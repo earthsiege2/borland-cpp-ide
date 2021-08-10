@@ -1,7 +1,6 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*++
 
-Copyright (c) 1997-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -61,4 +60,3 @@ BOOL
     IN  LPWSABUF        QosName,
     IN  LPQOS           Qos
     );
-#pragma option pop /*P_O_Pop*/

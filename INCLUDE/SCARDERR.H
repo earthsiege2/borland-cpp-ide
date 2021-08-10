@@ -5,7 +5,7 @@
    These messages must be reconciled with winerror.w
    They exist here to provide error messages on pre-Win2K systems.
 
-   30-Jun-97 - DBarlow Created.  */
+*/
 #ifndef SCARD_S_SUCCESS
 #pragma option push -b -a8 -pc -A- /*P_O_Push*/
 //
@@ -50,6 +50,9 @@
 //
 // Define the severity codes
 //
+#define STATUS_SEVERITY_WARNING          0x2
+#define STATUS_SEVERITY_INFORMATIONAL    0x1
+#define STATUS_SEVERITY_ERROR            0x3
 
 
 //
@@ -408,7 +411,7 @@
 //
 // MessageText:
 //
-//  An attempt was made to write more data than would fit in the target object.
+//  The smartcard does not have enough memory to store the information.
 //
 #define SCARD_E_WRITE_TOO_MANY           ((DWORD)0x80100028L)
 
@@ -474,6 +477,15 @@
 //  A communications error with the smart card has been detected.  Retry the operation.
 //
 #define SCARD_E_COMM_DATA_LOST           ((DWORD)0x8010002FL)
+
+//
+// MessageId: SCARD_E_NO_KEY_CONTAINER
+//
+// MessageText:
+//
+//  The requested key container does not exist on the smart card.
+//
+#define SCARD_E_NO_KEY_CONTAINER         ((DWORD)0x80100030L)
 
 //
 // These are warning codes.
@@ -567,6 +579,16 @@
 //  The action was cancelled by the user.
 //
 #define SCARD_W_CANCELLED_BY_USER        ((DWORD)0x8010006EL)
+
+//
+// MessageId: SCARD_W_CARD_NOT_AUTHENTICATED
+//
+// MessageText:
+//
+//  No PIN was presented to the smart card.
+//
+#define SCARD_W_CARD_NOT_AUTHENTICATED   ((DWORD)0x8010006FL)
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // SCARD_S_SUCCESS

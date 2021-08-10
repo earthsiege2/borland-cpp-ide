@@ -6,13 +6,13 @@
 {                                                       }
 {*******************************************************}
 
-unit mxdsql;
+unit MXDSQL;
 
 interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  Db, DBTables, Grids, DBGrids, StdCtrls;
+  DB, DBTables, Grids, DBGrids, StdCtrls;
 
 type
   TSQLWindow = class(TForm)
@@ -34,7 +34,7 @@ procedure ShowSQLWindow(DataBaseName: string; SQL: string);
 
 implementation
 
-{$R *.DFM}
+{$R *.dfm}
 
 procedure ShowSQLWindow(DataBaseName: string; SQL: string);
 var

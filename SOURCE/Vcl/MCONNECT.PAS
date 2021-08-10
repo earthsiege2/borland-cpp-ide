@@ -13,8 +13,8 @@ unit MConnect;
 
 interface
 
-uses
-  Messages, Windows, SysUtils, Classes, Midas, DBClient, ActiveX, ComObj;
+uses  Variants, Windows, SysUtils, Classes, Midas, DB, DBClient, ActiveX,
+  ComObj, Provider;
 
 type
 
@@ -59,36 +59,66 @@ type
       ExceptAddr: Pointer): HResult; override;
   end;
 
-  { TDispatchConnection }
+  { TLocalConnection }
 
-  TGetUsernameEvent = procedure(Sender: TObject; var Username: string) of object;
+  TLocalConnection = class(TCustomRemoteServer, IAppServer)
+  private
+    FAppServer: IAppServer;
+    FProviders: TList;
+    function GetProviderCount: integer;
+  protected
+    function GetProvider(const ProviderName: string): TCustomProvider; virtual;
+    { IAppServer }
+    function AS_GetProviderNames: OleVariant; safecall;
+    function AS_ApplyUpdates(const ProviderName: WideString; Delta: OleVariant;
+      MaxErrors: Integer; out ErrorCount: Integer;
+      var OwnerData: OleVariant): OleVariant; safecall;
+    function AS_GetRecords(const ProviderName: WideString; Count: Integer;
+      out RecsOut: Integer; Options: Integer; const CommandText: WideString;
+      var Params, OwnerData: OleVariant): OleVariant; safecall;
+    function AS_DataRequest(const ProviderName: WideString;
+      Data: OleVariant): OleVariant; safecall;
+    function AS_GetParams(const ProviderName: WideString; var OwnerData: OleVariant): OleVariant; safecall;
+    function AS_RowRequest(const ProviderName: WideString; Row: OleVariant;
+      RequestType: Integer; var OwnerData: OleVariant): OleVariant; safecall;
+    procedure AS_Execute(const ProviderName: WideString;
+      const CommandText: WideString; var Params, OwnerData: OleVariant); safecall;
+    function GetConnected: Boolean; override;
+    procedure GetProviderNames(Proc: TGetStrProc); override;
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+    procedure RegisterProvider(Prov: TCustomProvider);
+    procedure UnRegisterProvider(Prov: TCustomProvider);
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    property AppServer: IAppServer read FAppServer;
+    function GetServer: IAppServer; override;
+    property Providers[const ProviderName: string]: TCustomProvider read GetProvider;
+    property ProviderCount: integer read GetProviderCount;
+  end;
+
+  { TDispatchConnection }
 
   TDispatchConnection = class(TCustomRemoteServer)
   private
     FServerGUID: TGUID;
     FServerName: string;
-    FAppServer: Variant;
     FObjectBroker: TCustomObjectBroker;
-    FOnGetUsername: TGetUsernameEvent;
     function GetServerGUID: string;
     procedure SetServerGUID(const Value: string);
     procedure SetServerName(const Value: string);
     procedure SetObjectBroker(Value: TCustomObjectBroker);
   protected
     function GetServerList: OleVariant; override;
-    function GetAppServer: Variant; virtual;
-    procedure SetAppServer(Value: Variant); virtual;
     procedure DoDisconnect; override;
     function GetConnected: Boolean; override;
     procedure SetConnected(Value: Boolean); override;
-    procedure GetProviderNames(Proc: TGetStrProc); override;
     function GetServerCLSID: TGUID;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     property ObjectBroker: TCustomObjectBroker read FObjectBroker write SetObjectBroker;
   public
     constructor Create(AOwner: TComponent); override;
     function GetServer: IAppServer; override;
-    property AppServer: Variant read GetAppServer;
   published
     property Connected;
     property LoginPrompt default False;
@@ -98,7 +128,7 @@ type
     property AfterDisconnect;
     property BeforeConnect;
     property BeforeDisconnect;
-    property OnGetUsername: TGetUsernameEvent read FOnGetUsername write FOnGetUsername;
+    property OnGetUsername;
     property OnLogin;
   end;
 
@@ -141,12 +171,36 @@ type
     property BrokerName: string read FBrokerName write SetBrokerName;
   end;
 
+{ TSharedConnection }
+
+  TSharedConnection = class(TCustomRemoteServer)
+  private
+    FParentConnection: TDispatchConnection;
+    FChildName: String;
+    procedure SetParentConnection(const Value: TDispatchConnection);
+  protected
+    procedure ConnectEvent(Sender: TObject; Connecting: Boolean);
+    procedure DoConnect; override;
+    procedure DoDisconnect; override;
+    function GetConnected: Boolean; override;
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+  public
+    destructor Destroy; override;
+    function GetServer: IAppServer; override;
+  published
+    property ParentConnection: TDispatchConnection read FParentConnection write SetParentConnection;
+    property ChildName: String read FChildName write FChildName;
+    property AfterConnect;
+    property AfterDisconnect;
+    property BeforeConnect;
+    property BeforeDisconnect;
+  end;
+
   procedure GetMIDASAppServerList(List: TStringList; const RegCheck: string);
 
 implementation
 
-uses
-  Forms, Registry, MidConst, DBLogDlg, Provider;
+uses Registry, MidConst;
 
 procedure GetMIDASAppServerList(List: TStringList; const RegCheck: string);
 var
@@ -182,8 +236,7 @@ begin
         I := 0;
         while RegEnumKey(ClassIDKey, I, Buffer, SizeOf(Buffer)) = 0 do
         begin
-          S := Format('%s\Implemented Categories\%s',[Buffer,
-            GUIDToString(CATID_MIDASAppServer)]);
+          S := Format(SCatImplKey, [Buffer, GUIDToString(CATID_MIDASAppServer)]);
           if RegQueryValue(ClassIDKey, PChar(S), nil, BufSize) = 0 then
             if RegCheck <> '' then
             begin
@@ -396,27 +449,21 @@ begin
   Login := LoginPrompt and Value and not Connected and not (csDesigning in ComponentState);
   if Login then
   begin
-    if Assigned(FOnGetUsername) then FOnGetUsername(Self, Username);
-    if not RemoteLoginDialog(Username, Password) then SysUtils.Abort;
+    if Assigned(OnGetUsername) then OnGetUsername(Self, Username);
+    if Assigned(RemoteLoginDialogProc) then
+      if not RemoteLoginDialogProc(Username, Password) then
+        SysUtils.Abort;
   end;
   inherited SetConnected(Value);
   if Login and Connected then
-    if Assigned(OnLogin) then OnLogin(Self, Username, Password);
+    if Assigned(OnLogin)
+      then OnLogin(Self, Username, Password);
 end;
 
 procedure TDispatchConnection.DoDisconnect;
 begin
-  SetAppServer(NULL);
-end;
-
-function TDispatchConnection.GetAppServer: Variant;
-begin
-  Result := FAppServer;
-end;
-
-procedure TDispatchConnection.SetAppServer(Value: Variant);
-begin
-  FAppServer := Value;
+  if not VarIsNull(AppServer) then
+    SetAppServer(NULL);
 end;
 
 function TDispatchConnection.GetServer: IAppServer;
@@ -424,26 +471,9 @@ var
   QIResult: HResult;
 begin
   Connected := True;
-  QIResult := IDispatch(FAppServer).QueryInterface(IAppServer, Result);
+  QIResult := IDispatch(AppServer).QueryInterface(IAppServer, Result);
   if QIResult <> S_OK then
-    Result := TDispatchAppServer.Create(IAppServerDisp(IDispatch(FAppServer)));
-end;
-
-procedure TDispatchConnection.GetProviderNames(Proc: TGetStrProc);
-var
-  List: Variant;
-  I: Integer;
-begin
-  Connected := True;
-  VarClear(List);
-  try
-    List := AppServer.AS_GetProviderNames;
-  except
-    { Assume any errors means the list is not available. }
-  end;
-  if VarIsArray(List) and (VarArrayDimCount(List) = 1) then
-    for I := VarArrayLowBound(List, 1) to VarArrayHighBound(List, 1) do
-      Proc(List[I]);
+    Result := TDispatchAppServer.Create(IAppServerDisp(IDispatch(AppServer)));
 end;
 
 function TDispatchConnection.GetServerCLSID: TGUID;
@@ -663,6 +693,230 @@ begin
     Reg.Free;
   end;
   inherited DoConnect;
+end;
+
+{ TLocalConnection }
+
+function TLocalConnection.GetProviderCount: integer;
+begin
+  Result := FProviders.Count;
+end;
+
+function TLocalConnection.GetConnected: Boolean;
+begin
+  Result := True;
+end;
+
+constructor TLocalConnection.Create(AOwner: TComponent);
+var
+  i: integer;
+begin
+  inherited;
+  FProviders := TList.Create;
+  FAppServer := Self as IAppServer;
+  for i:=0 to AOwner.ComponentCount - 1 do
+    if AOwner.Components[i] is TCustomProvider then
+      RegisterProvider(TCustomProvider(AOwner.Components[i]));
+end;
+
+destructor TLocalConnection.Destroy;
+begin
+  FProviders.Free;
+  FAppServer := nil;
+  inherited;
+end;
+
+function TLocalConnection.GetServer: IAppServer;
+begin
+  Result := FAppServer;
+end;
+
+procedure TLocalConnection.GetProviderNames(Proc: TGetStrProc);
+var
+  List: Variant;
+  I: Integer;
+begin
+  Connected := True;
+  VarClear(List);
+  try
+    List := AppServer.AS_GetProviderNames;
+  except
+    { Assume any errors means the list is not available. }
+  end;
+  if VarIsArray(List) and (VarArrayDimCount(List) = 1) then
+    for I := VarArrayLowBound(List, 1) to VarArrayHighBound(List, 1) do
+      Proc(List[I]);
+end;
+
+procedure TLocalConnection.Notification(AComponent: TComponent;
+  Operation: TOperation);
+begin
+  inherited;
+  if (AComponent is TCustomProvider) then
+    if (Operation = opInsert) then
+      RegisterProvider(TCustomProvider(AComponent)) else
+      UnRegisterProvider(TCustomProvider(AComponent));
+end;
+
+procedure TLocalConnection.RegisterProvider(Prov: TCustomProvider);
+begin
+  FProviders.Add(Prov);
+end;
+
+procedure TLocalConnection.UnRegisterProvider(Prov: TCustomProvider);
+begin
+  FProviders.Remove(Prov);
+end;
+
+function VarArrayFromStrings(Strings: TStrings): Variant; (**) (* Duplicate of DATABKR *)
+var
+  I: Integer;
+begin
+  Result := Null;
+  if Strings.Count > 0 then
+  begin
+    Result := VarArrayCreate([0, Strings.Count - 1], varOleStr);
+    for I := 0 to Strings.Count - 1 do Result[I] := WideString(Strings[I]);
+  end;
+end;
+
+function TLocalConnection.AS_GetProviderNames: OleVariant;
+var
+  List: TStringList;
+  i: Integer;
+begin
+  List := TStringList.Create;
+  try
+    for i := 0 to FProviders.Count - 1 do
+      if TCustomProvider(FProviders[i]).Exported then
+        List.Add(TCustomProvider(FProviders[i]).Name);
+    List.Sort;
+    Result := VarArrayFromStrings(List);
+  finally
+    List.Free;
+  end;
+end;
+
+function TLocalConnection.AS_ApplyUpdates(const ProviderName: WideString;
+  Delta: OleVariant; MaxErrors: Integer; out ErrorCount: Integer;
+  var OwnerData: OleVariant): OleVariant;
+begin
+  Result := Providers[ProviderName].ApplyUpdates(Delta, MaxErrors, ErrorCount, OwnerData);
+end;
+
+function TLocalConnection.AS_GetRecords(const ProviderName: WideString; Count: Integer;
+  out RecsOut: Integer; Options: Integer; const CommandText: WideString;
+  var Params, OwnerData: OleVariant): OleVariant;
+begin
+  Result := Providers[ProviderName].GetRecords(Count, RecsOut, Options,
+      CommandText, Params, OwnerData);
+end;
+
+function TLocalConnection.AS_RowRequest(const ProviderName: WideString;
+  Row: OleVariant; RequestType: Integer; var OwnerData: OleVariant): OleVariant;
+begin
+  Result := Providers[ProviderName].RowRequest(Row, RequestType, OwnerData);
+end;
+
+function TLocalConnection.AS_DataRequest(const ProviderName: WideString;
+  Data: OleVariant): OleVariant; safecall;
+begin
+  Result := Providers[ProviderName].DataRequest(Data);
+end;
+
+function TLocalConnection.AS_GetParams(const ProviderName: WideString; var OwnerData: OleVariant): OleVariant;
+begin
+  Result := Providers[ProviderName].GetParams(OwnerData);
+end;
+
+procedure TLocalConnection.AS_Execute(const ProviderName: WideString;
+  const CommandText: WideString; var Params, OwnerData: OleVariant);
+begin
+  Providers[ProviderName].Execute(CommandText, Params, OwnerData);
+end;
+
+function TLocalConnection.GetProvider(const ProviderName: string): TCustomProvider;
+var
+  i: Integer;
+begin
+  Result := nil;
+  for i := 0 to FProviders.Count - 1 do
+    if AnsiCompareText(TCustomProvider(FProviders[i]).Name, ProviderName) = 0 then
+    begin
+      Result := TCustomProvider(FProviders[i]);
+      if not Result.Exported then
+        Result := nil;
+      Exit;
+    end;
+  if not Assigned(Result) then
+    raise Exception.CreateResFmt(@SProviderNotExported, [ProviderName]);
+end;
+
+{ TSharedConnection }
+
+procedure TSharedConnection.SetParentConnection(const Value: TDispatchConnection);
+begin
+  if Value <> FParentConnection then
+  begin
+    if Assigned(FParentConnection) then
+      FParentConnection.UnregisterClient(Self);
+    if Assigned(Value) then
+    begin
+      Value.RegisterClient(Self, ConnectEvent);
+      Value.FreeNotification(Self);
+    end;
+    FParentConnection := Value;
+  end;
+end;
+
+procedure TSharedConnection.ConnectEvent(Sender: TObject;
+  Connecting: Boolean);
+begin
+  if not Connecting or (ChildName <> '') then
+    Connected := Connecting;
+end;
+
+function TSharedConnection.GetConnected: Boolean;
+begin
+  Result := (not VarIsNull(AppServer) and (IDispatch(AppServer) <> nil));
+end;
+
+procedure TSharedConnection.DoConnect;
+begin
+  if not Assigned(FParentConnection) then
+    raise Exception.Create(SNoParentConnection);
+  if FChildName = '' then
+    raise Exception.Create(SBlankChildName);
+  FParentConnection.Connected := True;
+  SetAppServer(GetDispatchPropValue(IDispatch(FParentConnection.AppServer), FChildName));
+end;
+
+procedure TSharedConnection.DoDisconnect;
+begin
+  SetAppServer(NULL);
+end;
+
+procedure TSharedConnection.Notification(AComponent: TComponent; Operation: TOperation);
+begin
+  inherited Notification(AComponent, Operation);
+  if (Operation = opRemove) and (AComponent = ParentConnection) then
+	ParentConnection:= nil;
+end;
+
+destructor TSharedConnection.Destroy;
+begin
+  ParentConnection := nil;
+  inherited;
+end;
+
+function TSharedConnection.GetServer: IAppServer;
+var
+  QIResult: HResult;
+begin
+  Connected := True;
+  QIResult := IDispatch(AppServer).QueryInterface(IAppServer, Result);
+  if QIResult <> S_OK then
+    Result := TDispatchAppServer.Create(IAppServerDisp(IDispatch(AppServer)));
 end;
 
 end.

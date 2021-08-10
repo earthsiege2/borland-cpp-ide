@@ -8,7 +8,7 @@
  * instmngr.h - Header for the Standard Library DLL Instance Manager
  *              For WIN16 on Borland 5.0
  *
- * $Id: instmngr.h,v 1.3 1996/08/28 01:29:59 smithey Exp $
+ * $Id: instmngr.h,v 9.5 2001/07/10 17:24:13 nyork Exp $
  *
  ***************************************************************************
  *

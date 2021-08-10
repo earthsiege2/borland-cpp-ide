@@ -1,17 +1,18 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxarrays.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Mxarrays.pas' rev: 6.00
 
-#ifndef mxarraysHPP
-#define mxarraysHPP
+#ifndef MxarraysHPP
+#define MxarraysHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <mxConsts.hpp>	// Pascal unit
+#include <Mxconsts.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
@@ -29,38 +30,28 @@ class PASCALIMPLEMENTATION EArrayError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EArrayError(const AnsiString Msg) : Sysutils::Exception(Msg
-		) { }
+	/* Exception.Create */ inline __fastcall EArrayError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EArrayError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EArrayError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EArrayError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EArrayError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EArrayError(int Ident, const System::TVarRec * Args, 
-		const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EArrayError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EArrayError(const AnsiString Msg, int AHelpContext) : 
-		Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EArrayError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EArrayError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EArrayError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EArrayError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EArrayError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EArrayError(System::PResStringRec ResStringRec, 
-		const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EArrayError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -78,38 +69,28 @@ class PASCALIMPLEMENTATION EUnsupportedTypeError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EUnsupportedTypeError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EUnsupportedTypeError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EUnsupportedTypeError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EUnsupportedTypeError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EUnsupportedTypeError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EUnsupportedTypeError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EUnsupportedTypeError(int Ident, const System::TVarRec 
-		* Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EUnsupportedTypeError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EUnsupportedTypeError(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EUnsupportedTypeError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EUnsupportedTypeError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EUnsupportedTypeError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EUnsupportedTypeError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EUnsupportedTypeError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EUnsupportedTypeError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EUnsupportedTypeError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -127,38 +108,28 @@ class PASCALIMPLEMENTATION ELowCapacityError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall ELowCapacityError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall ELowCapacityError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall ELowCapacityError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall ELowCapacityError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall ELowCapacityError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall ELowCapacityError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall ELowCapacityError(int Ident, const System::TVarRec * 
-		Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall ELowCapacityError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall ELowCapacityError(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall ELowCapacityError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall ELowCapacityError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ELowCapacityError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall ELowCapacityError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ELowCapacityError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall ELowCapacityError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ELowCapacityError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -185,11 +156,13 @@ typedef Set<TArrayFlags, afOwnsData, afSortUnique>  TArrayFlagSet;
 enum TDuplicates { dupIgnore, dupAccept, dupError };
 #pragma option pop
 
+#pragma pack(push, 4)
 struct TStringItem
 {
 	AnsiString FString;
 	System::TObject* FObject;
 } ;
+#pragma pack(pop)
 
 class DELPHICLASS TBaseArray;
 class PASCALIMPLEMENTATION TBaseArray : public Classes::TPersistent 
@@ -257,6 +230,9 @@ class PASCALIMPLEMENTATION TSmallIntArray : public TBaseArray
 	typedef TBaseArray inherited;
 	
 public:
+	short operator[](int Index) { return Items[Index]; }
+	
+public:
 	__fastcall virtual TSmallIntArray(int itemcount, int dummy);
 	HIDESBASE void __fastcall PutItem(int index, short value);
 	HIDESBASE short __fastcall GetItem(int index);
@@ -275,6 +251,9 @@ class DELPHICLASS TIntArray;
 class PASCALIMPLEMENTATION TIntArray : public TBaseArray 
 {
 	typedef TBaseArray inherited;
+	
+public:
+	int operator[](int Index) { return Items[Index]; }
 	
 public:
 	__fastcall virtual TIntArray(int itemcount, int dummy);
@@ -296,6 +275,9 @@ class DELPHICLASS TSingleArray;
 class PASCALIMPLEMENTATION TSingleArray : public TBaseArray 
 {
 	typedef TBaseArray inherited;
+	
+public:
+	float operator[](int Index) { return Items[Index]; }
 	
 public:
 	__fastcall virtual TSingleArray(int itemcount, int dummy);
@@ -320,6 +302,9 @@ class PASCALIMPLEMENTATION TDoubleArray : public TBaseArray
 	typedef TBaseArray inherited;
 	
 public:
+	double operator[](int Index) { return Items[Index]; }
+	
+public:
 	__fastcall virtual TDoubleArray(int itemcount, int dummy);
 	HIDESBASE void __fastcall PutItem(int index, double value);
 	HIDESBASE double __fastcall GetItem(int index);
@@ -342,6 +327,9 @@ class PASCALIMPLEMENTATION TCurrencyArray : public TBaseArray
 	typedef TBaseArray inherited;
 	
 public:
+	System::Currency operator[](int Index) { return Items[Index]; }
+	
+public:
 	__fastcall virtual TCurrencyArray(int itemcount, int dummy);
 	HIDESBASE void __fastcall PutItem(int index, System::Currency value);
 	HIDESBASE System::Currency __fastcall GetItem(int index);
@@ -362,6 +350,9 @@ class DELPHICLASS TWordArray;
 class PASCALIMPLEMENTATION TWordArray : public TBaseArray 
 {
 	typedef TBaseArray inherited;
+	
+public:
+	Word operator[](int Index) { return Items[Index]; }
 	
 public:
 	__fastcall virtual TWordArray(int itemcount, int dummy);
@@ -408,6 +399,9 @@ class DELPHICLASS TStringArray;
 class PASCALIMPLEMENTATION TStringArray : public TBaseArray 
 {
 	typedef TBaseArray inherited;
+	
+public:
+	AnsiString operator[](int Index) { return Strings[Index]; }
 	
 private:
 	void __fastcall ExchangeItems(int Index1, int Index2);
@@ -456,38 +450,28 @@ class PASCALIMPLEMENTATION EDynArrayRangeError : public Sysutils::ERangeError
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EDynArrayRangeError(const AnsiString Msg) : Sysutils::ERangeError(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EDynArrayRangeError(const AnsiString Msg) : Sysutils::ERangeError(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EDynArrayRangeError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::ERangeError(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EDynArrayRangeError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::ERangeError(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EDynArrayRangeError(int Ident)/* overload */ : Sysutils::ERangeError(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EDynArrayRangeError(int Ident)/* overload */ : Sysutils::ERangeError(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EDynArrayRangeError(int Ident, const System::TVarRec 
-		* Args, const int Args_Size)/* overload */ : Sysutils::ERangeError(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EDynArrayRangeError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::ERangeError(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EDynArrayRangeError(const AnsiString Msg, int AHelpContext
-		) : Sysutils::ERangeError(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EDynArrayRangeError(const AnsiString Msg, int AHelpContext) : Sysutils::ERangeError(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EDynArrayRangeError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::ERangeError(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EDynArrayRangeError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::ERangeError(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EDynArrayRangeError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::ERangeError(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EDynArrayRangeError(int Ident, int AHelpContext)/* overload */ : Sysutils::ERangeError(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EDynArrayRangeError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::ERangeError(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EDynArrayRangeError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::ERangeError(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -519,8 +503,7 @@ public:
 	void __fastcall SetSize(TDynArrayNDX NumRows, TMatrixNDX NumColumns);
 	__property TDynArrayNDX rows = {read=FRows, nodefault};
 	__property TMatrixNDX columns = {read=FColumns, nodefault};
-	__property short Element[TDynArrayNDX row][TMatrixNDX column] = {read=GetElement, write=SetElement/*
-		, default*/};
+	__property short Element[TDynArrayNDX row][TMatrixNDX column] = {read=GetElement, write=SetElement/*, default*/};
 };
 
 
@@ -534,6 +517,9 @@ class DELPHICLASS TIndexArray;
 class PASCALIMPLEMENTATION TIndexArray : public System::TObject 
 {
 	typedef System::TObject inherited;
+	
+public:
+	TSmallIntArray* operator[](TIndexNDX Element) { return Items[Element]; }
 	
 private:
 	int FMemAllocated;
@@ -556,8 +542,7 @@ public:
 	__property bool Autosize = {read=FAutosize, write=FAutosize, nodefault};
 	__property TIndexNDX Capacity = {read=FCapacity, write=SetSize, nodefault};
 	__property int Count = {read=FCount, nodefault};
-	__property TSmallIntArray* Items[TIndexNDX Element] = {read=GetElement, write=SetElement/*, default
-		*/};
+	__property TSmallIntArray* Items[TIndexNDX Element] = {read=GetElement, write=SetElement/*, default*/};
 };
 
 
@@ -565,6 +550,9 @@ class DELPHICLASS TCustomArray;
 class PASCALIMPLEMENTATION TCustomArray : public System::TObject 
 {
 	typedef System::TObject inherited;
+	
+public:
+	Variant operator[](int I) { return Items[I]; }
 	
 private:
 	int FDataType;
@@ -640,12 +628,10 @@ extern PACKAGE void __fastcall SetMemoryCapacity(int Value);
 extern PACKAGE int __fastcall GetMemoryCapacity(void);
 
 }	/* namespace Mxarrays */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxarrays;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxarrays
+#endif	// Mxarrays

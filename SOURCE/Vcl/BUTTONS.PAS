@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -16,13 +16,25 @@ interface
 
 uses Windows, Messages, Classes, Controls, Forms, Graphics, StdCtrls,
   ExtCtrls, CommCtrl;
-    
+
 type
   TButtonLayout = (blGlyphLeft, blGlyphRight, blGlyphTop, blGlyphBottom);
   TButtonState = (bsUp, bsDisabled, bsDown, bsExclusive);
   TButtonStyle = (bsAutoDetect, bsWin31, bsNew);
   TNumGlyphs = 1..4;
-    
+
+  TSpeedButton = class;
+
+  TSpeedButtonActionLink = class(TControlActionLink)
+  protected
+    FClient: TSpeedButton;
+    procedure AssignClient(AClient: TObject); override;
+    function IsCheckedLinked: Boolean; override;
+    function IsGroupIndexLinked: Boolean; override;
+    procedure SetGroupIndex(Value: Integer); override;
+    procedure SetChecked(Value: Boolean); override;
+  end;
+
   TSpeedButton = class(TGraphicControl)
   private
     FGroupIndex: Integer;
@@ -63,6 +75,7 @@ type
   protected
     FState: TButtonState;
     procedure ActionChange(Sender: TObject; CheckDefaults: Boolean); override;
+    function GetActionLinkClass: TControlActionLinkClass; override;
     function GetPalette: HPALETTE; override;
     procedure Loaded; override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
@@ -827,7 +840,37 @@ begin
   DrawButtonGlyph(Canvas, GlyphPos, State, Transparent);
   DrawButtonText(Canvas, Caption, Result, State, BiDiFlags);
 end;
-    
+
+{ TSpeedButtonActionLink }
+
+procedure TSpeedButtonActionLink.AssignClient(AClient: TObject);
+begin
+  inherited AssignClient(AClient);
+  FClient := AClient as TSpeedButton;
+end;
+
+function TSpeedButtonActionLink.IsCheckedLinked: Boolean;
+begin
+  Result := inherited IsCheckedLinked and (FClient.GroupIndex <> 0) and
+    FClient.AllowAllUp and (FClient.Down = (Action as TCustomAction).Checked);
+end;
+
+function TSpeedButtonActionLink.IsGroupIndexLinked: Boolean;
+begin
+  Result := (FClient is TSpeedButton) and
+    (TSpeedButton(FClient).GroupIndex = (Action as TCustomAction).GroupIndex);
+end;
+
+procedure TSpeedButtonActionLink.SetChecked(Value: Boolean);
+begin
+  if IsCheckedLinked then TSpeedButton(FClient).Down := Value;
+end;
+
+procedure TSpeedButtonActionLink.SetGroupIndex(Value: Integer);
+begin
+  if IsGroupIndexLinked then TSpeedButton(FClient).GroupIndex := Value;
+end;
+
 { TSpeedButton }
     
 constructor TSpeedButton.Create(AOwner: TComponent);
@@ -1023,7 +1066,12 @@ function TSpeedButton.GetPalette: HPALETTE;
 begin
   Result := Glyph.Palette;
 end;
-    
+
+function TSpeedButton.GetActionLinkClass: TControlActionLinkClass;
+begin
+  Result := TSpeedButtonActionLink;
+end;
+
 function TSpeedButton.GetGlyph: TBitmap;
 begin
   Result := TButtonGlyph(FGlyph).Glyph;
@@ -1185,6 +1233,8 @@ begin
       begin
         FDown := False;
         FState := bsUp;
+        if (Action is TCustomAction) then
+          TCustomAction(Action).Checked := False;
         Invalidate;
       end;
       FAllowAllUp := Sender.AllowAllUp;
@@ -1265,6 +1315,8 @@ begin
   if Sender is TCustomAction then
     with TCustomAction(Sender) do
     begin
+      if CheckDefaults or (Self.GroupIndex = 0) then
+        Self.GroupIndex := GroupIndex;
       { Copy image from action's imagelist }
       if (Glyph.Empty) and (ActionList <> nil) and (ActionList.Images <> nil) and
         (ImageIndex >= 0) and (ImageIndex < ActionList.Images.Count) then
@@ -1606,7 +1658,7 @@ begin
   for I := Low(TBitBtnKind) to High(TBitBtnKind) do
     BitBtnGlyphs[I].Free;
 end;
-    
+
 initialization
   FillChar(BitBtnGlyphs, SizeOf(BitBtnGlyphs), 0);
 finalization

@@ -1,0 +1,178 @@
+<!--#include file="..\include\StdDemoHeader.html"-->
+<!--#include file="MyStyles.html"-->
+
+
+<P>Welcome to the Photo Gallery Demo, built with WebSnap!
+
+<div align="center">
+<br>
+
+<%
+  data = Modules.PhotoData; // shortcut to the data module
+  PicturesIterator = data.PicturesIterator;
+  Categories = data.Categories;
+  VoteAdapter = data.VoteAdapter;
+  
+  viewMode = PicturesIterator.ViewMode.Value;
+%>
+
+<form method="GET">
+<input
+  type="hidden"
+  name="__act"
+  value="<%=PicturesIterator.UpdateViewMode.AsFieldValue%>">
+<select
+  name="<%=PicturesIterator.ViewMode.InputName%>"
+  onChange="this.form.submit()">
+<%
+  var allPics = PicturesIterator.AllPictures.Value;
+
+  Response.Write('<option value="' + allPics + '"');
+  if (viewMode == allPics)
+    Response.Write(' selected');
+  Response.Write('>All Pictures');
+
+  // List all categories for the user to select one from
+  e = new Enumerator(Categories.Records);
+  for (; !e.atEnd(); e.moveNext())
+  {
+    var catId = Categories.CAT_ID.Value;
+    Response.Write('<option value="' + catId + '"');
+    if (viewMode == catId)
+      Response.Write(' selected');
+    Response.Write('>' + Categories.CAT_NAME.Value);
+  }
+%>
+
+</select>
+<input type=submit value="Show me these" class=submitButton>
+</form>
+
+
+<%
+  // If the iterator PicturesIterator. raises any errors, it
+  // will not "announce" them on top. This will force them
+  // on top.
+  picture = new Enumerator(PicturesIterator.Records);
+
+  // Display server-side errors that may have occured.
+  var e = new Enumerator(PicturesIterator.Errors)
+  if (!e.atEnd())
+    Response.Write('<p>The following error(s) happened:');
+  for (; !e.atEnd(); e.moveNext())
+   Response.Write('<li>' + e.item().Message)
+
+  function roundIt(number,X) {
+  // rounds number to X decimal places, defaults to 1
+      X = (!X ? 1 : X);
+      return Math.round(number*Math.pow(10,X))/Math.pow(10,X);
+  }
+
+  function formatBytes(b)
+  {
+    if (Math.round(10*b/1024/1024) > 10)
+      return roundIt(b/1024/1024) + ' MB'; // MB
+    else if (Math.round(10*b/1024) > 10)
+      return roundIt(b/1024) + ' KB'; //KB
+    else
+      return b + ' bytes';
+  }
+%>
+
+<table border=1 cellspacing=0 cellpadding=3 bordercolor="#666666">
+    <tr>
+<%
+  count = 0;
+  i = 1;
+  for (; !picture.atEnd(); !picture.moveNext())
+  {
+    count++
+  %>
+        <form method=GET>
+        <input type="hidden" name=__act>
+      <td align="middle" valign="top">
+        <font face="Arial" size="2">
+          Category: <b><%=PicturesIterator.CAT_NAME.DisplayText%></b> &nbsp;&nbsp;
+          ID: <b><%=PicturesIterator.IMG_ID.DisplayText%></b><br>
+          <b><%=PicturesIterator.IMG_TITLE.DisplayText%></font></b><br>
+       <a href="<%=PicturesIterator.Image.Image.AsHREF%>"><img
+          src="<%=PicturesIterator.Thumbnail.Image.AsHREF%>"
+          width="<%=PicturesIterator.ThumbWidth.DisplayText%>"
+          height="<%=PicturesIterator.ThumbHeight.DisplayText%>"
+          border="0"></a><br>
+        <font face="Arial" size="2"><%=PicturesIterator.IMG_DATE.DisplayText%><br>
+        <%=PicturesIterator.IMG_DESCRIPTION.DisplayText%><br>
+        Rating: <%=PicturesIterator.ActualRating.Value%>
+        [<%=PicturesIterator.IMG_VOTE_COUNT.DisplayText%> votes]
+        Views: <%=PicturesIterator.IMG_VIEW_COUNT.Value%><br>
+        Size: <%=formatBytes(PicturesIterator.IMG_SIZE.Value)%>
+        <br>
+      <%
+        vVote = VoteAdapter.VoteForPicture;
+        vNewVote = VoteAdapter.NewVote;
+        if (vVote.Enabled)
+        {
+          for (j = 1; j < 6; j++)
+            Response.Write('<input type="radio" name="' +
+              vNewVote.InputName + '" value="' + j + '"> ' + j);
+        %>
+        <input type=submit class=submitButton value="Vote"
+          onclick="__act.value='<%=vVote.LinkToPage(Page.Name).AsFieldValue%>'">
+      <% } %></font><br>
+  <%
+      vDel = PicturesIterator.DeletePicture;
+      if (vDel.Enabled)
+      { %>
+      <input type=submit class=submitButton value="Delete"
+        onclick="__act.value='<%=vDel.AsFieldValue%>'">
+  <% } %>
+      </td>
+        </form>
+  <%
+    if (i % PicturesIterator.MaxPicsPerRow.Value == 0)
+    { %>
+    </tr><tr>
+ <% }
+    i++
+  }
+%>
+  </tr>
+</table>
+
+<P>
+<%
+  if (count == 0)
+    Response.Write('<b>You have no pictures - first upload some pictures, or view all pictures</b>');
+  else if (count > 0)
+  {
+     var picGoto = PicturesIterator.GotoPage;
+     var count = 0;
+     var e = new Enumerator(picGoto.Array)
+     if (!e.atEnd())
+       Response.Write('Page ');
+     for (; !e.atEnd(); e.moveNext())
+     {
+       if (count != 0)
+         Response.Write(' | ');
+       if (picGoto.Enabled)
+       { %>
+    <a 
+      href="<%=picGoto.LinkToPage(Page.Name, Page.Name).AsHREF%>"
+    ><%=picGoto.DisplayLabel%></a>
+       <%
+       }
+       else
+       {%>
+    <i><%=picGoto.DisplayLabel%></i>
+     <%}
+     count++;
+     }
+  }
+%>
+
+
+</div>
+
+
+
+<!--#include file="..\include\StdDemoFooter.html"-->

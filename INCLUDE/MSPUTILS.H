@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1997-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -16,10 +16,121 @@ Abstract:
 #pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __MSPUTILS_H_
 
-#define DECLARE_VQI() \
+
+#if _ATL_VER >= 0x0300
+
+ //
+ // ATL 3.0 contains an equivalent of DECLARE_VQI in its END_COM_MAP(), so 
+ // DECLARE_VQI() is not needed
+ //
+ 
+ #define DECLARE_VQI()
+
+#else
+
+ #define DECLARE_VQI() \
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) = 0; \
     STDMETHOD_(ULONG, AddRef)() = 0; \
     STDMETHOD_(ULONG, Release)() = 0;
+
+#endif
+
+//
+// this macro expands to the appropriate MSP_x value, depending on hr.
+// this is useful for logging. for instance, the statements:
+//
+//      .....
+//
+//      if (FAILED(hr))
+//      {
+//          LOG((MSP_ERROR, "MyClass::MyFunc - exit. hr = 0x%lx", hr));
+//      }
+//      else
+//      {
+//          LOG((MSP_TRACE, "MyClass::MyFunc - exit. hr = 0x%lx", hr));
+//      }
+//
+//      return hr;
+//  }
+//
+//  can be replaced with:
+//  
+//      ....
+//
+//      LOG((MSP_(hr), "MyClass::MyFunc - exit. hr = 0x%lx", hr));
+//      
+//      return hr;
+//  }
+//
+
+
+#define MSP_(hr) (FAILED(hr)?MSP_ERROR:MSP_TRACE)
+
+//
+// return TRUE if the (possibly aggregated) media type that was passed in is valid.
+//
+// here is the criteria for a valid aggregated media type:
+//
+// 1. there is one or more bit set
+// 2. all bits that are set match the possible media types
+// 3. there are no set bits that don't correspond to valid meda types
+//
+
+inline BOOL IsValidAggregatedMediaType(DWORD dwAggregatedMediaType) 
+{   
+
+    //
+    // these are all possible media types
+    //
+
+    const DWORD dwAllPossibleMediaTypes =  TAPIMEDIATYPE_AUDIO | 
+                                        TAPIMEDIATYPE_VIDEO | 
+                                        TAPIMEDIATYPE_DATAMODEM | 
+                                        TAPIMEDIATYPE_G3FAX | 
+                                        TAPIMEDIATYPE_MULTITRACK;
+
+    
+
+
+    //
+    // return value
+    //
+
+    BOOL bValidMediaType = FALSE;
+
+
+    //
+    // make sure that there is at least one allowed media type 
+    //
+    // and
+    //
+    // there are no invalid media types
+    //
+
+    if (  (0 == (dwAggregatedMediaType &    dwAllPossibleMediaTypes )   )  ||      // any valid bits set
+          (0 != (dwAggregatedMediaType &  (~dwAllPossibleMediaTypes))   )      )   // no invalid bits are set
+    {
+
+        //
+        // the media type is invalid.
+        //
+
+        bValidMediaType = FALSE;
+    }
+    else
+    {
+
+        //
+        // the media type is valid.
+        //
+
+        bValidMediaType = TRUE;
+
+    }
+
+    return bValidMediaType;
+}
+
 
 //
 // Make sure we have exactly one media type. That's not the case if
@@ -194,6 +305,7 @@ public:
     }
 };
 
+
 /*++
 
 CMSPCritSection Description:
@@ -219,6 +331,39 @@ public:
         m_CriticalSection.Unlock();
     }
 };
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// CCSLock
+//
+// a plain old automatic lock that takes a pointer to CRITICAL_SECTION
+//
+// constructore enters crit section, destructor leaves critical section
+//
+// class client is responsible for passing a valid critical section
+//
+
+class CCSLock
+{
+
+private:
+    CRITICAL_SECTION *m_pCritSec;
+
+public:
+    CCSLock(CRITICAL_SECTION *pCritSec)
+        : m_pCritSec(pCritSec)
+    {
+        EnterCriticalSection(m_pCritSec);
+    }
+
+    ~CCSLock()
+    {
+        LeaveCriticalSection(m_pCritSec);
+    }
+};
+
 
 
 /*++
@@ -336,6 +481,11 @@ LINK list:
     _EX_ListHead->Flink = (Entry);\
     }
 
+
+
+BOOL IsNodeOnList(PLIST_ENTRY ListHead, PLIST_ENTRY Entry);
+
+
 #endif //InitializeListHead
 
 //
@@ -357,6 +507,167 @@ template <class T> ULONG MSPReleaseHelper (T * pMyThis)
     AggClass * p = CONTAINING_RECORD(pMyThis, AggClass, m_contained);
     return p->Release();
 }
+
+
+
+
+//
+//  Basic implementation for IObjectSafety.
+//
+//  Derive from this class to make your object safe for scripting on all its
+//  interfaces
+//
+
+#include <Objsafe.h>
+
+
+class CMSPObjectSafetyImpl : public IObjectSafety
+{
+
+public:
+    
+    CMSPObjectSafetyImpl()
+        :m_dwSafety(0)
+    {}
+
+
+    //
+    // we support the following safety options:
+    //
+
+    enum { SUPPORTED_SAFETY_OPTIONS = 
+       INTERFACESAFE_FOR_UNTRUSTED_CALLER | INTERFACESAFE_FOR_UNTRUSTED_DATA };
+
+
+
+    STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
+    {
+
+        //
+        // any options requested that we do not support?
+        //
+        
+        if ( (~SUPPORTED_SAFETY_OPTIONS & dwOptionSetMask) != 0 )
+        {
+            return E_FAIL;
+        }
+
+        
+        //
+        // see if the interface is supported at all
+        //
+
+        IUnknown *pUnk = NULL;
+
+        HRESULT hr = QueryInterface(riid, (void**)&pUnk);
+
+        if (SUCCEEDED(hr))
+        {
+
+            //
+            // we don't need the interface, just wanted to see if it 
+            // was supported. so release.
+            //
+            
+            pUnk->Release();
+            pUnk = NULL;
+
+            //
+            // the object supports the interface. Set options
+            // 
+
+            s_CritSection.Lock();
+
+            //
+            // set the bits specified by the mask to the values specified by 
+            // dwEnabledOptions
+            //
+
+            m_dwSafety = (dwEnabledOptions & dwOptionSetMask) |
+                         (m_dwSafety & ~dwOptionSetMask);
+
+            s_CritSection.Unlock();
+
+        }
+
+        return hr;
+    }
+
+
+    
+    STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions)
+    {
+        
+        //
+        // check caller's pointers
+        //
+
+        if ( IsBadWritePtr(pdwSupportedOptions, sizeof(DWORD)) ||
+             IsBadWritePtr(pdwEnabledOptions, sizeof(DWORD)) )
+        {
+             return E_POINTER;
+        }
+
+        //
+        //  if we fail, return something meaningful
+        //
+
+        *pdwSupportedOptions = 0;
+        *pdwEnabledOptions = 0;
+
+
+
+        //
+        // see if the interface is supported at all
+        //
+
+        IUnknown *pUnk = NULL;
+
+        HRESULT hr = QueryInterface(riid, (void**)&pUnk);
+
+        if (SUCCEEDED(hr))
+        {
+
+            //
+            // we don't need the interface, just wanted to see if it 
+            // was supported. so release.
+            //
+            
+            pUnk->Release();
+            pUnk = NULL;
+
+            //
+            // the object supports the interface. get safe scripting options
+            // 
+
+            *pdwSupportedOptions = SUPPORTED_SAFETY_OPTIONS;
+
+ 
+            s_CritSection.Lock();
+
+            *pdwEnabledOptions = m_dwSafety;
+
+            s_CritSection.Unlock();
+
+        }
+
+        return hr;
+    }
+
+private:
+
+    DWORD m_dwSafety;
+
+    // 
+    // thread safety
+    //
+    // the critical section is shared among all instances of this class
+    //
+
+    static CMSPCritSection s_CritSection;
+    
+};
+
 
 #pragma option pop /*P_O_Pop*/
 #endif  //__MSPUTILS_H_

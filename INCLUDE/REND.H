@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Sat Jul 31 00:52:45 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for rend.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -20,7 +18,7 @@
 
 /* verify that the <rpcndr.h> version is high enough to compile this file*/
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
-#define __REQUIRED_RPCNDR_H_VERSION__ 440
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
 
 #include "rpc.h"
@@ -37,6 +35,10 @@
 
 #ifndef __rend_h__
 #define __rend_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -150,24 +152,34 @@ typedef struct Rendezvous Rendezvous;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_rend_0000 */
 /* [local] */ 
 
-/* Copyright (c) 1998-1999  Microsoft Corporation  */
+/* Copyright (c) Microsoft Corporation. All rights reserved. */
+#define	IDISPDIROBJECT	( 0x10000 )
+
+#define	IDISPDIROBJCONFERENCE	( 0x20000 )
+
+#define	IDISPDIROBJUSER	( 0x30000 )
+
+#define	IDISPDIRECTORY	( 0x10000 )
+
+#define	IDISPILSCONFIG	( 0x20000 )
+
 typedef 
 enum DIRECTORY_TYPE
     {	DT_NTDS	= 1,
 	DT_ILS	= 2
-    }	DIRECTORY_TYPE;
+    } 	DIRECTORY_TYPE;
 
 typedef 
 enum DIRECTORY_OBJECT_TYPE
     {	OT_CONFERENCE	= 1,
 	OT_USER	= 2
-    }	DIRECTORY_OBJECT_TYPE;
+    } 	DIRECTORY_OBJECT_TYPE;
 
 typedef 
 enum RND_ADVERTISING_SCOPE
@@ -175,7 +187,7 @@ enum RND_ADVERTISING_SCOPE
 	RAS_SITE	= 2,
 	RAS_REGION	= 3,
 	RAS_WORLD	= 4
-    }	RND_ADVERTISING_SCOPE;
+    } 	RND_ADVERTISING_SCOPE;
 
 
 
@@ -198,46 +210,46 @@ EXTERN_C const IID IID_ITDirectoryObjectConference;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Protocol( 
-            /* [retval][out] */ BSTR __RPC_FAR *ppProtocol) = 0;
+            /* [retval][out] */ BSTR *ppProtocol) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Originator( 
-            /* [retval][out] */ BSTR __RPC_FAR *ppOriginator) = 0;
+            /* [retval][out] */ BSTR *ppOriginator) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Originator( 
             /* [in] */ BSTR pOriginator) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AdvertisingScope( 
-            /* [retval][out] */ RND_ADVERTISING_SCOPE __RPC_FAR *pAdvertisingScope) = 0;
+            /* [retval][out] */ RND_ADVERTISING_SCOPE *pAdvertisingScope) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AdvertisingScope( 
             /* [in] */ RND_ADVERTISING_SCOPE AdvertisingScope) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Url( 
-            /* [retval][out] */ BSTR __RPC_FAR *ppUrl) = 0;
+            /* [retval][out] */ BSTR *ppUrl) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Url( 
             /* [in] */ BSTR pUrl) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *ppDescription) = 0;
+            /* [retval][out] */ BSTR *ppDescription) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR pDescription) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsEncrypted( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfEncrypted) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pfEncrypted) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_IsEncrypted( 
             /* [in] */ VARIANT_BOOL fEncrypted) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StartTime( 
-            /* [retval][out] */ DATE __RPC_FAR *pDate) = 0;
+            /* [retval][out] */ DATE *pDate) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_StartTime( 
             /* [in] */ DATE Date) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StopTime( 
-            /* [retval][out] */ DATE __RPC_FAR *pDate) = 0;
+            /* [retval][out] */ DATE *pDate) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_StopTime( 
             /* [in] */ DATE Date) = 0;
@@ -250,104 +262,104 @@ EXTERN_C const IID IID_ITDirectoryObjectConference;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITDirectoryObjectConference * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITDirectoryObjectConference __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITDirectoryObjectConference * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITDirectoryObjectConference __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITDirectoryObjectConference * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITDirectoryObjectConference * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITDirectoryObjectConference * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITDirectoryObjectConference * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITDirectoryObjectConference * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Protocol )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *ppProtocol);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Protocol )( 
+            ITDirectoryObjectConference * This,
+            /* [retval][out] */ BSTR *ppProtocol);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Originator )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *ppOriginator);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Originator )( 
+            ITDirectoryObjectConference * This,
+            /* [retval][out] */ BSTR *ppOriginator);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Originator )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Originator )( 
+            ITDirectoryObjectConference * This,
             /* [in] */ BSTR pOriginator);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AdvertisingScope )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
-            /* [retval][out] */ RND_ADVERTISING_SCOPE __RPC_FAR *pAdvertisingScope);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AdvertisingScope )( 
+            ITDirectoryObjectConference * This,
+            /* [retval][out] */ RND_ADVERTISING_SCOPE *pAdvertisingScope);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AdvertisingScope )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AdvertisingScope )( 
+            ITDirectoryObjectConference * This,
             /* [in] */ RND_ADVERTISING_SCOPE AdvertisingScope);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Url )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *ppUrl);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Url )( 
+            ITDirectoryObjectConference * This,
+            /* [retval][out] */ BSTR *ppUrl);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Url )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Url )( 
+            ITDirectoryObjectConference * This,
             /* [in] */ BSTR pUrl);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *ppDescription);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            ITDirectoryObjectConference * This,
+            /* [retval][out] */ BSTR *ppDescription);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            ITDirectoryObjectConference * This,
             /* [in] */ BSTR pDescription);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsEncrypted )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfEncrypted);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsEncrypted )( 
+            ITDirectoryObjectConference * This,
+            /* [retval][out] */ VARIANT_BOOL *pfEncrypted);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_IsEncrypted )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_IsEncrypted )( 
+            ITDirectoryObjectConference * This,
             /* [in] */ VARIANT_BOOL fEncrypted);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StartTime )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *pDate);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
+            ITDirectoryObjectConference * This,
+            /* [retval][out] */ DATE *pDate);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StartTime )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartTime )( 
+            ITDirectoryObjectConference * This,
             /* [in] */ DATE Date);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StopTime )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *pDate);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StopTime )( 
+            ITDirectoryObjectConference * This,
+            /* [retval][out] */ DATE *pDate);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StopTime )( 
-            ITDirectoryObjectConference __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StopTime )( 
+            ITDirectoryObjectConference * This,
             /* [in] */ DATE Date);
         
         END_INTERFACE
@@ -355,7 +367,7 @@ EXTERN_C const IID IID_ITDirectoryObjectConference;
 
     interface ITDirectoryObjectConference
     {
-        CONST_VTBL struct ITDirectoryObjectConferenceVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITDirectoryObjectConferenceVtbl *lpVtbl;
     };
 
     
@@ -439,8 +451,8 @@ EXTERN_C const IID IID_ITDirectoryObjectConference;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_get_Protocol_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *ppProtocol);
+    ITDirectoryObjectConference * This,
+    /* [retval][out] */ BSTR *ppProtocol);
 
 
 void __RPC_STUB ITDirectoryObjectConference_get_Protocol_Stub(
@@ -451,8 +463,8 @@ void __RPC_STUB ITDirectoryObjectConference_get_Protocol_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_get_Originator_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *ppOriginator);
+    ITDirectoryObjectConference * This,
+    /* [retval][out] */ BSTR *ppOriginator);
 
 
 void __RPC_STUB ITDirectoryObjectConference_get_Originator_Stub(
@@ -463,7 +475,7 @@ void __RPC_STUB ITDirectoryObjectConference_get_Originator_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_put_Originator_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
+    ITDirectoryObjectConference * This,
     /* [in] */ BSTR pOriginator);
 
 
@@ -475,8 +487,8 @@ void __RPC_STUB ITDirectoryObjectConference_put_Originator_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_get_AdvertisingScope_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
-    /* [retval][out] */ RND_ADVERTISING_SCOPE __RPC_FAR *pAdvertisingScope);
+    ITDirectoryObjectConference * This,
+    /* [retval][out] */ RND_ADVERTISING_SCOPE *pAdvertisingScope);
 
 
 void __RPC_STUB ITDirectoryObjectConference_get_AdvertisingScope_Stub(
@@ -487,7 +499,7 @@ void __RPC_STUB ITDirectoryObjectConference_get_AdvertisingScope_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_put_AdvertisingScope_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
+    ITDirectoryObjectConference * This,
     /* [in] */ RND_ADVERTISING_SCOPE AdvertisingScope);
 
 
@@ -499,8 +511,8 @@ void __RPC_STUB ITDirectoryObjectConference_put_AdvertisingScope_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_get_Url_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *ppUrl);
+    ITDirectoryObjectConference * This,
+    /* [retval][out] */ BSTR *ppUrl);
 
 
 void __RPC_STUB ITDirectoryObjectConference_get_Url_Stub(
@@ -511,7 +523,7 @@ void __RPC_STUB ITDirectoryObjectConference_get_Url_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_put_Url_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
+    ITDirectoryObjectConference * This,
     /* [in] */ BSTR pUrl);
 
 
@@ -523,8 +535,8 @@ void __RPC_STUB ITDirectoryObjectConference_put_Url_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_get_Description_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *ppDescription);
+    ITDirectoryObjectConference * This,
+    /* [retval][out] */ BSTR *ppDescription);
 
 
 void __RPC_STUB ITDirectoryObjectConference_get_Description_Stub(
@@ -535,7 +547,7 @@ void __RPC_STUB ITDirectoryObjectConference_get_Description_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_put_Description_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
+    ITDirectoryObjectConference * This,
     /* [in] */ BSTR pDescription);
 
 
@@ -547,8 +559,8 @@ void __RPC_STUB ITDirectoryObjectConference_put_Description_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_get_IsEncrypted_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfEncrypted);
+    ITDirectoryObjectConference * This,
+    /* [retval][out] */ VARIANT_BOOL *pfEncrypted);
 
 
 void __RPC_STUB ITDirectoryObjectConference_get_IsEncrypted_Stub(
@@ -559,7 +571,7 @@ void __RPC_STUB ITDirectoryObjectConference_get_IsEncrypted_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_put_IsEncrypted_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
+    ITDirectoryObjectConference * This,
     /* [in] */ VARIANT_BOOL fEncrypted);
 
 
@@ -571,8 +583,8 @@ void __RPC_STUB ITDirectoryObjectConference_put_IsEncrypted_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_get_StartTime_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *pDate);
+    ITDirectoryObjectConference * This,
+    /* [retval][out] */ DATE *pDate);
 
 
 void __RPC_STUB ITDirectoryObjectConference_get_StartTime_Stub(
@@ -583,7 +595,7 @@ void __RPC_STUB ITDirectoryObjectConference_get_StartTime_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_put_StartTime_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
+    ITDirectoryObjectConference * This,
     /* [in] */ DATE Date);
 
 
@@ -595,8 +607,8 @@ void __RPC_STUB ITDirectoryObjectConference_put_StartTime_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_get_StopTime_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *pDate);
+    ITDirectoryObjectConference * This,
+    /* [retval][out] */ DATE *pDate);
 
 
 void __RPC_STUB ITDirectoryObjectConference_get_StopTime_Stub(
@@ -607,7 +619,7 @@ void __RPC_STUB ITDirectoryObjectConference_get_StopTime_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectConference_put_StopTime_Proxy( 
-    ITDirectoryObjectConference __RPC_FAR * This,
+    ITDirectoryObjectConference * This,
     /* [in] */ DATE Date);
 
 
@@ -638,7 +650,7 @@ EXTERN_C const IID IID_ITDirectoryObjectUser;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IPPhonePrimary( 
-            /* [retval][out] */ BSTR __RPC_FAR *ppName) = 0;
+            /* [retval][out] */ BSTR *ppName) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_IPPhonePrimary( 
             /* [in] */ BSTR pName) = 0;
@@ -651,52 +663,52 @@ EXTERN_C const IID IID_ITDirectoryObjectUser;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITDirectoryObjectUser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITDirectoryObjectUser * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITDirectoryObjectUser __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITDirectoryObjectUser * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITDirectoryObjectUser __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITDirectoryObjectUser * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ITDirectoryObjectUser __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITDirectoryObjectUser * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ITDirectoryObjectUser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITDirectoryObjectUser * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ITDirectoryObjectUser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITDirectoryObjectUser * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ITDirectoryObjectUser __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITDirectoryObjectUser * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IPPhonePrimary )( 
-            ITDirectoryObjectUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *ppName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IPPhonePrimary )( 
+            ITDirectoryObjectUser * This,
+            /* [retval][out] */ BSTR *ppName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_IPPhonePrimary )( 
-            ITDirectoryObjectUser __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_IPPhonePrimary )( 
+            ITDirectoryObjectUser * This,
             /* [in] */ BSTR pName);
         
         END_INTERFACE
@@ -704,7 +716,7 @@ EXTERN_C const IID IID_ITDirectoryObjectUser;
 
     interface ITDirectoryObjectUser
     {
-        CONST_VTBL struct ITDirectoryObjectUserVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITDirectoryObjectUserVtbl *lpVtbl;
     };
 
     
@@ -749,8 +761,8 @@ EXTERN_C const IID IID_ITDirectoryObjectUser;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectUser_get_IPPhonePrimary_Proxy( 
-    ITDirectoryObjectUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *ppName);
+    ITDirectoryObjectUser * This,
+    /* [retval][out] */ BSTR *ppName);
 
 
 void __RPC_STUB ITDirectoryObjectUser_get_IPPhonePrimary_Stub(
@@ -761,7 +773,7 @@ void __RPC_STUB ITDirectoryObjectUser_get_IPPhonePrimary_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITDirectoryObjectUser_put_IPPhonePrimary_Proxy( 
-    ITDirectoryObjectUser __RPC_FAR * This,
+    ITDirectoryObjectUser * This,
     /* [in] */ BSTR pName);
 
 
@@ -793,8 +805,8 @@ EXTERN_C const IID IID_IEnumDialableAddrs;
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [size_is][out] */ BSTR __RPC_FAR *ppElements,
-            /* [full][out][in] */ ULONG __RPC_FAR *pcFetched) = 0;
+            /* [size_is][out] */ BSTR *ppElements,
+            /* [full][out][in] */ ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
@@ -802,7 +814,7 @@ EXTERN_C const IID IID_IEnumDialableAddrs;
             /* [in] */ ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumDialableAddrs __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+            /* [retval][out] */ IEnumDialableAddrs **ppEnum) = 0;
         
     };
     
@@ -812,40 +824,40 @@ EXTERN_C const IID IID_IEnumDialableAddrs;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumDialableAddrs __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumDialableAddrs * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumDialableAddrs __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumDialableAddrs * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumDialableAddrs __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumDialableAddrs * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumDialableAddrs __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumDialableAddrs * This,
             /* [in] */ ULONG celt,
-            /* [size_is][out] */ BSTR __RPC_FAR *ppElements,
-            /* [full][out][in] */ ULONG __RPC_FAR *pcFetched);
+            /* [size_is][out] */ BSTR *ppElements,
+            /* [full][out][in] */ ULONG *pcFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumDialableAddrs __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumDialableAddrs * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumDialableAddrs __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumDialableAddrs * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumDialableAddrs __RPC_FAR * This,
-            /* [retval][out] */ IEnumDialableAddrs __RPC_FAR *__RPC_FAR *ppEnum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumDialableAddrs * This,
+            /* [retval][out] */ IEnumDialableAddrs **ppEnum);
         
         END_INTERFACE
     } IEnumDialableAddrsVtbl;
 
     interface IEnumDialableAddrs
     {
-        CONST_VTBL struct IEnumDialableAddrsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumDialableAddrsVtbl *lpVtbl;
     };
 
     
@@ -883,10 +895,10 @@ EXTERN_C const IID IID_IEnumDialableAddrs;
 
 
 HRESULT STDMETHODCALLTYPE IEnumDialableAddrs_Next_Proxy( 
-    IEnumDialableAddrs __RPC_FAR * This,
+    IEnumDialableAddrs * This,
     /* [in] */ ULONG celt,
-    /* [size_is][out] */ BSTR __RPC_FAR *ppElements,
-    /* [full][out][in] */ ULONG __RPC_FAR *pcFetched);
+    /* [size_is][out] */ BSTR *ppElements,
+    /* [full][out][in] */ ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumDialableAddrs_Next_Stub(
@@ -897,7 +909,7 @@ void __RPC_STUB IEnumDialableAddrs_Next_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumDialableAddrs_Reset_Proxy( 
-    IEnumDialableAddrs __RPC_FAR * This);
+    IEnumDialableAddrs * This);
 
 
 void __RPC_STUB IEnumDialableAddrs_Reset_Stub(
@@ -908,7 +920,7 @@ void __RPC_STUB IEnumDialableAddrs_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumDialableAddrs_Skip_Proxy( 
-    IEnumDialableAddrs __RPC_FAR * This,
+    IEnumDialableAddrs * This,
     /* [in] */ ULONG celt);
 
 
@@ -920,8 +932,8 @@ void __RPC_STUB IEnumDialableAddrs_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumDialableAddrs_Clone_Proxy( 
-    IEnumDialableAddrs __RPC_FAR * This,
-    /* [retval][out] */ IEnumDialableAddrs __RPC_FAR *__RPC_FAR *ppEnum);
+    IEnumDialableAddrs * This,
+    /* [retval][out] */ IEnumDialableAddrs **ppEnum);
 
 
 void __RPC_STUB IEnumDialableAddrs_Clone_Stub(
@@ -951,27 +963,27 @@ EXTERN_C const IID IID_ITDirectoryObject;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ObjectType( 
-            /* [retval][out] */ DIRECTORY_OBJECT_TYPE __RPC_FAR *pObjectType) = 0;
+            /* [retval][out] */ DIRECTORY_OBJECT_TYPE *pObjectType) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *ppName) = 0;
+            /* [retval][out] */ BSTR *ppName) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
             /* [in] */ BSTR pName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DialableAddrs( 
             /* [in] */ long dwAddressType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant) = 0;
+            /* [retval][out] */ VARIANT *pVariant) = 0;
         
         virtual /* [helpstring][restricted][hidden][id] */ HRESULT STDMETHODCALLTYPE EnumerateDialableAddrs( 
             /* [in] */ DWORD dwAddressType,
-            /* [out] */ IEnumDialableAddrs __RPC_FAR *__RPC_FAR *ppEnumDialableAddrs) = 0;
+            /* [out] */ IEnumDialableAddrs **ppEnumDialableAddrs) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SecurityDescriptor( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppSecDes) = 0;
+            /* [retval][out] */ IDispatch **ppSecDes) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SecurityDescriptor( 
-            /* [in] */ IDispatch __RPC_FAR *pSecDes) = 0;
+            /* [in] */ IDispatch *pSecDes) = 0;
         
     };
     
@@ -981,82 +993,82 @@ EXTERN_C const IID IID_ITDirectoryObject;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITDirectoryObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITDirectoryObject * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITDirectoryObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITDirectoryObject * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITDirectoryObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITDirectoryObject * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ITDirectoryObject __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITDirectoryObject * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ITDirectoryObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITDirectoryObject * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ITDirectoryObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITDirectoryObject * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ITDirectoryObject __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITDirectoryObject * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ObjectType )( 
-            ITDirectoryObject __RPC_FAR * This,
-            /* [retval][out] */ DIRECTORY_OBJECT_TYPE __RPC_FAR *pObjectType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ObjectType )( 
+            ITDirectoryObject * This,
+            /* [retval][out] */ DIRECTORY_OBJECT_TYPE *pObjectType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            ITDirectoryObject __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *ppName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            ITDirectoryObject * This,
+            /* [retval][out] */ BSTR *ppName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
-            ITDirectoryObject __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+            ITDirectoryObject * This,
             /* [in] */ BSTR pName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DialableAddrs )( 
-            ITDirectoryObject __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DialableAddrs )( 
+            ITDirectoryObject * This,
             /* [in] */ long dwAddressType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+            /* [retval][out] */ VARIANT *pVariant);
         
-        /* [helpstring][restricted][hidden][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateDialableAddrs )( 
-            ITDirectoryObject __RPC_FAR * This,
+        /* [helpstring][restricted][hidden][id] */ HRESULT ( STDMETHODCALLTYPE *EnumerateDialableAddrs )( 
+            ITDirectoryObject * This,
             /* [in] */ DWORD dwAddressType,
-            /* [out] */ IEnumDialableAddrs __RPC_FAR *__RPC_FAR *ppEnumDialableAddrs);
+            /* [out] */ IEnumDialableAddrs **ppEnumDialableAddrs);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SecurityDescriptor )( 
-            ITDirectoryObject __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppSecDes);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SecurityDescriptor )( 
+            ITDirectoryObject * This,
+            /* [retval][out] */ IDispatch **ppSecDes);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SecurityDescriptor )( 
-            ITDirectoryObject __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pSecDes);
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SecurityDescriptor )( 
+            ITDirectoryObject * This,
+            /* [in] */ IDispatch *pSecDes);
         
         END_INTERFACE
     } ITDirectoryObjectVtbl;
 
     interface ITDirectoryObject
     {
-        CONST_VTBL struct ITDirectoryObjectVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITDirectoryObjectVtbl *lpVtbl;
     };
 
     
@@ -1116,8 +1128,8 @@ EXTERN_C const IID IID_ITDirectoryObject;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectoryObject_get_ObjectType_Proxy( 
-    ITDirectoryObject __RPC_FAR * This,
-    /* [retval][out] */ DIRECTORY_OBJECT_TYPE __RPC_FAR *pObjectType);
+    ITDirectoryObject * This,
+    /* [retval][out] */ DIRECTORY_OBJECT_TYPE *pObjectType);
 
 
 void __RPC_STUB ITDirectoryObject_get_ObjectType_Stub(
@@ -1128,8 +1140,8 @@ void __RPC_STUB ITDirectoryObject_get_ObjectType_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectoryObject_get_Name_Proxy( 
-    ITDirectoryObject __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *ppName);
+    ITDirectoryObject * This,
+    /* [retval][out] */ BSTR *ppName);
 
 
 void __RPC_STUB ITDirectoryObject_get_Name_Stub(
@@ -1140,7 +1152,7 @@ void __RPC_STUB ITDirectoryObject_get_Name_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITDirectoryObject_put_Name_Proxy( 
-    ITDirectoryObject __RPC_FAR * This,
+    ITDirectoryObject * This,
     /* [in] */ BSTR pName);
 
 
@@ -1152,9 +1164,9 @@ void __RPC_STUB ITDirectoryObject_put_Name_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectoryObject_get_DialableAddrs_Proxy( 
-    ITDirectoryObject __RPC_FAR * This,
+    ITDirectoryObject * This,
     /* [in] */ long dwAddressType,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+    /* [retval][out] */ VARIANT *pVariant);
 
 
 void __RPC_STUB ITDirectoryObject_get_DialableAddrs_Stub(
@@ -1165,9 +1177,9 @@ void __RPC_STUB ITDirectoryObject_get_DialableAddrs_Stub(
 
 
 /* [helpstring][restricted][hidden][id] */ HRESULT STDMETHODCALLTYPE ITDirectoryObject_EnumerateDialableAddrs_Proxy( 
-    ITDirectoryObject __RPC_FAR * This,
+    ITDirectoryObject * This,
     /* [in] */ DWORD dwAddressType,
-    /* [out] */ IEnumDialableAddrs __RPC_FAR *__RPC_FAR *ppEnumDialableAddrs);
+    /* [out] */ IEnumDialableAddrs **ppEnumDialableAddrs);
 
 
 void __RPC_STUB ITDirectoryObject_EnumerateDialableAddrs_Stub(
@@ -1178,8 +1190,8 @@ void __RPC_STUB ITDirectoryObject_EnumerateDialableAddrs_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectoryObject_get_SecurityDescriptor_Proxy( 
-    ITDirectoryObject __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppSecDes);
+    ITDirectoryObject * This,
+    /* [retval][out] */ IDispatch **ppSecDes);
 
 
 void __RPC_STUB ITDirectoryObject_get_SecurityDescriptor_Stub(
@@ -1190,8 +1202,8 @@ void __RPC_STUB ITDirectoryObject_get_SecurityDescriptor_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITDirectoryObject_put_SecurityDescriptor_Proxy( 
-    ITDirectoryObject __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pSecDes);
+    ITDirectoryObject * This,
+    /* [in] */ IDispatch *pSecDes);
 
 
 void __RPC_STUB ITDirectoryObject_put_SecurityDescriptor_Stub(
@@ -1222,8 +1234,8 @@ EXTERN_C const IID IID_IEnumDirectoryObject;
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [size_is][out] */ ITDirectoryObject __RPC_FAR *__RPC_FAR *pVal,
-            /* [full][out][in] */ ULONG __RPC_FAR *pcFetched) = 0;
+            /* [size_is][out] */ ITDirectoryObject **pVal,
+            /* [full][out][in] */ ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
@@ -1231,7 +1243,7 @@ EXTERN_C const IID IID_IEnumDirectoryObject;
             /* [in] */ ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumDirectoryObject __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+            /* [retval][out] */ IEnumDirectoryObject **ppEnum) = 0;
         
     };
     
@@ -1241,40 +1253,40 @@ EXTERN_C const IID IID_IEnumDirectoryObject;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumDirectoryObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumDirectoryObject * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumDirectoryObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumDirectoryObject * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumDirectoryObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumDirectoryObject * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumDirectoryObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumDirectoryObject * This,
             /* [in] */ ULONG celt,
-            /* [size_is][out] */ ITDirectoryObject __RPC_FAR *__RPC_FAR *pVal,
-            /* [full][out][in] */ ULONG __RPC_FAR *pcFetched);
+            /* [size_is][out] */ ITDirectoryObject **pVal,
+            /* [full][out][in] */ ULONG *pcFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumDirectoryObject __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumDirectoryObject * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumDirectoryObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumDirectoryObject * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumDirectoryObject __RPC_FAR * This,
-            /* [retval][out] */ IEnumDirectoryObject __RPC_FAR *__RPC_FAR *ppEnum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumDirectoryObject * This,
+            /* [retval][out] */ IEnumDirectoryObject **ppEnum);
         
         END_INTERFACE
     } IEnumDirectoryObjectVtbl;
 
     interface IEnumDirectoryObject
     {
-        CONST_VTBL struct IEnumDirectoryObjectVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumDirectoryObjectVtbl *lpVtbl;
     };
 
     
@@ -1312,10 +1324,10 @@ EXTERN_C const IID IID_IEnumDirectoryObject;
 
 
 HRESULT STDMETHODCALLTYPE IEnumDirectoryObject_Next_Proxy( 
-    IEnumDirectoryObject __RPC_FAR * This,
+    IEnumDirectoryObject * This,
     /* [in] */ ULONG celt,
-    /* [size_is][out] */ ITDirectoryObject __RPC_FAR *__RPC_FAR *pVal,
-    /* [full][out][in] */ ULONG __RPC_FAR *pcFetched);
+    /* [size_is][out] */ ITDirectoryObject **pVal,
+    /* [full][out][in] */ ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumDirectoryObject_Next_Stub(
@@ -1326,7 +1338,7 @@ void __RPC_STUB IEnumDirectoryObject_Next_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumDirectoryObject_Reset_Proxy( 
-    IEnumDirectoryObject __RPC_FAR * This);
+    IEnumDirectoryObject * This);
 
 
 void __RPC_STUB IEnumDirectoryObject_Reset_Stub(
@@ -1337,7 +1349,7 @@ void __RPC_STUB IEnumDirectoryObject_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumDirectoryObject_Skip_Proxy( 
-    IEnumDirectoryObject __RPC_FAR * This,
+    IEnumDirectoryObject * This,
     /* [in] */ ULONG celt);
 
 
@@ -1349,8 +1361,8 @@ void __RPC_STUB IEnumDirectoryObject_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumDirectoryObject_Clone_Proxy( 
-    IEnumDirectoryObject __RPC_FAR * This,
-    /* [retval][out] */ IEnumDirectoryObject __RPC_FAR *__RPC_FAR *ppEnum);
+    IEnumDirectoryObject * This,
+    /* [retval][out] */ IEnumDirectoryObject **ppEnum);
 
 
 void __RPC_STUB IEnumDirectoryObject_Clone_Stub(
@@ -1380,7 +1392,7 @@ EXTERN_C const IID IID_ITILSConfig;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Port( 
-            /* [retval][out] */ long __RPC_FAR *pPort) = 0;
+            /* [retval][out] */ long *pPort) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Port( 
             /* [in] */ long Port) = 0;
@@ -1393,52 +1405,52 @@ EXTERN_C const IID IID_ITILSConfig;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITILSConfig __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITILSConfig * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITILSConfig __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITILSConfig * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITILSConfig __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITILSConfig * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ITILSConfig __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITILSConfig * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ITILSConfig __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITILSConfig * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ITILSConfig __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITILSConfig * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ITILSConfig __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITILSConfig * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Port )( 
-            ITILSConfig __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pPort);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Port )( 
+            ITILSConfig * This,
+            /* [retval][out] */ long *pPort);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Port )( 
-            ITILSConfig __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Port )( 
+            ITILSConfig * This,
             /* [in] */ long Port);
         
         END_INTERFACE
@@ -1446,7 +1458,7 @@ EXTERN_C const IID IID_ITILSConfig;
 
     interface ITILSConfig
     {
-        CONST_VTBL struct ITILSConfigVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITILSConfigVtbl *lpVtbl;
     };
 
     
@@ -1491,8 +1503,8 @@ EXTERN_C const IID IID_ITILSConfig;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITILSConfig_get_Port_Proxy( 
-    ITILSConfig __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pPort);
+    ITILSConfig * This,
+    /* [retval][out] */ long *pPort);
 
 
 void __RPC_STUB ITILSConfig_get_Port_Stub(
@@ -1503,7 +1515,7 @@ void __RPC_STUB ITILSConfig_get_Port_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITILSConfig_put_Port_Proxy( 
-    ITILSConfig __RPC_FAR * This,
+    ITILSConfig * This,
     /* [in] */ long Port);
 
 
@@ -1534,16 +1546,16 @@ EXTERN_C const IID IID_ITDirectory;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DirectoryType( 
-            /* [retval][out] */ DIRECTORY_TYPE __RPC_FAR *pDirectoryType) = 0;
+            /* [retval][out] */ DIRECTORY_TYPE *pDirectoryType) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pName) = 0;
+            /* [retval][out] */ BSTR *pName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsDynamic( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfDynamic) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pfDynamic) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultObjectTTL( 
-            /* [retval][out] */ long __RPC_FAR *pTTL) = 0;
+            /* [retval][out] */ long *pTTL) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DefaultObjectTTL( 
             /* [in] */ long TTL) = 0;
@@ -1561,26 +1573,26 @@ EXTERN_C const IID IID_ITDirectory;
             /* [in] */ long lFlags) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddDirectoryObject( 
-            /* [in] */ ITDirectoryObject __RPC_FAR *pDirectoryObject) = 0;
+            /* [in] */ ITDirectoryObject *pDirectoryObject) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ModifyDirectoryObject( 
-            /* [in] */ ITDirectoryObject __RPC_FAR *pDirectoryObject) = 0;
+            /* [in] */ ITDirectoryObject *pDirectoryObject) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RefreshDirectoryObject( 
-            /* [in] */ ITDirectoryObject __RPC_FAR *pDirectoryObject) = 0;
+            /* [in] */ ITDirectoryObject *pDirectoryObject) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteDirectoryObject( 
-            /* [in] */ ITDirectoryObject __RPC_FAR *pDirectoryObject) = 0;
+            /* [in] */ ITDirectoryObject *pDirectoryObject) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DirectoryObjects( 
             /* [in] */ DIRECTORY_OBJECT_TYPE DirectoryObjectType,
             /* [in] */ BSTR pName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant) = 0;
+            /* [retval][out] */ VARIANT *pVariant) = 0;
         
         virtual /* [helpstring][restricted][hidden][id] */ HRESULT STDMETHODCALLTYPE EnumerateDirectoryObjects( 
             /* [in] */ DIRECTORY_OBJECT_TYPE DirectoryObjectType,
             /* [in] */ BSTR pName,
-            /* [out] */ IEnumDirectoryObject __RPC_FAR *__RPC_FAR *ppEnumObject) = 0;
+            /* [out] */ IEnumDirectoryObject **ppEnumObject) = 0;
         
     };
     
@@ -1590,115 +1602,115 @@ EXTERN_C const IID IID_ITDirectory;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITDirectory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITDirectory * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITDirectory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITDirectory * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITDirectory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITDirectory * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ITDirectory __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITDirectory * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ITDirectory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITDirectory * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ITDirectory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITDirectory * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ITDirectory __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITDirectory * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DirectoryType )( 
-            ITDirectory __RPC_FAR * This,
-            /* [retval][out] */ DIRECTORY_TYPE __RPC_FAR *pDirectoryType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DirectoryType )( 
+            ITDirectory * This,
+            /* [retval][out] */ DIRECTORY_TYPE *pDirectoryType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayName )( 
-            ITDirectory __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
+            ITDirectory * This,
+            /* [retval][out] */ BSTR *pName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsDynamic )( 
-            ITDirectory __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfDynamic);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsDynamic )( 
+            ITDirectory * This,
+            /* [retval][out] */ VARIANT_BOOL *pfDynamic);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultObjectTTL )( 
-            ITDirectory __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pTTL);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultObjectTTL )( 
+            ITDirectory * This,
+            /* [retval][out] */ long *pTTL);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DefaultObjectTTL )( 
-            ITDirectory __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DefaultObjectTTL )( 
+            ITDirectory * This,
             /* [in] */ long TTL);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnableAutoRefresh )( 
-            ITDirectory __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *EnableAutoRefresh )( 
+            ITDirectory * This,
             /* [in] */ VARIANT_BOOL fEnable);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Connect )( 
-            ITDirectory __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Connect )( 
+            ITDirectory * This,
             /* [in] */ VARIANT_BOOL fSecure);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Bind )( 
-            ITDirectory __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Bind )( 
+            ITDirectory * This,
             /* [in] */ BSTR pDomainName,
             /* [in] */ BSTR pUserName,
             /* [in] */ BSTR pPassword,
             /* [in] */ long lFlags);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddDirectoryObject )( 
-            ITDirectory __RPC_FAR * This,
-            /* [in] */ ITDirectoryObject __RPC_FAR *pDirectoryObject);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddDirectoryObject )( 
+            ITDirectory * This,
+            /* [in] */ ITDirectoryObject *pDirectoryObject);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ModifyDirectoryObject )( 
-            ITDirectory __RPC_FAR * This,
-            /* [in] */ ITDirectoryObject __RPC_FAR *pDirectoryObject);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ModifyDirectoryObject )( 
+            ITDirectory * This,
+            /* [in] */ ITDirectoryObject *pDirectoryObject);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RefreshDirectoryObject )( 
-            ITDirectory __RPC_FAR * This,
-            /* [in] */ ITDirectoryObject __RPC_FAR *pDirectoryObject);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RefreshDirectoryObject )( 
+            ITDirectory * This,
+            /* [in] */ ITDirectoryObject *pDirectoryObject);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteDirectoryObject )( 
-            ITDirectory __RPC_FAR * This,
-            /* [in] */ ITDirectoryObject __RPC_FAR *pDirectoryObject);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteDirectoryObject )( 
+            ITDirectory * This,
+            /* [in] */ ITDirectoryObject *pDirectoryObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DirectoryObjects )( 
-            ITDirectory __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DirectoryObjects )( 
+            ITDirectory * This,
             /* [in] */ DIRECTORY_OBJECT_TYPE DirectoryObjectType,
             /* [in] */ BSTR pName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+            /* [retval][out] */ VARIANT *pVariant);
         
-        /* [helpstring][restricted][hidden][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateDirectoryObjects )( 
-            ITDirectory __RPC_FAR * This,
+        /* [helpstring][restricted][hidden][id] */ HRESULT ( STDMETHODCALLTYPE *EnumerateDirectoryObjects )( 
+            ITDirectory * This,
             /* [in] */ DIRECTORY_OBJECT_TYPE DirectoryObjectType,
             /* [in] */ BSTR pName,
-            /* [out] */ IEnumDirectoryObject __RPC_FAR *__RPC_FAR *ppEnumObject);
+            /* [out] */ IEnumDirectoryObject **ppEnumObject);
         
         END_INTERFACE
     } ITDirectoryVtbl;
 
     interface ITDirectory
     {
-        CONST_VTBL struct ITDirectoryVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITDirectoryVtbl *lpVtbl;
     };
 
     
@@ -1779,8 +1791,8 @@ EXTERN_C const IID IID_ITDirectory;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectory_get_DirectoryType_Proxy( 
-    ITDirectory __RPC_FAR * This,
-    /* [retval][out] */ DIRECTORY_TYPE __RPC_FAR *pDirectoryType);
+    ITDirectory * This,
+    /* [retval][out] */ DIRECTORY_TYPE *pDirectoryType);
 
 
 void __RPC_STUB ITDirectory_get_DirectoryType_Stub(
@@ -1791,8 +1803,8 @@ void __RPC_STUB ITDirectory_get_DirectoryType_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectory_get_DisplayName_Proxy( 
-    ITDirectory __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pName);
+    ITDirectory * This,
+    /* [retval][out] */ BSTR *pName);
 
 
 void __RPC_STUB ITDirectory_get_DisplayName_Stub(
@@ -1803,8 +1815,8 @@ void __RPC_STUB ITDirectory_get_DisplayName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectory_get_IsDynamic_Proxy( 
-    ITDirectory __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfDynamic);
+    ITDirectory * This,
+    /* [retval][out] */ VARIANT_BOOL *pfDynamic);
 
 
 void __RPC_STUB ITDirectory_get_IsDynamic_Stub(
@@ -1815,8 +1827,8 @@ void __RPC_STUB ITDirectory_get_IsDynamic_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectory_get_DefaultObjectTTL_Proxy( 
-    ITDirectory __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pTTL);
+    ITDirectory * This,
+    /* [retval][out] */ long *pTTL);
 
 
 void __RPC_STUB ITDirectory_get_DefaultObjectTTL_Stub(
@@ -1827,7 +1839,7 @@ void __RPC_STUB ITDirectory_get_DefaultObjectTTL_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITDirectory_put_DefaultObjectTTL_Proxy( 
-    ITDirectory __RPC_FAR * This,
+    ITDirectory * This,
     /* [in] */ long TTL);
 
 
@@ -1839,7 +1851,7 @@ void __RPC_STUB ITDirectory_put_DefaultObjectTTL_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITDirectory_EnableAutoRefresh_Proxy( 
-    ITDirectory __RPC_FAR * This,
+    ITDirectory * This,
     /* [in] */ VARIANT_BOOL fEnable);
 
 
@@ -1851,7 +1863,7 @@ void __RPC_STUB ITDirectory_EnableAutoRefresh_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITDirectory_Connect_Proxy( 
-    ITDirectory __RPC_FAR * This,
+    ITDirectory * This,
     /* [in] */ VARIANT_BOOL fSecure);
 
 
@@ -1863,7 +1875,7 @@ void __RPC_STUB ITDirectory_Connect_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITDirectory_Bind_Proxy( 
-    ITDirectory __RPC_FAR * This,
+    ITDirectory * This,
     /* [in] */ BSTR pDomainName,
     /* [in] */ BSTR pUserName,
     /* [in] */ BSTR pPassword,
@@ -1878,8 +1890,8 @@ void __RPC_STUB ITDirectory_Bind_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITDirectory_AddDirectoryObject_Proxy( 
-    ITDirectory __RPC_FAR * This,
-    /* [in] */ ITDirectoryObject __RPC_FAR *pDirectoryObject);
+    ITDirectory * This,
+    /* [in] */ ITDirectoryObject *pDirectoryObject);
 
 
 void __RPC_STUB ITDirectory_AddDirectoryObject_Stub(
@@ -1890,8 +1902,8 @@ void __RPC_STUB ITDirectory_AddDirectoryObject_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITDirectory_ModifyDirectoryObject_Proxy( 
-    ITDirectory __RPC_FAR * This,
-    /* [in] */ ITDirectoryObject __RPC_FAR *pDirectoryObject);
+    ITDirectory * This,
+    /* [in] */ ITDirectoryObject *pDirectoryObject);
 
 
 void __RPC_STUB ITDirectory_ModifyDirectoryObject_Stub(
@@ -1902,8 +1914,8 @@ void __RPC_STUB ITDirectory_ModifyDirectoryObject_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITDirectory_RefreshDirectoryObject_Proxy( 
-    ITDirectory __RPC_FAR * This,
-    /* [in] */ ITDirectoryObject __RPC_FAR *pDirectoryObject);
+    ITDirectory * This,
+    /* [in] */ ITDirectoryObject *pDirectoryObject);
 
 
 void __RPC_STUB ITDirectory_RefreshDirectoryObject_Stub(
@@ -1914,8 +1926,8 @@ void __RPC_STUB ITDirectory_RefreshDirectoryObject_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITDirectory_DeleteDirectoryObject_Proxy( 
-    ITDirectory __RPC_FAR * This,
-    /* [in] */ ITDirectoryObject __RPC_FAR *pDirectoryObject);
+    ITDirectory * This,
+    /* [in] */ ITDirectoryObject *pDirectoryObject);
 
 
 void __RPC_STUB ITDirectory_DeleteDirectoryObject_Stub(
@@ -1926,10 +1938,10 @@ void __RPC_STUB ITDirectory_DeleteDirectoryObject_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITDirectory_get_DirectoryObjects_Proxy( 
-    ITDirectory __RPC_FAR * This,
+    ITDirectory * This,
     /* [in] */ DIRECTORY_OBJECT_TYPE DirectoryObjectType,
     /* [in] */ BSTR pName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+    /* [retval][out] */ VARIANT *pVariant);
 
 
 void __RPC_STUB ITDirectory_get_DirectoryObjects_Stub(
@@ -1940,10 +1952,10 @@ void __RPC_STUB ITDirectory_get_DirectoryObjects_Stub(
 
 
 /* [helpstring][restricted][hidden][id] */ HRESULT STDMETHODCALLTYPE ITDirectory_EnumerateDirectoryObjects_Proxy( 
-    ITDirectory __RPC_FAR * This,
+    ITDirectory * This,
     /* [in] */ DIRECTORY_OBJECT_TYPE DirectoryObjectType,
     /* [in] */ BSTR pName,
-    /* [out] */ IEnumDirectoryObject __RPC_FAR *__RPC_FAR *ppEnumObject);
+    /* [out] */ IEnumDirectoryObject **ppEnumObject);
 
 
 void __RPC_STUB ITDirectory_EnumerateDirectoryObjects_Stub(
@@ -1974,8 +1986,8 @@ EXTERN_C const IID IID_IEnumDirectory;
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ITDirectory __RPC_FAR *__RPC_FAR *ppElements,
-            /* [full][out][in] */ ULONG __RPC_FAR *pcFetched) = 0;
+            /* [length_is][size_is][out] */ ITDirectory **ppElements,
+            /* [full][out][in] */ ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
@@ -1983,7 +1995,7 @@ EXTERN_C const IID IID_IEnumDirectory;
             /* [in] */ ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumDirectory __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+            /* [retval][out] */ IEnumDirectory **ppEnum) = 0;
         
     };
     
@@ -1993,40 +2005,40 @@ EXTERN_C const IID IID_IEnumDirectory;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumDirectory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumDirectory * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumDirectory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumDirectory * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumDirectory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumDirectory * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumDirectory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumDirectory * This,
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ITDirectory __RPC_FAR *__RPC_FAR *ppElements,
-            /* [full][out][in] */ ULONG __RPC_FAR *pcFetched);
+            /* [length_is][size_is][out] */ ITDirectory **ppElements,
+            /* [full][out][in] */ ULONG *pcFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumDirectory __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumDirectory * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumDirectory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumDirectory * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumDirectory __RPC_FAR * This,
-            /* [retval][out] */ IEnumDirectory __RPC_FAR *__RPC_FAR *ppEnum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumDirectory * This,
+            /* [retval][out] */ IEnumDirectory **ppEnum);
         
         END_INTERFACE
     } IEnumDirectoryVtbl;
 
     interface IEnumDirectory
     {
-        CONST_VTBL struct IEnumDirectoryVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumDirectoryVtbl *lpVtbl;
     };
 
     
@@ -2064,10 +2076,10 @@ EXTERN_C const IID IID_IEnumDirectory;
 
 
 HRESULT STDMETHODCALLTYPE IEnumDirectory_Next_Proxy( 
-    IEnumDirectory __RPC_FAR * This,
+    IEnumDirectory * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ITDirectory __RPC_FAR *__RPC_FAR *ppElements,
-    /* [full][out][in] */ ULONG __RPC_FAR *pcFetched);
+    /* [length_is][size_is][out] */ ITDirectory **ppElements,
+    /* [full][out][in] */ ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumDirectory_Next_Stub(
@@ -2078,7 +2090,7 @@ void __RPC_STUB IEnumDirectory_Next_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumDirectory_Reset_Proxy( 
-    IEnumDirectory __RPC_FAR * This);
+    IEnumDirectory * This);
 
 
 void __RPC_STUB IEnumDirectory_Reset_Stub(
@@ -2089,7 +2101,7 @@ void __RPC_STUB IEnumDirectory_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumDirectory_Skip_Proxy( 
-    IEnumDirectory __RPC_FAR * This,
+    IEnumDirectory * This,
     /* [in] */ ULONG celt);
 
 
@@ -2101,8 +2113,8 @@ void __RPC_STUB IEnumDirectory_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumDirectory_Clone_Proxy( 
-    IEnumDirectory __RPC_FAR * This,
-    /* [retval][out] */ IEnumDirectory __RPC_FAR *__RPC_FAR *ppEnum);
+    IEnumDirectory * This,
+    /* [retval][out] */ IEnumDirectory **ppEnum);
 
 
 void __RPC_STUB IEnumDirectory_Clone_Stub(
@@ -2132,20 +2144,20 @@ EXTERN_C const IID IID_ITRendezvous;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultDirectories( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant) = 0;
+            /* [retval][out] */ VARIANT *pVariant) = 0;
         
         virtual /* [helpstring][restricted][hidden][id] */ HRESULT STDMETHODCALLTYPE EnumerateDefaultDirectories( 
-            /* [out] */ IEnumDirectory __RPC_FAR *__RPC_FAR *ppEnumDirectory) = 0;
+            /* [out] */ IEnumDirectory **ppEnumDirectory) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateDirectory( 
             /* [in] */ DIRECTORY_TYPE DirectoryType,
             /* [in] */ BSTR pName,
-            /* [retval][out] */ ITDirectory __RPC_FAR *__RPC_FAR *ppDir) = 0;
+            /* [retval][out] */ ITDirectory **ppDir) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateDirectoryObject( 
             /* [in] */ DIRECTORY_OBJECT_TYPE DirectoryObjectType,
             /* [in] */ BSTR pName,
-            /* [retval][out] */ ITDirectoryObject __RPC_FAR *__RPC_FAR *ppDirectoryObject) = 0;
+            /* [retval][out] */ ITDirectoryObject **ppDirectoryObject) = 0;
         
     };
     
@@ -2155,72 +2167,72 @@ EXTERN_C const IID IID_ITRendezvous;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITRendezvous __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITRendezvous * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITRendezvous __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITRendezvous * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITRendezvous __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITRendezvous * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ITRendezvous __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITRendezvous * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ITRendezvous __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITRendezvous * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ITRendezvous __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITRendezvous * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ITRendezvous __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITRendezvous * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultDirectories )( 
-            ITRendezvous __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultDirectories )( 
+            ITRendezvous * This,
+            /* [retval][out] */ VARIANT *pVariant);
         
-        /* [helpstring][restricted][hidden][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateDefaultDirectories )( 
-            ITRendezvous __RPC_FAR * This,
-            /* [out] */ IEnumDirectory __RPC_FAR *__RPC_FAR *ppEnumDirectory);
+        /* [helpstring][restricted][hidden][id] */ HRESULT ( STDMETHODCALLTYPE *EnumerateDefaultDirectories )( 
+            ITRendezvous * This,
+            /* [out] */ IEnumDirectory **ppEnumDirectory);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateDirectory )( 
-            ITRendezvous __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateDirectory )( 
+            ITRendezvous * This,
             /* [in] */ DIRECTORY_TYPE DirectoryType,
             /* [in] */ BSTR pName,
-            /* [retval][out] */ ITDirectory __RPC_FAR *__RPC_FAR *ppDir);
+            /* [retval][out] */ ITDirectory **ppDir);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateDirectoryObject )( 
-            ITRendezvous __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateDirectoryObject )( 
+            ITRendezvous * This,
             /* [in] */ DIRECTORY_OBJECT_TYPE DirectoryObjectType,
             /* [in] */ BSTR pName,
-            /* [retval][out] */ ITDirectoryObject __RPC_FAR *__RPC_FAR *ppDirectoryObject);
+            /* [retval][out] */ ITDirectoryObject **ppDirectoryObject);
         
         END_INTERFACE
     } ITRendezvousVtbl;
 
     interface ITRendezvous
     {
-        CONST_VTBL struct ITRendezvousVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITRendezvousVtbl *lpVtbl;
     };
 
     
@@ -2271,8 +2283,8 @@ EXTERN_C const IID IID_ITRendezvous;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITRendezvous_get_DefaultDirectories_Proxy( 
-    ITRendezvous __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+    ITRendezvous * This,
+    /* [retval][out] */ VARIANT *pVariant);
 
 
 void __RPC_STUB ITRendezvous_get_DefaultDirectories_Stub(
@@ -2283,8 +2295,8 @@ void __RPC_STUB ITRendezvous_get_DefaultDirectories_Stub(
 
 
 /* [helpstring][restricted][hidden][id] */ HRESULT STDMETHODCALLTYPE ITRendezvous_EnumerateDefaultDirectories_Proxy( 
-    ITRendezvous __RPC_FAR * This,
-    /* [out] */ IEnumDirectory __RPC_FAR *__RPC_FAR *ppEnumDirectory);
+    ITRendezvous * This,
+    /* [out] */ IEnumDirectory **ppEnumDirectory);
 
 
 void __RPC_STUB ITRendezvous_EnumerateDefaultDirectories_Stub(
@@ -2295,10 +2307,10 @@ void __RPC_STUB ITRendezvous_EnumerateDefaultDirectories_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITRendezvous_CreateDirectory_Proxy( 
-    ITRendezvous __RPC_FAR * This,
+    ITRendezvous * This,
     /* [in] */ DIRECTORY_TYPE DirectoryType,
     /* [in] */ BSTR pName,
-    /* [retval][out] */ ITDirectory __RPC_FAR *__RPC_FAR *ppDir);
+    /* [retval][out] */ ITDirectory **ppDir);
 
 
 void __RPC_STUB ITRendezvous_CreateDirectory_Stub(
@@ -2309,10 +2321,10 @@ void __RPC_STUB ITRendezvous_CreateDirectory_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITRendezvous_CreateDirectoryObject_Proxy( 
-    ITRendezvous __RPC_FAR * This,
+    ITRendezvous * This,
     /* [in] */ DIRECTORY_OBJECT_TYPE DirectoryObjectType,
     /* [in] */ BSTR pName,
-    /* [retval][out] */ ITDirectoryObject __RPC_FAR *__RPC_FAR *ppDirectoryObject);
+    /* [retval][out] */ ITDirectoryObject **ppDirectoryObject);
 
 
 void __RPC_STUB ITRendezvous_CreateDirectoryObject_Stub(
@@ -2326,7 +2338,7 @@ void __RPC_STUB ITRendezvous_CreateDirectoryObject_Stub(
 #endif 	/* __ITRendezvous_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_rend_0167 */
+/* interface __MIDL_itf_rend_0492 */
 /* [local] */ 
 
 
@@ -2355,8 +2367,8 @@ void __RPC_STUB ITRendezvous_CreateDirectoryObject_Stub(
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_rend_0167_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_rend_0167_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_rend_0492_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_rend_0492_v0_0_s_ifspec;
 
 
 #ifndef __RENDLib_LIBRARY_DEFINED__
@@ -2405,15 +2417,15 @@ const long RENDBIND_DEFAULTCREDENTIALS	=	0xe;
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
+unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
+void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
 /* end of Additional Prototypes */
 
@@ -2424,4 +2436,3 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

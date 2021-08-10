@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0002    // Increment this if a change has global effects
 
-Copyright (c) 1989 - 1999, Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -20,7 +20,6 @@ Revision History:
 --*/
 
 #ifndef _WINCON_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINCON_
 
 #ifdef __cplusplus
@@ -173,6 +172,29 @@ typedef struct _CONSOLE_CURSOR_INFO {
     DWORD  dwSize;
     BOOL   bVisible;
 } CONSOLE_CURSOR_INFO, *PCONSOLE_CURSOR_INFO;
+
+typedef struct _CONSOLE_FONT_INFO {
+    DWORD  nFont;
+    COORD  dwFontSize;
+} CONSOLE_FONT_INFO, *PCONSOLE_FONT_INFO;
+
+#if(_WIN32_WINNT >= 0x0500)
+typedef struct _CONSOLE_SELECTION_INFO {
+    DWORD dwFlags;
+    COORD dwSelectionAnchor;
+    SMALL_RECT srSelection;
+} CONSOLE_SELECTION_INFO, *PCONSOLE_SELECTION_INFO;
+
+//
+// Selection flags
+//
+
+#define CONSOLE_NO_SELECTION            0x0000
+#define CONSOLE_SELECTION_IN_PROGRESS   0x0001   // selection has begun
+#define CONSOLE_SELECTION_NOT_EMPTY     0x0002   // non-null select rectangle
+#define CONSOLE_MOUSE_SELECTION         0x0004   // selecting with mouse
+#define CONSOLE_MOUSE_DOWN              0x0008   // mouse is down
+#endif /* _WIN32_WINNT >= 0x0500 */
 
 //
 // typedef for ctrl-c handler routines
@@ -487,6 +509,34 @@ GetConsoleCursorInfo(
     OUT PCONSOLE_CURSOR_INFO lpConsoleCursorInfo
     );
 
+#if(_WIN32_WINNT >= 0x0500)
+
+WINBASEAPI
+BOOL
+WINAPI
+GetCurrentConsoleFont(
+    IN HANDLE hConsoleOutput,
+    IN BOOL bMaximumWindow,
+    OUT PCONSOLE_FONT_INFO lpConsoleCurrentFont
+    );
+
+WINBASEAPI
+COORD
+WINAPI
+GetConsoleFontSize(
+    IN HANDLE hConsoleOutput,
+    IN DWORD nFont
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+GetConsoleSelectionInfo(
+    OUT PCONSOLE_SELECTION_INFO lpConsoleSelectionInfo
+    );
+
+#endif /* _WIN32_WINNT >= 0x0500 */
+
 WINBASEAPI
 BOOL
 WINAPI
@@ -609,6 +659,14 @@ BOOL
 WINAPI
 FreeConsole( VOID );
 
+#if(_WIN32_WINNT >= 0x0500)
+WINBASEAPI
+BOOL
+WINAPI
+AttachConsole(
+    IN DWORD dwProcessId
+    );
+#endif /* _WIN32_WINNT >= 0x0500 */
 
 WINBASEAPI
 DWORD
@@ -737,10 +795,40 @@ SetConsoleOutputCP(
     IN UINT wCodePageID
     );
 
+#if(_WIN32_WINNT >= 0x0500)
+
+#define CONSOLE_FULLSCREEN 1            // fullscreen console
+#define CONSOLE_FULLSCREEN_HARDWARE 2   // console owns the hardware
+
+WINBASEAPI
+BOOL
+APIENTRY
+GetConsoleDisplayMode(
+    OUT LPDWORD lpModeFlags
+    );
+
+WINBASEAPI
+HWND
+APIENTRY
+GetConsoleWindow(
+    VOID
+    );
+
+#endif /* _WIN32_WINNT >= 0x0500 */
+
+#if(_WIN32_WINNT >= 0x0501)
+
+WINBASEAPI
+DWORD
+APIENTRY
+GetConsoleProcessList(
+    OUT LPDWORD lpdwProcessList,
+    IN DWORD dwProcessCount);
+#endif /* _WIN32_WINNT >= 0x0501 */
+
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _WINCON_
 

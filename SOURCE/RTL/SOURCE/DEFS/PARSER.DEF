@@ -1,72 +1,72 @@
-LIBRARY PARSER
+LIBRARY parser
 EXPORTS
 
-    AddressToString                          = 'PARSER.DLL'.*
-    _BERGetHeader                            = 'PARSER.DLL'.BERGetHeader
-    _BERGetInteger                           = 'PARSER.DLL'.BERGetInteger
-    _BERGetString                            = 'PARSER.DLL'.BERGetString
-    _BuildINIPath                            = 'PARSER.DLL'.BuildINIPath
-    ByteToBinary                             = 'PARSER.DLL'.*
-    CanonHex                                 = 'PARSER.DLL'.*
-    CanonicalizeHexString                    = 'PARSER.DLL'.*
-    DwordToBinary                            = 'PARSER.DLL'.*
-    _FormatByteFlags                         = 'PARSER.DLL'.FormatByteFlags
-    _FormatDwordFlags                        = 'PARSER.DLL'.FormatDwordFlags
-    _FormatLabeledByteSet                    = 'PARSER.DLL'.FormatLabeledByteSet
-    _FormatLabeledByteSetAsFlags             = 'PARSER.DLL'.FormatLabeledByteSetAsFlags
-    _FormatLabeledDwordSet                   = 'PARSER.DLL'.FormatLabeledDwordSet
-    _FormatLabeledDwordSetAsFlags            = 'PARSER.DLL'.FormatLabeledDwordSetAsFlags
-    _FormatLabeledWordSet                    = 'PARSER.DLL'.FormatLabeledWordSet
-    _FormatLabeledWordSetAsFlags             = 'PARSER.DLL'.FormatLabeledWordSetAsFlags
-    _FormatPropertyDataAsHexString           = 'PARSER.DLL'.FormatPropertyDataAsHexString
-    _FormatPropertyDataAsInt64               = 'PARSER.DLL'.FormatPropertyDataAsInt64
-    _FormatPropertyDataAsString              = 'PARSER.DLL'.FormatPropertyDataAsString
-    _FormatPropertyDataAsTime                = 'PARSER.DLL'.FormatPropertyDataAsTime
-    _FormatPropertyDataAsWord                = 'PARSER.DLL'.FormatPropertyDataAsWord
-    _FormatTimeAsString                      = 'PARSER.DLL'.FormatTimeAsString
-    _FormatWordFlags                         = 'PARSER.DLL'.FormatWordFlags
-    GetEtype                                 = 'PARSER.DLL'.*
-    GetLLCHeaderLength                       = 'PARSER.DLL'.*
-    GetMacHeaderLength                       = 'PARSER.DLL'.*
-    GetProtocolDescription                   = 'PARSER.DLL'.*
-    GetProtocolDescriptionTable              = 'PARSER.DLL'.*
-    GetSaps                                  = 'PARSER.DLL'.*
-    IsLLCPresent                             = 'PARSER.DLL'.*
-    LookupByteSetString                      = 'PARSER.DLL'.*
-    LookupDwordSetString                     = 'PARSER.DLL'.*
-    LookupWordSetString                      = 'PARSER.DLL'.*
-    StringToAddress                          = 'PARSER.DLL'.*
-    VarLenSmallIntToDword                    = 'PARSER.DLL'.*
-    WordToBinary                             = 'PARSER.DLL'.*
-    _byte_flag_to_string                     = 'PARSER.DLL'.byte_flag_to_string
-    _dword_flag_to_string                    = 'PARSER.DLL'.dword_flag_to_string
-    _fm_byte10                               = 'PARSER.DLL'.fm_byte10
-    _fm_byte16                               = 'PARSER.DLL'.fm_byte16
-    _fm_byte_flags                           = 'PARSER.DLL'.fm_byte_flags
-    _fm_byte_set                             = 'PARSER.DLL'.fm_byte_set
-    _fm_dword10                              = 'PARSER.DLL'.fm_dword10
-    _fm_dword16                              = 'PARSER.DLL'.fm_dword16
-    _fm_dword_flags                          = 'PARSER.DLL'.fm_dword_flags
-    _fm_dword_set                            = 'PARSER.DLL'.fm_dword_set
-    _fm_hex_string                           = 'PARSER.DLL'.fm_hex_string
-    _fm_largeint16                           = 'PARSER.DLL'.fm_largeint16
-    _fm_property_name                        = 'PARSER.DLL'.fm_property_name
-    _fm_string                               = 'PARSER.DLL'.fm_string
-    _fm_swap_dword10                         = 'PARSER.DLL'.fm_swap_dword10
-    _fm_swap_dword16                         = 'PARSER.DLL'.fm_swap_dword16
-    _fm_swap_word10                          = 'PARSER.DLL'.fm_swap_word10
-    _fm_swap_word16                          = 'PARSER.DLL'.fm_swap_word16
-    _fm_time                                 = 'PARSER.DLL'.fm_time
-    _fm_time_ex                              = 'PARSER.DLL'.fm_time_ex
-    _fm_word10                               = 'PARSER.DLL'.fm_word10
-    _fm_word16                               = 'PARSER.DLL'.fm_word16
-    _fm_word_flags                           = 'PARSER.DLL'.fm_word_flags
-    _fm_word_set                             = 'PARSER.DLL'.fm_word_set
-    _hex_canon                               = 'PARSER.DLL'.hex_canon
-    _hex_canon2                              = 'PARSER.DLL'.hex_canon2
-    _itoa1                                   = 'PARSER.DLL'.itoa1
-    _prop_name_equals                        = 'PARSER.DLL'.prop_name_equals
-    _property_name                           = 'PARSER.DLL'.property_name
-    _strcpy1                                 = 'PARSER.DLL'.strcpy1
-    _time_string                             = 'PARSER.DLL'.time_string
-    _word_flag_to_string                     = 'PARSER.DLL'.word_flag_to_string
+    AddressToString
+    _BERGetHeader        = BERGetHeader
+    _BERGetInteger        = BERGetInteger
+    _BERGetString        = BERGetString
+    _BuildINIPath        = BuildINIPath
+    ByteToBinary
+    CanonHex
+    CanonicalizeHexString
+    DwordToBinary
+    _FormatByteFlags        = FormatByteFlags
+    _FormatDwordFlags        = FormatDwordFlags
+    _FormatLabeledByteSet        = FormatLabeledByteSet
+    _FormatLabeledByteSetAsFlags        = FormatLabeledByteSetAsFlags
+    _FormatLabeledDwordSet        = FormatLabeledDwordSet
+    _FormatLabeledDwordSetAsFlags        = FormatLabeledDwordSetAsFlags
+    _FormatLabeledWordSet        = FormatLabeledWordSet
+    _FormatLabeledWordSetAsFlags        = FormatLabeledWordSetAsFlags
+    _FormatPropertyDataAsHexString        = FormatPropertyDataAsHexString
+    _FormatPropertyDataAsInt64        = FormatPropertyDataAsInt64
+    _FormatPropertyDataAsString        = FormatPropertyDataAsString
+    _FormatPropertyDataAsTime        = FormatPropertyDataAsTime
+    _FormatPropertyDataAsWord        = FormatPropertyDataAsWord
+    _FormatTimeAsString        = FormatTimeAsString
+    _FormatWordFlags        = FormatWordFlags
+    GetEtype
+    GetLLCHeaderLength
+    GetMacHeaderLength
+    GetProtocolDescription
+    GetProtocolDescriptionTable
+    GetSaps
+    IsLLCPresent
+    LookupByteSetString
+    LookupDwordSetString
+    LookupWordSetString
+    StringToAddress
+    VarLenSmallIntToDword
+    WordToBinary
+    _byte_flag_to_string        = byte_flag_to_string
+    _dword_flag_to_string        = dword_flag_to_string
+    _fm_byte10        = fm_byte10
+    _fm_byte16        = fm_byte16
+    _fm_byte_flags        = fm_byte_flags
+    _fm_byte_set        = fm_byte_set
+    _fm_dword10        = fm_dword10
+    _fm_dword16        = fm_dword16
+    _fm_dword_flags        = fm_dword_flags
+    _fm_dword_set        = fm_dword_set
+    _fm_hex_string        = fm_hex_string
+    _fm_largeint16        = fm_largeint16
+    _fm_property_name        = fm_property_name
+    _fm_string        = fm_string
+    _fm_swap_dword10        = fm_swap_dword10
+    _fm_swap_dword16        = fm_swap_dword16
+    _fm_swap_word10        = fm_swap_word10
+    _fm_swap_word16        = fm_swap_word16
+    _fm_time        = fm_time
+    _fm_time_ex        = fm_time_ex
+    _fm_word10        = fm_word10
+    _fm_word16        = fm_word16
+    _fm_word_flags        = fm_word_flags
+    _fm_word_set        = fm_word_set
+    _hex_canon        = hex_canon
+    _hex_canon2        = hex_canon2
+    _itoa1        = itoa1
+    _prop_name_equals        = prop_name_equals
+    _property_name        = property_name
+    _strcpy1        = strcpy1
+    _time_string        = time_string
+    _word_flag_to_string        = word_flag_to_string

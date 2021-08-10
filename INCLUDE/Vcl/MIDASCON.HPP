@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'MidasCon.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MidasCon.pas' rev: 6.00
 
 #ifndef MidasConHPP
 #define MidasConHPP
@@ -10,7 +10,8 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
+#include <DBClient.hpp>	// Pascal unit
 #include <SConnect.hpp>	// Pascal unit
 #include <MConnect.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
@@ -29,8 +30,7 @@ class PASCALIMPLEMENTATION TRemoteServer : public Mconnect::TDCOMConnection
 	
 public:
 	#pragma option push -w-inl
-	/* TDCOMConnection.Create */ inline __fastcall virtual TRemoteServer(Classes::TComponent* AOwner) : 
-		Mconnect::TDCOMConnection(AOwner) { }
+	/* TDCOMConnection.Create */ inline __fastcall virtual TRemoteServer(Classes::TComponent* AOwner) : Mconnect::TDCOMConnection(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -80,9 +80,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Midascon */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Midascon;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

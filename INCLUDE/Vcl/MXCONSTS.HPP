@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxConsts.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Mxconsts.pas' rev: 6.00
 
-#ifndef mxConstsHPP
-#define mxConstsHPP
+#ifndef MxconstsHPP
+#define MxconstsHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -87,7 +87,6 @@ extern PACKAGE System::ResourceString _sDupeItem;
 #define Mxconsts_sDupeItem System::LoadResourceString(&Mxconsts::_sDupeItem)
 extern PACKAGE System::ResourceString _sArrayIndexOutOfRange;
 #define Mxconsts_sArrayIndexOutOfRange System::LoadResourceString(&Mxconsts::_sArrayIndexOutOfRange)
-	
 extern PACKAGE System::ResourceString _sLowCapacityError;
 #define Mxconsts_sLowCapacityError System::LoadResourceString(&Mxconsts::_sLowCapacityError)
 extern PACKAGE System::ResourceString _sQryNotInitialized;
@@ -114,7 +113,6 @@ extern PACKAGE System::ResourceString _sGetValueCounts;
 #define Mxconsts_sGetValueCounts System::LoadResourceString(&Mxconsts::_sGetValueCounts)
 extern PACKAGE System::ResourceString _sDateBinningNotAllowed;
 #define Mxconsts_sDateBinningNotAllowed System::LoadResourceString(&Mxconsts::_sDateBinningNotAllowed)
-	
 extern PACKAGE System::ResourceString _sEmptyDataSet;
 #define Mxconsts_sEmptyDataSet System::LoadResourceString(&Mxconsts::_sEmptyDataSet)
 extern PACKAGE System::ResourceString _sNoDataSet;
@@ -175,7 +173,6 @@ extern PACKAGE System::ResourceString _sMaxAllowedCells;
 #define Mxconsts_sMaxAllowedCells System::LoadResourceString(&Mxconsts::_sMaxAllowedCells)
 extern PACKAGE System::ResourceString _sUnsupportedFieldType;
 #define Mxconsts_sUnsupportedFieldType System::LoadResourceString(&Mxconsts::_sUnsupportedFieldType)
-	
 extern PACKAGE System::ResourceString _sFetchValues;
 #define Mxconsts_sFetchValues System::LoadResourceString(&Mxconsts::_sFetchValues)
 extern PACKAGE System::ResourceString _sUserCanceled;
@@ -186,7 +183,6 @@ extern PACKAGE System::ResourceString _sCreatingIndexes;
 #define Mxconsts_sCreatingIndexes System::LoadResourceString(&Mxconsts::_sCreatingIndexes)
 extern PACKAGE System::ResourceString _sCreateDerivedSummaryError;
 #define Mxconsts_sCreateDerivedSummaryError System::LoadResourceString(&Mxconsts::_sCreateDerivedSummaryError)
-	
 extern PACKAGE System::ResourceString _sTrue;
 #define Mxconsts_sTrue System::LoadResourceString(&Mxconsts::_sTrue)
 extern PACKAGE System::ResourceString _sFalse;
@@ -197,7 +193,6 @@ extern PACKAGE System::ResourceString _sFatalCacheError;
 #define Mxconsts_sFatalCacheError System::LoadResourceString(&Mxconsts::_sFatalCacheError)
 extern PACKAGE System::ResourceString _sStringTypeNoSupported;
 #define Mxconsts_sStringTypeNoSupported System::LoadResourceString(&Mxconsts::_sStringTypeNoSupported)
-	
 extern PACKAGE System::ResourceString _sDataSetTooLarge;
 #define Mxconsts_sDataSetTooLarge System::LoadResourceString(&Mxconsts::_sDataSetTooLarge)
 extern PACKAGE System::ResourceString _sBuildingDataStore;
@@ -228,19 +223,16 @@ extern PACKAGE System::ResourceString _sArgumentExpected;
 #define Mxconsts_sArgumentExpected System::LoadResourceString(&Mxconsts::_sArgumentExpected)
 extern PACKAGE System::ResourceString _sGroupOnExpressionError;
 #define Mxconsts_sGroupOnExpressionError System::LoadResourceString(&Mxconsts::_sGroupOnExpressionError)
-	
 extern PACKAGE System::ResourceString _SOutofBounds;
 #define Mxconsts_SOutofBounds System::LoadResourceString(&Mxconsts::_SOutofBounds)
 extern PACKAGE System::ResourceString _sIDAPILangID;
 #define Mxconsts_sIDAPILangID System::LoadResourceString(&Mxconsts::_sIDAPILangID)
 
 }	/* namespace Mxconsts */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxconsts;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxConsts
+#endif	// Mxconsts

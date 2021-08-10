@@ -4,7 +4,6 @@
 //
 
 #ifndef          _INC_NDDESEC
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define          _INC_NDDESEC
 
 #if _MSC_VER > 1000
@@ -106,5 +105,4 @@
 
 #define NDDE_GUI_FULL_CONTROL	(NDDE_SHARE_GENERIC_ALL)
 
-#pragma option pop /*P_O_Pop*/
 #endif

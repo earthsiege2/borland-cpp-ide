@@ -15,6 +15,8 @@
 // (Microsoft Press).  See the book for more information about Win32
 // programming topics, including thread synchronization.
 
+#include <afxmt.h>
+
 class CCounterThread;
 class CDisplayThread;
 

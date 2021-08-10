@@ -12,7 +12,7 @@
 #define MSDAGUID
 
 #undef OLEDBDECLSPEC
-#if _MSC_VER >= 1100
+#if (_MSC_VER >= 1100) || defined(__BORLANDC__)
 #define OLEDBDECLSPEC __declspec(selectany)
 #else
 #define OLEDBDECLSPEC 

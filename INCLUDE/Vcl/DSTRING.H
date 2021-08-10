@@ -1,9 +1,9 @@
 // DSTRING.H - Support for delphi strings in C++
 //            (AnsiString and template<sz> SmallString)
-// $Revision:   1.33.1.3  $
-// $Date:   14 Dec 1999 17:58:10  $
+// $Revision:   1.35.1.0.1.0  $
+// $Date:   25 Jan 2002 12:54:18  $
 //
-// Copyright (c) 1997, 1999 Borland International
+// Copyright (c) 1997, 2002 Borland Software Corporation
 
 #ifndef DSTRING_H
 #define DSTRING_H

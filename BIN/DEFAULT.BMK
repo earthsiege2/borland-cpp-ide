@@ -25,11 +25,8 @@ LIBRARIES = %LIBRARIES%
 PACKAGES = %PACKAGES%
 SPARELIBS = %SPARELIBS%
 DEFFILE = %DEFFILE%
+OTHERFILES = %OTHERFILES%
 # ---------------------------------------------------------------------------
-PATHCPP = %PATHCPP%
-PATHASM = %PATHASM%
-PATHPAS = %PATHPAS%
-PATHRC = %PATHRC%
 DEBUGLIBPATH = %DEBUGLIBPATH%
 RELEASELIBPATH = %RELEASELIBPATH%
 USERDEFINES = %USERDEFINES%
@@ -37,6 +34,11 @@ SYSDEFINES = %SYSDEFINES%
 INCLUDEPATH = %INCLUDEPATH%
 LIBPATH = %LIBPATH%
 WARNINGS= %WARNINGS%
+PATHCPP = %PATHCPP%
+PATHASM = %PATHASM%
+PATHPAS = %PATHPAS%
+PATHRC = %PATHRC%
+PATHOBJ = .;$(LIBPATH)
 # ---------------------------------------------------------------------------
 CFLAG1 = %CFLAG1%
 IDLCFLAGS = %IDLCFLAGS%
@@ -174,8 +176,12 @@ BRCC32 = brcc32
 !if $d(PATHRC)
 .PATH.RC  = $(PATHRC)
 !endif
+
+!if $d(PATHOBJ)
+.PATH.OBJ  = $(PATHOBJ)
+!endif
 # ---------------------------------------------------------------------------
-$(PROJECT): $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
+$(PROJECT): $(OTHERFILES) $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
     $(BCB)\BIN\$(LINKER) @&&!
     $(LFLAGS) -L$(LIBPATH) +
     $(ALLOBJ), +
@@ -208,6 +214,9 @@ $(PROJECT): $(IDLGENFILES) $(OBJFILES) $(RESDEPEN) $(DEFFILE)
 
 .rc.res:
     $(BCB)\BIN\$(BRCC32) $(RFLAGS) -I$(INCLUDEPATH) -D$(USERDEFINES);$(SYSDEFINES) -fo$@ $<
+
+%BUILDTOOLS%
+
 # ---------------------------------------------------------------------------
 
 %FILES%

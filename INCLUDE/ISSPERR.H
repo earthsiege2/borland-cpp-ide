@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
@@ -13,4 +12,3 @@
 //--------------------------------------------------------------------------
 
 #pragma message("WARNING: issperr.h is an obsolete header file")
-#pragma option pop /*P_O_Pop*/

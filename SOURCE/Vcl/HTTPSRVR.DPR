@@ -10,7 +10,7 @@ uses
 exports
   GetExtensionVersion,
   HttpExtensionProc,
-  TerminateExtension;
+  HTTPIntr.TerminateExtension;
 
 begin
   Application.Initialize;

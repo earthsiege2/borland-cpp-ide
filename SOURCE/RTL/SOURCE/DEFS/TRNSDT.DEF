@@ -1,4 +1,4 @@
 LIBRARY TRNSDT
 EXPORTS
 
-    TrnsDt                                   = 'TRNSDT.DLL'.*
+    TrnsDt                                   

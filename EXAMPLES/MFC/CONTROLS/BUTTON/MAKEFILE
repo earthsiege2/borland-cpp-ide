@@ -11,13 +11,17 @@
 OBJS=btnctl.obj btnppg.obj button.obj stdafx.obj
 PROJ=button
 
-USES_OLE=1
-USRDLL=1
-AFXDLL=1
+#!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+!include <..\..\mfcrules.mak>
 
-All: MainRule
-        @-if exist $(PROJ).ocx del $(PROJ).ocx
-	@-ren $(PROJ).dll $(PROJ).ocx
+default: integration
+	$(MAKE) -f $(PROJ).mak
 
-!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+clean:
+	$(CLEAN_MFC)
+                                
+integration: $(PROJ).bpr $(PROJ).mak
+    $(NOP)
 
+button.bpr: button.dsp
+	$(VCTOBPR) -I"$(BCB)\include;$(BCB)\include\idl" -2 $?

@@ -26,6 +26,9 @@ Revision History:
 #pragma once
 #endif
 
+#if _MSC_VER >= 1200
+#pragma warning(push)
+#endif
 #pragma warning(disable:4201)
 
 //////////////////////////////////////////////////////////////////////////////
@@ -278,7 +281,12 @@ typedef struct _MPR50_SERVICE_CHARACTERISTICS
 
 typedef MPR_SERVICE_CHARACTERISTICS *PMPR_SERVICE_CHARACTERISTICS;
 
+#if _MSC_VER >= 1200
+#pragma warning(pop)
+#else
 #pragma warning(default:4201)
+#endif
+
 
 #pragma option pop /*P_O_Pop*/
 #endif

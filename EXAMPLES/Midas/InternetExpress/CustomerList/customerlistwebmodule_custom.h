@@ -16,6 +16,9 @@
 #include <ReconcileProd.h>
 #include <ImgButtons.h>
 #include <showxml.h>
+#include <DB.hpp>
+#include <HTTPProd.hpp>
+#include <WebComp.hpp>
 //---------------------------------------------------------------------------
 class TWebModule1 : public TWebModule
 {

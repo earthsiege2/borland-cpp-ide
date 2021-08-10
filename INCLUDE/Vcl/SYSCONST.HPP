@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'SysConst.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'SysConst.pas' rev: 6.00
 
 #ifndef SysConstHPP
 #define SysConstHPP
@@ -25,12 +25,22 @@ extern PACKAGE System::ResourceString _SInvalidInteger;
 #define Sysconst_SInvalidInteger System::LoadResourceString(&Sysconst::_SInvalidInteger)
 extern PACKAGE System::ResourceString _SInvalidFloat;
 #define Sysconst_SInvalidFloat System::LoadResourceString(&Sysconst::_SInvalidFloat)
+extern PACKAGE System::ResourceString _SInvalidCurrency;
+#define Sysconst_SInvalidCurrency System::LoadResourceString(&Sysconst::_SInvalidCurrency)
 extern PACKAGE System::ResourceString _SInvalidDate;
 #define Sysconst_SInvalidDate System::LoadResourceString(&Sysconst::_SInvalidDate)
 extern PACKAGE System::ResourceString _SInvalidTime;
 #define Sysconst_SInvalidTime System::LoadResourceString(&Sysconst::_SInvalidTime)
 extern PACKAGE System::ResourceString _SInvalidDateTime;
 #define Sysconst_SInvalidDateTime System::LoadResourceString(&Sysconst::_SInvalidDateTime)
+extern PACKAGE System::ResourceString _SInvalidDateTimeFloat;
+#define Sysconst_SInvalidDateTimeFloat System::LoadResourceString(&Sysconst::_SInvalidDateTimeFloat)
+extern PACKAGE System::ResourceString _SInvalidTimeStamp;
+#define Sysconst_SInvalidTimeStamp System::LoadResourceString(&Sysconst::_SInvalidTimeStamp)
+extern PACKAGE System::ResourceString _SInvalidGUID;
+#define Sysconst_SInvalidGUID System::LoadResourceString(&Sysconst::_SInvalidGUID)
+extern PACKAGE System::ResourceString _SInvalidBoolean;
+#define Sysconst_SInvalidBoolean System::LoadResourceString(&Sysconst::_SInvalidBoolean)
 extern PACKAGE System::ResourceString _STimeEncodeError;
 #define Sysconst_STimeEncodeError System::LoadResourceString(&Sysconst::_STimeEncodeError)
 extern PACKAGE System::ResourceString _SDateEncodeError;
@@ -77,6 +87,8 @@ extern PACKAGE System::ResourceString _SStackOverflow;
 #define Sysconst_SStackOverflow System::LoadResourceString(&Sysconst::_SStackOverflow)
 extern PACKAGE System::ResourceString _SControlC;
 #define Sysconst_SControlC System::LoadResourceString(&Sysconst::_SControlC)
+extern PACKAGE System::ResourceString _SQuit;
+#define Sysconst_SQuit System::LoadResourceString(&Sysconst::_SQuit)
 extern PACKAGE System::ResourceString _SPrivilege;
 #define Sysconst_SPrivilege System::LoadResourceString(&Sysconst::_SPrivilege)
 extern PACKAGE System::ResourceString _SOperationAborted;
@@ -89,10 +101,6 @@ extern PACKAGE System::ResourceString _SInvalidFormat;
 #define Sysconst_SInvalidFormat System::LoadResourceString(&Sysconst::_SInvalidFormat)
 extern PACKAGE System::ResourceString _SArgumentMissing;
 #define Sysconst_SArgumentMissing System::LoadResourceString(&Sysconst::_SArgumentMissing)
-extern PACKAGE System::ResourceString _SInvalidVarCast;
-#define Sysconst_SInvalidVarCast System::LoadResourceString(&Sysconst::_SInvalidVarCast)
-extern PACKAGE System::ResourceString _SInvalidVarOp;
-#define Sysconst_SInvalidVarOp System::LoadResourceString(&Sysconst::_SInvalidVarOp)
 extern PACKAGE System::ResourceString _SDispatchError;
 #define Sysconst_SDispatchError System::LoadResourceString(&Sysconst::_SDispatchError)
 extern PACKAGE System::ResourceString _SReadAccess;
@@ -105,10 +113,60 @@ extern PACKAGE System::ResourceString _SFormatTooLong;
 #define Sysconst_SFormatTooLong System::LoadResourceString(&Sysconst::_SFormatTooLong)
 extern PACKAGE System::ResourceString _SVarArrayCreate;
 #define Sysconst_SVarArrayCreate System::LoadResourceString(&Sysconst::_SVarArrayCreate)
-extern PACKAGE System::ResourceString _SVarNotArray;
-#define Sysconst_SVarNotArray System::LoadResourceString(&Sysconst::_SVarNotArray)
 extern PACKAGE System::ResourceString _SVarArrayBounds;
 #define Sysconst_SVarArrayBounds System::LoadResourceString(&Sysconst::_SVarArrayBounds)
+extern PACKAGE System::ResourceString _SVarArrayLocked;
+#define Sysconst_SVarArrayLocked System::LoadResourceString(&Sysconst::_SVarArrayLocked)
+extern PACKAGE System::ResourceString _SInvalidVarCast;
+#define Sysconst_SInvalidVarCast System::LoadResourceString(&Sysconst::_SInvalidVarCast)
+extern PACKAGE System::ResourceString _SInvalidVarOp;
+#define Sysconst_SInvalidVarOp System::LoadResourceString(&Sysconst::_SInvalidVarOp)
+extern PACKAGE System::ResourceString _SInvalidVarOpWithHResult;
+#define Sysconst_SInvalidVarOpWithHResult System::LoadResourceString(&Sysconst::_SInvalidVarOpWithHResult)
+extern PACKAGE System::ResourceString _SVarNotArray;
+#define Sysconst_SVarNotArray System::LoadResourceString(&Sysconst::_SVarNotArray)
+extern PACKAGE System::ResourceString _SVarTypeUnknown;
+#define Sysconst_SVarTypeUnknown System::LoadResourceString(&Sysconst::_SVarTypeUnknown)
+extern PACKAGE System::ResourceString _SVarTypeOutOfRange;
+#define Sysconst_SVarTypeOutOfRange System::LoadResourceString(&Sysconst::_SVarTypeOutOfRange)
+extern PACKAGE System::ResourceString _SVarTypeAlreadyUsed;
+#define Sysconst_SVarTypeAlreadyUsed System::LoadResourceString(&Sysconst::_SVarTypeAlreadyUsed)
+extern PACKAGE System::ResourceString _SVarTypeNotUsable;
+#define Sysconst_SVarTypeNotUsable System::LoadResourceString(&Sysconst::_SVarTypeNotUsable)
+extern PACKAGE System::ResourceString _SVarTypeTooManyCustom;
+#define Sysconst_SVarTypeTooManyCustom System::LoadResourceString(&Sysconst::_SVarTypeTooManyCustom)
+extern PACKAGE System::ResourceString _SVarTypeCouldNotConvert;
+#define Sysconst_SVarTypeCouldNotConvert System::LoadResourceString(&Sysconst::_SVarTypeCouldNotConvert)
+extern PACKAGE System::ResourceString _SVarTypeConvertOverflow;
+#define Sysconst_SVarTypeConvertOverflow System::LoadResourceString(&Sysconst::_SVarTypeConvertOverflow)
+extern PACKAGE System::ResourceString _SVarOverflow;
+#define Sysconst_SVarOverflow System::LoadResourceString(&Sysconst::_SVarOverflow)
+extern PACKAGE System::ResourceString _SVarInvalid;
+#define Sysconst_SVarInvalid System::LoadResourceString(&Sysconst::_SVarInvalid)
+extern PACKAGE System::ResourceString _SVarBadType;
+#define Sysconst_SVarBadType System::LoadResourceString(&Sysconst::_SVarBadType)
+extern PACKAGE System::ResourceString _SVarNotImplemented;
+#define Sysconst_SVarNotImplemented System::LoadResourceString(&Sysconst::_SVarNotImplemented)
+extern PACKAGE System::ResourceString _SVarOutOfMemory;
+#define Sysconst_SVarOutOfMemory System::LoadResourceString(&Sysconst::_SVarOutOfMemory)
+extern PACKAGE System::ResourceString _SVarUnexpected;
+#define Sysconst_SVarUnexpected System::LoadResourceString(&Sysconst::_SVarUnexpected)
+extern PACKAGE System::ResourceString _SVarDataClearRecursing;
+#define Sysconst_SVarDataClearRecursing System::LoadResourceString(&Sysconst::_SVarDataClearRecursing)
+extern PACKAGE System::ResourceString _SVarDataCopyRecursing;
+#define Sysconst_SVarDataCopyRecursing System::LoadResourceString(&Sysconst::_SVarDataCopyRecursing)
+extern PACKAGE System::ResourceString _SVarDataCopyNoIndRecursing;
+#define Sysconst_SVarDataCopyNoIndRecursing System::LoadResourceString(&Sysconst::_SVarDataCopyNoIndRecursing)
+extern PACKAGE System::ResourceString _SVarDataInitRecursing;
+#define Sysconst_SVarDataInitRecursing System::LoadResourceString(&Sysconst::_SVarDataInitRecursing)
+extern PACKAGE System::ResourceString _SVarDataCastToRecursing;
+#define Sysconst_SVarDataCastToRecursing System::LoadResourceString(&Sysconst::_SVarDataCastToRecursing)
+extern PACKAGE System::ResourceString _SVarIsEmpty;
+#define Sysconst_SVarIsEmpty System::LoadResourceString(&Sysconst::_SVarIsEmpty)
+extern PACKAGE System::ResourceString _sUnknownFromType;
+#define Sysconst_sUnknownFromType System::LoadResourceString(&Sysconst::_sUnknownFromType)
+extern PACKAGE System::ResourceString _sUnknownToType;
+#define Sysconst_sUnknownToType System::LoadResourceString(&Sysconst::_sUnknownToType)
 extern PACKAGE System::ResourceString _SExternalException;
 #define Sysconst_SExternalException System::LoadResourceString(&Sysconst::_SExternalException)
 extern PACKAGE System::ResourceString _SAssertionFailed;
@@ -123,26 +181,48 @@ extern PACKAGE System::ResourceString _SAbstractError;
 #define Sysconst_SAbstractError System::LoadResourceString(&Sysconst::_SAbstractError)
 extern PACKAGE System::ResourceString _SModuleAccessViolation;
 #define Sysconst_SModuleAccessViolation System::LoadResourceString(&Sysconst::_SModuleAccessViolation)
-	
 extern PACKAGE System::ResourceString _SCannotReadPackageInfo;
 #define Sysconst_SCannotReadPackageInfo System::LoadResourceString(&Sysconst::_SCannotReadPackageInfo)
-	
 extern PACKAGE System::ResourceString _sErrorLoadingPackage;
 #define Sysconst_sErrorLoadingPackage System::LoadResourceString(&Sysconst::_sErrorLoadingPackage)
 extern PACKAGE System::ResourceString _SInvalidPackageFile;
 #define Sysconst_SInvalidPackageFile System::LoadResourceString(&Sysconst::_SInvalidPackageFile)
 extern PACKAGE System::ResourceString _SInvalidPackageHandle;
 #define Sysconst_SInvalidPackageHandle System::LoadResourceString(&Sysconst::_SInvalidPackageHandle)
-	
 extern PACKAGE System::ResourceString _SDuplicatePackageUnit;
 #define Sysconst_SDuplicatePackageUnit System::LoadResourceString(&Sysconst::_SDuplicatePackageUnit)
-	
+extern PACKAGE System::ResourceString _SOSError;
+#define Sysconst_SOSError System::LoadResourceString(&Sysconst::_SOSError)
+extern PACKAGE System::ResourceString _SUnkOSError;
+#define Sysconst_SUnkOSError System::LoadResourceString(&Sysconst::_SUnkOSError)
 extern PACKAGE System::ResourceString _SWin32Error;
 #define Sysconst_SWin32Error System::LoadResourceString(&Sysconst::_SWin32Error)
 extern PACKAGE System::ResourceString _SUnkWin32Error;
 #define Sysconst_SUnkWin32Error System::LoadResourceString(&Sysconst::_SUnkWin32Error)
 extern PACKAGE System::ResourceString _SNL;
 #define Sysconst_SNL System::LoadResourceString(&Sysconst::_SNL)
+extern PACKAGE System::ResourceString _SConvIncompatibleTypes2;
+#define Sysconst_SConvIncompatibleTypes2 System::LoadResourceString(&Sysconst::_SConvIncompatibleTypes2)
+extern PACKAGE System::ResourceString _SConvIncompatibleTypes3;
+#define Sysconst_SConvIncompatibleTypes3 System::LoadResourceString(&Sysconst::_SConvIncompatibleTypes3)
+extern PACKAGE System::ResourceString _SConvIncompatibleTypes4;
+#define Sysconst_SConvIncompatibleTypes4 System::LoadResourceString(&Sysconst::_SConvIncompatibleTypes4)
+extern PACKAGE System::ResourceString _SConvUnknownType;
+#define Sysconst_SConvUnknownType System::LoadResourceString(&Sysconst::_SConvUnknownType)
+extern PACKAGE System::ResourceString _SConvDuplicateType;
+#define Sysconst_SConvDuplicateType System::LoadResourceString(&Sysconst::_SConvDuplicateType)
+extern PACKAGE System::ResourceString _SConvUnknownFamily;
+#define Sysconst_SConvUnknownFamily System::LoadResourceString(&Sysconst::_SConvUnknownFamily)
+extern PACKAGE System::ResourceString _SConvDuplicateFamily;
+#define Sysconst_SConvDuplicateFamily System::LoadResourceString(&Sysconst::_SConvDuplicateFamily)
+extern PACKAGE System::ResourceString _SConvUnknownDescription;
+#define Sysconst_SConvUnknownDescription System::LoadResourceString(&Sysconst::_SConvUnknownDescription)
+extern PACKAGE System::ResourceString _SConvIllegalType;
+#define Sysconst_SConvIllegalType System::LoadResourceString(&Sysconst::_SConvIllegalType)
+extern PACKAGE System::ResourceString _SConvIllegalFamily;
+#define Sysconst_SConvIllegalFamily System::LoadResourceString(&Sysconst::_SConvIllegalFamily)
+extern PACKAGE System::ResourceString _SConvFactorZero;
+#define Sysconst_SConvFactorZero System::LoadResourceString(&Sysconst::_SConvFactorZero)
 extern PACKAGE System::ResourceString _SShortMonthNameJan;
 #define Sysconst_SShortMonthNameJan System::LoadResourceString(&Sysconst::_SShortMonthNameJan)
 extern PACKAGE System::ResourceString _SShortMonthNameFeb;
@@ -219,11 +299,11 @@ extern PACKAGE System::ResourceString _SLongDayNameFri;
 #define Sysconst_SLongDayNameFri System::LoadResourceString(&Sysconst::_SLongDayNameFri)
 extern PACKAGE System::ResourceString _SLongDayNameSat;
 #define Sysconst_SLongDayNameSat System::LoadResourceString(&Sysconst::_SLongDayNameSat)
+extern PACKAGE System::ResourceString _SCannotCreateDir;
+#define Sysconst_SCannotCreateDir System::LoadResourceString(&Sysconst::_SCannotCreateDir)
 
 }	/* namespace Sysconst */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Sysconst;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

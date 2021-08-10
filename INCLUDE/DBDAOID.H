@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /************************************************************************
 **	D B D A O I D . H													*
 **																		*
@@ -7,7 +6,7 @@
 **	DAO has been allocated the GUID::Data1 range of 0x00025eXX			*
 **																		*
 *************************************************************************
-** Copyright (C) 1996 - 1999 Microsoft Corporation		 					*
+** Copyright (C) 1996 by Microsoft Corporation		 					*
 **		   All Rights Reserved					 						*
 ************************************************************************/
 
@@ -313,4 +312,3 @@ DEFINE_OLEGUID(IID30_IDAOQueryAS,			0x00025eab, 0, 0);	// Advise sink interface
 
 
 
-#pragma option pop /*P_O_Pop*/

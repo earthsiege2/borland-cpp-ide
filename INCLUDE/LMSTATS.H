@@ -24,7 +24,6 @@ Notes:
 --*/
 
 #ifndef _LMSTATS_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMSTATS_
 
 #if _MSC_VER > 1000
@@ -188,5 +187,4 @@ typedef struct _STAT_SERVER_0 {
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _LMSTATS.H

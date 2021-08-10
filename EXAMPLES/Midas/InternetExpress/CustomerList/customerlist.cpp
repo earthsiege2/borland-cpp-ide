@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 	}
 	catch (Exception &exception)
 	{
-		Sysutils::ShowException(&exception, Sysutils::ExceptAddr());
+		Sysutils::ShowException(&exception, System::ExceptAddr());
 	}
 	return 0;
 }

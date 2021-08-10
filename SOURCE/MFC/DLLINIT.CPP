@@ -765,10 +765,6 @@ static void _AfxForceVectorDelete()
 	new CRichEditCntrItem[2];
 #endif
 
-#ifdef _AFX_DB_IMPL
-	new CDatabase[2];
-	new CLongBinary[2];
-#endif
 
 #if defined(__BORLANDC__) && defined( _AFX_DAO_IMPL)
 	new CDaoWorkspace[2];

@@ -13,7 +13,6 @@ Abstract:
 
 --*/
 #ifndef _MQMAIL_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _MQMAIL_H
 
 #if _MSC_VER > 1000
@@ -217,5 +216,4 @@ STDAPI_(void) MQMailFreeMemory(LPVOID lpBuffer);
 #ifdef __cplusplus
 }
 #endif
-#pragma option pop /*P_O_Pop*/
 #endif //_MQMAIL_H

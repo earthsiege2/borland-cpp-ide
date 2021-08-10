@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Provider.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Provider.pas' rev: 6.00
 
 #ifndef ProviderHPP
 #define ProviderHPP
@@ -10,12 +10,14 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
+#include <SqlTimSt.hpp>	// Pascal unit
 #include <Midas.hpp>	// Pascal unit
 #include <ActiveX.hpp>	// Pascal unit
 #include <DSIntf.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <DBClient.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
@@ -38,19 +40,12 @@ public:
   __property int ErrorCode = {read=FErrorCode, nodefault};
 public:
   /* Exception.CreateFmt */ inline __fastcall EDSWriter(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
-	
   /* Exception.CreateRes */ inline __fastcall EDSWriter(int Ident, Extended Dummy) : Sysutils::Exception(Ident, Dummy) { }
-	
   /* Exception.CreateResFmt */ inline __fastcall EDSWriter(int Ident, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Ident, Args, Args_Size) { }
-	
   /* Exception.CreateHelp */ inline __fastcall EDSWriter(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
-	
   /* Exception.CreateFmtHelp */ inline __fastcall EDSWriter(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
-	
   /* Exception.CreateResHelp */ inline __fastcall EDSWriter(int Ident, int AHelpContext) : Sysutils::Exception(Ident, AHelpContext) { }
-	
   /* Exception.CreateResFmtHelp */ inline __fastcall EDSWriter(int Ident, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Ident, Args, Args_Size, AHelpContext) { }
-	
 
 public:
   /* TObject.Destroy */ inline __fastcall virtual ~EDSWriter(void) { }
@@ -75,8 +70,7 @@ private:
 	DynamicArray<Byte >  FBuffer;
 	
 protected:
-	void __fastcall AddAttribute(Dsintf::TPcktAttrArea Area, const AnsiString ParamName, const OleVariant 
-		&Value, bool IncludeInDelta);
+	void __fastcall AddAttribute(Dsintf::TPcktAttrArea Area, const AnsiString ParamName, const OleVariant &Value, bool IncludeInDelta);
 	void __fastcall Check(int Status);
 	__property Dsintf::_di_IDSWriter DSWriter = {read=FIDSWriter};
 	
@@ -87,21 +81,18 @@ public:
 
 
 #pragma option push -b-
-enum TGetRecordOption { grMetaData, grReset, grXML };
+enum TGetRecordOption { grMetaData, grReset, grXML, grXMLUTF8 };
 #pragma option pop
 
-typedef Set<TGetRecordOption, grMetaData, grXML>  TGetRecordOptions;
+typedef Set<TGetRecordOption, grMetaData, grXMLUTF8>  TGetRecordOptions;
 
-typedef OleVariant __fastcall (__closure *TDataRequestEvent)(System::TObject* Sender, const OleVariant 
-	&Input);
+typedef OleVariant __fastcall (__closure *TDataRequestEvent)(System::TObject* Sender, const OleVariant &Input);
 
 #pragma option push -b-
-enum TProviderOption { poFetchBlobsOnDemand, poFetchDetailsOnDemand, poIncFieldProps, poCascadeDeletes, 
-	poCascadeUpdates, poReadOnly, poAllowMultiRecordUpdates, poDisableInserts, poDisableEdits, poDisableDeletes, 
-	poNoReset, poAutoRefresh, poPropogateChanges, poAllowCommandText };
+enum TProviderOption { poFetchBlobsOnDemand, poFetchDetailsOnDemand, poIncFieldProps, poCascadeDeletes, poCascadeUpdates, poReadOnly, poAllowMultiRecordUpdates, poDisableInserts, poDisableEdits, poDisableDeletes, poNoReset, poAutoRefresh, poPropogateChanges, poAllowCommandText, poRetainServerOrder };
 #pragma option pop
 
-typedef Set<TProviderOption, poFetchBlobsOnDemand, poAllowCommandText>  TProviderOptions;
+typedef Set<TProviderOption, poFetchBlobsOnDemand, poRetainServerOrder>  TProviderOptions;
 
 struct TPutFieldInfo;
 typedef TPutFieldInfo *PPutFieldInfo;
@@ -124,7 +115,6 @@ struct TPutFieldInfo
 typedef DynamicArray<TPutFieldInfo >  TInfoArray;
 
 typedef void __fastcall (__closure *TGetParamsEvent)(Db::TDataSet* DataSet, Classes::TList* Params);
-	
 
 class DELPHICLASS TDataPacketWriter;
 class PASCALIMPLEMENTATION TDataPacketWriter : public TCustomPacketWriter 
@@ -158,7 +148,8 @@ protected:
 	void __fastcall PutStringField(PPutFieldInfo Info);
 	void __fastcall PutWideStringField(PPutFieldInfo Info);
 	void __fastcall PutVarBytesField(PPutFieldInfo Info);
-	void __fastcall WriteMetaData(Db::TDataSet* DataSet, const TInfoArray Info, bool IsReference);
+	void __fastcall Reset(void);
+	void __fastcall WriteMetaData(Db::TDataSet* DataSet, const TInfoArray Info, bool IsReference = false);
 	int __fastcall WriteDataSet(Db::TDataSet* DataSet, TInfoArray &Info, int RecsOut);
 	__property TGetParamsEvent OnGetParams = {read=FOnGetParams, write=FOnGetParams};
 	
@@ -166,22 +157,20 @@ public:
 	__fastcall virtual ~TDataPacketWriter(void);
 	void __fastcall GetDataPacket(Db::TDataSet* DataSet, int &RecsOut, /* out */ OleVariant &Data);
 	__property bool Constraints = {read=FConstraints, write=FConstraints, nodefault};
-	__property TGetRecordOptions PacketOptions = {read=FPacketOptions, write=FPacketOptions, nodefault}
-		;
+	__property TGetRecordOptions PacketOptions = {read=FPacketOptions, write=FPacketOptions, nodefault};
 	__property TProviderOptions Options = {read=FOptions, write=FOptions, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TCustomPacketWriter.Create */ inline __fastcall virtual TDataPacketWriter(void) : TCustomPacketWriter(
-		) { }
+	/* TCustomPacketWriter.Create */ inline __fastcall virtual TDataPacketWriter(void) : TCustomPacketWriter() { }
 	#pragma option pop
 	
 };
 
 
 class DELPHICLASS TPacketDataSet;
-class PASCALIMPLEMENTATION TPacketDataSet : public Dbclient::TClientDataSet 
+class PASCALIMPLEMENTATION TPacketDataSet : public Dbclient::TCustomClientDataSet 
 {
-	typedef Dbclient::TClientDataSet inherited;
+	typedef Dbclient::TCustomClientDataSet inherited;
 	
 private:
 	char *FOldRecBuf;
@@ -210,15 +199,21 @@ public:
 	void __fastcall CreateFromDelta(TPacketDataSet* Source);
 	bool __fastcall HasCurValues(void);
 	bool __fastcall HasMergeConflicts(void);
-	void __fastcall InitAltRecBuffers(bool CheckModified);
+	void __fastcall InitAltRecBuffers(bool CheckModified = true);
 	Db::TUpdateKind __fastcall UpdateKind(void);
 	__property bool NewValuesModified = {read=FNewValuesModified, nodefault};
 	__property bool StreamMetaData = {read=GetStreamMetaData, write=SetStreamMetaData, nodefault};
 	__property bool UseCurValues = {read=FUseCurValues, write=FUseCurValues, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TClientDataSet.Destroy */ inline __fastcall virtual ~TPacketDataSet(void) { }
+	/* TCustomClientDataSet.Destroy */ inline __fastcall virtual ~TPacketDataSet(void) { }
 	#pragma option pop
+	
+	
+/* Hoisted overloads: */
+	
+protected:
+	inline void __fastcall  SetFieldData(Db::TField* Field, void * Buffer, bool NativeFormat){ TDataSet::SetFieldData(Field, Buffer, NativeFormat); }
 	
 };
 
@@ -244,47 +239,40 @@ private:
 	OleVariant __fastcall GetData();
 	
 protected:
-	virtual OleVariant __fastcall InternalApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ 
-		int &ErrorCount) = 0 ;
-	virtual OleVariant __fastcall InternalGetRecords(int Count, /* out */ int &RecsOut, TGetRecordOptions 
-		Options, const WideString CommandText, OleVariant &Params);
-	virtual OleVariant __fastcall InternalRowRequest(const OleVariant &Row, Dbclient::TFetchOptions RequestType
-		);
+	virtual OleVariant __fastcall InternalApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ int &ErrorCount) = 0 ;
+	virtual OleVariant __fastcall InternalGetRecords(int Count, /* out */ int &RecsOut, TGetRecordOptions Options, const WideString CommandText, OleVariant &Params);
+	virtual OleVariant __fastcall InternalRowRequest(const OleVariant &Row, Dbclient::TFetchOptions RequestType);
 	virtual void __fastcall InternalExecute(const WideString CommandText, OleVariant &Params);
-	virtual OleVariant __fastcall InternalGetParams(Db::TParamTypes Types);
-	virtual void __fastcall DoBeforeGetRecords(int Count, int Options, const WideString CommandText, OleVariant 
-		&Params, OleVariant &OwnerData);
-	virtual void __fastcall DoBeforeExecute(const WideString CommandText, OleVariant &Params, OleVariant 
-		&OwnerData);
+	virtual OleVariant __fastcall InternalGetParams(Db::TParamTypes Types = (System::Set<Db::TParamType, ptUnknown, ptResult> () << Db::TParamType(0) << Db::TParamType(1) << Db::TParamType(2) << Db::TParamType(3) << Db::TParamType(4) ));
+	virtual void __fastcall DoAfterApplyUpdates(OleVariant &OwnerData);
+	virtual void __fastcall DoBeforeApplyUpdates(OleVariant &OwnerData);
+	virtual void __fastcall DoAfterExecute(OleVariant &OwnerData);
+	virtual void __fastcall DoBeforeExecute(const WideString CommandText, OleVariant &Params, OleVariant &OwnerData);
+	virtual void __fastcall DoAfterGetParams(OleVariant &OwnerData);
+	virtual void __fastcall DoBeforeGetParams(OleVariant &OwnerData);
+	virtual void __fastcall DoAfterGetRecords(OleVariant &OwnerData);
+	virtual void __fastcall DoBeforeGetRecords(int Count, int Options, const WideString CommandText, OleVariant &Params, OleVariant &OwnerData);
+	virtual void __fastcall DoAfterRowRequest(OleVariant &OwnerData);
+	virtual void __fastcall DoBeforeRowRequest(OleVariant &OwnerData);
 	__property TDataRequestEvent OnDataRequest = {read=FOnDataRequest, write=FOnDataRequest};
-	__property Dbclient::TRemoteEvent BeforeApplyUpdates = {read=FBeforeApplyUpdates, write=FBeforeApplyUpdates
-		};
-	__property Dbclient::TRemoteEvent AfterApplyUpdates = {read=FAfterApplyUpdates, write=FAfterApplyUpdates
-		};
-	__property Dbclient::TRemoteEvent BeforeGetRecords = {read=FBeforeGetRecords, write=FBeforeGetRecords
-		};
-	__property Dbclient::TRemoteEvent AfterGetRecords = {read=FAfterGetRecords, write=FAfterGetRecords}
-		;
-	__property Dbclient::TRemoteEvent BeforeRowRequest = {read=FBeforeRowRequest, write=FBeforeRowRequest
-		};
-	__property Dbclient::TRemoteEvent AfterRowRequest = {read=FAfterRowRequest, write=FAfterRowRequest}
-		;
+	__property Dbclient::TRemoteEvent BeforeApplyUpdates = {read=FBeforeApplyUpdates, write=FBeforeApplyUpdates};
+	__property Dbclient::TRemoteEvent AfterApplyUpdates = {read=FAfterApplyUpdates, write=FAfterApplyUpdates};
+	__property Dbclient::TRemoteEvent BeforeGetRecords = {read=FBeforeGetRecords, write=FBeforeGetRecords};
+	__property Dbclient::TRemoteEvent AfterGetRecords = {read=FAfterGetRecords, write=FAfterGetRecords};
+	__property Dbclient::TRemoteEvent BeforeRowRequest = {read=FBeforeRowRequest, write=FBeforeRowRequest};
+	__property Dbclient::TRemoteEvent AfterRowRequest = {read=FAfterRowRequest, write=FAfterRowRequest};
 	__property Dbclient::TRemoteEvent BeforeExecute = {read=FBeforeExecute, write=FBeforeExecute};
 	__property Dbclient::TRemoteEvent AfterExecute = {read=FAfterExecute, write=FAfterExecute};
-	__property Dbclient::TRemoteEvent BeforeGetParams = {read=FBeforeGetParams, write=FBeforeGetParams}
-		;
+	__property Dbclient::TRemoteEvent BeforeGetParams = {read=FBeforeGetParams, write=FBeforeGetParams};
 	__property Dbclient::TRemoteEvent AfterGetParams = {read=FAfterGetParams, write=FAfterGetParams};
 	
 public:
 	__fastcall virtual TCustomProvider(Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomProvider(void);
-	OleVariant __fastcall ApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ int &ErrorCount
-		)/* overload */;
-	OleVariant __fastcall ApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ int &ErrorCount
-		, OleVariant &OwnerData)/* overload */;
+	OleVariant __fastcall ApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ int &ErrorCount)/* overload */;
+	OleVariant __fastcall ApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ int &ErrorCount, OleVariant &OwnerData)/* overload */;
 	OleVariant __fastcall GetRecords(int Count, /* out */ int &RecsOut, int Options)/* overload */;
-	OleVariant __fastcall GetRecords(int Count, /* out */ int &RecsOut, int Options, const WideString CommandText
-		, OleVariant &Params, OleVariant &OwnerData)/* overload */;
+	OleVariant __fastcall GetRecords(int Count, /* out */ int &RecsOut, int Options, const WideString CommandText, OleVariant &Params, OleVariant &OwnerData)/* overload */;
 	OleVariant __fastcall RowRequest(const OleVariant &Row, int RequestType, OleVariant &OwnerData);
 	void __fastcall Execute(const WideString CommandText, OleVariant &Params, OleVariant &OwnerData);
 	OleVariant __fastcall GetParams(OleVariant &OwnerData);
@@ -298,17 +286,13 @@ public:
 enum TResolverResponse { rrSkip, rrAbort, rrMerge, rrApply, rrIgnore };
 #pragma option pop
 
-typedef void __fastcall (__closure *TProviderDataEvent)(System::TObject* Sender, Dbclient::TClientDataSet* 
-	DataSet);
+typedef void __fastcall (__closure *TProviderDataEvent)(System::TObject* Sender, Dbclient::TCustomClientDataSet* DataSet);
 
-typedef void __fastcall (__closure *TBeforeUpdateRecordEvent)(System::TObject* Sender, Db::TDataSet* 
-	SourceDS, Dbclient::TClientDataSet* DeltaDS, Db::TUpdateKind UpdateKind, bool &Applied);
+typedef void __fastcall (__closure *TBeforeUpdateRecordEvent)(System::TObject* Sender, Db::TDataSet* SourceDS, Dbclient::TCustomClientDataSet* DeltaDS, Db::TUpdateKind UpdateKind, bool &Applied);
 
-typedef void __fastcall (__closure *TAfterUpdateRecordEvent)(System::TObject* Sender, Db::TDataSet* 
-	SourceDS, Dbclient::TClientDataSet* DeltaDS, Db::TUpdateKind UpdateKind);
+typedef void __fastcall (__closure *TAfterUpdateRecordEvent)(System::TObject* Sender, Db::TDataSet* SourceDS, Dbclient::TCustomClientDataSet* DeltaDS, Db::TUpdateKind UpdateKind);
 
-typedef void __fastcall (__closure *TResolverErrorEvent)(System::TObject* Sender, Dbclient::TClientDataSet* 
-	DataSet, Db::EUpdateError* E, Db::TUpdateKind UpdateKind, TResolverResponse &Response);
+typedef void __fastcall (__closure *TResolverErrorEvent)(System::TObject* Sender, Dbclient::TCustomClientDataSet* DataSet, Db::EUpdateError* E, Db::TUpdateKind UpdateKind, TResolverResponse &Response);
 
 class DELPHICLASS TBaseProvider;
 class DELPHICLASS TCustomResolver;
@@ -372,11 +356,9 @@ private:
 	
 protected:
 	__property TBaseProvider* Provider = {read=FProvider};
-	bool __fastcall HandleUpdateError(TUpdateTree* Tree, Db::EUpdateError* E, int &MaxErrors, int &ErrorCount
-		);
+	bool __fastcall HandleUpdateError(TUpdateTree* Tree, Db::EUpdateError* E, int &MaxErrors, int &ErrorCount);
 	void __fastcall LogUpdateRecord(TUpdateTree* Tree);
 	void __fastcall LogUpdateError(TUpdateTree* Tree, Db::EUpdateError* E, TResolverResponse Response);
-		
 	void __fastcall InitKeyFields(TUpdateTree* Tree, TPacketDataSet* ADelta);
 	virtual void __fastcall InternalBeforeResolve(TUpdateTree* Tree);
 	bool __fastcall InternalUpdateRecord(TUpdateTree* Tree);
@@ -389,8 +371,7 @@ protected:
 	virtual void __fastcall DoDelete(TUpdateTree* Tree) = 0 ;
 	virtual void __fastcall DoInsert(TUpdateTree* Tree) = 0 ;
 	virtual OleVariant __fastcall RowRequest(const OleVariant &Row, Dbclient::TFetchOptions Options);
-	virtual OleVariant __fastcall ApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ int &ErrorCount
-		);
+	virtual OleVariant __fastcall ApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ int &ErrorCount);
 	
 public:
 	__fastcall TCustomResolver(TBaseProvider* AProvider);
@@ -417,20 +398,15 @@ protected:
 	void __fastcall CheckResolver(void);
 	virtual TCustomResolver* __fastcall CreateResolver(void);
 	void __fastcall FreeResolver(void);
-	virtual void __fastcall CreateDataPacket(TGetRecordOptions PacketOpts, TProviderOptions ProvOpts, int 
-		&RecsOut, OleVariant &Data);
+	virtual void __fastcall CreateDataPacket(TGetRecordOptions PacketOpts, TProviderOptions ProvOpts, int &RecsOut, OleVariant &Data);
 	void __fastcall DoOnGetData(OleVariant &Data);
 	void __fastcall DoOnUpdateData(TPacketDataSet* Delta);
 	virtual void __fastcall LocateRecord(Db::TDataSet* Source, Db::TDataSet* Delta);
-	virtual void __fastcall UpdateRecord(Db::TDataSet* Source, Db::TDataSet* Delta, bool BlobsOnly, bool 
-		KeyOnly);
+	virtual void __fastcall UpdateRecord(Db::TDataSet* Source, Db::TDataSet* Delta, bool BlobsOnly, bool KeyOnly);
 	virtual void __fastcall FetchDetails(Db::TDataSet* Source, Db::TDataSet* Delta);
-	virtual OleVariant __fastcall InternalRowRequest(const OleVariant &Row, Dbclient::TFetchOptions RequestType
-		);
-	virtual OleVariant __fastcall InternalApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ 
-		int &ErrorCount);
-	virtual OleVariant __fastcall InternalGetRecords(int Count, /* out */ int &RecsOut, TGetRecordOptions 
-		Options, const WideString CommandText, OleVariant &Params);
+	virtual OleVariant __fastcall InternalRowRequest(const OleVariant &Row, Dbclient::TFetchOptions RequestType);
+	virtual OleVariant __fastcall InternalApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ int &ErrorCount);
+	virtual OleVariant __fastcall InternalGetRecords(int Count, /* out */ int &RecsOut, TGetRecordOptions Options, const WideString CommandText, OleVariant &Params);
 	
 public:
 	__fastcall virtual TBaseProvider(Classes::TComponent* AOwner);
@@ -442,18 +418,14 @@ public:
 	__property TProviderDataEvent OnGetData = {read=FOnGetData, write=FOnGetData};
 	__property TProviderDataEvent OnUpdateData = {read=FOnUpdateData, write=FOnUpdateData};
 	__property TResolverErrorEvent OnUpdateError = {read=FOnUpdateError, write=FOnUpdateError};
-	__property TBeforeUpdateRecordEvent BeforeUpdateRecord = {read=FBeforeUpdateRecord, write=FBeforeUpdateRecord
-		};
-	__property TAfterUpdateRecordEvent AfterUpdateRecord = {read=FAfterUpdateRecord, write=FAfterUpdateRecord
-		};
+	__property TBeforeUpdateRecordEvent BeforeUpdateRecord = {read=FBeforeUpdateRecord, write=FBeforeUpdateRecord};
+	__property TAfterUpdateRecordEvent AfterUpdateRecord = {read=FAfterUpdateRecord, write=FAfterUpdateRecord};
 };
 
 
-typedef void __fastcall (__closure *TGetTableNameEvent)(System::TObject* Sender, Db::TDataSet* DataSet
-	, AnsiString &TableName);
+typedef void __fastcall (__closure *TGetTableNameEvent)(System::TObject* Sender, Db::TDataSet* DataSet, AnsiString &TableName);
 
-typedef void __fastcall (__closure *TGetDSProps)(System::TObject* Sender, Db::TDataSet* DataSet, /* out */ 
-	OleVariant &Properties);
+typedef void __fastcall (__closure *TGetDSProps)(System::TObject* Sender, Db::TDataSet* DataSet, /* out */ OleVariant &Properties);
 
 class DELPHICLASS TDataSetProvider;
 class PASCALIMPLEMENTATION TDataSetProvider : public TBaseProvider 
@@ -469,6 +441,7 @@ private:
 	bool FResolveToDataSet;
 	int FRecordsSent;
 	bool FConstraints;
+	bool FTransactionStarted;
 	TGetTableNameEvent FGetTableName;
 	void __fastcall CheckDataSet(void);
 	bool __fastcall FindRecord(Db::TDataSet* Source, Db::TDataSet* Delta, Db::TUpdateMode UpdateMode);
@@ -480,28 +453,23 @@ private:
 	
 protected:
 	virtual void __fastcall DoGetTableName(Db::TDataSet* DataSet, AnsiString &TableName);
-	virtual void __fastcall DoBeforeGetRecords(int Count, int Options, const WideString CommandText, OleVariant 
-		&Params, OleVariant &OwnerData);
-	virtual void __fastcall DoBeforeExecute(const WideString CommandText, OleVariant &Params, OleVariant 
-		&OwnerData);
+	virtual void __fastcall DoBeforeGetRecords(int Count, int Options, const WideString CommandText, OleVariant &Params, OleVariant &OwnerData);
+	virtual void __fastcall DoBeforeExecute(const WideString CommandText, OleVariant &Params, OleVariant &OwnerData);
 	virtual void __fastcall DoGetProviderAttributes(Db::TDataSet* DataSet, Classes::TList* List);
 	virtual TCustomResolver* __fastcall CreateResolver(void);
-	virtual void __fastcall CreateDataPacket(TGetRecordOptions PacketOpts, TProviderOptions ProvOpts, int 
-		&RecsOut, OleVariant &Data);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall CreateDataPacket(TGetRecordOptions PacketOpts, TProviderOptions ProvOpts, int &RecsOut, OleVariant &Data);
+	Db::TDataSet* __fastcall GetDataSetFromDelta(TUpdateTree* ATree, Db::TDataSet* Source, Db::TDataSet* Delta, Db::TUpdateMode Mode);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall LocateRecord(Db::TDataSet* Source, Db::TDataSet* Delta);
-	virtual void __fastcall UpdateRecord(Db::TDataSet* Source, Db::TDataSet* Delta, bool BlobsOnly, bool 
-		KeyOnly);
+	virtual void __fastcall UpdateRecord(Db::TDataSet* Source, Db::TDataSet* Delta, bool BlobsOnly, bool KeyOnly);
 	virtual void __fastcall FetchDetails(Db::TDataSet* Source, Db::TDataSet* Delta);
-	virtual OleVariant __fastcall InternalRowRequest(const OleVariant &Row, Dbclient::TFetchOptions Options
-		);
-	virtual OleVariant __fastcall InternalGetParams(Db::TParamTypes Types);
+	void __fastcall FetchDetailsFromServer(Db::TDataSet* Source, Db::TDataSet* Current, Db::TDataSet* Delta, TUpdateTree* ATree);
+	virtual OleVariant __fastcall InternalRowRequest(const OleVariant &Row, Dbclient::TFetchOptions Options);
+	virtual OleVariant __fastcall InternalGetParams(Db::TParamTypes Types = (System::Set<Db::TParamType, ptUnknown, ptResult> () << Db::TParamType(0) << Db::TParamType(1) << Db::TParamType(2) << Db::TParamType(3) << Db::TParamType(4) ));
 	virtual void __fastcall InternalExecute(const WideString CommandText, OleVariant &Params);
-	virtual OleVariant __fastcall InternalGetRecords(int Count, /* out */ int &RecsOut, TGetRecordOptions 
-		Options, const WideString CommandText, OleVariant &Params);
-	virtual OleVariant __fastcall InternalApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ 
-		int &ErrorCount);
+	virtual OleVariant __fastcall InternalGetRecords(int Count, /* out */ int &RecsOut, TGetRecordOptions Options, const WideString CommandText, OleVariant &Params);
+	virtual OleVariant __fastcall InternalApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ int &ErrorCount);
+	__property Db::TParams* Params = {read=FParams};
 	
 public:
 	__fastcall virtual TDataSetProvider(Classes::TComponent* AOwner);
@@ -509,11 +477,11 @@ public:
 	
 __published:
 	__property Db::TDataSet* DataSet = {read=FDataSet, write=SetDataSet};
-	__property bool Constraints = {read=FConstraints, write=FConstraints, nodefault};
+	__property bool Constraints = {read=FConstraints, write=FConstraints, default=0};
 	__property bool ResolveToDataSet = {read=FResolveToDataSet, write=SetResolveToDataSet, default=0};
-	__property Exported ;
-	__property Options ;
-	__property UpdateMode ;
+	__property Exported  = {default=1};
+	__property Options  = {default=0};
+	__property UpdateMode  = {default=0};
 	__property OnDataRequest ;
 	__property OnGetData ;
 	__property OnUpdateData ;
@@ -542,8 +510,7 @@ class PASCALIMPLEMENTATION TProvider : public TDataSetProvider
 	
 public:
 	#pragma option push -w-inl
-	/* TDataSetProvider.Create */ inline __fastcall virtual TProvider(Classes::TComponent* AOwner) : TDataSetProvider(
-		AOwner) { }
+	/* TDataSetProvider.Create */ inline __fastcall virtual TProvider(Classes::TComponent* AOwner) : TDataSetProvider(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TDataSetProvider.Destroy */ inline __fastcall virtual ~TProvider(void) { }
@@ -592,15 +559,11 @@ private:
 	Classes::TStringList* FSQL;
 	Db::TParams* FParams;
 	TDataSetProvider* __fastcall GetProvider(void);
-	void __fastcall GenWhereSQL(TUpdateTree* Tree, Classes::TStrings* SQL, Db::TParams* Params, Db::TUpdateMode 
-		GenUpdateMode, AnsiString Alias);
+	void __fastcall GenWhereSQL(TUpdateTree* Tree, Classes::TStrings* SQL, Db::TParams* Params, Db::TUpdateMode GenUpdateMode, AnsiString Alias);
 	void __fastcall GenInsertSQL(TUpdateTree* Tree, Classes::TStrings* SQL, Db::TParams* Params);
-	void __fastcall GenDeleteSQL(TUpdateTree* Tree, Classes::TStrings* SQL, Db::TParams* Params, AnsiString 
-		Alias);
-	void __fastcall GenUpdateSQL(TUpdateTree* Tree, Classes::TStrings* SQL, Db::TParams* Params, AnsiString 
-		Alias);
-	void __fastcall GenSelectSQL(TUpdateTree* Tree, Classes::TStrings* SQL, Db::TParams* Params, AnsiString 
-		Alias);
+	void __fastcall GenDeleteSQL(TUpdateTree* Tree, Classes::TStrings* SQL, Db::TParams* Params, AnsiString Alias);
+	void __fastcall GenUpdateSQL(TUpdateTree* Tree, Classes::TStrings* SQL, Db::TParams* Params, AnsiString Alias);
+	void __fastcall GenSelectSQL(TUpdateTree* Tree, Classes::TStrings* SQL, Db::TParams* Params, AnsiString Alias, Db::TUpdateMode Mode = (Db::TUpdateMode)(0x2));
 	bool __fastcall UseFieldInUpdate(Db::TField* Field);
 	bool __fastcall UseFieldInWhere(Db::TField* Field, Db::TUpdateMode Mode);
 	void __fastcall InternalDoUpdate(TUpdateTree* Tree, Db::TUpdateKind UpdateKind);
@@ -609,8 +572,7 @@ protected:
 	__property TDataSetProvider* Provider = {read=GetProvider};
 	virtual void __fastcall InitializeConflictBuffer(TUpdateTree* Tree);
 	virtual void __fastcall DoExecSQL(Classes::TStringList* SQL, Db::TParams* Params);
-	virtual void __fastcall DoGetValues(Classes::TStringList* SQL, Db::TParams* Params, Db::TDataSet* DataSet
-		);
+	virtual void __fastcall DoGetValues(Classes::TStringList* SQL, Db::TParams* Params, Db::TDataSet* DataSet);
 	virtual void __fastcall InitTreeData(TUpdateTree* Tree);
 	virtual void __fastcall FreeTreeData(TUpdateTree* Tree);
 	virtual void __fastcall DoUpdate(TUpdateTree* Tree);
@@ -635,24 +597,15 @@ private:
 protected:
 	HRESULT __stdcall GetTypeInfoCount(/* out */ int &Count);
 	HRESULT __stdcall GetTypeInfo(int Index, int LocaleID, /* out */ void *TypeInfo);
-	HRESULT __stdcall GetIDsOfNames(const GUID &IID, void * Names, int NameCount, int LocaleID, void * 
-		DispIDs);
-	HRESULT __stdcall Invoke(int DispID, const GUID &IID, int LocaleID, Word Flags, void *Params, void * 
-		VarResult, void * ExcepInfo, void * ArgErr);
-	HRESULT __safecall AS_ApplyUpdates(const WideString ProviderName, const OleVariant Delta, int MaxErrors
-		, /* out */ int &ErrorCount, OleVariant &OwnerData, OleVariant &AS_ApplyUpdates_result);
-	HRESULT __safecall AS_GetRecords(const WideString ProviderName, int Count, /* out */ int &RecsOut, 
-		int Options, const WideString CommandText, OleVariant &Params, OleVariant &OwnerData, OleVariant &AS_GetRecords_result
-		);
-	HRESULT __safecall AS_DataRequest(const WideString ProviderName, const OleVariant Data, OleVariant &AS_DataRequest_result
-		);
+	HRESULT __stdcall GetIDsOfNames(const GUID &IID, void * Names, int NameCount, int LocaleID, void * DispIDs);
+	HRESULT __stdcall Invoke(int DispID, const GUID &IID, int LocaleID, Word Flags, void *Params, void * VarResult, void * ExcepInfo, void * ArgErr);
+	HRESULT __safecall AS_ApplyUpdates(const WideString ProviderName, const OleVariant Delta, int MaxErrors, /* out */ int &ErrorCount, OleVariant &OwnerData, OleVariant &AS_ApplyUpdates_result);
+	HRESULT __safecall AS_GetRecords(const WideString ProviderName, int Count, /* out */ int &RecsOut, int Options, const WideString CommandText, OleVariant &Params, OleVariant &OwnerData, OleVariant &AS_GetRecords_result);
+	HRESULT __safecall AS_DataRequest(const WideString ProviderName, const OleVariant Data, OleVariant &AS_DataRequest_result);
 	HRESULT __safecall AS_GetProviderNames(OleVariant &AS_GetProviderNames_result);
-	HRESULT __safecall AS_GetParams(const WideString ProviderName, OleVariant &OwnerData, OleVariant &AS_GetParams_result
-		);
-	HRESULT __safecall AS_RowRequest(const WideString ProviderName, const OleVariant Row, int RequestType
-		, OleVariant &OwnerData, OleVariant &AS_RowRequest_result);
-	HRESULT __safecall AS_Execute(const WideString ProviderName, const WideString CommandText, OleVariant 
-		&Params, OleVariant &OwnerData);
+	HRESULT __safecall AS_GetParams(const WideString ProviderName, OleVariant &OwnerData, OleVariant &AS_GetParams_result);
+	HRESULT __safecall AS_RowRequest(const WideString ProviderName, const OleVariant Row, int RequestType, OleVariant &OwnerData, OleVariant &AS_RowRequest_result);
+	HRESULT __safecall AS_Execute(const WideString ProviderName, const WideString CommandText, OleVariant &Params, OleVariant &OwnerData);
 	HRESULT __stdcall InterfaceSupportsErrorInfo(const GUID &iid);
 	
 public:
@@ -661,7 +614,6 @@ public:
 	__fastcall virtual ~TLocalAppServer(void);
 	virtual HRESULT __fastcall SafeCallException(System::TObject* ExceptObject, void * ExceptAddr);
 private:
-		
 	void *__IAppServer;	/* Midas::IAppServer */
 	void *__ISupportErrorInfo;	/* ISupportErrorInfo */
 	
@@ -672,16 +624,28 @@ public:
 };
 
 
+__interface IProviderContainer;
+typedef System::DelphiInterface<IProviderContainer> _di_IProviderContainer;
+__interface INTERFACE_UUID("{EEE9FFD4-752F-11D4-80DD-00C04F6BB88C}") IProviderContainer  : public IInterface 
+{
+	
+public:
+	virtual void __fastcall RegisterProvider(TCustomProvider* Prov) = 0 ;
+	virtual void __fastcall UnRegisterProvider(TCustomProvider* Prov) = 0 ;
+};
+
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE System::TObject* __fastcall GetObjectProperty(Classes::TPersistent* Instance, const AnsiString 
-	PropName);
-extern PACKAGE AnsiString __fastcall GetStringProperty(Classes::TPersistent* Instance, const AnsiString 
-	PropName);
+extern PACKAGE bool InformixLob;
+extern PACKAGE int ResetOption;
+extern PACKAGE int MetaDataOption;
+extern PACKAGE int XMLOption;
+extern PACKAGE int XMLUTF8Option;
+extern PACKAGE System::TObject* __fastcall GetObjectProperty(Classes::TPersistent* Instance, const AnsiString PropName);
+extern PACKAGE AnsiString __fastcall GetStringProperty(Classes::TPersistent* Instance, const AnsiString PropName);
+extern PACKAGE Variant __fastcall VarArrayFromStrings(Classes::TStrings* Strings);
 
 }	/* namespace Provider */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Provider;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

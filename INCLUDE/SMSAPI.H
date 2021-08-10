@@ -2,7 +2,7 @@
 //
 //  File: SMSAPI.H
 //
-//  Copyright (c) 1994, 1995 Microsoft Corp.
+//  Copyright (c) 199 - 1999 Microsoft Corp.
 //
 //  This is the header file for the SMS API.
 //
@@ -115,7 +115,6 @@
 
 
 #ifndef _SMSAPI_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _SMSAPI_H_
 
 
@@ -1766,7 +1765,6 @@ __declspec (dllexport) SMS_STATUS SmsEnumObjects(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif  // _SMSAPI_H_
 
 /* EOF: smsapi.h */

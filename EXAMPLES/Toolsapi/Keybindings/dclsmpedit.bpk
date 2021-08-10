@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="dclsmpedit60.bpl"/>
+    <OBJFILES value="dclsmpedit.obj basebindings.obj bufferlist.obj bufferlistform.obj 
+      baseclss.obj savekeymacro.obj"/>
+    <RESFILES value="dclsmpedit.res strs.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) bufferlistform.dfm savekeymacro.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="vcl.lib rtl.lib"/>
+    <PACKAGES value="designide.bpi vcl.bpi rtl.bpi"/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value=""/>
+    <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
+    <MAINSOURCE value="dclsmpedit.cpp"/>
+    <INCLUDEPATH value="$(BCB)\bin;$(BCB)\include;$(BCB)\include\vcl;"/>
+    <LIBPATH value="$(BCB)\bin;$(BCB)\lib\obj;$(BCB)\lib;"/>
+    <WARNINGS value="-w-par"/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I$(BCB)\bin -I$(BCB)\include -I$(BCB)\include\vcl -I$(BCB)\emuvcl 
+      -I$(BCB)\units -I$(BCB)\vcl -I$(BCB)\db -src_suffixcpp"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -X- -r- -a8 -b- -k -y -v -vi- 
+      -c -tWM"/>
+    <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-GB&quot;dclsmpedit&quot; -D&quot;Borland Editor Script Enhancements&quot; -aa -Tpp -Gpd -x -Gn -Gl -Gi -v 
+      -b:0x507C0000"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0pkg32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
+  </LINKER>
+  <FILELIST>
+      <FILE FILENAME="dclsmpedit.cpp" FORMNAME="" UNITNAME="dclsmpedit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="dclsmpedit.res" FORMNAME="" UNITNAME="dclsmpedit" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="basebindings.cpp" FORMNAME="" UNITNAME="basebindings" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="bufferlist.cpp" FORMNAME="" UNITNAME="bufferlist" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="bufferlistform.cpp" FORMNAME="BufferListFrm" UNITNAME="bufferlistform" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="baseclss.cpp" FORMNAME="" UNITNAME="baseclss" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="savekeymacro.cpp" FORMNAME="SaveKeyMacroDlg" UNITNAME="savekeymacro" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="strs.rc" FORMNAME="" UNITNAME="strs" CONTAINERID="RCCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="designide.bpi" FORMNAME="" UNITNAME="designide" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="vcl.bpi" FORMNAME="" UNITNAME="vcl" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="rtl.bpi" FORMNAME="" UNITNAME="rtl" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=1
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1033
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[Debugging]
+DebugSourceDirs=
+
+[Parameters]
+RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteLauncher=
+RemoteCWD=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+
+[Linker]
+LibPrefix=
+LibSuffix=60
+LibVersion=
+
+  </IDEOPTIONS>
+</PROJECT>

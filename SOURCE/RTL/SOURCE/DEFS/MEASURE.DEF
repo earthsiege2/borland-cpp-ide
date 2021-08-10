@@ -1,14 +1,14 @@
 LIBRARY MEASURE
 EXPORTS
 
-    Msr_Control                              = 'MEASURE.DLL'.*
-    Msr_Dump                                 = 'MEASURE.DLL'.*
-    Msr_DumpStats                            = 'MEASURE.DLL'.*
-    Msr_Init                                 = 'MEASURE.DLL'.*
-    Msr_Integer                              = 'MEASURE.DLL'.*
-    Msr_Note                                 = 'MEASURE.DLL'.*
-    Msr_Register                             = 'MEASURE.DLL'.*
-    Msr_Reset                                = 'MEASURE.DLL'.*
-    Msr_Start                                = 'MEASURE.DLL'.*
-    Msr_Stop                                 = 'MEASURE.DLL'.*
-    Msr_Terminate                            = 'MEASURE.DLL'.*
+    Msr_Control                              
+    Msr_Dump                                 
+    Msr_DumpStats                            
+    Msr_Init                                 
+    Msr_Integer                              
+    Msr_Note                                 
+    Msr_Register                             
+    Msr_Reset                                
+    Msr_Start                                
+    Msr_Stop                                 
+    Msr_Terminate                            

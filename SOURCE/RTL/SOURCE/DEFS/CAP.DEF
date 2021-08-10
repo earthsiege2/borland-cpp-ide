@@ -1,6 +1,7 @@
-LIBRARY CAP
+LIBRARY Cap
 EXPORTS
 
-    DumpCAP                                  = 'CAP.DLL'.*
-    StartCAP                                 = 'CAP.DLL'.*
-    StopCAP                                  = 'CAP.DLL'.*
+    DumpCAP        @5
+    StartCAP        @3
+    StopCAP        @4
+    __penter        = _penter        @2

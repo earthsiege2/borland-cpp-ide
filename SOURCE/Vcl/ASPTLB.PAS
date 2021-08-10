@@ -1,12 +1,12 @@
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1995-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
-unit Asptlb;
+unit AspTlb;
 
 interface
 
@@ -248,12 +248,14 @@ type
     function GetResponse: IResponse;
     function GetServer: IServer;
     function GetSession: ISessionObject;
+    function GetObjectContext: IObjectContext;
   public
+    property Application: IApplicationObject read GetApplication;
+    property ObjectContext: IObjectContext read GetObjectContext;
     property Request: IRequest read GetRequest;
     property Response: IResponse read GetResponse;
     property Session: ISessionObject read GetSession;
     property Server: IServer read GetServer;
-    property Application: IApplicationObject read GetApplication;
   end;
 
 implementation
@@ -304,27 +306,32 @@ end;
 
 function TASPMTSObject.GetApplication: IApplicationObject;
 begin
-  Result := IUnknown((GetObjectContext as IGetContextProperties).GetProperty('Application')) as IApplicationObject;
+  Result := IUnknown((Mtx.GetObjectContext as IGetContextProperties).GetProperty('Application')) as IApplicationObject;
 end;
 
 function TASPMTSObject.GetRequest: IRequest;
 begin
-  Result := IUnknown((GetObjectContext as IGetContextProperties).GetProperty('Request')) as IRequest;
+  Result := IUnknown((Mtx.GetObjectContext as IGetContextProperties).GetProperty('Request')) as IRequest;
 end;
 
 function TASPMTSObject.GetResponse: IResponse;
 begin
-  Result := IUnknown((GetObjectContext as IGetContextProperties).GetProperty('Response')) as IResponse;
+  Result := IUnknown((Mtx.GetObjectContext as IGetContextProperties).GetProperty('Response')) as IResponse;
 end;
 
 function TASPMTSObject.GetServer: IServer;
 begin
-  Result := IUnknown((GetObjectContext as IGetContextProperties).GetProperty('Server')) as IServer;
+  Result := IUnknown((Mtx.GetObjectContext as IGetContextProperties).GetProperty('Server')) as IServer;
 end;
 
 function TASPMTSObject.GetSession: ISessionObject;
 begin
-  Result := IUnknown((GetObjectContext as IGetContextProperties).GetProperty('Session')) as ISessionObject;
+  Result := IUnknown((Mtx.GetObjectContext as IGetContextProperties).GetProperty('Session')) as ISessionObject;
+end;
+
+function TASPMTSObject.GetObjectContext: IObjectContext;
+begin
+  Result := Mtx.GetObjectContext;
 end;
 
 end.

@@ -6,7 +6,7 @@
 {                                                       }
 {*******************************************************}
 
-unit mxConsts;
+unit Mxconsts;
 
 {$R mxconsts.RES}
 

@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'VclHew.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'vclhew.pas' rev: 6.00
 
-#ifndef VclHewHPP
-#define VclHewHPP
+#ifndef vclhewHPP
+#define vclhewHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -41,8 +41,7 @@ public:
 	HIDESBASE int __stdcall _Release(void);
 public:
 	#pragma option push -w-inl
-	/* TAggregatedObject.Create */ inline __fastcall TPropertyPageImplHack(_di_IUnknown Controller) : Axctrls::TPropertyPageImpl(
-		Controller) { }
+	/* TAggregatedObject.Create */ inline __fastcall TPropertyPageImplHack(const System::_di_IInterface Controller) : Axctrls::TPropertyPageImpl(Controller) { }
 	#pragma option pop
 	
 public:
@@ -51,10 +50,10 @@ public:
 	#pragma option pop
 	
 private:
-	void *__IUnknown;	/* IUnknown */
+	void *__IInterface;	/* System::IInterface */
 	
 public:
-	operator IUnknown*(void) { return (IUnknown*)&__IUnknown; }
+	operator IInterface*(void) { return (IInterface*)&__IInterface; }
 	
 };
 
@@ -88,31 +87,20 @@ extern PACKAGE Variant __fastcall VariantNot(const Variant &V1);
 extern PACKAGE Variant __fastcall VariantNeg(const Variant &V1);
 extern PACKAGE Variant __fastcall VariantGetElement(const Variant &V, int i1)/* overload */;
 extern PACKAGE Variant __fastcall VariantGetElement(const Variant &V, int i1, int i2)/* overload */;
-	
-extern PACKAGE Variant __fastcall VariantGetElement(const Variant &V, int i1, int i2, int i3)/* overload */
-	;
-extern PACKAGE Variant __fastcall VariantGetElement(const Variant &V, int i1, int i2, int i3, int i4
-	)/* overload */;
-extern PACKAGE Variant __fastcall VariantGetElement(const Variant &V, int i1, int i2, int i3, int i4
-	, int i5)/* overload */;
-extern PACKAGE void __fastcall VariantPutElement(Variant &V, const Variant &data, int i1)/* overload */
-	;
-extern PACKAGE void __fastcall VariantPutElement(Variant &V, const Variant &data, int i1, int i2)/* overload */
-	;
-extern PACKAGE void __fastcall VariantPutElement(Variant &V, const Variant &data, int i1, int i2, int 
-	i3)/* overload */;
-extern PACKAGE void __fastcall VariantPutElement(Variant &V, const Variant &data, int i1, int i2, int 
-	i3, int i4)/* overload */;
-extern PACKAGE void __fastcall VariantPutElement(Variant &V, const Variant &data, int i1, int i2, int 
-	i3, int i4, int i5)/* overload */;
+extern PACKAGE Variant __fastcall VariantGetElement(const Variant &V, int i1, int i2, int i3)/* overload */;
+extern PACKAGE Variant __fastcall VariantGetElement(const Variant &V, int i1, int i2, int i3, int i4)/* overload */;
+extern PACKAGE Variant __fastcall VariantGetElement(const Variant &V, int i1, int i2, int i3, int i4, int i5)/* overload */;
+extern PACKAGE void __fastcall VariantPutElement(Variant &V, const Variant &data, int i1)/* overload */;
+extern PACKAGE void __fastcall VariantPutElement(Variant &V, const Variant &data, int i1, int i2)/* overload */;
+extern PACKAGE void __fastcall VariantPutElement(Variant &V, const Variant &data, int i1, int i2, int i3)/* overload */;
+extern PACKAGE void __fastcall VariantPutElement(Variant &V, const Variant &data, int i1, int i2, int i3, int i4)/* overload */;
+extern PACKAGE void __fastcall VariantPutElement(Variant &V, const Variant &data, int i1, int i2, int i3, int i4, int i5)/* overload */;
 
 }	/* namespace Vclhew */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Vclhew;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// VclHew
+#endif	// vclhew

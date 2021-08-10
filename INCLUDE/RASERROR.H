@@ -1,12 +1,18 @@
-/* Copyright (c) 1992-1999, Microsoft Corporation, all rights reserved
-**
-** raserror.h
-** Remote Access external API
-** RAS specific error codes
-*/
+/*++
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+Module Name:
+
+    raserror.h
+
+Abstract:
+
+    RAS specific error codes
+    
+--*/
 
 #ifndef _RASERROR_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _RASERROR_H_
 
 #if _MSC_VER > 1000
@@ -114,7 +120,7 @@
 
 #define ERROR_PORT_DISCONNECTED              (RASBASE+19)
 /*
- * The specified port is not connected.%0
+ * A connection to the remote computer could not be established, so the port used for this connection was closed. For further assistance, click More Info or search Help and Support Center for this error number.%0
  */
 
 #define ERROR_NO_ENDPOINTS                   (RASBASE+20)
@@ -159,7 +165,7 @@
 
 #define ERROR_DISCONNECTION                  (RASBASE+28)
 /*
- * The connection was closed.%0
+ * The connection was terminated by the remote computer before it could be completed. For further assistance, click More Info or search Help and Support Center for this error number.%0
  */ 
 
 #define ERROR_REMOTE_DISCONNECTION           (RASBASE+29)
@@ -409,7 +415,7 @@
 
 #define ERROR_NO_ANSWER                      (RASBASE+78)
 /*
- * There was no answer.%0
+ * The remote computer did not respond. For further assistance, click More Info or search Help and Support Center for this error number.%0
  */
 
 #define ERROR_NO_CARRIER                     (RASBASE+79)
@@ -574,7 +580,7 @@
 
 #define ERROR_RASMAN_CANNOT_INITIALIZE	     (RASBASE+111)
 /*
- * The Remote Access Service Manager could not start. Additional information is provided in the event log.%0
+ * A configuration error on this computer is preventing this connection. For further assistance, click More Info or search Help and Support Center for this error number.%0
  */
 
 #define ERROR_BIPLEX_PORT_NOT_AVAILABLE      (RASBASE+112)
@@ -609,7 +615,7 @@
 
 #define ERROR_PPP_TIMEOUT                    (RASBASE+118)
 /*
- * The connection timed out waiting for a valid response from the remote computer.%0
+ * The connection was terminated because the remote computer did not respond in a timely manner. For further assistance, click More Info or search Help and Support Center for this error number.%0
  */
 
 #define ERROR_PPP_REMOTE_TERMINATED          (RASBASE+119)
@@ -619,12 +625,12 @@
 
 #define ERROR_PPP_NO_PROTOCOLS_CONFIGURED    (RASBASE+120)
 /*
- * The connection attempt failed because your computer and the remote computer could not agree on PPP control protocols.%0
+ * A connection to the remote computer could not be established. You might need to change the network settings for this connection. For further assistance, click More Info or search Help and Support Center for this error number.%0
  */
 
 #define ERROR_PPP_NO_RESPONSE                (RASBASE+121)
 /*
- * The remote computer is not responding.%0
+ * The remote computer did not respond. For further assistance, click More Info or search Help and Support Center for this error number.%0
  */
 
 #define ERROR_PPP_INVALID_PACKET             (RASBASE+122)
@@ -684,7 +690,7 @@
 
 #define ERROR_PPP_CP_REJECTED                (RASBASE+133)
 /*
- * Your computer and the remote computer could not agree on PPP control protocols.%0
+ * A connection to the remote computer could not be completed. You might need to adjust the protocols on this computer. For further assistance, click More Info or search Help and Support Center for this error number.%0
  */
 
 #define ERROR_PPP_LCP_TERMINATED             (RASBASE+134)
@@ -933,13 +939,13 @@
 
 #define ERROR_CERT_FOR_ENCRYPTION_NOT_FOUND (RASBASE+181)
 /*
- * The encryption attempt failed because no valid certificate was found.%0
+ * The connection requires a certificate, and no valid certificate was found. For further assistance, click More Info or search Help and Support Center for this error number.%0
  */
 
 #define ERROR_SHARING_RRAS_CONFLICT         (RASBASE+182)
 /*
- * Connection Sharing (NAT) is currently installed as a routing protocol, and must be 
- * removed before enabling Internet Connection Sharing.%0
+ * Network Address Translation (NAT) is currently installed as a routing protocol, and must be 
+ * removed before enabling Internet Connection Sharing and/or Internet Connection Firewall.%0
  */
 
 #define ERROR_SHARING_NO_PRIVATE_LAN        (RASBASE+183)
@@ -1023,7 +1029,7 @@
 
 #define ERROR_CONNECTING_DEVICE_NOT_FOUND   (RASBASE+197)
 /*
- * The connection failed because the modem (or other connecting device) was not found. Please make sure that the modem or other connecting device is installed.%0
+ * A connection to the remote computer could not be established because the modem was not found or was busy. For further assistance, click More Info or search Help and Support Center for this error number.%0
  */
 
 #define ERROR_NO_EAPTLS_CERTIFICATE          (RASBASE+198)
@@ -1031,7 +1037,25 @@
  * A certificate could not be found that can be used with this Extensible Authentication Protocol.%0
  */
 
-#define RASBASEEND                          (RASBASE+198)
+#define ERROR_SHARING_HOST_ADDRESS_CONFLICT (RASBASE+199)
+/*
+ * Internet Connection Sharing (ICS) cannot be enabled due to an IP 
+ * address conflict on the network. ICS requires the host be configured to use 
+ * 192.168.0.1. Please ensure that no other client on the network is
+ * configured to use 192.168.0.1.%0
+ */
 
-#pragma option pop /*P_O_Pop*/
+#define ERROR_AUTOMATIC_VPN_FAILED          (RASBASE+200)
+/*
+ * Unable to establish the VPN connection.  The VPN server may be unreachable, or security parameters may not be configured properly for this connection.%0
+ */
+
+#define ERROR_VALIDATING_SERVER_CERT        (RASBASE+201)
+/*
+* This connection is configured to validate the identity of the access server, but Windows cannot verify the digital certificate sent by the server. 
+*/
+
+#define RASBASEEND                          (RASBASE+201)
+
 #endif // _RASERROR_H_
+  

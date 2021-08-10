@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'QRPrgres.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QRPrgres.pas' rev: 6.00
 
 #ifndef QRPrgresHPP
 #define QRPrgresHPP
@@ -10,7 +10,7 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <qr3const.hpp>	// Pascal unit
+#include <QR3Const.hpp>	// Pascal unit
 #include <QRPrntr.hpp>	// Pascal unit
 #include <ComCtrls.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
@@ -51,12 +51,10 @@ public:
 	__property Qrprntr::TQRPrinter* QRPrinter = {read=FQRPrinter, write=FQRPrinter};
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TQRProgressForm(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TQRProgressForm(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TQRProgressForm(Classes::TComponent* AOwner, 
-		int Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TQRProgressForm(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TQRProgressForm(void) { }
@@ -64,8 +62,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRProgressForm(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRProgressForm(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -74,9 +71,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Qrprgres */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qrprgres;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

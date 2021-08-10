@@ -1,5 +1,5 @@
 // SYSTDATE.H: Pascal TDateTime support
-// Copyright (c) 1997, 1999 Borland International
+// Copyright (c) 1997, 2002 Borland Software Corporation
 
 #if !defined(SYSTDATE_H)
 #define SYSTDATE_H
@@ -111,7 +111,7 @@ namespace System
 	  {return Val <= rhs.Val;}
 
 	  __fastcall operator AnsiString() const;//<Date||Time||DateTime>String(smart)
-	  AnsiString __fastcall FormatString(const AnsiString& format);
+	  AnsiString __fastcall FormatString(const AnsiString& format) const;
 	  AnsiString __fastcall DateString() const;
 	  AnsiString __fastcall TimeString() const;
 	  AnsiString __fastcall DateTimeString() const;

@@ -1,93 +1,147 @@
-{********************************************************}
-{                                                        }
-{       Borland Delphi Visual Component Library          }
-{       InterBase Express core components                }
-{                                                        }
-{       Copyright (c) 1998-1999 Inprise Corporation      }
-{                                                        }
-{    InterBase Express is based in part on the product   }
-{    Free IB Components, written by Gregory H. Deatz for }
-{    Hoagland, Longo, Moran, Dunst & Doukas Company.     }
-{    Free IB Components is used under license.           }
-{                                                        }
-{********************************************************}
+{************************************************************************}
+{                                                                        }
+{       Borland Delphi Visual Component Library                          }
+{       InterBase Express core components                                }
+{                                                                        }
+{       Copyright (c) 1998-2001 Borland Software Corporation             }
+{                                                                        }
+{    InterBase Express is based in part on the product                   }
+{    Free IB Components, written by Gregory H. Deatz for                 }
+{    Hoagland, Longo, Moran, Dunst & Doukas Company.                     }
+{    Free IB Components is used under license.                           }
+{                                                                        }
+{    The contents of this file are subject to the InterBase              }
+{    Public License Version 1.0 (the "License"); you may not             }
+{    use this file except in compliance with the License. You may obtain }
+{    a copy of the License at http://www.borland.com/interbase/IPL.html  }
+{    Software distributed under the License is distributed on            }
+{    an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either              }
+{    express or implied. See the License for the specific language       }
+{    governing rights and limitations under the License.                 }
+{    The Original Code was created by InterBase Software Corporation     }
+{       and its successors.                                              }
+{    Portions created by Borland Software Corporation are Copyright      }
+{       (C) Borland Software Corporation. All Rights Reserved.           }
+{    Contributor(s): Jeff Overcash                                       }
+{                                                                        }
+{************************************************************************}
 
 unit IBSQLMonitor;
 
 interface
 
 uses
-  SysUtils, Windows, Messages, Classes, Forms, Controls, IBUtils,
-  IBSQL, IBCustomDataSet, IBDatabase, Dialogs, StdCtrls, IBServices;
+  SysUtils,
+  {$IFDEF MSWINDOWS}
+  Windows, Messages,
+  {$ENDIF}
+  {$IFDEF LINUX}
+  Libc, {QForms,}
+  {$ENDIF}
+  Classes, IB, IBUtils, IBSQL, IBCustomDataSet, IBDatabase, IBServices, IBXConst;
 
-resourcestring
-  SCantPrintValue = 'Cannot print value';
-  SEOFReached = 'SEOFReached'; 
-  
+{$IFDEF MSWINDOWS}
 const
   WM_MIN_IBSQL_MONITOR = WM_USER;
   WM_MAX_IBSQL_MONITOR = WM_USER + 512;
   WM_IBSQL_SQL_EVENT = WM_MIN_IBSQL_MONITOR + 1;
+{$ENDIF}
 
 type
-  TIBSQLMonitorHook = class;
   TIBCustomSQLMonitor = class;
 
   { TIBSQLMonitor }
-  TSQLEvent = procedure(EventText: String) of object;
+  TSQLEvent = procedure(EventText: String; EventTime : TDateTime) of object;
 
   TIBCustomSQLMonitor = class(TComponent)
   private
-    FAtom: TAtom;
+{$IFDEF MSWINDOWS}
     FHWnd: HWND;
-    FThread: THandle;
+{$ENDIF}
     FOnSQLEvent: TSQLEvent;
     FTraceFlags: TTraceFlags;
+    FEnabled: Boolean;
+{$IFDEF MSWINDOWS}
+    procedure MonitorWndProc(var Message : TMessage);
+{$ENDIF}
+    procedure SetEnabled(const Value: Boolean);
   protected
-    procedure MonitorHandler(var Msg: TMessage); virtual;
     property OnSQL: TSQLEvent read FOnSQLEvent write FOnSQLEvent;
     property TraceFlags: TTraceFlags read FTraceFlags write FTraceFlags;
+    property Enabled : Boolean read FEnabled write SetEnabled default true;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    procedure Release;
+{$IFDEF MSWINDOWS}
+    property Handle : HWND read FHwnd;
+{$ENDIF}
   end;
 
   TIBSQLMonitor = class(TIBCustomSQLMonitor)
   published
     property OnSQL;
+    property TraceFlags;
+    property Enabled;
   end;
 
+  IIBSQLMonitorHook = interface
+    ['{CF65434C-9B75-4298-BA7E-E6B85B3C769D}']
+    procedure RegisterMonitor(SQLMonitor : TIBCustomSQLMonitor);
+    procedure UnregisterMonitor(SQLMonitor : TIBCustomSQLMonitor);
+    procedure ReleaseMonitor(Arg : TIBCustomSQLMonitor);
+    procedure SQLPrepare(qry: TIBSQL); 
+    procedure SQLExecute(qry: TIBSQL);
+    procedure SQLFetch(qry: TIBSQL); 
+    procedure DBConnect(db: TIBDatabase);
+    procedure DBDisconnect(db: TIBDatabase);
+    procedure TRStart(tr: TIBTransaction); 
+    procedure TRCommit(tr: TIBTransaction);
+    procedure TRCommitRetaining(tr: TIBTransaction); 
+    procedure TRRollback(tr: TIBTransaction);
+    procedure TRRollbackRetaining(tr: TIBTransaction);
+    procedure ServiceAttach(service: TIBCustomService); 
+    procedure ServiceDetach(service: TIBCustomService);
+    procedure ServiceQuery(service: TIBCustomService);
+    procedure ServiceStart(service: TIBCustomService);
+    procedure SendMisc(Msg : String);
+    function GetTraceFlags : TTraceFlags;
+    function GetMonitorCount : Integer;
+    procedure SetTraceFlags(const Value : TTraceFlags);
+    function GetEnabled : boolean;
+    procedure SetEnabled(const Value : Boolean);
+    property TraceFlags: TTraceFlags read GetTraceFlags write SetTraceFlags;
+    property Enabled : Boolean read GetEnabled write SetEnabled;
+  end;
+
+
+function MonitorHook: IIBSQLMonitorHook;
+procedure EnableMonitoring;
+procedure DisableMonitoring;
+function MonitoringEnabled: Boolean;
+
+implementation
+
+uses
+  contnrs, IBHeader, Db;
+
+type
+
   { TIBSQLMonitorHook }
-  TIBSQLMonitorHook = class(TObject)
+  TIBSQLMonitorHook = class(TInterfacedObject, IIBSQLMonitorHook)
   private
-    FSharedBuffer,                   { MMF for shared memory }
-    FWriteLock,                      { Only one writer at a time }
-    FWriteEvent,                     { The SQL log has been written }
-    FWriteFinishedEvent,             { The SQL log write is finished }
-    FReadEvent,                      { All readers are ready }
-    FReadFinishedEvent: THandle;     { The SQL log read is now finished }
-    FBuffer: PChar;                  { The shared buffer }
-    FMonitorCount: PInteger;         { Number of registered monitors }
-    FReaderCount: PInteger;          { Number of monitors currently reading }
-    FTraceDataType: PInteger;        { Datatype: connect, prepare, trans, .. }
-    FBufferSize: PInteger;           { Size of written buffer }
     FTraceFlags: TTraceFlags;
+    FEnabled: Boolean;
+    FEventsCreated : Boolean;
+    procedure CreateEvents;
   protected
-    procedure ResetStates;
-    procedure Lock;
-    procedure Unlock;
-    procedure BeginWrite;
-    procedure EndWrite;
-    procedure BeginRead;
-    procedure EndRead;
     procedure WriteSQLData(Text: String; DataType: TTraceFlag);
   public
     constructor Create;
     destructor Destroy; override;
-    function MonitorCount: Integer;
-    procedure RegisterMonitor;
-    procedure UnregisterMonitor;
-    function ReadSQLData(Arg: TIBCustomSQLMonitor): String;
+    procedure RegisterMonitor(SQLMonitor : TIBCustomSQLMonitor);
+    procedure UnregisterMonitor(SQLMonitor : TIBCustomSQLMonitor);
+    procedure ReleaseMonitor(Arg : TIBCustomSQLMonitor);
     procedure SQLPrepare(qry: TIBSQL); virtual;
     procedure SQLExecute(qry: TIBSQL); virtual;
     procedure SQLFetch(qry: TIBSQL); virtual;
@@ -102,263 +156,711 @@ type
     procedure ServiceDetach(service: TIBCustomService); virtual;
     procedure ServiceQuery(service: TIBCustomService); virtual;
     procedure ServiceStart(service: TIBCustomService); virtual;
-    property TraceFlags: TTraceFlags read FTraceFlags write FTraceFlags;
+    procedure SendMisc(Msg : String);
+    function GetEnabled: Boolean;
+    function GetTraceFlags: TTraceFlags;
+    function GetMonitorCount : Integer;
+    procedure SetEnabled(const Value: Boolean);
+    procedure SetTraceFlags(const Value: TTraceFlags);
+    property TraceFlags: TTraceFlags read GetTraceFlags write SetTraceFlags;
+    property Enabled : Boolean read GetEnabled write SetEnabled default true;
   end;
 
-function MonitorHook: TIBSQLMonitorHook;
-procedure EnableMonitoring;
-procedure DisableMonitoring;
-function MonitoringEnabled: Boolean;
+  { There are two possible objects.  One is a trace message object.
+    This object holds the flag of the trace type plus the message.
+    The second object is a Release object.  It holds the handle that
+    the CM_RELEASE message is to be queued to. }
 
-implementation
+  TTraceObject = Class(TObject)
+    FDataType : TTraceFlag;
+    FMsg : String;
+    FTimeStamp : TDateTime;
+  public
+    constructor Create(Msg : String; DataType : TTraceFlag); overload;
+    constructor Create(obj : TTraceObject); overload;
+  end;
 
-uses
-  IB;
+  TReleaseObject = Class(TObject)
+    FHandle : THandle;
+  public
+    constructor Create(Handle : THandle);
+  end;
+
+  TWriterThread = class(TThread)
+  private
+    { Private declarations }
+    FMsgs : TObjectList;
+  protected
+    procedure Lock;
+    Procedure Unlock;
+    procedure BeginWrite;
+    procedure EndWrite;
+    procedure Execute; override;
+    procedure WriteToBuffer;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure WriteSQLData(Msg : String; DataType : TTraceFlag);
+    procedure ReleaseMonitor(HWnd : THandle);
+  end;
+
+  TReaderThread = class(TThread)
+  private
+    st : TTraceObject;
+    FMonitors : TObjectList;
+    { Private declarations }
+  protected
+    procedure BeginRead;
+    procedure EndRead;
+    procedure ReadSQLData;
+    procedure Execute; override;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure AddMonitor(Arg : TIBCustomSQLMonitor);
+    procedure RemoveMonitor(Arg : TIBCustomSQLMonitor);
+  end;
+
+const
+  CM_BASE                   = $B000;
+  CM_RELEASE                = CM_BASE + 33;
+
+  MonitorHookNames: array[0..5] of String = (
+    'IB.SQL.MONITOR.Mutex4_1',  {do not localize}
+    'IB.SQL.MONITOR.SharedMem4_1',  {do not localize}
+    'IB.SQL.MONITOR.WriteEvent4_1',   {do not localize}
+    'IB.SQL.MONITOR.WriteFinishedEvent4_1',  {do not localize}
+    'IB.SQL.MONITOR.ReadEvent4_1',         {do not localize}
+    'IB.SQL.MONITOR.ReadFinishedEvent4_1'   {do not localize}
+  );
+  cMonitorHookSize = 1024;
+  cMaxBufferSize = cMonitorHookSize - (4 * SizeOf(Integer)) - SizeOf(TDateTime);
+  cDefaultTimeout = 500; { 1 seconds }
 
 var
-  bMonitoringEnabled: Boolean;
+  FSharedBuffer,
+  FWriteLock,
+  FWriteEvent,
+  FWriteFinishedEvent,
+  FReadEvent,
+  FReadFinishedEvent : THandle;
+  FBuffer : PChar;
+  FMonitorCount,
+  FReaderCount,
+  FTraceDataType,
+  FBufferSize : PInteger;
+  FTimeStamp : PDateTime;
 
-procedure EnableMonitoring;
-begin
-  bMonitoringEnabled := True;
-end;
-
-procedure DisableMonitoring;
-begin
-  bMonitoringEnabled := False;
-end;
-
-function MonitoringEnabled: Boolean;
-begin
-  result := bMonitoringEnabled;
-end;
-
+  FWriterThread : TWriterThread;
+  FReaderThread : TReaderThread;
+  _MonitorHook: TIBSQLMonitorHook;
+  bDone: Boolean;
+  CS : TRTLCriticalSection;
+  
 { TIBCustomSQLMonitor }
 
-procedure IBSQLM_Thread(Arg: TIBCustomSQLMonitor); stdcall;
-var
-  st: String;
-  len: Integer;
-  FBuffer: PChar;
-begin
-  while (Arg <> nil) and (Arg.FHWnd <> 0) do begin
-    st := MonitorHook.ReadSQLData(Arg);
-    if (st <> '') and (Arg.FHWnd <> 0) then begin
-      len := Length(st);
-      GetMem(FBuffer, len + SizeOf(Integer));
-      Move(len, FBuffer[0], SizeOf(Integer));
-      Move(st[1], FBuffer[SizeOf(Integer)], len);
-      PostMessage(
-        Arg.FHWnd,
-        WM_IBSQL_SQL_EVENT,
-        WPARAM(Arg),
-        LPARAM(FBuffer));
-    end;
-  end;
-  ExitThread(0);
-end;
-
-{function InitWndProc(HWindow: HWnd; Message, WParam: Longint;
-  LParam: Longint): Longint; stdcall;}
-function IBSQLM_WindowProc(_hWnd: HWND; Msg: UINT; _wParam: WPARAM;
-  _lParam: LPARAM): LRESULT; stdcall;
-var
-  MsgRec: TMessage;
-begin
-  MsgRec.Msg := Msg;
-  MsgRec.WParam := _wParam;
-  MsgRec.LParam := _lParam;
-  case Msg of
-    WM_CREATE:
-      result := 0;
-    else begin
-      if ((Msg >= WM_MIN_IBSQL_MONITOR) and
-          (Msg <= WM_MAX_IBSQL_MONITOR)) then begin
-        try
-          TIBCustomSQLMonitor(_wParam).MonitorHandler(MsgRec);
-        except
-          ;
-        end;
-        result := MsgRec.Result;
-      end else
-        result := DefWindowProc(_hWnd, Msg, _wParam, _lParam);
-    end;
-  end;
-end;
-
-var
-  MonitorClass: TWndClass = (
-    style: 0;
-    lpfnWndProc: @IBSQLM_WindowProc;
-    cbClsExtra: 0;
-    cbWndExtra: 0;
-    hInstance: 0;
-    hIcon: 0;
-    hCursor: 0;
-    hbrBackground: 0;
-    lpszMenuName: nil;
-    lpszClassName: 'TIBCustomSQLMonitor' {do not localize}
-  );
-
 constructor TIBCustomSQLMonitor.Create(AOwner: TComponent);
-var
-  TempClass: TWndClass;
-  ThreadID: DWORD;
 begin
-  inherited;
+  inherited Create(AOwner);
   FTraceFlags := [tfqPrepare .. tfMisc];
-  MonitorClass.hInstance := HInstance;
-  if not GetClassInfo(HInstance, MonitorClass.lpszClassName,
-           TempClass) then begin
-    FAtom := Windows.RegisterClass(MonitorClass);
-    if FAtom = 0 then
-      IBError(ibxeWindowsAPIError, [GetLastError, GetLastError]);
-  end;
-  FHWnd := CreateWindow(PChar(FAtom), '', 0, 0, 0, 0, 0,
-             0, 0, HInstance, nil);
-  if FHWnd = 0 then
-    IBError(ibxeSQLMonitorAlreadyPresent, []);
+  FEnabled := true;
   if not (csDesigning in ComponentState) then
   begin
-    MonitorHook.RegisterMonitor;
-    FThread := CreateThread(nil, 0, @IBSQLM_Thread, Pointer(Self), 0, ThreadID);
-    if FThread = 0 then
-      IBError(ibxeWindowsAPIError, [GetLastError, GetLastError]);
+{$IFDEF MSWINDOWS}
+    FHWnd := AllocateHWnd(MonitorWndProc);
+{$ENDIF}
+    MonitorHook.RegisterMonitor(self);
   end;
 end;
 
 destructor TIBCustomSQLMonitor.Destroy;
 begin
-  if csDesigning in ComponentState then
+  if not (csDesigning in ComponentState) then
   begin
-    DestroyWindow(FHWnd);
-    Windows.UnregisterClass(PChar(FAtom), HInstance);
-  end
-  else begin
-    MonitorHook.UnregisterMonitor;
-    DestroyWindow(FHWnd);
-    FHWnd := 0;
-    MonitorHook.ResetStates;
-    if WaitForSingleObject(FThread, 10000) = WAIT_TIMEOUT then
-      CloseHandle(FThread);
-    Windows.UnregisterClass(PChar(FAtom), HInstance);
-    FAtom := 0;
+    if FEnabled then
+      MonitorHook.UnregisterMonitor(self);
+{$IFDEF MSWINDOWS}
+    DeallocateHwnd(FHWnd);
+{$ENDIF}
   end;
-  inherited;
+  inherited Destroy;
 end;
 
-procedure TIBCustomSQLMonitor.MonitorHandler(var Msg: TMessage);
+{$IFDEF MSWINDOWS}
+procedure TIBCustomSQLMonitor.MonitorWndProc(var Message: TMessage);
 var
-  st: String;
+  st : TTraceObject;
 begin
-  if (Msg.Msg = WM_IBSQL_SQL_EVENT) then begin
-    if (Assigned(FOnSQLEvent)) then begin
-      begin
-        SetString(st, PChar(Msg.LParam) + SizeOf(Integer),
-                  PInteger(Msg.LParam)^);
-        FreeMem(PChar(Msg.LParam));
-        FOnSQLEvent(st);
-      end;
+  case Message.Msg of
+    WM_IBSQL_SQL_EVENT:
+    begin
+      st := TTraceObject(Message.LParam);
+      if (Assigned(FOnSQLEvent)) and
+         (st.FDataType in FTraceFlags) then
+        FOnSQLEvent(st.FMsg, st.FTimeStamp);
+      st.Free;
     end;
-  end else
-    Msg.Result := DefWindowProc(FHWnd, Msg.Msg, Msg.WParam, Msg.LParam);
+    CM_RELEASE :
+      Free;
+    else
+      DefWindowProc(FHWnd, Message.Msg, Message.WParam, Message.LParam);
+  end;
+end;
+{$ENDIF}
+
+procedure TIBCustomSQLMonitor.Release;
+begin
+  MonitorHook.ReleaseMonitor(self);
+end;
+
+procedure TIBCustomSQLMonitor.SetEnabled(const Value: Boolean);
+begin
+  if Value <> FEnabled then
+  begin
+    FEnabled := Value;
+    if not (csDesigning in ComponentState) then
+      if FEnabled then
+        Monitorhook.RegisterMonitor(self)
+      else
+        MonitorHook.UnregisterMonitor(self);
+  end;
 end;
 
 { TIBSQLMonitorHook }
 
-const
-  MonitorHookNames: array[0..5] of String = (
-    'IB.SQL.MONITOR.Mutex',
-    'IB.SQL.MONITOR.SharedMem',
-    'IB.SQL.MONITOR.WriteEvent',
-    'IB.SQL.MONITOR.WriteFinishedEvent',
-    'IB.SQL.MONITOR.ReadEvent',
-    'IB.SQL.MONITOR.ReadFinishedEvent'
-  );
-  cMonitorHookSize = 1024;
-  cMaxBufferSize = cMonitorHookSize - (4 * SizeOf(Integer));
-  cDefaultTimeout = 2000; { 2 seconds }
-
 constructor TIBSQLMonitorHook.Create;
+begin
+  inherited Create;
+  FEventsCreated := false;
+  FTraceFlags := [tfQPrepare..tfMisc];
+  FEnabled := true;
+end;
+
+procedure TIBSQLMonitorHook.CreateEvents;
+{$IFDEF MSWINDOWS}
+var
+  Sa : TSecurityAttributes;
+  Sd : TSecurityDescriptor;
+
+  function OpenLocalEvent(Idx: Integer): THandle;
+  begin
+    result := OpenEvent(EVENT_ALL_ACCESS, true, PChar(MonitorHookNames[Idx]));
+    if result = 0 then
+      IBError(ibxeCannotCreateSharedResource, [GetLastError]);
+  end;
+
   function CreateLocalEvent(Idx: Integer; InitialState: Boolean): THandle;
   begin
-    result := CreateEvent(nil, True, InitialState, PChar(MonitorHookNames[Idx]));
+    result := CreateEvent(@sa, true, InitialState, PChar(MonitorHookNames[Idx]));
     if result = 0 then
       IBError(ibxeCannotCreateSharedResource, [GetLastError]);
   end;
 
 begin
-  { Create the MMF with the initial size, and
-    create all events with an initial state of non-signalled }
-  FWriteLock := CreateMutex(nil, False, PChar(MonitorHookNames[0]));
-  if (FWriteLock = 0) then
-    IBError(ibxeCannotCreateSharedResource, [GetLastError]);
-  Lock; { Serialize the creation of memory mapped files. }
-  try
+  { Setup Secureity so anyone can connect to the MMF/Mutex/Events.  This is
+    needed when IBX is used in a Service. }
+
+  InitializeSecurityDescriptor(@Sd,SECURITY_DESCRIPTOR_REVISION);
+  SetSecurityDescriptorDacl(@Sd,true,nil,false);
+  Sa.nLength := SizeOf(Sa);
+  Sa.lpSecurityDescriptor := @Sd;
+  Sa.bInheritHandle := true;
+
+  FSharedBuffer := CreateFileMapping($FFFFFFFF, @sa, PAGE_READWRITE,
+                       0, cMonitorHookSize, PChar(MonitorHookNames[1]));
+
+  if GetLastError = ERROR_ALREADY_EXISTS then
+  begin
+    FSharedBuffer := OpenFileMapping(FILE_MAP_ALL_ACCESS, false, PChar(MonitorHookNames[1]));
+    if (FSharedBuffer = 0) then
+      IBError(ibxeCannotCreateSharedResource, [GetLastError]);
+    FBuffer := MapViewOfFile(FSharedBuffer, FILE_MAP_ALL_ACCESS, 0, 0, 0);
+    if FBuffer = nil then
+      IBError(ibxeCannotCreateSharedResource, [GetLastError]);
+    FMonitorCount := PInteger(FBuffer + cMonitorHookSize - SizeOf(Integer));
+    FReaderCount := PInteger(PChar(FMonitorCount) - SizeOf(Integer));
+    FTraceDataType := PInteger(PChar(FReaderCount) - SizeOf(Integer));
+    FTimeStamp := PDateTime(PChar(FTraceDataType) - SizeOf(TDateTime));
+    FBufferSize := PInteger(PChar(FTimeStamp) - SizeOf(Integer));
+    FWriteLock := OpenMutex(MUTEX_ALL_ACCESS, False, PChar(MonitorHookNames[0]));
+    FWriteEvent := OpenLocalEvent(2);
+    FWriteFinishedEvent := OpenLocalEvent(3);
+    FReadEvent := OpenLocalEvent(4);
+    FReadFinishedEvent := OpenLocalEvent(5);
+  end
+  else
+  begin
+    FWriteLock := CreateMutex(@sa, False, PChar(MonitorHookNames[0]));
     FWriteEvent := CreateLocalEvent(2, False);
     FWriteFinishedEvent := CreateLocalEvent(3, True);
     FReadEvent := CreateLocalEvent(4, False);
     FReadFinishedEvent := CreateLocalEvent(5, False);
-    { Set up the MMF }
-    FSharedBuffer := CreateFileMapping(
-                       $FFFFFFFF, nil, PAGE_READWRITE, 0, cMonitorHookSize,
-                       PChar(MonitorHookNames[1]));
-    if (FSharedBuffer = 0) then
-      IBError(ibxeCannotCreateSharedResource, [GetLastError]);
+
     FBuffer := MapViewOfFile(FSharedBuffer, FILE_MAP_ALL_ACCESS, 0, 0, 0);
     FMonitorCount := PInteger(FBuffer + cMonitorHookSize - SizeOf(Integer));
     FReaderCount := PInteger(PChar(FMonitorCount) - SizeOf(Integer));
     FTraceDataType := PInteger(PChar(FReaderCount) - SizeOf(Integer));
-    FBufferSize := PInteger(PChar(FTraceDataType) - SizeOf(Integer));
+    FTimeStamp := PDateTime(PChar(FTraceDataType) - SizeOf(TDateTime));
+    FBufferSize := PInteger(PChar(FTimeStamp) - SizeOf(Integer));
     FMonitorCount^ := 0;
     FReaderCount^ := 0;
     FBufferSize^ := 0;
-  finally
-    Unlock;
+  end;
+
+  { This should never evaluate to true, if it does
+  there has been a hiccup somewhere. }
+
+  if FMonitorCount^ < 0 then
+    FMonitorCount^ := 0;
+  if FReaderCount^ < 0 then
+    FReaderCount^ := 0;
+  FEventsCreated := true;
+{$ENDIF}
+{$IFDEF LINUX}
+begin
+{$ENDIF}
+end;
+
+procedure TIBSQLMonitorHook.DBConnect(db: TIBDatabase);
+var
+  st : String;
+begin
+  if FEnabled then
+  begin
+    if not (tfConnect in FTraceFlags * db.TraceFlags) then
+      Exit;
+    st := db.Name + ': [Connect]'; {do not localize}
+    WriteSQLData(st, tfConnect);
+  end;
+end;
+
+procedure TIBSQLMonitorHook.DBDisconnect(db: TIBDatabase);
+var
+  st: String;
+begin
+  if FEnabled then
+  begin
+    if not (tfConnect in FTraceFlags * db.TraceFlags) then
+      Exit;
+    st := db.Name + ': [Disconnect]'; {do not localize}
+    WriteSQLData(st, tfConnect);
   end;
 end;
 
 destructor TIBSQLMonitorHook.Destroy;
 begin
-  Lock;
-  try
+  if FEventsCreated then
+  begin
+{$IFDEF MSWINDOWS}
     UnmapViewOfFile(FBuffer);
     CloseHandle(FSharedBuffer);
     CloseHandle(FWriteEvent);
     CloseHandle(FWriteFinishedEvent);
     CloseHandle(FReadEvent);
     CloseHandle(FReadFinishedEvent);
-  finally
-    Unlock;
     CloseHandle(FWriteLock);
+{$ENDIF}
   end;
-  inherited;
+  inherited Destroy;
 end;
 
-procedure TIBSQLMonitorHook.ResetStates;
+function TIBSQLMonitorHook.GetEnabled: Boolean;
 begin
-  SetEvent(FWriteEvent);
-  SetEvent(FWriteFinishedEvent);
+  Result := FEnabled;
 end;
 
-
-procedure TIBSQLMonitorHook.Lock;
+function TIBSQLMonitorHook.GetMonitorCount: Integer;
 begin
+  Result := FMonitorCount^;
+end;
+
+function TIBSQLMonitorHook.GetTraceFlags: TTraceFlags;
+begin
+  Result := FTraceFlags;
+end;
+
+procedure TIBSQLMonitorHook.RegisterMonitor(SQLMonitor: TIBCustomSQLMonitor);
+begin
+  if not FEventsCreated then
+  try
+    CreateEvents;
+  except
+    SQLMonitor.Enabled := false;
+  end;
+  if not Assigned(FReaderThread) then
+    FReaderThread := TReaderThread.Create;
+  FReaderThread.AddMonitor(SQLMonitor);
+end;
+
+procedure TIBSQLMonitorHook.ReleaseMonitor(Arg: TIBCustomSQLMonitor);
+begin
+{$IFDEF MSWINDOWS}
+  FWriterThread.ReleaseMonitor(Arg.FHWnd);
+{$ENDIF}
+end;
+
+procedure TIBSQLMonitorHook.SendMisc(Msg: String);
+begin
+  if FEnabled then
+    WriteSQLData(Msg, tfMisc);
+end;
+
+procedure TIBSQLMonitorHook.ServiceAttach(service: TIBCustomService);
+var
+  st: String;
+begin
+  if FEnabled then
+  begin
+    if not (tfService in (FTraceFlags * service.TraceFlags)) then
+      Exit;
+    st := service.Name + ': [Attach]'; {do not localize}
+    WriteSQLData(st, tfService);
+  end;
+end;
+
+procedure TIBSQLMonitorHook.ServiceDetach(service: TIBCustomService);
+var
+  st: String;
+begin
+  if FEnabled then
+  begin
+    if not (tfService in (FTraceFlags * service.TraceFlags)) then
+      Exit;
+    st := service.Name + ': [Detach]'; {do not localize}
+    WriteSQLData(st, tfService);
+  end;
+end;
+
+procedure TIBSQLMonitorHook.ServiceQuery(service: TIBCustomService);
+var
+  st: String;
+begin
+  if FEnabled then
+  begin
+    if not (tfService in (FTraceFlags * service.TraceFlags)) then
+      Exit;
+    st := service.Name + ': [Query]'; {do not localize}
+    WriteSQLData(st, tfService);
+  end;
+end;
+
+procedure TIBSQLMonitorHook.ServiceStart(service: TIBCustomService);
+var
+  st: String;
+begin
+  if FEnabled then
+  begin
+    if not (tfService in (FTraceFlags * service.TraceFlags)) then
+      Exit;
+    st := service.Name + ': [Start]'; {do not localize}
+    WriteSQLData(st, tfService);
+  end;
+end;
+
+procedure TIBSQLMonitorHook.SetEnabled(const Value: Boolean);
+begin
+  if FEnabled <> Value then
+    FEnabled := Value;
+  if (not FEnabled) and (Assigned(FWriterThread)) then
+  begin
+    FWriterThread.Terminate;
+{$IFDEF MSWINDOWS}
+    FWriterThread.WaitFor;
+{$ENDIF}
+    FreeAndNil(FWriterThread);
+  end;
+end;
+
+procedure TIBSQLMonitorHook.SetTraceFlags(const Value: TTraceFlags);
+begin
+  FTraceFlags := Value
+end;
+
+procedure TIBSQLMonitorHook.SQLExecute(qry: TIBSQL);
+var
+  st: String;
+  i: Integer;
+begin
+  if FEnabled then
+  begin
+    if not ((tfQExecute in (FTraceFlags * qry.Database.TraceFlags)) or
+            (tfStmt in (FTraceFlags * qry.Database.TraceFlags)) ) then
+      Exit;
+    if qry.Owner is TIBCustomDataSet then
+      st := TIBCustomDataSet(qry.Owner).Name
+    else
+      st := qry.Name;
+    st := st + ': [Execute] ' + qry.SQL.Text; {do not localize}
+    if qry.Params.Count > 0 then begin
+      for i := 0 to qry.Params.Count - 1 do begin
+        st := st + CRLF + '  ' + qry.Params[i].Name + ' = ';  {do not localize}
+        try
+          if qry.Params[i].IsNull then
+            st := st + '<NULL>' {do not localize}
+          else
+          if qry.Params[i].SQLType <> SQL_BLOB then
+            st := st + qry.Params[i].AsString
+          else
+            st := st + '<BLOB>';   {do not localize}
+        except
+          st := st + '<' + SCantPrintValue + '>';  {do not localize}
+        end;
+      end;
+    end;
+    WriteSQLData(st, tfQExecute);
+  end;
+end;
+
+procedure TIBSQLMonitorHook.SQLFetch(qry: TIBSQL);
+var
+  st: String;
+begin
+  if FEnabled then
+  begin
+    if not ((tfQFetch in (FTraceFlags * qry.Database.TraceFlags)) or
+            (tfStmt in (FTraceFlags * qry.Database.TraceFlags))) then
+      Exit;
+    if qry.Owner is TIBCustomDataSet then
+      st := TIBCustomDataSet(qry.Owner).Name
+    else
+      st := qry.Name;
+    st := st + ': [Fetch] ' + qry.SQL.Text; {do not localize}
+    if (qry.EOF) then
+      st := st + CRLF + '  ' + SEOFReached;   {do not localize}
+    WriteSQLData(st, tfQFetch);
+  end;
+end;
+
+procedure TIBSQLMonitorHook.SQLPrepare(qry: TIBSQL);
+var
+  st: String;
+begin
+  if FEnabled then
+  begin
+    if not ((tfQPrepare in (FTraceFlags * qry.Database.TraceFlags)) or
+            (tfStmt in (FTraceFlags * qry.Database.TraceFlags))) then
+      Exit;
+    if qry.Owner is TIBCustomDataSet then
+      st := TIBCustomDataSet(qry.Owner).Name
+    else
+      st := qry.Name;
+    st := st + ': [Prepare] ' + qry.SQL.Text + CRLF; {do not localize}
+    try
+      st := st + '  Plan: ' + qry.Plan; {do not localize}
+    except
+      st := st + '  Plan: Can''t retrieve plan - too large';   {do not localize}
+    end;
+    WriteSQLData(st, tfQPrepare);
+  end;
+end;
+
+procedure TIBSQLMonitorHook.TRCommit(tr: TIBTransaction);
+var
+  st: String;
+begin
+  if FEnabled then
+  begin
+    if Assigned(tr.DefaultDatabase) and
+       (tfTransact in (FTraceFlags * tr.DefaultDatabase.TraceFlags)) then
+    begin
+      st := tr.Name + ': [Commit (Hard commit)]'; {do not localize}
+      WriteSQLData(st, tfTransact);
+    end;
+  end;
+end;
+
+procedure TIBSQLMonitorHook.TRCommitRetaining(tr: TIBTransaction);
+var
+  st: String;
+begin
+  if FEnabled then
+  begin
+    if Assigned(tr.DefaultDatabase) and
+       (tfTransact in (FTraceFlags * tr.DefaultDatabase.TraceFlags)) then
+    begin
+      st := tr.Name + ': [Commit retaining (Soft commit)]'; {do not localize}
+      WriteSQLData(st, tfTransact);
+    end;
+  end;
+end;
+
+procedure TIBSQLMonitorHook.TRRollback(tr: TIBTransaction);
+var
+  st: String;
+begin
+  if FEnabled then
+  begin
+    if Assigned(tr.DefaultDatabase) and
+       (tfTransact in (FTraceFlags * tr.DefaultDatabase.TraceFlags)) then
+    begin
+      st := tr.Name + ': [Rollback]'; {do not localize}
+      WriteSQLData(st, tfTransact);
+    end;
+  end;
+end;
+
+procedure TIBSQLMonitorHook.TRRollbackRetaining(tr: TIBTransaction);
+var
+  st: String;
+begin
+  if FEnabled then
+  begin
+    if Assigned(tr.DefaultDatabase) and
+       (tfTransact in (FTraceFlags * tr.DefaultDatabase.TraceFlags)) then
+    begin
+      st := tr.Name + ': [Rollback retaining (Soft rollback)]'; {do not localize}
+      WriteSQLData(st, tfTransact);
+    end;
+  end;
+end;
+
+procedure TIBSQLMonitorHook.TRStart(tr: TIBTransaction);
+var
+  st: String;
+begin
+  if FEnabled then
+  begin
+    if Assigned(tr.DefaultDatabase) and
+       (tfTransact in (FTraceFlags * tr.DefaultDatabase.TraceFlags)) then
+    begin
+      st := tr.Name + ': [Start transaction]'; {do not localize}
+      WriteSQLData(st, tfTransact);
+    end;
+  end;
+end;
+
+procedure TIBSQLMonitorHook.UnregisterMonitor(SQLMonitor: TIBCustomSQLMonitor);
+var
+  Created : Boolean;
+begin
+  FReaderThread.RemoveMonitor(SQLMonitor);
+  if FReaderThread.FMonitors.Count = 0 then
+  begin
+    FReaderThread.Terminate;
+
+    { There is a possibility of a reader thread, but no writer one.
+      When in that situation, the reader needs to be released after
+      the terminate is set.  To do that, create a Writer thread, send
+      the release code (a string of ' ' and type tfMisc) and then free
+      it up. }
+      
+    Created := false;
+    if not Assigned(FWriterThread) then
+    begin
+      FWriterThread := TWriterThread.Create;
+      Created := true;
+    end;
+    FWriterThread.WriteSQLData(' ', tfMisc);
+{$IFDEF MSWINDOWS}
+    FReaderThread.WaitFor;
+{$ENDIF}
+    FreeAndNil(FReaderThread);
+    if Created then
+    begin
+      FWriterThread.Terminate;
+{$IFDEF MSWINDOWS}
+      FWriterThread.WaitFor;
+{$ENDIF}
+      FreeAndNil(FWriterThread);
+    end;
+  end;
+end;
+
+procedure TIBSQLMonitorHook.WriteSQLData(Text: String;
+  DataType: TTraceFlag);
+begin
+  if not FEventsCreated then
+  try
+    CreateEvents;
+  except
+    Enabled := false;
+    Exit;
+  end;
+{$IFDEF MSWINDOWS}
+  Text := CRLF + '[Application: ' + DBApplication.Title + ']' + CRLF + Text; {do not localize}
+{$ENDIF}
+  if not Assigned(FWriterThread) then
+    FWriterThread := TWriterThread.Create;
+  FWriterThread.WriteSQLData(Text, DataType);
+end;
+
+{ TWriterThread }
+
+constructor TWriterThread.Create;
+
+begin
+  inherited Create(true);
+  FMsgs := TObjectList.Create(true);
+  Resume;
+end;
+
+destructor TWriterThread.Destroy;
+begin
+  FMsgs.Free;
+  inherited Destroy;
+end;
+
+procedure TWriterThread.Execute;
+begin
+{$IFDEF MSWINDOWS}
+  { Place thread code here }
+  while ((not Terminated) and (not bDone)) or
+        (FMsgs.Count <> 0) do
+  begin
+    { Any one listening? }
+    if FMonitorCount^ = 0 then
+    begin
+      if FMsgs.Count <> 0 then
+        FMsgs.Remove(FMsgs[0]);
+      Sleep(50);
+    end
+    else
+      { Anything to process? }
+      if FMsgs.Count <> 0 then
+      begin
+       { If the current queued message is a release release the object }
+        if FMsgs.Items[0] is TReleaseObject then
+          PostMessage(TReleaseObject(FMsgs.Items[0]).FHandle, CM_RELEASE, 0, 0)
+        else
+        { Otherwise write the TraceObject to the buffer }
+        begin
+          WriteToBuffer;
+        end;
+      end
+      else
+        Sleep(50);
+  end;
+{$ENDIF}
+end;
+
+procedure TWriterThread.Lock;
+begin
+{$IFDEF MSWINDOWS}
   WaitForSingleObject(FWriteLock, INFINITE);
+{$ENDIF}
 end;
 
-procedure TIBSQLMonitorHook.Unlock;
+procedure TWriterThread.Unlock;
 begin
+{$IFDEF MSWINDOWS}
   ReleaseMutex(FWriteLock);
+{$ENDIF}
 end;
 
-procedure TIBSQLMonitorHook.BeginWrite;
+procedure TWriterThread.WriteSQLData(Msg : String; DataType: TTraceFlag);
+begin
+  if FMonitorCount^ <> 0 then
+    FMsgs.Add(TTraceObject.Create(Msg, DataType));
+end;
+
+procedure TWriterThread.BeginWrite;
 begin
   Lock;
 end;
 
-procedure TIBSQLMonitorHook.EndWrite;
+procedure TWriterThread.EndWrite;
 begin
+{$IFDEF MSWINDOWS}
   {
    * 1. Wait to end the write until all registered readers have
    *    started to wait for a write event
@@ -370,27 +872,104 @@ begin
    * 7. Unblock all readers waiting for a write to be finished.
    * 8. Unlock the mutex.
    }
-  while WaitForSingleObject(FReadEvent, cDefaultTimeout) = WAIT_TIMEOUT do begin
+  while WaitForSingleObject(FReadEvent, cDefaultTimeout) = WAIT_TIMEOUT do
+  begin
     if FMonitorCount^ > 0 then
-      Dec(FMonitorCount^);
+      InterlockedDecrement(FMonitorCount^);
     if (FReaderCount^ = FMonitorCount^ - 1) or (FMonitorCount^ = 0) then
       SetEvent(FReadEvent);
   end;
   ResetEvent(FWriteFinishedEvent);
   ResetEvent(FReadFinishedEvent);
   SetEvent(FWriteEvent); { Let all readers pass through. }
-  while WaitForSingleObject(FReadFinishedEvent,
-          cDefaultTimeout) = WAIT_TIMEOUT do begin
+  while WaitForSingleObject(FReadFinishedEvent, cDefaultTimeout) = WAIT_TIMEOUT do
     if (FReaderCount^ = 0) or (InterlockedDecrement(FReaderCount^) = 0) then
       SetEvent(FReadFinishedEvent);
-  end;
   ResetEvent(FWriteEvent);
   SetEvent(FWriteFinishedEvent);
   Unlock;
+{$ENDIF}
 end;
 
-procedure TIBSQLMonitorHook.BeginRead;
+procedure TWriterThread.WriteToBuffer;
+var
+  i, len: Integer;
+  Text : String;
 begin
+  Lock;
+  try
+    { If there are no monitors throw out the message
+      The alternative is to have messages queue up until a
+      monitor is ready.}
+
+    if FMonitorCount^ = 0 then
+      FMsgs.Remove(FMsgs[0])
+    else
+    begin
+      Text := TTraceObject(FMsgs[0]).FMsg;
+      i := 1;
+      len := Length(Text);
+      while (len > 0) do begin
+        BeginWrite;
+        try
+          FTraceDataType^ := Integer(TTraceObject(FMsgs[0]).FDataType);
+          FTimeStamp^ := TTraceObject(FMsgs[0]).FTimeStamp;
+          FBufferSize^ := Min(len, cMaxBufferSize);
+          Move(Text[i], FBuffer[0], FBufferSize^);
+          Inc(i, cMaxBufferSize);
+          Dec(len, cMaxBufferSize);
+        finally
+          EndWrite;
+        end;
+      end;
+      FMsgs.Remove(FMsgs[0]);
+    end;
+  finally
+    Unlock;
+  end;
+end;
+
+procedure TWriterThread.ReleaseMonitor(HWnd: THandle);
+begin
+  FMsgs.Add(TReleaseObject.Create(HWnd));
+end;
+
+{ TTraceObject }
+
+constructor TTraceObject.Create(Msg : String; DataType: TTraceFlag);
+begin
+  FMsg := Msg;
+  FDataType := DataType;
+  FTimeStamp := Now;
+end;
+
+constructor TTraceObject.Create(obj: TTraceObject);
+begin
+  FMsg := obj.FMsg;
+  FDataType := obj.FDataType;
+  FTimeStamp := obj.FTimeStamp;
+end;
+
+{ TReleaseObject }
+
+constructor TReleaseObject.Create(Handle: THandle);
+begin
+  FHandle := Handle;
+end;
+
+{ ReaderThread }
+
+procedure TReaderThread.AddMonitor(Arg: TIBCustomSQLMonitor);
+begin
+  EnterCriticalSection(CS);
+  if FMonitors.IndexOf(Arg) < 0 then
+    FMonitors.Add(Arg);
+  LeaveCriticalSection(CS);
+end;
+
+procedure TReaderThread.BeginRead;
+begin
+{$IFDEF MSWINDOWS}
   {
    * 1. Wait for the "previous" write event to complete.
    * 2. Increment the number of readers.
@@ -403,302 +982,162 @@ begin
   if FReaderCount^ = FMonitorCount^ then
     SetEvent(FReadEvent);
   WaitForSingleObject(FWriteEvent, INFINITE);
+{$ENDIF}
 end;
 
-procedure TIBSQLMonitorHook.EndRead;
+constructor TReaderThread.Create;
 begin
+  inherited Create(true);
+  st := TTraceObject.Create('', tfMisc);  {do not localize}
+  FMonitors := TObjectList.Create(false);
+{$IFDEF MSWINDOWS}
+  InterlockedIncrement(FMonitorCount^);
+{$ENDIF}
+  Resume;
+end;
+
+destructor TReaderThread.Destroy;
+begin
+{$IFDEF MSWINDOWS}
+  if FMonitorCount^ > 0 then
+    InterlockedDecrement(FMonitorCount^);
+{$ENDIF}
+  FMonitors.Free;
+  st.Free;
+  inherited Destroy;
+end;
+
+procedure TReaderThread.EndRead;
+begin
+{$IFDEF MSWINDOWS}
   if InterlockedDecrement(FReaderCount^) = 0 then
+  begin
+    ResetEvent(FReadEvent);
     SetEvent(FReadFinishedEvent);
-end;
-
-procedure TIBSQLMonitorHook.RegisterMonitor;
-begin
-  Lock;
-  try
-    Inc(FMonitorCount^);
-  finally
-    Unlock;
   end;
+{$ENDIF}
 end;
 
-procedure TIBSQLMonitorHook.UnregisterMonitor;
+procedure TReaderThread.Execute;
+var
+  i : Integer;
+  FTemp : TTraceObject;
 begin
-  Lock;
-  try
-    Dec(FMonitorCount^);
-  finally
-    Unlock;
+{$IFDEF MSWINDOWS}
+  { Place thread code here }
+  while (not Terminated) and (not bDone) do
+  begin
+    ReadSQLData;
+    if (st.FMsg <> '') and    {do not localize}
+       not ((st.FMsg = ' ') and (st.FDataType = tfMisc)) then    {do not localize}
+    begin
+      for i := 0 to FMonitors.Count - 1 do
+      begin
+        FTemp := TTraceObject.Create(st);
+        PostMessage(TIBCustomSQLMonitor(FMonitors[i]).Handle,
+                    WM_IBSQL_SQL_EVENT,
+                    0,
+                    LPARAM(FTemp));
+      end;
+    end;
   end;
+{$ENDIF}
 end;
 
-function TIBSQLMonitorHook.MonitorCount: Integer;
+procedure TReaderThread.ReadSQLData;
 begin
-  Lock;
-  try
-    result := FMonitorCount^;
-  finally
-    Unlock;
-  end;
-end;
-
-function TIBSQLMonitorHook.ReadSQLData(Arg: TIBCustomSQLMonitor): String;
-begin
+  st.FMsg := '';     {do not localize}
   BeginRead;
+  if not bDone then
   try
-    if TTraceFlag(FTraceDataType^) in Arg.TraceFlags then
-      SetString(result, FBuffer, FBufferSize^)
-    else
-      result := '';
+    SetString(st.FMsg, FBuffer, FBufferSize^);
+    st.FDataType := TTraceFlag(FTraceDataType^);
+    st.FTimeStamp := TDateTime(FTimeStamp^);
   finally
     EndRead;
   end;
 end;
 
-procedure TIBSQLMonitorHook.SQLPrepare(qry: TIBSQL);
-var
-  st: String;
+procedure TReaderThread.RemoveMonitor(Arg: TIBCustomSQLMonitor);
 begin
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not ((tfQPrepare in FTraceFlags) or (tfStmt in FTraceFlags)) then
-      Exit;
-    if qry.Owner is TIBDataSet then
-      st := TIBDataSet(qry.Owner).Name
-    else
-      st := qry.Name;
-    st := st + ': [Prepare] ' + qry.SQL.Text + CRLF; {do not localize}
-    st := st + '  Plan: ' + qry.Plan; {do not localize}
-    WriteSQLData(st, tfQPrepare);
-  end;
+  EnterCriticalSection(CS);
+  FMonitors.Remove(Arg);
+  LeaveCriticalSection(CS);
 end;
 
-procedure TIBSQLMonitorHook.SQLExecute(qry: TIBSQL);
-var
-  st: String;
-  i: Integer;
-begin
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not ((tfQExecute in FTraceFlags) or (tfStmt in FTraceFlags)) then
-      Exit;
-    if qry.Owner is TIBDataSet then
-      st := TIBDataSet(qry.Owner).Name
-    else
-      st := qry.Name;
-    st := st + ': [Execute] ' + qry.SQL.Text; {do not localize}
-    if qry.Params.Count > 0 then begin
-      for i := 0 to qry.Params.Count - 1 do begin
-        st := st + CRLF + '  ' + qry.Params[i].Name + ' = '; 
-        try
-          if qry.Params[i].IsNull then
-            st := st + '<NULL>'; {do not localize}
-          st := st + qry.Params[i].AsString;
-        except
-          st := st + '<' + SCantPrintValue + '>';
-        end;
-      end;
-    end;
-    WriteSQLData(st, tfQExecute);
-  end;
-end;
+{ Misc methods }
 
-procedure TIBSQLMonitorHook.SQLFetch(qry: TIBSQL);
-var
-  st: String;
-begin
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not ((tfQFetch in FTraceFlags) or (tfStmt in FTraceFlags)) then
-      Exit;
-    if qry.Owner is TIBDataSet then
-      st := TIBDataSet(qry.Owner).Name
-    else
-      st := qry.Name;
-    st := st + ': [Fetch] ' + qry.SQL.Text; {do not localize}
-    if (qry.EOF) then
-      st := st + CRLF + '  ' + SEOFReached;
-    WriteSQLData(st, tfQFetch);
-  end;
-end;
-
-procedure TIBSQLMonitorHook.DBConnect(db: TIBDatabase);
-var
-  st: String;
-begin
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not (tfConnect in FTraceFlags) then
-      Exit;
-    st := db.Name + ': [Connect]'; {do not localize}
-    WriteSQLData(st, tfConnect) ;
-  end;
-end;
-
-procedure TIBSQLMonitorHook.DBDisconnect(db: TIBDatabase);
-var
-  st: String;
-begin
-  if (Self = nil) then exit;
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not (tfConnect in FTraceFlags) then
-      Exit;
-    st := db.Name + ': [Disconnect]'; {do not localize}
-    WriteSQLData(st, tfConnect);
-  end;
-end;
-
-procedure TIBSQLMonitorHook.TRStart(tr: TIBTransaction);
-var
-  st: String;
-begin
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not (tfTransact in FTraceFlags) then
-      Exit;
-    st := tr.Name + ': [Start transaction]'; {do not localize}
-    WriteSQLData(st, tfTransact);
-  end;
-end;
-
-procedure TIBSQLMonitorHook.TRCommit(tr: TIBTransaction);
-var
-  st: String;
-begin
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not (tfTransact in FTraceFlags) then
-      Exit;
-    st := tr.Name + ': [Commit (Hard commit)]'; {do not localize}
-    WriteSQLData(st, tfTransact);
-  end;
-end;
-
-procedure TIBSQLMonitorHook.TRCommitRetaining(tr: TIBTransaction);
-var
-  st: String;
-begin
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not (tfTransact in FTraceFlags) then
-      Exit;
-    st := tr.Name + ': [Commit retaining (Soft commit)]'; {do not localize}
-    WriteSQLData(st, tfTransact);
-  end;
-end;
-
-procedure TIBSQLMonitorHook.TRRollback(tr: TIBTransaction);
-var
-  st: String;
-begin
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not (tfTransact in FTraceFlags) then
-      Exit;
-    st := tr.Name + ': [Rollback]'; {do not localize}
-    WriteSQLData(st, tfTransact);
-  end;
-end;
-
-procedure TIBSQLMonitorHook.TRRollbackRetaining(tr: TIBTransaction);
-var
-  st: String;
-begin
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not (tfTransact in FTraceFlags) then
-      Exit;
-    st := tr.Name + ': [Rollback retaining (Soft rollback)]'; {do not localize}
-    WriteSQLData(st, tfTransact);
-  end;
-end;
-
-procedure TIBSQLMonitorHook.ServiceAttach(service: TIBCustomService);
-var
-  st: String;
-begin
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not (tfService in FTraceFlags) then
-      Exit;
-    st := service.Name + ': [Attach]'; {do not localize}
-    WriteSQLData(st, tfService);
-  end;
-end;
-
-procedure TIBSQLMonitorHook.ServiceDetach(service: TIBCustomService);
-var
-  st: String;
-begin
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not (tfService in FTraceFlags) then
-      Exit;
-    st := service.Name + ': [Detach]'; {do not localize}
-    WriteSQLData(st, tfService);
-  end;
-end;
-
-procedure TIBSQLMonitorHook.ServiceQuery(service: TIBCustomService);
-var
-  st: String;
-begin
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not (tfService in FTraceFlags) then
-      Exit;
-    st := service.Name + ': [Query]'; {do not localize}
-    WriteSQLData(st, tfService);
-  end;
-end;
-
-procedure TIBSQLMonitorHook.ServiceStart(service: TIBCustomService);
-var
-  st: String;
-begin
-  if bMonitoringEnabled and (MonitorCount > 0)then begin
-    if not (tfService in FTraceFlags) then
-      Exit;
-    st := service.Name + ': [Start]'; {do not localize}
-    WriteSQLData(st, tfService);
-  end;
-end;
-
-procedure TIBSQLMonitorHook.WriteSQLData(Text: String; DataType: TTraceFlag);
-var
-  i, len: Integer;
-
-begin
-  Text := CRLF + '[Application: ' + Application.Title + ']' + CRLF + Text; {do not localize}
-  Lock;
-  try
-    i := 1;
-    len := Length(Text);
-    while (len > 0) do begin
-      BeginWrite;
-      try
-        FTraceDataType^ := Integer(DataType);
-        FBufferSize^ := Min(len, cMaxBufferSize);
-        Move(Text[i], FBuffer[0], FBufferSize^);
-        Inc(i, cMaxBufferSize);
-        Dec(len, cMaxBufferSize);
-      finally
-        EndWrite;
-      end;
-    end;
-  finally
-    Unlock;
-  end;
-end;
-
-var
-  _MonitorHook: TIBSQLMonitorHook;
-  bDone: Boolean;
-
-function MonitorHook: TIBSQLMonitorHook;
+function MonitorHook: IIBSQLMonitorHook;
 begin
   if (_MonitorHook = nil) and (not bDone) then
-    _MonitorHook := TIBSQLMonitorHook.Create;
+  begin
+    EnterCriticalSection(CS);
+    if (_MonitorHook = nil) and (not bDone) then
+    begin
+      _MonitorHook := TIBSQLMonitorHook.Create;
+      _MonitorHook._AddRef;
+    end;
+    LeaveCriticalSection(CS);
+  end;
   result := _MonitorHook;
 end;
 
-initialization
+procedure EnableMonitoring;
+begin
+  MonitorHook.Enabled := True;
+end;
 
-  bMonitoringEnabled := True;
+procedure DisableMonitoring;
+begin
+  MonitorHook.Enabled := False;
+end;
+
+function MonitoringEnabled: Boolean;
+begin
+  result := MonitorHook.Enabled;
+end;
+
+procedure CloseThreads;
+begin
+  if Assigned(FReaderThread) then
+  begin
+    FReaderThread.Terminate;
+{$IFDEF MSWINDOWS}
+    FReaderThread.WaitFor;
+{$ENDIF}
+    FreeAndNil(FReaderThread);
+  end;
+  if Assigned(FWriterThread) then
+  begin
+    FWriterThread.Terminate;
+{$IFDEF MSWINDOWS}
+    FWriterThread.WaitFor;
+{$ENDIF}
+    FreeAndNil(FWriterThread);
+  end;
+end;
+
+initialization
+  InitializeCriticalSection(CS);
   _MonitorHook := nil;
+  FWriterThread := nil;
+  FReaderThread := nil;
   bDone := False;
 
 finalization
-
-  bDone := True;
-  _MonitorHook.Free;
-  _MonitorHook := nil;
-
+  try
+    bDone := True;
+    if Assigned(FReaderThread) then
+    begin
+      if not Assigned(FWriterThread) then
+        FWriterThread := TWriterThread.Create;
+      FWriterThread.WriteSQLData(' ', tfMisc);
+    end;
+    CloseThreads;
+    if Assigned(_MonitorHook) then
+      _MonitorHook._Release;
+  finally
+    _MonitorHook := nil;
+    DeleteCriticalSection(CS);
+  end;
 end.

@@ -3,7 +3,7 @@
 
 :BASE nmudp.hlp
 :TITLE FastNet UDP Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 TNMUDP component
 2 TNMUDP component Reference=Scribble1010
 2 Properties

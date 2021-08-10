@@ -7,7 +7,7 @@
  * stdgen.h - Standardizes what various compilers see of the generic.h
  *    facility
  *
- * $Id: stdgen.h,v 7.5 1995/08/14 22:30:13 smithey Exp $
+ * $Id: stdgen.h,v 9.7 2001/07/10 17:24:13 nyork Exp $
  *
  ***************************************************************************
  *

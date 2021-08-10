@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'AxCtrls.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'AxCtrls.pas' rev: 6.00
 
 #ifndef AxCtrlsHPP
 #define AxCtrlsHPP
@@ -22,6 +22,7 @@
 #include <ActiveX.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -49,11 +50,17 @@ public:
 	__fastcall TOleStream(const _di_IStream Stream);
 	virtual int __fastcall Read(void *Buffer, int Count);
 	virtual int __fastcall Write(const void *Buffer, int Count);
-	virtual int __fastcall Seek(int Offset, Word Origin);
+	virtual int __fastcall Seek(int Offset, Word Origin)/* overload */;
 public:
 	#pragma option push -w-inl
 	/* TObject.Destroy */ inline __fastcall virtual ~TOleStream(void) { }
 	#pragma option pop
+	
+	
+/* Hoisted overloads: */
+	
+public:
+	inline __int64 __fastcall  Seek(const __int64 Offset, Classes::TSeekOrigin Origin){ return TStream::Seek(Offset, Origin); }
 	
 };
 
@@ -63,16 +70,15 @@ typedef void __fastcall (__closure *TDefinePropertyPage)(const GUID &GUID);
 __dispinterface IAmbientDispatch;
 typedef System::DelphiInterface<IAmbientDispatch> _di_IAmbientDispatch;
 __dispinterface INTERFACE_UUID("{00020400-0000-0000-C000-000000000046}") IAmbientDispatch  : public IDispatch 
-	
 {
 	
 };
 
 class DELPHICLASS TPropertyPage;
 class DELPHICLASS TPropertyPageImpl;
-class PASCALIMPLEMENTATION TPropertyPageImpl : public Comobj::TAggregatedObject 
+class PASCALIMPLEMENTATION TPropertyPageImpl : public System::TAggregatedObject 
 {
-	typedef Comobj::TAggregatedObject inherited;
+	typedef System::TAggregatedObject inherited;
 	
 private:
 	TPropertyPage* FPropertyPage;
@@ -83,12 +89,12 @@ private:
 	
 protected:
 	HRESULT __stdcall SetPageSite(const _di_IPropertyPageSite pageSite);
-	HRESULT __stdcall Activate(HWND hwndParent, const Windows::TRect &rc, BOOL bModal);
+	HRESULT __stdcall Activate(HWND hwndParent, const Types::TRect &rc, BOOL bModal);
 	HRESULT __stdcall Deactivate(void);
 	HRESULT __stdcall GetPageInfo(/* out */ tagPROPPAGEINFO &pageInfo);
 	HRESULT __stdcall SetObjects(int cObjects, Activex::PUnknownList pUnkList);
 	HRESULT __stdcall Show(int nCmdShow);
-	HRESULT __stdcall Move(const Windows::TRect &rect);
+	HRESULT __stdcall Move(const Types::TRect &rect);
 	HRESULT __stdcall IsPageDirty(void);
 	HRESULT __stdcall Apply(void);
 	HRESULT __stdcall Help(wchar_t * pszHelpDir);
@@ -100,8 +106,7 @@ public:
 	__property TPropertyPage* PropertyPage = {read=FPropertyPage, write=FPropertyPage};
 public:
 	#pragma option push -w-inl
-	/* TAggregatedObject.Create */ inline __fastcall TPropertyPageImpl(_di_IUnknown Controller) : Comobj::TAggregatedObject(
-		Controller) { }
+	/* TAggregatedObject.Create */ inline __fastcall TPropertyPageImpl(const System::_di_IInterface Controller) : System::TAggregatedObject(Controller) { }
 	#pragma option pop
 	
 public:
@@ -115,7 +120,7 @@ private:
 public:
 	operator IPropertyPage2*(void) { return (IPropertyPage2*)&__IPropertyPage2; }
 	operator IPropertyPage*(void) { return (IPropertyPage*)&__IPropertyPage2; }
-	operator IUnknown*(void) { return (IUnknown*)&__IPropertyPage2; }
+	operator IInterface*(void) { return (IInterface*)&__IPropertyPage2; }
 	
 };
 
@@ -142,26 +147,26 @@ public:
 	
 __published:
 	__property ActiveControl ;
-	__property AutoScroll ;
+	__property AutoScroll  = {default=1};
 	__property Caption ;
 	__property ClientHeight ;
 	__property ClientWidth ;
-	__property Ctl3D ;
+	__property Ctl3D  = {default=1};
 	__property Color ;
-	__property Enabled ;
+	__property Enabled  = {default=1};
 	__property Font ;
 	__property Height ;
 	__property HorzScrollBar ;
 	__property OldCreateOrder ;
-	__property KeyPreview ;
+	__property KeyPreview  = {default=0};
 	__property PixelsPerInch ;
-	__property ParentFont ;
+	__property ParentFont  = {default=0};
 	__property PopupMenu ;
-	__property PrintScale ;
-	__property Scaled ;
+	__property PrintScale  = {default=1};
+	__property Scaled  = {default=1};
 	__property ShowHint ;
 	__property VertScrollBar ;
-	__property Visible ;
+	__property Visible  = {default=0};
 	__property Width ;
 	__property OnActivate ;
 	__property OnClick ;
@@ -185,14 +190,12 @@ __published:
 	__property OnShow ;
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TPropertyPage(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TCustomForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TPropertyPage(Classes::TComponent* AOwner, int Dummy) : Forms::TCustomForm(AOwner, Dummy) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TPropertyPage(HWND ParentWindow) : Forms::TCustomForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TPropertyPage(HWND ParentWindow) : Forms::TCustomForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -206,14 +209,14 @@ class PASCALIMPLEMENTATION TCustomAdapter : public System::TInterfacedObject
 	typedef System::TInterfacedObject inherited;
 	
 private:
-	_di_IUnknown FOleObject;
+	System::_di_IInterface FOleObject;
 	int FConnection;
-	_di_IUnknown FNotifier;
+	System::_di_IInterface FNotifier;
 	
 protected:
 	bool Updating;
 	virtual void __fastcall Changed(void);
-	void __fastcall ConnectOleObject(_di_IUnknown OleObject);
+	void __fastcall ConnectOleObject(System::_di_IInterface OleObject);
 	void __fastcall ReleaseOleObject(void);
 	virtual void __fastcall Update(void) = 0 ;
 	
@@ -253,8 +256,7 @@ public:
 
 __interface IFontAccess;
 typedef System::DelphiInterface<IFontAccess> _di_IFontAccess;
-__interface INTERFACE_UUID("{CBA55CA0-0E57-11D0-BD2F-0020AF0E5B81}") IFontAccess  : public IUnknown 
-	
+__interface INTERFACE_UUID("{CBA55CA0-0E57-11D0-BD2F-0020AF0E5B81}") IFontAccess  : public IInterface 
 {
 	
 public:
@@ -296,8 +298,7 @@ public:
 
 __interface IPictureAccess;
 typedef System::DelphiInterface<IPictureAccess> _di_IPictureAccess;
-__interface INTERFACE_UUID("{795D4D31-43D7-11D0-9E92-0020AF3D82DA}") IPictureAccess  : public IUnknown 
-	
+__interface INTERFACE_UUID("{795D4D31-43D7-11D0-9E92-0020AF3D82DA}") IPictureAccess  : public IInterface 
 {
 	
 public:
@@ -348,7 +349,7 @@ private:
 	
 protected:
 	virtual void __fastcall Changed(System::TObject* Sender);
-	virtual void __fastcall Draw(Graphics::TCanvas* ACanvas, const Windows::TRect &Rect);
+	virtual void __fastcall Draw(Graphics::TCanvas* ACanvas, const Types::TRect &Rect);
 	virtual bool __fastcall GetEmpty(void);
 	virtual int __fastcall GetHeight(void);
 	virtual HPALETTE __fastcall GetPalette(void);
@@ -368,7 +369,7 @@ public:
 	__property int MMHeight = {read=GetMMHeight, nodefault};
 	__property int MMWidth = {read=GetMMWidth, nodefault};
 	__property _di_IPicture Picture = {read=FPicture, write=FPicture};
-protected:
+public:
 	#pragma option push -w-inl
 	/* TGraphic.Create */ inline __fastcall virtual TOleGraphic(void) : Graphics::TGraphic() { }
 	#pragma option pop
@@ -400,7 +401,7 @@ protected:
 	HRESULT __safecall Remove(int Index);
 	HRESULT __safecall Clear(void);
 	HRESULT __safecall Add(const OleVariant Item, int &Add_result);
-	HRESULT __safecall _NewEnum(_di_IUnknown &_NewEnum_result);
+	HRESULT __safecall _NewEnum(System::_di_IInterface &_NewEnum_result);
 	
 public:
 	__fastcall TStringsAdapter(Classes::TStrings* Strings);
@@ -432,12 +433,14 @@ private:
 	HIDESBASE MESSAGE void __fastcall WMSetFocus(Messages::TWMSetFocus &Message);
 	HIDESBASE MESSAGE void __fastcall WMSize(Messages::TWMSize &Message);
 	
+protected:
+	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
+	
 public:
 	__fastcall TReflectorWindow(HWND ParentWindow, Controls::TControl* Control);
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TReflectorWindow(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TReflectorWindow(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TReflectorWindow(void) { }
@@ -452,26 +455,16 @@ extern PACKAGE GUID Class_DFontPropPage;
 extern PACKAGE GUID Class_DPicturePropPage;
 extern PACKAGE GUID Class_DStringPropPage;
 extern PACKAGE HWND __fastcall ParkingWindow(void);
-extern PACKAGE OleVariant __fastcall GetDispatchPropValue(_di_IDispatch Disp, int DispID);
-extern PACKAGE void __fastcall SetDispatchPropValue(_di_IDispatch Disp, int DispID, const OleVariant 
-	&Value);
-extern PACKAGE void __fastcall EnumDispatchProperties(_di_IDispatch Dispatch, const GUID &PropType, 
-	int VTCode, Classes::TStrings* PropList);
+extern PACKAGE void __fastcall EnumDispatchProperties(_di_IDispatch Dispatch, const GUID &PropType, int VTCode, Classes::TStrings* PropList);
 extern PACKAGE void __fastcall GetOleFont(Graphics::TFont* Font, _di_IFontDisp &OleFont);
 extern PACKAGE void __fastcall SetOleFont(Graphics::TFont* Font, _di_IFontDisp OleFont);
-extern PACKAGE void __fastcall GetOlePicture(Graphics::TPicture* Picture, _di_IPictureDisp &OlePicture
-	);
-extern PACKAGE void __fastcall SetOlePicture(Graphics::TPicture* Picture, _di_IPictureDisp OlePicture
-	);
-extern PACKAGE void __fastcall GetOleStrings(Classes::TStrings* Strings, Stdvcl::_di_IStrings &OleStrings
-	);
-extern PACKAGE void __fastcall SetOleStrings(Classes::TStrings* Strings, Stdvcl::_di_IStrings OleStrings
-	);
+extern PACKAGE void __fastcall GetOlePicture(Graphics::TPicture* Picture, _di_IPictureDisp &OlePicture);
+extern PACKAGE void __fastcall SetOlePicture(Graphics::TPicture* Picture, _di_IPictureDisp OlePicture);
+extern PACKAGE void __fastcall GetOleStrings(Classes::TStrings* Strings, Stdvcl::_di_IStrings &OleStrings);
+extern PACKAGE void __fastcall SetOleStrings(Classes::TStrings* Strings, Stdvcl::_di_IStrings OleStrings);
 
 }	/* namespace Axctrls */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Axctrls;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

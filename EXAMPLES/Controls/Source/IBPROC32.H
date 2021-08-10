@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1997 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1997-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 #ifndef Ibproc32H
 #define Ibproc32H

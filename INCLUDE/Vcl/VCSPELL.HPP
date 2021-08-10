@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'vcspell.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'VCSpell.pas' rev: 6.00
 
-#ifndef vcspellHPP
-#define vcspellHPP
+#ifndef VCSpellHPP
+#define VCSpellHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -58,44 +58,38 @@ typedef Activex::TOleEnum MiscellaneousCodes;
 
 __dispinterface _DVSpell;
 typedef System::DelphiInterface<_DVSpell> _di__DVSpell;
+typedef _DVSpell VSSpell;
+;
+
+typedef short *PSmallint1;
+
 __dispinterface INTERFACE_UUID("{97F4CED1-9103-11CE-8385-524153480001}") _DVSpell  : public IDispatch 
-	
 {
 	
 };
-typedef _DVSpell VSSpell;
-
-typedef short *PSmallint1;
 
 __dispinterface _DVSpellEvents;
 typedef System::DelphiInterface<_DVSpellEvents> _di__DVSpellEvents;
 __dispinterface INTERFACE_UUID("{97F4CED2-9103-11CE-8385-524153480001}") _DVSpellEvents  : public IDispatch 
-	
 {
 	
 };
 
-typedef void __fastcall (__closure *TVSSpellMisspelled)(System::TObject* Sender, short &EventAction)
-	;
+typedef void __fastcall (__closure *TVSSpellMisspelled)(System::TObject* Sender, short &EventAction);
 
 typedef void __fastcall (__closure *TVSSpellComplete)(System::TObject* Sender, short &EventAction);
 
 typedef void __fastcall (__closure *TVSSpellFound)(System::TObject* Sender, short &EventAction);
 
-typedef void __fastcall (__closure *TVSSpellBeforeReplace)(System::TObject* Sender, short &EventAction
-	);
+typedef void __fastcall (__closure *TVSSpellBeforeReplace)(System::TObject* Sender, short &EventAction);
 
-typedef void __fastcall (__closure *TVSSpellAfterReplace)(System::TObject* Sender, short &EventAction
-	);
+typedef void __fastcall (__closure *TVSSpellAfterReplace)(System::TObject* Sender, short &EventAction);
 
-typedef void __fastcall (__closure *TVSSpellAfterPopup)(System::TObject* Sender, short &EventAction)
-	;
+typedef void __fastcall (__closure *TVSSpellAfterPopup)(System::TObject* Sender, short &EventAction);
 
-typedef void __fastcall (__closure *TVSSpellCheckStatus)(System::TObject* Sender, short &EventAction
-	);
+typedef void __fastcall (__closure *TVSSpellCheckStatus)(System::TObject* Sender, short &EventAction);
 
-typedef void __fastcall (__closure *TVSSpellCheckError)(System::TObject* Sender, short &EventAction)
-	;
+typedef void __fastcall (__closure *TVSSpellCheckError)(System::TObject* Sender, short &EventAction);
 
 typedef void __fastcall (__closure *TVSSpellClickIn)(System::TObject* Sender, short &EventAction);
 
@@ -177,8 +171,7 @@ public:
 	__property WideString DictionaryNameFull[short index] = {read=Get_DictionaryNameFull};
 	__property Word StandardIRListIsEnabled[short index] = {read=Get_StandardIRListIsEnabled};
 	__property Word DictionaryIsLoaded[short index] = {read=Get_DictionaryIsLoaded};
-	__property short DictionaryPerformance[short index] = {read=Get_DictionaryPerformance, write=Set_DictionaryPerformance
-		};
+	__property short DictionaryPerformance[short index] = {read=Get_DictionaryPerformance, write=Set_DictionaryPerformance};
 	__property WideString Suggestion[short index] = {read=Get_Suggestion};
 	__property Word CustomIsUpdateable[short index] = {read=Get_CustomIsUpdateable};
 	__property short AddToStandardIRList[short index] = {write=Set_AddToStandardIRList};
@@ -188,17 +181,13 @@ public:
 	__property short CloseDictionary[short index] = {write=Set_CloseDictionary};
 	__property int GetEntry[short index] = {write=Set_GetEntry};
 	__property WideString RemoveFromStandardIRList[short index] = {write=Set_RemoveFromStandardIRList};
-		
 	__property short DictionaryPerformanceActual[short index] = {read=Get_DictionaryPerformanceActual};
-		
 	__property short DictionaryBlockCount[short index] = {read=Get_DictionaryBlockCount};
 	__property short DictionaryBlockSize[short index] = {read=Get_DictionaryBlockSize};
 	__property short DictionaryCommonCount[short index] = {read=Get_DictionaryCommonCount};
 	__property short DictionaryCompatibilityBits[short index] = {read=Get_DictionaryCompatibilityBits};
-		
 	__property WideString DictionaryCopyright[short index] = {read=Get_DictionaryCopyright};
-	__property WideString DictionaryCopyrightDerived[short index] = {read=Get_DictionaryCopyrightDerived
-		};
+	__property WideString DictionaryCopyrightDerived[short index] = {read=Get_DictionaryCopyrightDerived};
 	__property short DictionaryFlags[short index] = {read=Get_DictionaryFlags};
 	__property short DictionaryLoadCount[short index] = {read=Get_DictionaryLoadCount};
 	__property short DictionaryMakerVersion[short index] = {read=Get_DictionaryMakerVersion};
@@ -216,195 +205,102 @@ public:
 	__property WideString OpenCustom[Word loadit] = {write=Set_OpenCustom};
 	
 __published:
-	__property Word AutoPopup = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=4, nodefault
-		};
-	__property Word AutoReplace = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=5, 
-		nodefault};
-	__property Word AutoSuggest = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=6, 
-		nodefault};
-	__property short BreakWordCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=7
-		, nodefault};
-	__property short CacheSize = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=8, nodefault
-		};
-	__property short ErrorOffset = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=1, 
-		nodefault};
-	__property Word IgnoreFullCaps = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=9
-		, nodefault};
-	__property Word IgnorePartialNumbers = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, 
-		index=10, nodefault};
-	__property short MaxSuggestions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=11
-		, nodefault};
-	__property Word MultiLine = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=12, nodefault
-		};
-	__property short SuggestionsLimit = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=13
-		, nodefault};
-	__property WideString Version = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=14
-		};
-	__property int CurrentLine = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=15, nodefault
-		};
-	__property short CustomCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=16
-		, nodefault};
-	__property int DLLHandle = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=17, nodefault
-		};
-	__property short EventOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=18
-		, nodefault};
-	__property WideString Hyphenation = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=19};
-	__property short IRAction = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=20, nodefault
-		};
-	__property short IRWhereFound = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=21
-		, nodefault};
-	__property WideString LineBreak = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=22
-		};
-	__property short LineOffset = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=23, 
-		nodefault};
-	__property WideString MisspelledWord = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=24};
-	__property int ReplaceCount = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=25, nodefault
-		};
-	__property WideString ReplacementWord = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=26};
-	__property short ResultCode = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=27, 
-		nodefault};
-	__property int ResumeOffset = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=28, nodefault
-		};
-	__property short SearchOrder = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=29
-		, nodefault};
-	__property short SpellOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=30
-		, nodefault};
-	__property short StandardCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=31
-		, nodefault};
-	__property short SuggestOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=32
-		, nodefault};
-	__property short SuggestionCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=33
-		, nodefault};
-	__property WideString Text = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=34
-		};
-	__property short WhereFound = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=35, 
-		nodefault};
-	__property int WordCount = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=36, nodefault
-		};
-	__property int WordOffset = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=37, nodefault
-		};
-	__property Word AllowJoinedWords = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=38
-		, nodefault};
-	__property int DialogLeft = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=39, nodefault
-		};
-	__property int DialogTop = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=40, nodefault
-		};
-	__property Word ReplaceRecheck = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=41
-		, nodefault};
-	__property Graphics::TColor DialogBgColor = {read=GetTColorProp, write=SetTColorProp, stored=false, 
-		index=42, nodefault};
-	__property int DialogLeftActual = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=43
-		, nodefault};
-	__property int DialogTopActual = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=44
-		, nodefault};
-	__property Word ReplaceOccurred = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=45
-		, nodefault};
-	__property Word SuggestionsMade = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=46
-		, nodefault};
-	__property short WordLength = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=47, 
-		nodefault};
-	__property int CacheHits = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=48, nodefault
-		};
-	__property int CacheMisses = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=49, nodefault
-		};
-	__property int TimerTicks = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=50, nodefault
-		};
-	__property int UserData = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=51, nodefault
-		};
-	__property WideString CheckedWord = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=52};
-	__property Word CommonIRListIsEnabled = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, 
-		index=53, nodefault};
-	__property WideString WordMisspelledTitle = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=54};
-	__property WideString OptionsTitle = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=55};
-	__property WideString ErrorTitle = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=56};
-	__property WideString WordMisspelledHelpFile = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=57};
-	__property WideString OptionsHelpFile = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=58};
-	__property int DialogElements = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=59, 
-		nodefault};
-	__property int DialogWidth = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=60, nodefault
-		};
-	__property int DialogHeight = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=61, nodefault
-		};
-	__property WideString ErrorText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=62
-		};
-	__property int ClickedButton = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=63, 
-		nodefault};
-	__property int ClickInfo = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=64, nodefault
-		};
-	__property WideString ClickInfoText = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=65};
-	__property short AddToCommonIRList = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=66
-		, nodefault};
-	__property short BeginCheck = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=67, 
-		nodefault};
-	__property WideString CheckText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=68
-		};
-	__property WideString CheckWord = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=69
-		};
-	__property short ClearCounts = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=70
-		, nodefault};
-	__property short ClearOffsets = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=71
-		, nodefault};
-	__property WideString FindSuggestions = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=72};
-	__property short ReplaceLastWord = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=73
-		, nodefault};
-	__property short ResumeCheck = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=74
-		, nodefault};
-	__property short ClearSuggestions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=75
-		, nodefault};
-	__property short PopupError = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=76, 
-		nodefault};
-	__property short PopupOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=77
-		, nodefault};
-	__property short PopupWordMisspelled = {read=GetSmallintProp, write=SetSmallintProp, stored=false, 
-		index=78, nodefault};
-	__property WideString CreateCustom = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=79};
-	__property short ResumeWithRecheck = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=80
-		, nodefault};
-	__property Word EnableCommonIRList = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=81
-		, nodefault};
-	__property short ClearCommonIRList = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=82
-		, nodefault};
-	__property WideString RemoveFromCommonIRList = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=83};
-	__property short EnableEventOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=84
-		, nodefault};
-	__property short DisableEventOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, 
-		index=85, nodefault};
-	__property short EnableSpellOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=86
-		, nodefault};
-	__property short DisableSpellOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, 
-		index=87, nodefault};
-	__property short EnableSuggestOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, 
-		index=88, nodefault};
-	__property short DisableSuggestOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false
-		, index=89, nodefault};
-	__property int EnableDialogElements = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=90
-		, nodefault};
-	__property int DisableDialogElements = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=91
-		, nodefault};
-	__property WideString _Text = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=0
-		};
-	__property WideString StandardDictionary = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=2};
-	__property WideString CustomDictionary = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=3};
+	__property Word AutoPopup = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=4, nodefault};
+	__property Word AutoReplace = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=5, nodefault};
+	__property Word AutoSuggest = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=6, nodefault};
+	__property short BreakWordCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=7, nodefault};
+	__property short CacheSize = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=8, nodefault};
+	__property short ErrorOffset = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=1, nodefault};
+	__property Word IgnoreFullCaps = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=9, nodefault};
+	__property Word IgnorePartialNumbers = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=10, nodefault};
+	__property short MaxSuggestions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=11, nodefault};
+	__property Word MultiLine = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=12, nodefault};
+	__property short SuggestionsLimit = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=13, nodefault};
+	__property WideString Version = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=14};
+	__property int CurrentLine = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=15, nodefault};
+	__property short CustomCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=16, nodefault};
+	__property int DLLHandle = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=17, nodefault};
+	__property short EventOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=18, nodefault};
+	__property WideString Hyphenation = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=19};
+	__property short IRAction = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=20, nodefault};
+	__property short IRWhereFound = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=21, nodefault};
+	__property WideString LineBreak = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=22};
+	__property short LineOffset = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=23, nodefault};
+	__property WideString MisspelledWord = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=24};
+	__property int ReplaceCount = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=25, nodefault};
+	__property WideString ReplacementWord = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=26};
+	__property short ResultCode = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=27, nodefault};
+	__property int ResumeOffset = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=28, nodefault};
+	__property short SearchOrder = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=29, nodefault};
+	__property short SpellOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=30, nodefault};
+	__property short StandardCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=31, nodefault};
+	__property short SuggestOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=32, nodefault};
+	__property short SuggestionCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=33, nodefault};
+	__property WideString Text = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=34};
+	__property short WhereFound = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=35, nodefault};
+	__property int WordCount = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=36, nodefault};
+	__property int WordOffset = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=37, nodefault};
+	__property Word AllowJoinedWords = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=38, nodefault};
+	__property int DialogLeft = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=39, nodefault};
+	__property int DialogTop = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=40, nodefault};
+	__property Word ReplaceRecheck = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=41, nodefault};
+	__property Graphics::TColor DialogBgColor = {read=GetTColorProp, write=SetTColorProp, stored=false, index=42, nodefault};
+	__property int DialogLeftActual = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=43, nodefault};
+	__property int DialogTopActual = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=44, nodefault};
+	__property Word ReplaceOccurred = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=45, nodefault};
+	__property Word SuggestionsMade = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=46, nodefault};
+	__property short WordLength = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=47, nodefault};
+	__property int CacheHits = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=48, nodefault};
+	__property int CacheMisses = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=49, nodefault};
+	__property int TimerTicks = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=50, nodefault};
+	__property int UserData = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=51, nodefault};
+	__property WideString CheckedWord = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=52};
+	__property Word CommonIRListIsEnabled = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=53, nodefault};
+	__property WideString WordMisspelledTitle = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=54};
+	__property WideString OptionsTitle = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=55};
+	__property WideString ErrorTitle = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=56};
+	__property WideString WordMisspelledHelpFile = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=57};
+	__property WideString OptionsHelpFile = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=58};
+	__property int DialogElements = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=59, nodefault};
+	__property int DialogWidth = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=60, nodefault};
+	__property int DialogHeight = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=61, nodefault};
+	__property WideString ErrorText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=62};
+	__property int ClickedButton = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=63, nodefault};
+	__property int ClickInfo = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=64, nodefault};
+	__property WideString ClickInfoText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=65};
+	__property short AddToCommonIRList = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=66, nodefault};
+	__property short BeginCheck = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=67, nodefault};
+	__property WideString CheckText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=68};
+	__property WideString CheckWord = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=69};
+	__property short ClearCounts = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=70, nodefault};
+	__property short ClearOffsets = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=71, nodefault};
+	__property WideString FindSuggestions = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=72};
+	__property short ReplaceLastWord = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=73, nodefault};
+	__property short ResumeCheck = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=74, nodefault};
+	__property short ClearSuggestions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=75, nodefault};
+	__property short PopupError = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=76, nodefault};
+	__property short PopupOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=77, nodefault};
+	__property short PopupWordMisspelled = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=78, nodefault};
+	__property WideString CreateCustom = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=79};
+	__property short ResumeWithRecheck = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=80, nodefault};
+	__property Word EnableCommonIRList = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=81, nodefault};
+	__property short ClearCommonIRList = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=82, nodefault};
+	__property WideString RemoveFromCommonIRList = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=83};
+	__property short EnableEventOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=84, nodefault};
+	__property short DisableEventOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=85, nodefault};
+	__property short EnableSpellOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=86, nodefault};
+	__property short DisableSpellOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=87, nodefault};
+	__property short EnableSuggestOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=88, nodefault};
+	__property short DisableSuggestOptions = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=89, nodefault};
+	__property int EnableDialogElements = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=90, nodefault};
+	__property int DisableDialogElements = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=91, nodefault};
+	__property WideString _Text = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=0};
+	__property WideString StandardDictionary = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=2};
+	__property WideString CustomDictionary = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=3};
 	__property TVSSpellMisspelled OnMisspelled = {read=FOnMisspelled, write=FOnMisspelled};
 	__property TVSSpellComplete OnComplete = {read=FOnComplete, write=FOnComplete};
 	__property TVSSpellFound OnFound = {read=FOnFound, write=FOnFound};
 	__property TVSSpellBeforeReplace OnBeforeReplace = {read=FOnBeforeReplace, write=FOnBeforeReplace};
-		
 	__property TVSSpellAfterReplace OnAfterReplace = {read=FOnAfterReplace, write=FOnAfterReplace};
 	__property TVSSpellAfterPopup OnAfterPopup = {read=FOnAfterPopup, write=FOnAfterPopup};
 	__property TVSSpellCheckStatus OnCheckStatus = {read=FOnCheckStatus, write=FOnCheckStatus};
@@ -413,8 +309,7 @@ __published:
 	__property TVSSpellClickOut OnClickOut = {read=FOnClickOut, write=FOnClickOut};
 public:
 	#pragma option push -w-inl
-	/* TOleControl.Create */ inline __fastcall virtual TVSSpell(Classes::TComponent* AOwner) : Olectrls::TOleControl(
-		AOwner) { }
+	/* TOleControl.Create */ inline __fastcall virtual TVSSpell(Classes::TComponent* AOwner) : Olectrls::TOleControl(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TOleControl.Destroy */ inline __fastcall virtual ~TVSSpell(void) { }
@@ -422,8 +317,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TVSSpell(HWND ParentWindow) : Olectrls::TOleControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TVSSpell(HWND ParentWindow) : Olectrls::TOleControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -652,12 +546,10 @@ static const Shortint VS_MAXWORDSIZE = 0x4b;
 extern PACKAGE void __fastcall Register(void);
 
 }	/* namespace Vcspell */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Vcspell;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// vcspell
+#endif	// VCSpell

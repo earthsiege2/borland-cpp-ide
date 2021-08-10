@@ -17,7 +17,6 @@ Notes:
 --*/
 
 #ifndef _WS2ATM_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WS2ATM_H_
 
 #if _MSC_VER > 1000
@@ -461,5 +460,4 @@ typedef struct {
 
 #include <poppack.h>
 
-#pragma option pop /*P_O_Pop*/
 #endif   /* _WS2ATM_H_ */

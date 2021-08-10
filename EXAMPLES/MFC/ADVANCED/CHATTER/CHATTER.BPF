@@ -1,12 +1,13 @@
-USEUNIT("mainfrm.cpp");
-USEUNIT("chatter.cpp");
-USEUNIT("chatdoc.cpp");
-USEUNIT("chatsock.cpp");
-USEUNIT("chatvw.cpp");
-USEUNIT("msg.cpp");
-USEUNIT("sendvw.cpp");
-USEUNIT("setupdlg.cpp");
-USEUNIT("stdafx.cpp");
-USERC("chatter.rc");
+USEUNIT(".\Chatdoc.cpp");
+USEUNIT(".\Chatsock.cpp");
+USEUNIT(".\Chatter.cpp");
+USEUNIT(".\Chatvw.cpp");
+USEUNIT(".\Mainfrm.cpp");
+USEUNIT(".\Msg.cpp");
+USEUNIT(".\Sendvw.cpp");
+USEUNIT(".\Setupdlg.cpp");
+USEUNIT(".\Stdafx.cpp");
+USERC(".\Chatter.rc");
+USEFILE("vctobpr.log");
 
 #define WinMain

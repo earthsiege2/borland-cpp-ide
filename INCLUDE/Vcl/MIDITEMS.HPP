@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'MidItems.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MidItems.pas' rev: 6.00
 
 #ifndef MidItemsHPP
 #define MidItemsHPP
@@ -10,13 +10,15 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
+#include <MidComp.hpp>	// Pascal unit
 #include <MidProd.hpp>	// Pascal unit
 #include <PagItems.hpp>	// Pascal unit
 #include <WebComp.hpp>	// Pascal unit
 #include <XMLBrokr.hpp>	// Pascal unit
 #include <Midas.hpp>	// Pascal unit
 #include <DBClient.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
+#include <HTTPProd.hpp>	// Pascal unit
 #include <HTTPApp.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
@@ -27,10 +29,9 @@
 namespace Miditems
 {
 //-- type declarations -------------------------------------------------------
-__interface IMidasWebDataSet;
-typedef System::DelphiInterface<IMidasWebDataSet> _di_IMidasWebDataSet;
-__interface INTERFACE_UUID("{1E494CD4-D598-11D2-AF8C-00C04FB16EC3}") IMidasWebDataSet  : public IUnknown 
-	
+__interface IInetXWebDataSet;
+typedef System::DelphiInterface<IInetXWebDataSet> _di_IInetXWebDataSet;
+__interface INTERFACE_UUID("{1E494CD4-D598-11D2-AF8C-00C04FB16EC3}") IInetXWebDataSet  : public IInterface 
 {
 	
 public:
@@ -43,26 +44,27 @@ public:
 	virtual void __fastcall RemoveOnDataChange(const Classes::TNotifyEvent Value) = 0 ;
 };
 
+typedef IInetXWebDataSet IMidasWebDataSet;
+;
+
 __interface IDataSetComponent;
 typedef System::DelphiInterface<IDataSetComponent> _di_IDataSetComponent;
 class DELPHICLASS TXMLDataSet;
-__interface INTERFACE_UUID("{D1AE355D-F1C3-11D2-AFB3-00C04FB16EC3}") IDataSetComponent  : public IUnknown 
-	
+__interface INTERFACE_UUID("{D1AE355D-F1C3-11D2-AFB3-00C04FB16EC3}") IDataSetComponent  : public IInterface 
 {
 	
 public:
 	virtual Xmlbrokr::TXMLBroker* __fastcall GetXMLBroker(void) = 0 ;
-	virtual _di_IMidasWebDataSet __fastcall GetDataSet(void) = 0 ;
+	virtual _di_IInetXWebDataSet __fastcall GetDataSet(void) = 0 ;
 	virtual TXMLDataSet* __fastcall GetXMLDataSet(void) = 0 ;
-	__property _di_IMidasWebDataSet DataSet = {read=GetDataSet};
+	__property _di_IInetXWebDataSet DataSet = {read=GetDataSet};
 	__property Xmlbrokr::TXMLBroker* XMLBroker = {read=GetXMLBroker};
 	__property TXMLDataSet* XMLDataSet = {read=GetXMLDataSet};
 };
 
 __interface IQueryFields;
 typedef System::DelphiInterface<IQueryFields> _di_IQueryFields;
-__interface INTERFACE_UUID("{DADD9F42-FD2B-11D2-AA78-00A024C11562}") IQueryFields  : public IUnknown 
-	
+__interface INTERFACE_UUID("{DADD9F42-FD2B-11D2-AA78-00A024C11562}") IQueryFields  : public IInterface 
 {
 	
 public:
@@ -73,33 +75,28 @@ public:
 
 __interface IValidateFields;
 typedef System::DelphiInterface<IValidateFields> _di_IValidateFields;
-__interface INTERFACE_UUID("{10A1C310-2E47-11D3-B00E-00C04FB16EC3}") IValidateFields  : public IUnknown 
-	
+__interface INTERFACE_UUID("{10A1C310-2E47-11D3-B00E-00C04FB16EC3}") IValidateFields  : public IInterface 
 {
 	
 public:
 	virtual bool __fastcall GetEnableValidateFields(void) = 0 ;
 	virtual void __fastcall SetEnableValidateFields(bool Value) = 0 ;
-	virtual bool __fastcall ValidateFields(Webcomp::_di_IAddScriptElements AddIntf) = 0 ;
-	__property bool EnableValidateFields = {read=GetEnableValidateFields, write=SetEnableValidateFields
-		};
+	virtual bool __fastcall ValidateFields(Midcomp::_di_IAddScriptElements AddIntf) = 0 ;
+	__property bool EnableValidateFields = {read=GetEnableValidateFields, write=SetEnableValidateFields};
 };
 
 __interface IValidateField;
 typedef System::DelphiInterface<IValidateField> _di_IValidateField;
-__interface INTERFACE_UUID("{10A1C310-2E47-11D3-B00E-00C04FB16EC3}") IValidateField  : public IUnknown 
-	
+__interface INTERFACE_UUID("{10A1C310-2E47-11D3-B00E-00C04FB16EC3}") IValidateField  : public IInterface 
 {
 	
 public:
-	virtual bool __fastcall ValidateField(_di_IMidasWebDataSet DataSet, Webcomp::_di_IAddScriptElements 
-		AddIntf) = 0 ;
+	virtual bool __fastcall ValidateField(_di_IInetXWebDataSet DataSet, Midcomp::_di_IAddScriptElements AddIntf) = 0 ;
 };
 
 __interface IDataSetFields;
 typedef System::DelphiInterface<IDataSetFields> _di_IDataSetFields;
-__interface INTERFACE_UUID("{394C5DD4-F252-11D2-AA55-00A024C11562}") IDataSetFields  : public IUnknown 
-	
+__interface INTERFACE_UUID("{394C5DD4-F252-11D2-AA55-00A024C11562}") IDataSetFields  : public IInterface 
 {
 	
 public:
@@ -113,8 +110,7 @@ public:
 
 __interface IRestoreDefaults;
 typedef System::DelphiInterface<IRestoreDefaults> _di_IRestoreDefaults;
-__interface INTERFACE_UUID("{394C5DD3-F252-11D2-AA55-00A024C11562}") IRestoreDefaults  : public IUnknown 
-	
+__interface INTERFACE_UUID("{394C5DD3-F252-11D2-AA55-00A024C11562}") IRestoreDefaults  : public IInterface 
 {
 	
 public:
@@ -123,7 +119,7 @@ public:
 
 __interface IHTMLField;
 typedef System::DelphiInterface<IHTMLField> _di_IHTMLField;
-__interface INTERFACE_UUID("{C72355D9-FE5C-11D2-AFC5-00C04FB16EC3}") IHTMLField  : public IUnknown 
+__interface INTERFACE_UUID("{C72355D9-FE5C-11D2-AFC5-00C04FB16EC3}") IHTMLField  : public IInterface 
 {
 	
 public:
@@ -134,7 +130,6 @@ public:
 __interface IQueryField;
 typedef System::DelphiInterface<IQueryField> _di_IQueryField;
 __interface INTERFACE_UUID("{7C321115-FCFB-11D2-AFC3-00C04FB16EC3}") IQueryField  : public IHTMLField 
-	
 {
 	
 public:
@@ -149,7 +144,6 @@ public:
 __interface IDataSetField;
 typedef System::DelphiInterface<IDataSetField> _di_IDataSetField;
 __interface INTERFACE_UUID("{394C5DD5-F252-11D2-AA55-00A024C11562}") IDataSetField  : public IHTMLField 
-	
 {
 	
 public:
@@ -162,40 +156,47 @@ public:
 __interface IStatusField;
 typedef System::DelphiInterface<IStatusField> _di_IStatusField;
 __interface INTERFACE_UUID("{DA9A7341-FE79-11D2-AFC5-00C04FB16EC3}") IStatusField  : public IHTMLField 
-	
 {
 	
 };
 
+__interface IWebDisplay;
+typedef System::DelphiInterface<IWebDisplay> _di_IWebDisplay;
+__interface INTERFACE_UUID("{73506461-4D5E-11D4-A48B-00C04F6BB853}") IWebDisplay  : public IInterface 
+{
+	
+public:
+	virtual bool __fastcall GetIsMultipleRecordView(void) = 0 ;
+	__property bool IsMultipleRecordView = {read=GetIsMultipleRecordView};
+};
+
 __interface IXMLDisplay;
 typedef System::DelphiInterface<IXMLDisplay> _di_IXMLDisplay;
-__interface INTERFACE_UUID("{394C5DD6-F252-11D2-AA55-00A024C11562}") IXMLDisplay  : public IUnknown 
-	
+__interface INTERFACE_UUID("{394C5DD6-F252-11D2-AA55-00A024C11562}") IXMLDisplay  : public IWebDisplay 
 {
 	
 public:
 	virtual AnsiString __fastcall GetXMLDisplayName(void) = 0 ;
 	virtual AnsiString __fastcall GetXMLRowSetName(void) = 0 ;
-	virtual bool __fastcall GetIsMultipleRecordView(void) = 0 ;
-	__property AnsiString XMLRowSetName = {read=GetXMLRowSetName};
+	HIDESBASE virtual bool __fastcall GetIsMultipleRecordView(void) = 0 ;
 	__property AnsiString XMLDisplayName = {read=GetXMLDisplayName};
+	__property AnsiString XMLRowSetName = {read=GetXMLRowSetName};
 	__property bool IsMultipleRecordView = {read=GetIsMultipleRecordView};
 };
 
-__interface IXMLDisplayReference;
-typedef System::DelphiInterface<IXMLDisplayReference> _di_IXMLDisplayReference;
-__interface INTERFACE_UUID("{675ABA92-F660-11D2-AA59-00A024C11562}") IXMLDisplayReference  : public IUnknown 
-	
+__interface IWebDisplayReference;
+typedef System::DelphiInterface<IWebDisplayReference> _di_IWebDisplayReference;
+__interface INTERFACE_UUID("{675ABA92-F660-11D2-AA59-00A024C11562}") IWebDisplayReference  : public IInterface 
 {
 	
 public:
-	virtual Classes::TComponent* __fastcall GetXMLDisplayComponent(void) = 0 ;
-	__property Classes::TComponent* XMLDisplayComponent = {read=GetXMLDisplayComponent};
+	virtual Classes::TComponent* __fastcall GetWebDisplayComponent(void) = 0 ;
+	__property Classes::TComponent* WebDisplayComponent = {read=GetWebDisplayComponent};
 };
 
 __interface IHTMLForm;
 typedef System::DelphiInterface<IHTMLForm> _di_IHTMLForm;
-__interface INTERFACE_UUID("{394C5DD7-F252-11D2-AA55-00A024C11562}") IHTMLForm  : public IUnknown 
+__interface INTERFACE_UUID("{394C5DD7-F252-11D2-AA55-00A024C11562}") IHTMLForm  : public IInterface 
 {
 	
 public:
@@ -207,18 +208,17 @@ public:
 
 __interface IFormatColumn;
 typedef System::DelphiInterface<IFormatColumn> _di_IFormatColumn;
-__interface INTERFACE_UUID("{3417E2F0-22A0-11D3-B003-00C04FB16EC3}") IFormatColumn  : public IUnknown 
-	
+__interface INTERFACE_UUID("{3417E2F0-22A0-11D3-B003-00C04FB16EC3}") IFormatColumn  : public IInterface 
 {
 	
 public:
-	virtual AnsiString __fastcall FormatColumnHeading(void) = 0 ;
-	virtual AnsiString __fastcall FormatColumnData(AnsiString Content) = 0 ;
+	virtual AnsiString __fastcall FormatColumnHeading(Webcomp::TWebContentOptions* Options) = 0 ;
+	virtual AnsiString __fastcall FormatColumnData(const AnsiString Content, Webcomp::TWebContentOptions* Options) = 0 ;
 };
 
 __interface IQueryForm;
 typedef System::DelphiInterface<IQueryForm> _di_IQueryForm;
-__interface INTERFACE_UUID("{95097A4B-3A12-11D3-B01B-00C04FB16EC3}") IQueryForm  : public IUnknown 
+__interface INTERFACE_UUID("{95097A4B-3A12-11D3-B01B-00C04FB16EC3}") IQueryForm  : public IInterface 
 {
 	
 };
@@ -242,8 +242,7 @@ protected:
 	virtual Xmlbrokr::TXMLBroker* __fastcall GetXMLBroker(void);
 	
 public:
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	__fastcall TXMLData(Classes::TComponent* AParent);
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property Classes::TComponent* Parent = {read=FParent};
@@ -262,7 +261,7 @@ class PASCALIMPLEMENTATION TXMLDataSet : public TXMLData
 	
 private:
 	AnsiString FDataSetField;
-	_di_IMidasWebDataSet FDataSet;
+	_di_IInetXWebDataSet FDataSet;
 	Classes::TStrings* FDataSetPath;
 	Classes::_di_IInterfaceList FDiscardDataSetList;
 	
@@ -272,14 +271,14 @@ protected:
 	int __stdcall _Release(void);
 	void __fastcall ConnectionChange(Classes::TComponent* Sender, bool Connecting);
 	virtual void __fastcall SetXMLBroker(const Xmlbrokr::TXMLBroker* Value);
-	_di_IMidasWebDataSet __fastcall FindDataSet();
+	_di_IInetXWebDataSet __fastcall FindDataSet();
 	bool __fastcall CompareXMLData(TXMLDataSet* XMLDataSet);
 	virtual void __fastcall ChangedXMLBroker(void);
 	virtual void __fastcall ChangedDataSetField(void);
 	void __fastcall WrapperDataChange(System::TObject* Sender);
 	void __fastcall SetDataSetField(const AnsiString Value);
-	_di_IMidasWebDataSet __fastcall GetDataSet();
-	_di_IMidasWebDataSet __fastcall CreateDataSet();
+	_di_IInetXWebDataSet __fastcall GetDataSet();
+	_di_IInetXWebDataSet __fastcall CreateDataSet();
 	Classes::TStrings* __fastcall GetDataSetPath(void);
 	virtual AnsiString __fastcall GetDataSetField();
 	__property Classes::TComponent* Parent = {read=FParent};
@@ -287,7 +286,7 @@ protected:
 public:
 	__fastcall TXMLDataSet(Classes::TComponent* AParent);
 	__fastcall virtual ~TXMLDataSet(void);
-	__property _di_IMidasWebDataSet DataSet = {read=GetDataSet};
+	__property _di_IInetXWebDataSet DataSet = {read=GetDataSet};
 	__property Classes::TStrings* DataSetPath = {read=GetDataSetPath};
 	__property AnsiString DataSetField = {read=GetDataSetField, write=SetDataSetField};
 private:
@@ -295,7 +294,6 @@ private:
 	
 public:
 	operator INotifyConnectionChange*(void) { return (INotifyConnectionChange*)&__INotifyConnectionChange; }
-		
 	
 };
 
@@ -321,8 +319,7 @@ protected:
 	__property bool UseParent = {read=FUseParent, write=SetUseParent, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TXMLDataSet.Create */ inline __fastcall TXMLDataSetParent(Classes::TComponent* AParent) : TXMLDataSet(
-		AParent) { }
+	/* TXMLDataSet.Create */ inline __fastcall TXMLDataSetParent(Classes::TComponent* AParent) : TXMLDataSet(AParent) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TXMLDataSet.Destroy */ inline __fastcall virtual ~TXMLDataSetParent(void) { }
@@ -350,8 +347,7 @@ __published:
 	__property bool UseParent = {read=FUseParent, write=SetUseParent, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TXMLData.Create */ inline __fastcall TXMLDataParent(Classes::TComponent* AParent) : TXMLData(AParent
-		) { }
+	/* TXMLData.Create */ inline __fastcall TXMLDataParent(Classes::TComponent* AParent) : TXMLData(AParent) { }
 	#pragma option pop
 	
 public:
@@ -362,8 +358,8 @@ public:
 };
 
 
-class DELPHICLASS TXMLDisplay;
-class PASCALIMPLEMENTATION TXMLDisplay : public System::TObject 
+class DELPHICLASS TWebDisplay;
+class PASCALIMPLEMENTATION TWebDisplay : public System::TObject 
 {
 	typedef System::TObject inherited;
 	
@@ -379,25 +375,23 @@ protected:
 	virtual void __fastcall ChangedDisplayComponent(void);
 	
 public:
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
-	__fastcall TXMLDisplay(Classes::TComponent* AParent);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
+	__fastcall TWebDisplay(Classes::TComponent* AParent);
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property Classes::TComponent* Parent = {read=FParent};
-	__property Classes::TComponent* DisplayComponent = {read=GetDisplayComponent, write=SetDisplayComponent
-		};
+	__property Classes::TComponent* DisplayComponent = {read=GetDisplayComponent, write=SetDisplayComponent};
 public:
 	#pragma option push -w-inl
-	/* TObject.Destroy */ inline __fastcall virtual ~TXMLDisplay(void) { }
+	/* TObject.Destroy */ inline __fastcall virtual ~TWebDisplay(void) { }
 	#pragma option pop
 	
 };
 
 
 class DELPHICLASS TXMLDisplayParent;
-class PASCALIMPLEMENTATION TXMLDisplayParent : public TXMLDisplay 
+class PASCALIMPLEMENTATION TXMLDisplayParent : public TWebDisplay 
 {
-	typedef TXMLDisplay inherited;
+	typedef TWebDisplay inherited;
 	
 private:
 	bool FUseParent;
@@ -422,70 +416,50 @@ public:
 
 
 class DELPHICLASS TWebForm;
-class PASCALIMPLEMENTATION TWebForm : public Classes::TComponent 
+class PASCALIMPLEMENTATION TWebForm : public Webcomp::TWebContainedContainerComponent 
 {
-	typedef Classes::TComponent inherited;
+	typedef Webcomp::TWebContainedContainerComponent inherited;
 	
 private:
-	Webcomp::TWebComponentList* FContainer;
-	Webcomp::TWebComponentList* FWebComponents;
 	AnsiString FCustom;
 	AnsiString FStyle;
 	AnsiString FStyleRule;
-	Classes::TComponent* FWebParent;
 	Webcomp::TLayoutAttributes* FLayoutAttributes;
 	
 protected:
-	DYNAMIC void __fastcall GetChildren(Classes::TGetChildProc Proc, Classes::TComponent* Root);
-	DYNAMIC void __fastcall SetChildOrder(Classes::TComponent* Component, int Order);
+	virtual Webcomp::TWebComponentList* __fastcall GetDefaultWebComponents(void);
+	virtual void __fastcall SetDefaultWebComponents(Webcomp::TWebComponentList* AList);
 	bool __fastcall CanAddClass(Classes::TComponent* AParent, TMetaClass* AClass);
 	virtual bool __fastcall ImplCanAddClass(Classes::TComponent* AParent, TMetaClass* AClass) = 0 ;
-	int __fastcall GetIndex(void);
-	void __fastcall SetIndex(int Value);
-	void __fastcall SetContainer(System::TObject* Container);
-	System::TObject* __fastcall GetContainer(void);
-	void __fastcall SetComponentList(System::TObject* List);
 	AnsiString __fastcall Content(Webcomp::TWebContentOptions* Options, System::TObject* Layout);
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* Layout
-		) = 0 ;
-	virtual void __fastcall ReadState(Classes::TReader* Reader);
-	DYNAMIC void __fastcall SetParentComponent(Classes::TComponent* AParent);
-	System::TObject* __fastcall GetComponentList(void);
-	System::TObject* __fastcall GetDefaultComponentList(void);
-	void __fastcall AddElements(Webcomp::_di_IAddScriptElements AddIntf);
-	virtual void __fastcall ImplAddElements(Webcomp::_di_IAddScriptElements AddIntf);
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* Layout) = 0 ;
+	void __fastcall AddElements(Midcomp::_di_IAddScriptElements AddIntf);
+	virtual void __fastcall ImplAddElements(Midcomp::_di_IAddScriptElements AddIntf);
 	System::TObject* __fastcall GetSubComponents(void);
 	AnsiString __fastcall GetHTMLFormName();
 	AnsiString __fastcall GetHTMLFormVarName();
 	Webcomp::TWebComponentList* __fastcall GetVisibleFields(void);
 	virtual Webcomp::TLayoutAttributes* __fastcall GetLayoutAttributes(void);
-	void __fastcall SetWebParent(const Classes::TComponent* Value);
 	__property Webcomp::TWebComponentList* VisibleFields = {read=GetVisibleFields};
 	
 public:
 	__fastcall virtual TWebForm(Classes::TComponent* AComponent);
 	__fastcall virtual ~TWebForm(void);
-	DYNAMIC Classes::TComponent* __fastcall GetParentComponent(void);
-	DYNAMIC bool __fastcall HasParent(void);
-	__property Webcomp::TWebComponentList* WebComponents = {read=FWebComponents};
+	__property Webcomp::TWebComponentList* WebComponents = {read=GetWebComponents};
 	__property AnsiString Style = {read=FStyle, write=FStyle};
 	__property AnsiString Custom = {read=FCustom, write=FCustom};
 	__property AnsiString StyleRule = {read=FStyleRule, write=FStyleRule};
 private:
-	void *__IWebComponent;	/* Webcomp::IWebComponent */
 	void *__IWebContent;	/* Webcomp::IWebContent */
 	void *__IWebComponentEditor;	/* Webcomp::IWebComponentEditor */
-	void *__IScriptComponent;	/* Webcomp::IScriptComponent */
-	void *__IGetWebComponentList;	/* Webcomp::IGetWebComponentList */
+	void *__IScriptComponent;	/* Midcomp::IScriptComponent */
 	void *__IHTMLForm;	/* Miditems::IHTMLForm */
 	
 public:
 	operator IHTMLForm*(void) { return (IHTMLForm*)&__IHTMLForm; }
-	operator IGetWebComponentList*(void) { return (IGetWebComponentList*)&__IGetWebComponentList; }
 	operator IScriptComponent*(void) { return (IScriptComponent*)&__IScriptComponent; }
 	operator IWebComponentEditor*(void) { return (IWebComponentEditor*)&__IWebComponentEditor; }
 	operator IWebContent*(void) { return (IWebContent*)&__IWebContent; }
-	operator IWebComponent*(void) { return (IWebComponent*)&__IWebComponent; }
 	
 };
 
@@ -506,9 +480,8 @@ private:
 	
 protected:
 	virtual bool __fastcall ImplCanAddClass(Classes::TComponent* AParent, TMetaClass* AClass);
-	virtual void __fastcall ImplAddElements(Webcomp::_di_IAddScriptElements AddIntf);
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout
-		);
+	virtual void __fastcall ImplAddElements(Midcomp::_di_IAddScriptElements AddIntf);
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
 	virtual AnsiString __fastcall GetHTMLFormTag(Webcomp::TWebContentOptions* Options);
 	AnsiString __fastcall MethodString();
 	void __fastcall AssignStringsCallback(Classes::TComponent* AComponent);
@@ -545,8 +518,7 @@ __published:
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TCustomQueryForm.Create */ inline __fastcall virtual TQueryForm(Classes::TComponent* AOwner) : TCustomQueryForm(
-		AOwner) { }
+	/* TCustomQueryForm.Create */ inline __fastcall virtual TQueryForm(Classes::TComponent* AOwner) : TCustomQueryForm(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -557,16 +529,30 @@ public:
 };
 
 
-class DELPHICLASS TDataForm;
-class PASCALIMPLEMENTATION TDataForm : public TWebForm 
+class DELPHICLASS TCustomDataForm;
+class PASCALIMPLEMENTATION TCustomDataForm : public TWebForm 
 {
 	typedef TWebForm inherited;
 	
 protected:
 	virtual bool __fastcall ImplCanAddClass(Classes::TComponent* AParent, TMetaClass* AClass);
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout
-		);
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
 	virtual AnsiString __fastcall GetHTMLFormTag(Webcomp::TWebContentOptions* Options);
+public:
+	#pragma option push -w-inl
+	/* TWebForm.Create */ inline __fastcall virtual TCustomDataForm(Classes::TComponent* AComponent) : TWebForm(AComponent) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TWebForm.Destroy */ inline __fastcall virtual ~TCustomDataForm(void) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TDataForm;
+class PASCALIMPLEMENTATION TDataForm : public TCustomDataForm 
+{
+	typedef TCustomDataForm inherited;
 	
 __published:
 	__property Style ;
@@ -574,8 +560,7 @@ __published:
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TWebForm.Create */ inline __fastcall virtual TDataForm(Classes::TComponent* AComponent) : TWebForm(
-		AComponent) { }
+	/* TWebForm.Create */ inline __fastcall virtual TDataForm(Classes::TComponent* AComponent) : TCustomDataForm(AComponent) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWebForm.Destroy */ inline __fastcall virtual ~TDataForm(void) { }
@@ -585,63 +570,41 @@ public:
 
 
 class DELPHICLASS TWebControlGroup;
-class PASCALIMPLEMENTATION TWebControlGroup : public Classes::TComponent 
+class PASCALIMPLEMENTATION TWebControlGroup : public Webcomp::TWebContainedContainerComponent 
 {
-	typedef Classes::TComponent inherited;
+	typedef Webcomp::TWebContainedContainerComponent inherited;
 	
 private:
-	Webcomp::TWebComponentList* FContainer;
-	Webcomp::TWebComponentList* FWebComponents;
-	bool FDefaultField;
 	Webcomp::TWebComponentList* FDefaultWebComponents;
-	Classes::TComponent* FWebParent;
 	
 protected:
-	void __fastcall SetWebParent(const Classes::TComponent* Value);
-	DYNAMIC void __fastcall GetChildren(Classes::TGetChildProc Proc, Classes::TComponent* Root);
-	DYNAMIC void __fastcall SetChildOrder(Classes::TComponent* Component, int Order);
-	void __fastcall AddElements(Webcomp::_di_IAddScriptElements AddIntf);
+	virtual Webcomp::TWebComponentList* __fastcall GetDefaultWebComponents(void);
+	virtual void __fastcall SetDefaultWebComponents(Webcomp::TWebComponentList* Value);
+	void __fastcall AddElements(Midcomp::_di_IAddScriptElements AddIntf);
 	System::TObject* __fastcall GetSubComponents(void);
 	virtual System::TObject* __fastcall ImplGetSubComponents(void);
-	virtual void __fastcall ImplAddElements(Webcomp::_di_IAddScriptElements AddIntf);
+	virtual void __fastcall ImplAddElements(Midcomp::_di_IAddScriptElements AddIntf);
 	AnsiString __fastcall Content(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
-		
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout
-		);
-	int __fastcall GetIndex(void);
-	void __fastcall SetIndex(int Value);
-	void __fastcall SetContainer(System::TObject* Container);
-	System::TObject* __fastcall GetContainer(void);
-	void __fastcall SetComponentList(System::TObject* List);
-	System::TObject* __fastcall GetComponentList(void);
-	System::TObject* __fastcall GetDefaultComponentList(void);
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
 	bool __fastcall CanAddClass(Classes::TComponent* AParent, TMetaClass* AClass);
 	virtual bool __fastcall ImplCanAddClass(Classes::TComponent* AParent, TMetaClass* AClass);
-	virtual void __fastcall ReadState(Classes::TReader* Reader);
-	DYNAMIC void __fastcall SetParentComponent(Classes::TComponent* AParent);
 	virtual Webcomp::TLayoutAttributes* __fastcall GetLayoutAttributes(void);
-	__property Webcomp::TWebComponentList* DefaultWebComponents = {read=FDefaultWebComponents, write=FDefaultWebComponents
-		};
+	void __fastcall ChangeFieldControls(System::TObject* Sender);
+	__property Webcomp::TWebComponentList* DefaultWebComponents = {read=FDefaultWebComponents, write=FDefaultWebComponents};
 	
 public:
 	__fastcall virtual TWebControlGroup(Classes::TComponent* AOwner);
 	__fastcall virtual ~TWebControlGroup(void);
-	DYNAMIC Classes::TComponent* __fastcall GetParentComponent(void);
-	DYNAMIC bool __fastcall HasParent(void);
-	__property Webcomp::TWebComponentList* WebFieldControls = {read=FWebComponents};
+	__property Webcomp::TWebComponentList* WebFieldControls = {read=GetWebComponents};
 private:
-	void *__IWebComponent;	/* Webcomp::IWebComponent */
-	void *__IGetWebComponentList;	/* Webcomp::IGetWebComponentList */
 	void *__IWebComponentEditor;	/* Webcomp::IWebComponentEditor */
-	void *__IScriptComponent;	/* Webcomp::IScriptComponent */
+	void *__IScriptComponent;	/* Midcomp::IScriptComponent */
 	void *__IWebContent;	/* Webcomp::IWebContent */
 	
 public:
 	operator IWebContent*(void) { return (IWebContent*)&__IWebContent; }
 	operator IScriptComponent*(void) { return (IScriptComponent*)&__IScriptComponent; }
 	operator IWebComponentEditor*(void) { return (IWebComponentEditor*)&__IWebComponentEditor; }
-	operator IGetWebComponentList*(void) { return (IGetWebComponentList*)&__IGetWebComponentList; }
-	operator IWebComponent*(void) { return (IWebComponent*)&__IWebComponent; }
 	
 };
 
@@ -660,8 +623,7 @@ private:
 	
 protected:
 	virtual bool __fastcall ImplCanAddClass(Classes::TComponent* AParent, TMetaClass* AClass);
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout
-		);
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
 	virtual Webcomp::TLayoutAttributes* __fastcall GetLayoutAttributes(void);
 	
 public:
@@ -686,8 +648,7 @@ __published:
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TCustomLayoutGroup.Create */ inline __fastcall virtual TLayoutGroup(Classes::TComponent* AComponent
-		) : TCustomLayoutGroup(AComponent) { }
+	/* TCustomLayoutGroup.Create */ inline __fastcall virtual TLayoutGroup(Classes::TComponent* AComponent) : TCustomLayoutGroup(AComponent) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomLayoutGroup.Destroy */ inline __fastcall virtual ~TLayoutGroup(void) { }
@@ -710,15 +671,14 @@ protected:
 	void __fastcall SetDataSetField(const AnsiString Value);
 	void __fastcall SetXMLBroker(const Xmlbrokr::TXMLBroker* Value);
 	virtual void __fastcall XMLDataChange(System::TObject* Sender);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual System::TObject* __fastcall ImplGetSubComponents(void);
-	virtual void __fastcall ImplAddElements(Webcomp::_di_IAddScriptElements AddIntf);
+	virtual void __fastcall ImplAddElements(Midcomp::_di_IAddScriptElements AddIntf);
 	AnsiString __fastcall GetXMLDisplayName();
 	AnsiString __fastcall GetXMLRowSetName();
 	bool __fastcall GetIsMultipleRecordView(void);
 	virtual bool __fastcall ImplIsMultipleRecordView(void);
-	_di_IMidasWebDataSet __fastcall GetDataSet();
+	_di_IInetXWebDataSet __fastcall GetDataSet();
 	Xmlbrokr::TXMLBroker* __fastcall GetXMLBroker(void);
 	TXMLDataSet* __fastcall GetXMLDataSet(void);
 	virtual void __fastcall GetFieldsList(Classes::TStrings* List);
@@ -726,14 +686,13 @@ protected:
 	Webcomp::TWebComponentList* __fastcall GetVisibleFields(void);
 	bool __fastcall HasStatusField(void);
 	void __fastcall ValidateDataSet(void);
-	bool __fastcall ValidateFields(Webcomp::_di_IAddScriptElements AddIntf);
+	bool __fastcall ValidateFields(Midcomp::_di_IAddScriptElements AddIntf);
 	bool __fastcall GetEnableValidateFields(void);
 	void __fastcall SetEnableValidateFields(bool Value);
 	virtual void __fastcall CreateDefaultFields(void);
 	Classes::TComponent* __fastcall FindField(const AnsiString AName);
 	__property TXMLDataSet* XMLDataSet = {read=FXMLDataSet};
-	__property bool EnableValidateFields = {read=GetEnableValidateFields, write=SetEnableValidateFields
-		, nodefault};
+	__property bool EnableValidateFields = {read=GetEnableValidateFields, write=SetEnableValidateFields, nodefault};
 	
 public:
 	__fastcall virtual TXMLDisplayGroup(Classes::TComponent* AComponent);
@@ -764,9 +723,9 @@ class PASCALIMPLEMENTATION TGridRowAttributes : public Classes::TPersistent
 	typedef Classes::TPersistent inherited;
 	
 private:
-	Httpapp::THTMLAlign FAlign;
+	Httpprod::THTMLAlign FAlign;
 	AnsiString FBgColor;
-	Httpapp::THTMLVAlign FVAlign;
+	Httpprod::THTMLVAlign FVAlign;
 	AnsiString FStyle;
 	AnsiString FStyleRule;
 	AnsiString FCustom;
@@ -780,9 +739,9 @@ public:
 	__property Classes::TComponent* Parent = {read=FParent};
 	
 __published:
-	__property Httpapp::THTMLAlign Align = {read=FAlign, write=FAlign, default=0};
+	__property Httpprod::THTMLAlign Align = {read=FAlign, write=FAlign, default=0};
 	__property AnsiString BgColor = {read=FBgColor, write=FBgColor};
-	__property Httpapp::THTMLVAlign VAlign = {read=FVAlign, write=FVAlign, default=0};
+	__property Httpprod::THTMLVAlign VAlign = {read=FVAlign, write=FVAlign, default=0};
 	__property AnsiString Style = {read=FStyle, write=FStyle};
 	__property AnsiString StyleRule = {read=FStyleRule, write=FStyleRule};
 	__property AnsiString Custom = {read=FCustom, write=FCustom};
@@ -800,7 +759,7 @@ class PASCALIMPLEMENTATION TGridAttributes : public Classes::TPersistent
 	typedef Classes::TPersistent inherited;
 	
 private:
-	Httpapp::THTMLAlign FAlign;
+	Httpprod::THTMLAlign FAlign;
 	int FBorder;
 	AnsiString FBgColor;
 	int FCellSpacing;
@@ -818,7 +777,7 @@ public:
 	__property Classes::TComponent* Parent = {read=FParent};
 	
 __published:
-	__property Httpapp::THTMLAlign Align = {read=FAlign, write=FAlign, default=0};
+	__property Httpprod::THTMLAlign Align = {read=FAlign, write=FAlign, default=0};
 	__property AnsiString BgColor = {read=FBgColor, write=FBgColor};
 	__property int Border = {read=FBorder, write=FBorder, default=1};
 	__property int CellSpacing = {read=FCellSpacing, write=FCellSpacing, default=-1};
@@ -847,12 +806,10 @@ private:
 	
 protected:
 	virtual bool __fastcall ImplCanAddClass(Classes::TComponent* AParent, TMetaClass* AClass);
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout
-		);
-	virtual void __fastcall ImplAddElements(Webcomp::_di_IAddScriptElements AddIntf);
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
+	virtual void __fastcall ImplAddElements(Midcomp::_di_IAddScriptElements AddIntf);
 	virtual bool __fastcall ImplIsMultipleRecordView(void);
-	AnsiString __fastcall FormatTable(Webcomp::TLayoutWebContent* Layout, Webcomp::TWebContentOptions* 
-		Options);
+	AnsiString __fastcall FormatTable(Webcomp::TLayoutWebContent* Layout, Webcomp::TWebContentOptions* Options);
 	void __fastcall SetTableAttributes(const TGridAttributes* Value);
 	void __fastcall SetHeadingAttributes(const TGridRowAttributes* Value);
 	void __fastcall SetRowAttributes(const TGridRowAttributes* Value);
@@ -862,11 +819,9 @@ public:
 	__fastcall virtual ~TCustomDataGrid(void);
 	__property int DisplayRows = {read=FDisplayRows, write=FDisplayRows, default=4};
 	__property TGridAttributes* TableAttributes = {read=FTableAttributes, write=SetTableAttributes};
-	__property TGridRowAttributes* HeadingAttributes = {read=FHeadingAttributes, write=SetHeadingAttributes
-		};
+	__property TGridRowAttributes* HeadingAttributes = {read=FHeadingAttributes, write=SetHeadingAttributes};
 	__property TGridRowAttributes* RowAttributes = {read=FRowAttributes, write=SetRowAttributes};
 private:
-		
 	void *__IDataSetComponent;	/* Miditems::IDataSetComponent */
 	
 public:
@@ -881,14 +836,13 @@ class PASCALIMPLEMENTATION TDataGrid : public TCustomDataGrid
 	typedef TCustomDataGrid inherited;
 	
 __published:
-	__property DisplayRows ;
+	__property DisplayRows  = {default=4};
 	__property TableAttributes ;
 	__property HeadingAttributes ;
 	__property RowAttributes ;
 public:
 	#pragma option push -w-inl
-	/* TCustomDataGrid.Create */ inline __fastcall virtual TDataGrid(Classes::TComponent* AOwner) : TCustomDataGrid(
-		AOwner) { }
+	/* TCustomDataGrid.Create */ inline __fastcall virtual TDataGrid(Classes::TComponent* AOwner) : TCustomDataGrid(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomDataGrid.Destroy */ inline __fastcall virtual ~TDataGrid(void) { }
@@ -909,8 +863,7 @@ private:
 	Webcomp::TLayoutAttributes* FLayoutAttributes;
 	
 protected:
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout
-		);
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
 	virtual Webcomp::TLayoutAttributes* __fastcall GetLayoutAttributes(void);
 	
 public:
@@ -939,8 +892,7 @@ __published:
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TCustomFieldGroup.Create */ inline __fastcall virtual TQueryFieldGroup(Classes::TComponent* AOwner
-		) : TCustomFieldGroup(AOwner) { }
+	/* TCustomFieldGroup.Create */ inline __fastcall virtual TQueryFieldGroup(Classes::TComponent* AOwner) : TCustomFieldGroup(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomFieldGroup.Destroy */ inline __fastcall virtual ~TQueryFieldGroup(void) { }
@@ -961,7 +913,7 @@ class PASCALIMPLEMENTATION TFieldGroup : public TCustomFieldGroup
 	typedef TCustomFieldGroup inherited;
 	
 protected:
-	virtual void __fastcall ImplAddElements(Webcomp::_di_IAddScriptElements AddIntf);
+	virtual void __fastcall ImplAddElements(Midcomp::_di_IAddScriptElements AddIntf);
 	virtual bool __fastcall ImplCanAddClass(Classes::TComponent* AParent, TMetaClass* AClass);
 	
 __published:
@@ -970,8 +922,7 @@ __published:
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TCustomFieldGroup.Create */ inline __fastcall virtual TFieldGroup(Classes::TComponent* AOwner) : 
-		TCustomFieldGroup(AOwner) { }
+	/* TCustomFieldGroup.Create */ inline __fastcall virtual TFieldGroup(Classes::TComponent* AOwner) : TCustomFieldGroup(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomFieldGroup.Destroy */ inline __fastcall virtual ~TFieldGroup(void) { }
@@ -994,6 +945,8 @@ private:
 	AnsiString FStyle;
 	AnsiString FCustom;
 	AnsiString FStyleRule;
+	Httpprod::THTMLAlign FAlign;
+	Httpprod::THTMLVAlign FVAlign;
 	
 public:
 	__fastcall TCaptionAttributes(Classes::TComponent* AParent);
@@ -1003,6 +956,8 @@ __published:
 	__property AnsiString Style = {read=FStyle, write=FStyle};
 	__property AnsiString Custom = {read=FCustom, write=FCustom};
 	__property AnsiString StyleRule = {read=FStyleRule, write=FStyleRule};
+	__property Httpprod::THTMLAlign Align = {read=FAlign, write=FAlign, default=0};
+	__property Httpprod::THTMLVAlign VAlign = {read=FVAlign, write=FVAlign, default=0};
 public:
 	#pragma option push -w-inl
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TCaptionAttributes(void) { }
@@ -1012,14 +967,11 @@ public:
 
 
 class DELPHICLASS TWebDataDisplay;
-class PASCALIMPLEMENTATION TWebDataDisplay : public Classes::TComponent 
+class PASCALIMPLEMENTATION TWebDataDisplay : public Webcomp::TWebContainedComponent 
 {
-	typedef Classes::TComponent inherited;
+	typedef Webcomp::TWebContainedComponent inherited;
 	
 private:
-	Webcomp::TWebComponentList* FWebComponents;
-	Classes::TComponent* FWebParent;
-	bool FDefaultField;
 	AnsiString FCaption;
 	TCaptionPosition FCaptionPosition;
 	TCaptionAttributes* FCaptionAttributes;
@@ -1028,17 +980,11 @@ private:
 	AnsiString FStyle;
 	Webcomp::TLayoutAttributes* FLayoutAttributes;
 	AnsiString FStyleRule;
+	bool __fastcall IsCaptionStored(void);
 	
 protected:
-	int __fastcall GetIndex(void);
-	void __fastcall SetIndex(int Value);
-	void __fastcall SetContainer(System::TObject* Container);
-	System::TObject* __fastcall GetContainer(void);
-	void __fastcall SetComponentList(System::TObject* List);
 	AnsiString __fastcall Content(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
-		
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout
-		);
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
 	AnsiString __fastcall GetHTMLControlName();
 	virtual AnsiString __fastcall ImplGetHTMLControlName();
 	virtual AnsiString __fastcall ControlContent(Webcomp::TWebContentOptions* Options) = 0 ;
@@ -1046,9 +992,6 @@ protected:
 	virtual AnsiString __fastcall GetCaption();
 	virtual void __fastcall SetCaption(AnsiString Value);
 	virtual AnsiString __fastcall EventContent(Webcomp::TWebContentOptions* Options);
-	void __fastcall SetWebParent(Classes::TComponent* Value);
-	virtual void __fastcall ReadState(Classes::TReader* Reader);
-	DYNAMIC void __fastcall SetParentComponent(Classes::TComponent* AParent);
 	_di_IHTMLForm __fastcall GetHTMLForm();
 	AnsiString __fastcall GetXmlDisplayName();
 	AnsiString __fastcall GetXmlRowSetName();
@@ -1056,40 +999,26 @@ protected:
 	virtual AnsiString __fastcall FormatCaption();
 	virtual Webcomp::TLayoutAttributes* __fastcall GetLayoutAttributes(void);
 	__property Webcomp::TLayoutAttributes* LayoutAttributes = {read=FLayoutAttributes};
-	__property TCaptionPosition CaptionPosition = {read=FCaptionPosition, write=FCaptionPosition, default=0
-		};
+	__property TCaptionPosition CaptionPosition = {read=FCaptionPosition, write=FCaptionPosition, default=0};
 	
 public:
 	__fastcall virtual TWebDataDisplay(Classes::TComponent* AOwner);
 	__fastcall virtual ~TWebDataDisplay(void);
-	#pragma option push -w-inl
-	/* virtual class method */ virtual bool __fastcall IsColumn() { return IsColumn(__classid(TWebDataDisplay)
-		); }
-	#pragma option pop
-	/*         class method */ static bool __fastcall IsColumn(TMetaClass* vmt);
-	#pragma option push -w-inl
-	/* virtual class method */ virtual bool __fastcall IsQueryField() { return IsQueryField(__classid(TWebDataDisplay)
-		); }
-	#pragma option pop
-	/*         class method */ static bool __fastcall IsQueryField(TMetaClass* vmt);
-	DYNAMIC Classes::TComponent* __fastcall GetParentComponent(void);
-	DYNAMIC bool __fastcall HasParent(void);
-	__property AnsiString Caption = {read=GetCaption, write=FCaption};
+	/* virtual class method */ virtual bool __fastcall IsColumn(TMetaClass* vmt);
+	/* virtual class method */ virtual bool __fastcall IsQueryField(TMetaClass* vmt);
+	__property AnsiString Caption = {read=GetCaption, write=SetCaption, stored=IsCaptionStored};
 	__property int TabIndex = {read=FTabIndex, write=FTabIndex, default=-1};
 	__property AnsiString Custom = {read=FCustom, write=FCustom};
 	__property AnsiString Style = {read=FStyle, write=FStyle};
 	__property AnsiString StyleRule = {read=FStyleRule, write=FStyleRule};
-	__property TCaptionAttributes* CaptionAttributes = {read=FCaptionAttributes, write=SetCaptionAttributes
-		};
+	__property TCaptionAttributes* CaptionAttributes = {read=FCaptionAttributes, write=SetCaptionAttributes};
 private:
-	void *__IWebComponent;	/* Webcomp::IWebComponent */
 	void *__IWebContent;	/* Webcomp::IWebContent */
 	void *__IHTMLField;	/* Miditems::IHTMLField */
 	
 public:
 	operator IHTMLField*(void) { return (IHTMLField*)&__IHTMLField; }
 	operator IWebContent*(void) { return (IWebContent*)&__IWebContent; }
-	operator IWebComponent*(void) { return (IWebComponent*)&__IWebComponent; }
 	
 };
 
@@ -1108,8 +1037,7 @@ private:
 protected:
 	void __fastcall RestoreDefaults(void);
 	virtual void __fastcall ImplRestoreDefaults(void);
-	bool __fastcall ValidateField(_di_IMidasWebDataSet DataSet, Webcomp::_di_IAddScriptElements AddIntf
-		);
+	bool __fastcall ValidateField(_di_IInetXWebDataSet DataSet, Midcomp::_di_IAddScriptElements AddIntf);
 	void __fastcall SetFieldName(AnsiString Value);
 	AnsiString __fastcall GetFieldName();
 	virtual AnsiString __fastcall ImplGetFieldName();
@@ -1117,7 +1045,7 @@ protected:
 	virtual AnsiString __fastcall ImplGetRowSetFieldAttributes(const AnsiString FieldVarName);
 	virtual AnsiString __fastcall ImplGetHTMLControlName();
 	virtual void __fastcall RestoreFieldDefaults(Db::TField* AField);
-	virtual Db::TField* __fastcall FindAssociatedField(_di_IMidasWebDataSet DataSet);
+	virtual Db::TField* __fastcall FindAssociatedField(_di_IInetXWebDataSet DataSet);
 	virtual AnsiString __fastcall GetParamName();
 	void __fastcall SetParamName(AnsiString Value);
 	virtual AnsiString __fastcall GetCaption();
@@ -1129,8 +1057,7 @@ public:
 	__property AnsiString FieldName = {read=GetFieldName, write=SetFieldName};
 public:
 	#pragma option push -w-inl
-	/* TWebDataDisplay.Create */ inline __fastcall virtual TWebDataInput(Classes::TComponent* AOwner) : 
-		TWebDataDisplay(AOwner) { }
+	/* TWebDataDisplay.Create */ inline __fastcall virtual TWebDataInput(Classes::TComponent* AOwner) : TWebDataDisplay(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWebDataDisplay.Destroy */ inline __fastcall virtual ~TWebDataInput(void) { }
@@ -1168,7 +1095,7 @@ public:
 	__property int DisplayWidth = {read=FDisplayWidth, write=FDisplayWidth, default=1};
 	__property Caption ;
 	__property CaptionAttributes ;
-	__property CaptionPosition ;
+	__property CaptionPosition  = {default=0};
 public:
 	#pragma option push -w-inl
 	/* TWebDataDisplay.Destroy */ inline __fastcall virtual ~TWebStatus(void) { }
@@ -1193,14 +1120,13 @@ class PASCALIMPLEMENTATION TFieldStatus : public TWebStatus
 __published:
 	__property Caption ;
 	__property CaptionAttributes ;
-	__property CaptionPosition ;
+	__property CaptionPosition  = {default=0};
 	__property Style ;
 	__property Custom ;
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TWebStatus.Create */ inline __fastcall virtual TFieldStatus(Classes::TComponent* AOwner) : TWebStatus(
-		AOwner) { }
+	/* TWebStatus.Create */ inline __fastcall virtual TFieldStatus(Classes::TComponent* AOwner) : TWebStatus(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -1217,11 +1143,7 @@ class PASCALIMPLEMENTATION TStatusColumn : public TWebStatus
 	typedef TWebStatus inherited;
 	
 public:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual bool __fastcall IsColumn() { return IsColumn(__classid(TStatusColumn)
-		); }
-	#pragma option pop
-	/*         class method */ static bool __fastcall IsColumn(TMetaClass* vmt);
+	/* virtual class method */ virtual bool __fastcall IsColumn(TMetaClass* vmt);
 	
 __published:
 	__property Caption ;
@@ -1231,8 +1153,7 @@ __published:
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TWebStatus.Create */ inline __fastcall virtual TStatusColumn(Classes::TComponent* AOwner) : TWebStatus(
-		AOwner) { }
+	/* TWebStatus.Create */ inline __fastcall virtual TStatusColumn(Classes::TComponent* AOwner) : TWebStatus(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -1280,19 +1201,18 @@ class PASCALIMPLEMENTATION TFieldText : public TWebTextInput
 	
 __published:
 	__property DisplayWidth ;
-	__property ReadOnly ;
+	__property ReadOnly  = {default=0};
 	__property Caption ;
 	__property CaptionAttributes ;
-	__property CaptionPosition ;
+	__property CaptionPosition  = {default=0};
 	__property FieldName ;
-	__property TabIndex ;
+	__property TabIndex  = {default=-1};
 	__property Style ;
 	__property Custom ;
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TWebTextInput.Create */ inline __fastcall virtual TFieldText(Classes::TComponent* AOwner) : TWebTextInput(
-		AOwner) { }
+	/* TWebTextInput.Create */ inline __fastcall virtual TFieldText(Classes::TComponent* AOwner) : TWebTextInput(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -1309,26 +1229,21 @@ class PASCALIMPLEMENTATION TTextColumn : public TWebTextInput
 	typedef TWebTextInput inherited;
 	
 public:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual bool __fastcall IsColumn() { return IsColumn(__classid(TTextColumn)
-		); }
-	#pragma option pop
-	/*         class method */ static bool __fastcall IsColumn(TMetaClass* vmt);
+	/* virtual class method */ virtual bool __fastcall IsColumn(TMetaClass* vmt);
 	
 __published:
 	__property DisplayWidth ;
-	__property ReadOnly ;
+	__property ReadOnly  = {default=0};
 	__property Caption ;
 	__property CaptionAttributes ;
 	__property FieldName ;
-	__property TabIndex ;
+	__property TabIndex  = {default=-1};
 	__property Style ;
 	__property Custom ;
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TWebTextInput.Create */ inline __fastcall virtual TTextColumn(Classes::TComponent* AOwner) : TWebTextInput(
-		AOwner) { }
+	/* TWebTextInput.Create */ inline __fastcall virtual TTextColumn(Classes::TComponent* AOwner) : TWebTextInput(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -1354,22 +1269,18 @@ protected:
 	void __fastcall SetText(const AnsiString Value);
 	
 public:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual bool __fastcall IsQueryField() { return IsQueryField(__classid(TQueryText)
-		); }
-	#pragma option pop
-	/*         class method */ static bool __fastcall IsQueryField(TMetaClass* vmt);
+	/* virtual class method */ virtual bool __fastcall IsQueryField(TMetaClass* vmt);
 	__fastcall virtual TQueryText(Classes::TComponent* AOwner);
 	
 __published:
 	__property ParamName ;
 	__property DisplayWidth ;
-	__property ReadOnly ;
+	__property ReadOnly  = {default=0};
 	__property Caption ;
 	__property CaptionAttributes ;
-	__property CaptionPosition ;
+	__property CaptionPosition  = {default=0};
 	__property FieldName ;
-	__property TabIndex ;
+	__property TabIndex  = {default=-1};
 	__property Style ;
 	__property Custom ;
 	__property StyleRule ;
@@ -1431,22 +1342,21 @@ class PASCALIMPLEMENTATION TFieldTextArea : public TWebTextAreaInput
 	typedef TWebTextAreaInput inherited;
 	
 __published:
-	__property ReadOnly ;
+	__property ReadOnly  = {default=0};
 	__property Caption ;
 	__property CaptionAttributes ;
-	__property CaptionPosition ;
+	__property CaptionPosition  = {default=0};
 	__property FieldName ;
 	__property Wrap ;
 	__property DisplayWidth ;
 	__property DisplayRows ;
-	__property TabIndex ;
+	__property TabIndex  = {default=-1};
 	__property Style ;
 	__property Custom ;
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TWebTextAreaInput.Create */ inline __fastcall virtual TFieldTextArea(Classes::TComponent* AOwner
-		) : TWebTextAreaInput(AOwner) { }
+	/* TWebTextAreaInput.Create */ inline __fastcall virtual TFieldTextArea(Classes::TComponent* AOwner) : TWebTextAreaInput(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -1473,25 +1383,21 @@ protected:
 	AnsiString __fastcall GetText();
 	
 public:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual bool __fastcall IsQueryField() { return IsQueryField(__classid(TQueryTextArea)
-		); }
-	#pragma option pop
-	/*         class method */ static bool __fastcall IsQueryField(TMetaClass* vmt);
+	/* virtual class method */ virtual bool __fastcall IsQueryField(TMetaClass* vmt);
 	__fastcall virtual TQueryTextArea(Classes::TComponent* AOwner);
 	__fastcall virtual ~TQueryTextArea(void);
 	
 __published:
 	__property ParamName ;
-	__property ReadOnly ;
+	__property ReadOnly  = {default=0};
 	__property Caption ;
 	__property CaptionAttributes ;
-	__property CaptionPosition ;
+	__property CaptionPosition  = {default=0};
 	__property FieldName ;
 	__property Wrap ;
 	__property DisplayWidth ;
 	__property DisplayRows ;
-	__property TabIndex ;
+	__property TabIndex  = {default=-1};
 	__property Style ;
 	__property Custom ;
 	__property StyleRule ;
@@ -1511,28 +1417,23 @@ class PASCALIMPLEMENTATION TTextAreaColumn : public TWebTextAreaInput
 	typedef TWebTextAreaInput inherited;
 	
 public:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual bool __fastcall IsColumn() { return IsColumn(__classid(TTextAreaColumn)
-		); }
-	#pragma option pop
-	/*         class method */ static bool __fastcall IsColumn(TMetaClass* vmt);
+	/* virtual class method */ virtual bool __fastcall IsColumn(TMetaClass* vmt);
 	
 __published:
-	__property ReadOnly ;
+	__property ReadOnly  = {default=0};
 	__property Caption ;
 	__property CaptionAttributes ;
 	__property FieldName ;
 	__property Wrap ;
 	__property DisplayWidth ;
 	__property DisplayRows ;
-	__property TabIndex ;
+	__property TabIndex  = {default=-1};
 	__property Style ;
 	__property Custom ;
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TWebTextAreaInput.Create */ inline __fastcall virtual TTextAreaColumn(Classes::TComponent* AOwner
-		) : TWebTextAreaInput(AOwner) { }
+	/* TWebTextAreaInput.Create */ inline __fastcall virtual TTextAreaColumn(Classes::TComponent* AOwner) : TWebTextAreaInput(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -1556,17 +1457,15 @@ private:
 	AnsiString FItemsField;
 	
 protected:
-	void __fastcall AddElements(Webcomp::_di_IAddScriptElements AddIntf);
-	virtual void __fastcall ImplAddElements(Webcomp::_di_IAddScriptElements AddIntf);
+	void __fastcall AddElements(Midcomp::_di_IAddScriptElements AddIntf);
+	virtual void __fastcall ImplAddElements(Midcomp::_di_IAddScriptElements AddIntf);
 	System::TObject* __fastcall GetSubComponents(void);
 	void __fastcall SetItems(const Classes::TStrings* Value);
 	void __fastcall SetValues(const Classes::TStrings* Value);
 	void __fastcall SetDataSet(const Db::TDataSet* Value);
-	virtual AnsiString __fastcall FormatInputs(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings
-		, Webcomp::TWebContentOptions* Options) = 0 ;
+	virtual AnsiString __fastcall FormatInputs(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings, Webcomp::TWebContentOptions* Options) = 0 ;
 	virtual AnsiString __fastcall ControlContent(Webcomp::TWebContentOptions* Options);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TWebListInput(Classes::TComponent* AOwner);
@@ -1577,7 +1476,7 @@ public:
 	__property AnsiString ValuesField = {read=FValuesField, write=FValuesField};
 	__property AnsiString ItemsField = {read=FItemsField, write=FItemsField};
 private:
-	void *__IScriptComponent;	/* Webcomp::IScriptComponent */
+	void *__IScriptComponent;	/* Midcomp::IScriptComponent */
 	
 public:
 	operator IScriptComponent*(void) { return (IScriptComponent*)&__IScriptComponent; }
@@ -1597,11 +1496,9 @@ private:
 	
 protected:
 	virtual void __fastcall AddAttributes(AnsiString &Attrs);
-	virtual AnsiString __fastcall FormatInputs(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings
-		, Webcomp::TWebContentOptions* Options);
+	virtual AnsiString __fastcall FormatInputs(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings, Webcomp::TWebContentOptions* Options);
 	virtual void __fastcall RestoreFieldDefaults(Db::TField* AField);
-	virtual int __fastcall GetCheckIndex(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings
-		);
+	virtual int __fastcall GetCheckIndex(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings);
 	virtual AnsiString __fastcall EventContent(Webcomp::TWebContentOptions* Options);
 	virtual AnsiString __fastcall ImplGetRowSetFieldAttributes(const AnsiString FieldVarName);
 	
@@ -1627,11 +1524,11 @@ __published:
 	__property ReadOnly ;
 	__property Caption ;
 	__property CaptionAttributes ;
-	__property CaptionPosition ;
+	__property CaptionPosition  = {default=0};
 	__property FieldName ;
 	__property DisplayWidth ;
 	__property DisplayColumns ;
-	__property TabIndex ;
+	__property TabIndex  = {default=-1};
 	__property Values ;
 	__property Items ;
 	__property DataSet ;
@@ -1642,8 +1539,7 @@ __published:
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TWebRadioGroupInput.Create */ inline __fastcall virtual TFieldRadioGroup(Classes::TComponent* AOwner
-		) : TWebRadioGroupInput(AOwner) { }
+	/* TWebRadioGroupInput.Create */ inline __fastcall virtual TFieldRadioGroup(Classes::TComponent* AOwner) : TWebRadioGroupInput(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -1665,27 +1561,22 @@ private:
 protected:
 	AnsiString __fastcall GetText();
 	void __fastcall SetText(const AnsiString Value);
-	virtual int __fastcall GetCheckIndex(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings
-		);
+	virtual int __fastcall GetCheckIndex(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings);
 	virtual void __fastcall AddAttributes(AnsiString &Attrs);
 	
 public:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual bool __fastcall IsQueryField() { return IsQueryField(__classid(TQueryRadioGroup)
-		); }
-	#pragma option pop
-	/*         class method */ static bool __fastcall IsQueryField(TMetaClass* vmt);
+	/* virtual class method */ virtual bool __fastcall IsQueryField(TMetaClass* vmt);
 	
 __published:
 	__property ParamName ;
 	__property ReadOnly ;
 	__property Caption ;
 	__property CaptionAttributes ;
-	__property CaptionPosition ;
+	__property CaptionPosition  = {default=0};
 	__property FieldName ;
 	__property DisplayWidth ;
 	__property DisplayColumns ;
-	__property TabIndex ;
+	__property TabIndex  = {default=-1};
 	__property Values ;
 	__property Items ;
 	__property DataSet ;
@@ -1697,8 +1588,7 @@ __published:
 	__property AnsiString Text = {read=GetText, write=SetText};
 public:
 	#pragma option push -w-inl
-	/* TWebRadioGroupInput.Create */ inline __fastcall virtual TQueryRadioGroup(Classes::TComponent* AOwner
-		) : TWebRadioGroupInput(AOwner) { }
+	/* TWebRadioGroupInput.Create */ inline __fastcall virtual TQueryRadioGroup(Classes::TComponent* AOwner) : TWebRadioGroupInput(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -1725,10 +1615,8 @@ private:
 	
 protected:
 	virtual void __fastcall AddAttributes(AnsiString &Attrs);
-	virtual int __fastcall GetSelectIndex(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings
-		);
-	virtual AnsiString __fastcall FormatInputs(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings
-		, Webcomp::TWebContentOptions* Options);
+	virtual int __fastcall GetSelectIndex(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings);
+	virtual AnsiString __fastcall FormatInputs(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings, Webcomp::TWebContentOptions* Options);
 	virtual AnsiString __fastcall EventContent(Webcomp::TWebContentOptions* Options);
 	
 public:
@@ -1751,9 +1639,9 @@ __published:
 	__property DisplayRows ;
 	__property Caption ;
 	__property CaptionAttributes ;
-	__property CaptionPosition ;
+	__property CaptionPosition  = {default=0};
 	__property FieldName ;
-	__property TabIndex ;
+	__property TabIndex  = {default=-1};
 	__property Values ;
 	__property Items ;
 	__property DataSet ;
@@ -1764,8 +1652,7 @@ __published:
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TWebSelectOptionsInput.Create */ inline __fastcall virtual TFieldSelectOptions(Classes::TComponent* 
-		AOwner) : TWebSelectOptionsInput(AOwner) { }
+	/* TWebSelectOptionsInput.Create */ inline __fastcall virtual TFieldSelectOptions(Classes::TComponent* AOwner) : TWebSelectOptionsInput(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -1787,24 +1674,19 @@ private:
 protected:
 	AnsiString __fastcall GetText();
 	void __fastcall SetText(const AnsiString Value);
-	virtual int __fastcall GetSelectIndex(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings
-		);
+	virtual int __fastcall GetSelectIndex(Classes::TStrings* ItemsStrings, Classes::TStrings* ValuesStrings);
 	
 public:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual bool __fastcall IsQueryField() { return IsQueryField(__classid(TQuerySelectOptions)
-		); }
-	#pragma option pop
-	/*         class method */ static bool __fastcall IsQueryField(TMetaClass* vmt);
+	/* virtual class method */ virtual bool __fastcall IsQueryField(TMetaClass* vmt);
 	
 __published:
 	__property ParamName ;
 	__property DisplayRows ;
 	__property Caption ;
 	__property CaptionAttributes ;
-	__property CaptionPosition ;
+	__property CaptionPosition  = {default=0};
 	__property FieldName ;
-	__property TabIndex ;
+	__property TabIndex  = {default=-1};
 	__property Values ;
 	__property Items ;
 	__property DataSet ;
@@ -1816,8 +1698,7 @@ __published:
 	__property AnsiString Text = {read=GetText, write=SetText};
 public:
 	#pragma option push -w-inl
-	/* TWebSelectOptionsInput.Create */ inline __fastcall virtual TQuerySelectOptions(Classes::TComponent* 
-		AOwner) : TWebSelectOptionsInput(AOwner) { }
+	/* TWebSelectOptionsInput.Create */ inline __fastcall virtual TQuerySelectOptions(Classes::TComponent* AOwner) : TWebSelectOptionsInput(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -1840,18 +1721,14 @@ class PASCALIMPLEMENTATION TSelectOptionsColumn : public TWebSelectOptionsInput
 	typedef TWebSelectOptionsInput inherited;
 	
 public:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual bool __fastcall IsColumn() { return IsColumn(__classid(TSelectOptionsColumn)
-		); }
-	#pragma option pop
-	/*         class method */ static bool __fastcall IsColumn(TMetaClass* vmt);
+	/* virtual class method */ virtual bool __fastcall IsColumn(TMetaClass* vmt);
 	
 __published:
 	__property DisplayRows ;
 	__property Caption ;
 	__property CaptionAttributes ;
 	__property FieldName ;
-	__property TabIndex ;
+	__property TabIndex  = {default=-1};
 	__property Values ;
 	__property Items ;
 	__property DataSet ;
@@ -1862,8 +1739,7 @@ __published:
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TWebSelectOptionsInput.Create */ inline __fastcall virtual TSelectOptionsColumn(Classes::TComponent* 
-		AOwner) : TWebSelectOptionsInput(AOwner) { }
+	/* TWebSelectOptionsInput.Create */ inline __fastcall virtual TSelectOptionsColumn(Classes::TComponent* AOwner) : TWebSelectOptionsInput(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -1875,50 +1751,36 @@ public:
 
 
 class DELPHICLASS TWebButton;
-class PASCALIMPLEMENTATION TWebButton : public Classes::TComponent 
+class PASCALIMPLEMENTATION TWebButton : public Webcomp::TWebContainedComponent 
 {
-	typedef Classes::TComponent inherited;
+	typedef Webcomp::TWebContainedComponent inherited;
 	
 private:
-	Classes::TComponent* FWebParent;
-	Webcomp::TWebComponentList* FWebButtonsList;
-	bool FDefaultButton;
 	AnsiString FStyle;
 	AnsiString FCustom;
 	AnsiString FCaption;
 	AnsiString FStyleRule;
-	void __fastcall SetWebParent(const Classes::TComponent* Value);
+	bool __fastcall IsCaptionStored(void);
 	
 protected:
-	int __fastcall GetIndex(void);
-	void __fastcall SetIndex(int Value);
-	void __fastcall SetContainer(System::TObject* Container);
-	System::TObject* __fastcall GetContainer(void);
-	void __fastcall SetComponentList(System::TObject* List);
 	AnsiString __fastcall Content(Webcomp::TWebContentOptions* Options, System::TObject* Layout);
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* Layout
-		) = 0 ;
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* Layout) = 0 ;
 	virtual AnsiString __fastcall GetCaption();
+	virtual void __fastcall SetCaption(const AnsiString AValue);
 	virtual Webcomp::TLayoutAttributes* __fastcall GetLayoutAttributes(void);
-	virtual void __fastcall ReadState(Classes::TReader* Reader);
-	DYNAMIC void __fastcall SetParentComponent(Classes::TComponent* AParent);
 	
 public:
 	__fastcall virtual TWebButton(Classes::TComponent* AOwner);
 	__fastcall virtual ~TWebButton(void);
-	DYNAMIC Classes::TComponent* __fastcall GetParentComponent(void);
-	DYNAMIC bool __fastcall HasParent(void);
-	__property AnsiString Caption = {read=GetCaption, write=FCaption};
+	__property AnsiString Caption = {read=GetCaption, write=SetCaption, stored=IsCaptionStored};
 	__property AnsiString Style = {read=FStyle, write=FStyle};
 	__property AnsiString Custom = {read=FCustom, write=FCustom};
 	__property AnsiString StyleRule = {read=FStyleRule, write=FStyleRule};
 private:
-	void *__IWebComponent;	/* Webcomp::IWebComponent */
 	void *__IWebContent;	/* Webcomp::IWebContent */
 	
 public:
 	operator IWebContent*(void) { return (IWebContent*)&__IWebContent; }
-	operator IWebComponent*(void) { return (IWebComponent*)&__IWebComponent; }
 	
 };
 
@@ -1939,17 +1801,14 @@ protected:
 	void __fastcall SetDisplayComponent(const Classes::TComponent* Value);
 	void __fastcall SetDisplayComponentParent(const bool Value);
 	AnsiString __fastcall GetXmlDisplayName();
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	__property TXMLDisplayParent* XMLDisplay = {read=FXMLDisplay};
 	
 public:
 	__fastcall virtual TXMLDisplayReferenceButton(Classes::TComponent* AOwner);
 	__fastcall virtual ~TXMLDisplayReferenceButton(void);
-	__property Classes::TComponent* XMLComponent = {read=GetDisplayComponent, write=SetDisplayComponent
-		};
-	__property bool XMLUseParent = {read=GetDisplayComponentParent, write=SetDisplayComponentParent, default=1
-		};
+	__property Classes::TComponent* XMLComponent = {read=GetDisplayComponent, write=SetDisplayComponent};
+	__property bool XMLUseParent = {read=GetDisplayComponentParent, write=SetDisplayComponentParent, default=1};
 };
 
 
@@ -1961,32 +1820,30 @@ class PASCALIMPLEMENTATION TDataSetButton : public TXMLDisplayReferenceButton
 protected:
 	AnsiString DefaultCaption;
 	AnsiString XMLMethodName;
-	void __fastcall AddElements(Webcomp::_di_IAddScriptElements AddIntf);
+	void __fastcall AddElements(Midcomp::_di_IAddScriptElements AddIntf);
 	System::TObject* __fastcall GetSubComponents(void);
-	virtual void __fastcall ImplAddElements(Webcomp::_di_IAddScriptElements AddIntf);
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout
-		);
+	virtual void __fastcall ImplAddElements(Midcomp::_di_IAddScriptElements AddIntf);
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
 	virtual AnsiString __fastcall GetCaption();
 	virtual AnsiString __fastcall GetMethodName();
 	
 __published:
 	__property XMLComponent ;
-	__property XMLUseParent ;
+	__property XMLUseParent  = {default=1};
 	__property Style ;
 	__property Custom ;
 	__property Caption ;
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TXMLDisplayReferenceButton.Create */ inline __fastcall virtual TDataSetButton(Classes::TComponent* 
-		AOwner) : TXMLDisplayReferenceButton(AOwner) { }
+	/* TXMLDisplayReferenceButton.Create */ inline __fastcall virtual TDataSetButton(Classes::TComponent* AOwner) : TXMLDisplayReferenceButton(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TXMLDisplayReferenceButton.Destroy */ inline __fastcall virtual ~TDataSetButton(void) { }
 	#pragma option pop
 	
 private:
-	void *__IScriptComponent;	/* Webcomp::IScriptComponent */
+	void *__IScriptComponent;	/* Midcomp::IScriptComponent */
 	
 public:
 	operator IScriptComponent*(void) { return (IScriptComponent*)&__IScriptComponent; }
@@ -2159,8 +2016,7 @@ protected:
 	bool __fastcall GetXMLUseParent(void);
 	void __fastcall SetXMLUseParent(const bool Value);
 	virtual AnsiString __fastcall GetCaption();
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	__property TXMLDataParent* XMLData = {read=FXMLData};
 	__property AnsiString DefaultCaption = {read=FDefaultCaption, write=FDefaultCaption};
 	
@@ -2178,10 +2034,9 @@ class PASCALIMPLEMENTATION TApplyUpdatesButton : public TXMLButton
 	typedef TXMLButton inherited;
 	
 protected:
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout
-		);
-	void __fastcall AddElements(Webcomp::_di_IAddScriptElements AddIntf);
-	virtual void __fastcall ImplAddElements(Webcomp::_di_IAddScriptElements AddIntf);
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
+	void __fastcall AddElements(Midcomp::_di_IAddScriptElements AddIntf);
+	virtual void __fastcall ImplAddElements(Midcomp::_di_IAddScriptElements AddIntf);
 	System::TObject* __fastcall GetSubComponents(void);
 	
 public:
@@ -2200,7 +2055,7 @@ public:
 	#pragma option pop
 	
 private:
-	void *__IScriptComponent;	/* Webcomp::IScriptComponent */
+	void *__IScriptComponent;	/* Midcomp::IScriptComponent */
 	
 public:
 	operator IScriptComponent*(void) { return (IScriptComponent*)&__IScriptComponent; }
@@ -2208,32 +2063,50 @@ public:
 };
 
 
-class DELPHICLASS TXMLDisplayReferenceGroup;
-class PASCALIMPLEMENTATION TXMLDisplayReferenceGroup : public TWebControlGroup 
+class DELPHICLASS TWebDisplayReferenceGroup;
+class PASCALIMPLEMENTATION TWebDisplayReferenceGroup : public TWebControlGroup 
 {
 	typedef TWebControlGroup inherited;
 	
 private:
-	TXMLDisplay* FXMLDisplay;
+	TWebDisplay* FWebDisplay;
 	
 protected:
-	Classes::TComponent* __fastcall GetXMLDisplayComponent(void);
-	virtual void __fastcall ImplAddElements(Webcomp::_di_IAddScriptElements AddIntf);
-	void __fastcall SetXMLDisplayComponent(const Classes::TComponent* Value);
-	__property TXMLDisplay* XMLDisplay = {read=FXMLDisplay};
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	Classes::TComponent* __fastcall GetWebDisplayComponent(void);
+	virtual void __fastcall SetWebDisplayComponent(const Classes::TComponent* Value);
+	__property TWebDisplay* WebDisplay = {read=FWebDisplay};
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
+	__property Classes::TComponent* WebDisplayComponent = {read=GetWebDisplayComponent, write=SetWebDisplayComponent};
 	
 public:
-	__fastcall virtual TXMLDisplayReferenceGroup(Classes::TComponent* AOwner);
-	__fastcall virtual ~TXMLDisplayReferenceGroup(void);
-	__property Classes::TComponent* XMLComponent = {read=GetXMLDisplayComponent, write=SetXMLDisplayComponent
-		};
+	__fastcall virtual TWebDisplayReferenceGroup(Classes::TComponent* AOwner);
+	__fastcall virtual ~TWebDisplayReferenceGroup(void);
 private:
-	void *__IXMLDisplayReference;	/* Miditems::IXMLDisplayReference */
+	void *__IWebDisplayReference;	/* Miditems::IWebDisplayReference */
 	
 public:
-	operator IXMLDisplayReference*(void) { return (IXMLDisplayReference*)&__IXMLDisplayReference; }
+	operator IWebDisplayReference*(void) { return (IWebDisplayReference*)&__IWebDisplayReference; }
+	
+};
+
+
+class DELPHICLASS TXMLDisplayReferenceGroup;
+class PASCALIMPLEMENTATION TXMLDisplayReferenceGroup : public TWebDisplayReferenceGroup 
+{
+	typedef TWebDisplayReferenceGroup inherited;
+	
+protected:
+	virtual void __fastcall ImplAddElements(Midcomp::_di_IAddScriptElements AddIntf);
+	
+public:
+	__property Classes::TComponent* XMLComponent = {read=GetWebDisplayComponent, write=SetWebDisplayComponent};
+public:
+	#pragma option push -w-inl
+	/* TWebDisplayReferenceGroup.Create */ inline __fastcall virtual TXMLDisplayReferenceGroup(Classes::TComponent* AOwner) : TWebDisplayReferenceGroup(AOwner) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TWebDisplayReferenceGroup.Destroy */ inline __fastcall virtual ~TXMLDisplayReferenceGroup(void) { }
+	#pragma option pop
 	
 };
 
@@ -2251,8 +2124,7 @@ private:
 protected:
 	virtual System::TObject* __fastcall ImplGetSubComponents(void);
 	virtual bool __fastcall ImplCanAddClass(Classes::TComponent* AParent, TMetaClass* AClass);
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout
-		);
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
 	Webcomp::TWebComponentList* __fastcall VisibleButtons(void);
 	virtual void __fastcall GetDefaultButtons(void);
 	
@@ -2262,11 +2134,10 @@ public:
 	__property AnsiString StyleRule = {read=FStyleRule, write=FStyleRule};
 public:
 	#pragma option push -w-inl
-	/* TXMLDisplayReferenceGroup.Create */ inline __fastcall virtual TCustomDataNavigator(Classes::TComponent* 
-		AOwner) : TXMLDisplayReferenceGroup(AOwner) { }
+	/* TWebDisplayReferenceGroup.Create */ inline __fastcall virtual TCustomDataNavigator(Classes::TComponent* AOwner) : TXMLDisplayReferenceGroup(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TXMLDisplayReferenceGroup.Destroy */ inline __fastcall virtual ~TCustomDataNavigator(void) { }
+	/* TWebDisplayReferenceGroup.Destroy */ inline __fastcall virtual ~TCustomDataNavigator(void) { }
 	#pragma option pop
 	
 };
@@ -2284,11 +2155,10 @@ __published:
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TXMLDisplayReferenceGroup.Create */ inline __fastcall virtual TDataNavigator(Classes::TComponent* 
-		AOwner) : TCustomDataNavigator(AOwner) { }
+	/* TWebDisplayReferenceGroup.Create */ inline __fastcall virtual TDataNavigator(Classes::TComponent* AOwner) : TCustomDataNavigator(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TXMLDisplayReferenceGroup.Destroy */ inline __fastcall virtual ~TDataNavigator(void) { }
+	/* TWebDisplayReferenceGroup.Destroy */ inline __fastcall virtual ~TDataNavigator(void) { }
 	#pragma option pop
 	
 };
@@ -2315,11 +2185,9 @@ protected:
 	virtual AnsiString __fastcall GetInputType();
 	virtual AnsiString __fastcall GetHTMLControlName();
 	_di_IHTMLForm __fastcall GetHTMLForm();
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout
-		);
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
 	virtual AnsiString __fastcall EventContent(Webcomp::TWebContentOptions* Options);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TQueryButton(Classes::TComponent* AOwner);
@@ -2387,9 +2255,8 @@ private:
 	
 protected:
 	virtual bool __fastcall ImplCanAddClass(Classes::TComponent* AParent, TMetaClass* AClass);
-	virtual void __fastcall ImplAddElements(Webcomp::_di_IAddScriptElements AddIntf);
-	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout
-		);
+	virtual void __fastcall ImplAddElements(Midcomp::_di_IAddScriptElements AddIntf);
+	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
 	Webcomp::TWebComponentList* __fastcall VisibleButtons(void);
 	virtual void __fastcall GetDefaultButtons(void);
 	
@@ -2399,8 +2266,7 @@ public:
 	__property AnsiString StyleRule = {read=FStyleRule, write=FStyleRule};
 public:
 	#pragma option push -w-inl
-	/* TWebControlGroup.Create */ inline __fastcall virtual TCustomQueryButtons(Classes::TComponent* AOwner
-		) : TWebControlGroup(AOwner) { }
+	/* TWebControlGroup.Create */ inline __fastcall virtual TCustomQueryButtons(Classes::TComponent* AOwner) : TWebControlGroup(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWebControlGroup.Destroy */ inline __fastcall virtual ~TCustomQueryButtons(void) { }
@@ -2420,8 +2286,7 @@ __published:
 	__property StyleRule ;
 public:
 	#pragma option push -w-inl
-	/* TWebControlGroup.Create */ inline __fastcall virtual TQueryButtons(Classes::TComponent* AOwner) : 
-		TCustomQueryButtons(AOwner) { }
+	/* TWebControlGroup.Create */ inline __fastcall virtual TQueryButtons(Classes::TComponent* AOwner) : TCustomQueryButtons(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWebControlGroup.Destroy */ inline __fastcall virtual ~TQueryButtons(void) { }
@@ -2446,18 +2311,15 @@ private:
 	AnsiString FTableHeader;
 	int FColumnCount;
 	int FColumnIndex;
+	bool FSpanAll;
 	bool FBreakButtons;
 	int FButtonIndex;
 	
 protected:
-	virtual AnsiString __fastcall ImplLayoutButton(const AnsiString HTMLButton, Webcomp::TLayoutAttributes* 
-		Attributes);
-	virtual AnsiString __fastcall ImplLayoutField(const AnsiString HTMLField, Webcomp::TLayoutAttributes* 
-		Attributes);
-	virtual AnsiString __fastcall ImplLayoutLabelAndField(const AnsiString HTMLLabel, const AnsiString 
-		HTMLField, Webcomp::TLayoutAttributes* Attributes);
-	virtual AnsiString __fastcall ImplLayoutTable(const AnsiString HTMLTable, Webcomp::TLayoutAttributes* 
-		Attributes);
+	virtual AnsiString __fastcall ImplLayoutButton(const AnsiString HTMLButton, Webcomp::TLayoutAttributes* Attributes);
+	virtual AnsiString __fastcall ImplLayoutField(const AnsiString HTMLField, Webcomp::TLayoutAttributes* Attributes);
+	virtual AnsiString __fastcall ImplLayoutLabelAndField(const AnsiString HTMLLabel, const AnsiString HTMLField, Webcomp::TLayoutAttributes* Attributes);
+	virtual AnsiString __fastcall ImplLayoutTable(const AnsiString HTMLTable, Webcomp::TLayoutAttributes* Attributes);
 	AnsiString __fastcall StartFields(int ColCount);
 	AnsiString __fastcall EndButtons();
 	AnsiString __fastcall StartButtons();
@@ -2482,42 +2344,64 @@ public:
 };
 
 
-typedef AnsiString MidItems__86[3];
+typedef AnsiString MidItems__07[3];
 
-typedef AnsiString MidItems__96[2];
+typedef AnsiString MidItems__17[2];
+
+typedef AnsiString MidItems__27[4];
+
+typedef AnsiString MidItems__37[5];
 
 //-- var, const, procedure ---------------------------------------------------
 extern PACKAGE AnsiString TextAreaWrap[3];
 extern PACKAGE AnsiString FormMethodNames[2];
-extern PACKAGE bool __fastcall CanAddClassHelper(Classes::TComponent* AEditor, Classes::TComponent* 
-	AParent, TMetaClass* AClass);
-extern PACKAGE void __fastcall AddIntAttrib(AnsiString &Attribs, const AnsiString Attrib, int Value)
-	;
-extern PACKAGE void __fastcall AddStringAttrib(AnsiString &Attribs, const AnsiString Attrib, const AnsiString 
-	Value);
+extern PACKAGE AnsiString HTMLAlignValues[4];
+extern PACKAGE AnsiString HTMLVAlignValues[5];
+#define sTabIndexAttr "tabindex"
+#define sStyleAttr "style"
+#define sClassAttr "class"
+#define sSizeAttr "size"
+#define sMultipleAttr "multiple"
+#define sBgColorAttr "bgcolor"
+#define sBorderAttr "border"
+#define sCellPaddingAttr "cellpadding"
+#define sCellSpacingAttr "cellspacing"
+#define sNameAttr "name"
+#define sColSpanAttr "colspan"
+#define sEncTypeAttr "enctype"
+#define sMethodAttr "method"
+#define sActionAttr "action"
+#define sColsAttr "cols"
+#define sRowsAttr "rows"
+#define sWrapAttr "wrap"
+#define sValueAttr "value"
+#define sOnClickAttr "onclick"
+#define sTypeAttr "type"
+#define sCheckedAttr "checked"
+#define sReadOnlyAttr "readonly"
+#define sSelectedAttr "selected"
+#define sMaxLengthAttr "maxlength"
+#define sWidthAttr "width"
+#define sAlignAttr "align"
+#define sVAlignAttr "valign"
+#define sImageHeightAttr "imageheight"
+#define sImageWidthAttr "imagewidth"
+extern PACKAGE bool __fastcall CanAddClassHelper(Classes::TComponent* AEditor, Classes::TComponent* AParent, TMetaClass* AClass);
+extern PACKAGE void __fastcall AddIntAttrib(AnsiString &Attribs, const AnsiString Attrib, int Value);
+extern PACKAGE void __fastcall AddStringAttrib(AnsiString &Attribs, const AnsiString Attrib, const AnsiString Value);
 extern PACKAGE void __fastcall AddCustomAttrib(AnsiString &Attribs, AnsiString Value);
-extern PACKAGE void __fastcall AddBoolAttrib(AnsiString &Attribs, const AnsiString Attrib, bool Value
-	);
-extern PACKAGE void __fastcall AddQuotedAttrib(AnsiString &Attribs, const AnsiString Attrib, const AnsiString 
-	Value);
+extern PACKAGE void __fastcall AddBoolAttrib(AnsiString &Attribs, const AnsiString Attrib, bool Value);
+extern PACKAGE void __fastcall AddQuotedAttrib(AnsiString &Attribs, const AnsiString Attrib, const AnsiString Value);
 extern PACKAGE AnsiString __fastcall FormatColumnHeading(TWebDataDisplay* Field);
 extern PACKAGE AnsiString __fastcall FormatColumnData(TWebDataDisplay* Field, AnsiString Content);
-extern PACKAGE void __fastcall CreateDefaultButtonClasses(TMetaClass* const * Classes, const int Classes_Size
-	, Webcomp::TWebComponentList* Container);
-extern PACKAGE Httpapp::TCustomContentProducer* __fastcall FindProducer(Classes::TComponent* Component
-	);
-extern PACKAGE Httpapp::TCustomWebDispatcher* __fastcall FindDispatcher(Classes::TComponent* Component
-	);
-extern PACKAGE void __fastcall DeclareSubmitForm(Classes::TComponent* Component, Xmlbrokr::TXMLBroker* 
-	XMLBroker, Webcomp::_di_IAddScriptElements AddIntf);
-extern PACKAGE bool __fastcall GetItemValuesFromDataSet(Db::TDataSet* DataSet, const AnsiString ItemsField
-	, const AnsiString ValuesField, Classes::TStrings* &ItemsStrings, Classes::TStrings* &ValuesStrings
-	);
+extern PACKAGE void __fastcall CreateDefaultButtonClasses(TMetaClass* * Classes, const int Classes_Size, Webcomp::TWebComponentList* Container);
+extern PACKAGE Httpapp::TCustomContentProducer* __fastcall FindProducer(Classes::TComponent* Component);
+extern PACKAGE Httpapp::_di_IWebDispatcherAccess __fastcall FindDispatcher(Classes::TComponent* Component);
+extern PACKAGE void __fastcall DeclareSubmitForm(Classes::TComponent* Component, Xmlbrokr::TXMLBroker* XMLBroker, Midcomp::_di_IAddScriptElements AddIntf);
+extern PACKAGE bool __fastcall GetItemValuesFromDataSet(Db::TDataSet* DataSet, const AnsiString ItemsField, const AnsiString ValuesField, Classes::TStrings* &ItemsStrings, Classes::TStrings* &ValuesStrings);
 
 }	/* namespace Miditems */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Miditems;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

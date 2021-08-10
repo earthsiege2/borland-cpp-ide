@@ -1,11 +1,10 @@
 /*
 
-    Copyright (c) 1998-1999  Microsoft Corporation
+    Copyright (c) Microsoft Corporation. All rights reserved.
 
 */
 
 #ifndef __MSPBASE_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __MSPBASE_H_
 
 #if _MSC_VER >= 1000
@@ -55,7 +54,6 @@ EXTERN_C const IID LIBID_TAPI3Lib;
 #include "msptrmar.h"
 #include "msptrmvc.h"
 
-#pragma option pop /*P_O_Pop*/
 #endif
 
 // eof

@@ -112,7 +112,7 @@ For convenience, you can add the path to the library path (Tools/Environment
 Options/Library).  CBuilder will automatically update the project include path
 when the a header is found using the library path.  Use the following path:
 
-$(BCB)\examples\midas\iternetexpress\inetxcustom
+$(BCB)\examples\midas\internetexpress\inetxcustom
 
 Web Application Example
 =======================

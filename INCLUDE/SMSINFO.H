@@ -2,7 +2,7 @@
 //
 //  File: SMSINFO.H
 //
-//  Copyright (c) 1995 Microsoft Corp.
+//  Copyright (c) 1995 - 1999 Microsoft Corp.
 //
 //  This is an auxiliary header file for the SMS API.
 //  It contains manifests used in scalars and filters.
@@ -12,7 +12,6 @@
 
 
 #ifndef _SMSINFO_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _SMSINFO_H_
 
 
@@ -308,7 +307,6 @@
 
 
 
-#pragma option pop /*P_O_Pop*/
 #endif  // _SMSINFO_H_
 
 /* EOF: smsinfo.h */

@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -32,6 +32,8 @@ type
     procedure SetEdgeBorders(Value: TEdgeBorders);
     procedure SetEdgeInner(Value: TEdgeStyle);
     procedure SetEdgeOuter(Value: TEdgeStyle);
+  protected
+    procedure NCPaint(DC: HDC); virtual;
     procedure WMNCCalcSize(var Message: TWMNCCalcSize); message WM_NCCALCSIZE;
     procedure WMNCPaint(var Message: TMessage); message WM_NCPAINT;
     procedure CMBorderChanged(var Message: TMessage); message CM_BORDERCHANGED;
@@ -66,15 +68,15 @@ type
     FSizingAdjustW: Integer;
     FSizingOrientation: TSizingOrientation;
     FUpdatingSize: Boolean;
+  protected
+    function CanResize(var NewWidth, NewHeight: Integer): Boolean; override;
+    procedure CreateParams(var Params: TCreateParams); override;
+    procedure DoAddDockClient(Client: TControl; const ARect: TRect); override;
     procedure WMNCCreate(var Message: TWMNCCreate); message WM_NCCREATE;
     procedure WMNCHitTest(var Message: TWMNCHitTest); message WM_NCHITTEST;
     procedure WMNCLButtonDown(var Message: TWMNCLButtonDown); message WM_NCLBUTTONDOWN;
     procedure WMSize(var Message: TWMSize); message WM_SIZE;
     procedure WMSysCommand(var Message: TWMSysCommand); message WM_SYSCOMMAND;
-  protected
-    function CanResize(var NewWidth, NewHeight: Integer): Boolean; override;
-    procedure CreateParams(var Params: TCreateParams); override;
-    procedure DoAddDockClient(Client: TControl; const ARect: TRect); override;
   public
     constructor Create(AOwner: TComponent); override;
   end;
@@ -120,6 +122,28 @@ begin
   end;
 end;
 
+procedure TToolWindow.NCPaint(DC: HDC);
+const
+  InnerStyles: array[TEdgeStyle] of Integer = (0, BDR_RAISEDINNER, BDR_SUNKENINNER);
+  OuterStyles: array[TEdgeStyle] of Integer = (0, BDR_RAISEDOUTER, BDR_SUNKENOUTER);
+  Ctl3DStyles: array[Boolean] of Integer = (BF_MONO, 0);
+var
+  RC, RW: TRect;
+begin
+  Windows.GetClientRect(Handle, RC);
+  GetWindowRect(Handle, RW);
+  MapWindowPoints(0, Handle, RW, 2);
+  OffsetRect(RC, -RW.Left, -RW.Top);
+  ExcludeClipRect(DC, RC.Left, RC.Top, RC.Right, RC.Bottom);
+  { Draw borders in non-client area }
+  OffsetRect(RW, -RW.Left, -RW.Top);
+  DrawEdge(DC, RW, InnerStyles[FEdgeInner] or OuterStyles[FEdgeOuter],
+    Byte(FEdgeBorders) or Ctl3DStyles[Ctl3D] or BF_ADJUST);
+  { Erase parts not drawn }
+  IntersectClipRect(DC, RW.Left, RW.Top, RW.Right, RW.Bottom);
+  Windows.FillRect(DC, RW, Brush.Handle);
+end;
+
 procedure TToolWindow.WMNCCalcSize(var Message: TWMNCCalcSize);
 var
   EdgeSize: Integer;
@@ -142,29 +166,13 @@ begin
 end;
 
 procedure TToolWindow.WMNCPaint(var Message: TMessage);
-const
-  InnerStyles: array[TEdgeStyle] of Integer = (0, BDR_RAISEDINNER, BDR_SUNKENINNER);
-  OuterStyles: array[TEdgeStyle] of Integer = (0, BDR_RAISEDOUTER, BDR_SUNKENOUTER);
-  Ctl3DStyles: array[Boolean] of Integer = (BF_MONO, 0);
 var
   DC: HDC;
-  RC, RW: TRect;
 begin
   { Get window DC that is clipped to the non-client area }
   DC := GetWindowDC(Handle);
   try
-    Windows.GetClientRect(Handle, RC);
-    GetWindowRect(Handle, RW);
-    MapWindowPoints(0, Handle, RW, 2);
-    OffsetRect(RC, -RW.Left, -RW.Top);
-    ExcludeClipRect(DC, RC.Left, RC.Top, RC.Right, RC.Bottom);
-    { Draw borders in non-client area }
-    OffsetRect(RW, -RW.Left, -RW.Top);
-    DrawEdge(DC, RW, InnerStyles[FEdgeInner] or OuterStyles[FEdgeOuter],
-      Byte(FEdgeBorders) or Ctl3DStyles[Ctl3D] or BF_ADJUST);
-    { Erase parts not drawn }
-    IntersectClipRect(DC, RW.Left, RW.Top, RW.Right, RW.Bottom);
-    Windows.FillRect(DC, RW, Brush.Handle);
+    NCPaint(DC);
   finally
     ReleaseDC(Handle, DC);
   end;

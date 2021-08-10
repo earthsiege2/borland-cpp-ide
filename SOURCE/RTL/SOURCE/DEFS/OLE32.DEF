@@ -1,291 +1,328 @@
-LIBRARY OLE32
+LIBRARY Ole32
 EXPORTS
 
-    BindMoniker                              = 'OLE32.DLL'.*
-    CLIPFORMAT_UserFree                      = 'OLE32.DLL'.*
-    CLIPFORMAT_UserMarshal                   = 'OLE32.DLL'.*
-    CLIPFORMAT_UserSize                      = 'OLE32.DLL'.*
-    CLIPFORMAT_UserUnmarshal                 = 'OLE32.DLL'.*
-    CLSIDFromProgID                          = 'OLE32.DLL'.*
-    CLSIDFromProgIDEx                        = 'OLE32.DLL'.*
-    CLSIDFromString                          = 'OLE32.DLL'.*
-    CoAddRefServerProcess                    = 'OLE32.DLL'.*
-    CoAllowSetForegroundWindow               = 'OLE32.DLL'.*
-    CoBuildVersion                           = 'OLE32.DLL'.*
-    CoCancelCall                             = 'OLE32.DLL'.*
-    CoCopyProxy                              = 'OLE32.DLL'.*
-    CoCreateFreeThreadedMarshaler            = 'OLE32.DLL'.*
-    CoCreateGuid                             = 'OLE32.DLL'.*
-    CoCreateInstance                         = 'OLE32.DLL'.*
-    CoCreateInstanceEx                       = 'OLE32.DLL'.*
-    CoCreateObjectInContext                  = 'OLE32.DLL'.*
-    CoDeactivateObject                       = 'OLE32.DLL'.*
-    CoDisableCallCancellation                = 'OLE32.DLL'.*
-    CoDisconnectObject                       = 'OLE32.DLL'.*
-    CoDosDateTimeToFileTime                  = 'OLE32.DLL'.*
-    CoEnableCallCancellation                 = 'OLE32.DLL'.*
-    CoFileTimeNow                            = 'OLE32.DLL'.*
-    CoFileTimeToDosDateTime                  = 'OLE32.DLL'.*
-    CoFreeAllLibraries                       = 'OLE32.DLL'.*
-    CoFreeLibrary                            = 'OLE32.DLL'.*
-    CoFreeUnusedLibraries                    = 'OLE32.DLL'.*
-    CoGetApartmentID                         = 'OLE32.DLL'.*
-    CoGetCallContext                         = 'OLE32.DLL'.*
-    CoGetCallerTID                           = 'OLE32.DLL'.*
-    CoGetCancelObject                        = 'OLE32.DLL'.*
-    CoGetClassObject                         = 'OLE32.DLL'.*
-    CoGetClassVersion                        = 'OLE32.DLL'.*
-    CoGetCurrentLogicalThreadId              = 'OLE32.DLL'.*
-    CoGetCurrentProcess                      = 'OLE32.DLL'.*
-    CoGetInstanceFromFile                    = 'OLE32.DLL'.*
-    CoGetInstanceFromIStorage                = 'OLE32.DLL'.*
-    CoGetInterfaceAndReleaseStream           = 'OLE32.DLL'.*
-    CoGetMalloc                              = 'OLE32.DLL'.*
-    CoGetMarshalSizeMax                      = 'OLE32.DLL'.*
-    CoGetObject                              = 'OLE32.DLL'.*
-    CoGetObjectContext                       = 'OLE32.DLL'.*
-    CoGetPSClsid                             = 'OLE32.DLL'.*
-    CoGetStandardMarshal                     = 'OLE32.DLL'.*
-    CoGetState                               = 'OLE32.DLL'.*
-    CoGetStdMarshalEx                        = 'OLE32.DLL'.*
-    CoGetTreatAsClass                        = 'OLE32.DLL'.*
-    CoImpersonateClient                      = 'OLE32.DLL'.*
-    CoInitialize                             = 'OLE32.DLL'.*
-    CoInitializeEx                           = 'OLE32.DLL'.*
-    CoInitializeSecurity                     = 'OLE32.DLL'.*
-    CoInitializeWOW                          = 'OLE32.DLL'.*
-    CoInstall                                = 'OLE32.DLL'.*
-    CoIsHandlerConnected                     = 'OLE32.DLL'.*
-    CoIsOle1Class                            = 'OLE32.DLL'.*
-    CoLoadLibrary                            = 'OLE32.DLL'.*
-    CoLockObjectExternal                     = 'OLE32.DLL'.*
-    CoMarshalHresult                         = 'OLE32.DLL'.*
-    CoMarshalInterThreadInterfaceInStream    = 'OLE32.DLL'.*
-    CoMarshalInterface                       = 'OLE32.DLL'.*
-    CoQueryAuthenticationServices            = 'OLE32.DLL'.*
-    CoQueryClientBlanket                     = 'OLE32.DLL'.*
-    CoQueryProxyBlanket                      = 'OLE32.DLL'.*
-    CoQueryReleaseObject                     = 'OLE32.DLL'.*
-    CoReactivateObject                       = 'OLE32.DLL'.*
-    CoRegisterChannelHook                    = 'OLE32.DLL'.*
-    CoRegisterClassObject                    = 'OLE32.DLL'.*
-    CoRegisterMallocSpy                      = 'OLE32.DLL'.*
-    CoRegisterMessageFilter                  = 'OLE32.DLL'.*
-    CoRegisterPSClsid                        = 'OLE32.DLL'.*
-    CoRegisterSurrogate                      = 'OLE32.DLL'.*
-    CoRegisterSurrogateEx                    = 'OLE32.DLL'.*
-    CoReleaseMarshalData                     = 'OLE32.DLL'.*
-    CoReleaseServerProcess                   = 'OLE32.DLL'.*
-    CoResumeClassObjects                     = 'OLE32.DLL'.*
-    CoRevertToSelf                           = 'OLE32.DLL'.*
-    CoRevokeClassObject                      = 'OLE32.DLL'.*
-    CoRevokeMallocSpy                        = 'OLE32.DLL'.*
-    CoSetCancelObject                        = 'OLE32.DLL'.*
-    CoSetProxyBlanket                        = 'OLE32.DLL'.*
-    CoSetState                               = 'OLE32.DLL'.*
-    CoSuspendClassObjects                    = 'OLE32.DLL'.*
-    CoSwitchCallContext                      = 'OLE32.DLL'.*
-    CoTaskMemAlloc                           = 'OLE32.DLL'.*
-    CoTaskMemFree                            = 'OLE32.DLL'.*
-    CoTaskMemRealloc                         = 'OLE32.DLL'.*
-    CoTestCancel                             = 'OLE32.DLL'.*
-    CoTreatAsClass                           = 'OLE32.DLL'.*
-    CoUninitialize                           = 'OLE32.DLL'.*
-    CoUnloadingWOW                           = 'OLE32.DLL'.*
-    CoUnmarshalHresult                       = 'OLE32.DLL'.*
-    CoUnmarshalInterface                     = 'OLE32.DLL'.*
-    CoWaitForMultipleHandles                 = 'OLE32.DLL'.*
-    CreateAntiMoniker                        = 'OLE32.DLL'.*
-    CreateBindCtx                            = 'OLE32.DLL'.*
-    CreateClassMoniker                       = 'OLE32.DLL'.*
-    CreateDataAdviseHolder                   = 'OLE32.DLL'.*
-    CreateDataCache                          = 'OLE32.DLL'.*
-    CreateFileMoniker                        = 'OLE32.DLL'.*
-    CreateGenericComposite                   = 'OLE32.DLL'.*
-    CreateILockBytesOnHGlobal                = 'OLE32.DLL'.*
-    CreateItemMoniker                        = 'OLE32.DLL'.*
-    CreateObjrefMoniker                      = 'OLE32.DLL'.*
-    CreateOleAdviseHolder                    = 'OLE32.DLL'.*
-    CreatePointerMoniker                     = 'OLE32.DLL'.*
-    CreateStdProgressIndicator               = 'OLE32.DLL'.*
-    CreateStreamOnHGlobal                    = 'OLE32.DLL'.*
-    DcomChannelSetHResult                    = 'OLE32.DLL'.*
-    DllDebugObjectRPCHook                    = 'OLE32.DLL'.*
-    DllGetClassObjectWOW                     = 'OLE32.DLL'.*
-    DoDragDrop                               = 'OLE32.DLL'.*
-    EnableHookObject                         = 'OLE32.DLL'.*
-    FmtIdToPropStgName                       = 'OLE32.DLL'.*
-    FreePropVariantArray                     = 'OLE32.DLL'.*
-    GetClassFile                             = 'OLE32.DLL'.*
-    GetConvertStg                            = 'OLE32.DLL'.*
-    GetDocumentBitStg                        = 'OLE32.DLL'.*
-    GetHGlobalFromILockBytes                 = 'OLE32.DLL'.*
-    GetHGlobalFromStream                     = 'OLE32.DLL'.*
-    GetHookInterface                         = 'OLE32.DLL'.*
-    GetRunningObjectTable                    = 'OLE32.DLL'.*
-    HACCEL_UserFree                          = 'OLE32.DLL'.*
-    HACCEL_UserMarshal                       = 'OLE32.DLL'.*
-    HACCEL_UserSize                          = 'OLE32.DLL'.*
-    HACCEL_UserUnmarshal                     = 'OLE32.DLL'.*
-    HBITMAP_UserFree                         = 'OLE32.DLL'.*
-    HBITMAP_UserMarshal                      = 'OLE32.DLL'.*
-    HBITMAP_UserSize                         = 'OLE32.DLL'.*
-    HBITMAP_UserUnmarshal                    = 'OLE32.DLL'.*
-    HBRUSH_UserFree                          = 'OLE32.DLL'.*
-    HBRUSH_UserMarshal                       = 'OLE32.DLL'.*
-    HBRUSH_UserSize                          = 'OLE32.DLL'.*
-    HBRUSH_UserUnmarshal                     = 'OLE32.DLL'.*
-    HDC_UserFree                             = 'OLE32.DLL'.*
-    HDC_UserMarshal                          = 'OLE32.DLL'.*
-    HDC_UserSize                             = 'OLE32.DLL'.*
-    HDC_UserUnmarshal                        = 'OLE32.DLL'.*
-    HENHMETAFILE_UserFree                    = 'OLE32.DLL'.*
-    HENHMETAFILE_UserMarshal                 = 'OLE32.DLL'.*
-    HENHMETAFILE_UserSize                    = 'OLE32.DLL'.*
-    HENHMETAFILE_UserUnmarshal               = 'OLE32.DLL'.*
-    HGLOBAL_UserFree                         = 'OLE32.DLL'.*
-    HGLOBAL_UserMarshal                      = 'OLE32.DLL'.*
-    HGLOBAL_UserSize                         = 'OLE32.DLL'.*
-    HGLOBAL_UserUnmarshal                    = 'OLE32.DLL'.*
-    HICON_UserFree                           = 'OLE32.DLL'.*
-    HICON_UserMarshal                        = 'OLE32.DLL'.*
-    HICON_UserSize                           = 'OLE32.DLL'.*
-    HICON_UserUnmarshal                      = 'OLE32.DLL'.*
-    HMENU_UserFree                           = 'OLE32.DLL'.*
-    HMENU_UserMarshal                        = 'OLE32.DLL'.*
-    HMENU_UserSize                           = 'OLE32.DLL'.*
-    HMENU_UserUnmarshal                      = 'OLE32.DLL'.*
-    HMETAFILEPICT_UserFree                   = 'OLE32.DLL'.*
-    HMETAFILEPICT_UserMarshal                = 'OLE32.DLL'.*
-    HMETAFILEPICT_UserSize                   = 'OLE32.DLL'.*
-    HMETAFILEPICT_UserUnmarshal              = 'OLE32.DLL'.*
-    HMETAFILE_UserFree                       = 'OLE32.DLL'.*
-    HMETAFILE_UserMarshal                    = 'OLE32.DLL'.*
-    HMETAFILE_UserSize                       = 'OLE32.DLL'.*
-    HMETAFILE_UserUnmarshal                  = 'OLE32.DLL'.*
-    HPALETTE_UserFree                        = 'OLE32.DLL'.*
-    HPALETTE_UserMarshal                     = 'OLE32.DLL'.*
-    HPALETTE_UserSize                        = 'OLE32.DLL'.*
-    HPALETTE_UserUnmarshal                   = 'OLE32.DLL'.*
-    HWND_UserFree                            = 'OLE32.DLL'.*
-    HWND_UserMarshal                         = 'OLE32.DLL'.*
-    HWND_UserSize                            = 'OLE32.DLL'.*
-    HWND_UserUnmarshal                       = 'OLE32.DLL'.*
-    HkOleRegisterObject                      = 'OLE32.DLL'.*
-    IIDFromString                            = 'OLE32.DLL'.*
-    IsAccelerator                            = 'OLE32.DLL'.*
-    IsEqualGUID                              = 'OLE32.DLL'.*
-    IsValidIid                               = 'OLE32.DLL'.*
-    IsValidInterface                         = 'OLE32.DLL'.*
-    IsValidPtrIn                             = 'OLE32.DLL'.*
-    IsValidPtrOut                            = 'OLE32.DLL'.*
-    MkParseDisplayName                       = 'OLE32.DLL'.*
-    MonikerCommonPrefixWith                  = 'OLE32.DLL'.*
-    MonikerRelativePathTo                    = 'OLE32.DLL'.*
-    OleBuildVersion                          = 'OLE32.DLL'.*
-    OleConvertIStorageToOLESTREAM            = 'OLE32.DLL'.*
-    OleConvertIStorageToOLESTREAMEx          = 'OLE32.DLL'.*
-    OleConvertOLESTREAMToIStorage            = 'OLE32.DLL'.*
-    OleConvertOLESTREAMToIStorageEx          = 'OLE32.DLL'.*
-    OleCreate                                = 'OLE32.DLL'.*
-    OleCreateDefaultHandler                  = 'OLE32.DLL'.*
-    OleCreateEmbeddingHelper                 = 'OLE32.DLL'.*
-    OleCreateEx                              = 'OLE32.DLL'.*
-    OleCreateFromData                        = 'OLE32.DLL'.*
-    OleCreateFromDataEx                      = 'OLE32.DLL'.*
-    OleCreateFromFile                        = 'OLE32.DLL'.*
-    OleCreateFromFileEx                      = 'OLE32.DLL'.*
-    OleCreateLink                            = 'OLE32.DLL'.*
-    OleCreateLinkEx                          = 'OLE32.DLL'.*
-    OleCreateLinkFromData                    = 'OLE32.DLL'.*
-    OleCreateLinkFromDataEx                  = 'OLE32.DLL'.*
-    OleCreateLinkToFile                      = 'OLE32.DLL'.*
-    OleCreateLinkToFileEx                    = 'OLE32.DLL'.*
-    OleCreateMenuDescriptor                  = 'OLE32.DLL'.*
-    OleCreateStaticFromData                  = 'OLE32.DLL'.*
-    OleDestroyMenuDescriptor                 = 'OLE32.DLL'.*
-    OleDoAutoConvert                         = 'OLE32.DLL'.*
-    OleDraw                                  = 'OLE32.DLL'.*
-    OleDuplicateData                         = 'OLE32.DLL'.*
-    OleFlushClipboard                        = 'OLE32.DLL'.*
-    OleGetAutoConvert                        = 'OLE32.DLL'.*
-    OleGetClipboard                          = 'OLE32.DLL'.*
-    OleGetIconOfClass                        = 'OLE32.DLL'.*
-    OleGetIconOfFile                         = 'OLE32.DLL'.*
-    OleInitialize                            = 'OLE32.DLL'.*
-    OleInitializeWOW                         = 'OLE32.DLL'.*
-    OleIsCurrentClipboard                    = 'OLE32.DLL'.*
-    OleIsRunning                             = 'OLE32.DLL'.*
-    OleLoad                                  = 'OLE32.DLL'.*
-    OleLoadFromStream                        = 'OLE32.DLL'.*
-    OleLockRunning                           = 'OLE32.DLL'.*
-    OleMetafilePictFromIconAndLabel          = 'OLE32.DLL'.*
-    OleNoteObjectVisible                     = 'OLE32.DLL'.*
-    OleQueryCreateFromData                   = 'OLE32.DLL'.*
-    OleQueryLinkFromData                     = 'OLE32.DLL'.*
-    OleRegEnumFormatEtc                      = 'OLE32.DLL'.*
-    OleRegEnumVerbs                          = 'OLE32.DLL'.*
-    OleRegGetMiscStatus                      = 'OLE32.DLL'.*
-    OleRegGetUserType                        = 'OLE32.DLL'.*
-    OleRun                                   = 'OLE32.DLL'.*
-    OleSave                                  = 'OLE32.DLL'.*
-    OleSaveToStream                          = 'OLE32.DLL'.*
-    OleSetAutoConvert                        = 'OLE32.DLL'.*
-    OleSetClipboard                          = 'OLE32.DLL'.*
-    OleSetContainedObject                    = 'OLE32.DLL'.*
-    OleSetMenuDescriptor                     = 'OLE32.DLL'.*
-    OleTranslateAccelerator                  = 'OLE32.DLL'.*
-    OleUninitialize                          = 'OLE32.DLL'.*
-    OpenOrCreateStream                       = 'OLE32.DLL'.*
-    ProgIDFromCLSID                          = 'OLE32.DLL'.*
-    PropStgNameToFmtId                       = 'OLE32.DLL'.*
-    PropSysAllocString                       = 'OLE32.DLL'.*
-    PropSysFreeString                        = 'OLE32.DLL'.*
-    PropVariantClear                         = 'OLE32.DLL'.*
-    PropVariantCopy                          = 'OLE32.DLL'.*
-    ReadClassStg                             = 'OLE32.DLL'.*
-    ReadClassStm                             = 'OLE32.DLL'.*
-    ReadFmtUserTypeStg                       = 'OLE32.DLL'.*
-    ReadOleStg                               = 'OLE32.DLL'.*
-    ReadStringStream                         = 'OLE32.DLL'.*
-    RegisterDragDrop                         = 'OLE32.DLL'.*
-    ReleaseStgMedium                         = 'OLE32.DLL'.*
-    RevokeDragDrop                           = 'OLE32.DLL'.*
-    SNB_UserFree                             = 'OLE32.DLL'.*
-    SNB_UserMarshal                          = 'OLE32.DLL'.*
-    SNB_UserSize                             = 'OLE32.DLL'.*
-    SNB_UserUnmarshal                        = 'OLE32.DLL'.*
-    STGMEDIUM_UserFree                       = 'OLE32.DLL'.*
-    STGMEDIUM_UserMarshal                    = 'OLE32.DLL'.*
-    STGMEDIUM_UserSize                       = 'OLE32.DLL'.*
-    STGMEDIUM_UserUnmarshal                  = 'OLE32.DLL'.*
-    SetConvertStg                            = 'OLE32.DLL'.*
-    SetDocumentBitStg                        = 'OLE32.DLL'.*
-    StgCreateDocfile                         = 'OLE32.DLL'.*
-    StgCreateDocfileOnILockBytes             = 'OLE32.DLL'.*
-    StgCreatePropSetStg                      = 'OLE32.DLL'.*
-    StgCreatePropStg                         = 'OLE32.DLL'.*
-    StgCreateStorageEx                       = 'OLE32.DLL'.*
-    StgGetIFillLockBytesOnFile               = 'OLE32.DLL'.*
-    StgGetIFillLockBytesOnILockBytes         = 'OLE32.DLL'.*
-    StgIsStorageFile                         = 'OLE32.DLL'.*
-    StgIsStorageILockBytes                   = 'OLE32.DLL'.*
-    StgOpenAsyncDocfileOnIFillLockBytes      = 'OLE32.DLL'.*
-    StgOpenPropStg                           = 'OLE32.DLL'.*
-    StgOpenStorage                           = 'OLE32.DLL'.*
-    StgOpenStorageEx                         = 'OLE32.DLL'.*
-    StgOpenStorageOnILockBytes               = 'OLE32.DLL'.*
-    StgSetTimes                              = 'OLE32.DLL'.*
-    StringFromCLSID                          = 'OLE32.DLL'.*
-    StringFromGUID2                          = 'OLE32.DLL'.*
-    StringFromIID                            = 'OLE32.DLL'.*
-    UpdateDCOMSettings                       = 'OLE32.DLL'.*
-    UtConvertDvtd16toDvtd32                  = 'OLE32.DLL'.*
-    UtConvertDvtd32toDvtd16                  = 'OLE32.DLL'.*
-    UtGetDvtd16Info                          = 'OLE32.DLL'.*
-    UtGetDvtd32Info                          = 'OLE32.DLL'.*
-    WriteClassStg                            = 'OLE32.DLL'.*
-    WriteClassStm                            = 'OLE32.DLL'.*
-    WriteFmtUserTypeStg                      = 'OLE32.DLL'.*
-    WriteOleStg                              = 'OLE32.DLL'.*
-    WriteStringStream                        = 'OLE32.DLL'.*
+    BindMoniker
+    CLIPFORMAT_UserFree
+    CLIPFORMAT_UserMarshal
+    CLIPFORMAT_UserSize
+    CLIPFORMAT_UserUnmarshal
+    CLSIDFromProgID
+    CLSIDFromProgIDEx
+    CLSIDFromString
+    CoAddRefServerProcess
+    CoAllowSetForegroundWindow
+    CoBuildVersion
+    CoCancelCall
+    CoCopyProxy
+    CoCreateFreeThreadedMarshaler
+    CoCreateGuid
+    CoCreateInstance
+    CoCreateInstanceEx
+    CoCreateObjectInContext
+    CoDeactivateObject
+    CoDisableCallCancellation
+    CoDisconnectObject
+    CoDosDateTimeToFileTime
+    CoEnableCallCancellation
+    CoFileTimeNow
+    CoFileTimeToDosDateTime
+    CoFreeAllLibraries
+    CoFreeLibrary
+    CoFreeUnusedLibraries
+    CoFreeUnusedLibrariesEx
+    CoGetApartmentID
+    CoGetCallContext
+    CoGetCallerTID
+    CoGetCancelObject
+    CoGetClassObject
+    CoGetClassVersion
+    CoGetContextToken
+    CoGetCurrentLogicalThreadId
+    CoGetCurrentProcess
+    CoGetDefaultContext
+    CoGetInstanceFromFile
+    CoGetInstanceFromIStorage
+    CoGetInterceptor
+    CoGetInterceptorFromTypeInfo
+    CoGetInterfaceAndReleaseStream
+    CoGetMalloc
+    CoGetMarshalSizeMax
+    CoGetObject
+    CoGetObjectContext
+    CoGetPSClsid
+    CoGetProcessIdentifier
+    CoGetStandardMarshal
+    CoGetState
+    CoGetStdMarshalEx
+    CoGetTreatAsClass
+    CoImpersonateClient
+    CoInitialize
+    CoInitializeEx
+    CoInitializeSecurity
+    CoInitializeWOW
+    CoInstall
+    CoInvalidateRemoteMachineBindings
+    CoIsHandlerConnected
+    CoIsOle1Class
+    CoLoadLibrary
+    CoLockObjectExternal
+    CoMarshalHresult
+    CoMarshalInterThreadInterfaceInStream
+    CoMarshalInterface
+    CoQueryAuthenticationServices
+    CoQueryClientBlanket
+    CoQueryProxyBlanket
+    CoQueryReleaseObject
+    CoReactivateObject
+    CoRegisterChannelHook
+    CoRegisterClassObject
+    CoRegisterMallocSpy
+    CoRegisterMessageFilter
+    CoRegisterPSClsid
+    CoRegisterSurrogate
+    CoRegisterSurrogateEx
+    CoReleaseMarshalData
+    CoReleaseServerProcess
+    CoResumeClassObjects
+    CoRetireServer
+    CoRevertToSelf
+    CoRevokeClassObject
+    CoRevokeMallocSpy
+    CoSetCancelObject
+    CoSetProxyBlanket
+    CoSetState
+    CoSuspendClassObjects
+    CoSwitchCallContext
+    CoTaskMemAlloc
+    CoTaskMemFree
+    CoTaskMemRealloc
+    CoTestCancel
+    CoTreatAsClass
+    CoUninitialize
+    CoUnloadingWOW
+    CoUnmarshalHresult
+    CoUnmarshalInterface
+    CoWaitForMultipleHandles
+    ComPs_CStdStubBuffer_AddRef
+    ComPs_CStdStubBuffer_Connect
+    ComPs_CStdStubBuffer_CountRefs
+    ComPs_CStdStubBuffer_DebugServerQueryInterface
+    ComPs_CStdStubBuffer_DebugServerRelease
+    ComPs_CStdStubBuffer_Disconnect
+    ComPs_CStdStubBuffer_Invoke
+    ComPs_CStdStubBuffer_IsIIDSupported
+    ComPs_CStdStubBuffer_QueryInterface
+    ComPs_IUnknown_AddRef_Proxy
+    ComPs_IUnknown_QueryInterface_Proxy
+    ComPs_IUnknown_Release_Proxy
+    ComPs_NdrCStdStubBuffer2_Release
+    ComPs_NdrCStdStubBuffer_Release
+    _ComPs_NdrClientCall2        = ComPs_NdrClientCall2
+    ComPs_NdrClientCall2_va
+    ComPs_NdrDllCanUnloadNow
+    ComPs_NdrDllGetClassObject
+    ComPs_NdrDllRegisterProxy
+    ComPs_NdrDllUnregisterProxy
+    ComPs_NdrStubCall2
+    ComPs_NdrStubForwardingFunction
+    CreateAntiMoniker
+    CreateBindCtx
+    CreateClassMoniker
+    CreateDataAdviseHolder
+    CreateDataCache
+    CreateFileMoniker
+    CreateGenericComposite
+    CreateILockBytesOnHGlobal
+    CreateItemMoniker
+    CreateObjrefMoniker
+    CreateOleAdviseHolder
+    CreatePointerMoniker
+    CreateStdProgressIndicator
+    CreateStreamOnHGlobal
+    DcomChannelSetHResult
+    DllDebugObjectRPCHook
+    DllGetClassObjectWOW
+    DoDragDrop
+    EnableHookObject
+    FmtIdToPropStgName
+    FreePropVariantArray
+    GetClassFile
+    GetConvertStg
+    GetDocumentBitStg
+    GetHGlobalFromILockBytes
+    GetHGlobalFromStream
+    GetHookInterface
+    GetRunningObjectTable
+    HACCEL_UserFree
+    HACCEL_UserMarshal
+    HACCEL_UserSize
+    HACCEL_UserUnmarshal
+    HBITMAP_UserFree
+    HBITMAP_UserMarshal
+    HBITMAP_UserSize
+    HBITMAP_UserUnmarshal
+    HBRUSH_UserFree
+    HBRUSH_UserMarshal
+    HBRUSH_UserSize
+    HBRUSH_UserUnmarshal
+    HDC_UserFree
+    HDC_UserMarshal
+    HDC_UserSize
+    HDC_UserUnmarshal
+    HENHMETAFILE_UserFree
+    HENHMETAFILE_UserMarshal
+    HENHMETAFILE_UserSize
+    HENHMETAFILE_UserUnmarshal
+    HGLOBAL_UserFree
+    HGLOBAL_UserMarshal
+    HGLOBAL_UserSize
+    HGLOBAL_UserUnmarshal
+    HICON_UserFree
+    HICON_UserMarshal
+    HICON_UserSize
+    HICON_UserUnmarshal
+    HMENU_UserFree
+    HMENU_UserMarshal
+    HMENU_UserSize
+    HMENU_UserUnmarshal
+    HMETAFILEPICT_UserFree
+    HMETAFILEPICT_UserMarshal
+    HMETAFILEPICT_UserSize
+    HMETAFILEPICT_UserUnmarshal
+    HMETAFILE_UserFree
+    HMETAFILE_UserMarshal
+    HMETAFILE_UserSize
+    HMETAFILE_UserUnmarshal
+    HPALETTE_UserFree
+    HPALETTE_UserMarshal
+    HPALETTE_UserSize
+    HPALETTE_UserUnmarshal
+    HWND_UserFree
+    HWND_UserMarshal
+    HWND_UserSize
+    HWND_UserUnmarshal
+    HkOleRegisterObject
+    IIDFromString
+    IsAccelerator
+    IsEqualGUID
+    IsValidIid
+    IsValidInterface
+    IsValidPtrIn
+    IsValidPtrOut
+    MkParseDisplayName
+    MonikerCommonPrefixWith
+    MonikerRelativePathTo
+    OleBuildVersion
+    OleConvertIStorageToOLESTREAM
+    OleConvertIStorageToOLESTREAMEx
+    OleConvertOLESTREAMToIStorage
+    OleConvertOLESTREAMToIStorageEx
+    OleCreate
+    OleCreateDefaultHandler
+    OleCreateEmbeddingHelper
+    OleCreateEx
+    OleCreateFromData
+    OleCreateFromDataEx
+    OleCreateFromFile
+    OleCreateFromFileEx
+    OleCreateLink
+    OleCreateLinkEx
+    OleCreateLinkFromData
+    OleCreateLinkFromDataEx
+    OleCreateLinkToFile
+    OleCreateLinkToFileEx
+    OleCreateMenuDescriptor
+    OleCreateStaticFromData
+    OleDestroyMenuDescriptor
+    OleDoAutoConvert
+    OleDraw
+    OleDuplicateData
+    OleFlushClipboard
+    OleGetAutoConvert
+    OleGetClipboard
+    OleGetIconOfClass
+    OleGetIconOfFile
+    OleInitialize
+    OleInitializeWOW
+    OleIsCurrentClipboard
+    OleIsRunning
+    OleLoad
+    OleLoadFromStream
+    OleLockRunning
+    OleMetafilePictFromIconAndLabel
+    OleNoteObjectVisible
+    OleQueryCreateFromData
+    OleQueryLinkFromData
+    OleRegEnumFormatEtc
+    OleRegEnumVerbs
+    OleRegGetMiscStatus
+    OleRegGetUserType
+    OleRun
+    OleSave
+    OleSaveToStream
+    OleSetAutoConvert
+    OleSetClipboard
+    OleSetContainedObject
+    OleSetMenuDescriptor
+    OleTranslateAccelerator
+    OleUninitialize
+    OpenOrCreateStream
+    ProgIDFromCLSID
+    PropStgNameToFmtId
+    PropSysAllocString
+    PropSysFreeString
+    PropVariantClear
+    PropVariantCopy
+    ReadClassStg
+    ReadClassStm
+    ReadFmtUserTypeStg
+    ReadOleStg
+    ReadStringStream
+    RegisterDragDrop
+    ReleaseStgMedium
+    RevokeDragDrop
+    SNB_UserFree
+    SNB_UserMarshal
+    SNB_UserSize
+    SNB_UserUnmarshal
+    STGMEDIUM_UserFree
+    STGMEDIUM_UserMarshal
+    STGMEDIUM_UserSize
+    STGMEDIUM_UserUnmarshal
+    SetConvertStg
+    SetDocumentBitStg
+    StgConvertPropertyToVariant
+    StgConvertVariantToProperty
+    StgCreateDocfile
+    StgCreateDocfileOnILockBytes
+    StgCreatePropSetStg
+    StgCreatePropStg
+    StgCreateStorageEx
+    StgGetIFillLockBytesOnFile
+    StgGetIFillLockBytesOnILockBytes
+    StgIsStorageFile
+    StgIsStorageILockBytes
+    StgOpenAsyncDocfileOnIFillLockBytes
+    StgOpenPropStg
+    StgOpenStorage
+    StgOpenStorageEx
+    StgOpenStorageOnILockBytes
+    StgPropertyLengthAsVariant
+    StgSetTimes
+    StringFromCLSID
+    StringFromGUID2
+    StringFromIID
+    UpdateDCOMSettings
+    UtConvertDvtd16toDvtd32
+    UtConvertDvtd32toDvtd16
+    UtGetDvtd16Info
+    UtGetDvtd32Info
+    WdtpInterfacePointer_UserFree
+    WdtpInterfacePointer_UserMarshal
+    WdtpInterfacePointer_UserSize
+    WdtpInterfacePointer_UserUnmarshal
+    WriteClassStg
+    WriteClassStm
+    WriteFmtUserTypeStg
+    WriteOleStg
+    WriteStringStream

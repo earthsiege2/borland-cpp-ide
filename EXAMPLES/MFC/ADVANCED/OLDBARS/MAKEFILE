@@ -12,12 +12,14 @@ PROJ=OLDBARS
 OBJS=oldbars.obj mainfrm.obj oldbadoc.obj oldbavw.obj \
 	globals.obj statbar.obj toolbar.obj
 
-!if "$(PLATFORM)"=="M68K" || "$(PLATFORM)"=="MPPC"
-MACPROJ=OldBars
-MACSIG=OLDB
-!endif
+#!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+!include <..\..\mfcrules.mak>
 
-!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+default: integration
+	$(MAKE) -f $(PROJ).mak
 
-statbar.cpp: globals.h statbar.h
-toolbar.cpp: globals.h toolbar.h
+clean:
+	$(CLEAN_MFC)
+                                
+integration: $(PROJ).bpr $(PROJ).mak
+    $(NOP)

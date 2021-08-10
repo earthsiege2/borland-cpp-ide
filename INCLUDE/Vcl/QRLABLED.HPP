@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'QRLablEd.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QRLablEd.pas' rev: 6.00
 
 #ifndef QRLablEdHPP
 #define QRLablEdHPP
@@ -39,8 +39,6 @@ __published:
 	Stdctrls::TGroupBox* GroupBox1;
 	Stdctrls::TLabel* Label1;
 	Stdctrls::TEdit* Value;
-	Stdctrls::TButton* Button1;
-	Stdctrls::TButton* Button3;
 	Stdctrls::TCheckBox* AutoSize;
 	Stdctrls::TCheckBox* Stretch;
 	Dialogs::TFontDialog* FontDialog1;
@@ -53,12 +51,10 @@ __published:
 	Stdctrls::TLabel* Label3;
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TQRLabelEditorForm(Classes::TComponent* AOwner) : 
-		Forms::TForm(AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TQRLabelEditorForm(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TQRLabelEditorForm(Classes::TComponent* AOwner
-		, int Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TQRLabelEditorForm(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TQRLabelEditorForm(void) { }
@@ -66,8 +62,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRLabelEditorForm(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRLabelEditorForm(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -93,8 +88,7 @@ public:
 	virtual bool __fastcall ShowEditor(void);
 public:
 	#pragma option push -w-inl
-	/* TQRPrintableEditor.Create */ inline __fastcall virtual TQRLabelEditor(Quickrpt::TQRPrintable* AControl
-		) : Quickrpt::TQRPrintableEditor(AControl) { }
+	/* TQRPrintableEditor.Create */ inline __fastcall virtual TQRLabelEditor(Quickrpt::TQRPrintable* AControl) : Quickrpt::TQRPrintableEditor(AControl) { }
 	#pragma option pop
 	
 public:
@@ -108,9 +102,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Qrlabled */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qrlabled;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

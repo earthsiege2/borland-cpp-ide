@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBUtils.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBUtils.pas' rev: 6.00
 
 #ifndef IBUtilsHPP
 #define IBUtilsHPP
@@ -10,6 +10,8 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
+#include <DBCommon.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
@@ -35,11 +37,11 @@ extern PACKAGE AnsiString __fastcall StripString(AnsiString st, AnsiString Chars
 extern PACKAGE AnsiString __fastcall FormatIdentifier(int Dialect, AnsiString Value);
 extern PACKAGE AnsiString __fastcall FormatIdentifierValue(int Dialect, AnsiString Value);
 extern PACKAGE AnsiString __fastcall ExtractIdentifier(int Dialect, AnsiString Value);
+extern PACKAGE AnsiString __fastcall QuoteIdentifier(int Dialect, AnsiString Value);
+extern PACKAGE AnsiString __fastcall AddIBParamSQLForDetail(Db::TParams* Params, AnsiString SQL, bool Native, int Dialect);
 
 }	/* namespace Ibutils */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ibutils;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

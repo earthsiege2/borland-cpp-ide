@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 #if !defined(CGaugesH)
 #define CGaugesH

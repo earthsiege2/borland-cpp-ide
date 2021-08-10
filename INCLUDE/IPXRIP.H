@@ -23,7 +23,6 @@ Revision History:
 --*/
 
 #ifndef _IPXRIP_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _IPXRIP_
 
 #if _MSC_VER > 1000
@@ -218,5 +217,4 @@ typedef struct _RIP_MIB_SET_INPUT_DATA {
 // OUTPUT DATA: RIP_INTERFACE
 //
 
-#pragma option pop /*P_O_Pop*/
 #endif

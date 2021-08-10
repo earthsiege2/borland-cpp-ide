@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ScktMain.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ScktMain.pas' rev: 6.00
 
 #ifndef ScktMainHPP
 #define ScktMainHPP
@@ -35,8 +35,7 @@
 namespace Scktmain
 {
 //-- type declarations -------------------------------------------------------
-typedef void __fastcall (__closure *TSocketProc)(Comctrls::TListItem* Item, Scktcomp::TCustomWinSocket* 
-	Socket);
+typedef void __fastcall (__closure *TSocketProc)(Comctrls::TListItem* Item, Scktcomp::TCustomWinSocket* Socket);
 
 class DELPHICLASS TSocketForm;
 class PASCALIMPLEMENTATION TSocketForm : public Forms::TForm 
@@ -94,6 +93,8 @@ __published:
 	Comctrls::TStatusBar* UserStatus;
 	Menus::TMenuItem* ExportedObjectOnly1;
 	Actnlist::TAction* RegisteredAction;
+	Menus::TMenuItem* XMLPacket1;
+	Actnlist::TAction* AllowXML;
 	void __fastcall FormCreate(System::TObject* Sender);
 	void __fastcall FormDestroy(System::TObject* Sender);
 	void __fastcall miCloseClick(System::TObject* Sender);
@@ -111,12 +112,12 @@ __published:
 	void __fastcall RemovePortActionExecute(System::TObject* Sender);
 	void __fastcall UpDownClick(System::TObject* Sender, Comctrls::TUDBtnType Button);
 	void __fastcall PortListClick(System::TObject* Sender);
-	void __fastcall ConnectionListCompare(System::TObject* Sender, Comctrls::TListItem* Item1, Comctrls::TListItem* 
-		Item2, int Data, int &Compare);
+	void __fastcall ConnectionListCompare(System::TObject* Sender, Comctrls::TListItem* Item1, Comctrls::TListItem* Item2, int Data, int &Compare);
 	void __fastcall ConnectionListColumnClick(System::TObject* Sender, Comctrls::TListColumn* Column);
 	void __fastcall IntegerExit(System::TObject* Sender);
 	void __fastcall UpdateTimerTimer(System::TObject* Sender);
 	void __fastcall RegisteredActionExecute(System::TObject* Sender);
+	void __fastcall AllowXMLExecute(System::TObject* Sender);
 	
 private:
 	unsigned FTaskMessage;
@@ -150,12 +151,10 @@ public:
 	__property int ItemIndex = {read=GetItemIndex, write=SetItemIndex, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TSocketForm(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TSocketForm(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TSocketForm(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TSocketForm(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TSocketForm(void) { }
@@ -163,8 +162,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TSocketForm(HWND ParentWindow) : Forms::TForm(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TSocketForm(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -189,8 +187,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TDataModule.Create */ inline __fastcall virtual TSocketService(Classes::TComponent* AOwner) : Svcmgr::TService(
-		AOwner) { }
+	/* TDataModule.Create */ inline __fastcall virtual TSocketService(Classes::TComponent* AOwner) : Svcmgr::TService(AOwner) { }
 	#pragma option pop
 	
 };
@@ -203,9 +200,7 @@ extern PACKAGE TSocketForm* SocketForm;
 extern PACKAGE TSocketService* SocketService;
 
 }	/* namespace Scktmain */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Scktmain;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

@@ -1,17 +1,17 @@
-LIBRARY LZ32
+LIBRARY Lz32
 EXPORTS
 
-    CopyLZFile                               = 'LZ32.DLL'.*
-    GetExpandedNameA                         = 'LZ32.DLL'.*
-    GetExpandedNameW                         = 'LZ32.DLL'.*
-    LZClose                                  = 'LZ32.DLL'.*
-    LZCloseFile                              = 'LZ32.DLL'.*
-    LZCopy                                   = 'LZ32.DLL'.*
-    LZCreateFileW                            = 'LZ32.DLL'.*
-    LZDone                                   = 'LZ32.DLL'.*
-    LZInit                                   = 'LZ32.DLL'.*
-    LZOpenFileA                              = 'LZ32.DLL'.*
-    LZOpenFileW                              = 'LZ32.DLL'.*
-    LZRead                                   = 'LZ32.DLL'.*
-    LZSeek                                   = 'LZ32.DLL'.*
-    LZStart                                  = 'LZ32.DLL'.*
+    CopyLZFile
+    GetExpandedNameA
+    GetExpandedNameW
+    LZClose
+    LZCloseFile
+    LZCopy
+    LZCreateFileW
+    LZDone
+    LZInit
+    LZOpenFileA
+    LZOpenFileW
+    LZRead
+    LZSeek
+    LZStart

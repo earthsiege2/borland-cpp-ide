@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NodeEdit.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NodeEdit.pas' rev: 6.00
 
 #ifndef NodeEditHPP
 #define NodeEditHPP
@@ -11,7 +11,6 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <Consts.hpp>	// Pascal unit
-#include <LibHelp.hpp>	// Pascal unit
 #include <ComCtrls.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
@@ -65,16 +64,13 @@ __published:
 	void __fastcall StateImageExit(System::TObject* Sender);
 	void __fastcall ApplyClick(System::TObject* Sender);
 	void __fastcall TreeViewChange(System::TObject* Sender, Comctrls::TTreeNode* Node);
-	void __fastcall TreeViewChanging(System::TObject* Sender, Comctrls::TTreeNode* Node, bool &AllowChange
-		);
+	void __fastcall TreeViewChanging(System::TObject* Sender, Comctrls::TTreeNode* Node, bool &AllowChange);
 	void __fastcall SelectedIndexExit(System::TObject* Sender);
 	void __fastcall LoadClick(System::TObject* Sender);
-	void __fastcall TreeViewDragOver(System::TObject* Sender, System::TObject* Source, int X, int Y, Controls::TDragState 
-		State, bool &Accept);
+	void __fastcall TreeViewDragOver(System::TObject* Sender, System::TObject* Source, int X, int Y, Controls::TDragState State, bool &Accept);
 	void __fastcall TreeViewDragDrop(System::TObject* Sender, System::TObject* Source, int X, int Y);
 	void __fastcall TreeViewEdited(System::TObject* Sender, Comctrls::TTreeNode* Node, AnsiString &S);
 	void __fastcall HelpClick(System::TObject* Sender);
-	void __fastcall FormCreate(System::TObject* Sender);
 	
 private:
 	Comctrls::TTreeNodes* FItems;
@@ -87,12 +83,10 @@ public:
 	__property Comctrls::TTreeNodes* Items = {read=FItems};
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TTreeViewItems(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TTreeViewItems(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TTreeViewItems(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TTreeViewItems(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TTreeViewItems(void) { }
@@ -100,8 +94,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TTreeViewItems(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TTreeViewItems(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -111,9 +104,7 @@ public:
 extern PACKAGE bool __fastcall EditTreeViewItems(Comctrls::TTreeNodes* AItems);
 
 }	/* namespace Nodeedit */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nodeedit;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

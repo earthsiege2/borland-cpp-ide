@@ -6,14 +6,14 @@
 {                                                       }
 {*******************************************************}
 
-unit mxpivsrc;
+unit MXPIVSRC;
 
 interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Grids, Buttons, Controls, StdCtrls,
-  Forms, Dialogs, Bde, DB, DBTables, Menus, ExtCtrls,
-  mxConsts, mxdb, mxbutton, mxStore, mxcommon;
+  Forms, Dialogs, BDE, DB, DBTables, Menus, ExtCtrls,
+  Mxconsts, MXDB, MXBUTTON, Mxstore, MXCOMMON;
   
 type
   TDecisionButtonPosition = (xtHorizontal, xtVertical, xtLeftTop);

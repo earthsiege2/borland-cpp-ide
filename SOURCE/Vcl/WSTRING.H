@@ -1,7 +1,7 @@
 //    wstring.h - support for delphi widestrings in c++
 //                (WideString)
-// $Revision:   1.12  $
-//    copyright (c) 1997, 1999 Borland International
+// $Revision:   1.12.1.0.1.1  $
+//    copyright (c) 1997, 2002 Borland Software Corporation
 
 #ifndef WSTRING_H
 #define WSTRING_H
@@ -11,6 +11,7 @@
 #include <wtypes.h>
 #include <sysmac.h>
 #include <dstring.h>
+#include <stdarg.h>
 
 namespace System
 {
@@ -28,7 +29,19 @@ namespace System
     __fastcall WideString(const AnsiString& src);
     __fastcall WideString(const wchar_t* src, int len);
     __fastcall WideString(const wchar_t* src);
-    __fastcall WideString(const wchar_t  src);
+    __fastcall explicit WideString(const wchar_t  src);
+    __fastcall explicit WideString(char src);
+    __fastcall explicit WideString(short src);
+    __fastcall explicit WideString(unsigned short);
+    __fastcall explicit WideString(int src);
+    __fastcall explicit WideString(unsigned int);
+    __fastcall explicit WideString(long);
+    __fastcall explicit WideString(unsigned long);
+    __fastcall explicit WideString(__int64);
+    __fastcall explicit WideString(unsigned __int64);
+    __fastcall explicit WideString(float src);
+    __fastcall explicit WideString(double src);
+    __fastcall explicit WideString(long double src);
 
     // Destructor
     //
@@ -101,6 +114,8 @@ namespace System
     WideString __fastcall SubString(int index, int count) const;
 
   private:
+    int __cdecl vprintf(const wchar_t *fmt, va_list);
+    int __cdecl printf(const wchar_t *fmt, ...);
     wchar_t *Data;
   };
 }

@@ -9,29 +9,32 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.1.1  $
-// File generated on 1/24/2000 09:37:50 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/28/2002 8:27:08 AM from Type Library described below.
 
-// ************************************************************************ //
-// Type Lib: D:\Program Files\Common Files\Microsoft Shared\DAO\dao360.dll (1)
-// IID\LCID: {00025E01-0000-0000-C000-000000000046}\0
-// Helpfile: D:\Program Files\Common Files\Microsoft Shared\DAO\dao360.chm
+// ************************************************************************  //
+// Type Lib: C:\Program Files\Common Files\Microsoft Shared\DAO\dao360.dll (1)
+// LIBID: {00025E01-0000-0000-C000-000000000046}
+// LCID: 0
+// Helpfile: C:\Program Files\Common Files\Microsoft Shared\DAO\dao360.chm
+// HelpString: Microsoft DAO 3.6 Object Library
 // DepndLst: 
-//   (1) v2.0 stdole, (D:\WINNT\System32\stdole2.tlb)
+//   (1) v2.0 stdole, (C:\WINNT\System32\stdole2.tlb)
 // Parent TypeLibrary:
-//   (0) v9.0 Access, (d:\tlbgen\rampage\typelib\TypeLibraries\MSACC9.olb)
+//   (0) v9.0 Access, (c:\program files\microsoft office\office\msacc9.olb)
 // Errors:
-//   Hint: Symbol 'Update' renamed to '_Update'
+//   Hint: Symbol 'EOF' renamed to 'EOF_'
 // ************************************************************************ //
 
 #include <vcl.h>
 #pragma hdrstop
 
+#include <oleserver.hpp>
 #if defined(USING_ATL)
 #include <atl\atlvcl.h>
 #endif
 
-#include "DAO_2K_SRVR.h"
+#include "DAO_2k_srvr.h"
 
 #if !defined(__PRAGMA_PACKAGE_SMART_INIT)
 #define      __PRAGMA_PACKAGE_SMART_INIT

@@ -1,19 +1,11 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 #include  "cgrid.h"
 #include "samp.h"
 #pragma resource "*.res"   
 #pragma package(smart_init)
-
-namespace Cgrid {
-void __fastcall PACKAGE Register()
-{
-  TComponentClass classes[1] = {__classid(TCColorGrid)};
-  RegisterComponents(LoadStr(Tab_101), classes, 0);
-}
-}
 
 __fastcall TCColorGrid::TCColorGrid(TComponent *AOwner):
          TCustomControl( AOwner )

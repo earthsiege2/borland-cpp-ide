@@ -1,11 +1,11 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Kylix and Delphi Cross-Platform Visual Component Library                    }
+{                                                                             }
+{ Copyright (c) 1995, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
 unit DBLogDlg;
 
@@ -14,7 +14,7 @@ unit DBLogDlg;
 interface
 
 uses SysUtils, Windows, Messages, Classes, Graphics, Controls,
-  Forms, StdCtrls, ExtCtrls;
+  Forms, StdCtrls, ExtCtrls, DB;
 
 type
   TLoginDialog = class(TForm)
@@ -40,11 +40,14 @@ function LoginDialogEx(const ADatabaseName: string;
 
 function RemoteLoginDialog(var AUserName, APassword: string): Boolean;
 
+procedure SetCursorType(const CurIndex: Integer);
+
+
 implementation
 
-{$R *.DFM}
+{$R *.dfm}
 
-uses DBConsts;
+uses VDBConsts;
 
 function LoginDialog(const ADatabaseName: string;
   var AUserName, APassword: string): Boolean;
@@ -121,4 +124,14 @@ begin
     DatabaseName.Width := (Panel.ClientWidth - DatabaseName.Left) - 5;
 end;
 
+procedure SetCursorType(const CurIndex: Integer);
+begin
+  Screen.Cursor := TCursor(CurIndex);
+end;
+
+initialization
+  LoginDialogProc := LoginDialog;
+  LoginDialogExProc := LoginDialogEx;
+  RemoteLoginDialogProc := RemoteLoginDialog;
+  ScreenCursorProc := SetCursorType;
 end.

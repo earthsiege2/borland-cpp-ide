@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -14,7 +14,6 @@ Abstract:
 
 
 #ifndef _DLGSH_INCLUDED_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _DLGSH_INCLUDED_
 
 
@@ -270,5 +269,4 @@ typedef struct tagCRGB
 } CRGB;           /* RGB Color */
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // _DLGSH_INCLUDED_

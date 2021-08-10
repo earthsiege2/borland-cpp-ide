@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
-Copyright (c) 1996-1999 Microsoft Corporation
+Copyright (c) 1996-2000 Microsoft Corporation
 
 Module Name:
 
@@ -21,7 +21,6 @@ Notes:
 
 
 #ifndef _NTDSAPI_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _NTDSAPI_H_
 
 #if _MSC_VER > 1000
@@ -51,6 +50,13 @@ typedef GUID UUID;
 typedef void * RPC_AUTH_IDENTITY_HANDLE;
 typedef void VOID;
 #endif
+
+
+// Following constants define the Active Directory Behavior
+// Version numbers. 
+#define DS_BEHAVIOR_WIN2000                            0
+#define DS_BEHAVIOR_WHISTLER_WITH_MIXED_DOMAINS        1
+#define DS_BEHAVIOR_WHISTLER                           2
 
 #define DS_DEFAULT_LOCALE                                           \
            (MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),  \
@@ -118,14 +124,14 @@ typedef enum
     // unknown name type
     DS_UNKNOWN_NAME = 0,
 
-    // eg: CN=Spencer Katt,OU=Users,DC=Engineering,DC=Widget,DC=Com
+    // eg: CN=User Name,OU=Users,DC=Example,DC=Microsoft,DC=Com
     DS_FQDN_1779_NAME = 1,
 
-    // eg: Engineering\SpencerK
+    // eg: Example\UserN
     // Domain-only version includes trailing '\\'.
     DS_NT4_ACCOUNT_NAME = 2,
 
-    // Probably "Spencer Katt" but could be something else.  I.e. The
+    // Probably "User Name" but could be something else.  I.e. The
     // display name is not necessarily the defining RDN.
     DS_DISPLAY_NAME = 3,
 
@@ -139,26 +145,30 @@ typedef enum
     // eg: {4fa050f0-f561-11cf-bdd9-00aa003a77b6}
     DS_UNIQUE_ID_NAME = 6,
 
-    // eg: engineering.widget.com/software/spencer katt
+    // eg: example.microsoft.com/software/user name
     // Domain-only version includes trailing '/'.
     DS_CANONICAL_NAME = 7,
 
-    // eg: spencerk@engineering.widget.com
+    // eg: usern@example.microsoft.com
     DS_USER_PRINCIPAL_NAME = 8,
 
     // Same as DS_CANONICAL_NAME except that rightmost '/' is
     // replaced with '\n' - even in domain-only case.
-    // eg: engineering.widget.com/software\nspencer katt
+    // eg: example.microsoft.com/software\nuser name
     DS_CANONICAL_NAME_EX = 9,
 
-    // eg: www/www.widget.com@widget.com - generalized service principal
+    // eg: www/www.microsoft.com@example.com - generalized service principal
     // names.
     DS_SERVICE_PRINCIPAL_NAME = 10,
 
     // This is the string representation of a SID.  Invalid for formatDesired.
     // See sddl.h for SID binary <--> text conversion routines.
     // eg: S-1-5-21-397955417-626881126-188441444-501
-    DS_SID_OR_SID_HISTORY_NAME = 11
+    DS_SID_OR_SID_HISTORY_NAME = 11,
+
+    // Pseudo-name format so GetUserNameEx can return the DNS domain name to
+    // a caller.  This level is not supported by the DS APIs.
+    DS_DNS_DOMAIN_NAME = 12
 
 } DS_NAME_FORMAT;
 
@@ -179,10 +189,16 @@ typedef enum
 
     // Force a trip to the DC for evaluation, even if this could be
     // locally cracked syntactically.
-    DS_NAME_FLAG_EVAL_AT_DC = 0x2
+    DS_NAME_FLAG_EVAL_AT_DC = 0x2,
+
+    // The call fails if the DC is not a GC
+    DS_NAME_FLAG_GCVERIFY = 0x4,
+    
+    // Enable cross forest trust referral
+    DS_NAME_FLAG_TRUST_REFERRAL = 0x8
 
 } DS_NAME_FLAGS;
-
+                        
 typedef enum
 {
     DS_NAME_NO_ERROR = 0,
@@ -208,7 +224,10 @@ typedef enum
 
     // Unable to perform a purely syntactical mapping at the client
     // without going out on the wire.
-    DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING = 6
+    DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING = 6,
+    
+    // The name is from an external trusted forest.
+    DS_NAME_ERROR_TRUST_REFERRAL = 7
 
 } DS_NAME_ERROR;
 
@@ -310,6 +329,8 @@ typedef struct
 
 // ********************
 // Replica Sync flags
+// These flag values are used both as input to DsReplicaSync and
+// as output from DsReplicaGetInfo, PENDING_OPS, DS_REPL_OPW.ulOptions
 // ********************
 
 // Perform this operation asynchronously.
@@ -351,6 +372,45 @@ typedef struct
 
 // When this sync is complete, requests a sync in the opposite direction.
 #define DS_REPSYNC_TWO_WAY                0x00000800
+
+// Do not request change notifications from this source.
+#define DS_REPSYNC_NEVER_NOTIFY           0x00001000
+
+// Sync the NC from this source when the DSA is started.
+#define DS_REPSYNC_INITIAL                0x00002000
+
+// Use compression when replicating.  Saves message size (e.g., network
+// bandwidth) at the expense of extra CPU overhead at both the source and
+// destination servers.
+#define DS_REPSYNC_USE_COMPRESSION        0x00004000
+
+// Sync was abandoned for lack of updates
+#define DS_REPSYNC_ABANDONED              0x00008000
+
+// Initial sync in progress
+#define DS_REPSYNC_INITIAL_IN_PROGRESS    0x00010000
+
+// Partial Attribute Set sync in progress
+#define DS_REPSYNC_PARTIAL_ATTRIBUTE_SET  0x00020000
+
+// Sync is being retried
+#define DS_REPSYNC_REQUEUE                0x00040000
+
+// Sync is a notification request from a source
+#define DS_REPSYNC_NOTIFICATION           0x00080000
+
+// Sync is a special form which requests to establish contact
+// now and do the rest of the sync later
+#define DS_REPSYNC_ASYNCHRONOUS_REPLICA   0x00100000
+
+// Request critical objects only
+#define DS_REPSYNC_CRITICAL               0x00200000
+
+// A full synchronization is in progress
+#define DS_REPSYNC_FULL_IN_PROGRESS       0x00400000
+
+// Synchronization request was previously preempted
+#define DS_REPSYNC_PREEMPTED              0x00800000
 
 
 
@@ -400,6 +460,17 @@ typedef struct
 // disabled only temporarily.
 #define DS_REPADD_NEVER_NOTIFY             0x00000200
 
+// When this sync is complete, requests a sync in the opposite direction.
+#define DS_REPADD_TWO_WAY                  0x00000400
+
+// Request critical objects only
+// Critical only is only allowed while installing
+// A critical only sync does not bring all objects in the partition. It
+// replicates just the ones necessary for minimal directory operation.
+// A normal, non-critical sync must be performed before the partition
+// can be considered fully synchronized.
+#define DS_REPADD_CRITICAL                 0x00000800
+
 
 
 
@@ -435,6 +506,7 @@ typedef struct
 // Allow deletion of read-only replica even if it sources
 // other read-only replicas.
 #define DS_REPDEL_REF_OK                  0x00000040
+
 
 // ********************
 // Replica Modify flags
@@ -474,6 +546,122 @@ typedef struct
 #define DS_REPUPD_DELETE_REFERENCE        0x00000008
 
 
+// ********************
+//  NC Related Flags
+// ********************
+//
+// Instance Type bits, specifies flags for NC head creation.
+//
+#define DS_INSTANCETYPE_IS_NC_HEAD        0x00000001 // This if what to specify on an object to indicate it's an NC Head.
+#define DS_INSTANCETYPE_NC_IS_WRITEABLE   0x00000004 // This is to indicate that the NC Head is writeable.
+
+
+// ********************
+//  xxx_OPT_xxx Flags
+// ********************
+
+// These macros define bit flags which can be set in the "options" attribute
+// of objects of the specified object class.
+
+// Bit flags valid for options attribute on NTDS-DSA objects.
+//
+#define NTDSDSA_OPT_IS_GC                     ( 1 << 0 ) /* DSA is a global catalog */
+#define NTDSDSA_OPT_DISABLE_INBOUND_REPL      ( 1 << 1 ) /* disable inbound replication */
+#define NTDSDSA_OPT_DISABLE_OUTBOUND_REPL     ( 1 << 2 ) /* disable outbound replication */
+#define NTDSDSA_OPT_DISABLE_NTDSCONN_XLATE    ( 1 << 3 ) /* disable logical conn xlation */
+
+
+// Bit flags for options attribute on NTDS-Connection objects.
+//
+// The reasons that two bits are required to control notification are as follows.
+// We must support existing connections with the old behavior and the UI does not
+// create manual connections with the new bit set.
+// The default for existing and manually created connections with bits 2 and 3
+// clear must be the standard prior behavior: notification for intra-site and
+// no notification for inter-site.
+// We need a way to distinguish a old connection which desires the default
+// notification rules, and a new connection for which we desire to explicitly
+// control the notification state as passed down from a site link.  Thus we
+// have a new bit to say we are overriding the default, and a new bit to indicate
+// what the overridden default shall be.
+//
+#define NTDSCONN_OPT_IS_GENERATED ( 1 << 0 )  /* object generated by DS, not admin */
+#define NTDSCONN_OPT_TWOWAY_SYNC  ( 1 << 1 )  /* force sync in opposite direction at end of sync */
+#define NTDSCONN_OPT_OVERRIDE_NOTIFY_DEFAULT (1 << 2 )  // Do not use defaults to determine notification
+#define NTDSCONN_OPT_USE_NOTIFY   (1 << 3) // Does source notify destination
+
+// For intra-site connections, this bit has no meaning.
+// For inter-site connections, this bit means:
+//  0 - Compression of replication data enabled
+//  1 - Compression of replication data disabled
+#define NTDSCONN_OPT_DISABLE_INTERSITE_COMPRESSION    (1 << 4)
+
+//
+// The high 4 bits of the options attribute are used by NTFRS to assign priority
+// for inbound connections. Bit 31 is used to force FRS to ignore schedule during
+// the initial sync. Bits 30 - 28 are used to specify a priority between 0-7.
+//
+
+#define FRSCONN_PRIORITY_MASK		      0x70000000
+#define FRSCONN_MAX_PRIORITY		      0x8
+
+#define NTDSCONN_OPT_IGNORE_SCHEDULE_MASK 0x80000000
+
+#define	NTDSCONN_IGNORE_SCHEDULE(_options_)\
+        (((_options_) & NTDSCONN_OPT_IGNORE_SCHEDULE_MASK) >> 31)
+
+#define	FRSCONN_GET_PRIORITY(_options_)    \
+        (((((_options_) & FRSCONN_PRIORITY_MASK) >> 28) != 0 ) ? \
+         (((_options_) & FRSCONN_PRIORITY_MASK) >> 28) :        \
+         FRSCONN_MAX_PRIORITY                                   \
+        )
+
+// Bit flags for options attribute on NTDS-Site-Settings objects.
+//
+#define NTDSSETTINGS_OPT_IS_AUTO_TOPOLOGY_DISABLED     ( 1 << 0 ) /* automatic topology gen disabled */
+#define NTDSSETTINGS_OPT_IS_TOPL_CLEANUP_DISABLED      ( 1 << 1 ) /* automatic topology cleanup disabled */
+#define NTDSSETTINGS_OPT_IS_TOPL_MIN_HOPS_DISABLED     ( 1 << 2 ) /* automatic minimum hops topology disabled */
+#define NTDSSETTINGS_OPT_IS_TOPL_DETECT_STALE_DISABLED ( 1 << 3 ) /* automatic stale server detection disabled */
+#define NTDSSETTINGS_OPT_IS_INTER_SITE_AUTO_TOPOLOGY_DISABLED ( 1 << 4 ) /* automatic inter-site topology gen disabled */
+#define NTDSSETTINGS_OPT_IS_GROUP_CACHING_ENABLED      ( 1 << 5 ) /* group memberships for users enabled */
+#define NTDSSETTINGS_OPT_FORCE_KCC_WHISTLER_BEHAVIOR   ( 1 << 6 ) /* force KCC to operate in Whistler behavior mode */
+#define NTDSSETTINGS_OPT_FORCE_KCC_W2K_ELECTION        ( 1 << 7 ) /* force KCC to use the Windows 2000 ISTG election algorithm */
+
+// Bit flags for options attribute on Inter-Site-Transport objects
+//
+// Note, the sense of the flag should be such that the default state or
+// behavior corresponds to the flag NOT being present. Put another way, the
+// flag should state the OPPOSITE of the default
+//
+// default: schedules are significant
+#define NTDSTRANSPORT_OPT_IGNORE_SCHEDULES ( 1 << 0 ) // Schedules disabled
+
+// default: links transitive (bridges not required)
+#define NTDSTRANSPORT_OPT_BRIDGES_REQUIRED (1 << 1 ) // siteLink bridges are required
+
+// Bit flags for options attribute on site-Connection objects
+//
+// These are not realized in the DS, but are built up in the KCC
+#define NTDSSITECONN_OPT_USE_NOTIFY ( 1 << 0 ) // Use notification on this link
+#define NTDSSITECONN_OPT_TWOWAY_SYNC ( 1 << 1 )  /* force sync in opposite direction at end of sync */
+
+// This bit means:
+//  0 - Compression of replication data across this site connection enabled
+//  1 - Compression of replication data across this site connection disabled
+#define NTDSSITECONN_OPT_DISABLE_COMPRESSION ( 1 << 2 )
+
+// Bit flags for options attribute on site-Link objects
+// Note that these options are AND-ed along a site-link path
+//
+#define NTDSSITELINK_OPT_USE_NOTIFY ( 1 << 0 ) // Use notification on this link
+#define NTDSSITELINK_OPT_TWOWAY_SYNC ( 1 << 1 )  /* force sync in opposite direction at end of sync */
+
+// This bit means:
+//  0 - Compression of replication data across this site link enabled
+//  1 - Compression of replication data across this site link disabled
+#define NTDSSITELINK_OPT_DISABLE_COMPRESSION ( 1 << 2 )
+
+
 // ***********************
 // Well Known Object Guids
 // ***********************
@@ -485,6 +673,7 @@ typedef struct
 #define GUID_INFRASTRUCTURE_CONTAINER_A     "2fbac1870ade11d297c400c04fd8d5cd"
 #define GUID_DELETED_OBJECTS_CONTAINER_A    "18e2ea80684f11d2b9aa00c04f79f805"
 #define GUID_LOSTANDFOUND_CONTAINER_A       "ab8153b7768811d1aded00c04fd8d5cd"
+#define GUID_FOREIGNSECURITYPRINCIPALS_CONTAINER_A "22b70c67d56e4efb91e9300fca3dc1aa"
 
 #define GUID_USERS_CONTAINER_W              L"a9d1ca15768811d1aded00c04fd8d5cd"
 #define GUID_COMPUTRS_CONTAINER_W           L"aa312825768811d1aded00c04fd8d5cd"
@@ -493,6 +682,7 @@ typedef struct
 #define GUID_INFRASTRUCTURE_CONTAINER_W     L"2fbac1870ade11d297c400c04fd8d5cd"
 #define GUID_DELETED_OBJECTS_CONTAINER_W    L"18e2ea80684f11d2b9aa00c04f79f805"
 #define GUID_LOSTANDFOUND_CONTAINER_W       L"ab8153b7768811d1aded00c04fd8d5cd"
+#define GUID_FOREIGNSECURITYPRINCIPALS_CONTAINER_W L"22b70c67d56e4efb91e9300fca3dc1aa"
 
 #define GUID_USERS_CONTAINER_BYTE              "\xa9\xd1\xca\x15\x76\x88\x11\xd1\xad\xed\x00\xc0\x4f\xd8\xd5\xcd"
 #define GUID_COMPUTRS_CONTAINER_BYTE           "\xaa\x31\x28\x25\x76\x88\x11\xd1\xad\xed\x00\xc0\x4f\xd8\xd5\xcd"
@@ -501,7 +691,13 @@ typedef struct
 #define GUID_INFRASTRUCTURE_CONTAINER_BYTE     "\x2f\xba\xc1\x87\x0a\xde\x11\xd2\x97\xc4\x00\xc0\x4f\xd8\xd5\xcd"
 #define GUID_DELETED_OBJECTS_CONTAINER_BYTE    "\x18\xe2\xea\x80\x68\x4f\x11\xd2\xb9\xaa\x00\xc0\x4f\x79\xf8\x05"
 #define GUID_LOSTANDFOUND_CONTAINER_BYTE       "\xab\x81\x53\xb7\x76\x88\x11\xd1\xad\xed\x00\xc0\x4f\xd8\xd5\xcd"
+#define GUID_FOREIGNSECURITYPRINCIPALS_CONTAINER_BYTE "\x22\xb7\x0c\x67\xd5\x6e\x4e\xfb\x91\xe9\x30\x0f\xca\x3d\xc1\xaa"
 
+typedef enum _DS_MANGLE_FOR {
+        DS_MANGLE_UNKNOWN = 0,
+        DS_MANGLE_OBJECT_RDN_FOR_DELETION,
+        DS_MANGLE_OBJECT_RDN_FOR_NAME_CONFLICT,
+        } DS_MANGLE_FOR;
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
@@ -520,10 +716,10 @@ typedef struct
 //      obtained via DsGetDcName (i.e. Field with the same name in a
 //      DOMAIN_CONTROLLER_INFO struct on return from DsGetDcName call.)
 //      The client is bound to the domain controller at this name.
-//      
+//
 //      Mutual authentication will be performed using an SPN of
 //      LDAP/DomainControllerName provided DomainControllerName
-//      is not a NETBIOS name or IP address - i.e. it must be a 
+//      is not a NETBIOS name or IP address - i.e. it must be a
 //      DNS host name.
 //
 // DomainControllerName(value), DnsDomainName(value)
@@ -538,7 +734,7 @@ typedef struct
 // DomainControllerName(NULL), DnsDomainName(NULL)
 //
 //      DsBind will attempt to find to a global catalog and fail if one
-//      can not be found.  
+//      can not be found.
 //
 //      Mutual authentication will be performed using an SPN of
 //      GC/DnsHostName/ForestName where DnsHostName and ForestName
@@ -2008,10 +2204,10 @@ typedef struct
 
 } DS_DOMAIN_CONTROLLER_INFO_2W, *PDS_DOMAIN_CONTROLLER_INFO_2W;
 
-// The following APIs strictly find domain controller account objects 
+// The following APIs strictly find domain controller account objects
 // in the DS and return information associated with them.  As such, they
 // may return entries which correspond to domain controllers long since
-// decommissioned, etc. and there is no guarantee that there exists a 
+// decommissioned, etc. and there is no guarantee that there exists a
 // physical domain controller at all.  Use DsGetDcName (dsgetdc.h) to find
 // live domain controllers for a domain.
 
@@ -2082,32 +2278,94 @@ DsReplicaConsistencyCheck(
     HANDLE          hDS,        // in
     DS_KCC_TASKID   TaskID,     // in
     DWORD           dwFlags);   // in
+    
+NTDSAPI
+DWORD
+WINAPI
+DsReplicaVerifyObjectsW(
+    HANDLE          hDS,        // in
+    LPCWSTR         NameContext,// in
+    const UUID *    pUuidDsaSrc,// in
+    ULONG           ulOptions);   // in
+    
+NTDSAPI
+DWORD
+WINAPI
+DsReplicaVerifyObjectsA(
+    HANDLE          hDS,        // in
+    LPCSTR          NameContext,// in
+    const UUID *    pUuidDsaSrc,// in
+    ULONG           ulOptions);   // in
 
+#ifdef UNICODE
+#define DsReplicaVerifyObjects DsReplicaVerifyObjectsW
+#else
+#define DsReplicaVerifyObjects DsReplicaVerifyObjectsA
+#endif
+
+// Do not delete objects on DsReplicaVerifyObjects call
+#define DS_EXIST_ADVISORY_MODE (0x1)
 
 typedef enum _DS_REPL_INFO_TYPE {
-    DS_REPL_INFO_NEIGHBORS        = 0,  // returns DS_REPL_NEIGHBORS *
-    DS_REPL_INFO_CURSORS_FOR_NC   = 1,  // returns DS_REPL_CURSORS *
-    DS_REPL_INFO_METADATA_FOR_OBJ = 2,  // returns DS_REPL_OBJECT_META_DATA *
+    DS_REPL_INFO_NEIGHBORS        = 0,          // returns DS_REPL_NEIGHBORS *
+    DS_REPL_INFO_CURSORS_FOR_NC   = 1,          // returns DS_REPL_CURSORS *
+    DS_REPL_INFO_METADATA_FOR_OBJ = 2,          // returns DS_REPL_OBJECT_META_DATA *
     DS_REPL_INFO_KCC_DSA_CONNECT_FAILURES = 3,  // both return
     DS_REPL_INFO_KCC_DSA_LINK_FAILURES = 4,     //    DS_REPL_KCC_DSA_FAILURES *
-    DS_REPL_INFO_PENDING_OPS      = 5,  // returns DS_REPL_PENDING_OPS *
+    DS_REPL_INFO_PENDING_OPS      = 5,          // returns DS_REPL_PENDING_OPS *
+    
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    //  The following info types are not supported by Windows 2000.  Calling
+    //  DsReplicaGetInfo() with one of the types on a Windows 2000 client or
+    //  where hDS is bound to a Windows 2000 DC will fail with
+    //  ERROR_NOT_SUPPORTED.
+    //
+    
+    DS_REPL_INFO_METADATA_FOR_ATTR_VALUE = 6,   // returns DS_REPL_ATTR_VALUE_META_DATA *
+    DS_REPL_INFO_CURSORS_2_FOR_NC = 7,          // returns DS_REPL_CURSORS_2 *
+    DS_REPL_INFO_CURSORS_3_FOR_NC = 8,          // returns DS_REPL_CURSORS_3 *
+    DS_REPL_INFO_METADATA_2_FOR_OBJ = 9,        // returns DS_REPL_OBJECT_META_DATA_2 *
+    DS_REPL_INFO_METADATA_2_FOR_ATTR_VALUE = 10,// returns DS_REPL_ATTR_VALUE_META_DATA_2 *
+    
     // <- insert new DS_REPL_INFO_* types here.
     DS_REPL_INFO_TYPE_MAX
 } DS_REPL_INFO_TYPE;
 
+// Bit values for flags argument to DsReplicaGetInfo2
+#define DS_REPL_INFO_FLAG_IMPROVE_LINKED_ATTRS      (0x00000001)
+
 // Bit values for the dwReplicaFlags field of the DS_REPL_NEIGHBOR structure.
-#define DS_REPL_NBR_WRITEABLE                       (0x10)
-#define DS_REPL_NBR_SYNC_ON_STARTUP                 (0x20)
-#define DS_REPL_NBR_DO_SCHEDULED_SYNCS              (0x40)
-#define DS_REPL_NBR_USE_ASYNC_INTERSITE_TRANSPORT   (0x80)
-#define DS_REPL_NBR_TWO_WAY_SYNC                    (0x200)
-#define DS_REPL_NBR_FULL_SYNC_IN_PROGRESS           (0x10000)
-#define DS_REPL_NBR_FULL_SYNC_NEXT_PACKET           (0x20000)
-#define DS_REPL_NBR_NEVER_SYNCED                    (0x200000)
-#define DS_REPL_NBR_IGNORE_CHANGE_NOTIFICATIONS     (0x4000000)
-#define DS_REPL_NBR_DISABLE_SCHEDULED_SYNC          (0x8000000)
+// Also used for the ulReplicaFlags argument to DsReplicaModify
+#define DS_REPL_NBR_WRITEABLE                       (0x00000010)
+#define DS_REPL_NBR_SYNC_ON_STARTUP                 (0x00000020)
+#define DS_REPL_NBR_DO_SCHEDULED_SYNCS              (0x00000040)
+#define DS_REPL_NBR_USE_ASYNC_INTERSITE_TRANSPORT   (0x00000080)
+#define DS_REPL_NBR_TWO_WAY_SYNC                    (0x00000200)
+#define DS_REPL_NBR_RETURN_OBJECT_PARENTS           (0x00000800)
+#define DS_REPL_NBR_FULL_SYNC_IN_PROGRESS           (0x00010000)
+#define DS_REPL_NBR_FULL_SYNC_NEXT_PACKET           (0x00020000)
+#define DS_REPL_NBR_NEVER_SYNCED                    (0x00200000)
+#define DS_REPL_NBR_IGNORE_CHANGE_NOTIFICATIONS     (0x04000000)
+#define DS_REPL_NBR_DISABLE_SCHEDULED_SYNC          (0x08000000)
 #define DS_REPL_NBR_COMPRESS_CHANGES                (0x10000000)
 #define DS_REPL_NBR_NO_CHANGE_NOTIFICATIONS         (0x20000000)
+#define DS_REPL_NBR_PARTIAL_ATTRIBUTE_SET           (0x40000000)
+
+// This is the mask of replica flags that may be changed on the DsReplicaModify
+// call using the ulReplicaFlags parameter. The other flags are protected
+// system flags.  The previous values of the system flags must be read in
+// advance and merged into the ulReplicaFlags parameter unchanged.
+#define DS_REPL_NBR_MODIFIABLE_MASK \
+        ( \
+        DS_REPL_NBR_SYNC_ON_STARTUP | \
+        DS_REPL_NBR_DO_SCHEDULED_SYNCS | \
+        DS_REPL_NBR_TWO_WAY_SYNC | \
+        DS_REPL_NBR_IGNORE_CHANGE_NOTIFICATIONS | \
+        DS_REPL_NBR_DISABLE_SCHEDULED_SYNC | \
+        DS_REPL_NBR_COMPRESS_CHANGES | \
+        DS_REPL_NBR_NO_CHANGE_NOTIFICATIONS \
+        )
 
 typedef struct _DS_REPL_NEIGHBORW {
     LPWSTR      pszNamingContext;
@@ -2132,6 +2390,30 @@ typedef struct _DS_REPL_NEIGHBORW {
     DWORD       cNumConsecutiveSyncFailures;
 } DS_REPL_NEIGHBORW;
 
+// Fields can be added only to the end of this structure.
+typedef struct _DS_REPL_NEIGHBORW_BLOB {
+    DWORD       oszNamingContext;
+    DWORD       oszSourceDsaDN;
+    DWORD       oszSourceDsaAddress;
+    DWORD       oszAsyncIntersiteTransportDN;
+    DWORD       dwReplicaFlags;
+    DWORD       dwReserved;         
+
+    UUID        uuidNamingContextObjGuid;
+    UUID        uuidSourceDsaObjGuid;
+    UUID        uuidSourceDsaInvocationID;
+    UUID        uuidAsyncIntersiteTransportObjGuid;
+
+    USN         usnLastObjChangeSynced;
+    USN         usnAttributeFilter;
+
+    FILETIME    ftimeLastSyncSuccess;
+    FILETIME    ftimeLastSyncAttempt;
+
+    DWORD       dwLastSyncResult;
+    DWORD       cNumConsecutiveSyncFailures;
+} DS_REPL_NEIGHBORW_BLOB;
+
 typedef struct _DS_REPL_NEIGHBORSW {
     DWORD       cNumNeighbors;
     DWORD       dwReserved;             // alignment
@@ -2147,6 +2429,27 @@ typedef struct _DS_REPL_CURSOR {
     USN         usnAttributeFilter;
 } DS_REPL_CURSOR;
 
+typedef struct _DS_REPL_CURSOR_2 {
+    UUID        uuidSourceDsaInvocationID;
+    USN         usnAttributeFilter;
+    FILETIME    ftimeLastSyncSuccess;
+} DS_REPL_CURSOR_2;
+
+typedef struct _DS_REPL_CURSOR_3W {
+    UUID        uuidSourceDsaInvocationID;
+    USN         usnAttributeFilter;
+    FILETIME    ftimeLastSyncSuccess;
+    LPWSTR      pszSourceDsaDN;
+} DS_REPL_CURSOR_3W;
+
+// Fields can be added only to the end of this structure.
+typedef struct _DS_REPL_CURSOR_BLOB {
+    UUID        uuidSourceDsaInvocationID;
+    USN         usnAttributeFilter;
+    FILETIME    ftimeLastSyncSuccess;
+    DWORD       oszSourceDsaDN;
+} DS_REPL_CURSOR_BLOB;
+
 typedef struct _DS_REPL_CURSORS {
     DWORD       cNumCursors;
     DWORD       dwReserved;             // alignment
@@ -2157,6 +2460,28 @@ typedef struct _DS_REPL_CURSORS {
 #endif
 } DS_REPL_CURSORS;
 
+typedef struct _DS_REPL_CURSORS_2 {
+    DWORD       cNumCursors;
+    DWORD       dwEnumerationContext;
+    // keep this 8 byte aligned
+#ifdef MIDL_PASS
+    [size_is(cNumCursors)] DS_REPL_CURSOR_2 rgCursor[];
+#else
+    DS_REPL_CURSOR_2 rgCursor[1];
+#endif
+} DS_REPL_CURSORS_2;
+
+typedef struct _DS_REPL_CURSORS_3W {
+    DWORD       cNumCursors;
+    DWORD       dwEnumerationContext;
+    // keep this 8 byte aligned
+#ifdef MIDL_PASS
+    [size_is(cNumCursors)] DS_REPL_CURSOR_3W rgCursor[];
+#else
+    DS_REPL_CURSOR_3W rgCursor[1];
+#endif
+} DS_REPL_CURSORS_3W;
+
 typedef struct _DS_REPL_ATTR_META_DATA {
     LPWSTR      pszAttributeName;
     DWORD       dwVersion;
@@ -2165,6 +2490,27 @@ typedef struct _DS_REPL_ATTR_META_DATA {
     USN         usnOriginatingChange;   // in the originating DSA's USN space
     USN         usnLocalChange;         // in the local DSA's USN space
 } DS_REPL_ATTR_META_DATA;
+
+typedef struct _DS_REPL_ATTR_META_DATA_2 {
+    LPWSTR      pszAttributeName;
+    DWORD       dwVersion;
+    FILETIME    ftimeLastOriginatingChange;
+    UUID        uuidLastOriginatingDsaInvocationID;
+    USN         usnOriginatingChange;   // in the originating DSA's USN space
+    USN         usnLocalChange;         // in the local DSA's USN space
+    LPWSTR      pszLastOriginatingDsaDN;
+} DS_REPL_ATTR_META_DATA_2;
+
+// Fields can be added only to the end of this structure.
+typedef struct _DS_REPL_ATTR_META_DATA_BLOB {
+    DWORD       oszAttributeName;
+    DWORD       dwVersion;
+    FILETIME    ftimeLastOriginatingChange;
+    UUID        uuidLastOriginatingDsaInvocationID;
+    USN         usnOriginatingChange;   // in the originating DSA's USN space
+    USN         usnLocalChange;         // in the local DSA's USN space
+    DWORD       oszLastOriginatingDsaDN;
+} DS_REPL_ATTR_META_DATA_BLOB;
 
 typedef struct _DS_REPL_OBJ_META_DATA {
     DWORD       cNumEntries;
@@ -2176,6 +2522,16 @@ typedef struct _DS_REPL_OBJ_META_DATA {
 #endif
 } DS_REPL_OBJ_META_DATA;
 
+typedef struct _DS_REPL_OBJ_META_DATA_2 {
+    DWORD       cNumEntries;
+    DWORD       dwReserved;             // alignment
+#ifdef MIDL_PASS
+    [size_is(cNumEntries)] DS_REPL_ATTR_META_DATA_2 rgMetaData[];
+#else
+    DS_REPL_ATTR_META_DATA_2 rgMetaData[1];
+#endif
+} DS_REPL_OBJ_META_DATA_2;
+
 typedef struct _DS_REPL_KCC_DSA_FAILUREW {
     LPWSTR      pszDsaDN;
     UUID        uuidDsaObjGuid;
@@ -2183,6 +2539,15 @@ typedef struct _DS_REPL_KCC_DSA_FAILUREW {
     DWORD       cNumFailures;
     DWORD       dwLastResult;   // Win32 error code
 } DS_REPL_KCC_DSA_FAILUREW;
+
+// Fields can be added only to the end of this structure.
+typedef struct _DS_REPL_KCC_DSA_FAILUREW_BLOB {
+    DWORD       oszDsaDN;
+    UUID        uuidDsaObjGuid;
+    FILETIME    ftimeFirstFailure;
+    DWORD       cNumFailures;
+    DWORD       dwLastResult;   // Win32 error code
+} DS_REPL_KCC_DSA_FAILUREW_BLOB;
 
 typedef struct _DS_REPL_KCC_DSA_FAILURESW {
     DWORD       cNumEntries;
@@ -2207,17 +2572,35 @@ typedef struct _DS_REPL_OPW {
     ULONG           ulSerialNumber; // ID of this sync; unique per machine per boot
     ULONG           ulPriority;     // > priority, > urgency
     DS_REPL_OP_TYPE OpType;
-    
+
     ULONG           ulOptions;      // Zero or more bits specific to OpType; e.g.,
                                     //  DS_REPADD_* for DS_REPL_OP_TYPE_ADD,
                                     //  DS_REPSYNC_* for DS_REPL_OP_TYPE_SYNC, etc.
     LPWSTR          pszNamingContext;
     LPWSTR          pszDsaDN;
     LPWSTR          pszDsaAddress;
-                    
+
     UUID            uuidNamingContextObjGuid;
     UUID            uuidDsaObjGuid;
 } DS_REPL_OPW;
+
+// Fields can be added only to the end of this structure.
+typedef struct _DS_REPL_OPW_BLOB {
+    FILETIME        ftimeEnqueued;  // time at which the operation was enqueued
+    ULONG           ulSerialNumber; // ID of this sync; unique per machine per boot
+    ULONG           ulPriority;     // > priority, > urgency
+    DS_REPL_OP_TYPE OpType;
+
+    ULONG           ulOptions;      // Zero or more bits specific to OpType; e.g.,
+                                    //  DS_REPADD_* for DS_REPL_OP_TYPE_ADD,
+                                    //  DS_REPSYNC_* for DS_REPL_OP_TYPE_SYNC, etc.
+    DWORD           oszNamingContext;
+    DWORD           oszDsaDN;
+    DWORD           oszDsaAddress;
+
+    UUID            uuidNamingContextObjGuid;
+    UUID            uuidDsaObjGuid;
+} DS_REPL_OPW_BLOB;
 
 typedef struct _DS_REPL_PENDING_OPSW {
     FILETIME            ftimeCurrentOpStarted;
@@ -2228,6 +2611,93 @@ typedef struct _DS_REPL_PENDING_OPSW {
     DS_REPL_OPW         rgPendingOp[1];
 #endif
 } DS_REPL_PENDING_OPSW;
+
+typedef struct _DS_REPL_VALUE_META_DATA {
+    LPWSTR      pszAttributeName;
+    LPWSTR      pszObjectDn;
+    DWORD       cbData;
+#ifdef MIDL_PASS
+    [size_is(cbData), ptr] BYTE        *pbData;
+#else
+    BYTE        *pbData;
+#endif
+    FILETIME    ftimeDeleted;
+    FILETIME    ftimeCreated;
+    DWORD       dwVersion;
+    FILETIME    ftimeLastOriginatingChange;
+    UUID        uuidLastOriginatingDsaInvocationID;
+    USN         usnOriginatingChange;   // in the originating DSA's USN space
+    USN         usnLocalChange;         // in the local DSA's USN space
+} DS_REPL_VALUE_META_DATA;
+
+typedef struct _DS_REPL_VALUE_META_DATA_2 {
+    LPWSTR      pszAttributeName;
+    LPWSTR      pszObjectDn;
+    DWORD       cbData;
+#ifdef MIDL_PASS
+    [size_is(cbData), ptr] BYTE        *pbData;
+#else
+    BYTE        *pbData;
+#endif
+    FILETIME    ftimeDeleted;
+    FILETIME    ftimeCreated;
+    DWORD       dwVersion;
+    FILETIME    ftimeLastOriginatingChange;
+    UUID        uuidLastOriginatingDsaInvocationID;
+    USN         usnOriginatingChange;   // in the originating DSA's USN space
+    USN         usnLocalChange;         // in the local DSA's USN space
+    LPWSTR      pszLastOriginatingDsaDN;
+} DS_REPL_VALUE_META_DATA_2;
+
+// Fields can be added only to the end of this structure.
+typedef struct _DS_REPL_VALUE_META_DATA_BLOB {
+    DWORD       oszAttributeName;
+    DWORD       oszObjectDn;
+    DWORD       cbData;
+    DWORD       obData;
+    FILETIME    ftimeDeleted;
+    FILETIME    ftimeCreated;
+    DWORD       dwVersion;
+    FILETIME    ftimeLastOriginatingChange;
+    UUID        uuidLastOriginatingDsaInvocationID;
+    USN         usnOriginatingChange;   // in the originating DSA's USN space
+    USN         usnLocalChange;         // in the local DSA's USN space
+    DWORD       oszLastOriginatingDsaDN;
+} DS_REPL_VALUE_META_DATA_BLOB;
+
+typedef struct _DS_REPL_ATTR_VALUE_META_DATA {
+    DWORD       cNumEntries;
+    DWORD       dwEnumerationContext;
+#ifdef MIDL_PASS
+    [size_is(cNumEntries)] DS_REPL_VALUE_META_DATA rgMetaData[];
+#else
+    DS_REPL_VALUE_META_DATA rgMetaData[1];
+#endif
+} DS_REPL_ATTR_VALUE_META_DATA;
+
+typedef struct _DS_REPL_ATTR_VALUE_META_DATA_2 {
+    DWORD       cNumEntries;
+    DWORD       dwEnumerationContext;
+#ifdef MIDL_PASS
+    [size_is(cNumEntries)] DS_REPL_VALUE_META_DATA_2 rgMetaData[];
+#else
+    DS_REPL_VALUE_META_DATA_2 rgMetaData[1];
+#endif
+} DS_REPL_ATTR_VALUE_META_DATA_2;
+
+typedef struct _DS_REPL_QUEUE_STATISTICSW
+{
+    FILETIME ftimeCurrentOpStarted;
+    DWORD cNumPendingOps;
+    FILETIME ftimeOldestSync;
+    FILETIME ftimeOldestAdd;
+    FILETIME ftimeOldestMod;
+    FILETIME ftimeOldestDel;
+    FILETIME ftimeOldestUpdRefs;
+} DS_REPL_QUEUE_STATISTICSW;
+
+// Fields can be added only to the end of this structure.
+typedef struct _DS_REPL_QUEUE_STATISTICSW DS_REPL_QUEUE_STATISTICSW_BLOB;
 
 
 NTDSAPI
@@ -2240,6 +2710,21 @@ DsReplicaGetInfoW(
     UUID *              puuidForSourceDsaObjGuid,   // in
     VOID **             ppInfo);                    // out
 
+// This API is not supported by Windows 2000 clients or Windows 2000 DCs.
+NTDSAPI
+DWORD
+WINAPI
+DsReplicaGetInfo2W(
+    HANDLE              hDS,                        // in
+    DS_REPL_INFO_TYPE   InfoType,                   // in
+    LPCWSTR             pszObject,                  // in
+    UUID *              puuidForSourceDsaObjGuid,   // in
+    LPCWSTR             pszAttributeName,           // in
+    LPCWSTR             pszValue,                   // in
+    DWORD               dwFlags,                    // in
+    DWORD               dwEnumerationContext,       // in
+    VOID **             ppInfo);                    // out
+
 NTDSAPI
 void
 WINAPI
@@ -2250,8 +2735,11 @@ DsReplicaFreeInfo(
 
 #ifdef UNICODE
 #define DsReplicaGetInfo          DsReplicaGetInfoW
+#define DsReplicaGetInfo2         DsReplicaGetInfo2W
 #define DS_REPL_NEIGHBOR          DS_REPL_NEIGHBORW
 #define DS_REPL_NEIGHBORS         DS_REPL_NEIGHBORSW
+#define DS_REPL_CURSOR_3          DS_REPL_CURSOR_3W
+#define DS_REPL_CURSORS_3         DS_REPL_CURSORS_3W
 #define DS_REPL_KCC_DSA_FAILURES  DS_REPL_KCC_DSA_FAILURESW
 #define DS_REPL_KCC_DSA_FAILURE   DS_REPL_KCC_DSA_FAILUREW
 #define DS_REPL_OP                DS_REPL_OPW
@@ -2515,11 +3003,307 @@ DsUnquoteRdnValueA(
 #else
 #define DsUnquoteRdnValue DsUnquoteRdnValueA
 #endif
+
+/*++
+==========================================================
+NTDSAPI
+DWORD
+WINAPI
+DsGetRdnW(
+    IN OUT LPCWCH   *ppDN,
+    IN OUT DWORD    *pcDN,
+    OUT    LPCWCH   *ppKey,
+    OUT    DWORD    *pcKey,
+    OUT    LPCWCH   *ppVal,
+    OUT    DWORD    *pcVal
+    )
+
+Description
+
+    This client call accepts a DN with quoted RDNs and returns the address
+    and length, in chars, of the key and value for the first RDN in the DN.
+    The RDN value returned is still quoted. Use DsUnquoteRdnValue to unquote
+    the value for display.
+
+    This client call also returns the address and length of the rest of the
+    DN. A subsequent call using the returned DN address and length will
+    return information about the next RDN.
+
+    The following loop processes each RDN in pDN:
+        ccDN = wcslen(pDN)
+        while (ccDN) {
+            error = DsGetRdn(&pDN,
+                             &ccDN,
+                             &pKey,
+                             &ccKey,
+                             &pVal,
+                             &ccVal);
+            if (error != ERROR_SUCCESS) {
+                process error;
+                return;
+            }
+            if (ccKey) {
+                process pKey;
+            }
+            if (ccVal) {
+                process pVal;
+            }
+        }
+
+    For example, given the DN "cn=bob,dc=com", the first call to DsGetRdnW
+    returns the addresses for ",dc=com", "cn", and "bob" with respective
+    lengths of 7, 2, and 3. A subsequent call with ",dc=com" returns "",
+    "dc", and "com" with respective lengths 0, 2, and 3.
+
+Arguments:
+    ppDN
+        IN : *ppDN points to a DN
+        OUT: *ppDN points to the rest of the DN following the first RDN
+    pcDN
+        IN : *pcDN is the count of chars in the input *ppDN, not including
+             any terminating NULL
+        OUT: *pcDN is the count of chars in the output *ppDN, not including
+             any terminating NULL
+    ppKey
+        OUT: Undefined if *pcKey is 0. Otherwise, *ppKey points to the first
+             key in the DN
+    pcKey
+        OUT: *pcKey is the count of chars in *ppKey.
+
+    ppVal
+        OUT: Undefined if *pcVal is 0. Otherwise, *ppVal points to the first
+             value in the DN
+    pcVal
+        OUT: *pcVal is the count of chars in *ppVal
+
+Return Value:
+    ERROR_SUCCESS
+        If *pccDN is not 0, then *ppDN points to the rest of the DN following
+        the first RDN. If *pccDN is 0, then *ppDN is undefined.
+
+        If *pccKey is not 0, then *ppKey points to the first key in DN. If
+        *pccKey is 0, then *ppKey is undefined.
+
+        If *pccVal is not 0, then *ppVal points to the first value in DN. If
+        *pccVal is 0, then *ppVal is undefined.
+
+    ERROR_DS_NAME_UNPARSEABLE
+        The first RDN in *ppDN could not be parsed. All output parameters
+        are undefined.
+
+    Any other error
+        All output parameters are undefined.
+
+--*/
+NTDSAPI
+DWORD
+WINAPI
+DsGetRdnW(
+    IN OUT LPCWCH   *ppDN,
+    IN OUT DWORD    *pcDN,
+    OUT    LPCWCH   *ppKey,
+    OUT    DWORD    *pcKey,
+    OUT    LPCWCH   *ppVal,
+    OUT    DWORD    *pcVal
+    );
+
+
+/*++
+==========================================================
+
+NTDSAPI
+BOOL
+WINAPI
+DsCrackUnquotedMangledRdnW(
+     IN LPCWSTR pszRDN,
+     IN DWORD cchRDN,
+     OUT OPTIONAL GUID *pGuid,
+     OUT OPTIONAL DS_MANGLE_FOR *peDsMangleFor
+     );
+
+Description
+
+Determine whether the given RDN is in mangled form. If so, the mangled RDN
+is decoded, and the guid and mangle type are returned.
+
+The RDN should already be in unquoted form. See DsUnquoteRdnValue.
+
+Arguments:
+
+    pszRDN (IN) - Character string containing RDN. Termination is optional.
+
+    cchRDN (IN) - Length of RDN excluding termination, if any
+
+    pGuid (OUT, OPTIONAL) - Pointer to storage to receive decoded guid.
+                            Only returned if RDN is mangled.
+
+    peDsMangleFor (OUT, OPTIONAL) - Pointer to storage to receive mangle type.
+                            Only returned if RDN is mangled
+
+Return Value:
+
+    BOOL - Whether the RDN is mangled or not
+
+--*/
+
+NTDSAPI
+BOOL
+WINAPI
+DsCrackUnquotedMangledRdnW(
+     IN LPCWSTR pszRDN,
+     IN DWORD cchRDN,
+     OUT OPTIONAL GUID *pGuid,
+     OUT OPTIONAL DS_MANGLE_FOR *peDsMangleFor
+     );
+
+NTDSAPI
+BOOL
+WINAPI
+DsCrackUnquotedMangledRdnA(
+     IN LPCSTR pszRDN,
+     IN DWORD cchRDN,
+     OUT OPTIONAL GUID *pGuid,
+     OUT OPTIONAL DS_MANGLE_FOR *peDsMangleFor
+     );
+
+#ifdef UNICODE
+#define DsCrackUnquotedMangledRdn DsCrackUnquotedMangledRdnW
+#else
+#define DsCrackUnquotedMangledRdn DsCrackUnquotedMangledRdnA
+#endif
+
+/*++
+==========================================================
+
+NTDSAPI
+BOOL
+WINAPI
+DsIsMangledRdnValueW(
+    LPCWSTR pszRdn,
+    DWORD cRdn,
+    DS_MANGLE_FOR eDsMangleForDesired
+    );
+
+Description
+
+    Determine if the given RDN Value is mangled, and of the given type. Note that
+    the key portion of an RDN should not be supplied.
+
+    The name may be quoted or unquoted.  This routine tries to unquote the value.  If
+    the unquote operation fails, the routine proceeds to attempt the unmangle.
+
+    A change was made in the default quoting behavior of DNs returned from the DS
+    between Windows 2000 and Windows XP. This routine transparently handles RDNs with
+    special characters in either form.
+
+    The routine expects the value part of the RDN.
+
+    If you have full DN, use DsIsMangledDn() below.
+
+    To check for deleted name:
+        DsIsMangledRdnValueW( rdn, rdnlen, DS_MANGLE_OBJECT_FOR_DELETION )
+    To check for a conflicted name:
+        DsIsMangledRdnValueW( rdn, rdnlen, DS_MANGLE_OBJECT_FOR_NAME_CONFLICT )
+
+Arguments:
+
+    pszRdn (IN) - RDN value character string. Termination is not required and
+        is ignored.
+
+    cRdn (IN) - Length of RDN value in characters excluding termination
+
+    eDsMangleForDesired (IN) - Type of mangling to check for
+
+Return Value:
+
+    BOOL - True if the Rdn is mangled and is of the required type
+
+--*/
+
+NTDSAPI
+BOOL
+WINAPI
+DsIsMangledRdnValueW(
+    LPCWSTR pszRdn,
+    DWORD cRdn,
+    DS_MANGLE_FOR eDsMangleForDesired
+    );
+
+NTDSAPI
+BOOL
+WINAPI
+DsIsMangledRdnValueA(
+    LPCSTR pszRdn,
+    DWORD cRdn,
+    DS_MANGLE_FOR eDsMangleForDesired
+    );
+
+#ifdef UNICODE
+#define DsIsMangledRdnValue DsIsMangledRdnValueW
+#else
+#define DsIsMangledRdnValue DsIsMangledRdnValueA
+#endif
+
+/*++
+==========================================================
+
+NTDSAPI
+BOOL
+WINAPI
+DsIsMangledDnW(
+    LPCWSTR pszDn,
+    DS_MANGLE_FOR eDsMangleFor
+    );
+
+Description
+
+    Determine if the first RDN in a quoted DN is a mangled name of given type.
+
+    The DN must be suitable for input to DsGetRdn().
+
+    To check for deleted name:
+        DsIsMangledDnW( dn, DS_MANGLE_OBJECT_FOR_DELETION )
+    To check for a conflicted name:
+        DsIsMangledDnW( Dn, DS_MANGLE_OBJECT_FOR_NAME_CONFLICT )
+
+Arguments:
+
+    pszDn (IN) - Quoted Distinguished Name as returned by DS functions
+
+    eDsMangleFor (IN) - Type of mangling to check for
+
+Return Value:
+
+    BOOL - True if first RDN is mangled and is of the given mangle type
+
+--*/
+
+NTDSAPI
+BOOL
+WINAPI
+DsIsMangledDnA(
+    LPCSTR pszDn,
+    DS_MANGLE_FOR eDsMangleFor
+    );
+
+NTDSAPI
+BOOL
+WINAPI
+DsIsMangledDnW(
+    LPCWSTR pszDn,
+    DS_MANGLE_FOR eDsMangleFor
+    );
+
+#ifdef UNICODE
+#define DsIsMangledDn DsIsMangledDnW
+#else
+#define DsIsMangledDn DsIsMangledDnA
+#endif
+
 #ifdef __cplusplus
 }
 #endif
 #endif !MIDL_PASS
 
-#pragma option pop /*P_O_Pop*/
 #endif // _NTDSAPI_H_
 

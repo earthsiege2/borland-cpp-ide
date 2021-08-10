@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DBCtrls.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DBCtrls.pas' rev: 6.00
 
 #ifndef DBCtrlsHPP
 #define DBCtrlsHPP
@@ -10,7 +10,7 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <ComCtrls.hpp>	// Pascal unit
 #include <Buttons.hpp>	// Pascal unit
 #include <Mask.hpp>	// Pascal unit
@@ -18,16 +18,29 @@
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Menus.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
+#include <Classes.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
-#include <Classes.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
 //-- user supplied -----------------------------------------------------------
+
+/* automatically link to dblogdlg.obj so that the login dialog is automatically shown */
+#pragma link "dblogdlg.obj"
+/* automatically link to dbrtl and vcldb as well */
+#ifdef USEPACKAGES
+#pragma link "dbrtl.bpi"
+#pragma link "vcldb.bpi"
+#else
+#pragma link "dbrtl.lib"
+#pragma link "vcldb.lib"
+#endif
+
 
 namespace Dbctrls
 {
@@ -74,11 +87,9 @@ public:
 	__property AnsiString FieldName = {read=FFieldName, write=SetFieldName};
 	__property Classes::TNotifyEvent OnDataChange = {read=FOnDataChange, write=FOnDataChange};
 	__property Classes::TNotifyEvent OnEditingChange = {read=FOnEditingChange, write=FOnEditingChange};
-		
 	__property Classes::TNotifyEvent OnUpdateData = {read=FOnUpdateData, write=FOnUpdateData};
 	__property Classes::TNotifyEvent OnActiveChange = {read=FOnActiveChange, write=FOnActiveChange};
 public:
-		
 	#pragma option push -w-inl
 	/* TDataLink.Destroy */ inline __fastcall virtual ~TFieldDataLink(void) { }
 	#pragma option pop
@@ -128,7 +139,7 @@ private:
 	Db::TDataSource* __fastcall GetDataSource(void);
 	Db::TField* __fastcall GetField(void);
 	bool __fastcall GetReadOnly(void);
-	Windows::TPoint __fastcall GetTextMargins();
+	Types::TPoint __fastcall GetTextMargins();
 	void __fastcall ResetMaxLength(void);
 	void __fastcall SetDataField(const AnsiString Value);
 	void __fastcall SetDataSource(Db::TDataSource* Value);
@@ -149,8 +160,7 @@ protected:
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
 	DYNAMIC void __fastcall KeyPress(char &Key);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall Reset(void);
 	
 public:
@@ -162,37 +172,42 @@ public:
 	__property Db::TField* Field = {read=GetField};
 	
 __published:
-	__property Anchors ;
-	__property AutoSelect ;
-	__property AutoSize ;
+	__property Anchors  = {default=3};
+	__property AutoSelect  = {default=1};
+	__property AutoSize  = {default=1};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelOuter  = {index=1, default=1};
+	__property BevelKind  = {default=0};
+	__property BevelWidth  = {default=1};
 	__property BiDiMode ;
-	__property BorderStyle ;
-	__property CharCase ;
-	__property Color ;
+	__property BorderStyle  = {default=1};
+	__property CharCase  = {default=0};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
 	__property AnsiString DataField = {read=GetDataField, write=SetDataField};
 	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
-	__property MaxLength ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
-	__property PasswordChar ;
+	__property MaxLength  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
+	__property PasswordChar  = {default=0};
 	__property PopupMenu ;
 	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnChange ;
 	__property OnClick ;
 	__property OnContextPopup ;
@@ -213,8 +228,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBEdit(HWND ParentWindow) : Mask::TCustomMaskEdit(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBEdit(HWND ParentWindow) : Mask::TCustomMaskEdit(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -239,8 +253,7 @@ private:
 protected:
 	virtual AnsiString __fastcall GetLabelText();
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall SetAutoSize(bool Value);
 	
 public:
@@ -252,29 +265,29 @@ public:
 	__property Db::TField* Field = {read=GetField};
 	
 __published:
-	__property Align ;
-	__property Alignment ;
-	__property Anchors ;
-	__property AutoSize ;
+	__property Align  = {default=0};
+	__property Alignment  = {default=0};
+	__property Anchors  = {default=3};
+	__property AutoSize  = {default=0};
 	__property BiDiMode ;
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property AnsiString DataField = {read=GetDataField, write=SetDataField};
 	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property Transparent ;
+	__property Transparent  = {default=0};
 	__property ShowHint ;
-	__property Visible ;
-	__property WordWrap ;
+	__property Visible  = {default=1};
+	__property WordWrap  = {default=0};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property OnDblClick ;
@@ -320,8 +333,7 @@ private:
 protected:
 	virtual void __fastcall Toggle(void);
 	DYNAMIC void __fastcall KeyPress(char &Key);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
 	
 public:
@@ -330,40 +342,40 @@ public:
 	DYNAMIC bool __fastcall ExecuteAction(Classes::TBasicAction* Action);
 	DYNAMIC bool __fastcall UpdateAction(Classes::TBasicAction* Action);
 	DYNAMIC bool __fastcall UseRightToLeftAlignment(void);
-	__property Checked ;
+	__property Checked  = {default=0};
 	__property Db::TField* Field = {read=GetField};
-	__property State ;
+	__property State  = {default=0};
 	
 __published:
 	__property Action ;
-	__property Alignment ;
-	__property AllowGrayed ;
-	__property Anchors ;
+	__property Alignment  = {default=1};
+	__property AllowGrayed  = {default=0};
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
 	__property Caption ;
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
 	__property AnsiString DataField = {read=GetDataField, write=SetDataField};
 	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=1};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
 	__property AnsiString ValueChecked = {read=FValueCheck, write=SetValueCheck};
 	__property AnsiString ValueUnchecked = {read=FValueUncheck, write=SetValueUncheck};
-	__property Visible ;
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property OnDragDrop ;
@@ -382,8 +394,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBCheckBox(HWND ParentWindow) : Stdctrls::TCustomCheckBox(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBCheckBox(HWND ParentWindow) : Stdctrls::TCustomCheckBox(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -408,7 +419,6 @@ private:
 	void __fastcall SetDataField(const AnsiString Value);
 	void __fastcall SetDataSource(Db::TDataSource* Value);
 	void __fastcall SetEditReadOnly(void);
-	HIDESBASE void __fastcall SetItems(Classes::TStrings* Value);
 	void __fastcall SetReadOnly(bool Value);
 	void __fastcall UpdateData(System::TObject* Sender);
 	HIDESBASE MESSAGE void __fastcall CMEnter(Messages::TWMNoParams &Message);
@@ -420,14 +430,13 @@ protected:
 	DYNAMIC void __fastcall Change(void);
 	DYNAMIC void __fastcall Click(void);
 	virtual void __fastcall ComboWndProc(Messages::TMessage &Message, HWND ComboWnd, void * ComboProc);
-		
 	virtual void __fastcall CreateWnd(void);
 	DYNAMIC void __fastcall DropDown(void);
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
 	DYNAMIC void __fastcall KeyPress(char &Key);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
+	virtual void __fastcall SetItems(const Classes::TStrings* Value);
 	virtual void __fastcall SetStyle(Stdctrls::TComboBoxStyle Value);
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
 	
@@ -441,36 +450,44 @@ public:
 	__property Text ;
 	
 __published:
-	__property Style ;
-	__property Anchors ;
+	__property Style  = {default=0};
+	__property Anchors  = {default=3};
+	__property AutoComplete  = {default=1};
+	__property AutoDropDown  = {default=0};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelOuter  = {index=1, default=1};
+	__property BevelKind  = {default=0};
+	__property BevelWidth  = {default=1};
 	__property BiDiMode ;
-	__property Color ;
+	__property CharCase  = {default=0};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
 	__property AnsiString DataField = {read=GetDataField, write=SetDataField};
 	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property DropDownCount ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property DropDownCount  = {default=8};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
 	__property ItemHeight ;
 	__property Items  = {write=SetItems};
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, default=0};
 	__property ShowHint ;
-	__property Sorted ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property Sorted  = {default=0};
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnChange ;
 	__property OnClick ;
 	__property OnContextPopup ;
@@ -491,8 +508,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBComboBox(HWND ParentWindow) : Stdctrls::TCustomComboBox(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBComboBox(HWND ParentWindow) : Stdctrls::TCustomComboBox(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -517,13 +533,13 @@ private:
 	HIDESBASE void __fastcall SetItems(Classes::TStrings* Value);
 	HIDESBASE MESSAGE void __fastcall WMLButtonDown(Messages::TWMMouse &Message);
 	HIDESBASE MESSAGE void __fastcall CMExit(Messages::TWMNoParams &Message);
+	MESSAGE void __fastcall CMGetDataLink(Messages::TMessage &Message);
 	
 protected:
 	DYNAMIC void __fastcall Click(void);
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
 	DYNAMIC void __fastcall KeyPress(char &Key);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TDBListBox(Classes::TComponent* AOwner);
@@ -534,37 +550,43 @@ public:
 	__property Db::TField* Field = {read=GetField};
 	
 __published:
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property AutoComplete  = {default=1};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelOuter  = {index=1, default=1};
+	__property BevelKind  = {default=0};
+	__property BevelWidth  = {default=1};
 	__property BiDiMode ;
-	__property BorderStyle ;
-	__property Color ;
+	__property BorderStyle  = {default=1};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
-	__property Ctl3D ;
+	__property Ctl3D  = {default=1};
 	__property AnsiString DataField = {read=GetDataField, write=SetDataField};
 	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
-	__property IntegralHeight ;
+	__property IntegralHeight  = {default=0};
 	__property ItemHeight ;
 	__property Items  = {write=SetItems};
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, default=0};
 	__property ShowHint ;
-	__property Style ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property Style  = {default=0};
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property OnDblClick ;
@@ -586,8 +608,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBListBox(HWND ParentWindow) : Stdctrls::TCustomListBox(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBListBox(HWND ParentWindow) : Stdctrls::TCustomListBox(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -618,14 +639,14 @@ private:
 	HIDESBASE void __fastcall SetItems(Classes::TStrings* Value);
 	void __fastcall SetValues(Classes::TStrings* Value);
 	HIDESBASE MESSAGE void __fastcall CMExit(Messages::TWMNoParams &Message);
+	MESSAGE void __fastcall CMGetDataLink(Messages::TMessage &Message);
 	
 protected:
 	DYNAMIC void __fastcall Change(void);
 	DYNAMIC void __fastcall Click(void);
 	DYNAMIC void __fastcall KeyPress(char &Key);
 	virtual bool __fastcall CanModify(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	__property TFieldDataLink* DataLink = {read=FDataLink};
 	
 public:
@@ -635,38 +656,38 @@ public:
 	DYNAMIC bool __fastcall UpdateAction(Classes::TBasicAction* Action);
 	DYNAMIC bool __fastcall UseRightToLeftAlignment(void);
 	__property Db::TField* Field = {read=GetField};
-	__property ItemIndex ;
+	__property ItemIndex  = {default=-1};
 	__property AnsiString Value = {read=FValue, write=SetValue};
 	
 __published:
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
 	__property Caption ;
-	__property Color ;
-	__property Columns ;
+	__property Color  = {default=-2147483643};
+	__property Columns  = {default=1};
 	__property Constraints ;
 	__property Ctl3D ;
 	__property AnsiString DataField = {read=GetDataField, write=SetDataField};
 	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
 	__property Items  = {write=SetItems};
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=1};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
 	__property Classes::TStrings* Values = {read=FValues, write=SetValues};
-	__property Visible ;
+	__property Visible  = {default=1};
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property OnClick ;
 	__property OnContextPopup ;
@@ -680,8 +701,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBRadioGroup(HWND ParentWindow) : Extctrls::TCustomRadioGroup(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBRadioGroup(HWND ParentWindow) : Extctrls::TCustomRadioGroup(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -724,8 +744,7 @@ protected:
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
 	DYNAMIC void __fastcall KeyPress(char &Key);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
 	
 public:
@@ -738,39 +757,46 @@ public:
 	__property Db::TField* Field = {read=GetField};
 	
 __published:
-	__property Align ;
-	__property Alignment ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Alignment  = {default=0};
+	__property Anchors  = {default=3};
 	__property bool AutoDisplay = {read=FAutoDisplay, write=SetAutoDisplay, default=1};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelOuter  = {index=1, default=1};
+	__property BevelKind  = {default=0};
+	__property BevelWidth  = {default=1};
 	__property BiDiMode ;
-	__property BorderStyle ;
-	__property Color ;
+	__property BorderStyle  = {default=1};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
 	__property AnsiString DataField = {read=GetDataField, write=SetDataField};
 	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ImeMode ;
+	__property HideSelection  = {default=1};
+	__property ImeMode  = {default=3};
 	__property ImeName ;
-	__property MaxLength ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property MaxLength  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, default=0};
-	__property ScrollBars ;
+	__property ScrollBars  = {default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
-	__property WantTabs ;
-	__property WordWrap ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
+	__property WantReturns  = {default=1};
+	__property WantTabs  = {default=0};
+	__property WordWrap  = {default=1};
 	__property OnChange ;
 	__property OnClick ;
 	__property OnContextPopup ;
@@ -791,8 +817,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBMemo(HWND ParentWindow) : Stdctrls::TCustomMemo(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBMemo(HWND ParentWindow) : Stdctrls::TCustomMemo(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -843,8 +868,7 @@ protected:
 	DYNAMIC HPALETTE __fastcall GetPalette(void);
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
 	DYNAMIC void __fastcall KeyPress(char &Key);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall Paint(void);
 	
 public:
@@ -860,33 +884,33 @@ public:
 	__property Graphics::TPicture* Picture = {read=FPicture, write=SetPicture};
 	
 __published:
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
 	__property bool AutoDisplay = {read=FAutoDisplay, write=SetAutoDisplay, default=1};
 	__property Forms::TBorderStyle BorderStyle = {read=FBorderStyle, write=SetBorderStyle, default=1};
 	__property bool Center = {read=FCenter, write=SetCenter, default=1};
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
 	__property AnsiString DataField = {read=GetDataField, write=SetDataField};
 	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, default=0};
 	__property bool QuickDraw = {read=FQuickDraw, write=FQuickDraw, default=1};
 	__property ShowHint ;
 	__property bool Stretch = {read=FStretch, write=SetStretch, default=0};
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property OnDblClick ;
@@ -906,8 +930,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBImage(HWND ParentWindow) : Controls::TCustomControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBImage(HWND ParentWindow) : Controls::TCustomControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -918,8 +941,7 @@ enum TNavGlyph { ngEnabled, ngDisabled };
 #pragma option pop
 
 #pragma option push -b-
-enum TNavigateBtn { nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbEdit, nbPost, nbCancel, 
-	nbRefresh };
+enum TNavigateBtn { nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbEdit, nbPost, nbCancel, nbRefresh };
 #pragma option pop
 
 typedef Set<TNavigateBtn, nbFirst, nbRefresh>  TButtonSet;
@@ -963,14 +985,16 @@ private:
 	Classes::TStrings* FHints;
 	Classes::TStrings* FDefHints;
 	int ButtonWidth;
-	Windows::TPoint MinBtnSize;
+	#pragma pack(push, 1)
+	Types::TPoint MinBtnSize;
+	#pragma pack(pop)
+	
 	ENavClick FOnNavClick;
 	ENavClick FBeforeAction;
 	TNavigateBtn FocusedButton;
 	bool FConfirmDelete;
 	bool FFlat;
-	void __fastcall BtnMouseDown(System::TObject* Sender, Controls::TMouseButton Button, Classes::TShiftState 
-		Shift, int X, int Y);
+	void __fastcall BtnMouseDown(System::TObject* Sender, Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	void __fastcall ClickHandler(System::TObject* Sender);
 	Db::TDataSource* __fastcall GetDataSource(void);
 	Classes::TStrings* __fastcall GetHints(void);
@@ -996,8 +1020,7 @@ protected:
 	void __fastcall ActiveChanged(void);
 	virtual void __fastcall Loaded(void);
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	DYNAMIC void __fastcall GetChildren(Classes::TGetChildProc Proc, Classes::TComponent* Root);
 	void __fastcall CalcMinSize(int &W, int &H);
 	
@@ -1010,24 +1033,24 @@ public:
 __published:
 	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
 	__property TButtonSet VisibleButtons = {read=FVisibleButtons, write=SetVisible, default=1023};
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
 	__property Constraints ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property bool Flat = {read=FFlat, write=SetFlat, default=0};
 	__property Ctl3D ;
 	__property Classes::TStrings* Hints = {read=GetHints, write=SetHints};
-	__property ParentCtl3D ;
-	__property ParentShowHint ;
+	__property ParentCtl3D  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property bool ConfirmDelete = {read=FConfirmDelete, write=FConfirmDelete, default=1};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
+	__property Visible  = {default=1};
 	__property ENavClick BeforeAction = {read=FBeforeAction, write=FBeforeAction};
 	__property ENavClick OnClick = {read=FOnNavClick, write=FOnNavClick};
 	__property OnContextPopup ;
@@ -1043,8 +1066,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBNavigator(HWND ParentWindow) : Extctrls::TCustomPanel(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBNavigator(HWND ParentWindow) : Extctrls::TCustomPanel(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1062,10 +1084,8 @@ private:
 	
 protected:
 	virtual void __fastcall Paint(void);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
-	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int 
-		Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	
 public:
 	__fastcall virtual ~TNavButton(void);
@@ -1073,8 +1093,7 @@ public:
 	__property TNavigateBtn Index = {read=FIndex, write=FIndex, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TSpeedButton.Create */ inline __fastcall virtual TNavButton(Classes::TComponent* AOwner) : Buttons::TSpeedButton(
-		AOwner) { }
+	/* TSpeedButton.Create */ inline __fastcall virtual TNavButton(Classes::TComponent* AOwner) : Buttons::TSpeedButton(AOwner) { }
 	#pragma option pop
 	
 };
@@ -1127,6 +1146,7 @@ private:
 	bool FLookupMode;
 	bool FListActive;
 	bool FHasFocus;
+	Classes::TShortCut FNullValueKey;
 	void __fastcall CheckNotCircular(void);
 	void __fastcall CheckNotLookup(void);
 	void __fastcall DataLinkRecordChanged(Db::TField* Field);
@@ -1143,9 +1163,11 @@ private:
 	void __fastcall SetLookupMode(bool Value);
 	void __fastcall SetReadOnly(bool Value);
 	MESSAGE void __fastcall WMGetDlgCode(Messages::TMessage &Message);
+	HIDESBASE MESSAGE void __fastcall WMKeyDown(Messages::TWMKey &Message);
 	HIDESBASE MESSAGE void __fastcall WMKillFocus(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall WMSetFocus(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMEnabledChanged(Messages::TMessage &Message);
+	MESSAGE void __fastcall CMGetDataLink(Messages::TMessage &Message);
 	
 protected:
 	virtual bool __fastcall CanModify(void);
@@ -1154,13 +1176,13 @@ protected:
 	virtual void __fastcall KeyValueChanged(void);
 	virtual void __fastcall ListLinkDataChanged(void);
 	virtual bool __fastcall LocateKey(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall ProcessSearchKey(char Key);
 	virtual void __fastcall SelectKeyValue(const Variant &Value);
 	virtual void __fastcall UpdateDataFields(void);
 	virtual void __fastcall UpdateListFields(void);
 	__property AnsiString DataField = {read=FDataFieldName, write=SetDataFieldName};
+	__property TDataSourceLink* DataLink = {read=FDataLink};
 	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
 	__property bool HasFocus = {read=FHasFocus, nodefault};
 	__property AnsiString KeyField = {read=GetKeyFieldName, write=SetKeyFieldName};
@@ -1171,10 +1193,11 @@ protected:
 	__property Classes::TList* ListFields = {read=FListFields};
 	__property TListSourceLink* ListLink = {read=FListLink};
 	__property Db::TDataSource* ListSource = {read=GetListSource, write=SetListSource};
-	__property ParentColor ;
+	__property Classes::TShortCut NullValueKey = {read=FNullValueKey, write=FNullValueKey, default=0};
+	__property ParentColor  = {default=0};
 	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, default=0};
 	__property AnsiString SearchText = {read=FSearchText, write=FSearchText};
-	__property TabStop ;
+	__property TabStop  = {default=1};
 	
 public:
 	__fastcall virtual TDBLookupControl(Classes::TComponent* AOwner);
@@ -1184,8 +1207,7 @@ public:
 	__property Db::TField* Field = {read=FDataField};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBLookupControl(HWND ParentWindow) : Controls::TCustomControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBLookupControl(HWND ParentWindow) : Controls::TCustomControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1253,11 +1275,9 @@ protected:
 	DYNAMIC void __fastcall KeyPress(char &Key);
 	virtual void __fastcall KeyValueChanged(void);
 	virtual void __fastcall ListLinkDataChanged(void);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
-	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int 
-		Y);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	virtual void __fastcall Paint(void);
 	virtual void __fastcall UpdateListFields(void);
 	
@@ -1271,38 +1291,44 @@ public:
 	virtual void __fastcall SetBounds(int ALeft, int ATop, int AWidth, int AHeight);
 	
 __published:
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelOuter  = {index=1, default=1};
+	__property BevelKind  = {default=0};
+	__property BevelWidth  = {default=1};
 	__property BiDiMode ;
 	__property Forms::TBorderStyle BorderStyle = {read=FBorderStyle, write=SetBorderStyle, default=1};
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
 	__property DataField ;
 	__property DataSource ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
 	__property KeyField ;
 	__property ListField ;
-	__property ListFieldIndex ;
+	__property ListFieldIndex  = {default=0};
 	__property ListSource ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property NullValueKey  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property ReadOnly ;
+	__property ReadOnly  = {default=0};
 	__property int RowCount = {read=FRowCount, write=SetRowCount, stored=false, nodefault};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property OnDblClick ;
@@ -1327,8 +1353,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBLookupListBox(HWND ParentWindow) : TDBLookupControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBLookupListBox(HWND ParentWindow) : TDBLookupControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1354,8 +1379,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TPopupDataList(HWND ParentWindow) : TDBLookupListBox(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TPopupDataList(HWND ParentWindow) : TDBLookupListBox(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1384,15 +1408,14 @@ private:
 	bool FLookupMode;
 	Classes::TNotifyEvent FOnDropDown;
 	Classes::TNotifyEvent FOnCloseUp;
-	void __fastcall ListMouseUp(System::TObject* Sender, Controls::TMouseButton Button, Classes::TShiftState 
-		Shift, int X, int Y);
+	void __fastcall ListMouseUp(System::TObject* Sender, Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	void __fastcall StopTracking(void);
 	void __fastcall TrackButton(int X, int Y);
 	HIDESBASE MESSAGE void __fastcall CMDialogKey(Messages::TWMKey &Message);
 	MESSAGE void __fastcall CMCancelMode(Controls::TCMCancelMode &Message);
 	HIDESBASE MESSAGE void __fastcall CMCtl3DChanged(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMFontChanged(Messages::TMessage &Message);
-	MESSAGE void __fastcall CMGetDataLink(Messages::TMessage &Message);
+	HIDESBASE MESSAGE void __fastcall CMGetDataLink(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall WMCancelMode(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall WMKillFocus(Messages::TWMKillFocus &Message);
 	HIDESBASE MESSAGE void __fastcall CMBiDiModeChanged(Messages::TMessage &Message);
@@ -1403,11 +1426,9 @@ protected:
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
 	DYNAMIC void __fastcall KeyPress(char &Key);
 	virtual void __fastcall KeyValueChanged(void);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
-	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int 
-		Y);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	virtual void __fastcall UpdateListFields(void);
 	
 public:
@@ -1423,38 +1444,44 @@ public:
 	__property AnsiString Text = {read=FText};
 	
 __published:
-	__property Anchors ;
+	__property Anchors  = {default=3};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelOuter  = {index=1, default=1};
+	__property BevelKind  = {default=0};
+	__property BevelWidth  = {default=1};
 	__property BiDiMode ;
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
 	__property DataField ;
 	__property DataSource ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
 	__property TDropDownAlign DropDownAlign = {read=FDropDownAlign, write=FDropDownAlign, default=0};
 	__property int DropDownRows = {read=FDropDownRows, write=FDropDownRows, default=7};
 	__property int DropDownWidth = {read=FDropDownWidth, write=FDropDownWidth, default=0};
-	__property Enabled ;
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
 	__property KeyField ;
 	__property ListField ;
-	__property ListFieldIndex ;
+	__property ListFieldIndex  = {default=0};
 	__property ListSource ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property NullValueKey  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property ReadOnly ;
+	__property ReadOnly  = {default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property Classes::TNotifyEvent OnCloseUp = {read=FOnCloseUp, write=FOnCloseUp};
 	__property OnContextPopup ;
@@ -1480,8 +1507,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBLookupComboBox(HWND ParentWindow) : TDBLookupControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBLookupComboBox(HWND ParentWindow) : TDBLookupControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1523,8 +1549,7 @@ protected:
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
 	DYNAMIC void __fastcall KeyPress(char &Key);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TDBRichEdit(Classes::TComponent* AOwner);
@@ -1536,43 +1561,48 @@ public:
 	__property Db::TField* Field = {read=GetField};
 	
 __published:
-	__property Align ;
-	__property Alignment ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Alignment  = {default=0};
+	__property Anchors  = {default=3};
 	__property bool AutoDisplay = {read=FAutoDisplay, write=SetAutoDisplay, default=1};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelOuter  = {index=1, default=1};
+	__property BevelKind  = {default=0};
+	__property BevelWidth  = {default=1};
 	__property BiDiMode ;
-	__property BorderStyle ;
-	__property Color ;
+	__property BorderStyle  = {default=1};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
 	__property AnsiString DataField = {read=GetDataField, write=SetDataField};
 	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property HideSelection ;
-	__property HideScrollBars ;
-	__property ImeMode ;
+	__property HideSelection  = {default=1};
+	__property HideScrollBars  = {default=1};
+	__property ImeMode  = {default=3};
 	__property ImeName ;
-	__property MaxLength ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
-	__property PlainText ;
+	__property MaxLength  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
+	__property PlainText  = {default=0};
 	__property PopupMenu ;
 	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, default=0};
-	__property ScrollBars ;
+	__property ScrollBars  = {default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
-	__property WantReturns ;
-	__property WantTabs ;
-	__property WordWrap ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
+	__property WantReturns  = {default=1};
+	__property WantTabs  = {default=0};
+	__property WordWrap  = {default=1};
 	__property OnChange ;
 	__property OnClick ;
 	__property OnContextPopup ;
@@ -1597,8 +1627,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBRichEdit(HWND ParentWindow) : Comctrls::TCustomRichEdit(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBRichEdit(HWND ParentWindow) : Comctrls::TCustomRichEdit(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1608,15 +1637,11 @@ public:
 static const Word InitRepeatPause = 0x190;
 static const Shortint RepeatPause = 0x64;
 static const Shortint SpaceSize = 0x5;
-extern PACKAGE bool __fastcall OkToChangeFieldAlignment(Db::TField* AField, Classes::TAlignment Alignment
-	);
-extern PACKAGE bool __fastcall DBUseRightToLeftAlignment(Controls::TControl* AControl, Db::TField* AField
-	);
+extern PACKAGE bool __fastcall OkToChangeFieldAlignment(Db::TField* AField, Classes::TAlignment Alignment);
+extern PACKAGE bool __fastcall DBUseRightToLeftAlignment(Controls::TControl* AControl, Db::TField* AField);
 
 }	/* namespace Dbctrls */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dbctrls;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

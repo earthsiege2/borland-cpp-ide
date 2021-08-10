@@ -17,6 +17,8 @@
 #endif
 #endif
 
+#pragma option push -VF
+
 // OLE DB Provider Support
 
 // Interface Impl Classes
@@ -6397,4 +6399,5 @@ END_PROVIDER_COLUMN_MAP()
 
 };
 
+#pragma option pop
 #endif

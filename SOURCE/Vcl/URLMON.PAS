@@ -7,7 +7,7 @@
 {       Copyright (C) 1995-1998, Microsoft Corporation. }
 {       All Rights Reserved.                            }
 {                                                       }
-{       Obtained on behalf of Inprise through:          }
+{       Obtained on behalf of Borland through:          }
 {       Joint Endeavour of Delphi Innovators (JEDI)     }
 {       http://www.delphi-jedi.org                      }
 {       Translator: Rudolph Velthuis                    }
@@ -762,36 +762,36 @@ function FindMimeFromData(
 {$EXTERNALSYM ObtainUserAgentString}
 function ObtainUserAgentString(dwOption: DWORD; pszUAOut: LPSTR; var cbSize: DWORD): HResult; stdcall;
 
+{$EXTERNALSYM URLOpenStream}
+function URLOpenStream(p1: IUnknown; p2: PChar; p3: DWORD; p4: IBindStatusCallback): HResult; stdcall;
 {$EXTERNALSYM URLOpenStreamA}
 function URLOpenStreamA(p1: IUnknown; p2: PAnsiChar; p3: DWORD; p4: IBindStatusCallback): HResult; stdcall;
 {$EXTERNALSYM URLOpenStreamW}
 function URLOpenStreamW(p1: IUnknown; p2: PWideChar; p3: DWORD; p4: IBindStatusCallback): HResult; stdcall;
-{$EXTERNALSYM URLOpenStream}
-function URLOpenStream(p1: IUnknown; p2: PChar; p3: DWORD; p4: IBindStatusCallback): HResult; stdcall;
+{$EXTERNALSYM URLOpenPullStream}
+function URLOpenPullStream(p1: IUnknown; p2: PChar; p3: DWORD; BSC: IBindStatusCallback): HResult; stdcall;
 {$EXTERNALSYM URLOpenPullStreamA}
 function URLOpenPullStreamA(p1: IUnknown; p2: PAnsiChar; p3: DWORD; BSC: IBindStatusCallback): HResult; stdcall;
 {$EXTERNALSYM URLOpenPullStreamW}
 function URLOpenPullStreamW(p1: IUnknown; p2: PWideChar; p3: DWORD; BSC: IBindStatusCallback): HResult; stdcall;
-{$EXTERNALSYM URLOpenPullStream}
-function URLOpenPullStream(p1: IUnknown; p2: PChar; p3: DWORD; BSC: IBindStatusCallback): HResult; stdcall;
-{$EXTERNALSYM URLDownloadToFileA}
-function URLDownloadToFileA(p1: IUnknown; p2: PAnsiChar; p3: PAnsiChar; p4: DWORD; p5: IBindStatusCallback): HResult; stdcall;
-{$EXTERNALSYM URLDownloadToFileW}
-function URLDownloadToFileW(p1: IUnknown; p2: PWideChar; p3: PWideChar; p4: DWORD; p5: IBindStatusCallback): HResult; stdcall;
 {$EXTERNALSYM URLDownloadToFile}
-function URLDownloadToFile(p1: IUnknown; p2: PChar; p3: PChar; p4: DWORD; p5: IBindStatusCallback): HResult; stdcall;
+function URLDownloadToFile(Caller: IUnknown; URL: PChar; FileName: PChar; Reserved: DWORD; StatusCB: IBindStatusCallback): HResult; stdcall;
+{$EXTERNALSYM URLDownloadToFileA}
+function URLDownloadToFileA(Caller: IUnknown; URL: PAnsiChar; FileName: PAnsiChar; Reserved: DWORD; StatusCB: IBindStatusCallback): HResult; stdcall;
+{$EXTERNALSYM URLDownloadToFileW}
+function URLDownloadToFileW(Caller: IUnknown; URL: PWideChar; FileName: PWideChar; Reserved: DWORD; StatusCB: IBindStatusCallback): HResult; stdcall;
+{$EXTERNALSYM URLDownloadToCacheFile}
+function URLDownloadToCacheFile(p1: IUnknown; p2: PChar; p3: PChar; p4: DWORD; p5: DWORD; p6: IBindStatusCallback): HResult; stdcall;
 {$EXTERNALSYM URLDownloadToCacheFileA}
 function URLDownloadToCacheFileA(p1: IUnknown; p2: PAnsiChar; p3: PAnsiChar; p4: DWORD; p5: DWORD; p6: IBindStatusCallback): HResult; stdcall;
 {$EXTERNALSYM URLDownloadToCacheFileW}
 function URLDownloadToCacheFileW(p1: IUnknown; p2: PWideChar; p3: PWideChar; p4: DWORD; p5: DWORD; p6: IBindStatusCallback): HResult; stdcall;
-{$EXTERNALSYM URLDownloadToCacheFile}
-function URLDownloadToCacheFile(p1: IUnknown; p2: PChar; p3: PChar; p4: DWORD; p5: DWORD; p6: IBindStatusCallback): HResult; stdcall;
+{$EXTERNALSYM URLOpenBlockingStream}
+function URLOpenBlockingStream(p1: IUnknown; p2: PChar; out p3: IStream; p4: DWORD; p5: IBindStatusCallback): HResult; stdcall;
 {$EXTERNALSYM URLOpenBlockingStreamA}
 function URLOpenBlockingStreamA(p1: IUnknown; p2: PAnsiChar; out p3: IStream; p4: DWORD; p5: IBindStatusCallback): HResult; stdcall;
 {$EXTERNALSYM URLOpenBlockingStreamW}
 function URLOpenBlockingStreamW(p1: IUnknown; p2: PWideChar; out p3: IStream; p4: DWORD; p5: IBindStatusCallback): HResult; stdcall;
-{$EXTERNALSYM URLOpenBlockingStream}
-function URLOpenBlockingStream(p1: IUnknown; p2: PChar; out p3: IStream; p4: DWORD; p5: IBindStatusCallback): HResult; stdcall;
 
 {$EXTERNALSYM HlinkGoBack}
 function HlinkGoBack(unk: IUnknown): HResult; stdcall;
@@ -1725,12 +1725,12 @@ type
   end;
 
 // Logging-specific apis
+{$EXTERNALSYM IsLoggingEnabled}
+function IsLoggingEnabled(pszUrl: PChar): BOOL; stdcall;
 {$EXTERNALSYM IsLoggingEnabledA}
 function IsLoggingEnabledA(pszUrl: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM IsLoggingEnabledW}
 function IsLoggingEnabledW(pszUrl: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM IsLoggingEnabled}
-function IsLoggingEnabled(pszUrl: PChar): BOOL; stdcall;
 
 type
   PHitLoggingInfo = ^THitLoggingInfo;
@@ -1791,21 +1791,21 @@ function FindMimeFromData;                external UrlMonLib name 'FindMimeFromD
 function ObtainUserAgentString;           external UrlMonLib name 'ObtainUserAgentString';
 function HlinkSimpleNavigateToString;     external UrlMonLib name 'HlinkSimpleNavigateToString';
 function HlinkSimpleNavigateToMoniker;    external UrlMonLib name 'HlinkSimpleNavigateToMoniker';
+function URLOpenStream;                  external UrlMonLib name 'URLOpenStreamA';
 function URLOpenStreamA;                  external UrlMonLib name 'URLOpenStreamA';
 function URLOpenStreamW;                  external UrlMonLib name 'URLOpenStreamW';
-function URLOpenStream;                  external UrlMonLib name 'URLOpenStreamA';
+function URLOpenPullStream;              external UrlMonLib name 'URLOpenPullStreamA';
 function URLOpenPullStreamA;              external UrlMonLib name 'URLOpenPullStreamA';
 function URLOpenPullStreamW;              external UrlMonLib name 'URLOpenPullStreamW';
-function URLOpenPullStream;              external UrlMonLib name 'URLOpenPullStreamA';
+function URLDownloadToFile;              external UrlMonLib name 'URLDownloadToFileA';
 function URLDownloadToFileA;              external UrlMonLib name 'URLDownloadToFileA';
 function URLDownloadToFileW;              external UrlMonLib name 'URLDownloadToFileW';
-function URLDownloadToFile;              external UrlMonLib name 'URLDownloadToFileA';
+function URLDownloadToCacheFile;         external UrlMonLib name 'URLDownloadToCacheFileA';
 function URLDownloadToCacheFileA;         external UrlMonLib name 'URLDownloadToCacheFileA';
 function URLDownloadToCacheFileW;         external UrlMonLib name 'URLDownloadToCacheFileW';
-function URLDownloadToCacheFile;         external UrlMonLib name 'URLDownloadToCacheFileA';
+function URLOpenBlockingStream;          external UrlMonLib name 'URLOpenBlockingStreamA';
 function URLOpenBlockingStreamA;          external UrlMonLib name 'URLOpenBlockingStreamA';
 function URLOpenBlockingStreamW;          external UrlMonLib name 'URLOpenBlockingStreamW';
-function URLOpenBlockingStream;          external UrlMonLib name 'URLOpenBlockingStreamA';
 function HlinkGoBack;                     external UrlMonLib name 'HlinkGoBack';
 function HlinkGoForward;                  external UrlMonLib name 'HlinkGoForward';
 function HlinkNavigateString;             external UrlMonLib name 'HlinkNavigateString';
@@ -1830,9 +1830,9 @@ procedure ReleaseBindInfo;                external UrlMonLib name 'ReleaseBindIn
 function CoInternetCreateSecurityManager; external UrlMonLib name 'CoInternetCreateSecurityManager';
 function CoInternetCreateZoneManager;     external UrlMonLib name 'CoInternetCreateZoneManager';
 function GetSoftwareUpdateInfo;           external UrlMonLib name 'GetSoftwareUpdateInfo';
+function IsLoggingEnabled;               external UrlMonLib name 'IsLoggingEnabledA';
 function IsLoggingEnabledA;               external UrlMonLib name 'IsLoggingEnabledA';
 function IsLoggingEnabledW;               external UrlMonLib name 'IsLoggingEnabledW';
-function IsLoggingEnabled;               external UrlMonLib name 'IsLoggingEnabledA';
 function WriteHitLogging;                 external UrlMonLib name 'WriteHitLogging';
 function SetSoftwareUpdateAdvertisementState; external UrlMonLib name 'SetSoftwareUpdateAdvertisementState';
 

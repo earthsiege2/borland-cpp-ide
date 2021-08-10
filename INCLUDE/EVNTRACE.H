@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1997 Microsoft Corporation
+Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Module Name:
 
@@ -11,16 +11,9 @@ Abstract:
     Public headers for event tracing control applications,
     consumers and providers
 
-Author:
-
-    15-Sep-1997 JeePang
-
-Revision History:
-
 --*/
 
 #ifndef _EVNTRACE_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _EVNTRACE_
 
 #if defined(_WINNT_) || defined(WINNT)
@@ -59,16 +52,28 @@ DEFINE_GUID ( /* 9e814aad-3204-11d2-9a82-006008a86939 */
     0x9a, 0x82, 0x00, 0x60, 0x08, 0xa8, 0x69, 0x39
   );
 
+//
+//EventTraceConfigGuid. Used to report hardware configuration records
+//
+
+DEFINE_GUID ( /* 01853a65-418f-4f36-aefc-dc0f1d2fd235 */
+    EventTraceConfigGuid,
+    0x01853a65,
+    0x418f,
+    0x4f36,
+    0xae, 0xfc, 0xdc, 0x0f, 0x1d, 0x2f, 0xd2, 0x35
+  );
+
+#define KERNEL_LOGGER_NAMEW   L"NT Kernel Logger"
+#define GLOBAL_LOGGER_NAMEW   L"GlobalLogger"
+#define EVENT_LOGGER_NAMEW    L"Event Log"
+
+#define KERNEL_LOGGER_NAMEA   "NT Kernel Logger"
+#define GLOBAL_LOGGER_NAMEA   "GlobalLogger"
+#define EVENT_LOGGER_NAMEA    "Event Log"
 
 #define MAX_MOF_FIELDS                      16  // Limit of USE_MOF_PTR fields
 typedef ULONG64 TRACEHANDLE, *PTRACEHANDLE;
-
-typedef struct _TRACE_ENABLE_CONTEXT {
-    USHORT  LoggerId;           // Actual Id of the logger
-    UCHAR   Level;              // Enable level passed by control caller
-    UCHAR   InternalFlag;       // Reserved
-    ULONG   EnableFlags;        // Enable flags passed by control caller
-} TRACE_ENABLE_CONTEXT, *PTRACE_ENABLE_CONTEXT;
 
 //
 // predefined generic event types (0x00 to 0x09 reserved).
@@ -81,8 +86,8 @@ typedef struct _TRACE_ENABLE_CONTEXT {
 #define EVENT_TRACE_TYPE_DC_END             0x04  // Collection end marker
 #define EVENT_TRACE_TYPE_EXTENSION          0x05  // Extension/continuation
 #define EVENT_TRACE_TYPE_REPLY              0x06  // Reply event
-#define EVENT_TRACE_TYPE_RESERVED7          0x07
-#define EVENT_TRACE_TYPE_RESERVED8          0x08
+#define EVENT_TRACE_TYPE_DEQUEUE            0x07  // De-queue event
+#define EVENT_TRACE_TYPE_CHECKPOINT         0x08  // Generic checkpoint event
 #define EVENT_TRACE_TYPE_RESERVED9          0x09
 
 //
@@ -116,6 +121,10 @@ typedef struct _TRACE_ENABLE_CONTEXT {
 #define EVENT_TRACE_TYPE_RECEIVE               0x0B     // Receive
 #define EVENT_TRACE_TYPE_CONNECT               0x0C     // Connect
 #define EVENT_TRACE_TYPE_DISCONNECT            0x0D     // Disconnect
+#define EVENT_TRACE_TYPE_RETRANSMIT            0x0E     // ReTransmit
+#define EVENT_TRACE_TYPE_ACCEPT                0x0F     // Accept
+#define EVENT_TRACE_TYPE_RECONNECT             0x10     // ReConnect
+
 
 //
 // Event Types for the Header (to handle internal event headers)
@@ -142,6 +151,16 @@ typedef struct _TRACE_ENABLE_CONTEXT {
 #define EVENT_TRACE_TYPE_REGQUERYMULTIPLEVALUE  0x13     // NtQueryMultipleValueKey
 #define EVENT_TRACE_TYPE_REGSETINFORMATION      0x14     // NtSetInformationKey
 #define EVENT_TRACE_TYPE_REGFLUSH               0x15     // NtFlushKey
+#define EVENT_TRACE_TYPE_REGKCBDMP              0x16     // KcbDump/create
+
+//
+// Event types for hardware configuration records
+//
+#define EVENT_TRACE_TYPE_CONFIG_CPU             0x0A     // CPU Configuration
+#define EVENT_TRACE_TYPE_CONFIG_PHYSICALDISK    0x0B     // Physical Disk Configuration
+#define EVENT_TRACE_TYPE_CONFIG_LOGICALDISK     0x0C     // Logical Disk Configuration
+#define EVENT_TRACE_TYPE_CONFIG_NIC             0x0D     // NIC Configuration
+#define EVENT_TRACE_TYPE_CONFIG_VIDEO           0x0E     // Video Adapter Configuration
 
 //
 // Enable flags for SystemControlGuid only
@@ -159,7 +178,7 @@ typedef struct _TRACE_ENABLE_CONTEXT {
 #define EVENT_TRACE_FLAG_NETWORK_TCPIP      0x00010000  // tcpip send & receive
 
 #define EVENT_TRACE_FLAG_REGISTRY           0x00020000  // registry calls
-
+#define EVENT_TRACE_FLAG_DBGPRINT           0x00040000  // DbgPrint(ex) Calls
 //
 // Pre-defined Enable flags for everybody else
 //
@@ -168,19 +187,28 @@ typedef struct _TRACE_ENABLE_CONTEXT {
 #define EVENT_TRACE_FLAG_ENABLE_RESERVE     0x20000000  // Reserved
 
 //
-// Logfile flags
+// Logger Mode flags
 //
 
-#define EVENT_TRACE_FILE_MODE_NONE          0x0000  // logfile is off
-#define EVENT_TRACE_FILE_MODE_SEQUENTIAL    0x0001  // log sequentially
-#define EVENT_TRACE_FILE_MODE_CIRCULAR      0x0002  // log in circular manner
-#define EVENT_TRACE_FILE_MODE_NEWFILE       0x0004  // log to new file if full
+#define EVENT_TRACE_FILE_MODE_NONE          0x00000000  // logfile is off
+#define EVENT_TRACE_FILE_MODE_SEQUENTIAL    0x00000001  // log sequentially
+#define EVENT_TRACE_FILE_MODE_CIRCULAR      0x00000002  // log in circular manner
+#define EVENT_TRACE_FILE_MODE_APPEND        0x00000004  // append sequential log
+#define EVENT_TRACE_FILE_MODE_NEWFILE       0x00000008  // auto-switch log file
 
-#define EVENT_TRACE_REAL_TIME_MODE          0x0100  // real time mode on
-#define EVENT_TRACE_DELAY_OPEN_FILE_MODE    0x0200  // delay opening file
-#define EVENT_TRACE_BUFFERING_MODE          0x0400  // buffering mode only
-#define EVENT_TRACE_PRIVATE_LOGGER_MODE     0x0800  // Process Private Logger
-#define EVENT_TRACE_ADD_HEADER_MODE         0x1000  // Add a logfile header
+#define EVENT_TRACE_FILE_MODE_PREALLOCATE   0x00000020  // pre-allocate mode
+
+#define EVENT_TRACE_REAL_TIME_MODE          0x00000100  // real time mode on
+#define EVENT_TRACE_DELAY_OPEN_FILE_MODE    0x00000200  // delay opening file
+#define EVENT_TRACE_BUFFERING_MODE          0x00000400  // buffering mode only
+#define EVENT_TRACE_PRIVATE_LOGGER_MODE     0x00000800  // Process Private Logger
+#define EVENT_TRACE_ADD_HEADER_MODE         0x00001000  // Add a logfile header
+#define EVENT_TRACE_USE_GLOBAL_SEQUENCE     0x00004000  // Use global sequence no.
+#define EVENT_TRACE_USE_LOCAL_SEQUENCE      0x00008000  // Use local sequence no.
+
+#define EVENT_TRACE_RELOG_MODE              0x00010000  // Relogger
+
+#define EVENT_TRACE_USE_PAGED_MEMORY        0x01000000  // Use pageable buffers   
 
 //
 // internal control codes used.
@@ -188,16 +216,49 @@ typedef struct _TRACE_ENABLE_CONTEXT {
 #define EVENT_TRACE_CONTROL_QUERY           0
 #define EVENT_TRACE_CONTROL_STOP            1
 #define EVENT_TRACE_CONTROL_UPDATE          2
+#define EVENT_TRACE_CONTROL_FLUSH           3       // Flushes all the buffers
 
+//
+// Flags used by WMI Trace Message
+// Note that the order or value of these flags should NOT be changed as they are processed
+// in this order.
+//
+#define TRACE_MESSAGE_SEQUENCE		1           // Message should include a sequence number
+#define TRACE_MESSAGE_GUID			2           // Message includes a GUID
+#define TRACE_MESSAGE_COMPONENTID   4           // Message has no GUID, Component ID instead
+#define	TRACE_MESSAGE_TIMESTAMP		8           // Message includes a timestamp
+#define TRACE_MESSAGE_PERFORMANCE_TIMESTAMP 16  // Timestamp is the Performance Counter not the system clock
+#define	TRACE_MESSAGE_SYSTEMINFO	32          // Message includes system information TID,PID
+#define TRACE_MESSAGE_FLAG_MASK     0xFFFF      // Only the lower 16 bits of flags are placed in the message
+                                                // those above 16 bits are reserved for local processing
+#define TRACE_MESSAGE_MAXIMUM_SIZE  8*1024      // the maximum size allowed for a single trace message
+                                                // longer messages will return ERROR_BUFFER_OVERFLOW
+//
+// Flags to indicate to consumer which fields
+// in the EVENT_TRACE_HEADER are valid
+//
+
+#define EVENT_TRACE_USE_PROCTIME   0x0001    // ProcessorTime field is valid
+#define EVENT_TRACE_USE_NOCPUTIME  0x0002    // No Kernel/User/Processor Times
+
+#if _MSC_VER >= 1200
+#pragma warning(push)
+#endif
+#pragma warning (disable:4201)
 //
 // Trace header for all (except kernel) events. This is used to overlay
 // to bottom part of WNODE_HEADER to conserve space.
 //
 
-typedef struct _EVENT_TRACE_HEADER {    // overlays WNODE_HEADER
+typedef struct _EVENT_TRACE_HEADER {        // overlays WNODE_HEADER
     USHORT          Size;                   // Size of entire record
-    UCHAR           HeaderType;             // Header type - internal use only
-    UCHAR           MarkerFlags;            // Marker - internal use only
+    union {
+        USHORT      FieldTypeFlags;         // Indicates valid fields
+        struct {
+            UCHAR   HeaderType;             // Header type - internal use only
+            UCHAR   MarkerFlags;            // Marker - internal use only
+        };
+    };
     union {
         ULONG       Version;
         struct {
@@ -206,7 +267,8 @@ typedef struct _EVENT_TRACE_HEADER {    // overlays WNODE_HEADER
             USHORT  Version;                // version of trace record
         } Class;
     };
-    ULONGLONG       ThreadId;               // thread Id responsible
+    ULONG           ThreadId;               // Thread Id
+    ULONG           ProcessId;              // Process Id
     LARGE_INTEGER   TimeStamp;              // time when event happens
     union {
         GUID        Guid;                   // Guid that identifies event
@@ -230,8 +292,13 @@ typedef struct _EVENT_TRACE_HEADER {    // overlays WNODE_HEADER
 //
 typedef struct _EVENT_INSTANCE_HEADER {
     USHORT          Size;
-    UCHAR           HeaderType;
-    UCHAR           MarkerFlags;
+    union {
+        USHORT      FieldTypeFlags;     // Indicates valid fields
+        struct {
+            UCHAR   HeaderType;         // Header type - internal use only
+            UCHAR   MarkerFlags;        // Marker - internal use only
+        };
+    };
     union {
         ULONG       Version;
         struct {
@@ -240,7 +307,8 @@ typedef struct _EVENT_INSTANCE_HEADER {
             USHORT  Version;
         } Class;
     };
-    ULONGLONG       ThreadId;
+    ULONG           ThreadId;
+    ULONG           ProcessId;
     LARGE_INTEGER   TimeStamp;
     ULONGLONG       RegHandle;
     ULONG           InstanceId;
@@ -268,27 +336,11 @@ typedef struct _EVENT_INSTANCE_HEADER {
     (MOF)->Length   = (ULONG) length; \
     (MOF)->DataType = (ULONG) type;
 
-//
-// Known data types supported.
-//
-#define EVENT_TRACE_MOF_TYPE_UNKNOWN    0   // undefined or unknown
-#define EVENT_TRACE_MOF_TYPE_8BIT       1   // 8 bit character
-#define EVENT_TRACE_MOF_TYPE_16BIT      2   // short or wide char
-#define EVENT_TRACE_MOF_TYPE_32BIT      3   // 32-bit integer
-#define EVENT_TRACE_MOF_TYPE_64BIT      4   // 64-bit integer
-#define EVENT_TRACE_MOF_TYPE_CSTRING    5   // Counted(1byte len) string
-#define EVENT_TRACE_MOF_TYPE_C2STRING   6   // Counted(2byte len) string
-#define EVENT_TRACE_MOF_TYPE_CWSTRING   7   // Counted(2byte len) wstring
-#define EVENT_TRACE_MOF_TYPE_CLSTRING   8   // Counted(little endian) wstring
-#define EVENT_TRACE_MOF_TYPE_STRING     9   // Null terminated ANSI string
-#define EVENT_TRACE_MOF_TYPE_WSTRING    10  // NULL terminated Wide string
-
 typedef struct _MOF_FIELD {
     ULONG64     DataPtr;    // Pointer to the field. Up to 64-bits only
     ULONG       Length;     // Length of the MOF field
     ULONG       DataType;   // Type of data
 } MOF_FIELD, *PMOF_FIELD;
-
 
 #if !defined(_NTDDK_) || defined(_WMIKM_)
 //
@@ -318,8 +370,9 @@ typedef struct _TRACE_LOGFILE_HEADER {
         GUID LogInstanceGuid;           // For RealTime Buffer Delivery
         struct {
             ULONG   StartBuffers;       // Count of buffers written at start.
-            ULONG   Reserved32;         // Reserved 32bits
-            ULONG64 Reserved64;         // Reserved 64bits
+            ULONG   PointerSize;        // Size of pointer type in bits
+            ULONG   EventsLost;         // Events losts during log session
+            ULONG   CpuSpeedInMHz;      // Cpu Speed in MHz
         };
     };
 #if defined(_WMIKM_)
@@ -335,7 +388,7 @@ typedef struct _TRACE_LOGFILE_HEADER {
     LARGE_INTEGER   PerfFreq;           // Reserved
     LARGE_INTEGER   StartTime;          // Reserved
     ULONG           ReservedFlags;      // Reserved
-    ULONG           PrivateUse;
+    ULONG           BuffersLost;
 } TRACE_LOGFILE_HEADER, *PTRACE_LOGFILE_HEADER;
 
 #endif // !_NTDDK_ || _WMIKM_
@@ -388,6 +441,16 @@ typedef struct _EVENT_TRACE_PROPERTIES {
 // If AgeLimit is 0, default is used
 // If AgeLimit is < 0, buffer aging is turned off
 
+typedef struct _TRACE_GUID_PROPERTIES {
+    GUID    Guid;
+    ULONG   GuidType;
+    ULONG   LoggerId;
+    ULONG   EnableLevel;
+    ULONG   EnableFlags;
+    BOOLEAN     IsEnable;
+} TRACE_GUID_PROPERTIES, *PTRACE_GUID_PROPERTIES;
+
+
 //
 // Data Provider structures
 //
@@ -424,13 +487,13 @@ typedef struct _EVENT_TRACE_LOGFILEW
 typedef struct _EVENT_TRACE_LOGFILEA
                 EVENT_TRACE_LOGFILEA, *PEVENT_TRACE_LOGFILEA;
 
-typedef ULONG (*PEVENT_TRACE_BUFFER_CALLBACKW)
+typedef ULONG (WINAPI * PEVENT_TRACE_BUFFER_CALLBACKW)
                 (PEVENT_TRACE_LOGFILEW Logfile);
 
-typedef ULONG (*PEVENT_TRACE_BUFFER_CALLBACKA)
+typedef ULONG (WINAPI * PEVENT_TRACE_BUFFER_CALLBACKA)
                 (PEVENT_TRACE_LOGFILEA Logfile);
 
-typedef VOID (*PEVENT_CALLBACK)( PEVENT_TRACE pEvent );
+typedef VOID (WINAPI *PEVENT_CALLBACK)( PEVENT_TRACE pEvent );
 
 //
 // Prototype for service request callback. Data providers register with WMI
@@ -512,13 +575,23 @@ struct _EVENT_TRACE_LOGFILEA {
 #define PEVENT_TRACE_BUFFER_CALLBACK    PEVENT_TRACE_BUFFER_CALLBACKW
 #define EVENT_TRACE_LOGFILE             EVENT_TRACE_LOGFILEW
 #define PEVENT_TRACE_LOGFILE            PEVENT_TRACE_LOGFILEW
+#define KERNEL_LOGGER_NAME              KERNEL_LOGGER_NAMEW
+#define GLOBAL_LOGGER_NAME              GLOBAL_LOGGER_NAMEW
+#define EVENT_LOGGER_NAME               EVENT_LOGGER_NAMEW
 
 #else
 
 #define PEVENT_TRACE_BUFFER_CALLBACK    PEVENT_TRACE_BUFFER_CALLBACKA
 #define EVENT_TRACE_LOGFILE             EVENT_TRACE_LOGFILEA
 #define PEVENT_TRACE_LOGFILE            PEVENT_TRACE_LOGFILEA
+#define KERNEL_LOGGER_NAME              KERNEL_LOGGER_NAMEA
+#define GLOBAL_LOGGER_NAME              GLOBAL_LOGGER_NAMEA
+#define EVENT_LOGGER_NAME               EVENT_LOGGER_NAMEA
 
+#endif
+
+#if _MSC_VER >= 1200
+#pragma warning(pop)
 #endif
 
 #ifdef __cplusplus
@@ -567,10 +640,29 @@ StartTraceA(
 //
 // ULONG
 // StopTrace(
-//      IN PTRACEHANDLE TraceHandle,
+//      IN TRACEHANDLE TraceHandle,
 //      IN LPTSTR InstanceName,
 //      IN OUT PEVENT_TRACE_PROPERTIES Properties
 //      );
+
+EXTERN_C
+ULONG
+WMIAPI
+StopTraceW(
+    IN TRACEHANDLE TraceHandle,
+    IN LPCWSTR InstanceName,
+    IN OUT PEVENT_TRACE_PROPERTIES Properties
+    );
+
+EXTERN_C
+ULONG
+WMIAPI
+StopTraceA(
+    IN TRACEHANDLE TraceHandle,
+    IN LPCSTR InstanceName,
+    IN OUT PEVENT_TRACE_PROPERTIES Properties
+    );
+
 
 //
 // Use the routine below to query the properties of an event trace session
@@ -578,10 +670,28 @@ StartTraceA(
 
 // ULONG
 // QueryTrace(
-//      IN PTRACEHANDLE TraceHandle,
+//      IN TRACEHANDLE TraceHandle,
 //      IN LPTSTR InstanceName,
 //      IN OUT PEVENT_TRACE_PROPERTIES Properties
 //      );
+
+EXTERN_C
+ULONG
+WMIAPI
+QueryTraceW(
+    IN TRACEHANDLE TraceHandle,
+    IN LPCWSTR InstanceName,
+    IN OUT PEVENT_TRACE_PROPERTIES Properties
+    );
+
+EXTERN_C
+ULONG
+WMIAPI
+QueryTraceA(
+    IN TRACEHANDLE TraceHandle,
+    IN LPCSTR InstanceName,
+    IN OUT PEVENT_TRACE_PROPERTIES Properties
+    );
 
 //
 // Use the routine below to update certain properties of an event trace session
@@ -594,6 +704,60 @@ StartTraceA(
 //      IN OUT PEVENT_TRACE_PROPERTIES Properties
 //      );
 
+EXTERN_C
+ULONG
+WMIAPI
+UpdateTraceW(
+    IN TRACEHANDLE TraceHandle,
+    IN LPCWSTR InstanceName,
+    IN OUT PEVENT_TRACE_PROPERTIES Properties
+    );
+
+EXTERN_C
+ULONG
+WMIAPI
+UpdateTraceA(
+    IN TRACEHANDLE TraceHandle,
+    IN LPCSTR InstanceName,
+    IN OUT PEVENT_TRACE_PROPERTIES Properties
+    );
+
+//
+// Use the routine below to request that all active buffers an event trace
+// session be "flushed", or written out.
+//
+
+#if (WINVER >= 0x0501)
+// ULONG
+// FlushTrace(
+//      IN TRACEHANDLE TraceHandle,
+//      IN LPTSTR InstanceName,
+//      IN OUT PEVENT_TRACE_PROPERTIES Properties
+//      );
+
+EXTERN_C
+ULONG
+WMIAPI
+FlushTraceW(
+    IN TRACEHANDLE TraceHandle,
+    IN LPCWSTR InstanceName,
+    IN OUT PEVENT_TRACE_PROPERTIES Properties
+    );
+
+EXTERN_C
+ULONG
+WMIAPI
+FlushTraceA(
+    IN TRACEHANDLE TraceHandle,
+    IN LPCSTR InstanceName,
+    IN OUT PEVENT_TRACE_PROPERTIES Properties
+    );
+
+#endif
+
+//
+// Generic trace control routine
+//
 EXTERN_C
 ULONG
 WMIAPI
@@ -734,6 +898,17 @@ RegisterTraceGuidsA(
     OUT PTRACEHANDLE RegistrationHandle
     );
 
+#if (WINVER >= 0x0501)
+EXTERN_C
+ULONG
+WMIAPI
+EnumerateTraceGuids(
+    IN OUT PTRACE_GUID_PROPERTIES *GuidPropertiesArray,
+    IN ULONG PropertyArrayCount,
+    OUT PULONG GuidCount
+    );
+#endif
+
 EXTERN_C
 ULONG
 WMIAPI
@@ -819,6 +994,30 @@ RemoveTraceCallback (
     IN LPCGUID pGuid
     );
 
+//
+// The routines for tracing Messages follow
+//
+EXTERN_C
+ULONG 
+__cdecl
+TraceMessage(
+    IN TRACEHANDLE  LoggerHandle,
+    IN ULONG        MessageFlags,
+    IN LPGUID       MessageGuid,
+    IN USHORT       MessageNumber,
+    ...
+);
+
+EXTERN_C
+ULONG 
+TraceMessageVa(
+    IN TRACEHANDLE  LoggerHandle,
+    IN ULONG        MessageFlags,
+    IN LPGUID       MessageGuid,
+    IN USHORT       MessageNumber,
+    IN va_list      MessageArgList
+);
+
 #ifdef __cplusplus
 }       // extern "C"
 #endif
@@ -832,24 +1031,42 @@ RemoveTraceCallback (
 #define RegisterTraceGuids      RegisterTraceGuidsW
 #define StartTrace              StartTraceW
 #define ControlTrace            ControlTraceW
+#if defined(__TRACE_W2K_COMPATIBLE)
 #define StopTrace(a,b,c)        ControlTraceW((a),(b),(c), \
                                         EVENT_TRACE_CONTROL_STOP)
 #define QueryTrace(a,b,c)       ControlTraceW((a),(b),(c), \
                                         EVENT_TRACE_CONTROL_QUERY)
 #define UpdateTrace(a,b,c)      ControlTraceW((a),(b),(c), \
                                         EVENT_TRACE_CONTROL_UPDATE)
+#else
+#define StopTrace               StopTraceW
+#define QueryTrace              QueryTraceW
+#define UpdateTrace             UpdateTraceW
+#endif
+#if (WINVER >= 0x0501)
+#define FlushTrace              FlushTraceW
+#endif
 #define QueryAllTraces          QueryAllTracesW
 #define OpenTrace               OpenTraceW
 #else
 #define RegisterTraceGuids      RegisterTraceGuidsA
 #define StartTrace              StartTraceA
 #define ControlTrace            ControlTraceA
+#if defined(__TRACE_W2K_COMPATIBLE)
 #define StopTrace(a,b,c)        ControlTraceA((a),(b),(c), \
                                         EVENT_TRACE_CONTROL_STOP)
 #define QueryTrace(a,b,c)       ControlTraceA((a),(b),(c), \
                                         EVENT_TRACE_CONTROL_QUERY)
 #define UpdateTrace(a,b,c)      ControlTraceA((a),(b),(c), \
                                         EVENT_TRACE_CONTROL_UPDATE)
+#else
+#define StopTrace               StopTraceA
+#define QueryTrace              QueryTraceA
+#define UpdateTrace             UpdateTraceA
+#endif
+#if (WINVER >= 0x0501)
+#define FlushTrace              FlushTraceA
+#endif
 #define QueryAllTraces          QueryAllTracesA
 #define OpenTrace               OpenTraceA
 #endif  // UNICODE
@@ -857,5 +1074,4 @@ RemoveTraceCallback (
 #endif /* _WMIKM_  && _NTDDK_ */
 
 #endif // WINNT
-#pragma option pop /*P_O_Pop*/
 #endif /* _EVNTRACE_ */

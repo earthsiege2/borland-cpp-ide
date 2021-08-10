@@ -1,4 +1,4 @@
-/* Copyright (c) 1997-1998, Microsoft Corporation, all rights reserved
+/* Copyright (c) 1997-1999, Microsoft Corporation, all rights reserved
 **
 ** tcerror.h
 ** Traffic Control external API
@@ -6,9 +6,11 @@
 */
 
 #ifndef _TCERROR_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _TCERROR_H_
 
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 #define TCBASE 7500
 
@@ -87,5 +89,35 @@
 // TcObjectsLength is inconsistent with CfInfoSize
 //
 #define ERROR_TC_OBJECT_LENGTH_INVALID      (TCBASE+15)
-#pragma option pop /*P_O_Pop*/
+
+//
+// Adding an Intserv flow in Diffserv mode or vice versa
+//
+#define ERROR_INVALID_FLOW_MODE             (TCBASE+16)
+
+//
+// Invalid Diffserv flow
+//
+#define ERROR_INVALID_DIFFSERV_FLOW         (TCBASE+17)
+
+//
+// DS codepoint already exists
+//
+#define ERROR_DS_MAPPING_EXISTS             (TCBASE+18)
+
+//
+// Invalid Shape Rate specified
+//
+#define ERROR_INVALID_SHAPE_RATE            (TCBASE+19)
+
+// 
+// Invalid DCLASS
+// 
+#define ERROR_INVALID_DS_CLASS              (TCBASE+20)
+
+// 
+// Too many GPC clients
+// 
+#define ERROR_TOO_MANY_CLIENTS              (TCBASE+21)
+
 #endif // _TCERROR_H_

@@ -31,14 +31,14 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1998, 2000 by Inprise Corporation
+ *      Copyright (c) 1998, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.3  $        */
+/* $Revision: 9.6 $        */
 
 #include <windows.h>
 #include <_defs.h>

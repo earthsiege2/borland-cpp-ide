@@ -1,7 +1,6 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*++
 
-Copyright (c) 1997-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Module Name:
 
@@ -34,7 +33,6 @@ extern "C" {
 //
 
 #define MS_FAXROUTE_PRINTING_GUID               TEXT("{aec1b37c-9af2-11d0-abf7-00c04fd91a4e}")
-#define MS_FAXROUTE_INBOX_GUID                  TEXT("{9d3d0c32-9af2-11d0-abf7-00c04fd91a4e}")
 #define MS_FAXROUTE_FOLDER_GUID                 TEXT("{92041a90-9af2-11d0-abf7-00c04fd91a4e}")
 #define MS_FAXROUTE_EMAIL_GUID                  TEXT("{6bbf7bfe-9af2-11d0-abf7-00c04fd91a4e}")
 
@@ -42,12 +40,12 @@ extern "C" {
 // callback routines
 //
 
-typedef LONG (WINAPI *PFAXROUTEADDFILE)(IN DWORD JobId,IN LPCWSTR FileName,IN GUID *Guid);
-typedef LONG (WINAPI *PFAXROUTEDELETEFILE)(IN DWORD JobId,IN LPCWSTR FileName);
-typedef BOOL (WINAPI *PFAXROUTEGETFILE)(IN DWORD JobId,IN DWORD Index,OUT LPWSTR FileNameBuffer,OUT LPDWORD RequiredSize);
-typedef BOOL (WINAPI *PFAXROUTEENUMFILE)(IN DWORD JobId,IN GUID *GuidOwner,IN GUID *GuidCaller,IN LPCWSTR FileName,IN OUT PVOID Context);
-typedef BOOL (WINAPI *PFAXROUTEENUMFILES)(IN DWORD JobId,IN GUID *Guid,IN PFAXROUTEENUMFILE FileEnumerator,IN OUT PVOID Context);
-typedef BOOL (WINAPI *PFAXROUTEMODIFYROUTINGDATA)(IN DWORD JobId,IN LPCWSTR RoutingGuid,IN LPBYTE RoutingData,IN DWORD RoutingDataSize );
+typedef LONG (WINAPI *PFAXROUTEADDFILE)(DWORD JobId, LPCWSTR FileName, GUID *Guid);
+typedef LONG (WINAPI *PFAXROUTEDELETEFILE)(DWORD JobId, LPCWSTR FileName);
+typedef BOOL (WINAPI *PFAXROUTEGETFILE)(DWORD JobId, DWORD Index, LPWSTR FileNameBuffer, LPDWORD RequiredSize);
+typedef BOOL (WINAPI *PFAXROUTEENUMFILE)(DWORD JobId, GUID *GuidOwner, GUID *GuidCaller, LPCWSTR FileName, PVOID Context);
+typedef BOOL (WINAPI *PFAXROUTEENUMFILES)(DWORD JobId, GUID *Guid,PFAXROUTEENUMFILE FileEnumerator, PVOID Context);
+typedef BOOL (WINAPI *PFAXROUTEMODIFYROUTINGDATA)(DWORD JobId, LPCWSTR RoutingGuid, LPBYTE RoutingData, DWORD RoutingDataSize );
 
 
 typedef struct _FAX_ROUTE_CALLBACKROUTINES {
@@ -129,18 +127,15 @@ FaxRouteSetRoutingInfo(
     );
 
 
-typedef BOOL (WINAPI *PFAXROUTEINITIALIZE)               (IN HANDLE,IN PFAX_ROUTE_CALLBACKROUTINES);
-typedef BOOL (WINAPI *PFAXROUTEMETHOD)                   (IN const FAX_ROUTE*,OUT PVOID*,OUT LPDWORD);
-typedef BOOL (WINAPI *PFAXROUTEDEVICEENABLE)             (IN LPCWSTR,IN DWORD,IN LONG);
-typedef BOOL (WINAPI *PFAXROUTEDEVICECHANGENOTIFICATION) (IN DWORD,IN BOOL);
-typedef BOOL (WINAPI *PFAXROUTEGETROUTINGINFO)           (IN LPCWSTR,IN DWORD,OUT LPBYTE,OUT LPDWORD);
-typedef BOOL (WINAPI *PFAXROUTESETROUTINGINFO)           (IN LPCWSTR,IN DWORD,IN const BYTE*,IN DWORD);
-
-
+typedef BOOL (WINAPI *PFAXROUTEINITIALIZE)               (HANDLE,PFAX_ROUTE_CALLBACKROUTINES);
+typedef BOOL (WINAPI *PFAXROUTEMETHOD)                   (const FAX_ROUTE*,PVOID*,LPDWORD);
+typedef BOOL (WINAPI *PFAXROUTEDEVICEENABLE)             (LPCWSTR,DWORD,LONG);
+typedef BOOL (WINAPI *PFAXROUTEDEVICECHANGENOTIFICATION) (DWORD,BOOL);
+typedef BOOL (WINAPI *PFAXROUTEGETROUTINGINFO)           (LPCWSTR,DWORD,LPBYTE,LPDWORD);
+typedef BOOL (WINAPI *PFAXROUTESETROUTINGINFO)           (LPCWSTR,DWORD,const BYTE*,DWORD);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-#pragma option pop /*P_O_Pop*/

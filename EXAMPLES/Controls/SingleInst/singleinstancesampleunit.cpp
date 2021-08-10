@@ -9,7 +9,7 @@
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
-#pragma link "SingleAppInstance"
+#pragma link "SingleInstance"
 #pragma resource "*.dfm"
 
 TForm1 *Form1;

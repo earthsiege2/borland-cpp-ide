@@ -1,18 +1,24 @@
-/* Copyright (c) 1992-1999, Microsoft Corporation, all rights reserved
-**
-** ras.h
-** Remote Access external API
-** Public header for external API clients
-**
-** WINVER values in this file:
-**      WINVER < 0x400 = Windows NT 3.5, Windows NT 3.51
-**      WINVER = 0x400 = Windows 95, Windows98, Windows NT4 (default)
-**      WINVER > 0x400 = Windows NT4 enhancements
-**      WINVER = 0x500 = Windows 2000
-*/
+/*++
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+Module Name:
+
+    ras.h
+
+Abstract:
+
+    Remote Access external API
+
+    WINVER values in this file:
+        WINVER < 0x400 = Windows NT 3.5, Windows NT 3.51
+        WINVER = 0x400 = Windows 95, Windows98, Windows NT4 (default)
+        WINVER > 0x400 = Windows NT4 enhancements
+        WINVER = 0x500 = Windows 2000
+
+--*/
 
 #ifndef _RAS_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _RAS_H_
 
 #if _MSC_VER > 1000
@@ -50,10 +56,15 @@ extern "C" {
 #define RAS_MaxFacilities     200
 #define RAS_MaxUserData       200
 #define RAS_MaxReplyMessage   1024
+#define RAS_MaxDnsSuffix      256
 
 DECLARE_HANDLE( HRASCONN );
 #define LPHRASCONN HRASCONN*
 
+#if (WINVER >= 0x501)
+#define RASCF_AllUsers		0x00000001
+#define RASCF_GlobalCreds	0x00000002
+#endif
 
 /* Identifies an active RAS connection.  (See RasEnumConnections)
 */
@@ -75,6 +86,10 @@ RASCONNW
 #if (WINVER >= 0x500)
     GUID    guidEntry;
 #endif
+#if (WINVER >= 0x501)
+	DWORD	dwFlags;
+	LUID    luid;
+#endif
 };
 
 #define RASCONNA struct tagRASCONNA
@@ -94,6 +109,10 @@ RASCONNA
 #endif
 #if (WINVER >= 0x500)
     GUID     guidEntry;
+#endif
+#if (WINVER >= 0x501)
+	DWORD	dwFlags;
+	LUID    luid;
 #endif
 };
 
@@ -287,6 +306,11 @@ RASDIALEXTENSIONS
 #if (WINVER >= 0x500)
 #define RDEOPT_CustomDial                0x00001000
 #endif
+
+#if (WINVER >= 0x501)
+#define RDEOPT_UseCustomScripting        0x00002000
+#endif
+
 
 //
 // This flag when set in the RASENTRYNAME structure
@@ -762,9 +786,6 @@ RASIPADDR
 
 #if (WINVER >= 0x500)
 
-#define ET_40Bit        1
-#define ET_128Bit       2
-
 #define ET_None         0  // No encryption
 #define ET_Require      1  // Require Encryption
 #define ET_RequireMax   2  // Require max encryption
@@ -883,6 +904,30 @@ RASENTRYA
     DWORD       dwVpnStrategy;
 #endif
 
+#if (WINVER >= 0x501)
+	//
+	// More RASEO_* options
+	//
+	DWORD		dwfOptions2;
+
+	//
+	// For future use
+	//
+	DWORD       dwfOptions3;
+
+	CHAR		szDnsSuffix[RAS_MaxDnsSuffix];
+
+	DWORD       dwTcpWindowSize;
+
+	CHAR        szPrerequisitePbk[MAX_PATH];
+
+	CHAR        szPrerequisiteEntry[RAS_MaxEntryName + 1];
+
+	DWORD       dwRedialCount;
+
+	DWORD       dwRedialPause;
+#endif
+
 };
 
 #define RASENTRYW struct tagRASENTRYW
@@ -986,6 +1031,30 @@ RASENTRYW
     //
     DWORD       dwVpnStrategy;
 #endif
+
+#if (WINVER >= 0x501)
+	//
+	// More RASEO_* options
+	//
+	DWORD		dwfOptions2;
+
+	//
+	// For future use
+	//
+	DWORD       dwfOptions3;
+
+	WCHAR		szDnsSuffix[RAS_MaxDnsSuffix];
+
+	DWORD       dwTcpWindowSize;
+
+	WCHAR       szPrerequisitePbk[MAX_PATH];
+
+	WCHAR       szPrerequisiteEntry[RAS_MaxEntryName + 1];
+
+	DWORD       dwRedialCount;
+
+	DWORD       dwRedialPause;
+#endif
 };
 
 #ifdef UNICODE
@@ -1016,9 +1085,11 @@ RASENTRYW
 #define RASEO_NetworkLogon              0x00002000
 #define RASEO_UseLogonCredentials       0x00004000
 #define RASEO_PromoteAlternates         0x00008000
+
 #if (WINVER >= 0x401)
 #define RASEO_SecureLocalFiles          0x00010000
 #endif
+
 #if (WINVER >= 0x500)
 #define RASEO_RequireEAP                0x00020000
 #define RASEO_RequirePAP                0x00040000
@@ -1035,7 +1106,22 @@ RASENTRYW
 #define RASEO_RequireMsCHAP2            0x20000000
 #define RASEO_RequireW95MSCHAP          0x40000000
 #define RASEO_CustomScript              0x80000000
+#endif
 
+#if (WINVER >= 0x501)
+//
+// RASENTRY dwfOptions2 bit flags
+//
+#define RASEO2_SecureFileAndPrint       0x00000001
+#define RASEO2_SecureClientForMSNet     0x00000002
+#define RASEO2_DontNegotiateMultilink   0x00000004
+#define RASEO2_DontUseRasCredentials    0x00000008
+#define RASEO2_UsePreSharedKey          0x00000010
+#define RASEO2_Internet                 0x00000020
+#define RASEO2_DisableNbtOverIP         0x00000040
+#define RASEO2_UseGlobalDeviceSettings  0x00000080
+#define RASEO2_ReconnectIfDropped       0x00000100
+#define RASEO2_SharePhoneNumbers        0x00000200
 #endif
 
 /* RASENTRY 'dwProtocols' bit flags.
@@ -1065,16 +1151,22 @@ RASENTRYW
 #define RASDT_SW56                      TEXT("SW56")
 #define RASDT_Irda                      TEXT("IRDA")
 #define RASDT_Parallel                  TEXT("PARALLEL")
+#if (WINVER >= 0x501)
+#define RASDT_PPPoE                     TEXT("PPPoE")
+#endif
 
 
 // The entry type used to determine which UI properties
 // are to be presented to user.  This generally corresponds
 // to a Connections "add" wizard selection.
 //
-#define RASET_Phone    1  // Phone lines: modem, ISDN, X.25, etc
-#define RASET_Vpn      2  // Virtual private network
-#define RASET_Direct   3  // Direct connect: serial, parallel
-#define RASET_Internet 4  // BaseCamp internet
+#define RASET_Phone     1  // Phone lines: modem, ISDN, X.25, etc
+#define RASET_Vpn       2  // Virtual private network
+#define RASET_Direct    3  // Direct connect: serial, parallel
+#define RASET_Internet  4  // BaseCamp internet
+#if (WINVER >= 0x501)
+#define RASET_Broadband 5  // Broadband
+#endif
 
 /* Old AutoDial DLL function prototype.
 **
@@ -1086,7 +1178,8 @@ RASENTRYW
 */
 typedef BOOL (WINAPI *ORASADFUNC)( HWND, LPSTR, DWORD, LPDWORD );
 
-#if (WINVER >= 0x401)
+#if (WINVER >= 0x400)
+
 /* Flags for RasConnectionNotification().
 */
 #define RASCN_Connection        0x00000001
@@ -1094,6 +1187,9 @@ typedef BOOL (WINAPI *ORASADFUNC)( HWND, LPSTR, DWORD, LPDWORD );
 #define RASCN_BandwidthAdded    0x00000004
 #define RASCN_BandwidthRemoved  0x00000008
 
+#endif
+
+#if (WINVER >= 0x401)
 /* RASENTRY 'dwDialMode' values.
 */
 #define RASEDM_DialAll                  1
@@ -1214,9 +1310,15 @@ RASCREDENTIALSW
 
 /* RASCREDENTIALS 'dwMask' values.
 */
-#define RASCM_UserName       0x00000001
-#define RASCM_Password       0x00000002
-#define RASCM_Domain         0x00000004
+#define RASCM_UserName          0x00000001
+#define RASCM_Password          0x00000002
+#define RASCM_Domain            0x00000004
+#if (WINVER >= 501)
+#define RASCM_DefaultCreds       0x00000008
+#define RASCM_PreSharedKey       0x00000010
+#define RASCM_ServerPreSharedKey 0x00000020
+#define RASCM_DDMPreSharedKey    0x00000040
+#endif
 
 /* AutoDial address properties.
 */
@@ -1295,7 +1397,80 @@ RASEAPUSERIDENTITYW
 #define LPRASEAPUSERIDENTITYW RASEAPUSERIDENTITYW*
 #define LPRASEAPUSERIDENTITYA RASEAPUSERIDENTITYA*
 
+typedef DWORD (WINAPI *PFNRASGETBUFFER) (
+                            PBYTE *ppBuffer,
+                            PDWORD pdwSize
+                            );
+
+typedef DWORD (WINAPI *PFNRASFREEBUFFER) (
+                            PBYTE pBufer);
+
+typedef DWORD (WINAPI *PFNRASSENDBUFFER) (
+                            HANDLE hPort,
+                            PBYTE  pBuffer,
+                            DWORD  dwSize
+                            );
+
+typedef DWORD (WINAPI *PFNRASRECEIVEBUFFER) (
+                            HANDLE hPort,
+                            PBYTE pBuffer,
+                            PDWORD pdwSize,
+                            DWORD  dwTimeOut,
+                            HANDLE hEvent
+                            );
+
+typedef DWORD (WINAPI *PFNRASRETRIEVEBUFFER) (
+                            HANDLE hPort,
+                            PBYTE pBuffer,
+                            PDWORD pdwSize
+                            );
+
+typedef  DWORD (WINAPI *RasCustomScriptExecuteFn) (
+                            HANDLE hPort,
+                            LPCWSTR lpszPhonebook,
+                            LPCWSTR lpszEntryName,
+                            PFNRASGETBUFFER pfnRasGetBuffer,
+                            PFNRASFREEBUFFER pfnRasFreeBuffer,
+                            PFNRASSENDBUFFER pfnRasSendBuffer,
+                            PFNRASRECEIVEBUFFER pfnRasReceiveBuffer,
+                            PFNRASRETRIEVEBUFFER pfnRasRetrieveBuffer,
+                            HWND hWnd,
+                            RASDIALPARAMS *pRasDialParams,
+                            PVOID pvReserved
+                            );
+                            
+                            
+                            
+                            
+
 #endif // (WINVER >= 0x500)
+
+#if (WINVER >= 0x0501)
+
+#define RASCOMMSETTINGS struct tagRASCOMMSETTINGS
+RASCOMMSETTINGS
+{
+    DWORD     dwSize;
+    BYTE      bParity;
+    BYTE      bStop;
+    BYTE      bByteSize;
+    BYTE      bAlign;
+};
+
+typedef DWORD (WINAPI *PFNRASSETCOMMSETTINGS) (
+                            HANDLE hPort,
+                            RASCOMMSETTINGS *pRasCommSettings,
+                            PVOID  pvReserved
+                            );
+
+#define RASCUSTOMSCRIPTEXTENSIONS struct tagRASCUSTOMSCRIPTEXTENSIONS
+RASCUSTOMSCRIPTEXTENSIONS
+{
+    DWORD                    dwSize;                  
+    PFNRASSETCOMMSETTINGS    pfnRasSetCommSettings;
+};
+
+#endif
 
 
 /* External RAS API function prototypes.
@@ -1378,6 +1553,10 @@ DWORD APIENTRY RasValidateEntryNameA( LPCSTR, LPCSTR );
 
 DWORD APIENTRY RasValidateEntryNameW( LPCWSTR, LPCWSTR );
 
+DWORD APIENTRY RasConnectionNotificationA( HRASCONN, HANDLE, DWORD );
+
+DWORD APIENTRY RasConnectionNotificationW( HRASCONN, HANDLE, DWORD );
+
 #if (WINVER >= 0x401)
 DWORD APIENTRY RasGetSubEntryHandleA( HRASCONN, DWORD, LPHRASCONN );
 
@@ -1390,10 +1569,6 @@ DWORD APIENTRY RasGetCredentialsW( LPCWSTR, LPCWSTR, LPRASCREDENTIALSW );
 DWORD APIENTRY RasSetCredentialsA( LPCSTR, LPCSTR, LPRASCREDENTIALSA, BOOL );
 
 DWORD APIENTRY RasSetCredentialsW( LPCWSTR, LPCWSTR, LPRASCREDENTIALSW, BOOL );
-
-DWORD APIENTRY RasConnectionNotificationA( HRASCONN, HANDLE, DWORD );
-
-DWORD APIENTRY RasConnectionNotificationW( HRASCONN, HANDLE, DWORD );
 
 DWORD APIENTRY RasGetSubEntryPropertiesA( LPCSTR, LPCSTR, DWORD,
                     LPRASSUBENTRYA, LPDWORD, LPBYTE, LPDWORD );
@@ -1487,6 +1662,7 @@ typedef DWORD (WINAPI *RasCustomDeleteEntryNotifyFn) (
 #define RCD_SingleUser  0
 #define RCD_AllUsers    0x00000001
 #define RCD_Eap         0x00000002
+#define RCD_Logon       0x00000004
 
 DWORD APIENTRY RasInvokeEapUI( HRASCONN, DWORD, LPRASDIALEXTENSIONS, HWND);
 
@@ -1580,6 +1756,19 @@ VOID APIENTRY RasFreeEapUserIdentityA(
 );
 #endif
 
+#if (WINVER >= 0x501)
+
+DWORD APIENTRY  RasDeleteSubEntryA(
+                LPCSTR pszPhonebook,
+                LPCSTR pszEntry,
+                DWORD  dwSubentryId);
+
+DWORD APIENTRY  RasDeleteSubEntryW(
+                LPCWSTR pszPhonebook,
+                LPCWSTR pszEntry,
+                DWORD   dwSubEntryId);
+#endif
+
 #ifdef UNICODE
 #define RasDial                 RasDialW
 #define RasEnumConnections      RasEnumConnectionsW
@@ -1621,6 +1810,9 @@ VOID APIENTRY RasFreeEapUserIdentityA(
 #define RasSetCustomAuthData        RasSetCustomAuthDataW
 #define RasGetEapUserIdentity       RasGetEapUserIdentityW
 #define RasFreeEapUserIdentity      RasFreeEapUserIdentityW
+#endif
+#if(WINVER >= 0x501)
+#define RasDeleteSubEntry           RasDeleteSubEntryW
 #endif
 #else
 #define RasDial                 RasDialA
@@ -1664,6 +1856,9 @@ VOID APIENTRY RasFreeEapUserIdentityA(
 #define RasGetEapUserIdentity       RasGetEapUserIdentityA
 #define RasFreeEapUserIdentity      RasFreeEapUserIdentityA
 #endif
+#if (WINVER >= 0x501)
+#define RasDeleteSubEntry           RasDeleteSubEntryA
+#endif
 #endif
 
 #ifdef __cplusplus
@@ -1672,5 +1867,4 @@ VOID APIENTRY RasFreeEapUserIdentityA(
 
 #include <poppack.h>
 
-#pragma option pop /*P_O_Pop*/
 #endif // _RAS_H_

@@ -1,6 +1,5 @@
 // SYSTOBJ.H: Pascal TObject and Interface types
-// Copyright (c) 1997, 1999 Borland International
-
+// Copyright (c) 1997, 2002 Borland Software Corporation
 #if !defined(SYSTOBJ_H)
 #define SYSTOBJ_H
 
@@ -68,8 +67,17 @@ namespace System
 
           bool __fastcall GetInterface(const TGUID &IID, /* out */ void *Obj);
 
+          /** Template function to ease querying for a
+           *  smart-Interface-object from a TObject class
+           */
+          template <typename T>
+          bool __fastcall GetInterface(DelphiInterface<T>& smartIntf)
+          {
+            return GetInterface(__uuidof(T), reinterpret_cast<void*>(static_cast<T**>(&smartIntf)));
+          }
+
           /*         class method */ static PInterfaceEntry __fastcall GetInterfaceEntry(const TGUID IID);
-          /*         class method */ static PInterfaceTable * __fastcall GetInterfaceTable(void);
+          /*         class method */ static PInterfaceTable  __fastcall GetInterfaceTable(TClass cls);
 
           ShortString __fastcall ClassName()
           {
@@ -111,13 +119,18 @@ namespace System
                 return MethodName(ClassType(), Address);
           }
 
+          PInterfaceTable __fastcall GetInterfaceTable()
+          {
+                return GetInterfaceTable(ClassType());
+          }
+
           virtual HResult __fastcall SafeCallException(TObject *ExceptObject, void *ExceptAddr);
           virtual void __fastcall AfterConstruction();
           virtual void __fastcall BeforeDestruction();
           virtual void __fastcall Dispatch(void *Message);
           virtual void __fastcall DefaultHandler(void* Message);
 
-        private:
+        protected:
           virtual TObject* __fastcall NewInstance(TClass cls);
 
         public:
@@ -238,9 +251,11 @@ namespace System
 
           __fastcall ~DelphiInterface<T>()
           {
-                if (intf != 0)
+                if (intf != 0) 
+                {
                   intf->Release();
-                intf = 0;
+                  intf = 0;
+                }
           }
 
 #if (__BORLANDC__ >= 0x550)
@@ -310,19 +325,85 @@ namespace System
           }
         };
 
-        class DELPHICLASS TInterfacedObject : public TObject
+        class DELPHICLASS TInterfacedObject;
+        class PASCALIMPLEMENTATION TInterfacedObject : public TObject
         {
-        private:
-          void    *IUnknown;
         protected:
-      int     FRefCount;
-          HResult __stdcall QueryInterface(const GUID& IID, /* out */ void **Obj);
-          int __stdcall _AddRef(void);
-          int __stdcall _Release(void);
+           int     FRefCount;
         public:
-      virtual void __fastcall BeforeDestruction();
-          __property int RefCount       = { read=FRefCount };
+           HRESULT __stdcall QueryInterface(const GUID& IID, /* out */ void *Obj);
+           int     __stdcall _AddRef(void);
+           int     __stdcall _Release(void);
+           virtual void     __fastcall AfterConstruction();
+           virtual void     __fastcall BeforeDestruction();
+           virtual TObject* __fastcall NewInstance(TClass cls);
+
+           /**
+            * Template function to ease querying for a
+            * smart-Interface-object from a TInterfaced-derived class
+            */
+           template <typename T>
+           HRESULT __stdcall QueryInterface(DelphiInterface<T>& smartIntf)
+           {
+             return QueryInterface(__uuidof(T), reinterpret_cast<void*>(static_cast<T**>(&smartIntf)));
+           }
+
+           __property int RefCount       = { read=FRefCount };
+
+        private:
+           void* __IInterface;
         };
+
+
+       /* TAggregatedObject and TContainedObject moved from ComObj.hpp
+          as of March, 2001. */
+
+       class DELPHICLASS TAggregatedObject;
+       #pragma pack(push, 4)
+       class PASCALIMPLEMENTATION TAggregatedObject : public TObject
+       {
+           typedef TObject inherited;
+       private:
+           void* FController;
+           _di_IInterface __fastcall GetController();
+       protected:
+           HRESULT __stdcall QueryInterface(const GUID &IID, void *Obj);
+           int __stdcall _AddRef(void);
+           int __stdcall _Release(void);
+       public:
+           __fastcall TAggregatedObject(const _di_IInterface Controller);
+           __property _di_IInterface Controller = {read=GetController};
+       #pragma option push -w-inl
+           inline __fastcall virtual ~TAggregatedObject(void) { }
+       #pragma option pop
+       };
+
+       #if sizeof(TAggregatedObject) > 8
+       #pragma message "Pascal/C++ size mismatch on TAggregatedObject."
+       #endif
+       #pragma pack(pop)
+
+       class DELPHICLASS TContainedObject;
+       #pragma pack(push, 4)
+       class PASCALIMPLEMENTATION TContainedObject : public TAggregatedObject
+       {
+           typedef TObject inherited;
+       protected:
+           HIDESBASE virtual HRESULT __stdcall QueryInterface(const GUID &IID, void *Obj);
+       #pragma option push -w-inl
+           inline __fastcall TContainedObject(_di_IInterface Controller) : TAggregatedObject(Controller) { }
+       #pragma option pop
+       public:
+       #pragma option push -w-inl
+           inline __fastcall virtual ~TContainedObject(void) { }
+       #pragma option pop
+       };
+
+       #if sizeof(TContainedObject) > 8
+       #pragma message "Pascal/C++ size mismatch on TAggregatedObject."
+       #endif
+       #pragma pack(pop)
+
 }
 
 // Type definition of interfaces wrapped by a smart object
@@ -385,6 +466,7 @@ DECLARE_DINTERFACE_TYPE(IOleInPlaceUIWindow)
 DECLARE_DINTERFACE_TYPE(IOleInPlaceFrame)
 DECLARE_DINTERFACE_TYPE(IOleObject)
 DECLARE_DINTERFACE_TYPE(IOleInPlaceSite)
+DECLARE_DINTERFACE_TYPE(IOleInPlaceObjectWindowless)
 
 #pragma option pop
 

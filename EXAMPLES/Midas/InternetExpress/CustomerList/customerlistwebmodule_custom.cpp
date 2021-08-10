@@ -168,8 +168,8 @@ void __fastcall TWebModule1::AddScript(void * Data, _di_IAddScriptElements AddSc
 //---------------------------------------------------------------------------
 void __fastcall TWebModule1::DataBeforeGetContent(TObject *Sender)
 {
-  _di_IScriptProducer ScriptProducer;
-  if (Data->GetInterface(__uuidof(IScriptProducer), &ScriptProducer))
+  Midcomp::_di_IScriptProducer ScriptProducer;
+  if (Data->GetInterface(__uuidof(Midcomp::IScriptProducer), &ScriptProducer))
     ScriptProducer->ScriptManager->AddElementsIntf->AddPass(AddScript, NULL);
         
 }

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ComStrs.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ComStrs.pas' rev: 6.00
 
 #ifndef ComStrsHPP
 #define ComStrsHPP
@@ -79,20 +79,15 @@ extern PACKAGE System::ResourceString _sFailSetCalDateTime;
 #define Comstrs_sFailSetCalDateTime System::LoadResourceString(&Comstrs::_sFailSetCalDateTime)
 extern PACKAGE System::ResourceString _sFailSetCalMaxSelRange;
 #define Comstrs_sFailSetCalMaxSelRange System::LoadResourceString(&Comstrs::_sFailSetCalMaxSelRange)
-	
 extern PACKAGE System::ResourceString _sFailSetCalMinMaxRange;
 #define Comstrs_sFailSetCalMinMaxRange System::LoadResourceString(&Comstrs::_sFailSetCalMinMaxRange)
-	
 extern PACKAGE System::ResourceString _sCalRangeNeedsMultiSelect;
 #define Comstrs_sCalRangeNeedsMultiSelect System::LoadResourceString(&Comstrs::_sCalRangeNeedsMultiSelect)
-	
 extern PACKAGE System::ResourceString _sFailsetCalSelRange;
 #define Comstrs_sFailsetCalSelRange System::LoadResourceString(&Comstrs::_sFailsetCalSelRange)
 
 }	/* namespace Comstrs */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Comstrs;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

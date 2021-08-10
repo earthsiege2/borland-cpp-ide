@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
-Copyright (c) 1992-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -23,7 +23,6 @@ Revision History:
 --*/
 
 #ifndef _SVCGUID_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _SVCGUID_
 
 #if _MSC_VER > 1000
@@ -396,5 +395,4 @@ Revision History:
 #define SVCID_DNS_TYPE_SRV                SVCID_DNS( 0x0021 )
 #define SVCID_DNS_TYPE_ATMA               SVCID_DNS( 0x0022 )
 
-#pragma option pop /*P_O_Pop*/
 #endif // _SVCGUID_

@@ -5,7 +5,7 @@
  * wmoney.cpp - Source for the Standard Library wide-character monetary
  *              locale classes.
  *
- * $Id: wmoney.cpp,v 1.9 1996/10/22 05:13:31 delaney Exp $
+ * $Id: wmoney.cpp,v 9.6 2001/07/10 17:24:47 nyork Exp $
  *
  ***************************************************************************
  *

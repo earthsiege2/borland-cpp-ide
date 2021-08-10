@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'AclApi.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'AclAPI.pas' rev: 6.00
 
-#ifndef AclApiHPP
-#define AclApiHPP
+#ifndef AclAPIHPP
+#define AclAPIHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -23,12 +23,10 @@ namespace Aclapi
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Aclapi */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Aclapi;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// AclApi
+#endif	// AclAPI

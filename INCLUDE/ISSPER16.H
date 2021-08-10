@@ -16,7 +16,6 @@
 //
 //--------------------------------------------------------------------------
 #ifndef _ISSPERR_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _ISSPERR_H_
 #if _MSC_VER > 1000
 #pragma once
@@ -319,5 +318,4 @@
 #define SEC_E_BAD_PKGID                  SEC_E_SECPKG_NOT_FOUND
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // _ISSPERR_H_

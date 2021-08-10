@@ -9,21 +9,21 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.2.1  $
-// File generated on 1/24/2000 9:49:21 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/28/2002 7:55:52 AM from Type Library described below.
 
-// ************************************************************************ //
-// Type Lib: g:\rampage\typelib\TypeLibraries\MSWORD8.olb (1)
-// IID\LCID: {00020905-0000-0000-C000-000000000046}\409
-// Helpfile: g:\rampage\typelib\TypeLibraries\VBAWRD8.HLP
+// ************************************************************************  //
+// Type Lib: c:\program files\microsoft office\office97\office\msword8.olb (1)
+// LIBID: {00020905-0000-0000-C000-000000000046}
+// LCID: 409
+// Helpfile: c:\program files\microsoft office\office97\office\VBAWRD8.HLP
+// HelpString: Microsoft Word 8.0 Object Library
 // DepndLst: 
 //   (1) v2.0 stdole, (C:\WINNT\System32\stdole2.tlb)
-//   (2) v2.0 Office, (D:\Program Files\Microsoft Office\Office\MSO97.DLL)
+//   (2) v2.0 Office, (C:\Program Files\Microsoft Office\office97\Office\MSO97.DLL)
 //   (3) v5.0 VBIDE, (C:\Program Files\Common Files\Microsoft Shared\VBA\VBEEXT1.OLB)
-//   (4) v4.0 StdVCL, (C:\WINNT\System32\STDVCL40.DLL)
 // Errors:
 //   Hint: Symbol 'Window' renamed to 'WINDOW'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
 //   Hint: Symbol 'System' renamed to 'SYSTEM'
 //   Hint: Symbol 'Global' renamed to 'WordGlobal'
 //   Hint: Symbol 'Application' renamed to 'WordApplication'
@@ -32,22 +32,10 @@
 //   Hint: Symbol 'ParagraphFormat' renamed to 'WordParagraphFormat'
 //   Hint: Symbol 'OLEControl' renamed to 'WordOLEControl'
 //   Hint: Symbol 'LetterContent' renamed to 'WordLetterContent'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Symbol 'ExitWindows' renamed to 'ExitWindoz'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'Window' renamed to 'WINDOW'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
 //   Hint: Symbol 'System' renamed to 'SYSTEM'
 //   Hint: Symbol 'Global' renamed to 'WordGlobal'
 //   Hint: Symbol 'Application' renamed to 'WordApplication'
@@ -56,17 +44,6 @@
 //   Hint: Symbol 'ParagraphFormat' renamed to 'WordParagraphFormat'
 //   Hint: Symbol 'OLEControl' renamed to 'WordOLEControl'
 //   Hint: Symbol 'LetterContent' renamed to 'WordLetterContent'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Symbol 'ExitWindows' renamed to 'ExitWindoz'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
@@ -75,6 +52,7 @@
 #include <vcl.h>
 #pragma hdrstop
 
+#include <oleserver.hpp>
 #if defined(USING_ATL)
 #include <atl\atlvcl.h>
 #endif
@@ -88,65 +66,6 @@
 
 namespace Word_97
 {
-
-_GlobalPtr& TWordGlobal::GetDefaultInterface()
-{
-  if (!m_DefaultIntf)
-    Connect();
-  return m_DefaultIntf;
-}
-
-_di_IUnknown __fastcall TWordGlobal::GetDunk()
-{
-  _di_IUnknown diUnk;
-  if (m_DefaultIntf) {
-    IUnknownPtr punk = m_DefaultIntf;
-    diUnk = LPUNKNOWN(punk);
-  }
-  return diUnk;
-}
-
-void __fastcall TWordGlobal::Connect()
-{
-  if (!m_DefaultIntf) {
-    _di_IUnknown punk = GetServer();
-    m_DefaultIntf = punk;
-    if (ServerData->EventIID != GUID_NULL)
-      ConnectEvents(GetDunk());
-  }
-}
-
-void __fastcall TWordGlobal::Disconnect()
-{
-  if (m_DefaultIntf) {
-    
-    if (ServerData->EventIID != GUID_NULL)
-      DisconnectEvents(GetDunk());
-    m_DefaultIntf.Reset();
-  }
-}
-
-void __fastcall TWordGlobal::BeforeDestruction()
-{
-  Disconnect();
-}
-
-void __fastcall TWordGlobal::ConnectTo(_GlobalPtr intf)
-{
-  Disconnect();
-  m_DefaultIntf = intf;
-  if (ServerData->EventIID != GUID_NULL)
-    ConnectEvents(GetDunk());
-}
-
-void __fastcall TWordGlobal::InitServerData()
-{
-  static Oleserver::TServerData sd;
-  sd.ClassID = CLSID_WordGlobal;
-  sd.IntfIID = __uuidof(_Global);
-  sd.EventIID= GUID_NULL;
-  ServerData = &sd;
-}
 
 _ApplicationPtr& TWordApplication::GetDefaultInterface()
 {
@@ -207,22 +126,28 @@ void __fastcall TWordApplication::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TWordApplication::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TWordApplication::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 1:
-      if (OnStartup)
+    case 1: {
+      if (OnStartup) {
         (OnStartup)(this);
+      }
       break;
-    case 2:
-      if (OnQuit)
+      }
+    case 2: {
+      if (OnQuit) {
         (OnQuit)(this);
+      }
       break;
-    case 3:
-      if (OnDocumentChange)
+      }
+    case 3: {
+      if (OnDocumentChange) {
         (OnDocumentChange)(this);
+      }
       break;
+      }
     default:
       break;
   }
@@ -287,22 +212,28 @@ void __fastcall TWordDocument::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TWordDocument::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TWordDocument::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 4:
-      if (OnNew)
+    case 4: {
+      if (OnNew) {
         (OnNew)(this);
+      }
       break;
-    case 5:
-      if (OnOpen)
+      }
+    case 5: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 6:
-      if (OnClose)
+      }
+    case 6: {
+      if (OnClose) {
         (OnClose)(this);
+      }
       break;
+      }
     default:
       break;
   }
@@ -500,16 +431,15 @@ namespace Word_97_srvr
 
 void __fastcall PACKAGE Register()
 {
-  // [6]
+  // [5]
   TComponentClass cls_svr[] = {
-                              __classid(Word_97::TWordGlobal), 
                               __classid(Word_97::TWordApplication), 
                               __classid(Word_97::TWordDocument), 
                               __classid(Word_97::TWordFont), 
                               __classid(Word_97::TWordParagraphFormat), 
                               __classid(Word_97::TWordLetterContent)
                            };
-  RegisterComponents("Servers", cls_svr,
+  RegisterComponents("Office97", cls_svr,
                      sizeof(cls_svr)/sizeof(cls_svr[0])-1);
 }
 

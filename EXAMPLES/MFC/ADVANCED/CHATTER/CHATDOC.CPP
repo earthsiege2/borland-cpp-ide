@@ -69,7 +69,7 @@ BOOL CChatDoc::OnNewDocument()
 		TCHAR strServer[128];
 		int nChannel;
 
-		istrstream(AfxGetApp()->m_lpCmdLine) >> strHandle >> strServer >> nChannel;
+		istrstream(AfxGetApp()->m_lpCmdLine) >> (bool)strHandle >> strServer >> nChannel;
 		return ConnectSocket(strHandle, strServer, nChannel);
 	}
 	else

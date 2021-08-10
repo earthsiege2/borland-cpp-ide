@@ -21,7 +21,7 @@ class PACKAGE TCustomShowXMLButton : public Miditems::TDataSetButton
 
 protected:
 	AnsiString XMLMethodName;
-	virtual void __fastcall ImplAddElements(Webcomp::_di_IAddScriptElements AddIntf);
+	virtual void __fastcall ImplAddElements(_di_IAddScriptElements AddIntf);
 	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
 public:
 	#pragma option push -w-inl

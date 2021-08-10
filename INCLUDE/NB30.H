@@ -14,7 +14,6 @@
 //--*/
 
 #ifndef NCB_INCLUDED
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define NCB_INCLUDED
 
 #if _MSC_VER > 1000
@@ -314,5 +313,4 @@ Netbios(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif /* NCB_INCLUDED */

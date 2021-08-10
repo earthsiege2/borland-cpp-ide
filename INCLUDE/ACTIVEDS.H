@@ -61,4 +61,5 @@
 //
 
 #include "adsdb.h"
+
 #pragma option pop /*P_O_Pop*/

@@ -1,15 +1,15 @@
 LIBRARY TH32
 EXPORTS
 
-    CreateToolhelp32Snapshot                 = 'KERNEL32.DLL'.*
-    Heap32First                              = 'KERNEL32.DLL'.*
-    Heap32ListFirst                          = 'KERNEL32.DLL'.*
-    Heap32ListNext                           = 'KERNEL32.DLL'.*
-    Heap32Next                               = 'KERNEL32.DLL'.*
-    Module32First                            = 'KERNEL32.DLL'.*
-    Module32Next                             = 'KERNEL32.DLL'.*
-    Process32First                           = 'KERNEL32.DLL'.*
-    Process32Next                            = 'KERNEL32.DLL'.*
-    Thread32First                            = 'KERNEL32.DLL'.*
-    Thread32Next                             = 'KERNEL32.DLL'.*
-    Toolhelp32ReadProcessMemory              = 'KERNEL32.DLL'.*
+    CreateToolhelp32Snapshot                 
+    Heap32First                              
+    Heap32ListFirst                          
+    Heap32ListNext                           
+    Heap32Next                               
+    Module32First                            
+    Module32Next                             
+    Process32First                           
+    Process32Next                            
+    Thread32First                            
+    Thread32Next                             
+    Toolhelp32ReadProcessMemory              

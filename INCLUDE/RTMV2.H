@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1995-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -17,7 +17,6 @@ Revision History:
 --*/
 
 #ifndef __ROUTING_RTMv2_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __ROUTING_RTMv2_H__
 
 #ifdef __cplusplus
@@ -1213,5 +1212,4 @@ RtmReferenceHandles (
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif //__ROUTING_RTMv2_H__

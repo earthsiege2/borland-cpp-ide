@@ -2,7 +2,7 @@
 # Configure the tools appropriately.                                        #
 #############################################################################
 # This is the major version # of the RTL DLL.
-DLLMAJOR  = 5
+DLLMAJOR  = 6
 
 # VCLPACKVER is the VCL Package version number in the .BPL filenames
 VCLPACKVER=$(DLLMAJOR)0
@@ -11,10 +11,10 @@ VCLPACKVER=$(DLLMAJOR)0
 PRODVER=$(DLLMAJOR).0
 
 # BETA is defined only prior to RTM and indicates the current milestone.
-#BETA=rtm
+BETA=pre-alpha
 
 !if $d(DLL)
-DLLCOPYRIGHTSTR = Copyright Inprise Corporation 1994,2000
+DLLCOPYRIGHTSTR = Copyright Borland Corporation 1994,2002
 
 # DLLVER is the version number in the RTL .DLL files: the xx (c?32xx*.dll)
 # DLLVERSTR is a string representation of the same number for VERSION.RC
@@ -31,13 +31,15 @@ DLLCOPYRIGHTSTR = Copyright Inprise Corporation 1994,2000
 # -b:0x32X00000 for base address - X should be only the major version num.
 #               ie: 4 for 40 & 45, 5 for 50, 6 for 60, 7 for 70...
 LINKER_DLL_BASE_SWITCH=-b:0x32$(DLLMAJOR)00000
+
 !endif
 
 !if $d(MAGIC) && $d(DLL)
 !  if $d(RTLSOURCE)
-     EXTLIB=$(BCB)\lib\release\vcl$(VCLPACKVER).lib $(BCB)\lib\release\vcle$(VCLPACKVER).lib
+     EXTLIB=$(BCB)\lib\release\vcl$(VCLPACKVER).lib \
+     $(BCB)\lib\release\vcle$(VCLPACKVER).lib $(BCB)\lib\release\rtl$(VCLPACKVER).lib
 !  else
-     EXTLIB=$(EXTDIR)\vcl$(VCLPACKVER).lib $(EXTDIR)\vcle$(VCLPACKVER).lib
+     EXTLIB=$(EXTDIR)\vcl$(VCLPACKVER).lib $(EXTDIR)\vcle$(VCLPACKVER).lib $(EXTLIB)\rtl$(VCLPACKVER).lib
 !  endif
 !endif
 
@@ -63,7 +65,9 @@ BRCC     = brcc32
 
 CC       = bcc32 +$(OBJDIR)\$(CFG) $(XTRAFLAGS) $(CCXTRAFLAGS)
 CPP      = cpp32 +$(OBJDIR)\$(CFG) $(XTRAFLAGS) $(CPPXTRAFLAGS)
-CFLAGS   = -c -X -n$(OBJDIR) -I$(INCLUDES) -ff- -j3 -jb -w -w-sig -V? -D__RTL_BUILD__;NO_STRICT;__USELOCALES__
+CFLAGS   = -c -X -n$(OBJDIR) -I$(INCLUDES) -ff- -j3 -jb -w -w-sig -V? \
+           -D__RTL_BUILD__;NO_STRICT;__USELOCALES__;_USE_OLD_RW_STL -Q
+
 !if $d(CREATE_ALLSTL)
 CFLAGS   = $(CFLAGS) -Jgi -w- -D__CREATE_ALLSTL__
 !endif
@@ -109,7 +113,9 @@ PUBNAME = names32.pub
 !endif
 
 !if $d(MAGIC)
-    CFLAGS = $(CFLAGS) -DMAGIC "-D__VCLPACKVERSTR=\"$(VCLPACKVER)\"" -D__VCLPACKVER=$(VCLPACKVER)
+    CFLAGS = $(CFLAGS) -DMAGIC "-D__VCLPACKVERSTR=\"$(VCLPACKVER)\"" \
+             -D__VCLPACKVER=$(VCLPACKVER)
+
     AFLAGS = $(AFLAGS) -DMAGIC
     MAGICSUFFIX = mg
 !endif
@@ -133,7 +139,9 @@ PUBNAME = names32.pub
 
 !if $d(DLL)
     AFLAGS = $(AFLAGS) -D_BUILDRTLDLL
-    CFLAGS = $(CFLAGS) -D_BUILDRTLDLL -WD -D_RWSTDBUILDDLL -D_RWSTDDLL "-D__RTLDLLVERSTR=\"$(DLLVER)\""
+    CFLAGS = $(CFLAGS) -D_BUILDRTLDLL -WD -D_RWSTDBUILDDLL -D_RWSTDDLL \
+             "-D__RTLDLLVERSTR=\"$(DLLVER)\""
+
     BRCC = $(BRCC) "-D__RTLDLLVERSTR=\"$(DLLVERSTR)\0\""
     BRCC = $(BRCC) "-D__RTLDLLPRODNAMESTR=\"Borland C++ Builder $(PRODVER)\0\""
     BRCC = $(BRCC) "-D__RTLDLLDESCSTR=\"$(DLLDESCSTR)\0\""
@@ -173,26 +181,25 @@ PUBNAME = names32.pub
 # Note: The following dirs must be built in this order for the RTL to work
 #----------------------------------------------------------------------------
 
-SRCDIRS =                               \
-          $(SRCBASE)\memory             \
-          $(SRCBASE)\vcl                \
-          $(SRCBASE)\stl\predecl        \
-          $(SRCBASE)\stl\allstl         \
-          $(SRCBASE)\stl                \
-          $(SRCBASE)\conio              \
-          $(SRCBASE)\cstrings           \
-          $(SRCBASE)\except             \
-          $(SRCBASE)\io                 \
-          $(SRCBASE)\locale             \
-          $(SRCBASE)\math               \
-          $(SRCBASE)\mbcs               \
-          $(SRCBASE)\misc               \
-          $(SRCBASE)\process            \
-          $(SRCBASE)\startup            \
-          $(SRCBASE)\threads            \
-          $(SRCBASE)\time               \
+SRCDIRS =                                     \
+          $(SRCBASE)\memory                   \
+          $(SRCBASE)\vcl                      \
+          $(SRCBASE)\stl\rw201\predecl        \
+          $(SRCBASE)\stl\rw201\allstl         \
+          $(SRCBASE)\stl\rw201                \
+          $(SRCBASE)\conio                    \
+          $(SRCBASE)\cstrings                 \
+          $(SRCBASE)\except                   \
+          $(SRCBASE)\io                       \
+          $(SRCBASE)\locale                   \
+          $(SRCBASE)\math                     \
+          $(SRCBASE)\mbcs                     \
+          $(SRCBASE)\misc                     \
+          $(SRCBASE)\process                  \
+          $(SRCBASE)\startup                  \
+          $(SRCBASE)\threads                  \
+          $(SRCBASE)\time                     \
           $(SRCBASE)\pcre
-
 
 #!if !$d(DLL) && (!$d(MT) || $d(MAGIC))
     SRCDIRS = $(SRCDIRS)                \

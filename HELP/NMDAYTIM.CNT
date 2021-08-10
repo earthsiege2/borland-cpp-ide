@@ -3,7 +3,7 @@
 
 :BASE nmdaytim.hlp
 :TITLE FastNet DayTime Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 TNMDayTime component
 2 TNMDayTime component Reference=Scribble1010
 2 Properties

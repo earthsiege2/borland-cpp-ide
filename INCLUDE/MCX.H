@@ -7,7 +7,6 @@
 ************************************************************************/
 
 #ifndef _MCX_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _MCX_H_
 
 #if _MSC_VER > 1000
@@ -720,5 +719,4 @@ typedef struct _MODEMSETTINGS {
         MDM_PIAFS_OUTGOING           \
         )
 
-#pragma option pop /*P_O_Pop*/
 #endif /* _MCX_H_ */

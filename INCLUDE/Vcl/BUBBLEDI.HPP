@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'BubblEdi.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'BubbleDi.pas' rev: 6.00
 
-#ifndef BubblEdiHPP
-#define BubblEdiHPP
+#ifndef BubbleDiHPP
+#define BubbleDiHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -60,12 +60,10 @@ public:
 	void __fastcall Enable3DPoint(void);
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TBubbleSeriesEditor(Classes::TComponent* AOwner)
-		 : Forms::TForm(AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TBubbleSeriesEditor(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TBubbleSeriesEditor(Classes::TComponent* AOwner
-		, int Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TBubbleSeriesEditor(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TBubbleSeriesEditor(void) { }
@@ -73,8 +71,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TBubbleSeriesEditor(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TBubbleSeriesEditor(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -83,12 +80,10 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Bubbledi */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Bubbledi;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// BubblEdi
+#endif	// BubbleDi

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OleCtl.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'OleCtl.pas' rev: 6.00
 
 #ifndef OleCtlHPP
 #define OleCtlHPP
@@ -10,7 +10,7 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <OLE2.hpp>	// Pascal unit
+#include <Ole2.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
@@ -59,32 +59,38 @@ typedef GUID TGUIDList[65536];
 
 typedef GUID *PGUIDList;
 
+#pragma pack(push, 4)
 struct TCAGUID
 {
 	int cElems;
 	GUID *pElems;
 } ;
+#pragma pack(pop)
 
 typedef TCAGUID *PCAGUID;
 
 struct TCAPOleStr;
 typedef TCAPOleStr *PCAPOleStr;
 
+#pragma pack(push, 4)
 struct TCAPOleStr
 {
 	int cElems;
 	wchar_t * *pElems;
 } ;
+#pragma pack(pop)
 
 typedef int TLongintList[65536];
 
 typedef int *PLongintList;
 
+#pragma pack(push, 4)
 struct TCALongint
 {
 	int cElems;
 	int *pElems;
 } ;
+#pragma pack(pop)
 
 typedef TCALongint *PCALongint;
 
@@ -114,9 +120,7 @@ extern PACKAGE GUID CLSID_StdFont;
 extern PACKAGE GUID CLSID_StdPicture;
 
 }	/* namespace Olectl */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Olectl;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

@@ -68,7 +68,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 /* [local] */ 
 
 #undef OLEDBDECLSPEC
-#if _MSC_VER >= 1100
+#if (_MSC_VER >= 1100) || defined(__BORLANDC__)
 #define OLEDBDECLSPEC __declspec(selectany)
 #else
 #define OLEDBDECLSPEC 

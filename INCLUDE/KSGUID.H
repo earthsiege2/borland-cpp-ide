@@ -1,7 +1,6 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*++
 
-Copyright (C) Microsoft Corporation, 1996 - 1999
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -28,4 +27,3 @@ Abstract:
 #if !defined( DEFINE_WAVEFORMATEX_GUID )
 #define DEFINE_WAVEFORMATEX_GUID(x) (USHORT)(x), 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71
 #endif
-#pragma option pop /*P_O_Pop*/

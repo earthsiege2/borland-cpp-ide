@@ -1,5 +1,5 @@
 // SYSCURR.H: Pascal Currency type
-// Copyright (c) 1997, 1999 Borland International
+// Copyright (c) 1997, 2002 Borland Software Corporation
 
 #if !defined(SYSCURR_H)		// currency type
 #define SYSCURR_H

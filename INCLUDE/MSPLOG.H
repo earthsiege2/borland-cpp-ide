@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1997-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -32,7 +32,10 @@ Abstract:
 
         #define MSPLOGREGISTER(arg) MSPLogRegister(arg)
         #define MSPLOGDEREGISTER() MSPLogDeRegister()
-        #define LOG(arg) LogPrint arg
+
+        extern BOOL g_bMSPBaseTracingOn;
+
+        #define LOG(arg) g_bMSPBaseTracingOn?LogPrint arg:0
 
     #else // MSPLOG
 
@@ -45,6 +48,7 @@ Abstract:
     
     #define DECLARE_LOG_ADDREF_RELEASE(x)
     #define CMSPComObject CComObject
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // _MSPLOG_H_

@@ -3,11 +3,11 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
-unit OleAuto;
+unit OleAuto deprecated;
 
 {$DENYPACKAGEUNIT}
 
@@ -41,8 +41,8 @@ type
 
   {$EXTERNALSYM TAutoDispatch }
   { NOTE: TAutoDispatch is not really an External Symbol. However, it derives from IDispatch
-	  which is. However, in the C++ world, a DELPHICLASS cannot derive from a non-Delphi
-	  Class. }
+    which is. However, in the C++ world, a DELPHICLASS cannot derive from a non-Delphi
+    Class. }
   TAutoDispatch = class(IDispatch)
   private
     FAutoObject: TAutoObject;
@@ -80,12 +80,6 @@ type
   objects, automation objects are reference counted. }
 
   {$EXTERNALSYM TAutoObject}
-  { NOTE: TAutoObject is not really an External Symbol. However, it uses TAutoDispatch
-	  which derives from IDispatch and causes 'DELPHICLASS cannot derive from 
-	  non-Delphi Class' errors. I asked about this and was given the 
-	  'Interfaces in Delphi' v 0.3 (Draft), 9/10/96, Anders Hejlsberg to
-	  determine whether TAutoDispatch's declaration is correct. 
-	  Um... Guess what I'm thinking? }
 
   TAutoObject = class(TObject)
   private
@@ -201,16 +195,6 @@ type
     property ErrorCode: Integer read FErrorCode;
     property HelpFile: string read FHelpFile;
     property Source: string read FSource;
-  end;
-
-{ Dispatch call descriptor }
-
-  PCallDesc = ^TCallDesc;
-  TCallDesc = packed record
-    CallType: Byte;
-    ArgCount: Byte;
-    NamedArgCount: Byte;
-    ArgTypes: array[0..255] of Byte;
   end;
 
 var
@@ -1066,6 +1050,7 @@ begin
   Result := S_OK;
   StrCount := 0;
   for I := 0 to ArgCount - 1 do Args[I].VType := varEmpty;
+  FillChar(ResVar, sizeof(ResVar), 0);
   ResVar.VType := varEmpty;
   try
     try

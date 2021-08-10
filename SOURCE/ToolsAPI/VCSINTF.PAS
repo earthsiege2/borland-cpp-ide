@@ -3,7 +3,7 @@
 {                                                       }
 {       Delphi Visual Component Library                 }
 {                                                       }
-{       Copyright (c) 1995,1996 Borland International   }
+{   Copyright (c) 1995-1996 Borland Software Corp.      }
 {                                                       }
 {*******************************************************}
 

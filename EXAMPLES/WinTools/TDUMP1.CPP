@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //Borland C++Builder
-//Copyright (c) 1987, 2000 Inprise Corporation. All Rights Reserved.
+//Copyright (c) 1987, 2000-2002 Borland Corporation. All Rights Reserved.
 //----------------------------------------------------------------------------
 //------------------------------------------------------------
 #define NO_WIN32_LEAN_AND_MEAN

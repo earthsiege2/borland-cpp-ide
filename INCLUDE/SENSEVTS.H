@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:36:44 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for sensevts.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -20,14 +18,23 @@
 
 /* verify that the <rpcndr.h> version is high enough to compile this file*/
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
-#define __REQUIRED_RPCNDR_H_VERSION__ 440
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
 
 #include "rpc.h"
 #include "rpcndr.h"
 
+#ifndef __RPCNDR_H_VERSION__
+#error this stub requires an updated version of <rpcndr.h>
+#endif // __RPCNDR_H_VERSION__
+
+
 #ifndef __sensevts_h__
 #define __sensevts_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -49,6 +56,12 @@ typedef interface ISensLogon ISensLogon;
 #endif 	/* __ISensLogon_FWD_DEFINED__ */
 
 
+#ifndef __ISensLogon2_FWD_DEFINED__
+#define __ISensLogon2_FWD_DEFINED__
+typedef interface ISensLogon2 ISensLogon2;
+#endif 	/* __ISensLogon2_FWD_DEFINED__ */
+
+
 #ifndef __SENS_FWD_DEFINED__
 #define __SENS_FWD_DEFINED__
 
@@ -68,8 +81,8 @@ typedef struct SENS SENS;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 
 #ifndef __SensEvents_LIBRARY_DEFINED__
@@ -84,9 +97,9 @@ typedef /* [uuid] */  DECLSPEC_UUID("d597fad1-5b9f-11d1-8dd2-00aa004abd5e") stru
     DWORD dwFlags;
     DWORD dwOutSpeed;
     DWORD dwInSpeed;
-    }	SENS_QOCINFO;
+    } 	SENS_QOCINFO;
 
-typedef SENS_QOCINFO __RPC_FAR *LPSENS_QOCINFO;
+typedef SENS_QOCINFO *LPSENS_QOCINFO;
 
 
 EXTERN_C const IID LIBID_SensEvents;
@@ -138,71 +151,71 @@ EXTERN_C const IID IID_ISensNetwork;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISensNetwork __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISensNetwork * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISensNetwork __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISensNetwork * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISensNetwork __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISensNetwork * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISensNetwork __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISensNetwork * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISensNetwork __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISensNetwork * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISensNetwork __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISensNetwork * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISensNetwork __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISensNetwork * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ConnectionMade )( 
-            ISensNetwork __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConnectionMade )( 
+            ISensNetwork * This,
             /* [in] */ BSTR bstrConnection,
             /* [in] */ ULONG ulType,
             /* [in] */ LPSENS_QOCINFO lpQOCInfo);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ConnectionMadeNoQOCInfo )( 
-            ISensNetwork __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConnectionMadeNoQOCInfo )( 
+            ISensNetwork * This,
             /* [in] */ BSTR bstrConnection,
             /* [in] */ ULONG ulType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ConnectionLost )( 
-            ISensNetwork __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConnectionLost )( 
+            ISensNetwork * This,
             /* [in] */ BSTR bstrConnection,
             /* [in] */ ULONG ulType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DestinationReachable )( 
-            ISensNetwork __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DestinationReachable )( 
+            ISensNetwork * This,
             /* [in] */ BSTR bstrDestination,
             /* [in] */ BSTR bstrConnection,
             /* [in] */ ULONG ulType,
             /* [in] */ LPSENS_QOCINFO lpQOCInfo);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DestinationReachableNoQOCInfo )( 
-            ISensNetwork __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DestinationReachableNoQOCInfo )( 
+            ISensNetwork * This,
             /* [in] */ BSTR bstrDestination,
             /* [in] */ BSTR bstrConnection,
             /* [in] */ ULONG ulType);
@@ -212,7 +225,7 @@ EXTERN_C const IID IID_ISensNetwork;
 
     interface ISensNetwork
     {
-        CONST_VTBL struct ISensNetworkVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISensNetworkVtbl *lpVtbl;
     };
 
     
@@ -266,7 +279,7 @@ EXTERN_C const IID IID_ISensNetwork;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensNetwork_ConnectionMade_Proxy( 
-    ISensNetwork __RPC_FAR * This,
+    ISensNetwork * This,
     /* [in] */ BSTR bstrConnection,
     /* [in] */ ULONG ulType,
     /* [in] */ LPSENS_QOCINFO lpQOCInfo);
@@ -280,7 +293,7 @@ void __RPC_STUB ISensNetwork_ConnectionMade_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensNetwork_ConnectionMadeNoQOCInfo_Proxy( 
-    ISensNetwork __RPC_FAR * This,
+    ISensNetwork * This,
     /* [in] */ BSTR bstrConnection,
     /* [in] */ ULONG ulType);
 
@@ -293,7 +306,7 @@ void __RPC_STUB ISensNetwork_ConnectionMadeNoQOCInfo_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensNetwork_ConnectionLost_Proxy( 
-    ISensNetwork __RPC_FAR * This,
+    ISensNetwork * This,
     /* [in] */ BSTR bstrConnection,
     /* [in] */ ULONG ulType);
 
@@ -306,7 +319,7 @@ void __RPC_STUB ISensNetwork_ConnectionLost_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensNetwork_DestinationReachable_Proxy( 
-    ISensNetwork __RPC_FAR * This,
+    ISensNetwork * This,
     /* [in] */ BSTR bstrDestination,
     /* [in] */ BSTR bstrConnection,
     /* [in] */ ULONG ulType,
@@ -321,7 +334,7 @@ void __RPC_STUB ISensNetwork_DestinationReachable_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensNetwork_DestinationReachableNoQOCInfo_Proxy( 
-    ISensNetwork __RPC_FAR * This,
+    ISensNetwork * This,
     /* [in] */ BSTR bstrDestination,
     /* [in] */ BSTR bstrConnection,
     /* [in] */ ULONG ulType);
@@ -369,55 +382,55 @@ EXTERN_C const IID IID_ISensOnNow;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISensOnNow __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISensOnNow * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISensOnNow __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISensOnNow * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISensOnNow __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISensOnNow * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISensOnNow __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISensOnNow * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISensOnNow __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISensOnNow * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISensOnNow __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISensOnNow * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISensOnNow __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISensOnNow * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnACPower )( 
-            ISensOnNow __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OnACPower )( 
+            ISensOnNow * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnBatteryPower )( 
-            ISensOnNow __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OnBatteryPower )( 
+            ISensOnNow * This,
             /* [in] */ DWORD dwBatteryLifePercent);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BatteryLow )( 
-            ISensOnNow __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *BatteryLow )( 
+            ISensOnNow * This,
             /* [in] */ DWORD dwBatteryLifePercent);
         
         END_INTERFACE
@@ -425,7 +438,7 @@ EXTERN_C const IID IID_ISensOnNow;
 
     interface ISensOnNow
     {
-        CONST_VTBL struct ISensOnNowVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISensOnNowVtbl *lpVtbl;
     };
 
     
@@ -473,7 +486,7 @@ EXTERN_C const IID IID_ISensOnNow;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensOnNow_OnACPower_Proxy( 
-    ISensOnNow __RPC_FAR * This);
+    ISensOnNow * This);
 
 
 void __RPC_STUB ISensOnNow_OnACPower_Stub(
@@ -484,7 +497,7 @@ void __RPC_STUB ISensOnNow_OnACPower_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensOnNow_OnBatteryPower_Proxy( 
-    ISensOnNow __RPC_FAR * This,
+    ISensOnNow * This,
     /* [in] */ DWORD dwBatteryLifePercent);
 
 
@@ -496,7 +509,7 @@ void __RPC_STUB ISensOnNow_OnBatteryPower_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensOnNow_BatteryLow_Proxy( 
-    ISensOnNow __RPC_FAR * This,
+    ISensOnNow * This,
     /* [in] */ DWORD dwBatteryLifePercent);
 
 
@@ -555,72 +568,72 @@ EXTERN_C const IID IID_ISensLogon;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISensLogon __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISensLogon * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISensLogon __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISensLogon * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISensLogon __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISensLogon * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISensLogon __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISensLogon * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISensLogon __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISensLogon * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISensLogon __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISensLogon * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISensLogon __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISensLogon * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logon )( 
-            ISensLogon __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Logon )( 
+            ISensLogon * This,
             /* [in] */ BSTR bstrUserName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Logoff )( 
-            ISensLogon __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Logoff )( 
+            ISensLogon * This,
             /* [in] */ BSTR bstrUserName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StartShell )( 
-            ISensLogon __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StartShell )( 
+            ISensLogon * This,
             /* [in] */ BSTR bstrUserName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayLock )( 
-            ISensLogon __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DisplayLock )( 
+            ISensLogon * This,
             /* [in] */ BSTR bstrUserName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayUnlock )( 
-            ISensLogon __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DisplayUnlock )( 
+            ISensLogon * This,
             /* [in] */ BSTR bstrUserName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StartScreenSaver )( 
-            ISensLogon __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StartScreenSaver )( 
+            ISensLogon * This,
             /* [in] */ BSTR bstrUserName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StopScreenSaver )( 
-            ISensLogon __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StopScreenSaver )( 
+            ISensLogon * This,
             /* [in] */ BSTR bstrUserName);
         
         END_INTERFACE
@@ -628,7 +641,7 @@ EXTERN_C const IID IID_ISensLogon;
 
     interface ISensLogon
     {
-        CONST_VTBL struct ISensLogonVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISensLogonVtbl *lpVtbl;
     };
 
     
@@ -688,7 +701,7 @@ EXTERN_C const IID IID_ISensLogon;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_Logon_Proxy( 
-    ISensLogon __RPC_FAR * This,
+    ISensLogon * This,
     /* [in] */ BSTR bstrUserName);
 
 
@@ -700,7 +713,7 @@ void __RPC_STUB ISensLogon_Logon_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_Logoff_Proxy( 
-    ISensLogon __RPC_FAR * This,
+    ISensLogon * This,
     /* [in] */ BSTR bstrUserName);
 
 
@@ -712,7 +725,7 @@ void __RPC_STUB ISensLogon_Logoff_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_StartShell_Proxy( 
-    ISensLogon __RPC_FAR * This,
+    ISensLogon * This,
     /* [in] */ BSTR bstrUserName);
 
 
@@ -724,7 +737,7 @@ void __RPC_STUB ISensLogon_StartShell_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_DisplayLock_Proxy( 
-    ISensLogon __RPC_FAR * This,
+    ISensLogon * This,
     /* [in] */ BSTR bstrUserName);
 
 
@@ -736,7 +749,7 @@ void __RPC_STUB ISensLogon_DisplayLock_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_DisplayUnlock_Proxy( 
-    ISensLogon __RPC_FAR * This,
+    ISensLogon * This,
     /* [in] */ BSTR bstrUserName);
 
 
@@ -748,7 +761,7 @@ void __RPC_STUB ISensLogon_DisplayUnlock_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_StartScreenSaver_Proxy( 
-    ISensLogon __RPC_FAR * This,
+    ISensLogon * This,
     /* [in] */ BSTR bstrUserName);
 
 
@@ -760,7 +773,7 @@ void __RPC_STUB ISensLogon_StartScreenSaver_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_StopScreenSaver_Proxy( 
-    ISensLogon __RPC_FAR * This,
+    ISensLogon * This,
     /* [in] */ BSTR bstrUserName);
 
 
@@ -773,6 +786,241 @@ void __RPC_STUB ISensLogon_StopScreenSaver_Stub(
 
 
 #endif 	/* __ISensLogon_INTERFACE_DEFINED__ */
+
+
+#ifndef __ISensLogon2_INTERFACE_DEFINED__
+#define __ISensLogon2_INTERFACE_DEFINED__
+
+/* interface ISensLogon2 */
+/* [dual][helpstring][version][uuid][object] */ 
+
+
+EXTERN_C const IID IID_ISensLogon2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("d597bab4-5b9f-11d1-8dd2-00aa004abd5e")
+    ISensLogon2 : public IDispatch
+    {
+    public:
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Logon( 
+            /* [in] */ BSTR bstrUserName,
+            /* [in] */ DWORD dwSessionId) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Logoff( 
+            /* [in] */ BSTR bstrUserName,
+            /* [in] */ DWORD dwSessionId) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SessionDisconnect( 
+            /* [in] */ BSTR bstrUserName,
+            /* [in] */ DWORD dwSessionId) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SessionReconnect( 
+            /* [in] */ BSTR bstrUserName,
+            /* [in] */ DWORD dwSessionId) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE PostShell( 
+            /* [in] */ BSTR bstrUserName,
+            /* [in] */ DWORD dwSessionId) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct ISensLogon2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISensLogon2 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISensLogon2 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISensLogon2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISensLogon2 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISensLogon2 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISensLogon2 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISensLogon2 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Logon )( 
+            ISensLogon2 * This,
+            /* [in] */ BSTR bstrUserName,
+            /* [in] */ DWORD dwSessionId);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Logoff )( 
+            ISensLogon2 * This,
+            /* [in] */ BSTR bstrUserName,
+            /* [in] */ DWORD dwSessionId);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SessionDisconnect )( 
+            ISensLogon2 * This,
+            /* [in] */ BSTR bstrUserName,
+            /* [in] */ DWORD dwSessionId);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SessionReconnect )( 
+            ISensLogon2 * This,
+            /* [in] */ BSTR bstrUserName,
+            /* [in] */ DWORD dwSessionId);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PostShell )( 
+            ISensLogon2 * This,
+            /* [in] */ BSTR bstrUserName,
+            /* [in] */ DWORD dwSessionId);
+        
+        END_INTERFACE
+    } ISensLogon2Vtbl;
+
+    interface ISensLogon2
+    {
+        CONST_VTBL struct ISensLogon2Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define ISensLogon2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define ISensLogon2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define ISensLogon2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define ISensLogon2_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define ISensLogon2_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define ISensLogon2_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define ISensLogon2_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define ISensLogon2_Logon(This,bstrUserName,dwSessionId)	\
+    (This)->lpVtbl -> Logon(This,bstrUserName,dwSessionId)
+
+#define ISensLogon2_Logoff(This,bstrUserName,dwSessionId)	\
+    (This)->lpVtbl -> Logoff(This,bstrUserName,dwSessionId)
+
+#define ISensLogon2_SessionDisconnect(This,bstrUserName,dwSessionId)	\
+    (This)->lpVtbl -> SessionDisconnect(This,bstrUserName,dwSessionId)
+
+#define ISensLogon2_SessionReconnect(This,bstrUserName,dwSessionId)	\
+    (This)->lpVtbl -> SessionReconnect(This,bstrUserName,dwSessionId)
+
+#define ISensLogon2_PostShell(This,bstrUserName,dwSessionId)	\
+    (This)->lpVtbl -> PostShell(This,bstrUserName,dwSessionId)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon2_Logon_Proxy( 
+    ISensLogon2 * This,
+    /* [in] */ BSTR bstrUserName,
+    /* [in] */ DWORD dwSessionId);
+
+
+void __RPC_STUB ISensLogon2_Logon_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon2_Logoff_Proxy( 
+    ISensLogon2 * This,
+    /* [in] */ BSTR bstrUserName,
+    /* [in] */ DWORD dwSessionId);
+
+
+void __RPC_STUB ISensLogon2_Logoff_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon2_SessionDisconnect_Proxy( 
+    ISensLogon2 * This,
+    /* [in] */ BSTR bstrUserName,
+    /* [in] */ DWORD dwSessionId);
+
+
+void __RPC_STUB ISensLogon2_SessionDisconnect_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon2_SessionReconnect_Proxy( 
+    ISensLogon2 * This,
+    /* [in] */ BSTR bstrUserName,
+    /* [in] */ DWORD dwSessionId);
+
+
+void __RPC_STUB ISensLogon2_SessionReconnect_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon2_PostShell_Proxy( 
+    ISensLogon2 * This,
+    /* [in] */ BSTR bstrUserName,
+    /* [in] */ DWORD dwSessionId);
+
+
+void __RPC_STUB ISensLogon2_PostShell_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __ISensLogon2_INTERFACE_DEFINED__ */
 
 
 EXTERN_C const CLSID CLSID_SENS;
@@ -795,4 +1043,3 @@ SENS;
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

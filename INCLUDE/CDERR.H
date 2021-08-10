@@ -9,7 +9,6 @@
 \*****************************************************************************/
 
 #ifndef _INC_CDERR
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_CDERR
 
 #if _MSC_VER > 1000
@@ -60,5 +59,4 @@
 
 #define CCERR_CHOOSECOLORCODES 0x5000
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* !_INC_CDERR */

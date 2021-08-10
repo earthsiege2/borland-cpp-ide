@@ -1,531 +1,610 @@
-LIBRARY ADVAPI32
+LIBRARY AdvAPI32
 EXPORTS
 
-    AbortSystemShutdownA                     = 'ADVAPI32.DLL'.*
-    AbortSystemShutdownW                     = 'ADVAPI32.DLL'.*
-    AccessCheck                              = 'ADVAPI32.DLL'.*
-    AccessCheckAndAuditAlarmA                = 'ADVAPI32.DLL'.*
-    AccessCheckAndAuditAlarmW                = 'ADVAPI32.DLL'.*
-    AccessCheckByType                        = 'ADVAPI32.DLL'.*
-    AccessCheckByTypeAndAuditAlarmA          = 'ADVAPI32.DLL'.*
-    AccessCheckByTypeAndAuditAlarmW          = 'ADVAPI32.DLL'.*
-    AccessCheckByTypeResultList              = 'ADVAPI32.DLL'.*
-    AccessCheckByTypeResultListAndAuditAlarmA = 'ADVAPI32.DLL'.*
-    AccessCheckByTypeResultListAndAuditAlarmByHandleA = 'ADVAPI32.DLL'.*
-    AccessCheckByTypeResultListAndAuditAlarmByHandleW = 'ADVAPI32.DLL'.*
-    AccessCheckByTypeResultListAndAuditAlarmW = 'ADVAPI32.DLL'.*
-    AddAccessAllowedAce                      = 'ADVAPI32.DLL'.*
-    AddAccessAllowedAceEx                    = 'ADVAPI32.DLL'.*
-    AddAccessAllowedObjectAce                = 'ADVAPI32.DLL'.*
-    AddAccessDeniedAce                       = 'ADVAPI32.DLL'.*
-    AddAccessDeniedAceEx                     = 'ADVAPI32.DLL'.*
-    AddAccessDeniedObjectAce                 = 'ADVAPI32.DLL'.*
-    AddAce                                   = 'ADVAPI32.DLL'.*
-    AddAuditAccessAce                        = 'ADVAPI32.DLL'.*
-    AddAuditAccessAceEx                      = 'ADVAPI32.DLL'.*
-    AddAuditAccessObjectAce                  = 'ADVAPI32.DLL'.*
-    AddUsersToEncryptedFile                  = 'ADVAPI32.DLL'.*
-    AdjustTokenGroups                        = 'ADVAPI32.DLL'.*
-    AdjustTokenPrivileges                    = 'ADVAPI32.DLL'.*
-    AllocateAndInitializeSid                 = 'ADVAPI32.DLL'.*
-    AllocateLocallyUniqueId                  = 'ADVAPI32.DLL'.*
-    AreAllAccessesGranted                    = 'ADVAPI32.DLL'.*
-    AreAnyAccessesGranted                    = 'ADVAPI32.DLL'.*
-    BackupEventLogA                          = 'ADVAPI32.DLL'.*
-    BackupEventLogW                          = 'ADVAPI32.DLL'.*
-    BuildExplicitAccessWithNameA             = 'ADVAPI32.DLL'.*
-    BuildExplicitAccessWithNameW             = 'ADVAPI32.DLL'.*
-    BuildImpersonateExplicitAccessWithNameA  = 'ADVAPI32.DLL'.*
-    BuildImpersonateExplicitAccessWithNameW  = 'ADVAPI32.DLL'.*
-    BuildImpersonateTrusteeA                 = 'ADVAPI32.DLL'.*
-    BuildImpersonateTrusteeW                 = 'ADVAPI32.DLL'.*
-    BuildSecurityDescriptorA                 = 'ADVAPI32.DLL'.*
-    BuildSecurityDescriptorW                 = 'ADVAPI32.DLL'.*
-    BuildTrusteeWithNameA                    = 'ADVAPI32.DLL'.*
-    BuildTrusteeWithNameW                    = 'ADVAPI32.DLL'.*
-    BuildTrusteeWithObjectsAndNameA          = 'ADVAPI32.DLL'.*
-    BuildTrusteeWithObjectsAndNameW          = 'ADVAPI32.DLL'.*
-    BuildTrusteeWithObjectsAndSidA           = 'ADVAPI32.DLL'.*
-    BuildTrusteeWithObjectsAndSidW           = 'ADVAPI32.DLL'.*
-    BuildTrusteeWithSidA                     = 'ADVAPI32.DLL'.*
-    BuildTrusteeWithSidW                     = 'ADVAPI32.DLL'.*
-    CancelOverlappedAccess                   = 'ADVAPI32.DLL'.*
-    ChangeServiceConfig2A                    = 'ADVAPI32.DLL'.*
-    ChangeServiceConfig2W                    = 'ADVAPI32.DLL'.*
-    ChangeServiceConfigA                     = 'ADVAPI32.DLL'.*
-    ChangeServiceConfigW                     = 'ADVAPI32.DLL'.*
-    CheckTokenMembership                     = 'ADVAPI32.DLL'.*
-    ClearEventLogA                           = 'ADVAPI32.DLL'.*
-    ClearEventLogW                           = 'ADVAPI32.DLL'.*
-    CloseEncryptedFileRaw                    = 'ADVAPI32.DLL'.*
-    CloseEventLog                            = 'ADVAPI32.DLL'.*
-    CloseServiceHandle                       = 'ADVAPI32.DLL'.*
-    CloseTrace                               = 'ADVAPI32.DLL'.*
-    CommandLineFromMsiDescriptor             = 'ADVAPI32.DLL'.*
-    ControlService                           = 'ADVAPI32.DLL'.*
-    ControlTraceA                            = 'ADVAPI32.DLL'.*
-    ControlTraceW                            = 'ADVAPI32.DLL'.*
-    ConvertAccessToSecurityDescriptorA       = 'ADVAPI32.DLL'.*
-    ConvertAccessToSecurityDescriptorW       = 'ADVAPI32.DLL'.*
-    ConvertSDToStringSDRootDomainA           = 'ADVAPI32.DLL'.*
-    ConvertSDToStringSDRootDomainW           = 'ADVAPI32.DLL'.*
-    ConvertSecurityDescriptorToAccessA       = 'ADVAPI32.DLL'.*
-    ConvertSecurityDescriptorToAccessNamedA  = 'ADVAPI32.DLL'.*
-    ConvertSecurityDescriptorToAccessNamedW  = 'ADVAPI32.DLL'.*
-    ConvertSecurityDescriptorToAccessW       = 'ADVAPI32.DLL'.*
-    ConvertSecurityDescriptorToStringSecurityDescriptorA = 'ADVAPI32.DLL'.*
-    ConvertSecurityDescriptorToStringSecurityDescriptorW = 'ADVAPI32.DLL'.*
-    ConvertSidToStringSidA                   = 'ADVAPI32.DLL'.*
-    ConvertSidToStringSidW                   = 'ADVAPI32.DLL'.*
-    ConvertStringSDToSDRootDomainA           = 'ADVAPI32.DLL'.*
-    ConvertStringSDToSDRootDomainW           = 'ADVAPI32.DLL'.*
-    ConvertStringSecurityDescriptorToSecurityDescriptorA = 'ADVAPI32.DLL'.*
-    ConvertStringSecurityDescriptorToSecurityDescriptorW = 'ADVAPI32.DLL'.*
-    ConvertStringSidToSidA                   = 'ADVAPI32.DLL'.*
-    ConvertStringSidToSidW                   = 'ADVAPI32.DLL'.*
-    ConvertToAutoInheritPrivateObjectSecurity = 'ADVAPI32.DLL'.*
-    CopySid                                  = 'ADVAPI32.DLL'.*
-    CreatePrivateObjectSecurity              = 'ADVAPI32.DLL'.*
-    CreatePrivateObjectSecurityEx            = 'ADVAPI32.DLL'.*
-    CreateProcessAsUserA                     = 'ADVAPI32.DLL'.*
-    CreateProcessAsUserW                     = 'ADVAPI32.DLL'.*
-    CreateProcessWithLogonW                  = 'ADVAPI32.DLL'.*
-    CreateRestrictedToken                    = 'ADVAPI32.DLL'.*
-    CreateServiceA                           = 'ADVAPI32.DLL'.*
-    CreateServiceW                           = 'ADVAPI32.DLL'.*
-    CreateTraceInstanceId                    = 'ADVAPI32.DLL'.*
-    CryptAcquireContextA                     = 'ADVAPI32.DLL'.*
-    CryptAcquireContextW                     = 'ADVAPI32.DLL'.*
-    CryptContextAddRef                       = 'ADVAPI32.DLL'.*
-    CryptCreateHash                          = 'ADVAPI32.DLL'.*
-    CryptDecrypt                             = 'ADVAPI32.DLL'.*
-    CryptDeriveKey                           = 'ADVAPI32.DLL'.*
-    CryptDestroyHash                         = 'ADVAPI32.DLL'.*
-    CryptDestroyKey                          = 'ADVAPI32.DLL'.*
-    CryptDuplicateHash                       = 'ADVAPI32.DLL'.*
-    CryptDuplicateKey                        = 'ADVAPI32.DLL'.*
-    CryptEncrypt                             = 'ADVAPI32.DLL'.*
-    CryptEnumProviderTypesA                  = 'ADVAPI32.DLL'.*
-    CryptEnumProviderTypesW                  = 'ADVAPI32.DLL'.*
-    CryptEnumProvidersA                      = 'ADVAPI32.DLL'.*
-    CryptEnumProvidersW                      = 'ADVAPI32.DLL'.*
-    CryptExportKey                           = 'ADVAPI32.DLL'.*
-    CryptGenKey                              = 'ADVAPI32.DLL'.*
-    CryptGenRandom                           = 'ADVAPI32.DLL'.*
-    CryptGetDefaultProviderA                 = 'ADVAPI32.DLL'.*
-    CryptGetDefaultProviderW                 = 'ADVAPI32.DLL'.*
-    CryptGetHashParam                        = 'ADVAPI32.DLL'.*
-    CryptGetKeyParam                         = 'ADVAPI32.DLL'.*
-    CryptGetProvParam                        = 'ADVAPI32.DLL'.*
-    CryptGetUserKey                          = 'ADVAPI32.DLL'.*
-    CryptHashData                            = 'ADVAPI32.DLL'.*
-    CryptHashSessionKey                      = 'ADVAPI32.DLL'.*
-    CryptImportKey                           = 'ADVAPI32.DLL'.*
-    CryptReleaseContext                      = 'ADVAPI32.DLL'.*
-    CryptSetHashParam                        = 'ADVAPI32.DLL'.*
-    CryptSetKeyParam                         = 'ADVAPI32.DLL'.*
-    CryptSetProvParam                        = 'ADVAPI32.DLL'.*
-    CryptSetProviderA                        = 'ADVAPI32.DLL'.*
-    CryptSetProviderExA                      = 'ADVAPI32.DLL'.*
-    CryptSetProviderExW                      = 'ADVAPI32.DLL'.*
-    CryptSetProviderW                        = 'ADVAPI32.DLL'.*
-    CryptSignHashA                           = 'ADVAPI32.DLL'.*
-    CryptSignHashW                           = 'ADVAPI32.DLL'.*
-    CryptVerifySignatureA                    = 'ADVAPI32.DLL'.*
-    CryptVerifySignatureW                    = 'ADVAPI32.DLL'.*
-    DecryptFileA                             = 'ADVAPI32.DLL'.*
-    DecryptFileW                             = 'ADVAPI32.DLL'.*
-    DeleteAce                                = 'ADVAPI32.DLL'.*
-    DeleteService                            = 'ADVAPI32.DLL'.*
-    DeregisterEventSource                    = 'ADVAPI32.DLL'.*
-    DestroyPrivateObjectSecurity             = 'ADVAPI32.DLL'.*
-    DuplicateEncryptionInfoFile              = 'ADVAPI32.DLL'.*
-    DuplicateToken                           = 'ADVAPI32.DLL'.*
-    DuplicateTokenEx                         = 'ADVAPI32.DLL'.*
-    ElfBackupEventLogFileA                   = 'ADVAPI32.DLL'.*
-    ElfBackupEventLogFileW                   = 'ADVAPI32.DLL'.*
-    ElfChangeNotify                          = 'ADVAPI32.DLL'.*
-    ElfClearEventLogFileA                    = 'ADVAPI32.DLL'.*
-    ElfClearEventLogFileW                    = 'ADVAPI32.DLL'.*
-    ElfCloseEventLog                         = 'ADVAPI32.DLL'.*
-    ElfDeregisterEventSource                 = 'ADVAPI32.DLL'.*
-    ElfNumberOfRecords                       = 'ADVAPI32.DLL'.*
-    ElfOldestRecord                          = 'ADVAPI32.DLL'.*
-    ElfOpenBackupEventLogA                   = 'ADVAPI32.DLL'.*
-    ElfOpenBackupEventLogW                   = 'ADVAPI32.DLL'.*
-    ElfOpenEventLogA                         = 'ADVAPI32.DLL'.*
-    ElfOpenEventLogW                         = 'ADVAPI32.DLL'.*
-    ElfReadEventLogA                         = 'ADVAPI32.DLL'.*
-    ElfReadEventLogW                         = 'ADVAPI32.DLL'.*
-    ElfRegisterEventSourceA                  = 'ADVAPI32.DLL'.*
-    ElfRegisterEventSourceW                  = 'ADVAPI32.DLL'.*
-    ElfReportEventA                          = 'ADVAPI32.DLL'.*
-    ElfReportEventW                          = 'ADVAPI32.DLL'.*
-    EnableTrace                              = 'ADVAPI32.DLL'.*
-    EncryptFileA                             = 'ADVAPI32.DLL'.*
-    EncryptFileW                             = 'ADVAPI32.DLL'.*
-    EncryptionDisable                        = 'ADVAPI32.DLL'.*
-    EnumDependentServicesA                   = 'ADVAPI32.DLL'.*
-    EnumDependentServicesW                   = 'ADVAPI32.DLL'.*
-    EnumServiceGroupW                        = 'ADVAPI32.DLL'.*
-    EnumServicesStatusA                      = 'ADVAPI32.DLL'.*
-    EnumServicesStatusExA                    = 'ADVAPI32.DLL'.*
-    EnumServicesStatusExW                    = 'ADVAPI32.DLL'.*
-    EnumServicesStatusW                      = 'ADVAPI32.DLL'.*
-    EqualPrefixSid                           = 'ADVAPI32.DLL'.*
-    EqualSid                                 = 'ADVAPI32.DLL'.*
-    FileEncryptionStatusA                    = 'ADVAPI32.DLL'.*
-    FileEncryptionStatusW                    = 'ADVAPI32.DLL'.*
-    FindFirstFreeAce                         = 'ADVAPI32.DLL'.*
-    FreeEncryptionCertificateHashList        = 'ADVAPI32.DLL'.*
-    FreeSid                                  = 'ADVAPI32.DLL'.*
-    GetAccessPermissionsForObjectA           = 'ADVAPI32.DLL'.*
-    GetAccessPermissionsForObjectW           = 'ADVAPI32.DLL'.*
-    GetAce                                   = 'ADVAPI32.DLL'.*
-    GetAclInformation                        = 'ADVAPI32.DLL'.*
-    GetAuditedPermissionsFromAclA            = 'ADVAPI32.DLL'.*
-    GetAuditedPermissionsFromAclW            = 'ADVAPI32.DLL'.*
-    GetCurrentHwProfileA                     = 'ADVAPI32.DLL'.*
-    GetCurrentHwProfileW                     = 'ADVAPI32.DLL'.*
-    GetEffectiveRightsFromAclA               = 'ADVAPI32.DLL'.*
-    GetEffectiveRightsFromAclW               = 'ADVAPI32.DLL'.*
-    GetEventLogInformation                   = 'ADVAPI32.DLL'.*
-    GetExplicitEntriesFromAclA               = 'ADVAPI32.DLL'.*
-    GetExplicitEntriesFromAclW               = 'ADVAPI32.DLL'.*
-    GetFileSecurityA                         = 'ADVAPI32.DLL'.*
-    GetFileSecurityW                         = 'ADVAPI32.DLL'.*
-    GetKernelObjectSecurity                  = 'ADVAPI32.DLL'.*
-    GetLengthSid                             = 'ADVAPI32.DLL'.*
-    GetLocalManagedApplications              = 'ADVAPI32.DLL'.*
-    GetManagedApplications                   = 'ADVAPI32.DLL'.*
-    GetMangledSiteSid                        = 'ADVAPI32.DLL'.*
-    GetMultipleTrusteeA                      = 'ADVAPI32.DLL'.*
-    GetMultipleTrusteeOperationA             = 'ADVAPI32.DLL'.*
-    GetMultipleTrusteeOperationW             = 'ADVAPI32.DLL'.*
-    GetMultipleTrusteeW                      = 'ADVAPI32.DLL'.*
-    GetNamedSecurityInfoA                    = 'ADVAPI32.DLL'.*
-    GetNamedSecurityInfoExA                  = 'ADVAPI32.DLL'.*
-    GetNamedSecurityInfoExW                  = 'ADVAPI32.DLL'.*
-    GetNamedSecurityInfoW                    = 'ADVAPI32.DLL'.*
-    GetNumberOfEventLogRecords               = 'ADVAPI32.DLL'.*
-    GetOldestEventLogRecord                  = 'ADVAPI32.DLL'.*
-    GetOverlappedAccessResults               = 'ADVAPI32.DLL'.*
-    GetPrivateObjectSecurity                 = 'ADVAPI32.DLL'.*
-    GetSecurityDescriptorControl             = 'ADVAPI32.DLL'.*
-    GetSecurityDescriptorDacl                = 'ADVAPI32.DLL'.*
-    GetSecurityDescriptorGroup               = 'ADVAPI32.DLL'.*
-    GetSecurityDescriptorLength              = 'ADVAPI32.DLL'.*
-    GetSecurityDescriptorOwner               = 'ADVAPI32.DLL'.*
-    GetSecurityDescriptorRMControl           = 'ADVAPI32.DLL'.*
-    GetSecurityDescriptorSacl                = 'ADVAPI32.DLL'.*
-    GetSecurityInfo                          = 'ADVAPI32.DLL'.*
-    GetSecurityInfoExA                       = 'ADVAPI32.DLL'.*
-    GetSecurityInfoExW                       = 'ADVAPI32.DLL'.*
-    GetServiceDisplayNameA                   = 'ADVAPI32.DLL'.*
-    GetServiceDisplayNameW                   = 'ADVAPI32.DLL'.*
-    GetServiceKeyNameA                       = 'ADVAPI32.DLL'.*
-    GetServiceKeyNameW                       = 'ADVAPI32.DLL'.*
-    GetSidIdentifierAuthority                = 'ADVAPI32.DLL'.*
-    GetSidLengthRequired                     = 'ADVAPI32.DLL'.*
-    GetSidSubAuthority                       = 'ADVAPI32.DLL'.*
-    GetSidSubAuthorityCount                  = 'ADVAPI32.DLL'.*
-    GetSiteDirectoryA                        = 'ADVAPI32.DLL'.*
-    GetSiteDirectoryW                        = 'ADVAPI32.DLL'.*
-    GetSiteNameFromSid                       = 'ADVAPI32.DLL'.*
-    GetSiteSidFromToken                      = 'ADVAPI32.DLL'.*
-    GetSiteSidFromUrl                        = 'ADVAPI32.DLL'.*
-    GetTokenInformation                      = 'ADVAPI32.DLL'.*
-    GetTraceEnableFlags                      = 'ADVAPI32.DLL'.*
-    GetTraceEnableLevel                      = 'ADVAPI32.DLL'.*
-    GetTraceLoggerHandle                     = 'ADVAPI32.DLL'.*
-    GetTrusteeFormA                          = 'ADVAPI32.DLL'.*
-    GetTrusteeFormW                          = 'ADVAPI32.DLL'.*
-    GetTrusteeNameA                          = 'ADVAPI32.DLL'.*
-    GetTrusteeNameW                          = 'ADVAPI32.DLL'.*
-    GetTrusteeTypeA                          = 'ADVAPI32.DLL'.*
-    GetTrusteeTypeW                          = 'ADVAPI32.DLL'.*
-    GetUserNameA                             = 'ADVAPI32.DLL'.*
-    GetUserNameW                             = 'ADVAPI32.DLL'.*
-    I_ScSetServiceBitsA                      = 'ADVAPI32.DLL'.*
-    I_ScSetServiceBitsW                      = 'ADVAPI32.DLL'.*
-    ImpersonateAnonymousToken                = 'ADVAPI32.DLL'.*
-    ImpersonateLoggedOnUser                  = 'ADVAPI32.DLL'.*
-    ImpersonateNamedPipeClient               = 'ADVAPI32.DLL'.*
-    ImpersonateSelf                          = 'ADVAPI32.DLL'.*
-    InitializeAcl                            = 'ADVAPI32.DLL'.*
-    InitializeSecurityDescriptor             = 'ADVAPI32.DLL'.*
-    InitializeSid                            = 'ADVAPI32.DLL'.*
-    InitiateSystemShutdownA                  = 'ADVAPI32.DLL'.*
-    InitiateSystemShutdownExA                = 'ADVAPI32.DLL'.*
-    InitiateSystemShutdownExW                = 'ADVAPI32.DLL'.*
-    InitiateSystemShutdownW                  = 'ADVAPI32.DLL'.*
-    InstallApplication                       = 'ADVAPI32.DLL'.*
-    IsProcessRestricted                      = 'ADVAPI32.DLL'.*
-    IsTextUnicode                            = 'ADVAPI32.DLL'.*
-    IsTokenRestricted                        = 'ADVAPI32.DLL'.*
-    IsValidAcl                               = 'ADVAPI32.DLL'.*
-    IsValidSecurityDescriptor                = 'ADVAPI32.DLL'.*
-    IsValidSid                               = 'ADVAPI32.DLL'.*
-    LockServiceDatabase                      = 'ADVAPI32.DLL'.*
-    LogonUserA                               = 'ADVAPI32.DLL'.*
-    LogonUserW                               = 'ADVAPI32.DLL'.*
-    LookupAccountNameA                       = 'ADVAPI32.DLL'.*
-    LookupAccountNameW                       = 'ADVAPI32.DLL'.*
-    LookupAccountSidA                        = 'ADVAPI32.DLL'.*
-    LookupAccountSidW                        = 'ADVAPI32.DLL'.*
-    LookupPrivilegeDisplayNameA              = 'ADVAPI32.DLL'.*
-    LookupPrivilegeDisplayNameW              = 'ADVAPI32.DLL'.*
-    LookupPrivilegeNameA                     = 'ADVAPI32.DLL'.*
-    LookupPrivilegeNameW                     = 'ADVAPI32.DLL'.*
-    LookupPrivilegeValueA                    = 'ADVAPI32.DLL'.*
-    LookupPrivilegeValueW                    = 'ADVAPI32.DLL'.*
-    LookupSecurityDescriptorPartsA           = 'ADVAPI32.DLL'.*
-    LookupSecurityDescriptorPartsW           = 'ADVAPI32.DLL'.*
-    LsaAddAccountRights                      = 'ADVAPI32.DLL'.*
-    LsaAddPrivilegesToAccount                = 'ADVAPI32.DLL'.*
-    LsaClearAuditLog                         = 'ADVAPI32.DLL'.*
-    LsaClose                                 = 'ADVAPI32.DLL'.*
-    LsaCreateAccount                         = 'ADVAPI32.DLL'.*
-    LsaCreateSecret                          = 'ADVAPI32.DLL'.*
-    LsaCreateTrustedDomain                   = 'ADVAPI32.DLL'.*
-    LsaCreateTrustedDomainEx                 = 'ADVAPI32.DLL'.*
-    LsaDelete                                = 'ADVAPI32.DLL'.*
-    LsaDeleteTrustedDomain                   = 'ADVAPI32.DLL'.*
-    LsaEnumerateAccountRights                = 'ADVAPI32.DLL'.*
-    LsaEnumerateAccounts                     = 'ADVAPI32.DLL'.*
-    LsaEnumerateAccountsWithUserRight        = 'ADVAPI32.DLL'.*
-    LsaEnumeratePrivileges                   = 'ADVAPI32.DLL'.*
-    LsaEnumeratePrivilegesOfAccount          = 'ADVAPI32.DLL'.*
-    LsaEnumerateTrustedDomains               = 'ADVAPI32.DLL'.*
-    LsaEnumerateTrustedDomainsEx             = 'ADVAPI32.DLL'.*
-    LsaFreeMemory                            = 'ADVAPI32.DLL'.*
-    LsaGetQuotasForAccount                   = 'ADVAPI32.DLL'.*
-    LsaGetRemoteUserName                     = 'ADVAPI32.DLL'.*
-    LsaGetSystemAccessAccount                = 'ADVAPI32.DLL'.*
-    LsaGetUserName                           = 'ADVAPI32.DLL'.*
-    LsaICLookupNames                         = 'ADVAPI32.DLL'.*
-    LsaICLookupSids                          = 'ADVAPI32.DLL'.*
-    LsaLookupNames                           = 'ADVAPI32.DLL'.*
-    LsaLookupPrivilegeDisplayName            = 'ADVAPI32.DLL'.*
-    LsaLookupPrivilegeName                   = 'ADVAPI32.DLL'.*
-    LsaLookupPrivilegeValue                  = 'ADVAPI32.DLL'.*
-    LsaLookupSids                            = 'ADVAPI32.DLL'.*
-    LsaNtStatusToWinError                    = 'ADVAPI32.DLL'.*
-    LsaOpenAccount                           = 'ADVAPI32.DLL'.*
-    LsaOpenPolicy                            = 'ADVAPI32.DLL'.*
-    LsaOpenSecret                            = 'ADVAPI32.DLL'.*
-    LsaOpenTrustedDomain                     = 'ADVAPI32.DLL'.*
-    LsaOpenTrustedDomainByName               = 'ADVAPI32.DLL'.*
-    LsaQueryDomainInformationPolicy          = 'ADVAPI32.DLL'.*
-    LsaQueryInfoTrustedDomain                = 'ADVAPI32.DLL'.*
-    LsaQueryInformationPolicy                = 'ADVAPI32.DLL'.*
-    LsaQuerySecret                           = 'ADVAPI32.DLL'.*
-    LsaQuerySecurityObject                   = 'ADVAPI32.DLL'.*
-    LsaQueryTrustedDomainInfo                = 'ADVAPI32.DLL'.*
-    LsaQueryTrustedDomainInfoByName          = 'ADVAPI32.DLL'.*
-    LsaRemoveAccountRights                   = 'ADVAPI32.DLL'.*
-    LsaRemovePrivilegesFromAccount           = 'ADVAPI32.DLL'.*
-    LsaRetrievePrivateData                   = 'ADVAPI32.DLL'.*
-    LsaSetDomainInformationPolicy            = 'ADVAPI32.DLL'.*
-    LsaSetInformationPolicy                  = 'ADVAPI32.DLL'.*
-    LsaSetInformationTrustedDomain           = 'ADVAPI32.DLL'.*
-    LsaSetQuotasForAccount                   = 'ADVAPI32.DLL'.*
-    LsaSetSecret                             = 'ADVAPI32.DLL'.*
-    LsaSetSecurityObject                     = 'ADVAPI32.DLL'.*
-    LsaSetSystemAccessAccount                = 'ADVAPI32.DLL'.*
-    LsaSetTrustedDomainInfoByName            = 'ADVAPI32.DLL'.*
-    LsaSetTrustedDomainInformation           = 'ADVAPI32.DLL'.*
-    LsaStorePrivateData                      = 'ADVAPI32.DLL'.*
-    MakeAbsoluteSD2                          = 'ADVAPI32.DLL'.*
-    MakeAbsoluteSD                           = 'ADVAPI32.DLL'.*
-    MakeSelfRelativeSD                       = 'ADVAPI32.DLL'.*
-    MapGenericMask                           = 'ADVAPI32.DLL'.*
-    NotifyBootConfigStatus                   = 'ADVAPI32.DLL'.*
-    NotifyChangeEventLog                     = 'ADVAPI32.DLL'.*
-    ObjectCloseAuditAlarmA                   = 'ADVAPI32.DLL'.*
-    ObjectCloseAuditAlarmW                   = 'ADVAPI32.DLL'.*
-    ObjectDeleteAuditAlarmA                  = 'ADVAPI32.DLL'.*
-    ObjectDeleteAuditAlarmW                  = 'ADVAPI32.DLL'.*
-    ObjectOpenAuditAlarmA                    = 'ADVAPI32.DLL'.*
-    ObjectOpenAuditAlarmW                    = 'ADVAPI32.DLL'.*
-    ObjectPrivilegeAuditAlarmA               = 'ADVAPI32.DLL'.*
-    ObjectPrivilegeAuditAlarmW               = 'ADVAPI32.DLL'.*
-    OpenBackupEventLogA                      = 'ADVAPI32.DLL'.*
-    OpenBackupEventLogW                      = 'ADVAPI32.DLL'.*
-    OpenEncryptedFileRawA                    = 'ADVAPI32.DLL'.*
-    OpenEncryptedFileRawW                    = 'ADVAPI32.DLL'.*
-    OpenEventLogA                            = 'ADVAPI32.DLL'.*
-    OpenEventLogW                            = 'ADVAPI32.DLL'.*
-    OpenProcessToken                         = 'ADVAPI32.DLL'.*
-    OpenSCManagerA                           = 'ADVAPI32.DLL'.*
-    OpenSCManagerW                           = 'ADVAPI32.DLL'.*
-    OpenServiceA                             = 'ADVAPI32.DLL'.*
-    OpenServiceW                             = 'ADVAPI32.DLL'.*
-    OpenThreadToken                          = 'ADVAPI32.DLL'.*
-    OpenTraceA                               = 'ADVAPI32.DLL'.*
-    OpenTraceW                               = 'ADVAPI32.DLL'.*
-    PrivilegeCheck                           = 'ADVAPI32.DLL'.*
-    PrivilegedServiceAuditAlarmA             = 'ADVAPI32.DLL'.*
-    PrivilegedServiceAuditAlarmW             = 'ADVAPI32.DLL'.*
-    ProcessTrace                             = 'ADVAPI32.DLL'.*
-    QueryAllTracesA                          = 'ADVAPI32.DLL'.*
-    QueryAllTracesW                          = 'ADVAPI32.DLL'.*
-    QueryRecoveryAgentsOnEncryptedFile       = 'ADVAPI32.DLL'.*
-    QueryServiceConfig2A                     = 'ADVAPI32.DLL'.*
-    QueryServiceConfig2W                     = 'ADVAPI32.DLL'.*
-    QueryServiceConfigA                      = 'ADVAPI32.DLL'.*
-    QueryServiceConfigW                      = 'ADVAPI32.DLL'.*
-    QueryServiceLockStatusA                  = 'ADVAPI32.DLL'.*
-    QueryServiceLockStatusW                  = 'ADVAPI32.DLL'.*
-    QueryServiceObjectSecurity               = 'ADVAPI32.DLL'.*
-    QueryServiceStatus                       = 'ADVAPI32.DLL'.*
-    QueryServiceStatusEx                     = 'ADVAPI32.DLL'.*
-    QueryUsersOnEncryptedFile                = 'ADVAPI32.DLL'.*
-    QueryWindows31FilesMigration             = 'ADVAPI32.DLL'.*
-    ReadEncryptedFileRaw                     = 'ADVAPI32.DLL'.*
-    ReadEventLogA                            = 'ADVAPI32.DLL'.*
-    ReadEventLogW                            = 'ADVAPI32.DLL'.*
-    RegCloseKey                              = 'ADVAPI32.DLL'.*
-    RegConnectRegistryA                      = 'ADVAPI32.DLL'.*
-    RegConnectRegistryW                      = 'ADVAPI32.DLL'.*
-    RegCreateKeyA                            = 'ADVAPI32.DLL'.*
-    RegCreateKeyExA                          = 'ADVAPI32.DLL'.*
-    RegCreateKeyExW                          = 'ADVAPI32.DLL'.*
-    RegCreateKeyW                            = 'ADVAPI32.DLL'.*
-    RegDeleteKeyA                            = 'ADVAPI32.DLL'.*
-    RegDeleteKeyW                            = 'ADVAPI32.DLL'.*
-    RegDeleteValueA                          = 'ADVAPI32.DLL'.*
-    RegDeleteValueW                          = 'ADVAPI32.DLL'.*
-    RegDisablePredefinedCache                = 'ADVAPI32.DLL'.*
-    RegEnumKeyA                              = 'ADVAPI32.DLL'.*
-    RegEnumKeyExA                            = 'ADVAPI32.DLL'.*
-    RegEnumKeyExW                            = 'ADVAPI32.DLL'.*
-    RegEnumKeyW                              = 'ADVAPI32.DLL'.*
-    RegEnumValueA                            = 'ADVAPI32.DLL'.*
-    RegEnumValueW                            = 'ADVAPI32.DLL'.*
-    RegFlushKey                              = 'ADVAPI32.DLL'.*
-    RegGetKeySecurity                        = 'ADVAPI32.DLL'.*
-    RegLoadKeyA                              = 'ADVAPI32.DLL'.*
-    RegLoadKeyW                              = 'ADVAPI32.DLL'.*
-    RegNotifyChangeKeyValue                  = 'ADVAPI32.DLL'.*
-    RegOpenCurrentUser                       = 'ADVAPI32.DLL'.*
-    RegOpenKeyA                              = 'ADVAPI32.DLL'.*
-    RegOpenKeyExA                            = 'ADVAPI32.DLL'.*
-    RegOpenKeyExW                            = 'ADVAPI32.DLL'.*
-    RegOpenKeyW                              = 'ADVAPI32.DLL'.*
-    RegOpenUserClassesRoot                   = 'ADVAPI32.DLL'.*
-    RegOverridePredefKey                     = 'ADVAPI32.DLL'.*
-    RegQueryInfoKeyA                         = 'ADVAPI32.DLL'.*
-    RegQueryInfoKeyW                         = 'ADVAPI32.DLL'.*
-    RegQueryMultipleValuesA                  = 'ADVAPI32.DLL'.*
-    RegQueryMultipleValuesW                  = 'ADVAPI32.DLL'.*
-    RegQueryValueA                           = 'ADVAPI32.DLL'.*
-    RegQueryValueExA                         = 'ADVAPI32.DLL'.*
-    RegQueryValueExW                         = 'ADVAPI32.DLL'.*
-    RegQueryValueW                           = 'ADVAPI32.DLL'.*
-    RegReplaceKeyA                           = 'ADVAPI32.DLL'.*
-    RegReplaceKeyW                           = 'ADVAPI32.DLL'.*
-    RegRestoreKeyA                           = 'ADVAPI32.DLL'.*
-    RegRestoreKeyW                           = 'ADVAPI32.DLL'.*
-    RegSaveKeyA                              = 'ADVAPI32.DLL'.*
-    RegSaveKeyW                              = 'ADVAPI32.DLL'.*
-    RegSetKeySecurity                        = 'ADVAPI32.DLL'.*
-    RegSetValueA                             = 'ADVAPI32.DLL'.*
-    RegSetValueExA                           = 'ADVAPI32.DLL'.*
-    RegSetValueExW                           = 'ADVAPI32.DLL'.*
-    RegSetValueW                             = 'ADVAPI32.DLL'.*
-    RegUnLoadKeyA                            = 'ADVAPI32.DLL'.*
-    RegUnLoadKeyW                            = 'ADVAPI32.DLL'.*
-    RegisterEventSourceA                     = 'ADVAPI32.DLL'.*
-    RegisterEventSourceW                     = 'ADVAPI32.DLL'.*
-    RegisterServiceCtrlHandlerA              = 'ADVAPI32.DLL'.*
-    RegisterServiceCtrlHandlerExA            = 'ADVAPI32.DLL'.*
-    RegisterServiceCtrlHandlerExW            = 'ADVAPI32.DLL'.*
-    RegisterServiceCtrlHandlerW              = 'ADVAPI32.DLL'.*
-    RegisterTraceGuidsA                      = 'ADVAPI32.DLL'.*
-    RegisterTraceGuidsW                      = 'ADVAPI32.DLL'.*
-    RemoveTraceCallback                      = 'ADVAPI32.DLL'.*
-    RemoveUsersFromEncryptedFile             = 'ADVAPI32.DLL'.*
-    ReportEventA                             = 'ADVAPI32.DLL'.*
-    ReportEventW                             = 'ADVAPI32.DLL'.*
-    RevertToSelf                             = 'ADVAPI32.DLL'.*
-    SetAclInformation                        = 'ADVAPI32.DLL'.*
-    SetEntriesInAccessListA                  = 'ADVAPI32.DLL'.*
-    SetEntriesInAccessListW                  = 'ADVAPI32.DLL'.*
-    SetEntriesInAclA                         = 'ADVAPI32.DLL'.*
-    SetEntriesInAclW                         = 'ADVAPI32.DLL'.*
-    SetEntriesInAuditListA                   = 'ADVAPI32.DLL'.*
-    SetEntriesInAuditListW                   = 'ADVAPI32.DLL'.*
-    SetFileSecurityA                         = 'ADVAPI32.DLL'.*
-    SetFileSecurityW                         = 'ADVAPI32.DLL'.*
-    SetKernelObjectSecurity                  = 'ADVAPI32.DLL'.*
-    SetNamedSecurityInfoA                    = 'ADVAPI32.DLL'.*
-    SetNamedSecurityInfoExA                  = 'ADVAPI32.DLL'.*
-    SetNamedSecurityInfoExW                  = 'ADVAPI32.DLL'.*
-    SetNamedSecurityInfoW                    = 'ADVAPI32.DLL'.*
-    SetPrivateObjectSecurity                 = 'ADVAPI32.DLL'.*
-    SetPrivateObjectSecurityEx               = 'ADVAPI32.DLL'.*
-    SetSecurityDescriptorControl             = 'ADVAPI32.DLL'.*
-    SetSecurityDescriptorDacl                = 'ADVAPI32.DLL'.*
-    SetSecurityDescriptorGroup               = 'ADVAPI32.DLL'.*
-    SetSecurityDescriptorOwner               = 'ADVAPI32.DLL'.*
-    SetSecurityDescriptorRMControl           = 'ADVAPI32.DLL'.*
-    SetSecurityDescriptorSacl                = 'ADVAPI32.DLL'.*
-    SetSecurityInfo                          = 'ADVAPI32.DLL'.*
-    SetSecurityInfoExA                       = 'ADVAPI32.DLL'.*
-    SetSecurityInfoExW                       = 'ADVAPI32.DLL'.*
-    SetServiceBits                           = 'ADVAPI32.DLL'.*
-    SetServiceObjectSecurity                 = 'ADVAPI32.DLL'.*
-    SetServiceStatus                         = 'ADVAPI32.DLL'.*
-    SetThreadToken                           = 'ADVAPI32.DLL'.*
-    SetTokenInformation                      = 'ADVAPI32.DLL'.*
-    SetTraceCallback                         = 'ADVAPI32.DLL'.*
-    SetUserFileEncryptionKey                 = 'ADVAPI32.DLL'.*
-    StartServiceA                            = 'ADVAPI32.DLL'.*
-    StartServiceCtrlDispatcherA              = 'ADVAPI32.DLL'.*
-    StartServiceCtrlDispatcherW              = 'ADVAPI32.DLL'.*
-    StartServiceW                            = 'ADVAPI32.DLL'.*
-    StartTraceA                              = 'ADVAPI32.DLL'.*
-    StartTraceW                              = 'ADVAPI32.DLL'.*
-    SynchronizeWindows31FilesAndWindowsNTRegistry = 'ADVAPI32.DLL'.*
-    SystemFunction001                        = 'ADVAPI32.DLL'.*
-    SystemFunction002                        = 'ADVAPI32.DLL'.*
-    SystemFunction003                        = 'ADVAPI32.DLL'.*
-    SystemFunction004                        = 'ADVAPI32.DLL'.*
-    SystemFunction005                        = 'ADVAPI32.DLL'.*
-    SystemFunction006                        = 'ADVAPI32.DLL'.*
-    SystemFunction007                        = 'ADVAPI32.DLL'.*
-    SystemFunction008                        = 'ADVAPI32.DLL'.*
-    SystemFunction009                        = 'ADVAPI32.DLL'.*
-    SystemFunction010                        = 'ADVAPI32.DLL'.*
-    SystemFunction011                        = 'ADVAPI32.DLL'.*
-    SystemFunction012                        = 'ADVAPI32.DLL'.*
-    SystemFunction013                        = 'ADVAPI32.DLL'.*
-    SystemFunction014                        = 'ADVAPI32.DLL'.*
-    SystemFunction015                        = 'ADVAPI32.DLL'.*
-    SystemFunction016                        = 'ADVAPI32.DLL'.*
-    SystemFunction017                        = 'ADVAPI32.DLL'.*
-    SystemFunction018                        = 'ADVAPI32.DLL'.*
-    SystemFunction019                        = 'ADVAPI32.DLL'.*
-    SystemFunction020                        = 'ADVAPI32.DLL'.*
-    SystemFunction021                        = 'ADVAPI32.DLL'.*
-    SystemFunction022                        = 'ADVAPI32.DLL'.*
-    SystemFunction023                        = 'ADVAPI32.DLL'.*
-    SystemFunction024                        = 'ADVAPI32.DLL'.*
-    SystemFunction025                        = 'ADVAPI32.DLL'.*
-    SystemFunction026                        = 'ADVAPI32.DLL'.*
-    SystemFunction027                        = 'ADVAPI32.DLL'.*
-    SystemFunction028                        = 'ADVAPI32.DLL'.*
-    SystemFunction029                        = 'ADVAPI32.DLL'.*
-    SystemFunction030                        = 'ADVAPI32.DLL'.*
-    SystemFunction031                        = 'ADVAPI32.DLL'.*
-    SystemFunction032                        = 'ADVAPI32.DLL'.*
-    SystemFunction033                        = 'ADVAPI32.DLL'.*
-    TraceEvent                               = 'ADVAPI32.DLL'.*
-    TraceEventInstance                       = 'ADVAPI32.DLL'.*
-    TrusteeAccessToObjectA                   = 'ADVAPI32.DLL'.*
-    TrusteeAccessToObjectW                   = 'ADVAPI32.DLL'.*
-    UninstallApplication                     = 'ADVAPI32.DLL'.*
-    UnlockServiceDatabase                    = 'ADVAPI32.DLL'.*
-    UnregisterTraceGuids                     = 'ADVAPI32.DLL'.*
-    WriteEncryptedFileRaw                    = 'ADVAPI32.DLL'.*
+    AbortSystemShutdownA
+    AbortSystemShutdownW
+    AccessCheck
+    AccessCheckAndAuditAlarmA
+    AccessCheckAndAuditAlarmW
+    AccessCheckByType
+    AccessCheckByTypeAndAuditAlarmA
+    AccessCheckByTypeAndAuditAlarmW
+    AccessCheckByTypeResultList
+    AccessCheckByTypeResultListAndAuditAlarmA
+    AccessCheckByTypeResultListAndAuditAlarmByHandleA
+    AccessCheckByTypeResultListAndAuditAlarmByHandleW
+    AccessCheckByTypeResultListAndAuditAlarmW
+    AddAccessAllowedAce
+    AddAccessAllowedAceEx
+    AddAccessAllowedObjectAce
+    AddAccessDeniedAce
+    AddAccessDeniedAceEx
+    AddAccessDeniedObjectAce
+    AddAce
+    AddAuditAccessAce
+    AddAuditAccessAceEx
+    AddAuditAccessObjectAce
+    AddUsersToEncryptedFile
+    AdjustTokenGroups
+    AdjustTokenPrivileges
+    AllocateAndInitializeSid
+    AllocateLocallyUniqueId
+    AreAllAccessesGranted
+    AreAnyAccessesGranted
+    BackupEventLogA
+    BackupEventLogW
+    BuildExplicitAccessWithNameA
+    BuildExplicitAccessWithNameW
+    BuildImpersonateExplicitAccessWithNameA
+    BuildImpersonateExplicitAccessWithNameW
+    BuildImpersonateTrusteeA
+    BuildImpersonateTrusteeW
+    BuildSecurityDescriptorA
+    BuildSecurityDescriptorW
+    BuildTrusteeWithNameA
+    BuildTrusteeWithNameW
+    BuildTrusteeWithObjectsAndNameA
+    BuildTrusteeWithObjectsAndNameW
+    BuildTrusteeWithObjectsAndSidA
+    BuildTrusteeWithObjectsAndSidW
+    BuildTrusteeWithSidA
+    BuildTrusteeWithSidW
+    CancelOverlappedAccess
+    ChangeServiceConfig2A
+    ChangeServiceConfig2W
+    ChangeServiceConfigA
+    ChangeServiceConfigW
+    CheckTokenMembership
+    ClearEventLogA
+    ClearEventLogW
+    CloseCodeAuthzLevel
+    CloseEncryptedFileRaw
+    CloseEventLog
+    CloseServiceHandle
+    CloseTrace
+    CommandLineFromMsiDescriptor
+    ComputeAccessTokenFromCodeAuthzLevel
+    ControlService
+    ControlTraceA
+    ControlTraceW
+    ConvertAccessToSecurityDescriptorA
+    ConvertAccessToSecurityDescriptorW
+    ConvertSDToStringSDRootDomainA
+    ConvertSDToStringSDRootDomainW
+    ConvertSecurityDescriptorToAccessA
+    ConvertSecurityDescriptorToAccessNamedA
+    ConvertSecurityDescriptorToAccessNamedW
+    ConvertSecurityDescriptorToAccessW
+    ConvertSecurityDescriptorToStringSecurityDescriptorA
+    ConvertSecurityDescriptorToStringSecurityDescriptorW
+    ConvertSidToStringSidA
+    ConvertSidToStringSidW
+    ConvertStringSDToSDDomainA
+    ConvertStringSDToSDDomainW
+    ConvertStringSDToSDRootDomainA
+    ConvertStringSDToSDRootDomainW
+    ConvertStringSecurityDescriptorToSecurityDescriptorA
+    ConvertStringSecurityDescriptorToSecurityDescriptorW
+    ConvertStringSidToSidA
+    ConvertStringSidToSidW
+    ConvertToAutoInheritPrivateObjectSecurity
+    CopySid
+    CreateCodeAuthzLevel
+    CreatePrivateObjectSecurity
+    CreatePrivateObjectSecurityEx
+    CreatePrivateObjectSecurityWithMultipleInheritance
+    CreateProcessAsUserA
+    CreateProcessAsUserW
+    CreateProcessWithLogonW
+    CreateRestrictedToken
+    CreateServiceA
+    CreateServiceW
+    CreateTraceInstanceId
+    CreateWellKnownSid
+    CredDeleteA
+    CredDeleteW
+    CredEnumerateA
+    CredEnumerateW
+    CredFree
+    CredGetSessionTypes
+    CredGetTargetInfoA
+    CredGetTargetInfoW
+    CredIsMarshaledCredentialA
+    CredIsMarshaledCredentialW
+    CredMarshalCredentialA
+    CredMarshalCredentialW
+    CredReadA
+    CredReadDomainCredentialsA
+    CredReadDomainCredentialsW
+    CredReadW
+    CredRenameA
+    CredRenameW
+    CredUnmarshalCredentialA
+    CredUnmarshalCredentialW
+    CredWriteA
+    CredWriteDomainCredentialsA
+    CredWriteDomainCredentialsW
+    CredWriteW
+    CryptAcquireContextA
+    CryptAcquireContextW
+    CryptContextAddRef
+    CryptCreateHash
+    CryptDecrypt
+    CryptDeriveKey
+    CryptDestroyHash
+    CryptDestroyKey
+    CryptDuplicateHash
+    CryptDuplicateKey
+    CryptEncrypt
+    CryptEnumProviderTypesA
+    CryptEnumProviderTypesW
+    CryptEnumProvidersA
+    CryptEnumProvidersW
+    CryptExportKey
+    CryptGenKey
+    CryptGenRandom
+    CryptGetDefaultProviderA
+    CryptGetDefaultProviderW
+    CryptGetHashParam
+    CryptGetKeyParam
+    CryptGetProvParam
+    CryptGetUserKey
+    CryptHashData
+    CryptHashSessionKey
+    CryptImportKey
+    CryptReleaseContext
+    CryptSetHashParam
+    CryptSetKeyParam
+    CryptSetProvParam
+    CryptSetProviderA
+    CryptSetProviderExA
+    CryptSetProviderExW
+    CryptSetProviderW
+    CryptSignHashA
+    CryptSignHashW
+    CryptVerifySignatureA
+    CryptVerifySignatureW
+    DecryptFileA
+    DecryptFileW
+    DeleteAce
+    DeleteService
+    DeregisterEventSource
+    DestroyPrivateObjectSecurity
+    DuplicateEncryptionInfoFile
+    DuplicateToken
+    DuplicateTokenEx
+    ElfBackupEventLogFileA
+    ElfBackupEventLogFileW
+    ElfChangeNotify
+    ElfClearEventLogFileA
+    ElfClearEventLogFileW
+    ElfCloseEventLog
+    ElfDeregisterEventSource
+    ElfNumberOfRecords
+    ElfOldestRecord
+    ElfOpenBackupEventLogA
+    ElfOpenBackupEventLogW
+    ElfOpenEventLogA
+    ElfOpenEventLogW
+    ElfReadEventLogA
+    ElfReadEventLogW
+    ElfRegisterEventSourceA
+    ElfRegisterEventSourceW
+    ElfReportEventA
+    ElfReportEventW
+    EnableTrace
+    EncryptFileA
+    EncryptFileW
+    EncryptedFileKeyInfo
+    EncryptionDisable
+    EnumDependentServicesA
+    EnumDependentServicesW
+    EnumServiceGroupW
+    EnumServicesStatusA
+    EnumServicesStatusExA
+    EnumServicesStatusExW
+    EnumServicesStatusW
+    EnumerateTraceGuids
+    EqualDomainSid
+    EqualPrefixSid
+    EqualSid
+    FileEncryptionStatusA
+    FileEncryptionStatusW
+    FindFirstFreeAce
+    FlushTraceA
+    FlushTraceW
+    FreeEncryptedFileKeyInfo
+    FreeEncryptionCertificateHashList
+    FreeInheritedFromArray
+    FreeSid
+    GetAccessPermissionsForObjectA
+    GetAccessPermissionsForObjectW
+    GetAce
+    GetAclInformation
+    GetAuditedPermissionsFromAclA
+    GetAuditedPermissionsFromAclW
+    GetCurrentHwProfileA
+    GetCurrentHwProfileW
+    GetEffectiveRightsFromAclA
+    GetEffectiveRightsFromAclW
+    GetEventLogInformation
+    GetExplicitEntriesFromAclA
+    GetExplicitEntriesFromAclW
+    GetFileSecurityA
+    GetFileSecurityW
+    GetInformationCodeAuthzLevelW
+    GetInformationCodeAuthzPolicyW
+    GetInheritanceSourceA
+    GetInheritanceSourceW
+    GetKernelObjectSecurity
+    GetLengthSid
+    GetLocalManagedApplicationData
+    GetLocalManagedApplications
+    GetManagedApplicationCategories
+    GetManagedApplications
+    GetMultipleTrusteeA
+    GetMultipleTrusteeOperationA
+    GetMultipleTrusteeOperationW
+    GetMultipleTrusteeW
+    GetNamedSecurityInfoA
+    GetNamedSecurityInfoExA
+    GetNamedSecurityInfoExW
+    GetNamedSecurityInfoW
+    GetNumberOfEventLogRecords
+    GetOldestEventLogRecord
+    GetOverlappedAccessResults
+    GetPrivateObjectSecurity
+    GetSecurityDescriptorControl
+    GetSecurityDescriptorDacl
+    GetSecurityDescriptorGroup
+    GetSecurityDescriptorLength
+    GetSecurityDescriptorOwner
+    GetSecurityDescriptorRMControl
+    GetSecurityDescriptorSacl
+    GetSecurityInfo
+    GetSecurityInfoExA
+    GetSecurityInfoExW
+    GetServiceDisplayNameA
+    GetServiceDisplayNameW
+    GetServiceKeyNameA
+    GetServiceKeyNameW
+    GetSidIdentifierAuthority
+    GetSidLengthRequired
+    GetSidSubAuthority
+    GetSidSubAuthorityCount
+    GetTokenInformation
+    GetTraceEnableFlags
+    GetTraceEnableLevel
+    GetTraceLoggerHandle
+    GetTrusteeFormA
+    GetTrusteeFormW
+    GetTrusteeNameA
+    GetTrusteeNameW
+    GetTrusteeTypeA
+    GetTrusteeTypeW
+    GetUserNameA
+    GetUserNameW
+    GetWindowsAccountDomainSid
+    I_ScSetServiceBitsA
+    I_ScSetServiceBitsW
+    IdentifyCodeAuthzLevelW
+    ImpersonateAnonymousToken
+    ImpersonateLoggedOnUser
+    ImpersonateNamedPipeClient
+    ImpersonateSelf
+    InitializeAcl
+    InitializeSecurityDescriptor
+    InitializeSid
+    InitiateSystemShutdownA
+    InitiateSystemShutdownExA
+    InitiateSystemShutdownExW
+    InitiateSystemShutdownW
+    InstallApplication
+    IsTextUnicode
+    IsTokenRestricted
+    IsTokenUntrusted
+    IsValidAcl
+    IsValidSecurityDescriptor
+    IsValidSid
+    IsWellKnownSid
+    LockServiceDatabase
+    LogonUserA
+    LogonUserExA
+    LogonUserExW
+    LogonUserW
+    LookupAccountNameA
+    LookupAccountNameW
+    LookupAccountSidA
+    LookupAccountSidW
+    LookupPrivilegeDisplayNameA
+    LookupPrivilegeDisplayNameW
+    LookupPrivilegeNameA
+    LookupPrivilegeNameW
+    LookupPrivilegeValueA
+    LookupPrivilegeValueW
+    LookupSecurityDescriptorPartsA
+    LookupSecurityDescriptorPartsW
+    LsaAddAccountRights
+    LsaAddPrivilegesToAccount
+    LsaClearAuditLog
+    LsaClose
+    LsaCreateAccount
+    LsaCreateSecret
+    LsaCreateTrustedDomain
+    LsaCreateTrustedDomainEx
+    LsaDelete
+    LsaDeleteTrustedDomain
+    LsaEnumerateAccountRights
+    LsaEnumerateAccounts
+    LsaEnumerateAccountsWithUserRight
+    LsaEnumeratePrivileges
+    LsaEnumeratePrivilegesOfAccount
+    LsaEnumerateTrustedDomains
+    LsaEnumerateTrustedDomainsEx
+    LsaFreeMemory
+    LsaGetQuotasForAccount
+    LsaGetRemoteUserName
+    LsaGetSystemAccessAccount
+    LsaGetUserName
+    LsaICLookupNames
+    LsaICLookupNamesWithCreds
+    LsaICLookupSids
+    LsaICLookupSidsWithCreds
+    LsaLookupNames2
+    LsaLookupNames
+    LsaLookupPrivilegeDisplayName
+    LsaLookupPrivilegeName
+    LsaLookupPrivilegeValue
+    LsaLookupSids
+    LsaNtStatusToWinError
+    LsaOpenAccount
+    LsaOpenPolicy
+    LsaOpenPolicySce
+    LsaOpenSecret
+    LsaOpenTrustedDomain
+    LsaOpenTrustedDomainByName
+    LsaQueryDomainInformationPolicy
+    LsaQueryForestTrustInformation
+    LsaQueryInfoTrustedDomain
+    LsaQueryInformationPolicy
+    LsaQuerySecret
+    LsaQuerySecurityObject
+    LsaQueryTrustedDomainInfo
+    LsaQueryTrustedDomainInfoByName
+    LsaRemoveAccountRights
+    LsaRemovePrivilegesFromAccount
+    LsaRetrievePrivateData
+    LsaSetDomainInformationPolicy
+    LsaSetForestTrustInformation
+    LsaSetInformationPolicy
+    LsaSetInformationTrustedDomain
+    LsaSetQuotasForAccount
+    LsaSetSecret
+    LsaSetSecurityObject
+    LsaSetSystemAccessAccount
+    LsaSetTrustedDomainInfoByName
+    LsaSetTrustedDomainInformation
+    LsaStorePrivateData
+    MSChapSrvChangePassword2
+    MSChapSrvChangePassword
+    MakeAbsoluteSD2
+    MakeAbsoluteSD
+    MakeSelfRelativeSD
+    MapGenericMask
+    NotifyBootConfigStatus
+    NotifyChangeEventLog
+    ObjectCloseAuditAlarmA
+    ObjectCloseAuditAlarmW
+    ObjectDeleteAuditAlarmA
+    ObjectDeleteAuditAlarmW
+    ObjectOpenAuditAlarmA
+    ObjectOpenAuditAlarmW
+    ObjectPrivilegeAuditAlarmA
+    ObjectPrivilegeAuditAlarmW
+    OpenBackupEventLogA
+    OpenBackupEventLogW
+    OpenEncryptedFileRawA
+    OpenEncryptedFileRawW
+    OpenEventLogA
+    OpenEventLogW
+    OpenProcessToken
+    OpenSCManagerA
+    OpenSCManagerW
+    OpenServiceA
+    OpenServiceW
+    OpenThreadToken
+    OpenTraceA
+    OpenTraceW
+    PrivilegeCheck
+    PrivilegedServiceAuditAlarmA
+    PrivilegedServiceAuditAlarmW
+    ProcessTrace
+    QueryAllTracesA
+    QueryAllTracesW
+    QueryRecoveryAgentsOnEncryptedFile
+    QueryServiceConfig2A
+    QueryServiceConfig2W
+    QueryServiceConfigA
+    QueryServiceConfigW
+    QueryServiceLockStatusA
+    QueryServiceLockStatusW
+    QueryServiceObjectSecurity
+    QueryServiceStatus
+    QueryServiceStatusEx
+    QueryTraceA
+    QueryTraceW
+    QueryUsersOnEncryptedFile
+    QueryWindows31FilesMigration
+    ReadEncryptedFileRaw
+    ReadEventLogA
+    ReadEventLogW
+    RegCloseKey
+    RegConnectRegistryA
+    RegConnectRegistryW
+    RegCreateKeyA
+    RegCreateKeyExA
+    RegCreateKeyExW
+    RegCreateKeyW
+    RegDeleteKeyA
+    RegDeleteKeyW
+    RegDeleteValueA
+    RegDeleteValueW
+    RegDisablePredefinedCache
+    RegEnumKeyA
+    RegEnumKeyExA
+    RegEnumKeyExW
+    RegEnumKeyW
+    RegEnumValueA
+    RegEnumValueW
+    RegFlushKey
+    RegGetKeySecurity
+    RegLoadKeyA
+    RegLoadKeyW
+    RegNotifyChangeKeyValue
+    RegOpenCurrentUser
+    RegOpenKeyA
+    RegOpenKeyExA
+    RegOpenKeyExW
+    RegOpenKeyW
+    RegOpenUserClassesRoot
+    RegOverridePredefKey
+    RegQueryInfoKeyA
+    RegQueryInfoKeyW
+    RegQueryMultipleValuesA
+    RegQueryMultipleValuesW
+    RegQueryValueA
+    RegQueryValueExA
+    RegQueryValueExW
+    RegQueryValueW
+    RegReplaceKeyA
+    RegReplaceKeyW
+    RegRestoreKeyA
+    RegRestoreKeyW
+    RegSaveKeyA
+    RegSaveKeyExA
+    RegSaveKeyExW
+    RegSaveKeyW
+    RegSetKeySecurity
+    RegSetValueA
+    RegSetValueExA
+    RegSetValueExW
+    RegSetValueW
+    RegUnLoadKeyA
+    RegUnLoadKeyW
+    RegisterEventSourceA
+    RegisterEventSourceW
+    RegisterServiceCtrlHandlerA
+    RegisterServiceCtrlHandlerExA
+    RegisterServiceCtrlHandlerExW
+    RegisterServiceCtrlHandlerW
+    RegisterTraceGuidsA
+    RegisterTraceGuidsW
+    RemoveTraceCallback
+    RemoveUsersFromEncryptedFile
+    ReportEventA
+    ReportEventW
+    RevertToSelf
+    SaferCloseLevel
+    SaferComputeTokenFromLevel
+    SaferCreateLevel
+    SaferGetLevelInformation
+    SaferGetPolicyInformation
+    SaferIdentifyLevel
+    SaferRecordEventLogEntry
+    SaferSetLevelInformation
+    SaferSetPolicyInformation
+    SetAclInformation
+    SetEntriesInAccessListA
+    SetEntriesInAccessListW
+    SetEntriesInAclA
+    SetEntriesInAclW
+    SetEntriesInAuditListA
+    SetEntriesInAuditListW
+    SetFileSecurityA
+    SetFileSecurityW
+    SetInformationCodeAuthzLevelW
+    SetInformationCodeAuthzPolicyW
+    SetKernelObjectSecurity
+    SetNamedSecurityInfoA
+    SetNamedSecurityInfoExA
+    SetNamedSecurityInfoExW
+    SetNamedSecurityInfoW
+    SetPrivateObjectSecurity
+    SetPrivateObjectSecurityEx
+    SetSecurityDescriptorControl
+    SetSecurityDescriptorDacl
+    SetSecurityDescriptorGroup
+    SetSecurityDescriptorOwner
+    SetSecurityDescriptorRMControl
+    SetSecurityDescriptorSacl
+    SetSecurityInfo
+    SetSecurityInfoExA
+    SetSecurityInfoExW
+    SetServiceBits
+    SetServiceObjectSecurity
+    SetServiceStatus
+    SetThreadToken
+    SetTokenInformation
+    SetTraceCallback
+    SetUserFileEncryptionKey
+    StartServiceA
+    StartServiceCtrlDispatcherA
+    StartServiceCtrlDispatcherW
+    StartServiceW
+    StartTraceA
+    StartTraceW
+    StopTraceA
+    StopTraceW
+    SynchronizeWindows31FilesAndWindowsNTRegistry
+    SystemFunction001
+    SystemFunction002
+    SystemFunction003
+    SystemFunction004
+    SystemFunction005
+    SystemFunction006
+    SystemFunction007
+    SystemFunction008
+    SystemFunction009
+    SystemFunction010
+    SystemFunction011
+    SystemFunction012
+    SystemFunction013
+    SystemFunction014
+    SystemFunction015
+    SystemFunction016
+    SystemFunction017
+    SystemFunction018
+    SystemFunction019
+    SystemFunction020
+    SystemFunction021
+    SystemFunction022
+    SystemFunction023
+    SystemFunction024
+    SystemFunction025
+    SystemFunction026
+    SystemFunction027
+    SystemFunction028
+    SystemFunction029
+    SystemFunction030
+    SystemFunction031
+    SystemFunction032
+    SystemFunction033
+    SystemFunction034
+    SystemFunction036
+    SystemFunction040
+    SystemFunction041
+    TraceEvent
+    TraceEventInstance
+    _TraceMessage        = TraceMessage
+    TraceMessageVa
+    TreeResetNamedSecurityInfoA
+    TreeResetNamedSecurityInfoW
+    TrusteeAccessToObjectA
+    TrusteeAccessToObjectW
+    UninstallApplication
+    UnlockServiceDatabase
+    UnregisterTraceGuids
+    UpdateTraceA
+    UpdateTraceW
+    Wow64Win32ApiEntry
+    WriteEncryptedFileRaw

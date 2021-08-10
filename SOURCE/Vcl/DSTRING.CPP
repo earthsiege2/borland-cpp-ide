@@ -1,6 +1,6 @@
 //  dstring.cpp - support for delphi strings in cpp
-//  $Revision:   1.24.1.7  $
-//  Copyright (c) 1997, 1999 Borland International
+//  $Revision:   1.28.1.0.1.2  $
+//  Copyright (c) 1997, 2002 Borland Software Corp
 
 #pragma inline
 #define __DSTRING_INLINE
@@ -24,10 +24,10 @@ static void dummy()
   // extern all asm symbols used here
   asm
   {
-    extrn @System@@LStrAsg$qqrv:near
+    extrn @System@@LStrAsg$qqrpvpxv:near
     extrn @System@@LStrCat$qqrv:near
     extrn @System@@LStrCat3$qqrv:near
-    extrn @System@@LStrClr$qqrr17System@AnsiString:near
+    extrn @System@@LStrClr$qqrpv:near
     extrn @System@@LStrCmp$qqrv:near
     extrn @System@@LStrCopy$qqrv:near
     extrn @System@@LStrDelete$qqrv:near
@@ -69,7 +69,7 @@ namespace System
       xor     ecx,ecx
       mov     eax, this
       mov     [eax],ecx
-      call    @System@@LStrAsg$qqrv
+      call    @System@@LStrAsg$qqrpvpxv
     }
   }
 
@@ -161,7 +161,7 @@ namespace System
     asm
     {
       mov     eax,this
-      call    @System@@LStrClr$qqrr17System@AnsiString
+      call    @System@@LStrClr$qqrpv
     }
   }
 
@@ -170,7 +170,7 @@ namespace System
     asm
     {
       mov     edx,[edx]
-      call    @System@@LStrAsg$qqrv
+      call    @System@@LStrAsg$qqrpvpxv
     }
     return *this;
   }
@@ -355,7 +355,7 @@ namespace System
   {
     int size = vsnprintf(NULL, 0, format, paramList);
     SetLength(size);
-    return vsnprintf(Data, size, format, paramList);
+    return vsnprintf(Data, size + 1, format, paramList);
   }
 
   int __cdecl AnsiString::cat_vprintf(const char* format, va_list paramList)
@@ -363,7 +363,7 @@ namespace System
     int size = vsnprintf(NULL, 0, format, paramList);
     int len = Length();
     SetLength(len + size);
-    return vsnprintf(Data + len, len + size, format, paramList);
+    return vsnprintf(Data + len, size + 1, format, paramList);
   }
 
 
@@ -535,13 +535,15 @@ namespace System
 
   AnsiString __fastcall AnsiString::SubString(int index, int count) const
   {
-    // Emulate Pascal's _LStrCopy: if 'index' is bogus, or the 'count' is negative,
-    // return an empty string.
-    if (index < 1 || index > Length() || count < 0)
+    // This method is intended to be compatible with Delphi's Copy().
+    // Be careful when reordering parameter validation to maintain the
+    // semantics!
+    const int len = Length();
+	if (index > len || count < 1)
       return AnsiString();
-
-    // If 'count' is too large, copy the rest of the string.
-    int n = Length() - index + 1;
+	if (index < 1)
+      index = 1;
+    int n = len - index + 1;
     if (n > count)
       n = count;
     return AnsiString(Data + index - 1, n);

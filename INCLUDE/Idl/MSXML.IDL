@@ -46,7 +46,6 @@ typedef struct _xml_error {
 library MSXML
 {
 
-importlib("stdole32.tlb");
 importlib("stdole2.tlb");
 
 #include "xmldom.idl"

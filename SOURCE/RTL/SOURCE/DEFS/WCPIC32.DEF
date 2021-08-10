@@ -1,147 +1,147 @@
 LIBRARY WCPIC32
 EXPORTS
 
-    WinCPICCleanup                           = 'WCPIC32.DLL'.*
-    WinCPICCleanup_ext                       = 'WCPIC32.DLL'.*
-    WinCPICExtractEvent                      = 'WCPIC32.DLL'.*
-    WinCPICExtractEvent_ext                  = 'WCPIC32.DLL'.*
-    WinCPICIsBlocking                        = 'WCPIC32.DLL'.*
-    WinCPICIsBlocking_ext                    = 'WCPIC32.DLL'.*
-    WinCPICSetBlockingHook                   = 'WCPIC32.DLL'.*
-    WinCPICSetBlockingHook_ext               = 'WCPIC32.DLL'.*
-    WinCPICSetEvent                          = 'WCPIC32.DLL'.*
-    WinCPICSetEvent_ext                      = 'WCPIC32.DLL'.*
-    WinCPICStartup                           = 'WCPIC32.DLL'.*
-    WinCPICStartup_ext                       = 'WCPIC32.DLL'.*
-    WinCPICUnhookBlockingHook                = 'WCPIC32.DLL'.*
-    WinCPICUnhookBlockingHook_ext            = 'WCPIC32.DLL'.*
-    allocate_memory                          = 'WCPIC32.DLL'.*
-    allocate_memory_ext                      = 'WCPIC32.DLL'.*
-    cmaccp                                   = 'WCPIC32.DLL'.*
-    cmaccp_cb                                = 'WCPIC32.DLL'.*
-    cmaccp_cb_ext                            = 'WCPIC32.DLL'.*
-    cmaccp_ext                               = 'WCPIC32.DLL'.*
-    cmallc                                   = 'WCPIC32.DLL'.*
-    cmallc_cb                                = 'WCPIC32.DLL'.*
-    cmallc_cb_ext                            = 'WCPIC32.DLL'.*
-    cmallc_ext                               = 'WCPIC32.DLL'.*
-    cmcanc                                   = 'WCPIC32.DLL'.*
-    cmcanc_ext                               = 'WCPIC32.DLL'.*
-    cmcfm                                    = 'WCPIC32.DLL'.*
-    cmcfm_cb                                 = 'WCPIC32.DLL'.*
-    cmcfm_cb_ext                             = 'WCPIC32.DLL'.*
-    cmcfm_ext                                = 'WCPIC32.DLL'.*
-    cmcfmd                                   = 'WCPIC32.DLL'.*
-    cmcfmd_cb                                = 'WCPIC32.DLL'.*
-    cmcfmd_cb_ext                            = 'WCPIC32.DLL'.*
-    cmcfmd_ext                               = 'WCPIC32.DLL'.*
-    cmdeal                                   = 'WCPIC32.DLL'.*
-    cmdeal_cb                                = 'WCPIC32.DLL'.*
-    cmdeal_cb_ext                            = 'WCPIC32.DLL'.*
-    cmdeal_ext                               = 'WCPIC32.DLL'.*
-    cmecs                                    = 'WCPIC32.DLL'.*
-    cmecs_ext                                = 'WCPIC32.DLL'.*
-    cmecst                                   = 'WCPIC32.DLL'.*
-    cmecst_ext                               = 'WCPIC32.DLL'.*
-    cmecsu                                   = 'WCPIC32.DLL'.*
-    cmecsu_ext                               = 'WCPIC32.DLL'.*
-    cmect                                    = 'WCPIC32.DLL'.*
-    cmect_ext                                = 'WCPIC32.DLL'.*
-    cmemn                                    = 'WCPIC32.DLL'.*
-    cmemn_ext                                = 'WCPIC32.DLL'.*
-    cmepln                                   = 'WCPIC32.DLL'.*
-    cmepln_ext                               = 'WCPIC32.DLL'.*
-    cmesl                                    = 'WCPIC32.DLL'.*
-    cmesl_ext                                = 'WCPIC32.DLL'.*
-    cmetpn                                   = 'WCPIC32.DLL'.*
-    cmetpn_ext                               = 'WCPIC32.DLL'.*
-    cmflus                                   = 'WCPIC32.DLL'.*
-    cmflus_cb                                = 'WCPIC32.DLL'.*
-    cmflus_cb_ext                            = 'WCPIC32.DLL'.*
-    cmflus_ext                               = 'WCPIC32.DLL'.*
-    cminit                                   = 'WCPIC32.DLL'.*
-    cminit_ext                               = 'WCPIC32.DLL'.*
-    cmptr                                    = 'WCPIC32.DLL'.*
-    cmptr_cb                                 = 'WCPIC32.DLL'.*
-    cmptr_cb_ext                             = 'WCPIC32.DLL'.*
-    cmptr_ext                                = 'WCPIC32.DLL'.*
-    cmrcv                                    = 'WCPIC32.DLL'.*
-    cmrcv_cb                                 = 'WCPIC32.DLL'.*
-    cmrcv_cb_ext                             = 'WCPIC32.DLL'.*
-    cmrcv_ext                                = 'WCPIC32.DLL'.*
-    cmrts                                    = 'WCPIC32.DLL'.*
-    cmrts_cb                                 = 'WCPIC32.DLL'.*
-    cmrts_cb_ext                             = 'WCPIC32.DLL'.*
-    cmrts_ext                                = 'WCPIC32.DLL'.*
-    cmscsp                                   = 'WCPIC32.DLL'.*
-    cmscsp_ext                               = 'WCPIC32.DLL'.*
-    cmscst                                   = 'WCPIC32.DLL'.*
-    cmscst_ext                               = 'WCPIC32.DLL'.*
-    cmscsu                                   = 'WCPIC32.DLL'.*
-    cmscsu_ext                               = 'WCPIC32.DLL'.*
-    cmsct                                    = 'WCPIC32.DLL'.*
-    cmsct_ext                                = 'WCPIC32.DLL'.*
-    cmsdt                                    = 'WCPIC32.DLL'.*
-    cmsdt_ext                                = 'WCPIC32.DLL'.*
-    cmsed                                    = 'WCPIC32.DLL'.*
-    cmsed_ext                                = 'WCPIC32.DLL'.*
-    cmsend                                   = 'WCPIC32.DLL'.*
-    cmsend_cb                                = 'WCPIC32.DLL'.*
-    cmsend_cb_ext                            = 'WCPIC32.DLL'.*
-    cmsend_ext                               = 'WCPIC32.DLL'.*
-    cmserr                                   = 'WCPIC32.DLL'.*
-    cmserr_cb                                = 'WCPIC32.DLL'.*
-    cmserr_cb_ext                            = 'WCPIC32.DLL'.*
-    cmserr_ext                               = 'WCPIC32.DLL'.*
-    cmsf                                     = 'WCPIC32.DLL'.*
-    cmsf_ext                                 = 'WCPIC32.DLL'.*
-    cmsld                                    = 'WCPIC32.DLL'.*
-    cmsld_ext                                = 'WCPIC32.DLL'.*
-    cmsltp                                   = 'WCPIC32.DLL'.*
-    cmsltp_ext                               = 'WCPIC32.DLL'.*
-    cmsmn                                    = 'WCPIC32.DLL'.*
-    cmsmn_ext                                = 'WCPIC32.DLL'.*
-    cmspln                                   = 'WCPIC32.DLL'.*
-    cmspln_ext                               = 'WCPIC32.DLL'.*
-    cmspm                                    = 'WCPIC32.DLL'.*
-    cmspm_ext                                = 'WCPIC32.DLL'.*
-    cmsptr                                   = 'WCPIC32.DLL'.*
-    cmsptr_ext                               = 'WCPIC32.DLL'.*
-    cmsrc                                    = 'WCPIC32.DLL'.*
-    cmsrc_ext                                = 'WCPIC32.DLL'.*
-    cmsrt                                    = 'WCPIC32.DLL'.*
-    cmsrt_ext                                = 'WCPIC32.DLL'.*
-    cmssl                                    = 'WCPIC32.DLL'.*
-    cmssl_ext                                = 'WCPIC32.DLL'.*
-    cmsst                                    = 'WCPIC32.DLL'.*
-    cmsst_ext                                = 'WCPIC32.DLL'.*
-    cmstpn                                   = 'WCPIC32.DLL'.*
-    cmstpn_ext                               = 'WCPIC32.DLL'.*
-    cmtrts                                   = 'WCPIC32.DLL'.*
-    cmtrts_cb                                = 'WCPIC32.DLL'.*
-    cmtrts_cb_ext                            = 'WCPIC32.DLL'.*
-    cmtrts_ext                               = 'WCPIC32.DLL'.*
-    cmwait                                   = 'WCPIC32.DLL'.*
-    cmwait_ext                               = 'WCPIC32.DLL'.*
-    free_cpic_memory                         = 'WCPIC32.DLL'.*
-    free_cpic_memory_ext                     = 'WCPIC32.DLL'.*
-    icmssi                                   = 'WCPIC32.DLL'.*
-    icmssi_ext                               = 'WCPIC32.DLL'.*
-    xcecst                                   = 'WCPIC32.DLL'.*
-    xcecst_ext                               = 'WCPIC32.DLL'.*
-    xcecsu                                   = 'WCPIC32.DLL'.*
-    xcecsu_ext                               = 'WCPIC32.DLL'.*
-    xchwnd                                   = 'WCPIC32.DLL'.*
-    xchwnd_ext                               = 'WCPIC32.DLL'.*
-    xcmdsi                                   = 'WCPIC32.DLL'.*
-    xcmdsi_ext                               = 'WCPIC32.DLL'.*
-    xcmesi                                   = 'WCPIC32.DLL'.*
-    xcmesi_ext                               = 'WCPIC32.DLL'.*
-    xcmssi                                   = 'WCPIC32.DLL'.*
-    xcmssi_ext                               = 'WCPIC32.DLL'.*
-    xcscsp                                   = 'WCPIC32.DLL'.*
-    xcscsp_ext                               = 'WCPIC32.DLL'.*
-    xcscst                                   = 'WCPIC32.DLL'.*
-    xcscst_ext                               = 'WCPIC32.DLL'.*
-    xcscsu                                   = 'WCPIC32.DLL'.*
-    xcscsu_ext                               = 'WCPIC32.DLL'.*
+    WinCPICCleanup                           
+    WinCPICCleanup_ext                       
+    WinCPICExtractEvent                      
+    WinCPICExtractEvent_ext                  
+    WinCPICIsBlocking                        
+    WinCPICIsBlocking_ext                    
+    WinCPICSetBlockingHook                   
+    WinCPICSetBlockingHook_ext               
+    WinCPICSetEvent                          
+    WinCPICSetEvent_ext                      
+    WinCPICStartup                           
+    WinCPICStartup_ext                       
+    WinCPICUnhookBlockingHook                
+    WinCPICUnhookBlockingHook_ext            
+    allocate_memory                          
+    allocate_memory_ext                      
+    cmaccp                                   
+    cmaccp_cb                                
+    cmaccp_cb_ext                            
+    cmaccp_ext                               
+    cmallc                                   
+    cmallc_cb                                
+    cmallc_cb_ext                            
+    cmallc_ext                               
+    cmcanc                                   
+    cmcanc_ext                               
+    cmcfm                                    
+    cmcfm_cb                                 
+    cmcfm_cb_ext                             
+    cmcfm_ext                                
+    cmcfmd                                   
+    cmcfmd_cb                                
+    cmcfmd_cb_ext                            
+    cmcfmd_ext                               
+    cmdeal                                   
+    cmdeal_cb                                
+    cmdeal_cb_ext                            
+    cmdeal_ext                               
+    cmecs                                    
+    cmecs_ext                                
+    cmecst                                   
+    cmecst_ext                               
+    cmecsu                                   
+    cmecsu_ext                               
+    cmect                                    
+    cmect_ext                                
+    cmemn                                    
+    cmemn_ext                                
+    cmepln                                   
+    cmepln_ext                               
+    cmesl                                    
+    cmesl_ext                                
+    cmetpn                                   
+    cmetpn_ext                               
+    cmflus                                   
+    cmflus_cb                                
+    cmflus_cb_ext                            
+    cmflus_ext                               
+    cminit                                   
+    cminit_ext                               
+    cmptr                                    
+    cmptr_cb                                 
+    cmptr_cb_ext                             
+    cmptr_ext                                
+    cmrcv                                    
+    cmrcv_cb                                 
+    cmrcv_cb_ext                             
+    cmrcv_ext                                
+    cmrts                                    
+    cmrts_cb                                 
+    cmrts_cb_ext                             
+    cmrts_ext                                
+    cmscsp                                   
+    cmscsp_ext                               
+    cmscst                                   
+    cmscst_ext                               
+    cmscsu                                   
+    cmscsu_ext                               
+    cmsct                                    
+    cmsct_ext                                
+    cmsdt                                    
+    cmsdt_ext                                
+    cmsed                                    
+    cmsed_ext                                
+    cmsend                                   
+    cmsend_cb                                
+    cmsend_cb_ext                            
+    cmsend_ext                               
+    cmserr                                   
+    cmserr_cb                                
+    cmserr_cb_ext                            
+    cmserr_ext                               
+    cmsf                                     
+    cmsf_ext                                 
+    cmsld                                    
+    cmsld_ext                                
+    cmsltp                                   
+    cmsltp_ext                               
+    cmsmn                                    
+    cmsmn_ext                                
+    cmspln                                   
+    cmspln_ext                               
+    cmspm                                    
+    cmspm_ext                                
+    cmsptr                                   
+    cmsptr_ext                               
+    cmsrc                                    
+    cmsrc_ext                                
+    cmsrt                                    
+    cmsrt_ext                                
+    cmssl                                    
+    cmssl_ext                                
+    cmsst                                    
+    cmsst_ext                                
+    cmstpn                                   
+    cmstpn_ext                               
+    cmtrts                                   
+    cmtrts_cb                                
+    cmtrts_cb_ext                            
+    cmtrts_ext                               
+    cmwait                                   
+    cmwait_ext                               
+    free_cpic_memory                         
+    free_cpic_memory_ext                     
+    icmssi                                   
+    icmssi_ext                               
+    xcecst                                   
+    xcecst_ext                               
+    xcecsu                                   
+    xcecsu_ext                               
+    xchwnd                                   
+    xchwnd_ext                               
+    xcmdsi                                   
+    xcmdsi_ext                               
+    xcmesi                                   
+    xcmesi_ext                               
+    xcmssi                                   
+    xcmssi_ext                               
+    xcscsp                                   
+    xcscsp_ext                               
+    xcscst                                   
+    xcscst_ext                               
+    xcscsu                                   
+    xcscsu_ext                               

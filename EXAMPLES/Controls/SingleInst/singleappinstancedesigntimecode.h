@@ -2,7 +2,8 @@
 #ifndef SingleAppInstanceDesignTimeCodeH
 #define SingleAppInstanceDesignTimeCodeH
 
-#include <DsgnIntf.Hpp>
+#include <DesignIntf.hpp>
+#include <DesignEditors.hpp>
 
 class PACKAGE TSingleInstanceMarkerPropertyEditor : public TStringProperty
 {

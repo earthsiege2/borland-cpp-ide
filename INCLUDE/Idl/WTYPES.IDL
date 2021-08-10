@@ -1,7 +1,7 @@
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  File: wtypes.idl
 //
@@ -17,7 +17,7 @@
 cpp_quote("//+-------------------------------------------------------------------------")
 cpp_quote("//")
 cpp_quote("//  Microsoft Windows")
-cpp_quote("//  Copyright (C) Microsoft Corporation, 1992-1999.")
+cpp_quote("//  Copyright (c) Microsoft Corporation. All rights reserved.")
 cpp_quote("//")
 cpp_quote("//--------------------------------------------------------------------------")
 cpp_quote("#if ( _MSC_VER >= 1020 )")
@@ -557,7 +557,10 @@ typedef enum tagCLSCTX
     CLSCTX_NO_CUSTOM_MARSHAL = 0x1000,
     CLSCTX_ENABLE_CODE_DOWNLOAD = 0x2000,
                                      // allow code download from the Directory Service (if any) or the internet
-    CLSCTX_NO_FAILURE_LOG = 0x4000   // do not log messages about activation failure (should one occur) to Event Log
+    CLSCTX_NO_FAILURE_LOG = 0x4000,  // do not log messages about activation failure (should one occur) to Event Log
+    CLSCTX_DISABLE_AAA   = 0x8000,   // Disable EOAC_DISABLE_AAA capability for this activation only
+    CLSCTX_ENABLE_AAA   = 0x10000,   // Enable EOAC_DISABLE_AAA capability for this activation only
+    CLSCTX_FROM_DEFAULT_CONTEXT = 0x20000    // Begin this activation from the default context of the current apartment
  } CLSCTX;
 
 
@@ -781,6 +784,7 @@ typedef union _userHMETAFILE switch( long fContext ) u
 {
     case WDT_INPROC_CALL:   long            hInproc;
     case WDT_REMOTE_CALL:   BYTE_BLOB *     hRemote;
+    case WDT_INPROC64_CALL: __int64         hInproc64;
 } userHMETAFILE;
 
 // #########################################################################
@@ -799,6 +803,7 @@ typedef union _userHMETAFILEPICT switch( long fContext ) u
 {
     case WDT_INPROC_CALL:   long                hInproc;
     case WDT_REMOTE_CALL:   remoteMETAFILEPICT* hRemote;
+    case WDT_INPROC64_CALL: __int64             hInproc64;
 } userHMETAFILEPICT;
 
 // #########################################################################
@@ -810,6 +815,7 @@ typedef union _userHENHMETAFILE switch( long fContext ) u
 {
     case WDT_INPROC_CALL:   long            hInproc;
     case WDT_REMOTE_CALL:   BYTE_BLOB *     hRemote;
+    case WDT_INPROC64_CALL: __int64         hInproc64;
 } userHENHMETAFILE;
 
 // #########################################################################
@@ -839,6 +845,7 @@ typedef union _userHBITMAP switch( long fContext ) u
 {
     case WDT_INPROC_CALL:   long            hInproc;
     case WDT_REMOTE_CALL:   userBITMAP *    hRemote;
+    case WDT_INPROC64_CALL: __int64         hInproc64;
 } userHBITMAP;
 
 // #########################################################################
@@ -854,6 +861,7 @@ typedef union _userHPALETTE switch( long fContext ) u
 {
     case WDT_INPROC_CALL:   long            hInproc;
     case WDT_REMOTE_CALL:   LOGPALETTE *    hRemote;
+    case WDT_INPROC64_CALL: __int64         hInproc64;
 } userHPALETTE;
 
 // #########################################################################
@@ -1155,6 +1163,8 @@ cpp_quote(" *  VT_I8                  [T][P]     signed 64-bit int")
 cpp_quote(" *  VT_UI8                 [T][P]     unsigned 64-bit int")
 cpp_quote(" *  VT_INT              [V][T][P][S]  signed machine int")
 cpp_quote(" *  VT_UINT             [V][T]   [S]  unsigned machine int")
+cpp_quote(" *  VT_INT_PTR             [T]        signed machine register size width")
+cpp_quote(" *  VT_UINT_PTR            [T]        unsigned machine register size width")
 cpp_quote(" *  VT_VOID                [T]        C style void")
 cpp_quote(" *  VT_HRESULT             [T]        Standard return type")
 cpp_quote(" *  VT_PTR                 [T]        pointer type")
@@ -1215,6 +1225,8 @@ enum VARENUM
     VT_LPWSTR          = 31,
 // VBA reserves 32-35 for future use
     VT_RECORD          = 36,
+	VT_INT_PTR         = 37,
+	VT_UINT_PTR        = 38,	
 
     VT_FILETIME        = 64,
     VT_BLOB            = 65,
@@ -1239,13 +1251,6 @@ enum VARENUM
     VT_TYPEMASK        = 0x0fff
 };
 
-cpp_quote("#ifdef _WIN64")
-cpp_quote("#define VT_INT_PTR  VT_I8")
-cpp_quote("#define VT_UINT_PTR VT_UI8")
-cpp_quote("#else")
-cpp_quote("#define VT_INT_PTR  VT_I4")
-cpp_quote("#define VT_UINT_PTR VT_UI4")
-cpp_quote("#endif")
 
 // Property stuff
 typedef ULONG PROPID;

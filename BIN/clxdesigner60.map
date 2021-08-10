@@ -1,0 +1,1971 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 0001C900H .text                   CODE
+ 0002:00000000 00000318H .data                   DATA
+ 0002:00000318 000000B1H .bss                    BSS
+
+
+Detailed map of segments
+
+ 0001:00000000 00000286 C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000288 000001EC C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:00000474 00000016 C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:0000048C 00000036 C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:000004C4 0000000E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:000004D4 00000266 C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:0000073C 0000000E C=CODE     S=.text    G=(none)   M=ActiveX  ACBP=A9
+ 0001:0000074C 00000038 C=CODE     S=.text    G=(none)   M=Messages ACBP=A9
+ 0001:00000784 00000068 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:000007EC 0000001E C=CODE     S=.text    G=(none)   M=Types    ACBP=A9
+ 0001:0000080C 00000016 C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:00000824 0000007E C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:000008A4 0000000E C=CODE     S=.text    G=(none)   M=SysConst ACBP=A9
+ 0001:000008B4 0000000E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:000008C4 0000000E C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:000008D4 0000000E C=CODE     S=.text    G=(none)   M=RTLConsts ACBP=A9
+ 0001:000008E4 0000000E C=CODE     S=.text    G=(none)   M=Math     ACBP=A9
+ 0001:000008F4 0000000E C=CODE     S=.text    G=(none)   M=ImgList  ACBP=A9
+ 0001:00000904 00000038 C=CODE     S=.text    G=(none)   M=CommCtrl ACBP=A9
+ 0001:0000093C 0000000E C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:0000094C 0000000E C=CODE     S=.text    G=(none)   M=Consts   ACBP=A9
+ 0001:0000095C 00000026 C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:00000984 0000000E C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000994 0000000E C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:000009A4 00000038 C=CODE     S=.text    G=(none)   M=Imm      ACBP=A9
+ 0001:000009DC 0000000E C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:000009EC 0000000E C=CODE     S=.text    G=(none)   M=WinHelpViewer ACBP=A9
+ 0001:000009FC 0000000E C=CODE     S=.text    G=(none)   M=StdActns ACBP=A9
+ 0001:00000A0C 0000000E C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:00000A1C 00000038 C=CODE     S=.text    G=(none)   M=ShlObj   ACBP=A9
+ 0001:00000A54 00000038 C=CODE     S=.text    G=(none)   M=UrlMon   ACBP=A9
+ 0001:00000A8C 00000038 C=CODE     S=.text    G=(none)   M=WinInet  ACBP=A9
+ 0001:00000AC4 00000038 C=CODE     S=.text    G=(none)   M=RegStr   ACBP=A9
+ 0001:00000AFC 00000038 C=CODE     S=.text    G=(none)   M=ShellAPI ACBP=A9
+ 0001:00000B34 0000000E C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00000B44 00000038 C=CODE     S=.text    G=(none)   M=WinSpool ACBP=A9
+ 0001:00000B7C 0000000E C=CODE     S=.text    G=(none)   M=StdCtrls ACBP=A9
+ 0001:00000B8C 00000038 C=CODE     S=.text    G=(none)   M=CommDlg  ACBP=A9
+ 0001:00000BC4 00000038 C=CODE     S=.text    G=(none)   M=Dlgs     ACBP=A9
+ 0001:00000BFC 0000000E C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00000C0C 0000000E C=CODE     S=.text    G=(none)   M=StrUtils ACBP=A9
+ 0001:00000C1C 0000000E C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:00000C2C 0000000E C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:00000C3C 00000256 C=CODE     S=.text    G=(none)   M=Qt       ACBP=A9
+ 0001:00000E94 0000000E C=CODE     S=.text    G=(none)   M=BindHelp ACBP=A9
+ 0001:00000EA4 0000031E C=CODE     S=.text    G=(none)   M=QControls ACBP=A9
+ 0001:000011C4 0000006E C=CODE     S=.text    G=(none)   M=QImgList ACBP=A9
+ 0001:00001234 0000015E C=CODE     S=.text    G=(none)   M=QGraphics ACBP=A9
+ 0001:00001394 00000036 C=CODE     S=.text    G=(none)   M=QTypes   ACBP=A9
+ 0001:000013CC 0000000E C=CODE     S=.text    G=(none)   M=QConsts  ACBP=A9
+ 0001:000013DC 0000020E C=CODE     S=.text    G=(none)   M=QForms   ACBP=A9
+ 0001:000015EC 0000000E C=CODE     S=.text    G=(none)   M=QStyle   ACBP=A9
+ 0001:000015FC 00000016 C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00001614 00000086 C=CODE     S=.text    G=(none)   M=QActnList ACBP=A9
+ 0001:0000169C 0000018E C=CODE     S=.text    G=(none)   M=QMenus   ACBP=A9
+ 0001:0000182C 00000016 C=CODE     S=.text    G=(none)   M=QExtCtrls ACBP=A9
+ 0001:00001844 0000002E C=CODE     S=.text    G=(none)   M=QStdCtrls ACBP=A9
+ 0001:00001874 0000002E C=CODE     S=.text    G=(none)   M=QClipbrd ACBP=A9
+ 0001:000018A4 0000000E C=CODE     S=.text    G=(none)   M=QStdActns ACBP=A9
+ 0001:000018B4 0000000E C=CODE     S=.text    G=(none)   M=QSearch  ACBP=A9
+ 0001:000018C4 0000003E C=CODE     S=.text    G=(none)   M=QDialogs ACBP=A9
+ 0001:00001904 0000003E C=CODE     S=.text    G=(none)   M=DesignIntf ACBP=A9
+ 0001:00001944 0000000E C=CODE     S=.text    G=(none)   M=DesignMenus ACBP=A9
+ 0001:00001954 00000066 C=CODE     S=.text    G=(none)   M=Designer ACBP=A9
+ 0001:000019BC 00000066 C=CODE     S=.text    G=(none)   M=ComponentDesigner ACBP=A9
+ 0001:00001A24 0000000E C=CODE     S=.text    G=(none)   M=EditIntf ACBP=A9
+ 0001:00001A34 0000000E C=CODE     S=.text    G=(none)   M=VirtIntf ACBP=A9
+ 0001:00001A44 0000000E C=CODE     S=.text    G=(none)   M=Events   ACBP=A9
+ 0001:00001A54 0000000E C=CODE     S=.text    G=(none)   M=ToolUtils ACBP=A9
+ 0001:00001A64 0000000E C=CODE     S=.text    G=(none)   M=ToolsAPI ACBP=A9
+ 0001:00001A74 0000000E C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:00001A84 0000000E C=CODE     S=.text    G=(none)   M=ListActns ACBP=A9
+ 0001:00001A94 0000000E C=CODE     S=.text    G=(none)   M=ToolWin  ACBP=A9
+ 0001:00001AA4 00000038 C=CODE     S=.text    G=(none)   M=RichEdit ACBP=A9
+ 0001:00001ADC 0000000E C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00001AEC 0000000E C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:00001AFC 0000000E C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:00001B0C 0000000E C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:00001B1C 0000000E C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:00001B2C 0000000E C=CODE     S=.text    G=(none)   M=ComStrs  ACBP=A9
+ 0001:00001B3C 0000000E C=CODE     S=.text    G=(none)   M=Update   ACBP=A9
+ 0001:00001B4C 0000000E C=CODE     S=.text    G=(none)   M=LibConst ACBP=A9
+ 0001:00001B5C 0000019E C=CODE     S=.text    G=(none)   M=DesignEditors ACBP=A9
+ 0001:00001CFC 0000000E C=CODE     S=.text    G=(none)   M=Proxies  ACBP=A9
+ 0001:00001D0C 0000000E C=CODE     S=.text    G=(none)   M=DesignConst ACBP=A9
+ 0001:00001D1C 0000000E C=CODE     S=.text    G=(none)   M=TopLevels ACBP=A9
+ 0001:00001D2C 0000000E C=CODE     S=.text    G=(none)   M=StFilSys ACBP=A9
+ 0001:00001D3C 0000000E C=CODE     S=.text    G=(none)   M=IStreams ACBP=A9
+ 0001:00001D4C 0000000E C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00001D5C 0000000E C=CODE     S=.text    G=(none)   M=StdVCL   ACBP=A9
+ 0001:00001D6C 0000000E C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:00001D7C 0000000E C=CODE     S=.text    G=(none)   M=ComConst ACBP=A9
+ 0001:00001D8C 000002A6 C=CODE     S=.text    G=(none)   M=TreeIntf ACBP=A9
+ 0001:00002034 0000000E C=CODE     S=.text    G=(none)   M=LibHelp  ACBP=A9
+ 0001:00002044 000005E4 C=CODE     S=.text    G=(none)   M=DesignActionLink ACBP=A9
+ 0001:00002628 000000F6 C=CODE     S=.text    G=(none)   M=Surface  ACBP=A9
+ 0001:00002720 0000000E C=CODE     S=.text    G=(none)   M=DsnConst ACBP=A9
+ 0001:00002730 0000009E C=CODE     S=.text    G=(none)   M=QComCtrls ACBP=A9
+ 0001:000027D0 0000000E C=CODE     S=.text    G=(none)   M=QButtons ACBP=A9
+ 0001:000027E0 00003400 C=CODE     S=.text    G=(none)   M=ClxImgEdit ACBP=A9
+ 0001:00005BE0 00001D14 C=CODE     S=.text    G=(none)   M=ClxEditors ACBP=A9
+ 0001:000078F4 00000F94 C=CODE     S=.text    G=(none)   M=ClxMenus ACBP=A9
+ 0001:00008888 00006A2F C=CODE     S=.text    G=(none)   M=ClxSurface ACBP=A9
+ 0001:0000F2B8 00000828 C=CODE     S=.text    G=(none)   M=ClxDmSurface ACBP=A9
+ 0001:0000FAE0 00000948 C=CODE     S=.text    G=(none)   M=ClxDesignWindows ACBP=A9
+ 0001:00010428 00000590 C=CODE     S=.text    G=(none)   M=ClxToolWnds ACBP=A9
+ 0001:000109B8 0000018C C=CODE     S=.text    G=(none)   M=ClxVclInterop ACBP=A9
+ 0001:00010B44 0000000E C=CODE     S=.text    G=(none)   M=MnuConst ACBP=A9
+ 0001:00010B54 00000016 C=CODE     S=.text    G=(none)   M=VCLEditors ACBP=A9
+ 0001:00010B6C 00000C0C C=CODE     S=.text    G=(none)   M=ClxMenuTmpl ACBP=A9
+ 0001:00011778 00000464 C=CODE     S=.text    G=(none)   M=ClxMtSvDlg ACBP=A9
+ 0001:00011BDC 000002EC C=CODE     S=.text    G=(none)   M=ClxMtDeDlg ACBP=A9
+ 0001:00011EC8 00000344 C=CODE     S=.text    G=(none)   M=ClxMtInDlg ACBP=A9
+ 0001:0001220C 000006C0 C=CODE     S=.text    G=(none)   M=ClxMtMisc ACBP=A9
+ 0001:000128CC 000010EC C=CODE     S=.text    G=(none)   M=ClxMnuFile ACBP=A9
+ 0001:000139B8 00000344 C=CODE     S=.text    G=(none)   M=ClxMnuSelect ACBP=A9
+ 0001:00013CFC 00006F40 C=CODE     S=.text    G=(none)   M=ClxMnuBuild ACBP=A9
+ 0001:0001AC3C 00000E80 C=CODE     S=.text    G=(none)   M=ClxSprigs ACBP=A9
+ 0001:0001BABC 00000A54 C=CODE     S=.text    G=(none)   M=WidgetDesignForm ACBP=A9
+ 0001:0001C510 000003ED C=CODE     S=.text    G=(none)   M=clxdesigner ACBP=A9
+ 0002:00000000 00000028 C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00000028 000000A0 C=DATA     S=.data    G=DGROUP   M=DesignActionLink ACBP=A9
+ 0002:000000C8 00000008 C=DATA     S=.data    G=DGROUP   M=ClxImgEdit ACBP=A9
+ 0002:000000D0 00000110 C=DATA     S=.data    G=DGROUP   M=ClxEditors ACBP=A9
+ 0002:000001E0 0000004C C=DATA     S=.data    G=DGROUP   M=ClxSurface ACBP=A9
+ 0002:0000022C 00000008 C=DATA     S=.data    G=DGROUP   M=ClxDmSurface ACBP=A9
+ 0002:00000234 00000004 C=DATA     S=.data    G=DGROUP   M=ClxMenuTmpl ACBP=A9
+ 0002:00000238 00000005 C=DATA     S=.data    G=DGROUP   M=ClxMnuBuild ACBP=A9
+ 0002:00001000 00000018 C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00001018 00000004 C=BSS      S=.bss     G=DGROUP   M=Messages ACBP=A9
+ 0002:0000101C 00000004 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0002:00001020 00000004 C=BSS      S=.bss     G=DGROUP   M=CommCtrl ACBP=A9
+ 0002:00001024 00000004 C=BSS      S=.bss     G=DGROUP   M=Imm      ACBP=A9
+ 0002:00001028 00000004 C=BSS      S=.bss     G=DGROUP   M=ShlObj   ACBP=A9
+ 0002:0000102C 00000004 C=BSS      S=.bss     G=DGROUP   M=UrlMon   ACBP=A9
+ 0002:00001030 00000004 C=BSS      S=.bss     G=DGROUP   M=WinInet  ACBP=A9
+ 0002:00001034 00000004 C=BSS      S=.bss     G=DGROUP   M=RegStr   ACBP=A9
+ 0002:00001038 00000004 C=BSS      S=.bss     G=DGROUP   M=ShellAPI ACBP=A9
+ 0002:0000103C 00000004 C=BSS      S=.bss     G=DGROUP   M=WinSpool ACBP=A9
+ 0002:00001040 00000004 C=BSS      S=.bss     G=DGROUP   M=CommDlg  ACBP=A9
+ 0002:00001044 00000004 C=BSS      S=.bss     G=DGROUP   M=Dlgs     ACBP=A9
+ 0002:00001048 00000004 C=BSS      S=.bss     G=DGROUP   M=RichEdit ACBP=A9
+ 0002:0000104C 00000004 C=BSS      S=.bss     G=DGROUP   M=DesignActionLink ACBP=A9
+ 0002:00001050 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxImgEdit ACBP=A9
+ 0002:00001054 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxEditors ACBP=A9
+ 0002:00001058 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxMenus ACBP=A9
+ 0002:0000105C 00000018 C=BSS      S=.bss     G=DGROUP   M=ClxSurface ACBP=A9
+ 0002:00001074 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxDmSurface ACBP=A9
+ 0002:00001078 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxDesignWindows ACBP=A9
+ 0002:0000107C 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxToolWnds ACBP=A9
+ 0002:00001080 00000008 C=BSS      S=.bss     G=DGROUP   M=ClxVclInterop ACBP=A9
+ 0002:00001088 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxMenuTmpl ACBP=A9
+ 0002:0000108C 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxMtSvDlg ACBP=A9
+ 0002:00001090 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxMtDeDlg ACBP=A9
+ 0002:00001094 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxMtInDlg ACBP=A9
+ 0002:00001098 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxMtMisc ACBP=A9
+ 0002:0000109C 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxMnuFile ACBP=A9
+ 0002:000010A0 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxMnuSelect ACBP=A9
+ 0002:000010A4 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxMnuBuild ACBP=A9
+ 0002:000010A8 00000004 C=BSS      S=.bss     G=DGROUP   M=ClxSprigs ACBP=A9
+ 0002:000010AC 00000004 C=BSS      S=.bss     G=DGROUP   M=WidgetDesignForm ACBP=A9
+
+
+  Address         Publics by Name
+
+ 0002:00001044       .1
+ 0002:00001040       .1
+ 0002:0000104C       .1
+ 0002:00001038       .1
+ 0002:00001034       .1
+ 0002:00001010       .1
+ 0002:0000105C       .1
+ 0002:00001030       .1
+ 0002:0000102C       .1
+ 0002:00001028       .1
+ 0002:00001024       .1
+ 0002:00001020       .1
+ 0002:00001048       .1
+ 0002:00001080       .1
+ 0002:00001018       .1
+ 0002:00001098       .1
+ 0002:0000109C       .1
+ 0002:0000108C       .2
+ 0002:00001090       .2
+ 0002:000010A0       .2
+ 0002:00001094       .2
+ 0002:0000107C       .2
+ 0002:00001078       .2
+ 0002:00001050       .3
+ 0002:00001088       .3
+ 0002:00001074       .3
+ 0002:000010AC       .3
+ 0002:0000103C       .3
+ 0002:0000101C       .3
+ 0002:00001054       .31
+ 0002:000010A8       .7
+ 0002:00001058       .7
+ 0002:000010A4       .9
+ 0001:0001C8D8       @GetPackageInfoTable
+ 0001:000003C0       @InitPkg
+ 0001:00000424       @PackageLoad
+ 0001:0001C8E0       @PackageLoad
+ 0001:0001C8EC       @PackageUnload
+ 0001:00000430       @PackageUnload
+ 0002:000001DC       ActionClasses
+ 0001:0000E404       ActivateEvent
+ 0002:00001064       ActivationForm
+ 0001:0000D880       AddComponents
+ 0001:0000D1B0       AddComponentVerbs
+ 0001:0000D804       AddControls
+ 0001:0000C818       AddFormLocalMenu
+ 0001:0000CBC8       AddModuleLocalMenu
+ 0001:0000CF38       AddModuleVerbs
+ 0001:0000D048       AddSelectionVerbs
+ 0001:00017974       AdjustWindowItems
+ 0002:00000200       Affects
+ 0001:0000780C       AlignNames
+ 0001:000002C0       AllocTlsBuffer
+ 0001:00006BC8       AnotherObject
+ 0001:0000D7C4       ApproveControls
+ 0001:0000B1D4       BitmapEnum
+ 0001:000156B8       BreakConnections
+ 0001:00010D4C       BuildTemplateFileName
+ 0001:000148B8       CaptionToName
+ 0001:0000D4E0       CheckContainersOf
+ 0001:00017AB8       CheckForDescendants
+ 0001:000125D4       CheckForDuplicate
+ 0001:00012F68       CheckForItemOption
+ 0001:00012F10       CheckForLoadOption
+ 0001:00013000       CheckForMemoryOption
+ 0001:00010AB4       ClearModalHooks
+ 0001:0000E430       CloseEvent
+ 0001:0001C8F8       clxdesigner
+ 0001:00010420       ClxDesignWindows
+ 0001:0000FAD8       ClxDmSurface
+ 0001:000078E0       ClxEditors
+ 0001:00005BD8       ClxImgEdit
+ 0002:00000238       ClxMenuEditor
+ 0001:00008880       ClxMenus
+ 0001:00011748       ClxMenuTmpl
+ 0001:0001AC34       ClxMnuBuild
+ 0001:000139B0       ClxMnuFile
+ 0001:00013CF4       ClxMnuSelect
+ 0001:00011EC0       ClxMtDeDlg
+ 0001:00012204       ClxMtInDlg
+ 0001:000128C4       ClxMtMisc
+ 0001:00011BD4       ClxMtSvDlg
+ 0001:0001BAB4       ClxSprigs
+ 0001:0000F248       ClxSurface
+ 0001:000109B0       ClxToolWnds
+ 0001:00010B24       ClxVclInterop
+ 0001:00000934       CommCtrl
+ 0001:00000BBC       CommDlg
+ 0001:00017A38       ConstructList
+ 0002:0000106C       ContainerIconMgr
+ 0001:0000EFEC       ControlWantsKey
+ 0002:00001068       ConvertedActions
+ 0001:00006AE0       CopyStreamToClipboard
+ 0001:00014C9C       CorrectItem
+ 0001:0000763C       CreateAction
+ 0001:0000592C       CreateImageStrip
+ 0001:0000752C       CreateMaskedBmp
+ 0001:0001572C       CreateNew
+ 0001:0000C670       CreateSpecialItems
+ 0001:0001268C       CreateTheTemplate
+ 0002:000001F0       Cursors
+ 0001:00017B28       DeleteMenuItems
+ 0001:00017B88       DeleteWindowItems
+ 0001:00002620       DesignActionLink
+ 0001:000177F4       DetermineInsertPosition
+ 0002:0000023C       DINFileExist
+ 0001:00000BF4       Dlgs
+ 0001:0000AD74       DoMouseDownEvent
+ 0001:0000AB84       DoMouseEvent
+ 0001:0000BCF8       DoMouseEvent
+ 0001:0000BB78       DoMoveEvent
+ 0001:0000B914       DoPaintEvent
+ 0001:0000BD6C       DoPaintEvent
+ 0001:0000AF34       DoPaintEvent
+ 0001:0000A030       DrawMarker
+ 0001:000198C0       DrawMenuItem
+ 0001:0000E910       DrawPixels
+ 0001:0000A064       DrawSelection
+ 0001:00002DF0       EditImageList
+ 0002:0000022C       EmptyPoint
+ 0001:000073BC       EnumActions
+ 0001:0000078C       EqualRect
+ 0001:0000036C       ExitProcessTLS
+ 0001:00000344       ExitThreadTLS
+ 0001:0000074C       Finalization
+ 0001:00010AEC       Finalization
+ 0001:00010980       Finalization
+ 0001:0000043C       Finalization
+ 0001:0001170C       Finalization
+ 0001:00011BA4       Finalization
+ 0001:00011E90       Finalization
+ 0001:000121D4       Finalization
+ 0001:000103F0       Finalization
+ 0001:00005BA8       Finalization
+ 0001:0000FAA8       Finalization
+ 0001:00012894       Finalization
+ 0001:0000F1D8       Finalization
+ 0001:00013980       Finalization
+ 0001:00013CC4       Finalization
+ 0001:000007B4       Finalization
+ 0001:00000904       Finalization
+ 0001:000009A4       Finalization
+ 0001:00000AFC       Finalization
+ 0001:00000A1C       Finalization
+ 0001:00000B44       Finalization
+ 0001:000025F0       Finalization
+ 0001:00000A54       Finalization
+ 0001:00000AC4       Finalization
+ 0001:00007880       Finalization
+ 0001:0001ABF8       Finalization
+ 0001:0001BA84       Finalization
+ 0001:00000A8C       Finalization
+ 0001:0001C4D8       Finalization
+ 0001:00001AA4       Finalization
+ 0001:00000B8C       Finalization
+ 0001:00000BC4       Finalization
+ 0001:00008850       Finalization
+ 0001:0000A0C0       FindAction
+ 0001:0000B2E0       FindClassBitmap
+ 0001:00007480       FindComponentByClass
+ 0001:00015424       FindCtlForItem
+ 0001:00015408       FindGenesisOfMenuItem
+ 0001:000152C4       FindItemWinForMenu
+ 0001:00018A58       FindNewBounds
+ 0001:00015CE4       FindParentItem
+ 0001:00000784       FindResource
+ 0001:0000E44C       FocusEvent
+ 0001:0000E2C4       FormMoved
+ 0001:00000288       FreeLibrary
+ 0001:00016CFC       FreeTemplate
+ 0001:00000794       GetActiveWindow
+ 0001:00014E40       GetBitMapWidth
+ 0001:00006C68       GetClipboardStream
+ 0001:0000EF18       GetClxDesignSurface
+ 0001:00002D18       GetImages
+ 0001:000181A8       GetMenuSize
+ 0001:000002CC       GetTlsSize
+ 0001:00015F74       GetTopLevelItem
+ 0002:00000234       GLoadedTemplatesFrom
+ 0001:00017C18       HandleEmptyMenu
+ 0001:00016F9C       HandleEscape
+ 0001:00016FE0       HandleHomeEnd
+ 0001:00018BF0       HandleNewItem
+ 0001:000174F4       HandleVKRight
+ 0002:00001060       HiddenWidget
+ 0001:00015764       HideOthers
+ 0002:0000100C       HInstance
+ 0002:000001E0       IconRect
+ 0001:0000818C       IMainMenuFor
+ 0001:000081DC       IMenuItemFor
+ 0001:00008204       IMenuItemsFor
+ 0001:000009D4       Imm
+ 0001:0000CD64       InitBaseMenu
+ 0001:00000390       InitializeModule
+ 0001:00010A68       InitModalHooks
+ 0001:00000318       InitProcessTLS
+ 0001:000002D4       InitThreadTLS
+ 0001:0000D390       InternalFindContainer
+ 0001:0000A668       InvalidateWidget
+ 0001:000081B4       IPopupMenuFor
+ 0001:0000DD60       IsDblClick
+ 0001:00014830       IsFocusable
+ 0001:00014884       IsItemEmpty
+ 0001:00017114       IsOkToEdit
+ 0001:0000079C       IsRectEmpty
+ 0001:00016394       IsSelection
+ 0001:00015F38       IsThisAMainMenu
+ 0001:000148B4       IsThisChicago
+ 0001:00009F7C       ItemFor
+ 0001:0000DFAC       KeyEvent
+ 0001:0000F124       KeyEvent
+ 0002:00001070       KeyForwarder
+ 0002:00000208       KeyMap
+ 0001:0001386C       LoadMenuFromResource
+ 0001:00011580       LoadMenuTemplateManagerFromDisk
+ 0001:0000B270       LoadPackageBitmap
+ 0001:00000290       LocalAlloc
+ 0001:00000298       LocalFree
+ 0001:00002044       MapClxShortCutToVclShortCut
+ 0001:000020A8       MapVclShortCutToClxShortCut
+ 0002:000000C8       MaskBackground
+ 0001:00014AB0       MenuAutoName
+ 0001:000123C4       MenuClone
+ 0001:00012434       MenuTemplateDelete
+ 0001:00012554       MenuTemplateInsert
+ 0001:00012708       MenuTemplateSave
+ 0001:00014CFC       MenuTreeAutoName
+ 0001:0000077C       Messages
+ 0002:00001084       ModalHooks
+ 0002:000001B0       ModalResults
+ 0001:0000E30C       ModifyingEvent
+ 0001:00015084       ModifySettings
+ 0002:00000000       Module
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0001:0000DD84       MouseEvent
+ 0001:00018E0C       MoveDroppedMenus
+ 0001:000176E4       NavTopUD
+ 0001:0000A164       NewActionItem
+ 0001:0000CDDC       NewContextItem
+ 0001:00014814       NewTransientMenuItem
+ 0002:000000D0       NotifyActionListChange
+ 0001:0000E15C       PaintEvent
+ 0001:0001355C       ParseMenu
+ 0001:0001307C       ParseMenuItem
+ 0001:00013230       ParsePopup
+ 0001:00013810       ParseResource
+ 0001:00017218       PerformSelectionActions
+ 0002:00000028       QtKeyMap
+ 0001:00007098       RegActions
+ 0001:0001ABBC       Register
+ 0001:00000AF4       RegStr
+ 0001:000188A0       RelocateItemWindows
+ 0001:00011554       RemoveComponents
+ 0001:00018400       RemoveExtraWindows
+ 0001:000158C8       ReturnAppropriateWin
+ 0001:00018480       ReturnAppropriateWindow
+ 0001:00001AD4       RichEdit
+ 0001:0001580C       SearchForExisting
+ 0001:00015878       SearchForHidden
+ 0001:00014D60       SelectAndMakeActive
+ 0001:00018E74       SelectItems
+ 0001:0000DCAC       SendEvent
+ 0001:000007A4       SendMessage
+ 0001:000007AC       SetActiveWindow
+ 0001:00018D48       SetInitialValues
+ 0001:000173A0       SetInitialValues
+ 0001:000184D4       SetInitialValues
+ 0001:00018F34       SetInitialValues
+ 0001:000122D8       SetPropertiesAndEvents
+ 0001:00000B2C       ShellAPI
+ 0001:00000A4C       ShlObj
+ 0002:000000D4       ShortCuts
+ 0001:00015934       ShowAndMove
+ 0001:00018230       SizeSub
+ 0001:000180F0       SizeTop
+ 0001:00012D08       SkipComment
+ 0001:00012CCC       SkipToEOL
+ 0001:00013514       SkipToMenuStart
+ 0001:0000046C       SysInit
+ 0001:0000782C       TAlignProperty.GetValues
+ 0001:000069A4       TCaptionProperty.GetAttributes
+ 0001:0000C594       TClxDesignSurface.Activate
+ 0001:0000C5C0       TClxDesignSurface.AppViewAsText
+ 0001:0000C5D4       TClxDesignSurface.BeginDragging
+ 0001:0000D2BC       TClxDesignSurface.BuildLocalMenu
+ 0001:0000D3B4       TClxDesignSurface.CheckContainer
+ 0001:0000D4C8       TClxDesignSurface.ComponentVerb
+ 0001:0000EB7C       TClxDesignSurface.ControlPaintRequest
+ 0001:0000D548       TClxDesignSurface.Create
+ 0001:0000D700       TClxDesignSurface.CursorPosition
+ 0001:0000D734       TClxDesignSurface.DesignerToGlobal
+ 0001:0000D750       TClxDesignSurface.Destroy
+ 0001:0000C5C8       TClxDesignSurface.DoViewAsText
+ 0001:0000D794       TClxDesignSurface.FindContainer
+ 0001:0000D8EC       TClxDesignSurface.FindNextItem
+ 0001:0000D9E8       TClxDesignSurface.FlipContainers
+ 0001:0000DA50       TClxDesignSurface.Focus
+ 0001:0000DA5C       TClxDesignSurface.GetCustomForm
+ 0001:0000DA60       TClxDesignSurface.GetGridOffset
+ 0001:0000DAB4       TClxDesignSurface.GetOffset
+ 0001:0000DAC0       TClxDesignSurface.GetShiftState
+ 0001:0000DACC       TClxDesignSurface.GlobalToDesigner
+ 0001:0000DAE8       TClxDesignSurface.GrabHandleMouseDown
+ 0001:0000D420       TClxDesignSurface.InstanceInserted
+ 0001:0000D494       TClxDesignSurface.InstanceRemoved
+ 0001:0000DB80       TClxDesignSurface.InvokeLocalMenu
+ 0001:0000E464       TClxDesignSurface.IsDesignEvent
+ 0001:0000E614       TClxDesignSurface.IsModifiableFrame
+ 0001:0000E64C       TClxDesignSurface.ItemFor
+ 0001:0000E6FC       TClxDesignSurface.LocalPopup
+ 0001:0000E764       TClxDesignSurface.Modified
+ 0001:0000E774       TClxDesignSurface.ModuleVerb
+ 0001:0000E78C       TClxDesignSurface.MoveContainersFront
+ 0001:0000E89C       TClxDesignSurface.Notification
+ 0001:0000E978       TClxDesignSurface.PaintGrid
+ 0001:0000EC64       TClxDesignSurface.ResyncContainers
+ 0001:0000EC90       TClxDesignSurface.SelectionVerb
+ 0001:0000ECF0       TClxDesignSurface.SendKey
+ 0001:0000ED20       TClxDesignSurface.SendMouseDown
+ 0001:0000EDA0       TClxDesignSurface.SetOptions
+ 0001:0000EE18       TClxDesignSurface.Update
+ 0001:0000EE88       TClxDesignSurface.UpdateSelection
+ 0001:0000EE8C       TClxDesignSurface.ValidateRename
+ 0001:00010010       TClxDesignWindow.Activated
+ 0001:00010014       TClxDesignWindow.ActivateInspector
+ 0001:00010078       TClxDesignWindow.ClipboardComponents
+ 0001:000101E4       TClxDesignWindow.ComponentRead
+ 0001:000100AC       TClxDesignWindow.CopyComponents
+ 0001:0000FEF8       TClxDesignWindow.Create
+ 0001:00010368       TClxDesignWindow.DesignerClosed
+ 0001:0001038C       TClxDesignWindow.DesignerOpened
+ 0001:0000FFD8       TClxDesignWindow.Destroy
+ 0001:00010194       TClxDesignWindow.EditAction
+ 0001:00010198       TClxDesignWindow.ForceActive
+ 0001:00010188       TClxDesignWindow.GetEditState
+ 0001:00010360       TClxDesignWindow.ItemDeleted
+ 0001:00010364       TClxDesignWindow.ItemInserted
+ 0001:000103EC       TClxDesignWindow.ItemsModified
+ 0001:00010274       TClxDesignWindow.PasteComponents
+ 0001:000101F0       TClxDesignWindow.ReaderSetName
+ 0001:00010334       TClxDesignWindow.SelectionChanged
+ 0001:00010338       TClxDesignWindow.SetSelection
+ 0001:000101AC       TClxDesignWindow.WindowHide
+ 0001:000101C8       TClxDesignWindow.WindowShow
+ 0001:0000C324       TClxDragBoxes.Create
+ 0001:0000C400       TClxDragBoxes.Destroy
+ 0001:0000C458       TClxDragBoxes.DrawBox
+ 0001:000036A4       TClxImageListEditor.AddBitmap
+ 0001:000036C8       TClxImageListEditor.AddClick
+ 0001:00003F14       TClxImageListEditor.AddColor
+ 0001:00004830       TClxImageListEditor.ApplyClick
+ 0001:0000465C       TClxImageListEditor.Center
+ 0001:000051A4       TClxImageListEditor.CenterImageList
+ 0001:0000544C       TClxImageListEditor.CenterReplace
+ 0001:000055E4       TClxImageListEditor.CenterReplaceMasked
+ 0001:00004D08       TClxImageListEditor.ClearAllImages
+ 0001:00004990       TClxImageListEditor.ClearBitmap
+ 0001:00003E08       TClxImageListEditor.ClearClick
+ 0001:000042E4       TClxImageListEditor.ClearWithFill
+ 0001:00003448       TClxImageListEditor.CreateImgListEditor
+ 0001:00004368       TClxImageListEditor.Crop
+ 0001:00003DC4       TClxImageListEditor.DeleteClick
+ 0001:00004BD4       TClxImageListEditor.DeleteSelectedImages
+ 0001:000056F0       TClxImageListEditor.DoImageListViewChange
+ 0001:000059E8       TClxImageListEditor.ExportBtnClick
+ 0001:00004DD0       TClxImageListEditor.FocusImage
+ 0001:00003E44       TClxImageListEditor.FormCreate
+ 0001:00003F44       TClxImageListEditor.FormDestroy
+ 0001:00004350       TClxImageListEditor.GetImageInfo
+ 0001:00004334       TClxImageListEditor.GetIndex
+ 0001:00005720       TClxImageListEditor.HelpClick
+ 0001:00004DC8       TClxImageListEditor.ImageViewChange
+ 0001:00005B1C       TClxImageListEditor.ImageViewEdited
+ 0001:00004E60       TClxImageListEditor.ImageViewKeyDown
+ 0001:00005AE0       TClxImageListEditor.ImageViewSelectItem
+ 0001:00005B08       TClxImageListEditor.MainImageMouseDown
+ 0001:0000590C       TClxImageListEditor.MainImageMouseMove
+ 0001:00004E94       TClxImageListEditor.MoveImage
+ 0001:0000480C       TClxImageListEditor.OptionsGroupClick
+ 0001:00004A8C       TClxImageListEditor.Replace
+ 0001:00004B30       TClxImageListEditor.ReplaceMasked
+ 0001:00003F88       TClxImageListEditor.SelectImage
+ 0001:00004FDC       TClxImageListEditor.SetImageColor
+ 0001:00004F1C       TClxImageListEditor.SetImageOperation
+ 0001:0000348C       TClxImageListEditor.SetStates
+ 0001:000044BC       TClxImageListEditor.Stretch
+ 0001:000050DC       TClxImageListEditor.StretchImageList
+ 0001:0000526C       TClxImageListEditor.StretchReplace
+ 0001:000053AC       TClxImageListEditor.StretchReplaceMasked
+ 0001:000048C0       TClxImageListEditor.TransparentColorChange
+ 0001:00004A04       TClxImageListEditor.TransparentColorExit
+ 0001:0000350C       TClxImageListEditor.UpdateImageView
+ 0001:0000572C       TClxImageListEditor.UpdatePickColor
+ 0001:0001A5AC       TClxMenuBuilder.Activate
+ 0001:00015058       TClxMenuBuilder.ActiveChanged
+ 0001:00015098       TClxMenuBuilder.AdjustScrollBars
+ 0001:000151E0       TClxMenuBuilder.BuildCaptionFromPieces
+ 0001:000161A0       TClxMenuBuilder.ChangeWorkMenu
+ 0001:00015314       TClxMenuBuilder.CheckDragAcceptance
+ 0001:0001539C       TClxMenuBuilder.ClearDragState
+ 0001:000153C4       TClxMenuBuilder.ClearWorkMenu
+ 0001:000164E4       TClxMenuBuilder.Copy
+ 0001:0001A7F8       TClxMenuBuilder.CreateSubmenu1Click
+ 0001:000164D0       TClxMenuBuilder.Cut
+ 0001:000165D4       TClxMenuBuilder.Delete
+ 0001:0001A7F0       TClxMenuBuilder.DeleteItemClick
+ 0001:0001669C       TClxMenuBuilder.DesignerClosed
+ 0001:000166C8       TClxMenuBuilder.DesignerOpened
+ 0001:00014E68       TClxMenuBuilder.Destroy
+ 0001:0001A4E8       TClxMenuBuilder.DoActivate
+ 0001:0001661C       TClxMenuBuilder.EditAction
+ 0001:00014ED4       TClxMenuBuilder.FormActivate
+ 0001:00014EC8       TClxMenuBuilder.FormClose
+ 0001:00019F7C       TClxMenuBuilder.FormCreate
+ 0001:00015040       TClxMenuBuilder.FormDeactivate
+ 0001:0001A158       TClxMenuBuilder.FormDestroy
+ 0001:00015048       TClxMenuBuilder.FormMouseDown
+ 0001:00014E90       TClxMenuBuilder.FormResize
+ 0001:000154A0       TClxMenuBuilder.GetActiveItem
+ 0001:000154C0       TClxMenuBuilder.GetANewMenu
+ 0001:000163F0       TClxMenuBuilder.GetEditState
+ 0001:00015570       TClxMenuBuilder.GetScrollVisibility
+ 0001:0001550C       TClxMenuBuilder.GetSubWinForItem
+ 0001:00016654       TClxMenuBuilder.GetWindowForItem
+ 0001:000155C4       TClxMenuBuilder.HandleAltF10
+ 0001:0001A7AC       TClxMenuBuilder.InsertItemClick
+ 0001:0001A83C       TClxMenuBuilder.InsertResourceItemClick
+ 0001:00015664       TClxMenuBuilder.IsFirstWindowHome
+ 0001:00015648       TClxMenuBuilder.IsInDDList
+ 0001:000166D0       TClxMenuBuilder.ItemDeleted
+ 0001:000156B0       TClxMenuBuilder.ItemGotFocus
+ 0001:00016758       TClxMenuBuilder.ItemInserted
+ 0001:0001675C       TClxMenuBuilder.ItemsModified
+ 0001:0001A39C       TClxMenuBuilder.MnuBuildPopupPopup
+ 0001:00015A7C       TClxMenuBuilder.NewPopup
+ 0001:00016164       TClxMenuBuilder.Notification
+ 0001:00016548       TClxMenuBuilder.Paste
+ 0001:0001631C       TClxMenuBuilder.PerformUpdate
+ 0001:0001A358       TClxMenuBuilder.PopupMenu1DeleteTemplatesClick
+ 0001:0001A250       TClxMenuBuilder.PopupMenu1InsertFromTemplateClick
+ 0001:0001A310       TClxMenuBuilder.PopupMenu1SaveAsTemplateClick
+ 0001:0001A190       TClxMenuBuilder.PopupMenu1SelectMenuClick
+ 0001:00015B78       TClxMenuBuilder.ReConstructDDList
+ 0001:00015E88       TClxMenuBuilder.ResetAllSelections
+ 0001:0001A8F0       TClxMenuBuilder.SelectionChanged
+ 0001:00015EF8       TClxMenuBuilder.SetDragState
+ 0001:00015EC4       TClxMenuBuilder.SetFocusedControl
+ 0001:00015FA8       TClxMenuBuilder.SetMenu
+ 0001:00016194       TClxMenuBuilder.SetWorkMenu
+ 0001:00015E3C       TClxMenuBuilder.SyncSelection
+ 0001:0001AB34       TClxMenuBuilder.UpdatePropertyInspector
+ 0001:0001A6AC       TClxMenuEditor.Edit
+ 0001:0001A778       TClxMenuEditor.ExecuteVerb
+ 0001:0001A784       TClxMenuEditor.GetVerb
+ 0001:0001A7A4       TClxMenuEditor.GetVerbCount
+ 0001:0001A608       TClxMenuItemProperty.Edit
+ 0001:0001A5FC       TClxMenuItemProperty.GetAttributes
+ 0001:0001A5CC       TClxMenuItemProperty.GetValue
+ 0001:00013C00       TClxMenuSelectDialog.GetData
+ 0001:00013BE8       TClxMenuSelectDialog.HelpButtonClick
+ 0001:00013C48       TClxMenuSelectDialog.SetData
+ 0001:000111F4       TClxMenuTemplate.ComponentRead
+ 0001:00010E1C       TClxMenuTemplate.Create
+ 0001:000112BC       TClxMenuTemplate.GetChildOwner
+ 0001:000112A8       TClxMenuTemplate.GetChildren
+ 0001:00010E78       TClxMenuTemplate.LoadFromClipboard
+ 0001:00011148       TClxMenuTemplate.ReaderSetName
+ 0001:00011258       TClxMenuTemplate.ReadState
+ 0001:00010F18       TClxMenuTemplate.ReadStream
+ 0001:00010E60       TClxMenuTemplate.SetItem
+ 0001:000112C0       TClxMenuTemplateManager.Create
+ 0001:000112FC       TClxMenuTemplateManager.Destroy
+ 0001:000114C4       TClxMenuTemplateManager.DoesTemplateExist
+ 0001:00011324       TClxMenuTemplateManager.GetChildren
+ 0001:00011378       TClxMenuTemplateManager.GetTemplate
+ 0001:000113B4       TClxMenuTemplateManager.GetTemplatesSize
+ 0001:000113BC       TClxMenuTemplateManager.IsSpaceAvailable
+ 0001:00011438       TClxMenuTemplateManager.Notification
+ 0001:00011454       TClxMenuTemplateManager.StreamTemplatesOut
+ 0001:000113D0       TClxMenuTemplateManager.TemplateSaveAs
+ 0001:00011E08       TClxMtDeDlg.HelpButtonClick
+ 0001:00011DFC       TClxMtDeDlg.OkButtonClick
+ 0001:00011E20       TClxMtDeDlg.SetData
+ 0001:0001211C       TClxMtInDlg.GetData
+ 0001:00012104       TClxMtInDlg.HelpButtonClick
+ 0001:000120F8       TClxMtInDlg.OkButtonClick
+ 0001:00012164       TClxMtInDlg.SetData
+ 0001:00011A60       TClxMtSvDlg.GetData
+ 0001:00011B8C       TClxMtSvDlg.HelpButtonClick
+ 0001:000119DC       TClxMtSvDlg.SelectionBoxClick
+ 0001:00011AB4       TClxMtSvDlg.SetData
+ 0001:00010754       TClxToolbarDesignWindow.GetLargeButtons
+ 0001:00010768       TClxToolbarDesignWindow.ResizeButtons
+ 0001:0001083C       TClxToolbarDesignWindow.SetLargeButtons
+ 0001:00010848       TClxToolbarDesignWindow.Splitter1CanResize
+ 0001:00010888       TClxToolbarDesignWindow.Splitter1Moved
+ 0001:000108A4       TClxToolbarDesignWindow.Textlabels1Click
+ 0001:000108C8       TClxToolbarDesignWindow.TextLabelsCmdExecute
+ 0001:000108DC       TClxToolbarDesignWindow.TextLabelsCmdUpdate
+ 0001:00010900       TClxToolbarDesignWindow.ToolbarCmdExecute
+ 0001:0001095C       TClxToolbarDesignWindow.ToolbarCmdUpdate
+ 0001:00006584       TColorProperty.Edit
+ 0001:00006610       TColorProperty.GetAttributes
+ 0001:0000661C       TColorProperty.GetValue
+ 0001:00006634       TColorProperty.GetValues
+ 0001:00006648       TColorProperty.SetValue
+ 0001:0000B5C8       TComponentObserver.Create
+ 0001:0000B61C       TComponentObserver.Notification
+ 0001:0000A890       TComponentRootItem.Create
+ 0001:0000A918       TComponentRootItem.GetBoundsRect
+ 0001:0000A910       TComponentRootItem.GetControl
+ 0001:0000A914       TComponentRootItem.GetWidgetControl
+ 0001:0000A92C       TComponentRootItem.GlobalToLocal
+ 0001:0000A948       TComponentRootItem.Invalidate
+ 0001:0000A954       TComponentRootItem.IsContainer
+ 0001:0000A958       TComponentRootItem.LocalToGlobal
+ 0001:0000A974       TComponentRootItem.SetParent
+ 0001:0000A978       TComponentRootItem.Show
+ 0001:0000AC90       TComponentToolWindow.Create
+ 0001:0000AE44       TComponentToolWindow.EventFilter
+ 0001:0000ACD8       TComponentToolWindow.GetItem
+ 0001:0000A738       TContainedComponentItem.Create
+ 0001:0000A7C4       TContainedComponentItem.GetBoundsRect
+ 0001:0000A7D8       TContainedComponentItem.GetExtendedRect
+ 0001:0000A834       TContainedComponentItem.GetParent
+ 0001:0000A848       TContainedComponentItem.GlobalToLocal
+ 0001:0000A85C       TContainedComponentItem.Invalidate
+ 0001:0000A868       TContainedComponentItem.LocalToGlobal
+ 0001:0000A87C       TContainedComponentItem.SetBoundsRect
+ 0001:0000A888       TContainedComponentItem.SetParent
+ 0001:0000A88C       TContainedComponentItem.Show
+ 0001:0000B654       TContainer.Create
+ 0001:0000B740       TContainer.Destroy
+ 0001:0000BC34       TContainer.EventFilter
+ 0001:0000B7E0       TContainer.GetBoundsRect
+ 0001:0000BC7C       TContainer.GetContainer
+ 0001:0000B7F8       TContainer.GetLeft
+ 0001:0000B7F0       TContainer.GetShowCaption
+ 0001:0000B7B8       TContainer.Position
+ 0001:0000B810       TContainer.SetBoundsRect
+ 0001:0000B8F0       TContainer.SetLeft
+ 0001:0000B88C       TContainer.SetShowCaption
+ 0001:0000B790       TContainer.Sync
+ 0001:0000B7A8       TContainer.Update
+ 0001:0000AE70       TContainerCaption.Create
+ 0001:0000AEE0       TContainerCaption.Destroy
+ 0001:0000B0C4       TContainerCaption.EventFilter
+ 0001:0000B1A8       TContainerCaption.GetContainer
+ 0001:0000B0EC       TContainerCaption.Position
+ 0001:0000B194       TContainerCaption.Sync
+ 0001:0000AF10       TContainerCaption.Update
+ 0001:0000B390       TContainerIcon.Create
+ 0001:0000B3E8       TContainerIcon.Destroy
+ 0001:0000B424       TContainerIcon.GetBitmap
+ 0001:0000B428       TContainerIcon.GetID
+ 0001:0000B42C       TContainerIconMgr.Create
+ 0001:0000B470       TContainerIconMgr.FindIcon
+ 0001:0000B4C0       TContainerIconMgr.GetClassIcon
+ 0001:0000A2E8       TControlItem.Create
+ 0001:0000A330       TControlItem.GetBoundsRect
+ 0001:0000A344       TControlItem.GetControl
+ 0001:0000A348       TControlItem.GetParent
+ 0001:0000A38C       TControlItem.GlobalToLocal
+ 0001:0000A3A8       TControlItem.Invalidate
+ 0001:0000A3B8       TControlItem.LocalToGlobal
+ 0001:0000A3D4       TControlItem.SetBoundsRect
+ 0001:0000A3E0       TControlItem.SetParent
+ 0001:0000A408       TControlItem.Show
+ 0001:0000A414       TControlItem.ZOrder
+ 0001:0001B4B0       TControlSprig.Create
+ 0001:0001B4F4       TControlSprig.DragDropTo
+ 0001:0001B52C       TControlSprig.DragOverTo
+ 0001:0001B564       TControlSprig.PaletteOverTo
+ 0001:00006678       TCursorProperty.GetAttributes
+ 0001:00006684       TCursorProperty.GetValue
+ 0001:0000669C       TCursorProperty.GetValues
+ 0001:000066B0       TCursorProperty.SetValue
+ 0001:0001B89C       TCustomFormRootSprig.Create
+ 0001:0000FA30       TDataModuleCustomModule.CreateDesignerForm
+ 0001:0000FA5C       TDataModuleCustomModule.DesignClass
+ 0001:0000FA64       TDataModuleCustomModule.ValidateComponentClass
+ 0001:0001B8E0       TDataModuleRootSprig.AcceptsClass
+ 0001:0001B910       TDataModuleRootSprig.Create
+ 0001:0001B954       TDataModuleRootSprig.DragOver
+ 0001:0001B994       TDataModuleRootSprig.PaletteOver
+ 0001:0000F690       TDataModuleSurface.BoundsChanged
+ 0001:0000F6A8       TDataModuleSurface.Create
+ 0001:0000F764       TDataModuleSurface.DesignerClosed
+ 0001:0000F78C       TDataModuleSurface.DesignerOpened
+ 0001:0000F7AC       TDataModuleSurface.Destroy
+ 0001:0000F98C       TDataModuleSurface.FormResize
+ 0001:0000F7D4       TDataModuleSurface.GetContainer
+ 0001:0000F7DC       TDataModuleSurface.ItemDeleted
+ 0001:0000F7E0       TDataModuleSurface.ItemInserted
+ 0001:0000F7E4       TDataModuleSurface.ItemsModified
+ 0001:0000F7F4       TDataModuleSurface.SelectionChanged
+ 0001:0000F7F8       TDataModuleSurface.UpdateDesigner
+ 0001:0000A984       TDesignerToolWindow.Create
+ 0001:0000AA2C       TDesignerToolWindow.CreateHandle
+ 0001:0000A9D4       TDesignerToolWindow.Destroy
+ 0001:0000AC6C       TDesignerToolWindow.DestroyedHook
+ 0001:0000AC60       TDesignerToolWindow.EnsureHandle
+ 0001:0000ABE4       TDesignerToolWindow.EventFilter
+ 0001:0000AAEC       TDesignerToolWindow.Invalidate
+ 0001:0000AB34       TDesignerToolWindow.MainEventFilter
+ 0001:0000AAFC       TDesignerToolWindow.Sync
+ 0001:00006F68       TFileNameProperty.Edit
+ 0001:00006FA8       TFileNameProperty.GetAttributes
+ 0001:00006F38       TFileNameProperty.GetDialogOptions
+ 0001:00006778       TFontNameProperty.GetAttributes
+ 0001:00006784       TFontNameProperty.GetValues
+ 0001:000066E0       TFontProperty.Edit
+ 0001:0000676C       TFontProperty.GetAttributes
+ 0001:0001B9C4       TFrameSprig.Create
+ 0001:0001BA0C       TFrameSprig.FigureChildren
+ 0001:0000BC80       TGrabHandle.Create
+ 0001:0000BE1C       TGrabHandle.EventFilter
+ 0001:0000BE68       TGrabHandle.Hide
+ 0001:0000BF04       TGrabHandle.Position
+ 0001:0000BF18       TGrabHandle.Show
+ 0001:0000BE74       TGrabHandle.Update
+ 0001:0000C04C       TGrabHandles.BottomWidget
+ 0001:0000BF34       TGrabHandles.Create
+ 0001:0000BFAC       TGrabHandles.Destroy
+ 0001:0000C0E0       TGrabHandles.GetParentOf
+ 0001:0000BFF4       TGrabHandles.GetSelection
+ 0001:0000C008       TGrabHandles.Hide
+ 0001:0000C030       TGrabHandles.Invalidate
+ 0001:0000C228       TGrabHandles.SetActive
+ 0001:0000C05C       TGrabHandles.SetSelection
+ 0001:0000C238       TGrabHandles.Show
+ 0001:0000C19C       TGrabHandles.SyncParent
+ 0001:0000C250       TGrabHandles.Update
+ 0001:00006FBC       THTMLFileNameProperty.GetDialogOptions
+ 0001:000032A0       TImageInfo.Center
+ 0001:00003300       TImageInfo.Change
+ 0001:00003190       TImageInfo.Create
+ 0001:00003270       TImageInfo.Crop
+ 0001:00003220       TImageInfo.Destroy
+ 0001:00003264       TImageInfo.GetIndex
+ 0001:000032B8       TImageInfo.SelectImage
+ 0001:000032F0       TImageInfo.SetFillColor
+ 0001:000032D0       TImageInfo.SetOperation
+ 0001:000032E0       TImageInfo.SetTransparentColor
+ 0001:00003288       TImageInfo.Stretch
+ 0001:000069C4       TImageListEditor.Edit
+ 0001:00006A44       TImageListEditor.ExecuteVerb
+ 0001:00006AC4       TImageListEditor.GetVerb
+ 0001:00006AD8       TImageListEditor.GetVerbCount
+ 0001:000022F0       TLinkAction.Create
+ 0001:00002424       TLinkAction.Destroy
+ 0001:00002454       TLinkAction.Execute
+ 0001:0000245C       TLinkAction.Update
+ 0001:0000246C       TLinkActionLink.Create
+ 0001:000024AC       TLinkActionLink.Destroy
+ 0001:000024DC       TLinkActionLink.IsCaptionLinked
+ 0001:000024E0       TLinkActionLink.IsCheckedLinked
+ 0001:000024E4       TLinkActionLink.IsEnabledLinked
+ 0001:000024E8       TLinkActionLink.IsHelpContextLinked
+ 0001:000024EC       TLinkActionLink.IsHintLinked
+ 0001:000024F0       TLinkActionLink.IsImageIndexLinked
+ 0001:000024F4       TLinkActionLink.IsShortCutLinked
+ 0001:000024F8       TLinkActionLink.IsVisibleLinked
+ 0001:000024FC       TLinkActionLink.SetCaption
+ 0001:0000254C       TLinkActionLink.SetChecked
+ 0001:00002558       TLinkActionLink.SetEnabled
+ 0001:00002564       TLinkActionLink.SetGroupIndex
+ 0001:00002568       TLinkActionLink.SetHelpContext
+ 0001:00002574       TLinkActionLink.SetHint
+ 0001:000025C4       TLinkActionLink.SetImageIndex
+ 0001:000025C8       TLinkActionLink.SetShortCut
+ 0001:000025E4       TLinkActionLink.SetVisible
+ 0001:000002A0       TlsAlloc
+ 0002:00001014       tlsBuffer
+ 0001:000002A8       TlsFree
+ 0001:000002B0       TlsGetValue
+ 0002:00001004       TlsIndex
+ 0002:FFBE2000       TlsLast
+ 0002:00000018       TlsProc
+ 0001:000002B8       TlsSetValue
+ 0001:000087C8       TMainMenuWrapper.Create
+ 0001:0000A2D4       TMarkedItem.GetMarked
+ 0001:0000A2D8       TMarkedItem.SetMarked
+ 0001:00008254       TMenuItemsWrapper.AddItem
+ 0001:0000822C       TMenuItemsWrapper.AddItem
+ 0001:00008290       TMenuItemsWrapper.AddLine
+ 0001:000082AC       TMenuItemsWrapper.Clear
+ 0001:000082B8       TMenuItemsWrapper.Count
+ 0001:000082C4       TMenuItemsWrapper.Create
+ 0001:00008300       TMenuItemsWrapper.Find
+ 0001:00008328       TMenuItemsWrapper.FindByName
+ 0001:0000836C       TMenuItemsWrapper.GetComponent
+ 0001:00008370       TMenuItemsWrapper.GetItem
+ 0001:00008390       TMenuItemsWrapper.InsertItem
+ 0001:000084D0       TMenuItemsWrapper.InsertItem
+ 0001:00008444       TMenuItemsWrapper.InsertItem
+ 0001:00008408       TMenuItemsWrapper.InsertItem
+ 0001:000083B4       TMenuItemsWrapper.InsertItem
+ 0001:00008514       TMenuItemsWrapper.InsertLine
+ 0001:00008530       TMenuItemsWrapper.InsertLine
+ 0001:00008574       TMenuItemsWrapper.SameAs
+ 0001:000195AC       TMenuItemWin.Create
+ 0001:000196D0       TMenuItemWin.Destroy
+ 0001:0001971C       TMenuItemWin.DoSetColor
+ 0001:00019728       TMenuItemWin.GetCaptionExtent
+ 0001:00019850       TMenuItemWin.GetMenuItem
+ 0001:00019C78       TMenuItemWin.GetShortCutExtent
+ 0001:00019890       TMenuItemWin.MenuOwner
+ 0001:000198A0       TMenuItemWin.Notification
+ 0001:00019AE8       TMenuItemWin.Paint
+ 0001:00019CEC       TMenuItemWin.SetExtentValues
+ 0001:0001A5B4       TMenuItemWin.SetFocus
+ 0001:00019E54       TMenuItemWin.SetMenuItem
+ 0001:00019EEC       TMenuItemWin.SetSelected
+ 0001:000085F8       TMenuItemWrapper.GetCaption
+ 0001:00008610       TMenuItemWrapper.GetChecked
+ 0001:00008618       TMenuItemWrapper.GetEnabled
+ 0001:00008620       TMenuItemWrapper.GetGroupIndex
+ 0001:00008628       TMenuItemWrapper.GetHelpContext
+ 0001:00008630       TMenuItemWrapper.GetHint
+ 0001:00008648       TMenuItemWrapper.GetRadioItem
+ 0001:00008650       TMenuItemWrapper.GetShortCut
+ 0001:00008660       TMenuItemWrapper.GetTag
+ 0001:00008668       TMenuItemWrapper.GetVisible
+ 0001:00008670       TMenuItemWrapper.HasParent
+ 0001:00008680       TMenuItemWrapper.IsLine
+ 0001:0000868C       TMenuItemWrapper.MenuIndex
+ 0001:00008698       TMenuItemWrapper.Name
+ 0001:000086B0       TMenuItemWrapper.Parent
+ 0001:000086E0       TMenuItemWrapper.SetCaption
+ 0001:000086EC       TMenuItemWrapper.SetChecked
+ 0001:000086F8       TMenuItemWrapper.SetEnabled
+ 0001:00008704       TMenuItemWrapper.SetGroupIndex
+ 0001:00008710       TMenuItemWrapper.SetHelpContext
+ 0001:0000871C       TMenuItemWrapper.SetHint
+ 0001:00008734       TMenuItemWrapper.SetRadioItem
+ 0001:00008740       TMenuItemWrapper.SetShortCut
+ 0001:0000875C       TMenuItemWrapper.SetTag
+ 0001:00008764       TMenuItemWrapper.SetVisible
+ 0001:00012984       TMenuParser.Create
+ 0001:000129F0       TMenuParser.Destroy
+ 0001:00012A2C       TMenuParser.Error
+ 0001:00012A34       TMenuParser.ErrorStr
+ 0001:00012A74       TMenuParser.NextToken
+ 0001:00012C04       TMenuParser.ReadBuffer
+ 0001:00012DFC       TMenuParser.SkipBlanks
+ 0001:00012E80       TMenuParser.TokenString
+ 0001:00012EAC       TMenuParser.TokenSymbolIs
+ 0001:000189EC       TMenuWin.AdjustAfterParentSize
+ 0001:0001880C       TMenuWin.AdjustItemSizes
+ 0001:000167F4       TMenuWin.Create
+ 0001:00016990       TMenuWin.CreateAndPositionNewItem
+ 0001:00016ADC       TMenuWin.FindControlIndex
+ 0001:00016B14       TMenuWin.GetActiveItem
+ 0001:00016B64       TMenuWin.GetItemsSelected
+ 0001:00016B9C       TMenuWin.GetLongestCaption
+ 0001:00016BEC       TMenuWin.GetLongestShortCut
+ 0001:000194DC       TMenuWin.GetMaxPixmapWidth
+ 0001:00016CA0       TMenuWin.GetWindowForItem
+ 0001:00016C24       TMenuWin.HideNextLevels
+ 0001:00016C58       TMenuWin.InitDragDrop
+ 0001:00016D2C       TMenuWin.InsertMenuTemplate
+ 0001:00016E60       TMenuWin.IsAncestorLevel
+ 0001:00016E84       TMenuWin.IsLastItemEmpty
+ 0001:00016EC0       TMenuWin.IsParentLevel
+ 0001:00016EF0       TMenuWin.ItemDblClick
+ 0001:00016F7C       TMenuWin.ItemGotFocus
+ 0001:00017038       TMenuWin.ItemKeyDown
+ 0001:00017138       TMenuWin.ItemKeyPress
+ 0001:000173FC       TMenuWin.ItemOnMouseDown
+ 0001:000171D4       TMenuWin.ItemOnMouseUp
+ 0001:000190CC       TMenuWin.MenuDragDrop
+ 0001:00019198       TMenuWin.MenuDragOver
+ 0001:0001927C       TMenuWin.MenuEndDrag
+ 0001:00017460       TMenuWin.MenuInvalidNotification
+ 0001:0001945C       TMenuWin.MenuStartDrag
+ 0001:00017490       TMenuWin.NavItemIncrement
+ 0001:00017608       TMenuWin.NavItemLR
+ 0001:0001773C       TMenuWin.NavItemUD
+ 0001:00017838       TMenuWin.NewMenuItem
+ 0001:0001778C       TMenuWin.NewSubMenu
+ 0001:000194AC       TMenuWin.Notification
+ 0001:000168F0       TMenuWin.Paint
+ 0001:00018B20       TMenuWin.PositionAfterParentSize
+ 0001:00017CBC       TMenuWin.RemoveMenuItem
+ 0001:00017E34       TMenuWin.ResetAllSelections
+ 0001:00017E6C       TMenuWin.SetItemProperties
+ 0001:00017EF4       TMenuWin.SetPosition
+ 0001:00018050       TMenuWin.SetWorkMenu
+ 0001:00018300       TMenuWin.SizeItemWindows
+ 0001:00018328       TMenuWin.StreamSelections
+ 0001:00015D4C       TMenuWin.SyncSelection
+ 0001:000183DC       TMenuWin.TreatAsMenuBar
+ 0001:00018640       TMenuWin.UpdateMenuAssignments
+ 0001:00018D64       TMenuWin.UpdateNotification
+ 0001:00018720       TMenuWin.UpdatePropertyInspector
+ 0001:000187AC       TMenuWin.VerifyWindowsMatchMenu
+ 0001:00008770       TMenuWrapper.Create
+ 0001:000087AC       TMenuWrapper.GetComponent
+ 0001:000087B0       TMenuWrapper.Items
+ 0001:00010A10       TModalHooks.ClxModalBegin
+ 0001:00010A4C       TModalHooks.ClxModalEnd
+ 0001:00006E88       TModalResultProperty.GetAttributes
+ 0001:00006E94       TModalResultProperty.GetValue
+ 0001:00006EC4       TModalResultProperty.GetValues
+ 0001:00006EE8       TModalResultProperty.SetValue
+ 0001:0000A248       TNoClipCanvas.BeginPainting
+ 0001:0000A438       TNonControlItem.Create
+ 0001:0000A4D8       TNonControlItem.FlipChildren
+ 0001:0000A478       TNonControlItem.GetBoundsRect
+ 0001:0000A4D0       TNonControlItem.GetMarked
+ 0001:0000A48C       TNonControlItem.GetParent
+ 0001:0000A498       TNonControlItem.GlobalToLocal
+ 0001:0000A4AC       TNonControlItem.LocalToGlobal
+ 0001:0000A550       TNonControlItem.Selectable
+ 0001:0000A4C0       TNonControlItem.SetBoundsRect
+ 0001:0000A4D4       TNonControlItem.SetMarked
+ 0001:0000A4C4       TNonControlItem.SetParent
+ 0001:0000A4C8       TNonControlItem.Show
+ 0001:0000A4DC       TNonControlItem.ValidateDeletable
+ 0001:0000A4CC       TNonControlItem.ZOrder
+ 0001:00008800       TPopupMenuWrapper.Create
+ 0001:00008838       TPopupMenuWrapper.Popup
+ 0001:00008848       TPopupMenuWrapper.PopupComponent
+ 0001:0000F1AC       TQtKeyForwarder.KeyEventFilter
+ 0001:000147F8       TransientMenuItem
+ 0001:0000DD04       TranslatePoint
+ 0001:0000F094       TryShortCut
+ 0001:00006800       TShortCutProperty.GetAttributes
+ 0001:0000680C       TShortCutProperty.GetValue
+ 0001:00006878       TShortCutProperty.GetValues
+ 0001:00006908       TShortCutProperty.SetValue
+ 0001:00006998       TTabOrderProperty.GetAttributes
+ 0001:0001C490       TWidgetControlCustomModule.CreateDesignerForm
+ 0001:0001BF9C       TWidgetControlForm.AfterConstruction
+ 0001:0001BEFC       TWidgetControlForm.Create
+ 0001:0001C440       TWidgetControlForm.DesignerClosed
+ 0001:0001C444       TWidgetControlForm.DesignerOpened
+ 0001:0001BF64       TWidgetControlForm.Destroy
+ 0001:0001C370       TWidgetControlForm.DragEnd
+ 0001:0001C2F4       TWidgetControlForm.DragMove
+ 0001:0001C2AC       TWidgetControlForm.DragStart
+ 0001:0001C1E0       TWidgetControlForm.FormResize
+ 0001:0001BFB4       TWidgetControlForm.Initialize
+ 0001:0001C47C       TWidgetControlForm.ItemDeleted
+ 0001:0001C480       TWidgetControlForm.ItemInserted
+ 0001:0001C484       TWidgetControlForm.ItemsModified
+ 0001:0001C10C       TWidgetControlForm.Modified
+ 0001:0001C48C       TWidgetControlForm.SelectionChanged
+ 0001:0001C380       TWidgetControlForm.SizerMouseDown
+ 0001:0001C3DC       TWidgetControlForm.SizerMouseMove
+ 0001:0001C434       TWidgetControlForm.SizerMouseUp
+ 0001:0001C220       TWidgetControlForm.UpdateSizers
+ 0001:0000A554       TWidgetControlItem.Contains
+ 0001:0000A5DC       TWidgetControlItem.Create
+ 0001:0000A620       TWidgetControlItem.FlipChildren
+ 0001:0000A634       TWidgetControlItem.GetChildCount
+ 0001:0000A640       TWidgetControlItem.GetChildren
+ 0001:0000A664       TWidgetControlItem.GetWidgetControl
+ 0001:0000A714       TWidgetControlItem.HasSelectableChildren
+ 0001:0000A6F0       TWidgetControlItem.Invalidate
+ 0001:0000A708       TWidgetControlItem.IsContainer
+ 0001:0001B794       TWidgetControlRootSprig.Create
+ 0001:0001B7E8       TWidgetControlRootSprig.DragDrop
+ 0001:0001B840       TWidgetControlRootSprig.DragOver
+ 0001:0001B868       TWidgetControlRootSprig.PaletteOver
+ 0001:0001B6D0       TWidgetControlSprig.Create
+ 0001:0001B724       TWidgetControlSprig.DragDrop
+ 0001:0001B758       TWidgetControlSprig.DragOver
+ 0001:0001B78C       TWidgetControlSprig.PaletteOver
+ 0001:0000039C       UninitializeModule
+ 0001:0001220C       UniquifyName
+ 0001:000072B4       UnRegActions
+ 0001:00007348       UnregisterActionGroup
+ 0001:000185A8       UpdateSelfValues
+ 0001:00018604       UpdateValues
+ 0001:00000A84       UrlMon
+ 0001:000022C0       VclActionToClxAction
+ 0001:0000D348       VisibleRoot
+ 0001:0001B59C       WidgetControlDragDrop
+ 0001:0001B644       WidgetControlDragOver
+ 0001:0001B680       WidgetControlPaletteOver
+ 0001:0001C508       WidgetDesignForm
+ 0001:000007E4       Windows
+ 0001:00000ABC       WinInet
+ 0001:00000B74       WinSpool
+
+
+  Address         Publics by Value
+
+ 0002:FFBE2000       TlsLast
+ 0001:00000288       FreeLibrary
+ 0001:00000290       LocalAlloc
+ 0001:00000298       LocalFree
+ 0001:000002A0       TlsAlloc
+ 0001:000002A8       TlsFree
+ 0001:000002B0       TlsGetValue
+ 0001:000002B8       TlsSetValue
+ 0001:000002C0       AllocTlsBuffer
+ 0001:000002CC       GetTlsSize
+ 0001:000002D4       InitThreadTLS
+ 0001:00000318       InitProcessTLS
+ 0001:00000344       ExitThreadTLS
+ 0001:0000036C       ExitProcessTLS
+ 0001:00000390       InitializeModule
+ 0001:0000039C       UninitializeModule
+ 0001:000003C0       @InitPkg
+ 0001:00000424       @PackageLoad
+ 0001:00000430       @PackageUnload
+ 0001:0000043C       Finalization
+ 0001:0000046C       SysInit
+ 0001:0000074C       Finalization
+ 0001:0000077C       Messages
+ 0001:00000784       FindResource
+ 0001:0000078C       EqualRect
+ 0001:00000794       GetActiveWindow
+ 0001:0000079C       IsRectEmpty
+ 0001:000007A4       SendMessage
+ 0001:000007AC       SetActiveWindow
+ 0001:000007B4       Finalization
+ 0001:000007E4       Windows
+ 0001:00000904       Finalization
+ 0001:00000934       CommCtrl
+ 0001:000009A4       Finalization
+ 0001:000009D4       Imm
+ 0001:00000A1C       Finalization
+ 0001:00000A4C       ShlObj
+ 0001:00000A54       Finalization
+ 0001:00000A84       UrlMon
+ 0001:00000A8C       Finalization
+ 0001:00000ABC       WinInet
+ 0001:00000AC4       Finalization
+ 0001:00000AF4       RegStr
+ 0001:00000AFC       Finalization
+ 0001:00000B2C       ShellAPI
+ 0001:00000B44       Finalization
+ 0001:00000B74       WinSpool
+ 0001:00000B8C       Finalization
+ 0001:00000BBC       CommDlg
+ 0001:00000BC4       Finalization
+ 0001:00000BF4       Dlgs
+ 0001:00001AA4       Finalization
+ 0001:00001AD4       RichEdit
+ 0001:00002044       MapClxShortCutToVclShortCut
+ 0001:000020A8       MapVclShortCutToClxShortCut
+ 0001:000022C0       VclActionToClxAction
+ 0001:000022F0       TLinkAction.Create
+ 0001:00002424       TLinkAction.Destroy
+ 0001:00002454       TLinkAction.Execute
+ 0001:0000245C       TLinkAction.Update
+ 0001:0000246C       TLinkActionLink.Create
+ 0001:000024AC       TLinkActionLink.Destroy
+ 0001:000024DC       TLinkActionLink.IsCaptionLinked
+ 0001:000024E0       TLinkActionLink.IsCheckedLinked
+ 0001:000024E4       TLinkActionLink.IsEnabledLinked
+ 0001:000024E8       TLinkActionLink.IsHelpContextLinked
+ 0001:000024EC       TLinkActionLink.IsHintLinked
+ 0001:000024F0       TLinkActionLink.IsImageIndexLinked
+ 0001:000024F4       TLinkActionLink.IsShortCutLinked
+ 0001:000024F8       TLinkActionLink.IsVisibleLinked
+ 0001:000024FC       TLinkActionLink.SetCaption
+ 0001:0000254C       TLinkActionLink.SetChecked
+ 0001:00002558       TLinkActionLink.SetEnabled
+ 0001:00002564       TLinkActionLink.SetGroupIndex
+ 0001:00002568       TLinkActionLink.SetHelpContext
+ 0001:00002574       TLinkActionLink.SetHint
+ 0001:000025C4       TLinkActionLink.SetImageIndex
+ 0001:000025C8       TLinkActionLink.SetShortCut
+ 0001:000025E4       TLinkActionLink.SetVisible
+ 0001:000025F0       Finalization
+ 0001:00002620       DesignActionLink
+ 0001:00002D18       GetImages
+ 0001:00002DF0       EditImageList
+ 0001:00003190       TImageInfo.Create
+ 0001:00003220       TImageInfo.Destroy
+ 0001:00003264       TImageInfo.GetIndex
+ 0001:00003270       TImageInfo.Crop
+ 0001:00003288       TImageInfo.Stretch
+ 0001:000032A0       TImageInfo.Center
+ 0001:000032B8       TImageInfo.SelectImage
+ 0001:000032D0       TImageInfo.SetOperation
+ 0001:000032E0       TImageInfo.SetTransparentColor
+ 0001:000032F0       TImageInfo.SetFillColor
+ 0001:00003300       TImageInfo.Change
+ 0001:00003448       TClxImageListEditor.CreateImgListEditor
+ 0001:0000348C       TClxImageListEditor.SetStates
+ 0001:0000350C       TClxImageListEditor.UpdateImageView
+ 0001:000036A4       TClxImageListEditor.AddBitmap
+ 0001:000036C8       TClxImageListEditor.AddClick
+ 0001:00003DC4       TClxImageListEditor.DeleteClick
+ 0001:00003E08       TClxImageListEditor.ClearClick
+ 0001:00003E44       TClxImageListEditor.FormCreate
+ 0001:00003F14       TClxImageListEditor.AddColor
+ 0001:00003F44       TClxImageListEditor.FormDestroy
+ 0001:00003F88       TClxImageListEditor.SelectImage
+ 0001:000042E4       TClxImageListEditor.ClearWithFill
+ 0001:00004334       TClxImageListEditor.GetIndex
+ 0001:00004350       TClxImageListEditor.GetImageInfo
+ 0001:00004368       TClxImageListEditor.Crop
+ 0001:000044BC       TClxImageListEditor.Stretch
+ 0001:0000465C       TClxImageListEditor.Center
+ 0001:0000480C       TClxImageListEditor.OptionsGroupClick
+ 0001:00004830       TClxImageListEditor.ApplyClick
+ 0001:000048C0       TClxImageListEditor.TransparentColorChange
+ 0001:00004990       TClxImageListEditor.ClearBitmap
+ 0001:00004A04       TClxImageListEditor.TransparentColorExit
+ 0001:00004A8C       TClxImageListEditor.Replace
+ 0001:00004B30       TClxImageListEditor.ReplaceMasked
+ 0001:00004BD4       TClxImageListEditor.DeleteSelectedImages
+ 0001:00004D08       TClxImageListEditor.ClearAllImages
+ 0001:00004DC8       TClxImageListEditor.ImageViewChange
+ 0001:00004DD0       TClxImageListEditor.FocusImage
+ 0001:00004E60       TClxImageListEditor.ImageViewKeyDown
+ 0001:00004E94       TClxImageListEditor.MoveImage
+ 0001:00004F1C       TClxImageListEditor.SetImageOperation
+ 0001:00004FDC       TClxImageListEditor.SetImageColor
+ 0001:000050DC       TClxImageListEditor.StretchImageList
+ 0001:000051A4       TClxImageListEditor.CenterImageList
+ 0001:0000526C       TClxImageListEditor.StretchReplace
+ 0001:000053AC       TClxImageListEditor.StretchReplaceMasked
+ 0001:0000544C       TClxImageListEditor.CenterReplace
+ 0001:000055E4       TClxImageListEditor.CenterReplaceMasked
+ 0001:000056F0       TClxImageListEditor.DoImageListViewChange
+ 0001:00005720       TClxImageListEditor.HelpClick
+ 0001:0000572C       TClxImageListEditor.UpdatePickColor
+ 0001:0000590C       TClxImageListEditor.MainImageMouseMove
+ 0001:0000592C       CreateImageStrip
+ 0001:000059E8       TClxImageListEditor.ExportBtnClick
+ 0001:00005AE0       TClxImageListEditor.ImageViewSelectItem
+ 0001:00005B08       TClxImageListEditor.MainImageMouseDown
+ 0001:00005B1C       TClxImageListEditor.ImageViewEdited
+ 0001:00005BA8       Finalization
+ 0001:00005BD8       ClxImgEdit
+ 0001:00006584       TColorProperty.Edit
+ 0001:00006610       TColorProperty.GetAttributes
+ 0001:0000661C       TColorProperty.GetValue
+ 0001:00006634       TColorProperty.GetValues
+ 0001:00006648       TColorProperty.SetValue
+ 0001:00006678       TCursorProperty.GetAttributes
+ 0001:00006684       TCursorProperty.GetValue
+ 0001:0000669C       TCursorProperty.GetValues
+ 0001:000066B0       TCursorProperty.SetValue
+ 0001:000066E0       TFontProperty.Edit
+ 0001:0000676C       TFontProperty.GetAttributes
+ 0001:00006778       TFontNameProperty.GetAttributes
+ 0001:00006784       TFontNameProperty.GetValues
+ 0001:00006800       TShortCutProperty.GetAttributes
+ 0001:0000680C       TShortCutProperty.GetValue
+ 0001:00006878       TShortCutProperty.GetValues
+ 0001:00006908       TShortCutProperty.SetValue
+ 0001:00006998       TTabOrderProperty.GetAttributes
+ 0001:000069A4       TCaptionProperty.GetAttributes
+ 0001:000069C4       TImageListEditor.Edit
+ 0001:00006A44       TImageListEditor.ExecuteVerb
+ 0001:00006AC4       TImageListEditor.GetVerb
+ 0001:00006AD8       TImageListEditor.GetVerbCount
+ 0001:00006AE0       CopyStreamToClipboard
+ 0001:00006BC8       AnotherObject
+ 0001:00006C68       GetClipboardStream
+ 0001:00006E88       TModalResultProperty.GetAttributes
+ 0001:00006E94       TModalResultProperty.GetValue
+ 0001:00006EC4       TModalResultProperty.GetValues
+ 0001:00006EE8       TModalResultProperty.SetValue
+ 0001:00006F38       TFileNameProperty.GetDialogOptions
+ 0001:00006F68       TFileNameProperty.Edit
+ 0001:00006FA8       TFileNameProperty.GetAttributes
+ 0001:00006FBC       THTMLFileNameProperty.GetDialogOptions
+ 0001:00007098       RegActions
+ 0001:000072B4       UnRegActions
+ 0001:00007348       UnregisterActionGroup
+ 0001:000073BC       EnumActions
+ 0001:00007480       FindComponentByClass
+ 0001:0000752C       CreateMaskedBmp
+ 0001:0000763C       CreateAction
+ 0001:0000780C       AlignNames
+ 0001:0000782C       TAlignProperty.GetValues
+ 0001:00007880       Finalization
+ 0001:000078E0       ClxEditors
+ 0001:0000818C       IMainMenuFor
+ 0001:000081B4       IPopupMenuFor
+ 0001:000081DC       IMenuItemFor
+ 0001:00008204       IMenuItemsFor
+ 0001:0000822C       TMenuItemsWrapper.AddItem
+ 0001:00008254       TMenuItemsWrapper.AddItem
+ 0001:00008290       TMenuItemsWrapper.AddLine
+ 0001:000082AC       TMenuItemsWrapper.Clear
+ 0001:000082B8       TMenuItemsWrapper.Count
+ 0001:000082C4       TMenuItemsWrapper.Create
+ 0001:00008300       TMenuItemsWrapper.Find
+ 0001:00008328       TMenuItemsWrapper.FindByName
+ 0001:0000836C       TMenuItemsWrapper.GetComponent
+ 0001:00008370       TMenuItemsWrapper.GetItem
+ 0001:00008390       TMenuItemsWrapper.InsertItem
+ 0001:000083B4       TMenuItemsWrapper.InsertItem
+ 0001:00008408       TMenuItemsWrapper.InsertItem
+ 0001:00008444       TMenuItemsWrapper.InsertItem
+ 0001:000084D0       TMenuItemsWrapper.InsertItem
+ 0001:00008514       TMenuItemsWrapper.InsertLine
+ 0001:00008530       TMenuItemsWrapper.InsertLine
+ 0001:00008574       TMenuItemsWrapper.SameAs
+ 0001:000085F8       TMenuItemWrapper.GetCaption
+ 0001:00008610       TMenuItemWrapper.GetChecked
+ 0001:00008618       TMenuItemWrapper.GetEnabled
+ 0001:00008620       TMenuItemWrapper.GetGroupIndex
+ 0001:00008628       TMenuItemWrapper.GetHelpContext
+ 0001:00008630       TMenuItemWrapper.GetHint
+ 0001:00008648       TMenuItemWrapper.GetRadioItem
+ 0001:00008650       TMenuItemWrapper.GetShortCut
+ 0001:00008660       TMenuItemWrapper.GetTag
+ 0001:00008668       TMenuItemWrapper.GetVisible
+ 0001:00008670       TMenuItemWrapper.HasParent
+ 0001:00008680       TMenuItemWrapper.IsLine
+ 0001:0000868C       TMenuItemWrapper.MenuIndex
+ 0001:00008698       TMenuItemWrapper.Name
+ 0001:000086B0       TMenuItemWrapper.Parent
+ 0001:000086E0       TMenuItemWrapper.SetCaption
+ 0001:000086EC       TMenuItemWrapper.SetChecked
+ 0001:000086F8       TMenuItemWrapper.SetEnabled
+ 0001:00008704       TMenuItemWrapper.SetGroupIndex
+ 0001:00008710       TMenuItemWrapper.SetHelpContext
+ 0001:0000871C       TMenuItemWrapper.SetHint
+ 0001:00008734       TMenuItemWrapper.SetRadioItem
+ 0001:00008740       TMenuItemWrapper.SetShortCut
+ 0001:0000875C       TMenuItemWrapper.SetTag
+ 0001:00008764       TMenuItemWrapper.SetVisible
+ 0001:00008770       TMenuWrapper.Create
+ 0001:000087AC       TMenuWrapper.GetComponent
+ 0001:000087B0       TMenuWrapper.Items
+ 0001:000087C8       TMainMenuWrapper.Create
+ 0001:00008800       TPopupMenuWrapper.Create
+ 0001:00008838       TPopupMenuWrapper.Popup
+ 0001:00008848       TPopupMenuWrapper.PopupComponent
+ 0001:00008850       Finalization
+ 0001:00008880       ClxMenus
+ 0001:00009F7C       ItemFor
+ 0001:0000A030       DrawMarker
+ 0001:0000A064       DrawSelection
+ 0001:0000A0C0       FindAction
+ 0001:0000A164       NewActionItem
+ 0001:0000A248       TNoClipCanvas.BeginPainting
+ 0001:0000A2D4       TMarkedItem.GetMarked
+ 0001:0000A2D8       TMarkedItem.SetMarked
+ 0001:0000A2E8       TControlItem.Create
+ 0001:0000A330       TControlItem.GetBoundsRect
+ 0001:0000A344       TControlItem.GetControl
+ 0001:0000A348       TControlItem.GetParent
+ 0001:0000A38C       TControlItem.GlobalToLocal
+ 0001:0000A3A8       TControlItem.Invalidate
+ 0001:0000A3B8       TControlItem.LocalToGlobal
+ 0001:0000A3D4       TControlItem.SetBoundsRect
+ 0001:0000A3E0       TControlItem.SetParent
+ 0001:0000A408       TControlItem.Show
+ 0001:0000A414       TControlItem.ZOrder
+ 0001:0000A438       TNonControlItem.Create
+ 0001:0000A478       TNonControlItem.GetBoundsRect
+ 0001:0000A48C       TNonControlItem.GetParent
+ 0001:0000A498       TNonControlItem.GlobalToLocal
+ 0001:0000A4AC       TNonControlItem.LocalToGlobal
+ 0001:0000A4C0       TNonControlItem.SetBoundsRect
+ 0001:0000A4C4       TNonControlItem.SetParent
+ 0001:0000A4C8       TNonControlItem.Show
+ 0001:0000A4CC       TNonControlItem.ZOrder
+ 0001:0000A4D0       TNonControlItem.GetMarked
+ 0001:0000A4D4       TNonControlItem.SetMarked
+ 0001:0000A4D8       TNonControlItem.FlipChildren
+ 0001:0000A4DC       TNonControlItem.ValidateDeletable
+ 0001:0000A550       TNonControlItem.Selectable
+ 0001:0000A554       TWidgetControlItem.Contains
+ 0001:0000A5DC       TWidgetControlItem.Create
+ 0001:0000A620       TWidgetControlItem.FlipChildren
+ 0001:0000A634       TWidgetControlItem.GetChildCount
+ 0001:0000A640       TWidgetControlItem.GetChildren
+ 0001:0000A664       TWidgetControlItem.GetWidgetControl
+ 0001:0000A668       InvalidateWidget
+ 0001:0000A6F0       TWidgetControlItem.Invalidate
+ 0001:0000A708       TWidgetControlItem.IsContainer
+ 0001:0000A714       TWidgetControlItem.HasSelectableChildren
+ 0001:0000A738       TContainedComponentItem.Create
+ 0001:0000A7C4       TContainedComponentItem.GetBoundsRect
+ 0001:0000A7D8       TContainedComponentItem.GetExtendedRect
+ 0001:0000A834       TContainedComponentItem.GetParent
+ 0001:0000A848       TContainedComponentItem.GlobalToLocal
+ 0001:0000A85C       TContainedComponentItem.Invalidate
+ 0001:0000A868       TContainedComponentItem.LocalToGlobal
+ 0001:0000A87C       TContainedComponentItem.SetBoundsRect
+ 0001:0000A888       TContainedComponentItem.SetParent
+ 0001:0000A88C       TContainedComponentItem.Show
+ 0001:0000A890       TComponentRootItem.Create
+ 0001:0000A910       TComponentRootItem.GetControl
+ 0001:0000A914       TComponentRootItem.GetWidgetControl
+ 0001:0000A918       TComponentRootItem.GetBoundsRect
+ 0001:0000A92C       TComponentRootItem.GlobalToLocal
+ 0001:0000A948       TComponentRootItem.Invalidate
+ 0001:0000A954       TComponentRootItem.IsContainer
+ 0001:0000A958       TComponentRootItem.LocalToGlobal
+ 0001:0000A974       TComponentRootItem.SetParent
+ 0001:0000A978       TComponentRootItem.Show
+ 0001:0000A984       TDesignerToolWindow.Create
+ 0001:0000A9D4       TDesignerToolWindow.Destroy
+ 0001:0000AA2C       TDesignerToolWindow.CreateHandle
+ 0001:0000AAEC       TDesignerToolWindow.Invalidate
+ 0001:0000AAFC       TDesignerToolWindow.Sync
+ 0001:0000AB34       TDesignerToolWindow.MainEventFilter
+ 0001:0000AB84       DoMouseEvent
+ 0001:0000ABE4       TDesignerToolWindow.EventFilter
+ 0001:0000AC60       TDesignerToolWindow.EnsureHandle
+ 0001:0000AC6C       TDesignerToolWindow.DestroyedHook
+ 0001:0000AC90       TComponentToolWindow.Create
+ 0001:0000ACD8       TComponentToolWindow.GetItem
+ 0001:0000AD74       DoMouseDownEvent
+ 0001:0000AE44       TComponentToolWindow.EventFilter
+ 0001:0000AE70       TContainerCaption.Create
+ 0001:0000AEE0       TContainerCaption.Destroy
+ 0001:0000AF10       TContainerCaption.Update
+ 0001:0000AF34       DoPaintEvent
+ 0001:0000B0C4       TContainerCaption.EventFilter
+ 0001:0000B0EC       TContainerCaption.Position
+ 0001:0000B194       TContainerCaption.Sync
+ 0001:0000B1A8       TContainerCaption.GetContainer
+ 0001:0000B1D4       BitmapEnum
+ 0001:0000B270       LoadPackageBitmap
+ 0001:0000B2E0       FindClassBitmap
+ 0001:0000B390       TContainerIcon.Create
+ 0001:0000B3E8       TContainerIcon.Destroy
+ 0001:0000B424       TContainerIcon.GetBitmap
+ 0001:0000B428       TContainerIcon.GetID
+ 0001:0000B42C       TContainerIconMgr.Create
+ 0001:0000B470       TContainerIconMgr.FindIcon
+ 0001:0000B4C0       TContainerIconMgr.GetClassIcon
+ 0001:0000B5C8       TComponentObserver.Create
+ 0001:0000B61C       TComponentObserver.Notification
+ 0001:0000B654       TContainer.Create
+ 0001:0000B740       TContainer.Destroy
+ 0001:0000B790       TContainer.Sync
+ 0001:0000B7A8       TContainer.Update
+ 0001:0000B7B8       TContainer.Position
+ 0001:0000B7E0       TContainer.GetBoundsRect
+ 0001:0000B7F0       TContainer.GetShowCaption
+ 0001:0000B7F8       TContainer.GetLeft
+ 0001:0000B810       TContainer.SetBoundsRect
+ 0001:0000B88C       TContainer.SetShowCaption
+ 0001:0000B8F0       TContainer.SetLeft
+ 0001:0000B914       DoPaintEvent
+ 0001:0000BB78       DoMoveEvent
+ 0001:0000BC34       TContainer.EventFilter
+ 0001:0000BC7C       TContainer.GetContainer
+ 0001:0000BC80       TGrabHandle.Create
+ 0001:0000BCF8       DoMouseEvent
+ 0001:0000BD6C       DoPaintEvent
+ 0001:0000BE1C       TGrabHandle.EventFilter
+ 0001:0000BE68       TGrabHandle.Hide
+ 0001:0000BE74       TGrabHandle.Update
+ 0001:0000BF04       TGrabHandle.Position
+ 0001:0000BF18       TGrabHandle.Show
+ 0001:0000BF34       TGrabHandles.Create
+ 0001:0000BFAC       TGrabHandles.Destroy
+ 0001:0000BFF4       TGrabHandles.GetSelection
+ 0001:0000C008       TGrabHandles.Hide
+ 0001:0000C030       TGrabHandles.Invalidate
+ 0001:0000C04C       TGrabHandles.BottomWidget
+ 0001:0000C05C       TGrabHandles.SetSelection
+ 0001:0000C0E0       TGrabHandles.GetParentOf
+ 0001:0000C19C       TGrabHandles.SyncParent
+ 0001:0000C228       TGrabHandles.SetActive
+ 0001:0000C238       TGrabHandles.Show
+ 0001:0000C250       TGrabHandles.Update
+ 0001:0000C324       TClxDragBoxes.Create
+ 0001:0000C400       TClxDragBoxes.Destroy
+ 0001:0000C458       TClxDragBoxes.DrawBox
+ 0001:0000C594       TClxDesignSurface.Activate
+ 0001:0000C5C0       TClxDesignSurface.AppViewAsText
+ 0001:0000C5C8       TClxDesignSurface.DoViewAsText
+ 0001:0000C5D4       TClxDesignSurface.BeginDragging
+ 0001:0000C670       CreateSpecialItems
+ 0001:0000C818       AddFormLocalMenu
+ 0001:0000CBC8       AddModuleLocalMenu
+ 0001:0000CD64       InitBaseMenu
+ 0001:0000CDDC       NewContextItem
+ 0001:0000CF38       AddModuleVerbs
+ 0001:0000D048       AddSelectionVerbs
+ 0001:0000D1B0       AddComponentVerbs
+ 0001:0000D2BC       TClxDesignSurface.BuildLocalMenu
+ 0001:0000D348       VisibleRoot
+ 0001:0000D390       InternalFindContainer
+ 0001:0000D3B4       TClxDesignSurface.CheckContainer
+ 0001:0000D420       TClxDesignSurface.InstanceInserted
+ 0001:0000D494       TClxDesignSurface.InstanceRemoved
+ 0001:0000D4C8       TClxDesignSurface.ComponentVerb
+ 0001:0000D4E0       CheckContainersOf
+ 0001:0000D548       TClxDesignSurface.Create
+ 0001:0000D700       TClxDesignSurface.CursorPosition
+ 0001:0000D734       TClxDesignSurface.DesignerToGlobal
+ 0001:0000D750       TClxDesignSurface.Destroy
+ 0001:0000D794       TClxDesignSurface.FindContainer
+ 0001:0000D7C4       ApproveControls
+ 0001:0000D804       AddControls
+ 0001:0000D880       AddComponents
+ 0001:0000D8EC       TClxDesignSurface.FindNextItem
+ 0001:0000D9E8       TClxDesignSurface.FlipContainers
+ 0001:0000DA50       TClxDesignSurface.Focus
+ 0001:0000DA5C       TClxDesignSurface.GetCustomForm
+ 0001:0000DA60       TClxDesignSurface.GetGridOffset
+ 0001:0000DAB4       TClxDesignSurface.GetOffset
+ 0001:0000DAC0       TClxDesignSurface.GetShiftState
+ 0001:0000DACC       TClxDesignSurface.GlobalToDesigner
+ 0001:0000DAE8       TClxDesignSurface.GrabHandleMouseDown
+ 0001:0000DB80       TClxDesignSurface.InvokeLocalMenu
+ 0001:0000DCAC       SendEvent
+ 0001:0000DD04       TranslatePoint
+ 0001:0000DD60       IsDblClick
+ 0001:0000DD84       MouseEvent
+ 0001:0000DFAC       KeyEvent
+ 0001:0000E15C       PaintEvent
+ 0001:0000E2C4       FormMoved
+ 0001:0000E30C       ModifyingEvent
+ 0001:0000E404       ActivateEvent
+ 0001:0000E430       CloseEvent
+ 0001:0000E44C       FocusEvent
+ 0001:0000E464       TClxDesignSurface.IsDesignEvent
+ 0001:0000E614       TClxDesignSurface.IsModifiableFrame
+ 0001:0000E64C       TClxDesignSurface.ItemFor
+ 0001:0000E6FC       TClxDesignSurface.LocalPopup
+ 0001:0000E764       TClxDesignSurface.Modified
+ 0001:0000E774       TClxDesignSurface.ModuleVerb
+ 0001:0000E78C       TClxDesignSurface.MoveContainersFront
+ 0001:0000E89C       TClxDesignSurface.Notification
+ 0001:0000E910       DrawPixels
+ 0001:0000E978       TClxDesignSurface.PaintGrid
+ 0001:0000EB7C       TClxDesignSurface.ControlPaintRequest
+ 0001:0000EC64       TClxDesignSurface.ResyncContainers
+ 0001:0000EC90       TClxDesignSurface.SelectionVerb
+ 0001:0000ECF0       TClxDesignSurface.SendKey
+ 0001:0000ED20       TClxDesignSurface.SendMouseDown
+ 0001:0000EDA0       TClxDesignSurface.SetOptions
+ 0001:0000EE18       TClxDesignSurface.Update
+ 0001:0000EE88       TClxDesignSurface.UpdateSelection
+ 0001:0000EE8C       TClxDesignSurface.ValidateRename
+ 0001:0000EF18       GetClxDesignSurface
+ 0001:0000EFEC       ControlWantsKey
+ 0001:0000F094       TryShortCut
+ 0001:0000F124       KeyEvent
+ 0001:0000F1AC       TQtKeyForwarder.KeyEventFilter
+ 0001:0000F1D8       Finalization
+ 0001:0000F248       ClxSurface
+ 0001:0000F690       TDataModuleSurface.BoundsChanged
+ 0001:0000F6A8       TDataModuleSurface.Create
+ 0001:0000F764       TDataModuleSurface.DesignerClosed
+ 0001:0000F78C       TDataModuleSurface.DesignerOpened
+ 0001:0000F7AC       TDataModuleSurface.Destroy
+ 0001:0000F7D4       TDataModuleSurface.GetContainer
+ 0001:0000F7DC       TDataModuleSurface.ItemDeleted
+ 0001:0000F7E0       TDataModuleSurface.ItemInserted
+ 0001:0000F7E4       TDataModuleSurface.ItemsModified
+ 0001:0000F7F4       TDataModuleSurface.SelectionChanged
+ 0001:0000F7F8       TDataModuleSurface.UpdateDesigner
+ 0001:0000F98C       TDataModuleSurface.FormResize
+ 0001:0000FA30       TDataModuleCustomModule.CreateDesignerForm
+ 0001:0000FA5C       TDataModuleCustomModule.DesignClass
+ 0001:0000FA64       TDataModuleCustomModule.ValidateComponentClass
+ 0001:0000FAA8       Finalization
+ 0001:0000FAD8       ClxDmSurface
+ 0001:0000FEF8       TClxDesignWindow.Create
+ 0001:0000FFD8       TClxDesignWindow.Destroy
+ 0001:00010010       TClxDesignWindow.Activated
+ 0001:00010014       TClxDesignWindow.ActivateInspector
+ 0001:00010078       TClxDesignWindow.ClipboardComponents
+ 0001:000100AC       TClxDesignWindow.CopyComponents
+ 0001:00010188       TClxDesignWindow.GetEditState
+ 0001:00010194       TClxDesignWindow.EditAction
+ 0001:00010198       TClxDesignWindow.ForceActive
+ 0001:000101AC       TClxDesignWindow.WindowHide
+ 0001:000101C8       TClxDesignWindow.WindowShow
+ 0001:000101E4       TClxDesignWindow.ComponentRead
+ 0001:000101F0       TClxDesignWindow.ReaderSetName
+ 0001:00010274       TClxDesignWindow.PasteComponents
+ 0001:00010334       TClxDesignWindow.SelectionChanged
+ 0001:00010338       TClxDesignWindow.SetSelection
+ 0001:00010360       TClxDesignWindow.ItemDeleted
+ 0001:00010364       TClxDesignWindow.ItemInserted
+ 0001:00010368       TClxDesignWindow.DesignerClosed
+ 0001:0001038C       TClxDesignWindow.DesignerOpened
+ 0001:000103EC       TClxDesignWindow.ItemsModified
+ 0001:000103F0       Finalization
+ 0001:00010420       ClxDesignWindows
+ 0001:00010754       TClxToolbarDesignWindow.GetLargeButtons
+ 0001:00010768       TClxToolbarDesignWindow.ResizeButtons
+ 0001:0001083C       TClxToolbarDesignWindow.SetLargeButtons
+ 0001:00010848       TClxToolbarDesignWindow.Splitter1CanResize
+ 0001:00010888       TClxToolbarDesignWindow.Splitter1Moved
+ 0001:000108A4       TClxToolbarDesignWindow.Textlabels1Click
+ 0001:000108C8       TClxToolbarDesignWindow.TextLabelsCmdExecute
+ 0001:000108DC       TClxToolbarDesignWindow.TextLabelsCmdUpdate
+ 0001:00010900       TClxToolbarDesignWindow.ToolbarCmdExecute
+ 0001:0001095C       TClxToolbarDesignWindow.ToolbarCmdUpdate
+ 0001:00010980       Finalization
+ 0001:000109B0       ClxToolWnds
+ 0001:00010A10       TModalHooks.ClxModalBegin
+ 0001:00010A4C       TModalHooks.ClxModalEnd
+ 0001:00010A68       InitModalHooks
+ 0001:00010AB4       ClearModalHooks
+ 0001:00010AEC       Finalization
+ 0001:00010B24       ClxVclInterop
+ 0001:00010D4C       BuildTemplateFileName
+ 0001:00010E1C       TClxMenuTemplate.Create
+ 0001:00010E60       TClxMenuTemplate.SetItem
+ 0001:00010E78       TClxMenuTemplate.LoadFromClipboard
+ 0001:00010F18       TClxMenuTemplate.ReadStream
+ 0001:00011148       TClxMenuTemplate.ReaderSetName
+ 0001:000111F4       TClxMenuTemplate.ComponentRead
+ 0001:00011258       TClxMenuTemplate.ReadState
+ 0001:000112A8       TClxMenuTemplate.GetChildren
+ 0001:000112BC       TClxMenuTemplate.GetChildOwner
+ 0001:000112C0       TClxMenuTemplateManager.Create
+ 0001:000112FC       TClxMenuTemplateManager.Destroy
+ 0001:00011324       TClxMenuTemplateManager.GetChildren
+ 0001:00011378       TClxMenuTemplateManager.GetTemplate
+ 0001:000113B4       TClxMenuTemplateManager.GetTemplatesSize
+ 0001:000113BC       TClxMenuTemplateManager.IsSpaceAvailable
+ 0001:000113D0       TClxMenuTemplateManager.TemplateSaveAs
+ 0001:00011438       TClxMenuTemplateManager.Notification
+ 0001:00011454       TClxMenuTemplateManager.StreamTemplatesOut
+ 0001:000114C4       TClxMenuTemplateManager.DoesTemplateExist
+ 0001:00011554       RemoveComponents
+ 0001:00011580       LoadMenuTemplateManagerFromDisk
+ 0001:0001170C       Finalization
+ 0001:00011748       ClxMenuTmpl
+ 0001:000119DC       TClxMtSvDlg.SelectionBoxClick
+ 0001:00011A60       TClxMtSvDlg.GetData
+ 0001:00011AB4       TClxMtSvDlg.SetData
+ 0001:00011B8C       TClxMtSvDlg.HelpButtonClick
+ 0001:00011BA4       Finalization
+ 0001:00011BD4       ClxMtSvDlg
+ 0001:00011DFC       TClxMtDeDlg.OkButtonClick
+ 0001:00011E08       TClxMtDeDlg.HelpButtonClick
+ 0001:00011E20       TClxMtDeDlg.SetData
+ 0001:00011E90       Finalization
+ 0001:00011EC0       ClxMtDeDlg
+ 0001:000120F8       TClxMtInDlg.OkButtonClick
+ 0001:00012104       TClxMtInDlg.HelpButtonClick
+ 0001:0001211C       TClxMtInDlg.GetData
+ 0001:00012164       TClxMtInDlg.SetData
+ 0001:000121D4       Finalization
+ 0001:00012204       ClxMtInDlg
+ 0001:0001220C       UniquifyName
+ 0001:000122D8       SetPropertiesAndEvents
+ 0001:000123C4       MenuClone
+ 0001:00012434       MenuTemplateDelete
+ 0001:00012554       MenuTemplateInsert
+ 0001:000125D4       CheckForDuplicate
+ 0001:0001268C       CreateTheTemplate
+ 0001:00012708       MenuTemplateSave
+ 0001:00012894       Finalization
+ 0001:000128C4       ClxMtMisc
+ 0001:00012984       TMenuParser.Create
+ 0001:000129F0       TMenuParser.Destroy
+ 0001:00012A2C       TMenuParser.Error
+ 0001:00012A34       TMenuParser.ErrorStr
+ 0001:00012A74       TMenuParser.NextToken
+ 0001:00012C04       TMenuParser.ReadBuffer
+ 0001:00012CCC       SkipToEOL
+ 0001:00012D08       SkipComment
+ 0001:00012DFC       TMenuParser.SkipBlanks
+ 0001:00012E80       TMenuParser.TokenString
+ 0001:00012EAC       TMenuParser.TokenSymbolIs
+ 0001:00012F10       CheckForLoadOption
+ 0001:00012F68       CheckForItemOption
+ 0001:00013000       CheckForMemoryOption
+ 0001:0001307C       ParseMenuItem
+ 0001:00013230       ParsePopup
+ 0001:00013514       SkipToMenuStart
+ 0001:0001355C       ParseMenu
+ 0001:00013810       ParseResource
+ 0001:0001386C       LoadMenuFromResource
+ 0001:00013980       Finalization
+ 0001:000139B0       ClxMnuFile
+ 0001:00013BE8       TClxMenuSelectDialog.HelpButtonClick
+ 0001:00013C00       TClxMenuSelectDialog.GetData
+ 0001:00013C48       TClxMenuSelectDialog.SetData
+ 0001:00013CC4       Finalization
+ 0001:00013CF4       ClxMnuSelect
+ 0001:000147F8       TransientMenuItem
+ 0001:00014814       NewTransientMenuItem
+ 0001:00014830       IsFocusable
+ 0001:00014884       IsItemEmpty
+ 0001:000148B4       IsThisChicago
+ 0001:000148B8       CaptionToName
+ 0001:00014AB0       MenuAutoName
+ 0001:00014C9C       CorrectItem
+ 0001:00014CFC       MenuTreeAutoName
+ 0001:00014D60       SelectAndMakeActive
+ 0001:00014E40       GetBitMapWidth
+ 0001:00014E68       TClxMenuBuilder.Destroy
+ 0001:00014E90       TClxMenuBuilder.FormResize
+ 0001:00014EC8       TClxMenuBuilder.FormClose
+ 0001:00014ED4       TClxMenuBuilder.FormActivate
+ 0001:00015040       TClxMenuBuilder.FormDeactivate
+ 0001:00015048       TClxMenuBuilder.FormMouseDown
+ 0001:00015058       TClxMenuBuilder.ActiveChanged
+ 0001:00015084       ModifySettings
+ 0001:00015098       TClxMenuBuilder.AdjustScrollBars
+ 0001:000151E0       TClxMenuBuilder.BuildCaptionFromPieces
+ 0001:000152C4       FindItemWinForMenu
+ 0001:00015314       TClxMenuBuilder.CheckDragAcceptance
+ 0001:0001539C       TClxMenuBuilder.ClearDragState
+ 0001:000153C4       TClxMenuBuilder.ClearWorkMenu
+ 0001:00015408       FindGenesisOfMenuItem
+ 0001:00015424       FindCtlForItem
+ 0001:000154A0       TClxMenuBuilder.GetActiveItem
+ 0001:000154C0       TClxMenuBuilder.GetANewMenu
+ 0001:0001550C       TClxMenuBuilder.GetSubWinForItem
+ 0001:00015570       TClxMenuBuilder.GetScrollVisibility
+ 0001:000155C4       TClxMenuBuilder.HandleAltF10
+ 0001:00015648       TClxMenuBuilder.IsInDDList
+ 0001:00015664       TClxMenuBuilder.IsFirstWindowHome
+ 0001:000156B0       TClxMenuBuilder.ItemGotFocus
+ 0001:000156B8       BreakConnections
+ 0001:0001572C       CreateNew
+ 0001:00015764       HideOthers
+ 0001:0001580C       SearchForExisting
+ 0001:00015878       SearchForHidden
+ 0001:000158C8       ReturnAppropriateWin
+ 0001:00015934       ShowAndMove
+ 0001:00015A7C       TClxMenuBuilder.NewPopup
+ 0001:00015B78       TClxMenuBuilder.ReConstructDDList
+ 0001:00015CE4       FindParentItem
+ 0001:00015D4C       TMenuWin.SyncSelection
+ 0001:00015E3C       TClxMenuBuilder.SyncSelection
+ 0001:00015E88       TClxMenuBuilder.ResetAllSelections
+ 0001:00015EC4       TClxMenuBuilder.SetFocusedControl
+ 0001:00015EF8       TClxMenuBuilder.SetDragState
+ 0001:00015F38       IsThisAMainMenu
+ 0001:00015F74       GetTopLevelItem
+ 0001:00015FA8       TClxMenuBuilder.SetMenu
+ 0001:00016164       TClxMenuBuilder.Notification
+ 0001:00016194       TClxMenuBuilder.SetWorkMenu
+ 0001:000161A0       TClxMenuBuilder.ChangeWorkMenu
+ 0001:0001631C       TClxMenuBuilder.PerformUpdate
+ 0001:00016394       IsSelection
+ 0001:000163F0       TClxMenuBuilder.GetEditState
+ 0001:000164D0       TClxMenuBuilder.Cut
+ 0001:000164E4       TClxMenuBuilder.Copy
+ 0001:00016548       TClxMenuBuilder.Paste
+ 0001:000165D4       TClxMenuBuilder.Delete
+ 0001:0001661C       TClxMenuBuilder.EditAction
+ 0001:00016654       TClxMenuBuilder.GetWindowForItem
+ 0001:0001669C       TClxMenuBuilder.DesignerClosed
+ 0001:000166C8       TClxMenuBuilder.DesignerOpened
+ 0001:000166D0       TClxMenuBuilder.ItemDeleted
+ 0001:00016758       TClxMenuBuilder.ItemInserted
+ 0001:0001675C       TClxMenuBuilder.ItemsModified
+ 0001:000167F4       TMenuWin.Create
+ 0001:000168F0       TMenuWin.Paint
+ 0001:00016990       TMenuWin.CreateAndPositionNewItem
+ 0001:00016ADC       TMenuWin.FindControlIndex
+ 0001:00016B14       TMenuWin.GetActiveItem
+ 0001:00016B64       TMenuWin.GetItemsSelected
+ 0001:00016B9C       TMenuWin.GetLongestCaption
+ 0001:00016BEC       TMenuWin.GetLongestShortCut
+ 0001:00016C24       TMenuWin.HideNextLevels
+ 0001:00016C58       TMenuWin.InitDragDrop
+ 0001:00016CA0       TMenuWin.GetWindowForItem
+ 0001:00016CFC       FreeTemplate
+ 0001:00016D2C       TMenuWin.InsertMenuTemplate
+ 0001:00016E60       TMenuWin.IsAncestorLevel
+ 0001:00016E84       TMenuWin.IsLastItemEmpty
+ 0001:00016EC0       TMenuWin.IsParentLevel
+ 0001:00016EF0       TMenuWin.ItemDblClick
+ 0001:00016F7C       TMenuWin.ItemGotFocus
+ 0001:00016F9C       HandleEscape
+ 0001:00016FE0       HandleHomeEnd
+ 0001:00017038       TMenuWin.ItemKeyDown
+ 0001:00017114       IsOkToEdit
+ 0001:00017138       TMenuWin.ItemKeyPress
+ 0001:000171D4       TMenuWin.ItemOnMouseUp
+ 0001:00017218       PerformSelectionActions
+ 0001:000173A0       SetInitialValues
+ 0001:000173FC       TMenuWin.ItemOnMouseDown
+ 0001:00017460       TMenuWin.MenuInvalidNotification
+ 0001:00017490       TMenuWin.NavItemIncrement
+ 0001:000174F4       HandleVKRight
+ 0001:00017608       TMenuWin.NavItemLR
+ 0001:000176E4       NavTopUD
+ 0001:0001773C       TMenuWin.NavItemUD
+ 0001:0001778C       TMenuWin.NewSubMenu
+ 0001:000177F4       DetermineInsertPosition
+ 0001:00017838       TMenuWin.NewMenuItem
+ 0001:00017974       AdjustWindowItems
+ 0001:00017A38       ConstructList
+ 0001:00017AB8       CheckForDescendants
+ 0001:00017B28       DeleteMenuItems
+ 0001:00017B88       DeleteWindowItems
+ 0001:00017C18       HandleEmptyMenu
+ 0001:00017CBC       TMenuWin.RemoveMenuItem
+ 0001:00017E34       TMenuWin.ResetAllSelections
+ 0001:00017E6C       TMenuWin.SetItemProperties
+ 0001:00017EF4       TMenuWin.SetPosition
+ 0001:00018050       TMenuWin.SetWorkMenu
+ 0001:000180F0       SizeTop
+ 0001:000181A8       GetMenuSize
+ 0001:00018230       SizeSub
+ 0001:00018300       TMenuWin.SizeItemWindows
+ 0001:00018328       TMenuWin.StreamSelections
+ 0001:000183DC       TMenuWin.TreatAsMenuBar
+ 0001:00018400       RemoveExtraWindows
+ 0001:00018480       ReturnAppropriateWindow
+ 0001:000184D4       SetInitialValues
+ 0001:000185A8       UpdateSelfValues
+ 0001:00018604       UpdateValues
+ 0001:00018640       TMenuWin.UpdateMenuAssignments
+ 0001:00018720       TMenuWin.UpdatePropertyInspector
+ 0001:000187AC       TMenuWin.VerifyWindowsMatchMenu
+ 0001:0001880C       TMenuWin.AdjustItemSizes
+ 0001:000188A0       RelocateItemWindows
+ 0001:000189EC       TMenuWin.AdjustAfterParentSize
+ 0001:00018A58       FindNewBounds
+ 0001:00018B20       TMenuWin.PositionAfterParentSize
+ 0001:00018BF0       HandleNewItem
+ 0001:00018D48       SetInitialValues
+ 0001:00018D64       TMenuWin.UpdateNotification
+ 0001:00018E0C       MoveDroppedMenus
+ 0001:00018E74       SelectItems
+ 0001:00018F34       SetInitialValues
+ 0001:000190CC       TMenuWin.MenuDragDrop
+ 0001:00019198       TMenuWin.MenuDragOver
+ 0001:0001927C       TMenuWin.MenuEndDrag
+ 0001:0001945C       TMenuWin.MenuStartDrag
+ 0001:000194AC       TMenuWin.Notification
+ 0001:000194DC       TMenuWin.GetMaxPixmapWidth
+ 0001:000195AC       TMenuItemWin.Create
+ 0001:000196D0       TMenuItemWin.Destroy
+ 0001:0001971C       TMenuItemWin.DoSetColor
+ 0001:00019728       TMenuItemWin.GetCaptionExtent
+ 0001:00019850       TMenuItemWin.GetMenuItem
+ 0001:00019890       TMenuItemWin.MenuOwner
+ 0001:000198A0       TMenuItemWin.Notification
+ 0001:000198C0       DrawMenuItem
+ 0001:00019AE8       TMenuItemWin.Paint
+ 0001:00019C78       TMenuItemWin.GetShortCutExtent
+ 0001:00019CEC       TMenuItemWin.SetExtentValues
+ 0001:00019E54       TMenuItemWin.SetMenuItem
+ 0001:00019EEC       TMenuItemWin.SetSelected
+ 0001:00019F7C       TClxMenuBuilder.FormCreate
+ 0001:0001A158       TClxMenuBuilder.FormDestroy
+ 0001:0001A190       TClxMenuBuilder.PopupMenu1SelectMenuClick
+ 0001:0001A250       TClxMenuBuilder.PopupMenu1InsertFromTemplateClick
+ 0001:0001A310       TClxMenuBuilder.PopupMenu1SaveAsTemplateClick
+ 0001:0001A358       TClxMenuBuilder.PopupMenu1DeleteTemplatesClick
+ 0001:0001A39C       TClxMenuBuilder.MnuBuildPopupPopup
+ 0001:0001A4E8       TClxMenuBuilder.DoActivate
+ 0001:0001A5AC       TClxMenuBuilder.Activate
+ 0001:0001A5B4       TMenuItemWin.SetFocus
+ 0001:0001A5CC       TClxMenuItemProperty.GetValue
+ 0001:0001A5FC       TClxMenuItemProperty.GetAttributes
+ 0001:0001A608       TClxMenuItemProperty.Edit
+ 0001:0001A6AC       TClxMenuEditor.Edit
+ 0001:0001A778       TClxMenuEditor.ExecuteVerb
+ 0001:0001A784       TClxMenuEditor.GetVerb
+ 0001:0001A7A4       TClxMenuEditor.GetVerbCount
+ 0001:0001A7AC       TClxMenuBuilder.InsertItemClick
+ 0001:0001A7F0       TClxMenuBuilder.DeleteItemClick
+ 0001:0001A7F8       TClxMenuBuilder.CreateSubmenu1Click
+ 0001:0001A83C       TClxMenuBuilder.InsertResourceItemClick
+ 0001:0001A8F0       TClxMenuBuilder.SelectionChanged
+ 0001:0001AB34       TClxMenuBuilder.UpdatePropertyInspector
+ 0001:0001ABBC       Register
+ 0001:0001ABF8       Finalization
+ 0001:0001AC34       ClxMnuBuild
+ 0001:0001B4B0       TControlSprig.Create
+ 0001:0001B4F4       TControlSprig.DragDropTo
+ 0001:0001B52C       TControlSprig.DragOverTo
+ 0001:0001B564       TControlSprig.PaletteOverTo
+ 0001:0001B59C       WidgetControlDragDrop
+ 0001:0001B644       WidgetControlDragOver
+ 0001:0001B680       WidgetControlPaletteOver
+ 0001:0001B6D0       TWidgetControlSprig.Create
+ 0001:0001B724       TWidgetControlSprig.DragDrop
+ 0001:0001B758       TWidgetControlSprig.DragOver
+ 0001:0001B78C       TWidgetControlSprig.PaletteOver
+ 0001:0001B794       TWidgetControlRootSprig.Create
+ 0001:0001B7E8       TWidgetControlRootSprig.DragDrop
+ 0001:0001B840       TWidgetControlRootSprig.DragOver
+ 0001:0001B868       TWidgetControlRootSprig.PaletteOver
+ 0001:0001B89C       TCustomFormRootSprig.Create
+ 0001:0001B8E0       TDataModuleRootSprig.AcceptsClass
+ 0001:0001B910       TDataModuleRootSprig.Create
+ 0001:0001B954       TDataModuleRootSprig.DragOver
+ 0001:0001B994       TDataModuleRootSprig.PaletteOver
+ 0001:0001B9C4       TFrameSprig.Create
+ 0001:0001BA0C       TFrameSprig.FigureChildren
+ 0001:0001BA84       Finalization
+ 0001:0001BAB4       ClxSprigs
+ 0001:0001BEFC       TWidgetControlForm.Create
+ 0001:0001BF64       TWidgetControlForm.Destroy
+ 0001:0001BF9C       TWidgetControlForm.AfterConstruction
+ 0001:0001BFB4       TWidgetControlForm.Initialize
+ 0001:0001C10C       TWidgetControlForm.Modified
+ 0001:0001C1E0       TWidgetControlForm.FormResize
+ 0001:0001C220       TWidgetControlForm.UpdateSizers
+ 0001:0001C2AC       TWidgetControlForm.DragStart
+ 0001:0001C2F4       TWidgetControlForm.DragMove
+ 0001:0001C370       TWidgetControlForm.DragEnd
+ 0001:0001C380       TWidgetControlForm.SizerMouseDown
+ 0001:0001C3DC       TWidgetControlForm.SizerMouseMove
+ 0001:0001C434       TWidgetControlForm.SizerMouseUp
+ 0001:0001C440       TWidgetControlForm.DesignerClosed
+ 0001:0001C444       TWidgetControlForm.DesignerOpened
+ 0001:0001C47C       TWidgetControlForm.ItemDeleted
+ 0001:0001C480       TWidgetControlForm.ItemInserted
+ 0001:0001C484       TWidgetControlForm.ItemsModified
+ 0001:0001C48C       TWidgetControlForm.SelectionChanged
+ 0001:0001C490       TWidgetControlCustomModule.CreateDesignerForm
+ 0001:0001C4D8       Finalization
+ 0001:0001C508       WidgetDesignForm
+ 0001:0001C8D8       @GetPackageInfoTable
+ 0001:0001C8E0       @PackageLoad
+ 0001:0001C8EC       @PackageUnload
+ 0001:0001C8F8       clxdesigner
+ 0002:00000000       Module
+ 0002:00000018       TlsProc
+ 0002:00000028       QtKeyMap
+ 0002:000000C8       MaskBackground
+ 0002:000000D0       NotifyActionListChange
+ 0002:000000D4       ShortCuts
+ 0002:000001B0       ModalResults
+ 0002:000001DC       ActionClasses
+ 0002:000001E0       IconRect
+ 0002:000001F0       Cursors
+ 0002:00000200       Affects
+ 0002:00000208       KeyMap
+ 0002:0000022C       EmptyPoint
+ 0002:00000234       GLoadedTemplatesFrom
+ 0002:00000238       ClxMenuEditor
+ 0002:0000023C       DINFileExist
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0002:00001004       TlsIndex
+ 0002:0000100C       HInstance
+ 0002:00001010       .1
+ 0002:00001014       tlsBuffer
+ 0002:00001018       .1
+ 0002:0000101C       .3
+ 0002:00001020       .1
+ 0002:00001024       .1
+ 0002:00001028       .1
+ 0002:0000102C       .1
+ 0002:00001030       .1
+ 0002:00001034       .1
+ 0002:00001038       .1
+ 0002:0000103C       .3
+ 0002:00001040       .1
+ 0002:00001044       .1
+ 0002:00001048       .1
+ 0002:0000104C       .1
+ 0002:00001050       .3
+ 0002:00001054       .31
+ 0002:00001058       .7
+ 0002:0000105C       .1
+ 0002:00001060       HiddenWidget
+ 0002:00001064       ActivationForm
+ 0002:00001068       ConvertedActions
+ 0002:0000106C       ContainerIconMgr
+ 0002:00001070       KeyForwarder
+ 0002:00001074       .3
+ 0002:00001078       .2
+ 0002:0000107C       .2
+ 0002:00001080       .1
+ 0002:00001084       ModalHooks
+ 0002:00001088       .3
+ 0002:0000108C       .2
+ 0002:00001090       .2
+ 0002:00001094       .2
+ 0002:00001098       .1
+ 0002:0000109C       .1
+ 0002:000010A0       .2
+ 0002:000010A4       .9
+ 0002:000010A8       .7
+ 0002:000010AC       .3
+
+
+Bound resource files
+
+ClxImgEdit.res
+ClxImgEdit.xfm
+ClxDmSurface.dfm
+ClxToolWnds.xfm
+ClxMtSvDlg.xfm
+ClxMtDeDlg.xfm
+ClxMtInDlg.xfm
+ClxMnuSelect.xfm
+ClxMnuBuild.xfm
+WidgetDesignForm.xfm
+clxdesigner.res
+C:\DOCUME~1\~storm\LOCALS~1\Temp\dtf70D8.tmp
+
+
+Program entry point at 0001:0001C8F8

@@ -17,6 +17,7 @@
 #include "wordpvw.h"
 #include "formatba.h"
 #include "strings.h"
+#include <algorithm>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -534,7 +535,7 @@ void CFontComboBox::MeasureItem(LPMEASUREITEMSTRUCT lpMIS)
 	
 	GetWindowRect(&rc);
 	lpMIS->itemWidth = rc.Width();
-	lpMIS->itemHeight = max(BMH, m_nFontHeight);
+	lpMIS->itemHeight = std::max(BMH, m_nFontHeight);
 }
 
 int CFontComboBox::CompareItem(LPCOMPAREITEMSTRUCT lpCIS)

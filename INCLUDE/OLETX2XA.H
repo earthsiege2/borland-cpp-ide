@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0268 */
-/* at Wed Aug 04 16:38:59 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for oletx2xa.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -20,7 +18,7 @@
 
 /* verify that the <rpcndr.h> version is high enough to compile this file*/
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
-#define __REQUIRED_RPCNDR_H_VERSION__ 440
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
 
 #include "rpc.h"
@@ -37,6 +35,10 @@
 
 #ifndef __oletx2xa_h__
 #define __oletx2xa_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -74,8 +76,8 @@ typedef interface IDtcToXaHelperSinglePipe IDtcToXaHelperSinglePipe;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_oletx2xa_0000 */
 /* [local] */ 
@@ -129,7 +131,7 @@ extern RPC_IF_HANDLE XaMapperTypes_v0_0_s_ifspec;
 
 HRESULT __cdecl GetXaSwitch( 
     /* [in] */ XA_SWITCH_FLAGS XaSwitchFlags,
-    /* [out] */ xa_switch_t __RPC_FAR *__RPC_FAR *ppXaSwitch);
+    /* [out] */ xa_switch_t **ppXaSwitch);
 
 
 
@@ -153,18 +155,18 @@ EXTERN_C const IID IID_IDtcToXaMapper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RequestNewResourceManager( 
-            /* [in] */ char __RPC_FAR *pszDSN,
-            /* [in] */ char __RPC_FAR *pszClientDllName,
-            /* [out][in] */ DWORD __RPC_FAR *pdwRMCookie) = 0;
+            /* [in] */ char *pszDSN,
+            /* [in] */ char *pszClientDllName,
+            /* [out][in] */ DWORD *pdwRMCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TranslateTridToXid( 
-            /* [in] */ DWORD __RPC_FAR *pdwITransaction,
+            /* [in] */ DWORD *pdwITransaction,
             /* [in] */ DWORD dwRMCookie,
-            /* [out][in] */ XID __RPC_FAR *pXid) = 0;
+            /* [out][in] */ XID *pXid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnlistResourceManager( 
             /* [in] */ DWORD dwRMCookie,
-            /* [in] */ DWORD __RPC_FAR *pdwITransaction) = 0;
+            /* [in] */ DWORD *pdwITransaction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseResourceManager( 
             /* [in] */ DWORD dwRMCookie) = 0;
@@ -177,36 +179,36 @@ EXTERN_C const IID IID_IDtcToXaMapper;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDtcToXaMapper __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDtcToXaMapper * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDtcToXaMapper __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDtcToXaMapper * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDtcToXaMapper __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDtcToXaMapper * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestNewResourceManager )( 
-            IDtcToXaMapper __RPC_FAR * This,
-            /* [in] */ char __RPC_FAR *pszDSN,
-            /* [in] */ char __RPC_FAR *pszClientDllName,
-            /* [out][in] */ DWORD __RPC_FAR *pdwRMCookie);
+        HRESULT ( STDMETHODCALLTYPE *RequestNewResourceManager )( 
+            IDtcToXaMapper * This,
+            /* [in] */ char *pszDSN,
+            /* [in] */ char *pszClientDllName,
+            /* [out][in] */ DWORD *pdwRMCookie);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TranslateTridToXid )( 
-            IDtcToXaMapper __RPC_FAR * This,
-            /* [in] */ DWORD __RPC_FAR *pdwITransaction,
+        HRESULT ( STDMETHODCALLTYPE *TranslateTridToXid )( 
+            IDtcToXaMapper * This,
+            /* [in] */ DWORD *pdwITransaction,
             /* [in] */ DWORD dwRMCookie,
-            /* [out][in] */ XID __RPC_FAR *pXid);
+            /* [out][in] */ XID *pXid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnlistResourceManager )( 
-            IDtcToXaMapper __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnlistResourceManager )( 
+            IDtcToXaMapper * This,
             /* [in] */ DWORD dwRMCookie,
-            /* [in] */ DWORD __RPC_FAR *pdwITransaction);
+            /* [in] */ DWORD *pdwITransaction);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseResourceManager )( 
-            IDtcToXaMapper __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ReleaseResourceManager )( 
+            IDtcToXaMapper * This,
             /* [in] */ DWORD dwRMCookie);
         
         END_INTERFACE
@@ -214,7 +216,7 @@ EXTERN_C const IID IID_IDtcToXaMapper;
 
     interface IDtcToXaMapper
     {
-        CONST_VTBL struct IDtcToXaMapperVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDtcToXaMapperVtbl *lpVtbl;
     };
 
     
@@ -252,10 +254,10 @@ EXTERN_C const IID IID_IDtcToXaMapper;
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaMapper_RequestNewResourceManager_Proxy( 
-    IDtcToXaMapper __RPC_FAR * This,
-    /* [in] */ char __RPC_FAR *pszDSN,
-    /* [in] */ char __RPC_FAR *pszClientDllName,
-    /* [out][in] */ DWORD __RPC_FAR *pdwRMCookie);
+    IDtcToXaMapper * This,
+    /* [in] */ char *pszDSN,
+    /* [in] */ char *pszClientDllName,
+    /* [out][in] */ DWORD *pdwRMCookie);
 
 
 void __RPC_STUB IDtcToXaMapper_RequestNewResourceManager_Stub(
@@ -266,10 +268,10 @@ void __RPC_STUB IDtcToXaMapper_RequestNewResourceManager_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaMapper_TranslateTridToXid_Proxy( 
-    IDtcToXaMapper __RPC_FAR * This,
-    /* [in] */ DWORD __RPC_FAR *pdwITransaction,
+    IDtcToXaMapper * This,
+    /* [in] */ DWORD *pdwITransaction,
     /* [in] */ DWORD dwRMCookie,
-    /* [out][in] */ XID __RPC_FAR *pXid);
+    /* [out][in] */ XID *pXid);
 
 
 void __RPC_STUB IDtcToXaMapper_TranslateTridToXid_Stub(
@@ -280,9 +282,9 @@ void __RPC_STUB IDtcToXaMapper_TranslateTridToXid_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaMapper_EnlistResourceManager_Proxy( 
-    IDtcToXaMapper __RPC_FAR * This,
+    IDtcToXaMapper * This,
     /* [in] */ DWORD dwRMCookie,
-    /* [in] */ DWORD __RPC_FAR *pdwITransaction);
+    /* [in] */ DWORD *pdwITransaction);
 
 
 void __RPC_STUB IDtcToXaMapper_EnlistResourceManager_Stub(
@@ -293,7 +295,7 @@ void __RPC_STUB IDtcToXaMapper_EnlistResourceManager_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaMapper_ReleaseResourceManager_Proxy( 
-    IDtcToXaMapper __RPC_FAR * This,
+    IDtcToXaMapper * This,
     /* [in] */ DWORD dwRMCookie);
 
 
@@ -324,10 +326,10 @@ EXTERN_C const IID IID_IDtcToXaHelperFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ char __RPC_FAR *pszDSN,
-            /* [in] */ char __RPC_FAR *pszClientDllName,
-            /* [out] */ GUID __RPC_FAR *pguidRm,
-            /* [out] */ IDtcToXaHelper __RPC_FAR *__RPC_FAR *ppXaHelper) = 0;
+            /* [in] */ char *pszDSN,
+            /* [in] */ char *pszClientDllName,
+            /* [out] */ GUID *pguidRm,
+            /* [out] */ IDtcToXaHelper **ppXaHelper) = 0;
         
     };
     
@@ -337,30 +339,30 @@ EXTERN_C const IID IID_IDtcToXaHelperFactory;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDtcToXaHelperFactory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDtcToXaHelperFactory * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDtcToXaHelperFactory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDtcToXaHelperFactory * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDtcToXaHelperFactory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDtcToXaHelperFactory * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Create )( 
-            IDtcToXaHelperFactory __RPC_FAR * This,
-            /* [in] */ char __RPC_FAR *pszDSN,
-            /* [in] */ char __RPC_FAR *pszClientDllName,
-            /* [out] */ GUID __RPC_FAR *pguidRm,
-            /* [out] */ IDtcToXaHelper __RPC_FAR *__RPC_FAR *ppXaHelper);
+        HRESULT ( STDMETHODCALLTYPE *Create )( 
+            IDtcToXaHelperFactory * This,
+            /* [in] */ char *pszDSN,
+            /* [in] */ char *pszClientDllName,
+            /* [out] */ GUID *pguidRm,
+            /* [out] */ IDtcToXaHelper **ppXaHelper);
         
         END_INTERFACE
     } IDtcToXaHelperFactoryVtbl;
 
     interface IDtcToXaHelperFactory
     {
-        CONST_VTBL struct IDtcToXaHelperFactoryVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDtcToXaHelperFactoryVtbl *lpVtbl;
     };
 
     
@@ -389,11 +391,11 @@ EXTERN_C const IID IID_IDtcToXaHelperFactory;
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaHelperFactory_Create_Proxy( 
-    IDtcToXaHelperFactory __RPC_FAR * This,
-    /* [in] */ char __RPC_FAR *pszDSN,
-    /* [in] */ char __RPC_FAR *pszClientDllName,
-    /* [out] */ GUID __RPC_FAR *pguidRm,
-    /* [out] */ IDtcToXaHelper __RPC_FAR *__RPC_FAR *ppXaHelper);
+    IDtcToXaHelperFactory * This,
+    /* [in] */ char *pszDSN,
+    /* [in] */ char *pszClientDllName,
+    /* [out] */ GUID *pguidRm,
+    /* [out] */ IDtcToXaHelper **ppXaHelper);
 
 
 void __RPC_STUB IDtcToXaHelperFactory_Create_Stub(
@@ -426,9 +428,9 @@ EXTERN_C const IID IID_IDtcToXaHelper;
             /* [in] */ BOOL i_fDoRecovery) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TranslateTridToXid( 
-            /* [in] */ ITransaction __RPC_FAR *pITransaction,
-            /* [in] */ GUID __RPC_FAR *pguidBqual,
-            /* [out] */ XID __RPC_FAR *pXid) = 0;
+            /* [in] */ ITransaction *pITransaction,
+            /* [in] */ GUID *pguidBqual,
+            /* [out] */ XID *pXid) = 0;
         
     };
     
@@ -438,33 +440,33 @@ EXTERN_C const IID IID_IDtcToXaHelper;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDtcToXaHelper __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDtcToXaHelper * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDtcToXaHelper __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDtcToXaHelper * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDtcToXaHelper __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDtcToXaHelper * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
-            IDtcToXaHelper __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Close )( 
+            IDtcToXaHelper * This,
             /* [in] */ BOOL i_fDoRecovery);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TranslateTridToXid )( 
-            IDtcToXaHelper __RPC_FAR * This,
-            /* [in] */ ITransaction __RPC_FAR *pITransaction,
-            /* [in] */ GUID __RPC_FAR *pguidBqual,
-            /* [out] */ XID __RPC_FAR *pXid);
+        HRESULT ( STDMETHODCALLTYPE *TranslateTridToXid )( 
+            IDtcToXaHelper * This,
+            /* [in] */ ITransaction *pITransaction,
+            /* [in] */ GUID *pguidBqual,
+            /* [out] */ XID *pXid);
         
         END_INTERFACE
     } IDtcToXaHelperVtbl;
 
     interface IDtcToXaHelper
     {
-        CONST_VTBL struct IDtcToXaHelperVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDtcToXaHelperVtbl *lpVtbl;
     };
 
     
@@ -496,7 +498,7 @@ EXTERN_C const IID IID_IDtcToXaHelper;
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaHelper_Close_Proxy( 
-    IDtcToXaHelper __RPC_FAR * This,
+    IDtcToXaHelper * This,
     /* [in] */ BOOL i_fDoRecovery);
 
 
@@ -508,10 +510,10 @@ void __RPC_STUB IDtcToXaHelper_Close_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaHelper_TranslateTridToXid_Proxy( 
-    IDtcToXaHelper __RPC_FAR * This,
-    /* [in] */ ITransaction __RPC_FAR *pITransaction,
-    /* [in] */ GUID __RPC_FAR *pguidBqual,
-    /* [out] */ XID __RPC_FAR *pXid);
+    IDtcToXaHelper * This,
+    /* [in] */ ITransaction *pITransaction,
+    /* [in] */ GUID *pguidBqual,
+    /* [out] */ XID *pXid);
 
 
 void __RPC_STUB IDtcToXaHelper_TranslateTridToXid_Stub(
@@ -541,20 +543,20 @@ EXTERN_C const IID IID_IDtcToXaHelperSinglePipe;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE XARMCreate( 
-            /* [string][in] */ char __RPC_FAR *pszDSN,
-            /* [string][in] */ char __RPC_FAR *pszClientDll,
-            /* [out][in] */ DWORD __RPC_FAR *pdwRMCookie) = 0;
+            /* [string][in] */ char *pszDSN,
+            /* [string][in] */ char *pszClientDll,
+            /* [out][in] */ DWORD *pdwRMCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConvertTridToXID( 
-            /* [in] */ DWORD __RPC_FAR *pdwITrans,
+            /* [in] */ DWORD *pdwITrans,
             /* [in] */ DWORD dwRMCookie,
-            /* [out][in] */ XID __RPC_FAR *pxid) = 0;
+            /* [out][in] */ XID *pxid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnlistWithRM( 
             /* [in] */ DWORD dwRMCookie,
-            /* [in] */ ITransaction __RPC_FAR *i_pITransaction,
-            /* [in] */ ITransactionResourceAsync __RPC_FAR *i_pITransRes,
-            /* [out] */ ITransactionEnlistmentAsync __RPC_FAR *__RPC_FAR *o_ppITransEnslitment) = 0;
+            /* [in] */ ITransaction *i_pITransaction,
+            /* [in] */ ITransactionResourceAsync *i_pITransRes,
+            /* [out] */ ITransactionEnlistmentAsync **o_ppITransEnslitment) = 0;
         
         virtual void STDMETHODCALLTYPE ReleaseRMCookie( 
             /* [in] */ DWORD i_dwRMCookie,
@@ -568,38 +570,38 @@ EXTERN_C const IID IID_IDtcToXaHelperSinglePipe;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDtcToXaHelperSinglePipe __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDtcToXaHelperSinglePipe * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDtcToXaHelperSinglePipe __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDtcToXaHelperSinglePipe * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDtcToXaHelperSinglePipe __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDtcToXaHelperSinglePipe * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *XARMCreate )( 
-            IDtcToXaHelperSinglePipe __RPC_FAR * This,
-            /* [string][in] */ char __RPC_FAR *pszDSN,
-            /* [string][in] */ char __RPC_FAR *pszClientDll,
-            /* [out][in] */ DWORD __RPC_FAR *pdwRMCookie);
+        HRESULT ( STDMETHODCALLTYPE *XARMCreate )( 
+            IDtcToXaHelperSinglePipe * This,
+            /* [string][in] */ char *pszDSN,
+            /* [string][in] */ char *pszClientDll,
+            /* [out][in] */ DWORD *pdwRMCookie);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ConvertTridToXID )( 
-            IDtcToXaHelperSinglePipe __RPC_FAR * This,
-            /* [in] */ DWORD __RPC_FAR *pdwITrans,
+        HRESULT ( STDMETHODCALLTYPE *ConvertTridToXID )( 
+            IDtcToXaHelperSinglePipe * This,
+            /* [in] */ DWORD *pdwITrans,
             /* [in] */ DWORD dwRMCookie,
-            /* [out][in] */ XID __RPC_FAR *pxid);
+            /* [out][in] */ XID *pxid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnlistWithRM )( 
-            IDtcToXaHelperSinglePipe __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnlistWithRM )( 
+            IDtcToXaHelperSinglePipe * This,
             /* [in] */ DWORD dwRMCookie,
-            /* [in] */ ITransaction __RPC_FAR *i_pITransaction,
-            /* [in] */ ITransactionResourceAsync __RPC_FAR *i_pITransRes,
-            /* [out] */ ITransactionEnlistmentAsync __RPC_FAR *__RPC_FAR *o_ppITransEnslitment);
+            /* [in] */ ITransaction *i_pITransaction,
+            /* [in] */ ITransactionResourceAsync *i_pITransRes,
+            /* [out] */ ITransactionEnlistmentAsync **o_ppITransEnslitment);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *ReleaseRMCookie )( 
-            IDtcToXaHelperSinglePipe __RPC_FAR * This,
+        void ( STDMETHODCALLTYPE *ReleaseRMCookie )( 
+            IDtcToXaHelperSinglePipe * This,
             /* [in] */ DWORD i_dwRMCookie,
             /* [in] */ BOOL i_fNormal);
         
@@ -608,7 +610,7 @@ EXTERN_C const IID IID_IDtcToXaHelperSinglePipe;
 
     interface IDtcToXaHelperSinglePipe
     {
-        CONST_VTBL struct IDtcToXaHelperSinglePipeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDtcToXaHelperSinglePipeVtbl *lpVtbl;
     };
 
     
@@ -646,10 +648,10 @@ EXTERN_C const IID IID_IDtcToXaHelperSinglePipe;
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaHelperSinglePipe_XARMCreate_Proxy( 
-    IDtcToXaHelperSinglePipe __RPC_FAR * This,
-    /* [string][in] */ char __RPC_FAR *pszDSN,
-    /* [string][in] */ char __RPC_FAR *pszClientDll,
-    /* [out][in] */ DWORD __RPC_FAR *pdwRMCookie);
+    IDtcToXaHelperSinglePipe * This,
+    /* [string][in] */ char *pszDSN,
+    /* [string][in] */ char *pszClientDll,
+    /* [out][in] */ DWORD *pdwRMCookie);
 
 
 void __RPC_STUB IDtcToXaHelperSinglePipe_XARMCreate_Stub(
@@ -660,10 +662,10 @@ void __RPC_STUB IDtcToXaHelperSinglePipe_XARMCreate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaHelperSinglePipe_ConvertTridToXID_Proxy( 
-    IDtcToXaHelperSinglePipe __RPC_FAR * This,
-    /* [in] */ DWORD __RPC_FAR *pdwITrans,
+    IDtcToXaHelperSinglePipe * This,
+    /* [in] */ DWORD *pdwITrans,
     /* [in] */ DWORD dwRMCookie,
-    /* [out][in] */ XID __RPC_FAR *pxid);
+    /* [out][in] */ XID *pxid);
 
 
 void __RPC_STUB IDtcToXaHelperSinglePipe_ConvertTridToXID_Stub(
@@ -674,11 +676,11 @@ void __RPC_STUB IDtcToXaHelperSinglePipe_ConvertTridToXID_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDtcToXaHelperSinglePipe_EnlistWithRM_Proxy( 
-    IDtcToXaHelperSinglePipe __RPC_FAR * This,
+    IDtcToXaHelperSinglePipe * This,
     /* [in] */ DWORD dwRMCookie,
-    /* [in] */ ITransaction __RPC_FAR *i_pITransaction,
-    /* [in] */ ITransactionResourceAsync __RPC_FAR *i_pITransRes,
-    /* [out] */ ITransactionEnlistmentAsync __RPC_FAR *__RPC_FAR *o_ppITransEnslitment);
+    /* [in] */ ITransaction *i_pITransaction,
+    /* [in] */ ITransactionResourceAsync *i_pITransRes,
+    /* [out] */ ITransactionEnlistmentAsync **o_ppITransEnslitment);
 
 
 void __RPC_STUB IDtcToXaHelperSinglePipe_EnlistWithRM_Stub(
@@ -689,7 +691,7 @@ void __RPC_STUB IDtcToXaHelperSinglePipe_EnlistWithRM_Stub(
 
 
 void STDMETHODCALLTYPE IDtcToXaHelperSinglePipe_ReleaseRMCookie_Proxy( 
-    IDtcToXaHelperSinglePipe __RPC_FAR * This,
+    IDtcToXaHelperSinglePipe * This,
     /* [in] */ DWORD i_dwRMCookie,
     /* [in] */ BOOL i_fNormal);
 
@@ -705,7 +707,7 @@ void __RPC_STUB IDtcToXaHelperSinglePipe_ReleaseRMCookie_Stub(
 #endif 	/* __IDtcToXaHelperSinglePipe_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_oletx2xa_0112 */
+/* interface __MIDL_itf_oletx2xa_0118 */
 /* [local] */ 
 
 
@@ -727,8 +729,8 @@ DEFINE_GUID(IID_IDtcToXaHelperSinglePipe,		0x47ED4971, 0x53B3, 0x11d1, 0xBB, 0xB
 #endif
 
 
-extern RPC_IF_HANDLE __MIDL_itf_oletx2xa_0112_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_oletx2xa_0112_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_oletx2xa_0118_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_oletx2xa_0118_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
@@ -741,4 +743,3 @@ extern RPC_IF_HANDLE __MIDL_itf_oletx2xa_0112_v0_0_s_ifspec;
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

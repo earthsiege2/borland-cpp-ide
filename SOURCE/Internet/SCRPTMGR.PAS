@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1999 Inprise Corporation          }
+{  Copyright (c) 1999-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -11,8 +11,14 @@ unit ScrptMgr;
 
 interface
 
-uses Classes, Messages, ImgList, HTTPApp, WebComp,
-  CompProd, SysUtils, Db, DbClient, PagItems, XMLBrokr, Contnrs;
+{$IFDEF MSWINDOWS}
+uses Classes, Messages,  HTTPApp, WebComp,
+  CompProd, SysUtils, DB, DBClient, PagItems, XMLBrokr, Contnrs, MidComp;
+{$ENDIF}
+{$IFDEF LINUX}
+uses Classes, HTTPApp, WebComp,
+  CompProd, SysUtils, DB, DBClient, PagItems, XMLBrokr, Contnrs, MidComp;
+{$ENDIF}
 
 type
 

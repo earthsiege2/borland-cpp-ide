@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:36:57 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for urlmon.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -38,12 +37,22 @@
 #ifndef __urlmon_h__
 #define __urlmon_h__
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
 /* Forward Declarations */ 
 
 #ifndef __IPersistMoniker_FWD_DEFINED__
 #define __IPersistMoniker_FWD_DEFINED__
 typedef interface IPersistMoniker IPersistMoniker;
 #endif 	/* __IPersistMoniker_FWD_DEFINED__ */
+
+
+#ifndef __IMonikerProp_FWD_DEFINED__
+#define __IMonikerProp_FWD_DEFINED__
+typedef interface IMonikerProp IMonikerProp;
+#endif 	/* __IMonikerProp_FWD_DEFINED__ */
 
 
 #ifndef __IBindProtocol_FWD_DEFINED__
@@ -74,6 +83,12 @@ typedef interface IAuthenticate IAuthenticate;
 #define __IHttpNegotiate_FWD_DEFINED__
 typedef interface IHttpNegotiate IHttpNegotiate;
 #endif 	/* __IHttpNegotiate_FWD_DEFINED__ */
+
+
+#ifndef __IHttpNegotiate2_FWD_DEFINED__
+#define __IHttpNegotiate2_FWD_DEFINED__
+typedef interface IHttpNegotiate2 IHttpNegotiate2;
+#endif 	/* __IHttpNegotiate2_FWD_DEFINED__ */
 
 
 #ifndef __IWindowForBindingUI_FWD_DEFINED__
@@ -220,6 +235,12 @@ typedef interface IEncodingFilterFactory IEncodingFilterFactory;
 #endif 	/* __IEncodingFilterFactory_FWD_DEFINED__ */
 
 
+#ifndef __IWrappedProtocol_FWD_DEFINED__
+#define __IWrappedProtocol_FWD_DEFINED__
+typedef interface IWrappedProtocol IWrappedProtocol;
+#endif 	/* __IWrappedProtocol_FWD_DEFINED__ */
+
+
 /* header files for imported files */
 #include "objidl.h"
 #include "oleidl.h"
@@ -230,8 +251,8 @@ typedef interface IEncodingFilterFactory IEncodingFilterFactory;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_urlmon_0000 */
 /* [local] */ 
@@ -261,10 +282,29 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
 
 
+
+// Side-by-Side clsid
+EXTERN_C const IID CLSID_SBS_StdURLMoniker;  
+EXTERN_C const IID CLSID_SBS_HttpProtocol;   
+EXTERN_C const IID CLSID_SBS_FtpProtocol;    
+EXTERN_C const IID CLSID_SBS_GopherProtocol; 
+EXTERN_C const IID CLSID_SBS_HttpSProtocol;  
+EXTERN_C const IID CLSID_SBS_FileProtocol;   
+EXTERN_C const IID CLSID_SBS_MkProtocol;     
+EXTERN_C const IID CLSID_SBS_UrlMkBindCtx;   
+EXTERN_C const IID CLSID_SBS_SoftDistExt;  
+EXTERN_C const IID CLSID_SBS_StdEncodingFilterFac; 
+EXTERN_C const IID CLSID_SBS_DeCompMimeFilter;     
+EXTERN_C const IID CLSID_SBS_CdlProtocol;          
+EXTERN_C const IID CLSID_SBS_ClassInstallFilter;   
+EXTERN_C const IID CLSID_SBS_InternetSecurityManager;  
+EXTERN_C const IID CLSID_SBS_InternetZoneManager;  
+// END Side-by-Side clsid
 // These are for backwards compatibility with previous URLMON versions
 #define BINDF_DONTUSECACHE BINDF_GETNEWESTVERSION
 #define BINDF_DONTPUTINCACHE BINDF_NOWRITECACHE
 #define BINDF_NOCOPYDATA BINDF_PULLDATA
+#define INVALID_P_ROOT_SECURITY_ID ((BYTE*)-1)
 #define PI_DOCFILECLSIDLOOKUP PI_CLSIDLOOKUP
 EXTERN_C const IID IID_IAsyncMoniker;    
 EXTERN_C const IID CLSID_StdURLMoniker;  
@@ -284,9 +324,13 @@ EXTERN_C const IID IID_IAsyncBindCtx;
  
 #define SZ_URLCONTEXT           OLESTR("URL Context")
 #define SZ_ASYNC_CALLEE         OLESTR("AsyncCallee")
-#define MKSYS_URLMONIKER    6                 
+#define MKSYS_URLMONIKER         6            
+#define URL_MK_LEGACY            0            
+#define URL_MK_UNIFORM           1            
+#define URL_MK_NO_CANONICALIZE   2            
  
 STDAPI CreateURLMoniker(LPMONIKER pMkCtx, LPCWSTR szURL, LPMONIKER FAR * ppmk);             
+STDAPI CreateURLMonikerEx(LPMONIKER pMkCtx, LPCWSTR szURL, LPMONIKER FAR * ppmk, DWORD dwFlags);             
 STDAPI GetClassURL(LPCWSTR szURL, CLSID *pClsID);                                           
 STDAPI CreateAsyncBindCtx(DWORD reserved, IBindStatusCallback *pBSCb,                       
                                 IEnumFORMATETC *pEFetc, IBindCtx **ppBC);                   
@@ -342,6 +386,7 @@ STDAPI FindMimeFromData(
 #define     FMFD_DEFAULT        0x00000000 
 #define     FMFD_URLASFILENAME  0x00000001 
 STDAPI ObtainUserAgentString(DWORD dwOption, LPSTR pszUAOut, DWORD* cbSize);       
+STDAPI CompareSecurityIds(BYTE* pbSecurityId1, DWORD dwLen1, BYTE* pbSecurityId2, DWORD dwLen2, DWORD dwReserved);    
  
 // URLMON-specific defines for UrlMkSetSessionOption() above
 #define URLMON_OPTION_USERAGENT  0x10000001
@@ -373,6 +418,7 @@ STDAPI ObtainUserAgentString(DWORD dwOption, LPSTR pszUAOut, DWORD* cbSize);
 #define CFSTR_MIME_RAWDATA      (TEXT("application/octet-stream"))
 #define CFSTR_MIME_RAWDATASTRM  (TEXT("application/octet-stream"))
 #define CFSTR_MIME_PDF          (TEXT("application/pdf"))        
+#define CFSTR_MIME_HTA          (TEXT("application/hta"))        
 #define CFSTR_MIME_X_AIFF       (TEXT("audio/x-aiff"))           
 #define CFSTR_MIME_X_REALAUDIO  (TEXT("audio/x-pn-realaudio"))   
 #define CFSTR_MIME_XBM          (TEXT("image/xbm"))              
@@ -380,6 +426,7 @@ STDAPI ObtainUserAgentString(DWORD dwOption, LPSTR pszUAOut, DWORD* cbSize);
 #define CFSTR_MIME_X_MSVIDEO    (TEXT("video/x-msvideo"))        
 #define CFSTR_MIME_X_SGI_MOVIE  (TEXT("video/x-sgi-movie"))      
 #define CFSTR_MIME_HTML         (TEXT("text/html"))              
+#define CFSTR_MIME_XML          (TEXT("text/xml"))               
  
 // MessageId: MK_S_ASYNCHRONOUS                                              
 // MessageText: Operation is successful, but will complete asynchronously.   
@@ -424,11 +471,12 @@ STDAPI ObtainUserAgentString(DWORD dwOption, LPSTR pszUAOut, DWORD* cbSize);
 #define INET_E_REDIRECT_TO_DIR           _HRESULT_TYPEDEF_(0x800C0015L)      
 #define INET_E_CANNOT_LOCK_REQUEST       _HRESULT_TYPEDEF_(0x800C0016L)      
 #define INET_E_USE_EXTEND_BINDING        _HRESULT_TYPEDEF_(0x800C0017L)      
+#define INET_E_TERMINATED_BIND           _HRESULT_TYPEDEF_(0x800C0018L)      
 #define INET_E_ERROR_FIRST               _HRESULT_TYPEDEF_(0x800C0002L)      
-#define INET_E_ERROR_LAST                INET_E_USE_EXTEND_BINDING
 #define INET_E_CODE_DOWNLOAD_DECLINED    _HRESULT_TYPEDEF_(0x800C0100L)      
 #define INET_E_RESULT_DISPATCHED         _HRESULT_TYPEDEF_(0x800C0200L)      
 #define INET_E_CANNOT_REPLACE_SFP_FILE   _HRESULT_TYPEDEF_(0x800C0300L)      
+#define INET_E_ERROR_LAST                INET_E_CANNOT_REPLACE_SFP_FILE
 #ifndef _LPPERSISTMONIKER_DEFINED
 #define _LPPERSISTMONIKER_DEFINED
 
@@ -442,7 +490,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0000_v0_0_s_ifspec;
 /* interface IPersistMoniker */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IPersistMoniker __RPC_FAR *LPPERSISTMONIKER;
+typedef /* [unique] */ IPersistMoniker *LPPERSISTMONIKER;
 
 
 EXTERN_C const IID IID_IPersistMoniker;
@@ -454,27 +502,27 @@ EXTERN_C const IID IID_IPersistMoniker;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClassID( 
-            /* [out] */ CLSID __RPC_FAR *pClassID) = 0;
+            /* [out] */ CLSID *pClassID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsDirty( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Load( 
             /* [in] */ BOOL fFullyAvailable,
-            /* [in] */ IMoniker __RPC_FAR *pimkName,
+            /* [in] */ IMoniker *pimkName,
             /* [in] */ LPBC pibc,
             /* [in] */ DWORD grfMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Save( 
-            /* [in] */ IMoniker __RPC_FAR *pimkName,
+            /* [in] */ IMoniker *pimkName,
             /* [in] */ LPBC pbc,
             /* [in] */ BOOL fRemember) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveCompleted( 
-            /* [in] */ IMoniker __RPC_FAR *pimkName,
+            /* [in] */ IMoniker *pimkName,
             /* [in] */ LPBC pibc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurMoniker( 
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppimkName) = 0;
+            /* [out] */ IMoniker **ppimkName) = 0;
         
     };
     
@@ -484,52 +532,52 @@ EXTERN_C const IID IID_IPersistMoniker;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPersistMoniker __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPersistMoniker * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPersistMoniker __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPersistMoniker * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPersistMoniker __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPersistMoniker * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassID )( 
-            IPersistMoniker __RPC_FAR * This,
-            /* [out] */ CLSID __RPC_FAR *pClassID);
+        HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
+            IPersistMoniker * This,
+            /* [out] */ CLSID *pClassID);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsDirty )( 
-            IPersistMoniker __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *IsDirty )( 
+            IPersistMoniker * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Load )( 
-            IPersistMoniker __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Load )( 
+            IPersistMoniker * This,
             /* [in] */ BOOL fFullyAvailable,
-            /* [in] */ IMoniker __RPC_FAR *pimkName,
+            /* [in] */ IMoniker *pimkName,
             /* [in] */ LPBC pibc,
             /* [in] */ DWORD grfMode);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Save )( 
-            IPersistMoniker __RPC_FAR * This,
-            /* [in] */ IMoniker __RPC_FAR *pimkName,
+        HRESULT ( STDMETHODCALLTYPE *Save )( 
+            IPersistMoniker * This,
+            /* [in] */ IMoniker *pimkName,
             /* [in] */ LPBC pbc,
             /* [in] */ BOOL fRemember);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveCompleted )( 
-            IPersistMoniker __RPC_FAR * This,
-            /* [in] */ IMoniker __RPC_FAR *pimkName,
+        HRESULT ( STDMETHODCALLTYPE *SaveCompleted )( 
+            IPersistMoniker * This,
+            /* [in] */ IMoniker *pimkName,
             /* [in] */ LPBC pibc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCurMoniker )( 
-            IPersistMoniker __RPC_FAR * This,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppimkName);
+        HRESULT ( STDMETHODCALLTYPE *GetCurMoniker )( 
+            IPersistMoniker * This,
+            /* [out] */ IMoniker **ppimkName);
         
         END_INTERFACE
     } IPersistMonikerVtbl;
 
     interface IPersistMoniker
     {
-        CONST_VTBL struct IPersistMonikerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPersistMonikerVtbl *lpVtbl;
     };
 
     
@@ -573,8 +621,8 @@ EXTERN_C const IID IID_IPersistMoniker;
 
 
 HRESULT STDMETHODCALLTYPE IPersistMoniker_GetClassID_Proxy( 
-    IPersistMoniker __RPC_FAR * This,
-    /* [out] */ CLSID __RPC_FAR *pClassID);
+    IPersistMoniker * This,
+    /* [out] */ CLSID *pClassID);
 
 
 void __RPC_STUB IPersistMoniker_GetClassID_Stub(
@@ -585,7 +633,7 @@ void __RPC_STUB IPersistMoniker_GetClassID_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistMoniker_IsDirty_Proxy( 
-    IPersistMoniker __RPC_FAR * This);
+    IPersistMoniker * This);
 
 
 void __RPC_STUB IPersistMoniker_IsDirty_Stub(
@@ -596,9 +644,9 @@ void __RPC_STUB IPersistMoniker_IsDirty_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistMoniker_Load_Proxy( 
-    IPersistMoniker __RPC_FAR * This,
+    IPersistMoniker * This,
     /* [in] */ BOOL fFullyAvailable,
-    /* [in] */ IMoniker __RPC_FAR *pimkName,
+    /* [in] */ IMoniker *pimkName,
     /* [in] */ LPBC pibc,
     /* [in] */ DWORD grfMode);
 
@@ -611,8 +659,8 @@ void __RPC_STUB IPersistMoniker_Load_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistMoniker_Save_Proxy( 
-    IPersistMoniker __RPC_FAR * This,
-    /* [in] */ IMoniker __RPC_FAR *pimkName,
+    IPersistMoniker * This,
+    /* [in] */ IMoniker *pimkName,
     /* [in] */ LPBC pbc,
     /* [in] */ BOOL fRemember);
 
@@ -625,8 +673,8 @@ void __RPC_STUB IPersistMoniker_Save_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistMoniker_SaveCompleted_Proxy( 
-    IPersistMoniker __RPC_FAR * This,
-    /* [in] */ IMoniker __RPC_FAR *pimkName,
+    IPersistMoniker * This,
+    /* [in] */ IMoniker *pimkName,
     /* [in] */ LPBC pibc);
 
 
@@ -638,8 +686,8 @@ void __RPC_STUB IPersistMoniker_SaveCompleted_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistMoniker_GetCurMoniker_Proxy( 
-    IPersistMoniker __RPC_FAR * This,
-    /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppimkName);
+    IPersistMoniker * This,
+    /* [out] */ IMoniker **ppimkName);
 
 
 void __RPC_STUB IPersistMoniker_GetCurMoniker_Stub(
@@ -653,7 +701,118 @@ void __RPC_STUB IPersistMoniker_GetCurMoniker_Stub(
 #endif 	/* __IPersistMoniker_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0168 */
+/* interface __MIDL_itf_urlmon_0173 */
+/* [local] */ 
+
+#endif
+#ifndef _LPMONIKERPROP_DEFINED
+#define _LPMONIKERPROP_DEFINED
+
+
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0173_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0173_v0_0_s_ifspec;
+
+#ifndef __IMonikerProp_INTERFACE_DEFINED__
+#define __IMonikerProp_INTERFACE_DEFINED__
+
+/* interface IMonikerProp */
+/* [unique][uuid][object] */ 
+
+typedef /* [unique] */ IMonikerProp *LPMONIKERPROP;
+
+typedef /* [public][public] */ 
+enum __MIDL_IMonikerProp_0001
+    {	MIMETYPEPROP	= 0
+    } 	MONIKERPROPERTY;
+
+
+EXTERN_C const IID IID_IMonikerProp;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("a5ca5f7f-1847-4d87-9c5b-918509f7511d")
+    IMonikerProp : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE PutProperty( 
+            /* [in] */ MONIKERPROPERTY mkp,
+            /* [in] */ LPCWSTR val) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMonikerPropVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMonikerProp * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMonikerProp * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMonikerProp * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
+            IMonikerProp * This,
+            /* [in] */ MONIKERPROPERTY mkp,
+            /* [in] */ LPCWSTR val);
+        
+        END_INTERFACE
+    } IMonikerPropVtbl;
+
+    interface IMonikerProp
+    {
+        CONST_VTBL struct IMonikerPropVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMonikerProp_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMonikerProp_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMonikerProp_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMonikerProp_PutProperty(This,mkp,val)	\
+    (This)->lpVtbl -> PutProperty(This,mkp,val)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IMonikerProp_PutProperty_Proxy( 
+    IMonikerProp * This,
+    /* [in] */ MONIKERPROPERTY mkp,
+    /* [in] */ LPCWSTR val);
+
+
+void __RPC_STUB IMonikerProp_PutProperty_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMonikerProp_INTERFACE_DEFINED__ */
+
+
+/* interface __MIDL_itf_urlmon_0174 */
 /* [local] */ 
 
 #endif
@@ -661,8 +820,8 @@ void __RPC_STUB IPersistMoniker_GetCurMoniker_Stub(
 #define _LPBINDPROTOCOL_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0168_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0168_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0174_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0174_v0_0_s_ifspec;
 
 #ifndef __IBindProtocol_INTERFACE_DEFINED__
 #define __IBindProtocol_INTERFACE_DEFINED__
@@ -670,7 +829,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0168_v0_0_s_ifspec;
 /* interface IBindProtocol */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IBindProtocol __RPC_FAR *LPBINDPROTOCOL;
+typedef /* [unique] */ IBindProtocol *LPBINDPROTOCOL;
 
 
 EXTERN_C const IID IID_IBindProtocol;
@@ -683,8 +842,8 @@ EXTERN_C const IID IID_IBindProtocol;
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateBinding( 
             /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IBindCtx __RPC_FAR *pbc,
-            /* [out] */ IBinding __RPC_FAR *__RPC_FAR *ppb) = 0;
+            /* [in] */ IBindCtx *pbc,
+            /* [out] */ IBinding **ppb) = 0;
         
     };
     
@@ -694,29 +853,29 @@ EXTERN_C const IID IID_IBindProtocol;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IBindProtocol __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IBindProtocol * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IBindProtocol __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IBindProtocol * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IBindProtocol __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IBindProtocol * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateBinding )( 
-            IBindProtocol __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CreateBinding )( 
+            IBindProtocol * This,
             /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IBindCtx __RPC_FAR *pbc,
-            /* [out] */ IBinding __RPC_FAR *__RPC_FAR *ppb);
+            /* [in] */ IBindCtx *pbc,
+            /* [out] */ IBinding **ppb);
         
         END_INTERFACE
     } IBindProtocolVtbl;
 
     interface IBindProtocol
     {
-        CONST_VTBL struct IBindProtocolVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IBindProtocolVtbl *lpVtbl;
     };
 
     
@@ -745,10 +904,10 @@ EXTERN_C const IID IID_IBindProtocol;
 
 
 HRESULT STDMETHODCALLTYPE IBindProtocol_CreateBinding_Proxy( 
-    IBindProtocol __RPC_FAR * This,
+    IBindProtocol * This,
     /* [in] */ LPCWSTR szUrl,
-    /* [in] */ IBindCtx __RPC_FAR *pbc,
-    /* [out] */ IBinding __RPC_FAR *__RPC_FAR *ppb);
+    /* [in] */ IBindCtx *pbc,
+    /* [out] */ IBinding **ppb);
 
 
 void __RPC_STUB IBindProtocol_CreateBinding_Stub(
@@ -762,7 +921,7 @@ void __RPC_STUB IBindProtocol_CreateBinding_Stub(
 #endif 	/* __IBindProtocol_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0169 */
+/* interface __MIDL_itf_urlmon_0175 */
 /* [local] */ 
 
 #endif
@@ -770,8 +929,8 @@ void __RPC_STUB IBindProtocol_CreateBinding_Stub(
 #define _LPBINDING_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0169_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0169_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0175_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0175_v0_0_s_ifspec;
 
 #ifndef __IBinding_INTERFACE_DEFINED__
 #define __IBinding_INTERFACE_DEFINED__
@@ -779,7 +938,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0169_v0_0_s_ifspec;
 /* interface IBinding */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IBinding __RPC_FAR *LPBINDING;
+typedef /* [unique] */ IBinding *LPBINDING;
 
 
 EXTERN_C const IID IID_IBinding;
@@ -800,13 +959,13 @@ EXTERN_C const IID IID_IBinding;
             /* [in] */ LONG nPriority) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPriority( 
-            /* [out] */ LONG __RPC_FAR *pnPriority) = 0;
+            /* [out] */ LONG *pnPriority) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetBindResult( 
-            /* [out] */ CLSID __RPC_FAR *pclsidProtocol,
-            /* [out] */ DWORD __RPC_FAR *pdwResult,
-            /* [out] */ LPOLESTR __RPC_FAR *pszResult,
-            /* [out][in] */ DWORD __RPC_FAR *pdwReserved) = 0;
+            /* [out] */ CLSID *pclsidProtocol,
+            /* [out] */ DWORD *pdwResult,
+            /* [out] */ LPOLESTR *pszResult,
+            /* [out][in] */ DWORD *pdwReserved) = 0;
         
     };
     
@@ -816,47 +975,47 @@ EXTERN_C const IID IID_IBinding;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IBinding __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IBinding * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IBinding __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IBinding * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IBinding __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IBinding * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Abort )( 
-            IBinding __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Abort )( 
+            IBinding * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Suspend )( 
-            IBinding __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Suspend )( 
+            IBinding * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Resume )( 
-            IBinding __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Resume )( 
+            IBinding * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPriority )( 
-            IBinding __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetPriority )( 
+            IBinding * This,
             /* [in] */ LONG nPriority);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPriority )( 
-            IBinding __RPC_FAR * This,
-            /* [out] */ LONG __RPC_FAR *pnPriority);
+        HRESULT ( STDMETHODCALLTYPE *GetPriority )( 
+            IBinding * This,
+            /* [out] */ LONG *pnPriority);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBindResult )( 
-            IBinding __RPC_FAR * This,
-            /* [out] */ CLSID __RPC_FAR *pclsidProtocol,
-            /* [out] */ DWORD __RPC_FAR *pdwResult,
-            /* [out] */ LPOLESTR __RPC_FAR *pszResult,
-            /* [out][in] */ DWORD __RPC_FAR *pdwReserved);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetBindResult )( 
+            IBinding * This,
+            /* [out] */ CLSID *pclsidProtocol,
+            /* [out] */ DWORD *pdwResult,
+            /* [out] */ LPOLESTR *pszResult,
+            /* [out][in] */ DWORD *pdwReserved);
         
         END_INTERFACE
     } IBindingVtbl;
 
     interface IBinding
     {
-        CONST_VTBL struct IBindingVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IBindingVtbl *lpVtbl;
     };
 
     
@@ -900,7 +1059,7 @@ EXTERN_C const IID IID_IBinding;
 
 
 HRESULT STDMETHODCALLTYPE IBinding_Abort_Proxy( 
-    IBinding __RPC_FAR * This);
+    IBinding * This);
 
 
 void __RPC_STUB IBinding_Abort_Stub(
@@ -911,7 +1070,7 @@ void __RPC_STUB IBinding_Abort_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBinding_Suspend_Proxy( 
-    IBinding __RPC_FAR * This);
+    IBinding * This);
 
 
 void __RPC_STUB IBinding_Suspend_Stub(
@@ -922,7 +1081,7 @@ void __RPC_STUB IBinding_Suspend_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBinding_Resume_Proxy( 
-    IBinding __RPC_FAR * This);
+    IBinding * This);
 
 
 void __RPC_STUB IBinding_Resume_Stub(
@@ -933,7 +1092,7 @@ void __RPC_STUB IBinding_Resume_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBinding_SetPriority_Proxy( 
-    IBinding __RPC_FAR * This,
+    IBinding * This,
     /* [in] */ LONG nPriority);
 
 
@@ -945,8 +1104,8 @@ void __RPC_STUB IBinding_SetPriority_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBinding_GetPriority_Proxy( 
-    IBinding __RPC_FAR * This,
-    /* [out] */ LONG __RPC_FAR *pnPriority);
+    IBinding * This,
+    /* [out] */ LONG *pnPriority);
 
 
 void __RPC_STUB IBinding_GetPriority_Stub(
@@ -957,10 +1116,10 @@ void __RPC_STUB IBinding_GetPriority_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBinding_RemoteGetBindResult_Proxy( 
-    IBinding __RPC_FAR * This,
-    /* [out] */ CLSID __RPC_FAR *pclsidProtocol,
-    /* [out] */ DWORD __RPC_FAR *pdwResult,
-    /* [out] */ LPOLESTR __RPC_FAR *pszResult,
+    IBinding * This,
+    /* [out] */ CLSID *pclsidProtocol,
+    /* [out] */ DWORD *pdwResult,
+    /* [out] */ LPOLESTR *pszResult,
     /* [in] */ DWORD dwReserved);
 
 
@@ -975,7 +1134,7 @@ void __RPC_STUB IBinding_RemoteGetBindResult_Stub(
 #endif 	/* __IBinding_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0170 */
+/* interface __MIDL_itf_urlmon_0176 */
 /* [local] */ 
 
 #endif
@@ -983,8 +1142,8 @@ void __RPC_STUB IBinding_RemoteGetBindResult_Stub(
 #define _LPBINDSTATUSCALLBACK_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0170_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0170_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0176_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0176_v0_0_s_ifspec;
 
 #ifndef __IBindStatusCallback_INTERFACE_DEFINED__
 #define __IBindStatusCallback_INTERFACE_DEFINED__
@@ -992,7 +1151,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0170_v0_0_s_ifspec;
 /* interface IBindStatusCallback */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IBindStatusCallback __RPC_FAR *LPBINDSTATUSCALLBACK;
+typedef /* [unique] */ IBindStatusCallback *LPBINDSTATUSCALLBACK;
 
 typedef /* [public] */ 
 enum __MIDL_IBindStatusCallback_0001
@@ -1000,13 +1159,13 @@ enum __MIDL_IBindStatusCallback_0001
 	BINDVERB_POST	= 0x1,
 	BINDVERB_PUT	= 0x2,
 	BINDVERB_CUSTOM	= 0x3
-    }	BINDVERB;
+    } 	BINDVERB;
 
 typedef /* [public] */ 
 enum __MIDL_IBindStatusCallback_0002
     {	BINDINFOF_URLENCODESTGMEDDATA	= 0x1,
 	BINDINFOF_URLENCODEDEXTRAINFO	= 0x2
-    }	BINDINFOF;
+    } 	BINDINFOF;
 
 typedef /* [public] */ 
 enum __MIDL_IBindStatusCallback_0003
@@ -1032,16 +1191,16 @@ enum __MIDL_IBindStatusCallback_0003
 	BINDF_GETFROMCACHE_IF_NET_FAIL	= 0x80000,
 	BINDF_FROMURLMON	= 0x100000,
 	BINDF_FWD_BACK	= 0x200000,
-	BINDF_RESERVED_2	= 0x400000,
-	BINDF_RESERVED_3	= 0x800000
-    }	BINDF;
+	BINDF_PREFERDEFAULTHANDLER	= 0x400000,
+	BINDF_ENFORCERESTRICTED	= 0x800000
+    } 	BINDF;
 
 typedef /* [public] */ 
 enum __MIDL_IBindStatusCallback_0004
     {	URL_ENCODING_NONE	= 0,
 	URL_ENCODING_ENABLE_UTF8	= 0x10000000,
 	URL_ENCODING_DISABLE_UTF8	= 0x20000000
-    }	URL_ENCODING;
+    } 	URL_ENCODING;
 
 typedef struct _tagBINDINFO
     {
@@ -1057,20 +1216,20 @@ typedef struct _tagBINDINFO
     DWORD dwCodePage;
     SECURITY_ATTRIBUTES securityAttributes;
     IID iid;
-    IUnknown __RPC_FAR *pUnk;
+    IUnknown *pUnk;
     DWORD dwReserved;
-    }	BINDINFO;
+    } 	BINDINFO;
 
 typedef struct _REMSECURITY_ATTRIBUTES
     {
     DWORD nLength;
     DWORD lpSecurityDescriptor;
     BOOL bInheritHandle;
-    }	REMSECURITY_ATTRIBUTES;
+    } 	REMSECURITY_ATTRIBUTES;
 
-typedef struct _REMSECURITY_ATTRIBUTES __RPC_FAR *PREMSECURITY_ATTRIBUTES;
+typedef struct _REMSECURITY_ATTRIBUTES *PREMSECURITY_ATTRIBUTES;
 
-typedef struct _REMSECURITY_ATTRIBUTES __RPC_FAR *LPREMSECURITY_ATTRIBUTES;
+typedef struct _REMSECURITY_ATTRIBUTES *LPREMSECURITY_ATTRIBUTES;
 
 typedef struct _tagRemBINDINFO
     {
@@ -1085,9 +1244,9 @@ typedef struct _tagRemBINDINFO
     DWORD dwCodePage;
     REMSECURITY_ATTRIBUTES securityAttributes;
     IID iid;
-    IUnknown __RPC_FAR *pUnk;
+    IUnknown *pUnk;
     DWORD dwReserved;
-    }	RemBINDINFO;
+    } 	RemBINDINFO;
 
 typedef struct tagRemFORMATETC
     {
@@ -1096,9 +1255,9 @@ typedef struct tagRemFORMATETC
     DWORD dwAspect;
     LONG lindex;
     DWORD tymed;
-    }	RemFORMATETC;
+    } 	RemFORMATETC;
 
-typedef struct tagRemFORMATETC __RPC_FAR *LPREMFORMATETC;
+typedef struct tagRemFORMATETC *LPREMFORMATETC;
 
 typedef /* [public] */ 
 enum __MIDL_IBindStatusCallback_0005
@@ -1107,7 +1266,7 @@ enum __MIDL_IBindStatusCallback_0005
 	BINDINFO_OPTIONS_DISABLE_UTF8	= 0x40000,
 	BINDINFO_OPTIONS_USE_IE_ENCODING	= 0x80000,
 	BINDINFO_OPTIONS_BINDTOOBJECT	= 0x100000
-    }	BINDINFO_OPTIONS;
+    } 	BINDINFO_OPTIONS;
 
 typedef /* [public] */ 
 enum __MIDL_IBindStatusCallback_0006
@@ -1116,7 +1275,7 @@ enum __MIDL_IBindStatusCallback_0006
 	BSCF_LASTDATANOTIFICATION	= 0x4,
 	BSCF_DATAFULLYAVAILABLE	= 0x8,
 	BSCF_AVAILABLEDATASIZEUNKNOWN	= 0x10
-    }	BSCF;
+    } 	BSCF;
 
 typedef 
 enum tagBINDSTATUS
@@ -1152,8 +1311,22 @@ enum tagBINDSTATUS
 	BINDSTATUS_DIRECTBIND	= BINDSTATUS_IUNKNOWNAVAILABLE + 1,
 	BINDSTATUS_RAWMIMETYPE	= BINDSTATUS_DIRECTBIND + 1,
 	BINDSTATUS_PROXYDETECTING	= BINDSTATUS_RAWMIMETYPE + 1,
-	BINDSTATUS_ACCEPTRANGES	= BINDSTATUS_PROXYDETECTING + 1
-    }	BINDSTATUS;
+	BINDSTATUS_ACCEPTRANGES	= BINDSTATUS_PROXYDETECTING + 1,
+	BINDSTATUS_COOKIE_SENT	= BINDSTATUS_ACCEPTRANGES + 1,
+	BINDSTATUS_COMPACT_POLICY_RECEIVED	= BINDSTATUS_COOKIE_SENT + 1,
+	BINDSTATUS_COOKIE_SUPPRESSED	= BINDSTATUS_COMPACT_POLICY_RECEIVED + 1,
+	BINDSTATUS_COOKIE_STATE_UNKNOWN	= BINDSTATUS_COOKIE_SUPPRESSED + 1,
+	BINDSTATUS_COOKIE_STATE_ACCEPT	= BINDSTATUS_COOKIE_STATE_UNKNOWN + 1,
+	BINDSTATUS_COOKIE_STATE_REJECT	= BINDSTATUS_COOKIE_STATE_ACCEPT + 1,
+	BINDSTATUS_COOKIE_STATE_PROMPT	= BINDSTATUS_COOKIE_STATE_REJECT + 1,
+	BINDSTATUS_COOKIE_STATE_LEASH	= BINDSTATUS_COOKIE_STATE_PROMPT + 1,
+	BINDSTATUS_COOKIE_STATE_DOWNGRADE	= BINDSTATUS_COOKIE_STATE_LEASH + 1,
+	BINDSTATUS_POLICY_HREF	= BINDSTATUS_COOKIE_STATE_DOWNGRADE + 1,
+	BINDSTATUS_P3P_HEADER	= BINDSTATUS_POLICY_HREF + 1,
+	BINDSTATUS_SESSION_COOKIE_RECEIVED	= BINDSTATUS_P3P_HEADER + 1,
+	BINDSTATUS_PERSISTENT_COOKIE_RECEIVED	= BINDSTATUS_SESSION_COOKIE_RECEIVED + 1,
+	BINDSTATUS_SESSION_COOKIES_ALLOWED	= BINDSTATUS_PERSISTENT_COOKIE_RECEIVED + 1
+    } 	BINDSTATUS;
 
 
 EXTERN_C const IID IID_IBindStatusCallback;
@@ -1166,10 +1339,10 @@ EXTERN_C const IID IID_IBindStatusCallback;
     public:
         virtual HRESULT STDMETHODCALLTYPE OnStartBinding( 
             /* [in] */ DWORD dwReserved,
-            /* [in] */ IBinding __RPC_FAR *pib) = 0;
+            /* [in] */ IBinding *pib) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPriority( 
-            /* [out] */ LONG __RPC_FAR *pnPriority) = 0;
+            /* [out] */ LONG *pnPriority) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnLowResource( 
             /* [in] */ DWORD reserved) = 0;
@@ -1185,18 +1358,18 @@ EXTERN_C const IID IID_IBindStatusCallback;
             /* [unique][in] */ LPCWSTR szError) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetBindInfo( 
-            /* [out] */ DWORD __RPC_FAR *grfBINDF,
-            /* [unique][out][in] */ BINDINFO __RPC_FAR *pbindinfo) = 0;
+            /* [out] */ DWORD *grfBINDF,
+            /* [unique][out][in] */ BINDINFO *pbindinfo) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE OnDataAvailable( 
             /* [in] */ DWORD grfBSCF,
             /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC __RPC_FAR *pformatetc,
-            /* [in] */ STGMEDIUM __RPC_FAR *pstgmed) = 0;
+            /* [in] */ FORMATETC *pformatetc,
+            /* [in] */ STGMEDIUM *pstgmed) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnObjectAvailable( 
             /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown __RPC_FAR *punk) = 0;
+            /* [iid_is][in] */ IUnknown *punk) = 0;
         
     };
     
@@ -1206,65 +1379,65 @@ EXTERN_C const IID IID_IBindStatusCallback;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IBindStatusCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IBindStatusCallback * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IBindStatusCallback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IBindStatusCallback * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IBindStatusCallback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IBindStatusCallback * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnStartBinding )( 
-            IBindStatusCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OnStartBinding )( 
+            IBindStatusCallback * This,
             /* [in] */ DWORD dwReserved,
-            /* [in] */ IBinding __RPC_FAR *pib);
+            /* [in] */ IBinding *pib);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPriority )( 
-            IBindStatusCallback __RPC_FAR * This,
-            /* [out] */ LONG __RPC_FAR *pnPriority);
+        HRESULT ( STDMETHODCALLTYPE *GetPriority )( 
+            IBindStatusCallback * This,
+            /* [out] */ LONG *pnPriority);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnLowResource )( 
-            IBindStatusCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OnLowResource )( 
+            IBindStatusCallback * This,
             /* [in] */ DWORD reserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnProgress )( 
-            IBindStatusCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OnProgress )( 
+            IBindStatusCallback * This,
             /* [in] */ ULONG ulProgress,
             /* [in] */ ULONG ulProgressMax,
             /* [in] */ ULONG ulStatusCode,
             /* [in] */ LPCWSTR szStatusText);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnStopBinding )( 
-            IBindStatusCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OnStopBinding )( 
+            IBindStatusCallback * This,
             /* [in] */ HRESULT hresult,
             /* [unique][in] */ LPCWSTR szError);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBindInfo )( 
-            IBindStatusCallback __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *grfBINDF,
-            /* [unique][out][in] */ BINDINFO __RPC_FAR *pbindinfo);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetBindInfo )( 
+            IBindStatusCallback * This,
+            /* [out] */ DWORD *grfBINDF,
+            /* [unique][out][in] */ BINDINFO *pbindinfo);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnDataAvailable )( 
-            IBindStatusCallback __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OnDataAvailable )( 
+            IBindStatusCallback * This,
             /* [in] */ DWORD grfBSCF,
             /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC __RPC_FAR *pformatetc,
-            /* [in] */ STGMEDIUM __RPC_FAR *pstgmed);
+            /* [in] */ FORMATETC *pformatetc,
+            /* [in] */ STGMEDIUM *pstgmed);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnObjectAvailable )( 
-            IBindStatusCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OnObjectAvailable )( 
+            IBindStatusCallback * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown __RPC_FAR *punk);
+            /* [iid_is][in] */ IUnknown *punk);
         
         END_INTERFACE
     } IBindStatusCallbackVtbl;
 
     interface IBindStatusCallback
     {
-        CONST_VTBL struct IBindStatusCallbackVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IBindStatusCallbackVtbl *lpVtbl;
     };
 
     
@@ -1314,9 +1487,9 @@ EXTERN_C const IID IID_IBindStatusCallback;
 
 
 HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnStartBinding_Proxy( 
-    IBindStatusCallback __RPC_FAR * This,
+    IBindStatusCallback * This,
     /* [in] */ DWORD dwReserved,
-    /* [in] */ IBinding __RPC_FAR *pib);
+    /* [in] */ IBinding *pib);
 
 
 void __RPC_STUB IBindStatusCallback_OnStartBinding_Stub(
@@ -1327,8 +1500,8 @@ void __RPC_STUB IBindStatusCallback_OnStartBinding_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBindStatusCallback_GetPriority_Proxy( 
-    IBindStatusCallback __RPC_FAR * This,
-    /* [out] */ LONG __RPC_FAR *pnPriority);
+    IBindStatusCallback * This,
+    /* [out] */ LONG *pnPriority);
 
 
 void __RPC_STUB IBindStatusCallback_GetPriority_Stub(
@@ -1339,7 +1512,7 @@ void __RPC_STUB IBindStatusCallback_GetPriority_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnLowResource_Proxy( 
-    IBindStatusCallback __RPC_FAR * This,
+    IBindStatusCallback * This,
     /* [in] */ DWORD reserved);
 
 
@@ -1351,7 +1524,7 @@ void __RPC_STUB IBindStatusCallback_OnLowResource_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnProgress_Proxy( 
-    IBindStatusCallback __RPC_FAR * This,
+    IBindStatusCallback * This,
     /* [in] */ ULONG ulProgress,
     /* [in] */ ULONG ulProgressMax,
     /* [in] */ ULONG ulStatusCode,
@@ -1366,7 +1539,7 @@ void __RPC_STUB IBindStatusCallback_OnProgress_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnStopBinding_Proxy( 
-    IBindStatusCallback __RPC_FAR * This,
+    IBindStatusCallback * This,
     /* [in] */ HRESULT hresult,
     /* [unique][in] */ LPCWSTR szError);
 
@@ -1379,10 +1552,10 @@ void __RPC_STUB IBindStatusCallback_OnStopBinding_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBindStatusCallback_RemoteGetBindInfo_Proxy( 
-    IBindStatusCallback __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *grfBINDF,
-    /* [unique][out][in] */ RemBINDINFO __RPC_FAR *pbindinfo,
-    /* [unique][out][in] */ RemSTGMEDIUM __RPC_FAR *pstgmed);
+    IBindStatusCallback * This,
+    /* [out] */ DWORD *grfBINDF,
+    /* [unique][out][in] */ RemBINDINFO *pbindinfo,
+    /* [unique][out][in] */ RemSTGMEDIUM *pstgmed);
 
 
 void __RPC_STUB IBindStatusCallback_RemoteGetBindInfo_Stub(
@@ -1393,11 +1566,11 @@ void __RPC_STUB IBindStatusCallback_RemoteGetBindInfo_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBindStatusCallback_RemoteOnDataAvailable_Proxy( 
-    IBindStatusCallback __RPC_FAR * This,
+    IBindStatusCallback * This,
     /* [in] */ DWORD grfBSCF,
     /* [in] */ DWORD dwSize,
-    /* [in] */ RemFORMATETC __RPC_FAR *pformatetc,
-    /* [in] */ RemSTGMEDIUM __RPC_FAR *pstgmed);
+    /* [in] */ RemFORMATETC *pformatetc,
+    /* [in] */ RemSTGMEDIUM *pstgmed);
 
 
 void __RPC_STUB IBindStatusCallback_RemoteOnDataAvailable_Stub(
@@ -1408,9 +1581,9 @@ void __RPC_STUB IBindStatusCallback_RemoteOnDataAvailable_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnObjectAvailable_Proxy( 
-    IBindStatusCallback __RPC_FAR * This,
+    IBindStatusCallback * This,
     /* [in] */ REFIID riid,
-    /* [iid_is][in] */ IUnknown __RPC_FAR *punk);
+    /* [iid_is][in] */ IUnknown *punk);
 
 
 void __RPC_STUB IBindStatusCallback_OnObjectAvailable_Stub(
@@ -1424,7 +1597,7 @@ void __RPC_STUB IBindStatusCallback_OnObjectAvailable_Stub(
 #endif 	/* __IBindStatusCallback_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0171 */
+/* interface __MIDL_itf_urlmon_0177 */
 /* [local] */ 
 
 #endif
@@ -1432,8 +1605,8 @@ void __RPC_STUB IBindStatusCallback_OnObjectAvailable_Stub(
 #define _LPAUTHENTICATION_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0171_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0171_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0177_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0177_v0_0_s_ifspec;
 
 #ifndef __IAuthenticate_INTERFACE_DEFINED__
 #define __IAuthenticate_INTERFACE_DEFINED__
@@ -1441,7 +1614,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0171_v0_0_s_ifspec;
 /* interface IAuthenticate */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IAuthenticate __RPC_FAR *LPAUTHENTICATION;
+typedef /* [unique] */ IAuthenticate *LPAUTHENTICATION;
 
 
 EXTERN_C const IID IID_IAuthenticate;
@@ -1453,9 +1626,9 @@ EXTERN_C const IID IID_IAuthenticate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Authenticate( 
-            /* [out] */ HWND __RPC_FAR *phwnd,
-            /* [out] */ LPWSTR __RPC_FAR *pszUsername,
-            /* [out] */ LPWSTR __RPC_FAR *pszPassword) = 0;
+            /* [out] */ HWND *phwnd,
+            /* [out] */ LPWSTR *pszUsername,
+            /* [out] */ LPWSTR *pszPassword) = 0;
         
     };
     
@@ -1465,29 +1638,29 @@ EXTERN_C const IID IID_IAuthenticate;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAuthenticate __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAuthenticate * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAuthenticate __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAuthenticate * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAuthenticate __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAuthenticate * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Authenticate )( 
-            IAuthenticate __RPC_FAR * This,
-            /* [out] */ HWND __RPC_FAR *phwnd,
-            /* [out] */ LPWSTR __RPC_FAR *pszUsername,
-            /* [out] */ LPWSTR __RPC_FAR *pszPassword);
+        HRESULT ( STDMETHODCALLTYPE *Authenticate )( 
+            IAuthenticate * This,
+            /* [out] */ HWND *phwnd,
+            /* [out] */ LPWSTR *pszUsername,
+            /* [out] */ LPWSTR *pszPassword);
         
         END_INTERFACE
     } IAuthenticateVtbl;
 
     interface IAuthenticate
     {
-        CONST_VTBL struct IAuthenticateVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAuthenticateVtbl *lpVtbl;
     };
 
     
@@ -1516,10 +1689,10 @@ EXTERN_C const IID IID_IAuthenticate;
 
 
 HRESULT STDMETHODCALLTYPE IAuthenticate_Authenticate_Proxy( 
-    IAuthenticate __RPC_FAR * This,
-    /* [out] */ HWND __RPC_FAR *phwnd,
-    /* [out] */ LPWSTR __RPC_FAR *pszUsername,
-    /* [out] */ LPWSTR __RPC_FAR *pszPassword);
+    IAuthenticate * This,
+    /* [out] */ HWND *phwnd,
+    /* [out] */ LPWSTR *pszUsername,
+    /* [out] */ LPWSTR *pszPassword);
 
 
 void __RPC_STUB IAuthenticate_Authenticate_Stub(
@@ -1533,7 +1706,7 @@ void __RPC_STUB IAuthenticate_Authenticate_Stub(
 #endif 	/* __IAuthenticate_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0172 */
+/* interface __MIDL_itf_urlmon_0178 */
 /* [local] */ 
 
 #endif
@@ -1541,8 +1714,8 @@ void __RPC_STUB IAuthenticate_Authenticate_Stub(
 #define _LPHTTPNEGOTIATE_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0172_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0172_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0178_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0178_v0_0_s_ifspec;
 
 #ifndef __IHttpNegotiate_INTERFACE_DEFINED__
 #define __IHttpNegotiate_INTERFACE_DEFINED__
@@ -1550,7 +1723,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0172_v0_0_s_ifspec;
 /* interface IHttpNegotiate */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IHttpNegotiate __RPC_FAR *LPHTTPNEGOTIATE;
+typedef /* [unique] */ IHttpNegotiate *LPHTTPNEGOTIATE;
 
 
 EXTERN_C const IID IID_IHttpNegotiate;
@@ -1565,13 +1738,13 @@ EXTERN_C const IID IID_IHttpNegotiate;
             /* [in] */ LPCWSTR szURL,
             /* [unique][in] */ LPCWSTR szHeaders,
             /* [in] */ DWORD dwReserved,
-            /* [out] */ LPWSTR __RPC_FAR *pszAdditionalHeaders) = 0;
+            /* [out] */ LPWSTR *pszAdditionalHeaders) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnResponse( 
             /* [in] */ DWORD dwResponseCode,
             /* [unique][in] */ LPCWSTR szResponseHeaders,
             /* [unique][in] */ LPCWSTR szRequestHeaders,
-            /* [out] */ LPWSTR __RPC_FAR *pszAdditionalRequestHeaders) = 0;
+            /* [out] */ LPWSTR *pszAdditionalRequestHeaders) = 0;
         
     };
     
@@ -1581,37 +1754,37 @@ EXTERN_C const IID IID_IHttpNegotiate;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IHttpNegotiate __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHttpNegotiate * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IHttpNegotiate __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHttpNegotiate * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IHttpNegotiate __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHttpNegotiate * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginningTransaction )( 
-            IHttpNegotiate __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *BeginningTransaction )( 
+            IHttpNegotiate * This,
             /* [in] */ LPCWSTR szURL,
             /* [unique][in] */ LPCWSTR szHeaders,
             /* [in] */ DWORD dwReserved,
-            /* [out] */ LPWSTR __RPC_FAR *pszAdditionalHeaders);
+            /* [out] */ LPWSTR *pszAdditionalHeaders);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnResponse )( 
-            IHttpNegotiate __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OnResponse )( 
+            IHttpNegotiate * This,
             /* [in] */ DWORD dwResponseCode,
             /* [unique][in] */ LPCWSTR szResponseHeaders,
             /* [unique][in] */ LPCWSTR szRequestHeaders,
-            /* [out] */ LPWSTR __RPC_FAR *pszAdditionalRequestHeaders);
+            /* [out] */ LPWSTR *pszAdditionalRequestHeaders);
         
         END_INTERFACE
     } IHttpNegotiateVtbl;
 
     interface IHttpNegotiate
     {
-        CONST_VTBL struct IHttpNegotiateVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IHttpNegotiateVtbl *lpVtbl;
     };
 
     
@@ -1643,11 +1816,11 @@ EXTERN_C const IID IID_IHttpNegotiate;
 
 
 HRESULT STDMETHODCALLTYPE IHttpNegotiate_BeginningTransaction_Proxy( 
-    IHttpNegotiate __RPC_FAR * This,
+    IHttpNegotiate * This,
     /* [in] */ LPCWSTR szURL,
     /* [unique][in] */ LPCWSTR szHeaders,
     /* [in] */ DWORD dwReserved,
-    /* [out] */ LPWSTR __RPC_FAR *pszAdditionalHeaders);
+    /* [out] */ LPWSTR *pszAdditionalHeaders);
 
 
 void __RPC_STUB IHttpNegotiate_BeginningTransaction_Stub(
@@ -1658,11 +1831,11 @@ void __RPC_STUB IHttpNegotiate_BeginningTransaction_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IHttpNegotiate_OnResponse_Proxy( 
-    IHttpNegotiate __RPC_FAR * This,
+    IHttpNegotiate * This,
     /* [in] */ DWORD dwResponseCode,
     /* [unique][in] */ LPCWSTR szResponseHeaders,
     /* [unique][in] */ LPCWSTR szRequestHeaders,
-    /* [out] */ LPWSTR __RPC_FAR *pszAdditionalRequestHeaders);
+    /* [out] */ LPWSTR *pszAdditionalRequestHeaders);
 
 
 void __RPC_STUB IHttpNegotiate_OnResponse_Stub(
@@ -1676,7 +1849,137 @@ void __RPC_STUB IHttpNegotiate_OnResponse_Stub(
 #endif 	/* __IHttpNegotiate_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0173 */
+/* interface __MIDL_itf_urlmon_0179 */
+/* [local] */ 
+
+#endif
+#ifndef _LPHTTPNEGOTIATE2_DEFINED
+#define _LPHTTPNEGOTIATE2_DEFINED
+
+
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0179_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0179_v0_0_s_ifspec;
+
+#ifndef __IHttpNegotiate2_INTERFACE_DEFINED__
+#define __IHttpNegotiate2_INTERFACE_DEFINED__
+
+/* interface IHttpNegotiate2 */
+/* [unique][uuid][object] */ 
+
+typedef /* [unique] */ IHttpNegotiate2 *LPHTTPNEGOTIATE2;
+
+
+EXTERN_C const IID IID_IHttpNegotiate2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("4F9F9FCB-E0F4-48eb-B7AB-FA2EA9365CB4")
+    IHttpNegotiate2 : public IHttpNegotiate
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetRootSecurityId( 
+            /* [size_is][out] */ BYTE *pbSecurityId,
+            /* [out][in] */ DWORD *pcbSecurityId,
+            /* [in] */ DWORD_PTR dwReserved) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IHttpNegotiate2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHttpNegotiate2 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHttpNegotiate2 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHttpNegotiate2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *BeginningTransaction )( 
+            IHttpNegotiate2 * This,
+            /* [in] */ LPCWSTR szURL,
+            /* [unique][in] */ LPCWSTR szHeaders,
+            /* [in] */ DWORD dwReserved,
+            /* [out] */ LPWSTR *pszAdditionalHeaders);
+        
+        HRESULT ( STDMETHODCALLTYPE *OnResponse )( 
+            IHttpNegotiate2 * This,
+            /* [in] */ DWORD dwResponseCode,
+            /* [unique][in] */ LPCWSTR szResponseHeaders,
+            /* [unique][in] */ LPCWSTR szRequestHeaders,
+            /* [out] */ LPWSTR *pszAdditionalRequestHeaders);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetRootSecurityId )( 
+            IHttpNegotiate2 * This,
+            /* [size_is][out] */ BYTE *pbSecurityId,
+            /* [out][in] */ DWORD *pcbSecurityId,
+            /* [in] */ DWORD_PTR dwReserved);
+        
+        END_INTERFACE
+    } IHttpNegotiate2Vtbl;
+
+    interface IHttpNegotiate2
+    {
+        CONST_VTBL struct IHttpNegotiate2Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IHttpNegotiate2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IHttpNegotiate2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IHttpNegotiate2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IHttpNegotiate2_BeginningTransaction(This,szURL,szHeaders,dwReserved,pszAdditionalHeaders)	\
+    (This)->lpVtbl -> BeginningTransaction(This,szURL,szHeaders,dwReserved,pszAdditionalHeaders)
+
+#define IHttpNegotiate2_OnResponse(This,dwResponseCode,szResponseHeaders,szRequestHeaders,pszAdditionalRequestHeaders)	\
+    (This)->lpVtbl -> OnResponse(This,dwResponseCode,szResponseHeaders,szRequestHeaders,pszAdditionalRequestHeaders)
+
+
+#define IHttpNegotiate2_GetRootSecurityId(This,pbSecurityId,pcbSecurityId,dwReserved)	\
+    (This)->lpVtbl -> GetRootSecurityId(This,pbSecurityId,pcbSecurityId,dwReserved)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IHttpNegotiate2_GetRootSecurityId_Proxy( 
+    IHttpNegotiate2 * This,
+    /* [size_is][out] */ BYTE *pbSecurityId,
+    /* [out][in] */ DWORD *pcbSecurityId,
+    /* [in] */ DWORD_PTR dwReserved);
+
+
+void __RPC_STUB IHttpNegotiate2_GetRootSecurityId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IHttpNegotiate2_INTERFACE_DEFINED__ */
+
+
+/* interface __MIDL_itf_urlmon_0180 */
 /* [local] */ 
 
 #endif
@@ -1684,8 +1987,8 @@ void __RPC_STUB IHttpNegotiate_OnResponse_Stub(
 #define _LPWINDOWFORBINDINGUI_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0173_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0173_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0180_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0180_v0_0_s_ifspec;
 
 #ifndef __IWindowForBindingUI_INTERFACE_DEFINED__
 #define __IWindowForBindingUI_INTERFACE_DEFINED__
@@ -1693,7 +1996,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0173_v0_0_s_ifspec;
 /* interface IWindowForBindingUI */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IWindowForBindingUI __RPC_FAR *LPWINDOWFORBINDINGUI;
+typedef /* [unique] */ IWindowForBindingUI *LPWINDOWFORBINDINGUI;
 
 
 EXTERN_C const IID IID_IWindowForBindingUI;
@@ -1706,7 +2009,7 @@ EXTERN_C const IID IID_IWindowForBindingUI;
     public:
         virtual HRESULT STDMETHODCALLTYPE GetWindow( 
             /* [in] */ REFGUID rguidReason,
-            /* [out] */ HWND __RPC_FAR *phwnd) = 0;
+            /* [out] */ HWND *phwnd) = 0;
         
     };
     
@@ -1716,28 +2019,28 @@ EXTERN_C const IID IID_IWindowForBindingUI;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWindowForBindingUI __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWindowForBindingUI * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWindowForBindingUI __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWindowForBindingUI * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWindowForBindingUI __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWindowForBindingUI * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWindow )( 
-            IWindowForBindingUI __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
+            IWindowForBindingUI * This,
             /* [in] */ REFGUID rguidReason,
-            /* [out] */ HWND __RPC_FAR *phwnd);
+            /* [out] */ HWND *phwnd);
         
         END_INTERFACE
     } IWindowForBindingUIVtbl;
 
     interface IWindowForBindingUI
     {
-        CONST_VTBL struct IWindowForBindingUIVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWindowForBindingUIVtbl *lpVtbl;
     };
 
     
@@ -1766,9 +2069,9 @@ EXTERN_C const IID IID_IWindowForBindingUI;
 
 
 HRESULT STDMETHODCALLTYPE IWindowForBindingUI_GetWindow_Proxy( 
-    IWindowForBindingUI __RPC_FAR * This,
+    IWindowForBindingUI * This,
     /* [in] */ REFGUID rguidReason,
-    /* [out] */ HWND __RPC_FAR *phwnd);
+    /* [out] */ HWND *phwnd);
 
 
 void __RPC_STUB IWindowForBindingUI_GetWindow_Stub(
@@ -1782,7 +2085,7 @@ void __RPC_STUB IWindowForBindingUI_GetWindow_Stub(
 #endif 	/* __IWindowForBindingUI_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0174 */
+/* interface __MIDL_itf_urlmon_0181 */
 /* [local] */ 
 
 #endif
@@ -1790,8 +2093,8 @@ void __RPC_STUB IWindowForBindingUI_GetWindow_Stub(
 #define _LPCODEINSTALL_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0174_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0174_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0181_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0181_v0_0_s_ifspec;
 
 #ifndef __ICodeInstall_INTERFACE_DEFINED__
 #define __ICodeInstall_INTERFACE_DEFINED__
@@ -1799,7 +2102,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0174_v0_0_s_ifspec;
 /* interface ICodeInstall */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ ICodeInstall __RPC_FAR *LPCODEINSTALL;
+typedef /* [unique] */ ICodeInstall *LPCODEINSTALL;
 
 typedef /* [public] */ 
 enum __MIDL_ICodeInstall_0001
@@ -1812,7 +2115,7 @@ enum __MIDL_ICodeInstall_0001
 	CIP_EXE_SELF_REGISTERATION_TIMEOUT	= CIP_TRUST_VERIFICATION_COMPONENT_MISSING + 1,
 	CIP_UNSAFE_TO_ABORT	= CIP_EXE_SELF_REGISTERATION_TIMEOUT + 1,
 	CIP_NEED_REBOOT	= CIP_UNSAFE_TO_ABORT + 1
-    }	CIP_STATUS;
+    } 	CIP_STATUS;
 
 
 EXTERN_C const IID IID_ICodeInstall;
@@ -1837,24 +2140,24 @@ EXTERN_C const IID IID_ICodeInstall;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICodeInstall __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICodeInstall * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICodeInstall __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICodeInstall * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICodeInstall __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICodeInstall * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWindow )( 
-            ICodeInstall __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
+            ICodeInstall * This,
             /* [in] */ REFGUID rguidReason,
-            /* [out] */ HWND __RPC_FAR *phwnd);
+            /* [out] */ HWND *phwnd);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnCodeInstallProblem )( 
-            ICodeInstall __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OnCodeInstallProblem )( 
+            ICodeInstall * This,
             /* [in] */ ULONG ulStatusCode,
             /* [unique][in] */ LPCWSTR szDestination,
             /* [unique][in] */ LPCWSTR szSource,
@@ -1865,7 +2168,7 @@ EXTERN_C const IID IID_ICodeInstall;
 
     interface ICodeInstall
     {
-        CONST_VTBL struct ICodeInstallVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICodeInstallVtbl *lpVtbl;
     };
 
     
@@ -1898,7 +2201,7 @@ EXTERN_C const IID IID_ICodeInstall;
 
 
 HRESULT STDMETHODCALLTYPE ICodeInstall_OnCodeInstallProblem_Proxy( 
-    ICodeInstall __RPC_FAR * This,
+    ICodeInstall * This,
     /* [in] */ ULONG ulStatusCode,
     /* [unique][in] */ LPCWSTR szDestination,
     /* [unique][in] */ LPCWSTR szSource,
@@ -1916,7 +2219,7 @@ void __RPC_STUB ICodeInstall_OnCodeInstallProblem_Stub(
 #endif 	/* __ICodeInstall_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0175 */
+/* interface __MIDL_itf_urlmon_0182 */
 /* [local] */ 
 
 #endif
@@ -1924,8 +2227,8 @@ void __RPC_STUB ICodeInstall_OnCodeInstallProblem_Stub(
 #define _LPWININETINFO_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0175_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0175_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0182_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0182_v0_0_s_ifspec;
 
 #ifndef __IWinInetInfo_INTERFACE_DEFINED__
 #define __IWinInetInfo_INTERFACE_DEFINED__
@@ -1933,7 +2236,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0175_v0_0_s_ifspec;
 /* interface IWinInetInfo */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IWinInetInfo __RPC_FAR *LPWININETINFO;
+typedef /* [unique] */ IWinInetInfo *LPWININETINFO;
 
 
 EXTERN_C const IID IID_IWinInetInfo;
@@ -1947,7 +2250,7 @@ EXTERN_C const IID IID_IWinInetInfo;
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE QueryOption( 
             /* [in] */ DWORD dwOption,
             /* [size_is][out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD __RPC_FAR *pcbBuf) = 0;
+            /* [out][in] */ DWORD *pcbBuf) = 0;
         
     };
     
@@ -1957,29 +2260,29 @@ EXTERN_C const IID IID_IWinInetInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWinInetInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWinInetInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWinInetInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWinInetInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWinInetInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWinInetInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryOption )( 
-            IWinInetInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *QueryOption )( 
+            IWinInetInfo * This,
             /* [in] */ DWORD dwOption,
             /* [size_is][out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD __RPC_FAR *pcbBuf);
+            /* [out][in] */ DWORD *pcbBuf);
         
         END_INTERFACE
     } IWinInetInfoVtbl;
 
     interface IWinInetInfo
     {
-        CONST_VTBL struct IWinInetInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWinInetInfoVtbl *lpVtbl;
     };
 
     
@@ -2008,10 +2311,10 @@ EXTERN_C const IID IID_IWinInetInfo;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IWinInetInfo_RemoteQueryOption_Proxy( 
-    IWinInetInfo __RPC_FAR * This,
+    IWinInetInfo * This,
     /* [in] */ DWORD dwOption,
-    /* [size_is][out][in] */ BYTE __RPC_FAR *pBuffer,
-    /* [out][in] */ DWORD __RPC_FAR *pcbBuf);
+    /* [size_is][out][in] */ BYTE *pBuffer,
+    /* [out][in] */ DWORD *pcbBuf);
 
 
 void __RPC_STUB IWinInetInfo_RemoteQueryOption_Stub(
@@ -2025,7 +2328,7 @@ void __RPC_STUB IWinInetInfo_RemoteQueryOption_Stub(
 #endif 	/* __IWinInetInfo_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0176 */
+/* interface __MIDL_itf_urlmon_0183 */
 /* [local] */ 
 
 #endif
@@ -2034,8 +2337,8 @@ void __RPC_STUB IWinInetInfo_RemoteQueryOption_Stub(
 #define _LPHTTPSECURITY_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0176_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0176_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0183_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0183_v0_0_s_ifspec;
 
 #ifndef __IHttpSecurity_INTERFACE_DEFINED__
 #define __IHttpSecurity_INTERFACE_DEFINED__
@@ -2043,7 +2346,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0176_v0_0_s_ifspec;
 /* interface IHttpSecurity */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IHttpSecurity __RPC_FAR *LPHTTPSECURITY;
+typedef /* [unique] */ IHttpSecurity *LPHTTPSECURITY;
 
 
 EXTERN_C const IID IID_IHttpSecurity;
@@ -2065,24 +2368,24 @@ EXTERN_C const IID IID_IHttpSecurity;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IHttpSecurity __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IHttpSecurity * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IHttpSecurity __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IHttpSecurity * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IHttpSecurity __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IHttpSecurity * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWindow )( 
-            IHttpSecurity __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
+            IHttpSecurity * This,
             /* [in] */ REFGUID rguidReason,
-            /* [out] */ HWND __RPC_FAR *phwnd);
+            /* [out] */ HWND *phwnd);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnSecurityProblem )( 
-            IHttpSecurity __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OnSecurityProblem )( 
+            IHttpSecurity * This,
             /* [in] */ DWORD dwProblem);
         
         END_INTERFACE
@@ -2090,7 +2393,7 @@ EXTERN_C const IID IID_IHttpSecurity;
 
     interface IHttpSecurity
     {
-        CONST_VTBL struct IHttpSecurityVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IHttpSecurityVtbl *lpVtbl;
     };
 
     
@@ -2123,7 +2426,7 @@ EXTERN_C const IID IID_IHttpSecurity;
 
 
 HRESULT STDMETHODCALLTYPE IHttpSecurity_OnSecurityProblem_Proxy( 
-    IHttpSecurity __RPC_FAR * This,
+    IHttpSecurity * This,
     /* [in] */ DWORD dwProblem);
 
 
@@ -2138,7 +2441,7 @@ void __RPC_STUB IHttpSecurity_OnSecurityProblem_Stub(
 #endif 	/* __IHttpSecurity_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0177 */
+/* interface __MIDL_itf_urlmon_0184 */
 /* [local] */ 
 
 #endif
@@ -2146,8 +2449,8 @@ void __RPC_STUB IHttpSecurity_OnSecurityProblem_Stub(
 #define _LPWININETHTTPINFO_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0177_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0177_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0184_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0184_v0_0_s_ifspec;
 
 #ifndef __IWinInetHttpInfo_INTERFACE_DEFINED__
 #define __IWinInetHttpInfo_INTERFACE_DEFINED__
@@ -2155,7 +2458,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0177_v0_0_s_ifspec;
 /* interface IWinInetHttpInfo */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IWinInetHttpInfo __RPC_FAR *LPWININETHTTPINFO;
+typedef /* [unique] */ IWinInetHttpInfo *LPWININETHTTPINFO;
 
 
 EXTERN_C const IID IID_IWinInetHttpInfo;
@@ -2169,9 +2472,9 @@ EXTERN_C const IID IID_IWinInetHttpInfo;
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE QueryInfo( 
             /* [in] */ DWORD dwOption,
             /* [size_is][out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD __RPC_FAR *pcbBuf,
-            /* [out][in] */ DWORD __RPC_FAR *pdwFlags,
-            /* [out][in] */ DWORD __RPC_FAR *pdwReserved) = 0;
+            /* [out][in] */ DWORD *pcbBuf,
+            /* [out][in] */ DWORD *pdwFlags,
+            /* [out][in] */ DWORD *pdwReserved) = 0;
         
     };
     
@@ -2181,37 +2484,37 @@ EXTERN_C const IID IID_IWinInetHttpInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWinInetHttpInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWinInetHttpInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWinInetHttpInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWinInetHttpInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWinInetHttpInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWinInetHttpInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryOption )( 
-            IWinInetHttpInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *QueryOption )( 
+            IWinInetHttpInfo * This,
             /* [in] */ DWORD dwOption,
             /* [size_is][out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD __RPC_FAR *pcbBuf);
+            /* [out][in] */ DWORD *pcbBuf);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInfo )( 
-            IWinInetHttpInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *QueryInfo )( 
+            IWinInetHttpInfo * This,
             /* [in] */ DWORD dwOption,
             /* [size_is][out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD __RPC_FAR *pcbBuf,
-            /* [out][in] */ DWORD __RPC_FAR *pdwFlags,
-            /* [out][in] */ DWORD __RPC_FAR *pdwReserved);
+            /* [out][in] */ DWORD *pcbBuf,
+            /* [out][in] */ DWORD *pdwFlags,
+            /* [out][in] */ DWORD *pdwReserved);
         
         END_INTERFACE
     } IWinInetHttpInfoVtbl;
 
     interface IWinInetHttpInfo
     {
-        CONST_VTBL struct IWinInetHttpInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWinInetHttpInfoVtbl *lpVtbl;
     };
 
     
@@ -2244,12 +2547,12 @@ EXTERN_C const IID IID_IWinInetHttpInfo;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IWinInetHttpInfo_RemoteQueryInfo_Proxy( 
-    IWinInetHttpInfo __RPC_FAR * This,
+    IWinInetHttpInfo * This,
     /* [in] */ DWORD dwOption,
-    /* [size_is][out][in] */ BYTE __RPC_FAR *pBuffer,
-    /* [out][in] */ DWORD __RPC_FAR *pcbBuf,
-    /* [out][in] */ DWORD __RPC_FAR *pdwFlags,
-    /* [out][in] */ DWORD __RPC_FAR *pdwReserved);
+    /* [size_is][out][in] */ BYTE *pBuffer,
+    /* [out][in] */ DWORD *pcbBuf,
+    /* [out][in] */ DWORD *pdwFlags,
+    /* [out][in] */ DWORD *pdwReserved);
 
 
 void __RPC_STUB IWinInetHttpInfo_RemoteQueryInfo_Stub(
@@ -2263,7 +2566,7 @@ void __RPC_STUB IWinInetHttpInfo_RemoteQueryInfo_Stub(
 #endif 	/* __IWinInetHttpInfo_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0178 */
+/* interface __MIDL_itf_urlmon_0185 */
 /* [local] */ 
 
 #endif
@@ -2274,8 +2577,8 @@ void __RPC_STUB IWinInetHttpInfo_RemoteQueryInfo_Stub(
 EXTERN_C const GUID SID_BindHost;
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0178_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0178_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0185_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0185_v0_0_s_ifspec;
 
 #ifndef __IBindHost_INTERFACE_DEFINED__
 #define __IBindHost_INTERFACE_DEFINED__
@@ -2283,7 +2586,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0178_v0_0_s_ifspec;
 /* interface IBindHost */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IBindHost __RPC_FAR *LPBINDHOST;
+typedef /* [unique] */ IBindHost *LPBINDHOST;
 
 
 EXTERN_C const IID IID_IBindHost;
@@ -2296,23 +2599,23 @@ EXTERN_C const IID IID_IBindHost;
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateMoniker( 
             /* [in] */ LPOLESTR szName,
-            /* [in] */ IBindCtx __RPC_FAR *pBC,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk,
+            /* [in] */ IBindCtx *pBC,
+            /* [out] */ IMoniker **ppmk,
             /* [in] */ DWORD dwReserved) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE MonikerBindToStorage( 
-            /* [in] */ IMoniker __RPC_FAR *pMk,
-            /* [in] */ IBindCtx __RPC_FAR *pBC,
-            /* [in] */ IBindStatusCallback __RPC_FAR *pBSC,
+            /* [in] */ IMoniker *pMk,
+            /* [in] */ IBindCtx *pBC,
+            /* [in] */ IBindStatusCallback *pBSC,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObj) = 0;
+            /* [out] */ void **ppvObj) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE MonikerBindToObject( 
-            /* [in] */ IMoniker __RPC_FAR *pMk,
-            /* [in] */ IBindCtx __RPC_FAR *pBC,
-            /* [in] */ IBindStatusCallback __RPC_FAR *pBSC,
+            /* [in] */ IMoniker *pMk,
+            /* [in] */ IBindCtx *pBC,
+            /* [in] */ IBindStatusCallback *pBSC,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObj) = 0;
+            /* [out] */ void **ppvObj) = 0;
         
     };
     
@@ -2322,46 +2625,46 @@ EXTERN_C const IID IID_IBindHost;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IBindHost __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IBindHost * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IBindHost __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IBindHost * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IBindHost __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IBindHost * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateMoniker )( 
-            IBindHost __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CreateMoniker )( 
+            IBindHost * This,
             /* [in] */ LPOLESTR szName,
-            /* [in] */ IBindCtx __RPC_FAR *pBC,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk,
+            /* [in] */ IBindCtx *pBC,
+            /* [out] */ IMoniker **ppmk,
             /* [in] */ DWORD dwReserved);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MonikerBindToStorage )( 
-            IBindHost __RPC_FAR * This,
-            /* [in] */ IMoniker __RPC_FAR *pMk,
-            /* [in] */ IBindCtx __RPC_FAR *pBC,
-            /* [in] */ IBindStatusCallback __RPC_FAR *pBSC,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *MonikerBindToStorage )( 
+            IBindHost * This,
+            /* [in] */ IMoniker *pMk,
+            /* [in] */ IBindCtx *pBC,
+            /* [in] */ IBindStatusCallback *pBSC,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObj);
+            /* [out] */ void **ppvObj);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MonikerBindToObject )( 
-            IBindHost __RPC_FAR * This,
-            /* [in] */ IMoniker __RPC_FAR *pMk,
-            /* [in] */ IBindCtx __RPC_FAR *pBC,
-            /* [in] */ IBindStatusCallback __RPC_FAR *pBSC,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *MonikerBindToObject )( 
+            IBindHost * This,
+            /* [in] */ IMoniker *pMk,
+            /* [in] */ IBindCtx *pBC,
+            /* [in] */ IBindStatusCallback *pBSC,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObj);
+            /* [out] */ void **ppvObj);
         
         END_INTERFACE
     } IBindHostVtbl;
 
     interface IBindHost
     {
-        CONST_VTBL struct IBindHostVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IBindHostVtbl *lpVtbl;
     };
 
     
@@ -2396,10 +2699,10 @@ EXTERN_C const IID IID_IBindHost;
 
 
 HRESULT STDMETHODCALLTYPE IBindHost_CreateMoniker_Proxy( 
-    IBindHost __RPC_FAR * This,
+    IBindHost * This,
     /* [in] */ LPOLESTR szName,
-    /* [in] */ IBindCtx __RPC_FAR *pBC,
-    /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk,
+    /* [in] */ IBindCtx *pBC,
+    /* [out] */ IMoniker **ppmk,
     /* [in] */ DWORD dwReserved);
 
 
@@ -2411,12 +2714,12 @@ void __RPC_STUB IBindHost_CreateMoniker_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBindHost_RemoteMonikerBindToStorage_Proxy( 
-    IBindHost __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pMk,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pBC,
-    /* [unique][in] */ IBindStatusCallback __RPC_FAR *pBSC,
+    IBindHost * This,
+    /* [unique][in] */ IMoniker *pMk,
+    /* [unique][in] */ IBindCtx *pBC,
+    /* [unique][in] */ IBindStatusCallback *pBSC,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObj);
+    /* [iid_is][out] */ IUnknown **ppvObj);
 
 
 void __RPC_STUB IBindHost_RemoteMonikerBindToStorage_Stub(
@@ -2427,12 +2730,12 @@ void __RPC_STUB IBindHost_RemoteMonikerBindToStorage_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBindHost_RemoteMonikerBindToObject_Proxy( 
-    IBindHost __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pMk,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pBC,
-    /* [unique][in] */ IBindStatusCallback __RPC_FAR *pBSC,
+    IBindHost * This,
+    /* [unique][in] */ IMoniker *pMk,
+    /* [unique][in] */ IBindCtx *pBC,
+    /* [unique][in] */ IBindStatusCallback *pBSC,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObj);
+    /* [iid_is][out] */ IUnknown **ppvObj);
 
 
 void __RPC_STUB IBindHost_RemoteMonikerBindToObject_Stub(
@@ -2446,7 +2749,7 @@ void __RPC_STUB IBindHost_RemoteMonikerBindToObject_Stub(
 #endif 	/* __IBindHost_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0179 */
+/* interface __MIDL_itf_urlmon_0186 */
 /* [local] */ 
 
 #endif
@@ -2525,8 +2828,8 @@ STDAPI HlinkNavigateMoniker(IUnknown *pUnk, IMoniker *pmkTarget);
 #define _LPIINTERNET
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0179_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0179_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0186_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0186_v0_0_s_ifspec;
 
 #ifndef __IInternet_INTERFACE_DEFINED__
 #define __IInternet_INTERFACE_DEFINED__
@@ -2534,7 +2837,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0179_v0_0_s_ifspec;
 /* interface IInternet */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IInternet __RPC_FAR *LPIINTERNET;
+typedef /* [unique] */ IInternet *LPIINTERNET;
 
 
 EXTERN_C const IID IID_IInternet;
@@ -2553,23 +2856,23 @@ EXTERN_C const IID IID_IInternet;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternet __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternet * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternet __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternet * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternet __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternet * This);
         
         END_INTERFACE
     } IInternetVtbl;
 
     interface IInternet
     {
-        CONST_VTBL struct IInternetVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetVtbl *lpVtbl;
     };
 
     
@@ -2598,7 +2901,7 @@ EXTERN_C const IID IID_IInternet;
 #endif 	/* __IInternet_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0180 */
+/* interface __MIDL_itf_urlmon_0187 */
 /* [local] */ 
 
 #endif
@@ -2606,8 +2909,8 @@ EXTERN_C const IID IID_IInternet;
 #define _LPIINTERNETBINDINFO
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0180_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0180_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0187_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0187_v0_0_s_ifspec;
 
 #ifndef __IInternetBindInfo_INTERFACE_DEFINED__
 #define __IInternetBindInfo_INTERFACE_DEFINED__
@@ -2615,7 +2918,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0180_v0_0_s_ifspec;
 /* interface IInternetBindInfo */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IInternetBindInfo __RPC_FAR *LPIINTERNETBINDINFO;
+typedef /* [unique] */ IInternetBindInfo *LPIINTERNETBINDINFO;
 
 typedef 
 enum tagBINDSTRING
@@ -2636,7 +2939,7 @@ enum tagBINDSTRING
 	BINDSTRING_IID	= BINDSTRING_URL + 1,
 	BINDSTRING_FLAG_BIND_TO_OBJECT	= BINDSTRING_IID + 1,
 	BINDSTRING_PTR_BIND_CONTEXT	= BINDSTRING_FLAG_BIND_TO_OBJECT + 1
-    }	BINDSTRING;
+    } 	BINDSTRING;
 
 
 EXTERN_C const IID IID_IInternetBindInfo;
@@ -2648,14 +2951,14 @@ EXTERN_C const IID IID_IInternetBindInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetBindInfo( 
-            /* [out] */ DWORD __RPC_FAR *grfBINDF,
-            /* [unique][out][in] */ BINDINFO __RPC_FAR *pbindinfo) = 0;
+            /* [out] */ DWORD *grfBINDF,
+            /* [unique][out][in] */ BINDINFO *pbindinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBindString( 
             /* [in] */ ULONG ulStringType,
-            /* [out][in] */ LPOLESTR __RPC_FAR *ppwzStr,
+            /* [out][in] */ LPOLESTR *ppwzStr,
             /* [in] */ ULONG cEl,
-            /* [out][in] */ ULONG __RPC_FAR *pcElFetched) = 0;
+            /* [out][in] */ ULONG *pcElFetched) = 0;
         
     };
     
@@ -2665,35 +2968,35 @@ EXTERN_C const IID IID_IInternetBindInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternetBindInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternetBindInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternetBindInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternetBindInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternetBindInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternetBindInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBindInfo )( 
-            IInternetBindInfo __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *grfBINDF,
-            /* [unique][out][in] */ BINDINFO __RPC_FAR *pbindinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetBindInfo )( 
+            IInternetBindInfo * This,
+            /* [out] */ DWORD *grfBINDF,
+            /* [unique][out][in] */ BINDINFO *pbindinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBindString )( 
-            IInternetBindInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetBindString )( 
+            IInternetBindInfo * This,
             /* [in] */ ULONG ulStringType,
-            /* [out][in] */ LPOLESTR __RPC_FAR *ppwzStr,
+            /* [out][in] */ LPOLESTR *ppwzStr,
             /* [in] */ ULONG cEl,
-            /* [out][in] */ ULONG __RPC_FAR *pcElFetched);
+            /* [out][in] */ ULONG *pcElFetched);
         
         END_INTERFACE
     } IInternetBindInfoVtbl;
 
     interface IInternetBindInfo
     {
-        CONST_VTBL struct IInternetBindInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetBindInfoVtbl *lpVtbl;
     };
 
     
@@ -2725,9 +3028,9 @@ EXTERN_C const IID IID_IInternetBindInfo;
 
 
 HRESULT STDMETHODCALLTYPE IInternetBindInfo_GetBindInfo_Proxy( 
-    IInternetBindInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *grfBINDF,
-    /* [unique][out][in] */ BINDINFO __RPC_FAR *pbindinfo);
+    IInternetBindInfo * This,
+    /* [out] */ DWORD *grfBINDF,
+    /* [unique][out][in] */ BINDINFO *pbindinfo);
 
 
 void __RPC_STUB IInternetBindInfo_GetBindInfo_Stub(
@@ -2738,11 +3041,11 @@ void __RPC_STUB IInternetBindInfo_GetBindInfo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetBindInfo_GetBindString_Proxy( 
-    IInternetBindInfo __RPC_FAR * This,
+    IInternetBindInfo * This,
     /* [in] */ ULONG ulStringType,
-    /* [out][in] */ LPOLESTR __RPC_FAR *ppwzStr,
+    /* [out][in] */ LPOLESTR *ppwzStr,
     /* [in] */ ULONG cEl,
-    /* [out][in] */ ULONG __RPC_FAR *pcElFetched);
+    /* [out][in] */ ULONG *pcElFetched);
 
 
 void __RPC_STUB IInternetBindInfo_GetBindString_Stub(
@@ -2756,7 +3059,7 @@ void __RPC_STUB IInternetBindInfo_GetBindString_Stub(
 #endif 	/* __IInternetBindInfo_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0181 */
+/* interface __MIDL_itf_urlmon_0188 */
 /* [local] */ 
 
 #endif
@@ -2764,8 +3067,8 @@ void __RPC_STUB IInternetBindInfo_GetBindString_Stub(
 #define _LPIINTERNETPROTOCOLROOT_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0181_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0181_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0188_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0188_v0_0_s_ifspec;
 
 #ifndef __IInternetProtocolRoot_INTERFACE_DEFINED__
 #define __IInternetProtocolRoot_INTERFACE_DEFINED__
@@ -2773,7 +3076,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0181_v0_0_s_ifspec;
 /* interface IInternetProtocolRoot */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IInternetProtocolRoot __RPC_FAR *LPIINTERNETPROTOCOLROOT;
+typedef /* [unique] */ IInternetProtocolRoot *LPIINTERNETPROTOCOLROOT;
 
 typedef 
 enum _tagPI_FLAGS
@@ -2790,8 +3093,9 @@ enum _tagPI_FLAGS
 	PI_PASSONBINDCTX	= 0x2000,
 	PI_NOMIMEHANDLER	= 0x8000,
 	PI_LOADAPPDIRECT	= 0x4000,
-	PD_FORCE_SWITCH	= 0x10000
-    }	PI_FLAGS;
+	PD_FORCE_SWITCH	= 0x10000,
+	PI_PREFERDEFAULTHANDLER	= 0x20000
+    } 	PI_FLAGS;
 
 typedef struct _tagPROTOCOLDATA
     {
@@ -2799,14 +3103,14 @@ typedef struct _tagPROTOCOLDATA
     DWORD dwState;
     LPVOID pData;
     ULONG cbData;
-    }	PROTOCOLDATA;
+    } 	PROTOCOLDATA;
 
 typedef struct _tagStartParam
     {
     IID iid;
-    IBindCtx __RPC_FAR *pIBindCtx;
-    IUnknown __RPC_FAR *pItf;
-    }	StartParam;
+    IBindCtx *pIBindCtx;
+    IUnknown *pItf;
+    } 	StartParam;
 
 
 EXTERN_C const IID IID_IInternetProtocolRoot;
@@ -2819,13 +3123,13 @@ EXTERN_C const IID IID_IInternetProtocolRoot;
     public:
         virtual HRESULT STDMETHODCALLTYPE Start( 
             /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IInternetProtocolSink __RPC_FAR *pOIProtSink,
-            /* [in] */ IInternetBindInfo __RPC_FAR *pOIBindInfo,
+            /* [in] */ IInternetProtocolSink *pOIProtSink,
+            /* [in] */ IInternetBindInfo *pOIBindInfo,
             /* [in] */ DWORD grfPI,
             /* [in] */ HANDLE_PTR dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Continue( 
-            /* [in] */ PROTOCOLDATA __RPC_FAR *pProtocolData) = 0;
+            /* [in] */ PROTOCOLDATA *pProtocolData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Abort( 
             /* [in] */ HRESULT hrReason,
@@ -2846,50 +3150,50 @@ EXTERN_C const IID IID_IInternetProtocolRoot;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternetProtocolRoot __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternetProtocolRoot * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternetProtocolRoot __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternetProtocolRoot * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternetProtocolRoot __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternetProtocolRoot * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Start )( 
-            IInternetProtocolRoot __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Start )( 
+            IInternetProtocolRoot * This,
             /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IInternetProtocolSink __RPC_FAR *pOIProtSink,
-            /* [in] */ IInternetBindInfo __RPC_FAR *pOIBindInfo,
+            /* [in] */ IInternetProtocolSink *pOIProtSink,
+            /* [in] */ IInternetBindInfo *pOIBindInfo,
             /* [in] */ DWORD grfPI,
             /* [in] */ HANDLE_PTR dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Continue )( 
-            IInternetProtocolRoot __RPC_FAR * This,
-            /* [in] */ PROTOCOLDATA __RPC_FAR *pProtocolData);
+        HRESULT ( STDMETHODCALLTYPE *Continue )( 
+            IInternetProtocolRoot * This,
+            /* [in] */ PROTOCOLDATA *pProtocolData);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Abort )( 
-            IInternetProtocolRoot __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Abort )( 
+            IInternetProtocolRoot * This,
             /* [in] */ HRESULT hrReason,
             /* [in] */ DWORD dwOptions);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Terminate )( 
-            IInternetProtocolRoot __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Terminate )( 
+            IInternetProtocolRoot * This,
             /* [in] */ DWORD dwOptions);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Suspend )( 
-            IInternetProtocolRoot __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Suspend )( 
+            IInternetProtocolRoot * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Resume )( 
-            IInternetProtocolRoot __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Resume )( 
+            IInternetProtocolRoot * This);
         
         END_INTERFACE
     } IInternetProtocolRootVtbl;
 
     interface IInternetProtocolRoot
     {
-        CONST_VTBL struct IInternetProtocolRootVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetProtocolRootVtbl *lpVtbl;
     };
 
     
@@ -2933,10 +3237,10 @@ EXTERN_C const IID IID_IInternetProtocolRoot;
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolRoot_Start_Proxy( 
-    IInternetProtocolRoot __RPC_FAR * This,
+    IInternetProtocolRoot * This,
     /* [in] */ LPCWSTR szUrl,
-    /* [in] */ IInternetProtocolSink __RPC_FAR *pOIProtSink,
-    /* [in] */ IInternetBindInfo __RPC_FAR *pOIBindInfo,
+    /* [in] */ IInternetProtocolSink *pOIProtSink,
+    /* [in] */ IInternetBindInfo *pOIBindInfo,
     /* [in] */ DWORD grfPI,
     /* [in] */ HANDLE_PTR dwReserved);
 
@@ -2949,8 +3253,8 @@ void __RPC_STUB IInternetProtocolRoot_Start_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolRoot_Continue_Proxy( 
-    IInternetProtocolRoot __RPC_FAR * This,
-    /* [in] */ PROTOCOLDATA __RPC_FAR *pProtocolData);
+    IInternetProtocolRoot * This,
+    /* [in] */ PROTOCOLDATA *pProtocolData);
 
 
 void __RPC_STUB IInternetProtocolRoot_Continue_Stub(
@@ -2961,7 +3265,7 @@ void __RPC_STUB IInternetProtocolRoot_Continue_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolRoot_Abort_Proxy( 
-    IInternetProtocolRoot __RPC_FAR * This,
+    IInternetProtocolRoot * This,
     /* [in] */ HRESULT hrReason,
     /* [in] */ DWORD dwOptions);
 
@@ -2974,7 +3278,7 @@ void __RPC_STUB IInternetProtocolRoot_Abort_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolRoot_Terminate_Proxy( 
-    IInternetProtocolRoot __RPC_FAR * This,
+    IInternetProtocolRoot * This,
     /* [in] */ DWORD dwOptions);
 
 
@@ -2986,7 +3290,7 @@ void __RPC_STUB IInternetProtocolRoot_Terminate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolRoot_Suspend_Proxy( 
-    IInternetProtocolRoot __RPC_FAR * This);
+    IInternetProtocolRoot * This);
 
 
 void __RPC_STUB IInternetProtocolRoot_Suspend_Stub(
@@ -2997,7 +3301,7 @@ void __RPC_STUB IInternetProtocolRoot_Suspend_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolRoot_Resume_Proxy( 
-    IInternetProtocolRoot __RPC_FAR * This);
+    IInternetProtocolRoot * This);
 
 
 void __RPC_STUB IInternetProtocolRoot_Resume_Stub(
@@ -3011,7 +3315,7 @@ void __RPC_STUB IInternetProtocolRoot_Resume_Stub(
 #endif 	/* __IInternetProtocolRoot_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0182 */
+/* interface __MIDL_itf_urlmon_0189 */
 /* [local] */ 
 
 #endif
@@ -3019,8 +3323,8 @@ void __RPC_STUB IInternetProtocolRoot_Resume_Stub(
 #define _LPIINTERNETPROTOCOL_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0182_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0182_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0189_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0189_v0_0_s_ifspec;
 
 #ifndef __IInternetProtocol_INTERFACE_DEFINED__
 #define __IInternetProtocol_INTERFACE_DEFINED__
@@ -3028,7 +3332,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0182_v0_0_s_ifspec;
 /* interface IInternetProtocol */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IInternetProtocol __RPC_FAR *LPIINTERNETPROTOCOL;
+typedef /* [unique] */ IInternetProtocol *LPIINTERNETPROTOCOL;
 
 
 EXTERN_C const IID IID_IInternetProtocol;
@@ -3040,14 +3344,14 @@ EXTERN_C const IID IID_IInternetProtocol;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Read( 
-            /* [length_is][size_is][out][in] */ void __RPC_FAR *pv,
+            /* [length_is][size_is][out][in] */ void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbRead) = 0;
+            /* [out] */ ULONG *pcbRead) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Seek( 
             /* [in] */ LARGE_INTEGER dlibMove,
             /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *plibNewPosition) = 0;
+            /* [out] */ ULARGE_INTEGER *plibNewPosition) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LockRequest( 
             /* [in] */ DWORD dwOptions) = 0;
@@ -3062,69 +3366,69 @@ EXTERN_C const IID IID_IInternetProtocol;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternetProtocol __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternetProtocol * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternetProtocol __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternetProtocol * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternetProtocol __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternetProtocol * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Start )( 
-            IInternetProtocol __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Start )( 
+            IInternetProtocol * This,
             /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IInternetProtocolSink __RPC_FAR *pOIProtSink,
-            /* [in] */ IInternetBindInfo __RPC_FAR *pOIBindInfo,
+            /* [in] */ IInternetProtocolSink *pOIProtSink,
+            /* [in] */ IInternetBindInfo *pOIBindInfo,
             /* [in] */ DWORD grfPI,
             /* [in] */ HANDLE_PTR dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Continue )( 
-            IInternetProtocol __RPC_FAR * This,
-            /* [in] */ PROTOCOLDATA __RPC_FAR *pProtocolData);
+        HRESULT ( STDMETHODCALLTYPE *Continue )( 
+            IInternetProtocol * This,
+            /* [in] */ PROTOCOLDATA *pProtocolData);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Abort )( 
-            IInternetProtocol __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Abort )( 
+            IInternetProtocol * This,
             /* [in] */ HRESULT hrReason,
             /* [in] */ DWORD dwOptions);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Terminate )( 
-            IInternetProtocol __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Terminate )( 
+            IInternetProtocol * This,
             /* [in] */ DWORD dwOptions);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Suspend )( 
-            IInternetProtocol __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Suspend )( 
+            IInternetProtocol * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Resume )( 
-            IInternetProtocol __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Resume )( 
+            IInternetProtocol * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
-            IInternetProtocol __RPC_FAR * This,
-            /* [length_is][size_is][out][in] */ void __RPC_FAR *pv,
+        HRESULT ( STDMETHODCALLTYPE *Read )( 
+            IInternetProtocol * This,
+            /* [length_is][size_is][out][in] */ void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbRead);
+            /* [out] */ ULONG *pcbRead);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Seek )( 
-            IInternetProtocol __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Seek )( 
+            IInternetProtocol * This,
             /* [in] */ LARGE_INTEGER dlibMove,
             /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *plibNewPosition);
+            /* [out] */ ULARGE_INTEGER *plibNewPosition);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockRequest )( 
-            IInternetProtocol __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *LockRequest )( 
+            IInternetProtocol * This,
             /* [in] */ DWORD dwOptions);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnlockRequest )( 
-            IInternetProtocol __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *UnlockRequest )( 
+            IInternetProtocol * This);
         
         END_INTERFACE
     } IInternetProtocolVtbl;
 
     interface IInternetProtocol
     {
-        CONST_VTBL struct IInternetProtocolVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetProtocolVtbl *lpVtbl;
     };
 
     
@@ -3181,10 +3485,10 @@ EXTERN_C const IID IID_IInternetProtocol;
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocol_Read_Proxy( 
-    IInternetProtocol __RPC_FAR * This,
-    /* [length_is][size_is][out][in] */ void __RPC_FAR *pv,
+    IInternetProtocol * This,
+    /* [length_is][size_is][out][in] */ void *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbRead);
+    /* [out] */ ULONG *pcbRead);
 
 
 void __RPC_STUB IInternetProtocol_Read_Stub(
@@ -3195,10 +3499,10 @@ void __RPC_STUB IInternetProtocol_Read_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocol_Seek_Proxy( 
-    IInternetProtocol __RPC_FAR * This,
+    IInternetProtocol * This,
     /* [in] */ LARGE_INTEGER dlibMove,
     /* [in] */ DWORD dwOrigin,
-    /* [out] */ ULARGE_INTEGER __RPC_FAR *plibNewPosition);
+    /* [out] */ ULARGE_INTEGER *plibNewPosition);
 
 
 void __RPC_STUB IInternetProtocol_Seek_Stub(
@@ -3209,7 +3513,7 @@ void __RPC_STUB IInternetProtocol_Seek_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocol_LockRequest_Proxy( 
-    IInternetProtocol __RPC_FAR * This,
+    IInternetProtocol * This,
     /* [in] */ DWORD dwOptions);
 
 
@@ -3221,7 +3525,7 @@ void __RPC_STUB IInternetProtocol_LockRequest_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocol_UnlockRequest_Proxy( 
-    IInternetProtocol __RPC_FAR * This);
+    IInternetProtocol * This);
 
 
 void __RPC_STUB IInternetProtocol_UnlockRequest_Stub(
@@ -3235,7 +3539,7 @@ void __RPC_STUB IInternetProtocol_UnlockRequest_Stub(
 #endif 	/* __IInternetProtocol_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0183 */
+/* interface __MIDL_itf_urlmon_0190 */
 /* [local] */ 
 
 #endif
@@ -3243,8 +3547,8 @@ void __RPC_STUB IInternetProtocol_UnlockRequest_Stub(
 #define _LPIINTERNETPROTOCOLSINK_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0183_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0183_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0190_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0190_v0_0_s_ifspec;
 
 #ifndef __IInternetProtocolSink_INTERFACE_DEFINED__
 #define __IInternetProtocolSink_INTERFACE_DEFINED__
@@ -3252,7 +3556,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0183_v0_0_s_ifspec;
 /* interface IInternetProtocolSink */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IInternetProtocolSink __RPC_FAR *LPIINTERNETPROTOCOLSINK;
+typedef /* [unique] */ IInternetProtocolSink *LPIINTERNETPROTOCOLSINK;
 
 
 EXTERN_C const IID IID_IInternetProtocolSink;
@@ -3264,7 +3568,7 @@ EXTERN_C const IID IID_IInternetProtocolSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Switch( 
-            /* [in] */ PROTOCOLDATA __RPC_FAR *pProtocolData) = 0;
+            /* [in] */ PROTOCOLDATA *pProtocolData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReportProgress( 
             /* [in] */ ULONG ulStatusCode,
@@ -3288,34 +3592,34 @@ EXTERN_C const IID IID_IInternetProtocolSink;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternetProtocolSink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternetProtocolSink * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternetProtocolSink __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternetProtocolSink * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternetProtocolSink __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternetProtocolSink * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Switch )( 
-            IInternetProtocolSink __RPC_FAR * This,
-            /* [in] */ PROTOCOLDATA __RPC_FAR *pProtocolData);
+        HRESULT ( STDMETHODCALLTYPE *Switch )( 
+            IInternetProtocolSink * This,
+            /* [in] */ PROTOCOLDATA *pProtocolData);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReportProgress )( 
-            IInternetProtocolSink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ReportProgress )( 
+            IInternetProtocolSink * This,
             /* [in] */ ULONG ulStatusCode,
             /* [in] */ LPCWSTR szStatusText);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReportData )( 
-            IInternetProtocolSink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ReportData )( 
+            IInternetProtocolSink * This,
             /* [in] */ DWORD grfBSCF,
             /* [in] */ ULONG ulProgress,
             /* [in] */ ULONG ulProgressMax);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReportResult )( 
-            IInternetProtocolSink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ReportResult )( 
+            IInternetProtocolSink * This,
             /* [in] */ HRESULT hrResult,
             /* [in] */ DWORD dwError,
             /* [in] */ LPCWSTR szResult);
@@ -3325,7 +3629,7 @@ EXTERN_C const IID IID_IInternetProtocolSink;
 
     interface IInternetProtocolSink
     {
-        CONST_VTBL struct IInternetProtocolSinkVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetProtocolSinkVtbl *lpVtbl;
     };
 
     
@@ -3363,8 +3667,8 @@ EXTERN_C const IID IID_IInternetProtocolSink;
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolSink_Switch_Proxy( 
-    IInternetProtocolSink __RPC_FAR * This,
-    /* [in] */ PROTOCOLDATA __RPC_FAR *pProtocolData);
+    IInternetProtocolSink * This,
+    /* [in] */ PROTOCOLDATA *pProtocolData);
 
 
 void __RPC_STUB IInternetProtocolSink_Switch_Stub(
@@ -3375,7 +3679,7 @@ void __RPC_STUB IInternetProtocolSink_Switch_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolSink_ReportProgress_Proxy( 
-    IInternetProtocolSink __RPC_FAR * This,
+    IInternetProtocolSink * This,
     /* [in] */ ULONG ulStatusCode,
     /* [in] */ LPCWSTR szStatusText);
 
@@ -3388,7 +3692,7 @@ void __RPC_STUB IInternetProtocolSink_ReportProgress_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolSink_ReportData_Proxy( 
-    IInternetProtocolSink __RPC_FAR * This,
+    IInternetProtocolSink * This,
     /* [in] */ DWORD grfBSCF,
     /* [in] */ ULONG ulProgress,
     /* [in] */ ULONG ulProgressMax);
@@ -3402,7 +3706,7 @@ void __RPC_STUB IInternetProtocolSink_ReportData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolSink_ReportResult_Proxy( 
-    IInternetProtocolSink __RPC_FAR * This,
+    IInternetProtocolSink * This,
     /* [in] */ HRESULT hrResult,
     /* [in] */ DWORD dwError,
     /* [in] */ LPCWSTR szResult);
@@ -3419,7 +3723,7 @@ void __RPC_STUB IInternetProtocolSink_ReportResult_Stub(
 #endif 	/* __IInternetProtocolSink_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0184 */
+/* interface __MIDL_itf_urlmon_0191 */
 /* [local] */ 
 
 #endif
@@ -3427,8 +3731,8 @@ void __RPC_STUB IInternetProtocolSink_ReportResult_Stub(
 #define _LPIINTERNETPROTOCOLSINKSTACKABLE_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0184_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0184_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0191_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0191_v0_0_s_ifspec;
 
 #ifndef __IInternetProtocolSinkStackable_INTERFACE_DEFINED__
 #define __IInternetProtocolSinkStackable_INTERFACE_DEFINED__
@@ -3436,7 +3740,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0184_v0_0_s_ifspec;
 /* interface IInternetProtocolSinkStackable */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IInternetProtocolSinkStackable __RPC_FAR *LPIINTERNETPROTOCOLSINKStackable;
+typedef /* [unique] */ IInternetProtocolSinkStackable *LPIINTERNETPROTOCOLSINKStackable;
 
 
 EXTERN_C const IID IID_IInternetProtocolSinkStackable;
@@ -3448,7 +3752,7 @@ EXTERN_C const IID IID_IInternetProtocolSinkStackable;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SwitchSink( 
-            /* [in] */ IInternetProtocolSink __RPC_FAR *pOIProtSink) = 0;
+            /* [in] */ IInternetProtocolSink *pOIProtSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommitSwitch( void) = 0;
         
@@ -3462,33 +3766,33 @@ EXTERN_C const IID IID_IInternetProtocolSinkStackable;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternetProtocolSinkStackable __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternetProtocolSinkStackable * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternetProtocolSinkStackable __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternetProtocolSinkStackable * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternetProtocolSinkStackable __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternetProtocolSinkStackable * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SwitchSink )( 
-            IInternetProtocolSinkStackable __RPC_FAR * This,
-            /* [in] */ IInternetProtocolSink __RPC_FAR *pOIProtSink);
+        HRESULT ( STDMETHODCALLTYPE *SwitchSink )( 
+            IInternetProtocolSinkStackable * This,
+            /* [in] */ IInternetProtocolSink *pOIProtSink);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CommitSwitch )( 
-            IInternetProtocolSinkStackable __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *CommitSwitch )( 
+            IInternetProtocolSinkStackable * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RollbackSwitch )( 
-            IInternetProtocolSinkStackable __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *RollbackSwitch )( 
+            IInternetProtocolSinkStackable * This);
         
         END_INTERFACE
     } IInternetProtocolSinkStackableVtbl;
 
     interface IInternetProtocolSinkStackable
     {
-        CONST_VTBL struct IInternetProtocolSinkStackableVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetProtocolSinkStackableVtbl *lpVtbl;
     };
 
     
@@ -3523,8 +3827,8 @@ EXTERN_C const IID IID_IInternetProtocolSinkStackable;
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolSinkStackable_SwitchSink_Proxy( 
-    IInternetProtocolSinkStackable __RPC_FAR * This,
-    /* [in] */ IInternetProtocolSink __RPC_FAR *pOIProtSink);
+    IInternetProtocolSinkStackable * This,
+    /* [in] */ IInternetProtocolSink *pOIProtSink);
 
 
 void __RPC_STUB IInternetProtocolSinkStackable_SwitchSink_Stub(
@@ -3535,7 +3839,7 @@ void __RPC_STUB IInternetProtocolSinkStackable_SwitchSink_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolSinkStackable_CommitSwitch_Proxy( 
-    IInternetProtocolSinkStackable __RPC_FAR * This);
+    IInternetProtocolSinkStackable * This);
 
 
 void __RPC_STUB IInternetProtocolSinkStackable_CommitSwitch_Stub(
@@ -3546,7 +3850,7 @@ void __RPC_STUB IInternetProtocolSinkStackable_CommitSwitch_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolSinkStackable_RollbackSwitch_Proxy( 
-    IInternetProtocolSinkStackable __RPC_FAR * This);
+    IInternetProtocolSinkStackable * This);
 
 
 void __RPC_STUB IInternetProtocolSinkStackable_RollbackSwitch_Stub(
@@ -3560,7 +3864,7 @@ void __RPC_STUB IInternetProtocolSinkStackable_RollbackSwitch_Stub(
 #endif 	/* __IInternetProtocolSinkStackable_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0185 */
+/* interface __MIDL_itf_urlmon_0192 */
 /* [local] */ 
 
 #endif
@@ -3568,8 +3872,8 @@ void __RPC_STUB IInternetProtocolSinkStackable_RollbackSwitch_Stub(
 #define _LPIINTERNETSESSION_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0185_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0185_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0192_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0192_v0_0_s_ifspec;
 
 #ifndef __IInternetSession_INTERFACE_DEFINED__
 #define __IInternetSession_INTERFACE_DEFINED__
@@ -3577,13 +3881,13 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0185_v0_0_s_ifspec;
 /* interface IInternetSession */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IInternetSession __RPC_FAR *LPIINTERNETSESSION;
+typedef /* [unique] */ IInternetSession *LPIINTERNETSESSION;
 
 typedef 
 enum _tagOIBDG_FLAGS
     {	OIBDG_APARTMENTTHREADED	= 0x100,
 	OIBDG_DATAONLY	= 0x1000
-    }	OIBDG_FLAGS;
+    } 	OIBDG_FLAGS;
 
 
 EXTERN_C const IID IID_IInternetSession;
@@ -3595,32 +3899,32 @@ EXTERN_C const IID IID_IInternetSession;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterNameSpace( 
-            /* [in] */ IClassFactory __RPC_FAR *pCF,
+            /* [in] */ IClassFactory *pCF,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ LPCWSTR pwzProtocol,
             /* [in] */ ULONG cPatterns,
-            /* [in] */ const LPCWSTR __RPC_FAR *ppwzPatterns,
+            /* [in] */ const LPCWSTR *ppwzPatterns,
             /* [in] */ DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterNameSpace( 
-            /* [in] */ IClassFactory __RPC_FAR *pCF,
+            /* [in] */ IClassFactory *pCF,
             /* [in] */ LPCWSTR pszProtocol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterMimeFilter( 
-            /* [in] */ IClassFactory __RPC_FAR *pCF,
+            /* [in] */ IClassFactory *pCF,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ LPCWSTR pwzType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterMimeFilter( 
-            /* [in] */ IClassFactory __RPC_FAR *pCF,
+            /* [in] */ IClassFactory *pCF,
             /* [in] */ LPCWSTR pwzType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateBinding( 
             /* [in] */ LPBC pBC,
             /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [unique][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk,
-            /* [unique][out] */ IInternetProtocol __RPC_FAR *__RPC_FAR *ppOInetProt,
+            /* [in] */ IUnknown *pUnkOuter,
+            /* [unique][out] */ IUnknown **ppUnk,
+            /* [unique][out] */ IInternetProtocol **ppOInetProt,
             /* [in] */ DWORD dwOption) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSessionOption( 
@@ -3632,7 +3936,7 @@ EXTERN_C const IID IID_IInternetSession;
         virtual HRESULT STDMETHODCALLTYPE GetSessionOption( 
             /* [in] */ DWORD dwOption,
             /* [out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD __RPC_FAR *pdwBufferLength,
+            /* [out][in] */ DWORD *pdwBufferLength,
             /* [in] */ DWORD dwReserved) = 0;
         
     };
@@ -3643,63 +3947,63 @@ EXTERN_C const IID IID_IInternetSession;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternetSession __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternetSession * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternetSession __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternetSession * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternetSession __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternetSession * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterNameSpace )( 
-            IInternetSession __RPC_FAR * This,
-            /* [in] */ IClassFactory __RPC_FAR *pCF,
+        HRESULT ( STDMETHODCALLTYPE *RegisterNameSpace )( 
+            IInternetSession * This,
+            /* [in] */ IClassFactory *pCF,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ LPCWSTR pwzProtocol,
             /* [in] */ ULONG cPatterns,
-            /* [in] */ const LPCWSTR __RPC_FAR *ppwzPatterns,
+            /* [in] */ const LPCWSTR *ppwzPatterns,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnregisterNameSpace )( 
-            IInternetSession __RPC_FAR * This,
-            /* [in] */ IClassFactory __RPC_FAR *pCF,
+        HRESULT ( STDMETHODCALLTYPE *UnregisterNameSpace )( 
+            IInternetSession * This,
+            /* [in] */ IClassFactory *pCF,
             /* [in] */ LPCWSTR pszProtocol);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterMimeFilter )( 
-            IInternetSession __RPC_FAR * This,
-            /* [in] */ IClassFactory __RPC_FAR *pCF,
+        HRESULT ( STDMETHODCALLTYPE *RegisterMimeFilter )( 
+            IInternetSession * This,
+            /* [in] */ IClassFactory *pCF,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ LPCWSTR pwzType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnregisterMimeFilter )( 
-            IInternetSession __RPC_FAR * This,
-            /* [in] */ IClassFactory __RPC_FAR *pCF,
+        HRESULT ( STDMETHODCALLTYPE *UnregisterMimeFilter )( 
+            IInternetSession * This,
+            /* [in] */ IClassFactory *pCF,
             /* [in] */ LPCWSTR pwzType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateBinding )( 
-            IInternetSession __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CreateBinding )( 
+            IInternetSession * This,
             /* [in] */ LPBC pBC,
             /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-            /* [unique][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk,
-            /* [unique][out] */ IInternetProtocol __RPC_FAR *__RPC_FAR *ppOInetProt,
+            /* [in] */ IUnknown *pUnkOuter,
+            /* [unique][out] */ IUnknown **ppUnk,
+            /* [unique][out] */ IInternetProtocol **ppOInetProt,
             /* [in] */ DWORD dwOption);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSessionOption )( 
-            IInternetSession __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetSessionOption )( 
+            IInternetSession * This,
             /* [in] */ DWORD dwOption,
             /* [in] */ LPVOID pBuffer,
             /* [in] */ DWORD dwBufferLength,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSessionOption )( 
-            IInternetSession __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetSessionOption )( 
+            IInternetSession * This,
             /* [in] */ DWORD dwOption,
             /* [out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD __RPC_FAR *pdwBufferLength,
+            /* [out][in] */ DWORD *pdwBufferLength,
             /* [in] */ DWORD dwReserved);
         
         END_INTERFACE
@@ -3707,7 +4011,7 @@ EXTERN_C const IID IID_IInternetSession;
 
     interface IInternetSession
     {
-        CONST_VTBL struct IInternetSessionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetSessionVtbl *lpVtbl;
     };
 
     
@@ -3754,12 +4058,12 @@ EXTERN_C const IID IID_IInternetSession;
 
 
 HRESULT STDMETHODCALLTYPE IInternetSession_RegisterNameSpace_Proxy( 
-    IInternetSession __RPC_FAR * This,
-    /* [in] */ IClassFactory __RPC_FAR *pCF,
+    IInternetSession * This,
+    /* [in] */ IClassFactory *pCF,
     /* [in] */ REFCLSID rclsid,
     /* [in] */ LPCWSTR pwzProtocol,
     /* [in] */ ULONG cPatterns,
-    /* [in] */ const LPCWSTR __RPC_FAR *ppwzPatterns,
+    /* [in] */ const LPCWSTR *ppwzPatterns,
     /* [in] */ DWORD dwReserved);
 
 
@@ -3771,8 +4075,8 @@ void __RPC_STUB IInternetSession_RegisterNameSpace_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSession_UnregisterNameSpace_Proxy( 
-    IInternetSession __RPC_FAR * This,
-    /* [in] */ IClassFactory __RPC_FAR *pCF,
+    IInternetSession * This,
+    /* [in] */ IClassFactory *pCF,
     /* [in] */ LPCWSTR pszProtocol);
 
 
@@ -3784,8 +4088,8 @@ void __RPC_STUB IInternetSession_UnregisterNameSpace_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSession_RegisterMimeFilter_Proxy( 
-    IInternetSession __RPC_FAR * This,
-    /* [in] */ IClassFactory __RPC_FAR *pCF,
+    IInternetSession * This,
+    /* [in] */ IClassFactory *pCF,
     /* [in] */ REFCLSID rclsid,
     /* [in] */ LPCWSTR pwzType);
 
@@ -3798,8 +4102,8 @@ void __RPC_STUB IInternetSession_RegisterMimeFilter_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSession_UnregisterMimeFilter_Proxy( 
-    IInternetSession __RPC_FAR * This,
-    /* [in] */ IClassFactory __RPC_FAR *pCF,
+    IInternetSession * This,
+    /* [in] */ IClassFactory *pCF,
     /* [in] */ LPCWSTR pwzType);
 
 
@@ -3811,12 +4115,12 @@ void __RPC_STUB IInternetSession_UnregisterMimeFilter_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSession_CreateBinding_Proxy( 
-    IInternetSession __RPC_FAR * This,
+    IInternetSession * This,
     /* [in] */ LPBC pBC,
     /* [in] */ LPCWSTR szUrl,
-    /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
-    /* [unique][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk,
-    /* [unique][out] */ IInternetProtocol __RPC_FAR *__RPC_FAR *ppOInetProt,
+    /* [in] */ IUnknown *pUnkOuter,
+    /* [unique][out] */ IUnknown **ppUnk,
+    /* [unique][out] */ IInternetProtocol **ppOInetProt,
     /* [in] */ DWORD dwOption);
 
 
@@ -3828,7 +4132,7 @@ void __RPC_STUB IInternetSession_CreateBinding_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSession_SetSessionOption_Proxy( 
-    IInternetSession __RPC_FAR * This,
+    IInternetSession * This,
     /* [in] */ DWORD dwOption,
     /* [in] */ LPVOID pBuffer,
     /* [in] */ DWORD dwBufferLength,
@@ -3843,10 +4147,10 @@ void __RPC_STUB IInternetSession_SetSessionOption_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSession_GetSessionOption_Proxy( 
-    IInternetSession __RPC_FAR * This,
+    IInternetSession * This,
     /* [in] */ DWORD dwOption,
     /* [out][in] */ LPVOID pBuffer,
-    /* [out][in] */ DWORD __RPC_FAR *pdwBufferLength,
+    /* [out][in] */ DWORD *pdwBufferLength,
     /* [in] */ DWORD dwReserved);
 
 
@@ -3861,7 +4165,7 @@ void __RPC_STUB IInternetSession_GetSessionOption_Stub(
 #endif 	/* __IInternetSession_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0186 */
+/* interface __MIDL_itf_urlmon_0193 */
 /* [local] */ 
 
 #endif
@@ -3869,8 +4173,8 @@ void __RPC_STUB IInternetSession_GetSessionOption_Stub(
 #define _LPIINTERNETTHREADSWITCH_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0186_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0186_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0193_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0193_v0_0_s_ifspec;
 
 #ifndef __IInternetThreadSwitch_INTERFACE_DEFINED__
 #define __IInternetThreadSwitch_INTERFACE_DEFINED__
@@ -3878,7 +4182,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0186_v0_0_s_ifspec;
 /* interface IInternetThreadSwitch */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IInternetThreadSwitch __RPC_FAR *LPIINTERNETTHREADSWITCH;
+typedef /* [unique] */ IInternetThreadSwitch *LPIINTERNETTHREADSWITCH;
 
 
 EXTERN_C const IID IID_IInternetThreadSwitch;
@@ -3901,29 +4205,29 @@ EXTERN_C const IID IID_IInternetThreadSwitch;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternetThreadSwitch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternetThreadSwitch * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternetThreadSwitch __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternetThreadSwitch * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternetThreadSwitch __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternetThreadSwitch * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Prepare )( 
-            IInternetThreadSwitch __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Prepare )( 
+            IInternetThreadSwitch * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Continue )( 
-            IInternetThreadSwitch __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Continue )( 
+            IInternetThreadSwitch * This);
         
         END_INTERFACE
     } IInternetThreadSwitchVtbl;
 
     interface IInternetThreadSwitch
     {
-        CONST_VTBL struct IInternetThreadSwitchVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetThreadSwitchVtbl *lpVtbl;
     };
 
     
@@ -3955,7 +4259,7 @@ EXTERN_C const IID IID_IInternetThreadSwitch;
 
 
 HRESULT STDMETHODCALLTYPE IInternetThreadSwitch_Prepare_Proxy( 
-    IInternetThreadSwitch __RPC_FAR * This);
+    IInternetThreadSwitch * This);
 
 
 void __RPC_STUB IInternetThreadSwitch_Prepare_Stub(
@@ -3966,7 +4270,7 @@ void __RPC_STUB IInternetThreadSwitch_Prepare_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetThreadSwitch_Continue_Proxy( 
-    IInternetThreadSwitch __RPC_FAR * This);
+    IInternetThreadSwitch * This);
 
 
 void __RPC_STUB IInternetThreadSwitch_Continue_Stub(
@@ -3980,7 +4284,7 @@ void __RPC_STUB IInternetThreadSwitch_Continue_Stub(
 #endif 	/* __IInternetThreadSwitch_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0187 */
+/* interface __MIDL_itf_urlmon_0194 */
 /* [local] */ 
 
 #endif
@@ -3988,8 +4292,8 @@ void __RPC_STUB IInternetThreadSwitch_Continue_Stub(
 #define _LPIINTERNETPRIORITY_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0187_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0187_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0194_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0194_v0_0_s_ifspec;
 
 #ifndef __IInternetPriority_INTERFACE_DEFINED__
 #define __IInternetPriority_INTERFACE_DEFINED__
@@ -3997,7 +4301,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0187_v0_0_s_ifspec;
 /* interface IInternetPriority */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IInternetPriority __RPC_FAR *LPIINTERNETPRIORITY;
+typedef /* [unique] */ IInternetPriority *LPIINTERNETPRIORITY;
 
 
 EXTERN_C const IID IID_IInternetPriority;
@@ -4012,7 +4316,7 @@ EXTERN_C const IID IID_IInternetPriority;
             /* [in] */ LONG nPriority) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPriority( 
-            /* [out] */ LONG __RPC_FAR *pnPriority) = 0;
+            /* [out] */ LONG *pnPriority) = 0;
         
     };
     
@@ -4022,31 +4326,31 @@ EXTERN_C const IID IID_IInternetPriority;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternetPriority __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternetPriority * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternetPriority __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternetPriority * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternetPriority __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternetPriority * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPriority )( 
-            IInternetPriority __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetPriority )( 
+            IInternetPriority * This,
             /* [in] */ LONG nPriority);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPriority )( 
-            IInternetPriority __RPC_FAR * This,
-            /* [out] */ LONG __RPC_FAR *pnPriority);
+        HRESULT ( STDMETHODCALLTYPE *GetPriority )( 
+            IInternetPriority * This,
+            /* [out] */ LONG *pnPriority);
         
         END_INTERFACE
     } IInternetPriorityVtbl;
 
     interface IInternetPriority
     {
-        CONST_VTBL struct IInternetPriorityVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetPriorityVtbl *lpVtbl;
     };
 
     
@@ -4078,7 +4382,7 @@ EXTERN_C const IID IID_IInternetPriority;
 
 
 HRESULT STDMETHODCALLTYPE IInternetPriority_SetPriority_Proxy( 
-    IInternetPriority __RPC_FAR * This,
+    IInternetPriority * This,
     /* [in] */ LONG nPriority);
 
 
@@ -4090,8 +4394,8 @@ void __RPC_STUB IInternetPriority_SetPriority_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetPriority_GetPriority_Proxy( 
-    IInternetPriority __RPC_FAR * This,
-    /* [out] */ LONG __RPC_FAR *pnPriority);
+    IInternetPriority * This,
+    /* [out] */ LONG *pnPriority);
 
 
 void __RPC_STUB IInternetPriority_GetPriority_Stub(
@@ -4105,7 +4409,7 @@ void __RPC_STUB IInternetPriority_GetPriority_Stub(
 #endif 	/* __IInternetPriority_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0188 */
+/* interface __MIDL_itf_urlmon_0195 */
 /* [local] */ 
 
 #endif
@@ -4113,8 +4417,8 @@ void __RPC_STUB IInternetPriority_GetPriority_Stub(
 #define _LPIINTERNETPROTOCOLINFO_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0188_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0188_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0195_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0195_v0_0_s_ifspec;
 
 #ifndef __IInternetProtocolInfo_INTERFACE_DEFINED__
 #define __IInternetProtocolInfo_INTERFACE_DEFINED__
@@ -4122,7 +4426,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0188_v0_0_s_ifspec;
 /* interface IInternetProtocolInfo */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IInternetProtocolInfo __RPC_FAR *LPIINTERNETPROTOCOLINFO;
+typedef /* [unique] */ IInternetProtocolInfo *LPIINTERNETPROTOCOLINFO;
 
 typedef 
 enum _tagPARSEACTION
@@ -4145,13 +4449,13 @@ enum _tagPARSEACTION
 	PARSE_SECURITY_DOMAIN	= PARSE_LOCATION + 1,
 	PARSE_ESCAPE	= PARSE_SECURITY_DOMAIN + 1,
 	PARSE_UNESCAPE	= PARSE_ESCAPE + 1
-    }	PARSEACTION;
+    } 	PARSEACTION;
 
 typedef 
 enum _tagPSUACTION
     {	PSU_DEFAULT	= 1,
 	PSU_SECURITY_URL_ONLY	= PSU_DEFAULT + 1
-    }	PSUACTION;
+    } 	PSUACTION;
 
 typedef 
 enum _tagQUERYOPTION
@@ -4169,7 +4473,7 @@ enum _tagQUERYOPTION
 	QUERY_USES_CACHE	= QUERY_IS_CACHED_OR_MAPPED + 1,
 	QUERY_IS_SECURE	= QUERY_USES_CACHE + 1,
 	QUERY_IS_SAFE	= QUERY_IS_SECURE + 1
-    }	QUERYOPTION;
+    } 	QUERYOPTION;
 
 
 EXTERN_C const IID IID_IInternetProtocolInfo;
@@ -4186,7 +4490,7 @@ EXTERN_C const IID IID_IInternetProtocolInfo;
             /* [in] */ DWORD dwParseFlags,
             /* [out] */ LPWSTR pwzResult,
             /* [in] */ DWORD cchResult,
-            /* [out] */ DWORD __RPC_FAR *pcchResult,
+            /* [out] */ DWORD *pcchResult,
             /* [in] */ DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CombineUrl( 
@@ -4195,7 +4499,7 @@ EXTERN_C const IID IID_IInternetProtocolInfo;
             /* [in] */ DWORD dwCombineFlags,
             /* [out] */ LPWSTR pwzResult,
             /* [in] */ DWORD cchResult,
-            /* [out] */ DWORD __RPC_FAR *pcchResult,
+            /* [out] */ DWORD *pcchResult,
             /* [in] */ DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CompareUrl( 
@@ -4209,7 +4513,7 @@ EXTERN_C const IID IID_IInternetProtocolInfo;
             /* [in] */ DWORD dwQueryFlags,
             /* [size_is][out][in] */ LPVOID pBuffer,
             /* [in] */ DWORD cbBuffer,
-            /* [out][in] */ DWORD __RPC_FAR *pcbBuf,
+            /* [out][in] */ DWORD *pcbBuf,
             /* [in] */ DWORD dwReserved) = 0;
         
     };
@@ -4220,51 +4524,51 @@ EXTERN_C const IID IID_IInternetProtocolInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternetProtocolInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternetProtocolInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternetProtocolInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternetProtocolInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternetProtocolInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternetProtocolInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ParseUrl )( 
-            IInternetProtocolInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ParseUrl )( 
+            IInternetProtocolInfo * This,
             /* [in] */ LPCWSTR pwzUrl,
             /* [in] */ PARSEACTION ParseAction,
             /* [in] */ DWORD dwParseFlags,
             /* [out] */ LPWSTR pwzResult,
             /* [in] */ DWORD cchResult,
-            /* [out] */ DWORD __RPC_FAR *pcchResult,
+            /* [out] */ DWORD *pcchResult,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CombineUrl )( 
-            IInternetProtocolInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CombineUrl )( 
+            IInternetProtocolInfo * This,
             /* [in] */ LPCWSTR pwzBaseUrl,
             /* [in] */ LPCWSTR pwzRelativeUrl,
             /* [in] */ DWORD dwCombineFlags,
             /* [out] */ LPWSTR pwzResult,
             /* [in] */ DWORD cchResult,
-            /* [out] */ DWORD __RPC_FAR *pcchResult,
+            /* [out] */ DWORD *pcchResult,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CompareUrl )( 
-            IInternetProtocolInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CompareUrl )( 
+            IInternetProtocolInfo * This,
             /* [in] */ LPCWSTR pwzUrl1,
             /* [in] */ LPCWSTR pwzUrl2,
             /* [in] */ DWORD dwCompareFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInfo )( 
-            IInternetProtocolInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInfo )( 
+            IInternetProtocolInfo * This,
             /* [in] */ LPCWSTR pwzUrl,
             /* [in] */ QUERYOPTION OueryOption,
             /* [in] */ DWORD dwQueryFlags,
             /* [size_is][out][in] */ LPVOID pBuffer,
             /* [in] */ DWORD cbBuffer,
-            /* [out][in] */ DWORD __RPC_FAR *pcbBuf,
+            /* [out][in] */ DWORD *pcbBuf,
             /* [in] */ DWORD dwReserved);
         
         END_INTERFACE
@@ -4272,7 +4576,7 @@ EXTERN_C const IID IID_IInternetProtocolInfo;
 
     interface IInternetProtocolInfo
     {
-        CONST_VTBL struct IInternetProtocolInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetProtocolInfoVtbl *lpVtbl;
     };
 
     
@@ -4310,13 +4614,13 @@ EXTERN_C const IID IID_IInternetProtocolInfo;
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolInfo_ParseUrl_Proxy( 
-    IInternetProtocolInfo __RPC_FAR * This,
+    IInternetProtocolInfo * This,
     /* [in] */ LPCWSTR pwzUrl,
     /* [in] */ PARSEACTION ParseAction,
     /* [in] */ DWORD dwParseFlags,
     /* [out] */ LPWSTR pwzResult,
     /* [in] */ DWORD cchResult,
-    /* [out] */ DWORD __RPC_FAR *pcchResult,
+    /* [out] */ DWORD *pcchResult,
     /* [in] */ DWORD dwReserved);
 
 
@@ -4328,13 +4632,13 @@ void __RPC_STUB IInternetProtocolInfo_ParseUrl_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolInfo_CombineUrl_Proxy( 
-    IInternetProtocolInfo __RPC_FAR * This,
+    IInternetProtocolInfo * This,
     /* [in] */ LPCWSTR pwzBaseUrl,
     /* [in] */ LPCWSTR pwzRelativeUrl,
     /* [in] */ DWORD dwCombineFlags,
     /* [out] */ LPWSTR pwzResult,
     /* [in] */ DWORD cchResult,
-    /* [out] */ DWORD __RPC_FAR *pcchResult,
+    /* [out] */ DWORD *pcchResult,
     /* [in] */ DWORD dwReserved);
 
 
@@ -4346,7 +4650,7 @@ void __RPC_STUB IInternetProtocolInfo_CombineUrl_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolInfo_CompareUrl_Proxy( 
-    IInternetProtocolInfo __RPC_FAR * This,
+    IInternetProtocolInfo * This,
     /* [in] */ LPCWSTR pwzUrl1,
     /* [in] */ LPCWSTR pwzUrl2,
     /* [in] */ DWORD dwCompareFlags);
@@ -4360,13 +4664,13 @@ void __RPC_STUB IInternetProtocolInfo_CompareUrl_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolInfo_QueryInfo_Proxy( 
-    IInternetProtocolInfo __RPC_FAR * This,
+    IInternetProtocolInfo * This,
     /* [in] */ LPCWSTR pwzUrl,
     /* [in] */ QUERYOPTION OueryOption,
     /* [in] */ DWORD dwQueryFlags,
     /* [size_is][out][in] */ LPVOID pBuffer,
     /* [in] */ DWORD cbBuffer,
-    /* [out][in] */ DWORD __RPC_FAR *pcbBuf,
+    /* [out][in] */ DWORD *pcbBuf,
     /* [in] */ DWORD dwReserved);
 
 
@@ -4381,7 +4685,7 @@ void __RPC_STUB IInternetProtocolInfo_QueryInfo_Stub(
 #endif 	/* __IInternetProtocolInfo_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0189 */
+/* interface __MIDL_itf_urlmon_0196 */
 /* [local] */ 
 
 #endif
@@ -4506,8 +4810,8 @@ EXTERN_C const IID CLSID_InternetZoneManager;
 #define _LPINTERNETSECURITYMGRSITE_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0189_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0189_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0196_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0196_v0_0_s_ifspec;
 
 #ifndef __IInternetSecurityMgrSite_INTERFACE_DEFINED__
 #define __IInternetSecurityMgrSite_INTERFACE_DEFINED__
@@ -4525,7 +4829,7 @@ EXTERN_C const IID IID_IInternetSecurityMgrSite;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetWindow( 
-            /* [out] */ HWND __RPC_FAR *phwnd) = 0;
+            /* [out] */ HWND *phwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableModeless( 
             /* [in] */ BOOL fEnable) = 0;
@@ -4538,23 +4842,23 @@ EXTERN_C const IID IID_IInternetSecurityMgrSite;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternetSecurityMgrSite __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternetSecurityMgrSite * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternetSecurityMgrSite __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternetSecurityMgrSite * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternetSecurityMgrSite __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternetSecurityMgrSite * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWindow )( 
-            IInternetSecurityMgrSite __RPC_FAR * This,
-            /* [out] */ HWND __RPC_FAR *phwnd);
+        HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
+            IInternetSecurityMgrSite * This,
+            /* [out] */ HWND *phwnd);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnableModeless )( 
-            IInternetSecurityMgrSite __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnableModeless )( 
+            IInternetSecurityMgrSite * This,
             /* [in] */ BOOL fEnable);
         
         END_INTERFACE
@@ -4562,7 +4866,7 @@ EXTERN_C const IID IID_IInternetSecurityMgrSite;
 
     interface IInternetSecurityMgrSite
     {
-        CONST_VTBL struct IInternetSecurityMgrSiteVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetSecurityMgrSiteVtbl *lpVtbl;
     };
 
     
@@ -4594,8 +4898,8 @@ EXTERN_C const IID IID_IInternetSecurityMgrSite;
 
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityMgrSite_GetWindow_Proxy( 
-    IInternetSecurityMgrSite __RPC_FAR * This,
-    /* [out] */ HWND __RPC_FAR *phwnd);
+    IInternetSecurityMgrSite * This,
+    /* [out] */ HWND *phwnd);
 
 
 void __RPC_STUB IInternetSecurityMgrSite_GetWindow_Stub(
@@ -4606,7 +4910,7 @@ void __RPC_STUB IInternetSecurityMgrSite_GetWindow_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityMgrSite_EnableModeless_Proxy( 
-    IInternetSecurityMgrSite __RPC_FAR * This,
+    IInternetSecurityMgrSite * This,
     /* [in] */ BOOL fEnable);
 
 
@@ -4621,7 +4925,7 @@ void __RPC_STUB IInternetSecurityMgrSite_EnableModeless_Stub(
 #endif 	/* __IInternetSecurityMgrSite_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0190 */
+/* interface __MIDL_itf_urlmon_0197 */
 /* [local] */ 
 
 #endif
@@ -4629,8 +4933,8 @@ void __RPC_STUB IInternetSecurityMgrSite_EnableModeless_Stub(
 #define _LPINTERNETSECURITYMANANGER_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0190_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0190_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0197_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0197_v0_0_s_ifspec;
 
 #ifndef __IInternetSecurityManager_INTERFACE_DEFINED__
 #define __IInternetSecurityManager_INTERFACE_DEFINED__
@@ -4639,6 +4943,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0190_v0_0_s_ifspec;
 /* [object][unique][helpstring][uuid] */ 
 
 #define MUTZ_NOSAVEDFILECHECK 0x00000001 // don't check file: for saved file comment
+#define MUTZ_ENFORCERESTRICTED   0x00000100 // enforce restricted zone independent of URL
 // MapUrlToZone returns the zone index given a URL
 #define MAX_SIZE_SECURITY_ID 512 // bytes
 typedef /* [public] */ 
@@ -4651,8 +4956,9 @@ enum __MIDL_IInternetSecurityManager_0001
 	PUAF_CHECK_TIFS	= 0x10,
 	PUAF_DONTCHECKBOXINDIALOG	= 0x20,
 	PUAF_TRUSTED	= 0x40,
-	PUAF_ACCEPT_WILDCARD_SCHEME	= 0x80
-    }	PUAF;
+	PUAF_ACCEPT_WILDCARD_SCHEME	= 0x80,
+	PUAF_ENFORCERESTRICTED	= 0x100
+    } 	PUAF;
 
 // This is the wrapper function that most clients will use.
 // It figures out the current Policy for the passed in Action,
@@ -4664,7 +4970,7 @@ typedef /* [public] */
 enum __MIDL_IInternetSecurityManager_0002
     {	SZM_CREATE	= 0,
 	SZM_DELETE	= 0x1
-    }	SZM_FLAGS;
+    } 	SZM_FLAGS;
 
 // SetZoneMapping
 //    lpszPattern: string denoting a URL pattern
@@ -4690,28 +4996,28 @@ EXTERN_C const IID IID_IInternetSecurityManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetSecuritySite( 
-            /* [unique][in] */ IInternetSecurityMgrSite __RPC_FAR *pSite) = 0;
+            /* [unique][in] */ IInternetSecurityMgrSite *pSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSecuritySite( 
-            /* [out] */ IInternetSecurityMgrSite __RPC_FAR *__RPC_FAR *ppSite) = 0;
+            /* [out] */ IInternetSecurityMgrSite **ppSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapUrlToZone( 
             /* [in] */ LPCWSTR pwszUrl,
-            /* [out] */ DWORD __RPC_FAR *pdwZone,
+            /* [out] */ DWORD *pdwZone,
             /* [in] */ DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSecurityId( 
             /* [in] */ LPCWSTR pwszUrl,
-            /* [size_is][out] */ BYTE __RPC_FAR *pbSecurityId,
-            /* [out][in] */ DWORD __RPC_FAR *pcbSecurityId,
+            /* [size_is][out] */ BYTE *pbSecurityId,
+            /* [out][in] */ DWORD *pcbSecurityId,
             /* [in] */ DWORD_PTR dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ProcessUrlAction( 
             /* [in] */ LPCWSTR pwszUrl,
             /* [in] */ DWORD dwAction,
-            /* [size_is][out] */ BYTE __RPC_FAR *pPolicy,
+            /* [size_is][out] */ BYTE *pPolicy,
             /* [in] */ DWORD cbPolicy,
-            /* [in] */ BYTE __RPC_FAR *pContext,
+            /* [in] */ BYTE *pContext,
             /* [in] */ DWORD cbContext,
             /* [in] */ DWORD dwFlags,
             /* [in] */ DWORD dwReserved) = 0;
@@ -4719,9 +5025,9 @@ EXTERN_C const IID IID_IInternetSecurityManager;
         virtual HRESULT STDMETHODCALLTYPE QueryCustomPolicy( 
             /* [in] */ LPCWSTR pwszUrl,
             /* [in] */ REFGUID guidKey,
-            /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppPolicy,
-            /* [out] */ DWORD __RPC_FAR *pcbPolicy,
-            /* [in] */ BYTE __RPC_FAR *pContext,
+            /* [size_is][size_is][out] */ BYTE **ppPolicy,
+            /* [out] */ DWORD *pcbPolicy,
+            /* [in] */ BYTE *pContext,
             /* [in] */ DWORD cbContext,
             /* [in] */ DWORD dwReserved) = 0;
         
@@ -4732,7 +5038,7 @@ EXTERN_C const IID IID_IInternetSecurityManager;
         
         virtual HRESULT STDMETHODCALLTYPE GetZoneMappings( 
             /* [in] */ DWORD dwZone,
-            /* [out] */ IEnumString __RPC_FAR *__RPC_FAR *ppenumString,
+            /* [out] */ IEnumString **ppenumString,
             /* [in] */ DWORD dwFlags) = 0;
         
     };
@@ -4743,69 +5049,69 @@ EXTERN_C const IID IID_IInternetSecurityManager;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternetSecurityManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternetSecurityManager * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternetSecurityManager __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternetSecurityManager * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternetSecurityManager __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternetSecurityManager * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSecuritySite )( 
-            IInternetSecurityManager __RPC_FAR * This,
-            /* [unique][in] */ IInternetSecurityMgrSite __RPC_FAR *pSite);
+        HRESULT ( STDMETHODCALLTYPE *SetSecuritySite )( 
+            IInternetSecurityManager * This,
+            /* [unique][in] */ IInternetSecurityMgrSite *pSite);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSecuritySite )( 
-            IInternetSecurityManager __RPC_FAR * This,
-            /* [out] */ IInternetSecurityMgrSite __RPC_FAR *__RPC_FAR *ppSite);
+        HRESULT ( STDMETHODCALLTYPE *GetSecuritySite )( 
+            IInternetSecurityManager * This,
+            /* [out] */ IInternetSecurityMgrSite **ppSite);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MapUrlToZone )( 
-            IInternetSecurityManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *MapUrlToZone )( 
+            IInternetSecurityManager * This,
             /* [in] */ LPCWSTR pwszUrl,
-            /* [out] */ DWORD __RPC_FAR *pdwZone,
+            /* [out] */ DWORD *pdwZone,
             /* [in] */ DWORD dwFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSecurityId )( 
-            IInternetSecurityManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetSecurityId )( 
+            IInternetSecurityManager * This,
             /* [in] */ LPCWSTR pwszUrl,
-            /* [size_is][out] */ BYTE __RPC_FAR *pbSecurityId,
-            /* [out][in] */ DWORD __RPC_FAR *pcbSecurityId,
+            /* [size_is][out] */ BYTE *pbSecurityId,
+            /* [out][in] */ DWORD *pcbSecurityId,
             /* [in] */ DWORD_PTR dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProcessUrlAction )( 
-            IInternetSecurityManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ProcessUrlAction )( 
+            IInternetSecurityManager * This,
             /* [in] */ LPCWSTR pwszUrl,
             /* [in] */ DWORD dwAction,
-            /* [size_is][out] */ BYTE __RPC_FAR *pPolicy,
+            /* [size_is][out] */ BYTE *pPolicy,
             /* [in] */ DWORD cbPolicy,
-            /* [in] */ BYTE __RPC_FAR *pContext,
+            /* [in] */ BYTE *pContext,
             /* [in] */ DWORD cbContext,
             /* [in] */ DWORD dwFlags,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryCustomPolicy )( 
-            IInternetSecurityManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryCustomPolicy )( 
+            IInternetSecurityManager * This,
             /* [in] */ LPCWSTR pwszUrl,
             /* [in] */ REFGUID guidKey,
-            /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppPolicy,
-            /* [out] */ DWORD __RPC_FAR *pcbPolicy,
-            /* [in] */ BYTE __RPC_FAR *pContext,
+            /* [size_is][size_is][out] */ BYTE **ppPolicy,
+            /* [out] */ DWORD *pcbPolicy,
+            /* [in] */ BYTE *pContext,
             /* [in] */ DWORD cbContext,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetZoneMapping )( 
-            IInternetSecurityManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetZoneMapping )( 
+            IInternetSecurityManager * This,
             /* [in] */ DWORD dwZone,
             /* [in] */ LPCWSTR lpszPattern,
             /* [in] */ DWORD dwFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetZoneMappings )( 
-            IInternetSecurityManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetZoneMappings )( 
+            IInternetSecurityManager * This,
             /* [in] */ DWORD dwZone,
-            /* [out] */ IEnumString __RPC_FAR *__RPC_FAR *ppenumString,
+            /* [out] */ IEnumString **ppenumString,
             /* [in] */ DWORD dwFlags);
         
         END_INTERFACE
@@ -4813,7 +5119,7 @@ EXTERN_C const IID IID_IInternetSecurityManager;
 
     interface IInternetSecurityManager
     {
-        CONST_VTBL struct IInternetSecurityManagerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetSecurityManagerVtbl *lpVtbl;
     };
 
     
@@ -4863,8 +5169,8 @@ EXTERN_C const IID IID_IInternetSecurityManager;
 
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_SetSecuritySite_Proxy( 
-    IInternetSecurityManager __RPC_FAR * This,
-    /* [unique][in] */ IInternetSecurityMgrSite __RPC_FAR *pSite);
+    IInternetSecurityManager * This,
+    /* [unique][in] */ IInternetSecurityMgrSite *pSite);
 
 
 void __RPC_STUB IInternetSecurityManager_SetSecuritySite_Stub(
@@ -4875,8 +5181,8 @@ void __RPC_STUB IInternetSecurityManager_SetSecuritySite_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_GetSecuritySite_Proxy( 
-    IInternetSecurityManager __RPC_FAR * This,
-    /* [out] */ IInternetSecurityMgrSite __RPC_FAR *__RPC_FAR *ppSite);
+    IInternetSecurityManager * This,
+    /* [out] */ IInternetSecurityMgrSite **ppSite);
 
 
 void __RPC_STUB IInternetSecurityManager_GetSecuritySite_Stub(
@@ -4887,9 +5193,9 @@ void __RPC_STUB IInternetSecurityManager_GetSecuritySite_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_MapUrlToZone_Proxy( 
-    IInternetSecurityManager __RPC_FAR * This,
+    IInternetSecurityManager * This,
     /* [in] */ LPCWSTR pwszUrl,
-    /* [out] */ DWORD __RPC_FAR *pdwZone,
+    /* [out] */ DWORD *pdwZone,
     /* [in] */ DWORD dwFlags);
 
 
@@ -4901,10 +5207,10 @@ void __RPC_STUB IInternetSecurityManager_MapUrlToZone_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_GetSecurityId_Proxy( 
-    IInternetSecurityManager __RPC_FAR * This,
+    IInternetSecurityManager * This,
     /* [in] */ LPCWSTR pwszUrl,
-    /* [size_is][out] */ BYTE __RPC_FAR *pbSecurityId,
-    /* [out][in] */ DWORD __RPC_FAR *pcbSecurityId,
+    /* [size_is][out] */ BYTE *pbSecurityId,
+    /* [out][in] */ DWORD *pcbSecurityId,
     /* [in] */ DWORD_PTR dwReserved);
 
 
@@ -4916,12 +5222,12 @@ void __RPC_STUB IInternetSecurityManager_GetSecurityId_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_ProcessUrlAction_Proxy( 
-    IInternetSecurityManager __RPC_FAR * This,
+    IInternetSecurityManager * This,
     /* [in] */ LPCWSTR pwszUrl,
     /* [in] */ DWORD dwAction,
-    /* [size_is][out] */ BYTE __RPC_FAR *pPolicy,
+    /* [size_is][out] */ BYTE *pPolicy,
     /* [in] */ DWORD cbPolicy,
-    /* [in] */ BYTE __RPC_FAR *pContext,
+    /* [in] */ BYTE *pContext,
     /* [in] */ DWORD cbContext,
     /* [in] */ DWORD dwFlags,
     /* [in] */ DWORD dwReserved);
@@ -4935,12 +5241,12 @@ void __RPC_STUB IInternetSecurityManager_ProcessUrlAction_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_QueryCustomPolicy_Proxy( 
-    IInternetSecurityManager __RPC_FAR * This,
+    IInternetSecurityManager * This,
     /* [in] */ LPCWSTR pwszUrl,
     /* [in] */ REFGUID guidKey,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppPolicy,
-    /* [out] */ DWORD __RPC_FAR *pcbPolicy,
-    /* [in] */ BYTE __RPC_FAR *pContext,
+    /* [size_is][size_is][out] */ BYTE **ppPolicy,
+    /* [out] */ DWORD *pcbPolicy,
+    /* [in] */ BYTE *pContext,
     /* [in] */ DWORD cbContext,
     /* [in] */ DWORD dwReserved);
 
@@ -4953,7 +5259,7 @@ void __RPC_STUB IInternetSecurityManager_QueryCustomPolicy_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_SetZoneMapping_Proxy( 
-    IInternetSecurityManager __RPC_FAR * This,
+    IInternetSecurityManager * This,
     /* [in] */ DWORD dwZone,
     /* [in] */ LPCWSTR lpszPattern,
     /* [in] */ DWORD dwFlags);
@@ -4967,9 +5273,9 @@ void __RPC_STUB IInternetSecurityManager_SetZoneMapping_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_GetZoneMappings_Proxy( 
-    IInternetSecurityManager __RPC_FAR * This,
+    IInternetSecurityManager * This,
     /* [in] */ DWORD dwZone,
-    /* [out] */ IEnumString __RPC_FAR *__RPC_FAR *ppenumString,
+    /* [out] */ IEnumString **ppenumString,
     /* [in] */ DWORD dwFlags);
 
 
@@ -4984,7 +5290,7 @@ void __RPC_STUB IInternetSecurityManager_GetZoneMappings_Stub(
 #endif 	/* __IInternetSecurityManager_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0191 */
+/* interface __MIDL_itf_urlmon_0198 */
 /* [local] */ 
 
 #endif
@@ -4995,8 +5301,8 @@ void __RPC_STUB IInternetSecurityManager_GetZoneMappings_Stub(
 //since MSHTML maintains the notion of the current URL
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0191_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0191_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0198_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0198_v0_0_s_ifspec;
 
 #ifndef __IInternetHostSecurityManager_INTERFACE_DEFINED__
 #define __IInternetHostSecurityManager_INTERFACE_DEFINED__
@@ -5014,24 +5320,24 @@ EXTERN_C const IID IID_IInternetHostSecurityManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSecurityId( 
-            /* [size_is][out] */ BYTE __RPC_FAR *pbSecurityId,
-            /* [out][in] */ DWORD __RPC_FAR *pcbSecurityId,
+            /* [size_is][out] */ BYTE *pbSecurityId,
+            /* [out][in] */ DWORD *pcbSecurityId,
             /* [in] */ DWORD_PTR dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ProcessUrlAction( 
             /* [in] */ DWORD dwAction,
-            /* [size_is][out] */ BYTE __RPC_FAR *pPolicy,
+            /* [size_is][out] */ BYTE *pPolicy,
             /* [in] */ DWORD cbPolicy,
-            /* [in] */ BYTE __RPC_FAR *pContext,
+            /* [in] */ BYTE *pContext,
             /* [in] */ DWORD cbContext,
             /* [in] */ DWORD dwFlags,
             /* [in] */ DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryCustomPolicy( 
             /* [in] */ REFGUID guidKey,
-            /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppPolicy,
-            /* [out] */ DWORD __RPC_FAR *pcbPolicy,
-            /* [in] */ BYTE __RPC_FAR *pContext,
+            /* [size_is][size_is][out] */ BYTE **ppPolicy,
+            /* [out] */ DWORD *pcbPolicy,
+            /* [in] */ BYTE *pContext,
             /* [in] */ DWORD cbContext,
             /* [in] */ DWORD dwReserved) = 0;
         
@@ -5043,39 +5349,39 @@ EXTERN_C const IID IID_IInternetHostSecurityManager;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternetHostSecurityManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternetHostSecurityManager * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternetHostSecurityManager __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternetHostSecurityManager * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternetHostSecurityManager __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternetHostSecurityManager * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSecurityId )( 
-            IInternetHostSecurityManager __RPC_FAR * This,
-            /* [size_is][out] */ BYTE __RPC_FAR *pbSecurityId,
-            /* [out][in] */ DWORD __RPC_FAR *pcbSecurityId,
+        HRESULT ( STDMETHODCALLTYPE *GetSecurityId )( 
+            IInternetHostSecurityManager * This,
+            /* [size_is][out] */ BYTE *pbSecurityId,
+            /* [out][in] */ DWORD *pcbSecurityId,
             /* [in] */ DWORD_PTR dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProcessUrlAction )( 
-            IInternetHostSecurityManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ProcessUrlAction )( 
+            IInternetHostSecurityManager * This,
             /* [in] */ DWORD dwAction,
-            /* [size_is][out] */ BYTE __RPC_FAR *pPolicy,
+            /* [size_is][out] */ BYTE *pPolicy,
             /* [in] */ DWORD cbPolicy,
-            /* [in] */ BYTE __RPC_FAR *pContext,
+            /* [in] */ BYTE *pContext,
             /* [in] */ DWORD cbContext,
             /* [in] */ DWORD dwFlags,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryCustomPolicy )( 
-            IInternetHostSecurityManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryCustomPolicy )( 
+            IInternetHostSecurityManager * This,
             /* [in] */ REFGUID guidKey,
-            /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppPolicy,
-            /* [out] */ DWORD __RPC_FAR *pcbPolicy,
-            /* [in] */ BYTE __RPC_FAR *pContext,
+            /* [size_is][size_is][out] */ BYTE **ppPolicy,
+            /* [out] */ DWORD *pcbPolicy,
+            /* [in] */ BYTE *pContext,
             /* [in] */ DWORD cbContext,
             /* [in] */ DWORD dwReserved);
         
@@ -5084,7 +5390,7 @@ EXTERN_C const IID IID_IInternetHostSecurityManager;
 
     interface IInternetHostSecurityManager
     {
-        CONST_VTBL struct IInternetHostSecurityManagerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetHostSecurityManagerVtbl *lpVtbl;
     };
 
     
@@ -5119,9 +5425,9 @@ EXTERN_C const IID IID_IInternetHostSecurityManager;
 
 
 HRESULT STDMETHODCALLTYPE IInternetHostSecurityManager_GetSecurityId_Proxy( 
-    IInternetHostSecurityManager __RPC_FAR * This,
-    /* [size_is][out] */ BYTE __RPC_FAR *pbSecurityId,
-    /* [out][in] */ DWORD __RPC_FAR *pcbSecurityId,
+    IInternetHostSecurityManager * This,
+    /* [size_is][out] */ BYTE *pbSecurityId,
+    /* [out][in] */ DWORD *pcbSecurityId,
     /* [in] */ DWORD_PTR dwReserved);
 
 
@@ -5133,11 +5439,11 @@ void __RPC_STUB IInternetHostSecurityManager_GetSecurityId_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetHostSecurityManager_ProcessUrlAction_Proxy( 
-    IInternetHostSecurityManager __RPC_FAR * This,
+    IInternetHostSecurityManager * This,
     /* [in] */ DWORD dwAction,
-    /* [size_is][out] */ BYTE __RPC_FAR *pPolicy,
+    /* [size_is][out] */ BYTE *pPolicy,
     /* [in] */ DWORD cbPolicy,
-    /* [in] */ BYTE __RPC_FAR *pContext,
+    /* [in] */ BYTE *pContext,
     /* [in] */ DWORD cbContext,
     /* [in] */ DWORD dwFlags,
     /* [in] */ DWORD dwReserved);
@@ -5151,11 +5457,11 @@ void __RPC_STUB IInternetHostSecurityManager_ProcessUrlAction_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetHostSecurityManager_QueryCustomPolicy_Proxy( 
-    IInternetHostSecurityManager __RPC_FAR * This,
+    IInternetHostSecurityManager * This,
     /* [in] */ REFGUID guidKey,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppPolicy,
-    /* [out] */ DWORD __RPC_FAR *pcbPolicy,
-    /* [in] */ BYTE __RPC_FAR *pContext,
+    /* [size_is][size_is][out] */ BYTE **ppPolicy,
+    /* [out] */ DWORD *pcbPolicy,
+    /* [in] */ BYTE *pContext,
     /* [in] */ DWORD cbContext,
     /* [in] */ DWORD dwReserved);
 
@@ -5171,7 +5477,7 @@ void __RPC_STUB IInternetHostSecurityManager_QueryCustomPolicy_Stub(
 #endif 	/* __IInternetHostSecurityManager_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0192 */
+/* interface __MIDL_itf_urlmon_0199 */
 /* [local] */ 
 
 #endif
@@ -5218,7 +5524,8 @@ void __RPC_STUB IInternetHostSecurityManager_QueryCustomPolicy_Stub(
 #define URLACTION_HTML_JAVA_RUN                                0x00001605 // derive from Java custom policy
 #define URLACTION_HTML_USERDATA_SAVE                           0x00001606
 #define URLACTION_HTML_SUBFRAME_NAVIGATE                       0x00001607
-#define URLACTION_HTML_CURR_MAX                                0x00001607
+#define URLACTION_HTML_META_REFRESH                            0x00001608
+#define URLACTION_HTML_MIXED_CONTENT                           0x00001609
 #define URLACTION_HTML_MAX                                     0x000017ff
 
 #define URLACTION_SHELL_MIN                                    0x00001800
@@ -5247,7 +5554,14 @@ void __RPC_STUB IInternetHostSecurityManager_QueryCustomPolicy_Stub(
 #define URLACTION_COOKIES                                      0x00001A02
 #define URLACTION_COOKIES_SESSION                              0x00001A03
 
-#define URLACTION_NETWORK_CURR_MAX                             0x00001A03
+#define URLACTION_CLIENT_CERT_PROMPT                           0x00001A04
+
+#define URLACTION_COOKIES_THIRD_PARTY                          0x00001A05
+#define URLACTION_COOKIES_SESSION_THIRD_PARTY                  0x00001A06
+
+#define URLACTION_COOKIES_ENABLED                              0x00001A10
+
+#define URLACTION_NETWORK_CURR_MAX                             0x00001A10
 #define URLACTION_NETWORK_MAX                                  0x00001Bff
 
 
@@ -5319,8 +5633,8 @@ void __RPC_STUB IInternetHostSecurityManager_QueryCustomPolicy_Stub(
 #define _LPINTERNETZONEMANAGER_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0192_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0192_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0199_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0199_v0_0_s_ifspec;
 
 #ifndef __IInternetZoneManager_INTERFACE_DEFINED__
 #define __IInternetZoneManager_INTERFACE_DEFINED__
@@ -5328,7 +5642,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0192_v0_0_s_ifspec;
 /* interface IInternetZoneManager */
 /* [unique][helpstring][uuid][object][local] */ 
 
-typedef /* [unique] */ IInternetZoneManager __RPC_FAR *LPURLZONEMANAGER;
+typedef /* [unique] */ IInternetZoneManager *LPURLZONEMANAGER;
 
 typedef 
 enum tagURLZONE
@@ -5341,7 +5655,7 @@ enum tagURLZONE
 	URLZONE_PREDEFINED_MAX	= 999,
 	URLZONE_USER_MIN	= 1000,
 	URLZONE_USER_MAX	= 10000
-    }	URLZONE;
+    } 	URLZONE;
 
 typedef 
 enum tagURLTEMPLATE
@@ -5352,13 +5666,13 @@ enum tagURLTEMPLATE
 	URLTEMPLATE_MEDIUM	= 0x11000,
 	URLTEMPLATE_HIGH	= 0x12000,
 	URLTEMPLATE_PREDEFINED_MAX	= 0x20000
-    }	URLTEMPLATE;
+    } 	URLTEMPLATE;
 
 
 enum __MIDL_IInternetZoneManager_0001
     {	MAX_ZONE_PATH	= 260,
 	MAX_ZONE_DESCRIPTION	= 200
-    };
+    } ;
 typedef /* [public] */ 
 enum __MIDL_IInternetZoneManager_0002
     {	ZAFLAGS_CUSTOM_EDIT	= 0x1,
@@ -5369,7 +5683,7 @@ enum __MIDL_IInternetZoneManager_0002
 	ZAFLAGS_NO_UI	= 0x20,
 	ZAFLAGS_SUPPORTS_VERIFICATION	= 0x40,
 	ZAFLAGS_UNC_AS_INTRANET	= 0x80
-    }	ZAFLAGS;
+    } 	ZAFLAGS;
 
 typedef struct _ZONEATTRIBUTES
     {
@@ -5381,9 +5695,9 @@ typedef struct _ZONEATTRIBUTES
     DWORD dwTemplateRecommended;
     DWORD dwTemplateCurrentLevel;
     DWORD dwFlags;
-    }	ZONEATTRIBUTES;
+    } 	ZONEATTRIBUTES;
 
-typedef struct _ZONEATTRIBUTES __RPC_FAR *LPZONEATTRIBUTES;
+typedef struct _ZONEATTRIBUTES *LPZONEATTRIBUTES;
 
 // Gets the zone attributes (information in registry other than actual security
 // policies associated with the zone).  Zone attributes are fixed as:
@@ -5406,7 +5720,7 @@ enum _URLZONEREG
     {	URLZONEREG_DEFAULT	= 0,
 	URLZONEREG_HKLM	= URLZONEREG_DEFAULT + 1,
 	URLZONEREG_HKCU	= URLZONEREG_HKLM + 1
-    }	URLZONEREG;
+    } 	URLZONEREG;
 
 // Gets a named custom policy associated with a zone;
 // e.g. the Java VM settings can be defined with a unique key such as 'Java'.
@@ -5449,37 +5763,37 @@ EXTERN_C const IID IID_IInternetZoneManager;
     public:
         virtual HRESULT STDMETHODCALLTYPE GetZoneAttributes( 
             /* [in] */ DWORD dwZone,
-            /* [unique][out][in] */ ZONEATTRIBUTES __RPC_FAR *pZoneAttributes) = 0;
+            /* [unique][out][in] */ ZONEATTRIBUTES *pZoneAttributes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetZoneAttributes( 
             /* [in] */ DWORD dwZone,
-            /* [in] */ ZONEATTRIBUTES __RPC_FAR *pZoneAttributes) = 0;
+            /* [in] */ ZONEATTRIBUTES *pZoneAttributes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetZoneCustomPolicy( 
             /* [in] */ DWORD dwZone,
             /* [in] */ REFGUID guidKey,
-            /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppPolicy,
-            /* [out] */ DWORD __RPC_FAR *pcbPolicy,
+            /* [size_is][size_is][out] */ BYTE **ppPolicy,
+            /* [out] */ DWORD *pcbPolicy,
             /* [in] */ URLZONEREG urlZoneReg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetZoneCustomPolicy( 
             /* [in] */ DWORD dwZone,
             /* [in] */ REFGUID guidKey,
-            /* [size_is][in] */ BYTE __RPC_FAR *pPolicy,
+            /* [size_is][in] */ BYTE *pPolicy,
             /* [in] */ DWORD cbPolicy,
             /* [in] */ URLZONEREG urlZoneReg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetZoneActionPolicy( 
             /* [in] */ DWORD dwZone,
             /* [in] */ DWORD dwAction,
-            /* [size_is][out] */ BYTE __RPC_FAR *pPolicy,
+            /* [size_is][out] */ BYTE *pPolicy,
             /* [in] */ DWORD cbPolicy,
             /* [in] */ URLZONEREG urlZoneReg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetZoneActionPolicy( 
             /* [in] */ DWORD dwZone,
             /* [in] */ DWORD dwAction,
-            /* [size_is][in] */ BYTE __RPC_FAR *pPolicy,
+            /* [size_is][in] */ BYTE *pPolicy,
             /* [in] */ DWORD cbPolicy,
             /* [in] */ URLZONEREG urlZoneReg) = 0;
         
@@ -5497,14 +5811,14 @@ EXTERN_C const IID IID_IInternetZoneManager;
             /* [in] */ DWORD dwLogFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateZoneEnumerator( 
-            /* [out] */ DWORD __RPC_FAR *pdwEnum,
-            /* [out] */ DWORD __RPC_FAR *pdwCount,
+            /* [out] */ DWORD *pdwEnum,
+            /* [out] */ DWORD *pdwCount,
             /* [in] */ DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetZoneAt( 
             /* [in] */ DWORD dwEnum,
             /* [in] */ DWORD dwIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwZone) = 0;
+            /* [out] */ DWORD *pdwZone) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DestroyZoneEnumerator( 
             /* [in] */ DWORD dwEnum) = 0;
@@ -5522,92 +5836,92 @@ EXTERN_C const IID IID_IInternetZoneManager;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternetZoneManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternetZoneManager * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternetZoneManager __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternetZoneManager * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternetZoneManager __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternetZoneManager * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetZoneAttributes )( 
-            IInternetZoneManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetZoneAttributes )( 
+            IInternetZoneManager * This,
             /* [in] */ DWORD dwZone,
-            /* [unique][out][in] */ ZONEATTRIBUTES __RPC_FAR *pZoneAttributes);
+            /* [unique][out][in] */ ZONEATTRIBUTES *pZoneAttributes);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetZoneAttributes )( 
-            IInternetZoneManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetZoneAttributes )( 
+            IInternetZoneManager * This,
             /* [in] */ DWORD dwZone,
-            /* [in] */ ZONEATTRIBUTES __RPC_FAR *pZoneAttributes);
+            /* [in] */ ZONEATTRIBUTES *pZoneAttributes);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetZoneCustomPolicy )( 
-            IInternetZoneManager __RPC_FAR * This,
-            /* [in] */ DWORD dwZone,
-            /* [in] */ REFGUID guidKey,
-            /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppPolicy,
-            /* [out] */ DWORD __RPC_FAR *pcbPolicy,
-            /* [in] */ URLZONEREG urlZoneReg);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetZoneCustomPolicy )( 
-            IInternetZoneManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetZoneCustomPolicy )( 
+            IInternetZoneManager * This,
             /* [in] */ DWORD dwZone,
             /* [in] */ REFGUID guidKey,
-            /* [size_is][in] */ BYTE __RPC_FAR *pPolicy,
+            /* [size_is][size_is][out] */ BYTE **ppPolicy,
+            /* [out] */ DWORD *pcbPolicy,
+            /* [in] */ URLZONEREG urlZoneReg);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetZoneCustomPolicy )( 
+            IInternetZoneManager * This,
+            /* [in] */ DWORD dwZone,
+            /* [in] */ REFGUID guidKey,
+            /* [size_is][in] */ BYTE *pPolicy,
             /* [in] */ DWORD cbPolicy,
             /* [in] */ URLZONEREG urlZoneReg);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetZoneActionPolicy )( 
-            IInternetZoneManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetZoneActionPolicy )( 
+            IInternetZoneManager * This,
             /* [in] */ DWORD dwZone,
             /* [in] */ DWORD dwAction,
-            /* [size_is][out] */ BYTE __RPC_FAR *pPolicy,
+            /* [size_is][out] */ BYTE *pPolicy,
             /* [in] */ DWORD cbPolicy,
             /* [in] */ URLZONEREG urlZoneReg);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetZoneActionPolicy )( 
-            IInternetZoneManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetZoneActionPolicy )( 
+            IInternetZoneManager * This,
             /* [in] */ DWORD dwZone,
             /* [in] */ DWORD dwAction,
-            /* [size_is][in] */ BYTE __RPC_FAR *pPolicy,
+            /* [size_is][in] */ BYTE *pPolicy,
             /* [in] */ DWORD cbPolicy,
             /* [in] */ URLZONEREG urlZoneReg);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PromptAction )( 
-            IInternetZoneManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *PromptAction )( 
+            IInternetZoneManager * This,
             /* [in] */ DWORD dwAction,
             /* [in] */ HWND hwndParent,
             /* [in] */ LPCWSTR pwszUrl,
             /* [in] */ LPCWSTR pwszText,
             /* [in] */ DWORD dwPromptFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LogAction )( 
-            IInternetZoneManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *LogAction )( 
+            IInternetZoneManager * This,
             /* [in] */ DWORD dwAction,
             /* [in] */ LPCWSTR pwszUrl,
             /* [in] */ LPCWSTR pwszText,
             /* [in] */ DWORD dwLogFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateZoneEnumerator )( 
-            IInternetZoneManager __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwEnum,
-            /* [out] */ DWORD __RPC_FAR *pdwCount,
+        HRESULT ( STDMETHODCALLTYPE *CreateZoneEnumerator )( 
+            IInternetZoneManager * This,
+            /* [out] */ DWORD *pdwEnum,
+            /* [out] */ DWORD *pdwCount,
             /* [in] */ DWORD dwFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetZoneAt )( 
-            IInternetZoneManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetZoneAt )( 
+            IInternetZoneManager * This,
             /* [in] */ DWORD dwEnum,
             /* [in] */ DWORD dwIndex,
-            /* [out] */ DWORD __RPC_FAR *pdwZone);
+            /* [out] */ DWORD *pdwZone);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DestroyZoneEnumerator )( 
-            IInternetZoneManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DestroyZoneEnumerator )( 
+            IInternetZoneManager * This,
             /* [in] */ DWORD dwEnum);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyTemplatePoliciesToZone )( 
-            IInternetZoneManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CopyTemplatePoliciesToZone )( 
+            IInternetZoneManager * This,
             /* [in] */ DWORD dwTemplate,
             /* [in] */ DWORD dwZone,
             /* [in] */ DWORD dwReserved);
@@ -5617,7 +5931,7 @@ EXTERN_C const IID IID_IInternetZoneManager;
 
     interface IInternetZoneManager
     {
-        CONST_VTBL struct IInternetZoneManagerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternetZoneManagerVtbl *lpVtbl;
     };
 
     
@@ -5679,9 +5993,9 @@ EXTERN_C const IID IID_IInternetZoneManager;
 
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_GetZoneAttributes_Proxy( 
-    IInternetZoneManager __RPC_FAR * This,
+    IInternetZoneManager * This,
     /* [in] */ DWORD dwZone,
-    /* [unique][out][in] */ ZONEATTRIBUTES __RPC_FAR *pZoneAttributes);
+    /* [unique][out][in] */ ZONEATTRIBUTES *pZoneAttributes);
 
 
 void __RPC_STUB IInternetZoneManager_GetZoneAttributes_Stub(
@@ -5692,9 +6006,9 @@ void __RPC_STUB IInternetZoneManager_GetZoneAttributes_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_SetZoneAttributes_Proxy( 
-    IInternetZoneManager __RPC_FAR * This,
+    IInternetZoneManager * This,
     /* [in] */ DWORD dwZone,
-    /* [in] */ ZONEATTRIBUTES __RPC_FAR *pZoneAttributes);
+    /* [in] */ ZONEATTRIBUTES *pZoneAttributes);
 
 
 void __RPC_STUB IInternetZoneManager_SetZoneAttributes_Stub(
@@ -5705,11 +6019,11 @@ void __RPC_STUB IInternetZoneManager_SetZoneAttributes_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_GetZoneCustomPolicy_Proxy( 
-    IInternetZoneManager __RPC_FAR * This,
+    IInternetZoneManager * This,
     /* [in] */ DWORD dwZone,
     /* [in] */ REFGUID guidKey,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppPolicy,
-    /* [out] */ DWORD __RPC_FAR *pcbPolicy,
+    /* [size_is][size_is][out] */ BYTE **ppPolicy,
+    /* [out] */ DWORD *pcbPolicy,
     /* [in] */ URLZONEREG urlZoneReg);
 
 
@@ -5721,10 +6035,10 @@ void __RPC_STUB IInternetZoneManager_GetZoneCustomPolicy_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_SetZoneCustomPolicy_Proxy( 
-    IInternetZoneManager __RPC_FAR * This,
+    IInternetZoneManager * This,
     /* [in] */ DWORD dwZone,
     /* [in] */ REFGUID guidKey,
-    /* [size_is][in] */ BYTE __RPC_FAR *pPolicy,
+    /* [size_is][in] */ BYTE *pPolicy,
     /* [in] */ DWORD cbPolicy,
     /* [in] */ URLZONEREG urlZoneReg);
 
@@ -5737,10 +6051,10 @@ void __RPC_STUB IInternetZoneManager_SetZoneCustomPolicy_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_GetZoneActionPolicy_Proxy( 
-    IInternetZoneManager __RPC_FAR * This,
+    IInternetZoneManager * This,
     /* [in] */ DWORD dwZone,
     /* [in] */ DWORD dwAction,
-    /* [size_is][out] */ BYTE __RPC_FAR *pPolicy,
+    /* [size_is][out] */ BYTE *pPolicy,
     /* [in] */ DWORD cbPolicy,
     /* [in] */ URLZONEREG urlZoneReg);
 
@@ -5753,10 +6067,10 @@ void __RPC_STUB IInternetZoneManager_GetZoneActionPolicy_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_SetZoneActionPolicy_Proxy( 
-    IInternetZoneManager __RPC_FAR * This,
+    IInternetZoneManager * This,
     /* [in] */ DWORD dwZone,
     /* [in] */ DWORD dwAction,
-    /* [size_is][in] */ BYTE __RPC_FAR *pPolicy,
+    /* [size_is][in] */ BYTE *pPolicy,
     /* [in] */ DWORD cbPolicy,
     /* [in] */ URLZONEREG urlZoneReg);
 
@@ -5769,7 +6083,7 @@ void __RPC_STUB IInternetZoneManager_SetZoneActionPolicy_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_PromptAction_Proxy( 
-    IInternetZoneManager __RPC_FAR * This,
+    IInternetZoneManager * This,
     /* [in] */ DWORD dwAction,
     /* [in] */ HWND hwndParent,
     /* [in] */ LPCWSTR pwszUrl,
@@ -5785,7 +6099,7 @@ void __RPC_STUB IInternetZoneManager_PromptAction_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_LogAction_Proxy( 
-    IInternetZoneManager __RPC_FAR * This,
+    IInternetZoneManager * This,
     /* [in] */ DWORD dwAction,
     /* [in] */ LPCWSTR pwszUrl,
     /* [in] */ LPCWSTR pwszText,
@@ -5800,9 +6114,9 @@ void __RPC_STUB IInternetZoneManager_LogAction_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_CreateZoneEnumerator_Proxy( 
-    IInternetZoneManager __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwEnum,
-    /* [out] */ DWORD __RPC_FAR *pdwCount,
+    IInternetZoneManager * This,
+    /* [out] */ DWORD *pdwEnum,
+    /* [out] */ DWORD *pdwCount,
     /* [in] */ DWORD dwFlags);
 
 
@@ -5814,10 +6128,10 @@ void __RPC_STUB IInternetZoneManager_CreateZoneEnumerator_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_GetZoneAt_Proxy( 
-    IInternetZoneManager __RPC_FAR * This,
+    IInternetZoneManager * This,
     /* [in] */ DWORD dwEnum,
     /* [in] */ DWORD dwIndex,
-    /* [out] */ DWORD __RPC_FAR *pdwZone);
+    /* [out] */ DWORD *pdwZone);
 
 
 void __RPC_STUB IInternetZoneManager_GetZoneAt_Stub(
@@ -5828,7 +6142,7 @@ void __RPC_STUB IInternetZoneManager_GetZoneAt_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_DestroyZoneEnumerator_Proxy( 
-    IInternetZoneManager __RPC_FAR * This,
+    IInternetZoneManager * This,
     /* [in] */ DWORD dwEnum);
 
 
@@ -5840,7 +6154,7 @@ void __RPC_STUB IInternetZoneManager_DestroyZoneEnumerator_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_CopyTemplatePoliciesToZone_Proxy( 
-    IInternetZoneManager __RPC_FAR * This,
+    IInternetZoneManager * This,
     /* [in] */ DWORD dwTemplate,
     /* [in] */ DWORD dwZone,
     /* [in] */ DWORD dwReserved);
@@ -5857,7 +6171,7 @@ void __RPC_STUB IInternetZoneManager_CopyTemplatePoliciesToZone_Stub(
 #endif 	/* __IInternetZoneManager_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0193 */
+/* interface __MIDL_itf_urlmon_0200 */
 /* [local] */ 
 
 #endif
@@ -5884,9 +6198,9 @@ typedef struct _tagCODEBASEHOLD
     DWORD dwVersionMS;
     DWORD dwVersionLS;
     DWORD dwStyle;
-    }	CODEBASEHOLD;
+    } 	CODEBASEHOLD;
 
-typedef struct _tagCODEBASEHOLD __RPC_FAR *LPCODEBASEHOLD;
+typedef struct _tagCODEBASEHOLD *LPCODEBASEHOLD;
 
 typedef struct _tagSOFTDISTINFO
     {
@@ -5903,14 +6217,14 @@ typedef struct _tagSOFTDISTINFO
     DWORD dwAdvertisedVersionMS;
     DWORD dwAdvertisedVersionLS;
     DWORD dwReserved;
-    }	SOFTDISTINFO;
+    } 	SOFTDISTINFO;
 
-typedef struct _tagSOFTDISTINFO __RPC_FAR *LPSOFTDISTINFO;
+typedef struct _tagSOFTDISTINFO *LPSOFTDISTINFO;
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0193_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0193_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0200_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0200_v0_0_s_ifspec;
 
 #ifndef __ISoftDistExt_INTERFACE_DEFINED__
 #define __ISoftDistExt_INTERFACE_DEFINED__
@@ -5929,19 +6243,19 @@ EXTERN_C const IID IID_ISoftDistExt;
     public:
         virtual HRESULT STDMETHODCALLTYPE ProcessSoftDist( 
             /* [in] */ LPCWSTR szCDFURL,
-            /* [in] */ IXMLElement __RPC_FAR *pSoftDistElement,
+            /* [in] */ IXMLElement *pSoftDistElement,
             /* [out][in] */ LPSOFTDISTINFO lpsdi) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFirstCodeBase( 
-            /* [in] */ LPWSTR __RPC_FAR *szCodeBase,
+            /* [in] */ LPWSTR *szCodeBase,
             /* [in] */ LPDWORD dwMaxSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextCodeBase( 
-            /* [in] */ LPWSTR __RPC_FAR *szCodeBase,
+            /* [in] */ LPWSTR *szCodeBase,
             /* [in] */ LPDWORD dwMaxSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AsyncInstallDistributionUnit( 
-            /* [in] */ IBindCtx __RPC_FAR *pbc,
+            /* [in] */ IBindCtx *pbc,
             /* [in] */ LPVOID pvReserved,
             /* [in] */ DWORD flags,
             /* [in] */ LPCODEBASEHOLD lpcbh) = 0;
@@ -5954,36 +6268,36 @@ EXTERN_C const IID IID_ISoftDistExt;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISoftDistExt __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISoftDistExt * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISoftDistExt __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISoftDistExt * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISoftDistExt __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISoftDistExt * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProcessSoftDist )( 
-            ISoftDistExt __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ProcessSoftDist )( 
+            ISoftDistExt * This,
             /* [in] */ LPCWSTR szCDFURL,
-            /* [in] */ IXMLElement __RPC_FAR *pSoftDistElement,
+            /* [in] */ IXMLElement *pSoftDistElement,
             /* [out][in] */ LPSOFTDISTINFO lpsdi);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFirstCodeBase )( 
-            ISoftDistExt __RPC_FAR * This,
-            /* [in] */ LPWSTR __RPC_FAR *szCodeBase,
+        HRESULT ( STDMETHODCALLTYPE *GetFirstCodeBase )( 
+            ISoftDistExt * This,
+            /* [in] */ LPWSTR *szCodeBase,
             /* [in] */ LPDWORD dwMaxSize);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNextCodeBase )( 
-            ISoftDistExt __RPC_FAR * This,
-            /* [in] */ LPWSTR __RPC_FAR *szCodeBase,
+        HRESULT ( STDMETHODCALLTYPE *GetNextCodeBase )( 
+            ISoftDistExt * This,
+            /* [in] */ LPWSTR *szCodeBase,
             /* [in] */ LPDWORD dwMaxSize);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AsyncInstallDistributionUnit )( 
-            ISoftDistExt __RPC_FAR * This,
-            /* [in] */ IBindCtx __RPC_FAR *pbc,
+        HRESULT ( STDMETHODCALLTYPE *AsyncInstallDistributionUnit )( 
+            ISoftDistExt * This,
+            /* [in] */ IBindCtx *pbc,
             /* [in] */ LPVOID pvReserved,
             /* [in] */ DWORD flags,
             /* [in] */ LPCODEBASEHOLD lpcbh);
@@ -5993,7 +6307,7 @@ EXTERN_C const IID IID_ISoftDistExt;
 
     interface ISoftDistExt
     {
-        CONST_VTBL struct ISoftDistExtVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISoftDistExtVtbl *lpVtbl;
     };
 
     
@@ -6031,9 +6345,9 @@ EXTERN_C const IID IID_ISoftDistExt;
 
 
 HRESULT STDMETHODCALLTYPE ISoftDistExt_ProcessSoftDist_Proxy( 
-    ISoftDistExt __RPC_FAR * This,
+    ISoftDistExt * This,
     /* [in] */ LPCWSTR szCDFURL,
-    /* [in] */ IXMLElement __RPC_FAR *pSoftDistElement,
+    /* [in] */ IXMLElement *pSoftDistElement,
     /* [out][in] */ LPSOFTDISTINFO lpsdi);
 
 
@@ -6045,8 +6359,8 @@ void __RPC_STUB ISoftDistExt_ProcessSoftDist_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISoftDistExt_GetFirstCodeBase_Proxy( 
-    ISoftDistExt __RPC_FAR * This,
-    /* [in] */ LPWSTR __RPC_FAR *szCodeBase,
+    ISoftDistExt * This,
+    /* [in] */ LPWSTR *szCodeBase,
     /* [in] */ LPDWORD dwMaxSize);
 
 
@@ -6058,8 +6372,8 @@ void __RPC_STUB ISoftDistExt_GetFirstCodeBase_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISoftDistExt_GetNextCodeBase_Proxy( 
-    ISoftDistExt __RPC_FAR * This,
-    /* [in] */ LPWSTR __RPC_FAR *szCodeBase,
+    ISoftDistExt * This,
+    /* [in] */ LPWSTR *szCodeBase,
     /* [in] */ LPDWORD dwMaxSize);
 
 
@@ -6071,8 +6385,8 @@ void __RPC_STUB ISoftDistExt_GetNextCodeBase_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISoftDistExt_AsyncInstallDistributionUnit_Proxy( 
-    ISoftDistExt __RPC_FAR * This,
-    /* [in] */ IBindCtx __RPC_FAR *pbc,
+    ISoftDistExt * This,
+    /* [in] */ IBindCtx *pbc,
     /* [in] */ LPVOID pvReserved,
     /* [in] */ DWORD flags,
     /* [in] */ LPCODEBASEHOLD lpcbh);
@@ -6089,7 +6403,7 @@ void __RPC_STUB ISoftDistExt_AsyncInstallDistributionUnit_Stub(
 #endif 	/* __ISoftDistExt_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0194 */
+/* interface __MIDL_itf_urlmon_0201 */
 /* [local] */ 
 
 STDAPI GetSoftwareUpdateInfo( LPCWSTR szDistUnit, LPSOFTDISTINFO psdi );
@@ -6099,8 +6413,8 @@ STDAPI SetSoftwareUpdateAdvertisementState( LPCWSTR szDistUnit, DWORD dwAdState,
 #define _LPCATALOGFILEINFO_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0194_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0194_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0201_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0201_v0_0_s_ifspec;
 
 #ifndef __ICatalogFileInfo_INTERFACE_DEFINED__
 #define __ICatalogFileInfo_INTERFACE_DEFINED__
@@ -6108,7 +6422,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0194_v0_0_s_ifspec;
 /* interface ICatalogFileInfo */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ ICatalogFileInfo __RPC_FAR *LPCATALOGFILEINFO;
+typedef /* [unique] */ ICatalogFileInfo *LPCATALOGFILEINFO;
 
 
 EXTERN_C const IID IID_ICatalogFileInfo;
@@ -6120,10 +6434,10 @@ EXTERN_C const IID IID_ICatalogFileInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCatalogFile( 
-            /* [out] */ LPSTR __RPC_FAR *ppszCatalogFile) = 0;
+            /* [out] */ LPSTR *ppszCatalogFile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetJavaTrust( 
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppJavaTrust) = 0;
+            /* [out] */ void **ppJavaTrust) = 0;
         
     };
     
@@ -6133,31 +6447,31 @@ EXTERN_C const IID IID_ICatalogFileInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICatalogFileInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICatalogFileInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICatalogFileInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICatalogFileInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICatalogFileInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICatalogFileInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCatalogFile )( 
-            ICatalogFileInfo __RPC_FAR * This,
-            /* [out] */ LPSTR __RPC_FAR *ppszCatalogFile);
+        HRESULT ( STDMETHODCALLTYPE *GetCatalogFile )( 
+            ICatalogFileInfo * This,
+            /* [out] */ LPSTR *ppszCatalogFile);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetJavaTrust )( 
-            ICatalogFileInfo __RPC_FAR * This,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppJavaTrust);
+        HRESULT ( STDMETHODCALLTYPE *GetJavaTrust )( 
+            ICatalogFileInfo * This,
+            /* [out] */ void **ppJavaTrust);
         
         END_INTERFACE
     } ICatalogFileInfoVtbl;
 
     interface ICatalogFileInfo
     {
-        CONST_VTBL struct ICatalogFileInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICatalogFileInfoVtbl *lpVtbl;
     };
 
     
@@ -6189,8 +6503,8 @@ EXTERN_C const IID IID_ICatalogFileInfo;
 
 
 HRESULT STDMETHODCALLTYPE ICatalogFileInfo_GetCatalogFile_Proxy( 
-    ICatalogFileInfo __RPC_FAR * This,
-    /* [out] */ LPSTR __RPC_FAR *ppszCatalogFile);
+    ICatalogFileInfo * This,
+    /* [out] */ LPSTR *ppszCatalogFile);
 
 
 void __RPC_STUB ICatalogFileInfo_GetCatalogFile_Stub(
@@ -6201,8 +6515,8 @@ void __RPC_STUB ICatalogFileInfo_GetCatalogFile_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICatalogFileInfo_GetJavaTrust_Proxy( 
-    ICatalogFileInfo __RPC_FAR * This,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppJavaTrust);
+    ICatalogFileInfo * This,
+    /* [out] */ void **ppJavaTrust);
 
 
 void __RPC_STUB ICatalogFileInfo_GetJavaTrust_Stub(
@@ -6216,7 +6530,7 @@ void __RPC_STUB ICatalogFileInfo_GetJavaTrust_Stub(
 #endif 	/* __ICatalogFileInfo_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0195 */
+/* interface __MIDL_itf_urlmon_0202 */
 /* [local] */ 
 
 #endif
@@ -6224,8 +6538,8 @@ void __RPC_STUB ICatalogFileInfo_GetJavaTrust_Stub(
 #define _LPDATAFILTER_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0195_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0195_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0202_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0202_v0_0_s_ifspec;
 
 #ifndef __IDataFilter_INTERFACE_DEFINED__
 #define __IDataFilter_INTERFACE_DEFINED__
@@ -6233,7 +6547,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0195_v0_0_s_ifspec;
 /* interface IDataFilter */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IDataFilter __RPC_FAR *LPDATAFILTER;
+typedef /* [unique] */ IDataFilter *LPDATAFILTER;
 
 
 EXTERN_C const IID IID_IDataFilter;
@@ -6247,23 +6561,23 @@ EXTERN_C const IID IID_IDataFilter;
         virtual HRESULT STDMETHODCALLTYPE DoEncode( 
             /* [in] */ DWORD dwFlags,
             /* [in] */ LONG lInBufferSize,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbInBuffer,
+            /* [size_is][in] */ BYTE *pbInBuffer,
             /* [in] */ LONG lOutBufferSize,
-            /* [size_is][out] */ BYTE __RPC_FAR *pbOutBuffer,
+            /* [size_is][out] */ BYTE *pbOutBuffer,
             /* [in] */ LONG lInBytesAvailable,
-            /* [out] */ LONG __RPC_FAR *plInBytesRead,
-            /* [out] */ LONG __RPC_FAR *plOutBytesWritten,
+            /* [out] */ LONG *plInBytesRead,
+            /* [out] */ LONG *plOutBytesWritten,
             /* [in] */ DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DoDecode( 
             /* [in] */ DWORD dwFlags,
             /* [in] */ LONG lInBufferSize,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbInBuffer,
+            /* [size_is][in] */ BYTE *pbInBuffer,
             /* [in] */ LONG lOutBufferSize,
-            /* [size_is][out] */ BYTE __RPC_FAR *pbOutBuffer,
+            /* [size_is][out] */ BYTE *pbOutBuffer,
             /* [in] */ LONG lInBytesAvailable,
-            /* [out] */ LONG __RPC_FAR *plInBytesRead,
-            /* [out] */ LONG __RPC_FAR *plOutBytesWritten,
+            /* [out] */ LONG *plInBytesRead,
+            /* [out] */ LONG *plOutBytesWritten,
             /* [in] */ DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEncodingLevel( 
@@ -6277,43 +6591,43 @@ EXTERN_C const IID IID_IDataFilter;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDataFilter __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDataFilter * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDataFilter __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDataFilter * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDataFilter __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDataFilter * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoEncode )( 
-            IDataFilter __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DoEncode )( 
+            IDataFilter * This,
             /* [in] */ DWORD dwFlags,
             /* [in] */ LONG lInBufferSize,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbInBuffer,
+            /* [size_is][in] */ BYTE *pbInBuffer,
             /* [in] */ LONG lOutBufferSize,
-            /* [size_is][out] */ BYTE __RPC_FAR *pbOutBuffer,
+            /* [size_is][out] */ BYTE *pbOutBuffer,
             /* [in] */ LONG lInBytesAvailable,
-            /* [out] */ LONG __RPC_FAR *plInBytesRead,
-            /* [out] */ LONG __RPC_FAR *plOutBytesWritten,
+            /* [out] */ LONG *plInBytesRead,
+            /* [out] */ LONG *plOutBytesWritten,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoDecode )( 
-            IDataFilter __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DoDecode )( 
+            IDataFilter * This,
             /* [in] */ DWORD dwFlags,
             /* [in] */ LONG lInBufferSize,
-            /* [size_is][in] */ BYTE __RPC_FAR *pbInBuffer,
+            /* [size_is][in] */ BYTE *pbInBuffer,
             /* [in] */ LONG lOutBufferSize,
-            /* [size_is][out] */ BYTE __RPC_FAR *pbOutBuffer,
+            /* [size_is][out] */ BYTE *pbOutBuffer,
             /* [in] */ LONG lInBytesAvailable,
-            /* [out] */ LONG __RPC_FAR *plInBytesRead,
-            /* [out] */ LONG __RPC_FAR *plOutBytesWritten,
+            /* [out] */ LONG *plInBytesRead,
+            /* [out] */ LONG *plOutBytesWritten,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEncodingLevel )( 
-            IDataFilter __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetEncodingLevel )( 
+            IDataFilter * This,
             /* [in] */ DWORD dwEncLevel);
         
         END_INTERFACE
@@ -6321,7 +6635,7 @@ EXTERN_C const IID IID_IDataFilter;
 
     interface IDataFilter
     {
-        CONST_VTBL struct IDataFilterVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDataFilterVtbl *lpVtbl;
     };
 
     
@@ -6356,15 +6670,15 @@ EXTERN_C const IID IID_IDataFilter;
 
 
 HRESULT STDMETHODCALLTYPE IDataFilter_DoEncode_Proxy( 
-    IDataFilter __RPC_FAR * This,
+    IDataFilter * This,
     /* [in] */ DWORD dwFlags,
     /* [in] */ LONG lInBufferSize,
-    /* [size_is][in] */ BYTE __RPC_FAR *pbInBuffer,
+    /* [size_is][in] */ BYTE *pbInBuffer,
     /* [in] */ LONG lOutBufferSize,
-    /* [size_is][out] */ BYTE __RPC_FAR *pbOutBuffer,
+    /* [size_is][out] */ BYTE *pbOutBuffer,
     /* [in] */ LONG lInBytesAvailable,
-    /* [out] */ LONG __RPC_FAR *plInBytesRead,
-    /* [out] */ LONG __RPC_FAR *plOutBytesWritten,
+    /* [out] */ LONG *plInBytesRead,
+    /* [out] */ LONG *plOutBytesWritten,
     /* [in] */ DWORD dwReserved);
 
 
@@ -6376,15 +6690,15 @@ void __RPC_STUB IDataFilter_DoEncode_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDataFilter_DoDecode_Proxy( 
-    IDataFilter __RPC_FAR * This,
+    IDataFilter * This,
     /* [in] */ DWORD dwFlags,
     /* [in] */ LONG lInBufferSize,
-    /* [size_is][in] */ BYTE __RPC_FAR *pbInBuffer,
+    /* [size_is][in] */ BYTE *pbInBuffer,
     /* [in] */ LONG lOutBufferSize,
-    /* [size_is][out] */ BYTE __RPC_FAR *pbOutBuffer,
+    /* [size_is][out] */ BYTE *pbOutBuffer,
     /* [in] */ LONG lInBytesAvailable,
-    /* [out] */ LONG __RPC_FAR *plInBytesRead,
-    /* [out] */ LONG __RPC_FAR *plOutBytesWritten,
+    /* [out] */ LONG *plInBytesRead,
+    /* [out] */ LONG *plOutBytesWritten,
     /* [in] */ DWORD dwReserved);
 
 
@@ -6396,7 +6710,7 @@ void __RPC_STUB IDataFilter_DoDecode_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDataFilter_SetEncodingLevel_Proxy( 
-    IDataFilter __RPC_FAR * This,
+    IDataFilter * This,
     /* [in] */ DWORD dwEncLevel);
 
 
@@ -6411,7 +6725,7 @@ void __RPC_STUB IDataFilter_SetEncodingLevel_Stub(
 #endif 	/* __IDataFilter_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0196 */
+/* interface __MIDL_itf_urlmon_0203 */
 /* [local] */ 
 
 #endif
@@ -6420,16 +6734,16 @@ void __RPC_STUB IDataFilter_SetEncodingLevel_Stub(
 typedef struct _tagPROTOCOLFILTERDATA
     {
     DWORD cbSize;
-    IInternetProtocolSink __RPC_FAR *pProtocolSink;
-    IInternetProtocol __RPC_FAR *pProtocol;
-    IUnknown __RPC_FAR *pUnk;
+    IInternetProtocolSink *pProtocolSink;
+    IInternetProtocol *pProtocol;
+    IUnknown *pUnk;
     DWORD dwFilterFlags;
-    }	PROTOCOLFILTERDATA;
+    } 	PROTOCOLFILTERDATA;
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0196_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0196_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0203_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0203_v0_0_s_ifspec;
 
 #ifndef __IEncodingFilterFactory_INTERFACE_DEFINED__
 #define __IEncodingFilterFactory_INTERFACE_DEFINED__
@@ -6437,7 +6751,7 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmon_0196_v0_0_s_ifspec;
 /* interface IEncodingFilterFactory */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IEncodingFilterFactory __RPC_FAR *LPENCODINGFILTERFACTORY;
+typedef /* [unique] */ IEncodingFilterFactory *LPENCODINGFILTERFACTORY;
 
 typedef struct _tagDATAINFO
     {
@@ -6445,7 +6759,7 @@ typedef struct _tagDATAINFO
     ULONG ulavrPacketSize;
     ULONG ulConnectSpeed;
     ULONG ulProcessorSpeed;
-    }	DATAINFO;
+    } 	DATAINFO;
 
 
 EXTERN_C const IID IID_IEncodingFilterFactory;
@@ -6460,12 +6774,12 @@ EXTERN_C const IID IID_IEncodingFilterFactory;
             /* [in] */ LPCWSTR pwzCodeIn,
             /* [in] */ LPCWSTR pwzCodeOut,
             /* [in] */ DATAINFO info,
-            /* [out] */ IDataFilter __RPC_FAR *__RPC_FAR *ppDF) = 0;
+            /* [out] */ IDataFilter **ppDF) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultFilter( 
             /* [in] */ LPCWSTR pwzCodeIn,
             /* [in] */ LPCWSTR pwzCodeOut,
-            /* [out] */ IDataFilter __RPC_FAR *__RPC_FAR *ppDF) = 0;
+            /* [out] */ IDataFilter **ppDF) = 0;
         
     };
     
@@ -6475,36 +6789,36 @@ EXTERN_C const IID IID_IEncodingFilterFactory;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEncodingFilterFactory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEncodingFilterFactory * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEncodingFilterFactory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEncodingFilterFactory * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEncodingFilterFactory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEncodingFilterFactory * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindBestFilter )( 
-            IEncodingFilterFactory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *FindBestFilter )( 
+            IEncodingFilterFactory * This,
             /* [in] */ LPCWSTR pwzCodeIn,
             /* [in] */ LPCWSTR pwzCodeOut,
             /* [in] */ DATAINFO info,
-            /* [out] */ IDataFilter __RPC_FAR *__RPC_FAR *ppDF);
+            /* [out] */ IDataFilter **ppDF);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDefaultFilter )( 
-            IEncodingFilterFactory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetDefaultFilter )( 
+            IEncodingFilterFactory * This,
             /* [in] */ LPCWSTR pwzCodeIn,
             /* [in] */ LPCWSTR pwzCodeOut,
-            /* [out] */ IDataFilter __RPC_FAR *__RPC_FAR *ppDF);
+            /* [out] */ IDataFilter **ppDF);
         
         END_INTERFACE
     } IEncodingFilterFactoryVtbl;
 
     interface IEncodingFilterFactory
     {
-        CONST_VTBL struct IEncodingFilterFactoryVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEncodingFilterFactoryVtbl *lpVtbl;
     };
 
     
@@ -6536,11 +6850,11 @@ EXTERN_C const IID IID_IEncodingFilterFactory;
 
 
 HRESULT STDMETHODCALLTYPE IEncodingFilterFactory_FindBestFilter_Proxy( 
-    IEncodingFilterFactory __RPC_FAR * This,
+    IEncodingFilterFactory * This,
     /* [in] */ LPCWSTR pwzCodeIn,
     /* [in] */ LPCWSTR pwzCodeOut,
     /* [in] */ DATAINFO info,
-    /* [out] */ IDataFilter __RPC_FAR *__RPC_FAR *ppDF);
+    /* [out] */ IDataFilter **ppDF);
 
 
 void __RPC_STUB IEncodingFilterFactory_FindBestFilter_Stub(
@@ -6551,10 +6865,10 @@ void __RPC_STUB IEncodingFilterFactory_FindBestFilter_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEncodingFilterFactory_GetDefaultFilter_Proxy( 
-    IEncodingFilterFactory __RPC_FAR * This,
+    IEncodingFilterFactory * This,
     /* [in] */ LPCWSTR pwzCodeIn,
     /* [in] */ LPCWSTR pwzCodeOut,
-    /* [out] */ IDataFilter __RPC_FAR *__RPC_FAR *ppDF);
+    /* [out] */ IDataFilter **ppDF);
 
 
 void __RPC_STUB IEncodingFilterFactory_GetDefaultFilter_Stub(
@@ -6568,7 +6882,7 @@ void __RPC_STUB IEncodingFilterFactory_GetDefaultFilter_Stub(
 #endif 	/* __IEncodingFilterFactory_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_urlmon_0197 */
+/* interface __MIDL_itf_urlmon_0204 */
 /* [local] */ 
 
 #endif
@@ -6589,137 +6903,243 @@ typedef struct _tagHIT_LOGGING_INFO
     SYSTEMTIME StartTime;
     SYSTEMTIME EndTime;
     LPSTR lpszExtendedInfo;
-    }	HIT_LOGGING_INFO;
+    } 	HIT_LOGGING_INFO;
 
-typedef struct _tagHIT_LOGGING_INFO __RPC_FAR *LPHIT_LOGGING_INFO;
+typedef struct _tagHIT_LOGGING_INFO *LPHIT_LOGGING_INFO;
 
 BOOL WINAPI WriteHitLogging(IN LPHIT_LOGGING_INFO lpLogginginfo);    
 #define CONFIRMSAFETYACTION_LOADOBJECT  0x00000001
 struct CONFIRMSAFETY
     {
     CLSID clsid;
-    IUnknown __RPC_FAR *pUnk;
+    IUnknown *pUnk;
     DWORD dwFlags;
-    };
+    } ;
 EXTERN_C const GUID GUID_CUSTOM_CONFIRMOBJECTSAFETY; 
+#endif
+#ifndef _LPIWRAPPEDPROTOCOL_DEFINED
+#define _LPIWRAPPEDPROTOCOL_DEFINED
+
+
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0204_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0204_v0_0_s_ifspec;
+
+#ifndef __IWrappedProtocol_INTERFACE_DEFINED__
+#define __IWrappedProtocol_INTERFACE_DEFINED__
+
+/* interface IWrappedProtocol */
+/* [unique][uuid][object][local] */ 
+
+typedef /* [unique] */ IWrappedProtocol *LPIWRAPPEDPROTOCOL;
+
+
+EXTERN_C const IID IID_IWrappedProtocol;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("53c84785-8425-4dc5-971b-e58d9c19f9b6")
+    IWrappedProtocol : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetWrapperCode( 
+            /* [out] */ LONG *pnCode,
+            /* [in] */ DWORD_PTR dwReserved) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IWrappedProtocolVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWrappedProtocol * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWrappedProtocol * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWrappedProtocol * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetWrapperCode )( 
+            IWrappedProtocol * This,
+            /* [out] */ LONG *pnCode,
+            /* [in] */ DWORD_PTR dwReserved);
+        
+        END_INTERFACE
+    } IWrappedProtocolVtbl;
+
+    interface IWrappedProtocol
+    {
+        CONST_VTBL struct IWrappedProtocolVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IWrappedProtocol_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IWrappedProtocol_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IWrappedProtocol_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IWrappedProtocol_GetWrapperCode(This,pnCode,dwReserved)	\
+    (This)->lpVtbl -> GetWrapperCode(This,pnCode,dwReserved)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IWrappedProtocol_GetWrapperCode_Proxy( 
+    IWrappedProtocol * This,
+    /* [out] */ LONG *pnCode,
+    /* [in] */ DWORD_PTR dwReserved);
+
+
+void __RPC_STUB IWrappedProtocol_GetWrapperCode_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IWrappedProtocol_INTERFACE_DEFINED__ */
+
+
+/* interface __MIDL_itf_urlmon_0205 */
+/* [local] */ 
+
 #endif
 
 
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0197_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_urlmon_0197_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0205_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_urlmon_0205_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  HWND_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HWND __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HWND_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HWND __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HWND_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HWND __RPC_FAR * ); 
-void                      __RPC_USER  HWND_UserFree(     unsigned long __RPC_FAR *, HWND __RPC_FAR * ); 
+unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long            , HWND * ); 
+unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * ); 
+unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
+void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IBinding_GetBindResult_Proxy( 
-    IBinding __RPC_FAR * This,
-    /* [out] */ CLSID __RPC_FAR *pclsidProtocol,
-    /* [out] */ DWORD __RPC_FAR *pdwResult,
-    /* [out] */ LPOLESTR __RPC_FAR *pszResult,
-    /* [out][in] */ DWORD __RPC_FAR *pdwReserved);
+    IBinding * This,
+    /* [out] */ CLSID *pclsidProtocol,
+    /* [out] */ DWORD *pdwResult,
+    /* [out] */ LPOLESTR *pszResult,
+    /* [out][in] */ DWORD *pdwReserved);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBinding_GetBindResult_Stub( 
-    IBinding __RPC_FAR * This,
-    /* [out] */ CLSID __RPC_FAR *pclsidProtocol,
-    /* [out] */ DWORD __RPC_FAR *pdwResult,
-    /* [out] */ LPOLESTR __RPC_FAR *pszResult,
+    IBinding * This,
+    /* [out] */ CLSID *pclsidProtocol,
+    /* [out] */ DWORD *pdwResult,
+    /* [out] */ LPOLESTR *pszResult,
     /* [in] */ DWORD dwReserved);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IBindStatusCallback_GetBindInfo_Proxy( 
-    IBindStatusCallback __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *grfBINDF,
-    /* [unique][out][in] */ BINDINFO __RPC_FAR *pbindinfo);
+    IBindStatusCallback * This,
+    /* [out] */ DWORD *grfBINDF,
+    /* [unique][out][in] */ BINDINFO *pbindinfo);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBindStatusCallback_GetBindInfo_Stub( 
-    IBindStatusCallback __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *grfBINDF,
-    /* [unique][out][in] */ RemBINDINFO __RPC_FAR *pbindinfo,
-    /* [unique][out][in] */ RemSTGMEDIUM __RPC_FAR *pstgmed);
+    IBindStatusCallback * This,
+    /* [out] */ DWORD *grfBINDF,
+    /* [unique][out][in] */ RemBINDINFO *pbindinfo,
+    /* [unique][out][in] */ RemSTGMEDIUM *pstgmed);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnDataAvailable_Proxy( 
-    IBindStatusCallback __RPC_FAR * This,
+    IBindStatusCallback * This,
     /* [in] */ DWORD grfBSCF,
     /* [in] */ DWORD dwSize,
-    /* [in] */ FORMATETC __RPC_FAR *pformatetc,
-    /* [in] */ STGMEDIUM __RPC_FAR *pstgmed);
+    /* [in] */ FORMATETC *pformatetc,
+    /* [in] */ STGMEDIUM *pstgmed);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnDataAvailable_Stub( 
-    IBindStatusCallback __RPC_FAR * This,
+    IBindStatusCallback * This,
     /* [in] */ DWORD grfBSCF,
     /* [in] */ DWORD dwSize,
-    /* [in] */ RemFORMATETC __RPC_FAR *pformatetc,
-    /* [in] */ RemSTGMEDIUM __RPC_FAR *pstgmed);
+    /* [in] */ RemFORMATETC *pformatetc,
+    /* [in] */ RemSTGMEDIUM *pstgmed);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IWinInetInfo_QueryOption_Proxy( 
-    IWinInetInfo __RPC_FAR * This,
+    IWinInetInfo * This,
     /* [in] */ DWORD dwOption,
     /* [size_is][out][in] */ LPVOID pBuffer,
-    /* [out][in] */ DWORD __RPC_FAR *pcbBuf);
+    /* [out][in] */ DWORD *pcbBuf);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IWinInetInfo_QueryOption_Stub( 
-    IWinInetInfo __RPC_FAR * This,
+    IWinInetInfo * This,
     /* [in] */ DWORD dwOption,
-    /* [size_is][out][in] */ BYTE __RPC_FAR *pBuffer,
-    /* [out][in] */ DWORD __RPC_FAR *pcbBuf);
+    /* [size_is][out][in] */ BYTE *pBuffer,
+    /* [out][in] */ DWORD *pcbBuf);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IWinInetHttpInfo_QueryInfo_Proxy( 
-    IWinInetHttpInfo __RPC_FAR * This,
+    IWinInetHttpInfo * This,
     /* [in] */ DWORD dwOption,
     /* [size_is][out][in] */ LPVOID pBuffer,
-    /* [out][in] */ DWORD __RPC_FAR *pcbBuf,
-    /* [out][in] */ DWORD __RPC_FAR *pdwFlags,
-    /* [out][in] */ DWORD __RPC_FAR *pdwReserved);
+    /* [out][in] */ DWORD *pcbBuf,
+    /* [out][in] */ DWORD *pdwFlags,
+    /* [out][in] */ DWORD *pdwReserved);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IWinInetHttpInfo_QueryInfo_Stub( 
-    IWinInetHttpInfo __RPC_FAR * This,
+    IWinInetHttpInfo * This,
     /* [in] */ DWORD dwOption,
-    /* [size_is][out][in] */ BYTE __RPC_FAR *pBuffer,
-    /* [out][in] */ DWORD __RPC_FAR *pcbBuf,
-    /* [out][in] */ DWORD __RPC_FAR *pdwFlags,
-    /* [out][in] */ DWORD __RPC_FAR *pdwReserved);
+    /* [size_is][out][in] */ BYTE *pBuffer,
+    /* [out][in] */ DWORD *pcbBuf,
+    /* [out][in] */ DWORD *pdwFlags,
+    /* [out][in] */ DWORD *pdwReserved);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IBindHost_MonikerBindToStorage_Proxy( 
-    IBindHost __RPC_FAR * This,
-    /* [in] */ IMoniker __RPC_FAR *pMk,
-    /* [in] */ IBindCtx __RPC_FAR *pBC,
-    /* [in] */ IBindStatusCallback __RPC_FAR *pBSC,
+    IBindHost * This,
+    /* [in] */ IMoniker *pMk,
+    /* [in] */ IBindCtx *pBC,
+    /* [in] */ IBindStatusCallback *pBSC,
     /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObj);
+    /* [out] */ void **ppvObj);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBindHost_MonikerBindToStorage_Stub( 
-    IBindHost __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pMk,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pBC,
-    /* [unique][in] */ IBindStatusCallback __RPC_FAR *pBSC,
+    IBindHost * This,
+    /* [unique][in] */ IMoniker *pMk,
+    /* [unique][in] */ IBindCtx *pBC,
+    /* [unique][in] */ IBindStatusCallback *pBSC,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObj);
+    /* [iid_is][out] */ IUnknown **ppvObj);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IBindHost_MonikerBindToObject_Proxy( 
-    IBindHost __RPC_FAR * This,
-    /* [in] */ IMoniker __RPC_FAR *pMk,
-    /* [in] */ IBindCtx __RPC_FAR *pBC,
-    /* [in] */ IBindStatusCallback __RPC_FAR *pBSC,
+    IBindHost * This,
+    /* [in] */ IMoniker *pMk,
+    /* [in] */ IBindCtx *pBC,
+    /* [in] */ IBindStatusCallback *pBSC,
     /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObj);
+    /* [out] */ void **ppvObj);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBindHost_MonikerBindToObject_Stub( 
-    IBindHost __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pMk,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pBC,
-    /* [unique][in] */ IBindStatusCallback __RPC_FAR *pBSC,
+    IBindHost * This,
+    /* [unique][in] */ IMoniker *pMk,
+    /* [unique][in] */ IBindCtx *pBC,
+    /* [unique][in] */ IBindStatusCallback *pBSC,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObj);
+    /* [iid_is][out] */ IUnknown **ppvObj);
 
 
 
@@ -6730,6 +7150,7 @@ void                      __RPC_USER  HWND_UserFree(     unsigned long __RPC_FAR
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

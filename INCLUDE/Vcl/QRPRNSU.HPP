@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'qrprnsu.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QRPrnSu.pas' rev: 6.00
 
-#ifndef qrprnsuHPP
-#define qrprnsuHPP
+#ifndef QRPrnSuHPP
+#define QRPrnSuHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -106,8 +106,7 @@ public:
 	virtual bool __fastcall Execute(void);
 public:
 	#pragma option push -w-inl
-	/* TQRBasePrintDialog.Create */ inline __fastcall virtual TQRPrinterSetupDialog(Classes::TComponent* 
-		AOwner) : TQRBasePrintDialog(AOwner) { }
+	/* TQRBasePrintDialog.Create */ inline __fastcall virtual TQRPrinterSetupDialog(Classes::TComponent* AOwner) : TQRBasePrintDialog(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -150,8 +149,7 @@ __published:
 	__property int ToPage = {read=FToPage, write=FToPage, default=0};
 public:
 	#pragma option push -w-inl
-	/* TQRBasePrintDialog.Create */ inline __fastcall virtual TQRPrintDialog(Classes::TComponent* AOwner
-		) : TQRBasePrintDialog(AOwner) { }
+	/* TQRBasePrintDialog.Create */ inline __fastcall virtual TQRPrintDialog(Classes::TComponent* AOwner) : TQRBasePrintDialog(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -166,12 +164,10 @@ public:
 static const Shortint MaxCustomColors = 0x10;
 
 }	/* namespace Qrprnsu */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qrprnsu;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// qrprnsu
+#endif	// QRPrnSu

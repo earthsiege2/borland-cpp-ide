@@ -1,7 +1,7 @@
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright 1995-1996 Microsoft Corporation. All Rights Reserved.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //  Microsoft Confidential
 //
 //  File: oleacc.idl
@@ -22,7 +22,7 @@
 cpp_quote("//=--------------------------------------------------------------------------=")
 cpp_quote("// OLEACC.H")
 cpp_quote("//=--------------------------------------------------------------------------=")
-cpp_quote("// (C) Copyright 1995-1999 Microsoft Corporation.  All Rights Reserved.")
+cpp_quote("// (C) Copyright (c) Microsoft Corporation. All rights reserved.")
 cpp_quote("//")
 cpp_quote("// THIS CODE AND INFORMATION IS PROVIDED \"AS IS\" WITHOUT WARRANTY OF")
 cpp_quote("// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO")
@@ -59,9 +59,17 @@ cpp_quote("//=------------------------------------------------------------------
 cpp_quote("// GUIDs")
 cpp_quote("//=--------------------------------------------------------------------------=")
 cpp_quote("")
-cpp_quote("DEFINE_GUID(LIBID_Accessibility,	0x1ea4dbf0, 0x3c3b, 0x11cf, 0x81, 0x0c, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);")
-cpp_quote("DEFINE_GUID(IID_IAccessible,		0x618736e0, 0x3c3d, 0x11cf, 0x81, 0x0c, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);")
-cpp_quote("DEFINE_GUID(IID_IAccessibleHandler, 0x03022430, 0xABC4, 0x11d0, 0xBD, 0xE2, 0x00, 0xAA, 0x00, 0x1A, 0x19, 0x53);")
+cpp_quote("DEFINE_GUID(LIBID_Accessibility,     0x1ea4dbf0, 0x3c3b, 0x11cf, 0x81, 0x0c, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);")
+cpp_quote("DEFINE_GUID(IID_IAccessible,         0x618736e0, 0x3c3d, 0x11cf, 0x81, 0x0c, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);")
+cpp_quote("DEFINE_GUID(IID_IAccessibleHandler,  0x03022430, 0xABC4, 0x11d0, 0xBD, 0xE2, 0x00, 0xAA, 0x00, 0x1A, 0x19, 0x53);")
+cpp_quote("DEFINE_GUID(IID_IAccIdentity,        0x7852b78d, 0x1cfd, 0x41c1, 0xa6, 0x15, 0x9c, 0x0c, 0x85, 0x96, 0x0b, 0x5f);")
+cpp_quote("DEFINE_GUID(IID_IAccPropServer,      0x76c0dbbb, 0x15e0, 0x4e7b, 0xb6, 0x1b, 0x20, 0xee, 0xea, 0x20, 0x01, 0xe0);")
+cpp_quote("DEFINE_GUID(IID_IAccPropServices,    0x6e26e776, 0x04f0, 0x495d, 0x80, 0xe4, 0x33, 0x30, 0x35, 0x2e, 0x31, 0x69);")
+cpp_quote("DEFINE_GUID(IID_IAccPropMgrInternal, 0x2bd370a9, 0x3e7f, 0x4edd, 0x8a, 0x85, 0xf8, 0xfe, 0xd1, 0xf8, 0xe5, 0x1f);")
+cpp_quote("DEFINE_GUID(CLSID_AccPropServices,   0xb5f8350b, 0x0548, 0x48b1, 0xa6, 0xee, 0x88, 0xbd, 0x00, 0xb4, 0xa5, 0xe7);")
+
+cpp_quote("DEFINE_GUID(IIS_IsOleaccProxy,       0x902697fa, 0x80e4, 0x4560, 0x80, 0x2a, 0xa1, 0x3f, 0x22, 0xa6, 0x47, 0x09);")
+
 
 cpp_quote("")
 cpp_quote("//=--------------------------------------------------------------------------=")
@@ -122,9 +130,49 @@ cpp_quote("} MSAAMENUINFO, *LPMSAAMENUINFO;")
 cpp_quote("")
 cpp_quote("")
 cpp_quote("//=--------------------------------------------------------------------------=")
+cpp_quote("// Property GUIDs (used by annotation interfaces)")
+cpp_quote("//=--------------------------------------------------------------------------=")
+cpp_quote("")
+cpp_quote("DEFINE_GUID( PROPID_ACC_NAME             , 0x608d3df8, 0x8128, 0x4aa7, 0xa4, 0x28, 0xf5, 0x5e, 0x49, 0x26, 0x72, 0x91);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_VALUE            , 0x123fe443, 0x211a, 0x4615, 0x95, 0x27, 0xc4, 0x5a, 0x7e, 0x93, 0x71, 0x7a);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_DESCRIPTION      , 0x4d48dfe4, 0xbd3f, 0x491f, 0xa6, 0x48, 0x49, 0x2d, 0x6f, 0x20, 0xc5, 0x88);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_ROLE             , 0xcb905ff2, 0x7bd1, 0x4c05, 0xb3, 0xc8, 0xe6, 0xc2, 0x41, 0x36, 0x4d, 0x70);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_STATE            , 0xa8d4d5b0, 0x0a21, 0x42d0, 0xa5, 0xc0, 0x51, 0x4e, 0x98, 0x4f, 0x45, 0x7b);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_HELP             , 0xc831e11f, 0x44db, 0x4a99, 0x97, 0x68, 0xcb, 0x8f, 0x97, 0x8b, 0x72, 0x31);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_KEYBOARDSHORTCUT , 0x7d9bceee, 0x7d1e, 0x4979, 0x93, 0x82, 0x51, 0x80, 0xf4, 0x17, 0x2c, 0x34);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_DEFAULTACTION    , 0x180c072b, 0xc27f, 0x43c7, 0x99, 0x22, 0xf6, 0x35, 0x62, 0xa4, 0x63, 0x2b);")
+cpp_quote("")
+cpp_quote("DEFINE_GUID( PROPID_ACC_HELPTOPIC        , 0x787d1379, 0x8ede, 0x440b, 0x8a, 0xec, 0x11, 0xf7, 0xbf, 0x90, 0x30, 0xb3);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_FOCUS            , 0x6eb335df, 0x1c29, 0x4127, 0xb1, 0x2c, 0xde, 0xe9, 0xfd, 0x15, 0x7f, 0x2b);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_SELECTION        , 0xb99d073c, 0xd731, 0x405b, 0x90, 0x61, 0xd9, 0x5e, 0x8f, 0x84, 0x29, 0x84);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_PARENT           , 0x474c22b6, 0xffc2, 0x467a, 0xb1, 0xb5, 0xe9, 0x58, 0xb4, 0x65, 0x73, 0x30);")
+cpp_quote("")
+cpp_quote("DEFINE_GUID( PROPID_ACC_NAV_UP           , 0x016e1a2b, 0x1a4e, 0x4767, 0x86, 0x12, 0x33, 0x86, 0xf6, 0x69, 0x35, 0xec);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_NAV_DOWN         , 0x031670ed, 0x3cdf, 0x48d2, 0x96, 0x13, 0x13, 0x8f, 0x2d, 0xd8, 0xa6, 0x68);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_NAV_LEFT         , 0x228086cb, 0x82f1, 0x4a39, 0x87, 0x05, 0xdc, 0xdc, 0x0f, 0xff, 0x92, 0xf5);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_NAV_RIGHT        , 0xcd211d9f, 0xe1cb, 0x4fe5, 0xa7, 0x7c, 0x92, 0x0b, 0x88, 0x4d, 0x09, 0x5b);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_NAV_PREV         , 0x776d3891, 0xc73b, 0x4480, 0xb3, 0xf6, 0x07, 0x6a, 0x16, 0xa1, 0x5a, 0xf6);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_NAV_NEXT         , 0x1cdc5455, 0x8cd9, 0x4c92, 0xa3, 0x71, 0x39, 0x39, 0xa2, 0xfe, 0x3e, 0xee);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_NAV_FIRSTCHILD   , 0xcfd02558, 0x557b, 0x4c67, 0x84, 0xf9, 0x2a, 0x09, 0xfc, 0xe4, 0x07, 0x49);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_NAV_LASTCHILD    , 0x302ecaa5, 0x48d5, 0x4f8d, 0xb6, 0x71, 0x1a, 0x8d, 0x20, 0xa7, 0x78, 0x32);")
+cpp_quote("")
+cpp_quote("// Value map, used by sliders and other controls...")
+cpp_quote("DEFINE_GUID( PROPID_ACC_ROLEMAP          , 0xf79acda2, 0x140d, 0x4fe6, 0x89, 0x14, 0x20, 0x84, 0x76, 0x32, 0x82, 0x69);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_VALUEMAP         , 0xda1c3d79, 0xfc5c, 0x420e, 0xb3, 0x99, 0x9d, 0x15, 0x33, 0x54, 0x9e, 0x75);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_STATEMAP         , 0x43946c5e, 0x0ac0, 0x4042, 0xb5, 0x25, 0x07, 0xbb, 0xdb, 0xe1, 0x7f, 0xa7);")
+cpp_quote("DEFINE_GUID( PROPID_ACC_DESCRIPTIONMAP   , 0x1ff1435f, 0x8a14, 0x477b, 0xb2, 0x26, 0xa0, 0xab, 0xe2, 0x79, 0x97, 0x5d);")
+cpp_quote("")
+cpp_quote("DEFINE_GUID( PROPID_ACC_DODEFAULTACTION  , 0x1ba09523, 0x2e3b, 0x49a6, 0xa0, 0x59, 0x59, 0x68, 0x2a, 0x3c, 0x48, 0xfd);")
+cpp_quote("")
+cpp_quote("//=--------------------------------------------------------------------------=")
 cpp_quote("// Interface Definitions")
 cpp_quote("//=--------------------------------------------------------------------------=")
 cpp_quote("")
+
+//
+//  IAccessible
+//
+
 
 #define DO_NO_IMPORTS
 import "oaidl.idl";
@@ -227,8 +275,16 @@ cpp_quote("#ifndef STATE_SYSTEM_UNAVAILABLE")
 		const long STATE_SYSTEM_ALERT_MEDIUM		= 0x08000000;  // This information is of medium priority
 		const long STATE_SYSTEM_ALERT_HIGH			= 0x10000000;  // This information is of high priority
 		const long STATE_SYSTEM_PROTECTED			= 0x20000000;
-		const long STATE_SYSTEM_VALID				= 0x3FFFFFFF;
+		const long STATE_SYSTEM_VALID				= 0x7FFFFFFF;
 cpp_quote("#endif //STATE_SYSTEM_UNAVAILABLE")
+
+// winuser.h already defines the above, so anything within the
+// above ifdefs will be pulled from winuser.h, not oleacc.h.
+// New stuff has to be added outside those ifdefs, otherwise
+// anything that includes winuser won't see it.
+cpp_quote("#ifndef STATE_SYSTEM_HASPOPUP")
+		const long STATE_SYSTEM_HASPOPUP			= 0x40000000;
+cpp_quote("#endif //STATE_SYSTEM_HASPOPUP")
 
 		// Output from DISPID_ACC_ROLE
 
@@ -293,7 +349,9 @@ cpp_quote("#endif //STATE_SYSTEM_UNAVAILABLE")
 		const long ROLE_SYSTEM_WHITESPACE			= 0x0000003B;
 		const long ROLE_SYSTEM_PAGETABLIST			= 0x0000003C;
 		const long ROLE_SYSTEM_CLOCK				= 0x0000003D;
-
+		const long ROLE_SYSTEM_SPLITBUTTON			= 0x0000003E;
+		const long ROLE_SYSTEM_IPADDRESS			= 0x0000003F;
+		const long ROLE_SYSTEM_OUTLINEBUTTON		= 0x00000040;
 
 		// Hierarchy Properties
 
@@ -364,25 +422,225 @@ interface IAccessibleHandler : IUnknown
 	HRESULT AccessibleObjectFromID( [in] long hwnd, [in] long lObjectID, [out] LPACCESSIBLE *pIAccessible );
 }
 
-/*	TODO - to convert the IAccessibleHandler interface into a dual interface, simply replace the current
-		   interface definition above with the one commented out below.
-[
-	object,
-	uuid(03022430-ABC4-11d0-BDE2-00AA001A1953),
-	hidden,
-	dual,
-	pointer_default(unique)
-]
 
-interface IAccessibleHandler : IDispatch
+
+
+//
+//
+//  Annotation interfaces
+//
+//
+
+
+
+typedef enum AnnoScope
 {
-	typedef [unique] IAccessibleHandler *LPACCESSIBLEHANDLER;
+    ANNO_THIS       = 0,    // Just this object
+    ANNO_CONTAINER  = 1,    // This object, plus immediate children
+} AnnoScope;
 
-	const long DISPID_ACCHANDLER_ACCOBJFROMID	= -5019;
 
-	[hidden, id(DISPID_ACCHANDLER_ACCOBJFROMID)] HRESULT AccessibleObjectFromID( [in] long hwnd, [in] long lObjectID, [out, retval] LPACCESSIBLE *pIAccessible );
-}
-*/
+
+typedef GUID MSAAPROPID;
+
+
+// This interface is used to expose an identity string that is used as a key
+// into the annotation database.
+[
+    object,
+    uuid(7852b78d-1cfd-41c1-a615-9c0c85960b5f),
+    pointer_default(unique)
+]
+interface IAccIdentity: IUnknown
+{
+    HRESULT GetIdentityString (
+        [in]                                DWORD               dwIDChild,
+
+        [out, size_is(, *pdwIDStringLen )]  BYTE **             ppIDString,
+        [out]                               DWORD *             pdwIDStringLen
+    );
+};
+
+
+
+[
+    object,
+    uuid(76c0dbbb-15e0-4e7b-b61b-20eeea2001e0),
+    pointer_default(unique)
+]
+interface IAccPropServer: IUnknown
+{
+    HRESULT GetPropValue (
+        [in, size_is(dwIDStringLen)]        const BYTE *        pIDString,
+        [in]                                DWORD               dwIDStringLen,
+
+        [in]                                MSAAPROPID          idProp,
+        [out]                               VARIANT *           pvarValue,
+        [out]                               BOOL *              pfHasProp );
+};
+
+
+[
+    object,
+    uuid(6e26e776-04f0-495d-80e4-3330352e3169),
+    pointer_default(unique)
+]
+interface IAccPropServices: IUnknown
+{
+    HRESULT SetPropValue (
+        [in, size_is(dwIDStringLen)]        const BYTE *        pIDString,
+        [in]                                DWORD               dwIDStringLen,
+
+        [in]                                MSAAPROPID          idProp,
+        [in]                                VARIANT             var
+    );
+
+
+    HRESULT SetPropServer (
+        [in, size_is(dwIDStringLen)]        const BYTE *        pIDString,
+        [in]                                DWORD               dwIDStringLen,
+
+        [in, size_is(cProps)]               const MSAAPROPID *  paProps,
+        [in]                                int                 cProps,
+
+        [in]                                IAccPropServer *    pServer,
+        [in]                                AnnoScope           annoScope
+    );
+
+
+    HRESULT ClearProps (
+        [in, size_is(dwIDStringLen)]        const BYTE *        pIDString,
+        [in]                                DWORD               dwIDStringLen,
+
+        [in, size_is(cProps)]               const MSAAPROPID *  paProps,
+        [in]                                int                 cProps
+    );
+
+
+
+
+    // Quick OLEACC/HWND-based functionality
+
+    HRESULT SetHwndProp (
+        [in]                                HWND                hwnd,
+        [in]                                DWORD               idObject,
+        [in]                                DWORD               idChild,
+        [in]                                MSAAPROPID          idProp,
+        [in]                                VARIANT             var
+    );
+
+    HRESULT SetHwndPropStr (
+        [in]                                HWND                hwnd,
+        [in]                                DWORD               idObject,
+        [in]                                DWORD               idChild,
+        [in]                                MSAAPROPID          idProp,
+        [in, string]                        LPCWSTR             str
+    );
+
+    HRESULT SetHwndPropServer (
+        [in]                                HWND                hwnd,
+        [in]                                DWORD               idObject,
+        [in]                                DWORD               idChild,
+
+        [in, size_is(cProps)]               const MSAAPROPID *  paProps,
+        [in]                                int                 cProps,
+
+        [in]                                IAccPropServer *    pServer,
+        [in]                                AnnoScope           annoScope
+    );
+
+    HRESULT ClearHwndProps (
+        [in]                                HWND                hwnd,
+        [in]                                DWORD               idObject,
+        [in]                                DWORD               idChild,
+
+        [in, size_is(cProps)]               const MSAAPROPID *  paProps,
+        [in]                                int                 cProps
+    );
+
+
+
+    // Methods for composing/decomposing HWND based identity strings...
+
+    HRESULT ComposeHwndIdentityString (
+        [in]                                HWND                hwnd,
+        [in]                                DWORD               idObject,
+        [in]                                DWORD               idChild,
+
+        [out, size_is(, *pdwIDStringLen )]  BYTE **             ppIDString,
+        [out]                               DWORD *             pdwIDStringLen
+    );
+
+
+    HRESULT DecomposeHwndIdentityString (
+        [in, size_is(dwIDStringLen)]        const BYTE *        pIDString,
+        [in]                                DWORD               dwIDStringLen,
+
+        [out]                               HWND *              phwnd,
+        [out]                               DWORD *             pidObject,
+        [out]                               DWORD *             pidChild
+    );
+
+
+
+    // Quick OLEACC/HMENU-based functionality
+
+    HRESULT SetHmenuProp (
+        [in]                                HMENU               hmenu,
+        [in]                                DWORD               idChild,
+        [in]                                MSAAPROPID          idProp,
+        [in]                                VARIANT             var
+    );
+
+    HRESULT SetHmenuPropStr (
+        [in]                                HMENU               hmenu,
+        [in]                                DWORD               idChild,
+        [in]                                MSAAPROPID          idProp,
+        [in, string]                        LPCWSTR             str
+    );
+
+    HRESULT SetHmenuPropServer (
+        [in]                                HMENU               hmenu,
+        [in]                                DWORD               idChild,
+
+        [in, size_is(cProps)]               const MSAAPROPID *  paProps,
+        [in]                                int                 cProps,
+
+        [in]                                IAccPropServer *    pServer,
+        [in]                                AnnoScope           annoScope
+    );
+
+    HRESULT ClearHmenuProps (
+        [in]                                HMENU               hmenu,
+        [in]                                DWORD               idChild,
+
+        [in, size_is(cProps)]               const MSAAPROPID *  paProps,
+        [in]                                int                 cProps
+    );
+
+
+    // Methods for composing/decomposing HMENU based identity strings...
+
+    HRESULT ComposeHmenuIdentityString (
+        [in]                                HMENU               hmenu,
+        [in]                                DWORD               idChild,
+
+        [out, size_is(, *pdwIDStringLen )]  BYTE **             ppIDString,
+        [out]                               DWORD *             pdwIDStringLen
+    );
+
+
+    HRESULT DecomposeHmenuIdentityString (
+        [in, size_is(dwIDStringLen)]        const BYTE *        pIDString,
+        [in]                                DWORD               dwIDStringLen,
+
+        [out]                               HMENU *             phmenu,
+        [out]                               DWORD *             pidChild
+    );
+};
+
+
+
 
 cpp_quote("")
 cpp_quote("//=--------------------------------------------------------------------------=")
@@ -402,7 +660,16 @@ library Accessibility
 	importlib ("stdole2.tlb");
 	interface	IAccessible;
 	interface	IAccessibleHandler;
+
+	interface	IAccIdentity;
+	interface	IAccPropServer;
+	interface	IAccPropServices;
+
+	[
+		uuid(b5f8350b-0548-48b1-a6ee-88bd00b4a5e7)
+	]
+	coclass CAccPropServices
+	{
+		interface IAccPropServices;
+	}
 }
-
-
-

@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DbConsts.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DBConsts.pas' rev: 6.00
 
-#ifndef DbConstsHPP
-#define DbConstsHPP
+#ifndef DBConstsHPP
+#define DBConstsHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -25,7 +25,6 @@ extern PACKAGE System::ResourceString _SInvalidFieldKind;
 #define Dbconsts_SInvalidFieldKind System::LoadResourceString(&Dbconsts::_SInvalidFieldKind)
 extern PACKAGE System::ResourceString _SInvalidFieldRegistration;
 #define Dbconsts_SInvalidFieldRegistration System::LoadResourceString(&Dbconsts::_SInvalidFieldRegistration)
-	
 extern PACKAGE System::ResourceString _SUnknownFieldType;
 #define Dbconsts_SUnknownFieldType System::LoadResourceString(&Dbconsts::_SUnknownFieldType)
 extern PACKAGE System::ResourceString _SFieldNameMissing;
@@ -40,6 +39,8 @@ extern PACKAGE System::ResourceString _SFieldValueError;
 #define Dbconsts_SFieldValueError System::LoadResourceString(&Dbconsts::_SFieldValueError)
 extern PACKAGE System::ResourceString _SFieldRangeError;
 #define Dbconsts_SFieldRangeError System::LoadResourceString(&Dbconsts::_SFieldRangeError)
+extern PACKAGE System::ResourceString _SBcdFieldRangeError;
+#define Dbconsts_SBcdFieldRangeError System::LoadResourceString(&Dbconsts::_SBcdFieldRangeError)
 extern PACKAGE System::ResourceString _SInvalidIntegerValue;
 #define Dbconsts_SInvalidIntegerValue System::LoadResourceString(&Dbconsts::_SInvalidIntegerValue)
 extern PACKAGE System::ResourceString _SInvalidBoolValue;
@@ -54,8 +55,6 @@ extern PACKAGE System::ResourceString _SInvalidVarByteArray;
 #define Dbconsts_SInvalidVarByteArray System::LoadResourceString(&Dbconsts::_SInvalidVarByteArray)
 extern PACKAGE System::ResourceString _SFieldOutOfRange;
 #define Dbconsts_SFieldOutOfRange System::LoadResourceString(&Dbconsts::_SFieldOutOfRange)
-extern PACKAGE System::ResourceString _SBCDOverflow;
-#define Dbconsts_SBCDOverflow System::LoadResourceString(&Dbconsts::_SBCDOverflow)
 extern PACKAGE System::ResourceString _SFieldRequired;
 #define Dbconsts_SFieldRequired System::LoadResourceString(&Dbconsts::_SFieldRequired)
 extern PACKAGE System::ResourceString _SDataSetMissing;
@@ -84,11 +83,12 @@ extern PACKAGE System::ResourceString _SCircularDataLink;
 #define Dbconsts_SCircularDataLink System::LoadResourceString(&Dbconsts::_SCircularDataLink)
 extern PACKAGE System::ResourceString _SLookupInfoError;
 #define Dbconsts_SLookupInfoError System::LoadResourceString(&Dbconsts::_SLookupInfoError)
+extern PACKAGE System::ResourceString _SNewLookupFieldCaption;
+#define Dbconsts_SNewLookupFieldCaption System::LoadResourceString(&Dbconsts::_SNewLookupFieldCaption)
 extern PACKAGE System::ResourceString _SDataSourceChange;
 #define Dbconsts_SDataSourceChange System::LoadResourceString(&Dbconsts::_SDataSourceChange)
 extern PACKAGE System::ResourceString _SNoNestedMasterSource;
 #define Dbconsts_SNoNestedMasterSource System::LoadResourceString(&Dbconsts::_SNoNestedMasterSource)
-	
 extern PACKAGE System::ResourceString _SDataSetOpen;
 #define Dbconsts_SDataSetOpen System::LoadResourceString(&Dbconsts::_SDataSetOpen)
 extern PACKAGE System::ResourceString _SNotEditing;
@@ -161,62 +161,42 @@ extern PACKAGE System::ResourceString _SAggActive;
 #define Dbconsts_SAggActive System::LoadResourceString(&Dbconsts::_SAggActive)
 extern PACKAGE System::ResourceString _SProviderSQLNotSupported;
 #define Dbconsts_SProviderSQLNotSupported System::LoadResourceString(&Dbconsts::_SProviderSQLNotSupported)
-	
 extern PACKAGE System::ResourceString _SProviderExecuteNotSupported;
 #define Dbconsts_SProviderExecuteNotSupported System::LoadResourceString(&Dbconsts::_SProviderExecuteNotSupported)
-	
 extern PACKAGE System::ResourceString _SExprNoAggOnCalcs;
 #define Dbconsts_SExprNoAggOnCalcs System::LoadResourceString(&Dbconsts::_SExprNoAggOnCalcs)
 extern PACKAGE System::ResourceString _SRecordChanged;
 #define Dbconsts_SRecordChanged System::LoadResourceString(&Dbconsts::_SRecordChanged)
-extern PACKAGE System::ResourceString _SFirstRecord;
-#define Dbconsts_SFirstRecord System::LoadResourceString(&Dbconsts::_SFirstRecord)
-extern PACKAGE System::ResourceString _SPriorRecord;
-#define Dbconsts_SPriorRecord System::LoadResourceString(&Dbconsts::_SPriorRecord)
-extern PACKAGE System::ResourceString _SNextRecord;
-#define Dbconsts_SNextRecord System::LoadResourceString(&Dbconsts::_SNextRecord)
-extern PACKAGE System::ResourceString _SLastRecord;
-#define Dbconsts_SLastRecord System::LoadResourceString(&Dbconsts::_SLastRecord)
-extern PACKAGE System::ResourceString _SInsertRecord;
-#define Dbconsts_SInsertRecord System::LoadResourceString(&Dbconsts::_SInsertRecord)
-extern PACKAGE System::ResourceString _SDeleteRecord;
-#define Dbconsts_SDeleteRecord System::LoadResourceString(&Dbconsts::_SDeleteRecord)
-extern PACKAGE System::ResourceString _SEditRecord;
-#define Dbconsts_SEditRecord System::LoadResourceString(&Dbconsts::_SEditRecord)
-extern PACKAGE System::ResourceString _SPostEdit;
-#define Dbconsts_SPostEdit System::LoadResourceString(&Dbconsts::_SPostEdit)
-extern PACKAGE System::ResourceString _SCancelEdit;
-#define Dbconsts_SCancelEdit System::LoadResourceString(&Dbconsts::_SCancelEdit)
-extern PACKAGE System::ResourceString _SRefreshRecord;
-#define Dbconsts_SRefreshRecord System::LoadResourceString(&Dbconsts::_SRefreshRecord)
-extern PACKAGE System::ResourceString _SDeleteRecordQuestion;
-#define Dbconsts_SDeleteRecordQuestion System::LoadResourceString(&Dbconsts::_SDeleteRecordQuestion)
-	
-extern PACKAGE System::ResourceString _SDeleteMultipleRecordsQuestion;
-#define Dbconsts_SDeleteMultipleRecordsQuestion System::LoadResourceString(&Dbconsts::_SDeleteMultipleRecordsQuestion)
-	
+extern PACKAGE System::ResourceString _SDataSetUnidirectional;
+#define Dbconsts_SDataSetUnidirectional System::LoadResourceString(&Dbconsts::_SDataSetUnidirectional)
+extern PACKAGE System::ResourceString _SUnassignedVar;
+#define Dbconsts_SUnassignedVar System::LoadResourceString(&Dbconsts::_SUnassignedVar)
 extern PACKAGE System::ResourceString _SRecordNotFound;
 #define Dbconsts_SRecordNotFound System::LoadResourceString(&Dbconsts::_SRecordNotFound)
-extern PACKAGE System::ResourceString _SDataSourceFixed;
-#define Dbconsts_SDataSourceFixed System::LoadResourceString(&Dbconsts::_SDataSourceFixed)
-extern PACKAGE System::ResourceString _SNotReplicatable;
-#define Dbconsts_SNotReplicatable System::LoadResourceString(&Dbconsts::_SNotReplicatable)
-extern PACKAGE System::ResourceString _SPropDefByLookup;
-#define Dbconsts_SPropDefByLookup System::LoadResourceString(&Dbconsts::_SPropDefByLookup)
+extern PACKAGE System::ResourceString _SFileNameBlank;
+#define Dbconsts_SFileNameBlank System::LoadResourceString(&Dbconsts::_SFileNameBlank)
+extern PACKAGE System::ResourceString _SBcdOverflow;
+#define Dbconsts_SBcdOverflow System::LoadResourceString(&Dbconsts::_SBcdOverflow)
+extern PACKAGE System::ResourceString _SInvalidBcdValue;
+#define Dbconsts_SInvalidBcdValue System::LoadResourceString(&Dbconsts::_SInvalidBcdValue)
+extern PACKAGE System::ResourceString _SInvalidFormatType;
+#define Dbconsts_SInvalidFormatType System::LoadResourceString(&Dbconsts::_SInvalidFormatType)
+extern PACKAGE System::ResourceString _SCouldNotParseTimeStamp;
+#define Dbconsts_SCouldNotParseTimeStamp System::LoadResourceString(&Dbconsts::_SCouldNotParseTimeStamp)
+extern PACKAGE System::ResourceString _SInvalidSqlTimeStamp;
+#define Dbconsts_SInvalidSqlTimeStamp System::LoadResourceString(&Dbconsts::_SInvalidSqlTimeStamp)
+extern PACKAGE System::ResourceString _SDeleteRecordQuestion;
+#define Dbconsts_SDeleteRecordQuestion System::LoadResourceString(&Dbconsts::_SDeleteRecordQuestion)
+extern PACKAGE System::ResourceString _SDeleteMultipleRecordsQuestion;
+#define Dbconsts_SDeleteMultipleRecordsQuestion System::LoadResourceString(&Dbconsts::_SDeleteMultipleRecordsQuestion)
 extern PACKAGE System::ResourceString _STooManyColumns;
 #define Dbconsts_STooManyColumns System::LoadResourceString(&Dbconsts::_STooManyColumns)
-extern PACKAGE System::ResourceString _SRemoteLogin;
-#define Dbconsts_SRemoteLogin System::LoadResourceString(&Dbconsts::_SRemoteLogin)
-extern PACKAGE System::ResourceString _SDataBindings;
-#define Dbconsts_SDataBindings System::LoadResourceString(&Dbconsts::_SDataBindings)
 
 }	/* namespace Dbconsts */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dbconsts;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// DbConsts
+#endif	// DBConsts

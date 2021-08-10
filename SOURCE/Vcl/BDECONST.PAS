@@ -7,7 +7,7 @@
 {                                                       }
 {*******************************************************}
 
-unit BdeConst;
+unit bdeconst;
 
 interface
 

@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Wed Aug 25 16:06:19 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for certenc.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -37,6 +35,10 @@
 
 #ifndef __certenc_h__
 #define __certenc_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -156,8 +158,8 @@ typedef struct CCertEncodeBitString CCertEncodeBitString;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 #ifndef __ICertEncodeStringArray_INTERFACE_DEFINED__
 #define __ICertEncodeStringArray_INTERFACE_DEFINED__
@@ -178,14 +180,14 @@ EXTERN_C const IID IID_ICertEncodeStringArray;
             /* [in] */ const BSTR strBinary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStringType( 
-            /* [retval][out] */ LONG __RPC_FAR *pStringType) = 0;
+            /* [retval][out] */ LONG *pStringType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [retval][out] */ LONG __RPC_FAR *pCount) = 0;
+            /* [retval][out] */ LONG *pCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
             /* [in] */ LONG Index,
-            /* [retval][out] */ BSTR __RPC_FAR *pstr) = 0;
+            /* [retval][out] */ BSTR *pstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( 
             /* [in] */ LONG Count,
@@ -196,7 +198,7 @@ EXTERN_C const IID IID_ICertEncodeStringArray;
             /* [in] */ const BSTR str) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Encode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBinary) = 0;
+            /* [retval][out] */ BSTR *pstrBinary) = 0;
         
     };
     
@@ -206,83 +208,83 @@ EXTERN_C const IID IID_ICertEncodeStringArray;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICertEncodeStringArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICertEncodeStringArray * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICertEncodeStringArray __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICertEncodeStringArray * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICertEncodeStringArray __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICertEncodeStringArray * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ICertEncodeStringArray __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ICertEncodeStringArray * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ICertEncodeStringArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ICertEncodeStringArray * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ICertEncodeStringArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ICertEncodeStringArray * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ICertEncodeStringArray __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ICertEncodeStringArray * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Decode )( 
-            ICertEncodeStringArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Decode )( 
+            ICertEncodeStringArray * This,
             /* [in] */ const BSTR strBinary);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStringType )( 
-            ICertEncodeStringArray __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pStringType);
+        HRESULT ( STDMETHODCALLTYPE *GetStringType )( 
+            ICertEncodeStringArray * This,
+            /* [retval][out] */ LONG *pStringType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCount )( 
-            ICertEncodeStringArray __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pCount);
+        HRESULT ( STDMETHODCALLTYPE *GetCount )( 
+            ICertEncodeStringArray * This,
+            /* [retval][out] */ LONG *pCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetValue )( 
-            ICertEncodeStringArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetValue )( 
+            ICertEncodeStringArray * This,
             /* [in] */ LONG Index,
-            /* [retval][out] */ BSTR __RPC_FAR *pstr);
+            /* [retval][out] */ BSTR *pstr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            ICertEncodeStringArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            ICertEncodeStringArray * This,
             /* [in] */ LONG Count,
             /* [in] */ LONG StringType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetValue )( 
-            ICertEncodeStringArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetValue )( 
+            ICertEncodeStringArray * This,
             /* [in] */ LONG Index,
             /* [in] */ const BSTR str);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Encode )( 
-            ICertEncodeStringArray __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBinary);
+        HRESULT ( STDMETHODCALLTYPE *Encode )( 
+            ICertEncodeStringArray * This,
+            /* [retval][out] */ BSTR *pstrBinary);
         
         END_INTERFACE
     } ICertEncodeStringArrayVtbl;
 
     interface ICertEncodeStringArray
     {
-        CONST_VTBL struct ICertEncodeStringArrayVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICertEncodeStringArrayVtbl *lpVtbl;
     };
 
     
@@ -342,7 +344,7 @@ EXTERN_C const IID IID_ICertEncodeStringArray;
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_Decode_Proxy( 
-    ICertEncodeStringArray __RPC_FAR * This,
+    ICertEncodeStringArray * This,
     /* [in] */ const BSTR strBinary);
 
 
@@ -354,8 +356,8 @@ void __RPC_STUB ICertEncodeStringArray_Decode_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_GetStringType_Proxy( 
-    ICertEncodeStringArray __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *pStringType);
+    ICertEncodeStringArray * This,
+    /* [retval][out] */ LONG *pStringType);
 
 
 void __RPC_STUB ICertEncodeStringArray_GetStringType_Stub(
@@ -366,8 +368,8 @@ void __RPC_STUB ICertEncodeStringArray_GetStringType_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_GetCount_Proxy( 
-    ICertEncodeStringArray __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *pCount);
+    ICertEncodeStringArray * This,
+    /* [retval][out] */ LONG *pCount);
 
 
 void __RPC_STUB ICertEncodeStringArray_GetCount_Stub(
@@ -378,9 +380,9 @@ void __RPC_STUB ICertEncodeStringArray_GetCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_GetValue_Proxy( 
-    ICertEncodeStringArray __RPC_FAR * This,
+    ICertEncodeStringArray * This,
     /* [in] */ LONG Index,
-    /* [retval][out] */ BSTR __RPC_FAR *pstr);
+    /* [retval][out] */ BSTR *pstr);
 
 
 void __RPC_STUB ICertEncodeStringArray_GetValue_Stub(
@@ -391,7 +393,7 @@ void __RPC_STUB ICertEncodeStringArray_GetValue_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_Reset_Proxy( 
-    ICertEncodeStringArray __RPC_FAR * This,
+    ICertEncodeStringArray * This,
     /* [in] */ LONG Count,
     /* [in] */ LONG StringType);
 
@@ -404,7 +406,7 @@ void __RPC_STUB ICertEncodeStringArray_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_SetValue_Proxy( 
-    ICertEncodeStringArray __RPC_FAR * This,
+    ICertEncodeStringArray * This,
     /* [in] */ LONG Index,
     /* [in] */ const BSTR str);
 
@@ -417,8 +419,8 @@ void __RPC_STUB ICertEncodeStringArray_SetValue_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeStringArray_Encode_Proxy( 
-    ICertEncodeStringArray __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrBinary);
+    ICertEncodeStringArray * This,
+    /* [retval][out] */ BSTR *pstrBinary);
 
 
 void __RPC_STUB ICertEncodeStringArray_Encode_Stub(
@@ -451,11 +453,11 @@ EXTERN_C const IID IID_ICertEncodeLongArray;
             /* [in] */ const BSTR strBinary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [retval][out] */ LONG __RPC_FAR *pCount) = 0;
+            /* [retval][out] */ LONG *pCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
             /* [in] */ LONG Index,
-            /* [retval][out] */ LONG __RPC_FAR *pValue) = 0;
+            /* [retval][out] */ LONG *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( 
             /* [in] */ LONG Count) = 0;
@@ -465,7 +467,7 @@ EXTERN_C const IID IID_ICertEncodeLongArray;
             /* [in] */ LONG Value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Encode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBinary) = 0;
+            /* [retval][out] */ BSTR *pstrBinary) = 0;
         
     };
     
@@ -475,78 +477,78 @@ EXTERN_C const IID IID_ICertEncodeLongArray;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICertEncodeLongArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICertEncodeLongArray * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICertEncodeLongArray __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICertEncodeLongArray * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICertEncodeLongArray __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICertEncodeLongArray * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ICertEncodeLongArray __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ICertEncodeLongArray * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ICertEncodeLongArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ICertEncodeLongArray * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ICertEncodeLongArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ICertEncodeLongArray * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ICertEncodeLongArray __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ICertEncodeLongArray * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Decode )( 
-            ICertEncodeLongArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Decode )( 
+            ICertEncodeLongArray * This,
             /* [in] */ const BSTR strBinary);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCount )( 
-            ICertEncodeLongArray __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pCount);
+        HRESULT ( STDMETHODCALLTYPE *GetCount )( 
+            ICertEncodeLongArray * This,
+            /* [retval][out] */ LONG *pCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetValue )( 
-            ICertEncodeLongArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetValue )( 
+            ICertEncodeLongArray * This,
             /* [in] */ LONG Index,
-            /* [retval][out] */ LONG __RPC_FAR *pValue);
+            /* [retval][out] */ LONG *pValue);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            ICertEncodeLongArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            ICertEncodeLongArray * This,
             /* [in] */ LONG Count);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetValue )( 
-            ICertEncodeLongArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetValue )( 
+            ICertEncodeLongArray * This,
             /* [in] */ LONG Index,
             /* [in] */ LONG Value);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Encode )( 
-            ICertEncodeLongArray __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBinary);
+        HRESULT ( STDMETHODCALLTYPE *Encode )( 
+            ICertEncodeLongArray * This,
+            /* [retval][out] */ BSTR *pstrBinary);
         
         END_INTERFACE
     } ICertEncodeLongArrayVtbl;
 
     interface ICertEncodeLongArray
     {
-        CONST_VTBL struct ICertEncodeLongArrayVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICertEncodeLongArrayVtbl *lpVtbl;
     };
 
     
@@ -603,7 +605,7 @@ EXTERN_C const IID IID_ICertEncodeLongArray;
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeLongArray_Decode_Proxy( 
-    ICertEncodeLongArray __RPC_FAR * This,
+    ICertEncodeLongArray * This,
     /* [in] */ const BSTR strBinary);
 
 
@@ -615,8 +617,8 @@ void __RPC_STUB ICertEncodeLongArray_Decode_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeLongArray_GetCount_Proxy( 
-    ICertEncodeLongArray __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *pCount);
+    ICertEncodeLongArray * This,
+    /* [retval][out] */ LONG *pCount);
 
 
 void __RPC_STUB ICertEncodeLongArray_GetCount_Stub(
@@ -627,9 +629,9 @@ void __RPC_STUB ICertEncodeLongArray_GetCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeLongArray_GetValue_Proxy( 
-    ICertEncodeLongArray __RPC_FAR * This,
+    ICertEncodeLongArray * This,
     /* [in] */ LONG Index,
-    /* [retval][out] */ LONG __RPC_FAR *pValue);
+    /* [retval][out] */ LONG *pValue);
 
 
 void __RPC_STUB ICertEncodeLongArray_GetValue_Stub(
@@ -640,7 +642,7 @@ void __RPC_STUB ICertEncodeLongArray_GetValue_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeLongArray_Reset_Proxy( 
-    ICertEncodeLongArray __RPC_FAR * This,
+    ICertEncodeLongArray * This,
     /* [in] */ LONG Count);
 
 
@@ -652,7 +654,7 @@ void __RPC_STUB ICertEncodeLongArray_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeLongArray_SetValue_Proxy( 
-    ICertEncodeLongArray __RPC_FAR * This,
+    ICertEncodeLongArray * This,
     /* [in] */ LONG Index,
     /* [in] */ LONG Value);
 
@@ -665,8 +667,8 @@ void __RPC_STUB ICertEncodeLongArray_SetValue_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeLongArray_Encode_Proxy( 
-    ICertEncodeLongArray __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrBinary);
+    ICertEncodeLongArray * This,
+    /* [retval][out] */ BSTR *pstrBinary);
 
 
 void __RPC_STUB ICertEncodeLongArray_Encode_Stub(
@@ -699,11 +701,11 @@ EXTERN_C const IID IID_ICertEncodeDateArray;
             /* [in] */ const BSTR strBinary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [retval][out] */ LONG __RPC_FAR *pCount) = 0;
+            /* [retval][out] */ LONG *pCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
             /* [in] */ LONG Index,
-            /* [retval][out] */ DATE __RPC_FAR *pValue) = 0;
+            /* [retval][out] */ DATE *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( 
             /* [in] */ LONG Count) = 0;
@@ -713,7 +715,7 @@ EXTERN_C const IID IID_ICertEncodeDateArray;
             /* [in] */ DATE Value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Encode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBinary) = 0;
+            /* [retval][out] */ BSTR *pstrBinary) = 0;
         
     };
     
@@ -723,78 +725,78 @@ EXTERN_C const IID IID_ICertEncodeDateArray;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICertEncodeDateArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICertEncodeDateArray * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICertEncodeDateArray __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICertEncodeDateArray * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICertEncodeDateArray __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICertEncodeDateArray * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ICertEncodeDateArray __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ICertEncodeDateArray * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ICertEncodeDateArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ICertEncodeDateArray * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ICertEncodeDateArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ICertEncodeDateArray * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ICertEncodeDateArray __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ICertEncodeDateArray * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Decode )( 
-            ICertEncodeDateArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Decode )( 
+            ICertEncodeDateArray * This,
             /* [in] */ const BSTR strBinary);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCount )( 
-            ICertEncodeDateArray __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pCount);
+        HRESULT ( STDMETHODCALLTYPE *GetCount )( 
+            ICertEncodeDateArray * This,
+            /* [retval][out] */ LONG *pCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetValue )( 
-            ICertEncodeDateArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetValue )( 
+            ICertEncodeDateArray * This,
             /* [in] */ LONG Index,
-            /* [retval][out] */ DATE __RPC_FAR *pValue);
+            /* [retval][out] */ DATE *pValue);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            ICertEncodeDateArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            ICertEncodeDateArray * This,
             /* [in] */ LONG Count);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetValue )( 
-            ICertEncodeDateArray __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetValue )( 
+            ICertEncodeDateArray * This,
             /* [in] */ LONG Index,
             /* [in] */ DATE Value);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Encode )( 
-            ICertEncodeDateArray __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBinary);
+        HRESULT ( STDMETHODCALLTYPE *Encode )( 
+            ICertEncodeDateArray * This,
+            /* [retval][out] */ BSTR *pstrBinary);
         
         END_INTERFACE
     } ICertEncodeDateArrayVtbl;
 
     interface ICertEncodeDateArray
     {
-        CONST_VTBL struct ICertEncodeDateArrayVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICertEncodeDateArrayVtbl *lpVtbl;
     };
 
     
@@ -851,7 +853,7 @@ EXTERN_C const IID IID_ICertEncodeDateArray;
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeDateArray_Decode_Proxy( 
-    ICertEncodeDateArray __RPC_FAR * This,
+    ICertEncodeDateArray * This,
     /* [in] */ const BSTR strBinary);
 
 
@@ -863,8 +865,8 @@ void __RPC_STUB ICertEncodeDateArray_Decode_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeDateArray_GetCount_Proxy( 
-    ICertEncodeDateArray __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *pCount);
+    ICertEncodeDateArray * This,
+    /* [retval][out] */ LONG *pCount);
 
 
 void __RPC_STUB ICertEncodeDateArray_GetCount_Stub(
@@ -875,9 +877,9 @@ void __RPC_STUB ICertEncodeDateArray_GetCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeDateArray_GetValue_Proxy( 
-    ICertEncodeDateArray __RPC_FAR * This,
+    ICertEncodeDateArray * This,
     /* [in] */ LONG Index,
-    /* [retval][out] */ DATE __RPC_FAR *pValue);
+    /* [retval][out] */ DATE *pValue);
 
 
 void __RPC_STUB ICertEncodeDateArray_GetValue_Stub(
@@ -888,7 +890,7 @@ void __RPC_STUB ICertEncodeDateArray_GetValue_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeDateArray_Reset_Proxy( 
-    ICertEncodeDateArray __RPC_FAR * This,
+    ICertEncodeDateArray * This,
     /* [in] */ LONG Count);
 
 
@@ -900,7 +902,7 @@ void __RPC_STUB ICertEncodeDateArray_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeDateArray_SetValue_Proxy( 
-    ICertEncodeDateArray __RPC_FAR * This,
+    ICertEncodeDateArray * This,
     /* [in] */ LONG Index,
     /* [in] */ DATE Value);
 
@@ -913,8 +915,8 @@ void __RPC_STUB ICertEncodeDateArray_SetValue_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeDateArray_Encode_Proxy( 
-    ICertEncodeDateArray __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrBinary);
+    ICertEncodeDateArray * This,
+    /* [retval][out] */ BSTR *pstrBinary);
 
 
 void __RPC_STUB ICertEncodeDateArray_Encode_Stub(
@@ -947,21 +949,21 @@ EXTERN_C const IID IID_ICertEncodeCRLDistInfo;
             /* [in] */ const BSTR strBinary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDistPointCount( 
-            /* [retval][out] */ LONG __RPC_FAR *pDistPointCount) = 0;
+            /* [retval][out] */ LONG *pDistPointCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNameCount( 
             /* [in] */ LONG DistPointIndex,
-            /* [retval][out] */ LONG __RPC_FAR *pNameCount) = 0;
+            /* [retval][out] */ LONG *pNameCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNameChoice( 
             /* [in] */ LONG DistPointIndex,
             /* [in] */ LONG NameIndex,
-            /* [retval][out] */ LONG __RPC_FAR *pNameChoice) = 0;
+            /* [retval][out] */ LONG *pNameChoice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
             /* [in] */ LONG DistPointIndex,
             /* [in] */ LONG NameIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrName) = 0;
+            /* [retval][out] */ BSTR *pstrName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( 
             /* [in] */ LONG DistPointCount) = 0;
@@ -977,7 +979,7 @@ EXTERN_C const IID IID_ICertEncodeCRLDistInfo;
             /* [in] */ const BSTR strName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Encode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBinary) = 0;
+            /* [retval][out] */ BSTR *pstrBinary) = 0;
         
     };
     
@@ -987,97 +989,97 @@ EXTERN_C const IID IID_ICertEncodeCRLDistInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICertEncodeCRLDistInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICertEncodeCRLDistInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICertEncodeCRLDistInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ICertEncodeCRLDistInfo * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ICertEncodeCRLDistInfo * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ICertEncodeCRLDistInfo * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ICertEncodeCRLDistInfo * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Decode )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Decode )( 
+            ICertEncodeCRLDistInfo * This,
             /* [in] */ const BSTR strBinary);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDistPointCount )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pDistPointCount);
+        HRESULT ( STDMETHODCALLTYPE *GetDistPointCount )( 
+            ICertEncodeCRLDistInfo * This,
+            /* [retval][out] */ LONG *pDistPointCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNameCount )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetNameCount )( 
+            ICertEncodeCRLDistInfo * This,
             /* [in] */ LONG DistPointIndex,
-            /* [retval][out] */ LONG __RPC_FAR *pNameCount);
+            /* [retval][out] */ LONG *pNameCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNameChoice )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
-            /* [in] */ LONG DistPointIndex,
-            /* [in] */ LONG NameIndex,
-            /* [retval][out] */ LONG __RPC_FAR *pNameChoice);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetNameChoice )( 
+            ICertEncodeCRLDistInfo * This,
             /* [in] */ LONG DistPointIndex,
             /* [in] */ LONG NameIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrName);
+            /* [retval][out] */ LONG *pNameChoice);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetName )( 
+            ICertEncodeCRLDistInfo * This,
+            /* [in] */ LONG DistPointIndex,
+            /* [in] */ LONG NameIndex,
+            /* [retval][out] */ BSTR *pstrName);
+        
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            ICertEncodeCRLDistInfo * This,
             /* [in] */ LONG DistPointCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetNameCount )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetNameCount )( 
+            ICertEncodeCRLDistInfo * This,
             /* [in] */ LONG DistPointIndex,
             /* [in] */ LONG NameCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetNameEntry )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetNameEntry )( 
+            ICertEncodeCRLDistInfo * This,
             /* [in] */ LONG DistPointIndex,
             /* [in] */ LONG NameIndex,
             /* [in] */ LONG NameChoice,
             /* [in] */ const BSTR strName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Encode )( 
-            ICertEncodeCRLDistInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBinary);
+        HRESULT ( STDMETHODCALLTYPE *Encode )( 
+            ICertEncodeCRLDistInfo * This,
+            /* [retval][out] */ BSTR *pstrBinary);
         
         END_INTERFACE
     } ICertEncodeCRLDistInfoVtbl;
 
     interface ICertEncodeCRLDistInfo
     {
-        CONST_VTBL struct ICertEncodeCRLDistInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICertEncodeCRLDistInfoVtbl *lpVtbl;
     };
 
     
@@ -1143,7 +1145,7 @@ EXTERN_C const IID IID_ICertEncodeCRLDistInfo;
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_Decode_Proxy( 
-    ICertEncodeCRLDistInfo __RPC_FAR * This,
+    ICertEncodeCRLDistInfo * This,
     /* [in] */ const BSTR strBinary);
 
 
@@ -1155,8 +1157,8 @@ void __RPC_STUB ICertEncodeCRLDistInfo_Decode_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_GetDistPointCount_Proxy( 
-    ICertEncodeCRLDistInfo __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *pDistPointCount);
+    ICertEncodeCRLDistInfo * This,
+    /* [retval][out] */ LONG *pDistPointCount);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_GetDistPointCount_Stub(
@@ -1167,9 +1169,9 @@ void __RPC_STUB ICertEncodeCRLDistInfo_GetDistPointCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_GetNameCount_Proxy( 
-    ICertEncodeCRLDistInfo __RPC_FAR * This,
+    ICertEncodeCRLDistInfo * This,
     /* [in] */ LONG DistPointIndex,
-    /* [retval][out] */ LONG __RPC_FAR *pNameCount);
+    /* [retval][out] */ LONG *pNameCount);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_GetNameCount_Stub(
@@ -1180,10 +1182,10 @@ void __RPC_STUB ICertEncodeCRLDistInfo_GetNameCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_GetNameChoice_Proxy( 
-    ICertEncodeCRLDistInfo __RPC_FAR * This,
+    ICertEncodeCRLDistInfo * This,
     /* [in] */ LONG DistPointIndex,
     /* [in] */ LONG NameIndex,
-    /* [retval][out] */ LONG __RPC_FAR *pNameChoice);
+    /* [retval][out] */ LONG *pNameChoice);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_GetNameChoice_Stub(
@@ -1194,10 +1196,10 @@ void __RPC_STUB ICertEncodeCRLDistInfo_GetNameChoice_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_GetName_Proxy( 
-    ICertEncodeCRLDistInfo __RPC_FAR * This,
+    ICertEncodeCRLDistInfo * This,
     /* [in] */ LONG DistPointIndex,
     /* [in] */ LONG NameIndex,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrName);
+    /* [retval][out] */ BSTR *pstrName);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_GetName_Stub(
@@ -1208,7 +1210,7 @@ void __RPC_STUB ICertEncodeCRLDistInfo_GetName_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_Reset_Proxy( 
-    ICertEncodeCRLDistInfo __RPC_FAR * This,
+    ICertEncodeCRLDistInfo * This,
     /* [in] */ LONG DistPointCount);
 
 
@@ -1220,7 +1222,7 @@ void __RPC_STUB ICertEncodeCRLDistInfo_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_SetNameCount_Proxy( 
-    ICertEncodeCRLDistInfo __RPC_FAR * This,
+    ICertEncodeCRLDistInfo * This,
     /* [in] */ LONG DistPointIndex,
     /* [in] */ LONG NameCount);
 
@@ -1233,7 +1235,7 @@ void __RPC_STUB ICertEncodeCRLDistInfo_SetNameCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_SetNameEntry_Proxy( 
-    ICertEncodeCRLDistInfo __RPC_FAR * This,
+    ICertEncodeCRLDistInfo * This,
     /* [in] */ LONG DistPointIndex,
     /* [in] */ LONG NameIndex,
     /* [in] */ LONG NameChoice,
@@ -1248,8 +1250,8 @@ void __RPC_STUB ICertEncodeCRLDistInfo_SetNameEntry_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeCRLDistInfo_Encode_Proxy( 
-    ICertEncodeCRLDistInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrBinary);
+    ICertEncodeCRLDistInfo * This,
+    /* [retval][out] */ BSTR *pstrBinary);
 
 
 void __RPC_STUB ICertEncodeCRLDistInfo_Encode_Stub(
@@ -1262,6 +1264,16 @@ void __RPC_STUB ICertEncodeCRLDistInfo_Encode_Stub(
 
 #endif 	/* __ICertEncodeCRLDistInfo_INTERFACE_DEFINED__ */
 
+
+/* interface __MIDL_itf_certenc_0117 */
+/* [local] */ 
+
+#define	EAN_NAMEOBJECTID	( 0x80000000 )
+
+
+
+extern RPC_IF_HANDLE __MIDL_itf_certenc_0117_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_certenc_0117_v0_0_s_ifspec;
 
 #ifndef __ICertEncodeAltName_INTERFACE_DEFINED__
 #define __ICertEncodeAltName_INTERFACE_DEFINED__
@@ -1282,15 +1294,15 @@ EXTERN_C const IID IID_ICertEncodeAltName;
             /* [in] */ const BSTR strBinary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNameCount( 
-            /* [retval][out] */ LONG __RPC_FAR *pNameCount) = 0;
+            /* [retval][out] */ LONG *pNameCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNameChoice( 
             /* [in] */ LONG NameIndex,
-            /* [retval][out] */ LONG __RPC_FAR *pNameChoice) = 0;
+            /* [retval][out] */ LONG *pNameChoice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
             /* [in] */ LONG NameIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrName) = 0;
+            /* [retval][out] */ BSTR *pstrName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( 
             /* [in] */ LONG NameCount) = 0;
@@ -1301,7 +1313,7 @@ EXTERN_C const IID IID_ICertEncodeAltName;
             /* [in] */ const BSTR strName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Encode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBinary) = 0;
+            /* [retval][out] */ BSTR *pstrBinary) = 0;
         
     };
     
@@ -1311,84 +1323,84 @@ EXTERN_C const IID IID_ICertEncodeAltName;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICertEncodeAltName __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICertEncodeAltName * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICertEncodeAltName __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICertEncodeAltName * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICertEncodeAltName __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICertEncodeAltName * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ICertEncodeAltName __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ICertEncodeAltName * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ICertEncodeAltName __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ICertEncodeAltName * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ICertEncodeAltName __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ICertEncodeAltName * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ICertEncodeAltName __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ICertEncodeAltName * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Decode )( 
-            ICertEncodeAltName __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Decode )( 
+            ICertEncodeAltName * This,
             /* [in] */ const BSTR strBinary);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNameCount )( 
-            ICertEncodeAltName __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pNameCount);
+        HRESULT ( STDMETHODCALLTYPE *GetNameCount )( 
+            ICertEncodeAltName * This,
+            /* [retval][out] */ LONG *pNameCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNameChoice )( 
-            ICertEncodeAltName __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetNameChoice )( 
+            ICertEncodeAltName * This,
             /* [in] */ LONG NameIndex,
-            /* [retval][out] */ LONG __RPC_FAR *pNameChoice);
+            /* [retval][out] */ LONG *pNameChoice);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
-            ICertEncodeAltName __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetName )( 
+            ICertEncodeAltName * This,
             /* [in] */ LONG NameIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrName);
+            /* [retval][out] */ BSTR *pstrName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            ICertEncodeAltName __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            ICertEncodeAltName * This,
             /* [in] */ LONG NameCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetNameEntry )( 
-            ICertEncodeAltName __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetNameEntry )( 
+            ICertEncodeAltName * This,
             /* [in] */ LONG NameIndex,
             /* [in] */ LONG NameChoice,
             /* [in] */ const BSTR strName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Encode )( 
-            ICertEncodeAltName __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBinary);
+        HRESULT ( STDMETHODCALLTYPE *Encode )( 
+            ICertEncodeAltName * This,
+            /* [retval][out] */ BSTR *pstrBinary);
         
         END_INTERFACE
     } ICertEncodeAltNameVtbl;
 
     interface ICertEncodeAltName
     {
-        CONST_VTBL struct ICertEncodeAltNameVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICertEncodeAltNameVtbl *lpVtbl;
     };
 
     
@@ -1448,7 +1460,7 @@ EXTERN_C const IID IID_ICertEncodeAltName;
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_Decode_Proxy( 
-    ICertEncodeAltName __RPC_FAR * This,
+    ICertEncodeAltName * This,
     /* [in] */ const BSTR strBinary);
 
 
@@ -1460,8 +1472,8 @@ void __RPC_STUB ICertEncodeAltName_Decode_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_GetNameCount_Proxy( 
-    ICertEncodeAltName __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *pNameCount);
+    ICertEncodeAltName * This,
+    /* [retval][out] */ LONG *pNameCount);
 
 
 void __RPC_STUB ICertEncodeAltName_GetNameCount_Stub(
@@ -1472,9 +1484,9 @@ void __RPC_STUB ICertEncodeAltName_GetNameCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_GetNameChoice_Proxy( 
-    ICertEncodeAltName __RPC_FAR * This,
+    ICertEncodeAltName * This,
     /* [in] */ LONG NameIndex,
-    /* [retval][out] */ LONG __RPC_FAR *pNameChoice);
+    /* [retval][out] */ LONG *pNameChoice);
 
 
 void __RPC_STUB ICertEncodeAltName_GetNameChoice_Stub(
@@ -1485,9 +1497,9 @@ void __RPC_STUB ICertEncodeAltName_GetNameChoice_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_GetName_Proxy( 
-    ICertEncodeAltName __RPC_FAR * This,
+    ICertEncodeAltName * This,
     /* [in] */ LONG NameIndex,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrName);
+    /* [retval][out] */ BSTR *pstrName);
 
 
 void __RPC_STUB ICertEncodeAltName_GetName_Stub(
@@ -1498,7 +1510,7 @@ void __RPC_STUB ICertEncodeAltName_GetName_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_Reset_Proxy( 
-    ICertEncodeAltName __RPC_FAR * This,
+    ICertEncodeAltName * This,
     /* [in] */ LONG NameCount);
 
 
@@ -1510,7 +1522,7 @@ void __RPC_STUB ICertEncodeAltName_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_SetNameEntry_Proxy( 
-    ICertEncodeAltName __RPC_FAR * This,
+    ICertEncodeAltName * This,
     /* [in] */ LONG NameIndex,
     /* [in] */ LONG NameChoice,
     /* [in] */ const BSTR strName);
@@ -1524,8 +1536,8 @@ void __RPC_STUB ICertEncodeAltName_SetNameEntry_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeAltName_Encode_Proxy( 
-    ICertEncodeAltName __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrBinary);
+    ICertEncodeAltName * This,
+    /* [retval][out] */ BSTR *pstrBinary);
 
 
 void __RPC_STUB ICertEncodeAltName_Encode_Stub(
@@ -1558,15 +1570,15 @@ EXTERN_C const IID IID_ICertEncodeBitString;
             /* [in] */ const BSTR strBinary) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBitCount( 
-            /* [retval][out] */ LONG __RPC_FAR *pBitCount) = 0;
+            /* [retval][out] */ LONG *pBitCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBitString( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBitString) = 0;
+            /* [retval][out] */ BSTR *pstrBitString) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Encode( 
             /* [in] */ LONG BitCount,
             /* [in] */ BSTR strBitString,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBinary) = 0;
+            /* [retval][out] */ BSTR *pstrBinary) = 0;
         
     };
     
@@ -1576,70 +1588,70 @@ EXTERN_C const IID IID_ICertEncodeBitString;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICertEncodeBitString __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICertEncodeBitString * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICertEncodeBitString __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICertEncodeBitString * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICertEncodeBitString __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICertEncodeBitString * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ICertEncodeBitString __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ICertEncodeBitString * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ICertEncodeBitString __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ICertEncodeBitString * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ICertEncodeBitString __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ICertEncodeBitString * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ICertEncodeBitString __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ICertEncodeBitString * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Decode )( 
-            ICertEncodeBitString __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Decode )( 
+            ICertEncodeBitString * This,
             /* [in] */ const BSTR strBinary);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBitCount )( 
-            ICertEncodeBitString __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pBitCount);
+        HRESULT ( STDMETHODCALLTYPE *GetBitCount )( 
+            ICertEncodeBitString * This,
+            /* [retval][out] */ LONG *pBitCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBitString )( 
-            ICertEncodeBitString __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBitString);
+        HRESULT ( STDMETHODCALLTYPE *GetBitString )( 
+            ICertEncodeBitString * This,
+            /* [retval][out] */ BSTR *pstrBitString);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Encode )( 
-            ICertEncodeBitString __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Encode )( 
+            ICertEncodeBitString * This,
             /* [in] */ LONG BitCount,
             /* [in] */ BSTR strBitString,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrBinary);
+            /* [retval][out] */ BSTR *pstrBinary);
         
         END_INTERFACE
     } ICertEncodeBitStringVtbl;
 
     interface ICertEncodeBitString
     {
-        CONST_VTBL struct ICertEncodeBitStringVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICertEncodeBitStringVtbl *lpVtbl;
     };
 
     
@@ -1690,7 +1702,7 @@ EXTERN_C const IID IID_ICertEncodeBitString;
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeBitString_Decode_Proxy( 
-    ICertEncodeBitString __RPC_FAR * This,
+    ICertEncodeBitString * This,
     /* [in] */ const BSTR strBinary);
 
 
@@ -1702,8 +1714,8 @@ void __RPC_STUB ICertEncodeBitString_Decode_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeBitString_GetBitCount_Proxy( 
-    ICertEncodeBitString __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *pBitCount);
+    ICertEncodeBitString * This,
+    /* [retval][out] */ LONG *pBitCount);
 
 
 void __RPC_STUB ICertEncodeBitString_GetBitCount_Stub(
@@ -1714,8 +1726,8 @@ void __RPC_STUB ICertEncodeBitString_GetBitCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeBitString_GetBitString_Proxy( 
-    ICertEncodeBitString __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrBitString);
+    ICertEncodeBitString * This,
+    /* [retval][out] */ BSTR *pstrBitString);
 
 
 void __RPC_STUB ICertEncodeBitString_GetBitString_Stub(
@@ -1726,10 +1738,10 @@ void __RPC_STUB ICertEncodeBitString_GetBitString_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertEncodeBitString_Encode_Proxy( 
-    ICertEncodeBitString __RPC_FAR * This,
+    ICertEncodeBitString * This,
     /* [in] */ LONG BitCount,
     /* [in] */ BSTR strBitString,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrBinary);
+    /* [retval][out] */ BSTR *pstrBinary);
 
 
 void __RPC_STUB ICertEncodeBitString_Encode_Stub(
@@ -1804,10 +1816,10 @@ CCertEncodeBitString;
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
 /* end of Additional Prototypes */
 
@@ -1818,4 +1830,3 @@ void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

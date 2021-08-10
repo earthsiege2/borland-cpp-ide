@@ -1,11 +1,13 @@
 #pragma option push -b -a8 -pc -A- /*P_O_Push*/
+//***************************************************************************
 //
-// RefPtrCollection.h -- definition of TRefPointerCollection template
+//  Copyright (c) 1997-1999 Microsoft Corporation
 //
-// Copyright 1998 - 1999 Microsoft Corporation
+//  RefPtrCo.h
 //
+//  Purpose: definition of TRefPointerCollection template
 //
-//=================================================================
+//***************************************************************************
 
 #if _MSC_VER > 1000
 #pragma once

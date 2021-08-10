@@ -1,17 +1,17 @@
-LIBRARY LOADPERF
+LIBRARY LoadPerf
 EXPORTS
 
-    BackupPerfRegistryToFileW                = 'LOADPERF.DLL'.*
-    InstallPerfDllA                          = 'LOADPERF.DLL'.*
-    InstallPerfDllW                          = 'LOADPERF.DLL'.*
-    LoadMofFromInstalledServiceA             = 'LOADPERF.DLL'.*
-    LoadMofFromInstalledServiceW             = 'LOADPERF.DLL'.*
-    LoadPerfCounterTextStringsA              = 'LOADPERF.DLL'.*
-    LoadPerfCounterTextStringsW              = 'LOADPERF.DLL'.*
-    RestorePerfRegistryFromFileW             = 'LOADPERF.DLL'.*
-    SetServiceAsTrustedA                     = 'LOADPERF.DLL'.*
-    SetServiceAsTrustedW                     = 'LOADPERF.DLL'.*
-    UnloadPerfCounterTextStringsA            = 'LOADPERF.DLL'.*
-    UnloadPerfCounterTextStringsW            = 'LOADPERF.DLL'.*
-    UpdatePerfNameFilesA                     = 'LOADPERF.DLL'.*
-    UpdatePerfNameFilesW                     = 'LOADPERF.DLL'.*
+    BackupPerfRegistryToFileW
+    InstallPerfDllA
+    InstallPerfDllW
+    LoadMofFromInstalledServiceA
+    LoadMofFromInstalledServiceW
+    LoadPerfCounterTextStringsA
+    LoadPerfCounterTextStringsW
+    RestorePerfRegistryFromFileW
+    SetServiceAsTrustedA
+    SetServiceAsTrustedW
+    UnloadPerfCounterTextStringsA
+    UnloadPerfCounterTextStringsW
+    UpdatePerfNameFilesA
+    UpdatePerfNameFilesW

@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Sat Jul 31 00:53:08 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for mdhcp.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -20,7 +18,7 @@
 
 /* verify that the <rpcndr.h> version is high enough to compile this file*/
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
-#define __REQUIRED_RPCNDR_H_VERSION__ 440
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
 
 #include "rpc.h"
@@ -37,6 +35,10 @@
 
 #ifndef __mdhcp_h__
 #define __mdhcp_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -109,13 +111,13 @@ typedef struct McastAddressAllocation McastAddressAllocation;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_mdhcp_0000 */
 /* [local] */ 
 
-/* Copyright (c) 1998-1999  Microsoft Corporation  */
+/* Copyright (c) Microsoft Corporation. All rights reserved.*/
 
 
 extern RPC_IF_HANDLE __MIDL_itf_mdhcp_0000_v0_0_c_ifspec;
@@ -137,19 +139,19 @@ EXTERN_C const IID IID_IMcastScope;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ScopeID( 
-            /* [retval][out] */ long __RPC_FAR *pID) = 0;
+            /* [retval][out] */ long *pID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ServerID( 
-            /* [retval][out] */ long __RPC_FAR *pID) = 0;
+            /* [retval][out] */ long *pID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_InterfaceID( 
-            /* [retval][out] */ long __RPC_FAR *pID) = 0;
+            /* [retval][out] */ long *pID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ScopeDescription( 
-            /* [retval][out] */ BSTR __RPC_FAR *ppDescription) = 0;
+            /* [retval][out] */ BSTR *ppDescription) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TTL( 
-            /* [retval][out] */ long __RPC_FAR *pTTL) = 0;
+            /* [retval][out] */ long *pTTL) = 0;
         
     };
     
@@ -159,72 +161,72 @@ EXTERN_C const IID IID_IMcastScope;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMcastScope __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMcastScope * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMcastScope __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMcastScope * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMcastScope __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMcastScope * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMcastScope __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMcastScope * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMcastScope __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMcastScope * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMcastScope __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMcastScope * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMcastScope __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMcastScope * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ScopeID )( 
-            IMcastScope __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ScopeID )( 
+            IMcastScope * This,
+            /* [retval][out] */ long *pID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServerID )( 
-            IMcastScope __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServerID )( 
+            IMcastScope * This,
+            /* [retval][out] */ long *pID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InterfaceID )( 
-            IMcastScope __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InterfaceID )( 
+            IMcastScope * This,
+            /* [retval][out] */ long *pID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ScopeDescription )( 
-            IMcastScope __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *ppDescription);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ScopeDescription )( 
+            IMcastScope * This,
+            /* [retval][out] */ BSTR *ppDescription);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TTL )( 
-            IMcastScope __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pTTL);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TTL )( 
+            IMcastScope * This,
+            /* [retval][out] */ long *pTTL);
         
         END_INTERFACE
     } IMcastScopeVtbl;
 
     interface IMcastScope
     {
-        CONST_VTBL struct IMcastScopeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMcastScopeVtbl *lpVtbl;
     };
 
     
@@ -278,8 +280,8 @@ EXTERN_C const IID IID_IMcastScope;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastScope_get_ScopeID_Proxy( 
-    IMcastScope __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pID);
+    IMcastScope * This,
+    /* [retval][out] */ long *pID);
 
 
 void __RPC_STUB IMcastScope_get_ScopeID_Stub(
@@ -290,8 +292,8 @@ void __RPC_STUB IMcastScope_get_ScopeID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastScope_get_ServerID_Proxy( 
-    IMcastScope __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pID);
+    IMcastScope * This,
+    /* [retval][out] */ long *pID);
 
 
 void __RPC_STUB IMcastScope_get_ServerID_Stub(
@@ -302,8 +304,8 @@ void __RPC_STUB IMcastScope_get_ServerID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastScope_get_InterfaceID_Proxy( 
-    IMcastScope __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pID);
+    IMcastScope * This,
+    /* [retval][out] */ long *pID);
 
 
 void __RPC_STUB IMcastScope_get_InterfaceID_Stub(
@@ -314,8 +316,8 @@ void __RPC_STUB IMcastScope_get_InterfaceID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastScope_get_ScopeDescription_Proxy( 
-    IMcastScope __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *ppDescription);
+    IMcastScope * This,
+    /* [retval][out] */ BSTR *ppDescription);
 
 
 void __RPC_STUB IMcastScope_get_ScopeDescription_Stub(
@@ -326,8 +328,8 @@ void __RPC_STUB IMcastScope_get_ScopeDescription_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastScope_get_TTL_Proxy( 
-    IMcastScope __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pTTL);
+    IMcastScope * This,
+    /* [retval][out] */ long *pTTL);
 
 
 void __RPC_STUB IMcastScope_get_TTL_Stub(
@@ -357,34 +359,34 @@ EXTERN_C const IID IID_IMcastLeaseInfo;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RequestID( 
-            /* [retval][out] */ BSTR __RPC_FAR *ppRequestID) = 0;
+            /* [retval][out] */ BSTR *ppRequestID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LeaseStartTime( 
-            /* [retval][out] */ DATE __RPC_FAR *pTime) = 0;
+            /* [retval][out] */ DATE *pTime) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LeaseStartTime( 
             /* [in] */ DATE time) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LeaseStopTime( 
-            /* [retval][out] */ DATE __RPC_FAR *pTime) = 0;
+            /* [retval][out] */ DATE *pTime) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LeaseStopTime( 
             /* [in] */ DATE time) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AddressCount( 
-            /* [retval][out] */ long __RPC_FAR *pCount) = 0;
+            /* [retval][out] */ long *pCount) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ServerAddress( 
-            /* [retval][out] */ BSTR __RPC_FAR *ppAddress) = 0;
+            /* [retval][out] */ BSTR *ppAddress) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TTL( 
-            /* [retval][out] */ long __RPC_FAR *pTTL) = 0;
+            /* [retval][out] */ long *pTTL) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Addresses( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant) = 0;
+            /* [retval][out] */ VARIANT *pVariant) = 0;
         
         virtual /* [helpstring][hidden][id] */ HRESULT STDMETHODCALLTYPE EnumerateAddresses( 
-            /* [retval][out] */ IEnumBstr __RPC_FAR *__RPC_FAR *ppEnumAddresses) = 0;
+            /* [retval][out] */ IEnumBstr **ppEnumAddresses) = 0;
         
     };
     
@@ -394,92 +396,92 @@ EXTERN_C const IID IID_IMcastLeaseInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMcastLeaseInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMcastLeaseInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMcastLeaseInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMcastLeaseInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMcastLeaseInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMcastLeaseInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMcastLeaseInfo __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMcastLeaseInfo * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMcastLeaseInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMcastLeaseInfo * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMcastLeaseInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMcastLeaseInfo * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMcastLeaseInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMcastLeaseInfo * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RequestID )( 
-            IMcastLeaseInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *ppRequestID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RequestID )( 
+            IMcastLeaseInfo * This,
+            /* [retval][out] */ BSTR *ppRequestID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LeaseStartTime )( 
-            IMcastLeaseInfo __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *pTime);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LeaseStartTime )( 
+            IMcastLeaseInfo * This,
+            /* [retval][out] */ DATE *pTime);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LeaseStartTime )( 
-            IMcastLeaseInfo __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LeaseStartTime )( 
+            IMcastLeaseInfo * This,
             /* [in] */ DATE time);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LeaseStopTime )( 
-            IMcastLeaseInfo __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *pTime);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LeaseStopTime )( 
+            IMcastLeaseInfo * This,
+            /* [retval][out] */ DATE *pTime);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LeaseStopTime )( 
-            IMcastLeaseInfo __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LeaseStopTime )( 
+            IMcastLeaseInfo * This,
             /* [in] */ DATE time);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AddressCount )( 
-            IMcastLeaseInfo __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AddressCount )( 
+            IMcastLeaseInfo * This,
+            /* [retval][out] */ long *pCount);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServerAddress )( 
-            IMcastLeaseInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *ppAddress);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServerAddress )( 
+            IMcastLeaseInfo * This,
+            /* [retval][out] */ BSTR *ppAddress);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TTL )( 
-            IMcastLeaseInfo __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pTTL);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TTL )( 
+            IMcastLeaseInfo * This,
+            /* [retval][out] */ long *pTTL);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Addresses )( 
-            IMcastLeaseInfo __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Addresses )( 
+            IMcastLeaseInfo * This,
+            /* [retval][out] */ VARIANT *pVariant);
         
-        /* [helpstring][hidden][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateAddresses )( 
-            IMcastLeaseInfo __RPC_FAR * This,
-            /* [retval][out] */ IEnumBstr __RPC_FAR *__RPC_FAR *ppEnumAddresses);
+        /* [helpstring][hidden][id] */ HRESULT ( STDMETHODCALLTYPE *EnumerateAddresses )( 
+            IMcastLeaseInfo * This,
+            /* [retval][out] */ IEnumBstr **ppEnumAddresses);
         
         END_INTERFACE
     } IMcastLeaseInfoVtbl;
 
     interface IMcastLeaseInfo
     {
-        CONST_VTBL struct IMcastLeaseInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMcastLeaseInfoVtbl *lpVtbl;
     };
 
     
@@ -548,8 +550,8 @@ EXTERN_C const IID IID_IMcastLeaseInfo;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_RequestID_Proxy( 
-    IMcastLeaseInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *ppRequestID);
+    IMcastLeaseInfo * This,
+    /* [retval][out] */ BSTR *ppRequestID);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_RequestID_Stub(
@@ -560,8 +562,8 @@ void __RPC_STUB IMcastLeaseInfo_get_RequestID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_LeaseStartTime_Proxy( 
-    IMcastLeaseInfo __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *pTime);
+    IMcastLeaseInfo * This,
+    /* [retval][out] */ DATE *pTime);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_LeaseStartTime_Stub(
@@ -572,7 +574,7 @@ void __RPC_STUB IMcastLeaseInfo_get_LeaseStartTime_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_put_LeaseStartTime_Proxy( 
-    IMcastLeaseInfo __RPC_FAR * This,
+    IMcastLeaseInfo * This,
     /* [in] */ DATE time);
 
 
@@ -584,8 +586,8 @@ void __RPC_STUB IMcastLeaseInfo_put_LeaseStartTime_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_LeaseStopTime_Proxy( 
-    IMcastLeaseInfo __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *pTime);
+    IMcastLeaseInfo * This,
+    /* [retval][out] */ DATE *pTime);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_LeaseStopTime_Stub(
@@ -596,7 +598,7 @@ void __RPC_STUB IMcastLeaseInfo_get_LeaseStopTime_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_put_LeaseStopTime_Proxy( 
-    IMcastLeaseInfo __RPC_FAR * This,
+    IMcastLeaseInfo * This,
     /* [in] */ DATE time);
 
 
@@ -608,8 +610,8 @@ void __RPC_STUB IMcastLeaseInfo_put_LeaseStopTime_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_AddressCount_Proxy( 
-    IMcastLeaseInfo __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pCount);
+    IMcastLeaseInfo * This,
+    /* [retval][out] */ long *pCount);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_AddressCount_Stub(
@@ -620,8 +622,8 @@ void __RPC_STUB IMcastLeaseInfo_get_AddressCount_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_ServerAddress_Proxy( 
-    IMcastLeaseInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *ppAddress);
+    IMcastLeaseInfo * This,
+    /* [retval][out] */ BSTR *ppAddress);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_ServerAddress_Stub(
@@ -632,8 +634,8 @@ void __RPC_STUB IMcastLeaseInfo_get_ServerAddress_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_TTL_Proxy( 
-    IMcastLeaseInfo __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pTTL);
+    IMcastLeaseInfo * This,
+    /* [retval][out] */ long *pTTL);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_TTL_Stub(
@@ -644,8 +646,8 @@ void __RPC_STUB IMcastLeaseInfo_get_TTL_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_get_Addresses_Proxy( 
-    IMcastLeaseInfo __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+    IMcastLeaseInfo * This,
+    /* [retval][out] */ VARIANT *pVariant);
 
 
 void __RPC_STUB IMcastLeaseInfo_get_Addresses_Stub(
@@ -656,8 +658,8 @@ void __RPC_STUB IMcastLeaseInfo_get_Addresses_Stub(
 
 
 /* [helpstring][hidden][id] */ HRESULT STDMETHODCALLTYPE IMcastLeaseInfo_EnumerateAddresses_Proxy( 
-    IMcastLeaseInfo __RPC_FAR * This,
-    /* [retval][out] */ IEnumBstr __RPC_FAR *__RPC_FAR *ppEnumAddresses);
+    IMcastLeaseInfo * This,
+    /* [retval][out] */ IEnumBstr **ppEnumAddresses);
 
 
 void __RPC_STUB IMcastLeaseInfo_EnumerateAddresses_Stub(
@@ -688,8 +690,8 @@ EXTERN_C const IID IID_IEnumMcastScope;
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [out] */ IMcastScope __RPC_FAR *__RPC_FAR *ppScopes,
-            /* [full][out][in] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [out] */ IMcastScope **ppScopes,
+            /* [full][out][in] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
@@ -697,7 +699,7 @@ EXTERN_C const IID IID_IEnumMcastScope;
             /* [in] */ ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumMcastScope __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+            /* [retval][out] */ IEnumMcastScope **ppEnum) = 0;
         
     };
     
@@ -707,40 +709,40 @@ EXTERN_C const IID IID_IEnumMcastScope;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumMcastScope __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumMcastScope * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumMcastScope __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumMcastScope * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumMcastScope __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumMcastScope * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumMcastScope __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumMcastScope * This,
             /* [in] */ ULONG celt,
-            /* [out] */ IMcastScope __RPC_FAR *__RPC_FAR *ppScopes,
-            /* [full][out][in] */ ULONG __RPC_FAR *pceltFetched);
+            /* [out] */ IMcastScope **ppScopes,
+            /* [full][out][in] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumMcastScope __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumMcastScope * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumMcastScope __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumMcastScope * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumMcastScope __RPC_FAR * This,
-            /* [retval][out] */ IEnumMcastScope __RPC_FAR *__RPC_FAR *ppEnum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumMcastScope * This,
+            /* [retval][out] */ IEnumMcastScope **ppEnum);
         
         END_INTERFACE
     } IEnumMcastScopeVtbl;
 
     interface IEnumMcastScope
     {
-        CONST_VTBL struct IEnumMcastScopeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumMcastScopeVtbl *lpVtbl;
     };
 
     
@@ -778,10 +780,10 @@ EXTERN_C const IID IID_IEnumMcastScope;
 
 
 HRESULT STDMETHODCALLTYPE IEnumMcastScope_Next_Proxy( 
-    IEnumMcastScope __RPC_FAR * This,
+    IEnumMcastScope * This,
     /* [in] */ ULONG celt,
-    /* [out] */ IMcastScope __RPC_FAR *__RPC_FAR *ppScopes,
-    /* [full][out][in] */ ULONG __RPC_FAR *pceltFetched);
+    /* [out] */ IMcastScope **ppScopes,
+    /* [full][out][in] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumMcastScope_Next_Stub(
@@ -792,7 +794,7 @@ void __RPC_STUB IEnumMcastScope_Next_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumMcastScope_Reset_Proxy( 
-    IEnumMcastScope __RPC_FAR * This);
+    IEnumMcastScope * This);
 
 
 void __RPC_STUB IEnumMcastScope_Reset_Stub(
@@ -803,7 +805,7 @@ void __RPC_STUB IEnumMcastScope_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumMcastScope_Skip_Proxy( 
-    IEnumMcastScope __RPC_FAR * This,
+    IEnumMcastScope * This,
     /* [in] */ ULONG celt);
 
 
@@ -815,8 +817,8 @@ void __RPC_STUB IEnumMcastScope_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumMcastScope_Clone_Proxy( 
-    IEnumMcastScope __RPC_FAR * This,
-    /* [retval][out] */ IEnumMcastScope __RPC_FAR *__RPC_FAR *ppEnum);
+    IEnumMcastScope * This,
+    /* [retval][out] */ IEnumMcastScope **ppEnum);
 
 
 void __RPC_STUB IEnumMcastScope_Clone_Stub(
@@ -846,34 +848,34 @@ EXTERN_C const IID IID_IMcastAddressAllocation;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Scopes( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant) = 0;
+            /* [retval][out] */ VARIANT *pVariant) = 0;
         
         virtual /* [helpstring][hidden][id] */ HRESULT STDMETHODCALLTYPE EnumerateScopes( 
-            /* [out] */ IEnumMcastScope __RPC_FAR *__RPC_FAR *ppEnumMcastScope) = 0;
+            /* [out] */ IEnumMcastScope **ppEnumMcastScope) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RequestAddress( 
-            /* [in] */ IMcastScope __RPC_FAR *pScope,
+            /* [in] */ IMcastScope *pScope,
             /* [in] */ DATE LeaseStartTime,
             /* [in] */ DATE LeaseStopTime,
             /* [in] */ long NumAddresses,
-            /* [retval][out] */ IMcastLeaseInfo __RPC_FAR *__RPC_FAR *ppLeaseResponse) = 0;
+            /* [retval][out] */ IMcastLeaseInfo **ppLeaseResponse) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RenewAddress( 
             /* [in] */ long lReserved,
-            /* [in] */ IMcastLeaseInfo __RPC_FAR *pRenewRequest,
-            /* [retval][out] */ IMcastLeaseInfo __RPC_FAR *__RPC_FAR *ppRenewResponse) = 0;
+            /* [in] */ IMcastLeaseInfo *pRenewRequest,
+            /* [retval][out] */ IMcastLeaseInfo **ppRenewResponse) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ReleaseAddress( 
-            /* [in] */ IMcastLeaseInfo __RPC_FAR *pReleaseRequest) = 0;
+            /* [in] */ IMcastLeaseInfo *pReleaseRequest) = 0;
         
         virtual /* [helpstring][hidden][id] */ HRESULT STDMETHODCALLTYPE CreateLeaseInfo( 
             /* [in] */ DATE LeaseStartTime,
             /* [in] */ DATE LeaseStopTime,
             /* [in] */ DWORD dwNumAddresses,
-            /* [in] */ LPWSTR __RPC_FAR *ppAddresses,
+            /* [in] */ LPWSTR *ppAddresses,
             /* [in] */ LPWSTR pRequestID,
             /* [in] */ LPWSTR pServerAddress,
-            /* [retval][out] */ IMcastLeaseInfo __RPC_FAR *__RPC_FAR *ppReleaseRequest) = 0;
+            /* [retval][out] */ IMcastLeaseInfo **ppReleaseRequest) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateLeaseInfoFromVariant( 
             /* [in] */ DATE LeaseStartTime,
@@ -881,7 +883,7 @@ EXTERN_C const IID IID_IMcastAddressAllocation;
             /* [in] */ VARIANT vAddresses,
             /* [in] */ BSTR pRequestID,
             /* [in] */ BSTR pServerAddress,
-            /* [retval][out] */ IMcastLeaseInfo __RPC_FAR *__RPC_FAR *ppReleaseRequest) = 0;
+            /* [retval][out] */ IMcastLeaseInfo **ppReleaseRequest) = 0;
         
     };
     
@@ -891,97 +893,97 @@ EXTERN_C const IID IID_IMcastAddressAllocation;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMcastAddressAllocation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMcastAddressAllocation * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMcastAddressAllocation __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMcastAddressAllocation * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMcastAddressAllocation __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMcastAddressAllocation * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMcastAddressAllocation __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMcastAddressAllocation * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMcastAddressAllocation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMcastAddressAllocation * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMcastAddressAllocation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMcastAddressAllocation * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMcastAddressAllocation __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMcastAddressAllocation * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Scopes )( 
-            IMcastAddressAllocation __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Scopes )( 
+            IMcastAddressAllocation * This,
+            /* [retval][out] */ VARIANT *pVariant);
         
-        /* [helpstring][hidden][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateScopes )( 
-            IMcastAddressAllocation __RPC_FAR * This,
-            /* [out] */ IEnumMcastScope __RPC_FAR *__RPC_FAR *ppEnumMcastScope);
+        /* [helpstring][hidden][id] */ HRESULT ( STDMETHODCALLTYPE *EnumerateScopes )( 
+            IMcastAddressAllocation * This,
+            /* [out] */ IEnumMcastScope **ppEnumMcastScope);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestAddress )( 
-            IMcastAddressAllocation __RPC_FAR * This,
-            /* [in] */ IMcastScope __RPC_FAR *pScope,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RequestAddress )( 
+            IMcastAddressAllocation * This,
+            /* [in] */ IMcastScope *pScope,
             /* [in] */ DATE LeaseStartTime,
             /* [in] */ DATE LeaseStopTime,
             /* [in] */ long NumAddresses,
-            /* [retval][out] */ IMcastLeaseInfo __RPC_FAR *__RPC_FAR *ppLeaseResponse);
+            /* [retval][out] */ IMcastLeaseInfo **ppLeaseResponse);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RenewAddress )( 
-            IMcastAddressAllocation __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RenewAddress )( 
+            IMcastAddressAllocation * This,
             /* [in] */ long lReserved,
-            /* [in] */ IMcastLeaseInfo __RPC_FAR *pRenewRequest,
-            /* [retval][out] */ IMcastLeaseInfo __RPC_FAR *__RPC_FAR *ppRenewResponse);
+            /* [in] */ IMcastLeaseInfo *pRenewRequest,
+            /* [retval][out] */ IMcastLeaseInfo **ppRenewResponse);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseAddress )( 
-            IMcastAddressAllocation __RPC_FAR * This,
-            /* [in] */ IMcastLeaseInfo __RPC_FAR *pReleaseRequest);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ReleaseAddress )( 
+            IMcastAddressAllocation * This,
+            /* [in] */ IMcastLeaseInfo *pReleaseRequest);
         
-        /* [helpstring][hidden][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateLeaseInfo )( 
-            IMcastAddressAllocation __RPC_FAR * This,
+        /* [helpstring][hidden][id] */ HRESULT ( STDMETHODCALLTYPE *CreateLeaseInfo )( 
+            IMcastAddressAllocation * This,
             /* [in] */ DATE LeaseStartTime,
             /* [in] */ DATE LeaseStopTime,
             /* [in] */ DWORD dwNumAddresses,
-            /* [in] */ LPWSTR __RPC_FAR *ppAddresses,
+            /* [in] */ LPWSTR *ppAddresses,
             /* [in] */ LPWSTR pRequestID,
             /* [in] */ LPWSTR pServerAddress,
-            /* [retval][out] */ IMcastLeaseInfo __RPC_FAR *__RPC_FAR *ppReleaseRequest);
+            /* [retval][out] */ IMcastLeaseInfo **ppReleaseRequest);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateLeaseInfoFromVariant )( 
-            IMcastAddressAllocation __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateLeaseInfoFromVariant )( 
+            IMcastAddressAllocation * This,
             /* [in] */ DATE LeaseStartTime,
             /* [in] */ DATE LeaseStopTime,
             /* [in] */ VARIANT vAddresses,
             /* [in] */ BSTR pRequestID,
             /* [in] */ BSTR pServerAddress,
-            /* [retval][out] */ IMcastLeaseInfo __RPC_FAR *__RPC_FAR *ppReleaseRequest);
+            /* [retval][out] */ IMcastLeaseInfo **ppReleaseRequest);
         
         END_INTERFACE
     } IMcastAddressAllocationVtbl;
 
     interface IMcastAddressAllocation
     {
-        CONST_VTBL struct IMcastAddressAllocationVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMcastAddressAllocationVtbl *lpVtbl;
     };
 
     
@@ -1041,8 +1043,8 @@ EXTERN_C const IID IID_IMcastAddressAllocation;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_get_Scopes_Proxy( 
-    IMcastAddressAllocation __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+    IMcastAddressAllocation * This,
+    /* [retval][out] */ VARIANT *pVariant);
 
 
 void __RPC_STUB IMcastAddressAllocation_get_Scopes_Stub(
@@ -1053,8 +1055,8 @@ void __RPC_STUB IMcastAddressAllocation_get_Scopes_Stub(
 
 
 /* [helpstring][hidden][id] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_EnumerateScopes_Proxy( 
-    IMcastAddressAllocation __RPC_FAR * This,
-    /* [out] */ IEnumMcastScope __RPC_FAR *__RPC_FAR *ppEnumMcastScope);
+    IMcastAddressAllocation * This,
+    /* [out] */ IEnumMcastScope **ppEnumMcastScope);
 
 
 void __RPC_STUB IMcastAddressAllocation_EnumerateScopes_Stub(
@@ -1065,12 +1067,12 @@ void __RPC_STUB IMcastAddressAllocation_EnumerateScopes_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_RequestAddress_Proxy( 
-    IMcastAddressAllocation __RPC_FAR * This,
-    /* [in] */ IMcastScope __RPC_FAR *pScope,
+    IMcastAddressAllocation * This,
+    /* [in] */ IMcastScope *pScope,
     /* [in] */ DATE LeaseStartTime,
     /* [in] */ DATE LeaseStopTime,
     /* [in] */ long NumAddresses,
-    /* [retval][out] */ IMcastLeaseInfo __RPC_FAR *__RPC_FAR *ppLeaseResponse);
+    /* [retval][out] */ IMcastLeaseInfo **ppLeaseResponse);
 
 
 void __RPC_STUB IMcastAddressAllocation_RequestAddress_Stub(
@@ -1081,10 +1083,10 @@ void __RPC_STUB IMcastAddressAllocation_RequestAddress_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_RenewAddress_Proxy( 
-    IMcastAddressAllocation __RPC_FAR * This,
+    IMcastAddressAllocation * This,
     /* [in] */ long lReserved,
-    /* [in] */ IMcastLeaseInfo __RPC_FAR *pRenewRequest,
-    /* [retval][out] */ IMcastLeaseInfo __RPC_FAR *__RPC_FAR *ppRenewResponse);
+    /* [in] */ IMcastLeaseInfo *pRenewRequest,
+    /* [retval][out] */ IMcastLeaseInfo **ppRenewResponse);
 
 
 void __RPC_STUB IMcastAddressAllocation_RenewAddress_Stub(
@@ -1095,8 +1097,8 @@ void __RPC_STUB IMcastAddressAllocation_RenewAddress_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_ReleaseAddress_Proxy( 
-    IMcastAddressAllocation __RPC_FAR * This,
-    /* [in] */ IMcastLeaseInfo __RPC_FAR *pReleaseRequest);
+    IMcastAddressAllocation * This,
+    /* [in] */ IMcastLeaseInfo *pReleaseRequest);
 
 
 void __RPC_STUB IMcastAddressAllocation_ReleaseAddress_Stub(
@@ -1107,14 +1109,14 @@ void __RPC_STUB IMcastAddressAllocation_ReleaseAddress_Stub(
 
 
 /* [helpstring][hidden][id] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_CreateLeaseInfo_Proxy( 
-    IMcastAddressAllocation __RPC_FAR * This,
+    IMcastAddressAllocation * This,
     /* [in] */ DATE LeaseStartTime,
     /* [in] */ DATE LeaseStopTime,
     /* [in] */ DWORD dwNumAddresses,
-    /* [in] */ LPWSTR __RPC_FAR *ppAddresses,
+    /* [in] */ LPWSTR *ppAddresses,
     /* [in] */ LPWSTR pRequestID,
     /* [in] */ LPWSTR pServerAddress,
-    /* [retval][out] */ IMcastLeaseInfo __RPC_FAR *__RPC_FAR *ppReleaseRequest);
+    /* [retval][out] */ IMcastLeaseInfo **ppReleaseRequest);
 
 
 void __RPC_STUB IMcastAddressAllocation_CreateLeaseInfo_Stub(
@@ -1125,13 +1127,13 @@ void __RPC_STUB IMcastAddressAllocation_CreateLeaseInfo_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMcastAddressAllocation_CreateLeaseInfoFromVariant_Proxy( 
-    IMcastAddressAllocation __RPC_FAR * This,
+    IMcastAddressAllocation * This,
     /* [in] */ DATE LeaseStartTime,
     /* [in] */ DATE LeaseStopTime,
     /* [in] */ VARIANT vAddresses,
     /* [in] */ BSTR pRequestID,
     /* [in] */ BSTR pServerAddress,
-    /* [retval][out] */ IMcastLeaseInfo __RPC_FAR *__RPC_FAR *ppReleaseRequest);
+    /* [retval][out] */ IMcastLeaseInfo **ppReleaseRequest);
 
 
 void __RPC_STUB IMcastAddressAllocation_CreateLeaseInfoFromVariant_Stub(
@@ -1171,15 +1173,15 @@ McastAddressAllocation;
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
+unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
+void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
 /* end of Additional Prototypes */
 
@@ -1190,4 +1192,3 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

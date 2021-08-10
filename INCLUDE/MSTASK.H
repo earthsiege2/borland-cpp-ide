@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:31:56 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for mstask.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -37,6 +35,10 @@
 
 #ifndef __mstask_h__
 #define __mstask_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -84,8 +86,8 @@ typedef interface IProvideTaskPage IProvideTaskPage;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_mstask_0000 */
 /* [local] */ 
@@ -142,33 +144,33 @@ enum _TASK_TRIGGER_TYPE
 	TASK_EVENT_TRIGGER_ON_IDLE	= 5,
 	TASK_EVENT_TRIGGER_AT_SYSTEMSTART	= 6,
 	TASK_EVENT_TRIGGER_AT_LOGON	= 7
-    }	TASK_TRIGGER_TYPE;
+    } 	TASK_TRIGGER_TYPE;
 
-typedef enum _TASK_TRIGGER_TYPE __RPC_FAR *PTASK_TRIGGER_TYPE;
+typedef enum _TASK_TRIGGER_TYPE *PTASK_TRIGGER_TYPE;
 
 typedef struct _DAILY
     {
     WORD DaysInterval;
-    }	DAILY;
+    } 	DAILY;
 
 typedef struct _WEEKLY
     {
     WORD WeeksInterval;
     WORD rgfDaysOfTheWeek;
-    }	WEEKLY;
+    } 	WEEKLY;
 
 typedef struct _MONTHLYDATE
     {
     DWORD rgfDays;
     WORD rgfMonths;
-    }	MONTHLYDATE;
+    } 	MONTHLYDATE;
 
 typedef struct _MONTHLYDOW
     {
     WORD wWhichWeek;
     WORD rgfDaysOfTheWeek;
     WORD rgfMonths;
-    }	MONTHLYDOW;
+    } 	MONTHLYDOW;
 
 typedef union _TRIGGER_TYPE_UNION
     {
@@ -176,7 +178,7 @@ typedef union _TRIGGER_TYPE_UNION
     WEEKLY Weekly;
     MONTHLYDATE MonthlyDate;
     MONTHLYDOW MonthlyDOW;
-    }	TRIGGER_TYPE_UNION;
+    } 	TRIGGER_TYPE_UNION;
 
 typedef struct _TASK_TRIGGER
     {
@@ -197,9 +199,9 @@ typedef struct _TASK_TRIGGER
     TRIGGER_TYPE_UNION Type;
     WORD Reserved2;
     WORD wRandomMinutesInterval;
-    }	TASK_TRIGGER;
+    } 	TASK_TRIGGER;
 
-typedef struct _TASK_TRIGGER __RPC_FAR *PTASK_TRIGGER;
+typedef struct _TASK_TRIGGER *PTASK_TRIGGER;
 
 // {148BD52B-A2AB-11CE-B11F-00AA00530503}
 DEFINE_GUID(IID_ITaskTrigger, 0x148BD52BL, 0xA2AB, 0x11CE, 0xB1, 0x1F, 0x00, 0xAA, 0x00, 0x53, 0x05, 0x03);
@@ -231,7 +233,7 @@ EXTERN_C const IID IID_ITaskTrigger;
             /* [out] */ PTASK_TRIGGER pTrigger) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTriggerString( 
-            /* [out] */ LPWSTR __RPC_FAR *ppwszTrigger) = 0;
+            /* [out] */ LPWSTR *ppwszTrigger) = 0;
         
     };
     
@@ -241,35 +243,35 @@ EXTERN_C const IID IID_ITaskTrigger;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITaskTrigger __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITaskTrigger * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITaskTrigger __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITaskTrigger * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITaskTrigger __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITaskTrigger * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTrigger )( 
-            ITaskTrigger __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetTrigger )( 
+            ITaskTrigger * This,
             /* [in] */ const PTASK_TRIGGER pTrigger);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTrigger )( 
-            ITaskTrigger __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTrigger )( 
+            ITaskTrigger * This,
             /* [out] */ PTASK_TRIGGER pTrigger);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTriggerString )( 
-            ITaskTrigger __RPC_FAR * This,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszTrigger);
+        HRESULT ( STDMETHODCALLTYPE *GetTriggerString )( 
+            ITaskTrigger * This,
+            /* [out] */ LPWSTR *ppwszTrigger);
         
         END_INTERFACE
     } ITaskTriggerVtbl;
 
     interface ITaskTrigger
     {
-        CONST_VTBL struct ITaskTriggerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITaskTriggerVtbl *lpVtbl;
     };
 
     
@@ -304,7 +306,7 @@ EXTERN_C const IID IID_ITaskTrigger;
 
 
 HRESULT STDMETHODCALLTYPE ITaskTrigger_SetTrigger_Proxy( 
-    ITaskTrigger __RPC_FAR * This,
+    ITaskTrigger * This,
     /* [in] */ const PTASK_TRIGGER pTrigger);
 
 
@@ -316,7 +318,7 @@ void __RPC_STUB ITaskTrigger_SetTrigger_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITaskTrigger_GetTrigger_Proxy( 
-    ITaskTrigger __RPC_FAR * This,
+    ITaskTrigger * This,
     /* [out] */ PTASK_TRIGGER pTrigger);
 
 
@@ -328,8 +330,8 @@ void __RPC_STUB ITaskTrigger_GetTrigger_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITaskTrigger_GetTriggerString_Proxy( 
-    ITaskTrigger __RPC_FAR * This,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszTrigger);
+    ITaskTrigger * This,
+    /* [out] */ LPWSTR *ppwszTrigger);
 
 
 void __RPC_STUB ITaskTrigger_GetTriggerString_Stub(
@@ -343,7 +345,7 @@ void __RPC_STUB ITaskTrigger_GetTriggerString_Stub(
 #endif 	/* __ITaskTrigger_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_mstask_0130 */
+/* interface __MIDL_itf_mstask_0135 */
 /* [local] */ 
 
 // {a6b952f0-a4b1-11d0-997d-00aa006887ec}
@@ -351,8 +353,8 @@ DEFINE_GUID(IID_IScheduledWorkItem, 0xa6b952f0L, 0xa4b1, 0x11d0, 0x99, 0x7d, 0x0
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_mstask_0130_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_mstask_0130_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mstask_0135_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mstask_0135_v0_0_s_ifspec;
 
 #ifndef __IScheduledWorkItem_INTERFACE_DEFINED__
 #define __IScheduledWorkItem_INTERFACE_DEFINED__
@@ -370,39 +372,39 @@ EXTERN_C const IID IID_IScheduledWorkItem;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateTrigger( 
-            /* [out] */ WORD __RPC_FAR *piNewTrigger,
-            /* [out] */ ITaskTrigger __RPC_FAR *__RPC_FAR *ppTrigger) = 0;
+            /* [out] */ WORD *piNewTrigger,
+            /* [out] */ ITaskTrigger **ppTrigger) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteTrigger( 
             /* [in] */ WORD iTrigger) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTriggerCount( 
-            /* [out] */ WORD __RPC_FAR *pwCount) = 0;
+            /* [out] */ WORD *pwCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTrigger( 
             /* [in] */ WORD iTrigger,
-            /* [out] */ ITaskTrigger __RPC_FAR *__RPC_FAR *ppTrigger) = 0;
+            /* [out] */ ITaskTrigger **ppTrigger) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTriggerString( 
             /* [in] */ WORD iTrigger,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszTrigger) = 0;
+            /* [out] */ LPWSTR *ppwszTrigger) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRunTimes( 
             /* [in] */ const LPSYSTEMTIME pstBegin,
             /* [in] */ const LPSYSTEMTIME pstEnd,
-            /* [out][in] */ WORD __RPC_FAR *pCount,
-            /* [out] */ LPSYSTEMTIME __RPC_FAR *rgstTaskTimes) = 0;
+            /* [out][in] */ WORD *pCount,
+            /* [out] */ LPSYSTEMTIME *rgstTaskTimes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextRunTime( 
-            /* [out][in] */ SYSTEMTIME __RPC_FAR *pstNextRun) = 0;
+            /* [out][in] */ SYSTEMTIME *pstNextRun) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetIdleWait( 
             /* [in] */ WORD wIdleMinutes,
             /* [in] */ WORD wDeadlineMinutes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIdleWait( 
-            /* [out] */ WORD __RPC_FAR *pwIdleMinutes,
-            /* [out] */ WORD __RPC_FAR *pwDeadlineMinutes) = 0;
+            /* [out] */ WORD *pwIdleMinutes,
+            /* [out] */ WORD *pwDeadlineMinutes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Run( void) = 0;
         
@@ -413,58 +415,58 @@ EXTERN_C const IID IID_IScheduledWorkItem;
             /* [in] */ DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMostRecentRunTime( 
-            /* [out] */ SYSTEMTIME __RPC_FAR *pstLastRun) = 0;
+            /* [out] */ SYSTEMTIME *pstLastRun) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ HRESULT __RPC_FAR *phrStatus) = 0;
+            /* [out] */ HRESULT *phrStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetExitCode( 
-            /* [out] */ DWORD __RPC_FAR *pdwExitCode) = 0;
+            /* [out] */ DWORD *pdwExitCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetComment( 
             /* [in] */ LPCWSTR pwszComment) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetComment( 
-            /* [out] */ LPWSTR __RPC_FAR *ppwszComment) = 0;
+            /* [out] */ LPWSTR *ppwszComment) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCreator( 
             /* [in] */ LPCWSTR pwszCreator) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCreator( 
-            /* [out] */ LPWSTR __RPC_FAR *ppwszCreator) = 0;
+            /* [out] */ LPWSTR *ppwszCreator) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetWorkItemData( 
             /* [in] */ WORD cbData,
-            /* [in] */ BYTE __RPC_FAR rgbData[  ]) = 0;
+            /* [in] */ BYTE rgbData[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWorkItemData( 
-            /* [out] */ WORD __RPC_FAR *pcbData,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbData) = 0;
+            /* [out] */ WORD *pcbData,
+            /* [out] */ BYTE **prgbData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetErrorRetryCount( 
             /* [in] */ WORD wRetryCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorRetryCount( 
-            /* [out] */ WORD __RPC_FAR *pwRetryCount) = 0;
+            /* [out] */ WORD *pwRetryCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetErrorRetryInterval( 
             /* [in] */ WORD wRetryInterval) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorRetryInterval( 
-            /* [out] */ WORD __RPC_FAR *pwRetryInterval) = 0;
+            /* [out] */ WORD *pwRetryInterval) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFlags( 
             /* [in] */ DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFlags( 
-            /* [out] */ DWORD __RPC_FAR *pdwFlags) = 0;
+            /* [out] */ DWORD *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAccountInformation( 
             /* [in] */ LPCWSTR pwszAccountName,
             /* [in] */ LPCWSTR pwszPassword) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAccountInformation( 
-            /* [out] */ LPWSTR __RPC_FAR *ppwszAccountName) = 0;
+            /* [out] */ LPWSTR *ppwszAccountName) = 0;
         
     };
     
@@ -474,149 +476,149 @@ EXTERN_C const IID IID_IScheduledWorkItem;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IScheduledWorkItem * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IScheduledWorkItem __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IScheduledWorkItem * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IScheduledWorkItem __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IScheduledWorkItem * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateTrigger )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *piNewTrigger,
-            /* [out] */ ITaskTrigger __RPC_FAR *__RPC_FAR *ppTrigger);
+        HRESULT ( STDMETHODCALLTYPE *CreateTrigger )( 
+            IScheduledWorkItem * This,
+            /* [out] */ WORD *piNewTrigger,
+            /* [out] */ ITaskTrigger **ppTrigger);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteTrigger )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeleteTrigger )( 
+            IScheduledWorkItem * This,
             /* [in] */ WORD iTrigger);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTriggerCount )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pwCount);
+        HRESULT ( STDMETHODCALLTYPE *GetTriggerCount )( 
+            IScheduledWorkItem * This,
+            /* [out] */ WORD *pwCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTrigger )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTrigger )( 
+            IScheduledWorkItem * This,
             /* [in] */ WORD iTrigger,
-            /* [out] */ ITaskTrigger __RPC_FAR *__RPC_FAR *ppTrigger);
+            /* [out] */ ITaskTrigger **ppTrigger);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTriggerString )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTriggerString )( 
+            IScheduledWorkItem * This,
             /* [in] */ WORD iTrigger,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszTrigger);
+            /* [out] */ LPWSTR *ppwszTrigger);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRunTimes )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetRunTimes )( 
+            IScheduledWorkItem * This,
             /* [in] */ const LPSYSTEMTIME pstBegin,
             /* [in] */ const LPSYSTEMTIME pstEnd,
-            /* [out][in] */ WORD __RPC_FAR *pCount,
-            /* [out] */ LPSYSTEMTIME __RPC_FAR *rgstTaskTimes);
+            /* [out][in] */ WORD *pCount,
+            /* [out] */ LPSYSTEMTIME *rgstTaskTimes);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNextRunTime )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out][in] */ SYSTEMTIME __RPC_FAR *pstNextRun);
+        HRESULT ( STDMETHODCALLTYPE *GetNextRunTime )( 
+            IScheduledWorkItem * This,
+            /* [out][in] */ SYSTEMTIME *pstNextRun);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIdleWait )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetIdleWait )( 
+            IScheduledWorkItem * This,
             /* [in] */ WORD wIdleMinutes,
             /* [in] */ WORD wDeadlineMinutes);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIdleWait )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pwIdleMinutes,
-            /* [out] */ WORD __RPC_FAR *pwDeadlineMinutes);
+        HRESULT ( STDMETHODCALLTYPE *GetIdleWait )( 
+            IScheduledWorkItem * This,
+            /* [out] */ WORD *pwIdleMinutes,
+            /* [out] */ WORD *pwDeadlineMinutes);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Run )( 
-            IScheduledWorkItem __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Run )( 
+            IScheduledWorkItem * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Terminate )( 
-            IScheduledWorkItem __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Terminate )( 
+            IScheduledWorkItem * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EditWorkItem )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EditWorkItem )( 
+            IScheduledWorkItem * This,
             /* [in] */ HWND hParent,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMostRecentRunTime )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out] */ SYSTEMTIME __RPC_FAR *pstLastRun);
+        HRESULT ( STDMETHODCALLTYPE *GetMostRecentRunTime )( 
+            IScheduledWorkItem * This,
+            /* [out] */ SYSTEMTIME *pstLastRun);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatus )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out] */ HRESULT __RPC_FAR *phrStatus);
+        HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
+            IScheduledWorkItem * This,
+            /* [out] */ HRESULT *phrStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetExitCode )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwExitCode);
+        HRESULT ( STDMETHODCALLTYPE *GetExitCode )( 
+            IScheduledWorkItem * This,
+            /* [out] */ DWORD *pdwExitCode);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetComment )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetComment )( 
+            IScheduledWorkItem * This,
             /* [in] */ LPCWSTR pwszComment);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetComment )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszComment);
+        HRESULT ( STDMETHODCALLTYPE *GetComment )( 
+            IScheduledWorkItem * This,
+            /* [out] */ LPWSTR *ppwszComment);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCreator )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetCreator )( 
+            IScheduledWorkItem * This,
             /* [in] */ LPCWSTR pwszCreator);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCreator )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszCreator);
+        HRESULT ( STDMETHODCALLTYPE *GetCreator )( 
+            IScheduledWorkItem * This,
+            /* [out] */ LPWSTR *ppwszCreator);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetWorkItemData )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetWorkItemData )( 
+            IScheduledWorkItem * This,
             /* [in] */ WORD cbData,
-            /* [in] */ BYTE __RPC_FAR rgbData[  ]);
+            /* [in] */ BYTE rgbData[  ]);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWorkItemData )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pcbData,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbData);
+        HRESULT ( STDMETHODCALLTYPE *GetWorkItemData )( 
+            IScheduledWorkItem * This,
+            /* [out] */ WORD *pcbData,
+            /* [out] */ BYTE **prgbData);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetErrorRetryCount )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetErrorRetryCount )( 
+            IScheduledWorkItem * This,
             /* [in] */ WORD wRetryCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorRetryCount )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pwRetryCount);
+        HRESULT ( STDMETHODCALLTYPE *GetErrorRetryCount )( 
+            IScheduledWorkItem * This,
+            /* [out] */ WORD *pwRetryCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetErrorRetryInterval )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetErrorRetryInterval )( 
+            IScheduledWorkItem * This,
             /* [in] */ WORD wRetryInterval);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorRetryInterval )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pwRetryInterval);
+        HRESULT ( STDMETHODCALLTYPE *GetErrorRetryInterval )( 
+            IScheduledWorkItem * This,
+            /* [out] */ WORD *pwRetryInterval);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFlags )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetFlags )( 
+            IScheduledWorkItem * This,
             /* [in] */ DWORD dwFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFlags )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags);
+        HRESULT ( STDMETHODCALLTYPE *GetFlags )( 
+            IScheduledWorkItem * This,
+            /* [out] */ DWORD *pdwFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAccountInformation )( 
-            IScheduledWorkItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetAccountInformation )( 
+            IScheduledWorkItem * This,
             /* [in] */ LPCWSTR pwszAccountName,
             /* [in] */ LPCWSTR pwszPassword);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAccountInformation )( 
-            IScheduledWorkItem __RPC_FAR * This,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszAccountName);
+        HRESULT ( STDMETHODCALLTYPE *GetAccountInformation )( 
+            IScheduledWorkItem * This,
+            /* [out] */ LPWSTR *ppwszAccountName);
         
         END_INTERFACE
     } IScheduledWorkItemVtbl;
 
     interface IScheduledWorkItem
     {
-        CONST_VTBL struct IScheduledWorkItemVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IScheduledWorkItemVtbl *lpVtbl;
     };
 
     
@@ -729,9 +731,9 @@ EXTERN_C const IID IID_IScheduledWorkItem;
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_CreateTrigger_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out] */ WORD __RPC_FAR *piNewTrigger,
-    /* [out] */ ITaskTrigger __RPC_FAR *__RPC_FAR *ppTrigger);
+    IScheduledWorkItem * This,
+    /* [out] */ WORD *piNewTrigger,
+    /* [out] */ ITaskTrigger **ppTrigger);
 
 
 void __RPC_STUB IScheduledWorkItem_CreateTrigger_Stub(
@@ -742,7 +744,7 @@ void __RPC_STUB IScheduledWorkItem_CreateTrigger_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_DeleteTrigger_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
+    IScheduledWorkItem * This,
     /* [in] */ WORD iTrigger);
 
 
@@ -754,8 +756,8 @@ void __RPC_STUB IScheduledWorkItem_DeleteTrigger_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetTriggerCount_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out] */ WORD __RPC_FAR *pwCount);
+    IScheduledWorkItem * This,
+    /* [out] */ WORD *pwCount);
 
 
 void __RPC_STUB IScheduledWorkItem_GetTriggerCount_Stub(
@@ -766,9 +768,9 @@ void __RPC_STUB IScheduledWorkItem_GetTriggerCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetTrigger_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
+    IScheduledWorkItem * This,
     /* [in] */ WORD iTrigger,
-    /* [out] */ ITaskTrigger __RPC_FAR *__RPC_FAR *ppTrigger);
+    /* [out] */ ITaskTrigger **ppTrigger);
 
 
 void __RPC_STUB IScheduledWorkItem_GetTrigger_Stub(
@@ -779,9 +781,9 @@ void __RPC_STUB IScheduledWorkItem_GetTrigger_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetTriggerString_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
+    IScheduledWorkItem * This,
     /* [in] */ WORD iTrigger,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszTrigger);
+    /* [out] */ LPWSTR *ppwszTrigger);
 
 
 void __RPC_STUB IScheduledWorkItem_GetTriggerString_Stub(
@@ -792,11 +794,11 @@ void __RPC_STUB IScheduledWorkItem_GetTriggerString_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetRunTimes_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
+    IScheduledWorkItem * This,
     /* [in] */ const LPSYSTEMTIME pstBegin,
     /* [in] */ const LPSYSTEMTIME pstEnd,
-    /* [out][in] */ WORD __RPC_FAR *pCount,
-    /* [out] */ LPSYSTEMTIME __RPC_FAR *rgstTaskTimes);
+    /* [out][in] */ WORD *pCount,
+    /* [out] */ LPSYSTEMTIME *rgstTaskTimes);
 
 
 void __RPC_STUB IScheduledWorkItem_GetRunTimes_Stub(
@@ -807,8 +809,8 @@ void __RPC_STUB IScheduledWorkItem_GetRunTimes_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetNextRunTime_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out][in] */ SYSTEMTIME __RPC_FAR *pstNextRun);
+    IScheduledWorkItem * This,
+    /* [out][in] */ SYSTEMTIME *pstNextRun);
 
 
 void __RPC_STUB IScheduledWorkItem_GetNextRunTime_Stub(
@@ -819,7 +821,7 @@ void __RPC_STUB IScheduledWorkItem_GetNextRunTime_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_SetIdleWait_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
+    IScheduledWorkItem * This,
     /* [in] */ WORD wIdleMinutes,
     /* [in] */ WORD wDeadlineMinutes);
 
@@ -832,9 +834,9 @@ void __RPC_STUB IScheduledWorkItem_SetIdleWait_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetIdleWait_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out] */ WORD __RPC_FAR *pwIdleMinutes,
-    /* [out] */ WORD __RPC_FAR *pwDeadlineMinutes);
+    IScheduledWorkItem * This,
+    /* [out] */ WORD *pwIdleMinutes,
+    /* [out] */ WORD *pwDeadlineMinutes);
 
 
 void __RPC_STUB IScheduledWorkItem_GetIdleWait_Stub(
@@ -845,7 +847,7 @@ void __RPC_STUB IScheduledWorkItem_GetIdleWait_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_Run_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This);
+    IScheduledWorkItem * This);
 
 
 void __RPC_STUB IScheduledWorkItem_Run_Stub(
@@ -856,7 +858,7 @@ void __RPC_STUB IScheduledWorkItem_Run_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_Terminate_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This);
+    IScheduledWorkItem * This);
 
 
 void __RPC_STUB IScheduledWorkItem_Terminate_Stub(
@@ -867,7 +869,7 @@ void __RPC_STUB IScheduledWorkItem_Terminate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_EditWorkItem_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
+    IScheduledWorkItem * This,
     /* [in] */ HWND hParent,
     /* [in] */ DWORD dwReserved);
 
@@ -880,8 +882,8 @@ void __RPC_STUB IScheduledWorkItem_EditWorkItem_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetMostRecentRunTime_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out] */ SYSTEMTIME __RPC_FAR *pstLastRun);
+    IScheduledWorkItem * This,
+    /* [out] */ SYSTEMTIME *pstLastRun);
 
 
 void __RPC_STUB IScheduledWorkItem_GetMostRecentRunTime_Stub(
@@ -892,8 +894,8 @@ void __RPC_STUB IScheduledWorkItem_GetMostRecentRunTime_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetStatus_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out] */ HRESULT __RPC_FAR *phrStatus);
+    IScheduledWorkItem * This,
+    /* [out] */ HRESULT *phrStatus);
 
 
 void __RPC_STUB IScheduledWorkItem_GetStatus_Stub(
@@ -904,8 +906,8 @@ void __RPC_STUB IScheduledWorkItem_GetStatus_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetExitCode_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwExitCode);
+    IScheduledWorkItem * This,
+    /* [out] */ DWORD *pdwExitCode);
 
 
 void __RPC_STUB IScheduledWorkItem_GetExitCode_Stub(
@@ -916,7 +918,7 @@ void __RPC_STUB IScheduledWorkItem_GetExitCode_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_SetComment_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
+    IScheduledWorkItem * This,
     /* [in] */ LPCWSTR pwszComment);
 
 
@@ -928,8 +930,8 @@ void __RPC_STUB IScheduledWorkItem_SetComment_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetComment_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszComment);
+    IScheduledWorkItem * This,
+    /* [out] */ LPWSTR *ppwszComment);
 
 
 void __RPC_STUB IScheduledWorkItem_GetComment_Stub(
@@ -940,7 +942,7 @@ void __RPC_STUB IScheduledWorkItem_GetComment_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_SetCreator_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
+    IScheduledWorkItem * This,
     /* [in] */ LPCWSTR pwszCreator);
 
 
@@ -952,8 +954,8 @@ void __RPC_STUB IScheduledWorkItem_SetCreator_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetCreator_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszCreator);
+    IScheduledWorkItem * This,
+    /* [out] */ LPWSTR *ppwszCreator);
 
 
 void __RPC_STUB IScheduledWorkItem_GetCreator_Stub(
@@ -964,9 +966,9 @@ void __RPC_STUB IScheduledWorkItem_GetCreator_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_SetWorkItemData_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
+    IScheduledWorkItem * This,
     /* [in] */ WORD cbData,
-    /* [in] */ BYTE __RPC_FAR rgbData[  ]);
+    /* [in] */ BYTE rgbData[  ]);
 
 
 void __RPC_STUB IScheduledWorkItem_SetWorkItemData_Stub(
@@ -977,9 +979,9 @@ void __RPC_STUB IScheduledWorkItem_SetWorkItemData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetWorkItemData_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out] */ WORD __RPC_FAR *pcbData,
-    /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbData);
+    IScheduledWorkItem * This,
+    /* [out] */ WORD *pcbData,
+    /* [out] */ BYTE **prgbData);
 
 
 void __RPC_STUB IScheduledWorkItem_GetWorkItemData_Stub(
@@ -990,7 +992,7 @@ void __RPC_STUB IScheduledWorkItem_GetWorkItemData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_SetErrorRetryCount_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
+    IScheduledWorkItem * This,
     /* [in] */ WORD wRetryCount);
 
 
@@ -1002,8 +1004,8 @@ void __RPC_STUB IScheduledWorkItem_SetErrorRetryCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetErrorRetryCount_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out] */ WORD __RPC_FAR *pwRetryCount);
+    IScheduledWorkItem * This,
+    /* [out] */ WORD *pwRetryCount);
 
 
 void __RPC_STUB IScheduledWorkItem_GetErrorRetryCount_Stub(
@@ -1014,7 +1016,7 @@ void __RPC_STUB IScheduledWorkItem_GetErrorRetryCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_SetErrorRetryInterval_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
+    IScheduledWorkItem * This,
     /* [in] */ WORD wRetryInterval);
 
 
@@ -1026,8 +1028,8 @@ void __RPC_STUB IScheduledWorkItem_SetErrorRetryInterval_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetErrorRetryInterval_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out] */ WORD __RPC_FAR *pwRetryInterval);
+    IScheduledWorkItem * This,
+    /* [out] */ WORD *pwRetryInterval);
 
 
 void __RPC_STUB IScheduledWorkItem_GetErrorRetryInterval_Stub(
@@ -1038,7 +1040,7 @@ void __RPC_STUB IScheduledWorkItem_GetErrorRetryInterval_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_SetFlags_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
+    IScheduledWorkItem * This,
     /* [in] */ DWORD dwFlags);
 
 
@@ -1050,8 +1052,8 @@ void __RPC_STUB IScheduledWorkItem_SetFlags_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetFlags_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwFlags);
+    IScheduledWorkItem * This,
+    /* [out] */ DWORD *pdwFlags);
 
 
 void __RPC_STUB IScheduledWorkItem_GetFlags_Stub(
@@ -1062,7 +1064,7 @@ void __RPC_STUB IScheduledWorkItem_GetFlags_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_SetAccountInformation_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
+    IScheduledWorkItem * This,
     /* [in] */ LPCWSTR pwszAccountName,
     /* [in] */ LPCWSTR pwszPassword);
 
@@ -1075,8 +1077,8 @@ void __RPC_STUB IScheduledWorkItem_SetAccountInformation_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IScheduledWorkItem_GetAccountInformation_Proxy( 
-    IScheduledWorkItem __RPC_FAR * This,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszAccountName);
+    IScheduledWorkItem * This,
+    /* [out] */ LPWSTR *ppwszAccountName);
 
 
 void __RPC_STUB IScheduledWorkItem_GetAccountInformation_Stub(
@@ -1090,7 +1092,7 @@ void __RPC_STUB IScheduledWorkItem_GetAccountInformation_Stub(
 #endif 	/* __IScheduledWorkItem_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_mstask_0131 */
+/* interface __MIDL_itf_mstask_0136 */
 /* [local] */ 
 
 // {148BD524-A2AB-11CE-B11F-00AA00530503}
@@ -1098,8 +1100,8 @@ DEFINE_GUID(IID_ITask, 0x148BD524L, 0xA2AB, 0x11CE, 0xB1, 0x1F, 0x00, 0xAA, 0x00
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_mstask_0131_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_mstask_0131_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mstask_0136_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mstask_0136_v0_0_s_ifspec;
 
 #ifndef __ITask_INTERFACE_DEFINED__
 #define __ITask_INTERFACE_DEFINED__
@@ -1120,37 +1122,37 @@ EXTERN_C const IID IID_ITask;
             /* [in] */ LPCWSTR pwszApplicationName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetApplicationName( 
-            /* [out] */ LPWSTR __RPC_FAR *ppwszApplicationName) = 0;
+            /* [out] */ LPWSTR *ppwszApplicationName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetParameters( 
             /* [in] */ LPCWSTR pwszParameters) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParameters( 
-            /* [out] */ LPWSTR __RPC_FAR *ppwszParameters) = 0;
+            /* [out] */ LPWSTR *ppwszParameters) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetWorkingDirectory( 
             /* [in] */ LPCWSTR pwszWorkingDirectory) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWorkingDirectory( 
-            /* [out] */ LPWSTR __RPC_FAR *ppwszWorkingDirectory) = 0;
+            /* [out] */ LPWSTR *ppwszWorkingDirectory) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPriority( 
             /* [in] */ DWORD dwPriority) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPriority( 
-            /* [out] */ DWORD __RPC_FAR *pdwPriority) = 0;
+            /* [out] */ DWORD *pdwPriority) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTaskFlags( 
             /* [in] */ DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTaskFlags( 
-            /* [out] */ DWORD __RPC_FAR *pdwFlags) = 0;
+            /* [out] */ DWORD *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetMaxRunTime( 
             /* [in] */ DWORD dwMaxRunTimeMS) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxRunTime( 
-            /* [out] */ DWORD __RPC_FAR *pdwMaxRunTimeMS) = 0;
+            /* [out] */ DWORD *pdwMaxRunTimeMS) = 0;
         
     };
     
@@ -1160,197 +1162,197 @@ EXTERN_C const IID IID_ITask;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITask * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITask __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITask * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITask __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITask * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateTrigger )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *piNewTrigger,
-            /* [out] */ ITaskTrigger __RPC_FAR *__RPC_FAR *ppTrigger);
+        HRESULT ( STDMETHODCALLTYPE *CreateTrigger )( 
+            ITask * This,
+            /* [out] */ WORD *piNewTrigger,
+            /* [out] */ ITaskTrigger **ppTrigger);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteTrigger )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeleteTrigger )( 
+            ITask * This,
             /* [in] */ WORD iTrigger);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTriggerCount )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pwCount);
+        HRESULT ( STDMETHODCALLTYPE *GetTriggerCount )( 
+            ITask * This,
+            /* [out] */ WORD *pwCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTrigger )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTrigger )( 
+            ITask * This,
             /* [in] */ WORD iTrigger,
-            /* [out] */ ITaskTrigger __RPC_FAR *__RPC_FAR *ppTrigger);
+            /* [out] */ ITaskTrigger **ppTrigger);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTriggerString )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTriggerString )( 
+            ITask * This,
             /* [in] */ WORD iTrigger,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszTrigger);
+            /* [out] */ LPWSTR *ppwszTrigger);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRunTimes )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetRunTimes )( 
+            ITask * This,
             /* [in] */ const LPSYSTEMTIME pstBegin,
             /* [in] */ const LPSYSTEMTIME pstEnd,
-            /* [out][in] */ WORD __RPC_FAR *pCount,
-            /* [out] */ LPSYSTEMTIME __RPC_FAR *rgstTaskTimes);
+            /* [out][in] */ WORD *pCount,
+            /* [out] */ LPSYSTEMTIME *rgstTaskTimes);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNextRunTime )( 
-            ITask __RPC_FAR * This,
-            /* [out][in] */ SYSTEMTIME __RPC_FAR *pstNextRun);
+        HRESULT ( STDMETHODCALLTYPE *GetNextRunTime )( 
+            ITask * This,
+            /* [out][in] */ SYSTEMTIME *pstNextRun);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIdleWait )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetIdleWait )( 
+            ITask * This,
             /* [in] */ WORD wIdleMinutes,
             /* [in] */ WORD wDeadlineMinutes);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIdleWait )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pwIdleMinutes,
-            /* [out] */ WORD __RPC_FAR *pwDeadlineMinutes);
+        HRESULT ( STDMETHODCALLTYPE *GetIdleWait )( 
+            ITask * This,
+            /* [out] */ WORD *pwIdleMinutes,
+            /* [out] */ WORD *pwDeadlineMinutes);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Run )( 
-            ITask __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Run )( 
+            ITask * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Terminate )( 
-            ITask __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Terminate )( 
+            ITask * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EditWorkItem )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EditWorkItem )( 
+            ITask * This,
             /* [in] */ HWND hParent,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMostRecentRunTime )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ SYSTEMTIME __RPC_FAR *pstLastRun);
+        HRESULT ( STDMETHODCALLTYPE *GetMostRecentRunTime )( 
+            ITask * This,
+            /* [out] */ SYSTEMTIME *pstLastRun);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatus )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ HRESULT __RPC_FAR *phrStatus);
+        HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
+            ITask * This,
+            /* [out] */ HRESULT *phrStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetExitCode )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwExitCode);
+        HRESULT ( STDMETHODCALLTYPE *GetExitCode )( 
+            ITask * This,
+            /* [out] */ DWORD *pdwExitCode);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetComment )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetComment )( 
+            ITask * This,
             /* [in] */ LPCWSTR pwszComment);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetComment )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszComment);
+        HRESULT ( STDMETHODCALLTYPE *GetComment )( 
+            ITask * This,
+            /* [out] */ LPWSTR *ppwszComment);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCreator )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetCreator )( 
+            ITask * This,
             /* [in] */ LPCWSTR pwszCreator);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCreator )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszCreator);
+        HRESULT ( STDMETHODCALLTYPE *GetCreator )( 
+            ITask * This,
+            /* [out] */ LPWSTR *ppwszCreator);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetWorkItemData )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetWorkItemData )( 
+            ITask * This,
             /* [in] */ WORD cbData,
-            /* [in] */ BYTE __RPC_FAR rgbData[  ]);
+            /* [in] */ BYTE rgbData[  ]);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWorkItemData )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pcbData,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbData);
+        HRESULT ( STDMETHODCALLTYPE *GetWorkItemData )( 
+            ITask * This,
+            /* [out] */ WORD *pcbData,
+            /* [out] */ BYTE **prgbData);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetErrorRetryCount )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetErrorRetryCount )( 
+            ITask * This,
             /* [in] */ WORD wRetryCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorRetryCount )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pwRetryCount);
+        HRESULT ( STDMETHODCALLTYPE *GetErrorRetryCount )( 
+            ITask * This,
+            /* [out] */ WORD *pwRetryCount);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetErrorRetryInterval )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetErrorRetryInterval )( 
+            ITask * This,
             /* [in] */ WORD wRetryInterval);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorRetryInterval )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ WORD __RPC_FAR *pwRetryInterval);
+        HRESULT ( STDMETHODCALLTYPE *GetErrorRetryInterval )( 
+            ITask * This,
+            /* [out] */ WORD *pwRetryInterval);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFlags )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetFlags )( 
+            ITask * This,
             /* [in] */ DWORD dwFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFlags )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags);
+        HRESULT ( STDMETHODCALLTYPE *GetFlags )( 
+            ITask * This,
+            /* [out] */ DWORD *pdwFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAccountInformation )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetAccountInformation )( 
+            ITask * This,
             /* [in] */ LPCWSTR pwszAccountName,
             /* [in] */ LPCWSTR pwszPassword);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAccountInformation )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszAccountName);
+        HRESULT ( STDMETHODCALLTYPE *GetAccountInformation )( 
+            ITask * This,
+            /* [out] */ LPWSTR *ppwszAccountName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetApplicationName )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetApplicationName )( 
+            ITask * This,
             /* [in] */ LPCWSTR pwszApplicationName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetApplicationName )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszApplicationName);
+        HRESULT ( STDMETHODCALLTYPE *GetApplicationName )( 
+            ITask * This,
+            /* [out] */ LPWSTR *ppwszApplicationName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetParameters )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetParameters )( 
+            ITask * This,
             /* [in] */ LPCWSTR pwszParameters);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParameters )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszParameters);
+        HRESULT ( STDMETHODCALLTYPE *GetParameters )( 
+            ITask * This,
+            /* [out] */ LPWSTR *ppwszParameters);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetWorkingDirectory )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetWorkingDirectory )( 
+            ITask * This,
             /* [in] */ LPCWSTR pwszWorkingDirectory);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWorkingDirectory )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszWorkingDirectory);
+        HRESULT ( STDMETHODCALLTYPE *GetWorkingDirectory )( 
+            ITask * This,
+            /* [out] */ LPWSTR *ppwszWorkingDirectory);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPriority )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetPriority )( 
+            ITask * This,
             /* [in] */ DWORD dwPriority);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPriority )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwPriority);
+        HRESULT ( STDMETHODCALLTYPE *GetPriority )( 
+            ITask * This,
+            /* [out] */ DWORD *pdwPriority);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTaskFlags )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetTaskFlags )( 
+            ITask * This,
             /* [in] */ DWORD dwFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTaskFlags )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags);
+        HRESULT ( STDMETHODCALLTYPE *GetTaskFlags )( 
+            ITask * This,
+            /* [out] */ DWORD *pdwFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMaxRunTime )( 
-            ITask __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetMaxRunTime )( 
+            ITask * This,
             /* [in] */ DWORD dwMaxRunTimeMS);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMaxRunTime )( 
-            ITask __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwMaxRunTimeMS);
+        HRESULT ( STDMETHODCALLTYPE *GetMaxRunTime )( 
+            ITask * This,
+            /* [out] */ DWORD *pdwMaxRunTimeMS);
         
         END_INTERFACE
     } ITaskVtbl;
 
     interface ITask
     {
-        CONST_VTBL struct ITaskVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITaskVtbl *lpVtbl;
     };
 
     
@@ -1500,7 +1502,7 @@ EXTERN_C const IID IID_ITask;
 
 
 HRESULT STDMETHODCALLTYPE ITask_SetApplicationName_Proxy( 
-    ITask __RPC_FAR * This,
+    ITask * This,
     /* [in] */ LPCWSTR pwszApplicationName);
 
 
@@ -1512,8 +1514,8 @@ void __RPC_STUB ITask_SetApplicationName_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITask_GetApplicationName_Proxy( 
-    ITask __RPC_FAR * This,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszApplicationName);
+    ITask * This,
+    /* [out] */ LPWSTR *ppwszApplicationName);
 
 
 void __RPC_STUB ITask_GetApplicationName_Stub(
@@ -1524,7 +1526,7 @@ void __RPC_STUB ITask_GetApplicationName_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITask_SetParameters_Proxy( 
-    ITask __RPC_FAR * This,
+    ITask * This,
     /* [in] */ LPCWSTR pwszParameters);
 
 
@@ -1536,8 +1538,8 @@ void __RPC_STUB ITask_SetParameters_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITask_GetParameters_Proxy( 
-    ITask __RPC_FAR * This,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszParameters);
+    ITask * This,
+    /* [out] */ LPWSTR *ppwszParameters);
 
 
 void __RPC_STUB ITask_GetParameters_Stub(
@@ -1548,7 +1550,7 @@ void __RPC_STUB ITask_GetParameters_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITask_SetWorkingDirectory_Proxy( 
-    ITask __RPC_FAR * This,
+    ITask * This,
     /* [in] */ LPCWSTR pwszWorkingDirectory);
 
 
@@ -1560,8 +1562,8 @@ void __RPC_STUB ITask_SetWorkingDirectory_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITask_GetWorkingDirectory_Proxy( 
-    ITask __RPC_FAR * This,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszWorkingDirectory);
+    ITask * This,
+    /* [out] */ LPWSTR *ppwszWorkingDirectory);
 
 
 void __RPC_STUB ITask_GetWorkingDirectory_Stub(
@@ -1572,7 +1574,7 @@ void __RPC_STUB ITask_GetWorkingDirectory_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITask_SetPriority_Proxy( 
-    ITask __RPC_FAR * This,
+    ITask * This,
     /* [in] */ DWORD dwPriority);
 
 
@@ -1584,8 +1586,8 @@ void __RPC_STUB ITask_SetPriority_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITask_GetPriority_Proxy( 
-    ITask __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwPriority);
+    ITask * This,
+    /* [out] */ DWORD *pdwPriority);
 
 
 void __RPC_STUB ITask_GetPriority_Stub(
@@ -1596,7 +1598,7 @@ void __RPC_STUB ITask_GetPriority_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITask_SetTaskFlags_Proxy( 
-    ITask __RPC_FAR * This,
+    ITask * This,
     /* [in] */ DWORD dwFlags);
 
 
@@ -1608,8 +1610,8 @@ void __RPC_STUB ITask_SetTaskFlags_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITask_GetTaskFlags_Proxy( 
-    ITask __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwFlags);
+    ITask * This,
+    /* [out] */ DWORD *pdwFlags);
 
 
 void __RPC_STUB ITask_GetTaskFlags_Stub(
@@ -1620,7 +1622,7 @@ void __RPC_STUB ITask_GetTaskFlags_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITask_SetMaxRunTime_Proxy( 
-    ITask __RPC_FAR * This,
+    ITask * This,
     /* [in] */ DWORD dwMaxRunTimeMS);
 
 
@@ -1632,8 +1634,8 @@ void __RPC_STUB ITask_SetMaxRunTime_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITask_GetMaxRunTime_Proxy( 
-    ITask __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwMaxRunTimeMS);
+    ITask * This,
+    /* [out] */ DWORD *pdwMaxRunTimeMS);
 
 
 void __RPC_STUB ITask_GetMaxRunTime_Stub(
@@ -1647,7 +1649,7 @@ void __RPC_STUB ITask_GetMaxRunTime_Stub(
 #endif 	/* __ITask_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_mstask_0132 */
+/* interface __MIDL_itf_mstask_0137 */
 /* [local] */ 
 
 // {148BD528-A2AB-11CE-B11F-00AA00530503}
@@ -1655,8 +1657,8 @@ DEFINE_GUID(IID_IEnumWorkItems, 0x148BD528L, 0xA2AB, 0x11CE, 0xB1, 0x1F, 0x00, 0
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_mstask_0132_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_mstask_0132_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mstask_0137_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mstask_0137_v0_0_s_ifspec;
 
 #ifndef __IEnumWorkItems_INTERFACE_DEFINED__
 #define __IEnumWorkItems_INTERFACE_DEFINED__
@@ -1675,8 +1677,8 @@ EXTERN_C const IID IID_IEnumWorkItems;
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [out] */ LPWSTR __RPC_FAR *__RPC_FAR *rgpwszNames,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [out] */ LPWSTR **rgpwszNames,
+            /* [out] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -1684,7 +1686,7 @@ EXTERN_C const IID IID_IEnumWorkItems;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumWorkItems __RPC_FAR *__RPC_FAR *ppEnumWorkItems) = 0;
+            /* [out] */ IEnumWorkItems **ppEnumWorkItems) = 0;
         
     };
     
@@ -1694,40 +1696,40 @@ EXTERN_C const IID IID_IEnumWorkItems;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumWorkItems __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumWorkItems * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumWorkItems __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumWorkItems * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumWorkItems __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumWorkItems * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumWorkItems __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumWorkItems * This,
             /* [in] */ ULONG celt,
-            /* [out] */ LPWSTR __RPC_FAR *__RPC_FAR *rgpwszNames,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+            /* [out] */ LPWSTR **rgpwszNames,
+            /* [out] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumWorkItems __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumWorkItems * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumWorkItems __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumWorkItems * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumWorkItems __RPC_FAR * This,
-            /* [out] */ IEnumWorkItems __RPC_FAR *__RPC_FAR *ppEnumWorkItems);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumWorkItems * This,
+            /* [out] */ IEnumWorkItems **ppEnumWorkItems);
         
         END_INTERFACE
     } IEnumWorkItemsVtbl;
 
     interface IEnumWorkItems
     {
-        CONST_VTBL struct IEnumWorkItemsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumWorkItemsVtbl *lpVtbl;
     };
 
     
@@ -1765,10 +1767,10 @@ EXTERN_C const IID IID_IEnumWorkItems;
 
 
 HRESULT STDMETHODCALLTYPE IEnumWorkItems_Next_Proxy( 
-    IEnumWorkItems __RPC_FAR * This,
+    IEnumWorkItems * This,
     /* [in] */ ULONG celt,
-    /* [out] */ LPWSTR __RPC_FAR *__RPC_FAR *rgpwszNames,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [out] */ LPWSTR **rgpwszNames,
+    /* [out] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumWorkItems_Next_Stub(
@@ -1779,7 +1781,7 @@ void __RPC_STUB IEnumWorkItems_Next_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumWorkItems_Skip_Proxy( 
-    IEnumWorkItems __RPC_FAR * This,
+    IEnumWorkItems * This,
     /* [in] */ ULONG celt);
 
 
@@ -1791,7 +1793,7 @@ void __RPC_STUB IEnumWorkItems_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumWorkItems_Reset_Proxy( 
-    IEnumWorkItems __RPC_FAR * This);
+    IEnumWorkItems * This);
 
 
 void __RPC_STUB IEnumWorkItems_Reset_Stub(
@@ -1802,8 +1804,8 @@ void __RPC_STUB IEnumWorkItems_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumWorkItems_Clone_Proxy( 
-    IEnumWorkItems __RPC_FAR * This,
-    /* [out] */ IEnumWorkItems __RPC_FAR *__RPC_FAR *ppEnumWorkItems);
+    IEnumWorkItems * This,
+    /* [out] */ IEnumWorkItems **ppEnumWorkItems);
 
 
 void __RPC_STUB IEnumWorkItems_Clone_Stub(
@@ -1817,7 +1819,7 @@ void __RPC_STUB IEnumWorkItems_Clone_Stub(
 #endif 	/* __IEnumWorkItems_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_mstask_0133 */
+/* interface __MIDL_itf_mstask_0138 */
 /* [local] */ 
 
 // {148BD527-A2AB-11CE-B11F-00AA00530503}
@@ -1825,8 +1827,8 @@ DEFINE_GUID(IID_ITaskScheduler, 0x148BD527L, 0xA2AB, 0x11CE, 0xB1, 0x1F, 0x00, 0
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_mstask_0133_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_mstask_0133_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mstask_0138_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mstask_0138_v0_0_s_ifspec;
 
 #ifndef __ITaskScheduler_INTERFACE_DEFINED__
 #define __ITaskScheduler_INTERFACE_DEFINED__
@@ -1847,15 +1849,15 @@ EXTERN_C const IID IID_ITaskScheduler;
             /* [in] */ LPCWSTR pwszComputer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTargetComputer( 
-            /* [out] */ LPWSTR __RPC_FAR *ppwszComputer) = 0;
+            /* [out] */ LPWSTR *ppwszComputer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enum( 
-            /* [out] */ IEnumWorkItems __RPC_FAR *__RPC_FAR *ppEnumWorkItems) = 0;
+            /* [out] */ IEnumWorkItems **ppEnumWorkItems) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Activate( 
             /* [in] */ LPCWSTR pwszName,
             /* [in] */ REFIID riid,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+            /* [out] */ IUnknown **ppUnk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
             /* [in] */ LPCWSTR pwszName) = 0;
@@ -1864,11 +1866,11 @@ EXTERN_C const IID IID_ITaskScheduler;
             /* [in] */ LPCWSTR pwszTaskName,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ REFIID riid,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+            /* [out] */ IUnknown **ppUnk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddWorkItem( 
             /* [in] */ LPCWSTR pwszTaskName,
-            /* [in] */ IScheduledWorkItem __RPC_FAR *pWorkItem) = 0;
+            /* [in] */ IScheduledWorkItem *pWorkItem) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsOfType( 
             /* [in] */ LPCWSTR pwszName,
@@ -1882,53 +1884,53 @@ EXTERN_C const IID IID_ITaskScheduler;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITaskScheduler __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITaskScheduler * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITaskScheduler __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITaskScheduler * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITaskScheduler __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITaskScheduler * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTargetComputer )( 
-            ITaskScheduler __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetTargetComputer )( 
+            ITaskScheduler * This,
             /* [in] */ LPCWSTR pwszComputer);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTargetComputer )( 
-            ITaskScheduler __RPC_FAR * This,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszComputer);
+        HRESULT ( STDMETHODCALLTYPE *GetTargetComputer )( 
+            ITaskScheduler * This,
+            /* [out] */ LPWSTR *ppwszComputer);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Enum )( 
-            ITaskScheduler __RPC_FAR * This,
-            /* [out] */ IEnumWorkItems __RPC_FAR *__RPC_FAR *ppEnumWorkItems);
+        HRESULT ( STDMETHODCALLTYPE *Enum )( 
+            ITaskScheduler * This,
+            /* [out] */ IEnumWorkItems **ppEnumWorkItems);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Activate )( 
-            ITaskScheduler __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Activate )( 
+            ITaskScheduler * This,
             /* [in] */ LPCWSTR pwszName,
             /* [in] */ REFIID riid,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+            /* [out] */ IUnknown **ppUnk);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
-            ITaskScheduler __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Delete )( 
+            ITaskScheduler * This,
             /* [in] */ LPCWSTR pwszName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NewWorkItem )( 
-            ITaskScheduler __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *NewWorkItem )( 
+            ITaskScheduler * This,
             /* [in] */ LPCWSTR pwszTaskName,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ REFIID riid,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+            /* [out] */ IUnknown **ppUnk);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddWorkItem )( 
-            ITaskScheduler __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *AddWorkItem )( 
+            ITaskScheduler * This,
             /* [in] */ LPCWSTR pwszTaskName,
-            /* [in] */ IScheduledWorkItem __RPC_FAR *pWorkItem);
+            /* [in] */ IScheduledWorkItem *pWorkItem);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsOfType )( 
-            ITaskScheduler __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *IsOfType )( 
+            ITaskScheduler * This,
             /* [in] */ LPCWSTR pwszName,
             /* [in] */ REFIID riid);
         
@@ -1937,7 +1939,7 @@ EXTERN_C const IID IID_ITaskScheduler;
 
     interface ITaskScheduler
     {
-        CONST_VTBL struct ITaskSchedulerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITaskSchedulerVtbl *lpVtbl;
     };
 
     
@@ -1987,7 +1989,7 @@ EXTERN_C const IID IID_ITaskScheduler;
 
 
 HRESULT STDMETHODCALLTYPE ITaskScheduler_SetTargetComputer_Proxy( 
-    ITaskScheduler __RPC_FAR * This,
+    ITaskScheduler * This,
     /* [in] */ LPCWSTR pwszComputer);
 
 
@@ -1999,8 +2001,8 @@ void __RPC_STUB ITaskScheduler_SetTargetComputer_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITaskScheduler_GetTargetComputer_Proxy( 
-    ITaskScheduler __RPC_FAR * This,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszComputer);
+    ITaskScheduler * This,
+    /* [out] */ LPWSTR *ppwszComputer);
 
 
 void __RPC_STUB ITaskScheduler_GetTargetComputer_Stub(
@@ -2011,8 +2013,8 @@ void __RPC_STUB ITaskScheduler_GetTargetComputer_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITaskScheduler_Enum_Proxy( 
-    ITaskScheduler __RPC_FAR * This,
-    /* [out] */ IEnumWorkItems __RPC_FAR *__RPC_FAR *ppEnumWorkItems);
+    ITaskScheduler * This,
+    /* [out] */ IEnumWorkItems **ppEnumWorkItems);
 
 
 void __RPC_STUB ITaskScheduler_Enum_Stub(
@@ -2023,10 +2025,10 @@ void __RPC_STUB ITaskScheduler_Enum_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITaskScheduler_Activate_Proxy( 
-    ITaskScheduler __RPC_FAR * This,
+    ITaskScheduler * This,
     /* [in] */ LPCWSTR pwszName,
     /* [in] */ REFIID riid,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+    /* [out] */ IUnknown **ppUnk);
 
 
 void __RPC_STUB ITaskScheduler_Activate_Stub(
@@ -2037,7 +2039,7 @@ void __RPC_STUB ITaskScheduler_Activate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITaskScheduler_Delete_Proxy( 
-    ITaskScheduler __RPC_FAR * This,
+    ITaskScheduler * This,
     /* [in] */ LPCWSTR pwszName);
 
 
@@ -2049,11 +2051,11 @@ void __RPC_STUB ITaskScheduler_Delete_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITaskScheduler_NewWorkItem_Proxy( 
-    ITaskScheduler __RPC_FAR * This,
+    ITaskScheduler * This,
     /* [in] */ LPCWSTR pwszTaskName,
     /* [in] */ REFCLSID rclsid,
     /* [in] */ REFIID riid,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+    /* [out] */ IUnknown **ppUnk);
 
 
 void __RPC_STUB ITaskScheduler_NewWorkItem_Stub(
@@ -2064,9 +2066,9 @@ void __RPC_STUB ITaskScheduler_NewWorkItem_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITaskScheduler_AddWorkItem_Proxy( 
-    ITaskScheduler __RPC_FAR * This,
+    ITaskScheduler * This,
     /* [in] */ LPCWSTR pwszTaskName,
-    /* [in] */ IScheduledWorkItem __RPC_FAR *pWorkItem);
+    /* [in] */ IScheduledWorkItem *pWorkItem);
 
 
 void __RPC_STUB ITaskScheduler_AddWorkItem_Stub(
@@ -2077,7 +2079,7 @@ void __RPC_STUB ITaskScheduler_AddWorkItem_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITaskScheduler_IsOfType_Proxy( 
-    ITaskScheduler __RPC_FAR * This,
+    ITaskScheduler * This,
     /* [in] */ LPCWSTR pwszName,
     /* [in] */ REFIID riid);
 
@@ -2093,7 +2095,7 @@ void __RPC_STUB ITaskScheduler_IsOfType_Stub(
 #endif 	/* __ITaskScheduler_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_mstask_0134 */
+/* interface __MIDL_itf_mstask_0139 */
 /* [local] */ 
 
 EXTERN_C const CLSID CLSID_CTask;
@@ -2106,22 +2108,22 @@ DEFINE_GUID(CLSID_CTask, 0x148BD520, 0xA2AB, 0x11CE, 0xB1, 0x1F, 0x00, 0xAA, 0x0
 DEFINE_GUID(CLSID_CTaskScheduler, 0x148BD52A, 0xA2AB, 0x11CE, 0xB1, 0x1F, 0x00, 0xAA, 0x00, 0x53, 0x05, 0x03);
  
 
-typedef struct _PSP __RPC_FAR *HPROPSHEETPAGE;
+typedef struct _PSP *HPROPSHEETPAGE;
 
 typedef 
 enum _TASKPAGE
     {	TASKPAGE_TASK	= 0,
 	TASKPAGE_SCHEDULE	= 1,
 	TASKPAGE_SETTINGS	= 2
-    }	TASKPAGE;
+    } 	TASKPAGE;
 
 // {4086658a-cbbb-11cf-b604-00c04fd8d565}
 DEFINE_GUID(IID_IProvideTaskPage, 0x4086658aL, 0xcbbb, 0x11cf, 0xb6, 0x04, 0x00, 0xc0, 0x4f, 0xd8, 0xd5, 0x65);
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_mstask_0134_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_mstask_0134_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mstask_0139_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mstask_0139_v0_0_s_ifspec;
 
 #ifndef __IProvideTaskPage_INTERFACE_DEFINED__
 #define __IProvideTaskPage_INTERFACE_DEFINED__
@@ -2141,7 +2143,7 @@ EXTERN_C const IID IID_IProvideTaskPage;
         virtual HRESULT STDMETHODCALLTYPE GetPage( 
             /* [in] */ TASKPAGE tpType,
             /* [in] */ BOOL fPersistChanges,
-            /* [out] */ HPROPSHEETPAGE __RPC_FAR *phPage) = 0;
+            /* [out] */ HPROPSHEETPAGE *phPage) = 0;
         
     };
     
@@ -2151,29 +2153,29 @@ EXTERN_C const IID IID_IProvideTaskPage;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IProvideTaskPage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IProvideTaskPage * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IProvideTaskPage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IProvideTaskPage * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IProvideTaskPage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IProvideTaskPage * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPage )( 
-            IProvideTaskPage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetPage )( 
+            IProvideTaskPage * This,
             /* [in] */ TASKPAGE tpType,
             /* [in] */ BOOL fPersistChanges,
-            /* [out] */ HPROPSHEETPAGE __RPC_FAR *phPage);
+            /* [out] */ HPROPSHEETPAGE *phPage);
         
         END_INTERFACE
     } IProvideTaskPageVtbl;
 
     interface IProvideTaskPage
     {
-        CONST_VTBL struct IProvideTaskPageVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IProvideTaskPageVtbl *lpVtbl;
     };
 
     
@@ -2202,10 +2204,10 @@ EXTERN_C const IID IID_IProvideTaskPage;
 
 
 HRESULT STDMETHODCALLTYPE IProvideTaskPage_GetPage_Proxy( 
-    IProvideTaskPage __RPC_FAR * This,
+    IProvideTaskPage * This,
     /* [in] */ TASKPAGE tpType,
     /* [in] */ BOOL fPersistChanges,
-    /* [out] */ HPROPSHEETPAGE __RPC_FAR *phPage);
+    /* [out] */ HPROPSHEETPAGE *phPage);
 
 
 void __RPC_STUB IProvideTaskPage_GetPage_Stub(
@@ -2219,7 +2221,7 @@ void __RPC_STUB IProvideTaskPage_GetPage_Stub(
 #endif 	/* __IProvideTaskPage_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_mstask_0135 */
+/* interface __MIDL_itf_mstask_0140 */
 /* [local] */ 
 
 #define ISchedulingAgent       ITaskScheduler
@@ -2228,8 +2230,8 @@ void __RPC_STUB IProvideTaskPage_GetPage_Stub(
 #define CLSID_CSchedulingAgent CLSID_CTaskScheduler
 
 
-extern RPC_IF_HANDLE __MIDL_itf_mstask_0135_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_mstask_0135_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mstask_0140_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mstask_0140_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
@@ -2242,4 +2244,3 @@ extern RPC_IF_HANDLE __MIDL_itf_mstask_0135_v0_0_s_ifspec;
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

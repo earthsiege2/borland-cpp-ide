@@ -1,8 +1,7 @@
 //
-// Copyright (c) 1998-1999  Microsoft Corporation
-//
+// Copyright (c) Microsoft Corporation. All rights reserved.
 
-cpp_quote("/* Copyright (c) 1998-1999  Microsoft Corporation  */")
+cpp_quote("/* Copyright (c) Microsoft Corporation. All rights reserved.*/")
 
 ///////////////////////////////////////////////////////////////////////////
 // confpriv.idl : IDL source for IPconf msp private interfaces
@@ -11,93 +10,28 @@ cpp_quote("/* Copyright (c) 1998-1999  Microsoft Corporation  */")
 #ifndef __IPCONF_PRIVATE_IDL__
 #define __IPCONF_PRIVATE_IDL__
 
-import "tapi3if.idl";
+import "ipmsp.idl";
 
-// The maximum length of the info string is 256 bytes inluding EOS.
-const unsigned long MAX_PARTICIPANT_TYPED_INFO_LENGTH		= 256; 
-
-typedef enum PARTICIPANT_TYPED_INFO
+typedef enum MULTICAST_LOOPBACK_MODE
 {
-    PTI_CANONICALNAME,
-    PTI_NAME,
-    PTI_EMAILADDRESS,
-    PTI_PHONENUMBER,
-    PTI_LOCATION,
-    PTI_TOOL,
-    PTI_NOTES,
-    PTI_PRIVATE
+    MM_NO_LOOPBACK,
+    MM_FULL_LOOPBACK,
+    MM_SELECTIVE_LOOPBACK
 
-} PARTICIPANT_TYPED_INFO;
-
-typedef enum PARTICIPANT_EVENT
-{
-    PE_NEW_PARTICIPANT,
-    PE_INFO_CHANGE,
-    PE_PARTICIPANT_LEAVE,
-
-    PE_NEW_SUBSTREAM,
-    PE_SUBSTREAM_REMOVED,
-
-    PE_SUBSTREAM_MAPPED,
-    PE_SUBSTREAM_UNMAPPED,
-
-    PE_PARTICIPANT_TIMEOUT,
-    PE_PARTICIPANT_RECOVERED,
-
-    PE_PARTICIPANT_ACTIVE,
-    PE_PARTICIPANT_INACTIVE,
-
-    PE_LOCAL_TALKING,
-    PE_LOCAL_SILENT
-
-} PARTICIPANT_EVENT;
+} MULTICAST_LOOPBACK_MODE;
 
 /////////////////////////////////////////////////////////////////////////////
 // Interface definitions
 /////////////////////////////////////////////////////////////////////////////
 
 [
-    uuid(5899b820-5a34-11d2-95a0-00a0244d2298),
-    helpstring("ITParticipant Interface"),
+    uuid(0d7ca54a-d252-4fcb-9104-f6ddd310b3f9),
+    helpstring("IDummy interface"),
     pointer_default(unique),
-    dual
 ]
-interface ITParticipant : IDispatch
+interface IDummy : IUnknown
 {
-    [propget, id(1), helpstring("propertry ParticipantTypedInfo")]
-    HRESULT ParticipantTypedInfo(
-        [in] PARTICIPANT_TYPED_INFO InfoType,
-        [out, retval] BSTR * ppInfo
-        );
-
-    [propget, id(2), helpstring("the media types of the participant")]
-    HRESULT MediaTypes(
-        [out, retval] long * plMediaType
-        );
-
-    [propput, id(3), helpstring("enable or disable a participant")]
-    HRESULT Status(
-        [in] ITStream * pITStream,
-        [in] VARIANT_BOOL   fEnable
-        );
-
-    [propget, id(3), helpstring("the status of the participant")]
-    HRESULT Status(
-        [in] ITStream * pITStream,
-        [out, retval] VARIANT_BOOL * pStatus
-        );
-
-    [propget, id(4), helpstring("get the streams that have the participant")]
-    HRESULT Streams(
-        [out, retval] VARIANT * pVariant
-        );
-
-    [id(6), hidden]
-    HRESULT EnumerateStreams(
-        [out, retval] IEnumStream ** ppEnumStream
-        );
 }
-
 
 [
     uuid(39cbf055-f77a-11d2-a824-00c04f8ef6e3),
@@ -107,19 +41,18 @@ interface ITParticipant : IDispatch
 ]
 interface ITLocalParticipant : IDispatch
 {
-    [propget, id(1), helpstring("propertry LocalParticipantTypedInfo")]
+    [propget, id(1), helpstring("property LocalParticipantTypedInfo")]
     HRESULT LocalParticipantTypedInfo(
         [in] PARTICIPANT_TYPED_INFO InfoType,
         [out, retval] BSTR * ppInfo
         );
 
-    [propput, id(1), helpstring("propertry LocalParticipantTypedInfo")]
+    [propput, id(1), helpstring("property LocalParticipantTypedInfo")]
     HRESULT LocalParticipantTypedInfo(
         [in] PARTICIPANT_TYPED_INFO InfoType,
-        [in] BSTR ppInfo
+        [in] BSTR pInfo
         );
 }
-
 
 [
     uuid(0a91b56c-5a35-11d2-95a0-00a0244d2298),
@@ -161,7 +94,7 @@ interface ITParticipantControl : IDispatch
             [out, retval] IEnumParticipant ** ppEnumParticipants
             );
 
-    [propget, id(2), helpstring("property Participants")]
+    [propget, id(2), helpstring("an ITCollection of participants")]
     HRESULT Participants(
             [out, retval] VARIANT * pVariant
             );
@@ -176,13 +109,13 @@ interface ITParticipantControl : IDispatch
 ]
 interface ITParticipantSubStreamControl : IDispatch
 {
-    [propget, id(1), helpstring("get the substream that renders a participant")]
+    [propget, id(1), helpstring("the substream that renders a participant")]
     HRESULT SubStreamFromParticipant(
             [in] ITParticipant * pParticipant,
             [out, retval] ITSubStream ** ppITSubStream
             );
 
-    [propget, id(2), helpstring("get the participant rendered on a sub stream")]
+    [propget, id(2), helpstring("the participant rendered on a sub stream")]
     HRESULT ParticipantFromSubStream(
             [in] ITSubStream * pITSubStream,
             [out, retval] ITParticipant ** ppParticipant 
@@ -218,6 +151,25 @@ interface ITParticipantEvent : IDispatch
     HRESULT SubStream(
             [out, retval] ITSubStream** ppSubStream
             );
+}
+
+[
+    uuid(410fa507-4dc6-415a-9014-633875d5406e),
+    helpstring("IMulticastControl Interface"),
+    pointer_default(unique),
+    dual
+]
+interface IMulticastControl : IDispatch
+{
+    [propget, id(1), helpstring("property Loopback mode")]
+    HRESULT LoopbackMode(
+			[out, retval] MULTICAST_LOOPBACK_MODE * pMode
+			);
+
+    [propput, id(1), helpstring("property Loopback mode")]
+    HRESULT LoopbackMode(
+			[in] MULTICAST_LOOPBACK_MODE mode
+			);
 }
 
 #endif // __IPCONF_PRIVATE_IDL__

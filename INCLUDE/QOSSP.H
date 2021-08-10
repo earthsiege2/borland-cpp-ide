@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1998  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -16,7 +16,6 @@ Revision History:
 --*/
 
 #ifndef __QOSSP_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __QOSSP_H_
 
 /*
@@ -34,8 +33,10 @@ Revision History:
           /* RSVP_RESERVE_INFO structure passed */
 #define   RSVP_OBJECT_ADSPEC          (0x00000002 + RSVP_OBJECT_ID_BASE)
           /* RSVP_ADSPEC structure passed */
-#define   RSVP_OBJECT_POLICY_INFO    (0x00000003 + RSVP_OBJECT_ID_BASE)
+#define   RSVP_OBJECT_POLICY_INFO     (0x00000003 + RSVP_OBJECT_ID_BASE)
           /* RSVP POLICY ELEMENT(S) retrieved */
+#define   RSVP_OBJECT_FILTERSPEC_LIST (0x00000004 + RSVP_OBJECT_ID_BASE)
+          /* RSVP SENDER LIST returned */
 
 
 /* 
@@ -415,9 +416,6 @@ typedef struct _RSVP_ADSPEC  {
 #define INFO_NOT_AVAILABLE  0xFFFFFFFF          // used when LINE_RATE is not known
 
 
-#define QUERY_PS_SIZE       0xFFFFFFFF          // used in SIO_GET_QOS to query the
-                                                // required buffer size
-
 #define ANY_DEST_ADDR       0xFFFFFFFF          // for QOS_OBJECT_DEST_ADDR
 
 
@@ -452,6 +450,7 @@ typedef struct _RSVP_ADSPEC  {
 #define GQOS_MTU                                       (QOSSP_ERR_BASE+100+4)
 #define GQOS_FLOW_RATE                                 (QOSSP_ERR_BASE+100+5)
 #define GQOS_PEAK_RATE                                 (QOSSP_ERR_BASE+100+6)
+#define GQOS_AGG_PEAK_RATE                             (QOSSP_ERR_BASE+100+7)
 
 // Policy Error
 #define GQOS_NET_POLICY                                (QOSSP_ERR_BASE+200)
@@ -522,6 +521,14 @@ typedef struct _RSVP_ADSPEC  {
 #define GQOS_POLICY_NO_MEMORY                          (QOSSP_ERR_BASE+200+56)
 #define GQOS_POLICY_CRAZY_FLOWSPEC                     (QOSSP_ERR_BASE+200+57)
 
+#define GQOS_POLICY_NO_MORE_INFO                       (QOSSP_ERR_BASE+200+58)
+#define GQOS_POLICY_UNSUPPORTED_CREDENTIAL_TYPE        (QOSSP_ERR_BASE+200+59)
+#define GQOS_POLICY_INSUFFICIENT_PRIVILEGES            (QOSSP_ERR_BASE+200+60)
+#define GQOS_POLICY_EXPIRED_CREDENTIAL                 (QOSSP_ERR_BASE+200+61)
+#define GQOS_POLICY_IDENTITY_CHANGED                   (QOSSP_ERR_BASE+200+62)
+#define GQOS_POLICY_NO_QOS_PROVIDED                    (QOSSP_ERR_BASE+200+63)
+#define GQOS_POLICY_DO_NOT_SEND                        (QOSSP_ERR_BASE+200+64)
+
 #define GQOS_POLICY_ERROR_USERID                       (QOSSP_ERR_BASE+200+99)
 
 // RSVP Error
@@ -587,6 +594,8 @@ typedef struct _RSVP_ADSPEC  {
 #define GQOS_IOCTL_SYSTEMFAILURE                       (QOSSP_ERR_BASE+800+1)
 #define GQOS_IOCTL_NOBYTESRETURNED                     (QOSSP_ERR_BASE+800+2)
 #define GQOS_IOCTL_INVALIDSOCKET                       (QOSSP_ERR_BASE+800+3)
+#define GQOS_IOCTL_INV_FUNCPTR                         (QOSSP_ERR_BASE+800+4)
+#define GQOS_IOCTL_INV_OVERLAPPED                      (QOSSP_ERR_BASE+800+5)
 
 // SIO_SET_QOS error
 
@@ -634,7 +643,6 @@ typedef struct _RSVP_ADSPEC  {
 #define GQOS_CHKQOS_BADPARAMETER                       (QOSSP_ERR_BASE+850+5)
 #define GQOS_CHKQOS_EXCEPTION                          (QOSSP_ERR_BASE+850+6)
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* __QOSSP_H_ */
 
 

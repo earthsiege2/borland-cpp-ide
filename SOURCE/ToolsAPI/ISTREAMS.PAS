@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{ Copyright (c) 1995-2001 Borland Software Corporation  }
 {                                                       }
 {*******************************************************}
 
@@ -11,7 +11,7 @@ unit IStreams;
 
 interface
 
-uses Windows, ActiveX, SysUtils, Classes, VirtIntf, Axctrls;
+uses Windows, ActiveX, SysUtils, Classes, VirtIntf, AxCtrls;
 
 type
 
@@ -69,6 +69,10 @@ const
   ExceptionHandler: TExceptionHandler = nil;
 
 implementation
+
+{$IFDEF LINUX}
+uses Libc;
+{$ENDIF}
 
 { TIStreamAdapter }
 
@@ -130,6 +134,10 @@ end;
 
 constructor TIFileStream.Create(const FileName: string; Mode: Word);
 begin
+{$IFDEF LINUX}
+  if Mode = fmCreate then
+    unlink(PChar(FileName));
+{$ENDIF}
   inherited Create(TFileStream.Create(FileName, Mode), soOwned);
 end;
 
@@ -152,7 +160,10 @@ end;
 
 procedure TIFileStream.SetModifyTime(Time: Longint);
 begin
+{$IFDEF MSWINDOWS}
   FileSetDate(FileStream.Handle, Time);
+{$ELSE}
+{$ENDIF}
 end;
 
 function TIFileStream.Commit(grfCommitFlags: Longint): HResult;

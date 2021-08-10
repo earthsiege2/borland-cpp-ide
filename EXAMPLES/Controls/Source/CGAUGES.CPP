@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 #pragma hdrstop
 #include  "cgauges.h"
@@ -9,15 +9,6 @@
 #pragma package(smart_init)
  
 #pragma resource "*.res"   
-
-namespace Cgauges{
-void __fastcall PACKAGE Register()
-{
-  TComponentClass classes[1] = {__classid(TCGauge)};
-  RegisterComponents(LoadStr(Tab_101), classes, 0);
-}
-} //namespace
-
 
 /* TBltBitmap */
 __fastcall TBltBitmap::TBltBitmap(): Graphics::TBitmap(){}

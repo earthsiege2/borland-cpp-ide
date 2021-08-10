@@ -2,8 +2,8 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
-    <PROJECT value="appevents.exe"/>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="AppEvents.exe"/>
     <OBJFILES value="appevents.obj main.obj"/>
     <RESFILES value="appevents.res"/>
     <IDLFILES value=""/>
@@ -12,15 +12,15 @@
     <RESDEPEN value="$(RESFILES) main.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value=""/>
-    <SPARELIBS value="Vcl50.lib"/>
-    <PACKAGES value="Vcl50.bpi Vclx50.bpi"/>
+    <SPARELIBS value="rtl.lib vcl.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
-    <LINKER value="tlink32"/>
+    <LINKER value="ilink32"/>
     <USERDEFINES value=""/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
     <MAINSOURCE value="appevents.cpp"/>
@@ -29,9 +29,9 @@
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
-      -tW -tWM"/>
+    <IDLCFLAGS value="-src_suffix cpp -I$(BCB)\include -I$(BCB)\include\vcl"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
@@ -42,6 +42,13 @@
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="appevents.cpp" FORMNAME="" UNITNAME="appevents" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="appevents.res" FORMNAME="" UNITNAME="appevents" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="main.cpp" FORMNAME="AppEventForm" UNITNAME="main" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="readme.txt" FORMNAME="" UNITNAME="readme" CONTAINERID="File" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -75,9 +82,14 @@ DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
@@ -89,10 +101,5 @@ LinkCGLIB=0
 AddServerUnit=1
 AddClientUnit=1
 PrecompiledHeaders=1
-
-[Language]
-ActiveLang=
-ProjectLang=
-RootDir=
   </IDEOPTIONS>
 </PROJECT>

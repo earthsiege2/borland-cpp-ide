@@ -6,11 +6,11 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
-unit Commctrl;
+unit CommCtrl;
 
 {$WEAKPACKAGEUNIT}
 
@@ -422,20 +422,20 @@ type
     lParam: Longint): BOOL stdcall;
   TFNAddPropSheetPages = LPFNADDPROPSHEETPAGES;
 
+{$EXTERNALSYM CreatePropertySheetPage}
+function CreatePropertySheetPage(var PSP: TPropSheetPage): HPropSheetPage; stdcall;
 {$EXTERNALSYM CreatePropertySheetPageA}
 function CreatePropertySheetPageA(var PSP: TPropSheetPageA): HPropSheetPage; stdcall;
 {$EXTERNALSYM CreatePropertySheetPageW}
 function CreatePropertySheetPageW(var PSP: TPropSheetPageW): HPropSheetPage; stdcall;
-{$EXTERNALSYM CreatePropertySheetPage}
-function CreatePropertySheetPage(var PSP: TPropSheetPage): HPropSheetPage; stdcall;
 {$EXTERNALSYM DestroyPropertySheetPage}
 function DestroyPropertySheetPage(hPSP: HPropSheetPage): BOOL; stdcall;
+{$EXTERNALSYM PropertySheet}
+function PropertySheet(var PSH: TPropSheetHeader): Integer; stdcall;
 {$EXTERNALSYM PropertySheetA}
 function PropertySheetA(var PSH: TPropSheetHeaderA): Integer; stdcall;
 {$EXTERNALSYM PropertySheetW}
 function PropertySheetW(var PSH: TPropSheetHeaderW): Integer; stdcall;
-{$EXTERNALSYM PropertySheet}
-function PropertySheet(var PSH: TPropSheetHeader): Integer; stdcall;
 
 { From commctrl.h }
 
@@ -937,14 +937,14 @@ function ImageList_Remove(ImageList: HIMAGELIST; Index: Integer): Bool; stdcall;
 {$EXTERNALSYM ImageList_GetIcon}
 function ImageList_GetIcon(ImageList: HIMAGELIST; Index: Integer;
   Flags: Cardinal): HIcon; stdcall;
+{$EXTERNALSYM ImageList_LoadImage}
+function ImageList_LoadImage(Instance: THandle; Bmp: PChar; CX, Grow: Integer;
+  Mask: TColorRef; pType, Flags: Cardinal): HIMAGELIST; stdcall;
 {$EXTERNALSYM ImageList_LoadImageA}
 function ImageList_LoadImageA(Instance: THandle; Bmp: PAnsiChar; CX, Grow: Integer;
   Mask: TColorRef; pType, Flags: Cardinal): HIMAGELIST; stdcall;
 {$EXTERNALSYM ImageList_LoadImageW}
 function ImageList_LoadImageW(Instance: THandle; Bmp: PWideChar; CX, Grow: Integer;
-  Mask: TColorRef; pType, Flags: Cardinal): HIMAGELIST; stdcall;
-{$EXTERNALSYM ImageList_LoadImage}
-function ImageList_LoadImage(Instance: THandle; Bmp: PChar; CX, Grow: Integer;
   Mask: TColorRef; pType, Flags: Cardinal): HIMAGELIST; stdcall;
 
 const
@@ -1129,12 +1129,14 @@ const
   {$EXTERNALSYM HDM_INSERTITEMW}
   HDM_INSERTITEMW          = HDM_FIRST + 10;
   {$EXTERNALSYM HDM_INSERTITEMA}
-  HDM_INSERTITEMA          = HDM_FIRST + 1;
+  HDM_INSERTITEMA          = HDM_FIRST + 1;
+
 
 
 
   {$EXTERNALSYM HDM_INSERTITEM}
-  HDM_INSERTITEM           = HDM_INSERTITEMA;
+  HDM_INSERTITEM           = HDM_INSERTITEMA;
+
 
 {$EXTERNALSYM Header_InsertItem}
 function Header_InsertItem(Header: HWnd; Index: Integer;
@@ -1151,12 +1153,14 @@ const
   {$EXTERNALSYM HDM_GETITEMW}
   HDM_GETITEMW             = HDM_FIRST + 11;
   {$EXTERNALSYM HDM_GETITEMA}
-  HDM_GETITEMA             = HDM_FIRST + 3;
+  HDM_GETITEMA             = HDM_FIRST + 3;
+
 
 
 
   {$EXTERNALSYM HDM_GETITEM}
-  HDM_GETITEM              = HDM_GETITEMA;
+  HDM_GETITEM              = HDM_GETITEMA;
+
 
 {$EXTERNALSYM Header_GetItem}
 function Header_GetItem(Header: HWnd; Index: Integer;
@@ -1166,12 +1170,14 @@ const
   {$EXTERNALSYM HDM_SETITEMA}
   HDM_SETITEMA            = HDM_FIRST + 4;
   {$EXTERNALSYM HDM_SETITEMW}
-  HDM_SETITEMW            = HDM_FIRST + 12;
+  HDM_SETITEMW            = HDM_FIRST + 12;
+
 
 
 
   {$EXTERNALSYM HDM_SETITEM}
-  HDM_SETITEM             = HDM_SETITEMA;
+  HDM_SETITEM             = HDM_SETITEMA;
+
 
 {$EXTERNALSYM Header_SetItem}
 function Header_SetItem(Header: HWnd; Index: Integer; const Item: THDItem): Bool;
@@ -1325,7 +1331,8 @@ const
   HDN_TRACKW               = HDN_FIRST-28;
   {$EXTERNALSYM HDN_GETDISPINFOW}
   HDN_GETDISPINFOW         = HDN_FIRST-29;
-
+
+
 
 
 
@@ -1362,7 +1369,8 @@ const
   {$EXTERNALSYM HDN_TRACK}
   HDN_TRACK               = HDN_TRACKA;
   {$EXTERNALSYM HDN_GETDISPINFO}
-  HDN_GETDISPINFO         = HDN_GETDISPINFOA;
+  HDN_GETDISPINFO         = HDN_GETDISPINFOA;
+
 
 type
   {$EXTERNALSYM tagNMHEADERA}
@@ -1749,7 +1757,8 @@ const
   TB_GETBUTTONTEXTW        = WM_USER + 75;
   {$EXTERNALSYM TBN_GETBUTTONINFOW}
   TBN_GETBUTTONINFOW       = TBN_FIRST-20;
-
+
+
 
 
 
@@ -1766,7 +1775,8 @@ const
   {$EXTERNALSYM TB_GETBUTTONTEXT}
   TB_GETBUTTONTEXT        = TB_GETBUTTONTEXTA;
   {$EXTERNALSYM TBN_GETBUTTONINFO}
-  TBN_GETBUTTONINFO       = TBN_GETBUTTONINFOA;
+  TBN_GETBUTTONINFO       = TBN_GETBUTTONINFOA;
+
 
   {$EXTERNALSYM TB_CUSTOMIZE}
   TB_CUSTOMIZE            = WM_USER + 27;
@@ -1891,12 +1901,14 @@ const
   TB_GETUNICODEFORMAT     = CCM_GETUNICODEFORMAT;
 
   {$EXTERNALSYM TB_MAPACCELERATORW}
-  TB_MAPACCELERATORW      = WM_USER + 90;  // wParam == ch, lParam int * pidBtn
+  TB_MAPACCELERATORW      = WM_USER + 90;  // wParam == ch, lParam int * pidBtn
+
 
 
 
   {$EXTERNALSYM TB_MAPACCELERATOR}
-  TB_MAPACCELERATOR       = TB_MAPACCELERATORA;
+  TB_MAPACCELERATOR       = TB_MAPACCELERATORA;
+
 
 type
   {$EXTERNALSYM TBREPLACEBITMAP}
@@ -1910,7 +1922,7 @@ type
   PTBReplaceBitmap = ^TTBReplaceBitmap;
   TTBReplaceBitmap = TBREPLACEBITMAP;
 
-const  
+const
   {$EXTERNALSYM TBBF_LARGE}
   TBBF_LARGE              = $0001;
 
@@ -1977,7 +1989,8 @@ const
   {$EXTERNALSYM TB_GETBUTTONINFOA}
   TB_GETBUTTONINFOA        = WM_USER + 65;
   {$EXTERNALSYM TB_SETBUTTONINFOA}
-  TB_SETBUTTONINFOA        = WM_USER + 66;
+  TB_SETBUTTONINFOA        = WM_USER + 66;
+
 
 
 
@@ -1986,7 +1999,8 @@ const
   {$EXTERNALSYM TB_GETBUTTONINFO}
   TB_GETBUTTONINFO         = TB_GETBUTTONINFOA;
   {$EXTERNALSYM TB_SETBUTTONINFO}
-  TB_SETBUTTONINFO         = TB_SETBUTTONINFOA;
+  TB_SETBUTTONINFO         = TB_SETBUTTONINFOA;
+
 
   {$EXTERNALSYM TB_INSERTBUTTONW}
   TB_INSERTBUTTONW        = WM_USER + 67;
@@ -1998,7 +2012,8 @@ const
 
   // New post Win95/NT4 for InsertButton and AddButton.  if iString member
   // is a pointer to a string, it will be handled as a string like listview
-  // = although LPSTR_TEXTCALLBACK is not supported;.
+  // = although LPSTR_TEXTCALLBACK is not supported;.
+
 
 
 
@@ -2007,10 +2022,14 @@ const
   {$EXTERNALSYM TB_INSERTBUTTON}
   TB_INSERTBUTTON         = TB_INSERTBUTTONA;
   {$EXTERNALSYM TB_ADDBUTTONS}
-  TB_ADDBUTTONS           = TB_ADDBUTTONSA;
+  TB_ADDBUTTONS           = TB_ADDBUTTONSA;
+
 
   {$EXTERNALSYM TB_SETDRAWTEXTFLAGS}
   TB_SETDRAWTEXTFLAGS     = WM_USER + 70;  // wParam == mask lParam == bit values
+
+  {$EXTERNALSYM TB_GETSTRING}
+  TB_GETSTRING            = WM_USER + 92;
 
   {$EXTERNALSYM TBN_BEGINDRAG}
   TBN_BEGINDRAG           = TBN_FIRST-1;
@@ -2036,6 +2055,11 @@ const
   TBN_CLOSEUP             = TBN_FIRST-11;
   {$EXTERNALSYM TBN_GETOBJECT}
   TBN_GETOBJECT           = TBN_FIRST-12;
+  {$EXTERNALSYM TBN_RESTORE}
+  TBN_RESTORE             = TBN_FIRST-21;
+  {$EXTERNALSYM TBN_SAVE}
+  TBN_SAVE                = TBN_FIRST-22;
+
 
 type
   // Structure for TBN_HOTITEMCHANGE notification
@@ -2406,7 +2430,8 @@ const
   RB_SETUNICODEFORMAT     = CCM_SETUNICODEFORMAT;
   {$EXTERNALSYM RB_GETUNICODEFORMAT}
   RB_GETUNICODEFORMAT     = CCM_GETUNICODEFORMAT;
-
+
+
 
 
 
@@ -2419,7 +2444,8 @@ const
   {$EXTERNALSYM RB_SETBANDINFO}
   RB_SETBANDINFO     = RB_SETBANDINFOA;
   {$EXTERNALSYM RB_GETBANDINFO}
-  RB_GETBANDINFO     = RB_GETBANDINFOA;
+  RB_GETBANDINFO     = RB_GETBANDINFOA;
+
 
   {$EXTERNALSYM RBN_HEIGHTCHANGE}
   RBN_HEIGHTCHANGE   = RBN_FIRST - 0;
@@ -2662,7 +2688,8 @@ const
   TTM_POP                  = WM_USER + 28;
   {$EXTERNALSYM TTM_UPDATE}
   TTM_UPDATE               = WM_USER + 29;
-
+
+
 
 
 
@@ -2703,7 +2730,8 @@ const
   {$EXTERNALSYM TTM_ENUMTOOLS}
   TTM_ENUMTOOLS           = TTM_ENUMTOOLSA;
   {$EXTERNALSYM TTM_GETCURRENTTOOL}
-  TTM_GETCURRENTTOOL      = TTM_GETCURRENTTOOLA;
+  TTM_GETCURRENTTOOL      = TTM_GETCURRENTTOOLA;
+
 
   {$EXTERNALSYM TTM_RELAYEVENT}
   TTM_RELAYEVENT          = WM_USER + 7;
@@ -2745,12 +2773,14 @@ const
   TTN_NEEDTEXTA            = TTN_FIRST - 0;
   {$EXTERNALSYM TTN_NEEDTEXTW}
   TTN_NEEDTEXTW            = TTN_FIRST - 10;
-
+
+
 
 
 
   {$EXTERNALSYM TTN_NEEDTEXT}
-  TTN_NEEDTEXT            = TTN_NEEDTEXTA;
+  TTN_NEEDTEXT            = TTN_NEEDTEXTA;
+
 
   {$EXTERNALSYM TTN_SHOW}
   TTN_SHOW                = TTN_FIRST - 1;
@@ -2808,23 +2838,23 @@ const
   {$EXTERNALSYM SBARS_SIZEGRIP}
   SBARS_SIZEGRIP          = $0100;
 
+{$EXTERNALSYM DrawStatusText}
+procedure DrawStatusText(hDC: HDC; lprc: PRect; pzsText: PChar;
+  uFlags: UINT); stdcall;
 {$EXTERNALSYM DrawStatusTextA}
 procedure DrawStatusTextA(hDC: HDC; lprc: PRect; pzsText: PAnsiChar;
   uFlags: UINT); stdcall;
 {$EXTERNALSYM DrawStatusTextW}
 procedure DrawStatusTextW(hDC: HDC; lprc: PRect; pzsText: PWideChar;
   uFlags: UINT); stdcall;
-{$EXTERNALSYM DrawStatusText}
-procedure DrawStatusText(hDC: HDC; lprc: PRect; pzsText: PChar;
-  uFlags: UINT); stdcall;
+{$EXTERNALSYM CreateStatusWindow}
+function CreateStatusWindow(Style: Longint; lpszText: PChar;
+  hwndParent: HWND; wID: UINT): HWND; stdcall;
 {$EXTERNALSYM CreateStatusWindowA}
 function CreateStatusWindowA(Style: Longint; lpszText: PAnsiChar;
   hwndParent: HWND; wID: UINT): HWND; stdcall;
 {$EXTERNALSYM CreateStatusWindowW}
 function CreateStatusWindowW(Style: Longint; lpszText: PWideChar;
-  hwndParent: HWND; wID: UINT): HWND; stdcall;
-{$EXTERNALSYM CreateStatusWindow}
-function CreateStatusWindow(Style: Longint; lpszText: PChar;
   hwndParent: HWND; wID: UINT): HWND; stdcall;
 
 const
@@ -2853,7 +2883,8 @@ const
   SB_SETTIPTEXTW          = WM_USER+17;
   {$EXTERNALSYM SB_GETTIPTEXTW}
   SB_GETTIPTEXTW          = WM_USER+19;
-
+
+
 
 
 
@@ -2874,7 +2905,8 @@ const
   {$EXTERNALSYM SB_SETTIPTEXT}
   SB_SETTIPTEXT          = SB_SETTIPTEXTA;
   {$EXTERNALSYM SB_GETTIPTEXT}
-  SB_GETTIPTEXT          = SB_GETTIPTEXTA;
+  SB_GETTIPTEXT          = SB_GETTIPTEXTA;
+
 
   {$EXTERNALSYM SB_SETPARTS}
   SB_SETPARTS             = WM_USER+4;
@@ -3561,12 +3593,14 @@ const
   LPSTR_TEXTCALLBACKA = LPSTR(-1);
   {$EXTERNALSYM LPSTR_TEXTCALLBACKW}
   LPSTR_TEXTCALLBACKW = LPWSTR(-1);
-
+
+
 
 
 
   {$EXTERNALSYM LPSTR_TEXTCALLBACK}
-  LPSTR_TEXTCALLBACK = LPSTR_TEXTCALLBACKA;
+  LPSTR_TEXTCALLBACK = LPSTR_TEXTCALLBACKA;
+
 
   {$EXTERNALSYM I_IMAGECALLBACK}
   I_IMAGECALLBACK         = -1;
@@ -3585,7 +3619,8 @@ const
   LVM_SETITEMW            = LVM_FIRST + 76;
   {$EXTERNALSYM LVM_INSERTITEMW}
   LVM_INSERTITEMW         = LVM_FIRST + 77;
-
+
+
 
 
 
@@ -3598,7 +3633,8 @@ const
   {$EXTERNALSYM LVM_SETITEM}
   LVM_SETITEM            = LVM_SETITEMA;
   {$EXTERNALSYM LVM_INSERTITEM}
-  LVM_INSERTITEM         = LVM_INSERTITEMA;
+  LVM_INSERTITEM         = LVM_INSERTITEMA;
+
 
   {$EXTERNALSYM LVM_DELETEITEM}
   LVM_DELETEITEM          = LVM_FIRST + 8;
@@ -3609,24 +3645,24 @@ const
   {$EXTERNALSYM LVM_SETCALLBACKMASK}
   LVM_SETCALLBACKMASK     = LVM_FIRST + 11;
 
+{$EXTERNALSYM ListView_GetItem}
+function ListView_GetItem(hWnd: HWND; var pItem: TLVItem): Bool;
 {$EXTERNALSYM ListView_GetItemA}
 function ListView_GetItemA(hWnd: HWND; var pItem: TLVItemA): Bool;
 {$EXTERNALSYM ListView_GetItemW}
 function ListView_GetItemW(hWnd: HWND; var pItem: TLVItemW): Bool;
-{$EXTERNALSYM ListView_GetItem}
-function ListView_GetItem(hWnd: HWND; var pItem: TLVItem): Bool;
+{$EXTERNALSYM ListView_SetItem}
+function ListView_SetItem(hWnd: HWND; const pItem: TLVItem): Bool;
 {$EXTERNALSYM ListView_SetItemA}
 function ListView_SetItemA(hWnd: HWND; const pItem: TLVItemA): Bool;
 {$EXTERNALSYM ListView_SetItemW}
 function ListView_SetItemW(hWnd: HWND; const pItem: TLVItemW): Bool;
-{$EXTERNALSYM ListView_SetItem}
-function ListView_SetItem(hWnd: HWND; const pItem: TLVItem): Bool;
+{$EXTERNALSYM ListView_InsertItem}
+function ListView_InsertItem(hWnd: HWND; const pItem: TLVItem): Integer;
 {$EXTERNALSYM ListView_InsertItemA}
 function ListView_InsertItemA(hWnd: HWND; const pItem: TLVItemA): Integer;
 {$EXTERNALSYM ListView_InsertItemW}
 function ListView_InsertItemW(hWnd: HWND; const pItem: TLVItemW): Integer;
-{$EXTERNALSYM ListView_InsertItem}
-function ListView_InsertItem(hWnd: HWND; const pItem: TLVItem): Integer;
 {$EXTERNALSYM ListView_DeleteItem}
 function ListView_DeleteItem(hWnd: HWND; i: Integer): Bool;
 {$EXTERNALSYM ListView_DeleteAllItems}
@@ -3720,22 +3756,24 @@ const
   {$EXTERNALSYM LVM_FINDITEMA}
   LVM_FINDITEMA            = LVM_FIRST + 13;
   {$EXTERNALSYM LVM_FINDITEMW}
-  LVM_FINDITEMW            = LVM_FIRST + 83;
+  LVM_FINDITEMW            = LVM_FIRST + 83;
+
 
 
 
   {$EXTERNALSYM LVM_FINDITEM}
-  LVM_FINDITEM            = LVM_FINDITEMA;
+  LVM_FINDITEM            = LVM_FINDITEMA;
 
+
+{$EXTERNALSYM ListView_FindItem}
+function ListView_FindItem(hWnd: HWND; iStart: Integer;
+  const plvfi: TLVFindInfo): Integer;
 {$EXTERNALSYM ListView_FindItemA}
 function ListView_FindItemA(hWnd: HWND; iStart: Integer;
   const plvfi: TLVFindInfoA): Integer;
 {$EXTERNALSYM ListView_FindItemW}
 function ListView_FindItemW(hWnd: HWND; iStart: Integer;
   const plvfi: TLVFindInfoW): Integer;
-{$EXTERNALSYM ListView_FindItem}
-function ListView_FindItem(hWnd: HWND; iStart: Integer;
-  const plvfi: TLVFindInfo): Integer;
 
 const
   {$EXTERNALSYM LVIR_BOUNDS}
@@ -3774,19 +3812,21 @@ const
   {$EXTERNALSYM LVM_GETSTRINGWIDTHA}
   LVM_GETSTRINGWIDTHA      = LVM_FIRST + 17;
   {$EXTERNALSYM LVM_GETSTRINGWIDTHW}
-  LVM_GETSTRINGWIDTHW      = LVM_FIRST + 87;
+  LVM_GETSTRINGWIDTHW      = LVM_FIRST + 87;
+
 
 
 
   {$EXTERNALSYM LVM_GETSTRINGWIDTH}
-  LVM_GETSTRINGWIDTH      = LVM_GETSTRINGWIDTHA;
+  LVM_GETSTRINGWIDTH      = LVM_GETSTRINGWIDTHA;
 
+
+{$EXTERNALSYM ListView_GetStringWidth}
+function ListView_GetStringWidth(hwndLV: HWND; psz: PChar): Integer;
 {$EXTERNALSYM ListView_GetStringWidthA}
 function ListView_GetStringWidthA(hwndLV: HWND; psz: PAnsiChar): Integer;
 {$EXTERNALSYM ListView_GetStringWidthW}
 function ListView_GetStringWidthW(hwndLV: HWND; psz: PWideChar): Integer;
-{$EXTERNALSYM ListView_GetStringWidth}
-function ListView_GetStringWidth(hwndLV: HWND; psz: PChar): Integer;
 
 const
   {$EXTERNALSYM LVHT_NOWHERE}
@@ -3878,19 +3918,21 @@ const
   {$EXTERNALSYM LVM_EDITLABELA}
   LVM_EDITLABELA           = LVM_FIRST + 23;
   {$EXTERNALSYM LVM_EDITLABELW}
-  LVM_EDITLABELW           = LVM_FIRST + 118;
+  LVM_EDITLABELW           = LVM_FIRST + 118;
+
 
 
 
   {$EXTERNALSYM LVM_EDITLABEL}
-  LVM_EDITLABEL           = LVM_EDITLABELA;
+  LVM_EDITLABEL           = LVM_EDITLABELA;
 
+
+{$EXTERNALSYM ListView_EditLabel}
+function ListView_EditLabel(hwndLV: HWND; i: Integer): HWND;
 {$EXTERNALSYM ListView_EditLabelA}
 function ListView_EditLabelA(hwndLV: HWND; i: Integer): HWND;
 {$EXTERNALSYM ListView_EditLabelW}
 function ListView_EditLabelW(hwndLV: HWND; i: Integer): HWND;
-{$EXTERNALSYM ListView_EditLabel}
-function ListView_EditLabel(hwndLV: HWND; i: Integer): HWND;
 
 const
   {$EXTERNALSYM LVM_GETEDITCONTROL}
@@ -3975,61 +4017,67 @@ const
   {$EXTERNALSYM LVM_GETCOLUMNA}
   LVM_GETCOLUMNA          = LVM_FIRST + 25;
   {$EXTERNALSYM LVM_GETCOLUMNW}
-  LVM_GETCOLUMNW          = LVM_FIRST + 95;
+  LVM_GETCOLUMNW          = LVM_FIRST + 95;
+
 
 
 
   {$EXTERNALSYM LVM_GETCOLUMN}
-  LVM_GETCOLUMN           = LVM_GETCOLUMNA;
+  LVM_GETCOLUMN           = LVM_GETCOLUMNA;
 
+
+{$EXTERNALSYM ListView_GetColumn}
+function ListView_GetColumn(hwnd: HWND; iCol: Integer;
+  var pcol: TLVColumn): Bool;
 {$EXTERNALSYM ListView_GetColumnA}
 function ListView_GetColumnA(hwnd: HWND; iCol: Integer;
   var pcol: TLVColumnA): Bool;
 {$EXTERNALSYM ListView_GetColumnW}
 function ListView_GetColumnW(hwnd: HWND; iCol: Integer;
   var pcol: TLVColumnW): Bool;
-{$EXTERNALSYM ListView_GetColumn}
-function ListView_GetColumn(hwnd: HWND; iCol: Integer;
-  var pcol: TLVColumn): Bool;
 
 const
   {$EXTERNALSYM LVM_SETCOLUMNA}
   LVM_SETCOLUMNA           = LVM_FIRST + 26;
   {$EXTERNALSYM LVM_SETCOLUMNW}
-  LVM_SETCOLUMNW           = LVM_FIRST + 96;
+  LVM_SETCOLUMNW           = LVM_FIRST + 96;
+
 
 
 
   {$EXTERNALSYM LVM_SETCOLUMN}
-  LVM_SETCOLUMN           = LVM_SETCOLUMNA;
+  LVM_SETCOLUMN           = LVM_SETCOLUMNA;
 
+
+{$EXTERNALSYM ListView_SetColumn}
+function ListView_SetColumn(hwnd: HWnd; iCol: Integer; const pcol: TLVColumn): Bool;
 {$EXTERNALSYM ListView_SetColumnA}
 function ListView_SetColumnA(hwnd: HWnd; iCol: Integer; const pcol: TLVColumnA): Bool;
 {$EXTERNALSYM ListView_SetColumnW}
 function ListView_SetColumnW(hwnd: HWnd; iCol: Integer; const pcol: TLVColumnW): Bool;
-{$EXTERNALSYM ListView_SetColumn}
-function ListView_SetColumn(hwnd: HWnd; iCol: Integer; const pcol: TLVColumn): Bool;
 
 const
   {$EXTERNALSYM LVM_INSERTCOLUMNA}
   LVM_INSERTCOLUMNA        = LVM_FIRST + 27;
   {$EXTERNALSYM LVM_INSERTCOLUMNW}
-  LVM_INSERTCOLUMNW        = LVM_FIRST + 97;
+  LVM_INSERTCOLUMNW        = LVM_FIRST + 97;
+
 
 
 
   {$EXTERNALSYM LVM_INSERTCOLUMN}
-  LVM_INSERTCOLUMN        = LVM_INSERTCOLUMNA;
+  LVM_INSERTCOLUMN        = LVM_INSERTCOLUMNA;
 
+
+{$EXTERNALSYM ListView_InsertColumn}
+function ListView_InsertColumn(hwnd: HWND; iCol: Integer;
+  const pcol: TLVColumn): Integer;
 {$EXTERNALSYM ListView_InsertColumnA}
 function ListView_InsertColumnA(hwnd: HWND; iCol: Integer;
   const pcol: TLVColumnA): Integer;
 {$EXTERNALSYM ListView_InsertColumnW}
 function ListView_InsertColumnW(hwnd: HWND; iCol: Integer;
   const pcol: TLVColumnW): Integer;
-{$EXTERNALSYM ListView_InsertColumn}
-function ListView_InsertColumn(hwnd: HWND; iCol: Integer;
-  const pcol: TLVColumn): Integer;
 
 const
   {$EXTERNALSYM LVM_DELETECOLUMN}
@@ -4157,43 +4205,47 @@ const
   {$EXTERNALSYM LVM_GETITEMTEXTA}
   LVM_GETITEMTEXTA         = LVM_FIRST + 45;
   {$EXTERNALSYM LVM_GETITEMTEXTW}
-  LVM_GETITEMTEXTW         = LVM_FIRST + 115;
+  LVM_GETITEMTEXTW         = LVM_FIRST + 115;
+
 
 
 
   {$EXTERNALSYM LVM_GETITEMTEXT}
-  LVM_GETITEMTEXT         = LVM_GETITEMTEXTA;
+  LVM_GETITEMTEXT         = LVM_GETITEMTEXTA;
 
+
+{$EXTERNALSYM ListView_GetItemText}
+function ListView_GetItemText(hwndLV: HWND; i, iSubItem: Integer;
+  pszText: PChar; cchTextMax: Integer): Integer;
 {$EXTERNALSYM ListView_GetItemTextA}
 function ListView_GetItemTextA(hwndLV: HWND; i, iSubItem: Integer;
   pszText: PAnsiChar; cchTextMax: Integer): Integer;
 {$EXTERNALSYM ListView_GetItemTextW}
 function ListView_GetItemTextW(hwndLV: HWND; i, iSubItem: Integer;
   pszText: PWideChar; cchTextMax: Integer): Integer;
-{$EXTERNALSYM ListView_GetItemText}
-function ListView_GetItemText(hwndLV: HWND; i, iSubItem: Integer;
-  pszText: PChar; cchTextMax: Integer): Integer;
 
 const
   {$EXTERNALSYM LVM_SETITEMTEXTA}
   LVM_SETITEMTEXTA         = LVM_FIRST + 46;
   {$EXTERNALSYM LVM_SETITEMTEXTW}
-  LVM_SETITEMTEXTW         = LVM_FIRST + 116;
+  LVM_SETITEMTEXTW         = LVM_FIRST + 116;
+
 
 
 
   {$EXTERNALSYM LVM_SETITEMTEXT}
-  LVM_SETITEMTEXT         = LVM_SETITEMTEXTA;
+  LVM_SETITEMTEXT         = LVM_SETITEMTEXTA;
 
+
+{$EXTERNALSYM ListView_SetItemText}
+function ListView_SetItemText(hwndLV: HWND; i, iSubItem: Integer;
+  pszText: PChar): Bool;
 {$EXTERNALSYM ListView_SetItemTextA}
 function ListView_SetItemTextA(hwndLV: HWND; i, iSubItem: Integer;
   pszText: PAnsiChar): Bool;
 {$EXTERNALSYM ListView_SetItemTextW}
 function ListView_SetItemTextW(hwndLV: HWND; i, iSubItem: Integer;
   pszText: PWideChar): Bool;
-{$EXTERNALSYM ListView_SetItemText}
-function ListView_SetItemText(hwndLV: HWND; i, iSubItem: Integer;
-  pszText: PChar): Bool;
 
 const
   // these flags only apply to LVS_OWNERDATA listviews in report or list mode
@@ -4249,19 +4301,21 @@ const
   {$EXTERNALSYM LVM_GETISEARCHSTRINGA}
   LVM_GETISEARCHSTRINGA    = LVM_FIRST + 52;
   {$EXTERNALSYM LVM_GETISEARCHSTRINGW}
-  LVM_GETISEARCHSTRINGW    = LVM_FIRST + 117;
+  LVM_GETISEARCHSTRINGW    = LVM_FIRST + 117;
+
 
 
 
   {$EXTERNALSYM LVM_GETISEARCHSTRING}
-  LVM_GETISEARCHSTRING    = LVM_GETISEARCHSTRINGA;
+  LVM_GETISEARCHSTRING    = LVM_GETISEARCHSTRINGA;
 
+
+{$EXTERNALSYM ListView_GetISearchString}
+function ListView_GetISearchString(hwndLV: HWND; lpsz: PChar): Bool;
 {$EXTERNALSYM ListView_GetISearchStringA}
 function ListView_GetISearchStringA(hwndLV: HWND; lpsz: PAnsiChar): Bool;
 {$EXTERNALSYM ListView_GetISearchStringW}
 function ListView_GetISearchStringW(hwndLV: HWND; lpsz: PWideChar): Bool;
-{$EXTERNALSYM ListView_GetISearchString}
-function ListView_GetISearchString(hwndLV: HWND; lpsz: PChar): Bool;
 
 const
   {$EXTERNALSYM LVM_SETICONSPACING}
@@ -4470,7 +4524,8 @@ const
   LVM_GETBKIMAGEA         = LVM_FIRST + 69;
   {$EXTERNALSYM LVM_GETBKIMAGEW}
   LVM_GETBKIMAGEW         = LVM_FIRST + 139;
-
+
+
 
 
 
@@ -4479,7 +4534,8 @@ const
   {$EXTERNALSYM LVM_SETBKIMAGE}
   LVM_SETBKIMAGE = LVM_SETBKIMAGEA;
   {$EXTERNALSYM LVM_GETBKIMAGE}
-  LVM_GETBKIMAGE = LVM_GETBKIMAGEA;
+  LVM_GETBKIMAGE = LVM_GETBKIMAGEA;
+
 
 {$EXTERNALSYM ListView_SetBkImage}
 function ListView_SetBkImage(hwnd: HWND; plvbki: PLVBKImage): BOOL;
@@ -4608,12 +4664,14 @@ const
   LVN_ITEMACTIVATE        = LVN_FIRST-14;
   {$EXTERNALSYM LVN_ODSTATECHANGED}
   LVN_ODSTATECHANGED      = LVN_FIRST-15;
-
+
+
 
 
 
   {$EXTERNALSYM LVN_ODFINDITEM}
-  LVN_ODFINDITEM          = LVN_ODFINDITEMA; 
+  LVN_ODFINDITEM          = LVN_ODFINDITEMA; 
+
 
   {$EXTERNALSYM LVN_BEGINLABELEDITA}
   LVN_BEGINLABELEDITA      = LVN_FIRST-5;
@@ -4622,7 +4680,8 @@ const
   {$EXTERNALSYM LVN_BEGINLABELEDITW}
   LVN_BEGINLABELEDITW      = LVN_FIRST-75;
   {$EXTERNALSYM LVN_ENDLABELEDITW}
-  LVN_ENDLABELEDITW        = LVN_FIRST-76;
+  LVN_ENDLABELEDITW        = LVN_FIRST-76;
+
 
 
 
@@ -4631,7 +4690,8 @@ const
   {$EXTERNALSYM LVN_BEGINLABELEDIT}
   LVN_BEGINLABELEDIT      = LVN_BEGINLABELEDITA;
   {$EXTERNALSYM LVN_ENDLABELEDIT}
-  LVN_ENDLABELEDIT        = LVN_ENDLABELEDITA;
+  LVN_ENDLABELEDIT        = LVN_ENDLABELEDITA;
+
 
   {$EXTERNALSYM LVN_HOTTRACK}
   LVN_HOTTRACK            = LVN_FIRST-21;
@@ -4643,7 +4703,8 @@ const
   {$EXTERNALSYM LVN_GETDISPINFOW}
   LVN_GETDISPINFOW        = LVN_FIRST-77;
   {$EXTERNALSYM LVN_SETDISPINFOW}
-  LVN_SETDISPINFOW        = LVN_FIRST-78;
+  LVN_SETDISPINFOW        = LVN_FIRST-78;
+
 
 
 
@@ -4652,7 +4713,8 @@ const
   {$EXTERNALSYM LVN_GETDISPINFO}
   LVN_GETDISPINFO        = LVN_GETDISPINFOA;
   {$EXTERNALSYM LVN_SETDISPINFO}
-  LVN_SETDISPINFO        = LVN_SETDISPINFOA;
+  LVN_SETDISPINFO        = LVN_SETDISPINFOA;
+
 
   {$EXTERNALSYM LVIF_DI_SETITEM}
   LVIF_DI_SETITEM         = $1000;
@@ -4746,12 +4808,14 @@ const
   LVN_GETINFOTIPA          = LVN_FIRST-57;
   {$EXTERNALSYM LVN_GETINFOTIPW}
   LVN_GETINFOTIPW          = LVN_FIRST-58;
-
+
+
 
 
 
   {$EXTERNALSYM LVN_GETINFOTIP}
-  LVN_GETINFOTIP          = LVN_GETINFOTIPA;
+  LVN_GETINFOTIP          = LVN_GETINFOTIPA;
+
 
 { ====== TREEVIEW CONTROL =================== }
 
@@ -4983,12 +5047,14 @@ const
   {$EXTERNALSYM TVM_INSERTITEMA}
   TVM_INSERTITEMA          = TV_FIRST + 0;
   {$EXTERNALSYM TVM_INSERTITEMW}
-  TVM_INSERTITEMW          = TV_FIRST + 50;
+  TVM_INSERTITEMW          = TV_FIRST + 50;
+
 
 
 
   {$EXTERNALSYM TVM_INSERTITEM}
-  TVM_INSERTITEM          = TVM_INSERTITEMA;
+  TVM_INSERTITEM          = TVM_INSERTITEMA;
+
 
 {$EXTERNALSYM TreeView_InsertItem}
 function TreeView_InsertItem(hwnd: HWND; const lpis: TTVInsertStruct): HTreeItem;
@@ -5147,55 +5213,61 @@ const
   {$EXTERNALSYM TVM_GETITEMA}
   TVM_GETITEMA             = TV_FIRST + 12;
   {$EXTERNALSYM TVM_GETITEMW}
-  TVM_GETITEMW             = TV_FIRST + 62;
+  TVM_GETITEMW             = TV_FIRST + 62;
+
 
 
 
   {$EXTERNALSYM TVM_GETITEM}
-  TVM_GETITEM             = TVM_GETITEMA;
+  TVM_GETITEM             = TVM_GETITEMA;
 
+
+{$EXTERNALSYM TreeView_GetItem}
+function TreeView_GetItem(hwnd: HWND; var pitem: TTVItem): Bool;
 {$EXTERNALSYM TreeView_GetItemA}
 function TreeView_GetItemA(hwnd: HWND; var pitem: TTVItemA): Bool;
 {$EXTERNALSYM TreeView_GetItemW}
 function TreeView_GetItemW(hwnd: HWND; var pitem: TTVItemW): Bool;
-{$EXTERNALSYM TreeView_GetItem}
-function TreeView_GetItem(hwnd: HWND; var pitem: TTVItem): Bool;
 
 const
   {$EXTERNALSYM TVM_SETITEMA}
   TVM_SETITEMA             = TV_FIRST + 13;
   {$EXTERNALSYM TVM_SETITEMW}
-  TVM_SETITEMW             = TV_FIRST + 63;
+  TVM_SETITEMW             = TV_FIRST + 63;
+
 
 
 
   {$EXTERNALSYM TVM_SETITEM}
-  TVM_SETITEM             = TVM_SETITEMA;
+  TVM_SETITEM             = TVM_SETITEMA;
 
+
+{$EXTERNALSYM TreeView_SetItem}
+function TreeView_SetItem(hwnd: HWND; const pitem: TTVItem): Bool;
 {$EXTERNALSYM TreeView_SetItemA}
 function TreeView_SetItemA(hwnd: HWND; const pitem: TTVItemA): Bool;
 {$EXTERNALSYM TreeView_SetItemW}
 function TreeView_SetItemW(hwnd: HWND; const pitem: TTVItemW): Bool;
-{$EXTERNALSYM TreeView_SetItem}
-function TreeView_SetItem(hwnd: HWND; const pitem: TTVItem): Bool;
 
 const
   {$EXTERNALSYM TVM_EDITLABELA}
   TVM_EDITLABELA           = TV_FIRST + 14;
   {$EXTERNALSYM TVM_EDITLABELW}
-  TVM_EDITLABELW           = TV_FIRST + 65;
+  TVM_EDITLABELW           = TV_FIRST + 65;
+
 
 
 
   {$EXTERNALSYM TVM_EDITLABEL}
-  TVM_EDITLABEL           = TVM_EDITLABELA;
+  TVM_EDITLABEL           = TVM_EDITLABELA;
 
+
+{$EXTERNALSYM TreeView_EditLabel}
+function TreeView_EditLabel(hwnd: HWND; hitem: HTreeItem): HWND;
 {$EXTERNALSYM TreeView_EditLabelA}
 function TreeView_EditLabelA(hwnd: HWND; hitem: HTreeItem): HWND;
 {$EXTERNALSYM TreeView_EditLabelW}
 function TreeView_EditLabelW(hwnd: HWND; hitem: HTreeItem): HWND;
-{$EXTERNALSYM TreeView_EditLabel}
-function TreeView_EditLabel(hwnd: HWND; hitem: HTreeItem): HWND;
 
 const
   {$EXTERNALSYM TVM_GETEDITCONTROL}
@@ -5321,19 +5393,21 @@ const
   {$EXTERNALSYM TVM_GETISEARCHSTRINGA}
   TVM_GETISEARCHSTRINGA    = TV_FIRST + 23;
   {$EXTERNALSYM TVM_GETISEARCHSTRINGW}
-  TVM_GETISEARCHSTRINGW    = TV_FIRST + 64;
+  TVM_GETISEARCHSTRINGW    = TV_FIRST + 64;
+
 
 
 
   {$EXTERNALSYM TVM_GETISEARCHSTRING}
-  TVM_GETISEARCHSTRING    = TVM_GETISEARCHSTRINGA;
+  TVM_GETISEARCHSTRING    = TVM_GETISEARCHSTRINGA;
 
+
+{$EXTERNALSYM TreeView_GetISearchString}
+function TreeView_GetISearchString(hwndTV: HWND; lpsz: PChar): Bool;
 {$EXTERNALSYM TreeView_GetISearchStringA}
 function TreeView_GetISearchStringA(hwndTV: HWND; lpsz: PAnsiChar): Bool;
 {$EXTERNALSYM TreeView_GetISearchStringW}
 function TreeView_GetISearchStringW(hwndTV: HWND; lpsz: PWideChar): Bool;
-{$EXTERNALSYM TreeView_GetISearchString}
-function TreeView_GetISearchString(hwndTV: HWND; lpsz: PChar): Bool;
 
 const
   {$EXTERNALSYM TVM_SETTOOLTIPS}
@@ -5486,7 +5560,8 @@ const
   {$EXTERNALSYM TVN_SELCHANGINGW}
   TVN_SELCHANGINGW         = TVN_FIRST-50;
   {$EXTERNALSYM TVN_SELCHANGEDW}
-  TVN_SELCHANGEDW          = TVN_FIRST-51;
+  TVN_SELCHANGEDW          = TVN_FIRST-51;
+
 
 
 
@@ -5495,7 +5570,8 @@ const
   {$EXTERNALSYM TVN_SELCHANGING}
   TVN_SELCHANGING         = TVN_SELCHANGINGA;
   {$EXTERNALSYM TVN_SELCHANGED}
-  TVN_SELCHANGED          = TVN_SELCHANGEDA;
+  TVN_SELCHANGED          = TVN_SELCHANGEDA;
+
 
 const
   {$EXTERNALSYM TVC_UNKNOWN}
@@ -5513,7 +5589,8 @@ const
   {$EXTERNALSYM TVN_GETDISPINFOW}
   TVN_GETDISPINFOW         = TVN_FIRST-52;
   {$EXTERNALSYM TVN_SETDISPINFOW}
-  TVN_SETDISPINFOW         = TVN_FIRST-53;
+  TVN_SETDISPINFOW         = TVN_FIRST-53;
+
 
 
 
@@ -5522,7 +5599,8 @@ const
   {$EXTERNALSYM TVN_GETDISPINFO}
   TVN_GETDISPINFO         = TVN_GETDISPINFOA;
   {$EXTERNALSYM TVN_SETDISPINFO}
-  TVN_SETDISPINFO         = TVN_SETDISPINFOA;
+  TVN_SETDISPINFO         = TVN_SETDISPINFOA;
+
 
   {$EXTERNALSYM TVIF_DI_SETITEM}
   TVIF_DI_SETITEM         = $1000;
@@ -5591,7 +5669,8 @@ const
   {$EXTERNALSYM TVN_ENDLABELEDITW}
   TVN_ENDLABELEDITW        = TVN_FIRST-60;
   {$EXTERNALSYM TVN_GETINFOTIPW}
-  TVN_GETINFOTIPW          = TVN_FIRST-14;
+  TVN_GETINFOTIPW          = TVN_FIRST-14;
+
 
 
 
@@ -5624,7 +5703,8 @@ const
   {$EXTERNALSYM TVN_ENDLABELEDIT}
   TVN_ENDLABELEDIT        = TVN_ENDLABELEDITA;
   {$EXTERNALSYM TVN_GETINFOTIP}
-  TVN_GETINFOTIP         = TVN_GETINFOTIPA;
+  TVN_GETINFOTIP         = TVN_GETINFOTIPA;
+
 
 const
   {$EXTERNALSYM TVN_KEYDOWN}
@@ -5779,7 +5859,8 @@ const
   CBEM_SETUNICODEFORMAT   = CCM_SETUNICODEFORMAT;
   {$EXTERNALSYM CBEM_GETUNICODEFORMAT}
   CBEM_GETUNICODEFORMAT   = CCM_GETUNICODEFORMAT;
-
+
+
 
 
 
@@ -5792,7 +5873,8 @@ const
   {$EXTERNALSYM CBEM_SETITEM}
   CBEM_SETITEM            = CBEM_SETITEMA;
   {$EXTERNALSYM CBEM_GETITEM}
-  CBEM_GETITEM            = CBEM_GETITEMA;
+  CBEM_GETITEM            = CBEM_GETITEMA;
+
 
   {$EXTERNALSYM CBES_EX_NOEDITIMAGE}
   CBES_EX_NOEDITIMAGE          = $00000001;
@@ -5844,7 +5926,8 @@ const
   CBEN_DRAGBEGINA			    = CBEN_FIRST - 8;
   {$EXTERNALSYM CBEN_DRAGBEGINW}
   CBEN_DRAGBEGINW			    = CBEN_FIRST - 9;
-
+
+
 
 
 
@@ -5857,7 +5940,8 @@ const
   {$EXTERNALSYM CBEN_GETDISPINFO}
   CBEN_GETDISPINFO        = CBEN_GETDISPINFOA;
   {$EXTERNALSYM CBEN_DRAGBEGIN}
-  CBEN_DRAGBEGIN          = CBEN_DRAGBEGINA;
+  CBEN_DRAGBEGIN          = CBEN_DRAGBEGINA;
+
 
   {$EXTERNALSYM CBENF_KILLFOCUS}
   CBENF_KILLFOCUS         = 1;
@@ -6138,7 +6222,8 @@ const
   {$EXTERNALSYM TCM_SETITEMW}
   TCM_SETITEMW             = TCM_FIRST + 61;
   {$EXTERNALSYM TCM_INSERTITEMW}
-  TCM_INSERTITEMW          = TCM_FIRST + 62;
+  TCM_INSERTITEMW          = TCM_FIRST + 62;
+
 
 
 
@@ -6151,7 +6236,8 @@ const
   {$EXTERNALSYM TCM_SETITEM}
   TCM_SETITEM             = TCM_SETITEMA;
   {$EXTERNALSYM TCM_INSERTITEM}
-  TCM_INSERTITEM          = TCM_INSERTITEMA;
+  TCM_INSERTITEM          = TCM_INSERTITEMA;
+
 
 const
   {$EXTERNALSYM TCHT_NOWHERE}
@@ -6256,12 +6342,14 @@ const
   {$EXTERNALSYM ACM_OPENA}
   ACM_OPENA                = WM_USER + 100;
   {$EXTERNALSYM ACM_OPENW}
-  ACM_OPENW                = WM_USER + 103;
+  ACM_OPENW                = WM_USER + 103;
+
 
 
 
   {$EXTERNALSYM ACM_OPEN}
-  ACM_OPEN                = ACM_OPENA;
+  ACM_OPEN                = ACM_OPENA;
+
 
   {$EXTERNALSYM ACM_PLAY}
   ACM_PLAY                = WM_USER + 101;
@@ -6659,7 +6747,8 @@ const
   {$EXTERNALSYM DTN_DROPDOWN}
   DTN_DROPDOWN       = DTN_FIRST + 6;  // MonthCal has dropped down
   {$EXTERNALSYM DTN_CLOSEUP}
-  DTN_CLOSEUP        = DTN_FIRST + 7;  // MonthCal is popping up
+  DTN_CLOSEUP        = DTN_FIRST + 7;  // MonthCal is popping up
+
 
 
 
@@ -6676,7 +6765,8 @@ const
   {$EXTERNALSYM DTN_FORMAT}
   DTN_FORMAT         = DTN_FORMATA;
   {$EXTERNALSYM DTN_FORMATQUERY}
-  DTN_FORMATQUERY    = DTN_FORMATQUERYA;
+  DTN_FORMATQUERY    = DTN_FORMATQUERYA;
+
 
   // Ranges
   {$EXTERNALSYM GDTR_MIN}
@@ -6821,12 +6911,12 @@ function DateTime_SetRange(hdp: HWND; gdtr: DWORD; rgst: PSystemTime): BOOL;
 //   NOTE: 'X' is a valid formatting character which indicates that the application
 //   will determine how to display information. Such apps must support DTN_WMKEYDOWN,
 //   DTN_FORMAT, and DTN_FORMATQUERY.
+{$EXTERNALSYM DateTime_SetFormat}
+function DateTime_SetFormat(hdp: HWND; sz: PChar): BOOL;
 {$EXTERNALSYM DateTime_SetFormatA}
 function DateTime_SetFormatA(hdp: HWND; sz: PAnsiChar): BOOL;
 {$EXTERNALSYM DateTime_SetFormatW}
 function DateTime_SetFormatW(hdp: HWND; sz: PWideChar): BOOL;
-{$EXTERNALSYM DateTime_SetFormat}
-function DateTime_SetFormat(hdp: HWND; sz: PChar): BOOL;
 
 {$EXTERNALSYM DateTime_SetMonthCalColor}
 function DateTime_SetMonthCalColor(hdp: HWND; iColor: DWORD; clr: TColorRef): TColorRef;
@@ -7206,13 +7296,13 @@ begin
 end;
 
 { Property Sheets }
+function CreatePropertySheetPage; external cctrl name 'CreatePropertySheetPageA';
 function CreatePropertySheetPageA; external cctrl name 'CreatePropertySheetPageA';
 function CreatePropertySheetPageW; external cctrl name 'CreatePropertySheetPageW';
-function CreatePropertySheetPage; external cctrl name 'CreatePropertySheetPageA';
 function DestroyPropertySheetPage; external cctrl name 'DestroyPropertySheetPage';
+function PropertySheet; external cctrl name 'PropertySheetA';
 function PropertySheetA; external cctrl name 'PropertySheetA';
 function PropertySheetW; external cctrl name 'PropertySheetW';
-function PropertySheet; external cctrl name 'PropertySheetA';
 
 { Image List }
 function ImageList_Create; external cctrl name 'ImageList_Create';
@@ -7243,9 +7333,9 @@ function ImageList_DrawEx; external cctrl name 'ImageList_DrawEx';
 function ImageList_DrawIndirect; external cctrl name 'ImageList_DrawIndirect';
 function ImageList_Remove; external cctrl name 'ImageList_Remove';
 function ImageList_GetIcon; external cctrl name 'ImageList_GetIcon';
+function ImageList_LoadImage; external cctrl name 'ImageList_LoadImageA';
 function ImageList_LoadImageA; external cctrl name 'ImageList_LoadImageA';
 function ImageList_LoadImageW; external cctrl name 'ImageList_LoadImageW';
-function ImageList_LoadImage; external cctrl name 'ImageList_LoadImageA';
 function ImageList_Copy; external cctrl name 'ImageList_Copy';
 function ImageList_BeginDrag; external cctrl name 'ImageList_BeginDrag';
 function ImageList_EndDrag; external cctrl name 'ImageList_EndDrag';
@@ -7373,12 +7463,12 @@ function CreateToolBarEx; external cctrl name 'CreateToolbarEx';
 function CreateMappedBitmap; external cctrl name 'CreateMappedBitmap';
 
 { Status bar }
+procedure DrawStatusText; external cctrl name 'DrawStatusTextA';
 procedure DrawStatusTextA; external cctrl name 'DrawStatusTextA';
 procedure DrawStatusTextW; external cctrl name 'DrawStatusTextW';
-procedure DrawStatusText; external cctrl name 'DrawStatusTextA';
+function CreateStatusWindow; external cctrl name 'CreateStatusWindowA';
 function CreateStatusWindowA; external cctrl name 'CreateStatusWindowA';
 function CreateStatusWindowW; external cctrl name 'CreateStatusWindowW';
-function CreateStatusWindow; external cctrl name 'CreateStatusWindowA';
 
 { Menu Help }
 procedure MenuHelp; external cctrl name 'MenuHelp';
@@ -7434,6 +7524,10 @@ begin
   Result := I shl 12;
 end;
 
+function ListView_GetItem(hWnd: HWND; var pItem: TLVItem): Bool;
+begin
+  Result := Bool( SendMessage(hWnd, LVM_GETITEM, 0, Longint(@pItem)) );
+end;
 function ListView_GetItemA(hWnd: HWND; var pItem: TLVItemA): Bool;
 begin
   Result := Bool( SendMessage(hWnd, LVM_GETITEM, 0, Longint(@pItem)) );
@@ -7442,11 +7536,11 @@ function ListView_GetItemW(hWnd: HWND; var pItem: TLVItemW): Bool;
 begin
   Result := Bool( SendMessage(hWnd, LVM_GETITEM, 0, Longint(@pItem)) );
 end;
-function ListView_GetItem(hWnd: HWND; var pItem: TLVItem): Bool;
-begin
-  Result := Bool( SendMessage(hWnd, LVM_GETITEM, 0, Longint(@pItem)) );
-end;
 
+function ListView_SetItem(hWnd: HWND; const pItem: TLVItem): Bool;
+begin
+  Result := Bool( SendMessage(hWnd, LVM_SETITEM, 0, Longint(@pItem)) );
+end;
 function ListView_SetItemA(hWnd: HWND; const pItem: TLVItemA): Bool;
 begin
   Result := Bool( SendMessage(hWnd, LVM_SETITEM, 0, Longint(@pItem)) );
@@ -7455,20 +7549,16 @@ function ListView_SetItemW(hWnd: HWND; const pItem: TLVItemW): Bool;
 begin
   Result := Bool( SendMessage(hWnd, LVM_SETITEM, 0, Longint(@pItem)) );
 end;
-function ListView_SetItem(hWnd: HWND; const pItem: TLVItem): Bool;
-begin
-  Result := Bool( SendMessage(hWnd, LVM_SETITEM, 0, Longint(@pItem)) );
-end;
 
+function ListView_InsertItem(hWnd: HWND; const pItem: TLVItem): Integer;
+begin
+  Result := Integer( SendMessage(hWnd, LVM_INSERTITEM, 0, Longint(@pItem)) );
+end;
 function ListView_InsertItemA(hWnd: HWND; const pItem: TLVItemA): Integer;
 begin
   Result := Integer( SendMessage(hWnd, LVM_INSERTITEM, 0, Longint(@pItem)) );
 end;
 function ListView_InsertItemW(hWnd: HWND; const pItem: TLVItemW): Integer;
-begin
-  Result := Integer( SendMessage(hWnd, LVM_INSERTITEM, 0, Longint(@pItem)) );
-end;
-function ListView_InsertItem(hWnd: HWND; const pItem: TLVItem): Integer;
 begin
   Result := Integer( SendMessage(hWnd, LVM_INSERTITEM, 0, Longint(@pItem)) );
 end;
@@ -7498,6 +7588,11 @@ begin
   Result := SendMessage(hWnd, LVM_GETNEXTITEM, iStart, MakeLong(Flags, 0));
 end;
 
+function ListView_FindItem(hWnd: HWND; iStart: Integer;
+  const plvfi: TLVFindInfo): Integer;
+begin
+  Result := SendMessage(hWnd, LVM_FINDITEM, iStart, Longint(@plvfi));
+end;
 function ListView_FindItemA(hWnd: HWND; iStart: Integer;
   const plvfi: TLVFindInfoA): Integer;
 begin
@@ -7505,11 +7600,6 @@ begin
 end;
 function ListView_FindItemW(hWnd: HWND; iStart: Integer;
   const plvfi: TLVFindInfoW): Integer;
-begin
-  Result := SendMessage(hWnd, LVM_FINDITEM, iStart, Longint(@plvfi));
-end;
-function ListView_FindItem(hWnd: HWND; iStart: Integer;
-  const plvfi: TLVFindInfo): Integer;
 begin
   Result := SendMessage(hWnd, LVM_FINDITEM, iStart, Longint(@plvfi));
 end;
@@ -7537,15 +7627,15 @@ begin
   Result := Bool( SendMessage(hWndLV, LVM_GETITEMPOSITION, i, Longint(@ppt)) );
 end;
 
+function ListView_GetStringWidth(hwndLV: HWND; psz: PChar): Integer;
+begin
+  Result := SendMessage(hwndLV, LVM_GETSTRINGWIDTH, 0, Longint(psz));
+end;
 function ListView_GetStringWidthA(hwndLV: HWND; psz: PAnsiChar): Integer;
 begin
   Result := SendMessage(hwndLV, LVM_GETSTRINGWIDTH, 0, Longint(psz));
 end;
 function ListView_GetStringWidthW(hwndLV: HWND; psz: PWideChar): Integer;
-begin
-  Result := SendMessage(hwndLV, LVM_GETSTRINGWIDTH, 0, Longint(psz));
-end;
-function ListView_GetStringWidth(hwndLV: HWND; psz: PChar): Integer;
 begin
   Result := SendMessage(hwndLV, LVM_GETSTRINGWIDTH, 0, Longint(psz));
 end;
@@ -7576,15 +7666,15 @@ begin
   Result := Bool( SendMessage(hwndLV, LVM_ARRANGE, Code, 0) );
 end;
 
+function ListView_EditLabel(hwndLV: HWND; i: Integer): HWND;
+begin
+  Result := HWND( SendMessage(hwndLV, LVM_EDITLABEL, i, 0) );
+end;
 function ListView_EditLabelA(hwndLV: HWND; i: Integer): HWND;
 begin
   Result := HWND( SendMessage(hwndLV, LVM_EDITLABEL, i, 0) );
 end;
 function ListView_EditLabelW(hwndLV: HWND; i: Integer): HWND;
-begin
-  Result := HWND( SendMessage(hwndLV, LVM_EDITLABEL, i, 0) );
-end;
-function ListView_EditLabel(hwndLV: HWND; i: Integer): HWND;
 begin
   Result := HWND( SendMessage(hwndLV, LVM_EDITLABEL, i, 0) );
 end;
@@ -7594,6 +7684,10 @@ begin
   Result := HWND( SendMessage(hwndLV, LVM_GETEDITCONTROL, 0, 0) );
 end;
 
+function ListView_GetColumn(hwnd: HWND; iCol: Integer; var pcol: TLVColumn): Bool;
+begin
+  Result := Bool( SendMessage(hwnd, LVM_GETCOLUMN, iCol, Longint(@pcol)) );
+end;
 function ListView_GetColumnA(hwnd: HWND; iCol: Integer; var pcol: TLVColumnA): Bool;
 begin
   Result := Bool( SendMessage(hwnd, LVM_GETCOLUMN, iCol, Longint(@pcol)) );
@@ -7602,11 +7696,11 @@ function ListView_GetColumnW(hwnd: HWND; iCol: Integer; var pcol: TLVColumnW): B
 begin
   Result := Bool( SendMessage(hwnd, LVM_GETCOLUMN, iCol, Longint(@pcol)) );
 end;
-function ListView_GetColumn(hwnd: HWND; iCol: Integer; var pcol: TLVColumn): Bool;
-begin
-  Result := Bool( SendMessage(hwnd, LVM_GETCOLUMN, iCol, Longint(@pcol)) );
-end;
 
+function ListView_SetColumn(hwnd: HWND; iCol: Integer; const pcol: TLVColumn): Bool;
+begin
+  Result := Bool( SendMessage(hwnd, LVM_SETCOLUMN, iCol, Longint(@pcol)) );
+end;
 function ListView_SetColumnA(hwnd: HWND; iCol: Integer; const pcol: TLVColumnA): Bool;
 begin
   Result := Bool( SendMessage(hwnd, LVM_SETCOLUMN, iCol, Longint(@pcol)) );
@@ -7615,20 +7709,16 @@ function ListView_SetColumnW(hwnd: HWND; iCol: Integer; const pcol: TLVColumnW):
 begin
   Result := Bool( SendMessage(hwnd, LVM_SETCOLUMN, iCol, Longint(@pcol)) );
 end;
-function ListView_SetColumn(hwnd: HWND; iCol: Integer; const pcol: TLVColumn): Bool;
-begin
-  Result := Bool( SendMessage(hwnd, LVM_SETCOLUMN, iCol, Longint(@pcol)) );
-end;
 
+function ListView_InsertColumn(hwnd: HWND; iCol: Integer; const pcol: TLVColumn): Integer;
+begin
+  Result := SendMessage(hWnd, LVM_INSERTCOLUMN, iCol, Longint(@pcol));
+end;
 function ListView_InsertColumnA(hwnd: HWND; iCol: Integer; const pcol: TLVColumnA): Integer;
 begin
   Result := SendMessage(hWnd, LVM_INSERTCOLUMN, iCol, Longint(@pcol));
 end;
 function ListView_InsertColumnW(hwnd: HWND; iCol: Integer; const pcol: TLVColumnW): Integer;
-begin
-  Result := SendMessage(hWnd, LVM_INSERTCOLUMN, iCol, Longint(@pcol));
-end;
-function ListView_InsertColumn(hwnd: HWND; iCol: Integer; const pcol: TLVColumn): Integer;
 begin
   Result := SendMessage(hWnd, LVM_INSERTCOLUMN, iCol, Longint(@pcol));
 end;
@@ -7734,6 +7824,16 @@ begin
   SendMessage(hwndLV, LVM_SETITEMSTATE, i, Integer(@Item));
 end;
 
+function ListView_GetItemText(hwndLV: HWND; i, iSubItem: Integer;
+  pszText: PChar; cchTextMax: Integer): Integer;
+var
+  Item: TLVItem;
+begin
+  Item.iSubItem := iSubItem;
+  Item.cchTextMax := cchTextMax;
+  Item.pszText := pszText;
+  Result := SendMessage(hwndLV, LVM_GETITEMTEXT, i, Longint(@Item));
+end;
 function ListView_GetItemTextA(hwndLV: HWND; i, iSubItem: Integer;
   pszText: PAnsiChar; cchTextMax: Integer): Integer;
 var
@@ -7754,17 +7854,16 @@ begin
   Item.pszText := pszText;
   Result := SendMessage(hwndLV, LVM_GETITEMTEXT, i, Longint(@Item));
 end;
-function ListView_GetItemText(hwndLV: HWND; i, iSubItem: Integer;
-  pszText: PChar; cchTextMax: Integer): Integer;
+
+function ListView_SetItemText(hwndLV: HWND; i, iSubItem: Integer;
+  pszText: PChar): Bool;
 var
   Item: TLVItem;
 begin
   Item.iSubItem := iSubItem;
-  Item.cchTextMax := cchTextMax;
   Item.pszText := pszText;
-  Result := SendMessage(hwndLV, LVM_GETITEMTEXT, i, Longint(@Item));
+  Result := Bool( SendMessage(hwndLV, LVM_SETITEMTEXT, i, Longint(@Item)) );
 end;
-
 function ListView_SetItemTextA(hwndLV: HWND; i, iSubItem: Integer;
   pszText: PAnsiChar): Bool;
 var
@@ -7778,15 +7877,6 @@ function ListView_SetItemTextW(hwndLV: HWND; i, iSubItem: Integer;
   pszText: PWideChar): Bool;
 var
   Item: TLVItemW;
-begin
-  Item.iSubItem := iSubItem;
-  Item.pszText := pszText;
-  Result := Bool( SendMessage(hwndLV, LVM_SETITEMTEXT, i, Longint(@Item)) );
-end;
-function ListView_SetItemText(hwndLV: HWND; i, iSubItem: Integer;
-  pszText: PChar): Bool;
-var
-  Item: TLVItem;
 begin
   Item.iSubItem := iSubItem;
   Item.pszText := pszText;
@@ -7829,17 +7919,17 @@ begin
   Result := SendMessage(hwndLV, LVM_GETITEMSPACING, fSmall, 0);
 end;
 
+function ListView_GetISearchString(hwndLV: HWND; lpsz: PChar): Bool;
+begin
+  Result := Bool( SendMessage(hwndLV, LVM_GETISEARCHSTRING, 0,
+    Longint(lpsz)) );
+end;
 function ListView_GetISearchStringA(hwndLV: HWND; lpsz: PAnsiChar): Bool;
 begin
   Result := Bool( SendMessage(hwndLV, LVM_GETISEARCHSTRING, 0,
     Longint(lpsz)) );
 end;
 function ListView_GetISearchStringW(hwndLV: HWND; lpsz: PWideChar): Bool;
-begin
-  Result := Bool( SendMessage(hwndLV, LVM_GETISEARCHSTRING, 0,
-    Longint(lpsz)) );
-end;
-function ListView_GetISearchString(hwndLV: HWND; lpsz: PChar): Bool;
 begin
   Result := Bool( SendMessage(hwndLV, LVM_GETISEARCHSTRING, 0,
     Longint(lpsz)) );
@@ -8112,6 +8202,10 @@ begin
   Result := TreeView_Select(hwnd, hitem, TVGN_FIRSTVISIBLE);
 end;
 
+function TreeView_GetItem(hwnd: HWND; var pitem: TTVItem): Bool;
+begin
+  Result := Bool( SendMessage(hwnd, TVM_GETITEM, 0, Longint(@pitem)) );
+end;
 function TreeView_GetItemA(hwnd: HWND; var pitem: TTVItemA): Bool;
 begin
   Result := Bool( SendMessage(hwnd, TVM_GETITEM, 0, Longint(@pitem)) );
@@ -8120,11 +8214,11 @@ function TreeView_GetItemW(hwnd: HWND; var pitem: TTVItemW): Bool;
 begin
   Result := Bool( SendMessage(hwnd, TVM_GETITEM, 0, Longint(@pitem)) );
 end;
-function TreeView_GetItem(hwnd: HWND; var pitem: TTVItem): Bool;
-begin
-  Result := Bool( SendMessage(hwnd, TVM_GETITEM, 0, Longint(@pitem)) );
-end;
 
+function TreeView_SetItem(hwnd: HWND; const pitem: TTVItem): Bool;
+begin
+  Result := Bool( SendMessage(hwnd, TVM_SETITEM, 0, Longint(@pitem)) );
+end;
 function TreeView_SetItemA(hwnd: HWND; const pitem: TTVItemA): Bool;
 begin
   Result := Bool( SendMessage(hwnd, TVM_SETITEM, 0, Longint(@pitem)) );
@@ -8133,20 +8227,16 @@ function TreeView_SetItemW(hwnd: HWND; const pitem: TTVItemW): Bool;
 begin
   Result := Bool( SendMessage(hwnd, TVM_SETITEM, 0, Longint(@pitem)) );
 end;
-function TreeView_SetItem(hwnd: HWND; const pitem: TTVItem): Bool;
-begin
-  Result := Bool( SendMessage(hwnd, TVM_SETITEM, 0, Longint(@pitem)) );
-end;
 
+function TreeView_EditLabel(hwnd: HWND; hitem: HTreeItem): HWND;
+begin
+  Result := Windows.HWND( SendMessage(hwnd, TVM_EDITLABEL, 0, Longint(hitem)) );
+end;
 function TreeView_EditLabelA(hwnd: HWND; hitem: HTreeItem): HWND;
 begin
   Result := Windows.HWND( SendMessage(hwnd, TVM_EDITLABEL, 0, Longint(hitem)) );
 end;
 function TreeView_EditLabelW(hwnd: HWND; hitem: HTreeItem): HWND;
-begin
-  Result := Windows.HWND( SendMessage(hwnd, TVM_EDITLABEL, 0, Longint(hitem)) );
-end;
-function TreeView_EditLabel(hwnd: HWND; hitem: HTreeItem): HWND;
 begin
   Result := Windows.HWND( SendMessage(hwnd, TVM_EDITLABEL, 0, Longint(hitem)) );
 end;
@@ -8197,17 +8287,17 @@ begin
     0) );
 end;
 
+function TreeView_GetISearchString(hwndTV: HWND; lpsz: PChar): Bool;
+begin
+  Result := Bool( SendMessage(hwndTV, TVM_GETISEARCHSTRING, 0,
+    Longint(lpsz)) );
+end;
 function TreeView_GetISearchStringA(hwndTV: HWND; lpsz: PAnsiChar): Bool;
 begin
   Result := Bool( SendMessage(hwndTV, TVM_GETISEARCHSTRING, 0,
     Longint(lpsz)) );
 end;
 function TreeView_GetISearchStringW(hwndTV: HWND; lpsz: PWideChar): Bool;
-begin
-  Result := Bool( SendMessage(hwndTV, TVM_GETISEARCHSTRING, 0,
-    Longint(lpsz)) );
-end;
-function TreeView_GetISearchString(hwndTV: HWND; lpsz: PChar): Bool;
 begin
   Result := Bool( SendMessage(hwndTV, TVM_GETISEARCHSTRING, 0,
     Longint(lpsz)) );
@@ -8562,6 +8652,10 @@ begin
   Result := BOOL(SendMessage(hdp, DTM_SETRANGE, gdtr, Longint(rgst)));
 end;
 
+function DateTime_SetFormat(hdp: HWND; sz: PChar): BOOL;
+begin
+  Result := BOOL(SendMessage(hdp, DTM_SETFORMAT, 0, Longint(sz)));
+end;
 function DateTime_SetFormatA(hdp: HWND; sz: PAnsiChar): BOOL;
 begin
   Result := BOOL(SendMessage(hdp, DTM_SETFORMATA, 0, Longint(sz)));
@@ -8569,10 +8663,6 @@ end;
 function DateTime_SetFormatW(hdp: HWND; sz: PWideChar): BOOL;
 begin
   Result := BOOL(SendMessage(hdp, DTM_SETFORMATW, 0, Longint(sz)));
-end;
-function DateTime_SetFormat(hdp: HWND; sz: PChar): BOOL;
-begin
-  Result := BOOL(SendMessage(hdp, DTM_SETFORMAT, 0, Longint(sz)));
 end;
 
 function DateTime_SetMonthCalColor(hdp: HWND; iColor: DWORD; clr: TColorRef): TColorRef;

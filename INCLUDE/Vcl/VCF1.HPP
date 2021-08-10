@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'vcf1.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'VCF1.pas' rev: 6.00
 
-#ifndef vcf1HPP
-#define vcf1HPP
+#ifndef VCF1HPP
+#define VCF1HPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -57,12 +57,8 @@ typedef Activex::TOleEnum F1ControlCellConstants;
 
 __dispinterface _DVCF1;
 typedef System::DelphiInterface<_DVCF1> _di__DVCF1;
-__dispinterface INTERFACE_UUID("{042BADC6-5E58-11CE-B610-524153480001}") _DVCF1  : public IDispatch 
-	
-{
-	
-};
 typedef _DVCF1 F1Book;
+;
 
 typedef short *PSmallint1;
 
@@ -80,10 +76,14 @@ typedef double *PDouble1;
 
 typedef float *PSingle1;
 
+__dispinterface INTERFACE_UUID("{042BADC6-5E58-11CE-B610-524153480001}") _DVCF1  : public IDispatch 
+{
+	
+};
+
 __dispinterface _DVCF1Events;
 typedef System::DelphiInterface<_DVCF1Events> _di__DVCF1Events;
 __dispinterface INTERFACE_UUID("{042BADC7-5E58-11CE-B610-524153480001}") _DVCF1Events  : public IDispatch 
-	
 {
 	
 };
@@ -92,33 +92,25 @@ typedef void __fastcall (__closure *TF1BookClick)(System::TObject* Sender, int n
 
 typedef void __fastcall (__closure *TF1BookDblClick)(System::TObject* Sender, int nRow, int nCol);
 
-typedef void __fastcall (__closure *TF1BookStartEdit)(System::TObject* Sender, WideString &EditString
-	, short &Cancel);
+typedef void __fastcall (__closure *TF1BookStartEdit)(System::TObject* Sender, WideString &EditString, short &Cancel);
 
-typedef void __fastcall (__closure *TF1BookEndEdit)(System::TObject* Sender, WideString &EditString, 
-	short &Cancel);
+typedef void __fastcall (__closure *TF1BookEndEdit)(System::TObject* Sender, WideString &EditString, short &Cancel);
 
-typedef void __fastcall (__closure *TF1BookObjClick)(System::TObject* Sender, WideString &ObjName, int 
-	ObjID);
+typedef void __fastcall (__closure *TF1BookObjClick)(System::TObject* Sender, WideString &ObjName, int ObjID);
 
-typedef void __fastcall (__closure *TF1BookObjDblClick)(System::TObject* Sender, WideString &ObjName
-	, int ObjID);
+typedef void __fastcall (__closure *TF1BookObjDblClick)(System::TObject* Sender, WideString &ObjName, int ObjID);
 
 typedef void __fastcall (__closure *TF1BookRClick)(System::TObject* Sender, int nRow, int nCol);
 
 typedef void __fastcall (__closure *TF1BookRDblClick)(System::TObject* Sender, int nRow, int nCol);
 
-typedef void __fastcall (__closure *TF1BookObjValueChanged)(System::TObject* Sender, WideString &ObjName
-	, int ObjID);
+typedef void __fastcall (__closure *TF1BookObjValueChanged)(System::TObject* Sender, WideString &ObjName, int ObjID);
 
-typedef void __fastcall (__closure *TF1BookObjGotFocus)(System::TObject* Sender, WideString &ObjName
-	, int ObjID);
+typedef void __fastcall (__closure *TF1BookObjGotFocus)(System::TObject* Sender, WideString &ObjName, int ObjID);
 
-typedef void __fastcall (__closure *TF1BookObjLostFocus)(System::TObject* Sender, WideString &ObjName
-	, int ObjID);
+typedef void __fastcall (__closure *TF1BookObjLostFocus)(System::TObject* Sender, WideString &ObjName, int ObjID);
 
-typedef void __fastcall (__closure *TF1BookValidationFailed)(System::TObject* Sender, WideString &pEntry
-	, int nSheet, int nRow, int nCol, WideString &pShowMessage, short &pAction);
+typedef void __fastcall (__closure *TF1BookValidationFailed)(System::TObject* Sender, WideString &pEntry, int nSheet, int nRow, int nCol, WideString &pShowMessage, short &pAction);
 
 class DELPHICLASS TF1Book;
 class PASCALIMPLEMENTATION TF1Book : public Olectrls::TOleControl 
@@ -207,19 +199,14 @@ protected:
 	
 public:
 	void __fastcall EditPasteValues(void);
-	void __fastcall GetAlignment(short &pHorizontal, Word &pWordWrap, short &pVertical, short &pOrientation
-		);
-	HIDESBASE void __fastcall GetBorder(short &pLeft, short &pRight, short &pTop, short &pBottom, short 
-		&pShade, unsigned &pcrLeft, unsigned &pcrRight, unsigned &pcrTop, unsigned &pcrBottom);
-	void __fastcall GetFont(WideString &pName, short &pSize, Word &pBold, Word &pItalic, Word &pUnderline
-		, Word &pStrikeout, unsigned &pcrColor, Word &pOutline, Word &pShadow);
+	void __fastcall GetAlignment(short &pHorizontal, Word &pWordWrap, short &pVertical, short &pOrientation);
+	HIDESBASE void __fastcall GetBorder(short &pLeft, short &pRight, short &pTop, short &pBottom, short &pShade, unsigned &pcrLeft, unsigned &pcrRight, unsigned &pcrTop, unsigned &pcrBottom);
+	void __fastcall GetFont(WideString &pName, short &pSize, Word &pBold, Word &pItalic, Word &pUnderline, Word &pStrikeout, unsigned &pcrColor, Word &pOutline, Word &pShadow);
 	void __fastcall GetLineStyle(short &pStyle, unsigned &pcrColor, short &pWeight);
 	void __fastcall GetPattern(short &pPattern, unsigned &pcrFG, unsigned &pcrBG);
 	void __fastcall GetProtection(Word &pLocked, Word &pHidden);
-	void __fastcall GetTabbedText(int nR1, int nC1, int nR2, int nC2, Word bValuesOnly, unsigned &phText
-		);
-	void __fastcall SetTabbedText(int nStartRow, int nStartCol, int &pRows, int &pCols, Word bValuesOnly
-		, const WideString pText);
+	void __fastcall GetTabbedText(int nR1, int nC1, int nR2, int nC2, Word bValuesOnly, unsigned &phText);
+	void __fastcall SetTabbedText(int nStartRow, int nStartCol, int &pRows, int &pCols, Word bValuesOnly, const WideString pText);
 	void __fastcall AddColPageBreak(int nCol);
 	void __fastcall AddPageBreak(void);
 	void __fastcall AddRowPageBreak(int nRow);
@@ -234,13 +221,11 @@ public:
 	void __fastcall ColorPaletteDlg(void);
 	void __fastcall ColWidthDlg(void);
 	void __fastcall CopyAll(int hSrcSS);
-	void __fastcall CopyRange(int nDstR1, int nDstC1, int nDstR2, int nDstC2, int hSrcSS, int nSrcR1, int 
-		nSrcC1, int nSrcR2, int nSrcC2);
+	void __fastcall CopyRange(int nDstR1, int nDstC1, int nDstR2, int nDstC2, int hSrcSS, int nSrcR1, int nSrcC1, int nSrcR2, int nSrcC2);
 	void __fastcall DefinedNameDlg(void);
 	void __fastcall DeleteDefinedName(const WideString pName);
 	void __fastcall DeleteRange(int nR1, int nC1, int nR2, int nC2, short ShiftType);
-	void __fastcall Draw(unsigned hDC, int x, int y, int cx, int cy, int nRow, int nCol, int &pRows, int 
-		&pCols, int nFixedRow, int nFixedCol, int nFixedRows, int nFixedCols);
+	void __fastcall Draw(unsigned hDC, int x, int y, int cx, int cy, int nRow, int nCol, int &pRows, int &pCols, int nFixedRow, int nFixedCol, int nFixedRows, int nFixedCols);
 	void __fastcall EditClear(short ClearType);
 	void __fastcall EditCopy(void);
 	void __fastcall EditCopyDown(void);
@@ -291,21 +276,17 @@ public:
 	void __fastcall ObjInsertItem(int ID, short nItem, const WideString pItem);
 	void __fastcall ObjNameDlg(void);
 	void __fastcall ObjNew(short ObjType, float nX1, float nY1, float nX2, float nY2, int &pID);
-	void __fastcall ObjNewPicture(float nX1, float nY1, float nX2, float nY2, int &pID, unsigned hMF, int 
-		nMapMode, int nWndExtentX, int nWndExtentY);
+	void __fastcall ObjNewPicture(float nX1, float nY1, float nX2, float nY2, int &pID, unsigned hMF, int nMapMode, int nWndExtentX, int nWndExtentY);
 	void __fastcall ObjOptionsDlg(void);
-	void __fastcall ObjPosToTwips(float nX1, float nY1, float nX2, float nY2, int &pX, int &pY, int &pCX
-		, int &pCY, short &pShown);
+	void __fastcall ObjPosToTwips(float nX1, float nY1, float nX2, float nY2, int &pX, int &pY, int &pCX, int &pCY, short &pShown);
 	void __fastcall ObjSendToBack(void);
 	void __fastcall ObjSetCell(int ID, short ControlCellType, int nRow, int nCol);
-	void __fastcall ObjSetPicture(int ID, unsigned hMF, short nMapMode, int nWndExtentX, int nWndExtentY
-		);
+	void __fastcall ObjSetPicture(int ID, unsigned hMF, short nMapMode, int nWndExtentX, int nWndExtentY);
 	void __fastcall ObjSetPos(int ID, float nX1, float nY1, float nX2, float nY2);
 	void __fastcall ObjSetSelection(int ID);
 	void __fastcall OpenFileDlg(const WideString pTitle, unsigned hWndParent, WideString &pBuf);
 	void __fastcall ProtectionDlg(void);
-	void __fastcall RangeToTwips(int nRow1, int nCol1, int nRow2, int nCol2, int &pX, int &pY, int &pCX
-		, int &pCY, short &pShown);
+	void __fastcall RangeToTwips(int nRow1, int nCol1, int nRow2, int nCol2, int &pX, int &pY, int &pCX, int &pCY, short &pShown);
 	void __fastcall Read(const WideString pPathName, short &pFileType);
 	void __fastcall ReadFromBlob(unsigned hBlob, short nReservedBytes);
 	void __fastcall Recalc(void);
@@ -317,14 +298,11 @@ public:
 	void __fastcall SaveWindowInfo(void);
 	void __fastcall SetActiveCell(int nRow, int nCol);
 	void __fastcall SetAlignment(short HAlign, Word bWordWrap, short VAlign, short nOrientation);
-	void __fastcall SetBorder(short nOutline, short nLeft, short nRight, short nTop, short nBottom, short 
-		nShade, unsigned crOutline, unsigned crLeft, unsigned crRight, unsigned crTop, unsigned crBottom);
-		
+	void __fastcall SetBorder(short nOutline, short nLeft, short nRight, short nTop, short nBottom, short nShade, unsigned crOutline, unsigned crLeft, unsigned crRight, unsigned crTop, unsigned crBottom);
 	void __fastcall SetColWidth(int nC1, int nC2, short nWidth, Word bDefColWidth);
 	void __fastcall SetColWidthAuto(int nR1, int nC1, int nR2, int nC2, Word bSetDefaults);
 	void __fastcall SetDefaultFont(const WideString pName, short nSize);
-	HIDESBASE void __fastcall SetFont(const WideString pName, short nSize, Word bBold, Word bItalic, Word 
-		bUnderline, Word bStrikeout, unsigned crColor, Word bOutline, Word bShadow);
+	HIDESBASE void __fastcall SetFont(const WideString pName, short nSize, Word bBold, Word bItalic, Word bUnderline, Word bStrikeout, unsigned crColor, Word bOutline, Word bShadow);
 	void __fastcall SetHdrSelection(Word bTopLeftHdr, Word bRowHdr, Word bColHdr);
 	void __fastcall SetIteration(Word bIteration, short nMaxIterations, double nMaxChange);
 	void __fastcall SetLineStyle(short nStyle, unsigned crColor, short nWeight);
@@ -337,8 +315,7 @@ public:
 	void __fastcall SetRowHeightAuto(int nR1, int nC1, int nR2, int nC2, Word bSetDefaults);
 	void __fastcall SetSelection(int nR1, int nC1, int nR2, int nC2);
 	void __fastcall ShowActiveCell(void);
-	void __fastcall Sort3(int nR1, int nC1, int nR2, int nC2, Word bSortByRows, int nKey1, int nKey2, int 
-		nKey3);
+	void __fastcall Sort3(int nR1, int nC1, int nR2, int nC2, Word bSortByRows, int nKey1, int nKey2, int nKey3);
 	void __fastcall SortDlg(void);
 	void __fastcall StartEdit(Word bClear, Word bInCellEditFocus, Word bArrowsExitEditMode);
 	void __fastcall SwapTables(int hSS2);
@@ -374,25 +351,20 @@ public:
 	void __fastcall SetValidationRule(const WideString Rule, const WideString Text);
 	void __fastcall GetValidationRule(WideString &Rule, WideString &Text);
 	short __fastcall AutoFillItemsCount(void);
-	void __fastcall CopyRangeEx(int nDstSheet, int nDstR1, int nDstC1, int nDstR2, int nDstC2, int hSrcSS
-		, int nSrcSheet, int nSrcR1, int nSrcC1, int nSrcR2, int nSrcC2);
+	void __fastcall CopyRangeEx(int nDstSheet, int nDstR1, int nDstC1, int nDstR2, int nDstC2, int hSrcSS, int nSrcSheet, int nSrcR1, int nSrcC1, int nSrcR2, int nSrcC2);
 	void __fastcall Sort(int nR1, int nC1, int nR2, int nC2, Word bSortByRows, const OleVariant &Keys);
-		
 	void __fastcall DeleteAutoFillItems(short nIndex);
 	void __fastcall ODBCConnect(WideString &pConnect, Word bShowErrors, short &pRetCode);
 	void __fastcall ODBCDisconnect(void);
-	void __fastcall ODBCQuery(WideString &pQuery, int nRow, int nCol, Word bForceShowDlg, Word &pSetColNames
-		, Word &pSetColFormats, Word &pSetColWidths, Word &pSetMaxRC, short &pRetCode);
+	void __fastcall ODBCQuery(WideString &pQuery, int nRow, int nCol, Word bForceShowDlg, Word &pSetColNames, Word &pSetColFormats, Word &pSetColWidths, Word &pSetMaxRC, short &pRetCode);
 	void __fastcall LaunchDesigner(void);
 	void __fastcall AboutBox(void);
 	__property _di__DVCF1 ControlInterface = {read=GetControlInterface};
 	__property _di__DVCF1 DefaultInterface = {read=GetControlInterface};
 	__property WideString ColText[int nCol] = {read=Get_ColText, write=Set_ColText};
-	__property WideString DefinedName[WideString pName] = {read=Get_DefinedName, write=Set_DefinedName}
-		;
+	__property WideString DefinedName[WideString pName] = {read=Get_DefinedName, write=Set_DefinedName};
 	__property WideString EntryRC[int nRow][int nCol] = {read=Get_EntryRC, write=Set_EntryRC};
-	__property WideString FormattedTextRC[int nRow][int nCol] = {read=Get_FormattedTextRC, write=Set_FormattedTextRC
-		};
+	__property WideString FormattedTextRC[int nRow][int nCol] = {read=Get_FormattedTextRC, write=Set_FormattedTextRC};
 	__property WideString FormulaRC[int nRow][int nCol] = {read=Get_FormulaRC, write=Set_FormulaRC};
 	__property int LastColForRow[int nRow] = {read=Get_LastColForRow, write=Set_LastColForRow};
 	__property Word LogicalRC[int nRow][int nCol] = {read=Get_LogicalRC, write=Set_LogicalRC};
@@ -402,8 +374,7 @@ public:
 	__property short TypeRC[int nRow][int nCol] = {read=Get_TypeRC, write=Set_TypeRC};
 	__property short ColWidth[int nCol] = {read=Get_ColWidth, write=Set_ColWidth};
 	__property short RowHeight[int nRow] = {read=Get_RowHeight, write=Set_RowHeight};
-	__property WideString DefinedNameByIndex[int nName] = {read=Get_DefinedNameByIndex, write=Set_DefinedNameByIndex
-		};
+	__property WideString DefinedNameByIndex[int nName] = {read=Get_DefinedNameByIndex, write=Set_DefinedNameByIndex};
 	__property WideString SheetName[int nSheet] = {read=Get_SheetName, write=Set_SheetName};
 	__property unsigned PaletteEntry[int nEntry] = {read=Get_PaletteEntry, write=Set_PaletteEntry};
 	__property short ColWidthTwips[int Col] = {read=Get_ColWidthTwips, write=Set_ColWidthTwips};
@@ -413,22 +384,21 @@ public:
 	__property WideString ObjText[int ID] = {read=Get_ObjText, write=Set_ObjText};
 	__property short ObjValue[int ID] = {read=Get_ObjValue, write=Set_ObjValue};
 	__property Word ObjVisible[int ID] = {read=Get_ObjVisible, write=Set_ObjVisible};
-	__property WideString AutoFillItems[short Index] = {read=Get_AutoFillItems, write=Set_AutoFillItems
-		};
+	__property WideString AutoFillItems[short Index] = {read=Get_AutoFillItems, write=Set_AutoFillItems};
 	__property Word ColHidden[int nCol] = {read=Get_ColHidden, write=Set_ColHidden};
 	__property Word RowHidden[int nRow] = {read=Get_RowHidden, write=Set_RowHidden};
 	__property Word SheetSelected[int nSheet] = {read=Get_SheetSelected, write=Set_SheetSelected};
 	
 __published:
-	__property TabStop ;
-	__property Align ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property ParentShowHint ;
+	__property TabStop  = {default=1};
+	__property Align  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property Visible  = {default=1};
 	__property OnDragDrop ;
 	__property OnDragOver ;
 	__property OnEndDrag ;
@@ -441,235 +411,121 @@ __published:
 	__property OnKeyUp ;
 	__property OnKeyPress ;
 	__property OnKeyDown ;
-	__property Graphics::TColor BackColor = {read=GetTColorProp, write=SetTColorProp, stored=false, index=3
-		, nodefault};
+	__property Graphics::TColor BackColor = {read=GetTColorProp, write=SetTColorProp, stored=false, index=3, nodefault};
 	__property int Col = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=4, nodefault};
-		
 	__property int Row = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=5, nodefault};
-		
-	__property short ShowHScrollBar = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=6
-		, nodefault};
-	__property WideString Text = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=7
-		};
+	__property short ShowHScrollBar = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=6, nodefault};
+	__property WideString Text = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=7};
 	__property double Number = {read=GetDoubleProp, write=SetDoubleProp, stored=false, index=8};
-	__property WideString Formula = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=9
-		};
-	__property int FixedCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=10, nodefault
-		};
-	__property int FixedCols = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=11, nodefault
-		};
-	__property int FixedRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=12, nodefault
-		};
-	__property int FixedRows = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=13, nodefault
-		};
-	__property Word ShowGridLines = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=14
-		, nodefault};
-	__property Word ShowRowHeading = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=15
-		, nodefault};
-	__property short ShowSelections = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=16
-		, nodefault};
-	__property int LeftCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=17, nodefault
-		};
-	__property int MaxCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=18, nodefault
-		};
-	__property int MaxRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=19, nodefault
-		};
-	__property int TopRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=20, nodefault
-		};
-	__property Word AllowResize = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=21, 
-		nodefault};
-	__property Word AllowSelections = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=22
-		, nodefault};
-	__property Word AllowFormulas = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=23
-		, nodefault};
-	__property Word AllowInCellEditing = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=24
-		, nodefault};
-	__property short ShowVScrollBar = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=25
-		, nodefault};
-	__property Word AllowFillRange = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=26
-		, nodefault};
-	__property Word AllowMoveRange = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=27
-		, nodefault};
-	__property int SelStartCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=28, nodefault
-		};
-	__property int SelStartRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=29, nodefault
-		};
-	__property int SelEndCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=30, nodefault
-		};
-	__property int SelEndRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=31, nodefault
-		};
-	__property Graphics::TColor ExtraColor = {read=GetTColorProp, write=SetTColorProp, stored=false, index=32
-		, nodefault};
-	__property WideString FileName = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=33
-		};
-	__property Word AutoRecalc = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=34, 
-		nodefault};
-	__property Word PrintGridLines = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=35
-		, nodefault};
-	__property Word PrintRowHeading = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=36
-		, nodefault};
-	__property Word PrintHCenter = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=37
-		, nodefault};
-	__property Word PrintVCenter = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=38
-		, nodefault};
-	__property Word PrintLeftToRight = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=39
-		, nodefault};
-	__property WideString PrintHeader = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=40};
-	__property WideString PrintFooter = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=41};
-	__property double PrintLeftMargin = {read=GetDoubleProp, write=SetDoubleProp, stored=false, index=42
-		};
-	__property double PrintTopMargin = {read=GetDoubleProp, write=SetDoubleProp, stored=false, index=43
-		};
-	__property double PrintRightMargin = {read=GetDoubleProp, write=SetDoubleProp, stored=false, index=44
-		};
-	__property double PrintBottomMargin = {read=GetDoubleProp, write=SetDoubleProp, stored=false, index=45
-		};
-	__property WideString PrintArea = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=46
-		};
-	__property WideString PrintTitles = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=47};
-	__property Word PrintNoColor = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=48
-		, nodefault};
-	__property WideString Selection = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=49
-		};
-	__property WideString TableName = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=50
-		};
-	__property Word DoCancelEdit = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=51
-		, nodefault};
-	__property Word DoSelChange = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=52, 
-		nodefault};
-	__property Word DoStartEdit = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=53, 
-		nodefault};
-	__property Word DoEndEdit = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=54, nodefault
-		};
-	__property Word DoStartRecalc = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=55
-		, nodefault};
-	__property Word DoEndRecalc = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=56, 
-		nodefault};
-	__property Word DoClick = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=57, nodefault
-		};
-	__property Word DoDblClick = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=58, 
-		nodefault};
-	__property Word ShowColHeading = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=59
-		, nodefault};
-	__property Word PrintColHeading = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=60
-		, nodefault};
-	__property WideString Entry = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=61
-		};
-	__property Word Repaint = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=62, nodefault
-		};
-	__property Word AllowArrows = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=63, 
-		nodefault};
-	__property Word AllowTabs = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=64, nodefault
-		};
-	__property WideString FormattedText = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=65};
-	__property Word RowMode = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=66, nodefault
-		};
-	__property Word AllowDelete = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=67, 
-		nodefault};
-	__property Word EnableProtection = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=68
-		, nodefault};
-	__property int MinCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=69, nodefault
-		};
-	__property int MinRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=70, nodefault
-		};
-	__property Word DoTopLeftChanged = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=71
-		, nodefault};
-	__property Word AllowEditHeaders = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=72
-		, nodefault};
-	__property Word DoObjClick = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=73, 
-		nodefault};
-	__property Word DoObjDblClick = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=74
-		, nodefault};
-	__property Word AllowObjSelections = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=75
-		, nodefault};
-	__property Word DoRClick = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=76, nodefault
-		};
-	__property Word DoRDblClick = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=77, 
-		nodefault};
-	__property WideString Clip = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=78
-		};
-	__property WideString ClipValues = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=79};
-	__property Word PrintLandscape = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=80
-		, nodefault};
-	__property Word Enabled = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=-514, nodefault
-		};
-	__property short BorderStyle = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=-504
-		, nodefault};
-	__property WideString AppName = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=81
-		};
-	__property short HdrHeight = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=82, 
-		nodefault};
-	__property short HdrWidth = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=83, nodefault
-		};
-	__property WideString NumberFormat = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=84};
-	__property WideString TopLeftText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=85};
-	__property Word EnterMovesDown = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=86
-		, nodefault};
-	__property int LastCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=87, nodefault
-		};
-	__property int LastRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=88, nodefault
-		};
-	__property Word Logical = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=89, nodefault
-		};
-	__property short Mode = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=90, nodefault
-		};
-	__property short PolyEditMode = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=91
-		, nodefault};
-	__property short ViewScale = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=92, 
-		nodefault};
-	__property short SelectionCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=93
-		, nodefault};
-	__property WideString Title = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=94
-		};
-	__property short Type_ = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=95, nodefault
-		};
-	__property Word ShowFormulas = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=96
-		, nodefault};
-	__property Word ShowZeroValues = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=97
-		, nodefault};
-	__property short MousePointer = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=2
-		, nodefault};
-	__property Graphics::TPicture* MouseIcon = {read=GetTPictureProp, write=SetTPictureProp, stored=false
-		, index=98};
-	__property Word DoObjValueChanged = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=99
-		, nodefault};
-	__property Word ScrollToLastRC = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=100
-		, nodefault};
-	__property Word Modified = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=101, nodefault
-		};
-	__property Word DoObjGotFocus = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=102
-		, nodefault};
-	__property Word DoObjLostFocus = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=103
-		, nodefault};
-	__property int PrintDevMode = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=104, 
-		nodefault};
-	__property int NumSheets = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=105, nodefault
-		};
-	__property int Sheet = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=106, nodefault
-		};
-	__property short ColWidthUnits = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=107
-		, nodefault};
-	__property Word ShowTypeMarkers = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=108
-		, nodefault};
-	__property short ShowTabs = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=109, 
-		nodefault};
-	__property Word ShowEditBar = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=110
-		, nodefault};
-	__property Word ShowEditBarCellRef = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=111
-		, nodefault};
-	__property Word AllowDesigner = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=1
-		, nodefault};
-	__property int hWnd = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=-515, nodefault
-		};
-	__property Word AllowAutoFill = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=112
-		, nodefault};
+	__property WideString Formula = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=9};
+	__property int FixedCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=10, nodefault};
+	__property int FixedCols = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=11, nodefault};
+	__property int FixedRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=12, nodefault};
+	__property int FixedRows = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=13, nodefault};
+	__property Word ShowGridLines = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=14, nodefault};
+	__property Word ShowRowHeading = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=15, nodefault};
+	__property short ShowSelections = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=16, nodefault};
+	__property int LeftCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=17, nodefault};
+	__property int MaxCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=18, nodefault};
+	__property int MaxRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=19, nodefault};
+	__property int TopRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=20, nodefault};
+	__property Word AllowResize = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=21, nodefault};
+	__property Word AllowSelections = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=22, nodefault};
+	__property Word AllowFormulas = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=23, nodefault};
+	__property Word AllowInCellEditing = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=24, nodefault};
+	__property short ShowVScrollBar = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=25, nodefault};
+	__property Word AllowFillRange = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=26, nodefault};
+	__property Word AllowMoveRange = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=27, nodefault};
+	__property int SelStartCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=28, nodefault};
+	__property int SelStartRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=29, nodefault};
+	__property int SelEndCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=30, nodefault};
+	__property int SelEndRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=31, nodefault};
+	__property Graphics::TColor ExtraColor = {read=GetTColorProp, write=SetTColorProp, stored=false, index=32, nodefault};
+	__property WideString FileName = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=33};
+	__property Word AutoRecalc = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=34, nodefault};
+	__property Word PrintGridLines = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=35, nodefault};
+	__property Word PrintRowHeading = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=36, nodefault};
+	__property Word PrintHCenter = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=37, nodefault};
+	__property Word PrintVCenter = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=38, nodefault};
+	__property Word PrintLeftToRight = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=39, nodefault};
+	__property WideString PrintHeader = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=40};
+	__property WideString PrintFooter = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=41};
+	__property double PrintLeftMargin = {read=GetDoubleProp, write=SetDoubleProp, stored=false, index=42};
+	__property double PrintTopMargin = {read=GetDoubleProp, write=SetDoubleProp, stored=false, index=43};
+	__property double PrintRightMargin = {read=GetDoubleProp, write=SetDoubleProp, stored=false, index=44};
+	__property double PrintBottomMargin = {read=GetDoubleProp, write=SetDoubleProp, stored=false, index=45};
+	__property WideString PrintArea = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=46};
+	__property WideString PrintTitles = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=47};
+	__property Word PrintNoColor = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=48, nodefault};
+	__property WideString Selection = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=49};
+	__property WideString TableName = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=50};
+	__property Word DoCancelEdit = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=51, nodefault};
+	__property Word DoSelChange = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=52, nodefault};
+	__property Word DoStartEdit = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=53, nodefault};
+	__property Word DoEndEdit = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=54, nodefault};
+	__property Word DoStartRecalc = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=55, nodefault};
+	__property Word DoEndRecalc = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=56, nodefault};
+	__property Word DoClick = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=57, nodefault};
+	__property Word DoDblClick = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=58, nodefault};
+	__property Word ShowColHeading = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=59, nodefault};
+	__property Word PrintColHeading = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=60, nodefault};
+	__property WideString Entry = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=61};
+	__property Word Repaint = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=62, nodefault};
+	__property Word AllowArrows = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=63, nodefault};
+	__property Word AllowTabs = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=64, nodefault};
+	__property WideString FormattedText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=65};
+	__property Word RowMode = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=66, nodefault};
+	__property Word AllowDelete = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=67, nodefault};
+	__property Word EnableProtection = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=68, nodefault};
+	__property int MinCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=69, nodefault};
+	__property int MinRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=70, nodefault};
+	__property Word DoTopLeftChanged = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=71, nodefault};
+	__property Word AllowEditHeaders = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=72, nodefault};
+	__property Word DoObjClick = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=73, nodefault};
+	__property Word DoObjDblClick = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=74, nodefault};
+	__property Word AllowObjSelections = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=75, nodefault};
+	__property Word DoRClick = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=76, nodefault};
+	__property Word DoRDblClick = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=77, nodefault};
+	__property WideString Clip = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=78};
+	__property WideString ClipValues = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=79};
+	__property Word PrintLandscape = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=80, nodefault};
+	__property Word Enabled = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=-514, nodefault};
+	__property short BorderStyle = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=-504, nodefault};
+	__property WideString AppName = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=81};
+	__property short HdrHeight = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=82, nodefault};
+	__property short HdrWidth = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=83, nodefault};
+	__property WideString NumberFormat = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=84};
+	__property WideString TopLeftText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=85};
+	__property Word EnterMovesDown = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=86, nodefault};
+	__property int LastCol = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=87, nodefault};
+	__property int LastRow = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=88, nodefault};
+	__property Word Logical = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=89, nodefault};
+	__property short Mode = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=90, nodefault};
+	__property short PolyEditMode = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=91, nodefault};
+	__property short ViewScale = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=92, nodefault};
+	__property short SelectionCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=93, nodefault};
+	__property WideString Title = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=94};
+	__property short Type_ = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=95, nodefault};
+	__property Word ShowFormulas = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=96, nodefault};
+	__property Word ShowZeroValues = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=97, nodefault};
+	__property short MousePointer = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=2, nodefault};
+	__property Graphics::TPicture* MouseIcon = {read=GetTPictureProp, write=SetTPictureProp, stored=false, index=98};
+	__property Word DoObjValueChanged = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=99, nodefault};
+	__property Word ScrollToLastRC = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=100, nodefault};
+	__property Word Modified = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=101, nodefault};
+	__property Word DoObjGotFocus = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=102, nodefault};
+	__property Word DoObjLostFocus = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=103, nodefault};
+	__property int PrintDevMode = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=104, nodefault};
+	__property int NumSheets = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=105, nodefault};
+	__property int Sheet = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=106, nodefault};
+	__property short ColWidthUnits = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=107, nodefault};
+	__property Word ShowTypeMarkers = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=108, nodefault};
+	__property short ShowTabs = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=109, nodefault};
+	__property Word ShowEditBar = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=110, nodefault};
+	__property Word ShowEditBarCellRef = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=111, nodefault};
+	__property Word AllowDesigner = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=1, nodefault};
+	__property int hWnd = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=-515, nodefault};
+	__property Word AllowAutoFill = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=112, nodefault};
 	__property TF1BookClick OnClick = {read=FOnClick, write=FOnClick};
 	__property TF1BookDblClick OnDblClick = {read=FOnDblClick, write=FOnDblClick};
 	__property Classes::TNotifyEvent OnCancelEdit = {read=FOnCancelEdit, write=FOnCancelEdit};
@@ -678,23 +534,19 @@ __published:
 	__property TF1BookEndEdit OnEndEdit = {read=FOnEndEdit, write=FOnEndEdit};
 	__property Classes::TNotifyEvent OnStartRecalc = {read=FOnStartRecalc, write=FOnStartRecalc};
 	__property Classes::TNotifyEvent OnEndRecalc = {read=FOnEndRecalc, write=FOnEndRecalc};
-	__property Classes::TNotifyEvent OnTopLeftChanged = {read=FOnTopLeftChanged, write=FOnTopLeftChanged
-		};
+	__property Classes::TNotifyEvent OnTopLeftChanged = {read=FOnTopLeftChanged, write=FOnTopLeftChanged};
 	__property TF1BookObjClick OnObjClick = {read=FOnObjClick, write=FOnObjClick};
 	__property TF1BookObjDblClick OnObjDblClick = {read=FOnObjDblClick, write=FOnObjDblClick};
 	__property TF1BookRClick OnRClick = {read=FOnRClick, write=FOnRClick};
 	__property TF1BookRDblClick OnRDblClick = {read=FOnRDblClick, write=FOnRDblClick};
-	__property TF1BookObjValueChanged OnObjValueChanged = {read=FOnObjValueChanged, write=FOnObjValueChanged
-		};
+	__property TF1BookObjValueChanged OnObjValueChanged = {read=FOnObjValueChanged, write=FOnObjValueChanged};
 	__property Classes::TNotifyEvent OnModified = {read=FOnModified, write=FOnModified};
 	__property TF1BookObjGotFocus OnObjGotFocus = {read=FOnObjGotFocus, write=FOnObjGotFocus};
 	__property TF1BookObjLostFocus OnObjLostFocus = {read=FOnObjLostFocus, write=FOnObjLostFocus};
-	__property TF1BookValidationFailed OnValidationFailed = {read=FOnValidationFailed, write=FOnValidationFailed
-		};
+	__property TF1BookValidationFailed OnValidationFailed = {read=FOnValidationFailed, write=FOnValidationFailed};
 public:
 	#pragma option push -w-inl
-	/* TOleControl.Create */ inline __fastcall virtual TF1Book(Classes::TComponent* AOwner) : Olectrls::TOleControl(
-		AOwner) { }
+	/* TOleControl.Create */ inline __fastcall virtual TF1Book(Classes::TComponent* AOwner) : Olectrls::TOleControl(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TOleControl.Destroy */ inline __fastcall virtual ~TF1Book(void) { }
@@ -702,8 +554,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TF1Book(HWND ParentWindow) : Olectrls::TOleControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TF1Book(HWND ParentWindow) : Olectrls::TOleControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -837,12 +688,10 @@ static const Shortint F1ControlCellText = 0x2;
 extern PACKAGE void __fastcall Register(void);
 
 }	/* namespace Vcf1 */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Vcf1;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// vcf1
+#endif	// VCF1

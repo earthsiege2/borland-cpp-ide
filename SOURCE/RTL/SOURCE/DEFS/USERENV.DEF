@@ -1,64 +1,101 @@
-LIBRARY USERENV
+LIBRARY UserEnv
 EXPORTS
 
-    AddDesktopItemA                          = 'USERENV.DLL'.* @113 @112
-    AddDesktopItemW                          = 'USERENV.DLL'.* @114 @113
-    AddItemA                                 = 'USERENV.DLL'.* @105 @104
-    AddItemW                                 = 'USERENV.DLL'.* @106 @105
-    ApplyGroupPolicy                         = 'USERENV.DLL'.* @117 @116
-    ApplySystemPolicyA                       = 'USERENV.DLL'.* @129 @128
-    ApplySystemPolicyW                       = 'USERENV.DLL'.* @130 @129
-    CopyProfileDirectoryA                    = 'USERENV.DLL'.* @111 @110
-    CopyProfileDirectoryExA                  = 'USERENV.DLL'.* @123 @122
-    CopyProfileDirectoryExW                  = 'USERENV.DLL'.* @124 @123
-    CopyProfileDirectoryW                    = 'USERENV.DLL'.* @112 @111
-    CreateEnvironmentBlock                   = 'USERENV.DLL'.*
-    CreateGroupA                             = 'USERENV.DLL'.* @101 @100
-    CreateGroupW                             = 'USERENV.DLL'.* @102 @101
-    CreateLinkFileA                          = 'USERENV.DLL'.* @119 @118
-    CreateLinkFileW                          = 'USERENV.DLL'.* @120 @119
-    CreateUserProfileA                       = 'USERENV.DLL'.* @109 @108
-    CreateUserProfileW                       = 'USERENV.DLL'.* @110 @109
-    DeleteDesktopItemA                       = 'USERENV.DLL'.* @115 @114
-    DeleteDesktopItemW                       = 'USERENV.DLL'.* @116 @115
-    DeleteGroupA                             = 'USERENV.DLL'.* @103 @102
-    DeleteGroupW                             = 'USERENV.DLL'.* @104 @103
-    DeleteItemA                              = 'USERENV.DLL'.* @107 @106
-    DeleteItemW                              = 'USERENV.DLL'.* @108 @107
-    DeleteLinkFileA                          = 'USERENV.DLL'.* @121 @120
-    DeleteLinkFileW                          = 'USERENV.DLL'.* @122 @121
-    DeleteProfileA                           = 'USERENV.DLL'.*
-    DeleteProfileW                           = 'USERENV.DLL'.*
-    DestroyEnvironmentBlock                  = 'USERENV.DLL'.*
-    EnterCriticalPolicySection               = 'USERENV.DLL'.*
-    ExpandEnvironmentStringsForUserA         = 'USERENV.DLL'.*
-    ExpandEnvironmentStringsForUserW         = 'USERENV.DLL'.*
-    FreeGPOListA                             = 'USERENV.DLL'.*
-    FreeGPOListW                             = 'USERENV.DLL'.*
-    GetAllUsersProfileDirectoryA             = 'USERENV.DLL'.*
-    GetAllUsersProfileDirectoryW             = 'USERENV.DLL'.*
-    GetAppliedGPOListA                       = 'USERENV.DLL'.*
-    GetAppliedGPOListW                       = 'USERENV.DLL'.*
-    GetDefaultUserProfileDirectoryA          = 'USERENV.DLL'.*
-    GetDefaultUserProfileDirectoryW          = 'USERENV.DLL'.*
-    GetGPOListA                              = 'USERENV.DLL'.*
-    GetGPOListW                              = 'USERENV.DLL'.*
-    GetProfileType                           = 'USERENV.DLL'.*
-    GetProfilesDirectoryA                    = 'USERENV.DLL'.*
-    GetProfilesDirectoryW                    = 'USERENV.DLL'.*
-    GetSystemTempDirectoryA                  = 'USERENV.DLL'.* @125 @124
-    GetSystemTempDirectoryW                  = 'USERENV.DLL'.* @126 @125
-    GetUserProfileDirectoryA                 = 'USERENV.DLL'.*
-    GetUserProfileDirectoryW                 = 'USERENV.DLL'.*
-    InitializeProfiles                       = 'USERENV.DLL'.* @100 @99
-    LeaveCriticalPolicySection               = 'USERENV.DLL'.*
-    LoadUserProfileA                         = 'USERENV.DLL'.*
-    LoadUserProfileW                         = 'USERENV.DLL'.*
-    MigrateNT4ToNT5                          = 'USERENV.DLL'.* @127 @126
-    ProcessGroupPolicyCompleted              = 'USERENV.DLL'.*
-    RefreshPolicy                            = 'USERENV.DLL'.*
-    RegisterGPNotification                   = 'USERENV.DLL'.*
-    ResetUserSpecialFolderPaths              = 'USERENV.DLL'.* @128 @127
-    ShutdownGPOProcessing                    = 'USERENV.DLL'.* @131 @130
-    UnloadUserProfile                        = 'USERENV.DLL'.*
-    UnregisterGPNotification                 = 'USERENV.DLL'.*
+    AddDesktopItemA        @113
+    AddDesktopItemW        @114
+    AddItemA        @105
+    AddItemW        @106
+    ApplyGroupPolicy        @118
+    ApplySystemPolicyA        @129
+    ApplySystemPolicyW        @130
+    CheckAccessForPolicyGeneration        @146
+    CopyProfileDirectoryA        @111
+    CopyProfileDirectoryExA        @123
+    CopyProfileDirectoryExW        @124
+    CopyProfileDirectoryW        @112
+    CopySystemProfile        @155
+    CreateEnvironmentBlock
+    CreateGroupA        @101
+    CreateGroupExA        @136
+    CreateGroupExW        @137
+    CreateGroupW        @102
+    CreateLinkFileA        @119
+    CreateLinkFileExA        @138
+    CreateLinkFileExW        @139
+    CreateLinkFileW        @120
+    CreateUserProfileA        @109
+    CreateUserProfileExA        @153
+    CreateUserProfileExW        @154
+    CreateUserProfileW        @110
+    DeleteDesktopItemA        @115
+    DeleteDesktopItemW        @116
+    DeleteGroupA        @103
+    DeleteGroupW        @104
+    DeleteItemA        @107
+    DeleteItemW        @108
+    DeleteLinkFileA        @121
+    DeleteLinkFileW        @122
+    DeleteProfileA
+    DeleteProfileW
+    DestroyEnvironmentBlock
+    DetermineProfilesLocation        @117
+    EnterCriticalPolicySection
+    EnterUserProfileLock        @144
+    ExpandEnvironmentStringsForUserA
+    ExpandEnvironmentStringsForUserW
+    ForceSyncFgPolicy
+    FreeGPOListA
+    FreeGPOListW
+    GenerateRsopPolicy
+    GetAllUsersProfileDirectoryA
+    GetAllUsersProfileDirectoryW
+    GetAppliedGPOListA
+    GetAppliedGPOListW
+    GetDefaultUserProfileDirectoryA
+    GetDefaultUserProfileDirectoryW
+    GetGPOListA
+    GetGPOListW
+    GetGroupPolicyNetworkName        @147
+    GetNextFgPolicyRefreshInfo
+    GetPreviousFgPolicyRefreshInfo
+    GetProfileType
+    GetProfilesDirectoryA
+    GetProfilesDirectoryW
+    GetSystemTempDirectoryA        @125
+    GetSystemTempDirectoryW        @126
+    GetUserAppDataPathA        @148
+    GetUserAppDataPathW        @149
+    GetUserProfileDirFromSidA        @156
+    GetUserProfileDirFromSidW        @157
+    GetUserProfileDirectoryA
+    GetUserProfileDirectoryW
+    GetUserSid        @142
+    InitializeProfiles        @100
+    InitializeUserProfile        @131
+    IsSyncForegroundPolicyRefresh        @152
+    LeaveCriticalPolicySection
+    LeaveUserProfileLock        @145
+    LoadUserProfileA
+    LoadUserProfileW
+    MigrateNT4ToNT5        @127
+    PingComputer        @135
+    ProcessGroupPolicyCompleted
+    ProcessGroupPolicyCompletedEx
+    RefreshPolicy
+    RefreshPolicyEx
+    RegisterGPNotification
+    ResetUserSpecialFolderPaths        @128
+    RsopAccessCheckByType
+    RsopFileAccessCheck
+    RsopLoggingEnabled
+    RsopResetPolicySettingStatus
+    RsopSetPolicySettingStatus
+    SecureUserProfiles        @143
+    SetNextFgPolicyRefreshInfo        @158
+    ShutdownGPOProcessing        @140
+    SignalMachinePolicyForegroundProcessingDone        @151
+    SignalUserPolicyForegroundProcessingDone        @150
+    UnloadUserProfile
+    UnregisterGPNotification
+    WaitForMachinePolicyForegroundProcessing
+    WaitForUserPolicyForegroundProcessing

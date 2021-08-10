@@ -1,7 +1,7 @@
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  File: objidl.idl
 //
@@ -11,7 +11,7 @@ cpp_quote("//+------------------------------------------------------------------
 cpp_quote("//+-------------------------------------------------------------------------")
 cpp_quote("//")
 cpp_quote("//  Microsoft Windows")
-cpp_quote("//  Copyright (C) Microsoft Corporation, 1992-1999.")
+cpp_quote("//  Copyright (c) Microsoft Corporation. All rights reserved.")
 cpp_quote("//")
 cpp_quote("//--------------------------------------------------------------------------")
 
@@ -2063,6 +2063,16 @@ interface IRpcChannelBuffer3 : IRpcChannelBuffer2
 
 }
 
+[
+    local,
+    object,
+    uuid(58a08519-24c8-4935-b482-3fd823333a4f)
+]
+interface IRpcSyntaxNegotiate : IUnknown
+{
+    HRESULT NegotiateSyntax ( [in,out] RPCOLEMESSAGE * pMsg );
+}
+
 
 [
     local,
@@ -2961,6 +2971,31 @@ interface IForegroundTransfer : IUnknown
         [in] void *lpvReserved);
 }
 
+[
+    local,
+    object,
+    uuid(00000147-0000-0000-C000-000000000046)
+]
+interface IAddrTrackingControl : IUnknown
+{
+    typedef [unique] IAddrTrackingControl* LPADDRTRACKINGCONTROL;
+
+    HRESULT EnableCOMDynamicAddrTracking();
+    HRESULT DisableCOMDynamicAddrTracking();
+};
+
+[
+    local,
+    object,
+    uuid(00000148-0000-0000-C000-000000000046)
+]
+interface IAddrExclusionControl : IUnknown
+{
+    typedef [unique] IAddrExclusionControl* LPADDREXCLUSIONCONTROL;
+
+    HRESULT GetCurrentAddrExclusionList([in]REFIID riid, [out, iid_is(riid)]void** ppEnumerator);
+    HRESULT UpdateAddrExclusionList([in]IUnknown* pEnumerator);
+};
 
 /****************************************************************************
 * Pipe interfaces
@@ -3046,6 +3081,52 @@ interface IDummyHICONIncluder : IUnknown
 {
         HRESULT Dummy([in]HICON h1, [in] HDC h2);
 }
+
+
+/****************************************************************************
+* ICOMThreadingInfo and enums
+****************************************************************************/
+typedef enum _APTTYPE
+{
+    APTTYPE_CURRENT         = -1,
+    APTTYPE_STA             = 0,
+    APTTYPE_MTA             = 1,
+    APTTYPE_NA              = 2,
+    APTTYPE_MAINSTA         = 3
+} APTTYPE;
+
+typedef enum _THDTYPE
+{
+    THDTYPE_BLOCKMESSAGES   = 0,
+    THDTYPE_PROCESSMESSAGES = 1
+} THDTYPE;
+
+typedef DWORD APARTMENTID;
+
+[
+    local,
+    object,
+    uuid(000001ce-0000-0000-C000-000000000046),
+    pointer_default(unique)
+]
+interface IComThreadingInfo : IUnknown
+{
+    HRESULT GetCurrentApartmentType( [out] APTTYPE* pAptType );
+    HRESULT GetCurrentThreadType( [out] THDTYPE* pThreadType );
+    HRESULT GetCurrentLogicalThreadId( [out] GUID* pguidLogicalThreadId );
+    HRESULT SetCurrentLogicalThreadId( [in] REFGUID rguid );
+};
+
+
+[
+    object,
+    pointer_default(unique),
+    uuid(72380d55-8d2b-43a3-8513-2b6ef31434e9)
+]
+interface IProcessInitControl : IUnknown
+{
+    HRESULT ResetInitializerTimeout([in] DWORD dwSecondsRemaining);
+};
 
 
 cpp_quote("#if ( _MSC_VER >= 800 )")

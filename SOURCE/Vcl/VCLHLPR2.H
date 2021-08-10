@@ -1,6 +1,8 @@
 #ifndef _VCLHLPR2_H_
 #define _VCLHLPR2_H_
 
+// Copyright 1997, 2002 Borland Software Corporation
+
 //
 // class Vclhlpr contains static methods that are (generally) aliases to
 // the helper routines in the pascal system unit that are not directly
@@ -22,7 +24,10 @@ class Vclhlpr {
   static void __fastcall VarAnd(System::Variant& dst, const System::Variant& src);
   static void __fastcall VarOr(System::Variant& dst, const System::Variant& src);
   static void __fastcall VarXor(System::Variant& dst, const System::Variant& src);
-  static int __fastcall VarCmp(const System::Variant&, const System::Variant &);
+  static int __fastcall VarCmp(const System::Variant&, const System::Variant &, int Op);
+  static void __fastcall VarCmpSysEQ(const System::Variant&, const System::Variant &);
+  static void __fastcall VarCmpSysLT(const System::Variant&, const System::Variant &);
+  static void __fastcall VarCmpSysGT(const System::Variant&, const System::Variant &);
   static void __fastcall VarCmpSys(const System::Variant&, const System::Variant &);
   static void __fastcall VarNot(System::Variant&);
   static void __fastcall VarNeg(System::Variant&);
@@ -30,7 +35,7 @@ class Vclhlpr {
   static void __cdecl VarArrayPut(System::Variant& dst, System::Variant const &src, int IndexCount, ...);
 };
 
-namespace System {
+namespace Variants {
   // for backwards compatibility, these are accessible to everyone.
   extern void __fastcall VarClear(System::Variant&);
   extern void __fastcall VarCast(System::Variant&, const System::Variant&, int);

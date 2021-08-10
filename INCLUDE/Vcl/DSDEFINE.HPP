@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DSDefine.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DSDefine.pas' rev: 6.00
 
 #ifndef DSDefineHPP
 #define DSDefineHPP
@@ -10,8 +10,8 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <DsgnIntf.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DesignIntf.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Buttons.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
@@ -72,7 +72,7 @@ __published:
 	
 private:
 	Db::TDataSet* FDataset;
-	Dsgnintf::_di_IFormDesigner FDesigner;
+	Designintf::_di_IDesigner FDesigner;
 	Db::TDataSetDesigner* FDSDesigner;
 	Db::TField* FField;
 	bool __fastcall GetCalculated(void);
@@ -96,8 +96,7 @@ private:
 	void __fastcall UpdateLookupControls(void);
 	
 public:
-	void __fastcall ConfigureForLookupOnly(const AnsiString ADataSet, const AnsiString AKey, const AnsiString 
-		ALookup, const AnsiString AResult, const AnsiString AType, Word ASize);
+	void __fastcall ConfigureForLookupOnly(const AnsiString ADataSet, const AnsiString AKey, const AnsiString ALookup, const AnsiString AResult, const AnsiString AType, Word ASize);
 	__property bool Calculated = {read=GetCalculated, write=SetCalculated, nodefault};
 	__property bool Lookup = {read=GetLookup, write=SetLookup, nodefault};
 	__property AnsiString ComponentName = {read=GetComponentName, write=SetComponentName};
@@ -110,16 +109,14 @@ public:
 	__property AnsiString LookupKeyFields = {read=GetLookupKeyFields};
 	__property AnsiString LookupResultField = {read=GetLookupResultField};
 	__property Db::TDataSet* Dataset = {read=FDataset, write=SetDataset};
-	__property Dsgnintf::_di_IFormDesigner Designer = {read=FDesigner, write=FDesigner};
+	__property Designintf::_di_IDesigner Designer = {read=FDesigner, write=FDesigner};
 	__property Db::TDataSetDesigner* DSDesigner = {read=FDSDesigner, write=FDSDesigner};
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TDefineField(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TDefineField(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TDefineField(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TDefineField(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TDefineField(void) { }
@@ -127,8 +124,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDefineField(HWND ParentWindow) : Forms::TForm(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDefineField(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -139,9 +135,7 @@ extern PACKAGE TDefineField* DefineField;
 extern PACKAGE AnsiString __fastcall ClassNameNoT(TMetaClass* FieldClass);
 
 }	/* namespace Dsdefine */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dsdefine;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

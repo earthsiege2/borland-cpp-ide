@@ -2,12 +2,11 @@
 *                                                                             *
 * shellapi.h -  SHELL.DLL functions, types, and definitions                   *
 *                                                                             *
-* Copyright (c) 1992-1998, Microsoft Corp.  All rights reserved               *
+* Copyright (c) Microsoft Corporation. All rights reserved.                   *
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef _INC_SHELLAPI
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_SHELLAPI
 
 
@@ -43,7 +42,9 @@
 #endif // SHDOCAPI
 
 
+#if !defined(_WIN64)
 #include <pshpack1.h>
+#endif
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
@@ -142,7 +143,7 @@ typedef LPDRAGINFOA LPDRAGINFO;
                                         // lParam = TRUE/FALSE  Set/Unset
                                         // uEdge = what edge
 #define ABM_WINDOWPOSCHANGED 0x0000009
-
+#define ABM_SETSTATE      0x0000000a
 
 // these are put in the wparam of callback messages
 #define ABN_STATECHANGE    0x0000000
@@ -169,7 +170,8 @@ typedef struct _AppBarData
     LPARAM lParam; // message specific
 } APPBARDATA, *PAPPBARDATA;
 
-SHSTDAPI_(UINT) SHAppBarMessage(DWORD dwMessage, PAPPBARDATA pData);
+
+SHSTDAPI_(UINT_PTR) SHAppBarMessage(DWORD dwMessage, PAPPBARDATA pData);
 
 ////
 ////  EndAppBar
@@ -221,6 +223,9 @@ SHSTDAPI_(UINT) ExtractIconExW(LPCWSTR lpszFile, int nIconIndex, HICON *phiconLa
 #define FOF_NO_CONNECTED_ELEMENTS  0x2000  // don't operate on connected elements.
 #define FOF_WANTNUKEWARNING        0x4000  // during delete operation, warn if nuking instead of recycling (partially overrides FOF_NOCONFIRMATION)
 #endif // (_WIN32_IE >= 0x500)
+#if (_WIN32_WINNT >= 0x0501)
+#define FOF_NORECURSEREPARSE       0x8000  // treat reparse points as objects, not containers
+#endif // (_WIN32_WINNT >= 0x501)
 
 typedef WORD FILEOP_FLAGS;
 
@@ -358,6 +363,10 @@ typedef LPSHNAMEMAPPINGA LPSHNAMEMAPPING;
 #define SEE_MASK_NOQUERYCLASSSTORE 0x01000000
 #define SEE_MASK_WAITFORINPUTIDLE  0x02000000
 #endif // (_WIN32_IE >= 0x500)
+#if (_WIN32_IE >= 0x0560)
+#define SEE_MASK_FLAG_LOG_USAGE    0x04000000
+#endif // (_WIN32_IE >= 0x560)
+
 
 //
 // For compilers that don't support nameless unions
@@ -540,6 +549,9 @@ typedef struct _NOTIFYICONDATAA {
         CHAR   szInfoTitle[64];
         DWORD dwInfoFlags;
 #endif
+#if (_WIN32_IE >= 0x600)
+        GUID guidItem;
+#endif
 } NOTIFYICONDATAA, *PNOTIFYICONDATAA;
 typedef struct _NOTIFYICONDATAW {
         DWORD cbSize;
@@ -564,6 +576,9 @@ typedef struct _NOTIFYICONDATAW {
         WCHAR  szInfoTitle[64];
         DWORD dwInfoFlags;
 #endif
+#if (_WIN32_IE >= 0x600)
+        GUID guidItem;
+#endif
 } NOTIFYICONDATAW, *PNOTIFYICONDATAW;
 #ifdef UNICODE
 typedef NOTIFYICONDATAW NOTIFYICONDATA;
@@ -582,11 +597,26 @@ typedef PNOTIFYICONDATAA PNOTIFYICONDATA;
 #define NOTIFYICONDATA_V1_SIZE      NOTIFYICONDATAA_V1_SIZE
 #endif
 
+#define NOTIFYICONDATAA_V2_SIZE     FIELD_OFFSET(NOTIFYICONDATAA, guidItem)
+#define NOTIFYICONDATAW_V2_SIZE     FIELD_OFFSET(NOTIFYICONDATAW, guidItem)
+#ifdef UNICODE
+#define NOTIFYICONDATA_V2_SIZE      NOTIFYICONDATAW_V2_SIZE
+#else
+#define NOTIFYICONDATA_V2_SIZE      NOTIFYICONDATAA_V2_SIZE
+#endif
+
 
 #if (_WIN32_IE >= 0x0500)
 #define NIN_SELECT          (WM_USER + 0)
 #define NINF_KEY            0x1
 #define NIN_KEYSELECT       (NIN_SELECT | NINF_KEY)
+#endif
+
+#if (_WIN32_IE >= 0x0501)
+#define NIN_BALLOONSHOW     (WM_USER + 2)
+#define NIN_BALLOONHIDE     (WM_USER + 3)
+#define NIN_BALLOONTIMEOUT  (WM_USER + 4)
+#define NIN_BALLOONUSERCLICK (WM_USER + 5)
 #endif
 
 
@@ -606,18 +636,27 @@ typedef PNOTIFYICONDATAA PNOTIFYICONDATA;
 #define NIF_STATE       0x00000008
 #define NIF_INFO        0x00000010
 #endif
+#if (_WIN32_IE >= 0x600)
+#define NIF_GUID        0x00000020
+#endif
 
 #if (_WIN32_IE >= 0x0500)
-#define NIS_HIDDEN      0x00000001
-#define NIS_SHAREDICON  0x00000002
+#define NIS_HIDDEN              0x00000001
+#define NIS_SHAREDICON          0x00000002
+
+// says this is the source of a shared icon
 
 // Notify Icon Infotip flags
 #define NIIF_NONE       0x00000000
-// icon flags are mutualy exclusive
+// icon flags are mutually exclusive
 // and take only the lowest 2 bits
 #define NIIF_INFO       0x00000001
 #define NIIF_WARNING    0x00000002
 #define NIIF_ERROR      0x00000003
+#define NIIF_ICON_MASK  0x0000000F
+#if (_WIN32_IE >= 0x0501)
+#define NIIF_NOSOUND    0x00000010
+#endif
 #endif
 
 SHSTDAPI_(BOOL) Shell_NotifyIconA(DWORD dwMessage, PNOTIFYICONDATAA lpData);
@@ -733,6 +772,9 @@ SHSTDAPI_(BOOL) SHGetNewLinkInfoW(LPCWSTR pszLinkTo, LPCWSTR pszDir, LPWSTR pszN
 #define SHGNLI_PIDL             0x000000001     // pszLinkTo is a pidl
 #define SHGNLI_PREFIXNAME       0x000000002     // Make name "Shortcut to xxx"
 #define SHGNLI_NOUNIQUE         0x000000004     // don't do the unique name generation
+#if (_WIN32_IE >= 0x0501)
+#define SHGNLI_NOLNK            0x000000008     // don't add ".lnk" extension
+#endif // _WIN2_IE >= 0x0501
 
 
 ////
@@ -778,16 +820,93 @@ SHSTDAPI_(BOOL) SHInvokePrinterCommandW(HWND hwnd, UINT uAction, LPCWSTR lpBuf1,
 // 
 SHSTDAPI SHLoadNonloadedIconOverlayIdentifiers(void);
 
+//
+// The SHIsFileAvailableOffline API determines whether a file
+// or folder is available for offline use.
+//
+// Parameters:
+//     pwszPath             file name to get info about
+//     pdwStatus            (optional) OFFLINE_STATUS_* flags returned here
+//
+// Returns:
+//     S_OK                 File/directory is available offline, unless
+//                            OFFLINE_STATUS_INCOMPLETE is returned.
+//     E_INVALIDARG         Path is invalid, or not a net path
+//     E_FAIL               File/directory is not available offline
+// 
+// Notes:
+//     OFFLINE_STATUS_INCOMPLETE is never returned for directories.
+//     Both OFFLINE_STATUS_LOCAL and OFFLINE_STATUS_REMOTE may be returned,
+//     indicating "open in both places." This is common when the server is online.
+//
+SHSTDAPI SHIsFileAvailableOffline(LPCWSTR pwszPath, LPDWORD pdwStatus);
+
+#define OFFLINE_STATUS_LOCAL        0x0001  // If open, it's open locally
+#define OFFLINE_STATUS_REMOTE       0x0002  // If open, it's open remotely
+#define OFFLINE_STATUS_INCOMPLETE   0x0004  // The local copy is currently imcomplete.
+                                            // The file will not be available offline
+                                            // until it has been synchronized.
+
 #endif
 
+//  sets the specified path to use the string resource
+//  as the UI instead of the file system name
+SHSTDAPI SHSetLocalizedName(LPWSTR pszPath, LPCWSTR pszResModule, int idsRes);
 
+
+
+#if         _WIN32_IE >= 0x0600
+
+STDAPI          SHEnumerateUnreadMailAccountsA(HKEY hKeyUser, DWORD dwIndex, LPSTR pszMailAddress, int cchMailAddress);
+STDAPI          SHEnumerateUnreadMailAccountsW(HKEY hKeyUser, DWORD dwIndex, LPWSTR pszMailAddress, int cchMailAddress);
+#ifdef UNICODE
+#define SHEnumerateUnreadMailAccounts  SHEnumerateUnreadMailAccountsW
+#else
+#define SHEnumerateUnreadMailAccounts  SHEnumerateUnreadMailAccountsA
+#endif // !UNICODE
+STDAPI          SHGetUnreadMailCountA(HKEY hKeyUser, LPCSTR pszMailAddress, DWORD *pdwCount, FILETIME *pFileTime, LPSTR pszShellExecuteCommand, int cchShellExecuteCommand);
+STDAPI          SHGetUnreadMailCountW(HKEY hKeyUser, LPCWSTR pszMailAddress, DWORD *pdwCount, FILETIME *pFileTime, LPWSTR pszShellExecuteCommand, int cchShellExecuteCommand);
+#ifdef UNICODE
+#define SHGetUnreadMailCount  SHGetUnreadMailCountW
+#else
+#define SHGetUnreadMailCount  SHGetUnreadMailCountA
+#endif // !UNICODE
+STDAPI          SHSetUnreadMailCountA(LPCSTR pszMailAddress, DWORD dwCount, LPCSTR pszShellExecuteCommand);
+STDAPI          SHSetUnreadMailCountW(LPCWSTR pszMailAddress, DWORD dwCount, LPCWSTR pszShellExecuteCommand);
+#ifdef UNICODE
+#define SHSetUnreadMailCount  SHSetUnreadMailCountW
+#else
+#define SHSetUnreadMailCount  SHSetUnreadMailCountA
+#endif // !UNICODE
+
+#endif  /*  _WIN32_IE >= 0x0600     */
+
+
+#if         _WIN32_IE >= 0x0600
+
+HRESULT SHGetImageList(int iImageList, REFIID riid, void **ppvObj);
+
+#define SHIL_LARGE          0   // normally 32x32
+#define SHIL_SMALL          1   // normally 16x16
+#define SHIL_EXTRALARGE     2
+#define SHIL_SYSSMALL       3   // like SHIL_SMALL, but tracks system small icon metric correctly
+
+#define SHIL_LAST           SHIL_SYSSMALL
+
+
+// Function call types for ntshrui folder sharing helpers
+typedef HRESULT (STDMETHODCALLTYPE *PFNCANSHAREFOLDERW)(IN LPCWSTR pszPath);
+typedef HRESULT (STDMETHODCALLTYPE *PFNSHOWSHAREFOLDERUIW)(IN HWND hwndParent, IN LPCWSTR pszPath);
+
+#endif  /*  _WIN32_IE >= 0x0600     */
 
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
 
+#if !defined(_WIN64)
 #include <poppack.h>
+#endif
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* _INC_SHELLAPI */
 

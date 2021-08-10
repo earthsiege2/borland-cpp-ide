@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'TeeShape.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'TeeShape.pas' rev: 6.00
 
 #ifndef TeeShapeHPP
 #define TeeShapeHPP
@@ -30,9 +30,7 @@ enum TChartShapeXYStyle { xysPixels, xysAxis, xysAxisOrigin };
 #pragma option pop
 
 #pragma option push -b-
-enum TChartShapeStyle { chasRectangle, chasCircle, chasVertLine, chasHorizLine, chasTriangle, chasInvertTriangle, 
-	chasLine, chasDiamond, chasCube, chasCross, chasDiagCross, chasStar, chasPyramid, chasInvertPyramid 
-	};
+enum TChartShapeStyle { chasRectangle, chasCircle, chasVertLine, chasHorizLine, chasTriangle, chasInvertTriangle, chasLine, chasDiamond, chasCube, chasCross, chasDiagCross, chasStar, chasPyramid, chasInvertPyramid };
 #pragma option pop
 
 class DELPHICLASS TChartShape;
@@ -69,12 +67,12 @@ private:
 	void __fastcall SetXYStyle(TChartShapeXYStyle Value);
 	
 protected:
-	void __fastcall DrawShape(bool Is3D, const Windows::TRect &R);
-	void __fastcall DrawText(const Windows::TRect &R);
+	void __fastcall DrawShape(bool Is3D, const Types::TRect &R);
+	void __fastcall DrawText(const Types::TRect &R);
 	virtual void __fastcall SetSeriesColor(Graphics::TColor AColor);
-	Windows::TRect __fastcall GetAdjustedRectangle();
-	virtual Windows::TRect __fastcall GetShapeRectangle();
-	void __fastcall SetShapeRectangle(const Windows::TRect &ARect);
+	Types::TRect __fastcall GetAdjustedRectangle();
+	virtual Types::TRect __fastcall GetShapeRectangle();
+	void __fastcall SetShapeRectangle(const Types::TRect &ARect);
 	virtual void __fastcall SetText(Classes::TStrings* Value);
 	virtual bool __fastcall MoreSameZOrder(void);
 	
@@ -84,14 +82,14 @@ public:
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	virtual void __fastcall CalcZOrder(void);
 	virtual int __fastcall Clicked(int x, int y);
-	virtual void __fastcall DrawLegendShape(int ValueIndex, const Windows::TRect &Rect);
+	virtual void __fastcall DrawLegendShape(int ValueIndex, const Types::TRect &Rect);
 	virtual void __fastcall DrawValue(int ValueIndex);
 	virtual void __fastcall FillSampleValues(int NumValues);
 	virtual void __fastcall PrepareForGallery(bool IsEnabled);
 	virtual AnsiString __fastcall GetEditorClass();
 	virtual bool __fastcall IsValidSourceOf(Teengine::TChartSeries* Value);
 	virtual bool __fastcall UseAxis(void);
-	__property Windows::TRect Bounds = {read=GetShapeRectangle, write=SetShapeRectangle};
+	__property Types::TRect Bounds = {read=GetShapeRectangle, write=SetShapeRectangle};
 	
 __published:
 	__property Classes::TAlignment Alignment = {read=FAlignment, write=SetAlignment, default=2};
@@ -115,9 +113,7 @@ __published:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Teeshape */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Teeshape;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

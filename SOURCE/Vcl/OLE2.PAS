@@ -1,14 +1,16 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1996-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
 {       OLE 2 Interface Unit                            }
-{                                                       }
-{       Copyright (C) 1996,99 Inprise Corporation       }
-{                                                       }
 {*******************************************************}
 
-unit OLE2;
+unit Ole2;
 
 interface
 

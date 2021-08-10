@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Inprise Corp.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland Corp.  All Rights Reserved.
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 #ifndef ClientDataModuleUH
@@ -13,6 +13,7 @@
 #include <Db.hpp>
 #include <DBClient.hpp>
 #include "Customers_c.hh"
+#include <DB.hpp>
 //---------------------------------------------------------------------------
 class TClientDataModule : public TDataModule
 {

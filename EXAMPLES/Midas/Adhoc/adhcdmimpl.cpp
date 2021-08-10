@@ -61,7 +61,12 @@ STDMETHODIMP TAdHcDMImpl::GetTableNames(BSTR sAlias,
 
   try
   {
-    Session->GetTableNames(sAlias, "",  false, true, Names);
+    /* assumes type is Paradox or DBase */
+    Session->GetTableNames(sAlias, "", true, true, Names);
+    /*
+      If you'd like to retrieve names for SQL Servers, use the following function call
+      Session->GetTableNames(sAlias, "", false, true, Names);
+    */
     for (i = 0; i < Names->Count-1; i++)
       (*TableNames)->Add(WideString(Names->Strings[i]), Temp);
     return S_OK;

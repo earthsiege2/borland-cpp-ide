@@ -9,7 +9,6 @@
  */
 
 #ifndef _WSNETBS_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WSNETBS_
 
 #if _MSC_VER > 1000
@@ -70,6 +69,5 @@ typedef struct sockaddr_nb {
  */
 
 
-#pragma option pop /*P_O_Pop*/
 #endif
 

@@ -3,7 +3,7 @@
 
 :BASE nmhttp.hlp
 :TITLE FastNet HTTP Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 THeaderInfo object
 2 THeaderInfo object Reference=Scribble1010
 2 Properties

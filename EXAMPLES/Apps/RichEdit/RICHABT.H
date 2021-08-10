@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //Borland C++Builder
-//Copyright (c) 1987 - 2000 Borland International Inc. All Rights Reserved.
+//Copyright (c) 1987-2002 Borland International Inc. All Rights Reserved.
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
 // _RichAbt.hpp - dcc32 generated hdr (DO NOT EDIT) rev: -10

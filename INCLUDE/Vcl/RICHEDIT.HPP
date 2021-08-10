@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'RichEdit.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'RichEdit.pas' rev: 6.00
 
 #ifndef RichEditHPP
 #define RichEditHPP
@@ -21,6 +21,7 @@
 namespace Richedit
 {
 //-- type declarations -------------------------------------------------------
+#pragma pack(push, 4)
 struct TCharFormatA
 {
 	unsigned cbSize;
@@ -33,7 +34,9 @@ struct TCharFormatA
 	Byte bPitchAndFamily;
 	char szFaceName[32];
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TCharFormatW
 {
 	unsigned cbSize;
@@ -46,6 +49,7 @@ struct TCharFormatW
 	Byte bPitchAndFamily;
 	wchar_t szFaceName[32];
 } ;
+#pragma pack(pop)
 
 typedef TCharFormatA  TCharFormat;
 
@@ -57,8 +61,7 @@ typedef TEXTRANGEW  TTextRangeW;
 
 typedef TEXTRANGEA  TEXTRANGE;
 
-typedef int __stdcall (*TEditStreamCallBack)(int dwCookie, Windows::PByte pbBuff, int cb, int &pcb);
-	
+typedef int __stdcall (*TEditStreamCallBack)(int dwCookie, System::PByte pbBuff, int cb, int &pcb);
 
 typedef _editstream  TEditStream;
 
@@ -97,16 +100,19 @@ typedef _msgfilter  TMsgFilter;
 struct TReqSize;
 typedef TReqSize *PReqSize;
 
+#pragma pack(push, 1)
 struct TReqSize
 {
 	tagNMHDR nmhdr;
-	Windows::TRect rc;
+	Types::TRect rc;
 } ;
+#pragma pack(pop)
 
 typedef _selchange *PSelChange;
 
 typedef _selchange  TSelChange;
 
+#pragma pack(push, 4)
 struct TEndDropFiles
 {
 	tagNMHDR nmhdr;
@@ -114,6 +120,7 @@ struct TEndDropFiles
 	int cp;
 	BOOL fProtected;
 } ;
+#pragma pack(pop)
 
 typedef _enprotected *PENProtected;
 
@@ -147,9 +154,7 @@ static const Shortint FT_MATCHCASE = 0x4;
 static const Shortint FT_WHOLEWORD = 0x2;
 
 }	/* namespace Richedit */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Richedit;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

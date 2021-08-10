@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1998 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1998-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
@@ -10,11 +10,7 @@
 #pragma package(smart_init)
 USEFORM("EmpEdImp.cpp", EmpEditX); /* TActiveForm: DesignClass */ /* EmpEditX: CoClass */
 USERES("EmpX.res");
-USEUNIT("EmpX_ATL.cpp");
-USETLB("EmpX.tlb");
-USEUNIT("EmpX_TLB.cpp");
 USEFORM("RECERROR.cpp", ReconcileErrorForm);
-USEFILE("readme.txt");
 //---------------------------------------------------------------------------
 TComModule  Project1Module;
 TComModule &_Module = Project1Module;

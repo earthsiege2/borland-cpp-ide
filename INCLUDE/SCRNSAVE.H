@@ -28,7 +28,6 @@
 \*****************************************************************************/
 
 #ifndef _INC_SCRNSAVE
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_SCRNSAVE
 
 #if _MSC_VER > 1000
@@ -194,5 +193,4 @@ void WINAPI ScreenSaverChangePassword( HWND hParent );
 
 #include <poppack.h>
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* !_INC_SCRNSAVE */

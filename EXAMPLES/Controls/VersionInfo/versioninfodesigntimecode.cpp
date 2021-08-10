@@ -8,7 +8,7 @@
 //
 // Includes to support design-time code
 //
-#include <DsgnIntf.hpp>
+#include <DesignIntf.hpp>
 #include <ToolsApi.hpp>
 
 //

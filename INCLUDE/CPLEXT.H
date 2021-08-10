@@ -4,12 +4,11 @@
 //
 // Version 4.00
 //
-// Copyright (c) 1992-1995, Microsoft Corp.	All rights reserved
+// Copyright (c) Microsoft Corporation. All rights reserved.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef _INC_CPLEXT
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_CPLEXT
 
 
@@ -33,6 +32,7 @@
 
 #define CPLPAGE_MOUSE_BUTTONS       1
 #define CPLPAGE_MOUSE_PTRMOTION     2
+#define CPLPAGE_MOUSE_WHEEL         3
 
 
 //-----------------------------------------------------------------------------
@@ -45,7 +45,16 @@
 #define CPLPAGE_KEYBOARD_SPEED      1
 
 
+//-----------------------------------------------------------------------------
+// Display Control Panel Extensions
+// The following constants MAY be passed in IShellPropSheetExt::ReplacePage's
+// uPageID parameter for servers registered under
+//                                  ( REGSTR_PATH_CONTROLSFOLDER "\\Display" )
+//-----------------------------------------------------------------------------
+
+#define CPLPAGE_DISPLAY_BACKGROUND  1
+
+
 ///////////////////////////////////////////////////////////////////////////////
 
-#pragma option pop /*P_O_Pop*/
 #endif

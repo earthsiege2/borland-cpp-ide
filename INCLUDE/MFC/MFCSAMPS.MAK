@@ -182,15 +182,15 @@ MFCDEFS=$(MFCDEFS) /D_X86_;_WINDOWS;_MSC_VER=1100;_AFX_PORTABLE;_AFX_NOFORCE_LIB
 !if "$(USRDLL)" == "1"
 MFCDEFS=$(MFCDEFS) /D_USRDLL /D_WINDLL
 !if "$(CONSOLE)" == "1"
-MFCFLAGS=$(MFCFLAGS) -tWCD
+MFCFLAGS=$(MFCFLAGS) -WD
 !else
-MFCFLAGS=$(MFCFLAGS) -tWD
+MFCFLAGS=$(MFCFLAGS) -WD
 !endif
 !else
 !if "$(CONSOLE)" == "1"
-MFCFLAGS=$(MFCFLAGS) -tWC
+MFCFLAGS=$(MFCFLAGS) -WC
 !else
-MFCFLAGS=$(MFCFLAGS) -tWE
+MFCFLAGS=$(MFCFLAGS) -W
 !endif
 !endif
 
@@ -232,10 +232,10 @@ LINKCMD=ilink32
 #LIBRARIES=BFC42D.lib BFCS42D.lib bfcd42d.lib bfco42d.lib bfcn42d.lib $(OTHERLIBS) cw32mti.lib import32.lib
 LIBRARIES=BFC42D.lib BFCS42D.lib $(OTHERLIBS) cw32mti.lib import32.lib
 !else
-LIBRARIES=BFC42.lib BFCS42.lib $(OTHERLIBS) cw32mti.lib import32.lib
+LIBRARIES=BFC42.lib BFCS42.lib $(OTHERLIBS) cw32mti.lib import32.lib stlpmti.lib
 !endif
 !else
-LIBRARIES=nafxcw$(DEBUG_SUFFIX).lib $(OTHERLIBS) cw32mt.lib import32.lib
+LIBRARIES=nafxcw$(DEBUG_SUFFIX).lib $(OTHERLIBS) cw32mt.lib import32.lib stlpmt.lib
 !endif
 RC=brc32
 

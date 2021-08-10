@@ -1,5 +1,5 @@
 // This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1997 Microsoft Corporation
+// Copyright (C) 1992-1998 Microsoft Corporation
 // All rights reserved.
 //
 // This source code is only intended as a supplement to the
@@ -60,19 +60,19 @@ _AfxDispatchCall(AFX_PMSG /*pfn*/, void* /*pArgs*/, UINT /*nSizeArgs*/)
              0xC3                   // ret              ; esp[0] should = scratch[0] = return address
             );
 #else
-    _asm
-    {
-	    pop     edx         // edx = return address
-	    pop     eax         // eax = pfn
-	    pop     ecx         // ecx = pArgs
-	    add     ecx,[esp]   // ecx += nSizeArgs (=scratch area)
-	    mov     [ecx],edx   // scratch[0] = return address
-	    sub     ecx,[esp]   // ecx = pArgs (again)
-	    mov     esp,ecx     // esp = pArgs (usually already correct)
-	    pop     ecx         // ecx = this pointer (the CCmdTarget*)
-	    call    eax         // call member function
-	    ret                 // esp[0] should = scratch[0] = return address
-    }
+	_asm
+	{
+		pop     edx         // edx = return address
+		pop     eax         // eax = pfn
+		pop     ecx         // ecx = pArgs
+		add     ecx,[esp]   // ecx += nSizeArgs (=scratch area)
+		mov     [ecx],edx   // scratch[0] = return address
+		sub     ecx,[esp]   // ecx = pArgs (again)
+		mov     esp,ecx     // esp = pArgs (usually already correct)
+		pop     ecx         // ecx = this pointer (the CCmdTarget*)
+		call    eax         // call member function
+		ret                 // esp[0] should = scratch[0] = return address
+	}
 #endif
 }
 #endif // _X86_
@@ -108,32 +108,6 @@ _AfxDispatchCall(AFX_PMSG /*pfn*/, void* /*pArgs*/, UINT /*nSizeArgs*/)
 //  must be build separately with the ASAXP assembler.
 
 #endif // _ALPHA_
-
-/////////////////////////////////////////////////////////////////////////////
-// 680x0 version
-
-#ifdef _68K_
-
-// Note: Mac68k version is in src\m68k\olecall.obj
-
-// The 68k compiler does not support inline assembly, so it
-//  has been build separate and included as an object
-
-
-#endif // _68K_
-
-/////////////////////////////////////////////////////////////////////////////
-// PowerMac version
-
-#ifdef _MPPC_
-
-// Note: MacPPC version is in src\mppc\olecall.obj
-
-// The Mac PowerPC compiler does not support inline assembly, so it
-//  has been build separate and included as an object
-
-#endif // _MPPC_
-
 
 } // end extern "C" block
 

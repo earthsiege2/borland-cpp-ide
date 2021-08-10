@@ -1,31 +1,31 @@
-LIBRARY WOW32
+LIBRARY Wow32
 EXPORTS
 
-    CopyDropFilesFrom16                      = 'WOW32.DLL'.*
-    CopyDropFilesFrom32                      = 'WOW32.DLL'.*
-    GetCommHandle                            = 'WOW32.DLL'.*
-    GetCommShadowMSR                         = 'WOW32.DLL'.*
-    W32Dispatch                              = 'WOW32.DLL'.*
-    W32HungAppNotifyThread                   = 'WOW32.DLL'.*
-    W32Init                                  = 'WOW32.DLL'.*
-    WOW32DriverCallback                      = 'WOW32.DLL'.*
-    WOW32ResolveHandle                       = 'WOW32.DLL'.*
-    WOW32ResolveMemory                       = 'WOW32.DLL'.*
-    WOWCallback16                            = 'WOW32.DLL'.*
-    WOWCallback16Ex                          = 'WOW32.DLL'.*
-    WOWDirectedYield16                       = 'WOW32.DLL'.*
-    WOWFreeMetafile                          = 'WOW32.DLL'.*
-    WOWGetVDMPointer                         = 'WOW32.DLL'.*
-    WOWGetVDMPointerFix                      = 'WOW32.DLL'.*
-    WOWGetVDMPointerUnfix                    = 'WOW32.DLL'.*
-    WOWGlobalAlloc16                         = 'WOW32.DLL'.*
-    WOWGlobalAllocLock16                     = 'WOW32.DLL'.*
-    WOWGlobalFree16                          = 'WOW32.DLL'.*
-    WOWGlobalLock16                          = 'WOW32.DLL'.*
-    WOWGlobalLockSize16                      = 'WOW32.DLL'.*
-    WOWGlobalUnlock16                        = 'WOW32.DLL'.*
-    WOWGlobalUnlockFree16                    = 'WOW32.DLL'.*
-    WOWHandle16                              = 'WOW32.DLL'.*
-    WOWHandle32                              = 'WOW32.DLL'.*
-    WOWUseMciavi16                           = 'WOW32.DLL'.*
-    WOWYield16                               = 'WOW32.DLL'.*
+    CopyDropFilesFrom16
+    CopyDropFilesFrom32
+    GetCommHandle
+    GetCommShadowMSR
+    W32Dispatch
+    W32HungAppNotifyThread
+    W32Init
+    WOW32DriverCallback
+    WOW32ResolveHandle
+    WOW32ResolveMemory
+    WOWCallback16
+    WOWCallback16Ex
+    WOWDirectedYield16
+    WOWFreeMetafile
+    WOWGetVDMPointer
+    WOWGetVDMPointerFix
+    WOWGetVDMPointerUnfix
+    WOWGlobalAlloc16
+    WOWGlobalAllocLock16
+    WOWGlobalFree16
+    WOWGlobalLock16
+    WOWGlobalLockSize16
+    WOWGlobalUnlock16
+    WOWGlobalUnlockFree16
+    WOWHandle16
+    WOWHandle32
+    WOWUseMciavi16
+    WOWYield16

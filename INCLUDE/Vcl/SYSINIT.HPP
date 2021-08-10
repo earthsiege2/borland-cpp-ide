@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'SysInit.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'SysInit.pas' rev: 6.00
 
 #ifndef SysInitHPP
 #define SysInitHPP
@@ -27,15 +27,14 @@ extern PACKAGE bool ModuleIsPackage;
 extern PACKAGE bool ModuleIsCpp;
 extern PACKAGE int TlsIndex;
 extern PACKAGE Byte TlsLast;
-extern PACKAGE void *DllProc;
+extern PACKAGE System::TDLLProc DllProc;
+#pragma error Unsupported symbol type (4, DllProcEx)
 extern PACKAGE int DataMark;
 extern PACKAGE void __cdecl VclInit(bool isDLL, bool isPkg, int hInst, bool isGui);
 extern PACKAGE void __cdecl VclExit(void);
 
 }	/* namespace Sysinit */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Sysinit;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

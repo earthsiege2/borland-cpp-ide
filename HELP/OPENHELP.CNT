@@ -1,5 +1,5 @@
-:Base OPENHELP.HLP>main
+:Base openhelp.hlp>main
 :Title Borland OpenHelp Help
-:Index Borland OpenHelp Help=OPENHELP.HLP
-:INCLUDE BCB5XTRA.OHL
-:INCLUDE OPENHELP.TOC
+:Index Borland OpenHelp Help=openhelp.hlp
+:Include bcb6xtra.ohl
+:Include openhelp.toc

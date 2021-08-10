@@ -1,9 +1,9 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 #pragma hdrstop
-#include <dsgnintf.hpp>
+#include <designintf.hpp>
 #include <memory>       //for STL auto_ptr
 #include "ibreg.h"
 #include "samp.h"
@@ -12,7 +12,7 @@
 
 #pragma resource "*.res"  
 
-__fastcall TIBEventListProperty::TIBEventListProperty(_di_IFormDesigner ADesigner, int APropCount)
+__fastcall TIBEventListProperty::TIBEventListProperty(_di_IDesigner ADesigner, int APropCount)
                                 : TClassProperty(ADesigner, APropCount) { } 
 __fastcall TIBEventListProperty::~TIBEventListProperty(void){}
 
@@ -29,7 +29,7 @@ void __fastcall TIBEventListProperty::Edit()
     SetOrdValue(long(Events.get()));
 }
 
-namespace Ibsmp50
+namespace Ibsmp60
 {
 void __fastcall PACKAGE Register()
 {

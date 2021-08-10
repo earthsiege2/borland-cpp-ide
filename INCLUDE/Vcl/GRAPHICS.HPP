@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Graphics.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Graphics.pas' rev: 6.00
 
 #ifndef GraphicsHPP
 #define GraphicsHPP
@@ -12,6 +12,7 @@
 #pragma option push -Vx
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
+#include <Types.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
@@ -40,38 +41,28 @@ class PASCALIMPLEMENTATION EInvalidGraphic : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EInvalidGraphic(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EInvalidGraphic(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EInvalidGraphic(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EInvalidGraphic(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EInvalidGraphic(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EInvalidGraphic(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EInvalidGraphic(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EInvalidGraphic(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EInvalidGraphic(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EInvalidGraphic(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EInvalidGraphic(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EInvalidGraphic(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EInvalidGraphic(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EInvalidGraphic(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidGraphic(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidGraphic(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -89,38 +80,28 @@ class PASCALIMPLEMENTATION EInvalidGraphicOperation : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EInvalidGraphicOperation(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EInvalidGraphicOperation(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EInvalidGraphicOperation(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EInvalidGraphicOperation(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EInvalidGraphicOperation(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EInvalidGraphicOperation(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EInvalidGraphicOperation(int Ident, const System::TVarRec 
-		* Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EInvalidGraphicOperation(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EInvalidGraphicOperation(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EInvalidGraphicOperation(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EInvalidGraphicOperation(const AnsiString Msg, const 
-		System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size
-		, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EInvalidGraphicOperation(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EInvalidGraphicOperation(int Ident, int AHelpContext
-		)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EInvalidGraphicOperation(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidGraphicOperation(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidGraphicOperation(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -131,10 +112,12 @@ public:
 };
 
 
+#pragma pack(push, 4)
 struct TResData
 {
 	unsigned Handle;
 } ;
+#pragma pack(pop)
 
 #pragma option push -b-
 enum TFontPitch { fpDefault, fpVariable, fpFixed };
@@ -146,6 +129,7 @@ typedef Byte TFontCharset;
 
 typedef Set<TFontStyle, fsBold, fsStrikeOut>  TFontStyles;
 
+#pragma pack(push, 4)
 struct TFontData
 {
 	HFONT Handle;
@@ -155,16 +139,17 @@ struct TFontData
 	TFontCharset Charset;
 	TFontDataName Name;
 } ;
+#pragma pack(pop)
 
 #pragma option push -b-
 enum TPenStyle { psSolid, psDash, psDot, psDashDot, psDashDotDot, psClear, psInsideFrame };
 #pragma option pop
 
 #pragma option push -b-
-enum TPenMode { pmBlack, pmWhite, pmNop, pmNot, pmCopy, pmNotCopy, pmMergePenNot, pmMaskPenNot, pmMergeNotPen, 
-	pmMaskNotPen, pmMerge, pmNotMerge, pmMask, pmNotMask, pmXor, pmNotXor };
+enum TPenMode { pmBlack, pmWhite, pmNop, pmNot, pmCopy, pmNotCopy, pmMergePenNot, pmMaskPenNot, pmMergeNotPen, pmMaskNotPen, pmMerge, pmNotMerge, pmMask, pmNotMask, pmXor, pmNotXor };
 #pragma option pop
 
+#pragma pack(push, 4)
 struct TPenData
 {
 	HPEN Handle;
@@ -172,10 +157,10 @@ struct TPenData
 	int Width;
 	TPenStyle Style;
 } ;
+#pragma pack(pop)
 
 #pragma option push -b-
-enum TBrushStyle { bsSolid, bsClear, bsHorizontal, bsVertical, bsFDiagonal, bsBDiagonal, bsCross, bsDiagCross 
-	};
+enum TBrushStyle { bsSolid, bsClear, bsHorizontal, bsVertical, bsFDiagonal, bsBDiagonal, bsCross, bsDiagCross };
 #pragma option pop
 
 class DELPHICLASS TBitmap;
@@ -184,13 +169,12 @@ class DELPHICLASS TGraphic;
 enum TProgressStage { psStarting, psRunning, psEnding };
 #pragma option pop
 
-typedef void __fastcall (__closure *TProgressEvent)(System::TObject* Sender, TProgressStage Stage, Byte 
-	PercentDone, bool RedrawNow, const Windows::TRect &R, const AnsiString Msg);
+typedef void __fastcall (__closure *TProgressEvent)(System::TObject* Sender, TProgressStage Stage, Byte PercentDone, bool RedrawNow, const Types::TRect &R, const AnsiString Msg);
 
 class DELPHICLASS TCanvas;
-class PASCALIMPLEMENTATION TGraphic : public Classes::TPersistent 
+class PASCALIMPLEMENTATION TGraphic : public Classes::TInterfacedPersistent 
 {
-	typedef Classes::TPersistent inherited;
+	typedef Classes::TInterfacedPersistent inherited;
 	
 private:
 	Classes::TNotifyEvent FOnChange;
@@ -201,18 +185,16 @@ private:
 	void __fastcall SetModified(bool Value);
 	
 protected:
-	__fastcall virtual TGraphic(void);
 	virtual void __fastcall Changed(System::TObject* Sender);
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
-	virtual void __fastcall Draw(TCanvas* ACanvas, const Windows::TRect &Rect) = 0 ;
+	virtual void __fastcall Draw(TCanvas* ACanvas, const Types::TRect &Rect) = 0 ;
 	virtual bool __fastcall Equals(TGraphic* Graphic);
 	virtual bool __fastcall GetEmpty(void) = 0 ;
 	virtual int __fastcall GetHeight(void) = 0 ;
 	virtual HPALETTE __fastcall GetPalette(void);
 	virtual bool __fastcall GetTransparent(void);
 	virtual int __fastcall GetWidth(void) = 0 ;
-	DYNAMIC void __fastcall Progress(System::TObject* Sender, TProgressStage Stage, Byte PercentDone, bool 
-		RedrawNow, const Windows::TRect &R, const AnsiString Msg);
+	DYNAMIC void __fastcall Progress(System::TObject* Sender, TProgressStage Stage, Byte PercentDone, bool RedrawNow, const Types::TRect &R, const AnsiString Msg);
 	virtual void __fastcall ReadData(Classes::TStream* Stream);
 	virtual void __fastcall SetHeight(int Value) = 0 ;
 	virtual void __fastcall SetPalette(HPALETTE Value);
@@ -221,14 +203,13 @@ protected:
 	virtual void __fastcall WriteData(Classes::TStream* Stream);
 	
 public:
+	__fastcall virtual TGraphic(void);
 	virtual void __fastcall LoadFromFile(const AnsiString Filename);
 	virtual void __fastcall SaveToFile(const AnsiString Filename);
 	virtual void __fastcall LoadFromStream(Classes::TStream* Stream) = 0 ;
 	virtual void __fastcall SaveToStream(Classes::TStream* Stream) = 0 ;
-	virtual void __fastcall LoadFromClipboardFormat(Word AFormat, unsigned AData, HPALETTE APalette) = 0 
-		;
-	virtual void __fastcall SaveToClipboardFormat(Word &AFormat, unsigned &AData, HPALETTE &APalette) = 0 
-		;
+	virtual void __fastcall LoadFromClipboardFormat(Word AFormat, unsigned AData, HPALETTE APalette) = 0 ;
+	virtual void __fastcall SaveToClipboardFormat(Word &AFormat, unsigned &AData, HPALETTE &APalette) = 0 ;
 	__property bool Empty = {read=GetEmpty, nodefault};
 	__property int Height = {read=GetHeight, write=SetHeight, nodefault};
 	__property bool Modified = {read=FModified, write=SetModified, nodefault};
@@ -242,6 +223,12 @@ public:
 	#pragma option push -w-inl
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TGraphic(void) { }
 	#pragma option pop
+	
+private:
+	void *__IStreamPersist;	/* Classes::IStreamPersist */
+	
+public:
+	operator IStreamPersist*(void) { return (IStreamPersist*)&__IStreamPersist; }
 	
 };
 
@@ -310,8 +297,7 @@ enum TBitmapHandleType { bmDIB, bmDDB };
 #pragma option pop
 
 #pragma option push -b-
-enum TPixelFormat { pfDevice, pf1bit, pf4bit, pf8bit, pf15bit, pf16bit, pf24bit, pf32bit, pfCustom }
-	;
+enum TPixelFormat { pfDevice, pf1bit, pf4bit, pf8bit, pf15bit, pf16bit, pf24bit, pf32bit, pfCustom };
 #pragma option pop
 
 class PASCALIMPLEMENTATION TBitmap : public TGraphic 
@@ -338,10 +324,9 @@ private:
 	TPixelFormat __fastcall GetPixelFormat(void);
 	void * __fastcall GetScanline(int Row);
 	TColor __fastcall GetTransparentColor(void);
-	void __fastcall NewImage(HBITMAP NewHandle, HPALETTE NewPalette, const tagDIBSECTION &NewDIB, bool 
-		OS2Format, Classes::TStream* RLEStream);
+	void __fastcall NewImage(HBITMAP NewHandle, HPALETTE NewPalette, const tagDIBSECTION &NewDIB, bool OS2Format, Classes::TStream* RLEStream = (Classes::TStream*)(0x0));
 	void __fastcall ReadStream(Classes::TStream* Stream, int Size);
-	void __fastcall ReadDIB(Classes::TStream* Stream, unsigned ImageSize);
+	void __fastcall ReadDIB(Classes::TStream* Stream, unsigned ImageSize, Windows::PBitmapFileHeader bmf = (void *)(0x0));
 	void __fastcall SetHandle(HBITMAP Value);
 	virtual void __fastcall SetHandleType(TBitmapHandleType Value);
 	void __fastcall SetMaskHandle(HBITMAP Value);
@@ -354,7 +339,7 @@ private:
 	
 protected:
 	virtual void __fastcall Changed(System::TObject* Sender);
-	virtual void __fastcall Draw(TCanvas* ACanvas, const Windows::TRect &Rect);
+	virtual void __fastcall Draw(TCanvas* ACanvas, const Types::TRect &Rect);
 	virtual bool __fastcall GetEmpty(void);
 	virtual int __fastcall GetHeight(void);
 	virtual HPALETTE __fastcall GetPalette(void);
@@ -374,6 +359,7 @@ public:
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	void __fastcall Dormant(void);
 	void __fastcall FreeImage(void);
+	bool __fastcall HandleAllocated(void);
 	virtual void __fastcall LoadFromClipboardFormat(Word AFormat, unsigned AData, HPALETTE APalette);
 	virtual void __fastcall LoadFromStream(Classes::TStream* Stream);
 	void __fastcall LoadFromResourceName(unsigned Instance, const AnsiString ResName);
@@ -392,13 +378,12 @@ public:
 	__property bool Monochrome = {read=GetMonochrome, write=SetMonochrome, nodefault};
 	__property TPixelFormat PixelFormat = {read=GetPixelFormat, write=SetPixelFormat, nodefault};
 	__property void * ScanLine[int Row] = {read=GetScanline};
-	__property TColor TransparentColor = {read=GetTransparentColor, write=SetTransparentColor, stored=TransparentColorStored
-		, nodefault};
-	__property TTransparentMode TransparentMode = {read=FTransparentMode, write=SetTransparentMode, default=0
-		};
+	__property TColor TransparentColor = {read=GetTransparentColor, write=SetTransparentColor, stored=TransparentColorStored, nodefault};
+	__property TTransparentMode TransparentMode = {read=FTransparentMode, write=SetTransparentMode, default=0};
 };
 
 
+#pragma pack(push, 4)
 struct TBrushData
 {
 	HBRUSH Handle;
@@ -406,10 +391,12 @@ struct TBrushData
 	TBitmap* Bitmap;
 	TBrushStyle Style;
 } ;
+#pragma pack(pop)
 
 struct TResource;
 typedef TResource *PResource;
 
+#pragma pack(push, 4)
 struct TResource
 {
 	TResource *Next;
@@ -441,6 +428,7 @@ struct TResource
 		
 	};
 } ;
+#pragma pack(pop)
 
 class DELPHICLASS TGraphicsObject;
 class PASCALIMPLEMENTATION TGraphicsObject : public Classes::TPersistent 
@@ -458,9 +446,9 @@ protected:
 	void __fastcall Unlock(void);
 	
 public:
+	bool __fastcall HandleAllocated(void);
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property Windows::PRTLCriticalSection OwnerCriticalSection = {read=FOwnerLock, write=FOwnerLock};
-		
 public:
 	#pragma option push -w-inl
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TGraphicsObject(void) { }
@@ -476,8 +464,7 @@ public:
 
 __interface IChangeNotifier;
 typedef System::DelphiInterface<IChangeNotifier> _di_IChangeNotifier;
-__interface INTERFACE_UUID("{1FB62321-44A7-11D0-9E93-0020AF3D82DA}") IChangeNotifier  : public IUnknown 
-	
+__interface INTERFACE_UUID("{1FB62321-44A7-11D0-9E93-0020AF3D82DA}") IChangeNotifier  : public IInterface 
 {
 	
 public:
@@ -600,6 +587,51 @@ __published:
 };
 
 
+class DELPHICLASS TFontRecall;
+class PASCALIMPLEMENTATION TFontRecall : public Classes::TRecall 
+{
+	typedef Classes::TRecall inherited;
+	
+public:
+	__fastcall TFontRecall(TFont* AFont);
+public:
+	#pragma option push -w-inl
+	/* TRecall.Destroy */ inline __fastcall virtual ~TFontRecall(void) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TPenRecall;
+class PASCALIMPLEMENTATION TPenRecall : public Classes::TRecall 
+{
+	typedef Classes::TRecall inherited;
+	
+public:
+	__fastcall TPenRecall(TPen* APen);
+public:
+	#pragma option push -w-inl
+	/* TRecall.Destroy */ inline __fastcall virtual ~TPenRecall(void) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TBrushRecall;
+class PASCALIMPLEMENTATION TBrushRecall : public Classes::TRecall 
+{
+	typedef Classes::TRecall inherited;
+	
+public:
+	__fastcall TBrushRecall(TBrush* ABrush);
+public:
+	#pragma option push -w-inl
+	/* TRecall.Destroy */ inline __fastcall virtual ~TBrushRecall(void) { }
+	#pragma option pop
+	
+};
+
+
 #pragma option push -b-
 enum TFillStyle { fsSurface, fsBorder };
 #pragma option pop
@@ -630,7 +662,10 @@ private:
 	TFont* FFont;
 	TPen* FPen;
 	TBrush* FBrush;
-	Windows::TPoint FPenPos;
+	#pragma pack(push, 1)
+	Types::TPoint FPenPos;
+	#pragma pack(pop)
+	
 	int FCopyMode;
 	Classes::TNotifyEvent FOnChange;
 	Classes::TNotifyEvent FOnChanging;
@@ -643,9 +678,9 @@ private:
 	void __fastcall BrushChanged(System::TObject* ABrush);
 	void __fastcall DeselectHandles(void);
 	TCanvasOrientation __fastcall GetCanvasOrientation(void);
-	Windows::TRect __fastcall GetClipRect();
+	Types::TRect __fastcall GetClipRect();
 	HDC __fastcall GetHandle(void);
-	Windows::TPoint __fastcall GetPenPos();
+	Types::TPoint __fastcall GetPenPos();
 	TColor __fastcall GetPixel(int X, int Y);
 	void __fastcall FontChanged(System::TObject* AFont);
 	void __fastcall PenChanged(System::TObject* APen);
@@ -653,7 +688,7 @@ private:
 	void __fastcall SetFont(TFont* Value);
 	void __fastcall SetHandle(HDC Value);
 	void __fastcall SetPen(TPen* Value);
-	void __fastcall SetPenPos(const Windows::TPoint &Value);
+	void __fastcall SetPenPos(const Types::TPoint &Value);
 	void __fastcall SetPixel(int X, int Y, TColor Value);
 	
 protected:
@@ -666,43 +701,42 @@ public:
 	__fastcall TCanvas(void);
 	__fastcall virtual ~TCanvas(void);
 	void __fastcall Arc(int X1, int Y1, int X2, int Y2, int X3, int Y3, int X4, int Y4);
-	void __fastcall BrushCopy(const Windows::TRect &Dest, TBitmap* Bitmap, const Windows::TRect &Source
-		, TColor Color);
+	void __fastcall BrushCopy(const Types::TRect &Dest, TBitmap* Bitmap, const Types::TRect &Source, TColor Color);
 	void __fastcall Chord(int X1, int Y1, int X2, int Y2, int X3, int Y3, int X4, int Y4);
-	void __fastcall CopyRect(const Windows::TRect &Dest, TCanvas* Canvas, const Windows::TRect &Source)
-		;
+	void __fastcall CopyRect(const Types::TRect &Dest, TCanvas* Canvas, const Types::TRect &Source);
 	void __fastcall Draw(int X, int Y, TGraphic* Graphic);
-	void __fastcall DrawFocusRect(const Windows::TRect &Rect);
+	void __fastcall DrawFocusRect(const Types::TRect &Rect);
 	void __fastcall Ellipse(int X1, int Y1, int X2, int Y2)/* overload */;
-	void __fastcall Ellipse(const Windows::TRect &Rect)/* overload */;
-	void __fastcall FillRect(const Windows::TRect &Rect);
+	void __fastcall Ellipse(const Types::TRect &Rect)/* overload */;
+	void __fastcall FillRect(const Types::TRect &Rect);
 	void __fastcall FloodFill(int X, int Y, TColor Color, TFillStyle FillStyle);
-	void __fastcall FrameRect(const Windows::TRect &Rect);
+	void __fastcall FrameRect(const Types::TRect &Rect);
+	bool __fastcall HandleAllocated(void);
 	void __fastcall LineTo(int X, int Y);
 	void __fastcall Lock(void);
 	void __fastcall MoveTo(int X, int Y);
 	void __fastcall Pie(int X1, int Y1, int X2, int Y2, int X3, int Y3, int X4, int Y4);
-	void __fastcall Polygon(const Windows::TPoint * Points, const int Points_Size);
-	void __fastcall Polyline(const Windows::TPoint * Points, const int Points_Size);
-	void __fastcall PolyBezier(const Windows::TPoint * Points, const int Points_Size);
-	void __fastcall PolyBezierTo(const Windows::TPoint * Points, const int Points_Size);
+	void __fastcall Polygon(const Types::TPoint * Points, const int Points_Size);
+	void __fastcall Polyline(const Types::TPoint * Points, const int Points_Size);
+	void __fastcall PolyBezier(const Types::TPoint * Points, const int Points_Size);
+	void __fastcall PolyBezierTo(const Types::TPoint * Points, const int Points_Size);
 	void __fastcall Rectangle(int X1, int Y1, int X2, int Y2)/* overload */;
-	void __fastcall Rectangle(const Windows::TRect &Rect)/* overload */;
+	void __fastcall Rectangle(const Types::TRect &Rect)/* overload */;
 	void __fastcall Refresh(void);
 	void __fastcall RoundRect(int X1, int Y1, int X2, int Y2, int X3, int Y3);
-	void __fastcall StretchDraw(const Windows::TRect &Rect, TGraphic* Graphic);
+	void __fastcall StretchDraw(const Types::TRect &Rect, TGraphic* Graphic);
 	tagSIZE __fastcall TextExtent(const AnsiString Text);
 	int __fastcall TextHeight(const AnsiString Text);
 	void __fastcall TextOut(int X, int Y, const AnsiString Text);
-	void __fastcall TextRect(const Windows::TRect &Rect, int X, int Y, const AnsiString Text);
+	void __fastcall TextRect(const Types::TRect &Rect, int X, int Y, const AnsiString Text);
 	int __fastcall TextWidth(const AnsiString Text);
 	bool __fastcall TryLock(void);
 	void __fastcall Unlock(void);
-	__property Windows::TRect ClipRect = {read=GetClipRect};
+	__property Types::TRect ClipRect = {read=GetClipRect};
 	__property HDC Handle = {read=GetHandle, write=SetHandle, nodefault};
 	__property int LockCount = {read=FLockCount, nodefault};
 	__property TCanvasOrientation CanvasOrientation = {read=GetCanvasOrientation, nodefault};
-	__property Windows::TPoint PenPos = {read=GetPenPos, write=SetPenPos};
+	__property Types::TPoint PenPos = {read=GetPenPos, write=SetPenPos};
 	__property TColor Pixels[int X][int Y] = {read=GetPixel, write=SetPixel};
 	__property int TextFlags = {read=FTextFlags, write=FTextFlags, nodefault};
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
@@ -721,9 +755,9 @@ typedef TMetaClass*TGraphicClass;
 class DELPHICLASS TPicture;
 class DELPHICLASS TIcon;
 class DELPHICLASS TMetafile;
-class PASCALIMPLEMENTATION TPicture : public Classes::TPersistent 
+class PASCALIMPLEMENTATION TPicture : public Classes::TInterfacedPersistent 
 {
-	typedef Classes::TPersistent inherited;
+	typedef Classes::TInterfacedPersistent inherited;
 	
 private:
 	TGraphic* FGraphic;
@@ -746,9 +780,10 @@ private:
 protected:
 	virtual void __fastcall AssignTo(Classes::TPersistent* Dest);
 	DYNAMIC void __fastcall Changed(System::TObject* Sender);
-	DYNAMIC void __fastcall Progress(System::TObject* Sender, TProgressStage Stage, Byte PercentDone, bool 
-		RedrawNow, const Windows::TRect &R, const AnsiString Msg);
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
+	DYNAMIC void __fastcall Progress(System::TObject* Sender, TProgressStage Stage, Byte PercentDone, bool RedrawNow, const Types::TRect &R, const AnsiString Msg);
+	void __fastcall LoadFromStream(Classes::TStream* Stream);
+	void __fastcall SaveToStream(Classes::TStream* Stream);
 	
 public:
 	__fastcall TPicture(void);
@@ -757,17 +792,12 @@ public:
 	void __fastcall SaveToFile(const AnsiString Filename);
 	void __fastcall LoadFromClipboardFormat(Word AFormat, unsigned AData, HPALETTE APalette);
 	void __fastcall SaveToClipboardFormat(Word &AFormat, unsigned &AData, HPALETTE &APalette);
-	/*         class method */ static bool __fastcall SupportsClipboardFormat(TMetaClass* vmt, Word AFormat
-		);
+	/*         class method */ static bool __fastcall SupportsClipboardFormat(TMetaClass* vmt, Word AFormat);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
-	/*         class method */ static void __fastcall RegisterFileFormat(TMetaClass* vmt, const AnsiString 
-		AExtension, const AnsiString ADescription, TMetaClass* AGraphicClass);
-	/*         class method */ static void __fastcall RegisterFileFormatRes(TMetaClass* vmt, const AnsiString 
-		AExtension, int ADescriptionResID, TMetaClass* AGraphicClass);
-	/*         class method */ static void __fastcall RegisterClipboardFormat(TMetaClass* vmt, Word AFormat
-		, TMetaClass* AGraphicClass);
-	/*         class method */ static void __fastcall UnregisterGraphicClass(TMetaClass* vmt, TMetaClass* 
-		AClass);
+	/*         class method */ static void __fastcall RegisterFileFormat(TMetaClass* vmt, const AnsiString AExtension, const AnsiString ADescription, TMetaClass* AGraphicClass);
+	/*         class method */ static void __fastcall RegisterFileFormatRes(TMetaClass* vmt, const AnsiString AExtension, int ADescriptionResID, TMetaClass* AGraphicClass);
+	/*         class method */ static void __fastcall RegisterClipboardFormat(TMetaClass* vmt, Word AFormat, TMetaClass* AGraphicClass);
+	/*         class method */ static void __fastcall UnregisterGraphicClass(TMetaClass* vmt, TMetaClass* AClass);
 	__property TBitmap* Bitmap = {read=GetBitmap, write=SetBitmap};
 	__property TGraphic* Graphic = {read=FGraphic, write=SetGraphic};
 	__property _di_IChangeNotifier PictureAdapter = {read=FNotify, write=FNotify};
@@ -777,6 +807,12 @@ public:
 	__property int Width = {read=GetWidth, nodefault};
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property TProgressEvent OnProgress = {read=FOnProgress, write=FOnProgress};
+private:
+	void *__IStreamPersist;	/* Classes::IStreamPersist */
+	
+public:
+	operator IStreamPersist*(void) { return (IStreamPersist*)&__IStreamPersist; }
+	
 };
 
 
@@ -790,8 +826,7 @@ private:
 	
 public:
 	__fastcall TMetafileCanvas(TMetafile* AMetafile, HDC ReferenceDevice);
-	__fastcall TMetafileCanvas(TMetafile* AMetafile, HDC ReferenceDevice, const AnsiString CreatedBy, const 
-		AnsiString Description);
+	__fastcall TMetafileCanvas(TMetafile* AMetafile, HDC ReferenceDevice, const AnsiString CreatedBy, const AnsiString Description);
 	__fastcall virtual ~TMetafileCanvas(void);
 };
 
@@ -848,7 +883,7 @@ protected:
 	virtual int __fastcall GetHeight(void);
 	virtual HPALETTE __fastcall GetPalette(void);
 	virtual int __fastcall GetWidth(void);
-	virtual void __fastcall Draw(TCanvas* ACanvas, const Windows::TRect &Rect);
+	virtual void __fastcall Draw(TCanvas* ACanvas, const Types::TRect &Rect);
 	virtual void __fastcall ReadData(Classes::TStream* Stream);
 	void __fastcall ReadEMFStream(Classes::TStream* Stream);
 	void __fastcall ReadWMFStream(Classes::TStream* Stream, int Length);
@@ -864,6 +899,7 @@ public:
 	__fastcall virtual TMetafile(void);
 	__fastcall virtual ~TMetafile(void);
 	void __fastcall Clear(void);
+	bool __fastcall HandleAllocated(void);
 	virtual void __fastcall LoadFromStream(Classes::TStream* Stream);
 	virtual void __fastcall SaveToFile(const AnsiString Filename);
 	virtual void __fastcall SaveToStream(Classes::TStream* Stream);
@@ -889,7 +925,10 @@ class PASCALIMPLEMENTATION TIconImage : public TSharedImage
 private:
 	HICON FHandle;
 	Classes::TCustomMemoryStream* FMemoryImage;
-	Windows::TPoint FSize;
+	#pragma pack(push, 1)
+	Types::TPoint FSize;
+	#pragma pack(pop)
+	
 	
 protected:
 	virtual void __fastcall FreeHandle(void);
@@ -910,7 +949,10 @@ class PASCALIMPLEMENTATION TIcon : public TGraphic
 	
 private:
 	TIconImage* FImage;
-	Windows::TPoint FRequestedSize;
+	#pragma pack(push, 1)
+	Types::TPoint FRequestedSize;
+	#pragma pack(pop)
+	
 	HICON __fastcall GetHandle(void);
 	void __fastcall HandleNeeded(void);
 	void __fastcall ImageNeeded(void);
@@ -918,7 +960,7 @@ private:
 	void __fastcall SetHandle(HICON Value);
 	
 protected:
-	virtual void __fastcall Draw(TCanvas* ACanvas, const Windows::TRect &Rect);
+	virtual void __fastcall Draw(TCanvas* ACanvas, const Types::TRect &Rect);
 	virtual bool __fastcall GetEmpty(void);
 	virtual int __fastcall GetHeight(void);
 	virtual int __fastcall GetWidth(void);
@@ -930,6 +972,7 @@ public:
 	__fastcall virtual TIcon(void);
 	__fastcall virtual ~TIcon(void);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
+	bool __fastcall HandleAllocated(void);
 	virtual void __fastcall LoadFromClipboardFormat(Word AFormat, unsigned AData, HPALETTE APalette);
 	virtual void __fastcall LoadFromStream(Classes::TStream* Stream);
 	HICON __fastcall ReleaseHandle(void);
@@ -965,6 +1008,11 @@ static const TColor cl3DDkShadow = 0x80000015;
 static const TColor cl3DLight = 0x80000016;
 static const TColor clInfoText = 0x80000017;
 static const TColor clInfoBk = 0x80000018;
+static const TColor clHotLight = 0x8000001a;
+static const TColor clGradientActiveCaption = 0x8000001b;
+static const TColor clGradientInactiveCaption = 0x8000001c;
+static const TColor clMenuHighlight = 0x8000001d;
+static const TColor clMenuBar = 0x8000001e;
 static const TColor clBlack = 0x0;
 static const TColor clMaroon = 0x80;
 static const TColor clGreen = 0x8000;
@@ -983,6 +1031,12 @@ static const TColor clAqua = 0xffff00;
 static const TColor clLtGray = 0xc0c0c0;
 static const TColor clDkGray = 0x808080;
 static const TColor clWhite = 0xffffff;
+static const Shortint StandardColorsCount = 0x10;
+static const TColor clMoneyGreen = 0xc0dcc0;
+static const TColor clSkyBlue = 0xf0caa6;
+static const TColor clCream = 0xf0fbff;
+static const TColor clMedGray = 0xa4a0a0;
+static const Shortint ExtendedColorsCount = 0x4;
 static const TColor clNone = 0x1fffffff;
 static const TColor clDefault = 0x20000000;
 static const Shortint cmBlackness = 0x42;
@@ -1013,19 +1067,13 @@ extern PACKAGE bool __fastcall IdentToColor(const AnsiString Ident, int &Color);
 extern PACKAGE void __fastcall GetCharsetValues(Classes::TGetStrProc Proc);
 extern PACKAGE bool __fastcall CharsetToIdent(int Charset, AnsiString &Ident);
 extern PACKAGE bool __fastcall IdentToCharset(const AnsiString Ident, int &Charset);
-extern PACKAGE int __fastcall BytesPerScanline(int PixelsPerScanline, int BitsPerPixel, int Alignment
-	);
-extern PACKAGE bool __fastcall TransparentStretchBlt(HDC DstDC, int DstX, int DstY, int DstW, int DstH
-	, HDC SrcDC, int SrcX, int SrcY, int SrcW, int SrcH, HDC MaskDC, int MaskX, int MaskY);
-extern PACKAGE void __fastcall GetDIBSizes(HBITMAP Bitmap, unsigned &InfoHeaderSize, unsigned &ImageSize
-	);
-extern PACKAGE bool __fastcall GetDIB(HBITMAP Bitmap, HPALETTE Palette, void *BitmapInfo, void *Bits
-	);
+extern PACKAGE int __fastcall BytesPerScanline(int PixelsPerScanline, int BitsPerPixel, int Alignment);
+extern PACKAGE bool __fastcall TransparentStretchBlt(HDC DstDC, int DstX, int DstY, int DstW, int DstH, HDC SrcDC, int SrcX, int SrcY, int SrcW, int SrcH, HDC MaskDC, int MaskX, int MaskY);
+extern PACKAGE void __fastcall GetDIBSizes(HBITMAP Bitmap, unsigned &InfoHeaderSize, unsigned &ImageSize);
+extern PACKAGE bool __fastcall GetDIB(HBITMAP Bitmap, HPALETTE Palette, void *BitmapInfo, void *Bits);
 extern PACKAGE void __fastcall FreeMemoryContexts(void);
-extern PACKAGE HBITMAP __fastcall CreateMappedBmp(HBITMAP Handle, const TColor * OldColors, const int 
-	OldColors_Size, const TColor * NewColors, const int NewColors_Size);
-extern PACKAGE HBITMAP __fastcall CreateMappedRes(unsigned Instance, char * ResName, const TColor * 
-	OldColors, const int OldColors_Size, const TColor * NewColors, const int NewColors_Size);
+extern PACKAGE HBITMAP __fastcall CreateMappedBmp(HBITMAP Handle, const TColor * OldColors, const int OldColors_Size, const TColor * NewColors, const int NewColors_Size);
+extern PACKAGE HBITMAP __fastcall CreateMappedRes(unsigned Instance, char * ResName, const TColor * OldColors, const int OldColors_Size, const TColor * NewColors, const int NewColors_Size);
 extern PACKAGE HBITMAP __fastcall CreateGrayMappedBmp(HBITMAP Handle);
 extern PACKAGE HBITMAP __fastcall CreateGrayMappedRes(unsigned Instance, char * ResName);
 extern PACKAGE HPALETTE __fastcall CopyPalette(HPALETTE Palette);
@@ -1036,9 +1084,7 @@ extern PACKAGE TFontCharset __fastcall GetDefFontCharSet(void);
 extern PACKAGE TBitmap* __fastcall AllocPatternBitmap(TColor BkColor, TColor FgColor);
 
 }	/* namespace Graphics */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Graphics;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

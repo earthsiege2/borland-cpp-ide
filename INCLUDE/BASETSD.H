@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1997-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Module Name:
 
@@ -11,8 +11,6 @@ Abstract:
     Type definitions for the basic sized types.
 
 Author:
-
-    Jeff Havens (jhavens)   23-Oct-1997
 
 Revision History:
 
@@ -30,12 +28,20 @@ Revision History:
 extern "C" {
 #endif
 
+typedef signed char         INT8, *PINT8;
+typedef signed short        INT16, *PINT16;
+typedef signed int          INT32, *PINT32;
+typedef signed __int64      INT64, *PINT64;
+typedef unsigned char       UINT8, *PUINT8;
+typedef unsigned short      UINT16, *PUINT16;
+typedef unsigned int        UINT32, *PUINT32;
+typedef unsigned __int64    UINT64, *PUINT64;
+
 //
 // The following types are guaranteed to be signed and 32 bits wide.
 //
 
-typedef int LONG32, *PLONG32;
-typedef int INT32, *PINT32;
+typedef signed int LONG32, *PLONG32;
 
 //
 // The following types are guaranteed to be unsigned and 32 bits wide.
@@ -43,12 +49,13 @@ typedef int INT32, *PINT32;
 
 typedef unsigned int ULONG32, *PULONG32;
 typedef unsigned int DWORD32, *PDWORD32;
-typedef unsigned int UINT32, *PUINT32;
 
-#if !defined(__midl) && defined(_X86_) && _MSC_VER >= 1300
+#if !defined(_W64)
+#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300
 #define _W64 __w64
 #else
 #define _W64
+#endif
 #endif
 
 //
@@ -101,24 +108,19 @@ typedef unsigned int UINT32, *PUINT32;
 
 #define ADDRESS_TAG_BIT 0x40000000000UI64
 
+typedef __int64 SHANDLE_PTR;
 typedef unsigned __int64 HANDLE_PTR;
 typedef unsigned int UHALF_PTR, *PUHALF_PTR;
 typedef int HALF_PTR, *PHALF_PTR;
 
-#pragma warning(disable:4311)   // type cast truncation
-#if _MSC_VER >= 1200
-#pragma warning(push)
-#endif
-#pragma warning(disable:4305)   // type cast truncation
-
 #if !defined(__midl)
 __inline
 unsigned long
-HandleToUlong(
+HandleToULong(
     const void *h
     )
 {
-    return((unsigned long) h );
+    return((unsigned long) (ULONG_PTR) h );
 }
 
 __inline
@@ -127,8 +129,18 @@ HandleToLong(
     const void *h
     )
 {
-    return((long) h );
+    return((long) (LONG_PTR) h );
 }
+
+__inline
+void *
+ULongToHandle(
+    const unsigned long h
+    )
+{
+    return((void *) (UINT_PTR) h );
+}
+
 
 __inline
 void *
@@ -146,7 +158,7 @@ PtrToUlong(
     const void  *p
     )
 {
-    return((unsigned long) p );
+    return((unsigned long) (ULONG_PTR) p );
 }
 
 __inline
@@ -155,7 +167,7 @@ PtrToUint(
     const void  *p
     )
 {
-    return((unsigned int) p );
+    return((unsigned int) (UINT_PTR) p );
 }
 
 __inline
@@ -164,7 +176,7 @@ PtrToUshort(
     const void  *p
     )
 {
-    return((unsigned short) p );
+    return((unsigned short) (unsigned long) (ULONG_PTR) p );
 }
 
 __inline
@@ -173,7 +185,7 @@ PtrToLong(
     const void  *p
     )
 {
-    return((long) p );
+    return((long) (LONG_PTR) p );
 }
 
 __inline
@@ -182,7 +194,7 @@ PtrToInt(
     const void  *p
     )
 {
-    return((int) p );
+    return((int) (INT_PTR) p );
 }
 
 __inline
@@ -191,14 +203,14 @@ PtrToShort(
     const void  *p
     )
 {
-    return((short) p );
+    return((short) (long) (LONG_PTR) p );
 }
 
 __inline
 void *
 IntToPtr(
     const int i
-	)
+    )
 // Caution: IntToPtr() sign-extends the int value.
 {
     return( (void *)(INT_PTR)i );
@@ -235,10 +247,6 @@ ULongToPtr(
 }
 
 #endif // !_midl
-#if _MSC_VER >= 1200
-#pragma warning(pop)      // restore 4305
-#endif
-#pragma warning(3:4311)   // bump 4311 to a level 3
 
 #else  // !_WIN64
 
@@ -246,26 +254,30 @@ ULongToPtr(
 
 typedef unsigned short UHALF_PTR, *PUHALF_PTR;
 typedef short HALF_PTR, *PHALF_PTR;
+typedef _W64 long SHANDLE_PTR;
 typedef _W64 unsigned long HANDLE_PTR;
 
-#define HandleToUlong( h ) ((ULONG)(ULONG_PTR)(h) )
-#define HandleToLong( h ) ((LONG)(LONG_PTR) (h) )
-#define LongToHandle( h) ((HANDLE)(LONG_PTR) (h))
+#define HandleToULong( h ) ((ULONG)(ULONG_PTR)(h) )
+#define HandleToLong( h )  ((LONG)(LONG_PTR) (h) )
+#define ULongToHandle( ul ) ((HANDLE)(ULONG_PTR) (ul) )
+#define LongToHandle( h )   ((HANDLE)(LONG_PTR) (h) )
 #define PtrToUlong( p ) ((ULONG)(ULONG_PTR) (p) )
-#define PtrToLong( p ) ((LONG)(LONG_PTR) (p) )
+#define PtrToLong( p )  ((LONG)(LONG_PTR) (p) )
 #define PtrToUint( p ) ((UINT)(UINT_PTR) (p) )
-#define PtrToInt( p ) ((INT)(INT_PTR) (p) )
+#define PtrToInt( p )  ((INT)(INT_PTR) (p) )
 #define PtrToUshort( p ) ((unsigned short)(ULONG_PTR)(p) )
-#define PtrToShort( p ) ((short)(LONG_PTR)(p) )
+#define PtrToShort( p )  ((short)(LONG_PTR)(p) )
 #define IntToPtr( i )    ((VOID *)(INT_PTR)((int)i))
 #define UIntToPtr( ui )  ((VOID *)(UINT_PTR)((unsigned int)ui))
 #define LongToPtr( l )   ((VOID *)(LONG_PTR)((long)l))
-#define ULongToPtr( ul )  ((VOID *)(ULONG_PTR)((unsigned long)ul))
+#define ULongToPtr( ul ) ((VOID *)(ULONG_PTR)((unsigned long)ul))
 
 #endif // !_WIN64
 
+#define HandleToUlong(h)  HandleToULong(h)
+#define UlongToHandle(ul) ULongToHandle(ul)
 #define UlongToPtr(ul) ULongToPtr(ul)
-#define UintToPtr(ui) UIntToPtr(ui)
+#define UintToPtr(ui)  UIntToPtr(ui)
 
 #define MAXUINT_PTR  (~((UINT_PTR)0))
 #define MAXINT_PTR   ((INT_PTR)(MAXUINT_PTR >> 1))
@@ -298,7 +310,6 @@ typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 //
 
 typedef __int64 LONG64, *PLONG64;
-typedef __int64 INT64,  *PINT64;
 
 
 //
@@ -307,11 +318,18 @@ typedef __int64 INT64,  *PINT64;
 
 typedef unsigned __int64 ULONG64, *PULONG64;
 typedef unsigned __int64 DWORD64, *PDWORD64;
-typedef unsigned __int64 UINT64,  *PUINT64;
+
+//
+// Thread affinity.
+//
+
+typedef ULONG_PTR KAFFINITY;
+typedef KAFFINITY *PKAFFINITY;
 
 #ifdef __cplusplus
 }
 #endif
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // _BASETSD_H_

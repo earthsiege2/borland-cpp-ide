@@ -147,4 +147,4 @@ This example uses BRC32 to build a 16-bit Windows 3.1 compatible .RES file:
 
 brc32 -16 -v3.1 -fo<filename>.RES <filename>.RC
 
-Copyright © 1998 Borland International.
+Copyright © 1998-2002 Borland International.

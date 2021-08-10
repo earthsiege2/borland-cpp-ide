@@ -44,7 +44,6 @@ Environments :
 //
 
 #ifndef LDAP_CLIENT_DEFINED
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define LDAP_CLIENT_DEFINED
 
 #if _MSC_VER > 1000
@@ -102,9 +101,8 @@ extern "C" {
 #define LDAP_SSL_GC_PORT        3269
 
 //
-//  We currently support going to either v2 or v3 servers, though the API
-//  is only a V2 API.  We'll add support for result sets, server side
-//  sorting, extended operations, etc as soon as they stabilize.
+// The default version of the API is 2. If required, the user MUST set the
+// version to 3 using the LDAP_OPT_VERSION option.
 //
 
 #define LDAP_VERSION1           1
@@ -156,6 +154,7 @@ extern "C" {
 #define LDAP_RES_SESSION        0x72L   // not in base LDAP protocol
 #define LDAP_RES_REFERRAL       0x73L   // application + constructed
 #define LDAP_RES_EXTENDED       0x78L   // application + constructed
+
 #define LDAP_RES_ANY            (-1L)
 
 #define LDAP_INVALID_CMD         0xff
@@ -204,6 +203,8 @@ typedef enum {
     LDAP_UNAVAILABLE                =   0x34,
     LDAP_UNWILLING_TO_PERFORM       =   0x35,
     LDAP_LOOP_DETECT                =   0x36,
+    LDAP_SORT_CONTROL_MISSING       =   0x3C,
+    LDAP_OFFSET_RANGE_ERROR         =   0x3D,
 
     LDAP_NAMING_VIOLATION           =   0x40,
     LDAP_OBJECT_CLASS_VIOLATION     =   0x41,
@@ -300,6 +301,19 @@ typedef enum {
 // backward compatible #define for older constant name.
 
 #define LDAP_AUTH_SSPI                   LDAP_AUTH_NEGOTIATE
+
+//
+// uses the DIGEST-MD5 mechanism.
+//
+
+#define LDAP_AUTH_DIGEST                (LDAP_AUTH_OTHERKIND | 0x4000)
+
+// The external auth mechanism is used upon setting up an SSL/TLS connection
+// to denote that the server must use the client cert credentials presented
+// at the outset of the SSL/TLS connection.
+
+
+#define LDAP_AUTH_EXTERNAL              (LDAP_AUTH_OTHERKIND | 0x0020)
 
 //
 //  Client applications typically don't have to encode/decode LDAP filters,
@@ -427,7 +441,7 @@ typedef struct l_timeval {
 typedef struct berval {
     ULONG  bv_len;
     PCHAR  bv_val;
-} LDAP_BERVAL, * PLDAP_BERVAL, BERVAL, * PBERVAL;
+} LDAP_BERVAL, * PLDAP_BERVAL, BERVAL, * PBERVAL, BerValue;
 
 //
 //  The following structure has to be compatible with reference implementation.
@@ -675,6 +689,7 @@ WINLDAPAPI ULONG LDAPAPI ldap_set_optionW( LDAP *ld, int option, const void *inv
 //  These are the values to pass to ldap_get/set_option :
 //
 
+#define LDAP_OPT_API_INFO           0x00
 #define LDAP_OPT_DESC               0x01
 #define LDAP_OPT_DEREF              0x02
 #define LDAP_OPT_SIZELIMIT          0x03
@@ -694,6 +709,7 @@ WINLDAPAPI ULONG LDAPAPI ldap_set_optionW( LDAP *ld, int option, const void *inv
 
 #define LDAP_OPT_PROTOCOL_VERSION   0x11        // known by two names.
 #define LDAP_OPT_VERSION            0x11
+#define LDAP_OPT_API_FEATURE_INFO   0x15
 
 //
 //  These are new ones that we've defined, not in current RFC draft.
@@ -749,17 +765,21 @@ WINLDAPAPI ULONG LDAPAPI ldap_set_optionW( LDAP *ld, int option, const void *inv
 
 //
 // To retrieve information on an secure connection, a pointer to a
-// SecPkgContext_connectionInfo structure (defined in schnlsp.h) must be
+// SecPkgContext_connectionInfo structure (defined in schannel.h) must be
 // passed in. On success, it is filled with relevent security information.
 //
 
 #define LDAP_OPT_SSL_INFO           0x93
 
+// backward compatible #define for older constant name.
+
+#define LDAP_OPT_TLS                        LDAP_OPT_SSL
+#define LDAP_OPT_TLS_INFO                   LDAP_OPT_SSL_INFO
+
 //
 // Turing on either the sign or the encrypt option prior to binding using
 // LDAP_AUTH_NEGOTIATE will result in the ensuing LDAP session to be signed
-// or encrypted using either Kerberos or NTLM (as negotiated by the underlying
-// security packages). Note that these options can't be used with SSL.
+// or encrypted using Kerberos. Note that these options can't be used with SSL.
 //
 
 #define LDAP_OPT_SIGN               0x95
@@ -784,6 +804,21 @@ WINLDAPAPI ULONG LDAPAPI ldap_set_optionW( LDAP *ld, int option, const void *inv
 //
 
 #define LDAP_OPT_SECURITY_CONTEXT   0x99
+
+//
+// Enable/Disable the built-in RootDSE cache. This option is ON by default.
+//
+
+#define LDAP_OPT_ROOTDSE_CACHE      0x9a
+
+//
+// Turns on TCP keep-alives.  This is separate from the ICMP ping keep-alive
+// mechanism (discussed above), and enables the keep-alive mechanism built into
+// the TCP protocol.  This has no effect when using connectionless (UDP) LDAP.
+// This option is OFF by default.
+//
+
+#define LDAP_OPT_TCP_KEEPALIVE     0x40
 
 //
 //  End of Microsoft only options
@@ -2265,6 +2300,75 @@ WINLDAPAPI ULONG LDAPAPI ldap_startup (
     HANDLE *Instance
     );
 
+
+//
+// Calls to retrieve basic information about the API and specific implementations
+// being used. The caller has to pass the LDAP_OPT_API_INFO option along with 
+// a pointer to the following structure to retrieve information about this library.
+// It is the caller's responsibility to free the individual strings and string
+// arrays in the structure using ldap_memfree() and ldap_value_free() respectively.
+//
+
+#define LDAP_API_INFO_VERSION     1
+#define LDAP_API_VERSION          2004
+#define LDAP_VERSION_MIN          2
+#define LDAP_VERSION_MAX          3
+#define LDAP_VENDOR_NAME          "Microsoft Corporation."
+#define LDAP_VENDOR_NAME_W       L"Microsoft Corporation."
+#define LDAP_VENDOR_VERSION       510
+
+typedef struct ldapapiinfoA {
+    
+    int  ldapai_info_version;     /* version of this struct: LDAP_API_INFO_VERSION */
+    int  ldapai_api_version;      /* revision of API supported */
+    int  ldapai_protocol_version; /* highest LDAP version supported */
+    char **ldapai_extensions;     /* names of API extensions */
+    char *ldapai_vendor_name;     /* name of supplier */
+    int  ldapai_vendor_version;   /* supplier-specific version times 100 */
+
+} LDAPAPIInfoA;
+
+typedef struct ldapapiinfoW {
+    
+    int    ldapai_info_version;     /* version of this struct: LDAP_API_INFO_VERSION */
+    int    ldapai_api_version;      /* revision of API supported */
+    int    ldapai_protocol_version; /* highest LDAP version supported */
+    PWCHAR *ldapai_extensions;     /* names of API extensions */
+    PWCHAR ldapai_vendor_name;     /* name of supplier */
+    int    ldapai_vendor_version;   /* supplier-specific version times 100 */
+
+} LDAPAPIInfoW;
+
+#define LDAP_FEATURE_INFO_VERSION    1
+
+typedef struct ldap_apifeature_infoA {
+    
+    int   ldapaif_info_version; /* version of this struct : LDAP_FEATURE_INFO_VERSION */
+    char  *ldapaif_name;        /* name of supported feature */
+    int   ldapaif_version;      /* revision of supported feature */
+
+} LDAPAPIFeatureInfoA;
+
+typedef struct ldap_apifeature_infoW {
+    
+    int    ldapaif_info_version; /* version of this struct : LDAP_FEATURE_INFO_VERSION */
+    PWCHAR ldapaif_name;         /* name of supported feature */
+    int    ldapaif_version;      /* revision of supported feature */
+
+} LDAPAPIFeatureInfoW;
+
+#if LDAP_UNICODE
+
+#define LDAPAPIInfo   LDAPAPIInfoW
+#define LDAPAPIFeatureInfo  LDAPAPIFeatureInfoW
+
+#else
+
+#define LDAPAPIInfo   LDAPAPIInfoA
+#define LDAPAPIFeatureInfo  LDAPAPIFeatureInfoA
+
+#endif
+
 //
 //  ldap_cleanup unloads the library when the refcount of opens goes to zero.
 //  (i.e. if a DLL calls it within a program that is also using it, it won't
@@ -2679,6 +2783,164 @@ WINLDAPAPI ULONG LDAPAPI ldap_search_abandon_page(
         PLDAPSearch     SearchBlock
     );
 
+
+//
+// The Virtual List View (VLV) functions are used to simulate an address book
+// like client scenario where the user can request a small window of results
+// within a larger result set. The advantage of this method is that the client
+// does not have to store all of the results sent back from the server. This
+// also acts as a superset of simple paging.
+//
+
+#define LDAP_CONTROL_VLVREQUEST       "2.16.840.1.113730.3.4.9"
+#define LDAP_CONTROL_VLVREQUEST_W    L"2.16.840.1.113730.3.4.9"
+
+#define LDAP_CONTROL_VLVRESPONSE      "2.16.840.1.113730.3.4.10"
+#define LDAP_CONTROL_VLVRESPONSE_W   L"2.16.840.1.113730.3.4.10"
+
+//
+// This library supports the version 01 of the internet draft 
+// draft-smith-ldap-c-api-ext-vlv-01.txt
+//
+
+#define LDAP_API_FEATURE_VIRTUAL_LIST_VIEW   1001
+
+#define LDAP_VLVINFO_VERSION        1
+
+typedef struct ldapvlvinfo {
+    
+    int       ldvlv_version;    // version of this struct (1)
+    ULONG     ldvlv_before_count;
+    ULONG     ldvlv_after_count;
+    ULONG     ldvlv_offset;     // used if ldvlv_attrvalue is NULL
+    ULONG     ldvlv_count;      // used if ldvlv_attrvalue is NULL
+    PBERVAL   ldvlv_attrvalue;
+    PBERVAL   ldvlv_context;
+    VOID      *ldvlv_extradata; // for use by application
+
+} LDAPVLVInfo, *PLDAPVLVInfo;
+
+
+WINLDAPAPI INT LDAPAPI ldap_create_vlv_controlW (
+        PLDAP             ExternalHandle,
+        PLDAPVLVInfo      VlvInfo,
+        UCHAR             IsCritical,
+        PLDAPControlW    *Control
+    );
+
+WINLDAPAPI INT LDAPAPI ldap_create_vlv_controlA (
+        PLDAP             ExternalHandle,
+        PLDAPVLVInfo      VlvInfo,
+        UCHAR             IsCritical,
+        PLDAPControlA    *Control
+    );
+
+WINLDAPAPI INT LDAPAPI ldap_parse_vlv_controlW (
+        PLDAP            ExternalHandle,
+        PLDAPControlW   *Control,
+        PULONG           TargetPos,
+        PULONG           ListCount,
+        PBERVAL         *Context,
+        PINT             ErrCode
+    );
+
+WINLDAPAPI INT LDAPAPI ldap_parse_vlv_controlA (
+        PLDAP             ExternalHandle,
+        PLDAPControlA    *Control,
+        PULONG            TargetPos,
+        PULONG            ListCount,
+        PBERVAL          *Context,
+        PINT              ErrCode
+    );
+
+#if LDAP_UNICODE
+
+#define ldap_create_vlv_control ldap_create_vlv_controlW
+#define ldap_parse_vlv_control  ldap_parse_vlv_controlW
+
+#else
+
+#define ldap_create_vlv_control ldap_create_vlv_controlA
+#define ldap_parse_vlv_control  ldap_parse_vlv_controlA
+
+#endif
+
+//
+// The StartTLS APIs are used for establishing Transport Layer Security on
+// the fly. 
+//
+
+#define LDAP_START_TLS_OID       "1.3.6.1.4.1.1466.20037"
+#define LDAP_START_TLS_OID_W    L"1.3.6.1.4.1.1466.20037"
+
+//
+// This API is called by users to initiate Transport Level Security on an
+// LDAP connection. If the server accepts our proposal and initiates TLS,
+// this API will return LDAP_SUCCESS.
+//
+// If the server fails the request for whatever reason, the API returns LDAP_OTHER
+// and the ServerReturnValue will contain the error code from the server.
+//
+// It is possible that the server returns a referral - either in response to the
+// StartTLS request or during the subsequent encrypted session. For security
+// reasons, we have decided to NOT chase referrals by default. In the former case
+// the referral message is returned as an LDAPMessage to the user.
+//
+// The operation has a default timeout of about 30 seconds.
+//
+
+WINLDAPAPI ULONG LDAPAPI ldap_start_tls_sW (
+    IN   PLDAP          ExternalHandle,
+    OUT  PULONG         ServerReturnValue,
+    OUT  LDAPMessage    **result,
+    IN   PLDAPControlW  *ServerControls,
+    IN   PLDAPControlW  *ClientControls
+);
+
+
+WINLDAPAPI ULONG LDAPAPI ldap_start_tls_sA (
+    IN   PLDAP          ExternalHandle,
+    OUT  PULONG         ServerReturnValue,
+    OUT  LDAPMessage    **result,
+    IN   PLDAPControlA  *ServerControls,
+    IN   PLDAPControlA  *ClientControls
+);
+
+//
+// This API is called by the user to stop Transport Level Security on an open
+// LDAP connection on which TLS has already been started.
+//
+// If the operation succeeds, the user can resume normal plaintext LDAP
+// operations on the connection.
+//
+// If the operation fails, the user MUST close the connection by calling
+// ldap_unbind as the TLS state of the connection will be indeterminate.
+//
+// The operation has a default timeout of about 30 seconds.
+//
+
+WINLDAPAPI BOOLEAN LDAPAPI ldap_stop_tls_s (
+    IN  PLDAP ExternalHandle
+ );
+
+#if LDAP_UNICODE
+
+#define ldap_start_tls_s ldap_start_tls_sW
+
+#else
+
+#define ldap_start_tls_s ldap_start_tls_sA
+
+#endif
+
+//
+// This OID is used in a Refresh Extended operation as defined in
+// RFC 2589: LDAP v3 Extensions for Dynamic Directory Services
+//
+
+#define LDAP_TTL_EXTENDED_OP_OID    "1.3.6.1.4.1.1466.101.119.1"
+#define LDAP_TTL_EXTENDED_OP_OID_W L"1.3.6.1.4.1.1466.101.119.1"
+
 //
 //  These functions return subordinate referrals (references) that are returned
 //  in search responses.  There are two types of referrals.  External referrals
@@ -2771,9 +3033,32 @@ WINLDAPAPI ULONG LDAPAPI ldap_extended_operationA(
         ULONG           *MessageNumber
         );
 
+WINLDAPAPI ULONG LDAPAPI ldap_extended_operation_sA (
+        LDAP            *ExternalHandle,
+        PCHAR           Oid,
+        struct berval   *Data,
+        PLDAPControlA   *ServerControls,
+        PLDAPControlA   *ClientControls,
+        PCHAR           *ReturnedOid,
+        struct berval   **ReturnedData
+        );
+
+WINLDAPAPI ULONG LDAPAPI ldap_extended_operation_sW (
+        LDAP            *ExternalHandle,
+        PWCHAR          Oid,
+        struct berval   *Data,
+        PLDAPControlW   *ServerControls,
+        PLDAPControlW   *ClientControls,
+        PWCHAR          *ReturnedOid,
+        struct berval   **ReturnedData
+        );
+
+
+
 #if LDAP_UNICODE
 
 #define ldap_extended_operation ldap_extended_operationW
+#define ldap_extended_operation_s ldap_extended_operation_sW
 
 #else
 
@@ -2785,6 +3070,9 @@ WINLDAPAPI ULONG LDAPAPI ldap_extended_operation(
         PLDAPControlA   *ClientControls,
         ULONG           *MessageNumber
         );
+
+#define ldap_extended_operation_s ldap_extended_operation_sA
+
 #endif
 
 WINLDAPAPI ULONG LDAPAPI ldap_close_extended_op(
@@ -2906,18 +3194,21 @@ WINLDAPAPI ULONG LDAPAPI LdapMapErrorToWin32( ULONG LdapError );
 
 //
 // This callback is invoked when the server demands a client certificate for
-// authorization. We pass a structure containing a list of server-trusted
-// Certificate Authorities. If the client has certificates to provide, it
-// converts them to CERT_CONTEXTs and adds them to the given certificate
-// store. LDAP subsequently passes these credentials to the SSL server as part
-// of the handshake.
+// authorization. The application should examine the list of Certificate Authorities
+// the server trusts and supply an appropriate client certificate. wldap32.dll 
+// subsequently passes these credentials to the SSL server as part of the
+// handshake. If the application desires that anonymous credentials be used,
+// it must return FALSE instead of a certificate. Any certificate must be freed
+// by the application after the connection has been completed. Note that the
+// application MUST perform an EXTERNAL bind subsequent to connection
+// establishment for these credentials to be used by the server.
 //
+
 
 typedef BOOLEAN (_cdecl QUERYCLIENTCERT) (
     IN PLDAP Connection,
     IN PSecPkgContext_IssuerListInfoEx trusted_CAs,
-    IN OUT HCERTSTORE hCertStore,
-    IN OUT DWORD *pcCreds
+    IN OUT PCCERT_CONTEXT *ppCertificate
     );
 
 //
@@ -2939,9 +3230,8 @@ typedef BOOLEAN (_cdecl QUERYCLIENTCERT) (
 
 typedef BOOLEAN (_cdecl VERIFYSERVERCERT) (
      PLDAP Connection,
-     PCCERT_CONTEXT pServerCert);
-
-
+     PCCERT_CONTEXT pServerCert
+     );
 
 //
 //  Given an LDAP message, return the connection pointer where the message
@@ -2964,5 +3254,4 @@ WINLDAPAPI LDAP * LDAPAPI ldap_conn_from_msg (
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif  // LDAP_CLIENT_DEFINED

@@ -1,5 +1,4 @@
 #ifndef __dsclient_h
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __dsclient_h
 
 //---------------------------------------------------------------------------//
@@ -278,7 +277,7 @@ DECLARE_INTERFACE_(IDsDisplaySpecifier, IUnknown)
     STDMETHOD_(BOOL, IsClassContainer)(THIS_ LPCWSTR pszObjectClass, LPCWSTR pszADsPath, DWORD dwFlags) PURE;
     STDMETHOD(GetClassCreationInfo)(THIS_ LPCWSTR pszObjectClass, LPDSCLASSCREATIONINFO* ppdscci) PURE;
     STDMETHOD(EnumClassAttributes)(THIS_ LPCWSTR pszObjectClass, LPDSENUMATTRIBUTES pcbEnum, LPARAM lParam) PURE;
-    STDMETHOD_(ADSTYPE, GetAttributeADsType)(LPCWSTR pszAttributeName) PURE;
+    STDMETHOD_(ADSTYPE, GetAttributeADsType)(THIS_ LPCWSTR pszAttributeName) PURE;
 };
 
 
@@ -460,11 +459,11 @@ STDAPI_(int) DsBrowseForContainerA(PDSBROWSEINFOA pInfo);
 #endif
 
 
-//BUGBUG: these are here to keep old clients building - remove soon
+// NOTE: these are here to keep old clients building - remove soon
+
 STDAPI_(HICON) DsGetIcon(DWORD dwFlags, LPWSTR pszObjectClass, INT cxImage, INT cyImage);
 STDAPI DsGetFriendlyClassName(LPWSTR pszObjectClass, LPWSTR pszBuffer, UINT cchBuffer);
 
 
 #endif  // GUID_DEFS_ONLY
-#pragma option pop /*P_O_Pop*/
 #endif

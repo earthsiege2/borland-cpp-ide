@@ -6,14 +6,14 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1991, 2000 by Inprise Corporation
+ *      Copyright (c) 1991, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.2  $        */
+/* $Revision: 9.7.2.1 $        */
 
 #ifdef __OS2__
 #  define INCL_VIO
@@ -163,7 +163,7 @@ Note            template must match putnF typedef from _printf.h
 
 #pragma warn -par
 
-unsigned __cputn (const void *str, unsigned n, void *dontCare /*, int eos_flag */)
+unsigned _RTLENTRY _EXPFUNC __cputn (const void *str, unsigned n, void *dontCare /*, int eos_flag */)
 {
     STRINGINFO s;
     unsigned char c = 0;

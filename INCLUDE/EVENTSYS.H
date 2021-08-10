@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0268 */
-/* at Wed Aug 04 16:38:29 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for eventsys.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -20,7 +18,7 @@
 
 /* verify that the <rpcndr.h> version is high enough to compile this file*/
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
-#define __REQUIRED_RPCNDR_H_VERSION__ 440
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
 
 #include "rpc.h"
@@ -37,6 +35,10 @@
 
 #ifndef __eventsys_h__
 #define __eventsys_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -56,6 +58,12 @@ typedef interface IEventPublisher IEventPublisher;
 #define __IEventClass_FWD_DEFINED__
 typedef interface IEventClass IEventClass;
 #endif 	/* __IEventClass_FWD_DEFINED__ */
+
+
+#ifndef __IEventClass2_FWD_DEFINED__
+#define __IEventClass2_FWD_DEFINED__
+typedef interface IEventClass2 IEventClass2;
+#endif 	/* __IEventClass2_FWD_DEFINED__ */
 
 
 #ifndef __IEventSubscription_FWD_DEFINED__
@@ -86,6 +94,12 @@ typedef interface IMultiInterfacePublisherFilter IMultiInterfacePublisherFilter;
 #define __IEventObjectChange_FWD_DEFINED__
 typedef interface IEventObjectChange IEventObjectChange;
 #endif 	/* __IEventObjectChange_FWD_DEFINED__ */
+
+
+#ifndef __IEventObjectChange2_FWD_DEFINED__
+#define __IEventObjectChange2_FWD_DEFINED__
+typedef interface IEventObjectChange2 IEventObjectChange2;
+#endif 	/* __IEventObjectChange2_FWD_DEFINED__ */
 
 
 #ifndef __IEnumEventObject_FWD_DEFINED__
@@ -178,6 +192,18 @@ typedef struct EventObjectChange EventObjectChange;
 #endif 	/* __EventObjectChange_FWD_DEFINED__ */
 
 
+#ifndef __EventObjectChange2_FWD_DEFINED__
+#define __EventObjectChange2_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class EventObjectChange2 EventObjectChange2;
+#else
+typedef struct EventObjectChange2 EventObjectChange2;
+#endif /* __cplusplus */
+
+#endif 	/* __EventObjectChange2_FWD_DEFINED__ */
+
+
 /* header files for imported files */
 #include "oaidl.h"
 #include "ocidl.h"
@@ -186,8 +212,8 @@ typedef struct EventObjectChange EventObjectChange;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_eventsys_0000 */
 /* [local] */ 
@@ -232,25 +258,25 @@ EXTERN_C const IID IID_IEventSystem;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Query( 
             /* [in] */ BSTR progID,
             /* [in] */ BSTR queryCriteria,
-            /* [out] */ int __RPC_FAR *errorIndex,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppInterface) = 0;
+            /* [out] */ int *errorIndex,
+            /* [retval][out] */ IUnknown **ppInterface) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Store( 
             /* [in] */ BSTR ProgID,
-            /* [in] */ IUnknown __RPC_FAR *pInterface) = 0;
+            /* [in] */ IUnknown *pInterface) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
             /* [in] */ BSTR progID,
             /* [in] */ BSTR queryCriteria,
-            /* [out] */ int __RPC_FAR *errorIndex) = 0;
+            /* [out] */ int *errorIndex) = 0;
         
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_EventObjectChangeEventClassID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEventClassID) = 0;
+            /* [retval][out] */ BSTR *pbstrEventClassID) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE QueryS( 
             /* [in] */ BSTR progID,
             /* [in] */ BSTR queryCriteria,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppInterface) = 0;
+            /* [retval][out] */ IUnknown **ppInterface) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveS( 
             /* [in] */ BSTR progID,
@@ -264,76 +290,76 @@ EXTERN_C const IID IID_IEventSystem;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEventSystem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEventSystem * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEventSystem __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEventSystem * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEventSystem __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEventSystem * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IEventSystem __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IEventSystem * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IEventSystem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IEventSystem * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IEventSystem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IEventSystem * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IEventSystem __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IEventSystem * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Query )( 
-            IEventSystem __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Query )( 
+            IEventSystem * This,
             /* [in] */ BSTR progID,
             /* [in] */ BSTR queryCriteria,
-            /* [out] */ int __RPC_FAR *errorIndex,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppInterface);
+            /* [out] */ int *errorIndex,
+            /* [retval][out] */ IUnknown **ppInterface);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Store )( 
-            IEventSystem __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Store )( 
+            IEventSystem * This,
             /* [in] */ BSTR ProgID,
-            /* [in] */ IUnknown __RPC_FAR *pInterface);
+            /* [in] */ IUnknown *pInterface);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Remove )( 
-            IEventSystem __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+            IEventSystem * This,
             /* [in] */ BSTR progID,
             /* [in] */ BSTR queryCriteria,
-            /* [out] */ int __RPC_FAR *errorIndex);
+            /* [out] */ int *errorIndex);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EventObjectChangeEventClassID )( 
-            IEventSystem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEventClassID);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_EventObjectChangeEventClassID )( 
+            IEventSystem * This,
+            /* [retval][out] */ BSTR *pbstrEventClassID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryS )( 
-            IEventSystem __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *QueryS )( 
+            IEventSystem * This,
             /* [in] */ BSTR progID,
             /* [in] */ BSTR queryCriteria,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppInterface);
+            /* [retval][out] */ IUnknown **ppInterface);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveS )( 
-            IEventSystem __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveS )( 
+            IEventSystem * This,
             /* [in] */ BSTR progID,
             /* [in] */ BSTR queryCriteria);
         
@@ -342,7 +368,7 @@ EXTERN_C const IID IID_IEventSystem;
 
     interface IEventSystem
     {
-        CONST_VTBL struct IEventSystemVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEventSystemVtbl *lpVtbl;
     };
 
     
@@ -399,11 +425,11 @@ EXTERN_C const IID IID_IEventSystem;
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventSystem_Query_Proxy( 
-    IEventSystem __RPC_FAR * This,
+    IEventSystem * This,
     /* [in] */ BSTR progID,
     /* [in] */ BSTR queryCriteria,
-    /* [out] */ int __RPC_FAR *errorIndex,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppInterface);
+    /* [out] */ int *errorIndex,
+    /* [retval][out] */ IUnknown **ppInterface);
 
 
 void __RPC_STUB IEventSystem_Query_Stub(
@@ -414,9 +440,9 @@ void __RPC_STUB IEventSystem_Query_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventSystem_Store_Proxy( 
-    IEventSystem __RPC_FAR * This,
+    IEventSystem * This,
     /* [in] */ BSTR ProgID,
-    /* [in] */ IUnknown __RPC_FAR *pInterface);
+    /* [in] */ IUnknown *pInterface);
 
 
 void __RPC_STUB IEventSystem_Store_Stub(
@@ -427,10 +453,10 @@ void __RPC_STUB IEventSystem_Store_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventSystem_Remove_Proxy( 
-    IEventSystem __RPC_FAR * This,
+    IEventSystem * This,
     /* [in] */ BSTR progID,
     /* [in] */ BSTR queryCriteria,
-    /* [out] */ int __RPC_FAR *errorIndex);
+    /* [out] */ int *errorIndex);
 
 
 void __RPC_STUB IEventSystem_Remove_Stub(
@@ -441,8 +467,8 @@ void __RPC_STUB IEventSystem_Remove_Stub(
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IEventSystem_get_EventObjectChangeEventClassID_Proxy( 
-    IEventSystem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrEventClassID);
+    IEventSystem * This,
+    /* [retval][out] */ BSTR *pbstrEventClassID);
 
 
 void __RPC_STUB IEventSystem_get_EventObjectChangeEventClassID_Stub(
@@ -453,10 +479,10 @@ void __RPC_STUB IEventSystem_get_EventObjectChangeEventClassID_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventSystem_QueryS_Proxy( 
-    IEventSystem __RPC_FAR * This,
+    IEventSystem * This,
     /* [in] */ BSTR progID,
     /* [in] */ BSTR queryCriteria,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppInterface);
+    /* [retval][out] */ IUnknown **ppInterface);
 
 
 void __RPC_STUB IEventSystem_QueryS_Stub(
@@ -467,7 +493,7 @@ void __RPC_STUB IEventSystem_QueryS_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventSystem_RemoveS_Proxy( 
-    IEventSystem __RPC_FAR * This,
+    IEventSystem * This,
     /* [in] */ BSTR progID,
     /* [in] */ BSTR queryCriteria);
 
@@ -502,48 +528,48 @@ EXTERN_C const IID IID_IEventPublisher;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PublisherID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPublisherID) = 0;
+            /* [retval][out] */ BSTR *pbstrPublisherID) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PublisherID( 
             /* [in] */ BSTR bstrPublisherID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PublisherName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPublisherName) = 0;
+            /* [retval][out] */ BSTR *pbstrPublisherName) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PublisherName( 
             /* [in] */ BSTR bstrPublisherName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PublisherType( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPublisherType) = 0;
+            /* [retval][out] */ BSTR *pbstrPublisherType) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PublisherType( 
             /* [in] */ BSTR bstrPublisherType) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OwnerSID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrOwnerSID) = 0;
+            /* [retval][out] */ BSTR *pbstrOwnerSID) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_OwnerSID( 
             /* [in] */ BSTR bstrOwnerSID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription) = 0;
+            /* [retval][out] */ BSTR *pbstrDescription) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bstrDescription) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetDefaultProperty( 
             /* [in] */ BSTR bstrPropertyName,
-            /* [retval][out] */ VARIANT __RPC_FAR *propertyValue) = 0;
+            /* [retval][out] */ VARIANT *propertyValue) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PutDefaultProperty( 
             /* [in] */ BSTR bstrPropertyName,
-            /* [in] */ VARIANT __RPC_FAR *propertyValue) = 0;
+            /* [in] */ VARIANT *propertyValue) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveDefaultProperty( 
             /* [in] */ BSTR bstrPropertyName) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetDefaultPropertyCollection( 
-            /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *collection) = 0;
+            /* [retval][out] */ IEventObjectCollection **collection) = 0;
         
     };
     
@@ -553,110 +579,110 @@ EXTERN_C const IID IID_IEventPublisher;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEventPublisher __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEventPublisher * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEventPublisher __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEventPublisher * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEventPublisher __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEventPublisher * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IEventPublisher __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IEventPublisher * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IEventPublisher __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IEventPublisher * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IEventPublisher __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IEventPublisher * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IEventPublisher __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IEventPublisher * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PublisherID )( 
-            IEventPublisher __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPublisherID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PublisherID )( 
+            IEventPublisher * This,
+            /* [retval][out] */ BSTR *pbstrPublisherID);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PublisherID )( 
-            IEventPublisher __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PublisherID )( 
+            IEventPublisher * This,
             /* [in] */ BSTR bstrPublisherID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PublisherName )( 
-            IEventPublisher __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPublisherName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PublisherName )( 
+            IEventPublisher * This,
+            /* [retval][out] */ BSTR *pbstrPublisherName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PublisherName )( 
-            IEventPublisher __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PublisherName )( 
+            IEventPublisher * This,
             /* [in] */ BSTR bstrPublisherName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PublisherType )( 
-            IEventPublisher __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPublisherType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PublisherType )( 
+            IEventPublisher * This,
+            /* [retval][out] */ BSTR *pbstrPublisherType);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PublisherType )( 
-            IEventPublisher __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PublisherType )( 
+            IEventPublisher * This,
             /* [in] */ BSTR bstrPublisherType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OwnerSID )( 
-            IEventPublisher __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrOwnerSID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OwnerSID )( 
+            IEventPublisher * This,
+            /* [retval][out] */ BSTR *pbstrOwnerSID);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OwnerSID )( 
-            IEventPublisher __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OwnerSID )( 
+            IEventPublisher * This,
             /* [in] */ BSTR bstrOwnerSID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IEventPublisher __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IEventPublisher * This,
+            /* [retval][out] */ BSTR *pbstrDescription);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IEventPublisher __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IEventPublisher * This,
             /* [in] */ BSTR bstrDescription);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDefaultProperty )( 
-            IEventPublisher __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetDefaultProperty )( 
+            IEventPublisher * This,
             /* [in] */ BSTR bstrPropertyName,
-            /* [retval][out] */ VARIANT __RPC_FAR *propertyValue);
+            /* [retval][out] */ VARIANT *propertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutDefaultProperty )( 
-            IEventPublisher __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PutDefaultProperty )( 
+            IEventPublisher * This,
             /* [in] */ BSTR bstrPropertyName,
-            /* [in] */ VARIANT __RPC_FAR *propertyValue);
+            /* [in] */ VARIANT *propertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveDefaultProperty )( 
-            IEventPublisher __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveDefaultProperty )( 
+            IEventPublisher * This,
             /* [in] */ BSTR bstrPropertyName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDefaultPropertyCollection )( 
-            IEventPublisher __RPC_FAR * This,
-            /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *collection);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetDefaultPropertyCollection )( 
+            IEventPublisher * This,
+            /* [retval][out] */ IEventObjectCollection **collection);
         
         END_INTERFACE
     } IEventPublisherVtbl;
 
     interface IEventPublisher
     {
-        CONST_VTBL struct IEventPublisherVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEventPublisherVtbl *lpVtbl;
     };
 
     
@@ -737,8 +763,8 @@ EXTERN_C const IID IID_IEventPublisher;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventPublisher_get_PublisherID_Proxy( 
-    IEventPublisher __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrPublisherID);
+    IEventPublisher * This,
+    /* [retval][out] */ BSTR *pbstrPublisherID);
 
 
 void __RPC_STUB IEventPublisher_get_PublisherID_Stub(
@@ -749,7 +775,7 @@ void __RPC_STUB IEventPublisher_get_PublisherID_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventPublisher_put_PublisherID_Proxy( 
-    IEventPublisher __RPC_FAR * This,
+    IEventPublisher * This,
     /* [in] */ BSTR bstrPublisherID);
 
 
@@ -761,8 +787,8 @@ void __RPC_STUB IEventPublisher_put_PublisherID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventPublisher_get_PublisherName_Proxy( 
-    IEventPublisher __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrPublisherName);
+    IEventPublisher * This,
+    /* [retval][out] */ BSTR *pbstrPublisherName);
 
 
 void __RPC_STUB IEventPublisher_get_PublisherName_Stub(
@@ -773,7 +799,7 @@ void __RPC_STUB IEventPublisher_get_PublisherName_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventPublisher_put_PublisherName_Proxy( 
-    IEventPublisher __RPC_FAR * This,
+    IEventPublisher * This,
     /* [in] */ BSTR bstrPublisherName);
 
 
@@ -785,8 +811,8 @@ void __RPC_STUB IEventPublisher_put_PublisherName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventPublisher_get_PublisherType_Proxy( 
-    IEventPublisher __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrPublisherType);
+    IEventPublisher * This,
+    /* [retval][out] */ BSTR *pbstrPublisherType);
 
 
 void __RPC_STUB IEventPublisher_get_PublisherType_Stub(
@@ -797,7 +823,7 @@ void __RPC_STUB IEventPublisher_get_PublisherType_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventPublisher_put_PublisherType_Proxy( 
-    IEventPublisher __RPC_FAR * This,
+    IEventPublisher * This,
     /* [in] */ BSTR bstrPublisherType);
 
 
@@ -809,8 +835,8 @@ void __RPC_STUB IEventPublisher_put_PublisherType_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventPublisher_get_OwnerSID_Proxy( 
-    IEventPublisher __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrOwnerSID);
+    IEventPublisher * This,
+    /* [retval][out] */ BSTR *pbstrOwnerSID);
 
 
 void __RPC_STUB IEventPublisher_get_OwnerSID_Stub(
@@ -821,7 +847,7 @@ void __RPC_STUB IEventPublisher_get_OwnerSID_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventPublisher_put_OwnerSID_Proxy( 
-    IEventPublisher __RPC_FAR * This,
+    IEventPublisher * This,
     /* [in] */ BSTR bstrOwnerSID);
 
 
@@ -833,8 +859,8 @@ void __RPC_STUB IEventPublisher_put_OwnerSID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventPublisher_get_Description_Proxy( 
-    IEventPublisher __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
+    IEventPublisher * This,
+    /* [retval][out] */ BSTR *pbstrDescription);
 
 
 void __RPC_STUB IEventPublisher_get_Description_Stub(
@@ -845,7 +871,7 @@ void __RPC_STUB IEventPublisher_get_Description_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventPublisher_put_Description_Proxy( 
-    IEventPublisher __RPC_FAR * This,
+    IEventPublisher * This,
     /* [in] */ BSTR bstrDescription);
 
 
@@ -857,9 +883,9 @@ void __RPC_STUB IEventPublisher_put_Description_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventPublisher_GetDefaultProperty_Proxy( 
-    IEventPublisher __RPC_FAR * This,
+    IEventPublisher * This,
     /* [in] */ BSTR bstrPropertyName,
-    /* [retval][out] */ VARIANT __RPC_FAR *propertyValue);
+    /* [retval][out] */ VARIANT *propertyValue);
 
 
 void __RPC_STUB IEventPublisher_GetDefaultProperty_Stub(
@@ -870,9 +896,9 @@ void __RPC_STUB IEventPublisher_GetDefaultProperty_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventPublisher_PutDefaultProperty_Proxy( 
-    IEventPublisher __RPC_FAR * This,
+    IEventPublisher * This,
     /* [in] */ BSTR bstrPropertyName,
-    /* [in] */ VARIANT __RPC_FAR *propertyValue);
+    /* [in] */ VARIANT *propertyValue);
 
 
 void __RPC_STUB IEventPublisher_PutDefaultProperty_Stub(
@@ -883,7 +909,7 @@ void __RPC_STUB IEventPublisher_PutDefaultProperty_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventPublisher_RemoveDefaultProperty_Proxy( 
-    IEventPublisher __RPC_FAR * This,
+    IEventPublisher * This,
     /* [in] */ BSTR bstrPropertyName);
 
 
@@ -895,8 +921,8 @@ void __RPC_STUB IEventPublisher_RemoveDefaultProperty_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventPublisher_GetDefaultPropertyCollection_Proxy( 
-    IEventPublisher __RPC_FAR * This,
-    /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *collection);
+    IEventPublisher * This,
+    /* [retval][out] */ IEventObjectCollection **collection);
 
 
 void __RPC_STUB IEventPublisher_GetDefaultPropertyCollection_Stub(
@@ -926,43 +952,43 @@ EXTERN_C const IID IID_IEventClass;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EventClassID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEventClassID) = 0;
+            /* [retval][out] */ BSTR *pbstrEventClassID) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EventClassID( 
             /* [in] */ BSTR bstrEventClassID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EventClassName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEventClassName) = 0;
+            /* [retval][out] */ BSTR *pbstrEventClassName) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EventClassName( 
             /* [in] */ BSTR bstrEventClassName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OwnerSID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrOwnerSID) = 0;
+            /* [retval][out] */ BSTR *pbstrOwnerSID) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_OwnerSID( 
             /* [in] */ BSTR bstrOwnerSID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FiringInterfaceID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFiringInterfaceID) = 0;
+            /* [retval][out] */ BSTR *pbstrFiringInterfaceID) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_FiringInterfaceID( 
             /* [in] */ BSTR bstrFiringInterfaceID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription) = 0;
+            /* [retval][out] */ BSTR *pbstrDescription) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bstrDescription) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CustomConfigCLSID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCustomConfigCLSID) = 0;
+            /* [retval][out] */ BSTR *pbstrCustomConfigCLSID) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CustomConfigCLSID( 
             /* [in] */ BSTR bstrCustomConfigCLSID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TypeLib( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrTypeLib) = 0;
+            /* [retval][out] */ BSTR *pbstrTypeLib) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_TypeLib( 
             /* [in] */ BSTR bstrTypeLib) = 0;
@@ -975,100 +1001,100 @@ EXTERN_C const IID IID_IEventClass;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEventClass __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEventClass * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEventClass __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEventClass * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEventClass __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEventClass * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IEventClass __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IEventClass * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IEventClass __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IEventClass * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IEventClass __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IEventClass * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IEventClass __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IEventClass * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EventClassID )( 
-            IEventClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEventClassID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventClassID )( 
+            IEventClass * This,
+            /* [retval][out] */ BSTR *pbstrEventClassID);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EventClassID )( 
-            IEventClass __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventClassID )( 
+            IEventClass * This,
             /* [in] */ BSTR bstrEventClassID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EventClassName )( 
-            IEventClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEventClassName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventClassName )( 
+            IEventClass * This,
+            /* [retval][out] */ BSTR *pbstrEventClassName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EventClassName )( 
-            IEventClass __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventClassName )( 
+            IEventClass * This,
             /* [in] */ BSTR bstrEventClassName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OwnerSID )( 
-            IEventClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrOwnerSID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OwnerSID )( 
+            IEventClass * This,
+            /* [retval][out] */ BSTR *pbstrOwnerSID);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OwnerSID )( 
-            IEventClass __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OwnerSID )( 
+            IEventClass * This,
             /* [in] */ BSTR bstrOwnerSID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FiringInterfaceID )( 
-            IEventClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFiringInterfaceID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FiringInterfaceID )( 
+            IEventClass * This,
+            /* [retval][out] */ BSTR *pbstrFiringInterfaceID);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FiringInterfaceID )( 
-            IEventClass __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FiringInterfaceID )( 
+            IEventClass * This,
             /* [in] */ BSTR bstrFiringInterfaceID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IEventClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IEventClass * This,
+            /* [retval][out] */ BSTR *pbstrDescription);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IEventClass __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IEventClass * This,
             /* [in] */ BSTR bstrDescription);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CustomConfigCLSID )( 
-            IEventClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCustomConfigCLSID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CustomConfigCLSID )( 
+            IEventClass * This,
+            /* [retval][out] */ BSTR *pbstrCustomConfigCLSID);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CustomConfigCLSID )( 
-            IEventClass __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CustomConfigCLSID )( 
+            IEventClass * This,
             /* [in] */ BSTR bstrCustomConfigCLSID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TypeLib )( 
-            IEventClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrTypeLib);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TypeLib )( 
+            IEventClass * This,
+            /* [retval][out] */ BSTR *pbstrTypeLib);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TypeLib )( 
-            IEventClass __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TypeLib )( 
+            IEventClass * This,
             /* [in] */ BSTR bstrTypeLib);
         
         END_INTERFACE
@@ -1076,7 +1102,7 @@ EXTERN_C const IID IID_IEventClass;
 
     interface IEventClass
     {
-        CONST_VTBL struct IEventClassVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEventClassVtbl *lpVtbl;
     };
 
     
@@ -1157,8 +1183,8 @@ EXTERN_C const IID IID_IEventClass;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventClass_get_EventClassID_Proxy( 
-    IEventClass __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrEventClassID);
+    IEventClass * This,
+    /* [retval][out] */ BSTR *pbstrEventClassID);
 
 
 void __RPC_STUB IEventClass_get_EventClassID_Stub(
@@ -1169,7 +1195,7 @@ void __RPC_STUB IEventClass_get_EventClassID_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventClass_put_EventClassID_Proxy( 
-    IEventClass __RPC_FAR * This,
+    IEventClass * This,
     /* [in] */ BSTR bstrEventClassID);
 
 
@@ -1181,8 +1207,8 @@ void __RPC_STUB IEventClass_put_EventClassID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventClass_get_EventClassName_Proxy( 
-    IEventClass __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrEventClassName);
+    IEventClass * This,
+    /* [retval][out] */ BSTR *pbstrEventClassName);
 
 
 void __RPC_STUB IEventClass_get_EventClassName_Stub(
@@ -1193,7 +1219,7 @@ void __RPC_STUB IEventClass_get_EventClassName_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventClass_put_EventClassName_Proxy( 
-    IEventClass __RPC_FAR * This,
+    IEventClass * This,
     /* [in] */ BSTR bstrEventClassName);
 
 
@@ -1205,8 +1231,8 @@ void __RPC_STUB IEventClass_put_EventClassName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventClass_get_OwnerSID_Proxy( 
-    IEventClass __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrOwnerSID);
+    IEventClass * This,
+    /* [retval][out] */ BSTR *pbstrOwnerSID);
 
 
 void __RPC_STUB IEventClass_get_OwnerSID_Stub(
@@ -1217,7 +1243,7 @@ void __RPC_STUB IEventClass_get_OwnerSID_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventClass_put_OwnerSID_Proxy( 
-    IEventClass __RPC_FAR * This,
+    IEventClass * This,
     /* [in] */ BSTR bstrOwnerSID);
 
 
@@ -1229,8 +1255,8 @@ void __RPC_STUB IEventClass_put_OwnerSID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventClass_get_FiringInterfaceID_Proxy( 
-    IEventClass __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFiringInterfaceID);
+    IEventClass * This,
+    /* [retval][out] */ BSTR *pbstrFiringInterfaceID);
 
 
 void __RPC_STUB IEventClass_get_FiringInterfaceID_Stub(
@@ -1241,7 +1267,7 @@ void __RPC_STUB IEventClass_get_FiringInterfaceID_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventClass_put_FiringInterfaceID_Proxy( 
-    IEventClass __RPC_FAR * This,
+    IEventClass * This,
     /* [in] */ BSTR bstrFiringInterfaceID);
 
 
@@ -1253,8 +1279,8 @@ void __RPC_STUB IEventClass_put_FiringInterfaceID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventClass_get_Description_Proxy( 
-    IEventClass __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
+    IEventClass * This,
+    /* [retval][out] */ BSTR *pbstrDescription);
 
 
 void __RPC_STUB IEventClass_get_Description_Stub(
@@ -1265,7 +1291,7 @@ void __RPC_STUB IEventClass_get_Description_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventClass_put_Description_Proxy( 
-    IEventClass __RPC_FAR * This,
+    IEventClass * This,
     /* [in] */ BSTR bstrDescription);
 
 
@@ -1277,8 +1303,8 @@ void __RPC_STUB IEventClass_put_Description_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventClass_get_CustomConfigCLSID_Proxy( 
-    IEventClass __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrCustomConfigCLSID);
+    IEventClass * This,
+    /* [retval][out] */ BSTR *pbstrCustomConfigCLSID);
 
 
 void __RPC_STUB IEventClass_get_CustomConfigCLSID_Stub(
@@ -1289,7 +1315,7 @@ void __RPC_STUB IEventClass_get_CustomConfigCLSID_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventClass_put_CustomConfigCLSID_Proxy( 
-    IEventClass __RPC_FAR * This,
+    IEventClass * This,
     /* [in] */ BSTR bstrCustomConfigCLSID);
 
 
@@ -1301,8 +1327,8 @@ void __RPC_STUB IEventClass_put_CustomConfigCLSID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventClass_get_TypeLib_Proxy( 
-    IEventClass __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrTypeLib);
+    IEventClass * This,
+    /* [retval][out] */ BSTR *pbstrTypeLib);
 
 
 void __RPC_STUB IEventClass_get_TypeLib_Stub(
@@ -1313,7 +1339,7 @@ void __RPC_STUB IEventClass_get_TypeLib_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventClass_put_TypeLib_Proxy( 
-    IEventClass __RPC_FAR * This,
+    IEventClass * This,
     /* [in] */ BSTR bstrTypeLib);
 
 
@@ -1326,6 +1352,391 @@ void __RPC_STUB IEventClass_put_TypeLib_Stub(
 
 
 #endif 	/* __IEventClass_INTERFACE_DEFINED__ */
+
+
+#ifndef __IEventClass2_INTERFACE_DEFINED__
+#define __IEventClass2_INTERFACE_DEFINED__
+
+/* interface IEventClass2 */
+/* [unique][helpstring][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IEventClass2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("fb2b72a1-7a68-11d1-88f9-0080c7d771bf")
+    IEventClass2 : public IEventClass
+    {
+    public:
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_PublisherID( 
+            /* [retval][out] */ BSTR *pbstrPublisherID) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_PublisherID( 
+            /* [in] */ BSTR bstrPublisherID) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_MultiInterfacePublisherFilterCLSID( 
+            /* [retval][out] */ BSTR *pbstrPubFilCLSID) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_MultiInterfacePublisherFilterCLSID( 
+            /* [in] */ BSTR bstrPubFilCLSID) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_AllowInprocActivation( 
+            /* [retval][out] */ BOOL *pfAllowInprocActivation) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_AllowInprocActivation( 
+            /* [in] */ BOOL fAllowInprocActivation) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_FireInParallel( 
+            /* [retval][out] */ BOOL *pfFireInParallel) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_FireInParallel( 
+            /* [in] */ BOOL fFireInParallel) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IEventClass2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEventClass2 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEventClass2 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEventClass2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IEventClass2 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IEventClass2 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IEventClass2 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IEventClass2 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventClassID )( 
+            IEventClass2 * This,
+            /* [retval][out] */ BSTR *pbstrEventClassID);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventClassID )( 
+            IEventClass2 * This,
+            /* [in] */ BSTR bstrEventClassID);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventClassName )( 
+            IEventClass2 * This,
+            /* [retval][out] */ BSTR *pbstrEventClassName);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventClassName )( 
+            IEventClass2 * This,
+            /* [in] */ BSTR bstrEventClassName);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OwnerSID )( 
+            IEventClass2 * This,
+            /* [retval][out] */ BSTR *pbstrOwnerSID);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OwnerSID )( 
+            IEventClass2 * This,
+            /* [in] */ BSTR bstrOwnerSID);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FiringInterfaceID )( 
+            IEventClass2 * This,
+            /* [retval][out] */ BSTR *pbstrFiringInterfaceID);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FiringInterfaceID )( 
+            IEventClass2 * This,
+            /* [in] */ BSTR bstrFiringInterfaceID);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IEventClass2 * This,
+            /* [retval][out] */ BSTR *pbstrDescription);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IEventClass2 * This,
+            /* [in] */ BSTR bstrDescription);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CustomConfigCLSID )( 
+            IEventClass2 * This,
+            /* [retval][out] */ BSTR *pbstrCustomConfigCLSID);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CustomConfigCLSID )( 
+            IEventClass2 * This,
+            /* [in] */ BSTR bstrCustomConfigCLSID);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TypeLib )( 
+            IEventClass2 * This,
+            /* [retval][out] */ BSTR *pbstrTypeLib);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TypeLib )( 
+            IEventClass2 * This,
+            /* [in] */ BSTR bstrTypeLib);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_PublisherID )( 
+            IEventClass2 * This,
+            /* [retval][out] */ BSTR *pbstrPublisherID);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_PublisherID )( 
+            IEventClass2 * This,
+            /* [in] */ BSTR bstrPublisherID);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_MultiInterfacePublisherFilterCLSID )( 
+            IEventClass2 * This,
+            /* [retval][out] */ BSTR *pbstrPubFilCLSID);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_MultiInterfacePublisherFilterCLSID )( 
+            IEventClass2 * This,
+            /* [in] */ BSTR bstrPubFilCLSID);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_AllowInprocActivation )( 
+            IEventClass2 * This,
+            /* [retval][out] */ BOOL *pfAllowInprocActivation);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_AllowInprocActivation )( 
+            IEventClass2 * This,
+            /* [in] */ BOOL fAllowInprocActivation);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FireInParallel )( 
+            IEventClass2 * This,
+            /* [retval][out] */ BOOL *pfFireInParallel);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_FireInParallel )( 
+            IEventClass2 * This,
+            /* [in] */ BOOL fFireInParallel);
+        
+        END_INTERFACE
+    } IEventClass2Vtbl;
+
+    interface IEventClass2
+    {
+        CONST_VTBL struct IEventClass2Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IEventClass2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IEventClass2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IEventClass2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IEventClass2_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IEventClass2_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IEventClass2_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IEventClass2_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IEventClass2_get_EventClassID(This,pbstrEventClassID)	\
+    (This)->lpVtbl -> get_EventClassID(This,pbstrEventClassID)
+
+#define IEventClass2_put_EventClassID(This,bstrEventClassID)	\
+    (This)->lpVtbl -> put_EventClassID(This,bstrEventClassID)
+
+#define IEventClass2_get_EventClassName(This,pbstrEventClassName)	\
+    (This)->lpVtbl -> get_EventClassName(This,pbstrEventClassName)
+
+#define IEventClass2_put_EventClassName(This,bstrEventClassName)	\
+    (This)->lpVtbl -> put_EventClassName(This,bstrEventClassName)
+
+#define IEventClass2_get_OwnerSID(This,pbstrOwnerSID)	\
+    (This)->lpVtbl -> get_OwnerSID(This,pbstrOwnerSID)
+
+#define IEventClass2_put_OwnerSID(This,bstrOwnerSID)	\
+    (This)->lpVtbl -> put_OwnerSID(This,bstrOwnerSID)
+
+#define IEventClass2_get_FiringInterfaceID(This,pbstrFiringInterfaceID)	\
+    (This)->lpVtbl -> get_FiringInterfaceID(This,pbstrFiringInterfaceID)
+
+#define IEventClass2_put_FiringInterfaceID(This,bstrFiringInterfaceID)	\
+    (This)->lpVtbl -> put_FiringInterfaceID(This,bstrFiringInterfaceID)
+
+#define IEventClass2_get_Description(This,pbstrDescription)	\
+    (This)->lpVtbl -> get_Description(This,pbstrDescription)
+
+#define IEventClass2_put_Description(This,bstrDescription)	\
+    (This)->lpVtbl -> put_Description(This,bstrDescription)
+
+#define IEventClass2_get_CustomConfigCLSID(This,pbstrCustomConfigCLSID)	\
+    (This)->lpVtbl -> get_CustomConfigCLSID(This,pbstrCustomConfigCLSID)
+
+#define IEventClass2_put_CustomConfigCLSID(This,bstrCustomConfigCLSID)	\
+    (This)->lpVtbl -> put_CustomConfigCLSID(This,bstrCustomConfigCLSID)
+
+#define IEventClass2_get_TypeLib(This,pbstrTypeLib)	\
+    (This)->lpVtbl -> get_TypeLib(This,pbstrTypeLib)
+
+#define IEventClass2_put_TypeLib(This,bstrTypeLib)	\
+    (This)->lpVtbl -> put_TypeLib(This,bstrTypeLib)
+
+
+#define IEventClass2_get_PublisherID(This,pbstrPublisherID)	\
+    (This)->lpVtbl -> get_PublisherID(This,pbstrPublisherID)
+
+#define IEventClass2_put_PublisherID(This,bstrPublisherID)	\
+    (This)->lpVtbl -> put_PublisherID(This,bstrPublisherID)
+
+#define IEventClass2_get_MultiInterfacePublisherFilterCLSID(This,pbstrPubFilCLSID)	\
+    (This)->lpVtbl -> get_MultiInterfacePublisherFilterCLSID(This,pbstrPubFilCLSID)
+
+#define IEventClass2_put_MultiInterfacePublisherFilterCLSID(This,bstrPubFilCLSID)	\
+    (This)->lpVtbl -> put_MultiInterfacePublisherFilterCLSID(This,bstrPubFilCLSID)
+
+#define IEventClass2_get_AllowInprocActivation(This,pfAllowInprocActivation)	\
+    (This)->lpVtbl -> get_AllowInprocActivation(This,pfAllowInprocActivation)
+
+#define IEventClass2_put_AllowInprocActivation(This,fAllowInprocActivation)	\
+    (This)->lpVtbl -> put_AllowInprocActivation(This,fAllowInprocActivation)
+
+#define IEventClass2_get_FireInParallel(This,pfFireInParallel)	\
+    (This)->lpVtbl -> get_FireInParallel(This,pfFireInParallel)
+
+#define IEventClass2_put_FireInParallel(This,fFireInParallel)	\
+    (This)->lpVtbl -> put_FireInParallel(This,fFireInParallel)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IEventClass2_get_PublisherID_Proxy( 
+    IEventClass2 * This,
+    /* [retval][out] */ BSTR *pbstrPublisherID);
+
+
+void __RPC_STUB IEventClass2_get_PublisherID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IEventClass2_put_PublisherID_Proxy( 
+    IEventClass2 * This,
+    /* [in] */ BSTR bstrPublisherID);
+
+
+void __RPC_STUB IEventClass2_put_PublisherID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IEventClass2_get_MultiInterfacePublisherFilterCLSID_Proxy( 
+    IEventClass2 * This,
+    /* [retval][out] */ BSTR *pbstrPubFilCLSID);
+
+
+void __RPC_STUB IEventClass2_get_MultiInterfacePublisherFilterCLSID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IEventClass2_put_MultiInterfacePublisherFilterCLSID_Proxy( 
+    IEventClass2 * This,
+    /* [in] */ BSTR bstrPubFilCLSID);
+
+
+void __RPC_STUB IEventClass2_put_MultiInterfacePublisherFilterCLSID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IEventClass2_get_AllowInprocActivation_Proxy( 
+    IEventClass2 * This,
+    /* [retval][out] */ BOOL *pfAllowInprocActivation);
+
+
+void __RPC_STUB IEventClass2_get_AllowInprocActivation_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IEventClass2_put_AllowInprocActivation_Proxy( 
+    IEventClass2 * This,
+    /* [in] */ BOOL fAllowInprocActivation);
+
+
+void __RPC_STUB IEventClass2_put_AllowInprocActivation_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IEventClass2_get_FireInParallel_Proxy( 
+    IEventClass2 * This,
+    /* [retval][out] */ BOOL *pfFireInParallel);
+
+
+void __RPC_STUB IEventClass2_get_FireInParallel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IEventClass2_put_FireInParallel_Proxy( 
+    IEventClass2 * This,
+    /* [in] */ BOOL fFireInParallel);
+
+
+void __RPC_STUB IEventClass2_put_FireInParallel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IEventClass2_INTERFACE_DEFINED__ */
 
 
 #ifndef __IEventSubscription_INTERFACE_DEFINED__
@@ -1344,107 +1755,107 @@ EXTERN_C const IID IID_IEventSubscription;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubscriptionID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSubscriptionID) = 0;
+            /* [retval][out] */ BSTR *pbstrSubscriptionID) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SubscriptionID( 
             /* [in] */ BSTR bstrSubscriptionID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubscriptionName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSubscriptionName) = 0;
+            /* [retval][out] */ BSTR *pbstrSubscriptionName) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SubscriptionName( 
             /* [in] */ BSTR bstrSubscriptionName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PublisherID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPublisherID) = 0;
+            /* [retval][out] */ BSTR *pbstrPublisherID) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PublisherID( 
             /* [in] */ BSTR bstrPublisherID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EventClassID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEventClassID) = 0;
+            /* [retval][out] */ BSTR *pbstrEventClassID) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EventClassID( 
             /* [in] */ BSTR bstrEventClassID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MethodName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMethodName) = 0;
+            /* [retval][out] */ BSTR *pbstrMethodName) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_MethodName( 
             /* [in] */ BSTR bstrMethodName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubscriberCLSID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSubscriberCLSID) = 0;
+            /* [retval][out] */ BSTR *pbstrSubscriberCLSID) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SubscriberCLSID( 
             /* [in] */ BSTR bstrSubscriberCLSID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubscriberInterface( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppSubscriberInterface) = 0;
+            /* [retval][out] */ IUnknown **ppSubscriberInterface) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SubscriberInterface( 
-            /* [in] */ IUnknown __RPC_FAR *pSubscriberInterface) = 0;
+            /* [in] */ IUnknown *pSubscriberInterface) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PerUser( 
-            /* [retval][out] */ BOOL __RPC_FAR *pfPerUser) = 0;
+            /* [retval][out] */ BOOL *pfPerUser) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PerUser( 
             /* [in] */ BOOL fPerUser) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OwnerSID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrOwnerSID) = 0;
+            /* [retval][out] */ BSTR *pbstrOwnerSID) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_OwnerSID( 
             /* [in] */ BSTR bstrOwnerSID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Enabled( 
-            /* [retval][out] */ BOOL __RPC_FAR *pfEnabled) = 0;
+            /* [retval][out] */ BOOL *pfEnabled) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Enabled( 
             /* [in] */ BOOL fEnabled) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription) = 0;
+            /* [retval][out] */ BSTR *pbstrDescription) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bstrDescription) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MachineName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMachineName) = 0;
+            /* [retval][out] */ BSTR *pbstrMachineName) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_MachineName( 
             /* [in] */ BSTR bstrMachineName) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetPublisherProperty( 
             /* [in] */ BSTR bstrPropertyName,
-            /* [retval][out] */ VARIANT __RPC_FAR *propertyValue) = 0;
+            /* [retval][out] */ VARIANT *propertyValue) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PutPublisherProperty( 
             /* [in] */ BSTR bstrPropertyName,
-            /* [in] */ VARIANT __RPC_FAR *propertyValue) = 0;
+            /* [in] */ VARIANT *propertyValue) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemovePublisherProperty( 
             /* [in] */ BSTR bstrPropertyName) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetPublisherPropertyCollection( 
-            /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *collection) = 0;
+            /* [retval][out] */ IEventObjectCollection **collection) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSubscriberProperty( 
             /* [in] */ BSTR bstrPropertyName,
-            /* [retval][out] */ VARIANT __RPC_FAR *propertyValue) = 0;
+            /* [retval][out] */ VARIANT *propertyValue) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PutSubscriberProperty( 
             /* [in] */ BSTR bstrPropertyName,
-            /* [in] */ VARIANT __RPC_FAR *propertyValue) = 0;
+            /* [in] */ VARIANT *propertyValue) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveSubscriberProperty( 
             /* [in] */ BSTR bstrPropertyName) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSubscriberPropertyCollection( 
-            /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *collection) = 0;
+            /* [retval][out] */ IEventObjectCollection **collection) = 0;
         
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_InterfaceID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrInterfaceID) = 0;
+            /* [retval][out] */ BSTR *pbstrInterfaceID) = 0;
         
         virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_InterfaceID( 
             /* [in] */ BSTR bstrInterfaceID) = 0;
@@ -1457,184 +1868,184 @@ EXTERN_C const IID IID_IEventSubscription;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEventSubscription __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEventSubscription * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEventSubscription __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEventSubscription * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEventSubscription __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEventSubscription * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IEventSubscription * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IEventSubscription __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IEventSubscription * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IEventSubscription __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IEventSubscription * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IEventSubscription * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SubscriptionID )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSubscriptionID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubscriptionID )( 
+            IEventSubscription * This,
+            /* [retval][out] */ BSTR *pbstrSubscriptionID);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SubscriptionID )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SubscriptionID )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrSubscriptionID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SubscriptionName )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSubscriptionName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubscriptionName )( 
+            IEventSubscription * This,
+            /* [retval][out] */ BSTR *pbstrSubscriptionName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SubscriptionName )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SubscriptionName )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrSubscriptionName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PublisherID )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPublisherID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PublisherID )( 
+            IEventSubscription * This,
+            /* [retval][out] */ BSTR *pbstrPublisherID);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PublisherID )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PublisherID )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrPublisherID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EventClassID )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEventClassID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventClassID )( 
+            IEventSubscription * This,
+            /* [retval][out] */ BSTR *pbstrEventClassID);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EventClassID )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventClassID )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrEventClassID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MethodName )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMethodName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MethodName )( 
+            IEventSubscription * This,
+            /* [retval][out] */ BSTR *pbstrMethodName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MethodName )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MethodName )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrMethodName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SubscriberCLSID )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSubscriberCLSID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubscriberCLSID )( 
+            IEventSubscription * This,
+            /* [retval][out] */ BSTR *pbstrSubscriberCLSID);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SubscriberCLSID )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SubscriberCLSID )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrSubscriberCLSID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SubscriberInterface )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppSubscriberInterface);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubscriberInterface )( 
+            IEventSubscription * This,
+            /* [retval][out] */ IUnknown **ppSubscriberInterface);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SubscriberInterface )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pSubscriberInterface);
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SubscriberInterface )( 
+            IEventSubscription * This,
+            /* [in] */ IUnknown *pSubscriberInterface);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PerUser )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pfPerUser);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PerUser )( 
+            IEventSubscription * This,
+            /* [retval][out] */ BOOL *pfPerUser);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PerUser )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PerUser )( 
+            IEventSubscription * This,
             /* [in] */ BOOL fPerUser);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OwnerSID )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrOwnerSID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OwnerSID )( 
+            IEventSubscription * This,
+            /* [retval][out] */ BSTR *pbstrOwnerSID);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OwnerSID )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OwnerSID )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrOwnerSID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Enabled )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pfEnabled);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
+            IEventSubscription * This,
+            /* [retval][out] */ BOOL *pfEnabled);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Enabled )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Enabled )( 
+            IEventSubscription * This,
             /* [in] */ BOOL fEnabled);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IEventSubscription * This,
+            /* [retval][out] */ BSTR *pbstrDescription);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrDescription);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MachineName )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMachineName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MachineName )( 
+            IEventSubscription * This,
+            /* [retval][out] */ BSTR *pbstrMachineName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MachineName )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MachineName )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrMachineName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPublisherProperty )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetPublisherProperty )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrPropertyName,
-            /* [retval][out] */ VARIANT __RPC_FAR *propertyValue);
+            /* [retval][out] */ VARIANT *propertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutPublisherProperty )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PutPublisherProperty )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrPropertyName,
-            /* [in] */ VARIANT __RPC_FAR *propertyValue);
+            /* [in] */ VARIANT *propertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemovePublisherProperty )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemovePublisherProperty )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrPropertyName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPublisherPropertyCollection )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *collection);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetPublisherPropertyCollection )( 
+            IEventSubscription * This,
+            /* [retval][out] */ IEventObjectCollection **collection);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSubscriberProperty )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSubscriberProperty )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrPropertyName,
-            /* [retval][out] */ VARIANT __RPC_FAR *propertyValue);
+            /* [retval][out] */ VARIANT *propertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutSubscriberProperty )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PutSubscriberProperty )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrPropertyName,
-            /* [in] */ VARIANT __RPC_FAR *propertyValue);
+            /* [in] */ VARIANT *propertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveSubscriberProperty )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveSubscriberProperty )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrPropertyName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSubscriberPropertyCollection )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *collection);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSubscriberPropertyCollection )( 
+            IEventSubscription * This,
+            /* [retval][out] */ IEventObjectCollection **collection);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InterfaceID )( 
-            IEventSubscription __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrInterfaceID);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_InterfaceID )( 
+            IEventSubscription * This,
+            /* [retval][out] */ BSTR *pbstrInterfaceID);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_InterfaceID )( 
-            IEventSubscription __RPC_FAR * This,
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_InterfaceID )( 
+            IEventSubscription * This,
             /* [in] */ BSTR bstrInterfaceID);
         
         END_INTERFACE
@@ -1642,7 +2053,7 @@ EXTERN_C const IID IID_IEventSubscription;
 
     interface IEventSubscription
     {
-        CONST_VTBL struct IEventSubscriptionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEventSubscriptionVtbl *lpVtbl;
     };
 
     
@@ -1783,8 +2194,8 @@ EXTERN_C const IID IID_IEventSubscription;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventSubscription_get_SubscriptionID_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrSubscriptionID);
+    IEventSubscription * This,
+    /* [retval][out] */ BSTR *pbstrSubscriptionID);
 
 
 void __RPC_STUB IEventSubscription_get_SubscriptionID_Stub(
@@ -1795,7 +2206,7 @@ void __RPC_STUB IEventSubscription_get_SubscriptionID_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventSubscription_put_SubscriptionID_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrSubscriptionID);
 
 
@@ -1807,8 +2218,8 @@ void __RPC_STUB IEventSubscription_put_SubscriptionID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventSubscription_get_SubscriptionName_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrSubscriptionName);
+    IEventSubscription * This,
+    /* [retval][out] */ BSTR *pbstrSubscriptionName);
 
 
 void __RPC_STUB IEventSubscription_get_SubscriptionName_Stub(
@@ -1819,7 +2230,7 @@ void __RPC_STUB IEventSubscription_get_SubscriptionName_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventSubscription_put_SubscriptionName_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrSubscriptionName);
 
 
@@ -1831,8 +2242,8 @@ void __RPC_STUB IEventSubscription_put_SubscriptionName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventSubscription_get_PublisherID_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrPublisherID);
+    IEventSubscription * This,
+    /* [retval][out] */ BSTR *pbstrPublisherID);
 
 
 void __RPC_STUB IEventSubscription_get_PublisherID_Stub(
@@ -1843,7 +2254,7 @@ void __RPC_STUB IEventSubscription_get_PublisherID_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventSubscription_put_PublisherID_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrPublisherID);
 
 
@@ -1855,8 +2266,8 @@ void __RPC_STUB IEventSubscription_put_PublisherID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventSubscription_get_EventClassID_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrEventClassID);
+    IEventSubscription * This,
+    /* [retval][out] */ BSTR *pbstrEventClassID);
 
 
 void __RPC_STUB IEventSubscription_get_EventClassID_Stub(
@@ -1867,7 +2278,7 @@ void __RPC_STUB IEventSubscription_get_EventClassID_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventSubscription_put_EventClassID_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrEventClassID);
 
 
@@ -1879,8 +2290,8 @@ void __RPC_STUB IEventSubscription_put_EventClassID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventSubscription_get_MethodName_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrMethodName);
+    IEventSubscription * This,
+    /* [retval][out] */ BSTR *pbstrMethodName);
 
 
 void __RPC_STUB IEventSubscription_get_MethodName_Stub(
@@ -1891,7 +2302,7 @@ void __RPC_STUB IEventSubscription_get_MethodName_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventSubscription_put_MethodName_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrMethodName);
 
 
@@ -1903,8 +2314,8 @@ void __RPC_STUB IEventSubscription_put_MethodName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventSubscription_get_SubscriberCLSID_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrSubscriberCLSID);
+    IEventSubscription * This,
+    /* [retval][out] */ BSTR *pbstrSubscriberCLSID);
 
 
 void __RPC_STUB IEventSubscription_get_SubscriberCLSID_Stub(
@@ -1915,7 +2326,7 @@ void __RPC_STUB IEventSubscription_get_SubscriberCLSID_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventSubscription_put_SubscriberCLSID_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrSubscriberCLSID);
 
 
@@ -1927,8 +2338,8 @@ void __RPC_STUB IEventSubscription_put_SubscriberCLSID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventSubscription_get_SubscriberInterface_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppSubscriberInterface);
+    IEventSubscription * This,
+    /* [retval][out] */ IUnknown **ppSubscriberInterface);
 
 
 void __RPC_STUB IEventSubscription_get_SubscriberInterface_Stub(
@@ -1939,8 +2350,8 @@ void __RPC_STUB IEventSubscription_get_SubscriberInterface_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventSubscription_put_SubscriberInterface_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pSubscriberInterface);
+    IEventSubscription * This,
+    /* [in] */ IUnknown *pSubscriberInterface);
 
 
 void __RPC_STUB IEventSubscription_put_SubscriberInterface_Stub(
@@ -1951,8 +2362,8 @@ void __RPC_STUB IEventSubscription_put_SubscriberInterface_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventSubscription_get_PerUser_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pfPerUser);
+    IEventSubscription * This,
+    /* [retval][out] */ BOOL *pfPerUser);
 
 
 void __RPC_STUB IEventSubscription_get_PerUser_Stub(
@@ -1963,7 +2374,7 @@ void __RPC_STUB IEventSubscription_get_PerUser_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventSubscription_put_PerUser_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BOOL fPerUser);
 
 
@@ -1975,8 +2386,8 @@ void __RPC_STUB IEventSubscription_put_PerUser_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventSubscription_get_OwnerSID_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrOwnerSID);
+    IEventSubscription * This,
+    /* [retval][out] */ BSTR *pbstrOwnerSID);
 
 
 void __RPC_STUB IEventSubscription_get_OwnerSID_Stub(
@@ -1987,7 +2398,7 @@ void __RPC_STUB IEventSubscription_get_OwnerSID_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventSubscription_put_OwnerSID_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrOwnerSID);
 
 
@@ -1999,8 +2410,8 @@ void __RPC_STUB IEventSubscription_put_OwnerSID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventSubscription_get_Enabled_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pfEnabled);
+    IEventSubscription * This,
+    /* [retval][out] */ BOOL *pfEnabled);
 
 
 void __RPC_STUB IEventSubscription_get_Enabled_Stub(
@@ -2011,7 +2422,7 @@ void __RPC_STUB IEventSubscription_get_Enabled_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventSubscription_put_Enabled_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BOOL fEnabled);
 
 
@@ -2023,8 +2434,8 @@ void __RPC_STUB IEventSubscription_put_Enabled_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventSubscription_get_Description_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrDescription);
+    IEventSubscription * This,
+    /* [retval][out] */ BSTR *pbstrDescription);
 
 
 void __RPC_STUB IEventSubscription_get_Description_Stub(
@@ -2035,7 +2446,7 @@ void __RPC_STUB IEventSubscription_get_Description_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventSubscription_put_Description_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrDescription);
 
 
@@ -2047,8 +2458,8 @@ void __RPC_STUB IEventSubscription_put_Description_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventSubscription_get_MachineName_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrMachineName);
+    IEventSubscription * This,
+    /* [retval][out] */ BSTR *pbstrMachineName);
 
 
 void __RPC_STUB IEventSubscription_get_MachineName_Stub(
@@ -2059,7 +2470,7 @@ void __RPC_STUB IEventSubscription_get_MachineName_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventSubscription_put_MachineName_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrMachineName);
 
 
@@ -2071,9 +2482,9 @@ void __RPC_STUB IEventSubscription_put_MachineName_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventSubscription_GetPublisherProperty_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrPropertyName,
-    /* [retval][out] */ VARIANT __RPC_FAR *propertyValue);
+    /* [retval][out] */ VARIANT *propertyValue);
 
 
 void __RPC_STUB IEventSubscription_GetPublisherProperty_Stub(
@@ -2084,9 +2495,9 @@ void __RPC_STUB IEventSubscription_GetPublisherProperty_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventSubscription_PutPublisherProperty_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrPropertyName,
-    /* [in] */ VARIANT __RPC_FAR *propertyValue);
+    /* [in] */ VARIANT *propertyValue);
 
 
 void __RPC_STUB IEventSubscription_PutPublisherProperty_Stub(
@@ -2097,7 +2508,7 @@ void __RPC_STUB IEventSubscription_PutPublisherProperty_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventSubscription_RemovePublisherProperty_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrPropertyName);
 
 
@@ -2109,8 +2520,8 @@ void __RPC_STUB IEventSubscription_RemovePublisherProperty_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventSubscription_GetPublisherPropertyCollection_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *collection);
+    IEventSubscription * This,
+    /* [retval][out] */ IEventObjectCollection **collection);
 
 
 void __RPC_STUB IEventSubscription_GetPublisherPropertyCollection_Stub(
@@ -2121,9 +2532,9 @@ void __RPC_STUB IEventSubscription_GetPublisherPropertyCollection_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventSubscription_GetSubscriberProperty_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrPropertyName,
-    /* [retval][out] */ VARIANT __RPC_FAR *propertyValue);
+    /* [retval][out] */ VARIANT *propertyValue);
 
 
 void __RPC_STUB IEventSubscription_GetSubscriberProperty_Stub(
@@ -2134,9 +2545,9 @@ void __RPC_STUB IEventSubscription_GetSubscriberProperty_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventSubscription_PutSubscriberProperty_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrPropertyName,
-    /* [in] */ VARIANT __RPC_FAR *propertyValue);
+    /* [in] */ VARIANT *propertyValue);
 
 
 void __RPC_STUB IEventSubscription_PutSubscriberProperty_Stub(
@@ -2147,7 +2558,7 @@ void __RPC_STUB IEventSubscription_PutSubscriberProperty_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventSubscription_RemoveSubscriberProperty_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrPropertyName);
 
 
@@ -2159,8 +2570,8 @@ void __RPC_STUB IEventSubscription_RemoveSubscriberProperty_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventSubscription_GetSubscriberPropertyCollection_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *collection);
+    IEventSubscription * This,
+    /* [retval][out] */ IEventObjectCollection **collection);
 
 
 void __RPC_STUB IEventSubscription_GetSubscriberPropertyCollection_Stub(
@@ -2171,8 +2582,8 @@ void __RPC_STUB IEventSubscription_GetSubscriberPropertyCollection_Stub(
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IEventSubscription_get_InterfaceID_Proxy( 
-    IEventSubscription __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrInterfaceID);
+    IEventSubscription * This,
+    /* [retval][out] */ BSTR *pbstrInterfaceID);
 
 
 void __RPC_STUB IEventSubscription_get_InterfaceID_Stub(
@@ -2183,7 +2594,7 @@ void __RPC_STUB IEventSubscription_get_InterfaceID_Stub(
 
 
 /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IEventSubscription_put_InterfaceID_Proxy( 
-    IEventSubscription __RPC_FAR * This,
+    IEventSubscription * This,
     /* [in] */ BSTR bstrInterfaceID);
 
 
@@ -2214,7 +2625,7 @@ EXTERN_C const IID IID_IFiringControl;
     {
     public:
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FireSubscription( 
-            /* [in] */ IEventSubscription __RPC_FAR *subscription) = 0;
+            /* [in] */ IEventSubscription *subscription) = 0;
         
     };
     
@@ -2224,56 +2635,56 @@ EXTERN_C const IID IID_IFiringControl;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFiringControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFiringControl * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFiringControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFiringControl * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFiringControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFiringControl * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IFiringControl __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IFiringControl * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IFiringControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IFiringControl * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IFiringControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IFiringControl * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IFiringControl __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IFiringControl * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FireSubscription )( 
-            IFiringControl __RPC_FAR * This,
-            /* [in] */ IEventSubscription __RPC_FAR *subscription);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *FireSubscription )( 
+            IFiringControl * This,
+            /* [in] */ IEventSubscription *subscription);
         
         END_INTERFACE
     } IFiringControlVtbl;
 
     interface IFiringControl
     {
-        CONST_VTBL struct IFiringControlVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFiringControlVtbl *lpVtbl;
     };
 
     
@@ -2315,8 +2726,8 @@ EXTERN_C const IID IID_IFiringControl;
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFiringControl_FireSubscription_Proxy( 
-    IFiringControl __RPC_FAR * This,
-    /* [in] */ IEventSubscription __RPC_FAR *subscription);
+    IFiringControl * This,
+    /* [in] */ IEventSubscription *subscription);
 
 
 void __RPC_STUB IFiringControl_FireSubscription_Stub(
@@ -2350,11 +2761,11 @@ EXTERN_C const IID IID_IPublisherFilter;
     public:
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Initialize( 
             /* [in] */ BSTR methodName,
-            /* [unique][in] */ IDispatch __RPC_FAR *dispUserDefined) = 0;
+            /* [unique][in] */ IDispatch *dispUserDefined) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE PrepareToFire( 
             /* [in] */ BSTR methodName,
-            /* [in] */ IFiringControl __RPC_FAR *firingControl) = 0;
+            /* [in] */ IFiringControl *firingControl) = 0;
         
     };
     
@@ -2364,33 +2775,33 @@ EXTERN_C const IID IID_IPublisherFilter;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPublisherFilter __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPublisherFilter * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPublisherFilter __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPublisherFilter * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPublisherFilter __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPublisherFilter * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IPublisherFilter __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+            IPublisherFilter * This,
             /* [in] */ BSTR methodName,
-            /* [unique][in] */ IDispatch __RPC_FAR *dispUserDefined);
+            /* [unique][in] */ IDispatch *dispUserDefined);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrepareToFire )( 
-            IPublisherFilter __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *PrepareToFire )( 
+            IPublisherFilter * This,
             /* [in] */ BSTR methodName,
-            /* [in] */ IFiringControl __RPC_FAR *firingControl);
+            /* [in] */ IFiringControl *firingControl);
         
         END_INTERFACE
     } IPublisherFilterVtbl;
 
     interface IPublisherFilter
     {
-        CONST_VTBL struct IPublisherFilterVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPublisherFilterVtbl *lpVtbl;
     };
 
     
@@ -2422,9 +2833,9 @@ EXTERN_C const IID IID_IPublisherFilter;
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IPublisherFilter_Initialize_Proxy( 
-    IPublisherFilter __RPC_FAR * This,
+    IPublisherFilter * This,
     /* [in] */ BSTR methodName,
-    /* [unique][in] */ IDispatch __RPC_FAR *dispUserDefined);
+    /* [unique][in] */ IDispatch *dispUserDefined);
 
 
 void __RPC_STUB IPublisherFilter_Initialize_Stub(
@@ -2435,9 +2846,9 @@ void __RPC_STUB IPublisherFilter_Initialize_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IPublisherFilter_PrepareToFire_Proxy( 
-    IPublisherFilter __RPC_FAR * This,
+    IPublisherFilter * This,
     /* [in] */ BSTR methodName,
-    /* [in] */ IFiringControl __RPC_FAR *firingControl);
+    /* [in] */ IFiringControl *firingControl);
 
 
 void __RPC_STUB IPublisherFilter_PrepareToFire_Stub(
@@ -2467,12 +2878,12 @@ EXTERN_C const IID IID_IMultiInterfacePublisherFilter;
     {
     public:
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ IMultiInterfaceEventControl __RPC_FAR *pEIC) = 0;
+            /* [in] */ IMultiInterfaceEventControl *pEIC) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE PrepareToFire( 
             /* [in] */ REFIID iid,
             /* [in] */ BSTR methodName,
-            /* [in] */ IFiringControl __RPC_FAR *firingControl) = 0;
+            /* [in] */ IFiringControl *firingControl) = 0;
         
     };
     
@@ -2482,33 +2893,33 @@ EXTERN_C const IID IID_IMultiInterfacePublisherFilter;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMultiInterfacePublisherFilter __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMultiInterfacePublisherFilter * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMultiInterfacePublisherFilter __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMultiInterfacePublisherFilter * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMultiInterfacePublisherFilter __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMultiInterfacePublisherFilter * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IMultiInterfacePublisherFilter __RPC_FAR * This,
-            /* [in] */ IMultiInterfaceEventControl __RPC_FAR *pEIC);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+            IMultiInterfacePublisherFilter * This,
+            /* [in] */ IMultiInterfaceEventControl *pEIC);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrepareToFire )( 
-            IMultiInterfacePublisherFilter __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *PrepareToFire )( 
+            IMultiInterfacePublisherFilter * This,
             /* [in] */ REFIID iid,
             /* [in] */ BSTR methodName,
-            /* [in] */ IFiringControl __RPC_FAR *firingControl);
+            /* [in] */ IFiringControl *firingControl);
         
         END_INTERFACE
     } IMultiInterfacePublisherFilterVtbl;
 
     interface IMultiInterfacePublisherFilter
     {
-        CONST_VTBL struct IMultiInterfacePublisherFilterVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMultiInterfacePublisherFilterVtbl *lpVtbl;
     };
 
     
@@ -2540,8 +2951,8 @@ EXTERN_C const IID IID_IMultiInterfacePublisherFilter;
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IMultiInterfacePublisherFilter_Initialize_Proxy( 
-    IMultiInterfacePublisherFilter __RPC_FAR * This,
-    /* [in] */ IMultiInterfaceEventControl __RPC_FAR *pEIC);
+    IMultiInterfacePublisherFilter * This,
+    /* [in] */ IMultiInterfaceEventControl *pEIC);
 
 
 void __RPC_STUB IMultiInterfacePublisherFilter_Initialize_Stub(
@@ -2552,10 +2963,10 @@ void __RPC_STUB IMultiInterfacePublisherFilter_Initialize_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IMultiInterfacePublisherFilter_PrepareToFire_Proxy( 
-    IMultiInterfacePublisherFilter __RPC_FAR * This,
+    IMultiInterfacePublisherFilter * This,
     /* [in] */ REFIID iid,
     /* [in] */ BSTR methodName,
-    /* [in] */ IFiringControl __RPC_FAR *firingControl);
+    /* [in] */ IFiringControl *firingControl);
 
 
 void __RPC_STUB IMultiInterfacePublisherFilter_PrepareToFire_Stub(
@@ -2575,12 +2986,12 @@ void __RPC_STUB IMultiInterfacePublisherFilter_PrepareToFire_Stub(
 /* interface IEventObjectChange */
 /* [unique][helpstring][uuid][object] */ 
 
-typedef /* [public][public][public][public] */ 
+typedef /* [public][public][public][public][public][public][public] */ 
 enum __MIDL_IEventObjectChange_0001
     {	EOC_NewObject	= 0,
 	EOC_ModifiedObject	= EOC_NewObject + 1,
 	EOC_DeletedObject	= EOC_ModifiedObject + 1
-    }	EOC_ChangeType;
+    } 	EOC_ChangeType;
 
 
 EXTERN_C const IID IID_IEventObjectChange;
@@ -2611,29 +3022,29 @@ EXTERN_C const IID IID_IEventObjectChange;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEventObjectChange __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEventObjectChange * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEventObjectChange __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEventObjectChange * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEventObjectChange __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEventObjectChange * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ChangedSubscription )( 
-            IEventObjectChange __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ChangedSubscription )( 
+            IEventObjectChange * This,
             /* [in] */ EOC_ChangeType changeType,
             /* [in] */ BSTR bstrSubscriptionID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ChangedEventClass )( 
-            IEventObjectChange __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ChangedEventClass )( 
+            IEventObjectChange * This,
             /* [in] */ EOC_ChangeType changeType,
             /* [in] */ BSTR bstrEventClassID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ChangedPublisher )( 
-            IEventObjectChange __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ChangedPublisher )( 
+            IEventObjectChange * This,
             /* [in] */ EOC_ChangeType changeType,
             /* [in] */ BSTR bstrPublisherID);
         
@@ -2642,7 +3053,7 @@ EXTERN_C const IID IID_IEventObjectChange;
 
     interface IEventObjectChange
     {
-        CONST_VTBL struct IEventObjectChangeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEventObjectChangeVtbl *lpVtbl;
     };
 
     
@@ -2677,7 +3088,7 @@ EXTERN_C const IID IID_IEventObjectChange;
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IEventObjectChange_ChangedSubscription_Proxy( 
-    IEventObjectChange __RPC_FAR * This,
+    IEventObjectChange * This,
     /* [in] */ EOC_ChangeType changeType,
     /* [in] */ BSTR bstrSubscriptionID);
 
@@ -2690,7 +3101,7 @@ void __RPC_STUB IEventObjectChange_ChangedSubscription_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IEventObjectChange_ChangedEventClass_Proxy( 
-    IEventObjectChange __RPC_FAR * This,
+    IEventObjectChange * This,
     /* [in] */ EOC_ChangeType changeType,
     /* [in] */ BSTR bstrEventClassID);
 
@@ -2703,7 +3114,7 @@ void __RPC_STUB IEventObjectChange_ChangedEventClass_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IEventObjectChange_ChangedPublisher_Proxy( 
-    IEventObjectChange __RPC_FAR * This,
+    IEventObjectChange * This,
     /* [in] */ EOC_ChangeType changeType,
     /* [in] */ BSTR bstrPublisherID);
 
@@ -2717,6 +3128,139 @@ void __RPC_STUB IEventObjectChange_ChangedPublisher_Stub(
 
 
 #endif 	/* __IEventObjectChange_INTERFACE_DEFINED__ */
+
+
+/* interface __MIDL_itf_eventsys_0260 */
+/* [local] */ 
+
+#ifndef _COMEVENTSYSCHANGEINFO_
+#define _COMEVENTSYSCHANGEINFO_
+typedef /* [public][public][public][hidden] */ struct __MIDL___MIDL_itf_eventsys_0260_0001
+    {
+    DWORD cbSize;
+    EOC_ChangeType changeType;
+    BSTR objectId;
+    BSTR partitionId;
+    BSTR applicationId;
+    GUID reserved[ 10 ];
+    } 	COMEVENTSYSCHANGEINFO;
+
+#endif _COMEVENTSYSCHANGEINFO_
+
+
+extern RPC_IF_HANDLE __MIDL_itf_eventsys_0260_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_eventsys_0260_v0_0_s_ifspec;
+
+#ifndef __IEventObjectChange2_INTERFACE_DEFINED__
+#define __IEventObjectChange2_INTERFACE_DEFINED__
+
+/* interface IEventObjectChange2 */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IEventObjectChange2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("7701A9C3-BD68-438f-83E0-67BF4F53A422")
+    IEventObjectChange2 : public IUnknown
+    {
+    public:
+        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ChangedSubscription( 
+            /* [in] */ COMEVENTSYSCHANGEINFO *pInfo) = 0;
+        
+        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ChangedEventClass( 
+            /* [in] */ COMEVENTSYSCHANGEINFO *pInfo) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IEventObjectChange2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEventObjectChange2 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEventObjectChange2 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEventObjectChange2 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ChangedSubscription )( 
+            IEventObjectChange2 * This,
+            /* [in] */ COMEVENTSYSCHANGEINFO *pInfo);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ChangedEventClass )( 
+            IEventObjectChange2 * This,
+            /* [in] */ COMEVENTSYSCHANGEINFO *pInfo);
+        
+        END_INTERFACE
+    } IEventObjectChange2Vtbl;
+
+    interface IEventObjectChange2
+    {
+        CONST_VTBL struct IEventObjectChange2Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IEventObjectChange2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IEventObjectChange2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IEventObjectChange2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IEventObjectChange2_ChangedSubscription(This,pInfo)	\
+    (This)->lpVtbl -> ChangedSubscription(This,pInfo)
+
+#define IEventObjectChange2_ChangedEventClass(This,pInfo)	\
+    (This)->lpVtbl -> ChangedEventClass(This,pInfo)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEventObjectChange2_ChangedSubscription_Proxy( 
+    IEventObjectChange2 * This,
+    /* [in] */ COMEVENTSYSCHANGEINFO *pInfo);
+
+
+void __RPC_STUB IEventObjectChange2_ChangedSubscription_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEventObjectChange2_ChangedEventClass_Proxy( 
+    IEventObjectChange2 * This,
+    /* [in] */ COMEVENTSYSCHANGEINFO *pInfo);
+
+
+void __RPC_STUB IEventObjectChange2_ChangedEventClass_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IEventObjectChange2_INTERFACE_DEFINED__ */
 
 
 #ifndef __IEnumEventObject_INTERFACE_DEFINED__
@@ -2735,12 +3279,12 @@ EXTERN_C const IID IID_IEnumEventObject;
     {
     public:
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumEventObject __RPC_FAR *__RPC_FAR *ppInterface) = 0;
+            /* [out] */ IEnumEventObject **ppInterface) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG cReqElem,
-            /* [length_is][size_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppInterface,
-            /* [out] */ ULONG __RPC_FAR *cRetElem) = 0;
+            /* [length_is][size_is][out] */ IUnknown **ppInterface,
+            /* [out] */ ULONG *cRetElem) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
@@ -2755,32 +3299,32 @@ EXTERN_C const IID IID_IEnumEventObject;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumEventObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumEventObject * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumEventObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumEventObject * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumEventObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumEventObject * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumEventObject __RPC_FAR * This,
-            /* [out] */ IEnumEventObject __RPC_FAR *__RPC_FAR *ppInterface);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumEventObject * This,
+            /* [out] */ IEnumEventObject **ppInterface);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumEventObject __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumEventObject * This,
             /* [in] */ ULONG cReqElem,
-            /* [length_is][size_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppInterface,
-            /* [out] */ ULONG __RPC_FAR *cRetElem);
+            /* [length_is][size_is][out] */ IUnknown **ppInterface,
+            /* [out] */ ULONG *cRetElem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumEventObject __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumEventObject * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumEventObject __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumEventObject * This,
             /* [in] */ ULONG cSkipElem);
         
         END_INTERFACE
@@ -2788,7 +3332,7 @@ EXTERN_C const IID IID_IEnumEventObject;
 
     interface IEnumEventObject
     {
-        CONST_VTBL struct IEnumEventObjectVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumEventObjectVtbl *lpVtbl;
     };
 
     
@@ -2826,8 +3370,8 @@ EXTERN_C const IID IID_IEnumEventObject;
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEnumEventObject_Clone_Proxy( 
-    IEnumEventObject __RPC_FAR * This,
-    /* [out] */ IEnumEventObject __RPC_FAR *__RPC_FAR *ppInterface);
+    IEnumEventObject * This,
+    /* [out] */ IEnumEventObject **ppInterface);
 
 
 void __RPC_STUB IEnumEventObject_Clone_Stub(
@@ -2838,10 +3382,10 @@ void __RPC_STUB IEnumEventObject_Clone_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEnumEventObject_Next_Proxy( 
-    IEnumEventObject __RPC_FAR * This,
+    IEnumEventObject * This,
     /* [in] */ ULONG cReqElem,
-    /* [length_is][size_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppInterface,
-    /* [out] */ ULONG __RPC_FAR *cRetElem);
+    /* [length_is][size_is][out] */ IUnknown **ppInterface,
+    /* [out] */ ULONG *cRetElem);
 
 
 void __RPC_STUB IEnumEventObject_Next_Stub(
@@ -2852,7 +3396,7 @@ void __RPC_STUB IEnumEventObject_Next_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEnumEventObject_Reset_Proxy( 
-    IEnumEventObject __RPC_FAR * This);
+    IEnumEventObject * This);
 
 
 void __RPC_STUB IEnumEventObject_Reset_Stub(
@@ -2863,7 +3407,7 @@ void __RPC_STUB IEnumEventObject_Reset_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEnumEventObject_Skip_Proxy( 
-    IEnumEventObject __RPC_FAR * This,
+    IEnumEventObject * This,
     /* [in] */ ULONG cSkipElem);
 
 
@@ -2894,20 +3438,20 @@ EXTERN_C const IID IID_IEventObjectCollection;
     {
     public:
         virtual /* [helpstring][restricted][propget][id] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnkEnum) = 0;
+            /* [retval][out] */ IUnknown **ppUnkEnum) = 0;
         
         virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ BSTR objectID,
-            /* [retval][out] */ VARIANT __RPC_FAR *pItem) = 0;
+            /* [retval][out] */ VARIANT *pItem) = 0;
         
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_NewEnum( 
-            /* [retval][out] */ IEnumEventObject __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+            /* [retval][out] */ IEnumEventObject **ppEnum) = 0;
         
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *pCount) = 0;
+            /* [retval][out] */ long *pCount) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ VARIANT __RPC_FAR *item,
+            /* [in] */ VARIANT *item,
             /* [in] */ BSTR objectID) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
@@ -2921,70 +3465,70 @@ EXTERN_C const IID IID_IEventObjectCollection;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEventObjectCollection __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEventObjectCollection * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEventObjectCollection __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEventObjectCollection * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEventObjectCollection __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEventObjectCollection * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IEventObjectCollection __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IEventObjectCollection * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IEventObjectCollection __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IEventObjectCollection * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IEventObjectCollection __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IEventObjectCollection * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IEventObjectCollection __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IEventObjectCollection * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][restricted][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            IEventObjectCollection __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnkEnum);
+        /* [helpstring][restricted][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            IEventObjectCollection * This,
+            /* [retval][out] */ IUnknown **ppUnkEnum);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            IEventObjectCollection __RPC_FAR * This,
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            IEventObjectCollection * This,
             /* [in] */ BSTR objectID,
-            /* [retval][out] */ VARIANT __RPC_FAR *pItem);
+            /* [retval][out] */ VARIANT *pItem);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NewEnum )( 
-            IEventObjectCollection __RPC_FAR * This,
-            /* [retval][out] */ IEnumEventObject __RPC_FAR *__RPC_FAR *ppEnum);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_NewEnum )( 
+            IEventObjectCollection * This,
+            /* [retval][out] */ IEnumEventObject **ppEnum);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            IEventObjectCollection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCount);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IEventObjectCollection * This,
+            /* [retval][out] */ long *pCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Add )( 
-            IEventObjectCollection __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *item,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+            IEventObjectCollection * This,
+            /* [in] */ VARIANT *item,
             /* [in] */ BSTR objectID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Remove )( 
-            IEventObjectCollection __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+            IEventObjectCollection * This,
             /* [in] */ BSTR objectID);
         
         END_INTERFACE
@@ -2992,7 +3536,7 @@ EXTERN_C const IID IID_IEventObjectCollection;
 
     interface IEventObjectCollection
     {
-        CONST_VTBL struct IEventObjectCollectionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEventObjectCollectionVtbl *lpVtbl;
     };
 
     
@@ -3049,8 +3593,8 @@ EXTERN_C const IID IID_IEventObjectCollection;
 
 
 /* [helpstring][restricted][propget][id] */ HRESULT STDMETHODCALLTYPE IEventObjectCollection_get__NewEnum_Proxy( 
-    IEventObjectCollection __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnkEnum);
+    IEventObjectCollection * This,
+    /* [retval][out] */ IUnknown **ppUnkEnum);
 
 
 void __RPC_STUB IEventObjectCollection_get__NewEnum_Stub(
@@ -3061,9 +3605,9 @@ void __RPC_STUB IEventObjectCollection_get__NewEnum_Stub(
 
 
 /* [propget][id] */ HRESULT STDMETHODCALLTYPE IEventObjectCollection_get_Item_Proxy( 
-    IEventObjectCollection __RPC_FAR * This,
+    IEventObjectCollection * This,
     /* [in] */ BSTR objectID,
-    /* [retval][out] */ VARIANT __RPC_FAR *pItem);
+    /* [retval][out] */ VARIANT *pItem);
 
 
 void __RPC_STUB IEventObjectCollection_get_Item_Stub(
@@ -3074,8 +3618,8 @@ void __RPC_STUB IEventObjectCollection_get_Item_Stub(
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IEventObjectCollection_get_NewEnum_Proxy( 
-    IEventObjectCollection __RPC_FAR * This,
-    /* [retval][out] */ IEnumEventObject __RPC_FAR *__RPC_FAR *ppEnum);
+    IEventObjectCollection * This,
+    /* [retval][out] */ IEnumEventObject **ppEnum);
 
 
 void __RPC_STUB IEventObjectCollection_get_NewEnum_Stub(
@@ -3086,8 +3630,8 @@ void __RPC_STUB IEventObjectCollection_get_NewEnum_Stub(
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IEventObjectCollection_get_Count_Proxy( 
-    IEventObjectCollection __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pCount);
+    IEventObjectCollection * This,
+    /* [retval][out] */ long *pCount);
 
 
 void __RPC_STUB IEventObjectCollection_get_Count_Stub(
@@ -3098,8 +3642,8 @@ void __RPC_STUB IEventObjectCollection_get_Count_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventObjectCollection_Add_Proxy( 
-    IEventObjectCollection __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *item,
+    IEventObjectCollection * This,
+    /* [in] */ VARIANT *item,
     /* [in] */ BSTR objectID);
 
 
@@ -3111,7 +3655,7 @@ void __RPC_STUB IEventObjectCollection_Add_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventObjectCollection_Remove_Proxy( 
-    IEventObjectCollection __RPC_FAR * This,
+    IEventObjectCollection * This,
     /* [in] */ BSTR objectID);
 
 
@@ -3142,16 +3686,16 @@ EXTERN_C const IID IID_IEventProperty;
     {
     public:
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *propertyName) = 0;
+            /* [retval][out] */ BSTR *propertyName) = 0;
         
         virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Name( 
             /* [in] */ BSTR propertyName) = 0;
         
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Value( 
-            /* [retval][out] */ VARIANT __RPC_FAR *propertyValue) = 0;
+            /* [retval][out] */ VARIANT *propertyValue) = 0;
         
         virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Value( 
-            /* [in] */ VARIANT __RPC_FAR *propertyValue) = 0;
+            /* [in] */ VARIANT *propertyValue) = 0;
         
     };
     
@@ -3161,68 +3705,68 @@ EXTERN_C const IID IID_IEventProperty;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEventProperty __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEventProperty * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEventProperty __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEventProperty * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEventProperty __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEventProperty * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IEventProperty __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IEventProperty * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IEventProperty __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IEventProperty * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IEventProperty __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IEventProperty * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IEventProperty __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IEventProperty * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IEventProperty __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *propertyName);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IEventProperty * This,
+            /* [retval][out] */ BSTR *propertyName);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
-            IEventProperty __RPC_FAR * This,
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+            IEventProperty * This,
             /* [in] */ BSTR propertyName);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Value )( 
-            IEventProperty __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *propertyValue);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Value )( 
+            IEventProperty * This,
+            /* [retval][out] */ VARIANT *propertyValue);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Value )( 
-            IEventProperty __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *propertyValue);
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Value )( 
+            IEventProperty * This,
+            /* [in] */ VARIANT *propertyValue);
         
         END_INTERFACE
     } IEventPropertyVtbl;
 
     interface IEventProperty
     {
-        CONST_VTBL struct IEventPropertyVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEventPropertyVtbl *lpVtbl;
     };
 
     
@@ -3273,8 +3817,8 @@ EXTERN_C const IID IID_IEventProperty;
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IEventProperty_get_Name_Proxy( 
-    IEventProperty __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *propertyName);
+    IEventProperty * This,
+    /* [retval][out] */ BSTR *propertyName);
 
 
 void __RPC_STUB IEventProperty_get_Name_Stub(
@@ -3285,7 +3829,7 @@ void __RPC_STUB IEventProperty_get_Name_Stub(
 
 
 /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IEventProperty_put_Name_Proxy( 
-    IEventProperty __RPC_FAR * This,
+    IEventProperty * This,
     /* [in] */ BSTR propertyName);
 
 
@@ -3297,8 +3841,8 @@ void __RPC_STUB IEventProperty_put_Name_Stub(
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IEventProperty_get_Value_Proxy( 
-    IEventProperty __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *propertyValue);
+    IEventProperty * This,
+    /* [retval][out] */ VARIANT *propertyValue);
 
 
 void __RPC_STUB IEventProperty_get_Value_Stub(
@@ -3309,8 +3853,8 @@ void __RPC_STUB IEventProperty_get_Value_Stub(
 
 
 /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IEventProperty_put_Value_Proxy( 
-    IEventProperty __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *propertyValue);
+    IEventProperty * This,
+    /* [in] */ VARIANT *propertyValue);
 
 
 void __RPC_STUB IEventProperty_put_Value_Stub(
@@ -3344,10 +3888,10 @@ EXTERN_C const IID IID_IEventControl;
     public:
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetPublisherFilter( 
             /* [in] */ BSTR methodName,
-            /* [unique][in] */ IPublisherFilter __RPC_FAR *pPublisherFilter) = 0;
+            /* [unique][in] */ IPublisherFilter *pPublisherFilter) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowInprocActivation( 
-            /* [retval][out] */ BOOL __RPC_FAR *pfAllowInprocActivation) = 0;
+            /* [retval][out] */ BOOL *pfAllowInprocActivation) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowInprocActivation( 
             /* [in] */ BOOL fAllowInprocActivation) = 0;
@@ -3355,13 +3899,13 @@ EXTERN_C const IID IID_IEventControl;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSubscriptions( 
             /* [in] */ BSTR methodName,
             /* [unique][in] */ BSTR optionalCriteria,
-            /* [unique][in] */ int __RPC_FAR *optionalErrorIndex,
-            /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *ppCollection) = 0;
+            /* [unique][in] */ int *optionalErrorIndex,
+            /* [retval][out] */ IEventObjectCollection **ppCollection) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetDefaultQuery( 
             /* [in] */ BSTR methodName,
             /* [in] */ BSTR criteria,
-            /* [retval][out] */ int __RPC_FAR *errorIndex) = 0;
+            /* [retval][out] */ int *errorIndex) = 0;
         
     };
     
@@ -3371,78 +3915,78 @@ EXTERN_C const IID IID_IEventControl;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEventControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEventControl * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEventControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEventControl * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEventControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEventControl * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IEventControl __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IEventControl * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IEventControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IEventControl * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IEventControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IEventControl * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IEventControl __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IEventControl * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPublisherFilter )( 
-            IEventControl __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetPublisherFilter )( 
+            IEventControl * This,
             /* [in] */ BSTR methodName,
-            /* [unique][in] */ IPublisherFilter __RPC_FAR *pPublisherFilter);
+            /* [unique][in] */ IPublisherFilter *pPublisherFilter);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AllowInprocActivation )( 
-            IEventControl __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pfAllowInprocActivation);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowInprocActivation )( 
+            IEventControl * This,
+            /* [retval][out] */ BOOL *pfAllowInprocActivation);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllowInprocActivation )( 
-            IEventControl __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowInprocActivation )( 
+            IEventControl * This,
             /* [in] */ BOOL fAllowInprocActivation);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSubscriptions )( 
-            IEventControl __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSubscriptions )( 
+            IEventControl * This,
             /* [in] */ BSTR methodName,
             /* [unique][in] */ BSTR optionalCriteria,
-            /* [unique][in] */ int __RPC_FAR *optionalErrorIndex,
-            /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *ppCollection);
+            /* [unique][in] */ int *optionalErrorIndex,
+            /* [retval][out] */ IEventObjectCollection **ppCollection);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDefaultQuery )( 
-            IEventControl __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetDefaultQuery )( 
+            IEventControl * This,
             /* [in] */ BSTR methodName,
             /* [in] */ BSTR criteria,
-            /* [retval][out] */ int __RPC_FAR *errorIndex);
+            /* [retval][out] */ int *errorIndex);
         
         END_INTERFACE
     } IEventControlVtbl;
 
     interface IEventControl
     {
-        CONST_VTBL struct IEventControlVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEventControlVtbl *lpVtbl;
     };
 
     
@@ -3496,9 +4040,9 @@ EXTERN_C const IID IID_IEventControl;
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventControl_SetPublisherFilter_Proxy( 
-    IEventControl __RPC_FAR * This,
+    IEventControl * This,
     /* [in] */ BSTR methodName,
-    /* [unique][in] */ IPublisherFilter __RPC_FAR *pPublisherFilter);
+    /* [unique][in] */ IPublisherFilter *pPublisherFilter);
 
 
 void __RPC_STUB IEventControl_SetPublisherFilter_Stub(
@@ -3509,8 +4053,8 @@ void __RPC_STUB IEventControl_SetPublisherFilter_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IEventControl_get_AllowInprocActivation_Proxy( 
-    IEventControl __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pfAllowInprocActivation);
+    IEventControl * This,
+    /* [retval][out] */ BOOL *pfAllowInprocActivation);
 
 
 void __RPC_STUB IEventControl_get_AllowInprocActivation_Stub(
@@ -3521,7 +4065,7 @@ void __RPC_STUB IEventControl_get_AllowInprocActivation_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IEventControl_put_AllowInprocActivation_Proxy( 
-    IEventControl __RPC_FAR * This,
+    IEventControl * This,
     /* [in] */ BOOL fAllowInprocActivation);
 
 
@@ -3533,11 +4077,11 @@ void __RPC_STUB IEventControl_put_AllowInprocActivation_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventControl_GetSubscriptions_Proxy( 
-    IEventControl __RPC_FAR * This,
+    IEventControl * This,
     /* [in] */ BSTR methodName,
     /* [unique][in] */ BSTR optionalCriteria,
-    /* [unique][in] */ int __RPC_FAR *optionalErrorIndex,
-    /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *ppCollection);
+    /* [unique][in] */ int *optionalErrorIndex,
+    /* [retval][out] */ IEventObjectCollection **ppCollection);
 
 
 void __RPC_STUB IEventControl_GetSubscriptions_Stub(
@@ -3548,10 +4092,10 @@ void __RPC_STUB IEventControl_GetSubscriptions_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEventControl_SetDefaultQuery_Proxy( 
-    IEventControl __RPC_FAR * This,
+    IEventControl * This,
     /* [in] */ BSTR methodName,
     /* [in] */ BSTR criteria,
-    /* [retval][out] */ int __RPC_FAR *errorIndex);
+    /* [retval][out] */ int *errorIndex);
 
 
 void __RPC_STUB IEventControl_SetDefaultQuery_Stub(
@@ -3581,29 +4125,29 @@ EXTERN_C const IID IID_IMultiInterfaceEventControl;
     {
     public:
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetMultiInterfacePublisherFilter( 
-            /* [unique][in] */ IMultiInterfacePublisherFilter __RPC_FAR *classFilter) = 0;
+            /* [unique][in] */ IMultiInterfacePublisherFilter *classFilter) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSubscriptions( 
             /* [in] */ REFIID eventIID,
             /* [in] */ BSTR bstrMethodName,
             /* [unique][in] */ BSTR optionalCriteria,
-            /* [unique][in] */ int __RPC_FAR *optionalErrorIndex,
-            /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *ppCollection) = 0;
+            /* [unique][in] */ int *optionalErrorIndex,
+            /* [retval][out] */ IEventObjectCollection **ppCollection) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetDefaultQuery( 
             /* [in] */ REFIID eventIID,
             /* [in] */ BSTR bstrMethodName,
             /* [in] */ BSTR bstrCriteria,
-            /* [retval][out] */ int __RPC_FAR *errorIndex) = 0;
+            /* [retval][out] */ int *errorIndex) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AllowInprocActivation( 
-            /* [retval][out] */ BOOL __RPC_FAR *pfAllowInprocActivation) = 0;
+            /* [retval][out] */ BOOL *pfAllowInprocActivation) = 0;
         
         virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_AllowInprocActivation( 
             /* [in] */ BOOL fAllowInprocActivation) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_FireInParallel( 
-            /* [retval][out] */ BOOL __RPC_FAR *pfFireInParallel) = 0;
+            /* [retval][out] */ BOOL *pfFireInParallel) = 0;
         
         virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_FireInParallel( 
             /* [in] */ BOOL fFireInParallel) = 0;
@@ -3616,50 +4160,50 @@ EXTERN_C const IID IID_IMultiInterfaceEventControl;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMultiInterfaceEventControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMultiInterfaceEventControl * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMultiInterfaceEventControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMultiInterfaceEventControl * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMultiInterfaceEventControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMultiInterfaceEventControl * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMultiInterfacePublisherFilter )( 
-            IMultiInterfaceEventControl __RPC_FAR * This,
-            /* [unique][in] */ IMultiInterfacePublisherFilter __RPC_FAR *classFilter);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetMultiInterfacePublisherFilter )( 
+            IMultiInterfaceEventControl * This,
+            /* [unique][in] */ IMultiInterfacePublisherFilter *classFilter);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSubscriptions )( 
-            IMultiInterfaceEventControl __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSubscriptions )( 
+            IMultiInterfaceEventControl * This,
             /* [in] */ REFIID eventIID,
             /* [in] */ BSTR bstrMethodName,
             /* [unique][in] */ BSTR optionalCriteria,
-            /* [unique][in] */ int __RPC_FAR *optionalErrorIndex,
-            /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *ppCollection);
+            /* [unique][in] */ int *optionalErrorIndex,
+            /* [retval][out] */ IEventObjectCollection **ppCollection);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDefaultQuery )( 
-            IMultiInterfaceEventControl __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetDefaultQuery )( 
+            IMultiInterfaceEventControl * This,
             /* [in] */ REFIID eventIID,
             /* [in] */ BSTR bstrMethodName,
             /* [in] */ BSTR bstrCriteria,
-            /* [retval][out] */ int __RPC_FAR *errorIndex);
+            /* [retval][out] */ int *errorIndex);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AllowInprocActivation )( 
-            IMultiInterfaceEventControl __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pfAllowInprocActivation);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowInprocActivation )( 
+            IMultiInterfaceEventControl * This,
+            /* [retval][out] */ BOOL *pfAllowInprocActivation);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllowInprocActivation )( 
-            IMultiInterfaceEventControl __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowInprocActivation )( 
+            IMultiInterfaceEventControl * This,
             /* [in] */ BOOL fAllowInprocActivation);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FireInParallel )( 
-            IMultiInterfaceEventControl __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pfFireInParallel);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FireInParallel )( 
+            IMultiInterfaceEventControl * This,
+            /* [retval][out] */ BOOL *pfFireInParallel);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FireInParallel )( 
-            IMultiInterfaceEventControl __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FireInParallel )( 
+            IMultiInterfaceEventControl * This,
             /* [in] */ BOOL fFireInParallel);
         
         END_INTERFACE
@@ -3667,7 +4211,7 @@ EXTERN_C const IID IID_IMultiInterfaceEventControl;
 
     interface IMultiInterfaceEventControl
     {
-        CONST_VTBL struct IMultiInterfaceEventControlVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMultiInterfaceEventControlVtbl *lpVtbl;
     };
 
     
@@ -3714,8 +4258,8 @@ EXTERN_C const IID IID_IMultiInterfaceEventControl;
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IMultiInterfaceEventControl_SetMultiInterfacePublisherFilter_Proxy( 
-    IMultiInterfaceEventControl __RPC_FAR * This,
-    /* [unique][in] */ IMultiInterfacePublisherFilter __RPC_FAR *classFilter);
+    IMultiInterfaceEventControl * This,
+    /* [unique][in] */ IMultiInterfacePublisherFilter *classFilter);
 
 
 void __RPC_STUB IMultiInterfaceEventControl_SetMultiInterfacePublisherFilter_Stub(
@@ -3726,12 +4270,12 @@ void __RPC_STUB IMultiInterfaceEventControl_SetMultiInterfacePublisherFilter_Stu
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IMultiInterfaceEventControl_GetSubscriptions_Proxy( 
-    IMultiInterfaceEventControl __RPC_FAR * This,
+    IMultiInterfaceEventControl * This,
     /* [in] */ REFIID eventIID,
     /* [in] */ BSTR bstrMethodName,
     /* [unique][in] */ BSTR optionalCriteria,
-    /* [unique][in] */ int __RPC_FAR *optionalErrorIndex,
-    /* [retval][out] */ IEventObjectCollection __RPC_FAR *__RPC_FAR *ppCollection);
+    /* [unique][in] */ int *optionalErrorIndex,
+    /* [retval][out] */ IEventObjectCollection **ppCollection);
 
 
 void __RPC_STUB IMultiInterfaceEventControl_GetSubscriptions_Stub(
@@ -3742,11 +4286,11 @@ void __RPC_STUB IMultiInterfaceEventControl_GetSubscriptions_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IMultiInterfaceEventControl_SetDefaultQuery_Proxy( 
-    IMultiInterfaceEventControl __RPC_FAR * This,
+    IMultiInterfaceEventControl * This,
     /* [in] */ REFIID eventIID,
     /* [in] */ BSTR bstrMethodName,
     /* [in] */ BSTR bstrCriteria,
-    /* [retval][out] */ int __RPC_FAR *errorIndex);
+    /* [retval][out] */ int *errorIndex);
 
 
 void __RPC_STUB IMultiInterfaceEventControl_SetDefaultQuery_Stub(
@@ -3757,8 +4301,8 @@ void __RPC_STUB IMultiInterfaceEventControl_SetDefaultQuery_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMultiInterfaceEventControl_get_AllowInprocActivation_Proxy( 
-    IMultiInterfaceEventControl __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pfAllowInprocActivation);
+    IMultiInterfaceEventControl * This,
+    /* [retval][out] */ BOOL *pfAllowInprocActivation);
 
 
 void __RPC_STUB IMultiInterfaceEventControl_get_AllowInprocActivation_Stub(
@@ -3769,7 +4313,7 @@ void __RPC_STUB IMultiInterfaceEventControl_get_AllowInprocActivation_Stub(
 
 
 /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMultiInterfaceEventControl_put_AllowInprocActivation_Proxy( 
-    IMultiInterfaceEventControl __RPC_FAR * This,
+    IMultiInterfaceEventControl * This,
     /* [in] */ BOOL fAllowInprocActivation);
 
 
@@ -3781,8 +4325,8 @@ void __RPC_STUB IMultiInterfaceEventControl_put_AllowInprocActivation_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMultiInterfaceEventControl_get_FireInParallel_Proxy( 
-    IMultiInterfaceEventControl __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pfFireInParallel);
+    IMultiInterfaceEventControl * This,
+    /* [retval][out] */ BOOL *pfFireInParallel);
 
 
 void __RPC_STUB IMultiInterfaceEventControl_get_FireInParallel_Stub(
@@ -3793,7 +4337,7 @@ void __RPC_STUB IMultiInterfaceEventControl_get_FireInParallel_Stub(
 
 
 /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMultiInterfaceEventControl_put_FireInParallel_Proxy( 
-    IMultiInterfaceEventControl __RPC_FAR * This,
+    IMultiInterfaceEventControl * This,
     /* [in] */ BOOL fFireInParallel);
 
 
@@ -3857,19 +4401,27 @@ EXTERN_C const CLSID CLSID_EventObjectChange;
 class DECLSPEC_UUID("d0565000-9df4-11d1-a281-00c04fca0aa7")
 EventObjectChange;
 #endif
+
+EXTERN_C const CLSID CLSID_EventObjectChange2;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("BB07BACD-CD56-4e63-A8FF-CBF0355FB9F4")
+EventObjectChange2;
+#endif
 #endif /* __DummyEventSystemLib_LIBRARY_DEFINED__ */
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
+unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
+void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
 /* end of Additional Prototypes */
 
@@ -3880,4 +4432,3 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

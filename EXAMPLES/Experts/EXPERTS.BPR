@@ -1,17 +1,19 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- C++Builder XML Project --><PROJECT>
+<!-- C++Builder XML Project -->
+<PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
-    <PROJECT value="experts.dll"/>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="EXPERTS.dll"/>
     <OBJFILES value="EXPERTS.obj filters.obj dlg.obj app.obj"/>
     <RESFILES value="experts.res exptbmps.res strings.res"/>
     <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) filters.dfm dlg.dfm app.dfm"/>
     <LIBFILES value="Memmgr.lib"/>
-    <LIBRARIES value="vclx50.lib vcl50.lib"/>
-    <SPARELIBS value="vcl50.lib vclx50.lib"/>
-    <PACKAGES value=""/>
+    <LIBRARIES value="vclx.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib vclx.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi designide.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -24,22 +26,34 @@
     <MAINSOURCE value="EXPERTS.cpp"/>
     <INCLUDEPATH value="$(BCB)\bin;$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="$(BCB)\bin;$(BCB)\lib\obj;$(BCB)\lib"/>
-    <WARNINGS value=" -w-8026 -w-8027 -w-par"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\bin -I$(BCB)\include -I$(BCB)\include\vcl"/>
-    <CFLAG1 value="-WD -Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a8 -k -y -v -vi- -c 
-      -b- -tWM"/>
+    <IDLCFLAGS value="-src_suffix cpp -I$(BCB)\bin -I$(BCB)\include -I$(BCB)\include\vcl"/>
+    <CFLAG1 value="-WD -Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- 
+      -c -tWM"/>
     <PFLAGS value="-$YD -v -JPHNV -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w0 /zd"/>
-    <LFLAGS value="-aa -Tpd -GD -s"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpd -GD -s"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0d32.obj Memmgr.Lib sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0d32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="EXPERTS.cpp" FORMNAME="" UNITNAME="EXPERTS" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="readme.txt" FORMNAME="" UNITNAME="readme" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="experts.res" FORMNAME="" UNITNAME="experts" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="filters.cpp" FORMNAME="FilterDlg" UNITNAME="filters" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="dlg.cpp" FORMNAME="DlgExpert" UNITNAME="dlg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="app.cpp" FORMNAME="AppExpert" UNITNAME="app" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="exptbmps.rc" FORMNAME="" UNITNAME="exptbmps" CONTAINERID="RCCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="strings.rc" FORMNAME="" UNITNAME="strings" CONTAINERID="RCCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Memmgr.lib" FORMNAME="" UNITNAME="Memmgr" CONTAINERID="LibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -60,26 +74,42 @@ CodePage=1252
 FileVersion=1.0.0.0
 
 [HistoryLists\hlIncludePath]
-Count=1
-Item0=$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=1
-Item0=$(BCB)\lib\obj;$(BCB)\lib
 
 [Debugging]
 DebugSourceDirs=
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
-InMemoryExe=0
 ShowInfoMsgs=0
 LinkDebugVcl=0
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
+
+[Linker]
+LibPrefix=
+LibSuffix=
+LibVersion=
   </IDEOPTIONS>
 </PROJECT>

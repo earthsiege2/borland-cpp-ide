@@ -1,6 +1,6 @@
 
 //=============================================================================
-//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1993.
+//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1999.
 //
 //  MODULE: pmacros.h
 //
@@ -10,7 +10,6 @@
 //=============================================================================
 
 #ifndef OLDPLIBINC
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define OLDPLIBINC
 
 extern UCHAR * WINAPIV strcpy1(UCHAR * string1, UCHAR * string2);
@@ -46,6 +45,5 @@ extern void WINAPIV fm_time(LPPROPERTYINST prop);
 extern void WINAPIV fm_time_ex(LPPROPERTYINST prop);
 extern void WINAPIV fm_largeint16(LPPROPERTYINST prop);
 
-#pragma option pop /*P_O_Pop*/
 #endif
 

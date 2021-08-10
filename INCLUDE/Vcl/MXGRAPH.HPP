@@ -1,32 +1,32 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxgraph.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MXGRAPH.pas' rev: 6.00
 
-#ifndef mxgraphHPP
-#define mxgraphHPP
+#ifndef MXGRAPHHPP
+#define MXGRAPHHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
 #include <Menus.hpp>	// Pascal unit
 #include <TeCanvas.hpp>	// Pascal unit
-#include <mxgrid.hpp>	// Pascal unit
+#include <MXGRID.hpp>	// Pascal unit
 #include <TeeProcs.hpp>	// Pascal unit
 #include <TeEngine.hpp>	// Pascal unit
 #include <Series.hpp>	// Pascal unit
 #include <Chart.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
-#include <mxDB.hpp>	// Pascal unit
-#include <mxConsts.hpp>	// Pascal unit
-#include <mxbutton.hpp>	// Pascal unit
-#include <mxstore.hpp>	// Pascal unit
+#include <MXDB.hpp>	// Pascal unit
+#include <Mxconsts.hpp>	// Pascal unit
+#include <MXBUTTON.hpp>	// Pascal unit
+#include <Mxstore.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <Grids.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -67,19 +67,16 @@ private:
 	void __fastcall SetDecisionSource(Mxdb::TDecisionSource* Value);
 	
 protected:
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
-	__property Mxdb::TDecisionSource* DecisionSource = {read=GetDecisionSource, write=SetDecisionSource
-		};
+	__property Mxdb::TDecisionSource* DecisionSource = {read=GetDecisionSource, write=SetDecisionSource};
 	__fastcall virtual TCustomDecisionGraph(Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomDecisionGraph(void);
 	DYNAMIC void __fastcall Updated(void);
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomDecisionGraph(HWND ParentWindow) : Chart::TCustomChart(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomDecisionGraph(HWND ParentWindow) : Chart::TCustomChart(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -108,21 +105,21 @@ class PASCALIMPLEMENTATION TDecisionGraph : public TCustomDecisionGraph
 	
 __published:
 	__property DecisionSource ;
-	__property AllowPanning ;
-	__property AllowZoom ;
-	__property AnimatedZoom ;
-	__property AnimatedZoomSteps ;
+	__property AllowPanning  = {default=3};
+	__property AllowZoom  = {default=1};
+	__property AnimatedZoom  = {default=0};
+	__property AnimatedZoomSteps  = {default=8};
 	__property BackImage ;
-	__property BackImageInside ;
-	__property BackImageMode ;
+	__property BackImageInside  = {default=0};
+	__property BackImageMode  = {default=0};
 	__property BottomWall ;
 	__property Foot ;
 	__property Gradient ;
 	__property LeftWall ;
-	__property MarginBottom ;
-	__property MarginLeft ;
-	__property MarginRight ;
-	__property MarginTop ;
+	__property MarginBottom  = {index=3, default=4};
+	__property MarginLeft  = {index=0, default=3};
+	__property MarginRight  = {index=2, default=3};
+	__property MarginTop  = {index=1, default=4};
 	__property Title ;
 	__property OnAllowScroll ;
 	__property OnClickAxis ;
@@ -134,49 +131,49 @@ __published:
 	__property OnScroll ;
 	__property OnUndoZoom ;
 	__property OnZoom ;
-	__property AxisVisible ;
-	__property BackColor ;
+	__property AxisVisible  = {default=1};
+	__property BackColor  = {default=536870912};
 	__property BottomAxis ;
-	__property Chart3DPercent ;
-	__property ClipPoints ;
+	__property Chart3DPercent  = {default=15};
+	__property ClipPoints  = {default=1};
 	__property Frame ;
 	__property LeftAxis ;
 	__property Legend ;
-	__property MaxPointsPerPage ;
-	__property Monochrome ;
-	__property Page ;
+	__property MaxPointsPerPage  = {default=0};
+	__property Monochrome  = {default=0};
+	__property Page  = {default=1};
 	__property RightAxis ;
-	__property ScaleLastPage ;
+	__property ScaleLastPage  = {default=1};
 	__property SeriesList ;
 	__property TopAxis ;
-	__property View3D ;
-	__property View3DWalls ;
+	__property View3D  = {default=1};
+	__property View3DWalls  = {default=1};
 	__property OnAfterDraw ;
 	__property OnGetAxisLabel ;
 	__property OnGetLegendText ;
 	__property OnGetNextAxisLabel ;
 	__property OnPageChange ;
-	__property Align ;
-	__property Anchors ;
-	__property AutoSize ;
-	__property BevelInner ;
-	__property BevelOuter ;
-	__property BevelWidth ;
-	__property BorderWidth ;
-	__property BorderStyle ;
-	__property Color ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property AutoSize  = {default=0};
+	__property BevelInner  = {default=0};
+	__property BevelOuter  = {default=2};
+	__property BevelWidth  = {default=1};
+	__property BorderWidth  = {default=0};
+	__property BorderStyle  = {default=0};
+	__property Color  = {default=-2147483633};
 	__property Constraints ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
-	__property ParentColor ;
-	__property ParentShowHint ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
+	__property Visible  = {default=1};
 	__property OnCanResize ;
 	__property OnClick ;
 	__property OnConstrainedResize ;
@@ -199,8 +196,7 @@ __published:
 	__property OnUnDock ;
 public:
 	#pragma option push -w-inl
-	/* TCustomDecisionGraph.Create */ inline __fastcall virtual TDecisionGraph(Classes::TComponent* AOwner
-		) : TCustomDecisionGraph(AOwner) { }
+	/* TCustomDecisionGraph.Create */ inline __fastcall virtual TDecisionGraph(Classes::TComponent* AOwner) : TCustomDecisionGraph(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomDecisionGraph.Destroy */ inline __fastcall virtual ~TDecisionGraph(void) { }
@@ -208,8 +204,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDecisionGraph(HWND ParentWindow) : TCustomDecisionGraph(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDecisionGraph(HWND ParentWindow) : TCustomDecisionGraph(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -218,12 +213,10 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Mxgraph */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxgraph;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxgraph
+#endif	// MXGRAPH

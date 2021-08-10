@@ -1,0 +1,716 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 000089DCH .text                   CODE
+ 0002:00000000 000008A0H .data                   DATA
+ 0002:000008A0 0000004DH .bss                    BSS
+
+
+Detailed map of segments
+
+ 0001:00000000 000000BE C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:000000C0 000001EC C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:000002AC 00000038 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:000002E4 0000000E C=CODE     S=.text    G=(none)   M=Types    ACBP=A9
+ 0001:000002F4 0000000E C=CODE     S=.text    G=(none)   M=ActiveX  ACBP=A9
+ 0001:00000304 00000038 C=CODE     S=.text    G=(none)   M=Messages ACBP=A9
+ 0001:0000033C 00000046 C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:00000384 0000000E C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:00000394 0000000E C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:000003A4 0000000E C=CODE     S=.text    G=(none)   M=SysConst ACBP=A9
+ 0001:000003B4 0000000E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:000003C4 0000000E C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:000003D4 0000000E C=CODE     S=.text    G=(none)   M=RTLConsts ACBP=A9
+ 0001:000003E4 0000000E C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:000003F4 0000000E C=CODE     S=.text    G=(none)   M=Consts   ACBP=A9
+ 0001:00000404 0000010E C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:00000514 0000000E C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00000524 0000000E C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000534 0000000E C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:00000544 0000000E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:00000554 0000000E C=CODE     S=.text    G=(none)   M=Math     ACBP=A9
+ 0001:00000564 0000000E C=CODE     S=.text    G=(none)   M=ImgList  ACBP=A9
+ 0001:00000574 00000038 C=CODE     S=.text    G=(none)   M=CommCtrl ACBP=A9
+ 0001:000005AC 0000000E C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:000005BC 0000000E C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:000005CC 0000000E C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:000005DC 00000196 C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00000774 00000038 C=CODE     S=.text    G=(none)   M=Imm      ACBP=A9
+ 0001:000007AC 0000000E C=CODE     S=.text    G=(none)   M=WinHelpViewer ACBP=A9
+ 0001:000007BC 0000000E C=CODE     S=.text    G=(none)   M=StdActns ACBP=A9
+ 0001:000007CC 0000000E C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:000007DC 00000038 C=CODE     S=.text    G=(none)   M=ShlObj   ACBP=A9
+ 0001:00000814 00000038 C=CODE     S=.text    G=(none)   M=UrlMon   ACBP=A9
+ 0001:0000084C 00000038 C=CODE     S=.text    G=(none)   M=WinInet  ACBP=A9
+ 0001:00000884 00000038 C=CODE     S=.text    G=(none)   M=RegStr   ACBP=A9
+ 0001:000008BC 00000038 C=CODE     S=.text    G=(none)   M=ShellAPI ACBP=A9
+ 0001:000008F4 0000000E C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00000904 00000038 C=CODE     S=.text    G=(none)   M=WinSpool ACBP=A9
+ 0001:0000093C 0000000E C=CODE     S=.text    G=(none)   M=StdCtrls ACBP=A9
+ 0001:0000094C 00000038 C=CODE     S=.text    G=(none)   M=CommDlg  ACBP=A9
+ 0001:00000984 00000038 C=CODE     S=.text    G=(none)   M=Dlgs     ACBP=A9
+ 0001:000009BC 0000000E C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:000009CC 0000000E C=CODE     S=.text    G=(none)   M=StrUtils ACBP=A9
+ 0001:000009DC 0000000E C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:000009EC 0000000E C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:000009FC 0000000E C=CODE     S=.text    G=(none)   M=StdVCL   ACBP=A9
+ 0001:00000A0C 0000001E C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:00000A2C 0000000E C=CODE     S=.text    G=(none)   M=ComConst ACBP=A9
+ 0001:00000A3C 0000000E C=CODE     S=.text    G=(none)   M=OleConst ACBP=A9
+ 0001:00000A4C 00007DC8 C=CODE     S=.text    G=(none)   M=Isp3     ACBP=A9
+ 0001:00008814 000001C5 C=CODE     S=.text    G=(none)   M=dclisp   ACBP=A9
+ 0002:00000000 00000028 C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00000028 00000878 C=DATA     S=.data    G=DGROUP   M=Isp3     ACBP=A9
+ 0002:00001000 00000018 C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00001018 00000004 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0002:0000101C 00000004 C=BSS      S=.bss     G=DGROUP   M=Messages ACBP=A9
+ 0002:00001020 00000004 C=BSS      S=.bss     G=DGROUP   M=CommCtrl ACBP=A9
+ 0002:00001024 00000004 C=BSS      S=.bss     G=DGROUP   M=Imm      ACBP=A9
+ 0002:00001028 00000004 C=BSS      S=.bss     G=DGROUP   M=ShlObj   ACBP=A9
+ 0002:0000102C 00000004 C=BSS      S=.bss     G=DGROUP   M=UrlMon   ACBP=A9
+ 0002:00001030 00000004 C=BSS      S=.bss     G=DGROUP   M=WinInet  ACBP=A9
+ 0002:00001034 00000004 C=BSS      S=.bss     G=DGROUP   M=RegStr   ACBP=A9
+ 0002:00001038 00000004 C=BSS      S=.bss     G=DGROUP   M=ShellAPI ACBP=A9
+ 0002:0000103C 00000004 C=BSS      S=.bss     G=DGROUP   M=WinSpool ACBP=A9
+ 0002:00001040 00000004 C=BSS      S=.bss     G=DGROUP   M=CommDlg  ACBP=A9
+ 0002:00001044 00000004 C=BSS      S=.bss     G=DGROUP   M=Dlgs     ACBP=A9
+ 0002:00001048 00000004 C=BSS      S=.bss     G=DGROUP   M=Isp3     ACBP=A9
+
+
+  Address         Publics by Name
+
+ 0002:00001028       .1
+ 0002:00001024       .1
+ 0002:00001030       .1
+ 0002:00001020       .1
+ 0002:0000101C       .1
+ 0002:00001010       .1
+ 0002:00001034       .1
+ 0002:00001038       .1
+ 0002:0000102C       .1
+ 0002:00001040       .1
+ 0002:00001044       .1
+ 0002:00001018       .3
+ 0002:0000103C       .3
+ 0002:00001048       .32
+ 0001:000089B4       @GetPackageInfoTable
+ 0001:000001F8       @InitPkg
+ 0001:000089BC       @PackageLoad
+ 0001:0000025C       @PackageLoad
+ 0001:00000268       @PackageUnload
+ 0001:000089C8       @PackageUnload
+ 0001:000000F8       AllocTlsBuffer
+ 0002:000002C4       CControlData
+ 0002:00000850       CControlData
+ 0002:00000474       CControlData
+ 0002:000007AC       CControlData
+ 0002:00000548       CControlData
+ 0002:00000624       CControlData
+ 0002:00000384       CControlData
+ 0002:000006F4       CControlData
+ 0002:000003D4       CEventDispIDs
+ 0002:000007FC       CEventDispIDs
+ 0002:00000744       CEventDispIDs
+ 0002:00000208       CEventDispIDs
+ 0002:00000314       CEventDispIDs
+ 0002:000004C4       CEventDispIDs
+ 0002:00000598       CEventDispIDs
+ 0002:00000674       CEventDispIDs
+ 0002:00000038       Class_DocHeaderCls
+ 0002:00000048       Class_DocHeadersCls
+ 0002:00000058       Class_DocInputCls
+ 0002:00000068       Class_DocOutputCls
+ 0002:000000B8       Class_Firewall
+ 0002:000000C8       Class_FTP
+ 0002:000000A8       Class_FTPDirItemCls
+ 0002:00000168       Class_HTML
+ 0002:00000148       Class_HTMLAttrCls
+ 0002:00000158       Class_HTMLAttrsCls
+ 0002:00000118       Class_HTMLElementCls
+ 0002:00000128       Class_HTMLFormCls
+ 0002:00000138       Class_HTMLFormsCls
+ 0002:000000F8       Class_HTTP
+ 0002:00000078       Class_icErrorCls
+ 0002:00000088       Class_icErrorsCls
+ 0002:000001A8       Class_NNTP
+ 0002:00000188       Class_POP
+ 0002:000000E8       Class_Proxy
+ 0002:000001C8       Class_SMTP
+ 0002:000001E8       Class_TCP
+ 0002:000001F8       Class_UDP
+ 0002:000006A8       CLicenseKey
+ 0002:00000338       CLicenseKey
+ 0002:00000760       CLicenseKey
+ 0002:00000278       CLicenseKey
+ 0002:000005D8       CLicenseKey
+ 0002:000004FC       CLicenseKey
+ 0002:00000408       CLicenseKey
+ 0002:00000804       CLicenseKey
+ 0001:00005A54       CoDocHeaderCls.Create
+ 0001:00005AB8       CoDocHeaderCls.CreateRemote
+ 0001:00005B38       CoDocHeadersCls.Create
+ 0001:00005B9C       CoDocHeadersCls.CreateRemote
+ 0001:00005C1C       CoDocInputCls.Create
+ 0001:00005C80       CoDocInputCls.CreateRemote
+ 0001:00005D00       CoDocOutputCls.Create
+ 0001:00005D64       CoDocOutputCls.CreateRemote
+ 0001:00006090       CoFirewall.Create
+ 0001:000060F4       CoFirewall.CreateRemote
+ 0001:00005FAC       CoFTPDirItemCls.Create
+ 0001:00006010       CoFTPDirItemCls.CreateRemote
+ 0001:00006E68       CoHTMLAttrCls.Create
+ 0001:00006ECC       CoHTMLAttrCls.CreateRemote
+ 0001:00006F4C       CoHTMLAttrsCls.Create
+ 0001:00006FB0       CoHTMLAttrsCls.CreateRemote
+ 0001:00006BBC       CoHTMLElementCls.Create
+ 0001:00006C20       CoHTMLElementCls.CreateRemote
+ 0001:00006CA0       CoHTMLFormCls.Create
+ 0001:00006D04       CoHTMLFormCls.CreateRemote
+ 0001:00006D84       CoHTMLFormsCls.Create
+ 0001:00006DE8       CoHTMLFormsCls.CreateRemote
+ 0001:00005DE4       CoicErrorCls.Create
+ 0001:00005E48       CoicErrorCls.CreateRemote
+ 0001:00005EC8       CoicErrorsCls.Create
+ 0001:00005F2C       CoicErrorsCls.CreateRemote
+ 0001:000005A4       CommCtrl
+ 0001:0000097C       CommDlg
+ 0001:000067E0       CoProxy.Create
+ 0001:00006844       CoProxy.CreateRemote
+ 0002:00000454       CTFontIDs
+ 0001:000089D4       dclisp
+ 0001:000009B4       Dlgs
+ 0001:000001A4       ExitProcessTLS
+ 0001:0000017C       ExitThreadTLS
+ 0001:00000774       Finalization
+ 0001:00000574       Finalization
+ 0001:00000304       Finalization
+ 0001:000002AC       Finalization
+ 0001:00000274       Finalization
+ 0001:00000984       Finalization
+ 0001:0000094C       Finalization
+ 0001:00000904       Finalization
+ 0001:000087DC       Finalization
+ 0001:000008BC       Finalization
+ 0001:0000084C       Finalization
+ 0001:000007DC       Finalization
+ 0001:00000814       Finalization
+ 0001:00000884       Finalization
+ 0001:000000C0       FreeLibrary
+ 0001:00000104       GetTlsSize
+ 0002:0000100C       HInstance
+ 0001:000007A4       Imm
+ 0001:000001C8       InitializeModule
+ 0001:00000150       InitProcessTLS
+ 0001:0000010C       InitThreadTLS
+ 0001:0000880C       Isp3
+ 0002:00000098       LIBID_FTPCTLib
+ 0002:00000108       LIBID_HTMLObjects
+ 0002:000000D8       LIBID_HTTPCTLib
+ 0002:00000028       LIBID_NMOCODObjects
+ 0002:00000198       LIBID_NNTPCTLib
+ 0002:00000178       LIBID_POPCTLib
+ 0002:000001B8       LIBID_SMTPCTLib
+ 0002:000001D8       LIBID_WINSOCKLib
+ 0001:000000C8       LocalAlloc
+ 0001:000000D0       LocalFree
+ 0001:00000334       Messages
+ 0002:00000000       Module
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0001:00008768       Register
+ 0001:000008B4       RegStr
+ 0001:000008EC       ShellAPI
+ 0001:0000080C       ShlObj
+ 0001:000002A4       SysInit
+ 0001:000064B4       TFTP.Abort
+ 0001:000061AC       TFTP.AboutBox
+ 0001:000064CC       TFTP.Account
+ 0001:00006270       TFTP.Authenticate
+ 0001:000061C0       TFTP.Cancel
+ 0001:000064E4       TFTP.ChangeDir
+ 0001:000061D8       TFTP.Connect
+ 0001:000064FC       TFTP.CreateDir
+ 0001:00006514       TFTP.DeleteDir
+ 0001:0000652C       TFTP.DeleteFile
+ 0001:00006630       TFTP.Execute
+ 0001:000063FC       TFTP.GetDoc
+ 0001:000066AC       TFTP.GetFile
+ 0001:00006768       TFTP.Get_DocInput
+ 0001:00006790       TFTP.Get_DocOutput
+ 0001:00006744       TFTP.Get_Errors
+ 0001:000067B8       TFTP.Get_Firewall
+ 0001:000066F8       TFTP.Get_Timeout
+ 0001:0000655C       TFTP.Help
+ 0001:00006174       TFTP.InitControlData
+ 0001:00006180       TFTP.InitControlInterface
+ 0001:000065C8       TFTP.List
+ 0001:00006590       TFTP.Mode
+ 0001:000065E4       TFTP.NameList
+ 0001:00006578       TFTP.Noop
+ 0001:00006600       TFTP.ParentDir
+ 0001:00006618       TFTP.PrintDir
+ 0001:00006660       TFTP.PutFile
+ 0001:000066C8       TFTP.PutFileUnique
+ 0001:00006544       TFTP.Quit
+ 0001:0000667C       TFTP.Reinitialize
+ 0001:00006308       TFTP.SendDoc
+ 0001:0000672C       TFTP.Set_EnableTimer
+ 0001:00006714       TFTP.Set_Timeout
+ 0001:000066E0       TFTP.Site
+ 0001:00006648       TFTP.Status
+ 0001:00006694       TFTP.System
+ 0001:000065AC       TFTP.Type_
+ 0001:00007068       THTML.AboutBox
+ 0001:00007268       THTML.AutoPrint
+ 0001:00007124       THTML.BeginPrinting
+ 0001:000070B8       THTML.Cancel
+ 0001:00007250       THTML.EndPrinting
+ 0001:00007280       THTML.GetPlainText
+ 0001:000072E8       THTML.Get_DocInput
+ 0001:0000730C       THTML.Get_DocOutput
+ 0001:00007374       THTML.Get_Errors
+ 0001:00007330       THTML.Get_Forms
+ 0001:0000739C       THTML.Get_hWnd
+ 0001:00007354       THTML.Get_IsPrintingDone
+ 0001:000072B4       THTML.HasSelection
+ 0001:00007030       THTML.InitControlData
+ 0001:0000703C       THTML.InitControlInterface
+ 0001:00007238       THTML.PrintPage
+ 0001:0000709C       THTML.RequestAllEmbedded
+ 0001:0000707C       THTML.RequestDoc
+ 0001:000072D0       THTML.SelectAll
+ 0001:000068FC       THTTP.AboutBox
+ 0001:00006910       THTTP.Cancel
+ 0001:00006A1C       THTTP.GetDoc
+ 0001:00006B44       THTTP.Get_DocInput
+ 0001:00006B6C       THTTP.Get_DocOutput
+ 0001:00006B20       THTTP.Get_Errors
+ 0001:00006B94       THTTP.Get_Proxy
+ 0001:00006AD4       THTTP.Get_Timeout
+ 0001:000068C4       THTTP.InitControlData
+ 0001:000068D0       THTTP.InitControlInterface
+ 0001:00006928       THTTP.SendDoc
+ 0001:00006B08       THTTP.Set_EnableTimer
+ 0001:00006AF0       THTTP.Set_Timeout
+ 0001:000000D8       TlsAlloc
+ 0002:00001014       tlsBuffer
+ 0001:000000E0       TlsFree
+ 0001:000000E8       TlsGetValue
+ 0002:00001004       TlsIndex
+ 0002:AFF06000       TlsLast
+ 0002:00000018       TlsProc
+ 0001:000000F0       TlsSetValue
+ 0001:000077AC       TNNTP.AboutBox
+ 0001:000077C0       TNNTP.Cancel
+ 0001:000077D8       TNNTP.Connect
+ 0001:00007A1C       TNNTP.GetAdministrationFile
+ 0001:00007BE0       TNNTP.GetArticleByArticleNumber
+ 0001:00007C50       TNNTP.GetArticleByMessageID
+ 0001:00007B44       TNNTP.GetArticleHeaders
+ 0001:00007AD4       TNNTP.GetArticleNumbers
+ 0001:00007CF0       TNNTP.GetBodyByArticleNumber
+ 0001:00007D60       TNNTP.GetBodyByMessageID
+ 0001:00007964       TNNTP.GetDoc
+ 0001:00007C68       TNNTP.GetHeaderByArticleNumber
+ 0001:00007CD8       TNNTP.GetHeaderByMessageID
+ 0001:00007E00       TNNTP.GetOverview
+ 0001:00007DE8       TNNTP.GetOverviewFormat
+ 0001:00007D78       TNNTP.GetStatByArticleNumber
+ 0001:00007FC0       TNNTP.Get_DocInput
+ 0001:00007FE8       TNNTP.Get_DocOutput
+ 0001:00007F9C       TNNTP.Get_Errors
+ 0001:00007F50       TNNTP.Get_Timeout
+ 0001:00007774       TNNTP.InitControlData
+ 0001:00007780       TNNTP.InitControlInterface
+ 0001:00007EB0       TNNTP.ListGroupDescriptions
+ 0001:00007E98       TNNTP.ListGroups
+ 0001:00007EC8       TNNTP.ListNewGroups
+ 0001:00007F38       TNNTP.Quit
+ 0001:00007A8C       TNNTP.SelectGroup
+ 0001:00007870       TNNTP.SendDoc
+ 0001:00007ABC       TNNTP.SetLastArticle
+ 0001:00007AA4       TNNTP.SetNextArticle
+ 0001:00007F84       TNNTP.Set_EnableTimer
+ 0001:00007F6C       TNNTP.Set_Timeout
+ 0001:000073F0       TPOP.AboutBox
+ 0001:000074B4       TPOP.Authenticate
+ 0001:00007404       TPOP.Cancel
+ 0001:0000741C       TPOP.Connect
+ 0001:00007634       TPOP.Delete
+ 0001:0000754C       TPOP.GetDoc
+ 0001:0000774C       TPOP.Get_DocOutput
+ 0001:00007728       TPOP.Get_Errors
+ 0001:000076DC       TPOP.Get_Timeout
+ 0001:000073B8       TPOP.InitControlData
+ 0001:000073C4       TPOP.InitControlInterface
+ 0001:00007664       TPOP.Last
+ 0001:00007604       TPOP.MessageSize
+ 0001:0000767C       TPOP.Noop
+ 0001:000076AC       TPOP.Quit
+ 0001:000076C4       TPOP.RefreshMessageCount
+ 0001:0000764C       TPOP.Reset
+ 0001:0000761C       TPOP.RetrieveMessage
+ 0001:00007710       TPOP.Set_EnableTimer
+ 0001:000076F8       TPOP.Set_Timeout
+ 0001:00007694       TPOP.TopMessage
+ 0001:00008048       TSMTP.AboutBox
+ 0001:0000805C       TSMTP.Cancel
+ 0001:00008074       TSMTP.Connect
+ 0001:00008230       TSMTP.Expand
+ 0001:00008358       TSMTP.Get_DocInput
+ 0001:00008334       TSMTP.Get_Errors
+ 0001:000082E8       TSMTP.Get_Timeout
+ 0001:00008248       TSMTP.Help
+ 0001:00008010       TSMTP.InitControlData
+ 0001:0000801C       TSMTP.InitControlInterface
+ 0001:000082B8       TSMTP.Noop
+ 0001:000082D0       TSMTP.Quit
+ 0001:00008200       TSMTP.Reset
+ 0001:0000810C       TSMTP.SendDoc
+ 0001:0000831C       TSMTP.Set_EnableTimer
+ 0001:00008304       TSMTP.Set_Timeout
+ 0001:00008218       TSMTP.Verify
+ 0001:000083B8       TTCP.AboutBox
+ 0001:00008474       TTCP.Accept
+ 0001:0000862C       TTCP.Close
+ 0001:000083CC       TTCP.Connect
+ 0001:000084F4       TTCP.GetData
+ 0001:00008380       TTCP.InitControlData
+ 0001:0000838C       TTCP.InitControlInterface
+ 0001:00008460       TTCP.Listen
+ 0001:00008590       TTCP.PeekData
+ 0001:00008488       TTCP.SendData
+ 0001:00008678       TUDP.AboutBox
+ 0001:000086F8       TUDP.GetData
+ 0001:00008640       TUDP.InitControlData
+ 0001:0000864C       TUDP.InitControlInterface
+ 0001:0000868C       TUDP.SendData
+ 0001:000001D4       UninitializeModule
+ 0001:00000844       UrlMon
+ 0001:000002DC       Windows
+ 0001:0000087C       WinInet
+ 0001:00000934       WinSpool
+
+
+  Address         Publics by Value
+
+ 0002:AFF06000       TlsLast
+ 0001:000000C0       FreeLibrary
+ 0001:000000C8       LocalAlloc
+ 0001:000000D0       LocalFree
+ 0001:000000D8       TlsAlloc
+ 0001:000000E0       TlsFree
+ 0001:000000E8       TlsGetValue
+ 0001:000000F0       TlsSetValue
+ 0001:000000F8       AllocTlsBuffer
+ 0001:00000104       GetTlsSize
+ 0001:0000010C       InitThreadTLS
+ 0001:00000150       InitProcessTLS
+ 0001:0000017C       ExitThreadTLS
+ 0001:000001A4       ExitProcessTLS
+ 0001:000001C8       InitializeModule
+ 0001:000001D4       UninitializeModule
+ 0001:000001F8       @InitPkg
+ 0001:0000025C       @PackageLoad
+ 0001:00000268       @PackageUnload
+ 0001:00000274       Finalization
+ 0001:000002A4       SysInit
+ 0001:000002AC       Finalization
+ 0001:000002DC       Windows
+ 0001:00000304       Finalization
+ 0001:00000334       Messages
+ 0001:00000574       Finalization
+ 0001:000005A4       CommCtrl
+ 0001:00000774       Finalization
+ 0001:000007A4       Imm
+ 0001:000007DC       Finalization
+ 0001:0000080C       ShlObj
+ 0001:00000814       Finalization
+ 0001:00000844       UrlMon
+ 0001:0000084C       Finalization
+ 0001:0000087C       WinInet
+ 0001:00000884       Finalization
+ 0001:000008B4       RegStr
+ 0001:000008BC       Finalization
+ 0001:000008EC       ShellAPI
+ 0001:00000904       Finalization
+ 0001:00000934       WinSpool
+ 0001:0000094C       Finalization
+ 0001:0000097C       CommDlg
+ 0001:00000984       Finalization
+ 0001:000009B4       Dlgs
+ 0001:00005A54       CoDocHeaderCls.Create
+ 0001:00005AB8       CoDocHeaderCls.CreateRemote
+ 0001:00005B38       CoDocHeadersCls.Create
+ 0001:00005B9C       CoDocHeadersCls.CreateRemote
+ 0001:00005C1C       CoDocInputCls.Create
+ 0001:00005C80       CoDocInputCls.CreateRemote
+ 0001:00005D00       CoDocOutputCls.Create
+ 0001:00005D64       CoDocOutputCls.CreateRemote
+ 0001:00005DE4       CoicErrorCls.Create
+ 0001:00005E48       CoicErrorCls.CreateRemote
+ 0001:00005EC8       CoicErrorsCls.Create
+ 0001:00005F2C       CoicErrorsCls.CreateRemote
+ 0001:00005FAC       CoFTPDirItemCls.Create
+ 0001:00006010       CoFTPDirItemCls.CreateRemote
+ 0001:00006090       CoFirewall.Create
+ 0001:000060F4       CoFirewall.CreateRemote
+ 0001:00006174       TFTP.InitControlData
+ 0001:00006180       TFTP.InitControlInterface
+ 0001:000061AC       TFTP.AboutBox
+ 0001:000061C0       TFTP.Cancel
+ 0001:000061D8       TFTP.Connect
+ 0001:00006270       TFTP.Authenticate
+ 0001:00006308       TFTP.SendDoc
+ 0001:000063FC       TFTP.GetDoc
+ 0001:000064B4       TFTP.Abort
+ 0001:000064CC       TFTP.Account
+ 0001:000064E4       TFTP.ChangeDir
+ 0001:000064FC       TFTP.CreateDir
+ 0001:00006514       TFTP.DeleteDir
+ 0001:0000652C       TFTP.DeleteFile
+ 0001:00006544       TFTP.Quit
+ 0001:0000655C       TFTP.Help
+ 0001:00006578       TFTP.Noop
+ 0001:00006590       TFTP.Mode
+ 0001:000065AC       TFTP.Type_
+ 0001:000065C8       TFTP.List
+ 0001:000065E4       TFTP.NameList
+ 0001:00006600       TFTP.ParentDir
+ 0001:00006618       TFTP.PrintDir
+ 0001:00006630       TFTP.Execute
+ 0001:00006648       TFTP.Status
+ 0001:00006660       TFTP.PutFile
+ 0001:0000667C       TFTP.Reinitialize
+ 0001:00006694       TFTP.System
+ 0001:000066AC       TFTP.GetFile
+ 0001:000066C8       TFTP.PutFileUnique
+ 0001:000066E0       TFTP.Site
+ 0001:000066F8       TFTP.Get_Timeout
+ 0001:00006714       TFTP.Set_Timeout
+ 0001:0000672C       TFTP.Set_EnableTimer
+ 0001:00006744       TFTP.Get_Errors
+ 0001:00006768       TFTP.Get_DocInput
+ 0001:00006790       TFTP.Get_DocOutput
+ 0001:000067B8       TFTP.Get_Firewall
+ 0001:000067E0       CoProxy.Create
+ 0001:00006844       CoProxy.CreateRemote
+ 0001:000068C4       THTTP.InitControlData
+ 0001:000068D0       THTTP.InitControlInterface
+ 0001:000068FC       THTTP.AboutBox
+ 0001:00006910       THTTP.Cancel
+ 0001:00006928       THTTP.SendDoc
+ 0001:00006A1C       THTTP.GetDoc
+ 0001:00006AD4       THTTP.Get_Timeout
+ 0001:00006AF0       THTTP.Set_Timeout
+ 0001:00006B08       THTTP.Set_EnableTimer
+ 0001:00006B20       THTTP.Get_Errors
+ 0001:00006B44       THTTP.Get_DocInput
+ 0001:00006B6C       THTTP.Get_DocOutput
+ 0001:00006B94       THTTP.Get_Proxy
+ 0001:00006BBC       CoHTMLElementCls.Create
+ 0001:00006C20       CoHTMLElementCls.CreateRemote
+ 0001:00006CA0       CoHTMLFormCls.Create
+ 0001:00006D04       CoHTMLFormCls.CreateRemote
+ 0001:00006D84       CoHTMLFormsCls.Create
+ 0001:00006DE8       CoHTMLFormsCls.CreateRemote
+ 0001:00006E68       CoHTMLAttrCls.Create
+ 0001:00006ECC       CoHTMLAttrCls.CreateRemote
+ 0001:00006F4C       CoHTMLAttrsCls.Create
+ 0001:00006FB0       CoHTMLAttrsCls.CreateRemote
+ 0001:00007030       THTML.InitControlData
+ 0001:0000703C       THTML.InitControlInterface
+ 0001:00007068       THTML.AboutBox
+ 0001:0000707C       THTML.RequestDoc
+ 0001:0000709C       THTML.RequestAllEmbedded
+ 0001:000070B8       THTML.Cancel
+ 0001:00007124       THTML.BeginPrinting
+ 0001:00007238       THTML.PrintPage
+ 0001:00007250       THTML.EndPrinting
+ 0001:00007268       THTML.AutoPrint
+ 0001:00007280       THTML.GetPlainText
+ 0001:000072B4       THTML.HasSelection
+ 0001:000072D0       THTML.SelectAll
+ 0001:000072E8       THTML.Get_DocInput
+ 0001:0000730C       THTML.Get_DocOutput
+ 0001:00007330       THTML.Get_Forms
+ 0001:00007354       THTML.Get_IsPrintingDone
+ 0001:00007374       THTML.Get_Errors
+ 0001:0000739C       THTML.Get_hWnd
+ 0001:000073B8       TPOP.InitControlData
+ 0001:000073C4       TPOP.InitControlInterface
+ 0001:000073F0       TPOP.AboutBox
+ 0001:00007404       TPOP.Cancel
+ 0001:0000741C       TPOP.Connect
+ 0001:000074B4       TPOP.Authenticate
+ 0001:0000754C       TPOP.GetDoc
+ 0001:00007604       TPOP.MessageSize
+ 0001:0000761C       TPOP.RetrieveMessage
+ 0001:00007634       TPOP.Delete
+ 0001:0000764C       TPOP.Reset
+ 0001:00007664       TPOP.Last
+ 0001:0000767C       TPOP.Noop
+ 0001:00007694       TPOP.TopMessage
+ 0001:000076AC       TPOP.Quit
+ 0001:000076C4       TPOP.RefreshMessageCount
+ 0001:000076DC       TPOP.Get_Timeout
+ 0001:000076F8       TPOP.Set_Timeout
+ 0001:00007710       TPOP.Set_EnableTimer
+ 0001:00007728       TPOP.Get_Errors
+ 0001:0000774C       TPOP.Get_DocOutput
+ 0001:00007774       TNNTP.InitControlData
+ 0001:00007780       TNNTP.InitControlInterface
+ 0001:000077AC       TNNTP.AboutBox
+ 0001:000077C0       TNNTP.Cancel
+ 0001:000077D8       TNNTP.Connect
+ 0001:00007870       TNNTP.SendDoc
+ 0001:00007964       TNNTP.GetDoc
+ 0001:00007A1C       TNNTP.GetAdministrationFile
+ 0001:00007A8C       TNNTP.SelectGroup
+ 0001:00007AA4       TNNTP.SetNextArticle
+ 0001:00007ABC       TNNTP.SetLastArticle
+ 0001:00007AD4       TNNTP.GetArticleNumbers
+ 0001:00007B44       TNNTP.GetArticleHeaders
+ 0001:00007BE0       TNNTP.GetArticleByArticleNumber
+ 0001:00007C50       TNNTP.GetArticleByMessageID
+ 0001:00007C68       TNNTP.GetHeaderByArticleNumber
+ 0001:00007CD8       TNNTP.GetHeaderByMessageID
+ 0001:00007CF0       TNNTP.GetBodyByArticleNumber
+ 0001:00007D60       TNNTP.GetBodyByMessageID
+ 0001:00007D78       TNNTP.GetStatByArticleNumber
+ 0001:00007DE8       TNNTP.GetOverviewFormat
+ 0001:00007E00       TNNTP.GetOverview
+ 0001:00007E98       TNNTP.ListGroups
+ 0001:00007EB0       TNNTP.ListGroupDescriptions
+ 0001:00007EC8       TNNTP.ListNewGroups
+ 0001:00007F38       TNNTP.Quit
+ 0001:00007F50       TNNTP.Get_Timeout
+ 0001:00007F6C       TNNTP.Set_Timeout
+ 0001:00007F84       TNNTP.Set_EnableTimer
+ 0001:00007F9C       TNNTP.Get_Errors
+ 0001:00007FC0       TNNTP.Get_DocInput
+ 0001:00007FE8       TNNTP.Get_DocOutput
+ 0001:00008010       TSMTP.InitControlData
+ 0001:0000801C       TSMTP.InitControlInterface
+ 0001:00008048       TSMTP.AboutBox
+ 0001:0000805C       TSMTP.Cancel
+ 0001:00008074       TSMTP.Connect
+ 0001:0000810C       TSMTP.SendDoc
+ 0001:00008200       TSMTP.Reset
+ 0001:00008218       TSMTP.Verify
+ 0001:00008230       TSMTP.Expand
+ 0001:00008248       TSMTP.Help
+ 0001:000082B8       TSMTP.Noop
+ 0001:000082D0       TSMTP.Quit
+ 0001:000082E8       TSMTP.Get_Timeout
+ 0001:00008304       TSMTP.Set_Timeout
+ 0001:0000831C       TSMTP.Set_EnableTimer
+ 0001:00008334       TSMTP.Get_Errors
+ 0001:00008358       TSMTP.Get_DocInput
+ 0001:00008380       TTCP.InitControlData
+ 0001:0000838C       TTCP.InitControlInterface
+ 0001:000083B8       TTCP.AboutBox
+ 0001:000083CC       TTCP.Connect
+ 0001:00008460       TTCP.Listen
+ 0001:00008474       TTCP.Accept
+ 0001:00008488       TTCP.SendData
+ 0001:000084F4       TTCP.GetData
+ 0001:00008590       TTCP.PeekData
+ 0001:0000862C       TTCP.Close
+ 0001:00008640       TUDP.InitControlData
+ 0001:0000864C       TUDP.InitControlInterface
+ 0001:00008678       TUDP.AboutBox
+ 0001:0000868C       TUDP.SendData
+ 0001:000086F8       TUDP.GetData
+ 0001:00008768       Register
+ 0001:000087DC       Finalization
+ 0001:0000880C       Isp3
+ 0001:000089B4       @GetPackageInfoTable
+ 0001:000089BC       @PackageLoad
+ 0001:000089C8       @PackageUnload
+ 0001:000089D4       dclisp
+ 0002:00000000       Module
+ 0002:00000018       TlsProc
+ 0002:00000028       LIBID_NMOCODObjects
+ 0002:00000038       Class_DocHeaderCls
+ 0002:00000048       Class_DocHeadersCls
+ 0002:00000058       Class_DocInputCls
+ 0002:00000068       Class_DocOutputCls
+ 0002:00000078       Class_icErrorCls
+ 0002:00000088       Class_icErrorsCls
+ 0002:00000098       LIBID_FTPCTLib
+ 0002:000000A8       Class_FTPDirItemCls
+ 0002:000000B8       Class_Firewall
+ 0002:000000C8       Class_FTP
+ 0002:000000D8       LIBID_HTTPCTLib
+ 0002:000000E8       Class_Proxy
+ 0002:000000F8       Class_HTTP
+ 0002:00000108       LIBID_HTMLObjects
+ 0002:00000118       Class_HTMLElementCls
+ 0002:00000128       Class_HTMLFormCls
+ 0002:00000138       Class_HTMLFormsCls
+ 0002:00000148       Class_HTMLAttrCls
+ 0002:00000158       Class_HTMLAttrsCls
+ 0002:00000168       Class_HTML
+ 0002:00000178       LIBID_POPCTLib
+ 0002:00000188       Class_POP
+ 0002:00000198       LIBID_NNTPCTLib
+ 0002:000001A8       Class_NNTP
+ 0002:000001B8       LIBID_SMTPCTLib
+ 0002:000001C8       Class_SMTP
+ 0002:000001D8       LIBID_WINSOCKLib
+ 0002:000001E8       Class_TCP
+ 0002:000001F8       Class_UDP
+ 0002:00000208       CEventDispIDs
+ 0002:00000278       CLicenseKey
+ 0002:000002C4       CControlData
+ 0002:00000314       CEventDispIDs
+ 0002:00000338       CLicenseKey
+ 0002:00000384       CControlData
+ 0002:000003D4       CEventDispIDs
+ 0002:00000408       CLicenseKey
+ 0002:00000454       CTFontIDs
+ 0002:00000474       CControlData
+ 0002:000004C4       CEventDispIDs
+ 0002:000004FC       CLicenseKey
+ 0002:00000548       CControlData
+ 0002:00000598       CEventDispIDs
+ 0002:000005D8       CLicenseKey
+ 0002:00000624       CControlData
+ 0002:00000674       CEventDispIDs
+ 0002:000006A8       CLicenseKey
+ 0002:000006F4       CControlData
+ 0002:00000744       CEventDispIDs
+ 0002:00000760       CLicenseKey
+ 0002:000007AC       CControlData
+ 0002:000007FC       CEventDispIDs
+ 0002:00000804       CLicenseKey
+ 0002:00000850       CControlData
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0002:00001004       TlsIndex
+ 0002:0000100C       HInstance
+ 0002:00001010       .1
+ 0002:00001014       tlsBuffer
+ 0002:00001018       .3
+ 0002:0000101C       .1
+ 0002:00001020       .1
+ 0002:00001024       .1
+ 0002:00001028       .1
+ 0002:0000102C       .1
+ 0002:00001030       .1
+ 0002:00001034       .1
+ 0002:00001038       .1
+ 0002:0000103C       .3
+ 0002:00001040       .1
+ 0002:00001044       .1
+ 0002:00001048       .32
+
+
+Bound resource files
+
+dclisp.res
+isp.dcr
+C:\DOCUME~1\~storm\LOCALS~1\Temp\dtf70F6.tmp
+
+
+Program entry point at 0001:000089D4

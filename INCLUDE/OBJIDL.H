@@ -1,3 +1,6 @@
+#ifndef __objidl__header_gd_h__
+#define __objidl__header_gd_h__
+
 #pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
@@ -5,11 +8,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Mon Aug 23 16:05:45 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for objidl.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -37,6 +39,10 @@
 
 #ifndef __objidl_h__
 #define __objidl_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -280,6 +286,12 @@ typedef interface IRpcChannelBuffer3 IRpcChannelBuffer3;
 #endif 	/* __IRpcChannelBuffer3_FWD_DEFINED__ */
 
 
+#ifndef __IRpcSyntaxNegotiate_FWD_DEFINED__
+#define __IRpcSyntaxNegotiate_FWD_DEFINED__
+typedef interface IRpcSyntaxNegotiate IRpcSyntaxNegotiate;
+#endif 	/* __IRpcSyntaxNegotiate_FWD_DEFINED__ */
+
+
 #ifndef __IRpcProxyBuffer_FWD_DEFINED__
 #define __IRpcProxyBuffer_FWD_DEFINED__
 typedef interface IRpcProxyBuffer IRpcProxyBuffer;
@@ -460,6 +472,18 @@ typedef interface IForegroundTransfer IForegroundTransfer;
 #endif 	/* __IForegroundTransfer_FWD_DEFINED__ */
 
 
+#ifndef __IAddrTrackingControl_FWD_DEFINED__
+#define __IAddrTrackingControl_FWD_DEFINED__
+typedef interface IAddrTrackingControl IAddrTrackingControl;
+#endif 	/* __IAddrTrackingControl_FWD_DEFINED__ */
+
+
+#ifndef __IAddrExclusionControl_FWD_DEFINED__
+#define __IAddrExclusionControl_FWD_DEFINED__
+typedef interface IAddrExclusionControl IAddrExclusionControl;
+#endif 	/* __IAddrExclusionControl_FWD_DEFINED__ */
+
+
 #ifndef __IPipeByte_FWD_DEFINED__
 #define __IPipeByte_FWD_DEFINED__
 typedef interface IPipeByte IPipeByte;
@@ -508,6 +532,18 @@ typedef interface IDummyHICONIncluder IDummyHICONIncluder;
 #endif 	/* __IDummyHICONIncluder_FWD_DEFINED__ */
 
 
+#ifndef __IComThreadingInfo_FWD_DEFINED__
+#define __IComThreadingInfo_FWD_DEFINED__
+typedef interface IComThreadingInfo IComThreadingInfo;
+#endif 	/* __IComThreadingInfo_FWD_DEFINED__ */
+
+
+#ifndef __IProcessInitControl_FWD_DEFINED__
+#define __IProcessInitControl_FWD_DEFINED__
+typedef interface IProcessInitControl IProcessInitControl;
+#endif 	/* __IProcessInitControl_FWD_DEFINED__ */
+
+
 /* header files for imported files */
 #include "unknwn.h"
 
@@ -515,8 +551,8 @@ typedef interface IDummyHICONIncluder IDummyHICONIncluder;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_objidl_0000 */
 /* [local] */ 
@@ -525,7 +561,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //--------------------------------------------------------------------------
 
@@ -557,9 +593,9 @@ typedef struct _COSERVERINFO
     {
     DWORD dwReserved1;
     LPWSTR pwszName;
-    COAUTHINFO __RPC_FAR *pAuthInfo;
+    COAUTHINFO *pAuthInfo;
     DWORD dwReserved2;
-    }	COSERVERINFO;
+    } 	COSERVERINFO;
 
 
 
@@ -572,7 +608,7 @@ extern RPC_IF_HANDLE __MIDL_itf_objidl_0000_v0_0_s_ifspec;
 /* interface IMarshal */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ IMarshal __RPC_FAR *LPMARSHAL;
+typedef /* [unique] */ IMarshal *LPMARSHAL;
 
 
 EXTERN_C const IID IID_IMarshal;
@@ -585,35 +621,35 @@ EXTERN_C const IID IID_IMarshal;
     public:
         virtual HRESULT STDMETHODCALLTYPE GetUnmarshalClass( 
             /* [in] */ REFIID riid,
-            /* [unique][in] */ void __RPC_FAR *pv,
+            /* [unique][in] */ void *pv,
             /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
+            /* [unique][in] */ void *pvDestContext,
             /* [in] */ DWORD mshlflags,
-            /* [out] */ CLSID __RPC_FAR *pCid) = 0;
+            /* [out] */ CLSID *pCid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMarshalSizeMax( 
             /* [in] */ REFIID riid,
-            /* [unique][in] */ void __RPC_FAR *pv,
+            /* [unique][in] */ void *pv,
             /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
+            /* [unique][in] */ void *pvDestContext,
             /* [in] */ DWORD mshlflags,
-            /* [out] */ DWORD __RPC_FAR *pSize) = 0;
+            /* [out] */ DWORD *pSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MarshalInterface( 
-            /* [unique][in] */ IStream __RPC_FAR *pStm,
+            /* [unique][in] */ IStream *pStm,
             /* [in] */ REFIID riid,
-            /* [unique][in] */ void __RPC_FAR *pv,
+            /* [unique][in] */ void *pv,
             /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
+            /* [unique][in] */ void *pvDestContext,
             /* [in] */ DWORD mshlflags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnmarshalInterface( 
-            /* [unique][in] */ IStream __RPC_FAR *pStm,
+            /* [unique][in] */ IStream *pStm,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppv) = 0;
+            /* [out] */ void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseMarshalData( 
-            /* [unique][in] */ IStream __RPC_FAR *pStm) = 0;
+            /* [unique][in] */ IStream *pStm) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DisconnectObject( 
             /* [in] */ DWORD dwReserved) = 0;
@@ -626,56 +662,56 @@ EXTERN_C const IID IID_IMarshal;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMarshal __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMarshal * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMarshal __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMarshal * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMarshal __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMarshal * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetUnmarshalClass )( 
-            IMarshal __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetUnmarshalClass )( 
+            IMarshal * This,
             /* [in] */ REFIID riid,
-            /* [unique][in] */ void __RPC_FAR *pv,
+            /* [unique][in] */ void *pv,
             /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
+            /* [unique][in] */ void *pvDestContext,
             /* [in] */ DWORD mshlflags,
-            /* [out] */ CLSID __RPC_FAR *pCid);
+            /* [out] */ CLSID *pCid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMarshalSizeMax )( 
-            IMarshal __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetMarshalSizeMax )( 
+            IMarshal * This,
             /* [in] */ REFIID riid,
-            /* [unique][in] */ void __RPC_FAR *pv,
+            /* [unique][in] */ void *pv,
             /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
+            /* [unique][in] */ void *pvDestContext,
             /* [in] */ DWORD mshlflags,
-            /* [out] */ DWORD __RPC_FAR *pSize);
+            /* [out] */ DWORD *pSize);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MarshalInterface )( 
-            IMarshal __RPC_FAR * This,
-            /* [unique][in] */ IStream __RPC_FAR *pStm,
+        HRESULT ( STDMETHODCALLTYPE *MarshalInterface )( 
+            IMarshal * This,
+            /* [unique][in] */ IStream *pStm,
             /* [in] */ REFIID riid,
-            /* [unique][in] */ void __RPC_FAR *pv,
+            /* [unique][in] */ void *pv,
             /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
+            /* [unique][in] */ void *pvDestContext,
             /* [in] */ DWORD mshlflags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnmarshalInterface )( 
-            IMarshal __RPC_FAR * This,
-            /* [unique][in] */ IStream __RPC_FAR *pStm,
+        HRESULT ( STDMETHODCALLTYPE *UnmarshalInterface )( 
+            IMarshal * This,
+            /* [unique][in] */ IStream *pStm,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppv);
+            /* [out] */ void **ppv);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseMarshalData )( 
-            IMarshal __RPC_FAR * This,
-            /* [unique][in] */ IStream __RPC_FAR *pStm);
+        HRESULT ( STDMETHODCALLTYPE *ReleaseMarshalData )( 
+            IMarshal * This,
+            /* [unique][in] */ IStream *pStm);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisconnectObject )( 
-            IMarshal __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DisconnectObject )( 
+            IMarshal * This,
             /* [in] */ DWORD dwReserved);
         
         END_INTERFACE
@@ -683,7 +719,7 @@ EXTERN_C const IID IID_IMarshal;
 
     interface IMarshal
     {
-        CONST_VTBL struct IMarshalVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMarshalVtbl *lpVtbl;
     };
 
     
@@ -727,13 +763,13 @@ EXTERN_C const IID IID_IMarshal;
 
 
 HRESULT STDMETHODCALLTYPE IMarshal_GetUnmarshalClass_Proxy( 
-    IMarshal __RPC_FAR * This,
+    IMarshal * This,
     /* [in] */ REFIID riid,
-    /* [unique][in] */ void __RPC_FAR *pv,
+    /* [unique][in] */ void *pv,
     /* [in] */ DWORD dwDestContext,
-    /* [unique][in] */ void __RPC_FAR *pvDestContext,
+    /* [unique][in] */ void *pvDestContext,
     /* [in] */ DWORD mshlflags,
-    /* [out] */ CLSID __RPC_FAR *pCid);
+    /* [out] */ CLSID *pCid);
 
 
 void __RPC_STUB IMarshal_GetUnmarshalClass_Stub(
@@ -744,13 +780,13 @@ void __RPC_STUB IMarshal_GetUnmarshalClass_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMarshal_GetMarshalSizeMax_Proxy( 
-    IMarshal __RPC_FAR * This,
+    IMarshal * This,
     /* [in] */ REFIID riid,
-    /* [unique][in] */ void __RPC_FAR *pv,
+    /* [unique][in] */ void *pv,
     /* [in] */ DWORD dwDestContext,
-    /* [unique][in] */ void __RPC_FAR *pvDestContext,
+    /* [unique][in] */ void *pvDestContext,
     /* [in] */ DWORD mshlflags,
-    /* [out] */ DWORD __RPC_FAR *pSize);
+    /* [out] */ DWORD *pSize);
 
 
 void __RPC_STUB IMarshal_GetMarshalSizeMax_Stub(
@@ -761,12 +797,12 @@ void __RPC_STUB IMarshal_GetMarshalSizeMax_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMarshal_MarshalInterface_Proxy( 
-    IMarshal __RPC_FAR * This,
-    /* [unique][in] */ IStream __RPC_FAR *pStm,
+    IMarshal * This,
+    /* [unique][in] */ IStream *pStm,
     /* [in] */ REFIID riid,
-    /* [unique][in] */ void __RPC_FAR *pv,
+    /* [unique][in] */ void *pv,
     /* [in] */ DWORD dwDestContext,
-    /* [unique][in] */ void __RPC_FAR *pvDestContext,
+    /* [unique][in] */ void *pvDestContext,
     /* [in] */ DWORD mshlflags);
 
 
@@ -778,10 +814,10 @@ void __RPC_STUB IMarshal_MarshalInterface_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMarshal_UnmarshalInterface_Proxy( 
-    IMarshal __RPC_FAR * This,
-    /* [unique][in] */ IStream __RPC_FAR *pStm,
+    IMarshal * This,
+    /* [unique][in] */ IStream *pStm,
     /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppv);
+    /* [out] */ void **ppv);
 
 
 void __RPC_STUB IMarshal_UnmarshalInterface_Stub(
@@ -792,8 +828,8 @@ void __RPC_STUB IMarshal_UnmarshalInterface_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMarshal_ReleaseMarshalData_Proxy( 
-    IMarshal __RPC_FAR * This,
-    /* [unique][in] */ IStream __RPC_FAR *pStm);
+    IMarshal * This,
+    /* [unique][in] */ IStream *pStm);
 
 
 void __RPC_STUB IMarshal_ReleaseMarshalData_Stub(
@@ -804,7 +840,7 @@ void __RPC_STUB IMarshal_ReleaseMarshalData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMarshal_DisconnectObject_Proxy( 
-    IMarshal __RPC_FAR * This,
+    IMarshal * This,
     /* [in] */ DWORD dwReserved);
 
 
@@ -825,7 +861,7 @@ void __RPC_STUB IMarshal_DisconnectObject_Stub(
 /* interface IMarshal2 */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ IMarshal2 __RPC_FAR *LPMARSHAL2;
+typedef /* [unique] */ IMarshal2 *LPMARSHAL2;
 
 
 EXTERN_C const IID IID_IMarshal2;
@@ -844,56 +880,56 @@ EXTERN_C const IID IID_IMarshal2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMarshal2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMarshal2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMarshal2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMarshal2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMarshal2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMarshal2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetUnmarshalClass )( 
-            IMarshal2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetUnmarshalClass )( 
+            IMarshal2 * This,
             /* [in] */ REFIID riid,
-            /* [unique][in] */ void __RPC_FAR *pv,
+            /* [unique][in] */ void *pv,
             /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
+            /* [unique][in] */ void *pvDestContext,
             /* [in] */ DWORD mshlflags,
-            /* [out] */ CLSID __RPC_FAR *pCid);
+            /* [out] */ CLSID *pCid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMarshalSizeMax )( 
-            IMarshal2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetMarshalSizeMax )( 
+            IMarshal2 * This,
             /* [in] */ REFIID riid,
-            /* [unique][in] */ void __RPC_FAR *pv,
+            /* [unique][in] */ void *pv,
             /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
+            /* [unique][in] */ void *pvDestContext,
             /* [in] */ DWORD mshlflags,
-            /* [out] */ DWORD __RPC_FAR *pSize);
+            /* [out] */ DWORD *pSize);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MarshalInterface )( 
-            IMarshal2 __RPC_FAR * This,
-            /* [unique][in] */ IStream __RPC_FAR *pStm,
+        HRESULT ( STDMETHODCALLTYPE *MarshalInterface )( 
+            IMarshal2 * This,
+            /* [unique][in] */ IStream *pStm,
             /* [in] */ REFIID riid,
-            /* [unique][in] */ void __RPC_FAR *pv,
+            /* [unique][in] */ void *pv,
             /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
+            /* [unique][in] */ void *pvDestContext,
             /* [in] */ DWORD mshlflags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnmarshalInterface )( 
-            IMarshal2 __RPC_FAR * This,
-            /* [unique][in] */ IStream __RPC_FAR *pStm,
+        HRESULT ( STDMETHODCALLTYPE *UnmarshalInterface )( 
+            IMarshal2 * This,
+            /* [unique][in] */ IStream *pStm,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppv);
+            /* [out] */ void **ppv);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseMarshalData )( 
-            IMarshal2 __RPC_FAR * This,
-            /* [unique][in] */ IStream __RPC_FAR *pStm);
+        HRESULT ( STDMETHODCALLTYPE *ReleaseMarshalData )( 
+            IMarshal2 * This,
+            /* [unique][in] */ IStream *pStm);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisconnectObject )( 
-            IMarshal2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DisconnectObject )( 
+            IMarshal2 * This,
             /* [in] */ DWORD dwReserved);
         
         END_INTERFACE
@@ -901,7 +937,7 @@ EXTERN_C const IID IID_IMarshal2;
 
     interface IMarshal2
     {
-        CONST_VTBL struct IMarshal2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMarshal2Vtbl *lpVtbl;
     };
 
     
@@ -955,7 +991,7 @@ EXTERN_C const IID IID_IMarshal2;
 /* interface IMalloc */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ IMalloc __RPC_FAR *LPMALLOC;
+typedef /* [unique] */ IMalloc *LPMALLOC;
 
 
 EXTERN_C const IID IID_IMalloc;
@@ -966,21 +1002,21 @@ EXTERN_C const IID IID_IMalloc;
     IMalloc : public IUnknown
     {
     public:
-        virtual void __RPC_FAR *STDMETHODCALLTYPE Alloc( 
+        virtual void *STDMETHODCALLTYPE Alloc( 
             /* [in] */ SIZE_T cb) = 0;
         
-        virtual void __RPC_FAR *STDMETHODCALLTYPE Realloc( 
-            /* [in] */ void __RPC_FAR *pv,
+        virtual void *STDMETHODCALLTYPE Realloc( 
+            /* [in] */ void *pv,
             /* [in] */ SIZE_T cb) = 0;
         
         virtual void STDMETHODCALLTYPE Free( 
-            /* [in] */ void __RPC_FAR *pv) = 0;
+            /* [in] */ void *pv) = 0;
         
         virtual SIZE_T STDMETHODCALLTYPE GetSize( 
-            /* [in] */ void __RPC_FAR *pv) = 0;
+            /* [in] */ void *pv) = 0;
         
         virtual int STDMETHODCALLTYPE DidAlloc( 
-            void __RPC_FAR *pv) = 0;
+            void *pv) = 0;
         
         virtual void STDMETHODCALLTYPE HeapMinimize( void) = 0;
         
@@ -992,47 +1028,47 @@ EXTERN_C const IID IID_IMalloc;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMalloc __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMalloc * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMalloc __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMalloc * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMalloc __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMalloc * This);
         
-        void __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *Alloc )( 
-            IMalloc __RPC_FAR * This,
+        void *( STDMETHODCALLTYPE *Alloc )( 
+            IMalloc * This,
             /* [in] */ SIZE_T cb);
         
-        void __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *Realloc )( 
-            IMalloc __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *pv,
+        void *( STDMETHODCALLTYPE *Realloc )( 
+            IMalloc * This,
+            /* [in] */ void *pv,
             /* [in] */ SIZE_T cb);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *Free )( 
-            IMalloc __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *pv);
+        void ( STDMETHODCALLTYPE *Free )( 
+            IMalloc * This,
+            /* [in] */ void *pv);
         
-        SIZE_T ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
-            IMalloc __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *pv);
+        SIZE_T ( STDMETHODCALLTYPE *GetSize )( 
+            IMalloc * This,
+            /* [in] */ void *pv);
         
-        int ( STDMETHODCALLTYPE __RPC_FAR *DidAlloc )( 
-            IMalloc __RPC_FAR * This,
-            void __RPC_FAR *pv);
+        int ( STDMETHODCALLTYPE *DidAlloc )( 
+            IMalloc * This,
+            void *pv);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *HeapMinimize )( 
-            IMalloc __RPC_FAR * This);
+        void ( STDMETHODCALLTYPE *HeapMinimize )( 
+            IMalloc * This);
         
         END_INTERFACE
     } IMallocVtbl;
 
     interface IMalloc
     {
-        CONST_VTBL struct IMallocVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMallocVtbl *lpVtbl;
     };
 
     
@@ -1075,8 +1111,8 @@ EXTERN_C const IID IID_IMalloc;
 
 
 
-void __RPC_FAR *STDMETHODCALLTYPE IMalloc_Alloc_Proxy( 
-    IMalloc __RPC_FAR * This,
+void *STDMETHODCALLTYPE IMalloc_Alloc_Proxy( 
+    IMalloc * This,
     /* [in] */ SIZE_T cb);
 
 
@@ -1087,9 +1123,9 @@ void __RPC_STUB IMalloc_Alloc_Stub(
     DWORD *_pdwStubPhase);
 
 
-void __RPC_FAR *STDMETHODCALLTYPE IMalloc_Realloc_Proxy( 
-    IMalloc __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *pv,
+void *STDMETHODCALLTYPE IMalloc_Realloc_Proxy( 
+    IMalloc * This,
+    /* [in] */ void *pv,
     /* [in] */ SIZE_T cb);
 
 
@@ -1101,8 +1137,8 @@ void __RPC_STUB IMalloc_Realloc_Stub(
 
 
 void STDMETHODCALLTYPE IMalloc_Free_Proxy( 
-    IMalloc __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *pv);
+    IMalloc * This,
+    /* [in] */ void *pv);
 
 
 void __RPC_STUB IMalloc_Free_Stub(
@@ -1113,8 +1149,8 @@ void __RPC_STUB IMalloc_Free_Stub(
 
 
 SIZE_T STDMETHODCALLTYPE IMalloc_GetSize_Proxy( 
-    IMalloc __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *pv);
+    IMalloc * This,
+    /* [in] */ void *pv);
 
 
 void __RPC_STUB IMalloc_GetSize_Stub(
@@ -1125,8 +1161,8 @@ void __RPC_STUB IMalloc_GetSize_Stub(
 
 
 int STDMETHODCALLTYPE IMalloc_DidAlloc_Proxy( 
-    IMalloc __RPC_FAR * This,
-    void __RPC_FAR *pv);
+    IMalloc * This,
+    void *pv);
 
 
 void __RPC_STUB IMalloc_DidAlloc_Stub(
@@ -1137,7 +1173,7 @@ void __RPC_STUB IMalloc_DidAlloc_Stub(
 
 
 void STDMETHODCALLTYPE IMalloc_HeapMinimize_Proxy( 
-    IMalloc __RPC_FAR * This);
+    IMalloc * This);
 
 
 void __RPC_STUB IMalloc_HeapMinimize_Stub(
@@ -1157,7 +1193,7 @@ void __RPC_STUB IMalloc_HeapMinimize_Stub(
 /* interface IMallocSpy */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ IMallocSpy __RPC_FAR *LPMALLOCSPY;
+typedef /* [unique] */ IMallocSpy *LPMALLOCSPY;
 
 
 EXTERN_C const IID IID_IMallocSpy;
@@ -1171,40 +1207,40 @@ EXTERN_C const IID IID_IMallocSpy;
         virtual SIZE_T STDMETHODCALLTYPE PreAlloc( 
             /* [in] */ SIZE_T cbRequest) = 0;
         
-        virtual void __RPC_FAR *STDMETHODCALLTYPE PostAlloc( 
-            /* [in] */ void __RPC_FAR *pActual) = 0;
+        virtual void *STDMETHODCALLTYPE PostAlloc( 
+            /* [in] */ void *pActual) = 0;
         
-        virtual void __RPC_FAR *STDMETHODCALLTYPE PreFree( 
-            /* [in] */ void __RPC_FAR *pRequest,
+        virtual void *STDMETHODCALLTYPE PreFree( 
+            /* [in] */ void *pRequest,
             /* [in] */ BOOL fSpyed) = 0;
         
         virtual void STDMETHODCALLTYPE PostFree( 
             /* [in] */ BOOL fSpyed) = 0;
         
         virtual SIZE_T STDMETHODCALLTYPE PreRealloc( 
-            /* [in] */ void __RPC_FAR *pRequest,
+            /* [in] */ void *pRequest,
             /* [in] */ SIZE_T cbRequest,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppNewRequest,
+            /* [out] */ void **ppNewRequest,
             /* [in] */ BOOL fSpyed) = 0;
         
-        virtual void __RPC_FAR *STDMETHODCALLTYPE PostRealloc( 
-            /* [in] */ void __RPC_FAR *pActual,
+        virtual void *STDMETHODCALLTYPE PostRealloc( 
+            /* [in] */ void *pActual,
             /* [in] */ BOOL fSpyed) = 0;
         
-        virtual void __RPC_FAR *STDMETHODCALLTYPE PreGetSize( 
-            /* [in] */ void __RPC_FAR *pRequest,
+        virtual void *STDMETHODCALLTYPE PreGetSize( 
+            /* [in] */ void *pRequest,
             /* [in] */ BOOL fSpyed) = 0;
         
         virtual SIZE_T STDMETHODCALLTYPE PostGetSize( 
             /* [in] */ SIZE_T cbActual,
             /* [in] */ BOOL fSpyed) = 0;
         
-        virtual void __RPC_FAR *STDMETHODCALLTYPE PreDidAlloc( 
-            /* [in] */ void __RPC_FAR *pRequest,
+        virtual void *STDMETHODCALLTYPE PreDidAlloc( 
+            /* [in] */ void *pRequest,
             /* [in] */ BOOL fSpyed) = 0;
         
         virtual int STDMETHODCALLTYPE PostDidAlloc( 
-            /* [in] */ void __RPC_FAR *pRequest,
+            /* [in] */ void *pRequest,
             /* [in] */ BOOL fSpyed,
             /* [in] */ int fActual) = 0;
         
@@ -1220,79 +1256,79 @@ EXTERN_C const IID IID_IMallocSpy;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMallocSpy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMallocSpy * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMallocSpy __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMallocSpy * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMallocSpy __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMallocSpy * This);
         
-        SIZE_T ( STDMETHODCALLTYPE __RPC_FAR *PreAlloc )( 
-            IMallocSpy __RPC_FAR * This,
+        SIZE_T ( STDMETHODCALLTYPE *PreAlloc )( 
+            IMallocSpy * This,
             /* [in] */ SIZE_T cbRequest);
         
-        void __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *PostAlloc )( 
-            IMallocSpy __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *pActual);
+        void *( STDMETHODCALLTYPE *PostAlloc )( 
+            IMallocSpy * This,
+            /* [in] */ void *pActual);
         
-        void __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *PreFree )( 
-            IMallocSpy __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *pRequest,
+        void *( STDMETHODCALLTYPE *PreFree )( 
+            IMallocSpy * This,
+            /* [in] */ void *pRequest,
             /* [in] */ BOOL fSpyed);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *PostFree )( 
-            IMallocSpy __RPC_FAR * This,
+        void ( STDMETHODCALLTYPE *PostFree )( 
+            IMallocSpy * This,
             /* [in] */ BOOL fSpyed);
         
-        SIZE_T ( STDMETHODCALLTYPE __RPC_FAR *PreRealloc )( 
-            IMallocSpy __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *pRequest,
+        SIZE_T ( STDMETHODCALLTYPE *PreRealloc )( 
+            IMallocSpy * This,
+            /* [in] */ void *pRequest,
             /* [in] */ SIZE_T cbRequest,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppNewRequest,
+            /* [out] */ void **ppNewRequest,
             /* [in] */ BOOL fSpyed);
         
-        void __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *PostRealloc )( 
-            IMallocSpy __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *pActual,
+        void *( STDMETHODCALLTYPE *PostRealloc )( 
+            IMallocSpy * This,
+            /* [in] */ void *pActual,
             /* [in] */ BOOL fSpyed);
         
-        void __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *PreGetSize )( 
-            IMallocSpy __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *pRequest,
+        void *( STDMETHODCALLTYPE *PreGetSize )( 
+            IMallocSpy * This,
+            /* [in] */ void *pRequest,
             /* [in] */ BOOL fSpyed);
         
-        SIZE_T ( STDMETHODCALLTYPE __RPC_FAR *PostGetSize )( 
-            IMallocSpy __RPC_FAR * This,
+        SIZE_T ( STDMETHODCALLTYPE *PostGetSize )( 
+            IMallocSpy * This,
             /* [in] */ SIZE_T cbActual,
             /* [in] */ BOOL fSpyed);
         
-        void __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *PreDidAlloc )( 
-            IMallocSpy __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *pRequest,
+        void *( STDMETHODCALLTYPE *PreDidAlloc )( 
+            IMallocSpy * This,
+            /* [in] */ void *pRequest,
             /* [in] */ BOOL fSpyed);
         
-        int ( STDMETHODCALLTYPE __RPC_FAR *PostDidAlloc )( 
-            IMallocSpy __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *pRequest,
+        int ( STDMETHODCALLTYPE *PostDidAlloc )( 
+            IMallocSpy * This,
+            /* [in] */ void *pRequest,
             /* [in] */ BOOL fSpyed,
             /* [in] */ int fActual);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *PreHeapMinimize )( 
-            IMallocSpy __RPC_FAR * This);
+        void ( STDMETHODCALLTYPE *PreHeapMinimize )( 
+            IMallocSpy * This);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *PostHeapMinimize )( 
-            IMallocSpy __RPC_FAR * This);
+        void ( STDMETHODCALLTYPE *PostHeapMinimize )( 
+            IMallocSpy * This);
         
         END_INTERFACE
     } IMallocSpyVtbl;
 
     interface IMallocSpy
     {
-        CONST_VTBL struct IMallocSpyVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMallocSpyVtbl *lpVtbl;
     };
 
     
@@ -1354,7 +1390,7 @@ EXTERN_C const IID IID_IMallocSpy;
 
 
 SIZE_T STDMETHODCALLTYPE IMallocSpy_PreAlloc_Proxy( 
-    IMallocSpy __RPC_FAR * This,
+    IMallocSpy * This,
     /* [in] */ SIZE_T cbRequest);
 
 
@@ -1365,9 +1401,9 @@ void __RPC_STUB IMallocSpy_PreAlloc_Stub(
     DWORD *_pdwStubPhase);
 
 
-void __RPC_FAR *STDMETHODCALLTYPE IMallocSpy_PostAlloc_Proxy( 
-    IMallocSpy __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *pActual);
+void *STDMETHODCALLTYPE IMallocSpy_PostAlloc_Proxy( 
+    IMallocSpy * This,
+    /* [in] */ void *pActual);
 
 
 void __RPC_STUB IMallocSpy_PostAlloc_Stub(
@@ -1377,9 +1413,9 @@ void __RPC_STUB IMallocSpy_PostAlloc_Stub(
     DWORD *_pdwStubPhase);
 
 
-void __RPC_FAR *STDMETHODCALLTYPE IMallocSpy_PreFree_Proxy( 
-    IMallocSpy __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *pRequest,
+void *STDMETHODCALLTYPE IMallocSpy_PreFree_Proxy( 
+    IMallocSpy * This,
+    /* [in] */ void *pRequest,
     /* [in] */ BOOL fSpyed);
 
 
@@ -1391,7 +1427,7 @@ void __RPC_STUB IMallocSpy_PreFree_Stub(
 
 
 void STDMETHODCALLTYPE IMallocSpy_PostFree_Proxy( 
-    IMallocSpy __RPC_FAR * This,
+    IMallocSpy * This,
     /* [in] */ BOOL fSpyed);
 
 
@@ -1403,10 +1439,10 @@ void __RPC_STUB IMallocSpy_PostFree_Stub(
 
 
 SIZE_T STDMETHODCALLTYPE IMallocSpy_PreRealloc_Proxy( 
-    IMallocSpy __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *pRequest,
+    IMallocSpy * This,
+    /* [in] */ void *pRequest,
     /* [in] */ SIZE_T cbRequest,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppNewRequest,
+    /* [out] */ void **ppNewRequest,
     /* [in] */ BOOL fSpyed);
 
 
@@ -1417,9 +1453,9 @@ void __RPC_STUB IMallocSpy_PreRealloc_Stub(
     DWORD *_pdwStubPhase);
 
 
-void __RPC_FAR *STDMETHODCALLTYPE IMallocSpy_PostRealloc_Proxy( 
-    IMallocSpy __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *pActual,
+void *STDMETHODCALLTYPE IMallocSpy_PostRealloc_Proxy( 
+    IMallocSpy * This,
+    /* [in] */ void *pActual,
     /* [in] */ BOOL fSpyed);
 
 
@@ -1430,9 +1466,9 @@ void __RPC_STUB IMallocSpy_PostRealloc_Stub(
     DWORD *_pdwStubPhase);
 
 
-void __RPC_FAR *STDMETHODCALLTYPE IMallocSpy_PreGetSize_Proxy( 
-    IMallocSpy __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *pRequest,
+void *STDMETHODCALLTYPE IMallocSpy_PreGetSize_Proxy( 
+    IMallocSpy * This,
+    /* [in] */ void *pRequest,
     /* [in] */ BOOL fSpyed);
 
 
@@ -1444,7 +1480,7 @@ void __RPC_STUB IMallocSpy_PreGetSize_Stub(
 
 
 SIZE_T STDMETHODCALLTYPE IMallocSpy_PostGetSize_Proxy( 
-    IMallocSpy __RPC_FAR * This,
+    IMallocSpy * This,
     /* [in] */ SIZE_T cbActual,
     /* [in] */ BOOL fSpyed);
 
@@ -1456,9 +1492,9 @@ void __RPC_STUB IMallocSpy_PostGetSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-void __RPC_FAR *STDMETHODCALLTYPE IMallocSpy_PreDidAlloc_Proxy( 
-    IMallocSpy __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *pRequest,
+void *STDMETHODCALLTYPE IMallocSpy_PreDidAlloc_Proxy( 
+    IMallocSpy * This,
+    /* [in] */ void *pRequest,
     /* [in] */ BOOL fSpyed);
 
 
@@ -1470,8 +1506,8 @@ void __RPC_STUB IMallocSpy_PreDidAlloc_Stub(
 
 
 int STDMETHODCALLTYPE IMallocSpy_PostDidAlloc_Proxy( 
-    IMallocSpy __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *pRequest,
+    IMallocSpy * This,
+    /* [in] */ void *pRequest,
     /* [in] */ BOOL fSpyed,
     /* [in] */ int fActual);
 
@@ -1484,7 +1520,7 @@ void __RPC_STUB IMallocSpy_PostDidAlloc_Stub(
 
 
 void STDMETHODCALLTYPE IMallocSpy_PreHeapMinimize_Proxy( 
-    IMallocSpy __RPC_FAR * This);
+    IMallocSpy * This);
 
 
 void __RPC_STUB IMallocSpy_PreHeapMinimize_Stub(
@@ -1495,7 +1531,7 @@ void __RPC_STUB IMallocSpy_PreHeapMinimize_Stub(
 
 
 void STDMETHODCALLTYPE IMallocSpy_PostHeapMinimize_Proxy( 
-    IMallocSpy __RPC_FAR * This);
+    IMallocSpy * This);
 
 
 void __RPC_STUB IMallocSpy_PostHeapMinimize_Stub(
@@ -1515,7 +1551,7 @@ void __RPC_STUB IMallocSpy_PostHeapMinimize_Stub(
 /* interface IStdMarshalInfo */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ IStdMarshalInfo __RPC_FAR *LPSTDMARSHALINFO;
+typedef /* [unique] */ IStdMarshalInfo *LPSTDMARSHALINFO;
 
 
 EXTERN_C const IID IID_IStdMarshalInfo;
@@ -1528,8 +1564,8 @@ EXTERN_C const IID IID_IStdMarshalInfo;
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClassForHandler( 
             /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
-            /* [out] */ CLSID __RPC_FAR *pClsid) = 0;
+            /* [unique][in] */ void *pvDestContext,
+            /* [out] */ CLSID *pClsid) = 0;
         
     };
     
@@ -1539,29 +1575,29 @@ EXTERN_C const IID IID_IStdMarshalInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IStdMarshalInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IStdMarshalInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IStdMarshalInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IStdMarshalInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IStdMarshalInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IStdMarshalInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassForHandler )( 
-            IStdMarshalInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetClassForHandler )( 
+            IStdMarshalInfo * This,
             /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
-            /* [out] */ CLSID __RPC_FAR *pClsid);
+            /* [unique][in] */ void *pvDestContext,
+            /* [out] */ CLSID *pClsid);
         
         END_INTERFACE
     } IStdMarshalInfoVtbl;
 
     interface IStdMarshalInfo
     {
-        CONST_VTBL struct IStdMarshalInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IStdMarshalInfoVtbl *lpVtbl;
     };
 
     
@@ -1590,10 +1626,10 @@ EXTERN_C const IID IID_IStdMarshalInfo;
 
 
 HRESULT STDMETHODCALLTYPE IStdMarshalInfo_GetClassForHandler_Proxy( 
-    IStdMarshalInfo __RPC_FAR * This,
+    IStdMarshalInfo * This,
     /* [in] */ DWORD dwDestContext,
-    /* [unique][in] */ void __RPC_FAR *pvDestContext,
-    /* [out] */ CLSID __RPC_FAR *pClsid);
+    /* [unique][in] */ void *pvDestContext,
+    /* [out] */ CLSID *pClsid);
 
 
 void __RPC_STUB IStdMarshalInfo_GetClassForHandler_Stub(
@@ -1613,14 +1649,14 @@ void __RPC_STUB IStdMarshalInfo_GetClassForHandler_Stub(
 /* interface IExternalConnection */
 /* [uuid][local][object] */ 
 
-typedef /* [unique] */ IExternalConnection __RPC_FAR *LPEXTERNALCONNECTION;
+typedef /* [unique] */ IExternalConnection *LPEXTERNALCONNECTION;
 
 typedef 
 enum tagEXTCONN
     {	EXTCONN_STRONG	= 0x1,
 	EXTCONN_WEAK	= 0x2,
 	EXTCONN_CALLABLE	= 0x4
-    }	EXTCONN;
+    } 	EXTCONN;
 
 
 EXTERN_C const IID IID_IExternalConnection;
@@ -1648,24 +1684,24 @@ EXTERN_C const IID IID_IExternalConnection;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IExternalConnection __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IExternalConnection * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IExternalConnection __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IExternalConnection * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IExternalConnection __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IExternalConnection * This);
         
-        DWORD ( STDMETHODCALLTYPE __RPC_FAR *AddConnection )( 
-            IExternalConnection __RPC_FAR * This,
+        DWORD ( STDMETHODCALLTYPE *AddConnection )( 
+            IExternalConnection * This,
             /* [in] */ DWORD extconn,
             /* [in] */ DWORD reserved);
         
-        DWORD ( STDMETHODCALLTYPE __RPC_FAR *ReleaseConnection )( 
-            IExternalConnection __RPC_FAR * This,
+        DWORD ( STDMETHODCALLTYPE *ReleaseConnection )( 
+            IExternalConnection * This,
             /* [in] */ DWORD extconn,
             /* [in] */ DWORD reserved,
             /* [in] */ BOOL fLastReleaseCloses);
@@ -1675,7 +1711,7 @@ EXTERN_C const IID IID_IExternalConnection;
 
     interface IExternalConnection
     {
-        CONST_VTBL struct IExternalConnectionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IExternalConnectionVtbl *lpVtbl;
     };
 
     
@@ -1707,7 +1743,7 @@ EXTERN_C const IID IID_IExternalConnection;
 
 
 DWORD STDMETHODCALLTYPE IExternalConnection_AddConnection_Proxy( 
-    IExternalConnection __RPC_FAR * This,
+    IExternalConnection * This,
     /* [in] */ DWORD extconn,
     /* [in] */ DWORD reserved);
 
@@ -1720,7 +1756,7 @@ void __RPC_STUB IExternalConnection_AddConnection_Stub(
 
 
 DWORD STDMETHODCALLTYPE IExternalConnection_ReleaseConnection_Proxy( 
-    IExternalConnection __RPC_FAR * This,
+    IExternalConnection * This,
     /* [in] */ DWORD extconn,
     /* [in] */ DWORD reserved,
     /* [in] */ BOOL fLastReleaseCloses);
@@ -1740,14 +1776,14 @@ void __RPC_STUB IExternalConnection_ReleaseConnection_Stub(
 /* interface __MIDL_itf_objidl_0015 */
 /* [local] */ 
 
-typedef /* [unique] */ IMultiQI __RPC_FAR *LPMULTIQI;
+typedef /* [unique] */ IMultiQI *LPMULTIQI;
 
 typedef struct tagMULTI_QI
     {
-    const IID __RPC_FAR *pIID;
-    IUnknown __RPC_FAR *pItf;
+    const IID *pIID;
+    IUnknown *pItf;
     HRESULT hr;
-    }	MULTI_QI;
+    } 	MULTI_QI;
 
 
 
@@ -1771,7 +1807,7 @@ EXTERN_C const IID IID_IMultiQI;
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryMultipleInterfaces( 
             /* [in] */ ULONG cMQIs,
-            /* [out][in] */ MULTI_QI __RPC_FAR *pMQIs) = 0;
+            /* [out][in] */ MULTI_QI *pMQIs) = 0;
         
     };
     
@@ -1781,28 +1817,28 @@ EXTERN_C const IID IID_IMultiQI;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMultiQI __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMultiQI * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMultiQI __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMultiQI * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMultiQI __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMultiQI * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryMultipleInterfaces )( 
-            IMultiQI __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryMultipleInterfaces )( 
+            IMultiQI * This,
             /* [in] */ ULONG cMQIs,
-            /* [out][in] */ MULTI_QI __RPC_FAR *pMQIs);
+            /* [out][in] */ MULTI_QI *pMQIs);
         
         END_INTERFACE
     } IMultiQIVtbl;
 
     interface IMultiQI
     {
-        CONST_VTBL struct IMultiQIVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMultiQIVtbl *lpVtbl;
     };
 
     
@@ -1831,9 +1867,9 @@ EXTERN_C const IID IID_IMultiQI;
 
 
 HRESULT STDMETHODCALLTYPE IMultiQI_QueryMultipleInterfaces_Proxy( 
-    IMultiQI __RPC_FAR * This,
+    IMultiQI * This,
     /* [in] */ ULONG cMQIs,
-    /* [out][in] */ MULTI_QI __RPC_FAR *pMQIs);
+    /* [out][in] */ MULTI_QI *pMQIs);
 
 
 void __RPC_STUB IMultiQI_QueryMultipleInterfaces_Stub(
@@ -1864,10 +1900,10 @@ EXTERN_C const IID IID_AsyncIMultiQI;
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_QueryMultipleInterfaces( 
             /* [in] */ ULONG cMQIs,
-            /* [out][in] */ MULTI_QI __RPC_FAR *pMQIs) = 0;
+            /* [out][in] */ MULTI_QI *pMQIs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_QueryMultipleInterfaces( 
-            /* [out][in] */ MULTI_QI __RPC_FAR *pMQIs) = 0;
+            /* [out][in] */ MULTI_QI *pMQIs) = 0;
         
     };
     
@@ -1877,32 +1913,32 @@ EXTERN_C const IID IID_AsyncIMultiQI;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            AsyncIMultiQI __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            AsyncIMultiQI * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            AsyncIMultiQI __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            AsyncIMultiQI * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            AsyncIMultiQI __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            AsyncIMultiQI * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Begin_QueryMultipleInterfaces )( 
-            AsyncIMultiQI __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Begin_QueryMultipleInterfaces )( 
+            AsyncIMultiQI * This,
             /* [in] */ ULONG cMQIs,
-            /* [out][in] */ MULTI_QI __RPC_FAR *pMQIs);
+            /* [out][in] */ MULTI_QI *pMQIs);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Finish_QueryMultipleInterfaces )( 
-            AsyncIMultiQI __RPC_FAR * This,
-            /* [out][in] */ MULTI_QI __RPC_FAR *pMQIs);
+        HRESULT ( STDMETHODCALLTYPE *Finish_QueryMultipleInterfaces )( 
+            AsyncIMultiQI * This,
+            /* [out][in] */ MULTI_QI *pMQIs);
         
         END_INTERFACE
     } AsyncIMultiQIVtbl;
 
     interface AsyncIMultiQI
     {
-        CONST_VTBL struct AsyncIMultiQIVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct AsyncIMultiQIVtbl *lpVtbl;
     };
 
     
@@ -1934,9 +1970,9 @@ EXTERN_C const IID IID_AsyncIMultiQI;
 
 
 HRESULT STDMETHODCALLTYPE AsyncIMultiQI_Begin_QueryMultipleInterfaces_Proxy( 
-    AsyncIMultiQI __RPC_FAR * This,
+    AsyncIMultiQI * This,
     /* [in] */ ULONG cMQIs,
-    /* [out][in] */ MULTI_QI __RPC_FAR *pMQIs);
+    /* [out][in] */ MULTI_QI *pMQIs);
 
 
 void __RPC_STUB AsyncIMultiQI_Begin_QueryMultipleInterfaces_Stub(
@@ -1947,8 +1983,8 @@ void __RPC_STUB AsyncIMultiQI_Begin_QueryMultipleInterfaces_Stub(
 
 
 HRESULT STDMETHODCALLTYPE AsyncIMultiQI_Finish_QueryMultipleInterfaces_Proxy( 
-    AsyncIMultiQI __RPC_FAR * This,
-    /* [out][in] */ MULTI_QI __RPC_FAR *pMQIs);
+    AsyncIMultiQI * This,
+    /* [out][in] */ MULTI_QI *pMQIs);
 
 
 void __RPC_STUB AsyncIMultiQI_Finish_QueryMultipleInterfaces_Stub(
@@ -1979,7 +2015,7 @@ EXTERN_C const IID IID_IInternalUnknown;
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryInternalInterface( 
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppv) = 0;
+            /* [out] */ void **ppv) = 0;
         
     };
     
@@ -1989,28 +2025,28 @@ EXTERN_C const IID IID_IInternalUnknown;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IInternalUnknown __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IInternalUnknown * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IInternalUnknown __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IInternalUnknown * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IInternalUnknown __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IInternalUnknown * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInternalInterface )( 
-            IInternalUnknown __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInternalInterface )( 
+            IInternalUnknown * This,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppv);
+            /* [out] */ void **ppv);
         
         END_INTERFACE
     } IInternalUnknownVtbl;
 
     interface IInternalUnknown
     {
-        CONST_VTBL struct IInternalUnknownVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IInternalUnknownVtbl *lpVtbl;
     };
 
     
@@ -2039,9 +2075,9 @@ EXTERN_C const IID IID_IInternalUnknown;
 
 
 HRESULT STDMETHODCALLTYPE IInternalUnknown_QueryInternalInterface_Proxy( 
-    IInternalUnknown __RPC_FAR * This,
+    IInternalUnknown * This,
     /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppv);
+    /* [out] */ void **ppv);
 
 
 void __RPC_STUB IInternalUnknown_QueryInternalInterface_Stub(
@@ -2061,7 +2097,7 @@ void __RPC_STUB IInternalUnknown_QueryInternalInterface_Stub(
 /* interface IEnumUnknown */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEnumUnknown __RPC_FAR *LPENUMUNKNOWN;
+typedef /* [unique] */ IEnumUnknown *LPENUMUNKNOWN;
 
 
 EXTERN_C const IID IID_IEnumUnknown;
@@ -2074,8 +2110,8 @@ EXTERN_C const IID IID_IEnumUnknown;
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [out] */ IUnknown **rgelt,
+            /* [out] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -2083,7 +2119,7 @@ EXTERN_C const IID IID_IEnumUnknown;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumUnknown __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumUnknown **ppenum) = 0;
         
     };
     
@@ -2093,40 +2129,40 @@ EXTERN_C const IID IID_IEnumUnknown;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumUnknown __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumUnknown * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumUnknown __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumUnknown * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumUnknown __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumUnknown * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumUnknown __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumUnknown * This,
             /* [in] */ ULONG celt,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+            /* [out] */ IUnknown **rgelt,
+            /* [out] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumUnknown __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumUnknown * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumUnknown __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumUnknown * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumUnknown __RPC_FAR * This,
-            /* [out] */ IEnumUnknown __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumUnknown * This,
+            /* [out] */ IEnumUnknown **ppenum);
         
         END_INTERFACE
     } IEnumUnknownVtbl;
 
     interface IEnumUnknown
     {
-        CONST_VTBL struct IEnumUnknownVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumUnknownVtbl *lpVtbl;
     };
 
     
@@ -2164,10 +2200,10 @@ EXTERN_C const IID IID_IEnumUnknown;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumUnknown_RemoteNext_Proxy( 
-    IEnumUnknown __RPC_FAR * This,
+    IEnumUnknown * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ IUnknown **rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumUnknown_RemoteNext_Stub(
@@ -2178,7 +2214,7 @@ void __RPC_STUB IEnumUnknown_RemoteNext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumUnknown_Skip_Proxy( 
-    IEnumUnknown __RPC_FAR * This,
+    IEnumUnknown * This,
     /* [in] */ ULONG celt);
 
 
@@ -2190,7 +2226,7 @@ void __RPC_STUB IEnumUnknown_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumUnknown_Reset_Proxy( 
-    IEnumUnknown __RPC_FAR * This);
+    IEnumUnknown * This);
 
 
 void __RPC_STUB IEnumUnknown_Reset_Stub(
@@ -2201,8 +2237,8 @@ void __RPC_STUB IEnumUnknown_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumUnknown_Clone_Proxy( 
-    IEnumUnknown __RPC_FAR * This,
-    /* [out] */ IEnumUnknown __RPC_FAR *__RPC_FAR *ppenum);
+    IEnumUnknown * This,
+    /* [out] */ IEnumUnknown **ppenum);
 
 
 void __RPC_STUB IEnumUnknown_Clone_Stub(
@@ -2222,9 +2258,9 @@ void __RPC_STUB IEnumUnknown_Clone_Stub(
 /* interface IBindCtx */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IBindCtx __RPC_FAR *LPBC;
+typedef /* [unique] */ IBindCtx *LPBC;
 
-typedef /* [unique] */ IBindCtx __RPC_FAR *LPBINDCTX;
+typedef /* [unique] */ IBindCtx *LPBINDCTX;
 
 typedef struct tagBIND_OPTS
     {
@@ -2232,9 +2268,9 @@ typedef struct tagBIND_OPTS
     DWORD grfFlags;
     DWORD grfMode;
     DWORD dwTickCountDeadline;
-    }	BIND_OPTS;
+    } 	BIND_OPTS;
 
-typedef struct tagBIND_OPTS __RPC_FAR *LPBIND_OPTS;
+typedef struct tagBIND_OPTS *LPBIND_OPTS;
 
 #if defined(__cplusplus)
     typedef struct tagBIND_OPTS2 : tagBIND_OPTS{
@@ -2253,17 +2289,17 @@ typedef struct tagBIND_OPTS2
     DWORD dwTrackFlags;
     DWORD dwClassContext;
     LCID locale;
-    COSERVERINFO __RPC_FAR *pServerInfo;
-    }	BIND_OPTS2;
+    COSERVERINFO *pServerInfo;
+    } 	BIND_OPTS2;
 
-typedef struct tagBIND_OPTS2 __RPC_FAR *LPBIND_OPTS2;
+typedef struct tagBIND_OPTS2 *LPBIND_OPTS2;
 
 #endif
 typedef 
 enum tagBIND_FLAGS
     {	BIND_MAYBOTHERUSER	= 1,
 	BIND_JUSTTESTEXISTENCE	= 2
-    }	BIND_FLAGS;
+    } 	BIND_FLAGS;
 
 
 EXTERN_C const IID IID_IBindCtx;
@@ -2275,32 +2311,32 @@ EXTERN_C const IID IID_IBindCtx;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterObjectBound( 
-            /* [unique][in] */ IUnknown __RPC_FAR *punk) = 0;
+            /* [unique][in] */ IUnknown *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RevokeObjectBound( 
-            /* [unique][in] */ IUnknown __RPC_FAR *punk) = 0;
+            /* [unique][in] */ IUnknown *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReleaseBoundObjects( void) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetBindOptions( 
-            /* [in] */ BIND_OPTS __RPC_FAR *pbindopts) = 0;
+            /* [in] */ BIND_OPTS *pbindopts) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetBindOptions( 
-            /* [out][in] */ BIND_OPTS __RPC_FAR *pbindopts) = 0;
+            /* [out][in] */ BIND_OPTS *pbindopts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRunningObjectTable( 
-            /* [out] */ IRunningObjectTable __RPC_FAR *__RPC_FAR *pprot) = 0;
+            /* [out] */ IRunningObjectTable **pprot) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterObjectParam( 
             /* [in] */ LPOLESTR pszKey,
-            /* [unique][in] */ IUnknown __RPC_FAR *punk) = 0;
+            /* [unique][in] */ IUnknown *punk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectParam( 
             /* [in] */ LPOLESTR pszKey,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk) = 0;
+            /* [out] */ IUnknown **ppunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumObjectParam( 
-            /* [out] */ IEnumString __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumString **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RevokeObjectParam( 
             /* [in] */ LPOLESTR pszKey) = 0;
@@ -2313,56 +2349,56 @@ EXTERN_C const IID IID_IBindCtx;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IBindCtx __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IBindCtx * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IBindCtx __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IBindCtx * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IBindCtx __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IBindCtx * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterObjectBound )( 
-            IBindCtx __RPC_FAR * This,
-            /* [unique][in] */ IUnknown __RPC_FAR *punk);
+        HRESULT ( STDMETHODCALLTYPE *RegisterObjectBound )( 
+            IBindCtx * This,
+            /* [unique][in] */ IUnknown *punk);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RevokeObjectBound )( 
-            IBindCtx __RPC_FAR * This,
-            /* [unique][in] */ IUnknown __RPC_FAR *punk);
+        HRESULT ( STDMETHODCALLTYPE *RevokeObjectBound )( 
+            IBindCtx * This,
+            /* [unique][in] */ IUnknown *punk);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseBoundObjects )( 
-            IBindCtx __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *ReleaseBoundObjects )( 
+            IBindCtx * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBindOptions )( 
-            IBindCtx __RPC_FAR * This,
-            /* [in] */ BIND_OPTS __RPC_FAR *pbindopts);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetBindOptions )( 
+            IBindCtx * This,
+            /* [in] */ BIND_OPTS *pbindopts);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBindOptions )( 
-            IBindCtx __RPC_FAR * This,
-            /* [out][in] */ BIND_OPTS __RPC_FAR *pbindopts);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetBindOptions )( 
+            IBindCtx * This,
+            /* [out][in] */ BIND_OPTS *pbindopts);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRunningObjectTable )( 
-            IBindCtx __RPC_FAR * This,
-            /* [out] */ IRunningObjectTable __RPC_FAR *__RPC_FAR *pprot);
+        HRESULT ( STDMETHODCALLTYPE *GetRunningObjectTable )( 
+            IBindCtx * This,
+            /* [out] */ IRunningObjectTable **pprot);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterObjectParam )( 
-            IBindCtx __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RegisterObjectParam )( 
+            IBindCtx * This,
             /* [in] */ LPOLESTR pszKey,
-            /* [unique][in] */ IUnknown __RPC_FAR *punk);
+            /* [unique][in] */ IUnknown *punk);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectParam )( 
-            IBindCtx __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetObjectParam )( 
+            IBindCtx * This,
             /* [in] */ LPOLESTR pszKey,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+            /* [out] */ IUnknown **ppunk);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumObjectParam )( 
-            IBindCtx __RPC_FAR * This,
-            /* [out] */ IEnumString __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *EnumObjectParam )( 
+            IBindCtx * This,
+            /* [out] */ IEnumString **ppenum);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RevokeObjectParam )( 
-            IBindCtx __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RevokeObjectParam )( 
+            IBindCtx * This,
             /* [in] */ LPOLESTR pszKey);
         
         END_INTERFACE
@@ -2370,7 +2406,7 @@ EXTERN_C const IID IID_IBindCtx;
 
     interface IBindCtx
     {
-        CONST_VTBL struct IBindCtxVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IBindCtxVtbl *lpVtbl;
     };
 
     
@@ -2426,8 +2462,8 @@ EXTERN_C const IID IID_IBindCtx;
 
 
 HRESULT STDMETHODCALLTYPE IBindCtx_RegisterObjectBound_Proxy( 
-    IBindCtx __RPC_FAR * This,
-    /* [unique][in] */ IUnknown __RPC_FAR *punk);
+    IBindCtx * This,
+    /* [unique][in] */ IUnknown *punk);
 
 
 void __RPC_STUB IBindCtx_RegisterObjectBound_Stub(
@@ -2438,8 +2474,8 @@ void __RPC_STUB IBindCtx_RegisterObjectBound_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBindCtx_RevokeObjectBound_Proxy( 
-    IBindCtx __RPC_FAR * This,
-    /* [unique][in] */ IUnknown __RPC_FAR *punk);
+    IBindCtx * This,
+    /* [unique][in] */ IUnknown *punk);
 
 
 void __RPC_STUB IBindCtx_RevokeObjectBound_Stub(
@@ -2450,7 +2486,7 @@ void __RPC_STUB IBindCtx_RevokeObjectBound_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBindCtx_ReleaseBoundObjects_Proxy( 
-    IBindCtx __RPC_FAR * This);
+    IBindCtx * This);
 
 
 void __RPC_STUB IBindCtx_ReleaseBoundObjects_Stub(
@@ -2461,8 +2497,8 @@ void __RPC_STUB IBindCtx_ReleaseBoundObjects_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBindCtx_RemoteSetBindOptions_Proxy( 
-    IBindCtx __RPC_FAR * This,
-    /* [in] */ BIND_OPTS2 __RPC_FAR *pbindopts);
+    IBindCtx * This,
+    /* [in] */ BIND_OPTS2 *pbindopts);
 
 
 void __RPC_STUB IBindCtx_RemoteSetBindOptions_Stub(
@@ -2473,8 +2509,8 @@ void __RPC_STUB IBindCtx_RemoteSetBindOptions_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBindCtx_RemoteGetBindOptions_Proxy( 
-    IBindCtx __RPC_FAR * This,
-    /* [out][in] */ BIND_OPTS2 __RPC_FAR *pbindopts);
+    IBindCtx * This,
+    /* [out][in] */ BIND_OPTS2 *pbindopts);
 
 
 void __RPC_STUB IBindCtx_RemoteGetBindOptions_Stub(
@@ -2485,8 +2521,8 @@ void __RPC_STUB IBindCtx_RemoteGetBindOptions_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBindCtx_GetRunningObjectTable_Proxy( 
-    IBindCtx __RPC_FAR * This,
-    /* [out] */ IRunningObjectTable __RPC_FAR *__RPC_FAR *pprot);
+    IBindCtx * This,
+    /* [out] */ IRunningObjectTable **pprot);
 
 
 void __RPC_STUB IBindCtx_GetRunningObjectTable_Stub(
@@ -2497,9 +2533,9 @@ void __RPC_STUB IBindCtx_GetRunningObjectTable_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBindCtx_RegisterObjectParam_Proxy( 
-    IBindCtx __RPC_FAR * This,
+    IBindCtx * This,
     /* [in] */ LPOLESTR pszKey,
-    /* [unique][in] */ IUnknown __RPC_FAR *punk);
+    /* [unique][in] */ IUnknown *punk);
 
 
 void __RPC_STUB IBindCtx_RegisterObjectParam_Stub(
@@ -2510,9 +2546,9 @@ void __RPC_STUB IBindCtx_RegisterObjectParam_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBindCtx_GetObjectParam_Proxy( 
-    IBindCtx __RPC_FAR * This,
+    IBindCtx * This,
     /* [in] */ LPOLESTR pszKey,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+    /* [out] */ IUnknown **ppunk);
 
 
 void __RPC_STUB IBindCtx_GetObjectParam_Stub(
@@ -2523,8 +2559,8 @@ void __RPC_STUB IBindCtx_GetObjectParam_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBindCtx_EnumObjectParam_Proxy( 
-    IBindCtx __RPC_FAR * This,
-    /* [out] */ IEnumString __RPC_FAR *__RPC_FAR *ppenum);
+    IBindCtx * This,
+    /* [out] */ IEnumString **ppenum);
 
 
 void __RPC_STUB IBindCtx_EnumObjectParam_Stub(
@@ -2535,7 +2571,7 @@ void __RPC_STUB IBindCtx_EnumObjectParam_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBindCtx_RevokeObjectParam_Proxy( 
-    IBindCtx __RPC_FAR * This,
+    IBindCtx * This,
     /* [in] */ LPOLESTR pszKey);
 
 
@@ -2556,7 +2592,7 @@ void __RPC_STUB IBindCtx_RevokeObjectParam_Stub(
 /* interface IEnumMoniker */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEnumMoniker __RPC_FAR *LPENUMMONIKER;
+typedef /* [unique] */ IEnumMoniker *LPENUMMONIKER;
 
 
 EXTERN_C const IID IID_IEnumMoniker;
@@ -2569,8 +2605,8 @@ EXTERN_C const IID IID_IEnumMoniker;
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IMoniker __RPC_FAR *__RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [length_is][size_is][out] */ IMoniker **rgelt,
+            /* [out] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -2578,7 +2614,7 @@ EXTERN_C const IID IID_IEnumMoniker;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumMoniker __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumMoniker **ppenum) = 0;
         
     };
     
@@ -2588,40 +2624,40 @@ EXTERN_C const IID IID_IEnumMoniker;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumMoniker __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumMoniker * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumMoniker __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumMoniker * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumMoniker __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumMoniker * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumMoniker __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumMoniker * This,
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ IMoniker __RPC_FAR *__RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+            /* [length_is][size_is][out] */ IMoniker **rgelt,
+            /* [out] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumMoniker __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumMoniker * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumMoniker __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumMoniker * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumMoniker __RPC_FAR * This,
-            /* [out] */ IEnumMoniker __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumMoniker * This,
+            /* [out] */ IEnumMoniker **ppenum);
         
         END_INTERFACE
     } IEnumMonikerVtbl;
 
     interface IEnumMoniker
     {
-        CONST_VTBL struct IEnumMonikerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumMonikerVtbl *lpVtbl;
     };
 
     
@@ -2659,10 +2695,10 @@ EXTERN_C const IID IID_IEnumMoniker;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumMoniker_RemoteNext_Proxy( 
-    IEnumMoniker __RPC_FAR * This,
+    IEnumMoniker * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IMoniker __RPC_FAR *__RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ IMoniker **rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumMoniker_RemoteNext_Stub(
@@ -2673,7 +2709,7 @@ void __RPC_STUB IEnumMoniker_RemoteNext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumMoniker_Skip_Proxy( 
-    IEnumMoniker __RPC_FAR * This,
+    IEnumMoniker * This,
     /* [in] */ ULONG celt);
 
 
@@ -2685,7 +2721,7 @@ void __RPC_STUB IEnumMoniker_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumMoniker_Reset_Proxy( 
-    IEnumMoniker __RPC_FAR * This);
+    IEnumMoniker * This);
 
 
 void __RPC_STUB IEnumMoniker_Reset_Stub(
@@ -2696,8 +2732,8 @@ void __RPC_STUB IEnumMoniker_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumMoniker_Clone_Proxy( 
-    IEnumMoniker __RPC_FAR * This,
-    /* [out] */ IEnumMoniker __RPC_FAR *__RPC_FAR *ppenum);
+    IEnumMoniker * This,
+    /* [out] */ IEnumMoniker **ppenum);
 
 
 void __RPC_STUB IEnumMoniker_Clone_Stub(
@@ -2717,7 +2753,7 @@ void __RPC_STUB IEnumMoniker_Clone_Stub(
 /* interface IRunnableObject */
 /* [uuid][object] */ 
 
-typedef /* [unique] */ IRunnableObject __RPC_FAR *LPRUNNABLEOBJECT;
+typedef /* [unique] */ IRunnableObject *LPRUNNABLEOBJECT;
 
 
 EXTERN_C const IID IID_IRunnableObject;
@@ -2751,35 +2787,35 @@ EXTERN_C const IID IID_IRunnableObject;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IRunnableObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IRunnableObject * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IRunnableObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IRunnableObject * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IRunnableObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IRunnableObject * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRunningClass )( 
-            IRunnableObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetRunningClass )( 
+            IRunnableObject * This,
             /* [out] */ LPCLSID lpClsid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Run )( 
-            IRunnableObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Run )( 
+            IRunnableObject * This,
             /* [in] */ LPBINDCTX pbc);
         
-        /* [local] */ BOOL ( STDMETHODCALLTYPE __RPC_FAR *IsRunning )( 
-            IRunnableObject __RPC_FAR * This);
+        /* [local] */ BOOL ( STDMETHODCALLTYPE *IsRunning )( 
+            IRunnableObject * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockRunning )( 
-            IRunnableObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *LockRunning )( 
+            IRunnableObject * This,
             /* [in] */ BOOL fLock,
             /* [in] */ BOOL fLastUnlockCloses);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetContainedObject )( 
-            IRunnableObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetContainedObject )( 
+            IRunnableObject * This,
             /* [in] */ BOOL fContained);
         
         END_INTERFACE
@@ -2787,7 +2823,7 @@ EXTERN_C const IID IID_IRunnableObject;
 
     interface IRunnableObject
     {
-        CONST_VTBL struct IRunnableObjectVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IRunnableObjectVtbl *lpVtbl;
     };
 
     
@@ -2828,7 +2864,7 @@ EXTERN_C const IID IID_IRunnableObject;
 
 
 HRESULT STDMETHODCALLTYPE IRunnableObject_GetRunningClass_Proxy( 
-    IRunnableObject __RPC_FAR * This,
+    IRunnableObject * This,
     /* [out] */ LPCLSID lpClsid);
 
 
@@ -2840,7 +2876,7 @@ void __RPC_STUB IRunnableObject_GetRunningClass_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRunnableObject_Run_Proxy( 
-    IRunnableObject __RPC_FAR * This,
+    IRunnableObject * This,
     /* [in] */ LPBINDCTX pbc);
 
 
@@ -2852,7 +2888,7 @@ void __RPC_STUB IRunnableObject_Run_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IRunnableObject_RemoteIsRunning_Proxy( 
-    IRunnableObject __RPC_FAR * This);
+    IRunnableObject * This);
 
 
 void __RPC_STUB IRunnableObject_RemoteIsRunning_Stub(
@@ -2863,7 +2899,7 @@ void __RPC_STUB IRunnableObject_RemoteIsRunning_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRunnableObject_LockRunning_Proxy( 
-    IRunnableObject __RPC_FAR * This,
+    IRunnableObject * This,
     /* [in] */ BOOL fLock,
     /* [in] */ BOOL fLastUnlockCloses);
 
@@ -2876,7 +2912,7 @@ void __RPC_STUB IRunnableObject_LockRunning_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRunnableObject_SetContainedObject_Proxy( 
-    IRunnableObject __RPC_FAR * This,
+    IRunnableObject * This,
     /* [in] */ BOOL fContained);
 
 
@@ -2897,7 +2933,7 @@ void __RPC_STUB IRunnableObject_SetContainedObject_Stub(
 /* interface IRunningObjectTable */
 /* [uuid][object] */ 
 
-typedef /* [unique] */ IRunningObjectTable __RPC_FAR *LPRUNNINGOBJECTTABLE;
+typedef /* [unique] */ IRunningObjectTable *LPRUNNINGOBJECTTABLE;
 
 
 EXTERN_C const IID IID_IRunningObjectTable;
@@ -2910,30 +2946,30 @@ EXTERN_C const IID IID_IRunningObjectTable;
     public:
         virtual HRESULT STDMETHODCALLTYPE Register( 
             /* [in] */ DWORD grfFlags,
-            /* [unique][in] */ IUnknown __RPC_FAR *punkObject,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkObjectName,
-            /* [out] */ DWORD __RPC_FAR *pdwRegister) = 0;
+            /* [unique][in] */ IUnknown *punkObject,
+            /* [unique][in] */ IMoniker *pmkObjectName,
+            /* [out] */ DWORD *pdwRegister) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Revoke( 
             /* [in] */ DWORD dwRegister) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsRunning( 
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkObjectName) = 0;
+            /* [unique][in] */ IMoniker *pmkObjectName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkObjectName,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkObject) = 0;
+            /* [unique][in] */ IMoniker *pmkObjectName,
+            /* [out] */ IUnknown **ppunkObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NoteChangeTime( 
             /* [in] */ DWORD dwRegister,
-            /* [in] */ FILETIME __RPC_FAR *pfiletime) = 0;
+            /* [in] */ FILETIME *pfiletime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTimeOfLastChange( 
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkObjectName,
-            /* [out] */ FILETIME __RPC_FAR *pfiletime) = 0;
+            /* [unique][in] */ IMoniker *pmkObjectName,
+            /* [out] */ FILETIME *pfiletime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumRunning( 
-            /* [out] */ IEnumMoniker __RPC_FAR *__RPC_FAR *ppenumMoniker) = 0;
+            /* [out] */ IEnumMoniker **ppenumMoniker) = 0;
         
     };
     
@@ -2943,57 +2979,57 @@ EXTERN_C const IID IID_IRunningObjectTable;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IRunningObjectTable __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IRunningObjectTable * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IRunningObjectTable __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IRunningObjectTable * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IRunningObjectTable __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IRunningObjectTable * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Register )( 
-            IRunningObjectTable __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Register )( 
+            IRunningObjectTable * This,
             /* [in] */ DWORD grfFlags,
-            /* [unique][in] */ IUnknown __RPC_FAR *punkObject,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkObjectName,
-            /* [out] */ DWORD __RPC_FAR *pdwRegister);
+            /* [unique][in] */ IUnknown *punkObject,
+            /* [unique][in] */ IMoniker *pmkObjectName,
+            /* [out] */ DWORD *pdwRegister);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Revoke )( 
-            IRunningObjectTable __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Revoke )( 
+            IRunningObjectTable * This,
             /* [in] */ DWORD dwRegister);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsRunning )( 
-            IRunningObjectTable __RPC_FAR * This,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkObjectName);
+        HRESULT ( STDMETHODCALLTYPE *IsRunning )( 
+            IRunningObjectTable * This,
+            /* [unique][in] */ IMoniker *pmkObjectName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObject )( 
-            IRunningObjectTable __RPC_FAR * This,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkObjectName,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkObject);
+        HRESULT ( STDMETHODCALLTYPE *GetObject )( 
+            IRunningObjectTable * This,
+            /* [unique][in] */ IMoniker *pmkObjectName,
+            /* [out] */ IUnknown **ppunkObject);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NoteChangeTime )( 
-            IRunningObjectTable __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *NoteChangeTime )( 
+            IRunningObjectTable * This,
             /* [in] */ DWORD dwRegister,
-            /* [in] */ FILETIME __RPC_FAR *pfiletime);
+            /* [in] */ FILETIME *pfiletime);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTimeOfLastChange )( 
-            IRunningObjectTable __RPC_FAR * This,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkObjectName,
-            /* [out] */ FILETIME __RPC_FAR *pfiletime);
+        HRESULT ( STDMETHODCALLTYPE *GetTimeOfLastChange )( 
+            IRunningObjectTable * This,
+            /* [unique][in] */ IMoniker *pmkObjectName,
+            /* [out] */ FILETIME *pfiletime);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumRunning )( 
-            IRunningObjectTable __RPC_FAR * This,
-            /* [out] */ IEnumMoniker __RPC_FAR *__RPC_FAR *ppenumMoniker);
+        HRESULT ( STDMETHODCALLTYPE *EnumRunning )( 
+            IRunningObjectTable * This,
+            /* [out] */ IEnumMoniker **ppenumMoniker);
         
         END_INTERFACE
     } IRunningObjectTableVtbl;
 
     interface IRunningObjectTable
     {
-        CONST_VTBL struct IRunningObjectTableVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IRunningObjectTableVtbl *lpVtbl;
     };
 
     
@@ -3040,11 +3076,11 @@ EXTERN_C const IID IID_IRunningObjectTable;
 
 
 HRESULT STDMETHODCALLTYPE IRunningObjectTable_Register_Proxy( 
-    IRunningObjectTable __RPC_FAR * This,
+    IRunningObjectTable * This,
     /* [in] */ DWORD grfFlags,
-    /* [unique][in] */ IUnknown __RPC_FAR *punkObject,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkObjectName,
-    /* [out] */ DWORD __RPC_FAR *pdwRegister);
+    /* [unique][in] */ IUnknown *punkObject,
+    /* [unique][in] */ IMoniker *pmkObjectName,
+    /* [out] */ DWORD *pdwRegister);
 
 
 void __RPC_STUB IRunningObjectTable_Register_Stub(
@@ -3055,7 +3091,7 @@ void __RPC_STUB IRunningObjectTable_Register_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRunningObjectTable_Revoke_Proxy( 
-    IRunningObjectTable __RPC_FAR * This,
+    IRunningObjectTable * This,
     /* [in] */ DWORD dwRegister);
 
 
@@ -3067,8 +3103,8 @@ void __RPC_STUB IRunningObjectTable_Revoke_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRunningObjectTable_IsRunning_Proxy( 
-    IRunningObjectTable __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkObjectName);
+    IRunningObjectTable * This,
+    /* [unique][in] */ IMoniker *pmkObjectName);
 
 
 void __RPC_STUB IRunningObjectTable_IsRunning_Stub(
@@ -3079,9 +3115,9 @@ void __RPC_STUB IRunningObjectTable_IsRunning_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRunningObjectTable_GetObject_Proxy( 
-    IRunningObjectTable __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkObjectName,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkObject);
+    IRunningObjectTable * This,
+    /* [unique][in] */ IMoniker *pmkObjectName,
+    /* [out] */ IUnknown **ppunkObject);
 
 
 void __RPC_STUB IRunningObjectTable_GetObject_Stub(
@@ -3092,9 +3128,9 @@ void __RPC_STUB IRunningObjectTable_GetObject_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRunningObjectTable_NoteChangeTime_Proxy( 
-    IRunningObjectTable __RPC_FAR * This,
+    IRunningObjectTable * This,
     /* [in] */ DWORD dwRegister,
-    /* [in] */ FILETIME __RPC_FAR *pfiletime);
+    /* [in] */ FILETIME *pfiletime);
 
 
 void __RPC_STUB IRunningObjectTable_NoteChangeTime_Stub(
@@ -3105,9 +3141,9 @@ void __RPC_STUB IRunningObjectTable_NoteChangeTime_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRunningObjectTable_GetTimeOfLastChange_Proxy( 
-    IRunningObjectTable __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkObjectName,
-    /* [out] */ FILETIME __RPC_FAR *pfiletime);
+    IRunningObjectTable * This,
+    /* [unique][in] */ IMoniker *pmkObjectName,
+    /* [out] */ FILETIME *pfiletime);
 
 
 void __RPC_STUB IRunningObjectTable_GetTimeOfLastChange_Stub(
@@ -3118,8 +3154,8 @@ void __RPC_STUB IRunningObjectTable_GetTimeOfLastChange_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRunningObjectTable_EnumRunning_Proxy( 
-    IRunningObjectTable __RPC_FAR * This,
-    /* [out] */ IEnumMoniker __RPC_FAR *__RPC_FAR *ppenumMoniker);
+    IRunningObjectTable * This,
+    /* [out] */ IEnumMoniker **ppenumMoniker);
 
 
 void __RPC_STUB IRunningObjectTable_EnumRunning_Stub(
@@ -3139,7 +3175,7 @@ void __RPC_STUB IRunningObjectTable_EnumRunning_Stub(
 /* interface IPersist */
 /* [uuid][object] */ 
 
-typedef /* [unique] */ IPersist __RPC_FAR *LPPERSIST;
+typedef /* [unique] */ IPersist *LPPERSIST;
 
 
 EXTERN_C const IID IID_IPersist;
@@ -3151,7 +3187,7 @@ EXTERN_C const IID IID_IPersist;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClassID( 
-            /* [out] */ CLSID __RPC_FAR *pClassID) = 0;
+            /* [out] */ CLSID *pClassID) = 0;
         
     };
     
@@ -3161,27 +3197,27 @@ EXTERN_C const IID IID_IPersist;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPersist __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPersist * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPersist __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPersist * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPersist __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPersist * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassID )( 
-            IPersist __RPC_FAR * This,
-            /* [out] */ CLSID __RPC_FAR *pClassID);
+        HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
+            IPersist * This,
+            /* [out] */ CLSID *pClassID);
         
         END_INTERFACE
     } IPersistVtbl;
 
     interface IPersist
     {
-        CONST_VTBL struct IPersistVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPersistVtbl *lpVtbl;
     };
 
     
@@ -3210,8 +3246,8 @@ EXTERN_C const IID IID_IPersist;
 
 
 HRESULT STDMETHODCALLTYPE IPersist_GetClassID_Proxy( 
-    IPersist __RPC_FAR * This,
-    /* [out] */ CLSID __RPC_FAR *pClassID);
+    IPersist * This,
+    /* [out] */ CLSID *pClassID);
 
 
 void __RPC_STUB IPersist_GetClassID_Stub(
@@ -3231,7 +3267,7 @@ void __RPC_STUB IPersist_GetClassID_Stub(
 /* interface IPersistStream */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IPersistStream __RPC_FAR *LPPERSISTSTREAM;
+typedef /* [unique] */ IPersistStream *LPPERSISTSTREAM;
 
 
 EXTERN_C const IID IID_IPersistStream;
@@ -3245,14 +3281,14 @@ EXTERN_C const IID IID_IPersistStream;
         virtual HRESULT STDMETHODCALLTYPE IsDirty( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Load( 
-            /* [unique][in] */ IStream __RPC_FAR *pStm) = 0;
+            /* [unique][in] */ IStream *pStm) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Save( 
-            /* [unique][in] */ IStream __RPC_FAR *pStm,
+            /* [unique][in] */ IStream *pStm,
             /* [in] */ BOOL fClearDirty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSizeMax( 
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbSize) = 0;
+            /* [out] */ ULARGE_INTEGER *pcbSize) = 0;
         
     };
     
@@ -3262,43 +3298,43 @@ EXTERN_C const IID IID_IPersistStream;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPersistStream __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPersistStream * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPersistStream __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPersistStream * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPersistStream __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPersistStream * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassID )( 
-            IPersistStream __RPC_FAR * This,
-            /* [out] */ CLSID __RPC_FAR *pClassID);
+        HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
+            IPersistStream * This,
+            /* [out] */ CLSID *pClassID);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsDirty )( 
-            IPersistStream __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *IsDirty )( 
+            IPersistStream * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Load )( 
-            IPersistStream __RPC_FAR * This,
-            /* [unique][in] */ IStream __RPC_FAR *pStm);
+        HRESULT ( STDMETHODCALLTYPE *Load )( 
+            IPersistStream * This,
+            /* [unique][in] */ IStream *pStm);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Save )( 
-            IPersistStream __RPC_FAR * This,
-            /* [unique][in] */ IStream __RPC_FAR *pStm,
+        HRESULT ( STDMETHODCALLTYPE *Save )( 
+            IPersistStream * This,
+            /* [unique][in] */ IStream *pStm,
             /* [in] */ BOOL fClearDirty);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSizeMax )( 
-            IPersistStream __RPC_FAR * This,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbSize);
+        HRESULT ( STDMETHODCALLTYPE *GetSizeMax )( 
+            IPersistStream * This,
+            /* [out] */ ULARGE_INTEGER *pcbSize);
         
         END_INTERFACE
     } IPersistStreamVtbl;
 
     interface IPersistStream
     {
-        CONST_VTBL struct IPersistStreamVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPersistStreamVtbl *lpVtbl;
     };
 
     
@@ -3340,7 +3376,7 @@ EXTERN_C const IID IID_IPersistStream;
 
 
 HRESULT STDMETHODCALLTYPE IPersistStream_IsDirty_Proxy( 
-    IPersistStream __RPC_FAR * This);
+    IPersistStream * This);
 
 
 void __RPC_STUB IPersistStream_IsDirty_Stub(
@@ -3351,8 +3387,8 @@ void __RPC_STUB IPersistStream_IsDirty_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistStream_Load_Proxy( 
-    IPersistStream __RPC_FAR * This,
-    /* [unique][in] */ IStream __RPC_FAR *pStm);
+    IPersistStream * This,
+    /* [unique][in] */ IStream *pStm);
 
 
 void __RPC_STUB IPersistStream_Load_Stub(
@@ -3363,8 +3399,8 @@ void __RPC_STUB IPersistStream_Load_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistStream_Save_Proxy( 
-    IPersistStream __RPC_FAR * This,
-    /* [unique][in] */ IStream __RPC_FAR *pStm,
+    IPersistStream * This,
+    /* [unique][in] */ IStream *pStm,
     /* [in] */ BOOL fClearDirty);
 
 
@@ -3376,8 +3412,8 @@ void __RPC_STUB IPersistStream_Save_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistStream_GetSizeMax_Proxy( 
-    IPersistStream __RPC_FAR * This,
-    /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbSize);
+    IPersistStream * This,
+    /* [out] */ ULARGE_INTEGER *pcbSize);
 
 
 void __RPC_STUB IPersistStream_GetSizeMax_Stub(
@@ -3397,7 +3433,7 @@ void __RPC_STUB IPersistStream_GetSizeMax_Stub(
 /* interface IMoniker */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IMoniker __RPC_FAR *LPMONIKER;
+typedef /* [unique] */ IMoniker *LPMONIKER;
 
 typedef 
 enum tagMKSYS
@@ -3410,7 +3446,7 @@ enum tagMKSYS
 	MKSYS_CLASSMONIKER	= 7,
 	MKSYS_OBJREFMONIKER	= 8,
 	MKSYS_SESSIONMONIKER	= 9
-    }	MKSYS;
+    } 	MKSYS;
 
 typedef /* [v1_enum] */ 
 enum tagMKREDUCE
@@ -3418,7 +3454,7 @@ enum tagMKREDUCE
 	MKRREDUCE_TOUSER	= 2 << 16,
 	MKRREDUCE_THROUGHUSER	= 1 << 16,
 	MKRREDUCE_ALL	= 0
-    }	MKRREDUCE;
+    } 	MKRREDUCE;
 
 
 EXTERN_C const IID IID_IMoniker;
@@ -3430,73 +3466,73 @@ EXTERN_C const IID IID_IMoniker;
     {
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE BindToObject( 
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
             /* [in] */ REFIID riidResult,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvResult) = 0;
+            /* [iid_is][out] */ void **ppvResult) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE BindToStorage( 
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObj) = 0;
+            /* [iid_is][out] */ void **ppvObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reduce( 
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+            /* [unique][in] */ IBindCtx *pbc,
             /* [in] */ DWORD dwReduceHowFar,
-            /* [unique][out][in] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkToLeft,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkReduced) = 0;
+            /* [unique][out][in] */ IMoniker **ppmkToLeft,
+            /* [out] */ IMoniker **ppmkReduced) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ComposeWith( 
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkRight,
+            /* [unique][in] */ IMoniker *pmkRight,
             /* [in] */ BOOL fOnlyIfNotGeneric,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkComposite) = 0;
+            /* [out] */ IMoniker **ppmkComposite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enum( 
             /* [in] */ BOOL fForward,
-            /* [out] */ IEnumMoniker __RPC_FAR *__RPC_FAR *ppenumMoniker) = 0;
+            /* [out] */ IEnumMoniker **ppenumMoniker) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsEqual( 
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkOtherMoniker) = 0;
+            /* [unique][in] */ IMoniker *pmkOtherMoniker) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Hash( 
-            /* [out] */ DWORD __RPC_FAR *pdwHash) = 0;
+            /* [out] */ DWORD *pdwHash) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsRunning( 
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkNewlyRunning) = 0;
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
+            /* [unique][in] */ IMoniker *pmkNewlyRunning) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTimeOfLastChange( 
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
-            /* [out] */ FILETIME __RPC_FAR *pFileTime) = 0;
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
+            /* [out] */ FILETIME *pFileTime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Inverse( 
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk) = 0;
+            /* [out] */ IMoniker **ppmk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommonPrefixWith( 
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkOther,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkPrefix) = 0;
+            /* [unique][in] */ IMoniker *pmkOther,
+            /* [out] */ IMoniker **ppmkPrefix) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RelativePathTo( 
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkOther,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkRelPath) = 0;
+            /* [unique][in] */ IMoniker *pmkOther,
+            /* [out] */ IMoniker **ppmkRelPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDisplayName( 
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
-            /* [out] */ LPOLESTR __RPC_FAR *ppszDisplayName) = 0;
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
+            /* [out] */ LPOLESTR *ppszDisplayName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ParseDisplayName( 
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
             /* [in] */ LPOLESTR pszDisplayName,
-            /* [out] */ ULONG __RPC_FAR *pchEaten,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkOut) = 0;
+            /* [out] */ ULONG *pchEaten,
+            /* [out] */ IMoniker **ppmkOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsSystemMoniker( 
-            /* [out] */ DWORD __RPC_FAR *pdwMksys) = 0;
+            /* [out] */ DWORD *pdwMksys) = 0;
         
     };
     
@@ -3506,127 +3542,127 @@ EXTERN_C const IID IID_IMoniker;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMoniker __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMoniker * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMoniker __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMoniker * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMoniker __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMoniker * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassID )( 
-            IMoniker __RPC_FAR * This,
-            /* [out] */ CLSID __RPC_FAR *pClassID);
+        HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
+            IMoniker * This,
+            /* [out] */ CLSID *pClassID);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsDirty )( 
-            IMoniker __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *IsDirty )( 
+            IMoniker * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Load )( 
-            IMoniker __RPC_FAR * This,
-            /* [unique][in] */ IStream __RPC_FAR *pStm);
+        HRESULT ( STDMETHODCALLTYPE *Load )( 
+            IMoniker * This,
+            /* [unique][in] */ IStream *pStm);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Save )( 
-            IMoniker __RPC_FAR * This,
-            /* [unique][in] */ IStream __RPC_FAR *pStm,
+        HRESULT ( STDMETHODCALLTYPE *Save )( 
+            IMoniker * This,
+            /* [unique][in] */ IStream *pStm,
             /* [in] */ BOOL fClearDirty);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSizeMax )( 
-            IMoniker __RPC_FAR * This,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbSize);
+        HRESULT ( STDMETHODCALLTYPE *GetSizeMax )( 
+            IMoniker * This,
+            /* [out] */ ULARGE_INTEGER *pcbSize);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BindToObject )( 
-            IMoniker __RPC_FAR * This,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *BindToObject )( 
+            IMoniker * This,
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
             /* [in] */ REFIID riidResult,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvResult);
+            /* [iid_is][out] */ void **ppvResult);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BindToStorage )( 
-            IMoniker __RPC_FAR * This,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *BindToStorage )( 
+            IMoniker * This,
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObj);
+            /* [iid_is][out] */ void **ppvObj);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reduce )( 
-            IMoniker __RPC_FAR * This,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+        HRESULT ( STDMETHODCALLTYPE *Reduce )( 
+            IMoniker * This,
+            /* [unique][in] */ IBindCtx *pbc,
             /* [in] */ DWORD dwReduceHowFar,
-            /* [unique][out][in] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkToLeft,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkReduced);
+            /* [unique][out][in] */ IMoniker **ppmkToLeft,
+            /* [out] */ IMoniker **ppmkReduced);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ComposeWith )( 
-            IMoniker __RPC_FAR * This,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkRight,
+        HRESULT ( STDMETHODCALLTYPE *ComposeWith )( 
+            IMoniker * This,
+            /* [unique][in] */ IMoniker *pmkRight,
             /* [in] */ BOOL fOnlyIfNotGeneric,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkComposite);
+            /* [out] */ IMoniker **ppmkComposite);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Enum )( 
-            IMoniker __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Enum )( 
+            IMoniker * This,
             /* [in] */ BOOL fForward,
-            /* [out] */ IEnumMoniker __RPC_FAR *__RPC_FAR *ppenumMoniker);
+            /* [out] */ IEnumMoniker **ppenumMoniker);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsEqual )( 
-            IMoniker __RPC_FAR * This,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkOtherMoniker);
+        HRESULT ( STDMETHODCALLTYPE *IsEqual )( 
+            IMoniker * This,
+            /* [unique][in] */ IMoniker *pmkOtherMoniker);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Hash )( 
-            IMoniker __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwHash);
+        HRESULT ( STDMETHODCALLTYPE *Hash )( 
+            IMoniker * This,
+            /* [out] */ DWORD *pdwHash);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsRunning )( 
-            IMoniker __RPC_FAR * This,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkNewlyRunning);
+        HRESULT ( STDMETHODCALLTYPE *IsRunning )( 
+            IMoniker * This,
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
+            /* [unique][in] */ IMoniker *pmkNewlyRunning);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTimeOfLastChange )( 
-            IMoniker __RPC_FAR * This,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
-            /* [out] */ FILETIME __RPC_FAR *pFileTime);
+        HRESULT ( STDMETHODCALLTYPE *GetTimeOfLastChange )( 
+            IMoniker * This,
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
+            /* [out] */ FILETIME *pFileTime);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Inverse )( 
-            IMoniker __RPC_FAR * This,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk);
+        HRESULT ( STDMETHODCALLTYPE *Inverse )( 
+            IMoniker * This,
+            /* [out] */ IMoniker **ppmk);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CommonPrefixWith )( 
-            IMoniker __RPC_FAR * This,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkOther,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkPrefix);
+        HRESULT ( STDMETHODCALLTYPE *CommonPrefixWith )( 
+            IMoniker * This,
+            /* [unique][in] */ IMoniker *pmkOther,
+            /* [out] */ IMoniker **ppmkPrefix);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RelativePathTo )( 
-            IMoniker __RPC_FAR * This,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkOther,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkRelPath);
+        HRESULT ( STDMETHODCALLTYPE *RelativePathTo )( 
+            IMoniker * This,
+            /* [unique][in] */ IMoniker *pmkOther,
+            /* [out] */ IMoniker **ppmkRelPath);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDisplayName )( 
-            IMoniker __RPC_FAR * This,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
-            /* [out] */ LPOLESTR __RPC_FAR *ppszDisplayName);
+        HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
+            IMoniker * This,
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
+            /* [out] */ LPOLESTR *ppszDisplayName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ParseDisplayName )( 
-            IMoniker __RPC_FAR * This,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
+        HRESULT ( STDMETHODCALLTYPE *ParseDisplayName )( 
+            IMoniker * This,
+            /* [unique][in] */ IBindCtx *pbc,
+            /* [unique][in] */ IMoniker *pmkToLeft,
             /* [in] */ LPOLESTR pszDisplayName,
-            /* [out] */ ULONG __RPC_FAR *pchEaten,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkOut);
+            /* [out] */ ULONG *pchEaten,
+            /* [out] */ IMoniker **ppmkOut);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsSystemMoniker )( 
-            IMoniker __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwMksys);
+        HRESULT ( STDMETHODCALLTYPE *IsSystemMoniker )( 
+            IMoniker * This,
+            /* [out] */ DWORD *pdwMksys);
         
         END_INTERFACE
     } IMonikerVtbl;
 
     interface IMoniker
     {
-        CONST_VTBL struct IMonikerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMonikerVtbl *lpVtbl;
     };
 
     
@@ -3714,11 +3750,11 @@ EXTERN_C const IID IID_IMoniker;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IMoniker_RemoteBindToObject_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
+    IMoniker * This,
+    /* [unique][in] */ IBindCtx *pbc,
+    /* [unique][in] */ IMoniker *pmkToLeft,
     /* [in] */ REFIID riidResult,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvResult);
+    /* [iid_is][out] */ IUnknown **ppvResult);
 
 
 void __RPC_STUB IMoniker_RemoteBindToObject_Stub(
@@ -3729,11 +3765,11 @@ void __RPC_STUB IMoniker_RemoteBindToObject_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IMoniker_RemoteBindToStorage_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
+    IMoniker * This,
+    /* [unique][in] */ IBindCtx *pbc,
+    /* [unique][in] */ IMoniker *pmkToLeft,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObj);
+    /* [iid_is][out] */ IUnknown **ppvObj);
 
 
 void __RPC_STUB IMoniker_RemoteBindToStorage_Stub(
@@ -3744,11 +3780,11 @@ void __RPC_STUB IMoniker_RemoteBindToStorage_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMoniker_Reduce_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+    IMoniker * This,
+    /* [unique][in] */ IBindCtx *pbc,
     /* [in] */ DWORD dwReduceHowFar,
-    /* [unique][out][in] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkToLeft,
-    /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkReduced);
+    /* [unique][out][in] */ IMoniker **ppmkToLeft,
+    /* [out] */ IMoniker **ppmkReduced);
 
 
 void __RPC_STUB IMoniker_Reduce_Stub(
@@ -3759,10 +3795,10 @@ void __RPC_STUB IMoniker_Reduce_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMoniker_ComposeWith_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkRight,
+    IMoniker * This,
+    /* [unique][in] */ IMoniker *pmkRight,
     /* [in] */ BOOL fOnlyIfNotGeneric,
-    /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkComposite);
+    /* [out] */ IMoniker **ppmkComposite);
 
 
 void __RPC_STUB IMoniker_ComposeWith_Stub(
@@ -3773,9 +3809,9 @@ void __RPC_STUB IMoniker_ComposeWith_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMoniker_Enum_Proxy( 
-    IMoniker __RPC_FAR * This,
+    IMoniker * This,
     /* [in] */ BOOL fForward,
-    /* [out] */ IEnumMoniker __RPC_FAR *__RPC_FAR *ppenumMoniker);
+    /* [out] */ IEnumMoniker **ppenumMoniker);
 
 
 void __RPC_STUB IMoniker_Enum_Stub(
@@ -3786,8 +3822,8 @@ void __RPC_STUB IMoniker_Enum_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMoniker_IsEqual_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkOtherMoniker);
+    IMoniker * This,
+    /* [unique][in] */ IMoniker *pmkOtherMoniker);
 
 
 void __RPC_STUB IMoniker_IsEqual_Stub(
@@ -3798,8 +3834,8 @@ void __RPC_STUB IMoniker_IsEqual_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMoniker_Hash_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwHash);
+    IMoniker * This,
+    /* [out] */ DWORD *pdwHash);
 
 
 void __RPC_STUB IMoniker_Hash_Stub(
@@ -3810,10 +3846,10 @@ void __RPC_STUB IMoniker_Hash_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMoniker_IsRunning_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkNewlyRunning);
+    IMoniker * This,
+    /* [unique][in] */ IBindCtx *pbc,
+    /* [unique][in] */ IMoniker *pmkToLeft,
+    /* [unique][in] */ IMoniker *pmkNewlyRunning);
 
 
 void __RPC_STUB IMoniker_IsRunning_Stub(
@@ -3824,10 +3860,10 @@ void __RPC_STUB IMoniker_IsRunning_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMoniker_GetTimeOfLastChange_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
-    /* [out] */ FILETIME __RPC_FAR *pFileTime);
+    IMoniker * This,
+    /* [unique][in] */ IBindCtx *pbc,
+    /* [unique][in] */ IMoniker *pmkToLeft,
+    /* [out] */ FILETIME *pFileTime);
 
 
 void __RPC_STUB IMoniker_GetTimeOfLastChange_Stub(
@@ -3838,8 +3874,8 @@ void __RPC_STUB IMoniker_GetTimeOfLastChange_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMoniker_Inverse_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk);
+    IMoniker * This,
+    /* [out] */ IMoniker **ppmk);
 
 
 void __RPC_STUB IMoniker_Inverse_Stub(
@@ -3850,9 +3886,9 @@ void __RPC_STUB IMoniker_Inverse_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMoniker_CommonPrefixWith_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkOther,
-    /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkPrefix);
+    IMoniker * This,
+    /* [unique][in] */ IMoniker *pmkOther,
+    /* [out] */ IMoniker **ppmkPrefix);
 
 
 void __RPC_STUB IMoniker_CommonPrefixWith_Stub(
@@ -3863,9 +3899,9 @@ void __RPC_STUB IMoniker_CommonPrefixWith_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMoniker_RelativePathTo_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkOther,
-    /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkRelPath);
+    IMoniker * This,
+    /* [unique][in] */ IMoniker *pmkOther,
+    /* [out] */ IMoniker **ppmkRelPath);
 
 
 void __RPC_STUB IMoniker_RelativePathTo_Stub(
@@ -3876,10 +3912,10 @@ void __RPC_STUB IMoniker_RelativePathTo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMoniker_GetDisplayName_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
-    /* [out] */ LPOLESTR __RPC_FAR *ppszDisplayName);
+    IMoniker * This,
+    /* [unique][in] */ IBindCtx *pbc,
+    /* [unique][in] */ IMoniker *pmkToLeft,
+    /* [out] */ LPOLESTR *ppszDisplayName);
 
 
 void __RPC_STUB IMoniker_GetDisplayName_Stub(
@@ -3890,12 +3926,12 @@ void __RPC_STUB IMoniker_GetDisplayName_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMoniker_ParseDisplayName_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
+    IMoniker * This,
+    /* [unique][in] */ IBindCtx *pbc,
+    /* [unique][in] */ IMoniker *pmkToLeft,
     /* [in] */ LPOLESTR pszDisplayName,
-    /* [out] */ ULONG __RPC_FAR *pchEaten,
-    /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkOut);
+    /* [out] */ ULONG *pchEaten,
+    /* [out] */ IMoniker **ppmkOut);
 
 
 void __RPC_STUB IMoniker_ParseDisplayName_Stub(
@@ -3906,8 +3942,8 @@ void __RPC_STUB IMoniker_ParseDisplayName_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMoniker_IsSystemMoniker_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwMksys);
+    IMoniker * This,
+    /* [out] */ DWORD *pdwMksys);
 
 
 void __RPC_STUB IMoniker_IsSystemMoniker_Stub(
@@ -3937,9 +3973,9 @@ EXTERN_C const IID IID_IROTData;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetComparisonData( 
-            /* [size_is][out] */ byte __RPC_FAR *pbData,
+            /* [size_is][out] */ byte *pbData,
             /* [in] */ ULONG cbMax,
-            /* [out] */ ULONG __RPC_FAR *pcbData) = 0;
+            /* [out] */ ULONG *pcbData) = 0;
         
     };
     
@@ -3949,29 +3985,29 @@ EXTERN_C const IID IID_IROTData;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IROTData __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IROTData * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IROTData __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IROTData * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IROTData __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IROTData * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetComparisonData )( 
-            IROTData __RPC_FAR * This,
-            /* [size_is][out] */ byte __RPC_FAR *pbData,
+        HRESULT ( STDMETHODCALLTYPE *GetComparisonData )( 
+            IROTData * This,
+            /* [size_is][out] */ byte *pbData,
             /* [in] */ ULONG cbMax,
-            /* [out] */ ULONG __RPC_FAR *pcbData);
+            /* [out] */ ULONG *pcbData);
         
         END_INTERFACE
     } IROTDataVtbl;
 
     interface IROTData
     {
-        CONST_VTBL struct IROTDataVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IROTDataVtbl *lpVtbl;
     };
 
     
@@ -4000,10 +4036,10 @@ EXTERN_C const IID IID_IROTData;
 
 
 HRESULT STDMETHODCALLTYPE IROTData_GetComparisonData_Proxy( 
-    IROTData __RPC_FAR * This,
-    /* [size_is][out] */ byte __RPC_FAR *pbData,
+    IROTData * This,
+    /* [size_is][out] */ byte *pbData,
     /* [in] */ ULONG cbMax,
-    /* [out] */ ULONG __RPC_FAR *pcbData);
+    /* [out] */ ULONG *pcbData);
 
 
 void __RPC_STUB IROTData_GetComparisonData_Stub(
@@ -4023,7 +4059,7 @@ void __RPC_STUB IROTData_GetComparisonData_Stub(
 /* interface IEnumString */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEnumString __RPC_FAR *LPENUMSTRING;
+typedef /* [unique] */ IEnumString *LPENUMSTRING;
 
 
 EXTERN_C const IID IID_IEnumString;
@@ -4036,8 +4072,8 @@ EXTERN_C const IID IID_IEnumString;
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ LPOLESTR __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [length_is][size_is][out] */ LPOLESTR *rgelt,
+            /* [out] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -4045,7 +4081,7 @@ EXTERN_C const IID IID_IEnumString;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumString __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumString **ppenum) = 0;
         
     };
     
@@ -4055,40 +4091,40 @@ EXTERN_C const IID IID_IEnumString;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumString __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumString * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumString __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumString * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumString __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumString * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumString __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumString * This,
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ LPOLESTR __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+            /* [length_is][size_is][out] */ LPOLESTR *rgelt,
+            /* [out] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumString __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumString * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumString __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumString * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumString __RPC_FAR * This,
-            /* [out] */ IEnumString __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumString * This,
+            /* [out] */ IEnumString **ppenum);
         
         END_INTERFACE
     } IEnumStringVtbl;
 
     interface IEnumString
     {
-        CONST_VTBL struct IEnumStringVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumStringVtbl *lpVtbl;
     };
 
     
@@ -4126,10 +4162,10 @@ EXTERN_C const IID IID_IEnumString;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumString_RemoteNext_Proxy( 
-    IEnumString __RPC_FAR * This,
+    IEnumString * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ LPOLESTR __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ LPOLESTR *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumString_RemoteNext_Stub(
@@ -4140,7 +4176,7 @@ void __RPC_STUB IEnumString_RemoteNext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumString_Skip_Proxy( 
-    IEnumString __RPC_FAR * This,
+    IEnumString * This,
     /* [in] */ ULONG celt);
 
 
@@ -4152,7 +4188,7 @@ void __RPC_STUB IEnumString_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumString_Reset_Proxy( 
-    IEnumString __RPC_FAR * This);
+    IEnumString * This);
 
 
 void __RPC_STUB IEnumString_Reset_Stub(
@@ -4163,8 +4199,8 @@ void __RPC_STUB IEnumString_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumString_Clone_Proxy( 
-    IEnumString __RPC_FAR * This,
-    /* [out] */ IEnumString __RPC_FAR *__RPC_FAR *ppenum);
+    IEnumString * This,
+    /* [out] */ IEnumString **ppenum);
 
 
 void __RPC_STUB IEnumString_Clone_Stub(
@@ -4194,14 +4230,14 @@ EXTERN_C const IID IID_ISequentialStream;
     {
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Read( 
-            /* [length_is][size_is][out] */ void __RPC_FAR *pv,
+            /* [length_is][size_is][out] */ void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbRead) = 0;
+            /* [out] */ ULONG *pcbRead) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Write( 
-            /* [size_is][in] */ const void __RPC_FAR *pv,
+            /* [size_is][in] */ const void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten) = 0;
+            /* [out] */ ULONG *pcbWritten) = 0;
         
     };
     
@@ -4211,35 +4247,35 @@ EXTERN_C const IID IID_ISequentialStream;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISequentialStream __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISequentialStream * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISequentialStream __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISequentialStream * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISequentialStream __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISequentialStream * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
-            ISequentialStream __RPC_FAR * This,
-            /* [length_is][size_is][out] */ void __RPC_FAR *pv,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+            ISequentialStream * This,
+            /* [length_is][size_is][out] */ void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbRead);
+            /* [out] */ ULONG *pcbRead);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )( 
-            ISequentialStream __RPC_FAR * This,
-            /* [size_is][in] */ const void __RPC_FAR *pv,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+            ISequentialStream * This,
+            /* [size_is][in] */ const void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten);
+            /* [out] */ ULONG *pcbWritten);
         
         END_INTERFACE
     } ISequentialStreamVtbl;
 
     interface ISequentialStream
     {
-        CONST_VTBL struct ISequentialStreamVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISequentialStreamVtbl *lpVtbl;
     };
 
     
@@ -4271,10 +4307,10 @@ EXTERN_C const IID IID_ISequentialStream;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ISequentialStream_RemoteRead_Proxy( 
-    ISequentialStream __RPC_FAR * This,
-    /* [length_is][size_is][out] */ byte __RPC_FAR *pv,
+    ISequentialStream * This,
+    /* [length_is][size_is][out] */ byte *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbRead);
+    /* [out] */ ULONG *pcbRead);
 
 
 void __RPC_STUB ISequentialStream_RemoteRead_Stub(
@@ -4285,10 +4321,10 @@ void __RPC_STUB ISequentialStream_RemoteRead_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ISequentialStream_RemoteWrite_Proxy( 
-    ISequentialStream __RPC_FAR * This,
-    /* [size_is][in] */ const byte __RPC_FAR *pv,
+    ISequentialStream * This,
+    /* [size_is][in] */ const byte *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    /* [out] */ ULONG *pcbWritten);
 
 
 void __RPC_STUB ISequentialStream_RemoteWrite_Stub(
@@ -4308,7 +4344,7 @@ void __RPC_STUB ISequentialStream_RemoteWrite_Stub(
 /* interface IStream */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IStream __RPC_FAR *LPSTREAM;
+typedef /* [unique] */ IStream *LPSTREAM;
 
 //FSSpec is Macintosh only, defined in macos\files.h
 #ifdef _MAC
@@ -4341,7 +4377,7 @@ typedef struct tagSTATSTG
     CLSID clsid;
     DWORD grfStateBits;
     DWORD reserved;
-    }	STATSTG;
+    } 	STATSTG;
 
 #endif //_MAC
 typedef 
@@ -4350,21 +4386,21 @@ enum tagSTGTY
 	STGTY_STREAM	= 2,
 	STGTY_LOCKBYTES	= 3,
 	STGTY_PROPERTY	= 4
-    }	STGTY;
+    } 	STGTY;
 
 typedef 
 enum tagSTREAM_SEEK
     {	STREAM_SEEK_SET	= 0,
 	STREAM_SEEK_CUR	= 1,
 	STREAM_SEEK_END	= 2
-    }	STREAM_SEEK;
+    } 	STREAM_SEEK;
 
 typedef 
 enum tagLOCKTYPE
     {	LOCK_WRITE	= 1,
 	LOCK_EXCLUSIVE	= 2,
 	LOCK_ONLYONCE	= 4
-    }	LOCKTYPE;
+    } 	LOCKTYPE;
 
 
 EXTERN_C const IID IID_IStream;
@@ -4378,16 +4414,16 @@ EXTERN_C const IID IID_IStream;
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Seek( 
             /* [in] */ LARGE_INTEGER dlibMove,
             /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *plibNewPosition) = 0;
+            /* [out] */ ULARGE_INTEGER *plibNewPosition) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSize( 
             /* [in] */ ULARGE_INTEGER libNewSize) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE CopyTo( 
-            /* [unique][in] */ IStream __RPC_FAR *pstm,
+            /* [unique][in] */ IStream *pstm,
             /* [in] */ ULARGE_INTEGER cb,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbRead,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbWritten) = 0;
+            /* [out] */ ULARGE_INTEGER *pcbRead,
+            /* [out] */ ULARGE_INTEGER *pcbWritten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( 
             /* [in] */ DWORD grfCommitFlags) = 0;
@@ -4405,11 +4441,11 @@ EXTERN_C const IID IID_IStream;
             /* [in] */ DWORD dwLockType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stat( 
-            /* [out] */ STATSTG __RPC_FAR *pstatstg,
+            /* [out] */ STATSTG *pstatstg,
             /* [in] */ DWORD grfStatFlag) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm) = 0;
+            /* [out] */ IStream **ppstm) = 0;
         
     };
     
@@ -4419,80 +4455,80 @@ EXTERN_C const IID IID_IStream;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IStream __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IStream * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IStream __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IStream * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IStream __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IStream * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
-            IStream __RPC_FAR * This,
-            /* [length_is][size_is][out] */ void __RPC_FAR *pv,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+            IStream * This,
+            /* [length_is][size_is][out] */ void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbRead);
+            /* [out] */ ULONG *pcbRead);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )( 
-            IStream __RPC_FAR * This,
-            /* [size_is][in] */ const void __RPC_FAR *pv,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Write )( 
+            IStream * This,
+            /* [size_is][in] */ const void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten);
+            /* [out] */ ULONG *pcbWritten);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Seek )( 
-            IStream __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Seek )( 
+            IStream * This,
             /* [in] */ LARGE_INTEGER dlibMove,
             /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *plibNewPosition);
+            /* [out] */ ULARGE_INTEGER *plibNewPosition);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSize )( 
-            IStream __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetSize )( 
+            IStream * This,
             /* [in] */ ULARGE_INTEGER libNewSize);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyTo )( 
-            IStream __RPC_FAR * This,
-            /* [unique][in] */ IStream __RPC_FAR *pstm,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
+            IStream * This,
+            /* [unique][in] */ IStream *pstm,
             /* [in] */ ULARGE_INTEGER cb,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbRead,
-            /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbWritten);
+            /* [out] */ ULARGE_INTEGER *pcbRead,
+            /* [out] */ ULARGE_INTEGER *pcbWritten);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Commit )( 
-            IStream __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Commit )( 
+            IStream * This,
             /* [in] */ DWORD grfCommitFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Revert )( 
-            IStream __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Revert )( 
+            IStream * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockRegion )( 
-            IStream __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *LockRegion )( 
+            IStream * This,
             /* [in] */ ULARGE_INTEGER libOffset,
             /* [in] */ ULARGE_INTEGER cb,
             /* [in] */ DWORD dwLockType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnlockRegion )( 
-            IStream __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *UnlockRegion )( 
+            IStream * This,
             /* [in] */ ULARGE_INTEGER libOffset,
             /* [in] */ ULARGE_INTEGER cb,
             /* [in] */ DWORD dwLockType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stat )( 
-            IStream __RPC_FAR * This,
-            /* [out] */ STATSTG __RPC_FAR *pstatstg,
+        HRESULT ( STDMETHODCALLTYPE *Stat )( 
+            IStream * This,
+            /* [out] */ STATSTG *pstatstg,
             /* [in] */ DWORD grfStatFlag);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IStream __RPC_FAR * This,
-            /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IStream * This,
+            /* [out] */ IStream **ppstm);
         
         END_INTERFACE
     } IStreamVtbl;
 
     interface IStream
     {
-        CONST_VTBL struct IStreamVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IStreamVtbl *lpVtbl;
     };
 
     
@@ -4552,10 +4588,10 @@ EXTERN_C const IID IID_IStream;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IStream_RemoteSeek_Proxy( 
-    IStream __RPC_FAR * This,
+    IStream * This,
     /* [in] */ LARGE_INTEGER dlibMove,
     /* [in] */ DWORD dwOrigin,
-    /* [out] */ ULARGE_INTEGER __RPC_FAR *plibNewPosition);
+    /* [out] */ ULARGE_INTEGER *plibNewPosition);
 
 
 void __RPC_STUB IStream_RemoteSeek_Stub(
@@ -4566,7 +4602,7 @@ void __RPC_STUB IStream_RemoteSeek_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStream_SetSize_Proxy( 
-    IStream __RPC_FAR * This,
+    IStream * This,
     /* [in] */ ULARGE_INTEGER libNewSize);
 
 
@@ -4578,11 +4614,11 @@ void __RPC_STUB IStream_SetSize_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IStream_RemoteCopyTo_Proxy( 
-    IStream __RPC_FAR * This,
-    /* [unique][in] */ IStream __RPC_FAR *pstm,
+    IStream * This,
+    /* [unique][in] */ IStream *pstm,
     /* [in] */ ULARGE_INTEGER cb,
-    /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbRead,
-    /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbWritten);
+    /* [out] */ ULARGE_INTEGER *pcbRead,
+    /* [out] */ ULARGE_INTEGER *pcbWritten);
 
 
 void __RPC_STUB IStream_RemoteCopyTo_Stub(
@@ -4593,7 +4629,7 @@ void __RPC_STUB IStream_RemoteCopyTo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStream_Commit_Proxy( 
-    IStream __RPC_FAR * This,
+    IStream * This,
     /* [in] */ DWORD grfCommitFlags);
 
 
@@ -4605,7 +4641,7 @@ void __RPC_STUB IStream_Commit_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStream_Revert_Proxy( 
-    IStream __RPC_FAR * This);
+    IStream * This);
 
 
 void __RPC_STUB IStream_Revert_Stub(
@@ -4616,7 +4652,7 @@ void __RPC_STUB IStream_Revert_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStream_LockRegion_Proxy( 
-    IStream __RPC_FAR * This,
+    IStream * This,
     /* [in] */ ULARGE_INTEGER libOffset,
     /* [in] */ ULARGE_INTEGER cb,
     /* [in] */ DWORD dwLockType);
@@ -4630,7 +4666,7 @@ void __RPC_STUB IStream_LockRegion_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStream_UnlockRegion_Proxy( 
-    IStream __RPC_FAR * This,
+    IStream * This,
     /* [in] */ ULARGE_INTEGER libOffset,
     /* [in] */ ULARGE_INTEGER cb,
     /* [in] */ DWORD dwLockType);
@@ -4644,8 +4680,8 @@ void __RPC_STUB IStream_UnlockRegion_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStream_Stat_Proxy( 
-    IStream __RPC_FAR * This,
-    /* [out] */ STATSTG __RPC_FAR *pstatstg,
+    IStream * This,
+    /* [out] */ STATSTG *pstatstg,
     /* [in] */ DWORD grfStatFlag);
 
 
@@ -4657,8 +4693,8 @@ void __RPC_STUB IStream_Stat_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStream_Clone_Proxy( 
-    IStream __RPC_FAR * This,
-    /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm);
+    IStream * This,
+    /* [out] */ IStream **ppstm);
 
 
 void __RPC_STUB IStream_Clone_Stub(
@@ -4678,7 +4714,7 @@ void __RPC_STUB IStream_Clone_Stub(
 /* interface IEnumSTATSTG */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEnumSTATSTG __RPC_FAR *LPENUMSTATSTG;
+typedef /* [unique] */ IEnumSTATSTG *LPENUMSTATSTG;
 
 
 EXTERN_C const IID IID_IEnumSTATSTG;
@@ -4691,8 +4727,8 @@ EXTERN_C const IID IID_IEnumSTATSTG;
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATSTG __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [length_is][size_is][out] */ STATSTG *rgelt,
+            /* [out] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -4700,7 +4736,7 @@ EXTERN_C const IID IID_IEnumSTATSTG;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumSTATSTG __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumSTATSTG **ppenum) = 0;
         
     };
     
@@ -4710,40 +4746,40 @@ EXTERN_C const IID IID_IEnumSTATSTG;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumSTATSTG __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumSTATSTG * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumSTATSTG __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumSTATSTG * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumSTATSTG __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumSTATSTG * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumSTATSTG __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumSTATSTG * This,
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATSTG __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+            /* [length_is][size_is][out] */ STATSTG *rgelt,
+            /* [out] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumSTATSTG __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumSTATSTG * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumSTATSTG __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumSTATSTG * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumSTATSTG __RPC_FAR * This,
-            /* [out] */ IEnumSTATSTG __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumSTATSTG * This,
+            /* [out] */ IEnumSTATSTG **ppenum);
         
         END_INTERFACE
     } IEnumSTATSTGVtbl;
 
     interface IEnumSTATSTG
     {
-        CONST_VTBL struct IEnumSTATSTGVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumSTATSTGVtbl *lpVtbl;
     };
 
     
@@ -4781,10 +4817,10 @@ EXTERN_C const IID IID_IEnumSTATSTG;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumSTATSTG_RemoteNext_Proxy( 
-    IEnumSTATSTG __RPC_FAR * This,
+    IEnumSTATSTG * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATSTG __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ STATSTG *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumSTATSTG_RemoteNext_Stub(
@@ -4795,7 +4831,7 @@ void __RPC_STUB IEnumSTATSTG_RemoteNext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATSTG_Skip_Proxy( 
-    IEnumSTATSTG __RPC_FAR * This,
+    IEnumSTATSTG * This,
     /* [in] */ ULONG celt);
 
 
@@ -4807,7 +4843,7 @@ void __RPC_STUB IEnumSTATSTG_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATSTG_Reset_Proxy( 
-    IEnumSTATSTG __RPC_FAR * This);
+    IEnumSTATSTG * This);
 
 
 void __RPC_STUB IEnumSTATSTG_Reset_Stub(
@@ -4818,8 +4854,8 @@ void __RPC_STUB IEnumSTATSTG_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATSTG_Clone_Proxy( 
-    IEnumSTATSTG __RPC_FAR * This,
-    /* [out] */ IEnumSTATSTG __RPC_FAR *__RPC_FAR *ppenum);
+    IEnumSTATSTG * This,
+    /* [out] */ IEnumSTATSTG **ppenum);
 
 
 void __RPC_STUB IEnumSTATSTG_Clone_Stub(
@@ -4839,18 +4875,18 @@ void __RPC_STUB IEnumSTATSTG_Clone_Stub(
 /* interface IStorage */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IStorage __RPC_FAR *LPSTORAGE;
+typedef /* [unique] */ IStorage *LPSTORAGE;
 
 typedef struct tagRemSNB
     {
     unsigned long ulCntStr;
     unsigned long ulCntChar;
     /* [size_is] */ OLECHAR rgString[ 1 ];
-    }	RemSNB;
+    } 	RemSNB;
 
-typedef /* [unique] */ RemSNB __RPC_FAR *wireSNB;
+typedef /* [unique] */ RemSNB *wireSNB;
 
-typedef /* [wire_marshal] */ OLECHAR __RPC_FAR *__RPC_FAR *SNB;
+typedef /* [wire_marshal] */ OLECHAR **SNB;
 
 
 EXTERN_C const IID IID_IStorage;
@@ -4862,44 +4898,44 @@ EXTERN_C const IID IID_IStorage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateStream( 
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
+            /* [string][in] */ const OLECHAR *pwcsName,
             /* [in] */ DWORD grfMode,
             /* [in] */ DWORD reserved1,
             /* [in] */ DWORD reserved2,
-            /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm) = 0;
+            /* [out] */ IStream **ppstm) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE OpenStream( 
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
-            /* [unique][in] */ void __RPC_FAR *reserved1,
+            /* [string][in] */ const OLECHAR *pwcsName,
+            /* [unique][in] */ void *reserved1,
             /* [in] */ DWORD grfMode,
             /* [in] */ DWORD reserved2,
-            /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm) = 0;
+            /* [out] */ IStream **ppstm) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateStorage( 
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
+            /* [string][in] */ const OLECHAR *pwcsName,
             /* [in] */ DWORD grfMode,
             /* [in] */ DWORD reserved1,
             /* [in] */ DWORD reserved2,
-            /* [out] */ IStorage __RPC_FAR *__RPC_FAR *ppstg) = 0;
+            /* [out] */ IStorage **ppstg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenStorage( 
-            /* [string][unique][in] */ const OLECHAR __RPC_FAR *pwcsName,
-            /* [unique][in] */ IStorage __RPC_FAR *pstgPriority,
+            /* [string][unique][in] */ const OLECHAR *pwcsName,
+            /* [unique][in] */ IStorage *pstgPriority,
             /* [in] */ DWORD grfMode,
             /* [unique][in] */ SNB snbExclude,
             /* [in] */ DWORD reserved,
-            /* [out] */ IStorage __RPC_FAR *__RPC_FAR *ppstg) = 0;
+            /* [out] */ IStorage **ppstg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyTo( 
             /* [in] */ DWORD ciidExclude,
-            /* [size_is][unique][in] */ const IID __RPC_FAR *rgiidExclude,
+            /* [size_is][unique][in] */ const IID *rgiidExclude,
             /* [unique][in] */ SNB snbExclude,
-            /* [unique][in] */ IStorage __RPC_FAR *pstgDest) = 0;
+            /* [unique][in] */ IStorage *pstgDest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MoveElementTo( 
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
-            /* [unique][in] */ IStorage __RPC_FAR *pstgDest,
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsNewName,
+            /* [string][in] */ const OLECHAR *pwcsName,
+            /* [unique][in] */ IStorage *pstgDest,
+            /* [string][in] */ const OLECHAR *pwcsNewName,
             /* [in] */ DWORD grfFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( 
@@ -4909,22 +4945,22 @@ EXTERN_C const IID IID_IStorage;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE EnumElements( 
             /* [in] */ DWORD reserved1,
-            /* [size_is][unique][in] */ void __RPC_FAR *reserved2,
+            /* [size_is][unique][in] */ void *reserved2,
             /* [in] */ DWORD reserved3,
-            /* [out] */ IEnumSTATSTG __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumSTATSTG **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DestroyElement( 
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName) = 0;
+            /* [string][in] */ const OLECHAR *pwcsName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RenameElement( 
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsOldName,
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsNewName) = 0;
+            /* [string][in] */ const OLECHAR *pwcsOldName,
+            /* [string][in] */ const OLECHAR *pwcsNewName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetElementTimes( 
-            /* [string][unique][in] */ const OLECHAR __RPC_FAR *pwcsName,
-            /* [unique][in] */ const FILETIME __RPC_FAR *pctime,
-            /* [unique][in] */ const FILETIME __RPC_FAR *patime,
-            /* [unique][in] */ const FILETIME __RPC_FAR *pmtime) = 0;
+            /* [string][unique][in] */ const OLECHAR *pwcsName,
+            /* [unique][in] */ const FILETIME *pctime,
+            /* [unique][in] */ const FILETIME *patime,
+            /* [unique][in] */ const FILETIME *pmtime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClass( 
             /* [in] */ REFCLSID clsid) = 0;
@@ -4934,7 +4970,7 @@ EXTERN_C const IID IID_IStorage;
             /* [in] */ DWORD grfMask) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stat( 
-            /* [out] */ STATSTG __RPC_FAR *pstatstg,
+            /* [out] */ STATSTG *pstatstg,
             /* [in] */ DWORD grfStatFlag) = 0;
         
     };
@@ -4945,106 +4981,106 @@ EXTERN_C const IID IID_IStorage;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IStorage * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IStorage * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IStorage * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateStream )( 
-            IStorage __RPC_FAR * This,
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
+        HRESULT ( STDMETHODCALLTYPE *CreateStream )( 
+            IStorage * This,
+            /* [string][in] */ const OLECHAR *pwcsName,
             /* [in] */ DWORD grfMode,
             /* [in] */ DWORD reserved1,
             /* [in] */ DWORD reserved2,
-            /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm);
+            /* [out] */ IStream **ppstm);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenStream )( 
-            IStorage __RPC_FAR * This,
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
-            /* [unique][in] */ void __RPC_FAR *reserved1,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OpenStream )( 
+            IStorage * This,
+            /* [string][in] */ const OLECHAR *pwcsName,
+            /* [unique][in] */ void *reserved1,
             /* [in] */ DWORD grfMode,
             /* [in] */ DWORD reserved2,
-            /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm);
+            /* [out] */ IStream **ppstm);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateStorage )( 
-            IStorage __RPC_FAR * This,
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
+        HRESULT ( STDMETHODCALLTYPE *CreateStorage )( 
+            IStorage * This,
+            /* [string][in] */ const OLECHAR *pwcsName,
             /* [in] */ DWORD grfMode,
             /* [in] */ DWORD reserved1,
             /* [in] */ DWORD reserved2,
-            /* [out] */ IStorage __RPC_FAR *__RPC_FAR *ppstg);
+            /* [out] */ IStorage **ppstg);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenStorage )( 
-            IStorage __RPC_FAR * This,
-            /* [string][unique][in] */ const OLECHAR __RPC_FAR *pwcsName,
-            /* [unique][in] */ IStorage __RPC_FAR *pstgPriority,
+        HRESULT ( STDMETHODCALLTYPE *OpenStorage )( 
+            IStorage * This,
+            /* [string][unique][in] */ const OLECHAR *pwcsName,
+            /* [unique][in] */ IStorage *pstgPriority,
             /* [in] */ DWORD grfMode,
             /* [unique][in] */ SNB snbExclude,
             /* [in] */ DWORD reserved,
-            /* [out] */ IStorage __RPC_FAR *__RPC_FAR *ppstg);
+            /* [out] */ IStorage **ppstg);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyTo )( 
-            IStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CopyTo )( 
+            IStorage * This,
             /* [in] */ DWORD ciidExclude,
-            /* [size_is][unique][in] */ const IID __RPC_FAR *rgiidExclude,
+            /* [size_is][unique][in] */ const IID *rgiidExclude,
             /* [unique][in] */ SNB snbExclude,
-            /* [unique][in] */ IStorage __RPC_FAR *pstgDest);
+            /* [unique][in] */ IStorage *pstgDest);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveElementTo )( 
-            IStorage __RPC_FAR * This,
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
-            /* [unique][in] */ IStorage __RPC_FAR *pstgDest,
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsNewName,
+        HRESULT ( STDMETHODCALLTYPE *MoveElementTo )( 
+            IStorage * This,
+            /* [string][in] */ const OLECHAR *pwcsName,
+            /* [unique][in] */ IStorage *pstgDest,
+            /* [string][in] */ const OLECHAR *pwcsNewName,
             /* [in] */ DWORD grfFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Commit )( 
-            IStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Commit )( 
+            IStorage * This,
             /* [in] */ DWORD grfCommitFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Revert )( 
-            IStorage __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Revert )( 
+            IStorage * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumElements )( 
-            IStorage __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *EnumElements )( 
+            IStorage * This,
             /* [in] */ DWORD reserved1,
-            /* [size_is][unique][in] */ void __RPC_FAR *reserved2,
+            /* [size_is][unique][in] */ void *reserved2,
             /* [in] */ DWORD reserved3,
-            /* [out] */ IEnumSTATSTG __RPC_FAR *__RPC_FAR *ppenum);
+            /* [out] */ IEnumSTATSTG **ppenum);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DestroyElement )( 
-            IStorage __RPC_FAR * This,
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName);
+        HRESULT ( STDMETHODCALLTYPE *DestroyElement )( 
+            IStorage * This,
+            /* [string][in] */ const OLECHAR *pwcsName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RenameElement )( 
-            IStorage __RPC_FAR * This,
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsOldName,
-            /* [string][in] */ const OLECHAR __RPC_FAR *pwcsNewName);
+        HRESULT ( STDMETHODCALLTYPE *RenameElement )( 
+            IStorage * This,
+            /* [string][in] */ const OLECHAR *pwcsOldName,
+            /* [string][in] */ const OLECHAR *pwcsNewName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetElementTimes )( 
-            IStorage __RPC_FAR * This,
-            /* [string][unique][in] */ const OLECHAR __RPC_FAR *pwcsName,
-            /* [unique][in] */ const FILETIME __RPC_FAR *pctime,
-            /* [unique][in] */ const FILETIME __RPC_FAR *patime,
-            /* [unique][in] */ const FILETIME __RPC_FAR *pmtime);
+        HRESULT ( STDMETHODCALLTYPE *SetElementTimes )( 
+            IStorage * This,
+            /* [string][unique][in] */ const OLECHAR *pwcsName,
+            /* [unique][in] */ const FILETIME *pctime,
+            /* [unique][in] */ const FILETIME *patime,
+            /* [unique][in] */ const FILETIME *pmtime);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetClass )( 
-            IStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetClass )( 
+            IStorage * This,
             /* [in] */ REFCLSID clsid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStateBits )( 
-            IStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetStateBits )( 
+            IStorage * This,
             /* [in] */ DWORD grfStateBits,
             /* [in] */ DWORD grfMask);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stat )( 
-            IStorage __RPC_FAR * This,
-            /* [out] */ STATSTG __RPC_FAR *pstatstg,
+        HRESULT ( STDMETHODCALLTYPE *Stat )( 
+            IStorage * This,
+            /* [out] */ STATSTG *pstatstg,
             /* [in] */ DWORD grfStatFlag);
         
         END_INTERFACE
@@ -5052,7 +5088,7 @@ EXTERN_C const IID IID_IStorage;
 
     interface IStorage
     {
-        CONST_VTBL struct IStorageVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IStorageVtbl *lpVtbl;
     };
 
     
@@ -5123,12 +5159,12 @@ EXTERN_C const IID IID_IStorage;
 
 
 HRESULT STDMETHODCALLTYPE IStorage_CreateStream_Proxy( 
-    IStorage __RPC_FAR * This,
-    /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
+    IStorage * This,
+    /* [string][in] */ const OLECHAR *pwcsName,
     /* [in] */ DWORD grfMode,
     /* [in] */ DWORD reserved1,
     /* [in] */ DWORD reserved2,
-    /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm);
+    /* [out] */ IStream **ppstm);
 
 
 void __RPC_STUB IStorage_CreateStream_Stub(
@@ -5139,13 +5175,13 @@ void __RPC_STUB IStorage_CreateStream_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IStorage_RemoteOpenStream_Proxy( 
-    IStorage __RPC_FAR * This,
-    /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
+    IStorage * This,
+    /* [string][in] */ const OLECHAR *pwcsName,
     /* [in] */ unsigned long cbReserved1,
-    /* [size_is][unique][in] */ byte __RPC_FAR *reserved1,
+    /* [size_is][unique][in] */ byte *reserved1,
     /* [in] */ DWORD grfMode,
     /* [in] */ DWORD reserved2,
-    /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm);
+    /* [out] */ IStream **ppstm);
 
 
 void __RPC_STUB IStorage_RemoteOpenStream_Stub(
@@ -5156,12 +5192,12 @@ void __RPC_STUB IStorage_RemoteOpenStream_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStorage_CreateStorage_Proxy( 
-    IStorage __RPC_FAR * This,
-    /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
+    IStorage * This,
+    /* [string][in] */ const OLECHAR *pwcsName,
     /* [in] */ DWORD grfMode,
     /* [in] */ DWORD reserved1,
     /* [in] */ DWORD reserved2,
-    /* [out] */ IStorage __RPC_FAR *__RPC_FAR *ppstg);
+    /* [out] */ IStorage **ppstg);
 
 
 void __RPC_STUB IStorage_CreateStorage_Stub(
@@ -5172,13 +5208,13 @@ void __RPC_STUB IStorage_CreateStorage_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStorage_OpenStorage_Proxy( 
-    IStorage __RPC_FAR * This,
-    /* [string][unique][in] */ const OLECHAR __RPC_FAR *pwcsName,
-    /* [unique][in] */ IStorage __RPC_FAR *pstgPriority,
+    IStorage * This,
+    /* [string][unique][in] */ const OLECHAR *pwcsName,
+    /* [unique][in] */ IStorage *pstgPriority,
     /* [in] */ DWORD grfMode,
     /* [unique][in] */ SNB snbExclude,
     /* [in] */ DWORD reserved,
-    /* [out] */ IStorage __RPC_FAR *__RPC_FAR *ppstg);
+    /* [out] */ IStorage **ppstg);
 
 
 void __RPC_STUB IStorage_OpenStorage_Stub(
@@ -5189,11 +5225,11 @@ void __RPC_STUB IStorage_OpenStorage_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStorage_CopyTo_Proxy( 
-    IStorage __RPC_FAR * This,
+    IStorage * This,
     /* [in] */ DWORD ciidExclude,
-    /* [size_is][unique][in] */ const IID __RPC_FAR *rgiidExclude,
+    /* [size_is][unique][in] */ const IID *rgiidExclude,
     /* [unique][in] */ SNB snbExclude,
-    /* [unique][in] */ IStorage __RPC_FAR *pstgDest);
+    /* [unique][in] */ IStorage *pstgDest);
 
 
 void __RPC_STUB IStorage_CopyTo_Stub(
@@ -5204,10 +5240,10 @@ void __RPC_STUB IStorage_CopyTo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStorage_MoveElementTo_Proxy( 
-    IStorage __RPC_FAR * This,
-    /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
-    /* [unique][in] */ IStorage __RPC_FAR *pstgDest,
-    /* [string][in] */ const OLECHAR __RPC_FAR *pwcsNewName,
+    IStorage * This,
+    /* [string][in] */ const OLECHAR *pwcsName,
+    /* [unique][in] */ IStorage *pstgDest,
+    /* [string][in] */ const OLECHAR *pwcsNewName,
     /* [in] */ DWORD grfFlags);
 
 
@@ -5219,7 +5255,7 @@ void __RPC_STUB IStorage_MoveElementTo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStorage_Commit_Proxy( 
-    IStorage __RPC_FAR * This,
+    IStorage * This,
     /* [in] */ DWORD grfCommitFlags);
 
 
@@ -5231,7 +5267,7 @@ void __RPC_STUB IStorage_Commit_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStorage_Revert_Proxy( 
-    IStorage __RPC_FAR * This);
+    IStorage * This);
 
 
 void __RPC_STUB IStorage_Revert_Stub(
@@ -5242,12 +5278,12 @@ void __RPC_STUB IStorage_Revert_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IStorage_RemoteEnumElements_Proxy( 
-    IStorage __RPC_FAR * This,
+    IStorage * This,
     /* [in] */ DWORD reserved1,
     /* [in] */ unsigned long cbReserved2,
-    /* [size_is][unique][in] */ byte __RPC_FAR *reserved2,
+    /* [size_is][unique][in] */ byte *reserved2,
     /* [in] */ DWORD reserved3,
-    /* [out] */ IEnumSTATSTG __RPC_FAR *__RPC_FAR *ppenum);
+    /* [out] */ IEnumSTATSTG **ppenum);
 
 
 void __RPC_STUB IStorage_RemoteEnumElements_Stub(
@@ -5258,8 +5294,8 @@ void __RPC_STUB IStorage_RemoteEnumElements_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStorage_DestroyElement_Proxy( 
-    IStorage __RPC_FAR * This,
-    /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName);
+    IStorage * This,
+    /* [string][in] */ const OLECHAR *pwcsName);
 
 
 void __RPC_STUB IStorage_DestroyElement_Stub(
@@ -5270,9 +5306,9 @@ void __RPC_STUB IStorage_DestroyElement_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStorage_RenameElement_Proxy( 
-    IStorage __RPC_FAR * This,
-    /* [string][in] */ const OLECHAR __RPC_FAR *pwcsOldName,
-    /* [string][in] */ const OLECHAR __RPC_FAR *pwcsNewName);
+    IStorage * This,
+    /* [string][in] */ const OLECHAR *pwcsOldName,
+    /* [string][in] */ const OLECHAR *pwcsNewName);
 
 
 void __RPC_STUB IStorage_RenameElement_Stub(
@@ -5283,11 +5319,11 @@ void __RPC_STUB IStorage_RenameElement_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStorage_SetElementTimes_Proxy( 
-    IStorage __RPC_FAR * This,
-    /* [string][unique][in] */ const OLECHAR __RPC_FAR *pwcsName,
-    /* [unique][in] */ const FILETIME __RPC_FAR *pctime,
-    /* [unique][in] */ const FILETIME __RPC_FAR *patime,
-    /* [unique][in] */ const FILETIME __RPC_FAR *pmtime);
+    IStorage * This,
+    /* [string][unique][in] */ const OLECHAR *pwcsName,
+    /* [unique][in] */ const FILETIME *pctime,
+    /* [unique][in] */ const FILETIME *patime,
+    /* [unique][in] */ const FILETIME *pmtime);
 
 
 void __RPC_STUB IStorage_SetElementTimes_Stub(
@@ -5298,7 +5334,7 @@ void __RPC_STUB IStorage_SetElementTimes_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStorage_SetClass_Proxy( 
-    IStorage __RPC_FAR * This,
+    IStorage * This,
     /* [in] */ REFCLSID clsid);
 
 
@@ -5310,7 +5346,7 @@ void __RPC_STUB IStorage_SetClass_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStorage_SetStateBits_Proxy( 
-    IStorage __RPC_FAR * This,
+    IStorage * This,
     /* [in] */ DWORD grfStateBits,
     /* [in] */ DWORD grfMask);
 
@@ -5323,8 +5359,8 @@ void __RPC_STUB IStorage_SetStateBits_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IStorage_Stat_Proxy( 
-    IStorage __RPC_FAR * This,
-    /* [out] */ STATSTG __RPC_FAR *pstatstg,
+    IStorage * This,
+    /* [out] */ STATSTG *pstatstg,
     /* [in] */ DWORD grfStatFlag);
 
 
@@ -5345,7 +5381,7 @@ void __RPC_STUB IStorage_Stat_Stub(
 /* interface IPersistFile */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IPersistFile __RPC_FAR *LPPERSISTFILE;
+typedef /* [unique] */ IPersistFile *LPPERSISTFILE;
 
 
 EXTERN_C const IID IID_IPersistFile;
@@ -5370,7 +5406,7 @@ EXTERN_C const IID IID_IPersistFile;
             /* [unique][in] */ LPCOLESTR pszFileName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurFile( 
-            /* [out] */ LPOLESTR __RPC_FAR *ppszFileName) = 0;
+            /* [out] */ LPOLESTR *ppszFileName) = 0;
         
     };
     
@@ -5380,48 +5416,48 @@ EXTERN_C const IID IID_IPersistFile;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPersistFile __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPersistFile * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPersistFile __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPersistFile * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPersistFile __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPersistFile * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassID )( 
-            IPersistFile __RPC_FAR * This,
-            /* [out] */ CLSID __RPC_FAR *pClassID);
+        HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
+            IPersistFile * This,
+            /* [out] */ CLSID *pClassID);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsDirty )( 
-            IPersistFile __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *IsDirty )( 
+            IPersistFile * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Load )( 
-            IPersistFile __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Load )( 
+            IPersistFile * This,
             /* [in] */ LPCOLESTR pszFileName,
             /* [in] */ DWORD dwMode);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Save )( 
-            IPersistFile __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Save )( 
+            IPersistFile * This,
             /* [unique][in] */ LPCOLESTR pszFileName,
             /* [in] */ BOOL fRemember);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveCompleted )( 
-            IPersistFile __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SaveCompleted )( 
+            IPersistFile * This,
             /* [unique][in] */ LPCOLESTR pszFileName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCurFile )( 
-            IPersistFile __RPC_FAR * This,
-            /* [out] */ LPOLESTR __RPC_FAR *ppszFileName);
+        HRESULT ( STDMETHODCALLTYPE *GetCurFile )( 
+            IPersistFile * This,
+            /* [out] */ LPOLESTR *ppszFileName);
         
         END_INTERFACE
     } IPersistFileVtbl;
 
     interface IPersistFile
     {
-        CONST_VTBL struct IPersistFileVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPersistFileVtbl *lpVtbl;
     };
 
     
@@ -5466,7 +5502,7 @@ EXTERN_C const IID IID_IPersistFile;
 
 
 HRESULT STDMETHODCALLTYPE IPersistFile_IsDirty_Proxy( 
-    IPersistFile __RPC_FAR * This);
+    IPersistFile * This);
 
 
 void __RPC_STUB IPersistFile_IsDirty_Stub(
@@ -5477,7 +5513,7 @@ void __RPC_STUB IPersistFile_IsDirty_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistFile_Load_Proxy( 
-    IPersistFile __RPC_FAR * This,
+    IPersistFile * This,
     /* [in] */ LPCOLESTR pszFileName,
     /* [in] */ DWORD dwMode);
 
@@ -5490,7 +5526,7 @@ void __RPC_STUB IPersistFile_Load_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistFile_Save_Proxy( 
-    IPersistFile __RPC_FAR * This,
+    IPersistFile * This,
     /* [unique][in] */ LPCOLESTR pszFileName,
     /* [in] */ BOOL fRemember);
 
@@ -5503,7 +5539,7 @@ void __RPC_STUB IPersistFile_Save_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistFile_SaveCompleted_Proxy( 
-    IPersistFile __RPC_FAR * This,
+    IPersistFile * This,
     /* [unique][in] */ LPCOLESTR pszFileName);
 
 
@@ -5515,8 +5551,8 @@ void __RPC_STUB IPersistFile_SaveCompleted_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistFile_GetCurFile_Proxy( 
-    IPersistFile __RPC_FAR * This,
-    /* [out] */ LPOLESTR __RPC_FAR *ppszFileName);
+    IPersistFile * This,
+    /* [out] */ LPOLESTR *ppszFileName);
 
 
 void __RPC_STUB IPersistFile_GetCurFile_Stub(
@@ -5536,7 +5572,7 @@ void __RPC_STUB IPersistFile_GetCurFile_Stub(
 /* interface IPersistStorage */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IPersistStorage __RPC_FAR *LPPERSISTSTORAGE;
+typedef /* [unique] */ IPersistStorage *LPPERSISTSTORAGE;
 
 
 EXTERN_C const IID IID_IPersistStorage;
@@ -5550,17 +5586,17 @@ EXTERN_C const IID IID_IPersistStorage;
         virtual HRESULT STDMETHODCALLTYPE IsDirty( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitNew( 
-            /* [unique][in] */ IStorage __RPC_FAR *pStg) = 0;
+            /* [unique][in] */ IStorage *pStg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Load( 
-            /* [unique][in] */ IStorage __RPC_FAR *pStg) = 0;
+            /* [unique][in] */ IStorage *pStg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Save( 
-            /* [unique][in] */ IStorage __RPC_FAR *pStgSave,
+            /* [unique][in] */ IStorage *pStgSave,
             /* [in] */ BOOL fSameAsLoad) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveCompleted( 
-            /* [unique][in] */ IStorage __RPC_FAR *pStgNew) = 0;
+            /* [unique][in] */ IStorage *pStgNew) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HandsOffStorage( void) = 0;
         
@@ -5572,50 +5608,50 @@ EXTERN_C const IID IID_IPersistStorage;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPersistStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPersistStorage * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPersistStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPersistStorage * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPersistStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPersistStorage * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassID )( 
-            IPersistStorage __RPC_FAR * This,
-            /* [out] */ CLSID __RPC_FAR *pClassID);
+        HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
+            IPersistStorage * This,
+            /* [out] */ CLSID *pClassID);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsDirty )( 
-            IPersistStorage __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *IsDirty )( 
+            IPersistStorage * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitNew )( 
-            IPersistStorage __RPC_FAR * This,
-            /* [unique][in] */ IStorage __RPC_FAR *pStg);
+        HRESULT ( STDMETHODCALLTYPE *InitNew )( 
+            IPersistStorage * This,
+            /* [unique][in] */ IStorage *pStg);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Load )( 
-            IPersistStorage __RPC_FAR * This,
-            /* [unique][in] */ IStorage __RPC_FAR *pStg);
+        HRESULT ( STDMETHODCALLTYPE *Load )( 
+            IPersistStorage * This,
+            /* [unique][in] */ IStorage *pStg);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Save )( 
-            IPersistStorage __RPC_FAR * This,
-            /* [unique][in] */ IStorage __RPC_FAR *pStgSave,
+        HRESULT ( STDMETHODCALLTYPE *Save )( 
+            IPersistStorage * This,
+            /* [unique][in] */ IStorage *pStgSave,
             /* [in] */ BOOL fSameAsLoad);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveCompleted )( 
-            IPersistStorage __RPC_FAR * This,
-            /* [unique][in] */ IStorage __RPC_FAR *pStgNew);
+        HRESULT ( STDMETHODCALLTYPE *SaveCompleted )( 
+            IPersistStorage * This,
+            /* [unique][in] */ IStorage *pStgNew);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *HandsOffStorage )( 
-            IPersistStorage __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *HandsOffStorage )( 
+            IPersistStorage * This);
         
         END_INTERFACE
     } IPersistStorageVtbl;
 
     interface IPersistStorage
     {
-        CONST_VTBL struct IPersistStorageVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPersistStorageVtbl *lpVtbl;
     };
 
     
@@ -5663,7 +5699,7 @@ EXTERN_C const IID IID_IPersistStorage;
 
 
 HRESULT STDMETHODCALLTYPE IPersistStorage_IsDirty_Proxy( 
-    IPersistStorage __RPC_FAR * This);
+    IPersistStorage * This);
 
 
 void __RPC_STUB IPersistStorage_IsDirty_Stub(
@@ -5674,8 +5710,8 @@ void __RPC_STUB IPersistStorage_IsDirty_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistStorage_InitNew_Proxy( 
-    IPersistStorage __RPC_FAR * This,
-    /* [unique][in] */ IStorage __RPC_FAR *pStg);
+    IPersistStorage * This,
+    /* [unique][in] */ IStorage *pStg);
 
 
 void __RPC_STUB IPersistStorage_InitNew_Stub(
@@ -5686,8 +5722,8 @@ void __RPC_STUB IPersistStorage_InitNew_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistStorage_Load_Proxy( 
-    IPersistStorage __RPC_FAR * This,
-    /* [unique][in] */ IStorage __RPC_FAR *pStg);
+    IPersistStorage * This,
+    /* [unique][in] */ IStorage *pStg);
 
 
 void __RPC_STUB IPersistStorage_Load_Stub(
@@ -5698,8 +5734,8 @@ void __RPC_STUB IPersistStorage_Load_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistStorage_Save_Proxy( 
-    IPersistStorage __RPC_FAR * This,
-    /* [unique][in] */ IStorage __RPC_FAR *pStgSave,
+    IPersistStorage * This,
+    /* [unique][in] */ IStorage *pStgSave,
     /* [in] */ BOOL fSameAsLoad);
 
 
@@ -5711,8 +5747,8 @@ void __RPC_STUB IPersistStorage_Save_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistStorage_SaveCompleted_Proxy( 
-    IPersistStorage __RPC_FAR * This,
-    /* [unique][in] */ IStorage __RPC_FAR *pStgNew);
+    IPersistStorage * This,
+    /* [unique][in] */ IStorage *pStgNew);
 
 
 void __RPC_STUB IPersistStorage_SaveCompleted_Stub(
@@ -5723,7 +5759,7 @@ void __RPC_STUB IPersistStorage_SaveCompleted_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPersistStorage_HandsOffStorage_Proxy( 
-    IPersistStorage __RPC_FAR * This);
+    IPersistStorage * This);
 
 
 void __RPC_STUB IPersistStorage_HandsOffStorage_Stub(
@@ -5743,7 +5779,7 @@ void __RPC_STUB IPersistStorage_HandsOffStorage_Stub(
 /* interface ILockBytes */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ ILockBytes __RPC_FAR *LPLOCKBYTES;
+typedef /* [unique] */ ILockBytes *LPLOCKBYTES;
 
 
 EXTERN_C const IID IID_ILockBytes;
@@ -5756,15 +5792,15 @@ EXTERN_C const IID IID_ILockBytes;
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE ReadAt( 
             /* [in] */ ULARGE_INTEGER ulOffset,
-            /* [length_is][size_is][out] */ void __RPC_FAR *pv,
+            /* [length_is][size_is][out] */ void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbRead) = 0;
+            /* [out] */ ULONG *pcbRead) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE WriteAt( 
             /* [in] */ ULARGE_INTEGER ulOffset,
-            /* [size_is][in] */ const void __RPC_FAR *pv,
+            /* [size_is][in] */ const void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten) = 0;
+            /* [out] */ ULONG *pcbWritten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Flush( void) = 0;
         
@@ -5782,7 +5818,7 @@ EXTERN_C const IID IID_ILockBytes;
             /* [in] */ DWORD dwLockType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stat( 
-            /* [out] */ STATSTG __RPC_FAR *pstatstg,
+            /* [out] */ STATSTG *pstatstg,
             /* [in] */ DWORD grfStatFlag) = 0;
         
     };
@@ -5793,53 +5829,53 @@ EXTERN_C const IID IID_ILockBytes;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ILockBytes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ILockBytes * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ILockBytes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ILockBytes * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ILockBytes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ILockBytes * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReadAt )( 
-            ILockBytes __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *ReadAt )( 
+            ILockBytes * This,
             /* [in] */ ULARGE_INTEGER ulOffset,
-            /* [length_is][size_is][out] */ void __RPC_FAR *pv,
+            /* [length_is][size_is][out] */ void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbRead);
+            /* [out] */ ULONG *pcbRead);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteAt )( 
-            ILockBytes __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *WriteAt )( 
+            ILockBytes * This,
             /* [in] */ ULARGE_INTEGER ulOffset,
-            /* [size_is][in] */ const void __RPC_FAR *pv,
+            /* [size_is][in] */ const void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten);
+            /* [out] */ ULONG *pcbWritten);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Flush )( 
-            ILockBytes __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Flush )( 
+            ILockBytes * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSize )( 
-            ILockBytes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetSize )( 
+            ILockBytes * This,
             /* [in] */ ULARGE_INTEGER cb);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockRegion )( 
-            ILockBytes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *LockRegion )( 
+            ILockBytes * This,
             /* [in] */ ULARGE_INTEGER libOffset,
             /* [in] */ ULARGE_INTEGER cb,
             /* [in] */ DWORD dwLockType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnlockRegion )( 
-            ILockBytes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *UnlockRegion )( 
+            ILockBytes * This,
             /* [in] */ ULARGE_INTEGER libOffset,
             /* [in] */ ULARGE_INTEGER cb,
             /* [in] */ DWORD dwLockType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stat )( 
-            ILockBytes __RPC_FAR * This,
-            /* [out] */ STATSTG __RPC_FAR *pstatstg,
+        HRESULT ( STDMETHODCALLTYPE *Stat )( 
+            ILockBytes * This,
+            /* [out] */ STATSTG *pstatstg,
             /* [in] */ DWORD grfStatFlag);
         
         END_INTERFACE
@@ -5847,7 +5883,7 @@ EXTERN_C const IID IID_ILockBytes;
 
     interface ILockBytes
     {
-        CONST_VTBL struct ILockBytesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ILockBytesVtbl *lpVtbl;
     };
 
     
@@ -5894,11 +5930,11 @@ EXTERN_C const IID IID_ILockBytes;
 
 
 /* [call_as] */ HRESULT __stdcall ILockBytes_RemoteReadAt_Proxy( 
-    ILockBytes __RPC_FAR * This,
+    ILockBytes * This,
     /* [in] */ ULARGE_INTEGER ulOffset,
-    /* [length_is][size_is][out] */ byte __RPC_FAR *pv,
+    /* [length_is][size_is][out] */ byte *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbRead);
+    /* [out] */ ULONG *pcbRead);
 
 
 void __RPC_STUB ILockBytes_RemoteReadAt_Stub(
@@ -5909,11 +5945,11 @@ void __RPC_STUB ILockBytes_RemoteReadAt_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ILockBytes_RemoteWriteAt_Proxy( 
-    ILockBytes __RPC_FAR * This,
+    ILockBytes * This,
     /* [in] */ ULARGE_INTEGER ulOffset,
-    /* [size_is][in] */ const byte __RPC_FAR *pv,
+    /* [size_is][in] */ const byte *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    /* [out] */ ULONG *pcbWritten);
 
 
 void __RPC_STUB ILockBytes_RemoteWriteAt_Stub(
@@ -5924,7 +5960,7 @@ void __RPC_STUB ILockBytes_RemoteWriteAt_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ILockBytes_Flush_Proxy( 
-    ILockBytes __RPC_FAR * This);
+    ILockBytes * This);
 
 
 void __RPC_STUB ILockBytes_Flush_Stub(
@@ -5935,7 +5971,7 @@ void __RPC_STUB ILockBytes_Flush_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ILockBytes_SetSize_Proxy( 
-    ILockBytes __RPC_FAR * This,
+    ILockBytes * This,
     /* [in] */ ULARGE_INTEGER cb);
 
 
@@ -5947,7 +5983,7 @@ void __RPC_STUB ILockBytes_SetSize_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ILockBytes_LockRegion_Proxy( 
-    ILockBytes __RPC_FAR * This,
+    ILockBytes * This,
     /* [in] */ ULARGE_INTEGER libOffset,
     /* [in] */ ULARGE_INTEGER cb,
     /* [in] */ DWORD dwLockType);
@@ -5961,7 +5997,7 @@ void __RPC_STUB ILockBytes_LockRegion_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ILockBytes_UnlockRegion_Proxy( 
-    ILockBytes __RPC_FAR * This,
+    ILockBytes * This,
     /* [in] */ ULARGE_INTEGER libOffset,
     /* [in] */ ULARGE_INTEGER cb,
     /* [in] */ DWORD dwLockType);
@@ -5975,8 +6011,8 @@ void __RPC_STUB ILockBytes_UnlockRegion_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ILockBytes_Stat_Proxy( 
-    ILockBytes __RPC_FAR * This,
-    /* [out] */ STATSTG __RPC_FAR *pstatstg,
+    ILockBytes * This,
+    /* [out] */ STATSTG *pstatstg,
     /* [in] */ DWORD grfStatFlag);
 
 
@@ -5997,7 +6033,7 @@ void __RPC_STUB ILockBytes_Stat_Stub(
 /* interface IEnumFORMATETC */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEnumFORMATETC __RPC_FAR *LPENUMFORMATETC;
+typedef /* [unique] */ IEnumFORMATETC *LPENUMFORMATETC;
 
 typedef struct tagDVTARGETDEVICE
     {
@@ -6007,20 +6043,20 @@ typedef struct tagDVTARGETDEVICE
     WORD tdPortNameOffset;
     WORD tdExtDevmodeOffset;
     /* [size_is] */ BYTE tdData[ 1 ];
-    }	DVTARGETDEVICE;
+    } 	DVTARGETDEVICE;
 
-typedef CLIPFORMAT __RPC_FAR *LPCLIPFORMAT;
+typedef CLIPFORMAT *LPCLIPFORMAT;
 
 typedef struct tagFORMATETC
     {
     CLIPFORMAT cfFormat;
-    /* [unique] */ DVTARGETDEVICE __RPC_FAR *ptd;
+    /* [unique] */ DVTARGETDEVICE *ptd;
     DWORD dwAspect;
     LONG lindex;
     DWORD tymed;
-    }	FORMATETC;
+    } 	FORMATETC;
 
-typedef struct tagFORMATETC __RPC_FAR *LPFORMATETC;
+typedef struct tagFORMATETC *LPFORMATETC;
 
 
 EXTERN_C const IID IID_IEnumFORMATETC;
@@ -6033,8 +6069,8 @@ EXTERN_C const IID IID_IEnumFORMATETC;
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ FORMATETC __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [length_is][size_is][out] */ FORMATETC *rgelt,
+            /* [out] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -6042,7 +6078,7 @@ EXTERN_C const IID IID_IEnumFORMATETC;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumFORMATETC __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumFORMATETC **ppenum) = 0;
         
     };
     
@@ -6052,40 +6088,40 @@ EXTERN_C const IID IID_IEnumFORMATETC;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumFORMATETC __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumFORMATETC * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumFORMATETC __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumFORMATETC * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumFORMATETC __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumFORMATETC * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumFORMATETC __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumFORMATETC * This,
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ FORMATETC __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+            /* [length_is][size_is][out] */ FORMATETC *rgelt,
+            /* [out] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumFORMATETC __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumFORMATETC * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumFORMATETC __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumFORMATETC * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumFORMATETC __RPC_FAR * This,
-            /* [out] */ IEnumFORMATETC __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumFORMATETC * This,
+            /* [out] */ IEnumFORMATETC **ppenum);
         
         END_INTERFACE
     } IEnumFORMATETCVtbl;
 
     interface IEnumFORMATETC
     {
-        CONST_VTBL struct IEnumFORMATETCVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumFORMATETCVtbl *lpVtbl;
     };
 
     
@@ -6123,10 +6159,10 @@ EXTERN_C const IID IID_IEnumFORMATETC;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumFORMATETC_RemoteNext_Proxy( 
-    IEnumFORMATETC __RPC_FAR * This,
+    IEnumFORMATETC * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ FORMATETC __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ FORMATETC *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumFORMATETC_RemoteNext_Stub(
@@ -6137,7 +6173,7 @@ void __RPC_STUB IEnumFORMATETC_RemoteNext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumFORMATETC_Skip_Proxy( 
-    IEnumFORMATETC __RPC_FAR * This,
+    IEnumFORMATETC * This,
     /* [in] */ ULONG celt);
 
 
@@ -6149,7 +6185,7 @@ void __RPC_STUB IEnumFORMATETC_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumFORMATETC_Reset_Proxy( 
-    IEnumFORMATETC __RPC_FAR * This);
+    IEnumFORMATETC * This);
 
 
 void __RPC_STUB IEnumFORMATETC_Reset_Stub(
@@ -6160,8 +6196,8 @@ void __RPC_STUB IEnumFORMATETC_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumFORMATETC_Clone_Proxy( 
-    IEnumFORMATETC __RPC_FAR * This,
-    /* [out] */ IEnumFORMATETC __RPC_FAR *__RPC_FAR *ppenum);
+    IEnumFORMATETC * This,
+    /* [out] */ IEnumFORMATETC **ppenum);
 
 
 void __RPC_STUB IEnumFORMATETC_Clone_Stub(
@@ -6181,7 +6217,7 @@ void __RPC_STUB IEnumFORMATETC_Clone_Stub(
 /* interface IEnumSTATDATA */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEnumSTATDATA __RPC_FAR *LPENUMSTATDATA;
+typedef /* [unique] */ IEnumSTATDATA *LPENUMSTATDATA;
 
 typedef 
 enum tagADVF
@@ -6192,17 +6228,17 @@ enum tagADVF
 	ADVFCACHE_NOHANDLER	= 8,
 	ADVFCACHE_FORCEBUILTIN	= 16,
 	ADVFCACHE_ONSAVE	= 32
-    }	ADVF;
+    } 	ADVF;
 
 typedef struct tagSTATDATA
     {
     FORMATETC formatetc;
     DWORD advf;
-    /* [unique] */ IAdviseSink __RPC_FAR *pAdvSink;
+    /* [unique] */ IAdviseSink *pAdvSink;
     DWORD dwConnection;
-    }	STATDATA;
+    } 	STATDATA;
 
-typedef STATDATA __RPC_FAR *LPSTATDATA;
+typedef STATDATA *LPSTATDATA;
 
 
 EXTERN_C const IID IID_IEnumSTATDATA;
@@ -6215,8 +6251,8 @@ EXTERN_C const IID IID_IEnumSTATDATA;
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATDATA __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [length_is][size_is][out] */ STATDATA *rgelt,
+            /* [out] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -6224,7 +6260,7 @@ EXTERN_C const IID IID_IEnumSTATDATA;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumSTATDATA **ppenum) = 0;
         
     };
     
@@ -6234,40 +6270,40 @@ EXTERN_C const IID IID_IEnumSTATDATA;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumSTATDATA __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumSTATDATA * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumSTATDATA __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumSTATDATA * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumSTATDATA __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumSTATDATA * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumSTATDATA __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumSTATDATA * This,
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATDATA __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+            /* [length_is][size_is][out] */ STATDATA *rgelt,
+            /* [out] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumSTATDATA __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumSTATDATA * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumSTATDATA __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumSTATDATA * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumSTATDATA __RPC_FAR * This,
-            /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumSTATDATA * This,
+            /* [out] */ IEnumSTATDATA **ppenum);
         
         END_INTERFACE
     } IEnumSTATDATAVtbl;
 
     interface IEnumSTATDATA
     {
-        CONST_VTBL struct IEnumSTATDATAVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumSTATDATAVtbl *lpVtbl;
     };
 
     
@@ -6305,10 +6341,10 @@ EXTERN_C const IID IID_IEnumSTATDATA;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumSTATDATA_RemoteNext_Proxy( 
-    IEnumSTATDATA __RPC_FAR * This,
+    IEnumSTATDATA * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATDATA __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ STATDATA *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumSTATDATA_RemoteNext_Stub(
@@ -6319,7 +6355,7 @@ void __RPC_STUB IEnumSTATDATA_RemoteNext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATDATA_Skip_Proxy( 
-    IEnumSTATDATA __RPC_FAR * This,
+    IEnumSTATDATA * This,
     /* [in] */ ULONG celt);
 
 
@@ -6331,7 +6367,7 @@ void __RPC_STUB IEnumSTATDATA_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATDATA_Reset_Proxy( 
-    IEnumSTATDATA __RPC_FAR * This);
+    IEnumSTATDATA * This);
 
 
 void __RPC_STUB IEnumSTATDATA_Reset_Stub(
@@ -6342,8 +6378,8 @@ void __RPC_STUB IEnumSTATDATA_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATDATA_Clone_Proxy( 
-    IEnumSTATDATA __RPC_FAR * This,
-    /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenum);
+    IEnumSTATDATA * This,
+    /* [out] */ IEnumSTATDATA **ppenum);
 
 
 void __RPC_STUB IEnumSTATDATA_Clone_Stub(
@@ -6363,7 +6399,7 @@ void __RPC_STUB IEnumSTATDATA_Clone_Stub(
 /* interface IRootStorage */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IRootStorage __RPC_FAR *LPROOTSTORAGE;
+typedef /* [unique] */ IRootStorage *LPROOTSTORAGE;
 
 
 EXTERN_C const IID IID_IRootStorage;
@@ -6385,19 +6421,19 @@ EXTERN_C const IID IID_IRootStorage;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IRootStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IRootStorage * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IRootStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IRootStorage * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IRootStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IRootStorage * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SwitchToFile )( 
-            IRootStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SwitchToFile )( 
+            IRootStorage * This,
             /* [in] */ LPOLESTR pszFile);
         
         END_INTERFACE
@@ -6405,7 +6441,7 @@ EXTERN_C const IID IID_IRootStorage;
 
     interface IRootStorage
     {
-        CONST_VTBL struct IRootStorageVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IRootStorageVtbl *lpVtbl;
     };
 
     
@@ -6434,7 +6470,7 @@ EXTERN_C const IID IID_IRootStorage;
 
 
 HRESULT STDMETHODCALLTYPE IRootStorage_SwitchToFile_Proxy( 
-    IRootStorage __RPC_FAR * This,
+    IRootStorage * This,
     /* [in] */ LPOLESTR pszFile);
 
 
@@ -6455,7 +6491,7 @@ void __RPC_STUB IRootStorage_SwitchToFile_Stub(
 /* interface IAdviseSink */
 /* [unique][async_uuid][uuid][object] */ 
 
-typedef IAdviseSink __RPC_FAR *LPADVISESINK;
+typedef IAdviseSink *LPADVISESINK;
 
 typedef /* [v1_enum] */ 
 enum tagTYMED
@@ -6467,7 +6503,7 @@ enum tagTYMED
 	TYMED_MFPICT	= 32,
 	TYMED_ENHMF	= 64,
 	TYMED_NULL	= 0
-    }	TYMED;
+    } 	TYMED;
 
 #ifndef RC_INVOKED
 #if _MSC_VER >= 1200
@@ -6483,7 +6519,7 @@ typedef struct tagRemSTGMEDIUM
     unsigned long pUnkForRelease;
     unsigned long cbData;
     /* [size_is] */ byte data[ 1 ];
-    }	RemSTGMEDIUM;
+    } 	RemSTGMEDIUM;
 
 #ifndef RC_INVOKED
 #if _MSC_VER >= 1200
@@ -6517,12 +6553,12 @@ typedef struct tagSTGMEDIUM
         /* [case()] */ HENHMETAFILE hEnhMetaFile;
         /* [case()] */ HGLOBAL hGlobal;
         /* [case()] */ LPOLESTR lpszFileName;
-        /* [case()] */ IStream __RPC_FAR *pstm;
-        /* [case()] */ IStorage __RPC_FAR *pstg;
+        /* [case()] */ IStream *pstm;
+        /* [case()] */ IStorage *pstg;
         /* [default] */  /* Empty union arm */ 
-        }	;
-    /* [unique] */ IUnknown __RPC_FAR *pUnkForRelease;
-    }	uSTGMEDIUM;
+        } 	;
+    /* [unique] */ IUnknown *pUnkForRelease;
+    } 	uSTGMEDIUM;
 
 #endif /* !NONAMELESSUNION */
 typedef struct _GDI_OBJECT
@@ -6533,8 +6569,8 @@ typedef struct _GDI_OBJECT
         /* [case()] */ wireHBITMAP hBitmap;
         /* [case()] */ wireHPALETTE hPalette;
         /* [default] */ wireHGLOBAL hGeneric;
-        }	u;
-    }	GDI_OBJECT;
+        } 	u;
+    } 	GDI_OBJECT;
 
 typedef struct _userSTGMEDIUM
     {
@@ -6546,41 +6582,41 @@ typedef struct _userSTGMEDIUM
             /* [case()] */  /* Empty union arm */ 
             /* [case()] */ wireHMETAFILEPICT hMetaFilePict;
             /* [case()] */ wireHENHMETAFILE hHEnhMetaFile;
-            /* [case()] */ GDI_OBJECT __RPC_FAR *hGdiHandle;
+            /* [case()] */ GDI_OBJECT *hGdiHandle;
             /* [case()] */ wireHGLOBAL hGlobal;
             /* [case()] */ LPOLESTR lpszFileName;
-            /* [case()] */ BYTE_BLOB __RPC_FAR *pstm;
-            /* [case()] */ BYTE_BLOB __RPC_FAR *pstg;
-            }	u;
-        }	;
-    IUnknown __RPC_FAR *pUnkForRelease;
-    }	userSTGMEDIUM;
+            /* [case()] */ BYTE_BLOB *pstm;
+            /* [case()] */ BYTE_BLOB *pstg;
+            } 	u;
+        } 	;
+    IUnknown *pUnkForRelease;
+    } 	userSTGMEDIUM;
 
-typedef /* [unique] */ userSTGMEDIUM __RPC_FAR *wireSTGMEDIUM;
+typedef /* [unique] */ userSTGMEDIUM *wireSTGMEDIUM;
 
 typedef /* [wire_marshal] */ uSTGMEDIUM STGMEDIUM;
 
-typedef /* [unique] */ userSTGMEDIUM __RPC_FAR *wireASYNC_STGMEDIUM;
+typedef /* [unique] */ userSTGMEDIUM *wireASYNC_STGMEDIUM;
 
 typedef /* [wire_marshal] */ STGMEDIUM ASYNC_STGMEDIUM;
 
-typedef STGMEDIUM __RPC_FAR *LPSTGMEDIUM;
+typedef STGMEDIUM *LPSTGMEDIUM;
 
 typedef struct _userFLAG_STGMEDIUM
     {
     long ContextFlags;
     long fPassOwnership;
     userSTGMEDIUM Stgmed;
-    }	userFLAG_STGMEDIUM;
+    } 	userFLAG_STGMEDIUM;
 
-typedef /* [unique] */ userFLAG_STGMEDIUM __RPC_FAR *wireFLAG_STGMEDIUM;
+typedef /* [unique] */ userFLAG_STGMEDIUM *wireFLAG_STGMEDIUM;
 
 typedef /* [wire_marshal] */ struct _FLAG_STGMEDIUM
     {
     long ContextFlags;
     long fPassOwnership;
     STGMEDIUM Stgmed;
-    }	FLAG_STGMEDIUM;
+    } 	FLAG_STGMEDIUM;
 
 
 EXTERN_C const IID IID_IAdviseSink;
@@ -6592,15 +6628,15 @@ EXTERN_C const IID IID_IAdviseSink;
     {
     public:
         virtual /* [local] */ void STDMETHODCALLTYPE OnDataChange( 
-            /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
-            /* [unique][in] */ STGMEDIUM __RPC_FAR *pStgmed) = 0;
+            /* [unique][in] */ FORMATETC *pFormatetc,
+            /* [unique][in] */ STGMEDIUM *pStgmed) = 0;
         
         virtual /* [local] */ void STDMETHODCALLTYPE OnViewChange( 
             /* [in] */ DWORD dwAspect,
             /* [in] */ LONG lindex) = 0;
         
         virtual /* [local] */ void STDMETHODCALLTYPE OnRename( 
-            /* [in] */ IMoniker __RPC_FAR *pmk) = 0;
+            /* [in] */ IMoniker *pmk) = 0;
         
         virtual /* [local] */ void STDMETHODCALLTYPE OnSave( void) = 0;
         
@@ -6614,43 +6650,43 @@ EXTERN_C const IID IID_IAdviseSink;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAdviseSink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAdviseSink * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAdviseSink __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAdviseSink * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAdviseSink __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAdviseSink * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnDataChange )( 
-            IAdviseSink __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
-            /* [unique][in] */ STGMEDIUM __RPC_FAR *pStgmed);
+        /* [local] */ void ( STDMETHODCALLTYPE *OnDataChange )( 
+            IAdviseSink * This,
+            /* [unique][in] */ FORMATETC *pFormatetc,
+            /* [unique][in] */ STGMEDIUM *pStgmed);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnViewChange )( 
-            IAdviseSink __RPC_FAR * This,
+        /* [local] */ void ( STDMETHODCALLTYPE *OnViewChange )( 
+            IAdviseSink * This,
             /* [in] */ DWORD dwAspect,
             /* [in] */ LONG lindex);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnRename )( 
-            IAdviseSink __RPC_FAR * This,
-            /* [in] */ IMoniker __RPC_FAR *pmk);
+        /* [local] */ void ( STDMETHODCALLTYPE *OnRename )( 
+            IAdviseSink * This,
+            /* [in] */ IMoniker *pmk);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnSave )( 
-            IAdviseSink __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *OnSave )( 
+            IAdviseSink * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnClose )( 
-            IAdviseSink __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *OnClose )( 
+            IAdviseSink * This);
         
         END_INTERFACE
     } IAdviseSinkVtbl;
 
     interface IAdviseSink
     {
-        CONST_VTBL struct IAdviseSinkVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAdviseSinkVtbl *lpVtbl;
     };
 
     
@@ -6691,9 +6727,9 @@ EXTERN_C const IID IID_IAdviseSink;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSink_RemoteOnDataChange_Proxy( 
-    IAdviseSink __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
-    /* [unique][in] */ ASYNC_STGMEDIUM __RPC_FAR *pStgmed);
+    IAdviseSink * This,
+    /* [unique][in] */ FORMATETC *pFormatetc,
+    /* [unique][in] */ ASYNC_STGMEDIUM *pStgmed);
 
 
 void __RPC_STUB IAdviseSink_RemoteOnDataChange_Stub(
@@ -6704,7 +6740,7 @@ void __RPC_STUB IAdviseSink_RemoteOnDataChange_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSink_RemoteOnViewChange_Proxy( 
-    IAdviseSink __RPC_FAR * This,
+    IAdviseSink * This,
     /* [in] */ DWORD dwAspect,
     /* [in] */ LONG lindex);
 
@@ -6717,8 +6753,8 @@ void __RPC_STUB IAdviseSink_RemoteOnViewChange_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSink_RemoteOnRename_Proxy( 
-    IAdviseSink __RPC_FAR * This,
-    /* [in] */ IMoniker __RPC_FAR *pmk);
+    IAdviseSink * This,
+    /* [in] */ IMoniker *pmk);
 
 
 void __RPC_STUB IAdviseSink_RemoteOnRename_Stub(
@@ -6729,7 +6765,7 @@ void __RPC_STUB IAdviseSink_RemoteOnRename_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSink_RemoteOnSave_Proxy( 
-    IAdviseSink __RPC_FAR * This);
+    IAdviseSink * This);
 
 
 void __RPC_STUB IAdviseSink_RemoteOnSave_Stub(
@@ -6740,7 +6776,7 @@ void __RPC_STUB IAdviseSink_RemoteOnSave_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSink_RemoteOnClose_Proxy( 
-    IAdviseSink __RPC_FAR * This);
+    IAdviseSink * This);
 
 
 void __RPC_STUB IAdviseSink_RemoteOnClose_Stub(
@@ -6770,8 +6806,8 @@ EXTERN_C const IID IID_AsyncIAdviseSink;
     {
     public:
         virtual /* [local] */ void STDMETHODCALLTYPE Begin_OnDataChange( 
-            /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
-            /* [unique][in] */ STGMEDIUM __RPC_FAR *pStgmed) = 0;
+            /* [unique][in] */ FORMATETC *pFormatetc,
+            /* [unique][in] */ STGMEDIUM *pStgmed) = 0;
         
         virtual /* [local] */ void STDMETHODCALLTYPE Finish_OnDataChange( void) = 0;
         
@@ -6782,7 +6818,7 @@ EXTERN_C const IID IID_AsyncIAdviseSink;
         virtual /* [local] */ void STDMETHODCALLTYPE Finish_OnViewChange( void) = 0;
         
         virtual /* [local] */ void STDMETHODCALLTYPE Begin_OnRename( 
-            /* [in] */ IMoniker __RPC_FAR *pmk) = 0;
+            /* [in] */ IMoniker *pmk) = 0;
         
         virtual /* [local] */ void STDMETHODCALLTYPE Finish_OnRename( void) = 0;
         
@@ -6802,58 +6838,58 @@ EXTERN_C const IID IID_AsyncIAdviseSink;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            AsyncIAdviseSink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            AsyncIAdviseSink * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            AsyncIAdviseSink __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            AsyncIAdviseSink * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            AsyncIAdviseSink __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            AsyncIAdviseSink * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Begin_OnDataChange )( 
-            AsyncIAdviseSink __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
-            /* [unique][in] */ STGMEDIUM __RPC_FAR *pStgmed);
+        /* [local] */ void ( STDMETHODCALLTYPE *Begin_OnDataChange )( 
+            AsyncIAdviseSink * This,
+            /* [unique][in] */ FORMATETC *pFormatetc,
+            /* [unique][in] */ STGMEDIUM *pStgmed);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Finish_OnDataChange )( 
-            AsyncIAdviseSink __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Finish_OnDataChange )( 
+            AsyncIAdviseSink * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Begin_OnViewChange )( 
-            AsyncIAdviseSink __RPC_FAR * This,
+        /* [local] */ void ( STDMETHODCALLTYPE *Begin_OnViewChange )( 
+            AsyncIAdviseSink * This,
             /* [in] */ DWORD dwAspect,
             /* [in] */ LONG lindex);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Finish_OnViewChange )( 
-            AsyncIAdviseSink __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Finish_OnViewChange )( 
+            AsyncIAdviseSink * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Begin_OnRename )( 
-            AsyncIAdviseSink __RPC_FAR * This,
-            /* [in] */ IMoniker __RPC_FAR *pmk);
+        /* [local] */ void ( STDMETHODCALLTYPE *Begin_OnRename )( 
+            AsyncIAdviseSink * This,
+            /* [in] */ IMoniker *pmk);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Finish_OnRename )( 
-            AsyncIAdviseSink __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Finish_OnRename )( 
+            AsyncIAdviseSink * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Begin_OnSave )( 
-            AsyncIAdviseSink __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Begin_OnSave )( 
+            AsyncIAdviseSink * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Finish_OnSave )( 
-            AsyncIAdviseSink __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Finish_OnSave )( 
+            AsyncIAdviseSink * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Begin_OnClose )( 
-            AsyncIAdviseSink __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Begin_OnClose )( 
+            AsyncIAdviseSink * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Finish_OnClose )( 
-            AsyncIAdviseSink __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Finish_OnClose )( 
+            AsyncIAdviseSink * This);
         
         END_INTERFACE
     } AsyncIAdviseSinkVtbl;
 
     interface AsyncIAdviseSink
     {
-        CONST_VTBL struct AsyncIAdviseSinkVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct AsyncIAdviseSinkVtbl *lpVtbl;
     };
 
     
@@ -6909,9 +6945,9 @@ EXTERN_C const IID IID_AsyncIAdviseSink;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Begin_RemoteOnDataChange_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
-    /* [unique][in] */ ASYNC_STGMEDIUM __RPC_FAR *pStgmed);
+    AsyncIAdviseSink * This,
+    /* [unique][in] */ FORMATETC *pFormatetc,
+    /* [unique][in] */ ASYNC_STGMEDIUM *pStgmed);
 
 
 void __RPC_STUB AsyncIAdviseSink_Begin_RemoteOnDataChange_Stub(
@@ -6922,7 +6958,7 @@ void __RPC_STUB AsyncIAdviseSink_Begin_RemoteOnDataChange_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_RemoteOnDataChange_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 void __RPC_STUB AsyncIAdviseSink_Finish_RemoteOnDataChange_Stub(
@@ -6933,7 +6969,7 @@ void __RPC_STUB AsyncIAdviseSink_Finish_RemoteOnDataChange_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Begin_RemoteOnViewChange_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This,
+    AsyncIAdviseSink * This,
     /* [in] */ DWORD dwAspect,
     /* [in] */ LONG lindex);
 
@@ -6946,7 +6982,7 @@ void __RPC_STUB AsyncIAdviseSink_Begin_RemoteOnViewChange_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_RemoteOnViewChange_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 void __RPC_STUB AsyncIAdviseSink_Finish_RemoteOnViewChange_Stub(
@@ -6957,8 +6993,8 @@ void __RPC_STUB AsyncIAdviseSink_Finish_RemoteOnViewChange_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Begin_RemoteOnRename_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This,
-    /* [in] */ IMoniker __RPC_FAR *pmk);
+    AsyncIAdviseSink * This,
+    /* [in] */ IMoniker *pmk);
 
 
 void __RPC_STUB AsyncIAdviseSink_Begin_RemoteOnRename_Stub(
@@ -6969,7 +7005,7 @@ void __RPC_STUB AsyncIAdviseSink_Begin_RemoteOnRename_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_RemoteOnRename_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 void __RPC_STUB AsyncIAdviseSink_Finish_RemoteOnRename_Stub(
@@ -6980,7 +7016,7 @@ void __RPC_STUB AsyncIAdviseSink_Finish_RemoteOnRename_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Begin_RemoteOnSave_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 void __RPC_STUB AsyncIAdviseSink_Begin_RemoteOnSave_Stub(
@@ -6991,7 +7027,7 @@ void __RPC_STUB AsyncIAdviseSink_Begin_RemoteOnSave_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_RemoteOnSave_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 void __RPC_STUB AsyncIAdviseSink_Finish_RemoteOnSave_Stub(
@@ -7002,7 +7038,7 @@ void __RPC_STUB AsyncIAdviseSink_Finish_RemoteOnSave_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Begin_RemoteOnClose_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 void __RPC_STUB AsyncIAdviseSink_Begin_RemoteOnClose_Stub(
@@ -7013,7 +7049,7 @@ void __RPC_STUB AsyncIAdviseSink_Begin_RemoteOnClose_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_RemoteOnClose_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 void __RPC_STUB AsyncIAdviseSink_Finish_RemoteOnClose_Stub(
@@ -7033,7 +7069,7 @@ void __RPC_STUB AsyncIAdviseSink_Finish_RemoteOnClose_Stub(
 /* interface IAdviseSink2 */
 /* [unique][async_uuid][uuid][object] */ 
 
-typedef /* [unique] */ IAdviseSink2 __RPC_FAR *LPADVISESINK2;
+typedef /* [unique] */ IAdviseSink2 *LPADVISESINK2;
 
 
 EXTERN_C const IID IID_IAdviseSink2;
@@ -7045,7 +7081,7 @@ EXTERN_C const IID IID_IAdviseSink2;
     {
     public:
         virtual /* [local] */ void STDMETHODCALLTYPE OnLinkSrcChange( 
-            /* [unique][in] */ IMoniker __RPC_FAR *pmk) = 0;
+            /* [unique][in] */ IMoniker *pmk) = 0;
         
     };
     
@@ -7055,47 +7091,47 @@ EXTERN_C const IID IID_IAdviseSink2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAdviseSink2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAdviseSink2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAdviseSink2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAdviseSink2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAdviseSink2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAdviseSink2 * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnDataChange )( 
-            IAdviseSink2 __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
-            /* [unique][in] */ STGMEDIUM __RPC_FAR *pStgmed);
+        /* [local] */ void ( STDMETHODCALLTYPE *OnDataChange )( 
+            IAdviseSink2 * This,
+            /* [unique][in] */ FORMATETC *pFormatetc,
+            /* [unique][in] */ STGMEDIUM *pStgmed);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnViewChange )( 
-            IAdviseSink2 __RPC_FAR * This,
+        /* [local] */ void ( STDMETHODCALLTYPE *OnViewChange )( 
+            IAdviseSink2 * This,
             /* [in] */ DWORD dwAspect,
             /* [in] */ LONG lindex);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnRename )( 
-            IAdviseSink2 __RPC_FAR * This,
-            /* [in] */ IMoniker __RPC_FAR *pmk);
+        /* [local] */ void ( STDMETHODCALLTYPE *OnRename )( 
+            IAdviseSink2 * This,
+            /* [in] */ IMoniker *pmk);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnSave )( 
-            IAdviseSink2 __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *OnSave )( 
+            IAdviseSink2 * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnClose )( 
-            IAdviseSink2 __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *OnClose )( 
+            IAdviseSink2 * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *OnLinkSrcChange )( 
-            IAdviseSink2 __RPC_FAR * This,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmk);
+        /* [local] */ void ( STDMETHODCALLTYPE *OnLinkSrcChange )( 
+            IAdviseSink2 * This,
+            /* [unique][in] */ IMoniker *pmk);
         
         END_INTERFACE
     } IAdviseSink2Vtbl;
 
     interface IAdviseSink2
     {
-        CONST_VTBL struct IAdviseSink2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAdviseSink2Vtbl *lpVtbl;
     };
 
     
@@ -7140,8 +7176,8 @@ EXTERN_C const IID IID_IAdviseSink2;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSink2_RemoteOnLinkSrcChange_Proxy( 
-    IAdviseSink2 __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmk);
+    IAdviseSink2 * This,
+    /* [unique][in] */ IMoniker *pmk);
 
 
 void __RPC_STUB IAdviseSink2_RemoteOnLinkSrcChange_Stub(
@@ -7171,7 +7207,7 @@ EXTERN_C const IID IID_AsyncIAdviseSink2;
     {
     public:
         virtual /* [local] */ void STDMETHODCALLTYPE Begin_OnLinkSrcChange( 
-            /* [unique][in] */ IMoniker __RPC_FAR *pmk) = 0;
+            /* [unique][in] */ IMoniker *pmk) = 0;
         
         virtual /* [local] */ void STDMETHODCALLTYPE Finish_OnLinkSrcChange( void) = 0;
         
@@ -7183,65 +7219,65 @@ EXTERN_C const IID IID_AsyncIAdviseSink2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            AsyncIAdviseSink2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            AsyncIAdviseSink2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            AsyncIAdviseSink2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            AsyncIAdviseSink2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            AsyncIAdviseSink2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            AsyncIAdviseSink2 * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Begin_OnDataChange )( 
-            AsyncIAdviseSink2 __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
-            /* [unique][in] */ STGMEDIUM __RPC_FAR *pStgmed);
+        /* [local] */ void ( STDMETHODCALLTYPE *Begin_OnDataChange )( 
+            AsyncIAdviseSink2 * This,
+            /* [unique][in] */ FORMATETC *pFormatetc,
+            /* [unique][in] */ STGMEDIUM *pStgmed);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Finish_OnDataChange )( 
-            AsyncIAdviseSink2 __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Finish_OnDataChange )( 
+            AsyncIAdviseSink2 * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Begin_OnViewChange )( 
-            AsyncIAdviseSink2 __RPC_FAR * This,
+        /* [local] */ void ( STDMETHODCALLTYPE *Begin_OnViewChange )( 
+            AsyncIAdviseSink2 * This,
             /* [in] */ DWORD dwAspect,
             /* [in] */ LONG lindex);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Finish_OnViewChange )( 
-            AsyncIAdviseSink2 __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Finish_OnViewChange )( 
+            AsyncIAdviseSink2 * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Begin_OnRename )( 
-            AsyncIAdviseSink2 __RPC_FAR * This,
-            /* [in] */ IMoniker __RPC_FAR *pmk);
+        /* [local] */ void ( STDMETHODCALLTYPE *Begin_OnRename )( 
+            AsyncIAdviseSink2 * This,
+            /* [in] */ IMoniker *pmk);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Finish_OnRename )( 
-            AsyncIAdviseSink2 __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Finish_OnRename )( 
+            AsyncIAdviseSink2 * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Begin_OnSave )( 
-            AsyncIAdviseSink2 __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Begin_OnSave )( 
+            AsyncIAdviseSink2 * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Finish_OnSave )( 
-            AsyncIAdviseSink2 __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Finish_OnSave )( 
+            AsyncIAdviseSink2 * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Begin_OnClose )( 
-            AsyncIAdviseSink2 __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Begin_OnClose )( 
+            AsyncIAdviseSink2 * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Finish_OnClose )( 
-            AsyncIAdviseSink2 __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Finish_OnClose )( 
+            AsyncIAdviseSink2 * This);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Begin_OnLinkSrcChange )( 
-            AsyncIAdviseSink2 __RPC_FAR * This,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmk);
+        /* [local] */ void ( STDMETHODCALLTYPE *Begin_OnLinkSrcChange )( 
+            AsyncIAdviseSink2 * This,
+            /* [unique][in] */ IMoniker *pmk);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *Finish_OnLinkSrcChange )( 
-            AsyncIAdviseSink2 __RPC_FAR * This);
+        /* [local] */ void ( STDMETHODCALLTYPE *Finish_OnLinkSrcChange )( 
+            AsyncIAdviseSink2 * This);
         
         END_INTERFACE
     } AsyncIAdviseSink2Vtbl;
 
     interface AsyncIAdviseSink2
     {
-        CONST_VTBL struct AsyncIAdviseSink2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct AsyncIAdviseSink2Vtbl *lpVtbl;
     };
 
     
@@ -7304,8 +7340,8 @@ EXTERN_C const IID IID_AsyncIAdviseSink2;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink2_Begin_RemoteOnLinkSrcChange_Proxy( 
-    AsyncIAdviseSink2 __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmk);
+    AsyncIAdviseSink2 * This,
+    /* [unique][in] */ IMoniker *pmk);
 
 
 void __RPC_STUB AsyncIAdviseSink2_Begin_RemoteOnLinkSrcChange_Stub(
@@ -7316,7 +7352,7 @@ void __RPC_STUB AsyncIAdviseSink2_Begin_RemoteOnLinkSrcChange_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink2_Finish_RemoteOnLinkSrcChange_Proxy( 
-    AsyncIAdviseSink2 __RPC_FAR * This);
+    AsyncIAdviseSink2 * This);
 
 
 void __RPC_STUB AsyncIAdviseSink2_Finish_RemoteOnLinkSrcChange_Stub(
@@ -7336,13 +7372,13 @@ void __RPC_STUB AsyncIAdviseSink2_Finish_RemoteOnLinkSrcChange_Stub(
 /* interface IDataObject */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IDataObject __RPC_FAR *LPDATAOBJECT;
+typedef /* [unique] */ IDataObject *LPDATAOBJECT;
 
 typedef 
 enum tagDATADIR
     {	DATADIR_GET	= 1,
 	DATADIR_SET	= 2
-    }	DATADIR;
+    } 	DATADIR;
 
 
 EXTERN_C const IID IID_IDataObject;
@@ -7354,40 +7390,40 @@ EXTERN_C const IID IID_IDataObject;
     {
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetData( 
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetcIn,
-            /* [out] */ STGMEDIUM __RPC_FAR *pmedium) = 0;
+            /* [unique][in] */ FORMATETC *pformatetcIn,
+            /* [out] */ STGMEDIUM *pmedium) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetDataHere( 
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-            /* [out][in] */ STGMEDIUM __RPC_FAR *pmedium) = 0;
+            /* [unique][in] */ FORMATETC *pformatetc,
+            /* [out][in] */ STGMEDIUM *pmedium) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryGetData( 
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc) = 0;
+            /* [unique][in] */ FORMATETC *pformatetc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCanonicalFormatEtc( 
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatectIn,
-            /* [out] */ FORMATETC __RPC_FAR *pformatetcOut) = 0;
+            /* [unique][in] */ FORMATETC *pformatectIn,
+            /* [out] */ FORMATETC *pformatetcOut) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetData( 
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-            /* [unique][in] */ STGMEDIUM __RPC_FAR *pmedium,
+            /* [unique][in] */ FORMATETC *pformatetc,
+            /* [unique][in] */ STGMEDIUM *pmedium,
             /* [in] */ BOOL fRelease) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumFormatEtc( 
             /* [in] */ DWORD dwDirection,
-            /* [out] */ IEnumFORMATETC __RPC_FAR *__RPC_FAR *ppenumFormatEtc) = 0;
+            /* [out] */ IEnumFORMATETC **ppenumFormatEtc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DAdvise( 
-            /* [in] */ FORMATETC __RPC_FAR *pformatetc,
+            /* [in] */ FORMATETC *pformatetc,
             /* [in] */ DWORD advf,
-            /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvSink,
-            /* [out] */ DWORD __RPC_FAR *pdwConnection) = 0;
+            /* [unique][in] */ IAdviseSink *pAdvSink,
+            /* [out] */ DWORD *pdwConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DUnadvise( 
             /* [in] */ DWORD dwConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumDAdvise( 
-            /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumAdvise) = 0;
+            /* [out] */ IEnumSTATDATA **ppenumAdvise) = 0;
         
     };
     
@@ -7397,68 +7433,68 @@ EXTERN_C const IID IID_IDataObject;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDataObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDataObject * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDataObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDataObject * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDataObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDataObject * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetData )( 
-            IDataObject __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetcIn,
-            /* [out] */ STGMEDIUM __RPC_FAR *pmedium);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetData )( 
+            IDataObject * This,
+            /* [unique][in] */ FORMATETC *pformatetcIn,
+            /* [out] */ STGMEDIUM *pmedium);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDataHere )( 
-            IDataObject __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-            /* [out][in] */ STGMEDIUM __RPC_FAR *pmedium);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDataHere )( 
+            IDataObject * This,
+            /* [unique][in] */ FORMATETC *pformatetc,
+            /* [out][in] */ STGMEDIUM *pmedium);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryGetData )( 
-            IDataObject __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc);
+        HRESULT ( STDMETHODCALLTYPE *QueryGetData )( 
+            IDataObject * This,
+            /* [unique][in] */ FORMATETC *pformatetc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCanonicalFormatEtc )( 
-            IDataObject __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatectIn,
-            /* [out] */ FORMATETC __RPC_FAR *pformatetcOut);
+        HRESULT ( STDMETHODCALLTYPE *GetCanonicalFormatEtc )( 
+            IDataObject * This,
+            /* [unique][in] */ FORMATETC *pformatectIn,
+            /* [out] */ FORMATETC *pformatetcOut);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetData )( 
-            IDataObject __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-            /* [unique][in] */ STGMEDIUM __RPC_FAR *pmedium,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *SetData )( 
+            IDataObject * This,
+            /* [unique][in] */ FORMATETC *pformatetc,
+            /* [unique][in] */ STGMEDIUM *pmedium,
             /* [in] */ BOOL fRelease);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumFormatEtc )( 
-            IDataObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnumFormatEtc )( 
+            IDataObject * This,
             /* [in] */ DWORD dwDirection,
-            /* [out] */ IEnumFORMATETC __RPC_FAR *__RPC_FAR *ppenumFormatEtc);
+            /* [out] */ IEnumFORMATETC **ppenumFormatEtc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DAdvise )( 
-            IDataObject __RPC_FAR * This,
-            /* [in] */ FORMATETC __RPC_FAR *pformatetc,
+        HRESULT ( STDMETHODCALLTYPE *DAdvise )( 
+            IDataObject * This,
+            /* [in] */ FORMATETC *pformatetc,
             /* [in] */ DWORD advf,
-            /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvSink,
-            /* [out] */ DWORD __RPC_FAR *pdwConnection);
+            /* [unique][in] */ IAdviseSink *pAdvSink,
+            /* [out] */ DWORD *pdwConnection);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DUnadvise )( 
-            IDataObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DUnadvise )( 
+            IDataObject * This,
             /* [in] */ DWORD dwConnection);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumDAdvise )( 
-            IDataObject __RPC_FAR * This,
-            /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumAdvise);
+        HRESULT ( STDMETHODCALLTYPE *EnumDAdvise )( 
+            IDataObject * This,
+            /* [out] */ IEnumSTATDATA **ppenumAdvise);
         
         END_INTERFACE
     } IDataObjectVtbl;
 
     interface IDataObject
     {
-        CONST_VTBL struct IDataObjectVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDataObjectVtbl *lpVtbl;
     };
 
     
@@ -7511,9 +7547,9 @@ EXTERN_C const IID IID_IDataObject;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IDataObject_RemoteGetData_Proxy( 
-    IDataObject __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pformatetcIn,
-    /* [out] */ STGMEDIUM __RPC_FAR *pRemoteMedium);
+    IDataObject * This,
+    /* [unique][in] */ FORMATETC *pformatetcIn,
+    /* [out] */ STGMEDIUM *pRemoteMedium);
 
 
 void __RPC_STUB IDataObject_RemoteGetData_Stub(
@@ -7524,9 +7560,9 @@ void __RPC_STUB IDataObject_RemoteGetData_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IDataObject_RemoteGetDataHere_Proxy( 
-    IDataObject __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-    /* [out][in] */ STGMEDIUM __RPC_FAR *pRemoteMedium);
+    IDataObject * This,
+    /* [unique][in] */ FORMATETC *pformatetc,
+    /* [out][in] */ STGMEDIUM *pRemoteMedium);
 
 
 void __RPC_STUB IDataObject_RemoteGetDataHere_Stub(
@@ -7537,8 +7573,8 @@ void __RPC_STUB IDataObject_RemoteGetDataHere_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDataObject_QueryGetData_Proxy( 
-    IDataObject __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc);
+    IDataObject * This,
+    /* [unique][in] */ FORMATETC *pformatetc);
 
 
 void __RPC_STUB IDataObject_QueryGetData_Stub(
@@ -7549,9 +7585,9 @@ void __RPC_STUB IDataObject_QueryGetData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDataObject_GetCanonicalFormatEtc_Proxy( 
-    IDataObject __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pformatectIn,
-    /* [out] */ FORMATETC __RPC_FAR *pformatetcOut);
+    IDataObject * This,
+    /* [unique][in] */ FORMATETC *pformatectIn,
+    /* [out] */ FORMATETC *pformatetcOut);
 
 
 void __RPC_STUB IDataObject_GetCanonicalFormatEtc_Stub(
@@ -7562,9 +7598,9 @@ void __RPC_STUB IDataObject_GetCanonicalFormatEtc_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IDataObject_RemoteSetData_Proxy( 
-    IDataObject __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-    /* [unique][in] */ FLAG_STGMEDIUM __RPC_FAR *pmedium,
+    IDataObject * This,
+    /* [unique][in] */ FORMATETC *pformatetc,
+    /* [unique][in] */ FLAG_STGMEDIUM *pmedium,
     /* [in] */ BOOL fRelease);
 
 
@@ -7576,9 +7612,9 @@ void __RPC_STUB IDataObject_RemoteSetData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDataObject_EnumFormatEtc_Proxy( 
-    IDataObject __RPC_FAR * This,
+    IDataObject * This,
     /* [in] */ DWORD dwDirection,
-    /* [out] */ IEnumFORMATETC __RPC_FAR *__RPC_FAR *ppenumFormatEtc);
+    /* [out] */ IEnumFORMATETC **ppenumFormatEtc);
 
 
 void __RPC_STUB IDataObject_EnumFormatEtc_Stub(
@@ -7589,11 +7625,11 @@ void __RPC_STUB IDataObject_EnumFormatEtc_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDataObject_DAdvise_Proxy( 
-    IDataObject __RPC_FAR * This,
-    /* [in] */ FORMATETC __RPC_FAR *pformatetc,
+    IDataObject * This,
+    /* [in] */ FORMATETC *pformatetc,
     /* [in] */ DWORD advf,
-    /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvSink,
-    /* [out] */ DWORD __RPC_FAR *pdwConnection);
+    /* [unique][in] */ IAdviseSink *pAdvSink,
+    /* [out] */ DWORD *pdwConnection);
 
 
 void __RPC_STUB IDataObject_DAdvise_Stub(
@@ -7604,7 +7640,7 @@ void __RPC_STUB IDataObject_DAdvise_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDataObject_DUnadvise_Proxy( 
-    IDataObject __RPC_FAR * This,
+    IDataObject * This,
     /* [in] */ DWORD dwConnection);
 
 
@@ -7616,8 +7652,8 @@ void __RPC_STUB IDataObject_DUnadvise_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDataObject_EnumDAdvise_Proxy( 
-    IDataObject __RPC_FAR * This,
-    /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumAdvise);
+    IDataObject * This,
+    /* [out] */ IEnumSTATDATA **ppenumAdvise);
 
 
 void __RPC_STUB IDataObject_EnumDAdvise_Stub(
@@ -7637,7 +7673,7 @@ void __RPC_STUB IDataObject_EnumDAdvise_Stub(
 /* interface IDataAdviseHolder */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ IDataAdviseHolder __RPC_FAR *LPDATAADVISEHOLDER;
+typedef /* [unique] */ IDataAdviseHolder *LPDATAADVISEHOLDER;
 
 
 EXTERN_C const IID IID_IDataAdviseHolder;
@@ -7649,20 +7685,20 @@ EXTERN_C const IID IID_IDataAdviseHolder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Advise( 
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObject,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pFetc,
+            /* [unique][in] */ IDataObject *pDataObject,
+            /* [unique][in] */ FORMATETC *pFetc,
             /* [in] */ DWORD advf,
-            /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvise,
-            /* [out] */ DWORD __RPC_FAR *pdwConnection) = 0;
+            /* [unique][in] */ IAdviseSink *pAdvise,
+            /* [out] */ DWORD *pdwConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unadvise( 
             /* [in] */ DWORD dwConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumAdvise( 
-            /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumAdvise) = 0;
+            /* [out] */ IEnumSTATDATA **ppenumAdvise) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendOnDataChange( 
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObject,
+            /* [unique][in] */ IDataObject *pDataObject,
             /* [in] */ DWORD dwReserved,
             /* [in] */ DWORD advf) = 0;
         
@@ -7674,36 +7710,36 @@ EXTERN_C const IID IID_IDataAdviseHolder;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDataAdviseHolder __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDataAdviseHolder * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDataAdviseHolder __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDataAdviseHolder * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDataAdviseHolder __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDataAdviseHolder * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Advise )( 
-            IDataAdviseHolder __RPC_FAR * This,
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObject,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pFetc,
+        HRESULT ( STDMETHODCALLTYPE *Advise )( 
+            IDataAdviseHolder * This,
+            /* [unique][in] */ IDataObject *pDataObject,
+            /* [unique][in] */ FORMATETC *pFetc,
             /* [in] */ DWORD advf,
-            /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvise,
-            /* [out] */ DWORD __RPC_FAR *pdwConnection);
+            /* [unique][in] */ IAdviseSink *pAdvise,
+            /* [out] */ DWORD *pdwConnection);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unadvise )( 
-            IDataAdviseHolder __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Unadvise )( 
+            IDataAdviseHolder * This,
             /* [in] */ DWORD dwConnection);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumAdvise )( 
-            IDataAdviseHolder __RPC_FAR * This,
-            /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumAdvise);
+        HRESULT ( STDMETHODCALLTYPE *EnumAdvise )( 
+            IDataAdviseHolder * This,
+            /* [out] */ IEnumSTATDATA **ppenumAdvise);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendOnDataChange )( 
-            IDataAdviseHolder __RPC_FAR * This,
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObject,
+        HRESULT ( STDMETHODCALLTYPE *SendOnDataChange )( 
+            IDataAdviseHolder * This,
+            /* [unique][in] */ IDataObject *pDataObject,
             /* [in] */ DWORD dwReserved,
             /* [in] */ DWORD advf);
         
@@ -7712,7 +7748,7 @@ EXTERN_C const IID IID_IDataAdviseHolder;
 
     interface IDataAdviseHolder
     {
-        CONST_VTBL struct IDataAdviseHolderVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDataAdviseHolderVtbl *lpVtbl;
     };
 
     
@@ -7750,12 +7786,12 @@ EXTERN_C const IID IID_IDataAdviseHolder;
 
 
 HRESULT STDMETHODCALLTYPE IDataAdviseHolder_Advise_Proxy( 
-    IDataAdviseHolder __RPC_FAR * This,
-    /* [unique][in] */ IDataObject __RPC_FAR *pDataObject,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pFetc,
+    IDataAdviseHolder * This,
+    /* [unique][in] */ IDataObject *pDataObject,
+    /* [unique][in] */ FORMATETC *pFetc,
     /* [in] */ DWORD advf,
-    /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvise,
-    /* [out] */ DWORD __RPC_FAR *pdwConnection);
+    /* [unique][in] */ IAdviseSink *pAdvise,
+    /* [out] */ DWORD *pdwConnection);
 
 
 void __RPC_STUB IDataAdviseHolder_Advise_Stub(
@@ -7766,7 +7802,7 @@ void __RPC_STUB IDataAdviseHolder_Advise_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDataAdviseHolder_Unadvise_Proxy( 
-    IDataAdviseHolder __RPC_FAR * This,
+    IDataAdviseHolder * This,
     /* [in] */ DWORD dwConnection);
 
 
@@ -7778,8 +7814,8 @@ void __RPC_STUB IDataAdviseHolder_Unadvise_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDataAdviseHolder_EnumAdvise_Proxy( 
-    IDataAdviseHolder __RPC_FAR * This,
-    /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumAdvise);
+    IDataAdviseHolder * This,
+    /* [out] */ IEnumSTATDATA **ppenumAdvise);
 
 
 void __RPC_STUB IDataAdviseHolder_EnumAdvise_Stub(
@@ -7790,8 +7826,8 @@ void __RPC_STUB IDataAdviseHolder_EnumAdvise_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDataAdviseHolder_SendOnDataChange_Proxy( 
-    IDataAdviseHolder __RPC_FAR * This,
-    /* [unique][in] */ IDataObject __RPC_FAR *pDataObject,
+    IDataAdviseHolder * This,
+    /* [unique][in] */ IDataObject *pDataObject,
     /* [in] */ DWORD dwReserved,
     /* [in] */ DWORD advf);
 
@@ -7813,7 +7849,7 @@ void __RPC_STUB IDataAdviseHolder_SendOnDataChange_Stub(
 /* interface IMessageFilter */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ IMessageFilter __RPC_FAR *LPMESSAGEFILTER;
+typedef /* [unique] */ IMessageFilter *LPMESSAGEFILTER;
 
 typedef 
 enum tagCALLTYPE
@@ -7822,36 +7858,36 @@ enum tagCALLTYPE
 	CALLTYPE_ASYNC	= 3,
 	CALLTYPE_TOPLEVEL_CALLPENDING	= 4,
 	CALLTYPE_ASYNC_CALLPENDING	= 5
-    }	CALLTYPE;
+    } 	CALLTYPE;
 
 typedef 
 enum tagSERVERCALL
     {	SERVERCALL_ISHANDLED	= 0,
 	SERVERCALL_REJECTED	= 1,
 	SERVERCALL_RETRYLATER	= 2
-    }	SERVERCALL;
+    } 	SERVERCALL;
 
 typedef 
 enum tagPENDINGTYPE
     {	PENDINGTYPE_TOPLEVEL	= 1,
 	PENDINGTYPE_NESTED	= 2
-    }	PENDINGTYPE;
+    } 	PENDINGTYPE;
 
 typedef 
 enum tagPENDINGMSG
     {	PENDINGMSG_CANCELCALL	= 0,
 	PENDINGMSG_WAITNOPROCESS	= 1,
 	PENDINGMSG_WAITDEFPROCESS	= 2
-    }	PENDINGMSG;
+    } 	PENDINGMSG;
 
 typedef struct tagINTERFACEINFO
     {
-    IUnknown __RPC_FAR *pUnk;
+    IUnknown *pUnk;
     IID iid;
     WORD wMethod;
-    }	INTERFACEINFO;
+    } 	INTERFACEINFO;
 
-typedef struct tagINTERFACEINFO __RPC_FAR *LPINTERFACEINFO;
+typedef struct tagINTERFACEINFO *LPINTERFACEINFO;
 
 
 EXTERN_C const IID IID_IMessageFilter;
@@ -7886,32 +7922,32 @@ EXTERN_C const IID IID_IMessageFilter;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMessageFilter __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMessageFilter * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMessageFilter __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMessageFilter * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMessageFilter __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMessageFilter * This);
         
-        DWORD ( STDMETHODCALLTYPE __RPC_FAR *HandleInComingCall )( 
-            IMessageFilter __RPC_FAR * This,
+        DWORD ( STDMETHODCALLTYPE *HandleInComingCall )( 
+            IMessageFilter * This,
             /* [in] */ DWORD dwCallType,
             /* [in] */ HTASK htaskCaller,
             /* [in] */ DWORD dwTickCount,
             /* [in] */ LPINTERFACEINFO lpInterfaceInfo);
         
-        DWORD ( STDMETHODCALLTYPE __RPC_FAR *RetryRejectedCall )( 
-            IMessageFilter __RPC_FAR * This,
+        DWORD ( STDMETHODCALLTYPE *RetryRejectedCall )( 
+            IMessageFilter * This,
             /* [in] */ HTASK htaskCallee,
             /* [in] */ DWORD dwTickCount,
             /* [in] */ DWORD dwRejectType);
         
-        DWORD ( STDMETHODCALLTYPE __RPC_FAR *MessagePending )( 
-            IMessageFilter __RPC_FAR * This,
+        DWORD ( STDMETHODCALLTYPE *MessagePending )( 
+            IMessageFilter * This,
             /* [in] */ HTASK htaskCallee,
             /* [in] */ DWORD dwTickCount,
             /* [in] */ DWORD dwPendingType);
@@ -7921,7 +7957,7 @@ EXTERN_C const IID IID_IMessageFilter;
 
     interface IMessageFilter
     {
-        CONST_VTBL struct IMessageFilterVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMessageFilterVtbl *lpVtbl;
     };
 
     
@@ -7956,7 +7992,7 @@ EXTERN_C const IID IID_IMessageFilter;
 
 
 DWORD STDMETHODCALLTYPE IMessageFilter_HandleInComingCall_Proxy( 
-    IMessageFilter __RPC_FAR * This,
+    IMessageFilter * This,
     /* [in] */ DWORD dwCallType,
     /* [in] */ HTASK htaskCaller,
     /* [in] */ DWORD dwTickCount,
@@ -7971,7 +8007,7 @@ void __RPC_STUB IMessageFilter_HandleInComingCall_Stub(
 
 
 DWORD STDMETHODCALLTYPE IMessageFilter_RetryRejectedCall_Proxy( 
-    IMessageFilter __RPC_FAR * This,
+    IMessageFilter * This,
     /* [in] */ HTASK htaskCallee,
     /* [in] */ DWORD dwTickCount,
     /* [in] */ DWORD dwRejectType);
@@ -7985,7 +8021,7 @@ void __RPC_STUB IMessageFilter_RetryRejectedCall_Stub(
 
 
 DWORD STDMETHODCALLTYPE IMessageFilter_MessagePending_Proxy( 
-    IMessageFilter __RPC_FAR * This,
+    IMessageFilter * This,
     /* [in] */ HTASK htaskCallee,
     /* [in] */ DWORD dwTickCount,
     /* [in] */ DWORD dwPendingType);
@@ -8012,16 +8048,16 @@ typedef unsigned long RPCOLEDATAREP;
 
 typedef struct tagRPCOLEMESSAGE
     {
-    void __RPC_FAR *reserved1;
+    void *reserved1;
     RPCOLEDATAREP dataRepresentation;
-    void __RPC_FAR *Buffer;
+    void *Buffer;
     ULONG cbBuffer;
     ULONG iMethod;
-    void __RPC_FAR *reserved2[ 5 ];
+    void *reserved2[ 5 ];
     ULONG rpcFlags;
-    }	RPCOLEMESSAGE;
+    } 	RPCOLEMESSAGE;
 
-typedef RPCOLEMESSAGE __RPC_FAR *PRPCOLEMESSAGE;
+typedef RPCOLEMESSAGE *PRPCOLEMESSAGE;
 
 
 EXTERN_C const IID IID_IRpcChannelBuffer;
@@ -8033,19 +8069,19 @@ EXTERN_C const IID IID_IRpcChannelBuffer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetBuffer( 
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
+            /* [in] */ RPCOLEMESSAGE *pMessage,
             /* [in] */ REFIID riid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendReceive( 
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-            /* [out] */ ULONG __RPC_FAR *pStatus) = 0;
+            /* [out][in] */ RPCOLEMESSAGE *pMessage,
+            /* [out] */ ULONG *pStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeBuffer( 
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage) = 0;
+            /* [in] */ RPCOLEMESSAGE *pMessage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDestCtx( 
-            /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext) = 0;
+            /* [out] */ DWORD *pdwDestContext,
+            /* [out] */ void **ppvDestContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsConnected( void) = 0;
         
@@ -8057,45 +8093,45 @@ EXTERN_C const IID IID_IRpcChannelBuffer;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IRpcChannelBuffer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IRpcChannelBuffer * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IRpcChannelBuffer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IRpcChannelBuffer * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IRpcChannelBuffer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IRpcChannelBuffer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBuffer )( 
-            IRpcChannelBuffer __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
+        HRESULT ( STDMETHODCALLTYPE *GetBuffer )( 
+            IRpcChannelBuffer * This,
+            /* [in] */ RPCOLEMESSAGE *pMessage,
             /* [in] */ REFIID riid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendReceive )( 
-            IRpcChannelBuffer __RPC_FAR * This,
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-            /* [out] */ ULONG __RPC_FAR *pStatus);
+        HRESULT ( STDMETHODCALLTYPE *SendReceive )( 
+            IRpcChannelBuffer * This,
+            /* [out][in] */ RPCOLEMESSAGE *pMessage,
+            /* [out] */ ULONG *pStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeBuffer )( 
-            IRpcChannelBuffer __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage);
+        HRESULT ( STDMETHODCALLTYPE *FreeBuffer )( 
+            IRpcChannelBuffer * This,
+            /* [in] */ RPCOLEMESSAGE *pMessage);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDestCtx )( 
-            IRpcChannelBuffer __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext);
+        HRESULT ( STDMETHODCALLTYPE *GetDestCtx )( 
+            IRpcChannelBuffer * This,
+            /* [out] */ DWORD *pdwDestContext,
+            /* [out] */ void **ppvDestContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsConnected )( 
-            IRpcChannelBuffer __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *IsConnected )( 
+            IRpcChannelBuffer * This);
         
         END_INTERFACE
     } IRpcChannelBufferVtbl;
 
     interface IRpcChannelBuffer
     {
-        CONST_VTBL struct IRpcChannelBufferVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IRpcChannelBufferVtbl *lpVtbl;
     };
 
     
@@ -8136,8 +8172,8 @@ EXTERN_C const IID IID_IRpcChannelBuffer;
 
 
 HRESULT STDMETHODCALLTYPE IRpcChannelBuffer_GetBuffer_Proxy( 
-    IRpcChannelBuffer __RPC_FAR * This,
-    /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
+    IRpcChannelBuffer * This,
+    /* [in] */ RPCOLEMESSAGE *pMessage,
     /* [in] */ REFIID riid);
 
 
@@ -8149,9 +8185,9 @@ void __RPC_STUB IRpcChannelBuffer_GetBuffer_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcChannelBuffer_SendReceive_Proxy( 
-    IRpcChannelBuffer __RPC_FAR * This,
-    /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-    /* [out] */ ULONG __RPC_FAR *pStatus);
+    IRpcChannelBuffer * This,
+    /* [out][in] */ RPCOLEMESSAGE *pMessage,
+    /* [out] */ ULONG *pStatus);
 
 
 void __RPC_STUB IRpcChannelBuffer_SendReceive_Stub(
@@ -8162,8 +8198,8 @@ void __RPC_STUB IRpcChannelBuffer_SendReceive_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcChannelBuffer_FreeBuffer_Proxy( 
-    IRpcChannelBuffer __RPC_FAR * This,
-    /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage);
+    IRpcChannelBuffer * This,
+    /* [in] */ RPCOLEMESSAGE *pMessage);
 
 
 void __RPC_STUB IRpcChannelBuffer_FreeBuffer_Stub(
@@ -8174,9 +8210,9 @@ void __RPC_STUB IRpcChannelBuffer_FreeBuffer_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcChannelBuffer_GetDestCtx_Proxy( 
-    IRpcChannelBuffer __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext);
+    IRpcChannelBuffer * This,
+    /* [out] */ DWORD *pdwDestContext,
+    /* [out] */ void **ppvDestContext);
 
 
 void __RPC_STUB IRpcChannelBuffer_GetDestCtx_Stub(
@@ -8187,7 +8223,7 @@ void __RPC_STUB IRpcChannelBuffer_GetDestCtx_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcChannelBuffer_IsConnected_Proxy( 
-    IRpcChannelBuffer __RPC_FAR * This);
+    IRpcChannelBuffer * This);
 
 
 void __RPC_STUB IRpcChannelBuffer_IsConnected_Stub(
@@ -8217,7 +8253,7 @@ EXTERN_C const IID IID_IRpcChannelBuffer2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetProtocolVersion( 
-            /* [out][in] */ DWORD __RPC_FAR *pdwVersion) = 0;
+            /* [out][in] */ DWORD *pdwVersion) = 0;
         
     };
     
@@ -8227,49 +8263,49 @@ EXTERN_C const IID IID_IRpcChannelBuffer2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IRpcChannelBuffer2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IRpcChannelBuffer2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IRpcChannelBuffer2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IRpcChannelBuffer2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IRpcChannelBuffer2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IRpcChannelBuffer2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBuffer )( 
-            IRpcChannelBuffer2 __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
+        HRESULT ( STDMETHODCALLTYPE *GetBuffer )( 
+            IRpcChannelBuffer2 * This,
+            /* [in] */ RPCOLEMESSAGE *pMessage,
             /* [in] */ REFIID riid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendReceive )( 
-            IRpcChannelBuffer2 __RPC_FAR * This,
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-            /* [out] */ ULONG __RPC_FAR *pStatus);
+        HRESULT ( STDMETHODCALLTYPE *SendReceive )( 
+            IRpcChannelBuffer2 * This,
+            /* [out][in] */ RPCOLEMESSAGE *pMessage,
+            /* [out] */ ULONG *pStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeBuffer )( 
-            IRpcChannelBuffer2 __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage);
+        HRESULT ( STDMETHODCALLTYPE *FreeBuffer )( 
+            IRpcChannelBuffer2 * This,
+            /* [in] */ RPCOLEMESSAGE *pMessage);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDestCtx )( 
-            IRpcChannelBuffer2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext);
+        HRESULT ( STDMETHODCALLTYPE *GetDestCtx )( 
+            IRpcChannelBuffer2 * This,
+            /* [out] */ DWORD *pdwDestContext,
+            /* [out] */ void **ppvDestContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsConnected )( 
-            IRpcChannelBuffer2 __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *IsConnected )( 
+            IRpcChannelBuffer2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProtocolVersion )( 
-            IRpcChannelBuffer2 __RPC_FAR * This,
-            /* [out][in] */ DWORD __RPC_FAR *pdwVersion);
+        HRESULT ( STDMETHODCALLTYPE *GetProtocolVersion )( 
+            IRpcChannelBuffer2 * This,
+            /* [out][in] */ DWORD *pdwVersion);
         
         END_INTERFACE
     } IRpcChannelBuffer2Vtbl;
 
     interface IRpcChannelBuffer2
     {
-        CONST_VTBL struct IRpcChannelBuffer2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IRpcChannelBuffer2Vtbl *lpVtbl;
     };
 
     
@@ -8314,8 +8350,8 @@ EXTERN_C const IID IID_IRpcChannelBuffer2;
 
 
 HRESULT STDMETHODCALLTYPE IRpcChannelBuffer2_GetProtocolVersion_Proxy( 
-    IRpcChannelBuffer2 __RPC_FAR * This,
-    /* [out][in] */ DWORD __RPC_FAR *pdwVersion);
+    IRpcChannelBuffer2 * This,
+    /* [out][in] */ DWORD *pdwVersion);
 
 
 void __RPC_STUB IRpcChannelBuffer2_GetProtocolVersion_Stub(
@@ -8345,18 +8381,18 @@ EXTERN_C const IID IID_IAsyncRpcChannelBuffer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Send( 
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [in] */ ISynchronize __RPC_FAR *pSync,
-            /* [out] */ ULONG __RPC_FAR *pulStatus) = 0;
+            /* [out][in] */ RPCOLEMESSAGE *pMsg,
+            /* [in] */ ISynchronize *pSync,
+            /* [out] */ ULONG *pulStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Receive( 
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [out] */ ULONG __RPC_FAR *pulStatus) = 0;
+            /* [out][in] */ RPCOLEMESSAGE *pMsg,
+            /* [out] */ ULONG *pulStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDestCtxEx( 
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext) = 0;
+            /* [in] */ RPCOLEMESSAGE *pMsg,
+            /* [out] */ DWORD *pdwDestContext,
+            /* [out] */ void **ppvDestContext) = 0;
         
     };
     
@@ -8366,66 +8402,66 @@ EXTERN_C const IID IID_IAsyncRpcChannelBuffer;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAsyncRpcChannelBuffer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAsyncRpcChannelBuffer * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAsyncRpcChannelBuffer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAsyncRpcChannelBuffer * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAsyncRpcChannelBuffer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAsyncRpcChannelBuffer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBuffer )( 
-            IAsyncRpcChannelBuffer __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
+        HRESULT ( STDMETHODCALLTYPE *GetBuffer )( 
+            IAsyncRpcChannelBuffer * This,
+            /* [in] */ RPCOLEMESSAGE *pMessage,
             /* [in] */ REFIID riid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendReceive )( 
-            IAsyncRpcChannelBuffer __RPC_FAR * This,
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-            /* [out] */ ULONG __RPC_FAR *pStatus);
+        HRESULT ( STDMETHODCALLTYPE *SendReceive )( 
+            IAsyncRpcChannelBuffer * This,
+            /* [out][in] */ RPCOLEMESSAGE *pMessage,
+            /* [out] */ ULONG *pStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeBuffer )( 
-            IAsyncRpcChannelBuffer __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage);
+        HRESULT ( STDMETHODCALLTYPE *FreeBuffer )( 
+            IAsyncRpcChannelBuffer * This,
+            /* [in] */ RPCOLEMESSAGE *pMessage);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDestCtx )( 
-            IAsyncRpcChannelBuffer __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext);
+        HRESULT ( STDMETHODCALLTYPE *GetDestCtx )( 
+            IAsyncRpcChannelBuffer * This,
+            /* [out] */ DWORD *pdwDestContext,
+            /* [out] */ void **ppvDestContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsConnected )( 
-            IAsyncRpcChannelBuffer __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *IsConnected )( 
+            IAsyncRpcChannelBuffer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProtocolVersion )( 
-            IAsyncRpcChannelBuffer __RPC_FAR * This,
-            /* [out][in] */ DWORD __RPC_FAR *pdwVersion);
+        HRESULT ( STDMETHODCALLTYPE *GetProtocolVersion )( 
+            IAsyncRpcChannelBuffer * This,
+            /* [out][in] */ DWORD *pdwVersion);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Send )( 
-            IAsyncRpcChannelBuffer __RPC_FAR * This,
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [in] */ ISynchronize __RPC_FAR *pSync,
-            /* [out] */ ULONG __RPC_FAR *pulStatus);
+        HRESULT ( STDMETHODCALLTYPE *Send )( 
+            IAsyncRpcChannelBuffer * This,
+            /* [out][in] */ RPCOLEMESSAGE *pMsg,
+            /* [in] */ ISynchronize *pSync,
+            /* [out] */ ULONG *pulStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Receive )( 
-            IAsyncRpcChannelBuffer __RPC_FAR * This,
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [out] */ ULONG __RPC_FAR *pulStatus);
+        HRESULT ( STDMETHODCALLTYPE *Receive )( 
+            IAsyncRpcChannelBuffer * This,
+            /* [out][in] */ RPCOLEMESSAGE *pMsg,
+            /* [out] */ ULONG *pulStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDestCtxEx )( 
-            IAsyncRpcChannelBuffer __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext);
+        HRESULT ( STDMETHODCALLTYPE *GetDestCtxEx )( 
+            IAsyncRpcChannelBuffer * This,
+            /* [in] */ RPCOLEMESSAGE *pMsg,
+            /* [out] */ DWORD *pdwDestContext,
+            /* [out] */ void **ppvDestContext);
         
         END_INTERFACE
     } IAsyncRpcChannelBufferVtbl;
 
     interface IAsyncRpcChannelBuffer
     {
-        CONST_VTBL struct IAsyncRpcChannelBufferVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAsyncRpcChannelBufferVtbl *lpVtbl;
     };
 
     
@@ -8480,10 +8516,10 @@ EXTERN_C const IID IID_IAsyncRpcChannelBuffer;
 
 
 HRESULT STDMETHODCALLTYPE IAsyncRpcChannelBuffer_Send_Proxy( 
-    IAsyncRpcChannelBuffer __RPC_FAR * This,
-    /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-    /* [in] */ ISynchronize __RPC_FAR *pSync,
-    /* [out] */ ULONG __RPC_FAR *pulStatus);
+    IAsyncRpcChannelBuffer * This,
+    /* [out][in] */ RPCOLEMESSAGE *pMsg,
+    /* [in] */ ISynchronize *pSync,
+    /* [out] */ ULONG *pulStatus);
 
 
 void __RPC_STUB IAsyncRpcChannelBuffer_Send_Stub(
@@ -8494,9 +8530,9 @@ void __RPC_STUB IAsyncRpcChannelBuffer_Send_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAsyncRpcChannelBuffer_Receive_Proxy( 
-    IAsyncRpcChannelBuffer __RPC_FAR * This,
-    /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-    /* [out] */ ULONG __RPC_FAR *pulStatus);
+    IAsyncRpcChannelBuffer * This,
+    /* [out][in] */ RPCOLEMESSAGE *pMsg,
+    /* [out] */ ULONG *pulStatus);
 
 
 void __RPC_STUB IAsyncRpcChannelBuffer_Receive_Stub(
@@ -8507,10 +8543,10 @@ void __RPC_STUB IAsyncRpcChannelBuffer_Receive_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAsyncRpcChannelBuffer_GetDestCtxEx_Proxy( 
-    IAsyncRpcChannelBuffer __RPC_FAR * This,
-    /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-    /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext);
+    IAsyncRpcChannelBuffer * This,
+    /* [in] */ RPCOLEMESSAGE *pMsg,
+    /* [out] */ DWORD *pdwDestContext,
+    /* [out] */ void **ppvDestContext);
 
 
 void __RPC_STUB IAsyncRpcChannelBuffer_GetDestCtxEx_Stub(
@@ -8540,34 +8576,34 @@ EXTERN_C const IID IID_IRpcChannelBuffer3;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Send( 
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [out] */ ULONG __RPC_FAR *pulStatus) = 0;
+            /* [out][in] */ RPCOLEMESSAGE *pMsg,
+            /* [out] */ ULONG *pulStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Receive( 
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
+            /* [out][in] */ RPCOLEMESSAGE *pMsg,
             /* [in] */ ULONG ulSize,
-            /* [out] */ ULONG __RPC_FAR *pulStatus) = 0;
+            /* [out] */ ULONG *pulStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Cancel( 
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg) = 0;
+            /* [in] */ RPCOLEMESSAGE *pMsg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCallContext( 
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
+            /* [in] */ RPCOLEMESSAGE *pMsg,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *pInterface) = 0;
+            /* [out] */ void **pInterface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDestCtxEx( 
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext) = 0;
+            /* [in] */ RPCOLEMESSAGE *pMsg,
+            /* [out] */ DWORD *pdwDestContext,
+            /* [out] */ void **ppvDestContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetState( 
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [out] */ DWORD __RPC_FAR *pState) = 0;
+            /* [in] */ RPCOLEMESSAGE *pMsg,
+            /* [out] */ DWORD *pState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterAsync( 
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [in] */ IAsyncManager __RPC_FAR *pAsyncMgr) = 0;
+            /* [in] */ RPCOLEMESSAGE *pMsg,
+            /* [in] */ IAsyncManager *pAsyncMgr) = 0;
         
     };
     
@@ -8577,86 +8613,86 @@ EXTERN_C const IID IID_IRpcChannelBuffer3;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IRpcChannelBuffer3 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IRpcChannelBuffer3 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IRpcChannelBuffer3 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IRpcChannelBuffer3 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IRpcChannelBuffer3 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IRpcChannelBuffer3 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBuffer )( 
-            IRpcChannelBuffer3 __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
+        HRESULT ( STDMETHODCALLTYPE *GetBuffer )( 
+            IRpcChannelBuffer3 * This,
+            /* [in] */ RPCOLEMESSAGE *pMessage,
             /* [in] */ REFIID riid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendReceive )( 
-            IRpcChannelBuffer3 __RPC_FAR * This,
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-            /* [out] */ ULONG __RPC_FAR *pStatus);
+        HRESULT ( STDMETHODCALLTYPE *SendReceive )( 
+            IRpcChannelBuffer3 * This,
+            /* [out][in] */ RPCOLEMESSAGE *pMessage,
+            /* [out] */ ULONG *pStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeBuffer )( 
-            IRpcChannelBuffer3 __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage);
+        HRESULT ( STDMETHODCALLTYPE *FreeBuffer )( 
+            IRpcChannelBuffer3 * This,
+            /* [in] */ RPCOLEMESSAGE *pMessage);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDestCtx )( 
-            IRpcChannelBuffer3 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext);
+        HRESULT ( STDMETHODCALLTYPE *GetDestCtx )( 
+            IRpcChannelBuffer3 * This,
+            /* [out] */ DWORD *pdwDestContext,
+            /* [out] */ void **ppvDestContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsConnected )( 
-            IRpcChannelBuffer3 __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *IsConnected )( 
+            IRpcChannelBuffer3 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProtocolVersion )( 
-            IRpcChannelBuffer3 __RPC_FAR * This,
-            /* [out][in] */ DWORD __RPC_FAR *pdwVersion);
+        HRESULT ( STDMETHODCALLTYPE *GetProtocolVersion )( 
+            IRpcChannelBuffer3 * This,
+            /* [out][in] */ DWORD *pdwVersion);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Send )( 
-            IRpcChannelBuffer3 __RPC_FAR * This,
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [out] */ ULONG __RPC_FAR *pulStatus);
+        HRESULT ( STDMETHODCALLTYPE *Send )( 
+            IRpcChannelBuffer3 * This,
+            /* [out][in] */ RPCOLEMESSAGE *pMsg,
+            /* [out] */ ULONG *pulStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Receive )( 
-            IRpcChannelBuffer3 __RPC_FAR * This,
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
+        HRESULT ( STDMETHODCALLTYPE *Receive )( 
+            IRpcChannelBuffer3 * This,
+            /* [out][in] */ RPCOLEMESSAGE *pMsg,
             /* [in] */ ULONG ulSize,
-            /* [out] */ ULONG __RPC_FAR *pulStatus);
+            /* [out] */ ULONG *pulStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Cancel )( 
-            IRpcChannelBuffer3 __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg);
+        HRESULT ( STDMETHODCALLTYPE *Cancel )( 
+            IRpcChannelBuffer3 * This,
+            /* [in] */ RPCOLEMESSAGE *pMsg);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCallContext )( 
-            IRpcChannelBuffer3 __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
+        HRESULT ( STDMETHODCALLTYPE *GetCallContext )( 
+            IRpcChannelBuffer3 * This,
+            /* [in] */ RPCOLEMESSAGE *pMsg,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *pInterface);
+            /* [out] */ void **pInterface);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDestCtxEx )( 
-            IRpcChannelBuffer3 __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext);
+        HRESULT ( STDMETHODCALLTYPE *GetDestCtxEx )( 
+            IRpcChannelBuffer3 * This,
+            /* [in] */ RPCOLEMESSAGE *pMsg,
+            /* [out] */ DWORD *pdwDestContext,
+            /* [out] */ void **ppvDestContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetState )( 
-            IRpcChannelBuffer3 __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [out] */ DWORD __RPC_FAR *pState);
+        HRESULT ( STDMETHODCALLTYPE *GetState )( 
+            IRpcChannelBuffer3 * This,
+            /* [in] */ RPCOLEMESSAGE *pMsg,
+            /* [out] */ DWORD *pState);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterAsync )( 
-            IRpcChannelBuffer3 __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-            /* [in] */ IAsyncManager __RPC_FAR *pAsyncMgr);
+        HRESULT ( STDMETHODCALLTYPE *RegisterAsync )( 
+            IRpcChannelBuffer3 * This,
+            /* [in] */ RPCOLEMESSAGE *pMsg,
+            /* [in] */ IAsyncManager *pAsyncMgr);
         
         END_INTERFACE
     } IRpcChannelBuffer3Vtbl;
 
     interface IRpcChannelBuffer3
     {
-        CONST_VTBL struct IRpcChannelBuffer3Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IRpcChannelBuffer3Vtbl *lpVtbl;
     };
 
     
@@ -8723,9 +8759,9 @@ EXTERN_C const IID IID_IRpcChannelBuffer3;
 
 
 HRESULT STDMETHODCALLTYPE IRpcChannelBuffer3_Send_Proxy( 
-    IRpcChannelBuffer3 __RPC_FAR * This,
-    /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-    /* [out] */ ULONG __RPC_FAR *pulStatus);
+    IRpcChannelBuffer3 * This,
+    /* [out][in] */ RPCOLEMESSAGE *pMsg,
+    /* [out] */ ULONG *pulStatus);
 
 
 void __RPC_STUB IRpcChannelBuffer3_Send_Stub(
@@ -8736,10 +8772,10 @@ void __RPC_STUB IRpcChannelBuffer3_Send_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcChannelBuffer3_Receive_Proxy( 
-    IRpcChannelBuffer3 __RPC_FAR * This,
-    /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
+    IRpcChannelBuffer3 * This,
+    /* [out][in] */ RPCOLEMESSAGE *pMsg,
     /* [in] */ ULONG ulSize,
-    /* [out] */ ULONG __RPC_FAR *pulStatus);
+    /* [out] */ ULONG *pulStatus);
 
 
 void __RPC_STUB IRpcChannelBuffer3_Receive_Stub(
@@ -8750,8 +8786,8 @@ void __RPC_STUB IRpcChannelBuffer3_Receive_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcChannelBuffer3_Cancel_Proxy( 
-    IRpcChannelBuffer3 __RPC_FAR * This,
-    /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg);
+    IRpcChannelBuffer3 * This,
+    /* [in] */ RPCOLEMESSAGE *pMsg);
 
 
 void __RPC_STUB IRpcChannelBuffer3_Cancel_Stub(
@@ -8762,10 +8798,10 @@ void __RPC_STUB IRpcChannelBuffer3_Cancel_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcChannelBuffer3_GetCallContext_Proxy( 
-    IRpcChannelBuffer3 __RPC_FAR * This,
-    /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
+    IRpcChannelBuffer3 * This,
+    /* [in] */ RPCOLEMESSAGE *pMsg,
     /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *pInterface);
+    /* [out] */ void **pInterface);
 
 
 void __RPC_STUB IRpcChannelBuffer3_GetCallContext_Stub(
@@ -8776,10 +8812,10 @@ void __RPC_STUB IRpcChannelBuffer3_GetCallContext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcChannelBuffer3_GetDestCtxEx_Proxy( 
-    IRpcChannelBuffer3 __RPC_FAR * This,
-    /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-    /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext);
+    IRpcChannelBuffer3 * This,
+    /* [in] */ RPCOLEMESSAGE *pMsg,
+    /* [out] */ DWORD *pdwDestContext,
+    /* [out] */ void **ppvDestContext);
 
 
 void __RPC_STUB IRpcChannelBuffer3_GetDestCtxEx_Stub(
@@ -8790,9 +8826,9 @@ void __RPC_STUB IRpcChannelBuffer3_GetDestCtxEx_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcChannelBuffer3_GetState_Proxy( 
-    IRpcChannelBuffer3 __RPC_FAR * This,
-    /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-    /* [out] */ DWORD __RPC_FAR *pState);
+    IRpcChannelBuffer3 * This,
+    /* [in] */ RPCOLEMESSAGE *pMsg,
+    /* [out] */ DWORD *pState);
 
 
 void __RPC_STUB IRpcChannelBuffer3_GetState_Stub(
@@ -8803,9 +8839,9 @@ void __RPC_STUB IRpcChannelBuffer3_GetState_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcChannelBuffer3_RegisterAsync_Proxy( 
-    IRpcChannelBuffer3 __RPC_FAR * This,
-    /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
-    /* [in] */ IAsyncManager __RPC_FAR *pAsyncMgr);
+    IRpcChannelBuffer3 * This,
+    /* [in] */ RPCOLEMESSAGE *pMsg,
+    /* [in] */ IAsyncManager *pAsyncMgr);
 
 
 void __RPC_STUB IRpcChannelBuffer3_RegisterAsync_Stub(
@@ -8817,6 +8853,96 @@ void __RPC_STUB IRpcChannelBuffer3_RegisterAsync_Stub(
 
 
 #endif 	/* __IRpcChannelBuffer3_INTERFACE_DEFINED__ */
+
+
+#ifndef __IRpcSyntaxNegotiate_INTERFACE_DEFINED__
+#define __IRpcSyntaxNegotiate_INTERFACE_DEFINED__
+
+/* interface IRpcSyntaxNegotiate */
+/* [uuid][object][local] */ 
+
+
+EXTERN_C const IID IID_IRpcSyntaxNegotiate;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("58a08519-24c8-4935-b482-3fd823333a4f")
+    IRpcSyntaxNegotiate : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE NegotiateSyntax( 
+            /* [out][in] */ RPCOLEMESSAGE *pMsg) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IRpcSyntaxNegotiateVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IRpcSyntaxNegotiate * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IRpcSyntaxNegotiate * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IRpcSyntaxNegotiate * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *NegotiateSyntax )( 
+            IRpcSyntaxNegotiate * This,
+            /* [out][in] */ RPCOLEMESSAGE *pMsg);
+        
+        END_INTERFACE
+    } IRpcSyntaxNegotiateVtbl;
+
+    interface IRpcSyntaxNegotiate
+    {
+        CONST_VTBL struct IRpcSyntaxNegotiateVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IRpcSyntaxNegotiate_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IRpcSyntaxNegotiate_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IRpcSyntaxNegotiate_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IRpcSyntaxNegotiate_NegotiateSyntax(This,pMsg)	\
+    (This)->lpVtbl -> NegotiateSyntax(This,pMsg)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IRpcSyntaxNegotiate_NegotiateSyntax_Proxy( 
+    IRpcSyntaxNegotiate * This,
+    /* [out][in] */ RPCOLEMESSAGE *pMsg);
+
+
+void __RPC_STUB IRpcSyntaxNegotiate_NegotiateSyntax_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IRpcSyntaxNegotiate_INTERFACE_DEFINED__ */
 
 
 #ifndef __IRpcProxyBuffer_INTERFACE_DEFINED__
@@ -8835,7 +8961,7 @@ EXTERN_C const IID IID_IRpcProxyBuffer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Connect( 
-            /* [unique][in] */ IRpcChannelBuffer __RPC_FAR *pRpcChannelBuffer) = 0;
+            /* [unique][in] */ IRpcChannelBuffer *pRpcChannelBuffer) = 0;
         
         virtual void STDMETHODCALLTYPE Disconnect( void) = 0;
         
@@ -8847,30 +8973,30 @@ EXTERN_C const IID IID_IRpcProxyBuffer;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IRpcProxyBuffer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IRpcProxyBuffer * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IRpcProxyBuffer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IRpcProxyBuffer * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IRpcProxyBuffer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IRpcProxyBuffer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Connect )( 
-            IRpcProxyBuffer __RPC_FAR * This,
-            /* [unique][in] */ IRpcChannelBuffer __RPC_FAR *pRpcChannelBuffer);
+        HRESULT ( STDMETHODCALLTYPE *Connect )( 
+            IRpcProxyBuffer * This,
+            /* [unique][in] */ IRpcChannelBuffer *pRpcChannelBuffer);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *Disconnect )( 
-            IRpcProxyBuffer __RPC_FAR * This);
+        void ( STDMETHODCALLTYPE *Disconnect )( 
+            IRpcProxyBuffer * This);
         
         END_INTERFACE
     } IRpcProxyBufferVtbl;
 
     interface IRpcProxyBuffer
     {
-        CONST_VTBL struct IRpcProxyBufferVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IRpcProxyBufferVtbl *lpVtbl;
     };
 
     
@@ -8902,8 +9028,8 @@ EXTERN_C const IID IID_IRpcProxyBuffer;
 
 
 HRESULT STDMETHODCALLTYPE IRpcProxyBuffer_Connect_Proxy( 
-    IRpcProxyBuffer __RPC_FAR * This,
-    /* [unique][in] */ IRpcChannelBuffer __RPC_FAR *pRpcChannelBuffer);
+    IRpcProxyBuffer * This,
+    /* [unique][in] */ IRpcChannelBuffer *pRpcChannelBuffer);
 
 
 void __RPC_STUB IRpcProxyBuffer_Connect_Stub(
@@ -8914,7 +9040,7 @@ void __RPC_STUB IRpcProxyBuffer_Connect_Stub(
 
 
 void STDMETHODCALLTYPE IRpcProxyBuffer_Disconnect_Proxy( 
-    IRpcProxyBuffer __RPC_FAR * This);
+    IRpcProxyBuffer * This);
 
 
 void __RPC_STUB IRpcProxyBuffer_Disconnect_Stub(
@@ -8944,24 +9070,24 @@ EXTERN_C const IID IID_IRpcStubBuffer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Connect( 
-            /* [in] */ IUnknown __RPC_FAR *pUnkServer) = 0;
+            /* [in] */ IUnknown *pUnkServer) = 0;
         
         virtual void STDMETHODCALLTYPE Disconnect( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Invoke( 
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *_prpcmsg,
-            /* [in] */ IRpcChannelBuffer __RPC_FAR *_pRpcChannelBuffer) = 0;
+            /* [in] */ RPCOLEMESSAGE *_prpcmsg,
+            /* [in] */ IRpcChannelBuffer *_pRpcChannelBuffer) = 0;
         
-        virtual IRpcStubBuffer __RPC_FAR *STDMETHODCALLTYPE IsIIDSupported( 
+        virtual IRpcStubBuffer *STDMETHODCALLTYPE IsIIDSupported( 
             /* [in] */ REFIID riid) = 0;
         
         virtual ULONG STDMETHODCALLTYPE CountRefs( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DebugServerQueryInterface( 
-            void __RPC_FAR *__RPC_FAR *ppv) = 0;
+            void **ppv) = 0;
         
         virtual void STDMETHODCALLTYPE DebugServerRelease( 
-            void __RPC_FAR *pv) = 0;
+            void *pv) = 0;
         
     };
     
@@ -8971,50 +9097,50 @@ EXTERN_C const IID IID_IRpcStubBuffer;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IRpcStubBuffer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IRpcStubBuffer * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IRpcStubBuffer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IRpcStubBuffer * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IRpcStubBuffer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IRpcStubBuffer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Connect )( 
-            IRpcStubBuffer __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pUnkServer);
+        HRESULT ( STDMETHODCALLTYPE *Connect )( 
+            IRpcStubBuffer * This,
+            /* [in] */ IUnknown *pUnkServer);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *Disconnect )( 
-            IRpcStubBuffer __RPC_FAR * This);
+        void ( STDMETHODCALLTYPE *Disconnect )( 
+            IRpcStubBuffer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IRpcStubBuffer __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *_prpcmsg,
-            /* [in] */ IRpcChannelBuffer __RPC_FAR *_pRpcChannelBuffer);
+        HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IRpcStubBuffer * This,
+            /* [in] */ RPCOLEMESSAGE *_prpcmsg,
+            /* [in] */ IRpcChannelBuffer *_pRpcChannelBuffer);
         
-        IRpcStubBuffer __RPC_FAR *( STDMETHODCALLTYPE __RPC_FAR *IsIIDSupported )( 
-            IRpcStubBuffer __RPC_FAR * This,
+        IRpcStubBuffer *( STDMETHODCALLTYPE *IsIIDSupported )( 
+            IRpcStubBuffer * This,
             /* [in] */ REFIID riid);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *CountRefs )( 
-            IRpcStubBuffer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *CountRefs )( 
+            IRpcStubBuffer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DebugServerQueryInterface )( 
-            IRpcStubBuffer __RPC_FAR * This,
-            void __RPC_FAR *__RPC_FAR *ppv);
+        HRESULT ( STDMETHODCALLTYPE *DebugServerQueryInterface )( 
+            IRpcStubBuffer * This,
+            void **ppv);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *DebugServerRelease )( 
-            IRpcStubBuffer __RPC_FAR * This,
-            void __RPC_FAR *pv);
+        void ( STDMETHODCALLTYPE *DebugServerRelease )( 
+            IRpcStubBuffer * This,
+            void *pv);
         
         END_INTERFACE
     } IRpcStubBufferVtbl;
 
     interface IRpcStubBuffer
     {
-        CONST_VTBL struct IRpcStubBufferVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IRpcStubBufferVtbl *lpVtbl;
     };
 
     
@@ -9061,8 +9187,8 @@ EXTERN_C const IID IID_IRpcStubBuffer;
 
 
 HRESULT STDMETHODCALLTYPE IRpcStubBuffer_Connect_Proxy( 
-    IRpcStubBuffer __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pUnkServer);
+    IRpcStubBuffer * This,
+    /* [in] */ IUnknown *pUnkServer);
 
 
 void __RPC_STUB IRpcStubBuffer_Connect_Stub(
@@ -9073,7 +9199,7 @@ void __RPC_STUB IRpcStubBuffer_Connect_Stub(
 
 
 void STDMETHODCALLTYPE IRpcStubBuffer_Disconnect_Proxy( 
-    IRpcStubBuffer __RPC_FAR * This);
+    IRpcStubBuffer * This);
 
 
 void __RPC_STUB IRpcStubBuffer_Disconnect_Stub(
@@ -9084,9 +9210,9 @@ void __RPC_STUB IRpcStubBuffer_Disconnect_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcStubBuffer_Invoke_Proxy( 
-    IRpcStubBuffer __RPC_FAR * This,
-    /* [in] */ RPCOLEMESSAGE __RPC_FAR *_prpcmsg,
-    /* [in] */ IRpcChannelBuffer __RPC_FAR *_pRpcChannelBuffer);
+    IRpcStubBuffer * This,
+    /* [in] */ RPCOLEMESSAGE *_prpcmsg,
+    /* [in] */ IRpcChannelBuffer *_pRpcChannelBuffer);
 
 
 void __RPC_STUB IRpcStubBuffer_Invoke_Stub(
@@ -9096,8 +9222,8 @@ void __RPC_STUB IRpcStubBuffer_Invoke_Stub(
     DWORD *_pdwStubPhase);
 
 
-IRpcStubBuffer __RPC_FAR *STDMETHODCALLTYPE IRpcStubBuffer_IsIIDSupported_Proxy( 
-    IRpcStubBuffer __RPC_FAR * This,
+IRpcStubBuffer *STDMETHODCALLTYPE IRpcStubBuffer_IsIIDSupported_Proxy( 
+    IRpcStubBuffer * This,
     /* [in] */ REFIID riid);
 
 
@@ -9109,7 +9235,7 @@ void __RPC_STUB IRpcStubBuffer_IsIIDSupported_Stub(
 
 
 ULONG STDMETHODCALLTYPE IRpcStubBuffer_CountRefs_Proxy( 
-    IRpcStubBuffer __RPC_FAR * This);
+    IRpcStubBuffer * This);
 
 
 void __RPC_STUB IRpcStubBuffer_CountRefs_Stub(
@@ -9120,8 +9246,8 @@ void __RPC_STUB IRpcStubBuffer_CountRefs_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcStubBuffer_DebugServerQueryInterface_Proxy( 
-    IRpcStubBuffer __RPC_FAR * This,
-    void __RPC_FAR *__RPC_FAR *ppv);
+    IRpcStubBuffer * This,
+    void **ppv);
 
 
 void __RPC_STUB IRpcStubBuffer_DebugServerQueryInterface_Stub(
@@ -9132,8 +9258,8 @@ void __RPC_STUB IRpcStubBuffer_DebugServerQueryInterface_Stub(
 
 
 void STDMETHODCALLTYPE IRpcStubBuffer_DebugServerRelease_Proxy( 
-    IRpcStubBuffer __RPC_FAR * This,
-    void __RPC_FAR *pv);
+    IRpcStubBuffer * This,
+    void *pv);
 
 
 void __RPC_STUB IRpcStubBuffer_DebugServerRelease_Stub(
@@ -9163,15 +9289,15 @@ EXTERN_C const IID IID_IPSFactoryBuffer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateProxy( 
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
+            /* [in] */ IUnknown *pUnkOuter,
             /* [in] */ REFIID riid,
-            /* [out] */ IRpcProxyBuffer __RPC_FAR *__RPC_FAR *ppProxy,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppv) = 0;
+            /* [out] */ IRpcProxyBuffer **ppProxy,
+            /* [out] */ void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateStub( 
             /* [in] */ REFIID riid,
-            /* [unique][in] */ IUnknown __RPC_FAR *pUnkServer,
-            /* [out] */ IRpcStubBuffer __RPC_FAR *__RPC_FAR *ppStub) = 0;
+            /* [unique][in] */ IUnknown *pUnkServer,
+            /* [out] */ IRpcStubBuffer **ppStub) = 0;
         
     };
     
@@ -9181,36 +9307,36 @@ EXTERN_C const IID IID_IPSFactoryBuffer;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPSFactoryBuffer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPSFactoryBuffer * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPSFactoryBuffer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPSFactoryBuffer * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPSFactoryBuffer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPSFactoryBuffer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateProxy )( 
-            IPSFactoryBuffer __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
+        HRESULT ( STDMETHODCALLTYPE *CreateProxy )( 
+            IPSFactoryBuffer * This,
+            /* [in] */ IUnknown *pUnkOuter,
             /* [in] */ REFIID riid,
-            /* [out] */ IRpcProxyBuffer __RPC_FAR *__RPC_FAR *ppProxy,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppv);
+            /* [out] */ IRpcProxyBuffer **ppProxy,
+            /* [out] */ void **ppv);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateStub )( 
-            IPSFactoryBuffer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CreateStub )( 
+            IPSFactoryBuffer * This,
             /* [in] */ REFIID riid,
-            /* [unique][in] */ IUnknown __RPC_FAR *pUnkServer,
-            /* [out] */ IRpcStubBuffer __RPC_FAR *__RPC_FAR *ppStub);
+            /* [unique][in] */ IUnknown *pUnkServer,
+            /* [out] */ IRpcStubBuffer **ppStub);
         
         END_INTERFACE
     } IPSFactoryBufferVtbl;
 
     interface IPSFactoryBuffer
     {
-        CONST_VTBL struct IPSFactoryBufferVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPSFactoryBufferVtbl *lpVtbl;
     };
 
     
@@ -9242,11 +9368,11 @@ EXTERN_C const IID IID_IPSFactoryBuffer;
 
 
 HRESULT STDMETHODCALLTYPE IPSFactoryBuffer_CreateProxy_Proxy( 
-    IPSFactoryBuffer __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
+    IPSFactoryBuffer * This,
+    /* [in] */ IUnknown *pUnkOuter,
     /* [in] */ REFIID riid,
-    /* [out] */ IRpcProxyBuffer __RPC_FAR *__RPC_FAR *ppProxy,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppv);
+    /* [out] */ IRpcProxyBuffer **ppProxy,
+    /* [out] */ void **ppv);
 
 
 void __RPC_STUB IPSFactoryBuffer_CreateProxy_Stub(
@@ -9257,10 +9383,10 @@ void __RPC_STUB IPSFactoryBuffer_CreateProxy_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPSFactoryBuffer_CreateStub_Proxy( 
-    IPSFactoryBuffer __RPC_FAR * This,
+    IPSFactoryBuffer * This,
     /* [in] */ REFIID riid,
-    /* [unique][in] */ IUnknown __RPC_FAR *pUnkServer,
-    /* [out] */ IRpcStubBuffer __RPC_FAR *__RPC_FAR *ppStub);
+    /* [unique][in] */ IUnknown *pUnkServer,
+    /* [out] */ IRpcStubBuffer **ppStub);
 
 
 void __RPC_STUB IPSFactoryBuffer_CreateStub_Stub(
@@ -9274,7 +9400,7 @@ void __RPC_STUB IPSFactoryBuffer_CreateStub_Stub(
 #endif 	/* __IPSFactoryBuffer_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_objidl_0049 */
+/* interface __MIDL_itf_objidl_0050 */
 /* [local] */ 
 
 #if  (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
@@ -9286,13 +9412,13 @@ typedef struct SChannelHookCallInfo
     GUID uCausality;
     DWORD dwServerPid;
     DWORD iMethod;
-    void __RPC_FAR *pObject;
-    }	SChannelHookCallInfo;
+    void *pObject;
+    } 	SChannelHookCallInfo;
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_objidl_0049_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_objidl_0049_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_objidl_0050_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_objidl_0050_v0_0_s_ifspec;
 
 #ifndef __IChannelHook_INTERFACE_DEFINED__
 #define __IChannelHook_INTERFACE_DEFINED__
@@ -9312,19 +9438,19 @@ EXTERN_C const IID IID_IChannelHook;
         virtual void STDMETHODCALLTYPE ClientGetSize( 
             /* [in] */ REFGUID uExtent,
             /* [in] */ REFIID riid,
-            /* [out] */ ULONG __RPC_FAR *pDataSize) = 0;
+            /* [out] */ ULONG *pDataSize) = 0;
         
         virtual void STDMETHODCALLTYPE ClientFillBuffer( 
             /* [in] */ REFGUID uExtent,
             /* [in] */ REFIID riid,
-            /* [out][in] */ ULONG __RPC_FAR *pDataSize,
-            /* [in] */ void __RPC_FAR *pDataBuffer) = 0;
+            /* [out][in] */ ULONG *pDataSize,
+            /* [in] */ void *pDataBuffer) = 0;
         
         virtual void STDMETHODCALLTYPE ClientNotify( 
             /* [in] */ REFGUID uExtent,
             /* [in] */ REFIID riid,
             /* [in] */ ULONG cbDataSize,
-            /* [in] */ void __RPC_FAR *pDataBuffer,
+            /* [in] */ void *pDataBuffer,
             /* [in] */ DWORD lDataRep,
             /* [in] */ HRESULT hrFault) = 0;
         
@@ -9332,20 +9458,20 @@ EXTERN_C const IID IID_IChannelHook;
             /* [in] */ REFGUID uExtent,
             /* [in] */ REFIID riid,
             /* [in] */ ULONG cbDataSize,
-            /* [in] */ void __RPC_FAR *pDataBuffer,
+            /* [in] */ void *pDataBuffer,
             /* [in] */ DWORD lDataRep) = 0;
         
         virtual void STDMETHODCALLTYPE ServerGetSize( 
             /* [in] */ REFGUID uExtent,
             /* [in] */ REFIID riid,
             /* [in] */ HRESULT hrFault,
-            /* [out] */ ULONG __RPC_FAR *pDataSize) = 0;
+            /* [out] */ ULONG *pDataSize) = 0;
         
         virtual void STDMETHODCALLTYPE ServerFillBuffer( 
             /* [in] */ REFGUID uExtent,
             /* [in] */ REFIID riid,
-            /* [out][in] */ ULONG __RPC_FAR *pDataSize,
-            /* [in] */ void __RPC_FAR *pDataBuffer,
+            /* [out][in] */ ULONG *pDataSize,
+            /* [in] */ void *pDataBuffer,
             /* [in] */ HRESULT hrFault) = 0;
         
     };
@@ -9356,60 +9482,60 @@ EXTERN_C const IID IID_IChannelHook;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IChannelHook __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IChannelHook * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IChannelHook __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IChannelHook * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IChannelHook __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IChannelHook * This);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *ClientGetSize )( 
-            IChannelHook __RPC_FAR * This,
+        void ( STDMETHODCALLTYPE *ClientGetSize )( 
+            IChannelHook * This,
             /* [in] */ REFGUID uExtent,
             /* [in] */ REFIID riid,
-            /* [out] */ ULONG __RPC_FAR *pDataSize);
+            /* [out] */ ULONG *pDataSize);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *ClientFillBuffer )( 
-            IChannelHook __RPC_FAR * This,
+        void ( STDMETHODCALLTYPE *ClientFillBuffer )( 
+            IChannelHook * This,
             /* [in] */ REFGUID uExtent,
             /* [in] */ REFIID riid,
-            /* [out][in] */ ULONG __RPC_FAR *pDataSize,
-            /* [in] */ void __RPC_FAR *pDataBuffer);
+            /* [out][in] */ ULONG *pDataSize,
+            /* [in] */ void *pDataBuffer);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *ClientNotify )( 
-            IChannelHook __RPC_FAR * This,
+        void ( STDMETHODCALLTYPE *ClientNotify )( 
+            IChannelHook * This,
             /* [in] */ REFGUID uExtent,
             /* [in] */ REFIID riid,
             /* [in] */ ULONG cbDataSize,
-            /* [in] */ void __RPC_FAR *pDataBuffer,
+            /* [in] */ void *pDataBuffer,
             /* [in] */ DWORD lDataRep,
             /* [in] */ HRESULT hrFault);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *ServerNotify )( 
-            IChannelHook __RPC_FAR * This,
+        void ( STDMETHODCALLTYPE *ServerNotify )( 
+            IChannelHook * This,
             /* [in] */ REFGUID uExtent,
             /* [in] */ REFIID riid,
             /* [in] */ ULONG cbDataSize,
-            /* [in] */ void __RPC_FAR *pDataBuffer,
+            /* [in] */ void *pDataBuffer,
             /* [in] */ DWORD lDataRep);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *ServerGetSize )( 
-            IChannelHook __RPC_FAR * This,
+        void ( STDMETHODCALLTYPE *ServerGetSize )( 
+            IChannelHook * This,
             /* [in] */ REFGUID uExtent,
             /* [in] */ REFIID riid,
             /* [in] */ HRESULT hrFault,
-            /* [out] */ ULONG __RPC_FAR *pDataSize);
+            /* [out] */ ULONG *pDataSize);
         
-        void ( STDMETHODCALLTYPE __RPC_FAR *ServerFillBuffer )( 
-            IChannelHook __RPC_FAR * This,
+        void ( STDMETHODCALLTYPE *ServerFillBuffer )( 
+            IChannelHook * This,
             /* [in] */ REFGUID uExtent,
             /* [in] */ REFIID riid,
-            /* [out][in] */ ULONG __RPC_FAR *pDataSize,
-            /* [in] */ void __RPC_FAR *pDataBuffer,
+            /* [out][in] */ ULONG *pDataSize,
+            /* [in] */ void *pDataBuffer,
             /* [in] */ HRESULT hrFault);
         
         END_INTERFACE
@@ -9417,7 +9543,7 @@ EXTERN_C const IID IID_IChannelHook;
 
     interface IChannelHook
     {
-        CONST_VTBL struct IChannelHookVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IChannelHookVtbl *lpVtbl;
     };
 
     
@@ -9461,10 +9587,10 @@ EXTERN_C const IID IID_IChannelHook;
 
 
 void STDMETHODCALLTYPE IChannelHook_ClientGetSize_Proxy( 
-    IChannelHook __RPC_FAR * This,
+    IChannelHook * This,
     /* [in] */ REFGUID uExtent,
     /* [in] */ REFIID riid,
-    /* [out] */ ULONG __RPC_FAR *pDataSize);
+    /* [out] */ ULONG *pDataSize);
 
 
 void __RPC_STUB IChannelHook_ClientGetSize_Stub(
@@ -9475,11 +9601,11 @@ void __RPC_STUB IChannelHook_ClientGetSize_Stub(
 
 
 void STDMETHODCALLTYPE IChannelHook_ClientFillBuffer_Proxy( 
-    IChannelHook __RPC_FAR * This,
+    IChannelHook * This,
     /* [in] */ REFGUID uExtent,
     /* [in] */ REFIID riid,
-    /* [out][in] */ ULONG __RPC_FAR *pDataSize,
-    /* [in] */ void __RPC_FAR *pDataBuffer);
+    /* [out][in] */ ULONG *pDataSize,
+    /* [in] */ void *pDataBuffer);
 
 
 void __RPC_STUB IChannelHook_ClientFillBuffer_Stub(
@@ -9490,11 +9616,11 @@ void __RPC_STUB IChannelHook_ClientFillBuffer_Stub(
 
 
 void STDMETHODCALLTYPE IChannelHook_ClientNotify_Proxy( 
-    IChannelHook __RPC_FAR * This,
+    IChannelHook * This,
     /* [in] */ REFGUID uExtent,
     /* [in] */ REFIID riid,
     /* [in] */ ULONG cbDataSize,
-    /* [in] */ void __RPC_FAR *pDataBuffer,
+    /* [in] */ void *pDataBuffer,
     /* [in] */ DWORD lDataRep,
     /* [in] */ HRESULT hrFault);
 
@@ -9507,11 +9633,11 @@ void __RPC_STUB IChannelHook_ClientNotify_Stub(
 
 
 void STDMETHODCALLTYPE IChannelHook_ServerNotify_Proxy( 
-    IChannelHook __RPC_FAR * This,
+    IChannelHook * This,
     /* [in] */ REFGUID uExtent,
     /* [in] */ REFIID riid,
     /* [in] */ ULONG cbDataSize,
-    /* [in] */ void __RPC_FAR *pDataBuffer,
+    /* [in] */ void *pDataBuffer,
     /* [in] */ DWORD lDataRep);
 
 
@@ -9523,11 +9649,11 @@ void __RPC_STUB IChannelHook_ServerNotify_Stub(
 
 
 void STDMETHODCALLTYPE IChannelHook_ServerGetSize_Proxy( 
-    IChannelHook __RPC_FAR * This,
+    IChannelHook * This,
     /* [in] */ REFGUID uExtent,
     /* [in] */ REFIID riid,
     /* [in] */ HRESULT hrFault,
-    /* [out] */ ULONG __RPC_FAR *pDataSize);
+    /* [out] */ ULONG *pDataSize);
 
 
 void __RPC_STUB IChannelHook_ServerGetSize_Stub(
@@ -9538,11 +9664,11 @@ void __RPC_STUB IChannelHook_ServerGetSize_Stub(
 
 
 void STDMETHODCALLTYPE IChannelHook_ServerFillBuffer_Proxy( 
-    IChannelHook __RPC_FAR * This,
+    IChannelHook * This,
     /* [in] */ REFGUID uExtent,
     /* [in] */ REFIID riid,
-    /* [out][in] */ ULONG __RPC_FAR *pDataSize,
-    /* [in] */ void __RPC_FAR *pDataBuffer,
+    /* [out][in] */ ULONG *pDataSize,
+    /* [in] */ void *pDataBuffer,
     /* [in] */ HRESULT hrFault);
 
 
@@ -9557,7 +9683,7 @@ void __RPC_STUB IChannelHook_ServerFillBuffer_Stub(
 #endif 	/* __IChannelHook_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_objidl_0050 */
+/* interface __MIDL_itf_objidl_0051 */
 /* [local] */ 
 
 #endif //DCOM
@@ -9583,8 +9709,8 @@ extern const FMTID FMTID_MediaFileSummaryInformation;
 // This interface is only valid on Windows NT 4.0
 
 
-extern RPC_IF_HANDLE __MIDL_itf_objidl_0050_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_objidl_0050_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_objidl_0051_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_objidl_0051_v0_0_s_ifspec;
 
 #ifndef __IClientSecurity_INTERFACE_DEFINED__
 #define __IClientSecurity_INTERFACE_DEFINED__
@@ -9596,11 +9722,11 @@ typedef struct tagSOLE_AUTHENTICATION_SERVICE
     {
     DWORD dwAuthnSvc;
     DWORD dwAuthzSvc;
-    OLECHAR __RPC_FAR *pPrincipalName;
+    OLECHAR *pPrincipalName;
     HRESULT hr;
-    }	SOLE_AUTHENTICATION_SERVICE;
+    } 	SOLE_AUTHENTICATION_SERVICE;
 
-typedef SOLE_AUTHENTICATION_SERVICE __RPC_FAR *PSOLE_AUTHENTICATION_SERVICE;
+typedef SOLE_AUTHENTICATION_SERVICE *PSOLE_AUTHENTICATION_SERVICE;
 
 typedef 
 enum tagEOLE_AUTHENTICATION_CAPABILITIES
@@ -9619,28 +9745,28 @@ enum tagEOLE_AUTHENTICATION_CAPABILITIES
 	EOAC_AUTO_IMPERSONATE	= 0x400,
 	EOAC_NO_CUSTOM_MARSHAL	= 0x2000,
 	EOAC_DISABLE_AAA	= 0x1000
-    }	EOLE_AUTHENTICATION_CAPABILITIES;
+    } 	EOLE_AUTHENTICATION_CAPABILITIES;
 
-#define	COLE_DEFAULT_PRINCIPAL	( ( OLECHAR __RPC_FAR * )-1 )
+#define	COLE_DEFAULT_PRINCIPAL	( ( OLECHAR * )-1 )
 
-#define	COLE_DEFAULT_AUTHINFO	( ( void __RPC_FAR * )-1 )
+#define	COLE_DEFAULT_AUTHINFO	( ( void * )-1 )
 
 typedef struct tagSOLE_AUTHENTICATION_INFO
     {
     DWORD dwAuthnSvc;
     DWORD dwAuthzSvc;
-    void __RPC_FAR *pAuthInfo;
-    }	SOLE_AUTHENTICATION_INFO;
+    void *pAuthInfo;
+    } 	SOLE_AUTHENTICATION_INFO;
 
-typedef struct tagSOLE_AUTHENTICATION_INFO __RPC_FAR *PSOLE_AUTHENTICATION_INFO;
+typedef struct tagSOLE_AUTHENTICATION_INFO *PSOLE_AUTHENTICATION_INFO;
 
 typedef struct tagSOLE_AUTHENTICATION_LIST
     {
     DWORD cAuthInfo;
-    SOLE_AUTHENTICATION_INFO __RPC_FAR *aAuthInfo;
-    }	SOLE_AUTHENTICATION_LIST;
+    SOLE_AUTHENTICATION_INFO *aAuthInfo;
+    } 	SOLE_AUTHENTICATION_LIST;
 
-typedef struct tagSOLE_AUTHENTICATION_LIST __RPC_FAR *PSOLE_AUTHENTICATION_LIST;
+typedef struct tagSOLE_AUTHENTICATION_LIST *PSOLE_AUTHENTICATION_LIST;
 
 
 EXTERN_C const IID IID_IClientSecurity;
@@ -9652,28 +9778,28 @@ EXTERN_C const IID IID_IClientSecurity;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryBlanket( 
-            /* [in] */ IUnknown __RPC_FAR *pProxy,
-            /* [out] */ DWORD __RPC_FAR *pAuthnSvc,
-            /* [out] */ DWORD __RPC_FAR *pAuthzSvc,
-            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
-            /* [out] */ DWORD __RPC_FAR *pAuthnLevel,
-            /* [out] */ DWORD __RPC_FAR *pImpLevel,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *pAuthInfo,
-            /* [out] */ DWORD __RPC_FAR *pCapabilites) = 0;
+            /* [in] */ IUnknown *pProxy,
+            /* [out] */ DWORD *pAuthnSvc,
+            /* [out] */ DWORD *pAuthzSvc,
+            /* [out] */ OLECHAR **pServerPrincName,
+            /* [out] */ DWORD *pAuthnLevel,
+            /* [out] */ DWORD *pImpLevel,
+            /* [out] */ void **pAuthInfo,
+            /* [out] */ DWORD *pCapabilites) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBlanket( 
-            /* [in] */ IUnknown __RPC_FAR *pProxy,
+            /* [in] */ IUnknown *pProxy,
             /* [in] */ DWORD dwAuthnSvc,
             /* [in] */ DWORD dwAuthzSvc,
-            /* [in] */ OLECHAR __RPC_FAR *pServerPrincName,
+            /* [in] */ OLECHAR *pServerPrincName,
             /* [in] */ DWORD dwAuthnLevel,
             /* [in] */ DWORD dwImpLevel,
-            /* [in] */ void __RPC_FAR *pAuthInfo,
+            /* [in] */ void *pAuthInfo,
             /* [in] */ DWORD dwCapabilities) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyProxy( 
-            /* [in] */ IUnknown __RPC_FAR *pProxy,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppCopy) = 0;
+            /* [in] */ IUnknown *pProxy,
+            /* [out] */ IUnknown **ppCopy) = 0;
         
     };
     
@@ -9683,50 +9809,50 @@ EXTERN_C const IID IID_IClientSecurity;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IClientSecurity __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IClientSecurity * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IClientSecurity __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IClientSecurity * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IClientSecurity __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IClientSecurity * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryBlanket )( 
-            IClientSecurity __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pProxy,
-            /* [out] */ DWORD __RPC_FAR *pAuthnSvc,
-            /* [out] */ DWORD __RPC_FAR *pAuthzSvc,
-            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
-            /* [out] */ DWORD __RPC_FAR *pAuthnLevel,
-            /* [out] */ DWORD __RPC_FAR *pImpLevel,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *pAuthInfo,
-            /* [out] */ DWORD __RPC_FAR *pCapabilites);
+        HRESULT ( STDMETHODCALLTYPE *QueryBlanket )( 
+            IClientSecurity * This,
+            /* [in] */ IUnknown *pProxy,
+            /* [out] */ DWORD *pAuthnSvc,
+            /* [out] */ DWORD *pAuthzSvc,
+            /* [out] */ OLECHAR **pServerPrincName,
+            /* [out] */ DWORD *pAuthnLevel,
+            /* [out] */ DWORD *pImpLevel,
+            /* [out] */ void **pAuthInfo,
+            /* [out] */ DWORD *pCapabilites);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBlanket )( 
-            IClientSecurity __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pProxy,
+        HRESULT ( STDMETHODCALLTYPE *SetBlanket )( 
+            IClientSecurity * This,
+            /* [in] */ IUnknown *pProxy,
             /* [in] */ DWORD dwAuthnSvc,
             /* [in] */ DWORD dwAuthzSvc,
-            /* [in] */ OLECHAR __RPC_FAR *pServerPrincName,
+            /* [in] */ OLECHAR *pServerPrincName,
             /* [in] */ DWORD dwAuthnLevel,
             /* [in] */ DWORD dwImpLevel,
-            /* [in] */ void __RPC_FAR *pAuthInfo,
+            /* [in] */ void *pAuthInfo,
             /* [in] */ DWORD dwCapabilities);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyProxy )( 
-            IClientSecurity __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pProxy,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppCopy);
+        HRESULT ( STDMETHODCALLTYPE *CopyProxy )( 
+            IClientSecurity * This,
+            /* [in] */ IUnknown *pProxy,
+            /* [out] */ IUnknown **ppCopy);
         
         END_INTERFACE
     } IClientSecurityVtbl;
 
     interface IClientSecurity
     {
-        CONST_VTBL struct IClientSecurityVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IClientSecurityVtbl *lpVtbl;
     };
 
     
@@ -9761,15 +9887,15 @@ EXTERN_C const IID IID_IClientSecurity;
 
 
 HRESULT STDMETHODCALLTYPE IClientSecurity_QueryBlanket_Proxy( 
-    IClientSecurity __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pProxy,
-    /* [out] */ DWORD __RPC_FAR *pAuthnSvc,
-    /* [out] */ DWORD __RPC_FAR *pAuthzSvc,
-    /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
-    /* [out] */ DWORD __RPC_FAR *pAuthnLevel,
-    /* [out] */ DWORD __RPC_FAR *pImpLevel,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *pAuthInfo,
-    /* [out] */ DWORD __RPC_FAR *pCapabilites);
+    IClientSecurity * This,
+    /* [in] */ IUnknown *pProxy,
+    /* [out] */ DWORD *pAuthnSvc,
+    /* [out] */ DWORD *pAuthzSvc,
+    /* [out] */ OLECHAR **pServerPrincName,
+    /* [out] */ DWORD *pAuthnLevel,
+    /* [out] */ DWORD *pImpLevel,
+    /* [out] */ void **pAuthInfo,
+    /* [out] */ DWORD *pCapabilites);
 
 
 void __RPC_STUB IClientSecurity_QueryBlanket_Stub(
@@ -9780,14 +9906,14 @@ void __RPC_STUB IClientSecurity_QueryBlanket_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IClientSecurity_SetBlanket_Proxy( 
-    IClientSecurity __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pProxy,
+    IClientSecurity * This,
+    /* [in] */ IUnknown *pProxy,
     /* [in] */ DWORD dwAuthnSvc,
     /* [in] */ DWORD dwAuthzSvc,
-    /* [in] */ OLECHAR __RPC_FAR *pServerPrincName,
+    /* [in] */ OLECHAR *pServerPrincName,
     /* [in] */ DWORD dwAuthnLevel,
     /* [in] */ DWORD dwImpLevel,
-    /* [in] */ void __RPC_FAR *pAuthInfo,
+    /* [in] */ void *pAuthInfo,
     /* [in] */ DWORD dwCapabilities);
 
 
@@ -9799,9 +9925,9 @@ void __RPC_STUB IClientSecurity_SetBlanket_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IClientSecurity_CopyProxy_Proxy( 
-    IClientSecurity __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pProxy,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppCopy);
+    IClientSecurity * This,
+    /* [in] */ IUnknown *pProxy,
+    /* [out] */ IUnknown **ppCopy);
 
 
 void __RPC_STUB IClientSecurity_CopyProxy_Stub(
@@ -9831,13 +9957,13 @@ EXTERN_C const IID IID_IServerSecurity;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryBlanket( 
-            /* [out] */ DWORD __RPC_FAR *pAuthnSvc,
-            /* [out] */ DWORD __RPC_FAR *pAuthzSvc,
-            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
-            /* [out] */ DWORD __RPC_FAR *pAuthnLevel,
-            /* [out] */ DWORD __RPC_FAR *pImpLevel,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *pPrivs,
-            /* [out][in] */ DWORD __RPC_FAR *pCapabilities) = 0;
+            /* [out] */ DWORD *pAuthnSvc,
+            /* [out] */ DWORD *pAuthzSvc,
+            /* [out] */ OLECHAR **pServerPrincName,
+            /* [out] */ DWORD *pAuthnLevel,
+            /* [out] */ DWORD *pImpLevel,
+            /* [out] */ void **pPrivs,
+            /* [out][in] */ DWORD *pCapabilities) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ImpersonateClient( void) = 0;
         
@@ -9853,42 +9979,42 @@ EXTERN_C const IID IID_IServerSecurity;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IServerSecurity __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IServerSecurity * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IServerSecurity __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IServerSecurity * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IServerSecurity __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IServerSecurity * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryBlanket )( 
-            IServerSecurity __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pAuthnSvc,
-            /* [out] */ DWORD __RPC_FAR *pAuthzSvc,
-            /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
-            /* [out] */ DWORD __RPC_FAR *pAuthnLevel,
-            /* [out] */ DWORD __RPC_FAR *pImpLevel,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *pPrivs,
-            /* [out][in] */ DWORD __RPC_FAR *pCapabilities);
+        HRESULT ( STDMETHODCALLTYPE *QueryBlanket )( 
+            IServerSecurity * This,
+            /* [out] */ DWORD *pAuthnSvc,
+            /* [out] */ DWORD *pAuthzSvc,
+            /* [out] */ OLECHAR **pServerPrincName,
+            /* [out] */ DWORD *pAuthnLevel,
+            /* [out] */ DWORD *pImpLevel,
+            /* [out] */ void **pPrivs,
+            /* [out][in] */ DWORD *pCapabilities);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ImpersonateClient )( 
-            IServerSecurity __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *ImpersonateClient )( 
+            IServerSecurity * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RevertToSelf )( 
-            IServerSecurity __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *RevertToSelf )( 
+            IServerSecurity * This);
         
-        BOOL ( STDMETHODCALLTYPE __RPC_FAR *IsImpersonating )( 
-            IServerSecurity __RPC_FAR * This);
+        BOOL ( STDMETHODCALLTYPE *IsImpersonating )( 
+            IServerSecurity * This);
         
         END_INTERFACE
     } IServerSecurityVtbl;
 
     interface IServerSecurity
     {
-        CONST_VTBL struct IServerSecurityVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IServerSecurityVtbl *lpVtbl;
     };
 
     
@@ -9926,14 +10052,14 @@ EXTERN_C const IID IID_IServerSecurity;
 
 
 HRESULT STDMETHODCALLTYPE IServerSecurity_QueryBlanket_Proxy( 
-    IServerSecurity __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pAuthnSvc,
-    /* [out] */ DWORD __RPC_FAR *pAuthzSvc,
-    /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR *pServerPrincName,
-    /* [out] */ DWORD __RPC_FAR *pAuthnLevel,
-    /* [out] */ DWORD __RPC_FAR *pImpLevel,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *pPrivs,
-    /* [out][in] */ DWORD __RPC_FAR *pCapabilities);
+    IServerSecurity * This,
+    /* [out] */ DWORD *pAuthnSvc,
+    /* [out] */ DWORD *pAuthzSvc,
+    /* [out] */ OLECHAR **pServerPrincName,
+    /* [out] */ DWORD *pAuthnLevel,
+    /* [out] */ DWORD *pImpLevel,
+    /* [out] */ void **pPrivs,
+    /* [out][in] */ DWORD *pCapabilities);
 
 
 void __RPC_STUB IServerSecurity_QueryBlanket_Stub(
@@ -9944,7 +10070,7 @@ void __RPC_STUB IServerSecurity_QueryBlanket_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IServerSecurity_ImpersonateClient_Proxy( 
-    IServerSecurity __RPC_FAR * This);
+    IServerSecurity * This);
 
 
 void __RPC_STUB IServerSecurity_ImpersonateClient_Stub(
@@ -9955,7 +10081,7 @@ void __RPC_STUB IServerSecurity_ImpersonateClient_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IServerSecurity_RevertToSelf_Proxy( 
-    IServerSecurity __RPC_FAR * This);
+    IServerSecurity * This);
 
 
 void __RPC_STUB IServerSecurity_RevertToSelf_Stub(
@@ -9966,7 +10092,7 @@ void __RPC_STUB IServerSecurity_RevertToSelf_Stub(
 
 
 BOOL STDMETHODCALLTYPE IServerSecurity_IsImpersonating_Proxy( 
-    IServerSecurity __RPC_FAR * This);
+    IServerSecurity * This);
 
 
 void __RPC_STUB IServerSecurity_IsImpersonating_Stub(
@@ -10000,7 +10126,7 @@ EXTERN_C const IID IID_IClassActivator;
             /* [in] */ DWORD dwClassContext,
             /* [in] */ LCID locale,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppv) = 0;
+            /* [iid_is][out] */ void **ppv) = 0;
         
     };
     
@@ -10010,31 +10136,31 @@ EXTERN_C const IID IID_IClassActivator;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IClassActivator __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IClassActivator * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IClassActivator __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IClassActivator * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IClassActivator __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IClassActivator * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClassObject )( 
-            IClassActivator __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetClassObject )( 
+            IClassActivator * This,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ DWORD dwClassContext,
             /* [in] */ LCID locale,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppv);
+            /* [iid_is][out] */ void **ppv);
         
         END_INTERFACE
     } IClassActivatorVtbl;
 
     interface IClassActivator
     {
-        CONST_VTBL struct IClassActivatorVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IClassActivatorVtbl *lpVtbl;
     };
 
     
@@ -10063,12 +10189,12 @@ EXTERN_C const IID IID_IClassActivator;
 
 
 HRESULT STDMETHODCALLTYPE IClassActivator_GetClassObject_Proxy( 
-    IClassActivator __RPC_FAR * This,
+    IClassActivator * This,
     /* [in] */ REFCLSID rclsid,
     /* [in] */ DWORD dwClassContext,
     /* [in] */ LCID locale,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppv);
+    /* [iid_is][out] */ void **ppv);
 
 
 void __RPC_STUB IClassActivator_GetClassObject_Stub(
@@ -10098,14 +10224,14 @@ EXTERN_C const IID IID_IRpcOptions;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Set( 
-            /* [in] */ IUnknown __RPC_FAR *pPrx,
+            /* [in] */ IUnknown *pPrx,
             /* [in] */ DWORD dwProperty,
             /* [in] */ ULONG_PTR dwValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Query( 
-            /* [in] */ IUnknown __RPC_FAR *pPrx,
+            /* [in] */ IUnknown *pPrx,
             /* [in] */ DWORD dwProperty,
-            /* [out] */ ULONG_PTR __RPC_FAR *pdwValue) = 0;
+            /* [out] */ ULONG_PTR *pdwValue) = 0;
         
     };
     
@@ -10115,35 +10241,35 @@ EXTERN_C const IID IID_IRpcOptions;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IRpcOptions __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IRpcOptions * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IRpcOptions __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IRpcOptions * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IRpcOptions __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IRpcOptions * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Set )( 
-            IRpcOptions __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pPrx,
+        HRESULT ( STDMETHODCALLTYPE *Set )( 
+            IRpcOptions * This,
+            /* [in] */ IUnknown *pPrx,
             /* [in] */ DWORD dwProperty,
             /* [in] */ ULONG_PTR dwValue);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Query )( 
-            IRpcOptions __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pPrx,
+        HRESULT ( STDMETHODCALLTYPE *Query )( 
+            IRpcOptions * This,
+            /* [in] */ IUnknown *pPrx,
             /* [in] */ DWORD dwProperty,
-            /* [out] */ ULONG_PTR __RPC_FAR *pdwValue);
+            /* [out] */ ULONG_PTR *pdwValue);
         
         END_INTERFACE
     } IRpcOptionsVtbl;
 
     interface IRpcOptions
     {
-        CONST_VTBL struct IRpcOptionsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IRpcOptionsVtbl *lpVtbl;
     };
 
     
@@ -10175,8 +10301,8 @@ EXTERN_C const IID IID_IRpcOptions;
 
 
 HRESULT STDMETHODCALLTYPE IRpcOptions_Set_Proxy( 
-    IRpcOptions __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pPrx,
+    IRpcOptions * This,
+    /* [in] */ IUnknown *pPrx,
     /* [in] */ DWORD dwProperty,
     /* [in] */ ULONG_PTR dwValue);
 
@@ -10189,10 +10315,10 @@ void __RPC_STUB IRpcOptions_Set_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcOptions_Query_Proxy( 
-    IRpcOptions __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pPrx,
+    IRpcOptions * This,
+    /* [in] */ IUnknown *pPrx,
     /* [in] */ DWORD dwProperty,
-    /* [out] */ ULONG_PTR __RPC_FAR *pdwValue);
+    /* [out] */ ULONG_PTR *pdwValue);
 
 
 void __RPC_STUB IRpcOptions_Query_Stub(
@@ -10206,18 +10332,18 @@ void __RPC_STUB IRpcOptions_Query_Stub(
 #endif 	/* __IRpcOptions_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_objidl_0054 */
+/* interface __MIDL_itf_objidl_0055 */
 /* [local] */ 
 
 
-enum __MIDL___MIDL_itf_objidl_0054_0001
+enum __MIDL___MIDL_itf_objidl_0055_0001
     {	COMBND_RPCTIMEOUT	= 0x1
-    };
+    } ;
 #endif //DCOM
 
 
-extern RPC_IF_HANDLE __MIDL_itf_objidl_0054_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_objidl_0054_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_objidl_0055_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_objidl_0055_v0_0_s_ifspec;
 
 #ifndef __IFillLockBytes_INTERFACE_DEFINED__
 #define __IFillLockBytes_INTERFACE_DEFINED__
@@ -10235,15 +10361,15 @@ EXTERN_C const IID IID_IFillLockBytes;
     {
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE FillAppend( 
-            /* [size_is][in] */ const void __RPC_FAR *pv,
+            /* [size_is][in] */ const void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten) = 0;
+            /* [out] */ ULONG *pcbWritten) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE FillAt( 
             /* [in] */ ULARGE_INTEGER ulOffset,
-            /* [size_is][in] */ const void __RPC_FAR *pv,
+            /* [size_is][in] */ const void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten) = 0;
+            /* [out] */ ULONG *pcbWritten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFillSize( 
             /* [in] */ ULARGE_INTEGER ulSize) = 0;
@@ -10259,36 +10385,36 @@ EXTERN_C const IID IID_IFillLockBytes;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFillLockBytes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFillLockBytes * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFillLockBytes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFillLockBytes * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFillLockBytes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFillLockBytes * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FillAppend )( 
-            IFillLockBytes __RPC_FAR * This,
-            /* [size_is][in] */ const void __RPC_FAR *pv,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *FillAppend )( 
+            IFillLockBytes * This,
+            /* [size_is][in] */ const void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten);
+            /* [out] */ ULONG *pcbWritten);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FillAt )( 
-            IFillLockBytes __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *FillAt )( 
+            IFillLockBytes * This,
             /* [in] */ ULARGE_INTEGER ulOffset,
-            /* [size_is][in] */ const void __RPC_FAR *pv,
+            /* [size_is][in] */ const void *pv,
             /* [in] */ ULONG cb,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten);
+            /* [out] */ ULONG *pcbWritten);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFillSize )( 
-            IFillLockBytes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetFillSize )( 
+            IFillLockBytes * This,
             /* [in] */ ULARGE_INTEGER ulSize);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Terminate )( 
-            IFillLockBytes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Terminate )( 
+            IFillLockBytes * This,
             /* [in] */ BOOL bCanceled);
         
         END_INTERFACE
@@ -10296,7 +10422,7 @@ EXTERN_C const IID IID_IFillLockBytes;
 
     interface IFillLockBytes
     {
-        CONST_VTBL struct IFillLockBytesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFillLockBytesVtbl *lpVtbl;
     };
 
     
@@ -10334,10 +10460,10 @@ EXTERN_C const IID IID_IFillLockBytes;
 
 
 /* [call_as] */ HRESULT __stdcall IFillLockBytes_RemoteFillAppend_Proxy( 
-    IFillLockBytes __RPC_FAR * This,
-    /* [size_is][in] */ const byte __RPC_FAR *pv,
+    IFillLockBytes * This,
+    /* [size_is][in] */ const byte *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    /* [out] */ ULONG *pcbWritten);
 
 
 void __RPC_STUB IFillLockBytes_RemoteFillAppend_Stub(
@@ -10348,11 +10474,11 @@ void __RPC_STUB IFillLockBytes_RemoteFillAppend_Stub(
 
 
 /* [call_as] */ HRESULT __stdcall IFillLockBytes_RemoteFillAt_Proxy( 
-    IFillLockBytes __RPC_FAR * This,
+    IFillLockBytes * This,
     /* [in] */ ULARGE_INTEGER ulOffset,
-    /* [size_is][in] */ const byte __RPC_FAR *pv,
+    /* [size_is][in] */ const byte *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    /* [out] */ ULONG *pcbWritten);
 
 
 void __RPC_STUB IFillLockBytes_RemoteFillAt_Stub(
@@ -10363,7 +10489,7 @@ void __RPC_STUB IFillLockBytes_RemoteFillAt_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IFillLockBytes_SetFillSize_Proxy( 
-    IFillLockBytes __RPC_FAR * This,
+    IFillLockBytes * This,
     /* [in] */ ULARGE_INTEGER ulSize);
 
 
@@ -10375,7 +10501,7 @@ void __RPC_STUB IFillLockBytes_SetFillSize_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IFillLockBytes_Terminate_Proxy( 
-    IFillLockBytes __RPC_FAR * This,
+    IFillLockBytes * This,
     /* [in] */ BOOL bCanceled);
 
 
@@ -10419,19 +10545,19 @@ EXTERN_C const IID IID_IProgressNotify;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IProgressNotify __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IProgressNotify * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IProgressNotify __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IProgressNotify * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IProgressNotify __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IProgressNotify * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnProgress )( 
-            IProgressNotify __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OnProgress )( 
+            IProgressNotify * This,
             /* [in] */ DWORD dwProgressCurrent,
             /* [in] */ DWORD dwProgressMaximum,
             /* [in] */ BOOL fAccurate,
@@ -10442,7 +10568,7 @@ EXTERN_C const IID IID_IProgressNotify;
 
     interface IProgressNotify
     {
-        CONST_VTBL struct IProgressNotifyVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IProgressNotifyVtbl *lpVtbl;
     };
 
     
@@ -10471,7 +10597,7 @@ EXTERN_C const IID IID_IProgressNotify;
 
 
 HRESULT STDMETHODCALLTYPE IProgressNotify_OnProgress_Proxy( 
-    IProgressNotify __RPC_FAR * This,
+    IProgressNotify * This,
     /* [in] */ DWORD dwProgressCurrent,
     /* [in] */ DWORD dwProgressMaximum,
     /* [in] */ BOOL fAccurate,
@@ -10498,10 +10624,10 @@ void __RPC_STUB IProgressNotify_OnProgress_Stub(
 typedef struct tagStorageLayout
     {
     DWORD LayoutType;
-    OLECHAR __RPC_FAR *pwcsElementName;
+    OLECHAR *pwcsElementName;
     LARGE_INTEGER cOffset;
     LARGE_INTEGER cBytes;
-    }	StorageLayout;
+    } 	StorageLayout;
 
 
 EXTERN_C const IID IID_ILayoutStorage;
@@ -10513,7 +10639,7 @@ EXTERN_C const IID IID_ILayoutStorage;
     {
     public:
         virtual HRESULT __stdcall LayoutScript( 
-            /* [in] */ StorageLayout __RPC_FAR *pStorageLayout,
+            /* [in] */ StorageLayout *pStorageLayout,
             /* [in] */ DWORD nEntries,
             /* [in] */ DWORD glfInterleavedFlag) = 0;
         
@@ -10522,10 +10648,10 @@ EXTERN_C const IID IID_ILayoutStorage;
         virtual HRESULT __stdcall EndMonitor( void) = 0;
         
         virtual HRESULT __stdcall ReLayoutDocfile( 
-            /* [in] */ OLECHAR __RPC_FAR *pwcsNewDfName) = 0;
+            /* [in] */ OLECHAR *pwcsNewDfName) = 0;
         
         virtual HRESULT __stdcall ReLayoutDocfileOnILockBytes( 
-            /* [in] */ ILockBytes __RPC_FAR *pILockBytes) = 0;
+            /* [in] */ ILockBytes *pILockBytes) = 0;
         
     };
     
@@ -10535,43 +10661,43 @@ EXTERN_C const IID IID_ILayoutStorage;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ILayoutStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ILayoutStorage * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ILayoutStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ILayoutStorage * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ILayoutStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ILayoutStorage * This);
         
-        HRESULT ( __stdcall __RPC_FAR *LayoutScript )( 
-            ILayoutStorage __RPC_FAR * This,
-            /* [in] */ StorageLayout __RPC_FAR *pStorageLayout,
+        HRESULT ( __stdcall *LayoutScript )( 
+            ILayoutStorage * This,
+            /* [in] */ StorageLayout *pStorageLayout,
             /* [in] */ DWORD nEntries,
             /* [in] */ DWORD glfInterleavedFlag);
         
-        HRESULT ( __stdcall __RPC_FAR *BeginMonitor )( 
-            ILayoutStorage __RPC_FAR * This);
+        HRESULT ( __stdcall *BeginMonitor )( 
+            ILayoutStorage * This);
         
-        HRESULT ( __stdcall __RPC_FAR *EndMonitor )( 
-            ILayoutStorage __RPC_FAR * This);
+        HRESULT ( __stdcall *EndMonitor )( 
+            ILayoutStorage * This);
         
-        HRESULT ( __stdcall __RPC_FAR *ReLayoutDocfile )( 
-            ILayoutStorage __RPC_FAR * This,
-            /* [in] */ OLECHAR __RPC_FAR *pwcsNewDfName);
+        HRESULT ( __stdcall *ReLayoutDocfile )( 
+            ILayoutStorage * This,
+            /* [in] */ OLECHAR *pwcsNewDfName);
         
-        HRESULT ( __stdcall __RPC_FAR *ReLayoutDocfileOnILockBytes )( 
-            ILayoutStorage __RPC_FAR * This,
-            /* [in] */ ILockBytes __RPC_FAR *pILockBytes);
+        HRESULT ( __stdcall *ReLayoutDocfileOnILockBytes )( 
+            ILayoutStorage * This,
+            /* [in] */ ILockBytes *pILockBytes);
         
         END_INTERFACE
     } ILayoutStorageVtbl;
 
     interface ILayoutStorage
     {
-        CONST_VTBL struct ILayoutStorageVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ILayoutStorageVtbl *lpVtbl;
     };
 
     
@@ -10612,8 +10738,8 @@ EXTERN_C const IID IID_ILayoutStorage;
 
 
 HRESULT __stdcall ILayoutStorage_LayoutScript_Proxy( 
-    ILayoutStorage __RPC_FAR * This,
-    /* [in] */ StorageLayout __RPC_FAR *pStorageLayout,
+    ILayoutStorage * This,
+    /* [in] */ StorageLayout *pStorageLayout,
     /* [in] */ DWORD nEntries,
     /* [in] */ DWORD glfInterleavedFlag);
 
@@ -10626,7 +10752,7 @@ void __RPC_STUB ILayoutStorage_LayoutScript_Stub(
 
 
 HRESULT __stdcall ILayoutStorage_BeginMonitor_Proxy( 
-    ILayoutStorage __RPC_FAR * This);
+    ILayoutStorage * This);
 
 
 void __RPC_STUB ILayoutStorage_BeginMonitor_Stub(
@@ -10637,7 +10763,7 @@ void __RPC_STUB ILayoutStorage_BeginMonitor_Stub(
 
 
 HRESULT __stdcall ILayoutStorage_EndMonitor_Proxy( 
-    ILayoutStorage __RPC_FAR * This);
+    ILayoutStorage * This);
 
 
 void __RPC_STUB ILayoutStorage_EndMonitor_Stub(
@@ -10648,8 +10774,8 @@ void __RPC_STUB ILayoutStorage_EndMonitor_Stub(
 
 
 HRESULT __stdcall ILayoutStorage_ReLayoutDocfile_Proxy( 
-    ILayoutStorage __RPC_FAR * This,
-    /* [in] */ OLECHAR __RPC_FAR *pwcsNewDfName);
+    ILayoutStorage * This,
+    /* [in] */ OLECHAR *pwcsNewDfName);
 
 
 void __RPC_STUB ILayoutStorage_ReLayoutDocfile_Stub(
@@ -10660,8 +10786,8 @@ void __RPC_STUB ILayoutStorage_ReLayoutDocfile_Stub(
 
 
 HRESULT __stdcall ILayoutStorage_ReLayoutDocfileOnILockBytes_Proxy( 
-    ILayoutStorage __RPC_FAR * This,
-    /* [in] */ ILockBytes __RPC_FAR *pILockBytes);
+    ILayoutStorage * This,
+    /* [in] */ ILockBytes *pILockBytes);
 
 
 void __RPC_STUB ILayoutStorage_ReLayoutDocfileOnILockBytes_Stub(
@@ -10703,30 +10829,30 @@ EXTERN_C const IID IID_IBlockingLock;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IBlockingLock __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IBlockingLock * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IBlockingLock __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IBlockingLock * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IBlockingLock __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IBlockingLock * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Lock )( 
-            IBlockingLock __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Lock )( 
+            IBlockingLock * This,
             /* [in] */ DWORD dwTimeout);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unlock )( 
-            IBlockingLock __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Unlock )( 
+            IBlockingLock * This);
         
         END_INTERFACE
     } IBlockingLockVtbl;
 
     interface IBlockingLock
     {
-        CONST_VTBL struct IBlockingLockVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IBlockingLockVtbl *lpVtbl;
     };
 
     
@@ -10758,7 +10884,7 @@ EXTERN_C const IID IID_IBlockingLock;
 
 
 HRESULT STDMETHODCALLTYPE IBlockingLock_Lock_Proxy( 
-    IBlockingLock __RPC_FAR * This,
+    IBlockingLock * This,
     /* [in] */ DWORD dwTimeout);
 
 
@@ -10770,7 +10896,7 @@ void __RPC_STUB IBlockingLock_Lock_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IBlockingLock_Unlock_Proxy( 
-    IBlockingLock __RPC_FAR * This);
+    IBlockingLock * This);
 
 
 void __RPC_STUB IBlockingLock_Unlock_Stub(
@@ -10811,19 +10937,19 @@ EXTERN_C const IID IID_ITimeAndNoticeControl;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITimeAndNoticeControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITimeAndNoticeControl * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITimeAndNoticeControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITimeAndNoticeControl * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITimeAndNoticeControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITimeAndNoticeControl * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SuppressChanges )( 
-            ITimeAndNoticeControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SuppressChanges )( 
+            ITimeAndNoticeControl * This,
             /* [in] */ DWORD res1,
             /* [in] */ DWORD res2);
         
@@ -10832,7 +10958,7 @@ EXTERN_C const IID IID_ITimeAndNoticeControl;
 
     interface ITimeAndNoticeControl
     {
-        CONST_VTBL struct ITimeAndNoticeControlVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITimeAndNoticeControlVtbl *lpVtbl;
     };
 
     
@@ -10861,7 +10987,7 @@ EXTERN_C const IID IID_ITimeAndNoticeControl;
 
 
 HRESULT STDMETHODCALLTYPE ITimeAndNoticeControl_SuppressChanges_Proxy( 
-    ITimeAndNoticeControl __RPC_FAR * This,
+    ITimeAndNoticeControl * This,
     /* [in] */ DWORD res1,
     /* [in] */ DWORD res2);
 
@@ -10898,7 +11024,7 @@ EXTERN_C const IID IID_IOplockStorage;
             /* [in] */ DWORD stgfmt,
             /* [in] */ DWORD grfAttrs,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppstgOpen) = 0;
+            /* [iid_is][out] */ void **ppstgOpen) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenStorageEx( 
             /* [in] */ LPCWSTR pwcsName,
@@ -10906,7 +11032,7 @@ EXTERN_C const IID IID_IOplockStorage;
             /* [in] */ DWORD stgfmt,
             /* [in] */ DWORD grfAttrs,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppstgOpen) = 0;
+            /* [iid_is][out] */ void **ppstgOpen) = 0;
         
     };
     
@@ -10916,41 +11042,41 @@ EXTERN_C const IID IID_IOplockStorage;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOplockStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOplockStorage * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOplockStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOplockStorage * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOplockStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOplockStorage * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateStorageEx )( 
-            IOplockStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CreateStorageEx )( 
+            IOplockStorage * This,
             /* [in] */ LPCWSTR pwcsName,
             /* [in] */ DWORD grfMode,
             /* [in] */ DWORD stgfmt,
             /* [in] */ DWORD grfAttrs,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppstgOpen);
+            /* [iid_is][out] */ void **ppstgOpen);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenStorageEx )( 
-            IOplockStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OpenStorageEx )( 
+            IOplockStorage * This,
             /* [in] */ LPCWSTR pwcsName,
             /* [in] */ DWORD grfMode,
             /* [in] */ DWORD stgfmt,
             /* [in] */ DWORD grfAttrs,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppstgOpen);
+            /* [iid_is][out] */ void **ppstgOpen);
         
         END_INTERFACE
     } IOplockStorageVtbl;
 
     interface IOplockStorage
     {
-        CONST_VTBL struct IOplockStorageVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOplockStorageVtbl *lpVtbl;
     };
 
     
@@ -10982,13 +11108,13 @@ EXTERN_C const IID IID_IOplockStorage;
 
 
 HRESULT STDMETHODCALLTYPE IOplockStorage_CreateStorageEx_Proxy( 
-    IOplockStorage __RPC_FAR * This,
+    IOplockStorage * This,
     /* [in] */ LPCWSTR pwcsName,
     /* [in] */ DWORD grfMode,
     /* [in] */ DWORD stgfmt,
     /* [in] */ DWORD grfAttrs,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppstgOpen);
+    /* [iid_is][out] */ void **ppstgOpen);
 
 
 void __RPC_STUB IOplockStorage_CreateStorageEx_Stub(
@@ -10999,13 +11125,13 @@ void __RPC_STUB IOplockStorage_CreateStorageEx_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOplockStorage_OpenStorageEx_Proxy( 
-    IOplockStorage __RPC_FAR * This,
+    IOplockStorage * This,
     /* [in] */ LPCWSTR pwcsName,
     /* [in] */ DWORD grfMode,
     /* [in] */ DWORD stgfmt,
     /* [in] */ DWORD grfAttrs,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppstgOpen);
+    /* [iid_is][out] */ void **ppstgOpen);
 
 
 void __RPC_STUB IOplockStorage_OpenStorageEx_Stub(
@@ -11025,7 +11151,7 @@ void __RPC_STUB IOplockStorage_OpenStorageEx_Stub(
 /* interface ISurrogate */
 /* [object][unique][version][uuid] */ 
 
-typedef /* [unique] */ ISurrogate __RPC_FAR *LPSURROGATE;
+typedef /* [unique] */ ISurrogate *LPSURROGATE;
 
 
 EXTERN_C const IID IID_ISurrogate;
@@ -11049,30 +11175,30 @@ EXTERN_C const IID IID_ISurrogate;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISurrogate __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISurrogate * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISurrogate __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISurrogate * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISurrogate __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISurrogate * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadDllServer )( 
-            ISurrogate __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *LoadDllServer )( 
+            ISurrogate * This,
             /* [in] */ REFCLSID Clsid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeSurrogate )( 
-            ISurrogate __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *FreeSurrogate )( 
+            ISurrogate * This);
         
         END_INTERFACE
     } ISurrogateVtbl;
 
     interface ISurrogate
     {
-        CONST_VTBL struct ISurrogateVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISurrogateVtbl *lpVtbl;
     };
 
     
@@ -11104,7 +11230,7 @@ EXTERN_C const IID IID_ISurrogate;
 
 
 HRESULT STDMETHODCALLTYPE ISurrogate_LoadDllServer_Proxy( 
-    ISurrogate __RPC_FAR * This,
+    ISurrogate * This,
     /* [in] */ REFCLSID Clsid);
 
 
@@ -11116,7 +11242,7 @@ void __RPC_STUB ISurrogate_LoadDllServer_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISurrogate_FreeSurrogate_Proxy( 
-    ISurrogate __RPC_FAR * This);
+    ISurrogate * This);
 
 
 void __RPC_STUB ISurrogate_FreeSurrogate_Stub(
@@ -11136,7 +11262,7 @@ void __RPC_STUB ISurrogate_FreeSurrogate_Stub(
 /* interface IGlobalInterfaceTable */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ IGlobalInterfaceTable __RPC_FAR *LPGLOBALINTERFACETABLE;
+typedef /* [unique] */ IGlobalInterfaceTable *LPGLOBALINTERFACETABLE;
 
 
 EXTERN_C const IID IID_IGlobalInterfaceTable;
@@ -11148,9 +11274,9 @@ EXTERN_C const IID IID_IGlobalInterfaceTable;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterInterfaceInGlobal( 
-            /* [in] */ IUnknown __RPC_FAR *pUnk,
+            /* [in] */ IUnknown *pUnk,
             /* [in] */ REFIID riid,
-            /* [out] */ DWORD __RPC_FAR *pdwCookie) = 0;
+            /* [out] */ DWORD *pdwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RevokeInterfaceFromGlobal( 
             /* [in] */ DWORD dwCookie) = 0;
@@ -11158,7 +11284,7 @@ EXTERN_C const IID IID_IGlobalInterfaceTable;
         virtual HRESULT STDMETHODCALLTYPE GetInterfaceFromGlobal( 
             /* [in] */ DWORD dwCookie,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppv) = 0;
+            /* [iid_is][out] */ void **ppv) = 0;
         
     };
     
@@ -11168,39 +11294,39 @@ EXTERN_C const IID IID_IGlobalInterfaceTable;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IGlobalInterfaceTable __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IGlobalInterfaceTable * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IGlobalInterfaceTable __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IGlobalInterfaceTable * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IGlobalInterfaceTable __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IGlobalInterfaceTable * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterInterfaceInGlobal )( 
-            IGlobalInterfaceTable __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pUnk,
+        HRESULT ( STDMETHODCALLTYPE *RegisterInterfaceInGlobal )( 
+            IGlobalInterfaceTable * This,
+            /* [in] */ IUnknown *pUnk,
             /* [in] */ REFIID riid,
-            /* [out] */ DWORD __RPC_FAR *pdwCookie);
+            /* [out] */ DWORD *pdwCookie);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RevokeInterfaceFromGlobal )( 
-            IGlobalInterfaceTable __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RevokeInterfaceFromGlobal )( 
+            IGlobalInterfaceTable * This,
             /* [in] */ DWORD dwCookie);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterfaceFromGlobal )( 
-            IGlobalInterfaceTable __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetInterfaceFromGlobal )( 
+            IGlobalInterfaceTable * This,
             /* [in] */ DWORD dwCookie,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppv);
+            /* [iid_is][out] */ void **ppv);
         
         END_INTERFACE
     } IGlobalInterfaceTableVtbl;
 
     interface IGlobalInterfaceTable
     {
-        CONST_VTBL struct IGlobalInterfaceTableVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IGlobalInterfaceTableVtbl *lpVtbl;
     };
 
     
@@ -11235,10 +11361,10 @@ EXTERN_C const IID IID_IGlobalInterfaceTable;
 
 
 HRESULT STDMETHODCALLTYPE IGlobalInterfaceTable_RegisterInterfaceInGlobal_Proxy( 
-    IGlobalInterfaceTable __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pUnk,
+    IGlobalInterfaceTable * This,
+    /* [in] */ IUnknown *pUnk,
     /* [in] */ REFIID riid,
-    /* [out] */ DWORD __RPC_FAR *pdwCookie);
+    /* [out] */ DWORD *pdwCookie);
 
 
 void __RPC_STUB IGlobalInterfaceTable_RegisterInterfaceInGlobal_Stub(
@@ -11249,7 +11375,7 @@ void __RPC_STUB IGlobalInterfaceTable_RegisterInterfaceInGlobal_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IGlobalInterfaceTable_RevokeInterfaceFromGlobal_Proxy( 
-    IGlobalInterfaceTable __RPC_FAR * This,
+    IGlobalInterfaceTable * This,
     /* [in] */ DWORD dwCookie);
 
 
@@ -11261,10 +11387,10 @@ void __RPC_STUB IGlobalInterfaceTable_RevokeInterfaceFromGlobal_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IGlobalInterfaceTable_GetInterfaceFromGlobal_Proxy( 
-    IGlobalInterfaceTable __RPC_FAR * This,
+    IGlobalInterfaceTable * This,
     /* [in] */ DWORD dwCookie,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppv);
+    /* [iid_is][out] */ void **ppv);
 
 
 void __RPC_STUB IGlobalInterfaceTable_GetInterfaceFromGlobal_Stub(
@@ -11308,33 +11434,33 @@ EXTERN_C const IID IID_IDirectWriterLock;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDirectWriterLock __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDirectWriterLock * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDirectWriterLock __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDirectWriterLock * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDirectWriterLock __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDirectWriterLock * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WaitForWriteAccess )( 
-            IDirectWriterLock __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *WaitForWriteAccess )( 
+            IDirectWriterLock * This,
             /* [in] */ DWORD dwTimeout);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseWriteAccess )( 
-            IDirectWriterLock __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *ReleaseWriteAccess )( 
+            IDirectWriterLock * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *HaveWriteAccess )( 
-            IDirectWriterLock __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *HaveWriteAccess )( 
+            IDirectWriterLock * This);
         
         END_INTERFACE
     } IDirectWriterLockVtbl;
 
     interface IDirectWriterLock
     {
-        CONST_VTBL struct IDirectWriterLockVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDirectWriterLockVtbl *lpVtbl;
     };
 
     
@@ -11369,7 +11495,7 @@ EXTERN_C const IID IID_IDirectWriterLock;
 
 
 HRESULT STDMETHODCALLTYPE IDirectWriterLock_WaitForWriteAccess_Proxy( 
-    IDirectWriterLock __RPC_FAR * This,
+    IDirectWriterLock * This,
     /* [in] */ DWORD dwTimeout);
 
 
@@ -11381,7 +11507,7 @@ void __RPC_STUB IDirectWriterLock_WaitForWriteAccess_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectWriterLock_ReleaseWriteAccess_Proxy( 
-    IDirectWriterLock __RPC_FAR * This);
+    IDirectWriterLock * This);
 
 
 void __RPC_STUB IDirectWriterLock_ReleaseWriteAccess_Stub(
@@ -11392,7 +11518,7 @@ void __RPC_STUB IDirectWriterLock_ReleaseWriteAccess_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectWriterLock_HaveWriteAccess_Proxy( 
-    IDirectWriterLock __RPC_FAR * This);
+    IDirectWriterLock * This);
 
 
 void __RPC_STUB IDirectWriterLock_HaveWriteAccess_Stub(
@@ -11437,34 +11563,34 @@ EXTERN_C const IID IID_ISynchronize;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISynchronize __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISynchronize * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISynchronize __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISynchronize * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISynchronize __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISynchronize * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Wait )( 
-            ISynchronize __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Wait )( 
+            ISynchronize * This,
             /* [in] */ DWORD dwFlags,
             /* [in] */ DWORD dwMilliseconds);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Signal )( 
-            ISynchronize __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Signal )( 
+            ISynchronize * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            ISynchronize __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            ISynchronize * This);
         
         END_INTERFACE
     } ISynchronizeVtbl;
 
     interface ISynchronize
     {
-        CONST_VTBL struct ISynchronizeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISynchronizeVtbl *lpVtbl;
     };
 
     
@@ -11499,7 +11625,7 @@ EXTERN_C const IID IID_ISynchronize;
 
 
 HRESULT STDMETHODCALLTYPE ISynchronize_Wait_Proxy( 
-    ISynchronize __RPC_FAR * This,
+    ISynchronize * This,
     /* [in] */ DWORD dwFlags,
     /* [in] */ DWORD dwMilliseconds);
 
@@ -11512,7 +11638,7 @@ void __RPC_STUB ISynchronize_Wait_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISynchronize_Signal_Proxy( 
-    ISynchronize __RPC_FAR * This);
+    ISynchronize * This);
 
 
 void __RPC_STUB ISynchronize_Signal_Stub(
@@ -11523,7 +11649,7 @@ void __RPC_STUB ISynchronize_Signal_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISynchronize_Reset_Proxy( 
-    ISynchronize __RPC_FAR * This);
+    ISynchronize * This);
 
 
 void __RPC_STUB ISynchronize_Reset_Stub(
@@ -11553,7 +11679,7 @@ EXTERN_C const IID IID_ISynchronizeHandle;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetHandle( 
-            /* [out] */ HANDLE __RPC_FAR *ph) = 0;
+            /* [out] */ HANDLE *ph) = 0;
         
     };
     
@@ -11563,27 +11689,27 @@ EXTERN_C const IID IID_ISynchronizeHandle;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISynchronizeHandle __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISynchronizeHandle * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISynchronizeHandle __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISynchronizeHandle * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISynchronizeHandle __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISynchronizeHandle * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHandle )( 
-            ISynchronizeHandle __RPC_FAR * This,
-            /* [out] */ HANDLE __RPC_FAR *ph);
+        HRESULT ( STDMETHODCALLTYPE *GetHandle )( 
+            ISynchronizeHandle * This,
+            /* [out] */ HANDLE *ph);
         
         END_INTERFACE
     } ISynchronizeHandleVtbl;
 
     interface ISynchronizeHandle
     {
-        CONST_VTBL struct ISynchronizeHandleVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISynchronizeHandleVtbl *lpVtbl;
     };
 
     
@@ -11612,8 +11738,8 @@ EXTERN_C const IID IID_ISynchronizeHandle;
 
 
 HRESULT STDMETHODCALLTYPE ISynchronizeHandle_GetHandle_Proxy( 
-    ISynchronizeHandle __RPC_FAR * This,
-    /* [out] */ HANDLE __RPC_FAR *ph);
+    ISynchronizeHandle * This,
+    /* [out] */ HANDLE *ph);
 
 
 void __RPC_STUB ISynchronizeHandle_GetHandle_Stub(
@@ -11643,7 +11769,7 @@ EXTERN_C const IID IID_ISynchronizeEvent;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetEventHandle( 
-            /* [in] */ HANDLE __RPC_FAR *ph) = 0;
+            /* [in] */ HANDLE *ph) = 0;
         
     };
     
@@ -11653,31 +11779,31 @@ EXTERN_C const IID IID_ISynchronizeEvent;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISynchronizeEvent __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISynchronizeEvent * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISynchronizeEvent __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISynchronizeEvent * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISynchronizeEvent __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISynchronizeEvent * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHandle )( 
-            ISynchronizeEvent __RPC_FAR * This,
-            /* [out] */ HANDLE __RPC_FAR *ph);
+        HRESULT ( STDMETHODCALLTYPE *GetHandle )( 
+            ISynchronizeEvent * This,
+            /* [out] */ HANDLE *ph);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEventHandle )( 
-            ISynchronizeEvent __RPC_FAR * This,
-            /* [in] */ HANDLE __RPC_FAR *ph);
+        HRESULT ( STDMETHODCALLTYPE *SetEventHandle )( 
+            ISynchronizeEvent * This,
+            /* [in] */ HANDLE *ph);
         
         END_INTERFACE
     } ISynchronizeEventVtbl;
 
     interface ISynchronizeEvent
     {
-        CONST_VTBL struct ISynchronizeEventVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISynchronizeEventVtbl *lpVtbl;
     };
 
     
@@ -11710,8 +11836,8 @@ EXTERN_C const IID IID_ISynchronizeEvent;
 
 
 HRESULT STDMETHODCALLTYPE ISynchronizeEvent_SetEventHandle_Proxy( 
-    ISynchronizeEvent __RPC_FAR * This,
-    /* [in] */ HANDLE __RPC_FAR *ph);
+    ISynchronizeEvent * This,
+    /* [in] */ HANDLE *ph);
 
 
 void __RPC_STUB ISynchronizeEvent_SetEventHandle_Stub(
@@ -11741,12 +11867,12 @@ EXTERN_C const IID IID_ISynchronizeContainer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddSynchronize( 
-            /* [in] */ ISynchronize __RPC_FAR *pSync) = 0;
+            /* [in] */ ISynchronize *pSync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WaitMultiple( 
             /* [in] */ DWORD dwFlags,
             /* [in] */ DWORD dwTimeOut,
-            /* [out] */ ISynchronize __RPC_FAR *__RPC_FAR *ppSync) = 0;
+            /* [out] */ ISynchronize **ppSync) = 0;
         
     };
     
@@ -11756,33 +11882,33 @@ EXTERN_C const IID IID_ISynchronizeContainer;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISynchronizeContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISynchronizeContainer * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISynchronizeContainer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISynchronizeContainer * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISynchronizeContainer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISynchronizeContainer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddSynchronize )( 
-            ISynchronizeContainer __RPC_FAR * This,
-            /* [in] */ ISynchronize __RPC_FAR *pSync);
+        HRESULT ( STDMETHODCALLTYPE *AddSynchronize )( 
+            ISynchronizeContainer * This,
+            /* [in] */ ISynchronize *pSync);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WaitMultiple )( 
-            ISynchronizeContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *WaitMultiple )( 
+            ISynchronizeContainer * This,
             /* [in] */ DWORD dwFlags,
             /* [in] */ DWORD dwTimeOut,
-            /* [out] */ ISynchronize __RPC_FAR *__RPC_FAR *ppSync);
+            /* [out] */ ISynchronize **ppSync);
         
         END_INTERFACE
     } ISynchronizeContainerVtbl;
 
     interface ISynchronizeContainer
     {
-        CONST_VTBL struct ISynchronizeContainerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISynchronizeContainerVtbl *lpVtbl;
     };
 
     
@@ -11814,8 +11940,8 @@ EXTERN_C const IID IID_ISynchronizeContainer;
 
 
 HRESULT STDMETHODCALLTYPE ISynchronizeContainer_AddSynchronize_Proxy( 
-    ISynchronizeContainer __RPC_FAR * This,
-    /* [in] */ ISynchronize __RPC_FAR *pSync);
+    ISynchronizeContainer * This,
+    /* [in] */ ISynchronize *pSync);
 
 
 void __RPC_STUB ISynchronizeContainer_AddSynchronize_Stub(
@@ -11826,10 +11952,10 @@ void __RPC_STUB ISynchronizeContainer_AddSynchronize_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISynchronizeContainer_WaitMultiple_Proxy( 
-    ISynchronizeContainer __RPC_FAR * This,
+    ISynchronizeContainer * This,
     /* [in] */ DWORD dwFlags,
     /* [in] */ DWORD dwTimeOut,
-    /* [out] */ ISynchronize __RPC_FAR *__RPC_FAR *ppSync);
+    /* [out] */ ISynchronize **ppSync);
 
 
 void __RPC_STUB ISynchronizeContainer_WaitMultiple_Stub(
@@ -11868,37 +11994,37 @@ EXTERN_C const IID IID_ISynchronizeMutex;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISynchronizeMutex __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISynchronizeMutex * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISynchronizeMutex __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISynchronizeMutex * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISynchronizeMutex __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISynchronizeMutex * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Wait )( 
-            ISynchronizeMutex __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Wait )( 
+            ISynchronizeMutex * This,
             /* [in] */ DWORD dwFlags,
             /* [in] */ DWORD dwMilliseconds);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Signal )( 
-            ISynchronizeMutex __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Signal )( 
+            ISynchronizeMutex * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            ISynchronizeMutex __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            ISynchronizeMutex * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseMutex )( 
-            ISynchronizeMutex __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *ReleaseMutex )( 
+            ISynchronizeMutex * This);
         
         END_INTERFACE
     } ISynchronizeMutexVtbl;
 
     interface ISynchronizeMutex
     {
-        CONST_VTBL struct ISynchronizeMutexVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISynchronizeMutexVtbl *lpVtbl;
     };
 
     
@@ -11937,7 +12063,7 @@ EXTERN_C const IID IID_ISynchronizeMutex;
 
 
 HRESULT STDMETHODCALLTYPE ISynchronizeMutex_ReleaseMutex_Proxy( 
-    ISynchronizeMutex __RPC_FAR * This);
+    ISynchronizeMutex * This);
 
 
 void __RPC_STUB ISynchronizeMutex_ReleaseMutex_Stub(
@@ -11957,7 +12083,7 @@ void __RPC_STUB ISynchronizeMutex_ReleaseMutex_Stub(
 /* interface ICancelMethodCalls */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ ICancelMethodCalls __RPC_FAR *LPCANCELMETHODCALLS;
+typedef /* [unique] */ ICancelMethodCalls *LPCANCELMETHODCALLS;
 
 
 EXTERN_C const IID IID_ICancelMethodCalls;
@@ -11981,30 +12107,30 @@ EXTERN_C const IID IID_ICancelMethodCalls;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICancelMethodCalls __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICancelMethodCalls * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICancelMethodCalls __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICancelMethodCalls * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICancelMethodCalls __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICancelMethodCalls * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Cancel )( 
-            ICancelMethodCalls __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Cancel )( 
+            ICancelMethodCalls * This,
             /* [in] */ ULONG ulSeconds);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TestCancel )( 
-            ICancelMethodCalls __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *TestCancel )( 
+            ICancelMethodCalls * This);
         
         END_INTERFACE
     } ICancelMethodCallsVtbl;
 
     interface ICancelMethodCalls
     {
-        CONST_VTBL struct ICancelMethodCallsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICancelMethodCallsVtbl *lpVtbl;
     };
 
     
@@ -12036,7 +12162,7 @@ EXTERN_C const IID IID_ICancelMethodCalls;
 
 
 HRESULT STDMETHODCALLTYPE ICancelMethodCalls_Cancel_Proxy( 
-    ICancelMethodCalls __RPC_FAR * This,
+    ICancelMethodCalls * This,
     /* [in] */ ULONG ulSeconds);
 
 
@@ -12048,7 +12174,7 @@ void __RPC_STUB ICancelMethodCalls_Cancel_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICancelMethodCalls_TestCancel_Proxy( 
-    ICancelMethodCalls __RPC_FAR * This);
+    ICancelMethodCalls * This);
 
 
 void __RPC_STUB ICancelMethodCalls_TestCancel_Stub(
@@ -12073,7 +12199,7 @@ enum tagDCOM_CALL_STATE
     {	DCOM_NONE	= 0,
 	DCOM_CALL_COMPLETE	= 0x1,
 	DCOM_CALL_CANCELED	= 0x2
-    }	DCOM_CALL_STATE;
+    } 	DCOM_CALL_STATE;
 
 
 EXTERN_C const IID IID_IAsyncManager;
@@ -12089,10 +12215,10 @@ EXTERN_C const IID IID_IAsyncManager;
         
         virtual HRESULT STDMETHODCALLTYPE GetCallContext( 
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *pInterface) = 0;
+            /* [out] */ void **pInterface) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetState( 
-            /* [out] */ ULONG __RPC_FAR *pulStateFlags) = 0;
+            /* [out] */ ULONG *pulStateFlags) = 0;
         
     };
     
@@ -12102,36 +12228,36 @@ EXTERN_C const IID IID_IAsyncManager;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAsyncManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAsyncManager * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAsyncManager __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAsyncManager * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAsyncManager __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAsyncManager * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CompleteCall )( 
-            IAsyncManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CompleteCall )( 
+            IAsyncManager * This,
             /* [in] */ HRESULT Result);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCallContext )( 
-            IAsyncManager __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetCallContext )( 
+            IAsyncManager * This,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *pInterface);
+            /* [out] */ void **pInterface);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetState )( 
-            IAsyncManager __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pulStateFlags);
+        HRESULT ( STDMETHODCALLTYPE *GetState )( 
+            IAsyncManager * This,
+            /* [out] */ ULONG *pulStateFlags);
         
         END_INTERFACE
     } IAsyncManagerVtbl;
 
     interface IAsyncManager
     {
-        CONST_VTBL struct IAsyncManagerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAsyncManagerVtbl *lpVtbl;
     };
 
     
@@ -12166,7 +12292,7 @@ EXTERN_C const IID IID_IAsyncManager;
 
 
 HRESULT STDMETHODCALLTYPE IAsyncManager_CompleteCall_Proxy( 
-    IAsyncManager __RPC_FAR * This,
+    IAsyncManager * This,
     /* [in] */ HRESULT Result);
 
 
@@ -12178,9 +12304,9 @@ void __RPC_STUB IAsyncManager_CompleteCall_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAsyncManager_GetCallContext_Proxy( 
-    IAsyncManager __RPC_FAR * This,
+    IAsyncManager * This,
     /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *pInterface);
+    /* [out] */ void **pInterface);
 
 
 void __RPC_STUB IAsyncManager_GetCallContext_Stub(
@@ -12191,8 +12317,8 @@ void __RPC_STUB IAsyncManager_GetCallContext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAsyncManager_GetState_Proxy( 
-    IAsyncManager __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pulStateFlags);
+    IAsyncManager * This,
+    /* [out] */ ULONG *pulStateFlags);
 
 
 void __RPC_STUB IAsyncManager_GetState_Stub(
@@ -12223,9 +12349,9 @@ EXTERN_C const IID IID_ICallFactory;
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateCall( 
             /* [in] */ REFIID riid,
-            /* [in] */ IUnknown __RPC_FAR *pCtrlUnk,
+            /* [in] */ IUnknown *pCtrlUnk,
             /* [in] */ REFIID riid2,
-            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppv) = 0;
+            /* [iid_is][out] */ IUnknown **ppv) = 0;
         
     };
     
@@ -12235,30 +12361,30 @@ EXTERN_C const IID IID_ICallFactory;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICallFactory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICallFactory * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICallFactory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICallFactory * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICallFactory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICallFactory * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateCall )( 
-            ICallFactory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CreateCall )( 
+            ICallFactory * This,
             /* [in] */ REFIID riid,
-            /* [in] */ IUnknown __RPC_FAR *pCtrlUnk,
+            /* [in] */ IUnknown *pCtrlUnk,
             /* [in] */ REFIID riid2,
-            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppv);
+            /* [iid_is][out] */ IUnknown **ppv);
         
         END_INTERFACE
     } ICallFactoryVtbl;
 
     interface ICallFactory
     {
-        CONST_VTBL struct ICallFactoryVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICallFactoryVtbl *lpVtbl;
     };
 
     
@@ -12287,11 +12413,11 @@ EXTERN_C const IID IID_ICallFactory;
 
 
 HRESULT STDMETHODCALLTYPE ICallFactory_CreateCall_Proxy( 
-    ICallFactory __RPC_FAR * This,
+    ICallFactory * This,
     /* [in] */ REFIID riid,
-    /* [in] */ IUnknown __RPC_FAR *pCtrlUnk,
+    /* [in] */ IUnknown *pCtrlUnk,
     /* [in] */ REFIID riid2,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppv);
+    /* [iid_is][out] */ IUnknown **ppv);
 
 
 void __RPC_STUB ICallFactory_CreateCall_Stub(
@@ -12321,11 +12447,11 @@ EXTERN_C const IID IID_IRpcHelper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDCOMProtocolVersion( 
-            /* [out] */ DWORD __RPC_FAR *pComVersion) = 0;
+            /* [out] */ DWORD *pComVersion) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIIDFromOBJREF( 
-            /* [in] */ void __RPC_FAR *pObjRef,
-            /* [out] */ IID __RPC_FAR *__RPC_FAR *piid) = 0;
+            /* [in] */ void *pObjRef,
+            /* [out] */ IID **piid) = 0;
         
     };
     
@@ -12335,32 +12461,32 @@ EXTERN_C const IID IID_IRpcHelper;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IRpcHelper __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IRpcHelper * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IRpcHelper __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IRpcHelper * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IRpcHelper __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IRpcHelper * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDCOMProtocolVersion )( 
-            IRpcHelper __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pComVersion);
+        HRESULT ( STDMETHODCALLTYPE *GetDCOMProtocolVersion )( 
+            IRpcHelper * This,
+            /* [out] */ DWORD *pComVersion);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIIDFromOBJREF )( 
-            IRpcHelper __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *pObjRef,
-            /* [out] */ IID __RPC_FAR *__RPC_FAR *piid);
+        HRESULT ( STDMETHODCALLTYPE *GetIIDFromOBJREF )( 
+            IRpcHelper * This,
+            /* [in] */ void *pObjRef,
+            /* [out] */ IID **piid);
         
         END_INTERFACE
     } IRpcHelperVtbl;
 
     interface IRpcHelper
     {
-        CONST_VTBL struct IRpcHelperVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IRpcHelperVtbl *lpVtbl;
     };
 
     
@@ -12392,8 +12518,8 @@ EXTERN_C const IID IID_IRpcHelper;
 
 
 HRESULT STDMETHODCALLTYPE IRpcHelper_GetDCOMProtocolVersion_Proxy( 
-    IRpcHelper __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pComVersion);
+    IRpcHelper * This,
+    /* [out] */ DWORD *pComVersion);
 
 
 void __RPC_STUB IRpcHelper_GetDCOMProtocolVersion_Stub(
@@ -12404,9 +12530,9 @@ void __RPC_STUB IRpcHelper_GetDCOMProtocolVersion_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRpcHelper_GetIIDFromOBJREF_Proxy( 
-    IRpcHelper __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *pObjRef,
-    /* [out] */ IID __RPC_FAR *__RPC_FAR *piid);
+    IRpcHelper * This,
+    /* [in] */ void *pObjRef,
+    /* [out] */ IID **piid);
 
 
 void __RPC_STUB IRpcHelper_GetIIDFromOBJREF_Stub(
@@ -12436,9 +12562,9 @@ EXTERN_C const IID IID_IReleaseMarshalBuffers;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ReleaseMarshalBuffer( 
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
+            /* [in] */ RPCOLEMESSAGE *pMsg,
             /* [in] */ DWORD dwFlags,
-            /* [unique][in] */ IUnknown __RPC_FAR *pChnl) = 0;
+            /* [unique][in] */ IUnknown *pChnl) = 0;
         
     };
     
@@ -12448,29 +12574,29 @@ EXTERN_C const IID IID_IReleaseMarshalBuffers;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IReleaseMarshalBuffers __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IReleaseMarshalBuffers * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IReleaseMarshalBuffers __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IReleaseMarshalBuffers * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IReleaseMarshalBuffers __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IReleaseMarshalBuffers * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReleaseMarshalBuffer )( 
-            IReleaseMarshalBuffers __RPC_FAR * This,
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
+        HRESULT ( STDMETHODCALLTYPE *ReleaseMarshalBuffer )( 
+            IReleaseMarshalBuffers * This,
+            /* [in] */ RPCOLEMESSAGE *pMsg,
             /* [in] */ DWORD dwFlags,
-            /* [unique][in] */ IUnknown __RPC_FAR *pChnl);
+            /* [unique][in] */ IUnknown *pChnl);
         
         END_INTERFACE
     } IReleaseMarshalBuffersVtbl;
 
     interface IReleaseMarshalBuffers
     {
-        CONST_VTBL struct IReleaseMarshalBuffersVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IReleaseMarshalBuffersVtbl *lpVtbl;
     };
 
     
@@ -12499,10 +12625,10 @@ EXTERN_C const IID IID_IReleaseMarshalBuffers;
 
 
 HRESULT STDMETHODCALLTYPE IReleaseMarshalBuffers_ReleaseMarshalBuffer_Proxy( 
-    IReleaseMarshalBuffers __RPC_FAR * This,
-    /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMsg,
+    IReleaseMarshalBuffers * This,
+    /* [in] */ RPCOLEMESSAGE *pMsg,
     /* [in] */ DWORD dwFlags,
-    /* [unique][in] */ IUnknown __RPC_FAR *pChnl);
+    /* [unique][in] */ IUnknown *pChnl);
 
 
 void __RPC_STUB IReleaseMarshalBuffers_ReleaseMarshalBuffer_Stub(
@@ -12533,10 +12659,10 @@ EXTERN_C const IID IID_IWaitMultiple;
     public:
         virtual HRESULT STDMETHODCALLTYPE WaitMultiple( 
             /* [in] */ DWORD timeout,
-            /* [out] */ ISynchronize __RPC_FAR *__RPC_FAR *pSync) = 0;
+            /* [out] */ ISynchronize **pSync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddSynchronize( 
-            /* [in] */ ISynchronize __RPC_FAR *pSync) = 0;
+            /* [in] */ ISynchronize *pSync) = 0;
         
     };
     
@@ -12546,32 +12672,32 @@ EXTERN_C const IID IID_IWaitMultiple;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWaitMultiple __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWaitMultiple * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWaitMultiple __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWaitMultiple * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWaitMultiple __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWaitMultiple * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WaitMultiple )( 
-            IWaitMultiple __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *WaitMultiple )( 
+            IWaitMultiple * This,
             /* [in] */ DWORD timeout,
-            /* [out] */ ISynchronize __RPC_FAR *__RPC_FAR *pSync);
+            /* [out] */ ISynchronize **pSync);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddSynchronize )( 
-            IWaitMultiple __RPC_FAR * This,
-            /* [in] */ ISynchronize __RPC_FAR *pSync);
+        HRESULT ( STDMETHODCALLTYPE *AddSynchronize )( 
+            IWaitMultiple * This,
+            /* [in] */ ISynchronize *pSync);
         
         END_INTERFACE
     } IWaitMultipleVtbl;
 
     interface IWaitMultiple
     {
-        CONST_VTBL struct IWaitMultipleVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWaitMultipleVtbl *lpVtbl;
     };
 
     
@@ -12603,9 +12729,9 @@ EXTERN_C const IID IID_IWaitMultiple;
 
 
 HRESULT STDMETHODCALLTYPE IWaitMultiple_WaitMultiple_Proxy( 
-    IWaitMultiple __RPC_FAR * This,
+    IWaitMultiple * This,
     /* [in] */ DWORD timeout,
-    /* [out] */ ISynchronize __RPC_FAR *__RPC_FAR *pSync);
+    /* [out] */ ISynchronize **pSync);
 
 
 void __RPC_STUB IWaitMultiple_WaitMultiple_Stub(
@@ -12616,8 +12742,8 @@ void __RPC_STUB IWaitMultiple_WaitMultiple_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IWaitMultiple_AddSynchronize_Proxy( 
-    IWaitMultiple __RPC_FAR * This,
-    /* [in] */ ISynchronize __RPC_FAR *pSync);
+    IWaitMultiple * This,
+    /* [in] */ ISynchronize *pSync);
 
 
 void __RPC_STUB IWaitMultiple_AddSynchronize_Stub(
@@ -12653,7 +12779,7 @@ EXTERN_C const IID IID_IUrlMon;
             /* [in] */ DWORD dwFileVersionMS,
             /* [in] */ DWORD dwFileVersionLS,
             /* [unique][in] */ LPCWSTR pszCodeBase,
-            /* [in] */ IBindCtx __RPC_FAR *pbc,
+            /* [in] */ IBindCtx *pbc,
             /* [in] */ DWORD dwClassContext,
             /* [in] */ REFIID riid,
             /* [in] */ DWORD flags) = 0;
@@ -12666,26 +12792,26 @@ EXTERN_C const IID IID_IUrlMon;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IUrlMon __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IUrlMon * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IUrlMon __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IUrlMon * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IUrlMon __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IUrlMon * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AsyncGetClassBits )( 
-            IUrlMon __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *AsyncGetClassBits )( 
+            IUrlMon * This,
             /* [in] */ REFCLSID rclsid,
             /* [unique][in] */ LPCWSTR pszTYPE,
             /* [unique][in] */ LPCWSTR pszExt,
             /* [in] */ DWORD dwFileVersionMS,
             /* [in] */ DWORD dwFileVersionLS,
             /* [unique][in] */ LPCWSTR pszCodeBase,
-            /* [in] */ IBindCtx __RPC_FAR *pbc,
+            /* [in] */ IBindCtx *pbc,
             /* [in] */ DWORD dwClassContext,
             /* [in] */ REFIID riid,
             /* [in] */ DWORD flags);
@@ -12695,7 +12821,7 @@ EXTERN_C const IID IID_IUrlMon;
 
     interface IUrlMon
     {
-        CONST_VTBL struct IUrlMonVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IUrlMonVtbl *lpVtbl;
     };
 
     
@@ -12724,14 +12850,14 @@ EXTERN_C const IID IID_IUrlMon;
 
 
 HRESULT STDMETHODCALLTYPE IUrlMon_AsyncGetClassBits_Proxy( 
-    IUrlMon __RPC_FAR * This,
+    IUrlMon * This,
     /* [in] */ REFCLSID rclsid,
     /* [unique][in] */ LPCWSTR pszTYPE,
     /* [unique][in] */ LPCWSTR pszExt,
     /* [in] */ DWORD dwFileVersionMS,
     /* [in] */ DWORD dwFileVersionLS,
     /* [unique][in] */ LPCWSTR pszCodeBase,
-    /* [in] */ IBindCtx __RPC_FAR *pbc,
+    /* [in] */ IBindCtx *pbc,
     /* [in] */ DWORD dwClassContext,
     /* [in] */ REFIID riid,
     /* [in] */ DWORD flags);
@@ -12764,7 +12890,7 @@ EXTERN_C const IID IID_IForegroundTransfer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AllowForegroundTransfer( 
-            /* [in] */ void __RPC_FAR *lpvReserved) = 0;
+            /* [in] */ void *lpvReserved) = 0;
         
     };
     
@@ -12774,27 +12900,27 @@ EXTERN_C const IID IID_IForegroundTransfer;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IForegroundTransfer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IForegroundTransfer * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IForegroundTransfer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IForegroundTransfer * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IForegroundTransfer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IForegroundTransfer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AllowForegroundTransfer )( 
-            IForegroundTransfer __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *lpvReserved);
+        HRESULT ( STDMETHODCALLTYPE *AllowForegroundTransfer )( 
+            IForegroundTransfer * This,
+            /* [in] */ void *lpvReserved);
         
         END_INTERFACE
     } IForegroundTransferVtbl;
 
     interface IForegroundTransfer
     {
-        CONST_VTBL struct IForegroundTransferVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IForegroundTransferVtbl *lpVtbl;
     };
 
     
@@ -12823,8 +12949,8 @@ EXTERN_C const IID IID_IForegroundTransfer;
 
 
 HRESULT STDMETHODCALLTYPE IForegroundTransfer_AllowForegroundTransfer_Proxy( 
-    IForegroundTransfer __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *lpvReserved);
+    IForegroundTransfer * This,
+    /* [in] */ void *lpvReserved);
 
 
 void __RPC_STUB IForegroundTransfer_AllowForegroundTransfer_Stub(
@@ -12836,6 +12962,231 @@ void __RPC_STUB IForegroundTransfer_AllowForegroundTransfer_Stub(
 
 
 #endif 	/* __IForegroundTransfer_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAddrTrackingControl_INTERFACE_DEFINED__
+#define __IAddrTrackingControl_INTERFACE_DEFINED__
+
+/* interface IAddrTrackingControl */
+/* [uuid][object][local] */ 
+
+typedef /* [unique] */ IAddrTrackingControl *LPADDRTRACKINGCONTROL;
+
+
+EXTERN_C const IID IID_IAddrTrackingControl;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("00000147-0000-0000-C000-000000000046")
+    IAddrTrackingControl : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE EnableCOMDynamicAddrTracking( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE DisableCOMDynamicAddrTracking( void) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAddrTrackingControlVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAddrTrackingControl * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAddrTrackingControl * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAddrTrackingControl * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *EnableCOMDynamicAddrTracking )( 
+            IAddrTrackingControl * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *DisableCOMDynamicAddrTracking )( 
+            IAddrTrackingControl * This);
+        
+        END_INTERFACE
+    } IAddrTrackingControlVtbl;
+
+    interface IAddrTrackingControl
+    {
+        CONST_VTBL struct IAddrTrackingControlVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAddrTrackingControl_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAddrTrackingControl_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAddrTrackingControl_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAddrTrackingControl_EnableCOMDynamicAddrTracking(This)	\
+    (This)->lpVtbl -> EnableCOMDynamicAddrTracking(This)
+
+#define IAddrTrackingControl_DisableCOMDynamicAddrTracking(This)	\
+    (This)->lpVtbl -> DisableCOMDynamicAddrTracking(This)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAddrTrackingControl_EnableCOMDynamicAddrTracking_Proxy( 
+    IAddrTrackingControl * This);
+
+
+void __RPC_STUB IAddrTrackingControl_EnableCOMDynamicAddrTracking_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAddrTrackingControl_DisableCOMDynamicAddrTracking_Proxy( 
+    IAddrTrackingControl * This);
+
+
+void __RPC_STUB IAddrTrackingControl_DisableCOMDynamicAddrTracking_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAddrTrackingControl_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAddrExclusionControl_INTERFACE_DEFINED__
+#define __IAddrExclusionControl_INTERFACE_DEFINED__
+
+/* interface IAddrExclusionControl */
+/* [uuid][object][local] */ 
+
+typedef /* [unique] */ IAddrExclusionControl *LPADDREXCLUSIONCONTROL;
+
+
+EXTERN_C const IID IID_IAddrExclusionControl;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("00000148-0000-0000-C000-000000000046")
+    IAddrExclusionControl : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetCurrentAddrExclusionList( 
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppEnumerator) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE UpdateAddrExclusionList( 
+            /* [in] */ IUnknown *pEnumerator) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAddrExclusionControlVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAddrExclusionControl * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAddrExclusionControl * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAddrExclusionControl * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetCurrentAddrExclusionList )( 
+            IAddrExclusionControl * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppEnumerator);
+        
+        HRESULT ( STDMETHODCALLTYPE *UpdateAddrExclusionList )( 
+            IAddrExclusionControl * This,
+            /* [in] */ IUnknown *pEnumerator);
+        
+        END_INTERFACE
+    } IAddrExclusionControlVtbl;
+
+    interface IAddrExclusionControl
+    {
+        CONST_VTBL struct IAddrExclusionControlVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAddrExclusionControl_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAddrExclusionControl_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAddrExclusionControl_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAddrExclusionControl_GetCurrentAddrExclusionList(This,riid,ppEnumerator)	\
+    (This)->lpVtbl -> GetCurrentAddrExclusionList(This,riid,ppEnumerator)
+
+#define IAddrExclusionControl_UpdateAddrExclusionList(This,pEnumerator)	\
+    (This)->lpVtbl -> UpdateAddrExclusionList(This,pEnumerator)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAddrExclusionControl_GetCurrentAddrExclusionList_Proxy( 
+    IAddrExclusionControl * This,
+    /* [in] */ REFIID riid,
+    /* [iid_is][out] */ void **ppEnumerator);
+
+
+void __RPC_STUB IAddrExclusionControl_GetCurrentAddrExclusionList_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAddrExclusionControl_UpdateAddrExclusionList_Proxy( 
+    IAddrExclusionControl * This,
+    /* [in] */ IUnknown *pEnumerator);
+
+
+void __RPC_STUB IAddrExclusionControl_UpdateAddrExclusionList_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAddrExclusionControl_INTERFACE_DEFINED__ */
 
 
 #ifndef __IPipeByte_INTERFACE_DEFINED__
@@ -12854,12 +13205,12 @@ EXTERN_C const IID IID_IPipeByte;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Pull( 
-            /* [length_is][size_is][out] */ BYTE __RPC_FAR *buf,
+            /* [length_is][size_is][out] */ BYTE *buf,
             /* [in] */ ULONG cRequest,
-            /* [out] */ ULONG __RPC_FAR *pcReturned) = 0;
+            /* [out] */ ULONG *pcReturned) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Push( 
-            /* [size_is][in] */ BYTE __RPC_FAR *buf,
+            /* [size_is][in] */ BYTE *buf,
             /* [in] */ ULONG cSent) = 0;
         
     };
@@ -12870,26 +13221,26 @@ EXTERN_C const IID IID_IPipeByte;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPipeByte __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPipeByte * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPipeByte __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPipeByte * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPipeByte __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPipeByte * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Pull )( 
-            IPipeByte __RPC_FAR * This,
-            /* [length_is][size_is][out] */ BYTE __RPC_FAR *buf,
+        HRESULT ( STDMETHODCALLTYPE *Pull )( 
+            IPipeByte * This,
+            /* [length_is][size_is][out] */ BYTE *buf,
             /* [in] */ ULONG cRequest,
-            /* [out] */ ULONG __RPC_FAR *pcReturned);
+            /* [out] */ ULONG *pcReturned);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Push )( 
-            IPipeByte __RPC_FAR * This,
-            /* [size_is][in] */ BYTE __RPC_FAR *buf,
+        HRESULT ( STDMETHODCALLTYPE *Push )( 
+            IPipeByte * This,
+            /* [size_is][in] */ BYTE *buf,
             /* [in] */ ULONG cSent);
         
         END_INTERFACE
@@ -12897,7 +13248,7 @@ EXTERN_C const IID IID_IPipeByte;
 
     interface IPipeByte
     {
-        CONST_VTBL struct IPipeByteVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPipeByteVtbl *lpVtbl;
     };
 
     
@@ -12929,10 +13280,10 @@ EXTERN_C const IID IID_IPipeByte;
 
 
 HRESULT STDMETHODCALLTYPE IPipeByte_Pull_Proxy( 
-    IPipeByte __RPC_FAR * This,
-    /* [length_is][size_is][out] */ BYTE __RPC_FAR *buf,
+    IPipeByte * This,
+    /* [length_is][size_is][out] */ BYTE *buf,
     /* [in] */ ULONG cRequest,
-    /* [out] */ ULONG __RPC_FAR *pcReturned);
+    /* [out] */ ULONG *pcReturned);
 
 
 void __RPC_STUB IPipeByte_Pull_Stub(
@@ -12943,8 +13294,8 @@ void __RPC_STUB IPipeByte_Pull_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPipeByte_Push_Proxy( 
-    IPipeByte __RPC_FAR * This,
-    /* [size_is][in] */ BYTE __RPC_FAR *buf,
+    IPipeByte * This,
+    /* [size_is][in] */ BYTE *buf,
     /* [in] */ ULONG cSent);
 
 
@@ -12978,11 +13329,11 @@ EXTERN_C const IID IID_AsyncIPipeByte;
             /* [in] */ ULONG cRequest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Pull( 
-            /* [length_is][size_is][out] */ BYTE __RPC_FAR *buf,
-            /* [out] */ ULONG __RPC_FAR *pcReturned) = 0;
+            /* [length_is][size_is][out] */ BYTE *buf,
+            /* [out] */ ULONG *pcReturned) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Push( 
-            /* [size_is][in] */ BYTE __RPC_FAR *buf,
+            /* [size_is][in] */ BYTE *buf,
             /* [in] */ ULONG cSent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Push( void) = 0;
@@ -12995,40 +13346,40 @@ EXTERN_C const IID IID_AsyncIPipeByte;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            AsyncIPipeByte __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            AsyncIPipeByte * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            AsyncIPipeByte __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            AsyncIPipeByte * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            AsyncIPipeByte __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            AsyncIPipeByte * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Begin_Pull )( 
-            AsyncIPipeByte __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Begin_Pull )( 
+            AsyncIPipeByte * This,
             /* [in] */ ULONG cRequest);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Finish_Pull )( 
-            AsyncIPipeByte __RPC_FAR * This,
-            /* [length_is][size_is][out] */ BYTE __RPC_FAR *buf,
-            /* [out] */ ULONG __RPC_FAR *pcReturned);
+        HRESULT ( STDMETHODCALLTYPE *Finish_Pull )( 
+            AsyncIPipeByte * This,
+            /* [length_is][size_is][out] */ BYTE *buf,
+            /* [out] */ ULONG *pcReturned);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Begin_Push )( 
-            AsyncIPipeByte __RPC_FAR * This,
-            /* [size_is][in] */ BYTE __RPC_FAR *buf,
+        HRESULT ( STDMETHODCALLTYPE *Begin_Push )( 
+            AsyncIPipeByte * This,
+            /* [size_is][in] */ BYTE *buf,
             /* [in] */ ULONG cSent);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Finish_Push )( 
-            AsyncIPipeByte __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Finish_Push )( 
+            AsyncIPipeByte * This);
         
         END_INTERFACE
     } AsyncIPipeByteVtbl;
 
     interface AsyncIPipeByte
     {
-        CONST_VTBL struct AsyncIPipeByteVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct AsyncIPipeByteVtbl *lpVtbl;
     };
 
     
@@ -13066,7 +13417,7 @@ EXTERN_C const IID IID_AsyncIPipeByte;
 
 
 HRESULT STDMETHODCALLTYPE AsyncIPipeByte_Begin_Pull_Proxy( 
-    AsyncIPipeByte __RPC_FAR * This,
+    AsyncIPipeByte * This,
     /* [in] */ ULONG cRequest);
 
 
@@ -13078,9 +13429,9 @@ void __RPC_STUB AsyncIPipeByte_Begin_Pull_Stub(
 
 
 HRESULT STDMETHODCALLTYPE AsyncIPipeByte_Finish_Pull_Proxy( 
-    AsyncIPipeByte __RPC_FAR * This,
-    /* [length_is][size_is][out] */ BYTE __RPC_FAR *buf,
-    /* [out] */ ULONG __RPC_FAR *pcReturned);
+    AsyncIPipeByte * This,
+    /* [length_is][size_is][out] */ BYTE *buf,
+    /* [out] */ ULONG *pcReturned);
 
 
 void __RPC_STUB AsyncIPipeByte_Finish_Pull_Stub(
@@ -13091,8 +13442,8 @@ void __RPC_STUB AsyncIPipeByte_Finish_Pull_Stub(
 
 
 HRESULT STDMETHODCALLTYPE AsyncIPipeByte_Begin_Push_Proxy( 
-    AsyncIPipeByte __RPC_FAR * This,
-    /* [size_is][in] */ BYTE __RPC_FAR *buf,
+    AsyncIPipeByte * This,
+    /* [size_is][in] */ BYTE *buf,
     /* [in] */ ULONG cSent);
 
 
@@ -13104,7 +13455,7 @@ void __RPC_STUB AsyncIPipeByte_Begin_Push_Stub(
 
 
 HRESULT STDMETHODCALLTYPE AsyncIPipeByte_Finish_Push_Proxy( 
-    AsyncIPipeByte __RPC_FAR * This);
+    AsyncIPipeByte * This);
 
 
 void __RPC_STUB AsyncIPipeByte_Finish_Push_Stub(
@@ -13134,12 +13485,12 @@ EXTERN_C const IID IID_IPipeLong;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Pull( 
-            /* [length_is][size_is][out] */ LONG __RPC_FAR *buf,
+            /* [length_is][size_is][out] */ LONG *buf,
             /* [in] */ ULONG cRequest,
-            /* [out] */ ULONG __RPC_FAR *pcReturned) = 0;
+            /* [out] */ ULONG *pcReturned) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Push( 
-            /* [size_is][in] */ LONG __RPC_FAR *buf,
+            /* [size_is][in] */ LONG *buf,
             /* [in] */ ULONG cSent) = 0;
         
     };
@@ -13150,26 +13501,26 @@ EXTERN_C const IID IID_IPipeLong;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPipeLong __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPipeLong * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPipeLong __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPipeLong * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPipeLong __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPipeLong * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Pull )( 
-            IPipeLong __RPC_FAR * This,
-            /* [length_is][size_is][out] */ LONG __RPC_FAR *buf,
+        HRESULT ( STDMETHODCALLTYPE *Pull )( 
+            IPipeLong * This,
+            /* [length_is][size_is][out] */ LONG *buf,
             /* [in] */ ULONG cRequest,
-            /* [out] */ ULONG __RPC_FAR *pcReturned);
+            /* [out] */ ULONG *pcReturned);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Push )( 
-            IPipeLong __RPC_FAR * This,
-            /* [size_is][in] */ LONG __RPC_FAR *buf,
+        HRESULT ( STDMETHODCALLTYPE *Push )( 
+            IPipeLong * This,
+            /* [size_is][in] */ LONG *buf,
             /* [in] */ ULONG cSent);
         
         END_INTERFACE
@@ -13177,7 +13528,7 @@ EXTERN_C const IID IID_IPipeLong;
 
     interface IPipeLong
     {
-        CONST_VTBL struct IPipeLongVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPipeLongVtbl *lpVtbl;
     };
 
     
@@ -13209,10 +13560,10 @@ EXTERN_C const IID IID_IPipeLong;
 
 
 HRESULT STDMETHODCALLTYPE IPipeLong_Pull_Proxy( 
-    IPipeLong __RPC_FAR * This,
-    /* [length_is][size_is][out] */ LONG __RPC_FAR *buf,
+    IPipeLong * This,
+    /* [length_is][size_is][out] */ LONG *buf,
     /* [in] */ ULONG cRequest,
-    /* [out] */ ULONG __RPC_FAR *pcReturned);
+    /* [out] */ ULONG *pcReturned);
 
 
 void __RPC_STUB IPipeLong_Pull_Stub(
@@ -13223,8 +13574,8 @@ void __RPC_STUB IPipeLong_Pull_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPipeLong_Push_Proxy( 
-    IPipeLong __RPC_FAR * This,
-    /* [size_is][in] */ LONG __RPC_FAR *buf,
+    IPipeLong * This,
+    /* [size_is][in] */ LONG *buf,
     /* [in] */ ULONG cSent);
 
 
@@ -13258,11 +13609,11 @@ EXTERN_C const IID IID_AsyncIPipeLong;
             /* [in] */ ULONG cRequest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Pull( 
-            /* [length_is][size_is][out] */ LONG __RPC_FAR *buf,
-            /* [out] */ ULONG __RPC_FAR *pcReturned) = 0;
+            /* [length_is][size_is][out] */ LONG *buf,
+            /* [out] */ ULONG *pcReturned) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Push( 
-            /* [size_is][in] */ LONG __RPC_FAR *buf,
+            /* [size_is][in] */ LONG *buf,
             /* [in] */ ULONG cSent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Push( void) = 0;
@@ -13275,40 +13626,40 @@ EXTERN_C const IID IID_AsyncIPipeLong;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            AsyncIPipeLong __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            AsyncIPipeLong * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            AsyncIPipeLong __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            AsyncIPipeLong * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            AsyncIPipeLong __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            AsyncIPipeLong * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Begin_Pull )( 
-            AsyncIPipeLong __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Begin_Pull )( 
+            AsyncIPipeLong * This,
             /* [in] */ ULONG cRequest);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Finish_Pull )( 
-            AsyncIPipeLong __RPC_FAR * This,
-            /* [length_is][size_is][out] */ LONG __RPC_FAR *buf,
-            /* [out] */ ULONG __RPC_FAR *pcReturned);
+        HRESULT ( STDMETHODCALLTYPE *Finish_Pull )( 
+            AsyncIPipeLong * This,
+            /* [length_is][size_is][out] */ LONG *buf,
+            /* [out] */ ULONG *pcReturned);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Begin_Push )( 
-            AsyncIPipeLong __RPC_FAR * This,
-            /* [size_is][in] */ LONG __RPC_FAR *buf,
+        HRESULT ( STDMETHODCALLTYPE *Begin_Push )( 
+            AsyncIPipeLong * This,
+            /* [size_is][in] */ LONG *buf,
             /* [in] */ ULONG cSent);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Finish_Push )( 
-            AsyncIPipeLong __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Finish_Push )( 
+            AsyncIPipeLong * This);
         
         END_INTERFACE
     } AsyncIPipeLongVtbl;
 
     interface AsyncIPipeLong
     {
-        CONST_VTBL struct AsyncIPipeLongVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct AsyncIPipeLongVtbl *lpVtbl;
     };
 
     
@@ -13346,7 +13697,7 @@ EXTERN_C const IID IID_AsyncIPipeLong;
 
 
 HRESULT STDMETHODCALLTYPE AsyncIPipeLong_Begin_Pull_Proxy( 
-    AsyncIPipeLong __RPC_FAR * This,
+    AsyncIPipeLong * This,
     /* [in] */ ULONG cRequest);
 
 
@@ -13358,9 +13709,9 @@ void __RPC_STUB AsyncIPipeLong_Begin_Pull_Stub(
 
 
 HRESULT STDMETHODCALLTYPE AsyncIPipeLong_Finish_Pull_Proxy( 
-    AsyncIPipeLong __RPC_FAR * This,
-    /* [length_is][size_is][out] */ LONG __RPC_FAR *buf,
-    /* [out] */ ULONG __RPC_FAR *pcReturned);
+    AsyncIPipeLong * This,
+    /* [length_is][size_is][out] */ LONG *buf,
+    /* [out] */ ULONG *pcReturned);
 
 
 void __RPC_STUB AsyncIPipeLong_Finish_Pull_Stub(
@@ -13371,8 +13722,8 @@ void __RPC_STUB AsyncIPipeLong_Finish_Pull_Stub(
 
 
 HRESULT STDMETHODCALLTYPE AsyncIPipeLong_Begin_Push_Proxy( 
-    AsyncIPipeLong __RPC_FAR * This,
-    /* [size_is][in] */ LONG __RPC_FAR *buf,
+    AsyncIPipeLong * This,
+    /* [size_is][in] */ LONG *buf,
     /* [in] */ ULONG cSent);
 
 
@@ -13384,7 +13735,7 @@ void __RPC_STUB AsyncIPipeLong_Begin_Push_Stub(
 
 
 HRESULT STDMETHODCALLTYPE AsyncIPipeLong_Finish_Push_Proxy( 
-    AsyncIPipeLong __RPC_FAR * This);
+    AsyncIPipeLong * This);
 
 
 void __RPC_STUB AsyncIPipeLong_Finish_Push_Stub(
@@ -13414,12 +13765,12 @@ EXTERN_C const IID IID_IPipeDouble;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Pull( 
-            /* [length_is][size_is][out] */ DOUBLE __RPC_FAR *buf,
+            /* [length_is][size_is][out] */ DOUBLE *buf,
             /* [in] */ ULONG cRequest,
-            /* [out] */ ULONG __RPC_FAR *pcReturned) = 0;
+            /* [out] */ ULONG *pcReturned) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Push( 
-            /* [size_is][in] */ DOUBLE __RPC_FAR *buf,
+            /* [size_is][in] */ DOUBLE *buf,
             /* [in] */ ULONG cSent) = 0;
         
     };
@@ -13430,26 +13781,26 @@ EXTERN_C const IID IID_IPipeDouble;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPipeDouble __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPipeDouble * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPipeDouble __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPipeDouble * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPipeDouble __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPipeDouble * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Pull )( 
-            IPipeDouble __RPC_FAR * This,
-            /* [length_is][size_is][out] */ DOUBLE __RPC_FAR *buf,
+        HRESULT ( STDMETHODCALLTYPE *Pull )( 
+            IPipeDouble * This,
+            /* [length_is][size_is][out] */ DOUBLE *buf,
             /* [in] */ ULONG cRequest,
-            /* [out] */ ULONG __RPC_FAR *pcReturned);
+            /* [out] */ ULONG *pcReturned);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Push )( 
-            IPipeDouble __RPC_FAR * This,
-            /* [size_is][in] */ DOUBLE __RPC_FAR *buf,
+        HRESULT ( STDMETHODCALLTYPE *Push )( 
+            IPipeDouble * This,
+            /* [size_is][in] */ DOUBLE *buf,
             /* [in] */ ULONG cSent);
         
         END_INTERFACE
@@ -13457,7 +13808,7 @@ EXTERN_C const IID IID_IPipeDouble;
 
     interface IPipeDouble
     {
-        CONST_VTBL struct IPipeDoubleVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPipeDoubleVtbl *lpVtbl;
     };
 
     
@@ -13489,10 +13840,10 @@ EXTERN_C const IID IID_IPipeDouble;
 
 
 HRESULT STDMETHODCALLTYPE IPipeDouble_Pull_Proxy( 
-    IPipeDouble __RPC_FAR * This,
-    /* [length_is][size_is][out] */ DOUBLE __RPC_FAR *buf,
+    IPipeDouble * This,
+    /* [length_is][size_is][out] */ DOUBLE *buf,
     /* [in] */ ULONG cRequest,
-    /* [out] */ ULONG __RPC_FAR *pcReturned);
+    /* [out] */ ULONG *pcReturned);
 
 
 void __RPC_STUB IPipeDouble_Pull_Stub(
@@ -13503,8 +13854,8 @@ void __RPC_STUB IPipeDouble_Pull_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPipeDouble_Push_Proxy( 
-    IPipeDouble __RPC_FAR * This,
-    /* [size_is][in] */ DOUBLE __RPC_FAR *buf,
+    IPipeDouble * This,
+    /* [size_is][in] */ DOUBLE *buf,
     /* [in] */ ULONG cSent);
 
 
@@ -13538,11 +13889,11 @@ EXTERN_C const IID IID_AsyncIPipeDouble;
             /* [in] */ ULONG cRequest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Pull( 
-            /* [length_is][size_is][out] */ DOUBLE __RPC_FAR *buf,
-            /* [out] */ ULONG __RPC_FAR *pcReturned) = 0;
+            /* [length_is][size_is][out] */ DOUBLE *buf,
+            /* [out] */ ULONG *pcReturned) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_Push( 
-            /* [size_is][in] */ DOUBLE __RPC_FAR *buf,
+            /* [size_is][in] */ DOUBLE *buf,
             /* [in] */ ULONG cSent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_Push( void) = 0;
@@ -13555,40 +13906,40 @@ EXTERN_C const IID IID_AsyncIPipeDouble;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            AsyncIPipeDouble __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            AsyncIPipeDouble * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            AsyncIPipeDouble __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            AsyncIPipeDouble * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            AsyncIPipeDouble __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            AsyncIPipeDouble * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Begin_Pull )( 
-            AsyncIPipeDouble __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Begin_Pull )( 
+            AsyncIPipeDouble * This,
             /* [in] */ ULONG cRequest);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Finish_Pull )( 
-            AsyncIPipeDouble __RPC_FAR * This,
-            /* [length_is][size_is][out] */ DOUBLE __RPC_FAR *buf,
-            /* [out] */ ULONG __RPC_FAR *pcReturned);
+        HRESULT ( STDMETHODCALLTYPE *Finish_Pull )( 
+            AsyncIPipeDouble * This,
+            /* [length_is][size_is][out] */ DOUBLE *buf,
+            /* [out] */ ULONG *pcReturned);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Begin_Push )( 
-            AsyncIPipeDouble __RPC_FAR * This,
-            /* [size_is][in] */ DOUBLE __RPC_FAR *buf,
+        HRESULT ( STDMETHODCALLTYPE *Begin_Push )( 
+            AsyncIPipeDouble * This,
+            /* [size_is][in] */ DOUBLE *buf,
             /* [in] */ ULONG cSent);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Finish_Push )( 
-            AsyncIPipeDouble __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Finish_Push )( 
+            AsyncIPipeDouble * This);
         
         END_INTERFACE
     } AsyncIPipeDoubleVtbl;
 
     interface AsyncIPipeDouble
     {
-        CONST_VTBL struct AsyncIPipeDoubleVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct AsyncIPipeDoubleVtbl *lpVtbl;
     };
 
     
@@ -13626,7 +13977,7 @@ EXTERN_C const IID IID_AsyncIPipeDouble;
 
 
 HRESULT STDMETHODCALLTYPE AsyncIPipeDouble_Begin_Pull_Proxy( 
-    AsyncIPipeDouble __RPC_FAR * This,
+    AsyncIPipeDouble * This,
     /* [in] */ ULONG cRequest);
 
 
@@ -13638,9 +13989,9 @@ void __RPC_STUB AsyncIPipeDouble_Begin_Pull_Stub(
 
 
 HRESULT STDMETHODCALLTYPE AsyncIPipeDouble_Finish_Pull_Proxy( 
-    AsyncIPipeDouble __RPC_FAR * This,
-    /* [length_is][size_is][out] */ DOUBLE __RPC_FAR *buf,
-    /* [out] */ ULONG __RPC_FAR *pcReturned);
+    AsyncIPipeDouble * This,
+    /* [length_is][size_is][out] */ DOUBLE *buf,
+    /* [out] */ ULONG *pcReturned);
 
 
 void __RPC_STUB AsyncIPipeDouble_Finish_Pull_Stub(
@@ -13651,8 +14002,8 @@ void __RPC_STUB AsyncIPipeDouble_Finish_Pull_Stub(
 
 
 HRESULT STDMETHODCALLTYPE AsyncIPipeDouble_Begin_Push_Proxy( 
-    AsyncIPipeDouble __RPC_FAR * This,
-    /* [size_is][in] */ DOUBLE __RPC_FAR *buf,
+    AsyncIPipeDouble * This,
+    /* [size_is][in] */ DOUBLE *buf,
     /* [in] */ ULONG cSent);
 
 
@@ -13664,7 +14015,7 @@ void __RPC_STUB AsyncIPipeDouble_Begin_Push_Stub(
 
 
 HRESULT STDMETHODCALLTYPE AsyncIPipeDouble_Finish_Push_Proxy( 
-    AsyncIPipeDouble __RPC_FAR * This);
+    AsyncIPipeDouble * This);
 
 
 void __RPC_STUB AsyncIPipeDouble_Finish_Push_Stub(
@@ -13694,15 +14045,15 @@ EXTERN_C const IID IID_IThumbnailExtractor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ExtractThumbnail( 
-            /* [in] */ IStorage __RPC_FAR *pStg,
+            /* [in] */ IStorage *pStg,
             /* [in] */ ULONG ulLength,
             /* [in] */ ULONG ulHeight,
-            /* [out] */ ULONG __RPC_FAR *pulOutputLength,
-            /* [out] */ ULONG __RPC_FAR *pulOutputHeight,
-            /* [out] */ HBITMAP __RPC_FAR *phOutputBitmap) = 0;
+            /* [out] */ ULONG *pulOutputLength,
+            /* [out] */ ULONG *pulOutputHeight,
+            /* [out] */ HBITMAP *phOutputBitmap) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnFileUpdated( 
-            /* [in] */ IStorage __RPC_FAR *pStg) = 0;
+            /* [in] */ IStorage *pStg) = 0;
         
     };
     
@@ -13712,36 +14063,36 @@ EXTERN_C const IID IID_IThumbnailExtractor;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IThumbnailExtractor __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IThumbnailExtractor * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IThumbnailExtractor __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IThumbnailExtractor * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IThumbnailExtractor __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IThumbnailExtractor * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExtractThumbnail )( 
-            IThumbnailExtractor __RPC_FAR * This,
-            /* [in] */ IStorage __RPC_FAR *pStg,
+        HRESULT ( STDMETHODCALLTYPE *ExtractThumbnail )( 
+            IThumbnailExtractor * This,
+            /* [in] */ IStorage *pStg,
             /* [in] */ ULONG ulLength,
             /* [in] */ ULONG ulHeight,
-            /* [out] */ ULONG __RPC_FAR *pulOutputLength,
-            /* [out] */ ULONG __RPC_FAR *pulOutputHeight,
-            /* [out] */ HBITMAP __RPC_FAR *phOutputBitmap);
+            /* [out] */ ULONG *pulOutputLength,
+            /* [out] */ ULONG *pulOutputHeight,
+            /* [out] */ HBITMAP *phOutputBitmap);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnFileUpdated )( 
-            IThumbnailExtractor __RPC_FAR * This,
-            /* [in] */ IStorage __RPC_FAR *pStg);
+        HRESULT ( STDMETHODCALLTYPE *OnFileUpdated )( 
+            IThumbnailExtractor * This,
+            /* [in] */ IStorage *pStg);
         
         END_INTERFACE
     } IThumbnailExtractorVtbl;
 
     interface IThumbnailExtractor
     {
-        CONST_VTBL struct IThumbnailExtractorVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IThumbnailExtractorVtbl *lpVtbl;
     };
 
     
@@ -13773,13 +14124,13 @@ EXTERN_C const IID IID_IThumbnailExtractor;
 
 
 HRESULT STDMETHODCALLTYPE IThumbnailExtractor_ExtractThumbnail_Proxy( 
-    IThumbnailExtractor __RPC_FAR * This,
-    /* [in] */ IStorage __RPC_FAR *pStg,
+    IThumbnailExtractor * This,
+    /* [in] */ IStorage *pStg,
     /* [in] */ ULONG ulLength,
     /* [in] */ ULONG ulHeight,
-    /* [out] */ ULONG __RPC_FAR *pulOutputLength,
-    /* [out] */ ULONG __RPC_FAR *pulOutputHeight,
-    /* [out] */ HBITMAP __RPC_FAR *phOutputBitmap);
+    /* [out] */ ULONG *pulOutputLength,
+    /* [out] */ ULONG *pulOutputHeight,
+    /* [out] */ HBITMAP *phOutputBitmap);
 
 
 void __RPC_STUB IThumbnailExtractor_ExtractThumbnail_Stub(
@@ -13790,8 +14141,8 @@ void __RPC_STUB IThumbnailExtractor_ExtractThumbnail_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IThumbnailExtractor_OnFileUpdated_Proxy( 
-    IThumbnailExtractor __RPC_FAR * This,
-    /* [in] */ IStorage __RPC_FAR *pStg);
+    IThumbnailExtractor * This,
+    /* [in] */ IStorage *pStg);
 
 
 void __RPC_STUB IThumbnailExtractor_OnFileUpdated_Stub(
@@ -13832,19 +14183,19 @@ EXTERN_C const IID IID_IDummyHICONIncluder;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDummyHICONIncluder __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDummyHICONIncluder * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDummyHICONIncluder __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDummyHICONIncluder * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDummyHICONIncluder __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDummyHICONIncluder * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Dummy )( 
-            IDummyHICONIncluder __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Dummy )( 
+            IDummyHICONIncluder * This,
             /* [in] */ HICON h1,
             /* [in] */ HDC h2);
         
@@ -13853,7 +14204,7 @@ EXTERN_C const IID IID_IDummyHICONIncluder;
 
     interface IDummyHICONIncluder
     {
-        CONST_VTBL struct IDummyHICONIncluderVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDummyHICONIncluderVtbl *lpVtbl;
     };
 
     
@@ -13882,7 +14233,7 @@ EXTERN_C const IID IID_IDummyHICONIncluder;
 
 
 HRESULT STDMETHODCALLTYPE IDummyHICONIncluder_Dummy_Proxy( 
-    IDummyHICONIncluder __RPC_FAR * This,
+    IDummyHICONIncluder * This,
     /* [in] */ HICON h1,
     /* [in] */ HDC h2);
 
@@ -13898,7 +14249,278 @@ void __RPC_STUB IDummyHICONIncluder_Dummy_Stub(
 #endif 	/* __IDummyHICONIncluder_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_objidl_0081 */
+/* interface __MIDL_itf_objidl_0084 */
+/* [local] */ 
+
+typedef 
+enum _APTTYPE
+    {	APTTYPE_CURRENT	= -1,
+	APTTYPE_STA	= 0,
+	APTTYPE_MTA	= 1,
+	APTTYPE_NA	= 2,
+	APTTYPE_MAINSTA	= 3
+    } 	APTTYPE;
+
+typedef 
+enum _THDTYPE
+    {	THDTYPE_BLOCKMESSAGES	= 0,
+	THDTYPE_PROCESSMESSAGES	= 1
+    } 	THDTYPE;
+
+typedef DWORD APARTMENTID;
+
+
+
+extern RPC_IF_HANDLE __MIDL_itf_objidl_0084_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_objidl_0084_v0_0_s_ifspec;
+
+#ifndef __IComThreadingInfo_INTERFACE_DEFINED__
+#define __IComThreadingInfo_INTERFACE_DEFINED__
+
+/* interface IComThreadingInfo */
+/* [unique][uuid][object][local] */ 
+
+
+EXTERN_C const IID IID_IComThreadingInfo;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("000001ce-0000-0000-C000-000000000046")
+    IComThreadingInfo : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetCurrentApartmentType( 
+            /* [out] */ APTTYPE *pAptType) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCurrentThreadType( 
+            /* [out] */ THDTYPE *pThreadType) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCurrentLogicalThreadId( 
+            /* [out] */ GUID *pguidLogicalThreadId) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetCurrentLogicalThreadId( 
+            /* [in] */ REFGUID rguid) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IComThreadingInfoVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IComThreadingInfo * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IComThreadingInfo * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IComThreadingInfo * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetCurrentApartmentType )( 
+            IComThreadingInfo * This,
+            /* [out] */ APTTYPE *pAptType);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetCurrentThreadType )( 
+            IComThreadingInfo * This,
+            /* [out] */ THDTYPE *pThreadType);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetCurrentLogicalThreadId )( 
+            IComThreadingInfo * This,
+            /* [out] */ GUID *pguidLogicalThreadId);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetCurrentLogicalThreadId )( 
+            IComThreadingInfo * This,
+            /* [in] */ REFGUID rguid);
+        
+        END_INTERFACE
+    } IComThreadingInfoVtbl;
+
+    interface IComThreadingInfo
+    {
+        CONST_VTBL struct IComThreadingInfoVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IComThreadingInfo_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IComThreadingInfo_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IComThreadingInfo_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IComThreadingInfo_GetCurrentApartmentType(This,pAptType)	\
+    (This)->lpVtbl -> GetCurrentApartmentType(This,pAptType)
+
+#define IComThreadingInfo_GetCurrentThreadType(This,pThreadType)	\
+    (This)->lpVtbl -> GetCurrentThreadType(This,pThreadType)
+
+#define IComThreadingInfo_GetCurrentLogicalThreadId(This,pguidLogicalThreadId)	\
+    (This)->lpVtbl -> GetCurrentLogicalThreadId(This,pguidLogicalThreadId)
+
+#define IComThreadingInfo_SetCurrentLogicalThreadId(This,rguid)	\
+    (This)->lpVtbl -> SetCurrentLogicalThreadId(This,rguid)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IComThreadingInfo_GetCurrentApartmentType_Proxy( 
+    IComThreadingInfo * This,
+    /* [out] */ APTTYPE *pAptType);
+
+
+void __RPC_STUB IComThreadingInfo_GetCurrentApartmentType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IComThreadingInfo_GetCurrentThreadType_Proxy( 
+    IComThreadingInfo * This,
+    /* [out] */ THDTYPE *pThreadType);
+
+
+void __RPC_STUB IComThreadingInfo_GetCurrentThreadType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IComThreadingInfo_GetCurrentLogicalThreadId_Proxy( 
+    IComThreadingInfo * This,
+    /* [out] */ GUID *pguidLogicalThreadId);
+
+
+void __RPC_STUB IComThreadingInfo_GetCurrentLogicalThreadId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IComThreadingInfo_SetCurrentLogicalThreadId_Proxy( 
+    IComThreadingInfo * This,
+    /* [in] */ REFGUID rguid);
+
+
+void __RPC_STUB IComThreadingInfo_SetCurrentLogicalThreadId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IComThreadingInfo_INTERFACE_DEFINED__ */
+
+
+#ifndef __IProcessInitControl_INTERFACE_DEFINED__
+#define __IProcessInitControl_INTERFACE_DEFINED__
+
+/* interface IProcessInitControl */
+/* [uuid][unique][object] */ 
+
+
+EXTERN_C const IID IID_IProcessInitControl;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("72380d55-8d2b-43a3-8513-2b6ef31434e9")
+    IProcessInitControl : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE ResetInitializerTimeout( 
+            /* [in] */ DWORD dwSecondsRemaining) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IProcessInitControlVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IProcessInitControl * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IProcessInitControl * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IProcessInitControl * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *ResetInitializerTimeout )( 
+            IProcessInitControl * This,
+            /* [in] */ DWORD dwSecondsRemaining);
+        
+        END_INTERFACE
+    } IProcessInitControlVtbl;
+
+    interface IProcessInitControl
+    {
+        CONST_VTBL struct IProcessInitControlVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IProcessInitControl_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IProcessInitControl_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IProcessInitControl_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IProcessInitControl_ResetInitializerTimeout(This,dwSecondsRemaining)	\
+    (This)->lpVtbl -> ResetInitializerTimeout(This,dwSecondsRemaining)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IProcessInitControl_ResetInitializerTimeout_Proxy( 
+    IProcessInitControl * This,
+    /* [in] */ DWORD dwSecondsRemaining);
+
+
+void __RPC_STUB IProcessInitControl_ResetInitializerTimeout_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IProcessInitControl_INTERFACE_DEFINED__ */
+
+
+/* interface __MIDL_itf_objidl_0086 */
 /* [local] */ 
 
 #if ( _MSC_VER >= 800 )
@@ -13910,514 +14532,514 @@ void __RPC_STUB IDummyHICONIncluder_Dummy_Stub(
 #endif
 
 
-extern RPC_IF_HANDLE __MIDL_itf_objidl_0081_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_objidl_0081_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_objidl_0086_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_objidl_0086_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  ASYNC_STGMEDIUM_UserSize(     unsigned long __RPC_FAR *, unsigned long            , ASYNC_STGMEDIUM __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  ASYNC_STGMEDIUM_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, ASYNC_STGMEDIUM __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  ASYNC_STGMEDIUM_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, ASYNC_STGMEDIUM __RPC_FAR * ); 
-void                      __RPC_USER  ASYNC_STGMEDIUM_UserFree(     unsigned long __RPC_FAR *, ASYNC_STGMEDIUM __RPC_FAR * ); 
+unsigned long             __RPC_USER  ASYNC_STGMEDIUM_UserSize(     unsigned long *, unsigned long            , ASYNC_STGMEDIUM * ); 
+unsigned char * __RPC_USER  ASYNC_STGMEDIUM_UserMarshal(  unsigned long *, unsigned char *, ASYNC_STGMEDIUM * ); 
+unsigned char * __RPC_USER  ASYNC_STGMEDIUM_UserUnmarshal(unsigned long *, unsigned char *, ASYNC_STGMEDIUM * ); 
+void                      __RPC_USER  ASYNC_STGMEDIUM_UserFree(     unsigned long *, ASYNC_STGMEDIUM * ); 
 
-unsigned long             __RPC_USER  CLIPFORMAT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , CLIPFORMAT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  CLIPFORMAT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, CLIPFORMAT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  CLIPFORMAT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, CLIPFORMAT __RPC_FAR * ); 
-void                      __RPC_USER  CLIPFORMAT_UserFree(     unsigned long __RPC_FAR *, CLIPFORMAT __RPC_FAR * ); 
+unsigned long             __RPC_USER  CLIPFORMAT_UserSize(     unsigned long *, unsigned long            , CLIPFORMAT * ); 
+unsigned char * __RPC_USER  CLIPFORMAT_UserMarshal(  unsigned long *, unsigned char *, CLIPFORMAT * ); 
+unsigned char * __RPC_USER  CLIPFORMAT_UserUnmarshal(unsigned long *, unsigned char *, CLIPFORMAT * ); 
+void                      __RPC_USER  CLIPFORMAT_UserFree(     unsigned long *, CLIPFORMAT * ); 
 
-unsigned long             __RPC_USER  FLAG_STGMEDIUM_UserSize(     unsigned long __RPC_FAR *, unsigned long            , FLAG_STGMEDIUM __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  FLAG_STGMEDIUM_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, FLAG_STGMEDIUM __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  FLAG_STGMEDIUM_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, FLAG_STGMEDIUM __RPC_FAR * ); 
-void                      __RPC_USER  FLAG_STGMEDIUM_UserFree(     unsigned long __RPC_FAR *, FLAG_STGMEDIUM __RPC_FAR * ); 
+unsigned long             __RPC_USER  FLAG_STGMEDIUM_UserSize(     unsigned long *, unsigned long            , FLAG_STGMEDIUM * ); 
+unsigned char * __RPC_USER  FLAG_STGMEDIUM_UserMarshal(  unsigned long *, unsigned char *, FLAG_STGMEDIUM * ); 
+unsigned char * __RPC_USER  FLAG_STGMEDIUM_UserUnmarshal(unsigned long *, unsigned char *, FLAG_STGMEDIUM * ); 
+void                      __RPC_USER  FLAG_STGMEDIUM_UserFree(     unsigned long *, FLAG_STGMEDIUM * ); 
 
-unsigned long             __RPC_USER  HBITMAP_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HBITMAP __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HBITMAP_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HBITMAP __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HBITMAP_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HBITMAP __RPC_FAR * ); 
-void                      __RPC_USER  HBITMAP_UserFree(     unsigned long __RPC_FAR *, HBITMAP __RPC_FAR * ); 
+unsigned long             __RPC_USER  HBITMAP_UserSize(     unsigned long *, unsigned long            , HBITMAP * ); 
+unsigned char * __RPC_USER  HBITMAP_UserMarshal(  unsigned long *, unsigned char *, HBITMAP * ); 
+unsigned char * __RPC_USER  HBITMAP_UserUnmarshal(unsigned long *, unsigned char *, HBITMAP * ); 
+void                      __RPC_USER  HBITMAP_UserFree(     unsigned long *, HBITMAP * ); 
 
-unsigned long             __RPC_USER  HDC_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HDC __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HDC_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HDC __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HDC_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HDC __RPC_FAR * ); 
-void                      __RPC_USER  HDC_UserFree(     unsigned long __RPC_FAR *, HDC __RPC_FAR * ); 
+unsigned long             __RPC_USER  HDC_UserSize(     unsigned long *, unsigned long            , HDC * ); 
+unsigned char * __RPC_USER  HDC_UserMarshal(  unsigned long *, unsigned char *, HDC * ); 
+unsigned char * __RPC_USER  HDC_UserUnmarshal(unsigned long *, unsigned char *, HDC * ); 
+void                      __RPC_USER  HDC_UserFree(     unsigned long *, HDC * ); 
 
-unsigned long             __RPC_USER  HICON_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HICON __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HICON_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HICON __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HICON_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HICON __RPC_FAR * ); 
-void                      __RPC_USER  HICON_UserFree(     unsigned long __RPC_FAR *, HICON __RPC_FAR * ); 
+unsigned long             __RPC_USER  HICON_UserSize(     unsigned long *, unsigned long            , HICON * ); 
+unsigned char * __RPC_USER  HICON_UserMarshal(  unsigned long *, unsigned char *, HICON * ); 
+unsigned char * __RPC_USER  HICON_UserUnmarshal(unsigned long *, unsigned char *, HICON * ); 
+void                      __RPC_USER  HICON_UserFree(     unsigned long *, HICON * ); 
 
-unsigned long             __RPC_USER  SNB_UserSize(     unsigned long __RPC_FAR *, unsigned long            , SNB __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  SNB_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, SNB __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  SNB_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, SNB __RPC_FAR * ); 
-void                      __RPC_USER  SNB_UserFree(     unsigned long __RPC_FAR *, SNB __RPC_FAR * ); 
+unsigned long             __RPC_USER  SNB_UserSize(     unsigned long *, unsigned long            , SNB * ); 
+unsigned char * __RPC_USER  SNB_UserMarshal(  unsigned long *, unsigned char *, SNB * ); 
+unsigned char * __RPC_USER  SNB_UserUnmarshal(unsigned long *, unsigned char *, SNB * ); 
+void                      __RPC_USER  SNB_UserFree(     unsigned long *, SNB * ); 
 
-unsigned long             __RPC_USER  STGMEDIUM_UserSize(     unsigned long __RPC_FAR *, unsigned long            , STGMEDIUM __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  STGMEDIUM_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, STGMEDIUM __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  STGMEDIUM_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, STGMEDIUM __RPC_FAR * ); 
-void                      __RPC_USER  STGMEDIUM_UserFree(     unsigned long __RPC_FAR *, STGMEDIUM __RPC_FAR * ); 
+unsigned long             __RPC_USER  STGMEDIUM_UserSize(     unsigned long *, unsigned long            , STGMEDIUM * ); 
+unsigned char * __RPC_USER  STGMEDIUM_UserMarshal(  unsigned long *, unsigned char *, STGMEDIUM * ); 
+unsigned char * __RPC_USER  STGMEDIUM_UserUnmarshal(unsigned long *, unsigned char *, STGMEDIUM * ); 
+void                      __RPC_USER  STGMEDIUM_UserFree(     unsigned long *, STGMEDIUM * ); 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEnumUnknown_Next_Proxy( 
-    IEnumUnknown __RPC_FAR * This,
+    IEnumUnknown * This,
     /* [in] */ ULONG celt,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [out] */ IUnknown **rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumUnknown_Next_Stub( 
-    IEnumUnknown __RPC_FAR * This,
+    IEnumUnknown * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ IUnknown **rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IBindCtx_SetBindOptions_Proxy( 
-    IBindCtx __RPC_FAR * This,
-    /* [in] */ BIND_OPTS __RPC_FAR *pbindopts);
+    IBindCtx * This,
+    /* [in] */ BIND_OPTS *pbindopts);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBindCtx_SetBindOptions_Stub( 
-    IBindCtx __RPC_FAR * This,
-    /* [in] */ BIND_OPTS2 __RPC_FAR *pbindopts);
+    IBindCtx * This,
+    /* [in] */ BIND_OPTS2 *pbindopts);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IBindCtx_GetBindOptions_Proxy( 
-    IBindCtx __RPC_FAR * This,
-    /* [out][in] */ BIND_OPTS __RPC_FAR *pbindopts);
+    IBindCtx * This,
+    /* [out][in] */ BIND_OPTS *pbindopts);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IBindCtx_GetBindOptions_Stub( 
-    IBindCtx __RPC_FAR * This,
-    /* [out][in] */ BIND_OPTS2 __RPC_FAR *pbindopts);
+    IBindCtx * This,
+    /* [out][in] */ BIND_OPTS2 *pbindopts);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEnumMoniker_Next_Proxy( 
-    IEnumMoniker __RPC_FAR * This,
+    IEnumMoniker * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IMoniker __RPC_FAR *__RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ IMoniker **rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumMoniker_Next_Stub( 
-    IEnumMoniker __RPC_FAR * This,
+    IEnumMoniker * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ IMoniker __RPC_FAR *__RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ IMoniker **rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 /* [local] */ BOOL STDMETHODCALLTYPE IRunnableObject_IsRunning_Proxy( 
-    IRunnableObject __RPC_FAR * This);
+    IRunnableObject * This);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IRunnableObject_IsRunning_Stub( 
-    IRunnableObject __RPC_FAR * This);
+    IRunnableObject * This);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IMoniker_BindToObject_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
+    IMoniker * This,
+    /* [unique][in] */ IBindCtx *pbc,
+    /* [unique][in] */ IMoniker *pmkToLeft,
     /* [in] */ REFIID riidResult,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvResult);
+    /* [iid_is][out] */ void **ppvResult);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IMoniker_BindToObject_Stub( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
+    IMoniker * This,
+    /* [unique][in] */ IBindCtx *pbc,
+    /* [unique][in] */ IMoniker *pmkToLeft,
     /* [in] */ REFIID riidResult,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvResult);
+    /* [iid_is][out] */ IUnknown **ppvResult);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IMoniker_BindToStorage_Proxy( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
+    IMoniker * This,
+    /* [unique][in] */ IBindCtx *pbc,
+    /* [unique][in] */ IMoniker *pmkToLeft,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObj);
+    /* [iid_is][out] */ void **ppvObj);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IMoniker_BindToStorage_Stub( 
-    IMoniker __RPC_FAR * This,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmkToLeft,
+    IMoniker * This,
+    /* [unique][in] */ IBindCtx *pbc,
+    /* [unique][in] */ IMoniker *pmkToLeft,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObj);
+    /* [iid_is][out] */ IUnknown **ppvObj);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEnumString_Next_Proxy( 
-    IEnumString __RPC_FAR * This,
+    IEnumString * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ LPOLESTR __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ LPOLESTR *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumString_Next_Stub( 
-    IEnumString __RPC_FAR * This,
+    IEnumString * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ LPOLESTR __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ LPOLESTR *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ISequentialStream_Read_Proxy( 
-    ISequentialStream __RPC_FAR * This,
-    /* [length_is][size_is][out] */ void __RPC_FAR *pv,
+    ISequentialStream * This,
+    /* [length_is][size_is][out] */ void *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbRead);
+    /* [out] */ ULONG *pcbRead);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ISequentialStream_Read_Stub( 
-    ISequentialStream __RPC_FAR * This,
-    /* [length_is][size_is][out] */ byte __RPC_FAR *pv,
+    ISequentialStream * This,
+    /* [length_is][size_is][out] */ byte *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbRead);
+    /* [out] */ ULONG *pcbRead);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ISequentialStream_Write_Proxy( 
-    ISequentialStream __RPC_FAR * This,
-    /* [size_is][in] */ const void __RPC_FAR *pv,
+    ISequentialStream * This,
+    /* [size_is][in] */ const void *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    /* [out] */ ULONG *pcbWritten);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ISequentialStream_Write_Stub( 
-    ISequentialStream __RPC_FAR * This,
-    /* [size_is][in] */ const byte __RPC_FAR *pv,
+    ISequentialStream * This,
+    /* [size_is][in] */ const byte *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    /* [out] */ ULONG *pcbWritten);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IStream_Seek_Proxy( 
-    IStream __RPC_FAR * This,
+    IStream * This,
     /* [in] */ LARGE_INTEGER dlibMove,
     /* [in] */ DWORD dwOrigin,
-    /* [out] */ ULARGE_INTEGER __RPC_FAR *plibNewPosition);
+    /* [out] */ ULARGE_INTEGER *plibNewPosition);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IStream_Seek_Stub( 
-    IStream __RPC_FAR * This,
+    IStream * This,
     /* [in] */ LARGE_INTEGER dlibMove,
     /* [in] */ DWORD dwOrigin,
-    /* [out] */ ULARGE_INTEGER __RPC_FAR *plibNewPosition);
+    /* [out] */ ULARGE_INTEGER *plibNewPosition);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IStream_CopyTo_Proxy( 
-    IStream __RPC_FAR * This,
-    /* [unique][in] */ IStream __RPC_FAR *pstm,
+    IStream * This,
+    /* [unique][in] */ IStream *pstm,
     /* [in] */ ULARGE_INTEGER cb,
-    /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbRead,
-    /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbWritten);
+    /* [out] */ ULARGE_INTEGER *pcbRead,
+    /* [out] */ ULARGE_INTEGER *pcbWritten);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IStream_CopyTo_Stub( 
-    IStream __RPC_FAR * This,
-    /* [unique][in] */ IStream __RPC_FAR *pstm,
+    IStream * This,
+    /* [unique][in] */ IStream *pstm,
     /* [in] */ ULARGE_INTEGER cb,
-    /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbRead,
-    /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbWritten);
+    /* [out] */ ULARGE_INTEGER *pcbRead,
+    /* [out] */ ULARGE_INTEGER *pcbWritten);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEnumSTATSTG_Next_Proxy( 
-    IEnumSTATSTG __RPC_FAR * This,
+    IEnumSTATSTG * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATSTG __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ STATSTG *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumSTATSTG_Next_Stub( 
-    IEnumSTATSTG __RPC_FAR * This,
+    IEnumSTATSTG * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATSTG __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ STATSTG *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IStorage_OpenStream_Proxy( 
-    IStorage __RPC_FAR * This,
-    /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
-    /* [unique][in] */ void __RPC_FAR *reserved1,
+    IStorage * This,
+    /* [string][in] */ const OLECHAR *pwcsName,
+    /* [unique][in] */ void *reserved1,
     /* [in] */ DWORD grfMode,
     /* [in] */ DWORD reserved2,
-    /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm);
+    /* [out] */ IStream **ppstm);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IStorage_OpenStream_Stub( 
-    IStorage __RPC_FAR * This,
-    /* [string][in] */ const OLECHAR __RPC_FAR *pwcsName,
+    IStorage * This,
+    /* [string][in] */ const OLECHAR *pwcsName,
     /* [in] */ unsigned long cbReserved1,
-    /* [size_is][unique][in] */ byte __RPC_FAR *reserved1,
+    /* [size_is][unique][in] */ byte *reserved1,
     /* [in] */ DWORD grfMode,
     /* [in] */ DWORD reserved2,
-    /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm);
+    /* [out] */ IStream **ppstm);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IStorage_EnumElements_Proxy( 
-    IStorage __RPC_FAR * This,
+    IStorage * This,
     /* [in] */ DWORD reserved1,
-    /* [size_is][unique][in] */ void __RPC_FAR *reserved2,
+    /* [size_is][unique][in] */ void *reserved2,
     /* [in] */ DWORD reserved3,
-    /* [out] */ IEnumSTATSTG __RPC_FAR *__RPC_FAR *ppenum);
+    /* [out] */ IEnumSTATSTG **ppenum);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IStorage_EnumElements_Stub( 
-    IStorage __RPC_FAR * This,
+    IStorage * This,
     /* [in] */ DWORD reserved1,
     /* [in] */ unsigned long cbReserved2,
-    /* [size_is][unique][in] */ byte __RPC_FAR *reserved2,
+    /* [size_is][unique][in] */ byte *reserved2,
     /* [in] */ DWORD reserved3,
-    /* [out] */ IEnumSTATSTG __RPC_FAR *__RPC_FAR *ppenum);
+    /* [out] */ IEnumSTATSTG **ppenum);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ILockBytes_ReadAt_Proxy( 
-    ILockBytes __RPC_FAR * This,
+    ILockBytes * This,
     /* [in] */ ULARGE_INTEGER ulOffset,
-    /* [length_is][size_is][out] */ void __RPC_FAR *pv,
+    /* [length_is][size_is][out] */ void *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbRead);
+    /* [out] */ ULONG *pcbRead);
 
 
 /* [call_as] */ HRESULT __stdcall ILockBytes_ReadAt_Stub( 
-    ILockBytes __RPC_FAR * This,
+    ILockBytes * This,
     /* [in] */ ULARGE_INTEGER ulOffset,
-    /* [length_is][size_is][out] */ byte __RPC_FAR *pv,
+    /* [length_is][size_is][out] */ byte *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbRead);
+    /* [out] */ ULONG *pcbRead);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ILockBytes_WriteAt_Proxy( 
-    ILockBytes __RPC_FAR * This,
+    ILockBytes * This,
     /* [in] */ ULARGE_INTEGER ulOffset,
-    /* [size_is][in] */ const void __RPC_FAR *pv,
+    /* [size_is][in] */ const void *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    /* [out] */ ULONG *pcbWritten);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ILockBytes_WriteAt_Stub( 
-    ILockBytes __RPC_FAR * This,
+    ILockBytes * This,
     /* [in] */ ULARGE_INTEGER ulOffset,
-    /* [size_is][in] */ const byte __RPC_FAR *pv,
+    /* [size_is][in] */ const byte *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    /* [out] */ ULONG *pcbWritten);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEnumFORMATETC_Next_Proxy( 
-    IEnumFORMATETC __RPC_FAR * This,
+    IEnumFORMATETC * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ FORMATETC __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ FORMATETC *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumFORMATETC_Next_Stub( 
-    IEnumFORMATETC __RPC_FAR * This,
+    IEnumFORMATETC * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ FORMATETC __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ FORMATETC *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEnumSTATDATA_Next_Proxy( 
-    IEnumSTATDATA __RPC_FAR * This,
+    IEnumSTATDATA * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATDATA __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ STATDATA *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumSTATDATA_Next_Stub( 
-    IEnumSTATDATA __RPC_FAR * This,
+    IEnumSTATDATA * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATDATA __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ STATDATA *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 /* [local] */ void STDMETHODCALLTYPE IAdviseSink_OnDataChange_Proxy( 
-    IAdviseSink __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
-    /* [unique][in] */ STGMEDIUM __RPC_FAR *pStgmed);
+    IAdviseSink * This,
+    /* [unique][in] */ FORMATETC *pFormatetc,
+    /* [unique][in] */ STGMEDIUM *pStgmed);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSink_OnDataChange_Stub( 
-    IAdviseSink __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
-    /* [unique][in] */ ASYNC_STGMEDIUM __RPC_FAR *pStgmed);
+    IAdviseSink * This,
+    /* [unique][in] */ FORMATETC *pFormatetc,
+    /* [unique][in] */ ASYNC_STGMEDIUM *pStgmed);
 
 /* [local] */ void STDMETHODCALLTYPE IAdviseSink_OnViewChange_Proxy( 
-    IAdviseSink __RPC_FAR * This,
+    IAdviseSink * This,
     /* [in] */ DWORD dwAspect,
     /* [in] */ LONG lindex);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSink_OnViewChange_Stub( 
-    IAdviseSink __RPC_FAR * This,
+    IAdviseSink * This,
     /* [in] */ DWORD dwAspect,
     /* [in] */ LONG lindex);
 
 /* [local] */ void STDMETHODCALLTYPE IAdviseSink_OnRename_Proxy( 
-    IAdviseSink __RPC_FAR * This,
-    /* [in] */ IMoniker __RPC_FAR *pmk);
+    IAdviseSink * This,
+    /* [in] */ IMoniker *pmk);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSink_OnRename_Stub( 
-    IAdviseSink __RPC_FAR * This,
-    /* [in] */ IMoniker __RPC_FAR *pmk);
+    IAdviseSink * This,
+    /* [in] */ IMoniker *pmk);
 
 /* [local] */ void STDMETHODCALLTYPE IAdviseSink_OnSave_Proxy( 
-    IAdviseSink __RPC_FAR * This);
+    IAdviseSink * This);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSink_OnSave_Stub( 
-    IAdviseSink __RPC_FAR * This);
+    IAdviseSink * This);
 
 /* [local] */ void STDMETHODCALLTYPE IAdviseSink_OnClose_Proxy( 
-    IAdviseSink __RPC_FAR * This);
+    IAdviseSink * This);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSink_OnClose_Stub( 
-    IAdviseSink __RPC_FAR * This);
+    IAdviseSink * This);
 
 /* [local] */ void STDMETHODCALLTYPE IAdviseSink2_OnLinkSrcChange_Proxy( 
-    IAdviseSink2 __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmk);
+    IAdviseSink2 * This,
+    /* [unique][in] */ IMoniker *pmk);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IAdviseSink2_OnLinkSrcChange_Stub( 
-    IAdviseSink2 __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmk);
+    IAdviseSink2 * This,
+    /* [unique][in] */ IMoniker *pmk);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IDataObject_GetData_Proxy( 
-    IDataObject __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pformatetcIn,
-    /* [out] */ STGMEDIUM __RPC_FAR *pmedium);
+    IDataObject * This,
+    /* [unique][in] */ FORMATETC *pformatetcIn,
+    /* [out] */ STGMEDIUM *pmedium);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IDataObject_GetData_Stub( 
-    IDataObject __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pformatetcIn,
-    /* [out] */ STGMEDIUM __RPC_FAR *pRemoteMedium);
+    IDataObject * This,
+    /* [unique][in] */ FORMATETC *pformatetcIn,
+    /* [out] */ STGMEDIUM *pRemoteMedium);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IDataObject_GetDataHere_Proxy( 
-    IDataObject __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-    /* [out][in] */ STGMEDIUM __RPC_FAR *pmedium);
+    IDataObject * This,
+    /* [unique][in] */ FORMATETC *pformatetc,
+    /* [out][in] */ STGMEDIUM *pmedium);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IDataObject_GetDataHere_Stub( 
-    IDataObject __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-    /* [out][in] */ STGMEDIUM __RPC_FAR *pRemoteMedium);
+    IDataObject * This,
+    /* [unique][in] */ FORMATETC *pformatetc,
+    /* [out][in] */ STGMEDIUM *pRemoteMedium);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IDataObject_SetData_Proxy( 
-    IDataObject __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-    /* [unique][in] */ STGMEDIUM __RPC_FAR *pmedium,
+    IDataObject * This,
+    /* [unique][in] */ FORMATETC *pformatetc,
+    /* [unique][in] */ STGMEDIUM *pmedium,
     /* [in] */ BOOL fRelease);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IDataObject_SetData_Stub( 
-    IDataObject __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-    /* [unique][in] */ FLAG_STGMEDIUM __RPC_FAR *pmedium,
+    IDataObject * This,
+    /* [unique][in] */ FORMATETC *pformatetc,
+    /* [unique][in] */ FLAG_STGMEDIUM *pmedium,
     /* [in] */ BOOL fRelease);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IFillLockBytes_FillAppend_Proxy( 
-    IFillLockBytes __RPC_FAR * This,
-    /* [size_is][in] */ const void __RPC_FAR *pv,
+    IFillLockBytes * This,
+    /* [size_is][in] */ const void *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    /* [out] */ ULONG *pcbWritten);
 
 
 /* [call_as] */ HRESULT __stdcall IFillLockBytes_FillAppend_Stub( 
-    IFillLockBytes __RPC_FAR * This,
-    /* [size_is][in] */ const byte __RPC_FAR *pv,
+    IFillLockBytes * This,
+    /* [size_is][in] */ const byte *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    /* [out] */ ULONG *pcbWritten);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IFillLockBytes_FillAt_Proxy( 
-    IFillLockBytes __RPC_FAR * This,
+    IFillLockBytes * This,
     /* [in] */ ULARGE_INTEGER ulOffset,
-    /* [size_is][in] */ const void __RPC_FAR *pv,
+    /* [size_is][in] */ const void *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    /* [out] */ ULONG *pcbWritten);
 
 
 /* [call_as] */ HRESULT __stdcall IFillLockBytes_FillAt_Stub( 
-    IFillLockBytes __RPC_FAR * This,
+    IFillLockBytes * This,
     /* [in] */ ULARGE_INTEGER ulOffset,
-    /* [size_is][in] */ const byte __RPC_FAR *pv,
+    /* [size_is][in] */ const byte *pv,
     /* [in] */ ULONG cb,
-    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    /* [out] */ ULONG *pcbWritten);
 
 /* [local] */ void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnDataChange_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
-    /* [unique][in] */ STGMEDIUM __RPC_FAR *pStgmed);
+    AsyncIAdviseSink * This,
+    /* [unique][in] */ FORMATETC *pFormatetc,
+    /* [unique][in] */ STGMEDIUM *pStgmed);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnDataChange_Stub( 
-    AsyncIAdviseSink __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pFormatetc,
-    /* [unique][in] */ ASYNC_STGMEDIUM __RPC_FAR *pStgmed);
+    AsyncIAdviseSink * This,
+    /* [unique][in] */ FORMATETC *pFormatetc,
+    /* [unique][in] */ ASYNC_STGMEDIUM *pStgmed);
 
 /* [local] */ void STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnDataChange_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnDataChange_Stub( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 /* [local] */ void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnViewChange_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This,
+    AsyncIAdviseSink * This,
     /* [in] */ DWORD dwAspect,
     /* [in] */ LONG lindex);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnViewChange_Stub( 
-    AsyncIAdviseSink __RPC_FAR * This,
+    AsyncIAdviseSink * This,
     /* [in] */ DWORD dwAspect,
     /* [in] */ LONG lindex);
 
 /* [local] */ void STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnViewChange_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnViewChange_Stub( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 /* [local] */ void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnRename_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This,
-    /* [in] */ IMoniker __RPC_FAR *pmk);
+    AsyncIAdviseSink * This,
+    /* [in] */ IMoniker *pmk);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnRename_Stub( 
-    AsyncIAdviseSink __RPC_FAR * This,
-    /* [in] */ IMoniker __RPC_FAR *pmk);
+    AsyncIAdviseSink * This,
+    /* [in] */ IMoniker *pmk);
 
 /* [local] */ void STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnRename_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnRename_Stub( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 /* [local] */ void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnSave_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnSave_Stub( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 /* [local] */ void STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnSave_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnSave_Stub( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 /* [local] */ void STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnClose_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Begin_OnClose_Stub( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 /* [local] */ void STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnClose_Proxy( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink_Finish_OnClose_Stub( 
-    AsyncIAdviseSink __RPC_FAR * This);
+    AsyncIAdviseSink * This);
 
 /* [local] */ void STDMETHODCALLTYPE AsyncIAdviseSink2_Begin_OnLinkSrcChange_Proxy( 
-    AsyncIAdviseSink2 __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmk);
+    AsyncIAdviseSink2 * This,
+    /* [unique][in] */ IMoniker *pmk);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink2_Begin_OnLinkSrcChange_Stub( 
-    AsyncIAdviseSink2 __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmk);
+    AsyncIAdviseSink2 * This,
+    /* [unique][in] */ IMoniker *pmk);
 
 /* [local] */ void STDMETHODCALLTYPE AsyncIAdviseSink2_Finish_OnLinkSrcChange_Proxy( 
-    AsyncIAdviseSink2 __RPC_FAR * This);
+    AsyncIAdviseSink2 * This);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE AsyncIAdviseSink2_Finish_OnLinkSrcChange_Stub( 
-    AsyncIAdviseSink2 __RPC_FAR * This);
+    AsyncIAdviseSink2 * This);
 
 
 
@@ -14430,4 +15052,7 @@ void                      __RPC_USER  STGMEDIUM_UserFree(     unsigned long __RP
 #endif
 
 
+
 #pragma option pop /*P_O_Pop*/
+
+#endif //__objidl__header_gd_h__

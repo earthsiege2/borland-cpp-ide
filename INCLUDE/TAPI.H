@@ -6,7 +6,7 @@ the   API/SPI  for  making  applications/drivers  that  interface  with  the
 specification provided that this paragraph and the Intel/Microsoft copyright
 statement is maintained as is in the text and source code files.
 
-Copyright 1995-97 Microsoft, all rights reserved.
+Copyright (c) Microsoft Corporation, All rights reserved.
 Portions copyright 1992, 1993 Intel/Microsoft, all rights reserved.
 
 Module Name:
@@ -543,6 +543,7 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINEDEVCAPFLAGS_CALLHUBTRACKING         0x00000800      // TAPI v3.0
 #define LINEDEVCAPFLAGS_PRIVATEOBJECTS          0x00001000      // TAPI v3.0
 #endif
+#define LINEDEVCAPFLAGS_LOCAL                   0x00002000
 
 #define LINEDEVSTATE_OTHER                      0x00000001
 #define LINEDEVSTATE_RINGING                    0x00000002
@@ -710,6 +711,7 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
 #define LINEERR_INVALAGENTSESSIONSTATE          0x8000005F      // TAPI v2.2
 #define LINEERR_DISCONNECTED                    0X80000060
+#define LINEERR_SERVICE_NOT_RUNNING             0x80000061
 #endif
 
 #define LINEFEATURE_DEVSPECIFIC                 0x00000001
@@ -958,6 +960,9 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define PHONEBUTTONFUNCTION_SAVEREPEAT          0x0000002C
 #define PHONEBUTTONFUNCTION_QUEUECALL           0x0000002D
 #define PHONEBUTTONFUNCTION_NONE                0x0000002E
+#if (TAPI_CURRENT_VERSION >= 0x00030001)
+#define PHONEBUTTONFUNCTION_SEND                0x0000002F      // TAPI v3.1
+#endif
 
 #define PHONEBUTTONMODE_DUMMY                   0x00000001
 #define PHONEBUTTONMODE_CALL                    0x00000002
@@ -1006,6 +1011,7 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define PHONEERR_UNINITIALIZED                  0x90000022
 #define PHONEERR_REINIT                         0x90000023
 #define PHONEERR_DISCONNECTED                   0x90000024
+#define PHONEERR_SERVICE_NOT_RUNNING            0x90000025
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 #define PHONEFEATURE_GETBUTTONINFO              0x00000001      // TAPI v2.0
@@ -1036,6 +1042,9 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define PHONEFEATURE_SETVOLUMEHANDSET           0x02000000      // TAPI v2.0
 #define PHONEFEATURE_SETVOLUMESPEAKER           0x04000000      // TAPI v2.0
 #define PHONEFEATURE_SETVOLUMEHEADSET           0x08000000      // TAPI v2.0
+#endif
+#if (TAPI_CURRENT_VERSION >= 0x00030001)
+#define PHONEFEATURE_GENERICPHONE               0x10000000      // TAPI v3.1
 #endif
 
 #define PHONEHOOKSWITCHDEV_HANDSET              0x00000001
@@ -1121,6 +1130,10 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define TAPIERR_REQUESTCANCELLED                -17L
 #define TAPIERR_INVALPOINTER                    -18L
 #define TAPIERR_NOTADMIN                        -19L
+#define TAPIERR_MMCWRITELOCKED                  -20L
+#define TAPIERR_PROVIDERALREADYINSTALLED        -21L
+#define TAPIERR_SCP_ALREADY_EXISTS		-22L
+#define TAPIERR_SCP_DOES_NOT_EXIST		-23L
 
 
 #define TAPIMAXDESTADDRESSSIZE                  80L
@@ -1848,6 +1861,11 @@ typedef struct lineforward_tag
     DWORD       dwDestCountryCode;
     DWORD       dwDestAddressSize;
     DWORD       dwDestAddressOffset;
+
+#if (TAPI_CURRENT_VERSION >= 0x00030001)
+    DWORD       dwCallerAddressType;
+    DWORD       dwDestAddressType;
+#endif
 
 } LINEFORWARD, FAR *LPLINEFORWARD;
 
@@ -5259,5 +5277,7 @@ TAPIERROR_FORMATMESSAGE - macro to convert a TAPI error constant
 
 #pragma pack()
 
+
 #pragma option pop /*P_O_Pop*/
 #endif // TAPI_H
+

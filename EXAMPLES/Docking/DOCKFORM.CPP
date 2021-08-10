@@ -18,37 +18,37 @@ __fastcall TDockableForm::TDockableForm(TComponent* Owner)
 
 TAlign TDockableForm::ComputeDockingRect(TRect & DockRect, const TPoint & MousePos)
 {
-  Windows::TRect  DockTopRect,
+  Types::TRect  DockTopRect,
                   DockLeftRect,
                   DockBottomRect,
                   DockRightRect,
                   DockCenterRect;
 
-  Windows::TPoint TopLeft,
+  Types::TPoint TopLeft,
                   BottomRight;
 
   TAlign Result = alNone;
 
   // Divide form up into docking "Zones"
-  TopLeft = Windows::TPoint(0, 0);
-  BottomRight = Windows::TPoint(ClientWidth / 5, ClientHeight);
-  DockLeftRect = Windows::TRect(TopLeft, BottomRight);
+  TopLeft = Types::TPoint(0, 0);
+  BottomRight = Types::TPoint(ClientWidth / 5, ClientHeight);
+  DockLeftRect = Types::TRect(TopLeft, BottomRight);
 
-  TopLeft = Windows::TPoint(ClientWidth / 5, 0);
-  BottomRight = Windows::TPoint(ClientWidth / 5 * 4, ClientHeight / 5);
-  DockTopRect = Windows::TRect(TopLeft, BottomRight);
+  TopLeft = Types::TPoint(ClientWidth / 5, 0);
+  BottomRight = Types::TPoint(ClientWidth / 5 * 4, ClientHeight / 5);
+  DockTopRect = Types::TRect(TopLeft, BottomRight);
 
-  TopLeft = Windows::TPoint(ClientWidth / 5 * 4, 0);
-  BottomRight = Windows::TPoint(ClientWidth, ClientHeight);
-  DockRightRect = Windows::TRect(TopLeft, BottomRight);
+  TopLeft = Types::TPoint(ClientWidth / 5 * 4, 0);
+  BottomRight = Types::TPoint(ClientWidth, ClientHeight);
+  DockRightRect = Types::TRect(TopLeft, BottomRight);
 
-  TopLeft = Windows::TPoint(ClientWidth / 5, ClientHeight / 5 * 4);
-  BottomRight = Windows::TPoint(ClientWidth / 5 * 4, ClientHeight);
-  DockBottomRect = Windows::TRect(TopLeft, BottomRight);
+  TopLeft = Types::TPoint(ClientWidth / 5, ClientHeight / 5 * 4);
+  BottomRight = Types::TPoint(ClientWidth / 5 * 4, ClientHeight);
+  DockBottomRect = Types::TRect(TopLeft, BottomRight);
 
-  TopLeft = Windows::TPoint(ClientWidth / 5, ClientHeight / 5);
-  BottomRight = Windows::TPoint(ClientWidth / 5 * 4, ClientHeight / 5 * 4);
-  DockCenterRect = Windows::TRect(TopLeft, BottomRight);
+  TopLeft = Types::TPoint(ClientWidth / 5, ClientHeight / 5);
+  BottomRight = Types::TPoint(ClientWidth / 5 * 4, ClientHeight / 5 * 4);
+  DockCenterRect = Types::TRect(TopLeft, BottomRight);
 
   // Find out where the mouse cursor is,
   // to decide where to draw dock preview.
@@ -93,8 +93,8 @@ TAlign TDockableForm::ComputeDockingRect(TRect & DockRect, const TPoint & MouseP
   if (Result != alNone)
   {
     // DockRect is in screen coordinates.
-    TopLeft = ClientToScreen(Windows::TPoint(DockRect.Left, DockRect.Top));
-    BottomRight = ClientToScreen(Windows::TPoint(DockRect.Right, DockRect.Bottom));
+    TopLeft = ClientToScreen(Types::TPoint(DockRect.Left, DockRect.Top));
+    BottomRight = ClientToScreen(Types::TPoint(DockRect.Right, DockRect.Bottom));
 
     DockRect = TRect(TopLeft, BottomRight);
   }
@@ -146,7 +146,7 @@ void __fastcall TDockableForm::CMDockClient(TCMDockClient& Message)
   TRect ARect;
   TAlign DockType;
   TForm* Host;
-  Windows::TPoint Pt;
+  Types::TPoint Pt;
 
   // Overriding this message allows the dock form to create host forms
   // depending on the mouse position when docking occurs. If we don't override

@@ -1,6 +1,7 @@
+#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*++
 
-Copyright (c) 1990-1998  Microsoft Corporation
+Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Module Name:
 
@@ -22,8 +23,8 @@ Abstract:
 
 --*/
 
-#if ! (defined(lint) || defined(_lint) || defined(RC_INVOKED))
-#if ( _MSC_VER >= 800 ) || defined(_PUSHPOP_SUPPORTED)
+#if ! (defined(lint) || defined(RC_INVOKED))
+#if ( _MSC_VER >= 800 && !defined(_M_I86)) || defined(_PUSHPOP_SUPPORTED)
 #pragma warning(disable:4103)
 #if !(defined( MIDL_PASS )) || defined( __midl )
 #pragma pack(pop)
@@ -33,4 +34,6 @@ Abstract:
 #else
 #pragma pack()
 #endif
-#endif // ! (defined(lint) || defined(_lint) || defined(RC_INVOKED))
+#endif // ! (defined(lint) || defined(RC_INVOKED))
+
+#pragma option pop /*P_O_Pop*/

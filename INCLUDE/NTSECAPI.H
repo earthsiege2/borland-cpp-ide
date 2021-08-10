@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0000     Increment this if a change has global effects
 
-Copyright (c) 1990-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -15,7 +15,6 @@ Revision History:
 --*/
 
 #ifndef _NTSECAPI_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _NTSECAPI_
 
 #ifdef __cplusplus
@@ -95,7 +94,9 @@ typedef enum _SECURITY_LOGON_TYPE {
     Proxy,              // Proxy logon
     Unlock,             // Unlock workstation
     NetworkCleartext,   // Network logon with cleartext credentials
-    NewCredentials      // Clone caller, new default credentials
+    NewCredentials,     // Clone caller, new default credentials
+    RemoteInteractive,  // Remote, yet interactive.  Terminal server
+    CachedInteractive   // Try cached credentials without hitting the net.
 } SECURITY_LOGON_TYPE, *PSECURITY_LOGON_TYPE;
 
 // end_ntifs
@@ -180,6 +181,9 @@ typedef OBJECT_ATTRIBUTES LSA_OBJECT_ATTRIBUTES, *PLSA_OBJECT_ATTRIBUTES;
 typedef struct _LSA_UNICODE_STRING {
     USHORT Length;
     USHORT MaximumLength;
+#ifdef MIDL_PASS
+    [size_is(MaximumLength/2), length_is(Length/2)]
+#endif // MIDL_PASS
     PWSTR  Buffer;
 } LSA_UNICODE_STRING, *PLSA_UNICODE_STRING;
 
@@ -219,8 +223,6 @@ LsaRegisterLogonProcess (
     OUT PLSA_OPERATIONAL_MODE SecurityMode
     );
 
-// end_ntifs
-// begin_ntsrv
 
 NTSTATUS
 NTAPI
@@ -242,7 +244,7 @@ LsaLogonUser (
     );
 
 
-// end_ntsrv
+// end_ntifs
 
 NTSTATUS
 NTAPI
@@ -423,6 +425,30 @@ typedef struct _LSA_TRANSLATED_SID {
 //         this field will contain a negative value.
 //
 
+typedef struct _LSA_TRANSLATED_SID2 {
+
+    SID_NAME_USE Use;
+    PSID         Sid;
+    LONG         DomainIndex;
+    ULONG        Flags;
+
+} LSA_TRANSLATED_SID2, *PLSA_TRANSLATED_SID2;
+
+// where members have the following usage:
+//
+//     Use - identifies the use of the SID.  If this value is SidUnknown or
+//         SidInvalid, then the remainder of the record is not set and
+//         should be ignored.
+//
+//     Sid - Contains the complete Sid of the tranlated SID
+//
+//     DomainIndex - Is the index of an entry in a related
+//         LSA_REFERENCED_DOMAIN_LIST data structure describing the
+//         domain in which the account was found.
+//
+//         If there is no corresponding reference domain for an entry, then
+//         this field will contain a negative value.
+//
 
 //
 // The following data type is used in SID to name lookup services to
@@ -528,7 +554,8 @@ typedef enum _POLICY_INFORMATION_CLASS {
     PolicyModificationInformation,
     PolicyAuditFullSetInformation,
     PolicyAuditFullQueryInformation,
-    PolicyDnsDomainInformation
+    PolicyDnsDomainInformation,
+    PolicyDnsDomainInformationInt
 
 } POLICY_INFORMATION_CLASS, *PPOLICY_INFORMATION_CLASS;
 
@@ -813,8 +840,8 @@ typedef struct _POLICY_AUDIT_FULL_QUERY_INFO {
 
 typedef enum _POLICY_DOMAIN_INFORMATION_CLASS {
 
-    PolicyDomainQualityOfServiceInformation = 1,
-    PolicyDomainEfsInformation,
+//  PolicyDomainQualityOfServiceInformation, // value was used in W2K; no longer supported
+    PolicyDomainEfsInformation = 2,
     PolicyDomainKerberosTicketInformation
 
 } POLICY_DOMAIN_INFORMATION_CLASS, *PPOLICY_DOMAIN_INFORMATION_CLASS;
@@ -836,17 +863,6 @@ typedef enum _POLICY_DOMAIN_INFORMATION_CLASS {
 //
 // Bits 0x00000100 through 0xFFFFFFFF are reserved for future use.
 //
-typedef struct _POLICY_DOMAIN_QUALITY_OF_SERVICE_INFO {
-
-    ULONG QualityOfService;
-
-} POLICY_DOMAIN_QUALITY_OF_SERVICE_INFO, *PPOLICY_DOMAIN_QUALITY_OF_SERVICE_INFO;
-//
-// where the members have the following usage:
-//
-//  QualityOfService - Determines what specific QOS actions a machine should take
-//
-
 
 //
 // The following structure corresponds to the PolicyEfsInformation
@@ -946,7 +962,11 @@ typedef enum _TRUSTED_INFORMATION_CLASS {
     TrustedDomainInformationBasic,
     TrustedDomainInformationEx,
     TrustedDomainAuthInformation,
-    TrustedDomainFullInformation
+    TrustedDomainFullInformation,
+    TrustedDomainAuthInformationInternal,
+    TrustedDomainFullInformationInternal,
+    TrustedDomainInformationEx2Internal,
+    TrustedDomainFullInformation2Internal,
 
 } TRUSTED_INFORMATION_CLASS, *PTRUSTED_INFORMATION_CLASS;
 
@@ -1043,20 +1063,15 @@ typedef PLSA_TRUST_INFORMATION PTRUSTED_DOMAIN_INFORMATION_BASIC;
 // Levels 0x5 - 0x000FFFFF reserved for future use
 // Provider specific trust levels are from 0x00100000 to 0xFFF00000
 
-#define TRUST_ATTRIBUTE_NON_TRANSITIVE  0x00000001  // Disallow transitivity
-#define TRUST_ATTRIBUTE_UPLEVEL_ONLY    0x00000002  // Trust link only valid
-                                                    // for uplevel client
-#define TRUST_ATTRIBUTE_TREE_PARENT     0x00400000  // Denotes that we are setting the trust
-                                                    // to our parent in the org tree...
-#define TRUST_ATTRIBUTE_TREE_ROOT       0x00800000  // Denotes that we are setting the trust
-                                                    // to another tree root in a forest...
-// Trust attributes 0x00000004 through 0x004FFFFF reserved for future use
-// Trust attributes 0x00F00000 through 0x00400000 are reserved for internal use
-// Trust attributes 0x01000000 through 0xFF000000 are reserved for user
-// defined values
-#define TRUST_ATTRIBUTES_VALID  0xFF02FFFF
-#define TRUST_ATTRIBUTES_USER   0xFF000000
-
+#define TRUST_ATTRIBUTE_NON_TRANSITIVE     0x00000001  // Disallow transitivity
+#define TRUST_ATTRIBUTE_UPLEVEL_ONLY       0x00000002  // Trust link only valid for uplevel client
+#define TRUST_ATTRIBUTE_FILTER_SIDS        0x00000004  // Used to quarantine domains
+#define TRUST_ATTRIBUTE_FOREST_TRANSITIVE  0x00000008  // This link may contain forest trust information
+// Trust attributes 0x00000010 through 0x00200000 are reserved for future use
+// Trust attributes 0x00400000 through 0x00800000 were used previously (up to W2K) and should not be re-used
+// Trust attributes 0x01000000 through 0x80000000 are reserved for user
+#define TRUST_ATTRIBUTES_VALID          0xFF03FFFF
+#define TRUST_ATTRIBUTES_USER           0xFF000000
 
 typedef struct _TRUSTED_DOMAIN_INFORMATION_EX {
 
@@ -1068,6 +1083,22 @@ typedef struct _TRUSTED_DOMAIN_INFORMATION_EX {
     ULONG TrustAttributes;
 
 } TRUSTED_DOMAIN_INFORMATION_EX, *PTRUSTED_DOMAIN_INFORMATION_EX;
+
+typedef struct _TRUSTED_DOMAIN_INFORMATION_EX2 {
+
+    LSA_UNICODE_STRING Name;
+    LSA_UNICODE_STRING FlatName;
+    PSID  Sid;
+    ULONG TrustDirection;
+    ULONG TrustType;
+    ULONG TrustAttributes;
+    ULONG ForestTrustLength;
+#ifdef MIDL_PASS
+    [size_is( ForestTrustLength )]
+#endif
+    PUCHAR ForestTrustInfo;
+
+} TRUSTED_DOMAIN_INFORMATION_EX2, *PTRUSTED_DOMAIN_INFORMATION_EX2;
 
 //
 // Type of authentication information
@@ -1104,6 +1135,132 @@ typedef struct _TRUSTED_DOMAIN_FULL_INFORMATION {
 
 } TRUSTED_DOMAIN_FULL_INFORMATION, *PTRUSTED_DOMAIN_FULL_INFORMATION;
 
+typedef struct _TRUSTED_DOMAIN_FULL_INFORMATION2 {
+
+    TRUSTED_DOMAIN_INFORMATION_EX2  Information;
+    TRUSTED_POSIX_OFFSET_INFO       PosixOffset;
+    TRUSTED_DOMAIN_AUTH_INFORMATION AuthInformation;
+
+} TRUSTED_DOMAIN_FULL_INFORMATION2, *PTRUSTED_DOMAIN_FULL_INFORMATION2;
+
+typedef enum {
+
+    ForestTrustTopLevelName,
+    ForestTrustTopLevelNameEx,
+    ForestTrustDomainInfo,
+    ForestTrustRecordTypeLast = ForestTrustDomainInfo
+
+} LSA_FOREST_TRUST_RECORD_TYPE;
+
+#define LSA_FOREST_TRUST_RECORD_TYPE_UNRECOGNIZED 0x80000000
+
+//
+// Bottom 16 bits of the flags are reserved for disablement reasons
+//
+
+#define LSA_FTRECORD_DISABLED_REASONS            ( 0x0000FFFFL )
+
+//
+// Reasons for a top-level name forest trust record to be disabled
+//
+
+#define LSA_TLN_DISABLED_NEW                     ( 0x00000001L )
+#define LSA_TLN_DISABLED_ADMIN                   ( 0x00000002L )
+#define LSA_TLN_DISABLED_CONFLICT                ( 0x00000004L )
+
+//
+// Reasons for a domain information forest trust record to be disabled
+//
+
+#define LSA_SID_DISABLED_ADMIN                   ( 0x00000001L )
+#define LSA_SID_DISABLED_CONFLICT                ( 0x00000002L )
+#define LSA_NB_DISABLED_ADMIN                    ( 0x00000004L )
+#define LSA_NB_DISABLED_CONFLICT                 ( 0x00000008L )
+
+typedef struct _LSA_FOREST_TRUST_DOMAIN_INFO {
+
+#ifdef MIDL_PASS
+    PISID Sid;
+#else
+    PSID Sid;
+#endif
+    LSA_UNICODE_STRING DnsName;
+    LSA_UNICODE_STRING NetbiosName;
+
+} LSA_FOREST_TRUST_DOMAIN_INFO, *PLSA_FOREST_TRUST_DOMAIN_INFO;
+
+typedef struct _LSA_FOREST_TRUST_BINARY_DATA {
+
+    ULONG Length;
+#ifdef MIDL_PASS
+    [size_is( Length )]
+#endif
+    PUCHAR Buffer;
+
+} LSA_FOREST_TRUST_BINARY_DATA, *PLSA_FOREST_TRUST_BINARY_DATA;
+
+typedef struct _LSA_FOREST_TRUST_RECORD {
+
+    ULONG Flags;
+    LSA_FOREST_TRUST_RECORD_TYPE ForestTrustType; // type of record
+    LARGE_INTEGER Time;
+
+#ifdef MIDL_PASS
+    [switch_type( LSA_FOREST_TRUST_RECORD_TYPE ), switch_is( ForestTrustType )]
+#endif
+
+    union {                                       // actual data
+
+#ifdef MIDL_PASS
+        [case( ForestTrustTopLevelName,
+               ForestTrustTopLevelNameEx )] LSA_UNICODE_STRING TopLevelName;
+        [case( ForestTrustDomainInfo )] LSA_FOREST_TRUST_DOMAIN_INFO DomainInfo;
+        [default] LSA_FOREST_TRUST_BINARY_DATA Data;
+#else
+        LSA_UNICODE_STRING TopLevelName;
+        LSA_FOREST_TRUST_DOMAIN_INFO DomainInfo;
+        LSA_FOREST_TRUST_BINARY_DATA Data;        // used for unrecognized types
+#endif
+    } ForestTrustData;
+
+} LSA_FOREST_TRUST_RECORD, *PLSA_FOREST_TRUST_RECORD;
+
+typedef struct _LSA_FOREST_TRUST_INFORMATION {
+
+    ULONG RecordCount;
+#ifdef MIDL_PASS
+    [size_is( RecordCount )]
+#endif
+    PLSA_FOREST_TRUST_RECORD * Entries;
+
+} LSA_FOREST_TRUST_INFORMATION, *PLSA_FOREST_TRUST_INFORMATION;
+
+typedef enum {
+
+    CollisionTdo,
+    CollisionXref,
+    CollisionOther
+
+} LSA_FOREST_TRUST_COLLISION_RECORD_TYPE;
+
+typedef struct _LSA_FOREST_TRUST_COLLISION_RECORD {
+
+    ULONG Index;
+    LSA_FOREST_TRUST_COLLISION_RECORD_TYPE Type;
+    ULONG Flags;
+    LSA_UNICODE_STRING Name;
+
+} LSA_FOREST_TRUST_COLLISION_RECORD, *PLSA_FOREST_TRUST_COLLISION_RECORD;
+
+typedef struct _LSA_FOREST_TRUST_COLLISION_INFORMATION {
+
+    ULONG RecordCount;
+#ifdef MIDL_PASS
+    [size_is( RecordCount )]
+#endif
+    PLSA_FOREST_TRUST_COLLISION_RECORD * Entries;
+
+} LSA_FOREST_TRUST_COLLISION_INFORMATION, *PLSA_FOREST_TRUST_COLLISION_INFORMATION;
 
 
 //
@@ -1142,6 +1299,41 @@ LsaClose(
     IN LSA_HANDLE ObjectHandle
     );
 
+
+typedef struct _SECURITY_LOGON_SESSION_DATA {
+    ULONG               Size ;
+    LUID                LogonId ;
+    LSA_UNICODE_STRING  UserName ;
+    LSA_UNICODE_STRING  LogonDomain ;
+    LSA_UNICODE_STRING  AuthenticationPackage ;
+    ULONG               LogonType ;
+    ULONG               Session ;
+    PSID                Sid ;
+    LARGE_INTEGER       LogonTime ;
+
+    //
+    // new for whistler:
+    //
+
+    LSA_UNICODE_STRING  LogonServer ;
+    LSA_UNICODE_STRING  DnsDomainName ;
+    LSA_UNICODE_STRING  Upn ;
+} SECURITY_LOGON_SESSION_DATA, * PSECURITY_LOGON_SESSION_DATA ;
+
+NTSTATUS
+NTAPI
+LsaEnumerateLogonSessions(
+    OUT PULONG  LogonSessionCount,
+    OUT PLUID * LogonSessionList
+    );
+
+NTSTATUS
+NTAPI
+LsaGetLogonSessionData(
+    IN PLUID    LogonId,
+    OUT PSECURITY_LOGON_SESSION_DATA * ppLogonSessionData
+    );
+
 NTSTATUS
 NTAPI
 LsaOpenPolicy(
@@ -1150,6 +1342,7 @@ LsaOpenPolicy(
     IN ACCESS_MASK DesiredAccess,
     IN OUT PLSA_HANDLE PolicyHandle
     );
+
 
 NTSTATUS
 NTAPI
@@ -1223,6 +1416,17 @@ LsaLookupNames(
 
 NTSTATUS
 NTAPI
+LsaLookupNames2(
+    IN LSA_HANDLE PolicyHandle,
+    IN ULONG Flags, // Reserved
+    IN ULONG Count,
+    IN PLSA_UNICODE_STRING Names,
+    OUT PLSA_REFERENCED_DOMAIN_LIST *ReferencedDomains,
+    OUT PLSA_TRANSLATED_SID2 *Sids
+    );
+
+NTSTATUS
+NTAPI
 LsaLookupSids(
     IN LSA_HANDLE PolicyHandle,
     IN ULONG Count,
@@ -1241,6 +1445,8 @@ LsaLookupSids(
 #define SE_DENY_NETWORK_LOGON_NAME          TEXT("SeDenyNetworkLogonRight")
 #define SE_DENY_BATCH_LOGON_NAME            TEXT("SeDenyBatchLogonRight")
 #define SE_DENY_SERVICE_LOGON_NAME          TEXT("SeDenyServiceLogonRight")
+#define SE_REMOTE_INTERACTIVE_LOGON_NAME    TEXT("SeRemoteInteractiveLogonRight")
+#define SE_DENY_REMOTE_INTERACTIVE_LOGON_NAME TEXT("SeDenyRemoteInteractiveLogonRight")
 
 //
 // This new API returns all the accounts with a certain privilege
@@ -1368,6 +1574,38 @@ LsaCreateTrustedDomainEx(
     OUT PLSA_HANDLE TrustedDomainHandle
     );
 
+NTSTATUS
+NTAPI
+LsaQueryForestTrustInformation(
+    IN LSA_HANDLE PolicyHandle,
+    IN PLSA_UNICODE_STRING TrustedDomainName,
+    OUT PLSA_FOREST_TRUST_INFORMATION * ForestTrustInfo
+    );
+
+NTSTATUS
+NTAPI
+LsaSetForestTrustInformation(
+    IN LSA_HANDLE PolicyHandle,
+    IN PLSA_UNICODE_STRING TrustedDomainName,
+    IN PLSA_FOREST_TRUST_INFORMATION ForestTrustInfo,
+    IN BOOLEAN CheckOnly,
+    OUT PLSA_FOREST_TRUST_COLLISION_INFORMATION * CollisionInfo
+    );
+
+// #define TESTING_MATCHING_ROUTINE
+
+#ifdef TESTING_MATCHING_ROUTINE
+
+NTSTATUS
+NTAPI
+LsaForestTrustFindMatch(
+    IN LSA_HANDLE PolicyHandle,
+    IN ULONG Type,
+    IN PLSA_UNICODE_STRING Name,
+    OUT PLSA_UNICODE_STRING * Match
+    );
+
+#endif
 
 //
 // This API sets the workstation password (equivalent of setting/getting
@@ -1397,29 +1635,6 @@ LsaNtStatusToWinError(
     NTSTATUS Status
     );
 
-#if 0
-NTSTATUS
-NTAPI
-LsaLookupNamesEx(
-    IN LSA_HANDLE PolicyHandle,
-    IN ULONG Count,
-    IN PLSA_NAME_LOOKUP_EX Names,
-    OUT PLSA_TRANSLATED_SID_EX *TranslatedSids,
-    IN ULONG LookupOptions,
-    IN OUT PULONG MappedCount
-    );
-
-NTSTATUS
-NTAPI
-LsaLookupSidsEx(
-    IN LSA_HANDLE PolicyHandle,
-    IN ULONG Count,
-    IN PLSA_SID_LOOKUP_EX Sids,
-    OUT PLSA_TRANSLATED_NAME_EX *TranslatedNames,
-    IN ULONG LookupOptions,
-    IN OUT PULONG MappedCount
-    );
-#endif
 
 //
 // Define a symbol so we can tell if ntifs.h has been included.
@@ -1492,6 +1707,19 @@ typedef struct _DOMAIN_PASSWORD_INFORMATION {
 } DOMAIN_PASSWORD_INFORMATION, *PDOMAIN_PASSWORD_INFORMATION;
 #endif 
 
+//
+// PasswordProperties flags
+//
+
+#define DOMAIN_PASSWORD_COMPLEX             0x00000001L
+#define DOMAIN_PASSWORD_NO_ANON_CHANGE      0x00000002L
+#define DOMAIN_PASSWORD_NO_CLEAR_CHANGE     0x00000004L
+#define DOMAIN_LOCKOUT_ADMINS               0x00000008L
+#define DOMAIN_PASSWORD_STORE_CLEARTEXT     0x00000010L
+#define DOMAIN_REFUSE_PASSWORD_CHANGE       0x00000020L
+#define DOMAIN_NO_LM_OWF_CHANGE             0x00000040L
+
+
 
 #ifndef _PASSWORD_NOTIFICATION_DEFINED
 #define _PASSWORD_NOTIFICATION_DEFINED
@@ -1508,7 +1736,6 @@ typedef BOOLEAN (*PSAM_INIT_NOTIFICATION_ROUTINE) (
 
 #define SAM_INIT_NOTIFICATION_ROUTINE  "InitializeChangeNotify"
 
-
 #define SAM_PASSWORD_FILTER_ROUTINE  "PasswordFilter"
 
 typedef BOOLEAN (*PSAM_PASSWORD_FILTER_ROUTINE) (
@@ -1517,7 +1744,10 @@ typedef BOOLEAN (*PSAM_PASSWORD_FILTER_ROUTINE) (
     IN PUNICODE_STRING Password,
     IN BOOLEAN SetOperation
     );
+
+
 #endif // _PASSWORD_NOTIFICATION_DEFINED
+
 
 /////////////////////////////////////////////////////////////////////////
 //                                                                     //
@@ -1717,6 +1947,8 @@ typedef struct _MSV1_0_INTERACTIVE_PROFILE {
 #define MSV1_0_RETURN_PROFILE_PATH           0x200
 #define MSV1_0_TRY_SPECIFIED_DOMAIN_ONLY     0x400
 #define MSV1_0_ALLOW_WORKSTATION_TRUST_ACCOUNT 0x800
+#define MSV1_0_DISABLE_PERSONAL_FALLBACK     0x00001000
+#define MSV1_0_ALLOW_FORCE_GUEST	     0x00002000
 #define MSV1_0_SUBAUTHENTICATION_DLL_EX      0x00100000
 
 //
@@ -1830,8 +2062,15 @@ typedef struct _MSV1_0_SUPPLEMENTAL_CREDENTIAL {
 // this is the longest amount of time we'll allow challenge response
 // pairs to be used. Note that this also has to allow for worst case clock skew
 //
-#define MSV1_0_MAX_NTLM3_LIFE 1800     // 30 minutes (in seconds)
+#define MSV1_0_MAX_NTLM3_LIFE 129600     // 36 hours (in seconds)
 #define MSV1_0_MAX_AVL_SIZE 64000
+
+//
+// MsvAvFlags bit values
+//
+
+#define MSV1_0_AV_FLAG_FORCE_GUEST  0x00000001
+
 
 // this is an MSV1_0 private data structure, defining the layout of an NTLM3 response, as sent by a
 //  client in the NtChallengeResponse field of the NETLOGON_NETWORK_INFO structure. If can be differentiated
@@ -1856,7 +2095,9 @@ typedef enum {
     MsvAvNbComputerName,      // server's computer name -- NetBIOS
     MsvAvNbDomainName,        // server's domain name -- NetBIOS
     MsvAvDnsComputerName,     // server's computer name -- DNS
-    MsvAvDnsDomainName        // server's domain name -- DNS
+    MsvAvDnsDomainName,       // server's domain name -- DNS
+    MsvAvDnsTreeName,         // server's tree name -- DNS
+    MsvAvFlags                // server's extended flags -- DWORD mask
 } MSV1_0_AVID;
 
 typedef struct  _MSV1_0_AV_PAIR {
@@ -1891,7 +2132,8 @@ typedef enum _MSV1_0_PROTOCOL_MESSAGE_TYPE {
     MsV1_0CacheLogon,                        // Submission only, no response
     MsV1_0SubAuth,                           // Both submission and response
     MsV1_0DeriveCredential,                  // Both submission and response
-    MsV1_0CacheLookup                        // Both submission and response
+    MsV1_0CacheLookup,                       // Both submission and response
+    MsV1_0SetProcessOption,                  // Submission only, no response
 } MSV1_0_PROTOCOL_MESSAGE_TYPE, *PMSV1_0_PROTOCOL_MESSAGE_TYPE;
 
 
@@ -1935,38 +2177,6 @@ typedef struct _MSV1_0_SUBAUTH_RESPONSE{
 } MSV1_0_SUBAUTH_RESPONSE, *PMSV1_0_SUBAUTH_RESPONSE;
 
 
-//
-// Credential Derivation types for MsV1_0DeriveCredential Submit DeriveCredType
-//
-
-//
-// Derive Credential using SHA-1 and Request buffer DeriveCredSubmitBuffer of
-// length DeriveCredInfoLength mixing bytes.
-// Response buffer DeriveCredReturnBuffer will contain SHA-1 hash of size
-// A_SHA_DIGEST_LEN (20)
-//
-
-#define MSV1_0_DERIVECRED_TYPE_SHA1     0
-
-//
-// MsV1_0DeriveCredential submit buffer and response - for submitting a buffer
-// an call to LsaCallAuthenticationPackage().
-//
-
-typedef struct _MSV1_0_DERIVECRED_REQUEST {
-    MSV1_0_PROTOCOL_MESSAGE_TYPE MessageType;
-    LUID LogonId;
-    ULONG DeriveCredType;
-    ULONG DeriveCredInfoLength;
-    UCHAR DeriveCredSubmitBuffer[1];    // in-place array of length DeriveCredInfoLength
-} MSV1_0_DERIVECRED_REQUEST, *PMSV1_0_DERIVECRED_REQUEST;
-
-typedef struct _MSV1_0_DERIVECRED_RESPONSE {
-    MSV1_0_PROTOCOL_MESSAGE_TYPE MessageType;
-    ULONG DeriveCredInfoLength;
-    UCHAR DeriveCredReturnBuffer[1];    // in-place array of length DeriveCredInfoLength
-} MSV1_0_DERIVECRED_RESPONSE, *PMSV1_0_DERIVECRED_RESPONSE;
-
 
 // Revision of the Kerberos Protocol.  MS uses Version 5, Revision 6
 
@@ -1986,12 +2196,12 @@ typedef struct _MSV1_0_DERIVECRED_RESPONSE {
 #define KERB_ETYPE_DES_CBC_MD5      3
 
 
-#define KERB_ETYPE_RC4_MD4          -128
+#define KERB_ETYPE_RC4_MD4          -128    // FFFFFF80
 #define KERB_ETYPE_RC4_PLAIN2       -129
 #define KERB_ETYPE_RC4_LM           -130
 #define KERB_ETYPE_RC4_SHA          -131
 #define KERB_ETYPE_DES_PLAIN        -132
-#define KERB_ETYPE_RC4_HMAC_OLD     -133
+#define KERB_ETYPE_RC4_HMAC_OLD     -133    // FFFFFF7B
 #define KERB_ETYPE_RC4_PLAIN_OLD    -134
 #define KERB_ETYPE_RC4_HMAC_OLD_EXP -135
 #define KERB_ETYPE_RC4_PLAIN_OLD_EXP -136
@@ -2038,6 +2248,7 @@ typedef struct _MSV1_0_DERIVECRED_RESPONSE {
 #define KERB_CHECKSUM_CRC32         1
 #define KERB_CHECKSUM_MD4           2
 #define KERB_CHECKSUM_KRB_DES_MAC   4
+#define KERB_CHECKSUM_KRB_DES_MAC_K 5
 #define KERB_CHECKSUM_MD5           7
 #define KERB_CHECKSUM_MD5_DES       8
 
@@ -2062,12 +2273,13 @@ typedef struct _MSV1_0_DERIVECRED_RESPONSE {
 #define AUTH_REQ_VALIDATE_CLIENT        0x00000080
 #define AUTH_REQ_OK_AS_DELEGATE         0x00000100
 #define AUTH_REQ_PREAUTH_REQUIRED       0x00000200
+#define AUTH_REQ_TRANSITIVE_TRUST       0x00000400
 
 
-#define AUTH_REQ_PER_USER_FLAGS         (AUTH_REQ_ALLOW_FORWARDABLE \
-                                         AUTH_REQ_ALLOW_PROXIABLE \
-                                         AUTH_REQ_ALLOW_POSTDATE \
-                                         AUTH_REQ_ALLOW_RENEWABLE \
+#define AUTH_REQ_PER_USER_FLAGS         (AUTH_REQ_ALLOW_FORWARDABLE | \
+                                         AUTH_REQ_ALLOW_PROXIABLE | \
+                                         AUTH_REQ_ALLOW_POSTDATE | \
+                                         AUTH_REQ_ALLOW_RENEWABLE | \
                                          AUTH_REQ_ALLOW_VALIDATE )
 //
 // Ticket Flags:
@@ -2087,8 +2299,36 @@ typedef struct _MSV1_0_DERIVECRED_RESPONSE {
 #define KERB_TICKET_FLAGS_hw_authent        0x00100000
 #define KERB_TICKET_FLAGS_ok_as_delegate    0x00040000
 #define KERB_TICKET_FLAGS_name_canonicalize 0x00010000
+#define KERB_TICKET_FLAGS_cname_in_pa_data  0x00040000
 #define KERB_TICKET_FLAGS_reserved1         0x00000001
 
+
+
+
+//
+// Name types
+//
+
+#define KRB_NT_UNKNOWN   0                // Name type not known
+#define KRB_NT_PRINCIPAL 1                // Just the name of the principal as in DCE, or for users
+#define KRB_NT_PRINCIPAL_AND_ID -131      // Name of the principal and its SID.
+#define KRB_NT_SRV_INST  2                // Service and other unique instance (krbtgt)
+#define KRB_NT_SRV_INST_AND_ID -132       // SPN and SID
+#define KRB_NT_SRV_HST   3                // Service with host name as instance (telnet, rcommands)
+#define KRB_NT_SRV_XHST  4                // Service with host as remaining components
+#define KRB_NT_UID       5                // Unique ID
+#define KRB_NT_ENTERPRISE_PRINCIPAL 10    // UPN or SPN
+#define KRB_NT_ENT_PRINCIPAL_AND_ID -130  // UPN and SID
+
+//
+// MS extensions, negative according to the RFC
+//
+
+#define KRB_NT_MS_PRINCIPAL         -128        // NT4 style name
+
+#define KRB_NT_MS_PRINCIPAL_AND_ID  -129        // nt4 style name with sid
+
+#define KERB_IS_MS_PRINCIPAL(_x_) (((_x_) <= KRB_NT_MS_PRINCIPAL) || ((_x_) >= KRB_NT_ENTERPRISE_PRINCIPAL))
 
 
 #ifndef MICROSOFT_KERBEROS_NAME_A
@@ -2129,7 +2369,8 @@ typedef enum _KERB_LOGON_SUBMIT_TYPE {
     KerbSmartCardUnlockLogon = 8,
     KerbProxyLogon = 9,
     KerbTicketLogon = 10,
-    KerbTicketUnlockLogon = 11
+    KerbTicketUnlockLogon = 11,
+    KerbS4ULogon = 12
 } KERB_LOGON_SUBMIT_TYPE, *PKERB_LOGON_SUBMIT_TYPE;
 
 
@@ -2181,6 +2422,24 @@ typedef struct _KERB_TICKET_UNLOCK_LOGON {
     KERB_TICKET_LOGON Logon;
     LUID LogonId;
 } KERB_TICKET_UNLOCK_LOGON, *PKERB_TICKET_UNLOCK_LOGON;
+
+//
+//  Used for S4U Client requests
+//
+//
+typedef struct _KERB_S4U_LOGON {
+    KERB_LOGON_SUBMIT_TYPE MessageType;
+    ULONG Flags;
+    UNICODE_STRING ClientUpn;   // REQUIRED: UPN for client
+    UNICODE_STRING ClientRealm; // Optional: Client Realm, if known
+} KERB_S4U_LOGON, *PKERB_S4U_LOGON;
+
+//
+// TBD:  Flags for S4UToSelf() logon
+//
+
+
+
 
 //
 // Use the same profile structure as MSV1_0
@@ -2255,7 +2514,12 @@ typedef enum _KERB_PROTOCOL_MESSAGE_TYPE {
     KerbRetrieveEncodedTicketMessage,
     KerbDecryptDataMessage,
     KerbAddBindingCacheEntryMessage,
-    KerbSetPasswordMessage
+    KerbSetPasswordMessage,
+    KerbSetPasswordExMessage,
+    KerbVerifyCredentialsMessage,
+    KerbQueryTicketCacheExMessage,
+    KerbPurgeTicketCacheExMessage,
+//  KerbRetrieveEncodedTicketExMessage,
 } KERB_PROTOCOL_MESSAGE_TYPE, *PKERB_PROTOCOL_MESSAGE_TYPE;
 
 
@@ -2280,11 +2544,32 @@ typedef struct _KERB_TICKET_CACHE_INFO {
 } KERB_TICKET_CACHE_INFO, *PKERB_TICKET_CACHE_INFO;
 
 
+typedef struct _KERB_TICKET_CACHE_INFO_EX {
+    UNICODE_STRING ClientName;
+    UNICODE_STRING ClientRealm;
+    UNICODE_STRING ServerName;
+    UNICODE_STRING ServerRealm;
+    LARGE_INTEGER StartTime;
+    LARGE_INTEGER EndTime;
+    LARGE_INTEGER RenewTime;
+    LONG EncryptionType;
+    ULONG TicketFlags;
+} KERB_TICKET_CACHE_INFO_EX, *PKERB_TICKET_CACHE_INFO_EX;
+
+
 typedef struct _KERB_QUERY_TKT_CACHE_RESPONSE {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
     ULONG CountOfTickets;
     KERB_TICKET_CACHE_INFO Tickets[ANYSIZE_ARRAY];
 } KERB_QUERY_TKT_CACHE_RESPONSE, *PKERB_QUERY_TKT_CACHE_RESPONSE;
+
+
+typedef struct _KERB_QUERY_TKT_CACHE_EX_RESPONSE {
+    KERB_PROTOCOL_MESSAGE_TYPE MessageType;
+    ULONG CountOfTickets;
+    KERB_TICKET_CACHE_INFO_EX Tickets[ANYSIZE_ARRAY];
+} KERB_QUERY_TKT_CACHE_EX_RESPONSE, *PKERB_QUERY_TKT_CACHE_EX_RESPONSE;
+
 
 //
 // Types for retrieving encoded ticket from the cache
@@ -2300,19 +2585,38 @@ typedef struct _SecHandle
 #define __SECHANDLE_DEFINED__
 #endif // __SECHANDLE_DEFINED__
 
-typedef struct _KERB_RETRIEVE_TKT_REQUEST {
-    KERB_PROTOCOL_MESSAGE_TYPE MessageType;
-    LUID LogonId;
-    UNICODE_STRING TargetName;
-    ULONG TicketFlags;
-    ULONG CacheOptions;
-    LONG EncryptionType;
-    SecHandle CredentialsHandle;
-} KERB_RETRIEVE_TKT_REQUEST, *PKERB_RETRIEVE_TKT_REQUEST;
+// Ticket Flags
+#define KERB_USE_DEFAULT_TICKET_FLAGS       0x0
 
+// CacheOptions
+#define KERB_RETRIEVE_TICKET_DEFAULT        0x0
 #define KERB_RETRIEVE_TICKET_DONT_USE_CACHE 0x1
 #define KERB_RETRIEVE_TICKET_USE_CACHE_ONLY 0x2
 #define KERB_RETRIEVE_TICKET_USE_CREDHANDLE 0x4
+#define KERB_RETRIEVE_TICKET_AS_KERB_CRED   0x8
+#define KERB_RETRIEVE_TICKET_WITH_SEC_CRED  0x10
+
+// Encryption Type options
+#define KERB_ETYPE_DEFAULT 0x0 // don't specify etype in tkt req.
+
+typedef struct _KERB_AUTH_DATA {
+    ULONG Type;
+    ULONG Length;
+    PUCHAR Data;
+} KERB_AUTH_DATA, *PKERB_AUTH_DATA;
+
+
+typedef struct _KERB_NET_ADDRESS {
+    ULONG Family;
+    ULONG Length;
+    PCHAR Address;
+} KERB_NET_ADDRESS, *PKERB_NET_ADDRESS;
+
+
+typedef struct _KERB_NET_ADDRESSES {
+    ULONG Number;
+    KERB_NET_ADDRESS Addresses[ANYSIZE_ARRAY];
+} KERB_NET_ADDRESSES, *PKERB_NET_ADDRESSES;
 
 //
 // Types for the information about a ticket
@@ -2323,7 +2627,6 @@ typedef struct _KERB_EXTERNAL_NAME {
     USHORT NameCount;
     UNICODE_STRING Names[ANYSIZE_ARRAY];
 } KERB_EXTERNAL_NAME, *PKERB_EXTERNAL_NAME;
-
 
 
 typedef struct _KERB_EXTERNAL_TICKET {
@@ -2345,9 +2648,69 @@ typedef struct _KERB_EXTERNAL_TICKET {
     PUCHAR EncodedTicket;
 } KERB_EXTERNAL_TICKET, *PKERB_EXTERNAL_TICKET;
 
+#if 0
+
+typedef struct _KERB_EXTERNAL_TICKET_EX {
+    PKERB_EXTERNAL_NAME ClientName;
+    PKERB_EXTERNAL_NAME ServiceName;
+    PKERB_EXTERNAL_NAME TargetName;
+    UNICODE_STRING ClientRealm;
+    UNICODE_STRING ServerRealm;
+    UNICODE_STRING TargetDomainName;
+    UNICODE_STRING AltTargetDomainName;
+    KERB_CRYPTO_KEY SessionKey;
+    ULONG TicketFlags;
+    ULONG Flags;
+    LARGE_INTEGER KeyExpirationTime;
+    LARGE_INTEGER StartTime;
+    LARGE_INTEGER EndTime;
+    LARGE_INTEGER RenewUntil;
+    LARGE_INTEGER TimeSkew;
+    PKERB_NET_ADDRESSES TicketAddresses;
+    PKERB_AUTH_DATA AuthorizationData;
+    _KERB_EXTERNAL_TICKET_EX * SecondTicket;
+    ULONG EncodedTicketSize;
+    PUCHAR EncodedTicket;
+} KERB_EXTERNAL_TICKET_EX, *PKERB_EXTERNAL_TICKET_EX;
+
+#endif // 0
+
+typedef struct _KERB_RETRIEVE_TKT_REQUEST {
+    KERB_PROTOCOL_MESSAGE_TYPE MessageType;
+    LUID LogonId;
+    UNICODE_STRING TargetName;
+    ULONG TicketFlags;
+    ULONG CacheOptions;
+    LONG EncryptionType;
+    SecHandle CredentialsHandle;
+} KERB_RETRIEVE_TKT_REQUEST, *PKERB_RETRIEVE_TKT_REQUEST;
+
+#if 0
+
+typedef struct _KERB_RETRIEVE_TKT_EX_REQUEST {
+    KERB_PROTOCOL_MESSAGE_TYPE MessageType;
+    LUID LogonId;
+    KERB_TICKET_CACHE_INFO_EX TicketTemplate;
+    ULONG CacheOptions;
+    SecHandle CredentialsHandle;
+    PKERB_EXTERNAL_TICKET_EX SecondTicket;
+    PKERB_AUTH_DATA UserAuthData;
+    PKERB_NET_ADDRESS Addresses;
+} KERB_RETRIEVE_TKT_EX_REQUEST, *PKERB_RETRIEVE_TKT_EX_REQUEST;
+
+#endif // 0
+
 typedef struct _KERB_RETRIEVE_TKT_RESPONSE {
     KERB_EXTERNAL_TICKET Ticket;
 } KERB_RETRIEVE_TKT_RESPONSE, *PKERB_RETRIEVE_TKT_RESPONSE;
+
+#if 0
+
+typedef struct _KERB_RETRIEVE_TKT_EX_RESPONSE {
+    KERB_EXTERNAL_TICKET_EX Ticket;
+} KERB_RETRIEVE_TKT_EX_RESPONSE, *PKERB_RETRIEVE_TKT_EX_RESPONSE;
+
+#endif // 0
 
 //
 // Used to purge entries from the ticket cache
@@ -2359,6 +2722,19 @@ typedef struct _KERB_PURGE_TKT_CACHE_REQUEST {
     UNICODE_STRING ServerName;
     UNICODE_STRING RealmName;
 } KERB_PURGE_TKT_CACHE_REQUEST, *PKERB_PURGE_TKT_CACHE_REQUEST;
+
+//
+// Flags for purge requests
+//
+
+#define KERB_PURGE_ALL_TICKETS 1
+
+typedef struct _KERB_PURGE_TKT_CACHE_EX_REQUEST {
+    KERB_PROTOCOL_MESSAGE_TYPE MessageType;
+    LUID LogonId;
+    ULONG Flags;
+    KERB_TICKET_CACHE_INFO_EX TicketTemplate;
+} KERB_PURGE_TKT_CACHE_EX_REQUEST, *PKERB_PURGE_TKT_CACHE_EX_REQUEST;
 
 
 
@@ -2379,6 +2755,16 @@ typedef struct _KERB_CHANGEPASSWORD_REQUEST {
     BOOLEAN        Impersonating;
 } KERB_CHANGEPASSWORD_REQUEST, *PKERB_CHANGEPASSWORD_REQUEST;
 
+
+
+
+
+
+
+
+
+
+
 //
 // KerbSetPassword
 //
@@ -2386,9 +2772,7 @@ typedef struct _KERB_CHANGEPASSWORD_REQUEST {
 //  the password cache and logon credentials if applicable.
 //
 //
-
-
-
+   
 typedef struct _KERB_SETPASSWORD_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
     LUID LogonId;
@@ -2399,6 +2783,24 @@ typedef struct _KERB_SETPASSWORD_REQUEST {
     UNICODE_STRING Password;
 } KERB_SETPASSWORD_REQUEST, *PKERB_SETPASSWORD_REQUEST;
 
+
+typedef struct _KERB_SETPASSWORD_EX_REQUEST {
+    KERB_PROTOCOL_MESSAGE_TYPE MessageType;
+    LUID LogonId;
+    SecHandle CredentialsHandle;
+    ULONG Flags;
+    UNICODE_STRING AccountRealm;
+    UNICODE_STRING AccountName;
+    UNICODE_STRING Password;
+    UNICODE_STRING ClientRealm;
+    UNICODE_STRING ClientName;
+    BOOLEAN        Impersonating;
+    UNICODE_STRING KdcAddress;
+    ULONG          KdcAddressType;
+ } KERB_SETPASSWORD_EX_REQUEST, *PKERB_SETPASSWORD_EX_REQUEST;
+
+                                                                   
+#define DS_UNKNOWN_ADDRESS_TYPE         0 // anything *but* IP
 #define KERB_SETPASS_USE_LOGONID        1
 #define KERB_SETPASS_USE_CREDHANDLE     2
 
@@ -2437,14 +2839,15 @@ typedef struct _KERB_ADD_BINDING_CACHE_ENTRY_REQUEST {
     KERB_PROTOCOL_MESSAGE_TYPE MessageType;
     UNICODE_STRING RealmName;
     UNICODE_STRING KdcAddress;
-    ULONG AddressType;                  // from dsgetdc.h
+    ULONG AddressType;                  //dsgetdc.h DS_NETBIOS_ADDRESS||DS_INET_ADDRESS
 } KERB_ADD_BINDING_CACHE_ENTRY_REQUEST, *PKERB_ADD_BINDING_CACHE_ENTRY_REQUEST;
+
+                       
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif /* _NTSECAPI_ */
 

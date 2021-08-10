@@ -1,0 +1,68 @@
+<!--#include file="..\include\StdDemoHeader.html"-->
+<!--#include file="MyStyles.html"-->
+<form name="AdapterForm1" method="post">
+
+  <input type="hidden" name=__act>
+  <table>
+    <tr><td colspan="2"><% { 
+     var e = new Enumerator(DisplayOptions.Errors)
+     for (; !e.atEnd(); e.moveNext())
+     {
+        Response.Write('<li>' + e.item().Message);
+    }
+   } %>
+    </td></tr>
+    <tr><td colspan="2">
+        <table>
+                <tr><td align="right"><SPAN align="right">Maximum Pictures Per Page:</SPAN></td>
+                    <td>
+                     <input
+                        type="text"
+                        name="<%=DisplayOptions.MaxPicsPerPage.InputName%>"
+                        value="<%= DisplayOptions.MaxPicsPerPage.EditText %>"
+                     ></td>
+                </tr>
+                <tr><td align="right"><SPAN align="right">Preferred Thumb Width:</SPAN></td>
+                <td>
+                  <select
+                    name="<%=DisplayOptions.PreferredThumbWidth.InputName%>">
+                     <%
+                      var res = Modules.PhotoData.Resolutions;
+                      var e = new Enumerator(res.Records)
+                      for (; !e.atEnd(); e.moveNext())
+                      {
+                        Response.Write('<option value="' +
+                          res.Value + '"');
+                        if (DisplayOptions.PreferredThumbWidth.Value == res.Value)
+                          Response.Write(' selected');
+                        Response.Write('>' + res.Value + '</option>');
+                      }
+                     %>
+                  </select>
+                </td>
+                </tr>
+                <tr><td align="right"><SPAN align="right">Maximum Pictures Per Row:</SPAN></td>
+                <td>
+                  <input
+                    type="text"
+                    name="<%=DisplayOptions.MaxPicsPerRow.InputName%>"
+                    value="<%= DisplayOptions.MaxPicsPerRow.EditText %>" >
+                </td>
+      </tr>
+        </table></td>
+</tr>
+    <tr><td colspan="2">
+        <table>
+                <tr><td colspan="2" valign="top">
+<% if (DisplayOptions.SubmitOptions.Visible) { %>
+  <input type="submit"
+    value="Update Options"
+    class=submitButton
+    onclick="AdapterForm1.__act.value='<%=DisplayOptions.SubmitOptions.AsFieldValue%>'">
+<% } %>
+</tr>
+        </table></td></tr>
+  </table>
+
+
+<!--#include file="..\include\StdDemoFooter.html"-->

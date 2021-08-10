@@ -1,5 +1,5 @@
 LIBRARY SVCSRVL
 EXPORTS
 
-    _ServerEnumDialogA                       = 'SVCSRVL.DLL'.ServerEnumDialogA
-    _ServerEnumDialogW                       = 'SVCSRVL.DLL'.ServerEnumDialogW
+    _ServerEnumDialogA                       = ServerEnumDialogA
+    _ServerEnumDialogW                       = ServerEnumDialogW

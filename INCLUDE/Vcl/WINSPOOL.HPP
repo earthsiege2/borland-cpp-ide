@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'WinSpool.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'WinSpool.pas' rev: 6.00
 
 #ifndef WinSpoolHPP
 #define WinSpoolHPP
@@ -296,12 +296,15 @@ typedef _PRINTER_NOTIFY_OPTIONS  TPrinterNotifyOptions;
 
 typedef _PRINTER_NOTIFY_INFO_DATA *PPrinterNotifyInfoData;
 
+#pragma pack(push, 4)
 struct WinSpool__2
 {
 	unsigned cbBuf;
 	void *pBuf;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct WinSpool__1
 {
 	
@@ -320,6 +323,7 @@ struct WinSpool__1
 		
 	};
 } ;
+#pragma pack(pop)
 
 typedef _PRINTER_NOTIFY_INFO_DATA  TPrinterNotifyInfoData;
 
@@ -343,9 +347,7 @@ typedef _PROVIDOR_INFO_1A  TProvidorInfo1;
 #define winspl "winspool.drv"
 
 }	/* namespace Winspool */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Winspool;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

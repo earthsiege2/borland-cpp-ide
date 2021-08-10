@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBQuery.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBQuery.pas' rev: 6.00
 
 #ifndef IBQueryHPP
 #define IBQueryHPP
@@ -12,15 +12,11 @@
 #pragma option push -Vx
 #include <IBSQL.hpp>	// Pascal unit
 #include <IBCustomDataSet.hpp>	// Pascal unit
+#include <IBDatabase.hpp>	// Pascal unit
 #include <IB.hpp>	// Pascal unit
 #include <IBHeader.hpp>	// Pascal unit
-#include <StdVCL.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
-#include <Controls.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
-#include <Graphics.hpp>	// Pascal unit
-#include <SysUtils.hpp>	// Pascal unit
-#include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -75,37 +71,46 @@ public:
 	void __fastcall BatchInput(Ibsql::TIBBatchInput* InputObject);
 	void __fastcall BatchOutput(Ibsql::TIBBatchOutput* OutputObject);
 	void __fastcall ExecSQL(void);
-	virtual void __fastcall GetDetailLinkFields(Classes::TList* MasterFields, Classes::TList* DetailFields
-		);
+	virtual void __fastcall GetDetailLinkFields(Classes::TList* MasterFields, Classes::TList* DetailFields);
 	Db::TParam* __fastcall ParamByName(const AnsiString Value);
 	void __fastcall Prepare(void);
 	void __fastcall UnPrepare(void);
+	__property LiveMode ;
 	__property bool Prepared = {read=FPrepared, write=SetPrepare, nodefault};
 	__property Word ParamCount = {read=GetParamsCount, nodefault};
 	__property Ibexternals::PVoid StmtHandle = {read=GetStmtHandle};
+	__property StatementType ;
 	__property AnsiString Text = {read=FText};
 	__property int RowsAffected = {read=GetRowsAffected, nodefault};
-	__property bool GenerateParamNames = {read=FGenerateParamNames, write=FGenerateParamNames, nodefault
-		};
+	__property bool GenerateParamNames = {read=FGenerateParamNames, write=FGenerateParamNames, nodefault};
 	
 __published:
+	__property Active  = {default=0};
+	__property BufferChunks ;
 	__property CachedUpdates ;
 	__property DataSource  = {read=GetDataSource, write=SetDataSource};
 	__property Constraints  = {stored=ConstraintsStored};
-	__property ParamCheck ;
+	__property ParamCheck  = {default=1};
 	__property Classes::TStrings* SQL = {read=FSQL, write=SetQuery};
 	__property Db::TParams* Params = {read=FParams, write=SetParamsList, stored=false};
-	__property UniDirectional ;
+	__property UniDirectional  = {default=0};
 	__property UpdateObject ;
+	__property Filtered  = {default=0};
+	__property GeneratorField ;
+	__property BeforeDatabaseDisconnect ;
+	__property AfterDatabaseDisconnect ;
+	__property DatabaseFree ;
+	__property BeforeTransactionEnd ;
+	__property AfterTransactionEnd ;
+	__property TransactionFree ;
+	__property OnFilterRecord ;
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Ibquery */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ibquery;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

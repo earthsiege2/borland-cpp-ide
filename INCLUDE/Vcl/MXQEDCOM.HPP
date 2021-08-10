@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxqedcom.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MXQEDCOM.pas' rev: 6.00
 
-#ifndef mxqedcomHPP
-#define mxqedcomHPP
+#ifndef MXQEDCOMHPP
+#define MXQEDCOMHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -13,7 +13,7 @@
 #include <Windows.hpp>	// Pascal unit
 #include <ComObj.hpp>	// Pascal unit
 #include <ActiveX.hpp>	// Pascal unit
-#include <Bde.hpp>	// Pascal unit
+#include <BDE.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -39,13 +39,7 @@ enum JoinType { joinNone, joinInner, joinLeft, joinRight, joinFull };
 #pragma option pop
 
 #pragma option push -b
-enum QNodeType { qnodeNA, qnodeAdd, qnodeAvg, qnodeCount, qnodeMax, qnodeMin, qnodeTotal, qnodeAlias, 
-	qnodeAnd, qnodeConstant, qnodeDivide, qnodeEqual, qnodeField, qnodeGreaterEq, qnodeGreater, qnodeLessEq, 
-	qnodeLike, qnodeLess, qnodeMultiply, qnodeNotEqual, qnodeNot, qnodeOr, qnodeSubtract, qnodeColumn, 
-	qnodeCast, qnodeAssign, qnodeIsNull, qnodeExists, qnodeVariable, qnodeSelect, qnodeNegate, qnodeUdf, 
-	qnodeIN, qnodeANY, qnodeALL, qnodeTrim, qnodeLower, qnodeUpper, qnodeSubstring, qnodeList, qnodeExtract, 
-	qnodeCorrVar, qnodeTrue, qnodeNotAnd, qnodeNotOr, qnodeUnknown, qnodeConcatenate, qnodeGetDateTime 
-	};
+enum QNodeType { qnodeNA, qnodeAdd, qnodeAvg, qnodeCount, qnodeMax, qnodeMin, qnodeTotal, qnodeAlias, qnodeAnd, qnodeConstant, qnodeDivide, qnodeEqual, qnodeField, qnodeGreaterEq, qnodeGreater, qnodeLessEq, qnodeLike, qnodeLess, qnodeMultiply, qnodeNotEqual, qnodeNot, qnodeOr, qnodeSubtract, qnodeColumn, qnodeCast, qnodeAssign, qnodeIsNull, qnodeExists, qnodeVariable, qnodeSelect, qnodeNegate, qnodeUdf, qnodeIN, qnodeANY, qnodeALL, qnodeTrim, qnodeLower, qnodeUpper, qnodeSubstring, qnodeList, qnodeExtract, qnodeCorrVar, qnodeTrue, qnodeNotAnd, qnodeNotOr, qnodeUnknown, qnodeConcatenate, qnodeGetDateTime };
 #pragma option pop
 
 class DELPHICLASS IExpr;
@@ -84,6 +78,7 @@ enum ExprCat { exprCatWhere, exprCatHaving };
 enum dialect_ansi { DIALECT, ANSI, DIALECTANSI };
 #pragma option pop
 
+#pragma pack(push, 4)
 struct DeletedObj
 {
 	Word iNumProjector;
@@ -99,6 +94,7 @@ struct DeletedObj
 	IExpr* *pHaving;
 	IOrderBy* *pOrderBy;
 } ;
+#pragma pack(pop)
 
 typedef DeletedObj *pDeletedObj;
 
@@ -214,13 +210,11 @@ public:
 	virtual Word __stdcall FetchSubExpr(Word number, IExpr* &ppExpr) = 0 ;
 	virtual Word __stdcall AddSubExpr_Text(char * sqlText, IExpr* &pObj, IExpr* pBefThisObj) = 0 ;
 	virtual Word __stdcall AddSubExpr_node(QNodeType qNodeType, IExpr* &pObj, IExpr* pBefThisObj) = 0 ;
-		
 	virtual Word __stdcall AddSubExpr_field(IField* pField, IExpr* &pObj, pIExpr pBefThisObj) = 0 ;
 	virtual Word __stdcall ChangeNodeType(QNodeType nodeType) = 0 ;
 	virtual Word __stdcall DeleteSubExpr(IExpr* pObj) = 0 ;
 	virtual Word __stdcall MoveSubExpr(IExpr* pObj, IExpr* pBefThisObj) = 0 ;
-	virtual Word __stdcall GetParentExpr(IExpr* pRootExpr, IExpr* &ppParentExpr, IExpr* &ppNextSiblingExpr
-		) = 0 ;
+	virtual Word __stdcall GetParentExpr(IExpr* pRootExpr, IExpr* &ppParentExpr, IExpr* &ppNextSiblingExpr) = 0 ;
 	virtual Word __stdcall GetNumCells(Word &nCells) = 0 ;
 	virtual Word __stdcall GetCell(Word index, IExpr* &ppCell, char * &ppText1, char * &ppText2) = 0 ;
 	virtual Word __stdcall FetchField(IField* &ppField) = 0 ;
@@ -265,10 +259,8 @@ public:
 	virtual Word __stdcall GetSQLText(char * &ppSQLText) = 0 ;
 	virtual Word __stdcall FetchJoinExpr(Word number, IExpr* &ppExpr) = 0 ;
 	virtual Word __stdcall GetIndexForJoinExpr(IJoinExpr* pJoinExpr, Word &index) = 0 ;
-	virtual Word __stdcall AddJoinExpr(Word FldNumLeft, Word FldNumRight, QNodeType MathOp, IExpr* &ppObj
-		, IExpr* pBefThisObj) = 0 ;
-	virtual Word __stdcall AddJoinExpr_useFldName(char * FldNameLeft, char * FldNameRight, QNodeType MathOp
-		, IExpr* &ppObj, IExpr* pBefThisObj) = 0 ;
+	virtual Word __stdcall AddJoinExpr(Word FldNumLeft, Word FldNumRight, QNodeType MathOp, IExpr* &ppObj, IExpr* pBefThisObj) = 0 ;
+	virtual Word __stdcall AddJoinExpr_useFldName(char * FldNameLeft, char * FldNameRight, QNodeType MathOp, IExpr* &ppObj, IExpr* pBefThisObj) = 0 ;
 	virtual Word __stdcall DeleteJoinExpr(IExpr* pObj) = 0 ;
 	virtual Word __stdcall ChangeJoinType(JoinType JoinType_input) = 0 ;
 public:
@@ -282,7 +274,7 @@ public:
 };
 
 
-__interface IQStmt  : public IUnknown 
+__interface IQStmt  : public IInterface 
 {
 	
 public:
@@ -297,8 +289,7 @@ public:
 	virtual Word __stdcall GetHasHavingPred(BOOL &Has) = 0 ;
 	virtual Word __stdcall GetIsDistinct(BOOL &IsDistinct) = 0 ;
 	virtual Word __stdcall SetDistinct(BOOL IsDistinct) = 0 ;
-	virtual Word __stdcall GetSQLText(char * &sqlText, unsigned &DialectDrvType, BOOL bInnerJoinUseKeyword
-		, dialect_ansi lang) = 0 ;
+	virtual Word __stdcall GetSQLText(char * &sqlText, unsigned &DialectDrvType, BOOL bInnerJoinUseKeyword, dialect_ansi lang) = 0 ;
 	virtual Word __stdcall FetchInputTable(Word index, ITable* &pTable) = 0 ;
 	virtual Word __stdcall FetchProjector(Word index, IProjector* &pProjector) = 0 ;
 	virtual Word __stdcall FetchGroupBy(Word index, IGroupBy* &pGroupBy) = 0 ;
@@ -311,31 +302,22 @@ public:
 	virtual Word __stdcall GetIndexForProjector(IProjector* pObj, Word &index) = 0 ;
 	virtual Word __stdcall GetIndexForGroupBy(IGroupBy* pObj, Word &index) = 0 ;
 	virtual Word __stdcall GetIndexForOrderBy(IOrderBy* pObj, Word &index) = 0 ;
-	virtual Word __stdcall AddInputTable(char * Name, char * DbName, char * DrvType, char * Alias, ITable* 
-		&pObj, ITable* BefThisObj) = 0 ;
+	virtual Word __stdcall AddInputTable(char * Name, char * DbName, char * DrvType, char * Alias, ITable* &pObj, ITable* BefThisObj) = 0 ;
 	virtual Word __stdcall DeleteInputTable(ITable* Table, pDeletedObj &pDelObj) = 0 ;
-	virtual Word __stdcall AddJoin(ITable* TableLeft, ITable* TableRight, JoinType eJoinType, IJoin* &pObj
-		, IJoin* BefThisObj) = 0 ;
+	virtual Word __stdcall AddJoin(ITable* TableLeft, ITable* TableRight, JoinType eJoinType, IJoin* &pObj, IJoin* BefThisObj) = 0 ;
 	virtual Word __stdcall DeleteJoin(IJoin* Obj) = 0 ;
-	virtual Word __stdcall AddProjector_FldNum(ITable* Table, Word FldSeqNum, IProjector* &pObj, IProjector* 
-		BefThisObj, BOOL bAddGroupBY) = 0 ;
-	virtual Word __stdcall AddProjector_field(IField* Field, IProjector* &pObj, IProjector* BefThisObj, 
-		BOOL bAddGroupBY) = 0 ;
-	virtual Word __stdcall AddProjector_text(char * sqlText, IProjector* &pObj, IProjector* BefThisObj)
-		 = 0 ;
-	virtual Word __stdcall AddProjector_node(QNodeType qNodeType, IProjector* &pObj, IProjector* BefThisObj
-		, BOOL bAddGroupBy) = 0 ;
+	virtual Word __stdcall AddProjector_FldNum(ITable* Table, Word FldSeqNum, IProjector* &pObj, IProjector* BefThisObj, BOOL bAddGroupBY) = 0 ;
+	virtual Word __stdcall AddProjector_field(IField* Field, IProjector* &pObj, IProjector* BefThisObj, BOOL bAddGroupBY) = 0 ;
+	virtual Word __stdcall AddProjector_text(char * sqlText, IProjector* &pObj, IProjector* BefThisObj) = 0 ;
+	virtual Word __stdcall AddProjector_node(QNodeType qNodeType, IProjector* &pObj, IProjector* BefThisObj, BOOL bAddGroupBy) = 0 ;
 	virtual Word __stdcall DeleteProjector(IProjector* pObj, pDeletedObj &pDelObj) = 0 ;
 	virtual Word __stdcall GenerateDefProjName(IProjector* Proj) = 0 ;
 	virtual Word __stdcall IsField(char * sqlText, IField* &pField) = 0 ;
-	virtual Word __stdcall AddGroupBy_FieldNo(ITable* pTable, Word FldIndex, IGroupBy* &pObj, IGroupBy* 
-		pBefThisObj) = 0 ;
-	virtual Word __stdcall AddGroupBy_Field(IField* pField, IGroupBy* &pObj, IGroupBy* pBefThisObj) = 0 
-		;
+	virtual Word __stdcall AddGroupBy_FieldNo(ITable* pTable, Word FldIndex, IGroupBy* &pObj, IGroupBy* pBefThisObj) = 0 ;
+	virtual Word __stdcall AddGroupBy_Field(IField* pField, IGroupBy* &pObj, IGroupBy* pBefThisObj) = 0 ;
 	virtual Word __stdcall DeleteGroupBy(IGroupBy* pObj) = 0 ;
 	virtual Word __stdcall AddGroupBy_automatic(void) = 0 ;
-	virtual Word __stdcall AddOrderBy(IProjector* pProjector, Word iPosition, BOOL bDesc, IOrderBy* &pObj
-		, IOrderBy* pBefThisObj) = 0 ;
+	virtual Word __stdcall AddOrderBy(IProjector* pProjector, Word iPosition, BOOL bDesc, IOrderBy* &pObj, IOrderBy* pBefThisObj) = 0 ;
 	virtual Word __stdcall DeleteOrderBy(IOrderBy* pObj) = 0 ;
 	virtual Word __stdcall SetTableAlias(ITable* pTable, char * newAlias) = 0 ;
 	virtual Word __stdcall SetProjectorName(IProjector* pProj, char * newName) = 0 ;
@@ -355,12 +337,10 @@ extern PACKAGE GUID CLSID_IDSQL32;
 extern PACKAGE GUID IID_IQStmt;
 
 }	/* namespace Mxqedcom */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxqedcom;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxqedcom
+#endif	// MXQEDCOM

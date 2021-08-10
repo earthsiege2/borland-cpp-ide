@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ShlObj.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ShlObj.pas' rev: 6.00
 
 #ifndef ShlObjHPP
 #define ShlObjHPP
@@ -15,17 +15,16 @@
 #include <Messages.hpp>	// Pascal unit
 #include <RegStr.hpp>	// Pascal unit
 #include <ShellAPI.hpp>	// Pascal unit
-#include <Commctrl.hpp>	// Pascal unit
+#include <CommCtrl.hpp>	// Pascal unit
 #include <ActiveX.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
 //-- user supplied -----------------------------------------------------------
-//---------------------------------------------------------------------------
-// if compilation errors occur while attempting to access structs, unions, or enums
-// define NO_WIN32_LEAN_AND_MEAN so that the appropriate windows headers are included.
-//---------------------------------------------------------------------------
+// If problems occur when compiling win32 structs, records, or
+// unions, please define NO_WIN32_LEAN_AND_MEAN to force inclusion
+// of Windows header files. 
 #if defined(NO_WIN32_LEAN_AND_MEAN)
 #include <ole2.h>
 #include <prsht.h>
@@ -33,34 +32,64 @@
 #include <shlguid.h>
 #include <shlobj.h>
 #endif
-DECLARE_DINTERFACE_TYPE(IAdviseSink);
-DECLARE_DINTERFACE_TYPE(IShellBrowser);
-DECLARE_DINTERFACE_TYPE(IShellView);
-DECLARE_DINTERFACE_TYPE(IContextMenu);
-DECLARE_DINTERFACE_TYPE(IShellIcon);
-DECLARE_DINTERFACE_TYPE(IShellFolder);
-DECLARE_DINTERFACE_TYPE(IShellFolder2);
-DECLARE_DINTERFACE_TYPE(IShellDetails);
-DECLARE_DINTERFACE_TYPE(IShellExtInit);
-DECLARE_DINTERFACE_TYPE(IShellPropSheetExt);
-DECLARE_DINTERFACE_TYPE(IPersistFolder);
-DECLARE_DINTERFACE_TYPE(ICommDlgBrowser);
-DECLARE_DINTERFACE_TYPE(IEnumIDList);
-DECLARE_DINTERFACE_TYPE(IFileViewerSite);
-DECLARE_DINTERFACE_TYPE(IContextMenu2);
-DECLARE_DINTERFACE_TYPE(IShellView2);
-DECLARE_DINTERFACE_TYPE(INewShortcutHookA);
-DECLARE_DINTERFACE_TYPE(INewShortcutHookW);
-DECLARE_DINTERFACE_TYPE(IFileViewerA);
-DECLARE_DINTERFACE_TYPE(IFileViewerW);
-DECLARE_DINTERFACE_TYPE(IShellLinkA);
-DECLARE_DINTERFACE_TYPE(IShellLinkW);
-DECLARE_DINTERFACE_TYPE(IExtractIconA);
-DECLARE_DINTERFACE_TYPE(IExtractIconW);
-DECLARE_DINTERFACE_TYPE(IShellExecuteHookA);
-DECLARE_DINTERFACE_TYPE(IShellExecuteHookW);
-DECLARE_DINTERFACE_TYPE(ICopyHookA);
-DECLARE_DINTERFACE_TYPE(ICopyHookW);
+#if !defined(NO_WIN32_LEAN_AND_MEAN)
+interface DECLSPEC_UUID("0000010f-0000-0000-C000-000000000046") IAdviseSink;
+interface DECLSPEC_UUID("000214e2-0000-0000-c000-000000000046") IShellBrowser;
+interface DECLSPEC_UUID("000214e3-0000-0000-c000-000000000046") IShellView;
+interface DECLSPEC_UUID("000214e4-0000-0000-c000-000000000046") IContextMenu;
+interface DECLSPEC_UUID("000214e5-0000-0000-c000-000000000046") IShellIcon;
+interface DECLSPEC_UUID("000214e6-0000-0000-c000-000000000046") IShellFolder;
+interface DECLSPEC_UUID("93F2F68C-1D1B-11d3-A30E-00C04F79ABD1") IShellFolder2;
+interface DECLSPEC_UUID("000214EC-0000-0000-C000-000000000046") IShellDetails;
+interface DECLSPEC_UUID("000214e8-0000-0000-c000-000000000046") IShellExtInit;
+interface DECLSPEC_UUID("000214e9-0000-0000-c000-000000000046") IShellPropSheetExt;
+interface DECLSPEC_UUID("000214ea-0000-0000-c000-000000000046") IPersistFolder;
+interface DECLSPEC_UUID("000214f1-0000-0000-c000-000000000046") ICommDlgBrowser;
+interface DECLSPEC_UUID("000214f2-0000-0000-c000-000000000046") IEnumIDList;
+interface DECLSPEC_UUID("000214f3-0000-0000-c000-000000000046") IFileViewerSite;
+interface DECLSPEC_UUID("000214f4-0000-0000-c000-000000000046") IContextMenu2;
+interface DECLSPEC_UUID("88e39e80-3578-11cf-ae69-08002b2e1262") IShellView2;
+interface DECLSPEC_UUID("000214e1-0000-0000-c000-000000000046") INewShortcutHookA;
+interface DECLSPEC_UUID("000214f7-0000-0000-c000-000000000046") INewShortcutHookW;
+interface DECLSPEC_UUID("000214f0-0000-0000-c000-000000000046") IFileViewerA;
+interface DECLSPEC_UUID("000214f8-0000-0000-c000-000000000046") IFileViewerW;
+interface DECLSPEC_UUID("000214ee-0000-0000-c000-000000000046") IShellLinkA;
+interface DECLSPEC_UUID("000214f9-0000-0000-c000-000000000046") IShellLinkW;
+interface DECLSPEC_UUID("000214eb-0000-0000-c000-000000000046") IExtractIconA;
+interface DECLSPEC_UUID("000214fa-0000-0000-c000-000000000046") IExtractIconW;
+interface DECLSPEC_UUID("000214f5-0000-0000-c000-000000000046") IShellExecuteHookA;
+interface DECLSPEC_UUID("000214fb-0000-0000-c000-000000000046") IShellExecuteHookW;
+interface DECLSPEC_UUID("000214EF-0000-0000-c000-000000000046") ICopyHookA;
+interface DECLSPEC_UUID("000214FC-0000-0000-c000-000000000046") ICopyHookW;
+#endif
+typedef System::DelphiInterface<IAdviseSink> _di_IAdviseSink;
+typedef System::DelphiInterface<IShellBrowser> _di_IShellBrowser;
+typedef System::DelphiInterface<IShellView> _di_IShellView;
+typedef System::DelphiInterface<IContextMenu> _di_IContextMenu;
+typedef System::DelphiInterface<IShellIcon> _di_IShellIcon;
+typedef System::DelphiInterface<IShellFolder> _di_IShellFolder;
+typedef System::DelphiInterface<IShellFolder2> _di_IShellFolder2;
+typedef System::DelphiInterface<IShellDetails> _di_IShellDetails;
+typedef System::DelphiInterface<IShellExtInit> _di_IShellExtInit;
+typedef System::DelphiInterface<IShellPropSheetExt> _di_IShellPropSheetExt;
+typedef System::DelphiInterface<IPersistFolder> _di_IPersistFolder;
+typedef System::DelphiInterface<ICommDlgBrowser> _di_ICommDlgBrowser;
+typedef System::DelphiInterface<IEnumIDList> _di_IEnumIDList;
+typedef System::DelphiInterface<IFileViewerSite> _di_IFileViewerSite;
+typedef System::DelphiInterface<IContextMenu2> _di_IContextMenu2;
+typedef System::DelphiInterface<IShellView2> _di_IShellView2;
+typedef System::DelphiInterface<INewShortcutHookA> _di_INewShortcutHookA;
+typedef System::DelphiInterface<INewShortcutHookW> _di_INewShortcutHookW;
+typedef System::DelphiInterface<IFileViewerA> _di_IFileViewerA;
+typedef System::DelphiInterface<IFileViewerW> _di_IFileViewerW;
+typedef System::DelphiInterface<IShellLinkA> _di_IShellLinkA;
+typedef System::DelphiInterface<IShellLinkW> _di_IShellLinkW;
+typedef System::DelphiInterface<IExtractIconA> _di_IExtractIconA;
+typedef System::DelphiInterface<IExtractIconW> _di_IExtractIconW;
+typedef System::DelphiInterface<IShellExecuteHookA> _di_IShellExecuteHookA;
+typedef System::DelphiInterface<IShellExecuteHookW> _di_IShellExecuteHookW;
+typedef System::DelphiInterface<ICopyHookA> _di_ICopyHookA;
+typedef System::DelphiInterface<ICopyHookW> _di_ICopyHookW;
 #ifdef UNICODE
 typedef _di_INewShortcutHookW _di_INewShortcutHook;
 typedef _di_IFileViewerW _di_IFileViewer;
@@ -138,6 +167,20 @@ typedef _SV2CVW2_PARAMS  TSV2CreateParams;
 typedef _STRRET *PSTRRet;
 
 typedef _STRRET  TStrRet;
+
+typedef _SHELLDETAILS *PShellDetails;
+
+typedef _SHELLDETAILS  TShellDetails;
+
+__interface IShellDetails;
+typedef System::DelphiInterface<IShellDetails> _di_IShellDetails;
+__interface INTERFACE_UUID("{000214EC-0000-0000-C000-000000000046}") IShellDetails  : public IInterface 
+{
+	
+public:
+	virtual HRESULT __stdcall GetDetailsOf(PItemIDList pidl, unsigned iColumn, _SHELLDETAILS &pDetails) = 0 ;
+	virtual HRESULT __stdcall ColumnClick(unsigned iColumn) = 0 ;
+};
 
 typedef int __stdcall (*TFNBFFCallBack)(HWND Wnd, unsigned uMsg, int lParam, int lpData);
 
@@ -243,12 +286,22 @@ extern PACKAGE GUID CLSID_ActiveDesktop;
 #define SID_IActiveDesktop "{F490EB00-1240-11D1-9888-006097DEACF9}"
 #define SID_IShellChangeNotify "{00000000-0000-0000-0000-000000000000}"
 #define SID_IQueryInfo "{00021500-0000-0000-C000-000000000046}"
+#define SID_IShellDetails "{000214EC-0000-0000-C000-000000000046}"
+#define SID_IShellFolder2 "{B82C5AA8-A41B-11D2-BE32-00C04FB93661}"
+#define SID_IEnumExtraSearch "{0E700BE1-9DB6-11D1-A1CE-00C04FD75D13}"
+static const Shortint SHCOLSTATE_TYPE_STR = 0x1;
+static const Shortint SHCOLSTATE_TYPE_INT = 0x2;
+static const Shortint SHCOLSTATE_TYPE_DATE = 0x3;
+static const Shortint SHCOLSTATE_TYPEMASK = 0xf;
+static const Shortint SHCOLSTATE_ONBYDEFAULT = 0x10;
+static const Shortint SHCOLSTATE_SLOW = 0x20;
+static const Shortint SHCOLSTATE_EXTENDED = 0x40;
+static const Byte SHCOLSTATE_SECONDARYUI = 0x80;
+static const Word SHCOLSTATE_HIDDEN = 0x100;
 static const int SHCNE_EXTENDED_EVENT_PRE_IE4 = 0x80000;
 
 }	/* namespace Shlobj */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Shlobj;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

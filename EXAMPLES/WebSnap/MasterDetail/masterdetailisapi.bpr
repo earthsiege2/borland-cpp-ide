@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="MasterDetailIsapi.dll"/>
+    <OBJFILES value="ISAPIApp.obj MainPg.obj MasterDetailIsapi.obj OrderPg.obj 
+      MasterDataMod.obj OrderGridPg.obj"/>
+    <RESFILES value="MasterDetailIsapi.res"/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES)"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="vcl.lib rtl.lib websnap.lib webdsnap.lib inetdb.lib dbrtl.lib inet.lib 
+      xmlrtl.lib dsnapcon.lib dsnap.lib bdertl.lib"/>
+    <PACKAGES value="vcl.bpi rtl.bpi dbrtl.bpi adortl.bpi vcldb.bpi vclx.bpi bdertl.bpi 
+      vcldbx.bpi ibxpress.bpi dsnap.bpi cds.bpi bdecds.bpi qrpt.bpi teeui.bpi 
+      teedb.bpi tee.bpi dss.bpi teeqr.bpi visualclx.bpi visualdbclx.bpi 
+      dsnapcrba.bpi dsnapcon.bpi vclie.bpi xmlrtl.bpi inet.bpi inetdbbde.bpi 
+      inetdbxpress.bpi inetdb.bpi nmfast.bpi webdsnap.bpi bcbie.bpi 
+      websnap.bpi dbexpress.bpi dbxcds.bpi indy.bpi"/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value="_DEBUG"/>
+    <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
+    <MAINSOURCE value="MasterDetailIsapi.cpp"/>
+    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par"/>
+  </MACROS>
+  <OPTIONS>
+    <CFLAG1 value="-WD -Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- 
+      -c -tWM"/>
+    <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpd -x -Gn -Gi -v"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0d32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
+  </LINKER>
+  <FILELIST>
+      <FILE FILENAME="MasterDetailIsapi.res" FORMNAME="" UNITNAME="MasterDetailIsapi.res" CONTAINERID="ResTool" DESIGNCLASS=""/>
+      <FILE FILENAME="MasterDetailIsapi.cpp" FORMNAME="" UNITNAME="MasterDetailIsapi" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="ISAPIApp.obj" FORMNAME="" UNITNAME="ISAPIApp" CONTAINERID="OBJTool" DESIGNCLASS=""/>
+      <FILE FILENAME="MainPg.cpp" FORMNAME="MainPage" UNITNAME="MainPg" CONTAINERID="CCompiler" DESIGNCLASS="TWebAppPageModule"/>
+      <FILE FILENAME="OrderPg.cpp" FORMNAME="OrderPage" UNITNAME="OrderPg" CONTAINERID="CCompiler" DESIGNCLASS="TWebPageModule"/>
+      <FILE FILENAME="MasterDataMod.cpp" FORMNAME="MasterDataModule" UNITNAME="MasterDataMod" CONTAINERID="CCompiler" DESIGNCLASS="TWebDataModule"/>
+      <FILE FILENAME="OrderGridPg.cpp" FORMNAME="OrderGridPage" UNITNAME="OrderGridPg" CONTAINERID="CCompiler" DESIGNCLASS="TWebPageModule"/>
+  </FILELIST>
+
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1033
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteLauncher=
+RemoteCWD=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+LinkCGLIB=0
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
+  </IDEOPTIONS>
+</PROJECT>

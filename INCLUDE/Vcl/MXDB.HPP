@@ -1,25 +1,25 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxDB.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MXDB.pas' rev: 6.00
 
-#ifndef mxDBHPP
-#define mxDBHPP
+#ifndef MXDBHPP
+#define MXDBHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <mxqedcom.hpp>	// Pascal unit
-#include <mxqparse.hpp>	// Pascal unit
-#include <mxtables.hpp>	// Pascal unit
-#include <mxcommon.hpp>	// Pascal unit
-#include <mxConsts.hpp>	// Pascal unit
-#include <mxstore.hpp>	// Pascal unit
-#include <mxarrays.hpp>	// Pascal unit
+#include <MXQEDCOM.hpp>	// Pascal unit
+#include <MXQPARSE.hpp>	// Pascal unit
+#include <MXTABLES.hpp>	// Pascal unit
+#include <MXCOMMON.hpp>	// Pascal unit
+#include <Mxconsts.hpp>	// Pascal unit
+#include <Mxstore.hpp>	// Pascal unit
+#include <Mxarrays.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
-#include <Bde.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
+#include <BDE.hpp>	// Pascal unit
 #include <Menus.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
@@ -29,6 +29,7 @@
 #include <SysUtils.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -44,38 +45,28 @@ class PASCALIMPLEMENTATION EArrayError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EArrayError(const AnsiString Msg) : Sysutils::Exception(Msg
-		) { }
+	/* Exception.Create */ inline __fastcall EArrayError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EArrayError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EArrayError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EArrayError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EArrayError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EArrayError(int Ident, const System::TVarRec * Args, 
-		const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EArrayError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EArrayError(const AnsiString Msg, int AHelpContext) : 
-		Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EArrayError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EArrayError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EArrayError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EArrayError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EArrayError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EArrayError(System::PResStringRec ResStringRec, 
-		const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EArrayError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -93,38 +84,28 @@ class PASCALIMPLEMENTATION EDimIndexError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EDimIndexError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EDimIndexError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EDimIndexError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EDimIndexError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EDimIndexError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EDimIndexError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EDimIndexError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EDimIndexError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EDimIndexError(const AnsiString Msg, int AHelpContext)
-		 : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EDimIndexError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EDimIndexError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EDimIndexError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EDimIndexError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EDimIndexError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EDimIndexError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EDimIndexError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -158,6 +139,9 @@ class PASCALIMPLEMENTATION TIArray : public System::TObject
 {
 	typedef System::TObject inherited;
 	
+public:
+	int operator[](int Index) { return Items[Index]; }
+	
 private:
 	int FLimit;
 	bool FAutoIncr;
@@ -187,6 +171,7 @@ typedef int TArrayInt[268435456];
 
 typedef int *PArrayInt;
 
+#pragma pack(push, 4)
 struct TDimInfo
 {
 	TDimState iState;
@@ -196,12 +181,15 @@ struct TDimInfo
 	TRowState iRowState;
 	TDimGroup iGroup;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TDimRange
 {
 	int First;
 	int Last;
 } ;
+#pragma pack(pop)
 
 typedef char TBigStr[100001];
 
@@ -215,6 +203,9 @@ class DELPHICLASS TDimInfoArray;
 class PASCALIMPLEMENTATION TDimInfoArray : public System::TObject 
 {
 	typedef System::TObject inherited;
+	
+public:
+	PDimInfo operator[](int Index) { return Items[Index]; }
 	
 private:
 	int FLimit;
@@ -264,8 +255,7 @@ public:
 
 
 #pragma option push -b-
-enum TDecisionDataEvent { xeStateChanged, xeSummaryChanged, xePivot, xeNewMetaData, xeSourceChange }
-	;
+enum TDecisionDataEvent { xeStateChanged, xeSummaryChanged, xePivot, xeNewMetaData, xeSourceChange };
 #pragma option pop
 
 class DELPHICLASS TDecisionDataLink;
@@ -287,8 +277,7 @@ private:
 	void __fastcall AddDataSource(TDecisionSource* source);
 	void __fastcall RemoveDataSource(TDecisionSource* source);
 	void __fastcall NotifyDataSources(TDecisionDataEvent Event);
-	AnsiString __fastcall GetAnySQL(Mxarrays::TSmallIntArray* ValueArray, AnsiString SelectList, bool bActive
-		, bool bGrouped);
+	AnsiString __fastcall GetAnySQL(Mxarrays::TSmallIntArray* ValueArray, AnsiString SelectList, bool bActive, bool bGrouped);
 	__property bool Sparsing = {read=GetSparsing, write=SetSparsing, nodefault};
 	
 protected:
@@ -300,8 +289,7 @@ public:
 	__fastcall virtual ~TDecisionCube(void);
 	__property DesignState ;
 	AnsiString __fastcall GetSQL(Mxarrays::TSmallIntArray* ValueArray, bool bActive);
-	AnsiString __fastcall GetDetailSQL(Mxarrays::TSmallIntArray* ValueArray, AnsiString SelectList, bool 
-		bActive);
+	AnsiString __fastcall GetDetailSQL(Mxarrays::TSmallIntArray* ValueArray, AnsiString SelectList, bool bActive);
 	void __fastcall ShowCubeDialog(void);
 	virtual void __fastcall StateChanged(void);
 	__property bool Active = {read=CubeGetActive, write=CubeSetActive, nodefault};
@@ -415,10 +403,8 @@ public:
 	void __fastcall OpenDimIndexLeft(TDimGroup dimGroup, int Index, bool bOpen);
 	void __fastcall ToggleDimIndex(TDimGroup dimGroup, int Index, bool bOpen);
 	void __fastcall DrillDimIndex(TDimGroup dimGroup, int Index, int ValueIndex, bool bOpen);
-	void __fastcall MoveDimIndexes(TDimGroup SdimGroup, TDimGroup DdimGroup, int SIndex, int DIndex, bool 
-		bOpen);
-	void __fastcall SwapDimIndexes(TDimGroup SdimGroup, TDimGroup DdimGroup, int SIndex, int DIndex, bool 
-		bOpen);
+	void __fastcall MoveDimIndexes(TDimGroup SdimGroup, TDimGroup DdimGroup, int SIndex, int DIndex, bool bOpen);
+	void __fastcall SwapDimIndexes(TDimGroup SdimGroup, TDimGroup DdimGroup, int SIndex, int DIndex, bool bOpen);
 	int __fastcall GetGroupCount(TDimGroup dimGroup, bool bOpen);
 	TDimGroup __fastcall GetGroup(int iDim);
 	int __fastcall GetIndex(int iDim, bool bOpen);
@@ -444,10 +430,8 @@ __published:
 	__property bool SparseCols = {read=GetColSparsing, write=SetColSparsing, nodefault};
 	__property Classes::TNotifyEvent OnStateChange = {read=FOnStateChange, write=FOnStateChange};
 	__property Classes::TNotifyEvent OnNewDimensions = {read=FOnNewDimensions, write=FOnNewDimensions};
-		
 	__property Classes::TNotifyEvent OnLayoutChange = {read=FOnLayoutChange, write=FOnLayoutChange};
 	__property Classes::TNotifyEvent OnSummaryChange = {read=FonSummaryChange, write=FonSummaryChange};
-		
 	__property Classes::TNotifyEvent OnBeforePivot = {read=FOnBeforePivot, write=FOnBeforePivot};
 	__property Classes::TNotifyEvent OnAfterPivot = {read=FOnAfterPivot, write=FOnAfterPivot};
 };
@@ -477,8 +461,7 @@ class PASCALIMPLEMENTATION TQADecisionSource : public TDecisionSource
 	
 public:
 	#pragma option push -w-inl
-	/* TDecisionSource.Create */ inline __fastcall virtual TQADecisionSource(Classes::TComponent* AOwner
-		) : TDecisionSource(AOwner) { }
+	/* TDecisionSource.Create */ inline __fastcall virtual TQADecisionSource(Classes::TComponent* AOwner) : TDecisionSource(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TDecisionSource.Destroy */ inline __fastcall virtual ~TQADecisionSource(void) { }
@@ -490,12 +473,10 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Mxdb */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxdb;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxDB
+#endif	// MXDB

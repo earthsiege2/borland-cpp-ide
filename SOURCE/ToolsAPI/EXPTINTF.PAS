@@ -3,15 +3,20 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{ Copyright (c) 1995-2001 Borland Software Corporation  }
 {                                                       }
 {*******************************************************}
 
-unit Exptintf;
+unit ExptIntf;
 
 interface
 
+{$IFDEF MSWINDOWS}
 uses Windows, VirtIntf, ToolIntf;
+{$ENDIF}
+{$IFDEF LINUX}
+uses VirtIntf, ToolIntf;
+{$ENDIF}
 
 const
   isExperts = 'Experts';
@@ -105,7 +110,12 @@ type
     function GetAuthor: string; virtual; stdcall; abstract;
     function GetComment: string; virtual; stdcall; abstract;
     function GetPage: string; virtual; stdcall; abstract;
+{$IFDEF MSWINDOWS}
     function GetGlyph: HICON; virtual; stdcall; abstract;
+{$ENDIF}
+{$IFDEF LINUX}
+    function GetGlyph: Cardinal; virtual; stdcall; abstract;
+{$ENDIF}
     function GetStyle: TExpertStyle; virtual; stdcall; abstract;
     function GetState: TExpertState; virtual; stdcall; abstract;
     function GetIDString: string; virtual; stdcall; abstract;

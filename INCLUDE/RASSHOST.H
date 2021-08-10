@@ -1,17 +1,19 @@
-/********************************************************************/
-/**               Copyright(c) 1989-1999 Microsoft Corporation.	   **/
-/********************************************************************/
+/*++
 
-//***
-//
-// Filename:    rasshost.h
-//
-// Description: This header defines the interface between third party security
-//              DLLs and the RAS server.
-//
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+Module Name:
+
+    rasshost.h
+
+Abstract:
+
+    This header defines the interface between third party security
+    DLLs and the RAS server.
+    
+--*/
 
 #ifndef _RASSHOST_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _RASSHOST_
 
 #if _MSC_VER > 1000
@@ -151,5 +153,4 @@ RasSecurityDialogGetInfo(
     IN RAS_SECURITY_INFO*   pBuffer     // Pointer to get info structure.
 );
 
-#pragma option pop /*P_O_Pop*/
 #endif

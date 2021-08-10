@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'graphsv3.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'GraphSv3.pas' rev: 6.00
 
-#ifndef graphsv3HPP
-#define graphsv3HPP
+#ifndef GraphSv3HPP
+#define GraphSv3HPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -28,12 +28,8 @@ namespace Graphsv3
 //-- type declarations -------------------------------------------------------
 __dispinterface _DGraph;
 typedef System::DelphiInterface<_DGraph> _di__DGraph;
-__dispinterface INTERFACE_UUID("{0842D101-1E19-101B-9AAF-1A1626551E7C}") _DGraph  : public IDispatch 
-	
-{
-	
-};
 typedef _DGraph Graph;
+;
 
 typedef Activex::TOleEnum AutoIncConstants;
 
@@ -87,10 +83,14 @@ typedef Activex::TOleEnum YAxisStyleConstants;
 
 typedef Activex::TOleEnum BorderStyleConstants;
 
+__dispinterface INTERFACE_UUID("{0842D101-1E19-101B-9AAF-1A1626551E7C}") _DGraph  : public IDispatch 
+{
+	
+};
+
 __dispinterface _DGraphEvents;
 typedef System::DelphiInterface<_DGraphEvents> _di__DGraphEvents;
 __dispinterface INTERFACE_UUID("{0842D102-1E19-101B-9AAF-1A1626551E7C}") _DGraphEvents  : public IDispatch 
-	
 {
 	
 };
@@ -103,7 +103,7 @@ class PASCALIMPLEMENTATION TGraph : public Olectrls::TOleControl
 private:
 	_di__DGraph FIntf;
 	unsigned __fastcall Get_hWnd(void);
-	void __fastcall Set_hWnd(unsigned &Value);
+	void __fastcall Set_hWnd(const unsigned Value);
 	short __fastcall Get_Color(short index);
 	void __fastcall Set_Color(short index, short Value);
 	float __fastcall Get_Data(short index);
@@ -129,7 +129,7 @@ private:
 	
 protected:
 	virtual void __fastcall InitControlData(void);
-	virtual void __fastcall InitControlInterface(const _di_IUnknown Obj);
+	virtual void __fastcall InitControlInterface(const System::_di_IInterface Obj);
 	
 public:
 	HIDESBASE void __fastcall Refresh(void);
@@ -152,15 +152,15 @@ public:
 	__property float XPos[short index] = {read=Get_XPos, write=Set_XPos};
 	
 __published:
-	__property TabStop ;
-	__property Align ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property ParentShowHint ;
+	__property TabStop  = {default=1};
+	__property Align  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property Visible  = {default=1};
 	__property OnDragDrop ;
 	__property OnDragOver ;
 	__property OnEndDrag ;
@@ -175,107 +175,60 @@ __published:
 	__property OnKeyDown ;
 	__property OnDblClick ;
 	__property OnClick ;
-	__property Activex::TOleEnum AutoInc = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, 
-		index=1, nodefault};
-	__property Activex::TOleEnum Background = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=2, nodefault};
-	__property WideString BottomTitle = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=3};
-	__property Activex::TOleEnum ColorData = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=4, nodefault};
-	__property WideString CtlVersion = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=5};
-	__property Activex::TOleEnum DataReset = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=6, nodefault};
-	__property Activex::TOleEnum DrawMode = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, 
-		index=7, nodefault};
-	__property Activex::TOleEnum DrawStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=8, nodefault};
-	__property short ExtraData = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=9, nodefault
-		};
-	__property Activex::TOleEnum FontFamily = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=10, nodefault};
-	__property short FontSize = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=11, nodefault
-		};
-	__property Activex::TOleEnum FontStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=12, nodefault};
-	__property Activex::TOleEnum FontUse = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, 
-		index=13, nodefault};
-	__property Activex::TOleEnum Foreground = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=14, nodefault};
-	__property WideString GraphCaption = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=15};
+	__property Activex::TOleEnum AutoInc = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=1, nodefault};
+	__property Activex::TOleEnum Background = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=2, nodefault};
+	__property WideString BottomTitle = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=3};
+	__property Activex::TOleEnum ColorData = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=4, nodefault};
+	__property WideString CtlVersion = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=5};
+	__property Activex::TOleEnum DataReset = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=6, nodefault};
+	__property Activex::TOleEnum DrawMode = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=7, nodefault};
+	__property Activex::TOleEnum DrawStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=8, nodefault};
+	__property short ExtraData = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=9, nodefault};
+	__property Activex::TOleEnum FontFamily = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=10, nodefault};
+	__property short FontSize = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=11, nodefault};
+	__property Activex::TOleEnum FontStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=12, nodefault};
+	__property Activex::TOleEnum FontUse = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=13, nodefault};
+	__property Activex::TOleEnum Foreground = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=14, nodefault};
+	__property WideString GraphCaption = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=15};
 	__property float GraphData = {read=GetSingleProp, write=SetSingleProp, stored=false, index=16};
-	__property short GraphStyle = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=17, 
-		nodefault};
-	__property WideString GraphTitle = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=18};
-	__property Activex::TOleEnum GraphType = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=19, nodefault};
-	__property Activex::TOleEnum GridStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=20, nodefault};
-	__property WideString ImageFile = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=21
-		};
-	__property Activex::TOleEnum IndexStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=22, nodefault};
-	__property short LabelEvery = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=23, 
-		nodefault};
-	__property Activex::TOleEnum Labels = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=24
-		, nodefault};
-	__property WideString LabelText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=25
-		};
-	__property WideString LeftTitle = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=26
-		};
-	__property Activex::TOleEnum LegendStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=27, nodefault};
-	__property WideString LegendText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=28};
-	__property Activex::TOleEnum LineStats = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=29, nodefault};
-	__property short NumPoints = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=30, 
-		nodefault};
-	__property short NumSets = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=31, nodefault
-		};
-	__property Activex::TOleEnum Palette = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, 
-		index=32, nodefault};
-	__property short PatternData = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=33
-		, nodefault};
-	__property Activex::TOleEnum PatternedLines = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=34, nodefault};
-	__property Activex::TOleEnum PrintStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=36, nodefault};
-	__property Activex::TOleEnum RandomData = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=38, nodefault};
-	__property Activex::TOleEnum SymbolData = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=40, nodefault};
-	__property Activex::TOleEnum ThickLines = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=41, nodefault};
-	__property short ThisPoint = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=42, 
-		nodefault};
-	__property short ThisSet = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=43, nodefault
-		};
-	__property short TickEvery = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=44, 
-		nodefault};
-	__property Activex::TOleEnum Ticks = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=45
-		, nodefault};
+	__property short GraphStyle = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=17, nodefault};
+	__property WideString GraphTitle = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=18};
+	__property Activex::TOleEnum GraphType = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=19, nodefault};
+	__property Activex::TOleEnum GridStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=20, nodefault};
+	__property WideString ImageFile = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=21};
+	__property Activex::TOleEnum IndexStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=22, nodefault};
+	__property short LabelEvery = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=23, nodefault};
+	__property Activex::TOleEnum Labels = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=24, nodefault};
+	__property WideString LabelText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=25};
+	__property WideString LeftTitle = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=26};
+	__property Activex::TOleEnum LegendStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=27, nodefault};
+	__property WideString LegendText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=28};
+	__property Activex::TOleEnum LineStats = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=29, nodefault};
+	__property short NumPoints = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=30, nodefault};
+	__property short NumSets = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=31, nodefault};
+	__property Activex::TOleEnum Palette = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=32, nodefault};
+	__property short PatternData = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=33, nodefault};
+	__property Activex::TOleEnum PatternedLines = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=34, nodefault};
+	__property Activex::TOleEnum PrintStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=36, nodefault};
+	__property Activex::TOleEnum RandomData = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=38, nodefault};
+	__property Activex::TOleEnum SymbolData = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=40, nodefault};
+	__property Activex::TOleEnum ThickLines = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=41, nodefault};
+	__property short ThisPoint = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=42, nodefault};
+	__property short ThisSet = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=43, nodefault};
+	__property short TickEvery = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=44, nodefault};
+	__property Activex::TOleEnum Ticks = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=45, nodefault};
 	__property float XPosData = {read=GetSingleProp, write=SetSingleProp, stored=false, index=46};
 	__property float YAxisMax = {read=GetSingleProp, write=SetSingleProp, stored=false, index=47};
 	__property float YAxisMin = {read=GetSingleProp, write=SetSingleProp, stored=false, index=48};
-	__property Activex::TOleEnum YAxisPos = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, 
-		index=49, nodefault};
-	__property Activex::TOleEnum YAxisStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=50, nodefault};
-	__property short YAxisTicks = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=51, 
-		nodefault};
-	__property Word Enabled = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=-514, nodefault
-		};
-	__property Activex::TOleEnum BorderStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false
-		, index=-504, nodefault};
+	__property Activex::TOleEnum YAxisPos = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=49, nodefault};
+	__property Activex::TOleEnum YAxisStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=50, nodefault};
+	__property short YAxisTicks = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=51, nodefault};
+	__property Word Enabled = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=-514, nodefault};
+	__property Activex::TOleEnum BorderStyle = {read=GetTOleEnumProp, write=SetTOleEnumProp, stored=false, index=-504, nodefault};
 	__property unsigned hWnd = {read=Get_hWnd, write=Set_hWnd, stored=false, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TOleControl.Create */ inline __fastcall virtual TGraph(Classes::TComponent* AOwner) : Olectrls::TOleControl(
-		AOwner) { }
+	/* TOleControl.Create */ inline __fastcall virtual TGraph(Classes::TComponent* AOwner) : Olectrls::TOleControl(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TOleControl.Destroy */ inline __fastcall virtual ~TGraph(void) { }
@@ -283,8 +236,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TGraph(HWND ParentWindow) : Olectrls::TOleControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TGraph(HWND ParentWindow) : Olectrls::TOleControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -411,12 +363,10 @@ extern PACKAGE GUID Class_Graph;
 extern PACKAGE void __fastcall Register(void);
 
 }	/* namespace Graphsv3 */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Graphsv3;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// graphsv3
+#endif	// GraphSv3

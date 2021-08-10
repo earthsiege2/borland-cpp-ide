@@ -7,12 +7,12 @@
 {                                                       }
 {*******************************************************}
 
-unit DbOleCtl;
+unit DBOleCtl;
 
 interface
 
-uses Windows, Messages, SysUtils, Classes, Controls, Forms, OleCtrls, Db,
-  DbCtrls, ActiveX;
+uses Variants, Windows, Messages, SysUtils, Classes, Controls, Forms, OleCtrls, DB,
+  DBCtrls, ActiveX;
 
 type
   TDBOleControl = class;

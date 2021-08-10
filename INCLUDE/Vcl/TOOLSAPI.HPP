@@ -1,5 +1,5 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 Borland Software Corporation
 // All rights reserved
 
 //Used to redefine the PASCALIMPLEMENTATION and DELPHICLASS after ToolApi.Hpp

@@ -1,4 +1,4 @@
 LIBRARY DTCCFG
 EXPORTS
 
-    CPlApplet                                = 'DTCCFG.CPL'.*
+    CPlApplet                                

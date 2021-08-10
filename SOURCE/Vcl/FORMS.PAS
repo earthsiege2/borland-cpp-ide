@@ -1,8 +1,9 @@
+
 {*******************************************************}
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -10,11 +11,12 @@ unit Forms;
 
 {$P+,S-,W-,R-,T-,H+,X+}
 {$C PRELOAD}
+{$WARN SYMBOL_PLATFORM OFF}
 
 interface
 
 uses Messages, Windows, SysUtils, Classes, Graphics, Menus, Controls, Imm,
-  ActnList, MultiMon;
+  ActnList, MultiMon, HelpIntfs;
 
 type
 
@@ -160,6 +162,11 @@ type
     property Anchors;
     property AutoScroll;
     property AutoSize;
+    property BevelEdges;
+    property BevelInner;
+    property BevelOuter;
+    property BevelKind;
+    property BevelWidth;
     property BiDiMode;
     property BorderStyle: TBorderStyle read FBorderStyle write SetBorderStyle default bsSingle;
     property Constraints;
@@ -279,10 +286,10 @@ type
     property OnUnDock;
   end;
 
-{ IDesigner }
+{ IDesignerHook }
 
-  IDesigner = interface(IDesignerNotify)
-    ['{ABBE7256-5495-11D1-9FB5-0020AF3D82DA}']
+  IDesignerHook = interface(IDesignerNotify)
+    ['{1E431DA5-2BEA-4DE7-A330-CC45FD2FB1EC}']
     function GetCustomForm: TCustomForm;
     procedure SetCustomForm(Value: TCustomForm);
     function GetIsControl: Boolean;
@@ -304,7 +311,7 @@ type
     procedure OnDestroy;
     procedure OnResize;
   end;
-  
+
 { TCustomForm }
 
   TFormStyle = (fsNormal, fsMDIChild, fsMDIForm, fsStayOnTop);
@@ -316,7 +323,6 @@ type
   TPrintScale = (poNone, poProportional, poPrintToFit);
   TShowAction = (saIgnore, saRestore, saMinimize, saMaximize);
   TTileMode = (tbHorizontal, tbVertical);
-  TModalResult = Low(Integer)..High(Integer);
   TCloseAction = (caNone, caHide, caFree, caMinimize);
   TCloseEvent = procedure(Sender: TObject; var Action: TCloseAction) of object;
   TCloseQueryEvent = procedure(Sender: TObject;
@@ -324,6 +330,8 @@ type
   TFormState = set of (fsCreating, fsVisible, fsShowing, fsModal,
     fsCreatedMDIChild, fsActivated);
   TShortCutEvent = procedure (var Msg: TWMKey; var Handled: Boolean) of object;
+  THelpEvent = function(Command: Word; Data: Longint;
+    var CallHelp: Boolean): Boolean of object;
 
   TCustomForm = class(TScrollingWinControl)
   private
@@ -349,7 +357,7 @@ type
     FInCMParentBiDiModeChanged: Boolean;
     FMenu: TMainMenu;
     FModalResult: TModalResult;
-    FDesigner: IDesigner;
+    FDesigner: IDesignerHook;
     FClientHandle: HWND;
     FWindowMenu: TMenuItem;
     FPixelsPerInch: Integer;
@@ -373,6 +381,10 @@ type
     FOnShow: TNotifyEvent;
     FOnCreate: TNotifyEvent;
     FOnDestroy: TNotifyEvent;
+    FAlphaBlend: Boolean;
+    FAlphaBlendValue: Byte;
+    FTransparentColor: Boolean;
+    FTransparentColorValue: TColor;
     procedure RefreshMDIMenu;
     procedure ClientWndProc(var Message: TMessage);
     procedure CloseModal;
@@ -400,7 +412,7 @@ type
     procedure SetBorderStyle(Value: TFormBorderStyle);
     procedure SetClientHeight(Value: Integer);
     procedure SetClientWidth(Value: Integer);
-    procedure SetDesigner(ADesigner: IDesigner);
+    procedure SetDesigner(ADesigner: IDesignerHook);
     procedure SetFormStyle(Value: TFormStyle);
     procedure SetIcon(Value: TIcon);
     procedure SetMenu(Value: TMainMenu);
@@ -457,6 +469,13 @@ type
     procedure CMUIActivate(var Message); message CM_UIACTIVATE;
     procedure CMParentBiDiModeChanged(var Message: TMessage); message CM_PARENTBIDIMODECHANGED;
     procedure CMParentFontChanged(var Message: TMessage); message CM_PARENTFONTCHANGED;
+    procedure CMIsShortCut(var Message: TWMKey); message CM_ISSHORTCUT;
+    procedure SetLayeredAttribs;
+    procedure SetAlphaBlend(const Value: Boolean);
+    procedure SetAlphaBlendValue(const Value: Byte);
+    procedure SetTransparentColor(const Value: Boolean);
+    procedure SetTransparentColorValue(const Value: TColor);
+    procedure InitAlphaBlending(var Params: TCreateParams);
   protected
     FActionLists: TList;
     FFormState: TFormState;
@@ -479,6 +498,7 @@ type
     function GetClientRect: TRect; override;
     procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
     function GetFloating: Boolean; override;
+    function HandleCreateException: Boolean; dynamic;
     procedure Loaded; override;
     procedure Notification(AComponent: TComponent;
       Operation: TOperation); override;
@@ -500,12 +520,16 @@ type
     procedure WndProc(var Message: TMessage); override;
     procedure Resizing(State: TWindowState); override;
     property ActiveMDIChild: TForm read GetActiveMDIChild;
+    property AlphaBlend: Boolean read FAlphaBlend write SetAlphaBlend;
+    property AlphaBlendValue: Byte read FAlphaBlendValue write SetAlphaBlendValue;
     property BorderIcons: TBorderIcons read FBorderIcons write SetBorderIcons stored IsForm
       default [biSystemMenu, biMinimize, biMaximize];
     property AutoScroll stored IsAutoScrollStored;
     property ClientHandle: HWND read FClientHandle;
     property ClientHeight write SetClientHeight stored IsClientSizeStored;
     property ClientWidth write SetClientWidth stored IsClientSizeStored;
+    property TransparentColor: Boolean read FTransparentColor write SetTransparentColor;
+    property TransparentColorValue: TColor read FTransparentColorValue write SetTransparentColorValue;
     property Ctl3D default True;
     property DefaultMonitor: TDefaultMonitor read FDefaultMonitor write FDefaultMonitor
       stored IsForm default dmActiveForm;
@@ -572,6 +596,7 @@ type
     function GetFormImage: TBitmap;
     procedure Hide;
     function IsShortCut(var Message: TWMKey): Boolean; dynamic;
+    procedure MakeFullyVisible(AMonitor: TMonitor = nil);
     procedure MouseWheelHandler(var Message: TMessage); override;
     procedure Print;
     procedure Release;
@@ -591,7 +616,7 @@ type
     property Canvas: TCanvas read GetCanvas;
     property Caption stored IsForm;
     property Color nodefault;
-    property Designer: IDesigner read FDesigner write SetDesigner;
+    property Designer: IDesignerHook read FDesigner write SetDesigner;
     property DropTarget: Boolean read FDropTarget write FDropTarget;
     property Font;
     property FormState: TFormState read FFormState;
@@ -605,7 +630,7 @@ type
     property WindowState: TWindowState read FWindowState write SetWindowState
       stored IsForm default wsNormal;
   end;
-  
+
   TCustomFormClass = class of TCustomForm;
 
   { TCustomActiveForm }
@@ -682,6 +707,8 @@ type
     property Action;
     property ActiveControl;
     property Align;
+    property AlphaBlend default False;
+    property AlphaBlendValue default 255;
     property Anchors;
     property AutoScroll;
     property AutoSize;
@@ -693,6 +720,8 @@ type
     property ClientHeight;
     property ClientWidth;
     property Color;
+    property TransparentColor default False;
+    property TransparentColorValue default 0;
     property Constraints;
     property Ctl3D;
     property UseDockManager;
@@ -787,46 +816,9 @@ type
     property PixelsPerInch;
   end;
 
-{ TDataModule }
-
-  TDataModule = class(TComponent)
-  private
-    FDesignSize: TPoint;
-    FDesignOffset: TPoint;
-    FOnCreate: TNotifyEvent;
-    FOnDestroy: TNotifyEvent;
-    FOldCreateOrder: Boolean;
-    procedure ReadHeight(Reader: TReader);
-    procedure ReadHorizontalOffset(Reader: TReader);
-    procedure ReadVerticalOffset(Reader: TReader);
-    procedure ReadWidth(Reader: TReader);
-    procedure WriteWidth(Writer: TWriter);
-    procedure WriteHorizontalOffset(Writer: TWriter);
-    procedure WriteVerticalOffset(Writer: TWriter);
-    procedure WriteHeight(Writer: TWriter);
-  protected
-    procedure DoCreate; virtual;
-    procedure DoDestroy; virtual;
-    procedure DefineProperties(Filer: TFiler); override;
-    procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
-    procedure ReadState(Reader: TReader); override;
-  public
-    constructor Create(AOwner: TComponent); override;
-    constructor CreateNew(AOwner: TComponent; Dummy: Integer = 0); virtual;
-    destructor Destroy; override;
-    procedure AfterConstruction; override;
-    procedure BeforeDestruction; override;
-    property DesignOffset: TPoint read FDesignOffset write FDesignOffset;
-    property DesignSize: TPoint read FDesignSize write FDesignSize;
-  published
-    property OldCreateOrder: Boolean read FOldCreateOrder write FOldCreateOrder;
-    property OnCreate: TNotifyEvent read FOnCreate write FOnCreate;
-    property OnDestroy: TNotifyEvent read FOnDestroy write FOnDestroy;
-  end;
-
 { TMonitor }
 
-  TMonitor = class
+  TMonitor = class(TObject)
   private
     FHandle: HMONITOR;
     FMonitorNum: Integer;
@@ -834,6 +826,9 @@ type
     function GetHeight: Integer;
     function GetTop: Integer;
     function GetWidth: Integer;
+    function GetBoundsRect: TRect;
+    function GetWorkareaRect: TRect;
+    function GetPrimary: Boolean;
   public
     property Handle: HMONITOR read FHandle;
     property MonitorNum: Integer read FMonitorNum;
@@ -841,6 +836,9 @@ type
     property Height: Integer read GetHeight;
     property Top: Integer read GetTop;
     property Width: Integer read GetWidth;
+    property BoundsRect: TRect read GetBoundsRect;
+    property WorkareaRect: TRect read GetWorkareaRect;
+    property Primary: Boolean read GetPrimary;
   end;
 
 { TScreen }
@@ -851,6 +849,8 @@ type
     Index: Integer;
     Handle: HCURSOR;
   end;
+
+  TMonitorDefaultTo = (mdNearest, mdNull, mdPrimary);
 
   TScreen = class(TComponent)
   private
@@ -888,6 +888,7 @@ type
     procedure CreateCursors;
     procedure DeleteCursor(Index: Integer);
     procedure DestroyCursors;
+    function FindMonitor(Handle: HMONITOR): TMonitor;
     procedure IconFontChanged(Sender: TObject);
     function GetCustomFormCount: Integer;
     function GetCustomForms(Index: Integer): TCustomForm;
@@ -899,6 +900,12 @@ type
     function GetDesktopLeft: Integer;
     function GetDesktopHeight: Integer;
     function GetDesktopWidth: Integer;
+    function GetDesktopRect: TRect;
+    function GetWorkAreaRect: TRect;
+    function GetWorkAreaHeight: Integer;
+    function GetWorkAreaLeft: Integer;
+    function GetWorkAreaTop: Integer;
+    function GetWorkAreaWidth: Integer;
     function GetImes: TStrings;
     function GetHeight: Integer;
     function GetMonitor(Index: Integer): TMonitor;
@@ -922,6 +929,12 @@ type
     destructor Destroy; override;
     procedure DisableAlign;
     procedure EnableAlign;
+    function MonitorFromPoint(const Point: TPoint;
+      MonitorDefault: TMonitorDefaultTo = mdNearest): TMonitor;
+    function MonitorFromRect(const Rect: TRect;
+      MonitorDefault: TMonitorDefaultTo = mdNearest): TMonitor;
+    function MonitorFromWindow(const Handle: THandle;
+      MonitorDefault: TMonitorDefaultTo = mdNearest): TMonitor;
     procedure Realign;
     procedure ResetFonts;
     property ActiveControl: TWinControl read FActiveControl;
@@ -935,10 +948,16 @@ type
     property DataModuleCount: Integer read GetDataModuleCount;
     property MonitorCount: Integer read GetMonitorCount;
     property Monitors[Index: Integer]: TMonitor read GetMonitor;
+    property DesktopRect: TRect read GetDesktopRect;
     property DesktopHeight: Integer read GetDesktopHeight;
     property DesktopLeft: Integer read GetDesktopLeft;
     property DesktopTop: Integer read GetDesktopTop;
     property DesktopWidth: Integer read GetDesktopWidth;
+    property WorkAreaRect: TRect read GetWorkAreaRect;
+    property WorkAreaHeight: Integer read GetWorkAreaHeight;
+    property WorkAreaLeft: Integer read GetWorkAreaLeft;
+    property WorkAreaTop: Integer read GetWorkAreaTop;
+    property WorkAreaWidth: Integer read GetWorkAreaWidth;
     property HintFont: TFont read FHintFont write SetHintFont;
     property IconFont: TFont read FIconFont write SetIconFont;
     property MenuFont: TFont read FMenuFont write SetMenuFont;
@@ -996,6 +1015,7 @@ type
   TShowHintEvent = procedure (var HintStr: string; var CanShow: Boolean;
     var HintInfo: THintInfo) of object;
   TWindowHook = function (var Message: TMessage): Boolean of object;
+  TSettingChangeEvent = procedure (Sender: TObject; Flag: Integer; const Section: string; var Result: Longint) of object;
 
   TApplication = class(TComponent)
   private
@@ -1006,6 +1026,7 @@ type
     FObjectInstance: Pointer;
     FMainForm: TForm;
     FMouseControl: TControl;
+    FHelpSystem : IHelpSystem;
     FHelpFile: string;
     FHint: string;
     FHintActive: Boolean;
@@ -1036,6 +1057,7 @@ type
     FWindowHooks: TList;
     FWindowList: Pointer;
     FDialogHandle: HWnd;
+    FAutoDragDocking: Boolean;
     FOnActionExecute: TActionEvent;
     FOnActionUpdate: TActionEvent;
     FOnException: TExceptionEvent;
@@ -1049,8 +1071,9 @@ type
     FOnRestore: TNotifyEvent;
     FOnShortCut: TShortCutEvent;
     FOnShowHint: TShowHintEvent;
+    FOnSettingChange: TSettingChangeEvent;
     function CheckIniChange(var Message: TMessage): Boolean;
-    function DispatchAction(Msg: Longint; Action: TBasicAction): Boolean; 
+    function DispatchAction(Msg: Longint; Action: TBasicAction): Boolean;
     procedure DoActionIdle;
     function DoMouseIdle: TControl;
     procedure DoNormalizeTopMosts(IncludeMain: Boolean);
@@ -1061,13 +1084,7 @@ type
     function GetTitle: string;
     procedure HintTimerExpired;
     procedure IconChanged(Sender: TObject);
-    procedure Idle(const Msg: TMsg);
     function InvokeHelp(Command: Word; Data: Longint): Boolean;
-    function IsDlgMsg(var Msg: TMsg): Boolean;
-    function IsHintMsg(var Msg: TMsg): Boolean;
-    function IsKeyMsg(var Msg: TMsg): Boolean;
-    function IsMDIMsg(var Msg: TMsg): Boolean;
-    function IsShortCut(var Message: TWMKey): Boolean;
     procedure NotifyForms(Msg: Word);
     function ProcessMessage(var Msg: TMsg): Boolean;
     procedure SetBiDiMode(Value: TBiDiMode);
@@ -1078,10 +1095,20 @@ type
     procedure SetIcon(Value: TIcon);
     procedure SetShowHint(Value: Boolean);
     procedure SetTitle(const Value: string);
+    procedure SettingChange(var Message: TWMSettingChange);
     procedure StartHintTimer(Value: Integer; TimerMode: TTimerMode);
     procedure StopHintTimer;
     procedure WndProc(var Message: TMessage);
     procedure UpdateVisible;
+    function  ValidateHelpSystem: Boolean;
+    procedure WakeMainThread(Sender: TObject);
+  protected
+    procedure Idle(const Msg: TMsg);
+    function IsDlgMsg(var Msg: TMsg): Boolean;
+    function IsHintMsg(var Msg: TMsg): Boolean;
+    function IsKeyMsg(var Msg: TMsg): Boolean;
+    function IsMDIMsg(var Msg: TMsg): Boolean;
+    function IsShortCut(var Message: TWMKey): Boolean;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -1097,12 +1124,14 @@ type
     function HelpCommand(Command: Integer; Data: Longint): Boolean;
     function HelpContext(Context: THelpContext): Boolean;
     function HelpJump(const JumpID: string): Boolean;
+    function HelpKeyword(const Keyword: String): Boolean;
     procedure HideHint;
     procedure HintMouseMessage(Control: TControl; var Message: TMessage);
     procedure HookMainWindow(Hook: TWindowHook);
+    procedure HookSynchronizeWakeup;
     procedure Initialize;
     function IsRightToLeft: Boolean;
-    function MessageBox(const Text, Caption: PChar; Flags: Longint): Integer;
+    function MessageBox(const Text, Caption: PChar; Flags: Longint = MB_OK): Integer;
     procedure Minimize;
     procedure NormalizeAllTopMosts;
     procedure NormalizeTopMosts;
@@ -1113,12 +1142,15 @@ type
     procedure ShowException(E: Exception);
     procedure Terminate;
     procedure UnhookMainWindow(Hook: TWindowHook);
+    procedure UnhookSynchronizeWakeup;
     function UpdateAction(Action: TBasicAction): Boolean; reintroduce;
     function UseRightToLeftAlignment: Boolean;
     function UseRightToLeftReading: Boolean;
     function UseRightToLeftScrollBar: Boolean;
     property Active: Boolean read FActive;
     property AllowTesting: Boolean read FAllowTesting write FAllowTesting;
+    property AutoDragDocking: Boolean read FAutoDragDocking write FAutoDragDocking default True;
+    property HelpSystem : IHelpSystem read FHelpSystem;
     property CurrentHelpFile: string read GetCurrentHelpFile;
     property DialogHandle: HWnd read GetDialogHandle write SetDialogHandle;
     property ExeName: string read GetExeName;
@@ -1157,6 +1189,7 @@ type
     property OnRestore: TNotifyEvent read FOnRestore write FOnRestore;
     property OnShowHint: TShowHintEvent read FOnShowHint write FOnShowHint;
     property OnShortCut: TShortCutEvent read FOnShortCut write FOnShortCut;
+    property OnSettingChange: TSettingChangeEvent read FOnSettingChange write FOnSettingChange;
   end;
 
 { Global objects }
@@ -1175,32 +1208,69 @@ function ValidParentForm(Control: TControl): TCustomForm;
 function DisableTaskWindows(ActiveWindow: HWnd): Pointer;
 procedure EnableTaskWindows(WindowList: Pointer);
 
-function MakeObjectInstance(Method: TWndMethod): Pointer;
-procedure FreeObjectInstance(ObjectInstance: Pointer);
+function MakeObjectInstance(Method: TWndMethod): Pointer; deprecated; { moved to Classes.pas }
+{$EXTERNALSYM MakeObjectInstance}
+procedure FreeObjectInstance(ObjectInstance: Pointer);    deprecated; { moved to Classes.pas }
+{$EXTERNALSYM FreeObjectInstance}
 
 function IsAccel(VK: Word; const Str: string): Boolean;
 
-function  Subclass3DWnd(Wnd: HWnd): Boolean; { obsolete }
-procedure Subclass3DDlg(Wnd: HWnd; Flags: Word); { obsolete }
-procedure SetAutoSubClass(Enable: Boolean); { obsolete }
-function AllocateHWnd(Method: TWndMethod): HWND;
-procedure DeallocateHWnd(Wnd: HWND);
-procedure DoneCtl3D;  { obsolete }
-procedure InitCtl3D;  { obsolete }
+function  Subclass3DWnd(Wnd: HWnd): Boolean;     deprecated;  { obsolete }
+procedure Subclass3DDlg(Wnd: HWnd; Flags: Word); deprecated;  { obsolete }
+procedure SetAutoSubClass(Enable: Boolean);      deprecated;  { obsolete }
+function AllocateHWnd(Method: TWndMethod): HWND; deprecated;  { moved to Classes.pas }
+{$EXTERNALSYM AllocateHWnd}
+procedure DeallocateHWnd(Wnd: HWND);             deprecated;  { moved to Classes.pas }
+{$EXTERNALSYM DeallocateHWnd}
+procedure DoneCtl3D;                             deprecated;  { obsolete }
+procedure InitCtl3D;                             deprecated;  { obsolete }
 
 function KeysToShiftState(Keys: Word): TShiftState;
 function KeyDataToShiftState(KeyData: Longint): TShiftState;
-function KeyboardStateToShiftState(const KeyboardState: TKeyboardState): TShiftState;
+function KeyboardStateToShiftState(const KeyboardState: TKeyboardState): TShiftState; overload;
+function KeyboardStateToShiftState: TShiftState; overload;
 
 function ForegroundTask: Boolean;
 
+type
+  TFocusState = type Pointer;
+
+function SaveFocusState: TFocusState;
+procedure RestoreFocusState(FocusState: TFocusState);
+
 implementation
 
-uses ActiveX, Math, Printers, Consts, CommCtrl, FlatSB, StdActns;
+uses
+  ActiveX, Math, Printers, Consts, RTLConsts, CommCtrl, FlatSB, StdActns, WinHelpViewer;
+
+type
+  TSetLayeredWindowAttributes = function (Hwnd: THandle; crKey: COLORREF; bAlpha: Byte; dwFlags: DWORD): Boolean; stdcall;
 
 var
   FocusMessages: Boolean = True;
   FocusCount: Integer = 0;
+  SetLayeredWindowAttributes: TSetLayeredWindowAttributes = nil;
+
+{ RM_TaskbarCreated is a registered window message that the OS sends to
+  top-level windows of running UI interactive services when a new user logs
+  onto the local workstation desktop.
+  VCL listens for this message to send around color, font, and settings
+  change notifications to controls in the app so that UI interactive
+  service apps built with VCL will conform to the new user's UI preferences. }
+var
+  RM_TaskbarCreated: DWORD;
+
+// The focus state is just the focus count for now. To save having to allocate
+// anything, I just map the Integer to the TFocusState.
+function SaveFocusState: TFocusState;
+begin
+  Result := TFocusState(FocusCount);
+end;
+
+procedure RestoreFocusState(FocusState: TFocusState);
+begin
+  FocusCount := Integer(FocusState);
+end;
 
 const
   DefHintColor = clInfoBk;  { default hint window color }
@@ -1414,143 +1484,28 @@ procedure SetAutoSubClass(Enable: Boolean);
 begin
 end;
 
-const
-  InstanceCount = 313;
-
-{ Object instance management }
-
-type
-  PObjectInstance = ^TObjectInstance;
-  TObjectInstance = packed record
-    Code: Byte;
-    Offset: Integer;
-    case Integer of
-      0: (Next: PObjectInstance);
-      1: (Method: TWndMethod);
-  end;
-
-type
-  PInstanceBlock = ^TInstanceBlock;
-  TInstanceBlock = packed record
-    Next: PInstanceBlock;
-    Code: array[1..2] of Byte;
-    WndProcPtr: Pointer;
-    Instances: array[0..InstanceCount] of TObjectInstance;
-  end;
-
-var
-  InstBlockList: PInstanceBlock;
-  InstFreeList: PObjectInstance;
-
-{ Standard window procedure }
-{ In    ECX = Address of method pointer }
-{ Out   EAX = Result }
-
-function StdWndProc(Window: HWND; Message, WParam: Longint;
-  LParam: Longint): Longint; stdcall; assembler;
-asm
-        XOR     EAX,EAX
-        PUSH    EAX
-        PUSH    LParam
-        PUSH    WParam
-        PUSH    Message
-        MOV     EDX,ESP
-        MOV     EAX,[ECX].Longint[4]
-        CALL    [ECX].Pointer
-        ADD     ESP,12
-        POP     EAX
-end;
-
 { Allocate an object instance }
 
-function CalcJmpOffset(Src, Dest: Pointer): Longint;
-begin
-  Result := Longint(Dest) - (Longint(Src) + 5);
-end;
-
 function MakeObjectInstance(Method: TWndMethod): Pointer;
-const
-  BlockCode: array[1..2] of Byte = (
-    $59,       { POP ECX }
-    $E9);      { JMP StdWndProc }
-  PageSize = 4096;
-var
-  Block: PInstanceBlock;
-  Instance: PObjectInstance;
 begin
-  if InstFreeList = nil then
-  begin
-    Block := VirtualAlloc(nil, PageSize, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
-    Block^.Next := InstBlockList;
-    Move(BlockCode, Block^.Code, SizeOf(BlockCode));
-    Block^.WndProcPtr := Pointer(CalcJmpOffset(@Block^.Code[2], @StdWndProc));
-    Instance := @Block^.Instances;
-    repeat
-      Instance^.Code := $E8;  { CALL NEAR PTR Offset }
-      Instance^.Offset := CalcJmpOffset(Instance, @Block^.Code);
-      Instance^.Next := InstFreeList;
-      InstFreeList := Instance;
-      Inc(Longint(Instance), SizeOf(TObjectInstance));
-    until Longint(Instance) - Longint(Block) >= SizeOf(TInstanceBlock);
-    InstBlockList := Block;
-  end;
-  Result := InstFreeList;
-  Instance := InstFreeList;
-  InstFreeList := Instance^.Next;
-  Instance^.Method := Method;
+  Result := Classes.MakeObjectInstance(Method);
 end;
 
 { Free an object instance }
 
 procedure FreeObjectInstance(ObjectInstance: Pointer);
 begin
-  if ObjectInstance <> nil then
-  begin
-    PObjectInstance(ObjectInstance)^.Next := InstFreeList;
-    InstFreeList := ObjectInstance;
-  end;
+  Classes.FreeObjectInstance(ObjectInstance);
 end;
 
-var
-  UtilWindowClass: TWndClass = (
-    style: 0;
-    lpfnWndProc: @DefWindowProc;
-    cbClsExtra: 0;
-    cbWndExtra: 0;
-    hInstance: 0;
-    hIcon: 0;
-    hCursor: 0;
-    hbrBackground: 0;
-    lpszMenuName: nil;
-    lpszClassName: 'TPUtilWindow');
-
 function AllocateHWnd(Method: TWndMethod): HWND;
-var
-  TempClass: TWndClass;
-  ClassRegistered: Boolean;
 begin
-  UtilWindowClass.hInstance := HInstance;
-  ClassRegistered := GetClassInfo(HInstance, UtilWindowClass.lpszClassName,
-    TempClass);
-  if not ClassRegistered or (TempClass.lpfnWndProc <> @DefWindowProc) then
-  begin
-    if ClassRegistered then
-      Windows.UnregisterClass(UtilWindowClass.lpszClassName, HInstance);
-    Windows.RegisterClass(UtilWindowClass);
-  end;
-  Result := CreateWindowEx(WS_EX_TOOLWINDOW, UtilWindowClass.lpszClassName,
-    '', WS_POPUP {!0}, 0, 0, 0, 0, 0, 0, HInstance, nil);
-  if Assigned(Method) then
-    SetWindowLong(Result, GWL_WNDPROC, Longint(MakeObjectInstance(Method)));
+  Result := Classes.AllocateHWnd(Method);
 end;
 
 procedure DeallocateHWnd(Wnd: HWND);
-var
-  Instance: Pointer;
 begin
-  Instance := Pointer(GetWindowLong(Wnd, GWL_WNDPROC));
-  DestroyWindow(Wnd);
-  if Instance <> @DefWindowProc then FreeObjectInstance(Instance);
+  Classes.DeallocateHWnd(Wnd);
 end;
 
 { Utility mapping functions }
@@ -1591,6 +1546,16 @@ begin
   if KeyboardState[VK_LBUTTON] and $80 <> 0 then Include(Result, ssLeft);
   if KeyboardState[VK_RBUTTON] and $80 <> 0 then Include(Result, ssRight);
   if KeyboardState[VK_MBUTTON] and $80 <> 0 then Include(Result, ssMiddle);
+end;
+
+{ Calls GetKeyboardState and converts output to TShiftState }
+
+function KeyboardStateToShiftState: TShiftState; overload;
+var
+  KeyState: TKeyBoardState;
+begin
+  GetKeyboardState(KeyState);
+  Result := KeyboardStateToShiftState(KeyState);
 end;
 
 function IsAccel(VK: Word; const Str: string): Boolean;
@@ -2034,11 +1999,8 @@ begin
   ScrollInfo.nPage := ControlSize(ControlSB, AssumeSB) + 1;
   ScrollInfo.nPos := FPosition;
   ScrollInfo.nTrackPos := FPosition;
-//  if FUpdateNeeded then
-  begin
-    UpdateScrollProperties(FUpdateNeeded);
-    FUpdateNeeded := False;
-  end;
+  UpdateScrollProperties(FUpdateNeeded);
+  FUpdateNeeded := False;
   FlatSB_SetScrollInfo(FControl.Handle, Code, ScrollInfo, True);
   SetPosition(FPosition);
   FPageIncrement := (ControlSize(True, False) * 9) div 10;
@@ -2075,7 +2037,9 @@ begin
   //! Scroll bars don't move to the Left side of a TScrollingWinControl when the
   //! WS_EX_LEFTSCROLLBAR flag is set and InitializeFlatSB is called.
   //! A call to UnInitializeFlatSB does nothing.
-  if not SysLocale.MiddleEast then InitializeFlatSB(Handle);
+  if not SysLocale.MiddleEast and
+     not CheckWin32Version(5, 1) then
+    InitializeFlatSB(Handle);
   UpdateScrollBars;
 end;
 
@@ -2114,8 +2078,8 @@ begin
       FlippedList.Add(Controls[Loop]);
       Left := TheWidth - Width - Left;
     end;
-    
-    { Allow controls that have associations to realign themselves }  
+
+    { Allow controls that have associations to realign themselves }
     for Loop := 0 to FlippedList.Count - 1 do
       TControl(FlippedList[Loop]).Perform(CM_ALLCHILDRENFLIPPED, 0, 0);
 
@@ -2573,24 +2537,26 @@ begin
   Top := 0;
   Width := 320;
   Height := 240;
-  Visible := False;
-  ParentColor := False;
-  ParentFont := False;
-  Ctl3D := True;
-  FBorderIcons := [biSystemMenu, biMinimize, biMaximize];
-  FBorderStyle := bsSizeable;
-  FWindowState := wsNormal;
-  FDefaultMonitor := dmActiveForm;
   FIcon := TIcon.Create;
   FIcon.Width := GetSystemMetrics(SM_CXSMICON);
   FIcon.Height := GetSystemMetrics(SM_CYSMICON);
   FIcon.OnChange := IconChanged;
-  FInCMParentBiDiModeChanged := False;
   FCanvas := TControlCanvas.Create;
   FCanvas.Control := Self;
+  FBorderIcons := [biSystemMenu, biMinimize, biMaximize];
+  FBorderStyle := bsSizeable;
+  FWindowState := wsNormal;
+  FDefaultMonitor := dmActiveForm;
+  FInCMParentBiDiModeChanged := False;
   FPixelsPerInch := Screen.PixelsPerInch;
   FPrintScale := poProportional;
   FloatingDockSiteClass := TWinControlClass(ClassType);
+  FAlphaBlendValue := 255;
+  FTransparentColorValue := 0;
+  Visible := False;
+  ParentColor := False;
+  ParentFont := False;
+  Ctl3D := True;
   Screen.AddForm(Self);
 end;
 
@@ -2628,7 +2594,8 @@ begin
   try
     FOnCreate(Self);
   except
-    Application.HandleException(Self);
+    if not HandleCreateException then
+      raise;
   end;
   if fsVisible in FFormState then Visible := True;
 end;
@@ -2716,6 +2683,11 @@ begin
           FClientWidth := MulDiv(FClientWidth, NewTextHeight, FTextHeight);
         if sfHeight in ScalingFlags then
           FClientHeight := MulDiv(FClientHeight, NewTextHeight, FTextHeight);
+        if sfDesignSize in ScalingFlags then
+        begin
+          FDesignSize.X := MulDiv(FDesignSize.X, NewTextHeight, FTextHeight);
+          FDesignSize.Y := MulDiv(FDesignSize.Y, NewTextHeight, FTextHeight);
+        end;
       end;
     end;
     if FClientWidth > 0 then inherited ClientWidth := FClientWidth;
@@ -2893,7 +2865,7 @@ begin
     { if there is no parent, then the parent is Application }
     if Parent = nil then
       Perform(CM_PARENTBIDIMODECHANGED, 0, 0);
-  end;  
+  end;
 end;
 
 procedure TCustomForm.SetClientWidth(Value: Integer);
@@ -3059,6 +3031,15 @@ begin
               Exit;
             end;
           end;
+    else if Message.Msg = RM_TaskbarCreated then
+      begin
+        Perform(CM_WININICHANGE, 0, 0);
+        Perform(CM_SYSCOLORCHANGE, 0, 0);
+        Perform(CM_SYSFONTCHANGED, 0, 0);
+        Perform(CM_PARENTCOLORCHANGED, 0, 0);
+        Perform(CM_PARENTFONTCHANGED, 0, 0);
+        Perform(CM_PARENTBIDIMODECHANGED, 0, 0);
+      end;
     end;
   inherited WndProc(Message);
 end;
@@ -3084,6 +3065,9 @@ procedure TCustomForm.ClientWndProc(var Message: TMessage);
     Result := False;
   end;
 
+var
+  DC: HDC;
+  PS: TPaintStruct;
 begin
   with Message do
     case Msg of
@@ -3103,6 +3087,16 @@ begin
           if FFormStyle = fsMDIForm then
             ShowMDIClientEdge(FClientHandle, (MDIChildCount = 0) or
             not MaximizedChildren);
+        end;
+      WM_PAINT:
+        begin
+          DC := TWMPaint(Message).DC;
+          if DC = 0 then TWMPaint(Message).DC := BeginPaint(ClientHandle, PS);
+          try
+            PaintHandler(TWMPaint(Message));
+          finally
+            if DC = 0 then EndPaint(ClientHandle, PS);
+          end;
         end;
     else
       Default;
@@ -3159,7 +3153,7 @@ begin
   end;
 end;
 
-procedure TCustomForm.SetDesigner(ADesigner: IDesigner);
+procedure TCustomForm.SetDesigner(ADesigner: IDesignerHook);
 begin
   FDesigner := ADesigner;
 end;
@@ -3279,7 +3273,7 @@ begin
     begin
       Result := Screen.Monitors[I];
       Exit;
-    end;    
+    end;
 end;
 
 function TCustomForm.GetCanvas: TCanvas;
@@ -3366,6 +3360,9 @@ begin
       if (Screen.Forms[I].Menu = Value) and (Screen.Forms[I] <> Self) then
         raise EInvalidOperation.CreateFmt(sDuplicateMenus, [Value.Name]);
   if FMenu <> nil then FMenu.WindowHandle := 0;
+  if (csDestroying in ComponentState) or
+    ((Value <> nil) and (csDestroying in Value.ComponentState)) then
+    Value := nil;
   FMenu := Value;
   if Value <> nil then Value.FreeNotification(Self);
   if (Value <> nil) and ((csDesigning in ComponentState) or
@@ -3525,6 +3522,7 @@ var
   CreateStyle: TFormBorderStyle;
 begin
   inherited CreateParams(Params);
+  InitAlphaBlending(Params);
   with Params do
   begin
     if (Parent = nil) and (ParentWindow = 0) then
@@ -3626,7 +3624,7 @@ begin
             WS_CLIPCHILDREN or WS_HSCROLL or WS_VSCROLL or WS_CLIPSIBLINGS or
             MDIS_ALLCHILDSTYLES, 0, 0, ClientWidth, ClientHeight, Handle, 0,
             HInstance, @ClientCreateStruct);
-          FClientInstance := MakeObjectInstance(ClientWndProc);
+          FClientInstance := Classes.MakeObjectInstance(ClientWndProc);
           FDefClientProc := Pointer(GetWindowLong(FClientHandle, GWL_WNDPROC));
           SetWindowLong(FClientHandle, GWL_WNDPROC, Longint(FClientInstance));
         end;
@@ -3639,6 +3637,7 @@ end;
 procedure TCustomForm.CreateWindowHandle(const Params: TCreateParams);
 var
   CreateStruct: TMDICreateStruct;
+  NewParams: TCreateParams;
 begin
   if (FormStyle = fsMDIChild) and not (csDesigning in ComponentState) then
   begin
@@ -3662,9 +3661,12 @@ begin
     Include(FFormState, fsCreatedMDIChild);
   end else
   begin
-    inherited CreateWindowHandle(Params);
+    NewParams := Params;
+    NewParams.ExStyle := NewParams.ExStyle and not WS_EX_LAYERED;
+    inherited CreateWindowHandle(NewParams);
     Exclude(FFormState, fsCreatedMDIChild);
   end;
+  SetLayeredAttribs;
 end;
 
 procedure TCustomForm.DestroyWindowHandle;
@@ -4186,7 +4188,7 @@ begin
   SendCancelMode(nil);
   inherited;
 end;
-
+// APH '
 procedure TCustomForm.WMHelp(var Message: TWMHelp);
 
   function GetMenuHelpContext(Menu: TMenu): Integer;
@@ -4198,9 +4200,33 @@ procedure TCustomForm.WMHelp(var Message: TWMHelp);
       Result := Menu.GetHelpContext(Message.HelpInfo.hItemHandle, False);
   end;
 
+  function ControlHasHelp(const Control: TWinControl) : Boolean;
+  begin
+    Result := false;
+    if (Control.HelpType = htContext) and (Control.HelpContext <> 0)
+      then Result := true
+    else if (Control.HelpType = htKeyword) and (Control.HelpKeyword <> '') then
+      Result := true;
+  end;
+
+  procedure GetHelpInfo(const Control: TWinControl; var HType: THelpType; var ContextID: Integer; var Keyword: String);
+  begin
+    if Control.HelpType = htContext then
+    begin
+      HType := htContext;
+      ContextID := Control.HelpContext;
+    end else
+    begin
+      HType := htKeyword;
+      Keyword := Control.HelpKeyword;
+    end;
+  end;
+
 var
   Control: TWinControl;
   ContextID: Integer;
+  HType: THelpType;
+  Keyword: String;
   Pt: TSmallPoint;
 begin
   if csDesigning in ComponentState then
@@ -4212,27 +4238,32 @@ begin
       if iContextType = HELPINFO_WINDOW then
       begin
         Control := FindControl(hItemHandle);
-        while (Control <> nil) and (Control.HelpContext = 0) do
+        while (Control <> nil) and ( not ControlHasHelp(Control)) do
           Control := Control.Parent;
         if Control = nil then Exit;
-        ContextID := Control.HelpContext;
+        GetHelpInfo(Control, HType, ContextID, Keyword);
         Pt := PointToSmallPoint(Control.ClientToScreen(Point(0, 0)));
       end
-      else
+      else  { Message.HelpInfo.iContextType = HELPINFO_MENUITEM }
       begin
+        HType := htContext;
         ContextID := GetMenuHelpContext(FMenu);
         if ContextID = 0 then
           ContextID := GetMenuHelpContext(PopupMenu);
         Pt := PointToSmallPoint(ClientToScreen(Point(0,0)));
       end;
     end;
-    if (biHelp in BorderIcons) then
+    if (biHelp in BorderIcons) and (HType = htContext) then
     begin
       Application.HelpCommand(HELP_SETPOPUP_POS, Longint(Pt));
       Application.HelpCommand(HELP_CONTEXTPOPUP, ContextID);
     end
-    else
-      Application.HelpContext(ContextID);
+    else begin
+      if HType = htContext then
+        Application.HelpContext(ContextID)
+      else if HType = htKeyword then
+        Application.HelpKeyword(Keyword);
+    end;
   end;
 end;
 
@@ -4477,6 +4508,14 @@ begin
     end;
 end;
 
+procedure TCustomForm.CMIsShortCut(var Message: TWMKey);
+begin
+  if IsShortCut(Message) then
+    Message.Result := 1
+  else
+    Message.Result := 0;
+end;
+
 procedure TCustomForm.Close;
 var
   CloseAction: TCloseAction;
@@ -4524,7 +4563,7 @@ begin
     if CloseQuery then
     begin
       CloseAction := caHide;
-      if Assigned(FOnClose) then FOnClose(Self, CloseAction);
+      DoClose(CloseAction);
     end;
     case CloseAction of
       caNone: ModalResult := 0;
@@ -4718,7 +4757,7 @@ end;
 procedure TCustomForm.UpdateActions;
 var
   I: Integer;
-  
+
   procedure TraverseClients(Container: TWinControl);
   var
     I: Integer;
@@ -4875,13 +4914,11 @@ end;
 
 function TCustomForm.QueryInterface(const IID: TGUID; out Obj): HResult;
 begin
-  if IsEqualIID(IID, IDesignerNotify) or IsEqualIID(IID, IDesigner) then
-  begin
-    Result := S_OK;
-    IUnknown(Obj) := Designer;
-  end
+  // Route the QueryInterface through the Designer first
+  if (Designer = nil) or (Designer.QueryInterface(IID, Obj) <> 0) then
+    Result := inherited QueryInterface(IID, Obj)
   else
-    Result := inherited QueryInterface(IID, Obj);
+    Result := 0;
 end;
 
 procedure TCustomForm.MouseWheelHandler(var Message: TMessage);
@@ -4893,6 +4930,101 @@ begin
     else
       inherited MouseWheelHandler(Message);
   end;
+end;
+
+function TCustomForm.HandleCreateException: Boolean;
+begin
+  Application.HandleException(Self);
+  Result := True;
+end;
+
+procedure TCustomForm.SetLayeredAttribs;
+const
+  cUseAlpha: array [Boolean] of Integer = (0, LWA_ALPHA);
+  cUseColorKey: array [Boolean] of Integer = (0, LWA_COLORKEY);
+var
+  AStyle: Integer;
+begin
+  if not (csDesigning in ComponentState) and
+    (Assigned(SetLayeredWindowAttributes)) and HandleAllocated then
+  begin
+    AStyle := GetWindowLong(Handle, GWL_EXSTYLE);
+    if FAlphaBlend or FTransparentColor then
+    begin
+      if (AStyle and WS_EX_LAYERED) = 0 then
+        SetWindowLong(Handle, GWL_EXSTYLE, AStyle or WS_EX_LAYERED);
+      SetLayeredWindowAttributes(Handle, FTransparentColorValue, FAlphaBlendValue,
+        cUseAlpha[FAlphaBlend] or cUseColorKey[FTransparentColor]);
+    end
+    else
+    begin
+      SetWindowLong(Handle, GWL_EXSTYLE, AStyle and not WS_EX_LAYERED);
+      RedrawWindow(Handle, nil, 0, RDW_ERASE or RDW_INVALIDATE or RDW_FRAME or RDW_ALLCHILDREN);
+    end;
+  end;
+end;
+
+procedure TCustomForm.SetAlphaBlend(const Value: Boolean);
+begin
+  if FAlphaBlend <> Value then
+  begin
+    FAlphaBlend := Value;
+    SetLayeredAttribs;
+  end;
+end;
+
+procedure TCustomForm.SetAlphaBlendValue(const Value: Byte);
+begin
+  if FAlphaBlendValue <> Value then
+  begin
+    FAlphaBlendValue := Value;
+    SetLayeredAttribs;
+  end;
+end;
+
+procedure TCustomForm.SetTransparentColorValue(const Value: TColor);
+begin
+  if FTransparentColorValue <> Value then
+  begin
+    FTransparentColorValue := Value;
+    SetLayeredAttribs;
+  end;
+end;
+
+procedure TCustomForm.SetTransparentColor(const Value: Boolean);
+begin
+  if FTransparentColor <> Value then
+  begin
+    FTransparentColor := Value;
+    SetLayeredAttribs;
+  end;
+end;
+
+procedure TCustomForm.InitAlphaBlending(var Params: TCreateParams);
+begin
+  if not (csDesigning in ComponentState) and (assigned(SetLayeredWindowAttributes)) then
+    if FAlphaBlend or FTransparentColor then
+      Params.ExStyle := Params.ExStyle or WS_EX_LAYERED;
+end;
+
+procedure TCustomForm.MakeFullyVisible(AMonitor: TMonitor);
+var
+  ALeft: Integer;
+  ATop: Integer;
+begin
+  if AMonitor = nil then
+    AMonitor := Monitor;
+  ALeft := Left;
+  ATop := Top;
+  if Left + Width > AMonitor.Left + AMonitor.Width then
+    ALeft := Monitor.Left + AMonitor.Width - Width;
+  if Left < AMonitor.Left then
+    ALeft := AMonitor.Left;
+  if Top + Height > AMonitor.Top + AMonitor.Height then
+    ATop := AMonitor.Top + AMonitor.Height - Height;
+  if Top < AMonitor.Top then
+    ATop := AMonitor.Top;
+  SetBounds(ALeft, ATop, Width, Height);
 end;
 
 { TForm }
@@ -5065,214 +5197,56 @@ begin
       DockClients[I].Visible := Visible;
 end;
 
-{ TDataModule }
-
-constructor TDataModule.Create(AOwner: TComponent);
-begin
-  GlobalNameSpace.BeginWrite;
-  try
-    CreateNew(AOwner);
-    if (ClassType <> TDataModule) and not (csDesigning in ComponentState) then
-    begin
-      if not InitInheritedComponent(Self, TDataModule) then
-        raise EResNotFound.CreateFmt(SResNotFound, [ClassName]);
-      if OldCreateOrder then DoCreate;
-    end;
-  finally
-    GlobalNameSpace.EndWrite;
-  end;
-end;
-
-procedure TDataModule.AfterConstruction;
-begin
-  if not OldCreateOrder then DoCreate;
-end;
-
-constructor TDataModule.CreateNew(AOwner: TComponent; Dummy: Integer);
-begin
-  inherited Create(AOwner);
-  Screen.AddDataModule(Self);
-end;
-
-procedure TDataModule.BeforeDestruction;
-begin
-  GlobalNameSpace.BeginWrite;
-  Destroying;
-  RemoveFixupReferences(Self, '');
-  if not OldCreateOrder then DoDestroy;
-end;
-
-destructor TDataModule.Destroy;
-begin
-  if not (csDestroying in ComponentState) then GlobalNameSpace.BeginWrite;
-  try
-    if OldCreateOrder then DoDestroy;
-    Screen.RemoveDataModule(Self);
-    inherited Destroy;
-  finally
-    GlobalNameSpace.EndWrite;
-  end;
-end;
-
-procedure TDataModule.DoCreate;
-begin
-  if Assigned(FOnCreate) then
-  try
-    FOnCreate(Self);
-  except
-    Application.HandleException(Self);
-  end;
-end;
-
-procedure TDataModule.DoDestroy;
-begin
-  if Assigned(FOnDestroy) then
-  try
-    FOnDestroy(Self);
-  except
-    Application.HandleException(Self);
-  end;
-end;
-
-procedure TDataModule.DefineProperties(Filer: TFiler);
-var
-  Ancestor: TDataModule;
-
-  function DoWriteWidth: Boolean;
-  begin
-    Result := True;
-    if Ancestor <> nil then Result := FDesignSize.X <> Ancestor.FDesignSize.X;
-  end;
-
-  function DoWriteHorizontalOffset: Boolean;
-  begin
-    if Ancestor <> nil then
-      Result := FDesignOffset.X <> Ancestor.FDesignOffset.X else
-      Result := FDesignOffset.X <> 0;
-  end;
-
-  function DoWriteVerticalOffset: Boolean;
-  begin
-    if Ancestor <> nil then
-      Result := FDesignOffset.Y <> Ancestor.FDesignOffset.Y else
-      Result := FDesignOffset.Y <> 0;
-  end;
-
-  function DoWriteHeight: Boolean;
-  begin
-    Result := True;
-    if Ancestor <> nil then Result := FDesignSize.Y <> Ancestor.FDesignSize.Y;
-  end;
-
-begin
-  inherited DefineProperties(Filer);
-  Ancestor := TDataModule(Filer.Ancestor);
-  Filer.DefineProperty('Height', ReadHeight, WriteHeight, DoWriteHeight);
-  Filer.DefineProperty('HorizontalOffset', ReadHorizontalOffset,
-    WriteHorizontalOffset, DoWriteHorizontalOffset);
-  Filer.DefineProperty('VerticalOffset', ReadVerticalOffset,
-    WriteVerticalOffset, DoWriteVerticalOffset);
-  Filer.DefineProperty('Width', ReadWidth, WriteWidth, DoWriteWidth);
-end;
-
-procedure TDataModule.GetChildren(Proc: TGetChildProc; Root: TComponent);
-var
-  I: Integer;
-  OwnedComponent: TComponent;
-begin
-  inherited GetChildren(Proc, Root);
-  if Root = Self then
-    for I := 0 to ComponentCount - 1 do
-    begin
-      OwnedComponent := Components[I];
-      if not OwnedComponent.HasParent then Proc(OwnedComponent);
-    end;
-end;
-
-procedure TDataModule.ReadState(Reader: TReader);
-begin
-  FOldCreateOrder := not ModuleIsCPP;
-  inherited ReadState(Reader);
-end;
-
-procedure TDataModule.ReadWidth(Reader: TReader);
-begin
-  FDesignSize.X := Reader.ReadInteger;
-end;
-
-procedure TDataModule.ReadHorizontalOffset(Reader: TReader);
-begin
-  FDesignOffset.X := Reader.ReadInteger;
-end;
-
-procedure TDataModule.ReadVerticalOffset(Reader: TReader);
-begin
-  FDesignOffset.Y := Reader.ReadInteger;
-end;
-
-procedure TDataModule.ReadHeight(Reader: TReader);
-begin
-  FDesignSize.Y := Reader.ReadInteger;
-end;
-
-procedure TDataModule.WriteWidth(Writer: TWriter);
-begin
-  Writer.WriteInteger(FDesignSize.X);
-end;
-
-procedure TDataModule.WriteHorizontalOffset(Writer: TWriter);
-begin
-  Writer.WriteInteger(FDesignOffset.X);
-end;
-
-procedure TDataModule.WriteVerticalOffset(Writer: TWriter);
-begin
-  Writer.WriteInteger(FDesignOffset.Y);
-end;
-
-procedure TDataModule.WriteHeight(Writer: TWriter);
-begin
-  Writer.WriteInteger(FDesignSize.Y);
-end;
-
 { TMonitor }
 
 function TMonitor.GetLeft: Integer;
-var
-  MonInfo: TMonitorInfo;
 begin
-  MonInfo.cbSize := SizeOf(MonInfo);
-  GetMonitorInfo(FHandle, @MonInfo);
-  Result := MonInfo.rcMonitor.Left;
+  Result := BoundsRect.Left;
 end;
 
 function TMonitor.GetHeight: Integer;
-var
-  MonInfo: TMonitorInfo;
 begin
-  MonInfo.cbSize := SizeOf(MonInfo);
-  GetMonitorInfo(FHandle, @MonInfo);
-  Result := MonInfo.rcMonitor.Bottom - MonInfo.rcMonitor.Top;
+  with BoundsRect do
+    Result := Bottom - Top;
 end;
 
 function TMonitor.GetTop: Integer;
-var
-  MonInfo: TMonitorInfo;
 begin
-  MonInfo.cbSize := SizeOf(MonInfo);
-  GetMonitorInfo(FHandle, @MonInfo);
-  Result := MonInfo.rcMonitor.Top;
+  Result := BoundsRect.Top;
 end;
 
 function TMonitor.GetWidth: Integer;
+begin
+  with BoundsRect do
+    Result := Right - Left;
+end;
+
+function TMonitor.GetBoundsRect: TRect;
 var
   MonInfo: TMonitorInfo;
 begin
   MonInfo.cbSize := SizeOf(MonInfo);
   GetMonitorInfo(FHandle, @MonInfo);
-  Result := MonInfo.rcMonitor.Right - MonInfo.rcMonitor.Left;
+  Result := MonInfo.rcMonitor;
 end;
 
+function TMonitor.GetWorkareaRect: TRect;
+var
+  MonInfo: TMonitorInfo;
+begin
+  MonInfo.cbSize := SizeOf(MonInfo);
+  GetMonitorInfo(FHandle, @MonInfo);
+  Result := MonInfo.rcWork;
+end;
+
+function TMonitor.GetPrimary: Boolean;
+var
+  MonInfo: TMonitorInfo;
+begin
+  MonInfo.cbSize := SizeOf(MonInfo);
+  GetMonitorInfo(FHandle, @MonInfo);
+  Result := (MonInfo.dwFlags and MONITORINFOF_PRIMARY) <> 0;
+end;
 
 { TScreen }
 
@@ -5303,6 +5277,8 @@ var
   DC: HDC;
 begin
   inherited Create(AOwner);
+  Classes.AddDataModule := AddDataModule;
+  Classes.RemoveDataModule := RemoveDataModule;
   CreateCursors;
   FDefaultKbLayout := GetKeyboardLayout(0);
   FForms := TList.Create;
@@ -5341,6 +5317,8 @@ begin
       TMonitor(FMonitors[I]).Free;
   FMonitors.Free;
   DestroyCursors;
+  Classes.AddDataModule := nil;
+  Classes.RemoveDataModule := nil;
   inherited Destroy;
 end;
 
@@ -5510,6 +5488,19 @@ begin
   end;
 end;
 
+function TScreen.FindMonitor(Handle: HMONITOR): TMonitor;
+var
+  I: Integer;
+begin
+  Result := nil;
+  for I := 0 to MonitorCount - 1 do
+    if Monitors[I].Handle = Handle then
+    begin
+      Result := Monitors[I];
+      break;
+    end;
+end;
+
 procedure TScreen.InsertCursor(Index: Integer; Handle: HCURSOR);
 var
   P: PCursorRec;
@@ -5575,6 +5566,11 @@ end;
 procedure TScreen.IconFontChanged(Sender: TObject);
 begin
   Application.NotifyForms(CM_SYSFONTCHANGED);
+  if (Sender = FHintFont) and Assigned(Application) and Application.ShowHint then
+  begin
+    Application.ShowHint := False;
+    Application.ShowHint := True;
+  end;
 end;
 
 function TScreen.GetDataModule(Index: Integer): TDataModule;
@@ -5661,20 +5657,30 @@ procedure TScreen.GetMetricSettings;
 var
   LogFont: TLogFont;
   NonClientMetrics: TNonClientMetrics;
+  SaveShowHint: Boolean;
 begin
-  if SystemParametersInfo(SPI_GETICONTITLELOGFONT, SizeOf(LogFont), @LogFont, 0) then
-    FIconFont.Handle := CreateFontIndirect(LogFont)
-  else
-    FIconFont.Handle := GetStockObject(SYSTEM_FONT);
-  NonClientMetrics.cbSize := SizeOf(NonClientMetrics);
-  if SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, @NonClientMetrics, 0) then
-  begin
-    FHintFont.Handle := CreateFontIndirect(NonClientMetrics.lfStatusFont);
-    FMenuFont.Handle := CreateFontIndirect(NonClientMetrics.lfMenuFont);
-  end else
-  begin
-    FHintFont.Size := 8;
-    FMenuFont.Handle := GetStockObject(SYSTEM_FONT);
+  SaveShowHint := False;
+  if Assigned(Application) then SaveShowHint := Application.ShowHint;
+  try
+    if Assigned(Application) then Application.ShowHint := False;
+    if SystemParametersInfo(SPI_GETICONTITLELOGFONT, SizeOf(LogFont), @LogFont, 0) then
+      FIconFont.Handle := CreateFontIndirect(LogFont)
+    else
+      FIconFont.Handle := GetStockObject(SYSTEM_FONT);
+    NonClientMetrics.cbSize := SizeOf(NonClientMetrics);
+    if SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, @NonClientMetrics, 0) then
+    begin
+      FHintFont.Handle := CreateFontIndirect(NonClientMetrics.lfStatusFont);
+      FMenuFont.Handle := CreateFontIndirect(NonClientMetrics.lfMenuFont);
+    end else
+    begin
+      FHintFont.Size := 8;
+      FMenuFont.Handle := GetStockObject(SYSTEM_FONT);
+    end;
+    FHintFont.Color := clInfoText;
+    FMenuFont.Color := clMenuText;
+  finally
+    if Assigned(Application) then Application.ShowHint := SaveShowHint;
   end;
 end;
 
@@ -5896,12 +5902,12 @@ end;
 
 procedure HintTimerProc(Wnd: HWnd; Msg, TimerID, SysTime: Longint); stdcall;
 begin
-  if Application <> nil then 
+  if Application <> nil then
   try
     Application.HintTimerExpired;
   except
     Application.HandleException(Application);
-  end;    
+  end;
 end;
 
 { DLL specific hint routines - Only executed in the context of a DLL to
@@ -5994,6 +6000,63 @@ begin
   if Animation then SetAnimation(True);
 end;
 
+function TScreen.GetDesktopRect: TRect;
+begin
+  Result := Bounds(DesktopLeft, DesktopTop, DesktopWidth, DesktopHeight);
+end;
+
+function TScreen.GetWorkAreaHeight: Integer;
+begin
+  with WorkAreaRect do
+    Result := Bottom - Top;
+end;
+
+function TScreen.GetWorkAreaLeft: Integer;
+begin
+  Result := WorkAreaRect.Left;
+end;
+
+function TScreen.GetWorkAreaRect: TRect;
+begin
+  SystemParametersInfo(SPI_GETWORKAREA, 0, @Result, 0);
+end;
+
+function TScreen.GetWorkAreaTop: Integer;
+begin
+  Result := WorkAreaRect.Top;
+end;
+
+function TScreen.GetWorkAreaWidth: Integer;
+begin
+  with WorkAreaRect do
+    Result := Right - Left;
+end;
+
+const
+  MonitorDefaultFlags: array[TMonitorDefaultTo] of DWORD = (MONITOR_DEFAULTTONEAREST,
+    MONITOR_DEFAULTTONULL, MONITOR_DEFAULTTOPRIMARY);
+
+function TScreen.MonitorFromPoint(const Point: TPoint;
+  MonitorDefault: TMonitorDefaultTo): TMonitor;
+begin
+  Result := FindMonitor(MultiMon.MonitorFromPoint(Point,
+    MonitorDefaultFlags[MonitorDefault]));
+end;
+
+function TScreen.MonitorFromRect(const Rect: TRect;
+  MonitorDefault: TMonitorDefaultTo): TMonitor;
+begin
+  Result := FindMonitor(MultiMon.MonitorFromRect(@Rect,
+    MonitorDefaultFlags[MonitorDefault]));
+end;
+
+function TScreen.MonitorFromWindow(const Handle: THandle;
+  MonitorDefault: TMonitorDefaultTo): TMonitor;
+begin
+  Result := FindMonitor(MultiMon.MonitorFromWindow(Handle,
+    MonitorDefaultFlags[MonitorDefault]));
+end;
+
 { TApplication }
 
 var
@@ -6015,6 +6078,10 @@ var
   ModuleName: array[0..255] of Char;
 begin
   inherited Create(AOwner);
+  if not Assigned(Classes.ApplicationHandleException) then
+    Classes.ApplicationHandleException := HandleException;
+  if not Assigned(Classes.ApplicationShowException) then
+    Classes.ApplicationShowException := ShowException;
   FBiDiMode := bdLeftToRight;
   FTopMostList := TList.Create;
   FWindowHooks := TList.Create;
@@ -6027,6 +6094,7 @@ begin
   FHintHidePause := DefHintHidePause;
   FShowHint := False;
   FActive := True;
+  FAutoDragDocking := True;
   FIcon := TIcon.Create;
   FIcon.Handle := LoadIcon(MainInstance, 'MAINICON');
   FIcon.OnChange := IconChanged;
@@ -6044,14 +6112,26 @@ begin
   FShowMainForm := True;
   FAllowTesting := True;
   FTestLib := 0;
+  ValidateHelpSystem;
+  HookSynchronizeWakeup;
 end;
 
 destructor TApplication.Destroy;
+type
+  TExceptionEvent = procedure (E: Exception) of object;
+var
+  P: TNotifyEvent;
+  E: TExceptionEvent;
 begin
-  if FTestLib > 32 then
+  UnhookSynchronizeWakeup;
+  P := HandleException;
+  if @P = @Classes.ApplicationHandleException then
+    Classes.ApplicationHandleException := nil;
+  E := ShowException;
+  if @E = @Classes.ApplicationShowException then
+    Classes.ApplicationShowException := nil;
+  if FTestLib <> 0 then
     FreeLibrary(FTestLib);
-  if (FHandle <> 0) and FHandleCreated and (HelpFile <> '') then
-    HelpCommand(HELP_QUIT, 0);
   FActive := False;
   CancelHint;
   ShowHint := False;
@@ -6062,7 +6142,8 @@ begin
     if NewStyleControls then SendMessage(FHandle, WM_SETICON, 1, 0);
     DestroyWindow(FHandle);
   end;
-  if FObjectInstance <> nil then FreeObjectInstance(FObjectInstance);
+  if FHelpSystem <> nil then FHelpSystem := nil;
+  if FObjectInstance <> nil then Classes.FreeObjectInstance(FObjectInstance);
   FWindowHooks.Free;
   FTopMostList.Free;
   FIcon.Free;
@@ -6075,7 +6156,7 @@ var
 begin
   if not FHandleCreated and not IsConsole then
   begin
-    FObjectInstance := MakeObjectInstance(WndProc);
+    FObjectInstance := Classes.MakeObjectInstance(WndProc);
     if not GetClassInfo(HInstance, WindowClass.lpszClassName, TempClass) then
     begin
       WindowClass.hInstance := HInstance;
@@ -6159,7 +6240,7 @@ begin
           Info.TopWindow := HWND_NOTOPMOST;
         for I := FTopMostList.Count - 1 downto 0 do
           SetWindowPos(HWND(FTopMostList[I]), Info.TopWindow, 0, 0, 0, 0,
-            SWP_NOMOVE or SWP_NOSIZE or SWP_NOACTIVATE);
+            SWP_NOMOVE or SWP_NOSIZE or SWP_NOACTIVATE or SWP_NOOWNERZORDER);
       end;
     end;
     Inc(FTopMostLevel);
@@ -6187,7 +6268,7 @@ begin
     begin
       for I := FTopMostList.Count - 1 downto 0 do
         SetWindowPos(HWND(FTopMostList[I]), HWND_TOPMOST, 0, 0, 0, 0,
-          SWP_NOMOVE or SWP_NOSIZE or SWP_NOACTIVATE);
+          SWP_NOMOVE or SWP_NOSIZE or SWP_NOACTIVATE or SWP_NOOWNERZORDER);
       FTopMostList.Clear;
     end;
   end;
@@ -6217,27 +6298,31 @@ end;
 function TApplication.CheckIniChange(var Message: TMessage): Boolean;
 begin
   Result := False;
-  case Message.Msg of
-    WM_WININICHANGE:
-      begin
-        if UpdateFormatSettings then
-        begin
-          SetThreadLocale(LOCALE_USER_DEFAULT);
-          GetFormatSettings;
-        end;
-        if UpdateMetricSettings then
-        begin
-          Screen.GetMetricSettings;
-          { Update the hint window font }
-          if ShowHint then
-          begin
-            SetShowHint(False);
-            SetShowHint(True);
-          end;
-        end;
-      end;
+  if (Message.Msg = RM_TaskbarCreated) or
+     (Message.Msg = WM_WININICHANGE) then
+  begin
+    if UpdateFormatSettings then
+    begin
+      SetThreadLocale(LOCALE_USER_DEFAULT);
+      GetFormatSettings;
+    end;
+    if UpdateMetricSettings then
+      Screen.GetMetricSettings;
+
+    if Message.Msg = RM_TaskbarCreated then
+    begin
+      Screen.ResetFonts;
+    end;
   end;
 end;
+
+procedure TApplication.SettingChange(var Message: TWMSettingChange);
+begin
+  if Assigned(FOnSettingChange) then
+    with Message do
+      FOnSettingChange(Self, Flag, Section, Result);
+end;
+
 
 procedure TApplication.WndProc(var Message: TMessage);
 type
@@ -6280,15 +6365,11 @@ begin
             SC_MINIMIZE: Minimize;
             SC_RESTORE: Restore;
           else
-            Default;  
+            Default;
           end;
         WM_CLOSE:
           if MainForm <> nil then MainForm.Close;
-{        WM_SYSCOLORCHANGE:
-          if (Ctl3DHandle <> 0) and (Ctl3DHandle <> INVALID_HANDLE_VALUE) and
-            (@Ctl3DColorChange <> nil) then
-            Ctl3DColorChange;
-}        WM_PAINT:
+        WM_PAINT:
           if IsIconic(FHandle) then DrawAppIcon else Default;
         WM_ERASEBKGND:
           begin
@@ -6387,6 +6468,7 @@ begin
             TopWindow := FindTopMostWindow(0);
             if TopWindow <> 0 then Windows.SetFocus(TopWindow);
           end;
+        WM_HELP,   // MessageBox(... MB_HELP)
         CM_INVOKEHELP: InvokeHelp(WParam, LParam);
         CM_WINDOWHOOK:
           if wParam = 0 then
@@ -6400,6 +6482,7 @@ begin
         WM_SETTINGCHANGE:
           begin
             Mouse.SettingChanged(wParam);
+            SettingChange(TWMSettingChange(Message));
             Default;
           end;
         WM_FONTCHANGE:
@@ -6407,6 +6490,8 @@ begin
             Screen.ResetFonts;
             Default;
           end;
+        WM_NULL:
+          CheckSynchronize;
       else
         Default;
       end;
@@ -6427,7 +6512,8 @@ begin
   begin
     NormalizeTopMosts;
     SetActiveWindow(FHandle);
-    if (MainForm <> nil) and (ShowMainForm or MainForm.Visible) then
+    if (MainForm <> nil) and (ShowMainForm or MainForm.Visible)
+      and IsWindowEnabled(MainForm.Handle) then
     begin
       SetWindowPos(FHandle, MainForm.Handle, MainForm.Left, MainForm.Top,
         MainForm.Width, 0, SWP_SHOWWINDOW);
@@ -6443,7 +6529,8 @@ begin
   if IsIconic(FHandle) then
   begin
     SetActiveWindow(FHandle);
-    if (MainForm <> nil) and (ShowMainForm or MainForm.Visible) then
+    if (MainForm <> nil) and (ShowMainForm or MainForm.Visible)
+      and IsWindowEnabled(MainForm.Handle) then
       DefWindowProc(FHandle, WM_SYSCOMMAND, SC_RESTORE, 0)
     else ShowWinNoAnimate(FHandle, SW_RESTORE);
     SetWindowPos(FHandle, 0, GetSystemMetrics(SM_CXSCREEN) div 2,
@@ -6533,32 +6620,11 @@ begin
     Result := IsDialogMessage(FDialogHandle, Msg);
 end;
 
-{
-function TApplication.IsIdleMessage(const Msg: TMsg): Boolean;
-const
-  WM_SYSTIMER = $118;
-begin
-  with Msg do
-    if (Message = WM_MOUSEMOVE) or (Message = WM_NCMOUSEMOVE) then
-    begin
-      if (Message = FLastMsg.Message) and (pt.X = FLastMsg.pt.X) and (pt.Y = FLastMsg.pt.Y) then
-        Result := False
-      else
-      begin
-        FLastMsg := Msg;
-        Result := True;
-      end;
-    end
-    else
-      Result := Message <> WM_SYSTIMER;
-end;
-}
 function TApplication.IsMDIMsg(var Msg: TMsg): Boolean;
 begin
   Result := False;
   if (MainForm <> nil) and (MainForm.FormStyle = fsMDIForm) and
-    (Screen.ActiveForm <> nil) and
-    (Screen.ActiveForm.FormStyle = fsMDIChild) then
+     (Screen.ActiveForm <> nil) then
     Result := TranslateMDISysAccel(MainForm.ClientHandle, Msg);
 end;
 
@@ -6578,7 +6644,7 @@ begin
           Wnd := MainForm.Handle
         else
         begin
-          // Find the nearest VCL component.  Non-VCL windows won't know what
+          // Find the nearest VCL component.  Non-VCL windows wont know what
           // to do with CN_BASE offset messages anyway.
           // TOleControl.WndProc needs this for TranslateAccelerator
           while (FindControl(Wnd) = nil) and (Wnd <> 0) do
@@ -6729,7 +6795,11 @@ begin
           Minimize else
           FMainForm.Visible := True;
       repeat
-        HandleMessage
+        try
+          HandleMessage;
+        except
+          HandleException(Self);
+        end;
       until Terminated;
     end;
   finally
@@ -6763,6 +6833,7 @@ var
   MBMonitor, AppMonitor: HMonitor;
   MonInfo: TMonitorInfo;
   Rect: TRect;
+  FocusState: TFocusState;
 begin
   ActiveWindow := GetActiveWindow;
   MBMonitor := MonitorFromWindow(ActiveWindow, MONITOR_DEFAULTTONEAREST);
@@ -6778,6 +6849,7 @@ begin
       0, 0, SWP_NOACTIVATE or SWP_NOREDRAW or SWP_NOSIZE or SWP_NOZORDER);
   end;
   WindowList := DisableTaskWindows(0);
+  FocusState := SaveFocusState;
   if UseRightToLeftReading then Flags := Flags or MB_RTLREADING;
   try
     Result := Windows.MessageBox(Handle, Text, Caption, Flags);
@@ -6789,6 +6861,7 @@ begin
         0, 0, SWP_NOACTIVATE or SWP_NOREDRAW or SWP_NOSIZE or SWP_NOZORDER);
     EnableTaskWindows(WindowList);
     SetActiveWindow(ActiveWindow);
+    RestoreFocusState(FocusState);
   end;
 end;
 
@@ -6810,30 +6883,45 @@ begin
   Result := False;
   CallHelp := True;
   ActiveForm := Screen.ActiveCustomForm;
+
+  { let existing hooks get called, if any. }
   if Assigned(ActiveForm) and Assigned(ActiveForm.FOnHelp) then
     Result := ActiveForm.FOnHelp(Command, Data, CallHelp)
   else if Assigned(FOnHelp) then
     Result := FOnHelp(Command, Data, CallHelp);
+
   if CallHelp then
     if Assigned(ActiveForm) and ActiveForm.HandleAllocated and (ActiveForm.FHelpFile <> '') then
     begin
       HelpHandle := ActiveForm.Handle;
-      Result := WinHelp(HelpHandle, PChar(ActiveForm.FHelpFile), Command, Data);
+      if ValidateHelpSystem then
+        Result := HelpSystem.Hook(Longint(HelpHandle), ActiveForm.FHelpFile, Command, Data);
     end
     else
     if FHelpFile <> '' then
     begin
       HelpHandle := Handle;
       if FMainForm <> nil then HelpHandle := FMainForm.Handle;
-      Result := WinHelp(HelpHandle, PChar(FHelpFile), Command, Data);
+      if ValidateHelpSystem then Result := HelpSystem.Hook(Longint(HelpHandle), FHelpFile, Command, Data);
     end else
       if not FHandleCreated then
         PostMessage(FHandle, CM_INVOKEHELP, Command, Data);
 end;
 
+function TApplication.HelpKeyword(const Keyword: String): Boolean;
+begin
+  Result := true;
+  if ValidateHelpSystem then
+    HelpSystem.ShowHelp(Keyword, GetCurrentHelpFile)
+  else Result := false;
+end;
+
 function TApplication.HelpContext(Context: THelpContext): Boolean;
 begin
-  Result := InvokeHelp(HELP_CONTEXT, Context);
+  Result := true;
+  if ValidateHelpSystem then
+    HelpSystem.ShowContextHelp(Context, GetCurrentHelpFile)
+  else Result := false;
 end;
 
 function TApplication.HelpCommand(Command: Integer; Data: Longint): Boolean;
@@ -6842,15 +6930,11 @@ begin
 end;
 
 function TApplication.HelpJump(const JumpID: string): Boolean;
-var
-  Command: array[0..255] of Char;
 begin
-  Result := True;
-  if InvokeHelp(HELP_CONTENTS, 0) then
-  begin
-    StrLFmt(Command, SizeOf(Command) - 1, 'JumpID("","%s")', [JumpID]);
-    Result := InvokeHelp(HELP_COMMAND, Longint(@Command));
-  end;
+  Result := true;
+  if ValidateHelpSystem then
+    HelpSystem.ShowTopicHelp(JumpID, GetCurrentHelpFile)
+  else Result := false;
 end;
 
 function TApplication.GetExeName: string;
@@ -6934,6 +7018,8 @@ begin
   except
     HandleException(Self);
   end;
+  if (GetCurrentThreadID = MainThreadID) and CheckSynchronize then
+    Done := False;
   if Done then WaitMessage;
 end;
 
@@ -6988,7 +7074,7 @@ procedure TApplication.UpdateVisible;
       SWP_NOSIZE + SWP_NOMOVE + SWP_NOZORDER + SWP_NOACTIVATE + SWP_HIDEWINDOW,
       SWP_NOSIZE + SWP_NOMOVE + SWP_NOZORDER + SWP_NOACTIVATE + SWP_SHOWWINDOW);
   begin
-    // Don't auto-update visibility if somebody else has hidden app window
+    // Dont auto-update visibility if somebody else has hidden app window
     if (IsWindowVisible(FHandle) = AppVisible) and (AppVisible <> Value) then
     begin
       SetWindowPos(FHandle, 0, 0, 0, 0, 0, ShowFlags[Value]);
@@ -7014,6 +7100,15 @@ begin
     end;
     SetVisible(False);
   end;
+end;
+
+function TApplication.ValidateHelpSystem : Boolean;
+begin
+  Result := false;
+  if FHelpSystem = nil then begin
+    HelpIntfs.GetHelpSystem(FHelpSystem);
+  end;
+  if FHelpSystem <> nil then Result := true;
 end;
 
 { Hint window processing }
@@ -7115,6 +7210,7 @@ var
   HintInfo: THintInfo;
   CanShow: Boolean;
   HintWinRect: TRect;
+  Delta: Integer;
 
   { Return number of scanlines between the scanline containing cursor hotspot
     and the last scanline included in the cursor mask. }
@@ -7188,6 +7284,28 @@ var
     end;
   end;
 
+  function MultiLineWidth(const Value: string): Integer;
+  var
+    W: Integer;
+    P, Start: PChar;
+    S: string;
+  begin
+    Result := 0;
+    P := Pointer(Value);
+    if P <> nil then
+      while P^ <> #0 do
+      begin
+        Start := P;
+        while not (P^ in [#0, #10, #13]) do Inc(P);
+        SetString(S, Start, P - Start);
+        W := FHintWindow.Canvas.TextWidth(S);
+        if W > Result then
+          Result := W;
+        if P^ = #13 then Inc(P);
+        if P^ = #10 then Inc(P);
+      end;
+  end;
+
 begin
   FHintActive := False;
   if FShowHint and (FHintControl <> nil) and ForegroundTask and
@@ -7222,6 +7340,7 @@ begin
     if FHintActive and (HintInfo.HintStr <> '') then
     begin
       ValidateHintWindow(HintInfo.HintWindowClass);
+
       { make the hint have the same BiDiMode as the activating control }
       FHintWindow.BiDiMode := FHintControl.BiDiMode;
       { calculate the width of the hint based on HintStr and MaxWidth }
@@ -7231,8 +7350,9 @@ begin
       if FHintWindow.UseRightToLeftAlignment then
         with HintWinRect do
         begin
-          Dec(Left, FHintWindow.Canvas.TextWidth(HintInfo.HintStr) + 5);
-          Dec(Right, FHintWindow.Canvas.TextWidth(HintInfo.HintStr) + 5);
+          Delta := MultiLineWidth(HintInfo.HintStr) + 5;
+          Dec(Left, Delta);
+          Dec(Right, Delta);
         end;
 
       { Convert the client's rect to screen coordinates }
@@ -7308,11 +7428,40 @@ begin
   if Assigned(FOnActionUpdate) then FOnActionUpdate(Action, Result);
 end;
 
+procedure InitProcs;
+const
+  sUser32 = 'User32.dll';
+var
+  ModH: HMODULE;
+begin
+  ModH := GetModuleHandle(sUser32);
+  if ModH <> 0 then
+     @SetLayeredWindowAttributes := GetProcAddress(ModH, 'SetLayeredWindowAttributes');
+end;
+
+procedure TApplication.WakeMainThread(Sender: TObject);
+begin
+  PostMessage(Handle, WM_NULL, 0, 0);
+end;
+
+procedure TApplication.HookSynchronizeWakeup;
+begin
+  Classes.WakeMainThread := WakeMainThread;
+end;
+
+procedure TApplication.UnhookSynchronizeWakeup;
+begin
+  Classes.WakeMainThread := nil;
+end;
+
 initialization
-  Classes.FindGlobalComponent := FindGlobalComponent;
+  InitProcs;
+  RM_TaskBarCreated := RegisterWindowMessage('TaskbarCreated');
+  Classes.RegisterFindGlobalComponentProc(FindGlobalComponent);
 
 finalization
   if Application <> nil then DoneApplication;
   if HintDoneEvent <> 0 then CloseHandle(HintDoneEvent);
+  Classes.UnregisterFindGlobalComponentProc(FindGlobalComponent);
 
 end.

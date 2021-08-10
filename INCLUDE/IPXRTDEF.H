@@ -24,7 +24,6 @@ Revision History:
 --*/
 
 #ifndef _IPXRTDEF_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _IPXRTDEF_
 
 #if _MSC_VER > 1000
@@ -438,5 +437,4 @@ typedef struct _IPX_MIB_SET_INPUT_DATA {
 
 // OUTPUT DATA: IPX_SERVICE
 
-#pragma option pop /*P_O_Pop*/
 #endif	 // _IPXRTDEF_

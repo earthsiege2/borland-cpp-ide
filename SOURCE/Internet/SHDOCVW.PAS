@@ -1,29 +1,8 @@
 unit SHDocVw;
 
-// ************************************************************************ //
-// WARNING                                                                    
-// -------                                                                    
-// The types declared in this file were generated from data read from a       
-// Type Library. If this type library is explicitly or indirectly (via        
-// another type library referring to this type library) re-imported, or the   
-// 'Refresh' command of the Type Library Editor activated while editing the   
-// Type Library, the contents of this file will be regenerated and all        
-// manual modifications will be lost.                                         
-// ************************************************************************ //
-
-// PASTLWTR : $Revision:   1.8  $
+// PASTLWTR : $Revision:   1.12  $
 // File generated on 7/26/99 12:22:56 PM from Type Library described below.
 
-// *************************************************************************//
-// NOTE:                                                                      
-// Items guarded by $IFDEF_LIVE_SERVER_AT_DESIGN_TIME are used by properties  
-// which return objects that may need to be explicitly created via a function 
-// call prior to any access via the property. These items have been disabled  
-// in order to prevent accidental use from within the object inspector. You   
-// may enable them by defining LIVE_SERVER_AT_DESIGN_TIME or by selectively   
-// removing them from the $IFDEF blocks. However, such items must still be    
-// programmatically created via a method of the appropriate CoClass before    
-// they can be used.                                                          
 // ************************************************************************ //
 // Type Lib: C:\WINNT\System32\shdocvw.dll (1)
 // IID\LCID: {EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}\0
@@ -31,16 +10,11 @@ unit SHDocVw;
 // DepndLst: 
 //   (1) v2.0 stdole, (C:\WINNT\System32\STDOLE2.TLB)
 //   (2) v4.0 StdVCL, (C:\WINNT\System32\STDVCL40.DLL)
-// Errors:
-//   Hint: Member 'Type' of 'IWebBrowser' changed to 'Type_'
-//   Hint: Parameter 'Type' of IWebBrowser.Type changed to 'Type_'
-//   Hint: Parameter 'Property' of DWebBrowserEvents.PropertyChange changed to 'Property_'
-//   Hint: Parameter 'Property' of IWebBrowserApp.PutProperty changed to 'Property_'
-//   Hint: Parameter 'Property' of IWebBrowserApp.GetProperty changed to 'Property_'
-//   Hint: Parameter 'Type' of IShellUIHelper.AddDesktopComponent changed to 'Type_'
-//   Error creating palette bitmap of (TInternetExplorer) : Invalid GUID format
 // ************************************************************************ //
 {$TYPEDADDRESS OFF} // Unit must be compiled without type-checked pointers. 
+{$WRITEABLECONST ON}
+{$WARN SYMBOL_PLATFORM OFF}
+
 interface
 
 uses Windows, ActiveX, Classes, Graphics, OleServer, OleCtrls, StdVCL;
@@ -1297,7 +1271,8 @@ type
 // Def. Intf. DISP? : No
 // Event   Interface: DWebBrowserEvents2
 // TypeFlags        : (2) CanCreate
-// *********************************************************************//
+// *********************************************************************//
+
 
 
   TInternetExplorer = class(TOleServer)
@@ -1320,7 +1295,8 @@ type
     FOnStatusBar: TInternetExplorerOnStatusBar;
     FOnFullScreen: TInternetExplorerOnFullScreen;
     FOnTheaterMode: TInternetExplorerOnTheaterMode;
-    FIntf:        IWebBrowser2;
+    FIntf:        IWebBrowser2;
+
 
 
 
@@ -1451,7 +1427,8 @@ type
     property TheaterMode: WordBool read Get_TheaterMode write Set_TheaterMode;
     property AddressBar: WordBool read Get_AddressBar write Set_AddressBar;
     property Resizable: WordBool read Get_Resizable write Set_Resizable;
-  published
+  published
+
 
 
     property OnStatusTextChange: TInternetExplorerStatusTextChange read FOnStatusTextChange write FOnStatusTextChange;
@@ -1473,7 +1450,8 @@ type
     property OnFullScreen: TInternetExplorerOnFullScreen read FOnFullScreen write FOnFullScreen;
     property OnTheaterMode: TInternetExplorerOnTheaterMode read FOnTheaterMode write FOnTheaterMode;
   end;
-
+
+
 
 
 
@@ -1594,14 +1572,16 @@ type
 // Def. Intf. DISP? : No
 // Event   Interface: DShellWindowsEvents
 // TypeFlags        : (2) CanCreate
-// *********************************************************************//
+// *********************************************************************//
+
 
 
   TShellWindows = class(TOleServer)
   private
     FOnWindowRegistered: TShellWindowsWindowRegistered;
     FOnWindowRevoked: TShellWindowsWindowRevoked;
-    FIntf:        IShellWindows;
+    FIntf:        IShellWindows;
+
 
 
 
@@ -1631,13 +1611,15 @@ type
     procedure ProcessAttachDetach(fAttach: WordBool);
     property  DefaultInterface: IShellWindows read GetDefaultInterface;
     property Count: Integer read Get_Count;
-  published
+  published
+
 
 
     property OnWindowRegistered: TShellWindowsWindowRegistered read FOnWindowRegistered write FOnWindowRegistered;
     property OnWindowRevoked: TShellWindowsWindowRevoked read FOnWindowRevoked write FOnWindowRevoked;
   end;
-
+
+
 
 
 
@@ -1679,12 +1661,14 @@ type
 // Def. Intf. DISP? : No
 // Event   Interface: 
 // TypeFlags        : (2) CanCreate
-// *********************************************************************//
+// *********************************************************************//
+
 
 
   TShellUIHelper = class(TOleServer)
   private
-    FIntf:        IShellUIHelper;
+    FIntf:        IShellUIHelper;
+
 
 
 
@@ -1726,11 +1710,13 @@ type
     procedure AutoCompleteAttach(var Reserved: OleVariant); overload;
     function  ShowBrowserUI(const bstrName: WideString; var pvarIn: OleVariant): OleVariant;
     property  DefaultInterface: IShellUIHelper read GetDefaultInterface;
-  published
+  published
+
 
 
   end;
-
+
+
 
 
 
@@ -1779,13 +1765,15 @@ type
 // Def. Intf. DISP? : No
 // Event   Interface: _ShellFavoritesNameSpaceEvents
 // TypeFlags        : (2) CanCreate
-// *********************************************************************//
+// *********************************************************************//
+
 
 
   TShellFavoritesNameSpace = class(TOleServer)
   private
     FOnFavoritesSelectionChange: TShellFavoritesNameSpaceFavoritesSelectionChange;
-    FIntf:        IShellFavoritesNameSpace;
+    FIntf:        IShellFavoritesNameSpace;
+
 
 
 
@@ -1814,12 +1802,14 @@ type
     procedure SetRoot(const bstrFullPath: WideString);
     property  DefaultInterface: IShellFavoritesNameSpace read GetDefaultInterface;
     property FOfflinePackInstalled: WordBool read Get_FOfflinePackInstalled;
-  published
+  published
+
 
 
     property OnFavoritesSelectionChange: TShellFavoritesNameSpaceFavoritesSelectionChange read FOnFavoritesSelectionChange write FOnFavoritesSelectionChange;
   end;
-
+
+
 
 
 
@@ -2264,18 +2254,21 @@ end;
 
 constructor TInternetExplorer.Create(AOwner: TComponent);
 begin
-  inherited Create(AOwner);
+  inherited Create(AOwner);
+
 
 
 end;
 
 destructor TInternetExplorer.Destroy;
-begin
+begin
+
 
 
   inherited Destroy;
 end;
-
+
+
 
 
 
@@ -2719,7 +2712,8 @@ procedure TInternetExplorer.ShowBrowserBar(var pvaClsid: OleVariant; var pvarSho
 begin
   DefaultInterface.ShowBrowserBar(pvaClsid, pvarShow, pvarSize);
 end;
-
+
+
 
 
 
@@ -3043,18 +3037,21 @@ end;
 
 constructor TShellWindows.Create(AOwner: TComponent);
 begin
-  inherited Create(AOwner);
+  inherited Create(AOwner);
+
 
 
 end;
 
 destructor TShellWindows.Destroy;
-begin
+begin
+
 
 
   inherited Destroy;
 end;
-
+
+
 
 
 
@@ -3135,7 +3132,8 @@ procedure TShellWindows.ProcessAttachDetach(fAttach: WordBool);
 begin
   DefaultInterface.ProcessAttachDetach(fAttach);
 end;
-
+
+
 
 
 
@@ -3211,18 +3209,21 @@ end;
 
 constructor TShellUIHelper.Create(AOwner: TComponent);
 begin
-  inherited Create(AOwner);
+  inherited Create(AOwner);
+
 
 
 end;
 
 destructor TShellUIHelper.Destroy;
-begin
+begin
+
 
 
   inherited Destroy;
 end;
-
+
+
 
 
 
@@ -3341,7 +3342,8 @@ function  TShellUIHelper.ShowBrowserUI(const bstrName: WideString; var pvarIn: O
 begin
   Result := DefaultInterface.ShowBrowserUI(bstrName, pvarIn);
 end;
-
+
+
 
 
 
@@ -3415,18 +3417,21 @@ end;
 
 constructor TShellFavoritesNameSpace.Create(AOwner: TComponent);
 begin
-  inherited Create(AOwner);
+  inherited Create(AOwner);
+
 
 
 end;
 
 destructor TShellFavoritesNameSpace.Destroy;
-begin
+begin
+
 
 
   inherited Destroy;
 end;
-
+
+
 
 
 
@@ -3506,7 +3511,8 @@ procedure TShellFavoritesNameSpace.SetRoot(const bstrFullPath: WideString);
 begin
   DefaultInterface.SetRoot(bstrFullPath);
 end;
-
+
+
 
 
 

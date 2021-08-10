@@ -2,7 +2,7 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="textdata_pkg.bpl"/>
     <OBJFILES value="textdata_pkg.obj TextDataSet.obj"/>
     <RESFILES value="textdata_pkg.res textdata.dcr"/>
@@ -11,9 +11,9 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="VCLBDE50.lib"/>
-    <SPARELIBS value="vcl50.lib vcldb50.lib VCLBDE50.lib"/>
-    <PACKAGES value="vcl50.bpi vcldb50.bpi"/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="rtl.lib vcl.lib dbrtl.lib vcldb.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi dbrtl.bpi vcldb.bpi bdertl.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -30,8 +30,8 @@
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
-      -tWM"/>
+    <CFLAG1 value="-Od -H=$(BCB)\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
@@ -42,6 +42,17 @@
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="textdata_pkg.cpp" FORMNAME="" UNITNAME="textdata_pkg" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="textdata_pkg.res" FORMNAME="" UNITNAME="textdata_pkg" CONTAINERID="ResTool" DESIGNCLASS=""/>
+      <FILE FILENAME="textdata.dcr" FORMNAME="" UNITNAME="textdata" CONTAINERID="" DESIGNCLASS=""/>
+      <FILE FILENAME="TextDataSet.cpp" FORMNAME="" UNITNAME="TextDataSet" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="rtl.bpi" FORMNAME="" UNITNAME="rtl" CONTAINERID="BPITool" DESIGNCLASS=""/>
+      <FILE FILENAME="vcl.bpi" FORMNAME="" UNITNAME="vcl" CONTAINERID="BPITool" DESIGNCLASS=""/>
+      <FILE FILENAME="dbrtl.bpi" FORMNAME="" UNITNAME="dbrtl" CONTAINERID="BPITool" DESIGNCLASS=""/>
+      <FILE FILENAME="vcldb.bpi" FORMNAME="" UNITNAME="vcldb" CONTAINERID="BPITool" DESIGNCLASS=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=1
@@ -75,20 +86,20 @@ DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
 ShowInfoMsgs=0
 LinkDebugVcl=0
 LinkCGLIB=0
-
-[CORBA]
-AddServerUnit=1
-AddClientUnit=1
-PrecompiledHeaders=1
 
 [Language]
 ActiveLang=

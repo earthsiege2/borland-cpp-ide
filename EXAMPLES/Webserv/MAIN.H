@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Inprise Corp.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland Corp.  All Rights Reserved.
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 #ifndef mainH
@@ -22,6 +22,9 @@
 #include <JPeg.hpp>
 #include <Messages.hpp>
 #include <Windows.hpp>
+#include <DB.hpp>
+#include <DBBdeWeb.hpp>
+#include <HTTPProd.hpp>
 
 //---------------------------------------------------------------------------
 class TCInfoModule : public TWebModule

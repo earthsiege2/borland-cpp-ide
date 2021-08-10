@@ -1,83 +1,83 @@
-LIBRARY IMM32
+LIBRARY Imm32
 EXPORTS
 
-    ImmAssociateContext                      = 'IMM32.DLL'.*
-    ImmAssociateContextEx                    = 'IMM32.DLL'.*
-    ImmConfigureIMEA                         = 'IMM32.DLL'.*
-    ImmConfigureIMEW                         = 'IMM32.DLL'.*
-    ImmCreateContext                         = 'IMM32.DLL'.*
-    ImmCreateIMCC                            = 'IMM32.DLL'.*
-    ImmCreateSoftKeyboard                    = 'IMM32.DLL'.*
-    ImmDestroyContext                        = 'IMM32.DLL'.*
-    ImmDestroyIMCC                           = 'IMM32.DLL'.*
-    ImmDestroySoftKeyboard                   = 'IMM32.DLL'.*
-    ImmDisableIME                            = 'IMM32.DLL'.*
-    ImmEnumInputContext                      = 'IMM32.DLL'.*
-    ImmEnumRegisterWordA                     = 'IMM32.DLL'.*
-    ImmEnumRegisterWordW                     = 'IMM32.DLL'.*
-    ImmEscapeA                               = 'IMM32.DLL'.*
-    ImmEscapeW                               = 'IMM32.DLL'.*
-    ImmGenerateMessage                       = 'IMM32.DLL'.*
-    ImmGetCandidateListA                     = 'IMM32.DLL'.*
-    ImmGetCandidateListCountA                = 'IMM32.DLL'.*
-    ImmGetCandidateListCountW                = 'IMM32.DLL'.*
-    ImmGetCandidateListW                     = 'IMM32.DLL'.*
-    ImmGetCandidateWindow                    = 'IMM32.DLL'.*
-    ImmGetCompositionFontA                   = 'IMM32.DLL'.*
-    ImmGetCompositionFontW                   = 'IMM32.DLL'.*
-    ImmGetCompositionStringA                 = 'IMM32.DLL'.*
-    ImmGetCompositionStringW                 = 'IMM32.DLL'.*
-    ImmGetCompositionWindow                  = 'IMM32.DLL'.*
-    ImmGetContext                            = 'IMM32.DLL'.*
-    ImmGetConversionListA                    = 'IMM32.DLL'.*
-    ImmGetConversionListW                    = 'IMM32.DLL'.*
-    ImmGetConversionStatus                   = 'IMM32.DLL'.*
-    ImmGetDefaultIMEWnd                      = 'IMM32.DLL'.*
-    ImmGetDescriptionA                       = 'IMM32.DLL'.*
-    ImmGetDescriptionW                       = 'IMM32.DLL'.*
-    ImmGetGuideLineA                         = 'IMM32.DLL'.*
-    ImmGetGuideLineW                         = 'IMM32.DLL'.*
-    ImmGetHotKey                             = 'IMM32.DLL'.*
-    ImmGetIMCCLockCount                      = 'IMM32.DLL'.*
-    ImmGetIMCCSize                           = 'IMM32.DLL'.*
-    ImmGetIMCLockCount                       = 'IMM32.DLL'.*
-    ImmGetIMEFileNameA                       = 'IMM32.DLL'.*
-    ImmGetIMEFileNameW                       = 'IMM32.DLL'.*
-    ImmGetImeMenuItemsA                      = 'IMM32.DLL'.*
-    ImmGetImeMenuItemsW                      = 'IMM32.DLL'.*
-    ImmGetOpenStatus                         = 'IMM32.DLL'.*
-    ImmGetProperty                           = 'IMM32.DLL'.*
-    ImmGetRegisterWordStyleA                 = 'IMM32.DLL'.*
-    ImmGetRegisterWordStyleW                 = 'IMM32.DLL'.*
-    ImmGetStatusWindowPos                    = 'IMM32.DLL'.*
-    ImmGetVirtualKey                         = 'IMM32.DLL'.*
-    ImmInstallIMEA                           = 'IMM32.DLL'.*
-    ImmInstallIMEW                           = 'IMM32.DLL'.*
-    ImmIsIME                                 = 'IMM32.DLL'.*
-    ImmIsUIMessageA                          = 'IMM32.DLL'.*
-    ImmIsUIMessageW                          = 'IMM32.DLL'.*
-    ImmLockIMC                               = 'IMM32.DLL'.*
-    ImmLockIMCC                              = 'IMM32.DLL'.*
-    ImmNotifyIME                             = 'IMM32.DLL'.*
-    ImmReSizeIMCC                            = 'IMM32.DLL'.*
-    ImmRegisterWordA                         = 'IMM32.DLL'.*
-    ImmRegisterWordW                         = 'IMM32.DLL'.*
-    ImmReleaseContext                        = 'IMM32.DLL'.*
-    ImmRequestMessageA                       = 'IMM32.DLL'.*
-    ImmRequestMessageW                       = 'IMM32.DLL'.*
-    ImmSetCandidateWindow                    = 'IMM32.DLL'.*
-    ImmSetCompositionFontA                   = 'IMM32.DLL'.*
-    ImmSetCompositionFontW                   = 'IMM32.DLL'.*
-    ImmSetCompositionStringA                 = 'IMM32.DLL'.*
-    ImmSetCompositionStringW                 = 'IMM32.DLL'.*
-    ImmSetCompositionWindow                  = 'IMM32.DLL'.*
-    ImmSetConversionStatus                   = 'IMM32.DLL'.*
-    ImmSetHotKey                             = 'IMM32.DLL'.*
-    ImmSetOpenStatus                         = 'IMM32.DLL'.*
-    ImmSetStatusWindowPos                    = 'IMM32.DLL'.*
-    ImmShowSoftKeyboard                      = 'IMM32.DLL'.*
-    ImmSimulateHotKey                        = 'IMM32.DLL'.*
-    ImmUnlockIMC                             = 'IMM32.DLL'.*
-    ImmUnlockIMCC                            = 'IMM32.DLL'.*
-    ImmUnregisterWordA                       = 'IMM32.DLL'.*
-    ImmUnregisterWordW                       = 'IMM32.DLL'.*
+    ImmAssociateContext
+    ImmAssociateContextEx
+    ImmConfigureIMEA
+    ImmConfigureIMEW
+    ImmCreateContext
+    ImmCreateIMCC
+    ImmCreateSoftKeyboard
+    ImmDestroyContext
+    ImmDestroyIMCC
+    ImmDestroySoftKeyboard
+    ImmDisableIME
+    ImmEnumInputContext
+    ImmEnumRegisterWordA
+    ImmEnumRegisterWordW
+    ImmEscapeA
+    ImmEscapeW
+    ImmGenerateMessage
+    ImmGetCandidateListA
+    ImmGetCandidateListCountA
+    ImmGetCandidateListCountW
+    ImmGetCandidateListW
+    ImmGetCandidateWindow
+    ImmGetCompositionFontA
+    ImmGetCompositionFontW
+    ImmGetCompositionStringA
+    ImmGetCompositionStringW
+    ImmGetCompositionWindow
+    ImmGetContext
+    ImmGetConversionListA
+    ImmGetConversionListW
+    ImmGetConversionStatus
+    ImmGetDefaultIMEWnd
+    ImmGetDescriptionA
+    ImmGetDescriptionW
+    ImmGetGuideLineA
+    ImmGetGuideLineW
+    ImmGetHotKey
+    ImmGetIMCCLockCount
+    ImmGetIMCCSize
+    ImmGetIMCLockCount
+    ImmGetIMEFileNameA
+    ImmGetIMEFileNameW
+    ImmGetImeMenuItemsA
+    ImmGetImeMenuItemsW
+    ImmGetOpenStatus
+    ImmGetProperty
+    ImmGetRegisterWordStyleA
+    ImmGetRegisterWordStyleW
+    ImmGetStatusWindowPos
+    ImmGetVirtualKey
+    ImmInstallIMEA
+    ImmInstallIMEW
+    ImmIsIME
+    ImmIsUIMessageA
+    ImmIsUIMessageW
+    ImmLockIMC
+    ImmLockIMCC
+    ImmNotifyIME
+    ImmReSizeIMCC
+    ImmRegisterWordA
+    ImmRegisterWordW
+    ImmReleaseContext
+    ImmRequestMessageA
+    ImmRequestMessageW
+    ImmSetCandidateWindow
+    ImmSetCompositionFontA
+    ImmSetCompositionFontW
+    ImmSetCompositionStringA
+    ImmSetCompositionStringW
+    ImmSetCompositionWindow
+    ImmSetConversionStatus
+    ImmSetHotKey
+    ImmSetOpenStatus
+    ImmSetStatusWindowPos
+    ImmShowSoftKeyboard
+    ImmSimulateHotKey
+    ImmUnlockIMC
+    ImmUnlockIMCC
+    ImmUnregisterWordA
+    ImmUnregisterWordW

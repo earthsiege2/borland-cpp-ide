@@ -3,7 +3,7 @@
 #pragma hdrstop
 
 #include "SingleAppInstanceDesignMarkerForm.h"
-#include "SingleAppInstance.h"
+#include "SingleInstance.h"
 
 #include <ComObj.Hpp>
 

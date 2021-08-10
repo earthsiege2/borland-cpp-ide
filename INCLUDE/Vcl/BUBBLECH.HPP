@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'BubbleCh.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'BubbleCh.pas' rev: 6.00
 
 #ifndef BubbleChHPP
 #define BubbleChHPP
@@ -34,18 +34,16 @@ private:
 	bool FSquared;
 	void __fastcall SetSquared(bool Value);
 	void __fastcall SetRadiusValues(Teengine::TChartValueList* Value);
-	double __fastcall ApplyRadius(const double Value, Teengine::TChartValueList* AList, bool Increment)
-		;
+	double __fastcall ApplyRadius(const double Value, Teengine::TChartValueList* AList, bool Increment);
 	
 protected:
 	virtual void __fastcall DrawValue(int ValueIndex);
 	
 public:
 	__fastcall virtual TBubbleSeries(Classes::TComponent* AOwner);
-	int __fastcall AddBubble(const double AX, const double AY, const double ARadius, const AnsiString AXLabel
-		, Graphics::TColor AColor);
+	int __fastcall AddBubble(const double AX, const double AY, const double ARadius, const AnsiString AXLabel = "", Graphics::TColor AColor = (Graphics::TColor)(0x20000000));
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
-	virtual void __fastcall DrawLegendShape(int ValueIndex, const Windows::TRect &Rect);
+	virtual void __fastcall DrawLegendShape(int ValueIndex, const Types::TRect &Rect);
 	virtual void __fastcall FillSampleValues(int NumValues);
 	virtual int __fastcall NumSampleValues(void);
 	virtual bool __fastcall IsValidSourceOf(Teengine::TChartSeries* Value);
@@ -55,7 +53,7 @@ public:
 	virtual double __fastcall MinZValue(void);
 	
 __published:
-	__property ColorEachPoint ;
+	__property ColorEachPoint  = {default=1};
 	__property Teengine::TChartValueList* RadiusValues = {read=FRadiusValues, write=SetRadiusValues};
 	__property bool Squared = {read=FSquared, write=SetSquared, default=1};
 public:
@@ -69,9 +67,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Bubblech */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Bubblech;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

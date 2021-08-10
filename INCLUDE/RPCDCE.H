@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1991-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -13,7 +13,6 @@ Abstract:
 --*/
 
 #ifndef __RPCDCE_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __RPCDCE_H__
 
 #if _MSC_VER > 1000
@@ -34,6 +33,14 @@ extern "C" {
 
 #ifndef OPTIONAL
 #define OPTIONAL
+#endif
+
+#ifndef DECLSPEC_NORETURN
+#if (_MSC_VER >= 1200) && !defined(MIDL_PASS)
+#define DECLSPEC_NORETURN   __declspec(noreturn)
+#else
+#define DECLSPEC_NORETURN
+#endif
 #endif
 
 /*typedef char small;*/
@@ -123,7 +130,9 @@ typedef struct _RPC_IF_ID
 #define RPC_C_OPT_BINDING_NONCAUSAL      9
 #define RPC_C_OPT_SECURITY_CALLBACK      10
 #define RPC_C_OPT_UNIQUE_BINDING         11
-#define RPC_C_OPT_MAX_OPTIONS            12
+#define RPC_C_OPT_CALL_TIMEOUT           12
+#define RPC_C_OPT_DONT_LINGER            13
+#define RPC_C_OPT_MAX_OPTIONS            14
 
 #define RPC_C_MQ_EXPRESS                0  // Client: RPC_C_MQ_DELIVERY.
 #define RPC_C_MQ_RECOVERABLE            1
@@ -755,6 +764,16 @@ RpcServerUnregisterIf (
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
+RpcServerUnregisterIfEx (
+    IN RPC_IF_HANDLE IfSpec,
+    IN UUID __RPC_FAR * MgrTypeUuid, OPTIONAL
+    IN int RundownContextHandles
+    );
+
+/* server */
+RPCRTAPI
+RPC_STATUS
+RPC_ENTRY
 RpcServerUseAllProtseqs (
     IN unsigned int MaxCalls,
     IN void __RPC_FAR * SecurityDescriptor OPTIONAL
@@ -1275,12 +1294,13 @@ typedef void __RPC_FAR * RPC_AUTHZ_HANDLE;
 #define RPC_C_AUTHN_WINNT        10
 #define RPC_C_AUTHN_GSS_SCHANNEL 14
 #define RPC_C_AUTHN_GSS_KERBEROS 16
-#define RPC_C_AUTHN_MSN          17
-#define RPC_C_AUTHN_DPA          18
+#define RPC_C_AUTHN_DPA          17
+#define RPC_C_AUTHN_MSN          18
+#define RPC_C_AUTHN_DIGEST       21
 #define RPC_C_AUTHN_MQ          100
 #define RPC_C_AUTHN_DEFAULT     0xFFFFFFFFL
 
-#define RPC_C_NO_CREDENTIALS ((RPC_AUTH_IDENTITY_HANDLE) ~0UL)
+#define RPC_C_NO_CREDENTIALS ((RPC_AUTH_IDENTITY_HANDLE) MAXUINT_PTR)
 
 #define RPC_C_SECURITY_QOS_VERSION  1L
 
@@ -1291,15 +1311,8 @@ typedef struct _RPC_SECURITY_QOS {
   unsigned long ImpersonationType;
 } RPC_SECURITY_QOS, *PRPC_SECURITY_QOS;
 
-#if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
-typedef struct _SEC_WINNT_AUTH_IDENTITY
-{
-  char __RPC_FAR *User;
-  char __RPC_FAR *Domain;
-  char __RPC_FAR *Password;
-} SEC_WINNT_AUTH_IDENTITY;
-#else
-
+#ifndef _AUTH_IDENTITY_DEFINED
+#define _AUTH_IDENTITY_DEFINED
 
 #define SEC_WINNT_AUTH_IDENTITY_ANSI    0x1
 #define SEC_WINNT_AUTH_IDENTITY_UNICODE 0x2
@@ -1334,7 +1347,8 @@ typedef struct _SEC_WINNT_AUTH_IDENTITY_A {
 #define PSEC_WINNT_AUTH_IDENTITY PSEC_WINNT_AUTH_IDENTITY_A
 #define _SEC_WINNT_AUTH_IDENTITY _SEC_WINNT_AUTH_IDENTITY_A
 #endif // UNICODE
-#endif // defined(__RPC_DOS__) || defined(__RPC_WIN16__)
+
+#endif //_AUTH_IDENTITY_DEFINED
 
 #define RPC_C_AUTHZ_NONE    0
 #define RPC_C_AUTHZ_NAME    1
@@ -1634,12 +1648,14 @@ RpcServerRegisterAuthInfo (
 
 #endif /* RPC_UNICODE_SUPPORTED */
 
+#if !defined(_M_IA64)
 typedef struct {
     unsigned char __RPC_FAR * UserName;
     unsigned char __RPC_FAR * ComputerName;
     unsigned short Privilege;
     unsigned long AuthFlags;
 } RPC_CLIENT_INFORMATION1, __RPC_FAR * PRPC_CLIENT_INFORMATION1;
+#endif
 
 RPCRTAPI
 RPC_STATUS
@@ -1650,6 +1666,7 @@ RpcBindingServerFromClient (
     );
 
 RPCRTAPI
+DECLSPEC_NORETURN
 void
 RPC_ENTRY
 RpcRaiseException (
@@ -2052,5 +2069,4 @@ RpcMgmtSetAuthorizationFn (
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif /* __RPCDCE_H__ */

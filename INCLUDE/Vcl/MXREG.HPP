@@ -1,18 +1,19 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'MXReg.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MXREG.pas' rev: 6.00
 
-#ifndef MXRegHPP
-#define MXRegHPP
+#ifndef MXREGHPP
+#define MXREGHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
 #include <Chart.hpp>	// Pascal unit
-#include <ChartReg.hpp>	// Pascal unit
-#include <DsgnIntf.hpp>	// Pascal unit
+#include <chartreg.hpp>	// Pascal unit
+#include <DesignEditors.hpp>	// Pascal unit
+#include <DesignIntf.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -30,8 +31,7 @@ public:
 	virtual void __fastcall Edit(void);
 public:
 	#pragma option push -w-inl
-	/* TComponentEditor.Create */ inline __fastcall virtual TDSSChartCompEditor(Classes::TComponent* AComponent
-		, Dsgnintf::_di_IFormDesigner ADesigner) : Chartreg::TChartCompEditor(AComponent, ADesigner) { }
+	/* TComponentEditor.Create */ inline __fastcall virtual TDSSChartCompEditor(Classes::TComponent* AComponent, Designintf::_di_IDesigner ADesigner) : Chartreg::TChartCompEditor(AComponent, ADesigner) { }
 	#pragma option pop
 	
 public:
@@ -46,12 +46,10 @@ public:
 extern PACKAGE void __fastcall Register(void);
 
 }	/* namespace Mxreg */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxreg;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// MXReg
+#endif	// MXREG

@@ -1,12 +1,12 @@
-LIBRARY URL
+LIBRARY Url
 EXPORTS
 
-    AddMIMEFileTypesPS                       = 'URL.DLL'.*
-    InetIsOffline                            = 'URL.DLL'.*
-    MIMEAssociationDialogA                   = 'URL.DLL'.*
-    MIMEAssociationDialogW                   = 'URL.DLL'.*
-    SetInetOffline                           = 'URL.DLL'.* @101 @100
-    TranslateURLA                            = 'URL.DLL'.*
-    TranslateURLW                            = 'URL.DLL'.*
-    URLAssociationDialogA                    = 'URL.DLL'.*
-    URLAssociationDialogW                    = 'URL.DLL'.*
+    AddMIMEFileTypesPS
+    InetIsOffline
+    MIMEAssociationDialogA
+    MIMEAssociationDialogW
+    SetInetOffline        @101
+    TranslateURLA
+    TranslateURLW
+    URLAssociationDialogA
+    URLAssociationDialogW

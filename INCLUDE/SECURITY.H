@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 //+-----------------------------------------------------------------------
 //
 // Microsoft Windows
@@ -73,4 +72,3 @@
 #if ISSP_LEVEL == 16
 #include <issper16.h>
 #endif
-#pragma option pop /*P_O_Pop*/

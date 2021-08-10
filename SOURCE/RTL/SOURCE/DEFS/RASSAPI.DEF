@@ -1,17 +1,17 @@
-LIBRARY RASSAPI
+LIBRARY RASsAPI
 EXPORTS
 
-    RasAdminCompressPhoneNumber              = 'RASSAPI.DLL'.* @13 @12
-    RasAdminDLLInit                          = 'RASSAPI.DLL'.* @1 @0
-    RasAdminFreeBuffer                       = 'RASSAPI.DLL'.* @10 @9
-    RasAdminGetErrorString                   = 'RASSAPI.DLL'.* @14 @13
-    RasAdminGetUserAccountServer             = 'RASSAPI.DLL'.* @4 @3
-    RasAdminGetUserParms                     = 'RASSAPI.DLL'.* @12 @11
-    RasAdminPortClearStatistics              = 'RASSAPI.DLL'.* @7 @6
-    RasAdminPortDisconnect                   = 'RASSAPI.DLL'.* @9 @8
-    RasAdminPortEnum                         = 'RASSAPI.DLL'.* @5 @4
-    RasAdminPortGetInfo                      = 'RASSAPI.DLL'.* @6 @5
-    RasAdminServerGetInfo                    = 'RASSAPI.DLL'.* @8 @7
-    RasAdminSetUserParms                     = 'RASSAPI.DLL'.* @11 @10
-    RasAdminUserGetInfo                      = 'RASSAPI.DLL'.* @3 @2
-    RasAdminUserSetInfo                      = 'RASSAPI.DLL'.* @2 @1
+    RasAdminCompressPhoneNumber        @13
+    RasAdminDLLInit        @1
+    RasAdminFreeBuffer        @10
+    RasAdminGetErrorString        @14
+    RasAdminGetUserAccountServer        @4
+    RasAdminGetUserParms        @12
+    RasAdminPortClearStatistics        @7
+    RasAdminPortDisconnect        @9
+    RasAdminPortEnum        @5
+    RasAdminPortGetInfo        @6
+    RasAdminServerGetInfo        @8
+    RasAdminSetUserParms        @11
+    RasAdminUserGetInfo        @3
+    RasAdminUserSetInfo        @2

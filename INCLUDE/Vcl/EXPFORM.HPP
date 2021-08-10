@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ExpForm.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ExpForm.pas' rev: 6.00
 
 #ifndef ExpFormHPP
 #define ExpFormHPP
@@ -13,16 +13,16 @@
 #include <FileCtrl.hpp>	// Pascal unit
 #include <DsnDBCst.hpp>	// Pascal unit
 #include <ActiveX.hpp>	// Pascal unit
-#include <dsnconst.hpp>	// Pascal unit
+#include <DsnConst.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <Bde.hpp>	// Pascal unit
-#include <DBCombo.hpp>	// Pascal unit
+#include <BDE.hpp>	// Pascal unit
+#include <DbCombo.hpp>	// Pascal unit
 #include <TeeConst.hpp>	// Pascal unit
 #include <TeeProcs.hpp>	// Pascal unit
 #include <DBCtrls.hpp>	// Pascal unit
 #include <TeeGally.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
-#include <DBChart.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
+#include <DbChart.hpp>	// Pascal unit
 #include <Chart.hpp>	// Pascal unit
 #include <TeEngine.hpp>	// Pascal unit
 #include <ComCtrls.hpp>	// Pascal unit
@@ -144,8 +144,7 @@ private:
 	Teegally::TTeeGallery* tmpGallery;
 	char *SourceBuffer;
 	void __fastcall RefreshButtons(void);
-	void __fastcall FmtWrite(Classes::TStream* Stream, const AnsiString Fmt, const System::TVarRec * Args
-		, const int Args_Size);
+	void __fastcall FmtWrite(Classes::TStream* Stream, const AnsiString Fmt, const System::TVarRec * Args, const int Args_Size);
 	Forms::TForm* __fastcall DoFormCreation(const AnsiString FormIdent);
 	
 public:
@@ -156,14 +155,10 @@ public:
 	AnsiString WizardTableName;
 	int WizardDriveIndex;
 	TSources WizardSource;
-	void __fastcall CreateSeries(Classes::TComponent* AOwner, Chart::TCustomChart* AChart, Dbtables::TTable* 
-		ATable, bool ShowData);
-	Classes::TMemoryStream* __fastcall CreateHeader(const AnsiString UnitIdent, const AnsiString FormIdent
-		);
-	Classes::TMemoryStream* __fastcall CreateCppSource(const AnsiString UnitIdent, const AnsiString FormIdent
-		);
-	Classes::TMemoryStream* __fastcall CreateSource(const AnsiString UnitIdent, const AnsiString FormIdent
-		);
+	void __fastcall CreateSeries(Classes::TComponent* AOwner, Chart::TCustomChart* AChart, Dbtables::TTable* ATable, bool ShowData);
+	Classes::TMemoryStream* __fastcall CreateHeader(const AnsiString UnitIdent, const AnsiString FormIdent);
+	Classes::TMemoryStream* __fastcall CreateCppSource(const AnsiString UnitIdent, const AnsiString FormIdent);
+	Classes::TMemoryStream* __fastcall CreateSource(const AnsiString UnitIdent, const AnsiString FormIdent);
 	Classes::TMemoryStream* __fastcall CreateForm(const AnsiString FormIdent);
 	void __fastcall SetChartOptions(void);
 	void __fastcall GallerySelectedChart(System::TObject* Sender);
@@ -173,12 +168,10 @@ public:
 	void __fastcall InitFilter(void);
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TTeeDlgWizard(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TTeeDlgWizard(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TTeeDlgWizard(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TTeeDlgWizard(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TTeeDlgWizard(void) { }
@@ -186,8 +179,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TTeeDlgWizard(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TTeeDlgWizard(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -197,9 +189,7 @@ public:
 extern PACKAGE void __fastcall TeeChartWizard(Toolintf::TIToolServices* ToolServices);
 
 }	/* namespace Expform */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Expform;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

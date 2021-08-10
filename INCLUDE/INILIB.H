@@ -1,21 +1,24 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
-//=================================================================================================================//
-//                                                                                                                 //
-//  inilib.h  - Include file for buildhs.c and ini_path.c                                                          //
-//              These files are used to read a parsers ini file and generate the appropriate handoff               //
-//              set. Ini_path gets the path to the ini file given the parser dll s name and buildhs                //
-//              reads the ini file and builds the parsers handoff set.                                             //
-//                                                                                                                 //
-//  Created     SteveRo     11/8/93                                                                                      //
-//                                                                                                                 //
-//=================================================================================================================//
+//=============================================================================
+//  Microsoft (R) Network Monitor (tm). 
+//  Copyright (C) 1993-1999. All rights reserved.
+//
+//  MODULE: nminilib.h
+//
+//  These files are used to read a parsers ini file and generate the 
+//  appropriate handoff set. Ini_path gets the path to the ini file given the
+//  parser dll s name and buildhs reads the ini file and builds the parsers 
+//  handoff set.
+//=============================================================================
 
-#include <bhsupp.h>
+#include <nmsupp.h>
 
-#if !defined(_INILIB_)
+#ifndef _NMINILIB_
+#define _NMINILIB_
 
-#define _INILIB_
-
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #define INI_PATH_LENGTH             256                 // Maximum path tha can be specified
 #define MAX_HANDOFF_ENTRY_LENGTH    80                  // Longest entry that can be specified ie.. 0x451 = NCP
@@ -30,8 +33,8 @@
 
 
 // Given "XNS" or "TCP" or whatever BuildINIPath will return fully qual. path to "XNS.INI" or "TCP.INI"
-extern LPSTR BuildINIPath( char     *FullPath,          // Buffer that will contain fully qual. path to ini file
-                           char     *IniFileName );     // DLL name
+extern LPSTR _cdecl BuildINIPath( char     *FullPath,          // Buffer that will contain fully qual. path to ini file
+                                  char     *IniFileName );     // DLL name
 
 
 // Builds Handoff Set
@@ -44,12 +47,16 @@ extern DWORD     WINAPI CreateHandoffTable(LPSTR               secName,
 
 extern HPROTOCOL WINAPI GetProtocolFromTable(LPHANDOFFTABLE  hTable, // lp to Handoff Table...
                                              DWORD           ItemToFind,       // port number etc...
-                                             LPDWORD         lpInstData );   // inst data to give to next protocol
+                                             PDWORD_PTR      lpInstData );   // inst data to give to next protocol
 
 extern VOID      WINAPI DestroyHandoffTable( LPHANDOFFTABLE hTable );
 
 extern BOOLEAN WINAPI IsRawIPXEnabled(LPSTR               secName,
                                       LPSTR               iniFile,
                                       LPSTR               CurProtocol );
+
+#ifdef __cplusplus
+}
 #endif
-#pragma option pop /*P_O_Pop*/
+
+#endif

@@ -1,6 +1,6 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+/*
 
-Copyright (c) 1990-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -9,7 +9,9 @@ Module Name:
 Abstract:
 
     This file contains procedure prototypes and structures
-    needed to write NTSD and KD debugger extensions.
+    needed to write old NTSD and KD debugger extensions.
+
+    NOTE:  Newer defitions and interfaces are in wdbgexts.h
 
 Environment:
 
@@ -20,7 +22,6 @@ Revision History:
 --*/
 
 #ifndef _NTSDEXTNS_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _NTSDEXTNS_
 
 #if _MSC_VER > 1000
@@ -33,7 +34,7 @@ extern "C" {
 
 typedef
 VOID
-(*PNTSD_OUTPUT_ROUTINE)(
+(__cdecl *PNTSD_OUTPUT_ROUTINE)(
     char *,
     ...
     );
@@ -90,5 +91,4 @@ VOID
 #endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // _NTSDEXTNS_

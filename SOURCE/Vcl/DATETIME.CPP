@@ -60,7 +60,7 @@ namespace System
 		return Sysutils::DateToStr(*this);
 	}
 
-	AnsiString __fastcall TDateTime::FormatString(const AnsiString& format)
+	AnsiString __fastcall TDateTime::FormatString(const AnsiString& format) const
 	{
 		return Sysutils::FormatDateTime(format, *this);
 	}

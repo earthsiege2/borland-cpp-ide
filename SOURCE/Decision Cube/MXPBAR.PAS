@@ -6,7 +6,7 @@
 {                                                       }
 {*******************************************************}
 
-unit mxpbar;
+unit MXPBAR;
 
 { the progress dialog with a cancel button }
 
@@ -56,7 +56,7 @@ var
 
 implementation
 
-{$R *.DFM}
+{$R *.dfm}
 
 procedure TProgressDialog.StartBuild(var Message);
 begin

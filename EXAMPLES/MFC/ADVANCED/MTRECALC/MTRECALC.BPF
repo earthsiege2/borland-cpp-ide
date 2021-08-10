@@ -1,11 +1,12 @@
-USEUNIT("calcthrd.cpp");
-USEUNIT("mainfrm.cpp");
-USEUNIT("mtrecalc.cpp");
-USEUNIT("recalcvw.cpp");
-USEUNIT("recaldoc.cpp");
-USEUNIT("slowcalc.cpp");
-USEUNIT("speeddlg.cpp");
-USEUNIT("stdafx.cpp");
-USERC("mtrecalc.rc");
+USEUNIT(".\Calcthrd.cpp");
+USEUNIT(".\Mainfrm.cpp");
+USEUNIT(".\Mtrecalc.cpp");
+USEUNIT(".\Recalcvw.cpp");
+USEUNIT(".\Recaldoc.cpp");
+USEUNIT(".\Slowcalc.cpp");
+USEUNIT(".\Speeddlg.cpp");
+USEUNIT(".\Stdafx.cpp");
+USERC(".\Mtrecalc.rc");
+USEFILE("vctobpr.log");
 
 #define WinMain

@@ -56,7 +56,7 @@ void __fastcall TImgDataNavigator::GetDefaultButtons()
   bool Grid;
 
   Grid = False;
-  XMLDisplay = GetXMLDisplayComponent();
+  XMLDisplay = GetWebDisplayComponent();
   if (XMLDisplay)
     if (XMLDisplay->GetInterface(__uuidof(IXMLDisplay), &Intf))
       Grid = Intf->IsMultipleRecordView;
@@ -85,7 +85,8 @@ AnsiString __fastcall TImgDataNavigator::ImplContent(Webcomp::TWebContentOptions
   AnsiString Path;
   TComponent * Button;
   long I;
-  TCustomWebDispatcher * Dispatcher;
+  //TCustomWebDispatcher * Dispatcher;
+  _di_IWebDispatcherAccess Dispatcher;
   // Initialize image paths
   Path = ImagePathURL;
   if (! (ComponentState.Contains(csDesigning) && (Path.Length() == 0)))
@@ -93,8 +94,8 @@ AnsiString __fastcall TImgDataNavigator::ImplContent(Webcomp::TWebContentOptions
     if (Path.Length() == 0)
     {
       Dispatcher = FindDispatcher(this);
-      if (Dispatcher && Dispatcher->Request)
-         Path = PathInfoToRelativePath(Dispatcher->Request->PathInfo);
+      if (Dispatcher && Dispatcher->Request())
+         Path = PathInfoToRelativePath(Dispatcher->Request()->PathInfo);
     }
   }
   for (I = 0; I < VisibleButtons()->Count; I++)
@@ -147,7 +148,7 @@ AnsiString __fastcall TImgDataSetButton::GetSrcUrl()
   return FPathURL + Src;
 }
 
-void __fastcall TImgDataSetButton::AddElements(Webcomp::_di_IAddScriptElements AddIntf)
+void __fastcall TImgDataSetButton::AddElements(_di_IAddScriptElements AddIntf)
 {
   if ((XMLComponent == NULL) && (Name.Length() != 0))
     AddIntf->AddError(AnsiString().Format(sXMLComponentNotDefined, ARRAYOFCONST((Name))));

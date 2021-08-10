@@ -6,13 +6,13 @@
 {                                                       }
 {*******************************************************}
 
-unit mxcommon;
+unit MXCOMMON;
 
 interface
 
 uses
-  dialogs, Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  inifiles, db, dbtables, dbcommon, bde, mxarrays, mxconsts;
+  Variants, Dialogs, Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  IniFiles, DB, DBTables, DBCommon, BDE, Mxarrays, Mxconsts;
 
 type
   EDimensionMapError = class(Exception);
@@ -173,7 +173,7 @@ type
 implementation
 
 uses
-  mxqparse, mxstore;
+  Math, MXQPARSE, Mxstore;
 
 type
   THackQuery = class(TDBDataSet)
@@ -837,13 +837,6 @@ end;
 function VerifyRTQuery(aDataSet: TDataSet; Map: TDimensionItems; var bDataSetMatch: Boolean): TQueryError;
 var
   bParsed: Boolean;
-
-  function Min(X, Y: Integer): Integer;
-  begin
-    Result := X;
-    if X > Y then Result := Y;
-  end;
-
 begin
   { Build or modify the dimmap based on the current data set }
   Result := BuildDataSetMap( aDataSet, Map, bParsed, bDataSetMatch);
@@ -1003,7 +996,7 @@ begin
       vtPChar      : Result := VPChar^;
       vtAnsiString : Result := string(VAnsiString);
       vtCurrency   : Result := VCurrency^;
-      vtVariant    : if not VarIsEmpty(VVariant^) then
+      vtVariant    : if not VarIsClear(VVariant^) then
                        Result := VVariant^;
       else
         EUnsupportedTypeError.CreateResFmt(@sUnsupportedVarType, [Value.VType]); 
@@ -1151,13 +1144,6 @@ end;
 function TBinData.GetMaxBinNameSize: Integer;
 var
   I : Integer;
-
-  function Max(X, Y: Integer): Integer;
-  begin
-    Result := Y;
-    if (X > Y) then Result := X;
-  end;
-
 begin
   Result := Length(FOtherStr);
   for I := 0 to FNameList.Count-1 do

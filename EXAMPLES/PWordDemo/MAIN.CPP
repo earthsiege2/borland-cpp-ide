@@ -9,6 +9,7 @@
 #include "main.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+#pragma link "Word_2K_SRVR"
 #pragma resource "*.dfm"
 TPWordForm *PWordForm;
 //---------------------------------------------------------------------------
@@ -51,17 +52,22 @@ void __fastcall TPWordForm::btnPreviewClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void TPWordForm::SetFont()
 {
+    /* Note: for most properties, only getters are exposed at the wrapper
+       class level. However, both getters and setters are usually exposed
+       on the interface itself. Thus, you can either call the setter function
+       directly: WordDocument->set_Prop ... or you can go through the interface:
+       WordDocument->GetDefaultInterface()->Prop. The two syntaxes are equivalent. */
     WordFont->ConnectTo(WordDocument->Sentences->get_Last()->get_Font());
-    if (ChkBoxUnderline->Checked)    WordFont->Underline = wdUnderlineWords;
-    if (ChkBoxBold->Checked)         WordFont->Bold = 1;
-    if (ChkBoxItalic->Checked)       WordFont->Italic = 1;
-    if (ChkBoxEmboss->Checked)       WordFont->Emboss = 1;
-    if (ChkBoxEngrave->Checked)      WordFont->Engrave = 1;
-    if (ChkBoxShadow->Checked)       WordFont->Shadow = 1;
-    if (ChkBoxDoublestrike->Checked) WordFont->DoubleStrikeThrough = 1;
-    if (ChkBoxStrike->Checked)       WordFont->StrikeThrough = 1;
-    WordFont->Size = StrToInt(Size->Text);
-    if (Fonttype->ItemIndex >= 0)    WordFont->Name = StringToOleStr(Fonttype->Items->Strings[Fonttype->ItemIndex]);
+    if (ChkBoxUnderline->Checked)    WordFont->set_Underline(wdUnderlineWords);
+    if (ChkBoxBold->Checked)         WordFont->set_Bold(1);
+    if (ChkBoxItalic->Checked)       WordFont->GetDefaultInterface()->Italic = 1;
+    if (ChkBoxEmboss->Checked)       WordFont->GetDefaultInterface()->Emboss = 1;
+    if (ChkBoxEngrave->Checked)      WordFont->GetDefaultInterface()->Engrave = 1;
+    if (ChkBoxShadow->Checked)       WordFont->GetDefaultInterface()->Shadow = 1;
+    if (ChkBoxDoublestrike->Checked) WordFont->GetDefaultInterface()->DoubleStrikeThrough = 1;
+    if (ChkBoxStrike->Checked)       WordFont->GetDefaultInterface()->StrikeThrough = 1;
+    WordFont->set_Size(StrToInt(Size->Text));
+    if (Fonttype->ItemIndex >= 0)    WordFont->set_Name(StringToOleStr(Fonttype->Items->Strings[Fonttype->ItemIndex]));
 }
 
 
@@ -82,8 +88,8 @@ void __fastcall TPWordForm::BtnInsertRecordClick(TObject *Sender)
         MessageDlg("Word may not be installed", mtError, TMsgDlgButtons() << mbYes, 0);
         Abort;
       }
-    WordApplication->Visible = True;
-    WordApplication->Caption = StringToOleStr("Borland automation");
+    WordApplication->GetDefaultInterface()->Visible = True;
+    WordApplication->set_Caption(StringToOleStr("Borland automation"));
     //Create new document
     if (ChkBoxNewDoc->Checked)
     {

@@ -4,7 +4,7 @@
 {       Delphi Visual Component Library                 }
 {       NSAPI to ISAPI interface library                }
 {                                                       }
-{       Copyright (c) 1997,98 Inprise Corporation       }
+{       Copyright (c) 1997,2002 Borland Software Corp.  }
 {                                                       }
 {*******************************************************}
 
@@ -15,16 +15,20 @@ library ISAPIter;
 uses
   SysUtils,
   Classes,
-  NSAPI,
+  Nsapi,
   {$IFDEF NETSCAPE3}
-  NS30Fix,
+  Ns30Fix,
   {$ENDIF}
   {$IFDEF NETSCAPE35}
-  NS35Fix,
+  Ns35Fix,
   {$ENDIF}
   {$IFDEF NETSCAPE36}
-  NS36Fix,
+  Ns36Fix,
   {$ENDIF}
+  {$IFDEF NETSCAPE41}
+  Ns41Fix,
+  {$ENDIF}
+
   NSToIS;
 
 {$R *.RES}
@@ -129,7 +133,12 @@ begin
     Path := NSstr2String(pblock_findval('path', rq.vars));
     pblock_nvinsert('dll-path', PChar(Path), rq.vars);
     PathInfo := NSstr2String(pblock_findval('path-info', rq.vars));
+    {$IFDEF NETSCAPE41}
+    pblock_nvinsert('path-translated', PChar (Path + PathInfo), rq.vars);
+    {$ELSE}
     pblock_nvinsert('path-translated', PChar(GetDocumentRoot(rq.os) + PathInfo), rq.vars);
+    {$ENDIF}
+
     Result := REQ_PROCEED;
   except
     Result := HandleServerException(Exception(ExceptObject), pb, sn, rq);

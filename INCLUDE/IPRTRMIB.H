@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1995-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -17,7 +17,6 @@ Abstract:
 --*/
 
 #ifndef __ROUTING_IPRTRMIB_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __ROUTING_IPRTRMIB_H__
 
 #if _MSC_VER > 1000
@@ -111,8 +110,13 @@ Abstract:
 #define ROUTE_MATCHING      (DEST_SHORTER       + 1)
 #define ROUTE_LONGER        (ROUTE_MATCHING     + 1)
 #define ROUTE_SHORTER       (ROUTE_LONGER       + 1)
+#define ROUTE_STATE         (ROUTE_SHORTER      + 1)
+#define MCAST_MFE_STATS_EX  (ROUTE_STATE        + 1)
+#define IP6_STATS           (MCAST_MFE_STATS_EX + 1)
+#define UDP6_STATS          (IP6_STATS          + 1)
+#define TCP6_STATS          (UDP6_STATS         + 1)
 
-#define NUMBER_OF_EXPORTED_VARIABLES    (ROUTE_SHORTER + 1)
+#define NUMBER_OF_EXPORTED_VARIABLES    (TCP6_STATS + 1)
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -153,29 +157,29 @@ typedef struct _MIB_IFNUMBER
 typedef struct _MIB_IFROW
 {
     WCHAR   wszName[MAX_INTERFACE_NAME_LEN];
-    DWORD	dwIndex;
-    DWORD	dwType;
-    DWORD	dwMtu;
-    DWORD	dwSpeed;
-    DWORD	dwPhysAddrLen;
-    BYTE	bPhysAddr[MAXLEN_PHYSADDR];
-    DWORD	dwAdminStatus;
-    DWORD	dwOperStatus;
-    DWORD	dwLastChange;
-    DWORD	dwInOctets;
-    DWORD	dwInUcastPkts;
-    DWORD	dwInNUcastPkts;
-    DWORD	dwInDiscards;
-    DWORD	dwInErrors;
-    DWORD	dwInUnknownProtos;
-    DWORD	dwOutOctets;
-    DWORD	dwOutUcastPkts;
-    DWORD	dwOutNUcastPkts;
-    DWORD	dwOutDiscards;
-    DWORD	dwOutErrors;
-    DWORD	dwOutQLen;
-    DWORD	dwDescrLen;
-    BYTE	bDescr[MAXLEN_IFDESCR];
+    DWORD    dwIndex;
+    DWORD    dwType;
+    DWORD    dwMtu;
+    DWORD    dwSpeed;
+    DWORD    dwPhysAddrLen;
+    BYTE    bPhysAddr[MAXLEN_PHYSADDR];
+    DWORD    dwAdminStatus;
+    DWORD    dwOperStatus;
+    DWORD    dwLastChange;
+    DWORD    dwInOctets;
+    DWORD    dwInUcastPkts;
+    DWORD    dwInNUcastPkts;
+    DWORD    dwInDiscards;
+    DWORD    dwInErrors;
+    DWORD    dwInUnknownProtos;
+    DWORD    dwOutOctets;
+    DWORD    dwOutUcastPkts;
+    DWORD    dwOutNUcastPkts;
+    DWORD    dwOutDiscards;
+    DWORD    dwOutErrors;
+    DWORD    dwOutQLen;
+    DWORD    dwDescrLen;
+    BYTE    bDescr[MAXLEN_IFDESCR];
 } MIB_IFROW,*PMIB_IFROW;
 
 typedef struct _MIB_IFTABLE
@@ -188,25 +192,25 @@ typedef struct _MIB_IFTABLE
 
 typedef struct _MIBICMPSTATS
 {
-    DWORD		dwMsgs;
-    DWORD		dwErrors;
-    DWORD		dwDestUnreachs;
-    DWORD		dwTimeExcds;
-    DWORD		dwParmProbs;
-    DWORD		dwSrcQuenchs;
-    DWORD		dwRedirects;
-    DWORD		dwEchos;
-    DWORD		dwEchoReps;
-    DWORD		dwTimestamps;
-    DWORD		dwTimestampReps;
-    DWORD		dwAddrMasks;
-    DWORD		dwAddrMaskReps;
+    DWORD        dwMsgs;
+    DWORD        dwErrors;
+    DWORD        dwDestUnreachs;
+    DWORD        dwTimeExcds;
+    DWORD        dwParmProbs;
+    DWORD        dwSrcQuenchs;
+    DWORD        dwRedirects;
+    DWORD        dwEchos;
+    DWORD        dwEchoReps;
+    DWORD        dwTimestamps;
+    DWORD        dwTimestampReps;
+    DWORD        dwAddrMasks;
+    DWORD        dwAddrMaskReps;
 } MIBICMPSTATS;
 
-typedef	struct _MIBICMPINFO
+typedef    struct _MIBICMPINFO
 {
-    MIBICMPSTATS	icmpInStats;
-    MIBICMPSTATS	icmpOutStats;
+    MIBICMPSTATS    icmpInStats;
+    MIBICMPSTATS    icmpOutStats;
 } MIBICMPINFO;
 
 typedef struct _MIB_ICMP
@@ -298,44 +302,53 @@ typedef struct _MIB_TCPTABLE
 
 typedef struct _MIB_IPSTATS
 {
-    DWORD		dwForwarding;
-    DWORD		dwDefaultTTL;
-    DWORD		dwInReceives;
-    DWORD		dwInHdrErrors;
-    DWORD		dwInAddrErrors;
-    DWORD		dwForwDatagrams;
-    DWORD		dwInUnknownProtos;
-    DWORD		dwInDiscards;
-    DWORD		dwInDelivers;
-    DWORD		dwOutRequests;
-    DWORD		dwRoutingDiscards;
-    DWORD		dwOutDiscards;
-    DWORD		dwOutNoRoutes;
-    DWORD		dwReasmTimeout;
-    DWORD		dwReasmReqds;
-    DWORD		dwReasmOks;
-    DWORD		dwReasmFails;
-    DWORD		dwFragOks;
-    DWORD		dwFragFails;
-    DWORD		dwFragCreates;
-    DWORD		dwNumIf;
-    DWORD		dwNumAddr;
-    DWORD		dwNumRoutes;
+    DWORD        dwForwarding;
+    DWORD        dwDefaultTTL;
+    DWORD        dwInReceives;
+    DWORD        dwInHdrErrors;
+    DWORD        dwInAddrErrors;
+    DWORD        dwForwDatagrams;
+    DWORD        dwInUnknownProtos;
+    DWORD        dwInDiscards;
+    DWORD        dwInDelivers;
+    DWORD        dwOutRequests;
+    DWORD        dwRoutingDiscards;
+    DWORD        dwOutDiscards;
+    DWORD        dwOutNoRoutes;
+    DWORD        dwReasmTimeout;
+    DWORD        dwReasmReqds;
+    DWORD        dwReasmOks;
+    DWORD        dwReasmFails;
+    DWORD        dwFragOks;
+    DWORD        dwFragFails;
+    DWORD        dwFragCreates;
+    DWORD        dwNumIf;
+    DWORD        dwNumAddr;
+    DWORD        dwNumRoutes;
 } MIB_IPSTATS, *PMIB_IPSTATS;
 
-#define	MIB_IP_FORWARDING               1
-#define	MIB_IP_NOT_FORWARDING           2
+#define    MIB_IP_FORWARDING               1
+#define    MIB_IP_NOT_FORWARDING           2
+
+
+// Note: These addr types have dependency on ipdef.h
+
+#define MIB_IPADDR_PRIMARY      0x0001   // Primary ipaddr
+#define MIB_IPADDR_DYNAMIC      0x0004   // Dynamic ipaddr
+#define MIB_IPADDR_DISCONNECTED 0x0008   // Address is on disconnected interface
+#define MIB_IPADDR_DELETED      0x0040   // Address being deleted
+#define MIB_IPADDR_TRANSIENT    0x0080   // Transient address
 
 
 typedef struct _MIB_IPADDRROW
 {
-    DWORD		dwAddr;
-    DWORD		dwIndex;
-    DWORD		dwMask;
-    DWORD		dwBCastAddr;
-    DWORD		dwReasmSize;
-    unsigned short	unused1;
-    unsigned short	unused2;
+    DWORD        dwAddr;
+    DWORD        dwIndex;
+    DWORD        dwMask;
+    DWORD        dwBCastAddr;
+    DWORD        dwReasmSize;
+    unsigned short    unused1;
+    unsigned short    wType;
 } MIB_IPADDRROW, *PMIB_IPADDRROW;
 
 typedef struct _MIB_IPADDRTABLE
@@ -355,47 +368,47 @@ typedef struct _MIB_IPFORWARDNUMBER
 
 typedef struct _MIB_IPFORWARDROW
 {
-    DWORD		dwForwardDest;
-    DWORD		dwForwardMask;
-    DWORD		dwForwardPolicy;
-    DWORD		dwForwardNextHop;
-    DWORD		dwForwardIfIndex;
-    DWORD		dwForwardType;
-    DWORD		dwForwardProto;
-    DWORD		dwForwardAge;
+    DWORD        dwForwardDest;
+    DWORD        dwForwardMask;
+    DWORD        dwForwardPolicy;
+    DWORD        dwForwardNextHop;
+    DWORD        dwForwardIfIndex;
+    DWORD        dwForwardType;
+    DWORD        dwForwardProto;
+    DWORD        dwForwardAge;
     DWORD       dwForwardNextHopAS;
-    DWORD		dwForwardMetric1;
-    DWORD		dwForwardMetric2;
-    DWORD		dwForwardMetric3;
-    DWORD		dwForwardMetric4;
-    DWORD		dwForwardMetric5;
+    DWORD        dwForwardMetric1;
+    DWORD        dwForwardMetric2;
+    DWORD        dwForwardMetric3;
+    DWORD        dwForwardMetric4;
+    DWORD        dwForwardMetric5;
 }MIB_IPFORWARDROW, *PMIB_IPFORWARDROW;
 
-#define	MIB_IPROUTE_TYPE_OTHER		1
-#define	MIB_IPROUTE_TYPE_INVALID	2
-#define	MIB_IPROUTE_TYPE_DIRECT		3
-#define	MIB_IPROUTE_TYPE_INDIRECT	4
+#define    MIB_IPROUTE_TYPE_OTHER        1
+#define    MIB_IPROUTE_TYPE_INVALID    2
+#define    MIB_IPROUTE_TYPE_DIRECT        3
+#define    MIB_IPROUTE_TYPE_INDIRECT    4
 
-#define	MIB_IPROUTE_METRIC_UNUSED	(DWORD)-1
+#define    MIB_IPROUTE_METRIC_UNUSED    (DWORD)-1
 
 //
 // THESE MUST MATCH the ids in routprot.h
 //
 
-#define MIB_IPPROTO_OTHER		        1
-#define MIB_IPPROTO_LOCAL		        2
-#define MIB_IPPROTO_NETMGMT		        3
-#define MIB_IPPROTO_ICMP			    4
-#define MIB_IPPROTO_EGP			        5
-#define MIB_IPPROTO_GGP			        6
-#define MIB_IPPROTO_HELLO		        7
-#define MIB_IPPROTO_RIP			        8
-#define MIB_IPPROTO_IS_IS		        9
-#define MIB_IPPROTO_ES_IS		        10
-#define MIB_IPPROTO_CISCO		        11
-#define MIB_IPPROTO_BBN			        12
-#define MIB_IPPROTO_OSPF			    13
-#define MIB_IPPROTO_BGP			        14
+#define MIB_IPPROTO_OTHER                1
+#define MIB_IPPROTO_LOCAL                2
+#define MIB_IPPROTO_NETMGMT                3
+#define MIB_IPPROTO_ICMP                4
+#define MIB_IPPROTO_EGP                    5
+#define MIB_IPPROTO_GGP                    6
+#define MIB_IPPROTO_HELLO                7
+#define MIB_IPPROTO_RIP                    8
+#define MIB_IPPROTO_IS_IS                9
+#define MIB_IPPROTO_ES_IS                10
+#define MIB_IPPROTO_CISCO                11
+#define MIB_IPPROTO_BBN                    12
+#define MIB_IPPROTO_OSPF                13
+#define MIB_IPPROTO_BGP                    14
 
 #define MIB_IPPROTO_NT_AUTOSTATIC       10002
 #define MIB_IPPROTO_NT_STATIC           10006
@@ -415,17 +428,17 @@ typedef struct _MIB_IPFORWARDTABLE
 
 typedef struct _MIB_IPNETROW
 {
-    DWORD		dwIndex;
-    DWORD		dwPhysAddrLen;
-    BYTE		bPhysAddr[MAXLEN_PHYSADDR];
-    DWORD		dwAddr;
-    DWORD		dwType;
+    DWORD        dwIndex;
+    DWORD        dwPhysAddrLen;
+    BYTE        bPhysAddr[MAXLEN_PHYSADDR];
+    DWORD        dwAddr;
+    DWORD        dwType;
 } MIB_IPNETROW, *PMIB_IPNETROW;
 
-#define	MIB_IPNET_TYPE_OTHER		1
-#define	MIB_IPNET_TYPE_INVALID		2
-#define	MIB_IPNET_TYPE_DYNAMIC		3
-#define	MIB_IPNET_TYPE_STATIC		4
+#define    MIB_IPNET_TYPE_OTHER        1
+#define    MIB_IPNET_TYPE_INVALID        2
+#define    MIB_IPNET_TYPE_DYNAMIC        3
+#define    MIB_IPNET_TYPE_STATIC        4
 
 typedef struct _MIB_IPNETTABLE
 {
@@ -439,8 +452,8 @@ typedef struct _MIB_IPMCAST_OIF
 {
     DWORD   dwOutIfIndex;
     DWORD   dwNextHopAddr;
-    PVOID   pvReserved;
     DWORD   dwReserved;
+    DWORD   dwReserved1;
 }MIB_IPMCAST_OIF, *PMIB_IPMCAST_OIF;
 
 typedef struct _MIB_IPMCAST_MFE
@@ -481,7 +494,7 @@ typedef struct _MIB_IPMCAST_OIF_STATS
 {
     DWORD   dwOutIfIndex;
     DWORD   dwNextHopAddr;
-    PVOID   pvDialContext;
+    DWORD   dwDialContext;
     ULONG   ulTtlTooLow;
     ULONG   ulFragNeeded;
     ULONG   ulOutPackets;
@@ -506,6 +519,7 @@ typedef struct _MIB_IPMCAST_MFE_STATS
     ULONG   ulInOctets;
     ULONG   ulPktsDifferentIf;
     ULONG   ulQueueOverflow;
+
     MIB_IPMCAST_OIF_STATS   rgmiosOutStats[ANY_SIZE];
 }MIB_IPMCAST_MFE_STATS, *PMIB_IPMCAST_MFE_STATS;
 
@@ -520,6 +534,47 @@ typedef struct _MIB_MFE_STATS_TABLE
 
 #define SIZEOF_MIB_MFE_STATS(X)       \
     (SIZEOF_BASIC_MIB_MFE_STATS + ((X) * sizeof(MIB_IPMCAST_OIF_STATS)))
+
+
+typedef struct _MIB_IPMCAST_MFE_STATS_EX
+{
+    DWORD   dwGroup;
+    DWORD   dwSource;
+    DWORD   dwSrcMask;
+    DWORD   dwUpStrmNgbr;
+    DWORD   dwInIfIndex;
+    DWORD   dwInIfProtocol;
+    DWORD   dwRouteProtocol;
+    DWORD   dwRouteNetwork;
+    DWORD   dwRouteMask;
+    ULONG   ulUpTime;
+    ULONG   ulExpiryTime;
+    ULONG   ulNumOutIf;
+    ULONG   ulInPkts;
+    ULONG   ulInOctets;
+    ULONG   ulPktsDifferentIf;
+    ULONG   ulQueueOverflow;
+    ULONG   ulUninitMfe;
+    ULONG   ulNegativeMfe;
+    ULONG   ulInDiscards;
+    ULONG   ulInHdrErrors;
+    ULONG   ulTotalOutPackets;
+
+    MIB_IPMCAST_OIF_STATS   rgmiosOutStats[ANY_SIZE];
+}MIB_IPMCAST_MFE_STATS_EX, *PMIB_IPMCAST_MFE_STATS_EX;
+
+typedef struct _MIB_MFE_STATS_TABLE_EX
+{
+    DWORD       dwNumEntries;
+    MIB_IPMCAST_MFE_STATS_EX   table[ANY_SIZE];
+}MIB_MFE_STATS_TABLE_EX, *PMIB_MFE_STATS_TABLE_EX;
+
+#define SIZEOF_BASIC_MIB_MFE_STATS_EX    \
+    (ULONG)(FIELD_OFFSET(MIB_IPMCAST_MFE_STATS_EX, rgmiosOutStats[0]))
+
+#define SIZEOF_MIB_MFE_STATS_EX(X)       \
+    (SIZEOF_BASIC_MIB_MFE_STATS_EX + ((X) * sizeof(MIB_IPMCAST_OIF_STATS)))
+
 
 typedef struct _MIB_IPMCAST_GLOBAL {
     DWORD   dwEnable;
@@ -631,6 +686,11 @@ typedef struct _MIB_IFSTATUS
     BOOL        bMHbeatAlive;
 }MIB_IFSTATUS, *PMIB_IFSTATUS;
 
+typedef struct _MIB_ROUTESTATE
+{
+    BOOL        bRoutesSetToStack;
+
+}MIB_ROUTESTATE, *PMIB_ROUTESTATE;
 
 //////////////////////////////////////////////////////////////////////////////
 //                                                                          //
@@ -673,7 +733,7 @@ typedef struct _MIB_OPAQUE_INFO
     ((MIB_INFO_SIZE(S))/sizeof(DWORD) + 1)
 
 #define DEFINE_MIB_BUFFER(X,Y,Z)                                        \
-    DWORD		__rgdwBuff[MIB_INFO_SIZE_IN_DWORDS(Y)]; \
+    DWORD        __rgdwBuff[MIB_INFO_SIZE_IN_DWORDS(Y)]; \
     PMIB_OPAQUE_INFO    X = (PMIB_OPAQUE_INFO)__rgdwBuff;               \
     Y *                 Z = (Y *)(X->rgbyData)
 
@@ -686,5 +746,4 @@ typedef struct _MIB_OPAQUE_INFO
 #pragma warning(default:4201)
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif //__ROUTING_IPRTRMIB_H__

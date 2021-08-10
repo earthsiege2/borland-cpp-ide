@@ -1,11 +1,10 @@
 /*++
 
-   Copyright (c) 1998-1999 Microsoft Corporation.
+   Copyright (c) Microsoft Corporation. All rights reserved.
 
 */
 
 #ifndef __usp10__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __usp10__
 #if _MSC_VER > 1000
 #pragma once
@@ -19,13 +18,13 @@ extern "C" {
 
 ///// Uniscribe build number
 
-#define USPBUILD 0306
+#define USPBUILD 0400
 
 
 
 /////   USP - Unicode Complex Script processor
 //
-//      Copyright (c) 1996-9, Microsoft Corporation. All rights reserved.
+//      Copyright (c) Microsoft Corporation. All rights reserved.
 
 
 
@@ -586,11 +585,51 @@ HRESULT WINAPI ScriptShape(
 //
 //      Returns E_OUTOFMEMORY if the output buffer length (cMaxGlyphs) is
 //          insufficient. Note that in this case, as in all error cases, the
-//          content of the output array is undefined.
+//          content of all output parameters are undefined.
+//
+//p     psa: Pass the SCRIPT_ANALYSIS field of the SCRIPT_ITEM entry for this
+//          item. (The SCRIPT_ITEM array is returned by ScriptItemize.)
 //
 //      Clusters are sequenced uniformly within the run, as are glyphs within
 //      the cluster - the fRTL item flag (from ScriptItemize) identifies
 //      whether left to right, or right to left.
+//
+//p     pwLogClust: has cChars elements - each entry in pwLogClust corresponds
+//          to a character in the input string (pwcChars). The value in each
+//          pwLogCLust entry is the offset of the first glyph in the cluster
+//          that contains this character.
+//
+//      Example: In the following example, there are four clusters:
+//      1st cluster: one character represented by one glyph
+//      2nd cluster: one character represented by 3 glyphs
+//      3rd cluster: three characters represented by one glyph
+//      4th cluster: 2 characters represented by three glyphs
+//
+//      Glyph array: (c<n>g<m> means cluster n glyph m)
+//c        0      1    2    3      4      5    6    7
+//c     -------------------------------------------------
+//c     | c1g1 | c2g1 c2g2 c2g3 | c3g1 | c4g1 c4g2 c4g3 |
+//c     -------------------------------------------------
+//
+//      Character array: (c<n>u<m> means cluster n Unicode codepoint m)
+//c        0      1      2    3    4      5    6
+//c     --------------------------------------------
+//c     | c1u1 | c2u1 | c3u1 c3u2 c3u3 | c4u1 c4u2 |
+//c     --------------------------------------------
+//
+//      LogClust: (one entry per character gives 1st glyph in cluster
+//c     --------------------------------------------
+//c     |   0  |   1  |   4    4    4  |   5    5  |
+//c     --------------------------------------------
+//
+//      Note that for an RTL run (SCRIPT_ANALYSIS.a.fRTL == TRUE) and when
+//      fLogicalOrder == FALSE (the default), glyphs are generated in visual
+//      order - the reverse of the codepoint order, and the values in the
+//      LogClust array will be descending.
+//
+//
+//p     psva: has one visual attribute per glyph and so has maxGlyphs entries.
+//
 //
 //      ScriptShape may set the fNoGlyphIndex flag in psa if the font or
 //      OS cannot support glyph indices.
@@ -650,27 +689,28 @@ HRESULT WINAPI ScriptPlace(
 //
 //      The ScriptTextOut function takes the output of both ScriptShape and
 //      ScriptPlace calls and calls the operating system ExtTextOut function
-//      appropriately.
+//      appropriately. If the last parameter is not null, GDI's ExtTextOutW calls
+//      are routed to this function.
 //
 //      All arrays are in visual order unless the fLogicalOrder flag is set in
 //      psa.
 
 
 HRESULT WINAPI ScriptTextOut(
-    const HDC               hdc,        // In     OS handle to device context (required)
-    SCRIPT_CACHE           *psc,        // InOut  Cache handle
-    int                     x,          // In     x,y position for first glyph
-    int                     y,          // In
-    UINT                    fuOptions,  // In     ExtTextOut options
-    const RECT             *lprc,       // In     optional clipping/opaquing rectangle
-    const SCRIPT_ANALYSIS  *psa,        // In     Result of ScriptItemize
-    const WCHAR            *pwcReserved,// In     Reserved (requires NULL)
-    int                     iReserved,  // In     Reserved (requires 0)
-    const WORD             *pwGlyphs,   // In     Glyph buffer from prior ScriptShape call
-    int                     cGlyphs,    // In     Number of glyphs
-    const int              *piAdvance,  // In     Advance widths from ScriptPlace
-    const int              *piJustify,  // In     Justified advance widths (optional)
-    const GOFFSET          *pGoffset);  // In     x,y offset for combining glyph
+    const HDC                           hdc,            // In     OS handle to device context (required)
+    SCRIPT_CACHE                        *psc,           // InOut  Cache handle
+    int                                 x,              // In     x,y position for first glyph
+    int                                 y,              // In
+    UINT                                fuOptions,      // In     ExtTextOut options
+    const RECT                          *lprc,          // In     optional clipping/opaquing rectangle
+    const SCRIPT_ANALYSIS               *psa,           // In     Result of ScriptItemize
+    const WCHAR                         *pwcReserved,   // In     Reserved (requires NULL)
+    int                                 iReserved,      // In     Reserved (requires 0)
+    const WORD                          *pwGlyphs,      // In     Glyph buffer from prior ScriptShape call
+    int                                 cGlyphs,        // In     Number of glyphs
+    const int                           *piAdvance,     // In     Advance widths from ScriptPlace
+    const int                           *piJustify,     // In     Justified advance widths (optional)
+    const GOFFSET                       *pGoffset);     // In     x,y offset for combining glyph
 
 
 
@@ -1881,5 +1921,4 @@ HRESULT WINAPI ScriptApplyDigitSubstitution(
 #ifdef __cplusplus
 }
 #endif
-#pragma option pop /*P_O_Pop*/
 #endif

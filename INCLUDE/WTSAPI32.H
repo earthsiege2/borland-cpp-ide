@@ -10,7 +10,6 @@
 **********************************************************************/
 
 #ifndef _INC_WTSAPI
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_WTSAPI
 
 #if _MSC_VER > 1000
@@ -288,17 +287,17 @@ typedef struct _WTS_CLIENT_DISPLAY {
 
 typedef enum _WTS_CONFIG_CLASS {
     //Initial program settings
-    WTSUserConfigInitialProgram,         	// string returned/expected
-    WTSUserConfigWorkingDirectory,       	// string returned/expected
-    WTSUserConfigfInheritInitialProgram, 	// DWORD returned/expected
+    WTSUserConfigInitialProgram,            // string returned/expected
+    WTSUserConfigWorkingDirectory,          // string returned/expected
+    WTSUserConfigfInheritInitialProgram,    // DWORD returned/expected
     //
-    WTSUserConfigfAllowLogonTerminalServer, 	//DWORD returned/expected
+    WTSUserConfigfAllowLogonTerminalServer,     //DWORD returned/expected
     //Timeout settings
-    WTSUserConfigTimeoutSettingsConnections, 	//DWORD returned/expected
+    WTSUserConfigTimeoutSettingsConnections,    //DWORD returned/expected
     WTSUserConfigTimeoutSettingsDisconnections, //DWORD returned/expected
-    WTSUserConfigTimeoutSettingsIdle, 	        //DWORD returned/expected
+    WTSUserConfigTimeoutSettingsIdle,           //DWORD returned/expected
     //Client device settings
-    WTSUserConfigfDeviceClientDrives,  		//DWORD returned/expected
+    WTSUserConfigfDeviceClientDrives,       //DWORD returned/expected
     WTSUserConfigfDeviceClientPrinters,         //DWORD returned/expected
     WTSUserConfigfDeviceClientDefaultPrinter,   //DWORD returned/expected
     //Connection settings
@@ -319,27 +318,6 @@ typedef enum _WTS_CONFIG_CLASS {
 } WTS_CONFIG_CLASS;
 
 
-typedef struct _WTS_USER_CONFIG_SET_NWSERVERW {
-    LPWSTR pNWServerName;
-    LPWSTR pNWDomainAdminName;
-    LPWSTR pNWDomainAdminPassword;
-} WTS_USER_CONFIG_SET_NWSERVERW, * PWTS_USER_CONFIG_SET_NWSERVERW;
-
-
-typedef struct _WTS_USER_CONFIG_SET_NWSERVERA {
-    LPSTR pNWServerName;
-    LPSTR pNWDomainAdminName;
-    LPSTR pNWDomainAdminPassword;
-} WTS_USER_CONFIG_SET_NWSERVERA, * PWTS_USER_CONFIG_SET_NWSERVERA;
-
-
-#ifdef UNICODE
-#define WTS_USER_CONFIG_SET_NWSERVER   WTS_USER_CONFIG_SET_NWSERVERW
-#define PWTS_USER_CONFIG_SET_NWSERVER  PWTS_USER_CONFIG_SET_NWSERVERW
-#else
-#define WTS_USER_CONFIG_SET_NWSERVER  WTS_USER_CONFIG_SET_NWSERVERA
-#define PWTS_USER_CONFIG_SET_NWSERVER  PWTS_USER_CONFIG_SET_NWSERVERA
-#endif
 /*=====================================================================
 ==   WTS_EVENT - Event flags for WTSWaitSystemEvent
 =====================================================================*/
@@ -366,6 +344,7 @@ typedef struct _WTS_USER_CONFIG_SET_NWSERVERA {
 typedef enum _WTS_VIRTUAL_CLASS {
     WTSVirtualClientData,  // Virtual channel client module data
                            //     (C2H data)
+    WTSVirtualFileHandle
 } WTS_VIRTUAL_CLASS;
 
 
@@ -714,16 +693,40 @@ WTSVirtualChannelQuery(
 
 /*------------------------------------------------*/
 
+
 VOID
 WINAPI
 WTSFreeMemory(
     IN PVOID pMemory
     );
 
+/* Flags for Console Notification */
+
+#define NOTIFY_FOR_ALL_SESSIONS     1
+#define NOTIFY_FOR_THIS_SESSION     0
+
+
+BOOL WINAPI
+WTSRegisterSessionNotification(
+    HWND hWnd,
+    DWORD dwFlags
+    );
+
+BOOL WINAPI
+WTSUnRegisterSessionNotification(
+    HWND hWnd
+    );
+
+BOOL WINAPI
+WTSQueryUserToken(
+    ULONG SessionId, 
+    PHANDLE phToken
+    );
+
+
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* !_INC_WTSAPI */
 

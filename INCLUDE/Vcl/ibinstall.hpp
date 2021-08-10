@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBInstall.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBInstall.pas' rev: 6.00
 
 #ifndef IBInstallHPP
 #define IBInstallHPP
@@ -10,12 +10,13 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
+#include <IBXConst.hpp>	// Pascal unit
 #include <IBIntf.hpp>	// Pascal unit
 #include <IBInstallHeader.hpp>	// Pascal unit
+#include <IB.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <TypInfo.hpp>	// Pascal unit
-#include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -27,9 +28,7 @@ namespace Ibinstall
 typedef int TIscError;
 
 #pragma option push -b-
-enum TIBInstallerError { ieSuccess, ieDelphiException, ieNoOptionsSet, ieNoDestinationDirectory, ieNosourceDirectory, 
-	ieNoUninstallFile, ieOptionNeedsClient, ieOptionNeedsServer, ieInvalidOption, ieInvalidOnErrorResult, 
-	ieInvalidOnStatusResult };
+enum TIBInstallerError { ieSuccess, ieDelphiException, ieNoOptionsSet, ieNoDestinationDirectory, ieNosourceDirectory, ieNoUninstallFile, ieOptionNeedsClient, ieOptionNeedsServer, ieInvalidOption, ieInvalidOnErrorResult, ieInvalidOnStatusResult };
 #pragma option pop
 
 #pragma option push -b-
@@ -68,14 +67,11 @@ enum TStatusResult { srAbort, srContinue };
 enum TWarningResult { wrAbort, wrContinue };
 #pragma option pop
 
-typedef TStatusResult __fastcall (__closure *TIBSetupOnStatus)(System::TObject* Sender, AnsiString StatusComment
-	);
+typedef TStatusResult __fastcall (__closure *TIBSetupOnStatus)(System::TObject* Sender, AnsiString StatusComment);
 
-typedef TWarningResult __fastcall (__closure *TIBSetupOnWarning)(System::TObject* Sender, int WarningCode
-	, AnsiString WarningMessage);
+typedef TWarningResult __fastcall (__closure *TIBSetupOnWarning)(System::TObject* Sender, int WarningCode, AnsiString WarningMessage);
 
-typedef TErrorResult __fastcall (__closure *TIBSetupOnError)(System::TObject* Sender, int IscCode, AnsiString 
-	ErrorMessage, AnsiString ErrorComment);
+typedef TErrorResult __fastcall (__closure *TIBSetupOnError)(System::TObject* Sender, int IscCode, AnsiString ErrorMessage, AnsiString ErrorComment);
 
 class DELPHICLASS EIBInstall;
 class PASCALIMPLEMENTATION EIBInstall : public Sysutils::Exception 
@@ -93,34 +89,25 @@ public:
 	__property TIBInstallerError InstallerError = {read=FInstallerError, nodefault};
 public:
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EIBInstall(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EIBInstall(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EIBInstall(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EIBInstall(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EIBInstall(int Ident, const System::TVarRec * Args, 
-		const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EIBInstall(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EIBInstall(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(
-		Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EIBInstall(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EIBInstall(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EIBInstall(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EIBInstall(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EIBInstall(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EIBInstall(System::PResStringRec ResStringRec, const 
-		System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EIBInstall(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -138,40 +125,30 @@ class PASCALIMPLEMENTATION EIBInstallError : public EIBInstall
 	
 public:
 	#pragma option push -w-inl
-	/* EIBInstall.Create */ inline __fastcall virtual EIBInstallError(int IscCode, AnsiString IscMessage
-		)/* overload */ : EIBInstall(IscCode, IscMessage) { }
+	/* EIBInstall.Create */ inline __fastcall virtual EIBInstallError(int IscCode, AnsiString IscMessage)/* overload */ : EIBInstall(IscCode, IscMessage) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EIBInstallError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : EIBInstall(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EIBInstallError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : EIBInstall(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EIBInstallError(int Ident)/* overload */ : EIBInstall(Ident
-		) { }
+	/* Exception.CreateRes */ inline __fastcall EIBInstallError(int Ident)/* overload */ : EIBInstall(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EIBInstallError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : EIBInstall(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EIBInstallError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : EIBInstall(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EIBInstallError(const AnsiString Msg, int AHelpContext
-		) : EIBInstall(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EIBInstallError(const AnsiString Msg, int AHelpContext) : EIBInstall(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EIBInstallError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : EIBInstall(Msg, Args, Args_Size, AHelpContext) { }
-		
+	/* Exception.CreateFmtHelp */ inline __fastcall EIBInstallError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : EIBInstall(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EIBInstallError(int Ident, int AHelpContext)/* overload */
-		 : EIBInstall(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EIBInstallError(int Ident, int AHelpContext)/* overload */ : EIBInstall(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EIBInstallError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : EIBInstall(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EIBInstallError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : EIBInstall(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -189,40 +166,30 @@ class PASCALIMPLEMENTATION EIBInstallerError : public EIBInstall
 	
 public:
 	#pragma option push -w-inl
-	/* EIBInstall.Create */ inline __fastcall virtual EIBInstallerError(int IscCode, AnsiString IscMessage
-		)/* overload */ : EIBInstall(IscCode, IscMessage) { }
+	/* EIBInstall.Create */ inline __fastcall virtual EIBInstallerError(int IscCode, AnsiString IscMessage)/* overload */ : EIBInstall(IscCode, IscMessage) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EIBInstallerError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : EIBInstall(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EIBInstallerError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : EIBInstall(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EIBInstallerError(int Ident)/* overload */ : EIBInstall(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EIBInstallerError(int Ident)/* overload */ : EIBInstall(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EIBInstallerError(int Ident, const System::TVarRec * 
-		Args, const int Args_Size)/* overload */ : EIBInstall(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EIBInstallerError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : EIBInstall(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EIBInstallerError(const AnsiString Msg, int AHelpContext
-		) : EIBInstall(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EIBInstallerError(const AnsiString Msg, int AHelpContext) : EIBInstall(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EIBInstallerError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : EIBInstall(Msg, Args, Args_Size, AHelpContext) { }
-		
+	/* Exception.CreateFmtHelp */ inline __fastcall EIBInstallerError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : EIBInstall(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EIBInstallerError(int Ident, int AHelpContext)/* overload */
-		 : EIBInstall(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EIBInstallerError(int Ident, int AHelpContext)/* overload */ : EIBInstall(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EIBInstallerError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : EIBInstall(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EIBInstallerError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : EIBInstall(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -247,8 +214,7 @@ private:
 __published:
 	__property TMainOptions MainComponents = {read=FMainComponents, write=FMainComponents, nodefault};
 	__property TCmdOptions CmdLineTools = {read=FCmdLineTools, write=FCmdLineTools, nodefault};
-	__property TConnectivityOptions ConnectivityClients = {read=FConnectivityClients, write=FConnectivityClients
-		, nodefault};
+	__property TConnectivityOptions ConnectivityClients = {read=FConnectivityClients, write=FConnectivityClients, nodefault};
 	__property TExamplesOptions Examples = {read=FExamples, write=FExamples, nodefault};
 public:
 	#pragma option push -w-inl
@@ -318,14 +284,10 @@ private:
 	AnsiString FDestinationDir;
 	AnsiString FSuggestedDestination;
 	TInstallOptions* FInstallOptions;
-	void __fastcall GetOptionProperty(int InfoType, TExamplesOption Option, void * Buffer, unsigned BufferLen
-		)/* overload */;
-	void __fastcall GetOptionProperty(int InfoType, TMainOption Option, void * Buffer, unsigned BufferLen
-		)/* overload */;
-	void __fastcall GetOptionProperty(int InfoType, TConnectivityOption Option, void * Buffer, unsigned 
-		BufferLen)/* overload */;
-	void __fastcall GetOptionProperty(int InfoType, TCmdOption Option, void * Buffer, unsigned BufferLen
-		)/* overload */;
+	void __fastcall GetOptionProperty(int InfoType, TExamplesOption Option, void * Buffer, unsigned BufferLen)/* overload */;
+	void __fastcall GetOptionProperty(int InfoType, TMainOption Option, void * Buffer, unsigned BufferLen)/* overload */;
+	void __fastcall GetOptionProperty(int InfoType, TConnectivityOption Option, void * Buffer, unsigned BufferLen)/* overload */;
+	void __fastcall GetOptionProperty(int InfoType, TCmdOption Option, void * Buffer, unsigned BufferLen)/* overload */;
 	void __fastcall InternalSetOptions(Ibinstallheader::POPTIONS_HANDLE pHandle);
 	void __fastcall SetDestination(const AnsiString Value);
 	void __fastcall SetSource(const AnsiString Value);
@@ -373,8 +335,7 @@ public:
 	__property AnsiString UnInstallFile = {read=FUnInstallFile, write=FUnInstallFile};
 public:
 	#pragma option push -w-inl
-	/* TIBSetup.Create */ inline __fastcall virtual TIBUnInstall(Classes::TComponent* AOwner) : TIBSetup(
-		AOwner) { }
+	/* TIBSetup.Create */ inline __fastcall virtual TIBUnInstall(Classes::TComponent* AOwner) : TIBSetup(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -386,36 +347,9 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE System::ResourceString _SSuccess;
-#define Ibinstall_SSuccess System::LoadResourceString(&Ibinstall::_SSuccess)
-extern PACKAGE System::ResourceString _SDelphiException;
-#define Ibinstall_SDelphiException System::LoadResourceString(&Ibinstall::_SDelphiException)
-extern PACKAGE System::ResourceString _SNoOptionsSet;
-#define Ibinstall_SNoOptionsSet System::LoadResourceString(&Ibinstall::_SNoOptionsSet)
-extern PACKAGE System::ResourceString _SNoDestinationDirectory;
-#define Ibinstall_SNoDestinationDirectory System::LoadResourceString(&Ibinstall::_SNoDestinationDirectory)
-	
-extern PACKAGE System::ResourceString _SNosourceDirectory;
-#define Ibinstall_SNosourceDirectory System::LoadResourceString(&Ibinstall::_SNosourceDirectory)
-extern PACKAGE System::ResourceString _SNoUninstallFile;
-#define Ibinstall_SNoUninstallFile System::LoadResourceString(&Ibinstall::_SNoUninstallFile)
-extern PACKAGE System::ResourceString _SOptionNeedsClient;
-#define Ibinstall_SOptionNeedsClient System::LoadResourceString(&Ibinstall::_SOptionNeedsClient)
-extern PACKAGE System::ResourceString _SOptionNeedsServer;
-#define Ibinstall_SOptionNeedsServer System::LoadResourceString(&Ibinstall::_SOptionNeedsServer)
-extern PACKAGE System::ResourceString _SInvalidOption;
-#define Ibinstall_SInvalidOption System::LoadResourceString(&Ibinstall::_SInvalidOption)
-extern PACKAGE System::ResourceString _SInvalidOnErrorResult;
-#define Ibinstall_SInvalidOnErrorResult System::LoadResourceString(&Ibinstall::_SInvalidOnErrorResult)
-	
-extern PACKAGE System::ResourceString _SInvalidOnStatusResult;
-#define Ibinstall_SInvalidOnStatusResult System::LoadResourceString(&Ibinstall::_SInvalidOnStatusResult)
-	
 
 }	/* namespace Ibinstall */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ibinstall;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

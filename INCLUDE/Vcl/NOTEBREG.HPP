@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NoteBReg.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NoteBReg.pas' rev: 6.00
 
 #ifndef NoteBRegHPP
 #define NoteBRegHPP
@@ -10,7 +10,8 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <DsgnIntf.hpp>	// Pascal unit
+#include <DesignEditors.hpp>	// Pascal unit
+#include <DesignIntf.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
@@ -21,22 +22,19 @@ namespace Notebreg
 {
 //-- type declarations -------------------------------------------------------
 class DELPHICLASS TPageNameProperty;
-class PASCALIMPLEMENTATION TPageNameProperty : public Dsgnintf::TPropertyEditor 
+class PASCALIMPLEMENTATION TPageNameProperty : public Designeditors::TPropertyEditor 
 {
-	typedef Dsgnintf::TPropertyEditor inherited;
+	typedef Designeditors::TPropertyEditor inherited;
 	
 public:
-	virtual Dsgnintf::TPropertyAttributes __fastcall GetAttributes(void);
+	virtual Designintf::TPropertyAttributes __fastcall GetAttributes(void);
 	virtual void __fastcall GetValues(Classes::TGetStrProc Proc);
 	virtual AnsiString __fastcall GetValue();
 	virtual void __fastcall SetValue(const AnsiString AValue);
-protected:
-	#pragma option push -w-inl
-	/* TPropertyEditor.Create */ inline __fastcall virtual TPageNameProperty(const Dsgnintf::_di_IFormDesigner 
-		ADesigner, int APropCount) : Dsgnintf::TPropertyEditor(ADesigner, APropCount) { }
-	#pragma option pop
-	
 public:
+	#pragma option push -w-inl
+	/* TPropertyEditor.Create */ inline __fastcall virtual TPageNameProperty(const Designintf::_di_IDesigner ADesigner, int APropCount) : Designeditors::TPropertyEditor(ADesigner, APropCount) { }
+	#pragma option pop
 	#pragma option push -w-inl
 	/* TPropertyEditor.Destroy */ inline __fastcall virtual ~TPageNameProperty(void) { }
 	#pragma option pop
@@ -45,21 +43,18 @@ public:
 
 
 class DELPHICLASS TPageListProperty;
-class PASCALIMPLEMENTATION TPageListProperty : public Dsgnintf::TPropertyEditor 
+class PASCALIMPLEMENTATION TPageListProperty : public Designeditors::TPropertyEditor 
 {
-	typedef Dsgnintf::TPropertyEditor inherited;
+	typedef Designeditors::TPropertyEditor inherited;
 	
 public:
-	virtual Dsgnintf::TPropertyAttributes __fastcall GetAttributes(void);
+	virtual Designintf::TPropertyAttributes __fastcall GetAttributes(void);
 	virtual AnsiString __fastcall GetValue();
 	virtual void __fastcall Edit(void);
-protected:
-	#pragma option push -w-inl
-	/* TPropertyEditor.Create */ inline __fastcall virtual TPageListProperty(const Dsgnintf::_di_IFormDesigner 
-		ADesigner, int APropCount) : Dsgnintf::TPropertyEditor(ADesigner, APropCount) { }
-	#pragma option pop
-	
 public:
+	#pragma option push -w-inl
+	/* TPropertyEditor.Create */ inline __fastcall virtual TPageListProperty(const Designintf::_di_IDesigner ADesigner, int APropCount) : Designeditors::TPropertyEditor(ADesigner, APropCount) { }
+	#pragma option pop
 	#pragma option push -w-inl
 	/* TPropertyEditor.Destroy */ inline __fastcall virtual ~TPageListProperty(void) { }
 	#pragma option pop
@@ -68,9 +63,9 @@ public:
 
 
 class DELPHICLASS TNotebookEditor;
-class PASCALIMPLEMENTATION TNotebookEditor : public Dsgnintf::TDefaultEditor 
+class PASCALIMPLEMENTATION TNotebookEditor : public Designeditors::TDefaultEditor 
 {
-	typedef Dsgnintf::TDefaultEditor inherited;
+	typedef Designeditors::TDefaultEditor inherited;
 	
 public:
 	virtual void __fastcall ExecuteVerb(int Index);
@@ -78,8 +73,7 @@ public:
 	virtual int __fastcall GetVerbCount(void);
 public:
 	#pragma option push -w-inl
-	/* TComponentEditor.Create */ inline __fastcall virtual TNotebookEditor(Classes::TComponent* AComponent
-		, Dsgnintf::_di_IFormDesigner ADesigner) : Dsgnintf::TDefaultEditor(AComponent, ADesigner) { }
+	/* TComponentEditor.Create */ inline __fastcall virtual TNotebookEditor(Classes::TComponent* AComponent, Designintf::_di_IDesigner ADesigner) : Designeditors::TDefaultEditor(AComponent, ADesigner) { }
 	#pragma option pop
 	
 public:
@@ -93,9 +87,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Notebreg */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Notebreg;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

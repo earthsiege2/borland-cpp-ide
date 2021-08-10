@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBErrorCodes.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBErrorCodes.pas' rev: 6.00
 
 #ifndef IBErrorCodesHPP
 #define IBErrorCodesHPP
@@ -681,9 +681,7 @@ static const int isc_gstat_sysmemex = 0x1415001f;
 static const Word isc_err_max = 0x294;
 
 }	/* namespace Iberrorcodes */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Iberrorcodes;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

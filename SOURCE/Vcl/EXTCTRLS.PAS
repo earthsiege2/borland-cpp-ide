@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -110,12 +110,14 @@ type
     FIncrementalDisplay: Boolean;
     FTransparent: Boolean;
     FDrawing: Boolean;
+    FProportional: Boolean;    
     function GetCanvas: TCanvas;
     procedure PictureChanged(Sender: TObject);
     procedure SetCenter(Value: Boolean);
     procedure SetPicture(Value: TPicture);
     procedure SetStretch(Value: Boolean);
     procedure SetTransparent(Value: Boolean);
+    procedure SetProportional(Value: Boolean);
   protected
     function CanAutoSize(var NewWidth, NewHeight: Integer): Boolean; override;
     function DestRect: TRect;
@@ -142,6 +144,7 @@ type
     property ParentShowHint;
     property Picture: TPicture read FPicture write SetPicture;
     property PopupMenu;
+    property Proportional: Boolean read FProportional write SetProportional default false;
     property ShowHint;
     property Stretch: Boolean read FStretch write SetStretch default False;
     property Transparent: Boolean read FTransparent write SetTransparent default False;
@@ -770,13 +773,257 @@ type
     property OnUnDock;
   end;
 
+  { TBoundLabel }
+
+  TBoundLabel = class(TCustomLabel)
+  private
+    function GetTop: Integer;
+    function GetLeft: Integer;
+    function GetWidth: Integer;
+    function GetHeight: Integer;
+    procedure SetHeight(const Value: Integer);
+    procedure SetWidth(const Value: Integer);
+  protected
+    procedure AdjustBounds; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+  published
+    property BiDiMode;
+    property Caption;
+    property Color;
+    property DragCursor;
+    property DragKind;
+    property DragMode;
+    property Font;
+    property Height: Integer read GetHeight write SetHeight;
+    property Left: Integer read GetLeft;
+    property ParentBiDiMode;
+    property ParentColor;
+    property ParentFont;
+    property ParentShowHint;
+    property PopupMenu;
+    property ShowAccelChar;
+    property ShowHint;
+    property Top: Integer read GetTop;
+    property Transparent;
+    property Layout;
+    property WordWrap;
+    property Width: Integer read GetWidth write SetWidth;
+    property OnClick;
+    property OnContextPopup;
+    property OnDblClick;
+    property OnDragDrop;
+    property OnDragOver;
+    property OnEndDock;
+    property OnEndDrag;
+    property OnMouseDown;
+    property OnMouseMove;
+    property OnMouseUp;
+    property OnStartDock;
+    property OnStartDrag;
+  end;
+
+  TLabelPosition = (lpAbove, lpBelow, lpLeft, lpRight);
+
+  { TCustomLabeledEdit }
+
+  TCustomLabeledEdit = class(TCustomEdit)
+  private
+    FEditLabel: TBoundLabel;
+    FLabelPosition: TLabelPosition;
+    FLabelSpacing: Integer;
+    procedure SetLabelPosition(const Value: TLabelPosition);
+    procedure SetLabelSpacing(const Value: Integer);
+  protected
+    procedure SetParent(AParent: TWinControl); override;
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+    procedure SetName(const Value: TComponentName); override;
+    procedure CMVisiblechanged(var Message: TMessage);
+      message CM_VISIBLECHANGED;
+    procedure CMEnabledchanged(var Message: TMessage);
+      message CM_ENABLEDCHANGED;
+    procedure CMBidimodechanged(var Message: TMessage);
+      message CM_BIDIMODECHANGED;
+  public
+    { Public declarations }
+    constructor Create(AOwner: TComponent); override;
+    procedure SetBounds(ALeft: Integer; ATop: Integer; AWidth: Integer; AHeight: Integer); override;
+    procedure SetupInternalLabel;
+    property EditLabel: TBoundLabel read FEditLabel;
+    property LabelPosition: TLabelPosition read FLabelPosition write SetLabelPosition;
+    property LabelSpacing: Integer read FLabelSpacing write SetLabelSpacing;
+  end;
+
+  { TLabeledEdit }
+
+  TLabeledEdit = class(TCustomLabeledEdit)
+  published
+    property Anchors;
+    property AutoSelect;
+    property AutoSize;
+    property BevelEdges;
+    property BevelInner;
+    property BevelKind;
+    property BevelOuter;
+    property BiDiMode;
+    property BorderStyle;
+    property CharCase;
+    property Color;
+    property Constraints;
+    property Ctl3D;
+    property DragCursor;
+    property DragKind;
+    property DragMode;
+    property EditLabel;
+    property Enabled;
+    property Font;
+    property HideSelection;
+    property ImeMode;
+    property ImeName;
+    property LabelPosition;
+    property LabelSpacing;
+    property MaxLength;
+    property OEMConvert;
+    property ParentBiDiMode;
+    property ParentColor;
+    property ParentCtl3D;
+    property ParentFont;
+    property ParentShowHint;
+    property PasswordChar;
+    property PopupMenu;
+    property ReadOnly;
+    property ShowHint;
+    property TabOrder;
+    property TabStop;
+    property Text;
+    property Visible;
+    property OnChange;
+    property OnClick;
+    property OnContextPopup;
+    property OnDblClick;
+    property OnDragDrop;
+    property OnDragOver;
+    property OnEndDock;
+    property OnEndDrag;
+    property OnEnter;
+    property OnExit;
+    property OnKeyDown;
+    property OnKeyPress;
+    property OnKeyUp;
+    property OnMouseDown;
+    property OnMouseMove;
+    property OnMouseUp;
+    property OnStartDock;
+    property OnStartDrag;
+  end;
+
+const
+  NoColorSelected = TColor($FF000000);
+
+type
+  TColorBoxStyles = (cbStandardColors, // first sixteen RGBI colors
+                     cbExtendedColors, // four additional reserved colors
+                     cbSystemColors,   // system managed/defined colors
+                     cbIncludeNone,    // include clNone color, must be used with cbSystemColors
+                     cbIncludeDefault, // include clDefault color, must be used with cbSystemColors
+                     cbCustomColor,    // first color is customizable
+                     cbPrettyNames);   // instead of 'clColorNames' you get 'Color Names'
+  TColorBoxStyle = set of TColorBoxStyles;
+  TCustomColorBox = class(TCustomComboBox)
+  private
+    FStyle: TColorBoxStyle;
+    FNeedToPopulate: Boolean;
+    FListSelected: Boolean;
+    FDefaultColorColor: TColor;
+    FNoneColorColor: TColor;
+    FSelectedColor: TColor;
+    function GetColor(Index: Integer): TColor;
+    function GetColorName(Index: Integer): string;
+    function GetSelected: TColor;
+    procedure SetSelected(const AColor: TColor);
+    procedure ColorCallBack(const AName: string);
+    procedure SetDefaultColorColor(const Value: TColor);
+    procedure SetNoneColorColor(const Value: TColor);
+  protected
+    procedure CloseUp; override;
+    procedure CreateWnd; override;
+    procedure DrawItem(Index: Integer; Rect: TRect; State: TOwnerDrawState); override;
+    procedure KeyDown(var Key: Word; Shift: TShiftState); override;
+    procedure KeyPress(var Key: Char); override;
+    function PickCustomColor: Boolean; virtual;
+    procedure PopulateList;
+    procedure Select; override;
+    procedure SetStyle(AStyle: TColorBoxStyle); reintroduce;
+  public
+    constructor Create(AOwner: TComponent); override;
+    property Style: TColorBoxStyle read FStyle write SetStyle
+      default [cbStandardColors, cbExtendedColors, cbSystemColors];
+    property Colors[Index: Integer]: TColor read GetColor;
+    property ColorNames[Index: Integer]: string read GetColorName;
+    property Selected: TColor read GetSelected write SetSelected default clBlack;
+    property DefaultColorColor: TColor read FDefaultColorColor write SetDefaultColorColor default clBlack;
+    property NoneColorColor: TColor read FNoneColorColor write SetNoneColorColor default clBlack;
+  end;
+
+  TColorBox = class(TCustomColorBox)
+  published
+    property AutoComplete;
+    property AutoDropDown;
+    property DefaultColorColor;
+    property NoneColorColor;
+    property Selected;
+    property Style;
+
+    property Anchors;
+    property BevelEdges;
+    property BevelInner;
+    property BevelKind;
+    property BevelOuter;
+    property BiDiMode;
+    property Color;
+    property Constraints;
+    property Ctl3D;
+    property DropDownCount;
+    property Enabled;
+    property Font;
+    property ItemHeight;
+    property ParentBiDiMode;
+    property ParentColor;
+    property ParentCtl3D;
+    property ParentFont;
+    property ParentShowHint;
+    property PopupMenu;
+    property ShowHint;
+    property TabOrder;
+    property TabStop;
+    property Visible;
+    property OnChange;
+    property OnCloseUp;
+    property OnClick;
+    property OnContextPopup;
+    property OnDblClick;
+    property OnDragDrop;
+    property OnDragOver;
+    property OnDropDown;
+    property OnEndDock;
+    property OnEndDrag;
+    property OnEnter;
+    property OnExit;
+    property OnKeyDown;
+    property OnKeyPress;
+    property OnKeyUp;
+    property OnSelect;
+    property OnStartDock;
+    property OnStartDrag;
+  end;
+
 procedure Frame3D(Canvas: TCanvas; var Rect: TRect;
   TopColor, BottomColor: TColor; Width: Integer);
 procedure NotebookHandlesNeeded(Notebook: TNotebook);
 
 implementation
 
-uses Consts;
+uses Consts, Dialogs;
 
 { Utility routines }
 
@@ -961,18 +1208,61 @@ function TImage.GetPalette: HPALETTE;
 begin
   Result := 0;
   if FPicture.Graphic <> nil then
-    Result := FPicture.Graphic.Palette;
+	Result := FPicture.Graphic.Palette;
 end;
 
 function TImage.DestRect: TRect;
+var
+  w, h, cw, ch: Integer;
+  xyaspect: Double;
 begin
-  if Stretch then
-    Result := ClientRect
-  else if Center then
-    Result := Bounds((Width - Picture.Width) div 2, (Height - Picture.Height) div 2,
-      Picture.Width, Picture.Height)
-  else
-    Result := Rect(0, 0, Picture.Width, Picture.Height);
+  w := Picture.Width;
+  h := Picture.Height;
+  cw := ClientWidth;
+  ch := ClientHeight;
+  if Stretch or (Proportional and ((w > cw) or (h > ch))) then
+  begin
+	if Proportional and (w > 0) and (h > 0) then
+	begin
+      xyaspect := w / h;
+      if w > h then
+      begin
+        w := cw;
+        h := Trunc(cw / xyaspect);
+        if h > ch then  // woops, too big
+        begin
+          h := ch;
+          w := Trunc(ch * xyaspect);
+        end;
+      end
+      else
+      begin
+        h := ch;
+        w := Trunc(ch * xyaspect);
+        if w > cw then  // woops, too big
+        begin
+          w := cw;
+          h := Trunc(cw / xyaspect);
+        end;
+      end;
+    end
+    else
+    begin
+      w := cw;
+      h := ch;
+    end;
+  end;
+
+  with Result do
+  begin
+    Left := 0;
+    Top := 0;
+    Right := w;
+    Bottom := h;
+  end;
+
+  if Center then
+	OffsetRect(Result, (cw - w) div 2, (ch - h) div 2);
 end;
 
 procedure TImage.Paint;
@@ -980,19 +1270,19 @@ var
   Save: Boolean;
 begin
   if csDesigning in ComponentState then
-    with inherited Canvas do
-    begin
-      Pen.Style := psDash;
-      Brush.Style := bsClear;
-      Rectangle(0, 0, Width, Height);
-    end;
+	with inherited Canvas do
+	begin
+	  Pen.Style := psDash;
+	  Brush.Style := bsClear;
+	  Rectangle(0, 0, Width, Height);
+	end;
   Save := FDrawing;
   FDrawing := True;
   try
-    with inherited Canvas do
-      StretchDraw(DestRect, Picture.Graphic);
+	with inherited Canvas do
+	  StretchDraw(DestRect, Picture.Graphic);
   finally
-    FDrawing := Save;
+	FDrawing := Save;
   end;
 end;
 
@@ -1004,23 +1294,23 @@ begin
   Result := False;
   Tmp := Picture.Graphic;
   if Visible and (not (csLoading in ComponentState)) and (Tmp <> nil) and
-    (Tmp.PaletteModified) then
+	(Tmp.PaletteModified) then
   begin
-    if (Tmp.Palette = 0) then
-      Tmp.PaletteModified := False
-    else
-    begin
-      ParentForm := GetParentForm(Self);
-      if Assigned(ParentForm) and ParentForm.Active and Parentform.HandleAllocated then
-      begin
-        if FDrawing then
-          ParentForm.Perform(wm_QueryNewPalette, 0, 0)
-        else
-          PostMessage(ParentForm.Handle, wm_QueryNewPalette, 0, 0);
-        Result := True;
-        Tmp.PaletteModified := False;
-      end;
-    end;
+	if (Tmp.Palette = 0) then
+	  Tmp.PaletteModified := False
+	else
+	begin
+	  ParentForm := GetParentForm(Self);
+	  if Assigned(ParentForm) and ParentForm.Active and Parentform.HandleAllocated then
+	  begin
+		if FDrawing then
+		  ParentForm.Perform(wm_QueryNewPalette, 0, 0)
+		else
+		  PostMessage(ParentForm.Handle, wm_QueryNewPalette, 0, 0);
+		Result := True;
+		Tmp.PaletteModified := False;
+	  end;
+	end;
   end;
 end;
 
@@ -1029,8 +1319,8 @@ procedure TImage.Progress(Sender: TObject; Stage: TProgressStage;
 begin
   if FIncrementalDisplay and RedrawNow then
   begin
-    if DoPaletteChange then Update
-    else Paint;
+	if DoPaletteChange then Update
+	else Paint;
   end;
   if Assigned(FOnProgress) then FOnProgress(Sender, Stage, PercentDone, RedrawNow, R, Msg);
 end;
@@ -1041,27 +1331,27 @@ var
 begin
   if Picture.Graphic = nil then
   begin
-    Bitmap := TBitmap.Create;
-    try
-      Bitmap.Width := Width;
-      Bitmap.Height := Height;
-      Picture.Graphic := Bitmap;
-    finally
-      Bitmap.Free;
-    end;
+	Bitmap := TBitmap.Create;
+	try
+	  Bitmap.Width := Width;
+	  Bitmap.Height := Height;
+	  Picture.Graphic := Bitmap;
+	finally
+	  Bitmap.Free;
+	end;
   end;
   if Picture.Graphic is TBitmap then
-    Result := TBitmap(Picture.Graphic).Canvas
+	Result := TBitmap(Picture.Graphic).Canvas
   else
-    raise EInvalidOperation.Create(SImageCanvasNeedsBitmap);
+	raise EInvalidOperation.Create(SImageCanvasNeedsBitmap);
 end;
 
 procedure TImage.SetCenter(Value: Boolean);
 begin
   if FCenter <> Value then
   begin
-    FCenter := Value;
-    PictureChanged(Self);
+	FCenter := Value;
+	PictureChanged(Self);
   end;
 end;
 
@@ -1074,8 +1364,8 @@ procedure TImage.SetStretch(Value: Boolean);
 begin
   if Value <> FStretch then
   begin
-    FStretch := Value;
-    PictureChanged(Self);
+	FStretch := Value;
+	PictureChanged(Self);
   end;
 end;
 
@@ -1083,8 +1373,17 @@ procedure TImage.SetTransparent(Value: Boolean);
 begin
   if Value <> FTransparent then
   begin
-    FTransparent := Value;
-    PictureChanged(Self);
+	FTransparent := Value;
+	PictureChanged(Self);
+  end;
+end;
+
+procedure TImage.SetProportional(Value: Boolean);
+begin
+  if FProportional <> Value then
+  begin
+	FProportional := Value;
+	PictureChanged(Self);
   end;
 end;
 
@@ -1093,18 +1392,17 @@ var
   G: TGraphic;
 begin
   if AutoSize and (Picture.Width > 0) and (Picture.Height > 0) then
-    SetBounds(Left, Top, Picture.Width, Picture.Height);
+	SetBounds(Left, Top, Picture.Width, Picture.Height);
   G := Picture.Graphic;
   if G <> nil then
   begin
-    if not ((G is TMetaFile) or (G is TIcon)) then
-      G.Transparent := FTransparent;
-    if (not G.Transparent) and (Stretch or (G.Width >= Width)
-      and (G.Height >= Height)) then
-      ControlStyle := ControlStyle + [csOpaque]
-    else
-      ControlStyle := ControlStyle - [csOpaque];
-    if DoPaletteChange and FDrawing then Update;
+	if not ((G is TMetaFile) or (G is TIcon)) then
+	  G.Transparent := FTransparent;
+	if (not G.Transparent) and Stretch and not Proportional then
+	  ControlStyle := ControlStyle + [csOpaque]
+	else  // picture might not cover entire clientrect
+	  ControlStyle := ControlStyle - [csOpaque];
+	if DoPaletteChange and FDrawing then Update;
   end
   else ControlStyle := ControlStyle - [csOpaque];
   if not FDrawing then Invalidate;
@@ -1261,14 +1559,14 @@ begin
   inherited Create(AOwner);
   FEnabled := True;
   FInterval := 1000;
-  FWindowHandle := AllocateHWnd(WndProc);
+  FWindowHandle := Classes.AllocateHWnd(WndProc);
 end;
 
 destructor TTimer.Destroy;
 begin
   FEnabled := False;
   UpdateTimer;
-  DeallocateHWnd(FWindowHandle);
+  Classes.DeallocateHWnd(FWindowHandle);
   inherited Destroy;
 end;
 
@@ -1529,7 +1827,7 @@ begin
   begin
     FAutoSizeDocking := True;
     try
-      R := Message.DockSource.Control.BoundsRect;
+      R := Message.DockSource.DockRect;
       case Align of
         alLeft: if Width = 0 then Width := R.Right - R.Left;
         alRight: if Width = 0 then
@@ -2738,7 +3036,7 @@ begin
         FMaxSize := Parent.ClientWidth - FMinSize;
         for I := 0 to Parent.ControlCount - 1 do
           with Parent.Controls[I] do
-            if Align in [alLeft, alRight] then Dec(FMaxSize, Width);
+            if Visible and (Align in [alLeft, alRight]) then Dec(FMaxSize, Width);
         Inc(FMaxSize, FControl.Width);
       end
       else
@@ -3935,8 +4233,6 @@ begin
       R := Rect(ARect.Left + Offset, ARect.Top + 2, ARect.Left + Offset + 2,
         ARect.Bottom - 3);
       DrawGrabber;
-      OffsetRect(R, 3, 0);
-      DrawGrabber;
     end;
   end;
 end;
@@ -4296,5 +4592,427 @@ begin
     inherited;
   end;
 end;
+
+
+{ TBoundLabel }
+
+constructor TBoundLabel.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Name := 'SubLabel';
+  SetSubComponent(True);
+  if Assigned(AOwner) then
+    Caption := AOwner.Name;
+end;
+
+procedure TBoundLabel.AdjustBounds;
+begin
+  inherited AdjustBounds;
+  if Owner is TCustomLabeledEdit then
+    with Owner as TCustomLabeledEdit do
+      SetLabelPosition(LabelPosition);
+end;
+
+function TBoundLabel.GetHeight: Integer;
+begin
+  Result := inherited Height;
+end;
+
+function TBoundLabel.GetLeft: Integer;
+begin
+  Result := inherited Left;
+end;
+
+function TBoundLabel.GetTop: Integer;
+begin
+  Result := inherited Top;
+end;
+
+function TBoundLabel.GetWidth: Integer;
+begin
+  Result := inherited Width;
+end;
+
+procedure TBoundLabel.SetHeight(const Value: Integer);
+begin
+  SetBounds(Left, Top, Width, Value);
+end;
+
+procedure TBoundLabel.SetWidth(const Value: Integer);
+begin
+  SetBounds(Left, Top, Value, Height);
+end;
+
+{ TCustomLabeledEdit }
+
+constructor TCustomLabeledEdit.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FLabelPosition := lpAbove;
+  FLabelSpacing := 3;
+  SetupInternalLabel;
+end;
+
+procedure TCustomLabeledEdit.CMBidimodechanged(var Message: TMessage);
+begin
+  inherited;
+  FEditLabel.BiDiMode := BiDiMode;
+end;
+
+procedure TCustomLabeledEdit.CMEnabledchanged(var Message: TMessage);
+begin
+  inherited;
+  FEditLabel.Enabled := Enabled;
+end;
+
+procedure TCustomLabeledEdit.CMVisiblechanged(var Message: TMessage);
+begin
+  inherited;
+  FEditLabel.Visible := Visible;
+end;
+
+procedure TCustomLabeledEdit.Notification(AComponent: TComponent;
+  Operation: TOperation);
+begin
+  inherited Notification(AComponent, Operation);
+  if (AComponent = FEditLabel) and (Operation = opRemove) then
+    FEditLabel := nil;
+end;
+
+procedure TCustomLabeledEdit.SetBounds(ALeft, ATop, AWidth, AHeight: Integer);
+begin
+  inherited SetBounds(ALeft, ATop, AWidth, AHeight);
+  SetLabelPosition(FLabelPosition);
+end;
+
+procedure TCustomLabeledEdit.SetLabelPosition(const Value: TLabelPosition);
+var
+  P: TPoint;
+begin
+  if FEditLabel = nil then exit;
+  FLabelPosition := Value;
+  case Value of
+    lpAbove: P := Point(Left, Top - FEditLabel.Height - FLabelSpacing);
+    lpBelow: P := Point(Left, Top + Height + FLabelSpacing);
+    lpLeft : P := Point(Left - FEditLabel.Width - FLabelSpacing,
+                    Top + ((Height - FEditLabel.Height) div 2));
+    lpRight: P := Point(Left + Width + FLabelSpacing,
+                    Top + ((Height - FEditLabel.Height) div 2));
+  end;
+  FEditLabel.SetBounds(P.x, P.y, FEditLabel.Width, FEditLabel.Height);
+end;
+
+procedure TCustomLabeledEdit.SetLabelSpacing(const Value: Integer);
+begin
+  FLabelSpacing := Value;
+  SetLabelPosition(FLabelPosition);
+end;
+
+procedure TCustomLabeledEdit.SetName(const Value: TComponentName);
+begin
+  if (csDesigning in ComponentState) and ((FEditlabel.GetTextLen = 0) or
+     (CompareText(FEditLabel.Caption, Name) = 0)) then
+    FEditLabel.Caption := Value;
+  inherited SetName(Value);
+  if csDesigning in ComponentState then
+    Text := '';
+end;
+
+procedure TCustomLabeledEdit.SetParent(AParent: TWinControl);
+begin
+  inherited SetParent(AParent);
+  if FEditLabel = nil then exit;
+  FEditLabel.Parent := AParent;
+  FEditLabel.Visible := True;
+end;
+
+procedure TCustomLabeledEdit.SetupInternalLabel;
+begin
+  if Assigned(FEditLabel) then exit;
+  FEditLabel := TBoundLabel.Create(Self);
+  FEditLabel.FreeNotification(Self);
+  FEditLabel.FocusControl := Self;
+end;
+
+{ TCustomColorBox }
+
+procedure TCustomColorBox.CloseUp;
+begin
+  inherited CloseUp;
+  FListSelected := True;
+end;
+
+procedure TCustomColorBox.ColorCallBack(const AName: String);
+var
+  I, LStart: Integer;
+  LColor: TColor;
+  LName: string;
+begin
+  LColor := StringToColor(AName);
+  if cbPrettyNames in Style then
+  begin
+    if Copy(AName, 1, 2) = 'cl' then
+      LStart := 3
+    else
+      LStart := 1;
+    LName := '';
+    for I := LStart to Length(AName) do
+    begin
+      case AName[I] of
+        'A'..'Z':
+          if LName <> '' then
+            LName := LName + ' ';
+      end;
+      LName := LName + AName[I];
+    end;
+  end
+  else
+    LName := AName;
+  Items.AddObject(LName, TObject(LColor));
+end;
+
+constructor TCustomColorBox.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  inherited Style := csOwnerDrawFixed;
+  FStyle := [cbStandardColors, cbExtendedColors, cbSystemColors];
+  FSelectedColor := clBlack;
+  FDefaultColorColor := clBlack;
+  FNoneColorColor := clBlack;
+  PopulateList;
+end;
+
+procedure TCustomColorBox.CreateWnd;
+begin
+  inherited CreateWnd;
+  if FNeedToPopulate then
+    PopulateList;
+end;
+
+procedure TCustomColorBox.DrawItem(Index: Integer; Rect: TRect;
+  State: TOwnerDrawState);
+
+  function ColorToBorderColor(AColor: TColor): TColor;
+  type
+    TColorQuad = record
+      Red,
+      Green,
+      Blue,
+      Alpha: Byte;
+    end;
+  begin
+    if (TColorQuad(AColor).Red > 192) or
+       (TColorQuad(AColor).Green > 192) or
+       (TColorQuad(AColor).Blue > 192) then
+      Result := clBlack
+    else if odSelected in State then
+      Result := clWhite
+    else
+      Result := AColor;
+  end;
+
+var
+  LRect: TRect;
+  LBackground: TColor;
+begin
+  with Canvas do
+  begin
+    FillRect(Rect);
+    LBackground := Brush.Color;
+
+    LRect := Rect;
+    LRect.Right := LRect.Bottom - LRect.Top + LRect.Left;
+    InflateRect(LRect, -1, -1);
+    Brush.Color := Colors[Index];
+    if Brush.Color = clDefault then
+      Brush.Color := DefaultColorColor
+    else if Brush.Color = clNone then
+      Brush.Color := NoneColorColor;
+    FillRect(LRect);
+    Brush.Color := ColorToBorderColor(ColorToRGB(Brush.Color));
+    FrameRect(LRect);
+
+    Brush.Color := LBackground;
+    Rect.Left := LRect.Right + 5;
+
+    TextRect(Rect, Rect.Left,
+      Rect.Top + (Rect.Bottom - Rect.Top - TextHeight(Items[Index])) div 2,
+      Items[Index]);
+  end;
+end;
+
+function TCustomColorBox.GetColor(Index: Integer): TColor;
+begin
+  Result := TColor(Items.Objects[Index]);
+end;
+
+function TCustomColorBox.GetColorName(Index: Integer): string;
+begin
+  Result := Items[Index];
+end;
+
+function TCustomColorBox.GetSelected: TColor;
+begin
+  if HandleAllocated then
+    if ItemIndex <> -1 then
+      Result := Colors[ItemIndex]
+    else
+      Result := NoColorSelected
+  else
+    Result := FSelectedColor;
+end;
+
+procedure TCustomColorBox.KeyDown(var Key: Word; Shift: TShiftState);
+begin
+  FListSelected := False;
+  inherited KeyDown(Key, Shift);
+end;
+
+procedure TCustomColorBox.KeyPress(var Key: Char);
+begin
+  inherited KeyPress(Key);
+  if (cbCustomColor in Style) and (Key = #13) and (ItemIndex = 0) then
+  begin
+    PickCustomColor;
+    Key := #0;
+  end;
+end;
+
+function TCustomColorBox.PickCustomColor: Boolean;
+var
+  LColor: TColor;
+begin
+  with TColorDialog.Create(nil) do
+    try
+      LColor := ColorToRGB(TColor(Items.Objects[0]));
+      Color := LColor;
+      CustomColors.Text := Format('ColorA=%.8x', [LColor]);
+      Result := Execute;
+      if Result then
+      begin
+        Items.Objects[0] := TObject(Color);
+        Self.Invalidate;
+      end;
+    finally
+      Free;
+    end;
+end;
+
+procedure TCustomColorBox.PopulateList;
+  procedure DeleteRange(const AMin, AMax: Integer);
+  var
+    I: Integer;
+  begin
+    for I := AMax downto AMin do
+      Items.Delete(I);
+  end;
+  procedure DeleteColor(const AColor: TColor);
+  var
+    I: Integer;
+  begin
+    I := Items.IndexOfObject(TObject(AColor));
+    if I <> -1 then
+      Items.Delete(I);
+  end;
+var
+  LSelectedColor, LCustomColor: TColor;
+begin
+  if HandleAllocated then
+  begin
+    Items.BeginUpdate;
+    try
+      LCustomColor := clBlack;
+      if (cbCustomColor in Style) and (Items.Count > 0) then
+        LCustomColor := TColor(Items.Objects[0]);
+      LSelectedColor := FSelectedColor;
+      Items.Clear;
+      GetColorValues(ColorCallBack);
+      if not (cbIncludeNone in Style) then
+        DeleteColor(clNone);
+      if not (cbIncludeDefault in Style) then
+        DeleteColor(clDefault);
+      if not (cbSystemColors in Style) then
+        DeleteRange(StandardColorsCount + ExtendedColorsCount, Items.Count - 1);
+      if not (cbExtendedColors in Style) then
+        DeleteRange(StandardColorsCount, StandardColorsCount + ExtendedColorsCount - 1);
+      if not (cbStandardColors in Style) then
+        DeleteRange(0, StandardColorsCount - 1);
+      if cbCustomColor in Style then
+        Items.InsertObject(0, SColorBoxCustomCaption, TObject(LCustomColor));
+      Selected := LSelectedColor;
+    finally
+      Items.EndUpdate;
+      FNeedToPopulate := False;
+    end;
+  end
+  else
+    FNeedToPopulate := True;
+end;
+
+procedure TCustomColorBox.Select;
+begin
+  if FListSelected then
+  begin
+    FListSelected := False;
+    if (cbCustomColor in Style) and
+       (ItemIndex = 0) and
+       not PickCustomColor then
+      Exit;
+  end;
+  inherited Select;
+end;
+
+procedure TCustomColorBox.SetDefaultColorColor(const Value: TColor);
+begin
+  if Value <> FDefaultColorColor then
+  begin
+    FDefaultColorColor := Value;
+    Invalidate;
+  end;
+end;
+
+procedure TCustomColorBox.SetNoneColorColor(const Value: TColor);
+begin
+  if Value <> FNoneColorColor then
+  begin
+    FNoneColorColor := Value;
+    Invalidate;
+  end;
+end;
+
+procedure TCustomColorBox.SetSelected(const AColor: TColor);
+var
+  I: Integer;
+begin
+  if HandleAllocated then
+  begin
+    I := Items.IndexOfObject(TObject(AColor));
+    if (I = -1) and (cbCustomColor in Style) and (AColor <> NoColorSelected) then
+    begin
+      Items.Objects[0] := TObject(AColor);
+      I := 0;
+    end;
+    ItemIndex := I;
+  end;
+  FSelectedColor := AColor;
+end;
+
+procedure TCustomColorBox.SetStyle(AStyle: TColorBoxStyle);
+begin
+  if AStyle <> Style then
+  begin
+    FStyle := AStyle;
+    Enabled := ([cbStandardColors, cbExtendedColors, cbSystemColors, cbCustomColor] * FStyle) <> [];
+    PopulateList;
+    if (Items.Count > 0) and (ItemIndex = -1) then
+      ItemIndex := 0;
+  end;
+end;
+
+initialization
+  StartClassGroup(TControl);
+  GroupDescendentsWith(TTimer, Controls.TControl);
+
+finalization
 
 end.

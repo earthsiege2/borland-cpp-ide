@@ -1,6 +1,6 @@
 /*++
 
-Copyright (C) 1993-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Module Name:
 
@@ -31,7 +31,6 @@ Abstract:
 --*/
 
 #ifndef _WINPERF_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINPERF_
 
 #if _MSC_VER > 1000
@@ -117,14 +116,22 @@ typedef struct _PERF_OBJECT_TYPE {
                                         // object
     DWORD           ObjectNameTitleIndex;
                                         // Index to name in Title Database
+#ifdef _WIN64
+    DWORD           ObjectNameTitle;    // Should use this as an offset
+#else
     LPWSTR          ObjectNameTitle;    // Initially NULL, for use by
                                         // analysis program to point to
                                         // retrieved title string
+#endif
     DWORD           ObjectHelpTitleIndex;
                                         // Index to Help in Title Database
+#ifdef _WIN64
+    DWORD           ObjectHelpTitle;    // Should use this as an offset
+#else
     LPWSTR          ObjectHelpTitle;    // Initially NULL, for use by
                                         // analysis program to point to
                                         // retrieved title string
+#endif
     DWORD           DetailLevel;        // Object level of detail (for
                                         // controlling display complexity);
                                         // will be min of detail levels
@@ -178,8 +185,8 @@ typedef struct _PERF_OBJECT_TYPE {
 //
 //  select one of the following to indicate the counter's data size
 //
-#define PERF_SIZE_DWORD         0x00000000
-#define PERF_SIZE_LARGE         0x00000100
+#define PERF_SIZE_DWORD         0x00000000  // 32 bit field
+#define PERF_SIZE_LARGE         0x00000100  // 64 bit field
 #define PERF_SIZE_ZERO          0x00000200  // for Zero Length fields
 #define PERF_SIZE_VARIABLE_LEN  0x00000300  // length is in CounterLength field
                                             //  of Counter Definition struct
@@ -537,15 +544,23 @@ typedef struct _PERF_COUNTER_DEFINITION {
     DWORD           CounterNameTitleIndex;
                                         // Index of Counter name into
                                         // Title Database
+#ifdef _WIN64
+    DWORD           CounterNameTitle;
+#else
     LPWSTR          CounterNameTitle;   // Initially NULL, for use by
                                         // analysis program to point to
                                         // retrieved title string
+#endif
     DWORD           CounterHelpTitleIndex;
                                         // Index of Counter Help into
                                         // Title Database
+#ifdef _WIN64
+    DWORD           CounterHelpTitle;
+#else
     LPWSTR          CounterHelpTitle;   // Initially NULL, for use by
                                         // analysis program to point to
                                         // retrieved title string
+#endif
     LONG            DefaultScale;       // Power of 10 by which to scale
                                         // chart line if vertical axis is 100
                                         // 0 ==> 1, 1 ==> 10, -1 ==>1/10, etc.
@@ -635,9 +650,21 @@ typedef DWORD (APIENTRY PM_COLLECT_PROC) (LPWSTR, LPVOID *, LPDWORD, LPDWORD);
 typedef DWORD (APIENTRY PM_CLOSE_PROC) (void);
 typedef DWORD (APIENTRY PM_QUERY_PROC) (LPDWORD, LPVOID *, LPDWORD, LPDWORD);
 
-#define     MAX_PERF_OBJECTS_IN_QUERY_FUNCTION      (8L)
+#define     MAX_PERF_OBJECTS_IN_QUERY_FUNCTION      (64L)
+
+//
+// The following are the possible values for
+// HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Perflib\EventLogLevel
+// The default is WINPERF_LOG_NONE if the registry value is not defined.
+// This should be adopted by all perfdlls to avoid flooding the application
+// event log.
+//
+
+#define  WINPERF_LOG_NONE       0           // No event reported
+#define  WINPERF_LOG_USER       1           // Report only errors
+#define  WINPERF_LOG_DEBUG      2           // Report debug errors as well
+#define  WINPERF_LOG_VERBOSE    3           // Report everything
 
 #include <poppack.h>
 
-#pragma option pop /*P_O_Pop*/
 #endif // _WINPERF_

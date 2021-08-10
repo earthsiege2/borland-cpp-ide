@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DataModl.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DataModl.pas' rev: 6.00
 
 #ifndef DataModlHPP
 #define DataModlHPP
@@ -11,7 +11,7 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -29,9 +29,9 @@ namespace Datamodl
 {
 //-- type declarations -------------------------------------------------------
 class DELPHICLASS TDataMod;
-class PASCALIMPLEMENTATION TDataMod : public Forms::TDataModule 
+class PASCALIMPLEMENTATION TDataMod : public Classes::TDataModule 
 {
-	typedef Forms::TDataModule inherited;
+	typedef Classes::TDataModule inherited;
 	
 __published:
 	Dbtables::TTable* Table1;
@@ -46,20 +46,15 @@ public:
 	bool MultiQuery;
 	bool CreateTable;
 	Classes::TMemoryStream* __fastcall CreateRes(const AnsiString ModuleName);
-	Classes::TMemoryStream* __fastcall CreateHdrSource(const AnsiString FilePath, const AnsiString FormName
-		);
-	Classes::TMemoryStream* __fastcall CreateCppSource(const AnsiString FilePath, const AnsiString FormName
-		);
-	Classes::TMemoryStream* __fastcall CreateSource(const AnsiString FilePath, const AnsiString FormName
-		);
+	Classes::TMemoryStream* __fastcall CreateHdrSource(const AnsiString FilePath, const AnsiString FormName);
+	Classes::TMemoryStream* __fastcall CreateCppSource(const AnsiString FilePath, const AnsiString FormName);
+	Classes::TMemoryStream* __fastcall CreateSource(const AnsiString FilePath, const AnsiString FormName);
 public:
 	#pragma option push -w-inl
-	/* TDataModule.Create */ inline __fastcall virtual TDataMod(Classes::TComponent* AOwner) : Forms::TDataModule(
-		AOwner) { }
+	/* TDataModule.Create */ inline __fastcall virtual TDataMod(Classes::TComponent* AOwner) : Classes::TDataModule(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TDataModule.CreateNew */ inline __fastcall virtual TDataMod(Classes::TComponent* AOwner, int Dummy
-		) : Forms::TDataModule(AOwner, Dummy) { }
+	/* TDataModule.CreateNew */ inline __fastcall virtual TDataMod(Classes::TComponent* AOwner, int Dummy) : Classes::TDataModule(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TDataModule.Destroy */ inline __fastcall virtual ~TDataMod(void) { }
@@ -71,9 +66,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Datamodl */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Datamodl;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

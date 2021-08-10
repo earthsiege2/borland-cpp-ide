@@ -1,465 +1,486 @@
-LIBRARY RPCRT4
+LIBRARY RpcRT4
 EXPORTS
 
-    CStdStubBuffer_AddRef                    = 'RPCRT4.DLL'.*
-    CStdStubBuffer_Connect                   = 'RPCRT4.DLL'.*
-    CStdStubBuffer_CountRefs                 = 'RPCRT4.DLL'.*
-    CStdStubBuffer_DebugServerQueryInterface = 'RPCRT4.DLL'.*
-    CStdStubBuffer_DebugServerRelease        = 'RPCRT4.DLL'.*
-    CStdStubBuffer_Disconnect                = 'RPCRT4.DLL'.*
-    CStdStubBuffer_Invoke                    = 'RPCRT4.DLL'.*
-    CStdStubBuffer_IsIIDSupported            = 'RPCRT4.DLL'.*
-    CStdStubBuffer_QueryInterface            = 'RPCRT4.DLL'.*
-    DceErrorInqTextA                         = 'RPCRT4.DLL'.*
-    DceErrorInqTextW                         = 'RPCRT4.DLL'.*
-    GlobalMutexClearExternal                 = 'RPCRT4.DLL'.*
-    GlobalMutexRequestExternal               = 'RPCRT4.DLL'.*
-    IUnknown_AddRef_Proxy                    = 'RPCRT4.DLL'.*
-    IUnknown_QueryInterface_Proxy            = 'RPCRT4.DLL'.*
-    IUnknown_Release_Proxy                   = 'RPCRT4.DLL'.*
-    I_RpcAbortAsyncCall                      = 'RPCRT4.DLL'.*
-    I_RpcAllocate                            = 'RPCRT4.DLL'.*
-    I_RpcAsyncAbortCall                      = 'RPCRT4.DLL'.*
-    I_RpcAsyncSetHandle                      = 'RPCRT4.DLL'.*
-    I_RpcBCacheAllocate                      = 'RPCRT4.DLL'.*
-    I_RpcBCacheFree                          = 'RPCRT4.DLL'.*
-    I_RpcBindingCopy                         = 'RPCRT4.DLL'.*
-    I_RpcBindingInqConnId                    = 'RPCRT4.DLL'.*
-    I_RpcBindingInqDynamicEndpoint           = 'RPCRT4.DLL'.*
-    I_RpcBindingInqDynamicEndpointA          = 'RPCRT4.DLL'.*
-    I_RpcBindingInqDynamicEndpointW          = 'RPCRT4.DLL'.*
-    I_RpcBindingInqSecurityContext           = 'RPCRT4.DLL'.*
-    I_RpcBindingInqTransportType             = 'RPCRT4.DLL'.*
-    I_RpcBindingIsClientLocal                = 'RPCRT4.DLL'.*
-    I_RpcBindingToStaticStringBindingW       = 'RPCRT4.DLL'.*
-    I_RpcClearMutex                          = 'RPCRT4.DLL'.*
-    I_RpcConnectionInqSockBuffSize           = 'RPCRT4.DLL'.*
-    I_RpcConnectionSetSockBuffSize           = 'RPCRT4.DLL'.*
-    I_RpcDeleteMutex                         = 'RPCRT4.DLL'.*
-    I_RpcFree                                = 'RPCRT4.DLL'.*
-    I_RpcFreeBuffer                          = 'RPCRT4.DLL'.*
-    I_RpcFreePipeBuffer                      = 'RPCRT4.DLL'.*
-    I_RpcGetAssociationContext               = 'RPCRT4.DLL'.*
-    I_RpcGetBuffer                           = 'RPCRT4.DLL'.*
-    I_RpcGetBufferWithObject                 = 'RPCRT4.DLL'.*
-    I_RpcGetCurrentCallHandle                = 'RPCRT4.DLL'.*
-    I_RpcGetExtendedError                    = 'RPCRT4.DLL'.*
-    I_RpcGetServerContextList                = 'RPCRT4.DLL'.*
-    I_RpcIfInqTransferSyntaxes               = 'RPCRT4.DLL'.*
-    I_RpcLogEvent                            = 'RPCRT4.DLL'.*
-    I_RpcMapWin32Status                      = 'RPCRT4.DLL'.*
-    I_RpcMonitorAssociation                  = 'RPCRT4.DLL'.*
-    I_RpcNsBindingSetEntryName               = 'RPCRT4.DLL'.*
-    I_RpcNsBindingSetEntryNameA              = 'RPCRT4.DLL'.*
-    I_RpcNsBindingSetEntryNameW              = 'RPCRT4.DLL'.*
-    I_RpcNsInterfaceExported                 = 'RPCRT4.DLL'.*
-    I_RpcNsInterfaceUnexported               = 'RPCRT4.DLL'.*
-    I_RpcParseSecurity                       = 'RPCRT4.DLL'.*
-    I_RpcPauseExecution                      = 'RPCRT4.DLL'.*
-    I_RpcReallocPipeBuffer                   = 'RPCRT4.DLL'.*
-    I_RpcReceive                             = 'RPCRT4.DLL'.*
-    I_RpcRequestMutex                        = 'RPCRT4.DLL'.*
-    I_RpcSend                                = 'RPCRT4.DLL'.*
-    I_RpcSendReceive                         = 'RPCRT4.DLL'.*
-    I_RpcServerAllocateIpPort                = 'RPCRT4.DLL'.*
-    I_RpcServerInqAddressChangeFn            = 'RPCRT4.DLL'.*
-    I_RpcServerInqTransportType              = 'RPCRT4.DLL'.*
-    I_RpcServerRegisterForwardFunction       = 'RPCRT4.DLL'.*
-    I_RpcServerSetAddressChangeFn            = 'RPCRT4.DLL'.*
-    I_RpcServerUseProtseq2A                  = 'RPCRT4.DLL'.*
-    I_RpcServerUseProtseq2W                  = 'RPCRT4.DLL'.*
-    I_RpcServerUseProtseqEp2A                = 'RPCRT4.DLL'.*
-    I_RpcServerUseProtseqEp2W                = 'RPCRT4.DLL'.*
-    I_RpcSetAsyncHandle                      = 'RPCRT4.DLL'.*
-    I_RpcSetServerContextList                = 'RPCRT4.DLL'.*
-    I_RpcSsDontSerializeContext              = 'RPCRT4.DLL'.*
-    I_RpcStopMonitorAssociation              = 'RPCRT4.DLL'.*
-    I_RpcTransConnectionAllocatePacket       = 'RPCRT4.DLL'.*
-    I_RpcTransConnectionFreePacket           = 'RPCRT4.DLL'.*
-    I_RpcTransConnectionReallocPacket        = 'RPCRT4.DLL'.*
-    I_RpcTransDatagramAllocate2              = 'RPCRT4.DLL'.*
-    I_RpcTransDatagramAllocate               = 'RPCRT4.DLL'.*
-    I_RpcTransDatagramFree                   = 'RPCRT4.DLL'.*
-    I_RpcTransGetThreadEvent                 = 'RPCRT4.DLL'.*
-    I_RpcTransIoCancelled                    = 'RPCRT4.DLL'.*
-    I_RpcTransServerNewConnection            = 'RPCRT4.DLL'.*
-    I_UuidCreate                             = 'RPCRT4.DLL'.*
-    MIDL_wchar_strcpy                        = 'RPCRT4.DLL'.*
-    MIDL_wchar_strlen                        = 'RPCRT4.DLL'.*
-    MesBufferHandleReset                     = 'RPCRT4.DLL'.*
-    MesDecodeBufferHandleCreate              = 'RPCRT4.DLL'.*
-    MesDecodeIncrementalHandleCreate         = 'RPCRT4.DLL'.*
-    MesEncodeDynBufferHandleCreate           = 'RPCRT4.DLL'.*
-    MesEncodeFixedBufferHandleCreate         = 'RPCRT4.DLL'.*
-    MesEncodeIncrementalHandleCreate         = 'RPCRT4.DLL'.*
-    MesHandleFree                            = 'RPCRT4.DLL'.*
-    MesIncrementalHandleReset                = 'RPCRT4.DLL'.*
-    MesInqProcEncodingId                     = 'RPCRT4.DLL'.*
-    NDRCContextBinding                       = 'RPCRT4.DLL'.*
-    NDRCContextMarshall                      = 'RPCRT4.DLL'.*
-    NDRCContextUnmarshall                    = 'RPCRT4.DLL'.*
-    NDRSContextMarshall2                     = 'RPCRT4.DLL'.*
-    NDRSContextMarshall                      = 'RPCRT4.DLL'.*
-    NDRSContextMarshallEx                    = 'RPCRT4.DLL'.*
-    NDRSContextUnmarshall2                   = 'RPCRT4.DLL'.*
-    NDRSContextUnmarshall                    = 'RPCRT4.DLL'.*
-    NDRSContextUnmarshallEx                  = 'RPCRT4.DLL'.*
-    NDRcopy                                  = 'RPCRT4.DLL'.*
-    NdrAllocate                              = 'RPCRT4.DLL'.*
-    _NdrAsyncClientCall                      = 'RPCRT4.DLL'.NdrAsyncClientCall
-    NdrAsyncServerCall                       = 'RPCRT4.DLL'.*
-    NdrByteCountPointerBufferSize            = 'RPCRT4.DLL'.*
-    NdrByteCountPointerFree                  = 'RPCRT4.DLL'.*
-    NdrByteCountPointerMarshall              = 'RPCRT4.DLL'.*
-    NdrByteCountPointerUnmarshall            = 'RPCRT4.DLL'.*
-    NdrCStdStubBuffer2_Release               = 'RPCRT4.DLL'.*
-    NdrCStdStubBuffer_Release                = 'RPCRT4.DLL'.*
-    NdrClearOutParameters                    = 'RPCRT4.DLL'.*
-    _NdrClientCall                           = 'RPCRT4.DLL'.NdrClientCall
-    _NdrClientCall2                          = 'RPCRT4.DLL'.NdrClientCall2
-    NdrClientContextMarshall                 = 'RPCRT4.DLL'.*
-    NdrClientContextUnmarshall               = 'RPCRT4.DLL'.*
-    NdrClientInitialize                      = 'RPCRT4.DLL'.*
-    NdrClientInitializeNew                   = 'RPCRT4.DLL'.*
-    NdrComplexArrayBufferSize                = 'RPCRT4.DLL'.*
-    NdrComplexArrayFree                      = 'RPCRT4.DLL'.*
-    NdrComplexArrayMarshall                  = 'RPCRT4.DLL'.*
-    NdrComplexArrayMemorySize                = 'RPCRT4.DLL'.*
-    NdrComplexArrayUnmarshall                = 'RPCRT4.DLL'.*
-    NdrComplexStructBufferSize               = 'RPCRT4.DLL'.*
-    NdrComplexStructFree                     = 'RPCRT4.DLL'.*
-    NdrComplexStructMarshall                 = 'RPCRT4.DLL'.*
-    NdrComplexStructMemorySize               = 'RPCRT4.DLL'.*
-    NdrComplexStructUnmarshall               = 'RPCRT4.DLL'.*
-    NdrConformantArrayBufferSize             = 'RPCRT4.DLL'.*
-    NdrConformantArrayFree                   = 'RPCRT4.DLL'.*
-    NdrConformantArrayMarshall               = 'RPCRT4.DLL'.*
-    NdrConformantArrayMemorySize             = 'RPCRT4.DLL'.*
-    NdrConformantArrayUnmarshall             = 'RPCRT4.DLL'.*
-    NdrConformantStringBufferSize            = 'RPCRT4.DLL'.*
-    NdrConformantStringMarshall              = 'RPCRT4.DLL'.*
-    NdrConformantStringMemorySize            = 'RPCRT4.DLL'.*
-    NdrConformantStringUnmarshall            = 'RPCRT4.DLL'.*
-    NdrConformantStructBufferSize            = 'RPCRT4.DLL'.*
-    NdrConformantStructFree                  = 'RPCRT4.DLL'.*
-    NdrConformantStructMarshall              = 'RPCRT4.DLL'.*
-    NdrConformantStructMemorySize            = 'RPCRT4.DLL'.*
-    NdrConformantStructUnmarshall            = 'RPCRT4.DLL'.*
-    NdrConformantVaryingArrayBufferSize      = 'RPCRT4.DLL'.*
-    NdrConformantVaryingArrayFree            = 'RPCRT4.DLL'.*
-    NdrConformantVaryingArrayMarshall        = 'RPCRT4.DLL'.*
-    NdrConformantVaryingArrayMemorySize      = 'RPCRT4.DLL'.*
-    NdrConformantVaryingArrayUnmarshall      = 'RPCRT4.DLL'.*
-    NdrConformantVaryingStructBufferSize     = 'RPCRT4.DLL'.*
-    NdrConformantVaryingStructFree           = 'RPCRT4.DLL'.*
-    NdrConformantVaryingStructMarshall       = 'RPCRT4.DLL'.*
-    NdrConformantVaryingStructMemorySize     = 'RPCRT4.DLL'.*
-    NdrConformantVaryingStructUnmarshall     = 'RPCRT4.DLL'.*
-    NdrContextHandleInitialize               = 'RPCRT4.DLL'.*
-    NdrContextHandleSize                     = 'RPCRT4.DLL'.*
-    NdrConvert2                              = 'RPCRT4.DLL'.*
-    NdrConvert                               = 'RPCRT4.DLL'.*
-    NdrCorrelationFree                       = 'RPCRT4.DLL'.*
-    NdrCorrelationInitialize                 = 'RPCRT4.DLL'.*
-    NdrCorrelationPass                       = 'RPCRT4.DLL'.*
-    _NdrDcomAsyncClientCall                  = 'RPCRT4.DLL'.NdrDcomAsyncClientCall
-    NdrDcomAsyncStubCall                     = 'RPCRT4.DLL'.*
-    NdrDllCanUnloadNow                       = 'RPCRT4.DLL'.*
-    NdrDllGetClassObject                     = 'RPCRT4.DLL'.*
-    NdrDllRegisterProxy                      = 'RPCRT4.DLL'.*
-    NdrDllUnregisterProxy                    = 'RPCRT4.DLL'.*
-    NdrEncapsulatedUnionBufferSize           = 'RPCRT4.DLL'.*
-    NdrEncapsulatedUnionFree                 = 'RPCRT4.DLL'.*
-    NdrEncapsulatedUnionMarshall             = 'RPCRT4.DLL'.*
-    NdrEncapsulatedUnionMemorySize           = 'RPCRT4.DLL'.*
-    NdrEncapsulatedUnionUnmarshall           = 'RPCRT4.DLL'.*
-    NdrFixedArrayBufferSize                  = 'RPCRT4.DLL'.*
-    NdrFixedArrayFree                        = 'RPCRT4.DLL'.*
-    NdrFixedArrayMarshall                    = 'RPCRT4.DLL'.*
-    NdrFixedArrayMemorySize                  = 'RPCRT4.DLL'.*
-    NdrFixedArrayUnmarshall                  = 'RPCRT4.DLL'.*
-    NdrFreeBuffer                            = 'RPCRT4.DLL'.*
-    NdrFullPointerFree                       = 'RPCRT4.DLL'.*
-    NdrFullPointerInsertRefId                = 'RPCRT4.DLL'.*
-    NdrFullPointerQueryPointer               = 'RPCRT4.DLL'.*
-    NdrFullPointerQueryRefId                 = 'RPCRT4.DLL'.*
-    NdrFullPointerXlatFree                   = 'RPCRT4.DLL'.*
-    NdrFullPointerXlatInit                   = 'RPCRT4.DLL'.*
-    NdrGetBuffer                             = 'RPCRT4.DLL'.*
-    NdrGetDcomProtocolVersion                = 'RPCRT4.DLL'.*
-    NdrGetPartialBuffer                      = 'RPCRT4.DLL'.*
-    NdrGetPipeBuffer                         = 'RPCRT4.DLL'.*
-    NdrGetUserMarshalInfo                    = 'RPCRT4.DLL'.*
-    NdrInterfacePointerBufferSize            = 'RPCRT4.DLL'.*
-    NdrInterfacePointerFree                  = 'RPCRT4.DLL'.*
-    NdrInterfacePointerMarshall              = 'RPCRT4.DLL'.*
-    NdrInterfacePointerMemorySize            = 'RPCRT4.DLL'.*
-    NdrInterfacePointerUnmarshall            = 'RPCRT4.DLL'.*
-    NdrIsAppDoneWithPipes                    = 'RPCRT4.DLL'.*
-    NdrMapCommAndFaultStatus                 = 'RPCRT4.DLL'.*
-    NdrMarkNextActivePipe                    = 'RPCRT4.DLL'.*
-    _NdrMesProcEncodeDecode                  = 'RPCRT4.DLL'.NdrMesProcEncodeDecode
-    _NdrMesProcEncodeDecode2                 = 'RPCRT4.DLL'.NdrMesProcEncodeDecode2
-    NdrMesSimpleTypeAlignSize                = 'RPCRT4.DLL'.*
-    NdrMesSimpleTypeDecode                   = 'RPCRT4.DLL'.*
-    NdrMesSimpleTypeEncode                   = 'RPCRT4.DLL'.*
-    NdrMesTypeAlignSize2                     = 'RPCRT4.DLL'.*
-    NdrMesTypeAlignSize                      = 'RPCRT4.DLL'.*
-    NdrMesTypeDecode2                        = 'RPCRT4.DLL'.*
-    NdrMesTypeDecode                         = 'RPCRT4.DLL'.*
-    NdrMesTypeEncode2                        = 'RPCRT4.DLL'.*
-    NdrMesTypeEncode                         = 'RPCRT4.DLL'.*
-    NdrMesTypeFree2                          = 'RPCRT4.DLL'.*
-    NdrNonConformantStringBufferSize         = 'RPCRT4.DLL'.*
-    NdrNonConformantStringMarshall           = 'RPCRT4.DLL'.*
-    NdrNonConformantStringMemorySize         = 'RPCRT4.DLL'.*
-    NdrNonConformantStringUnmarshall         = 'RPCRT4.DLL'.*
-    NdrNonEncapsulatedUnionBufferSize        = 'RPCRT4.DLL'.*
-    NdrNonEncapsulatedUnionFree              = 'RPCRT4.DLL'.*
-    NdrNonEncapsulatedUnionMarshall          = 'RPCRT4.DLL'.*
-    NdrNonEncapsulatedUnionMemorySize        = 'RPCRT4.DLL'.*
-    NdrNonEncapsulatedUnionUnmarshall        = 'RPCRT4.DLL'.*
-    NdrNsGetBuffer                           = 'RPCRT4.DLL'.*
-    NdrNsSendReceive                         = 'RPCRT4.DLL'.*
-    NdrOleAllocate                           = 'RPCRT4.DLL'.*
-    NdrOleFree                               = 'RPCRT4.DLL'.*
-    NdrPipePull                              = 'RPCRT4.DLL'.*
-    NdrPipePush                              = 'RPCRT4.DLL'.*
-    NdrPipeSendReceive                       = 'RPCRT4.DLL'.*
-    NdrPipesDone                             = 'RPCRT4.DLL'.*
-    NdrPipesInitialize                       = 'RPCRT4.DLL'.*
-    NdrPointerBufferSize                     = 'RPCRT4.DLL'.*
-    NdrPointerFree                           = 'RPCRT4.DLL'.*
-    NdrPointerMarshall                       = 'RPCRT4.DLL'.*
-    NdrPointerMemorySize                     = 'RPCRT4.DLL'.*
-    NdrPointerUnmarshall                     = 'RPCRT4.DLL'.*
-    NdrProxyErrorHandler                     = 'RPCRT4.DLL'.*
-    NdrProxyFreeBuffer                       = 'RPCRT4.DLL'.*
-    NdrProxyGetBuffer                        = 'RPCRT4.DLL'.*
-    NdrProxyInitialize                       = 'RPCRT4.DLL'.*
-    NdrProxySendReceive                      = 'RPCRT4.DLL'.*
-    NdrRangeUnmarshall                       = 'RPCRT4.DLL'.*
-    NdrRpcSmClientAllocate                   = 'RPCRT4.DLL'.*
-    NdrRpcSmClientFree                       = 'RPCRT4.DLL'.*
-    NdrRpcSmSetClientToOsf                   = 'RPCRT4.DLL'.*
-    NdrRpcSsDefaultAllocate                  = 'RPCRT4.DLL'.*
-    NdrRpcSsDefaultFree                      = 'RPCRT4.DLL'.*
-    NdrRpcSsDisableAllocate                  = 'RPCRT4.DLL'.*
-    NdrRpcSsEnableAllocate                   = 'RPCRT4.DLL'.*
-    NdrSendReceive                           = 'RPCRT4.DLL'.*
-    NdrServerCall2                           = 'RPCRT4.DLL'.*
-    NdrServerCall                            = 'RPCRT4.DLL'.*
-    NdrServerContextMarshall                 = 'RPCRT4.DLL'.*
-    NdrServerContextNewMarshall              = 'RPCRT4.DLL'.*
-    NdrServerContextNewUnmarshall            = 'RPCRT4.DLL'.*
-    NdrServerContextUnmarshall               = 'RPCRT4.DLL'.*
-    NdrServerInitialize                      = 'RPCRT4.DLL'.*
-    NdrServerInitializeMarshall              = 'RPCRT4.DLL'.*
-    NdrServerInitializeNew                   = 'RPCRT4.DLL'.*
-    NdrServerInitializePartial               = 'RPCRT4.DLL'.*
-    NdrServerInitializeUnmarshall            = 'RPCRT4.DLL'.*
-    NdrServerMarshall                        = 'RPCRT4.DLL'.*
-    NdrServerUnmarshall                      = 'RPCRT4.DLL'.*
-    NdrSimpleStructBufferSize                = 'RPCRT4.DLL'.*
-    NdrSimpleStructFree                      = 'RPCRT4.DLL'.*
-    NdrSimpleStructMarshall                  = 'RPCRT4.DLL'.*
-    NdrSimpleStructMemorySize                = 'RPCRT4.DLL'.*
-    NdrSimpleStructUnmarshall                = 'RPCRT4.DLL'.*
-    NdrSimpleTypeMarshall                    = 'RPCRT4.DLL'.*
-    NdrSimpleTypeUnmarshall                  = 'RPCRT4.DLL'.*
-    NdrStubCall2                             = 'RPCRT4.DLL'.*
-    NdrStubCall                              = 'RPCRT4.DLL'.*
-    NdrStubForwardingFunction                = 'RPCRT4.DLL'.*
-    NdrStubGetBuffer                         = 'RPCRT4.DLL'.*
-    NdrStubInitialize                        = 'RPCRT4.DLL'.*
-    NdrStubInitializeMarshall                = 'RPCRT4.DLL'.*
-    NdrUserMarshalBufferSize                 = 'RPCRT4.DLL'.*
-    NdrUserMarshalFree                       = 'RPCRT4.DLL'.*
-    NdrUserMarshalMarshall                   = 'RPCRT4.DLL'.*
-    NdrUserMarshalMemorySize                 = 'RPCRT4.DLL'.*
-    NdrUserMarshalSimpleTypeConvert          = 'RPCRT4.DLL'.*
-    NdrUserMarshalUnmarshall                 = 'RPCRT4.DLL'.*
-    NdrVaryingArrayBufferSize                = 'RPCRT4.DLL'.*
-    NdrVaryingArrayFree                      = 'RPCRT4.DLL'.*
-    NdrVaryingArrayMarshall                  = 'RPCRT4.DLL'.*
-    NdrVaryingArrayMemorySize                = 'RPCRT4.DLL'.*
-    NdrVaryingArrayUnmarshall                = 'RPCRT4.DLL'.*
-    NdrXmitOrRepAsBufferSize                 = 'RPCRT4.DLL'.*
-    NdrXmitOrRepAsFree                       = 'RPCRT4.DLL'.*
-    NdrXmitOrRepAsMarshall                   = 'RPCRT4.DLL'.*
-    NdrXmitOrRepAsMemorySize                 = 'RPCRT4.DLL'.*
-    NdrXmitOrRepAsUnmarshall                 = 'RPCRT4.DLL'.*
-    NdrpSetRpcSsDefaults                     = 'RPCRT4.DLL'.*
-    RpcAbortAsyncCall                        = 'RPCRT4.DLL'.*
-    RpcAsyncAbortCall                        = 'RPCRT4.DLL'.*
-    RpcAsyncCancelCall                       = 'RPCRT4.DLL'.*
-    RpcAsyncCompleteCall                     = 'RPCRT4.DLL'.*
-    RpcAsyncGetCallStatus                    = 'RPCRT4.DLL'.*
-    RpcAsyncInitializeHandle                 = 'RPCRT4.DLL'.*
-    RpcAsyncRegisterInfo                     = 'RPCRT4.DLL'.*
-    RpcBindingCopy                           = 'RPCRT4.DLL'.*
-    RpcBindingFree                           = 'RPCRT4.DLL'.*
-    RpcBindingFromStringBindingA             = 'RPCRT4.DLL'.*
-    RpcBindingFromStringBindingW             = 'RPCRT4.DLL'.*
-    RpcBindingInqAuthClientA                 = 'RPCRT4.DLL'.*
-    RpcBindingInqAuthClientExA               = 'RPCRT4.DLL'.*
-    RpcBindingInqAuthClientExW               = 'RPCRT4.DLL'.*
-    RpcBindingInqAuthClientW                 = 'RPCRT4.DLL'.*
-    RpcBindingInqAuthInfoA                   = 'RPCRT4.DLL'.*
-    RpcBindingInqAuthInfoExA                 = 'RPCRT4.DLL'.*
-    RpcBindingInqAuthInfoExW                 = 'RPCRT4.DLL'.*
-    RpcBindingInqAuthInfoW                   = 'RPCRT4.DLL'.*
-    RpcBindingInqObject                      = 'RPCRT4.DLL'.*
-    RpcBindingInqOption                      = 'RPCRT4.DLL'.*
-    RpcBindingReset                          = 'RPCRT4.DLL'.*
-    RpcBindingServerFromClient               = 'RPCRT4.DLL'.*
-    RpcBindingSetAuthInfoA                   = 'RPCRT4.DLL'.*
-    RpcBindingSetAuthInfoExA                 = 'RPCRT4.DLL'.*
-    RpcBindingSetAuthInfoExW                 = 'RPCRT4.DLL'.*
-    RpcBindingSetAuthInfoW                   = 'RPCRT4.DLL'.*
-    RpcBindingSetObject                      = 'RPCRT4.DLL'.*
-    RpcBindingSetOption                      = 'RPCRT4.DLL'.*
-    RpcBindingToStringBindingA               = 'RPCRT4.DLL'.*
-    RpcBindingToStringBindingW               = 'RPCRT4.DLL'.*
-    RpcBindingVectorFree                     = 'RPCRT4.DLL'.*
-    RpcCancelAsyncCall                       = 'RPCRT4.DLL'.*
-    RpcCancelThread                          = 'RPCRT4.DLL'.*
-    RpcCancelThreadEx                        = 'RPCRT4.DLL'.*
-    RpcCertGeneratePrincipalNameA            = 'RPCRT4.DLL'.*
-    RpcCertGeneratePrincipalNameW            = 'RPCRT4.DLL'.*
-    RpcCompleteAsyncCall                     = 'RPCRT4.DLL'.*
-    RpcEpRegisterA                           = 'RPCRT4.DLL'.*
-    RpcEpRegisterNoReplaceA                  = 'RPCRT4.DLL'.*
-    RpcEpRegisterNoReplaceW                  = 'RPCRT4.DLL'.*
-    RpcEpRegisterW                           = 'RPCRT4.DLL'.*
-    RpcEpResolveBinding                      = 'RPCRT4.DLL'.*
-    RpcEpUnregister                          = 'RPCRT4.DLL'.*
-    RpcGetAsyncCallStatus                    = 'RPCRT4.DLL'.*
-    RpcIfIdVectorFree                        = 'RPCRT4.DLL'.*
-    RpcIfInqId                               = 'RPCRT4.DLL'.*
-    RpcImpersonateClient                     = 'RPCRT4.DLL'.*
-    RpcInitializeAsyncHandle                 = 'RPCRT4.DLL'.*
-    RpcMgmtEnableIdleCleanup                 = 'RPCRT4.DLL'.*
-    RpcMgmtEpEltInqBegin                     = 'RPCRT4.DLL'.*
-    RpcMgmtEpEltInqDone                      = 'RPCRT4.DLL'.*
-    RpcMgmtEpEltInqNextA                     = 'RPCRT4.DLL'.*
-    RpcMgmtEpEltInqNextW                     = 'RPCRT4.DLL'.*
-    RpcMgmtEpUnregister                      = 'RPCRT4.DLL'.*
-    RpcMgmtInqComTimeout                     = 'RPCRT4.DLL'.*
-    RpcMgmtInqDefaultProtectLevel            = 'RPCRT4.DLL'.*
-    RpcMgmtInqIfIds                          = 'RPCRT4.DLL'.*
-    RpcMgmtInqServerPrincNameA               = 'RPCRT4.DLL'.*
-    RpcMgmtInqServerPrincNameW               = 'RPCRT4.DLL'.*
-    RpcMgmtInqStats                          = 'RPCRT4.DLL'.*
-    RpcMgmtIsServerListening                 = 'RPCRT4.DLL'.*
-    RpcMgmtSetAuthorizationFn                = 'RPCRT4.DLL'.*
-    RpcMgmtSetCancelTimeout                  = 'RPCRT4.DLL'.*
-    RpcMgmtSetComTimeout                     = 'RPCRT4.DLL'.*
-    RpcMgmtSetServerStackSize                = 'RPCRT4.DLL'.*
-    RpcMgmtStatsVectorFree                   = 'RPCRT4.DLL'.*
-    RpcMgmtStopServerListening               = 'RPCRT4.DLL'.*
-    RpcMgmtWaitServerListen                  = 'RPCRT4.DLL'.*
-    RpcNetworkInqProtseqsA                   = 'RPCRT4.DLL'.*
-    RpcNetworkInqProtseqsW                   = 'RPCRT4.DLL'.*
-    RpcNetworkIsProtseqValidA                = 'RPCRT4.DLL'.*
-    RpcNetworkIsProtseqValidW                = 'RPCRT4.DLL'.*
-    RpcNsBindingInqEntryNameA                = 'RPCRT4.DLL'.*
-    RpcNsBindingInqEntryNameW                = 'RPCRT4.DLL'.*
-    RpcObjectInqType                         = 'RPCRT4.DLL'.*
-    RpcObjectSetInqFn                        = 'RPCRT4.DLL'.*
-    RpcObjectSetType                         = 'RPCRT4.DLL'.*
-    RpcProtseqVectorFreeA                    = 'RPCRT4.DLL'.*
-    RpcProtseqVectorFreeW                    = 'RPCRT4.DLL'.*
-    RpcRaiseException                        = 'RPCRT4.DLL'.*
-    RpcRegisterAsyncInfo                     = 'RPCRT4.DLL'.*
-    RpcRevertToSelf                          = 'RPCRT4.DLL'.*
-    RpcRevertToSelfEx                        = 'RPCRT4.DLL'.*
-    RpcServerInqBindings                     = 'RPCRT4.DLL'.*
-    RpcServerInqDefaultPrincNameA            = 'RPCRT4.DLL'.*
-    RpcServerInqDefaultPrincNameW            = 'RPCRT4.DLL'.*
-    RpcServerInqIf                           = 'RPCRT4.DLL'.*
-    RpcServerListen                          = 'RPCRT4.DLL'.*
-    RpcServerRegisterAuthInfoA               = 'RPCRT4.DLL'.*
-    RpcServerRegisterAuthInfoW               = 'RPCRT4.DLL'.*
-    RpcServerRegisterIf2                     = 'RPCRT4.DLL'.*
-    RpcServerRegisterIf                      = 'RPCRT4.DLL'.*
-    RpcServerRegisterIfEx                    = 'RPCRT4.DLL'.*
-    RpcServerTestCancel                      = 'RPCRT4.DLL'.*
-    RpcServerUnregisterIf                    = 'RPCRT4.DLL'.*
-    RpcServerUseAllProtseqs                  = 'RPCRT4.DLL'.*
-    RpcServerUseAllProtseqsEx                = 'RPCRT4.DLL'.*
-    RpcServerUseAllProtseqsIf                = 'RPCRT4.DLL'.*
-    RpcServerUseAllProtseqsIfEx              = 'RPCRT4.DLL'.*
-    RpcServerUseProtseqA                     = 'RPCRT4.DLL'.*
-    RpcServerUseProtseqEpA                   = 'RPCRT4.DLL'.*
-    RpcServerUseProtseqEpExA                 = 'RPCRT4.DLL'.*
-    RpcServerUseProtseqEpExW                 = 'RPCRT4.DLL'.*
-    RpcServerUseProtseqEpW                   = 'RPCRT4.DLL'.*
-    RpcServerUseProtseqExA                   = 'RPCRT4.DLL'.*
-    RpcServerUseProtseqExW                   = 'RPCRT4.DLL'.*
-    RpcServerUseProtseqIfA                   = 'RPCRT4.DLL'.*
-    RpcServerUseProtseqIfExA                 = 'RPCRT4.DLL'.*
-    RpcServerUseProtseqIfExW                 = 'RPCRT4.DLL'.*
-    RpcServerUseProtseqIfW                   = 'RPCRT4.DLL'.*
-    RpcServerUseProtseqW                     = 'RPCRT4.DLL'.*
-    RpcServerYield                           = 'RPCRT4.DLL'.*
-    RpcSmAllocate                            = 'RPCRT4.DLL'.*
-    RpcSmClientFree                          = 'RPCRT4.DLL'.*
-    RpcSmDestroyClientContext                = 'RPCRT4.DLL'.*
-    RpcSmDisableAllocate                     = 'RPCRT4.DLL'.*
-    RpcSmEnableAllocate                      = 'RPCRT4.DLL'.*
-    RpcSmFree                                = 'RPCRT4.DLL'.*
-    RpcSmGetThreadHandle                     = 'RPCRT4.DLL'.*
-    RpcSmSetClientAllocFree                  = 'RPCRT4.DLL'.*
-    RpcSmSetThreadHandle                     = 'RPCRT4.DLL'.*
-    RpcSmSwapClientAllocFree                 = 'RPCRT4.DLL'.*
-    RpcSsAllocate                            = 'RPCRT4.DLL'.*
-    RpcSsDestroyClientContext                = 'RPCRT4.DLL'.*
-    RpcSsDisableAllocate                     = 'RPCRT4.DLL'.*
-    RpcSsDontSerializeContext                = 'RPCRT4.DLL'.*
-    RpcSsEnableAllocate                      = 'RPCRT4.DLL'.*
-    RpcSsFree                                = 'RPCRT4.DLL'.*
-    RpcSsGetContextBinding                   = 'RPCRT4.DLL'.*
-    RpcSsGetThreadHandle                     = 'RPCRT4.DLL'.*
-    RpcSsSetClientAllocFree                  = 'RPCRT4.DLL'.*
-    RpcSsSetThreadHandle                     = 'RPCRT4.DLL'.*
-    RpcSsSwapClientAllocFree                 = 'RPCRT4.DLL'.*
-    RpcStringBindingComposeA                 = 'RPCRT4.DLL'.*
-    RpcStringBindingComposeW                 = 'RPCRT4.DLL'.*
-    RpcStringBindingParseA                   = 'RPCRT4.DLL'.*
-    RpcStringBindingParseW                   = 'RPCRT4.DLL'.*
-    RpcStringFreeA                           = 'RPCRT4.DLL'.*
-    RpcStringFreeW                           = 'RPCRT4.DLL'.*
-    RpcTestCancel                            = 'RPCRT4.DLL'.*
-    TowerConstruct                           = 'RPCRT4.DLL'.*
-    TowerExplode                             = 'RPCRT4.DLL'.*
-    UuidCompare                              = 'RPCRT4.DLL'.*
-    UuidCreate                               = 'RPCRT4.DLL'.*
-    UuidCreateNil                            = 'RPCRT4.DLL'.*
-    UuidCreateSequential                     = 'RPCRT4.DLL'.*
-    UuidEqual                                = 'RPCRT4.DLL'.*
-    UuidFromStringA                          = 'RPCRT4.DLL'.*
-    UuidFromStringW                          = 'RPCRT4.DLL'.*
-    UuidHash                                 = 'RPCRT4.DLL'.*
-    UuidIsNil                                = 'RPCRT4.DLL'.*
-    UuidToStringA                            = 'RPCRT4.DLL'.*
-    UuidToStringW                            = 'RPCRT4.DLL'.*
-    char_array_from_ndr                      = 'RPCRT4.DLL'.*
-    char_from_ndr                            = 'RPCRT4.DLL'.*
-    data_from_ndr                            = 'RPCRT4.DLL'.*
-    data_into_ndr                            = 'RPCRT4.DLL'.*
-    data_size_ndr                            = 'RPCRT4.DLL'.*
-    double_array_from_ndr                    = 'RPCRT4.DLL'.*
-    double_from_ndr                          = 'RPCRT4.DLL'.*
-    enum_from_ndr                            = 'RPCRT4.DLL'.*
-    float_array_from_ndr                     = 'RPCRT4.DLL'.*
-    float_from_ndr                           = 'RPCRT4.DLL'.*
-    long_array_from_ndr                      = 'RPCRT4.DLL'.*
-    long_from_ndr                            = 'RPCRT4.DLL'.*
-    long_from_ndr_temp                       = 'RPCRT4.DLL'.*
-    short_array_from_ndr                     = 'RPCRT4.DLL'.*
-    short_from_ndr                           = 'RPCRT4.DLL'.*
-    short_from_ndr_temp                      = 'RPCRT4.DLL'.*
-    tree_into_ndr                            = 'RPCRT4.DLL'.*
-    tree_peek_ndr                            = 'RPCRT4.DLL'.*
-    tree_size_ndr                            = 'RPCRT4.DLL'.*
+    CStdStubBuffer_AddRef
+    CStdStubBuffer_Connect
+    CStdStubBuffer_CountRefs
+    CStdStubBuffer_DebugServerQueryInterface
+    CStdStubBuffer_DebugServerRelease
+    CStdStubBuffer_Disconnect
+    CStdStubBuffer_Invoke
+    CStdStubBuffer_IsIIDSupported
+    CStdStubBuffer_QueryInterface
+    DceErrorInqTextA
+    DceErrorInqTextW
+    GlobalMutexClearExternal
+    GlobalMutexRequestExternal
+    IUnknown_AddRef_Proxy
+    IUnknown_QueryInterface_Proxy
+    IUnknown_Release_Proxy
+    I_RpcAbortAsyncCall
+    I_RpcAllocate
+    I_RpcAsyncAbortCall
+    I_RpcAsyncSetHandle
+    I_RpcBCacheAllocate
+    I_RpcBCacheFree
+    I_RpcBindingCopy
+    I_RpcBindingHandleToAsyncHandle
+    I_RpcBindingInqConnId
+    I_RpcBindingInqDynamicEndpoint
+    I_RpcBindingInqDynamicEndpointA
+    I_RpcBindingInqDynamicEndpointW
+    I_RpcBindingInqLocalClientPID
+    I_RpcBindingInqSecurityContext
+    I_RpcBindingInqTransportType
+    I_RpcBindingInqWireIdForSnego
+    I_RpcBindingIsClientLocal
+    I_RpcBindingToStaticStringBindingW
+    I_RpcClearMutex
+    I_RpcConnectionInqSockBuffSize
+    I_RpcConnectionSetSockBuffSize
+    I_RpcDeleteMutex
+    I_RpcEnableWmiTrace
+    I_RpcExceptionFilter
+    I_RpcFree
+    I_RpcFreeBuffer
+    I_RpcFreePipeBuffer
+    I_RpcGetBuffer
+    I_RpcGetBufferWithObject
+    I_RpcGetCurrentCallHandle
+    I_RpcGetExtendedError
+    I_RpcIfInqTransferSyntaxes
+    I_RpcLogEvent
+    I_RpcMapWin32Status
+    I_RpcNegotiateTransferSyntax
+    I_RpcNsBindingSetEntryName
+    I_RpcNsBindingSetEntryNameA
+    I_RpcNsBindingSetEntryNameW
+    I_RpcNsInterfaceExported
+    I_RpcNsInterfaceUnexported
+    I_RpcParseSecurity
+    I_RpcPauseExecution
+    I_RpcReallocPipeBuffer
+    I_RpcReceive
+    I_RpcRequestMutex
+    I_RpcSend
+    I_RpcSendReceive
+    I_RpcServerAllocateIpPort
+    I_RpcServerInqAddressChangeFn
+    I_RpcServerInqLocalConnAddress
+    I_RpcServerInqTransportType
+    I_RpcServerRegisterForwardFunction
+    I_RpcServerSetAddressChangeFn
+    I_RpcServerUseProtseq2A
+    I_RpcServerUseProtseq2W
+    I_RpcServerUseProtseqEp2A
+    I_RpcServerUseProtseqEp2W
+    I_RpcSetAsyncHandle
+    I_RpcSsDontSerializeContext
+    I_RpcTransConnectionAllocatePacket
+    I_RpcTransConnectionFreePacket
+    I_RpcTransConnectionReallocPacket
+    I_RpcTransDatagramAllocate2
+    I_RpcTransDatagramAllocate
+    I_RpcTransDatagramFree
+    I_RpcTransGetThreadEvent
+    I_RpcTransIoCancelled
+    I_RpcTransServerNewConnection
+    I_RpcTurnOnEEInfoPropagation
+    I_UuidCreate
+    MesBufferHandleReset
+    MesDecodeBufferHandleCreate
+    MesDecodeIncrementalHandleCreate
+    MesEncodeDynBufferHandleCreate
+    MesEncodeFixedBufferHandleCreate
+    MesEncodeIncrementalHandleCreate
+    MesHandleFree
+    MesIncrementalHandleReset
+    MesInqProcEncodingId
+    NDRCContextBinding
+    NDRCContextMarshall
+    NDRCContextUnmarshall
+    NDRSContextMarshall2
+    NDRSContextMarshall
+    NDRSContextMarshallEx
+    NDRSContextUnmarshall2
+    NDRSContextUnmarshall
+    NDRSContextUnmarshallEx
+    NdrAllocate
+    _NdrAsyncClientCall        = NdrAsyncClientCall
+    NdrAsyncServerCall
+    NdrByteCountPointerBufferSize
+    NdrByteCountPointerFree
+    NdrByteCountPointerMarshall
+    NdrByteCountPointerUnmarshall
+    NdrCStdStubBuffer2_Release
+    NdrCStdStubBuffer_Release
+    NdrClearOutParameters
+    _NdrClientCall        = NdrClientCall
+    _NdrClientCall2        = NdrClientCall2
+    NdrClientContextMarshall
+    NdrClientContextUnmarshall
+    NdrClientInitialize
+    NdrClientInitializeNew
+    NdrComplexArrayBufferSize
+    NdrComplexArrayFree
+    NdrComplexArrayMarshall
+    NdrComplexArrayMemorySize
+    NdrComplexArrayUnmarshall
+    NdrComplexStructBufferSize
+    NdrComplexStructFree
+    NdrComplexStructMarshall
+    NdrComplexStructMemorySize
+    NdrComplexStructUnmarshall
+    NdrConformantArrayBufferSize
+    NdrConformantArrayFree
+    NdrConformantArrayMarshall
+    NdrConformantArrayMemorySize
+    NdrConformantArrayUnmarshall
+    NdrConformantStringBufferSize
+    NdrConformantStringMarshall
+    NdrConformantStringMemorySize
+    NdrConformantStringUnmarshall
+    NdrConformantStructBufferSize
+    NdrConformantStructFree
+    NdrConformantStructMarshall
+    NdrConformantStructMemorySize
+    NdrConformantStructUnmarshall
+    NdrConformantVaryingArrayBufferSize
+    NdrConformantVaryingArrayFree
+    NdrConformantVaryingArrayMarshall
+    NdrConformantVaryingArrayMemorySize
+    NdrConformantVaryingArrayUnmarshall
+    NdrConformantVaryingStructBufferSize
+    NdrConformantVaryingStructFree
+    NdrConformantVaryingStructMarshall
+    NdrConformantVaryingStructMemorySize
+    NdrConformantVaryingStructUnmarshall
+    NdrContextHandleInitialize
+    NdrContextHandleSize
+    NdrConvert2
+    NdrConvert
+    NdrCorrelationFree
+    NdrCorrelationInitialize
+    NdrCorrelationPass
+    NdrCreateServerInterfaceFromStub
+    _NdrDcomAsyncClientCall        = NdrDcomAsyncClientCall
+    NdrDcomAsyncStubCall
+    NdrDllCanUnloadNow
+    NdrDllGetClassObject
+    NdrDllRegisterProxy
+    NdrDllUnregisterProxy
+    NdrEncapsulatedUnionBufferSize
+    NdrEncapsulatedUnionFree
+    NdrEncapsulatedUnionMarshall
+    NdrEncapsulatedUnionMemorySize
+    NdrEncapsulatedUnionUnmarshall
+    NdrFixedArrayBufferSize
+    NdrFixedArrayFree
+    NdrFixedArrayMarshall
+    NdrFixedArrayMemorySize
+    NdrFixedArrayUnmarshall
+    NdrFreeBuffer
+    NdrFullPointerFree
+    NdrFullPointerInsertRefId
+    NdrFullPointerQueryPointer
+    NdrFullPointerQueryRefId
+    NdrFullPointerXlatFree
+    NdrFullPointerXlatInit
+    NdrGetBuffer
+    NdrGetDcomProtocolVersion
+    NdrGetSimpleTypeBufferAlignment
+    NdrGetSimpleTypeBufferSize
+    NdrGetSimpleTypeMemorySize
+    NdrGetTypeFlags
+    NdrGetUserMarshalInfo
+    NdrInterfacePointerBufferSize
+    NdrInterfacePointerFree
+    NdrInterfacePointerMarshall
+    NdrInterfacePointerMemorySize
+    NdrInterfacePointerUnmarshall
+    NdrMapCommAndFaultStatus
+    _NdrMesProcEncodeDecode        = NdrMesProcEncodeDecode
+    _NdrMesProcEncodeDecode2        = NdrMesProcEncodeDecode2
+    NdrMesSimpleTypeAlignSize
+    NdrMesSimpleTypeDecode
+    NdrMesSimpleTypeEncode
+    NdrMesTypeAlignSize2
+    NdrMesTypeAlignSize
+    NdrMesTypeDecode2
+    NdrMesTypeDecode
+    NdrMesTypeEncode2
+    NdrMesTypeEncode
+    NdrMesTypeFree2
+    NdrNonConformantStringBufferSize
+    NdrNonConformantStringMarshall
+    NdrNonConformantStringMemorySize
+    NdrNonConformantStringUnmarshall
+    NdrNonEncapsulatedUnionBufferSize
+    NdrNonEncapsulatedUnionFree
+    NdrNonEncapsulatedUnionMarshall
+    NdrNonEncapsulatedUnionMemorySize
+    NdrNonEncapsulatedUnionUnmarshall
+    NdrNsGetBuffer
+    NdrNsSendReceive
+    NdrOleAllocate
+    NdrOleFree
+    NdrOutInit
+    NdrPartialIgnoreClientBufferSize
+    NdrPartialIgnoreClientMarshall
+    NdrPartialIgnoreServerInitialize
+    NdrPartialIgnoreServerUnmarshall
+    NdrPointerBufferSize
+    NdrPointerFree
+    NdrPointerMarshall
+    NdrPointerMemorySize
+    NdrPointerUnmarshall
+    NdrProxyErrorHandler
+    NdrProxyFreeBuffer
+    NdrProxyGetBuffer
+    NdrProxyInitialize
+    NdrProxySendReceive
+    NdrRangeUnmarshall
+    NdrRpcSmClientAllocate
+    NdrRpcSmClientFree
+    NdrRpcSmSetClientToOsf
+    NdrRpcSsDefaultAllocate
+    NdrRpcSsDefaultFree
+    NdrRpcSsDisableAllocate
+    NdrRpcSsEnableAllocate
+    NdrSendReceive
+    NdrServerCall2
+    NdrServerCall
+    NdrServerContextMarshall
+    NdrServerContextNewMarshall
+    NdrServerContextNewUnmarshall
+    NdrServerContextUnmarshall
+    NdrServerInitialize
+    NdrServerInitializeMarshall
+    NdrServerInitializeNew
+    NdrServerInitializePartial
+    NdrServerInitializeUnmarshall
+    NdrServerMarshall
+    NdrServerUnmarshall
+    NdrSimpleStructBufferSize
+    NdrSimpleStructFree
+    NdrSimpleStructMarshall
+    NdrSimpleStructMemorySize
+    NdrSimpleStructUnmarshall
+    NdrSimpleTypeMarshall
+    NdrSimpleTypeUnmarshall
+    NdrStubCall2
+    NdrStubCall
+    NdrStubForwardingFunction
+    NdrStubGetBuffer
+    NdrStubInitialize
+    NdrStubInitializeMarshall
+    _NdrTypeFlags        = NdrTypeFlags
+    NdrTypeFree
+    NdrTypeMarshall
+    NdrTypeSize
+    NdrTypeUnmarshall
+    NdrUnmarshallBasetypeInline
+    NdrUserMarshalBufferSize
+    NdrUserMarshalFree
+    NdrUserMarshalMarshall
+    NdrUserMarshalMemorySize
+    NdrUserMarshalSimpleTypeConvert
+    NdrUserMarshalUnmarshall
+    NdrVaryingArrayBufferSize
+    NdrVaryingArrayFree
+    NdrVaryingArrayMarshall
+    NdrVaryingArrayMemorySize
+    NdrVaryingArrayUnmarshall
+    NdrXmitOrRepAsBufferSize
+    NdrXmitOrRepAsFree
+    NdrXmitOrRepAsMarshall
+    NdrXmitOrRepAsMemorySize
+    NdrXmitOrRepAsUnmarshall
+    NdrpCreateProxy
+    NdrpCreateStub
+    NdrpGetProcFormatString
+    NdrpGetTypeFormatString
+    NdrpGetTypeGenCookie
+    NdrpMemoryIncrement
+    NdrpReleaseTypeFormatString
+    NdrpReleaseTypeGenCookie
+    NdrpSetRpcSsDefaults
+    NdrpVarVtOfTypeDesc
+    RpcAbortAsyncCall
+    RpcAsyncAbortCall
+    RpcAsyncCancelCall
+    RpcAsyncCompleteCall
+    RpcAsyncGetCallStatus
+    RpcAsyncInitializeHandle
+    RpcAsyncRegisterInfo
+    RpcBindingCopy
+    RpcBindingFree
+    RpcBindingFromStringBindingA
+    RpcBindingFromStringBindingW
+    RpcBindingInqAuthClientA
+    RpcBindingInqAuthClientExA
+    RpcBindingInqAuthClientExW
+    RpcBindingInqAuthClientW
+    RpcBindingInqAuthInfoA
+    RpcBindingInqAuthInfoExA
+    RpcBindingInqAuthInfoExW
+    RpcBindingInqAuthInfoW
+    RpcBindingInqObject
+    RpcBindingInqOption
+    RpcBindingReset
+    RpcBindingServerFromClient
+    RpcBindingSetAuthInfoA
+    RpcBindingSetAuthInfoExA
+    RpcBindingSetAuthInfoExW
+    RpcBindingSetAuthInfoW
+    RpcBindingSetObject
+    RpcBindingSetOption
+    RpcBindingToStringBindingA
+    RpcBindingToStringBindingW
+    RpcBindingVectorFree
+    RpcCancelAsyncCall
+    RpcCancelThread
+    RpcCancelThreadEx
+    RpcCertGeneratePrincipalNameA
+    RpcCertGeneratePrincipalNameW
+    RpcCompleteAsyncCall
+    RpcEpRegisterA
+    RpcEpRegisterNoReplaceA
+    RpcEpRegisterNoReplaceW
+    RpcEpRegisterW
+    RpcEpResolveBinding
+    RpcEpUnregister
+    RpcErrorAddRecord
+    RpcErrorClearInformation
+    RpcErrorEndEnumeration
+    RpcErrorGetNextRecord
+    RpcErrorGetNumberOfRecords
+    RpcErrorLoadErrorInfo
+    RpcErrorResetEnumeration
+    RpcErrorSaveErrorInfo
+    RpcErrorStartEnumeration
+    RpcFreeAuthorizationContext
+    RpcGetAsyncCallStatus
+    RpcGetAuthorizationContextForClient
+    RpcIfIdVectorFree
+    RpcIfInqId
+    RpcImpersonateClient
+    RpcInitializeAsyncHandle
+    RpcMgmtEnableIdleCleanup
+    RpcMgmtEpEltInqBegin
+    RpcMgmtEpEltInqDone
+    RpcMgmtEpEltInqNextA
+    RpcMgmtEpEltInqNextW
+    RpcMgmtEpUnregister
+    RpcMgmtInqComTimeout
+    RpcMgmtInqDefaultProtectLevel
+    RpcMgmtInqIfIds
+    RpcMgmtInqServerPrincNameA
+    RpcMgmtInqServerPrincNameW
+    RpcMgmtInqStats
+    RpcMgmtIsServerListening
+    RpcMgmtSetAuthorizationFn
+    RpcMgmtSetCancelTimeout
+    RpcMgmtSetComTimeout
+    RpcMgmtSetServerStackSize
+    RpcMgmtStatsVectorFree
+    RpcMgmtStopServerListening
+    RpcMgmtWaitServerListen
+    RpcNetworkInqProtseqsA
+    RpcNetworkInqProtseqsW
+    RpcNetworkIsProtseqValidA
+    RpcNetworkIsProtseqValidW
+    RpcNsBindingInqEntryNameA
+    RpcNsBindingInqEntryNameW
+    RpcObjectInqType
+    RpcObjectSetInqFn
+    RpcObjectSetType
+    RpcProtseqVectorFreeA
+    RpcProtseqVectorFreeW
+    RpcRaiseException
+    RpcRegisterAsyncInfo
+    RpcRevertToSelf
+    RpcRevertToSelfEx
+    RpcServerInqBindings
+    RpcServerInqCallAttributesA
+    RpcServerInqCallAttributesW
+    RpcServerInqDefaultPrincNameA
+    RpcServerInqDefaultPrincNameW
+    RpcServerInqIf
+    RpcServerListen
+    RpcServerRegisterAuthInfoA
+    RpcServerRegisterAuthInfoW
+    RpcServerRegisterIf2
+    RpcServerRegisterIf
+    RpcServerRegisterIfEx
+    RpcServerTestCancel
+    RpcServerUnregisterIf
+    RpcServerUnregisterIfEx
+    RpcServerUseAllProtseqs
+    RpcServerUseAllProtseqsEx
+    RpcServerUseAllProtseqsIf
+    RpcServerUseAllProtseqsIfEx
+    RpcServerUseProtseqA
+    RpcServerUseProtseqEpA
+    RpcServerUseProtseqEpExA
+    RpcServerUseProtseqEpExW
+    RpcServerUseProtseqEpW
+    RpcServerUseProtseqExA
+    RpcServerUseProtseqExW
+    RpcServerUseProtseqIfA
+    RpcServerUseProtseqIfExA
+    RpcServerUseProtseqIfExW
+    RpcServerUseProtseqIfW
+    RpcServerUseProtseqW
+    RpcServerYield
+    RpcSmAllocate
+    RpcSmClientFree
+    RpcSmDestroyClientContext
+    RpcSmDisableAllocate
+    RpcSmEnableAllocate
+    RpcSmFree
+    RpcSmGetThreadHandle
+    RpcSmSetClientAllocFree
+    RpcSmSetThreadHandle
+    RpcSmSwapClientAllocFree
+    RpcSsAllocate
+    RpcSsContextLockExclusive
+    RpcSsContextLockShared
+    RpcSsDestroyClientContext
+    RpcSsDisableAllocate
+    RpcSsDontSerializeContext
+    RpcSsEnableAllocate
+    RpcSsFree
+    RpcSsGetContextBinding
+    RpcSsGetThreadHandle
+    RpcSsSetClientAllocFree
+    RpcSsSetThreadHandle
+    RpcSsSwapClientAllocFree
+    RpcStringBindingComposeA
+    RpcStringBindingComposeW
+    RpcStringBindingParseA
+    RpcStringBindingParseW
+    RpcStringFreeA
+    RpcStringFreeW
+    RpcTestCancel
+    RpcUserFree
+    _SimpleTypeAlignment        = SimpleTypeAlignment
+    _SimpleTypeBufferSize        = SimpleTypeBufferSize
+    _SimpleTypeMemorySize        = SimpleTypeMemorySize
+    TowerConstruct
+    TowerExplode
+    UuidCompare
+    UuidCreate
+    UuidCreateNil
+    UuidCreateSequential
+    UuidEqual
+    UuidFromStringA
+    UuidFromStringW
+    UuidHash
+    UuidIsNil
+    UuidToStringA
+    UuidToStringW
+    _pfnFreeRoutines        = pfnFreeRoutines
+    _pfnMarshallRoutines        = pfnMarshallRoutines
+    _pfnSizeRoutines        = pfnSizeRoutines
+    _pfnUnmarshallRoutines        = pfnUnmarshallRoutines

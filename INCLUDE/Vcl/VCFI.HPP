@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'vcfi.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'VCFI.pas' rev: 6.00
 
-#ifndef vcfiHPP
-#define vcfiHPP
+#ifndef VCFIHPP
+#define VCFIHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -135,566 +135,318 @@ typedef Activex::TOleEnum ChartTypeConstants;
 
 __dispinterface _DVtChart;
 typedef System::DelphiInterface<_DVtChart> _di__DVtChart;
-__dispinterface INTERFACE_UUID("{5A721581-5AF0-11CE-8384-0020AF2337F2}") _DVtChart  : public IDispatch 
-	
-{
-	
-};
 typedef _DVtChart VtChart;
+;
 
 __dispinterface ICoor;
 typedef System::DelphiInterface<ICoor> _di_ICoor;
-__dispinterface INTERFACE_UUID("{EBF97E20-731F-11CE-840F-00AA0042CB33}") ICoor  : public IDispatch 
-{
-	
-};
 typedef ICoor Coor;
+;
 
 __dispinterface ILCoor;
 typedef System::DelphiInterface<ILCoor> _di_ILCoor;
-__dispinterface INTERFACE_UUID("{EBF97E22-731F-11CE-840F-00AA0042CB33}") ILCoor  : public IDispatch 
-	
-{
-	
-};
 typedef ILCoor LCoor;
+;
 
 __dispinterface ICoor3;
 typedef System::DelphiInterface<ICoor3> _di_ICoor3;
-__dispinterface INTERFACE_UUID("{177BF2A0-7350-11CE-840F-00AA0042CB33}") ICoor3  : public IDispatch 
-	
-{
-	
-};
 typedef ICoor3 Coor3;
+;
 
 __dispinterface ILRect;
 typedef System::DelphiInterface<ILRect> _di_ILRect;
-__dispinterface INTERFACE_UUID("{177BF2A2-7350-11CE-840F-00AA0042CB33}") ILRect  : public IDispatch 
-	
-{
-	
-};
 typedef ILRect LRect;
+;
 
 __dispinterface IRect;
 typedef System::DelphiInterface<IRect> _di_IRect;
-__dispinterface INTERFACE_UUID("{FE5517C0-73FE-11CE-840F-00AA0042CB33}") IRect  : public IDispatch 
-{
-	
-};
 typedef IRect Rect;
+;
 
 __dispinterface IColor;
 typedef System::DelphiInterface<IColor> _di_IColor;
-__dispinterface INTERFACE_UUID("{9BA79C60-7403-11CE-840F-00AA0042CB33}") IColor  : public IDispatch 
-	
-{
-	
-};
 typedef IColor VtColor;
+;
 
 __dispinterface IBrush;
 typedef System::DelphiInterface<IBrush> _di_IBrush;
-__dispinterface INTERFACE_UUID("{AFE57020-7409-11CE-840F-00AA0042CB33}") IBrush  : public IDispatch 
-	
-{
-	
-};
 typedef IBrush Brush;
+;
 
 __dispinterface IShadow;
 typedef System::DelphiInterface<IShadow> _di_IShadow;
-__dispinterface INTERFACE_UUID("{AFE57022-7409-11CE-840F-00AA0042CB33}") IShadow  : public IDispatch 
-	
-{
-	
-};
 typedef IShadow Shadow;
+;
 
 __dispinterface ITextLayout;
 typedef System::DelphiInterface<ITextLayout> _di_ITextLayout;
-__dispinterface INTERFACE_UUID("{E26C7700-756C-11CE-840F-00AA0042CB33}") ITextLayout  : public IDispatch 
-	
-{
-	
-};
 typedef ITextLayout TextLayout;
+;
 
 __dispinterface IVcTitle;
 typedef System::DelphiInterface<IVcTitle> _di_IVcTitle;
-__dispinterface INTERFACE_UUID("{C82141A0-7571-11CE-840F-00AA0042CB33}") IVcTitle  : public IDispatch 
-	
-{
-	
-};
 typedef IVcTitle Title;
+;
 
 __dispinterface ILocation;
 typedef System::DelphiInterface<ILocation> _di_ILocation;
-__dispinterface INTERFACE_UUID("{EDDF9242-764B-11CE-840F-00AA0042CB33}") ILocation  : public IDispatch 
-	
-{
-	
-};
 typedef ILocation Location;
+;
 
 __dispinterface IFont;
 typedef System::DelphiInterface<IFont> _di_IFont;
-__dispinterface INTERFACE_UUID("{2E6A37A0-77FC-11CE-840F-00AA0042CB33}") IFont  : public IDispatch 
-{
-	
-};
 typedef IFont VtFont;
+;
 
 __dispinterface IBackdrop;
 typedef System::DelphiInterface<IBackdrop> _di_IBackdrop;
-__dispinterface INTERFACE_UUID("{2E6A37A2-77FC-11CE-840F-00AA0042CB33}") IBackdrop  : public IDispatch 
-	
-{
-	
-};
 typedef IBackdrop Backdrop;
+;
 
 __dispinterface IFrame;
 typedef System::DelphiInterface<IFrame> _di_IFrame;
-__dispinterface INTERFACE_UUID("{2E6A37A4-77FC-11CE-840F-00AA0042CB33}") IFrame  : public IDispatch 
-	
-{
-	
-};
 typedef IFrame Frame;
+;
 
 __dispinterface IGradient;
 typedef System::DelphiInterface<IGradient> _di_IGradient;
-__dispinterface INTERFACE_UUID("{2E6A37A6-77FC-11CE-840F-00AA0042CB33}") IGradient  : public IDispatch 
-	
-{
-	
-};
 typedef IGradient Gradient;
+;
 
 __dispinterface IPicture;
 typedef System::DelphiInterface<IPicture> _di_IPicture;
-__dispinterface INTERFACE_UUID("{FD30FB00-789C-11CE-840F-00AA0042CB33}") IPicture  : public IDispatch 
-	
-{
-	
-};
 typedef IPicture VtPicture;
+;
 
 __dispinterface IFill;
 typedef System::DelphiInterface<IFill> _di_IFill;
-__dispinterface INTERFACE_UUID("{FD30FB02-789C-11CE-840F-00AA0042CB33}") IFill  : public IDispatch 
-{
-	
-};
 typedef IFill Fill;
+;
 
 __dispinterface IVcPen;
 typedef System::DelphiInterface<IVcPen> _di_IVcPen;
-__dispinterface INTERFACE_UUID("{279B5A40-8098-11CE-BECC-00AA0042CB33}") IVcPen  : public IDispatch 
-	
-{
-	
-};
 typedef IVcPen Pen;
+;
 
 __dispinterface IVcMarker;
 typedef System::DelphiInterface<IVcMarker> _di_IVcMarker;
-__dispinterface INTERFACE_UUID("{3080E742-813F-11CE-BECC-00AA0042CB33}") IVcMarker  : public IDispatch 
-	
-{
-	
-};
 typedef IVcMarker Marker;
+;
 
 __dispinterface IVcFootnote;
 typedef System::DelphiInterface<IVcFootnote> _di_IVcFootnote;
-__dispinterface INTERFACE_UUID("{4F053F00-8396-11CE-BECC-00AA0042CB33}") IVcFootnote  : public IDispatch 
-	
-{
-	
-};
 typedef IVcFootnote Footnote;
+;
 
 __dispinterface IVcLegend;
 typedef System::DelphiInterface<IVcLegend> _di_IVcLegend;
-__dispinterface INTERFACE_UUID("{95C52B60-83B1-11CE-BECC-00AA0042CB33}") IVcLegend  : public IDispatch 
-	
-{
-	
-};
 typedef IVcLegend Legend;
+;
 
 __dispinterface IVcPrintInformation;
 typedef System::DelphiInterface<IVcPrintInformation> _di_IVcPrintInformation;
-__dispinterface INTERFACE_UUID("{CFA0AC00-8B6E-11CE-840F-00AA0042CB33}") IVcPrintInformation  : public IDispatch 
-	
-{
-	
-};
 typedef IVcPrintInformation PrintInformation;
+;
 
 __dispinterface IVcDataGrid;
 typedef System::DelphiInterface<IVcDataGrid> _di_IVcDataGrid;
-__dispinterface INTERFACE_UUID("{6CB603A0-8F70-11CE-840F-00AA0042CB33}") IVcDataGrid  : public IDispatch 
-	
-{
-	
-};
 typedef IVcDataGrid DataGrid;
+;
 
 __dispinterface IVcPlot;
 typedef System::DelphiInterface<IVcPlot> _di_IVcPlot;
-__dispinterface INTERFACE_UUID("{F77BA680-9037-11CE-86B3-444553540000}") IVcPlot  : public IDispatch 
-	
-{
-	
-};
 typedef IVcPlot Plot;
+;
 
 __dispinterface IVcView3d;
 typedef System::DelphiInterface<IVcView3d> _di_IVcView3d;
-__dispinterface INTERFACE_UUID("{21645F62-90F0-11CE-86B3-444553540000}") IVcView3d  : public IDispatch 
-	
-{
-	
-};
 typedef IVcView3d View3d;
+;
 
 __dispinterface IVcPlotBase;
 typedef System::DelphiInterface<IVcPlotBase> _di_IVcPlotBase;
-__dispinterface INTERFACE_UUID("{508D02E0-90FC-11CE-86B3-444553540000}") IVcPlotBase  : public IDispatch 
-	
-{
-	
-};
 typedef IVcPlotBase PlotBase;
+;
 
 __dispinterface IVcDoughnut;
 typedef System::DelphiInterface<IVcDoughnut> _di_IVcDoughnut;
-__dispinterface INTERFACE_UUID("{508D02E2-90FC-11CE-86B3-444553540000}") IVcDoughnut  : public IDispatch 
-	
-{
-	
-};
 typedef IVcDoughnut Doughnut;
+;
 
 __dispinterface IVcPie;
 typedef System::DelphiInterface<IVcPie> _di_IVcPie;
-__dispinterface INTERFACE_UUID("{508D02E4-90FC-11CE-86B3-444553540000}") IVcPie  : public IDispatch 
-	
-{
-	
-};
 typedef IVcPie Pie;
+;
 
 __dispinterface IVcWeighting;
 typedef System::DelphiInterface<IVcWeighting> _di_IVcWeighting;
-__dispinterface INTERFACE_UUID("{508D02E6-90FC-11CE-86B3-444553540000}") IVcWeighting  : public IDispatch 
-	
-{
-	
-};
 typedef IVcWeighting Weighting;
+;
 
 __dispinterface IVcWall;
 typedef System::DelphiInterface<IVcWall> _di_IVcWall;
-__dispinterface INTERFACE_UUID("{508D02E8-90FC-11CE-86B3-444553540000}") IVcWall  : public IDispatch 
-	
-{
-	
-};
 typedef IVcWall Wall;
+;
 
 __dispinterface IVcSeries;
 typedef System::DelphiInterface<IVcSeries> _di_IVcSeries;
-__dispinterface INTERFACE_UUID("{0AA0FE20-912A-11CE-86B3-444553540000}") IVcSeries  : public IDispatch 
-	
-{
-	
-};
 typedef IVcSeries Series;
+;
 
 __dispinterface IVcBar;
 typedef System::DelphiInterface<IVcBar> _di_IVcBar;
-__dispinterface INTERFACE_UUID("{264931C0-91F1-11CE-840F-00AA0042CB33}") IVcBar  : public IDispatch 
-	
-{
-	
-};
 typedef IVcBar Bar;
+;
 
 __dispinterface IVcHiLo;
 typedef System::DelphiInterface<IVcHiLo> _di_IVcHiLo;
-__dispinterface INTERFACE_UUID("{51DCC620-95B7-11CE-86B3-444553540000}") IVcHiLo  : public IDispatch 
-	
-{
-	
-};
 typedef IVcHiLo HiLo;
+;
 
 __dispinterface IVcPosition;
 typedef System::DelphiInterface<IVcPosition> _di_IVcPosition;
-__dispinterface INTERFACE_UUID("{51DCC622-95B7-11CE-86B3-444553540000}") IVcPosition  : public IDispatch 
-	
-{
-	
-};
 typedef IVcPosition Position;
+;
 
 __dispinterface IVcSeriesMarker;
 typedef System::DelphiInterface<IVcSeriesMarker> _di_IVcSeriesMarker;
-__dispinterface INTERFACE_UUID("{51DCC624-95B7-11CE-86B3-444553540000}") IVcSeriesMarker  : public IDispatch 
-	
-{
-	
-};
 typedef IVcSeriesMarker SeriesMarker;
+;
 
 __dispinterface IVcSeriesLabel;
 typedef System::DelphiInterface<IVcSeriesLabel> _di_IVcSeriesLabel;
-__dispinterface INTERFACE_UUID("{51DCC626-95B7-11CE-86B3-444553540000}") IVcSeriesLabel  : public IDispatch 
-	
-{
-	
-};
 typedef IVcSeriesLabel SeriesLabel;
+;
 
 __dispinterface IVcStatLines;
 typedef System::DelphiInterface<IVcStatLines> _di_IVcStatLines;
-__dispinterface INTERFACE_UUID("{2F6DD6A0-95E5-11CE-86B3-444553540000}") IVcStatLines  : public IDispatch 
-	
-{
-	
-};
 typedef IVcStatLines StatLine;
+;
 
 __dispinterface IVcDataPointLabel;
 typedef System::DelphiInterface<IVcDataPointLabel> _di_IVcDataPointLabel;
-__dispinterface INTERFACE_UUID("{2F6DD6A2-95E5-11CE-86B3-444553540000}") IVcDataPointLabel  : public IDispatch 
-	
-{
-	
-};
 typedef IVcDataPointLabel DataPointLabel;
+;
 
 __dispinterface IVcDataPoint;
 typedef System::DelphiInterface<IVcDataPoint> _di_IVcDataPoint;
-__dispinterface INTERFACE_UUID("{2F6DD6A4-95E5-11CE-86B3-444553540000}") IVcDataPoint  : public IDispatch 
-	
-{
-	
-};
 typedef IVcDataPoint DataPoint;
+;
 
 __dispinterface IVcAxis;
 typedef System::DelphiInterface<IVcAxis> _di_IVcAxis;
-__dispinterface INTERFACE_UUID("{027D7900-A023-11CE-840F-00AA0042CB33}") IVcAxis  : public IDispatch 
-	
-{
-	
-};
 typedef IVcAxis Axis;
+;
 
 __dispinterface IVcCategoryScale;
 typedef System::DelphiInterface<IVcCategoryScale> _di_IVcCategoryScale;
-__dispinterface INTERFACE_UUID("{62375360-A17D-11CE-840F-00AA0042CB33}") IVcCategoryScale  : public IDispatch 
-	
-{
-	
-};
 typedef IVcCategoryScale CategoryScale;
+;
 
 __dispinterface IVcDateScale;
 typedef System::DelphiInterface<IVcDateScale> _di_IVcDateScale;
-__dispinterface INTERFACE_UUID("{62375362-A17D-11CE-840F-00AA0042CB33}") IVcDateScale  : public IDispatch 
-	
-{
-	
-};
 typedef IVcDateScale DateScale;
+;
 
 __dispinterface IVcAxisGrid;
 typedef System::DelphiInterface<IVcAxisGrid> _di_IVcAxisGrid;
-__dispinterface INTERFACE_UUID("{62375364-A17D-11CE-840F-00AA0042CB33}") IVcAxisGrid  : public IDispatch 
-	
-{
-	
-};
 typedef IVcAxisGrid AxisGrid;
+;
 
 __dispinterface IVcIntersection;
 typedef System::DelphiInterface<IVcIntersection> _di_IVcIntersection;
-__dispinterface INTERFACE_UUID("{62375366-A17D-11CE-840F-00AA0042CB33}") IVcIntersection  : public IDispatch 
-	
-{
-	
-};
 typedef IVcIntersection Intersection;
+;
 
 __dispinterface IVcTick;
 typedef System::DelphiInterface<IVcTick> _di_IVcTick;
-__dispinterface INTERFACE_UUID("{62375368-A17D-11CE-840F-00AA0042CB33}") IVcTick  : public IDispatch 
-	
-{
-	
-};
 typedef IVcTick Tick;
+;
 
 __dispinterface IVcScale;
 typedef System::DelphiInterface<IVcScale> _di_IVcScale;
-__dispinterface INTERFACE_UUID("{6237536A-A17D-11CE-840F-00AA0042CB33}") IVcScale  : public IDispatch 
-	
-{
-	
-};
 typedef IVcScale AxisScale;
+;
 
 __dispinterface IVcValueScale;
 typedef System::DelphiInterface<IVcValueScale> _di_IVcValueScale;
-__dispinterface INTERFACE_UUID("{6237536C-A17D-11CE-840F-00AA0042CB33}") IVcValueScale  : public IDispatch 
-	
-{
-	
-};
 typedef IVcValueScale ValueScale;
+;
 
 __dispinterface IVcAxisTitle;
 typedef System::DelphiInterface<IVcAxisTitle> _di_IVcAxisTitle;
-__dispinterface INTERFACE_UUID("{6237536E-A17D-11CE-840F-00AA0042CB33}") IVcAxisTitle  : public IDispatch 
-	
-{
-	
-};
 typedef IVcAxisTitle AxisTitle;
+;
 
 __dispinterface IVcLabel;
 typedef System::DelphiInterface<IVcLabel> _di_IVcLabel;
-__dispinterface INTERFACE_UUID("{62375370-A17D-11CE-840F-00AA0042CB33}") IVcLabel  : public IDispatch 
-	
-{
-	
-};
 typedef IVcLabel Label_;
+;
 
 __dispinterface IVcLight;
 typedef System::DelphiInterface<IVcLight> _di_IVcLight;
-__dispinterface INTERFACE_UUID("{B54A6420-A25E-11CE-840F-00AA0042CB33}") IVcLight  : public IDispatch 
-	
-{
-	
-};
 typedef IVcLight Light;
+;
 
 __dispinterface IVcElevation;
 typedef System::DelphiInterface<IVcElevation> _di_IVcElevation;
-__dispinterface INTERFACE_UUID("{A71FB700-A732-11CE-840F-00AA0042CB33}") IVcElevation  : public IDispatch 
-	
-{
-	
-};
 typedef IVcElevation Elevation;
+;
 
 __dispinterface IVcAttribute;
 typedef System::DelphiInterface<IVcAttribute> _di_IVcAttribute;
-__dispinterface INTERFACE_UUID("{A71FB702-A732-11CE-840F-00AA0042CB33}") IVcAttribute  : public IDispatch 
-	
-{
-	
-};
 typedef IVcAttribute Attribute;
+;
 
 __dispinterface IVcSurface;
 typedef System::DelphiInterface<IVcSurface> _di_IVcSurface;
-__dispinterface INTERFACE_UUID("{A71FB704-A732-11CE-840F-00AA0042CB33}") IVcSurface  : public IDispatch 
-	
-{
-	
-};
 typedef IVcSurface Surface;
+;
 
 __dispinterface IVcContour;
 typedef System::DelphiInterface<IVcContour> _di_IVcContour;
-__dispinterface INTERFACE_UUID("{A71FB706-A732-11CE-840F-00AA0042CB33}") IVcContour  : public IDispatch 
-	
-{
-	
-};
 typedef IVcContour Contour;
+;
 
 __dispinterface IVcLightSource;
 typedef System::DelphiInterface<IVcLightSource> _di_IVcLightSource;
-__dispinterface INTERFACE_UUID("{CD9EFA60-AA40-11CE-840F-00AA0042CB33}") IVcLightSource  : public IDispatch 
-	
-{
-	
-};
 typedef IVcLightSource LightSource;
+;
 
 __dispinterface IVcSeriesCollection;
 typedef System::DelphiInterface<IVcSeriesCollection> _di_IVcSeriesCollection;
-__dispinterface INTERFACE_UUID("{C14E8B60-AE2B-11CE-840F-00AA0042CB33}") IVcSeriesCollection  : public IDispatch 
-	
-{
-	
-};
 typedef IVcSeriesCollection SeriesCollection;
+;
 
 __dispinterface IVcDataPoints;
 typedef System::DelphiInterface<IVcDataPoints> _di_IVcDataPoints;
-__dispinterface INTERFACE_UUID("{C20E5260-B06F-11CE-840F-00AA0042CB33}") IVcDataPoints  : public IDispatch 
-	
-{
-	
-};
 typedef IVcDataPoints DataPoints;
+;
 
 __dispinterface IVcLabels;
 typedef System::DelphiInterface<IVcLabels> _di_IVcLabels;
-__dispinterface INTERFACE_UUID("{62B9A400-B93D-11CE-8410-00AA0042CB33}") IVcLabels  : public IDispatch 
-	
-{
-	
-};
 typedef IVcLabels Labels;
+;
 
 __dispinterface IVcXYZ;
 typedef System::DelphiInterface<IVcXYZ> _di_IVcXYZ;
-__dispinterface INTERFACE_UUID("{7D001800-BC65-11CE-8410-00AA0042CB33}") IVcXYZ  : public IDispatch 
-	
-{
-	
-};
 typedef IVcXYZ XYZ;
+;
 
 __dispinterface IVcLightSources;
 typedef System::DelphiInterface<IVcLightSources> _di_IVcLightSources;
-__dispinterface INTERFACE_UUID("{6FE35CC0-CE50-11CE-8410-00AA0042CB33}") IVcLightSources  : public IDispatch 
-	
-{
-	
-};
 typedef IVcLightSources LightSources;
+;
 
 __dispinterface IVcAttributes;
 typedef System::DelphiInterface<IVcAttributes> _di_IVcAttributes;
-__dispinterface INTERFACE_UUID("{5A693220-CFEF-11CE-8410-00AA0042CB33}") IVcAttributes  : public IDispatch 
-	
-{
-	
-};
 typedef IVcAttributes Attributes;
+;
 
 __dispinterface IVcContourGradient;
 typedef System::DelphiInterface<IVcContourGradient> _di_IVcContourGradient;
-__dispinterface INTERFACE_UUID("{69032720-D303-11CE-8410-00AA0042CB33}") IVcContourGradient  : public IDispatch 
-	
-{
-	
-};
 typedef IVcContourGradient ContourGradient;
+;
 
 typedef short *PSmallint1;
 
@@ -704,85 +456,375 @@ typedef int *PInteger1;
 
 typedef double *PDouble1;
 
-__dispinterface _DVtChartEvents;
-typedef System::DelphiInterface<_DVtChartEvents> _di__DVtChartEvents;
-__dispinterface INTERFACE_UUID("{5A721582-5AF0-11CE-8384-0020AF2337F2}") _DVtChartEvents  : public IDispatch 
-	
+__dispinterface INTERFACE_UUID("{5A721581-5AF0-11CE-8384-0020AF2337F2}") _DVtChart  : public IDispatch 
 {
 	
 };
 
-typedef void __fastcall (__closure *TVtChartChartSelected)(System::TObject* Sender, short &MouseFlags
-	, short &Cancel);
+__dispinterface _DVtChartEvents;
+typedef System::DelphiInterface<_DVtChartEvents> _di__DVtChartEvents;
+__dispinterface INTERFACE_UUID("{5A721582-5AF0-11CE-8384-0020AF2337F2}") _DVtChartEvents  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartTitleSelected)(System::TObject* Sender, short &MouseFlags
-	, short &Cancel);
+__dispinterface INTERFACE_UUID("{EBF97E20-731F-11CE-840F-00AA0042CB33}") ICoor  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartFootnoteSelected)(System::TObject* Sender, short &MouseFlags
-	, short &Cancel);
+__dispinterface INTERFACE_UUID("{EBF97E22-731F-11CE-840F-00AA0042CB33}") ILCoor  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartLegendSelected)(System::TObject* Sender, short &MouseFlags
-	, short &Cancel);
+__dispinterface INTERFACE_UUID("{177BF2A0-7350-11CE-840F-00AA0042CB33}") ICoor3  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartPlotSelected)(System::TObject* Sender, short &MouseFlags
-	, short &Cancel);
+__dispinterface INTERFACE_UUID("{177BF2A2-7350-11CE-840F-00AA0042CB33}") ILRect  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartAxisSelected)(System::TObject* Sender, short &AxisId, short 
-	&AxisIndex, short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{FE5517C0-73FE-11CE-840F-00AA0042CB33}") IRect  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartAxisLabelSelected)(System::TObject* Sender, short &AxisId
-	, short &AxisIndex, short &labelSetIndex, short &LabelIndex, short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{9BA79C60-7403-11CE-840F-00AA0042CB33}") IColor  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartAxisTitleSelected)(System::TObject* Sender, short &AxisId
-	, short &AxisIndex, short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{AFE57020-7409-11CE-840F-00AA0042CB33}") IBrush  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartPointSelected)(System::TObject* Sender, short &Series, short 
-	&DataPoint, short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{AFE57022-7409-11CE-840F-00AA0042CB33}") IShadow  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartPointLabelSelected)(System::TObject* Sender, short &Series
-	, short &DataPoint, short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{E26C7700-756C-11CE-840F-00AA0042CB33}") ITextLayout  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartSeriesSelected)(System::TObject* Sender, short &Series, 
-	short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{C82141A0-7571-11CE-840F-00AA0042CB33}") IVcTitle  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartSeriesLabelSelected)(System::TObject* Sender, short &Series
-	, short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{EDDF9242-764B-11CE-840F-00AA0042CB33}") ILocation  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartChartActivated)(System::TObject* Sender, short &MouseFlags
-	, short &Cancel);
+__dispinterface INTERFACE_UUID("{2E6A37A0-77FC-11CE-840F-00AA0042CB33}") IFont  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartTitleActivated)(System::TObject* Sender, short &MouseFlags
-	, short &Cancel);
+__dispinterface INTERFACE_UUID("{2E6A37A2-77FC-11CE-840F-00AA0042CB33}") IBackdrop  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartFootnoteActivated)(System::TObject* Sender, short &MouseFlags
-	, short &Cancel);
+__dispinterface INTERFACE_UUID("{2E6A37A4-77FC-11CE-840F-00AA0042CB33}") IFrame  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartLegendActivated)(System::TObject* Sender, short &MouseFlags
-	, short &Cancel);
+__dispinterface INTERFACE_UUID("{2E6A37A6-77FC-11CE-840F-00AA0042CB33}") IGradient  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartPlotActivated)(System::TObject* Sender, short &MouseFlags
-	, short &Cancel);
+__dispinterface INTERFACE_UUID("{FD30FB00-789C-11CE-840F-00AA0042CB33}") IPicture  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartAxisActivated)(System::TObject* Sender, short &AxisId, short 
-	&AxisIndex, short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{FD30FB02-789C-11CE-840F-00AA0042CB33}") IFill  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartAxisLabelActivated)(System::TObject* Sender, short &AxisId
-	, short &AxisIndex, short &labelSetIndex, short &LabelIndex, short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{279B5A40-8098-11CE-BECC-00AA0042CB33}") IVcPen  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartAxisTitleActivated)(System::TObject* Sender, short &AxisId
-	, short &AxisIndex, short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{3080E742-813F-11CE-BECC-00AA0042CB33}") IVcMarker  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartPointActivated)(System::TObject* Sender, short &Series, 
-	short &DataPoint, short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{4F053F00-8396-11CE-BECC-00AA0042CB33}") IVcFootnote  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartPointLabelActivated)(System::TObject* Sender, short &Series
-	, short &DataPoint, short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{95C52B60-83B1-11CE-BECC-00AA0042CB33}") IVcLegend  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartSeriesActivated)(System::TObject* Sender, short &Series, 
-	short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{CFA0AC00-8B6E-11CE-840F-00AA0042CB33}") IVcPrintInformation  : public IDispatch 
+{
+	
+};
 
-typedef void __fastcall (__closure *TVtChartSeriesLabelActivated)(System::TObject* Sender, short &Series
-	, short &MouseFlags, short &Cancel);
+__dispinterface INTERFACE_UUID("{6CB603A0-8F70-11CE-840F-00AA0042CB33}") IVcDataGrid  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{F77BA680-9037-11CE-86B3-444553540000}") IVcPlot  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{21645F62-90F0-11CE-86B3-444553540000}") IVcView3d  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{508D02E0-90FC-11CE-86B3-444553540000}") IVcPlotBase  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{508D02E2-90FC-11CE-86B3-444553540000}") IVcDoughnut  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{508D02E4-90FC-11CE-86B3-444553540000}") IVcPie  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{508D02E6-90FC-11CE-86B3-444553540000}") IVcWeighting  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{508D02E8-90FC-11CE-86B3-444553540000}") IVcWall  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{0AA0FE20-912A-11CE-86B3-444553540000}") IVcSeries  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{264931C0-91F1-11CE-840F-00AA0042CB33}") IVcBar  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{51DCC620-95B7-11CE-86B3-444553540000}") IVcHiLo  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{51DCC622-95B7-11CE-86B3-444553540000}") IVcPosition  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{51DCC624-95B7-11CE-86B3-444553540000}") IVcSeriesMarker  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{51DCC626-95B7-11CE-86B3-444553540000}") IVcSeriesLabel  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{2F6DD6A0-95E5-11CE-86B3-444553540000}") IVcStatLines  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{2F6DD6A2-95E5-11CE-86B3-444553540000}") IVcDataPointLabel  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{2F6DD6A4-95E5-11CE-86B3-444553540000}") IVcDataPoint  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{027D7900-A023-11CE-840F-00AA0042CB33}") IVcAxis  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{62375360-A17D-11CE-840F-00AA0042CB33}") IVcCategoryScale  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{62375362-A17D-11CE-840F-00AA0042CB33}") IVcDateScale  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{62375364-A17D-11CE-840F-00AA0042CB33}") IVcAxisGrid  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{62375366-A17D-11CE-840F-00AA0042CB33}") IVcIntersection  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{62375368-A17D-11CE-840F-00AA0042CB33}") IVcTick  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{6237536A-A17D-11CE-840F-00AA0042CB33}") IVcScale  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{6237536C-A17D-11CE-840F-00AA0042CB33}") IVcValueScale  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{6237536E-A17D-11CE-840F-00AA0042CB33}") IVcAxisTitle  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{62375370-A17D-11CE-840F-00AA0042CB33}") IVcLabel  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{B54A6420-A25E-11CE-840F-00AA0042CB33}") IVcLight  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{A71FB700-A732-11CE-840F-00AA0042CB33}") IVcElevation  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{A71FB702-A732-11CE-840F-00AA0042CB33}") IVcAttribute  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{A71FB704-A732-11CE-840F-00AA0042CB33}") IVcSurface  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{A71FB706-A732-11CE-840F-00AA0042CB33}") IVcContour  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{CD9EFA60-AA40-11CE-840F-00AA0042CB33}") IVcLightSource  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{C14E8B60-AE2B-11CE-840F-00AA0042CB33}") IVcSeriesCollection  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{C20E5260-B06F-11CE-840F-00AA0042CB33}") IVcDataPoints  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{62B9A400-B93D-11CE-8410-00AA0042CB33}") IVcLabels  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{7D001800-BC65-11CE-8410-00AA0042CB33}") IVcXYZ  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{6FE35CC0-CE50-11CE-8410-00AA0042CB33}") IVcLightSources  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{5A693220-CFEF-11CE-8410-00AA0042CB33}") IVcAttributes  : public IDispatch 
+{
+	
+};
+
+__dispinterface INTERFACE_UUID("{69032720-D303-11CE-8410-00AA0042CB33}") IVcContourGradient  : public IDispatch 
+{
+	
+};
+
+typedef void __fastcall (__closure *TVtChartChartSelected)(System::TObject* Sender, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartTitleSelected)(System::TObject* Sender, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartFootnoteSelected)(System::TObject* Sender, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartLegendSelected)(System::TObject* Sender, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartPlotSelected)(System::TObject* Sender, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartAxisSelected)(System::TObject* Sender, short &AxisId, short &AxisIndex, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartAxisLabelSelected)(System::TObject* Sender, short &AxisId, short &AxisIndex, short &labelSetIndex, short &LabelIndex, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartAxisTitleSelected)(System::TObject* Sender, short &AxisId, short &AxisIndex, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartPointSelected)(System::TObject* Sender, short &Series, short &DataPoint, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartPointLabelSelected)(System::TObject* Sender, short &Series, short &DataPoint, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartSeriesSelected)(System::TObject* Sender, short &Series, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartSeriesLabelSelected)(System::TObject* Sender, short &Series, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartChartActivated)(System::TObject* Sender, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartTitleActivated)(System::TObject* Sender, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartFootnoteActivated)(System::TObject* Sender, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartLegendActivated)(System::TObject* Sender, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartPlotActivated)(System::TObject* Sender, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartAxisActivated)(System::TObject* Sender, short &AxisId, short &AxisIndex, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartAxisLabelActivated)(System::TObject* Sender, short &AxisId, short &AxisIndex, short &labelSetIndex, short &LabelIndex, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartAxisTitleActivated)(System::TObject* Sender, short &AxisId, short &AxisIndex, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartPointActivated)(System::TObject* Sender, short &Series, short &DataPoint, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartPointLabelActivated)(System::TObject* Sender, short &Series, short &DataPoint, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartSeriesActivated)(System::TObject* Sender, short &Series, short &MouseFlags, short &Cancel);
+
+typedef void __fastcall (__closure *TVtChartSeriesLabelActivated)(System::TObject* Sender, short &Series, short &MouseFlags, short &Cancel);
 
 class DELPHICLASS TVtChart;
 class PASCALIMPLEMENTATION TVtChart : public Olectrls::TOleControl 
@@ -846,22 +888,17 @@ public:
 	void __fastcall PrintSetupDialog(void);
 	void __fastcall PrintChart(void);
 	void __fastcall SelectPart(short part, short index1, short index2, short index3, short index4);
-	void __fastcall GetSelectedPart(short &part, short &index1, short &index2, short &index3, short &index4
-		);
+	void __fastcall GetSelectedPart(short &part, short &index1, short &index2, short &index3, short &index4);
 	void __fastcall GetDLLVersion(short &major, short &minor);
-	void __fastcall TwipsToChartPart(int xVal, int yVal, short &part, short &index1, short &index2, short 
-		&index3, short &index4);
+	void __fastcall TwipsToChartPart(int xVal, int yVal, short &part, short &index1, short &index2, short &index3, short &index4);
 	void __fastcall ReadFromFile(const WideString FileName);
 	void __fastcall WritePictureToFile(const WideString FileName, short pictureType, short options);
 	void __fastcall WriteToFile(const WideString FileName);
 	void __fastcall ActivateFormatMenu(int X, int Y);
 	void __fastcall GetMetafile(short options, unsigned &Handle, int &Width, int &Height);
-	void __fastcall CopyDataFromArray(short Top, short Left, short Bottom, short Right, const OleVariant 
-		&Array_);
-	void __fastcall CopyDataToArray(short Top, short Left, short Bottom, short Right, const OleVariant 
-		&Array_);
-	void __fastcall Draw(unsigned hDC, short hDCType, int Top, int Left, int Bottom, int Right, Word Layout
-		, Word Stretch);
+	void __fastcall CopyDataFromArray(short Top, short Left, short Bottom, short Right, const OleVariant &Array_);
+	void __fastcall CopyDataToArray(short Top, short Left, short Bottom, short Right, const OleVariant &Array_);
+	void __fastcall Draw(unsigned hDC, short hDCType, int Top, int Left, int Bottom, int Right, Word Layout, Word Stretch);
 	void __fastcall UseWizard(void);
 	void __fastcall EditChartData(void);
 	HIDESBASE void __fastcall Refresh(void);
@@ -874,23 +911,22 @@ public:
 	__property _di_IDispatch Title = {read=GetIDispatchProp, write=SetIDispatchProp, index=26};
 	__property _di_IDispatch Footnote = {read=GetIDispatchProp, write=SetIDispatchProp, index=27};
 	__property _di_IDispatch Backdrop = {read=GetIDispatchProp, write=SetIDispatchProp, index=36};
-	__property _di_IDispatch PrintInformation = {read=GetIDispatchProp, write=SetIDispatchProp, index=37
-		};
+	__property _di_IDispatch PrintInformation = {read=GetIDispatchProp, write=SetIDispatchProp, index=37};
 	__property _di_IDispatch Legend = {read=GetIDispatchProp, write=SetIDispatchProp, index=38};
 	__property _di_IDispatch DataGrid = {read=GetIDispatchProp, write=SetIDispatchProp, index=39};
 	__property _di_IDispatch Plot = {read=GetIDispatchProp, write=SetIDispatchProp, index=40};
 	__property unsigned GetBitmap[OleVariant options] = {read=Get_GetBitmap};
 	
 __published:
-	__property TabStop ;
-	__property Align ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property ParentShowHint ;
+	__property TabStop  = {default=1};
+	__property Align  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property Visible  = {default=1};
 	__property OnDragDrop ;
 	__property OnDragOver ;
 	__property OnEndDrag ;
@@ -905,140 +941,75 @@ __published:
 	__property OnKeyDown ;
 	__property OnDblClick ;
 	__property OnClick ;
-	__property Word AutoIncrement = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=1
-		, nodefault};
-	__property Word RandomFill = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=2, nodefault
-		};
-	__property short ChartType = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=3, nodefault
-		};
-	__property short Column = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=4, nodefault
-		};
-	__property short ColumnCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=5, 
-		nodefault};
-	__property WideString ColumnLabel = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=6};
-	__property short ColumnLabelCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=7
-		, nodefault};
-	__property short ColumnLabelIndex = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=8
-		, nodefault};
-	__property WideString Data = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=9
-		};
-	__property WideString FootnoteText = {read=GetWideStringProp, write=SetWideStringProp, stored=false
-		, index=10};
-	__property Word Repaint = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=11, nodefault
-		};
-	__property short Row = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=12, nodefault
-		};
-	__property short RowCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=13, nodefault
-		};
-	__property WideString RowLabel = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=14
-		};
-	__property short RowLabelCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=15
-		, nodefault};
-	__property short RowLabelIndex = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=16
-		, nodefault};
-	__property short SeriesColumn = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=17
-		, nodefault};
-	__property short SeriesType = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=18, 
-		nodefault};
-	__property Word ShowLegend = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=19, 
-		nodefault};
-	__property short SsLinkMode = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=20, 
-		nodefault};
-	__property WideString SsLinkRange = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=21};
-	__property short DrawMode = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=23, nodefault
-		};
-	__property short BorderStyle = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=-504
-		, nodefault};
-	__property Word Enabled = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=-514, nodefault
-		};
-	__property short hWnd = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=-515, nodefault
-		};
-	__property WideString TitleText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=28
-		};
-	__property Word Stacking = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=29, nodefault
-		};
-	__property short TextLengthType = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=30
-		, nodefault};
-	__property Word AllowUserChanges = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=31
-		, nodefault};
-	__property Word AllowSelections = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=32
-		, nodefault};
-	__property Word AllowSeriesSelection = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, 
-		index=33, nodefault};
-	__property Word AllowDynamicRotation = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, 
-		index=34, nodefault};
-	__property short ActiveSeriesCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=35
-		, nodefault};
-	__property int TwipsWidth = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=41, nodefault
-		};
-	__property int TwipsHeight = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=42, nodefault
-		};
-	__property Word AllowDithering = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=43
-		, nodefault};
-	__property short ErrorOffset = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=44
-		, nodefault};
-	__property Word DoSetCursor = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=45, 
-		nodefault};
-	__property WideString FileName = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=46
-		};
-	__property Word Chart3d = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=47, nodefault
-		};
-	__property WideString SsLinkBook = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=48};
+	__property Word AutoIncrement = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=1, nodefault};
+	__property Word RandomFill = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=2, nodefault};
+	__property short ChartType = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=3, nodefault};
+	__property short Column = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=4, nodefault};
+	__property short ColumnCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=5, nodefault};
+	__property WideString ColumnLabel = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=6};
+	__property short ColumnLabelCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=7, nodefault};
+	__property short ColumnLabelIndex = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=8, nodefault};
+	__property WideString Data = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=9};
+	__property WideString FootnoteText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=10};
+	__property Word Repaint = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=11, nodefault};
+	__property short Row = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=12, nodefault};
+	__property short RowCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=13, nodefault};
+	__property WideString RowLabel = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=14};
+	__property short RowLabelCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=15, nodefault};
+	__property short RowLabelIndex = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=16, nodefault};
+	__property short SeriesColumn = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=17, nodefault};
+	__property short SeriesType = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=18, nodefault};
+	__property Word ShowLegend = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=19, nodefault};
+	__property short SsLinkMode = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=20, nodefault};
+	__property WideString SsLinkRange = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=21};
+	__property short DrawMode = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=23, nodefault};
+	__property short BorderStyle = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=-504, nodefault};
+	__property Word Enabled = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=-514, nodefault};
+	__property short hWnd = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=-515, nodefault};
+	__property WideString TitleText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=28};
+	__property Word Stacking = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=29, nodefault};
+	__property short TextLengthType = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=30, nodefault};
+	__property Word AllowUserChanges = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=31, nodefault};
+	__property Word AllowSelections = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=32, nodefault};
+	__property Word AllowSeriesSelection = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=33, nodefault};
+	__property Word AllowDynamicRotation = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=34, nodefault};
+	__property short ActiveSeriesCount = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=35, nodefault};
+	__property int TwipsWidth = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=41, nodefault};
+	__property int TwipsHeight = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=42, nodefault};
+	__property Word AllowDithering = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=43, nodefault};
+	__property short ErrorOffset = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=44, nodefault};
+	__property Word DoSetCursor = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=45, nodefault};
+	__property WideString FileName = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=46};
+	__property Word Chart3d = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=47, nodefault};
+	__property WideString SsLinkBook = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=48};
 	__property TVtChartChartSelected OnChartSelected = {read=FOnChartSelected, write=FOnChartSelected};
-		
 	__property TVtChartTitleSelected OnTitleSelected = {read=FOnTitleSelected, write=FOnTitleSelected};
-		
-	__property TVtChartFootnoteSelected OnFootnoteSelected = {read=FOnFootnoteSelected, write=FOnFootnoteSelected
-		};
-	__property TVtChartLegendSelected OnLegendSelected = {read=FOnLegendSelected, write=FOnLegendSelected
-		};
+	__property TVtChartFootnoteSelected OnFootnoteSelected = {read=FOnFootnoteSelected, write=FOnFootnoteSelected};
+	__property TVtChartLegendSelected OnLegendSelected = {read=FOnLegendSelected, write=FOnLegendSelected};
 	__property TVtChartPlotSelected OnPlotSelected = {read=FOnPlotSelected, write=FOnPlotSelected};
 	__property TVtChartAxisSelected OnAxisSelected = {read=FOnAxisSelected, write=FOnAxisSelected};
-	__property TVtChartAxisLabelSelected OnAxisLabelSelected = {read=FOnAxisLabelSelected, write=FOnAxisLabelSelected
-		};
-	__property TVtChartAxisTitleSelected OnAxisTitleSelected = {read=FOnAxisTitleSelected, write=FOnAxisTitleSelected
-		};
+	__property TVtChartAxisLabelSelected OnAxisLabelSelected = {read=FOnAxisLabelSelected, write=FOnAxisLabelSelected};
+	__property TVtChartAxisTitleSelected OnAxisTitleSelected = {read=FOnAxisTitleSelected, write=FOnAxisTitleSelected};
 	__property TVtChartPointSelected OnPointSelected = {read=FOnPointSelected, write=FOnPointSelected};
-		
-	__property TVtChartPointLabelSelected OnPointLabelSelected = {read=FOnPointLabelSelected, write=FOnPointLabelSelected
-		};
-	__property TVtChartSeriesSelected OnSeriesSelected = {read=FOnSeriesSelected, write=FOnSeriesSelected
-		};
-	__property TVtChartSeriesLabelSelected OnSeriesLabelSelected = {read=FOnSeriesLabelSelected, write=
-		FOnSeriesLabelSelected};
-	__property TVtChartChartActivated OnChartActivated = {read=FOnChartActivated, write=FOnChartActivated
-		};
-	__property TVtChartTitleActivated OnTitleActivated = {read=FOnTitleActivated, write=FOnTitleActivated
-		};
-	__property TVtChartFootnoteActivated OnFootnoteActivated = {read=FOnFootnoteActivated, write=FOnFootnoteActivated
-		};
-	__property TVtChartLegendActivated OnLegendActivated = {read=FOnLegendActivated, write=FOnLegendActivated
-		};
+	__property TVtChartPointLabelSelected OnPointLabelSelected = {read=FOnPointLabelSelected, write=FOnPointLabelSelected};
+	__property TVtChartSeriesSelected OnSeriesSelected = {read=FOnSeriesSelected, write=FOnSeriesSelected};
+	__property TVtChartSeriesLabelSelected OnSeriesLabelSelected = {read=FOnSeriesLabelSelected, write=FOnSeriesLabelSelected};
+	__property TVtChartChartActivated OnChartActivated = {read=FOnChartActivated, write=FOnChartActivated};
+	__property TVtChartTitleActivated OnTitleActivated = {read=FOnTitleActivated, write=FOnTitleActivated};
+	__property TVtChartFootnoteActivated OnFootnoteActivated = {read=FOnFootnoteActivated, write=FOnFootnoteActivated};
+	__property TVtChartLegendActivated OnLegendActivated = {read=FOnLegendActivated, write=FOnLegendActivated};
 	__property TVtChartPlotActivated OnPlotActivated = {read=FOnPlotActivated, write=FOnPlotActivated};
-		
 	__property TVtChartAxisActivated OnAxisActivated = {read=FOnAxisActivated, write=FOnAxisActivated};
-		
-	__property TVtChartAxisLabelActivated OnAxisLabelActivated = {read=FOnAxisLabelActivated, write=FOnAxisLabelActivated
-		};
-	__property TVtChartAxisTitleActivated OnAxisTitleActivated = {read=FOnAxisTitleActivated, write=FOnAxisTitleActivated
-		};
-	__property TVtChartPointActivated OnPointActivated = {read=FOnPointActivated, write=FOnPointActivated
-		};
-	__property TVtChartPointLabelActivated OnPointLabelActivated = {read=FOnPointLabelActivated, write=
-		FOnPointLabelActivated};
-	__property TVtChartSeriesActivated OnSeriesActivated = {read=FOnSeriesActivated, write=FOnSeriesActivated
-		};
-	__property TVtChartSeriesLabelActivated OnSeriesLabelActivated = {read=FOnSeriesLabelActivated, write=
-		FOnSeriesLabelActivated};
+	__property TVtChartAxisLabelActivated OnAxisLabelActivated = {read=FOnAxisLabelActivated, write=FOnAxisLabelActivated};
+	__property TVtChartAxisTitleActivated OnAxisTitleActivated = {read=FOnAxisTitleActivated, write=FOnAxisTitleActivated};
+	__property TVtChartPointActivated OnPointActivated = {read=FOnPointActivated, write=FOnPointActivated};
+	__property TVtChartPointLabelActivated OnPointLabelActivated = {read=FOnPointLabelActivated, write=FOnPointLabelActivated};
+	__property TVtChartSeriesActivated OnSeriesActivated = {read=FOnSeriesActivated, write=FOnSeriesActivated};
+	__property TVtChartSeriesLabelActivated OnSeriesLabelActivated = {read=FOnSeriesLabelActivated, write=FOnSeriesLabelActivated};
 	__property Classes::TNotifyEvent OnApplyChanges = {read=FOnApplyChanges, write=FOnApplyChanges};
 public:
-		
 	#pragma option push -w-inl
-	/* TOleControl.Create */ inline __fastcall virtual TVtChart(Classes::TComponent* AOwner) : Olectrls::TOleControl(
-		AOwner) { }
+	/* TOleControl.Create */ inline __fastcall virtual TVtChart(Classes::TComponent* AOwner) : Olectrls::TOleControl(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TOleControl.Destroy */ inline __fastcall virtual ~TVtChart(void) { }
@@ -1046,8 +1017,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TVtChart(HWND ParentWindow) : Olectrls::TOleControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TVtChart(HWND ParentWindow) : Olectrls::TOleControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1060,8 +1030,7 @@ class PASCALIMPLEMENTATION CoCoor : public System::TObject
 	
 public:
 	/*         class method */ static _di_ICoor __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_ICoor __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_ICoor __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoCoor(void) : System::TObject() { }
@@ -1080,8 +1049,7 @@ class PASCALIMPLEMENTATION CoLCoor : public System::TObject
 	
 public:
 	/*         class method */ static _di_ILCoor __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_ILCoor __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_ILCoor __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoLCoor(void) : System::TObject() { }
@@ -1100,8 +1068,7 @@ class PASCALIMPLEMENTATION CoCoor3 : public System::TObject
 	
 public:
 	/*         class method */ static _di_ICoor3 __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_ICoor3 __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_ICoor3 __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoCoor3(void) : System::TObject() { }
@@ -1120,8 +1087,7 @@ class PASCALIMPLEMENTATION CoLRect : public System::TObject
 	
 public:
 	/*         class method */ static _di_ILRect __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_ILRect __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_ILRect __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoLRect(void) : System::TObject() { }
@@ -1140,8 +1106,7 @@ class PASCALIMPLEMENTATION CoRect : public System::TObject
 	
 public:
 	/*         class method */ static _di_IRect __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IRect __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IRect __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoRect(void) : System::TObject() { }
@@ -1160,8 +1125,7 @@ class PASCALIMPLEMENTATION CoVtColor : public System::TObject
 	
 public:
 	/*         class method */ static _di_IColor __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IColor __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IColor __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoVtColor(void) : System::TObject() { }
@@ -1180,8 +1144,7 @@ class PASCALIMPLEMENTATION CoBrush : public System::TObject
 	
 public:
 	/*         class method */ static _di_IBrush __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IBrush __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IBrush __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoBrush(void) : System::TObject() { }
@@ -1200,8 +1163,7 @@ class PASCALIMPLEMENTATION CoShadow : public System::TObject
 	
 public:
 	/*         class method */ static _di_IShadow __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IShadow __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IShadow __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoShadow(void) : System::TObject() { }
@@ -1220,8 +1182,7 @@ class PASCALIMPLEMENTATION CoTextLayout : public System::TObject
 	
 public:
 	/*         class method */ static _di_ITextLayout __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_ITextLayout __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_ITextLayout __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoTextLayout(void) : System::TObject() { }
@@ -1240,8 +1201,7 @@ class PASCALIMPLEMENTATION CoTitle : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcTitle __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcTitle __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcTitle __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoTitle(void) : System::TObject() { }
@@ -1260,8 +1220,7 @@ class PASCALIMPLEMENTATION CoLocation : public System::TObject
 	
 public:
 	/*         class method */ static _di_ILocation __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_ILocation __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_ILocation __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoLocation(void) : System::TObject() { }
@@ -1280,8 +1239,7 @@ class PASCALIMPLEMENTATION CoVtFont : public System::TObject
 	
 public:
 	/*         class method */ static _di_IFont __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IFont __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IFont __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoVtFont(void) : System::TObject() { }
@@ -1300,8 +1258,7 @@ class PASCALIMPLEMENTATION CoBackdrop : public System::TObject
 	
 public:
 	/*         class method */ static _di_IBackdrop __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IBackdrop __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IBackdrop __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoBackdrop(void) : System::TObject() { }
@@ -1320,8 +1277,7 @@ class PASCALIMPLEMENTATION CoFrame : public System::TObject
 	
 public:
 	/*         class method */ static _di_IFrame __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IFrame __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IFrame __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoFrame(void) : System::TObject() { }
@@ -1340,8 +1296,7 @@ class PASCALIMPLEMENTATION CoGradient : public System::TObject
 	
 public:
 	/*         class method */ static _di_IGradient __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IGradient __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IGradient __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoGradient(void) : System::TObject() { }
@@ -1360,8 +1315,7 @@ class PASCALIMPLEMENTATION CoVtPicture : public System::TObject
 	
 public:
 	/*         class method */ static _di_IPicture __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IPicture __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IPicture __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoVtPicture(void) : System::TObject() { }
@@ -1380,8 +1334,7 @@ class PASCALIMPLEMENTATION CoFill : public System::TObject
 	
 public:
 	/*         class method */ static _di_IFill __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IFill __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IFill __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoFill(void) : System::TObject() { }
@@ -1400,8 +1353,7 @@ class PASCALIMPLEMENTATION CoPen : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcPen __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcPen __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcPen __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoPen(void) : System::TObject() { }
@@ -1420,8 +1372,7 @@ class PASCALIMPLEMENTATION CoMarker : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcMarker __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcMarker __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcMarker __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoMarker(void) : System::TObject() { }
@@ -1440,8 +1391,7 @@ class PASCALIMPLEMENTATION CoFootnote : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcFootnote __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcFootnote __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcFootnote __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoFootnote(void) : System::TObject() { }
@@ -1460,8 +1410,7 @@ class PASCALIMPLEMENTATION CoLegend : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcLegend __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcLegend __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcLegend __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoLegend(void) : System::TObject() { }
@@ -1480,8 +1429,7 @@ class PASCALIMPLEMENTATION CoPrintInformation : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcPrintInformation __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcPrintInformation __fastcall CreateRemote(TMetaClass* vmt, 
-		const AnsiString MachineName);
+	/*         class method */ static _di_IVcPrintInformation __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoPrintInformation(void) : System::TObject() { }
@@ -1500,8 +1448,7 @@ class PASCALIMPLEMENTATION CoDataGrid : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcDataGrid __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcDataGrid __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcDataGrid __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoDataGrid(void) : System::TObject() { }
@@ -1520,8 +1467,7 @@ class PASCALIMPLEMENTATION CoPlot : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcPlot __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcPlot __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcPlot __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoPlot(void) : System::TObject() { }
@@ -1540,8 +1486,7 @@ class PASCALIMPLEMENTATION CoView3d : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcView3d __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcView3d __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcView3d __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoView3d(void) : System::TObject() { }
@@ -1560,8 +1505,7 @@ class PASCALIMPLEMENTATION CoPlotBase : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcPlotBase __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcPlotBase __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcPlotBase __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoPlotBase(void) : System::TObject() { }
@@ -1580,8 +1524,7 @@ class PASCALIMPLEMENTATION CoDoughnut : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcDoughnut __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcDoughnut __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcDoughnut __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoDoughnut(void) : System::TObject() { }
@@ -1600,8 +1543,7 @@ class PASCALIMPLEMENTATION CoPie : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcPie __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcPie __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcPie __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoPie(void) : System::TObject() { }
@@ -1620,8 +1562,7 @@ class PASCALIMPLEMENTATION CoWeighting : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcWeighting __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcWeighting __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcWeighting __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoWeighting(void) : System::TObject() { }
@@ -1640,8 +1581,7 @@ class PASCALIMPLEMENTATION CoWall : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcWall __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcWall __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcWall __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoWall(void) : System::TObject() { }
@@ -1660,8 +1600,7 @@ class PASCALIMPLEMENTATION CoSeries : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcSeries __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcSeries __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcSeries __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoSeries(void) : System::TObject() { }
@@ -1680,8 +1619,7 @@ class PASCALIMPLEMENTATION CoBar : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcBar __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcBar __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcBar __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoBar(void) : System::TObject() { }
@@ -1700,8 +1638,7 @@ class PASCALIMPLEMENTATION CoHiLo : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcHiLo __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcHiLo __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcHiLo __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoHiLo(void) : System::TObject() { }
@@ -1720,8 +1657,7 @@ class PASCALIMPLEMENTATION CoPosition : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcPosition __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcPosition __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcPosition __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoPosition(void) : System::TObject() { }
@@ -1740,8 +1676,7 @@ class PASCALIMPLEMENTATION CoSeriesMarker : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcSeriesMarker __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcSeriesMarker __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IVcSeriesMarker __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoSeriesMarker(void) : System::TObject() { }
@@ -1760,8 +1695,7 @@ class PASCALIMPLEMENTATION CoSeriesLabel : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcSeriesLabel __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcSeriesLabel __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IVcSeriesLabel __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoSeriesLabel(void) : System::TObject() { }
@@ -1780,8 +1714,7 @@ class PASCALIMPLEMENTATION CoStatLine : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcStatLines __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcStatLines __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcStatLines __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoStatLine(void) : System::TObject() { }
@@ -1800,8 +1733,7 @@ class PASCALIMPLEMENTATION CoDataPointLabel : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcDataPointLabel __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcDataPointLabel __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IVcDataPointLabel __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoDataPointLabel(void) : System::TObject() { }
@@ -1820,8 +1752,7 @@ class PASCALIMPLEMENTATION CoDataPoint : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcDataPoint __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcDataPoint __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcDataPoint __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoDataPoint(void) : System::TObject() { }
@@ -1840,8 +1771,7 @@ class PASCALIMPLEMENTATION CoAxis : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcAxis __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcAxis __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcAxis __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoAxis(void) : System::TObject() { }
@@ -1860,8 +1790,7 @@ class PASCALIMPLEMENTATION CoCategoryScale : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcCategoryScale __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcCategoryScale __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IVcCategoryScale __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoCategoryScale(void) : System::TObject() { }
@@ -1880,8 +1809,7 @@ class PASCALIMPLEMENTATION CoDateScale : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcDateScale __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcDateScale __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcDateScale __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoDateScale(void) : System::TObject() { }
@@ -1900,8 +1828,7 @@ class PASCALIMPLEMENTATION CoAxisGrid : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcAxisGrid __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcAxisGrid __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcAxisGrid __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoAxisGrid(void) : System::TObject() { }
@@ -1920,8 +1847,7 @@ class PASCALIMPLEMENTATION CoIntersection : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcIntersection __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcIntersection __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IVcIntersection __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoIntersection(void) : System::TObject() { }
@@ -1940,8 +1866,7 @@ class PASCALIMPLEMENTATION CoTick : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcTick __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcTick __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcTick __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoTick(void) : System::TObject() { }
@@ -1960,8 +1885,7 @@ class PASCALIMPLEMENTATION CoAxisScale : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcScale __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcScale __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcScale __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoAxisScale(void) : System::TObject() { }
@@ -1980,8 +1904,7 @@ class PASCALIMPLEMENTATION CoValueScale : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcValueScale __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcValueScale __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IVcValueScale __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoValueScale(void) : System::TObject() { }
@@ -2000,8 +1923,7 @@ class PASCALIMPLEMENTATION CoAxisTitle : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcAxisTitle __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcAxisTitle __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcAxisTitle __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoAxisTitle(void) : System::TObject() { }
@@ -2020,8 +1942,7 @@ class PASCALIMPLEMENTATION CoLabel_ : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcLabel __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcLabel __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcLabel __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoLabel_(void) : System::TObject() { }
@@ -2040,8 +1961,7 @@ class PASCALIMPLEMENTATION CoLight : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcLight __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcLight __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcLight __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoLight(void) : System::TObject() { }
@@ -2060,8 +1980,7 @@ class PASCALIMPLEMENTATION CoElevation : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcElevation __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcElevation __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcElevation __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoElevation(void) : System::TObject() { }
@@ -2080,8 +1999,7 @@ class PASCALIMPLEMENTATION CoAttribute : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcAttribute __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcAttribute __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcAttribute __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoAttribute(void) : System::TObject() { }
@@ -2100,8 +2018,7 @@ class PASCALIMPLEMENTATION CoSurface : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcSurface __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcSurface __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcSurface __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoSurface(void) : System::TObject() { }
@@ -2120,8 +2037,7 @@ class PASCALIMPLEMENTATION CoContour : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcContour __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcContour __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcContour __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoContour(void) : System::TObject() { }
@@ -2140,8 +2056,7 @@ class PASCALIMPLEMENTATION CoLightSource : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcLightSource __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcLightSource __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IVcLightSource __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoLightSource(void) : System::TObject() { }
@@ -2160,8 +2075,7 @@ class PASCALIMPLEMENTATION CoSeriesCollection : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcSeriesCollection __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcSeriesCollection __fastcall CreateRemote(TMetaClass* vmt, 
-		const AnsiString MachineName);
+	/*         class method */ static _di_IVcSeriesCollection __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoSeriesCollection(void) : System::TObject() { }
@@ -2180,8 +2094,7 @@ class PASCALIMPLEMENTATION CoDataPoints : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcDataPoints __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcDataPoints __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IVcDataPoints __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoDataPoints(void) : System::TObject() { }
@@ -2200,8 +2113,7 @@ class PASCALIMPLEMENTATION CoLabels : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcLabels __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcLabels __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcLabels __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoLabels(void) : System::TObject() { }
@@ -2220,8 +2132,7 @@ class PASCALIMPLEMENTATION CoXYZ : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcXYZ __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcXYZ __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IVcXYZ __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoXYZ(void) : System::TObject() { }
@@ -2240,8 +2151,7 @@ class PASCALIMPLEMENTATION CoLightSources : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcLightSources __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcLightSources __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IVcLightSources __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoLightSources(void) : System::TObject() { }
@@ -2260,8 +2170,7 @@ class PASCALIMPLEMENTATION CoAttributes : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcAttributes __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcAttributes __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IVcAttributes __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoAttributes(void) : System::TObject() { }
@@ -2280,8 +2189,7 @@ class PASCALIMPLEMENTATION CoContourGradient : public System::TObject
 	
 public:
 	/*         class method */ static _di_IVcContourGradient __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IVcContourGradient __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IVcContourGradient __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoContourGradient(void) : System::TObject() { }
@@ -2713,12 +2621,10 @@ static const Shortint VtChChartType3dXYZ = 0x1a;
 extern PACKAGE void __fastcall Register(void);
 
 }	/* namespace Vcfi */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Vcfi;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// vcfi
+#endif	// VCFI

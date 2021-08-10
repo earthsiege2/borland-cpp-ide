@@ -1,92 +1,92 @@
 LIBRARY MSINSSTF
 EXPORTS
 
-    BuildCompressFileName                    = 'MSINSSTF.DLL'.*
-    DateFromSz                               = 'MSINSSTF.DLL'.*
-    DdeSendConnect                           = 'MSINSSTF.DLL'.*
-    DoesAnyFileNeedCopying                   = 'MSINSSTF.DLL'.*
-    FActivateProgMan                         = 'MSINSSTF.DLL'.*
-    FAddToBillboardList                      = 'MSINSSTF.DLL'.*
-    FAddToRestartFile                        = 'MSINSSTF.DLL'.*
-    FBuildFullBakPath                        = 'MSINSSTF.DLL'.*
-    FBuildFullDstPath                        = 'MSINSSTF.DLL'.*
-    FBuildFullSrcPath                        = 'MSINSSTF.DLL'.*
-    FClearBillboardList                      = 'MSINSSTF.DLL'.*
-    FConvertAndStoreRglInSymTab              = 'MSINSSTF.DLL'.*
-    FCopyFile                                = 'MSINSSTF.DLL'.*
-    FCopyListFile                            = 'MSINSSTF.DLL'.*
-    FCopyOneFile                             = 'MSINSSTF.DLL'.*
-    FCreateDir                               = 'MSINSSTF.DLL'.*
-    FCreateIniKeyValue                       = 'MSINSSTF.DLL'.*
-    FCreateProgManGroup                      = 'MSINSSTF.DLL'.*
-    FCreateProgManGroupEx                    = 'MSINSSTF.DLL'.*
-    FCreateProgManItem                       = 'MSINSSTF.DLL'.*
-    FCreateProgManItemEx                     = 'MSINSSTF.DLL'.*
-    FCreateSysIniKeyValue                    = 'MSINSSTF.DLL'.*
-    FDdeExec                                 = 'MSINSSTF.DLL'.*
-    FDdeInit                                 = 'MSINSSTF.DLL'.*
-    FDdeTerminate                            = 'MSINSSTF.DLL'.*
-    FDdeWait                                 = 'MSINSSTF.DLL'.*
-    FDumpCopyListToFile                      = 'MSINSSTF.DLL'.*
-    FEndProgManDde                           = 'MSINSSTF.DLL'.*
-    FExitExecRestart                         = 'MSINSSTF.DLL'.*
-    FFileInUse                               = 'MSINSSTF.DLL'.*
-    FFreePbbb                                = 'MSINSSTF.DLL'.*
-    FHideBillboardDialog                     = 'MSINSSTF.DLL'.*
-    FIncrementBillboardCurTicks              = 'MSINSSTF.DLL'.*
-    FInitProgManDde                          = 'MSINSSTF.DLL'.*
-    FInitializeInstall                       = 'MSINSSTF.DLL'.*
-    FInstRemoveableDrive                     = 'MSINSSTF.DLL'.*
-    FIsDirWritable                           = 'MSINSSTF.DLL'.*
-    FIsFileWritable                          = 'MSINSSTF.DLL'.*
-;    FIsRemoveDrive                           = 'MSINSSTF.DLL'.*
-    FPrependToPath                           = 'MSINSSTF.DLL'.*
-    FRemoveDir                               = 'MSINSSTF.DLL'.*
-    FRemoveIniKey                            = 'MSINSSTF.DLL'.*
-    FRemoveIniSection                        = 'MSINSSTF.DLL'.*
-    FRemoveProgManGroup                      = 'MSINSSTF.DLL'.*
-    FRemoveProgManGroupEx                    = 'MSINSSTF.DLL'.*
-    FRemoveProgManItem                       = 'MSINSSTF.DLL'.*
-    FRemoveProgManItemEx                     = 'MSINSSTF.DLL'.*
-    FRestartListEmpty                        = 'MSINSSTF.DLL'.*
-    FSetEnvVariableValue                     = 'MSINSSTF.DLL'.*
-    FSetRestartDir                           = 'MSINSSTF.DLL'.*
-    FShowBillboardDialog                     = 'MSINSSTF.DLL'.*
-    FShowProgManGroup                        = 'MSINSSTF.DLL'.*
-    FShowProgManGroupEx                      = 'MSINSSTF.DLL'.*
-    FStampResource                           = 'MSINSSTF.DLL'.*
-    FUninstall                               = 'MSINSSTF.DLL'.*
-    FYield                                   = 'MSINSSTF.DLL'.*
-    ForceRestartOn                           = 'MSINSSTF.DLL'.*
-    GetCopyMode                              = 'MSINSSTF.DLL'.*
-    GetDecompMode                            = 'MSINSSTF.DLL'.*
-    GrcCopyFilesInCopyList                   = 'MSINSSTF.DLL'.*
-    LcbGetCopyListCost                       = 'MSINSSTF.DLL'.*
-    MyDdeConnect                             = 'MSINSSTF.DLL'.*
-    NDriveNumber                             = 'MSINSSTF.DLL'.*
-    NLangFromFile                            = 'MSINSSTF.DLL'.*
-    PbbbAlloc                                = 'MSINSSTF.DLL'.*
-    ProBarProc                               = 'MSINSSTF.DLL'.*
-    ProDlgProc                               = 'MSINSSTF.DLL'.*
-    ProSetPos                                = 'MSINSSTF.DLL'.*
-    RemoveEnvVariable                        = 'MSINSSTF.DLL'.*
-    ResetCopyList                            = 'MSINSSTF.DLL'.*
-    SetCopyMode                              = 'MSINSSTF.DLL'.*
-    SetDecompMode                            = 'MSINSSTF.DLL'.*
-    SetEnvVariable                           = 'MSINSSTF.DLL'.*
-    SetSizeCheckMode                         = 'MSINSSTF.DLL'.*
-    SetTimeValue                             = 'MSINSSTF.DLL'.*
-    SzFindExt                                = 'MSINSSTF.DLL'.*
-    SzFindFileFromPath                       = 'MSINSSTF.DLL'.*
-    SzFindNthIniField                        = 'MSINSSTF.DLL'.*
-    TerminateInstall                         = 'MSINSSTF.DLL'.*
-    WFindFileUsingFileOpen                   = 'MSINSSTF.DLL'.*
-    WFindSrcFileName                         = 'MSINSSTF.DLL'.*
-    WPromptForDisk                           = 'MSINSSTF.DLL'.*
-    WndProcDde                               = 'MSINSSTF.DLL'.*
-    YnrcBackupFile                           = 'MSINSSTF.DLL'.*
-    YnrcEnsurePathExists                     = 'MSINSSTF.DLL'.*
-    YnrcFileReadOnly                         = 'MSINSSTF.DLL'.*
-    YnrcNewerExistingFile                    = 'MSINSSTF.DLL'.*
-    YnrcRemoveFile                           = 'MSINSSTF.DLL'.*
-    fnText                                   = 'MSINSSTF.DLL'.*
+    BuildCompressFileName                    
+    DateFromSz                               
+    DdeSendConnect                           
+    DoesAnyFileNeedCopying                   
+    FActivateProgMan                         
+    FAddToBillboardList                      
+    FAddToRestartFile                        
+    FBuildFullBakPath                        
+    FBuildFullDstPath                        
+    FBuildFullSrcPath                        
+    FClearBillboardList                      
+    FConvertAndStoreRglInSymTab              
+    FCopyFile                                
+    FCopyListFile                            
+    FCopyOneFile                             
+    FCreateDir                               
+    FCreateIniKeyValue                       
+    FCreateProgManGroup                      
+    FCreateProgManGroupEx                    
+    FCreateProgManItem                       
+    FCreateProgManItemEx                     
+    FCreateSysIniKeyValue                    
+    FDdeExec                                 
+    FDdeInit                                 
+    FDdeTerminate                            
+    FDdeWait                                 
+    FDumpCopyListToFile                      
+    FEndProgManDde                           
+    FExitExecRestart                         
+    FFileInUse                               
+    FFreePbbb                                
+    FHideBillboardDialog                     
+    FIncrementBillboardCurTicks              
+    FInitProgManDde                          
+    FInitializeInstall                       
+    FInstRemoveableDrive                     
+    FIsDirWritable                           
+    FIsFileWritable                          
+;    FIsRemoveDrive                           
+    FPrependToPath                           
+    FRemoveDir                               
+    FRemoveIniKey                            
+    FRemoveIniSection                        
+    FRemoveProgManGroup                      
+    FRemoveProgManGroupEx                    
+    FRemoveProgManItem                       
+    FRemoveProgManItemEx                     
+    FRestartListEmpty                        
+    FSetEnvVariableValue                     
+    FSetRestartDir                           
+    FShowBillboardDialog                     
+    FShowProgManGroup                        
+    FShowProgManGroupEx                      
+    FStampResource                           
+    FUninstall                               
+    FYield                                   
+    ForceRestartOn                           
+    GetCopyMode                              
+    GetDecompMode                            
+    GrcCopyFilesInCopyList                   
+    LcbGetCopyListCost                       
+    MyDdeConnect                             
+    NDriveNumber                             
+    NLangFromFile                            
+    PbbbAlloc                                
+    ProBarProc                               
+    ProDlgProc                               
+    ProSetPos                                
+    RemoveEnvVariable                        
+    ResetCopyList                            
+    SetCopyMode                              
+    SetDecompMode                            
+    SetEnvVariable                           
+    SetSizeCheckMode                         
+    SetTimeValue                             
+    SzFindExt                                
+    SzFindFileFromPath                       
+    SzFindNthIniField                        
+    TerminateInstall                         
+    WFindFileUsingFileOpen                   
+    WFindSrcFileName                         
+    WPromptForDisk                           
+    WndProcDde                               
+    YnrcBackupFile                           
+    YnrcEnsurePathExists                     
+    YnrcFileReadOnly                         
+    YnrcNewerExistingFile                    
+    YnrcRemoveFile                           
+    fnText                                   

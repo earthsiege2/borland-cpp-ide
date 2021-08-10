@@ -8,7 +8,6 @@
 /****************************************************************************/
 
 #ifndef H_CCHANNEL
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define H_CCHANNEL
 
 /****************************************************************************/
@@ -343,5 +342,4 @@ typedef VIRTUALCHANNELENTRY FAR * PVIRTUALCHANNELENTRY;
 }
 #endif  /* __cplusplus */
 
-#pragma option pop /*P_O_Pop*/
 #endif /* H_CCHANNEL */

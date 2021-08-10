@@ -1,5 +1,5 @@
 // SYSCOMP.H: Pascal Comp type
-// Copyright (c) 1997, 1999 Borland International
+// Copyright (c) 1997, 2002 Borland Software Corporation
 
 #if !defined(SYSCOMP_H)		// comp type
 #define SYSCOMP_H

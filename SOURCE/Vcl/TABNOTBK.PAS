@@ -3,19 +3,19 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
 { This unit defines the TTabbedNotebook Component. }
 
-unit Tabnotbk;
+unit TabNotBk;
 
 {$H+,X+}
 
 interface
 
-uses Windows, Classes,  Stdctrls, Forms, Messages, Graphics, Controls,
+uses Windows, Classes,  StdCtrls, Forms, Messages, Graphics, Controls,
   ComCtrls;
 
 const

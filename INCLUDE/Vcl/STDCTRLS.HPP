@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'StdCtrls.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'StdCtrls.pas' rev: 6.00
 
 #ifndef StdCtrlsHPP
 #define StdCtrlsHPP
@@ -13,9 +13,9 @@
 #include <ActnList.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
 #include <Menus.hpp>	// Pascal unit
+#include <Classes.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
-#include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
@@ -39,7 +39,7 @@ private:
 	HIDESBASE MESSAGE void __fastcall WMSize(Messages::TMessage &Message);
 	
 protected:
-	virtual void __fastcall AdjustClientRect(Windows::TRect &Rect);
+	virtual void __fastcall AdjustClientRect(Types::TRect &Rect);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall Paint(void);
 	
@@ -52,8 +52,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomGroupBox(HWND ParentWindow) : Controls::TCustomControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomGroupBox(HWND ParentWindow) : Controls::TCustomControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -65,29 +64,29 @@ class PASCALIMPLEMENTATION TGroupBox : public TCustomGroupBox
 	typedef TCustomGroupBox inherited;
 	
 __published:
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
 	__property Caption ;
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DockSite ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DockSite  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=1};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property OnDblClick ;
@@ -108,8 +107,7 @@ __published:
 	__property OnUnDock ;
 public:
 	#pragma option push -w-inl
-	/* TCustomGroupBox.Create */ inline __fastcall virtual TGroupBox(Classes::TComponent* AOwner) : TCustomGroupBox(
-		AOwner) { }
+	/* TCustomGroupBox.Create */ inline __fastcall virtual TGroupBox(Classes::TComponent* AOwner) : TCustomGroupBox(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -119,8 +117,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TGroupBox(HWND ParentWindow) : TCustomGroupBox(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TGroupBox(HWND ParentWindow) : TCustomGroupBox(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -142,6 +139,8 @@ private:
 	TTextLayout FLayout;
 	bool FWordWrap;
 	bool FShowAccelChar;
+	Classes::TNotifyEvent FOnMouseLeave;
+	Classes::TNotifyEvent FOnMouseEnter;
 	bool __fastcall GetTransparent(void);
 	void __fastcall SetAlignment(Classes::TAlignment Value);
 	void __fastcall SetFocusControl(Controls::TWinControl* Value);
@@ -152,16 +151,17 @@ private:
 	MESSAGE void __fastcall CMTextChanged(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMFontChanged(Messages::TMessage &Message);
 	MESSAGE void __fastcall CMDialogChar(Messages::TWMKey &Message);
+	HIDESBASE MESSAGE void __fastcall CMMouseEnter(Messages::TMessage &Message);
+	HIDESBASE MESSAGE void __fastcall CMMouseLeave(Messages::TMessage &Message);
 	
 protected:
 	DYNAMIC void __fastcall AdjustBounds(void);
-	DYNAMIC void __fastcall DoDrawText(Windows::TRect &Rect, int Flags);
+	DYNAMIC void __fastcall DoDrawText(Types::TRect &Rect, int Flags);
 	virtual AnsiString __fastcall GetLabelText();
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall Paint(void);
-	HIDESBASE virtual void __fastcall SetAutoSize(bool Value);
+	virtual void __fastcall SetAutoSize(bool Value);
 	__property Classes::TAlignment Alignment = {read=FAlignment, write=SetAlignment, default=0};
 	__property bool AutoSize = {read=FAutoSize, write=SetAutoSize, default=1};
 	__property Controls::TWinControl* FocusControl = {read=FFocusControl, write=SetFocusControl};
@@ -172,7 +172,10 @@ protected:
 	
 public:
 	__fastcall virtual TCustomLabel(Classes::TComponent* AOwner);
+	__property Caption ;
 	__property Canvas ;
+	__property Classes::TNotifyEvent OnMouseEnter = {read=FOnMouseEnter, write=FOnMouseEnter};
+	__property Classes::TNotifyEvent OnMouseLeave = {read=FOnMouseLeave, write=FOnMouseLeave};
 public:
 	#pragma option push -w-inl
 	/* TGraphicControl.Destroy */ inline __fastcall virtual ~TCustomLabel(void) { }
@@ -187,31 +190,31 @@ class PASCALIMPLEMENTATION TLabel : public TCustomLabel
 	typedef TCustomLabel inherited;
 	
 __published:
-	__property Align ;
-	__property Alignment ;
-	__property Anchors ;
-	__property AutoSize ;
+	__property Align  = {default=0};
+	__property Alignment  = {default=0};
+	__property Anchors  = {default=3};
+	__property AutoSize  = {default=1};
 	__property BiDiMode ;
 	__property Caption ;
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property FocusControl ;
 	__property Font ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property ShowAccelChar ;
+	__property ShowAccelChar  = {default=1};
 	__property ShowHint ;
-	__property Transparent ;
-	__property Layout ;
-	__property Visible ;
-	__property WordWrap ;
+	__property Transparent  = {default=0};
+	__property Layout  = {default=0};
+	__property Visible  = {default=1};
+	__property WordWrap  = {default=0};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property OnDblClick ;
@@ -222,12 +225,13 @@ __published:
 	__property OnMouseDown ;
 	__property OnMouseMove ;
 	__property OnMouseUp ;
+	__property OnMouseEnter ;
+	__property OnMouseLeave ;
 	__property OnStartDock ;
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TCustomLabel.Create */ inline __fastcall virtual TLabel(Classes::TComponent* AOwner) : TCustomLabel(
-		AOwner) { }
+	/* TCustomLabel.Create */ inline __fastcall virtual TLabel(Classes::TComponent* AOwner) : TCustomLabel(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -263,7 +267,6 @@ private:
 	void __fastcall AdjustHeight(void);
 	bool __fastcall GetModified(void);
 	bool __fastcall GetCanUndo(void);
-	HIDESBASE void __fastcall SetAutoSize(bool Value);
 	void __fastcall SetBorderStyle(Forms::TBorderStyle Value);
 	void __fastcall SetCharCase(TEditCharCase Value);
 	void __fastcall SetHideSelection(bool Value);
@@ -280,6 +283,7 @@ private:
 	HIDESBASE MESSAGE void __fastcall CMFontChanged(Messages::TMessage &Message);
 	MESSAGE void __fastcall CNCommand(Messages::TWMCommand &Message);
 	MESSAGE void __fastcall CMTextChanged(Messages::TMessage &Message);
+	HIDESBASE MESSAGE void __fastcall WMContextMenu(Messages::TWMContextMenu &Message);
 	
 protected:
 	DYNAMIC void __fastcall Change(void);
@@ -291,6 +295,7 @@ protected:
 	virtual int __fastcall GetSelLength(void);
 	virtual int __fastcall GetSelStart(void);
 	virtual AnsiString __fastcall GetSelText();
+	virtual void __fastcall SetAutoSize(bool Value);
 	virtual void __fastcall SetSelLength(int Value);
 	virtual void __fastcall SetSelStart(int Value);
 	__property bool AutoSelect = {read=FAutoSelect, write=FAutoSelect, default=1};
@@ -301,7 +306,7 @@ protected:
 	__property int MaxLength = {read=FMaxLength, write=SetMaxLength, default=0};
 	__property bool OEMConvert = {read=FOEMConvert, write=SetOEMConvert, default=0};
 	__property char PasswordChar = {read=FPasswordChar, write=SetPasswordChar, default=0};
-	__property ParentColor ;
+	__property ParentColor  = {default=0};
 	__property bool ReadOnly = {read=FReadOnly, write=SetReadOnly, default=0};
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	
@@ -326,11 +331,10 @@ public:
 	__property Text ;
 	
 __published:
-	__property TabStop ;
+	__property TabStop  = {default=1};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomEdit(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomEdit(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TCustomEdit(void) { }
@@ -345,38 +349,42 @@ class PASCALIMPLEMENTATION TEdit : public TCustomEdit
 	typedef TCustomEdit inherited;
 	
 __published:
-	__property Anchors ;
-	__property AutoSelect ;
-	__property AutoSize ;
+	__property Anchors  = {default=3};
+	__property AutoSelect  = {default=1};
+	__property AutoSize  = {default=1};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelKind  = {default=0};
+	__property BevelOuter  = {index=1, default=1};
 	__property BiDiMode ;
-	__property BorderStyle ;
-	__property CharCase ;
-	__property Color ;
+	__property BorderStyle  = {default=1};
+	__property CharCase  = {default=0};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property HideSelection ;
-	__property ImeMode ;
+	__property HideSelection  = {default=1};
+	__property ImeMode  = {default=3};
 	__property ImeName ;
-	__property MaxLength ;
-	__property OEMConvert ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
-	__property PasswordChar ;
+	__property MaxLength  = {default=0};
+	__property OEMConvert  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
+	__property PasswordChar  = {default=0};
 	__property PopupMenu ;
-	__property ReadOnly ;
+	__property ReadOnly  = {default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
 	__property Text ;
-	__property Visible ;
+	__property Visible  = {default=1};
 	__property OnChange ;
 	__property OnClick ;
 	__property OnContextPopup ;
@@ -397,14 +405,12 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TCustomEdit.Create */ inline __fastcall virtual TEdit(Classes::TComponent* AOwner) : TCustomEdit(
-		AOwner) { }
+	/* TCustomEdit.Create */ inline __fastcall virtual TEdit(Classes::TComponent* AOwner) : TCustomEdit(AOwner) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TEdit(HWND ParentWindow) : TCustomEdit(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TEdit(HWND ParentWindow) : TCustomEdit(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TEdit(void) { }
@@ -433,7 +439,8 @@ private:
 	HIDESBASE MESSAGE void __fastcall WMNCDestroy(Messages::TWMNoParams &Message);
 	
 protected:
-	virtual Windows::TPoint __fastcall GetCaretPos();
+	virtual Types::TPoint __fastcall GetCaretPos();
+	virtual void __fastcall SetCaretPos(const Types::TPoint &Value);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWindowHandle(const Controls::TCreateParams &Params);
 	DYNAMIC void __fastcall KeyPress(char &Key);
@@ -452,12 +459,11 @@ public:
 	__fastcall virtual TCustomMemo(Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomMemo(void);
 	DYNAMIC Classes::TAlignment __fastcall GetControlsAlignment(void);
-	__property Windows::TPoint CaretPos = {read=GetCaretPos};
+	__property Types::TPoint CaretPos = {read=GetCaretPos, write=SetCaretPos};
 	__property Classes::TStrings* Lines = {read=FLines, write=SetLines};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomMemo(HWND ParentWindow) : TCustomEdit(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomMemo(HWND ParentWindow) : TCustomEdit(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -469,40 +475,44 @@ class PASCALIMPLEMENTATION TMemo : public TCustomMemo
 	typedef TCustomMemo inherited;
 	
 __published:
-	__property Align ;
-	__property Alignment ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Alignment  = {default=0};
+	__property Anchors  = {default=3};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelKind  = {default=0};
+	__property BevelOuter  = {index=1, default=1};
 	__property BiDiMode ;
-	__property BorderStyle ;
-	__property Color ;
+	__property BorderStyle  = {default=1};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property HideSelection ;
-	__property ImeMode ;
+	__property HideSelection  = {default=1};
+	__property ImeMode  = {default=3};
 	__property ImeName ;
 	__property Lines ;
-	__property MaxLength ;
-	__property OEMConvert ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property MaxLength  = {default=0};
+	__property OEMConvert  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property ReadOnly ;
-	__property ScrollBars ;
+	__property ReadOnly  = {default=0};
+	__property ScrollBars  = {default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
-	__property WantReturns ;
-	__property WantTabs ;
-	__property WordWrap ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
+	__property WantReturns  = {default=1};
+	__property WantTabs  = {default=0};
+	__property WordWrap  = {default=1};
 	__property OnChange ;
 	__property OnClick ;
 	__property OnContextPopup ;
@@ -523,8 +533,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TCustomMemo.Create */ inline __fastcall virtual TMemo(Classes::TComponent* AOwner) : TCustomMemo(
-		AOwner) { }
+	/* TCustomMemo.Create */ inline __fastcall virtual TMemo(Classes::TComponent* AOwner) : TCustomMemo(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomMemo.Destroy */ inline __fastcall virtual ~TMemo(void) { }
@@ -532,8 +541,147 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TMemo(HWND ParentWindow) : TCustomMemo(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TMemo(HWND ParentWindow) : TCustomMemo(ParentWindow) { }
+	#pragma option pop
+	
+};
+
+
+typedef void __fastcall (__closure *TDrawItemEvent)(Controls::TWinControl* Control, int Index, const Types::TRect &Rect, Windows::TOwnerDrawState State);
+
+typedef void __fastcall (__closure *TMeasureItemEvent)(Controls::TWinControl* Control, int Index, int &Height);
+
+class DELPHICLASS TCustomComboBoxStrings;
+class DELPHICLASS TCustomCombo;
+typedef TMetaClass*TCustomComboBoxStringsClass;
+
+class PASCALIMPLEMENTATION TCustomCombo : public Controls::TCustomListControl 
+{
+	typedef Controls::TCustomListControl inherited;
+	
+private:
+	Graphics::TCanvas* FCanvas;
+	int FMaxLength;
+	int FDropDownCount;
+	int FItemIndex;
+	Classes::TNotifyEvent FOnChange;
+	Classes::TNotifyEvent FOnSelect;
+	Classes::TNotifyEvent FOnDropDown;
+	Classes::TNotifyEvent FOnCloseUp;
+	int FItemHeight;
+	Classes::TStrings* FItems;
+	MESSAGE void __fastcall WMCreate(Messages::TWMCreate &Message);
+	MESSAGE void __fastcall CMCancelMode(Controls::TCMCancelMode &Message);
+	HIDESBASE MESSAGE void __fastcall CMCtl3DChanged(Messages::TMessage &Message);
+	MESSAGE void __fastcall CNCommand(Messages::TWMCommand &Message);
+	HIDESBASE MESSAGE void __fastcall WMDrawItem(Messages::TWMDrawItem &Message);
+	HIDESBASE MESSAGE void __fastcall WMMeasureItem(Messages::TWMMeasureItem &Message);
+	HIDESBASE MESSAGE void __fastcall WMDeleteItem(Messages::TWMDeleteItem &Message);
+	MESSAGE void __fastcall WMGetDlgCode(Messages::TWMNoParams &Message);
+	
+protected:
+	HWND FEditHandle;
+	HWND FListHandle;
+	HWND FDropHandle;
+	void *FEditInstance;
+	void *FDefEditProc;
+	void *FListInstance;
+	void *FDefListProc;
+	bool FDroppingDown;
+	bool FFocusChanged;
+	bool FIsFocused;
+	int FSaveIndex;
+	virtual void __fastcall AdjustDropDown(void);
+	virtual void __fastcall ComboWndProc(Messages::TMessage &Message, HWND ComboWnd, void * ComboProc);
+	virtual void __fastcall CreateWnd(void);
+	void __fastcall EditWndProc(Messages::TMessage &Message);
+	virtual TMetaClass* __fastcall GetItemsClass(void) = 0 ;
+	virtual void __fastcall WndProc(Messages::TMessage &Message);
+	virtual int __fastcall GetItemHt(void) = 0 ;
+	virtual void __fastcall SetItemHeight(int Value);
+	virtual int __fastcall GetCount(void);
+	virtual int __fastcall GetItemCount(void) = 0 ;
+	virtual int __fastcall GetItemIndex(void);
+	bool __fastcall GetDroppedDown(void);
+	int __fastcall GetSelLength(void);
+	int __fastcall GetSelStart(void);
+	void __fastcall ListWndProc(Messages::TMessage &Message);
+	virtual void __fastcall Loaded(void);
+	DYNAMIC void __fastcall Change(void);
+	DYNAMIC void __fastcall Select(void);
+	DYNAMIC void __fastcall DropDown(void);
+	DYNAMIC void __fastcall CloseUp(void);
+	virtual void __fastcall DestroyWindowHandle(void);
+	void __fastcall SetDroppedDown(bool Value);
+	void __fastcall SetSelLength(int Value);
+	void __fastcall SetSelStart(int Value);
+	void __fastcall SetMaxLength(int Value);
+	virtual void __fastcall SetDropDownCount(const int Value);
+	virtual void __fastcall SetItemIndex(const int Value)/* overload */;
+	virtual void __fastcall SetItems(const Classes::TStrings* Value);
+	__property int DropDownCount = {read=FDropDownCount, write=SetDropDownCount, default=8};
+	__property HWND EditHandle = {read=FEditHandle, nodefault};
+	__property int ItemCount = {read=GetItemCount, nodefault};
+	__property int ItemHeight = {read=GetItemHt, write=SetItemHeight, nodefault};
+	__property HWND ListHandle = {read=FListHandle, nodefault};
+	__property int MaxLength = {read=FMaxLength, write=SetMaxLength, default=0};
+	__property ParentColor  = {default=0};
+	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
+	__property Classes::TNotifyEvent OnDropDown = {read=FOnDropDown, write=FOnDropDown};
+	__property Classes::TNotifyEvent OnSelect = {read=FOnSelect, write=FOnSelect};
+	__property Classes::TNotifyEvent OnCloseUp = {read=FOnCloseUp, write=FOnCloseUp};
+	
+public:
+	__fastcall virtual TCustomCombo(Classes::TComponent* AOwner);
+	__fastcall virtual ~TCustomCombo(void);
+	virtual void __fastcall AddItem(AnsiString Item, System::TObject* AObject);
+	virtual void __fastcall Clear(void);
+	virtual void __fastcall ClearSelection(void);
+	virtual void __fastcall CopySelection(Controls::TCustomListControl* Destination);
+	virtual void __fastcall DeleteSelected(void);
+	DYNAMIC bool __fastcall Focused(void);
+	virtual void __fastcall SelectAll(void);
+	__property Graphics::TCanvas* Canvas = {read=FCanvas};
+	__property bool DroppedDown = {read=GetDroppedDown, write=SetDroppedDown, nodefault};
+	__property Classes::TStrings* Items = {read=FItems, write=SetItems};
+	__property int SelLength = {read=GetSelLength, write=SetSelLength, nodefault};
+	__property int SelStart = {read=GetSelStart, write=SetSelStart, nodefault};
+	__property TabStop  = {default=1};
+public:
+	#pragma option push -w-inl
+	/* TWinControl.CreateParented */ inline __fastcall TCustomCombo(HWND ParentWindow) : Controls::TCustomListControl(ParentWindow) { }
+	#pragma option pop
+	
+};
+
+
+class PASCALIMPLEMENTATION TCustomComboBoxStrings : public Classes::TStrings 
+{
+	typedef Classes::TStrings inherited;
+	
+private:
+	TCustomCombo* FComboBox;
+	
+protected:
+	virtual int __fastcall GetCount(void);
+	virtual AnsiString __fastcall Get(int Index);
+	virtual System::TObject* __fastcall GetObject(int Index);
+	virtual void __fastcall PutObject(int Index, System::TObject* AObject);
+	virtual void __fastcall SetUpdateState(bool Updating);
+	__property TCustomCombo* ComboBox = {read=FComboBox, write=FComboBox};
+	
+public:
+	virtual void __fastcall Clear(void);
+	virtual void __fastcall Delete(int Index);
+	virtual int __fastcall IndexOf(const AnsiString S);
+public:
+	#pragma option push -w-inl
+	/* TStrings.Destroy */ inline __fastcall virtual ~TCustomComboBoxStrings(void) { }
+	#pragma option pop
+	
+public:
+	#pragma option push -w-inl
+	/* TObject.Create */ inline __fastcall TCustomComboBoxStrings(void) : Classes::TStrings() { }
 	#pragma option pop
 	
 };
@@ -541,125 +689,64 @@ public:
 
 #pragma option push -b-
 enum TComboBoxStyle { csDropDown, csSimple, csDropDownList, csOwnerDrawFixed, csOwnerDrawVariable };
-	
 #pragma option pop
 
-typedef void __fastcall (__closure *TDrawItemEvent)(Controls::TWinControl* Control, int Index, const 
-	Windows::TRect &Rect, Windows::TOwnerDrawState State);
-
-typedef void __fastcall (__closure *TMeasureItemEvent)(Controls::TWinControl* Control, int Index, int 
-	&Height);
-
 class DELPHICLASS TCustomComboBox;
-class PASCALIMPLEMENTATION TCustomComboBox : public Controls::TWinControl 
+class PASCALIMPLEMENTATION TCustomComboBox : public TCustomCombo 
 {
-	typedef Controls::TWinControl inherited;
+	typedef TCustomCombo inherited;
 	
 private:
-	Classes::TStrings* FItems;
-	Graphics::TCanvas* FCanvas;
+	bool FAutoComplete;
+	bool FAutoDropDown;
+	unsigned FLastTime;
+	AnsiString FFilter;
 	TEditCharCase FCharCase;
 	bool FSorted;
 	TComboBoxStyle FStyle;
-	int FItemHeight;
-	int FMaxLength;
-	int FDropDownCount;
-	HWND FEditHandle;
-	HWND FListHandle;
-	void *FEditInstance;
-	void *FListInstance;
-	void *FDefEditProc;
-	void *FDefListProc;
-	bool FIsFocused;
-	bool FFocusChanged;
 	Classes::TStringList* FSaveItems;
-	int FSaveIndex;
-	bool FDroppingDown;
-	Classes::TNotifyEvent FOnChange;
-	Classes::TNotifyEvent FOnDropDown;
 	TDrawItemEvent FOnDrawItem;
 	TMeasureItemEvent FOnMeasureItem;
-	void __fastcall AdjustDropDown(void);
-	void __fastcall EditWndProc(Messages::TMessage &Message);
-	bool __fastcall GetDroppedDown(void);
-	int __fastcall GetItemIndex(void);
-	int __fastcall GetSelLength(void);
-	int __fastcall GetSelStart(void);
-	AnsiString __fastcall GetSelText();
-	void __fastcall ListWndProc(Messages::TMessage &Message);
 	void __fastcall SetCharCase(TEditCharCase Value);
-	void __fastcall SetDroppedDown(bool Value);
-	void __fastcall SetItems(Classes::TStrings* Value);
-	void __fastcall SetItemIndex(int Value);
-	void __fastcall SetSelLength(int Value);
-	void __fastcall SetSelStart(int Value);
 	void __fastcall SetSelText(const AnsiString Value);
 	void __fastcall SetSorted(bool Value);
-	int __fastcall GetItemHeight(void);
-	void __fastcall SetItemHeight(int Value);
-	void __fastcall SetMaxLength(int Value);
-	MESSAGE void __fastcall WMCreate(Messages::TWMCreate &Message);
 	HIDESBASE MESSAGE void __fastcall WMEraseBkgnd(Messages::TWMEraseBkgnd &Message);
-	MESSAGE void __fastcall CMCancelMode(Controls::TCMCancelMode &Message);
-	HIDESBASE MESSAGE void __fastcall CMCtl3DChanged(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMParentColorChanged(Messages::TMessage &Message);
-	MESSAGE void __fastcall CNCommand(Messages::TWMCommand &Message);
 	MESSAGE void __fastcall CNDrawItem(Messages::TWMDrawItem &Message);
 	MESSAGE void __fastcall CNMeasureItem(Messages::TWMMeasureItem &Message);
 	HIDESBASE MESSAGE void __fastcall WMLButtonDown(Messages::TWMMouse &Message);
-	HIDESBASE MESSAGE void __fastcall WMDrawItem(Messages::TWMDrawItem &Message);
-	HIDESBASE MESSAGE void __fastcall WMMeasureItem(Messages::TWMMeasureItem &Message);
-	HIDESBASE MESSAGE void __fastcall WMDeleteItem(Messages::TWMDeleteItem &Message);
-	MESSAGE void __fastcall WMGetDlgCode(Messages::TWMNoParams &Message);
+	HIDESBASE MESSAGE void __fastcall WMPaint(Messages::TWMPaint &Message);
+	HIDESBASE MESSAGE void __fastcall WMNCCalcSize(Messages::TWMNCCalcSize &Message);
 	
 protected:
-	virtual void __fastcall ComboWndProc(Messages::TMessage &Message, HWND ComboWnd, void * ComboProc);
-		
-	virtual void __fastcall WndProc(Messages::TMessage &Message);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
 	virtual void __fastcall DestroyWnd(void);
-	virtual void __fastcall DrawItem(int Index, const Windows::TRect &Rect, Windows::TOwnerDrawState State
-		);
-	virtual HWND __fastcall GetComboControl(void);
+	virtual void __fastcall DrawItem(int Index, const Types::TRect &Rect, Windows::TOwnerDrawState State);
+	virtual int __fastcall GetItemHt(void);
+	virtual TMetaClass* __fastcall GetItemsClass(void);
+	AnsiString __fastcall GetSelText();
+	DYNAMIC void __fastcall KeyPress(char &Key);
 	virtual void __fastcall MeasureItem(int Index, int &Height);
-	DYNAMIC void __fastcall Change(void);
-	DYNAMIC void __fastcall DropDown(void);
+	bool __fastcall SelectItem(const AnsiString AnItem);
 	virtual void __fastcall SetStyle(TComboBoxStyle Value);
-	__property int DropDownCount = {read=FDropDownCount, write=FDropDownCount, default=8};
-	__property HWND EditHandle = {read=FEditHandle, nodefault};
-	__property int ItemHeight = {read=GetItemHeight, write=SetItemHeight, nodefault};
-	__property HWND ListHandle = {read=FListHandle, nodefault};
-	__property int MaxLength = {read=FMaxLength, write=SetMaxLength, default=0};
-	__property ParentColor ;
 	__property bool Sorted = {read=FSorted, write=SetSorted, default=0};
 	__property TComboBoxStyle Style = {read=FStyle, write=SetStyle, default=0};
-	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
-	__property Classes::TNotifyEvent OnDropDown = {read=FOnDropDown, write=FOnDropDown};
 	__property TDrawItemEvent OnDrawItem = {read=FOnDrawItem, write=FOnDrawItem};
 	__property TMeasureItemEvent OnMeasureItem = {read=FOnMeasureItem, write=FOnMeasureItem};
+	virtual void __fastcall WndProc(Messages::TMessage &Message);
+	virtual int __fastcall GetItemCount(void);
 	
 public:
 	__fastcall virtual TCustomComboBox(Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomComboBox(void);
-	void __fastcall Clear(void);
-	DYNAMIC bool __fastcall Focused(void);
-	void __fastcall SelectAll(void);
+	__property bool AutoComplete = {read=FAutoComplete, write=FAutoComplete, default=1};
+	__property bool AutoDropDown = {read=FAutoDropDown, write=FAutoDropDown, default=0};
 	__property TEditCharCase CharCase = {read=FCharCase, write=SetCharCase, default=0};
-	__property Graphics::TCanvas* Canvas = {read=FCanvas};
-	__property bool DroppedDown = {read=GetDroppedDown, write=SetDroppedDown, nodefault};
-	__property Classes::TStrings* Items = {read=FItems, write=SetItems};
-	__property int ItemIndex = {read=GetItemIndex, write=SetItemIndex, nodefault};
-	__property int SelLength = {read=GetSelLength, write=SetSelLength, nodefault};
-	__property int SelStart = {read=GetSelStart, write=SetSelStart, nodefault};
 	__property AnsiString SelText = {read=GetSelText, write=SetSelText};
-	
-__published:
-	__property TabStop ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomComboBox(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomComboBox(HWND ParentWindow) : TCustomCombo(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -671,36 +758,45 @@ class PASCALIMPLEMENTATION TComboBox : public TCustomComboBox
 	typedef TCustomComboBox inherited;
 	
 __published:
-	__property Style ;
-	__property Anchors ;
+	__property AutoComplete  = {default=1};
+	__property AutoDropDown  = {default=0};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelKind  = {default=0};
+	__property BevelOuter  = {index=1, default=1};
+	__property Style  = {default=0};
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
-	__property Color ;
+	__property CharCase  = {default=0};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property DropDownCount ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property DropDownCount  = {default=8};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
 	__property ItemHeight ;
-	__property MaxLength ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ItemIndex  = {default=-1};
+	__property MaxLength  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property Sorted ;
-	__property TabOrder ;
-	__property TabStop ;
+	__property Sorted  = {default=0};
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
 	__property Text ;
-	__property Visible ;
+	__property Visible  = {default=1};
 	__property OnChange ;
 	__property OnClick ;
+	__property OnCloseUp ;
 	__property OnContextPopup ;
 	__property OnDblClick ;
 	__property OnDragDrop ;
@@ -715,13 +811,13 @@ __published:
 	__property OnKeyPress ;
 	__property OnKeyUp ;
 	__property OnMeasureItem ;
+	__property OnSelect ;
 	__property OnStartDock ;
 	__property OnStartDrag ;
 	__property Items ;
 public:
 	#pragma option push -w-inl
-	/* TCustomComboBox.Create */ inline __fastcall virtual TComboBox(Classes::TComponent* AOwner) : TCustomComboBox(
-		AOwner) { }
+	/* TCustomComboBox.Create */ inline __fastcall virtual TComboBox(Classes::TComponent* AOwner) : TCustomComboBox(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomComboBox.Destroy */ inline __fastcall virtual ~TComboBox(void) { }
@@ -729,8 +825,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TComboBox(HWND ParentWindow) : TCustomComboBox(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TComboBox(HWND ParentWindow) : TCustomComboBox(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -759,8 +854,7 @@ public:
 	__fastcall virtual TButtonControl(Classes::TComponent* AOwner);
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TButtonControl(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TButtonControl(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TButtonControl(void) { }
@@ -780,8 +874,7 @@ protected:
 	virtual void __fastcall SetChecked(bool Value);
 public:
 	#pragma option push -w-inl
-	/* TBasicActionLink.Create */ inline __fastcall virtual TButtonActionLink(System::TObject* AClient)
-		 : Controls::TWinControlActionLink(AClient) { }
+	/* TBasicActionLink.Create */ inline __fastcall virtual TButtonActionLink(System::TObject* AClient) : Controls::TWinControlActionLink(AClient) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBasicActionLink.Destroy */ inline __fastcall virtual ~TButtonActionLink(void) { }
@@ -801,7 +894,7 @@ private:
 	bool FDefault;
 	bool FCancel;
 	bool FActive;
-	Forms::TModalResult FModalResult;
+	Controls::TModalResult FModalResult;
 	void __fastcall SetDefault(bool Value);
 	HIDESBASE MESSAGE void __fastcall CMDialogKey(Messages::TWMKey &Message);
 	HIDESBASE MESSAGE void __fastcall CMDialogChar(Messages::TWMKey &Message);
@@ -821,26 +914,26 @@ public:
 	
 __published:
 	__property Action ;
-	__property Anchors ;
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
 	__property bool Cancel = {read=FCancel, write=FCancel, default=0};
 	__property Caption ;
 	__property Constraints ;
 	__property bool Default = {read=FDefault, write=SetDefault, default=0};
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property Forms::TModalResult ModalResult = {read=FModalResult, write=FModalResult, default=0};
-	__property ParentBiDiMode ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property Controls::TModalResult ModalResult = {read=FModalResult, write=FModalResult, default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property OnDragDrop ;
@@ -859,8 +952,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TButton(HWND ParentWindow) : TButtonControl(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TButton(HWND ParentWindow) : TButtonControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TButton(void) { }
@@ -905,11 +997,10 @@ public:
 	DYNAMIC Classes::TAlignment __fastcall GetControlsAlignment(void);
 	
 __published:
-	__property TabStop ;
+	__property TabStop  = {default=1};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomCheckBox(HWND ParentWindow) : TButtonControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomCheckBox(HWND ParentWindow) : TButtonControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TCustomCheckBox(void) { }
@@ -925,31 +1016,31 @@ class PASCALIMPLEMENTATION TCheckBox : public TCustomCheckBox
 	
 __published:
 	__property Action ;
-	__property Alignment ;
-	__property AllowGrayed ;
-	__property Anchors ;
+	__property Alignment  = {default=1};
+	__property AllowGrayed  = {default=0};
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
 	__property Caption ;
-	__property Checked ;
-	__property Color ;
+	__property Checked  = {default=0};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=1};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property State ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property State  = {default=0};
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property OnDragDrop ;
@@ -968,14 +1059,12 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TCustomCheckBox.Create */ inline __fastcall virtual TCheckBox(Classes::TComponent* AOwner) : TCustomCheckBox(
-		AOwner) { }
+	/* TCustomCheckBox.Create */ inline __fastcall virtual TCheckBox(Classes::TComponent* AOwner) : TCustomCheckBox(AOwner) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCheckBox(HWND ParentWindow) : TCustomCheckBox(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCheckBox(HWND ParentWindow) : TCustomCheckBox(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TCheckBox(void) { }
@@ -1010,28 +1099,28 @@ public:
 __published:
 	__property Action ;
 	__property Classes::TLeftRight Alignment = {read=FAlignment, write=SetAlignment, default=1};
-	__property Anchors ;
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
 	__property Caption ;
-	__property Checked ;
-	__property Color ;
+	__property Checked  = {default=0};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=1};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property OnDblClick ;
@@ -1051,8 +1140,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TRadioButton(HWND ParentWindow) : TButtonControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TRadioButton(HWND ParentWindow) : TButtonControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TRadioButton(void) { }
@@ -1062,23 +1150,33 @@ public:
 
 
 #pragma option push -b-
-enum TListBoxStyle { lbStandard, lbOwnerDrawFixed, lbOwnerDrawVariable };
+enum TListBoxStyle { lbStandard, lbOwnerDrawFixed, lbOwnerDrawVariable, lbVirtual, lbVirtualOwnerDraw };
 #pragma option pop
 
+typedef void __fastcall (__closure *TLBGetDataEvent)(Controls::TWinControl* Control, int Index, AnsiString &Data);
+
+typedef void __fastcall (__closure *TLBGetDataObjectEvent)(Controls::TWinControl* Control, int Index, System::TObject* &DataObject);
+
+typedef int __fastcall (__closure *TLBFindDataEvent)(Controls::TWinControl* Control, AnsiString FindString);
+
 class DELPHICLASS TCustomListBox;
-class PASCALIMPLEMENTATION TCustomListBox : public Controls::TWinControl 
+class PASCALIMPLEMENTATION TCustomListBox : public Controls::TCustomMultiSelectListControl 
 {
-	typedef Controls::TWinControl inherited;
+	typedef Controls::TCustomMultiSelectListControl inherited;
 	
 private:
+	bool FAutoComplete;
+	int FCount;
 	Classes::TStrings* FItems;
+	AnsiString FFilter;
+	unsigned FLastTime;
 	Forms::TFormBorderStyle FBorderStyle;
 	Graphics::TCanvas* FCanvas;
 	int FColumns;
 	int FItemHeight;
+	int FOldCount;
 	TListBoxStyle FStyle;
 	bool FIntegralHeight;
-	bool FMultiSelect;
 	bool FSorted;
 	bool FExtendedSelect;
 	int FTabWidth;
@@ -1087,20 +1185,21 @@ private:
 	int FSaveItemIndex;
 	TDrawItemEvent FOnDrawItem;
 	TMeasureItemEvent FOnMeasureItem;
+	TLBGetDataEvent FOnData;
+	TLBFindDataEvent FOnDataFind;
+	TLBGetDataObjectEvent FOnDataObject;
 	int __fastcall GetItemHeight(void);
-	int __fastcall GetItemIndex(void);
-	int __fastcall GetSelCount(void);
-	bool __fastcall GetSelected(int Index);
 	int __fastcall GetTopIndex(void);
+	MESSAGE void __fastcall LBGetText(Messages::TMessage &Message);
+	MESSAGE void __fastcall LBGetTextLen(Messages::TMessage &Message);
 	void __fastcall SetBorderStyle(Forms::TBorderStyle Value);
 	void __fastcall SetColumnWidth(void);
 	void __fastcall SetColumns(int Value);
+	void __fastcall SetCount(const int Value);
 	void __fastcall SetExtendedSelect(bool Value);
 	void __fastcall SetIntegralHeight(bool Value);
 	void __fastcall SetItemHeight(int Value);
 	void __fastcall SetItems(Classes::TStrings* Value);
-	void __fastcall SetItemIndex(int Value);
-	void __fastcall SetMultiSelect(bool Value);
 	void __fastcall SetSelected(int Index, bool Value);
 	void __fastcall SetSorted(bool Value);
 	void __fastcall SetStyle(TListBoxStyle Value);
@@ -1113,55 +1212,73 @@ private:
 	MESSAGE void __fastcall CNMeasureItem(Messages::TWMMeasureItem &Message);
 	HIDESBASE MESSAGE void __fastcall WMLButtonDown(Messages::TWMMouse &Message);
 	HIDESBASE MESSAGE void __fastcall CMCtl3DChanged(Messages::TMessage &Message);
+	int __fastcall GetScrollWidth(void);
+	void __fastcall SetScrollWidth(const int Value);
 	
 protected:
 	bool FMoving;
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
 	virtual void __fastcall DestroyWnd(void);
+	AnsiString __fastcall DoGetData(const int Index);
+	System::TObject* __fastcall DoGetDataObject(const int Index);
+	int __fastcall DoFindData(const AnsiString Data);
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
 	DYNAMIC void __fastcall DragCanceled(void);
-	virtual void __fastcall DrawItem(int Index, const Windows::TRect &Rect, Windows::TOwnerDrawState State
-		);
+	virtual void __fastcall DrawItem(int Index, const Types::TRect &Rect, Windows::TOwnerDrawState State);
+	virtual int __fastcall GetCount(void);
+	virtual int __fastcall GetSelCount(void);
 	virtual void __fastcall MeasureItem(int Index, int &Height);
 	DYNAMIC int __fastcall InternalGetItemData(int Index);
 	DYNAMIC void __fastcall InternalSetItemData(int Index, int AData);
 	DYNAMIC int __fastcall GetItemData(int Index);
+	virtual int __fastcall GetItemIndex(void);
+	bool __fastcall GetSelected(int Index);
+	DYNAMIC void __fastcall KeyPress(char &Key);
 	DYNAMIC void __fastcall SetItemData(int Index, int AData);
 	DYNAMIC void __fastcall ResetContent(void);
 	DYNAMIC void __fastcall DeleteString(int Index);
+	virtual void __fastcall SetMultiSelect(bool Value);
+	virtual void __fastcall SetItemIndex(const int Value)/* overload */;
 	__property Forms::TBorderStyle BorderStyle = {read=FBorderStyle, write=SetBorderStyle, default=1};
 	__property int Columns = {read=FColumns, write=SetColumns, default=0};
 	__property bool ExtendedSelect = {read=FExtendedSelect, write=SetExtendedSelect, default=1};
 	__property bool IntegralHeight = {read=FIntegralHeight, write=SetIntegralHeight, default=0};
 	__property int ItemHeight = {read=GetItemHeight, write=SetItemHeight, nodefault};
-	__property bool MultiSelect = {read=FMultiSelect, write=SetMultiSelect, default=0};
-	__property ParentColor ;
+	__property ParentColor  = {default=0};
 	__property bool Sorted = {read=FSorted, write=SetSorted, default=0};
 	__property TListBoxStyle Style = {read=FStyle, write=SetStyle, default=0};
 	__property int TabWidth = {read=FTabWidth, write=SetTabWidth, default=0};
 	__property TDrawItemEvent OnDrawItem = {read=FOnDrawItem, write=FOnDrawItem};
 	__property TMeasureItemEvent OnMeasureItem = {read=FOnMeasureItem, write=FOnMeasureItem};
+	__property TLBGetDataEvent OnData = {read=FOnData, write=FOnData};
+	__property TLBGetDataObjectEvent OnDataObject = {read=FOnDataObject, write=FOnDataObject};
+	__property TLBFindDataEvent OnDataFind = {read=FOnDataFind, write=FOnDataFind};
 	
 public:
 	__fastcall virtual TCustomListBox(Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomListBox(void);
-	void __fastcall Clear(void);
-	int __fastcall ItemAtPos(const Windows::TPoint &Pos, bool Existing);
-	Windows::TRect __fastcall ItemRect(int Index);
+	virtual void __fastcall AddItem(AnsiString Item, System::TObject* AObject);
+	virtual void __fastcall Clear(void);
+	virtual void __fastcall ClearSelection(void);
+	virtual void __fastcall CopySelection(Controls::TCustomListControl* Destination);
+	virtual void __fastcall DeleteSelected(void);
+	int __fastcall ItemAtPos(const Types::TPoint &Pos, bool Existing);
+	Types::TRect __fastcall ItemRect(int Index);
+	virtual void __fastcall SelectAll(void);
+	__property bool AutoComplete = {read=FAutoComplete, write=FAutoComplete, default=1};
 	__property Graphics::TCanvas* Canvas = {read=FCanvas};
+	__property int Count = {read=GetCount, write=SetCount, nodefault};
 	__property Classes::TStrings* Items = {read=FItems, write=SetItems};
-	__property int ItemIndex = {read=GetItemIndex, write=SetItemIndex, nodefault};
-	__property int SelCount = {read=GetSelCount, nodefault};
 	__property bool Selected[int Index] = {read=GetSelected, write=SetSelected};
+	__property int ScrollWidth = {read=GetScrollWidth, write=SetScrollWidth, default=0};
 	__property int TopIndex = {read=GetTopIndex, write=SetTopIndex, nodefault};
 	
 __published:
-	__property TabStop ;
+	__property TabStop  = {default=1};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomListBox(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomListBox(HWND ParentWindow) : Controls::TCustomMultiSelectListControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1173,41 +1290,50 @@ class PASCALIMPLEMENTATION TListBox : public TCustomListBox
 	typedef TCustomListBox inherited;
 	
 __published:
-	__property Align ;
-	__property Anchors ;
+	__property Style  = {default=0};
+	__property AutoComplete  = {default=1};
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelKind  = {default=0};
+	__property BevelOuter  = {index=1, default=1};
 	__property BiDiMode ;
-	__property BorderStyle ;
-	__property Color ;
-	__property Columns ;
+	__property BorderStyle  = {default=1};
+	__property Color  = {default=-2147483643};
+	__property Columns  = {default=0};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
-	__property ExtendedSelect ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
+	__property ExtendedSelect  = {default=1};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
-	__property IntegralHeight ;
+	__property IntegralHeight  = {default=0};
 	__property ItemHeight ;
 	__property Items ;
-	__property MultiSelect ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property MultiSelect  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
+	__property ScrollWidth  = {default=0};
 	__property ShowHint ;
-	__property Sorted ;
-	__property Style ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property TabWidth ;
-	__property Visible ;
+	__property Sorted  = {default=0};
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property TabWidth  = {default=0};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnContextPopup ;
+	__property OnData ;
+	__property OnDataFind ;
+	__property OnDataObject ;
 	__property OnDblClick ;
 	__property OnDragDrop ;
 	__property OnDragOver ;
@@ -1227,8 +1353,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TCustomListBox.Create */ inline __fastcall virtual TListBox(Classes::TComponent* AOwner) : TCustomListBox(
-		AOwner) { }
+	/* TCustomListBox.Create */ inline __fastcall virtual TListBox(Classes::TComponent* AOwner) : TCustomListBox(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomListBox.Destroy */ inline __fastcall virtual ~TListBox(void) { }
@@ -1236,20 +1361,17 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TListBox(HWND ParentWindow) : TCustomListBox(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TListBox(HWND ParentWindow) : TCustomListBox(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 #pragma option push -b-
-enum TScrollCode { scLineUp, scLineDown, scPageUp, scPageDown, scPosition, scTrack, scTop, scBottom, 
-	scEndScroll };
+enum TScrollCode { scLineUp, scLineDown, scPageUp, scPageDown, scPosition, scTrack, scTop, scBottom, scEndScroll };
 #pragma option pop
 
-typedef void __fastcall (__closure *TScrollEvent)(System::TObject* Sender, TScrollCode ScrollCode, int 
-	&ScrollPos);
+typedef void __fastcall (__closure *TScrollEvent)(System::TObject* Sender, TScrollCode ScrollCode, int &ScrollPos);
 
 class DELPHICLASS TScrollBar;
 class PASCALIMPLEMENTATION TScrollBar : public Controls::TWinControl 
@@ -1290,30 +1412,30 @@ public:
 	void __fastcall SetParams(int APosition, int AMin, int AMax);
 	
 __published:
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Forms::TScrollBarKind Kind = {read=FKind, write=SetKind, default=0};
 	__property Forms::TScrollBarInc LargeChange = {read=FLargeChange, write=FLargeChange, default=1};
 	__property int Max = {read=FMax, write=SetMax, default=100};
 	__property int Min = {read=FMin, write=SetMin, default=0};
 	__property int PageSize = {read=FPageSize, write=SetPageSize, nodefault};
-	__property ParentBiDiMode ;
-	__property ParentCtl3D ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentCtl3D  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property int Position = {read=FPosition, write=SetPosition, default=0};
 	__property ShowHint ;
 	__property Forms::TScrollBarInc SmallChange = {read=FSmallChange, write=FSmallChange, default=1};
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnContextPopup ;
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property OnDragDrop ;
@@ -1330,8 +1452,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TScrollBar(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TScrollBar(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TScrollBar(void) { }
@@ -1360,7 +1481,6 @@ private:
 	MESSAGE void __fastcall CMTextChanged(Messages::TMessage &Message);
 	void __fastcall AdjustBounds(void);
 	void __fastcall SetAlignment(Classes::TAlignment Value);
-	HIDESBASE void __fastcall SetAutoSize(bool Value);
 	void __fastcall SetBorderStyle(TStaticBorderStyle Value);
 	void __fastcall SetFocusControl(Controls::TWinControl* Value);
 	void __fastcall SetShowAccelChar(bool Value);
@@ -1368,8 +1488,8 @@ private:
 protected:
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
+	virtual void __fastcall SetAutoSize(bool Value);
 	__property Classes::TAlignment Alignment = {read=FAlignment, write=SetAlignment, default=0};
 	__property bool AutoSize = {read=FAutoSize, write=SetAutoSize, default=1};
 	__property TStaticBorderStyle BorderStyle = {read=FBorderStyle, write=SetBorderStyle, default=0};
@@ -1380,8 +1500,7 @@ public:
 	__fastcall virtual TCustomStaticText(Classes::TComponent* AOwner);
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomStaticText(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomStaticText(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TCustomStaticText(void) { }
@@ -1396,31 +1515,35 @@ class PASCALIMPLEMENTATION TStaticText : public TCustomStaticText
 	typedef TCustomStaticText inherited;
 	
 __published:
-	__property Align ;
-	__property Alignment ;
-	__property Anchors ;
-	__property AutoSize ;
+	__property Align  = {default=0};
+	__property Alignment  = {default=0};
+	__property Anchors  = {default=3};
+	__property AutoSize  = {default=1};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelKind  = {default=0};
+	__property BevelOuter  = {index=1, default=1};
 	__property BiDiMode ;
-	__property BorderStyle ;
+	__property BorderStyle  = {default=0};
 	__property Caption ;
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property FocusControl ;
 	__property Font ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property ShowAccelChar ;
+	__property ShowAccelChar  = {default=1};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property OnDblClick ;
@@ -1435,14 +1558,12 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TCustomStaticText.Create */ inline __fastcall virtual TStaticText(Classes::TComponent* AOwner) : 
-		TCustomStaticText(AOwner) { }
+	/* TCustomStaticText.Create */ inline __fastcall virtual TStaticText(Classes::TComponent* AOwner) : TCustomStaticText(AOwner) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TStaticText(HWND ParentWindow) : TCustomStaticText(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TStaticText(HWND ParentWindow) : TCustomStaticText(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TStaticText(void) { }
@@ -1454,9 +1575,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Stdctrls */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Stdctrls;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

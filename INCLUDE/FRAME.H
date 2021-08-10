@@ -1,14 +1,19 @@
-
 //=============================================================================
-//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1992.
+//  Microsoft (R) Network Monitor (tm). 
+//  Copyright (C) 1991-1999. All rights reserved.
 //
-//  MODULE: frame.h
+//  MODULE: nmframe.h
 //=============================================================================
 
-#if !defined(_FRAME_)
+#if !defined(_NMFRAME_)
 #pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
-#define _FRAME_
+#define _NMFRAME_
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #pragma pack(1)
 
@@ -17,6 +22,7 @@
 //=============================================================================
 //  802.3 and ETHERNET MAC structure.
 //=============================================================================
+#pragma warning(disable:4200)
 
 typedef struct _ETHERNET
 {
@@ -129,7 +135,7 @@ typedef struct _LLC
 typedef LLC *LPLLC;
 typedef LLC UNALIGNED *ULPLLC;
 
-#define LLC_SIZE    sizeof(LLC);
+#define LLC_SIZE    sizeof(LLC)
 
 //=============================================================================
 //  Helper macros.
@@ -140,6 +146,13 @@ typedef LLC UNALIGNED *ULPLLC;
 #define GetRoutingInfoLength(f) (IsRoutingInfoPresent(f) \
                                  ? (((ULPTOKENRING) (f))->RoutingInfo[0] & TOKENRING_RC_LENGTHMASK) : 0)
 
+#pragma warning(default:4200)
 #pragma pack()
+
+#ifdef __cplusplus
+}
+#endif
+
+
 #pragma option pop /*P_O_Pop*/
 #endif

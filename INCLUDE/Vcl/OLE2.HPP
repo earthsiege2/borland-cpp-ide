@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OLE2.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Ole2.pas' rev: 6.00
 
-#ifndef OLE2HPP
-#define OLE2HPP
+#ifndef Ole2HPP
+#define Ole2HPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -37,6 +37,7 @@ typedef System::Comp Largeint;
 struct TGUID;
 typedef GUID *PGUID;
 
+#pragma pack(push, 4)
 struct TGUID
 {
 	unsigned D1;
@@ -44,6 +45,7 @@ struct TGUID
 	Word D3;
 	Byte D4[8];
 } ;
+#pragma pack(pop)
 
 typedef GUID *PIID;
 
@@ -72,7 +74,7 @@ typedef wchar_t * *TSNB;
 typedef tagDVTARGETDEVICE *PDVTargetDevice;
 
 #pragma pack(push, 1)
-struct OLE2__42
+struct Ole2__42
 {
 	
 } ;
@@ -95,7 +97,7 @@ typedef tagSTATDATA  TStatData;
 typedef tagRemSTGMEDIUM *PRemStgMedium;
 
 #pragma pack(push, 1)
-struct OLE2__82
+struct Ole2__82
 {
 	
 } ;
@@ -293,12 +295,10 @@ extern PACKAGE int __fastcall ResultFacility(HRESULT Res);
 extern PACKAGE int __fastcall ResultSeverity(HRESULT Res);
 
 }	/* namespace Ole2 */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ole2;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// OLE2
+#endif	// Ole2

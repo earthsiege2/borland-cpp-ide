@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Thu Aug 12 14:37:19 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for faxcom.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -37,6 +35,10 @@
 
 #ifndef __faxcom_h__
 #define __faxcom_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -228,8 +230,8 @@ typedef struct FaxJob FaxJob;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 #ifndef __IFaxTiff_INTERFACE_DEFINED__
 #define __IFaxTiff_INTERFACE_DEFINED__
@@ -247,41 +249,41 @@ EXTERN_C const IID IID_IFaxTiff;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReceiveTime( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Image( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Image( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Routing( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CallerId( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Csid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Tsid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientNumber( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RawReceiveTime( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ VARIANT *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TiffTagString( 
-            /* [in] */ WORD tagID,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [in] */ int tagID,
+            /* [retval][out] */ BSTR *pVal) = 0;
         
     };
     
@@ -291,101 +293,101 @@ EXTERN_C const IID IID_IFaxTiff;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFaxTiff __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFaxTiff * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFaxTiff __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFaxTiff * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFaxTiff __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFaxTiff * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IFaxTiff __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IFaxTiff * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IFaxTiff __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IFaxTiff * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IFaxTiff __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IFaxTiff * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IFaxTiff __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IFaxTiff * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ReceiveTime )( 
-            IFaxTiff __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReceiveTime )( 
+            IFaxTiff * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Image )( 
-            IFaxTiff __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Image )( 
+            IFaxTiff * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Image )( 
-            IFaxTiff __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Image )( 
+            IFaxTiff * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientName )( 
-            IFaxTiff __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientName )( 
+            IFaxTiff * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderName )( 
-            IFaxTiff __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderName )( 
+            IFaxTiff * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Routing )( 
-            IFaxTiff __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Routing )( 
+            IFaxTiff * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CallerId )( 
-            IFaxTiff __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CallerId )( 
+            IFaxTiff * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Csid )( 
-            IFaxTiff __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Csid )( 
+            IFaxTiff * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Tsid )( 
-            IFaxTiff __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
+            IFaxTiff * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientNumber )( 
-            IFaxTiff __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientNumber )( 
+            IFaxTiff * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RawReceiveTime )( 
-            IFaxTiff __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RawReceiveTime )( 
+            IFaxTiff * This,
+            /* [retval][out] */ VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TiffTagString )( 
-            IFaxTiff __RPC_FAR * This,
-            /* [in] */ WORD tagID,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TiffTagString )( 
+            IFaxTiff * This,
+            /* [in] */ int tagID,
+            /* [retval][out] */ BSTR *pVal);
         
         END_INTERFACE
     } IFaxTiffVtbl;
 
     interface IFaxTiff
     {
-        CONST_VTBL struct IFaxTiffVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFaxTiffVtbl *lpVtbl;
     };
 
     
@@ -460,8 +462,8 @@ EXTERN_C const IID IID_IFaxTiff;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_ReceiveTime_Proxy( 
-    IFaxTiff __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxTiff * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_ReceiveTime_Stub(
@@ -472,8 +474,8 @@ void __RPC_STUB IFaxTiff_get_ReceiveTime_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_Image_Proxy( 
-    IFaxTiff __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxTiff * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_Image_Stub(
@@ -484,7 +486,7 @@ void __RPC_STUB IFaxTiff_get_Image_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxTiff_put_Image_Proxy( 
-    IFaxTiff __RPC_FAR * This,
+    IFaxTiff * This,
     /* [in] */ BSTR newVal);
 
 
@@ -496,8 +498,8 @@ void __RPC_STUB IFaxTiff_put_Image_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_RecipientName_Proxy( 
-    IFaxTiff __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxTiff * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_RecipientName_Stub(
@@ -508,8 +510,8 @@ void __RPC_STUB IFaxTiff_get_RecipientName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_SenderName_Proxy( 
-    IFaxTiff __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxTiff * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_SenderName_Stub(
@@ -520,8 +522,8 @@ void __RPC_STUB IFaxTiff_get_SenderName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_Routing_Proxy( 
-    IFaxTiff __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxTiff * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_Routing_Stub(
@@ -532,8 +534,8 @@ void __RPC_STUB IFaxTiff_get_Routing_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_CallerId_Proxy( 
-    IFaxTiff __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxTiff * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_CallerId_Stub(
@@ -544,8 +546,8 @@ void __RPC_STUB IFaxTiff_get_CallerId_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_Csid_Proxy( 
-    IFaxTiff __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxTiff * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_Csid_Stub(
@@ -556,8 +558,8 @@ void __RPC_STUB IFaxTiff_get_Csid_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_Tsid_Proxy( 
-    IFaxTiff __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxTiff * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_Tsid_Stub(
@@ -568,8 +570,8 @@ void __RPC_STUB IFaxTiff_get_Tsid_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_RecipientNumber_Proxy( 
-    IFaxTiff __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxTiff * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_RecipientNumber_Stub(
@@ -580,8 +582,8 @@ void __RPC_STUB IFaxTiff_get_RecipientNumber_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_RawReceiveTime_Proxy( 
-    IFaxTiff __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVal);
+    IFaxTiff * This,
+    /* [retval][out] */ VARIANT *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_RawReceiveTime_Stub(
@@ -592,9 +594,9 @@ void __RPC_STUB IFaxTiff_get_RawReceiveTime_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxTiff_get_TiffTagString_Proxy( 
-    IFaxTiff __RPC_FAR * This,
-    /* [in] */ WORD tagID,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxTiff * This,
+    /* [in] */ int tagID,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxTiff_get_TiffTagString_Stub(
@@ -629,95 +631,95 @@ EXTERN_C const IID IID_IFaxServer;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetPorts( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateDocument( 
             BSTR FileName,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetJobs( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Retries( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Retries( 
             /* [in] */ long newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RetryDelay( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RetryDelay( 
             /* [in] */ long newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DirtyDays( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DirtyDays( 
             /* [in] */ long newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Branding( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Branding( 
             /* [in] */ BOOL newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UseDeviceTsid( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_UseDeviceTsid( 
             /* [in] */ BOOL newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ServerCoverpage( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ServerCoverpage( 
             /* [in] */ BOOL newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PauseServerQueue( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PauseServerQueue( 
             /* [in] */ BOOL newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ArchiveOutboundFaxes( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ArchiveOutboundFaxes( 
             /* [in] */ BOOL newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ArchiveDirectory( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ArchiveDirectory( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ServerMapiProfile( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ServerMapiProfile( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscountRateStartHour( 
-            /* [retval][out] */ short __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ short *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DiscountRateStartHour( 
             /* [in] */ short newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscountRateStartMinute( 
-            /* [retval][out] */ short __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ short *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DiscountRateStartMinute( 
             /* [in] */ short newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscountRateEndHour( 
-            /* [retval][out] */ short __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ short *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DiscountRateEndHour( 
             /* [in] */ short newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscountRateEndMinute( 
-            /* [retval][out] */ short __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ short *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DiscountRateEndMinute( 
             /* [in] */ short newVal) = 0;
@@ -730,176 +732,176 @@ EXTERN_C const IID IID_IFaxServer;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFaxServer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFaxServer * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFaxServer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFaxServer * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFaxServer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFaxServer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IFaxServer __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IFaxServer * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IFaxServer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IFaxServer * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IFaxServer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IFaxServer * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IFaxServer __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IFaxServer * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Connect )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Connect )( 
+            IFaxServer * This,
             BSTR ServerName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Disconnect )( 
-            IFaxServer __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
+            IFaxServer * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPorts )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetPorts )( 
+            IFaxServer * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateDocument )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateDocument )( 
+            IFaxServer * This,
             BSTR FileName,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetJobs )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetJobs )( 
+            IFaxServer * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Retries )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Retries )( 
+            IFaxServer * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Retries )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Retries )( 
+            IFaxServer * This,
             /* [in] */ long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RetryDelay )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RetryDelay )( 
+            IFaxServer * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RetryDelay )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RetryDelay )( 
+            IFaxServer * This,
             /* [in] */ long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DirtyDays )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DirtyDays )( 
+            IFaxServer * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DirtyDays )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DirtyDays )( 
+            IFaxServer * This,
             /* [in] */ long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Branding )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Branding )( 
+            IFaxServer * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Branding )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Branding )( 
+            IFaxServer * This,
             /* [in] */ BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UseDeviceTsid )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UseDeviceTsid )( 
+            IFaxServer * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_UseDeviceTsid )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UseDeviceTsid )( 
+            IFaxServer * This,
             /* [in] */ BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServerCoverpage )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServerCoverpage )( 
+            IFaxServer * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServerCoverpage )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServerCoverpage )( 
+            IFaxServer * This,
             /* [in] */ BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PauseServerQueue )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PauseServerQueue )( 
+            IFaxServer * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PauseServerQueue )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PauseServerQueue )( 
+            IFaxServer * This,
             /* [in] */ BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ArchiveOutboundFaxes )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ArchiveOutboundFaxes )( 
+            IFaxServer * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ArchiveOutboundFaxes )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ArchiveOutboundFaxes )( 
+            IFaxServer * This,
             /* [in] */ BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ArchiveDirectory )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ArchiveDirectory )( 
+            IFaxServer * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ArchiveDirectory )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ArchiveDirectory )( 
+            IFaxServer * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServerMapiProfile )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServerMapiProfile )( 
+            IFaxServer * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServerMapiProfile )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServerMapiProfile )( 
+            IFaxServer * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DiscountRateStartHour )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ short __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscountRateStartHour )( 
+            IFaxServer * This,
+            /* [retval][out] */ short *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DiscountRateStartHour )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DiscountRateStartHour )( 
+            IFaxServer * This,
             /* [in] */ short newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DiscountRateStartMinute )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ short __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscountRateStartMinute )( 
+            IFaxServer * This,
+            /* [retval][out] */ short *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DiscountRateStartMinute )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DiscountRateStartMinute )( 
+            IFaxServer * This,
             /* [in] */ short newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DiscountRateEndHour )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ short __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscountRateEndHour )( 
+            IFaxServer * This,
+            /* [retval][out] */ short *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DiscountRateEndHour )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DiscountRateEndHour )( 
+            IFaxServer * This,
             /* [in] */ short newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DiscountRateEndMinute )( 
-            IFaxServer __RPC_FAR * This,
-            /* [retval][out] */ short __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscountRateEndMinute )( 
+            IFaxServer * This,
+            /* [retval][out] */ short *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DiscountRateEndMinute )( 
-            IFaxServer __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DiscountRateEndMinute )( 
+            IFaxServer * This,
             /* [in] */ short newVal);
         
         END_INTERFACE
@@ -907,7 +909,7 @@ EXTERN_C const IID IID_IFaxServer;
 
     interface IFaxServer
     {
-        CONST_VTBL struct IFaxServerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFaxServerVtbl *lpVtbl;
     };
 
     
@@ -1045,7 +1047,7 @@ EXTERN_C const IID IID_IFaxServer;
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxServer_Connect_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     BSTR ServerName);
 
 
@@ -1057,7 +1059,7 @@ void __RPC_STUB IFaxServer_Connect_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxServer_Disconnect_Proxy( 
-    IFaxServer __RPC_FAR * This);
+    IFaxServer * This);
 
 
 void __RPC_STUB IFaxServer_Disconnect_Stub(
@@ -1068,8 +1070,8 @@ void __RPC_STUB IFaxServer_Disconnect_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxServer_GetPorts_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IFaxServer * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IFaxServer_GetPorts_Stub(
@@ -1080,9 +1082,9 @@ void __RPC_STUB IFaxServer_GetPorts_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxServer_CreateDocument_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     BSTR FileName,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IFaxServer_CreateDocument_Stub(
@@ -1093,8 +1095,8 @@ void __RPC_STUB IFaxServer_CreateDocument_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxServer_GetJobs_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IFaxServer * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IFaxServer_GetJobs_Stub(
@@ -1105,8 +1107,8 @@ void __RPC_STUB IFaxServer_GetJobs_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_Retries_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxServer_get_Retries_Stub(
@@ -1117,7 +1119,7 @@ void __RPC_STUB IFaxServer_get_Retries_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_Retries_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ long newVal);
 
 
@@ -1129,8 +1131,8 @@ void __RPC_STUB IFaxServer_put_Retries_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_RetryDelay_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxServer_get_RetryDelay_Stub(
@@ -1141,7 +1143,7 @@ void __RPC_STUB IFaxServer_get_RetryDelay_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_RetryDelay_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ long newVal);
 
 
@@ -1153,8 +1155,8 @@ void __RPC_STUB IFaxServer_put_RetryDelay_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_DirtyDays_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxServer_get_DirtyDays_Stub(
@@ -1165,7 +1167,7 @@ void __RPC_STUB IFaxServer_get_DirtyDays_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_DirtyDays_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ long newVal);
 
 
@@ -1177,8 +1179,8 @@ void __RPC_STUB IFaxServer_put_DirtyDays_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_Branding_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxServer_get_Branding_Stub(
@@ -1189,7 +1191,7 @@ void __RPC_STUB IFaxServer_get_Branding_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_Branding_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ BOOL newVal);
 
 
@@ -1201,8 +1203,8 @@ void __RPC_STUB IFaxServer_put_Branding_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_UseDeviceTsid_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxServer_get_UseDeviceTsid_Stub(
@@ -1213,7 +1215,7 @@ void __RPC_STUB IFaxServer_get_UseDeviceTsid_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_UseDeviceTsid_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ BOOL newVal);
 
 
@@ -1225,8 +1227,8 @@ void __RPC_STUB IFaxServer_put_UseDeviceTsid_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_ServerCoverpage_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxServer_get_ServerCoverpage_Stub(
@@ -1237,7 +1239,7 @@ void __RPC_STUB IFaxServer_get_ServerCoverpage_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_ServerCoverpage_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ BOOL newVal);
 
 
@@ -1249,8 +1251,8 @@ void __RPC_STUB IFaxServer_put_ServerCoverpage_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_PauseServerQueue_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxServer_get_PauseServerQueue_Stub(
@@ -1261,7 +1263,7 @@ void __RPC_STUB IFaxServer_get_PauseServerQueue_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_PauseServerQueue_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ BOOL newVal);
 
 
@@ -1273,8 +1275,8 @@ void __RPC_STUB IFaxServer_put_PauseServerQueue_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_ArchiveOutboundFaxes_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxServer_get_ArchiveOutboundFaxes_Stub(
@@ -1285,7 +1287,7 @@ void __RPC_STUB IFaxServer_get_ArchiveOutboundFaxes_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_ArchiveOutboundFaxes_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ BOOL newVal);
 
 
@@ -1297,8 +1299,8 @@ void __RPC_STUB IFaxServer_put_ArchiveOutboundFaxes_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_ArchiveDirectory_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxServer_get_ArchiveDirectory_Stub(
@@ -1309,7 +1311,7 @@ void __RPC_STUB IFaxServer_get_ArchiveDirectory_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_ArchiveDirectory_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ BSTR newVal);
 
 
@@ -1321,8 +1323,8 @@ void __RPC_STUB IFaxServer_put_ArchiveDirectory_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_ServerMapiProfile_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxServer_get_ServerMapiProfile_Stub(
@@ -1333,7 +1335,7 @@ void __RPC_STUB IFaxServer_get_ServerMapiProfile_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_ServerMapiProfile_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ BSTR newVal);
 
 
@@ -1345,8 +1347,8 @@ void __RPC_STUB IFaxServer_put_ServerMapiProfile_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_DiscountRateStartHour_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ short __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ short *pVal);
 
 
 void __RPC_STUB IFaxServer_get_DiscountRateStartHour_Stub(
@@ -1357,7 +1359,7 @@ void __RPC_STUB IFaxServer_get_DiscountRateStartHour_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_DiscountRateStartHour_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ short newVal);
 
 
@@ -1369,8 +1371,8 @@ void __RPC_STUB IFaxServer_put_DiscountRateStartHour_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_DiscountRateStartMinute_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ short __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ short *pVal);
 
 
 void __RPC_STUB IFaxServer_get_DiscountRateStartMinute_Stub(
@@ -1381,7 +1383,7 @@ void __RPC_STUB IFaxServer_get_DiscountRateStartMinute_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_DiscountRateStartMinute_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ short newVal);
 
 
@@ -1393,8 +1395,8 @@ void __RPC_STUB IFaxServer_put_DiscountRateStartMinute_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_DiscountRateEndHour_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ short __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ short *pVal);
 
 
 void __RPC_STUB IFaxServer_get_DiscountRateEndHour_Stub(
@@ -1405,7 +1407,7 @@ void __RPC_STUB IFaxServer_get_DiscountRateEndHour_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_DiscountRateEndHour_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ short newVal);
 
 
@@ -1417,8 +1419,8 @@ void __RPC_STUB IFaxServer_put_DiscountRateEndHour_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxServer_get_DiscountRateEndMinute_Proxy( 
-    IFaxServer __RPC_FAR * This,
-    /* [retval][out] */ short __RPC_FAR *pVal);
+    IFaxServer * This,
+    /* [retval][out] */ short *pVal);
 
 
 void __RPC_STUB IFaxServer_get_DiscountRateEndMinute_Stub(
@@ -1429,7 +1431,7 @@ void __RPC_STUB IFaxServer_get_DiscountRateEndMinute_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxServer_put_DiscountRateEndMinute_Proxy( 
-    IFaxServer __RPC_FAR * This,
+    IFaxServer * This,
     /* [in] */ short newVal);
 
 
@@ -1460,55 +1462,55 @@ EXTERN_C const IID IID_IFaxPort;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceId( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Rings( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Rings( 
             /* [in] */ long newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Csid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Csid( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Tsid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Tsid( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Send( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Send( 
             /* [in] */ BOOL newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Receive( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Receive( 
             /* [in] */ BOOL newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Priority( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Priority( 
             /* [in] */ long newVal) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetRoutingMethods( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CanModify( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
     };
     
@@ -1518,120 +1520,120 @@ EXTERN_C const IID IID_IFaxPort;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFaxPort __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFaxPort * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFaxPort __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFaxPort * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFaxPort __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFaxPort * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IFaxPort __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IFaxPort * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IFaxPort __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IFaxPort * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IFaxPort __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IFaxPort * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IFaxPort __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IFaxPort * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IFaxPort __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IFaxPort * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DeviceId )( 
-            IFaxPort __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceId )( 
+            IFaxPort * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Rings )( 
-            IFaxPort __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rings )( 
+            IFaxPort * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Rings )( 
-            IFaxPort __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Rings )( 
+            IFaxPort * This,
             /* [in] */ long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Csid )( 
-            IFaxPort __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Csid )( 
+            IFaxPort * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Csid )( 
-            IFaxPort __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Csid )( 
+            IFaxPort * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Tsid )( 
-            IFaxPort __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
+            IFaxPort * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Tsid )( 
-            IFaxPort __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Tsid )( 
+            IFaxPort * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Send )( 
-            IFaxPort __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Send )( 
+            IFaxPort * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Send )( 
-            IFaxPort __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Send )( 
+            IFaxPort * This,
             /* [in] */ BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Receive )( 
-            IFaxPort __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Receive )( 
+            IFaxPort * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Receive )( 
-            IFaxPort __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Receive )( 
+            IFaxPort * This,
             /* [in] */ BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Priority )( 
-            IFaxPort __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+            IFaxPort * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Priority )( 
-            IFaxPort __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+            IFaxPort * This,
             /* [in] */ long newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRoutingMethods )( 
-            IFaxPort __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetRoutingMethods )( 
+            IFaxPort * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CanModify )( 
-            IFaxPort __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CanModify )( 
+            IFaxPort * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetStatus )( 
-            IFaxPort __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
+            IFaxPort * This,
+            /* [retval][out] */ VARIANT *retval);
         
         END_INTERFACE
     } IFaxPortVtbl;
 
     interface IFaxPort
     {
-        CONST_VTBL struct IFaxPortVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFaxPortVtbl *lpVtbl;
     };
 
     
@@ -1721,8 +1723,8 @@ EXTERN_C const IID IID_IFaxPort;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Name_Proxy( 
-    IFaxPort __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxPort * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Name_Stub(
@@ -1733,8 +1735,8 @@ void __RPC_STUB IFaxPort_get_Name_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_DeviceId_Proxy( 
-    IFaxPort __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxPort * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxPort_get_DeviceId_Stub(
@@ -1745,8 +1747,8 @@ void __RPC_STUB IFaxPort_get_DeviceId_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Rings_Proxy( 
-    IFaxPort __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxPort * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Rings_Stub(
@@ -1757,7 +1759,7 @@ void __RPC_STUB IFaxPort_get_Rings_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxPort_put_Rings_Proxy( 
-    IFaxPort __RPC_FAR * This,
+    IFaxPort * This,
     /* [in] */ long newVal);
 
 
@@ -1769,8 +1771,8 @@ void __RPC_STUB IFaxPort_put_Rings_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Csid_Proxy( 
-    IFaxPort __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxPort * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Csid_Stub(
@@ -1781,7 +1783,7 @@ void __RPC_STUB IFaxPort_get_Csid_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxPort_put_Csid_Proxy( 
-    IFaxPort __RPC_FAR * This,
+    IFaxPort * This,
     /* [in] */ BSTR newVal);
 
 
@@ -1793,8 +1795,8 @@ void __RPC_STUB IFaxPort_put_Csid_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Tsid_Proxy( 
-    IFaxPort __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxPort * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Tsid_Stub(
@@ -1805,7 +1807,7 @@ void __RPC_STUB IFaxPort_get_Tsid_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxPort_put_Tsid_Proxy( 
-    IFaxPort __RPC_FAR * This,
+    IFaxPort * This,
     /* [in] */ BSTR newVal);
 
 
@@ -1817,8 +1819,8 @@ void __RPC_STUB IFaxPort_put_Tsid_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Send_Proxy( 
-    IFaxPort __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxPort * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Send_Stub(
@@ -1829,7 +1831,7 @@ void __RPC_STUB IFaxPort_get_Send_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxPort_put_Send_Proxy( 
-    IFaxPort __RPC_FAR * This,
+    IFaxPort * This,
     /* [in] */ BOOL newVal);
 
 
@@ -1841,8 +1843,8 @@ void __RPC_STUB IFaxPort_put_Send_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Receive_Proxy( 
-    IFaxPort __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxPort * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Receive_Stub(
@@ -1853,7 +1855,7 @@ void __RPC_STUB IFaxPort_get_Receive_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxPort_put_Receive_Proxy( 
-    IFaxPort __RPC_FAR * This,
+    IFaxPort * This,
     /* [in] */ BOOL newVal);
 
 
@@ -1865,8 +1867,8 @@ void __RPC_STUB IFaxPort_put_Receive_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_Priority_Proxy( 
-    IFaxPort __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxPort * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxPort_get_Priority_Stub(
@@ -1877,7 +1879,7 @@ void __RPC_STUB IFaxPort_get_Priority_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxPort_put_Priority_Proxy( 
-    IFaxPort __RPC_FAR * This,
+    IFaxPort * This,
     /* [in] */ long newVal);
 
 
@@ -1889,8 +1891,8 @@ void __RPC_STUB IFaxPort_put_Priority_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxPort_GetRoutingMethods_Proxy( 
-    IFaxPort __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IFaxPort * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IFaxPort_GetRoutingMethods_Stub(
@@ -1901,8 +1903,8 @@ void __RPC_STUB IFaxPort_GetRoutingMethods_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPort_get_CanModify_Proxy( 
-    IFaxPort __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxPort * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxPort_get_CanModify_Stub(
@@ -1913,8 +1915,8 @@ void __RPC_STUB IFaxPort_get_CanModify_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxPort_GetStatus_Proxy( 
-    IFaxPort __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IFaxPort * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IFaxPort_GetStatus_Stub(
@@ -1944,11 +1946,11 @@ EXTERN_C const IID IID_IFaxPorts;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             long Index,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ VARIANT *pVal) = 0;
         
     };
     
@@ -1958,61 +1960,61 @@ EXTERN_C const IID IID_IFaxPorts;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFaxPorts __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFaxPorts * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFaxPorts __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFaxPorts * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFaxPorts __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFaxPorts * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IFaxPorts __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IFaxPorts * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IFaxPorts __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IFaxPorts * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IFaxPorts __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IFaxPorts * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IFaxPorts __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IFaxPorts * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            IFaxPorts __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IFaxPorts * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            IFaxPorts __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            IFaxPorts * This,
             long Index,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVal);
+            /* [retval][out] */ VARIANT *pVal);
         
         END_INTERFACE
     } IFaxPortsVtbl;
 
     interface IFaxPorts
     {
-        CONST_VTBL struct IFaxPortsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFaxPortsVtbl *lpVtbl;
     };
 
     
@@ -2057,8 +2059,8 @@ EXTERN_C const IID IID_IFaxPorts;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPorts_get_Count_Proxy( 
-    IFaxPorts __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxPorts * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxPorts_get_Count_Stub(
@@ -2069,9 +2071,9 @@ void __RPC_STUB IFaxPorts_get_Count_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxPorts_get_Item_Proxy( 
-    IFaxPorts __RPC_FAR * This,
+    IFaxPorts * This,
     long Index,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVal);
+    /* [retval][out] */ VARIANT *pVal);
 
 
 void __RPC_STUB IFaxPorts_get_Item_Stub(
@@ -2101,34 +2103,34 @@ EXTERN_C const IID IID_IFaxRoutingMethod;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceId( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Enable( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Enable( 
             /* [in] */ BOOL newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Guid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FunctionName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ImageName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FriendlyName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ExtensionName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RoutingData( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
     };
     
@@ -2138,92 +2140,92 @@ EXTERN_C const IID IID_IFaxRoutingMethod;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFaxRoutingMethod __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFaxRoutingMethod * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFaxRoutingMethod __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFaxRoutingMethod * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFaxRoutingMethod __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFaxRoutingMethod * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IFaxRoutingMethod __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IFaxRoutingMethod * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IFaxRoutingMethod __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IFaxRoutingMethod * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IFaxRoutingMethod __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IFaxRoutingMethod * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IFaxRoutingMethod __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IFaxRoutingMethod * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DeviceId )( 
-            IFaxRoutingMethod __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceId )( 
+            IFaxRoutingMethod * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Enable )( 
-            IFaxRoutingMethod __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Enable )( 
+            IFaxRoutingMethod * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Enable )( 
-            IFaxRoutingMethod __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Enable )( 
+            IFaxRoutingMethod * This,
             /* [in] */ BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DeviceName )( 
-            IFaxRoutingMethod __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceName )( 
+            IFaxRoutingMethod * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Guid )( 
-            IFaxRoutingMethod __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Guid )( 
+            IFaxRoutingMethod * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FunctionName )( 
-            IFaxRoutingMethod __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FunctionName )( 
+            IFaxRoutingMethod * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ImageName )( 
-            IFaxRoutingMethod __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ImageName )( 
+            IFaxRoutingMethod * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FriendlyName )( 
-            IFaxRoutingMethod __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FriendlyName )( 
+            IFaxRoutingMethod * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ExtensionName )( 
-            IFaxRoutingMethod __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ExtensionName )( 
+            IFaxRoutingMethod * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RoutingData )( 
-            IFaxRoutingMethod __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RoutingData )( 
+            IFaxRoutingMethod * This,
+            /* [retval][out] */ BSTR *pVal);
         
         END_INTERFACE
     } IFaxRoutingMethodVtbl;
 
     interface IFaxRoutingMethod
     {
-        CONST_VTBL struct IFaxRoutingMethodVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFaxRoutingMethodVtbl *lpVtbl;
     };
 
     
@@ -2292,8 +2294,8 @@ EXTERN_C const IID IID_IFaxRoutingMethod;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_DeviceId_Proxy( 
-    IFaxRoutingMethod __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxRoutingMethod * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_DeviceId_Stub(
@@ -2304,8 +2306,8 @@ void __RPC_STUB IFaxRoutingMethod_get_DeviceId_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_Enable_Proxy( 
-    IFaxRoutingMethod __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxRoutingMethod * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_Enable_Stub(
@@ -2316,7 +2318,7 @@ void __RPC_STUB IFaxRoutingMethod_get_Enable_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_put_Enable_Proxy( 
-    IFaxRoutingMethod __RPC_FAR * This,
+    IFaxRoutingMethod * This,
     /* [in] */ BOOL newVal);
 
 
@@ -2328,8 +2330,8 @@ void __RPC_STUB IFaxRoutingMethod_put_Enable_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_DeviceName_Proxy( 
-    IFaxRoutingMethod __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxRoutingMethod * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_DeviceName_Stub(
@@ -2340,8 +2342,8 @@ void __RPC_STUB IFaxRoutingMethod_get_DeviceName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_Guid_Proxy( 
-    IFaxRoutingMethod __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxRoutingMethod * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_Guid_Stub(
@@ -2352,8 +2354,8 @@ void __RPC_STUB IFaxRoutingMethod_get_Guid_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_FunctionName_Proxy( 
-    IFaxRoutingMethod __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxRoutingMethod * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_FunctionName_Stub(
@@ -2364,8 +2366,8 @@ void __RPC_STUB IFaxRoutingMethod_get_FunctionName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_ImageName_Proxy( 
-    IFaxRoutingMethod __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxRoutingMethod * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_ImageName_Stub(
@@ -2376,8 +2378,8 @@ void __RPC_STUB IFaxRoutingMethod_get_ImageName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_FriendlyName_Proxy( 
-    IFaxRoutingMethod __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxRoutingMethod * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_FriendlyName_Stub(
@@ -2388,8 +2390,8 @@ void __RPC_STUB IFaxRoutingMethod_get_FriendlyName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_ExtensionName_Proxy( 
-    IFaxRoutingMethod __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxRoutingMethod * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_ExtensionName_Stub(
@@ -2400,8 +2402,8 @@ void __RPC_STUB IFaxRoutingMethod_get_ExtensionName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethod_get_RoutingData_Proxy( 
-    IFaxRoutingMethod __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxRoutingMethod * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethod_get_RoutingData_Stub(
@@ -2431,11 +2433,11 @@ EXTERN_C const IID IID_IFaxRoutingMethods;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ long Index,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ VARIANT *pVal) = 0;
         
     };
     
@@ -2445,61 +2447,61 @@ EXTERN_C const IID IID_IFaxRoutingMethods;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFaxRoutingMethods __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFaxRoutingMethods * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFaxRoutingMethods __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFaxRoutingMethods * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFaxRoutingMethods __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFaxRoutingMethods * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IFaxRoutingMethods __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IFaxRoutingMethods * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IFaxRoutingMethods __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IFaxRoutingMethods * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IFaxRoutingMethods __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IFaxRoutingMethods * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IFaxRoutingMethods __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IFaxRoutingMethods * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            IFaxRoutingMethods __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IFaxRoutingMethods * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            IFaxRoutingMethods __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            IFaxRoutingMethods * This,
             /* [in] */ long Index,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVal);
+            /* [retval][out] */ VARIANT *pVal);
         
         END_INTERFACE
     } IFaxRoutingMethodsVtbl;
 
     interface IFaxRoutingMethods
     {
-        CONST_VTBL struct IFaxRoutingMethodsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFaxRoutingMethodsVtbl *lpVtbl;
     };
 
     
@@ -2544,8 +2546,8 @@ EXTERN_C const IID IID_IFaxRoutingMethods;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethods_get_Count_Proxy( 
-    IFaxRoutingMethods __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxRoutingMethods * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethods_get_Count_Stub(
@@ -2556,9 +2558,9 @@ void __RPC_STUB IFaxRoutingMethods_get_Count_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxRoutingMethods_get_Item_Proxy( 
-    IFaxRoutingMethods __RPC_FAR * This,
+    IFaxRoutingMethods * This,
     /* [in] */ long Index,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVal);
+    /* [retval][out] */ VARIANT *pVal);
 
 
 void __RPC_STUB IFaxRoutingMethods_get_Item_Stub(
@@ -2588,61 +2590,61 @@ EXTERN_C const IID IID_IFaxStatus;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CallerId( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Csid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentPage( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceId( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DocumentName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Send( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Receive( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Address( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RoutingString( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DocumentSize( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PageCount( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Tsid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StartTime( 
-            /* [retval][out] */ DATE __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ DATE *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubmittedTime( 
-            /* [retval][out] */ DATE __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ DATE *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ElapsedTime( 
-            /* [retval][out] */ DATE __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ DATE *pVal) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
@@ -2654,131 +2656,131 @@ EXTERN_C const IID IID_IFaxStatus;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFaxStatus __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFaxStatus * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFaxStatus __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFaxStatus * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFaxStatus __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFaxStatus * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IFaxStatus * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IFaxStatus __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IFaxStatus * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IFaxStatus __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IFaxStatus * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IFaxStatus __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IFaxStatus * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CallerId )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CallerId )( 
+            IFaxStatus * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Csid )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Csid )( 
+            IFaxStatus * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CurrentPage )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentPage )( 
+            IFaxStatus * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DeviceId )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceId )( 
+            IFaxStatus * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DeviceName )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceName )( 
+            IFaxStatus * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DocumentName )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocumentName )( 
+            IFaxStatus * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Send )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Send )( 
+            IFaxStatus * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Receive )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Receive )( 
+            IFaxStatus * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Address )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Address )( 
+            IFaxStatus * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RoutingString )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RoutingString )( 
+            IFaxStatus * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderName )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderName )( 
+            IFaxStatus * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientName )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientName )( 
+            IFaxStatus * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DocumentSize )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DocumentSize )( 
+            IFaxStatus * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IFaxStatus * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PageCount )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PageCount )( 
+            IFaxStatus * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Tsid )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
+            IFaxStatus * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StartTime )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
+            IFaxStatus * This,
+            /* [retval][out] */ DATE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SubmittedTime )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubmittedTime )( 
+            IFaxStatus * This,
+            /* [retval][out] */ DATE *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ElapsedTime )( 
-            IFaxStatus __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ElapsedTime )( 
+            IFaxStatus * This,
+            /* [retval][out] */ DATE *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            IFaxStatus __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            IFaxStatus * This);
         
         END_INTERFACE
     } IFaxStatusVtbl;
 
     interface IFaxStatus
     {
-        CONST_VTBL struct IFaxStatusVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFaxStatusVtbl *lpVtbl;
     };
 
     
@@ -2877,8 +2879,8 @@ EXTERN_C const IID IID_IFaxStatus;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_CallerId_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_CallerId_Stub(
@@ -2889,8 +2891,8 @@ void __RPC_STUB IFaxStatus_get_CallerId_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_Csid_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_Csid_Stub(
@@ -2901,8 +2903,8 @@ void __RPC_STUB IFaxStatus_get_Csid_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_CurrentPage_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_CurrentPage_Stub(
@@ -2913,8 +2915,8 @@ void __RPC_STUB IFaxStatus_get_CurrentPage_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_DeviceId_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_DeviceId_Stub(
@@ -2925,8 +2927,8 @@ void __RPC_STUB IFaxStatus_get_DeviceId_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_DeviceName_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_DeviceName_Stub(
@@ -2937,8 +2939,8 @@ void __RPC_STUB IFaxStatus_get_DeviceName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_DocumentName_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_DocumentName_Stub(
@@ -2949,8 +2951,8 @@ void __RPC_STUB IFaxStatus_get_DocumentName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_Send_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_Send_Stub(
@@ -2961,8 +2963,8 @@ void __RPC_STUB IFaxStatus_get_Send_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_Receive_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_Receive_Stub(
@@ -2973,8 +2975,8 @@ void __RPC_STUB IFaxStatus_get_Receive_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_Address_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_Address_Stub(
@@ -2985,8 +2987,8 @@ void __RPC_STUB IFaxStatus_get_Address_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_RoutingString_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_RoutingString_Stub(
@@ -2997,8 +2999,8 @@ void __RPC_STUB IFaxStatus_get_RoutingString_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_SenderName_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_SenderName_Stub(
@@ -3009,8 +3011,8 @@ void __RPC_STUB IFaxStatus_get_SenderName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_RecipientName_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_RecipientName_Stub(
@@ -3021,8 +3023,8 @@ void __RPC_STUB IFaxStatus_get_RecipientName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_DocumentSize_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_DocumentSize_Stub(
@@ -3033,8 +3035,8 @@ void __RPC_STUB IFaxStatus_get_DocumentSize_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_Description_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_Description_Stub(
@@ -3045,8 +3047,8 @@ void __RPC_STUB IFaxStatus_get_Description_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_PageCount_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_PageCount_Stub(
@@ -3057,8 +3059,8 @@ void __RPC_STUB IFaxStatus_get_PageCount_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_Tsid_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_Tsid_Stub(
@@ -3069,8 +3071,8 @@ void __RPC_STUB IFaxStatus_get_Tsid_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_StartTime_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ DATE *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_StartTime_Stub(
@@ -3081,8 +3083,8 @@ void __RPC_STUB IFaxStatus_get_StartTime_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_SubmittedTime_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ DATE *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_SubmittedTime_Stub(
@@ -3093,8 +3095,8 @@ void __RPC_STUB IFaxStatus_get_SubmittedTime_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxStatus_get_ElapsedTime_Proxy( 
-    IFaxStatus __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *pVal);
+    IFaxStatus * This,
+    /* [retval][out] */ DATE *pVal);
 
 
 void __RPC_STUB IFaxStatus_get_ElapsedTime_Stub(
@@ -3105,7 +3107,7 @@ void __RPC_STUB IFaxStatus_get_ElapsedTime_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxStatus_Refresh_Proxy( 
-    IFaxStatus __RPC_FAR * This);
+    IFaxStatus * This);
 
 
 void __RPC_STUB IFaxStatus_Refresh_Stub(
@@ -3135,211 +3137,211 @@ EXTERN_C const IID IID_IFaxDoc;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FileName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_FileName( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CoverpageName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CoverpageName( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SendCoverpage( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SendCoverpage( 
             /* [in] */ BOOL newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ServerCoverpage( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ServerCoverpage( 
             /* [in] */ BOOL newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscountSend( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DiscountSend( 
             /* [in] */ BOOL newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientName( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientCompany( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientCompany( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientAddress( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientAddress( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientCity( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientCity( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientState( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientState( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientZip( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientZip( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientCountry( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientCountry( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientTitle( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientTitle( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientDepartment( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientDepartment( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientOffice( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientOffice( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientHomePhone( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientHomePhone( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientOfficePhone( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_RecipientOfficePhone( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderName( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderCompany( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderCompany( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderAddress( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderAddress( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderTitle( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderTitle( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderDepartment( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderDepartment( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderOffice( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderOffice( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderHomePhone( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderHomePhone( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderOfficePhone( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderOfficePhone( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CoverpageNote( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CoverpageNote( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CoverpageSubject( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CoverpageSubject( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Tsid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Tsid( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BillingCode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_BillingCode( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EmailAddress( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EmailAddress( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DisplayName( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Send( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FaxNumber( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_FaxNumber( 
             /* [in] */ BSTR newVal) = 0;
         
         virtual /* [helpstring][id][propputref] */ HRESULT STDMETHODCALLTYPE putref_ConnectionObject( 
-            /* [in] */ IDispatch __RPC_FAR *newVal) = 0;
+            /* [in] */ IDispatch *newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CallHandle( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CallHandle( 
             /* [in] */ long newVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderFax( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SenderFax( 
             /* [in] */ BSTR newVal) = 0;
@@ -3352,324 +3354,324 @@ EXTERN_C const IID IID_IFaxDoc;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFaxDoc __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFaxDoc * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFaxDoc __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFaxDoc * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFaxDoc __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFaxDoc * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IFaxDoc * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IFaxDoc __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IFaxDoc * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IFaxDoc __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IFaxDoc * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IFaxDoc * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FileName )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileName )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FileName )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FileName )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CoverpageName )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CoverpageName )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CoverpageName )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CoverpageName )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SendCoverpage )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SendCoverpage )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SendCoverpage )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SendCoverpage )( 
+            IFaxDoc * This,
             /* [in] */ BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServerCoverpage )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServerCoverpage )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServerCoverpage )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServerCoverpage )( 
+            IFaxDoc * This,
             /* [in] */ BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DiscountSend )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscountSend )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DiscountSend )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DiscountSend )( 
+            IFaxDoc * This,
             /* [in] */ BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientName )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientName )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientName )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientName )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientCompany )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientCompany )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientCompany )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientCompany )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientAddress )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientAddress )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientAddress )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientAddress )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientCity )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientCity )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientCity )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientCity )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientState )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientState )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientState )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientState )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientZip )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientZip )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientZip )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientZip )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientCountry )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientCountry )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientCountry )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientCountry )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientTitle )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientTitle )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientTitle )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientTitle )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientDepartment )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientDepartment )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientDepartment )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientDepartment )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientOffice )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientOffice )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientOffice )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientOffice )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientHomePhone )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientHomePhone )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientHomePhone )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientHomePhone )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientOfficePhone )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientOfficePhone )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RecipientOfficePhone )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RecipientOfficePhone )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderName )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderName )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderName )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderName )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderCompany )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderCompany )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderCompany )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderCompany )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderAddress )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderAddress )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderAddress )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderAddress )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderTitle )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderTitle )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderTitle )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderTitle )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderDepartment )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderDepartment )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderDepartment )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderDepartment )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderOffice )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderOffice )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderOffice )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderOffice )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderHomePhone )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderHomePhone )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderHomePhone )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderHomePhone )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderOfficePhone )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderOfficePhone )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderOfficePhone )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderOfficePhone )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CoverpageNote )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CoverpageNote )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CoverpageNote )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CoverpageNote )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CoverpageSubject )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CoverpageSubject )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CoverpageSubject )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CoverpageSubject )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Tsid )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Tsid )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Tsid )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BillingCode )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BillingCode )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BillingCode )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BillingCode )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EmailAddress )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EmailAddress )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EmailAddress )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EmailAddress )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayName )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplayName )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DisplayName )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Send )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Send )( 
+            IFaxDoc * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FaxNumber )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FaxNumber )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FaxNumber )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
-        /* [helpstring][id][propputref] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_ConnectionObject )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *newVal);
+        /* [helpstring][id][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_ConnectionObject )( 
+            IFaxDoc * This,
+            /* [in] */ IDispatch *newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CallHandle )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CallHandle )( 
+            IFaxDoc * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CallHandle )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CallHandle )( 
+            IFaxDoc * This,
             /* [in] */ long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderFax )( 
-            IFaxDoc __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderFax )( 
+            IFaxDoc * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderFax )( 
-            IFaxDoc __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SenderFax )( 
+            IFaxDoc * This,
             /* [in] */ BSTR newVal);
         
         END_INTERFACE
@@ -3677,7 +3679,7 @@ EXTERN_C const IID IID_IFaxDoc;
 
     interface IFaxDoc
     {
-        CONST_VTBL struct IFaxDocVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFaxDocVtbl *lpVtbl;
     };
 
     
@@ -3926,8 +3928,8 @@ EXTERN_C const IID IID_IFaxDoc;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_FileName_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_FileName_Stub(
@@ -3938,7 +3940,7 @@ void __RPC_STUB IFaxDoc_get_FileName_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_FileName_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -3950,8 +3952,8 @@ void __RPC_STUB IFaxDoc_put_FileName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_CoverpageName_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_CoverpageName_Stub(
@@ -3962,7 +3964,7 @@ void __RPC_STUB IFaxDoc_get_CoverpageName_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_CoverpageName_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -3974,8 +3976,8 @@ void __RPC_STUB IFaxDoc_put_CoverpageName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SendCoverpage_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SendCoverpage_Stub(
@@ -3986,7 +3988,7 @@ void __RPC_STUB IFaxDoc_get_SendCoverpage_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SendCoverpage_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BOOL newVal);
 
 
@@ -3998,8 +4000,8 @@ void __RPC_STUB IFaxDoc_put_SendCoverpage_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_ServerCoverpage_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_ServerCoverpage_Stub(
@@ -4010,7 +4012,7 @@ void __RPC_STUB IFaxDoc_get_ServerCoverpage_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_ServerCoverpage_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BOOL newVal);
 
 
@@ -4022,8 +4024,8 @@ void __RPC_STUB IFaxDoc_put_ServerCoverpage_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_DiscountSend_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_DiscountSend_Stub(
@@ -4034,7 +4036,7 @@ void __RPC_STUB IFaxDoc_get_DiscountSend_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_DiscountSend_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BOOL newVal);
 
 
@@ -4046,8 +4048,8 @@ void __RPC_STUB IFaxDoc_put_DiscountSend_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientName_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientName_Stub(
@@ -4058,7 +4060,7 @@ void __RPC_STUB IFaxDoc_get_RecipientName_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientName_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4070,8 +4072,8 @@ void __RPC_STUB IFaxDoc_put_RecipientName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientCompany_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientCompany_Stub(
@@ -4082,7 +4084,7 @@ void __RPC_STUB IFaxDoc_get_RecipientCompany_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientCompany_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4094,8 +4096,8 @@ void __RPC_STUB IFaxDoc_put_RecipientCompany_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientAddress_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientAddress_Stub(
@@ -4106,7 +4108,7 @@ void __RPC_STUB IFaxDoc_get_RecipientAddress_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientAddress_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4118,8 +4120,8 @@ void __RPC_STUB IFaxDoc_put_RecipientAddress_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientCity_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientCity_Stub(
@@ -4130,7 +4132,7 @@ void __RPC_STUB IFaxDoc_get_RecipientCity_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientCity_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4142,8 +4144,8 @@ void __RPC_STUB IFaxDoc_put_RecipientCity_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientState_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientState_Stub(
@@ -4154,7 +4156,7 @@ void __RPC_STUB IFaxDoc_get_RecipientState_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientState_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4166,8 +4168,8 @@ void __RPC_STUB IFaxDoc_put_RecipientState_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientZip_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientZip_Stub(
@@ -4178,7 +4180,7 @@ void __RPC_STUB IFaxDoc_get_RecipientZip_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientZip_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4190,8 +4192,8 @@ void __RPC_STUB IFaxDoc_put_RecipientZip_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientCountry_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientCountry_Stub(
@@ -4202,7 +4204,7 @@ void __RPC_STUB IFaxDoc_get_RecipientCountry_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientCountry_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4214,8 +4216,8 @@ void __RPC_STUB IFaxDoc_put_RecipientCountry_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientTitle_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientTitle_Stub(
@@ -4226,7 +4228,7 @@ void __RPC_STUB IFaxDoc_get_RecipientTitle_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientTitle_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4238,8 +4240,8 @@ void __RPC_STUB IFaxDoc_put_RecipientTitle_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientDepartment_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientDepartment_Stub(
@@ -4250,7 +4252,7 @@ void __RPC_STUB IFaxDoc_get_RecipientDepartment_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientDepartment_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4262,8 +4264,8 @@ void __RPC_STUB IFaxDoc_put_RecipientDepartment_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientOffice_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientOffice_Stub(
@@ -4274,7 +4276,7 @@ void __RPC_STUB IFaxDoc_get_RecipientOffice_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientOffice_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4286,8 +4288,8 @@ void __RPC_STUB IFaxDoc_put_RecipientOffice_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientHomePhone_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientHomePhone_Stub(
@@ -4298,7 +4300,7 @@ void __RPC_STUB IFaxDoc_get_RecipientHomePhone_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientHomePhone_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4310,8 +4312,8 @@ void __RPC_STUB IFaxDoc_put_RecipientHomePhone_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_RecipientOfficePhone_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_RecipientOfficePhone_Stub(
@@ -4322,7 +4324,7 @@ void __RPC_STUB IFaxDoc_get_RecipientOfficePhone_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_RecipientOfficePhone_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4334,8 +4336,8 @@ void __RPC_STUB IFaxDoc_put_RecipientOfficePhone_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderName_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderName_Stub(
@@ -4346,7 +4348,7 @@ void __RPC_STUB IFaxDoc_get_SenderName_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderName_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4358,8 +4360,8 @@ void __RPC_STUB IFaxDoc_put_SenderName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderCompany_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderCompany_Stub(
@@ -4370,7 +4372,7 @@ void __RPC_STUB IFaxDoc_get_SenderCompany_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderCompany_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4382,8 +4384,8 @@ void __RPC_STUB IFaxDoc_put_SenderCompany_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderAddress_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderAddress_Stub(
@@ -4394,7 +4396,7 @@ void __RPC_STUB IFaxDoc_get_SenderAddress_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderAddress_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4406,8 +4408,8 @@ void __RPC_STUB IFaxDoc_put_SenderAddress_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderTitle_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderTitle_Stub(
@@ -4418,7 +4420,7 @@ void __RPC_STUB IFaxDoc_get_SenderTitle_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderTitle_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4430,8 +4432,8 @@ void __RPC_STUB IFaxDoc_put_SenderTitle_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderDepartment_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderDepartment_Stub(
@@ -4442,7 +4444,7 @@ void __RPC_STUB IFaxDoc_get_SenderDepartment_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderDepartment_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4454,8 +4456,8 @@ void __RPC_STUB IFaxDoc_put_SenderDepartment_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderOffice_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderOffice_Stub(
@@ -4466,7 +4468,7 @@ void __RPC_STUB IFaxDoc_get_SenderOffice_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderOffice_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4478,8 +4480,8 @@ void __RPC_STUB IFaxDoc_put_SenderOffice_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderHomePhone_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderHomePhone_Stub(
@@ -4490,7 +4492,7 @@ void __RPC_STUB IFaxDoc_get_SenderHomePhone_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderHomePhone_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4502,8 +4504,8 @@ void __RPC_STUB IFaxDoc_put_SenderHomePhone_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderOfficePhone_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderOfficePhone_Stub(
@@ -4514,7 +4516,7 @@ void __RPC_STUB IFaxDoc_get_SenderOfficePhone_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderOfficePhone_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4526,8 +4528,8 @@ void __RPC_STUB IFaxDoc_put_SenderOfficePhone_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_CoverpageNote_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_CoverpageNote_Stub(
@@ -4538,7 +4540,7 @@ void __RPC_STUB IFaxDoc_get_CoverpageNote_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_CoverpageNote_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4550,8 +4552,8 @@ void __RPC_STUB IFaxDoc_put_CoverpageNote_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_CoverpageSubject_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_CoverpageSubject_Stub(
@@ -4562,7 +4564,7 @@ void __RPC_STUB IFaxDoc_get_CoverpageSubject_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_CoverpageSubject_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4574,8 +4576,8 @@ void __RPC_STUB IFaxDoc_put_CoverpageSubject_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_Tsid_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_Tsid_Stub(
@@ -4586,7 +4588,7 @@ void __RPC_STUB IFaxDoc_get_Tsid_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_Tsid_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4598,8 +4600,8 @@ void __RPC_STUB IFaxDoc_put_Tsid_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_BillingCode_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_BillingCode_Stub(
@@ -4610,7 +4612,7 @@ void __RPC_STUB IFaxDoc_get_BillingCode_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_BillingCode_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4622,8 +4624,8 @@ void __RPC_STUB IFaxDoc_put_BillingCode_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_EmailAddress_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_EmailAddress_Stub(
@@ -4634,7 +4636,7 @@ void __RPC_STUB IFaxDoc_get_EmailAddress_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_EmailAddress_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4646,8 +4648,8 @@ void __RPC_STUB IFaxDoc_put_EmailAddress_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_DisplayName_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_DisplayName_Stub(
@@ -4658,7 +4660,7 @@ void __RPC_STUB IFaxDoc_get_DisplayName_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_DisplayName_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4670,8 +4672,8 @@ void __RPC_STUB IFaxDoc_put_DisplayName_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxDoc_Send_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxDoc_Send_Stub(
@@ -4682,8 +4684,8 @@ void __RPC_STUB IFaxDoc_Send_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_FaxNumber_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_FaxNumber_Stub(
@@ -4694,7 +4696,7 @@ void __RPC_STUB IFaxDoc_get_FaxNumber_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_FaxNumber_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4706,8 +4708,8 @@ void __RPC_STUB IFaxDoc_put_FaxNumber_Stub(
 
 
 /* [helpstring][id][propputref] */ HRESULT STDMETHODCALLTYPE IFaxDoc_putref_ConnectionObject_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *newVal);
+    IFaxDoc * This,
+    /* [in] */ IDispatch *newVal);
 
 
 void __RPC_STUB IFaxDoc_putref_ConnectionObject_Stub(
@@ -4718,8 +4720,8 @@ void __RPC_STUB IFaxDoc_putref_ConnectionObject_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_CallHandle_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_CallHandle_Stub(
@@ -4730,7 +4732,7 @@ void __RPC_STUB IFaxDoc_get_CallHandle_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_CallHandle_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ long newVal);
 
 
@@ -4742,8 +4744,8 @@ void __RPC_STUB IFaxDoc_put_CallHandle_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxDoc_get_SenderFax_Proxy( 
-    IFaxDoc __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxDoc * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxDoc_get_SenderFax_Stub(
@@ -4754,7 +4756,7 @@ void __RPC_STUB IFaxDoc_get_SenderFax_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IFaxDoc_put_SenderFax_Proxy( 
-    IFaxDoc __RPC_FAR * This,
+    IFaxDoc * This,
     /* [in] */ BSTR newVal);
 
 
@@ -4785,11 +4787,11 @@ EXTERN_C const IID IID_IFaxJobs;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             long Index,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ VARIANT *pVal) = 0;
         
     };
     
@@ -4799,61 +4801,61 @@ EXTERN_C const IID IID_IFaxJobs;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFaxJobs __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFaxJobs * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFaxJobs __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFaxJobs * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFaxJobs __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFaxJobs * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IFaxJobs __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IFaxJobs * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IFaxJobs __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IFaxJobs * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IFaxJobs __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IFaxJobs * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IFaxJobs __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IFaxJobs * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            IFaxJobs __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IFaxJobs * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            IFaxJobs __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            IFaxJobs * This,
             long Index,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVal);
+            /* [retval][out] */ VARIANT *pVal);
         
         END_INTERFACE
     } IFaxJobsVtbl;
 
     interface IFaxJobs
     {
-        CONST_VTBL struct IFaxJobsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFaxJobsVtbl *lpVtbl;
     };
 
     
@@ -4898,8 +4900,8 @@ EXTERN_C const IID IID_IFaxJobs;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJobs_get_Count_Proxy( 
-    IFaxJobs __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxJobs * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxJobs_get_Count_Stub(
@@ -4910,9 +4912,9 @@ void __RPC_STUB IFaxJobs_get_Count_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJobs_get_Item_Proxy( 
-    IFaxJobs __RPC_FAR * This,
+    IFaxJobs * This,
     long Index,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVal);
+    /* [retval][out] */ VARIANT *pVal);
 
 
 void __RPC_STUB IFaxJobs_get_Item_Stub(
@@ -4942,49 +4944,49 @@ EXTERN_C const IID IID_IFaxJob;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_JobId( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UserName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_QueueStatus( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceStatus( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PageCount( 
-            /* [retval][out] */ long __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ long *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FaxNumber( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecipientName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Tsid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderCompany( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SenderDept( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BillingCode( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BSTR *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscountSend( 
-            /* [retval][out] */ BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ BOOL *pVal) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetStatus( 
             long Command) = 0;
@@ -4999,119 +5001,119 @@ EXTERN_C const IID IID_IFaxJob;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFaxJob __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFaxJob * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFaxJob __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFaxJob * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFaxJob __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFaxJob * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IFaxJob __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IFaxJob * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IFaxJob __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IFaxJob * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IFaxJob __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IFaxJob * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IFaxJob __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IFaxJob * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_JobId )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_JobId )( 
+            IFaxJob * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            IFaxJob * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UserName )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserName )( 
+            IFaxJob * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_QueueStatus )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QueueStatus )( 
+            IFaxJob * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DeviceStatus )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceStatus )( 
+            IFaxJob * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PageCount )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PageCount )( 
+            IFaxJob * This,
+            /* [retval][out] */ long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FaxNumber )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
+            IFaxJob * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RecipientName )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecipientName )( 
+            IFaxJob * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Tsid )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tsid )( 
+            IFaxJob * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderName )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderName )( 
+            IFaxJob * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderCompany )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderCompany )( 
+            IFaxJob * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderDept )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SenderDept )( 
+            IFaxJob * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BillingCode )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BillingCode )( 
+            IFaxJob * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayName )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
+            IFaxJob * This,
+            /* [retval][out] */ BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DiscountSend )( 
-            IFaxJob __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscountSend )( 
+            IFaxJob * This,
+            /* [retval][out] */ BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStatus )( 
-            IFaxJob __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetStatus )( 
+            IFaxJob * This,
             long Command);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            IFaxJob __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            IFaxJob * This);
         
         END_INTERFACE
     } IFaxJobVtbl;
 
     interface IFaxJob
     {
-        CONST_VTBL struct IFaxJobVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFaxJobVtbl *lpVtbl;
     };
 
     
@@ -5201,8 +5203,8 @@ EXTERN_C const IID IID_IFaxJob;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_JobId_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxJob_get_JobId_Stub(
@@ -5213,8 +5215,8 @@ void __RPC_STUB IFaxJob_get_JobId_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_Type_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxJob_get_Type_Stub(
@@ -5225,8 +5227,8 @@ void __RPC_STUB IFaxJob_get_Type_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_UserName_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_UserName_Stub(
@@ -5237,8 +5239,8 @@ void __RPC_STUB IFaxJob_get_UserName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_QueueStatus_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_QueueStatus_Stub(
@@ -5249,8 +5251,8 @@ void __RPC_STUB IFaxJob_get_QueueStatus_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_DeviceStatus_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_DeviceStatus_Stub(
@@ -5261,8 +5263,8 @@ void __RPC_STUB IFaxJob_get_DeviceStatus_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_PageCount_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ long *pVal);
 
 
 void __RPC_STUB IFaxJob_get_PageCount_Stub(
@@ -5273,8 +5275,8 @@ void __RPC_STUB IFaxJob_get_PageCount_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_FaxNumber_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_FaxNumber_Stub(
@@ -5285,8 +5287,8 @@ void __RPC_STUB IFaxJob_get_FaxNumber_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_RecipientName_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_RecipientName_Stub(
@@ -5297,8 +5299,8 @@ void __RPC_STUB IFaxJob_get_RecipientName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_Tsid_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_Tsid_Stub(
@@ -5309,8 +5311,8 @@ void __RPC_STUB IFaxJob_get_Tsid_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_SenderName_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_SenderName_Stub(
@@ -5321,8 +5323,8 @@ void __RPC_STUB IFaxJob_get_SenderName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_SenderCompany_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_SenderCompany_Stub(
@@ -5333,8 +5335,8 @@ void __RPC_STUB IFaxJob_get_SenderCompany_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_SenderDept_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_SenderDept_Stub(
@@ -5345,8 +5347,8 @@ void __RPC_STUB IFaxJob_get_SenderDept_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_BillingCode_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_BillingCode_Stub(
@@ -5357,8 +5359,8 @@ void __RPC_STUB IFaxJob_get_BillingCode_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_DisplayName_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ BSTR *pVal);
 
 
 void __RPC_STUB IFaxJob_get_DisplayName_Stub(
@@ -5369,8 +5371,8 @@ void __RPC_STUB IFaxJob_get_DisplayName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IFaxJob_get_DiscountSend_Proxy( 
-    IFaxJob __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pVal);
+    IFaxJob * This,
+    /* [retval][out] */ BOOL *pVal);
 
 
 void __RPC_STUB IFaxJob_get_DiscountSend_Stub(
@@ -5381,7 +5383,7 @@ void __RPC_STUB IFaxJob_get_DiscountSend_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxJob_SetStatus_Proxy( 
-    IFaxJob __RPC_FAR * This,
+    IFaxJob * This,
     long Command);
 
 
@@ -5393,7 +5395,7 @@ void __RPC_STUB IFaxJob_SetStatus_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFaxJob_Refresh_Proxy( 
-    IFaxJob __RPC_FAR * This);
+    IFaxJob * This);
 
 
 void __RPC_STUB IFaxJob_Refresh_Stub(
@@ -5500,15 +5502,15 @@ FaxJob;
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
+unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
+void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
 /* end of Additional Prototypes */
 
@@ -5519,4 +5521,3 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

@@ -9,22 +9,22 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.2.3  $
-// File generated on 1/24/2000 9:48:16 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/28/2002 7:56:29 AM from Type Library described below.
 
-// ************************************************************************ //
-// Type Lib: g:\rampage\typelib\TypeLibraries\EXCEL8.olb (1)
-// IID\LCID: {00020813-0000-0000-C000-000000000046}\0
-// Helpfile: g:\rampage\typelib\TypeLibraries\VBAXL8.HLP
+// ************************************************************************  //
+// Type Lib: c:\program files\microsoft office\office\excel8.olb (1)
+// LIBID: {00020813-0000-0000-C000-000000000046}
+// LCID: 0
+// Helpfile: c:\program files\microsoft office\office\VBAXL8.HLP
+// HelpString: Microsoft Excel 8.0 Object Library
 // DepndLst: 
-//   (1) v2.0 Office, (D:\Program Files\Microsoft Office\Office\MSO97.DLL)
+//   (1) v2.0 Office, (C:\Program Files\Microsoft Office\office97\Office\MSO97.DLL)
 //   (2) v2.0 stdole, (C:\WINNT\System32\stdole2.tlb)
 //   (3) v5.0 VBIDE, (C:\Program Files\Common Files\Microsoft Shared\VBA\VBEEXT1.OLB)
-//   (4) v4.0 StdVCL, (C:\WINNT\System32\STDVCL40.DLL)
 // Errors:
 //   Hint: Symbol 'IFont' renamed to 'ExcelIFont'
 //   Hint: Symbol 'Window' renamed to 'WINDOW'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
 //   Hint: Symbol 'QueryTable' renamed to 'ExcelQueryTable'
 //   Hint: Symbol 'Application' renamed to 'ExcelApplication'
 //   Hint: Symbol 'Chart' renamed to 'ExcelChart'
@@ -35,25 +35,15 @@
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Enum Member 'XlDisplayShapes' of 'XlDisplayShapes' changed to 'XlDisplayShapes_'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
 //   Hint: Symbol 'DialogBox' renamed to 'DialogBOX'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Symbol 'DialogBox' renamed to 'DialogBOX'
 //   Hint: Member 'Range' of 'Range' changed to 'Range_'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Member 'Name' of 'Name' changed to 'Name_'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'IFont' renamed to 'ExcelIFont'
 //   Hint: Symbol 'Window' renamed to 'WINDOW'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
 //   Hint: Symbol 'QueryTable' renamed to 'ExcelQueryTable'
 //   Hint: Symbol 'Application' renamed to 'ExcelApplication'
 //   Hint: Symbol 'Chart' renamed to 'ExcelChart'
@@ -64,27 +54,19 @@
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Enum Member 'XlDisplayShapes' of 'XlDisplayShapes' changed to 'XlDisplayShapes_'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
 //   Hint: Symbol 'DialogBox' renamed to 'DialogBOX'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Symbol 'DialogBox' renamed to 'DialogBOX'
 //   Hint: Member 'Range' of 'Range' changed to 'Range_'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Member 'Name' of 'Name' changed to 'Name_'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 // ************************************************************************ //
 
 #include <vcl.h>
 #pragma hdrstop
 
+#include <oleserver.hpp>
 #if defined(USING_ATL)
 #include <atl\atlvcl.h>
 #endif
@@ -158,18 +140,22 @@ void __fastcall TExcelQueryTable::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TExcelQueryTable::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TExcelQueryTable::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 1596:
-      if (OnBeforeRefresh)
+    case 1596: {
+      if (OnBeforeRefresh) {
         (OnBeforeRefresh)(this, TVariant(params[0]));
+      }
       break;
-    case 1597:
-      if (OnAfterRefresh)
+      }
+    case 1597: {
+      if (OnAfterRefresh) {
         (OnAfterRefresh)(this, TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -234,90 +220,130 @@ void __fastcall TExcelApplication::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TExcelApplication::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TExcelApplication::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 1565:
-      if (OnNewWorkbook)
+    case 1565: {
+      if (OnNewWorkbook) {
         (OnNewWorkbook)(this, (Excel_97::ExcelWorkbook*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 1558:
-      if (OnSheetSelectionChange)
+      }
+    case 1558: {
+      if (OnSheetSelectionChange) {
         (OnSheetSelectionChange)(this, TVariant(params[0]), (Excel_97::Range*)(LPDISPATCH)TVariant(params[1]));
+      }
       break;
-    case 1559:
-      if (OnSheetBeforeDoubleClick)
+      }
+    case 1559: {
+      if (OnSheetBeforeDoubleClick) {
         (OnSheetBeforeDoubleClick)(this, TVariant(params[0]), (Excel_97::Range*)(LPDISPATCH)TVariant(params[1]), TVariant(params[2]));
+      }
       break;
-    case 1560:
-      if (OnSheetBeforeRightClick)
+      }
+    case 1560: {
+      if (OnSheetBeforeRightClick) {
         (OnSheetBeforeRightClick)(this, TVariant(params[0]), (Excel_97::Range*)(LPDISPATCH)TVariant(params[1]), TVariant(params[2]));
+      }
       break;
-    case 1561:
-      if (OnSheetActivate1)
+      }
+    case 1561: {
+      if (OnSheetActivate1) {
         (OnSheetActivate1)(this, TVariant(params[0]));
+      }
       break;
-    case 1562:
-      if (OnSheetDeactivate1)
+      }
+    case 1562: {
+      if (OnSheetDeactivate1) {
         (OnSheetDeactivate1)(this, TVariant(params[0]));
+      }
       break;
-    case 1563:
-      if (OnSheetCalculate)
+      }
+    case 1563: {
+      if (OnSheetCalculate) {
         (OnSheetCalculate)(this, TVariant(params[0]));
+      }
       break;
-    case 1564:
-      if (OnSheetChange)
+      }
+    case 1564: {
+      if (OnSheetChange) {
         (OnSheetChange)(this, TVariant(params[0]), (Excel_97::Range*)(LPDISPATCH)TVariant(params[1]));
+      }
       break;
-    case 1567:
-      if (OnWorkbookOpen)
+      }
+    case 1567: {
+      if (OnWorkbookOpen) {
         (OnWorkbookOpen)(this, (Excel_97::ExcelWorkbook*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 1568:
-      if (OnWorkbookActivate)
+      }
+    case 1568: {
+      if (OnWorkbookActivate) {
         (OnWorkbookActivate)(this, (Excel_97::ExcelWorkbook*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 1569:
-      if (OnWorkbookDeactivate)
+      }
+    case 1569: {
+      if (OnWorkbookDeactivate) {
         (OnWorkbookDeactivate)(this, (Excel_97::ExcelWorkbook*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 1570:
-      if (OnWorkbookBeforeClose)
+      }
+    case 1570: {
+      if (OnWorkbookBeforeClose) {
         (OnWorkbookBeforeClose)(this, (Excel_97::ExcelWorkbook*)(LPDISPATCH)TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 1571:
-      if (OnWorkbookBeforeSave)
+      }
+    case 1571: {
+      if (OnWorkbookBeforeSave) {
         (OnWorkbookBeforeSave)(this, (Excel_97::ExcelWorkbook*)(LPDISPATCH)TVariant(params[0]), TVariant(params[1]), TVariant(params[2]));
+      }
       break;
-    case 1572:
-      if (OnWorkbookBeforePrint)
+      }
+    case 1572: {
+      if (OnWorkbookBeforePrint) {
         (OnWorkbookBeforePrint)(this, (Excel_97::ExcelWorkbook*)(LPDISPATCH)TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 1573:
-      if (OnWorkbookNewSheet)
+      }
+    case 1573: {
+      if (OnWorkbookNewSheet) {
         (OnWorkbookNewSheet)(this, (Excel_97::ExcelWorkbook*)(LPDISPATCH)TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 1574:
-      if (OnWorkbookAddinInstall)
+      }
+    case 1574: {
+      if (OnWorkbookAddinInstall) {
         (OnWorkbookAddinInstall)(this, (Excel_97::ExcelWorkbook*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 1575:
-      if (OnWorkbookAddinUninstall)
+      }
+    case 1575: {
+      if (OnWorkbookAddinUninstall) {
         (OnWorkbookAddinUninstall)(this, (Excel_97::ExcelWorkbook*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 1554:
-      if (OnWindowResize)
+      }
+    case 1554: {
+      if (OnWindowResize) {
         (OnWindowResize)(this, (Excel_97::ExcelWorkbook*)(LPDISPATCH)TVariant(params[0]), (Excel_97::WINDOW*)(LPDISPATCH)TVariant(params[1]));
+      }
       break;
-    case 1556:
-      if (OnWindowActivate)
+      }
+    case 1556: {
+      if (OnWindowActivate) {
         (OnWindowActivate)(this, (Excel_97::ExcelWorkbook*)(LPDISPATCH)TVariant(params[0]), (Excel_97::WINDOW*)(LPDISPATCH)TVariant(params[1]));
+      }
       break;
-    case 1557:
-      if (OnWindowDeactivate)
+      }
+    case 1557: {
+      if (OnWindowDeactivate) {
         (OnWindowDeactivate)(this, (Excel_97::ExcelWorkbook*)(LPDISPATCH)TVariant(params[0]), (Excel_97::WINDOW*)(LPDISPATCH)TVariant(params[1]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -382,62 +408,88 @@ void __fastcall TExcelChart::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TExcelChart::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TExcelChart::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 304:
-      if (OnActivate)
+    case 304: {
+      if (OnActivate) {
         (OnActivate)(this);
+      }
       break;
-    case 1530:
-      if (OnDeactivate)
+      }
+    case 1530: {
+      if (OnDeactivate) {
         (OnDeactivate)(this);
+      }
       break;
-    case 256:
-      if (OnResize)
+      }
+    case 256: {
+      if (OnResize) {
         (OnResize)(this);
+      }
       break;
-    case 1531:
-      if (OnMouseDown)
+      }
+    case 1531: {
+      if (OnMouseDown) {
         (OnMouseDown)(this, (Excel_97::XlMouseButton)(int)TVariant(params[0]), TVariant(params[1]), TVariant(params[2]), TVariant(params[3]));
+      }
       break;
-    case 1532:
-      if (OnMouseUp)
+      }
+    case 1532: {
+      if (OnMouseUp) {
         (OnMouseUp)(this, (Excel_97::XlMouseButton)(int)TVariant(params[0]), TVariant(params[1]), TVariant(params[2]), TVariant(params[3]));
+      }
       break;
-    case 1533:
-      if (OnMouseMove)
+      }
+    case 1533: {
+      if (OnMouseMove) {
         (OnMouseMove)(this, (Excel_97::XlMouseButton)(int)TVariant(params[0]), TVariant(params[1]), TVariant(params[2]), TVariant(params[3]));
+      }
       break;
-    case 1534:
-      if (OnBeforeRightClick)
+      }
+    case 1534: {
+      if (OnBeforeRightClick) {
         (OnBeforeRightClick)(this, TVariant(params[0]));
+      }
       break;
-    case 1535:
-      if (OnDragPlot)
+      }
+    case 1535: {
+      if (OnDragPlot) {
         (OnDragPlot)(this);
+      }
       break;
-    case 1536:
-      if (OnDragOver)
+      }
+    case 1536: {
+      if (OnDragOver) {
         (OnDragOver)(this);
+      }
       break;
-    case 1537:
-      if (OnBeforeDoubleClick)
+      }
+    case 1537: {
+      if (OnBeforeDoubleClick) {
         (OnBeforeDoubleClick)(this, (Excel_97::XlChartItem)(int)TVariant(params[0]), TVariant(params[1]), TVariant(params[2]), TVariant(params[3]));
+      }
       break;
-    case 235:
-      if (OnSelect)
+      }
+    case 235: {
+      if (OnSelect) {
         (OnSelect)(this, (Excel_97::XlChartItem)(int)TVariant(params[0]), TVariant(params[1]), TVariant(params[2]));
+      }
       break;
-    case 1538:
-      if (OnSeriesChange)
+      }
+    case 1538: {
+      if (OnSeriesChange) {
         (OnSeriesChange)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 279:
-      if (OnCalculate)
+      }
+    case 279: {
+      if (OnCalculate) {
         (OnCalculate)(this);
+      }
       break;
+      }
     default:
       break;
   }
@@ -502,100 +554,55 @@ void __fastcall TExcelWorksheet::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TExcelWorksheet::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TExcelWorksheet::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 1543:
-      if (OnSelectionChange)
+    case 1543: {
+      if (OnSelectionChange) {
         (OnSelectionChange)(this, (Excel_97::Range*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 1537:
-      if (OnBeforeDoubleClick)
+      }
+    case 1537: {
+      if (OnBeforeDoubleClick) {
         (OnBeforeDoubleClick)(this, (Excel_97::Range*)(LPDISPATCH)TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 1534:
-      if (OnBeforeRightClick)
+      }
+    case 1534: {
+      if (OnBeforeRightClick) {
         (OnBeforeRightClick)(this, (Excel_97::Range*)(LPDISPATCH)TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 304:
-      if (OnActivate)
+      }
+    case 304: {
+      if (OnActivate) {
         (OnActivate)(this);
+      }
       break;
-    case 1530:
-      if (OnDeactivate)
+      }
+    case 1530: {
+      if (OnDeactivate) {
         (OnDeactivate)(this);
+      }
       break;
-    case 279:
-      if (OnCalculate1)
+      }
+    case 279: {
+      if (OnCalculate1) {
         (OnCalculate1)(this);
+      }
       break;
-    case 1545:
-      if (OnChange)
+      }
+    case 1545: {
+      if (OnChange) {
         (OnChange)(this, (Excel_97::Range*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
-}
-
-_GlobalPtr& TExcelGlobal::GetDefaultInterface()
-{
-  if (!m_DefaultIntf)
-    Connect();
-  return m_DefaultIntf;
-}
-
-_di_IUnknown __fastcall TExcelGlobal::GetDunk()
-{
-  _di_IUnknown diUnk;
-  if (m_DefaultIntf) {
-    IUnknownPtr punk = m_DefaultIntf;
-    diUnk = LPUNKNOWN(punk);
-  }
-  return diUnk;
-}
-
-void __fastcall TExcelGlobal::Connect()
-{
-  if (!m_DefaultIntf) {
-    _di_IUnknown punk = GetServer();
-    m_DefaultIntf = punk;
-    if (ServerData->EventIID != GUID_NULL)
-      ConnectEvents(GetDunk());
-  }
-}
-
-void __fastcall TExcelGlobal::Disconnect()
-{
-  if (m_DefaultIntf) {
-    
-    if (ServerData->EventIID != GUID_NULL)
-      DisconnectEvents(GetDunk());
-    m_DefaultIntf.Reset();
-  }
-}
-
-void __fastcall TExcelGlobal::BeforeDestruction()
-{
-  Disconnect();
-}
-
-void __fastcall TExcelGlobal::ConnectTo(_GlobalPtr intf)
-{
-  Disconnect();
-  m_DefaultIntf = intf;
-  if (ServerData->EventIID != GUID_NULL)
-    ConnectEvents(GetDunk());
-}
-
-void __fastcall TExcelGlobal::InitServerData()
-{
-  static Oleserver::TServerData sd;
-  sd.ClassID = CLSID_ExcelGlobal;
-  sd.IntfIID = __uuidof(_Global);
-  sd.EventIID= GUID_NULL;
-  ServerData = &sd;
 }
 
 _WorkbookPtr& TExcelWorkbook::GetDefaultInterface()
@@ -657,86 +664,124 @@ void __fastcall TExcelWorkbook::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TExcelWorkbook::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TExcelWorkbook::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 682:
-      if (OnOpen)
+    case 682: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 304:
-      if (OnActivate)
+      }
+    case 304: {
+      if (OnActivate) {
         (OnActivate)(this);
+      }
       break;
-    case 1530:
-      if (OnDeactivate)
+      }
+    case 1530: {
+      if (OnDeactivate) {
         (OnDeactivate)(this);
+      }
       break;
-    case 1546:
-      if (OnBeforeClose)
+      }
+    case 1546: {
+      if (OnBeforeClose) {
         (OnBeforeClose)(this, TVariant(params[0]));
+      }
       break;
-    case 1547:
-      if (OnBeforeSave)
+      }
+    case 1547: {
+      if (OnBeforeSave) {
         (OnBeforeSave)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 1549:
-      if (OnBeforePrint)
+      }
+    case 1549: {
+      if (OnBeforePrint) {
         (OnBeforePrint)(this, TVariant(params[0]));
+      }
       break;
-    case 1550:
-      if (OnNewSheet)
+      }
+    case 1550: {
+      if (OnNewSheet) {
         (OnNewSheet)(this, TVariant(params[0]));
+      }
       break;
-    case 1552:
-      if (OnAddinInstall)
+      }
+    case 1552: {
+      if (OnAddinInstall) {
         (OnAddinInstall)(this);
+      }
       break;
-    case 1553:
-      if (OnAddinUninstall)
+      }
+    case 1553: {
+      if (OnAddinUninstall) {
         (OnAddinUninstall)(this);
+      }
       break;
-    case 1554:
-      if (OnWindowResize)
+      }
+    case 1554: {
+      if (OnWindowResize) {
         (OnWindowResize)(this, (Excel_97::WINDOW*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 1556:
-      if (OnWindowActivate)
+      }
+    case 1556: {
+      if (OnWindowActivate) {
         (OnWindowActivate)(this, (Excel_97::WINDOW*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 1557:
-      if (OnWindowDeactivate)
+      }
+    case 1557: {
+      if (OnWindowDeactivate) {
         (OnWindowDeactivate)(this, (Excel_97::WINDOW*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 1558:
-      if (OnSheetSelectionChange)
+      }
+    case 1558: {
+      if (OnSheetSelectionChange) {
         (OnSheetSelectionChange)(this, TVariant(params[0]), (Excel_97::Range*)(LPDISPATCH)TVariant(params[1]));
+      }
       break;
-    case 1559:
-      if (OnSheetBeforeDoubleClick)
+      }
+    case 1559: {
+      if (OnSheetBeforeDoubleClick) {
         (OnSheetBeforeDoubleClick)(this, TVariant(params[0]), (Excel_97::Range*)(LPDISPATCH)TVariant(params[1]), TVariant(params[2]));
+      }
       break;
-    case 1560:
-      if (OnSheetBeforeRightClick)
+      }
+    case 1560: {
+      if (OnSheetBeforeRightClick) {
         (OnSheetBeforeRightClick)(this, TVariant(params[0]), (Excel_97::Range*)(LPDISPATCH)TVariant(params[1]), TVariant(params[2]));
+      }
       break;
-    case 1561:
-      if (OnSheetActivate1)
+      }
+    case 1561: {
+      if (OnSheetActivate1) {
         (OnSheetActivate1)(this, TVariant(params[0]));
+      }
       break;
-    case 1562:
-      if (OnSheetDeactivate1)
+      }
+    case 1562: {
+      if (OnSheetDeactivate1) {
         (OnSheetDeactivate1)(this, TVariant(params[0]));
+      }
       break;
-    case 1563:
-      if (OnSheetCalculate)
+      }
+    case 1563: {
+      if (OnSheetCalculate) {
         (OnSheetCalculate)(this, TVariant(params[0]));
+      }
       break;
-    case 1564:
-      if (OnSheetChange)
+      }
+    case 1564: {
+      if (OnSheetChange) {
         (OnSheetChange)(this, TVariant(params[0]), (Excel_97::Range*)(LPDISPATCH)TVariant(params[1]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -801,18 +846,22 @@ void __fastcall TExcelOLEObject::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TExcelOLEObject::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TExcelOLEObject::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 1541:
-      if (OnGotFocus)
+    case 1541: {
+      if (OnGotFocus) {
         (OnGotFocus)(this);
+      }
       break;
-    case 1542:
-      if (OnLostFocus)
+      }
+    case 1542: {
+      if (OnLostFocus) {
         (OnLostFocus)(this);
+      }
       break;
+      }
     default:
       break;
   }
@@ -833,17 +882,16 @@ namespace Excel_97_srvr
 
 void __fastcall PACKAGE Register()
 {
-  // [7]
+  // [6]
   TComponentClass cls_svr[] = {
                               __classid(Excel_97::TExcelQueryTable), 
                               __classid(Excel_97::TExcelApplication), 
                               __classid(Excel_97::TExcelChart), 
                               __classid(Excel_97::TExcelWorksheet), 
-                              __classid(Excel_97::TExcelGlobal), 
                               __classid(Excel_97::TExcelWorkbook), 
                               __classid(Excel_97::TExcelOLEObject)
                            };
-  RegisterComponents("Servers", cls_svr,
+  RegisterComponents("Office97", cls_svr,
                      sizeof(cls_svr)/sizeof(cls_svr[0])-1);
 }
 

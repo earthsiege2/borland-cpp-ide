@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DBTables.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DBTables.pas' rev: 6.00
 
 #ifndef DBTablesHPP
 #define DBTablesHPP
@@ -10,15 +10,14 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <SMIntf.hpp>	// Pascal unit
-#include <Bde.hpp>	// Pascal unit
+#include <SMINTF.hpp>	// Pascal unit
+#include <BDE.hpp>	// Pascal unit
 #include <DBCommon.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
-#include <Controls.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
-#include <Graphics.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -48,34 +47,25 @@ public:
 	__property TDBError* Errors[int Index] = {read=GetError};
 public:
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EDBEngineError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Db::EDatabaseError(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EDBEngineError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Db::EDatabaseError(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EDBEngineError(int Ident)/* overload */ : Db::EDatabaseError(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EDBEngineError(int Ident)/* overload */ : Db::EDatabaseError(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EDBEngineError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Db::EDatabaseError(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EDBEngineError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Db::EDatabaseError(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EDBEngineError(const AnsiString Msg, int AHelpContext)
-		 : Db::EDatabaseError(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EDBEngineError(const AnsiString Msg, int AHelpContext) : Db::EDatabaseError(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EDBEngineError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Db::EDatabaseError(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EDBEngineError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Db::EDatabaseError(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EDBEngineError(int Ident, int AHelpContext)/* overload */
-		 : Db::EDatabaseError(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EDBEngineError(int Ident, int AHelpContext)/* overload */ : Db::EDatabaseError(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EDBEngineError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Db::EDatabaseError(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EDBEngineError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Db::EDatabaseError(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 };
@@ -88,38 +78,28 @@ class PASCALIMPLEMENTATION ENoResultSet : public Db::EDatabaseError
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall ENoResultSet(const AnsiString Msg) : Db::EDatabaseError(Msg
-		) { }
+	/* Exception.Create */ inline __fastcall ENoResultSet(const AnsiString Msg) : Db::EDatabaseError(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall ENoResultSet(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Db::EDatabaseError(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall ENoResultSet(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Db::EDatabaseError(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall ENoResultSet(int Ident)/* overload */ : Db::EDatabaseError(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall ENoResultSet(int Ident)/* overload */ : Db::EDatabaseError(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall ENoResultSet(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Db::EDatabaseError(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall ENoResultSet(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Db::EDatabaseError(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall ENoResultSet(const AnsiString Msg, int AHelpContext) : 
-		Db::EDatabaseError(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall ENoResultSet(const AnsiString Msg, int AHelpContext) : Db::EDatabaseError(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall ENoResultSet(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Db::EDatabaseError(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ENoResultSet(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Db::EDatabaseError(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall ENoResultSet(int Ident, int AHelpContext)/* overload */
-		 : Db::EDatabaseError(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ENoResultSet(int Ident, int AHelpContext)/* overload */ : Db::EDatabaseError(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall ENoResultSet(System::PResStringRec ResStringRec, 
-		const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Db::EDatabaseError(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ENoResultSet(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Db::EDatabaseError(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -180,8 +160,7 @@ protected:
 	Bde::CBRType __fastcall Invoke(Bde::CBType CallType, void * CBInfo);
 	
 public:
-	__fastcall TBDECallback(System::TObject* AOwner, Bde::hDBICur Handle, Bde::CBType CBType, void * CBBuf
-		, int CBBufSize, TBDECallbackEvent CallbackEvent, bool Chain);
+	__fastcall TBDECallback(System::TObject* AOwner, Bde::hDBICur Handle, Bde::CBType CBType, void * CBBuf, int CBBufSize, TBDECallbackEvent CallbackEvent, bool Chain);
 	__fastcall virtual ~TBDECallback(void);
 };
 
@@ -191,6 +170,9 @@ class DELPHICLASS TSession;
 class PASCALIMPLEMENTATION TSessionList : public System::TObject 
 {
 	typedef System::TObject inherited;
+	
+public:
+	TSession* operator[](int Index) { return Sessions[Index]; }
 	
 private:
 	Classes::TThreadList* FSessions;
@@ -225,18 +207,15 @@ typedef Set<TConfigModes, cfmVirtual, cfmSession>  TConfigMode;
 typedef void __fastcall (__closure *TPasswordEvent)(System::TObject* Sender, bool &Continue);
 
 #pragma option push -b-
-enum TDatabaseEvent { dbOpen, dbClose, dbAdd, dbRemove, dbAddAlias, dbDeleteAlias, dbAddDriver, dbDeleteDriver 
-	};
+enum TDatabaseEvent { dbOpen, dbClose, dbAdd, dbRemove, dbAddAlias, dbDeleteAlias, dbAddDriver, dbDeleteDriver };
 #pragma option pop
 
-typedef void __fastcall (__closure *TDatabaseNotifyEvent)(TDatabaseEvent DBEvent, const void *Param)
-	;
+typedef void __fastcall (__closure *TDatabaseNotifyEvent)(TDatabaseEvent DBEvent, const void *Param);
 
 typedef void __fastcall (*TBDEInitProc)(TSession* Session);
 
 #pragma option push -b-
-enum TTraceFlag { tfQPrepare, tfQExecute, tfError, tfStmt, tfConnect, tfTransact, tfBlob, tfMisc, tfVendor, 
-	tfDataIn, tfDataOut };
+enum TTraceFlag { tfQPrepare, tfQExecute, tfError, tfStmt, tfConnect, tfTransact, tfBlob, tfMisc, tfVendor, tfDataIn, tfDataOut };
 #pragma option pop
 
 typedef Set<TTraceFlag, tfQPrepare, tfDataOut>  TTraceFlags;
@@ -296,8 +275,7 @@ private:
 	AnsiString __fastcall GetNetFileDir();
 	AnsiString __fastcall GetPrivateDir();
 	void __fastcall InitializeBDE(void);
-	void __fastcall InternalAddAlias(const AnsiString Name, const AnsiString Driver, Classes::TStrings* 
-		List, TConfigMode CfgMode, bool RestoreMode);
+	void __fastcall InternalAddAlias(const AnsiString Name, const AnsiString Driver, Classes::TStrings* List, TConfigMode CfgMode, bool RestoreMode);
 	void __fastcall InternalDeleteAlias(const AnsiString Name, TConfigMode CfgMode, bool RestoreMode);
 	bool __fastcall SessionNameStored(void);
 	void __fastcall LoadSMClient(bool DesignTime);
@@ -309,8 +287,7 @@ private:
 	void __fastcall SetActive(bool Value);
 	void __fastcall SetAutoSessionName(bool Value);
 	void __fastcall SetConfigMode(TConfigMode Value);
-	void __fastcall SetConfigParams(const AnsiString Path, const AnsiString Node, Classes::TStrings* List
-		);
+	void __fastcall SetConfigParams(const AnsiString Path, const AnsiString Node, Classes::TStrings* List);
 	void __fastcall SetNetFileDir(const AnsiString Value);
 	void __fastcall SetPrivateDir(const AnsiString Value);
 	void __fastcall SetSessionName(const AnsiString Value);
@@ -325,10 +302,8 @@ private:
 	
 protected:
 	virtual void __fastcall Loaded(void);
-	void __fastcall ModifyConfigParams(const AnsiString Path, const AnsiString Node, Classes::TStrings* 
-		List);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	void __fastcall ModifyConfigParams(const AnsiString Path, const AnsiString Node, Classes::TStrings* List);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	__property TDatabaseNotifyEvent OnDBNotify = {read=FOnDBNotify, write=FOnDBNotify};
 	__property bool BDEOwnsLoginCbDb = {read=FBDEOwnsLoginCbDb, write=FBDEOwnsLoginCbDb, nodefault};
 	virtual void __fastcall SetName(const AnsiString NewName);
@@ -338,8 +313,7 @@ public:
 	__fastcall virtual ~TSession(void);
 	void __fastcall AddAlias(const AnsiString Name, const AnsiString Driver, Classes::TStrings* List);
 	void __fastcall AddDriver(const AnsiString Name, Classes::TStrings* List);
-	void __fastcall AddStandardAlias(const AnsiString Name, const AnsiString Path, const AnsiString DefaultDriver
-		);
+	void __fastcall AddStandardAlias(const AnsiString Name, const AnsiString Path, const AnsiString DefaultDriver);
 	__property TConfigMode ConfigMode = {read=GetConfigMode, write=SetConfigMode, nodefault};
 	void __fastcall AddPassword(const AnsiString Password);
 	void __fastcall Close(void);
@@ -351,14 +325,13 @@ public:
 	void __fastcall GetAliasNames(Classes::TStrings* List);
 	void __fastcall GetAliasParams(const AnsiString AliasName, Classes::TStrings* List);
 	AnsiString __fastcall GetAliasDriverName(const AnsiString AliasName);
-	void __fastcall GetConfigParams(const AnsiString Path, const AnsiString Section, Classes::TStrings* 
-		List);
+	void __fastcall GetConfigParams(const AnsiString Path, const AnsiString Section, Classes::TStrings* List);
 	void __fastcall GetDatabaseNames(Classes::TStrings* List);
 	void __fastcall GetDriverNames(Classes::TStrings* List);
 	void __fastcall GetDriverParams(const AnsiString DriverName, Classes::TStrings* List);
+	void __fastcall GetFieldNames(const AnsiString DatabaseName, const AnsiString TableName, Classes::TStrings* List);
 	bool __fastcall GetPassword(void);
-	void __fastcall GetTableNames(const AnsiString DatabaseName, const AnsiString Pattern, bool Extensions
-		, bool SystemTables, Classes::TStrings* List);
+	void __fastcall GetTableNames(const AnsiString DatabaseName, const AnsiString Pattern, bool Extensions, bool SystemTables, Classes::TStrings* List);
 	void __fastcall GetStoredProcNames(const AnsiString DatabaseName, Classes::TStrings* List);
 	bool __fastcall IsAlias(const AnsiString Name);
 	void __fastcall ModifyAlias(AnsiString Name, Classes::TStrings* List);
@@ -380,11 +353,16 @@ __published:
 	__property bool KeepConnections = {read=FKeepConnections, write=FKeepConnections, default=1};
 	__property AnsiString NetFileDir = {read=GetNetFileDir, write=SetNetFileDir};
 	__property AnsiString PrivateDir = {read=GetPrivateDir, write=SetPrivateDir};
-	__property AnsiString SessionName = {read=FSessionName, write=SetSessionName, stored=SessionNameStored
-		};
+	__property AnsiString SessionName = {read=FSessionName, write=SetSessionName, stored=SessionNameStored};
 	__property bool SQLHourGlass = {read=FSQLHourGlass, write=FSQLHourGlass, default=1};
 	__property TPasswordEvent OnPassword = {read=FOnPassword, write=FOnPassword};
 	__property Classes::TNotifyEvent OnStartup = {read=FOnStartup, write=FOnStartup};
+private:
+	void *__IDBSession;	/* Db::IDBSession */
+	
+public:
+	operator IDBSession*(void) { return (IDBSession*)&__IDBSession; }
+	
 };
 
 
@@ -414,8 +392,7 @@ public:
 enum TTransIsolation { tiDirtyRead, tiReadCommitted, tiRepeatableRead };
 #pragma option pop
 
-typedef void __fastcall (__closure *TDatabaseLoginEvent)(TDatabase* Database, Classes::TStrings* LoginParams
-	);
+typedef void __fastcall (__closure *TDatabaseLoginEvent)(TDatabase* Database, Classes::TStrings* LoginParams);
 
 class DELPHICLASS TDBDataSet;
 class PASCALIMPLEMENTATION TDatabase : public Db::TCustomConnection 
@@ -456,7 +433,7 @@ private:
 	AnsiString __fastcall GetDirectory();
 	AnsiString __fastcall GetDriverName();
 	bool __fastcall GetInTransaction(void);
-	_di_IUnknown __fastcall GetObjectContext();
+	System::_di_IInterface __fastcall GetObjectContext();
 	TTraceFlags __fastcall GetTraceFlags(void);
 	void __fastcall LoadLocale(void);
 	void __fastcall Login(Classes::TStrings* LoginParams);
@@ -482,18 +459,18 @@ protected:
 	virtual bool __fastcall GetConnected(void);
 	HIDESBASE TDBDataSet* __fastcall GetDataSet(int Index);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TDatabase(Classes::TComponent* AOwner);
 	__fastcall virtual ~TDatabase(void);
-	void __fastcall ApplyUpdates(TDBDataSet* const * DataSets, const int DataSets_Size);
+	void __fastcall ApplyUpdates(const TDBDataSet* * DataSets, const int DataSets_Size);
 	void __fastcall CloseDataSets(void);
 	void __fastcall Commit(void);
-	int __fastcall Execute(const AnsiString SQL, Db::TParams* Params, bool Cache, Bde::phDBICur Cursor)
-		;
+	int __fastcall Execute(const AnsiString SQL, Db::TParams* Params = (Db::TParams*)(0x0), bool Cache = false, Bde::phDBICur Cursor = (void *)(0x0));
 	void __fastcall FlushSchemaCache(const AnsiString TableName);
+	void __fastcall GetFieldNames(const AnsiString TableName, Classes::TStrings* List);
+	void __fastcall GetTableNames(Classes::TStrings* List, bool SystemTables = false);
 	void __fastcall Rollback(void);
 	void __fastcall StartTransaction(void);
 	void __fastcall ValidateName(const AnsiString Name);
@@ -510,18 +487,17 @@ public:
 	
 __published:
 	__property AnsiString AliasName = {read=GetAliasName, write=SetAliasName};
-	__property Connected ;
+	__property Connected  = {default=0};
 	__property AnsiString DatabaseName = {read=FDatabaseName, write=SetDatabaseName};
 	__property AnsiString DriverName = {read=GetDriverName, write=SetDriverName};
 	__property bool Exclusive = {read=FExclusive, write=SetExclusive, default=0};
 	__property bool HandleShared = {read=FHandleShared, write=FHandleShared, default=0};
 	__property bool KeepConnection = {read=FKeepConnection, write=SetKeepConnection, default=1};
-	__property LoginPrompt ;
+	__property LoginPrompt  = {default=1};
 	__property Classes::TStrings* Params = {read=FParams, write=SetParams};
 	__property bool ReadOnly = {read=FReadOnly, write=SetReadOnly, default=0};
 	__property AnsiString SessionName = {read=FSessionName, write=SetSessionName};
-	__property TTransIsolation TransIsolation = {read=FTransIsolation, write=FTransIsolation, default=1
-		};
+	__property TTransIsolation TransIsolation = {read=FTransIsolation, write=FTransIsolation, default=1};
 	__property AfterConnect ;
 	__property AfterDisconnect ;
 	__property BeforeConnect ;
@@ -535,20 +511,18 @@ enum TRecNoStatus { rnDbase, rnParadox, rnNotSupported };
 #pragma option pop
 
 class DELPHICLASS TDataSetUpdateObject;
-class DELPHICLASS TBDEDataSet;
 class PASCALIMPLEMENTATION TDataSetUpdateObject : public Classes::TComponent 
 {
 	typedef Classes::TComponent inherited;
 	
 protected:
-	virtual TBDEDataSet* __fastcall GetDataSet(void) = 0 ;
-	virtual void __fastcall SetDataSet(TBDEDataSet* ADataSet) = 0 ;
+	virtual Db::TDataSet* __fastcall GetDataSet(void) = 0 ;
+	virtual void __fastcall SetDataSet(Db::TDataSet* ADataSet) = 0 ;
 	virtual void __fastcall Apply(Db::TUpdateKind UpdateKind) = 0 ;
-	__property TBDEDataSet* DataSet = {read=GetDataSet, write=SetDataSet};
+	__property Db::TDataSet* DataSet = {read=GetDataSet, write=SetDataSet};
 public:
 	#pragma option push -w-inl
-	/* TComponent.Create */ inline __fastcall virtual TDataSetUpdateObject(Classes::TComponent* AOwner)
-		 : Classes::TComponent(AOwner) { }
+	/* TComponent.Create */ inline __fastcall virtual TDataSetUpdateObject(Classes::TComponent* AOwner) : Classes::TComponent(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TComponent.Destroy */ inline __fastcall virtual ~TDataSetUpdateObject(void) { }
@@ -566,8 +540,7 @@ protected:
 	virtual Classes::TStrings* __fastcall GetSQL(Db::TUpdateKind UpdateKind) = 0 ;
 public:
 	#pragma option push -w-inl
-	/* TComponent.Create */ inline __fastcall virtual TSQLUpdateObject(Classes::TComponent* AOwner) : TDataSetUpdateObject(
-		AOwner) { }
+	/* TComponent.Create */ inline __fastcall virtual TSQLUpdateObject(Classes::TComponent* AOwner) : TDataSetUpdateObject(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TComponent.Destroy */ inline __fastcall virtual ~TSQLUpdateObject(void) { }
@@ -606,11 +579,14 @@ struct TRecInfo
 
 typedef DynamicArray<AnsiString >  TBlobDataArray;
 
+class DELPHICLASS TBDEDataSet;
 class PASCALIMPLEMENTATION TBDEDataSet : public Db::TDataSet 
 {
+	friend class TQuery;
+	friend class TTable;
 	typedef Db::TDataSet inherited;
 	
-/*private:*/protected:
+private:
 	Bde::_hDBIObj *FHandle;
 	Bde::_hDBIObj *FStmtHandle;
 	#pragma pack(push, 1)
@@ -662,14 +638,12 @@ class PASCALIMPLEMENTATION TBDEDataSet : public Db::TDataSet
 	bool __fastcall HasConstraints(void);
 	
 protected:
-	virtual Db::EUpdateError* __fastcall PSGetUpdateException(Sysutils::Exception* E, Db::EUpdateError* 
-		Prev);
+	virtual Db::EUpdateError* __fastcall PSGetUpdateException(Sysutils::Exception* E, Db::EUpdateError* Prev);
 	virtual bool __fastcall PSIsSQLSupported(void);
 	virtual void __fastcall PSReset(void);
 	virtual bool __fastcall PSUpdateRecord(Db::TUpdateKind UpdateKind, Db::TDataSet* Delta);
 	void __fastcall ActivateFilters(void);
-	void __fastcall AddFieldDesc(TFieldDescList FieldDescs, int &DescNo, int &FieldID, Classes::TBits* 
-		RequiredFields, Db::TFieldDefs* FieldDefs);
+	void __fastcall AddFieldDesc(TFieldDescList FieldDescs, int &DescNo, int &FieldID, Classes::TBits* RequiredFields, Db::TFieldDefs* FieldDefs);
 	void __fastcall AllocCachedUpdateBuffers(bool Allocate);
 	void __fastcall AllocKeyBuffers(void);
 	virtual char * __fastcall AllocRecordBuffer(void);
@@ -679,12 +653,10 @@ protected:
 	virtual void __fastcall ClearCalcFields(char * Buffer);
 	virtual void __fastcall CloseCursor(void);
 	virtual void __fastcall CloseBlob(Db::TField* Field);
-	Bde::hDBIFilter __fastcall CreateExprFilter(const AnsiString Expr, Db::TFilterOptions Options, int 
-		Priority);
+	Bde::hDBIFilter __fastcall CreateExprFilter(const AnsiString Expr, Db::TFilterOptions Options, int Priority);
 	Bde::hDBIFilter __fastcall CreateFuncFilter(void * FilterFunc, int Priority);
 	virtual Bde::hDBICur __fastcall CreateHandle(void);
-	Bde::hDBIFilter __fastcall CreateLookupFilter(Classes::TList* Fields, const Variant &Values, Db::TLocateOptions 
-		Options, int Priority);
+	Bde::hDBIFilter __fastcall CreateLookupFilter(Classes::TList* Fields, const Variant &Values, Db::TLocateOptions Options, int Priority);
 	virtual void __fastcall DataEvent(Db::TDataEvent Event, int Info);
 	void __fastcall DeactivateFilters(void);
 	virtual void __fastcall DestroyHandle(void);
@@ -697,6 +669,7 @@ protected:
 	virtual Db::TBookmarkFlag __fastcall GetBookmarkFlag(char * Buffer);
 	virtual bool __fastcall GetCanModify(void);
 	virtual AnsiString __fastcall GetFieldFullName(Db::TField* Field);
+	Bde::hDBICur __fastcall GetHandle(void);
 	Db::TField* __fastcall GetIndexField(int Index);
 	int __fastcall GetIndexFieldCount(void);
 	virtual bool __fastcall GetIsIndexField(Db::TField* Field);
@@ -731,8 +704,7 @@ protected:
 	virtual void __fastcall InternalRefresh(void);
 	virtual void __fastcall InternalSetToRecord(char * Buffer);
 	virtual bool __fastcall IsCursorOpen(void);
-	bool __fastcall LocateRecord(const AnsiString KeyFields, const Variant &KeyValues, Db::TLocateOptions 
-		Options, bool SyncCursor);
+	bool __fastcall LocateRecord(const AnsiString KeyFields, const Variant &KeyValues, Db::TLocateOptions Options, bool SyncCursor);
 	bool __fastcall MapsToIndex(Classes::TList* Fields, bool CaseInsensitive);
 	virtual void __fastcall OpenCursor(bool InfoQuery);
 	void __fastcall PostKeyBuffer(bool Commit);
@@ -755,12 +727,10 @@ protected:
 	void __fastcall SetKeyBuffer(TKeyIndex KeyIndex, bool Clear);
 	void __fastcall SetKeyExclusive(bool Value);
 	void __fastcall SetKeyFieldCount(int Value);
-	void __fastcall SetKeyFields(TKeyIndex KeyIndex, const System::TVarRec * Values, const int Values_Size
-		);
+	void __fastcall SetKeyFields(TKeyIndex KeyIndex, const System::TVarRec * Values, const int Values_Size);
 	void __fastcall SetLinkRanges(Classes::TList* MasterFields);
 	void __fastcall SetLocale(void * Value);
-	virtual void __fastcall SetStateFieldValue(Db::TDataSetState State, Db::TField* Field, const Variant 
-		&Value);
+	virtual void __fastcall SetStateFieldValue(Db::TDataSetState State, Db::TField* Field, const Variant &Value);
 	virtual void __fastcall SetOnFilterRecord(const Db::TFilterRecordEvent Value);
 	void __fastcall SetOnUpdateError(Db::TUpdateErrorEvent UpdateEvent);
 	virtual void __fastcall SetRecNo(int Value);
@@ -784,7 +754,6 @@ public:
 	Word __stdcall ConstraintCallBack(Bde::DsInfoReq Req, Bde::DataSources &ADataSources);
 	bool __fastcall ConstraintsDisabled(void);
 	virtual Classes::TStream* __fastcall CreateBlobStream(Db::TField* Field, Db::TBlobStreamMode Mode);
-		
 	void __fastcall DisableConstraints(void);
 	void __fastcall EnableConstraints(void);
 	void __fastcall FetchAll(void);
@@ -794,10 +763,8 @@ public:
 	virtual bool __fastcall GetFieldData(Db::TField* Field, void * Buffer)/* overload */;
 	virtual bool __fastcall GetFieldData(int FieldNo, void * Buffer)/* overload */;
 	void __fastcall GetIndexInfo(void);
-	virtual bool __fastcall Locate(const AnsiString KeyFields, const Variant &KeyValues, Db::TLocateOptions 
-		Options);
-	virtual Variant __fastcall Lookup(const AnsiString KeyFields, const Variant &KeyValues, const AnsiString 
-		ResultFields);
+	virtual bool __fastcall Locate(const AnsiString KeyFields, const Variant &KeyValues, Db::TLocateOptions Options);
+	virtual Variant __fastcall Lookup(const AnsiString KeyFields, const Variant &KeyValues, const AnsiString ResultFields);
 	virtual bool __fastcall IsSequenced(void);
 	virtual void __fastcall Post(void);
 	void __fastcall RevertRecord(void);
@@ -809,14 +776,13 @@ public:
 	__property void * Locale = {read=FLocale};
 	__property TDataSetUpdateObject* UpdateObject = {read=FUpdateObject, write=SetUpdateObject};
 	__property bool UpdatesPending = {read=GetUpdatesPending, nodefault};
-	__property Db::TUpdateRecordTypes UpdateRecordTypes = {read=GetUpdateRecordSet, write=SetUpdateRecordSet
-		, nodefault};
+	__property Db::TUpdateRecordTypes UpdateRecordTypes = {read=GetUpdateRecordSet, write=SetUpdateRecordSet, nodefault};
 	
 __published:
-	__property Active ;
-	__property AutoCalcFields ;
+	__property Active  = {default=0};
+	__property AutoCalcFields  = {default=1};
 	__property bool CachedUpdates = {read=FCachedUpdates, write=SetCachedUpdates, default=0};
-	__property ObjectView ;
+	__property ObjectView  = {default=0};
 	__property BeforeOpen ;
 	__property AfterOpen ;
 	__property BeforeClose ;
@@ -842,6 +808,15 @@ __published:
 	__property OnPostError ;
 	__property Db::TUpdateErrorEvent OnUpdateError = {read=FOnUpdateError, write=SetOnUpdateError};
 	__property Db::TUpdateRecordEvent OnUpdateRecord = {read=FOnUpdateRecord, write=FOnUpdateRecord};
+	
+/* Hoisted overloads: */
+	
+protected:
+	inline void __fastcall  SetFieldData(Db::TField* Field, void * Buffer, bool NativeFormat){ TDataSet::SetFieldData(Field, Buffer, NativeFormat); }
+	
+public:
+	inline bool __fastcall  GetFieldData(Db::TField* Field, void * Buffer, bool NativeFormat){ return TDataSet::GetFieldData(Field, Buffer, NativeFormat); }
+	
 };
 
 
@@ -861,7 +836,7 @@ public:
 	
 __published:
 	__property DataSetField ;
-	__property ObjectView ;
+	__property ObjectView  = {default=1};
 public:
 	#pragma option push -w-inl
 	/* TBDEDataSet.Destroy */ inline __fastcall virtual ~TNestedTable(void) { }
@@ -874,9 +849,10 @@ typedef Set<Shortint, 0, 15>  TDBFlags;
 
 class PASCALIMPLEMENTATION TDBDataSet : public TBDEDataSet 
 {
+	friend class TBDEDataSet;
 	typedef TBDEDataSet inherited;
 	
-/*private:*/protected:
+private:
 	bool FAutoRefresh;
 	TDBFlags FDBFlags;
 	Db::TUpdateMode FUpdateMode;
@@ -895,8 +871,7 @@ class PASCALIMPLEMENTATION TDBDataSet : public TBDEDataSet
 	
 protected:
 	virtual void __fastcall PSEndTransaction(bool Commit);
-	virtual int __fastcall PSExecuteStatement(const AnsiString ASQL, Db::TParams* AParams, void * ResultSet
-		);
+	virtual int __fastcall PSExecuteStatement(const AnsiString ASQL, Db::TParams* AParams, void * ResultSet = (void *)(0x0));
 	virtual void __fastcall PSGetAttributes(Classes::TList* List);
 	virtual AnsiString __fastcall PSGetQuoteChar();
 	virtual bool __fastcall PSInTransaction(void);
@@ -921,14 +896,14 @@ public:
 	__property Bde::hDBIDb DBHandle = {read=GetDBHandle};
 	__property void * DBLocale = {read=GetDBLocale};
 	__property TSession* DBSession = {read=GetDBSession};
-	__property Bde::hDBICur Handle = {read=FHandle, write=SetHandle};
+	__property Bde::hDBICur Handle = {read=GetHandle, write=SetHandle};
 	
 __published:
 	__property bool AutoRefresh = {read=FAutoRefresh, write=SetAutoRefresh, default=0};
 	__property AnsiString DatabaseName = {read=FDatabaseName, write=SetDatabaseName};
 	__property Filter ;
-	__property Filtered ;
-	__property FilterOptions ;
+	__property Filtered  = {default=0};
+	__property FilterOptions  = {default=0};
 	__property AnsiString SessionName = {read=FSessionName, write=SetSessionName};
 	__property OnFilterRecord ;
 public:
@@ -981,15 +956,13 @@ private:
 	bool FLookupCaseIns;
 	char FNativeTableName[261];
 	void __fastcall CheckMasterRange(void);
-	void __fastcall DecodeIndexDesc(const Bde::IDXDesc &IndexDesc, AnsiString &Source, AnsiString &Name
-		, AnsiString &FieldExpression, AnsiString &DescFields, Db::TIndexOptions &Options);
+	void __fastcall DecodeIndexDesc(const Bde::IDXDesc &IndexDesc, AnsiString &Source, AnsiString &Name, AnsiString &FieldExpression, AnsiString &DescFields, Db::TIndexOptions &Options);
 	bool __fastcall FieldDefsStored(void);
 	char * __fastcall GetDriverTypeName(char * Buffer);
 	bool __fastcall GetExists(void);
 	AnsiString __fastcall GetIndexFieldNames();
 	AnsiString __fastcall GetIndexName();
-	void __fastcall GetIndexParams(const AnsiString IndexName, bool FieldsIndex, AnsiString &IndexedName
-		, AnsiString &IndexTag);
+	void __fastcall GetIndexParams(const AnsiString IndexName, bool FieldsIndex, AnsiString &IndexedName, AnsiString &IndexTag);
 	AnsiString __fastcall GetMasterFields();
 	char * __fastcall GetTableTypeName(void);
 	int __fastcall GetTableLevel(void);
@@ -1026,13 +999,11 @@ protected:
 	virtual void __fastcall DestroyHandle(void);
 	virtual void __fastcall DestroyLookupCursor(void);
 	virtual void __fastcall DoOnNewRecord(void);
-	void __fastcall EncodeFieldDesc(Bde::FLDDesc &FieldDesc, const AnsiString Name, Db::TFieldType DataType
-		, int Size, int Precision);
-	void __fastcall EncodeIndexDesc(Bde::IDXDesc &IndexDesc, const AnsiString Name, const AnsiString FieldExpression
-		, Db::TIndexOptions Options, const AnsiString DescFields);
+	void __fastcall EncodeFieldDesc(Bde::FLDDesc &FieldDesc, const AnsiString Name, Db::TFieldType DataType, int Size, int Precision);
+	void __fastcall EncodeIndexDesc(Bde::IDXDesc &IndexDesc, const AnsiString Name, const AnsiString FieldExpression, Db::TIndexOptions Options, const AnsiString DescFields = "");
 	virtual bool __fastcall GetCanModify(void);
 	virtual Db::TDataSource* __fastcall GetDataSource(void);
-	Bde::hDBICur __fastcall GetHandle(const AnsiString IndexName, const AnsiString IndexTag);
+	HIDESBASE Bde::hDBICur __fastcall GetHandle(const AnsiString IndexName, const AnsiString IndexTag);
 	AnsiString __fastcall GetLanguageDriverName();
 	virtual Bde::hDBICur __fastcall GetLookupCursor(const AnsiString KeyFields, bool CaseInsensitive);
 	virtual void __fastcall InitFieldDefs(void);
@@ -1048,8 +1019,7 @@ public:
 	__fastcall virtual TTable(Classes::TComponent* AOwner);
 	__fastcall virtual ~TTable(void);
 	int __fastcall BatchMove(TBDEDataSet* ASource, TBatchMode AMode);
-	void __fastcall AddIndex(const AnsiString Name, const AnsiString Fields, Db::TIndexOptions Options, 
-		const AnsiString DescFields);
+	void __fastcall AddIndex(const AnsiString Name, const AnsiString Fields, Db::TIndexOptions Options, const AnsiString DescFields = "");
 	void __fastcall ApplyRange(void);
 	void __fastcall CancelRange(void);
 	void __fastcall CloseIndexFile(const AnsiString IndexFileName);
@@ -1062,8 +1032,7 @@ public:
 	void __fastcall EmptyTable(void);
 	bool __fastcall FindKey(const System::TVarRec * KeyValues, const int KeyValues_Size);
 	void __fastcall FindNearest(const System::TVarRec * KeyValues, const int KeyValues_Size);
-	virtual void __fastcall GetDetailLinkFields(Classes::TList* MasterFields, Classes::TList* DetailFields
-		);
+	virtual void __fastcall GetDetailLinkFields(Classes::TList* MasterFields, Classes::TList* DetailFields);
 	void __fastcall GetIndexNames(Classes::TStrings* List);
 	void __fastcall GotoCurrent(TTable* Table);
 	bool __fastcall GotoKey(void);
@@ -1072,13 +1041,11 @@ public:
 	void __fastcall OpenIndexFile(const AnsiString IndexName);
 	void __fastcall RenameTable(const AnsiString NewTableName);
 	void __fastcall SetKey(void);
-	void __fastcall SetRange(const System::TVarRec * StartValues, const int StartValues_Size, const System::TVarRec 
-		* EndValues, const int EndValues_Size);
+	void __fastcall SetRange(const System::TVarRec * StartValues, const int StartValues_Size, const System::TVarRec * EndValues, const int EndValues_Size);
 	void __fastcall SetRangeEnd(void);
 	void __fastcall SetRangeStart(void);
 	void __fastcall UnlockTable(TLockType LockType);
 	__property bool Exists = {read=GetExists, nodefault};
-	__property Bde::hDBICur Handle = {read=FHandle};
 	__property int IndexFieldCount = {read=GetIndexFieldCount, nodefault};
 	__property Db::TField* IndexFields[int Index] = {read=GetIndexField, write=SetIndexField};
 	__property bool KeyExclusive = {read=GetKeyExclusive, write=SetKeyExclusive, nodefault};
@@ -1090,8 +1057,7 @@ __published:
 	__property bool DefaultIndex = {read=FDefaultIndex, write=FDefaultIndex, default=1};
 	__property bool Exclusive = {read=FExclusive, write=SetExclusive, default=0};
 	__property FieldDefs  = {stored=FieldDefsStored};
-	__property Db::TIndexDefs* IndexDefs = {read=FIndexDefs, write=SetIndexDefs, stored=IndexDefsStored
-		};
+	__property Db::TIndexDefs* IndexDefs = {read=FIndexDefs, write=SetIndexDefs, stored=IndexDefsStored};
 	__property AnsiString IndexFieldNames = {read=GetIndexFieldNames, write=SetIndexFieldNames};
 	__property Classes::TStrings* IndexFiles = {read=FIndexFiles, write=SetIndexFiles};
 	__property AnsiString IndexName = {read=GetIndexName, write=SetIndexName};
@@ -1101,7 +1067,7 @@ __published:
 	__property bool StoreDefs = {read=FStoreDefs, write=FStoreDefs, default=0};
 	__property AnsiString TableName = {read=FTableName, write=SetTableName};
 	__property TTableType TableType = {read=FTableType, write=SetTableType, default=0};
-	__property UpdateMode ;
+	__property UpdateMode  = {default=0};
 	__property UpdateObject ;
 };
 
@@ -1154,8 +1120,7 @@ private:
 	void __fastcall SetSource(TBDEDataSet* Value);
 	
 protected:
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TBatchMove(Classes::TComponent* AOwner);
@@ -1253,7 +1218,7 @@ public:
 	void __fastcall Prepare(void);
 	void __fastcall GetResults(void);
 	void __fastcall UnPrepare(void);
-	__property Bde::hDBICur Handle = {read=FHandle};
+	__property Bde::hDBICur Handle = {read=GetHandle};
 	__property Word ParamCount = {read=GetParamsCount, nodefault};
 	__property StmtHandle ;
 	__property bool Prepared = {read=FPrepared, write=SetPrepare, nodefault};
@@ -1325,12 +1290,10 @@ public:
 	__fastcall virtual TQuery(Classes::TComponent* AOwner);
 	__fastcall virtual ~TQuery(void);
 	void __fastcall ExecSQL(void);
-	virtual void __fastcall GetDetailLinkFields(Classes::TList* MasterFields, Classes::TList* DetailFields
-		);
+	virtual void __fastcall GetDetailLinkFields(Classes::TList* MasterFields, Classes::TList* DetailFields);
 	Db::TParam* __fastcall ParamByName(const AnsiString Value);
 	void __fastcall Prepare(void);
 	void __fastcall UnPrepare(void);
-	__property Bde::hDBICur Handle = {read=FHandle};
 	__property bool Prepared = {read=FPrepared, write=SetPrepare, nodefault};
 	__property Word ParamCount = {read=GetParamsCount, nodefault};
 	__property bool Local = {read=FLocal, nodefault};
@@ -1348,7 +1311,7 @@ __published:
 	__property Classes::TStrings* SQL = {read=FSQL, write=SetQuery};
 	__property Db::TParams* Params = {read=FParams, write=SetParamsList, stored=false};
 	__property bool UniDirectional = {read=FUniDirectional, write=FUniDirectional, default=0};
-	__property UpdateMode ;
+	__property UpdateMode  = {default=0};
 	__property UpdateObject ;
 };
 
@@ -1359,7 +1322,9 @@ class PASCALIMPLEMENTATION TUpdateSQL : public TSQLUpdateObject
 	typedef TSQLUpdateObject inherited;
 	
 private:
-	TBDEDataSet* FDataSet;
+	Db::TDataSet* FDataSet;
+	AnsiString FDatabaseName;
+	AnsiString FSessionName;
 	TQuery* FQueries[3];
 	Classes::TStrings* FSQLText[3];
 	TQuery* __fastcall GetQuery(Db::TUpdateKind UpdateKind);
@@ -1369,19 +1334,21 @@ private:
 	
 protected:
 	virtual Classes::TStrings* __fastcall GetSQL(Db::TUpdateKind UpdateKind);
-	virtual TBDEDataSet* __fastcall GetDataSet(void);
-	virtual void __fastcall SetDataSet(TBDEDataSet* ADataSet);
+	virtual Db::TDataSet* __fastcall GetDataSet(void);
+	virtual void __fastcall SetDataSet(Db::TDataSet* ADataSet);
 	void __fastcall SQLChanged(System::TObject* Sender);
 	
 public:
 	__fastcall virtual TUpdateSQL(Classes::TComponent* AOwner);
 	__fastcall virtual ~TUpdateSQL(void);
 	virtual void __fastcall Apply(Db::TUpdateKind UpdateKind);
-	void __fastcall ExecSQL(Db::TUpdateKind UpdateKind);
-	void __fastcall SetParams(Db::TUpdateKind UpdateKind);
+	virtual void __fastcall ExecSQL(Db::TUpdateKind UpdateKind);
+	virtual void __fastcall SetParams(Db::TUpdateKind UpdateKind);
+	__property AnsiString DatabaseName = {read=FDatabaseName, write=FDatabaseName};
 	__property DataSet ;
 	__property TQuery* Query[Db::TUpdateKind UpdateKind] = {read=GetQuery};
 	__property Classes::TStrings* SQL[Db::TUpdateKind UpdateKind] = {read=GetSQL, write=SetSQL};
+	__property AnsiString SessionName = {read=FSessionName, write=FSessionName};
 	
 __published:
 	__property Classes::TStrings* ModifySQL = {read=GetSQLIndex, write=SetSQLIndex, index=0};
@@ -1414,8 +1381,14 @@ public:
 	__fastcall virtual ~TBlobStream(void);
 	virtual int __fastcall Read(void *Buffer, int Count);
 	virtual int __fastcall Write(const void *Buffer, int Count);
-	virtual int __fastcall Seek(int Offset, Word Origin);
+	virtual int __fastcall Seek(int Offset, Word Origin)/* overload */;
 	void __fastcall Truncate(void);
+	
+/* Hoisted overloads: */
+	
+public:
+	inline __int64 __fastcall  Seek(const __int64 Offset, Classes::TSeekOrigin Origin){ return TStream::Seek(Offset, Origin); }
+	
 };
 
 
@@ -1432,40 +1405,32 @@ static const Shortint dbfExecProc = 0x7;
 static const Shortint dbfProcDesc = 0x8;
 static const Shortint dbfDatabase = 0x9;
 static const Shortint dbfProvider = 0xa;
-extern PACKAGE Byte FldTypeMap[36];
-extern PACKAGE Word FldSubTypeMap[36];
-extern PACKAGE Db::TFieldType DataTypeMap[24];
+extern PACKAGE Byte FldTypeMap[38];
+extern PACKAGE Word FldSubTypeMap[38];
+extern PACKAGE Db::TFieldType DataTypeMap[25];
 extern PACKAGE Db::TFieldType BlobTypeMap[15];
-#define cmVirtual (System::Set<TConfigModes, cfmVirtual, cfmSession> () )
-#define cmPersistent (System::Set<TConfigModes, cfmVirtual, cfmSession> () )
-#define cmSession (System::Set<TConfigModes, cfmVirtual, cfmSession> () )
-#define cmAll (System::Set<TConfigModes, cfmVirtual, cfmSession> () )
+#define cmVirtual (System::Set<TConfigModes, cfmVirtual, cfmSession> () << TConfigModes(0) )
+#define cmPersistent (System::Set<TConfigModes, cfmVirtual, cfmSession> () << TConfigModes(1) )
+#define cmSession (System::Set<TConfigModes, cfmVirtual, cfmSession> () << TConfigModes(2) )
+#define cmAll (System::Set<TConfigModes, cfmVirtual, cfmSession> () << TConfigModes(0) << TConfigModes(1) << TConfigModes(2) )
 extern PACKAGE TSession* Session;
 extern PACKAGE TSessionList* Sessions;
-extern PACKAGE _di_IUnknown __fastcall (*GetObjectContextProc)(void);
+extern PACKAGE System::_di_IInterface __fastcall (*GetObjectContextProc)(void);
 extern PACKAGE void __fastcall RegisterBDEInitProc(const TBDEInitProc InitProc);
-extern PACKAGE bool __fastcall GetFieldSource(Db::TDataSet* ADataSet, Bde::DataSources &ADataSources
-	);
-extern PACKAGE char * __fastcall AnsiToNative(void * Locale, const AnsiString AnsiStr, char * NativeStr
-	, int MaxLen);
+extern PACKAGE bool __fastcall GetFieldSource(Db::TDataSet* ADataSet, Bde::DataSources &ADataSources);
+extern PACKAGE char * __fastcall AnsiToNative(void * Locale, const AnsiString AnsiStr, char * NativeStr, int MaxLen);
 extern PACKAGE void __fastcall NativeToAnsi(void * Locale, char * NativeStr, AnsiString &AnsiStr);
 extern PACKAGE void __fastcall AnsiToNativeBuf(void * Locale, char * Source, char * Dest, int Len);
 extern PACKAGE void __fastcall NativeToAnsiBuf(void * Locale, char * Source, char * Dest, int Len);
-extern PACKAGE int __fastcall NativeCompareStr(void * Locale, const AnsiString S1, const AnsiString 
-	S2, int Len);
-extern PACKAGE int __fastcall NativeCompareStrBuf(void * Locale, const char * S1, const char * S2, int 
-	Len);
-extern PACKAGE int __fastcall NativeCompareText(void * Locale, const AnsiString S1, const AnsiString 
-	S2, int Len);
-extern PACKAGE int __fastcall NativeCompareTextBuf(void * Locale, const char * S1, const char * S2, 
-	int Len);
+extern PACKAGE int __fastcall NativeCompareStr(void * Locale, const AnsiString S1, const AnsiString S2, int Len);
+extern PACKAGE int __fastcall NativeCompareStrBuf(void * Locale, const char * S1, const char * S2, int Len);
+extern PACKAGE int __fastcall NativeCompareText(void * Locale, const AnsiString S1, const AnsiString S2, int Len);
+extern PACKAGE int __fastcall NativeCompareTextBuf(void * Locale, const char * S1, const char * S2, int Len);
 extern PACKAGE void __fastcall DbiError(Word ErrorCode);
 extern PACKAGE void __fastcall Check(Word Status);
 
 }	/* namespace Dbtables */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dbtables;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

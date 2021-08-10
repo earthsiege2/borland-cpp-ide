@@ -10,7 +10,6 @@
 //////////////////////////////////////////////////////////////
 
 #ifndef __SMSRSGEN_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __SMSRSGEN_H
 
 #include <windows.h>
@@ -117,5 +116,4 @@ extern "C" __declspec(dllimport) HRESULT DDRWrite(char *sFileName);
 // **********************************
 extern "C" __declspec(dllimport) HRESULT DDRSendToSMS(void);
 
-#pragma option pop /*P_O_Pop*/
 #endif

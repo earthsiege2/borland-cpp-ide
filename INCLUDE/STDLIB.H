@@ -4,23 +4,14 @@
 
 */
 
-/*
- *      C/C++ Run Time Library - Version 10.0
- *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
- *      All Rights Reserved.
- *
- */
-
-/* $Revision:   9.19  $ */
+/* $Copyright: 1987$ */
+/* $Revision: 9.30.2.5 $ */
 
 #ifndef __STDLIB_H
 #define __STDLIB_H
 #define _INC_STDLIB  /* MSC Guard name */
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 #ifndef __SEARCH_H
 #include <search.h>  /* Factored out all the search functions to search.h */
@@ -77,7 +68,15 @@ typedef struct {
 } ldiv_t;
 #endif
 
+/* If using cnames and c++, we need to scope to std.
+   bts 117437
+ */
+
+#if defined(__cplusplus) && defined(__USING_CNAME__)
+#define MB_CUR_MAX std::__mb_cur_max
+#else
 #define MB_CUR_MAX __mb_cur_max
+#endif
 
 /* Maximum value returned by "rand" function
 */
@@ -162,6 +161,18 @@ wchar_t *     _RTLENTRY _EXPFUNC _itow(int __value, wchar_t *__string, int __rad
 wchar_t *     _RTLENTRY _EXPFUNC _ltow(long __value, wchar_t *__string, int __radix);
 wchar_t *     _RTLENTRY _EXPFUNC _ultow(unsigned long __value, wchar_t *__string, int __radix);
 
+/* Add overloaded functions from 26.5 here */
+#if defined(__cplusplus) && defined(__USING_CNAME__)
+
+extern "C++" {
+
+inline long abs(long __x) { return labs(__x); }
+inline ldiv_t div(long __x, long __y) { return ldiv(__x,__y); }
+
+}
+
+#endif
+
 #if !defined(__STDC__)
 #if defined (_INTEGRAL_MAX_BITS) && (_INTEGRAL_MAX_BITS >= 64)
 __int64       _RTLENTRY _EXPFUNC _atoi64(const char * __s);
@@ -180,21 +191,6 @@ char *        _RTLENTRY _EXPFUNC gcvt(double __value, int __ndec, char * __buf);
 
 
 /* Variables */
-
-#ifdef _MT
-
-extern  int * _RTLENTRY _EXPFUNC __errno(void);
-extern  int * _RTLENTRY _EXPFUNC __doserrno(void);
-#define errno (*__errno())
-#define _doserrno (*__doserrno())
-
-#else   /* MT */
-
-extern  int   _RTLENTRY _EXPDATA errno;
-extern  int   _RTLENTRY _EXPDATA _doserrno;
-
-#endif  /* MT */
-
 extern  int   _RTLENTRY _EXPDATA __mb_cur_max;
 
 #if !defined(__STDC__)
@@ -358,7 +354,7 @@ long _RTLENTRY _EXPFUNC time(long *);
 inline void _RTLENTRY randomize(void) { srand((unsigned) time(NULL)); }
 
 #if defined(__MFC_COMPAT__)
-#if !defined( __MINMAX_DEFINED)
+#if !defined( __MINMAX_DEFINED) && defined(_USE_OLD_RW_STL)
 #define __MINMAX_DEFINED
 #define NOMINMAX    /* for WINDEF.H */
 #undef min  // make sure these aren't macros
@@ -427,7 +423,7 @@ inline int    _RTLENTRY _putenv(const char * __name) {return putenv(__name);}
 inline void   _RTLENTRY _swab(char * __from, char * __to, int __nbytes)
                             { swab (__from, __to, __nbytes); }
 #else   /* __MFC_COMPAT__ */
-#if !defined( __MINMAX_DEFINED) && defined(__cplusplus)
+#if !defined( __MINMAX_DEFINED) && defined(__cplusplus) && defined(_USE_OLD_RW_STL)
 #define __MINMAX_DEFINED
 #undef min  // make sure these aren't macros
 #undef max
@@ -500,17 +496,12 @@ extern "C"{
 
 #endif  /* __STDLIB_H */
 
+#include <errno.h>
+
 #if defined(__cplusplus) && !defined(__USING_CNAME__) && !defined(__STDLIB_H_USING_LIST)
 #define __STDLIB_H_USING_LIST
      using std::_argc;
      using std::_argv;
-#ifdef _MT
-     using std::__doserrno;
-     using std::__errno;
-#else
-     using std::_doserrno;
-     using std::errno;
-#endif
      using std::__mb_cur_max;
 
      using std::_ecvt;
@@ -555,8 +546,6 @@ extern "C"{
      using std::_searchstr;
      using std::_splitpath;
      using std::_strtold;
-     using std::_sys_errlist;
-     using std::_sys_nerr;
      using std::_wcstold;
      using std::_wenviron;
      using std::_wfullpath;
@@ -599,7 +588,7 @@ extern "C"{
      using std::randomize;
 #endif
 
-#if !defined(__STDC__) // The standard says that min() and max() should only
+#if !defined(__STDC__) && defined(_USE_OLD_RW_STL) // The standard says that min() and max() should only
      using std::min;   // come in from algorith.h, but we'll allow it here
      using std::max;   // unless -A is specified
      using std::_seterrormode;
@@ -633,9 +622,10 @@ extern "C"{
    only preform a using statement if it's not an intrinsic
 */
 
-#    ifndef abs
-       using std::abs;
-#    endif // ifndef abs
+#if !defined(__STDC__) && defined(__cplusplus) && !defined(__USING_CNAME__)
+using std::abs;
+#endif /* __USING_STD_NAMES__ */
+
 #    ifndef _crotl
        using std::_crotl;
 #    endif // ifndef _crotl

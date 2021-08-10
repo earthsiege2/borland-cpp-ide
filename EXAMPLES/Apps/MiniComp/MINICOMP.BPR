@@ -1,11 +1,13 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- C++Builder XML Project --><PROJECT>
+<!-- C++Builder XML Project -->
+<PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
-    <PROJECT value="minicomp.exe"/>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="MINICOMP.exe"/>
     <OBJFILES value="MINICOMP.obj counter.obj"/>
     <RESFILES value=""/>
     <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value=""/>
@@ -27,18 +29,23 @@
     <WARNINGS value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\include"/>
-    <CFLAG1 value="-a1 -k -vi -c -tWC -tWM"/>
+    <IDLCFLAGS value="-src_suffix cpp -I$(BCB)\include"/>
+    <CFLAG1 value="-X- -a1 -b -k -vi -c -tWC -tWM"/>
     <PFLAGS value="-$YD -v -JPHN -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-ap -Tpe -x -v"/>
+    <LFLAGS value="-D&quot;&quot; -ap -Tpe -x -v"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0x32.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) import32.lib cw32mt.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="MINICOMP.cpp" FORMNAME="" UNITNAME="MINICOMP" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="counter.cpp" FORMNAME="" UNITNAME="counter" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -68,30 +75,39 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=1
-Item0=$(BCB)\include
 
 [HistoryLists\hlLibraryPath]
-Count=1
-Item0=$(BCB)\lib
 
 [HistoryLists\hlConditionals]
-Count=1
-Item0=_NO_VCL
 
 [Debugging]
 DebugSourceDirs=
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
-InMemoryExe=0
 ShowInfoMsgs=0
 LinkDebugVcl=1
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
   </IDEOPTIONS>
 </PROJECT>

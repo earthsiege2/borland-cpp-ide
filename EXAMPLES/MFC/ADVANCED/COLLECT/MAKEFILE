@@ -13,9 +13,14 @@ OBJS=collect.obj collevw.obj mainfrm.obj colledoc.obj dwarryvw.obj \
 	intlstvw.obj mapdwvw.obj mapssvw.obj ptarryvw.obj strlstvw.obj \
 	typaryvw.obj typlstvw.obj typtrmap.obj
 
-!if "$(PLATFORM)" == "M68K" || "$(PLATFORM)" == "MPPC"
-MACPROJ=Collect
-MACSIG=COLL
-!endif
+#!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+!include <..\..\mfcrules.mak>
 
-!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+default: integration
+	$(MAKE) -f $(PROJ).mak
+
+clean:
+	$(CLEAN_MFC)
+                                
+integration: $(PROJ).bpr $(PROJ).mak
+    $(NOP)

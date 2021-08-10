@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1998-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -21,7 +21,7 @@ Abstract:
 // CVideoCaptureTerminal
 
 class CVideoCaptureTerminal : 
-    public CSingleFilterTerminal
+    public CSingleFilterStaticTerminal
 {
 public:
 
@@ -40,13 +40,10 @@ public:
 // we must uncomment and expand the following.
 //
 // BEGIN_COM_MAP(CVideoCaptureTerminal)
-//    COM_INTERFACE_ENTRY_CHAIN(CSingleFilterTerminal)
+//    COM_INTERFACE_ENTRY_CHAIN(CSingleFilterStaticTerminal)
 // END_COM_MAP()
 
 DECLARE_LOG_ADDREF_RELEASE(CVideoCaptureTerminal);
-
-public:
-    CComPtr<IMoniker> m_pMoniker;
 
 private:
 
@@ -78,6 +75,7 @@ CVideoCaptureTerminal::CVideoCaptureTerminal(
     m_TerminalDirection = TD_CAPTURE;
     m_TerminalType = TT_STATIC;
 }
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // _MSPTRMVC_H_

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ShellAPI.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ShellAPI.pas' rev: 6.00
 
 #ifndef ShellAPIHPP
 #define ShellAPIHPP
@@ -30,27 +30,31 @@ typedef _DRAGINFOW *PDragInfoW;
 
 typedef _DRAGINFOA *PDragInfo;
 
+#pragma pack(push, 4)
 struct _DRAGINFOA
 {
 	unsigned uSize;
-	Windows::TPoint pt;
+	Types::TPoint pt;
 	BOOL fNC;
 	char *lpFileList;
 	unsigned grfKeyState;
 } ;
+#pragma pack(pop)
 
 typedef _DRAGINFOA  TDragInfoA;
 
 typedef _DRAGINFOA *LPDRAGINFOA;
 
+#pragma pack(push, 4)
 struct _DRAGINFOW
 {
 	unsigned uSize;
-	Windows::TPoint pt;
+	Types::TPoint pt;
 	BOOL fNC;
 	wchar_t *lpFileList;
 	unsigned grfKeyState;
 } ;
+#pragma pack(pop)
 
 typedef _DRAGINFOW  TDragInfoW;
 
@@ -126,9 +130,7 @@ typedef _SHFILEINFOA  TSHFileInfo;
 #define shell32 "shell32.dll"
 
 }	/* namespace Shellapi */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Shellapi;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

@@ -18,6 +18,7 @@
 #include "batchdoc.h"
 #include "destdird.h"
 #include "interlea.h"
+#include <algorithm>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -777,7 +778,7 @@ void CBatchDoc::DeleteSelection()
 	int aSel[MAXSEL];
 	POSITION pos;
 		
-	cSel = min(ListBox.GetSelCount(), MAXSEL);
+	cSel = std::min(ListBox.GetSelCount(), MAXSEL);
 	if (cSel && !FileList.IsEmpty()) {
 		ListBox.GetSelItems(cSel, aSel);
 		for (i = 0; i < cSel; i++) {

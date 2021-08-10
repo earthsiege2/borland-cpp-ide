@@ -1,11 +1,13 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1991-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
 {       Windows Messages and Types                      }
-{                                                       }
-{       Copyright (C) 1991,99 Inprise Corporation       }
-{                                                       }
 {*******************************************************}
 
 unit Messages;
@@ -1473,7 +1475,12 @@ type
   TWMNCMButtonUp     = TWMNCHitMessage;
   TWMNCMouseMove     = TWMNCHitMessage;
 
-  TWMNCPaint = TWMNoParams;
+  TWMNCPaint = packed record
+    Msg: Cardinal;
+    RGN: HRGN;
+    Unused: Longint;
+    Result: Longint;
+  end;
 
   TWMNCRButtonDblClk = TWMNCHitMessage;
   TWMNCRButtonDown   = TWMNCHitMessage;

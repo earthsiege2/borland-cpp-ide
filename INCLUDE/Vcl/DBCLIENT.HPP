@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DBClient.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DBClient.pas' rev: 6.00
 
 #ifndef DBClientHPP
 #define DBClientHPP
@@ -10,15 +10,14 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
+#include <ActiveX.hpp>	// Pascal unit
+#include <SqlTimSt.hpp>	// Pascal unit
 #include <Midas.hpp>	// Pascal unit
 #include <DBCommon.hpp>	// Pascal unit
 #include <DSIntf.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
-#include <Forms.hpp>	// Pascal unit
-#include <Controls.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
-#include <Graphics.hpp>	// Pascal unit
-#include <ActiveX.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
@@ -42,34 +41,25 @@ public:
 	__property Word ErrorCode = {read=FErrorCode, nodefault};
 public:
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EDBClient(const AnsiString Msg, const System::TVarRec * 
-		Args, const int Args_Size) : Db::EDatabaseError(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EDBClient(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Db::EDatabaseError(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EDBClient(int Ident)/* overload */ : Db::EDatabaseError(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EDBClient(int Ident)/* overload */ : Db::EDatabaseError(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EDBClient(int Ident, const System::TVarRec * Args, const 
-		int Args_Size)/* overload */ : Db::EDatabaseError(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EDBClient(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Db::EDatabaseError(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EDBClient(const AnsiString Msg, int AHelpContext) : Db::EDatabaseError(
-		Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EDBClient(const AnsiString Msg, int AHelpContext) : Db::EDatabaseError(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EDBClient(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Db::EDatabaseError(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EDBClient(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Db::EDatabaseError(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EDBClient(int Ident, int AHelpContext)/* overload */
-		 : Db::EDatabaseError(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EDBClient(int Ident, int AHelpContext)/* overload */ : Db::EDatabaseError(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EDBClient(System::PResStringRec ResStringRec, const 
-		System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Db::EDatabaseError(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EDBClient(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Db::EDatabaseError(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -90,40 +80,30 @@ private:
 	Word FPreviousError;
 	
 public:
-	__fastcall EReconcileError(AnsiString NativeError, AnsiString Context, Word ErrorCode, Word PreviousError
-		);
+	__fastcall EReconcileError(AnsiString NativeError, AnsiString Context, Word ErrorCode, Word PreviousError);
 	__property AnsiString Context = {read=FContext};
 	__property Word PreviousError = {read=FPreviousError, nodefault};
 public:
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EReconcileError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : EDBClient(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EReconcileError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : EDBClient(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EReconcileError(int Ident)/* overload */ : EDBClient(Ident
-		) { }
+	/* Exception.CreateRes */ inline __fastcall EReconcileError(int Ident)/* overload */ : EDBClient(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EReconcileError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : EDBClient(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EReconcileError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : EDBClient(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EReconcileError(const AnsiString Msg, int AHelpContext
-		) : EDBClient(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EReconcileError(const AnsiString Msg, int AHelpContext) : EDBClient(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EReconcileError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : EDBClient(Msg, Args, Args_Size, AHelpContext) { }
-		
+	/* Exception.CreateFmtHelp */ inline __fastcall EReconcileError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : EDBClient(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EReconcileError(int Ident, int AHelpContext)/* overload */
-		 : EDBClient(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EReconcileError(int Ident, int AHelpContext)/* overload */ : EDBClient(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EReconcileError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : EDBClient(ResStringRec
-		, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EReconcileError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : EDBClient(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -134,18 +114,28 @@ public:
 };
 
 
+typedef void __fastcall (__closure *TGetUsernameEvent)(System::TObject* Sender, AnsiString &Username);
+
 class DELPHICLASS TCustomRemoteServer;
 class PASCALIMPLEMENTATION TCustomRemoteServer : public Db::TCustomConnection 
 {
 	typedef Db::TCustomConnection inherited;
 	
+private:
+	Variant FAppServer;
+	TGetUsernameEvent FOnGetUsername;
+	
 protected:
+	virtual Variant __fastcall GetAppServer();
+	virtual void __fastcall SetAppServer(const Variant &Value);
 	virtual OleVariant __fastcall GetServerList();
 	virtual void __fastcall GetProviderNames(Classes::TGetStrProc Proc);
+	__property TGetUsernameEvent OnGetUsername = {read=FOnGetUsername, write=FOnGetUsername};
 	
 public:
 	__fastcall virtual TCustomRemoteServer(Classes::TComponent* AOwner);
 	virtual Midas::_di_IAppServer __fastcall GetServer();
+	__property Variant AppServer = {read=GetAppServer};
 public:
 	#pragma option push -w-inl
 	/* TCustomConnection.Destroy */ inline __fastcall virtual ~TCustomRemoteServer(void) { }
@@ -154,16 +144,62 @@ public:
 };
 
 
+class DELPHICLASS TConnectionBroker;
+class PASCALIMPLEMENTATION TConnectionBroker : public TCustomRemoteServer 
+{
+	typedef TCustomRemoteServer inherited;
+	
+private:
+	TCustomRemoteServer* FConnection;
+	bool FStreamedConnected;
+	void __fastcall SetConnection(const TCustomRemoteServer* Value);
+	
+protected:
+	virtual Variant __fastcall GetAppServer();
+	virtual bool __fastcall GetConnected(void);
+	virtual void __fastcall Loaded(void);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
+	virtual void __fastcall SetConnected(bool Value);
+	
+public:
+	virtual Midas::_di_IAppServer __fastcall GetServer();
+	
+__published:
+	__property Connected  = {default=0};
+	__property TCustomRemoteServer* Connection = {read=FConnection, write=SetConnection};
+	__property LoginPrompt  = {default=0};
+	__property AfterConnect ;
+	__property AfterDisconnect ;
+	__property BeforeConnect ;
+	__property BeforeDisconnect ;
+	__property OnGetUsername ;
+	__property OnLogin ;
+public:
+	#pragma option push -w-inl
+	/* TCustomRemoteServer.Create */ inline __fastcall virtual TConnectionBroker(Classes::TComponent* AOwner) : TCustomRemoteServer(AOwner) { }
+	#pragma option pop
+	
+public:
+	#pragma option push -w-inl
+	/* TCustomConnection.Destroy */ inline __fastcall virtual ~TConnectionBroker(void) { }
+	#pragma option pop
+	
+};
+
+
 class DELPHICLASS TAggregate;
 typedef void __fastcall (__closure *TAggUpdateEvent)(TAggregate* Agg);
 
-typedef DynamicArray<Byte >  DBClient__5;
+typedef DynamicArray<Byte >  DBClient__6;
 
-class DELPHICLASS TClientDataSet;
+class DELPHICLASS TCustomClientDataSet;
 class DELPHICLASS TAggregates;
 class PASCALIMPLEMENTATION TAggregates : public Classes::TCollection 
 {
 	typedef Classes::TCollection inherited;
+	
+public:
+	TAggregate* operator[](int Index) { return Items[Index]; }
 	
 private:
 	Classes::TPersistent* FOwner;
@@ -194,7 +230,7 @@ enum TDataSetOption { doDisableInserts, doDisableDeletes, doDisableEdits, doNoRe
 
 typedef Set<TDataSetOption, doDisableInserts, doNoResetCall>  TDataSetOptions;
 
-typedef DynamicArray<Byte >  DBClient__9;
+typedef DynamicArray<Byte >  DBClient__01;
 
 struct TKeyBuffer;
 typedef TKeyBuffer *PKeyBuffer;
@@ -203,8 +239,7 @@ typedef TKeyBuffer *PKeyBuffer;
 enum TReconcileAction { raSkip, raAbort, raMerge, raCorrect, raCancel, raRefresh };
 #pragma option pop
 
-typedef void __fastcall (__closure *TReconcileErrorEvent)(TClientDataSet* DataSet, EReconcileError* 
-	E, Db::TUpdateKind UpdateKind, TReconcileAction &Action);
+typedef void __fastcall (__closure *TReconcileErrorEvent)(TCustomClientDataSet* DataSet, EReconcileError* E, Db::TUpdateKind UpdateKind, TReconcileAction &Action);
 
 typedef void __fastcall (__closure *TRemoteEvent)(System::TObject* Sender, OleVariant &OwnerData);
 
@@ -214,17 +249,17 @@ enum TFetchOption { foRecord, foBlobs, foDetails };
 
 typedef Set<TFetchOption, foRecord, foDetails>  TFetchOptions;
 
+#pragma option push -b-
+enum TDataPacketFormat { dfBinary, dfXML, dfXMLUTF8 };
+#pragma option pop
+
 typedef DynamicArray<Dsintf::DSFLDDesc >  TFieldDescList;
 
 #pragma option push -b-
 enum TKeyIndex { kiLookup, kiRangeStart, kiRangeEnd, kiCurRangeStart, kiCurRangeEnd, kiSave };
 #pragma option pop
 
-#pragma option push -b-
-enum TDataPacketFormat { dfBinary, dfXML };
-#pragma option pop
-
-class PASCALIMPLEMENTATION TClientDataSet : public Db::TDataSet 
+class PASCALIMPLEMENTATION TCustomClientDataSet : public Db::TDataSet 
 {
 	typedef Db::TDataSet inherited;
 	
@@ -239,12 +274,13 @@ private:
 	TAggregates* FAggregates;
 	bool FAggregatesActive;
 	AnsiString FCommandText;
+	bool FDisableStringTrim;
 	Dsintf::_di_IDSBase FDSBase;
 	Dsintf::_di_IDSCursor FDSCursor;
 	TDataSetOptions FDSOptions;
 	Dsintf::_di_IDSCursor FFindCursor;
-	TClientDataSet* FCloneSource;
-	TClientDataSet* FReconcileDataSet;
+	TCustomClientDataSet* FCloneSource;
+	TCustomClientDataSet* FReconcileDataSet;
 	tagSAFEARRAY *FSavedPacket;
 	tagSAFEARRAY *FDeltaPacket;
 	Db::TParams* FParams;
@@ -271,12 +307,12 @@ private:
 	int FPacketRecords;
 	int FConstDisableCount;
 	int FMaxAggGroupingLevel;
-	TClientDataSet* FParentDataSet;
+	TCustomClientDataSet* FParentDataSet;
 	Word FKeySize;
-	Word FRecordSize;
-	Word FBookmarkOfs;
-	Word FRecInfoOfs;
-	Word FRecBufSize;
+	int FRecordSize;
+	int FBookmarkOfs;
+	int FRecInfoOfs;
+	int FRecBufSize;
 	bool FReadOnly;
 	bool FFieldsIndex;
 	bool FCanModify;
@@ -299,6 +335,7 @@ private:
 	TRemoteEvent FAfterExecute;
 	TRemoteEvent FBeforeGetParams;
 	TRemoteEvent FAfterGetParams;
+	TConnectionBroker* FConnectionBroker;
 	void __fastcall AddExprFilter(const AnsiString Expr, Db::TFilterOptions Options);
 	void __fastcall AddFuncFilter(void);
 	Word __stdcall CalcFieldsCallBack(char * RecBuf);
@@ -310,12 +347,9 @@ private:
 	void __fastcall CloseAggs(void);
 	Dsintf::_di_IDSBase __fastcall CreateDSBase();
 	Dsintf::_di_IDSCursor __fastcall CreateDSCursor(Dsintf::_di_IDSCursor SourceCursor);
-	void __fastcall DecodeIndexDesc(const Dsintf::DSIDXDesc &IndexDesc, AnsiString &Name, AnsiString &Fields
-		, AnsiString &DescFields, AnsiString &CaseInsFields, Db::TIndexOptions &Options);
-	void __fastcall EncodeFieldDesc(Dsintf::DSFLDDesc &FieldDesc, const AnsiString Name, Db::TFieldType 
-		DataType, int Size, int Precision, bool Calculated, Db::TFieldAttributes Attributes);
-	void __fastcall EncodeIndexDesc(Dsintf::DSIDXDesc &IndexDesc, const AnsiString Name, const AnsiString 
-		Fields, const AnsiString DescFields, const AnsiString CaseInsFields, Db::TIndexOptions Options);
+	void __fastcall DecodeIndexDesc(const Dsintf::DSIDXDesc &IndexDesc, AnsiString &Name, AnsiString &Fields, AnsiString &DescFields, AnsiString &CaseInsFields, Db::TIndexOptions &Options);
+	void __fastcall EncodeFieldDesc(Dsintf::DSFLDDesc &FieldDesc, const AnsiString Name, Db::TFieldType DataType, int Size, int Precision, bool Calculated, Db::TFieldAttributes Attributes);
+	void __fastcall EncodeIndexDesc(Dsintf::DSIDXDesc &IndexDesc, const AnsiString Name, const AnsiString Fields, const AnsiString DescFields, const AnsiString CaseInsFields, Db::TIndexOptions Options);
 	void __fastcall FetchMoreData(bool All);
 	BOOL __stdcall FilterCallback(char * RecBuf);
 	void __fastcall DoAggUpdates(bool IsUpdate);
@@ -331,7 +365,6 @@ private:
 	AnsiString __fastcall GetIndexName();
 	bool __fastcall GetLogChanges(void);
 	AnsiString __fastcall GetMasterFields();
-	Midas::_di_IAppServer __fastcall GetAppServer();
 	bool __fastcall GetProviderEOF(void);
 	int __fastcall GetSavePoint(void);
 	bool __fastcall GetHasAppServer(void);
@@ -342,49 +375,57 @@ private:
 	void __fastcall MasterDisabled(System::TObject* Sender);
 	void __stdcall NotifyCallback(void);
 	void __fastcall ReadData(Classes::TStream* Stream);
-	int __stdcall ReconcileCallback(int iRslt, Dsintf::DSAttr iUpdateKind, int iResAction, int iErrCode
-		, char * pErrMessage, char * pErrContext, void * pRecUpd, void * pRecOrg, void * pRecConflict, int 
-		iLevels, Windows::PInteger piFieldIDs);
+	int __stdcall ReconcileCallback(int iRslt, Dsintf::DSAttr iUpdateKind, int iResAction, int iErrCode, char * pErrMessage, char * pErrContext, void * pRecUpd, void * pRecOrg, void * pRecConflict, int iLevels, System::PInteger piFieldIDs);
 	void __fastcall ResetAgg(TAggregate* Agg, bool DeleteFirst);
 	void __fastcall ResetAllAggs(bool Value);
 	void __fastcall ResetGrouping(void);
 	void __fastcall SetAggsActive(bool Value);
-	void __fastcall SaveDataPacket(bool XMLFormat);
+	void __fastcall SetConnectionBroker(const TConnectionBroker* Value);
+	void __fastcall SaveDataPacket(TDataPacketFormat Format = (TDataPacketFormat)(0x0));
 	void __fastcall SetData(const OleVariant &Value);
 	void __fastcall SetDataSource(Db::TDataSource* Value);
+	void __fastcall SetDisableStringTrim(bool Value);
 	void __fastcall SetIndex(const AnsiString Value, bool FieldsIndex);
 	void __fastcall SetIndexDefs(Db::TIndexDefs* Value);
+	void __fastcall SetFileName(const AnsiString Value);
 	void __fastcall SetIndexFieldNames(const AnsiString Value);
 	void __fastcall SetIndexName(const AnsiString Value);
 	void __fastcall SetLogChanges(bool Value);
 	void __fastcall SetMasterFields(const AnsiString Value);
 	void __fastcall SetNotifyCallback(void);
 	void __fastcall SetParams(Db::TParams* Value);
-	void __fastcall SetAppServer(Midas::_di_IAppServer Value);
 	void __fastcall SetProviderEOF(bool Value);
 	void __fastcall SetProviderName(const AnsiString Value);
 	void __fastcall SetReadOnly(bool Value);
 	void __fastcall SetSavePoint(int Value);
-	void __fastcall SortOnFields(Dsintf::_di_IDSCursor Cursor, const AnsiString Fields, bool CaseInsensitive
-		, bool Descending);
+	void __fastcall SortOnFields(Dsintf::_di_IDSCursor Cursor, const AnsiString Fields, bool CaseInsensitive, bool Descending);
 	void __fastcall SetupConstraints(void);
 	void __fastcall SetupInternalCalcFields(bool Add);
 	void __fastcall WriteData(Classes::TStream* Stream);
-	void __fastcall SetAggregates(TAggregates* Value);
 	void __fastcall SetStatusFilter(const Db::TUpdateStatusSet Value);
+	AnsiString __fastcall GetXMLData();
+	void __fastcall SetXMLData(const AnsiString Value);
 	
 protected:
-	virtual OleVariant __fastcall DoApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ int 
-		&ErrorCount);
-	virtual OleVariant __fastcall DoGetRecords(int Count, /* out */ int &RecsOut, int Options, const WideString 
-		CommandText, const OleVariant &Params);
+	virtual Db::TIndexDefs* __fastcall PSGetIndexDefs(Db::TIndexOptions IndexTypes);
+	virtual void __fastcall DoAfterApplyUpdates(OleVariant &OwnerData);
+	virtual void __fastcall DoBeforeApplyUpdates(OleVariant &OwnerData);
+	virtual OleVariant __fastcall DoApplyUpdates(const OleVariant &Delta, int MaxErrors, /* out */ int &ErrorCount);
+	virtual void __fastcall DoAfterGetParams(OleVariant &OwnerData);
+	virtual void __fastcall DoBeforeGetParams(OleVariant &OwnerData);
+	virtual void __fastcall DoAfterGetRecords(OleVariant &OwnerData);
+	virtual void __fastcall DoBeforeGetRecords(OleVariant &OwnerData);
+	virtual OleVariant __fastcall DoGetRecords(int Count, /* out */ int &RecsOut, int Options, const WideString CommandText, const OleVariant &Params);
+	virtual void __fastcall DoAfterRowRequest(OleVariant &OwnerData);
+	virtual void __fastcall DoBeforeRowRequest(OleVariant &OwnerData);
 	virtual OleVariant __fastcall DoRowRequest(const OleVariant &Row, int RequestType);
+	virtual void __fastcall DoAfterExecute(OleVariant &OwnerData);
+	virtual void __fastcall DoBeforeExecute(OleVariant &OwnerData);
 	virtual void __fastcall DoExecute(const OleVariant &Params);
 	virtual void __fastcall ResetAggField(Db::TField* Field);
 	void __fastcall ActivateFilters(void);
 	virtual void __fastcall AddDataPacket(const OleVariant &Data, bool HitEOF);
-	void __fastcall AddFieldDesc(TFieldDescList FieldDescs, int &DescNo, int &FieldID, Db::TFieldDefs* 
-		FieldDefs);
+	void __fastcall AddFieldDesc(TFieldDescList FieldDescs, int &DescNo, int &FieldID, Db::TFieldDefs* FieldDefs);
 	void __fastcall AllocKeyBuffers(void);
 	virtual char * __fastcall AllocRecordBuffer(void);
 	void __fastcall Check(Word Status);
@@ -404,6 +445,7 @@ protected:
 	void __fastcall FreeKeyBuffers(void);
 	virtual void __fastcall FreeRecordBuffer(char * &Buffer);
 	virtual Variant __fastcall GetAggregateValue(Db::TField* Field);
+	virtual Midas::_di_IAppServer __fastcall GetAppServer();
 	virtual void __fastcall GetBookmarkData(char * Buffer, void * Data);
 	virtual Db::TBookmarkFlag __fastcall GetBookmarkFlag(char * Buffer);
 	virtual bool __fastcall GetCanModify(void);
@@ -428,7 +470,7 @@ protected:
 	virtual void __fastcall InternalDelete(void);
 	virtual void __fastcall InternalEdit(void);
 	virtual void __fastcall InternalFirst(void);
-	OleVariant __fastcall InternalGetOptionalParam(const AnsiString ParamName, int FieldNo);
+	OleVariant __fastcall InternalGetOptionalParam(const AnsiString ParamName, int FieldNo = 0x0);
 	virtual void __fastcall InternalGotoBookmark(void * Bookmark);
 	virtual void __fastcall InternalHandleException(void);
 	virtual void __fastcall InternalInitFieldDefs(void);
@@ -441,17 +483,18 @@ protected:
 	virtual void __fastcall InternalSetToRecord(char * Buffer);
 	virtual bool __fastcall IsCursorOpen(void);
 	virtual void __fastcall Loaded(void);
-	bool __fastcall LocateRecord(const AnsiString KeyFields, const Variant &KeyValues, Db::TLocateOptions 
-		Options, bool SyncCursor);
+	bool __fastcall LocateRecord(const AnsiString KeyFields, const Variant &KeyValues, Db::TLocateOptions Options, bool SyncCursor);
 	virtual void __fastcall OpenCursor(bool InfoQuery);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	void __fastcall PostKeyBuffer(bool Commit);
 	virtual void __fastcall RefreshInternalCalcFields(char * Buffer);
 	void __fastcall ReadDataPacket(Classes::TStream* Stream, bool ReadSize);
 	bool __fastcall ResetCursorRange(void);
+	virtual void __fastcall SetAggregates(TAggregates* Value);
+	virtual void __fastcall SetAppServer(Midas::_di_IAppServer Value);
 	virtual void __fastcall SetBookmarkData(char * Buffer, void * Data);
 	virtual void __fastcall SetBookmarkFlag(char * Buffer, Db::TBookmarkFlag Value);
+	virtual void __fastcall SetCommandText(AnsiString Value);
 	bool __fastcall SetCursorRange(void);
 	virtual void __fastcall SetDataSetField(const Db::TDataSetField* Value);
 	virtual void __fastcall SetFieldData(Db::TField* Field, void * Buffer)/* overload */;
@@ -463,8 +506,7 @@ protected:
 	void __fastcall SetKeyBuffer(TKeyIndex KeyIndex, bool Clear);
 	void __fastcall SetKeyExclusive(bool Value);
 	void __fastcall SetKeyFieldCount(int Value);
-	void __fastcall SetKeyFields(TKeyIndex KeyIndex, const System::TVarRec * Values, const int Values_Size
-		);
+	void __fastcall SetKeyFields(TKeyIndex KeyIndex, const System::TVarRec * Values, const int Values_Size);
 	void __fastcall SetLinkRanges(Classes::TList* MasterFields);
 	virtual void __fastcall SetOnFilterRecord(const Db::TFilterRecordEvent Value);
 	virtual void __fastcall SetRecNo(int Value);
@@ -472,110 +514,23 @@ protected:
 	void __fastcall SwitchToIndex(const AnsiString IndexName);
 	void __fastcall SyncCursors(Dsintf::_di_IDSCursor Cursor1, Dsintf::_di_IDSCursor Cursor2);
 	virtual void __fastcall UpdateIndexDefs(void);
-	void __fastcall WriteDataPacket(Classes::TStream* Stream, bool WriteSize, bool XMLFormat);
+	void __fastcall WriteDataPacket(Classes::TStream* Stream, bool WriteSize, TDataPacketFormat Format = (TDataPacketFormat)(0x0));
 	bool __fastcall ConstraintsStored(void);
-	__property Dsintf::_di_IDSBase DSBase = {read=FDSBase, write=FDSBase};
-	__property Dsintf::_di_IDSCursor DSCursor = {read=FDSCursor};
-	__property bool ProviderEOF = {read=GetProviderEOF, write=SetProviderEOF, nodefault};
-	
-public:
-	__fastcall virtual TClientDataSet(Classes::TComponent* AOwner);
-	__fastcall virtual ~TClientDataSet(void);
-	void __fastcall AddIndex(const AnsiString Name, const AnsiString Fields, Db::TIndexOptions Options, 
-		const AnsiString DescFields, const AnsiString CaseInsFields, const int GroupingLevel);
-	void __fastcall AppendData(const OleVariant &Data, bool HitEOF);
-	void __fastcall ApplyRange(void);
-	virtual int __fastcall ApplyUpdates(int MaxErrors);
-	virtual bool __fastcall BookmarkValid(void * Bookmark);
-	virtual void __fastcall Cancel(void);
-	void __fastcall CancelRange(void);
-	void __fastcall CancelUpdates(void);
-	virtual Classes::TStream* __fastcall CreateBlobStream(Db::TField* Field, Db::TBlobStreamMode Mode);
-		
-	void __fastcall CreateDataSet(void);
-	void __fastcall CloneCursor(TClientDataSet* Source, bool Reset, bool KeepSettings);
-	virtual int __fastcall CompareBookmarks(void * Bookmark1, void * Bookmark2);
-	bool __fastcall ConstraintsDisabled(void);
-	virtual OleVariant __fastcall DataRequest(const OleVariant &Data);
-	void __fastcall DeleteIndex(const AnsiString Name);
-	void __fastcall DisableConstraints(void);
-	void __fastcall EnableConstraints(void);
-	void __fastcall EditKey(void);
-	void __fastcall EditRangeEnd(void);
-	void __fastcall EditRangeStart(void);
-	void __fastcall EmptyDataSet(void);
-	virtual void __fastcall Execute(void);
-	void __fastcall FetchBlobs(void);
-	void __fastcall FetchDetails(void);
-	void __fastcall RefreshRecord(void);
-	void __fastcall FetchParams(void);
-	virtual bool __fastcall FindKey(const System::TVarRec * KeyValues, const int KeyValues_Size);
-	void __fastcall FindNearest(const System::TVarRec * KeyValues, const int KeyValues_Size);
-	virtual bool __fastcall GetCurrentRecord(char * Buffer);
-	virtual bool __fastcall GetFieldData(Db::TField* Field, void * Buffer)/* overload */;
-	virtual bool __fastcall GetFieldData(int FieldNo, void * Buffer)/* overload */;
-	Db::TGroupPosInds __fastcall GetGroupState(int Level);
-	void __fastcall GetIndexInfo(AnsiString IndexName);
-	void __fastcall GetIndexNames(Classes::TStrings* List);
-	int __fastcall GetNextPacket(void);
-	OleVariant __fastcall GetOptionalParam(const AnsiString ParamName);
-	void __fastcall GotoCurrent(TClientDataSet* DataSet);
-	bool __fastcall GotoKey(void);
-	void __fastcall GotoNearest(void);
-	__property bool HasAppServer = {read=GetHasAppServer, nodefault};
-	virtual bool __fastcall Locate(const AnsiString KeyFields, const Variant &KeyValues, Db::TLocateOptions 
-		Options);
-	virtual Variant __fastcall Lookup(const AnsiString KeyFields, const Variant &KeyValues, const AnsiString 
-		ResultFields);
-	void __fastcall LoadFromFile(const AnsiString FileName);
-	void __fastcall LoadFromStream(Classes::TStream* Stream);
-	void __fastcall MergeChangeLog(void);
-	virtual void __fastcall Post(void);
-	bool __fastcall Reconcile(const OleVariant &Results);
-	void __fastcall RevertRecord(void);
-	void __fastcall SaveToFile(const AnsiString FileName, TDataPacketFormat Format);
-	void __fastcall SaveToStream(Classes::TStream* Stream, TDataPacketFormat Format);
-	void __fastcall SetAltRecBuffers(char * Old, char * New, char * Cur);
-	void __fastcall SetKey(void);
-	void __fastcall SetOptionalParam(const AnsiString ParamName, const OleVariant &Value, bool IncludeInDelta
-		);
-	void __fastcall SetProvider(Classes::TComponent* Provider);
-	void __fastcall SetRange(const System::TVarRec * StartValues, const int StartValues_Size, const System::TVarRec 
-		* EndValues, const int EndValues_Size);
-	void __fastcall SetRangeEnd(void);
-	void __fastcall SetRangeStart(void);
-	bool __fastcall UndoLastChange(bool FollowChange);
-	virtual Db::TUpdateStatus __fastcall UpdateStatus(void);
-	__property Classes::TList* ActiveAggs[int Index] = {read=GetActiveAggs};
-	__property int ChangeCount = {read=GetChangeCount, nodefault};
-	__property TClientDataSet* CloneSource = {read=FCloneSource};
-	__property OleVariant Data = {read=GetData, write=SetData};
-	__property Midas::_di_IAppServer AppServer = {read=GetAppServer, write=SetAppServer};
-	__property int DataSize = {read=GetDataSize, nodefault};
-	__property OleVariant Delta = {read=GetDelta};
-	__property int GroupingLevel = {read=FGroupingLevel, nodefault};
-	__property int IndexFieldCount = {read=GetIndexFieldCount, nodefault};
-	__property Db::TField* IndexFields[int Index] = {read=GetIndexField, write=SetIndexField};
-	__property bool KeyExclusive = {read=GetKeyExclusive, write=SetKeyExclusive, nodefault};
-	__property int KeyFieldCount = {read=GetKeyFieldCount, write=SetKeyFieldCount, nodefault};
-	__property Word KeySize = {read=FKeySize, nodefault};
-	__property bool LogChanges = {read=GetLogChanges, write=SetLogChanges, nodefault};
-	__property int SavePoint = {read=GetSavePoint, write=SetSavePoint, nodefault};
-	__property Db::TUpdateStatusSet StatusFilter = {read=FStatusFilter, write=SetStatusFilter, nodefault
-		};
-	
-__published:
-	__property Active ;
+	__property Active  = {default=0};
 	__property TAggregates* Aggregates = {read=FAggregates, write=SetAggregates};
 	__property bool AggregatesActive = {read=FAggregatesActive, write=SetAggsActive, default=0};
-	__property AutoCalcFields ;
-	__property AnsiString CommandText = {read=FCommandText, write=FCommandText};
+	__property AutoCalcFields  = {default=1};
+	__property AnsiString CommandText = {read=FCommandText, write=SetCommandText};
+	__property TConnectionBroker* ConnectionBroker = {read=FConnectionBroker, write=SetConnectionBroker};
 	__property Constraints  = {stored=ConstraintsStored};
 	__property DataSetField ;
-	__property AnsiString FileName = {read=FFileName, write=FFileName};
+	__property bool DisableStringTrim = {read=FDisableStringTrim, write=SetDisableStringTrim, default=0};
+	__property Dsintf::_di_IDSBase DSBase = {read=FDSBase, write=FDSBase};
+	__property Dsintf::_di_IDSCursor DSCursor = {read=FDSCursor};
+	__property AnsiString FileName = {read=FFileName, write=SetFileName};
 	__property Filter ;
-	__property Filtered ;
-	__property FilterOptions ;
+	__property Filtered  = {default=0};
+	__property FilterOptions  = {default=0};
 	__property FieldDefs  = {stored=FStoreDefs};
 	__property Db::TIndexDefs* IndexDefs = {read=GetIndexDefs, write=SetIndexDefs, stored=FStoreDefs};
 	__property AnsiString IndexFieldNames = {read=GetIndexFieldNames, write=SetIndexFieldNames};
@@ -583,9 +538,10 @@ __published:
 	__property bool FetchOnDemand = {read=FFetchOnDemand, write=FFetchOnDemand, default=1};
 	__property AnsiString MasterFields = {read=GetMasterFields, write=SetMasterFields};
 	__property Db::TDataSource* MasterSource = {read=GetDataSource, write=SetDataSource};
-	__property ObjectView ;
+	__property ObjectView  = {default=1};
 	__property int PacketRecords = {read=FPacketRecords, write=FPacketRecords, default=-1};
 	__property Db::TParams* Params = {read=FParams, write=SetParams};
+	__property bool ProviderEOF = {read=GetProviderEOF, write=SetProviderEOF, nodefault};
 	__property AnsiString ProviderName = {read=FProviderName, write=SetProviderName};
 	__property bool ReadOnly = {read=FReadOnly, write=SetReadOnly, default=0};
 	__property TCustomRemoteServer* RemoteServer = {read=GetRemoteServer, write=SetRemoteServer};
@@ -614,10 +570,8 @@ __published:
 	__property OnFilterRecord ;
 	__property OnNewRecord ;
 	__property OnPostError ;
-	__property TReconcileErrorEvent OnReconcileError = {read=FOnReconcileError, write=FOnReconcileError
-		};
+	__property TReconcileErrorEvent OnReconcileError = {read=FOnReconcileError, write=FOnReconcileError};
 	__property TRemoteEvent BeforeApplyUpdates = {read=FBeforeApplyUpdates, write=FBeforeApplyUpdates};
-		
 	__property TRemoteEvent AfterApplyUpdates = {read=FAfterApplyUpdates, write=FAfterApplyUpdates};
 	__property TRemoteEvent BeforeGetRecords = {read=FBeforeGetRecords, write=FBeforeGetRecords};
 	__property TRemoteEvent AfterGetRecords = {read=FAfterGetRecords, write=FAfterGetRecords};
@@ -627,6 +581,95 @@ __published:
 	__property TRemoteEvent AfterExecute = {read=FAfterExecute, write=FAfterExecute};
 	__property TRemoteEvent BeforeGetParams = {read=FBeforeGetParams, write=FBeforeGetParams};
 	__property TRemoteEvent AfterGetParams = {read=FAfterGetParams, write=FAfterGetParams};
+	
+public:
+	__fastcall virtual TCustomClientDataSet(Classes::TComponent* AOwner);
+	__fastcall virtual ~TCustomClientDataSet(void);
+	void __fastcall AddIndex(const AnsiString Name, const AnsiString Fields, Db::TIndexOptions Options, const AnsiString DescFields = "", const AnsiString CaseInsFields = "", const int GroupingLevel = 0x0);
+	void __fastcall AppendData(const OleVariant &Data, bool HitEOF);
+	void __fastcall ApplyRange(void);
+	virtual int __fastcall ApplyUpdates(int MaxErrors);
+	virtual bool __fastcall BookmarkValid(void * Bookmark);
+	virtual void __fastcall Cancel(void);
+	void __fastcall CancelRange(void);
+	void __fastcall CancelUpdates(void);
+	virtual Classes::TStream* __fastcall CreateBlobStream(Db::TField* Field, Db::TBlobStreamMode Mode);
+	void __fastcall CreateDataSet(void);
+	virtual void __fastcall CloneCursor(TCustomClientDataSet* Source, bool Reset, bool KeepSettings = false);
+	virtual int __fastcall CompareBookmarks(void * Bookmark1, void * Bookmark2);
+	bool __fastcall ConstraintsDisabled(void);
+	virtual OleVariant __fastcall DataRequest(const OleVariant &Data);
+	void __fastcall DeleteIndex(const AnsiString Name);
+	void __fastcall DisableConstraints(void);
+	void __fastcall EnableConstraints(void);
+	void __fastcall EditKey(void);
+	void __fastcall EditRangeEnd(void);
+	void __fastcall EditRangeStart(void);
+	void __fastcall EmptyDataSet(void);
+	virtual void __fastcall Execute(void);
+	void __fastcall FetchBlobs(void);
+	void __fastcall FetchDetails(void);
+	void __fastcall RefreshRecord(void);
+	void __fastcall FetchParams(void);
+	virtual bool __fastcall FindKey(const System::TVarRec * KeyValues, const int KeyValues_Size);
+	void __fastcall FindNearest(const System::TVarRec * KeyValues, const int KeyValues_Size);
+	virtual bool __fastcall GetCurrentRecord(char * Buffer);
+	virtual bool __fastcall GetFieldData(Db::TField* Field, void * Buffer)/* overload */;
+	virtual bool __fastcall GetFieldData(int FieldNo, void * Buffer)/* overload */;
+	Db::TGroupPosInds __fastcall GetGroupState(int Level);
+	void __fastcall GetIndexInfo(AnsiString IndexName);
+	void __fastcall GetIndexNames(Classes::TStrings* List);
+	int __fastcall GetNextPacket(void);
+	OleVariant __fastcall GetOptionalParam(const AnsiString ParamName);
+	void __fastcall GotoCurrent(TCustomClientDataSet* DataSet);
+	bool __fastcall GotoKey(void);
+	void __fastcall GotoNearest(void);
+	__property bool HasAppServer = {read=GetHasAppServer, nodefault};
+	virtual bool __fastcall Locate(const AnsiString KeyFields, const Variant &KeyValues, Db::TLocateOptions Options);
+	virtual Variant __fastcall Lookup(const AnsiString KeyFields, const Variant &KeyValues, const AnsiString ResultFields);
+	void __fastcall LoadFromFile(const AnsiString FileName = "");
+	void __fastcall LoadFromStream(Classes::TStream* Stream);
+	void __fastcall MergeChangeLog(void);
+	virtual void __fastcall Post(void);
+	bool __fastcall Reconcile(const OleVariant &Results);
+	void __fastcall RevertRecord(void);
+	void __fastcall SaveToFile(const AnsiString FileName = "", TDataPacketFormat Format = (TDataPacketFormat)(0x0));
+	void __fastcall SaveToStream(Classes::TStream* Stream, TDataPacketFormat Format = (TDataPacketFormat)(0x0));
+	void __fastcall SetAltRecBuffers(char * Old, char * New, char * Cur);
+	void __fastcall SetKey(void);
+	void __fastcall SetOptionalParam(const AnsiString ParamName, const OleVariant &Value, bool IncludeInDelta = false);
+	void __fastcall SetProvider(Classes::TComponent* Provider);
+	void __fastcall SetRange(const System::TVarRec * StartValues, const int StartValues_Size, const System::TVarRec * EndValues, const int EndValues_Size);
+	void __fastcall SetRangeEnd(void);
+	void __fastcall SetRangeStart(void);
+	bool __fastcall UndoLastChange(bool FollowChange);
+	virtual Db::TUpdateStatus __fastcall UpdateStatus(void);
+	__property Classes::TList* ActiveAggs[int Index] = {read=GetActiveAggs};
+	__property int ChangeCount = {read=GetChangeCount, nodefault};
+	__property TCustomClientDataSet* CloneSource = {read=FCloneSource};
+	__property OleVariant Data = {read=GetData, write=SetData};
+	__property AnsiString XMLData = {read=GetXMLData, write=SetXMLData};
+	__property Midas::_di_IAppServer AppServer = {read=GetAppServer, write=SetAppServer};
+	__property int DataSize = {read=GetDataSize, nodefault};
+	__property OleVariant Delta = {read=GetDelta};
+	__property int GroupingLevel = {read=FGroupingLevel, nodefault};
+	__property int IndexFieldCount = {read=GetIndexFieldCount, nodefault};
+	__property Db::TField* IndexFields[int Index] = {read=GetIndexField, write=SetIndexField};
+	__property bool KeyExclusive = {read=GetKeyExclusive, write=SetKeyExclusive, nodefault};
+	__property int KeyFieldCount = {read=GetKeyFieldCount, write=SetKeyFieldCount, nodefault};
+	__property Word KeySize = {read=FKeySize, nodefault};
+	__property bool LogChanges = {read=GetLogChanges, write=SetLogChanges, nodefault};
+	__property int SavePoint = {read=GetSavePoint, write=SetSavePoint, nodefault};
+	__property Db::TUpdateStatusSet StatusFilter = {read=FStatusFilter, write=SetStatusFilter, nodefault};
+	
+/* Hoisted overloads: */
+	
+protected:
+	inline void __fastcall  SetFieldData(Db::TField* Field, void * Buffer, bool NativeFormat){ TDataSet::SetFieldData(Field, Buffer, NativeFormat); }
+	
+public:
+	inline bool __fastcall  GetFieldData(Db::TField* Field, void * Buffer, bool NativeFormat){ return TDataSet::GetFieldData(Field, Buffer, NativeFormat); }
+	
 };
 
 
@@ -643,7 +686,7 @@ private:
 	Dsintf::hDSAggregate FHAggregate;
 	AnsiString FAggregateName;
 	int FGroupingLevel;
-	TClientDataSet* FDataSet;
+	TCustomClientDataSet* FDataSet;
 	AnsiString FIndexName;
 	DynamicArray<Byte >  FDataBuffer;
 	Db::TFieldType FDataType;
@@ -666,14 +709,14 @@ protected:
 	__property int RecBufOfs = {read=FRecBufOfs, write=FRecBufOfs, nodefault};
 	
 public:
-	__fastcall TAggregate(TAggregates* Aggregates, TClientDataSet* ADataSet)/* overload */;
+	__fastcall TAggregate(TAggregates* Aggregates, TCustomClientDataSet* ADataSet)/* overload */;
 	__fastcall virtual ~TAggregate(void);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	virtual AnsiString __fastcall GetDisplayName();
 	Variant __fastcall Value();
 	__property Dsintf::hDSAggregate AggHandle = {read=FHAggregate, write=FHAggregate, nodefault};
 	__property bool InUse = {read=FInUse, write=FInUse, default=0};
-	__property TClientDataSet* DataSet = {read=FDataSet};
+	__property TCustomClientDataSet* DataSet = {read=FDataSet};
 	__property int DataSize = {read=FDataSize, nodefault};
 	__property Db::TFieldType DataType = {read=FDataType, nodefault};
 	
@@ -701,19 +744,100 @@ struct TRecInfo
 #pragma pack(pop)
 
 #pragma pack(push, 1)
-struct DBClient__7
+struct DBClient__8
 {
 	
 } ;
 #pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TKeyBuffer
 {
 	bool Modified;
 	bool Exclusive;
 	int FieldCount;
-	DBClient__7 Data;
+	DBClient__8 Data;
 } ;
+#pragma pack(pop)
+
+class DELPHICLASS TClientDataSet;
+class PASCALIMPLEMENTATION TClientDataSet : public TCustomClientDataSet 
+{
+	typedef TCustomClientDataSet inherited;
+	
+__published:
+	__property Active  = {default=0};
+	__property Aggregates ;
+	__property AggregatesActive  = {default=0};
+	__property AutoCalcFields  = {default=1};
+	__property CommandText ;
+	__property ConnectionBroker ;
+	__property Constraints ;
+	__property DataSetField ;
+	__property DisableStringTrim  = {default=0};
+	__property FileName ;
+	__property Filter ;
+	__property Filtered  = {default=0};
+	__property FilterOptions  = {default=0};
+	__property FieldDefs ;
+	__property IndexDefs ;
+	__property IndexFieldNames ;
+	__property IndexName ;
+	__property FetchOnDemand  = {default=1};
+	__property MasterFields ;
+	__property MasterSource ;
+	__property ObjectView  = {default=1};
+	__property PacketRecords  = {default=-1};
+	__property Params ;
+	__property ProviderName ;
+	__property ReadOnly  = {default=0};
+	__property RemoteServer ;
+	__property StoreDefs  = {default=0};
+	__property BeforeOpen ;
+	__property AfterOpen ;
+	__property BeforeClose ;
+	__property AfterClose ;
+	__property BeforeInsert ;
+	__property AfterInsert ;
+	__property BeforeEdit ;
+	__property AfterEdit ;
+	__property BeforePost ;
+	__property AfterPost ;
+	__property BeforeCancel ;
+	__property AfterCancel ;
+	__property BeforeDelete ;
+	__property AfterDelete ;
+	__property BeforeScroll ;
+	__property AfterScroll ;
+	__property BeforeRefresh ;
+	__property AfterRefresh ;
+	__property OnCalcFields ;
+	__property OnDeleteError ;
+	__property OnEditError ;
+	__property OnFilterRecord ;
+	__property OnNewRecord ;
+	__property OnPostError ;
+	__property OnReconcileError ;
+	__property BeforeApplyUpdates ;
+	__property AfterApplyUpdates ;
+	__property BeforeGetRecords ;
+	__property AfterGetRecords ;
+	__property BeforeRowRequest ;
+	__property AfterRowRequest ;
+	__property BeforeExecute ;
+	__property AfterExecute ;
+	__property BeforeGetParams ;
+	__property AfterGetParams ;
+public:
+	#pragma option push -w-inl
+	/* TCustomClientDataSet.Create */ inline __fastcall virtual TClientDataSet(Classes::TComponent* AOwner) : TCustomClientDataSet(AOwner) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TCustomClientDataSet.Destroy */ inline __fastcall virtual ~TClientDataSet(void) { }
+	#pragma option pop
+	
+};
+
 
 class DELPHICLASS TClientBlobStream;
 class PASCALIMPLEMENTATION TClientBlobStream : public Classes::TMemoryStream 
@@ -722,7 +846,7 @@ class PASCALIMPLEMENTATION TClientBlobStream : public Classes::TMemoryStream
 	
 private:
 	Db::TBlobField* FField;
-	TClientDataSet* FDataSet;
+	TCustomClientDataSet* FDataSet;
 	char *FBuffer;
 	int FFieldNo;
 	bool FModified;
@@ -737,15 +861,13 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-#define AllParamTypes (System::Set<Db::TParamType, ptUnknown, ptResult> () )
+#define AllParamTypes (System::Set<Db::TParamType, ptUnknown, ptResult> () << Db::TParamType(0) << Db::TParamType(1) << Db::TParamType(2) << Db::TParamType(3) << Db::TParamType(4) )
 static const Shortint AllRecords = 0xffffffff;
-extern PACKAGE OleVariant __fastcall PackageParams(Db::TParams* Params, Db::TParamTypes Types);
+extern PACKAGE OleVariant __fastcall PackageParams(Db::TParams* Params, Db::TParamTypes Types = (System::Set<Db::TParamType, ptUnknown, ptResult> () << Db::TParamType(0) << Db::TParamType(1) << Db::TParamType(2) << Db::TParamType(3) << Db::TParamType(4) ));
 extern PACKAGE void __fastcall UnpackParams(const OleVariant &Source, Db::TParams* Dest);
 
 }	/* namespace Dbclient */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dbclient;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

@@ -12,8 +12,8 @@ unit DRIntf;
 interface
 
 uses
-  SysUtils, Windows, Messages, Classes, Graphics, Controls, Forms,
-  Dialogs, BDE, Db, DBTables;
+  Variants, SysUtils, Windows, Messages, Classes, Graphics, Controls, Forms,
+  Dialogs, BDE, DB, DBTables;
 
 type
   TID = packed record Reserved: array[1..6] of Byte; end;

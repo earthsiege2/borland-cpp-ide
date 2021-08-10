@@ -1,7 +1,6 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*****************************************************************************
 *
-* Copyright (c) 1998 - 1999  Microsoft Corporation
+* Copyright (c) Microsoft Corporation. All rights reserved.
 *
 * Module Name:
 *
@@ -814,5 +813,76 @@
 //
 #define TAPI_E_RESOURCEUNAVAIL           ((HRESULT)0x80040052L)
 
+//
+// MessageId: TAPI_E_PHONENOTOPEN
+//
+// MessageText:
+//
+//  The phone is not open.
+//
+#define TAPI_E_PHONENOTOPEN              ((HRESULT)0x80040053L)
+
+//
+// MessageId: TAPI_E_CALLNOTSELECTED
+//
+// MessageText:
+//
+//  The specified call is not currently selected.
+//
+#define TAPI_E_CALLNOTSELECTED           ((HRESULT)0x80040054L)
+
+//
+// MessageId: TAPI_E_WRONGEVENT
+//
+// MessageText:
+//
+//  This information is not available for this type of event.
+//
+#define TAPI_E_WRONGEVENT                ((HRESULT)0x80040055L)
+
+//
+// MessageId: TAPI_E_NOFORMAT
+//
+// MessageText:
+//
+//  The format is unknown
+//
+#define TAPI_E_NOFORMAT                  ((HRESULT)0x80040056L)
+
+//
+// MessageId: TAPI_E_INVALIDSTREAMSTATE
+//
+// MessageText:
+//
+//  The operation is not permitted in current stream state.
+//
+#define TAPI_E_INVALIDSTREAMSTATE        ((HRESULT)0x80040057L)
+
+//
+// MessageId: TAPI_E_WRONG_STATE
+//
+// MessageText:
+//
+//  The operation requested is not permitted for the current state.
+//
+#define TAPI_E_WRONG_STATE               ((HRESULT)0x80040058L)
+
+//
+// MessageId: TAPI_E_NOT_INITIALIZED
+//
+// MessageText:
+//
+//  The object has not been initialized.
+//
+#define TAPI_E_NOT_INITIALIZED           ((HRESULT)0x80040059L)
+
+//
+// MessageId: TAPI_E_SERVICE_NOT_RUNNING
+//
+// MessageText:
+//
+//  The Telephony Service could not be contacted.
+//
+#define TAPI_E_SERVICE_NOT_RUNNING       ((HRESULT)0x8004005AL)
+
 #endif // #ifndef __TAPI3ERR_H__
-#pragma option pop /*P_O_Pop*/

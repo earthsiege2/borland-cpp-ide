@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'QRExpr.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QRExpr.pas' rev: 6.00
 
 #ifndef QRExprHPP
 #define QRExprHPP
@@ -10,10 +10,10 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <qr3const.hpp>	// Pascal unit
+#include <QR3Const.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
@@ -68,16 +68,14 @@ protected:
 public:
 	__fastcall TQRLibrary(void);
 	__fastcall virtual ~TQRLibrary(void);
-	void __fastcall Add(TMetaClass* aItem, AnsiString AName, AnsiString ADescription, AnsiString AVendor
-		, AnsiString AData);
+	void __fastcall Add(TMetaClass* aItem, AnsiString AName, AnsiString ADescription, AnsiString AVendor, AnsiString AData);
 	__property Classes::TStrings* EntryList = {read=Entries, write=Entries};
 	__property TQRLibraryEntry* Entry[int Index] = {read=GetEntry};
 };
 
 
 #pragma option push -b-
-enum TQREvOperator { opLess, opLessOrEqual, opGreater, opGreaterOrEqual, opEqual, opUnequal, opPlus, 
-	opMinus, opOr, opMul, opDiv, opAnd };
+enum TQREvOperator { opLess, opLessOrEqual, opGreater, opGreaterOrEqual, opEqual, opUnequal, opPlus, opMinus, opOr, opMul, opDiv, opAnd };
 #pragma option pop
 
 #pragma option push -b-
@@ -338,7 +336,6 @@ class PASCALIMPLEMENTATION TQREvElementArgumentEnd : public TQREvElement
 public:
 	#pragma option push -w-inl
 	/* TQREvElement.Create */ inline __fastcall virtual TQREvElementArgumentEnd(void) : TQREvElement() { }
-		
 	#pragma option pop
 	
 public:
@@ -365,7 +362,6 @@ public:
 public:
 	#pragma option push -w-inl
 	/* TQREvElement.Create */ inline __fastcall virtual TQREvElementDataField(void) : TQREvElement() { }
-		
 	#pragma option pop
 	
 public:
@@ -421,13 +417,10 @@ extern PACKAGE Extended __fastcall QREvResultToFloat(const TQREvResult &AValue);
 extern PACKAGE Variant __fastcall QREvResultToVariant(const TQREvResult &AValue);
 extern PACKAGE TQREvEnvironment* __fastcall QRGlobalEnvironment(void);
 extern PACKAGE void __fastcall UpdateConstant(TQREvElement* AConstant, const TQREvResult &Value);
-extern PACKAGE void __fastcall RegisterQRFunction(TMetaClass* FunctionClass, AnsiString Name, AnsiString 
-	Description, AnsiString Vendor, AnsiString Arguments);
+extern PACKAGE void __fastcall RegisterQRFunction(TMetaClass* FunctionClass, AnsiString Name, AnsiString Description, AnsiString Vendor, AnsiString Arguments);
 
 }	/* namespace Qrexpr */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qrexpr;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

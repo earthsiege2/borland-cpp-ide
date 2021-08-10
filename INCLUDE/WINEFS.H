@@ -10,7 +10,6 @@
 //----------------------------------------------------------------------------
 
 #ifndef __WINEFS_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __WINEFS_H__
 
 #if _MSC_VER > 1000
@@ -30,6 +29,11 @@ extern "C" {
 //                                                                                  /
 //----------------------------------------------------------------------------------/
 
+
+#ifndef ALGIDDEF
+#define ALGIDDEF
+typedef unsigned int ALG_ID;
+#endif
 
 //
 //  Encoded Certificate
@@ -65,6 +69,30 @@ typedef struct _EFS_HASH_BLOB {
 
 } EFS_HASH_BLOB, *PEFS_HASH_BLOB;
 
+
+//
+//  RPC blob
+//
+
+typedef struct _EFS_RPC_BLOB {
+
+    DWORD   cbData;
+
+#ifdef MIDL_PASS
+    [size_is(cbData)]
+#endif // MIDL_PASS
+    PBYTE    pbData;
+
+} EFS_RPC_BLOB, *PEFS_RPC_BLOB;
+
+typedef struct _EFS_KEY_INFO {
+
+    DWORD   dwVersion;
+    ULONG   Entropy;
+    ALG_ID  Algorithm;
+    ULONG   KeyLength;
+    
+} EFS_KEY_INFO, *PEFS_KEY_INFO;
 
 
 //
@@ -187,9 +215,19 @@ EncryptionDisable(
     );
 
 
+WINADVAPI
+DWORD
+WINAPI
+DuplicateEncryptionInfoFile(
+     IN LPCWSTR SrcFileName,
+     IN LPCWSTR DstFileName, 
+     IN DWORD dwCreationDistribution, 
+     IN DWORD dwAttributes, 
+     IN LPSECURITY_ATTRIBUTES lpSecurityAttributes
+     );
+
 #ifdef __cplusplus
 }       // Balance extern "C" above
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // __WINEFS_H__

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'StdVCL.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'StdVCL.pas' rev: 6.00
 
 #ifndef StdVCLHPP
 #define StdVCLHPP
@@ -178,25 +178,20 @@ __interface INTERFACE_UUID("{6E644935-51F7-11D0-8D41-00A0248E4B9A}") IProvider  
 	
 public:
 	virtual HRESULT __safecall Get_Data(OleVariant &Get_Data_result) = 0 ;
-	virtual HRESULT __safecall ApplyUpdates(const OleVariant Delta, int MaxErrors, /* out */ int &ErrorCount
-		, OleVariant &ApplyUpdates_result) = 0 ;
+	virtual HRESULT __safecall ApplyUpdates(const OleVariant Delta, int MaxErrors, /* out */ int &ErrorCount, OleVariant &ApplyUpdates_result) = 0 ;
 	virtual HRESULT __safecall GetMetaData(OleVariant &GetMetaData_result) = 0 ;
-	virtual HRESULT __safecall GetRecords(int Count, /* out */ int &RecsOut, OleVariant &GetRecords_result
-		) = 0 ;
-	virtual HRESULT __safecall DataRequest(const OleVariant Input, OleVariant &DataRequest_result) = 0 
-		;
+	virtual HRESULT __safecall GetRecords(int Count, /* out */ int &RecsOut, OleVariant &GetRecords_result) = 0 ;
+	virtual HRESULT __safecall DataRequest(const OleVariant Input, OleVariant &DataRequest_result) = 0 ;
 	virtual HRESULT __safecall Get_Constraints(Word &Get_Constraints_result) = 0 ;
 	virtual HRESULT __safecall Set_Constraints(Word Value) = 0 ;
 	virtual HRESULT __safecall Reset(Word MetaData) = 0 ;
 	virtual HRESULT __safecall SetParams(const OleVariant Values) = 0 ;
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline OleVariant _scw_Get_Data() { OleVariant r; HRESULT hr = Get_Data(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property OleVariant Data = {read=_scw_Get_Data};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline Word _scw_Get_Constraints() { Word r; HRESULT hr = Get_Constraints(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property Word Constraints = {read=_scw_Get_Constraints, write=Set_Constraints};
 };
@@ -204,7 +199,6 @@ public:
 __dispinterface IProviderDisp;
 typedef System::DelphiInterface<IProviderDisp> _di_IProviderDisp;
 __dispinterface INTERFACE_UUID("{6E644935-51F7-11D0-8D41-00A0248E4B9A}") IProviderDisp  : public IDispatch 
-	
 {
 	
 };
@@ -215,8 +209,10 @@ __interface INTERFACE_UUID("{EE05DFE2-5549-11D0-9EA9-0020AF3D82DA}") IStrings  :
 {
 	
 public:
-	virtual HRESULT __safecall Get_ControlDefault(int Index, OleVariant &Get_ControlDefault_result) = 0 
-		;
+	OleVariant operator[](int Index) { return ControlDefault[Index]; }
+	
+public:
+	virtual HRESULT __safecall Get_ControlDefault(int Index, OleVariant &Get_ControlDefault_result) = 0 ;
 	virtual HRESULT __safecall Set_ControlDefault(int Index, const OleVariant Value) = 0 ;
 	virtual HRESULT __safecall Count(int &Count_result) = 0 ;
 	virtual HRESULT __safecall Get_Item(int Index, OleVariant &Get_Item_result) = 0 ;
@@ -224,16 +220,13 @@ public:
 	virtual HRESULT __safecall Remove(int Index) = 0 ;
 	virtual HRESULT __safecall Clear(void) = 0 ;
 	virtual HRESULT __safecall Add(const OleVariant Item, int &Add_result) = 0 ;
-	virtual HRESULT __safecall _NewEnum(_di_IUnknown &_NewEnum_result) = 0 ;
+	virtual HRESULT __safecall _NewEnum(System::_di_IInterface &_NewEnum_result) = 0 ;
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline OleVariant _scw_Get_ControlDefault(int Index) { OleVariant r; HRESULT hr = Get_ControlDefault(
-		Index, r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline OleVariant _scw_Get_ControlDefault(int Index) { OleVariant r; HRESULT hr = Get_ControlDefault(Index, r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
-	__property OleVariant ControlDefault[int Index] = {read=_scw_Get_ControlDefault, write=Set_ControlDefault
-		/*, default*/};
+	__property OleVariant ControlDefault[int Index] = {read=_scw_Get_ControlDefault, write=Set_ControlDefault/*, default*/};
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline OleVariant _scw_Get_Item(int Index) { OleVariant r; HRESULT hr = Get_Item(
-		Index, r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline OleVariant _scw_Get_Item(int Index) { OleVariant r; HRESULT hr = Get_Item(Index, r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property OleVariant Item[int Index] = {read=_scw_Get_Item, write=Set_Item};
 };
@@ -241,7 +234,6 @@ public:
 __dispinterface IStringsDisp;
 typedef System::DelphiInterface<IStringsDisp> _di_IStringsDisp;
 __dispinterface INTERFACE_UUID("{EE05DFE2-5549-11D0-9EA9-0020AF3D82DA}") IStringsDisp  : public IDispatch 
-	
 {
 	
 };
@@ -249,7 +241,6 @@ __dispinterface INTERFACE_UUID("{EE05DFE2-5549-11D0-9EA9-0020AF3D82DA}") IString
 __interface IDataBroker;
 typedef System::DelphiInterface<IDataBroker> _di_IDataBroker;
 __interface INTERFACE_UUID("{6539BF65-6FE7-11D0-9E8C-00A02457621F}") IDataBroker  : public IDispatch 
-	
 {
 	
 public:
@@ -259,7 +250,6 @@ public:
 __dispinterface IDataBrokerDisp;
 typedef System::DelphiInterface<IDataBrokerDisp> _di_IDataBrokerDisp;
 __dispinterface INTERFACE_UUID("{6539BF65-6FE7-11D0-9E8C-00A02457621F}") IDataBrokerDisp  : public IDispatch 
-	
 {
 	
 };
@@ -271,9 +261,7 @@ extern PACKAGE GUID IID_IStrings;
 extern PACKAGE GUID IID_IDataBroker;
 
 }	/* namespace Stdvcl */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Stdvcl;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

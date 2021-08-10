@@ -1,6 +1,7 @@
+//depot/private/homenet/net/published/inc/routprot.w#2 - integrate change 4116 (text)
 /*++
 
-Copyright (c) 1995-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -13,7 +14,6 @@ Abstract:
 
 
 #ifndef _ROUTPROT_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _ROUTPROT_H_
 
 #if _MSC_VER > 1000
@@ -185,6 +185,19 @@ typedef struct _SUPPORT_FUNCTIONS
         OUT     LPVOID          lpOutEntry
         );
 
+    //
+    // Can be called to get the router ID value
+    //
+
+    OUT DWORD
+    (WINAPI *GetRouterId)(VOID);
+
+    OUT BOOL
+    (WINAPI *HasMulticastBoundary)(
+        IN      DWORD           dwIfIndex,
+        IN      DWORD           dwGroupAddress
+        );
+
 } SUPPORT_FUNCTIONS, *PSUPPORT_FUNCTIONS ;
 
 
@@ -218,6 +231,7 @@ typedef struct _SUPPORT_FUNCTIONS
 // The multicast protocol IDs
 //
 
+#define PROTO_IP_MSDP        9
 #define PROTO_IP_IGMP       10
 #define PROTO_IP_BGMP       11
 
@@ -237,6 +251,8 @@ typedef struct _SUPPORT_FUNCTIONS
 #define PROTO_IP_MGM                10009   // 0x00002719
 #define PROTO_IP_DTP                10010   // 0x0000271A
 #define PROTO_IP_H323               10011   // 0x0000271B
+#define PROTO_IP_FTP                10012   // 0x0000271C
+#define PROTO_IP_ALG                10013   // 0x0000271D
 
 //
 // For all future development, the following macro must be used to generate
@@ -295,6 +311,9 @@ typedef struct _SUPPORT_FUNCTIONS
 #define MS_IP_BGMP                  \
     PROTOCOL_ID(PROTO_TYPE_MCAST, PROTO_VENDOR_MS1, PROTO_IP_BGMP)
 
+#define MS_IP_MSDP                  \
+    PROTOCOL_ID(PROTO_TYPE_MCAST, PROTO_VENDOR_MS1, PROTO_IP_MSDP)
+
 #define MS_IP_DNS_PROXY             \
     PROTOCOL_ID(PROTO_TYPE_MS0, PROTO_VENDOR_MS1, PROTO_IP_DNS_PROXY)
 
@@ -318,6 +337,12 @@ typedef struct _SUPPORT_FUNCTIONS
 
 #define MS_IP_H323                  \
     PROTOCOL_ID(PROTO_TYPE_MS0, PROTO_VENDOR_MS1, PROTO_IP_H323)
+
+#define MS_IP_FTP                   \
+    PROTOCOL_ID(PROTO_TYPE_MS0, PROTO_VENDOR_MS1, PROTO_IP_FTP)
+
+#define MS_IP_ALG                   \
+    PROTOCOL_ID(PROTO_TYPE_MS0, PROTO_VENDOR_MS1, PROTO_IP_ALG)
 
 //
 // All IPX Protocols must use the protocol ids defined in the range below.
@@ -766,5 +791,4 @@ DWORD
 #pragma warning(default:4201)
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif      // _ROUTPROT_H_

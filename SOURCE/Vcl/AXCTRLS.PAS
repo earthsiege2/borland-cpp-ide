@@ -4,11 +4,13 @@
 {       Borland Delphi Visual Component Library         }
 {       ActiveX Controls Unit                           }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
 unit AxCtrls;
+
+{$WARN SYMBOL_PLATFORM OFF}
 
 {$T-,H+,X+}
 
@@ -20,8 +22,8 @@ interface
 (*$HPPEMIT '' *)
 
 uses
-  Windows, Messages, ActiveX, SysUtils, ComObj, Classes, Graphics,
-  Controls, Forms, ExtCtrls, StdVcl;
+  Variants, Windows, Messages, ActiveX, SysUtils, ComObj, Classes, Graphics,
+  Controls, Forms, ExtCtrls, StdVCL;
 
 const
   { Delphi property page CLSIDs }
@@ -428,8 +430,10 @@ type
 
   TActiveForm = class(TCustomActiveForm)
   private
+    FSinkChangeCount : Integer;
     FActiveFormControl: TActiveFormControl;
   protected
+    procedure DoDestroy; override;
     procedure DefinePropertyPages(DefinePropertyPage: TDefinePropertyPage); virtual;
     procedure EventSinkChanged(const EventSink: IUnknown); virtual;
     procedure Initialize; virtual;
@@ -691,13 +695,12 @@ type
     procedure WMGetDlgCode(var Message: TMessage); message WM_GETDLGCODE;
     procedure WMSetFocus(var Message: TWMSetFocus); message WM_SETFOCUS;
     procedure WMSize(var Message: TWMSize); message WM_SIZE;
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
   public
     constructor Create(ParentWindow: HWND; Control: TControl); reintroduce;
   end;
 
-function GetDispatchPropValue(Disp: IDispatch; DispID: Integer): OleVariant;
-procedure SetDispatchPropValue(Disp: IDispatch; DispID: Integer;
-  const Value: OleVariant);
 procedure EnumDispatchProperties(Dispatch: IDispatch; PropType: TGUID;
   VTCode: Integer; PropList: TStrings);
 
@@ -852,42 +855,6 @@ begin
   Move(PWideChar(W)^, Result^, Size);
 end;
 
-{ Get/Set raw Dispatch properties }
-
-const
-  DispIDArgs: Longint = DISPID_PROPERTYPUT;
-
-function GetDispatchPropValue(Disp: IDispatch; DispID: Integer): OleVariant;
-var
-  ExcepInfo: TExcepInfo;
-  DispParams: TDispParams;
-  Status: HResult;
-begin
-  FillChar(DispParams, SizeOf(DispParams), 0);
-  Status := Disp.Invoke(DispID, GUID_NULL, 0, DISPATCH_PROPERTYGET, DispParams,
-    @Result, @ExcepInfo, nil);
-  if Status <> S_OK then DispatchInvokeError(Status, ExcepInfo);
-end;
-
-procedure SetDispatchPropValue(Disp: IDispatch; DispID: Integer;
-  const Value: OleVariant);
-var
-  ExcepInfo: TExcepInfo;
-  DispParams: TDispParams;
-  Status: HResult;
-begin
-  with DispParams do
-  begin
-    rgvarg := @Value;
-    rgdispidNamedArgs := @DispIDArgs;
-    cArgs := 1;
-    cNamedArgs := 1;
-  end;
-  Status := Disp.Invoke(DispId, GUID_NULL, 0, DISPATCH_PROPERTYPUT, DispParams,
-    nil, @ExcepInfo, nil);
-  if Status <> S_OK then DispatchInvokeError(Status, ExcepInfo);
-end;
-
 { Fill list with properties of a given IDispatch }
 
 procedure EnumDispatchProperties(Dispatch: IDispatch; PropType: TGUID;
@@ -979,10 +946,10 @@ begin
     begin
       OleCheck(TypeInfo.GetFuncDesc(I, FuncDesc));
       try
-        if ((FuncDesc.invkind = INVOKE_PROPERTYGET) and
+        if ((FuncDesc.invkind = INVOKE_PROPERTYGET) and (FuncDesc.cParams < 1) and
           HasMember(TypeInfo, TypeAttr.cFuncs, FuncDesc.memid, INVOKE_PROPERTYSET) and
           IsPropType(TypeInfo, @FuncDesc.elemdescFunc.tdesc)) or
-          ((FuncDesc.invkind and INVOKE_PROPERTYSET <> 0) and
+          ((FuncDesc.invkind and INVOKE_PROPERTYSET <> 0) and (FuncDesc.cParams < 2) and
           HasMember(TypeInfo, TypeAttr.cFuncs, FuncDesc.memid, INVOKE_PROPERTYGET) and
           IsPropType(TypeInfo,
             @FuncDesc.lprgelemdescParam[FuncDesc.cParams - 1].tdesc)) then
@@ -1436,6 +1403,12 @@ begin
   SetBounds(Left, Top, FControl.Width, FControl.Height);
 end;
 
+procedure TReflectorWindow.CreateParams(var Params: TCreateParams);
+begin
+  inherited CreateParams(Params);
+  Params.Style := Params.Style or WS_CLIPCHILDREN;
+end;
+
 procedure TReflectorWindow.WMGetDlgCode(var Message: TMessage);
 begin
   TWinControlAccess(FControl).WndProc(Message);
@@ -1624,13 +1597,13 @@ var
 begin
   //  Note: raise an EAbort exception here to stop properties from loading
   if PropBag.Read(PWideChar(PropName), PropValue, ErrorLog) = S_OK then
-    SetDispatchPropValue(Self as IDispatch, DispatchID, PropValue);
+    ComObj.SetDispatchPropValue(Self as IDispatch, DispatchID, PropValue);
 end;
 
 procedure TActiveXControl.PutPropInBag(const PropName: WideString;
   DispatchID: Integer; PropBag: IPropertyBag);
 begin
-  PropBag.Write(PWideChar(PropName), GetDispatchPropValue(Self as IDispatch,
+  PropBag.Write(PWideChar(PropName), ComObj.GetDispatchPropValue(Self as IDispatch,
     DispatchID));
 end;
 
@@ -2329,6 +2302,10 @@ function TActiveXControl.Close(dwSaveOption: Longint): HResult;
 begin
   if (dwSaveOption <> OLECLOSE_NOSAVE) and FIsDirty and
     (FOleClientSite <> nil) then FOleClientSite.SaveObject;
+  if (self is TActiveFormControl)
+   then if  (TActiveFormControl(self).Control is TActiveForm)
+     then
+       TActiveForm(TActiveFormControl(self).Control).DoDestroy;
   Result := InPlaceDeactivate;
 end;
 
@@ -2579,16 +2556,39 @@ end;
 function TActiveXControl.SetObjectRects(const rcPosRect: TRect;
   const rcClipRect: TRect): HResult;
 var
-  WinRect: TRect;
+  IntersectionRect: TRect;
+  NewRegion: HRGN;
 begin
   try
-    IntersectRect(WinRect, rcPosRect, rcClipRect);
-    FWinControl.BoundsRect := WinRect;
+    if (@rcPosRect = nil) or (@rcClipRect = nil) then
+    begin
+      Result := E_POINTER;
+      Exit;
+    end
+    else if FWinControl.HandleAllocated then
+    begin
+      // The container thinks the control should clip, figure out if the control
+      // really needs to clip.
+      NewRegion := 0;
+
+      if IntersectRect(IntersectionRect, rcPosRect, rcClipRect) and
+         (not EqualRect(IntersectionRect, rcPosRect)) then
+      begin
+        OffsetRect(IntersectionRect, -rcPosRect.Left, -rcPosRect.Top);
+        NewRegion := CreateRectRgnIndirect(IntersectionRect);
+      end;
+
+      // Set the control's location.
+      SetWindowRgn(FWinControl.Handle, NewRegion, True);
+      FWinControl.BoundsRect := rcPosRect;
+    end;
+
     Result := S_OK;
   except
     Result := HandleException;
   end;
 end;
+
 
 function TActiveXControl.ReactivateAndUndo: HResult;
 begin
@@ -3225,7 +3225,7 @@ end;
 function TActiveFormControl.ObjQueryInterface(const IID: TGUID; out Obj): HResult;
 begin
   Result := S_OK;
-  if not Control.GetInterface(IID, Obj) then
+  if IsEqualGUID(IID, IUnknown) or not Control.GetInterface(IID, Obj) then
     Result := inherited ObjQueryInterface(IID, Obj);
 end;
 
@@ -3241,9 +3241,24 @@ procedure TActiveForm.DefinePropertyPages(DefinePropertyPage: TDefinePropertyPag
 begin
 end;
 
+procedure TActiveForm.DoDestroy;
+begin
+  if Assigned(OnDestroy) then
+  try
+    OnDestroy(Self);
+    OnDestroy := nil;
+  except
+    Application.HandleException(Self);
+  end;
+end;
+
 procedure TActiveForm.EventSinkChanged(const EventSink: IUnknown);
 begin
+  if (FSinkChangeCount = 0) and (EventSink <> nil) then
+    DoCreate;
+  InterLockedIncrement(FSinkChangeCount);
 end;
+
 
 procedure TActiveForm.Initialize;
 begin

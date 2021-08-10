@@ -16,7 +16,6 @@ Environment:
 
 --*/
 #ifndef _WINSVC_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINSVC_
 
 //
@@ -102,6 +101,7 @@ extern "C" {
 #define SERVICE_CONTROL_DEVICEEVENT            0x0000000B
 #define SERVICE_CONTROL_HARDWAREPROFILECHANGE  0x0000000C
 #define SERVICE_CONTROL_POWEREVENT             0x0000000D
+#define SERVICE_CONTROL_SESSIONCHANGE          0x0000000E
 
 //
 // Service State -- for CurrentState
@@ -124,6 +124,7 @@ extern "C" {
 #define SERVICE_ACCEPT_NETBINDCHANGE           0x00000010
 #define SERVICE_ACCEPT_HARDWAREPROFILECHANGE   0x00000020
 #define SERVICE_ACCEPT_POWEREVENT              0x00000040
+#define SERVICE_ACCEPT_SESSIONCHANGE           0x00000080
 
 //
 // Service Control Manager object specific access types
@@ -1002,5 +1003,4 @@ UnlockServiceDatabase(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _WINSVC_

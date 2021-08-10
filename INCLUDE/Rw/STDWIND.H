@@ -8,7 +8,7 @@
  *
  * stdwind.h - Microsoft Windows related directives.
  *
- * $Id: stdwind.h,v 1.19 1996/09/24 19:42:16 smithey Exp $
+ * $Id: stdwind.h,v 9.13 2001/07/10 17:24:13 nyork Exp $
  *
  ***************************************************************************
  *

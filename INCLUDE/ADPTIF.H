@@ -17,7 +17,6 @@ Revision History:
 
 --*/
 #ifndef _IPX_ADAPTER_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _IPX_ADAPTER_
 
 #if _MSC_VER > 1000
@@ -185,5 +184,4 @@ IpxSendPacket (
 	IN LPOVERLAPPED_COMPLETION_ROUTINE	CompletionRoutine
 );
 
-#pragma option pop /*P_O_Pop*/
 #endif // _IPX_ADAPTER_

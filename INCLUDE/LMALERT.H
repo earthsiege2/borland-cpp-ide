@@ -27,7 +27,6 @@ Notes:
 
 
 #ifndef _ALERT_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _ALERT_
 
 #if _MSC_VER > 1000
@@ -156,5 +155,4 @@ typedef struct _USER_OTHER_INFO {
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _ALERT_

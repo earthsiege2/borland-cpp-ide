@@ -13,7 +13,6 @@
 //--------------------------------------------------------------------------
 
 #ifndef SIPBASE_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define SIPBASE_H
 
 #if _MSC_VER > 1000
@@ -23,7 +22,6 @@
 // all moved to mssip.h
 #include <mssip.h>
 
-#pragma option pop /*P_O_Pop*/
 #endif // SIPBASE_H
 
 

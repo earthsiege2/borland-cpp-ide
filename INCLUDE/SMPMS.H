@@ -7,11 +7,10 @@
  *  The following MAPI-defined properties are settable in service
  *  entry calls for the Sample Message Store Provider.
  *  
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1993-1999 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef _SMPMS_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _SMPMS_H_
 
 #define SMS_EXTERN_PROPID_BASE  0x6700      /* From MAPITAGS.H comments */
@@ -54,6 +53,5 @@
         0x93, 0xdc, 0x5a, 0xab, \
         0x3C, 0x47, 0x84, 0x37 }
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* _SMPMS_H_ */
 

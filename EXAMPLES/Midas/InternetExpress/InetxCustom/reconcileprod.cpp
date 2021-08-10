@@ -292,7 +292,7 @@ void __fastcall TReconcilePageProducer::SetReconcileGrid(const TReconcileGrid* V
   FReconcileGrid->Assign((TPersistent*)Value);
 };
 
-void __fastcall TReconcilePageProducer::DoTagEvent(Httpapp::TTag Tag, const AnsiString TagString, Classes::TStrings* TagParams, AnsiString &ReplaceText)
+void __fastcall TReconcilePageProducer::DoTagEvent(TTag Tag, const AnsiString TagString, Classes::TStrings* TagParams, AnsiString &ReplaceText)
 {
   TXMLBroker *XMLBroker;
   TXMLOptions XMLOptions;
@@ -305,9 +305,7 @@ void __fastcall TReconcilePageProducer::DoTagEvent(Httpapp::TTag Tag, const Ansi
         XMLOptions << xoQuote;
         XMLBroker = FindXMLBroker(TagParams);
         if (XMLBroker)
-          ReplaceText =
-            FormatXML(XMLBroker->GetDelta(Dispatcher->Request),
-              XMLOptions);
+          ReplaceText = FormatXML(XMLBroker->GetDelta(Dispatcher->Request()),  XMLOptions);
       }
       return;
     }
@@ -426,8 +424,8 @@ void __fastcall TReconcilePageProducer::AddScriptComponents(void)
   }
   if (PathInfo.Length() > 0 && PathInfo[1] == '/')
     PathInfo.Delete(1, 1);
-  if (Dispatcher && Dispatcher->Request)
-    PathInfo = Dispatcher->Request->ScriptName + "/" + PathInfo;
+  if (Dispatcher && Dispatcher->Request())
+    PathInfo = Dispatcher->Request()->ScriptName + "/" + PathInfo;
   Forms = Forms +
     AnsiString().Format("<FORM NAME=%s ACTION=\"%s\" METHOD=\"POST\">\r\n",
       ARRAYOFCONST((HTMLSubmitFormName, PathInfo)));
@@ -440,9 +438,9 @@ void __fastcall TReconcilePageProducer::AddScriptComponents(void)
   Forms = Forms +
     AnsiString().Format("%s<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=\"%s\">\r\n",
       ARRAYOFCONST((Indent1, sProducer, Name)));
-  if (Dispatcher && Dispatcher->Request)
+  if (Dispatcher && Dispatcher->Request())
   {
-    Redirect = Dispatcher->Request->ContentFields->Values[sRedirect];
+    Redirect = Dispatcher->Request()->ContentFields->Values[sRedirect];
     Forms = Forms +
       AnsiString().Format("%s<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=\"%s\">\r\n",
         ARRAYOFCONST((Indent1, sRedirect, Redirect)));
@@ -526,8 +524,8 @@ void __fastcall TReconcilePageProducer::GetXMLInfo(AnsiString &XMLBrokerName, An
   if (FXMLBroker)
   {
     XMLErrors = FormatXML(FXMLBroker->GetErrors(), XMLOptions);
-    if (Dispatcher && Dispatcher->Request)
-      XMLDelta = FormatXML(FXMLBroker->GetDelta(Dispatcher->Request),
+    if (Dispatcher && Dispatcher->Request())
+      XMLDelta = FormatXML(FXMLBroker->GetDelta(Dispatcher->Request()),
         XMLOptions);
     XMLBrokerName = FXMLBroker->Name;
   }

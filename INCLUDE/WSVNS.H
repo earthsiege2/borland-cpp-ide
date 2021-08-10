@@ -15,7 +15,6 @@
  ******************************************************************************/
 
 #ifndef _WSVNS_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WSVNS_
 
 #if _MSC_VER > 1000
@@ -41,7 +40,6 @@ typedef struct sockaddr_vns {
 #define VNSPROTO_SPP		3
 
 
-#pragma option pop /*P_O_Pop*/
 #endif _WSVNS_
 
 

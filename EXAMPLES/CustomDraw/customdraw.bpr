@@ -2,36 +2,36 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="CustomDraw.exe"/>
     <OBJFILES value="CustomDraw.obj CustDraw.obj"/>
     <RESFILES value="CustomDraw.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
-    <RESDEPEN value="$(RESFILES) CustDraw.dfm"/>
+    <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value=""/>
     <LIBRARIES value=""/>
-    <SPARELIBS value="Vcl50.lib Vclx50.lib"/>
-    <PACKAGES value="Vcl50.bpi Vclx50.bpi"/>
+    <SPARELIBS value="rtl.lib vcl.lib vclx.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
-    <LINKER value="tlink32"/>
+    <LINKER value="ilink32"/>
     <USERDEFINES value=""/>
     <SYSDEFINES value="NO_STRICT;_RTLDLL;USEPACKAGES"/>
     <MAINSOURCE value="CustomDraw.cpp"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
+    <LIBPATH value="$(BCB)\lib\release;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
-      -tW -tWM"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
@@ -42,6 +42,13 @@
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="CustomDraw.cpp" FORMNAME="" UNITNAME="CustomDraw" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="CustomDraw.res" FORMNAME="" UNITNAME="CustomDraw" CONTAINERID="ResTool" DESIGNCLASS=""/>
+      <FILE FILENAME="CustDraw.cpp" FORMNAME="CustomDrawForm" UNITNAME="CustDraw" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="ReadMe.txt" FORMNAME="" UNITNAME="ReadMe" CONTAINERID="" DESIGNCLASS=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -70,30 +77,24 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 
-
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
 ShowInfoMsgs=0
 LinkDebugVcl=1
 LinkCGLIB=0
-
-[CORBA]
-AddServerUnit=1
-AddClientUnit=1
-PrecompiledHeaders=1
-
-[Language]
-ActiveLang=
-ProjectLang=
-RootDir=
   </IDEOPTIONS>
 </PROJECT>

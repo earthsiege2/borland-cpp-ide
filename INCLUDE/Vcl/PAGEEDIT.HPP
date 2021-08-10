@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'PageEdit.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'PageEdit.pas' rev: 6.00
 
 #ifndef PageEditHPP
 #define PageEditHPP
@@ -42,8 +42,7 @@ __published:
 	Stdctrls::TButton* DownButton;
 	Stdctrls::TButton* UpButton;
 	Stdctrls::TButton* HelpBtn;
-	void __fastcall GridDrawCell(System::TObject* Sender, int Col, int Row, const Windows::TRect &Rect, 
-		Grids::TGridDrawState State);
+	void __fastcall GridDrawCell(System::TObject* Sender, int Col, int Row, const Types::TRect &Rect, Grids::TGridDrawState State);
 	void __fastcall FormCreate(System::TObject* Sender);
 	void __fastcall MoveClick(System::TObject* Sender);
 	void __fastcall EditClick(System::TObject* Sender);
@@ -60,12 +59,10 @@ public:
 	void __fastcall SetPageList(Classes::TStrings* Value);
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TNotebookEditDlg(Classes::TComponent* AOwner) : 
-		Forms::TForm(AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TNotebookEditDlg(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TNotebookEditDlg(Classes::TComponent* AOwner, 
-		int Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TNotebookEditDlg(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TNotebookEditDlg(void) { }
@@ -73,8 +70,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TNotebookEditDlg(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TNotebookEditDlg(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -83,9 +79,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Pageedit */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Pageedit;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

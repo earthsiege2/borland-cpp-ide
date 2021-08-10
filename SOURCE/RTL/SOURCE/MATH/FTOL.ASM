@@ -3,13 +3,13 @@
 ;[]------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 10.0
+;       C/C++ Run Time Library - Version 11.0
 ; 
-;       Copyright (c) 1987, 2000 by Inprise Corporation
+;       Copyright (c) 1987, 2002 by Borland Software Corporation
 ;       All Rights Reserved.
 ; 
 
-; $Revision:   9.0  $
+; $Revision: 9.5.2.1 $
 
         include RULES.ASI
 
@@ -41,7 +41,12 @@ Locals@ <int temp1>,<qword temp2>
         fstcw   temp1.w0                ; save the control word
         fwait
         mov     al, temp1.by1
-        or      temp1.by1, 0Ch          ; set rounding control to chop
+
+        ; the last bit in 0c01h disables the invalid fpu op exception
+        ; if the result overflows 64bits. this is done to remain
+        ; consistent with casts to 32bit ints which can overflow
+        ; w/o causing invalid fpu op.
+        or      temp1, 0C01h            ; set rounding control to chop
         fldcw   temp1
         fistp   qword ptr temp2         ; convert to 64-bit integer
         mov     temp1.by1, al

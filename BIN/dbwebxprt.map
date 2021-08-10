@@ -1,0 +1,564 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 00008170H .text                   CODE
+ 0002:00000000 0000013CH .data                   DATA
+ 0002:0000013C 00000461H .bss                    BSS
+
+
+Detailed map of segments
+
+ 0001:00000000 0000016E C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000170 000001EC C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:0000035C 0000005E C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:000003BC 0000000E C=CODE     S=.text    G=(none)   M=SysConst ACBP=A9
+ 0001:000003CC 00000058 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:00000424 0000000E C=CODE     S=.text    G=(none)   M=Types    ACBP=A9
+ 0001:00000434 0000013E C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:00000574 0000000E C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000584 0000010E C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:00000694 0000000E C=CODE     S=.text    G=(none)   M=ActiveX  ACBP=A9
+ 0001:000006A4 00000038 C=CODE     S=.text    G=(none)   M=Messages ACBP=A9
+ 0001:000006DC 0000000E C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:000006EC 0000000E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:000006FC 0000000E C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:0000070C 0000000E C=CODE     S=.text    G=(none)   M=RTLConsts ACBP=A9
+ 0001:0000071C 0000000E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:0000072C 0000000E C=CODE     S=.text    G=(none)   M=Math     ACBP=A9
+ 0001:0000073C 0000000E C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:0000074C 0000000E C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:0000075C 0000002E C=CODE     S=.text    G=(none)   M=ImgList  ACBP=A9
+ 0001:0000078C 00000038 C=CODE     S=.text    G=(none)   M=CommCtrl ACBP=A9
+ 0001:000007C4 0000003E C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:00000804 0000000E C=CODE     S=.text    G=(none)   M=Consts   ACBP=A9
+ 0001:00000814 000000FE C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00000914 00000038 C=CODE     S=.text    G=(none)   M=Imm      ACBP=A9
+ 0001:0000094C 0000000E C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:0000095C 0000000E C=CODE     S=.text    G=(none)   M=WinHelpViewer ACBP=A9
+ 0001:0000096C 0000000E C=CODE     S=.text    G=(none)   M=StdActns ACBP=A9
+ 0001:0000097C 00000016 C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:00000994 00000038 C=CODE     S=.text    G=(none)   M=ShlObj   ACBP=A9
+ 0001:000009CC 00000038 C=CODE     S=.text    G=(none)   M=UrlMon   ACBP=A9
+ 0001:00000A04 00000038 C=CODE     S=.text    G=(none)   M=WinInet  ACBP=A9
+ 0001:00000A3C 00000038 C=CODE     S=.text    G=(none)   M=RegStr   ACBP=A9
+ 0001:00000A74 00000038 C=CODE     S=.text    G=(none)   M=ShellAPI ACBP=A9
+ 0001:00000AAC 0000000E C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00000ABC 00000038 C=CODE     S=.text    G=(none)   M=WinSpool ACBP=A9
+ 0001:00000AF4 00000036 C=CODE     S=.text    G=(none)   M=StdCtrls ACBP=A9
+ 0001:00000B2C 00000038 C=CODE     S=.text    G=(none)   M=CommDlg  ACBP=A9
+ 0001:00000B64 00000038 C=CODE     S=.text    G=(none)   M=Dlgs     ACBP=A9
+ 0001:00000B9C 0000001E C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00000BBC 0000000E C=CODE     S=.text    G=(none)   M=StrUtils ACBP=A9
+ 0001:00000BCC 0000000E C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:00000BDC 0000000E C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:00000BEC 00000088 C=CODE     S=.text    G=(none)   M=dbwebconst ACBP=A9
+ 0001:00000C74 0000003E C=CODE     S=.text    G=(none)   M=VirtIntf ACBP=A9
+ 0001:00000CB4 00000016 C=CODE     S=.text    G=(none)   M=ExptIntf ACBP=A9
+ 0001:00000CCC 0000000E C=CODE     S=.text    G=(none)   M=ToolIntf ACBP=A9
+ 0001:00000CDC 0000000E C=CODE     S=.text    G=(none)   M=FileIntf ACBP=A9
+ 0001:00000CEC 0000000E C=CODE     S=.text    G=(none)   M=EditIntf ACBP=A9
+ 0001:00000CFC 00000016 C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:00000D14 0000002E C=CODE     S=.text    G=(none)   M=DB       ACBP=A9
+ 0001:00000D44 0000000E C=CODE     S=.text    G=(none)   M=FMTBcd   ACBP=A9
+ 0001:00000D54 0000000E C=CODE     S=.text    G=(none)   M=DBConsts ACBP=A9
+ 0001:00000D64 0000000E C=CODE     S=.text    G=(none)   M=SqlTimSt ACBP=A9
+ 0001:00000D74 0000000E C=CODE     S=.text    G=(none)   M=DateUtils ACBP=A9
+ 0001:00000D84 0000000E C=CODE     S=.text    G=(none)   M=MaskUtils ACBP=A9
+ 0001:00000D94 0000000E C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:00000DA4 0000000E C=CODE     S=.text    G=(none)   M=ComConst ACBP=A9
+ 0001:00000DB4 0000003E C=CODE     S=.text    G=(none)   M=DBTables ACBP=A9
+ 0001:00000DF4 0000000E C=CODE     S=.text    G=(none)   M=SMINTF   ACBP=A9
+ 0001:00000E04 0000001E C=CODE     S=.text    G=(none)   M=BDE      ACBP=A9
+ 0001:00000E24 0000000E C=CODE     S=.text    G=(none)   M=DBCommon ACBP=A9
+ 0001:00000E34 0000000E C=CODE     S=.text    G=(none)   M=bdeconst ACBP=A9
+ 0001:00000E44 0000005E C=CODE     S=.text    G=(none)   M=FileCtrl ACBP=A9
+ 0001:00000EA4 0000002E C=CODE     S=.text    G=(none)   M=DbCombo  ACBP=A9
+ 0001:00000ED4 0000000E C=CODE     S=.text    G=(none)   M=DsnDBCst ACBP=A9
+ 0001:00000EE4 00000036 C=CODE     S=.text    G=(none)   M=HTTPApp  ACBP=A9
+ 0001:00000F1C 0000000E C=CODE     S=.text    G=(none)   M=Masks    ACBP=A9
+ 0001:00000F2C 0000000E C=CODE     S=.text    G=(none)   M=BrkrConst ACBP=A9
+ 0001:00000F3C 0000000E C=CODE     S=.text    G=(none)   M=WebConst ACBP=A9
+ 0001:00000F4C 0000000E C=CODE     S=.text    G=(none)   M=DBWeb    ACBP=A9
+ 0001:00000F5C 00000016 C=CODE     S=.text    G=(none)   M=HTTPProd ACBP=A9
+ 0001:00000F74 0000000E C=CODE     S=.text    G=(none)   M=CopyPrsr ACBP=A9
+ 0001:00000F84 00000026 C=CODE     S=.text    G=(none)   M=Proxies  ACBP=A9
+ 0001:00000FAC 00001B20 C=CODE     S=.text    G=(none)   M=WebMod   ACBP=A9
+ 0001:00002ACC 00000016 C=CODE     S=.text    G=(none)   M=DrpCtrls ACBP=A9
+ 0001:00002AE4 0000000E C=CODE     S=.text    G=(none)   M=DesignIntf ACBP=A9
+ 0001:00002AF4 0000000E C=CODE     S=.text    G=(none)   M=DesignMenus ACBP=A9
+ 0001:00002B04 0000000E C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00002B14 00000016 C=CODE     S=.text    G=(none)   M=DSDesign ACBP=A9
+ 0001:00002B2C 0000000E C=CODE     S=.text    G=(none)   M=DesignWindows ACBP=A9
+ 0001:00002B3C 0000000E C=CODE     S=.text    G=(none)   M=ComponentDesigner ACBP=A9
+ 0001:00002B4C 0000000E C=CODE     S=.text    G=(none)   M=Events   ACBP=A9
+ 0001:00002B5C 0000000E C=CODE     S=.text    G=(none)   M=ToolUtils ACBP=A9
+ 0001:00002B6C 0000000E C=CODE     S=.text    G=(none)   M=ToolsAPI ACBP=A9
+ 0001:00002B7C 0000000E C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:00002B8C 0000000E C=CODE     S=.text    G=(none)   M=ListActns ACBP=A9
+ 0001:00002B9C 0000000E C=CODE     S=.text    G=(none)   M=ToolWin  ACBP=A9
+ 0001:00002BAC 00000038 C=CODE     S=.text    G=(none)   M=RichEdit ACBP=A9
+ 0001:00002BE4 0000000E C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00002BF4 0000000E C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:00002C04 0000000E C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:00002C14 0000000E C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:00002C24 0000000E C=CODE     S=.text    G=(none)   M=ComStrs  ACBP=A9
+ 0001:00002C34 0000000E C=CODE     S=.text    G=(none)   M=Update   ACBP=A9
+ 0001:00002C44 0000000E C=CODE     S=.text    G=(none)   M=LibConst ACBP=A9
+ 0001:00002C54 0000000E C=CODE     S=.text    G=(none)   M=DesignEditors ACBP=A9
+ 0001:00002C64 0000000E C=CODE     S=.text    G=(none)   M=DesignConst ACBP=A9
+ 0001:00002C74 0000000E C=CODE     S=.text    G=(none)   M=Designer ACBP=A9
+ 0001:00002C84 0000000E C=CODE     S=.text    G=(none)   M=TopLevels ACBP=A9
+ 0001:00002C94 0000000E C=CODE     S=.text    G=(none)   M=StFilSys ACBP=A9
+ 0001:00002CA4 00000016 C=CODE     S=.text    G=(none)   M=IStreams ACBP=A9
+ 0001:00002CBC 0000000E C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00002CCC 0000000E C=CODE     S=.text    G=(none)   M=StdVCL   ACBP=A9
+ 0001:00002CDC 0000000E C=CODE     S=.text    G=(none)   M=TreeIntf ACBP=A9
+ 0001:00002CEC 0000000E C=CODE     S=.text    G=(none)   M=VCLEditors ACBP=A9
+ 0001:00002CFC 0000000E C=CODE     S=.text    G=(none)   M=DBCtrls  ACBP=A9
+ 0001:00002D0C 0000000E C=CODE     S=.text    G=(none)   M=Mask     ACBP=A9
+ 0001:00002D1C 0000000E C=CODE     S=.text    G=(none)   M=VDBConsts ACBP=A9
+ 0001:00002D2C 0000000E C=CODE     S=.text    G=(none)   M=DBPWDlg  ACBP=A9
+ 0001:00002D3C 0000000E C=CODE     S=.text    G=(none)   M=DBLogDlg ACBP=A9
+ 0001:00002D4C 0000000E C=CODE     S=.text    G=(none)   M=DSDefine ACBP=A9
+ 0001:00002D5C 0000000E C=CODE     S=.text    G=(none)   M=LibHelp  ACBP=A9
+ 0001:00002D6C 0000000E C=CODE     S=.text    G=(none)   M=DSAdd    ACBP=A9
+ 0001:00002D7C 0000000E C=CODE     S=.text    G=(none)   M=DBGrids  ACBP=A9
+ 0001:00002D8C 0000000E C=CODE     S=.text    G=(none)   M=Grids    ACBP=A9
+ 0001:00002D9C 0000003E C=CODE     S=.text    G=(none)   M=DRIntf   ACBP=A9
+ 0001:00002DDC 0000000E C=CODE     S=.text    G=(none)   M=DrTable  ACBP=A9
+ 0001:00002DEC 00003A20 C=CODE     S=.text    G=(none)   M=DBWbExFrm ACBP=A9
+ 0001:0000680C 0000000E C=CODE     S=.text    G=(none)   M=DbExcept ACBP=A9
+ 0001:0000681C 00000178 C=CODE     S=.text    G=(none)   M=txtstrm  ACBP=A9
+ 0001:00006994 000013D4 C=CODE     S=.text    G=(none)   M=DBWebExprt ACBP=A9
+ 0001:00007D68 00000405 C=CODE     S=.text    G=(none)   M=DBWebXprt ACBP=A9
+ 0002:00000000 00000028 C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00000028 000000D4 C=DATA     S=.data    G=DGROUP   M=DBWbExFrm ACBP=A9
+ 0002:00001000 00000018 C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00001018 00000004 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0002:0000101C 00000004 C=BSS      S=.bss     G=DGROUP   M=Messages ACBP=A9
+ 0002:00001020 00000004 C=BSS      S=.bss     G=DGROUP   M=CommCtrl ACBP=A9
+ 0002:00001024 00000004 C=BSS      S=.bss     G=DGROUP   M=Imm      ACBP=A9
+ 0002:00001028 00000004 C=BSS      S=.bss     G=DGROUP   M=ShlObj   ACBP=A9
+ 0002:0000102C 00000004 C=BSS      S=.bss     G=DGROUP   M=UrlMon   ACBP=A9
+ 0002:00001030 00000004 C=BSS      S=.bss     G=DGROUP   M=WinInet  ACBP=A9
+ 0002:00001034 00000004 C=BSS      S=.bss     G=DGROUP   M=RegStr   ACBP=A9
+ 0002:00001038 00000004 C=BSS      S=.bss     G=DGROUP   M=ShellAPI ACBP=A9
+ 0002:0000103C 00000004 C=BSS      S=.bss     G=DGROUP   M=WinSpool ACBP=A9
+ 0002:00001040 00000004 C=BSS      S=.bss     G=DGROUP   M=CommDlg  ACBP=A9
+ 0002:00001044 00000004 C=BSS      S=.bss     G=DGROUP   M=Dlgs     ACBP=A9
+ 0002:00001048 00000004 C=BSS      S=.bss     G=DGROUP   M=dbwebconst ACBP=A9
+ 0002:0000104C 00000404 C=BSS      S=.bss     G=DGROUP   M=WebMod   ACBP=A9
+ 0002:00001450 00000004 C=BSS      S=.bss     G=DGROUP   M=RichEdit ACBP=A9
+ 0002:00001454 00000004 C=BSS      S=.bss     G=DGROUP   M=DBWbExFrm ACBP=A9
+ 0002:00001458 00000004 C=BSS      S=.bss     G=DGROUP   M=txtstrm  ACBP=A9
+ 0002:0000145C 00000004 C=BSS      S=.bss     G=DGROUP   M=DBWebExprt ACBP=A9
+
+
+  Address         Publics by Name
+
+ 0002:00001450       .1
+ 0002:00001048       .1
+ 0002:00001044       .1
+ 0002:00001040       .1
+ 0002:00001038       .1
+ 0002:00001010       .1
+ 0002:00001034       .1
+ 0002:00001030       .1
+ 0002:0000102C       .1
+ 0002:00001028       .1
+ 0002:00001024       .1
+ 0002:00001020       .1
+ 0002:0000145C       .1
+ 0002:0000101C       .1
+ 0002:00001458       .2
+ 0002:0000104C       .2
+ 0002:00001454       .3
+ 0002:00001018       .3
+ 0002:0000103C       .3
+ 0001:00008148       @GetPackageInfoTable
+ 0001:000002A8       @InitPkg
+ 0001:0000030C       @PackageLoad
+ 0001:00008150       @PackageLoad
+ 0001:0000815C       @PackageUnload
+ 0001:00000318       @PackageUnload
+ 0001:000001A8       AllocTlsBuffer
+ 0001:000003CC       AnsiToOem
+ 0001:000051B4       CheckAliasDrive
+ 0001:000007BC       CommCtrl
+ 0001:00000B5C       CommDlg
+ 0002:00000064       ControlWidths
+ 0001:00006804       DBWbExFrm
+ 0001:00000C6C       dbwebconst
+ 0001:00007D60       DBWebExprt
+ 0001:00008168       DBWebXprt
+ 0002:00000058       DetailTable
+ 0001:00000B94       Dlgs
+ 0001:00000254       ExitProcessTLS
+ 0001:0000022C       ExitThreadTLS
+ 0001:00000A74       Finalization
+ 0001:00000A3C       Finalization
+ 0001:00000ABC       Finalization
+ 0001:00000A04       Finalization
+ 0001:000009CC       Finalization
+ 0001:00000B2C       Finalization
+ 0001:00000994       Finalization
+ 0001:00000914       Finalization
+ 0001:00007D30       Finalization
+ 0001:0000078C       Finalization
+ 0001:00000B64       Finalization
+ 0001:000006A4       Finalization
+ 0001:000003EC       Finalization
+ 0001:00000C3C       Finalization
+ 0001:000067A0       Finalization
+ 0001:00000324       Finalization
+ 0001:00002BAC       Finalization
+ 0001:00002A94       Finalization
+ 0001:0000695C       Finalization
+ 0001:00000170       FreeLibrary
+ 0001:0000371C       FreeList
+ 0001:0000374C       GetQuoteChar
+ 0001:000001B4       GetTlsSize
+ 0001:00006AAC       HandleException
+ 0002:0000100C       HInstance
+ 0002:00000028       Images
+ 0001:00000944       Imm
+ 0001:00003CC0       InitChoices
+ 0001:00000278       InitializeModule
+ 0001:00000200       InitProcessTLS
+ 0001:000001BC       InitThreadTLS
+ 0001:000003D4       LoadBitmap
+ 0001:000003DC       LoadIcon
+ 0001:00000178       LocalAlloc
+ 0002:0000005C       LocalFilter
+ 0001:00000180       LocalFree
+ 0002:00000054       MasterTable
+ 0001:000006D4       Messages
+ 0002:00000000       Module
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0001:000003E4       OemToAnsi
+ 0001:00007D1C       Register
+ 0001:00000A6C       RegStr
+ 0002:00000060       RemoteFilter
+ 0001:00002BDC       RichEdit
+ 0001:00000AA4       ShellAPI
+ 0001:000009C4       ShlObj
+ 0002:00000050       SimpleTable
+ 0001:00001138       SWrite
+ 0001:00000354       SysInit
+ 0001:00007BBC       TDBWebAppExpert.Execute
+ 0001:00007B18       TDBWebAppExpert.GetAuthor
+ 0001:00007A78       TDBWebAppExpert.GetComment
+ 0001:00007ABC       TDBWebAppExpert.GetGlyph
+ 0001:00007B6C       TDBWebAppExpert.GetIDString
+ 0001:00007BAC       TDBWebAppExpert.GetMenuText
+ 0001:00007A34       TDBWebAppExpert.GetName
+ 0001:00007B3C       TDBWebAppExpert.GetPage
+ 0001:00007B5C       TDBWebAppExpert.GetState
+ 0001:00007B50       TDBWebAppExpert.GetStyle
+ 0001:00005210       TDBWebExpertForm.AliasDriveListChange
+ 0001:00005660       TDBWebExpertForm.AliasFileListClick
+ 0001:000056C4       TDBWebExpertForm.AliasFileListDblClick
+ 0001:00003820       TDBWebExpertForm.AliasPath
+ 0001:000053E4       TDBWebExpertForm.AliasPathListChange
+ 0001:000057EC       TDBWebExpertForm.Button1Click
+ 0001:00005854       TDBWebExpertForm.Button2Click
+ 0001:00005940       TDBWebExpertForm.Button3Click
+ 0001:000059EC       TDBWebExpertForm.Button4Click
+ 0001:00003F28       TDBWebExpertForm.ChangePages
+ 0001:000037D8       TDBWebExpertForm.Create
+ 0001:00004A08       TDBWebExpertForm.CreateField
+ 0001:00004EBC       TDBWebExpertForm.CreateForm
+ 0001:000045A0       TDBWebExpertForm.CreateOptionClick
+ 0001:0000647C       TDBWebExpertForm.CreateQueryClick
+ 0001:00006464       TDBWebExpertForm.CreateTableClick
+ 0001:000045B0       TDBWebExpertForm.DataSourceListClick
+ 0001:00005FF4       TDBWebExpertForm.DoDragOver
+ 0001:000063CC       TDBWebExpertForm.DownButtonClick
+ 0001:00005EFC       TDBWebExpertForm.FileEditChange
+ 0001:00006550       TDBWebExpertForm.FileEditKeyPress
+ 0001:00003E18       TDBWebExpertForm.FillFieldList
+ 0001:0000558C       TDBWebExpertForm.FilterListChange
+ 0001:00006728       TDBWebExpertForm.FormCloseQuery
+ 0001:00003984       TDBWebExpertForm.FormCreate
+ 0001:00003C74       TDBWebExpertForm.FormDestroy
+ 0001:000064B0       TDBWebExpertForm.FormPaint
+ 0001:0000396C       TDBWebExpertForm.FreeChoice
+ 0001:000045C0       TDBWebExpertForm.GenSelect
+ 0001:00005B7C       TDBWebExpertForm.GetFirstSelection
+ 0001:00006710       TDBWebExpertForm.HelpButtonClick
+ 0001:00003D20       TDBWebExpertForm.Init
+ 0001:00003948       TDBWebExpertForm.InitChoice
+ 0001:00003D98       TDBWebExpertForm.InitFilter
+ 0001:00004C00       TDBWebExpertForm.InitQuery
+ 0001:00004AE0       TDBWebExpertForm.InitTable
+ 0001:00005C54       TDBWebExpertForm.InsertSelected
+ 0001:00006284       TDBWebExpertForm.ListDblClick
+ 0001:000061CC       TDBWebExpertForm.ListDragDrop
+ 0001:00006108       TDBWebExpertForm.ListDragOver
+ 0001:00006184       TDBWebExpertForm.MoveDragList
+ 0001:00005DF4       TDBWebExpertForm.MoveItems
+ 0001:00005BB0       TDBWebExpertForm.MoveSelected
+ 0001:000043FC       TDBWebExpertForm.NextButtonClick
+ 0001:00005D34       TDBWebExpertForm.OrderFieldList
+ 0001:00006494       TDBWebExpertForm.PosButtonClick
+ 0001:000044F8       TDBWebExpertForm.PrevButtonClick
+ 0001:00004130       TDBWebExpertForm.ProcessPage0
+ 0001:00004140       TDBWebExpertForm.ProcessPage1
+ 0001:00004308       TDBWebExpertForm.ProcessPage2
+ 0001:00004388       TDBWebExpertForm.ProcessPage3
+ 0001:000043D0       TDBWebExpertForm.ProcessPage4
+ 0001:000043F8       TDBWebExpertForm.ProcessPage5
+ 0001:00005AF0       TDBWebExpertForm.RemoveMatch
+ 0001:000056E0       TDBWebExpertForm.SetButtons
+ 0001:00005EE4       TDBWebExpertForm.SetFileEditText
+ 0001:00005194       TDBWebExpertForm.SetFilter
+ 0001:000057A8       TDBWebExpertForm.SetItem
+ 0001:0000459C       TDBWebExpertForm.SetLayOut
+ 0001:00006340       TDBWebExpertForm.UpButtonClick
+ 0001:00006B00       TDBWebProject.Existing
+ 0001:00006B0C       TDBWebProject.GetFileName
+ 0001:00006B1C       TDBWebProject.GetFileSystem
+ 0001:00007A14       TDBWebProject.GetOptionName
+ 0001:00006AFC       TDBWebProject.InitProject
+ 0001:00007A04       TDBWebProject.NewDefaultModule
+ 0001:00007A24       TDBWebProject.NewOptionSource
+ 0001:00007A0C       TDBWebProject.NewProjectResource
+ 0001:00006B2C       TDBWebProject.NewProjectSource
+ 0001:00000188       TlsAlloc
+ 0002:00001014       tlsBuffer
+ 0001:00000190       TlsFree
+ 0001:00000198       TlsGetValue
+ 0002:00001004       TlsIndex
+ 0002:AD8B6000       TlsLast
+ 0002:00000018       TlsProc
+ 0001:000001A0       TlsSetValue
+ 0001:000068CC       TTextStream.FormatLn
+ 0001:00006944       TTextStream.NewLine
+ 0001:000068B8       TTextStream.WriteLn
+ 0001:00001178       TWebAppModule.CreateCppSource
+ 0001:00001758       TWebAppModule.CreateHdrSource
+ 0001:00001E88       TWebAppModule.CreateRes
+ 0001:000022CC       TWebAppModule.CreateSource
+ 0001:00002A4C       TWebAppModule.WebAppModuleCreate
+ 0001:00002A78       TWebAppModule.WebAppModuleDestroy
+ 0001:00002A44       TWebAppModule.WebAppModuleWebActionItem1Action
+ 0001:0000698C       txtstrm
+ 0001:00000284       UninitializeModule
+ 0001:000009FC       UrlMon
+ 0001:00002AC4       WebMod
+ 0001:0000041C       Windows
+ 0001:00000A34       WinInet
+ 0001:00000AEC       WinSpool
+ 0002:00001050       WriteBuffer
+
+
+  Address         Publics by Value
+
+ 0002:AD8B6000       TlsLast
+ 0001:00000170       FreeLibrary
+ 0001:00000178       LocalAlloc
+ 0001:00000180       LocalFree
+ 0001:00000188       TlsAlloc
+ 0001:00000190       TlsFree
+ 0001:00000198       TlsGetValue
+ 0001:000001A0       TlsSetValue
+ 0001:000001A8       AllocTlsBuffer
+ 0001:000001B4       GetTlsSize
+ 0001:000001BC       InitThreadTLS
+ 0001:00000200       InitProcessTLS
+ 0001:0000022C       ExitThreadTLS
+ 0001:00000254       ExitProcessTLS
+ 0001:00000278       InitializeModule
+ 0001:00000284       UninitializeModule
+ 0001:000002A8       @InitPkg
+ 0001:0000030C       @PackageLoad
+ 0001:00000318       @PackageUnload
+ 0001:00000324       Finalization
+ 0001:00000354       SysInit
+ 0001:000003CC       AnsiToOem
+ 0001:000003D4       LoadBitmap
+ 0001:000003DC       LoadIcon
+ 0001:000003E4       OemToAnsi
+ 0001:000003EC       Finalization
+ 0001:0000041C       Windows
+ 0001:000006A4       Finalization
+ 0001:000006D4       Messages
+ 0001:0000078C       Finalization
+ 0001:000007BC       CommCtrl
+ 0001:00000914       Finalization
+ 0001:00000944       Imm
+ 0001:00000994       Finalization
+ 0001:000009C4       ShlObj
+ 0001:000009CC       Finalization
+ 0001:000009FC       UrlMon
+ 0001:00000A04       Finalization
+ 0001:00000A34       WinInet
+ 0001:00000A3C       Finalization
+ 0001:00000A6C       RegStr
+ 0001:00000A74       Finalization
+ 0001:00000AA4       ShellAPI
+ 0001:00000ABC       Finalization
+ 0001:00000AEC       WinSpool
+ 0001:00000B2C       Finalization
+ 0001:00000B5C       CommDlg
+ 0001:00000B64       Finalization
+ 0001:00000B94       Dlgs
+ 0001:00000C3C       Finalization
+ 0001:00000C6C       dbwebconst
+ 0001:00001138       SWrite
+ 0001:00001178       TWebAppModule.CreateCppSource
+ 0001:00001758       TWebAppModule.CreateHdrSource
+ 0001:00001E88       TWebAppModule.CreateRes
+ 0001:000022CC       TWebAppModule.CreateSource
+ 0001:00002A44       TWebAppModule.WebAppModuleWebActionItem1Action
+ 0001:00002A4C       TWebAppModule.WebAppModuleCreate
+ 0001:00002A78       TWebAppModule.WebAppModuleDestroy
+ 0001:00002A94       Finalization
+ 0001:00002AC4       WebMod
+ 0001:00002BAC       Finalization
+ 0001:00002BDC       RichEdit
+ 0001:0000371C       FreeList
+ 0001:0000374C       GetQuoteChar
+ 0001:000037D8       TDBWebExpertForm.Create
+ 0001:00003820       TDBWebExpertForm.AliasPath
+ 0001:00003948       TDBWebExpertForm.InitChoice
+ 0001:0000396C       TDBWebExpertForm.FreeChoice
+ 0001:00003984       TDBWebExpertForm.FormCreate
+ 0001:00003C74       TDBWebExpertForm.FormDestroy
+ 0001:00003CC0       InitChoices
+ 0001:00003D20       TDBWebExpertForm.Init
+ 0001:00003D98       TDBWebExpertForm.InitFilter
+ 0001:00003E18       TDBWebExpertForm.FillFieldList
+ 0001:00003F28       TDBWebExpertForm.ChangePages
+ 0001:00004130       TDBWebExpertForm.ProcessPage0
+ 0001:00004140       TDBWebExpertForm.ProcessPage1
+ 0001:00004308       TDBWebExpertForm.ProcessPage2
+ 0001:00004388       TDBWebExpertForm.ProcessPage3
+ 0001:000043D0       TDBWebExpertForm.ProcessPage4
+ 0001:000043F8       TDBWebExpertForm.ProcessPage5
+ 0001:000043FC       TDBWebExpertForm.NextButtonClick
+ 0001:000044F8       TDBWebExpertForm.PrevButtonClick
+ 0001:0000459C       TDBWebExpertForm.SetLayOut
+ 0001:000045A0       TDBWebExpertForm.CreateOptionClick
+ 0001:000045B0       TDBWebExpertForm.DataSourceListClick
+ 0001:000045C0       TDBWebExpertForm.GenSelect
+ 0001:00004A08       TDBWebExpertForm.CreateField
+ 0001:00004AE0       TDBWebExpertForm.InitTable
+ 0001:00004C00       TDBWebExpertForm.InitQuery
+ 0001:00004EBC       TDBWebExpertForm.CreateForm
+ 0001:00005194       TDBWebExpertForm.SetFilter
+ 0001:000051B4       CheckAliasDrive
+ 0001:00005210       TDBWebExpertForm.AliasDriveListChange
+ 0001:000053E4       TDBWebExpertForm.AliasPathListChange
+ 0001:0000558C       TDBWebExpertForm.FilterListChange
+ 0001:00005660       TDBWebExpertForm.AliasFileListClick
+ 0001:000056C4       TDBWebExpertForm.AliasFileListDblClick
+ 0001:000056E0       TDBWebExpertForm.SetButtons
+ 0001:000057A8       TDBWebExpertForm.SetItem
+ 0001:000057EC       TDBWebExpertForm.Button1Click
+ 0001:00005854       TDBWebExpertForm.Button2Click
+ 0001:00005940       TDBWebExpertForm.Button3Click
+ 0001:000059EC       TDBWebExpertForm.Button4Click
+ 0001:00005AF0       TDBWebExpertForm.RemoveMatch
+ 0001:00005B7C       TDBWebExpertForm.GetFirstSelection
+ 0001:00005BB0       TDBWebExpertForm.MoveSelected
+ 0001:00005C54       TDBWebExpertForm.InsertSelected
+ 0001:00005D34       TDBWebExpertForm.OrderFieldList
+ 0001:00005DF4       TDBWebExpertForm.MoveItems
+ 0001:00005EE4       TDBWebExpertForm.SetFileEditText
+ 0001:00005EFC       TDBWebExpertForm.FileEditChange
+ 0001:00005FF4       TDBWebExpertForm.DoDragOver
+ 0001:00006108       TDBWebExpertForm.ListDragOver
+ 0001:00006184       TDBWebExpertForm.MoveDragList
+ 0001:000061CC       TDBWebExpertForm.ListDragDrop
+ 0001:00006284       TDBWebExpertForm.ListDblClick
+ 0001:00006340       TDBWebExpertForm.UpButtonClick
+ 0001:000063CC       TDBWebExpertForm.DownButtonClick
+ 0001:00006464       TDBWebExpertForm.CreateTableClick
+ 0001:0000647C       TDBWebExpertForm.CreateQueryClick
+ 0001:00006494       TDBWebExpertForm.PosButtonClick
+ 0001:000064B0       TDBWebExpertForm.FormPaint
+ 0001:00006550       TDBWebExpertForm.FileEditKeyPress
+ 0001:00006710       TDBWebExpertForm.HelpButtonClick
+ 0001:00006728       TDBWebExpertForm.FormCloseQuery
+ 0001:000067A0       Finalization
+ 0001:00006804       DBWbExFrm
+ 0001:000068B8       TTextStream.WriteLn
+ 0001:000068CC       TTextStream.FormatLn
+ 0001:00006944       TTextStream.NewLine
+ 0001:0000695C       Finalization
+ 0001:0000698C       txtstrm
+ 0001:00006AAC       HandleException
+ 0001:00006AFC       TDBWebProject.InitProject
+ 0001:00006B00       TDBWebProject.Existing
+ 0001:00006B0C       TDBWebProject.GetFileName
+ 0001:00006B1C       TDBWebProject.GetFileSystem
+ 0001:00006B2C       TDBWebProject.NewProjectSource
+ 0001:00007A04       TDBWebProject.NewDefaultModule
+ 0001:00007A0C       TDBWebProject.NewProjectResource
+ 0001:00007A14       TDBWebProject.GetOptionName
+ 0001:00007A24       TDBWebProject.NewOptionSource
+ 0001:00007A34       TDBWebAppExpert.GetName
+ 0001:00007A78       TDBWebAppExpert.GetComment
+ 0001:00007ABC       TDBWebAppExpert.GetGlyph
+ 0001:00007B18       TDBWebAppExpert.GetAuthor
+ 0001:00007B3C       TDBWebAppExpert.GetPage
+ 0001:00007B50       TDBWebAppExpert.GetStyle
+ 0001:00007B5C       TDBWebAppExpert.GetState
+ 0001:00007B6C       TDBWebAppExpert.GetIDString
+ 0001:00007BAC       TDBWebAppExpert.GetMenuText
+ 0001:00007BBC       TDBWebAppExpert.Execute
+ 0001:00007D1C       Register
+ 0001:00007D30       Finalization
+ 0001:00007D60       DBWebExprt
+ 0001:00008148       @GetPackageInfoTable
+ 0001:00008150       @PackageLoad
+ 0001:0000815C       @PackageUnload
+ 0001:00008168       DBWebXprt
+ 0002:00000000       Module
+ 0002:00000018       TlsProc
+ 0002:00000028       Images
+ 0002:00000050       SimpleTable
+ 0002:00000054       MasterTable
+ 0002:00000058       DetailTable
+ 0002:0000005C       LocalFilter
+ 0002:00000060       RemoteFilter
+ 0002:00000064       ControlWidths
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0002:00001004       TlsIndex
+ 0002:0000100C       HInstance
+ 0002:00001010       .1
+ 0002:00001014       tlsBuffer
+ 0002:00001018       .3
+ 0002:0000101C       .1
+ 0002:00001020       .1
+ 0002:00001024       .1
+ 0002:00001028       .1
+ 0002:0000102C       .1
+ 0002:00001030       .1
+ 0002:00001034       .1
+ 0002:00001038       .1
+ 0002:0000103C       .3
+ 0002:00001040       .1
+ 0002:00001044       .1
+ 0002:00001048       .1
+ 0002:0000104C       .2
+ 0002:00001050       WriteBuffer
+ 0002:00001450       .1
+ 0002:00001454       .3
+ 0002:00001458       .2
+ 0002:0000145C       .1
+
+
+Bound resource files
+
+WebMod.dfm
+DBWbExFrm.dfm
+DBWbExFrm.res
+TEMPLATE.RES
+dbwebxprt.res
+C:\DOCUME~1\~storm\LOCALS~1\Temp\dtf72BA.tmp
+
+
+Program entry point at 0001:00008168

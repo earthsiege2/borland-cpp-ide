@@ -1,92 +1,156 @@
-{********************************************************}
-{                                                        }
-{       Borland Delphi Visual Component Library          } 
-{       InterBase Express EventAlerter components        }
-{                                                        }
-{       Copyright (c) 1998-1999 Inprise Corporation      }
-{                                                        }
-{       Adapted from code written by:                    }
-{         James Thorpe                                   }
-{         CSA Australasia                                }
-{         Compuserve: 100035,2064                        }
-{         Internet:   csa@csaa.com.au                    }
-{                                                        }
-{********************************************************}
+{************************************************************************}
+{                                                                        }
+{       Borland Delphi Visual Component Library                          }
+{       InterBase Express core components                                }
+{                                                                        }
+{       Copyright (c) 1998-2001 Borland Software Corporation             }
+{                                                                        }
+{    InterBase Express is based in part on the product                   }
+{    Free IB Components, written by Gregory H. Deatz for                 }
+{    Hoagland, Longo, Moran, Dunst & Doukas Company.                     }
+{    Free IB Components is used under license.                           }
+{                                                                        }
+{    IBEvents was strongly based upon David S. Becker's SuperIB Events   }
+{    with permission (www.rcsis.com/users/dbecker/superib).  Thank you   }
+{    David.                                                              }
+{                                                                        }
+{    The contents of this file are subject to the InterBase              }
+{    Public License Version 1.0 (the "License"); you may not             }
+{    use this file except in compliance with the License. You may obtain }
+{    a copy of the License at http://www.borland.com/interbase/IPL.html  }
+{    Software distributed under the License is distributed on            }
+{    an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either              }
+{    express or implied. See the License for the specific language       }
+{    governing rights and limitations under the License.                 }
+{    The Original Code was created by InterBase Software Corporation     }
+{       and its successors.                                              }
+{    Portions created by Borland Software Corporation are Copyright      }
+{       (C) Borland Software Corporation. All Rights Reserved.           }
+{    Contributor(s): David S. Becker, Jeff Overcash, Slavomir Skopalik   }
+{                                                                        }
+{************************************************************************}
 
 unit IBEvents;
 
 interface
 
 uses
-  SysUtils, Windows, Messages, Classes, Graphics, Controls,
-  Forms, Dialogs, DB, IBHeader, IBExternals, IB, IBDatabase;
-
-const
-  MaxEvents = 15;
-  EventLength = 64;
+  SysUtils, Classes,
+  {$IFDEF MSWINDOWS}
+  Windows,
+  {$ENDIF}
+  {$IFDEF LINUX}
+  Libc,
+  {$ENDIF}
+  DB, IBHeader, IBExternals, IB, IBDatabase;
 
 type
 
   TEventAlert = procedure( Sender: TObject; EventName: string; EventCount: longint;
                            var CancelAlerts: Boolean) of object;
+  TErrorEvent=procedure( Sender: TObject; ErrorCode:integer)of object;
 
-  TEventBuffer = array[ 0..MaxEvents-1, 0..EventLength-1] of char;
-
-  TIBEvents = class(TComponent)
+  TIBEvents = class(TComponent, IIBEventNotifier)
   private
-    FIBLoaded: Boolean;
     FEvents: TStrings;
     FOnEventAlert: TEventAlert;
-    FQueued: Boolean;
-    FRegistered: Boolean;
-    Buffer: TEventBuffer;
-    Changing: Boolean;
-    CS: TRTLCriticalSection;
-    EventBuffer: PChar;
-    EventBufferLen: integer;
-    EventID: ISC_LONG;
-    ProcessingEvents: Boolean;
-    RegisteredState: Boolean;
-    ResultBuffer: PChar;
+    FThreads : TList;
+    FNativeHandle : TISC_DB_HANDLE;
+    ThreadException : Boolean;
     FDatabase: TIBDatabase;
-    procedure SetDatabase( value: TIBDatabase);
-    procedure ValidateDatabase( Database: TIBDatabase);
-    procedure DoQueueEvents;
-    procedure EventChange( sender: TObject);
-    procedure UpdateResultBuffer( length: short; updated: PChar);
-  protected
-    procedure HandleEvent;
-    procedure Loaded; override;
-    procedure Notification( AComponent: TComponent; Operation: TOperation); override;
-    procedure SetEvents( value: TStrings);
-    procedure SetRegistered( value: boolean);
-    function  GetNativeHandle: TISC_DB_HANDLE;
+    FOnError: TErrorEvent;
+    FAutoRegister: Boolean;
+    FRegistered : Boolean;
 
+    procedure SetDatabase( value: TIBDatabase);
+    procedure SetEvents(Value: TStrings);
+    function GetRegistered: Boolean;
+    procedure SetRegistered(const Value: Boolean);
+  protected
+    { Protected declarations }
+    function GetNativeHandle: TISC_DB_HANDLE; virtual;
+    procedure EventChange(Sender: TObject); virtual;
+    procedure ThreadEnded(Sender: TObject); virtual;
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+    procedure ValidateDatabase(DataBase: TIBDatabase); virtual;
   public
-    constructor Create( AOwner: TComponent); override;
+    { Public declarations }
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    procedure CancelEvents;
-    procedure QueueEvents;
-    procedure RegisterEvents;
-    procedure UnRegisterEvents;
-    property  Queued: Boolean read FQueued;
+    procedure RegisterEvents; virtual;
+    procedure UnRegisterEvents; virtual;
+    property NativeHandle: TISC_DB_HANDLE read GetNativeHandle;
+    procedure SetAutoRegister(const Value: Boolean);
+    function GetAutoRegister: Boolean;
   published
-    property  Database: TIBDatabase read FDatabase write SetDatabase;
+    { Published declarations }
+    property AutoRegister: Boolean read GetAutoRegister write SetAutoRegister;
+    property Database: TIBDatabase read FDatabase write SetDatabase;
     property Events: TStrings read FEvents write SetEvents;
-    property Registered: Boolean read FRegistered write SetRegistered;
+    property Registered: Boolean read GetRegistered write SetRegistered;
     property OnEventAlert: TEventAlert read FOnEventAlert write FOnEventAlert;
+    property OnError:TErrorEvent read FOnError write FOnError;
   end;
 
 implementation
 
 uses
-  IBIntf;
+  IBIntf, SyncObjs;
+
+const
+  IB_MAX_EVENT_BLOCK   = 15;   // maximum events handled per block by InterBase
+  IB_MAX_EVENT_LENGTH  = 64;  // maximum event name length
+{$IFDEF LINUX}
+  INFINITE = $FFFFFFFF;
+{$ENDIF}
+
+type
+
+  { TIBEventThread }
+  TIBEventThread = class(TThread)
+  private
+    // IB API call parameters
+    WhichEvent: Integer;
+    EventID: ISC_LONG;
+    EventBuffer: PChar;
+    EventBufferLen: Short;
+    ResultBuffer: PChar;
+    // Local use variables
+    Signal: TSimpleEvent;
+    EventsReceived,
+    FirstTime: Boolean;
+    EventGroup,
+    EventCount: Integer;
+    Parent: TIBEvents;
+    FExceptObject: TObject;
+    FExceptAddr: Pointer;
+    FCancelAlerts : Boolean;
+  protected
+    procedure Execute; override;
+    procedure SignalEvent; virtual;
+    procedure SignalTerminate; virtual;
+    procedure RegisterEvents; virtual;
+    procedure UnRegisterEvents; virtual;
+    procedure QueueEvents; virtual;
+    procedure SQueEvents;
+    procedure ProcessEvents; virtual;
+    procedure DoEvent;
+    procedure DoHandleException;
+    function HandleException: Boolean; virtual;
+    procedure UpdateResultBuffer(Length: UShort; Updated: PChar);
+  public
+    constructor Create(Owner: TIBEvents; EventGrp: Integer; TermEvent: TNotifyEvent); virtual;
+    destructor Destroy; override;
+  end;
+
+  Tsib_event_block = function (EventBuffer, ResultBuffer: PPChar; IDCount: UShort;
+    Event1, Event2, Event3, Event4, Event5, Event6, Event7, Event8, Event9,
+    Event10, Event11, Event12, Event13, Event14, Event15: PChar): ISC_LONG; cdecl;
 
 function TIBEvents.GetNativeHandle: TISC_DB_HANDLE;
 begin
-  if assigned( FDatabase) and FDatabase.Connected then
-    Result := FDatabase.Handle
-  else result := nil;
+  ValidateDatabase(FDatabase);
+  Result := FDatabase.Handle;
 end;
 
 procedure TIBEvents.ValidateDatabase( Database: TIBDatabase);
@@ -94,152 +158,46 @@ begin
   if not assigned( Database) then
     IBError(ibxeDatabaseNameMissing, [nil]);
   if not Database.Connected then
-    IBError(ibxeDatabaseOpen, [nil]);
+    IBError(ibxeDatabaseClosed, [nil]);
 end;
 
 { TIBEvents }
 
-procedure HandleEvent( param: integer); stdcall;
-begin
-  { don't let exceptions propogate out of thread }
-  try
-    TIBEvents( param).HandleEvent;
-  except
-    Application.HandleException( nil);
-  end;
-end;
-
-procedure IBEventCallback( ptr: pointer; length: short; updated: PChar); cdecl;
-var
-  ThreadID: DWORD;
-begin
-  { Handle events asynchronously in second thread }
-  EnterCriticalSection( TIBEvents( ptr).CS);
-  TIBEvents( ptr).UpdateResultBuffer( length, updated);
-  if TIBEvents( ptr).Queued then
-    CloseHandle( CreateThread( nil, 8192, @HandleEvent, ptr, 0, ThreadID));
-  LeaveCriticalSection( TIBEvents( ptr).CS);
-end;
-
 constructor TIBEvents.Create( AOwner: TComponent);
 begin
   inherited Create( AOwner);
-  FIBLoaded := False;
   CheckIBLoaded;
-  FIBLoaded := True;
-  InitializeCriticalSection( CS);
+  ThreadException := False;
+  FOnEventAlert := nil;
+  FNativeHandle := nil;
+  FDatabase := nil;
+  FAutoRegister := False;
   FEvents := TStringList.Create;
-  with TStringList( FEvents) do
+  with TStringList(FEvents) do
   begin
-    OnChange := EventChange;
-    Duplicates := dupIgnore;
+    Sorted := true;  // dupIgnore only works when the TStringList is sorted
+    OnChange := EventChange; // assign the routine which validates the event lenghts
+    Duplicates := dupIgnore; // don't allow duplicate events
   end;
+  FThreads := TList.Create;
 end;
 
 destructor TIBEvents.Destroy;
 begin
-  if FIBLoaded then
-  begin
-    UnregisterEvents;
-    SetDatabase( nil);
-    TStringList(FEvents).OnChange := nil;
-    FEvents.Free;
-    DeleteCriticalSection( CS);
-  end;
-  inherited Destroy;
-end;
-
-procedure TIBEvents.CancelEvents;
-begin
-  if ProcessingEvents then
-    IBError(ibxeInvalidCancellation, [nil]);  
-  if FQueued then
-  begin
-    try
-      { wait for event handler to finish before cancelling events }
-      EnterCriticalSection( CS);
-      ValidateDatabase( Database);
-      FQueued := false;
-      Changing := true;
-      if (isc_Cancel_events( StatusVector, @FDatabase.Handle, @EventID) > 0) then
-        IBDatabaseError;
-    finally
-      LeaveCriticalSection( CS);
-    end;
-  end;
-end;
-
-procedure TIBEvents.DoQueueEvents;
-var
-  callback: pointer;
-begin
-  ValidateDatabase( DataBase);
-  callback := @IBEventCallback;
-  if (isc_que_events( StatusVector, @FDatabase.Handle, @EventID, EventBufferLen,
-                     EventBuffer, TISC_CALLBACK(callback), PVoid(Self)) > 0) then
-    IBDatabaseError;
-  FQueued := true;
-end;
-
-procedure TIBEvents.EventChange( sender: TObject);
-begin
-  { check for blank event }
-  if TStringList(Events).IndexOf( '') <> -1 then
-    IBError(ibxeInvalidEvent, [nil]);
-  { check for too many events }
-  if Events.Count > MaxEvents then
-  begin
-    TStringList(Events).OnChange := nil;
-    Events.Delete( MaxEvents);
-    TStringList(Events).OnChange := EventChange;
-    IBError(ibxeMaximumEvents, [nil]);
-  end;
-  if Registered then RegisterEvents;
-end;
-
-procedure TIBEvents.HandleEvent;
-var
-  Status: PStatusVector;
-  CancelAlerts: Boolean;
-  i: integer;
-begin
   try
-    { prevent modification of vital data structures while handling events }
-    EnterCriticalSection( CS);
-    ProcessingEvents := true;
-    isc_event_counts( StatusVector, EventBufferLen, EventBuffer, ResultBuffer);
-    CancelAlerts := false;
-    if assigned(FOnEventAlert) and not Changing then
-    begin
-      for i := 0 to Events.Count-1 do
-      begin
-        try
-        Status := StatusVectorArray;
-        if (Status[i] <> 0) and not CancelAlerts then
-            FOnEventAlert( self, Events[Events.Count-i-1], Status[i], CancelAlerts);
-        except
-          Application.HandleException( nil);
-        end;
-      end;
-    end;
-    Changing := false;
-    if not CancelAlerts and FQueued then DoQueueEvents;
-  finally
-    ProcessingEvents := false;
-    LeaveCriticalSection( CS);
-  end;
-end;
-
-procedure TIBEvents.Loaded;
-begin
-  inherited Loaded;
-  try
-    if RegisteredState then RegisterEvents;
+    if Registered then
+      UnRegisterEvents;
   except
-    if csDesigning in ComponentState then
-      Application.HandleException( self)
-    else raise;
+    // silence any exceptions which might be raised
+    // by UnRegisterEvents during destruction
   end;
+  If Assigned(FDatabase) then
+    FDatabase.RemoveEventNotifier(Self);
+  FThreads.Free;
+  IF Assigned(FEvents) then
+    TStringList(FEvents).OnChange := nil;
+  FEvents.Free;
+  inherited Destroy;
 end;
 
 procedure TIBEvents.Notification( AComponent: TComponent;
@@ -248,121 +206,372 @@ begin
   inherited Notification( AComponent, Operation);
   if (Operation = opRemove) and (AComponent = FDatabase) then
   begin
-    UnregisterEvents;
+    if Registered then
+      UnRegisterEvents;
     FDatabase := nil;
-  end;
-end;
-
-procedure TIBEvents.QueueEvents;
-begin
-  if not FRegistered then
-    IBError(ibxeNoEventsRegistered, [nil]);
-  if ProcessingEvents then
-    IBError(ibxeInvalidQueueing, [nil]);
-  if not FQueued then
-  begin
-    try
-      { wait until current event handler is finished before queuing events }
-      EnterCriticalSection( CS);
-      DoQueueEvents;
-      Changing := true;
-    finally
-      LeaveCriticalSection( CS);
-    end;
   end;
 end;
 
 procedure TIBEvents.RegisterEvents;
 var
-  i: integer;
-  bufptr: pointer;
-  eventbufptr: pointer;
-  resultbufptr: pointer;
-  buflen: integer;
+  i: Integer;
 begin
-  ValidateDatabase( Database);
-  if csDesigning in ComponentState then FRegistered := true
-  else begin
-    UnregisterEvents;
-    if Events.Count = 0 then exit;
-    for i := 0 to Events.Count-1 do
-      StrPCopy( @Buffer[i][0], Events[i]);
-    i := Events.Count;
-    bufptr := @buffer[0];
-    eventbufptr :=  @EventBuffer;
-    resultBufPtr := @ResultBuffer;
-    asm
-      mov ecx, dword ptr [i]
-      mov eax, dword ptr [bufptr]
-      @@1:
-      push eax
-      add  eax, EventLength
-      loop @@1
-      push dword ptr [i]
-      push dword ptr [resultBufPtr]
-      push dword ptr [eventBufPtr]
-      call [isc_event_block]
-      mov  dword ptr [bufLen], eax
-      mov eax, dword ptr [i]
-      shl eax, 2
-      add eax, 12
-      add esp, eax
-    end;
-    EventBufferlen := Buflen;
-    FRegistered := true;
-    QueueEvents;
+  if csDesigning in ComponentState then
+    exit;
+  try
+    if not Assigned(FDatabase) then
+      IBError(ibxeDatabaseNameMissing, []);
+    if not FDatabase.Connected then
+      IBError(ibxeDatabaseClosed, []);
+    if (FThreads.Count = 0) then
+    begin
+      if (FEvents.Count > 0) then
+      begin
+        for i := 0 to ((FEvents.Count - 1) div IB_MAX_EVENT_BLOCK) do
+          FThreads.Add(TIBEventThread.Create(Self, i, ThreadEnded));
+      end;
+    end
+    else
+      IBError(ibxeEventAlreadyRegistered, []);
+  finally
+    FRegistered := FThreads.Count <> 0;
   end;
 end;
 
 procedure TIBEvents.SetEvents( value: TStrings);
 begin
-  FEvents.Assign( value);
+  FEvents.Assign(value);
 end;
 
 procedure TIBEvents.SetDatabase( value: TIBDatabase);
+var
+  WasRegistered: Boolean;
 begin
-  if value <> FDatabase then
+  if (Value <> FDatabase) then
   begin
-    UnregisterEvents;
-    if assigned( value) and value.Connected then ValidateDatabase( value);
-    FDatabase := value;
+    if (csDesigning in ComponentState) then
+      FDatabase := Value
+    else
+    begin
+      WasRegistered := Registered;
+      if WasRegistered then
+        UnRegisterEvents;
+      try
+        if Assigned(FDatabase) then
+          FDatabase.RemoveEventNotifier(Self);
+
+        FDatabase := Value;
+
+        if Assigned(FDatabase) then
+          FDatabase.AddEventNotifier(Self);
+
+      finally
+        if WasRegistered then
+          RegisterEvents;
+      end;
+    end;
   end;
 end;
 
-procedure TIBEvents.SetRegistered( value: Boolean);
+procedure TIBEvents.SetRegistered(const Value : Boolean);
 begin
-  if (csReading in ComponentState) then
-    RegisteredState := value
-  else if FRegistered <> value then
-    if value then RegisterEvents else UnregisterEvents;
+  FRegistered := Value;
+  if csDesigning in ComponentState then
+    exit;
+  if Value then
+    RegisterEvents
+  else
+    UnRegisterEvents;
 end;
 
 procedure TIBEvents.UnregisterEvents;
+var
+  i: Integer;
+  Temp: TIBEventThread;
 begin
-  if ProcessingEvents then
-    IBError(ibxeInvalidRegistration, [nil]);
   if csDesigning in ComponentState then
-    FRegistered := false
-  else if not (csLoading in ComponentState) then
+    exit;
+  if (FThreads.Count > 0) then
   begin
-    CancelEvents;
-    if FRegistered then
+    for i := (FThreads.Count - 1) downto 0 do
     begin
-      isc_free( EventBuffer);
-      EventBuffer := nil;
-      isc_free( ResultBuffer);
-      ResultBuffer := nil;
+      Temp := TIBEventThread(FThreads[i]);
+      FThreads.Delete(i);
+
+      Temp.SignalTerminate;
+      Temp.WaitFor;
+      Temp.Free;
     end;
-    FRegistered := false;
+  end;
+  FRegistered := FThreads.Count <> 0;
+end;
+
+{ TIBEventThread }
+
+procedure EventCallback(P: Pointer; Length: Short; Updated: PChar); cdecl;
+begin
+  if (Assigned(P) and Assigned(Updated)) then
+  begin
+    TIBEventThread(P).UpdateResultBuffer(Length, Updated);
+    TIBEventThread(P).SignalEvent;
   end;
 end;
 
-procedure TIBEvents.UpdateResultBuffer( length: short; updated: PChar);
-var
-  i: integer;
+procedure TIBEventThread.DoEvent;
 begin
-  for i := 0 to length-1 do
-    ResultBuffer[i] := updated[i];
+  Parent.FOnEventAlert(Parent, Parent.FEvents[((EventGroup * IB_MAX_EVENT_BLOCK) + WhichEvent)], StatusVectorArray[WhichEvent], FCancelAlerts)
+end;
+
+procedure TIBEventThread.UpdateResultBuffer(Length: UShort; Updated: PChar);
+begin
+  Move(Updated[0], ResultBuffer[0], Length);
+end;
+
+procedure TIBEventThread.QueueEvents;
+begin
+  EventsReceived := False;
+  Signal.ResetEvent;
+  Synchronize(SQueEvents);
+end;
+
+procedure TIBEventThread.ProcessEvents;
+var
+  i: Integer;
+begin
+  isc_event_counts(StatusVector, EventBufferLen, EventBuffer, ResultBuffer);
+  if (Assigned(Parent.FOnEventAlert) and (not FirstTime)) then
+  begin
+    FCancelAlerts := false;
+    for i := 0 to (EventCount - 1) do
+    begin
+        if (StatusVectorArray[i] <> 0) then
+        begin
+          WhichEvent := i;
+          Synchronize(DoEvent)
+        end;
+    end;
+  end;
+  FirstTime := False;
+end;
+
+procedure TIBEventThread.UnRegisterEvents;
+begin
+  Parent.Database.Call(isc_cancel_events(StatusVector, @Parent.Database.Handle,
+     @EventID), True);
+  isc_free(EventBuffer);
+  EventBuffer := nil;
+  isc_free(ResultBuffer);
+  ResultBuffer := nil;
+end;
+
+procedure TIBEventThread.RegisterEvents;
+
+  function EBP(Index: Integer): PChar;
+  begin
+    Inc(Index, (EventGroup * IB_MAX_EVENT_BLOCK));
+    if (Index > Parent.FEvents.Count) then
+      Result := nil
+    else
+      Result := PChar(Parent.FEvents[Index - 1]);
+  end;
+
+begin
+  EventBuffer := nil;
+  ResultBuffer := nil;
+  EventBufferLen := 0;
+  FirstTime := True;
+  EventCount := (Parent.FEvents.Count - (EventGroup * IB_MAX_EVENT_BLOCK));
+  if (EventCount > IB_MAX_EVENT_BLOCK) then
+    EventCount := IB_MAX_EVENT_BLOCK;
+  EventBufferLen := Tsib_event_block(isc_event_block)(@EventBuffer,
+    @ResultBuffer, EventCount, EBP(1), EBP(2), EBP(3), EBP(4), EBP(5), EBP(6),
+    EBP(7), EBP(8), EBP(9), EBP(10), EBP(11), EBP(12), EBP(13), EBP(14), EBP(15));
+end;
+
+procedure TIBEventThread.SignalEvent;
+begin
+   EventsReceived := True;
+   Signal.SetEvent;
+end;
+
+procedure TIBEventThread.SignalTerminate;
+begin
+   if not Terminated then
+   begin
+     Terminate;
+     Signal.SetEvent;
+   end;
+end;
+
+procedure TIBEventThread.DoHandleException;
+begin
+  SysUtils.ShowException(FExceptObject, FExceptAddr);
+end;
+
+function TIBEventThread.HandleException: Boolean;
+begin
+  if not Parent.ThreadException then
+  begin
+    Result := True;
+    Parent.ThreadException := True;
+    FExceptObject := ExceptObject;
+    FExceptAddr := ExceptAddr;
+    try
+      if not (FExceptObject is EAbort) then
+        Synchronize(DoHandleException);
+    finally
+      FExceptObject := nil;
+      FExceptAddr := nil;
+    end;
+  end
+  else
+    Result := False;
+end;
+
+procedure TIBEventThread.Execute;
+begin
+  RegisterEvents;
+  QueueEvents;
+  try
+    repeat
+      Signal.WaitFor(INFINITE);
+      if EventsReceived then
+      begin
+        ProcessEvents;
+        QueueEvents;
+      end;
+    until Terminated;
+    ReturnValue := 0;
+  except
+    if HandleException then
+      ReturnValue := 1
+    else
+      ReturnValue := 0;
+  end;
+end;
+
+constructor TIBEventThread.Create(Owner: TIBEvents; EventGrp: Integer; TermEvent: TNotifyEvent);
+begin
+  inherited Create(True);
+  FCancelAlerts := false;
+  Signal := TSimpleEvent.Create;
+  Parent := Owner;
+  EventGroup := EventGrp;
+  OnTerminate := TermEvent;
+  Resume;
+end;
+
+destructor TIBEventThread.Destroy;
+begin
+  try
+    UnRegisterEvents;
+  except
+    if HandleException then
+      ReturnValue := 1
+    else
+      ReturnValue := 0;
+  end;
+  Signal.Free;
+  inherited Destroy;
+end;
+
+procedure TIBEvents.EventChange(Sender: TObject);
+var
+  i: Integer;
+  TooLong,
+  AnyEmpty,
+  WasRegistered: Boolean;
+  ErrorStr: String;
+begin
+  ErrorStr := EmptyStr;
+  WasRegistered := Registered;
+  try
+    if WasRegistered then
+      UnRegisterEvents;
+    TStringList(FEvents).OnChange := nil;
+    try
+      TooLong := False;
+      AnyEmpty := False;
+      for i := (FEvents.Count - 1) downto 0 do
+      begin
+        if (FEvents[i] = EmptyStr) then
+        begin
+          AnyEmpty := True;
+          FEvents.Delete(i);
+        end
+        else
+        if (Length(FEvents[i]) > (IB_MAX_EVENT_LENGTH - 1)) then
+        begin
+          TooLong := True;
+          FEvents[i] := Copy(FEvents[i], 1, (IB_MAX_EVENT_LENGTH - 1));
+        end;
+      end;
+      if AnyEmpty then
+        IBError(ibxeInvalidEvent, []);
+      if TooLong then
+        IBError(ibxeInvalidEvent, []);
+    finally
+      TStringList(FEvents).OnChange := EventChange;
+    end;
+  finally
+    if WasRegistered then
+      RegisterEvents;
+  end;
+end;
+
+function TIBEvents.GetRegistered: Boolean;
+begin
+  Result := FRegistered;
+end;
+
+procedure TIBEvents.ThreadEnded(Sender: TObject);
+var
+  ThreadIdx: Integer;
+begin
+  if (Sender is TIBEventThread) then
+  begin
+    ThreadIdx := FThreads.IndexOf(Sender);
+    if (ThreadIdx > -1) then
+      FThreads.Delete(ThreadIdx);
+    if (TIBEventThread(Sender).ReturnValue = 1) then
+    begin
+      if Registered then
+        UnRegisterEvents;
+      ThreadException := False;
+    end
+  end;
+end;
+
+procedure TIBEvents.SetAutoRegister(const Value: Boolean);
+begin
+  if FAutoRegister <> Value then
+  begin
+    FAutoRegister := Value;
+    if FAutoRegister and (not Registered) and
+       Assigned(FDatabase) and FDatabase.Connected then
+      RegisterEvents;
+  end;
+end;
+
+function TIBEvents.GetAutoRegister: Boolean;
+begin
+  Result := FAutoRegister;
+end;
+
+procedure TIBEventThread.SQueEvents;
+begin
+  try
+    Parent.Database.Call(isc_que_events(StatusVector, @Parent.Database.Handle,
+      @EventID, EventBufferLen, EventBuffer, TISC_CALLBACK(@EventCallback),
+      PVoid(Self)), True);
+  except
+    on E : Exception do
+      if Assigned(Parent.OnError) then
+        if E is EIBError then
+          Parent.OnError(Parent, EIBError(E).IBErrorCode)
+        else
+          Parent.OnError(Parent, 0);
+  end;
 end;
 
 end.

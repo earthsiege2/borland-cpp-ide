@@ -1,13 +1,16 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Kylix and Delphi Cross-Platform Visual Component Library                    }
+{ Internet Application Runtime                                                }
+{                                                                             }
+{ Copyright (C) 1997, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ Licensees holding a valid Borland No-Nonsense License for this Software may }
+{ use this file in accordance with such license, which appears in the file    }
+{ license.txt that came with this Software.                                   }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{       Parser object to allow on-the-fly parsing and   }
-{       text insertion                                  }
-{                                                       }
-{       Copyright (c) 1997,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
 unit CopyPrsr;
 
@@ -72,11 +75,12 @@ type
     function TokenSymbolIs(const S: string): Boolean;
     property SourceLine: Integer read FSourceLine;
     property Token: Char read FToken;
+    property OutputStream: TStream read FOutStream write FOutStream;
   end;
 
 implementation
 
-uses SysUtils, Consts;
+uses SysUtils, RTLConsts;
 
 { TCopyParser }
 
@@ -212,9 +216,15 @@ var
     if DoCopy then UpdateOutStream(S);
   end;
 
+var
+  InSingleQuote, InDoubleQuote: Boolean;
+  Found: Boolean;
 begin
+  InSingleQuote := False;
+  InDoubleQuote := False;
+  Found := False;
   Result := '';
-  while (Token <> AToken) and (Token <> toEOF) do
+  while (not Found) and (Token <> toEOF) do
   begin
     S := FSourcePtr;
     InternalSkipBlanks;
@@ -224,7 +234,15 @@ begin
       Result := Result + Temp;
     end;
     SkipToNextToken(DoCopy, DoCopy);
-    if Token <> AToken then
+    if Token = '"' then
+      InDoubleQuote := not InDoubleQuote and not InSingleQuote
+    else if Token = '''' then
+      InSingleQuote := not InSingleQuote and not InDoubleQuote;
+    Found := (Token = AToken) and
+         (((Token = '"') and (not InSingleQuote)) or
+          ((Token = '''') and (not InDoubleQuote)) or
+           not (InDoubleQuote or InSingleQuote));
+    if not Found then
     begin
       SetString(Temp, FTokenPtr, FSourcePtr - FTokenPtr);
       Result := Result + Temp;

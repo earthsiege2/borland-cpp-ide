@@ -1,4 +1,4 @@
-LIBRARY WST
+LIBRARY Wst
 EXPORTS
 
-    __penter                                 = 'WST.DLL'._penter
+    __penter        = _penter

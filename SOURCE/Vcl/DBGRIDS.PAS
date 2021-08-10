@@ -13,7 +13,7 @@ unit DBGrids;
 
 interface
 
-uses Windows, SysUtils, Messages, Classes, Controls, Forms, StdCtrls,
+uses Variants, Windows, SysUtils, Messages, Classes, Controls, Forms, StdCtrls,
   Graphics, Grids, DBCtrls, Db, Menus, ImgList;
 
 type
@@ -248,6 +248,7 @@ type
     property FieldCount: Integer read FFieldCount;
     property Fields[I: Integer]: TField read GetFields;
     property SparseMap: Boolean read FSparseMap write FSparseMap;
+    property Grid: TCustomDBGrid read FGrid;
   end;
 
   TBookmarkList = class
@@ -405,6 +406,7 @@ type
     procedure ColWidthsChanged; override;
     function  CreateColumns: TDBGridColumns; dynamic;
     function  CreateEditor: TInplaceEdit; override;
+    function  CreateDataLink: TGridDataLink; dynamic;
     procedure CreateWnd; override;
     procedure DeferLayout;
     procedure DefineFieldMap; virtual;
@@ -420,6 +422,7 @@ type
     function  GetColField(DataCol: Integer): TField;
     function  GetEditLimit: Integer; override;
     function  GetEditMask(ACol, ARow: Longint): string; override;
+    function  GetEditStyle(ACol, ARow: Longint): TEditStyle; override;
     function  GetEditText(ACol, ARow: Longint): string; override;
     function  GetFieldValue(ACol: Integer): string;
     function  HighlightCell(DataCol, DataRow: Integer; const Value: string;
@@ -561,7 +564,7 @@ const
 
 implementation
 
-uses Math, DBConsts, Dialogs;
+uses Math, DBConsts, VDBConsts, Dialogs;
 
 {$R DBGRIDS.RES}
 
@@ -600,137 +603,26 @@ end;
   OnEditButtonClick.  }
 
 type
-  TEditStyle = (esSimple, esEllipsis, esPickList, esDataList);
-  TPopupListbox = class;
 
-  TDBGridInplaceEdit = class(TInplaceEdit)
+  TDBGridInplaceEdit = class(TInplaceEditList)
   private
-    FButtonWidth: Integer;
     FDataList: TDBLookupListBox;
-    FPickList: TPopupListbox;
-    FActiveList: TWinControl;
+    FUseDataList: Boolean;
     FLookupSource: TDatasource;
-    FEditStyle: TEditStyle;
-    FListVisible: Boolean;
-    FTracking: Boolean;
-    FPressed: Boolean;
-    procedure ListMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure SetEditStyle(Value: TEditStyle);
-    procedure StopTracking;
-    procedure TrackButton(X,Y: Integer);
-    procedure CMCancelMode(var Message: TCMCancelMode); message CM_CancelMode;
-    procedure WMCancelMode(var Message: TMessage); message WM_CancelMode;
-    procedure WMKillFocus(var Message: TMessage); message WM_KillFocus;
-    procedure WMLButtonDblClk(var Message: TWMLButtonDblClk); message wm_LButtonDblClk;
-    procedure WMPaint(var Message: TWMPaint); message wm_Paint;
-    procedure WMSetCursor(var Message: TWMSetCursor); message WM_SetCursor;
-    function OverButton(const P: TPoint): Boolean;
-    function ButtonRect: TRect;
   protected
-    procedure BoundsChanged; override;
-    procedure CloseUp(Accept: Boolean);
-    procedure DoDropDownKeys(var Key: Word; Shift: TShiftState);
-    procedure DropDown;
-    procedure KeyDown(var Key: Word; Shift: TShiftState); override;
-    procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
-      X, Y: Integer); override;
-    procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
-    procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
-      X, Y: Integer); override;
-    procedure PaintWindow(DC: HDC); override;
+    procedure CloseUp(Accept: Boolean); override;
+    procedure DoEditButtonClick; override;
+    procedure DropDown; override;
     procedure UpdateContents; override;
-    procedure WndProc(var Message: TMessage); override;
-    property  EditStyle: TEditStyle read FEditStyle write SetEditStyle;
-    property  ActiveList: TWinControl read FActiveList write FActiveList;
-    property  DataList: TDBLookupListBox read FDataList;
-    property  PickList: TPopupListbox read FPickList;
   public
     constructor Create(Owner: TComponent); override;
+    property  DataList: TDBLookupListBox read FDataList;
   end;
-
-{ TPopupListbox }
-
-  TPopupListbox = class(TCustomListbox)
-  private
-    FSearchText: String;
-    FSearchTickCount: Longint;
-  protected
-    procedure CreateParams(var Params: TCreateParams); override;
-    procedure CreateWnd; override;
-    procedure KeyPress(var Key: Char); override;
-    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
-  end;
-
-procedure TPopupListBox.CreateParams(var Params: TCreateParams);
-begin
-  inherited CreateParams(Params);
-  with Params do
-  begin
-    Style := Style or WS_BORDER;
-    ExStyle := WS_EX_TOOLWINDOW or WS_EX_TOPMOST;
-    AddBiDiModeExStyle(ExStyle);
-    WindowClass.Style := CS_SAVEBITS;
-  end;
-end;
-
-procedure TPopupListbox.CreateWnd;
-begin
-  inherited CreateWnd;
-  Windows.SetParent(Handle, 0);
-  CallWindowProc(DefWndProc, Handle, wm_SetFocus, 0, 0);
-end;
-
-procedure TPopupListbox.Keypress(var Key: Char);
-var
-  TickCount: Integer;
-begin
-  case Key of
-    #8, #27: FSearchText := '';
-    #32..#255:
-      begin
-        TickCount := GetTickCount;
-        if TickCount - FSearchTickCount > 2000 then FSearchText := '';
-        FSearchTickCount := TickCount;
-        if Length(FSearchText) < 32 then FSearchText := FSearchText + Key;
-        SendMessage(Handle, LB_SelectString, WORD(-1), Longint(PChar(FSearchText)));
-        Key := #0;
-      end;
-  end;
-  inherited Keypress(Key);
-end;
-
-procedure TPopupListbox.MouseUp(Button: TMouseButton; Shift: TShiftState;
-  X, Y: Integer);
-begin
-  inherited MouseUp(Button, Shift, X, Y);
-  TDBGridInPlaceEdit(Owner).CloseUp((X >= 0) and (Y >= 0) and
-      (X < Width) and (Y < Height));
-end;
-
 
 constructor TDBGridInplaceEdit.Create(Owner: TComponent);
 begin
   inherited Create(Owner);
   FLookupSource := TDataSource.Create(Self);
-  FButtonWidth := GetSystemMetrics(SM_CXVSCROLL);
-  FEditStyle := esSimple;
-end;
-
-procedure TDBGridInplaceEdit.BoundsChanged;
-var
-  R: TRect;
-begin
-  SetRect(R, 2, 2, Width - 2, Height);
-  if FEditStyle <> esSimple then
-    if not TCustomDBGrid(Owner).UseRightToLeftAlignment then
-      Dec(R.Right, FButtonWidth)
-    else
-      Inc(R.Left, FButtonWidth - 2);
-  SendMessage(Handle, EM_SETRECTNP, 0, LongInt(@R));
-  SendMessage(Handle, EM_SCROLLCARET, 0, 0);
-  if SysLocale.FarEast then
-    SetImeCompositionWindow(Font, R.Left, R.Top);
 end;
 
 procedure TDBGridInplaceEdit.CloseUp(Accept: Boolean);
@@ -738,23 +630,23 @@ var
   MasterField: TField;
   ListValue: Variant;
 begin
-  if FListVisible then
+  if ListVisible then
   begin
     if GetCapture <> 0 then SendMessage(GetCapture, WM_CANCELMODE, 0, 0);
-    if FActiveList = FDataList then
-      ListValue := FDataList.KeyValue
+    if ActiveList = DataList then
+      ListValue := DataList.KeyValue
     else
-      if FPickList.ItemIndex <> -1 then
-        ListValue := FPickList.Items[FPicklist.ItemIndex];
-    SetWindowPos(FActiveList.Handle, 0, 0, 0, 0, 0, SWP_NOZORDER or
+      if PickList.ItemIndex <> -1 then
+        ListValue := PickList.Items[Picklist.ItemIndex];
+    SetWindowPos(ActiveList.Handle, 0, 0, 0, 0, 0, SWP_NOZORDER or
       SWP_NOMOVE or SWP_NOSIZE or SWP_NOACTIVATE or SWP_HIDEWINDOW);
-    FListVisible := False;
+    ListVisible := False;
     if Assigned(FDataList) then
       FDataList.ListSource := nil;
     FLookupSource.Dataset := nil;
     Invalidate;
     if Accept then
-      if FActiveList = FDataList then
+      if ActiveList = DataList then
         with TCustomDBGrid(Grid), Columns[SelectedIndex].Field do
         begin
           MasterField := DataSet.FieldByName(KeyFields);
@@ -768,379 +660,63 @@ begin
   end;
 end;
 
-procedure TDBGridInplaceEdit.DoDropDownKeys(var Key: Word; Shift: TShiftState);
+procedure TDBGridInplaceEdit.DoEditButtonClick;
 begin
-  case Key of
-    VK_UP, VK_DOWN:
-      if ssAlt in Shift then
-      begin
-        if FListVisible then CloseUp(True) else DropDown;
-        Key := 0;
-      end;
-    VK_RETURN, VK_ESCAPE:
-      if FListVisible and not (ssAlt in Shift) then
-      begin
-        CloseUp(Key = VK_RETURN);
-        Key := 0;
-      end;
-  end;
+  TCustomDBGrid(Grid).EditButtonClick;
 end;
 
 procedure TDBGridInplaceEdit.DropDown;
 var
-  P: TPoint;
-  I,J,Y: Integer;
   Column: TColumn;
 begin
-  if not FListVisible and Assigned(FActiveList) then
+  if not ListVisible then
   begin
-    FActiveList.Width := Width;
     with TCustomDBGrid(Grid) do
       Column := Columns[SelectedIndex];
-    if FActiveList = FDataList then
-    with Column.Field do
-    begin
-      FDataList.Color := Color;
-      FDataList.Font := Font;
-      FDataList.RowCount := Column.DropDownRows;
-      FLookupSource.DataSet := LookupDataSet;
-      FDataList.KeyField := LookupKeyFields;
-      FDataList.ListField := LookupResultField;
-      FDataList.ListSource := FLookupSource;
-      FDataList.KeyValue := DataSet.FieldByName(KeyFields).Value;
-{      J := Column.DefaultWidth;
-      if J > FDataList.ClientWidth then
-        FDataList.ClientWidth := J;
-}    end
-    else
-    begin
-      FPickList.Color := Color;
-      FPickList.Font := Font;
-      FPickList.Items := Column.Picklist;
-      if FPickList.Items.Count >= Integer(Column.DropDownRows) then
-        FPickList.Height := Integer(Column.DropDownRows) * FPickList.ItemHeight + 4
-      else
-        FPickList.Height := FPickList.Items.Count * FPickList.ItemHeight + 4;
-      if Column.Field.IsNull then
-        FPickList.ItemIndex := -1
-      else
-        FPickList.ItemIndex := FPickList.Items.IndexOf(Column.Field.Text);
-      J := FPickList.ClientWidth;
-      for I := 0 to FPickList.Items.Count - 1 do
+    if ActiveList = FDataList then
+      with Column.Field do
       begin
-        Y := FPickList.Canvas.TextWidth(FPickList.Items[I]);
-        if Y > J then J := Y;
-      end;
-      FPickList.ClientWidth := J;
-    end;
-    P := Parent.ClientToScreen(Point(Left, Top));
-    Y := P.Y + Height;
-    if Y + FActiveList.Height > Screen.Height then Y := P.Y - FActiveList.Height;
-    SetWindowPos(FActiveList.Handle, HWND_TOP, P.X, Y, 0, 0,
-      SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
-    FListVisible := True;
-    Invalidate;
-    Windows.SetFocus(Handle);
-  end;
-end;
-
-type
-  TWinControlCracker = class(TWinControl) end;
-
-procedure TDBGridInplaceEdit.KeyDown(var Key: Word; Shift: TShiftState);
-begin
-  if (EditStyle = esEllipsis) and (Key = VK_RETURN) and (Shift = [ssCtrl]) then
-  begin
-    TCustomDBGrid(Grid).EditButtonClick;
-    KillMessage(Handle, WM_CHAR);
-  end
-  else
-    inherited KeyDown(Key, Shift);
-end;
-
-procedure TDBGridInplaceEdit.ListMouseUp(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
-begin
-  if Button = mbLeft then
-    CloseUp(PtInRect(FActiveList.ClientRect, Point(X, Y)));
-end;
-
-procedure TDBGridInplaceEdit.MouseDown(Button: TMouseButton; Shift: TShiftState;
-  X, Y: Integer);
-begin
-  if (Button = mbLeft) and (FEditStyle <> esSimple) and
-    OverButton(Point(X,Y)) then
-  begin
-    if FListVisible then
-      CloseUp(False)
-    else
+        FDataList.Color := Color;
+        FDataList.Font := Font;
+        FDataList.RowCount := Column.DropDownRows;
+        FLookupSource.DataSet := LookupDataSet;
+        FDataList.KeyField := LookupKeyFields;
+        FDataList.ListField := LookupResultField;
+        FDataList.ListSource := FLookupSource;
+        FDataList.KeyValue := DataSet.FieldByName(KeyFields).Value;
+      end
+    else if ActiveList = PickList then
     begin
-      MouseCapture := True;
-      FTracking := True;
-      TrackButton(X, Y);
-      if Assigned(FActiveList) then
-        DropDown;
+      PickList.Items.Assign(Column.PickList);
+      DropDownRows := Column.DropDownRows;
     end;
   end;
-  inherited MouseDown(Button, Shift, X, Y);
-end;
-
-procedure TDBGridInplaceEdit.MouseMove(Shift: TShiftState; X, Y: Integer);
-var
-  ListPos: TPoint;
-  MousePos: TSmallPoint;
-begin
-  if FTracking then
-  begin
-    TrackButton(X, Y);
-    if FListVisible then
-    begin
-      ListPos := FActiveList.ScreenToClient(ClientToScreen(Point(X, Y)));
-      if PtInRect(FActiveList.ClientRect, ListPos) then
-      begin
-        StopTracking;
-        MousePos := PointToSmallPoint(ListPos);
-        SendMessage(FActiveList.Handle, WM_LBUTTONDOWN, 0, Integer(MousePos));
-        Exit;
-      end;
-    end;
-  end;
-  inherited MouseMove(Shift, X, Y);
-end;
-
-procedure TDBGridInplaceEdit.MouseUp(Button: TMouseButton; Shift: TShiftState;
-  X, Y: Integer);
-var
-  WasPressed: Boolean;
-begin
-  WasPressed := FPressed;
-  StopTracking;
-  if (Button = mbLeft) and (FEditStyle = esEllipsis) and WasPressed then
-    TCustomDBGrid(Grid).EditButtonClick;
-  inherited MouseUp(Button, Shift, X, Y);
-end;
-
-procedure TDBGridInplaceEdit.PaintWindow(DC: HDC);
-var
-  R: TRect;
-  Flags: Integer;
-  W, X, Y: Integer;
-begin
-  if FEditStyle <> esSimple then
-  begin
-    R := ButtonRect;
-    Flags := 0;
-    if FEditStyle in [esDataList, esPickList] then
-    begin
-      if FActiveList = nil then
-        Flags := DFCS_INACTIVE
-      else if FPressed then
-        Flags := DFCS_FLAT or DFCS_PUSHED;
-      DrawFrameControl(DC, R, DFC_SCROLL, Flags or DFCS_SCROLLCOMBOBOX);
-    end
-    else   { esEllipsis }
-    begin
-      if FPressed then Flags := BF_FLAT;
-      DrawEdge(DC, R, EDGE_RAISED, BF_RECT or BF_MIDDLE or Flags);
-      X := R.Left + ((R.Right - R.Left) shr 1) - 1 + Ord(FPressed);
-      Y := R.Top + ((R.Bottom - R.Top) shr 1) - 1 + Ord(FPressed);
-      W := FButtonWidth shr 3;
-      if W = 0 then W := 1;
-      PatBlt(DC, X, Y, W, W, BLACKNESS);
-      PatBlt(DC, X - (W * 2), Y, W, W, BLACKNESS);
-      PatBlt(DC, X + (W * 2), Y, W, W, BLACKNESS);
-    end;
-    ExcludeClipRect(DC, R.Left, R.Top, R.Right, R.Bottom);
-  end;
-  inherited PaintWindow(DC);
-end;
-
-procedure TDBGridInplaceEdit.SetEditStyle(Value: TEditStyle);
-begin
-  if Value = FEditStyle then Exit;
-  FEditStyle := Value;
-  case Value of
-    esPickList:
-      begin
-        if FPickList = nil then
-        begin
-          FPickList := TPopupListbox.Create(Self);
-          FPickList.Visible := False;
-          FPickList.Parent := Self;
-          FPickList.OnMouseUp := ListMouseUp;
-          FPickList.IntegralHeight := True;
-          FPickList.ItemHeight := 11;
-        end;
-        FActiveList := FPickList;
-      end;
-    esDataList:
-      begin
-        if FDataList = nil then
-        begin
-          FDataList := TPopupDataList.Create(Self);
-          FDataList.Visible := False;
-          FDataList.Parent := Self;
-          FDataList.OnMouseUp := ListMouseUp;
-        end;
-        FActiveList := FDataList;
-      end;
-  else  { cbsNone, cbsEllipsis, or read only field }
-    FActiveList := nil;
-  end;
-  with TCustomDBGrid(Grid) do
-    Self.ReadOnly := Columns[SelectedIndex].ReadOnly;
-  Repaint;
-end;
-
-procedure TDBGridInplaceEdit.StopTracking;
-begin
-  if FTracking then
-  begin
-    TrackButton(-1, -1);
-    FTracking := False;
-    MouseCapture := False;
-  end;
-end;
-
-procedure TDBGridInplaceEdit.TrackButton(X,Y: Integer);
-var
-  NewState: Boolean;
-  R: TRect;
-begin
-  R := ButtonRect;
-  NewState := PtInRect(R, Point(X, Y));
-  if FPressed <> NewState then
-  begin
-    FPressed := NewState;
-    InvalidateRect(Handle, @R, False);
-  end;
+  inherited DropDown;
 end;
 
 procedure TDBGridInplaceEdit.UpdateContents;
 var
   Column: TColumn;
-  NewStyle: TEditStyle;
-  MasterField: TField;
 begin
+  inherited UpdateContents;
+  if FUseDataList then
+  begin
+    if FDataList = nil then
+    begin
+      FDataList := TPopupDataList.Create(Self);
+      FDataList.Visible := False;
+      FDataList.Parent := Self;
+      FDataList.OnMouseUp := ListMouseUp;
+    end;
+    ActiveList := FDataList;
+  end;
   with TCustomDBGrid(Grid) do
     Column := Columns[SelectedIndex];
-  NewStyle := esSimple;
-  case Column.ButtonStyle of
-   cbsEllipsis: NewStyle := esEllipsis;
-   cbsAuto:
-     if Assigned(Column.Field) then
-     with Column.Field do
-     begin
-       { Show the dropdown button only if the field is editable }
-       if FieldKind = fkLookup then
-       begin
-         MasterField := Dataset.FieldByName(KeyFields);
-         { Column.DefaultReadonly will always be True for a lookup field.
-           Test if Column.ReadOnly has been assigned a value of True }
-         if Assigned(MasterField) and MasterField.CanModify and
-           not ((cvReadOnly in Column.AssignedValues) and Column.ReadOnly) then
-           with TCustomDBGrid(Grid) do
-             if not ReadOnly and DataLink.Active and not Datalink.ReadOnly then
-               NewStyle := esDataList
-       end
-       else
-       if Assigned(Column.Picklist) and (Column.PickList.Count > 0) and
-         not Column.Readonly then
-         NewStyle := esPickList
-       else if DataType in [ftDataset, ftReference] then
-         NewStyle := esEllipsis;
-     end;
-  end;
-  EditStyle := NewStyle;
-  inherited UpdateContents;
+  Self.ReadOnly := Column.ReadOnly;
   Font.Assign(Column.Font);
   ImeMode := Column.ImeMode;
   ImeName := Column.ImeName;
 end;
-
-procedure TDBGridInplaceEdit.CMCancelMode(var Message: TCMCancelMode);
-begin
-  if (Message.Sender <> Self) and (Message.Sender <> FActiveList) then
-    CloseUp(False);
-end;
-
-procedure TDBGridInplaceEdit.WMCancelMode(var Message: TMessage);
-begin
-  StopTracking;
-  inherited;
-end;
-
-procedure TDBGridInplaceEdit.WMKillFocus(var Message: TMessage);
-begin
-  if not SysLocale.FarEast then inherited
-  else
-  begin
-    ImeName := Screen.DefaultIme;
-    ImeMode := imDontCare;
-    inherited;
-    if HWND(Message.WParam) <> TCustomDBGrid(Grid).Handle then
-      ActivateKeyboardLayout(Screen.DefaultKbLayout, KLF_ACTIVATE);
-  end;
-  CloseUp(False);
-end;
-
-function TDBGridInplaceEdit.ButtonRect: TRect;
-begin
-  if not TCustomDBGrid(Owner).UseRightToLeftAlignment then
-    Result := Rect(Width - FButtonWidth, 0, Width, Height)
-  else
-    Result := Rect(0, 0, FButtonWidth, Height);
-end;
-
-function TDBGridInplaceEdit.OverButton(const P: TPoint): Boolean;
-begin
-  Result := PtInRect(ButtonRect, P);
-end;
-
-procedure TDBGridInplaceEdit.WMLButtonDblClk(var Message: TWMLButtonDblClk);
-begin
-  with Message do
-  if (FEditStyle <> esSimple) and OverButton(Point(XPos, YPos)) then
-    Exit;
-  inherited;
-end;
-
-procedure TDBGridInplaceEdit.WMPaint(var Message: TWMPaint);
-begin
-  PaintHandler(Message);
-end;
-
-procedure TDBGridInplaceEdit.WMSetCursor(var Message: TWMSetCursor);
-var
-  P: TPoint;
-begin
-  GetCursorPos(P);
-  P := ScreenToClient(P);
-  if (FEditStyle <> esSimple) and OverButton(P) then
-    Windows.SetCursor(LoadCursor(0, idc_Arrow))
-  else
-    inherited;
-end;
-
-procedure TDBGridInplaceEdit.WndProc(var Message: TMessage);
-begin
-  case Message.Msg of
-    wm_KeyDown, wm_SysKeyDown, wm_Char:
-      if EditStyle in [esPickList, esDataList] then
-      with TWMKey(Message) do
-      begin
-        DoDropDownKeys(CharCode, KeyDataToShiftState(KeyData));
-        if (CharCode <> 0) and FListVisible then
-        begin
-          with TMessage(Message) do
-            SendMessage(FActiveList.Handle, Msg, WParam, LParam);
-          Exit;
-        end;
-      end
-  end;
-  inherited;
-end;
-
 
 { TGridDataLink }
 
@@ -1221,6 +797,10 @@ end;
 
 procedure TGridDataLink.ActiveChanged;
 begin
+  if Active and Assigned(DataSource) then
+    if Assigned(DataSource.DataSet) then
+      if DataSource.DataSet.IsUnidirectional then
+        DatabaseError(SDataSetUnidirectional);
   FGrid.LinkActive(Active);
   FModified := False;
 end;
@@ -1970,9 +1550,10 @@ end;
 procedure TColumn.SetField(Value: TField);
 begin
   if FField = Value then Exit;
-  if Assigned(FField) and
-     (GetGrid <> nil) then
+  if Assigned(FField) and (GetGrid <> nil) then
     FField.RemoveFreeNotification(GetGrid);
+  if Assigned(Value) and (csDestroying in Value.ComponentState) then
+    Value := nil;    // don't acquire references to fields being destroyed
   FField := Value;
   if Assigned(Value) then
   begin
@@ -2672,7 +2253,7 @@ begin
   FVisibleColumns := TList.Create;
   inherited RowCount := 2;
   inherited ColCount := 2;
-  FDataLink := TGridDataLink.Create(Self);
+  FDataLink := CreateDataLink;
   Color := clWindow;
   ParentColor := False;
   FTitleFont := TFont.Create;
@@ -2817,6 +2398,11 @@ end;
 function TCustomDBGrid.CreateColumns: TDBGridColumns;
 begin
   Result := TDBGridColumns.Create(Self, TColumn);
+end;
+
+function TCustomDBGrid.CreateDataLink: TGridDataLink;
+begin
+  Result := TGridDataLink.Create(Self);
 end;
 
 function TCustomDBGrid.CreateEditor: TInplaceEdit;
@@ -2967,7 +2553,7 @@ begin
       StoreIt := True
     else
       StoreIt := (vState = csCustomized) and
-        (not CollectionsEqual(Columns, TCustomDBGrid(Filer.Ancestor).Columns));
+        (not CollectionsEqual(Columns, TCustomDBGrid(Filer.Ancestor).Columns, Self, TCustomDBGrid(Filer.Ancestor)));
 
   Filer.DefineProperty('Columns', ReadColumns, WriteColumns, StoreIt);
 end;
@@ -3303,6 +2889,45 @@ begin
   with Columns[RawToDataColumn(ACol)] do
     if Assigned(Field) then
       Result := Field.EditMask;
+end;
+
+function TCustomDBGrid.GetEditStyle(ACol, ARow: Integer): TEditStyle;
+var
+  Column: TColumn;
+  MasterField: TField;
+begin
+  TDBGridInplaceEdit(InplaceEditor).FUseDataList := False;
+  Column := Columns[SelectedIndex];
+  Result := esSimple;
+  case Column.ButtonStyle of
+   cbsEllipsis:
+     Result := esEllipsis;
+   cbsAuto:
+     if Assigned(Column.Field) then
+     with Column.Field do
+     begin
+       { Show the dropdown button only if the field is editable }
+       if FieldKind = fkLookup then
+       begin
+         MasterField := Dataset.FieldByName(KeyFields);
+         { Column.DefaultReadonly will always be True for a lookup field.
+           Test if Column.ReadOnly has been assigned a value of True }
+         if Assigned(MasterField) and MasterField.CanModify and
+           not ((cvReadOnly in Column.AssignedValues) and Column.ReadOnly) then
+           if not ReadOnly and DataLink.Active and not Datalink.ReadOnly then
+           begin
+             Result := esPickList;
+             TDBGridInplaceEdit(InplaceEditor).FUseDataList := True;
+           end;
+       end
+       else
+       if Assigned(Column.Picklist) and (Column.PickList.Count > 0) and
+         not Column.Readonly then
+         Result := esPickList
+       else if DataType in [ftDataset, ftReference] then
+         Result := esEllipsis;
+     end;
+  end;
 end;
 
 function TCustomDBGrid.GetEditText(ACol, ARow: Longint): string;
@@ -3886,7 +3511,7 @@ begin
           FDatalink.MoveBy(Y - Row);
         if X >= FIndicatorOffset then
           MoveCol(X, 0);
-        if (dgMultiSelect in Options) and FDatalink.Active then
+        if (Button = mbLeft) and (dgMultiSelect in Options) and FDatalink.Active then
           with FBookmarks do
           begin
             FSelecting := False;
@@ -3994,6 +3619,7 @@ begin
               end;
         finally
           if NeedLayout and Assigned(FDatalink.Dataset)
+            and not (csDestroying in FDatalink.DataSet.ComponentState) 
             and not FDatalink.Dataset.ControlsDisabled then
             EndLayout
           else
@@ -4113,6 +3739,10 @@ end;
 procedure TCustomDBGrid.SetDataSource(Value: TDataSource);
 begin
   if Value = FDatalink.Datasource then Exit;
+  if Assigned(Value) then
+    if Assigned(Value.DataSet) then
+      if Value.DataSet.IsUnidirectional then
+        DatabaseError(SDataSetUnidirectional);
   FBookmarks.Clear;
   FDataLink.DataSource := Value;
   if Value <> nil then Value.FreeNotification(Self);
@@ -4455,8 +4085,8 @@ begin
 
   if InplaceEditor <> nil then
   begin
-    TDBGridInplaceEdit(Self).ImeName := ImeName;
-    TDBGridInplaceEdit(Self).ImeMode := ImeMode;
+    TDBGridInplaceEdit(InplaceEditor).ImeName := ImeName;
+    TDBGridInplaceEdit(InplaceEditor).ImeMode := ImeMode;
   end;
 end;
 
@@ -4677,7 +4307,7 @@ end;
 
 procedure TCustomDBGrid.TopLeftChanged;
 begin
-  InvalidateTitles; 
+  InvalidateTitles;
   inherited TopLeftChanged;
 end;
 

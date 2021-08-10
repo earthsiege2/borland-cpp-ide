@@ -1,6 +1,6 @@
-LIBRARY SENS
+LIBRARY Sens
 EXPORTS
 
-    SensNotifyNetconEvent                    = 'SENS.DLL'.*
-    SensNotifyRasEvent                       = 'SENS.DLL'.*
-    SensNotifyWinlogonEvent                  = 'SENS.DLL'.*
+    SensNotifyNetconEvent
+    SensNotifyRasEvent
+    SensNotifyWinlogonEvent

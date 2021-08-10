@@ -25,7 +25,6 @@ Notes:
 --*/
 
 #ifndef _LMREPL_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMREPL_
 
 #if _MSC_VER > 1000
@@ -277,5 +276,4 @@ NetReplImportDirUnlock (
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif //_LMREPL_

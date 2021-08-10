@@ -6,14 +6,14 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.2  $ */
+/* $Revision: 9.6.2.1 $ */
 
 #ifndef __STDARG_H
 #define __STDARG_H
@@ -23,9 +23,7 @@
 #error Can't include both STDARG.H and VARARGS.H
 #endif
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 #ifdef __cplusplus
 namespace std {
@@ -35,7 +33,12 @@ typedef void _FAR *va_list;
 
 #define __size(x) ((sizeof(x)+sizeof(int)-1) & ~(sizeof(int)-1))
 
+#ifdef __cplusplus
+#define va_start(ap, parmN) ((void)((ap) = (std::va_list)((char _FAR *)(&parmN)+__size(parmN))))
+#else
 #define va_start(ap, parmN) ((void)((ap) = (va_list)((char _FAR *)(&parmN)+__size(parmN))))
+#endif
+
 #define va_arg(ap, type) (*(type _FAR *)(((*(char _FAR *_FAR *)&(ap))+=__size(type))-(__size(type))))
 #define va_end(ap)          ((void)0)
 

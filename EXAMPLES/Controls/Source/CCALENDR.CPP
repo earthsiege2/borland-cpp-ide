@@ -1,20 +1,12 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 #pragma hdrstop
 #include  "ccalendr.h"
 #include "samp.h"
 #pragma resource "*.res"  
 #pragma package(smart_init)
-
-namespace Ccalendr{
-void __fastcall PACKAGE Register()
-{
-  TComponentClass classes[1] = {__classid(TCCalendar)};
-  RegisterComponents(LoadStr(Tab_101), classes, 0);
-}
-} //namespace
 
 __fastcall TCCalendar::TCCalendar(TComponent *AOwner) :
   TCustomGrid(AOwner)

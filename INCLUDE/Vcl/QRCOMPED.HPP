@@ -1,23 +1,23 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Qrcomped.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QRCompEd.pas' rev: 6.00
 
-#ifndef QrcompedHPP
-#define QrcompedHPP
+#ifndef QRCompEdHPP
+#define QRCompEdHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <qr3const.hpp>	// Pascal unit
-#include <Buttons.hpp>	// Pascal unit
+#include <QR3Const.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
-#include <ExtCtrls.hpp>	// Pascal unit
-#include <qrabout.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
+#include <QRAbout.hpp>	// Pascal unit
 #include <QuickRpt.hpp>	// Pascal unit
 #include <QRPrntr.hpp>	// Pascal unit
+#include <Buttons.hpp>	// Pascal unit
+#include <ExtCtrls.hpp>	// Pascal unit
 #include <Printers.hpp>	// Pascal unit
 #include <ComCtrls.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
@@ -134,16 +134,13 @@ private:
 	
 public:
 	__property Quickrpt::TQuickRep* QuickRep = {read=FQuickRep, write=SetQuickRep};
-	__property Classes::TStrings* AvailableDataSets = {read=FAvailableDataSets, write=SetAvailableDataSets
-		};
+	__property Classes::TStrings* AvailableDataSets = {read=FAvailableDataSets, write=SetAvailableDataSets};
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TQRCompEd(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TQRCompEd(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TQRCompEd(Classes::TComponent* AOwner, int Dummy
-		) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TQRCompEd(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TQRCompEd(void) { }
@@ -151,8 +148,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRCompEd(HWND ParentWindow) : Forms::TForm(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRCompEd(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -161,12 +157,10 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Qrcomped */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qrcomped;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Qrcomped
+#endif	// QRCompEd

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OleConst.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'OleConst.pas' rev: 6.00
 
 #ifndef OleConstHPP
 #define OleConstHPP
@@ -57,9 +57,7 @@ extern PACKAGE System::ResourceString _sNoRunningObject;
 #define Oleconst_sNoRunningObject System::LoadResourceString(&Oleconst::_sNoRunningObject)
 
 }	/* namespace Oleconst */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Oleconst;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

@@ -1,86 +1,112 @@
-LIBRARY PDH
+LIBRARY Pdh
 EXPORTS
 
-    PdhAddCounterA                           = 'PDH.DLL'.*
-    PdhAddCounterW                           = 'PDH.DLL'.*
-    PdhBrowseCountersA                       = 'PDH.DLL'.*
-    PdhBrowseCountersW                       = 'PDH.DLL'.*
-    PdhCalculateCounterFromRawValue          = 'PDH.DLL'.*
-    PdhCloseLog                              = 'PDH.DLL'.*
-    PdhCloseQuery                            = 'PDH.DLL'.*
-    PdhCollectQueryData                      = 'PDH.DLL'.*
-    PdhCollectQueryDataEx                    = 'PDH.DLL'.*
-    PdhComputeCounterStatistics              = 'PDH.DLL'.*
-    PdhConnectMachineA                       = 'PDH.DLL'.*
-    PdhConnectMachineW                       = 'PDH.DLL'.*
-    PdhEnumMachinesA                         = 'PDH.DLL'.*
-    PdhEnumMachinesW                         = 'PDH.DLL'.*
-    PdhEnumObjectItemsA                      = 'PDH.DLL'.*
-    PdhEnumObjectItemsW                      = 'PDH.DLL'.*
-    PdhEnumObjectsA                          = 'PDH.DLL'.*
-    PdhEnumObjectsW                          = 'PDH.DLL'.*
-    PdhExpandCounterPathA                    = 'PDH.DLL'.*
-    PdhExpandCounterPathW                    = 'PDH.DLL'.*
-    PdhExpandWildCardPathA                   = 'PDH.DLL'.*
-    PdhExpandWildCardPathW                   = 'PDH.DLL'.*
-    PdhFormatFromRawValue                    = 'PDH.DLL'.*
-    PdhGetCounterInfoA                       = 'PDH.DLL'.*
-    PdhGetCounterInfoW                       = 'PDH.DLL'.*
-    PdhGetCounterTimeBase                    = 'PDH.DLL'.*
-    PdhGetDataSourceTimeRangeA               = 'PDH.DLL'.*
-    PdhGetDataSourceTimeRangeW               = 'PDH.DLL'.*
-    PdhGetDefaultPerfCounterA                = 'PDH.DLL'.*
-    PdhGetDefaultPerfCounterW                = 'PDH.DLL'.*
-    PdhGetDefaultPerfObjectA                 = 'PDH.DLL'.*
-    PdhGetDefaultPerfObjectW                 = 'PDH.DLL'.*
-    PdhGetDllVersion                         = 'PDH.DLL'.*
-    PdhGetFormattedCounterArrayA             = 'PDH.DLL'.*
-    PdhGetFormattedCounterArrayW             = 'PDH.DLL'.*
-    PdhGetFormattedCounterValue              = 'PDH.DLL'.*
-    PdhGetLogFileSize                        = 'PDH.DLL'.*
-    PdhGetRawCounterArrayA                   = 'PDH.DLL'.*
-    PdhGetRawCounterArrayW                   = 'PDH.DLL'.*
-    PdhGetRawCounterValue                    = 'PDH.DLL'.*
-    PdhIsRealTimeQuery                       = 'PDH.DLL'.*
-    PdhLogServiceCommandA                    = 'PDH.DLL'.*
-    PdhLogServiceCommandW                    = 'PDH.DLL'.*
-    PdhLogServiceControlA                    = 'PDH.DLL'.*
-    PdhLogServiceControlW                    = 'PDH.DLL'.*
-    PdhLookupPerfIndexByNameA                = 'PDH.DLL'.*
-    PdhLookupPerfIndexByNameW                = 'PDH.DLL'.*
-    PdhLookupPerfNameByIndexA                = 'PDH.DLL'.*
-    PdhLookupPerfNameByIndexW                = 'PDH.DLL'.*
-    PdhMakeCounterPathA                      = 'PDH.DLL'.*
-    PdhMakeCounterPathW                      = 'PDH.DLL'.*
-    PdhOpenLogA                              = 'PDH.DLL'.*
-    PdhOpenLogW                              = 'PDH.DLL'.*
-    PdhOpenQuery                             = 'PDH.DLL'.*
-    PdhOpenQueryA                            = 'PDH.DLL'.*
-    PdhOpenQueryW                            = 'PDH.DLL'.*
-    PdhParseCounterPathA                     = 'PDH.DLL'.*
-    PdhParseCounterPathW                     = 'PDH.DLL'.*
-    PdhParseInstanceNameA                    = 'PDH.DLL'.*
-    PdhParseInstanceNameW                    = 'PDH.DLL'.*
-    PdhReadRawLogRecord                      = 'PDH.DLL'.*
-    PdhRemoveCounter                         = 'PDH.DLL'.*
-    PdhSelectDataSourceA                     = 'PDH.DLL'.*
-    PdhSelectDataSourceW                     = 'PDH.DLL'.*
-    PdhSetCounterScaleFactor                 = 'PDH.DLL'.*
-    PdhSetDefaultRealTimeDataSource          = 'PDH.DLL'.*
-    PdhSetQueryTimeRange                     = 'PDH.DLL'.*
-    PdhUpdateLogA                            = 'PDH.DLL'.*
-    PdhUpdateLogFileCatalog                  = 'PDH.DLL'.*
-    PdhUpdateLogW                            = 'PDH.DLL'.*
-    PdhValidatePathA                         = 'PDH.DLL'.*
-    PdhValidatePathW                         = 'PDH.DLL'.*
-    PdhVbAddCounter                          = 'PDH.DLL'.*
-    PdhVbCreateCounterPathList               = 'PDH.DLL'.*
-    PdhVbGetCounterPathElements              = 'PDH.DLL'.*
-    PdhVbGetCounterPathFromList              = 'PDH.DLL'.*
-    PdhVbGetDoubleCounterValue               = 'PDH.DLL'.*
-    PdhVbGetLogFileSize                      = 'PDH.DLL'.*
-    PdhVbGetOneCounterPath                   = 'PDH.DLL'.*
-    PdhVbIsGoodStatus                        = 'PDH.DLL'.*
-    PdhVbOpenLog                             = 'PDH.DLL'.*
-    PdhVbOpenQuery                           = 'PDH.DLL'.*
-    PdhVbUpdateLog                           = 'PDH.DLL'.*
+    PdhAddCounterA
+    PdhAddCounterW
+    PdhBindInputDataSourceA
+    PdhBindInputDataSourceW
+    PdhBrowseCountersA
+    PdhBrowseCountersHA
+    PdhBrowseCountersHW
+    PdhBrowseCountersW
+    PdhCalculateCounterFromRawValue
+    PdhCloseLog
+    PdhCloseQuery
+    PdhCollectQueryData
+    PdhCollectQueryDataEx
+    PdhComputeCounterStatistics
+    PdhConnectMachineA
+    PdhConnectMachineW
+    PdhCreateSQLTablesA
+    PdhCreateSQLTablesW
+    PdhEnumLogSetNamesA
+    PdhEnumLogSetNamesW
+    PdhEnumMachinesA
+    PdhEnumMachinesHA
+    PdhEnumMachinesHW
+    PdhEnumMachinesW
+    PdhEnumObjectItemsA
+    PdhEnumObjectItemsHA
+    PdhEnumObjectItemsHW
+    PdhEnumObjectItemsW
+    PdhEnumObjectsA
+    PdhEnumObjectsHA
+    PdhEnumObjectsHW
+    PdhEnumObjectsW
+    PdhExpandCounterPathA
+    PdhExpandCounterPathW
+    PdhExpandWildCardPathA
+    PdhExpandWildCardPathHA
+    PdhExpandWildCardPathHW
+    PdhExpandWildCardPathW
+    PdhFormatFromRawValue
+    PdhGetCounterInfoA
+    PdhGetCounterInfoW
+    PdhGetCounterTimeBase
+    PdhGetDataSourceTimeRangeA
+    PdhGetDataSourceTimeRangeH
+    PdhGetDataSourceTimeRangeW
+    PdhGetDefaultPerfCounterA
+    PdhGetDefaultPerfCounterHA
+    PdhGetDefaultPerfCounterHW
+    PdhGetDefaultPerfCounterW
+    PdhGetDefaultPerfObjectA
+    PdhGetDefaultPerfObjectHA
+    PdhGetDefaultPerfObjectHW
+    PdhGetDefaultPerfObjectW
+    PdhGetDllVersion
+    PdhGetFormattedCounterArrayA
+    PdhGetFormattedCounterArrayW
+    PdhGetFormattedCounterValue
+    PdhGetLogFileSize
+    PdhGetLogSetGUID
+    PdhGetRawCounterArrayA
+    PdhGetRawCounterArrayW
+    PdhGetRawCounterValue
+    PdhIsRealTimeQuery
+    PdhLogServiceCommandA
+    PdhLogServiceCommandW
+    PdhLogServiceControlA
+    PdhLogServiceControlW
+    PdhLookupPerfIndexByNameA
+    PdhLookupPerfIndexByNameW
+    PdhLookupPerfNameByIndexA
+    PdhLookupPerfNameByIndexW
+    PdhMakeCounterPathA
+    PdhMakeCounterPathW
+    PdhOpenLogA
+    PdhOpenLogW
+    PdhOpenQuery
+    PdhOpenQueryA
+    PdhOpenQueryH
+    PdhOpenQueryW
+    PdhParseCounterPathA
+    PdhParseCounterPathW
+    PdhParseInstanceNameA
+    PdhParseInstanceNameW
+    PdhReadRawLogRecord
+    PdhRemoveCounter
+    PdhSelectDataSourceA
+    PdhSelectDataSourceW
+    PdhSetCounterScaleFactor
+    PdhSetDefaultRealTimeDataSource
+    PdhSetLogSetRunID
+    PdhSetQueryTimeRange
+    PdhUpdateLogA
+    PdhUpdateLogFileCatalog
+    PdhUpdateLogW
+    PdhValidatePathA
+    PdhValidatePathW
+    PdhVbAddCounter
+    PdhVbCreateCounterPathList
+    PdhVbGetCounterPathElements
+    PdhVbGetCounterPathFromList
+    PdhVbGetDoubleCounterValue
+    PdhVbGetLogFileSize
+    PdhVbGetOneCounterPath
+    PdhVbIsGoodStatus
+    PdhVbOpenLog
+    PdhVbOpenQuery
+    PdhVbUpdateLog
+    PdhVerifySQLDBA
+    PdhVerifySQLDBW

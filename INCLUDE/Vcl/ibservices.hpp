@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBServices.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBServices.pas' rev: 6.00
 
 #ifndef IBServicesHPP
 #define IBServicesHPP
@@ -13,15 +13,9 @@
 #include <IBExternals.hpp>	// Pascal unit
 #include <IB.hpp>	// Pascal unit
 #include <IBHeader.hpp>	// Pascal unit
-#include <DBLogDlg.hpp>	// Pascal unit
-#include <Dialogs.hpp>	// Pascal unit
-#include <Forms.hpp>	// Pascal unit
-#include <Controls.hpp>	// Pascal unit
-#include <Graphics.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
-#include <Messages.hpp>	// Pascal unit
-#include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -41,8 +35,7 @@ enum TOutputBufferOption { ByLine, ByChunk };
 #pragma option pop
 
 class DELPHICLASS TIBCustomService;
-typedef void __fastcall (__closure *TLoginEvent)(TIBCustomService* Database, Classes::TStrings* LoginParams
-	);
+typedef void __fastcall (__closure *TLoginEvent)(TIBCustomService* Database, Classes::TStrings* LoginParams);
 
 class PASCALIMPLEMENTATION TIBCustomService : public Classes::TComponent 
 {
@@ -55,6 +48,7 @@ private:
 	char *FQuerySPB;
 	short FSPBLength;
 	short FQuerySPBLength;
+	Ib::TTraceFlags FTraceFlags;
 	TLoginEvent FOnLogin;
 	bool FLoginPrompt;
 	int FBufferSize;
@@ -90,8 +84,7 @@ protected:
 	void __fastcall CheckActive(void);
 	void __fastcall CheckInactive(void);
 	__property char * OutputBuffer = {read=FOutputBuffer};
-	__property TOutputBufferOption OutputBufferOption = {read=FOutputBufferOption, write=FOutputBufferOption
-		, nodefault};
+	__property TOutputBufferOption OutputBufferOption = {read=FOutputBufferOption, write=FOutputBufferOption, nodefault};
 	__property int BufferSize = {read=FBufferSize, write=SetBufferSize, default=32000};
 	void __fastcall InternalServiceQuery(void);
 	__property AnsiString ServiceQueryParams = {read=FQueryParams, write=FQueryParams};
@@ -102,8 +95,7 @@ public:
 	void __fastcall Attach(void);
 	void __fastcall Detach(void);
 	__property Ibexternals::PVoid Handle = {read=FHandle};
-	__property AnsiString ServiceParamBySPB[int Idx] = {read=GetServiceParamBySPB, write=SetServiceParamBySPB
-		};
+	__property AnsiString ServiceParamBySPB[int Idx] = {read=GetServiceParamBySPB, write=SetServiceParamBySPB};
 	
 __published:
 	__property bool Active = {read=GetActive, write=SetActive, default=0};
@@ -111,68 +103,123 @@ __published:
 	__property TProtocol Protocol = {read=FProtocol, write=SetProtocol, default=3};
 	__property Classes::TStrings* Params = {read=FParams, write=SetParams};
 	__property bool LoginPrompt = {read=FLoginPrompt, write=FLoginPrompt, default=1};
+	__property Ib::TTraceFlags TraceFlags = {read=FTraceFlags, write=FTraceFlags, nodefault};
 	__property Classes::TNotifyEvent OnAttach = {read=FOnAttach, write=FOnAttach};
 	__property TLoginEvent OnLogin = {read=FOnLogin, write=FOnLogin};
 };
 
 
-typedef DynamicArray<AnsiString >  IBServices__3;
+typedef DynamicArray<AnsiString >  IBServices__4;
 
-struct TDatabaseInfo
+class DELPHICLASS TDatabaseInfo;
+class PASCALIMPLEMENTATION TDatabaseInfo : public System::TObject 
 {
+	typedef System::TObject inherited;
+	
+public:
 	int NoOfAttachments;
 	int NoOfDatabases;
 	DynamicArray<AnsiString >  DbName;
-} ;
+	__fastcall TDatabaseInfo(void);
+	__fastcall virtual ~TDatabaseInfo(void);
+};
 
-typedef DynamicArray<AnsiString >  IBServices__4;
-
-typedef DynamicArray<AnsiString >  IBServices__5;
 
 typedef DynamicArray<AnsiString >  IBServices__6;
 
-struct TLicenseInfo
+typedef DynamicArray<AnsiString >  IBServices__7;
+
+typedef DynamicArray<AnsiString >  IBServices__8;
+
+class DELPHICLASS TLicenseInfo;
+class PASCALIMPLEMENTATION TLicenseInfo : public System::TObject 
 {
+	typedef System::TObject inherited;
+	
+public:
 	DynamicArray<AnsiString >  Key;
 	DynamicArray<AnsiString >  Id;
 	DynamicArray<AnsiString >  Desc;
 	int LicensedUsers;
-} ;
+	__fastcall TLicenseInfo(void);
+	__fastcall virtual ~TLicenseInfo(void);
+};
 
-struct TLicenseMaskInfo
+
+class DELPHICLASS TLicenseMaskInfo;
+class PASCALIMPLEMENTATION TLicenseMaskInfo : public System::TObject 
 {
+	typedef System::TObject inherited;
+	
+public:
 	int LicenseMask;
 	int CapabilityMask;
-} ;
+public:
+	#pragma option push -w-inl
+	/* TObject.Create */ inline __fastcall TLicenseMaskInfo(void) : System::TObject() { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TObject.Destroy */ inline __fastcall virtual ~TLicenseMaskInfo(void) { }
+	#pragma option pop
+	
+};
 
-typedef DynamicArray<int >  IBServices__7;
 
-typedef DynamicArray<int >  IBServices__8;
+typedef DynamicArray<int >  IBServices__11;
 
-struct TConfigFileData
+typedef DynamicArray<int >  IBServices__21;
+
+class DELPHICLASS TConfigFileData;
+class PASCALIMPLEMENTATION TConfigFileData : public System::TObject 
 {
+	typedef System::TObject inherited;
+	
+public:
 	DynamicArray<int >  ConfigFileValue;
 	DynamicArray<int >  ConfigFileKey;
-} ;
+	__fastcall TConfigFileData(void);
+	__fastcall virtual ~TConfigFileData(void);
+};
 
-typedef DynamicArray<AnsiString >  IBServices__9;
 
-struct TConfigParams
+typedef DynamicArray<AnsiString >  IBServices__41;
+
+class DELPHICLASS TConfigParams;
+class PASCALIMPLEMENTATION TConfigParams : public System::TObject 
 {
-	TConfigFileData ConfigFileData;
+	typedef System::TObject inherited;
+	
+public:
+	TConfigFileData* ConfigFileData;
 	DynamicArray<AnsiString >  ConfigFileParams;
 	AnsiString BaseLocation;
 	AnsiString LockFileLocation;
 	AnsiString MessageFileLocation;
 	AnsiString SecurityDatabaseLocation;
-} ;
+	__fastcall TConfigParams(void);
+	__fastcall virtual ~TConfigParams(void);
+};
 
-struct TVersionInfo
+
+class DELPHICLASS TVersionInfo;
+class PASCALIMPLEMENTATION TVersionInfo : public System::TObject 
 {
+	typedef System::TObject inherited;
+	
+public:
 	AnsiString ServerVersion;
 	AnsiString ServerImplementation;
 	int ServiceVersion;
-} ;
+public:
+	#pragma option push -w-inl
+	/* TObject.Create */ inline __fastcall TVersionInfo(void) : System::TObject() { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TObject.Destroy */ inline __fastcall virtual ~TVersionInfo(void) { }
+	#pragma option pop
+	
+};
+
 
 #pragma option push -b-
 enum TPropertyOption { Database, License, LicenseMask, ConfigParameters, Version };
@@ -187,11 +234,11 @@ class PASCALIMPLEMENTATION TIBServerProperties : public TIBCustomService
 	
 private:
 	TPropertyOptions FOptions;
-	TDatabaseInfo FDatabaseInfo;
-	TLicenseInfo FLicenseInfo;
-	TLicenseMaskInfo FLicenseMaskInfo;
-	TVersionInfo FVersionInfo;
-	TConfigParams FConfigParams;
+	TDatabaseInfo* FDatabaseInfo;
+	TLicenseInfo* FLicenseInfo;
+	TLicenseMaskInfo* FLicenseMaskInfo;
+	TVersionInfo* FVersionInfo;
+	TConfigParams* FConfigParams;
 	void __fastcall ParseConfigFileData(int &RunLen);
 	
 public:
@@ -203,11 +250,11 @@ public:
 	void __fastcall FetchLicenseMaskInfo(void);
 	void __fastcall FetchConfigParams(void);
 	void __fastcall FetchVersionInfo(void);
-	__property TDatabaseInfo DatabaseInfo = {read=FDatabaseInfo};
-	__property TLicenseInfo LicenseInfo = {read=FLicenseInfo};
-	__property TLicenseMaskInfo LicenseMaskInfo = {read=FLicenseMaskInfo};
-	__property TVersionInfo VersionInfo = {read=FVersionInfo};
-	__property TConfigParams ConfigParams = {read=FConfigParams};
+	__property TDatabaseInfo* DatabaseInfo = {read=FDatabaseInfo};
+	__property TLicenseInfo* LicenseInfo = {read=FLicenseInfo};
+	__property TLicenseMaskInfo* LicenseMaskInfo = {read=FLicenseMaskInfo};
+	__property TVersionInfo* VersionInfo = {read=FVersionInfo};
+	__property TConfigParams* ConfigParams = {read=FConfigParams};
 	
 __published:
 	__property TPropertyOptions Options = {read=FOptions, write=FOptions, nodefault};
@@ -264,7 +311,7 @@ public:
 	__property bool Eof = {read=FEof, nodefault};
 	
 __published:
-	__property BufferSize ;
+	__property BufferSize  = {default=32000};
 public:
 	#pragma option push -w-inl
 	/* TIBCustomService.Destroy */ inline __fastcall virtual ~TIBControlAndQueryService(void) { }
@@ -290,6 +337,7 @@ public:
 	virtual void __fastcall ServiceStart(void);
 	void __fastcall ShutdownDatabase(TShutdownMode Options, int Wait);
 	void __fastcall SetSweepInterval(int Value);
+	void __fastcall SetDBSqlDialect(int Value);
 	void __fastcall SetPageBuffers(int Value);
 	void __fastcall ActivateShadow(void);
 	void __fastcall BringDatabaseOnline(void);
@@ -301,8 +349,7 @@ __published:
 	__property AnsiString DatabaseName = {read=FDatabaseName, write=SetDatabaseName};
 public:
 	#pragma option push -w-inl
-	/* TIBControlService.Create */ inline __fastcall virtual TIBConfigService(Classes::TComponent* AOwner
-		) : TIBControlService(AOwner) { }
+	/* TIBControlService.Create */ inline __fastcall virtual TIBConfigService(Classes::TComponent* AOwner) : TIBControlService(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -341,8 +388,7 @@ __published:
 	__property AnsiString ID = {read=FID, write=FID};
 public:
 	#pragma option push -w-inl
-	/* TIBControlService.Create */ inline __fastcall virtual TIBLicensingService(Classes::TComponent* AOwner
-		) : TIBControlService(AOwner) { }
+	/* TIBControlService.Create */ inline __fastcall virtual TIBLicensingService(Classes::TComponent* AOwner) : TIBControlService(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -362,8 +408,7 @@ protected:
 	virtual void __fastcall SetServiceStartOptions(void);
 public:
 	#pragma option push -w-inl
-	/* TIBControlAndQueryService.create */ inline __fastcall virtual TIBLogService(Classes::TComponent* 
-		AOwner) : TIBControlAndQueryService(AOwner) { }
+	/* TIBControlAndQueryService.create */ inline __fastcall virtual TIBLogService(Classes::TComponent* AOwner) : TIBControlAndQueryService(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -398,8 +443,7 @@ __published:
 	__property TStatOptions Options = {read=FOptions, write=FOptions, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TIBControlAndQueryService.create */ inline __fastcall virtual TIBStatisticalService(Classes::TComponent* 
-		AOwner) : TIBControlAndQueryService(AOwner) { }
+	/* TIBControlAndQueryService.create */ inline __fastcall virtual TIBStatisticalService(Classes::TComponent* AOwner) : TIBControlAndQueryService(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -417,15 +461,12 @@ class PASCALIMPLEMENTATION TIBBackupRestoreService : public TIBControlAndQuerySe
 	
 private:
 	bool FVerbose;
-	AnsiString FSQLRole;
 	
 __published:
-	__property AnsiString SQLRole = {read=FSQLRole, write=FSQLRole};
 	__property bool Verbose = {read=FVerbose, write=FVerbose, default=0};
 public:
 	#pragma option push -w-inl
-	/* TIBControlAndQueryService.create */ inline __fastcall virtual TIBBackupRestoreService(Classes::TComponent* 
-		AOwner) : TIBControlAndQueryService(AOwner) { }
+	/* TIBControlAndQueryService.create */ inline __fastcall virtual TIBBackupRestoreService(Classes::TComponent* AOwner) : TIBControlAndQueryService(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -437,8 +478,7 @@ public:
 
 
 #pragma option push -b-
-enum TBackupOption { IgnoreChecksums, IgnoreLimbo, MetadataOnly, NoGarbageCollection, OldMetadataDesc, 
-	NonTransportable, ConvertExtTables };
+enum TBackupOption { IgnoreChecksums, IgnoreLimbo, MetadataOnly, NoGarbageCollection, OldMetadataDesc, NonTransportable, ConvertExtTables };
 #pragma option pop
 
 typedef Set<TBackupOption, IgnoreChecksums, ConvertExtTables>  TBackupOptions;
@@ -453,6 +493,7 @@ private:
 	TBackupOptions FOptions;
 	Classes::TStrings* FBackupFile;
 	int FBlockingFactor;
+	void __fastcall SetBackupFile(const Classes::TStrings* Value);
 	
 protected:
 	virtual void __fastcall SetServiceStartOptions(void);
@@ -462,7 +503,7 @@ public:
 	__fastcall virtual ~TIBBackupService(void);
 	
 __published:
-	__property Classes::TStrings* BackupFile = {read=FBackupFile, write=FBackupFile};
+	__property Classes::TStrings* BackupFile = {read=FBackupFile, write=SetBackupFile};
 	__property int BlockingFactor = {read=FBlockingFactor, write=FBlockingFactor, nodefault};
 	__property AnsiString DatabaseName = {read=FDatabaseName, write=FDatabaseName};
 	__property TBackupOptions Options = {read=FOptions, write=FOptions, nodefault};
@@ -470,8 +511,7 @@ __published:
 
 
 #pragma option push -b-
-enum TRestoreOption { DeactivateIndexes, NoShadow, NoValidityCheck, OneRelationAtATime, Replace, CreateNewDB, 
-	UseAllSpace };
+enum TRestoreOption { DeactivateIndexes, NoShadow, NoValidityCheck, OneRelationAtATime, Replace, CreateNewDB, UseAllSpace };
 #pragma option pop
 
 typedef Set<TRestoreOption, DeactivateIndexes, UseAllSpace>  TRestoreOptions;
@@ -487,6 +527,8 @@ private:
 	TRestoreOptions FOptions;
 	int FPageSize;
 	int FPageBuffers;
+	void __fastcall SetBackupFile(const Classes::TStrings* Value);
+	void __fastcall SetDatabaseName(const Classes::TStrings* Value);
 	
 protected:
 	virtual void __fastcall SetServiceStartOptions(void);
@@ -496,24 +538,22 @@ public:
 	__fastcall virtual ~TIBRestoreService(void);
 	
 __published:
-	__property Classes::TStrings* DatabaseName = {read=FDatabaseName, write=FDatabaseName};
-	__property Classes::TStrings* BackupFile = {read=FBackupFile, write=FBackupFile};
-	__property int PageSize = {read=FPageSize, write=FPageSize, nodefault};
+	__property Classes::TStrings* DatabaseName = {read=FDatabaseName, write=SetDatabaseName};
+	__property Classes::TStrings* BackupFile = {read=FBackupFile, write=SetBackupFile};
+	__property int PageSize = {read=FPageSize, write=FPageSize, default=4096};
 	__property int PageBuffers = {read=FPageBuffers, write=FPageBuffers, nodefault};
 	__property TRestoreOptions Options = {read=FOptions, write=FOptions, default=32};
 };
 
 
 #pragma option push -b-
-enum TValidateOption { LimboTransactions, CheckDB, IgnoreChecksum, KillShadows, MendDB, SweepDB, ValidateDB, 
-	ValidateFull };
+enum TValidateOption { LimboTransactions, CheckDB, IgnoreChecksum, KillShadows, MendDB, SweepDB, ValidateDB, ValidateFull };
 #pragma option pop
 
 typedef Set<TValidateOption, LimboTransactions, ValidateFull>  TValidateOptions;
 
 #pragma option push -b-
-enum TTransactionGlobalAction { CommitGlobal, RollbackGlobal, RecoverTwoPhaseGlobal, NoGlobalAction 
-	};
+enum TTransactionGlobalAction { CommitGlobal, RollbackGlobal, RecoverTwoPhaseGlobal, NoGlobalAction };
 #pragma option pop
 
 #pragma option push -b-
@@ -528,8 +568,12 @@ enum TTransactionAdvise { CommitAdvise, RollbackAdvise, UnknownAdvise };
 enum TTransactionAction { CommitAction, RollbackAction };
 #pragma option pop
 
-struct TLimboTransactionInfo
+class DELPHICLASS TLimboTransactionInfo;
+class PASCALIMPLEMENTATION TLimboTransactionInfo : public System::TObject 
 {
+	typedef System::TObject inherited;
+	
+public:
 	bool MultiDatabase;
 	int ID;
 	AnsiString HostSite;
@@ -538,9 +582,18 @@ struct TLimboTransactionInfo
 	TTransactionState State;
 	TTransactionAdvise Advise;
 	TTransactionAction Action;
-} ;
+public:
+	#pragma option push -w-inl
+	/* TObject.Create */ inline __fastcall TLimboTransactionInfo(void) : System::TObject() { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TObject.Destroy */ inline __fastcall virtual ~TLimboTransactionInfo(void) { }
+	#pragma option pop
+	
+};
 
-typedef DynamicArray<TLimboTransactionInfo >  IBServices__12;
+
+typedef DynamicArray<TLimboTransactionInfo* >  IBServices__82;
 
 class DELPHICLASS TIBValidationService;
 class PASCALIMPLEMENTATION TIBValidationService : public TIBControlAndQueryService 
@@ -550,10 +603,11 @@ class PASCALIMPLEMENTATION TIBValidationService : public TIBControlAndQueryServi
 private:
 	AnsiString FDatabaseName;
 	TValidateOptions FOptions;
-	DynamicArray<TLimboTransactionInfo >  FLimboTransactionInfo;
+	DynamicArray<TLimboTransactionInfo* >  FLimboTransactionInfo;
 	TTransactionGlobalAction FGlobalAction;
 	void __fastcall SetDatabaseName(const AnsiString Value);
-	TLimboTransactionInfo __fastcall GetLimboTransactionInfo(int index);
+	TLimboTransactionInfo* __fastcall GetLimboTransactionInfo(int index);
+	int __fastcall GetLimboTransactionInfoCount(void);
 	
 protected:
 	virtual void __fastcall SetServiceStartOptions(void);
@@ -563,38 +617,50 @@ public:
 	__fastcall virtual ~TIBValidationService(void);
 	void __fastcall FetchLimboTransactionInfo(void);
 	void __fastcall FixLimboTransactionErrors(void);
-	__property TLimboTransactionInfo LimboTransactionInfo[int Index] = {read=GetLimboTransactionInfo};
+	__property TLimboTransactionInfo* LimboTransactionInfo[int Index] = {read=GetLimboTransactionInfo};
+	__property int LimboTransactionInfoCount = {read=GetLimboTransactionInfoCount, nodefault};
 	
 __published:
 	__property AnsiString DatabaseName = {read=FDatabaseName, write=SetDatabaseName};
 	__property TValidateOptions Options = {read=FOptions, write=FOptions, nodefault};
-	__property TTransactionGlobalAction GlobalAction = {read=FGlobalAction, write=FGlobalAction, nodefault
-		};
+	__property TTransactionGlobalAction GlobalAction = {read=FGlobalAction, write=FGlobalAction, nodefault};
 };
 
 
-struct TUserInfo
+class DELPHICLASS TUserInfo;
+class PASCALIMPLEMENTATION TUserInfo : public System::TObject 
 {
+	typedef System::TObject inherited;
+	
+public:
 	AnsiString UserName;
 	AnsiString FirstName;
 	AnsiString MiddleName;
 	AnsiString LastName;
 	int GroupID;
 	int UserID;
-} ;
+public:
+	#pragma option push -w-inl
+	/* TObject.Create */ inline __fastcall TUserInfo(void) : System::TObject() { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TObject.Destroy */ inline __fastcall virtual ~TUserInfo(void) { }
+	#pragma option pop
+	
+};
+
 
 #pragma option push -b-
 enum TSecurityAction { ActionAddUser, ActionDeleteUser, ActionModifyUser, ActionDisplayUser };
 #pragma option pop
 
 #pragma option push -b-
-enum TSecurityModifyParam { ModifyFirstName, ModifyMiddleName, ModifyLastName, ModifyUserId, ModifyGroupId, 
-	ModifyGroupName, ModifyPassword };
+enum TSecurityModifyParam { ModifyFirstName, ModifyMiddleName, ModifyLastName, ModifyUserId, ModifyGroupId, ModifyPassword };
 #pragma option pop
 
 typedef Set<TSecurityModifyParam, ModifyFirstName, ModifyPassword>  TSecurityModifyParams;
 
-typedef DynamicArray<TUserInfo >  IBServices__32;
+typedef DynamicArray<TUserInfo* >  IBServices__13;
 
 class DELPHICLASS TIBSecurityService;
 class PASCALIMPLEMENTATION TIBSecurityService : public TIBControlAndQueryService 
@@ -605,13 +671,12 @@ private:
 	int FUserID;
 	int FGroupID;
 	AnsiString FFirstName;
-	AnsiString FGroupName;
 	AnsiString FUserName;
 	AnsiString FPassword;
 	AnsiString FSQLRole;
 	AnsiString FLastName;
 	AnsiString FMiddleName;
-	DynamicArray<TUserInfo >  FUserInfo;
+	DynamicArray<TUserInfo* >  FUserInfo;
 	TSecurityAction FSecurityAction;
 	TSecurityModifyParams FModifyParams;
 	void __fastcall ClearParams(void);
@@ -619,14 +684,15 @@ private:
 	void __fastcall SetFirstName(AnsiString Value);
 	void __fastcall SetMiddleName(AnsiString Value);
 	void __fastcall SetLastName(AnsiString Value);
-	void __fastcall SetGroupName(AnsiString Value);
 	void __fastcall SetPassword(AnsiString Value);
 	void __fastcall SetUserId(int Value);
 	void __fastcall SetGroupId(int Value);
 	void __fastcall FetchUserInfo(void);
-	TUserInfo __fastcall GetUserInfo(int Index);
+	TUserInfo* __fastcall GetUserInfo(int Index);
+	int __fastcall GetUserInfoCount(void);
 	
 protected:
+	virtual void __fastcall Loaded(void);
 	virtual void __fastcall SetServiceStartOptions(void);
 	
 public:
@@ -637,18 +703,17 @@ public:
 	void __fastcall AddUser(void);
 	void __fastcall DeleteUser(void);
 	void __fastcall ModifyUser(void);
-	__property TUserInfo UserInfo[int Index] = {read=GetUserInfo};
+	__property TUserInfo* UserInfo[int Index] = {read=GetUserInfo};
+	__property int UserInfoCount = {read=GetUserInfoCount, nodefault};
 	
 __published:
-	__property TSecurityAction SecurityAction = {read=FSecurityAction, write=SetSecurityAction, nodefault
-		};
+	__property TSecurityAction SecurityAction = {read=FSecurityAction, write=SetSecurityAction, nodefault};
 	__property AnsiString SQlRole = {read=FSQLRole, write=FSQLRole};
 	__property AnsiString UserName = {read=FUserName, write=FUserName};
 	__property AnsiString FirstName = {read=FFirstName, write=SetFirstName};
 	__property AnsiString MiddleName = {read=FMiddleName, write=SetMiddleName};
 	__property AnsiString LastName = {read=FLastName, write=SetLastName};
 	__property int UserID = {read=FUserID, write=SetUserId, nodefault};
-	__property AnsiString GroupName = {read=FGroupName, write=SetGroupName};
 	__property int GroupID = {read=FGroupID, write=SetGroupId, nodefault};
 	__property AnsiString Password = {read=FPassword, write=SetPassword};
 };
@@ -661,9 +726,7 @@ extern PACKAGE AnsiString SPBConstantNames[12];
 extern PACKAGE int SPBConstantValues[12];
 
 }	/* namespace Ibservices */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ibservices;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

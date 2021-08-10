@@ -1,17 +1,19 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- C++Builder XML Project --><PROJECT>
+<!-- C++Builder XML Project -->
+<PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="opengl.exe"/>
     <OBJFILES value="opengl.obj draw.obj"/>
     <RESFILES value="opengl.res"/>
     <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) draw.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="vcl50.lib vclx50.lib"/>
-    <SPARELIBS value="vclx50.lib vcl50.lib"/>
-    <PACKAGES value=""/>
+    <LIBRARIES value="vcl.lib rtl.lib vclx.lib"/>
+    <SPARELIBS value="vclx.lib rtl.lib vcl.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -24,22 +26,30 @@
     <MAINSOURCE value="opengl.cpp"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
-    <WARNINGS value=" -w-8026 -w-8027 -w-par"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\include -I$(BCB)\include\vcl"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a8 -k -y -v -vi- -c -b- -tWM"/>
+    <IDLCFLAGS value="-src_suffix cpp -I$(BCB)\include -I$(BCB)\include\vcl"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tWM"/>
     <PFLAGS value="-AWinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE 
       -$YD -$W -$O- -v -JPHNV -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -v"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="opengl.cpp" FORMNAME="" UNITNAME="opengl" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="draw.cpp" FORMNAME="OpenGL_Form" UNITNAME="draw" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="opengl.res" FORMNAME="" UNITNAME="opengl" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Readme.txt" FORMNAME="" UNITNAME="Readme" CONTAINERID="File" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -61,14 +71,29 @@ DebugSourceDirs=
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
-InMemoryExe=0
 ShowInfoMsgs=0
 LinkDebugVcl=1
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
   </IDEOPTIONS>
 </PROJECT>

@@ -1,7 +1,7 @@
 LIBRARY GWPERF
 EXPORTS
 
-    CloseGatewayPerformanceData              = 'GWPERF.DLL'.*
-    CollectGatewayPerformanceData            = 'GWPERF.DLL'.*
-;    DllEntryPoint                            = 'GWPERF.DLL'.*
-    OpenGatewayPerformanceData               = 'GWPERF.DLL'.*
+    CloseGatewayPerformanceData              
+    CollectGatewayPerformanceData            
+;    DllEntryPoint                            
+    OpenGatewayPerformanceData               

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NMS_Stream.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NMS_Stream.pas' rev: 6.00
 
 #ifndef NMS_StreamHPP
 #define NMS_StreamHPP
@@ -60,10 +60,16 @@ public:
 	virtual bool __fastcall FlushBuffer(void);
 	virtual int __fastcall Read(void *Buffer, int Count);
 	virtual int __fastcall Write(const void *Buffer, int Count);
-	virtual int __fastcall Seek(int Offset, Word Origin);
+	virtual int __fastcall Seek(int Offset, Word Origin)/* overload */;
 	bool __fastcall IsEof(void);
 	__property Classes::TNotifyEvent OnFillBuffer = {read=fOnFillBuffer, write=fOnFillBuffer};
 	__property Classes::TNotifyEvent OnFlushBuffer = {read=fOnFlushBuffer, write=fOnFlushBuffer};
+	
+/* Hoisted overloads: */
+	
+public:
+	inline __int64 __fastcall  Seek(const __int64 Offset, Classes::TSeekOrigin Origin){ return TStream::Seek(Offset, Origin); }
+	
 };
 
 
@@ -71,9 +77,7 @@ public:
 extern PACKAGE int BufferSize;
 
 }	/* namespace Nms_stream */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nms_stream;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

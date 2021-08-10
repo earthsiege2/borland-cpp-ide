@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Inprise Corp.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland Corp.  All Rights Reserved.
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 #include <windows.h>
@@ -14,7 +14,7 @@
 //---------------------------------------------------------------------------
 
 
-// Returns Any initialized with data from a single-dim BYTE ARRAY in a SAFEARRAY of a Variant.
+// Returns Any initialized with data from a single-dim BYTE ARRAY in a SAFEARRAY of a VARIANT.
 //
 BOOL SAFEARRAYToSequence(const VARIANT &va, CORBA::Any &any)
 {
@@ -22,7 +22,7 @@ BOOL SAFEARRAYToSequence(const VARIANT &va, CORBA::Any &any)
   //
   if (va.vt & VT_ARRAY)
   {
-    // Get the Variant Type
+    // Get the VARIANT Type
     //
     VARTYPE varType = VARTYPE(va.vt & ~(VT_ARRAY|VT_BYREF));
     // Must be array of byte
@@ -76,7 +76,8 @@ BOOL SAFEARRAYToSequence(const VARIANT &va, CORBA::Any &any)
 // VT_ARRAY/VT_UI1 -> tk_sequence/tk_octet
 // VT_VOID -> tk_void
 // all other anys -> tk_null
-CORBA::Any * SAFEARRAYToAny(const VARIANT &va)
+//CORBA::Any * SAFEARRAYToAny(const VARIANT &va)
+CORBA::Any * SAFEARRAYToAny(VARIANT va)
 {
   // Default constructor of Any builds a tk_null instance
   CORBA::Any_var any = new CORBA::Any;
@@ -92,7 +93,7 @@ CORBA::Any * SAFEARRAYToAny(const VARIANT &va)
 }
 
 // Take data from a Sequence in the 'Any' and copies the data to
-// an allocated SAFEARRAY stored in the Variant.
+// an allocated SAFEARRAY stored in the VARIANT.
 // NOTE: The VARIANT is *NOT* cleared. So make sure that it does
 //       not contain any data that will be leaked.
 //
@@ -189,11 +190,11 @@ BOOL AnyToSAFEARRAYVar(const CORBA::Any& any, VARIANT &var)
 // all other anys -> VT_EMPTY
 VARIANT * AnyToSAFEARRAY(const CORBA::Any& any)
 {
-  // Create VT_EMPTY variant
+  // Create VT_EMPTY VARIANT
   VARIANT *pv= new VARIANT;
   ::VariantInit(pv);
 
-  // Attempt the any data to the variant
+  // Attempt the any data to the VARIANT
   AnyToSAFEARRAYVar(any, *pv);
 
   return pv;

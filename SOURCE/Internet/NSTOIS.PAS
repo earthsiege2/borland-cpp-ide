@@ -4,7 +4,7 @@
 {       Borland Delphi Visual Component Library         }
 {       NSAPI to ISAPI server application components    }
 {                                                       }
-{       Copyright (c) 1997,99 Inprise Corporation       }
+{ Copyright (c) 1997-2001, Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -12,16 +12,16 @@ unit NSToIS;
 
 interface
 
-uses SysUtils, Windows, Classes, ISAPI2, NSAPI,
-  {$IFDEF NETSCAPE3}
-  NS30Fix,
-  {$ENDIF}
-  {$IFDEF NETSCAPE35}
-  NS35Fix,
-  {$ENDIF}
-  {$IFDEF NETSCAPE36}
-  NS36Fix,
-  {$ENDIF}
+uses SysUtils, Windows, Classes, Isapi2, Nsapi,
+  
+
+
+  
+
+
+  
+
+
   SyncObjs;
 
 type
@@ -89,7 +89,7 @@ type
     destructor Destroy; override;
     function LoadApplication(const AFileName: string): TISAPIApplication;
     function InitLog(pb: PPblock; sn: PSession; rq: Prequest): Integer;
-    procedure LogMessage(const Fmt: string; Params: array of const);
+    procedure LogMessage(const Fmt: string; const Params: array of const);
 {    function NewSession(ISAPIApplication: TISAPIApplication; pb: PPBlock;
       sn: PSession; rq: PRequest): TISAPISession;}
   end;
@@ -97,7 +97,7 @@ type
 var
   ISAPIApplicationList: TISAPIApplicationList = nil;
 
-procedure LogMessage(const Fmt: string; Params: array of const);
+procedure LogMessage(const Fmt: string; const Params: array of const);
 function UnixPathToDosPath(const Path: string): string;
 function DosPathToUnixPath(const Path: string): string;
 procedure InitISAPIApplicationList;
@@ -134,7 +134,7 @@ begin
   Result := TranslateChar(Path, '\', '/');
 end;
 
-procedure LogMessage(const Fmt: string; Params: array of const);
+procedure LogMessage(const Fmt: string; const Params: array of const);
 begin
   ISAPIApplicationList.LogMessage(Fmt, Params);
 end;
@@ -166,14 +166,14 @@ begin
     FModule := LoadLibrary(PChar(FFileName));
     if FModule <> 0 then
     begin
-      @GetExtensionVersion := GetProcAddress(FModule, 'GetExtensionVersion');
-      @HTTPExtensionProc := GetProcAddress(FModule, 'HttpExtensionProc');
-      @TerminateExtension := GetProcAddress(FModule, 'TerminateExtension');
+      @GetExtensionVersion := GetProcAddress(FModule, 'GetExtensionVersion');  { do not localize }
+      @HTTPExtensionProc := GetProcAddress(FModule, 'HttpExtensionProc');      { do not localize }
+      @TerminateExtension := GetProcAddress(FModule, 'TerminateExtension');    { do not localize }
       if not Assigned(GetExtensionVersion) or not Assigned(HTTPExtensionProc) then
         raise EISAPIException.CreateResFmt(@sInvalidISAPIApp, [FFileName]);
       if GetExtensionVersion(FVersionInfo) then
       begin
-        LogMessage('%s: Version: $%.8x'#13#10, [FFileName, FVersionInfo.dwExtensionVersion]);
+        LogMessage('%s: Version: $%.8x'#13#10, [FFileName, FVersionInfo.dwExtensionVersion]);  { do not localize }
         if (HiWord(FVersionInfo.dwExtensionVersion) <> $0001) and
           (HiWord(FVersionInfo.dwExtensionVersion) <> $0002) then
           raise EISAPIException.CreateResFmt(@sUnsupportedISAPIApp,
@@ -261,9 +261,9 @@ end;
 
 const
   DocumentMoved =
-    '<head><title>Document moved</title></head>' +
-    '<body><h1>Object Moved</h1>' +
-    'This document may be found <a HREF="%s">here</a></body>'#13#10;
+    '<head><title>Document moved</title></head>' +   { do not localize }
+    '<body><h1>Object Moved</h1>' +                  { do not localize }
+    'This document may be found <a HREF="%s">here</a></body>'#13#10;  { do not localize }
 
 // Diagnostic purposes only... Do not resource these strings    
 function GetObjectConfig(os: PHttpdObjSet): string;
@@ -273,38 +273,38 @@ var
   dir: PDirective;
   I, J, K: Integer;
 begin
-  Result := Format('os: $%p'#13#10, [os]);
+  Result := Format('os: $%p'#13#10, [os]);  { do not localize }
   try
     if os <> nil then
     begin
       K := 0;
       obj := PPointerList(os.obj)^[K];
-      Result := Format('%sobj: $%p'#13#10, [Result, obj]);
+      Result := Format('%sobj: $%p'#13#10, [Result, obj]);  { do not localize }
       if obj <> nil then
       begin
         while obj <> nil do
         begin
-          Result := Format('%sobj.name: $%p'#13#10, [Result, obj.name]);
-          Result := Format('%sRoot Object: %s (%s)'#13#10, [Result, 'default',
+          Result := Format('%sobj.name: $%p'#13#10, [Result, obj.name]);  { do not localize }
+          Result := Format('%sRoot Object: %s (%s)'#13#10, [Result, 'default',  { do not localize }
             NSstr2String(pblock_pblock2str(obj.name, nil))]);
           dt := obj.dt;
-          Result := Format('%sobj.dt: $%p'#13#10'obj.nd: %d'#13#10, [Result, dt, obj.nd]);
+          Result := Format('%sobj.dt: $%p'#13#10'obj.nd: %d'#13#10, [Result, dt, obj.nd]);  { do not localize }
           for I := 0 to obj.nd - 1 do
           begin
             dir := dt.inst;
-            Result := Format('%sdt.inst: $%p'#13#10'dt.ni: %d'#13#10, [Result, dir, dt.ni]);
+            Result := Format('%sdt.inst: $%p'#13#10'dt.ni: %d'#13#10, [Result, dir, dt.ni]);  { do not localize }
             for J := 0 to dt.ni - 1 do
             begin
               if dir <> nil then
               begin
                 if dir.param <> nil then
-                  Result := Format('%s  Param: %s'#13#10, [Result,
+                  Result := Format('%s  Param: %s'#13#10, [Result,  { do not localize }
                     NSstr2String(pblock_pblock2str(dir.param, nil))])
-                else Result := Format('%s  Param:'#13#10, [Result]);
+                else Result := Format('%s  Param:'#13#10, [Result]);  { do not localize }
                 if dir.client <> nil then
-                  Result := Format('%s  Client: %s'#13#10, [Result,
+                  Result := Format('%s  Client: %s'#13#10, [Result,   { do not localize }
                     NSstr2String(pblock_pblock2str(dir.client, nil))])
-                else Result := Format('%s  Client:'#13#10, [Result]);
+                else Result := Format('%s  Client:'#13#10, [Result]);  { do not localize }
               end;
               Inc(dir);
             end;
@@ -313,8 +313,8 @@ begin
           Inc(K);
           obj := PPointerList(os.obj)^[K];
         end;
-      end else Result := 'root_object not found';
-    end else Result := 'std_os Objset not found';
+      end else Result := 'root_object not found';  { do not localize }
+    end else Result := 'std_os Objset not found';  { do not localize }
   except
     on E: Exception do
       Result := Format('%sException %s: %s'#13#10, [Result, E.ClassName, E.Message]);
@@ -338,14 +338,14 @@ begin
     cbSize := SizeOf(FECB);
     dwVersion := MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
     ConnID := THandle(Self);
-    lpszMethod := MakeValid(pblock_findval('method', rq.reqpb));
-    lpszQueryString := MakeValid(pblock_findval('query', rq.reqpb));
-    lpszPathInfo := MakeValid(pblock_findval('path-info', rq.vars));
+    lpszMethod := MakeValid(pblock_findval('method', rq.reqpb));  { do not localize }
+    lpszQueryString := MakeValid(pblock_findval('query', rq.reqpb));  { do not localize }
+    lpszPathInfo := MakeValid(pblock_findval('path-info', rq.vars));  { do not localize }
     FPathTranslated := UnixPathToDosPath(NSstr2String(
-      pblock_findval('path-translated', rq.vars)));
+      pblock_findval('path-translated', rq.vars)));  { do not localize }
     lpszPathTranslated := PChar(FPathTranslated);
-    lpszContentType := MakeValid(pblock_findval('content-type', rq.headers));
-    Temp := pblock_findval('content-length', rq.headers);
+    lpszContentType := MakeValid(pblock_findval('content-type', rq.headers));  { do not localize }
+    Temp := pblock_findval('content-length', rq.headers);  { do not localize }
     try
       cbTotalBytes := StrToIntDef(MakeValid(Temp), 0);
     finally
@@ -412,24 +412,24 @@ var
     if Fenv = nil then
     begin
       Fenv := http_hdrs2env(Frq.headers);
-      Value := pblock_findval('content-length', Frq.headers);
+      Value := pblock_findval('content-length', Frq.headers); { do not localize }
       try
         if Value <> nil then
-          AddToEnv(Fenv, 'HTTP_CONTENT_LENGTH', Value);
+          AddToEnv(Fenv, 'HTTP_CONTENT_LENGTH', Value);  { do not localize }
       finally
         system_free(Value);
       end;
-      Value := pblock_findval('content-type', Frq.headers);
+      Value := pblock_findval('content-type', Frq.headers);  { do not localize }
       try
         if Value <> nil then
-          AddToEnv(Fenv, 'HTTP_CONTENT_TYPE', Value);
+          AddToEnv(Fenv, 'HTTP_CONTENT_TYPE', Value);  { do not localize }
       finally
         system_free(Value);
       end;
-      Value := pblock_findval('authorization', Frq.headers);
+      Value := pblock_findval('authorization', Frq.headers);  { do not localize }
       try
         if Value <> nil then
-          AddToEnv(Fenv, 'HTTP_AUTHORIZATION', Value);
+          AddToEnv(Fenv, 'HTTP_AUTHORIZATION', Value);  { do not localize }
       finally
         system_free(Value);
       end;
@@ -442,8 +442,8 @@ var
     PChar(Buffer)[0] := #0;
     if Value <> nil then
     begin
-      StrLCopy(Buffer, Value, Size);
-      if Size < StrLen(Value) then
+      StrLCopy(Buffer, Value, Size - 1);
+      if Size - 1 < StrLen(Value) then
         SetLastError(ERROR_INSUFFICIENT_BUFFER)
       else Result := True;
       Size := StrLen(Value) + 1;
@@ -468,52 +468,52 @@ var
 
 begin
   // Check if this is a request for an HTTP header
-  if VariableName = nil then VariableName := 'BAD';
-  LogMessage('GetServerVariable(%s, $%p, %d)'#13#10, [VariableName, Buffer, Size]);
+  if VariableName = nil then VariableName := 'BAD';   { do not localize }
+  LogMessage('GetServerVariable(%s, $%p, %d)'#13#10, [VariableName, Buffer, Size]);  { do not localize }
   HeaderValue := nil;
   HeaderName := VariableName;
-  if shexp_casecmp(VariableName, 'HTTP_*') = 0 then
+  if shexp_casecmp(VariableName, 'HTTP_*') = 0 then  { do not localize }
   begin
     InitEnv;
     CopyValue(util_env_find(Fenv, VariableName), Result);
     Exit;
   end else
   begin
-    if CompareText('CONTENT_LENGTH', HeaderName) = 0 then
-      HeaderValue := pblock_findval('content-length', Frq.headers)
-    else if CompareText('CONTENT_TYPE', HeaderName) = 0 then
-      HeaderValue := pblock_findval('content-type', Frq.headers)
-    else if CompareText('PATH_INFO', HeaderName) = 0 then
-      HeaderValue := pblock_findval('path-info', Frq.vars)
-    else if CompareText('PATH_TRANSLATED', HeaderName) = 0 then
-      HeaderValue := pblock_findval('path-translated', Frq.vars)
-    else if CompareText('QUERY_STRING', HeaderName) = 0 then
-      HeaderValue := pblock_findval('query', Frq.reqpb)
-    else if CompareText('REMOTE_ADDR', HeaderName) = 0 then
-      HeaderValue := pblock_findval('ip', Fsn.client)
-    else if CompareText('REMOTE_HOST', HeaderName) = 0 then
+    if CompareText('CONTENT_LENGTH', HeaderName) = 0 then           { do not localize }
+      HeaderValue := pblock_findval('content-length', Frq.headers)  { do not localize }
+    else if CompareText('CONTENT_TYPE', HeaderName) = 0 then        { do not localize }
+      HeaderValue := pblock_findval('content-type', Frq.headers)    { do not localize }
+    else if CompareText('PATH_INFO', HeaderName) = 0 then           { do not localize }
+      HeaderValue := pblock_findval('path-info', Frq.vars)          { do not localize }
+    else if CompareText('PATH_TRANSLATED', HeaderName) = 0 then     { do not localize }
+      HeaderValue := pblock_findval('path-translated', Frq.vars)    { do not localize }
+    else if CompareText('QUERY_STRING', HeaderName) = 0 then        { do not localize }
+      HeaderValue := pblock_findval('query', Frq.reqpb)             { do not localize }
+    else if CompareText('REMOTE_ADDR', HeaderName) = 0 then         { do not localize }
+      HeaderValue := pblock_findval('ip', Fsn.client)               { do not localize }
+    else if CompareText('REMOTE_HOST', HeaderName) = 0 then         { do not localize }
       HeaderValue := session_dns(Fsn)
-    else if CompareText('REQUEST_METHOD', HeaderName) = 0 then
-      HeaderValue := pblock_findval('method', Frq.reqpb)
-    else if CompareText('SCRIPT_NAME', HeaderName) = 0 then
-      HeaderValue := pblock_findval('uri', Frq.reqpb)
-    else if CompareText('SERVER_NAME', HeaderName) = 0 then
+    else if CompareText('REQUEST_METHOD', HeaderName) = 0 then      { do not localize }
+      HeaderValue := pblock_findval('method', Frq.reqpb)            { do not localize }
+    else if CompareText('SCRIPT_NAME', HeaderName) = 0 then         { do not localize }
+      HeaderValue := pblock_findval('uri', Frq.reqpb)               { do not localize }
+    else if CompareText('SERVER_NAME', HeaderName) = 0 then         { do not localize }
       HeaderValue := system_version
-    else if CompareText('ALL_HTTP', HeaderName) = 0 then
+    else if CompareText('ALL_HTTP', HeaderName) = 0 then            { do not localize }
     begin
       CopyValue(PChar(AllHeaders), Result);
       Exit;
-    end else if CompareText('SERVER_PORT', HeaderName) = 0 then
+    end else if CompareText('SERVER_PORT', HeaderName) = 0 then     { do not localize }
     begin
       CopyValue(PChar(IntToStr(conf_getglobals.Vport)), Result);
       Exit
-    end else if CompareText('SERVER_PROTOCOL', HeaderName) = 0 then
-      HeaderValue := pblock_findval('protocol', Frq.reqpb)
-    else if CompareText('URL', HeaderName) = 0 then
-      HeaderValue := pblock_findval('uri', Frq.reqpb)
-    else if CompareText('OBJECT_CONFIG', HeaderName) = 0 then
+    end else if CompareText('SERVER_PROTOCOL', HeaderName) = 0 then  { do not localize }
+      HeaderValue := pblock_findval('protocol', Frq.reqpb)           { do not localize }
+    else if CompareText('URL', HeaderName) = 0 then                  { do not localize }
+      HeaderValue := pblock_findval('uri', Frq.reqpb)                { do not localize }
+    else if CompareText('OBJECT_CONFIG', HeaderName) = 0 then        { do not localize }
     begin
-      CopyValue(PChar(Format('<pre>%s</pre><br>', [GetObjectConfig(Frq.os)])), Result);
+      CopyValue(PChar(Format('<pre>%s</pre><br>', [GetObjectConfig(Frq.os)])), Result);  { do not localize }
       Exit;
     end else
     begin
@@ -532,7 +532,7 @@ function TISAPISession.WriteClient(Buffer: Pointer; var Bytes: DWORD): Boolean;
 var
   nWritten: DWORD;
 begin
-  LogMessage('WriteClient($%p, %d)'#13#10, [Buffer, Bytes]);
+  LogMessage('WriteClient($%p, %d)'#13#10, [Buffer, Bytes]);  { do not localize }
   nWritten := net_write(Fsn.csd, Buffer, Bytes);
   Result := not (nWritten < Bytes) and not (nWritten = DWORD(IO_ERROR));
   Bytes := nWritten;
@@ -542,7 +542,7 @@ function TISAPISession.ReadClient(Buffer: Pointer; var Size: DWORD): Boolean;
 var
   nBuf, nRemaining: DWORD;
 begin
-  LogMessage('ReadClient($%p, %d)'#13#10, [Buffer, Size]);
+  LogMessage('ReadClient($%p, %d)'#13#10, [Buffer, Size]);  { do not localize }
   nRemaining := Size;
   while nRemaining > 0 do
   begin
@@ -633,13 +633,13 @@ begin
           Content := PChar(Datatype)
         else Content := #0;
         if Size <> nil then
-          LogMessage('ServerSupportFunction(HSE_REQ_SEND_RESPONSE_HEADER' +
+          LogMessage('ServerSupportFunction(HSE_REQ_SEND_RESPONSE_HEADER' +     { do not localize }
             ', $%p, %d, %s)'#13#10, [Buffer, Size^, Content])
-        else LogMessage('ServerSupportFunction(HSE_REQ_SEND_RESPONSE_HEADER' +
+        else LogMessage('ServerSupportFunction(HSE_REQ_SEND_RESPONSE_HEADER' +  { do not localize }
             ', $%p, nil, %s)'#13#10, [Buffer, Content]);
         SetStatus(PChar(Buffer));
-        param_free(pblock_remove('content-type', Frq.srvhdrs));
-        param_free(pblock_remove('content-length', Frq.srvhdrs));
+        param_free(pblock_remove('content-type', Frq.srvhdrs));    { do not localize }
+        param_free(pblock_remove('content-length', Frq.srvhdrs));  { do not localize }
         Content := SkipHeaders(PChar(DataType));
         ContentLen := StrLen(Content);
         Result := True;
@@ -653,20 +653,20 @@ begin
     HSE_REQ_SEND_URL_REDIRECT_RESP:
       begin
         if Size <> nil then
-          LogMessage('ServerSupportFunction(HSE_REQ_SEND_URL_REDIRECT_RESP' +
+          LogMessage('ServerSupportFunction(HSE_REQ_SEND_URL_REDIRECT_RESP' +     { do not localize }
             ', %s, %d)'#13#10, [PChar(Buffer), Size^])
-        else LogMessage('ServerSupportFunction(HSE_REQ_SEND_URL_REDIRECT_RESP' +
+        else LogMessage('ServerSupportFunction(HSE_REQ_SEND_URL_REDIRECT_RESP' +  { do not localize }
             ', %s, nil)'#13#10, [PChar(Buffer)]);
-        http_status(Fsn, Frq, PROTOCOL_REDIRECT, 'Object moved');
-        param_free(pblock_remove('content-type', Frq.srvhdrs));
-        param_free(pblock_remove('content-length', Frq.srvhdrs));
+        http_status(Fsn, Frq, PROTOCOL_REDIRECT, 'Object moved');  { do not localize }
+        param_free(pblock_remove('content-type', Frq.srvhdrs));    { do not localize }
+        param_free(pblock_remove('content-length', Frq.srvhdrs));  { do not localize }
         if Buffer <> nil then
         begin
-          pblock_nvinsert('Location', PChar(Buffer), Frq.srvhdrs);
+          pblock_nvinsert('Location', PChar(Buffer), Frq.srvhdrs);  { do not localize }
           ContentStr := Format(DocumentMoved, [PChar(Buffer)]);
           ContentLen := Length(ContentStr);
-          pblock_nvinsert('content-type', 'text/html', Frq.srvhdrs);
-          pblock_nninsert('content-length', ContentLen, Frq.srvhdrs);
+          pblock_nvinsert('content-type', 'text/html', Frq.srvhdrs);   { do not localize }
+          pblock_nninsert('content-length', ContentLen, Frq.srvhdrs);  { do not localize }
           Result := True;
           if http_start_response(Fsn, Frq) <> REQ_NOACTION then
           begin
@@ -685,8 +685,8 @@ begin
         Content := request_translate_uri(Buffer, Fsn);
         if Content <> nil then
         try
-          StrPLCopy(Buffer, Content, Size^);
-          if Size^ < StrLen(Content) + 1 then
+          StrPLCopy(Buffer, Content, Size^ - 1);
+          if Size^ - 1 < StrLen(Content) + 1 then
           begin
             Result := False;
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -711,7 +711,7 @@ end;
 
 procedure TISAPISession.ProcessExtension;
 begin
-  LogMessage('ProcessExtension -- Application: %s'#13#10, [FISAPIApplication.FFileName]);
+  LogMessage('ProcessExtension -- Application: %s'#13#10, [FISAPIApplication.FFileName]);  { do not localize }
   if Assigned(FISAPIApplication.HTTPExtensionProc) then
     case FISAPIApplication.HTTPExtensionProc(FECB) of
       HSE_STATUS_ERROR: raise EISAPIException.CreateRes(@sISAPIAppError);
@@ -789,12 +789,12 @@ function TISAPIApplicationList.InitLog(pb: PPblock; sn: PSession; rq: Prequest):
 var
   fn: Pchar;
 begin
-  fn := pblock_findval('file', pb);
+  fn := pblock_findval('file', pb);  { do not localize }
   try
 
     if fn = nil then
     begin
-      pblock_nvinsert('error', 'TISAPIApplicationList: please supply a file name', pb);
+      pblock_nvinsert('error', 'TISAPIApplicationList: please supply a file name', pb);  { do not localize }
       Result := REQ_ABORTED;
       Exit;
     end;
@@ -802,7 +802,7 @@ begin
     FLogfd := system_fopenWA(fn);
     if FLogfd = SYS_ERROR_FD then
     begin
-      pblock_nvinsert('error', 'TISAPIApplicationList: please supply a file name', pb);
+      pblock_nvinsert('error', 'TISAPIApplicationList: please supply a file name', pb);  { do not localize }
       Result := REQ_ABORTED;
       Exit;
     end;
@@ -820,7 +820,7 @@ begin
     Result := TISAPIApplication.Create(Self, AFileName);
 end;
 
-procedure TISAPIApplicationList.LogMessage(const Fmt: string; Params: array of const);
+procedure TISAPIApplicationList.LogMessage(const Fmt: string; const Params: array of const);
 var
   logmsg: string;
   len: Integer;

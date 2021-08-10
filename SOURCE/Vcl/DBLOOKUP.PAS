@@ -7,14 +7,14 @@
 {                                                       }
 {*******************************************************}
 
-unit DBLookup;
+unit dblookup;
 
 {$R-}
 
 interface
 
 uses Windows, Classes, StdCtrls, DB, Controls, Messages, SysUtils,
-  Forms, Graphics, Menus, Buttons, DBGrids, DBTables, Grids, DBCtrls;
+  Forms, Graphics, Menus, Buttons, DBGrids, DBTables, Grids, Dbctrls;
 
 type
 
@@ -288,7 +288,7 @@ type
 
 implementation
 
-uses DBConsts, BDEConst;
+uses DBConsts, bdeconst;
 
 { TDBLookupCombo }
 

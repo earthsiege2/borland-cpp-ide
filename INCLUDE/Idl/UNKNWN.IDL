@@ -1,7 +1,7 @@
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  File: unknwn.idl
 //
@@ -13,7 +13,7 @@
 cpp_quote("//+-------------------------------------------------------------------------")
 cpp_quote("//")
 cpp_quote("//  Microsoft Windows")
-cpp_quote("//  Copyright (C) Microsoft Corporation, 1992-1999.")
+cpp_quote("//  Copyright (c) Microsoft Corporation. All rights reserved.")
 cpp_quote("//")
 cpp_quote("//--------------------------------------------------------------------------")
 cpp_quote("#if ( _MSC_VER >= 1020 )")
@@ -95,7 +95,7 @@ cpp_quote("        IRpcStubBuffer *This,")
 cpp_quote("        IRpcChannelBuffer *_pRpcChannelBuffer,")
 cpp_quote("        PRPC_MESSAGE _pRpcMessage,")
 cpp_quote("        DWORD *_pdwStubPhase);")
-cpp_quote("#else // VC6 hack")
+cpp_quote("#else")
 
     HRESULT QueryInterface(
         [in] REFIID riid,
@@ -103,7 +103,7 @@ cpp_quote("#else // VC6 hack")
     ULONG AddRef();
     ULONG Release();
 }
-cpp_quote("#endif // VC6 hack")
+cpp_quote("#endif")
 
 [
   local,

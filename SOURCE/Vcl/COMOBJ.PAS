@@ -1,18 +1,20 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1997-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
 {       COM object support                              }
-{                                                       }
-{       Copyright (C) 1997,99 Inprise Corporation       }
-{                                                       }
 {*******************************************************}
 
 unit ComObj;
 
 interface
 
-uses Windows, ActiveX, SysUtils;
+uses Variants, Windows, ActiveX, SysUtils {$IFDEF LINUX}, WinUtils {$ENDIF};
 
 type
 { Forward declarations }
@@ -115,8 +117,10 @@ type
     function ObjAddRef: Integer; virtual; stdcall;
     function ObjQueryInterface(const IID: TGUID; out Obj): HResult; virtual; stdcall;
     function ObjRelease: Integer; virtual; stdcall;
+{$IFDEF MSWINDOWS}
     function SafeCallException(ExceptObject: TObject;
       ExceptAddr: Pointer): HResult; override;
+{$ENDIF}
     property Controller: IUnknown read GetController;
     property Factory: TComObjectFactory read FFactory;
     property RefCount: Integer read FRefCount;
@@ -136,7 +140,7 @@ type
 
 { Threading model supported by COM classes }
 
-  TThreadingModel = (tmSingle, tmApartment, tmFree, tmBoth);
+  TThreadingModel = (tmSingle, tmApartment, tmFree, tmBoth, tmNeutral);
 
 { COM object factory }
 
@@ -196,29 +200,7 @@ type
   end;
   {$EXTERNALSYM TComObjectFactory}
 
-{ COM objects intended to be aggregated / contained }
-
-  TAggregatedObject = class
-  private
-    FController: Pointer;
-    function GetController: IUnknown;
-  protected
-    { IUnknown }
-    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
-    function _AddRef: Integer; stdcall;
-    function _Release: Integer; stdcall;
-  public
-    constructor Create(Controller: IUnknown);
-    property Controller: IUnknown read GetController;
-  end;
-
-  TContainedObject = class(TAggregatedObject, IUnknown)
-  protected
-    { IUnknown }
-    function QueryInterface(const IID: TGUID; out Obj): HResult; virtual; stdcall;
-  end;
-
-{ COM object with type information }
+  { NOTE: TAggregatedObject and TContainedObject have been moved to system. }
 
   TTypedComObject = class(TComObject, IProvideClassInfo)
   protected
@@ -314,8 +296,10 @@ type
     function InterfaceSupportsErrorInfo(const iid: TIID): HResult; stdcall;
   public
     constructor Create(const TypeLib: ITypeLib; const DispIntf: TGUID);
+{$IFDEF MSWINDOWS}
     function SafeCallException(ExceptObject: TObject;
       ExceptAddr: Pointer): HResult; override;
+{$ENDIF}
     property DispIntfEntry: PInterfaceEntry read FDispIntfEntry;
     property DispTypeInfo: ITypeInfo read FDispTypeInfo;
     property DispIID: TGUID read FDispIID;
@@ -347,24 +331,6 @@ type
 
   EOleRegistrationError = class(EOleError);
 
-type
-  { Dispatch call descriptor }
-
-  PCallDesc = ^TCallDesc;
-  TCallDesc = packed record
-    CallType: Byte;
-    ArgCount: Byte;
-    NamedArgCount: Byte;
-    ArgTypes: array[0..255] of Byte;
-  end;
-
-  PDispDesc = ^TDispDesc;
-  TDispDesc = packed record
-    DispID: Integer;
-    ResType: Byte;
-    CallDesc: TCallDesc;
-  end;
-
 procedure DispatchInvoke(const Dispatch: IDispatch; CallDesc: PCallDesc;
   DispIDs: PDispIDList; Params: Pointer; Result: PVariant);
 procedure DispatchInvokeError(Status: Integer; const ExcepInfo: TExcepInfo);
@@ -387,9 +353,9 @@ function GUIDToString(const ClassID: TGUID): string;
 function ProgIDToClassID(const ProgID: string): TGUID;
 function ClassIDToProgID(const ClassID: TGUID): string;
 
-procedure CreateRegKey(const Key, ValueName, Value: string);
-procedure DeleteRegKey(const Key: string);
-function GetRegStringValue(const Key, ValueName: string): string;
+procedure CreateRegKey(const Key, ValueName, Value: string; RootKey: DWord = HKEY_CLASSES_ROOT);
+procedure DeleteRegKey(const Key: string; RootKey: DWord = HKEY_CLASSES_ROOT);
+function GetRegStringValue(const Key, ValueName: string; RootKey: DWord = HKEY_CLASSES_ROOT): string;
 
 function StringToLPOLESTR(const Source: string): POleStr;
 
@@ -402,6 +368,13 @@ procedure InterfaceConnect(const Source: IUnknown; const IID: TIID;
   const Sink: IUnknown; var Connection: Longint);
 procedure InterfaceDisconnect(const Source: IUnknown; const IID: TIID;
   var Connection: Longint);
+
+function GetDispatchPropValue(Disp: IDispatch; DispID: Integer): OleVariant; overload;
+function GetDispatchPropValue(Disp: IDispatch; Name: WideString): OleVariant; overload;
+procedure SetDispatchPropValue(Disp: IDispatch; DispID: Integer;
+  const Value: OleVariant); overload;
+procedure SetDispatchPropValue(Disp: IDispatch; Name: WideString;
+  const Value: OleVariant); overload;
 
 type
   TCoCreateInstanceExProc = function (const clsid: TCLSID;
@@ -693,6 +666,7 @@ procedure TComObject.Initialize;
 begin
 end;
 
+{$IFDEF MSWINDOWS}
 function TComObject.SafeCallException(ExceptObject: TObject;
   ExceptAddr: Pointer): HResult;
 var
@@ -714,6 +688,7 @@ begin
     Result := HandleSafeCallException(ExceptObject, ExceptAddr,
       FFactory.ErrorIID, FFactory.ProgID, FFactory.ComServer.HelpFileName);
 end;
+{$ENDIF}
 
 { TComObject.IUnknown }
 
@@ -824,7 +799,7 @@ end;
 procedure TComObjectFactory.UpdateRegistry(Register: Boolean);
 const
   ThreadStrs: array[TThreadingModel] of string =
-    ('', 'Apartment', 'Free', 'Both');
+    ('', 'Apartment', 'Free', 'Both', 'Neutral');
 var
   ClassID, ProgID, ServerKeyName, ShortFileName: string;
 begin
@@ -983,42 +958,6 @@ begin
   if ComObject.RefCount = 0 then ComObject.Free;
 end;
 
-{ TAggregatedObject }
-
-constructor TAggregatedObject.Create(Controller: IUnknown);
-begin
-  FController := Pointer(Controller);
-end;
-
-function TAggregatedObject.GetController: IUnknown;
-begin
-  Result := IUnknown(FController);
-end;
-
-{ TAggregatedObject.IUnknown }
-
-function TAggregatedObject.QueryInterface(const IID: TGUID; out Obj): HResult;
-begin
-  Result := IUnknown(FController).QueryInterface(IID, Obj);
-end;
-
-function TAggregatedObject._AddRef: Integer;
-begin
-  Result := IUnknown(FController)._AddRef;
-end;
-
-function TAggregatedObject._Release: Integer; stdcall;
-begin
-  Result := IUnknown(FController)._Release;
-end;
-
-{ TContainedObject.IUnknown }
-
-function TContainedObject.QueryInterface(const IID: TGUID; out Obj): HResult;
-begin
-  if GetInterface(IID, Obj) then Result := S_OK else Result := E_NOINTERFACE;
-end;
-
 { TTypedComObject.IProvideClassInfo }
 
 function TTypedComObject.GetClassInfo(out TypeInfo: ITypeInfo): HResult;
@@ -1127,8 +1066,13 @@ end;
 function TAutoObject.GetIDsOfNames(const IID: TGUID; Names: Pointer;
   NameCount, LocaleID: Integer; DispIDs: Pointer): HResult;
 begin
+{$IFDEF MSWINDOWS}
   Result := DispGetIDsOfNames(FAutoFactory.DispTypeInfo,
     Names, NameCount, DispIDs);
+{$ENDIF}
+{$IFDEF LINUX}
+  Result := E_NOTIMPL;
+{$ENDIF}
 end;
 
 function TAutoObject.GetTypeInfo(Index, LocaleID: Integer;
@@ -1208,7 +1152,12 @@ end;
 function TAutoIntfObject.GetIDsOfNames(const IID: TGUID; Names: Pointer;
   NameCount, LocaleID: Integer; DispIDs: Pointer): HResult;
 begin
+{$IFDEF MSWINDOWS}
   Result := DispGetIDsOfNames(FDispTypeInfo, Names, NameCount, DispIDs);
+{$ENDIF}
+{$IFDEF LINUX}
+  Result := E_NOTIMPL;
+{$ENDIF}
 end;
 
 function TAutoIntfObject.GetTypeInfo(Index, LocaleID: Integer;
@@ -1249,11 +1198,13 @@ begin
     Result := S_FALSE;
 end;
 
+{$IFDEF MSWINDOWS}
 function TAutoIntfObject.SafeCallException(ExceptObject: TObject;
   ExceptAddr: Pointer): HResult;
 begin
   Result := HandleSafeCallException(ExceptObject, ExceptAddr, DispIID, '', '');
 end;
+{$ENDIF}
 
 const
 { Maximum number of dispatch arguments }
@@ -1363,12 +1314,12 @@ end;
 
 { Create registry key }
 
-procedure CreateRegKey(const Key, ValueName, Value: string);
+procedure CreateRegKey(const Key, ValueName, Value: string; RootKey: DWord = HKEY_CLASSES_ROOT);
 var
   Handle: HKey;
   Status, Disposition: Integer;
 begin
-  Status := RegCreateKeyEx(HKEY_CLASSES_ROOT, PChar(Key), 0, '',
+  Status := RegCreateKeyEx(RootKey, PChar(Key), 0, '',
     REG_OPTION_NON_VOLATILE, KEY_READ or KEY_WRITE, nil, Handle,
     @Disposition);
   if Status = 0 then
@@ -1382,20 +1333,20 @@ end;
 
 { Delete registry key }
 
-procedure DeleteRegKey(const Key: string);
+procedure DeleteRegKey(const Key: string; RootKey: DWord = HKEY_CLASSES_ROOT);
 begin
-  RegDeleteKey(HKEY_CLASSES_ROOT, PChar(Key));
+  RegDeleteKey(RootKey, PChar(Key));
 end;
 
 { Get registry value }
 
-function GetRegStringValue(const Key, ValueName: string): string;
+function GetRegStringValue(const Key, ValueName: string; RootKey: DWord = HKEY_CLASSES_ROOT): string;
 var
   Size: DWord;
   RegKey: HKEY;
 begin
   Result := '';
-  if RegOpenKey(HKEY_CLASSES_ROOT, PChar(Key), RegKey) = ERROR_SUCCESS then
+  if RegOpenKey(RootKey, PChar(Key), RegKey) = ERROR_SUCCESS then
   try
     Size := 256;
     SetLength(Result, Size);
@@ -1504,7 +1455,7 @@ begin
     raise Exception.CreateFmt('%s: %s', [SysErrorMessage(GetLastError), DLLName]);
   try
     RegProc := GetProcAddress(Handle, RegProcName);
-    if Assigned(RegProc) then OleCheck(RegProc) else RaiseLastWin32Error;
+    if Assigned(RegProc) then OleCheck(RegProc) else RaiseLastOSError;
   finally
     FreeLibrary(Handle);
   end;
@@ -1548,18 +1499,19 @@ procedure LoadComExProcs;
 var
   Ole32: HModule;
 begin
-  Ole32 := GetModuleHandle('ole32.dll');
+  Ole32 := Windows.GetModuleHandle('ole32.dll');
   if Ole32 <> 0 then
   begin
-    @CoCreateInstanceEx := GetProcAddress(Ole32, 'CoCreateInstanceEx');
-    @CoInitializeEx := GetProcAddress(Ole32, 'CoInitializeEx');
-    @CoAddRefServerProcess := GetProcAddress(Ole32, 'CoAddRefServerProcess');
-    @CoReleaseServerProcess := GetProcAddress(Ole32, 'CoReleaseServerProcess');
-    @CoResumeClassObjects := GetProcAddress(Ole32, 'CoResumeClassObjects');
-    @CoSuspendClassObjects := GetProcAddress(Ole32, 'CoSuspendClassObjects');
+    @CoCreateInstanceEx := Windows.GetProcAddress(Ole32, 'CoCreateInstanceEx');
+    @CoInitializeEx := Windows.GetProcAddress(Ole32, 'CoInitializeEx');
+    @CoAddRefServerProcess := Windows.GetProcAddress(Ole32, 'CoAddRefServerProcess');
+    @CoReleaseServerProcess := Windows.GetProcAddress(Ole32, 'CoReleaseServerProcess');
+    @CoResumeClassObjects := Windows.GetProcAddress(Ole32, 'CoResumeClassObjects');
+    @CoSuspendClassObjects := Windows.GetProcAddress(Ole32, 'CoSuspendClassObjects');
   end;
 end;
 
+{$IFDEF MSWINDOWS}
 procedure SafeCallError(ErrorCode: Integer; ErrorAddr: Pointer);
 var
   ErrorInfo: IErrorInfo;
@@ -1577,6 +1529,7 @@ begin
   raise EOleException.Create(Description, ErrorCode, Source,
     HelpFile, HelpContext) at ErrorAddr;
 end;
+{$ENDIF}
 
 { Call Invoke method on the given IDispatch interface using the given
   call descriptor, dispatch IDs, parameters, and result }
@@ -1603,6 +1556,7 @@ begin
   StrCount := 0;
   try
     ArgCount := CallDesc^.ArgCount;
+    if ArgCount > MaxDispArgs then raise EOleException.CreateRes(@STooManyParams);
     if ArgCount <> 0 then
     begin
       ParamPtr := Params;
@@ -1616,7 +1570,8 @@ begin
         begin
           ArgPtr^[0] := varError;
           ArgPtr^[2] := DWORD(DISP_E_PARAMNOTFOUND);
-        end else
+        end
+        else
         begin
           if ArgType = varStrArg then
           begin
@@ -1627,7 +1582,8 @@ begin
                 PStr := PString(ParamPtr^);
                 ArgPtr^[0] := varOleStr or varByRef;
                 ArgPtr^[2] := Integer(@BStr);
-              end else
+              end
+              else
               begin
                 BStr := StringToOleStr(PString(ParamPtr)^);
                 PStr := nil;
@@ -1635,28 +1591,32 @@ begin
                 ArgPtr^[2] := Integer(BStr);
               end;
             Inc(StrCount);
-          end else
-          if VarFlag <> 0 then
+          end
+
+          else if VarFlag <> 0 then
           begin
             if (ArgType = varVariant) and
-              (PVarData(ParamPtr^)^.VType = varString) then
+               (PVarData(ParamPtr^)^.VType = varString) then
               VarCast(PVariant(ParamPtr^)^, PVariant(ParamPtr^)^, varOleStr);
+
             ArgPtr^[0] := ArgType or varByRef;
             ArgPtr^[2] := ParamPtr^;
-          end else
-          if ArgType = varVariant then
+          end
+
+          else if ArgType = varVariant then
           begin
             if PVarData(ParamPtr)^.VType = varString then
             begin
               with Strings[StrCount] do
               begin
-                BStr := StringToOleStr(string(PVarData(ParamPtr^)^.VString));
+                BStr := StringToOleStr(string(PVarData(ParamPtr)^.VString));
                 PStr := nil;
                 ArgPtr^[0] := varOleStr;
                 ArgPtr^[2] := Integer(BStr);
               end;
               Inc(StrCount);
-            end else
+            end
+            else
             begin
               VarPtr := PVarArg(ParamPtr);
               ArgPtr^[0] := VarPtr^[0];
@@ -1665,7 +1625,9 @@ begin
               ArgPtr^[3] := VarPtr^[3];
               Inc(Integer(ParamPtr), 12);
             end;
-          end else
+          end
+
+          else
           begin
             ArgPtr^[0] := ArgType;
             ArgPtr^[2] := ParamPtr^;
@@ -1788,6 +1750,7 @@ var
   Dispatch: Pointer;
   DispIDs: array[0..MaxDispArgs - 1] of Integer;
 begin
+  if (CallDesc^.ArgCount) > MaxDispArgs then raise EOleError.CreateRes(@STooManyParams);
   if TVarData(Instance).VType = varDispatch then
     Dispatch := TVarData(Instance).VDispatch
   else if TVarData(Instance).VType = (varDispatch or varByRef) then
@@ -1796,7 +1759,7 @@ begin
   GetIDsOfNames(IDispatch(Dispatch), @CallDesc^.ArgTypes[CallDesc^.ArgCount],
     CallDesc^.NamedArgCount + 1, @DispIDs);
   if Result <> nil then VarClear(Result^);
-  DispatchInvoke(IDispatch(Dispatch), CallDesc, @DispIDs, @Params, Result);
+  DispatchInvoke(IDispatch(Dispatch), CallDesc, @DispIDs, Params, Result);
 end;
 
 { Raise exception given an OLE return code and TExcepInfo structure }
@@ -2053,6 +2016,57 @@ asm
         POP     EBX
 end;
 
+const
+  DispIDArgs: Longint = DISPID_PROPERTYPUT;
+
+function GetDispatchPropValue(Disp: IDispatch; DispID: Integer): OleVariant;
+var
+  ExcepInfo: TExcepInfo;
+  DispParams: TDispParams;
+  Status: HResult;
+begin
+  FillChar(DispParams, SizeOf(DispParams), 0);
+  Status := Disp.Invoke(DispID, GUID_NULL, 0, DISPATCH_PROPERTYGET, DispParams,
+    @Result, @ExcepInfo, nil);
+  if Status <> S_OK then DispatchInvokeError(Status, ExcepInfo);
+end;
+
+function GetDispatchPropValue(Disp: IDispatch; Name: WideString): OleVariant;
+var
+  ID: Integer;
+begin
+  OleCheck(Disp.GetIDsOfNames(GUID_NULL, @Name, 1, 0, @ID));
+  Result := GetDispatchPropValue(Disp, ID);
+end;
+
+procedure SetDispatchPropValue(Disp: IDispatch; DispID: Integer;
+  const Value: OleVariant);
+var
+  ExcepInfo: TExcepInfo;
+  DispParams: TDispParams;
+  Status: HResult;
+begin
+  with DispParams do
+  begin
+    rgvarg := @Value;
+    rgdispidNamedArgs := @DispIDArgs;
+    cArgs := 1;
+    cNamedArgs := 1;
+  end;
+  Status := Disp.Invoke(DispId, GUID_NULL, 0, DISPATCH_PROPERTYPUT, DispParams,
+    nil, @ExcepInfo, nil);
+  if Status <> S_OK then DispatchInvokeError(Status, ExcepInfo);
+end;
+
+procedure SetDispatchPropValue(Disp: IDispatch; Name: WideString;
+  const Value: OleVariant); overload;
+var
+  ID: Integer;
+begin
+  OleCheck(Disp.GetIDsOfNames(GUID_NULL, @Name, 1, 0, @ID));
+  SetDispatchPropValue(Disp, ID, Value);
+end;
+
 var
   ComClassManagerVar: TObject;
   SaveInitProc: Pointer;
@@ -2085,7 +2099,9 @@ begin
   LoadComExProcs;
   VarDispProc := @VarDispInvoke;
   DispCallByIDProc := @DispCallByID;
+{$IFDEF MSWINDOWS}
   SafeCallErrorProc := @SafeCallError;
+{$ENDIF}
   if not IsLibrary then
   begin
     SaveInitProc := InitProc;

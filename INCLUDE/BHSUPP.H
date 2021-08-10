@@ -1,13 +1,12 @@
 
 
 //=============================================================================
-//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1992.
+//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1999.
 //
 //  MODULE: bhsupp.h
 //=============================================================================
 
 #if !defined(_BHSUPP_)
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #define _BHSUPP_
 
@@ -190,5 +189,4 @@ extern BOOL                 WINAPI IsDaytona(VOID);
 
 extern VOID                 dprintf(LPSTR format, ...);
 
-#pragma option pop /*P_O_Pop*/
 #endif

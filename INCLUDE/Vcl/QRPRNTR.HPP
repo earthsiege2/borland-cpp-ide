@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'QRPrntr.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QRPrntr.pas' rev: 6.00
 
 #ifndef QRPrntrHPP
 #define QRPrntrHPP
@@ -11,9 +11,9 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <Dialogs.hpp>	// Pascal unit
-#include <qr3const.hpp>	// Pascal unit
+#include <QR3Const.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
 #include <Printers.hpp>	// Pascal unit
@@ -36,19 +36,15 @@ namespace Qrprntr
 {
 //-- type declarations -------------------------------------------------------
 #pragma option push -b-
-enum TQRPaperSize { Default, Letter, LetterSmall, Tabloid, Ledger, Legal, Statement, Executive, A3, 
-	A4, A4Small, A5, B4, B5, Folio, Quarto, qr10X14, qr11X17, Note, Env9, Env10, Env11, Env12, Env14, CSheet, 
-	DSheet, ESheet, Custom };
+enum TQRPaperSize { Default, Letter, LetterSmall, Tabloid, Ledger, Legal, Statement, Executive, A3, A4, A4Small, A5, B4, B5, Folio, Quarto, qr10X14, qr11X17, Note, Env9, Env10, Env11, Env12, Env14, CSheet, DSheet, ESheet, Custom };
 #pragma option pop
 
 #pragma option push -b-
-enum TQRBin { First, Upper, Lower, Middle, Manual, Envelope, EnvManual, Auto, Tractor, SmallFormat, 
-	LargeFormat, LargeCapacity, Cassette, Last };
+enum TQRBin { First, Upper, Lower, Middle, Manual, Envelope, EnvManual, Auto, Tractor, SmallFormat, LargeFormat, LargeCapacity, Cassette, Last };
 #pragma option pop
 
 #pragma option push -b-
-enum TQRBandType { rbTitle, rbPageHeader, rbDetail, rbPageFooter, rbSummary, rbGroupHeader, rbGroupFooter, 
-	rbSubDetail, rbColumnHeader, rbOverlay, rbChild };
+enum TQRBandType { rbTitle, rbPageHeader, rbDetail, rbPageFooter, rbSummary, rbGroupHeader, rbGroupFooter, rbSubDetail, rbColumnHeader, rbOverlay, rbChild };
 #pragma option pop
 
 class DELPHICLASS EQRError;
@@ -59,37 +55,27 @@ class PASCALIMPLEMENTATION EQRError : public Sysutils::Exception
 public:
 	#pragma option push -w-inl
 	/* Exception.Create */ inline __fastcall EQRError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
-		
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EQRError(const AnsiString Msg, const System::TVarRec * 
-		Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EQRError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EQRError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EQRError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EQRError(int Ident, const System::TVarRec * Args, const 
-		int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EQRError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EQRError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(
-		Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EQRError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EQRError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EQRError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EQRError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EQRError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EQRError(System::PResStringRec ResStringRec, const 
-		System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EQRError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -193,8 +179,7 @@ public:
 	__property int TopOffset = {read=GetTopOffset, nodefault};
 	__property int Copies = {read=GetCopies, write=SetCopies, nodefault};
 	__property bool Duplex = {read=GetDuplex, write=SetDuplex, nodefault};
-	__property Printers::TPrinterOrientation Orientation = {read=GetOrientation, write=SetOrientation, 
-		nodefault};
+	__property Printers::TPrinterOrientation Orientation = {read=GetOrientation, write=SetOrientation, nodefault};
 	__property TQRBin OutputBin = {read=GetOutputBin, write=SetOutputBin, nodefault};
 	__property int PaperLength = {read=GetPaperLength, write=SetPaperLength, nodefault};
 	__property TQRPaperSize PaperSize = {read=GetPaperSize, write=SetPaperSize, nodefault};
@@ -222,12 +207,18 @@ public:
 	__fastcall TQRStream(AnsiString Filename);
 	__fastcall virtual ~TQRStream(void);
 	virtual int __fastcall Write(const void *Buffer, int Count);
-	virtual int __fastcall Seek(int Offset, Word Origin);
+	virtual int __fastcall Seek(int Offset, Word Origin)/* overload */;
 	virtual int __fastcall Read(void *Buffer, int Count);
 	void __fastcall LockStream(void);
 	void __fastcall UnlockStream(void);
 	void __fastcall SaveToStream(Classes::TStream* AStream);
 	__property bool InMemory = {read=FInMemory, nodefault};
+	
+/* Hoisted overloads: */
+	
+public:
+	inline __int64 __fastcall  Seek(const __int64 Offset, Classes::TSeekOrigin Origin){ return TStream::Seek(Offset, Origin); }
+	
 };
 
 
@@ -405,7 +396,6 @@ public:
 	void __fastcall Save(AnsiString Filename);
 	__property bool ReportLoaded = {read=FReportLoaded, write=FReportLoaded, nodefault};
 	__property TQRAfterPreviewEvent AfterPreview = {read=FAfterPreviewEvent, write=FAfterPreviewEvent};
-		
 	__property TQRAfterPrintEvent AfterPrint = {read=FAfterPrintEvent, write=FAfterPrintEvent};
 	__property int AvailablePages = {read=FAvailablePages, write=SetAvailablePages, nodefault};
 	__property TQRBin OutputBin = {read=GetBin, write=SetBin, nodefault};
@@ -414,17 +404,14 @@ public:
 	__property Controls::TWinControl* Client = {read=FClient, write=FClient};
 	__property bool Compression = {read=GetCompression, write=SetCompression, nodefault};
 	__property int Copies = {read=GetCopies, write=SetCopies, nodefault};
-	__property TQRPrinterDestination Destination = {read=FDestination, write=SetDestination, nodefault}
-		;
+	__property TQRPrinterDestination Destination = {read=FDestination, write=SetDestination, nodefault};
 	__property bool Duplex = {read=GetDuplex, write=SetDuplex, nodefault};
 	__property int FirstPage = {read=FFirstPage, write=FFirstPage, nodefault};
 	__property int LastPage = {read=FLastpage, write=FLastpage, nodefault};
 	__property int LeftWaste = {read=GetLeftWaste, nodefault};
 	__property Controls::TWinControl* Master = {read=FMaster, write=FMaster};
-	__property Printers::TPrinterOrientation Orientation = {read=GetOrientation, write=SetOrientation, 
-		nodefault};
-	__property TQRExportToFilterEvent OnExportToFilter = {read=FOnExportToFilterEvent, write=FOnExportToFilterEvent
-		};
+	__property Printers::TPrinterOrientation Orientation = {read=GetOrientation, write=SetOrientation, nodefault};
+	__property TQRExportToFilterEvent OnExportToFilter = {read=FOnExportToFilterEvent, write=FOnExportToFilterEvent};
 	__property Classes::TNotifyEvent OnPreview = {read=FOnPreviewEvent, write=FOnPreviewEvent};
 	__property TQRPrintSetupEvent OnPrintSetup = {read=FOnPrintSetupEvent, write=FOnPrintSetupEvent};
 	__property int PaperLength = {read=GetPaperLength, write=SetPaperLength, nodefault};
@@ -446,26 +433,32 @@ public:
 };
 
 
+#pragma pack(push, 4)
 struct TCM_QRPRogressUpdate
 {
 	unsigned Msg;
 	Word Position;
 	TQRPrinter* QRPrinter;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TCM_QRPageAvailable
 {
 	unsigned Msg;
 	Word PageCount;
 	TQRPrinter* QRPrinter;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TCM_QRPreviewClose
 {
 	unsigned Msg;
 	Word Dummy;
 	TQRPrinter* QRPrinter;
 } ;
+#pragma pack(pop)
 
 typedef Messages::TMessage  TCM_QRPrint;
 
@@ -527,8 +520,7 @@ public:
 	virtual Controls::TWinControl* __fastcall ShowModal(TQRPrinter* AQRPrinter);
 public:
 	#pragma option push -w-inl
-	/* TComponent.Create */ inline __fastcall virtual TQRPreviewInterface(Classes::TComponent* AOwner) : 
-		Classes::TComponent(AOwner) { }
+	/* TComponent.Create */ inline __fastcall virtual TQRPreviewInterface(Classes::TComponent* AOwner) : Classes::TComponent(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TComponent.Destroy */ inline __fastcall virtual ~TQRPreviewInterface(void) { }
@@ -549,8 +541,7 @@ public:
 	virtual Controls::TWinControl* __fastcall ShowModal(TQRPrinter* AQRPrinter);
 public:
 	#pragma option push -w-inl
-	/* TComponent.Create */ inline __fastcall virtual TQRStandardPreviewInterface(Classes::TComponent* 
-		AOwner) : TQRPreviewInterface(AOwner) { }
+	/* TComponent.Create */ inline __fastcall virtual TQRStandardPreviewInterface(Classes::TComponent* AOwner) : TQRPreviewInterface(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TComponent.Destroy */ inline __fastcall virtual ~TQRStandardPreviewInterface(void) { }
@@ -625,16 +616,13 @@ public:
 	__property TQRZoomState ZoomState = {read=FZoomState, write=FZoomState, nodefault};
 	
 __published:
-	__property TQRPageAvailableEvent OnPageAvailable = {read=FOnPageAvailableEvent, write=FOnPageAvailableEvent
-		};
-	__property TQRProgressUpdateEvent OnProgressUpdate = {read=FOnProgressUpdateEvent, write=FOnProgressUpdateEvent
-		};
+	__property TQRPageAvailableEvent OnPageAvailable = {read=FOnPageAvailableEvent, write=FOnPageAvailableEvent};
+	__property TQRProgressUpdateEvent OnProgressUpdate = {read=FOnProgressUpdateEvent, write=FOnProgressUpdateEvent};
 	__property int PageNumber = {read=FPageNumber, write=SetPageNumber, nodefault};
 	__property int Zoom = {read=FZoom, write=SetZoom, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRPreview(HWND ParentWindow) : Forms::TScrollBox(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRPreview(HWND ParentWindow) : Forms::TScrollBox(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -663,8 +651,7 @@ public:
 	virtual void __fastcall EndPage(void);
 	virtual void __fastcall Finish(void);
 	virtual void __fastcall NewPage(void);
-	virtual void __fastcall TextOut(Extended X, Extended Y, Graphics::TFont* Font, Graphics::TColor BGColor
-		, Classes::TAlignment Alignment, AnsiString Text);
+	virtual void __fastcall TextOut(Extended X, Extended Y, Graphics::TFont* Font, Graphics::TColor BGColor, Classes::TAlignment Alignment, AnsiString Text);
 	__property bool Active = {read=FActive, write=FActive, nodefault};
 	__property AnsiString Description = {read=GetDescription};
 	__property AnsiString FileExtension = {read=GetExtension};
@@ -675,7 +662,6 @@ public:
 	__property AnsiString Vendor = {read=GetVendorName};
 	__property TQRPrinter* OriginalQRPrinter = {read=FOriginalQRPrinter, write=FOriginalQRPrinter};
 public:
-		
 	#pragma option push -w-inl
 	/* TObject.Destroy */ inline __fastcall virtual ~TQRExportFilter(void) { }
 	#pragma option pop
@@ -706,8 +692,7 @@ public:
 	__property bool Duplex = {read=FDuplex, write=FDuplex, nodefault};
 	__property int FirstPage = {read=FFirstPage, write=FFirstPage, nodefault};
 	__property int LastPage = {read=FLastPage, write=FLastPage, nodefault};
-	__property Printers::TPrinterOrientation Orientation = {read=FOrientation, write=FOrientation, nodefault
-		};
+	__property Printers::TPrinterOrientation Orientation = {read=FOrientation, write=FOrientation, nodefault};
 	__property TQRBin OutputBin = {read=FOutputBin, write=FOutputBin, nodefault};
 	__property TQRPaperSize PaperSize = {read=FPaperSize, write=FPaperSize, nodefault};
 	__property int PrinterIndex = {read=FPrinterIndex, write=FPrinterIndex, nodefault};
@@ -725,8 +710,8 @@ typedef void __fastcall (__closure *TQRGenerateToPrinterEvent)(void);
 typedef void __fastcall (__closure *TQRPreviewEvent)(void);
 
 //-- var, const, procedure ---------------------------------------------------
-#define cQRName "QuickReport 3.0.5"
-static const Word cQRVersion = 0x131;
+#define cQRName "QuickReport 3.0.9"
+static const Word cQRVersion = 0x135;
 #define cQRPDefaultExt "QRP"
 #define cQRDefaultExt "QR"
 extern PACKAGE Extended cQRPaperSizeMetrics[26][2];
@@ -748,7 +733,6 @@ static const Word CM_QRPRINT = 0x402;
 static const Word CM_QRPRINTSETUP = 0x403;
 static const Word CM_QRPREVIEWCLOSE = 0x404;
 extern PACKAGE TQRExportFilterLibrary* QRExportFilterLibrary;
-extern PACKAGE int __fastcall AnsiPos(AnsiString Substr, AnsiString S);
 extern PACKAGE AnsiString __fastcall QRPaperName(TQRPaperSize Size);
 extern PACKAGE AnsiString __fastcall TempFilename();
 extern PACKAGE Classes::TStrings* __fastcall GetFonts(void);
@@ -756,9 +740,7 @@ extern PACKAGE TQRPrinter* __fastcall QRPrinter(void);
 extern PACKAGE void __fastcall RegisterPreviewClass(TMetaClass* APreviewInterface);
 
 }	/* namespace Qrprntr */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qrprntr;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

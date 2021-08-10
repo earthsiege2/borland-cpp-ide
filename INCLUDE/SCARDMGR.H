@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*++
 
 Copyright (C) Microsoft Corporation, 1999 - 1999
@@ -31,4 +30,3 @@ Notes:
 #pragma message("scardmgr.h is obsolete.  Use scardssp.h")
 #endif
 
-#pragma option pop /*P_O_Pop*/

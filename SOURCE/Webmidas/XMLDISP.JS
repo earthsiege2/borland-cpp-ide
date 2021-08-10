@@ -437,7 +437,9 @@ if(this.rows==1)
  }
  return "";
 }
-return ref[row].value;
+if(ref[row].type=="select-one") 
+{return ref[row].options[ref[row].selectedIndex].value}
+else return ref[row].value;
 }
 
 function GridDelete()

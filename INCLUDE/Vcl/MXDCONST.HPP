@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxdconst.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MXDCONST.pas' rev: 6.00
 
-#ifndef mxdconstHPP
-#define mxdconstHPP
+#ifndef MXDCONSTHPP
+#define MXDCONSTHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -43,12 +43,10 @@ extern PACKAGE System::ResourceString _sCubeProperties;
 #define Mxdconst_sCubeProperties System::LoadResourceString(&Mxdconst::_sCubeProperties)
 
 }	/* namespace Mxdconst */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxdconst;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxdconst
+#endif	// MXDCONST

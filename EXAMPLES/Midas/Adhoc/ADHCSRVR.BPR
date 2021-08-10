@@ -2,7 +2,7 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="adhcsrvr.exe"/>
     <OBJFILES value="adhcsrvr.obj adhcmain.obj adhcsrvr_TLB.obj AdHcDMImpl.obj adhcsrvr_ATL.obj"/>
     <RESFILES value="adhcsrvr.res adhcsrvr.tlb"/>
@@ -11,16 +11,16 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) adhcmain.dfm AdHcDMImpl.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="vclnp50.lib"/>
-    <SPARELIBS value="Vcl50.lib VCLBDE50.lib vcldb50.lib Vclmid50.lib"/>
-    <PACKAGES value="Vcl50.bpi Vclx50.bpi Vcldb50.bpi VCLBDE50.bpi vcldbx50.bpi Vclmid50.bpi"/>
+    <LIBRARIES value="vclnp.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib bdertl.lib dbrtl.lib vcldb.lib dsnap.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi dbrtl.bpi vcldb.bpi bdertl.bpi vcldbx.bpi dsnap.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
-    <LINKER value="tlink32"/>
+    <LINKER value="ilink32"/>
     <USERDEFINES value=""/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT;_ATL_APARTMENT_THREADED;USING_ATLVCL;_ATL_NO_SECURITY;USEPACKAGES"/>
     <MAINSOURCE value="adhcsrvr.cpp"/>
@@ -29,19 +29,29 @@
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\include -I$(BCB)\include\vcl -I$(BCB)\include\atl"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
-      -tW -tWM"/>
+    <IDLCFLAGS value="-src_suffix cpp -I$(BCB)\include -I$(BCB)\include\vcl -I$(BCB)\include\atl"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -Gn -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="adhcsrvr.cpp" FORMNAME="" UNITNAME="adhcsrvr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="adhcsrvr.res" FORMNAME="" UNITNAME="adhcsrvr" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="adhcmain.cpp" FORMNAME="FormMain" UNITNAME="adhcmain" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="adhcsrvr.tlb" FORMNAME="" UNITNAME="adhcsrvr" CONTAINERID="TypeLibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="adhcsrvr_TLB.cpp" FORMNAME="" UNITNAME="adhcsrvr_TLB" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="AdHcDMImpl.cpp" FORMNAME="AdHcDM" UNITNAME="AdHcDMImpl" COCLASSES="AdHcDM" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="adhcsrvr_ATL.cpp" FORMNAME="" UNITNAME="adhcsrvr_ATL" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -93,9 +103,14 @@ DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]

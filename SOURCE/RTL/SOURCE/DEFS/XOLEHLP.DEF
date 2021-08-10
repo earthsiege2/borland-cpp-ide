@@ -1,7 +1,7 @@
-LIBRARY XOLEHLP
+LIBRARY xoleHlp
 EXPORTS
 
-    _DtcGetTransactionManagerC               = 'XOLEHLP.DLL'.* @7 @6
-    _DtcGetTransactionManagerEx              = 'XOLEHLP.DLL'.DtcGetTransactionManagerEx
-    _DtcGetTransactionManagerExA             = 'XOLEHLP.DLL'.DtcGetTransactionManagerExA
-    _DtcGetTransactionManagerExW             = 'XOLEHLP.DLL'.DtcGetTransactionManagerExW
+    _DtcGetTransactionManagerC        = DtcGetTransactionManagerC        @7
+    _DtcGetTransactionManagerEx        = DtcGetTransactionManagerEx
+    _DtcGetTransactionManagerExA        = DtcGetTransactionManagerExA
+    _DtcGetTransactionManagerExW        = DtcGetTransactionManagerExW

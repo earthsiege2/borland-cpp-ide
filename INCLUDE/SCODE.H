@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*++
 
 Copyright (c) 1992-1999 Microsoft Corporation
@@ -21,4 +20,3 @@ Abstract:
 #include <winerror.h>
 #endif
 
-#pragma option pop /*P_O_Pop*/

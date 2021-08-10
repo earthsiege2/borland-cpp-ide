@@ -6,7 +6,7 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
@@ -46,6 +46,9 @@ type
     lCustData: LPARAM;
     lpfnHook: function(Wnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): UINT stdcall;
     lpTemplateName: PAnsiChar;
+    pvReserved: Pointer;
+    dwReserved: DWORD;
+    FlagsEx: DWORD;
   end;
   {$EXTERNALSYM tagOFNW}
   tagOFNW = packed record
@@ -69,6 +72,9 @@ type
     lCustData: LPARAM;
     lpfnHook: function(Wnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): UINT stdcall;
     lpTemplateName: PWideChar;
+    pvReserved: Pointer;
+    dwReserved: DWORD;
+    FlagsEx: DWORD;
   end;
   {$EXTERNALSYM tagOFN}
   tagOFN = tagOFNA;
@@ -82,24 +88,24 @@ type
   {$EXTERNALSYM OPENFILENAME}
   OPENFILENAME = OPENFILENAMEA;
 
+{$EXTERNALSYM GetOpenFileName}
+function GetOpenFileName(var OpenFile: TOpenFilename): Bool; stdcall;
 {$EXTERNALSYM GetOpenFileNameA}
 function GetOpenFileNameA(var OpenFile: TOpenFilenameA): Bool; stdcall;
 {$EXTERNALSYM GetOpenFileNameW}
 function GetOpenFileNameW(var OpenFile: TOpenFilenameW): Bool; stdcall;
-{$EXTERNALSYM GetOpenFileName}
-function GetOpenFileName(var OpenFile: TOpenFilename): Bool; stdcall;
+{$EXTERNALSYM GetSaveFileName}
+function GetSaveFileName(var OpenFile: TOpenFilename): Bool; stdcall;
 {$EXTERNALSYM GetSaveFileNameA}
 function GetSaveFileNameA(var OpenFile: TOpenFilenameA): Bool; stdcall;
 {$EXTERNALSYM GetSaveFileNameW}
 function GetSaveFileNameW(var OpenFile: TOpenFilenameW): Bool; stdcall;
-{$EXTERNALSYM GetSaveFileName}
-function GetSaveFileName(var OpenFile: TOpenFilename): Bool; stdcall;
+{$EXTERNALSYM GetFileTitle}
+function GetFileTitle(FileName: PChar; Title: PChar; TitleSize: Word): Smallint; stdcall;
 {$EXTERNALSYM GetFileTitleA}
 function GetFileTitleA(FileName: PAnsiChar; Title: PAnsiChar; TitleSize: Word): Smallint; stdcall;
 {$EXTERNALSYM GetFileTitleW}
 function GetFileTitleW(FileName: PWideChar; Title: PWideChar; TitleSize: Word): Smallint; stdcall;
-{$EXTERNALSYM GetFileTitle}
-function GetFileTitle(FileName: PChar; Title: PChar; TitleSize: Word): Smallint; stdcall;
 
 const
   {$EXTERNALSYM OFN_READONLY}
@@ -150,7 +156,18 @@ const
   OFN_ENABLEINCLUDENOTIFY = $00400000;
   {$EXTERNALSYM OFN_ENABLESIZING}
   OFN_ENABLESIZING = $00800000;
+  { #if (_WIN32_WINNT >= 0x0500) }
+  {$EXTERNALSYM OFN_DONTADDTORECENT}
+  OFN_DONTADDTORECENT = $02000000;
+  {$EXTERNALSYM OFN_FORCESHOWHIDDEN}
+  OFN_FORCESHOWHIDDEN = $10000000;    // Show All files including System and hidden files
+  { #endif // (_WIN32_WINNT >= 0x0500) }
 
+  { FlagsEx Values }
+  { #if (_WIN32_WINNT >= 0x0500) }
+  {$EXTERNALSYM OFN_EX_NOPLACESBAR}
+  OFN_EX_NOPLACESBAR = $00000001;
+  { #endif // (_WIN32_WINNT >= 0x0500) }
 
 { Return values for the registered message sent to the hook function
   when a sharing violation occurs.  OFN_SHAREFALLTHROUGH allows the
@@ -342,12 +359,12 @@ type
   TChooseColorW = tagCHOOSECOLORW;
   TChooseColor = TChooseColorA;
 
+{$EXTERNALSYM ChooseColor}
+function ChooseColor(var CC: TChooseColor): Bool; stdcall;
 {$EXTERNALSYM ChooseColorA}
 function ChooseColorA(var CC: TChooseColorA): Bool; stdcall;
 {$EXTERNALSYM ChooseColorW}
 function ChooseColorW(var CC: TChooseColorW): Bool; stdcall;
-{$EXTERNALSYM ChooseColor}
-function ChooseColor(var CC: TChooseColor): Bool; stdcall;
 
 const
   {$EXTERNALSYM CC_RGBINIT}
@@ -453,18 +470,18 @@ const
   {$EXTERNALSYM FR_HIDEWHOLEWORD}
   FR_HIDEWHOLEWORD = $00010000;
 
+{$EXTERNALSYM FindText}
+function FindText(var FindReplace: TFindReplace): HWND; stdcall;
 {$EXTERNALSYM FindTextA}
 function FindTextA(var FindReplace: TFindReplaceA): HWND; stdcall;
 {$EXTERNALSYM FindTextW}
 function FindTextW(var FindReplace: TFindReplaceW): HWND; stdcall;
-{$EXTERNALSYM FindText}
-function FindText(var FindReplace: TFindReplace): HWND; stdcall;
+{$EXTERNALSYM ReplaceText}
+function ReplaceText(var FindReplace: TFindReplace): HWND; stdcall;
 {$EXTERNALSYM ReplaceTextA}
 function ReplaceTextA(var FindReplace: TFindReplaceA): HWND; stdcall;
 {$EXTERNALSYM ReplaceTextW}
 function ReplaceTextW(var FindReplace: TFindReplaceW): HWND; stdcall;
-{$EXTERNALSYM ReplaceText}
-function ReplaceText(var FindReplace: TFindReplace): HWND; stdcall;
 
 type
   PChooseFontA = ^TChooseFontA;
@@ -526,12 +543,12 @@ type
   TChooseFontW = tagCHOOSEFONTW;
   TChooseFont = TChooseFontA;
 
+{$EXTERNALSYM ChooseFont}
+function ChooseFont(var ChooseFont: TChooseFont): Bool; stdcall;
 {$EXTERNALSYM ChooseFontA}
 function ChooseFontA(var ChooseFont: TChooseFontA): Bool; stdcall;
 {$EXTERNALSYM ChooseFontW}
 function ChooseFontW(var ChooseFont: TChooseFontW): Bool; stdcall;
-{$EXTERNALSYM ChooseFont}
-function ChooseFont(var ChooseFont: TChooseFont): Bool; stdcall;
 
 const
   {$EXTERNALSYM CF_SCREENFONTS}
@@ -652,8 +669,11 @@ const
   CD_LBSELADD     = 2;
 
 type
+  {$EXTERNALSYM PPrintDlgA}
   PPrintDlgA = ^TPrintDlgA;
+  {$EXTERNALSYM PPrintDlgW}
   PPrintDlgW = ^TPrintDlgW;
+  {$EXTERNALSYM PPrintDlg}
   PPrintDlg = PPrintDlgA;
   {$EXTERNALSYM tagPDA}
   tagPDA = packed record
@@ -701,16 +721,19 @@ type
   end;
   {$EXTERNALSYM tagPD}
   tagPD = tagPDA;
+  {$EXTERNALSYM TPrintDlgA}
   TPrintDlgA = tagPDA;
+  {$EXTERNALSYM TPrintDlgW}
   TPrintDlgW = tagPDW;
+  {$EXTERNALSYM TPrintDlg}
   TPrintDlg = TPrintDlgA;
 
+{$EXTERNALSYM PrintDlg}
+function PrintDlg(var PrintDlg: TPrintDlg): Bool; stdcall;
 {$EXTERNALSYM PrintDlgA}
 function PrintDlgA(var PrintDlg: TPrintDlgA): Bool; stdcall;
 {$EXTERNALSYM PrintDlgW}
 function PrintDlgW(var PrintDlg: TPrintDlgW): Bool; stdcall;
-{$EXTERNALSYM PrintDlg}
-function PrintDlg(var PrintDlg: TPrintDlg): Bool; stdcall;
 
 const
   {$EXTERNALSYM PD_ALLPAGES}
@@ -842,12 +865,12 @@ type
   TPageSetupDlgW = tagPSDW;
   TPageSetupDlg = TPageSetupDlgA;
 
+{$EXTERNALSYM PageSetupDlg}
+function PageSetupDlg(var PgSetupDialog: TPageSetupDlg): BOOL; stdcall;
 {$EXTERNALSYM PageSetupDlgA}
 function PageSetupDlgA(var PgSetupDialog: TPageSetupDlgA): BOOL; stdcall;
 {$EXTERNALSYM PageSetupDlgW}
 function PageSetupDlgW(var PgSetupDialog: TPageSetupDlgW): BOOL; stdcall;
-{$EXTERNALSYM PageSetupDlg}
-function PageSetupDlg(var PgSetupDialog: TPageSetupDlg): BOOL; stdcall;
 
 const
   {$EXTERNALSYM PSD_DEFAULTMINMARGINS}
@@ -977,34 +1000,34 @@ const
 
 implementation
 
+function GetOpenFileName;      external 'comdlg32.dll'  name 'GetOpenFileNameA';
 function GetOpenFileNameA;      external 'comdlg32.dll'  name 'GetOpenFileNameA';
 function GetOpenFileNameW;      external 'comdlg32.dll'  name 'GetOpenFileNameW';
-function GetOpenFileName;      external 'comdlg32.dll'  name 'GetOpenFileNameA';
+function GetSaveFileName;   external 'comdlg32.dll'  name 'GetSaveFileNameA';
 function GetSaveFileNameA;   external 'comdlg32.dll'  name 'GetSaveFileNameA';
 function GetSaveFileNameW;   external 'comdlg32.dll'  name 'GetSaveFileNameW';
-function GetSaveFileName;   external 'comdlg32.dll'  name 'GetSaveFileNameA';
+function GetFileTitle;      external 'comdlg32.dll'  name 'GetFileTitleA';
 function GetFileTitleA;      external 'comdlg32.dll'  name 'GetFileTitleA';
 function GetFileTitleW;      external 'comdlg32.dll'  name 'GetFileTitleW';
-function GetFileTitle;      external 'comdlg32.dll'  name 'GetFileTitleA';
+function ChooseColor;       external 'comdlg32.dll'  name 'ChooseColorA';
 function ChooseColorA;       external 'comdlg32.dll'  name 'ChooseColorA';
 function ChooseColorW;       external 'comdlg32.dll'  name 'ChooseColorW';
-function ChooseColor;       external 'comdlg32.dll'  name 'ChooseColorA';
+function FindText;          external 'comdlg32.dll'  name 'FindTextA';
 function FindTextA;          external 'comdlg32.dll'  name 'FindTextA';
 function FindTextW;          external 'comdlg32.dll'  name 'FindTextW';
-function FindText;          external 'comdlg32.dll'  name 'FindTextA';
+function ReplaceText;       external 'comdlg32.dll'  name 'ReplaceTextA';
 function ReplaceTextA;       external 'comdlg32.dll'  name 'ReplaceTextA';
 function ReplaceTextW;       external 'comdlg32.dll'  name 'ReplaceTextW';
-function ReplaceText;       external 'comdlg32.dll'  name 'ReplaceTextA';
+function ChooseFont;        external 'comdlg32.dll'  name 'ChooseFontA';
 function ChooseFontA;        external 'comdlg32.dll'  name 'ChooseFontA';
 function ChooseFontW;        external 'comdlg32.dll'  name 'ChooseFontW';
-function ChooseFont;        external 'comdlg32.dll'  name 'ChooseFontA';
+function PrintDlg;          external 'comdlg32.dll'  name 'PrintDlgA';
 function PrintDlgA;          external 'comdlg32.dll'  name 'PrintDlgA';
 function PrintDlgW;          external 'comdlg32.dll'  name 'PrintDlgW';
-function PrintDlg;          external 'comdlg32.dll'  name 'PrintDlgA';
 function CommDlgExtendedError; external 'comdlg32.dll'  name 'CommDlgExtendedError';
+function PageSetupDlg;      external 'comdlg32.dll'  name 'PageSetupDlgA';
 function PageSetupDlgA;      external 'comdlg32.dll'  name 'PageSetupDlgA';
 function PageSetupDlgW;      external 'comdlg32.dll'  name 'PageSetupDlgW';
-function PageSetupDlg;      external 'comdlg32.dll'  name 'PageSetupDlgA';
 
 end.
 

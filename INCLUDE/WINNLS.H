@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1991-1998,  Microsoft Corporation  All rights reserved.
+Copyright (c) Microsoft Corporation  All rights reserved.
 
 Module Name:
 
@@ -15,7 +15,6 @@ Abstract:
 
 
 #ifndef _WINNLS_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINNLS_
 
 
@@ -84,6 +83,7 @@ extern "C" {
 #define C1_BLANK                  0x0040      // blank characters
 #define C1_XDIGIT                 0x0080      // other digits
 #define C1_ALPHA                  0x0100      // any linguistic character
+#define C1_DEFINED                0x0200      // defined character
 
 //
 //  CType 2 Flag Bits.
@@ -300,17 +300,20 @@ extern "C" {
 #define CTRY_KAZAKSTAN            7           // Kazakstan
 #define CTRY_KENYA                254         // Kenya
 #define CTRY_KUWAIT               965         // Kuwait
+#define CTRY_KYRGYZSTAN           996         // Kyrgyzstan
 #define CTRY_LATVIA               371         // Latvia
 #define CTRY_LEBANON              961         // Lebanon
 #define CTRY_LIBYA                218         // Libya
 #define CTRY_LIECHTENSTEIN        41          // Liechtenstein
 #define CTRY_LITHUANIA            370         // Lithuania
 #define CTRY_LUXEMBOURG           352         // Luxembourg
-#define CTRY_MACAU                853         // Macau
-#define CTRY_MACEDONIA            389         // the Former Yugoslav Republic of Macedonia
+#define CTRY_MACAU                853         // Macau S.A.R., PRC
+#define CTRY_MACEDONIA            389         // Former Yugoslav Republic of Macedonia
 #define CTRY_MALAYSIA             60          // Malaysia
+#define CTRY_MALDIVES             960         // Maldives
 #define CTRY_MEXICO               52          // Mexico
 #define CTRY_MONACO               33          // Principality of Monaco
+#define CTRY_MONGOLIA             976         // Mongolia
 #define CTRY_MOROCCO              212         // Morocco
 #define CTRY_NETHERLANDS          31          // Netherlands
 #define CTRY_NEW_ZEALAND          64          // New Zealand
@@ -335,7 +338,7 @@ extern "C" {
 #define CTRY_SLOVAK               421         // Slovak Republic
 #define CTRY_SLOVENIA             386         // Slovenia
 #define CTRY_SOUTH_AFRICA         27          // South Africa
-#define CTRY_SOUTH_KOREA          82          // South Korea
+#define CTRY_SOUTH_KOREA          82          // Korea
 #define CTRY_SPAIN                34          // Spain
 #define CTRY_SWEDEN               46          // Sweden
 #define CTRY_SWITZERLAND          41          // Switzerland
@@ -513,6 +516,7 @@ extern "C" {
 #define LOCALE_SYEARMONTH             0x00001006   // year month format string
 #define LOCALE_SSORTNAME              0x00001013   // sort name
 #define LOCALE_IDIGITSUBSTITUTION     0x00001014   // 0 = context, 1 = none, 2 = national
+
 #endif /* WINVER >= 0x0500 */
 
 //
@@ -632,7 +636,7 @@ extern "C" {
 #define CAL_GREGORIAN                  1      // Gregorian (localized) calendar
 #define CAL_GREGORIAN_US               2      // Gregorian (U.S.) calendar
 #define CAL_JAPAN                      3      // Japanese Emperor Era calendar
-#define CAL_TAIWAN                     4      // Taiwan Era calendar
+#define CAL_TAIWAN                     4      // Taiwan calendar
 #define CAL_KOREA                      5      // Korean Tangun Era calendar
 #define CAL_HIJRI                      6      // Hijri (Arabic Lunar) calendar
 #define CAL_THAI                       7      // Thai calendar
@@ -797,6 +801,44 @@ typedef LPCURRENCYFMTA LPCURRENCYFMT;
 
 
 //
+//  GEO defines
+//
+
+typedef LONG    GEOID;
+typedef DWORD   GEOTYPE;
+typedef DWORD   GEOCLASS;
+
+#define GEOID_NOT_AVAILABLE -1
+
+//
+//  GEO information types for clients to query
+//
+
+enum SYSGEOTYPE {
+    GEO_NATION      =       0x0001,
+    GEO_LATITUDE    =       0x0002,
+    GEO_LONGITUDE   =       0x0003,
+    GEO_ISO2        =       0x0004,
+    GEO_ISO3        =       0x0005,
+    GEO_RFC1766     =       0x0006,
+    GEO_LCID        =       0x0007,
+    GEO_FRIENDLYNAME=       0x0008,
+    GEO_OFFICIALNAME=       0x0009,
+    GEO_TIMEZONES   =       0x000A,
+    GEO_OFFICIALLANGUAGES = 0x000B,
+};
+
+//
+//  More GEOCLASS defines will be listed here
+//
+
+enum SYSGEOCLASS {
+    GEOCLASS_NATION  = 16,
+    GEOCLASS_REGION  = 14,
+};
+
+
+//
 //  Enumeration function constants.
 //
 
@@ -823,6 +865,7 @@ typedef BOOL (CALLBACK* DATEFMT_ENUMPROCEXW)(LPWSTR, CALID);
 typedef BOOL (CALLBACK* TIMEFMT_ENUMPROCW)(LPWSTR);
 typedef BOOL (CALLBACK* CALINFO_ENUMPROCW)(LPWSTR);
 typedef BOOL (CALLBACK* CALINFO_ENUMPROCEXW)(LPWSTR, CALID);
+typedef BOOL (CALLBACK* GEO_ENUMPROC)(GEOID);
 
 #else // !STRICT
 
@@ -836,6 +879,7 @@ typedef FARPROC DATEFMT_ENUMPROCEXA;
 typedef FARPROC TIMEFMT_ENUMPROCA;
 typedef FARPROC CALINFO_ENUMPROCA;
 typedef FARPROC CALINFO_ENUMPROCEXA;
+typedef FARPROC GEO_ENUMPROC;
 
 typedef FARPROC LANGUAGEGROUP_ENUMPROCW;
 typedef FARPROC LANGGROUPLOCALE_ENUMPROCW;
@@ -1362,6 +1406,50 @@ IsValidLocale(
     IN DWORD  dwFlags);
 
 WINBASEAPI
+int
+WINAPI
+GetGeoInfoA(
+    GEOID       Location,
+    GEOTYPE     GeoType,
+    LPSTR     lpGeoData,
+    int         cchData,
+    LANGID      LangId);
+WINBASEAPI
+int
+WINAPI
+GetGeoInfoW(
+    GEOID       Location,
+    GEOTYPE     GeoType,
+    LPWSTR     lpGeoData,
+    int         cchData,
+    LANGID      LangId);
+#ifdef UNICODE
+#define GetGeoInfo  GetGeoInfoW
+#else
+#define GetGeoInfo  GetGeoInfoA
+#endif // !UNICODE
+
+WINBASEAPI
+BOOL
+WINAPI
+EnumSystemGeoID(
+    GEOCLASS        GeoClass,
+    GEOID           ParentGeoId,
+    GEO_ENUMPROC    lpGeoEnumProc);
+
+WINBASEAPI
+GEOID
+WINAPI
+GetUserGeoID(
+    GEOCLASS    GeoClass);
+
+WINBASEAPI
+BOOL
+WINAPI
+SetUserGeoID(
+    GEOID       GeoId);
+
+WINBASEAPI
 LCID
 WINAPI
 ConvertDefaultLocale(
@@ -1410,6 +1498,7 @@ WINBASEAPI
 LCID
 WINAPI
 GetUserDefaultLCID(void);
+
 
 
 //
@@ -1603,5 +1692,4 @@ EnumSystemCodePagesW(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _WINNLS_

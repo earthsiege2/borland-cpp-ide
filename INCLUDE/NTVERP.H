@@ -1,14 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ntverp.h
-//
-//--------------------------------------------------------------------------
-
 /****************************************************************************
  *                                                                          *
  *      ntverp.H        -- Version information for internal builds          *
@@ -24,27 +13,36 @@
 /* builder for each build                                       */
 /*                                                              */
 /* the VER_PRODUCTBUILD lines must contain the product          */
-/* comments (Win9x or NT) and end with the build#<CR><LF>       */
+/* comments and end with the build#<CR><LF>                     */
 /*                                                              */
 /* the VER_PRODUCTBETA_STR lines must  contain the product      */
-/* comments (Win9x or NT) and end with "some string"<CR><LF>    */
+/* comments and end with "some string"<CR><LF>                  */
 /*--------------------------------------------------------------*/
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
+#define VER_PRODUCTBUILD            /* NT */   2601
+
 #if defined(NASHVILLE)
+// IE components now use NT's VER_PRODUCTBUILD, but define other different major/minor version #'s
 #include <ieverp.h>
 #else
-#define VER_PRODUCTBUILD_QFE        3
-#define VER_PRODUCTBUILD            /* NT */     2000
-#define VER_PRODUCTBETA_STR         /* NT */     ""
-#define VER_PRODUCTVERSION_STRING   "5.00"
-#define VER_PRODUCTVERSION          5,00,VER_PRODUCTBUILD,VER_PRODUCTBUILD_QFE
-#define VER_PRODUCTVERSION_W        (0x0500)
-#define VER_PRODUCTVERSION_DW       (0x05000000 | VER_PRODUCTBUILD)
 
+#define VER_PRODUCTMAJORVERSION     5
+#define VER_PRODUCTMINORVERSION     1
+
+#define VER_PRODUCTBUILD_QFE        0
+#define VER_PRODUCTBETA_STR         /* NT */     ""
+
+#define VER_PRODUCTVERSION_MAJORMINOR2(x,y) #x "." #y
+#define VER_PRODUCTVERSION_MAJORMINOR1(x,y) VER_PRODUCTVERSION_MAJORMINOR2(x, y)
+#define VER_PRODUCTVERSION_STRING   VER_PRODUCTVERSION_MAJORMINOR1(VER_PRODUCTMAJORVERSION, VER_PRODUCTMINORVERSION)
+
+#define VER_PRODUCTVERSION          VER_PRODUCTMAJORVERSION,VER_PRODUCTMINORVERSION,VER_PRODUCTBUILD,VER_PRODUCTBUILD_QFE
+#define VER_PRODUCTVERSION_W        (0x0501)
+#define VER_PRODUCTVERSION_DW       (0x05010000 | VER_PRODUCTBUILD)
 
 /*--------------------------------------------------------------*/
 /* this value is used by third party drivers build with the DDK */
@@ -55,11 +53,11 @@
 
 #endif
 
-#if 	(VER_PRODUCTBUILD < 10)
+#if     (VER_PRODUCTBUILD < 10)
 #define VER_BPAD "000"
-#elif	(VER_PRODUCTBUILD < 100)
+#elif   (VER_PRODUCTBUILD < 100)
 #define VER_BPAD "00"
-#elif	(VER_PRODUCTBUILD < 1000)
+#elif   (VER_PRODUCTBUILD < 1000)
 #define VER_BPAD "0"
 #else
 #define VER_BPAD
@@ -98,8 +96,19 @@
 #define VER_FILEOS                  VOS_NT_WINDOWS32
 #define VER_FILEFLAGS               (VER_PRERELEASE|VER_DEBUG|VER_PRIVATE)
 
-#define VER_COMPANYNAME_STR         "Microsoft Corporation"
-#define VER_PRODUCTNAME_STR         "Microsoft(R) Windows (R) 2000 Operating System"
+// @@BEGIN_DDKSPLIT
+#if 0
+// @@END_DDKSPLIT
+#define VER_COMPANYNAME_STR         "Windows (R) 2000 DDK provider"
+#define VER_PRODUCTNAME_STR         "Windows (R) 2000 DDK driver"
 #define VER_LEGALTRADEMARKS_STR     \
-"Microsoft(R) is a registered trademark of Microsoft Corporation. Windows (R) is a registered trademark of Microsoft Corporation."
-#pragma option pop /*P_O_Pop*/
+"Windows (R) is a registered trademark of Microsoft Corporation."
+// @@BEGIN_DDKSPLIT
+#else
+
+#define VER_COMPANYNAME_STR         "Microsoft Corporation"
+#define VER_PRODUCTNAME_STR         "Microsoft\256 Windows\256 Operating System"
+#define VER_LEGALTRADEMARKS_STR     \
+"Microsoft\256 is a registered trademark of Microsoft Corporation. Windows\256 is a registered trademark of Microsoft Corporation."
+#endif
+// @@END_DDKSPLIT

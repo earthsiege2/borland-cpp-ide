@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1997 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1997-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 // ibctrls.cpp
 // This file is #included in IBREG.CPP which #includes IBREG.H which

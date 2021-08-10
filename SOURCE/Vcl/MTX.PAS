@@ -1,11 +1,13 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1999-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
 {       MS Transaction Server Interface Unit            }
-{                                                       }
-{       Copyright (c) 1999 Inprise Corporation          }
-{                                                       }
 {*******************************************************}
 
 unit Mtx;

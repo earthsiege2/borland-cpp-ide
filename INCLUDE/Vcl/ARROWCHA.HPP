@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ArrowCha.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ArrowCha.pas' rev: 6.00
 
 #ifndef ArrowChaHPP
 #define ArrowChaHPP
@@ -48,8 +48,7 @@ protected:
 	
 public:
 	__fastcall virtual TArrowSeries(Classes::TComponent* AOwner);
-	int __fastcall AddArrow(const double X0, const double Y0, const double X1, const double Y1, const AnsiString 
-		ALabel, Graphics::TColor AColor);
+	int __fastcall AddArrow(const double X0, const double Y0, const double X1, const double Y1, const AnsiString ALabel = "", Graphics::TColor AColor = (Graphics::TColor)(0x20000000));
 	virtual void __fastcall FillSampleValues(int NumValues);
 	virtual AnsiString __fastcall GetEditorClass();
 	virtual bool __fastcall IsValidSourceOf(Teengine::TChartSeries* Value);
@@ -65,9 +64,7 @@ __published:
 	__property Teengine::TChartValueList* EndXValues = {read=FEndXValues, write=SetEndXValues};
 	__property Teengine::TChartValueList* EndYValues = {read=FEndYValues, write=SetEndYValues};
 	__property Teengine::TChartValueList* StartXValues = {read=GetStartXValues, write=SetStartXValues};
-		
 	__property Teengine::TChartValueList* StartYValues = {read=GetStartYValues, write=SetStartYValues};
-		
 public:
 	#pragma option push -w-inl
 	/* TCustomSeries.Destroy */ inline __fastcall virtual ~TArrowSeries(void) { }
@@ -79,9 +76,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Arrowcha */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Arrowcha;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

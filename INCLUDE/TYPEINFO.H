@@ -4,14 +4,14 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1993, 2000 by Inprise Corporation
+ *      Copyright (c) 1993, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.14  $ */
+/* $Revision: 1.8.2.2 $ */
 
 #if !defined(__cplusplus)
 #error Must use C++ for typeinfo.h
@@ -20,9 +20,9 @@
 #ifndef __TYPEINFO_H
 #define __TYPEINFO_H
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
+
+#include <exception>
 
 #if !defined(RC_INVOKED)
 
@@ -111,8 +111,8 @@ protected:
                 __cdecl type_info(tpid *_tpp) { tpp = _tpp; }
 };
 
-class   bad_cast{};
-class   bad_typeid{};
+class   bad_cast : public std::exception {};
+class   bad_typeid : public std::exception {};
 } // std
 
 #if !defined(__STDC__)
@@ -138,9 +138,5 @@ typedef std::bad_typeid  Bad_typeid;
 #endif
 
 #endif  /* !RC_INVOKED */
-
-#ifndef __USING_STD_NAMES__
-  using namespace std;
-#endif
 
 #endif

@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- C++Builder XML Project --><PROJECT>
+<!-- C++Builder XML Project -->
+<PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="contacts.exe"/>
     <OBJFILES value="CONTACTS.obj adru1.obj"/>
     <RESFILES value="contacts.res"/>
@@ -10,9 +11,9 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) adru1.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="vcldb50.lib vcl50.lib vclbde50.lib"/>
-    <SPARELIBS value="vcl50.lib vcldb50.lib vclbde50.lib"/>
-    <PACKAGES value=""/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="rtl.lib vcl.lib dbrtl.lib vcldb.lib bdertl.lib"/>
+    <PACKAGES value="bdertl.bpi vcldb.bpi dbrtl.bpi vcl.bpi rtl.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -25,21 +26,29 @@
     <MAINSOURCE value="CONTACTS.cpp"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
-    <WARNINGS value=" -w-8026 -w-8027 -w-par"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffixcpp"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a8 -k -y -v -vi- -c -b- -tWM"/>
+    <IDLCFLAGS value="-src_suffix cpp -I$(BCB)\include -I$(BCB)\include\vcl"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tWM"/>
     <PFLAGS value="-$YD -v -JPHNV -M -JPHNE"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w0 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -v"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="CONTACTS.cpp" FORMNAME="" UNITNAME="CONTACTS" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="readme.txt" FORMNAME="" UNITNAME="readme" CONTAINERID="File" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="adru1.cpp" FORMNAME="FormMain" UNITNAME="adru1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="contacts.res" FORMNAME="" UNITNAME="contacts" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -57,26 +66,37 @@ Locale=1033
 CodePage=1252
 
 [HistoryLists\hlIncludePath]
-Count=1
-Item0=$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=1
-Item0=$(BCB)\lib\obj;$(BCB)\lib
 
 [Debugging]
 DebugSourceDirs=
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
-InMemoryExe=0
 ShowInfoMsgs=0
 LinkDebugVcl=1
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
   </IDEOPTIONS>
 </PROJECT>

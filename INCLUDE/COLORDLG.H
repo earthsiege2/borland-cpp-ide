@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*++
 
 Copyright (c) 1990-1999,  Microsoft Corporation  All rights reserved.
@@ -63,4 +62,3 @@ Revision History:
 #define NUM_BASIC_COLORS     48
 #define NUM_CUSTOM_COLORS    16
 
-#pragma option pop /*P_O_Pop*/

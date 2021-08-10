@@ -1,23 +1,23 @@
 LIBRARY SVRAPI
 EXPORTS
 
-    NetAccessAdd                             = 'SVRAPI.DLL'.*
-    NetAccessCheck                           = 'SVRAPI.DLL'.*
-    NetAccessDel                             = 'SVRAPI.DLL'.*
-    NetAccessEnum                            = 'SVRAPI.DLL'.*
-    NetAccessGetInfo                         = 'SVRAPI.DLL'.*
-    NetAccessGetUserPerms                    = 'SVRAPI.DLL'.*
-    NetAccessSetInfo                         = 'SVRAPI.DLL'.*
-    NetConnectionEnum                        = 'SVRAPI.DLL'.*
-    NetFileClose2                            = 'SVRAPI.DLL'.*
-    NetFileEnum                              = 'SVRAPI.DLL'.*
-    NetSecurityGetInfo                       = 'SVRAPI.DLL'.*
-    NetServerGetInfo                         = 'SVRAPI.DLL'.*
-    NetSessionDel                            = 'SVRAPI.DLL'.*
-    NetSessionEnum                           = 'SVRAPI.DLL'.*
-    NetSessionGetInfo                        = 'SVRAPI.DLL'.*
-    NetShareAdd                              = 'SVRAPI.DLL'.*
-    NetShareDel                              = 'SVRAPI.DLL'.*
-    NetShareEnum                             = 'SVRAPI.DLL'.*
-    NetShareGetInfo                          = 'SVRAPI.DLL'.*
-    NetShareSetInfo                          = 'SVRAPI.DLL'.*
+    NetAccessAdd                             
+    NetAccessCheck                           
+    NetAccessDel                             
+    NetAccessEnum                            
+    NetAccessGetInfo                         
+    NetAccessGetUserPerms                    
+    NetAccessSetInfo                         
+    NetConnectionEnum                        
+    NetFileClose2                            
+    NetFileEnum                              
+    NetSecurityGetInfo                       
+    NetServerGetInfo                         
+    NetSessionDel                            
+    NetSessionEnum                           
+    NetSessionGetInfo                        
+    NetShareAdd                              
+    NetShareDel                              
+    NetShareEnum                             
+    NetShareGetInfo                          
+    NetShareSetInfo                          

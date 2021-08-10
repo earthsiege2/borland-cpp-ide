@@ -6,7 +6,7 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
@@ -123,29 +123,29 @@ type
 
 { prototype of IMM API }
 
+{$EXTERNALSYM ImmInstallIME}
+function ImmInstallIME(lpszIMEFileName, lpszLayoutText: PChar): HKL; stdcall;
 {$EXTERNALSYM ImmInstallIMEA}
 function ImmInstallIMEA(lpszIMEFileName, lpszLayoutText: PAnsiChar): HKL; stdcall;
 {$EXTERNALSYM ImmInstallIMEW}
 function ImmInstallIMEW(lpszIMEFileName, lpszLayoutText: PWideChar): HKL; stdcall;
-{$EXTERNALSYM ImmInstallIME}
-function ImmInstallIME(lpszIMEFileName, lpszLayoutText: PChar): HKL; stdcall;
 
 {$EXTERNALSYM ImmGetDefaultIMEWnd}
 function ImmGetDefaultIMEWnd(hWnd: HWND): HWND; stdcall;
 
+{$EXTERNALSYM ImmGetDescription}
+function ImmGetDescription(hKl: HKL; PChar: PChar; uBufLen: UINT): UINT; stdcall;
 {$EXTERNALSYM ImmGetDescriptionA}
 function ImmGetDescriptionA(hKl: HKL; PAnsiChar: PAnsiChar; uBufLen: UINT): UINT; stdcall;
 {$EXTERNALSYM ImmGetDescriptionW}
 function ImmGetDescriptionW(hKl: HKL; PWideChar: PWideChar; uBufLen: UINT): UINT; stdcall;
-{$EXTERNALSYM ImmGetDescription}
-function ImmGetDescription(hKl: HKL; PChar: PChar; uBufLen: UINT): UINT; stdcall;
 
+{$EXTERNALSYM ImmGetIMEFileName}
+function ImmGetIMEFileName(hKl: HKL; PChar: PChar; uBufLen: UINT): UINT; stdcall;
 {$EXTERNALSYM ImmGetIMEFileNameA}
 function ImmGetIMEFileNameA(hKl: HKL; PAnsiChar: PAnsiChar; uBufLen: UINT): UINT; stdcall;
 {$EXTERNALSYM ImmGetIMEFileNameW}
 function ImmGetIMEFileNameW(hKl: HKL; PWideChar: PWideChar; uBufLen: UINT): UINT; stdcall;
-{$EXTERNALSYM ImmGetIMEFileName}
-function ImmGetIMEFileName(hKl: HKL; PChar: PChar; uBufLen: UINT): UINT; stdcall;
 
 {$EXTERNALSYM ImmGetProperty}
 function ImmGetProperty(hKl: HKL; dWord: DWORD): DWORD; stdcall;
@@ -167,40 +167,40 @@ function ImmReleaseContext(hWnd: HWND; hImc: HIMC): Boolean; stdcall;
 {$EXTERNALSYM ImmAssociateContext}
 function ImmAssociateContext(hWnd: HWND; hImc: HIMC): HIMC; stdcall;
 
+{$EXTERNALSYM ImmGetCompositionString}
+function ImmGetCompositionString(hImc: HIMC; dWord1: DWORD; lpBuf: pointer; dwBufLen: DWORD): Longint; stdcall;
 {$EXTERNALSYM ImmGetCompositionStringA}
 function ImmGetCompositionStringA(hImc: HIMC; dWord1: DWORD; lpBuf: pointer; dwBufLen: DWORD): Longint; stdcall;
 {$EXTERNALSYM ImmGetCompositionStringW}
 function ImmGetCompositionStringW(hImc: HIMC; dWord1: DWORD; lpBuf: pointer; dwBufLen: DWORD): Longint; stdcall;
-{$EXTERNALSYM ImmGetCompositionString}
-function ImmGetCompositionString(hImc: HIMC; dWord1: DWORD; lpBuf: pointer; dwBufLen: DWORD): Longint; stdcall;
 
+{$EXTERNALSYM ImmSetCompositionString}
+function ImmSetCompositionString(hImc: HIMC; dwIndex: DWORD; lpComp: pointer; dwCompLen: DWORD; lpRead: pointer; dwReadLen: DWORD):Boolean; stdcall;
 {$EXTERNALSYM ImmSetCompositionStringA}
 function ImmSetCompositionStringA(hImc: HIMC; dwIndex: DWORD; lpComp: pointer; dwCompLen: DWORD; lpRead: pointer; dwReadLen: DWORD):Boolean; stdcall;
 {$EXTERNALSYM ImmSetCompositionStringW}
 function ImmSetCompositionStringW(hImc: HIMC; dwIndex: DWORD; lpComp: pointer; dwCompLen: DWORD; lpRead: pointer; dwReadLen: DWORD):Boolean; stdcall;
-{$EXTERNALSYM ImmSetCompositionString}
-function ImmSetCompositionString(hImc: HIMC; dwIndex: DWORD; lpComp: pointer; dwCompLen: DWORD; lpRead: pointer; dwReadLen: DWORD):Boolean; stdcall;
 
+{$EXTERNALSYM ImmGetCandidateListCount}
+function ImmGetCandidateListCount(hImc: HIMC; var ListCount: DWORD): DWORD; stdcall;
 {$EXTERNALSYM ImmGetCandidateListCountA}
 function ImmGetCandidateListCountA(hImc: HIMC; var ListCount: DWORD): DWORD; stdcall;
 {$EXTERNALSYM ImmGetCandidateListCountW}
 function ImmGetCandidateListCountW(hImc: HIMC; var ListCount: DWORD): DWORD; stdcall;
-{$EXTERNALSYM ImmGetCandidateListCount}
-function ImmGetCandidateListCount(hImc: HIMC; var ListCount: DWORD): DWORD; stdcall;
 
+{$EXTERNALSYM ImmGetCandidateList}
+function ImmGetCandidateList(hImc: HIMC; deIndex: DWORD; lpCandidateList: PCANDIDATELIST; dwBufLen: DWORD): DWORD; stdcall;
 {$EXTERNALSYM ImmGetCandidateListA}
 function ImmGetCandidateListA(hImc: HIMC; deIndex: DWORD; lpCandidateList: PCANDIDATELIST; dwBufLen: DWORD): DWORD; stdcall;
 {$EXTERNALSYM ImmGetCandidateListW}
 function ImmGetCandidateListW(hImc: HIMC; deIndex: DWORD; lpCandidateList: PCANDIDATELIST; dwBufLen: DWORD): DWORD; stdcall;
-{$EXTERNALSYM ImmGetCandidateList}
-function ImmGetCandidateList(hImc: HIMC; deIndex: DWORD; lpCandidateList: PCANDIDATELIST; dwBufLen: DWORD): DWORD; stdcall;
 
+{$EXTERNALSYM ImmGetGuideLine}
+function ImmGetGuideLine(hImc: HIMC; dwIndex: DWORD; lpBuf: PChar; dwBufLen: DWORD): DWORD; stdcall;
 {$EXTERNALSYM ImmGetGuideLineA}
 function ImmGetGuideLineA(hImc: HIMC; dwIndex: DWORD; lpBuf: PAnsiChar; dwBufLen: DWORD): DWORD; stdcall;
 {$EXTERNALSYM ImmGetGuideLineW}
 function ImmGetGuideLineW(hImc: HIMC; dwIndex: DWORD; lpBuf: PWideChar; dwBufLen: DWORD): DWORD; stdcall;
-{$EXTERNALSYM ImmGetGuideLine}
-function ImmGetGuideLine(hImc: HIMC; dwIndex: DWORD; lpBuf: PChar; dwBufLen: DWORD): DWORD; stdcall;
 
 {$EXTERNALSYM ImmGetConversionStatus}
 function ImmGetConversionStatus(hImc: HIMC; var Conversion, Sentence: DWORD): Boolean; stdcall;
@@ -211,40 +211,40 @@ function ImmGetOpenStatus(hImc: HIMC): Boolean; stdcall;
 {$EXTERNALSYM ImmSetOpenStatus}
 function ImmSetOpenStatus(hImc: HIMC; fOpen: Boolean): Boolean; stdcall;
 
+{$EXTERNALSYM ImmGetCompositionFont}
+function ImmGetCompositionFont(hImc: HIMC; lpLogfont: PLOGFONT): Boolean; stdcall;
 {$EXTERNALSYM ImmGetCompositionFontA}
 function ImmGetCompositionFontA(hImc: HIMC; lpLogfont: PLOGFONTA): Boolean; stdcall;
 {$EXTERNALSYM ImmGetCompositionFontW}
 function ImmGetCompositionFontW(hImc: HIMC; lpLogfont: PLOGFONTW): Boolean; stdcall;
-{$EXTERNALSYM ImmGetCompositionFont}
-function ImmGetCompositionFont(hImc: HIMC; lpLogfont: PLOGFONT): Boolean; stdcall;
 
+{$EXTERNALSYM ImmSetCompositionFont}
+function ImmSetCompositionFont(hImc: HIMC; lpLogfont: PLOGFONT): Boolean; stdcall;
 {$EXTERNALSYM ImmSetCompositionFontA}
 function ImmSetCompositionFontA(hImc: HIMC; lpLogfont: PLOGFONTA): Boolean; stdcall;
 {$EXTERNALSYM ImmSetCompositionFontW}
 function ImmSetCompositionFontW(hImc: HIMC; lpLogfont: PLOGFONTW): Boolean; stdcall;
-{$EXTERNALSYM ImmSetCompositionFont}
-function ImmSetCompositionFont(hImc: HIMC; lpLogfont: PLOGFONT): Boolean; stdcall;
 
+{$EXTERNALSYM ImmConfigureIME}
+function ImmConfigureIME(hKl: HKL; hWnd: HWND; dwMode: DWORD; lpData: pointer): Boolean; stdcall;
 {$EXTERNALSYM ImmConfigureIMEA}
 function ImmConfigureIMEA(hKl: HKL; hWnd: HWND; dwMode: DWORD; lpData: pointer): Boolean; stdcall;
 {$EXTERNALSYM ImmConfigureIMEW}
 function ImmConfigureIMEW(hKl: HKL; hWnd: HWND; dwMode: DWORD; lpData: pointer): Boolean; stdcall;
-{$EXTERNALSYM ImmConfigureIME}
-function ImmConfigureIME(hKl: HKL; hWnd: HWND; dwMode: DWORD; lpData: pointer): Boolean; stdcall;
 
+{$EXTERNALSYM ImmEscape}
+function ImmEscape(hKl: HKL; hImc: HIMC; uEscape: UINT; lpData: pointer): LRESULT; stdcall;
 {$EXTERNALSYM ImmEscapeA}
 function ImmEscapeA(hKl: HKL; hImc: HIMC; uEscape: UINT; lpData: pointer): LRESULT; stdcall;
 {$EXTERNALSYM ImmEscapeW}
 function ImmEscapeW(hKl: HKL; hImc: HIMC; uEscape: UINT; lpData: pointer): LRESULT; stdcall;
-{$EXTERNALSYM ImmEscape}
-function ImmEscape(hKl: HKL; hImc: HIMC; uEscape: UINT; lpData: pointer): LRESULT; stdcall;
 
+{$EXTERNALSYM ImmGetConversionList}
+function ImmGetConversionList(hKl: HKL; hImc: HIMC; lpSrc: PChar; lpDst: PCANDIDATELIST; dwBufLen: DWORD; uFlag: UINT ): DWORD; stdcall;
 {$EXTERNALSYM ImmGetConversionListA}
 function ImmGetConversionListA(hKl: HKL; hImc: HIMC; lpSrc: PAnsiChar; lpDst: PCANDIDATELIST; dwBufLen: DWORD; uFlag: UINT ): DWORD; stdcall;
 {$EXTERNALSYM ImmGetConversionListW}
 function ImmGetConversionListW(hKl: HKL; hImc: HIMC; lpSrc: PWideChar; lpDst: PCANDIDATELIST; dwBufLen: DWORD; uFlag: UINT ): DWORD; stdcall;
-{$EXTERNALSYM ImmGetConversionList}
-function ImmGetConversionList(hKl: HKL; hImc: HIMC; lpSrc: PChar; lpDst: PCANDIDATELIST; dwBufLen: DWORD; uFlag: UINT ): DWORD; stdcall;
 
 {$EXTERNALSYM ImmNotifyIME}
 function ImmNotifyIME(hImc: HIMC; dwAction, dwIndex, dwValue: DWORD): Boolean; stdcall;
@@ -262,12 +262,12 @@ function ImmGetCandidateWindow(hImc: HIMC; dwBufLen: DWORD; lpCandidate: PCANDID
 {$EXTERNALSYM ImmSetCandidateWindow}
 function ImmSetCandidateWindow(hImc: HIMC; lpCandidate: PCANDIDATEFORM): Boolean; stdcall;
 
+{$EXTERNALSYM ImmIsUIMessage}
+function ImmIsUIMessage(hWnd: HWND; msg: UINT; wParam: WPARAM; lParam: LPARAM): Boolean; stdcall;
 {$EXTERNALSYM ImmIsUIMessageA}
 function ImmIsUIMessageA(hWnd: HWND; msg: UINT; wParam: WPARAM; lParam: LPARAM): Boolean; stdcall;
 {$EXTERNALSYM ImmIsUIMessageW}
 function ImmIsUIMessageW(hWnd: HWND; msg: UINT; wParam: WPARAM; lParam: LPARAM): Boolean; stdcall;
-{$EXTERNALSYM ImmIsUIMessage}
-function ImmIsUIMessage(hWnd: HWND; msg: UINT; wParam: WPARAM; lParam: LPARAM): Boolean; stdcall;
 
 {$EXTERNALSYM ImmGetVirtualKey}
 function ImmGetVirtualKey(hWnd: HWND): UINT; stdcall;
@@ -279,33 +279,33 @@ type
   {$EXTERNALSYM RegisterWordEnumProcW}
   RegisterWordEnumProc = RegisterWordEnumProcA;
 
+{$EXTERNALSYM ImmRegisterWord}
+function ImmRegisterWord(hKl: HKL; lpszReading: PChar; dwStyle: DWORD; lpszRegister: PChar): Boolean; stdcall;
 {$EXTERNALSYM ImmRegisterWordA}
 function ImmRegisterWordA(hKl: HKL; lpszReading: PAnsiChar; dwStyle: DWORD; lpszRegister: PAnsiChar): Boolean; stdcall;
 {$EXTERNALSYM ImmRegisterWordW}
 function ImmRegisterWordW(hKl: HKL; lpszReading: PWideChar; dwStyle: DWORD; lpszRegister: PWideChar): Boolean; stdcall;
-{$EXTERNALSYM ImmRegisterWord}
-function ImmRegisterWord(hKl: HKL; lpszReading: PChar; dwStyle: DWORD; lpszRegister: PChar): Boolean; stdcall;
 
+{$EXTERNALSYM ImmUnregisterWord}
+function ImmUnregisterWord(hKl: HKL; lpszReading: PChar; dwStyle: DWORD; lpszUnregister: PChar): Boolean; stdcall;
 {$EXTERNALSYM ImmUnregisterWordA}
 function ImmUnregisterWordA(hKl: HKL; lpszReading: PAnsiChar; dwStyle: DWORD; lpszUnregister: PAnsiChar): Boolean; stdcall;
 {$EXTERNALSYM ImmUnregisterWordW}
 function ImmUnregisterWordW(hKl: HKL; lpszReading: PWideChar; dwStyle: DWORD; lpszUnregister: PWideChar): Boolean; stdcall;
-{$EXTERNALSYM ImmUnregisterWord}
-function ImmUnregisterWord(hKl: HKL; lpszReading: PChar; dwStyle: DWORD; lpszUnregister: PChar): Boolean; stdcall;
 
+{$EXTERNALSYM ImmGetRegisterWordStyle}
+function ImmGetRegisterWordStyle(hKl: HKL; nItem: UINT; lpStyleBuf: PSTYLEBUF): UINT; stdcall;
 {$EXTERNALSYM ImmGetRegisterWordStyleA}
 function ImmGetRegisterWordStyleA(hKl: HKL; nItem: UINT; lpStyleBuf: PSTYLEBUFA): UINT; stdcall;
 {$EXTERNALSYM ImmGetRegisterWordStyleW}
 function ImmGetRegisterWordStyleW(hKl: HKL; nItem: UINT; lpStyleBuf: PSTYLEBUFW): UINT; stdcall;
-{$EXTERNALSYM ImmGetRegisterWordStyle}
-function ImmGetRegisterWordStyle(hKl: HKL; nItem: UINT; lpStyleBuf: PSTYLEBUF): UINT; stdcall;
 
+{$EXTERNALSYM ImmEnumRegisterWord}
+function ImmEnumRegisterWord(hKl: HKL; lpfnEnumProc: REGISTERWORDENUMPROC; lpszReading: PChar; dwStyle: DWORD; lpszRegister: PChar; lpData : pointer): UINT; stdcall;
 {$EXTERNALSYM ImmEnumRegisterWordA}
 function ImmEnumRegisterWordA(hKl: HKL; lpfnEnumProc: REGISTERWORDENUMPROCA; lpszReading: PAnsiChar; dwStyle: DWORD; lpszRegister: PAnsiChar; lpData : pointer): UINT; stdcall;
 {$EXTERNALSYM ImmEnumRegisterWordW}
 function ImmEnumRegisterWordW(hKl: HKL; lpfnEnumProc: REGISTERWORDENUMPROCW; lpszReading: PWideChar; dwStyle: DWORD; lpszRegister: PWideChar; lpData : pointer): UINT; stdcall;
-{$EXTERNALSYM ImmEnumRegisterWord}
-function ImmEnumRegisterWord(hKl: HKL; lpfnEnumProc: REGISTERWORDENUMPROC; lpszReading: PChar; dwStyle: DWORD; lpszRegister: PChar; lpData : pointer): UINT; stdcall;
 
 const
 { the IME related messages  ( removed in 4.0 SDK }
@@ -804,16 +804,16 @@ const
 
 implementation
 
+function ImmInstallIME; external imm32 name 'ImmInstallIMEA';
 function ImmInstallIMEA; external imm32 name 'ImmInstallIMEA';
 function ImmInstallIMEW; external imm32 name 'ImmInstallIMEW';
-function ImmInstallIME; external imm32 name 'ImmInstallIMEA';
 function ImmGetDefaultIMEWnd; external imm32 name 'ImmGetDefaultIMEWnd';
+function ImmGetDescription; external imm32 name 'ImmGetDescriptionA';
 function ImmGetDescriptionA; external imm32 name 'ImmGetDescriptionA';
 function ImmGetDescriptionW; external imm32 name 'ImmGetDescriptionW';
-function ImmGetDescription; external imm32 name 'ImmGetDescriptionA';
+function ImmGetIMEFileName; external imm32 name 'ImmGetIMEFileNameA';
 function ImmGetIMEFileNameA; external imm32 name 'ImmGetIMEFileNameA';
 function ImmGetIMEFileNameW; external imm32 name 'ImmGetIMEFileNameW';
-function ImmGetIMEFileName; external imm32 name 'ImmGetIMEFileNameA';
 function ImmGetProperty; external imm32 name 'ImmGetProperty';
 function ImmIsIME; external imm32 name 'ImmIsIME';
 function ImmSimulateHotKey; external imm32 name 'ImmSimulateHotKey';
@@ -822,40 +822,40 @@ function ImmDestroyContext; external imm32 name 'ImmDestroyContext';
 function ImmGetContext; external imm32 name 'ImmGetContext';
 function ImmReleaseContext; external imm32 name 'ImmReleaseContext';
 function ImmAssociateContext; external imm32 name 'ImmAssociateContext';
+function ImmGetCompositionString; external imm32 name 'ImmGetCompositionStringA';
 function ImmGetCompositionStringA; external imm32 name 'ImmGetCompositionStringA';
 function ImmGetCompositionStringW; external imm32 name 'ImmGetCompositionStringW';
-function ImmGetCompositionString; external imm32 name 'ImmGetCompositionStringA';
+function ImmSetCompositionString; external imm32 name 'ImmSetCompositionStringA';
 function ImmSetCompositionStringA; external imm32 name 'ImmSetCompositionStringA';
 function ImmSetCompositionStringW; external imm32 name 'ImmSetCompositionStringW';
-function ImmSetCompositionString; external imm32 name 'ImmSetCompositionStringA';
+function ImmGetCandidateListCount; external imm32 name 'ImmGetCandidateListCountA';
 function ImmGetCandidateListCountA; external imm32 name 'ImmGetCandidateListCountA';
 function ImmGetCandidateListCountW; external imm32 name 'ImmGetCandidateListCountW';
-function ImmGetCandidateListCount; external imm32 name 'ImmGetCandidateListCountA';
+function ImmGetCandidateList; external imm32 name 'ImmGetCandidateListA';
 function ImmGetCandidateListA; external imm32 name 'ImmGetCandidateListA';
 function ImmGetCandidateListW; external imm32 name 'ImmGetCandidateListW';
-function ImmGetCandidateList; external imm32 name 'ImmGetCandidateListA';
+function ImmGetGuideLine; external imm32 name 'ImmGetGuideLineA';
 function ImmGetGuideLineA; external imm32 name 'ImmGetGuideLineA';
 function ImmGetGuideLineW; external imm32 name 'ImmGetGuideLineW';
-function ImmGetGuideLine; external imm32 name 'ImmGetGuideLineA';
 function ImmGetConversionStatus; external imm32 name 'ImmGetConversionStatus';
 function ImmSetConversionStatus; external imm32 name 'ImmSetConversionStatus';
 function ImmGetOpenStatus; external imm32 name 'ImmGetOpenStatus';
 function ImmSetOpenStatus; external imm32 name 'ImmSetOpenStatus';
+function ImmGetCompositionFont; external imm32 name 'ImmGetCompositionFontA';
 function ImmGetCompositionFontA; external imm32 name 'ImmGetCompositionFontA';
 function ImmGetCompositionFontW; external imm32 name 'ImmGetCompositionFontW';
-function ImmGetCompositionFont; external imm32 name 'ImmGetCompositionFontA';
+function ImmSetCompositionFont; external imm32 name 'ImmSetCompositionFontA';
 function ImmSetCompositionFontA; external imm32 name 'ImmSetCompositionFontA';
 function ImmSetCompositionFontW; external imm32 name 'ImmSetCompositionFontW';
-function ImmSetCompositionFont; external imm32 name 'ImmSetCompositionFontA';
+function ImmConfigureIME; external imm32 name 'ImmConfigureIMEA';
 function ImmConfigureIMEA; external imm32 name 'ImmConfigureIMEA';
 function ImmConfigureIMEW; external imm32 name 'ImmConfigureIMEW';
-function ImmConfigureIME; external imm32 name 'ImmConfigureIMEA';
+function ImmEscape; external imm32 name 'ImmEscapeA';
 function ImmEscapeA; external imm32 name 'ImmEscapeA';
 function ImmEscapeW; external imm32 name 'ImmEscapeW';
-function ImmEscape; external imm32 name 'ImmEscapeA';
+function ImmGetConversionList; external imm32 name 'ImmGetConversionListA';
 function ImmGetConversionListA; external imm32 name 'ImmGetConversionListA';
 function ImmGetConversionListW; external imm32 name 'ImmGetConversionListW';
-function ImmGetConversionList; external imm32 name 'ImmGetConversionListA';
 function ImmNotifyIME; external imm32 name 'ImmNotifyIME';
 function ImmGetStatusWindowPos; external imm32 name 'ImmGetStatusWindowPos';
 function ImmSetStatusWindowPos; external imm32 name 'ImmSetStatusWindowPos';
@@ -863,22 +863,22 @@ function ImmGetCompositionWindow; external imm32 name 'ImmGetCompositionWindow';
 function ImmSetCompositionWindow; external imm32 name 'ImmSetCompositionWindow';
 function ImmGetCandidateWindow; external imm32 name 'ImmGetCandidateWindow';
 function ImmSetCandidateWindow; external imm32 name 'ImmSetCandidateWindow';
+function ImmIsUIMessage; external imm32 name 'ImmIsUIMessageA';
 function ImmIsUIMessageA; external imm32 name 'ImmIsUIMessageA';
 function ImmIsUIMessageW; external imm32 name 'ImmIsUIMessageW';
-function ImmIsUIMessage; external imm32 name 'ImmIsUIMessageA';
 function ImmGetVirtualKey; external imm32 name 'ImmGetVirtualKey';
+function ImmRegisterWord; external imm32 name 'ImmRegisterWordA';
 function ImmRegisterWordA; external imm32 name 'ImmRegisterWordA';
 function ImmRegisterWordW; external imm32 name 'ImmRegisterWordW';
-function ImmRegisterWord; external imm32 name 'ImmRegisterWordA';
+function ImmUnregisterWord; external imm32 name 'ImmUnregisterWordA';
 function ImmUnregisterWordA; external imm32 name 'ImmUnregisterWordA';
 function ImmUnregisterWordW; external imm32 name 'ImmUnregisterWordW';
-function ImmUnregisterWord; external imm32 name 'ImmUnregisterWordA';
+function ImmGetRegisterWordStyle; external imm32 name 'ImmGetRegisterWordStyleA';
 function ImmGetRegisterWordStyleA; external imm32 name 'ImmGetRegisterWordStyleA';
 function ImmGetRegisterWordStyleW; external imm32 name 'ImmGetRegisterWordStyleW';
-function ImmGetRegisterWordStyle; external imm32 name 'ImmGetRegisterWordStyleA';
+function ImmEnumRegisterWord; external imm32 name 'ImmEnumRegisterWordA';
 function ImmEnumRegisterWordA; external imm32 name 'ImmEnumRegisterWordA';
 function ImmEnumRegisterWordW; external imm32 name 'ImmEnumRegisterWordW';
-function ImmEnumRegisterWord; external imm32 name 'ImmEnumRegisterWordA';
 
 end.
 

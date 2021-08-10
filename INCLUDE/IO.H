@@ -5,21 +5,19 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.13  $ */
+/* $Revision: 9.17.2.2 $ */
 
 #ifndef __IO_H
 #define __IO_H
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 #if !defined(___NFILE_H)
 #include <_nfile.h>

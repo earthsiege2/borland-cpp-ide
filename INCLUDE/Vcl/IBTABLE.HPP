@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBTable.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBTable.pas' rev: 6.00
 
 #ifndef IBTableHPP
 #define IBTableHPP
@@ -16,13 +16,9 @@
 #include <IBCustomDataSet.hpp>	// Pascal unit
 #include <IBDatabase.hpp>	// Pascal unit
 #include <IB.hpp>	// Pascal unit
-#include <StdVCL.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
-#include <Controls.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
-#include <Graphics.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
-#include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -31,10 +27,6 @@
 namespace Ibtable
 {
 //-- type declarations -------------------------------------------------------
-#pragma option push -b-
-enum TBatchMode { batAppend, batUpdate, batAppendUpdate, batDelete, batCopy };
-#pragma option pop
-
 #pragma option push -b-
 enum TIBTableType { ttSystem, ttView };
 #pragma option pop
@@ -103,6 +95,7 @@ private:
 	void __fastcall SetIndex(const AnsiString Value, bool FieldsIndex);
 	void __fastcall ResetSQLStatements(void);
 	void __fastcall Reopen(void);
+	HIDESBASE bool __fastcall InternalLocate(const AnsiString KeyFields, const Variant &KeyValues, Db::TLocateOptions Options);
 	
 protected:
 	virtual Db::TIndexDef* __fastcall PSGetDefaultOrder(void);
@@ -112,8 +105,7 @@ protected:
 	virtual void __fastcall PSSetCommandText(const AnsiString CommandText);
 	virtual void __fastcall PSSetParams(Db::TParams* AParams);
 	virtual void __fastcall DoOnNewRecord(void);
-	void __fastcall GetIndexParams(const AnsiString IndexName, bool FieldsIndex, AnsiString &IndexedName
-		);
+	void __fastcall GetIndexParams(const AnsiString IndexName, bool FieldsIndex, AnsiString &IndexedName);
 	virtual bool __fastcall GetCanModify(void);
 	virtual void __fastcall UpdateIndexDefs(void);
 	virtual void __fastcall DataEvent(Db::TDataEvent Event, int Info);
@@ -122,6 +114,7 @@ protected:
 	virtual void __fastcall InitFieldDefs(void);
 	virtual void __fastcall InternalClose(void);
 	virtual void __fastcall InternalOpen(void);
+	virtual void __fastcall InternalRefresh(void);
 	virtual void __fastcall SetFiltered(bool Value);
 	virtual void __fastcall SetFilterText(const AnsiString Value);
 	virtual void __fastcall SetFilterOptions(Db::TFilterOptions Value);
@@ -130,33 +123,32 @@ protected:
 public:
 	__fastcall virtual TIBTable(Classes::TComponent* AOwner);
 	__fastcall virtual ~TIBTable(void);
-	void __fastcall AddIndex(const AnsiString Name, const AnsiString Fields, Db::TIndexOptions Options, 
-		const AnsiString DescFields);
+	void __fastcall AddIndex(const AnsiString Name, const AnsiString Fields, Db::TIndexOptions Options, const AnsiString DescFields = "");
 	void __fastcall CreateTable(void);
 	void __fastcall DeleteIndex(const AnsiString Name);
 	void __fastcall DeleteTable(void);
 	void __fastcall EmptyTable(void);
-	virtual void __fastcall GetDetailLinkFields(Classes::TList* MasterFields, Classes::TList* DetailFields
-		);
+	virtual void __fastcall GetDetailLinkFields(Classes::TList* MasterFields, Classes::TList* DetailFields);
 	void __fastcall GetIndexNames(Classes::TStrings* List);
 	void __fastcall GotoCurrent(TIBTable* Table);
+	virtual bool __fastcall Locate(const AnsiString KeyFields, const Variant &KeyValues, Db::TLocateOptions Options);
+	__property LiveMode ;
 	__property Ibcustomdataset::TIBDBKey CurrentDBKey = {read=GetCurrentDBKey};
 	__property bool Exists = {read=GetExists, nodefault};
 	__property int IndexFieldCount = {read=GetIndexFieldCount, nodefault};
 	__property Db::TField* IndexFields[int Index] = {read=GetIndexField, write=SetIndexField};
 	__property Classes::TStrings* TableNames = {read=GetTableNames};
-	__property BufferChunks ;
-	__property UniDirectional ;
 	
 __published:
+	__property Active  = {default=0};
+	__property BufferChunks ;
 	__property CachedUpdates ;
 	__property Constraints  = {stored=ConstraintsStored};
 	__property bool DefaultIndex = {read=FDefaultIndex, write=FDefaultIndex, default=1};
 	__property FieldDefs  = {stored=FieldDefsStored};
 	__property Filter ;
-	__property Filtered ;
-	__property Db::TIndexDefs* IndexDefs = {read=FIndexDefs, write=SetIndexDefs, stored=IndexDefsStored
-		};
+	__property Filtered  = {default=0};
+	__property Db::TIndexDefs* IndexDefs = {read=FIndexDefs, write=SetIndexDefs, stored=IndexDefsStored};
 	__property AnsiString IndexFieldNames = {read=GetIndexFieldNames, write=SetIndexFieldNames};
 	__property AnsiString IndexName = {read=GetIndexName, write=SetIndexName};
 	__property AnsiString MasterFields = {read=GetMasterFields, write=SetMasterFields};
@@ -164,17 +156,23 @@ __published:
 	__property bool ReadOnly = {read=FReadOnly, write=SetReadOnly, default=0};
 	__property bool StoreDefs = {read=FStoreDefs, write=FStoreDefs, default=0};
 	__property AnsiString TableName = {read=FTableName, write=SetTableName};
-	__property UpdateObject ;
 	__property TIBTableTypes TableTypes = {read=FTableTypes, write=SetTableTypes, default=0};
+	__property UpdateObject ;
+	__property UniDirectional  = {default=0};
+	__property BeforeDatabaseDisconnect ;
+	__property AfterDatabaseDisconnect ;
+	__property DatabaseFree ;
+	__property BeforeTransactionEnd ;
+	__property AfterTransactionEnd ;
+	__property TransactionFree ;
+	__property OnFilterRecord ;
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Ibtable */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ibtable;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

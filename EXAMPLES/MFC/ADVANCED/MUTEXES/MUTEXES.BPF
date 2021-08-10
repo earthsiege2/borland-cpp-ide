@@ -1,7 +1,8 @@
-USEUNIT("mutexdlg.cpp");
-USEUNIT("stdafx.cpp");
-USEUNIT("threads.cpp");
-USEUNIT("mutexes.cpp");
-USERC("mutexes.rc");
+USEUNIT(".\MUTEXDLG.CPP");
+USEUNIT(".\MUTEXES.CPP");
+USEUNIT(".\STDAFX.CPP");
+USEUNIT(".\THREADS.CPP");
+USERC(".\mutexes.rc");
+USEFILE("vctobpr.log");
 
 #define WinMain

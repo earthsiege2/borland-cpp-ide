@@ -7,7 +7,7 @@
 {                                                       }
 {*******************************************************}
 
-unit DBCGrids;
+unit dbcgrids;
 
 {$R-,H+,X+}
 
@@ -192,7 +192,7 @@ type
 
 implementation
 
-uses DBConsts;
+uses DBConsts, VDBConsts;
 
 { TDBCtrlGridLink }
 

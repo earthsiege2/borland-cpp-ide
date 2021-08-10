@@ -1,6 +1,6 @@
 /*****************************************************************************
  *
- *  (C) Copyright MICROSOFT Corp., 1993-1995
+ *  (C) Copyright MICROSOFT Corp., 1993-1999
  *
  *  Title:      DBT.H - Equates for WM_DEVICECHANGE and BroadcastSystemMessage
  *
@@ -20,8 +20,11 @@
  *****************************************************************************/
 
 #ifndef _DBT_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _DBT_H
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 /*
  * BroadcastSpecialMessage constants.
@@ -36,19 +39,13 @@
 #endif
 /* XLATON */
 
-#ifndef _WCHAR_T_DEFINED
+#if !defined(_WCHAR_T_DEFINED) && !defined(_NATIVE_WCHAR_T_DEFINED)
 typedef unsigned short wchar_t;
 #define _WCHAR_T_DEFINED
 #endif
 
 #ifndef GUID_DEFINED
-    #define GUID_DEFINED
-    typedef struct _GUID {
-        ULONG   Data1;
-        unsigned short Data2;
-        unsigned short Data3;
-        unsigned char Data4[8];
-    } GUID;
+#include <guiddef.h>
 #endif // !defined(GUID_DEFINED)
 
 /*
@@ -407,7 +404,7 @@ typedef struct _DEV_BROADCAST_HANDLE {
     DWORD       dbch_devicetype;
     DWORD       dbch_reserved;
     HANDLE      dbch_handle;     // file handle used in call to RegisterDeviceNotification
-    DWORD       dbch_hdevnotify; // HDEVNOTIFY returned from RegisterDeviceNotification
+    HDEVNOTIFY  dbch_hdevnotify; // returned from RegisterDeviceNotification
     //
     // The following 3 fields are only valid if wParam is DBT_CUSTOMEVENT.
     //
@@ -415,6 +412,37 @@ typedef struct _DEV_BROADCAST_HANDLE {
     LONG        dbch_nameoffset; // offset (bytes) of variable-length string buffer (-1 if none)
     BYTE        dbch_data[1];    // variable-sized buffer, potentially containing binary and/or text data
 } DEV_BROADCAST_HANDLE, *PDEV_BROADCAST_HANDLE;
+
+#if(WINVER >= 0x0501)
+
+//
+// Define 32-bit and 64-bit versions of the DEV_BROADCAST_HANDLE structure
+// for WOW64.  These must be kept in sync with the above structure.
+//
+
+typedef struct _DEV_BROADCAST_HANDLE32 {
+    DWORD       dbch_size;
+    DWORD       dbch_devicetype;
+    DWORD       dbch_reserved;
+    ULONG32     dbch_handle;
+    ULONG32     dbch_hdevnotify;
+    GUID        dbch_eventguid;
+    LONG        dbch_nameoffset;
+    BYTE        dbch_data[1];
+} DEV_BROADCAST_HANDLE32, *PDEV_BROADCAST_HANDLE32;
+
+typedef struct _DEV_BROADCAST_HANDLE64 {
+    DWORD       dbch_size;
+    DWORD       dbch_devicetype;
+    DWORD       dbch_reserved;
+    ULONG64     dbch_handle;
+    ULONG64     dbch_hdevnotify;
+    GUID        dbch_eventguid;
+    LONG        dbch_nameoffset;
+    BYTE        dbch_data[1];
+} DEV_BROADCAST_HANDLE64, *PDEV_BROADCAST_HANDLE64;
+
+#endif /* WINVER >= 0x0501 */
 
 #endif /* WINVER >= 0x040A */
 
@@ -452,6 +480,6 @@ struct _DEV_BROADCAST_USERDEFINED { /* */
 /*  BYTE        dbud_rgbUserDefined[];*/ /* User-defined contents */
 };
 
-#pragma option pop /*P_O_Pop*/
+
 #endif  // _DBT_H
 

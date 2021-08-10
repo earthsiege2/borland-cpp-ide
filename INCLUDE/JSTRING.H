@@ -5,19 +5,18 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 7.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 1996 by Borland International
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
+
 #ifndef __JSTRING_H
 #define __JSTRING_H
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 #if !defined(__MBCTYPE_H)
 #include <mbctype.h>

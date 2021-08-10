@@ -1,8 +1,10 @@
+
 /*++ BUILD Version: 0001    Increment this if a change has global effects
 
-Copyright (c) 1985-1999, Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
+
 
     windows.h
 
@@ -28,24 +30,11 @@ Abstract:
 #pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #ifndef WINVER
-#define WINVER 0x0500
+#define WINVER 0x0501
 #else
 #if defined(_WIN32_WINNT) && (WINVER < 0x0400) && (_WIN32_WINNT > 0x0400)
 #error WINVER setting conflicts with _WIN32_WINNT setting
 #endif
-#endif
-
-#if 0 // (WINVER >= 0x0500)
-#pragma message ("")
-#pragma message ("NOTE: WINVER has been defined as 0x0500 or greater which enables")
-#pragma message ("Windows 2000 features.")
-#pragma message ("")
-#pragma message ("Caution: When building applications with WINVER set to 0x0500")
-#pragma message ("or greater, the resulting binary may not run as expected")
-#pragma message ("on earlier platforms, such Windows NT 4.0 or Windows 95 & Windows 98")
-#pragma message ("")
-#pragma message ("See the Platform SDK release notes for more information.")
-#pragma message ("")
 #endif
 
 #ifndef _INC_WINDOWS
@@ -144,31 +133,23 @@ Abstract:
 #    endif
 #endif
 
-#if !defined(_68K_) && !defined(_MPPC_) && !defined(_PPC_) && !defined(_ALPHA_) && !defined(_MIPS_) && !defined(_X86_) && !defined(_IA64_) && defined(_M_IX86)
+#if !defined(_68K_) && !defined(_MPPC_) && !defined(_X86_) && !defined(_IA64_) && !defined(_AMD64_) && defined(_M_IX86)
 #define _X86_
 #endif
 
-#if !defined(_68K_) && !defined(_MPPC_) && !defined(_PPC_) && !defined(_ALPHA_) && !defined(_X86_) && !defined(_IA64_) && !defined(_MIPS_) && defined(_M_MRX000)
-#define _MIPS_
+#if !defined(_68K_) && !defined(_MPPC_) && !defined(_X86_) && !defined(_IA64_) && !defined(_AMD64_) && defined(_M_AMD64)
+#define _AMD64_
 #endif
 
-#if !defined(_68K_) && !defined(_MPPC_) && !defined(_PPC_) && !defined(_ALPHA_) && !defined(_X86_) && !defined(_IA64_) && !defined(_MIPS_) && defined(_M_ALPHA)
-#define _ALPHA_
-#endif
-
-#if !defined(_68K_) && !defined(_MPPC_) && !defined(_PPC_) && !defined(_ALPHA_) && !defined(_X86_) && !defined(_IA64_) && !defined(_MIPS_) && defined(_M_PPC)
-#define _PPC_
-#endif
-
-#if !defined(_68K_) && !defined(_MPPC_) && !defined(_PPC_) && !defined(_ALPHA_) && !defined(_X86_) && !defined(_IA64_) && !defined(_MIPS_) && defined(_M_M68K)
+#if !defined(_68K_) && !defined(_MPPC_) && !defined(_X86_) && !defined(_IA64_) && !defined(_AMD64_) && defined(_M_M68K)
 #define _68K_
 #endif
 
-#if !defined(_68K_) && !defined(_MPPC_) && !defined(_PPC_) && !defined(_ALPHA_) && !defined(_X86_) && !defined(_IA64_) && !defined(_MIPS_) && defined(_M_MPPC)
+#if !defined(_68K_) && !defined(_MPPC_) && !defined(_X86_) && !defined(_IA64_) && !defined(_AMD64_) && defined(_M_MPPC)
 #define _MPPC_
 #endif
 
-#if !defined(_68K_) && !defined(_MPPC_) && !defined(_PPC_) && !defined(_ALPHA_) && !defined(_MIPS_) && !defined(_X86_) && !defined(_M_IX86) && defined(_M_IA64)
+#if !defined(_68K_) && !defined(_MPPC_) && !defined(_X86_) && !defined(_M_IX86) && !defined(_AMD64_) && defined(_M_IA64)
 #if !defined(_IA64_)
 #define _IA64_
 #endif // !_IA64_
@@ -177,6 +158,15 @@ Abstract:
 #ifndef _MAC
 #if defined(_68K_) || defined(_MPPC_)
 #define _MAC
+#endif
+#endif
+
+#if defined (_MSC_VER)
+#if ( _MSC_VER >= 800 )
+#ifndef __cplusplus
+#pragma warning(disable:4116)       // TYPE_ALIGNMENT generates this - move it
+                                    // outside the warning push/pop scope.
+#endif
 #endif
 #endif
 
@@ -229,20 +219,7 @@ Abstract:
 #include <shellapi.h>
 #ifndef _MAC
 #include <winperf.h>
-
-#if(_WIN32_WINNT >= 0x0400)
-#if defined(__BORLANDC__) && !defined(_WINSOCKAPI_) && !defined(_WINSOCK2API_)
-#include <winsock2.h>
-#endif /* __BORLANDC__ */
-#if defined(__BORLANDC__) && !defined(_WINSOCKAPI_) && !defined(_MSWSOCK_)
-#include <mswsock.h>
-#endif /* __BORLANDC__ */
-#else
-#if defined(__BORLANDC__) && !defined(_WINSOCKAPI_) && !defined(_WINSOCK2API_)
 #include <winsock.h>
-#endif /* __BORLANDC__ */
-#endif /* _WIN32_WINNT >=  0x0400 */
-
 #endif
 #ifndef NOCRYPT
 #include <wincrypt.h>
@@ -262,6 +239,8 @@ Abstract:
 #include <commdlg.h>
 #endif /* !NOGDI */
 #endif /* WIN32_LEAN_AND_MEAN */
+
+#include <stralign.h>
 
 #ifdef _MAC
 #include <winwlm.h>
@@ -304,5 +283,7 @@ Abstract:
 #endif /* RC_INVOKED */
 
 #endif /* _INC_WINDOWS */
+
 #pragma option pop /*P_O_Pop*/
 #endif /* _WINDOWS_ */
+

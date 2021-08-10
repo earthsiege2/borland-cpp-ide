@@ -1,9 +1,9 @@
-program WIN2kAPP;
+program Win2kApp;
 
 uses
   Forms,
   W2kMain in 'W2kMain.pas' {Win2kAppForm},
-  About in 'ABOUT.PAS' {AboutBox};
+  About in 'About.pas' {AboutBox};
 
 {$R *.RES}
 

@@ -16,6 +16,14 @@ OBJS=chicdial.obj   colorlis.obj   datedial.obj   docopt.obj     filenewd.obj   
      formatba.obj   formatpa.obj   formatta.obj   ipframe.obj    mainfrm.obj    \
      wordpad.obj    wordpdoc.obj   wordpvw.obj
 
-USES_OLE=1
+#!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+!include <..\..\mfcrules.mak>
 
-!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+default: integration
+	$(MAKE) -f $(PROJ).mak
+
+clean:
+	$(CLEAN_MFC)
+                                
+integration: $(PROJ).bpr $(PROJ).mak
+    $(NOP)

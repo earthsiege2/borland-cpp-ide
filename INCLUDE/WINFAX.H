@@ -1,7 +1,7 @@
 
 /*++
 
-Copyright (c) 1996-1998 Microsoft Corporation
+Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Module Name:
 
@@ -14,9 +14,10 @@ Abstract:
 --*/
 
 
+
 #ifndef _FAXAPI_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _FAXAPI_
+
 
 #ifndef MIDL_PASS
 #include <tapi.h>
@@ -29,28 +30,165 @@ Abstract:
 #endif
 
 
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+//
+// FAX ERROR CODES
+//
 
-#define FAXLOG_LEVEL_NONE           0
-#define FAXLOG_LEVEL_MIN            1
-#define FAXLOG_LEVEL_MED            2
-#define FAXLOG_LEVEL_MAX            3
+#define FAX_ERR_START                                   7001L   // First fax specific error code
 
-#define FAXLOG_CATEGORY_INIT        1
-#define FAXLOG_CATEGORY_OUTBOUND    2
-#define FAXLOG_CATEGORY_INBOUND     3
-#define FAXLOG_CATEGORY_UNKNOWN     4
+#define FAX_ERR_SRV_OUTOFMEMORY                         7001L
+#define FAX_ERR_GROUP_NOT_FOUND                         7002L
+#define FAX_ERR_BAD_GROUP_CONFIGURATION                 7003L
+#define FAX_ERR_GROUP_IN_USE                            7004L
+#define FAX_ERR_RULE_NOT_FOUND                          7005L
+#define FAX_ERR_NOT_NTFS                                7006L
+#define FAX_ERR_DIRECTORY_IN_USE                        7007L
+#define FAX_ERR_FILE_ACCESS_DENIED                      7008L
+#define FAX_ERR_MESSAGE_NOT_FOUND                       7009L
+#define FAX_ERR_DEVICE_NUM_LIMIT_EXCEEDED               7010L
+#define FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU               7011L
+#define FAX_ERR_VERSION_MISMATCH                        7012L   // Fax client/server versions mismtach
+
+#define FAX_ERR_END                                     7012L   // Last fax specific error code
 
 
-typedef struct _FAX_LOG_CATEGORYA {
+//
+// MessageId: FAX_E_SRV_OUTOFMEMORY
+//
+// MessageText:
+//
+//  The fax server failed to allocate memory.
+//
+#define FAX_E_SRV_OUTOFMEMORY                MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_SRV_OUTOFMEMORY)
+
+//
+// MessageId: FAX_E_GROUP_NOT_FOUND
+//
+// MessageText:
+//
+//  The fax server failed to locate an outbound routing group by name.
+//
+#define FAX_E_GROUP_NOT_FOUND                MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_GROUP_NOT_FOUND)
+
+//
+// MessageId: FAX_E_BAD_GROUP_CONFIGURATION
+//
+// MessageText:
+//
+//  The fax server encountered an outbound routing group with bad configuration.
+//
+#define FAX_E_BAD_GROUP_CONFIGURATION        MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_BAD_GROUP_CONFIGURATION)
+
+//
+// MessageId: FAX_E_GROUP_IN_USE
+//
+// MessageText:
+//
+//  The fax server cannot remove an outbound routing group because it is in use by one or more outbound routing rules.
+//
+#define FAX_E_GROUP_IN_USE                   MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_GROUP_IN_USE)
+
+//
+// MessageId: FAX_E_RULE_NOT_FOUND
+//
+// MessageText:
+//
+//  The fax server failed to locate an outbound routing rule by country code and area code.
+//
+#define FAX_E_RULE_NOT_FOUND                 MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_RULE_NOT_FOUND)
+
+//
+// MessageId: FAX_E_NOT_NTFS
+//
+// MessageText:
+//
+//  The fax server cannot set an archive folder to a non-NTFS partition.
+//
+#define FAX_E_NOT_NTFS                       MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_NOT_NTFS)
+
+//
+// MessageId: FAX_E_DIRECTORY_IN_USE
+//
+// MessageText:
+//
+//  The fax server cannot use the same folder for both the inbox and the sent-items archives.
+//
+#define FAX_E_DIRECTORY_IN_USE               MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_DIRECTORY_IN_USE)
+
+//
+// MessageId: FAX_E_FILE_ACCESS_DENIED
+//
+// MessageText:
+//
+//  The fax server cannot access the specified file or folder.
+//
+#define FAX_E_FILE_ACCESS_DENIED             MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_FILE_ACCESS_DENIED)
+
+//
+// MessageId: FAX_E_MESSAGE_NOT_FOUND
+//
+// MessageText:
+//
+//  The fax server cannot find the job or message by its ID.
+//
+#define FAX_E_MESSAGE_NOT_FOUND              MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_MESSAGE_NOT_FOUND)
+
+//
+// MessageId: FAX_E_DEVICE_NUM_LIMIT_EXCEEDED
+//
+// MessageText:
+//
+//  The fax server cannot complete the operation because the number of active fax devices allowed for this version of Windows was exceeded.
+//
+#define FAX_E_DEVICE_NUM_LIMIT_EXCEEDED      MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_DEVICE_NUM_LIMIT_EXCEEDED)
+
+//
+// MessageId: FAX_E_NOT_SUPPORTED_ON_THIS_SKU
+//
+// MessageText:
+//
+//  The fax server cannot complete the operation because it is not supported for this version of Windows.
+//
+#define FAX_E_NOT_SUPPORTED_ON_THIS_SKU      MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_NOT_SUPPORTED_ON_THIS_SKU)
+
+//
+// MessageId: FAX_E_VERSION_MISMATCH
+//
+// MessageText:
+//
+//  The fax server API version does not support the requested operation.
+//
+#define FAX_E_VERSION_MISMATCH               MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, FAX_ERR_VERSION_MISMATCH)
+
+typedef enum
+{
+    FAXLOG_LEVEL_NONE            = 0,
+    FAXLOG_LEVEL_MIN,
+    FAXLOG_LEVEL_MED,
+    FAXLOG_LEVEL_MAX
+} FAX_ENUM_LOG_LEVELS;
+
+typedef enum
+{
+    FAXLOG_CATEGORY_INIT        = 1,        // Initialization / shutdown
+    FAXLOG_CATEGORY_OUTBOUND,               // Outbound messages
+    FAXLOG_CATEGORY_INBOUND,                // Inbound messages
+    FAXLOG_CATEGORY_UNKNOWN                 // Unknown category (all others)
+} FAX_ENUM_LOG_CATEGORIES;
+
+typedef struct _FAX_LOG_CATEGORYA
+{
     LPCSTR              Name;                       // logging category name
     DWORD               Category;                   // logging category number
     DWORD               Level;                      // logging level for the category
 } FAX_LOG_CATEGORYA, *PFAX_LOG_CATEGORYA;
-typedef struct _FAX_LOG_CATEGORYW {
+typedef struct _FAX_LOG_CATEGORYW
+{
     LPCWSTR             Name;                       // logging category name
     DWORD               Category;                   // logging category number
     DWORD               Level;                      // logging level for the category
@@ -63,12 +201,14 @@ typedef FAX_LOG_CATEGORYA FAX_LOG_CATEGORY;
 typedef PFAX_LOG_CATEGORYA PFAX_LOG_CATEGORY;
 #endif // UNICODE
 
-typedef struct _FAX_TIME {
+typedef struct _FAX_TIME
+{
     WORD    Hour;
     WORD    Minute;
 } FAX_TIME, *PFAX_TIME;
 
-typedef struct _FAX_CONFIGURATIONA {
+typedef struct _FAX_CONFIGURATIONA
+{
     DWORD               SizeOfStruct;                   // size of this structure
     DWORD               Retries;                        // number of retries for fax send
     DWORD               RetryDelay;                     // number of minutes between retries
@@ -81,9 +221,10 @@ typedef struct _FAX_CONFIGURATIONA {
     FAX_TIME            StopCheapTime;                  // end of discount rate period
     BOOL                ArchiveOutgoingFaxes;           // whether outgoing faxes should be archived
     LPCSTR              ArchiveDirectory;               // archive directory for outgoing faxes
-    LPCSTR              InboundProfile;                 // profile used for inbound routing (email)
+    LPCSTR              Reserved;                       // Reserved; must be NULL
 } FAX_CONFIGURATIONA, *PFAX_CONFIGURATIONA;
-typedef struct _FAX_CONFIGURATIONW {
+typedef struct _FAX_CONFIGURATIONW
+{
     DWORD               SizeOfStruct;                   // size of this structure
     DWORD               Retries;                        // number of retries for fax send
     DWORD               RetryDelay;                     // number of minutes between retries
@@ -96,7 +237,7 @@ typedef struct _FAX_CONFIGURATIONW {
     FAX_TIME            StopCheapTime;                  // end of discount rate period
     BOOL                ArchiveOutgoingFaxes;           // whether outgoing faxes should be archived
     LPCWSTR             ArchiveDirectory;               // archive directory for outgoing faxes
-    LPCWSTR             InboundProfile;                 // profile used for inbound routing (email)
+    LPCWSTR             Reserved;                       // Reserved; must be NULL
 } FAX_CONFIGURATIONW, *PFAX_CONFIGURATIONW;
 #ifdef UNICODE
 typedef FAX_CONFIGURATIONW FAX_CONFIGURATION;
@@ -111,11 +252,16 @@ typedef PFAX_CONFIGURATIONA PFAX_CONFIGURATION;
 // FaxSetJob() command codes
 //
 
-#define JC_UNKNOWN                  0
-#define JC_DELETE                   1
-#define JC_PAUSE                    2
-#define JC_RESUME                   3
-#define JC_RESTART                  JC_RESUME
+typedef enum
+{
+    JC_UNKNOWN      = 0,
+    JC_DELETE,
+    JC_PAUSE,
+    JC_RESUME
+} FAX_ENUM_JOB_COMMANDS;
+
+#define JC_RESTART   JC_RESUME
+
 
 //
 // job type defines
@@ -130,7 +276,6 @@ typedef PFAX_CONFIGURATIONA PFAX_CONFIGURATION;
 //
 // job status defines
 //
-
 #define JS_PENDING                  0x00000000
 #define JS_INPROGRESS               0x00000001
 #define JS_DELETING                 0x00000002
@@ -140,7 +285,10 @@ typedef PFAX_CONFIGURATIONA PFAX_CONFIGURATION;
 #define JS_RETRYING                 0x00000020
 #define JS_RETRIES_EXCEEDED         0x00000040
 
-typedef struct _FAX_DEVICE_STATUSA {
+
+
+typedef struct _FAX_DEVICE_STATUSA
+{
     DWORD               SizeOfStruct;               // size of this structure
     LPCSTR              CallerId;                   // caller id string
     LPCSTR              Csid;                       // station identifier
@@ -162,7 +310,8 @@ typedef struct _FAX_DEVICE_STATUSA {
     LPCSTR              Tsid;                       // transmitting station identifier
     LPCSTR              UserName;                   // user that submitted the active job
 } FAX_DEVICE_STATUSA, *PFAX_DEVICE_STATUSA;
-typedef struct _FAX_DEVICE_STATUSW {
+typedef struct _FAX_DEVICE_STATUSW
+{
     DWORD               SizeOfStruct;               // size of this structure
     LPCWSTR             CallerId;                   // caller id string
     LPCWSTR             Csid;                       // station identifier
@@ -192,7 +341,8 @@ typedef FAX_DEVICE_STATUSA FAX_DEVICE_STATUS;
 typedef PFAX_DEVICE_STATUSA PFAX_DEVICE_STATUS;
 #endif // UNICODE
 
-typedef struct _FAX_JOB_ENTRYA {
+typedef struct _FAX_JOB_ENTRYA
+{
     DWORD               SizeOfStruct;               // size of this structure
     DWORD               JobId;                      // fax job id
     LPCSTR              UserName;                   // user who submitted the job
@@ -211,10 +361,11 @@ typedef struct _FAX_JOB_ENTRYA {
     DWORD               ScheduleAction;             // when to schedule the fax, see JSA defines
     SYSTEMTIME          ScheduleTime;               // time to send the fax when JSA_SPECIFIC_TIME is used (must be local time)
     DWORD               DeliveryReportType;         // delivery report type, see DRT defines
-    LPCSTR              DeliveryReportAddress;      // email address for delivery report (ndr or dr)
+    LPCSTR              DeliveryReportAddress;      // email address for delivery report (ndr or dr) thru MAPI / SMTP
     LPCSTR              DocumentName;               // document name
 } FAX_JOB_ENTRYA, *PFAX_JOB_ENTRYA;
-typedef struct _FAX_JOB_ENTRYW {
+typedef struct _FAX_JOB_ENTRYW
+{
     DWORD               SizeOfStruct;               // size of this structure
     DWORD               JobId;                      // fax job id
     LPCWSTR             UserName;                   // user who submitted the job
@@ -233,7 +384,7 @@ typedef struct _FAX_JOB_ENTRYW {
     DWORD               ScheduleAction;             // when to schedule the fax, see JSA defines
     SYSTEMTIME          ScheduleTime;               // time to send the fax when JSA_SPECIFIC_TIME is used (must be local time)
     DWORD               DeliveryReportType;         // delivery report type, see DRT defines
-    LPCWSTR             DeliveryReportAddress;      // email address for delivery report (ndr or dr)
+    LPCWSTR             DeliveryReportAddress;      // email address for delivery report (ndr or dr) thru MAPI / SMTP
     LPCWSTR             DocumentName;               // document name
 } FAX_JOB_ENTRYW, *PFAX_JOB_ENTRYW;
 #ifdef UNICODE
@@ -279,31 +430,33 @@ typedef PFAX_JOB_ENTRYA PFAX_JOB_ENTRY;
 // fax port capability mask
 //
 
-#define FPF_RECEIVE       0x00000001
+#define FPF_RECEIVE       0x00000001        // Automatically receive faxes
 #define FPF_SEND          0x00000002
 #define FPF_VIRTUAL       0x00000004
 
-typedef struct _FAX_PORT_INFOA {
+typedef struct _FAX_PORT_INFOA
+{
     DWORD               SizeOfStruct;               // size of this structure
-    DWORD               DeviceId;                   //
-    DWORD               State;                      //
-    DWORD               Flags;                      //
-    DWORD               Rings;                      //
-    DWORD               Priority;                   //
-    LPCSTR              DeviceName;                 //
-    LPCSTR              Tsid;                       //
-    LPCSTR              Csid;                       //
+    DWORD               DeviceId;                   // Device ID
+    DWORD               State;                      // State of the device
+    DWORD               Flags;                      // Device specific flags
+    DWORD               Rings;                      // Number of rings before answer
+    DWORD               Priority;                   // Device priority
+    LPCSTR              DeviceName;                 // Device name
+    LPCSTR              Tsid;                       // Device Tsid
+    LPCSTR              Csid;                       // Device Csid
 } FAX_PORT_INFOA, *PFAX_PORT_INFOA;
-typedef struct _FAX_PORT_INFOW {
+typedef struct _FAX_PORT_INFOW
+{
     DWORD               SizeOfStruct;               // size of this structure
-    DWORD               DeviceId;                   //
-    DWORD               State;                      //
-    DWORD               Flags;                      //
-    DWORD               Rings;                      //
-    DWORD               Priority;                   //
-    LPCWSTR             DeviceName;                 //
-    LPCWSTR             Tsid;                       //
-    LPCWSTR             Csid;                       //
+    DWORD               DeviceId;                   // Device ID
+    DWORD               State;                      // State of the device
+    DWORD               Flags;                      // Device specific flags
+    DWORD               Rings;                      // Number of rings before answer
+    DWORD               Priority;                   // Device priority
+    LPCWSTR             DeviceName;                 // Device name
+    LPCWSTR             Tsid;                       // Device Tsid
+    LPCWSTR             Csid;                       // Device Csid
 } FAX_PORT_INFOW, *PFAX_PORT_INFOW;
 #ifdef UNICODE
 typedef FAX_PORT_INFOW FAX_PORT_INFO;
@@ -314,7 +467,8 @@ typedef PFAX_PORT_INFOA PFAX_PORT_INFO;
 #endif // UNICODE
 
 
-typedef struct _FAX_ROUTING_METHODA {
+typedef struct _FAX_ROUTING_METHODA
+{
     DWORD               SizeOfStruct;               // size of this structure
     DWORD               DeviceId;                   // device identifier
     BOOL                Enabled;                    // is this method enabled for this device?
@@ -325,7 +479,8 @@ typedef struct _FAX_ROUTING_METHODA {
     LPCSTR              ExtensionImageName;         // module (dll) name that implements this method
     LPCSTR              ExtensionFriendlyName;      // displayable string that identifies the extension
 } FAX_ROUTING_METHODA, *PFAX_ROUTING_METHODA;
-typedef struct _FAX_ROUTING_METHODW {
+typedef struct _FAX_ROUTING_METHODW
+{
     DWORD               SizeOfStruct;               // size of this structure
     DWORD               DeviceId;                   // device identifier
     BOOL                Enabled;                    // is this method enabled for this device?
@@ -345,7 +500,8 @@ typedef PFAX_ROUTING_METHODA PFAX_ROUTING_METHOD;
 #endif // UNICODE
 
 
-typedef struct _FAX_GLOBAL_ROUTING_INFOA {
+typedef struct _FAX_GLOBAL_ROUTING_INFOA
+{
     DWORD               SizeOfStruct;               // size of this structure
     DWORD               Priority;                   // priority of this device
     LPCSTR              Guid;                       // guid that identifies this routing method
@@ -354,7 +510,8 @@ typedef struct _FAX_GLOBAL_ROUTING_INFOA {
     LPCSTR              ExtensionImageName;         // module (dll) name that implements this method
     LPCSTR              ExtensionFriendlyName;      // displayable string that identifies the extension
 } FAX_GLOBAL_ROUTING_INFOA, *PFAX_GLOBAL_ROUTING_INFOA;
-typedef struct _FAX_GLOBAL_ROUTING_INFOW {
+typedef struct _FAX_GLOBAL_ROUTING_INFOW
+{
     DWORD               SizeOfStruct;               // size of this structure
     DWORD               Priority;                   // priority of this device
     LPCWSTR             Guid;                       // guid that identifies this routing method
@@ -372,7 +529,8 @@ typedef PFAX_GLOBAL_ROUTING_INFOA PFAX_GLOBAL_ROUTING_INFO;
 #endif // UNICODE
 
 
-typedef struct _FAX_COVERPAGE_INFOA {
+typedef struct _FAX_COVERPAGE_INFOA
+{
     DWORD               SizeOfStruct;               // Size of this structure
     //
     // general
@@ -415,7 +573,8 @@ typedef struct _FAX_COVERPAGE_INFOA {
     SYSTEMTIME          TimeSent;                   // Time the fax was sent
     DWORD               PageCount;                  // Number of pages
 } FAX_COVERPAGE_INFOA, *PFAX_COVERPAGE_INFOA;
-typedef struct _FAX_COVERPAGE_INFOW {
+typedef struct _FAX_COVERPAGE_INFOW
+{
     DWORD               SizeOfStruct;               // Size of this structure
     //
     // general
@@ -466,16 +625,22 @@ typedef FAX_COVERPAGE_INFOA FAX_COVERPAGE_INFO;
 typedef PFAX_COVERPAGE_INFOA PFAX_COVERPAGE_INFO;
 #endif // UNICODE
 
-#define JSA_NOW                 0
-#define JSA_SPECIFIC_TIME       1
-#define JSA_DISCOUNT_PERIOD     2
+typedef enum
+{
+    JSA_NOW                  = 0,   // Send now
+    JSA_SPECIFIC_TIME,              // Send at specific time
+    JSA_DISCOUNT_PERIOD             // Send at server configured discount period
+} FAX_ENUM_JOB_SEND_ATTRIBUTES;
 
-#define DRT_NONE                0
-#define DRT_EMAIL               1
-#define DRT_INBOX               2
+typedef enum
+{
+    DRT_NONE                = 0x0000,       // Do not send receipt
+    DRT_EMAIL               = 0x0001,       // Send receipt by email
+    DRT_INBOX               = 0x0002        // send receipt to local inbox
+} FAX_ENUM_DELIVERY_REPORT_TYPES;
 
-
-typedef struct _FAX_JOB_PARAMA {
+typedef struct _FAX_JOB_PARAMA
+{
     DWORD               SizeOfStruct;               // size of this structure
     LPCSTR              RecipientNumber;            // recipient fax number
     LPCSTR              RecipientName;              // recipient name
@@ -483,16 +648,17 @@ typedef struct _FAX_JOB_PARAMA {
     LPCSTR              SenderName;                 // sender name
     LPCSTR              SenderCompany;              // sender company
     LPCSTR              SenderDept;                 // sender department
-    LPCSTR              BillingCode;                // billing code    
+    LPCSTR              BillingCode;                // billing code
     DWORD               ScheduleAction;             // when to schedule the fax, see JSA defines
     SYSTEMTIME          ScheduleTime;               // time to send the fax when JSA_SPECIFIC_TIME is used (must be local time)
     DWORD               DeliveryReportType;         // delivery report type, see DRT defines
-    LPCSTR              DeliveryReportAddress;      // email address for delivery report (ndr or dr)
+    LPCSTR              DeliveryReportAddress;      // email address for delivery report (ndr or dr) thru MAPI / SMTP
     LPCSTR              DocumentName;               // document name (optional)
     HCALL               CallHandle;                 // optional call handle
     DWORD_PTR           Reserved[3];                // reserved for ms use only
 } FAX_JOB_PARAMA, *PFAX_JOB_PARAMA;
-typedef struct _FAX_JOB_PARAMW {
+typedef struct _FAX_JOB_PARAMW
+{
     DWORD               SizeOfStruct;               // size of this structure
     LPCWSTR             RecipientNumber;            // recipient fax number
     LPCWSTR             RecipientName;              // recipient name
@@ -500,11 +666,11 @@ typedef struct _FAX_JOB_PARAMW {
     LPCWSTR             SenderName;                 // sender name
     LPCWSTR             SenderCompany;              // sender company
     LPCWSTR             SenderDept;                 // sender department
-    LPCWSTR             BillingCode;                // billing code    
+    LPCWSTR             BillingCode;                // billing code
     DWORD               ScheduleAction;             // when to schedule the fax, see JSA defines
     SYSTEMTIME          ScheduleTime;               // time to send the fax when JSA_SPECIFIC_TIME is used (must be local time)
     DWORD               DeliveryReportType;         // delivery report type, see DRT defines
-    LPCWSTR             DeliveryReportAddress;      // email address for delivery report (ndr or dr)
+    LPCWSTR             DeliveryReportAddress;      // email address for delivery report (ndr or dr) thru MAPI / SMTP
     LPCWSTR             DocumentName;               // document name (optional)
     HCALL               CallHandle;                 // optional call handle
     DWORD_PTR           Reserved[3];                // reserved for ms use only
@@ -516,8 +682,6 @@ typedef PFAX_JOB_PARAMW PFAX_JOB_PARAM;
 typedef FAX_JOB_PARAMA FAX_JOB_PARAM;
 typedef PFAX_JOB_PARAMA PFAX_JOB_PARAM;
 #endif // UNICODE
-
-
 
 //
 // Event Ids
@@ -553,18 +717,18 @@ typedef PFAX_JOB_PARAMA PFAX_JOB_PARAM;
 #define FEI_HANDLED                 0x0000001a
 #define FEI_FAXSVC_STARTED          0x0000001b
 
-
-
 #define FEI_NEVENTS                 FEI_FAXSVC_STARTED
 
-typedef struct _FAX_EVENTA {
+typedef struct _FAX_EVENTA
+{
     DWORD               SizeOfStruct;               // Size of this structure
     FILETIME            TimeStamp;                  // Timestamp for when the event was generated
     DWORD               DeviceId;                   // Permanent line id
     DWORD               EventId;                    // Current event id
     DWORD               JobId;                      // Fax Job Id, 0xffffffff indicates inactive job
 } FAX_EVENTA, *PFAX_EVENTA;
-typedef struct _FAX_EVENTW {
+typedef struct _FAX_EVENTW
+{
     DWORD               SizeOfStruct;               // Size of this structure
     FILETIME            TimeStamp;                  // Timestamp for when the event was generated
     DWORD               DeviceId;                   // Permanent line id
@@ -580,7 +744,8 @@ typedef PFAX_EVENTA PFAX_EVENT;
 #endif // UNICODE
 
 
-typedef struct _FAX_PRINT_INFOA {
+typedef struct _FAX_PRINT_INFOA
+{
     DWORD               SizeOfStruct;               // Size of this structure
     LPCSTR              DocName;                    // Document name that appears in the spooler
     LPCSTR              RecipientName;              // Recipient name
@@ -589,11 +754,12 @@ typedef struct _FAX_PRINT_INFOA {
     LPCSTR              SenderCompany;              // Sender company (optional)
     LPCSTR              SenderDept;                 // Sender department
     LPCSTR              SenderBillingCode;          // Billing code
-    LPCSTR              DrProfileName;              // Profile name for delivery report    <--| mutually exclusive
-    LPCSTR              DrEmailAddress;             // E.Mail address for delivery report  <--|
+    LPCSTR              Reserved;                   // Reserved; must be NULL
+    LPCSTR              DrEmailAddress;             // E.Mail address for delivery report
     LPCSTR              OutputFileName;             // for print to file, resulting file name
 } FAX_PRINT_INFOA, *PFAX_PRINT_INFOA;
-typedef struct _FAX_PRINT_INFOW {
+typedef struct _FAX_PRINT_INFOW
+{
     DWORD               SizeOfStruct;               // Size of this structure
     LPCWSTR             DocName;                    // Document name that appears in the spooler
     LPCWSTR             RecipientName;              // Recipient name
@@ -602,8 +768,8 @@ typedef struct _FAX_PRINT_INFOW {
     LPCWSTR             SenderCompany;              // Sender company (optional)
     LPCWSTR             SenderDept;                 // Sender department
     LPCWSTR             SenderBillingCode;          // Billing code
-    LPCWSTR             DrProfileName;              // Profile name for delivery report    <--| mutually exclusive
-    LPCWSTR             DrEmailAddress;             // E.Mail address for delivery report  <--|
+    LPCWSTR             Reserved;                   // Reserved; must be NULL
+    LPCWSTR             DrEmailAddress;             // E.Mail address for delivery report
     LPCWSTR             OutputFileName;             // for print to file, resulting file name
 } FAX_PRINT_INFOW, *PFAX_PRINT_INFOW;
 #ifdef UNICODE
@@ -615,12 +781,14 @@ typedef PFAX_PRINT_INFOA PFAX_PRINT_INFO;
 #endif // UNICODE
 
 
-typedef struct _FAX_CONTEXT_INFOA {
+typedef struct _FAX_CONTEXT_INFOA
+{
     DWORD               SizeOfStruct;                           // Size of this structure
     HDC                 hDC;                                    // Device Context
     CHAR                ServerName[MAX_COMPUTERNAME_LENGTH+1];  // Server name
 } FAX_CONTEXT_INFOA, *PFAX_CONTEXT_INFOA;
-typedef struct _FAX_CONTEXT_INFOW {
+typedef struct _FAX_CONTEXT_INFOW
+{
     DWORD               SizeOfStruct;                           // Size of this structure
     HDC                 hDC;                                    // Device Context
     WCHAR               ServerName[MAX_COMPUTERNAME_LENGTH+1];  // Server name
@@ -635,38 +803,9 @@ typedef PFAX_CONTEXT_INFOA PFAX_CONTEXT_INFO;
 
 
 //
-// Fax Specific Access Rights
-//
-
-#define FAX_JOB_SUBMIT          (0x0001)
-#define FAX_JOB_QUERY           (0x0002)
-#define FAX_CONFIG_QUERY        (0x0004)
-#define FAX_CONFIG_SET          (0x0008)
-#define FAX_PORT_QUERY          (0x0010)
-#define FAX_PORT_SET            (0x0020)
-#define FAX_JOB_MANAGE          (0x0040)
-
-#define FAX_READ                (STANDARD_RIGHTS_READ        |\
-                                 FAX_JOB_QUERY               |\
-                                 FAX_CONFIG_QUERY            |\
-                                 FAX_PORT_QUERY)
-
-#define FAX_WRITE               (STANDARD_RIGHTS_WRITE       |\
-                                 FAX_JOB_SUBMIT )
-
-#define FAX_ALL_ACCESS          (STANDARD_RIGHTS_ALL         |\
-                                 FAX_JOB_SUBMIT              |\
-                                 FAX_JOB_QUERY               |\
-                                 FAX_CONFIG_QUERY            |\
-                                 FAX_CONFIG_SET              |\
-                                 FAX_PORT_QUERY              |\
-                                 FAX_PORT_SET                |\
-                                 FAX_JOB_MANAGE)
-
-
-//
 // prototypes
 //
+
 WINFAXAPI
 BOOL
 WINAPI
@@ -674,9 +813,6 @@ FaxConnectFaxServerA(
     IN  LPCSTR MachineName OPTIONAL,
     OUT LPHANDLE FaxHandle
     );
-//
-// prototypes
-//
 WINFAXAPI
 BOOL
 WINAPI
@@ -718,24 +854,11 @@ typedef BOOL
     IN HANDLE FaxHandle
     );
 
-
-WINFAXAPI
-BOOL
-WINAPI
-FaxAccessCheck(
-    IN HANDLE FaxHandle,
-    IN DWORD  AccessMask
-    );
-
-typedef BOOL
-(WINAPI *PFAXACCESSCHECK)(
-    IN HANDLE FaxHandle,
-    IN DWORD  AccessMask
-    );
-
-
-#define PORT_OPEN_QUERY     0x00000001
-#define PORT_OPEN_MODIFY    0x00000002
+typedef enum
+{
+    PORT_OPEN_QUERY     = 1,
+    PORT_OPEN_MODIFY
+} FAX_ENUM_PORT_OPEN_TYPE;
 
 WINFAXAPI
 BOOL
@@ -754,8 +877,6 @@ typedef BOOL
     IN  DWORD Flags,
     OUT LPHANDLE FaxPortHandle
     );
-
-
 
 WINFAXAPI
 BOOL
@@ -792,6 +913,7 @@ typedef BOOL
 #else
 #define PFAXCOMPLETEJOBPARAMS  PFAXCOMPLETEJOBPARAMSA
 #endif // !UNICODE
+
 
 
 WINFAXAPI
@@ -868,21 +990,21 @@ WINFAXAPI
 BOOL
 WINAPI
 FaxSendDocumentForBroadcastA(
-    IN  HANDLE FaxHandle,
-    IN  LPCSTR FileName,
+    IN HANDLE FaxHandle,
+    IN LPCSTR FileName,
     OUT LPDWORD FaxJobId,
-    IN  PFAX_RECIPIENT_CALLBACKA FaxRecipientCallback,
-    IN  LPVOID Context
+    IN PFAX_RECIPIENT_CALLBACKA FaxRecipientCallback,
+    IN LPVOID Context
     );
 WINFAXAPI
 BOOL
 WINAPI
 FaxSendDocumentForBroadcastW(
-    IN  HANDLE FaxHandle,
-    IN  LPCWSTR FileName,
+    IN HANDLE FaxHandle,
+    IN LPCWSTR FileName,
     OUT LPDWORD FaxJobId,
-    IN  PFAX_RECIPIENT_CALLBACKW FaxRecipientCallback,
-    IN  LPVOID Context
+    IN PFAX_RECIPIENT_CALLBACKW FaxRecipientCallback,
+    IN LPVOID Context
     );
 #ifdef UNICODE
 #define FaxSendDocumentForBroadcast  FaxSendDocumentForBroadcastW
@@ -911,6 +1033,7 @@ typedef BOOL
 #else
 #define PFAXSENDDOCUMENTFORBROADCAST  PFAXSENDDOCUMENTFORBROADCASTA
 #endif // !UNICODE
+
 
 WINFAXAPI
 BOOL
@@ -952,6 +1075,7 @@ typedef BOOL
 #define PFAXENUMJOBS  PFAXENUMJOBSA
 #endif // !UNICODE
 
+
 WINFAXAPI
 BOOL
 WINAPI
@@ -991,6 +1115,7 @@ typedef BOOL
 #else
 #define PFAXGETJOB  PFAXGETJOBA
 #endif // !UNICODE
+
 
 WINFAXAPI
 BOOL
@@ -1337,7 +1462,6 @@ typedef BOOL
 #define PFAXGETPORT  PFAXGETPORTA
 #endif // !UNICODE
 
-
 WINFAXAPI
 BOOL
 WINAPI
@@ -1373,7 +1497,6 @@ typedef BOOL
 #else
 #define PFAXSETPORT  PFAXSETPORTA
 #endif // !UNICODE
-
 
 WINFAXAPI
 BOOL
@@ -1532,7 +1655,6 @@ typedef BOOL
 #define PFAXSETGLOBALROUTINGINFO  PFAXSETGLOBALROUTINGINFOA
 #endif // !UNICODE
 
-
 WINFAXAPI
 BOOL
 WINAPI
@@ -1621,8 +1743,6 @@ typedef BOOL
 #else
 #define PFAXSETROUTINGINFO  PFAXSETROUTINGINFOA
 #endif // !UNICODE
-
-
 
 WINFAXAPI
 BOOL
@@ -1736,6 +1856,7 @@ typedef BOOL
 #define PFAXPRINTCOVERPAGE  PFAXPRINTCOVERPAGEA
 #endif // !UNICODE
 
+
 WINFAXAPI
 BOOL
 WINAPI
@@ -1749,13 +1870,13 @@ FaxRegisterServiceProviderW(
 #define FaxRegisterServiceProvider  FaxRegisterServiceProviderW
 
 typedef BOOL
-(WINAPI *PFAXREGISTERSERVICEPROVIDERW)(    
+(WINAPI *PFAXREGISTERSERVICEPROVIDERW)(
     IN LPCWSTR DeviceProvider,
     IN LPCWSTR FriendlyName,
     IN LPCWSTR ImageName,
     IN LPCWSTR TspName
     );
-    
+
 #define PFAXREGISTERSERVICEPROVIDER PFAXREGISTERSERVICEPROVIDERW
 
 typedef BOOL
@@ -1798,11 +1919,78 @@ typedef BOOL
 
 #define PFAXREGISTERROUTINGEXTENSION PFAXREGISTERROUTINGEXTENSIONW
 
+WINFAXAPI
+BOOL
+WINAPI
+FaxUnregisterRoutingExtensionA(
+    IN HANDLE           hFaxHandle,
+    IN LPCSTR         lpctstrExtensionName
+);
+WINFAXAPI
+BOOL
+WINAPI
+FaxUnregisterRoutingExtensionW(
+    IN HANDLE           hFaxHandle,
+    IN LPCWSTR         lpctstrExtensionName
+);
+#ifdef UNICODE
+#define FaxUnregisterRoutingExtension  FaxUnregisterRoutingExtensionW
+#else
+#define FaxUnregisterRoutingExtension  FaxUnregisterRoutingExtensionA
+#endif // !UNICODE
+
+
+
+
+WINFAXAPI
+BOOL
+WINAPI
+FaxAccessCheck(
+    IN HANDLE FaxHandle,
+    IN DWORD  AccessMask
+    );
+
+typedef BOOL
+(WINAPI *PFAXACCESSCHECK)(
+    IN HANDLE FaxHandle,
+    IN DWORD  AccessMask
+    );
+
+//
+// Fax Specific Access Rights
+//
+
+#define FAX_JOB_SUBMIT          (0x0001)
+#define FAX_JOB_QUERY           (0x0002)
+#define FAX_CONFIG_QUERY        (0x0004)
+#define FAX_CONFIG_SET          (0x0008)
+#define FAX_PORT_QUERY          (0x0010)
+#define FAX_PORT_SET            (0x0020)
+#define FAX_JOB_MANAGE          (0x0040)
+
+#define FAX_READ                (STANDARD_RIGHTS_READ        |\
+                                 FAX_JOB_QUERY               |\
+                                 FAX_CONFIG_QUERY            |\
+                                 FAX_PORT_QUERY)
+
+#define FAX_WRITE               (STANDARD_RIGHTS_WRITE       |\
+                                 FAX_JOB_SUBMIT )
+
+#define FAX_ALL_ACCESS          (STANDARD_RIGHTS_ALL         |\
+                                 FAX_JOB_SUBMIT              |\
+                                 FAX_JOB_QUERY               |\
+                                 FAX_CONFIG_QUERY            |\
+                                 FAX_CONFIG_SET              |\
+                                 FAX_PORT_QUERY              |\
+                                 FAX_PORT_SET                |\
+                                 FAX_JOB_MANAGE)
+
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif
+
+

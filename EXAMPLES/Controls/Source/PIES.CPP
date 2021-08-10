@@ -1,16 +1,11 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 // pies.cpp
-// This file is #included in PIEREG.CPP which #includes PIEREG.H which
-// in turn #includes PIES.H.  Hence #including PIES.H here is redundant with
-// no ramifications (there are sentries in the header file) but has been done
-// just to clarify that the function and class implementations in this file are
-// prototyped in PIES.H
 #include  "pies.h"
 #include <Windows.hpp>
-
+#pragma package(smart_init)
 //---------------------------------------------------------------------------
 __fastcall TAngles::TAngles(void) : TPersistent() { }
 __fastcall TAngles::~TAngles(void) { }

@@ -126,7 +126,7 @@ private:
            const char * VarName, const char * AnsiString, const char * XMLData);
 
 protected:
-	DYNAMIC void __fastcall DoTagEvent(Httpapp::TTag Tag, const AnsiString TagString, Classes::TStrings* TagParams, AnsiString &ReplaceText);
+	DYNAMIC void __fastcall DoTagEvent(TTag Tag, const AnsiString TagString, Classes::TStrings* TagParams, AnsiString &ReplaceText);
 	virtual void __fastcall GeneratePageElements(void);
 	virtual Midprod::TMidasPageElements* __fastcall CreatePageElements(void);
 	virtual void __fastcall AddIncludes(void);

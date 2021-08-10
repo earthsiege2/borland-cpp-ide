@@ -1,8 +1,7 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
 /* ----------------------------------------------------------------------------
 Microsoft	D.T.C (Distributed Transaction Coordinator)
 
-(c)	1996	Microsoft Corporation.	All Rights Reserved
+Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
 
 @doc
 
@@ -14,7 +13,6 @@ Microsoft	D.T.C (Distributed Transaction Coordinator)
 @rev 	0 	| 8th -Sep-1995	|	GaganC		| Created
 ----------------------------------------------------------------------------- */
 #ifndef __DTCHELP_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __DTCHELP_H__
 
 
@@ -53,6 +51,24 @@ typedef HRESULT  (__cdecl * DTC_GET_TRANSACTION_MANAGER)(
 									/* in */ void FAR * pvReserved2,
 									/*out */ void** ppvObject )	;
 
+typedef HRESULT  (__cdecl * DTC_GET_TRANSACTION_MANAGER_EX_A)(
+									/* in */ char * i_pszHost,
+									/* in */ char * i_pszTmName,
+									/* in */ REFIID i_riid,
+									/* in */ DWORD i_grfOptions,
+									/* in */ void * i_pvConfigParams,
+									/* out */ void ** o_ppvObject
+									);
+
+typedef HRESULT  (__cdecl * DTC_GET_TRANSACTION_MANAGER_EX_W)(
+									/* in */ WCHAR * i_pwszHost,
+									/* in */ WCHAR * i_pwszTmName,
+									/* in */ REFIID i_riid,
+									/* in */ DWORD i_grfOptions,
+									/* in */ void * i_pvConfigParams,
+									/* out */ void ** o_ppvObject
+									);
+
 typedef HRESULT	( * DTC_INSTALL_CLIENT ) ( 
 									   LPTSTR i_pszRemoteTmHostName, 
 									   DWORD i_dwProtocol,
@@ -60,15 +76,19 @@ typedef HRESULT	( * DTC_INSTALL_CLIENT ) (
 
 #ifndef UNICODE 
 
-#define	GetDTCStatus					GetDTCStatusA
-#define	StartDTC						StartDTCA
-#define	StopDTC							StopDTCA
+#define DTC_GET_TRANSACTION_MANAGER_EX		DTC_GET_TRANSACTION_MANAGER_EX_A
+#define LoadDtcHelperEx						LoadDtcHelperExA
+#define	GetDTCStatus						GetDTCStatusA
+#define	StartDTC							StartDTCA
+#define	StopDTC								StopDTCA
 
 #else
 
-#define	GetDTCStatus					GetDTCStatusW
-#define	StartDTC						StartDTCW
-#define	StopDTC							StopDTCW
+#define DTC_GET_TRANSACTION_MANAGER_EX		DTC_GET_TRANSACTION_MANAGER_EX_W
+#define LoadDtcHelperEx						LoadDtcHelperExW
+#define	GetDTCStatus						GetDTCStatusW
+#define	StartDTC							StartDTCW
+#define	StopDTC								StopDTCW
 
 #endif 
 
@@ -93,7 +113,11 @@ const	DWORD	DTC_INSTALL_OVERWRITE_SERVER	=	0x00000002;
 //---------------------------------------------------------
 EXTERN_C
 {
-	DTC_GET_TRANSACTION_MANAGER	__cdecl LoadDtcHelper (void);
+	DTC_GET_TRANSACTION_MANAGER			__cdecl LoadDtcHelper (void);
+	DTC_GET_TRANSACTION_MANAGER_EX_A	__cdecl LoadDtcHelperExA (void);
+	DTC_GET_TRANSACTION_MANAGER_EX_W	__cdecl LoadDtcHelperExW (void);
+	void								__cdecl FreeDtcHelper (void);
+
 	HMODULE __cdecl GetDtcLocaleResourceHandle(void);
 
 	// Function:	Initialize
@@ -198,5 +222,4 @@ EXTERN_C
 //---------------------------------------------------------
 
 
-#pragma option pop /*P_O_Pop*/
 #endif __DTCHELP_H__

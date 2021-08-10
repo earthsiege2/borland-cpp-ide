@@ -1,9 +1,9 @@
 LIBRARY DSOUND
 EXPORTS
 
-    DirectSoundCaptureCreate                 = 'DSOUND.DLL'.*
-    DirectSoundCaptureEnumerateA             = 'DSOUND.DLL'.*
-    DirectSoundCaptureEnumerateW             = 'DSOUND.DLL'.*
-    DirectSoundCreate                        = 'DSOUND.DLL'.*
-    DirectSoundEnumerateA                    = 'DSOUND.DLL'.*
-    DirectSoundEnumerateW                    = 'DSOUND.DLL'.*
+    DirectSoundCaptureCreate                 
+    DirectSoundCaptureEnumerateA             
+    DirectSoundCaptureEnumerateW             
+    DirectSoundCreate                        
+    DirectSoundEnumerateA                    
+    DirectSoundEnumerateW                    

@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Tue Aug 24 16:52:50 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for shldisp.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -37,6 +35,10 @@
 
 #ifndef __shldisp_h__
 #define __shldisp_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -112,6 +114,12 @@ typedef interface Folder2 Folder2;
 #endif 	/* __Folder2_FWD_DEFINED__ */
 
 
+#ifndef __Folder3_FWD_DEFINED__
+#define __Folder3_FWD_DEFINED__
+typedef interface Folder3 Folder3;
+#endif 	/* __Folder3_FWD_DEFINED__ */
+
+
 #ifndef __FolderItem2_FWD_DEFINED__
 #define __FolderItem2_FWD_DEFINED__
 typedef interface FolderItem2 FolderItem2;
@@ -134,6 +142,12 @@ typedef struct ShellFolderItem ShellFolderItem;
 #define __FolderItems2_FWD_DEFINED__
 typedef interface FolderItems2 FolderItems2;
 #endif 	/* __FolderItems2_FWD_DEFINED__ */
+
+
+#ifndef __FolderItems3_FWD_DEFINED__
+#define __FolderItems3_FWD_DEFINED__
+typedef interface FolderItems3 FolderItems3;
+#endif 	/* __FolderItems3_FWD_DEFINED__ */
 
 
 #ifndef __IShellLinkDual_FWD_DEFINED__
@@ -166,6 +180,12 @@ typedef interface IShellFolderViewDual IShellFolderViewDual;
 #endif 	/* __IShellFolderViewDual_FWD_DEFINED__ */
 
 
+#ifndef __IShellFolderViewDual2_FWD_DEFINED__
+#define __IShellFolderViewDual2_FWD_DEFINED__
+typedef interface IShellFolderViewDual2 IShellFolderViewDual2;
+#endif 	/* __IShellFolderViewDual2_FWD_DEFINED__ */
+
+
 #ifndef __ShellFolderView_FWD_DEFINED__
 #define __ShellFolderView_FWD_DEFINED__
 
@@ -178,6 +198,30 @@ typedef struct ShellFolderView ShellFolderView;
 #endif 	/* __ShellFolderView_FWD_DEFINED__ */
 
 
+#ifndef __IMigrationWizardAuto_FWD_DEFINED__
+#define __IMigrationWizardAuto_FWD_DEFINED__
+typedef interface IMigrationWizardAuto IMigrationWizardAuto;
+#endif 	/* __IMigrationWizardAuto_FWD_DEFINED__ */
+
+
+#ifndef __DMigrationWizardAutoEvents_FWD_DEFINED__
+#define __DMigrationWizardAutoEvents_FWD_DEFINED__
+typedef interface DMigrationWizardAutoEvents DMigrationWizardAutoEvents;
+#endif 	/* __DMigrationWizardAutoEvents_FWD_DEFINED__ */
+
+
+#ifndef __MigrationWizardAuto_FWD_DEFINED__
+#define __MigrationWizardAuto_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class MigrationWizardAuto MigrationWizardAuto;
+#else
+typedef struct MigrationWizardAuto MigrationWizardAuto;
+#endif /* __cplusplus */
+
+#endif 	/* __MigrationWizardAuto_FWD_DEFINED__ */
+
+
 #ifndef __IShellDispatch_FWD_DEFINED__
 #define __IShellDispatch_FWD_DEFINED__
 typedef interface IShellDispatch IShellDispatch;
@@ -188,6 +232,18 @@ typedef interface IShellDispatch IShellDispatch;
 #define __IShellDispatch2_FWD_DEFINED__
 typedef interface IShellDispatch2 IShellDispatch2;
 #endif 	/* __IShellDispatch2_FWD_DEFINED__ */
+
+
+#ifndef __IShellDispatch3_FWD_DEFINED__
+#define __IShellDispatch3_FWD_DEFINED__
+typedef interface IShellDispatch3 IShellDispatch3;
+#endif 	/* __IShellDispatch3_FWD_DEFINED__ */
+
+
+#ifndef __IShellDispatch4_FWD_DEFINED__
+#define __IShellDispatch4_FWD_DEFINED__
+typedef interface IShellDispatch4 IShellDispatch4;
+#endif 	/* __IShellDispatch4_FWD_DEFINED__ */
 
 
 #ifndef __Shell_FWD_DEFINED__
@@ -262,6 +318,36 @@ typedef struct FileSearchBand FileSearchBand;
 #endif 	/* __FileSearchBand_FWD_DEFINED__ */
 
 
+#ifndef __IWebWizardHost_FWD_DEFINED__
+#define __IWebWizardHost_FWD_DEFINED__
+typedef interface IWebWizardHost IWebWizardHost;
+#endif 	/* __IWebWizardHost_FWD_DEFINED__ */
+
+
+#ifndef __INewWDEvents_FWD_DEFINED__
+#define __INewWDEvents_FWD_DEFINED__
+typedef interface INewWDEvents INewWDEvents;
+#endif 	/* __INewWDEvents_FWD_DEFINED__ */
+
+
+#ifndef __IPassportClientServices_FWD_DEFINED__
+#define __IPassportClientServices_FWD_DEFINED__
+typedef interface IPassportClientServices IPassportClientServices;
+#endif 	/* __IPassportClientServices_FWD_DEFINED__ */
+
+
+#ifndef __PassportClientServices_FWD_DEFINED__
+#define __PassportClientServices_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class PassportClientServices PassportClientServices;
+#else
+typedef struct PassportClientServices PassportClientServices;
+#endif /* __cplusplus */
+
+#endif 	/* __PassportClientServices_FWD_DEFINED__ */
+
+
 #ifndef __IAutoComplete_FWD_DEFINED__
 #define __IAutoComplete_FWD_DEFINED__
 typedef interface IAutoComplete IAutoComplete;
@@ -272,6 +358,12 @@ typedef interface IAutoComplete IAutoComplete;
 #define __IAutoComplete2_FWD_DEFINED__
 typedef interface IAutoComplete2 IAutoComplete2;
 #endif 	/* __IAutoComplete2_FWD_DEFINED__ */
+
+
+#ifndef __IEnumACString_FWD_DEFINED__
+#define __IEnumACString_FWD_DEFINED__
+typedef interface IEnumACString IEnumACString;
+#endif 	/* __IEnumACString_FWD_DEFINED__ */
 
 
 #ifndef __IAsyncOperation_FWD_DEFINED__
@@ -287,18 +379,13 @@ typedef interface IAsyncOperation IAsyncOperation;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_shldisp_0000 */
 /* [local] */ 
 
 
-EXTERN_C const IID IID_IAsyncOperation;
-#ifndef _SHLDISP_PUB_H_
-#define _SHLDISP_PUB_H_
-
-#pragma once
 
 
 extern RPC_IF_HANDLE __MIDL_itf_shldisp_0000_v0_0_c_ifspec;
@@ -320,7 +407,7 @@ enum SearchCommandExecuteErrors
 	SCEE_SCOPEMISMATCH	= SCEE_CONSTRAINT + 1,
 	SCEE_CASESENINDEX	= SCEE_SCOPEMISMATCH + 1,
 	SCEE_INDEXNOTCOMPLETE	= SCEE_CASESENINDEX + 1
-    }	SearchCommandExecuteErrors;
+    } 	SearchCommandExecuteErrors;
 
 
 
@@ -333,8 +420,54 @@ enum OfflineFolderStatus
 	OFS_OFFLINE	= OFS_ONLINE + 1,
 	OFS_SERVERBACK	= OFS_OFFLINE + 1,
 	OFS_DIRTYCACHE	= OFS_SERVERBACK + 1
-    }	OfflineFolderStatus;
+    } 	OfflineFolderStatus;
 
+//===================================================================
+//DESCRIPTION:
+//OnProgress: This message is fired periodically as the object executes a
+//            task, either creating a tool disk or applying settings.  The
+//            pszMsg parameter is a user-readable string with information
+//            about what is currently being done, or an empty string if this
+//            has not been implemented.  The iDone parameter is an integer value
+//            which relates the numerical amount of work that has been done.
+//            The iTotal paramater is an integer value which relates the total
+//            amount of work in the task.  The ratio of iDone to iTotal is the
+//            fraction of the task that has been completed.
+//            Note that the string in pszMessage will not necessarily contain
+//            %d tokens, so do not use the three parameters in an sprintf
+//            and expect it to work.
+#define SZ_MIGWIZPROGRESS_OK                  L""
+//========================================
+//OnComplete: This message is fired when the object has completed either 
+//            creating a tool disk or applying settings.  This can be either
+//            a successful completion (pszMsg is the empty string), an
+//            acknowledgment of the user's cancel (pszMsg is 'Cancel'),
+//            the error message that there is no disk in the drive
+//            (pszMsg is 'No Disk') or a general failure. (pszMsg is 'Fail')
+//            
+#define SZ_MIGWIZCOMPLETE_OK                  L""
+#define SZ_MIGWIZCOMPLETE_CANCEL              L"Cancel"
+#define SZ_MIGWIZCOMPLETE_FAIL                L"Fail"
+#define SZ_MIGWIZCOMPLETE_NODISK              L"No Disk"
+//===================================================================
+//===================================================================
+//DESCRIPTION:
+// This object handles automation calls from OOBE (Out Of Box Experience)
+// and contains the Migration Wizard Engine located in migoobe.dll.
+//
+// Someday, this code will live inside of migoobe.dll, but we didn't 
+// have time to generate an entirely new typelib for migoobe.dll so we 
+// piggybacked on shell32's to make the development of the automation 
+// quicker to satisfy time constraints.
+//========================================
+//WARNING:
+//         Only the first registered listener will receive fired events.
+//         Because of the architecture of this object, if multiple objects
+//		  register for advisement on MigrationWizardAuto's dispatch
+//		  interface, only the first object to register will actually
+//		  receive the fired events.  This may be fixed when this object
+//         is moved into migoobe.dll and out of shell32.dll.
+//===================================================================
 typedef /* [helpstring][uuid] */  DECLSPEC_UUID("742A99A0-C77E-11D0-A32C-00A0C91EEDBA") 
 enum ShellFolderViewOptions
     {	SFVVO_SHOWALLOBJECTS	= 0x1,
@@ -344,7 +477,7 @@ enum ShellFolderViewOptions
 	SFVVO_WIN95CLASSIC	= 0x40,
 	SFVVO_DOUBLECLICKINWEBVIEW	= 0x80,
 	SFVVO_DESKTOPHTML	= 0x200
-    }	ShellFolderViewOptions;
+    } 	ShellFolderViewOptions;
 
 typedef /* [helpstring][uuid] */  DECLSPEC_UUID("CA31EA20-48D0-11CF-8350-444553540000") 
 enum ShellSpecialFolderConstants
@@ -386,7 +519,7 @@ enum ShellSpecialFolderConstants
 	ssfPROFILE	= 0x28,
 	ssfSYSTEMx86	= 0x29,
 	ssfPROGRAMFILESx86	= 0x30
-    }	ShellSpecialFolderConstants;
+    } 	ShellSpecialFolderConstants;
 
 
 EXTERN_C const IID LIBID_Shell32;
@@ -407,7 +540,7 @@ EXTERN_C const IID IID_IFolderViewOC;
     {
     public:
         virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE SetFolderView( 
-            /* [in] */ IDispatch __RPC_FAR *pdisp) = 0;
+            /* [in] */ IDispatch *pdisp) = 0;
         
     };
     
@@ -417,56 +550,56 @@ EXTERN_C const IID IID_IFolderViewOC;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFolderViewOC __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFolderViewOC * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFolderViewOC __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFolderViewOC * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFolderViewOC __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFolderViewOC * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IFolderViewOC __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IFolderViewOC * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IFolderViewOC __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IFolderViewOC * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IFolderViewOC __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IFolderViewOC * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IFolderViewOC __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IFolderViewOC * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFolderView )( 
-            IFolderViewOC __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pdisp);
+        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetFolderView )( 
+            IFolderViewOC * This,
+            /* [in] */ IDispatch *pdisp);
         
         END_INTERFACE
     } IFolderViewOCVtbl;
 
     interface IFolderViewOC
     {
-        CONST_VTBL struct IFolderViewOCVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFolderViewOCVtbl *lpVtbl;
     };
 
     
@@ -508,8 +641,8 @@ EXTERN_C const IID IID_IFolderViewOC;
 
 
 /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE IFolderViewOC_SetFolderView_Proxy( 
-    IFolderViewOC __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pdisp);
+    IFolderViewOC * This,
+    /* [in] */ IDispatch *pdisp);
 
 
 void __RPC_STUB IFolderViewOC_SetFolderView_Stub(
@@ -545,52 +678,52 @@ EXTERN_C const IID DIID_DShellFolderViewEvents;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            DShellFolderViewEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            DShellFolderViewEvents * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            DShellFolderViewEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            DShellFolderViewEvents * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            DShellFolderViewEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            DShellFolderViewEvents * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            DShellFolderViewEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            DShellFolderViewEvents * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            DShellFolderViewEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            DShellFolderViewEvents * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            DShellFolderViewEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            DShellFolderViewEvents * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            DShellFolderViewEvents __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            DShellFolderViewEvents * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } DShellFolderViewEventsVtbl;
 
     interface DShellFolderViewEvents
     {
-        CONST_VTBL struct DShellFolderViewEventsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct DShellFolderViewEventsVtbl *lpVtbl;
     };
 
     
@@ -653,10 +786,10 @@ EXTERN_C const IID IID_DFConstraint;
     {
     public:
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbs) = 0;
+            /* [retval][out] */ BSTR *pbs) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Value( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pv) = 0;
+            /* [retval][out] */ VARIANT *pv) = 0;
         
     };
     
@@ -666,60 +799,60 @@ EXTERN_C const IID IID_DFConstraint;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            DFConstraint __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            DFConstraint * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            DFConstraint __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            DFConstraint * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            DFConstraint __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            DFConstraint * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            DFConstraint __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            DFConstraint * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            DFConstraint __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            DFConstraint * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            DFConstraint __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            DFConstraint * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            DFConstraint __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            DFConstraint * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            DFConstraint __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            DFConstraint * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Value )( 
-            DFConstraint __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pv);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Value )( 
+            DFConstraint * This,
+            /* [retval][out] */ VARIANT *pv);
         
         END_INTERFACE
     } DFConstraintVtbl;
 
     interface DFConstraint
     {
-        CONST_VTBL struct DFConstraintVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct DFConstraintVtbl *lpVtbl;
     };
 
     
@@ -764,8 +897,8 @@ EXTERN_C const IID IID_DFConstraint;
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE DFConstraint_get_Name_Proxy( 
-    DFConstraint __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbs);
+    DFConstraint * This,
+    /* [retval][out] */ BSTR *pbs);
 
 
 void __RPC_STUB DFConstraint_get_Name_Stub(
@@ -776,8 +909,8 @@ void __RPC_STUB DFConstraint_get_Name_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE DFConstraint_get_Value_Proxy( 
-    DFConstraint __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pv);
+    DFConstraint * This,
+    /* [retval][out] */ VARIANT *pv);
 
 
 void __RPC_STUB DFConstraint_get_Value_Stub(
@@ -797,6 +930,12 @@ void __RPC_STUB DFConstraint_get_Value_Stub(
 /* interface ISearchCommandExt */
 /* [object][oleautomation][dual][helpstring][uuid] */ 
 
+typedef /* [public] */ 
+enum __MIDL_ISearchCommandExt_0001
+    {	SCE_SEARCHFORFILES	= 0,
+	SCE_SEARCHFORCOMPUTERS	= 1
+    } 	SEARCH_FOR_TYPE;
+
 
 EXTERN_C const IID IID_ISearchCommandExt;
 
@@ -811,27 +950,27 @@ EXTERN_C const IID IID_ISearchCommandExt;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NavigateToSearchResults( void) = 0;
         
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ProgressText( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbs) = 0;
+            /* [retval][out] */ BSTR *pbs) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SaveSearch( void) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetErrorInfo( 
-            /* [out] */ BSTR __RPC_FAR *pbs,
-            /* [retval][out] */ int __RPC_FAR *phr) = 0;
+            /* [out] */ BSTR *pbs,
+            /* [retval][out] */ int *phr) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SearchFor( 
             /* [in] */ int iFor) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetScopeInfo( 
             /* [in] */ BSTR bsScope,
-            /* [out] */ int __RPC_FAR *pdwScopeInfo) = 0;
+            /* [out] */ int *pdwScopeInfo) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RestoreSavedSearch( 
-            /* [in] */ VARIANT __RPC_FAR *pvarFile) = 0;
+            /* [in] */ VARIANT *pvarFile) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Execute( 
-            /* [optional][in] */ VARIANT __RPC_FAR *RecordsAffected,
-            /* [optional][in] */ VARIANT __RPC_FAR *Parameters,
+            /* [optional][in] */ VARIANT *RecordsAffected,
+            /* [optional][in] */ VARIANT *Parameters,
             /* [optional][in] */ long Options) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddConstraint( 
@@ -840,7 +979,7 @@ EXTERN_C const IID IID_ISearchCommandExt;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetNextConstraint( 
             /* [in] */ VARIANT_BOOL fReset,
-            /* [retval][out] */ DFConstraint __RPC_FAR *__RPC_FAR *ppdfc) = 0;
+            /* [retval][out] */ DFConstraint **ppdfc) = 0;
         
     };
     
@@ -850,99 +989,99 @@ EXTERN_C const IID IID_ISearchCommandExt;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISearchCommandExt __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISearchCommandExt * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISearchCommandExt __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISearchCommandExt * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISearchCommandExt __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISearchCommandExt * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISearchCommandExt __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISearchCommandExt * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISearchCommandExt __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISearchCommandExt * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISearchCommandExt __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISearchCommandExt * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISearchCommandExt __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISearchCommandExt * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ClearResults )( 
-            ISearchCommandExt __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ClearResults )( 
+            ISearchCommandExt * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NavigateToSearchResults )( 
-            ISearchCommandExt __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NavigateToSearchResults )( 
+            ISearchCommandExt * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProgressText )( 
-            ISearchCommandExt __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ProgressText )( 
+            ISearchCommandExt * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveSearch )( 
-            ISearchCommandExt __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SaveSearch )( 
+            ISearchCommandExt * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorInfo )( 
-            ISearchCommandExt __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbs,
-            /* [retval][out] */ int __RPC_FAR *phr);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetErrorInfo )( 
+            ISearchCommandExt * This,
+            /* [out] */ BSTR *pbs,
+            /* [retval][out] */ int *phr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SearchFor )( 
-            ISearchCommandExt __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SearchFor )( 
+            ISearchCommandExt * This,
             /* [in] */ int iFor);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetScopeInfo )( 
-            ISearchCommandExt __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetScopeInfo )( 
+            ISearchCommandExt * This,
             /* [in] */ BSTR bsScope,
-            /* [out] */ int __RPC_FAR *pdwScopeInfo);
+            /* [out] */ int *pdwScopeInfo);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RestoreSavedSearch )( 
-            ISearchCommandExt __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pvarFile);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RestoreSavedSearch )( 
+            ISearchCommandExt * This,
+            /* [in] */ VARIANT *pvarFile);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Execute )( 
-            ISearchCommandExt __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *RecordsAffected,
-            /* [optional][in] */ VARIANT __RPC_FAR *Parameters,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Execute )( 
+            ISearchCommandExt * This,
+            /* [optional][in] */ VARIANT *RecordsAffected,
+            /* [optional][in] */ VARIANT *Parameters,
             /* [optional][in] */ long Options);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddConstraint )( 
-            ISearchCommandExt __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddConstraint )( 
+            ISearchCommandExt * This,
             /* [in] */ BSTR Name,
             /* [in] */ VARIANT Value);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNextConstraint )( 
-            ISearchCommandExt __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetNextConstraint )( 
+            ISearchCommandExt * This,
             /* [in] */ VARIANT_BOOL fReset,
-            /* [retval][out] */ DFConstraint __RPC_FAR *__RPC_FAR *ppdfc);
+            /* [retval][out] */ DFConstraint **ppdfc);
         
         END_INTERFACE
     } ISearchCommandExtVtbl;
 
     interface ISearchCommandExt
     {
-        CONST_VTBL struct ISearchCommandExtVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISearchCommandExtVtbl *lpVtbl;
     };
 
     
@@ -1014,7 +1153,7 @@ EXTERN_C const IID IID_ISearchCommandExt;
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_ClearResults_Proxy( 
-    ISearchCommandExt __RPC_FAR * This);
+    ISearchCommandExt * This);
 
 
 void __RPC_STUB ISearchCommandExt_ClearResults_Stub(
@@ -1025,7 +1164,7 @@ void __RPC_STUB ISearchCommandExt_ClearResults_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_NavigateToSearchResults_Proxy( 
-    ISearchCommandExt __RPC_FAR * This);
+    ISearchCommandExt * This);
 
 
 void __RPC_STUB ISearchCommandExt_NavigateToSearchResults_Stub(
@@ -1036,8 +1175,8 @@ void __RPC_STUB ISearchCommandExt_NavigateToSearchResults_Stub(
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_get_ProgressText_Proxy( 
-    ISearchCommandExt __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbs);
+    ISearchCommandExt * This,
+    /* [retval][out] */ BSTR *pbs);
 
 
 void __RPC_STUB ISearchCommandExt_get_ProgressText_Stub(
@@ -1048,7 +1187,7 @@ void __RPC_STUB ISearchCommandExt_get_ProgressText_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_SaveSearch_Proxy( 
-    ISearchCommandExt __RPC_FAR * This);
+    ISearchCommandExt * This);
 
 
 void __RPC_STUB ISearchCommandExt_SaveSearch_Stub(
@@ -1059,9 +1198,9 @@ void __RPC_STUB ISearchCommandExt_SaveSearch_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_GetErrorInfo_Proxy( 
-    ISearchCommandExt __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbs,
-    /* [retval][out] */ int __RPC_FAR *phr);
+    ISearchCommandExt * This,
+    /* [out] */ BSTR *pbs,
+    /* [retval][out] */ int *phr);
 
 
 void __RPC_STUB ISearchCommandExt_GetErrorInfo_Stub(
@@ -1072,7 +1211,7 @@ void __RPC_STUB ISearchCommandExt_GetErrorInfo_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_SearchFor_Proxy( 
-    ISearchCommandExt __RPC_FAR * This,
+    ISearchCommandExt * This,
     /* [in] */ int iFor);
 
 
@@ -1084,9 +1223,9 @@ void __RPC_STUB ISearchCommandExt_SearchFor_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_GetScopeInfo_Proxy( 
-    ISearchCommandExt __RPC_FAR * This,
+    ISearchCommandExt * This,
     /* [in] */ BSTR bsScope,
-    /* [out] */ int __RPC_FAR *pdwScopeInfo);
+    /* [out] */ int *pdwScopeInfo);
 
 
 void __RPC_STUB ISearchCommandExt_GetScopeInfo_Stub(
@@ -1097,8 +1236,8 @@ void __RPC_STUB ISearchCommandExt_GetScopeInfo_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_RestoreSavedSearch_Proxy( 
-    ISearchCommandExt __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *pvarFile);
+    ISearchCommandExt * This,
+    /* [in] */ VARIANT *pvarFile);
 
 
 void __RPC_STUB ISearchCommandExt_RestoreSavedSearch_Stub(
@@ -1109,9 +1248,9 @@ void __RPC_STUB ISearchCommandExt_RestoreSavedSearch_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_Execute_Proxy( 
-    ISearchCommandExt __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *RecordsAffected,
-    /* [optional][in] */ VARIANT __RPC_FAR *Parameters,
+    ISearchCommandExt * This,
+    /* [optional][in] */ VARIANT *RecordsAffected,
+    /* [optional][in] */ VARIANT *Parameters,
     /* [optional][in] */ long Options);
 
 
@@ -1123,7 +1262,7 @@ void __RPC_STUB ISearchCommandExt_Execute_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_AddConstraint_Proxy( 
-    ISearchCommandExt __RPC_FAR * This,
+    ISearchCommandExt * This,
     /* [in] */ BSTR Name,
     /* [in] */ VARIANT Value);
 
@@ -1136,9 +1275,9 @@ void __RPC_STUB ISearchCommandExt_AddConstraint_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearchCommandExt_GetNextConstraint_Proxy( 
-    ISearchCommandExt __RPC_FAR * This,
+    ISearchCommandExt * This,
     /* [in] */ VARIANT_BOOL fReset,
-    /* [retval][out] */ DFConstraint __RPC_FAR *__RPC_FAR *ppdfc);
+    /* [retval][out] */ DFConstraint **ppdfc);
 
 
 void __RPC_STUB ISearchCommandExt_GetNextConstraint_Stub(
@@ -1158,7 +1297,7 @@ void __RPC_STUB ISearchCommandExt_GetNextConstraint_Stub(
 /* interface FolderItem */
 /* [object][dual][oleautomation][helpstring][uuid] */ 
 
-typedef /* [unique] */ FolderItem __RPC_FAR *LPFOLDERITEM;
+typedef /* [unique] */ FolderItem *LPFOLDERITEM;
 
 
 EXTERN_C const IID IID_FolderItem;
@@ -1170,52 +1309,52 @@ EXTERN_C const IID IID_FolderItem;
     {
     public:
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbs) = 0;
+            /* [retval][out] */ BSTR *pbs) = 0;
         
         virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Name( 
             /* [in] */ BSTR bs) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbs) = 0;
+            /* [retval][out] */ BSTR *pbs) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_GetLink( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_GetFolder( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IsLink( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pb) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IsFolder( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pb) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IsFileSystem( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pb) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_IsBrowsable( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pb) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ModifyDate( 
-            /* [retval][out] */ DATE __RPC_FAR *pdt) = 0;
+            /* [retval][out] */ DATE *pdt) = 0;
         
         virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ModifyDate( 
             /* [in] */ DATE dt) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Size( 
-            /* [retval][out] */ LONG __RPC_FAR *pul) = 0;
+            /* [retval][out] */ LONG *pul) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbs) = 0;
+            /* [retval][out] */ BSTR *pbs) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Verbs( 
-            /* [retval][out] */ FolderItemVerbs __RPC_FAR *__RPC_FAR *ppfic) = 0;
+            /* [retval][out] */ FolderItemVerbs **ppfic) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE InvokeVerb( 
             /* [optional][in] */ VARIANT vVerb) = 0;
@@ -1228,112 +1367,112 @@ EXTERN_C const IID IID_FolderItem;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            FolderItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            FolderItem * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            FolderItem __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            FolderItem * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            FolderItem __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            FolderItem * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            FolderItem __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            FolderItem * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            FolderItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            FolderItem * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            FolderItem __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            FolderItem * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            FolderItem __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            FolderItem * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            FolderItem * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            FolderItem * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            FolderItem * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
-            FolderItem __RPC_FAR * This,
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+            FolderItem * This,
             /* [in] */ BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+            FolderItem * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GetLink )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GetLink )( 
+            FolderItem * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GetFolder )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GetFolder )( 
+            FolderItem * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsLink )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsLink )( 
+            FolderItem * This,
+            /* [retval][out] */ VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsFolder )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsFolder )( 
+            FolderItem * This,
+            /* [retval][out] */ VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsFileSystem )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsFileSystem )( 
+            FolderItem * This,
+            /* [retval][out] */ VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsBrowsable )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsBrowsable )( 
+            FolderItem * This,
+            /* [retval][out] */ VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ModifyDate )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *pdt);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ModifyDate )( 
+            FolderItem * This,
+            /* [retval][out] */ DATE *pdt);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ModifyDate )( 
-            FolderItem __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ModifyDate )( 
+            FolderItem * This,
             /* [in] */ DATE dt);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Size )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pul);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Size )( 
+            FolderItem * This,
+            /* [retval][out] */ LONG *pul);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            FolderItem * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Verbs )( 
-            FolderItem __RPC_FAR * This,
-            /* [retval][out] */ FolderItemVerbs __RPC_FAR *__RPC_FAR *ppfic);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Verbs )( 
+            FolderItem * This,
+            /* [retval][out] */ FolderItemVerbs **ppfic);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InvokeVerb )( 
-            FolderItem __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InvokeVerb )( 
+            FolderItem * This,
             /* [optional][in] */ VARIANT vVerb);
         
         END_INTERFACE
@@ -1341,7 +1480,7 @@ EXTERN_C const IID IID_FolderItem;
 
     interface FolderItem
     {
-        CONST_VTBL struct FolderItemVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct FolderItemVtbl *lpVtbl;
     };
 
     
@@ -1431,8 +1570,8 @@ EXTERN_C const IID IID_FolderItem;
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_Application_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    FolderItem * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB FolderItem_get_Application_Stub(
@@ -1443,8 +1582,8 @@ void __RPC_STUB FolderItem_get_Application_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_Parent_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    FolderItem * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB FolderItem_get_Parent_Stub(
@@ -1455,8 +1594,8 @@ void __RPC_STUB FolderItem_get_Parent_Stub(
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE FolderItem_get_Name_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbs);
+    FolderItem * This,
+    /* [retval][out] */ BSTR *pbs);
 
 
 void __RPC_STUB FolderItem_get_Name_Stub(
@@ -1467,7 +1606,7 @@ void __RPC_STUB FolderItem_get_Name_Stub(
 
 
 /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE FolderItem_put_Name_Proxy( 
-    FolderItem __RPC_FAR * This,
+    FolderItem * This,
     /* [in] */ BSTR bs);
 
 
@@ -1479,8 +1618,8 @@ void __RPC_STUB FolderItem_put_Name_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_Path_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbs);
+    FolderItem * This,
+    /* [retval][out] */ BSTR *pbs);
 
 
 void __RPC_STUB FolderItem_get_Path_Stub(
@@ -1491,8 +1630,8 @@ void __RPC_STUB FolderItem_get_Path_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_GetLink_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    FolderItem * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB FolderItem_get_GetLink_Stub(
@@ -1503,8 +1642,8 @@ void __RPC_STUB FolderItem_get_GetLink_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_GetFolder_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    FolderItem * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB FolderItem_get_GetFolder_Stub(
@@ -1515,8 +1654,8 @@ void __RPC_STUB FolderItem_get_GetFolder_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_IsLink_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb);
+    FolderItem * This,
+    /* [retval][out] */ VARIANT_BOOL *pb);
 
 
 void __RPC_STUB FolderItem_get_IsLink_Stub(
@@ -1527,8 +1666,8 @@ void __RPC_STUB FolderItem_get_IsLink_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_IsFolder_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb);
+    FolderItem * This,
+    /* [retval][out] */ VARIANT_BOOL *pb);
 
 
 void __RPC_STUB FolderItem_get_IsFolder_Stub(
@@ -1539,8 +1678,8 @@ void __RPC_STUB FolderItem_get_IsFolder_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_IsFileSystem_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb);
+    FolderItem * This,
+    /* [retval][out] */ VARIANT_BOOL *pb);
 
 
 void __RPC_STUB FolderItem_get_IsFileSystem_Stub(
@@ -1551,8 +1690,8 @@ void __RPC_STUB FolderItem_get_IsFileSystem_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_IsBrowsable_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb);
+    FolderItem * This,
+    /* [retval][out] */ VARIANT_BOOL *pb);
 
 
 void __RPC_STUB FolderItem_get_IsBrowsable_Stub(
@@ -1563,8 +1702,8 @@ void __RPC_STUB FolderItem_get_IsBrowsable_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_ModifyDate_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *pdt);
+    FolderItem * This,
+    /* [retval][out] */ DATE *pdt);
 
 
 void __RPC_STUB FolderItem_get_ModifyDate_Stub(
@@ -1575,7 +1714,7 @@ void __RPC_STUB FolderItem_get_ModifyDate_Stub(
 
 
 /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE FolderItem_put_ModifyDate_Proxy( 
-    FolderItem __RPC_FAR * This,
+    FolderItem * This,
     /* [in] */ DATE dt);
 
 
@@ -1587,8 +1726,8 @@ void __RPC_STUB FolderItem_put_ModifyDate_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_Size_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *pul);
+    FolderItem * This,
+    /* [retval][out] */ LONG *pul);
 
 
 void __RPC_STUB FolderItem_get_Size_Stub(
@@ -1599,8 +1738,8 @@ void __RPC_STUB FolderItem_get_Size_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItem_get_Type_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbs);
+    FolderItem * This,
+    /* [retval][out] */ BSTR *pbs);
 
 
 void __RPC_STUB FolderItem_get_Type_Stub(
@@ -1611,8 +1750,8 @@ void __RPC_STUB FolderItem_get_Type_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItem_Verbs_Proxy( 
-    FolderItem __RPC_FAR * This,
-    /* [retval][out] */ FolderItemVerbs __RPC_FAR *__RPC_FAR *ppfic);
+    FolderItem * This,
+    /* [retval][out] */ FolderItemVerbs **ppfic);
 
 
 void __RPC_STUB FolderItem_Verbs_Stub(
@@ -1623,7 +1762,7 @@ void __RPC_STUB FolderItem_Verbs_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItem_InvokeVerb_Proxy( 
-    FolderItem __RPC_FAR * This,
+    FolderItem * This,
     /* [optional][in] */ VARIANT vVerb);
 
 
@@ -1654,20 +1793,20 @@ EXTERN_C const IID IID_FolderItems;
     {
     public:
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Item( 
             /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ FolderItem **ppid) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk) = 0;
+            /* [retval][out] */ IUnknown **ppunk) = 0;
         
     };
     
@@ -1677,73 +1816,73 @@ EXTERN_C const IID IID_FolderItems;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            FolderItems __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            FolderItems * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            FolderItems __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            FolderItems * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            FolderItems __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            FolderItems * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            FolderItems __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            FolderItems * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            FolderItems __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            FolderItems * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            FolderItems __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            FolderItems * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            FolderItems __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            FolderItems * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            FolderItems __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            FolderItems * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            FolderItems __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            FolderItems * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            FolderItems __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            FolderItems * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
-            FolderItems __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+            FolderItems * This,
             /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppid);
+            /* [retval][out] */ FolderItem **ppid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
-            FolderItems __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+            FolderItems * This,
+            /* [retval][out] */ IUnknown **ppunk);
         
         END_INTERFACE
     } FolderItemsVtbl;
 
     interface FolderItems
     {
-        CONST_VTBL struct FolderItemsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct FolderItemsVtbl *lpVtbl;
     };
 
     
@@ -1797,8 +1936,8 @@ EXTERN_C const IID IID_FolderItems;
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItems_get_Count_Proxy( 
-    FolderItems __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    FolderItems * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB FolderItems_get_Count_Stub(
@@ -1809,8 +1948,8 @@ void __RPC_STUB FolderItems_get_Count_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItems_get_Application_Proxy( 
-    FolderItems __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    FolderItems * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB FolderItems_get_Application_Stub(
@@ -1821,8 +1960,8 @@ void __RPC_STUB FolderItems_get_Application_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItems_get_Parent_Proxy( 
-    FolderItems __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    FolderItems * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB FolderItems_get_Parent_Stub(
@@ -1833,9 +1972,9 @@ void __RPC_STUB FolderItems_get_Parent_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItems_Item_Proxy( 
-    FolderItems __RPC_FAR * This,
+    FolderItems * This,
     /* [optional][in] */ VARIANT index,
-    /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppid);
+    /* [retval][out] */ FolderItem **ppid);
 
 
 void __RPC_STUB FolderItems_Item_Stub(
@@ -1846,8 +1985,8 @@ void __RPC_STUB FolderItems_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FolderItems__NewEnum_Proxy( 
-    FolderItems __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+    FolderItems * This,
+    /* [retval][out] */ IUnknown **ppunk);
 
 
 void __RPC_STUB FolderItems__NewEnum_Stub(
@@ -1877,13 +2016,13 @@ EXTERN_C const IID IID_FolderItemVerb;
     {
     public:
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbs) = 0;
+            /* [retval][out] */ BSTR *pbs) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DoIt( void) = 0;
         
@@ -1895,67 +2034,67 @@ EXTERN_C const IID IID_FolderItemVerb;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            FolderItemVerb __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            FolderItemVerb * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            FolderItemVerb __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            FolderItemVerb * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            FolderItemVerb __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            FolderItemVerb * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            FolderItemVerb __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            FolderItemVerb * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            FolderItemVerb __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            FolderItemVerb * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            FolderItemVerb __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            FolderItemVerb * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            FolderItemVerb __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            FolderItemVerb * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            FolderItemVerb __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            FolderItemVerb * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            FolderItemVerb __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            FolderItemVerb * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            FolderItemVerb __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            FolderItemVerb * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoIt )( 
-            FolderItemVerb __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DoIt )( 
+            FolderItemVerb * This);
         
         END_INTERFACE
     } FolderItemVerbVtbl;
 
     interface FolderItemVerb
     {
-        CONST_VTBL struct FolderItemVerbVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct FolderItemVerbVtbl *lpVtbl;
     };
 
     
@@ -2006,8 +2145,8 @@ EXTERN_C const IID IID_FolderItemVerb;
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItemVerb_get_Application_Proxy( 
-    FolderItemVerb __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    FolderItemVerb * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB FolderItemVerb_get_Application_Stub(
@@ -2018,8 +2157,8 @@ void __RPC_STUB FolderItemVerb_get_Application_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItemVerb_get_Parent_Proxy( 
-    FolderItemVerb __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    FolderItemVerb * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB FolderItemVerb_get_Parent_Stub(
@@ -2030,8 +2169,8 @@ void __RPC_STUB FolderItemVerb_get_Parent_Stub(
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE FolderItemVerb_get_Name_Proxy( 
-    FolderItemVerb __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbs);
+    FolderItemVerb * This,
+    /* [retval][out] */ BSTR *pbs);
 
 
 void __RPC_STUB FolderItemVerb_get_Name_Stub(
@@ -2042,7 +2181,7 @@ void __RPC_STUB FolderItemVerb_get_Name_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItemVerb_DoIt_Proxy( 
-    FolderItemVerb __RPC_FAR * This);
+    FolderItemVerb * This);
 
 
 void __RPC_STUB FolderItemVerb_DoIt_Stub(
@@ -2072,20 +2211,20 @@ EXTERN_C const IID IID_FolderItemVerbs;
     {
     public:
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Item( 
             /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ FolderItemVerb __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ FolderItemVerb **ppid) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk) = 0;
+            /* [retval][out] */ IUnknown **ppunk) = 0;
         
     };
     
@@ -2095,73 +2234,73 @@ EXTERN_C const IID IID_FolderItemVerbs;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            FolderItemVerbs __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            FolderItemVerbs * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            FolderItemVerbs __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            FolderItemVerbs * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            FolderItemVerbs __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            FolderItemVerbs * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            FolderItemVerbs __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            FolderItemVerbs * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            FolderItemVerbs __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            FolderItemVerbs * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            FolderItemVerbs __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            FolderItemVerbs * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            FolderItemVerbs __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            FolderItemVerbs * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            FolderItemVerbs __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            FolderItemVerbs * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            FolderItemVerbs __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            FolderItemVerbs * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            FolderItemVerbs __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            FolderItemVerbs * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
-            FolderItemVerbs __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+            FolderItemVerbs * This,
             /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ FolderItemVerb __RPC_FAR *__RPC_FAR *ppid);
+            /* [retval][out] */ FolderItemVerb **ppid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
-            FolderItemVerbs __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+            FolderItemVerbs * This,
+            /* [retval][out] */ IUnknown **ppunk);
         
         END_INTERFACE
     } FolderItemVerbsVtbl;
 
     interface FolderItemVerbs
     {
-        CONST_VTBL struct FolderItemVerbsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct FolderItemVerbsVtbl *lpVtbl;
     };
 
     
@@ -2215,8 +2354,8 @@ EXTERN_C const IID IID_FolderItemVerbs;
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItemVerbs_get_Count_Proxy( 
-    FolderItemVerbs __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    FolderItemVerbs * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB FolderItemVerbs_get_Count_Stub(
@@ -2227,8 +2366,8 @@ void __RPC_STUB FolderItemVerbs_get_Count_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItemVerbs_get_Application_Proxy( 
-    FolderItemVerbs __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    FolderItemVerbs * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB FolderItemVerbs_get_Application_Stub(
@@ -2239,8 +2378,8 @@ void __RPC_STUB FolderItemVerbs_get_Application_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE FolderItemVerbs_get_Parent_Proxy( 
-    FolderItemVerbs __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    FolderItemVerbs * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB FolderItemVerbs_get_Parent_Stub(
@@ -2251,9 +2390,9 @@ void __RPC_STUB FolderItemVerbs_get_Parent_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItemVerbs_Item_Proxy( 
-    FolderItemVerbs __RPC_FAR * This,
+    FolderItemVerbs * This,
     /* [optional][in] */ VARIANT index,
-    /* [retval][out] */ FolderItemVerb __RPC_FAR *__RPC_FAR *ppid);
+    /* [retval][out] */ FolderItemVerb **ppid);
 
 
 void __RPC_STUB FolderItemVerbs_Item_Stub(
@@ -2264,8 +2403,8 @@ void __RPC_STUB FolderItemVerbs_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE FolderItemVerbs__NewEnum_Proxy( 
-    FolderItemVerbs __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+    FolderItemVerbs * This,
+    /* [retval][out] */ IUnknown **ppunk);
 
 
 void __RPC_STUB FolderItemVerbs__NewEnum_Stub(
@@ -2295,23 +2434,23 @@ EXTERN_C const IID IID_Folder;
     {
     public:
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Title( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbs) = 0;
+            /* [retval][out] */ BSTR *pbs) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ParentFolder( 
-            /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppsf) = 0;
+            /* [retval][out] */ Folder **ppsf) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Items( 
-            /* [retval][out] */ FolderItems __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ FolderItems **ppid) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ParseName( 
             /* [in] */ BSTR bName,
-            /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ FolderItem **ppid) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NewFolder( 
             /* [in] */ BSTR bName,
@@ -2328,7 +2467,7 @@ EXTERN_C const IID IID_Folder;
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDetailsOf( 
             /* [in] */ VARIANT vItem,
             /* [in] */ int iColumn,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs) = 0;
+            /* [retval][out] */ BSTR *pbs) = 0;
         
     };
     
@@ -2338,98 +2477,98 @@ EXTERN_C const IID IID_Folder;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            Folder __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            Folder * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            Folder __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            Folder * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            Folder __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            Folder * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            Folder __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            Folder * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            Folder __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            Folder * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            Folder __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            Folder * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            Folder __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            Folder * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Title )( 
-            Folder __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Title )( 
+            Folder * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            Folder __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            Folder * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            Folder __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            Folder * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ParentFolder )( 
-            Folder __RPC_FAR * This,
-            /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppsf);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentFolder )( 
+            Folder * This,
+            /* [retval][out] */ Folder **ppsf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Items )( 
-            Folder __RPC_FAR * This,
-            /* [retval][out] */ FolderItems __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Items )( 
+            Folder * This,
+            /* [retval][out] */ FolderItems **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ParseName )( 
-            Folder __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ParseName )( 
+            Folder * This,
             /* [in] */ BSTR bName,
-            /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppid);
+            /* [retval][out] */ FolderItem **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NewFolder )( 
-            Folder __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
+            Folder * This,
             /* [in] */ BSTR bName,
             /* [optional][in] */ VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveHere )( 
-            Folder __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MoveHere )( 
+            Folder * This,
             /* [in] */ VARIANT vItem,
             /* [optional][in] */ VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyHere )( 
-            Folder __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CopyHere )( 
+            Folder * This,
             /* [in] */ VARIANT vItem,
             /* [optional][in] */ VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDetailsOf )( 
-            Folder __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDetailsOf )( 
+            Folder * This,
             /* [in] */ VARIANT vItem,
             /* [in] */ int iColumn,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+            /* [retval][out] */ BSTR *pbs);
         
         END_INTERFACE
     } FolderVtbl;
 
     interface Folder
     {
-        CONST_VTBL struct FolderVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct FolderVtbl *lpVtbl;
     };
 
     
@@ -2498,8 +2637,8 @@ EXTERN_C const IID IID_Folder;
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE Folder_get_Title_Proxy( 
-    Folder __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbs);
+    Folder * This,
+    /* [retval][out] */ BSTR *pbs);
 
 
 void __RPC_STUB Folder_get_Title_Stub(
@@ -2510,8 +2649,8 @@ void __RPC_STUB Folder_get_Title_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE Folder_get_Application_Proxy( 
-    Folder __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    Folder * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB Folder_get_Application_Stub(
@@ -2522,8 +2661,8 @@ void __RPC_STUB Folder_get_Application_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE Folder_get_Parent_Proxy( 
-    Folder __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    Folder * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB Folder_get_Parent_Stub(
@@ -2534,8 +2673,8 @@ void __RPC_STUB Folder_get_Parent_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE Folder_get_ParentFolder_Proxy( 
-    Folder __RPC_FAR * This,
-    /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppsf);
+    Folder * This,
+    /* [retval][out] */ Folder **ppsf);
 
 
 void __RPC_STUB Folder_get_ParentFolder_Stub(
@@ -2546,8 +2685,8 @@ void __RPC_STUB Folder_get_ParentFolder_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder_Items_Proxy( 
-    Folder __RPC_FAR * This,
-    /* [retval][out] */ FolderItems __RPC_FAR *__RPC_FAR *ppid);
+    Folder * This,
+    /* [retval][out] */ FolderItems **ppid);
 
 
 void __RPC_STUB Folder_Items_Stub(
@@ -2558,9 +2697,9 @@ void __RPC_STUB Folder_Items_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder_ParseName_Proxy( 
-    Folder __RPC_FAR * This,
+    Folder * This,
     /* [in] */ BSTR bName,
-    /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppid);
+    /* [retval][out] */ FolderItem **ppid);
 
 
 void __RPC_STUB Folder_ParseName_Stub(
@@ -2571,7 +2710,7 @@ void __RPC_STUB Folder_ParseName_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder_NewFolder_Proxy( 
-    Folder __RPC_FAR * This,
+    Folder * This,
     /* [in] */ BSTR bName,
     /* [optional][in] */ VARIANT vOptions);
 
@@ -2584,7 +2723,7 @@ void __RPC_STUB Folder_NewFolder_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder_MoveHere_Proxy( 
-    Folder __RPC_FAR * This,
+    Folder * This,
     /* [in] */ VARIANT vItem,
     /* [optional][in] */ VARIANT vOptions);
 
@@ -2597,7 +2736,7 @@ void __RPC_STUB Folder_MoveHere_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder_CopyHere_Proxy( 
-    Folder __RPC_FAR * This,
+    Folder * This,
     /* [in] */ VARIANT vItem,
     /* [optional][in] */ VARIANT vOptions);
 
@@ -2610,10 +2749,10 @@ void __RPC_STUB Folder_CopyHere_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder_GetDetailsOf_Proxy( 
-    Folder __RPC_FAR * This,
+    Folder * This,
     /* [in] */ VARIANT vItem,
     /* [in] */ int iColumn,
-    /* [retval][out] */ BSTR __RPC_FAR *pbs);
+    /* [retval][out] */ BSTR *pbs);
 
 
 void __RPC_STUB Folder_GetDetailsOf_Stub(
@@ -2643,15 +2782,15 @@ EXTERN_C const IID IID_Folder2;
     {
     public:
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Self( 
-            /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppfi) = 0;
+            /* [retval][out] */ FolderItem **ppfi) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_OfflineStatus( 
-            /* [retval][out] */ LONG __RPC_FAR *pul) = 0;
+            /* [retval][out] */ LONG *pul) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Synchronize( void) = 0;
         
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_HaveToShowWebViewBarricade( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbHaveToShowWebViewBarricade) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pbHaveToShowWebViewBarricade) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DismissedWebViewBarricade( void) = 0;
         
@@ -2663,116 +2802,116 @@ EXTERN_C const IID IID_Folder2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            Folder2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            Folder2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            Folder2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            Folder2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            Folder2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            Folder2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            Folder2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            Folder2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            Folder2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            Folder2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            Folder2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            Folder2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            Folder2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            Folder2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Title )( 
-            Folder2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Title )( 
+            Folder2 * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            Folder2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            Folder2 * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            Folder2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            Folder2 * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ParentFolder )( 
-            Folder2 __RPC_FAR * This,
-            /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppsf);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentFolder )( 
+            Folder2 * This,
+            /* [retval][out] */ Folder **ppsf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Items )( 
-            Folder2 __RPC_FAR * This,
-            /* [retval][out] */ FolderItems __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Items )( 
+            Folder2 * This,
+            /* [retval][out] */ FolderItems **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ParseName )( 
-            Folder2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ParseName )( 
+            Folder2 * This,
             /* [in] */ BSTR bName,
-            /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppid);
+            /* [retval][out] */ FolderItem **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NewFolder )( 
-            Folder2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
+            Folder2 * This,
             /* [in] */ BSTR bName,
             /* [optional][in] */ VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveHere )( 
-            Folder2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MoveHere )( 
+            Folder2 * This,
             /* [in] */ VARIANT vItem,
             /* [optional][in] */ VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyHere )( 
-            Folder2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CopyHere )( 
+            Folder2 * This,
             /* [in] */ VARIANT vItem,
             /* [optional][in] */ VARIANT vOptions);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDetailsOf )( 
-            Folder2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDetailsOf )( 
+            Folder2 * This,
             /* [in] */ VARIANT vItem,
             /* [in] */ int iColumn,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Self )( 
-            Folder2 __RPC_FAR * This,
-            /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppfi);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Self )( 
+            Folder2 * This,
+            /* [retval][out] */ FolderItem **ppfi);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OfflineStatus )( 
-            Folder2 __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pul);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OfflineStatus )( 
+            Folder2 * This,
+            /* [retval][out] */ LONG *pul);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Synchronize )( 
-            Folder2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
+            Folder2 * This);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HaveToShowWebViewBarricade )( 
-            Folder2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbHaveToShowWebViewBarricade);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_HaveToShowWebViewBarricade )( 
+            Folder2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pbHaveToShowWebViewBarricade);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DismissedWebViewBarricade )( 
-            Folder2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DismissedWebViewBarricade )( 
+            Folder2 * This);
         
         END_INTERFACE
     } Folder2Vtbl;
 
     interface Folder2
     {
-        CONST_VTBL struct Folder2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct Folder2Vtbl *lpVtbl;
     };
 
     
@@ -2857,8 +2996,8 @@ EXTERN_C const IID IID_Folder2;
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE Folder2_get_Self_Proxy( 
-    Folder2 __RPC_FAR * This,
-    /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppfi);
+    Folder2 * This,
+    /* [retval][out] */ FolderItem **ppfi);
 
 
 void __RPC_STUB Folder2_get_Self_Stub(
@@ -2869,8 +3008,8 @@ void __RPC_STUB Folder2_get_Self_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE Folder2_get_OfflineStatus_Proxy( 
-    Folder2 __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *pul);
+    Folder2 * This,
+    /* [retval][out] */ LONG *pul);
 
 
 void __RPC_STUB Folder2_get_OfflineStatus_Stub(
@@ -2881,7 +3020,7 @@ void __RPC_STUB Folder2_get_OfflineStatus_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder2_Synchronize_Proxy( 
-    Folder2 __RPC_FAR * This);
+    Folder2 * This);
 
 
 void __RPC_STUB Folder2_Synchronize_Stub(
@@ -2892,8 +3031,8 @@ void __RPC_STUB Folder2_Synchronize_Stub(
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE Folder2_get_HaveToShowWebViewBarricade_Proxy( 
-    Folder2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbHaveToShowWebViewBarricade);
+    Folder2 * This,
+    /* [retval][out] */ VARIANT_BOOL *pbHaveToShowWebViewBarricade);
 
 
 void __RPC_STUB Folder2_get_HaveToShowWebViewBarricade_Stub(
@@ -2904,7 +3043,7 @@ void __RPC_STUB Folder2_get_HaveToShowWebViewBarricade_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE Folder2_DismissedWebViewBarricade_Proxy( 
-    Folder2 __RPC_FAR * This);
+    Folder2 * This);
 
 
 void __RPC_STUB Folder2_DismissedWebViewBarricade_Stub(
@@ -2916,6 +3055,271 @@ void __RPC_STUB Folder2_DismissedWebViewBarricade_Stub(
 
 
 #endif 	/* __Folder2_INTERFACE_DEFINED__ */
+
+
+#ifndef __Folder3_INTERFACE_DEFINED__
+#define __Folder3_INTERFACE_DEFINED__
+
+/* interface Folder3 */
+/* [object][dual][oleautomation][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_Folder3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("A7AE5F64-C4D7-4d7f-9307-4D24EE54B841")
+    Folder3 : public Folder2
+    {
+    public:
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ShowWebViewBarricade( 
+            /* [retval][out] */ VARIANT_BOOL *pbShowWebViewBarricade) = 0;
+        
+        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ShowWebViewBarricade( 
+            /* [in] */ VARIANT_BOOL bShowWebViewBarricade) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct Folder3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            Folder3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            Folder3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            Folder3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            Folder3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            Folder3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            Folder3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            Folder3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Title )( 
+            Folder3 * This,
+            /* [retval][out] */ BSTR *pbs);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            Folder3 * This,
+            /* [retval][out] */ IDispatch **ppid);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            Folder3 * This,
+            /* [retval][out] */ IDispatch **ppid);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentFolder )( 
+            Folder3 * This,
+            /* [retval][out] */ Folder **ppsf);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Items )( 
+            Folder3 * This,
+            /* [retval][out] */ FolderItems **ppid);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ParseName )( 
+            Folder3 * This,
+            /* [in] */ BSTR bName,
+            /* [retval][out] */ FolderItem **ppid);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
+            Folder3 * This,
+            /* [in] */ BSTR bName,
+            /* [optional][in] */ VARIANT vOptions);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MoveHere )( 
+            Folder3 * This,
+            /* [in] */ VARIANT vItem,
+            /* [optional][in] */ VARIANT vOptions);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CopyHere )( 
+            Folder3 * This,
+            /* [in] */ VARIANT vItem,
+            /* [optional][in] */ VARIANT vOptions);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDetailsOf )( 
+            Folder3 * This,
+            /* [in] */ VARIANT vItem,
+            /* [in] */ int iColumn,
+            /* [retval][out] */ BSTR *pbs);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Self )( 
+            Folder3 * This,
+            /* [retval][out] */ FolderItem **ppfi);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OfflineStatus )( 
+            Folder3 * This,
+            /* [retval][out] */ LONG *pul);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
+            Folder3 * This);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_HaveToShowWebViewBarricade )( 
+            Folder3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pbHaveToShowWebViewBarricade);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DismissedWebViewBarricade )( 
+            Folder3 * This);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ShowWebViewBarricade )( 
+            Folder3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pbShowWebViewBarricade);
+        
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ShowWebViewBarricade )( 
+            Folder3 * This,
+            /* [in] */ VARIANT_BOOL bShowWebViewBarricade);
+        
+        END_INTERFACE
+    } Folder3Vtbl;
+
+    interface Folder3
+    {
+        CONST_VTBL struct Folder3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define Folder3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define Folder3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define Folder3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define Folder3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define Folder3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define Folder3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define Folder3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define Folder3_get_Title(This,pbs)	\
+    (This)->lpVtbl -> get_Title(This,pbs)
+
+#define Folder3_get_Application(This,ppid)	\
+    (This)->lpVtbl -> get_Application(This,ppid)
+
+#define Folder3_get_Parent(This,ppid)	\
+    (This)->lpVtbl -> get_Parent(This,ppid)
+
+#define Folder3_get_ParentFolder(This,ppsf)	\
+    (This)->lpVtbl -> get_ParentFolder(This,ppsf)
+
+#define Folder3_Items(This,ppid)	\
+    (This)->lpVtbl -> Items(This,ppid)
+
+#define Folder3_ParseName(This,bName,ppid)	\
+    (This)->lpVtbl -> ParseName(This,bName,ppid)
+
+#define Folder3_NewFolder(This,bName,vOptions)	\
+    (This)->lpVtbl -> NewFolder(This,bName,vOptions)
+
+#define Folder3_MoveHere(This,vItem,vOptions)	\
+    (This)->lpVtbl -> MoveHere(This,vItem,vOptions)
+
+#define Folder3_CopyHere(This,vItem,vOptions)	\
+    (This)->lpVtbl -> CopyHere(This,vItem,vOptions)
+
+#define Folder3_GetDetailsOf(This,vItem,iColumn,pbs)	\
+    (This)->lpVtbl -> GetDetailsOf(This,vItem,iColumn,pbs)
+
+
+#define Folder3_get_Self(This,ppfi)	\
+    (This)->lpVtbl -> get_Self(This,ppfi)
+
+#define Folder3_get_OfflineStatus(This,pul)	\
+    (This)->lpVtbl -> get_OfflineStatus(This,pul)
+
+#define Folder3_Synchronize(This)	\
+    (This)->lpVtbl -> Synchronize(This)
+
+#define Folder3_get_HaveToShowWebViewBarricade(This,pbHaveToShowWebViewBarricade)	\
+    (This)->lpVtbl -> get_HaveToShowWebViewBarricade(This,pbHaveToShowWebViewBarricade)
+
+#define Folder3_DismissedWebViewBarricade(This)	\
+    (This)->lpVtbl -> DismissedWebViewBarricade(This)
+
+
+#define Folder3_get_ShowWebViewBarricade(This,pbShowWebViewBarricade)	\
+    (This)->lpVtbl -> get_ShowWebViewBarricade(This,pbShowWebViewBarricade)
+
+#define Folder3_put_ShowWebViewBarricade(This,bShowWebViewBarricade)	\
+    (This)->lpVtbl -> put_ShowWebViewBarricade(This,bShowWebViewBarricade)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE Folder3_get_ShowWebViewBarricade_Proxy( 
+    Folder3 * This,
+    /* [retval][out] */ VARIANT_BOOL *pbShowWebViewBarricade);
+
+
+void __RPC_STUB Folder3_get_ShowWebViewBarricade_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE Folder3_put_ShowWebViewBarricade_Proxy( 
+    Folder3 * This,
+    /* [in] */ VARIANT_BOOL bShowWebViewBarricade);
+
+
+void __RPC_STUB Folder3_put_ShowWebViewBarricade_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __Folder3_INTERFACE_DEFINED__ */
 
 
 #ifndef __FolderItem2_INTERFACE_DEFINED__
@@ -2939,7 +3343,7 @@ EXTERN_C const IID IID_FolderItem2;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ExtendedProperty( 
             /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvRet) = 0;
+            /* [retval][out] */ VARIANT *pvRet) = 0;
         
     };
     
@@ -2949,130 +3353,130 @@ EXTERN_C const IID IID_FolderItem2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            FolderItem2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            FolderItem2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            FolderItem2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            FolderItem2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            FolderItem2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            FolderItem2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            FolderItem2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            FolderItem2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            FolderItem2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            FolderItem2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            FolderItem2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            FolderItem2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            FolderItem2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            FolderItem2 * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            FolderItem2 * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            FolderItem2 * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
-            FolderItem2 __RPC_FAR * This,
+        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+            FolderItem2 * This,
             /* [in] */ BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+            FolderItem2 * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GetLink )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GetLink )( 
+            FolderItem2 * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GetFolder )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GetFolder )( 
+            FolderItem2 * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsLink )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsLink )( 
+            FolderItem2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsFolder )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsFolder )( 
+            FolderItem2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsFileSystem )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsFileSystem )( 
+            FolderItem2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsBrowsable )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pb);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsBrowsable )( 
+            FolderItem2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pb);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ModifyDate )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *pdt);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ModifyDate )( 
+            FolderItem2 * This,
+            /* [retval][out] */ DATE *pdt);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ModifyDate )( 
-            FolderItem2 __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ModifyDate )( 
+            FolderItem2 * This,
             /* [in] */ DATE dt);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Size )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pul);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Size )( 
+            FolderItem2 * This,
+            /* [retval][out] */ LONG *pul);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            FolderItem2 * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Verbs )( 
-            FolderItem2 __RPC_FAR * This,
-            /* [retval][out] */ FolderItemVerbs __RPC_FAR *__RPC_FAR *ppfic);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Verbs )( 
+            FolderItem2 * This,
+            /* [retval][out] */ FolderItemVerbs **ppfic);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InvokeVerb )( 
-            FolderItem2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InvokeVerb )( 
+            FolderItem2 * This,
             /* [optional][in] */ VARIANT vVerb);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InvokeVerbEx )( 
-            FolderItem2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InvokeVerbEx )( 
+            FolderItem2 * This,
             /* [optional][in] */ VARIANT vVerb,
             /* [optional][in] */ VARIANT vArgs);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExtendedProperty )( 
-            FolderItem2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ExtendedProperty )( 
+            FolderItem2 * This,
             /* [in] */ BSTR bstrPropName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvRet);
+            /* [retval][out] */ VARIANT *pvRet);
         
         END_INTERFACE
     } FolderItem2Vtbl;
 
     interface FolderItem2
     {
-        CONST_VTBL struct FolderItem2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct FolderItem2Vtbl *lpVtbl;
     };
 
     
@@ -3169,7 +3573,7 @@ EXTERN_C const IID IID_FolderItem2;
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItem2_InvokeVerbEx_Proxy( 
-    FolderItem2 __RPC_FAR * This,
+    FolderItem2 * This,
     /* [optional][in] */ VARIANT vVerb,
     /* [optional][in] */ VARIANT vArgs);
 
@@ -3182,9 +3586,9 @@ void __RPC_STUB FolderItem2_InvokeVerbEx_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItem2_ExtendedProperty_Proxy( 
-    FolderItem2 __RPC_FAR * This,
+    FolderItem2 * This,
     /* [in] */ BSTR bstrPropName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvRet);
+    /* [retval][out] */ VARIANT *pvRet);
 
 
 void __RPC_STUB FolderItem2_ExtendedProperty_Stub(
@@ -3233,69 +3637,69 @@ EXTERN_C const IID IID_FolderItems2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            FolderItems2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            FolderItems2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            FolderItems2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            FolderItems2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            FolderItems2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            FolderItems2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            FolderItems2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            FolderItems2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            FolderItems2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            FolderItems2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            FolderItems2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            FolderItems2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            FolderItems2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            FolderItems2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            FolderItems2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            FolderItems2 * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            FolderItems2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            FolderItems2 * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            FolderItems2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            FolderItems2 * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
-            FolderItems2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+            FolderItems2 * This,
             /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppid);
+            /* [retval][out] */ FolderItem **ppid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
-            FolderItems2 __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+            FolderItems2 * This,
+            /* [retval][out] */ IUnknown **ppunk);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InvokeVerbEx )( 
-            FolderItems2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InvokeVerbEx )( 
+            FolderItems2 * This,
             /* [optional][in] */ VARIANT vVerb,
             /* [optional][in] */ VARIANT vArgs);
         
@@ -3304,7 +3708,7 @@ EXTERN_C const IID IID_FolderItems2;
 
     interface FolderItems2
     {
-        CONST_VTBL struct FolderItems2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct FolderItems2Vtbl *lpVtbl;
     };
 
     
@@ -3362,7 +3766,7 @@ EXTERN_C const IID IID_FolderItems2;
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItems2_InvokeVerbEx_Proxy( 
-    FolderItems2 __RPC_FAR * This,
+    FolderItems2 * This,
     /* [optional][in] */ VARIANT vVerb,
     /* [optional][in] */ VARIANT vArgs);
 
@@ -3376,6 +3780,209 @@ void __RPC_STUB FolderItems2_InvokeVerbEx_Stub(
 
 
 #endif 	/* __FolderItems2_INTERFACE_DEFINED__ */
+
+
+#ifndef __FolderItems3_INTERFACE_DEFINED__
+#define __FolderItems3_INTERFACE_DEFINED__
+
+/* interface FolderItems3 */
+/* [object][dual][oleautomation][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_FolderItems3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eaa7c309-bbec-49d5-821d-64d966cb667f")
+    FolderItems3 : public FolderItems2
+    {
+    public:
+        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Filter( 
+            /* [in] */ long grfFlags,
+            /* [in] */ BSTR bstrFileSpec) = 0;
+        
+        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Verbs( 
+            /* [retval][out] */ FolderItemVerbs **ppfic) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct FolderItems3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            FolderItems3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            FolderItems3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            FolderItems3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            FolderItems3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            FolderItems3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            FolderItems3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            FolderItems3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            FolderItems3 * This,
+            /* [retval][out] */ long *plCount);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            FolderItems3 * This,
+            /* [retval][out] */ IDispatch **ppid);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            FolderItems3 * This,
+            /* [retval][out] */ IDispatch **ppid);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+            FolderItems3 * This,
+            /* [optional][in] */ VARIANT index,
+            /* [retval][out] */ FolderItem **ppid);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+            FolderItems3 * This,
+            /* [retval][out] */ IUnknown **ppunk);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *InvokeVerbEx )( 
+            FolderItems3 * This,
+            /* [optional][in] */ VARIANT vVerb,
+            /* [optional][in] */ VARIANT vArgs);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Filter )( 
+            FolderItems3 * This,
+            /* [in] */ long grfFlags,
+            /* [in] */ BSTR bstrFileSpec);
+        
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Verbs )( 
+            FolderItems3 * This,
+            /* [retval][out] */ FolderItemVerbs **ppfic);
+        
+        END_INTERFACE
+    } FolderItems3Vtbl;
+
+    interface FolderItems3
+    {
+        CONST_VTBL struct FolderItems3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define FolderItems3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define FolderItems3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define FolderItems3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define FolderItems3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define FolderItems3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define FolderItems3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define FolderItems3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define FolderItems3_get_Count(This,plCount)	\
+    (This)->lpVtbl -> get_Count(This,plCount)
+
+#define FolderItems3_get_Application(This,ppid)	\
+    (This)->lpVtbl -> get_Application(This,ppid)
+
+#define FolderItems3_get_Parent(This,ppid)	\
+    (This)->lpVtbl -> get_Parent(This,ppid)
+
+#define FolderItems3_Item(This,index,ppid)	\
+    (This)->lpVtbl -> Item(This,index,ppid)
+
+#define FolderItems3__NewEnum(This,ppunk)	\
+    (This)->lpVtbl -> _NewEnum(This,ppunk)
+
+
+#define FolderItems3_InvokeVerbEx(This,vVerb,vArgs)	\
+    (This)->lpVtbl -> InvokeVerbEx(This,vVerb,vArgs)
+
+
+#define FolderItems3_Filter(This,grfFlags,bstrFileSpec)	\
+    (This)->lpVtbl -> Filter(This,grfFlags,bstrFileSpec)
+
+#define FolderItems3_get_Verbs(This,ppfic)	\
+    (This)->lpVtbl -> get_Verbs(This,ppfic)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstring] */ HRESULT STDMETHODCALLTYPE FolderItems3_Filter_Proxy( 
+    FolderItems3 * This,
+    /* [in] */ long grfFlags,
+    /* [in] */ BSTR bstrFileSpec);
+
+
+void __RPC_STUB FolderItems3_Filter_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE FolderItems3_get_Verbs_Proxy( 
+    FolderItems3 * This,
+    /* [retval][out] */ FolderItemVerbs **ppfic);
+
+
+void __RPC_STUB FolderItems3_get_Verbs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __FolderItems3_INTERFACE_DEFINED__ */
 
 
 #ifndef __IShellLinkDual_INTERFACE_DEFINED__
@@ -3394,37 +4001,37 @@ EXTERN_C const IID IID_IShellLinkDual;
     {
     public:
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbs) = 0;
+            /* [retval][out] */ BSTR *pbs) = 0;
         
         virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Path( 
             /* [in] */ BSTR bs) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbs) = 0;
+            /* [retval][out] */ BSTR *pbs) = 0;
         
         virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bs) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_WorkingDirectory( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbs) = 0;
+            /* [retval][out] */ BSTR *pbs) = 0;
         
         virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_WorkingDirectory( 
             /* [in] */ BSTR bs) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Arguments( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbs) = 0;
+            /* [retval][out] */ BSTR *pbs) = 0;
         
         virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Arguments( 
             /* [in] */ BSTR bs) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Hotkey( 
-            /* [retval][out] */ int __RPC_FAR *piHK) = 0;
+            /* [retval][out] */ int *piHK) = 0;
         
         virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Hotkey( 
             /* [in] */ int iHK) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ShowCommand( 
-            /* [retval][out] */ int __RPC_FAR *piShowCommand) = 0;
+            /* [retval][out] */ int *piShowCommand) = 0;
         
         virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ShowCommand( 
             /* [in] */ int iShowCommand) = 0;
@@ -3433,8 +4040,8 @@ EXTERN_C const IID IID_IShellLinkDual;
             /* [in] */ int fFlags) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetIconLocation( 
-            /* [out] */ BSTR __RPC_FAR *pbs,
-            /* [retval][out] */ int __RPC_FAR *piIcon) = 0;
+            /* [out] */ BSTR *pbs,
+            /* [retval][out] */ int *piIcon) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetIconLocation( 
             /* [in] */ BSTR bs,
@@ -3451,110 +4058,110 @@ EXTERN_C const IID IID_IShellLinkDual;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IShellLinkDual __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IShellLinkDual * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IShellLinkDual __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IShellLinkDual * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IShellLinkDual __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IShellLinkDual * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IShellLinkDual __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IShellLinkDual * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IShellLinkDual __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IShellLinkDual * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IShellLinkDual __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IShellLinkDual * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IShellLinkDual __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IShellLinkDual * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
-            IShellLinkDual __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+            IShellLinkDual * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Path )( 
-            IShellLinkDual __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+            IShellLinkDual * This,
             /* [in] */ BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IShellLinkDual __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IShellLinkDual * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IShellLinkDual __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IShellLinkDual * This,
             /* [in] */ BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_WorkingDirectory )( 
-            IShellLinkDual __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WorkingDirectory )( 
+            IShellLinkDual * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_WorkingDirectory )( 
-            IShellLinkDual __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WorkingDirectory )( 
+            IShellLinkDual * This,
             /* [in] */ BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Arguments )( 
-            IShellLinkDual __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Arguments )( 
+            IShellLinkDual * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Arguments )( 
-            IShellLinkDual __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Arguments )( 
+            IShellLinkDual * This,
             /* [in] */ BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Hotkey )( 
-            IShellLinkDual __RPC_FAR * This,
-            /* [retval][out] */ int __RPC_FAR *piHK);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hotkey )( 
+            IShellLinkDual * This,
+            /* [retval][out] */ int *piHK);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Hotkey )( 
-            IShellLinkDual __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Hotkey )( 
+            IShellLinkDual * This,
             /* [in] */ int iHK);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowCommand )( 
-            IShellLinkDual __RPC_FAR * This,
-            /* [retval][out] */ int __RPC_FAR *piShowCommand);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShowCommand )( 
+            IShellLinkDual * This,
+            /* [retval][out] */ int *piShowCommand);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowCommand )( 
-            IShellLinkDual __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ShowCommand )( 
+            IShellLinkDual * This,
             /* [in] */ int iShowCommand);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Resolve )( 
-            IShellLinkDual __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Resolve )( 
+            IShellLinkDual * This,
             /* [in] */ int fFlags);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIconLocation )( 
-            IShellLinkDual __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbs,
-            /* [retval][out] */ int __RPC_FAR *piIcon);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetIconLocation )( 
+            IShellLinkDual * This,
+            /* [out] */ BSTR *pbs,
+            /* [retval][out] */ int *piIcon);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIconLocation )( 
-            IShellLinkDual __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetIconLocation )( 
+            IShellLinkDual * This,
             /* [in] */ BSTR bs,
             /* [in] */ int iIcon);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Save )( 
-            IShellLinkDual __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Save )( 
+            IShellLinkDual * This,
             /* [optional][in] */ VARIANT vWhere);
         
         END_INTERFACE
@@ -3562,7 +4169,7 @@ EXTERN_C const IID IID_IShellLinkDual;
 
     interface IShellLinkDual
     {
-        CONST_VTBL struct IShellLinkDualVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IShellLinkDualVtbl *lpVtbl;
     };
 
     
@@ -3649,8 +4256,8 @@ EXTERN_C const IID IID_IShellLinkDual;
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_get_Path_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbs);
+    IShellLinkDual * This,
+    /* [retval][out] */ BSTR *pbs);
 
 
 void __RPC_STUB IShellLinkDual_get_Path_Stub(
@@ -3661,7 +4268,7 @@ void __RPC_STUB IShellLinkDual_get_Path_Stub(
 
 
 /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_put_Path_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
+    IShellLinkDual * This,
     /* [in] */ BSTR bs);
 
 
@@ -3673,8 +4280,8 @@ void __RPC_STUB IShellLinkDual_put_Path_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_get_Description_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbs);
+    IShellLinkDual * This,
+    /* [retval][out] */ BSTR *pbs);
 
 
 void __RPC_STUB IShellLinkDual_get_Description_Stub(
@@ -3685,7 +4292,7 @@ void __RPC_STUB IShellLinkDual_get_Description_Stub(
 
 
 /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_put_Description_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
+    IShellLinkDual * This,
     /* [in] */ BSTR bs);
 
 
@@ -3697,8 +4304,8 @@ void __RPC_STUB IShellLinkDual_put_Description_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_get_WorkingDirectory_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbs);
+    IShellLinkDual * This,
+    /* [retval][out] */ BSTR *pbs);
 
 
 void __RPC_STUB IShellLinkDual_get_WorkingDirectory_Stub(
@@ -3709,7 +4316,7 @@ void __RPC_STUB IShellLinkDual_get_WorkingDirectory_Stub(
 
 
 /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_put_WorkingDirectory_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
+    IShellLinkDual * This,
     /* [in] */ BSTR bs);
 
 
@@ -3721,8 +4328,8 @@ void __RPC_STUB IShellLinkDual_put_WorkingDirectory_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_get_Arguments_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbs);
+    IShellLinkDual * This,
+    /* [retval][out] */ BSTR *pbs);
 
 
 void __RPC_STUB IShellLinkDual_get_Arguments_Stub(
@@ -3733,7 +4340,7 @@ void __RPC_STUB IShellLinkDual_get_Arguments_Stub(
 
 
 /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_put_Arguments_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
+    IShellLinkDual * This,
     /* [in] */ BSTR bs);
 
 
@@ -3745,8 +4352,8 @@ void __RPC_STUB IShellLinkDual_put_Arguments_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_get_Hotkey_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
-    /* [retval][out] */ int __RPC_FAR *piHK);
+    IShellLinkDual * This,
+    /* [retval][out] */ int *piHK);
 
 
 void __RPC_STUB IShellLinkDual_get_Hotkey_Stub(
@@ -3757,7 +4364,7 @@ void __RPC_STUB IShellLinkDual_get_Hotkey_Stub(
 
 
 /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_put_Hotkey_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
+    IShellLinkDual * This,
     /* [in] */ int iHK);
 
 
@@ -3769,8 +4376,8 @@ void __RPC_STUB IShellLinkDual_put_Hotkey_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_get_ShowCommand_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
-    /* [retval][out] */ int __RPC_FAR *piShowCommand);
+    IShellLinkDual * This,
+    /* [retval][out] */ int *piShowCommand);
 
 
 void __RPC_STUB IShellLinkDual_get_ShowCommand_Stub(
@@ -3781,7 +4388,7 @@ void __RPC_STUB IShellLinkDual_get_ShowCommand_Stub(
 
 
 /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_put_ShowCommand_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
+    IShellLinkDual * This,
     /* [in] */ int iShowCommand);
 
 
@@ -3793,7 +4400,7 @@ void __RPC_STUB IShellLinkDual_put_ShowCommand_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_Resolve_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
+    IShellLinkDual * This,
     /* [in] */ int fFlags);
 
 
@@ -3805,9 +4412,9 @@ void __RPC_STUB IShellLinkDual_Resolve_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_GetIconLocation_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbs,
-    /* [retval][out] */ int __RPC_FAR *piIcon);
+    IShellLinkDual * This,
+    /* [out] */ BSTR *pbs,
+    /* [retval][out] */ int *piIcon);
 
 
 void __RPC_STUB IShellLinkDual_GetIconLocation_Stub(
@@ -3818,7 +4425,7 @@ void __RPC_STUB IShellLinkDual_GetIconLocation_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_SetIconLocation_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
+    IShellLinkDual * This,
     /* [in] */ BSTR bs,
     /* [in] */ int iIcon);
 
@@ -3831,7 +4438,7 @@ void __RPC_STUB IShellLinkDual_SetIconLocation_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellLinkDual_Save_Proxy( 
-    IShellLinkDual __RPC_FAR * This,
+    IShellLinkDual * This,
     /* [optional][in] */ VARIANT vWhere);
 
 
@@ -3862,7 +4469,7 @@ EXTERN_C const IID IID_IShellLinkDual2;
     {
     public:
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Target( 
-            /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppfi) = 0;
+            /* [retval][out] */ FolderItem **ppfi) = 0;
         
     };
     
@@ -3872,122 +4479,122 @@ EXTERN_C const IID IID_IShellLinkDual2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IShellLinkDual2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IShellLinkDual2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IShellLinkDual2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IShellLinkDual2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IShellLinkDual2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IShellLinkDual2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IShellLinkDual2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IShellLinkDual2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IShellLinkDual2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IShellLinkDual2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IShellLinkDual2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IShellLinkDual2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IShellLinkDual2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IShellLinkDual2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
-            IShellLinkDual2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+            IShellLinkDual2 * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Path )( 
-            IShellLinkDual2 __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+            IShellLinkDual2 * This,
             /* [in] */ BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IShellLinkDual2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IShellLinkDual2 * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IShellLinkDual2 __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IShellLinkDual2 * This,
             /* [in] */ BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_WorkingDirectory )( 
-            IShellLinkDual2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WorkingDirectory )( 
+            IShellLinkDual2 * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_WorkingDirectory )( 
-            IShellLinkDual2 __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WorkingDirectory )( 
+            IShellLinkDual2 * This,
             /* [in] */ BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Arguments )( 
-            IShellLinkDual2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Arguments )( 
+            IShellLinkDual2 * This,
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Arguments )( 
-            IShellLinkDual2 __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Arguments )( 
+            IShellLinkDual2 * This,
             /* [in] */ BSTR bs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Hotkey )( 
-            IShellLinkDual2 __RPC_FAR * This,
-            /* [retval][out] */ int __RPC_FAR *piHK);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hotkey )( 
+            IShellLinkDual2 * This,
+            /* [retval][out] */ int *piHK);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Hotkey )( 
-            IShellLinkDual2 __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Hotkey )( 
+            IShellLinkDual2 * This,
             /* [in] */ int iHK);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowCommand )( 
-            IShellLinkDual2 __RPC_FAR * This,
-            /* [retval][out] */ int __RPC_FAR *piShowCommand);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShowCommand )( 
+            IShellLinkDual2 * This,
+            /* [retval][out] */ int *piShowCommand);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ShowCommand )( 
-            IShellLinkDual2 __RPC_FAR * This,
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ShowCommand )( 
+            IShellLinkDual2 * This,
             /* [in] */ int iShowCommand);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Resolve )( 
-            IShellLinkDual2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Resolve )( 
+            IShellLinkDual2 * This,
             /* [in] */ int fFlags);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIconLocation )( 
-            IShellLinkDual2 __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbs,
-            /* [retval][out] */ int __RPC_FAR *piIcon);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetIconLocation )( 
+            IShellLinkDual2 * This,
+            /* [out] */ BSTR *pbs,
+            /* [retval][out] */ int *piIcon);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetIconLocation )( 
-            IShellLinkDual2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetIconLocation )( 
+            IShellLinkDual2 * This,
             /* [in] */ BSTR bs,
             /* [in] */ int iIcon);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Save )( 
-            IShellLinkDual2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Save )( 
+            IShellLinkDual2 * This,
             /* [optional][in] */ VARIANT vWhere);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Target )( 
-            IShellLinkDual2 __RPC_FAR * This,
-            /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppfi);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Target )( 
+            IShellLinkDual2 * This,
+            /* [retval][out] */ FolderItem **ppfi);
         
         END_INTERFACE
     } IShellLinkDual2Vtbl;
 
     interface IShellLinkDual2
     {
-        CONST_VTBL struct IShellLinkDual2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IShellLinkDual2Vtbl *lpVtbl;
     };
 
     
@@ -4078,8 +4685,8 @@ EXTERN_C const IID IID_IShellLinkDual2;
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellLinkDual2_get_Target_Proxy( 
-    IShellLinkDual2 __RPC_FAR * This,
-    /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppfi);
+    IShellLinkDual2 * This,
+    /* [retval][out] */ FolderItem **ppfi);
 
 
 void __RPC_STUB IShellLinkDual2_get_Target_Stub(
@@ -4117,35 +4724,35 @@ EXTERN_C const IID IID_IShellFolderViewDual;
     {
     public:
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Folder( 
-            /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ Folder **ppid) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SelectedItems( 
-            /* [retval][out] */ FolderItems __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ FolderItems **ppid) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_FocusedItem( 
-            /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ FolderItem **ppid) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SelectItem( 
-            /* [in] */ VARIANT __RPC_FAR *pvfi,
+            /* [in] */ VARIANT *pvfi,
             /* [in] */ int dwFlags) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE PopupItemMenu( 
-            /* [in] */ FolderItem __RPC_FAR *pfi,
+            /* [in] */ FolderItem *pfi,
             /* [optional][in] */ VARIANT vx,
             /* [optional][in] */ VARIANT vy,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs) = 0;
+            /* [retval][out] */ BSTR *pbs) = 0;
         
         virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Script( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
+            /* [retval][out] */ IDispatch **ppDisp) = 0;
         
         virtual /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ViewOptions( 
-            /* [retval][out] */ long __RPC_FAR *plViewOptions) = 0;
+            /* [retval][out] */ long *plViewOptions) = 0;
         
     };
     
@@ -4155,92 +4762,92 @@ EXTERN_C const IID IID_IShellFolderViewDual;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IShellFolderViewDual __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IShellFolderViewDual * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IShellFolderViewDual __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IShellFolderViewDual * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IShellFolderViewDual __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IShellFolderViewDual * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IShellFolderViewDual __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IShellFolderViewDual * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IShellFolderViewDual __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IShellFolderViewDual * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IShellFolderViewDual __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IShellFolderViewDual * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IShellFolderViewDual __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IShellFolderViewDual * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            IShellFolderViewDual __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            IShellFolderViewDual * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IShellFolderViewDual __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IShellFolderViewDual * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Folder )( 
-            IShellFolderViewDual __RPC_FAR * This,
-            /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Folder )( 
+            IShellFolderViewDual * This,
+            /* [retval][out] */ Folder **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SelectedItems )( 
-            IShellFolderViewDual __RPC_FAR * This,
-            /* [retval][out] */ FolderItems __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectedItems )( 
+            IShellFolderViewDual * This,
+            /* [retval][out] */ FolderItems **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FocusedItem )( 
-            IShellFolderViewDual __RPC_FAR * This,
-            /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FocusedItem )( 
+            IShellFolderViewDual * This,
+            /* [retval][out] */ FolderItem **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SelectItem )( 
-            IShellFolderViewDual __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pvfi,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectItem )( 
+            IShellFolderViewDual * This,
+            /* [in] */ VARIANT *pvfi,
             /* [in] */ int dwFlags);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PopupItemMenu )( 
-            IShellFolderViewDual __RPC_FAR * This,
-            /* [in] */ FolderItem __RPC_FAR *pfi,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *PopupItemMenu )( 
+            IShellFolderViewDual * This,
+            /* [in] */ FolderItem *pfi,
             /* [optional][in] */ VARIANT vx,
             /* [optional][in] */ VARIANT vy,
-            /* [retval][out] */ BSTR __RPC_FAR *pbs);
+            /* [retval][out] */ BSTR *pbs);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Script )( 
-            IShellFolderViewDual __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Script )( 
+            IShellFolderViewDual * This,
+            /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ViewOptions )( 
-            IShellFolderViewDual __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plViewOptions);
+        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ViewOptions )( 
+            IShellFolderViewDual * This,
+            /* [retval][out] */ long *plViewOptions);
         
         END_INTERFACE
     } IShellFolderViewDualVtbl;
 
     interface IShellFolderViewDual
     {
-        CONST_VTBL struct IShellFolderViewDualVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IShellFolderViewDualVtbl *lpVtbl;
     };
 
     
@@ -4306,8 +4913,8 @@ EXTERN_C const IID IID_IShellFolderViewDual;
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_Application_Proxy( 
-    IShellFolderViewDual __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    IShellFolderViewDual * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB IShellFolderViewDual_get_Application_Stub(
@@ -4318,8 +4925,8 @@ void __RPC_STUB IShellFolderViewDual_get_Application_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_Parent_Proxy( 
-    IShellFolderViewDual __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    IShellFolderViewDual * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB IShellFolderViewDual_get_Parent_Stub(
@@ -4330,8 +4937,8 @@ void __RPC_STUB IShellFolderViewDual_get_Parent_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_Folder_Proxy( 
-    IShellFolderViewDual __RPC_FAR * This,
-    /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppid);
+    IShellFolderViewDual * This,
+    /* [retval][out] */ Folder **ppid);
 
 
 void __RPC_STUB IShellFolderViewDual_get_Folder_Stub(
@@ -4342,8 +4949,8 @@ void __RPC_STUB IShellFolderViewDual_get_Folder_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_SelectedItems_Proxy( 
-    IShellFolderViewDual __RPC_FAR * This,
-    /* [retval][out] */ FolderItems __RPC_FAR *__RPC_FAR *ppid);
+    IShellFolderViewDual * This,
+    /* [retval][out] */ FolderItems **ppid);
 
 
 void __RPC_STUB IShellFolderViewDual_SelectedItems_Stub(
@@ -4354,8 +4961,8 @@ void __RPC_STUB IShellFolderViewDual_SelectedItems_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_FocusedItem_Proxy( 
-    IShellFolderViewDual __RPC_FAR * This,
-    /* [retval][out] */ FolderItem __RPC_FAR *__RPC_FAR *ppid);
+    IShellFolderViewDual * This,
+    /* [retval][out] */ FolderItem **ppid);
 
 
 void __RPC_STUB IShellFolderViewDual_get_FocusedItem_Stub(
@@ -4366,8 +4973,8 @@ void __RPC_STUB IShellFolderViewDual_get_FocusedItem_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_SelectItem_Proxy( 
-    IShellFolderViewDual __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *pvfi,
+    IShellFolderViewDual * This,
+    /* [in] */ VARIANT *pvfi,
     /* [in] */ int dwFlags);
 
 
@@ -4379,11 +4986,11 @@ void __RPC_STUB IShellFolderViewDual_SelectItem_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_PopupItemMenu_Proxy( 
-    IShellFolderViewDual __RPC_FAR * This,
-    /* [in] */ FolderItem __RPC_FAR *pfi,
+    IShellFolderViewDual * This,
+    /* [in] */ FolderItem *pfi,
     /* [optional][in] */ VARIANT vx,
     /* [optional][in] */ VARIANT vy,
-    /* [retval][out] */ BSTR __RPC_FAR *pbs);
+    /* [retval][out] */ BSTR *pbs);
 
 
 void __RPC_STUB IShellFolderViewDual_PopupItemMenu_Stub(
@@ -4394,8 +5001,8 @@ void __RPC_STUB IShellFolderViewDual_PopupItemMenu_Stub(
 
 
 /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_Script_Proxy( 
-    IShellFolderViewDual __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+    IShellFolderViewDual * This,
+    /* [retval][out] */ IDispatch **ppDisp);
 
 
 void __RPC_STUB IShellFolderViewDual_get_Script_Stub(
@@ -4406,8 +5013,8 @@ void __RPC_STUB IShellFolderViewDual_get_Script_Stub(
 
 
 /* [helpcontext][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual_get_ViewOptions_Proxy( 
-    IShellFolderViewDual __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plViewOptions);
+    IShellFolderViewDual * This,
+    /* [retval][out] */ long *plViewOptions);
 
 
 void __RPC_STUB IShellFolderViewDual_get_ViewOptions_Stub(
@@ -4421,12 +5028,549 @@ void __RPC_STUB IShellFolderViewDual_get_ViewOptions_Stub(
 #endif 	/* __IShellFolderViewDual_INTERFACE_DEFINED__ */
 
 
+#ifndef __IShellFolderViewDual2_INTERFACE_DEFINED__
+#define __IShellFolderViewDual2_INTERFACE_DEFINED__
+
+/* interface IShellFolderViewDual2 */
+/* [object][dual][hidden][oleautomation][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IShellFolderViewDual2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("31C147b6-0ADE-4A3C-B514-DDF932EF6D17")
+    IShellFolderViewDual2 : public IShellFolderViewDual
+    {
+    public:
+        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentViewMode( 
+            /* [retval][out] */ UINT *pViewMode) = 0;
+        
+        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentViewMode( 
+            /* [in] */ UINT ViewMode) = 0;
+        
+        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SelectItemRelative( 
+            /* [in] */ int iRelative) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IShellFolderViewDual2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IShellFolderViewDual2 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IShellFolderViewDual2 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IShellFolderViewDual2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IShellFolderViewDual2 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IShellFolderViewDual2 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IShellFolderViewDual2 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IShellFolderViewDual2 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            IShellFolderViewDual2 * This,
+            /* [retval][out] */ IDispatch **ppid);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IShellFolderViewDual2 * This,
+            /* [retval][out] */ IDispatch **ppid);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Folder )( 
+            IShellFolderViewDual2 * This,
+            /* [retval][out] */ Folder **ppid);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectedItems )( 
+            IShellFolderViewDual2 * This,
+            /* [retval][out] */ FolderItems **ppid);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FocusedItem )( 
+            IShellFolderViewDual2 * This,
+            /* [retval][out] */ FolderItem **ppid);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectItem )( 
+            IShellFolderViewDual2 * This,
+            /* [in] */ VARIANT *pvfi,
+            /* [in] */ int dwFlags);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *PopupItemMenu )( 
+            IShellFolderViewDual2 * This,
+            /* [in] */ FolderItem *pfi,
+            /* [optional][in] */ VARIANT vx,
+            /* [optional][in] */ VARIANT vy,
+            /* [retval][out] */ BSTR *pbs);
+        
+        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Script )( 
+            IShellFolderViewDual2 * This,
+            /* [retval][out] */ IDispatch **ppDisp);
+        
+        /* [helpcontext][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ViewOptions )( 
+            IShellFolderViewDual2 * This,
+            /* [retval][out] */ long *plViewOptions);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentViewMode )( 
+            IShellFolderViewDual2 * This,
+            /* [retval][out] */ UINT *pViewMode);
+        
+        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentViewMode )( 
+            IShellFolderViewDual2 * This,
+            /* [in] */ UINT ViewMode);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SelectItemRelative )( 
+            IShellFolderViewDual2 * This,
+            /* [in] */ int iRelative);
+        
+        END_INTERFACE
+    } IShellFolderViewDual2Vtbl;
+
+    interface IShellFolderViewDual2
+    {
+        CONST_VTBL struct IShellFolderViewDual2Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IShellFolderViewDual2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IShellFolderViewDual2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IShellFolderViewDual2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IShellFolderViewDual2_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IShellFolderViewDual2_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IShellFolderViewDual2_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IShellFolderViewDual2_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IShellFolderViewDual2_get_Application(This,ppid)	\
+    (This)->lpVtbl -> get_Application(This,ppid)
+
+#define IShellFolderViewDual2_get_Parent(This,ppid)	\
+    (This)->lpVtbl -> get_Parent(This,ppid)
+
+#define IShellFolderViewDual2_get_Folder(This,ppid)	\
+    (This)->lpVtbl -> get_Folder(This,ppid)
+
+#define IShellFolderViewDual2_SelectedItems(This,ppid)	\
+    (This)->lpVtbl -> SelectedItems(This,ppid)
+
+#define IShellFolderViewDual2_get_FocusedItem(This,ppid)	\
+    (This)->lpVtbl -> get_FocusedItem(This,ppid)
+
+#define IShellFolderViewDual2_SelectItem(This,pvfi,dwFlags)	\
+    (This)->lpVtbl -> SelectItem(This,pvfi,dwFlags)
+
+#define IShellFolderViewDual2_PopupItemMenu(This,pfi,vx,vy,pbs)	\
+    (This)->lpVtbl -> PopupItemMenu(This,pfi,vx,vy,pbs)
+
+#define IShellFolderViewDual2_get_Script(This,ppDisp)	\
+    (This)->lpVtbl -> get_Script(This,ppDisp)
+
+#define IShellFolderViewDual2_get_ViewOptions(This,plViewOptions)	\
+    (This)->lpVtbl -> get_ViewOptions(This,plViewOptions)
+
+
+#define IShellFolderViewDual2_get_CurrentViewMode(This,pViewMode)	\
+    (This)->lpVtbl -> get_CurrentViewMode(This,pViewMode)
+
+#define IShellFolderViewDual2_put_CurrentViewMode(This,ViewMode)	\
+    (This)->lpVtbl -> put_CurrentViewMode(This,ViewMode)
+
+#define IShellFolderViewDual2_SelectItemRelative(This,iRelative)	\
+    (This)->lpVtbl -> SelectItemRelative(This,iRelative)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual2_get_CurrentViewMode_Proxy( 
+    IShellFolderViewDual2 * This,
+    /* [retval][out] */ UINT *pViewMode);
+
+
+void __RPC_STUB IShellFolderViewDual2_get_CurrentViewMode_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual2_put_CurrentViewMode_Proxy( 
+    IShellFolderViewDual2 * This,
+    /* [in] */ UINT ViewMode);
+
+
+void __RPC_STUB IShellFolderViewDual2_put_CurrentViewMode_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellFolderViewDual2_SelectItemRelative_Proxy( 
+    IShellFolderViewDual2 * This,
+    /* [in] */ int iRelative);
+
+
+void __RPC_STUB IShellFolderViewDual2_SelectItemRelative_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IShellFolderViewDual2_INTERFACE_DEFINED__ */
+
+
 EXTERN_C const CLSID CLSID_ShellFolderView;
 
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("62112AA1-EBE4-11cf-A5FB-0020AFE7292D")
 ShellFolderView;
+#endif
+
+#ifndef __IMigrationWizardAuto_INTERFACE_DEFINED__
+#define __IMigrationWizardAuto_INTERFACE_DEFINED__
+
+/* interface IMigrationWizardAuto */
+/* [object][dual][hidden][oleautomation][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IMigrationWizardAuto;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("CE20DAB9-B353-469b-8B4D-6DBB3A7BA016")
+    IMigrationWizardAuto : public IDispatch
+    {
+    public:
+        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateToolDisk( 
+            /* [in] */ BSTR pszDrivePath,
+            /* [in] */ BSTR pszFilesPath,
+            /* [in] */ BSTR pszManifestPath) = 0;
+        
+        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ApplySettings( 
+            /* [in] */ BSTR pszStore) = 0;
+        
+        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMigrationWizardAutoVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMigrationWizardAuto * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMigrationWizardAuto * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMigrationWizardAuto * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMigrationWizardAuto * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMigrationWizardAuto * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMigrationWizardAuto * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMigrationWizardAuto * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateToolDisk )( 
+            IMigrationWizardAuto * This,
+            /* [in] */ BSTR pszDrivePath,
+            /* [in] */ BSTR pszFilesPath,
+            /* [in] */ BSTR pszManifestPath);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ApplySettings )( 
+            IMigrationWizardAuto * This,
+            /* [in] */ BSTR pszStore);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Cancel )( 
+            IMigrationWizardAuto * This);
+        
+        END_INTERFACE
+    } IMigrationWizardAutoVtbl;
+
+    interface IMigrationWizardAuto
+    {
+        CONST_VTBL struct IMigrationWizardAutoVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMigrationWizardAuto_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMigrationWizardAuto_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMigrationWizardAuto_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMigrationWizardAuto_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMigrationWizardAuto_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMigrationWizardAuto_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMigrationWizardAuto_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMigrationWizardAuto_CreateToolDisk(This,pszDrivePath,pszFilesPath,pszManifestPath)	\
+    (This)->lpVtbl -> CreateToolDisk(This,pszDrivePath,pszFilesPath,pszManifestPath)
+
+#define IMigrationWizardAuto_ApplySettings(This,pszStore)	\
+    (This)->lpVtbl -> ApplySettings(This,pszStore)
+
+#define IMigrationWizardAuto_Cancel(This)	\
+    (This)->lpVtbl -> Cancel(This)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMigrationWizardAuto_CreateToolDisk_Proxy( 
+    IMigrationWizardAuto * This,
+    /* [in] */ BSTR pszDrivePath,
+    /* [in] */ BSTR pszFilesPath,
+    /* [in] */ BSTR pszManifestPath);
+
+
+void __RPC_STUB IMigrationWizardAuto_CreateToolDisk_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMigrationWizardAuto_ApplySettings_Proxy( 
+    IMigrationWizardAuto * This,
+    /* [in] */ BSTR pszStore);
+
+
+void __RPC_STUB IMigrationWizardAuto_ApplySettings_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring] */ HRESULT STDMETHODCALLTYPE IMigrationWizardAuto_Cancel_Proxy( 
+    IMigrationWizardAuto * This);
+
+
+void __RPC_STUB IMigrationWizardAuto_Cancel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMigrationWizardAuto_INTERFACE_DEFINED__ */
+
+
+#ifndef __DMigrationWizardAutoEvents_DISPINTERFACE_DEFINED__
+#define __DMigrationWizardAutoEvents_DISPINTERFACE_DEFINED__
+
+/* dispinterface DMigrationWizardAutoEvents */
+/* [helpstring][uuid] */ 
+
+
+EXTERN_C const IID DIID_DMigrationWizardAutoEvents;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+
+    MIDL_INTERFACE("D2AC137D-A6D8-43b6-9879-EA34B67E1880")
+    DMigrationWizardAutoEvents : public IDispatch
+    {
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct DMigrationWizardAutoEventsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            DMigrationWizardAutoEvents * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            DMigrationWizardAutoEvents * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            DMigrationWizardAutoEvents * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            DMigrationWizardAutoEvents * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            DMigrationWizardAutoEvents * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            DMigrationWizardAutoEvents * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            DMigrationWizardAutoEvents * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        END_INTERFACE
+    } DMigrationWizardAutoEventsVtbl;
+
+    interface DMigrationWizardAutoEvents
+    {
+        CONST_VTBL struct DMigrationWizardAutoEventsVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define DMigrationWizardAutoEvents_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define DMigrationWizardAutoEvents_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define DMigrationWizardAutoEvents_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define DMigrationWizardAutoEvents_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define DMigrationWizardAutoEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define DMigrationWizardAutoEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define DMigrationWizardAutoEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+#endif 	/* __DMigrationWizardAutoEvents_DISPINTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_MigrationWizardAuto;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("67331D85-BE17-42f6-8D3F-47B8E8B26637")
+MigrationWizardAuto;
 #endif
 
 #ifndef __IShellDispatch_INTERFACE_DEFINED__
@@ -4445,24 +5589,24 @@ EXTERN_C const IID IID_IShellDispatch;
     {
     public:
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE NameSpace( 
             /* [in] */ VARIANT vDir,
-            /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppsdf) = 0;
+            /* [retval][out] */ Folder **ppsdf) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE BrowseForFolder( 
             /* [in] */ long Hwnd,
             /* [in] */ BSTR Title,
             /* [in] */ long Options,
             /* [optional][in] */ VARIANT RootFolder,
-            /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppsdf) = 0;
+            /* [retval][out] */ Folder **ppsdf) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Windows( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ IDispatch **ppid) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Open( 
             /* [in] */ VARIANT vDir) = 0;
@@ -4511,126 +5655,126 @@ EXTERN_C const IID IID_IShellDispatch;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IShellDispatch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IShellDispatch * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IShellDispatch __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IShellDispatch * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IShellDispatch __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IShellDispatch * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IShellDispatch __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IShellDispatch * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IShellDispatch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IShellDispatch * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IShellDispatch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IShellDispatch * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IShellDispatch __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IShellDispatch * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            IShellDispatch __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            IShellDispatch * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IShellDispatch __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IShellDispatch * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NameSpace )( 
-            IShellDispatch __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NameSpace )( 
+            IShellDispatch * This,
             /* [in] */ VARIANT vDir,
-            /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppsdf);
+            /* [retval][out] */ Folder **ppsdf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BrowseForFolder )( 
-            IShellDispatch __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *BrowseForFolder )( 
+            IShellDispatch * This,
             /* [in] */ long Hwnd,
             /* [in] */ BSTR Title,
             /* [in] */ long Options,
             /* [optional][in] */ VARIANT RootFolder,
-            /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppsdf);
+            /* [retval][out] */ Folder **ppsdf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Windows )( 
-            IShellDispatch __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Windows )( 
+            IShellDispatch * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
-            IShellDispatch __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+            IShellDispatch * This,
             /* [in] */ VARIANT vDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Explore )( 
-            IShellDispatch __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Explore )( 
+            IShellDispatch * This,
             /* [in] */ VARIANT vDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MinimizeAll )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MinimizeAll )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UndoMinimizeALL )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UndoMinimizeALL )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FileRun )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FileRun )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CascadeWindows )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CascadeWindows )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TileVertically )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileVertically )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TileHorizontally )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileHorizontally )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShutdownWindows )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShutdownWindows )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Suspend )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Suspend )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EjectPC )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EjectPC )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTime )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetTime )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TrayProperties )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TrayProperties )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Help )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Help )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindFiles )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindFiles )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindComputer )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RefreshMenu )( 
-            IShellDispatch __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RefreshMenu )( 
+            IShellDispatch * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ControlPanelItem )( 
-            IShellDispatch __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ControlPanelItem )( 
+            IShellDispatch * This,
             /* [in] */ BSTR szDir);
         
         END_INTERFACE
@@ -4638,7 +5782,7 @@ EXTERN_C const IID IID_IShellDispatch;
 
     interface IShellDispatch
     {
-        CONST_VTBL struct IShellDispatchVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IShellDispatchVtbl *lpVtbl;
     };
 
     
@@ -4746,8 +5890,8 @@ EXTERN_C const IID IID_IShellDispatch;
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellDispatch_get_Application_Proxy( 
-    IShellDispatch __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    IShellDispatch * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB IShellDispatch_get_Application_Stub(
@@ -4758,8 +5902,8 @@ void __RPC_STUB IShellDispatch_get_Application_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellDispatch_get_Parent_Proxy( 
-    IShellDispatch __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    IShellDispatch * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB IShellDispatch_get_Parent_Stub(
@@ -4770,9 +5914,9 @@ void __RPC_STUB IShellDispatch_get_Parent_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_NameSpace_Proxy( 
-    IShellDispatch __RPC_FAR * This,
+    IShellDispatch * This,
     /* [in] */ VARIANT vDir,
-    /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppsdf);
+    /* [retval][out] */ Folder **ppsdf);
 
 
 void __RPC_STUB IShellDispatch_NameSpace_Stub(
@@ -4783,12 +5927,12 @@ void __RPC_STUB IShellDispatch_NameSpace_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_BrowseForFolder_Proxy( 
-    IShellDispatch __RPC_FAR * This,
+    IShellDispatch * This,
     /* [in] */ long Hwnd,
     /* [in] */ BSTR Title,
     /* [in] */ long Options,
     /* [optional][in] */ VARIANT RootFolder,
-    /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppsdf);
+    /* [retval][out] */ Folder **ppsdf);
 
 
 void __RPC_STUB IShellDispatch_BrowseForFolder_Stub(
@@ -4799,8 +5943,8 @@ void __RPC_STUB IShellDispatch_BrowseForFolder_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_Windows_Proxy( 
-    IShellDispatch __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+    IShellDispatch * This,
+    /* [retval][out] */ IDispatch **ppid);
 
 
 void __RPC_STUB IShellDispatch_Windows_Stub(
@@ -4811,7 +5955,7 @@ void __RPC_STUB IShellDispatch_Windows_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_Open_Proxy( 
-    IShellDispatch __RPC_FAR * This,
+    IShellDispatch * This,
     /* [in] */ VARIANT vDir);
 
 
@@ -4823,7 +5967,7 @@ void __RPC_STUB IShellDispatch_Open_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_Explore_Proxy( 
-    IShellDispatch __RPC_FAR * This,
+    IShellDispatch * This,
     /* [in] */ VARIANT vDir);
 
 
@@ -4835,7 +5979,7 @@ void __RPC_STUB IShellDispatch_Explore_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_MinimizeAll_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_MinimizeAll_Stub(
@@ -4846,7 +5990,7 @@ void __RPC_STUB IShellDispatch_MinimizeAll_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_UndoMinimizeALL_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_UndoMinimizeALL_Stub(
@@ -4857,7 +6001,7 @@ void __RPC_STUB IShellDispatch_UndoMinimizeALL_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_FileRun_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_FileRun_Stub(
@@ -4868,7 +6012,7 @@ void __RPC_STUB IShellDispatch_FileRun_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_CascadeWindows_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_CascadeWindows_Stub(
@@ -4879,7 +6023,7 @@ void __RPC_STUB IShellDispatch_CascadeWindows_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_TileVertically_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_TileVertically_Stub(
@@ -4890,7 +6034,7 @@ void __RPC_STUB IShellDispatch_TileVertically_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_TileHorizontally_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_TileHorizontally_Stub(
@@ -4901,7 +6045,7 @@ void __RPC_STUB IShellDispatch_TileHorizontally_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_ShutdownWindows_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_ShutdownWindows_Stub(
@@ -4912,7 +6056,7 @@ void __RPC_STUB IShellDispatch_ShutdownWindows_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_Suspend_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_Suspend_Stub(
@@ -4923,7 +6067,7 @@ void __RPC_STUB IShellDispatch_Suspend_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_EjectPC_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_EjectPC_Stub(
@@ -4934,7 +6078,7 @@ void __RPC_STUB IShellDispatch_EjectPC_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_SetTime_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_SetTime_Stub(
@@ -4945,7 +6089,7 @@ void __RPC_STUB IShellDispatch_SetTime_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_TrayProperties_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_TrayProperties_Stub(
@@ -4956,7 +6100,7 @@ void __RPC_STUB IShellDispatch_TrayProperties_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_Help_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_Help_Stub(
@@ -4967,7 +6111,7 @@ void __RPC_STUB IShellDispatch_Help_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_FindFiles_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_FindFiles_Stub(
@@ -4978,7 +6122,7 @@ void __RPC_STUB IShellDispatch_FindFiles_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_FindComputer_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_FindComputer_Stub(
@@ -4989,7 +6133,7 @@ void __RPC_STUB IShellDispatch_FindComputer_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_RefreshMenu_Proxy( 
-    IShellDispatch __RPC_FAR * This);
+    IShellDispatch * This);
 
 
 void __RPC_STUB IShellDispatch_RefreshMenu_Stub(
@@ -5000,7 +6144,7 @@ void __RPC_STUB IShellDispatch_RefreshMenu_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch_ControlPanelItem_Proxy( 
-    IShellDispatch __RPC_FAR * This,
+    IShellDispatch * This,
     /* [in] */ BSTR szDir);
 
 
@@ -5033,7 +6177,7 @@ EXTERN_C const IID IID_IShellDispatch2;
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE IsRestricted( 
             /* [in] */ BSTR Group,
             /* [in] */ BSTR Restriction,
-            /* [retval][out] */ long __RPC_FAR *plRestrictValue) = 0;
+            /* [retval][out] */ long *plRestrictValue) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ShellExecute( 
             /* [in] */ BSTR File,
@@ -5049,30 +6193,30 @@ EXTERN_C const IID IID_IShellDispatch2;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSystemInformation( 
             /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT __RPC_FAR *pv) = 0;
+            /* [retval][out] */ VARIANT *pv) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ServiceStart( 
             /* [in] */ BSTR ServiceName,
             /* [in] */ VARIANT Persistent,
-            /* [retval][out] */ VARIANT __RPC_FAR *pSuccess) = 0;
+            /* [retval][out] */ VARIANT *pSuccess) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ServiceStop( 
             /* [in] */ BSTR ServiceName,
             /* [in] */ VARIANT Persistent,
-            /* [retval][out] */ VARIANT __RPC_FAR *pSuccess) = 0;
+            /* [retval][out] */ VARIANT *pSuccess) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE IsServiceRunning( 
             /* [in] */ BSTR ServiceName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pRunning) = 0;
+            /* [retval][out] */ VARIANT *pRunning) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CanStartStopService( 
             /* [in] */ BSTR ServiceName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pCanStartStop) = 0;
+            /* [retval][out] */ VARIANT *pCanStartStop) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ShowBrowserBar( 
             /* [in] */ BSTR bstrClsid,
             /* [in] */ VARIANT bShow,
-            /* [retval][out] */ VARIANT __RPC_FAR *pSuccess) = 0;
+            /* [retval][out] */ VARIANT *pSuccess) = 0;
         
     };
     
@@ -5082,187 +6226,187 @@ EXTERN_C const IID IID_IShellDispatch2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IShellDispatch2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IShellDispatch2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IShellDispatch2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IShellDispatch2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IShellDispatch2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IShellDispatch2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IShellDispatch2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IShellDispatch2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IShellDispatch2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IShellDispatch2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IShellDispatch2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IShellDispatch2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IShellDispatch2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            IShellDispatch2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            IShellDispatch2 * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IShellDispatch2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IShellDispatch2 * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NameSpace )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NameSpace )( 
+            IShellDispatch2 * This,
             /* [in] */ VARIANT vDir,
-            /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppsdf);
+            /* [retval][out] */ Folder **ppsdf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BrowseForFolder )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *BrowseForFolder )( 
+            IShellDispatch2 * This,
             /* [in] */ long Hwnd,
             /* [in] */ BSTR Title,
             /* [in] */ long Options,
             /* [optional][in] */ VARIANT RootFolder,
-            /* [retval][out] */ Folder __RPC_FAR *__RPC_FAR *ppsdf);
+            /* [retval][out] */ Folder **ppsdf);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Windows )( 
-            IShellDispatch2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Windows )( 
+            IShellDispatch2 * This,
+            /* [retval][out] */ IDispatch **ppid);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+            IShellDispatch2 * This,
             /* [in] */ VARIANT vDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Explore )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Explore )( 
+            IShellDispatch2 * This,
             /* [in] */ VARIANT vDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MinimizeAll )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MinimizeAll )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UndoMinimizeALL )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UndoMinimizeALL )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FileRun )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FileRun )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CascadeWindows )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CascadeWindows )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TileVertically )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileVertically )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TileHorizontally )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileHorizontally )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShutdownWindows )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShutdownWindows )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Suspend )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Suspend )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EjectPC )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EjectPC )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTime )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetTime )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TrayProperties )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TrayProperties )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Help )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Help )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindFiles )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindFiles )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindComputer )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RefreshMenu )( 
-            IShellDispatch2 __RPC_FAR * This);
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RefreshMenu )( 
+            IShellDispatch2 * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ControlPanelItem )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ControlPanelItem )( 
+            IShellDispatch2 * This,
             /* [in] */ BSTR szDir);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsRestricted )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
+            IShellDispatch2 * This,
             /* [in] */ BSTR Group,
             /* [in] */ BSTR Restriction,
-            /* [retval][out] */ long __RPC_FAR *plRestrictValue);
+            /* [retval][out] */ long *plRestrictValue);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShellExecute )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShellExecute )( 
+            IShellDispatch2 * This,
             /* [in] */ BSTR File,
             /* [optional][in] */ VARIANT vArgs,
             /* [optional][in] */ VARIANT vDir,
             /* [optional][in] */ VARIANT vOperation,
             /* [optional][in] */ VARIANT vShow);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindPrinter )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
+            IShellDispatch2 * This,
             /* [optional][in] */ BSTR name,
             /* [optional][in] */ BSTR location,
             /* [optional][in] */ BSTR model);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSystemInformation )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSystemInformation )( 
+            IShellDispatch2 * This,
             /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT __RPC_FAR *pv);
+            /* [retval][out] */ VARIANT *pv);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ServiceStart )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceStart )( 
+            IShellDispatch2 * This,
             /* [in] */ BSTR ServiceName,
             /* [in] */ VARIANT Persistent,
-            /* [retval][out] */ VARIANT __RPC_FAR *pSuccess);
+            /* [retval][out] */ VARIANT *pSuccess);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ServiceStop )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceStop )( 
+            IShellDispatch2 * This,
             /* [in] */ BSTR ServiceName,
             /* [in] */ VARIANT Persistent,
-            /* [retval][out] */ VARIANT __RPC_FAR *pSuccess);
+            /* [retval][out] */ VARIANT *pSuccess);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsServiceRunning )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsServiceRunning )( 
+            IShellDispatch2 * This,
             /* [in] */ BSTR ServiceName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pRunning);
+            /* [retval][out] */ VARIANT *pRunning);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanStartStopService )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CanStartStopService )( 
+            IShellDispatch2 * This,
             /* [in] */ BSTR ServiceName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pCanStartStop);
+            /* [retval][out] */ VARIANT *pCanStartStop);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowBrowserBar )( 
-            IShellDispatch2 __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShowBrowserBar )( 
+            IShellDispatch2 * This,
             /* [in] */ BSTR bstrClsid,
             /* [in] */ VARIANT bShow,
-            /* [retval][out] */ VARIANT __RPC_FAR *pSuccess);
+            /* [retval][out] */ VARIANT *pSuccess);
         
         END_INTERFACE
     } IShellDispatch2Vtbl;
 
     interface IShellDispatch2
     {
-        CONST_VTBL struct IShellDispatch2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IShellDispatch2Vtbl *lpVtbl;
     };
 
     
@@ -5398,10 +6542,10 @@ EXTERN_C const IID IID_IShellDispatch2;
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_IsRestricted_Proxy( 
-    IShellDispatch2 __RPC_FAR * This,
+    IShellDispatch2 * This,
     /* [in] */ BSTR Group,
     /* [in] */ BSTR Restriction,
-    /* [retval][out] */ long __RPC_FAR *plRestrictValue);
+    /* [retval][out] */ long *plRestrictValue);
 
 
 void __RPC_STUB IShellDispatch2_IsRestricted_Stub(
@@ -5412,7 +6556,7 @@ void __RPC_STUB IShellDispatch2_IsRestricted_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_ShellExecute_Proxy( 
-    IShellDispatch2 __RPC_FAR * This,
+    IShellDispatch2 * This,
     /* [in] */ BSTR File,
     /* [optional][in] */ VARIANT vArgs,
     /* [optional][in] */ VARIANT vDir,
@@ -5428,7 +6572,7 @@ void __RPC_STUB IShellDispatch2_ShellExecute_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_FindPrinter_Proxy( 
-    IShellDispatch2 __RPC_FAR * This,
+    IShellDispatch2 * This,
     /* [optional][in] */ BSTR name,
     /* [optional][in] */ BSTR location,
     /* [optional][in] */ BSTR model);
@@ -5442,9 +6586,9 @@ void __RPC_STUB IShellDispatch2_FindPrinter_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_GetSystemInformation_Proxy( 
-    IShellDispatch2 __RPC_FAR * This,
+    IShellDispatch2 * This,
     /* [in] */ BSTR name,
-    /* [retval][out] */ VARIANT __RPC_FAR *pv);
+    /* [retval][out] */ VARIANT *pv);
 
 
 void __RPC_STUB IShellDispatch2_GetSystemInformation_Stub(
@@ -5455,10 +6599,10 @@ void __RPC_STUB IShellDispatch2_GetSystemInformation_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_ServiceStart_Proxy( 
-    IShellDispatch2 __RPC_FAR * This,
+    IShellDispatch2 * This,
     /* [in] */ BSTR ServiceName,
     /* [in] */ VARIANT Persistent,
-    /* [retval][out] */ VARIANT __RPC_FAR *pSuccess);
+    /* [retval][out] */ VARIANT *pSuccess);
 
 
 void __RPC_STUB IShellDispatch2_ServiceStart_Stub(
@@ -5469,10 +6613,10 @@ void __RPC_STUB IShellDispatch2_ServiceStart_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_ServiceStop_Proxy( 
-    IShellDispatch2 __RPC_FAR * This,
+    IShellDispatch2 * This,
     /* [in] */ BSTR ServiceName,
     /* [in] */ VARIANT Persistent,
-    /* [retval][out] */ VARIANT __RPC_FAR *pSuccess);
+    /* [retval][out] */ VARIANT *pSuccess);
 
 
 void __RPC_STUB IShellDispatch2_ServiceStop_Stub(
@@ -5483,9 +6627,9 @@ void __RPC_STUB IShellDispatch2_ServiceStop_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_IsServiceRunning_Proxy( 
-    IShellDispatch2 __RPC_FAR * This,
+    IShellDispatch2 * This,
     /* [in] */ BSTR ServiceName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pRunning);
+    /* [retval][out] */ VARIANT *pRunning);
 
 
 void __RPC_STUB IShellDispatch2_IsServiceRunning_Stub(
@@ -5496,9 +6640,9 @@ void __RPC_STUB IShellDispatch2_IsServiceRunning_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_CanStartStopService_Proxy( 
-    IShellDispatch2 __RPC_FAR * This,
+    IShellDispatch2 * This,
     /* [in] */ BSTR ServiceName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pCanStartStop);
+    /* [retval][out] */ VARIANT *pCanStartStop);
 
 
 void __RPC_STUB IShellDispatch2_CanStartStopService_Stub(
@@ -5509,10 +6653,10 @@ void __RPC_STUB IShellDispatch2_CanStartStopService_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch2_ShowBrowserBar_Proxy( 
-    IShellDispatch2 __RPC_FAR * This,
+    IShellDispatch2 * This,
     /* [in] */ BSTR bstrClsid,
     /* [in] */ VARIANT bShow,
-    /* [retval][out] */ VARIANT __RPC_FAR *pSuccess);
+    /* [retval][out] */ VARIANT *pSuccess);
 
 
 void __RPC_STUB IShellDispatch2_ShowBrowserBar_Stub(
@@ -5524,6 +6668,814 @@ void __RPC_STUB IShellDispatch2_ShowBrowserBar_Stub(
 
 
 #endif 	/* __IShellDispatch2_INTERFACE_DEFINED__ */
+
+
+#ifndef __IShellDispatch3_INTERFACE_DEFINED__
+#define __IShellDispatch3_INTERFACE_DEFINED__
+
+/* interface IShellDispatch3 */
+/* [object][dual][hidden][oleautomation][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IShellDispatch3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("177160ca-bb5a-411c-841d-bd38facdeaa0")
+    IShellDispatch3 : public IShellDispatch2
+    {
+    public:
+        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddToRecent( 
+            /* [in] */ VARIANT varFile,
+            /* [optional][in] */ BSTR bstrCategory) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IShellDispatch3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IShellDispatch3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IShellDispatch3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IShellDispatch3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IShellDispatch3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IShellDispatch3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IShellDispatch3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IShellDispatch3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            IShellDispatch3 * This,
+            /* [retval][out] */ IDispatch **ppid);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IShellDispatch3 * This,
+            /* [retval][out] */ IDispatch **ppid);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NameSpace )( 
+            IShellDispatch3 * This,
+            /* [in] */ VARIANT vDir,
+            /* [retval][out] */ Folder **ppsdf);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *BrowseForFolder )( 
+            IShellDispatch3 * This,
+            /* [in] */ long Hwnd,
+            /* [in] */ BSTR Title,
+            /* [in] */ long Options,
+            /* [optional][in] */ VARIANT RootFolder,
+            /* [retval][out] */ Folder **ppsdf);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Windows )( 
+            IShellDispatch3 * This,
+            /* [retval][out] */ IDispatch **ppid);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+            IShellDispatch3 * This,
+            /* [in] */ VARIANT vDir);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Explore )( 
+            IShellDispatch3 * This,
+            /* [in] */ VARIANT vDir);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MinimizeAll )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UndoMinimizeALL )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FileRun )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CascadeWindows )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileVertically )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileHorizontally )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShutdownWindows )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Suspend )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EjectPC )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetTime )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TrayProperties )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Help )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindFiles )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RefreshMenu )( 
+            IShellDispatch3 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ControlPanelItem )( 
+            IShellDispatch3 * This,
+            /* [in] */ BSTR szDir);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
+            IShellDispatch3 * This,
+            /* [in] */ BSTR Group,
+            /* [in] */ BSTR Restriction,
+            /* [retval][out] */ long *plRestrictValue);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShellExecute )( 
+            IShellDispatch3 * This,
+            /* [in] */ BSTR File,
+            /* [optional][in] */ VARIANT vArgs,
+            /* [optional][in] */ VARIANT vDir,
+            /* [optional][in] */ VARIANT vOperation,
+            /* [optional][in] */ VARIANT vShow);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
+            IShellDispatch3 * This,
+            /* [optional][in] */ BSTR name,
+            /* [optional][in] */ BSTR location,
+            /* [optional][in] */ BSTR model);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSystemInformation )( 
+            IShellDispatch3 * This,
+            /* [in] */ BSTR name,
+            /* [retval][out] */ VARIANT *pv);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceStart )( 
+            IShellDispatch3 * This,
+            /* [in] */ BSTR ServiceName,
+            /* [in] */ VARIANT Persistent,
+            /* [retval][out] */ VARIANT *pSuccess);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceStop )( 
+            IShellDispatch3 * This,
+            /* [in] */ BSTR ServiceName,
+            /* [in] */ VARIANT Persistent,
+            /* [retval][out] */ VARIANT *pSuccess);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsServiceRunning )( 
+            IShellDispatch3 * This,
+            /* [in] */ BSTR ServiceName,
+            /* [retval][out] */ VARIANT *pRunning);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CanStartStopService )( 
+            IShellDispatch3 * This,
+            /* [in] */ BSTR ServiceName,
+            /* [retval][out] */ VARIANT *pCanStartStop);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShowBrowserBar )( 
+            IShellDispatch3 * This,
+            /* [in] */ BSTR bstrClsid,
+            /* [in] */ VARIANT bShow,
+            /* [retval][out] */ VARIANT *pSuccess);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddToRecent )( 
+            IShellDispatch3 * This,
+            /* [in] */ VARIANT varFile,
+            /* [optional][in] */ BSTR bstrCategory);
+        
+        END_INTERFACE
+    } IShellDispatch3Vtbl;
+
+    interface IShellDispatch3
+    {
+        CONST_VTBL struct IShellDispatch3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IShellDispatch3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IShellDispatch3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IShellDispatch3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IShellDispatch3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IShellDispatch3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IShellDispatch3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IShellDispatch3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IShellDispatch3_get_Application(This,ppid)	\
+    (This)->lpVtbl -> get_Application(This,ppid)
+
+#define IShellDispatch3_get_Parent(This,ppid)	\
+    (This)->lpVtbl -> get_Parent(This,ppid)
+
+#define IShellDispatch3_NameSpace(This,vDir,ppsdf)	\
+    (This)->lpVtbl -> NameSpace(This,vDir,ppsdf)
+
+#define IShellDispatch3_BrowseForFolder(This,Hwnd,Title,Options,RootFolder,ppsdf)	\
+    (This)->lpVtbl -> BrowseForFolder(This,Hwnd,Title,Options,RootFolder,ppsdf)
+
+#define IShellDispatch3_Windows(This,ppid)	\
+    (This)->lpVtbl -> Windows(This,ppid)
+
+#define IShellDispatch3_Open(This,vDir)	\
+    (This)->lpVtbl -> Open(This,vDir)
+
+#define IShellDispatch3_Explore(This,vDir)	\
+    (This)->lpVtbl -> Explore(This,vDir)
+
+#define IShellDispatch3_MinimizeAll(This)	\
+    (This)->lpVtbl -> MinimizeAll(This)
+
+#define IShellDispatch3_UndoMinimizeALL(This)	\
+    (This)->lpVtbl -> UndoMinimizeALL(This)
+
+#define IShellDispatch3_FileRun(This)	\
+    (This)->lpVtbl -> FileRun(This)
+
+#define IShellDispatch3_CascadeWindows(This)	\
+    (This)->lpVtbl -> CascadeWindows(This)
+
+#define IShellDispatch3_TileVertically(This)	\
+    (This)->lpVtbl -> TileVertically(This)
+
+#define IShellDispatch3_TileHorizontally(This)	\
+    (This)->lpVtbl -> TileHorizontally(This)
+
+#define IShellDispatch3_ShutdownWindows(This)	\
+    (This)->lpVtbl -> ShutdownWindows(This)
+
+#define IShellDispatch3_Suspend(This)	\
+    (This)->lpVtbl -> Suspend(This)
+
+#define IShellDispatch3_EjectPC(This)	\
+    (This)->lpVtbl -> EjectPC(This)
+
+#define IShellDispatch3_SetTime(This)	\
+    (This)->lpVtbl -> SetTime(This)
+
+#define IShellDispatch3_TrayProperties(This)	\
+    (This)->lpVtbl -> TrayProperties(This)
+
+#define IShellDispatch3_Help(This)	\
+    (This)->lpVtbl -> Help(This)
+
+#define IShellDispatch3_FindFiles(This)	\
+    (This)->lpVtbl -> FindFiles(This)
+
+#define IShellDispatch3_FindComputer(This)	\
+    (This)->lpVtbl -> FindComputer(This)
+
+#define IShellDispatch3_RefreshMenu(This)	\
+    (This)->lpVtbl -> RefreshMenu(This)
+
+#define IShellDispatch3_ControlPanelItem(This,szDir)	\
+    (This)->lpVtbl -> ControlPanelItem(This,szDir)
+
+
+#define IShellDispatch3_IsRestricted(This,Group,Restriction,plRestrictValue)	\
+    (This)->lpVtbl -> IsRestricted(This,Group,Restriction,plRestrictValue)
+
+#define IShellDispatch3_ShellExecute(This,File,vArgs,vDir,vOperation,vShow)	\
+    (This)->lpVtbl -> ShellExecute(This,File,vArgs,vDir,vOperation,vShow)
+
+#define IShellDispatch3_FindPrinter(This,name,location,model)	\
+    (This)->lpVtbl -> FindPrinter(This,name,location,model)
+
+#define IShellDispatch3_GetSystemInformation(This,name,pv)	\
+    (This)->lpVtbl -> GetSystemInformation(This,name,pv)
+
+#define IShellDispatch3_ServiceStart(This,ServiceName,Persistent,pSuccess)	\
+    (This)->lpVtbl -> ServiceStart(This,ServiceName,Persistent,pSuccess)
+
+#define IShellDispatch3_ServiceStop(This,ServiceName,Persistent,pSuccess)	\
+    (This)->lpVtbl -> ServiceStop(This,ServiceName,Persistent,pSuccess)
+
+#define IShellDispatch3_IsServiceRunning(This,ServiceName,pRunning)	\
+    (This)->lpVtbl -> IsServiceRunning(This,ServiceName,pRunning)
+
+#define IShellDispatch3_CanStartStopService(This,ServiceName,pCanStartStop)	\
+    (This)->lpVtbl -> CanStartStopService(This,ServiceName,pCanStartStop)
+
+#define IShellDispatch3_ShowBrowserBar(This,bstrClsid,bShow,pSuccess)	\
+    (This)->lpVtbl -> ShowBrowserBar(This,bstrClsid,bShow,pSuccess)
+
+
+#define IShellDispatch3_AddToRecent(This,varFile,bstrCategory)	\
+    (This)->lpVtbl -> AddToRecent(This,varFile,bstrCategory)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch3_AddToRecent_Proxy( 
+    IShellDispatch3 * This,
+    /* [in] */ VARIANT varFile,
+    /* [optional][in] */ BSTR bstrCategory);
+
+
+void __RPC_STUB IShellDispatch3_AddToRecent_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IShellDispatch3_INTERFACE_DEFINED__ */
+
+
+#ifndef __IShellDispatch4_INTERFACE_DEFINED__
+#define __IShellDispatch4_INTERFACE_DEFINED__
+
+/* interface IShellDispatch4 */
+/* [object][dual][hidden][oleautomation][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IShellDispatch4;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("efd84b2d-4bcf-4298-be25-eb542a59fbda")
+    IShellDispatch4 : public IShellDispatch3
+    {
+    public:
+        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE WindowsSecurity( void) = 0;
+        
+        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ToggleDesktop( void) = 0;
+        
+        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ExplorerPolicy( 
+            /* [in] */ BSTR bstrPolicyName,
+            /* [retval][out] */ VARIANT *pValue) = 0;
+        
+        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSetting( 
+            /* [in] */ long lSetting,
+            /* [retval][out] */ VARIANT_BOOL *pResult) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IShellDispatch4Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IShellDispatch4 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IShellDispatch4 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IShellDispatch4 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IShellDispatch4 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IShellDispatch4 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IShellDispatch4 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IShellDispatch4 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            IShellDispatch4 * This,
+            /* [retval][out] */ IDispatch **ppid);
+        
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IShellDispatch4 * This,
+            /* [retval][out] */ IDispatch **ppid);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *NameSpace )( 
+            IShellDispatch4 * This,
+            /* [in] */ VARIANT vDir,
+            /* [retval][out] */ Folder **ppsdf);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *BrowseForFolder )( 
+            IShellDispatch4 * This,
+            /* [in] */ long Hwnd,
+            /* [in] */ BSTR Title,
+            /* [in] */ long Options,
+            /* [optional][in] */ VARIANT RootFolder,
+            /* [retval][out] */ Folder **ppsdf);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Windows )( 
+            IShellDispatch4 * This,
+            /* [retval][out] */ IDispatch **ppid);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+            IShellDispatch4 * This,
+            /* [in] */ VARIANT vDir);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Explore )( 
+            IShellDispatch4 * This,
+            /* [in] */ VARIANT vDir);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *MinimizeAll )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UndoMinimizeALL )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FileRun )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CascadeWindows )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileVertically )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TileHorizontally )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShutdownWindows )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Suspend )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *EjectPC )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetTime )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *TrayProperties )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Help )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindFiles )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RefreshMenu )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ControlPanelItem )( 
+            IShellDispatch4 * This,
+            /* [in] */ BSTR szDir);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
+            IShellDispatch4 * This,
+            /* [in] */ BSTR Group,
+            /* [in] */ BSTR Restriction,
+            /* [retval][out] */ long *plRestrictValue);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShellExecute )( 
+            IShellDispatch4 * This,
+            /* [in] */ BSTR File,
+            /* [optional][in] */ VARIANT vArgs,
+            /* [optional][in] */ VARIANT vDir,
+            /* [optional][in] */ VARIANT vOperation,
+            /* [optional][in] */ VARIANT vShow);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
+            IShellDispatch4 * This,
+            /* [optional][in] */ BSTR name,
+            /* [optional][in] */ BSTR location,
+            /* [optional][in] */ BSTR model);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSystemInformation )( 
+            IShellDispatch4 * This,
+            /* [in] */ BSTR name,
+            /* [retval][out] */ VARIANT *pv);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceStart )( 
+            IShellDispatch4 * This,
+            /* [in] */ BSTR ServiceName,
+            /* [in] */ VARIANT Persistent,
+            /* [retval][out] */ VARIANT *pSuccess);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ServiceStop )( 
+            IShellDispatch4 * This,
+            /* [in] */ BSTR ServiceName,
+            /* [in] */ VARIANT Persistent,
+            /* [retval][out] */ VARIANT *pSuccess);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsServiceRunning )( 
+            IShellDispatch4 * This,
+            /* [in] */ BSTR ServiceName,
+            /* [retval][out] */ VARIANT *pRunning);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *CanStartStopService )( 
+            IShellDispatch4 * This,
+            /* [in] */ BSTR ServiceName,
+            /* [retval][out] */ VARIANT *pCanStartStop);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ShowBrowserBar )( 
+            IShellDispatch4 * This,
+            /* [in] */ BSTR bstrClsid,
+            /* [in] */ VARIANT bShow,
+            /* [retval][out] */ VARIANT *pSuccess);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddToRecent )( 
+            IShellDispatch4 * This,
+            /* [in] */ VARIANT varFile,
+            /* [optional][in] */ BSTR bstrCategory);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *WindowsSecurity )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ToggleDesktop )( 
+            IShellDispatch4 * This);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ExplorerPolicy )( 
+            IShellDispatch4 * This,
+            /* [in] */ BSTR bstrPolicyName,
+            /* [retval][out] */ VARIANT *pValue);
+        
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSetting )( 
+            IShellDispatch4 * This,
+            /* [in] */ long lSetting,
+            /* [retval][out] */ VARIANT_BOOL *pResult);
+        
+        END_INTERFACE
+    } IShellDispatch4Vtbl;
+
+    interface IShellDispatch4
+    {
+        CONST_VTBL struct IShellDispatch4Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IShellDispatch4_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IShellDispatch4_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IShellDispatch4_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IShellDispatch4_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IShellDispatch4_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IShellDispatch4_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IShellDispatch4_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IShellDispatch4_get_Application(This,ppid)	\
+    (This)->lpVtbl -> get_Application(This,ppid)
+
+#define IShellDispatch4_get_Parent(This,ppid)	\
+    (This)->lpVtbl -> get_Parent(This,ppid)
+
+#define IShellDispatch4_NameSpace(This,vDir,ppsdf)	\
+    (This)->lpVtbl -> NameSpace(This,vDir,ppsdf)
+
+#define IShellDispatch4_BrowseForFolder(This,Hwnd,Title,Options,RootFolder,ppsdf)	\
+    (This)->lpVtbl -> BrowseForFolder(This,Hwnd,Title,Options,RootFolder,ppsdf)
+
+#define IShellDispatch4_Windows(This,ppid)	\
+    (This)->lpVtbl -> Windows(This,ppid)
+
+#define IShellDispatch4_Open(This,vDir)	\
+    (This)->lpVtbl -> Open(This,vDir)
+
+#define IShellDispatch4_Explore(This,vDir)	\
+    (This)->lpVtbl -> Explore(This,vDir)
+
+#define IShellDispatch4_MinimizeAll(This)	\
+    (This)->lpVtbl -> MinimizeAll(This)
+
+#define IShellDispatch4_UndoMinimizeALL(This)	\
+    (This)->lpVtbl -> UndoMinimizeALL(This)
+
+#define IShellDispatch4_FileRun(This)	\
+    (This)->lpVtbl -> FileRun(This)
+
+#define IShellDispatch4_CascadeWindows(This)	\
+    (This)->lpVtbl -> CascadeWindows(This)
+
+#define IShellDispatch4_TileVertically(This)	\
+    (This)->lpVtbl -> TileVertically(This)
+
+#define IShellDispatch4_TileHorizontally(This)	\
+    (This)->lpVtbl -> TileHorizontally(This)
+
+#define IShellDispatch4_ShutdownWindows(This)	\
+    (This)->lpVtbl -> ShutdownWindows(This)
+
+#define IShellDispatch4_Suspend(This)	\
+    (This)->lpVtbl -> Suspend(This)
+
+#define IShellDispatch4_EjectPC(This)	\
+    (This)->lpVtbl -> EjectPC(This)
+
+#define IShellDispatch4_SetTime(This)	\
+    (This)->lpVtbl -> SetTime(This)
+
+#define IShellDispatch4_TrayProperties(This)	\
+    (This)->lpVtbl -> TrayProperties(This)
+
+#define IShellDispatch4_Help(This)	\
+    (This)->lpVtbl -> Help(This)
+
+#define IShellDispatch4_FindFiles(This)	\
+    (This)->lpVtbl -> FindFiles(This)
+
+#define IShellDispatch4_FindComputer(This)	\
+    (This)->lpVtbl -> FindComputer(This)
+
+#define IShellDispatch4_RefreshMenu(This)	\
+    (This)->lpVtbl -> RefreshMenu(This)
+
+#define IShellDispatch4_ControlPanelItem(This,szDir)	\
+    (This)->lpVtbl -> ControlPanelItem(This,szDir)
+
+
+#define IShellDispatch4_IsRestricted(This,Group,Restriction,plRestrictValue)	\
+    (This)->lpVtbl -> IsRestricted(This,Group,Restriction,plRestrictValue)
+
+#define IShellDispatch4_ShellExecute(This,File,vArgs,vDir,vOperation,vShow)	\
+    (This)->lpVtbl -> ShellExecute(This,File,vArgs,vDir,vOperation,vShow)
+
+#define IShellDispatch4_FindPrinter(This,name,location,model)	\
+    (This)->lpVtbl -> FindPrinter(This,name,location,model)
+
+#define IShellDispatch4_GetSystemInformation(This,name,pv)	\
+    (This)->lpVtbl -> GetSystemInformation(This,name,pv)
+
+#define IShellDispatch4_ServiceStart(This,ServiceName,Persistent,pSuccess)	\
+    (This)->lpVtbl -> ServiceStart(This,ServiceName,Persistent,pSuccess)
+
+#define IShellDispatch4_ServiceStop(This,ServiceName,Persistent,pSuccess)	\
+    (This)->lpVtbl -> ServiceStop(This,ServiceName,Persistent,pSuccess)
+
+#define IShellDispatch4_IsServiceRunning(This,ServiceName,pRunning)	\
+    (This)->lpVtbl -> IsServiceRunning(This,ServiceName,pRunning)
+
+#define IShellDispatch4_CanStartStopService(This,ServiceName,pCanStartStop)	\
+    (This)->lpVtbl -> CanStartStopService(This,ServiceName,pCanStartStop)
+
+#define IShellDispatch4_ShowBrowserBar(This,bstrClsid,bShow,pSuccess)	\
+    (This)->lpVtbl -> ShowBrowserBar(This,bstrClsid,bShow,pSuccess)
+
+
+#define IShellDispatch4_AddToRecent(This,varFile,bstrCategory)	\
+    (This)->lpVtbl -> AddToRecent(This,varFile,bstrCategory)
+
+
+#define IShellDispatch4_WindowsSecurity(This)	\
+    (This)->lpVtbl -> WindowsSecurity(This)
+
+#define IShellDispatch4_ToggleDesktop(This)	\
+    (This)->lpVtbl -> ToggleDesktop(This)
+
+#define IShellDispatch4_ExplorerPolicy(This,bstrPolicyName,pValue)	\
+    (This)->lpVtbl -> ExplorerPolicy(This,bstrPolicyName,pValue)
+
+#define IShellDispatch4_GetSetting(This,lSetting,pResult)	\
+    (This)->lpVtbl -> GetSetting(This,lSetting,pResult)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch4_WindowsSecurity_Proxy( 
+    IShellDispatch4 * This);
+
+
+void __RPC_STUB IShellDispatch4_WindowsSecurity_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch4_ToggleDesktop_Proxy( 
+    IShellDispatch4 * This);
+
+
+void __RPC_STUB IShellDispatch4_ToggleDesktop_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch4_ExplorerPolicy_Proxy( 
+    IShellDispatch4 * This,
+    /* [in] */ BSTR bstrPolicyName,
+    /* [retval][out] */ VARIANT *pValue);
+
+
+void __RPC_STUB IShellDispatch4_ExplorerPolicy_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring] */ HRESULT STDMETHODCALLTYPE IShellDispatch4_GetSetting_Proxy( 
+    IShellDispatch4 * This,
+    /* [in] */ long lSetting,
+    /* [retval][out] */ VARIANT_BOOL *pResult);
+
+
+void __RPC_STUB IShellDispatch4_GetSetting_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IShellDispatch4_INTERFACE_DEFINED__ */
 
 
 EXTERN_C const CLSID CLSID_Shell;
@@ -5572,52 +7524,52 @@ EXTERN_C const IID DIID_DSearchCommandEvents;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            DSearchCommandEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            DSearchCommandEvents * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            DSearchCommandEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            DSearchCommandEvents * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            DSearchCommandEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            DSearchCommandEvents * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            DSearchCommandEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            DSearchCommandEvents * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            DSearchCommandEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            DSearchCommandEvents * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            DSearchCommandEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            DSearchCommandEvents * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            DSearchCommandEvents __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            DSearchCommandEvents * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } DSearchCommandEventsVtbl;
 
     interface DSearchCommandEvents
     {
-        CONST_VTBL struct DSearchCommandEventsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct DSearchCommandEventsVtbl *lpVtbl;
     };
 
     
@@ -5682,19 +7634,19 @@ EXTERN_C const IID IID_IFileSearchBand;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetFocus( void) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetSearchParameters( 
-            /* [in] */ BSTR __RPC_FAR *pbstrSearchID,
+            /* [in] */ BSTR *pbstrSearchID,
             /* [in] */ VARIANT_BOOL bNavToResults,
-            /* [optional][in] */ VARIANT __RPC_FAR *pvarScope,
-            /* [optional][in] */ VARIANT __RPC_FAR *pvarQueryFile) = 0;
+            /* [optional][in] */ VARIANT *pvarScope,
+            /* [optional][in] */ VARIANT *pvarQueryFile) = 0;
         
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_SearchID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSearchID) = 0;
+            /* [retval][out] */ BSTR *pbstrSearchID) = 0;
         
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Scope( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarScope) = 0;
+            /* [retval][out] */ VARIANT *pvarScope) = 0;
         
         virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_QueryFile( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarFile) = 0;
+            /* [retval][out] */ VARIANT *pvarFile) = 0;
         
     };
     
@@ -5704,74 +7656,74 @@ EXTERN_C const IID IID_IFileSearchBand;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFileSearchBand __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFileSearchBand * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFileSearchBand __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFileSearchBand * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFileSearchBand __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFileSearchBand * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IFileSearchBand __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IFileSearchBand * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IFileSearchBand __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IFileSearchBand * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IFileSearchBand __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IFileSearchBand * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IFileSearchBand __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IFileSearchBand * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFocus )( 
-            IFileSearchBand __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetFocus )( 
+            IFileSearchBand * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSearchParameters )( 
-            IFileSearchBand __RPC_FAR * This,
-            /* [in] */ BSTR __RPC_FAR *pbstrSearchID,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetSearchParameters )( 
+            IFileSearchBand * This,
+            /* [in] */ BSTR *pbstrSearchID,
             /* [in] */ VARIANT_BOOL bNavToResults,
-            /* [optional][in] */ VARIANT __RPC_FAR *pvarScope,
-            /* [optional][in] */ VARIANT __RPC_FAR *pvarQueryFile);
+            /* [optional][in] */ VARIANT *pvarScope,
+            /* [optional][in] */ VARIANT *pvarQueryFile);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SearchID )( 
-            IFileSearchBand __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrSearchID);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_SearchID )( 
+            IFileSearchBand * This,
+            /* [retval][out] */ BSTR *pbstrSearchID);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Scope )( 
-            IFileSearchBand __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarScope);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Scope )( 
+            IFileSearchBand * This,
+            /* [retval][out] */ VARIANT *pvarScope);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_QueryFile )( 
-            IFileSearchBand __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarFile);
+        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_QueryFile )( 
+            IFileSearchBand * This,
+            /* [retval][out] */ VARIANT *pvarFile);
         
         END_INTERFACE
     } IFileSearchBandVtbl;
 
     interface IFileSearchBand
     {
-        CONST_VTBL struct IFileSearchBandVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFileSearchBandVtbl *lpVtbl;
     };
 
     
@@ -5825,7 +7777,7 @@ EXTERN_C const IID IID_IFileSearchBand;
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFileSearchBand_SetFocus_Proxy( 
-    IFileSearchBand __RPC_FAR * This);
+    IFileSearchBand * This);
 
 
 void __RPC_STUB IFileSearchBand_SetFocus_Stub(
@@ -5836,11 +7788,11 @@ void __RPC_STUB IFileSearchBand_SetFocus_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IFileSearchBand_SetSearchParameters_Proxy( 
-    IFileSearchBand __RPC_FAR * This,
-    /* [in] */ BSTR __RPC_FAR *pbstrSearchID,
+    IFileSearchBand * This,
+    /* [in] */ BSTR *pbstrSearchID,
     /* [in] */ VARIANT_BOOL bNavToResults,
-    /* [optional][in] */ VARIANT __RPC_FAR *pvarScope,
-    /* [optional][in] */ VARIANT __RPC_FAR *pvarQueryFile);
+    /* [optional][in] */ VARIANT *pvarScope,
+    /* [optional][in] */ VARIANT *pvarQueryFile);
 
 
 void __RPC_STUB IFileSearchBand_SetSearchParameters_Stub(
@@ -5851,8 +7803,8 @@ void __RPC_STUB IFileSearchBand_SetSearchParameters_Stub(
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IFileSearchBand_get_SearchID_Proxy( 
-    IFileSearchBand __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrSearchID);
+    IFileSearchBand * This,
+    /* [retval][out] */ BSTR *pbstrSearchID);
 
 
 void __RPC_STUB IFileSearchBand_get_SearchID_Stub(
@@ -5863,8 +7815,8 @@ void __RPC_STUB IFileSearchBand_get_SearchID_Stub(
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IFileSearchBand_get_Scope_Proxy( 
-    IFileSearchBand __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarScope);
+    IFileSearchBand * This,
+    /* [retval][out] */ VARIANT *pvarScope);
 
 
 void __RPC_STUB IFileSearchBand_get_Scope_Stub(
@@ -5875,8 +7827,8 @@ void __RPC_STUB IFileSearchBand_get_Scope_Stub(
 
 
 /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IFileSearchBand_get_QueryFile_Proxy( 
-    IFileSearchBand __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarFile);
+    IFileSearchBand * This,
+    /* [retval][out] */ VARIANT *pvarFile);
 
 
 void __RPC_STUB IFileSearchBand_get_QueryFile_Stub(
@@ -5897,9 +7849,670 @@ EXTERN_C const CLSID CLSID_FileSearchBand;
 class DECLSPEC_UUID("C4EE31F3-4768-11D2-BE5C-00A0C9A83DA1")
 FileSearchBand;
 #endif
+
+#ifndef __IWebWizardHost_INTERFACE_DEFINED__
+#define __IWebWizardHost_INTERFACE_DEFINED__
+
+/* interface IWebWizardHost */
+/* [helpstring][dual][object][uuid] */ 
+
+
+EXTERN_C const IID IID_IWebWizardHost;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("18bcc359-4990-4bfb-b951-3c83702be5f9")
+    IWebWizardHost : public IDispatch
+    {
+    public:
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FinalBack( void) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FinalNext( void) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Cancel( void) = 0;
+        
+        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Caption( 
+            /* [in] */ BSTR bstrCaption) = 0;
+        
+        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Caption( 
+            /* [retval][out] */ BSTR *pbstrCaption) = 0;
+        
+        virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Property( 
+            /* [in] */ BSTR bstrPropertyName,
+            /* [in] */ VARIANT *pvProperty) = 0;
+        
+        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Property( 
+            /* [in] */ BSTR bstrPropertyName,
+            /* [retval][out] */ VARIANT *pvProperty) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetWizardButtons( 
+            /* [in] */ VARIANT_BOOL vfEnableBack,
+            /* [in] */ VARIANT_BOOL vfEnableNext,
+            /* [in] */ VARIANT_BOOL vfLastPage) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetHeaderText( 
+            /* [in] */ BSTR bstrHeaderTitle,
+            /* [in] */ BSTR bstrHeaderSubtitle) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IWebWizardHostVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWebWizardHost * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWebWizardHost * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWebWizardHost * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IWebWizardHost * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IWebWizardHost * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IWebWizardHost * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IWebWizardHost * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FinalBack )( 
+            IWebWizardHost * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FinalNext )( 
+            IWebWizardHost * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Cancel )( 
+            IWebWizardHost * This);
+        
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Caption )( 
+            IWebWizardHost * This,
+            /* [in] */ BSTR bstrCaption);
+        
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Caption )( 
+            IWebWizardHost * This,
+            /* [retval][out] */ BSTR *pbstrCaption);
+        
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Property )( 
+            IWebWizardHost * This,
+            /* [in] */ BSTR bstrPropertyName,
+            /* [in] */ VARIANT *pvProperty);
+        
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Property )( 
+            IWebWizardHost * This,
+            /* [in] */ BSTR bstrPropertyName,
+            /* [retval][out] */ VARIANT *pvProperty);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetWizardButtons )( 
+            IWebWizardHost * This,
+            /* [in] */ VARIANT_BOOL vfEnableBack,
+            /* [in] */ VARIANT_BOOL vfEnableNext,
+            /* [in] */ VARIANT_BOOL vfLastPage);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetHeaderText )( 
+            IWebWizardHost * This,
+            /* [in] */ BSTR bstrHeaderTitle,
+            /* [in] */ BSTR bstrHeaderSubtitle);
+        
+        END_INTERFACE
+    } IWebWizardHostVtbl;
+
+    interface IWebWizardHost
+    {
+        CONST_VTBL struct IWebWizardHostVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IWebWizardHost_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IWebWizardHost_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IWebWizardHost_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IWebWizardHost_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IWebWizardHost_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IWebWizardHost_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IWebWizardHost_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IWebWizardHost_FinalBack(This)	\
+    (This)->lpVtbl -> FinalBack(This)
+
+#define IWebWizardHost_FinalNext(This)	\
+    (This)->lpVtbl -> FinalNext(This)
+
+#define IWebWizardHost_Cancel(This)	\
+    (This)->lpVtbl -> Cancel(This)
+
+#define IWebWizardHost_put_Caption(This,bstrCaption)	\
+    (This)->lpVtbl -> put_Caption(This,bstrCaption)
+
+#define IWebWizardHost_get_Caption(This,pbstrCaption)	\
+    (This)->lpVtbl -> get_Caption(This,pbstrCaption)
+
+#define IWebWizardHost_put_Property(This,bstrPropertyName,pvProperty)	\
+    (This)->lpVtbl -> put_Property(This,bstrPropertyName,pvProperty)
+
+#define IWebWizardHost_get_Property(This,bstrPropertyName,pvProperty)	\
+    (This)->lpVtbl -> get_Property(This,bstrPropertyName,pvProperty)
+
+#define IWebWizardHost_SetWizardButtons(This,vfEnableBack,vfEnableNext,vfLastPage)	\
+    (This)->lpVtbl -> SetWizardButtons(This,vfEnableBack,vfEnableNext,vfLastPage)
+
+#define IWebWizardHost_SetHeaderText(This,bstrHeaderTitle,bstrHeaderSubtitle)	\
+    (This)->lpVtbl -> SetHeaderText(This,bstrHeaderTitle,bstrHeaderSubtitle)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_FinalBack_Proxy( 
+    IWebWizardHost * This);
+
+
+void __RPC_STUB IWebWizardHost_FinalBack_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_FinalNext_Proxy( 
+    IWebWizardHost * This);
+
+
+void __RPC_STUB IWebWizardHost_FinalNext_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_Cancel_Proxy( 
+    IWebWizardHost * This);
+
+
+void __RPC_STUB IWebWizardHost_Cancel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [propput][id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_put_Caption_Proxy( 
+    IWebWizardHost * This,
+    /* [in] */ BSTR bstrCaption);
+
+
+void __RPC_STUB IWebWizardHost_put_Caption_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [propget][id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_get_Caption_Proxy( 
+    IWebWizardHost * This,
+    /* [retval][out] */ BSTR *pbstrCaption);
+
+
+void __RPC_STUB IWebWizardHost_get_Caption_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [propput][id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_put_Property_Proxy( 
+    IWebWizardHost * This,
+    /* [in] */ BSTR bstrPropertyName,
+    /* [in] */ VARIANT *pvProperty);
+
+
+void __RPC_STUB IWebWizardHost_put_Property_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [propget][id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_get_Property_Proxy( 
+    IWebWizardHost * This,
+    /* [in] */ BSTR bstrPropertyName,
+    /* [retval][out] */ VARIANT *pvProperty);
+
+
+void __RPC_STUB IWebWizardHost_get_Property_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_SetWizardButtons_Proxy( 
+    IWebWizardHost * This,
+    /* [in] */ VARIANT_BOOL vfEnableBack,
+    /* [in] */ VARIANT_BOOL vfEnableNext,
+    /* [in] */ VARIANT_BOOL vfLastPage);
+
+
+void __RPC_STUB IWebWizardHost_SetWizardButtons_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE IWebWizardHost_SetHeaderText_Proxy( 
+    IWebWizardHost * This,
+    /* [in] */ BSTR bstrHeaderTitle,
+    /* [in] */ BSTR bstrHeaderSubtitle);
+
+
+void __RPC_STUB IWebWizardHost_SetHeaderText_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IWebWizardHost_INTERFACE_DEFINED__ */
+
+
+#ifndef __INewWDEvents_INTERFACE_DEFINED__
+#define __INewWDEvents_INTERFACE_DEFINED__
+
+/* interface INewWDEvents */
+/* [helpstring][dual][object][uuid] */ 
+
+
+EXTERN_C const IID IID_INewWDEvents;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("0751c551-7568-41c9-8e5b-e22e38919236")
+    INewWDEvents : public IWebWizardHost
+    {
+    public:
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE PassportAuthenticate( 
+            /* [in] */ BSTR bstrSignInUrl,
+            /* [retval][out] */ VARIANT_BOOL *pvfAuthenitcated) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct INewWDEventsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            INewWDEvents * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            INewWDEvents * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            INewWDEvents * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            INewWDEvents * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            INewWDEvents * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            INewWDEvents * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            INewWDEvents * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FinalBack )( 
+            INewWDEvents * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FinalNext )( 
+            INewWDEvents * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Cancel )( 
+            INewWDEvents * This);
+        
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Caption )( 
+            INewWDEvents * This,
+            /* [in] */ BSTR bstrCaption);
+        
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Caption )( 
+            INewWDEvents * This,
+            /* [retval][out] */ BSTR *pbstrCaption);
+        
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Property )( 
+            INewWDEvents * This,
+            /* [in] */ BSTR bstrPropertyName,
+            /* [in] */ VARIANT *pvProperty);
+        
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Property )( 
+            INewWDEvents * This,
+            /* [in] */ BSTR bstrPropertyName,
+            /* [retval][out] */ VARIANT *pvProperty);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetWizardButtons )( 
+            INewWDEvents * This,
+            /* [in] */ VARIANT_BOOL vfEnableBack,
+            /* [in] */ VARIANT_BOOL vfEnableNext,
+            /* [in] */ VARIANT_BOOL vfLastPage);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetHeaderText )( 
+            INewWDEvents * This,
+            /* [in] */ BSTR bstrHeaderTitle,
+            /* [in] */ BSTR bstrHeaderSubtitle);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PassportAuthenticate )( 
+            INewWDEvents * This,
+            /* [in] */ BSTR bstrSignInUrl,
+            /* [retval][out] */ VARIANT_BOOL *pvfAuthenitcated);
+        
+        END_INTERFACE
+    } INewWDEventsVtbl;
+
+    interface INewWDEvents
+    {
+        CONST_VTBL struct INewWDEventsVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define INewWDEvents_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define INewWDEvents_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define INewWDEvents_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define INewWDEvents_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define INewWDEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define INewWDEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define INewWDEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define INewWDEvents_FinalBack(This)	\
+    (This)->lpVtbl -> FinalBack(This)
+
+#define INewWDEvents_FinalNext(This)	\
+    (This)->lpVtbl -> FinalNext(This)
+
+#define INewWDEvents_Cancel(This)	\
+    (This)->lpVtbl -> Cancel(This)
+
+#define INewWDEvents_put_Caption(This,bstrCaption)	\
+    (This)->lpVtbl -> put_Caption(This,bstrCaption)
+
+#define INewWDEvents_get_Caption(This,pbstrCaption)	\
+    (This)->lpVtbl -> get_Caption(This,pbstrCaption)
+
+#define INewWDEvents_put_Property(This,bstrPropertyName,pvProperty)	\
+    (This)->lpVtbl -> put_Property(This,bstrPropertyName,pvProperty)
+
+#define INewWDEvents_get_Property(This,bstrPropertyName,pvProperty)	\
+    (This)->lpVtbl -> get_Property(This,bstrPropertyName,pvProperty)
+
+#define INewWDEvents_SetWizardButtons(This,vfEnableBack,vfEnableNext,vfLastPage)	\
+    (This)->lpVtbl -> SetWizardButtons(This,vfEnableBack,vfEnableNext,vfLastPage)
+
+#define INewWDEvents_SetHeaderText(This,bstrHeaderTitle,bstrHeaderSubtitle)	\
+    (This)->lpVtbl -> SetHeaderText(This,bstrHeaderTitle,bstrHeaderSubtitle)
+
+
+#define INewWDEvents_PassportAuthenticate(This,bstrSignInUrl,pvfAuthenitcated)	\
+    (This)->lpVtbl -> PassportAuthenticate(This,bstrSignInUrl,pvfAuthenitcated)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE INewWDEvents_PassportAuthenticate_Proxy( 
+    INewWDEvents * This,
+    /* [in] */ BSTR bstrSignInUrl,
+    /* [retval][out] */ VARIANT_BOOL *pvfAuthenitcated);
+
+
+void __RPC_STUB INewWDEvents_PassportAuthenticate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __INewWDEvents_INTERFACE_DEFINED__ */
+
+
+#ifndef __IPassportClientServices_INTERFACE_DEFINED__
+#define __IPassportClientServices_INTERFACE_DEFINED__
+
+/* interface IPassportClientServices */
+/* [helpstring][dual][object][uuid] */ 
+
+
+EXTERN_C const IID IID_IPassportClientServices;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("b30f7305-5967-45d1-b7bc-d6eb7163d770")
+    IPassportClientServices : public IDispatch
+    {
+    public:
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE MemberExists( 
+            /* [in] */ BSTR bstrUser,
+            /* [in] */ BSTR bstrPassword,
+            /* [retval][out] */ VARIANT_BOOL *pvfExists) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IPassportClientServicesVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPassportClientServices * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPassportClientServices * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPassportClientServices * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IPassportClientServices * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IPassportClientServices * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IPassportClientServices * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IPassportClientServices * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *MemberExists )( 
+            IPassportClientServices * This,
+            /* [in] */ BSTR bstrUser,
+            /* [in] */ BSTR bstrPassword,
+            /* [retval][out] */ VARIANT_BOOL *pvfExists);
+        
+        END_INTERFACE
+    } IPassportClientServicesVtbl;
+
+    interface IPassportClientServices
+    {
+        CONST_VTBL struct IPassportClientServicesVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IPassportClientServices_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IPassportClientServices_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IPassportClientServices_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IPassportClientServices_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IPassportClientServices_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IPassportClientServices_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IPassportClientServices_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IPassportClientServices_MemberExists(This,bstrUser,bstrPassword,pvfExists)	\
+    (This)->lpVtbl -> MemberExists(This,bstrUser,bstrPassword,pvfExists)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE IPassportClientServices_MemberExists_Proxy( 
+    IPassportClientServices * This,
+    /* [in] */ BSTR bstrUser,
+    /* [in] */ BSTR bstrPassword,
+    /* [retval][out] */ VARIANT_BOOL *pvfExists);
+
+
+void __RPC_STUB IPassportClientServices_MemberExists_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IPassportClientServices_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_PassportClientServices;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("2d2307c8-7db4-40d6-9100-d52af4f97a5b")
+PassportClientServices;
+#endif
 #endif /* __Shell32_LIBRARY_DEFINED__ */
 
-/* interface __MIDL_itf_shldisp_0261 */
+/* interface __MIDL_itf_shldisp_0279 */
 /* [local] */ 
 
 
@@ -5920,8 +8533,8 @@ FileSearchBand;
 //-------------------------------------------------------------------------
 
 
-extern RPC_IF_HANDLE __MIDL_itf_shldisp_0261_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_shldisp_0261_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_shldisp_0279_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_shldisp_0279_v0_0_s_ifspec;
 
 #ifndef __IAutoComplete_INTERFACE_DEFINED__
 #define __IAutoComplete_INTERFACE_DEFINED__
@@ -5929,7 +8542,7 @@ extern RPC_IF_HANDLE __MIDL_itf_shldisp_0261_v0_0_s_ifspec;
 /* interface IAutoComplete */
 /* [unique][uuid][object][local][helpstring] */ 
 
-typedef /* [unique] */ IAutoComplete __RPC_FAR *LPAUTOCOMPLETE;
+typedef /* [unique] */ IAutoComplete *LPAUTOCOMPLETE;
 
 
 EXTERN_C const IID IID_IAutoComplete;
@@ -5942,7 +8555,7 @@ EXTERN_C const IID IID_IAutoComplete;
     public:
         virtual HRESULT STDMETHODCALLTYPE Init( 
             /* [in] */ HWND hwndEdit,
-            /* [unique][in] */ IUnknown __RPC_FAR *punkACL,
+            /* [unique][in] */ IUnknown *punkACL,
             /* [unique][in] */ LPCOLESTR pwszRegKeyPath,
             /* [in] */ LPCOLESTR pwszQuickComplete) = 0;
         
@@ -5957,26 +8570,26 @@ EXTERN_C const IID IID_IAutoComplete;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAutoComplete __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAutoComplete * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAutoComplete __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAutoComplete * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAutoComplete __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAutoComplete * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Init )( 
-            IAutoComplete __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Init )( 
+            IAutoComplete * This,
             /* [in] */ HWND hwndEdit,
-            /* [unique][in] */ IUnknown __RPC_FAR *punkACL,
+            /* [unique][in] */ IUnknown *punkACL,
             /* [unique][in] */ LPCOLESTR pwszRegKeyPath,
             /* [in] */ LPCOLESTR pwszQuickComplete);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Enable )( 
-            IAutoComplete __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Enable )( 
+            IAutoComplete * This,
             /* [in] */ BOOL fEnable);
         
         END_INTERFACE
@@ -5984,7 +8597,7 @@ EXTERN_C const IID IID_IAutoComplete;
 
     interface IAutoComplete
     {
-        CONST_VTBL struct IAutoCompleteVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAutoCompleteVtbl *lpVtbl;
     };
 
     
@@ -6016,9 +8629,9 @@ EXTERN_C const IID IID_IAutoComplete;
 
 
 HRESULT STDMETHODCALLTYPE IAutoComplete_Init_Proxy( 
-    IAutoComplete __RPC_FAR * This,
+    IAutoComplete * This,
     /* [in] */ HWND hwndEdit,
-    /* [unique][in] */ IUnknown __RPC_FAR *punkACL,
+    /* [unique][in] */ IUnknown *punkACL,
     /* [unique][in] */ LPCOLESTR pwszRegKeyPath,
     /* [in] */ LPCOLESTR pwszQuickComplete);
 
@@ -6031,7 +8644,7 @@ void __RPC_STUB IAutoComplete_Init_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAutoComplete_Enable_Proxy( 
-    IAutoComplete __RPC_FAR * This,
+    IAutoComplete * This,
     /* [in] */ BOOL fEnable);
 
 
@@ -6052,7 +8665,7 @@ void __RPC_STUB IAutoComplete_Enable_Stub(
 /* interface IAutoComplete2 */
 /* [unique][uuid][object][local][helpstring] */ 
 
-typedef /* [unique] */ IAutoComplete2 __RPC_FAR *LPAUTOCOMPLETE2;
+typedef /* [unique] */ IAutoComplete2 *LPAUTOCOMPLETE2;
 
 typedef 
 enum _tagAUTOCOMPLETEOPTIONS
@@ -6064,7 +8677,7 @@ enum _tagAUTOCOMPLETEOPTIONS
 	ACO_USETAB	= 0x10,
 	ACO_UPDOWNKEYDROPSLIST	= 0x20,
 	ACO_RTLREADING	= 0x40
-    }	AUTOCOMPLETEOPTIONS;
+    } 	AUTOCOMPLETEOPTIONS;
 
 
 EXTERN_C const IID IID_IAutoComplete2;
@@ -6079,7 +8692,7 @@ EXTERN_C const IID IID_IAutoComplete2;
             /* [in] */ DWORD dwFlag) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOptions( 
-            /* [out] */ DWORD __RPC_FAR *pdwFlag) = 0;
+            /* [out] */ DWORD *pdwFlag) = 0;
         
     };
     
@@ -6089,42 +8702,42 @@ EXTERN_C const IID IID_IAutoComplete2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAutoComplete2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAutoComplete2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAutoComplete2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAutoComplete2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAutoComplete2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAutoComplete2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Init )( 
-            IAutoComplete2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Init )( 
+            IAutoComplete2 * This,
             /* [in] */ HWND hwndEdit,
-            /* [unique][in] */ IUnknown __RPC_FAR *punkACL,
+            /* [unique][in] */ IUnknown *punkACL,
             /* [unique][in] */ LPCOLESTR pwszRegKeyPath,
             /* [in] */ LPCOLESTR pwszQuickComplete);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Enable )( 
-            IAutoComplete2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Enable )( 
+            IAutoComplete2 * This,
             /* [in] */ BOOL fEnable);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOptions )( 
-            IAutoComplete2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetOptions )( 
+            IAutoComplete2 * This,
             /* [in] */ DWORD dwFlag);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOptions )( 
-            IAutoComplete2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwFlag);
+        HRESULT ( STDMETHODCALLTYPE *GetOptions )( 
+            IAutoComplete2 * This,
+            /* [out] */ DWORD *pdwFlag);
         
         END_INTERFACE
     } IAutoComplete2Vtbl;
 
     interface IAutoComplete2
     {
-        CONST_VTBL struct IAutoComplete2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAutoComplete2Vtbl *lpVtbl;
     };
 
     
@@ -6163,7 +8776,7 @@ EXTERN_C const IID IID_IAutoComplete2;
 
 
 HRESULT STDMETHODCALLTYPE IAutoComplete2_SetOptions_Proxy( 
-    IAutoComplete2 __RPC_FAR * This,
+    IAutoComplete2 * This,
     /* [in] */ DWORD dwFlag);
 
 
@@ -6175,8 +8788,8 @@ void __RPC_STUB IAutoComplete2_SetOptions_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAutoComplete2_GetOptions_Proxy( 
-    IAutoComplete2 __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwFlag);
+    IAutoComplete2 * This,
+    /* [out] */ DWORD *pdwFlag);
 
 
 void __RPC_STUB IAutoComplete2_GetOptions_Stub(
@@ -6190,7 +8803,206 @@ void __RPC_STUB IAutoComplete2_GetOptions_Stub(
 #endif 	/* __IAutoComplete2_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_shldisp_0263 */
+/* interface __MIDL_itf_shldisp_0281 */
+/* [local] */ 
+
+// INTERFACE: IEnumACString
+//
+// This interface was implemented to return autocomplete strings
+// into the caller's buffer (to reduce the number of memory allocations).
+// A sort index is also returned to control the order of items displayed.
+// by autocomplete.  The sort index should be set to zero if unused.
+//
+// The NextItem method increments the current index by one (similar to Next
+// when one item is requested).
+//
+
+
+extern RPC_IF_HANDLE __MIDL_itf_shldisp_0281_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_shldisp_0281_v0_0_s_ifspec;
+
+#ifndef __IEnumACString_INTERFACE_DEFINED__
+#define __IEnumACString_INTERFACE_DEFINED__
+
+/* interface IEnumACString */
+/* [unique][uuid][object][local][helpstring] */ 
+
+typedef /* [unique] */ IEnumACString *PENUMACSTRING;
+
+typedef /* [unique] */ IEnumACString *LPENUMACSTRING;
+
+typedef 
+enum _tagACENUMOPTION
+    {	ACEO_NONE	= 0,
+	ACEO_MOSTRECENTFIRST	= 0x1,
+	ACEO_FIRSTUNUSED	= 0x10000
+    } 	ACENUMOPTION;
+
+
+EXTERN_C const IID IID_IEnumACString;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("8E74C210-CF9D-4eaf-A403-7356428F0A5A")
+    IEnumACString : public IEnumString
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE NextItem( 
+            /* [size_is][unique][string][out] */ LPOLESTR pszUrl,
+            /* [in] */ ULONG cchMax,
+            /* [out] */ ULONG *pulSortIndex) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetEnumOptions( 
+            /* [in] */ DWORD dwOptions) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetEnumOptions( 
+            /* [out] */ DWORD *pdwOptions) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IEnumACStringVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumACString * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumACString * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumACString * This);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumACString * This,
+            /* [in] */ ULONG celt,
+            /* [length_is][size_is][out] */ LPOLESTR *rgelt,
+            /* [out] */ ULONG *pceltFetched);
+        
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumACString * This,
+            /* [in] */ ULONG celt);
+        
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumACString * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumACString * This,
+            /* [out] */ IEnumString **ppenum);
+        
+        HRESULT ( STDMETHODCALLTYPE *NextItem )( 
+            IEnumACString * This,
+            /* [size_is][unique][string][out] */ LPOLESTR pszUrl,
+            /* [in] */ ULONG cchMax,
+            /* [out] */ ULONG *pulSortIndex);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetEnumOptions )( 
+            IEnumACString * This,
+            /* [in] */ DWORD dwOptions);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetEnumOptions )( 
+            IEnumACString * This,
+            /* [out] */ DWORD *pdwOptions);
+        
+        END_INTERFACE
+    } IEnumACStringVtbl;
+
+    interface IEnumACString
+    {
+        CONST_VTBL struct IEnumACStringVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IEnumACString_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IEnumACString_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IEnumACString_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IEnumACString_Next(This,celt,rgelt,pceltFetched)	\
+    (This)->lpVtbl -> Next(This,celt,rgelt,pceltFetched)
+
+#define IEnumACString_Skip(This,celt)	\
+    (This)->lpVtbl -> Skip(This,celt)
+
+#define IEnumACString_Reset(This)	\
+    (This)->lpVtbl -> Reset(This)
+
+#define IEnumACString_Clone(This,ppenum)	\
+    (This)->lpVtbl -> Clone(This,ppenum)
+
+
+#define IEnumACString_NextItem(This,pszUrl,cchMax,pulSortIndex)	\
+    (This)->lpVtbl -> NextItem(This,pszUrl,cchMax,pulSortIndex)
+
+#define IEnumACString_SetEnumOptions(This,dwOptions)	\
+    (This)->lpVtbl -> SetEnumOptions(This,dwOptions)
+
+#define IEnumACString_GetEnumOptions(This,pdwOptions)	\
+    (This)->lpVtbl -> GetEnumOptions(This,pdwOptions)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IEnumACString_NextItem_Proxy( 
+    IEnumACString * This,
+    /* [size_is][unique][string][out] */ LPOLESTR pszUrl,
+    /* [in] */ ULONG cchMax,
+    /* [out] */ ULONG *pulSortIndex);
+
+
+void __RPC_STUB IEnumACString_NextItem_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumACString_SetEnumOptions_Proxy( 
+    IEnumACString * This,
+    /* [in] */ DWORD dwOptions);
+
+
+void __RPC_STUB IEnumACString_SetEnumOptions_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumACString_GetEnumOptions_Proxy( 
+    IEnumACString * This,
+    /* [out] */ DWORD *pdwOptions);
+
+
+void __RPC_STUB IEnumACString_GetEnumOptions_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IEnumACString_INTERFACE_DEFINED__ */
+
+
+/* interface __MIDL_itf_shldisp_0282 */
 /* [local] */ 
 
 // INTERFACE: IAsyncOperation
@@ -6242,8 +9054,8 @@ void __RPC_STUB IAutoComplete2_GetOptions_Stub(
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_shldisp_0263_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_shldisp_0263_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_shldisp_0282_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_shldisp_0282_v0_0_s_ifspec;
 
 #ifndef __IAsyncOperation_INTERFACE_DEFINED__
 #define __IAsyncOperation_INTERFACE_DEFINED__
@@ -6251,7 +9063,7 @@ extern RPC_IF_HANDLE __MIDL_itf_shldisp_0263_v0_0_s_ifspec;
 /* interface IAsyncOperation */
 /* [object][uuid][helpstring] */ 
 
-typedef /* [unique] */ IAsyncOperation __RPC_FAR *LPASYNCOPERATION;
+typedef /* [unique] */ IAsyncOperation *LPASYNCOPERATION;
 
 
 EXTERN_C const IID IID_IAsyncOperation;
@@ -6266,17 +9078,17 @@ EXTERN_C const IID IID_IAsyncOperation;
             /* [in] */ BOOL fDoOpAsync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAsyncMode( 
-            /* [out] */ BOOL __RPC_FAR *pfIsOpAsync) = 0;
+            /* [out] */ BOOL *pfIsOpAsync) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StartOperation( 
-            /* [optional][unique][in] */ IBindCtx __RPC_FAR *pbcReserved) = 0;
+            /* [optional][unique][in] */ IBindCtx *pbcReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InOperation( 
-            /* [out] */ BOOL __RPC_FAR *pfInAsyncOp) = 0;
+            /* [out] */ BOOL *pfInAsyncOp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EndOperation( 
             /* [in] */ HRESULT hResult,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbcReserved,
+            /* [unique][in] */ IBindCtx *pbcReserved,
             /* [in] */ DWORD dwEffects) = 0;
         
     };
@@ -6287,37 +9099,37 @@ EXTERN_C const IID IID_IAsyncOperation;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAsyncOperation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAsyncOperation * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAsyncOperation __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAsyncOperation * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAsyncOperation __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAsyncOperation * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAsyncMode )( 
-            IAsyncOperation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetAsyncMode )( 
+            IAsyncOperation * This,
             /* [in] */ BOOL fDoOpAsync);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAsyncMode )( 
-            IAsyncOperation __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfIsOpAsync);
+        HRESULT ( STDMETHODCALLTYPE *GetAsyncMode )( 
+            IAsyncOperation * This,
+            /* [out] */ BOOL *pfIsOpAsync);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StartOperation )( 
-            IAsyncOperation __RPC_FAR * This,
-            /* [optional][unique][in] */ IBindCtx __RPC_FAR *pbcReserved);
+        HRESULT ( STDMETHODCALLTYPE *StartOperation )( 
+            IAsyncOperation * This,
+            /* [optional][unique][in] */ IBindCtx *pbcReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InOperation )( 
-            IAsyncOperation __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfInAsyncOp);
+        HRESULT ( STDMETHODCALLTYPE *InOperation )( 
+            IAsyncOperation * This,
+            /* [out] */ BOOL *pfInAsyncOp);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EndOperation )( 
-            IAsyncOperation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EndOperation )( 
+            IAsyncOperation * This,
             /* [in] */ HRESULT hResult,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbcReserved,
+            /* [unique][in] */ IBindCtx *pbcReserved,
             /* [in] */ DWORD dwEffects);
         
         END_INTERFACE
@@ -6325,7 +9137,7 @@ EXTERN_C const IID IID_IAsyncOperation;
 
     interface IAsyncOperation
     {
-        CONST_VTBL struct IAsyncOperationVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IAsyncOperationVtbl *lpVtbl;
     };
 
     
@@ -6366,7 +9178,7 @@ EXTERN_C const IID IID_IAsyncOperation;
 
 
 HRESULT STDMETHODCALLTYPE IAsyncOperation_SetAsyncMode_Proxy( 
-    IAsyncOperation __RPC_FAR * This,
+    IAsyncOperation * This,
     /* [in] */ BOOL fDoOpAsync);
 
 
@@ -6378,8 +9190,8 @@ void __RPC_STUB IAsyncOperation_SetAsyncMode_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAsyncOperation_GetAsyncMode_Proxy( 
-    IAsyncOperation __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfIsOpAsync);
+    IAsyncOperation * This,
+    /* [out] */ BOOL *pfIsOpAsync);
 
 
 void __RPC_STUB IAsyncOperation_GetAsyncMode_Stub(
@@ -6390,8 +9202,8 @@ void __RPC_STUB IAsyncOperation_GetAsyncMode_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAsyncOperation_StartOperation_Proxy( 
-    IAsyncOperation __RPC_FAR * This,
-    /* [optional][unique][in] */ IBindCtx __RPC_FAR *pbcReserved);
+    IAsyncOperation * This,
+    /* [optional][unique][in] */ IBindCtx *pbcReserved);
 
 
 void __RPC_STUB IAsyncOperation_StartOperation_Stub(
@@ -6402,8 +9214,8 @@ void __RPC_STUB IAsyncOperation_StartOperation_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAsyncOperation_InOperation_Proxy( 
-    IAsyncOperation __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfInAsyncOp);
+    IAsyncOperation * This,
+    /* [out] */ BOOL *pfInAsyncOp);
 
 
 void __RPC_STUB IAsyncOperation_InOperation_Stub(
@@ -6414,9 +9226,9 @@ void __RPC_STUB IAsyncOperation_InOperation_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IAsyncOperation_EndOperation_Proxy( 
-    IAsyncOperation __RPC_FAR * This,
+    IAsyncOperation * This,
     /* [in] */ HRESULT hResult,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbcReserved,
+    /* [unique][in] */ IBindCtx *pbcReserved,
     /* [in] */ DWORD dwEffects);
 
 
@@ -6431,15 +9243,6 @@ void __RPC_STUB IAsyncOperation_EndOperation_Stub(
 #endif 	/* __IAsyncOperation_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_shldisp_0264 */
-/* [local] */ 
-
-#endif // _SHLDISP_PUB_H_
-
-
-extern RPC_IF_HANDLE __MIDL_itf_shldisp_0264_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_shldisp_0264_v0_0_s_ifspec;
-
 /* Additional Prototypes for ALL interfaces */
 
 /* end of Additional Prototypes */
@@ -6451,4 +9254,3 @@ extern RPC_IF_HANDLE __MIDL_itf_shldisp_0264_v0_0_s_ifspec;
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

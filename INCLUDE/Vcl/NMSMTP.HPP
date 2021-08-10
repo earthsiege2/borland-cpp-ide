@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NMsmtp.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NMsmtp.pas' rev: 6.00
 
 #ifndef NMsmtpHPP
 #define NMsmtpHPP
@@ -140,20 +140,16 @@ __published:
 	__property bool ClearParams = {read=FClearParams, write=FClearParams, nodefault};
 	__property TSubType SubType = {read=FSubType, write=FSubType, nodefault};
 	__property AnsiString Charset = {read=FCharset, write=FCharset};
-	__property TRecipientNotFound OnRecipientNotFound = {read=FRecipientNotFound, write=FRecipientNotFound
-		};
-	__property THeaderInComplete OnHeaderIncomplete = {read=FOnHeaderInComplete, write=FOnHeaderInComplete
-		};
+	__property TRecipientNotFound OnRecipientNotFound = {read=FRecipientNotFound, write=FRecipientNotFound};
+	__property THeaderInComplete OnHeaderIncomplete = {read=FOnHeaderInComplete, write=FOnHeaderInComplete};
 	__property Classes::TNotifyEvent OnSendStart = {read=FOnSendStart, write=FOnSendStart};
 	__property Classes::TNotifyEvent OnSuccess = {read=FOnSuccess, write=FOnSuccess};
 	__property Classes::TNotifyEvent OnFailure = {read=FOnFailure, write=FOnFailure};
 	__property TFileItem OnEncodeStart = {read=FOnEncodeStart, write=FOnEncodeStart};
 	__property TFileItem OnEncodeEnd = {read=FOnEncodeEnd, write=FOnEncodeEnd};
 	__property TMailListReturn OnMailListReturn = {read=FMailListReturn, write=FMailListReturn};
-	__property TFileItem OnAttachmentNotFound = {read=FOnAttachmentNotFound, write=FOnAttachmentNotFound
-		};
-	__property Psock::THandlerEvent OnAuthenticationFailed = {read=FOnAuthenticationFailed, write=FOnAuthenticationFailed
-		};
+	__property TFileItem OnAttachmentNotFound = {read=FOnAttachmentNotFound, write=FOnAttachmentNotFound};
+	__property Psock::THandlerEvent OnAuthenticationFailed = {read=FOnAuthenticationFailed, write=FOnAuthenticationFailed};
 };
 
 
@@ -192,9 +188,7 @@ static const Shortint hiToAddress = 0x2;
 #define Cons_Head_7Bit "Content-Transfer-Encoding: 7Bit"
 
 }	/* namespace Nmsmtp */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nmsmtp;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

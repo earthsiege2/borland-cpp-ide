@@ -1,10 +1,8 @@
-USEUNIT("btnctl.cpp");
-USEUNIT("btnppg.cpp");
-USEUNIT("button.cpp");
-USEUNIT("stdafx.cpp");
-USELIB("odbc32.lib");
-USERC("button.rc");
-USERC("..\..\..\..\include\mfc\afxres.rc");
-USEDEF("button.def");
+USEUNIT(".\btnctl.cpp");
+USEUNIT(".\btnppg.cpp");
+USEUNIT(".\button.cpp");
+USEUNIT(".\stdafx.cpp");
+USERC(".\button.rc");
+USEFILE("vctobpr.log");
 
-#define DllEntryPoint
+#define WinMain

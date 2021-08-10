@@ -1,21 +1,24 @@
 /*
  *  M S P S T . H
- *  
+ *	
  *  This file lists internal properties of the Microsoft Personal
  *  Information Store
- *  
- *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
+ *	
+ *  Copyright 1986-1999 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef _MSPST_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _MSPST_H_
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 
 /*  The following is a list of properties that may be passed in
     as the properties in the array of SPropValue structure on the
     MsgServiceConfigure function.
-    
+
     Creating a PST profile section through CreateMsgService.
     The creation of the actual PST file is a two step process.  First the
     client should call CreateMsgService to setup the profile section and then
@@ -62,7 +65,7 @@
     properties.  If it is supposed to use UI, it will use these to initialize
     the creation dialog and get any changes the user want.  Then it will create
     a new file and update the profile.
-    
+
     PR_DISPLAY_NAME_A   display name for the PST service
     PR_COMMENT_A        comment to the place on the PST store object
     PR_PST_PATH         location the store to create or configure
@@ -78,7 +81,7 @@
 #define PR_PST_ENCRYPTION               PROP_TAG(PT_LONG, PST_EXTERN_PROPID_BASE + 2)
 #define PR_PST_PW_SZ_OLD                PROP_TAG(PT_STRING8, PST_EXTERN_PROPID_BASE + 3)
 #define PR_PST_PW_SZ_NEW                PROP_TAG(PT_STRING8, PST_EXTERN_PROPID_BASE + 4)
-    
+
 #define PSTF_NO_ENCRYPTION              ((DWORD)0x80000000)
 #define PSTF_COMPRESSABLE_ENCRYPTION    ((DWORD)0x40000000)
 #define PSTF_BEST_ENCRYPTION            ((DWORD)0x20000000)
@@ -93,5 +96,4 @@
                                 0x00, 0xaa, 0x00, 0x37, \
                                 0xd9, 0x6e, 0x00, 0x00 }
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* _MSPST_H_ */

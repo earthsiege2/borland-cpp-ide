@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'TLHelp32.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'TlHelp32.pas' rev: 6.00
 
-#ifndef TLHelp32HPP
-#define TLHelp32HPP
+#ifndef TlHelp32HPP
+#define TlHelp32HPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -30,13 +30,11 @@ typedef BOOL __stdcall (*THeap32ListNext)(unsigned hSnapshot, tagHEAPLIST32 &lph
 
 typedef tagHEAPENTRY32  THeapEntry32;
 
-typedef BOOL __stdcall (*THeap32First)(tagHEAPENTRY32 &lphe, unsigned th32ProcessID, unsigned th32HeapID
-	);
+typedef BOOL __stdcall (*THeap32First)(tagHEAPENTRY32 &lphe, unsigned th32ProcessID, unsigned th32HeapID);
 
 typedef BOOL __stdcall (*THeap32Next)(tagHEAPENTRY32 &lphe);
 
-typedef BOOL __stdcall (*TToolhelp32ReadProcessMemory)(unsigned th32ProcessID, void * lpBaseAddress, 
-	void *lpBuffer, unsigned cbRead, unsigned &lpNumberOfBytesRead);
+typedef BOOL __stdcall (*TToolhelp32ReadProcessMemory)(unsigned th32ProcessID, void * lpBaseAddress, void *lpBuffer, unsigned cbRead, unsigned &lpNumberOfBytesRead);
 
 typedef tagPROCESSENTRY32W  TProcessEntry32W;
 
@@ -77,12 +75,10 @@ typedef BOOL __stdcall (*TModule32NextW)(unsigned hSnapshot, tagMODULEENTRY32W &
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Tlhelp32 */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Tlhelp32;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// TLHelp32
+#endif	// TlHelp32

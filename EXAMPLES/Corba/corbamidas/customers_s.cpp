@@ -1,5 +1,5 @@
 /*
- * Copyright 1999 Inprise Corporation, Inc.
+ * Copyright 1999-2002 Borland Corporation, Inc.
  *
  * GENERATED CODE --- DO NOT EDIT
  * 

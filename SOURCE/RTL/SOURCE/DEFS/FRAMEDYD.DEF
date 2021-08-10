@@ -1,4 +1,4 @@
 LIBRARY FRAMEDYD
 EXPORTS
 
-    DoCmd                                    = 'FRAMEDYD.DLL'._DoCmd@16
+    DoCmd                                    = _DoCmd@16

@@ -13,6 +13,8 @@
 #include <ExtCtrls.hpp>
 #include <Grids.hpp>
 #include <OleServer.hpp>
+#include "Word_2K_SRVR.h"
+#include <DB.hpp>
 //---------------------------------------------------------------------------
 class TPWordForm : public TForm
 {

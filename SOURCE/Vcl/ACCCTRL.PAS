@@ -6,7 +6,7 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
@@ -274,10 +274,11 @@ type
 { Default provider }
 
 const
-  ACCCTRL_DEFAULT_PROVIDERA       = 'Windows NT Access Provider';
   {$EXTERNALSYM ACCCTRL_DEFAULT_PROVIDERA}
-  ACCCTRL_DEFAULT_PROVIDERW       = 'Windows NT Access Provider';
+  ACCCTRL_DEFAULT_PROVIDERA       = 'Windows NT Access Provider';
   {$EXTERNALSYM ACCCTRL_DEFAULT_PROVIDERW}
+  ACCCTRL_DEFAULT_PROVIDERW       = 'Windows NT Access Provider';
+  {$EXTERNALSYM ACCCTRL_DEFAULT_PROVIDER}
   ACCCTRL_DEFAULT_PROVIDER = ACCCTRL_DEFAULT_PROVIDERA;
 
 { / Access rights }

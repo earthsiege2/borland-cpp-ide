@@ -1,30 +1,30 @@
-LIBRARY COMDLG32
+LIBRARY ComDlg32
 EXPORTS
 
-    ChooseColorA                             = 'COMDLG32.DLL'.*
-    ChooseColorW                             = 'COMDLG32.DLL'.*
-    ChooseFontA                              = 'COMDLG32.DLL'.*
-    ChooseFontW                              = 'COMDLG32.DLL'.*
-    CommDlgExtendedError                     = 'COMDLG32.DLL'.*
-    FindTextA                                = 'COMDLG32.DLL'.*
-    FindTextW                                = 'COMDLG32.DLL'.*
-    FormatCharDlgProc                        = 'COMDLG32.DLL'.* @100 @99
-    GetFileTitleA                            = 'COMDLG32.DLL'.*
-    GetFileTitleW                            = 'COMDLG32.DLL'.*
-    GetOpenFileNameA                         = 'COMDLG32.DLL'.*
-    GetOpenFileNameW                         = 'COMDLG32.DLL'.*
-    GetSaveFileNameA                         = 'COMDLG32.DLL'.*
-    GetSaveFileNameW                         = 'COMDLG32.DLL'.*
-    LoadAlterBitmap                          = 'COMDLG32.DLL'.*
-    PageSetupDlgA                            = 'COMDLG32.DLL'.*
-    PageSetupDlgW                            = 'COMDLG32.DLL'.*
-    PrintDlgA                                = 'COMDLG32.DLL'.*
-    PrintDlgExA                              = 'COMDLG32.DLL'.*
-    PrintDlgExW                              = 'COMDLG32.DLL'.*
-    PrintDlgW                                = 'COMDLG32.DLL'.*
-    ReplaceTextA                             = 'COMDLG32.DLL'.*
-    ReplaceTextW                             = 'COMDLG32.DLL'.*
-    Ssync_ANSI_UNICODE_Struct_For_WOW        = 'COMDLG32.DLL'.*
-    WantArrows                               = 'COMDLG32.DLL'.*
-    dwLBSubclass                             = 'COMDLG32.DLL'.*
-    dwOKSubclass                             = 'COMDLG32.DLL'.*
+    ChooseColorA
+    ChooseColorW
+    ChooseFontA
+    ChooseFontW
+    CommDlgExtendedError
+    FindTextA
+    FindTextW
+    FormatCharDlgProc        @100
+    GetFileTitleA
+    GetFileTitleW
+    GetOpenFileNameA
+    GetOpenFileNameW
+    GetSaveFileNameA
+    GetSaveFileNameW
+    LoadAlterBitmap
+    PageSetupDlgA
+    PageSetupDlgW
+    PrintDlgA
+    PrintDlgExA
+    PrintDlgExW
+    PrintDlgW
+    ReplaceTextA
+    ReplaceTextW
+    Ssync_ANSI_UNICODE_Struct_For_WOW
+    WantArrows
+    dwLBSubclass
+    dwOKSubclass

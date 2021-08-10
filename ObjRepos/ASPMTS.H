@@ -1,8 +1,24 @@
-[!outputon] // $Revision:   1.0.1.6  $
+[!outputon] // $Revision:   1.4.1.0.1.1  $
 // [!HeaderName] : Declaration of the [!ClassName]
 
 #ifndef [!IDEHeaderName]
 #define [!IDEHEaderName]
+
+[!if=(ThreadingModel, "Single")]
+#define ATL_APARTMENT_THREADED
+[!endif]
+[!if=(ThreadingModel, "Apartment")]
+#define ATL_APARTMENT_THREADED
+[!endif]
+[!if=(ThreadingModel, "Both")]
+#define ATL_FREE_THREADED
+[!endif]
+[!if=(ThreadingModel, "Free")]
+#define ATL_FREE_THREADED
+[!endif]
+[!if=(ThreadingModel, "Neutral")]
+#define ATL_APARTMENT_THREADED
+[!endif]
 
 #include "[!TypeLibModuleName].H"
 #include <asphlpr.h>
@@ -19,7 +35,21 @@
 // Description    : [!Description]
 /////////////////////////////////////////////////////////////////////////////
 class ATL_NO_VTABLE [!ClassName] : 
+[!if=(ThreadingModel, "Single")]
   public CComObjectRootEx<CComSingleThreadModel>,
+[!endif]
+[!if=(ThreadingModel, "Apartment")]
+  public CComObjectRootEx<CComSingleThreadModel>,
+[!endif]
+[!if=(ThreadingModel, "Both")]
+  public CComObjectRootEx<CComMultiThreadModel>,
+[!endif]
+[!if=(ThreadingModel, "Free")]
+  public CComObjectRootEx<CComMultiThreadModel>,
+[!endif]
+[!if=(ThreadingModel, "Neutral")]
+  public CComObjectRootEx<CComMultiThreadModel>,
+[!endif]
   public CComCoClass<[!ClassName], &CLSID_[!CoClassName]>,
 [!if=(Dual, "TRUE")]
   public IDispatchImpl<[!InterfaceName], &IID_[!InterfaceName], &LIBID_[!LibName]>,
@@ -50,8 +80,8 @@ public:
 [!if=(ThreadingModel, "Neutral")]
   DECLARE_THREADING_MODEL(otNeutral);
 [!endif]
-  DECLARE_PROGID("");
-  DECLARE_DESCRIPTION("[!Description]");
+  DECLARE_PROGID(_T(""));
+  DECLARE_DESCRIPTION(_T("[!Description]"));
 
   // Function invoked to (un)register object
   //

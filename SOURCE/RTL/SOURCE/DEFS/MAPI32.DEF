@@ -1,151 +1,158 @@
 LIBRARY MAPI32
 EXPORTS
 
-    BuildDisplayTable                        = 'MAPI32.DLL'.BuildDisplayTable@40
-    CbOfEncoded                              = 'MAPI32.DLL'.CbOfEncoded@4
-    CchOfEncoding                            = 'MAPI32.DLL'.CchOfEncoding@4
-    ChangeIdleRoutine                        = 'MAPI32.DLL'.ChangeIdleRoutine@28
-    CloseIMsgSession                         = 'MAPI32.DLL'.CloseIMsgSession@4
-    CreateIProp                              = 'MAPI32.DLL'.CreateIProp@24
-    CreateTable                              = 'MAPI32.DLL'.CreateTable@36
-    DeinitMapiUtil                           = 'MAPI32.DLL'.DeinitMapiUtil@0
-    DeregisterIdleRoutine                    = 'MAPI32.DLL'.DeregisterIdleRoutine@4
-    EnableIdleRoutine                        = 'MAPI32.DLL'.EnableIdleRoutine@8
-    EncodeID                                 = 'MAPI32.DLL'.EncodeID@12
-    FBadColumnSet                            = 'MAPI32.DLL'.FBadColumnSet@4
-    FBadEntryList                            = 'MAPI32.DLL'.FBadEntryList@4
-    FBadProp                                 = 'MAPI32.DLL'.FBadProp@4
-    FBadPropTag                              = 'MAPI32.DLL'.FBadPropTag@4
-    FBadRestriction                          = 'MAPI32.DLL'.FBadRestriction@4
-    FBadRglpNameID                           = 'MAPI32.DLL'.FBadRglpNameID@8
-    FBadRglpszA                              = 'MAPI32.DLL'.FBadRglpszA@8
-    FBadRglpszW                              = 'MAPI32.DLL'.FBadRglpszW@8
-    FBadRow                                  = 'MAPI32.DLL'.FBadRow@4
-    FBadRowSet                               = 'MAPI32.DLL'.FBadRowSet@4
-    FBadSortOrderSet                         = 'MAPI32.DLL'.FBadSortOrderSet@4
-    FBinFromHex                              = 'MAPI32.DLL'.FBinFromHex@8
-    FDecodeID                                = 'MAPI32.DLL'.FDecodeID@12
-    FEqualNames                              = 'MAPI32.DLL'.FEqualNames@8
-    FPropCompareProp                         = 'MAPI32.DLL'.FPropCompareProp@12
-    FPropContainsProp                        = 'MAPI32.DLL'.FPropContainsProp@12
-    FPropExists                              = 'MAPI32.DLL'.FPropExists@8
-    FreePadrlist                             = 'MAPI32.DLL'.FreePadrlist@4
-    FreeProws                                = 'MAPI32.DLL'.FreeProws@4
-    FtAdcFt                                  = 'MAPI32.DLL'.FtAdcFt@20
-    FtAddFt                                  = 'MAPI32.DLL'.FtAddFt@16
-    FtDivFtBogus                             = 'MAPI32.DLL'.FtDivFtBogus@20
-    FtMulDw                                  = 'MAPI32.DLL'.FtMulDw@12
-    FtMulDwDw                                = 'MAPI32.DLL'.FtMulDwDw@8
-    FtNegFt                                  = 'MAPI32.DLL'.FtNegFt@8
-    FtSubFt                                  = 'MAPI32.DLL'.FtSubFt@16
-    FtgRegisterIdleRoutine                   = 'MAPI32.DLL'.FtgRegisterIdleRoutine@20
-    GetAttribIMsgOnIStg                      = 'MAPI32.DLL'.GetAttribIMsgOnIStg@12
-    GetTnefStreamCodepage                    = 'MAPI32.DLL'.*
-    GetTnefStreamCodepage                    = 'MAPI32.DLL'.GetTnefStreamCodepage@12
-    HexFromBin                               = 'MAPI32.DLL'.HexFromBin@12
-    HrAddColumns                             = 'MAPI32.DLL'.HrAddColumns@16
-    HrAddColumnsEx                           = 'MAPI32.DLL'.HrAddColumnsEx@20
-    HrAllocAdviseSink                        = 'MAPI32.DLL'.HrAllocAdviseSink@12
-    HrComposeEID                             = 'MAPI32.DLL'.HrComposeEID@28
-    HrComposeMsgID                           = 'MAPI32.DLL'.HrComposeMsgID@24
-    HrDecomposeEID                           = 'MAPI32.DLL'.HrDecomposeEID@28
-    HrDecomposeMsgID                         = 'MAPI32.DLL'.HrDecomposeMsgID@24
-    HrDispatchNotifications                  = 'MAPI32.DLL'.HrDispatchNotifications@4
-    HrEntryIDFromSz                          = 'MAPI32.DLL'.HrEntryIDFromSz@12
-    HrGetOneProp                             = 'MAPI32.DLL'.HrGetOneProp@12
-    HrIStorageFromStream                     = 'MAPI32.DLL'.HrIStorageFromStream@16
-    HrQueryAllRows                           = 'MAPI32.DLL'.HrQueryAllRows@24
-    HrSetOneProp                             = 'MAPI32.DLL'.HrSetOneProp@8
-    HrSzFromEntryID                          = 'MAPI32.DLL'.HrSzFromEntryID@12
-    HrThisThreadAdviseSink                   = 'MAPI32.DLL'.HrThisThreadAdviseSink@8
-    HrValidateIPMSubtree                     = 'MAPI32.DLL'.HrValidateIPMSubtree@20
-    HrValidateParameters                     = 'MAPI32.DLL'.HrValidateParameters@8
-    InstallFilterHook                        = 'MAPI32.DLL'.InstallFilterHook@4
-    IsBadBoundedStringPtr                    = 'MAPI32.DLL'.IsBadBoundedStringPtr@8
-    LAUNCHWIZARD                             = 'MAPI32.DLL'.*
-    LPropCompareProp                         = 'MAPI32.DLL'.LPropCompareProp@8
-    LaunchWizard                             = 'MAPI32.DLL'.LaunchWizard@20
-    LpValFindProp                            = 'MAPI32.DLL'.LpValFindProp@12
-    MAPIAdminProfiles                        = 'MAPI32.DLL'.*
-    MAPIAdminProfiles                        = 'MAPI32.DLL'.MAPIAdminProfiles@8
-    MAPIAllocateBuffer                       = 'MAPI32.DLL'.*
-    MAPIAllocateBuffer                       = 'MAPI32.DLL'.MAPIAllocateBuffer@8
-    MAPIAllocateMore                         = 'MAPI32.DLL'.*
-    MAPIAllocateMore                         = 'MAPI32.DLL'.MAPIAllocateMore@12
-    MAPIDeinitIdle                           = 'MAPI32.DLL'.MAPIDeinitIdle@0
-    MAPIFreeBuffer                           = 'MAPI32.DLL'.*
-    MAPIFreeBuffer                           = 'MAPI32.DLL'.MAPIFreeBuffer@4
-    MAPIGetDefaultMalloc                     = 'MAPI32.DLL'.MAPIGetDefaultMalloc@0
-    MAPIInitIdle                             = 'MAPI32.DLL'.MAPIInitIdle@4
-    MAPIInitialize                           = 'MAPI32.DLL'.*
-    MAPIInitialize                           = 'MAPI32.DLL'.MAPIInitialize@4
-    MAPILogonEx                              = 'MAPI32.DLL'.*
-    MAPILogonEx                              = 'MAPI32.DLL'.MAPILogonEx@20
-    MAPIOpenFormMgr                          = 'MAPI32.DLL'.*
-    MAPIOpenFormMgr                          = 'MAPI32.DLL'.MAPIOpenFormMgr@8
-    MAPIOpenLocalFormContainer               = 'MAPI32.DLL'.*
-    MAPIOpenLocalFormContainer               = 'MAPI32.DLL'.MAPIOpenLocalFormContainer@4
-    MAPIUninitialize                         = 'MAPI32.DLL'.*
-    MAPIUninitialize                         = 'MAPI32.DLL'.MAPIUninitialize@0
-    MNLS_CompareStringW                      = 'MAPI32.DLL'.MNLS_CompareStringW@24
-    MNLS_IsBadStringPtrW                     = 'MAPI32.DLL'.MNLS_IsBadStringPtrW@8
-    MNLS_MultiByteToWideChar                 = 'MAPI32.DLL'.MNLS_MultiByteToWideChar@24
-    MNLS_WideCharToMultiByte                 = 'MAPI32.DLL'.MNLS_WideCharToMultiByte@32
-    MNLS_lstrcmpW                            = 'MAPI32.DLL'.MNLS_lstrcmpW@8
-    MNLS_lstrcpyW                            = 'MAPI32.DLL'.MNLS_lstrcpyW@8
-    MNLS_lstrlenW                            = 'MAPI32.DLL'.MNLS_lstrlenW@4
-    MapStorageSCode                          = 'MAPI32.DLL'.MapStorageSCode@4
-    OpenIMsgOnIStg                           = 'MAPI32.DLL'.OpenIMsgOnIStg@44
-    OpenIMsgSession                          = 'MAPI32.DLL'.OpenIMsgSession@12
-    OpenStreamOnFile                         = 'MAPI32.DLL'.*
-    OpenStreamOnFile                         = 'MAPI32.DLL'.OpenStreamOnFile@24
-    OpenTnefStream                           = 'MAPI32.DLL'.*
-    OpenTnefStream                           = 'MAPI32.DLL'.OpenTnefStream@28
-    OpenTnefStreamEx                         = 'MAPI32.DLL'.*
-    OpenTnefStreamEx                         = 'MAPI32.DLL'.OpenTnefStreamEx@32
-    PRProviderInit                           = 'MAPI32.DLL'.*
-    PpropFindProp                            = 'MAPI32.DLL'.PpropFindProp@12
-    PropCopyMore                             = 'MAPI32.DLL'.PropCopyMore@16
-    RTFSync                                  = 'MAPI32.DLL'.*
-    RTFSync                                  = 'MAPI32.DLL'.RTFSync@12
-    ScBinFromHexBounded                      = 'MAPI32.DLL'.ScBinFromHexBounded@12
-    ScCopyNotifications                      = 'MAPI32.DLL'.ScCopyNotifications@16
-    ScCopyProps                              = 'MAPI32.DLL'.ScCopyProps@16
-    ScCountNotifications                     = 'MAPI32.DLL'.ScCountNotifications@12
-    ScCountProps                             = 'MAPI32.DLL'.ScCountProps@12
-    ScCreateConversationIndex                = 'MAPI32.DLL'.ScCreateConversationIndex@16
-    ScDupPropset                             = 'MAPI32.DLL'.ScDupPropset@16
-    ScGenerateMuid                           = 'MAPI32.DLL'.ScGenerateMuid@4
-    ScInitMapiUtil                           = 'MAPI32.DLL'.ScInitMapiUtil@4
-    ScLocalPathFromUNC                       = 'MAPI32.DLL'.ScLocalPathFromUNC@12
-    ScMAPIXFromCMC                           = 'MAPI32.DLL'.*
-    ScMAPIXFromSMAPI                         = 'MAPI32.DLL'.*
-    ScRelocNotifications                     = 'MAPI32.DLL'.ScRelocNotifications@20
-    ScRelocProps                             = 'MAPI32.DLL'.ScRelocProps@20
-    ScSplEntry                               = 'MAPI32.DLL'.*
-    ScUNCFromLocalPath                       = 'MAPI32.DLL'.ScUNCFromLocalPath@12
-    SetAttribIMsgOnIStg                      = 'MAPI32.DLL'.SetAttribIMsgOnIStg@16
-    SwapPlong                                = 'MAPI32.DLL'.SwapPlong@8
-    SwapPword                                = 'MAPI32.DLL'.SwapPword@8
-    SzFindCh                                 = 'MAPI32.DLL'.SzFindCh@8
-    SzFindLastCh                             = 'MAPI32.DLL'.SzFindLastCh@8
-    SzFindSz                                 = 'MAPI32.DLL'.SzFindSz@8
-    UFromSz                                  = 'MAPI32.DLL'.UFromSz@4
-    UNKOBJ_COFree                            = 'MAPI32.DLL'.UNKOBJ_COFree@8
-    UNKOBJ_Free                              = 'MAPI32.DLL'.UNKOBJ_Free@8
-    UNKOBJ_FreeRows                          = 'MAPI32.DLL'.UNKOBJ_FreeRows@8
-    UNKOBJ_ScAllocate                        = 'MAPI32.DLL'.UNKOBJ_ScAllocate@12
-    UNKOBJ_ScAllocateMore                    = 'MAPI32.DLL'.UNKOBJ_ScAllocateMore@16
-    UNKOBJ_ScCOAllocate                      = 'MAPI32.DLL'.UNKOBJ_ScCOAllocate@12
-    UNKOBJ_ScCOReallocate                    = 'MAPI32.DLL'.UNKOBJ_ScCOReallocate@12
-    UNKOBJ_ScSzFromIdsAlloc                  = 'MAPI32.DLL'.UNKOBJ_ScSzFromIdsAlloc@20
-    UlAddRef                                 = 'MAPI32.DLL'.UlAddRef@4
-    UlFromSzHex                              = 'MAPI32.DLL'.UlFromSzHex@4
-    UlPropSize                               = 'MAPI32.DLL'.UlPropSize@4
-    UlRelease                                = 'MAPI32.DLL'.UlRelease@4
-    WrapCompressedRTFStream                  = 'MAPI32.DLL'.*
-    WrapCompressedRTFStream                  = 'MAPI32.DLL'.WrapCompressedRTFStream@12
-    WrapProgress                             = 'MAPI32.DLL'.WrapProgress@20
-    WrapStoreEntryID                         = 'MAPI32.DLL'.WrapStoreEntryID@24
-    _CPPValidateParameters                   = 'MAPI32.DLL'.__CPPValidateParameters@8
-    _ValidateParameters                      = 'MAPI32.DLL'.__ValidateParameters@8
+    BuildDisplayTable        @46
+    CbOfEncoded        @207
+    CchOfEncoding        @206
+    ChangeIdleRoutine        @55
+    CloseIMsgSession        @197
+    CreateIProp        @60
+    CreateTable        @61
+    DeinitMapiUtil        @34
+    DeregisterIdleRoutine        @54
+    EnableIdleRoutine        @53
+    EncodeID        @204
+    FBadColumnSet        @182
+    FBadEntryList        @190
+    FBadProp        @181
+    FBadPropTag        @179
+    FBadRestriction        @191
+    FBadRglpNameID        @178
+    FBadRglpszA        @175
+    FBadRglpszW        @176
+    FBadRow        @180
+    FBadRowSet        @177
+    FBadSortOrderSet        @189
+    FBinFromHex        @44
+    FDecodeID        @205
+    FEqualNames        @72
+    _FGetComponentPath        = FGetComponentPath        @254
+    FPropCompareProp        @79
+    FPropContainsProp        @78
+    FPropExists        @137
+    _FixMAPI        = FixMAPI        @252
+    FreePadrlist        @139
+    FreeProws        @140
+    FtAdcFt        @122
+    FtAddFt        @121
+    FtDivFtBogus        @127
+    FtMulDw        @124
+    FtMulDwDw        @125
+    FtNegFt        @126
+    FtSubFt        @123
+    FtgRegisterIdleRoutine        @52
+    GetAttribIMsgOnIStg        @200
+    _GetOutlookVersion        = GetOutlookVersion        @250
+    _GetTnefStreamCodepage        = GetTnefStreamCodepage        @154
+    GetTnefStreamCodepage        @153
+    HexFromBin        @45
+    HrAddColumns        @81
+    HrAddColumnsEx        @82
+    HrAllocAdviseSink        @36
+    HrComposeEID        @143
+    HrComposeMsgID        @145
+    HrDecomposeEID        @144
+    HrDecomposeMsgID        @146
+    HrDispatchNotifications        @239
+    HrEntryIDFromSz        @142
+    _HrGetOmiProvidersFlags        = HrGetOmiProvidersFlags        @246
+    HrGetOmiProvidersFlags        @247
+    HrGetOneProp        @135
+    HrIStorageFromStream        @194
+    HrQueryAllRows        @75
+    _HrSetOmiProvidersFlagsInvalid        = HrSetOmiProvidersFlagsInvalid        @248
+    HrSetOmiProvidersFlagsInvalid        @249
+    HrSetOneProp        @136
+    HrSzFromEntryID        @141
+    HrThisThreadAdviseSink        @42
+    HrValidateIPMSubtree        @195
+    HrValidateParameters        @241
+    InstallFilterHook        @51
+    IsBadBoundedStringPtr        @74
+    _LAUNCHWIZARD        = LAUNCHWIZARD        @25
+    LPropCompareProp        @80
+    LaunchWizard        @26
+    LpValFindProp        @173
+    _MAPIAdminProfiles        = MAPIAdminProfiles        @18
+    MAPIAdminProfiles        @19
+    _MAPIAllocateBuffer        = MAPIAllocateBuffer        @12
+    MAPIAllocateBuffer        @13
+    _MAPIAllocateMore        = MAPIAllocateMore        @14
+    MAPIAllocateMore        @15
+    MAPIDeinitIdle        @50
+    _MAPIFreeBuffer        = MAPIFreeBuffer        @16
+    MAPIFreeBuffer        @17
+    MAPIGetDefaultMalloc        @59
+    MAPIInitIdle        @49
+    _MAPIInitialize        = MAPIInitialize        @20
+    MAPIInitialize        @21
+    _MAPILogonEx        = MAPILogonEx        @10
+    MAPILogonEx        @11
+    _MAPIOpenFormMgr        = MAPIOpenFormMgr        @29
+    MAPIOpenFormMgr        @30
+    _MAPIOpenLocalFormContainer        = MAPIOpenLocalFormContainer        @31
+    MAPIOpenLocalFormContainer        @32
+    _MAPIUninitialize        = MAPIUninitialize        @22
+    MAPIUninitialize        @23
+    MNLS_CompareStringW        @65
+    MNLS_IsBadStringPtrW        @68
+    MNLS_MultiByteToWideChar        @66
+    MNLS_WideCharToMultiByte        @67
+    MNLS_lstrcmpW        @63
+    MNLS_lstrcpyW        @64
+    MNLS_lstrlenW        @62
+    MapStorageSCode        @201
+    OpenIMsgOnIStg        @198
+    OpenIMsgSession        @196
+    _OpenStreamOnFile        = OpenStreamOnFile        @148
+    OpenStreamOnFile        @147
+    _OpenTnefStream        = OpenTnefStream        @150
+    OpenTnefStream        @149
+    _OpenTnefStreamEx        = OpenTnefStreamEx        @152
+    OpenTnefStreamEx        @151
+    _PRProviderInit        = PRProviderInit        @24
+    PpropFindProp        @138
+    PropCopyMore        @76
+    _RTFSync        = RTFSync        @184
+    RTFSync        @183
+    ScBinFromHexBounded        @43
+    ScCopyNotifications        @165
+    ScCopyProps        @171
+    ScCountNotifications        @164
+    ScCountProps        @170
+    ScCreateConversationIndex        @244
+    ScDupPropset        @174
+    ScGenerateMuid        @35
+    ScInitMapiUtil        @33
+    ScLocalPathFromUNC        @193
+    _ScMAPIXFromCMC        = ScMAPIXFromCMC        @202
+    _ScMAPIXFromSMAPI        = ScMAPIXFromSMAPI        @203
+    ScRelocNotifications        @166
+    ScRelocProps        @172
+    _ScSplEntry        = ScSplEntry        @8
+    ScUNCFromLocalPath        @192
+    SetAttribIMsgOnIStg        @199
+    SwapPlong        @47
+    SwapPword        @48
+    SzFindCh        @130
+    SzFindLastCh        @131
+    SzFindSz        @132
+    UFromSz        @133
+    UNKOBJ_COFree        @162
+    UNKOBJ_Free        @158
+    UNKOBJ_FreeRows        @159
+    UNKOBJ_ScAllocate        @156
+    UNKOBJ_ScAllocateMore        @157
+    UNKOBJ_ScCOAllocate        @160
+    UNKOBJ_ScCOReallocate        @161
+    UNKOBJ_ScSzFromIdsAlloc        @163
+    UlAddRef        @128
+    UlFromSzHex        @155
+    UlPropSize        @77
+    UlRelease        @129
+    _WrapCompressedRTFStream        = WrapCompressedRTFStream        @186
+    WrapCompressedRTFStream        @185
+    WrapProgress        @41
+    WrapStoreEntryID        @73
+    __CPPValidateParameters        @188
+    __ValidateParameters        @187

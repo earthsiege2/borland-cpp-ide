@@ -7,7 +7,6 @@
  */
 
 #ifndef XCMCMSXT_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define XCMCMSXT_H
 
 #ifdef __cplusplus
@@ -53,5 +52,4 @@ extern "C" {
 }      /* extern "C" */
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif /* XCMCMSXT_H */

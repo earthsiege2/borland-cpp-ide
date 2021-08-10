@@ -11,6 +11,7 @@
 #include <DBClient.hpp>
 #include <MConnect.hpp>
 #include <MidasCon.hpp>
+#include <DB.hpp>
 //---------------------------------------------------------------------------
 class TDataModule1 : public TDataModule
 {
@@ -31,9 +32,9 @@ __published:	// IDE-managed Components
         TDataSetField *ProjectEmpProj;
         TStringField *EmpProjEmpName;
         TDCOMConnection *DCOMConnection;
-        void __fastcall ProjectReconcileError(TClientDataSet *DataSet,
-          EReconcileError *E, TUpdateKind UpdateKind,
-          TReconcileAction &Action);
+        void __fastcall ProjectReconcileError(
+          TCustomClientDataSet *DataSet, EReconcileError *E,
+          TUpdateKind UpdateKind, TReconcileAction &Action);
         void __fastcall DataModuleCreate(TObject *Sender);
         void __fastcall ProjectNewRecord(TDataSet *DataSet);
 private:	// User declarations

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FiltEdit.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'FiltEdit.pas' rev: 6.00
 
 #ifndef FiltEditHPP
 #define FiltEditHPP
@@ -13,7 +13,8 @@
 #include <ExtCtrls.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Grids.hpp>	// Pascal unit
-#include <DsgnIntf.hpp>	// Pascal unit
+#include <DesignEditors.hpp>	// Pascal unit
+#include <DesignIntf.hpp>	// Pascal unit
 #include <Buttons.hpp>	// Pascal unit
 #include <Tabs.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -48,12 +49,10 @@ private:
 	AnsiString __fastcall GetFilter();
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TFilterEditor(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TFilterEditor(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TFilterEditor(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TFilterEditor(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TFilterEditor(void) { }
@@ -61,28 +60,24 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TFilterEditor(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TFilterEditor(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 class DELPHICLASS TFilterProperty;
-class PASCALIMPLEMENTATION TFilterProperty : public Dsgnintf::TStringProperty 
+class PASCALIMPLEMENTATION TFilterProperty : public Designeditors::TStringProperty 
 {
-	typedef Dsgnintf::TStringProperty inherited;
+	typedef Designeditors::TStringProperty inherited;
 	
 public:
 	virtual void __fastcall Edit(void);
-	virtual Dsgnintf::TPropertyAttributes __fastcall GetAttributes(void);
-protected:
-	#pragma option push -w-inl
-	/* TPropertyEditor.Create */ inline __fastcall virtual TFilterProperty(const Dsgnintf::_di_IFormDesigner 
-		ADesigner, int APropCount) : Dsgnintf::TStringProperty(ADesigner, APropCount) { }
-	#pragma option pop
-	
+	virtual Designintf::TPropertyAttributes __fastcall GetAttributes(void);
 public:
+	#pragma option push -w-inl
+	/* TPropertyEditor.Create */ inline __fastcall virtual TFilterProperty(const Designintf::_di_IDesigner ADesigner, int APropCount) : Designeditors::TStringProperty(ADesigner, APropCount) { }
+	#pragma option pop
 	#pragma option push -w-inl
 	/* TPropertyEditor.Destroy */ inline __fastcall virtual ~TFilterProperty(void) { }
 	#pragma option pop
@@ -93,9 +88,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Filtedit */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Filtedit;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

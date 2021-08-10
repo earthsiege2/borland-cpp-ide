@@ -1,4 +1,4 @@
-[!outputon] // $Revision:   1.1.1.0  $
+[!outputon] // $Revision:   1.2  $
 [!if=(ConsoleApp, "TRUE")]
 	try
 	{

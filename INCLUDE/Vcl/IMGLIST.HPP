@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ImgList.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ImgList.pas' rev: 6.00
 
 #ifndef ImgListHPP
 #define ImgListHPP
@@ -10,7 +10,7 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <Commctrl.hpp>	// Pascal unit
+#include <CommCtrl.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
@@ -32,18 +32,17 @@ enum TDrawingStyle { dsFocus, dsSelected, dsNormal, dsTransparent };
 enum TImageType { itImage, itMask };
 #pragma option pop
 
-typedef Shortint TOverlay;
-
 #pragma option push -b-
 enum TResType { rtBitmap, rtCursor, rtIcon };
 #pragma option pop
 
 #pragma option push -b-
-enum TLoadResource { lrDefaultColor, lrDefaultSize, lrFromFile, lrMap3DColors, lrTransparent, lrMonoChrome 
-	};
+enum TLoadResource { lrDefaultColor, lrDefaultSize, lrFromFile, lrMap3DColors, lrTransparent, lrMonoChrome };
 #pragma option pop
 
 typedef Set<TLoadResource, lrDefaultColor, lrMonoChrome>  TLoadResources;
+
+typedef Shortint TOverlay;
 
 class PASCALIMPLEMENTATION TCustomImageList : public Classes::TComponent 
 {
@@ -79,8 +78,8 @@ private:
 	Graphics::TColor __fastcall GetBkColor(void);
 	unsigned __fastcall GetHandle(void);
 	HBITMAP __fastcall GetImageHandle(Graphics::TBitmap* Image, Graphics::TBitmap* ImageDDB);
-	void __fastcall InsertImage(int Index, Graphics::TBitmap* Image, Graphics::TBitmap* Mask, Graphics::TColor 
-		MaskColor);
+	void __fastcall InsertImage(int Index, Graphics::TBitmap* Image, Graphics::TBitmap* Mask, Graphics::TColor MaskColor);
+	bool __fastcall InternalGetInstRes(unsigned Instance, TResType ResType, char * Name, int Width, TLoadResources LoadFlags, Graphics::TColor MaskColor);
 	void __fastcall ReadData(Classes::TStream* Stream);
 	void __fastcall SetBkColor(Graphics::TColor Value);
 	void __fastcall SetDrawingStyle(TDrawingStyle Value);
@@ -96,8 +95,7 @@ protected:
 	virtual void __fastcall AssignTo(Classes::TPersistent* Dest);
 	DYNAMIC void __fastcall Change(void);
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
-	virtual void __fastcall DoDraw(int Index, Graphics::TCanvas* Canvas, int X, int Y, unsigned Style, 
-		bool Enabled);
+	virtual void __fastcall DoDraw(int Index, Graphics::TCanvas* Canvas, int X, int Y, unsigned Style, bool Enabled = true);
 	void __fastcall GetImages(int Index, Graphics::TBitmap* Image, Graphics::TBitmap* Mask);
 	void __fastcall HandleNeeded(void);
 	virtual void __fastcall Initialize(void);
@@ -113,19 +111,20 @@ public:
 	int __fastcall AddMasked(Graphics::TBitmap* Image, Graphics::TColor MaskColor);
 	void __fastcall Clear(void);
 	void __fastcall Delete(int Index);
-	void __fastcall Draw(Graphics::TCanvas* Canvas, int X, int Y, int Index, bool Enabled);
-	void __fastcall DrawOverlay(Graphics::TCanvas* Canvas, int X, int Y, int ImageIndex, TOverlay Overlay
-		, bool Enabled);
-	bool __fastcall FileLoad(TResType ResType, AnsiString Name, Graphics::TColor MaskColor);
-	void __fastcall GetBitmap(int Index, Graphics::TBitmap* Image);
-	virtual Windows::TPoint __fastcall GetHotSpot();
-	void __fastcall GetIcon(int Index, Graphics::TIcon* Image);
+	void __fastcall Draw(Graphics::TCanvas* Canvas, int X, int Y, int Index, bool Enabled = true)/* overload */;
+	void __fastcall Draw(Graphics::TCanvas* Canvas, int X, int Y, int Index, TDrawingStyle ADrawingStyle, TImageType AImageType, bool Enabled = true)/* overload */;
+	void __fastcall DrawOverlay(Graphics::TCanvas* Canvas, int X, int Y, int ImageIndex, TOverlay Overlay, bool Enabled = true)/* overload */;
+	void __fastcall DrawOverlay(Graphics::TCanvas* Canvas, int X, int Y, int ImageIndex, TOverlay Overlay, TDrawingStyle ADrawingStyle, TImageType AImageType, bool Enabled = true)/* overload */;
+	bool __fastcall FileLoad(TResType ResType, const AnsiString Name, Graphics::TColor MaskColor);
+	bool __fastcall GetBitmap(int Index, Graphics::TBitmap* Image);
+	virtual Types::TPoint __fastcall GetHotSpot();
+	void __fastcall GetIcon(int Index, Graphics::TIcon* Image)/* overload */;
+	void __fastcall GetIcon(int Index, Graphics::TIcon* Image, TDrawingStyle ADrawingStyle, TImageType AImageType)/* overload */;
 	HBITMAP __fastcall GetImageBitmap(void);
 	HBITMAP __fastcall GetMaskBitmap(void);
-	bool __fastcall GetResource(TResType ResType, AnsiString Name, int Width, TLoadResources LoadFlags, 
-		Graphics::TColor MaskColor);
-	bool __fastcall GetInstRes(unsigned Instance, TResType ResType, AnsiString Name, int Width, TLoadResources 
-		LoadFlags, Graphics::TColor MaskColor);
+	bool __fastcall GetResource(TResType ResType, const AnsiString Name, int Width, TLoadResources LoadFlags, Graphics::TColor MaskColor);
+	bool __fastcall GetInstRes(unsigned Instance, TResType ResType, const AnsiString Name, int Width, TLoadResources LoadFlags, Graphics::TColor MaskColor)/* overload */;
+	bool __fastcall GetInstRes(unsigned Instance, TResType ResType, unsigned ResID, int Width, TLoadResources LoadFlags, Graphics::TColor MaskColor)/* overload */;
 	bool __fastcall HandleAllocated(void);
 	HIDESBASE void __fastcall Insert(int Index, Graphics::TBitmap* Image, Graphics::TBitmap* Mask);
 	void __fastcall InsertIcon(int Index, Graphics::TIcon* Image);
@@ -133,9 +132,8 @@ public:
 	void __fastcall Move(int CurIndex, int NewIndex);
 	bool __fastcall Overlay(int ImageIndex, TOverlay Overlay);
 	void __fastcall RegisterChanges(TChangeLink* Value);
-	bool __fastcall ResourceLoad(TResType ResType, AnsiString Name, Graphics::TColor MaskColor);
-	bool __fastcall ResInstLoad(unsigned Instance, TResType ResType, AnsiString Name, Graphics::TColor 
-		MaskColor);
+	bool __fastcall ResourceLoad(TResType ResType, const AnsiString Name, Graphics::TColor MaskColor);
+	bool __fastcall ResInstLoad(unsigned Instance, TResType ResType, const AnsiString Name, Graphics::TColor MaskColor);
 	void __fastcall Replace(int Index, Graphics::TBitmap* Image, Graphics::TBitmap* Mask);
 	void __fastcall ReplaceIcon(int Index, Graphics::TIcon* Image);
 	void __fastcall ReplaceMasked(int Index, Graphics::TBitmap* NewImage, Graphics::TColor MaskColor);
@@ -181,9 +179,7 @@ typedef int TImageIndex;
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Imglist */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Imglist;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

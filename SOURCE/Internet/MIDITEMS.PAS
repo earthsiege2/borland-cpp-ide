@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1999 Inprise Corporation          }
+{  Copyright (c) 1999-2001 Borland Software Corp.       }
 {                                                       }
 {*******************************************************}
 
@@ -11,12 +11,12 @@ unit MidItems;
 
 interface
 
-uses Classes, HTTPApp, Db, DbClient, Midas,
-  XMLBrokr, WebComp, PagItems, MidProd;
+uses Classes, HTTPApp, HTTPProd, DB, DBClient, Midas,
+  XMLBrokr, WebComp, PagItems, MidProd, MidComp;
 
 type
 
-  IMidasWebDataSet = interface
+  IInetXWebDataSet = interface
   ['{1E494CD4-D598-11D2-AF8C-00C04FB16EC3}']
     function FieldCount: Integer;
     function Fields: TFields;
@@ -27,14 +27,16 @@ type
     procedure RemoveOnDataChange(const Value: TNotifyEvent);
   end;
 
+  IMidasWebDataSet = IInetXWebDataSet;
+
   TXMLDataSet = class;
 
   IDataSetComponent = interface
   ['{D1AE355D-F1C3-11D2-AFB3-00C04FB16EC3}']
     function GetXMLBroker: TXMLBroker;
-    function GetDataSet: IMidasWebDataSet;
+    function GetDataSet: IInetXWebDataSet;
     function GetXMLDataSet: TXMLDataSet;
-    property DataSet: IMidasWebDataSet read GetDataSet;
+    property DataSet: IInetXWebDataSet read GetDataSet;
     property XMLBroker: TXMLBroker read GetXMLBroker;
     property XMLDataSet: TXMLDataSet read GetXMLDataSet;
   end;
@@ -57,7 +59,7 @@ type
 
   IValidateField = interface
   ['{10A1C310-2E47-11D3-B00E-00C04FB16EC3}']
-    function ValidateField(DataSet: IMidasWebDataSet; AddIntf: IAddScriptElements): Boolean;
+    function ValidateField(DataSet: IInetXWebDataSet; AddIntf: IAddScriptElements): Boolean;
   end;
 
   IDataSetFields = interface
@@ -103,20 +105,26 @@ type
   ['{DA9A7341-FE79-11D2-AFC5-00C04FB16EC3}']
   end;
 
-  IXMLDisplay = interface
+  IWebDisplay = interface
+  ['{73506461-4D5E-11D4-A48B-00C04F6BB853}']
+    function GetIsMultipleRecordView: Boolean;
+    property IsMultipleRecordView: Boolean read GetIsMultipleRecordView;
+  end;
+
+  IXMLDisplay = interface(IWebDisplay)
   ['{394C5DD6-F252-11D2-AA55-00A024C11562}']
     function GetXMLDisplayName: string;
     function GetXMLRowSetName: string;
     function GetIsMultipleRecordView: Boolean;
-    property XMLRowSetName: string read GetXMLRowSetName;
     property XMLDisplayName: string read GetXMLDisplayName;
+    property XMLRowSetName: string read GetXMLRowSetName;
     property IsMultipleRecordView: Boolean read GetIsMultipleRecordView;
   end;
 
-  IXMLDisplayReference = interface
+  IWebDisplayReference = interface
   ['{675ABA92-F660-11D2-AA59-00A024C11562}']
-    function GetXMLDisplayComponent: TComponent;
-    property XMLDisplayComponent: TComponent read GetXMLDisplayComponent;
+    function GetWebDisplayComponent: TComponent;
+    property WebDisplayComponent: TComponent read GetWebDisplayComponent;
   end;
 
   IHTMLForm = interface
@@ -129,8 +137,8 @@ type
 
   IFormatColumn = interface
   ['{3417E2F0-22A0-11D3-B003-00C04FB16EC3}']
-    function FormatColumnHeading: string;
-    function FormatColumnData(Content: string): string;
+    function FormatColumnHeading(Options: TWebContentOptions): string;
+    function FormatColumnData(const Content: string; Options: TWebContentOptions): string;
   end;
 
   IQueryForm = interface
@@ -162,7 +170,7 @@ type
   TXMLDataSet = class(TXMLData, INotifyConnectionChange)
   private
     FDataSetField: string;
-    FDataSet: IMidasWebDataSet;
+    FDataSet: IInetXWebDataSet;
     FDataSetPath: TStrings;
     FDiscardDataSetList: IInterfaceList;
   protected
@@ -174,22 +182,22 @@ type
     procedure ConnectionChange(Sender: TComponent; Connecting: Boolean);
 
     procedure SetXMLBroker(const Value: TXMLBroker); override;
-    function FindDataSet: IMidasWebDataSet;
+    function FindDataSet: IInetXWebDataSet;
     function CompareXMLData(XMLDataSet: TXMLDataSet): Boolean;
     procedure ChangedXMLBroker; override;
     procedure ChangedDataSetField; virtual;
     procedure WrapperDataChange(Sender: TObject);
     //procedure AssignTo(Dest: TPersistent); override;
     procedure SetDataSetField(const Value: string);
-    function GetDataSet: IMidasWebDataSet;
-    function CreateDataSet: IMidasWebDataSet;
+    function GetDataSet: IInetXWebDataSet;
+    function CreateDataSet: IInetXWebDataSet;
     function GetDataSetPath: TStrings;
     function GetDataSetField: string; virtual;
     property Parent: TComponent read FParent;
   public
     constructor Create(AParent: TComponent);
     destructor Destroy; override;
-    property DataSet: IMidasWebDataSet read GetDataSet;
+    property DataSet: IInetXWebDataSet read GetDataSet;
     property DataSetPath: TStrings read GetDataSetPath;
     property DataSetField: string read GetDataSetField write SetDataSetField;
   end;
@@ -223,7 +231,7 @@ type
     property UseParent: Boolean read FUseParent write SetUseParent;
   end;
 
-  TXMLDisplay = class(TObject)
+  TWebDisplay = class(TObject)
   private
     FParent: TComponent;
     FDisplayComponent: TComponent;
@@ -242,7 +250,7 @@ type
     property DisplayComponent: TComponent read GetDisplayComponent write SetDisplayComponent;
   end;
 
-  TXMLDisplayParent = class(TXMLDisplay)
+  TXMLDisplayParent = class(TWebDisplay)
   private
     FUseParent: Boolean;
   protected
@@ -256,38 +264,23 @@ type
     property UseParent: Boolean read FUseParent write SetUseParent default True;
   end;
 
-  TWebForm = class(TComponent, IWebComponent, IWebContent, IWebComponentEditor,
-    IScriptComponent, IGetWebComponentList, IHTMLForm)
+  TWebForm = class(TWebContainedContainerComponent, IWebContent, IWebComponentEditor,
+    IScriptComponent, IHTMLForm)
   private
-    FContainer: TWebComponentList;
-    FWebComponents: TWebComponentList;
     FCustom: string;
     FStyle: string;
     FStyleRule: string;
-    FWebParent: TComponent;
     FLayoutAttributes: TLayoutAttributes;
   protected
-    procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
-    procedure SetChildOrder(Component: TComponent; Order: Integer); override;
+    function GetDefaultWebComponents: TWebComponentList; override;
+    procedure SetDefaultWebComponents(AList: TWebComponentList); override;
     { IWebComponentEditor }
     function CanAddClass(AParent: TComponent; AClass: TClass): Boolean;
     function ImplCanAddClass(AParent: TComponent; AClass: TClass): Boolean; virtual; abstract;
-    { IWebComponent }
-    function GetIndex: Integer;
-    procedure SetIndex(Value: Integer);
-    procedure SetContainer(Container: TWebComponentContainer);
-    function GetContainer: TWebComponentContainer;
-    procedure SetComponentList(List: TObject);
 
     { IWebContent }
     function Content(Options: TWebContentOptions; Layout: TLayout): string;
     function ImplContent(Options: TWebContentOptions; Layout: TLayout): string; virtual; abstract;
-
-    procedure ReadState(Reader: TReader); override;
-    procedure SetParentComponent(AParent: TComponent); override;
-    { IGetWebComponentList }
-    function GetComponentList: TObject;
-    function GetDefaultComponentList: TObject;
 
     { IScriptComponent }
     procedure AddElements(AddIntf: IAddScriptElements);
@@ -300,14 +293,11 @@ type
 
     function GetVisibleFields: TWebComponentList;
     function GetLayoutAttributes: TLayoutAttributes; virtual;
-    procedure SetWebParent(const Value: TComponent);
     property VisibleFields: TWebComponentList read GetVisibleFields;
   public
     constructor Create(AComponent: TComponent); override;
     destructor Destroy; override;
-    function GetParentComponent: TComponent; override;
-    function HasParent: Boolean; override;
-    property WebComponents: TWebComponentList read FWebComponents;
+    property WebComponents: TWebComponentList read GetWebComponents;
     property Style: string read FStyle write FStyle;
     property Custom: string read FCustom write FCustom;
     property StyleRule: string read FStyleRule write FStyleRule;
@@ -346,7 +336,7 @@ type
     property StyleRule;
   end;
 
-  TDataForm = class(TWebForm)
+  TCustomDataForm = class(TWebForm)
   protected
     { IWebComponentEditor implementation }
     function ImplCanAddClass(AParent: TComponent; AClass: TClass): Boolean; override;
@@ -354,25 +344,22 @@ type
     function ImplContent(Options: TWebContentOptions; ParentLayout: TLayout): string; override;
 
     function GetHTMLFormTag(Options: TWebContentOptions): string; virtual;
+  end;
+
+  TDataForm = class(TCustomDataForm)
   published
     property Style;
     property Custom;
     property StyleRule;
   end;
 
-  TWebControlGroup = class(TComponent, IWebComponent, IGetWebComponentList, IWebComponentEditor,
+  TWebControlGroup = class(TWebContainedContainerComponent, IWebComponentEditor,
     IScriptComponent, IWebContent)
   private
-    FContainer: TWebComponentList;
-    FWebComponents: TWebComponentList;
-    FDefaultField: Boolean;
     FDefaultWebComponents: TWebComponentList;
-    FWebParent: TComponent;
   protected
-    procedure SetWebParent(const Value: TComponent);
-    procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
-    procedure SetChildOrder(Component: TComponent;
-     Order: Integer); override;
+    function GetDefaultWebComponents: TWebComponentList; override;
+    procedure SetDefaultWebComponents(Value: TWebComponentList); override;
     { IScriptComponent }
     procedure AddElements(AddIntf: IAddScriptElements);
     function GetSubComponents: TObject; // Object implementing IWebComponentContainer
@@ -381,30 +368,19 @@ type
     { IWebContent }
     function Content(Options: TWebContentOptions; ParentLayout: TLayout): string;
     function ImplContent(Options: TWebContentOptions; ParentLayout: TLayout): string; virtual;
-    { IWebComponent }
-    function GetIndex: Integer;
-    procedure SetIndex(Value: Integer);
-    procedure SetContainer(Container: TWebComponentContainer);
-    function GetContainer: TWebComponentContainer;
-    procedure SetComponentList(List: TObject);
-    { IGetWebComponentList }
-    function GetComponentList: TObject;
-    function GetDefaultComponentList: TObject;
     { IWebComponentEditor }
     function CanAddClass(AParent: TComponent; AClass: TClass): Boolean;
     function ImplCanAddClass(AParent: TComponent; AClass: TClass): Boolean; virtual;
 
-    procedure ReadState(Reader: TReader); override;
-    procedure SetParentComponent(AParent: TComponent); override;
     function GetLayoutAttributes: TLayoutAttributes; virtual;
+    procedure ChangeFieldControls(Sender: TObject);
     property DefaultWebComponents: TWebComponentList read FDefaultWebComponents write FDefaultWebComponents;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    function GetParentComponent: TComponent; override;
-    function HasParent: Boolean; override;
-    property WebFieldControls: TWebComponentList read FWebComponents;
+    property WebFieldControls: TWebComponentList read GetWebComponents;
   end;
+
 
   TCustomLayoutGroup = class(TWebControlGroup)
   private
@@ -457,7 +433,7 @@ type
     function GetIsMultipleRecordView: Boolean;
     function ImplIsMultipleRecordView: Boolean; virtual;
     { IDataSetComponent }
-    function GetDataSet: IMidasWebDataSet;
+    function GetDataSet: IInetXWebDataSet;
     function GetXMLBroker: TXMLBroker;
     function GetXMLDataSet: TXMLDataSet;
 
@@ -632,6 +608,8 @@ type
     FStyle: string;
     FCustom: string;
     FStyleRule: string;
+    FAlign: THTMLAlign;
+    FVAlign: THTMLVAlign;
   public
     constructor Create(AParent: TComponent);
     property Parent: TComponent read FParent;
@@ -639,13 +617,12 @@ type
     property Style: string read FStyle write FStyle;
     property Custom: string read FCustom write FCustom;
     property StyleRule: string read FStyleRule write FStyleRule;
+    property Align: THTMLAlign read FAlign write FAlign default haDefault;
+    property VAlign: THTMLVAlign read FVAlign write FVAlign default haVDefault;
   end;
 
-  TWebDataDisplay = class(TComponent, IWebComponent, IWebContent, IHTMLField)
+  TWebDataDisplay = class(TWebContainedComponent, IWebContent, IHTMLField)
   private
-    FWebComponents: TWebComponentList;
-    FWebParent: TComponent;
-    FDefaultField: Boolean;
     FCaption: string;
     FCaptionPosition: TCaptionPosition;
     FCaptionAttributes: TCaptionAttributes;
@@ -654,13 +631,8 @@ type
     FStyle: string;
     FLayoutAttributes: TLayoutAttributes;
     FStyleRule: string;
+    function IsCaptionStored: Boolean;
   protected
-    { IWebComponent }
-    function GetIndex: Integer;
-    procedure SetIndex(Value: Integer);
-    procedure SetContainer(Container: TWebComponentContainer);
-    function GetContainer: TWebComponentContainer;
-    procedure SetComponentList(List: TObject);
     { IWebContent }
     function Content(Options: TWebContentOptions; ParentLayout: TLayout): string;
     function ImplContent(Options: TWebContentOptions; ParentLayout: TLayout): string; virtual;
@@ -675,9 +647,6 @@ type
 
     function EventContent(Options: TWebContentOptions): string; virtual;
 
-    procedure SetWebParent(Value: TComponent);
-    procedure ReadState(Reader: TReader); override;
-    procedure SetParentComponent(AParent: TComponent); override;
     function GetHTMLForm: IHTMLForm;
     function GetXmlDisplayName: string;
     function GetXmlRowSetName: string;
@@ -692,9 +661,8 @@ type
     destructor Destroy; override;
     class function IsColumn: Boolean; virtual;
     class function IsQueryField: Boolean; virtual;
-    function GetParentComponent: TComponent; override;
-    function HasParent: Boolean; override;
-    property Caption: string read GetCaption write FCaption;
+    property Caption: string read GetCaption write SetCaption
+      stored IsCaptionStored;
     property TabIndex: Integer read FTabIndex write FTabIndex default -1;
     property Custom: string read FCustom write FCustom;
     property Style: string read FStyle write FStyle;
@@ -715,7 +683,7 @@ type
     procedure RestoreDefaults;
     procedure ImplRestoreDefaults; virtual;
     { IValidateField }
-    function ValidateField(DataSet: IMidasWebDataSet; AddIntf: IAddScriptElements): Boolean;
+    function ValidateField(DataSet: IInetXWebDataSet; AddIntf: IAddScriptElements): Boolean;
     { IDataSetField }
     procedure SetFieldName(Value: string);
     function GetFieldName: string;
@@ -725,7 +693,7 @@ type
 
     function ImplGetHTMLControlName: string; override;
     procedure RestoreFieldDefaults(AField: TField); virtual;
-    function FindAssociatedField(DataSet: IMidasWebDataSet): TField; virtual;
+    function FindAssociatedField(DataSet: IInetXWebDataSet): TField; virtual;
     function GetParamName: string; virtual;
     procedure SetParamName(Value: string);
     function GetCaption: string; override;
@@ -1115,41 +1083,31 @@ type
     property StyleRule;
   end;
 
-  TWebButton = class(TComponent, IWebComponent, IWebContent)
+  TWebButton = class(TWebContainedComponent, IWebContent)
   private
-    FWebParent: TComponent;
-    FWebButtonsList: TWebComponentList;
-    FDefaultButton: Boolean;
     FStyle: string;
     FCustom: string;
     FCaption: string;
     FStyleRule: string;
-    procedure SetWebParent(const Value: TComponent);
+    function IsCaptionStored: Boolean;
   protected
-    { IWebComponent }
-    function GetIndex: Integer;
-    procedure SetIndex(Value: Integer);
-    procedure SetContainer(Container: TWebComponentContainer);
-    function GetContainer: TWebComponentContainer;
-    procedure SetComponentList(List: TObject);
     { IWebContent }
     function Content(Options: TWebContentOptions; Layout: TLayout): string;
     function ImplContent(Options: TWebContentOptions; Layout: TLayout): string; virtual; abstract;
 
     function GetCaption: string; virtual;
+    procedure SetCaption(const AValue: string); virtual;
     function GetLayoutAttributes: TLayoutAttributes; virtual;
-    procedure ReadState(Reader: TReader); override;
-    procedure SetParentComponent(AParent: TComponent); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    function GetParentComponent: TComponent; override;
-    function HasParent: Boolean; override;
-    property Caption: string read GetCaption write FCaption;
+    property Caption: string read GetCaption write SetCaption
+      stored IsCaptionStored;
     property Style: string read FStyle write FStyle;
     property Custom: string read FCustom write FCustom;
     property StyleRule: string read FStyleRule write FStyleRule;
   end;
+
 
   TWebButtonClass = class of TWebButton;
 
@@ -1282,23 +1240,29 @@ type
     property XMLUseParent;
   end;
 
-  TXMLDisplayReferenceGroup = class(TWebControlGroup, IXMLDisplayReference)
+  TWebDisplayReferenceGroup = class(TWebControlGroup, IWebDisplayReference)
   private
-    FXMLDisplay: TXMLDisplay;
+    FWebDisplay: TWebDisplay;
   protected
-    { IXMLDisplayReference }
-    function GetXMLDisplayComponent: TComponent;
-    { IScriptComponent implementation }
-    procedure ImplAddElements(AddIntf: IAddScriptElements); override;
+    { IWebDisplayReference }
+    function GetWebDisplayComponent: TComponent;
 
-    procedure SetXMLDisplayComponent(const Value: TComponent);
-    property XMLDisplay: TXMLDisplay read FXMLDisplay;
+    procedure SetWebDisplayComponent(const Value: TComponent); virtual;
+    property WebDisplay: TWebDisplay read FWebDisplay;
     procedure Notification(AComponent: TComponent;
       Operation: TOperation); override;
+    property WebDisplayComponent: TComponent read GetWebDisplayComponent write SetWebDisplayComponent;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    property XMLComponent: TComponent read GetXMLDisplayComponent write SetXMLDisplayComponent;
+  end;
+
+  TXMLDisplayReferenceGroup = class(TWebDisplayReferenceGroup)
+  protected
+    { IScriptComponent implementation }
+    procedure ImplAddElements(AddIntf: IAddScriptElements); override;
+  public
+    property XMLComponent: TComponent read GetWebDisplayComponent write SetWebDisplayComponent;
   end;
 
   TCustomDataNavigator = class(TXMLDisplayReferenceGroup)
@@ -1412,6 +1376,7 @@ type
     FTableHeader: string;
     FColumnCount: Integer;
     FColumnIndex: Integer;
+    FSpanAll: Boolean;
     FBreakButtons: Boolean;
     FButtonIndex: Integer;
   protected
@@ -1447,6 +1412,18 @@ const
     ('POST',
      'GET');
 
+  HTMLAlignValues: array[THTMLAlign] of string =
+    ('',
+     'left',
+     'right',
+     'center');
+  HTMLVAlignValues: array[THTMLVAlign] of string =
+    ('',
+     'top',
+     'middle',
+     'bottom',
+     'baseline');
+
   // Utility functions
   function GetItemValuesFromDataSet(DataSet: TDataSet;
     const ItemsField, ValuesField: string;
@@ -1465,16 +1442,53 @@ const
   function FormatColumnHeading(Field: TWebDataDisplay): string;
   function FormatColumnData(Field: TWebDataDisplay; Content: string): string;
   procedure CreateDefaultButtonClasses(
-    Classes: array of TWebButtonClass; Container: TWebComponentList);
+    const Classes: array of TWebButtonClass; Container: TWebComponentList);
   function CanAddClassHelper(AEditor: TComponent; AParent: TComponent; AClass: TClass): Boolean;
   procedure DeclareSubmitForm(Component: TComponent; XMLBroker: TXMLBroker; AddIntf: IAddScriptElements);
-  function FindDispatcher(Component: TComponent): TCustomWebDispatcher;
+  function FindDispatcher(Component: TComponent): IWebDispatcherAccess;
   function FindProducer(Component: TComponent): TCustomContentProducer;
+
+const
+  sTabIndexAttr = 'tabindex';
+  sStyleAttr = 'style';
+  sClassAttr = 'class';
+  sSizeAttr = 'size';
+  sMultipleAttr = 'multiple';
+  sBgColorAttr = 'bgcolor';
+  sBorderAttr = 'border';
+  sCellPaddingAttr = 'cellpadding';
+  sCellSpacingAttr = 'cellspacing';
+  sNameAttr = 'name';
+  sColSpanAttr = 'colspan';
+  sEncTypeAttr = 'enctype';
+  sMethodAttr = 'method';
+  sActionAttr = 'action';
+  sColsAttr = 'cols';
+  sRowsAttr = 'rows';
+  sWrapAttr = 'wrap';
+  sValueAttr = 'value';
+  sOnClickAttr = 'onclick';
+  sTypeAttr = 'type';
+  sCheckedAttr = 'checked';
+  sReadOnlyAttr = 'readonly';
+  sSelectedAttr = 'selected';
+  sMaxLengthAttr = 'maxlength';
+  sWidthAttr = 'width';
+  sAlignAttr = 'align';
+  sVAlignAttr = 'valign';
+  sImageHeightAttr = 'imageheight';
+  sImageWidthAttr = 'imagewidth';
 
 implementation
 
-uses Provider, Windows, Messages, DbConsts, MidConst, ActiveX, ComObj, WebConst, sysutils, DbWeb, Forms,
-  WbmConst;
+{$IFDEF MSWINDOWS}
+uses Variants, Provider, Windows, DBConsts, MidConst, ActiveX, ComObj, Math,
+  WebConst, SysUtils, DBWeb, WbmConst;
+{$ENDIF}
+{$IFDEF LINUX}
+uses Variants, Provider,  DBConsts, MidConst, { ActiveX, ComObj,} Math,
+  WebConst, SysUtils, DBWeb, WbmConst;
+{$ENDIF}
 
 function CanAddClassHelper(AEditor: TComponent; AParent: TComponent; AClass: TClass): Boolean;
 var
@@ -1492,7 +1506,7 @@ procedure AddIntAttrib(var Attribs: string; const Attrib: string;
   Value: Integer);
 begin
   if Value <> -1 then
-    Attribs := Format('%s %s=%d', [Attribs, Attrib, Value]);
+    Attribs := Format('%s %s="%d"', [Attribs, Attrib, Value]);
 end;
 
 procedure AddStringAttrib(var Attribs: string; const Attrib,
@@ -1527,20 +1541,20 @@ function FormatColumnHeading(Field: TWebDataDisplay): string;
 var
   Attribs: string;
 begin
-  AddQuotedAttrib(Attribs, 'STYLE', Field.CaptionAttributes.Style);
+  AddQuotedAttrib(Attribs, sStyleAttr, Field.CaptionAttributes.Style);
   AddCustomAttrib(Attribs, Field.CaptionAttributes.Custom);
-  AddQuotedAttrib(Attribs, 'CLASS', Field.CaptionAttributes.StyleRule);
-  Result := Format('<TH%s>%s</TH>'#13#10, [Attribs, Field.Caption]);
+  AddQuotedAttrib(Attribs, sClassAttr, Field.CaptionAttributes.StyleRule);
+  Result := Format('<th%s>%s</th>'#13#10, [Attribs, Field.Caption]);            {do not localize}
 end;
 
 function FormatColumnData(Field: TWebDataDisplay; Content: string): string;
 var
   Attribs: string;
 begin
-  AddQuotedAttrib(Attribs, 'STYLE', Field.Style);
+  AddQuotedAttrib(Attribs, sStyleAttr, Field.Style);
   AddCustomAttrib(Attribs, Field.Custom);
-  AddQuotedAttrib(Attribs, 'CLASS', Field.StyleRule);
-  Result := Format('<TD%s><DIV>%s</DIV></TD>'#13#10, [Attribs,
+  AddQuotedAttrib(Attribs, sClassAttr, Field.StyleRule);
+  Result := Format('<td%s><div>%s</div></td>'#13#10, [Attribs,                  {do not localize}
     Content]);
 end;
 
@@ -1558,14 +1572,14 @@ type
     property DataChange: TNotifyEvent read FOnDataChange write FOnDataChange;
   end;
 
-  TDataSetWrapper = class(TInterfacedObject, IMidasWebDataSet)
+  TDataSetWrapper = class(TInterfacedObject, IInetXWebDataSet)
   private
     FDataSet: TClientDataSetEvent;
     FDetailDataSet: TDataSet;
     FOnDataChange: array of TNotifyEvent;
   protected
     procedure OnDataChange(Sender: TObject);
-    { IMidasWebDataSet }
+    { IInetXWebDataSet }
     function FieldCount: Integer;
     function Fields: TFields;
     procedure FetchParams;
@@ -1608,113 +1622,18 @@ end;
 constructor TWebForm.Create(AComponent: TComponent);
 begin
   inherited;
-  FWebComponents := TWebComponentList.Create(Self);
   FLayoutAttributes := TLayoutAttributes.Create;
 end;
 
 destructor TWebForm.Destroy;
 begin
   inherited;
-  if Assigned(FContainer) then
-    FContainer.Remove(Self);
-  FWebComponents.Free;
   FLayoutAttributes.Free;
-end;
-
-procedure TWebForm.SetComponentList(List: TObject);
-begin
-  FContainer := List as TWebComponentList;
-end;
-
-function TWebForm.GetContainer: TWebComponentContainer;
-begin
-  Result := FContainer;
-end;
-
-function TWebForm.GetIndex: Integer;
-begin
-  Result := FContainer.IndexOf(Self);
-end;
-
-procedure TWebForm.SetContainer(Container: TWebComponentContainer);
-begin
-  SetWebParent((Container as TWebComponentList).ParentComponent);
-end;
-
-procedure TWebForm.SetIndex(Value: Integer);
-begin
-  FContainer.SetComponentIndex(Self, Value);
-end;
-
-function TWebForm.GetParentComponent: TComponent;
-begin
-  if Assigned(FWebParent) then
-    Result := FWebParent else
-    Result := inherited GetParentComponent;
-end;
-
-function TWebForm.HasParent: Boolean;
-begin
-  if Assigned(FWebParent) then
-    Result := True else
-    Result := inherited HasParent;
-end;
-
-procedure TWebForm.ReadState(Reader: TReader);
-begin
-  inherited ReadState(Reader);
-  SetWebParent(Reader.Parent);
-end;
-
-procedure TWebForm.SetParentComponent(AParent: TComponent);
-begin
-  if not (csLoading in ComponentState) then
-    SetWebParent(AParent);
 end;
 
 function TWebForm.Content(Options: TWebContentOptions; Layout: TLayout): string;
 begin
   Result := ImplContent(Options, Layout);
-end;
-
-procedure ValidateWebParent(AComponent: TComponent; AParent: TComponent);
-var
-  P: TComponent;
-  Editor: IWebComponentEditor;
-begin
-  // Don't allow self to be parented by a child of self
-  P := AParent;
-  while Assigned(P) do
-  begin
-    if P = AComponent then
-      raise EComponentError.CreateRes(@sInvalidParent);
-    P := P.GetParentComponent;
-  end;
-  if AParent.GetInterface(IWebComponentEditor, Editor) then
-    if not Editor.CanAddClass(AParent, AComponent.ClassType) then
-      raise EComponentError.CreateRes(@sInvalidParent);
-end;
-
-procedure TWebForm.SetWebParent(const Value: TComponent);
-var
-  List: IGetWebComponentList;
-begin
-  if Value <> FWebParent then
-  begin
-    if Assigned(Value) and (csDesigning in ComponentState) then
-      ValidateWebParent(Self, Value);
-    if FWebParent <> nil then
-    begin
-      FWebParent.GetInterface(IGetWebComponentList, List);
-      (List.GetComponentList as TWebComponentList).Remove(Self);
-    end;
-    if Value <> nil then
-    begin
-      Value.GetInterface(IGetWebComponentList, List);
-      (List.GetComponentList as TWebComponentList).Add(Self);
-    end;
-    FWebParent := Value;
-  end;
 end;
 
 function TWebForm.CanAddClass(AParent: TComponent; AClass: TClass): Boolean;
@@ -1836,7 +1755,7 @@ var
                 Identifiers := Identifiers + ', |';
               Identifiers := Identifiers + FormatIdentifier(DataSetField);
               S := DataSetField.GetRowSetFieldAttributes(
-                Format('%s.Fields.Field["%s"]', [RowSetVarName, DataSetField.FieldName]));
+                Format('%s.Fields.Field["%s"]', [RowSetVarName, DataSetField.FieldName]));  {do not localize}
               if S <> '' then
                 Attributes.Add(S);
             end
@@ -1872,17 +1791,17 @@ begin
     if Identifiers <> '' then
     begin
       AddIntf.AddVar(HTMLForm.HTMLFormVarName,
-        Format('var %0:s = document.forms[''%1:s''];'#13#10, [HTMLForm.HTMLFormVarName, HTMLForm.HTMLFormName]));
+        Format('var %0:s = document.forms[''%1:s''];'#13#10, [HTMLForm.HTMLFormVarName, HTMLForm.HTMLFormName]));  {do not localize}
       NamesVar := Format(ScriptNamesVar, [AComponent.Name]);
-      AddIntf.AddVar(NamesVar, WrapParameters(Format('var %0:s = new Array(%1:s);'#13#10, [NamesVar, Names]), 4));
+      AddIntf.AddVar(NamesVar, WrapParameters(Format('var %0:s = new Array(%1:s);'#13#10, [NamesVar, Names]), 4));  {do not localize}
       IDsVar := Format(ScriptIDsVar, [AComponent.Name]);
-      AddIntf.AddVar(IdsVar, WrapParameters(Format('var %0:s = new Array(%1:s);'#13#10, [IDsVar, Identifiers]), 4));
+      AddIntf.AddVar(IdsVar, WrapParameters(Format('var %0:s = new Array(%1:s);'#13#10, [IDsVar, Identifiers]), 4));  {do not localize}
       Attributes.Text := TrimRight(Attributes.Text);
       if Attributes.Count > 0 then
         AddIntf.AddScriptBlock('', Attributes.Text);
-      if FieldStatus = '' then FieldStatus := 'null';
+      if FieldStatus = '' then FieldStatus := 'null';                           {do not localize}
       AddIntf.AddVar(XMLDisplayName,
-        Format('var %0:s = new xmlDisplay(%1:s, %2:s, %3:s, %4:s);'#13#10,
+        Format('var %0:s = new xmlDisplay(%1:s, %2:s, %3:s, %4:s);'#13#10,      {do not localize}
           [XMLDisplayName, RowSetVarName,
             Format(ScriptIDsVar, [AComponent.Name]),
             Format(ScriptNamesVar, [AComponent.Name]),
@@ -1900,47 +1819,12 @@ end;
 
 function TWebForm.GetVisibleFields: TWebComponentList;
 begin
-  Result := FWebComponents
-end;
-
-procedure TWebForm.GetChildren(Proc: TGetChildProc; Root: TComponent);
-var
-  I: Integer;
-  WebComponent: TComponent;
-begin
-  for I := 0 to FWebComponents.Count - 1 do
-  begin
-    WebComponent := FWebComponents.WebComponents[I];
-    if WebComponent.Owner = Root then Proc(WebComponent);
-  end;
-end;
-
-procedure TWebForm.SetChildOrder(Component: TComponent;
-  Order: Integer);
-var
-  Intf: IWebComponent;
-begin
-  if FWebComponents.IndexOf(Component) >= 0 then
-    if Component.GetInterface(IWebComponent, Intf) then
-      Intf.Index := Order
-    else
-      Assert(False, 'Interface not supported');
+  Result := GetWebComponents
 end;
 
 function TWebForm.GetSubComponents: TObject;
 begin
   Result := WebComponents;
-end;
-
-function TWebForm.GetComponentList: TObject;
-begin
-  Result := FWebComponents;
-end;
-
-function TWebForm.GetDefaultComponentList: TObject;
-begin
-  Assert(False, 'Form does not support DefaultComponents');
-  Result := nil;
 end;
 
 procedure TWebForm.AddElements(AddIntf: IAddScriptElements);
@@ -1959,8 +1843,8 @@ begin
   with FLayoutAttributes do
   begin
     ControlAttributes := '';
-    AddQuotedAttrib(ControlAttributes, 'STYLE', Style);
-    AddQuotedAttrib(ControlAttributes, 'CLASS', StyleRule);
+    AddQuotedAttrib(ControlAttributes, sStyleAttr, Style);
+    AddQuotedAttrib(ControlAttributes, sClassAttr, StyleRule);
     AddCustomAttrib(ControlAttributes, Custom);
   end;
   Result := FLayoutAttributes;
@@ -1971,20 +1855,31 @@ begin
   Result := Self.Name;
 end;
 
-{ TDataForm }
-function TDataForm.GetHTMLFormTag(Options: TWebContentOptions): string;
+function TWebForm.GetDefaultWebComponents: TWebComponentList;
+begin
+  Result := nil;  // No default components
+end;
+
+procedure TWebForm.SetDefaultWebComponents(AList: TWebComponentList);
+begin
+  Assert(False); // Unexpected call
+
+end;
+
+{ TCustomDataForm }
+function TCustomDataForm.GetHTMLFormTag(Options: TWebContentOptions): string;
 var
   Attribs: string;
 begin
-  AddStringAttrib(Attribs, 'NAME', GetHTMLFormName);
-  AddQuotedAttrib(Attribs, 'STYLE', Style);
-  AddQuotedAttrib(Attribs, 'CLASS', StyleRule);
+  AddStringAttrib(Attribs, sNameAttr, GetHTMLFormName);
+  AddQuotedAttrib(Attribs, sStyleAttr, Style);
+  AddQuotedAttrib(Attribs, sClassAttr, StyleRule);
   AddCustomAttrib(Attribs, Custom);
   Result :=
-    Format(#13#10'<FORM%s>', [Attribs]);
+    Format(#13#10'<form%s>', [Attribs]);                                        {do not localize}
 end;
 
-function TDataForm.ImplCanAddClass(AParent: TComponent; AClass: TClass): Boolean;
+function TCustomDataForm.ImplCanAddClass(AParent: TComponent; AClass: TClass): Boolean;
 begin
   Result :=
     AClass.InheritsFrom(TCustomDataGrid) or
@@ -2003,7 +1898,7 @@ begin
   FInRow := False;
   FColumnCount := 1;
   FColumnIndex := 0;
-  FTableHeader := #13#10'<TABLE>';
+  FTableHeader := #13#10'<table>';                                              {do not localize}
   FLayoutState := lsUnknown;
   FBreakButtons := False;
 end;
@@ -2012,7 +1907,7 @@ function TFormLayout.ImplLayoutButton(const HTMLButton: string; Attributes: TLay
 begin
   Result := StartButtons;
   if FBreakButtons then
-    Result := Format('%s>%s</TD>', [Result, HTMLButton])
+    Result := Format('%s>%s</td>', [Result, HTMLButton])                        {do not localize}
   else if FButtonIndex = 1 then
     Result := Format('%s>%s', [Result, HTMLButton])
   else
@@ -2022,9 +1917,9 @@ end;
 function TFormLayout.ImplLayoutField(const HTMLField: string; Attributes: TLayoutAttributes): string;
 begin
   if Assigned(Attributes) then
-    Result := StartFields(1) + Format('%0:s>%1:s</TD>'#13#10, [Attributes.ControlAttributes, HTMLField])
+    Result := StartFields(1) + Format('%0:s>%1:s</td>'#13#10, [Attributes.ControlAttributes, HTMLField])  {do not localize}
   else
-    Result := StartFields(1) + Format('>%0:s</TD>'#13#10, [HTMLField]);
+    Result := StartFields(1) + Format('>%0:s</td>'#13#10, [HTMLField]);         {do not localize}
 end;
 
 function TFormLayout.ImplLayoutLabelAndField(const HTMLLabel, HTMLField: string; Attributes: TLayoutAttributes): string;
@@ -2033,26 +1928,26 @@ begin
     case Attributes.LabelPosition of
       lposLeft:
         Result :=
-          StartFields(2) + Format('%0:s>%1:s</TD><TD %2:s>%3:s</TD>'#13#10,
+          StartFields(2) + Format('%0:s>%1:s</td><td %2:s>%3:s</td>'#13#10,     {do not localize}
             [Attributes.LabelAttributes, HTMLLabel, Attributes.ControlAttributes, HTMLField]);
       lposRight:
         Result :=
-          StartFields(2) + Format('%0:s>%1:s</TD><TD %2:s>%3:s</TD>'#13#10,
+          StartFields(2) + Format('%0:s>%1:s</td><td %2:s>%3:s</td>'#13#10,     {do not localize}
             [Attributes.ControlAttributes, HTMLField, Attributes.LabelAttributes, HTMLLabel]);
       lposAbove:
         Result :=
-          StartFields(1) + Format('%0:s>%1:s</TD></TR><TR><TD COLSPAN = 2 %2:s>%3:s</TD>'#13#10,
+          StartFields(1) + Format('%0:s>%1:s</td></tr><tr><td ' + sColSpanAttr + '="2" %2:s>%3:s</td>'#13#10,  {do not localize}
             [Attributes.LabelAttributes, HTMLLabel, Attributes.ControlAttributes, HTMLField]);
       lposBelow:
         Result :=
-          StartFields(1) + Format('%0:s>%1:s</TD></TR><TR><TD COLSPAN=2 %2:s>%3:s</TD>'#13#10,
+          StartFields(1) + Format('%0:s>%1:s</td></tr><tr><td ' + sColSpanAttr + '="2" %2:s>%3:s</td>'#13#10,  {do not localize}
             [Attributes.ControlAttributes, HTMLField, Attributes.LabelAttributes, HTMLLabel]);
     else
       Assert(False, 'Unknown position');
     end
   else
     Result :=
-        StartFields(2) + Format('>%0:s</TD><TD>%1:s</TD>'#13#10,
+        StartFields(2) + Format('>%0:s</td><td>%1:s</td>'#13#10,                {do not localize}
           [HTMLLabel, HTMLField])
 end;
 
@@ -2072,7 +1967,7 @@ function TFormLayout.NextColumn(SubItemCount: Integer): string;
 
   function SpanAll: string;
   begin
-    Result := Format('<TD COLSPAN=%d', [FColumnCount * 2]);
+    Result := Format('<td ' + sColSpanAttr + '="%d"', [FColumnCount * 2]);      {do not localize}
   end;
 
   function SpanCalc: string;
@@ -2083,9 +1978,9 @@ function TFormLayout.NextColumn(SubItemCount: Integer): string;
     if SubItemCount = 1 then
       Span := 2;
     if Span <> -1 then
-      Result := Format('<TD COLSPAN=%d', [Span])
+      Result := Format('<td ' + sColSpanAttr + '="%d"', [Span])                 {do not localize}
     else
-      Result := '<TD';
+      Result := '<td';                                                          {do not localize} 
   end;
 begin
   Result := '';
@@ -2094,7 +1989,13 @@ begin
   else if (FLayoutState <> lsButtons) or FBreakButtons then
   begin
     if FColumnIndex = FColumnCount then
-      Result := Format('%s%s%s', [EndRow, StartRow, SpanCalc])
+    begin
+      Result := Format('%s%s', [EndRow, StartRow]);
+      if FSpanAll then
+        Result := Result + SpanAll
+      else
+        Result := Result + SpanCalc;
+    end
     else
       Result := SpanCalc;
     Inc(FColumnIndex);
@@ -2107,7 +2008,7 @@ function TFormLayout.StartRow: string;
 begin
   if not FInRow then
   begin
-    Result := '<TR>';
+    Result := '<tr>';
     FInRow := True;
   end
   else
@@ -2119,7 +2020,7 @@ function TFormLayout.EndRow: string;
 begin
   if FInRow then
   begin
-    Result := '</TR>';
+    Result := '</tr>';   {do not localize}
     FColumnIndex := 0;
     FInRow := False;
   end
@@ -2131,7 +2032,7 @@ function TFormLayout.EndTable: string;
 begin
   if FInTable then
   begin
-    Result := EndRow + '</TABLE>';
+    Result := EndRow + '</table>';    {do not localize}
     FInTable := False;
   end
   else
@@ -2185,9 +2086,9 @@ begin
   end;
 end;
 
-{ TDataForm }
+{ TCustomDataForm }
 
-function TDataForm.ImplContent(Options: TWebContentOptions; ParentLayout: TLayout): string;
+function TCustomDataForm.ImplContent(Options: TWebContentOptions; ParentLayout: TLayout): string;
 var
   FormLayout: TFormLayout;
 
@@ -2211,7 +2112,7 @@ begin
     for I := 0 to VisibleFields.Count - 1 do
       Result := Result + FormatField(VisibleFields[I]);
     Result := Result + FormLayout.EndLayout;
-    Result := Result + '</FORM>';
+    Result := Result + '</form>';   {do not localize}
     if Assigned(ParentLayout) and ParentLayout.GetInterface(ILayoutWebContent, Intf) then
       Result := Intf.LayoutField(Result, GetLayoutAttributes)
   finally
@@ -2301,44 +2202,47 @@ begin
   end;
 end;
 
-{ TXMLDisplayReferenceGroup }
+{ TWebDisplayReferenceGroup }
 
-constructor TXMLDisplayReferenceGroup.Create(AOwner: TComponent);
+constructor TWebDisplayReferenceGroup.Create(AOwner: TComponent);
 begin
   inherited;
-  FXMLDisplay := TXMLDisplay.Create(Self);
+  FWebDisplay := TWebDisplay.Create(Self);
 end;
 
-destructor TXMLDisplayReferenceGroup.Destroy;
+destructor TWebDisplayReferenceGroup.Destroy;
 begin
   inherited;
-  FXMLDisplay.Free;
+  FWebDisplay.Free;
 end;
 
-function TXMLDisplayReferenceGroup.GetXMLDisplayComponent: TComponent;
+function TWebDisplayReferenceGroup.GetWebDisplayComponent: TComponent;
 begin
-  Result := XMLDisplay.DisplayComponent;
+  Result := WebDisplay.DisplayComponent;
 end;
 
-procedure TXMLDisplayReferenceGroup.SetXMLDisplayComponent(
+procedure TWebDisplayReferenceGroup.SetWebDisplayComponent(
   const Value: TComponent);
 begin
-  FXMLDisplay.DisplayComponent := Value;
+  FWebDisplay.DisplayComponent := Value;
 end;
 
-procedure TXMLDisplayReferenceGroup.Notification(AComponent: TComponent;
+procedure TWebDisplayReferenceGroup.Notification(AComponent: TComponent;
   Operation: TOperation);
 begin
   inherited Notification(AComponent, Operation);
-  if Assigned(FXMLDisplay) then
-    FXMLDisplay.Notification(AComponent, Operation);
+  if Assigned(FWebDisplay) then
+    FWebDisplay.Notification(AComponent, Operation);
 end;
+
+{ TXMLDisplayReferenceGroup }
+
 
 procedure TXMLDisplayReferenceGroup.ImplAddElements(
   AddIntf: IAddScriptElements);
 begin
   inherited;
-  if XMLComponent = nil then
+  if WebDisplayComponent = nil then
     AddIntf.AddError(Format(sXMLComponentNotDefined, [Self.Name]));
 end;
 
@@ -2365,11 +2269,11 @@ begin
   Result := '';
   ButtonsLayout := TFormLayout.Create(ParentLayout);
   try
-    // AddStringAttrib(Attribs, 'NAME', Name);
-    AddQuotedAttrib(Attribs, 'STYLE', Style);
-    AddQuotedAttrib(Attribs, 'CLASS', StyleRule);
+    // AddStringAttrib(Attribs, sNameAttr, Name);
+    AddQuotedAttrib(Attribs, sStyleAttr, Style);
+    AddQuotedAttrib(Attribs, sClassAttr, StyleRule);
     AddCustomAttrib(Attribs, Custom);
-    ButtonsLayout.FTableHeader := Format(#13#10'<TABLE%s>', [Attribs]);
+    ButtonsLayout.FTableHeader := Format(#13#10'<table%s>', [Attribs]);  {do not localize}
     for I := 0 to VisibleButtons.Count - 1 do
     begin
       Button := VisibleButtons.WebComponents[I];
@@ -2385,7 +2289,7 @@ end;
 
 
 procedure CreateDefaultButtonClasses(
-  Classes: array of TWebButtonClass; Container: TWebComponentList);
+  const Classes: array of TWebButtonClass; Container: TWebComponentList);
 var
   Button: TWebButton;
   I: Integer;
@@ -2418,7 +2322,7 @@ var
   Grid: Boolean;
 begin
   Grid := False;
-  XMLDisplay := GetXMLDisplayComponent;
+  XMLDisplay := GetWebDisplayComponent;
   if Assigned(XMLDisplay) then
     if XMLDisplay.GetInterface(IXMLDisplay, Intf) then
       Grid := Intf.IsMultipleRecordView;
@@ -2481,84 +2385,9 @@ end;
 
 { TWebDataDisplay }
 
-function TWebDataDisplay.GetContainer: TWebComponentContainer;
-begin
-  Result := FWebComponents;
-end;
-
-function TWebDataDisplay.GetIndex: Integer;
-begin
-  Result := FWebComponents.IndexOf(Self);
-end;
-
-procedure TWebDataDisplay.SetContainer(Container: TWebComponentContainer);
-begin
-  SetWebParent((Container as TWebComponentList).ParentComponent);
-end;
-
-procedure TWebDataDisplay.SetIndex(Value: Integer);
-begin
-  FWebComponents.SetComponentIndex(Self, Value)
-end;
-
-function TWebDataDisplay.GetParentComponent: TComponent;
-begin
-  if FWebParent <> nil then
-    Result := FWebParent else
-    Result := inherited GetParentComponent;
-end;
-
-function TWebDataDisplay.HasParent: Boolean;
-begin
-  if FWebParent <> nil then
-    Result := True else
-    Result := inherited HasParent;
-end;
-
-procedure TWebDataDisplay.ReadState(Reader: TReader);
-begin
-  inherited ReadState(Reader);
-  SetWebParent(Reader.Parent);
-end;
-
-procedure TWebDataDisplay.SetParentComponent(AParent: TComponent);
-begin
-  if not (csLoading in ComponentState) then
-    SetWebParent(AParent);
-end;
-
-procedure TWebDataDisplay.SetWebParent(Value: TComponent);
-var
-  List: IGetWebComponentList;
-begin
-  if Value <> FWebParent then
-  begin
-    if Assigned(Value) and (csDesigning in ComponentState) then
-      ValidateWebParent(Self, Value);
-    if FWebParent <> nil then
-    begin
-      FWebParent.GetInterface(IGetWebComponentList, List);
-      if FDefaultField then
-        (List.GetDefaultComponentList as TWebComponentList).Remove(Self)
-      else
-        (List.GetComponentList as TWebComponentList).Remove(Self)
-    end;
-    if Value <> nil then
-    begin
-      Value.GetInterface(IGetWebComponentList, List);
-      if FDefaultField then
-        (List.GetDefaultComponentList as TWebComponentList).Add(Self)
-      else
-        (List.GetComponentList as TWebComponentList).Add(Self)
-    end;
-    FWebParent := Value;
-  end;
-end;
-
 constructor TWebDataDisplay.Create(AOwner: TComponent);
 begin
   inherited;
-  FDefaultField := AOwner = nil;
   FTabIndex := -1;
   FCaptionAttributes := TCaptionAttributes.Create(Self);
   FLayoutAttributes := TLayoutAttributes.Create;
@@ -2568,16 +2397,8 @@ end;
 destructor TWebDataDisplay.Destroy;
 begin
   inherited;
-  if FWebComponents <> nil then
-    FWebComponents.Remove(Self);
   FCaptionAttributes.Free;
   FLayoutAttributes.Free;
-end;
-
-procedure TWebDataDisplay.SetComponentList(List: TObject);
-begin
-  Assert((List = nil) or (List is TWebComponentList));
-  FWebComponents := TWebComponentList(List);
 end;
 
 function TWebDataDisplay.Content(Options: TWebContentOptions; ParentLayout: TLayout): string;
@@ -2605,7 +2426,7 @@ begin
     (not Component.GetInterface(IXMLDisplay, Intf)) do
     Component := Component.GetParentComponent;
   if Assigned(Component) then
-    Result := Intf.XmlDisplayName;
+    Result := Intf.XMLDisplayName;
 end;
 
 function TWebDataDisplay.GetXmlRowSetName: string;
@@ -2654,9 +2475,11 @@ function TWebDataDisplay.FormatCaption: string;
 var
   Attribs: string;
 begin
-  AddQuotedAttrib(Attribs, 'STYLE', CaptionAttributes.Style);
+  AddQuotedAttrib(Attribs, sStyleAttr, CaptionAttributes.Style);
   AddCustomAttrib(Attribs, CaptionAttributes.Custom);
-  AddQuotedAttrib(Attribs, 'CLASS', CaptionAttributes.StyleRule);
+  AddQuotedAttrib(Attribs, sClassAttr, CaptionAttributes.StyleRule);
+  AddQuotedAttrib(Attribs, sVAlignAttr, HTMLVAlignValues[CaptionAttributes.VAlign]);
+  AddQuotedAttrib(Attribs, sAlignAttr, HTMLAlignValues[CaptionAttributes.Align]);
   LayoutAttributes.LabelAttributes := Attribs;
   case CaptionPosition of
     capLeft: LayoutAttributes.LabelPosition := lposLeft;
@@ -2667,7 +2490,7 @@ begin
     Assert(False, 'Unknown position');
   end;
   if Attribs <> '' then
-    Result := Format('<SPAN%0:s>%1:s</SPAN>', [Attribs, Caption])
+    Result := Format('<span%0:s>%1:s</span>', [Attribs, Caption])  {do not localize}
   else
     Result := Caption;
 end;
@@ -2718,7 +2541,7 @@ begin
   begin
     FFieldName := Value;
     if (FCaption = Value) then FCaption := '';
-    if Assigned(FWebParent) and
+    if Assigned(WebParent) and
       not (csLoading in ComponentState) and (Length(Value) > 0) then
       RestoreDefaults;
     if [csLoading, csDesigning] * ComponentState <> [] then
@@ -2801,16 +2624,16 @@ begin
   begin
     XMLDisplayName := GetXmlDisplayName;
     Result := Result +
-      Format(' onFocus=''if(%s)%s.xfocus(this);''', [sXMLReadyVar, XMLDisplayName]);
+      Format(' onFocus=''if(%s)%s.xfocus(this);''', [sXMLReadyVar, XMLDisplayName]);  {do not localize}
     Result := Result +
-      Format(' onkeydown=''if(%s)%s.keys(this);''', [sXMLReadyVar, XMLDisplayName]);
+      Format(' onkeydown=''if(%s)%s.keys(this);''', [sXMLReadyVar, XMLDisplayName]);  {do not localize}
   end;
 end;
 
 procedure TWebDataInput.ImplRestoreDefaults;
 var
   Field: TField;
-  DataSet: IMidasWebDataSet;
+  DataSet: IInetXWebDataSet;
   XMLDataSet: TXMLDataSetParent;
 begin
   XMLDataSet := TXMLDataSetParent.Create(Self);
@@ -2826,7 +2649,7 @@ begin
   RestoreFieldDefaults(Field);
 end;
 
-function TWebDataInput.FindAssociatedField(DataSet: IMidasWebDataSet): TField;
+function TWebDataInput.FindAssociatedField(DataSet: IInetXWebDataSet): TField;
 begin
   if FieldName <> '' then
     Result := DataSet.Fields.FindField(FieldName)
@@ -2869,7 +2692,7 @@ begin
   if Value <> FParamName then
   begin
     FParamName := Value;
-    if Assigned(FWebParent) and
+    if Assigned(WebParent) and
       not (csLoading in ComponentState) and (Length(Value) > 0) then
     begin
       RestoreDefaults;
@@ -2889,7 +2712,7 @@ begin
   Result := '';
 end;
 
-function TWebDataInput.ValidateField(DataSet: IMidasWebDataSet;
+function TWebDataInput.ValidateField(DataSet: IInetXWebDataSet;
   AddIntf: IAddScriptElements): Boolean;
 
   procedure AddError(Value: string);
@@ -2916,11 +2739,11 @@ end;
 
 procedure TWebTextInput.AddAttributes(var Attrs: string);
 begin
-  AddQuotedAttrib(Attrs, 'NAME', GetHTMLControlName);
-  AddIntAttrib(Attrs, 'SIZE', DisplayWidth);
-  AddIntAttrib(Attrs, 'TABINDEX', TabIndex);
-  AddQuotedAttrib(Attrs, 'STYLE', Style);
-  AddQuotedAttrib(Attrs, 'CLASS', StyleRule);
+  AddQuotedAttrib(Attrs, sNameAttr, GetHTMLControlName);
+  AddIntAttrib(Attrs, sSizeAttr, DisplayWidth);
+  AddIntAttrib(Attrs, sTabIndexAttr, TabIndex);
+  AddQuotedAttrib(Attrs, sStyleAttr, Style);
+  AddQuotedAttrib(Attrs, sClassAttr, StyleRule);
   AddCustomAttrib(Attrs, Custom);
 end;
 
@@ -2932,7 +2755,7 @@ begin
   AddAttributes(Attrs);
   if (not (coNoScript in Options.Flags)) then
     Events := EventContent(Options);
-  Result := Format('<INPUT TYPE=TEXT%0:s%1:s>', [Attrs, Events]);
+  Result := Format('<input type=TEXT%0:s%1:s>', [Attrs, Events]);  {do not localize}
 end;
 
 procedure TWebTextInput.RestoreFieldDefaults(AField: TField);
@@ -2946,7 +2769,7 @@ function TWebTextInput.ImplGetRowSetFieldAttributes(
   const FieldVarName: string): string;
 begin
   if ReadOnly then
-    Result := Format('%s.readonly=true;', [FieldVarName])
+    Result := Format('%s.readonly=true;', [FieldVarName])  {do not localize}
   else
     Result := '';
 end;
@@ -2994,7 +2817,7 @@ begin
   Component := XMLDisplay.DisplayComponent;
   if Assigned(Component) and
     Component.GetInterface(IXMLDisplay, Intf) then
-    Result := Intf.XmlDisplayName
+    Result := Intf.XMLDisplayName
   else
     Result := '';
 end;
@@ -3030,63 +2853,63 @@ constructor TFirstButton.Create(AOwner: TComponent);
 begin
   inherited;
   DefaultCaption := sFirstButton;
-  XMLMethodName := 'first';
+  XMLMethodName := 'first';   {do not localize}
 end;
 
 constructor TLastButton.Create(AOwner: TComponent);
 begin
   inherited;
   DefaultCaption := sLastButton;
-  XMLMethodName := 'last';
+  XMLMethodName := 'last';  {do not localize}
 end;
 
 constructor TPriorButton.Create(AOwner: TComponent);
 begin
   inherited;
   DefaultCaption := sPriorButton;
-  XMLMethodName := 'up';
+  XMLMethodName := 'up';  {do not localize}
 end;
 
 constructor TNextButton.Create(AOwner: TComponent);
 begin
   inherited;
   DefaultCaption := sNextButton;
-  XMLMethodName := 'down';
+  XMLMethodName := 'down';  {do not localize}
 end;
 
 constructor TNextPageButton.Create(AOwner: TComponent);
 begin
   inherited;
   DefaultCaption := sNextPageButton;
-  XMLMethodName := 'pgdown';
+  XMLMethodName := 'pgdown';  {do not localize}
 end;
 
 constructor TPriorPageButton.Create(AOwner: TComponent);
 begin
   inherited;
   DefaultCaption := sPriorPageButton;
-  XMLMethodName := 'pgup';
+  XMLMethodName := 'pgup';  {do not localize}
 end;
 
 constructor TInsertButton.Create(AOwner: TComponent);
 begin
   inherited;
   DefaultCaption := sInsertButton;
-  XMLMethodName := 'newRow';
+  XMLMethodName := 'newRow';  {do not localize}
 end;
 
 constructor TDeleteButton.Create(AOwner: TComponent);
 begin
   inherited;
   DefaultCaption := sDeleteButton;
-  XMLMethodName := 'removeRow';
+  XMLMethodName := 'removeRow';  {do not localize}
 end;
 
 constructor TUndoButton.Create(AOwner: TComponent);
 begin
   inherited;
   DefaultCaption := sUndoButton;
-  XMLMethodName := 'undo';
+  XMLMethodName := 'undo';  {do not localize}
 end;
 
 function TDataSetButton.GetSubComponents: TObject;
@@ -3105,20 +2928,20 @@ var
   Attrs: string;
   Intf: ILayoutWebContent;
 begin
-  //AddQuotedAttrib(Attrs, 'NAME', Name);
-  AddQuotedAttrib(Attrs, 'STYLE', Style);
-  AddQuotedAttrib(Attrs, 'CLASS', StyleRule);
-  AddQuotedAttrib(Attrs, 'VALUE', Self.Caption);
+  //AddQuotedAttrib(Attrs, sNameAttr, Name);
+  AddQuotedAttrib(Attrs, sStyleAttr, Style);
+  AddQuotedAttrib(Attrs, sClassAttr, StyleRule);
+  AddQuotedAttrib(Attrs, sValueAttr, Self.Caption);
   AddCustomAttrib(Attrs, Custom);
   if not (coNoScript in Options.Flags) then
   begin
     Result :=
-      Format('<INPUT TYPE=BUTTON%0:s onclick=''if(%3:s)%1:s.%2:s();''>'#13#10,
+      Format('<input type=BUTTON%0:s onclick=''if(%3:s)%1:s.%2:s();''>'#13#10,  {do not localize}
         [Attrs, Self.GetXmlDisplayName, Self.GetMethodName, sXMLReadyVar]);
   end
   else
     Result :=
-      Format('<INPUT TYPE=BUTTON%0:s>'#13#10,
+      Format('<input type=BUTTON%0:s>'#13#10,  {do not localize}
         [Attrs]);
   if Assigned(ParentLayout) and ParentLayout.GetInterface(ILayoutWebContent, Intf) then
     Result := Intf.LayoutButton(Result, GetLayoutAttributes);
@@ -3153,7 +2976,7 @@ begin
     Result := nil;
 end;
 
-function FindDispatcher(Component: TComponent): TCustomWebDispatcher;
+function FindDispatcher(Component: TComponent): IWebDispatcherAccess;
 var
   Producer: TCustomContentProducer;
 begin
@@ -3173,7 +2996,7 @@ var
   PathInfo: string;
   Redirect: string;
   Forms, Vars: string;
-  Dispatcher: TCustomWebDispatcher;
+  Dispatcher: IWebDispatcherAccess;
   Producer: TCustomContentProducer;
 begin
   Forms := '';
@@ -3189,38 +3012,38 @@ begin
     else
       Dispatcher := nil;
     if Assigned(Dispatcher) and Assigned(Dispatcher.Request) then
-      PathInfo := Dispatcher.Request.ScriptName + '/' + PathInfo;
+      PathInfo := Dispatcher.Request.InternalScriptName + '/' + PathInfo;
     Forms := Forms +
-      Format(#13#10'<FORM NAME=%0:s ACTION="%1:s" METHOD="POST">',
+      Format(#13#10'<form name=%0:s action="%1:s" method="POST">',  {do not localize}
         [XMLBroker.HTMLSubmitFormName, PathInfo]);
     Forms := Forms +
-      Format('%0:s<INPUT TYPE=HIDDEN NAME="%1:s" VALUE="%2:s">'#13#10,
+      Format('%0:s<input type=HIDDEN name="%1:s" value="%2:s">'#13#10,  {do not localize}
         [Indent1, sXMLBroker, XMLBroker.Name]);
     Forms := Forms +
-      Format('%0:s<INPUT TYPE=HIDDEN NAME="%1:s">'#13#10,
+      Format('%0:s<input type=HIDDEN name="%1:s">'#13#10,  {do not localize}
         [Indent1, SPostDelta]);
     Forms := Forms +
-      Format('%0:s<INPUT TYPE=HIDDEN NAME="%1:s" VALUE="%2:s">'#13#10,
+      Format('%0:s<input type=HIDDEN name="%1:s" value="%2:s">'#13#10,  {do not localize}
         [Indent1, sProducer, Producer.Name]);
     if (Dispatcher <> nil) and (Dispatcher.Request <> nil) then
     begin
       if Assigned(Dispatcher) and Assigned(Dispatcher.Request) then
-        Redirect := Format('http://%s%s', [Dispatcher.Request.Host, Dispatcher.Request.ScriptName]);
-      if Length(Dispatcher.Request.PathInfo) > 1 then
+        Redirect := Format('http://%s%s', [Dispatcher.Request.Host, Dispatcher.Request.InternalScriptName]);  {do not localize}
+      if Length(Dispatcher.Request.InternalPathInfo) > 1 then
       begin
         if Redirect <> '' then Redirect := Redirect + '/';
-        Redirect := Redirect + Copy(Dispatcher.Request.PathInfo, 2, MaxInt);
+        Redirect := Redirect + Copy(Dispatcher.Request.InternalPathInfo, 2, MaxInt);
       end;
       if Dispatcher.Request.Query <> '' then
         Redirect := Redirect + '?' + Dispatcher.Request.Query;
       Forms := Forms +
-        Format('%0:s<INPUT TYPE=HIDDEN NAME="%1:s" VALUE="%2:s">'#13#10,
+        Format('%0:s<input type=HIDDEN name="%1:s" value="%2:s">'#13#10,  {do not localize}
           [Indent1, sRedirect, Redirect]);
     end;
-    Forms := Forms + '</FORM>';
+    Forms := Forms + '</form>';  {do not localize}
     AddIntf.AddHTMLBlock(XMLBroker.HTMLSubmitFormName, Forms);
     AddIntf.AddVar(XMLBroker.SubmitFormVarName,
-       Format('var %0:s = document.forms[''%1:s''];'#13#10,
+       Format('var %0:s = document.forms[''%1:s''];'#13#10,  {do not localize}
         [XMLBroker.SubmitFormVarName, XMLBroker.HTMLSubmitFormName]));
   end;
 end;
@@ -3238,10 +3061,10 @@ var
   FormVarName: string;
   RowSetVarName: string;
 begin
-  //AddQuotedAttrib(Attrs, 'NAME', Name);
-  AddQuotedAttrib(Attrs, 'STYLE', Style);
-  AddQuotedAttrib(Attrs, 'CLASS', StyleRule);
-  AddQuotedAttrib(Attrs, 'VALUE', Self.Caption);
+  //AddQuotedAttrib(Attrs, sNameAttr, Name);
+  AddQuotedAttrib(Attrs, sStyleAttr, Style);
+  AddQuotedAttrib(Attrs, sClassAttr, StyleRule);
+  AddQuotedAttrib(Attrs, sValueAttr, Self.Caption);
   AddCustomAttrib(Attrs, Custom);
   if Assigned(XMLData.XMLBroker) then
   begin
@@ -3250,11 +3073,11 @@ begin
   end;
   if not (coNoScript in Options.Flags) then
     Result :=
-      Format('<INPUT TYPE=BUTTON%0:s onclick=''if(%3:s)%1:s.Apply(%2:s, %2:s.postdelta);''>'#13#10,
+      Format('<input type=BUTTON%0:s onclick=''if(%3:s)%1:s.Apply(%2:s, %2:s.postdelta);''>'#13#10,  {do not localize}
         [Attrs, RowSetVarName, FormVarName, sXMLReadyVar])
   else
     Result :=
-      Format('<INPUT TYPE=BUTTON%0:s>'#13#10,
+      Format('<input type=BUTTON%0:s>'#13#10,  {do not localize}
         [Attrs]);
   if Assigned(ParentLayout) and ParentLayout.GetInterface(ILayoutWebContent, Intf) then
     Result := Intf.LayoutButton(Result, GetLayoutAttributes);
@@ -3322,13 +3145,13 @@ end;
 
 procedure TWebTextAreaInput.AddAttributes(var Attrs: string);
 begin
-  AddQuotedAttrib(Attrs, 'NAME', GetHTMLControlName);
-  AddIntAttrib(Attrs, 'COLS', DisplayWidth);
-  AddIntAttrib(Attrs, 'ROWS', DisplayRows);
-  AddIntAttrib(Attrs, 'TABINDEX', TabIndex);
-  AddStringAttrib(Attrs, 'WRAP', TextAreaWrap[Wrap]);
-  AddQuotedAttrib(Attrs, 'STYLE', Style);
-  AddQuotedAttrib(Attrs, 'CLASS', StyleRule);
+  AddQuotedAttrib(Attrs, sNameAttr, GetHTMLControlName);
+  AddIntAttrib(Attrs, sColsAttr, DisplayWidth);
+  AddIntAttrib(Attrs, sRowsAttr, DisplayRows);
+  AddIntAttrib(Attrs, sTabIndexAttr, TabIndex);
+  AddStringAttrib(Attrs, sWrapAttr, TextAreaWrap[Wrap]);
+  AddQuotedAttrib(Attrs, sStyleAttr, Style);
+  AddQuotedAttrib(Attrs, sClassAttr, StyleRule);
   AddCustomAttrib(Attrs, Custom);
 end;
 
@@ -3340,7 +3163,7 @@ begin
   AddAttributes(Attrs);
   if (not (coNoScript in Options.Flags)) then
     Events := EventContent(Options);
-  Result := Format('<TEXTAREA%0:s%1:s></TEXTAREA>', [Attrs, Events]);
+  Result := Format('<textarea%0:s%1:s></textarea>', [Attrs, Events]);  {do not localize}
 end;
 
 function TWebTextAreaInput.EventContent(Options: TWebContentOptions): string;
@@ -3352,7 +3175,7 @@ begin
   begin
     XMLDisplayName := GetXmlDisplayName;
     Result := Result +
-      Format(' onFocus=''if(%s)%s.xfocus(this);''', [sXMLReadyVar, XMLDisplayName]);
+      Format(' onFocus=''if(%s)%s.xfocus(this);''', [sXMLReadyVar, XMLDisplayName]);  {do not localize}
   end;
 end;
 
@@ -3367,7 +3190,7 @@ function TWebTextAreaInput.ImplGetRowSetFieldAttributes(
   const FieldVarName: string): string;
 begin
   if ReadOnly then
-    Result := Format('%s.readonly=true;', [FieldVarName])
+    Result := Format('%s.readonly=true;', [FieldVarName])  {do not localize}
   else
     Result := '';
 end;
@@ -3465,18 +3288,13 @@ end;
 
 procedure TWebRadioGroupInput.AddAttributes(var Attrs: string);
 begin
-  AddQuotedAttrib(Attrs, 'NAME', GetHTMLControlName);
-  AddIntAttrib(Attrs, 'WIDTH', DisplayWidth);
-  AddIntAttrib(Attrs, 'TABINDEX', TabIndex);
+  AddQuotedAttrib(Attrs, sNameAttr, GetHTMLControlName);
+  AddIntAttrib(Attrs, sWidthAttr, DisplayWidth);
+  AddIntAttrib(Attrs, sTabIndexAttr, TabIndex);
   AddCustomAttrib(Attrs, Custom);
 end;
 
 function TWebRadioGroupInput.FormatInputs(ItemsStrings, ValuesStrings: TStrings; Options: TWebContentOptions): string;
-  function Min(X, Y: Integer): Integer;
-  begin
-    Result := X;
-    if X > Y then Result := Y;
-  end;
 var
   I, J, Index: Integer;
   Element, Value, Attrs, Item: string;
@@ -3493,7 +3311,7 @@ begin
     AddAttributes(Attrs);
     if (not (coNoScript in Options.Flags)) then
       Events := EventContent(Options);
-    Element := Format('<INPUT TYPE=RADIO%0:s%1:s', [Attrs, Events]);
+    Element := Format('<input type=RADIO%0:s%1:s', [Attrs, Events]);  {do not localize}
     CheckIndex := GetCheckIndex(ItemsStrings, ValuesStrings);
     if DisplayColumns > 0 then
     begin
@@ -3501,7 +3319,7 @@ begin
       Rows := (ItemsStrings.Count + Columns - 1) div Columns;
       for I := 0 to Rows - 1 do
       begin
-        Result := Format('%0:s<TR>', [Result]);
+        Result := Format('%0:s<tr>', [Result]);
         for J := 0 to Columns -1 do
         begin
           Index := (Rows * J) + I + Skip;
@@ -3518,24 +3336,24 @@ begin
             else
               Value := Item;
             ItemAttr := '';
-            AddQuotedAttrib(ItemAttr, 'VALUE', Value);
-            AddBoolAttrib(ItemAttr, 'CHECKED', Index = CheckIndex);
-            Result := Format('%0:s<TD>%1:s%2:s>%3:s</INPUT></TD>'#13#10,
+            AddQuotedAttrib(ItemAttr, sValueAttr, Value);
+            AddBoolAttrib(ItemAttr, sCheckedAttr, Index = CheckIndex);
+            Result := Format('%0:s<td>%1:s%2:s>%3:s</input></td>'#13#10,  {do not localize}
               [Result, Element, ItemAttr, Item]);
           end;
         end;
-        Result := Result + '</TR>';
+        Result := Result + '</tr>';  {do not localize}
       end;
       Attrs := '';
-      AddQuotedAttrib(Attrs, 'STYLE', Style);
-      AddQuotedAttrib(Attrs, 'CLASS', StyleRule);
-      Result := Format(#13#10'<TABLE%s>%s</TABLE>', [Attrs, Result]);
+      AddQuotedAttrib(Attrs, sStyleAttr, Style);
+      AddQuotedAttrib(Attrs, sClassAttr, StyleRule);
+      Result := Format(#13#10'<table%s>%s</table>', [Attrs, Result]);  {do not localize}
     end
     else
     begin
       Attrs := '';
-      AddQuotedAttrib(Attrs, 'STYLE', Style);
-      AddQuotedAttrib(Attrs, 'CLASS', StyleRule);
+      AddQuotedAttrib(Attrs, sStyleAttr, Style);
+      AddQuotedAttrib(Attrs, sClassAttr, StyleRule);
       LayoutAttributes.ControlAttributes := Attrs;
       for Index := 0 to ItemsStrings.Count - 1 do
       begin
@@ -3546,9 +3364,9 @@ begin
         else
           Value := Item;
         ItemAttr := '';
-        AddQuotedAttrib(ItemAttr, 'VALUE', Value);
-        AddBoolAttrib(ItemAttr, 'CHECKED', Index = CheckIndex);
-        Result := Format('%0:s %1:s%2:s>%3:s</INPUT>'#13#10,
+        AddQuotedAttrib(ItemAttr, sValueAttr, Value);
+        AddBoolAttrib(ItemAttr, sCheckedAttr, Index = CheckIndex);
+        Result := Format('%0:s %1:s%2:s>%3:s</input>'#13#10,  {do not localize}
           [Result, Element, ItemAttr, Item]);
       end;
     end;
@@ -3578,7 +3396,7 @@ begin
   begin
     XMLDisplayName := GetXmlDisplayName;
     Result := Result +
-      Format(' onFocus=''if(%s)%s.xfocus(this);''', [sXMLReadyVar, XMLDisplayName]);
+      Format(' onFocus=''if(%s)%s.xfocus(this);''', [sXMLReadyVar, XMLDisplayName]);  {do not localize}
   end;
 end;
 
@@ -3586,7 +3404,7 @@ function TWebRadioGroupInput.ImplGetRowSetFieldAttributes(
   const FieldVarName: string): string;
 begin
   if ReadOnly then
-    Result := Format('%s.readonly=true;', [FieldVarName])
+    Result := Format('%s.readonly=true;', [FieldVarName])  {do not localize}
   else
     Result := '';
 end;
@@ -3608,17 +3426,17 @@ begin
   begin
     XMLDisplayName := GetXmlDisplayName;
     Result := Result +
-      Format(' onFocus=''if(%s)%s.xfocus(this);''', [sXMLReadyVar, XMLDisplayName]);
+      Format(' onFocus=''if(%s)%s.xfocus(this);''', [sXMLReadyVar, XMLDisplayName]);  {do not localize}
   end;
 end;
 
 procedure TWebSelectOptionsInput.AddAttributes(var Attrs: string);
 begin
-  AddQuotedAttrib(Attrs, 'NAME', GetHTMLControlName);
-  AddIntAttrib(Attrs, 'SIZE', DisplayRows);
-  AddIntAttrib(Attrs, 'TABINDEX', TabIndex);
-  AddQuotedAttrib(Attrs, 'STYLE', Style);
-  AddQuotedAttrib(Attrs, 'CLASS', StyleRule);
+  AddQuotedAttrib(Attrs, sNameAttr, GetHTMLControlName);
+  AddIntAttrib(Attrs, sSizeAttr, DisplayRows);
+  AddIntAttrib(Attrs, sTabIndexAttr, TabIndex);
+  AddQuotedAttrib(Attrs, sStyleAttr, Style);
+  AddQuotedAttrib(Attrs, sClassAttr, StyleRule);
   AddCustomAttrib(Attrs, Custom);
 end;
 
@@ -3640,7 +3458,7 @@ begin
   AddAttributes(Attrs);
   if (not (coNoScript in Options.Flags)) then
     Events := EventContent(Options);
-  Result := Format('<SELECT%0:s%1:s>'#13#10, [Attrs, Events]);
+  Result := Format('<select%0:s%1:s>'#13#10, [Attrs, Events]);  {do not localize}
   SelectIndex := GetSelectIndex(ItemsStrings, ValuesStrings);
   for Index := 0 to ItemsStrings.Count - 1 do
   begin
@@ -3651,13 +3469,13 @@ begin
     else
       Value := Item;
     OptionAttr := '';
-    AddQuotedAttrib(OptionAttr, 'VALUE', Value);
-    AddBoolAttrib(OptionAttr, 'SELECTED', Index = SelectIndex);
+    AddQuotedAttrib(OptionAttr, sValueAttr, Value);
+    AddBoolAttrib(OptionAttr, sSelectedAttr, Index = SelectIndex);
 
-    Result := Format('%0:s <OPTION%1:s>%2:s'#13#10,
+    Result := Format('%0:s <option%1:s>%2:s'#13#10,  {do not localize}
       [Result, OptionAttr, Item]);
   end;
-  Result := Format('%0:s</SELECT>'#13#10, [Result]);
+  Result := Format('%0:s</select>'#13#10, [Result]);  {do not localize}
 end;
 
 { TDataSetPostButton }
@@ -3666,7 +3484,7 @@ constructor TPostButton.Create(AOwner: TComponent);
 begin
   inherited;
   DefaultCaption := sPostButton;
-  XMLMethodName := 'post';
+  XMLMethodName := 'post';  {do not localize}
 end;
 
 { TCustomQueryForm }
@@ -3681,14 +3499,14 @@ function TCustomQueryForm.GetHTMLFormTag(Options: TWebContentOptions): string;
 var
   Attribs: string;
 begin
-  AddStringAttrib(Attribs, 'NAME', GetHTMLFormName);
-  AddQuotedAttrib(Attribs, 'STYLE', Style);
-  AddQuotedAttrib(Attribs, 'CLASS', StyleRule);
-  AddQuotedAttrib(Attribs, 'ACTION', Action);
-  AddStringAttrib(Attribs, 'METHOD', MethodString);
+  AddStringAttrib(Attribs, sNameAttr, GetHTMLFormName);
+  AddQuotedAttrib(Attribs, sStyleAttr, Style);
+  AddQuotedAttrib(Attribs, sClassAttr, StyleRule);
+  AddQuotedAttrib(Attribs, sActionAttr, Action);
+  AddStringAttrib(Attribs, sMethodAttr, MethodString);
   AddCustomAttrib(Attribs, Custom);
   Result :=
-    Format(#13#10'<FORM%0:s>', [Attribs]);
+    Format(#13#10'<form%0:s>', [Attribs]);  {do not localize}
 end;
 
 function TCustomQueryForm.MethodString: string;
@@ -3740,7 +3558,7 @@ constructor TSubmitQueryButton.Create(AOwner: TComponent);
 begin
   inherited;
   DefaultCaption := sSubmitQuery;
-  InputType := 'BUTTON';
+  InputType := 'BUTTON';  {do not localize}
 end;
 
 function TSubmitQueryButton.EventContent(
@@ -3753,7 +3571,7 @@ begin
   if Assigned(HTMLForm) then
     HTMLFormVarName := HTMLForm.HTMLFormVarName;
   Result :=
-    Format(' onclick=''%0:s.submit();''',
+    Format(' onclick=''%0:s.submit();''',  {do not localize}
       [HTMLFormVarName]);
 end;
 
@@ -3763,7 +3581,7 @@ constructor TResetQueryButton.Create(AOwner: TComponent);
 begin
   inherited;
   DefaultCaption := sResetQuery;
-  InputType := 'BUTTON';
+  InputType := 'BUTTON';  {do not localize}
 end;
 
 function TResetQueryButton.EventContent(
@@ -3776,7 +3594,7 @@ begin
   if Assigned(HTMLForm) then
     HTMLFormVarName := HTMLForm.HTMLFormVarName;
   Result :=
-    Format(' onclick=''%0:s.reset();''',
+    Format(' onclick=''%0:s.reset();''', {do not localize}
       [HTMLFormVarName]);
 end;
 
@@ -3804,14 +3622,14 @@ begin
   if not (coNoScript in Options.Flags) then
     Events := EventContent(Options);
 
-  //AddStringAttrib(Attribs, 'NAME', GetHTMLControlName);
-  AddStringAttrib(Attribs, 'TYPE', GetInputType);
-  AddQuotedAttrib(Attribs, 'VALUE', Self.Caption);
-  AddQuotedAttrib(Attribs, 'STYLE', Style);
-  AddQuotedAttrib(Attribs, 'CLASS', StyleRule);
+  //AddStringAttrib(Attribs, sNameAttr, GetHTMLControlName);
+  AddStringAttrib(Attribs, sTypeAttr, GetInputType);
+  AddQuotedAttrib(Attribs, sValueAttr, Self.Caption);
+  AddQuotedAttrib(Attribs, sStyleAttr, Style);
+  AddQuotedAttrib(Attribs, sClassAttr, StyleRule);
   AddCustomAttrib(Attribs, Custom);
   Result :=
-    Format('<INPUT%0:s%1:s>'#13#10,
+    Format('<input%0:s%1:s>'#13#10,  {do not localize}
       [Attribs, Events]);
   if Assigned(ParentLayout) and ParentLayout.GetInterface(ILayoutWebContent, Intf) then
     Result := Intf.LayoutButton(Result, GetLayoutAttributes);
@@ -3896,7 +3714,7 @@ begin
   if not Assigned(DefaultWebComponents) then
   begin
     DefaultWebComponents := TWebComponentList.Create(Self);
-    CreateDefaultButtonClasses(DefaultQueryButtons, FWebComponents);
+    CreateDefaultButtonClasses(DefaultQueryButtons, GetWebComponents);
   end;
 end;
 
@@ -3926,11 +3744,11 @@ begin
   Result := '';
   ButtonsLayout := TFormLayout.Create(ParentLayout);
   try
-    // AddStringAttrib(Attribs, 'NAME', Name);
-    AddQuotedAttrib(Attribs, 'STYLE', Style);
-    AddQuotedAttrib(Attribs, 'CLASS', StyleRule);
+    // AddStringAttrib(Attribs, sNameAttr, Name);
+    AddQuotedAttrib(Attribs, sStyleAttr, Style);
+    AddQuotedAttrib(Attribs, sClassAttr, StyleRule);
     AddCustomAttrib(Attribs, Custom);
-    ButtonsLayout.FTableHeader := Format(#13#10'<TABLE%s>', [Attribs]);
+    ButtonsLayout.FTableHeader := Format(#13#10'<table%s>', [Attribs]);  {do not localize}
     for I := 0 to VisibleButtons.Count - 1 do
     begin
       Button := VisibleButtons.WebComponents[I];
@@ -4015,14 +3833,14 @@ var
   Attrs: string;
   Events: string;
 begin
-  AddQuotedAttrib(Attrs, 'NAME', GetHTMLControlName);
-  AddIntAttrib(Attrs, 'SIZE', DisplayWidth);
-  AddQuotedAttrib(Attrs, 'STYLE', Style);
-  AddQuotedAttrib(Attrs, 'CLASS', StyleRule);
+  AddQuotedAttrib(Attrs, sNameAttr, GetHTMLControlName);
+  AddIntAttrib(Attrs, sSizeAttr, DisplayWidth);
+  AddQuotedAttrib(Attrs, sStyleAttr, Style);
+  AddQuotedAttrib(Attrs, sClassAttr, StyleRule);
   AddCustomAttrib(Attrs, Custom);
   if (not (coNoScript in Options.Flags)) then
     Events := EventContent(Options);
-  Result := Format('<INPUT TYPE=TEXT%0:s%1:s>', [Attrs, Events]);
+  Result := Format('<input type=TEXT%0:s%1:s>', [Attrs, Events]);  {do not localize}
 end;
 
 constructor TWebStatus.Create(AOwner: TComponent);
@@ -4056,135 +3874,13 @@ end;
 constructor TWebControlGroup.Create(AOwner: TComponent);
 begin
   inherited;
-  FWebComponents := TWebComponentList.Create(Self);
-  FDefaultField := False;
+  GetWebComponents.OnChange := ChangeFieldControls;
 end;
 
 destructor TWebControlGroup.Destroy;
 begin
   inherited;
-  if FContainer <> nil then
-    FContainer.Remove(Self);
-  FWebComponents.Free;
   FDefaultWebComponents.Free;
-end;
-
-function TWebControlGroup.GetIndex: Integer;
-begin
-  Result := FContainer.IndexOf(Self);
-end;
-
-procedure TWebControlGroup.SetContainer(Container: TWebComponentContainer);
-begin
-  SetWebParent((Container as TWebComponentList).ParentComponent);
-end;
-
-procedure TWebControlGroup.SetIndex(Value: Integer);
-begin
-  FContainer.SetComponentIndex(Self, Value)
-end;
-
-function TWebControlGroup.GetParentComponent: TComponent;
-begin
-  if Assigned(FWebParent) then
-    Result := FWebParent
-  else
-    Result := inherited GetParentComponent;
-end;
-
-function TWebControlGroup.HasParent: Boolean;
-begin
-  if Assigned(FWebParent) then
-    Result := True
-  else
-    Result := inherited HasParent;
-end;
-
-procedure TWebControlGroup.ReadState(Reader: TReader);
-begin
-  inherited ReadState(Reader);
-  SetWebParent(Reader.Parent);
-end;
-
-procedure TWebControlGroup.SetParentComponent(AParent: TComponent);
-begin
-  if not (csLoading in ComponentState) then
-    SetWebParent(AParent);
-end;
-
-function TWebControlGroup.GetContainer: TWebComponentContainer;
-begin
-  Result := FContainer;
-end;
-
-procedure TWebControlGroup.SetComponentList(List: TObject);
-begin
-  Assert((List = nil) or (List is TWebComponentList));
-  FContainer := TWebComponentList(List);
-end;
-
-function TWebControlGroup.GetComponentList: TObject;
-begin
-  Result := FWebComponents;
-end;
-
-function TWebControlGroup.GetDefaultComponentList: TObject;
-begin
-  Result := FDefaultWebComponents;
-end;
-
-procedure TWebControlGroup.SetWebParent(const Value: TComponent);
-var
-  List: IGetWebComponentList;
-begin
-  if Value <> FWebParent then
-  begin
-    if Assigned(Value) and (csDesigning in ComponentState) then
-      ValidateWebParent(Self, Value);
-    if FWebParent <> nil then
-    begin
-      FWebParent.GetInterface(IGetWebComponentList, List);
-      if FDefaultField then
-        (List.GetDefaultComponentList as TWebComponentList).Remove(Self)
-      else
-        (List.GetComponentList as TWebComponentList).Remove(Self)
-    end;
-    if Value <> nil then
-    begin
-      Value.GetInterface(IGetWebComponentList, List);
-      if FDefaultField then
-        (List.GetDefaultComponentList as TWebComponentList).Add(Self)
-      else
-        (List.GetComponentList as TWebComponentList).Add(Self)
-    end;
-    FWebParent := Value;
-  end;
-end;
-
-procedure TWebControlGroup.GetChildren(Proc: TGetChildProc;
-  Root: TComponent);
-var
-  I: Integer;
-  WebComponent: TComponent;
-begin
-  for I := 0 to FWebComponents.Count - 1 do
-  begin
-    WebComponent := FWebComponents.WebComponents[I];
-    if WebComponent.Owner = Root then Proc(WebComponent);
-  end;
-end;
-
-
-procedure TWebControlGroup.SetChildOrder(Component: TComponent;
-  Order: Integer);
-var
-  Intf: IWebComponent;
-begin
-  if FWebComponents.IndexOf(Component) >= 0 then
-    if Component.GetInterface(IWebComponent, Intf) then
-      Intf.Index := Order
-    else
-      Assert(False, 'Interface not supported');
 end;
 
 procedure TWebControlGroup.AddElements(AddIntf: IAddScriptElements);
@@ -4236,6 +3932,24 @@ begin
   Result := WebFieldControls;
 end;
 
+function TWebControlGroup.GetDefaultWebComponents: TWebComponentList;
+begin
+  Result := FDefaultWebComponents;
+end;
+
+procedure TWebControlGroup.SetDefaultWebComponents(
+  Value: TWebComponentList);
+begin
+  FDefaultWebComponents := Value;
+end;
+
+procedure TWebControlGroup.ChangeFieldControls(Sender: TObject);
+begin
+  if WebFieldControls.Count > 0 then
+    if Assigned(DefaultWebComponents) then
+      FreeAndNil(FDefaultWebComponents);
+end;
+
 { TXMLDisplayGroup }
 
 constructor TXMLDisplayGroup.Create(AComponent: TComponent);
@@ -4266,15 +3980,15 @@ begin
     XMLDataSet.Notification(AComponent, Operation);
 end;
 
-function TXMLDisplayGroup.GetXmlDisplayName: string;
+function TXMLDisplayGroup.GetXMLDisplayName: string;
 begin
   Result := Format(ScriptXMLDisplayName, [Self.Name]);
 end;
 
 function TXMLDisplayGroup.GetVisibleFields: TWebComponentList;
 begin
-  if FWebComponents.Count > 0 then
-    Result := FWebComponents
+  if GetWebComponents.Count > 0 then
+    Result := GetWebComponents
   else
   begin
     if Assigned(FDefaultWebComponents) and
@@ -4288,7 +4002,7 @@ end;
 
 procedure TXMLDisplayGroup.CreateDefaultFields;
 var
-  DataSet: IMidasWebDataSet;
+  DataSet: IInetXWebDataSet;
   WebComponent: IWebComponent;
   DataSetField: IDataSetField;
   FieldControl: TComponent;
@@ -4326,18 +4040,18 @@ var
   I: Integer;
   DataSetField: IDataSetField;
 begin
-  for I := 0 to FWebComponents.Count - 1 do
+  for I := 0 to GetWebComponents.Count - 1 do
   begin
-    if FWebComponents.WebComponents[I].GetInterface(IDataSetField, DataSetField) then
+    if GetWebComponents.WebComponents[I].GetInterface(IDataSetField, DataSetField) then
     begin
-      Result := FWebComponents.WebComponents[I];
+      Result := GetWebComponents.WebComponents[I];
       if AnsiCompareText(DataSetField.FieldName, AName) = 0 then Exit;
     end;
   end;
   Result := nil;
 end;
 
-function TXMLDisplayGroup.GetDataSet: IMidasWebDataSet;
+function TXMLDisplayGroup.GetDataSet: IInetXWebDataSet;
 begin
   Result := XMLDataSet.DataSet;
 end;
@@ -4345,7 +4059,7 @@ end;
 procedure TXMLDisplayGroup.GetFieldsList(List: TStrings);
 var
   I: Integer;
-  DataSet: IMidasWebDataSet;
+  DataSet: IInetXWebDataSet;
   TextClass: TWebDataInputClass;
   StatusClass: TWebStatusClass;
 begin
@@ -4506,15 +4220,15 @@ function TCustomDataGrid.FormatTable(Layout: TLayoutWebContent;
     with TableAttributes do
     begin
       Attribs := Attribs + HTMLAlign[Align];
-      AddIntAttrib(Attribs, 'CELLSPACING', CellSpacing);
-      AddIntAttrib(Attribs, 'CELLPADDING', CellPadding);
-      AddIntAttrib(Attribs, 'BORDER', Border);
-      AddStringAttrib(Attribs, 'BGCOLOR', BgColor);
-      AddQuotedAttrib(Attribs, 'STYLE', Style);
-      AddQuotedAttrib(Attribs, 'CLASS', StyleRule);
+      AddIntAttrib(Attribs, sCellSpacingAttr, CellSpacing);
+      AddIntAttrib(Attribs, sCellPaddingAttr, CellPadding);
+      AddIntAttrib(Attribs, sBorderAttr, Border);
+      AddStringAttrib(Attribs, sBgColorAttr, BgColor);
+      AddQuotedAttrib(Attribs, sStyleAttr, Style);
+      AddQuotedAttrib(Attribs, sClassAttr, StyleRule);
       AddCustomAttrib(Attribs, Custom);
     end;
-    Result := Format(#13#10'<TABLE%s>', [Attribs]);
+    Result := Format(#13#10'<table%s>', [Attribs]);  {do not localize}
   end;
 
   function RowHeader(HeadingAttributes: TGridRowAttributes): string;
@@ -4525,45 +4239,50 @@ function TCustomDataGrid.FormatTable(Layout: TLayoutWebContent;
     begin
       Attribs := Attribs + HTMLAlign[Align];
       Attribs := Attribs + HTMLVAlign[VAlign];
-      AddQuotedAttrib(Attribs, 'BGCOLOR', BgColor);
-      AddQuotedAttrib(Attribs, 'STYLE', Style);
-      AddQuotedAttrib(Attribs, 'CLASS', StyleRule);
+      AddQuotedAttrib(Attribs, sBgColorAttr, BgColor);
+      AddQuotedAttrib(Attribs, sStyleAttr, Style);
+      AddQuotedAttrib(Attribs, sClassAttr, StyleRule);
       AddCustomAttrib(Attribs, Custom);
     end;
-    Result := Format('<TR%s>', [Attribs]);
+    Result := Format('<tr%s>', [Attribs]);  {do not localize}
   end;
 
 var
   I: Integer;
   OneRow: string;
-  Field: TWebDataDisplay;
+  Field: TComponent;
   RowHeaderStr: string;
   FormatColumn: IFormatColumn;
+  WebContent: IWebContent;
+  FieldContent: string;
 begin
   Result := TableHeader + RowHeader(HeadingAttributes) + #13#10;
   for I := 0 to VisibleFields.Count - 1 do
   begin
-    if VisibleFields[I] is TWebDataDisplay then
+    Field := TWebDataDisplay(VisibleFields[I]);
+    if Field.GetInterface(IWebContent, WebContent) then
+      FieldContent := WebContent.Content(Options, Layout)
+    else
+      FieldContent := '';
+    if Field.GetInterface(IFormatColumn, FormatColumn) then
     begin
-      Field := TWebDataDisplay(VisibleFields[I]);
-      if Field.GetInterface(IFormatColumn, FormatColumn) then
-      begin
-        Result := Result + FormatColumn.FormatColumnHeading;
-        OneRow := OneRow + FormatColumn.FormatColumnData(Field.Content(Options, Layout));
-      end
-      else
-      begin
-        // Default formatting
-        Result := Result + FormatColumnHeading(Field);
-        OneRow := OneRow + FormatColumnData(Field, Field.Content(Options, Layout));
-      end;
-    end;
+      Result := Result + FormatColumn.FormatColumnHeading(Options);
+      OneRow := OneRow + FormatColumn.FormatColumnData(FieldContent, Options);
+    end
+    else if Field is TWebDataDisplay then
+    begin
+      // Default formatting
+      Result := Result + FormatColumnHeading(TWebDataDisplay(Field));
+      OneRow := OneRow + FormatColumnData(TWebDataDisplay(Field), FieldContent);
+    end
+    else
+      Assert(False, 'Do not know how to format column');
   end;
-  Result := Result + '</TR>';
+  Result := Result + '</tr>';  {do not localize}
   RowHeaderStr := RowHeader(RowAttributes);
   for I := 0 to DisplayRows - 1 do
-    Result := Format('%0:s%1:s%2:s</TR>'#13#10, [Result, RowHeaderStr, OneRow]);
-  Result := Result + '</TABLE>';
+    Result := Format('%0:s%1:s%2:s</tr>'#13#10, [Result, RowHeaderStr, OneRow]);  {do not localize}
+  Result := Result + '</table>';  {do not localize}
 end;
 
 function TCustomDataGrid.ImplContent(Options: TWebContentOptions; ParentLayout: TLayout): string;
@@ -4748,7 +4467,7 @@ begin
   Result := FDataSetPath;
 end;
 
-function TXMLDataSet.CreateDataSet: IMidasWebDataSet;
+function TXMLDataSet.CreateDataSet: IInetXWebDataSet;
 var
   Wrapper: TDataSetWrapper;
   Field: TField;
@@ -4756,7 +4475,7 @@ var
   FieldName: string;
   ProvComp: TComponent;
 begin
-  Wrapper := nil; 
+  Wrapper := nil;
   if Assigned(XMLBroker) and not (csDesigning in XMLBroker.ComponentState) then
     XMLBroker.Connected := True;
   if Assigned(XMLBroker) and (XMLBroker.Connected) then
@@ -4793,12 +4512,13 @@ begin
     except
       Wrapper.Free;
       Wrapper := nil;
-      Application.HandleException(Self);
+      if Assigned(ApplicationHandleException) then
+        ApplicationHandleException(Self);
     end;
   end;
   if Assigned(Wrapper) then
   begin
-    Result := Wrapper as IMidasWebDataSet;
+    Result := Wrapper as IInetXWebDataSet;
     Result.AddOnDataChange(WrapperDataChange);
   end
   else
@@ -4815,7 +4535,7 @@ begin
   Changed;
 end;
 
-function TXMLDataSet.FindDataSet: IMidasWebDataSet;
+function TXMLDataSet.FindDataSet: IInetXWebDataSet;
 var
   I: Integer;
   XMLDataSet: TXMLDataSet;
@@ -4830,7 +4550,7 @@ begin
   Result := nil;
 end;
 
-function TXMLDataSet.GetDataSet: IMidasWebDataSet;
+function TXMLDataSet.GetDataSet: IInetXWebDataSet;
 begin
   if not Assigned(FDataSet) then
   begin
@@ -5026,14 +4746,14 @@ function TXMLDataParent.ParentXMLBroker: TXMLBroker;
 var
   Component, XMLDisplay: TComponent;
   DataSetComponent: IDataSetComponent;
-  XMLDisplayReference: IXMLDisplayReference;
+  XMLDisplayReference: IWebDisplayReference;
 begin
   Component := Parent.GetParentComponent;
   while Assigned(Component) do
   begin
-    if Component.GetInterface(IXMLDisplayReference, XMLDisplayReference) then
+    if Component.GetInterface(IWebDisplayReference, XMLDisplayReference) then
     begin
-      XMLDisplay := XMLDisplayReference.XMLDisplayComponent;
+      XMLDisplay := XMLDisplayReference.WebDisplayComponent;
       if Assigned(XMLDisplay) and
         XMLDisplay.GetInterface(IDataSetComponent, DataSetComponent) then
       begin
@@ -5060,37 +4780,37 @@ begin
     Result := ParentXMLBroker;
 end;
 
-{ TXMLDisplay }
+{ TWebDisplay }
 
-procedure TXMLDisplay.Changed;
+procedure TWebDisplay.Changed;
 begin
   if Assigned(FOnChange) then FOnChange(Self);
 end;
 
-procedure TXMLDisplay.ChangedDisplayComponent;
+procedure TWebDisplay.ChangedDisplayComponent;
 begin
   Changed;
 end;
 
-constructor TXMLDisplay.Create(AParent: TComponent);
+constructor TWebDisplay.Create(AParent: TComponent);
 begin
   inherited Create;
   FParent := AParent;
 end;
 
-function TXMLDisplay.GetDisplayComponent: TComponent;
+function TWebDisplay.GetDisplayComponent: TComponent;
 begin
   Result := FDisplayComponent;
 end;
 
-procedure TXMLDisplay.Notification(AComponent: TComponent;
+procedure TWebDisplay.Notification(AComponent: TComponent;
   Operation: TOperation);
 begin
   if (Operation = opRemove) and (AComponent = FDisplayComponent) then
     DisplayComponent := nil;
 end;
 
-procedure TXMLDisplay.SetDisplayComponent(const Value: TComponent);
+procedure TWebDisplay.SetDisplayComponent(const Value: TComponent);
 begin
   if FDisplayComponent <> Value then
   begin
@@ -5124,7 +4844,7 @@ end;
 
 function TXMLDisplayParent.GetDisplayComponent: TComponent;
 var
-  Intf: IXMLDisplayReference;
+  Intf: IWebDisplayReference;
   Reference: TComponent;
 begin
   if not UseParent then
@@ -5134,9 +4854,9 @@ begin
     Reference := Parent;
     while Assigned(Reference) do
     begin
-      if Reference.GetInterface(IXMLDisplayReference, Intf) then
+      if Reference.GetInterface(IWebDisplayReference, Intf) then
       begin
-        Result := Intf.XMLDisplayComponent;
+        Result := Intf.WebDisplayComponent;
         Exit;
       end;
       Reference := Reference.GetParentComponent;
@@ -5182,7 +4902,7 @@ begin
         FormatField(VisibleFields[I]);
     end;
     Result := Result + FormLayout.EndLayout;
-    Result := Result + '</FORM>';
+    Result := Result + '</form>';  {do not localize}
     if Assigned(ParentLayout) and ParentLayout.GetInterface(ILayoutWebContent, Intf) then
       Result := Intf.LayoutField(Result, GetLayoutAttributes)
   finally
@@ -5247,11 +4967,11 @@ begin
   Result := '';
   FormLayout := TFormLayout.Create(ParentLayout);
   try
-    // AddStringAttrib(Attribs, 'NAME', Name);
-    AddQuotedAttrib(Attribs, 'STYLE', Style);
-    AddQuotedAttrib(Attribs, 'CLASS', StyleRule);
+    // AddStringAttrib(Attribs, sNameAttr, Name);
+    AddQuotedAttrib(Attribs, sStyleAttr, Style);
+    AddQuotedAttrib(Attribs, sClassAttr, StyleRule);
     AddCustomAttrib(Attribs, Custom);
-    FormLayout.TableHeader := Format(#13#10'<TABLE%s>', [Attribs]);
+    FormLayout.TableHeader := Format(#13#10'<table%s>', [Attribs]);  {do not localize}
     for I := 0 to VisibleFields.Count - 1 do
     begin
       Result := Result +
@@ -5293,9 +5013,9 @@ end;
 procedure TQueryText.AddAttributes(var Attrs: string);
 begin
   Inherited;
-  AddQuotedAttrib(Attrs, 'VALUE', Text);
-  AddBoolAttrib(Attrs, 'READONLY', ReadOnly);
-  AddIntAttrib(Attrs, 'MAXLENGTH', MaxWidth);
+  AddQuotedAttrib(Attrs, sValueAttr, Text);
+  AddBoolAttrib(Attrs, sReadOnlyAttr, ReadOnly);
+  AddIntAttrib(Attrs, sMaxLengthAttr, MaxWidth);
 end;
 
 constructor TQueryText.Create(AOwner: TComponent);
@@ -5324,7 +5044,7 @@ end;
 procedure TQueryTextArea.AddAttributes(var Attrs: string);
 begin
   inherited;
-  AddBoolAttrib(Attrs, 'READONLY', ReadOnly);
+  AddBoolAttrib(Attrs, 'READONLY', ReadOnly);  {do not localize}
 end;
 
 function TQueryTextArea.ControlContent(
@@ -5336,7 +5056,7 @@ begin
   AddAttributes(Attrs);
   if (not (coNoScript in Options.Flags)) then
     Events := EventContent(Options);
-  Result := Format('<TEXTAREA%0:s%1:s>%2:s</TEXTAREA>', [Attrs, Events, Lines.Text]);
+  Result := Format('<textarea%0:s%1:s>%2:s</textarea>', [Attrs, Events, Lines.Text]);  {do not localize}
 end;
 
 constructor TQueryTextArea.Create(AOwner: TComponent);
@@ -5376,7 +5096,7 @@ end;
 procedure TQueryRadioGroup.AddAttributes(var Attrs: string);
 begin
   inherited;
-  AddBoolAttrib(Attrs, 'READONLY', ReadOnly);
+  AddBoolAttrib(Attrs, 'READONLY', ReadOnly);  {do not localize}
 end;
 
 function TQueryRadioGroup.GetCheckIndex(ItemsStrings,
@@ -5476,11 +5196,6 @@ var
       Result := '';
   end;
 
-  function Min(X, Y: Integer): Integer;
-  begin
-    Result := X;
-    if X > Y then Result := Y;
-  end;
 var
   I: Integer;
   Intf: ILayoutWebContent;
@@ -5491,9 +5206,9 @@ begin
     Exit;
   FormLayout := TFormLayout.Create(ParentLayout);
   try
-    // AddStringAttrib(Attribs, 'NAME', Name);
-    AddQuotedAttrib(Attribs, 'STYLE', Style);
-    AddQuotedAttrib(Attribs, 'CLASS', StyleRule);
+    // AddStringAttrib(Attribs, sNameAttr, Name);
+    AddQuotedAttrib(Attribs, sStyleAttr, Style);
+    AddQuotedAttrib(Attribs, sClassAttr, StyleRule);
     AddCustomAttrib(Attribs, Custom);
 
     if DisplayColumns >= 1 then
@@ -5502,9 +5217,12 @@ begin
       FormLayout.BreakButtons := True;
     end;
     FormLayout.TableHeader :=
-      Format(#13#10'<TABLE%s>', [Attribs]);
+      Format(#13#10'<table%s>', [Attribs]);  {do not localize}
     for I := 0 to WebFieldControls.Count - 1 do
     begin
+      if I = WebFieldControls.Count - 1 then
+        if WebFieldControls.Count mod FormLayout.ColumnCount = 1 then
+          FormLayout.FSpanAll := True;
       Result := Result +
         FormatField(WebFieldControls[I]);
     end;
@@ -5528,8 +5246,8 @@ begin
   with FLayoutAttributes do
   begin
     ControlAttributes := '';
-    AddQuotedAttrib(ControlAttributes, 'STYLE', Style);
-    AddQuotedAttrib(ControlAttributes, 'CLASS', StyleRule);
+    AddQuotedAttrib(ControlAttributes, sStyleAttr, Style);
+    AddQuotedAttrib(ControlAttributes, sClassAttr, StyleRule);
     AddCustomAttrib(ControlAttributes, Custom);
   end;
   Result := FLayoutAttributes;
@@ -5555,11 +5273,11 @@ var
   I: Integer;
   QueryField: IQueryField;
 begin
-  for I := 0 to FWebComponents.Count - 1 do
+  for I := 0 to GetWebComponents.Count - 1 do
   begin
-    if FWebComponents.WebComponents[I].GetInterface(IQueryField, QueryField) then
+    if GetWebComponents.WebComponents[I].GetInterface(IQueryField, QueryField) then
     begin
-      Result := FWebComponents.WebComponents[I];
+      Result := GetWebComponents.WebComponents[I];
       if AnsiCompareText(QueryField.ParamName, AName) = 0 then Exit;
     end;
   end;
@@ -5605,95 +5323,16 @@ end;
 constructor TWebButton.Create(AOwner: TComponent);
 begin
   inherited;
-  FDefaultButton := AOwner = nil;
 end;
 
 destructor TWebButton.Destroy;
 begin
   inherited;
-  if FWebButtonsList <> nil then
-    FWebButtonsList.Remove(Self);
 end;
 
-function TWebButton.GetContainer: TWebComponentContainer;
+function TWebButton.IsCaptionStored: Boolean;
 begin
-  Result := FWebButtonsList;
-end;
-
-function TWebButton.GetIndex: Integer;
-begin
-  Result := FWebButtonsList.IndexOf(Self);
-end;
-
-function TWebButton.GetParentComponent: TComponent;
-begin
-  if FWebParent <> nil then
-    Result := FWebParent else
-    Result := inherited GetParentComponent;
-end;
-
-function TWebButton.HasParent: Boolean;
-begin
-  if FWebParent <> nil then
-    Result := True else
-    Result := inherited HasParent;
-end;
-
-procedure TWebButton.ReadState(Reader: TReader);
-begin
-  inherited ReadState(Reader);
-  SetWebParent(Reader.Parent);
-end;
-
-procedure TWebButton.SetComponentList(List: TObject);
-begin
-  Assert((List = nil) or (List is TWebComponentList));
-  FWebButtonsList := TWebComponentList(List);
-end;
-
-procedure TWebButton.SetIndex(Value: Integer);
-begin
-  FWebButtonsList.SetComponentIndex(Self, Value)
-end;
-
-procedure TWebButton.SetContainer(
-  Container: TWebComponentContainer);
-begin
-  SetWebParent((Container as TWebComponentList).ParentComponent);
-end;
-
-procedure TWebButton.SetParentComponent(AParent: TComponent);
-begin
-  if not (csLoading in ComponentState) then
-    SetWebParent(AParent);
-end;
-
-procedure TWebButton.SetWebParent(const Value: TComponent);
-var
-  List: IGetWebComponentList;
-begin
-  if Value <> FWebParent then
-  begin
-    if Assigned(Value) and (csDesigning in ComponentState) then
-      ValidateWebParent(Self, Value);
-    if FWebParent <> nil then
-    begin
-      FWebParent.GetInterface(IGetWebComponentList, List);
-      if FDefaultButton then
-        (List.GetDefaultComponentList as TWebComponentList).Remove(Self)
-      else
-        (List.GetComponentList as TWebComponentList).Remove(Self)
-    end;
-    if Value <> nil then
-    begin
-      Value.GetInterface(IGetWebComponentList, List);
-      if FDefaultButton then
-        (List.GetDefaultComponentList as TWebComponentList).Add(Self)
-      else
-        (List.GetComponentList as TWebComponentList).Add(Self)
-    end;
-    FWebParent := Value;
-  end;
+  Result := FCaption <> '';
 end;
 
 function TWebButton.Content(Options: TWebContentOptions; Layout: TLayout): string;
@@ -5715,11 +5354,16 @@ function TCustomFieldGroup.GetLayoutAttributes: TLayoutAttributes;
 begin
   with FLayoutAttributes do
   begin
-    AddQuotedAttrib(ControlAttributes, 'STYLE', Style);
-    AddQuotedAttrib(ControlAttributes, 'CLASS', StyleRule);
+    AddQuotedAttrib(ControlAttributes, sStyleAttr, Style);
+    AddQuotedAttrib(ControlAttributes, sClassAttr, StyleRule);
     AddCustomAttrib(ControlAttributes, Custom);
   end;
   Result := FLayoutAttributes;
+end;
+
+procedure TWebButton.SetCaption(const AValue: string);
+begin
+  FCaption := AValue;
 end;
 
 { TGridAttributes }
@@ -5783,6 +5427,11 @@ begin
     if Assigned(FOnDataChange) then
       FOnDataChange(Self);
   end;
+end;
+
+function TWebDataDisplay.IsCaptionStored: Boolean;
+begin
+  Result := FCaption <> '';
 end;
 
 initialization

@@ -1,26 +1,26 @@
-LIBRARY OLEDLG
+LIBRARY OleDlg
 EXPORTS
 
-    OleUIAddVerbMenuA                        = 'OLEDLG.DLL'.* @1 @0
-    OleUIAddVerbMenuW                        = 'OLEDLG.DLL'.*
-    OleUIBusyA                               = 'OLEDLG.DLL'.* @8 @7
-    OleUIBusyW                               = 'OLEDLG.DLL'.*
-    OleUICanConvertOrActivateAs              = 'OLEDLG.DLL'.* @2 @1
-    OleUIChangeIconA                         = 'OLEDLG.DLL'.* @6 @5
-    OleUIChangeIconW                         = 'OLEDLG.DLL'.*
-    OleUIChangeSourceA                       = 'OLEDLG.DLL'.* @12 @11
-    OleUIChangeSourceW                       = 'OLEDLG.DLL'.*
-    OleUIConvertA                            = 'OLEDLG.DLL'.* @7 @6
-    OleUIConvertW                            = 'OLEDLG.DLL'.*
-    OleUIEditLinksA                          = 'OLEDLG.DLL'.* @5 @4
-    OleUIEditLinksW                          = 'OLEDLG.DLL'.*
-    OleUIInsertObjectA                       = 'OLEDLG.DLL'.* @3 @2
-    OleUIInsertObjectW                       = 'OLEDLG.DLL'.*
-    OleUIObjectPropertiesA                   = 'OLEDLG.DLL'.* @11 @10
-    OleUIObjectPropertiesW                   = 'OLEDLG.DLL'.*
-    OleUIPasteSpecialA                       = 'OLEDLG.DLL'.* @4 @3
-    OleUIPasteSpecialW                       = 'OLEDLG.DLL'.*
-    _OleUIPromptUserA                        = 'OLEDLG.DLL'.* @10 @9
-    _OleUIPromptUserW                        = 'OLEDLG.DLL'.OleUIPromptUserW
-    OleUIUpdateLinksA                        = 'OLEDLG.DLL'.* @9 @8
-    OleUIUpdateLinksW                        = 'OLEDLG.DLL'.*
+    OleUIAddVerbMenuA        @1
+    OleUIAddVerbMenuW
+    OleUIBusyA        @8
+    OleUIBusyW
+    OleUICanConvertOrActivateAs        @2
+    OleUIChangeIconA        @6
+    OleUIChangeIconW
+    OleUIChangeSourceA        @12
+    OleUIChangeSourceW
+    OleUIConvertA        @7
+    OleUIConvertW
+    OleUIEditLinksA        @5
+    OleUIEditLinksW
+    OleUIInsertObjectA        @3
+    OleUIInsertObjectW
+    OleUIObjectPropertiesA        @11
+    OleUIObjectPropertiesW
+    OleUIPasteSpecialA        @4
+    OleUIPasteSpecialW
+    _OleUIPromptUserA        = OleUIPromptUserA        @10
+    _OleUIPromptUserW        = OleUIPromptUserW
+    OleUIUpdateLinksA        @9
+    OleUIUpdateLinksW

@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    mqoai.h
-
-Abstract:
-
-    Master include file for MSMQ COM objects
-
---*/
-
-#ifndef __MQOAI_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
-#define __MQOAI_H__
-
-#if _MSC_VER > 1000
-#pragma once
-#endif
-
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Wed Aug 18 12:56:35 1999
- */
-/* Compiler settings for D:\MSMQ\src\activex\mqoa\mqoa.odl:
-    Os (OptLev=s), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+ /* File created by MIDL compiler version 6.00.0347 */
+/* Compiler settings for mqoai.idl:
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -41,14 +18,23 @@ Abstract:
 
 /* verify that the <rpcndr.h> version is high enough to compile this file*/
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
-#define __REQUIRED_RPCNDR_H_VERSION__ 440
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
 
 #include "rpc.h"
 #include "rpcndr.h"
 
-#ifndef ___mqoai_h__
-#define ___mqoai_h__
+#ifndef __RPCNDR_H_VERSION__
+#error this stub requires an updated version of <rpcndr.h>
+#endif // __RPCNDR_H_VERSION__
+
+
+#ifndef __mqoai_h__
+#define __mqoai_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -68,6 +54,12 @@ typedef interface IMSMQQueueInfo IMSMQQueueInfo;
 #define __IMSMQQueueInfo2_FWD_DEFINED__
 typedef interface IMSMQQueueInfo2 IMSMQQueueInfo2;
 #endif 	/* __IMSMQQueueInfo2_FWD_DEFINED__ */
+
+
+#ifndef __IMSMQQueueInfo3_FWD_DEFINED__
+#define __IMSMQQueueInfo3_FWD_DEFINED__
+typedef interface IMSMQQueueInfo3 IMSMQQueueInfo3;
+#endif 	/* __IMSMQQueueInfo3_FWD_DEFINED__ */
 
 
 #ifndef __IMSMQQueue_FWD_DEFINED__
@@ -100,6 +92,12 @@ typedef interface IMSMQQueueInfos2 IMSMQQueueInfos2;
 #endif 	/* __IMSMQQueueInfos2_FWD_DEFINED__ */
 
 
+#ifndef __IMSMQQueueInfos3_FWD_DEFINED__
+#define __IMSMQQueueInfos3_FWD_DEFINED__
+typedef interface IMSMQQueueInfos3 IMSMQQueueInfos3;
+#endif 	/* __IMSMQQueueInfos3_FWD_DEFINED__ */
+
+
 #ifndef __IMSMQEvent_FWD_DEFINED__
 #define __IMSMQEvent_FWD_DEFINED__
 typedef interface IMSMQEvent IMSMQEvent;
@@ -110,6 +108,12 @@ typedef interface IMSMQEvent IMSMQEvent;
 #define __IMSMQEvent2_FWD_DEFINED__
 typedef interface IMSMQEvent2 IMSMQEvent2;
 #endif 	/* __IMSMQEvent2_FWD_DEFINED__ */
+
+
+#ifndef __IMSMQEvent3_FWD_DEFINED__
+#define __IMSMQEvent3_FWD_DEFINED__
+typedef interface IMSMQEvent3 IMSMQEvent3;
+#endif 	/* __IMSMQEvent3_FWD_DEFINED__ */
 
 
 #ifndef __IMSMQTransaction_FWD_DEFINED__
@@ -136,6 +140,12 @@ typedef interface IMSMQQuery2 IMSMQQuery2;
 #endif 	/* __IMSMQQuery2_FWD_DEFINED__ */
 
 
+#ifndef __IMSMQQuery3_FWD_DEFINED__
+#define __IMSMQQuery3_FWD_DEFINED__
+typedef interface IMSMQQuery3 IMSMQQuery3;
+#endif 	/* __IMSMQQuery3_FWD_DEFINED__ */
+
+
 #ifndef __MSMQQuery_FWD_DEFINED__
 #define __MSMQQuery_FWD_DEFINED__
 
@@ -154,6 +164,12 @@ typedef interface IMSMQMessage2 IMSMQMessage2;
 #endif 	/* __IMSMQMessage2_FWD_DEFINED__ */
 
 
+#ifndef __IMSMQMessage3_FWD_DEFINED__
+#define __IMSMQMessage3_FWD_DEFINED__
+typedef interface IMSMQMessage3 IMSMQMessage3;
+#endif 	/* __IMSMQMessage3_FWD_DEFINED__ */
+
+
 #ifndef __MSMQMessage_FWD_DEFINED__
 #define __MSMQMessage_FWD_DEFINED__
 
@@ -164,6 +180,12 @@ typedef struct MSMQMessage MSMQMessage;
 #endif /* __cplusplus */
 
 #endif 	/* __MSMQMessage_FWD_DEFINED__ */
+
+
+#ifndef __IMSMQQueue3_FWD_DEFINED__
+#define __IMSMQQueue3_FWD_DEFINED__
+typedef interface IMSMQQueue3 IMSMQQueue3;
+#endif 	/* __IMSMQQueue3_FWD_DEFINED__ */
 
 
 #ifndef __MSMQQueue_FWD_DEFINED__
@@ -232,6 +254,12 @@ typedef interface IMSMQTransaction2 IMSMQTransaction2;
 #endif 	/* __IMSMQTransaction2_FWD_DEFINED__ */
 
 
+#ifndef __IMSMQTransaction3_FWD_DEFINED__
+#define __IMSMQTransaction3_FWD_DEFINED__
+typedef interface IMSMQTransaction3 IMSMQTransaction3;
+#endif 	/* __IMSMQTransaction3_FWD_DEFINED__ */
+
+
 #ifndef __MSMQTransaction_FWD_DEFINED__
 #define __MSMQTransaction_FWD_DEFINED__
 
@@ -250,6 +278,12 @@ typedef interface IMSMQCoordinatedTransactionDispenser2 IMSMQCoordinatedTransact
 #endif 	/* __IMSMQCoordinatedTransactionDispenser2_FWD_DEFINED__ */
 
 
+#ifndef __IMSMQCoordinatedTransactionDispenser3_FWD_DEFINED__
+#define __IMSMQCoordinatedTransactionDispenser3_FWD_DEFINED__
+typedef interface IMSMQCoordinatedTransactionDispenser3 IMSMQCoordinatedTransactionDispenser3;
+#endif 	/* __IMSMQCoordinatedTransactionDispenser3_FWD_DEFINED__ */
+
+
 #ifndef __MSMQCoordinatedTransactionDispenser_FWD_DEFINED__
 #define __MSMQCoordinatedTransactionDispenser_FWD_DEFINED__
 
@@ -266,6 +300,12 @@ typedef struct MSMQCoordinatedTransactionDispenser MSMQCoordinatedTransactionDis
 #define __IMSMQTransactionDispenser2_FWD_DEFINED__
 typedef interface IMSMQTransactionDispenser2 IMSMQTransactionDispenser2;
 #endif 	/* __IMSMQTransactionDispenser2_FWD_DEFINED__ */
+
+
+#ifndef __IMSMQTransactionDispenser3_FWD_DEFINED__
+#define __IMSMQTransactionDispenser3_FWD_DEFINED__
+typedef interface IMSMQTransactionDispenser3 IMSMQTransactionDispenser3;
+#endif 	/* __IMSMQTransactionDispenser3_FWD_DEFINED__ */
 
 
 #ifndef __MSMQTransactionDispenser_FWD_DEFINED__
@@ -292,6 +332,12 @@ typedef interface IMSMQApplication2 IMSMQApplication2;
 #endif 	/* __IMSMQApplication2_FWD_DEFINED__ */
 
 
+#ifndef __IMSMQApplication3_FWD_DEFINED__
+#define __IMSMQApplication3_FWD_DEFINED__
+typedef interface IMSMQApplication3 IMSMQApplication3;
+#endif 	/* __IMSMQApplication3_FWD_DEFINED__ */
+
+
 #ifndef __MSMQApplication_FWD_DEFINED__
 #define __MSMQApplication_FWD_DEFINED__
 
@@ -304,12 +350,96 @@ typedef struct MSMQApplication MSMQApplication;
 #endif 	/* __MSMQApplication_FWD_DEFINED__ */
 
 
+#ifndef __IMSMQDestination_FWD_DEFINED__
+#define __IMSMQDestination_FWD_DEFINED__
+typedef interface IMSMQDestination IMSMQDestination;
+#endif 	/* __IMSMQDestination_FWD_DEFINED__ */
+
+
+#ifndef __IMSMQPrivateDestination_FWD_DEFINED__
+#define __IMSMQPrivateDestination_FWD_DEFINED__
+typedef interface IMSMQPrivateDestination IMSMQPrivateDestination;
+#endif 	/* __IMSMQPrivateDestination_FWD_DEFINED__ */
+
+
+#ifndef __MSMQDestination_FWD_DEFINED__
+#define __MSMQDestination_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class MSMQDestination MSMQDestination;
+#else
+typedef struct MSMQDestination MSMQDestination;
+#endif /* __cplusplus */
+
+#endif 	/* __MSMQDestination_FWD_DEFINED__ */
+
+
+#ifndef __IMSMQCollection_FWD_DEFINED__
+#define __IMSMQCollection_FWD_DEFINED__
+typedef interface IMSMQCollection IMSMQCollection;
+#endif 	/* __IMSMQCollection_FWD_DEFINED__ */
+
+
+#ifndef __IMSMQManagement_FWD_DEFINED__
+#define __IMSMQManagement_FWD_DEFINED__
+typedef interface IMSMQManagement IMSMQManagement;
+#endif 	/* __IMSMQManagement_FWD_DEFINED__ */
+
+
+#ifndef __MSMQManagement_FWD_DEFINED__
+#define __MSMQManagement_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class MSMQManagement MSMQManagement;
+#else
+typedef struct MSMQManagement MSMQManagement;
+#endif /* __cplusplus */
+
+#endif 	/* __MSMQManagement_FWD_DEFINED__ */
+
+
+#ifndef __IMSMQOutgoingQueueManagement_FWD_DEFINED__
+#define __IMSMQOutgoingQueueManagement_FWD_DEFINED__
+typedef interface IMSMQOutgoingQueueManagement IMSMQOutgoingQueueManagement;
+#endif 	/* __IMSMQOutgoingQueueManagement_FWD_DEFINED__ */
+
+
+#ifndef __MSMQOutgoingQueueManagement_FWD_DEFINED__
+#define __MSMQOutgoingQueueManagement_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class MSMQOutgoingQueueManagement MSMQOutgoingQueueManagement;
+#else
+typedef struct MSMQOutgoingQueueManagement MSMQOutgoingQueueManagement;
+#endif /* __cplusplus */
+
+#endif 	/* __MSMQOutgoingQueueManagement_FWD_DEFINED__ */
+
+
+#ifndef __IMSMQQueueManagement_FWD_DEFINED__
+#define __IMSMQQueueManagement_FWD_DEFINED__
+typedef interface IMSMQQueueManagement IMSMQQueueManagement;
+#endif 	/* __IMSMQQueueManagement_FWD_DEFINED__ */
+
+
+#ifndef __MSMQQueueManagement_FWD_DEFINED__
+#define __MSMQQueueManagement_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class MSMQQueueManagement MSMQQueueManagement;
+#else
+typedef struct MSMQQueueManagement MSMQQueueManagement;
+#endif /* __cplusplus */
+
+#endif 	/* __MSMQQueueManagement_FWD_DEFINED__ */
+
+
 #ifdef __cplusplus
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 
 #ifndef __MSMQ_LIBRARY_DEFINED__
@@ -349,12 +479,16 @@ typedef int BOOL;
 
 
 
-typedef /* [helpstringcontext] */ 
-enum _MQCALG
+
+
+
+/* [helpstringcontext] */ 
+enum MQCALG
     {	MQMSG_CALG_MD2	= 0x8000 + 0 + 1,
 	MQMSG_CALG_MD4	= 0x8000 + 0 + 2,
 	MQMSG_CALG_MD5	= 0x8000 + 0 + 3,
 	MQMSG_CALG_SHA	= 0x8000 + 0 + 4,
+	MQMSG_CALG_SHA1	= 0x8000 + 0 + 4,
 	MQMSG_CALG_MAC	= 0x8000 + 0 + 5,
 	MQMSG_CALG_RSA_SIGN	= 0x2000 + 0x400 + 0,
 	MQMSG_CALG_DSS_SIGN	= 0x2000 + 0x200 + 0,
@@ -363,18 +497,16 @@ enum _MQCALG
 	MQMSG_CALG_RC2	= 0x6000 + 0x600 + 2,
 	MQMSG_CALG_RC4	= 0x6000 + 0x800 + 1,
 	MQMSG_CALG_SEAL	= 0x6000 + 0x800 + 2
-    }	MQCALG;
-
-typedef /* [helpstringcontext] */ 
-enum _MQTRANSACTION
+    } ;
+/* [helpstringcontext] */ 
+enum MQTRANSACTION
     {	MQ_NO_TRANSACTION	= 0,
 	MQ_MTS_TRANSACTION	= 1,
 	MQ_XA_TRANSACTION	= 2,
 	MQ_SINGLE_MESSAGE	= 3
-    }	MQTRANSACTION;
-
-typedef /* [helpstringcontext] */ 
-enum _RELOPS
+    } ;
+/* [helpstringcontext] */ 
+enum RELOPS
     {	REL_NOP	= 0,
 	REL_EQ	= REL_NOP + 1,
 	REL_NEQ	= REL_EQ + 1,
@@ -382,23 +514,20 @@ enum _RELOPS
 	REL_GT	= REL_LT + 1,
 	REL_LE	= REL_GT + 1,
 	REL_GE	= REL_LE + 1
-    }	RELOPS;
-
-typedef /* [helpstringcontext] */ 
-enum _MQCERT_REGISTER
+    } ;
+/* [helpstringcontext] */ 
+enum MQCERT_REGISTER
     {	MQCERT_REGISTER_ALWAYS	= 1,
 	MQCERT_REGISTER_IF_NOT_EXIST	= 2
-    }	MQCERT_REGISTER;
-
-typedef /* [helpstringcontext] */ 
-enum _MQMSGCURSOR
+    } ;
+/* [helpstringcontext] */ 
+enum MQMSGCURSOR
     {	MQMSG_FIRST	= 0,
 	MQMSG_CURRENT	= 1,
 	MQMSG_NEXT	= 2
-    }	MQMSGCURSOR;
-
-typedef /* [helpstringcontext] */ 
-enum _MQMSGCLASS
+    } ;
+/* [helpstringcontext] */ 
+enum MQMSGCLASS
     {	MQMSG_CLASS_NORMAL	= 0 + 0 + 0,
 	MQMSG_CLASS_REPORT	= 0 + 0 + 0x1,
 	MQMSG_CLASS_ACK_REACH_QUEUE	= 0 + 0 + 0x2,
@@ -419,16 +548,14 @@ enum _MQMSGCLASS
 	MQMSG_CLASS_NACK_Q_PURGED	= 0x8000 + 0x4000 + 0x1,
 	MQMSG_CLASS_NACK_RECEIVE_TIMEOUT	= 0x8000 + 0x4000 + 0x2,
 	MQMSG_CLASS_NACK_RECEIVE_TIMEOUT_AT_SENDER	= 0x8000 + 0x4000 + 0x3
-    }	MQMSGCLASS;
-
-typedef /* [helpstringcontext] */ 
-enum _MQMSGDELIVERY
+    } ;
+/* [helpstringcontext] */ 
+enum MQMSGDELIVERY
     {	MQMSG_DELIVERY_EXPRESS	= 0,
 	MQMSG_DELIVERY_RECOVERABLE	= 1
-    }	MQMSGDELIVERY;
-
-typedef /* [helpstringcontext] */ 
-enum _MQMSGACKNOWLEDGEMENT
+    } ;
+/* [helpstringcontext] */ 
+enum MQMSGACKNOWLEDGEMENT
     {	MQMSG_ACKNOWLEDGMENT_NONE	= 0,
 	MQMSG_ACKNOWLEDGMENT_POS_ARRIVAL	= 0x1,
 	MQMSG_ACKNOWLEDGMENT_POS_RECEIVE	= 0x2,
@@ -438,105 +565,136 @@ enum _MQMSGACKNOWLEDGEMENT
 	MQMSG_ACKNOWLEDGMENT_FULL_REACH_QUEUE	= 0x4 + 0x1,
 	MQMSG_ACKNOWLEDGMENT_NACK_RECEIVE	= 0x4 + 0x8,
 	MQMSG_ACKNOWLEDGMENT_FULL_RECEIVE	= 0x4 + 0x8 + 0x2
-    }	MQMSGACKNOWLEDGEMENT;
-
-typedef /* [helpstringcontext] */ 
-enum _MQMSGJOURNAL
+    } ;
+/* [helpstringcontext] */ 
+enum MQMSGJOURNAL
     {	MQMSG_JOURNAL_NONE	= 0,
 	MQMSG_DEADLETTER	= 1,
 	MQMSG_JOURNAL	= 2
-    }	MQMSGJOURNAL;
-
-typedef /* [helpstringcontext] */ 
-enum _MQMSGTRACE
+    } ;
+/* [helpstringcontext] */ 
+enum MQMSGTRACE
     {	MQMSG_TRACE_NONE	= 0,
 	MQMSG_SEND_ROUTE_TO_REPORT_QUEUE	= 1
-    }	MQMSGTRACE;
-
-typedef /* [helpstringcontext] */ 
-enum _MQMSGSENDERIDTYPE
+    } ;
+/* [helpstringcontext] */ 
+enum MQMSGSENDERIDTYPE
     {	MQMSG_SENDERID_TYPE_NONE	= 0,
 	MQMSG_SENDERID_TYPE_SID	= 1
-    }	MQMSGSENDERIDTYPE;
-
-typedef /* [helpstringcontext] */ 
-enum _MQMSGPRIVLEVEL
+    } ;
+/* [helpstringcontext] */ 
+enum MQMSGPRIVLEVEL
     {	MQMSG_PRIV_LEVEL_NONE	= 0,
 	MQMSG_PRIV_LEVEL_BODY	= 1,
 	MQMSG_PRIV_LEVEL_BODY_BASE	= 1,
 	MQMSG_PRIV_LEVEL_BODY_ENHANCED	= 3
-    }	MQMSGPRIVLEVEL;
-
-typedef /* [helpstringcontext] */ 
-enum _MQMSGAUTHLEVEL
+    } ;
+/* [helpstringcontext] */ 
+enum MQMSGAUTHLEVEL
     {	MQMSG_AUTH_LEVEL_NONE	= 0,
-	MQMSG_AUTH_LEVEL_ALWAYS	= 1
-    }	MQMSGAUTHLEVEL;
-
-typedef /* [helpstringcontext] */ 
-enum _MQMSGIDSIZE
+	MQMSG_AUTH_LEVEL_ALWAYS	= 1,
+	MQMSG_AUTH_LEVEL_MSMQ10	= 2,
+	MQMSG_AUTH_LEVEL_SIG10	= 2,
+	MQMSG_AUTH_LEVEL_MSMQ20	= 4,
+	MQMSG_AUTH_LEVEL_SIG20	= 4,
+	MQMSG_AUTH_LEVEL_SIG30	= 8
+    } ;
+/* [helpstringcontext] */ 
+enum MQMSGIDSIZE
     {	MQMSG_MSGID_SIZE	= 20,
 	MQMSG_CORRELATIONID_SIZE	= 20,
 	MQMSG_XACTID_SIZE	= 20
-    }	MQMSGIDSIZE;
-
-typedef /* [helpstringcontext] */ 
-enum _MQMSGMAX
+    } ;
+/* [helpstringcontext] */ 
+enum MQMSGMAX
     {	MQ_MAX_MSG_LABEL_LEN	= 249
-    }	MQMSGMAX;
-
-typedef /* [helpstringcontext] */ 
-enum _MQSHARE
+    } ;
+/* [helpstringcontext] */ 
+enum MQMSGAUTHENTICATION
+    {	MQMSG_AUTHENTICATION_NOT_REQUESTED	= 0,
+	MQMSG_AUTHENTICATION_REQUESTED	= 1,
+	MQMSG_AUTHENTICATED_SIG10	= 1,
+	MQMSG_AUTHENTICATION_REQUESTED_EX	= 3,
+	MQMSG_AUTHENTICATED_SIG20	= 3,
+	MQMSG_AUTHENTICATED_SIG30	= 5,
+	MQMSG_AUTHENTICATED_SIGXML	= 9
+    } ;
+/* [helpstringcontext] */ 
+enum MQSHARE
     {	MQ_DENY_NONE	= 0,
 	MQ_DENY_RECEIVE_SHARE	= 1
-    }	MQSHARE;
-
-typedef /* [helpstringcontext] */ 
-enum _MQACCESS
+    } ;
+/* [helpstringcontext] */ 
+enum MQACCESS
     {	MQ_RECEIVE_ACCESS	= 1,
 	MQ_SEND_ACCESS	= 2,
-	MQ_PEEK_ACCESS	= 0x20
-    }	MQACCESS;
-
-typedef /* [helpstringcontext] */ 
-enum _MQJOURNAL
+	MQ_PEEK_ACCESS	= 0x20,
+	MQ_ADMIN_ACCESS	= 0x80
+    } ;
+/* [helpstringcontext] */ 
+enum MQJOURNAL
     {	MQ_JOURNAL_NONE	= 0,
 	MQ_JOURNAL	= 1
-    }	MQJOURNAL;
-
-typedef /* [helpstringcontext] */ 
-enum _MQTRANSACTIONAL
+    } ;
+/* [helpstringcontext] */ 
+enum MQTRANSACTIONAL
     {	MQ_TRANSACTIONAL_NONE	= 0,
 	MQ_TRANSACTIONAL	= 1
-    }	MQTRANSACTIONAL;
-
-typedef /* [helpstringcontext] */ 
-enum _MQAUTHENTICATE
+    } ;
+/* [helpstringcontext] */ 
+enum MQAUTHENTICATE
     {	MQ_AUTHENTICATE_NONE	= 0,
 	MQ_AUTHENTICATE	= 1
-    }	MQAUTHENTICATE;
-
-typedef /* [helpstringcontext] */ 
-enum _MQPRIVLEVEL
+    } ;
+/* [helpstringcontext] */ 
+enum MQPRIVLEVEL
     {	MQ_PRIV_LEVEL_NONE	= 0,
 	MQ_PRIV_LEVEL_OPTIONAL	= 1,
 	MQ_PRIV_LEVEL_BODY	= 2
-    }	MQPRIVLEVEL;
-
-typedef /* [helpstringcontext] */ 
-enum _MQPRIORITY
+    } ;
+/* [helpstringcontext] */ 
+enum MQPRIORITY
     {	MQ_MIN_PRIORITY	= 0,
 	MQ_MAX_PRIORITY	= 7
-    }	MQPRIORITY;
-
-typedef /* [helpstringcontext] */ 
-enum _MQMAX
+    } ;
+/* [helpstringcontext] */ 
+enum MQMAX
     {	MQ_MAX_Q_NAME_LEN	= 124,
 	MQ_MAX_Q_LABEL_LEN	= 124
-    }	MQMAX;
+    } ;
+/* [helpstringcontext] */ 
+enum QUEUE_TYPE
+    {	MQ_TYPE_PUBLIC	= 0,
+	MQ_TYPE_PRIVATE	= MQ_TYPE_PUBLIC + 1,
+	MQ_TYPE_MACHINE	= MQ_TYPE_PRIVATE + 1,
+	MQ_TYPE_CONNECTOR	= MQ_TYPE_MACHINE + 1,
+	MQ_TYPE_MULTICAST	= MQ_TYPE_CONNECTOR + 1
+    } ;
+/* [helpstringcontext] */ 
+enum FOREIGN_STATUS
+    {	MQ_STATUS_FOREIGN	= 0,
+	MQ_STATUS_NOT_FOREIGN	= MQ_STATUS_FOREIGN + 1,
+	MQ_STATUS_UNKNOWN	= MQ_STATUS_NOT_FOREIGN + 1
+    } ;
 
-typedef /* [helpstringcontext] */ 
-enum _MQDEFAULT
+enum XACT_STATUS
+    {	MQ_XACT_STATUS_XACT	= 0,
+	MQ_XACT_STATUS_NOT_XACT	= MQ_XACT_STATUS_XACT + 1,
+	MQ_XACT_STATUS_UNKNOWN	= MQ_XACT_STATUS_NOT_XACT + 1
+    } ;
+/* [helpstringcontext] */ 
+enum QUEUE_STATE
+    {	MQ_QUEUE_STATE_LOCAL_CONNECTION	= 0,
+	MQ_QUEUE_STATE_DISCONNECTED	= MQ_QUEUE_STATE_LOCAL_CONNECTION + 1,
+	MQ_QUEUE_STATE_WAITING	= MQ_QUEUE_STATE_DISCONNECTED + 1,
+	MQ_QUEUE_STATE_NEEDVALIDATE	= MQ_QUEUE_STATE_WAITING + 1,
+	MQ_QUEUE_STATE_ONHOLD	= MQ_QUEUE_STATE_NEEDVALIDATE + 1,
+	MQ_QUEUE_STATE_NONACTIVE	= MQ_QUEUE_STATE_ONHOLD + 1,
+	MQ_QUEUE_STATE_CONNECTED	= MQ_QUEUE_STATE_NONACTIVE + 1,
+	MQ_QUEUE_STATE_DISCONNECTING	= MQ_QUEUE_STATE_CONNECTED + 1
+    } ;
+/* [helpstringcontext] */ 
+enum MQDEFAULT
     {	DEFAULT_M_PRIORITY	= 3,
 	DEFAULT_M_DELIVERY	= 0,
 	DEFAULT_M_ACKNOWLEDGE	= 0,
@@ -551,11 +709,11 @@ enum _MQDEFAULT
 	DEFAULT_Q_JOURNAL_QUOTA	= 0xffffffff,
 	DEFAULT_Q_TRANSACTION	= 0,
 	DEFAULT_Q_AUTHENTICATE	= 0,
-	DEFAULT_Q_PRIV_LEVEL	= 1
-    }	MQDEFAULT;
-
-typedef /* [helpstringcontext] */ 
-enum _MQERROR
+	DEFAULT_Q_PRIV_LEVEL	= 1,
+	DEFAULT_M_LOOKUPID	= 0
+    } ;
+/* [helpstringcontext] */ 
+enum MQERROR
     {	MQ_ERROR	= 0xc00e0001,
 	MQ_ERROR_PROPERTY	= 0xc00e0002,
 	MQ_ERROR_QUEUE_NOT_FOUND	= 0xc00e0003,
@@ -591,7 +749,6 @@ enum _MQERROR
 	MQ_ERROR_SENDER_CERT_BUFFER_TOO_SMALL	= 0xc00e002b,
 	MQ_ERROR_INVALID_CERTIFICATE	= 0xc00e002c,
 	MQ_ERROR_CORRUPTED_INTERNAL_CERTIFICATE	= 0xc00e002d,
-	MQ_ERROR_INTERNAL_USER_CERT_EXIST	= 0xc00e002e,
 	MQ_ERROR_NO_INTERNAL_USER_CERT	= 0xc00e002f,
 	MQ_ERROR_CORRUPTED_SECURITY_DATA	= 0xc00e0030,
 	MQ_ERROR_CORRUPTED_PERSONAL_CERT_STORE	= 0xc00e0031,
@@ -609,12 +766,12 @@ enum _MQERROR
 	MQ_ERROR_INSUFFICIENT_PROPERTIES	= 0xc00e003f,
 	MQ_ERROR_MACHINE_EXISTS	= 0xc00e0040,
 	MQ_ERROR_ILLEGAL_MQQMPROPS	= 0xc00e0041,
-	MQ_ERROR_DS_IS_FULL	= 0xc00e0042,
+	MQ_ERROR_DS_IS_FULL	= 0xc00e0042L,
 	MQ_ERROR_DS_ERROR	= 0xc00e0043,
 	MQ_ERROR_INVALID_OWNER	= 0xc00e0044,
 	MQ_ERROR_UNSUPPORTED_ACCESS_MODE	= 0xc00e0045,
 	MQ_ERROR_RESULT_BUFFER_TOO_SMALL	= 0xc00e0046,
-	MQ_ERROR_DELETE_CN_IN_USE	= 0xc00e0048,
+	MQ_ERROR_DELETE_CN_IN_USE	= 0xc00e0048L,
 	MQ_ERROR_NO_RESPONSE_FROM_OBJECT_SERVER	= 0xc00e0049,
 	MQ_ERROR_OBJECT_SERVER_NOT_AVAILABLE	= 0xc00e004a,
 	MQ_ERROR_QUEUE_NOT_AVAILABLE	= 0xc00e004b,
@@ -630,13 +787,13 @@ enum _MQERROR
 	MQ_ERROR_ILLEGAL_SORT_PROPID	= 0xc00e005c,
 	MQ_ERROR_LABEL_TOO_LONG	= 0xc00e005d,
 	MQ_ERROR_LABEL_BUFFER_TOO_SMALL	= 0xc00e005e,
-	MQ_ERROR_MQIS_SERVER_EMPTY	= 0xc00e005f,
-	MQ_ERROR_MQIS_READONLY_MODE	= 0xc00e0060,
+	MQ_ERROR_MQIS_SERVER_EMPTY	= 0xc00e005fL,
+	MQ_ERROR_MQIS_READONLY_MODE	= 0xc00e0060L,
 	MQ_ERROR_SYMM_KEY_BUFFER_TOO_SMALL	= 0xc00e0061,
 	MQ_ERROR_SIGNATURE_BUFFER_TOO_SMALL	= 0xc00e0062,
 	MQ_ERROR_PROV_NAME_BUFFER_TOO_SMALL	= 0xc00e0063,
 	MQ_ERROR_ILLEGAL_OPERATION	= 0xc00e0064,
-	MQ_ERROR_WRITE_NOT_ALLOWED	= 0xc00e0065,
+	MQ_ERROR_WRITE_NOT_ALLOWED	= 0xc00e0065L,
 	MQ_ERROR_WKS_CANT_SERVE_CLIENT	= 0xc00e0066L,
 	MQ_ERROR_DEPEND_WKS_LICENSE_OVERFLOW	= 0xc00e0067L,
 	MQ_CORRUPTED_QUEUE_WAS_DELETED	= 0xc00e0068L,
@@ -660,11 +817,34 @@ enum _MQERROR
 	MQ_ERROR_GUID_NOT_MATCHING	= 0xc00e0078L,
 	MQ_ERROR_PUBLIC_KEY_NOT_FOUND	= 0xc00e0079L,
 	MQ_ERROR_PUBLIC_KEY_DOES_NOT_EXIST	= 0xc00e007aL,
-	MQ_ERROR_ILLEGAL_MQPRIVATEPROPS	= 0xc00e007bL
-    }	MQERROR;
-
-typedef /* [helpstringcontext] */ 
-enum _MQWARNING
+	MQ_ERROR_ILLEGAL_MQPRIVATEPROPS	= 0xc00e007bL,
+	MQ_ERROR_NO_GC_IN_DOMAIN	= 0xc00e007cL,
+	MQ_ERROR_NO_MSMQ_SERVERS_ON_GC	= 0xc00e007dL,
+	MQ_ERROR_CANNOT_GET_DN	= 0xc00e007eL,
+	MQ_ERROR_CANNOT_HASH_DATA_EX	= 0xc00e007fL,
+	MQ_ERROR_CANNOT_SIGN_DATA_EX	= 0xc00e0080L,
+	MQ_ERROR_CANNOT_CREATE_HASH_EX	= 0xc00e0081L,
+	MQ_ERROR_FAIL_VERIFY_SIGNATURE_EX	= 0xc00e0082L,
+	MQ_ERROR_CANNOT_DELETE_PSC_OBJECTS	= 0xc00e0083L,
+	MQ_ERROR_NO_MQUSER_OU	= 0xc00e0084L,
+	MQ_ERROR_CANNOT_LOAD_MQAD	= 0xc00e0085L,
+	MQ_ERROR_CANNOT_LOAD_MQDSSRV	= 0xc00e0086L,
+	MQ_ERROR_PROPERTIES_CONFLICT	= 0xc00e0087L,
+	MQ_ERROR_MESSAGE_NOT_FOUND	= 0xc00e0088L,
+	MQ_ERROR_CANT_RESOLVE_SITES	= 0xc00e0089L,
+	MQ_ERROR_NOT_SUPPORTED_BY_DEPENDENT_CLIENTS	= 0xc00e008aL,
+	MQ_ERROR_OPERATION_NOT_SUPPORTED_BY_REMOTE_COMPUTER	= 0xc00e008bL,
+	MQ_ERROR_NOT_A_CORRECT_OBJECT_CLASS	= 0xc00e008cL,
+	MQ_ERROR_MULTI_SORT_KEYS	= 0xc00e008dL,
+	MQ_ERROR_GC_NEEDED	= 0xc00e008eL,
+	MQ_ERROR_DS_BIND_ROOT_FOREST	= 0xc00e008fL,
+	MQ_ERROR_DS_LOCAL_USER	= 0xc00e0090L,
+	MQ_ERROR_Q_ADS_PROPERTY_NOT_SUPPORTED	= 0xc00e0091L,
+	MQ_ERROR_BAD_XML_FORMAT	= 0xc00e0092L,
+	MQ_ERROR_UNSUPPORTED_CLASS	= 0xc00e0093L
+    } ;
+/* [helpstringcontext] */ 
+enum MQWARNING
     {	MQ_INFORMATION_PROPERTY	= 0x400e0001,
 	MQ_INFORMATION_ILLEGAL_PROPERTY	= 0x400e0002,
 	MQ_INFORMATION_PROPERTY_IGNORED	= 0x400e0003,
@@ -673,34 +853,10 @@ enum _MQWARNING
 	MQ_INFORMATION_OPERATION_PENDING	= 0x400e0006,
 	MQ_INFORMATION_FORMATNAME_BUFFER_TOO_SMALL	= 0x400e0009,
 	MQ_INFORMATION_INTERNAL_USER_CERT_EXIST	= 0x400e000aL,
-	MQ_INFORMATION_REMOTE_OPERATION	= 0x400e03e8L,
-	MQ_INFORMATION_REMOTE_CANCELED_BY_CLIENT	= 0x400e03e9L,
-	MQ_INFORMATION_RAS_NOT_AVAILABLE	= 0x400e03eaL,
-	MQ_INFORMATION_QUEUE_OWNED_BY_NT4_PSC	= 0x400e03ebL
-    }	MQWARNING;
+	MQ_INFORMATION_OWNER_IGNORED	= 0x400e000bL
+    } ;
 
-typedef struct _MQBOID
-    {
-    BYTE rgb[ 16 ];
-    }	MQBOID;
-
-typedef MQBOID MQXACTUOW;
-
-typedef LONG MQISOLEVEL;
-
-typedef struct _MQXACTTRANSINFO
-    {
-    MQXACTUOW uow;
-    MQISOLEVEL isoLevel;
-    ULONG isoFlags;
-    DWORD grfTCSupported;
-    DWORD grfRMSupported;
-    DWORD grfTCSupportedRetaining;
-    DWORD grfRMSupportedRetaining;
-    }	MQXACTTRANSINFO;
-
-
-DEFINE_GUID(LIBID_MSMQ,0xD7D6E071,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const IID LIBID_MSMQ;
 
 #ifndef __IMSMQQuery_INTERFACE_DEFINED__
 #define __IMSMQQuery_INTERFACE_DEFINED__
@@ -709,7 +865,7 @@ DEFINE_GUID(LIBID_MSMQ,0xD7D6E071,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0x
 /* [object][nonextensible][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQQuery,0xD7D6E072,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const IID IID_IMSMQQuery;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -718,16 +874,16 @@ DEFINE_GUID(IID_IMSMQQuery,0xD7D6E072,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0
     {
     public:
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE LookupQueue( 
-            /* [optional][in] */ VARIANT __RPC_FAR *QueueGuid,
-            /* [optional][in] */ VARIANT __RPC_FAR *ServiceTypeGuid,
-            /* [optional][in] */ VARIANT __RPC_FAR *Label,
-            /* [optional][in] */ VARIANT __RPC_FAR *CreateTime,
-            /* [optional][in] */ VARIANT __RPC_FAR *ModifyTime,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelServiceType,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelLabel,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelCreateTime,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelModifyTime,
-            /* [retval][out] */ IMSMQQueueInfos __RPC_FAR *__RPC_FAR *ppqinfos) = 0;
+            /* [optional][in] */ VARIANT *QueueGuid,
+            /* [optional][in] */ VARIANT *ServiceTypeGuid,
+            /* [optional][in] */ VARIANT *Label,
+            /* [optional][in] */ VARIANT *CreateTime,
+            /* [optional][in] */ VARIANT *ModifyTime,
+            /* [optional][in] */ VARIANT *RelServiceType,
+            /* [optional][in] */ VARIANT *RelLabel,
+            /* [optional][in] */ VARIANT *RelCreateTime,
+            /* [optional][in] */ VARIANT *RelModifyTime,
+            /* [retval][out] */ IMSMQQueueInfos **ppqinfos) = 0;
         
     };
     
@@ -737,65 +893,65 @@ DEFINE_GUID(IID_IMSMQQuery,0xD7D6E072,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQQuery __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQQuery * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQQuery __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQQuery * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQQuery __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQQuery * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQQuery __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQQuery * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQQuery __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQQuery * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQQuery __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQQuery * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQQuery __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQQuery * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupQueue )( 
-            IMSMQQuery __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *QueueGuid,
-            /* [optional][in] */ VARIANT __RPC_FAR *ServiceTypeGuid,
-            /* [optional][in] */ VARIANT __RPC_FAR *Label,
-            /* [optional][in] */ VARIANT __RPC_FAR *CreateTime,
-            /* [optional][in] */ VARIANT __RPC_FAR *ModifyTime,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelServiceType,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelLabel,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelCreateTime,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelModifyTime,
-            /* [retval][out] */ IMSMQQueueInfos __RPC_FAR *__RPC_FAR *ppqinfos);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *LookupQueue )( 
+            IMSMQQuery * This,
+            /* [optional][in] */ VARIANT *QueueGuid,
+            /* [optional][in] */ VARIANT *ServiceTypeGuid,
+            /* [optional][in] */ VARIANT *Label,
+            /* [optional][in] */ VARIANT *CreateTime,
+            /* [optional][in] */ VARIANT *ModifyTime,
+            /* [optional][in] */ VARIANT *RelServiceType,
+            /* [optional][in] */ VARIANT *RelLabel,
+            /* [optional][in] */ VARIANT *RelCreateTime,
+            /* [optional][in] */ VARIANT *RelModifyTime,
+            /* [retval][out] */ IMSMQQueueInfos **ppqinfos);
         
         END_INTERFACE
     } IMSMQQueryVtbl;
 
     interface IMSMQQuery
     {
-        CONST_VTBL struct IMSMQQueryVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQQueryVtbl *lpVtbl;
     };
 
     
@@ -837,17 +993,17 @@ DEFINE_GUID(IID_IMSMQQuery,0xD7D6E072,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQuery_LookupQueue_Proxy( 
-    IMSMQQuery __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *QueueGuid,
-    /* [optional][in] */ VARIANT __RPC_FAR *ServiceTypeGuid,
-    /* [optional][in] */ VARIANT __RPC_FAR *Label,
-    /* [optional][in] */ VARIANT __RPC_FAR *CreateTime,
-    /* [optional][in] */ VARIANT __RPC_FAR *ModifyTime,
-    /* [optional][in] */ VARIANT __RPC_FAR *RelServiceType,
-    /* [optional][in] */ VARIANT __RPC_FAR *RelLabel,
-    /* [optional][in] */ VARIANT __RPC_FAR *RelCreateTime,
-    /* [optional][in] */ VARIANT __RPC_FAR *RelModifyTime,
-    /* [retval][out] */ IMSMQQueueInfos __RPC_FAR *__RPC_FAR *ppqinfos);
+    IMSMQQuery * This,
+    /* [optional][in] */ VARIANT *QueueGuid,
+    /* [optional][in] */ VARIANT *ServiceTypeGuid,
+    /* [optional][in] */ VARIANT *Label,
+    /* [optional][in] */ VARIANT *CreateTime,
+    /* [optional][in] */ VARIANT *ModifyTime,
+    /* [optional][in] */ VARIANT *RelServiceType,
+    /* [optional][in] */ VARIANT *RelLabel,
+    /* [optional][in] */ VARIANT *RelCreateTime,
+    /* [optional][in] */ VARIANT *RelModifyTime,
+    /* [retval][out] */ IMSMQQueueInfos **ppqinfos);
 
 
 void __RPC_STUB IMSMQQuery_LookupQueue_Stub(
@@ -868,7 +1024,7 @@ void __RPC_STUB IMSMQQuery_LookupQueue_Stub(
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQQueueInfo,0xD7D6E07B,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const IID IID_IMSMQQueueInfo;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -877,90 +1033,90 @@ DEFINE_GUID(IID_IMSMQQueueInfo,0xD7D6E07B,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97
     {
     public:
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueGuid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidQueue) = 0;
+            /* [retval][out] */ BSTR *pbstrGuidQueue) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ServiceTypeGuid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidServiceType) = 0;
+            /* [retval][out] */ BSTR *pbstrGuidServiceType) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_ServiceTypeGuid( 
             /* [in] */ BSTR bstrGuidServiceType) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Label( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrLabel) = 0;
+            /* [retval][out] */ BSTR *pbstrLabel) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Label( 
             /* [in] */ BSTR bstrLabel) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PathName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPathName) = 0;
+            /* [retval][out] */ BSTR *pbstrPathName) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PathName( 
             /* [in] */ BSTR bstrPathName) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_FormatName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFormatName) = 0;
+            /* [retval][out] */ BSTR *pbstrFormatName) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_FormatName( 
             /* [in] */ BSTR bstrFormatName) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsTransactional( 
-            /* [retval][out] */ Boolean __RPC_FAR *pisTransactional) = 0;
+            /* [retval][out] */ Boolean *pisTransactional) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivLevel( 
-            /* [retval][out] */ long __RPC_FAR *plPrivLevel) = 0;
+            /* [retval][out] */ long *plPrivLevel) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PrivLevel( 
             /* [in] */ long lPrivLevel) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Journal( 
-            /* [retval][out] */ long __RPC_FAR *plJournal) = 0;
+            /* [retval][out] */ long *plJournal) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Journal( 
             /* [in] */ long lJournal) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Quota( 
-            /* [retval][out] */ long __RPC_FAR *plQuota) = 0;
+            /* [retval][out] */ long *plQuota) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Quota( 
             /* [in] */ long lQuota) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BasePriority( 
-            /* [retval][out] */ long __RPC_FAR *plBasePriority) = 0;
+            /* [retval][out] */ long *plBasePriority) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_BasePriority( 
             /* [in] */ long lBasePriority) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CreateTime( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarCreateTime) = 0;
+            /* [retval][out] */ VARIANT *pvarCreateTime) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ModifyTime( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarModifyTime) = 0;
+            /* [retval][out] */ VARIANT *pvarModifyTime) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Authenticate( 
-            /* [retval][out] */ long __RPC_FAR *plAuthenticate) = 0;
+            /* [retval][out] */ long *plAuthenticate) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Authenticate( 
             /* [in] */ long lAuthenticate) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_JournalQuota( 
-            /* [retval][out] */ long __RPC_FAR *plJournalQuota) = 0;
+            /* [retval][out] */ long *plJournalQuota) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_JournalQuota( 
             /* [in] */ long lJournalQuota) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsWorldReadable( 
-            /* [retval][out] */ Boolean __RPC_FAR *pisWorldReadable) = 0;
+            /* [retval][out] */ Boolean *pisWorldReadable) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Create( 
-            /* [optional][in] */ VARIANT __RPC_FAR *IsTransactional,
-            /* [optional][in] */ VARIANT __RPC_FAR *IsWorldReadable) = 0;
+            /* [optional][in] */ VARIANT *IsTransactional,
+            /* [optional][in] */ VARIANT *IsWorldReadable) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Open( 
             /* [in] */ long Access,
             /* [in] */ long ShareMode,
-            /* [retval][out] */ IMSMQQueue __RPC_FAR *__RPC_FAR *ppq) = 0;
+            /* [retval][out] */ IMSMQQueue **ppq) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
@@ -974,172 +1130,172 @@ DEFINE_GUID(IID_IMSMQQueueInfo,0xD7D6E07B,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQQueueInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQQueueInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQQueueInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQQueueInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQQueueInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQQueueInfo * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQQueueInfo * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQQueueInfo * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQQueueInfo * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_QueueGuid )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidQueue);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueGuid )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ BSTR *pbstrGuidQueue);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceTypeGuid )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidServiceType);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceTypeGuid )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ BSTR *pbstrGuidServiceType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServiceTypeGuid )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceTypeGuid )( 
+            IMSMQQueueInfo * This,
             /* [in] */ BSTR bstrGuidServiceType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Label )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrLabel);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Label )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ BSTR *pbstrLabel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Label )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Label )( 
+            IMSMQQueueInfo * This,
             /* [in] */ BSTR bstrLabel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PathName )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPathName);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PathName )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ BSTR *pbstrPathName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PathName )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PathName )( 
+            IMSMQQueueInfo * This,
             /* [in] */ BSTR bstrPathName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FormatName )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFormatName);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ BSTR *pbstrFormatName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FormatName )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_FormatName )( 
+            IMSMQQueueInfo * This,
             /* [in] */ BSTR bstrFormatName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsTransactional )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ Boolean __RPC_FAR *pisTransactional);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsTransactional )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ Boolean *pisTransactional);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivLevel )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plPrivLevel);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ long *plPrivLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PrivLevel )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
+            IMSMQQueueInfo * This,
             /* [in] */ long lPrivLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Journal )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plJournal);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ long *plJournal);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Journal )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
+            IMSMQQueueInfo * This,
             /* [in] */ long lJournal);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Quota )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plQuota);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Quota )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ long *plQuota);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Quota )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Quota )( 
+            IMSMQQueueInfo * This,
             /* [in] */ long lQuota);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BasePriority )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plBasePriority);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BasePriority )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ long *plBasePriority);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BasePriority )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_BasePriority )( 
+            IMSMQQueueInfo * This,
             /* [in] */ long lBasePriority);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CreateTime )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarCreateTime);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CreateTime )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ VARIANT *pvarCreateTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ModifyTime )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarModifyTime);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ModifyTime )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ VARIANT *pvarModifyTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Authenticate )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAuthenticate);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Authenticate )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ long *plAuthenticate);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Authenticate )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Authenticate )( 
+            IMSMQQueueInfo * This,
             /* [in] */ long lAuthenticate);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_JournalQuota )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plJournalQuota);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_JournalQuota )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ long *plJournalQuota);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_JournalQuota )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_JournalQuota )( 
+            IMSMQQueueInfo * This,
             /* [in] */ long lJournalQuota);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsWorldReadable )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [retval][out] */ Boolean __RPC_FAR *pisWorldReadable);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsWorldReadable )( 
+            IMSMQQueueInfo * This,
+            /* [retval][out] */ Boolean *pisWorldReadable);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Create )( 
-            IMSMQQueueInfo __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *IsTransactional,
-            /* [optional][in] */ VARIANT __RPC_FAR *IsWorldReadable);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+            IMSMQQueueInfo * This,
+            /* [optional][in] */ VARIANT *IsTransactional,
+            /* [optional][in] */ VARIANT *IsWorldReadable);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
-            IMSMQQueueInfo __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+            IMSMQQueueInfo * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
-            IMSMQQueueInfo __RPC_FAR * This,
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+            IMSMQQueueInfo * This,
             /* [in] */ long Access,
             /* [in] */ long ShareMode,
-            /* [retval][out] */ IMSMQQueue __RPC_FAR *__RPC_FAR *ppq);
+            /* [retval][out] */ IMSMQQueue **ppq);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            IMSMQQueueInfo __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            IMSMQQueueInfo * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Update )( 
-            IMSMQQueueInfo __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Update )( 
+            IMSMQQueueInfo * This);
         
         END_INTERFACE
     } IMSMQQueueInfoVtbl;
 
     interface IMSMQQueueInfo
     {
-        CONST_VTBL struct IMSMQQueueInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQQueueInfoVtbl *lpVtbl;
     };
 
     
@@ -1268,8 +1424,8 @@ DEFINE_GUID(IID_IMSMQQueueInfo,0xD7D6E07B,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_QueueGuid_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidQueue);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ BSTR *pbstrGuidQueue);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_QueueGuid_Stub(
@@ -1280,8 +1436,8 @@ void __RPC_STUB IMSMQQueueInfo_get_QueueGuid_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_ServiceTypeGuid_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidServiceType);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ BSTR *pbstrGuidServiceType);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_ServiceTypeGuid_Stub(
@@ -1292,7 +1448,7 @@ void __RPC_STUB IMSMQQueueInfo_get_ServiceTypeGuid_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_ServiceTypeGuid_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
+    IMSMQQueueInfo * This,
     /* [in] */ BSTR bstrGuidServiceType);
 
 
@@ -1304,8 +1460,8 @@ void __RPC_STUB IMSMQQueueInfo_put_ServiceTypeGuid_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_Label_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrLabel);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ BSTR *pbstrLabel);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_Label_Stub(
@@ -1316,7 +1472,7 @@ void __RPC_STUB IMSMQQueueInfo_get_Label_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_Label_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
+    IMSMQQueueInfo * This,
     /* [in] */ BSTR bstrLabel);
 
 
@@ -1328,8 +1484,8 @@ void __RPC_STUB IMSMQQueueInfo_put_Label_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_PathName_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrPathName);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ BSTR *pbstrPathName);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_PathName_Stub(
@@ -1340,7 +1496,7 @@ void __RPC_STUB IMSMQQueueInfo_get_PathName_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_PathName_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
+    IMSMQQueueInfo * This,
     /* [in] */ BSTR bstrPathName);
 
 
@@ -1352,8 +1508,8 @@ void __RPC_STUB IMSMQQueueInfo_put_PathName_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_FormatName_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFormatName);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ BSTR *pbstrFormatName);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_FormatName_Stub(
@@ -1364,7 +1520,7 @@ void __RPC_STUB IMSMQQueueInfo_get_FormatName_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_FormatName_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
+    IMSMQQueueInfo * This,
     /* [in] */ BSTR bstrFormatName);
 
 
@@ -1376,8 +1532,8 @@ void __RPC_STUB IMSMQQueueInfo_put_FormatName_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_IsTransactional_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ Boolean __RPC_FAR *pisTransactional);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ Boolean *pisTransactional);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_IsTransactional_Stub(
@@ -1388,8 +1544,8 @@ void __RPC_STUB IMSMQQueueInfo_get_IsTransactional_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_PrivLevel_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plPrivLevel);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ long *plPrivLevel);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_PrivLevel_Stub(
@@ -1400,7 +1556,7 @@ void __RPC_STUB IMSMQQueueInfo_get_PrivLevel_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_PrivLevel_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
+    IMSMQQueueInfo * This,
     /* [in] */ long lPrivLevel);
 
 
@@ -1412,8 +1568,8 @@ void __RPC_STUB IMSMQQueueInfo_put_PrivLevel_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_Journal_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plJournal);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ long *plJournal);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_Journal_Stub(
@@ -1424,7 +1580,7 @@ void __RPC_STUB IMSMQQueueInfo_get_Journal_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_Journal_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
+    IMSMQQueueInfo * This,
     /* [in] */ long lJournal);
 
 
@@ -1436,8 +1592,8 @@ void __RPC_STUB IMSMQQueueInfo_put_Journal_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_Quota_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plQuota);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ long *plQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_Quota_Stub(
@@ -1448,7 +1604,7 @@ void __RPC_STUB IMSMQQueueInfo_get_Quota_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_Quota_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
+    IMSMQQueueInfo * This,
     /* [in] */ long lQuota);
 
 
@@ -1460,8 +1616,8 @@ void __RPC_STUB IMSMQQueueInfo_put_Quota_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_BasePriority_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plBasePriority);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ long *plBasePriority);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_BasePriority_Stub(
@@ -1472,7 +1628,7 @@ void __RPC_STUB IMSMQQueueInfo_get_BasePriority_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_BasePriority_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
+    IMSMQQueueInfo * This,
     /* [in] */ long lBasePriority);
 
 
@@ -1484,8 +1640,8 @@ void __RPC_STUB IMSMQQueueInfo_put_BasePriority_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_CreateTime_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarCreateTime);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ VARIANT *pvarCreateTime);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_CreateTime_Stub(
@@ -1496,8 +1652,8 @@ void __RPC_STUB IMSMQQueueInfo_get_CreateTime_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_ModifyTime_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarModifyTime);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ VARIANT *pvarModifyTime);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_ModifyTime_Stub(
@@ -1508,8 +1664,8 @@ void __RPC_STUB IMSMQQueueInfo_get_ModifyTime_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_Authenticate_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plAuthenticate);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ long *plAuthenticate);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_Authenticate_Stub(
@@ -1520,7 +1676,7 @@ void __RPC_STUB IMSMQQueueInfo_get_Authenticate_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_Authenticate_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
+    IMSMQQueueInfo * This,
     /* [in] */ long lAuthenticate);
 
 
@@ -1532,8 +1688,8 @@ void __RPC_STUB IMSMQQueueInfo_put_Authenticate_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_JournalQuota_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plJournalQuota);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ long *plJournalQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_JournalQuota_Stub(
@@ -1544,7 +1700,7 @@ void __RPC_STUB IMSMQQueueInfo_get_JournalQuota_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_put_JournalQuota_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
+    IMSMQQueueInfo * This,
     /* [in] */ long lJournalQuota);
 
 
@@ -1556,8 +1712,8 @@ void __RPC_STUB IMSMQQueueInfo_put_JournalQuota_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_get_IsWorldReadable_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [retval][out] */ Boolean __RPC_FAR *pisWorldReadable);
+    IMSMQQueueInfo * This,
+    /* [retval][out] */ Boolean *pisWorldReadable);
 
 
 void __RPC_STUB IMSMQQueueInfo_get_IsWorldReadable_Stub(
@@ -1568,9 +1724,9 @@ void __RPC_STUB IMSMQQueueInfo_get_IsWorldReadable_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Create_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *IsTransactional,
-    /* [optional][in] */ VARIANT __RPC_FAR *IsWorldReadable);
+    IMSMQQueueInfo * This,
+    /* [optional][in] */ VARIANT *IsTransactional,
+    /* [optional][in] */ VARIANT *IsWorldReadable);
 
 
 void __RPC_STUB IMSMQQueueInfo_Create_Stub(
@@ -1581,7 +1737,7 @@ void __RPC_STUB IMSMQQueueInfo_Create_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Delete_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This);
+    IMSMQQueueInfo * This);
 
 
 void __RPC_STUB IMSMQQueueInfo_Delete_Stub(
@@ -1592,10 +1748,10 @@ void __RPC_STUB IMSMQQueueInfo_Delete_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Open_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This,
+    IMSMQQueueInfo * This,
     /* [in] */ long Access,
     /* [in] */ long ShareMode,
-    /* [retval][out] */ IMSMQQueue __RPC_FAR *__RPC_FAR *ppq);
+    /* [retval][out] */ IMSMQQueue **ppq);
 
 
 void __RPC_STUB IMSMQQueueInfo_Open_Stub(
@@ -1606,7 +1762,7 @@ void __RPC_STUB IMSMQQueueInfo_Open_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Refresh_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This);
+    IMSMQQueueInfo * This);
 
 
 void __RPC_STUB IMSMQQueueInfo_Refresh_Stub(
@@ -1617,7 +1773,7 @@ void __RPC_STUB IMSMQQueueInfo_Refresh_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo_Update_Proxy( 
-    IMSMQQueueInfo __RPC_FAR * This);
+    IMSMQQueueInfo * This);
 
 
 void __RPC_STUB IMSMQQueueInfo_Update_Stub(
@@ -1638,7 +1794,7 @@ void __RPC_STUB IMSMQQueueInfo_Update_Stub(
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQQueueInfo2,0xFD174A80,0x89CF,0x11D2,0xB0,0xF2,0x00,0xE0,0x2C,0x07,0x4F,0x6B);
+EXTERN_C const IID IID_IMSMQQueueInfo2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -1647,103 +1803,103 @@ DEFINE_GUID(IID_IMSMQQueueInfo2,0xFD174A80,0x89CF,0x11D2,0xB0,0xF2,0x00,0xE0,0x2
     {
     public:
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueGuid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidQueue) = 0;
+            /* [retval][out] */ BSTR *pbstrGuidQueue) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ServiceTypeGuid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidServiceType) = 0;
+            /* [retval][out] */ BSTR *pbstrGuidServiceType) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_ServiceTypeGuid( 
             /* [in] */ BSTR bstrGuidServiceType) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Label( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrLabel) = 0;
+            /* [retval][out] */ BSTR *pbstrLabel) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Label( 
             /* [in] */ BSTR bstrLabel) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PathName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPathName) = 0;
+            /* [retval][out] */ BSTR *pbstrPathName) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PathName( 
             /* [in] */ BSTR bstrPathName) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_FormatName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFormatName) = 0;
+            /* [retval][out] */ BSTR *pbstrFormatName) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_FormatName( 
             /* [in] */ BSTR bstrFormatName) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsTransactional( 
-            /* [retval][out] */ Boolean __RPC_FAR *pisTransactional) = 0;
+            /* [retval][out] */ Boolean *pisTransactional) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivLevel( 
-            /* [retval][out] */ long __RPC_FAR *plPrivLevel) = 0;
+            /* [retval][out] */ long *plPrivLevel) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PrivLevel( 
             /* [in] */ long lPrivLevel) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Journal( 
-            /* [retval][out] */ long __RPC_FAR *plJournal) = 0;
+            /* [retval][out] */ long *plJournal) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Journal( 
             /* [in] */ long lJournal) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Quota( 
-            /* [retval][out] */ long __RPC_FAR *plQuota) = 0;
+            /* [retval][out] */ long *plQuota) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Quota( 
             /* [in] */ long lQuota) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BasePriority( 
-            /* [retval][out] */ long __RPC_FAR *plBasePriority) = 0;
+            /* [retval][out] */ long *plBasePriority) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_BasePriority( 
             /* [in] */ long lBasePriority) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CreateTime( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarCreateTime) = 0;
+            /* [retval][out] */ VARIANT *pvarCreateTime) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ModifyTime( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarModifyTime) = 0;
+            /* [retval][out] */ VARIANT *pvarModifyTime) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Authenticate( 
-            /* [retval][out] */ long __RPC_FAR *plAuthenticate) = 0;
+            /* [retval][out] */ long *plAuthenticate) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Authenticate( 
             /* [in] */ long lAuthenticate) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_JournalQuota( 
-            /* [retval][out] */ long __RPC_FAR *plJournalQuota) = 0;
+            /* [retval][out] */ long *plJournalQuota) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_JournalQuota( 
             /* [in] */ long lJournalQuota) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsWorldReadable( 
-            /* [retval][out] */ Boolean __RPC_FAR *pisWorldReadable) = 0;
+            /* [retval][out] */ Boolean *pisWorldReadable) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Create( 
-            /* [optional][in] */ VARIANT __RPC_FAR *IsTransactional,
-            /* [optional][in] */ VARIANT __RPC_FAR *IsWorldReadable) = 0;
+            /* [optional][in] */ VARIANT *IsTransactional,
+            /* [optional][in] */ VARIANT *IsWorldReadable) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Open( 
             /* [in] */ long Access,
             /* [in] */ long ShareMode,
-            /* [retval][out] */ IMSMQQueue2 __RPC_FAR *__RPC_FAR *ppq) = 0;
+            /* [retval][out] */ IMSMQQueue2 **ppq) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Update( void) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PathNameDNS( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPathNameDNS) = 0;
+            /* [retval][out] */ BSTR *pbstrPathNameDNS) = 0;
         
         virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties) = 0;
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
         
         virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Security( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSecurity) = 0;
+            /* [retval][out] */ VARIANT *pvarSecurity) = 0;
         
         virtual /* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE put_Security( 
             /* [in] */ VARIANT varSecurity) = 0;
@@ -1756,180 +1912,180 @@ DEFINE_GUID(IID_IMSMQQueueInfo2,0xFD174A80,0x89CF,0x11D2,0xB0,0xF2,0x00,0xE0,0x2
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQQueueInfo2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQQueueInfo2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQQueueInfo2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQQueueInfo2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQQueueInfo2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_QueueGuid )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidQueue);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueGuid )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ BSTR *pbstrGuidQueue);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceTypeGuid )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidServiceType);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceTypeGuid )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ BSTR *pbstrGuidServiceType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServiceTypeGuid )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceTypeGuid )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ BSTR bstrGuidServiceType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Label )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrLabel);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Label )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ BSTR *pbstrLabel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Label )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Label )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ BSTR bstrLabel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PathName )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPathName);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PathName )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ BSTR *pbstrPathName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PathName )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PathName )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ BSTR bstrPathName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FormatName )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFormatName);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ BSTR *pbstrFormatName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FormatName )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_FormatName )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ BSTR bstrFormatName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsTransactional )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ Boolean __RPC_FAR *pisTransactional);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsTransactional )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ Boolean *pisTransactional);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivLevel )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plPrivLevel);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ long *plPrivLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PrivLevel )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ long lPrivLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Journal )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plJournal);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ long *plJournal);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Journal )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ long lJournal);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Quota )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plQuota);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Quota )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ long *plQuota);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Quota )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Quota )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ long lQuota);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BasePriority )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plBasePriority);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BasePriority )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ long *plBasePriority);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BasePriority )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_BasePriority )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ long lBasePriority);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CreateTime )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarCreateTime);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CreateTime )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ VARIANT *pvarCreateTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ModifyTime )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarModifyTime);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ModifyTime )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ VARIANT *pvarModifyTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Authenticate )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAuthenticate);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Authenticate )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ long *plAuthenticate);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Authenticate )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Authenticate )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ long lAuthenticate);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_JournalQuota )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plJournalQuota);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_JournalQuota )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ long *plJournalQuota);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_JournalQuota )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_JournalQuota )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ long lJournalQuota);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsWorldReadable )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ Boolean __RPC_FAR *pisWorldReadable);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsWorldReadable )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ Boolean *pisWorldReadable);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Create )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *IsTransactional,
-            /* [optional][in] */ VARIANT __RPC_FAR *IsWorldReadable);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+            IMSMQQueueInfo2 * This,
+            /* [optional][in] */ VARIANT *IsTransactional,
+            /* [optional][in] */ VARIANT *IsWorldReadable);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
-            IMSMQQueueInfo2 __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+            IMSMQQueueInfo2 * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ long Access,
             /* [in] */ long ShareMode,
-            /* [retval][out] */ IMSMQQueue2 __RPC_FAR *__RPC_FAR *ppq);
+            /* [retval][out] */ IMSMQQueue2 **ppq);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            IMSMQQueueInfo2 __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            IMSMQQueueInfo2 * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Update )( 
-            IMSMQQueueInfo2 __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Update )( 
+            IMSMQQueueInfo2 * This);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PathNameDNS )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPathNameDNS);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PathNameDNS )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ BSTR *pbstrPathNameDNS);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Security )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSecurity);
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Security )( 
+            IMSMQQueueInfo2 * This,
+            /* [retval][out] */ VARIANT *pvarSecurity);
         
-        /* [id][propput][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Security )( 
-            IMSMQQueueInfo2 __RPC_FAR * This,
+        /* [id][propput][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_Security )( 
+            IMSMQQueueInfo2 * This,
             /* [in] */ VARIANT varSecurity);
         
         END_INTERFACE
@@ -1937,7 +2093,7 @@ DEFINE_GUID(IID_IMSMQQueueInfo2,0xFD174A80,0x89CF,0x11D2,0xB0,0xF2,0x00,0xE0,0x2
 
     interface IMSMQQueueInfo2
     {
-        CONST_VTBL struct IMSMQQueueInfo2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQQueueInfo2Vtbl *lpVtbl;
     };
 
     
@@ -2078,8 +2234,8 @@ DEFINE_GUID(IID_IMSMQQueueInfo2,0xFD174A80,0x89CF,0x11D2,0xB0,0xF2,0x00,0xE0,0x2
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_QueueGuid_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidQueue);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ BSTR *pbstrGuidQueue);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_QueueGuid_Stub(
@@ -2090,8 +2246,8 @@ void __RPC_STUB IMSMQQueueInfo2_get_QueueGuid_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_ServiceTypeGuid_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidServiceType);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ BSTR *pbstrGuidServiceType);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_ServiceTypeGuid_Stub(
@@ -2102,7 +2258,7 @@ void __RPC_STUB IMSMQQueueInfo2_get_ServiceTypeGuid_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_ServiceTypeGuid_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
+    IMSMQQueueInfo2 * This,
     /* [in] */ BSTR bstrGuidServiceType);
 
 
@@ -2114,8 +2270,8 @@ void __RPC_STUB IMSMQQueueInfo2_put_ServiceTypeGuid_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Label_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrLabel);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ BSTR *pbstrLabel);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_Label_Stub(
@@ -2126,7 +2282,7 @@ void __RPC_STUB IMSMQQueueInfo2_get_Label_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Label_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
+    IMSMQQueueInfo2 * This,
     /* [in] */ BSTR bstrLabel);
 
 
@@ -2138,8 +2294,8 @@ void __RPC_STUB IMSMQQueueInfo2_put_Label_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_PathName_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrPathName);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ BSTR *pbstrPathName);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_PathName_Stub(
@@ -2150,7 +2306,7 @@ void __RPC_STUB IMSMQQueueInfo2_get_PathName_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_PathName_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
+    IMSMQQueueInfo2 * This,
     /* [in] */ BSTR bstrPathName);
 
 
@@ -2162,8 +2318,8 @@ void __RPC_STUB IMSMQQueueInfo2_put_PathName_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_FormatName_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFormatName);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ BSTR *pbstrFormatName);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_FormatName_Stub(
@@ -2174,7 +2330,7 @@ void __RPC_STUB IMSMQQueueInfo2_get_FormatName_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_FormatName_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
+    IMSMQQueueInfo2 * This,
     /* [in] */ BSTR bstrFormatName);
 
 
@@ -2186,8 +2342,8 @@ void __RPC_STUB IMSMQQueueInfo2_put_FormatName_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_IsTransactional_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ Boolean __RPC_FAR *pisTransactional);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ Boolean *pisTransactional);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_IsTransactional_Stub(
@@ -2198,8 +2354,8 @@ void __RPC_STUB IMSMQQueueInfo2_get_IsTransactional_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_PrivLevel_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plPrivLevel);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ long *plPrivLevel);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_PrivLevel_Stub(
@@ -2210,7 +2366,7 @@ void __RPC_STUB IMSMQQueueInfo2_get_PrivLevel_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_PrivLevel_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
+    IMSMQQueueInfo2 * This,
     /* [in] */ long lPrivLevel);
 
 
@@ -2222,8 +2378,8 @@ void __RPC_STUB IMSMQQueueInfo2_put_PrivLevel_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Journal_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plJournal);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ long *plJournal);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_Journal_Stub(
@@ -2234,7 +2390,7 @@ void __RPC_STUB IMSMQQueueInfo2_get_Journal_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Journal_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
+    IMSMQQueueInfo2 * This,
     /* [in] */ long lJournal);
 
 
@@ -2246,8 +2402,8 @@ void __RPC_STUB IMSMQQueueInfo2_put_Journal_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Quota_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plQuota);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ long *plQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_Quota_Stub(
@@ -2258,7 +2414,7 @@ void __RPC_STUB IMSMQQueueInfo2_get_Quota_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Quota_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
+    IMSMQQueueInfo2 * This,
     /* [in] */ long lQuota);
 
 
@@ -2270,8 +2426,8 @@ void __RPC_STUB IMSMQQueueInfo2_put_Quota_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_BasePriority_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plBasePriority);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ long *plBasePriority);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_BasePriority_Stub(
@@ -2282,7 +2438,7 @@ void __RPC_STUB IMSMQQueueInfo2_get_BasePriority_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_BasePriority_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
+    IMSMQQueueInfo2 * This,
     /* [in] */ long lBasePriority);
 
 
@@ -2294,8 +2450,8 @@ void __RPC_STUB IMSMQQueueInfo2_put_BasePriority_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_CreateTime_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarCreateTime);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ VARIANT *pvarCreateTime);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_CreateTime_Stub(
@@ -2306,8 +2462,8 @@ void __RPC_STUB IMSMQQueueInfo2_get_CreateTime_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_ModifyTime_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarModifyTime);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ VARIANT *pvarModifyTime);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_ModifyTime_Stub(
@@ -2318,8 +2474,8 @@ void __RPC_STUB IMSMQQueueInfo2_get_ModifyTime_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Authenticate_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plAuthenticate);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ long *plAuthenticate);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_Authenticate_Stub(
@@ -2330,7 +2486,7 @@ void __RPC_STUB IMSMQQueueInfo2_get_Authenticate_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Authenticate_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
+    IMSMQQueueInfo2 * This,
     /* [in] */ long lAuthenticate);
 
 
@@ -2342,8 +2498,8 @@ void __RPC_STUB IMSMQQueueInfo2_put_Authenticate_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_JournalQuota_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plJournalQuota);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ long *plJournalQuota);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_JournalQuota_Stub(
@@ -2354,7 +2510,7 @@ void __RPC_STUB IMSMQQueueInfo2_get_JournalQuota_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_JournalQuota_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
+    IMSMQQueueInfo2 * This,
     /* [in] */ long lJournalQuota);
 
 
@@ -2366,8 +2522,8 @@ void __RPC_STUB IMSMQQueueInfo2_put_JournalQuota_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_IsWorldReadable_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ Boolean __RPC_FAR *pisWorldReadable);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ Boolean *pisWorldReadable);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_IsWorldReadable_Stub(
@@ -2378,9 +2534,9 @@ void __RPC_STUB IMSMQQueueInfo2_get_IsWorldReadable_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Create_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *IsTransactional,
-    /* [optional][in] */ VARIANT __RPC_FAR *IsWorldReadable);
+    IMSMQQueueInfo2 * This,
+    /* [optional][in] */ VARIANT *IsTransactional,
+    /* [optional][in] */ VARIANT *IsWorldReadable);
 
 
 void __RPC_STUB IMSMQQueueInfo2_Create_Stub(
@@ -2391,7 +2547,7 @@ void __RPC_STUB IMSMQQueueInfo2_Create_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Delete_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This);
+    IMSMQQueueInfo2 * This);
 
 
 void __RPC_STUB IMSMQQueueInfo2_Delete_Stub(
@@ -2402,10 +2558,10 @@ void __RPC_STUB IMSMQQueueInfo2_Delete_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Open_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
+    IMSMQQueueInfo2 * This,
     /* [in] */ long Access,
     /* [in] */ long ShareMode,
-    /* [retval][out] */ IMSMQQueue2 __RPC_FAR *__RPC_FAR *ppq);
+    /* [retval][out] */ IMSMQQueue2 **ppq);
 
 
 void __RPC_STUB IMSMQQueueInfo2_Open_Stub(
@@ -2416,7 +2572,7 @@ void __RPC_STUB IMSMQQueueInfo2_Open_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Refresh_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This);
+    IMSMQQueueInfo2 * This);
 
 
 void __RPC_STUB IMSMQQueueInfo2_Refresh_Stub(
@@ -2427,7 +2583,7 @@ void __RPC_STUB IMSMQQueueInfo2_Refresh_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_Update_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This);
+    IMSMQQueueInfo2 * This);
 
 
 void __RPC_STUB IMSMQQueueInfo2_Update_Stub(
@@ -2438,8 +2594,8 @@ void __RPC_STUB IMSMQQueueInfo2_Update_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_PathNameDNS_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrPathNameDNS);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ BSTR *pbstrPathNameDNS);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_PathNameDNS_Stub(
@@ -2450,8 +2606,8 @@ void __RPC_STUB IMSMQQueueInfo2_get_PathNameDNS_Stub(
 
 
 /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Properties_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_Properties_Stub(
@@ -2462,8 +2618,8 @@ void __RPC_STUB IMSMQQueueInfo2_get_Properties_Stub(
 
 
 /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_get_Security_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarSecurity);
+    IMSMQQueueInfo2 * This,
+    /* [retval][out] */ VARIANT *pvarSecurity);
 
 
 void __RPC_STUB IMSMQQueueInfo2_get_Security_Stub(
@@ -2474,7 +2630,7 @@ void __RPC_STUB IMSMQQueueInfo2_get_Security_Stub(
 
 
 /* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo2_put_Security_Proxy( 
-    IMSMQQueueInfo2 __RPC_FAR * This,
+    IMSMQQueueInfo2 * This,
     /* [in] */ VARIANT varSecurity);
 
 
@@ -2489,6 +2645,974 @@ void __RPC_STUB IMSMQQueueInfo2_put_Security_Stub(
 #endif 	/* __IMSMQQueueInfo2_INTERFACE_DEFINED__ */
 
 
+#ifndef __IMSMQQueueInfo3_INTERFACE_DEFINED__
+#define __IMSMQQueueInfo3_INTERFACE_DEFINED__
+
+/* interface IMSMQQueueInfo3 */
+/* [object][dual][hidden][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQQueueInfo3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eba96b1d-2168-11d3-898c-00e02c074f6b")
+    IMSMQQueueInfo3 : public IDispatch
+    {
+    public:
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueGuid( 
+            /* [retval][out] */ BSTR *pbstrGuidQueue) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ServiceTypeGuid( 
+            /* [retval][out] */ BSTR *pbstrGuidServiceType) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_ServiceTypeGuid( 
+            /* [in] */ BSTR bstrGuidServiceType) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Label( 
+            /* [retval][out] */ BSTR *pbstrLabel) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Label( 
+            /* [in] */ BSTR bstrLabel) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PathName( 
+            /* [retval][out] */ BSTR *pbstrPathName) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PathName( 
+            /* [in] */ BSTR bstrPathName) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_FormatName( 
+            /* [retval][out] */ BSTR *pbstrFormatName) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_FormatName( 
+            /* [in] */ BSTR bstrFormatName) = 0;
+        
+        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_IsTransactional( 
+            /* [retval][out] */ Boolean *pisTransactional) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivLevel( 
+            /* [retval][out] */ long *plPrivLevel) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PrivLevel( 
+            /* [in] */ long lPrivLevel) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Journal( 
+            /* [retval][out] */ long *plJournal) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Journal( 
+            /* [in] */ long lJournal) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Quota( 
+            /* [retval][out] */ long *plQuota) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Quota( 
+            /* [in] */ long lQuota) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BasePriority( 
+            /* [retval][out] */ long *plBasePriority) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_BasePriority( 
+            /* [in] */ long lBasePriority) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CreateTime( 
+            /* [retval][out] */ VARIANT *pvarCreateTime) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ModifyTime( 
+            /* [retval][out] */ VARIANT *pvarModifyTime) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Authenticate( 
+            /* [retval][out] */ long *plAuthenticate) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Authenticate( 
+            /* [in] */ long lAuthenticate) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_JournalQuota( 
+            /* [retval][out] */ long *plJournalQuota) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_JournalQuota( 
+            /* [in] */ long lJournalQuota) = 0;
+        
+        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_IsWorldReadable( 
+            /* [retval][out] */ Boolean *pisWorldReadable) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Create( 
+            /* [optional][in] */ VARIANT *IsTransactional,
+            /* [optional][in] */ VARIANT *IsWorldReadable) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Open( 
+            /* [in] */ long Access,
+            /* [in] */ long ShareMode,
+            /* [retval][out] */ IMSMQQueue3 **ppq) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Update( void) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PathNameDNS( 
+            /* [retval][out] */ BSTR *pbstrPathNameDNS) = 0;
+        
+        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        
+        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Security( 
+            /* [retval][out] */ VARIANT *pvarSecurity) = 0;
+        
+        virtual /* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE put_Security( 
+            /* [in] */ VARIANT varSecurity) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsTransactional2( 
+            /* [retval][out] */ VARIANT_BOOL *pisTransactional) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsWorldReadable2( 
+            /* [retval][out] */ VARIANT_BOOL *pisWorldReadable) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MulticastAddress( 
+            /* [retval][out] */ BSTR *pbstrMulticastAddress) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MulticastAddress( 
+            /* [in] */ BSTR bstrMulticastAddress) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ADsPath( 
+            /* [retval][out] */ BSTR *pbstrADsPath) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQQueueInfo3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQQueueInfo3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQQueueInfo3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQQueueInfo3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueGuid )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ BSTR *pbstrGuidQueue);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceTypeGuid )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ BSTR *pbstrGuidServiceType);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceTypeGuid )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ BSTR bstrGuidServiceType);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Label )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ BSTR *pbstrLabel);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Label )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ BSTR bstrLabel);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PathName )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ BSTR *pbstrPathName);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PathName )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ BSTR bstrPathName);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ BSTR *pbstrFormatName);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_FormatName )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ BSTR bstrFormatName);
+        
+        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IsTransactional )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ Boolean *pisTransactional);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ long *plPrivLevel);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ long lPrivLevel);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ long *plJournal);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ long lJournal);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Quota )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ long *plQuota);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Quota )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ long lQuota);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BasePriority )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ long *plBasePriority);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_BasePriority )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ long lBasePriority);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CreateTime )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ VARIANT *pvarCreateTime);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ModifyTime )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ VARIANT *pvarModifyTime);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Authenticate )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ long *plAuthenticate);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Authenticate )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ long lAuthenticate);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_JournalQuota )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ long *plJournalQuota);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_JournalQuota )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ long lJournalQuota);
+        
+        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IsWorldReadable )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ Boolean *pisWorldReadable);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+            IMSMQQueueInfo3 * This,
+            /* [optional][in] */ VARIANT *IsTransactional,
+            /* [optional][in] */ VARIANT *IsWorldReadable);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+            IMSMQQueueInfo3 * This);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ long Access,
+            /* [in] */ long ShareMode,
+            /* [retval][out] */ IMSMQQueue3 **ppq);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            IMSMQQueueInfo3 * This);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Update )( 
+            IMSMQQueueInfo3 * This);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PathNameDNS )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ BSTR *pbstrPathNameDNS);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Security )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ VARIANT *pvarSecurity);
+        
+        /* [id][propput][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_Security )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ VARIANT varSecurity);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsTransactional2 )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pisTransactional);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsWorldReadable2 )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pisWorldReadable);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MulticastAddress )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ BSTR *pbstrMulticastAddress);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MulticastAddress )( 
+            IMSMQQueueInfo3 * This,
+            /* [in] */ BSTR bstrMulticastAddress);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IMSMQQueueInfo3 * This,
+            /* [retval][out] */ BSTR *pbstrADsPath);
+        
+        END_INTERFACE
+    } IMSMQQueueInfo3Vtbl;
+
+    interface IMSMQQueueInfo3
+    {
+        CONST_VTBL struct IMSMQQueueInfo3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQQueueInfo3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQQueueInfo3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQQueueInfo3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQQueueInfo3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQQueueInfo3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQQueueInfo3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQQueueInfo3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQQueueInfo3_get_QueueGuid(This,pbstrGuidQueue)	\
+    (This)->lpVtbl -> get_QueueGuid(This,pbstrGuidQueue)
+
+#define IMSMQQueueInfo3_get_ServiceTypeGuid(This,pbstrGuidServiceType)	\
+    (This)->lpVtbl -> get_ServiceTypeGuid(This,pbstrGuidServiceType)
+
+#define IMSMQQueueInfo3_put_ServiceTypeGuid(This,bstrGuidServiceType)	\
+    (This)->lpVtbl -> put_ServiceTypeGuid(This,bstrGuidServiceType)
+
+#define IMSMQQueueInfo3_get_Label(This,pbstrLabel)	\
+    (This)->lpVtbl -> get_Label(This,pbstrLabel)
+
+#define IMSMQQueueInfo3_put_Label(This,bstrLabel)	\
+    (This)->lpVtbl -> put_Label(This,bstrLabel)
+
+#define IMSMQQueueInfo3_get_PathName(This,pbstrPathName)	\
+    (This)->lpVtbl -> get_PathName(This,pbstrPathName)
+
+#define IMSMQQueueInfo3_put_PathName(This,bstrPathName)	\
+    (This)->lpVtbl -> put_PathName(This,bstrPathName)
+
+#define IMSMQQueueInfo3_get_FormatName(This,pbstrFormatName)	\
+    (This)->lpVtbl -> get_FormatName(This,pbstrFormatName)
+
+#define IMSMQQueueInfo3_put_FormatName(This,bstrFormatName)	\
+    (This)->lpVtbl -> put_FormatName(This,bstrFormatName)
+
+#define IMSMQQueueInfo3_get_IsTransactional(This,pisTransactional)	\
+    (This)->lpVtbl -> get_IsTransactional(This,pisTransactional)
+
+#define IMSMQQueueInfo3_get_PrivLevel(This,plPrivLevel)	\
+    (This)->lpVtbl -> get_PrivLevel(This,plPrivLevel)
+
+#define IMSMQQueueInfo3_put_PrivLevel(This,lPrivLevel)	\
+    (This)->lpVtbl -> put_PrivLevel(This,lPrivLevel)
+
+#define IMSMQQueueInfo3_get_Journal(This,plJournal)	\
+    (This)->lpVtbl -> get_Journal(This,plJournal)
+
+#define IMSMQQueueInfo3_put_Journal(This,lJournal)	\
+    (This)->lpVtbl -> put_Journal(This,lJournal)
+
+#define IMSMQQueueInfo3_get_Quota(This,plQuota)	\
+    (This)->lpVtbl -> get_Quota(This,plQuota)
+
+#define IMSMQQueueInfo3_put_Quota(This,lQuota)	\
+    (This)->lpVtbl -> put_Quota(This,lQuota)
+
+#define IMSMQQueueInfo3_get_BasePriority(This,plBasePriority)	\
+    (This)->lpVtbl -> get_BasePriority(This,plBasePriority)
+
+#define IMSMQQueueInfo3_put_BasePriority(This,lBasePriority)	\
+    (This)->lpVtbl -> put_BasePriority(This,lBasePriority)
+
+#define IMSMQQueueInfo3_get_CreateTime(This,pvarCreateTime)	\
+    (This)->lpVtbl -> get_CreateTime(This,pvarCreateTime)
+
+#define IMSMQQueueInfo3_get_ModifyTime(This,pvarModifyTime)	\
+    (This)->lpVtbl -> get_ModifyTime(This,pvarModifyTime)
+
+#define IMSMQQueueInfo3_get_Authenticate(This,plAuthenticate)	\
+    (This)->lpVtbl -> get_Authenticate(This,plAuthenticate)
+
+#define IMSMQQueueInfo3_put_Authenticate(This,lAuthenticate)	\
+    (This)->lpVtbl -> put_Authenticate(This,lAuthenticate)
+
+#define IMSMQQueueInfo3_get_JournalQuota(This,plJournalQuota)	\
+    (This)->lpVtbl -> get_JournalQuota(This,plJournalQuota)
+
+#define IMSMQQueueInfo3_put_JournalQuota(This,lJournalQuota)	\
+    (This)->lpVtbl -> put_JournalQuota(This,lJournalQuota)
+
+#define IMSMQQueueInfo3_get_IsWorldReadable(This,pisWorldReadable)	\
+    (This)->lpVtbl -> get_IsWorldReadable(This,pisWorldReadable)
+
+#define IMSMQQueueInfo3_Create(This,IsTransactional,IsWorldReadable)	\
+    (This)->lpVtbl -> Create(This,IsTransactional,IsWorldReadable)
+
+#define IMSMQQueueInfo3_Delete(This)	\
+    (This)->lpVtbl -> Delete(This)
+
+#define IMSMQQueueInfo3_Open(This,Access,ShareMode,ppq)	\
+    (This)->lpVtbl -> Open(This,Access,ShareMode,ppq)
+
+#define IMSMQQueueInfo3_Refresh(This)	\
+    (This)->lpVtbl -> Refresh(This)
+
+#define IMSMQQueueInfo3_Update(This)	\
+    (This)->lpVtbl -> Update(This)
+
+#define IMSMQQueueInfo3_get_PathNameDNS(This,pbstrPathNameDNS)	\
+    (This)->lpVtbl -> get_PathNameDNS(This,pbstrPathNameDNS)
+
+#define IMSMQQueueInfo3_get_Properties(This,ppcolProperties)	\
+    (This)->lpVtbl -> get_Properties(This,ppcolProperties)
+
+#define IMSMQQueueInfo3_get_Security(This,pvarSecurity)	\
+    (This)->lpVtbl -> get_Security(This,pvarSecurity)
+
+#define IMSMQQueueInfo3_put_Security(This,varSecurity)	\
+    (This)->lpVtbl -> put_Security(This,varSecurity)
+
+#define IMSMQQueueInfo3_get_IsTransactional2(This,pisTransactional)	\
+    (This)->lpVtbl -> get_IsTransactional2(This,pisTransactional)
+
+#define IMSMQQueueInfo3_get_IsWorldReadable2(This,pisWorldReadable)	\
+    (This)->lpVtbl -> get_IsWorldReadable2(This,pisWorldReadable)
+
+#define IMSMQQueueInfo3_get_MulticastAddress(This,pbstrMulticastAddress)	\
+    (This)->lpVtbl -> get_MulticastAddress(This,pbstrMulticastAddress)
+
+#define IMSMQQueueInfo3_put_MulticastAddress(This,bstrMulticastAddress)	\
+    (This)->lpVtbl -> put_MulticastAddress(This,bstrMulticastAddress)
+
+#define IMSMQQueueInfo3_get_ADsPath(This,pbstrADsPath)	\
+    (This)->lpVtbl -> get_ADsPath(This,pbstrADsPath)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_QueueGuid_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ BSTR *pbstrGuidQueue);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_QueueGuid_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_ServiceTypeGuid_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ BSTR *pbstrGuidServiceType);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_ServiceTypeGuid_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_ServiceTypeGuid_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [in] */ BSTR bstrGuidServiceType);
+
+
+void __RPC_STUB IMSMQQueueInfo3_put_ServiceTypeGuid_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Label_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ BSTR *pbstrLabel);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_Label_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Label_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [in] */ BSTR bstrLabel);
+
+
+void __RPC_STUB IMSMQQueueInfo3_put_Label_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_PathName_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ BSTR *pbstrPathName);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_PathName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_PathName_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [in] */ BSTR bstrPathName);
+
+
+void __RPC_STUB IMSMQQueueInfo3_put_PathName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_FormatName_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ BSTR *pbstrFormatName);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_FormatName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_FormatName_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [in] */ BSTR bstrFormatName);
+
+
+void __RPC_STUB IMSMQQueueInfo3_put_FormatName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_IsTransactional_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ Boolean *pisTransactional);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_IsTransactional_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_PrivLevel_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ long *plPrivLevel);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_PrivLevel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_PrivLevel_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [in] */ long lPrivLevel);
+
+
+void __RPC_STUB IMSMQQueueInfo3_put_PrivLevel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Journal_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ long *plJournal);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_Journal_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Journal_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [in] */ long lJournal);
+
+
+void __RPC_STUB IMSMQQueueInfo3_put_Journal_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Quota_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ long *plQuota);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_Quota_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Quota_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [in] */ long lQuota);
+
+
+void __RPC_STUB IMSMQQueueInfo3_put_Quota_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_BasePriority_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ long *plBasePriority);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_BasePriority_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_BasePriority_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [in] */ long lBasePriority);
+
+
+void __RPC_STUB IMSMQQueueInfo3_put_BasePriority_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_CreateTime_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ VARIANT *pvarCreateTime);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_CreateTime_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_ModifyTime_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ VARIANT *pvarModifyTime);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_ModifyTime_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Authenticate_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ long *plAuthenticate);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_Authenticate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Authenticate_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [in] */ long lAuthenticate);
+
+
+void __RPC_STUB IMSMQQueueInfo3_put_Authenticate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_JournalQuota_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ long *plJournalQuota);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_JournalQuota_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_JournalQuota_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [in] */ long lJournalQuota);
+
+
+void __RPC_STUB IMSMQQueueInfo3_put_JournalQuota_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_IsWorldReadable_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ Boolean *pisWorldReadable);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_IsWorldReadable_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Create_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [optional][in] */ VARIANT *IsTransactional,
+    /* [optional][in] */ VARIANT *IsWorldReadable);
+
+
+void __RPC_STUB IMSMQQueueInfo3_Create_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Delete_Proxy( 
+    IMSMQQueueInfo3 * This);
+
+
+void __RPC_STUB IMSMQQueueInfo3_Delete_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Open_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [in] */ long Access,
+    /* [in] */ long ShareMode,
+    /* [retval][out] */ IMSMQQueue3 **ppq);
+
+
+void __RPC_STUB IMSMQQueueInfo3_Open_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Refresh_Proxy( 
+    IMSMQQueueInfo3 * This);
+
+
+void __RPC_STUB IMSMQQueueInfo3_Refresh_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_Update_Proxy( 
+    IMSMQQueueInfo3 * This);
+
+
+void __RPC_STUB IMSMQQueueInfo3_Update_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_PathNameDNS_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ BSTR *pbstrPathNameDNS);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_PathNameDNS_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Properties_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_Properties_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_Security_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ VARIANT *pvarSecurity);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_Security_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_Security_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [in] */ VARIANT varSecurity);
+
+
+void __RPC_STUB IMSMQQueueInfo3_put_Security_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_IsTransactional2_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ VARIANT_BOOL *pisTransactional);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_IsTransactional2_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_IsWorldReadable2_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ VARIANT_BOOL *pisWorldReadable);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_IsWorldReadable2_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_MulticastAddress_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ BSTR *pbstrMulticastAddress);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_MulticastAddress_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_put_MulticastAddress_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [in] */ BSTR bstrMulticastAddress);
+
+
+void __RPC_STUB IMSMQQueueInfo3_put_MulticastAddress_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfo3_get_ADsPath_Proxy( 
+    IMSMQQueueInfo3 * This,
+    /* [retval][out] */ BSTR *pbstrADsPath);
+
+
+void __RPC_STUB IMSMQQueueInfo3_get_ADsPath_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQQueueInfo3_INTERFACE_DEFINED__ */
+
+
 #ifndef __IMSMQQueue_INTERFACE_DEFINED__
 #define __IMSMQQueue_INTERFACE_DEFINED__
 
@@ -2496,7 +3620,7 @@ void __RPC_STUB IMSMQQueueInfo2_put_Security_Stub(
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQQueue,0xD7D6E076,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const IID IID_IMSMQQueue;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -2505,60 +3629,60 @@ DEFINE_GUID(IID_IMSMQQueue,0xD7D6E076,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0
     {
     public:
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Access( 
-            /* [retval][out] */ long __RPC_FAR *plAccess) = 0;
+            /* [retval][out] */ long *plAccess) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ShareMode( 
-            /* [retval][out] */ long __RPC_FAR *plShareMode) = 0;
+            /* [retval][out] */ long *plShareMode) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfo) = 0;
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfo) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Handle( 
-            /* [retval][out] */ long __RPC_FAR *plHandle) = 0;
+            /* [retval][out] */ long *plHandle) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsOpen( 
-            /* [retval][out] */ Boolean __RPC_FAR *pisOpen) = 0;
+            /* [retval][out] */ Boolean *pisOpen) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Receive( 
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Peek( 
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE EnableNotification( 
-            /* [in] */ IMSMQEvent __RPC_FAR *Event,
-            /* [optional][in] */ VARIANT __RPC_FAR *Cursor,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout) = 0;
+            /* [in] */ IMSMQEvent *Event,
+            /* [optional][in] */ VARIANT *Cursor,
+            /* [optional][in] */ VARIANT *ReceiveTimeout) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveCurrent( 
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekNext( 
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekCurrent( 
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
         
     };
     
@@ -2568,121 +3692,121 @@ DEFINE_GUID(IID_IMSMQQueue,0xD7D6E076,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQQueue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQQueue * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQQueue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQQueue * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQQueue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQQueue * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQQueue __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQQueue * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQQueue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQQueue * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQQueue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQQueue * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQQueue __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQQueue * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Access )( 
-            IMSMQQueue __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAccess);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Access )( 
+            IMSMQQueue * This,
+            /* [retval][out] */ long *plAccess);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShareMode )( 
-            IMSMQQueue __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plShareMode);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ShareMode )( 
+            IMSMQQueue * This,
+            /* [retval][out] */ long *plShareMode);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_QueueInfo )( 
-            IMSMQQueue __RPC_FAR * This,
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfo);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueInfo )( 
+            IMSMQQueue * This,
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfo);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Handle )( 
-            IMSMQQueue __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plHandle);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            IMSMQQueue * This,
+            /* [retval][out] */ long *plHandle);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsOpen )( 
-            IMSMQQueue __RPC_FAR * This,
-            /* [retval][out] */ Boolean __RPC_FAR *pisOpen);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsOpen )( 
+            IMSMQQueue * This,
+            /* [retval][out] */ Boolean *pisOpen);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
-            IMSMQQueue __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+            IMSMQQueue * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Receive )( 
-            IMSMQQueue __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Receive )( 
+            IMSMQQueue * This,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Peek )( 
-            IMSMQQueue __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Peek )( 
+            IMSMQQueue * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnableNotification )( 
-            IMSMQQueue __RPC_FAR * This,
-            /* [in] */ IMSMQEvent __RPC_FAR *Event,
-            /* [optional][in] */ VARIANT __RPC_FAR *Cursor,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *EnableNotification )( 
+            IMSMQQueue * This,
+            /* [in] */ IMSMQEvent *Event,
+            /* [optional][in] */ VARIANT *Cursor,
+            /* [optional][in] */ VARIANT *ReceiveTimeout);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IMSMQQueue __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IMSMQQueue * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReceiveCurrent )( 
-            IMSMQQueue __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent )( 
+            IMSMQQueue * This,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PeekNext )( 
-            IMSMQQueue __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekNext )( 
+            IMSMQQueue * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PeekCurrent )( 
-            IMSMQQueue __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekCurrent )( 
+            IMSMQQueue * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
         
         END_INTERFACE
     } IMSMQQueueVtbl;
 
     interface IMSMQQueue
     {
-        CONST_VTBL struct IMSMQQueueVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQQueueVtbl *lpVtbl;
     };
 
     
@@ -2760,8 +3884,8 @@ DEFINE_GUID(IID_IMSMQQueue,0xD7D6E076,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_get_Access_Proxy( 
-    IMSMQQueue __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plAccess);
+    IMSMQQueue * This,
+    /* [retval][out] */ long *plAccess);
 
 
 void __RPC_STUB IMSMQQueue_get_Access_Stub(
@@ -2772,8 +3896,8 @@ void __RPC_STUB IMSMQQueue_get_Access_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_get_ShareMode_Proxy( 
-    IMSMQQueue __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plShareMode);
+    IMSMQQueue * This,
+    /* [retval][out] */ long *plShareMode);
 
 
 void __RPC_STUB IMSMQQueue_get_ShareMode_Stub(
@@ -2784,8 +3908,8 @@ void __RPC_STUB IMSMQQueue_get_ShareMode_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_get_QueueInfo_Proxy( 
-    IMSMQQueue __RPC_FAR * This,
-    /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfo);
+    IMSMQQueue * This,
+    /* [retval][out] */ IMSMQQueueInfo **ppqinfo);
 
 
 void __RPC_STUB IMSMQQueue_get_QueueInfo_Stub(
@@ -2796,8 +3920,8 @@ void __RPC_STUB IMSMQQueue_get_QueueInfo_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_get_Handle_Proxy( 
-    IMSMQQueue __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plHandle);
+    IMSMQQueue * This,
+    /* [retval][out] */ long *plHandle);
 
 
 void __RPC_STUB IMSMQQueue_get_Handle_Stub(
@@ -2808,8 +3932,8 @@ void __RPC_STUB IMSMQQueue_get_Handle_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_get_IsOpen_Proxy( 
-    IMSMQQueue __RPC_FAR * This,
-    /* [retval][out] */ Boolean __RPC_FAR *pisOpen);
+    IMSMQQueue * This,
+    /* [retval][out] */ Boolean *pisOpen);
 
 
 void __RPC_STUB IMSMQQueue_get_IsOpen_Stub(
@@ -2820,7 +3944,7 @@ void __RPC_STUB IMSMQQueue_get_IsOpen_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_Close_Proxy( 
-    IMSMQQueue __RPC_FAR * This);
+    IMSMQQueue * This);
 
 
 void __RPC_STUB IMSMQQueue_Close_Stub(
@@ -2831,12 +3955,12 @@ void __RPC_STUB IMSMQQueue_Close_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_Receive_Proxy( 
-    IMSMQQueue __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue * This,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue_Receive_Stub(
@@ -2847,11 +3971,11 @@ void __RPC_STUB IMSMQQueue_Receive_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_Peek_Proxy( 
-    IMSMQQueue __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue_Peek_Stub(
@@ -2862,10 +3986,10 @@ void __RPC_STUB IMSMQQueue_Peek_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_EnableNotification_Proxy( 
-    IMSMQQueue __RPC_FAR * This,
-    /* [in] */ IMSMQEvent __RPC_FAR *Event,
-    /* [optional][in] */ VARIANT __RPC_FAR *Cursor,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout);
+    IMSMQQueue * This,
+    /* [in] */ IMSMQEvent *Event,
+    /* [optional][in] */ VARIANT *Cursor,
+    /* [optional][in] */ VARIANT *ReceiveTimeout);
 
 
 void __RPC_STUB IMSMQQueue_EnableNotification_Stub(
@@ -2876,7 +4000,7 @@ void __RPC_STUB IMSMQQueue_EnableNotification_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_Reset_Proxy( 
-    IMSMQQueue __RPC_FAR * This);
+    IMSMQQueue * This);
 
 
 void __RPC_STUB IMSMQQueue_Reset_Stub(
@@ -2887,12 +4011,12 @@ void __RPC_STUB IMSMQQueue_Reset_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_ReceiveCurrent_Proxy( 
-    IMSMQQueue __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue * This,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue_ReceiveCurrent_Stub(
@@ -2903,11 +4027,11 @@ void __RPC_STUB IMSMQQueue_ReceiveCurrent_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_PeekNext_Proxy( 
-    IMSMQQueue __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue_PeekNext_Stub(
@@ -2918,11 +4042,11 @@ void __RPC_STUB IMSMQQueue_PeekNext_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue_PeekCurrent_Proxy( 
-    IMSMQQueue __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue_PeekCurrent_Stub(
@@ -2943,7 +4067,7 @@ void __RPC_STUB IMSMQQueue_PeekCurrent_Stub(
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQQueue2,0xEF0574E0,0x06D8,0x11D3,0xB1,0x00,0x00,0xE0,0x2C,0x07,0x4F,0x6B);
+EXTERN_C const IID IID_IMSMQQueue2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -2952,100 +4076,100 @@ DEFINE_GUID(IID_IMSMQQueue2,0xEF0574E0,0x06D8,0x11D3,0xB1,0x00,0x00,0xE0,0x2C,0x
     {
     public:
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Access( 
-            /* [retval][out] */ long __RPC_FAR *plAccess) = 0;
+            /* [retval][out] */ long *plAccess) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ShareMode( 
-            /* [retval][out] */ long __RPC_FAR *plShareMode) = 0;
+            /* [retval][out] */ long *plShareMode) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfo) = 0;
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfo) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Handle( 
-            /* [retval][out] */ long __RPC_FAR *plHandle) = 0;
+            /* [retval][out] */ long *plHandle) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsOpen( 
-            /* [retval][out] */ Boolean __RPC_FAR *pisOpen) = 0;
+            /* [retval][out] */ Boolean *pisOpen) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
         virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE Receive_v1( 
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
         
         virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE Peek_v1( 
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE EnableNotification( 
-            /* [in] */ IMSMQEvent2 __RPC_FAR *Event,
-            /* [optional][in] */ VARIANT __RPC_FAR *Cursor,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout) = 0;
+            /* [in] */ IMSMQEvent2 *Event,
+            /* [optional][in] */ VARIANT *Cursor,
+            /* [optional][in] */ VARIANT *ReceiveTimeout) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveCurrent_v1( 
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
         
         virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekNext_v1( 
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
         
         virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekCurrent_v1( 
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Receive( 
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage2 **ppmsg) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Peek( 
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage2 **ppmsg) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveCurrent( 
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage2 **ppmsg) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekNext( 
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage2 **ppmsg) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekCurrent( 
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg) = 0;
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage2 **ppmsg) = 0;
         
         virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties) = 0;
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
         
     };
     
@@ -3055,167 +4179,167 @@ DEFINE_GUID(IID_IMSMQQueue2,0xEF0574E0,0x06D8,0x11D3,0xB1,0x00,0x00,0xE0,0x2C,0x
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQQueue2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQQueue2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQQueue2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQQueue2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQQueue2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQQueue2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQQueue2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQQueue2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQQueue2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQQueue2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQQueue2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQQueue2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQQueue2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Access )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAccess);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Access )( 
+            IMSMQQueue2 * This,
+            /* [retval][out] */ long *plAccess);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShareMode )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plShareMode);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ShareMode )( 
+            IMSMQQueue2 * This,
+            /* [retval][out] */ long *plShareMode);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_QueueInfo )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfo);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueInfo )( 
+            IMSMQQueue2 * This,
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfo);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Handle )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plHandle);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            IMSMQQueue2 * This,
+            /* [retval][out] */ long *plHandle);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsOpen )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [retval][out] */ Boolean __RPC_FAR *pisOpen);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsOpen )( 
+            IMSMQQueue2 * This,
+            /* [retval][out] */ Boolean *pisOpen);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
-            IMSMQQueue2 __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+            IMSMQQueue2 * This);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Receive_v1 )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Receive_v1 )( 
+            IMSMQQueue2 * This,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Peek_v1 )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Peek_v1 )( 
+            IMSMQQueue2 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnableNotification )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [in] */ IMSMQEvent2 __RPC_FAR *Event,
-            /* [optional][in] */ VARIANT __RPC_FAR *Cursor,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *EnableNotification )( 
+            IMSMQQueue2 * This,
+            /* [in] */ IMSMQEvent2 *Event,
+            /* [optional][in] */ VARIANT *Cursor,
+            /* [optional][in] */ VARIANT *ReceiveTimeout);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IMSMQQueue2 __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IMSMQQueue2 * This);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReceiveCurrent_v1 )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent_v1 )( 
+            IMSMQQueue2 * This,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PeekNext_v1 )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekNext_v1 )( 
+            IMSMQQueue2 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
         
-        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PeekCurrent_v1 )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekCurrent_v1 )( 
+            IMSMQQueue2 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Receive )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Receive )( 
+            IMSMQQueue2 * This,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage2 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Peek )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Peek )( 
+            IMSMQQueue2 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage2 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReceiveCurrent )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent )( 
+            IMSMQQueue2 * This,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage2 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PeekNext )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekNext )( 
+            IMSMQQueue2 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage2 **ppmsg);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PeekCurrent )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-            /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-            /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-            /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekCurrent )( 
+            IMSMQQueue2 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage2 **ppmsg);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
-            IMSMQQueue2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQQueue2 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQQueue2Vtbl;
 
     interface IMSMQQueue2
     {
-        CONST_VTBL struct IMSMQQueue2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQQueue2Vtbl *lpVtbl;
     };
 
     
@@ -3311,8 +4435,8 @@ DEFINE_GUID(IID_IMSMQQueue2,0xEF0574E0,0x06D8,0x11D3,0xB1,0x00,0x00,0xE0,0x2C,0x
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_Access_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plAccess);
+    IMSMQQueue2 * This,
+    /* [retval][out] */ long *plAccess);
 
 
 void __RPC_STUB IMSMQQueue2_get_Access_Stub(
@@ -3323,8 +4447,8 @@ void __RPC_STUB IMSMQQueue2_get_Access_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_ShareMode_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plShareMode);
+    IMSMQQueue2 * This,
+    /* [retval][out] */ long *plShareMode);
 
 
 void __RPC_STUB IMSMQQueue2_get_ShareMode_Stub(
@@ -3335,8 +4459,8 @@ void __RPC_STUB IMSMQQueue2_get_ShareMode_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_QueueInfo_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfo);
+    IMSMQQueue2 * This,
+    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfo);
 
 
 void __RPC_STUB IMSMQQueue2_get_QueueInfo_Stub(
@@ -3347,8 +4471,8 @@ void __RPC_STUB IMSMQQueue2_get_QueueInfo_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_Handle_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plHandle);
+    IMSMQQueue2 * This,
+    /* [retval][out] */ long *plHandle);
 
 
 void __RPC_STUB IMSMQQueue2_get_Handle_Stub(
@@ -3359,8 +4483,8 @@ void __RPC_STUB IMSMQQueue2_get_Handle_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_IsOpen_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [retval][out] */ Boolean __RPC_FAR *pisOpen);
+    IMSMQQueue2 * This,
+    /* [retval][out] */ Boolean *pisOpen);
 
 
 void __RPC_STUB IMSMQQueue2_get_IsOpen_Stub(
@@ -3371,7 +4495,7 @@ void __RPC_STUB IMSMQQueue2_get_IsOpen_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_Close_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This);
+    IMSMQQueue2 * This);
 
 
 void __RPC_STUB IMSMQQueue2_Close_Stub(
@@ -3382,12 +4506,12 @@ void __RPC_STUB IMSMQQueue2_Close_Stub(
 
 
 /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_Receive_v1_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue2 * This,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_Receive_v1_Stub(
@@ -3398,11 +4522,11 @@ void __RPC_STUB IMSMQQueue2_Receive_v1_Stub(
 
 
 /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_Peek_v1_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue2 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_Peek_v1_Stub(
@@ -3413,10 +4537,10 @@ void __RPC_STUB IMSMQQueue2_Peek_v1_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_EnableNotification_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [in] */ IMSMQEvent2 __RPC_FAR *Event,
-    /* [optional][in] */ VARIANT __RPC_FAR *Cursor,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout);
+    IMSMQQueue2 * This,
+    /* [in] */ IMSMQEvent2 *Event,
+    /* [optional][in] */ VARIANT *Cursor,
+    /* [optional][in] */ VARIANT *ReceiveTimeout);
 
 
 void __RPC_STUB IMSMQQueue2_EnableNotification_Stub(
@@ -3427,7 +4551,7 @@ void __RPC_STUB IMSMQQueue2_EnableNotification_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_Reset_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This);
+    IMSMQQueue2 * This);
 
 
 void __RPC_STUB IMSMQQueue2_Reset_Stub(
@@ -3438,12 +4562,12 @@ void __RPC_STUB IMSMQQueue2_Reset_Stub(
 
 
 /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_ReceiveCurrent_v1_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue2 * This,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_ReceiveCurrent_v1_Stub(
@@ -3454,11 +4578,11 @@ void __RPC_STUB IMSMQQueue2_ReceiveCurrent_v1_Stub(
 
 
 /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_PeekNext_v1_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue2 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_PeekNext_v1_Stub(
@@ -3469,11 +4593,11 @@ void __RPC_STUB IMSMQQueue2_PeekNext_v1_Stub(
 
 
 /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_PeekCurrent_v1_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [retval][out] */ IMSMQMessage __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue2 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_PeekCurrent_v1_Stub(
@@ -3484,13 +4608,13 @@ void __RPC_STUB IMSMQQueue2_PeekCurrent_v1_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_Receive_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue2 * This,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage2 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_Receive_Stub(
@@ -3501,12 +4625,12 @@ void __RPC_STUB IMSMQQueue2_Receive_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_Peek_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue2 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage2 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_Peek_Stub(
@@ -3517,13 +4641,13 @@ void __RPC_STUB IMSMQQueue2_Peek_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_ReceiveCurrent_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *Transaction,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue2 * This,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage2 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_ReceiveCurrent_Stub(
@@ -3534,12 +4658,12 @@ void __RPC_STUB IMSMQQueue2_ReceiveCurrent_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_PeekNext_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue2 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage2 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_PeekNext_Stub(
@@ -3550,12 +4674,12 @@ void __RPC_STUB IMSMQQueue2_PeekNext_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_PeekCurrent_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantDestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantBody,
-    /* [optional][in] */ VARIANT __RPC_FAR *ReceiveTimeout,
-    /* [optional][in] */ VARIANT __RPC_FAR *WantConnectorType,
-    /* [retval][out] */ IMSMQMessage2 __RPC_FAR *__RPC_FAR *ppmsg);
+    IMSMQQueue2 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage2 **ppmsg);
 
 
 void __RPC_STUB IMSMQQueue2_PeekCurrent_Stub(
@@ -3566,8 +4690,8 @@ void __RPC_STUB IMSMQQueue2_PeekCurrent_Stub(
 
 
 /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueue2_get_Properties_Proxy( 
-    IMSMQQueue2 __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+    IMSMQQueue2 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQQueue2_get_Properties_Stub(
@@ -3588,7 +4712,7 @@ void __RPC_STUB IMSMQQueue2_get_Properties_Stub(
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQMessage,0xD7D6E074,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const IID IID_IMSMQMessage;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -3597,149 +4721,149 @@ DEFINE_GUID(IID_IMSMQMessage,0xD7D6E074,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0
     {
     public:
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Class( 
-            /* [retval][out] */ long __RPC_FAR *plClass) = 0;
+            /* [retval][out] */ long *plClass) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivLevel( 
-            /* [retval][out] */ long __RPC_FAR *plPrivLevel) = 0;
+            /* [retval][out] */ long *plPrivLevel) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PrivLevel( 
             /* [in] */ long lPrivLevel) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthLevel( 
-            /* [retval][out] */ long __RPC_FAR *plAuthLevel) = 0;
+            /* [retval][out] */ long *plAuthLevel) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthLevel( 
             /* [in] */ long lAuthLevel) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsAuthenticated( 
-            /* [retval][out] */ Boolean __RPC_FAR *pisAuthenticated) = 0;
+            /* [retval][out] */ Boolean *pisAuthenticated) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Delivery( 
-            /* [retval][out] */ long __RPC_FAR *plDelivery) = 0;
+            /* [retval][out] */ long *plDelivery) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Delivery( 
             /* [in] */ long lDelivery) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Trace( 
-            /* [retval][out] */ long __RPC_FAR *plTrace) = 0;
+            /* [retval][out] */ long *plTrace) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Trace( 
             /* [in] */ long lTrace) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Priority( 
-            /* [retval][out] */ long __RPC_FAR *plPriority) = 0;
+            /* [retval][out] */ long *plPriority) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Priority( 
             /* [in] */ long lPriority) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Journal( 
-            /* [retval][out] */ long __RPC_FAR *plJournal) = 0;
+            /* [retval][out] */ long *plJournal) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Journal( 
             /* [in] */ long lJournal) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoResponse) = 0;
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse) = 0;
         
         virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo( 
-            /* [in] */ IMSMQQueueInfo __RPC_FAR *pqinfoResponse) = 0;
+            /* [in] */ IMSMQQueueInfo *pqinfoResponse) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AppSpecific( 
-            /* [retval][out] */ long __RPC_FAR *plAppSpecific) = 0;
+            /* [retval][out] */ long *plAppSpecific) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AppSpecific( 
             /* [in] */ long lAppSpecific) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SourceMachineGuid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidSrcMachine) = 0;
+            /* [retval][out] */ BSTR *pbstrGuidSrcMachine) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BodyLength( 
-            /* [retval][out] */ long __RPC_FAR *pcbBody) = 0;
+            /* [retval][out] */ long *pcbBody) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Body( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarBody) = 0;
+            /* [retval][out] */ VARIANT *pvarBody) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Body( 
             /* [in] */ VARIANT varBody) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AdminQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoAdmin) = 0;
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin) = 0;
         
         virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo( 
-            /* [in] */ IMSMQQueueInfo __RPC_FAR *pqinfoAdmin) = 0;
+            /* [in] */ IMSMQQueueInfo *pqinfoAdmin) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarMsgId) = 0;
+            /* [retval][out] */ VARIANT *pvarMsgId) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CorrelationId( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarMsgId) = 0;
+            /* [retval][out] */ VARIANT *pvarMsgId) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_CorrelationId( 
             /* [in] */ VARIANT varMsgId) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Ack( 
-            /* [retval][out] */ long __RPC_FAR *plAck) = 0;
+            /* [retval][out] */ long *plAck) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Ack( 
             /* [in] */ long lAck) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Label( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrLabel) = 0;
+            /* [retval][out] */ BSTR *pbstrLabel) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Label( 
             /* [in] */ BSTR bstrLabel) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MaxTimeToReachQueue( 
-            /* [retval][out] */ long __RPC_FAR *plMaxTimeToReachQueue) = 0;
+            /* [retval][out] */ long *plMaxTimeToReachQueue) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MaxTimeToReachQueue( 
             /* [in] */ long lMaxTimeToReachQueue) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MaxTimeToReceive( 
-            /* [retval][out] */ long __RPC_FAR *plMaxTimeToReceive) = 0;
+            /* [retval][out] */ long *plMaxTimeToReceive) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MaxTimeToReceive( 
             /* [in] */ long lMaxTimeToReceive) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_HashAlgorithm( 
-            /* [retval][out] */ long __RPC_FAR *plHashAlg) = 0;
+            /* [retval][out] */ long *plHashAlg) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_HashAlgorithm( 
             /* [in] */ long lHashAlg) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_EncryptAlgorithm( 
-            /* [retval][out] */ long __RPC_FAR *plEncryptAlg) = 0;
+            /* [retval][out] */ long *plEncryptAlg) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_EncryptAlgorithm( 
             /* [in] */ long lEncryptAlg) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SentTime( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSentTime) = 0;
+            /* [retval][out] */ VARIANT *pvarSentTime) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ArrivedTime( 
-            /* [retval][out] */ VARIANT __RPC_FAR *plArrivedTime) = 0;
+            /* [retval][out] */ VARIANT *plArrivedTime) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_DestinationQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoDest) = 0;
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoDest) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderCertificate( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSenderCert) = 0;
+            /* [retval][out] */ VARIANT *pvarSenderCert) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderCertificate( 
             /* [in] */ VARIANT varSenderCert) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderId( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSenderId) = 0;
+            /* [retval][out] */ VARIANT *pvarSenderId) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderIdType( 
-            /* [retval][out] */ long __RPC_FAR *plSenderIdType) = 0;
+            /* [retval][out] */ long *plSenderIdType) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderIdType( 
             /* [in] */ long lSenderIdType) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Send( 
-            /* [in] */ IMSMQQueue __RPC_FAR *DestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction) = 0;
+            /* [in] */ IMSMQQueue *DestinationQueue,
+            /* [optional][in] */ VARIANT *Transaction) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE AttachCurrentSecurityContext( void) = 0;
         
@@ -3751,248 +4875,248 @@ DEFINE_GUID(IID_IMSMQMessage,0xD7D6E074,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQMessage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQMessage * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQMessage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQMessage * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQMessage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQMessage * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQMessage * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQMessage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQMessage * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQMessage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQMessage * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQMessage * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plClass);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plClass);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivLevel )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plPrivLevel);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plPrivLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PrivLevel )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
+            IMSMQMessage * This,
             /* [in] */ long lPrivLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AuthLevel )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAuthLevel);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthLevel )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plAuthLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AuthLevel )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthLevel )( 
+            IMSMQMessage * This,
             /* [in] */ long lAuthLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsAuthenticated )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ Boolean __RPC_FAR *pisAuthenticated);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ Boolean *pisAuthenticated);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Delivery )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plDelivery);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Delivery )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plDelivery);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Delivery )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Delivery )( 
+            IMSMQMessage * This,
             /* [in] */ long lDelivery);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Trace )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plTrace);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Trace )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plTrace);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Trace )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Trace )( 
+            IMSMQMessage * This,
             /* [in] */ long lTrace);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Priority )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plPriority);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plPriority);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Priority )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+            IMSMQMessage * This,
             /* [in] */ long lPriority);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Journal )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plJournal);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plJournal);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Journal )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
+            IMSMQMessage * This,
             /* [in] */ long lJournal);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ResponseQueueInfo )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoResponse);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse);
         
-        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_ResponseQueueInfo )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [in] */ IMSMQQueueInfo __RPC_FAR *pqinfoResponse);
+        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo )( 
+            IMSMQMessage * This,
+            /* [in] */ IMSMQQueueInfo *pqinfoResponse);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AppSpecific )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAppSpecific);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AppSpecific )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plAppSpecific);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AppSpecific )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AppSpecific )( 
+            IMSMQMessage * This,
             /* [in] */ long lAppSpecific);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SourceMachineGuid )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidSrcMachine);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SourceMachineGuid )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ BSTR *pbstrGuidSrcMachine);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BodyLength )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pcbBody);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BodyLength )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *pcbBody);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Body )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarBody);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Body )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ VARIANT *pvarBody);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Body )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Body )( 
+            IMSMQMessage * This,
             /* [in] */ VARIANT varBody);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AdminQueueInfo )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoAdmin);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin);
         
-        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_AdminQueueInfo )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [in] */ IMSMQQueueInfo __RPC_FAR *pqinfoAdmin);
+        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo )( 
+            IMSMQMessage * This,
+            /* [in] */ IMSMQQueueInfo *pqinfoAdmin);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Id )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarMsgId);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ VARIANT *pvarMsgId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CorrelationId )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarMsgId);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CorrelationId )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ VARIANT *pvarMsgId);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CorrelationId )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_CorrelationId )( 
+            IMSMQMessage * This,
             /* [in] */ VARIANT varMsgId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Ack )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAck);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Ack )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plAck);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Ack )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Ack )( 
+            IMSMQMessage * This,
             /* [in] */ long lAck);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Label )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrLabel);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Label )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ BSTR *pbstrLabel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Label )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Label )( 
+            IMSMQMessage * This,
             /* [in] */ BSTR bstrLabel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MaxTimeToReachQueue )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plMaxTimeToReachQueue);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReachQueue )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plMaxTimeToReachQueue);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MaxTimeToReachQueue )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReachQueue )( 
+            IMSMQMessage * This,
             /* [in] */ long lMaxTimeToReachQueue);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MaxTimeToReceive )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plMaxTimeToReceive);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReceive )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plMaxTimeToReceive);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MaxTimeToReceive )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReceive )( 
+            IMSMQMessage * This,
             /* [in] */ long lMaxTimeToReceive);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HashAlgorithm )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plHashAlg);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_HashAlgorithm )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plHashAlg);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HashAlgorithm )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_HashAlgorithm )( 
+            IMSMQMessage * This,
             /* [in] */ long lHashAlg);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EncryptAlgorithm )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plEncryptAlg);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_EncryptAlgorithm )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plEncryptAlg);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EncryptAlgorithm )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_EncryptAlgorithm )( 
+            IMSMQMessage * This,
             /* [in] */ long lEncryptAlg);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SentTime )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSentTime);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SentTime )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ VARIANT *pvarSentTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ArrivedTime )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *plArrivedTime);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ArrivedTime )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ VARIANT *plArrivedTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DestinationQueueInfo )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoDest);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_DestinationQueueInfo )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoDest);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderCertificate )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSenderCert);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderCertificate )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ VARIANT *pvarSenderCert);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderCertificate )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderCertificate )( 
+            IMSMQMessage * This,
             /* [in] */ VARIANT varSenderCert);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderId )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSenderId);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderId )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ VARIANT *pvarSenderId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderIdType )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plSenderIdType);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderIdType )( 
+            IMSMQMessage * This,
+            /* [retval][out] */ long *plSenderIdType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderIdType )( 
-            IMSMQMessage __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderIdType )( 
+            IMSMQMessage * This,
             /* [in] */ long lSenderIdType);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Send )( 
-            IMSMQMessage __RPC_FAR * This,
-            /* [in] */ IMSMQQueue __RPC_FAR *DestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Send )( 
+            IMSMQMessage * This,
+            /* [in] */ IMSMQQueue *DestinationQueue,
+            /* [optional][in] */ VARIANT *Transaction);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AttachCurrentSecurityContext )( 
-            IMSMQMessage __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *AttachCurrentSecurityContext )( 
+            IMSMQMessage * This);
         
         END_INTERFACE
     } IMSMQMessageVtbl;
 
     interface IMSMQMessage
     {
-        CONST_VTBL struct IMSMQMessageVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQMessageVtbl *lpVtbl;
     };
 
     
@@ -4178,8 +5302,8 @@ DEFINE_GUID(IID_IMSMQMessage,0xD7D6E074,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Class_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plClass);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plClass);
 
 
 void __RPC_STUB IMSMQMessage_get_Class_Stub(
@@ -4190,8 +5314,8 @@ void __RPC_STUB IMSMQMessage_get_Class_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_PrivLevel_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plPrivLevel);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plPrivLevel);
 
 
 void __RPC_STUB IMSMQMessage_get_PrivLevel_Stub(
@@ -4202,7 +5326,7 @@ void __RPC_STUB IMSMQMessage_get_PrivLevel_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_PrivLevel_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ long lPrivLevel);
 
 
@@ -4214,8 +5338,8 @@ void __RPC_STUB IMSMQMessage_put_PrivLevel_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_AuthLevel_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plAuthLevel);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plAuthLevel);
 
 
 void __RPC_STUB IMSMQMessage_get_AuthLevel_Stub(
@@ -4226,7 +5350,7 @@ void __RPC_STUB IMSMQMessage_get_AuthLevel_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_AuthLevel_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ long lAuthLevel);
 
 
@@ -4238,8 +5362,8 @@ void __RPC_STUB IMSMQMessage_put_AuthLevel_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_IsAuthenticated_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ Boolean __RPC_FAR *pisAuthenticated);
+    IMSMQMessage * This,
+    /* [retval][out] */ Boolean *pisAuthenticated);
 
 
 void __RPC_STUB IMSMQMessage_get_IsAuthenticated_Stub(
@@ -4250,8 +5374,8 @@ void __RPC_STUB IMSMQMessage_get_IsAuthenticated_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Delivery_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plDelivery);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plDelivery);
 
 
 void __RPC_STUB IMSMQMessage_get_Delivery_Stub(
@@ -4262,7 +5386,7 @@ void __RPC_STUB IMSMQMessage_get_Delivery_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Delivery_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ long lDelivery);
 
 
@@ -4274,8 +5398,8 @@ void __RPC_STUB IMSMQMessage_put_Delivery_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Trace_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plTrace);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plTrace);
 
 
 void __RPC_STUB IMSMQMessage_get_Trace_Stub(
@@ -4286,7 +5410,7 @@ void __RPC_STUB IMSMQMessage_get_Trace_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Trace_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ long lTrace);
 
 
@@ -4298,8 +5422,8 @@ void __RPC_STUB IMSMQMessage_put_Trace_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Priority_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plPriority);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plPriority);
 
 
 void __RPC_STUB IMSMQMessage_get_Priority_Stub(
@@ -4310,7 +5434,7 @@ void __RPC_STUB IMSMQMessage_get_Priority_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Priority_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ long lPriority);
 
 
@@ -4322,8 +5446,8 @@ void __RPC_STUB IMSMQMessage_put_Priority_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Journal_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plJournal);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plJournal);
 
 
 void __RPC_STUB IMSMQMessage_get_Journal_Stub(
@@ -4334,7 +5458,7 @@ void __RPC_STUB IMSMQMessage_get_Journal_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Journal_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ long lJournal);
 
 
@@ -4346,8 +5470,8 @@ void __RPC_STUB IMSMQMessage_put_Journal_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_ResponseQueueInfo_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoResponse);
+    IMSMQMessage * This,
+    /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage_get_ResponseQueueInfo_Stub(
@@ -4358,8 +5482,8 @@ void __RPC_STUB IMSMQMessage_get_ResponseQueueInfo_Stub(
 
 
 /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_putref_ResponseQueueInfo_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [in] */ IMSMQQueueInfo __RPC_FAR *pqinfoResponse);
+    IMSMQMessage * This,
+    /* [in] */ IMSMQQueueInfo *pqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage_putref_ResponseQueueInfo_Stub(
@@ -4370,8 +5494,8 @@ void __RPC_STUB IMSMQMessage_putref_ResponseQueueInfo_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_AppSpecific_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plAppSpecific);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plAppSpecific);
 
 
 void __RPC_STUB IMSMQMessage_get_AppSpecific_Stub(
@@ -4382,7 +5506,7 @@ void __RPC_STUB IMSMQMessage_get_AppSpecific_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_AppSpecific_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ long lAppSpecific);
 
 
@@ -4394,8 +5518,8 @@ void __RPC_STUB IMSMQMessage_put_AppSpecific_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SourceMachineGuid_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidSrcMachine);
+    IMSMQMessage * This,
+    /* [retval][out] */ BSTR *pbstrGuidSrcMachine);
 
 
 void __RPC_STUB IMSMQMessage_get_SourceMachineGuid_Stub(
@@ -4406,8 +5530,8 @@ void __RPC_STUB IMSMQMessage_get_SourceMachineGuid_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_BodyLength_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pcbBody);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *pcbBody);
 
 
 void __RPC_STUB IMSMQMessage_get_BodyLength_Stub(
@@ -4418,8 +5542,8 @@ void __RPC_STUB IMSMQMessage_get_BodyLength_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Body_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarBody);
+    IMSMQMessage * This,
+    /* [retval][out] */ VARIANT *pvarBody);
 
 
 void __RPC_STUB IMSMQMessage_get_Body_Stub(
@@ -4430,7 +5554,7 @@ void __RPC_STUB IMSMQMessage_get_Body_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Body_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ VARIANT varBody);
 
 
@@ -4442,8 +5566,8 @@ void __RPC_STUB IMSMQMessage_put_Body_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_AdminQueueInfo_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoAdmin);
+    IMSMQMessage * This,
+    /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage_get_AdminQueueInfo_Stub(
@@ -4454,8 +5578,8 @@ void __RPC_STUB IMSMQMessage_get_AdminQueueInfo_Stub(
 
 
 /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_putref_AdminQueueInfo_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [in] */ IMSMQQueueInfo __RPC_FAR *pqinfoAdmin);
+    IMSMQMessage * This,
+    /* [in] */ IMSMQQueueInfo *pqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage_putref_AdminQueueInfo_Stub(
@@ -4466,8 +5590,8 @@ void __RPC_STUB IMSMQMessage_putref_AdminQueueInfo_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Id_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarMsgId);
+    IMSMQMessage * This,
+    /* [retval][out] */ VARIANT *pvarMsgId);
 
 
 void __RPC_STUB IMSMQMessage_get_Id_Stub(
@@ -4478,8 +5602,8 @@ void __RPC_STUB IMSMQMessage_get_Id_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_CorrelationId_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarMsgId);
+    IMSMQMessage * This,
+    /* [retval][out] */ VARIANT *pvarMsgId);
 
 
 void __RPC_STUB IMSMQMessage_get_CorrelationId_Stub(
@@ -4490,7 +5614,7 @@ void __RPC_STUB IMSMQMessage_get_CorrelationId_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_CorrelationId_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ VARIANT varMsgId);
 
 
@@ -4502,8 +5626,8 @@ void __RPC_STUB IMSMQMessage_put_CorrelationId_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Ack_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plAck);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plAck);
 
 
 void __RPC_STUB IMSMQMessage_get_Ack_Stub(
@@ -4514,7 +5638,7 @@ void __RPC_STUB IMSMQMessage_get_Ack_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Ack_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ long lAck);
 
 
@@ -4526,8 +5650,8 @@ void __RPC_STUB IMSMQMessage_put_Ack_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_Label_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrLabel);
+    IMSMQMessage * This,
+    /* [retval][out] */ BSTR *pbstrLabel);
 
 
 void __RPC_STUB IMSMQMessage_get_Label_Stub(
@@ -4538,7 +5662,7 @@ void __RPC_STUB IMSMQMessage_get_Label_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_Label_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ BSTR bstrLabel);
 
 
@@ -4550,8 +5674,8 @@ void __RPC_STUB IMSMQMessage_put_Label_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_MaxTimeToReachQueue_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plMaxTimeToReachQueue);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plMaxTimeToReachQueue);
 
 
 void __RPC_STUB IMSMQMessage_get_MaxTimeToReachQueue_Stub(
@@ -4562,7 +5686,7 @@ void __RPC_STUB IMSMQMessage_get_MaxTimeToReachQueue_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_MaxTimeToReachQueue_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ long lMaxTimeToReachQueue);
 
 
@@ -4574,8 +5698,8 @@ void __RPC_STUB IMSMQMessage_put_MaxTimeToReachQueue_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_MaxTimeToReceive_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plMaxTimeToReceive);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plMaxTimeToReceive);
 
 
 void __RPC_STUB IMSMQMessage_get_MaxTimeToReceive_Stub(
@@ -4586,7 +5710,7 @@ void __RPC_STUB IMSMQMessage_get_MaxTimeToReceive_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_MaxTimeToReceive_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ long lMaxTimeToReceive);
 
 
@@ -4598,8 +5722,8 @@ void __RPC_STUB IMSMQMessage_put_MaxTimeToReceive_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_HashAlgorithm_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plHashAlg);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plHashAlg);
 
 
 void __RPC_STUB IMSMQMessage_get_HashAlgorithm_Stub(
@@ -4610,7 +5734,7 @@ void __RPC_STUB IMSMQMessage_get_HashAlgorithm_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_HashAlgorithm_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ long lHashAlg);
 
 
@@ -4622,8 +5746,8 @@ void __RPC_STUB IMSMQMessage_put_HashAlgorithm_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_EncryptAlgorithm_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plEncryptAlg);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plEncryptAlg);
 
 
 void __RPC_STUB IMSMQMessage_get_EncryptAlgorithm_Stub(
@@ -4634,7 +5758,7 @@ void __RPC_STUB IMSMQMessage_get_EncryptAlgorithm_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_EncryptAlgorithm_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ long lEncryptAlg);
 
 
@@ -4646,8 +5770,8 @@ void __RPC_STUB IMSMQMessage_put_EncryptAlgorithm_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SentTime_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarSentTime);
+    IMSMQMessage * This,
+    /* [retval][out] */ VARIANT *pvarSentTime);
 
 
 void __RPC_STUB IMSMQMessage_get_SentTime_Stub(
@@ -4658,8 +5782,8 @@ void __RPC_STUB IMSMQMessage_get_SentTime_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_ArrivedTime_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *plArrivedTime);
+    IMSMQMessage * This,
+    /* [retval][out] */ VARIANT *plArrivedTime);
 
 
 void __RPC_STUB IMSMQMessage_get_ArrivedTime_Stub(
@@ -4670,8 +5794,8 @@ void __RPC_STUB IMSMQMessage_get_ArrivedTime_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_DestinationQueueInfo_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoDest);
+    IMSMQMessage * This,
+    /* [retval][out] */ IMSMQQueueInfo **ppqinfoDest);
 
 
 void __RPC_STUB IMSMQMessage_get_DestinationQueueInfo_Stub(
@@ -4682,8 +5806,8 @@ void __RPC_STUB IMSMQMessage_get_DestinationQueueInfo_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SenderCertificate_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarSenderCert);
+    IMSMQMessage * This,
+    /* [retval][out] */ VARIANT *pvarSenderCert);
 
 
 void __RPC_STUB IMSMQMessage_get_SenderCertificate_Stub(
@@ -4694,7 +5818,7 @@ void __RPC_STUB IMSMQMessage_get_SenderCertificate_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_SenderCertificate_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ VARIANT varSenderCert);
 
 
@@ -4706,8 +5830,8 @@ void __RPC_STUB IMSMQMessage_put_SenderCertificate_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SenderId_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarSenderId);
+    IMSMQMessage * This,
+    /* [retval][out] */ VARIANT *pvarSenderId);
 
 
 void __RPC_STUB IMSMQMessage_get_SenderId_Stub(
@@ -4718,8 +5842,8 @@ void __RPC_STUB IMSMQMessage_get_SenderId_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_get_SenderIdType_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plSenderIdType);
+    IMSMQMessage * This,
+    /* [retval][out] */ long *plSenderIdType);
 
 
 void __RPC_STUB IMSMQMessage_get_SenderIdType_Stub(
@@ -4730,7 +5854,7 @@ void __RPC_STUB IMSMQMessage_get_SenderIdType_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_put_SenderIdType_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
+    IMSMQMessage * This,
     /* [in] */ long lSenderIdType);
 
 
@@ -4742,9 +5866,9 @@ void __RPC_STUB IMSMQMessage_put_SenderIdType_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_Send_Proxy( 
-    IMSMQMessage __RPC_FAR * This,
-    /* [in] */ IMSMQQueue __RPC_FAR *DestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *Transaction);
+    IMSMQMessage * This,
+    /* [in] */ IMSMQQueue *DestinationQueue,
+    /* [optional][in] */ VARIANT *Transaction);
 
 
 void __RPC_STUB IMSMQMessage_Send_Stub(
@@ -4755,7 +5879,7 @@ void __RPC_STUB IMSMQMessage_Send_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage_AttachCurrentSecurityContext_Proxy( 
-    IMSMQMessage __RPC_FAR * This);
+    IMSMQMessage * This);
 
 
 void __RPC_STUB IMSMQMessage_AttachCurrentSecurityContext_Stub(
@@ -4776,7 +5900,7 @@ void __RPC_STUB IMSMQMessage_AttachCurrentSecurityContext_Stub(
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQQueueInfos,0xD7D6E07D,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const IID IID_IMSMQQueueInfos;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -4787,7 +5911,7 @@ DEFINE_GUID(IID_IMSMQQueueInfos,0xD7D6E07D,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x9
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoNext) = 0;
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoNext) = 0;
         
     };
     
@@ -4797,59 +5921,59 @@ DEFINE_GUID(IID_IMSMQQueueInfos,0xD7D6E07D,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x9
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQQueueInfos __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQQueueInfos * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQQueueInfos __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQQueueInfos * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQQueueInfos __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQQueueInfos * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQQueueInfos __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQQueueInfos * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQQueueInfos __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQQueueInfos * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQQueueInfos __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQQueueInfos * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQQueueInfos __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQQueueInfos * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IMSMQQueueInfos __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IMSMQQueueInfos * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IMSMQQueueInfos __RPC_FAR * This,
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoNext);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IMSMQQueueInfos * This,
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoNext);
         
         END_INTERFACE
     } IMSMQQueueInfosVtbl;
 
     interface IMSMQQueueInfos
     {
-        CONST_VTBL struct IMSMQQueueInfosVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQQueueInfosVtbl *lpVtbl;
     };
 
     
@@ -4894,7 +6018,7 @@ DEFINE_GUID(IID_IMSMQQueueInfos,0xD7D6E07D,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x9
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos_Reset_Proxy( 
-    IMSMQQueueInfos __RPC_FAR * This);
+    IMSMQQueueInfos * This);
 
 
 void __RPC_STUB IMSMQQueueInfos_Reset_Stub(
@@ -4905,8 +6029,8 @@ void __RPC_STUB IMSMQQueueInfos_Reset_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos_Next_Proxy( 
-    IMSMQQueueInfos __RPC_FAR * This,
-    /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoNext);
+    IMSMQQueueInfos * This,
+    /* [retval][out] */ IMSMQQueueInfo **ppqinfoNext);
 
 
 void __RPC_STUB IMSMQQueueInfos_Next_Stub(
@@ -4927,7 +6051,7 @@ void __RPC_STUB IMSMQQueueInfos_Next_Stub(
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQQueueInfos2,0xeba96b0f,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x2c,0x07,0x4f,0x6b);
+EXTERN_C const IID IID_IMSMQQueueInfos2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -4938,10 +6062,10 @@ DEFINE_GUID(IID_IMSMQQueueInfos2,0xeba96b0f,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoNext) = 0;
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoNext) = 0;
         
         virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties) = 0;
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
         
     };
     
@@ -4951,63 +6075,63 @@ DEFINE_GUID(IID_IMSMQQueueInfos2,0xeba96b0f,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQQueueInfos2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQQueueInfos2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQQueueInfos2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQQueueInfos2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQQueueInfos2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQQueueInfos2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQQueueInfos2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQQueueInfos2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQQueueInfos2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQQueueInfos2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQQueueInfos2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQQueueInfos2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQQueueInfos2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQQueueInfos2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IMSMQQueueInfos2 __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IMSMQQueueInfos2 * This);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IMSMQQueueInfos2 __RPC_FAR * This,
-            /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoNext);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IMSMQQueueInfos2 * This,
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoNext);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
-            IMSMQQueueInfos2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQQueueInfos2 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQQueueInfos2Vtbl;
 
     interface IMSMQQueueInfos2
     {
-        CONST_VTBL struct IMSMQQueueInfos2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQQueueInfos2Vtbl *lpVtbl;
     };
 
     
@@ -5055,7 +6179,7 @@ DEFINE_GUID(IID_IMSMQQueueInfos2,0xeba96b0f,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos2_Reset_Proxy( 
-    IMSMQQueueInfos2 __RPC_FAR * This);
+    IMSMQQueueInfos2 * This);
 
 
 void __RPC_STUB IMSMQQueueInfos2_Reset_Stub(
@@ -5066,8 +6190,8 @@ void __RPC_STUB IMSMQQueueInfos2_Reset_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos2_Next_Proxy( 
-    IMSMQQueueInfos2 __RPC_FAR * This,
-    /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoNext);
+    IMSMQQueueInfos2 * This,
+    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoNext);
 
 
 void __RPC_STUB IMSMQQueueInfos2_Next_Stub(
@@ -5078,8 +6202,8 @@ void __RPC_STUB IMSMQQueueInfos2_Next_Stub(
 
 
 /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos2_get_Properties_Proxy( 
-    IMSMQQueueInfos2 __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+    IMSMQQueueInfos2 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQQueueInfos2_get_Properties_Stub(
@@ -5093,6 +6217,179 @@ void __RPC_STUB IMSMQQueueInfos2_get_Properties_Stub(
 #endif 	/* __IMSMQQueueInfos2_INTERFACE_DEFINED__ */
 
 
+#ifndef __IMSMQQueueInfos3_INTERFACE_DEFINED__
+#define __IMSMQQueueInfos3_INTERFACE_DEFINED__
+
+/* interface IMSMQQueueInfos3 */
+/* [object][dual][hidden][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQQueueInfos3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eba96b1e-2168-11d3-898c-00e02c074f6b")
+    IMSMQQueueInfos3 : public IDispatch
+    {
+    public:
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Next( 
+            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoNext) = 0;
+        
+        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQQueueInfos3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQQueueInfos3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQQueueInfos3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQQueueInfos3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQQueueInfos3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQQueueInfos3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQQueueInfos3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQQueueInfos3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IMSMQQueueInfos3 * This);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IMSMQQueueInfos3 * This,
+            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoNext);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQQueueInfos3 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
+        
+        END_INTERFACE
+    } IMSMQQueueInfos3Vtbl;
+
+    interface IMSMQQueueInfos3
+    {
+        CONST_VTBL struct IMSMQQueueInfos3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQQueueInfos3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQQueueInfos3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQQueueInfos3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQQueueInfos3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQQueueInfos3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQQueueInfos3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQQueueInfos3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQQueueInfos3_Reset(This)	\
+    (This)->lpVtbl -> Reset(This)
+
+#define IMSMQQueueInfos3_Next(This,ppqinfoNext)	\
+    (This)->lpVtbl -> Next(This,ppqinfoNext)
+
+#define IMSMQQueueInfos3_get_Properties(This,ppcolProperties)	\
+    (This)->lpVtbl -> get_Properties(This,ppcolProperties)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos3_Reset_Proxy( 
+    IMSMQQueueInfos3 * This);
+
+
+void __RPC_STUB IMSMQQueueInfos3_Reset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos3_Next_Proxy( 
+    IMSMQQueueInfos3 * This,
+    /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoNext);
+
+
+void __RPC_STUB IMSMQQueueInfos3_Next_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueInfos3_get_Properties_Proxy( 
+    IMSMQQueueInfos3 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
+
+
+void __RPC_STUB IMSMQQueueInfos3_get_Properties_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQQueueInfos3_INTERFACE_DEFINED__ */
+
+
 #ifndef __IMSMQEvent_INTERFACE_DEFINED__
 #define __IMSMQEvent_INTERFACE_DEFINED__
 
@@ -5100,7 +6397,7 @@ void __RPC_STUB IMSMQQueueInfos2_get_Properties_Stub(
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQEvent,0xD7D6E077,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const IID IID_IMSMQEvent;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -5116,52 +6413,52 @@ DEFINE_GUID(IID_IMSMQEvent,0xD7D6E077,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQEvent __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQEvent * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQEvent __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQEvent * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQEvent __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQEvent * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQEvent __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQEvent * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQEvent __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQEvent * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQEvent __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQEvent * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQEvent __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQEvent * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } IMSMQEventVtbl;
 
     interface IMSMQEvent
     {
-        CONST_VTBL struct IMSMQEventVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQEventVtbl *lpVtbl;
     };
 
     
@@ -5210,7 +6507,7 @@ DEFINE_GUID(IID_IMSMQEvent,0xD7D6E077,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQEvent2,0xeba96b12,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x2c,0x07,0x4f,0x6b);
+EXTERN_C const IID IID_IMSMQEvent2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -5219,7 +6516,7 @@ DEFINE_GUID(IID_IMSMQEvent2,0xeba96b12,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x2c,0x
     {
     public:
         virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties) = 0;
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
         
     };
     
@@ -5229,56 +6526,56 @@ DEFINE_GUID(IID_IMSMQEvent2,0xeba96b12,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x2c,0x
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQEvent2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQEvent2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQEvent2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQEvent2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQEvent2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQEvent2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQEvent2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQEvent2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQEvent2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQEvent2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQEvent2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQEvent2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQEvent2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQEvent2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
-            IMSMQEvent2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQEvent2 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQEvent2Vtbl;
 
     interface IMSMQEvent2
     {
-        CONST_VTBL struct IMSMQEvent2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQEvent2Vtbl *lpVtbl;
     };
 
     
@@ -5321,8 +6618,8 @@ DEFINE_GUID(IID_IMSMQEvent2,0xeba96b12,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x2c,0x
 
 
 /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQEvent2_get_Properties_Proxy( 
-    IMSMQEvent2 __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+    IMSMQEvent2 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQEvent2_get_Properties_Stub(
@@ -5336,6 +6633,125 @@ void __RPC_STUB IMSMQEvent2_get_Properties_Stub(
 #endif 	/* __IMSMQEvent2_INTERFACE_DEFINED__ */
 
 
+#ifndef __IMSMQEvent3_INTERFACE_DEFINED__
+#define __IMSMQEvent3_INTERFACE_DEFINED__
+
+/* interface IMSMQEvent3 */
+/* [object][dual][hidden][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQEvent3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eba96b1c-2168-11d3-898c-00e02c074f6b")
+    IMSMQEvent3 : public IMSMQEvent2
+    {
+    public:
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQEvent3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQEvent3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQEvent3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQEvent3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQEvent3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQEvent3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQEvent3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQEvent3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQEvent3 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
+        
+        END_INTERFACE
+    } IMSMQEvent3Vtbl;
+
+    interface IMSMQEvent3
+    {
+        CONST_VTBL struct IMSMQEvent3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQEvent3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQEvent3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQEvent3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQEvent3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQEvent3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQEvent3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQEvent3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+
+#define IMSMQEvent3_get_Properties(This,ppcolProperties)	\
+    (This)->lpVtbl -> get_Properties(This,ppcolProperties)
+
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IMSMQEvent3_INTERFACE_DEFINED__ */
+
+
 #ifndef __IMSMQTransaction_INTERFACE_DEFINED__
 #define __IMSMQTransaction_INTERFACE_DEFINED__
 
@@ -5343,7 +6759,7 @@ void __RPC_STUB IMSMQEvent2_get_Properties_Stub(
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQTransaction,0xD7D6E07F,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const IID IID_IMSMQTransaction;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -5352,16 +6768,16 @@ DEFINE_GUID(IID_IMSMQTransaction,0xD7D6E07F,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x
     {
     public:
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Transaction( 
-            /* [retval][out] */ long __RPC_FAR *plTransaction) = 0;
+            /* [retval][out] */ long *plTransaction) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Commit( 
-            /* [optional][in] */ VARIANT __RPC_FAR *fRetaining,
-            /* [optional][in] */ VARIANT __RPC_FAR *grfTC,
-            /* [optional][in] */ VARIANT __RPC_FAR *grfRM) = 0;
+            /* [optional][in] */ VARIANT *fRetaining,
+            /* [optional][in] */ VARIANT *grfTC,
+            /* [optional][in] */ VARIANT *grfRM) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Abort( 
-            /* [optional][in] */ VARIANT __RPC_FAR *fRetaining,
-            /* [optional][in] */ VARIANT __RPC_FAR *fAsync) = 0;
+            /* [optional][in] */ VARIANT *fRetaining,
+            /* [optional][in] */ VARIANT *fAsync) = 0;
         
     };
     
@@ -5371,67 +6787,67 @@ DEFINE_GUID(IID_IMSMQTransaction,0xD7D6E07F,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQTransaction __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQTransaction * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQTransaction __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQTransaction * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQTransaction __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQTransaction * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQTransaction __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQTransaction * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQTransaction __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQTransaction * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQTransaction __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQTransaction * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQTransaction __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQTransaction * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Transaction )( 
-            IMSMQTransaction __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plTransaction);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Transaction )( 
+            IMSMQTransaction * This,
+            /* [retval][out] */ long *plTransaction);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Commit )( 
-            IMSMQTransaction __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *fRetaining,
-            /* [optional][in] */ VARIANT __RPC_FAR *grfTC,
-            /* [optional][in] */ VARIANT __RPC_FAR *grfRM);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Commit )( 
+            IMSMQTransaction * This,
+            /* [optional][in] */ VARIANT *fRetaining,
+            /* [optional][in] */ VARIANT *grfTC,
+            /* [optional][in] */ VARIANT *grfRM);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Abort )( 
-            IMSMQTransaction __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *fRetaining,
-            /* [optional][in] */ VARIANT __RPC_FAR *fAsync);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Abort )( 
+            IMSMQTransaction * This,
+            /* [optional][in] */ VARIANT *fRetaining,
+            /* [optional][in] */ VARIANT *fAsync);
         
         END_INTERFACE
     } IMSMQTransactionVtbl;
 
     interface IMSMQTransaction
     {
-        CONST_VTBL struct IMSMQTransactionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQTransactionVtbl *lpVtbl;
     };
 
     
@@ -5479,8 +6895,8 @@ DEFINE_GUID(IID_IMSMQTransaction,0xD7D6E07F,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransaction_get_Transaction_Proxy( 
-    IMSMQTransaction __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plTransaction);
+    IMSMQTransaction * This,
+    /* [retval][out] */ long *plTransaction);
 
 
 void __RPC_STUB IMSMQTransaction_get_Transaction_Stub(
@@ -5491,10 +6907,10 @@ void __RPC_STUB IMSMQTransaction_get_Transaction_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransaction_Commit_Proxy( 
-    IMSMQTransaction __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *fRetaining,
-    /* [optional][in] */ VARIANT __RPC_FAR *grfTC,
-    /* [optional][in] */ VARIANT __RPC_FAR *grfRM);
+    IMSMQTransaction * This,
+    /* [optional][in] */ VARIANT *fRetaining,
+    /* [optional][in] */ VARIANT *grfTC,
+    /* [optional][in] */ VARIANT *grfRM);
 
 
 void __RPC_STUB IMSMQTransaction_Commit_Stub(
@@ -5505,9 +6921,9 @@ void __RPC_STUB IMSMQTransaction_Commit_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransaction_Abort_Proxy( 
-    IMSMQTransaction __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *fRetaining,
-    /* [optional][in] */ VARIANT __RPC_FAR *fAsync);
+    IMSMQTransaction * This,
+    /* [optional][in] */ VARIANT *fRetaining,
+    /* [optional][in] */ VARIANT *fAsync);
 
 
 void __RPC_STUB IMSMQTransaction_Abort_Stub(
@@ -5528,7 +6944,7 @@ void __RPC_STUB IMSMQTransaction_Abort_Stub(
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQCoordinatedTransactionDispenser,0xD7D6E081,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -5537,7 +6953,7 @@ DEFINE_GUID(IID_IMSMQCoordinatedTransactionDispenser,0xD7D6E081,0xDCCD,0x11d0,0x
     {
     public:
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE BeginTransaction( 
-            /* [retval][out] */ IMSMQTransaction __RPC_FAR *__RPC_FAR *ptransaction) = 0;
+            /* [retval][out] */ IMSMQTransaction **ptransaction) = 0;
         
     };
     
@@ -5547,56 +6963,56 @@ DEFINE_GUID(IID_IMSMQCoordinatedTransactionDispenser,0xD7D6E081,0xDCCD,0x11d0,0x
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQCoordinatedTransactionDispenser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQCoordinatedTransactionDispenser * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQCoordinatedTransactionDispenser __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQCoordinatedTransactionDispenser * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQCoordinatedTransactionDispenser __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQCoordinatedTransactionDispenser * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQCoordinatedTransactionDispenser __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQCoordinatedTransactionDispenser * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQCoordinatedTransactionDispenser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQCoordinatedTransactionDispenser * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQCoordinatedTransactionDispenser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQCoordinatedTransactionDispenser * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQCoordinatedTransactionDispenser __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQCoordinatedTransactionDispenser * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginTransaction )( 
-            IMSMQCoordinatedTransactionDispenser __RPC_FAR * This,
-            /* [retval][out] */ IMSMQTransaction __RPC_FAR *__RPC_FAR *ptransaction);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
+            IMSMQCoordinatedTransactionDispenser * This,
+            /* [retval][out] */ IMSMQTransaction **ptransaction);
         
         END_INTERFACE
     } IMSMQCoordinatedTransactionDispenserVtbl;
 
     interface IMSMQCoordinatedTransactionDispenser
     {
-        CONST_VTBL struct IMSMQCoordinatedTransactionDispenserVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQCoordinatedTransactionDispenserVtbl *lpVtbl;
     };
 
     
@@ -5638,8 +7054,8 @@ DEFINE_GUID(IID_IMSMQCoordinatedTransactionDispenser,0xD7D6E081,0xDCCD,0x11d0,0x
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser_BeginTransaction_Proxy( 
-    IMSMQCoordinatedTransactionDispenser __RPC_FAR * This,
-    /* [retval][out] */ IMSMQTransaction __RPC_FAR *__RPC_FAR *ptransaction);
+    IMSMQCoordinatedTransactionDispenser * This,
+    /* [retval][out] */ IMSMQTransaction **ptransaction);
 
 
 void __RPC_STUB IMSMQCoordinatedTransactionDispenser_BeginTransaction_Stub(
@@ -5660,7 +7076,7 @@ void __RPC_STUB IMSMQCoordinatedTransactionDispenser_BeginTransaction_Stub(
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQTransactionDispenser,0xD7D6E083,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const IID IID_IMSMQTransactionDispenser;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -5669,7 +7085,7 @@ DEFINE_GUID(IID_IMSMQTransactionDispenser,0xD7D6E083,0xDCCD,0x11d0,0xAA,0x4B,0x0
     {
     public:
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE BeginTransaction( 
-            /* [retval][out] */ IMSMQTransaction __RPC_FAR *__RPC_FAR *ptransaction) = 0;
+            /* [retval][out] */ IMSMQTransaction **ptransaction) = 0;
         
     };
     
@@ -5679,56 +7095,56 @@ DEFINE_GUID(IID_IMSMQTransactionDispenser,0xD7D6E083,0xDCCD,0x11d0,0xAA,0x4B,0x0
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQTransactionDispenser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQTransactionDispenser * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQTransactionDispenser __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQTransactionDispenser * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQTransactionDispenser __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQTransactionDispenser * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQTransactionDispenser __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQTransactionDispenser * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQTransactionDispenser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQTransactionDispenser * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQTransactionDispenser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQTransactionDispenser * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQTransactionDispenser __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQTransactionDispenser * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginTransaction )( 
-            IMSMQTransactionDispenser __RPC_FAR * This,
-            /* [retval][out] */ IMSMQTransaction __RPC_FAR *__RPC_FAR *ptransaction);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
+            IMSMQTransactionDispenser * This,
+            /* [retval][out] */ IMSMQTransaction **ptransaction);
         
         END_INTERFACE
     } IMSMQTransactionDispenserVtbl;
 
     interface IMSMQTransactionDispenser
     {
-        CONST_VTBL struct IMSMQTransactionDispenserVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQTransactionDispenserVtbl *lpVtbl;
     };
 
     
@@ -5770,8 +7186,8 @@ DEFINE_GUID(IID_IMSMQTransactionDispenser,0xD7D6E083,0xDCCD,0x11d0,0xAA,0x4B,0x0
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser_BeginTransaction_Proxy( 
-    IMSMQTransactionDispenser __RPC_FAR * This,
-    /* [retval][out] */ IMSMQTransaction __RPC_FAR *__RPC_FAR *ptransaction);
+    IMSMQTransactionDispenser * This,
+    /* [retval][out] */ IMSMQTransaction **ptransaction);
 
 
 void __RPC_STUB IMSMQTransactionDispenser_BeginTransaction_Stub(
@@ -5792,7 +7208,7 @@ void __RPC_STUB IMSMQTransactionDispenser_BeginTransaction_Stub(
 /* [object][nonextensible][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQQuery2,0xeba96b0e,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x2c,0x07,0x4f,0x6b);
+EXTERN_C const IID IID_IMSMQQuery2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -5801,19 +7217,19 @@ DEFINE_GUID(IID_IMSMQQuery2,0xeba96b0e,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x2c,0x
     {
     public:
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE LookupQueue( 
-            /* [optional][in] */ VARIANT __RPC_FAR *QueueGuid,
-            /* [optional][in] */ VARIANT __RPC_FAR *ServiceTypeGuid,
-            /* [optional][in] */ VARIANT __RPC_FAR *Label,
-            /* [optional][in] */ VARIANT __RPC_FAR *CreateTime,
-            /* [optional][in] */ VARIANT __RPC_FAR *ModifyTime,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelServiceType,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelLabel,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelCreateTime,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelModifyTime,
-            /* [retval][out] */ IMSMQQueueInfos2 __RPC_FAR *__RPC_FAR *ppqinfos) = 0;
+            /* [optional][in] */ VARIANT *QueueGuid,
+            /* [optional][in] */ VARIANT *ServiceTypeGuid,
+            /* [optional][in] */ VARIANT *Label,
+            /* [optional][in] */ VARIANT *CreateTime,
+            /* [optional][in] */ VARIANT *ModifyTime,
+            /* [optional][in] */ VARIANT *RelServiceType,
+            /* [optional][in] */ VARIANT *RelLabel,
+            /* [optional][in] */ VARIANT *RelCreateTime,
+            /* [optional][in] */ VARIANT *RelModifyTime,
+            /* [retval][out] */ IMSMQQueueInfos2 **ppqinfos) = 0;
         
         virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties) = 0;
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
         
     };
     
@@ -5823,69 +7239,69 @@ DEFINE_GUID(IID_IMSMQQuery2,0xeba96b0e,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x2c,0x
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQQuery2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQQuery2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQQuery2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQQuery2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQQuery2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQQuery2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQQuery2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQQuery2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQQuery2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQQuery2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQQuery2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQQuery2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQQuery2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQQuery2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupQueue )( 
-            IMSMQQuery2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *QueueGuid,
-            /* [optional][in] */ VARIANT __RPC_FAR *ServiceTypeGuid,
-            /* [optional][in] */ VARIANT __RPC_FAR *Label,
-            /* [optional][in] */ VARIANT __RPC_FAR *CreateTime,
-            /* [optional][in] */ VARIANT __RPC_FAR *ModifyTime,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelServiceType,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelLabel,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelCreateTime,
-            /* [optional][in] */ VARIANT __RPC_FAR *RelModifyTime,
-            /* [retval][out] */ IMSMQQueueInfos2 __RPC_FAR *__RPC_FAR *ppqinfos);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *LookupQueue )( 
+            IMSMQQuery2 * This,
+            /* [optional][in] */ VARIANT *QueueGuid,
+            /* [optional][in] */ VARIANT *ServiceTypeGuid,
+            /* [optional][in] */ VARIANT *Label,
+            /* [optional][in] */ VARIANT *CreateTime,
+            /* [optional][in] */ VARIANT *ModifyTime,
+            /* [optional][in] */ VARIANT *RelServiceType,
+            /* [optional][in] */ VARIANT *RelLabel,
+            /* [optional][in] */ VARIANT *RelCreateTime,
+            /* [optional][in] */ VARIANT *RelModifyTime,
+            /* [retval][out] */ IMSMQQueueInfos2 **ppqinfos);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
-            IMSMQQuery2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQQuery2 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQQuery2Vtbl;
 
     interface IMSMQQuery2
     {
-        CONST_VTBL struct IMSMQQuery2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQQuery2Vtbl *lpVtbl;
     };
 
     
@@ -5930,17 +7346,17 @@ DEFINE_GUID(IID_IMSMQQuery2,0xeba96b0e,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x2c,0x
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQuery2_LookupQueue_Proxy( 
-    IMSMQQuery2 __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *QueueGuid,
-    /* [optional][in] */ VARIANT __RPC_FAR *ServiceTypeGuid,
-    /* [optional][in] */ VARIANT __RPC_FAR *Label,
-    /* [optional][in] */ VARIANT __RPC_FAR *CreateTime,
-    /* [optional][in] */ VARIANT __RPC_FAR *ModifyTime,
-    /* [optional][in] */ VARIANT __RPC_FAR *RelServiceType,
-    /* [optional][in] */ VARIANT __RPC_FAR *RelLabel,
-    /* [optional][in] */ VARIANT __RPC_FAR *RelCreateTime,
-    /* [optional][in] */ VARIANT __RPC_FAR *RelModifyTime,
-    /* [retval][out] */ IMSMQQueueInfos2 __RPC_FAR *__RPC_FAR *ppqinfos);
+    IMSMQQuery2 * This,
+    /* [optional][in] */ VARIANT *QueueGuid,
+    /* [optional][in] */ VARIANT *ServiceTypeGuid,
+    /* [optional][in] */ VARIANT *Label,
+    /* [optional][in] */ VARIANT *CreateTime,
+    /* [optional][in] */ VARIANT *ModifyTime,
+    /* [optional][in] */ VARIANT *RelServiceType,
+    /* [optional][in] */ VARIANT *RelLabel,
+    /* [optional][in] */ VARIANT *RelCreateTime,
+    /* [optional][in] */ VARIANT *RelModifyTime,
+    /* [retval][out] */ IMSMQQueueInfos2 **ppqinfos);
 
 
 void __RPC_STUB IMSMQQuery2_LookupQueue_Stub(
@@ -5951,8 +7367,8 @@ void __RPC_STUB IMSMQQuery2_LookupQueue_Stub(
 
 
 /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQuery2_get_Properties_Proxy( 
-    IMSMQQuery2 __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+    IMSMQQuery2 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQQuery2_get_Properties_Stub(
@@ -5966,7 +7382,243 @@ void __RPC_STUB IMSMQQuery2_get_Properties_Stub(
 #endif 	/* __IMSMQQuery2_INTERFACE_DEFINED__ */
 
 
-DEFINE_GUID(CLSID_MSMQQuery,0xD7D6E073,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+#ifndef __IMSMQQuery3_INTERFACE_DEFINED__
+#define __IMSMQQuery3_INTERFACE_DEFINED__
+
+/* interface IMSMQQuery3 */
+/* [object][nonextensible][dual][hidden][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQQuery3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eba96b19-2168-11d3-898c-00e02c074f6b")
+    IMSMQQuery3 : public IDispatch
+    {
+    public:
+        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE LookupQueue_v2( 
+            /* [optional][in] */ VARIANT *QueueGuid,
+            /* [optional][in] */ VARIANT *ServiceTypeGuid,
+            /* [optional][in] */ VARIANT *Label,
+            /* [optional][in] */ VARIANT *CreateTime,
+            /* [optional][in] */ VARIANT *ModifyTime,
+            /* [optional][in] */ VARIANT *RelServiceType,
+            /* [optional][in] */ VARIANT *RelLabel,
+            /* [optional][in] */ VARIANT *RelCreateTime,
+            /* [optional][in] */ VARIANT *RelModifyTime,
+            /* [retval][out] */ IMSMQQueueInfos3 **ppqinfos) = 0;
+        
+        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE LookupQueue( 
+            /* [optional][in] */ VARIANT *QueueGuid,
+            /* [optional][in] */ VARIANT *ServiceTypeGuid,
+            /* [optional][in] */ VARIANT *Label,
+            /* [optional][in] */ VARIANT *CreateTime,
+            /* [optional][in] */ VARIANT *ModifyTime,
+            /* [optional][in] */ VARIANT *RelServiceType,
+            /* [optional][in] */ VARIANT *RelLabel,
+            /* [optional][in] */ VARIANT *RelCreateTime,
+            /* [optional][in] */ VARIANT *RelModifyTime,
+            /* [optional][in] */ VARIANT *MulticastAddress,
+            /* [optional][in] */ VARIANT *RelMulticastAddress,
+            /* [retval][out] */ IMSMQQueueInfos3 **ppqinfos) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQQuery3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQQuery3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQQuery3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQQuery3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQQuery3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQQuery3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQQuery3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQQuery3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *LookupQueue_v2 )( 
+            IMSMQQuery3 * This,
+            /* [optional][in] */ VARIANT *QueueGuid,
+            /* [optional][in] */ VARIANT *ServiceTypeGuid,
+            /* [optional][in] */ VARIANT *Label,
+            /* [optional][in] */ VARIANT *CreateTime,
+            /* [optional][in] */ VARIANT *ModifyTime,
+            /* [optional][in] */ VARIANT *RelServiceType,
+            /* [optional][in] */ VARIANT *RelLabel,
+            /* [optional][in] */ VARIANT *RelCreateTime,
+            /* [optional][in] */ VARIANT *RelModifyTime,
+            /* [retval][out] */ IMSMQQueueInfos3 **ppqinfos);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQQuery3 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *LookupQueue )( 
+            IMSMQQuery3 * This,
+            /* [optional][in] */ VARIANT *QueueGuid,
+            /* [optional][in] */ VARIANT *ServiceTypeGuid,
+            /* [optional][in] */ VARIANT *Label,
+            /* [optional][in] */ VARIANT *CreateTime,
+            /* [optional][in] */ VARIANT *ModifyTime,
+            /* [optional][in] */ VARIANT *RelServiceType,
+            /* [optional][in] */ VARIANT *RelLabel,
+            /* [optional][in] */ VARIANT *RelCreateTime,
+            /* [optional][in] */ VARIANT *RelModifyTime,
+            /* [optional][in] */ VARIANT *MulticastAddress,
+            /* [optional][in] */ VARIANT *RelMulticastAddress,
+            /* [retval][out] */ IMSMQQueueInfos3 **ppqinfos);
+        
+        END_INTERFACE
+    } IMSMQQuery3Vtbl;
+
+    interface IMSMQQuery3
+    {
+        CONST_VTBL struct IMSMQQuery3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQQuery3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQQuery3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQQuery3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQQuery3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQQuery3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQQuery3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQQuery3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQQuery3_LookupQueue_v2(This,QueueGuid,ServiceTypeGuid,Label,CreateTime,ModifyTime,RelServiceType,RelLabel,RelCreateTime,RelModifyTime,ppqinfos)	\
+    (This)->lpVtbl -> LookupQueue_v2(This,QueueGuid,ServiceTypeGuid,Label,CreateTime,ModifyTime,RelServiceType,RelLabel,RelCreateTime,RelModifyTime,ppqinfos)
+
+#define IMSMQQuery3_get_Properties(This,ppcolProperties)	\
+    (This)->lpVtbl -> get_Properties(This,ppcolProperties)
+
+#define IMSMQQuery3_LookupQueue(This,QueueGuid,ServiceTypeGuid,Label,CreateTime,ModifyTime,RelServiceType,RelLabel,RelCreateTime,RelModifyTime,MulticastAddress,RelMulticastAddress,ppqinfos)	\
+    (This)->lpVtbl -> LookupQueue(This,QueueGuid,ServiceTypeGuid,Label,CreateTime,ModifyTime,RelServiceType,RelLabel,RelCreateTime,RelModifyTime,MulticastAddress,RelMulticastAddress,ppqinfos)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQuery3_LookupQueue_v2_Proxy( 
+    IMSMQQuery3 * This,
+    /* [optional][in] */ VARIANT *QueueGuid,
+    /* [optional][in] */ VARIANT *ServiceTypeGuid,
+    /* [optional][in] */ VARIANT *Label,
+    /* [optional][in] */ VARIANT *CreateTime,
+    /* [optional][in] */ VARIANT *ModifyTime,
+    /* [optional][in] */ VARIANT *RelServiceType,
+    /* [optional][in] */ VARIANT *RelLabel,
+    /* [optional][in] */ VARIANT *RelCreateTime,
+    /* [optional][in] */ VARIANT *RelModifyTime,
+    /* [retval][out] */ IMSMQQueueInfos3 **ppqinfos);
+
+
+void __RPC_STUB IMSMQQuery3_LookupQueue_v2_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQuery3_get_Properties_Proxy( 
+    IMSMQQuery3 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
+
+
+void __RPC_STUB IMSMQQuery3_get_Properties_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQuery3_LookupQueue_Proxy( 
+    IMSMQQuery3 * This,
+    /* [optional][in] */ VARIANT *QueueGuid,
+    /* [optional][in] */ VARIANT *ServiceTypeGuid,
+    /* [optional][in] */ VARIANT *Label,
+    /* [optional][in] */ VARIANT *CreateTime,
+    /* [optional][in] */ VARIANT *ModifyTime,
+    /* [optional][in] */ VARIANT *RelServiceType,
+    /* [optional][in] */ VARIANT *RelLabel,
+    /* [optional][in] */ VARIANT *RelCreateTime,
+    /* [optional][in] */ VARIANT *RelModifyTime,
+    /* [optional][in] */ VARIANT *MulticastAddress,
+    /* [optional][in] */ VARIANT *RelMulticastAddress,
+    /* [retval][out] */ IMSMQQueueInfos3 **ppqinfos);
+
+
+void __RPC_STUB IMSMQQuery3_LookupQueue_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQQuery3_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_MSMQQuery;
 
 #ifdef __cplusplus
 
@@ -5981,7 +7633,7 @@ MSMQQuery;
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQMessage2,0xD9933BE0,0xA567,0x11D2,0xB0,0xF3,0x00,0xE0,0x2C,0x07,0x4F,0x6B);
+EXTERN_C const IID IID_IMSMQMessage2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -5990,190 +7642,190 @@ DEFINE_GUID(IID_IMSMQMessage2,0xD9933BE0,0xA567,0x11D2,0xB0,0xF3,0x00,0xE0,0x2C,
     {
     public:
         virtual /* [id][propget][hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Class( 
-            /* [retval][out] */ long __RPC_FAR *plClass) = 0;
+            /* [retval][out] */ long *plClass) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivLevel( 
-            /* [retval][out] */ long __RPC_FAR *plPrivLevel) = 0;
+            /* [retval][out] */ long *plPrivLevel) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PrivLevel( 
             /* [in] */ long lPrivLevel) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthLevel( 
-            /* [retval][out] */ long __RPC_FAR *plAuthLevel) = 0;
+            /* [retval][out] */ long *plAuthLevel) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthLevel( 
             /* [in] */ long lAuthLevel) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsAuthenticated( 
-            /* [retval][out] */ Boolean __RPC_FAR *pisAuthenticated) = 0;
+            /* [retval][out] */ Boolean *pisAuthenticated) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Delivery( 
-            /* [retval][out] */ long __RPC_FAR *plDelivery) = 0;
+            /* [retval][out] */ long *plDelivery) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Delivery( 
             /* [in] */ long lDelivery) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Trace( 
-            /* [retval][out] */ long __RPC_FAR *plTrace) = 0;
+            /* [retval][out] */ long *plTrace) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Trace( 
             /* [in] */ long lTrace) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Priority( 
-            /* [retval][out] */ long __RPC_FAR *plPriority) = 0;
+            /* [retval][out] */ long *plPriority) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Priority( 
             /* [in] */ long lPriority) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Journal( 
-            /* [retval][out] */ long __RPC_FAR *plJournal) = 0;
+            /* [retval][out] */ long *plJournal) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Journal( 
             /* [in] */ long lJournal) = 0;
         
         virtual /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo_v1( 
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoResponse) = 0;
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse) = 0;
         
         virtual /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo_v1( 
-            /* [in] */ IMSMQQueueInfo __RPC_FAR *pqinfoResponse) = 0;
+            /* [in] */ IMSMQQueueInfo *pqinfoResponse) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AppSpecific( 
-            /* [retval][out] */ long __RPC_FAR *plAppSpecific) = 0;
+            /* [retval][out] */ long *plAppSpecific) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AppSpecific( 
             /* [in] */ long lAppSpecific) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SourceMachineGuid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidSrcMachine) = 0;
+            /* [retval][out] */ BSTR *pbstrGuidSrcMachine) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BodyLength( 
-            /* [retval][out] */ long __RPC_FAR *pcbBody) = 0;
+            /* [retval][out] */ long *pcbBody) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Body( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarBody) = 0;
+            /* [retval][out] */ VARIANT *pvarBody) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Body( 
             /* [in] */ VARIANT varBody) = 0;
         
         virtual /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AdminQueueInfo_v1( 
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoAdmin) = 0;
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin) = 0;
         
         virtual /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo_v1( 
-            /* [in] */ IMSMQQueueInfo __RPC_FAR *pqinfoAdmin) = 0;
+            /* [in] */ IMSMQQueueInfo *pqinfoAdmin) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarMsgId) = 0;
+            /* [retval][out] */ VARIANT *pvarMsgId) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CorrelationId( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarMsgId) = 0;
+            /* [retval][out] */ VARIANT *pvarMsgId) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_CorrelationId( 
             /* [in] */ VARIANT varMsgId) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Ack( 
-            /* [retval][out] */ long __RPC_FAR *plAck) = 0;
+            /* [retval][out] */ long *plAck) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Ack( 
             /* [in] */ long lAck) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Label( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrLabel) = 0;
+            /* [retval][out] */ BSTR *pbstrLabel) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Label( 
             /* [in] */ BSTR bstrLabel) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MaxTimeToReachQueue( 
-            /* [retval][out] */ long __RPC_FAR *plMaxTimeToReachQueue) = 0;
+            /* [retval][out] */ long *plMaxTimeToReachQueue) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MaxTimeToReachQueue( 
             /* [in] */ long lMaxTimeToReachQueue) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MaxTimeToReceive( 
-            /* [retval][out] */ long __RPC_FAR *plMaxTimeToReceive) = 0;
+            /* [retval][out] */ long *plMaxTimeToReceive) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MaxTimeToReceive( 
             /* [in] */ long lMaxTimeToReceive) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_HashAlgorithm( 
-            /* [retval][out] */ long __RPC_FAR *plHashAlg) = 0;
+            /* [retval][out] */ long *plHashAlg) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_HashAlgorithm( 
             /* [in] */ long lHashAlg) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_EncryptAlgorithm( 
-            /* [retval][out] */ long __RPC_FAR *plEncryptAlg) = 0;
+            /* [retval][out] */ long *plEncryptAlg) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_EncryptAlgorithm( 
             /* [in] */ long lEncryptAlg) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SentTime( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSentTime) = 0;
+            /* [retval][out] */ VARIANT *pvarSentTime) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ArrivedTime( 
-            /* [retval][out] */ VARIANT __RPC_FAR *plArrivedTime) = 0;
+            /* [retval][out] */ VARIANT *plArrivedTime) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_DestinationQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoDest) = 0;
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoDest) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderCertificate( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSenderCert) = 0;
+            /* [retval][out] */ VARIANT *pvarSenderCert) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderCertificate( 
             /* [in] */ VARIANT varSenderCert) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderId( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSenderId) = 0;
+            /* [retval][out] */ VARIANT *pvarSenderId) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderIdType( 
-            /* [retval][out] */ long __RPC_FAR *plSenderIdType) = 0;
+            /* [retval][out] */ long *plSenderIdType) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderIdType( 
             /* [in] */ long lSenderIdType) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Send( 
-            /* [in] */ IMSMQQueue2 __RPC_FAR *DestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction) = 0;
+            /* [in] */ IMSMQQueue2 *DestinationQueue,
+            /* [optional][in] */ VARIANT *Transaction) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE AttachCurrentSecurityContext( void) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderVersion( 
-            /* [retval][out] */ long __RPC_FAR *plSenderVersion) = 0;
+            /* [retval][out] */ long *plSenderVersion) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Extension( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarExtension) = 0;
+            /* [retval][out] */ VARIANT *pvarExtension) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Extension( 
             /* [in] */ VARIANT varExtension) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ConnectorTypeGuid( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidConnectorType) = 0;
+            /* [retval][out] */ BSTR *pbstrGuidConnectorType) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_ConnectorTypeGuid( 
             /* [in] */ BSTR bstrGuidConnectorType) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_TransactionStatusQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoXactStatus) = 0;
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoXactStatus) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_DestinationSymmetricKey( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarDestSymmKey) = 0;
+            /* [retval][out] */ VARIANT *pvarDestSymmKey) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_DestinationSymmetricKey( 
             /* [in] */ VARIANT varDestSymmKey) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Signature( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSignature) = 0;
+            /* [retval][out] */ VARIANT *pvarSignature) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Signature( 
             /* [in] */ VARIANT varSignature) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthenticationProviderType( 
-            /* [retval][out] */ long __RPC_FAR *plAuthProvType) = 0;
+            /* [retval][out] */ long *plAuthProvType) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthenticationProviderType( 
             /* [in] */ long lAuthProvType) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthenticationProviderName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrAuthProvName) = 0;
+            /* [retval][out] */ BSTR *pbstrAuthProvName) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthenticationProviderName( 
             /* [in] */ BSTR bstrAuthProvName) = 0;
@@ -6182,34 +7834,37 @@ DEFINE_GUID(IID_IMSMQMessage2,0xD9933BE0,0xA567,0x11D2,0xB0,0xF3,0x00,0xE0,0x2C,
             /* [in] */ VARIANT varSenderId) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MsgClass( 
-            /* [retval][out] */ long __RPC_FAR *plMsgClass) = 0;
+            /* [retval][out] */ long *plMsgClass) = 0;
         
         virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MsgClass( 
             /* [in] */ long lMsgClass) = 0;
         
         virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties) = 0;
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_TransactionId( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarXactId) = 0;
+            /* [retval][out] */ VARIANT *pvarXactId) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsFirstInTransaction( 
-            /* [retval][out] */ Boolean __RPC_FAR *pisFirstInXact) = 0;
+            /* [retval][out] */ Boolean *pisFirstInXact) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsLastInTransaction( 
-            /* [retval][out] */ Boolean __RPC_FAR *pisLastInXact) = 0;
+            /* [retval][out] */ Boolean *pisLastInXact) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoResponse) = 0;
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoResponse) = 0;
         
         virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo( 
-            /* [in] */ IMSMQQueueInfo2 __RPC_FAR *pqinfoResponse) = 0;
+            /* [in] */ IMSMQQueueInfo2 *pqinfoResponse) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AdminQueueInfo( 
-            /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoAdmin) = 0;
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoAdmin) = 0;
         
         virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo( 
-            /* [in] */ IMSMQQueueInfo2 __RPC_FAR *pqinfoAdmin) = 0;
+            /* [in] */ IMSMQQueueInfo2 *pqinfoAdmin) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ReceivedAuthenticationLevel( 
+            /* [retval][out] */ short *psReceivedAuthenticationLevel) = 0;
         
     };
     
@@ -6219,348 +7874,352 @@ DEFINE_GUID(IID_IMSMQMessage2,0xD9933BE0,0xA567,0x11D2,0xB0,0xF3,0x00,0xE0,0x2C,
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQMessage2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQMessage2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQMessage2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQMessage2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQMessage2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQMessage2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQMessage2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQMessage2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQMessage2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget][hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plClass);
+        /* [id][propget][hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plClass);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivLevel )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plPrivLevel);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plPrivLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PrivLevel )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lPrivLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AuthLevel )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAuthLevel);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthLevel )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plAuthLevel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AuthLevel )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthLevel )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lAuthLevel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsAuthenticated )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ Boolean __RPC_FAR *pisAuthenticated);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ Boolean *pisAuthenticated);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Delivery )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plDelivery);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Delivery )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plDelivery);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Delivery )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Delivery )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lDelivery);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Trace )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plTrace);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Trace )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plTrace);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Trace )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Trace )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lTrace);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Priority )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plPriority);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plPriority);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Priority )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lPriority);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Journal )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plJournal);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plJournal);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Journal )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lJournal);
         
-        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ResponseQueueInfo_v1 )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoResponse);
+        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo_v1 )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse);
         
-        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_ResponseQueueInfo_v1 )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [in] */ IMSMQQueueInfo __RPC_FAR *pqinfoResponse);
+        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo_v1 )( 
+            IMSMQMessage2 * This,
+            /* [in] */ IMSMQQueueInfo *pqinfoResponse);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AppSpecific )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAppSpecific);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AppSpecific )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plAppSpecific);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AppSpecific )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AppSpecific )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lAppSpecific);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SourceMachineGuid )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidSrcMachine);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SourceMachineGuid )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ BSTR *pbstrGuidSrcMachine);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BodyLength )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pcbBody);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BodyLength )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *pcbBody);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Body )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarBody);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Body )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ VARIANT *pvarBody);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Body )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Body )( 
+            IMSMQMessage2 * This,
             /* [in] */ VARIANT varBody);
         
-        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AdminQueueInfo_v1 )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoAdmin);
+        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo_v1 )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin);
         
-        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_AdminQueueInfo_v1 )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [in] */ IMSMQQueueInfo __RPC_FAR *pqinfoAdmin);
+        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo_v1 )( 
+            IMSMQMessage2 * This,
+            /* [in] */ IMSMQQueueInfo *pqinfoAdmin);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Id )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarMsgId);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ VARIANT *pvarMsgId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CorrelationId )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarMsgId);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CorrelationId )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ VARIANT *pvarMsgId);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CorrelationId )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_CorrelationId )( 
+            IMSMQMessage2 * This,
             /* [in] */ VARIANT varMsgId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Ack )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAck);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Ack )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plAck);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Ack )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Ack )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lAck);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Label )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrLabel);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Label )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ BSTR *pbstrLabel);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Label )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Label )( 
+            IMSMQMessage2 * This,
             /* [in] */ BSTR bstrLabel);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MaxTimeToReachQueue )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plMaxTimeToReachQueue);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReachQueue )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plMaxTimeToReachQueue);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MaxTimeToReachQueue )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReachQueue )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lMaxTimeToReachQueue);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MaxTimeToReceive )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plMaxTimeToReceive);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReceive )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plMaxTimeToReceive);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MaxTimeToReceive )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReceive )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lMaxTimeToReceive);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HashAlgorithm )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plHashAlg);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_HashAlgorithm )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plHashAlg);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HashAlgorithm )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_HashAlgorithm )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lHashAlg);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EncryptAlgorithm )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plEncryptAlg);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_EncryptAlgorithm )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plEncryptAlg);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EncryptAlgorithm )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_EncryptAlgorithm )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lEncryptAlg);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SentTime )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSentTime);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SentTime )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ VARIANT *pvarSentTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ArrivedTime )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *plArrivedTime);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ArrivedTime )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ VARIANT *plArrivedTime);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DestinationQueueInfo )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoDest);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_DestinationQueueInfo )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoDest);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderCertificate )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSenderCert);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderCertificate )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ VARIANT *pvarSenderCert);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderCertificate )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderCertificate )( 
+            IMSMQMessage2 * This,
             /* [in] */ VARIANT varSenderCert);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderId )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSenderId);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderId )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ VARIANT *pvarSenderId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderIdType )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plSenderIdType);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderIdType )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plSenderIdType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderIdType )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderIdType )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lSenderIdType);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Send )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [in] */ IMSMQQueue2 __RPC_FAR *DestinationQueue,
-            /* [optional][in] */ VARIANT __RPC_FAR *Transaction);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Send )( 
+            IMSMQMessage2 * This,
+            /* [in] */ IMSMQQueue2 *DestinationQueue,
+            /* [optional][in] */ VARIANT *Transaction);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AttachCurrentSecurityContext )( 
-            IMSMQMessage2 __RPC_FAR * This);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *AttachCurrentSecurityContext )( 
+            IMSMQMessage2 * This);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SenderVersion )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plSenderVersion);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderVersion )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plSenderVersion);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Extension )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarExtension);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Extension )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ VARIANT *pvarExtension);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Extension )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Extension )( 
+            IMSMQMessage2 * This,
             /* [in] */ VARIANT varExtension);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ConnectorTypeGuid )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidConnectorType);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectorTypeGuid )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ BSTR *pbstrGuidConnectorType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ConnectorTypeGuid )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_ConnectorTypeGuid )( 
+            IMSMQMessage2 * This,
             /* [in] */ BSTR bstrGuidConnectorType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TransactionStatusQueueInfo )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoXactStatus);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionStatusQueueInfo )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoXactStatus);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DestinationSymmetricKey )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarDestSymmKey);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_DestinationSymmetricKey )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ VARIANT *pvarDestSymmKey);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DestinationSymmetricKey )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_DestinationSymmetricKey )( 
+            IMSMQMessage2 * This,
             /* [in] */ VARIANT varDestSymmKey);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Signature )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarSignature);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Signature )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ VARIANT *pvarSignature);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Signature )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Signature )( 
+            IMSMQMessage2 * This,
             /* [in] */ VARIANT varSignature);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AuthenticationProviderType )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plAuthProvType);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthenticationProviderType )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plAuthProvType);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AuthenticationProviderType )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthenticationProviderType )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lAuthProvType);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AuthenticationProviderName )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrAuthProvName);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthenticationProviderName )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ BSTR *pbstrAuthProvName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AuthenticationProviderName )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthenticationProviderName )( 
+            IMSMQMessage2 * This,
             /* [in] */ BSTR bstrAuthProvName);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SenderId )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderId )( 
+            IMSMQMessage2 * This,
             /* [in] */ VARIANT varSenderId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MsgClass )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plMsgClass);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MsgClass )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ long *plMsgClass);
         
-        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MsgClass )( 
-            IMSMQMessage2 __RPC_FAR * This,
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MsgClass )( 
+            IMSMQMessage2 * This,
             /* [in] */ long lMsgClass);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TransactionId )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarXactId);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionId )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ VARIANT *pvarXactId);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsFirstInTransaction )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ Boolean __RPC_FAR *pisFirstInXact);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsFirstInTransaction )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ Boolean *pisFirstInXact);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsLastInTransaction )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ Boolean __RPC_FAR *pisLastInXact);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsLastInTransaction )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ Boolean *pisLastInXact);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ResponseQueueInfo )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoResponse);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoResponse);
         
-        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_ResponseQueueInfo )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [in] */ IMSMQQueueInfo2 __RPC_FAR *pqinfoResponse);
+        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo )( 
+            IMSMQMessage2 * This,
+            /* [in] */ IMSMQQueueInfo2 *pqinfoResponse);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AdminQueueInfo )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoAdmin);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoAdmin);
         
-        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_AdminQueueInfo )( 
-            IMSMQMessage2 __RPC_FAR * This,
-            /* [in] */ IMSMQQueueInfo2 __RPC_FAR *pqinfoAdmin);
+        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo )( 
+            IMSMQMessage2 * This,
+            /* [in] */ IMSMQQueueInfo2 *pqinfoAdmin);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ReceivedAuthenticationLevel )( 
+            IMSMQMessage2 * This,
+            /* [retval][out] */ short *psReceivedAuthenticationLevel);
         
         END_INTERFACE
     } IMSMQMessage2Vtbl;
 
     interface IMSMQMessage2
     {
-        CONST_VTBL struct IMSMQMessage2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQMessage2Vtbl *lpVtbl;
     };
 
     
@@ -6813,6 +8472,9 @@ DEFINE_GUID(IID_IMSMQMessage2,0xD9933BE0,0xA567,0x11D2,0xB0,0xF3,0x00,0xE0,0x2C,
 #define IMSMQMessage2_putref_AdminQueueInfo(This,pqinfoAdmin)	\
     (This)->lpVtbl -> putref_AdminQueueInfo(This,pqinfoAdmin)
 
+#define IMSMQMessage2_get_ReceivedAuthenticationLevel(This,psReceivedAuthenticationLevel)	\
+    (This)->lpVtbl -> get_ReceivedAuthenticationLevel(This,psReceivedAuthenticationLevel)
+
 #endif /* COBJMACROS */
 
 
@@ -6821,8 +8483,8 @@ DEFINE_GUID(IID_IMSMQMessage2,0xD9933BE0,0xA567,0x11D2,0xB0,0xF3,0x00,0xE0,0x2C,
 
 
 /* [id][propget][hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Class_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plClass);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plClass);
 
 
 void __RPC_STUB IMSMQMessage2_get_Class_Stub(
@@ -6833,8 +8495,8 @@ void __RPC_STUB IMSMQMessage2_get_Class_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_PrivLevel_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plPrivLevel);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plPrivLevel);
 
 
 void __RPC_STUB IMSMQMessage2_get_PrivLevel_Stub(
@@ -6845,7 +8507,7 @@ void __RPC_STUB IMSMQMessage2_get_PrivLevel_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_PrivLevel_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lPrivLevel);
 
 
@@ -6857,8 +8519,8 @@ void __RPC_STUB IMSMQMessage2_put_PrivLevel_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AuthLevel_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plAuthLevel);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plAuthLevel);
 
 
 void __RPC_STUB IMSMQMessage2_get_AuthLevel_Stub(
@@ -6869,7 +8531,7 @@ void __RPC_STUB IMSMQMessage2_get_AuthLevel_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_AuthLevel_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lAuthLevel);
 
 
@@ -6881,8 +8543,8 @@ void __RPC_STUB IMSMQMessage2_put_AuthLevel_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_IsAuthenticated_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ Boolean __RPC_FAR *pisAuthenticated);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ Boolean *pisAuthenticated);
 
 
 void __RPC_STUB IMSMQMessage2_get_IsAuthenticated_Stub(
@@ -6893,8 +8555,8 @@ void __RPC_STUB IMSMQMessage2_get_IsAuthenticated_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Delivery_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plDelivery);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plDelivery);
 
 
 void __RPC_STUB IMSMQMessage2_get_Delivery_Stub(
@@ -6905,7 +8567,7 @@ void __RPC_STUB IMSMQMessage2_get_Delivery_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Delivery_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lDelivery);
 
 
@@ -6917,8 +8579,8 @@ void __RPC_STUB IMSMQMessage2_put_Delivery_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Trace_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plTrace);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plTrace);
 
 
 void __RPC_STUB IMSMQMessage2_get_Trace_Stub(
@@ -6929,7 +8591,7 @@ void __RPC_STUB IMSMQMessage2_get_Trace_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Trace_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lTrace);
 
 
@@ -6941,8 +8603,8 @@ void __RPC_STUB IMSMQMessage2_put_Trace_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Priority_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plPriority);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plPriority);
 
 
 void __RPC_STUB IMSMQMessage2_get_Priority_Stub(
@@ -6953,7 +8615,7 @@ void __RPC_STUB IMSMQMessage2_get_Priority_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Priority_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lPriority);
 
 
@@ -6965,8 +8627,8 @@ void __RPC_STUB IMSMQMessage2_put_Priority_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Journal_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plJournal);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plJournal);
 
 
 void __RPC_STUB IMSMQMessage2_get_Journal_Stub(
@@ -6977,7 +8639,7 @@ void __RPC_STUB IMSMQMessage2_get_Journal_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Journal_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lJournal);
 
 
@@ -6989,8 +8651,8 @@ void __RPC_STUB IMSMQMessage2_put_Journal_Stub(
 
 
 /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ResponseQueueInfo_v1_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoResponse);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage2_get_ResponseQueueInfo_v1_Stub(
@@ -7001,8 +8663,8 @@ void __RPC_STUB IMSMQMessage2_get_ResponseQueueInfo_v1_Stub(
 
 
 /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_putref_ResponseQueueInfo_v1_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [in] */ IMSMQQueueInfo __RPC_FAR *pqinfoResponse);
+    IMSMQMessage2 * This,
+    /* [in] */ IMSMQQueueInfo *pqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage2_putref_ResponseQueueInfo_v1_Stub(
@@ -7013,8 +8675,8 @@ void __RPC_STUB IMSMQMessage2_putref_ResponseQueueInfo_v1_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AppSpecific_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plAppSpecific);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plAppSpecific);
 
 
 void __RPC_STUB IMSMQMessage2_get_AppSpecific_Stub(
@@ -7025,7 +8687,7 @@ void __RPC_STUB IMSMQMessage2_get_AppSpecific_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_AppSpecific_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lAppSpecific);
 
 
@@ -7037,8 +8699,8 @@ void __RPC_STUB IMSMQMessage2_put_AppSpecific_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SourceMachineGuid_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidSrcMachine);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ BSTR *pbstrGuidSrcMachine);
 
 
 void __RPC_STUB IMSMQMessage2_get_SourceMachineGuid_Stub(
@@ -7049,8 +8711,8 @@ void __RPC_STUB IMSMQMessage2_get_SourceMachineGuid_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_BodyLength_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pcbBody);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *pcbBody);
 
 
 void __RPC_STUB IMSMQMessage2_get_BodyLength_Stub(
@@ -7061,8 +8723,8 @@ void __RPC_STUB IMSMQMessage2_get_BodyLength_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Body_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarBody);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ VARIANT *pvarBody);
 
 
 void __RPC_STUB IMSMQMessage2_get_Body_Stub(
@@ -7073,7 +8735,7 @@ void __RPC_STUB IMSMQMessage2_get_Body_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Body_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ VARIANT varBody);
 
 
@@ -7085,8 +8747,8 @@ void __RPC_STUB IMSMQMessage2_put_Body_Stub(
 
 
 /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AdminQueueInfo_v1_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ IMSMQQueueInfo __RPC_FAR *__RPC_FAR *ppqinfoAdmin);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage2_get_AdminQueueInfo_v1_Stub(
@@ -7097,8 +8759,8 @@ void __RPC_STUB IMSMQMessage2_get_AdminQueueInfo_v1_Stub(
 
 
 /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_putref_AdminQueueInfo_v1_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [in] */ IMSMQQueueInfo __RPC_FAR *pqinfoAdmin);
+    IMSMQMessage2 * This,
+    /* [in] */ IMSMQQueueInfo *pqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage2_putref_AdminQueueInfo_v1_Stub(
@@ -7109,8 +8771,8 @@ void __RPC_STUB IMSMQMessage2_putref_AdminQueueInfo_v1_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Id_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarMsgId);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ VARIANT *pvarMsgId);
 
 
 void __RPC_STUB IMSMQMessage2_get_Id_Stub(
@@ -7121,8 +8783,8 @@ void __RPC_STUB IMSMQMessage2_get_Id_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_CorrelationId_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarMsgId);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ VARIANT *pvarMsgId);
 
 
 void __RPC_STUB IMSMQMessage2_get_CorrelationId_Stub(
@@ -7133,7 +8795,7 @@ void __RPC_STUB IMSMQMessage2_get_CorrelationId_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_CorrelationId_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ VARIANT varMsgId);
 
 
@@ -7145,8 +8807,8 @@ void __RPC_STUB IMSMQMessage2_put_CorrelationId_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Ack_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plAck);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plAck);
 
 
 void __RPC_STUB IMSMQMessage2_get_Ack_Stub(
@@ -7157,7 +8819,7 @@ void __RPC_STUB IMSMQMessage2_get_Ack_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Ack_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lAck);
 
 
@@ -7169,8 +8831,8 @@ void __RPC_STUB IMSMQMessage2_put_Ack_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Label_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrLabel);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ BSTR *pbstrLabel);
 
 
 void __RPC_STUB IMSMQMessage2_get_Label_Stub(
@@ -7181,7 +8843,7 @@ void __RPC_STUB IMSMQMessage2_get_Label_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Label_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ BSTR bstrLabel);
 
 
@@ -7193,8 +8855,8 @@ void __RPC_STUB IMSMQMessage2_put_Label_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_MaxTimeToReachQueue_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plMaxTimeToReachQueue);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plMaxTimeToReachQueue);
 
 
 void __RPC_STUB IMSMQMessage2_get_MaxTimeToReachQueue_Stub(
@@ -7205,7 +8867,7 @@ void __RPC_STUB IMSMQMessage2_get_MaxTimeToReachQueue_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_MaxTimeToReachQueue_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lMaxTimeToReachQueue);
 
 
@@ -7217,8 +8879,8 @@ void __RPC_STUB IMSMQMessage2_put_MaxTimeToReachQueue_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_MaxTimeToReceive_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plMaxTimeToReceive);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plMaxTimeToReceive);
 
 
 void __RPC_STUB IMSMQMessage2_get_MaxTimeToReceive_Stub(
@@ -7229,7 +8891,7 @@ void __RPC_STUB IMSMQMessage2_get_MaxTimeToReceive_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_MaxTimeToReceive_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lMaxTimeToReceive);
 
 
@@ -7241,8 +8903,8 @@ void __RPC_STUB IMSMQMessage2_put_MaxTimeToReceive_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_HashAlgorithm_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plHashAlg);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plHashAlg);
 
 
 void __RPC_STUB IMSMQMessage2_get_HashAlgorithm_Stub(
@@ -7253,7 +8915,7 @@ void __RPC_STUB IMSMQMessage2_get_HashAlgorithm_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_HashAlgorithm_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lHashAlg);
 
 
@@ -7265,8 +8927,8 @@ void __RPC_STUB IMSMQMessage2_put_HashAlgorithm_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_EncryptAlgorithm_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plEncryptAlg);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plEncryptAlg);
 
 
 void __RPC_STUB IMSMQMessage2_get_EncryptAlgorithm_Stub(
@@ -7277,7 +8939,7 @@ void __RPC_STUB IMSMQMessage2_get_EncryptAlgorithm_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_EncryptAlgorithm_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lEncryptAlg);
 
 
@@ -7289,8 +8951,8 @@ void __RPC_STUB IMSMQMessage2_put_EncryptAlgorithm_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SentTime_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarSentTime);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ VARIANT *pvarSentTime);
 
 
 void __RPC_STUB IMSMQMessage2_get_SentTime_Stub(
@@ -7301,8 +8963,8 @@ void __RPC_STUB IMSMQMessage2_get_SentTime_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ArrivedTime_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *plArrivedTime);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ VARIANT *plArrivedTime);
 
 
 void __RPC_STUB IMSMQMessage2_get_ArrivedTime_Stub(
@@ -7313,8 +8975,8 @@ void __RPC_STUB IMSMQMessage2_get_ArrivedTime_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_DestinationQueueInfo_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoDest);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoDest);
 
 
 void __RPC_STUB IMSMQMessage2_get_DestinationQueueInfo_Stub(
@@ -7325,8 +8987,8 @@ void __RPC_STUB IMSMQMessage2_get_DestinationQueueInfo_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SenderCertificate_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarSenderCert);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ VARIANT *pvarSenderCert);
 
 
 void __RPC_STUB IMSMQMessage2_get_SenderCertificate_Stub(
@@ -7337,7 +8999,7 @@ void __RPC_STUB IMSMQMessage2_get_SenderCertificate_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_SenderCertificate_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ VARIANT varSenderCert);
 
 
@@ -7349,8 +9011,8 @@ void __RPC_STUB IMSMQMessage2_put_SenderCertificate_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SenderId_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarSenderId);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ VARIANT *pvarSenderId);
 
 
 void __RPC_STUB IMSMQMessage2_get_SenderId_Stub(
@@ -7361,8 +9023,8 @@ void __RPC_STUB IMSMQMessage2_get_SenderId_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SenderIdType_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plSenderIdType);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plSenderIdType);
 
 
 void __RPC_STUB IMSMQMessage2_get_SenderIdType_Stub(
@@ -7373,7 +9035,7 @@ void __RPC_STUB IMSMQMessage2_get_SenderIdType_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_SenderIdType_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lSenderIdType);
 
 
@@ -7385,9 +9047,9 @@ void __RPC_STUB IMSMQMessage2_put_SenderIdType_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_Send_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [in] */ IMSMQQueue2 __RPC_FAR *DestinationQueue,
-    /* [optional][in] */ VARIANT __RPC_FAR *Transaction);
+    IMSMQMessage2 * This,
+    /* [in] */ IMSMQQueue2 *DestinationQueue,
+    /* [optional][in] */ VARIANT *Transaction);
 
 
 void __RPC_STUB IMSMQMessage2_Send_Stub(
@@ -7398,7 +9060,7 @@ void __RPC_STUB IMSMQMessage2_Send_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_AttachCurrentSecurityContext_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This);
+    IMSMQMessage2 * This);
 
 
 void __RPC_STUB IMSMQMessage2_AttachCurrentSecurityContext_Stub(
@@ -7409,8 +9071,8 @@ void __RPC_STUB IMSMQMessage2_AttachCurrentSecurityContext_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_SenderVersion_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plSenderVersion);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plSenderVersion);
 
 
 void __RPC_STUB IMSMQMessage2_get_SenderVersion_Stub(
@@ -7421,8 +9083,8 @@ void __RPC_STUB IMSMQMessage2_get_SenderVersion_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Extension_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarExtension);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ VARIANT *pvarExtension);
 
 
 void __RPC_STUB IMSMQMessage2_get_Extension_Stub(
@@ -7433,7 +9095,7 @@ void __RPC_STUB IMSMQMessage2_get_Extension_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Extension_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ VARIANT varExtension);
 
 
@@ -7445,8 +9107,8 @@ void __RPC_STUB IMSMQMessage2_put_Extension_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ConnectorTypeGuid_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrGuidConnectorType);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ BSTR *pbstrGuidConnectorType);
 
 
 void __RPC_STUB IMSMQMessage2_get_ConnectorTypeGuid_Stub(
@@ -7457,7 +9119,7 @@ void __RPC_STUB IMSMQMessage2_get_ConnectorTypeGuid_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_ConnectorTypeGuid_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ BSTR bstrGuidConnectorType);
 
 
@@ -7469,8 +9131,8 @@ void __RPC_STUB IMSMQMessage2_put_ConnectorTypeGuid_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_TransactionStatusQueueInfo_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoXactStatus);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoXactStatus);
 
 
 void __RPC_STUB IMSMQMessage2_get_TransactionStatusQueueInfo_Stub(
@@ -7481,8 +9143,8 @@ void __RPC_STUB IMSMQMessage2_get_TransactionStatusQueueInfo_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_DestinationSymmetricKey_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarDestSymmKey);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ VARIANT *pvarDestSymmKey);
 
 
 void __RPC_STUB IMSMQMessage2_get_DestinationSymmetricKey_Stub(
@@ -7493,7 +9155,7 @@ void __RPC_STUB IMSMQMessage2_get_DestinationSymmetricKey_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_DestinationSymmetricKey_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ VARIANT varDestSymmKey);
 
 
@@ -7505,8 +9167,8 @@ void __RPC_STUB IMSMQMessage2_put_DestinationSymmetricKey_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Signature_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarSignature);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ VARIANT *pvarSignature);
 
 
 void __RPC_STUB IMSMQMessage2_get_Signature_Stub(
@@ -7517,7 +9179,7 @@ void __RPC_STUB IMSMQMessage2_get_Signature_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_Signature_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ VARIANT varSignature);
 
 
@@ -7529,8 +9191,8 @@ void __RPC_STUB IMSMQMessage2_put_Signature_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AuthenticationProviderType_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plAuthProvType);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plAuthProvType);
 
 
 void __RPC_STUB IMSMQMessage2_get_AuthenticationProviderType_Stub(
@@ -7541,7 +9203,7 @@ void __RPC_STUB IMSMQMessage2_get_AuthenticationProviderType_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_AuthenticationProviderType_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lAuthProvType);
 
 
@@ -7553,8 +9215,8 @@ void __RPC_STUB IMSMQMessage2_put_AuthenticationProviderType_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AuthenticationProviderName_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrAuthProvName);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ BSTR *pbstrAuthProvName);
 
 
 void __RPC_STUB IMSMQMessage2_get_AuthenticationProviderName_Stub(
@@ -7565,7 +9227,7 @@ void __RPC_STUB IMSMQMessage2_get_AuthenticationProviderName_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_AuthenticationProviderName_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ BSTR bstrAuthProvName);
 
 
@@ -7577,7 +9239,7 @@ void __RPC_STUB IMSMQMessage2_put_AuthenticationProviderName_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_SenderId_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ VARIANT varSenderId);
 
 
@@ -7589,8 +9251,8 @@ void __RPC_STUB IMSMQMessage2_put_SenderId_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_MsgClass_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plMsgClass);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ long *plMsgClass);
 
 
 void __RPC_STUB IMSMQMessage2_get_MsgClass_Stub(
@@ -7601,7 +9263,7 @@ void __RPC_STUB IMSMQMessage2_get_MsgClass_Stub(
 
 
 /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_put_MsgClass_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
+    IMSMQMessage2 * This,
     /* [in] */ long lMsgClass);
 
 
@@ -7613,8 +9275,8 @@ void __RPC_STUB IMSMQMessage2_put_MsgClass_Stub(
 
 
 /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_Properties_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQMessage2_get_Properties_Stub(
@@ -7625,8 +9287,8 @@ void __RPC_STUB IMSMQMessage2_get_Properties_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_TransactionId_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarXactId);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ VARIANT *pvarXactId);
 
 
 void __RPC_STUB IMSMQMessage2_get_TransactionId_Stub(
@@ -7637,8 +9299,8 @@ void __RPC_STUB IMSMQMessage2_get_TransactionId_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_IsFirstInTransaction_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ Boolean __RPC_FAR *pisFirstInXact);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ Boolean *pisFirstInXact);
 
 
 void __RPC_STUB IMSMQMessage2_get_IsFirstInTransaction_Stub(
@@ -7649,8 +9311,8 @@ void __RPC_STUB IMSMQMessage2_get_IsFirstInTransaction_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_IsLastInTransaction_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ Boolean __RPC_FAR *pisLastInXact);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ Boolean *pisLastInXact);
 
 
 void __RPC_STUB IMSMQMessage2_get_IsLastInTransaction_Stub(
@@ -7661,8 +9323,8 @@ void __RPC_STUB IMSMQMessage2_get_IsLastInTransaction_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ResponseQueueInfo_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoResponse);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage2_get_ResponseQueueInfo_Stub(
@@ -7673,8 +9335,8 @@ void __RPC_STUB IMSMQMessage2_get_ResponseQueueInfo_Stub(
 
 
 /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_putref_ResponseQueueInfo_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [in] */ IMSMQQueueInfo2 __RPC_FAR *pqinfoResponse);
+    IMSMQMessage2 * This,
+    /* [in] */ IMSMQQueueInfo2 *pqinfoResponse);
 
 
 void __RPC_STUB IMSMQMessage2_putref_ResponseQueueInfo_Stub(
@@ -7685,8 +9347,8 @@ void __RPC_STUB IMSMQMessage2_putref_ResponseQueueInfo_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_AdminQueueInfo_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [retval][out] */ IMSMQQueueInfo2 __RPC_FAR *__RPC_FAR *ppqinfoAdmin);
+    IMSMQMessage2 * This,
+    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage2_get_AdminQueueInfo_Stub(
@@ -7697,11 +9359,23 @@ void __RPC_STUB IMSMQMessage2_get_AdminQueueInfo_Stub(
 
 
 /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_putref_AdminQueueInfo_Proxy( 
-    IMSMQMessage2 __RPC_FAR * This,
-    /* [in] */ IMSMQQueueInfo2 __RPC_FAR *pqinfoAdmin);
+    IMSMQMessage2 * This,
+    /* [in] */ IMSMQQueueInfo2 *pqinfoAdmin);
 
 
 void __RPC_STUB IMSMQMessage2_putref_AdminQueueInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage2_get_ReceivedAuthenticationLevel_Proxy( 
+    IMSMQMessage2 * This,
+    /* [retval][out] */ short *psReceivedAuthenticationLevel);
+
+
+void __RPC_STUB IMSMQMessage2_get_ReceivedAuthenticationLevel_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -7712,7 +9386,2116 @@ void __RPC_STUB IMSMQMessage2_putref_AdminQueueInfo_Stub(
 #endif 	/* __IMSMQMessage2_INTERFACE_DEFINED__ */
 
 
-DEFINE_GUID(CLSID_MSMQMessage,0xD7D6E075,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+#ifndef __IMSMQMessage3_INTERFACE_DEFINED__
+#define __IMSMQMessage3_INTERFACE_DEFINED__
+
+/* interface IMSMQMessage3 */
+/* [object][dual][hidden][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQMessage3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eba96b1a-2168-11d3-898c-00e02c074f6b")
+    IMSMQMessage3 : public IDispatch
+    {
+    public:
+        virtual /* [id][propget][hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Class( 
+            /* [retval][out] */ long *plClass) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivLevel( 
+            /* [retval][out] */ long *plPrivLevel) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PrivLevel( 
+            /* [in] */ long lPrivLevel) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthLevel( 
+            /* [retval][out] */ long *plAuthLevel) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthLevel( 
+            /* [in] */ long lAuthLevel) = 0;
+        
+        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_IsAuthenticated( 
+            /* [retval][out] */ Boolean *pisAuthenticated) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Delivery( 
+            /* [retval][out] */ long *plDelivery) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Delivery( 
+            /* [in] */ long lDelivery) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Trace( 
+            /* [retval][out] */ long *plTrace) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Trace( 
+            /* [in] */ long lTrace) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Priority( 
+            /* [retval][out] */ long *plPriority) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Priority( 
+            /* [in] */ long lPriority) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Journal( 
+            /* [retval][out] */ long *plJournal) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Journal( 
+            /* [in] */ long lJournal) = 0;
+        
+        virtual /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo_v1( 
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse) = 0;
+        
+        virtual /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo_v1( 
+            /* [in] */ IMSMQQueueInfo *pqinfoResponse) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AppSpecific( 
+            /* [retval][out] */ long *plAppSpecific) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AppSpecific( 
+            /* [in] */ long lAppSpecific) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SourceMachineGuid( 
+            /* [retval][out] */ BSTR *pbstrGuidSrcMachine) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BodyLength( 
+            /* [retval][out] */ long *pcbBody) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Body( 
+            /* [retval][out] */ VARIANT *pvarBody) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Body( 
+            /* [in] */ VARIANT varBody) = 0;
+        
+        virtual /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AdminQueueInfo_v1( 
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin) = 0;
+        
+        virtual /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo_v1( 
+            /* [in] */ IMSMQQueueInfo *pqinfoAdmin) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Id( 
+            /* [retval][out] */ VARIANT *pvarMsgId) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CorrelationId( 
+            /* [retval][out] */ VARIANT *pvarMsgId) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_CorrelationId( 
+            /* [in] */ VARIANT varMsgId) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Ack( 
+            /* [retval][out] */ long *plAck) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Ack( 
+            /* [in] */ long lAck) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Label( 
+            /* [retval][out] */ BSTR *pbstrLabel) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Label( 
+            /* [in] */ BSTR bstrLabel) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MaxTimeToReachQueue( 
+            /* [retval][out] */ long *plMaxTimeToReachQueue) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MaxTimeToReachQueue( 
+            /* [in] */ long lMaxTimeToReachQueue) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MaxTimeToReceive( 
+            /* [retval][out] */ long *plMaxTimeToReceive) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MaxTimeToReceive( 
+            /* [in] */ long lMaxTimeToReceive) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_HashAlgorithm( 
+            /* [retval][out] */ long *plHashAlg) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_HashAlgorithm( 
+            /* [in] */ long lHashAlg) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_EncryptAlgorithm( 
+            /* [retval][out] */ long *plEncryptAlg) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_EncryptAlgorithm( 
+            /* [in] */ long lEncryptAlg) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SentTime( 
+            /* [retval][out] */ VARIANT *pvarSentTime) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ArrivedTime( 
+            /* [retval][out] */ VARIANT *plArrivedTime) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_DestinationQueueInfo( 
+            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoDest) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderCertificate( 
+            /* [retval][out] */ VARIANT *pvarSenderCert) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderCertificate( 
+            /* [in] */ VARIANT varSenderCert) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderId( 
+            /* [retval][out] */ VARIANT *pvarSenderId) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderIdType( 
+            /* [retval][out] */ long *plSenderIdType) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderIdType( 
+            /* [in] */ long lSenderIdType) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Send( 
+            /* [in] */ IDispatch *DestinationQueue,
+            /* [optional][in] */ VARIANT *Transaction) = 0;
+        
+        virtual /* [helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE AttachCurrentSecurityContext( void) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SenderVersion( 
+            /* [retval][out] */ long *plSenderVersion) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Extension( 
+            /* [retval][out] */ VARIANT *pvarExtension) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Extension( 
+            /* [in] */ VARIANT varExtension) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ConnectorTypeGuid( 
+            /* [retval][out] */ BSTR *pbstrGuidConnectorType) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_ConnectorTypeGuid( 
+            /* [in] */ BSTR bstrGuidConnectorType) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_TransactionStatusQueueInfo( 
+            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoXactStatus) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_DestinationSymmetricKey( 
+            /* [retval][out] */ VARIANT *pvarDestSymmKey) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_DestinationSymmetricKey( 
+            /* [in] */ VARIANT varDestSymmKey) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Signature( 
+            /* [retval][out] */ VARIANT *pvarSignature) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Signature( 
+            /* [in] */ VARIANT varSignature) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthenticationProviderType( 
+            /* [retval][out] */ long *plAuthProvType) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthenticationProviderType( 
+            /* [in] */ long lAuthProvType) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AuthenticationProviderName( 
+            /* [retval][out] */ BSTR *pbstrAuthProvName) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_AuthenticationProviderName( 
+            /* [in] */ BSTR bstrAuthProvName) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SenderId( 
+            /* [in] */ VARIANT varSenderId) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MsgClass( 
+            /* [retval][out] */ long *plMsgClass) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_MsgClass( 
+            /* [in] */ long lMsgClass) = 0;
+        
+        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_TransactionId( 
+            /* [retval][out] */ VARIANT *pvarXactId) = 0;
+        
+        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_IsFirstInTransaction( 
+            /* [retval][out] */ Boolean *pisFirstInXact) = 0;
+        
+        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_IsLastInTransaction( 
+            /* [retval][out] */ Boolean *pisLastInXact) = 0;
+        
+        virtual /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo_v2( 
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoResponse) = 0;
+        
+        virtual /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo_v2( 
+            /* [in] */ IMSMQQueueInfo2 *pqinfoResponse) = 0;
+        
+        virtual /* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AdminQueueInfo_v2( 
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoAdmin) = 0;
+        
+        virtual /* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo_v2( 
+            /* [in] */ IMSMQQueueInfo2 *pqinfoAdmin) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ReceivedAuthenticationLevel( 
+            /* [retval][out] */ short *psReceivedAuthenticationLevel) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseQueueInfo( 
+            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoResponse) = 0;
+        
+        virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseQueueInfo( 
+            /* [in] */ IMSMQQueueInfo3 *pqinfoResponse) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_AdminQueueInfo( 
+            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoAdmin) = 0;
+        
+        virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_AdminQueueInfo( 
+            /* [in] */ IMSMQQueueInfo3 *pqinfoAdmin) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ResponseDestination( 
+            /* [retval][out] */ IDispatch **ppdestResponse) = 0;
+        
+        virtual /* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE putref_ResponseDestination( 
+            /* [in] */ IDispatch *pdestResponse) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Destination( 
+            /* [retval][out] */ IDispatch **ppdestDestination) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_LookupId( 
+            /* [retval][out] */ VARIANT *pvarLookupId) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsAuthenticated2( 
+            /* [retval][out] */ VARIANT_BOOL *pisAuthenticated) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsFirstInTransaction2( 
+            /* [retval][out] */ VARIANT_BOOL *pisFirstInXact) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsLastInTransaction2( 
+            /* [retval][out] */ VARIANT_BOOL *pisLastInXact) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE AttachCurrentSecurityContext2( void) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_SoapEnvelope( 
+            /* [retval][out] */ BSTR *pbstrSoapEnvelope) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_CompoundMessage( 
+            /* [retval][out] */ VARIANT *pvarCompoundMessage) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SoapHeader( 
+            /* [in] */ BSTR bstrSoapHeader) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_SoapBody( 
+            /* [in] */ BSTR bstrSoapBody) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQMessage3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQMessage3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQMessage3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQMessage3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQMessage3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQMessage3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQMessage3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQMessage3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id][propget][hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plClass);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivLevel )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plPrivLevel);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PrivLevel )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lPrivLevel);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthLevel )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plAuthLevel);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthLevel )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lAuthLevel);
+        
+        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ Boolean *pisAuthenticated);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Delivery )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plDelivery);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Delivery )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lDelivery);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Trace )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plTrace);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Trace )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lTrace);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plPriority);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lPriority);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Journal )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plJournal);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Journal )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lJournal);
+        
+        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo_v1 )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse);
+        
+        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo_v1 )( 
+            IMSMQMessage3 * This,
+            /* [in] */ IMSMQQueueInfo *pqinfoResponse);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AppSpecific )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plAppSpecific);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AppSpecific )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lAppSpecific);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SourceMachineGuid )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ BSTR *pbstrGuidSrcMachine);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BodyLength )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *pcbBody);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Body )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT *pvarBody);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Body )( 
+            IMSMQMessage3 * This,
+            /* [in] */ VARIANT varBody);
+        
+        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo_v1 )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin);
+        
+        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo_v1 )( 
+            IMSMQMessage3 * This,
+            /* [in] */ IMSMQQueueInfo *pqinfoAdmin);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT *pvarMsgId);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CorrelationId )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT *pvarMsgId);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_CorrelationId )( 
+            IMSMQMessage3 * This,
+            /* [in] */ VARIANT varMsgId);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Ack )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plAck);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Ack )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lAck);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Label )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ BSTR *pbstrLabel);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Label )( 
+            IMSMQMessage3 * This,
+            /* [in] */ BSTR bstrLabel);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReachQueue )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plMaxTimeToReachQueue);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReachQueue )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lMaxTimeToReachQueue);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MaxTimeToReceive )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plMaxTimeToReceive);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MaxTimeToReceive )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lMaxTimeToReceive);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_HashAlgorithm )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plHashAlg);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_HashAlgorithm )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lHashAlg);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_EncryptAlgorithm )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plEncryptAlg);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_EncryptAlgorithm )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lEncryptAlg);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SentTime )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT *pvarSentTime);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ArrivedTime )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT *plArrivedTime);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_DestinationQueueInfo )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoDest);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderCertificate )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT *pvarSenderCert);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderCertificate )( 
+            IMSMQMessage3 * This,
+            /* [in] */ VARIANT varSenderCert);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderId )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT *pvarSenderId);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderIdType )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plSenderIdType);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderIdType )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lSenderIdType);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Send )( 
+            IMSMQMessage3 * This,
+            /* [in] */ IDispatch *DestinationQueue,
+            /* [optional][in] */ VARIANT *Transaction);
+        
+        /* [helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *AttachCurrentSecurityContext )( 
+            IMSMQMessage3 * This);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SenderVersion )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plSenderVersion);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Extension )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT *pvarExtension);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Extension )( 
+            IMSMQMessage3 * This,
+            /* [in] */ VARIANT varExtension);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectorTypeGuid )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ BSTR *pbstrGuidConnectorType);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_ConnectorTypeGuid )( 
+            IMSMQMessage3 * This,
+            /* [in] */ BSTR bstrGuidConnectorType);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionStatusQueueInfo )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoXactStatus);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_DestinationSymmetricKey )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT *pvarDestSymmKey);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_DestinationSymmetricKey )( 
+            IMSMQMessage3 * This,
+            /* [in] */ VARIANT varDestSymmKey);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Signature )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT *pvarSignature);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Signature )( 
+            IMSMQMessage3 * This,
+            /* [in] */ VARIANT varSignature);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthenticationProviderType )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plAuthProvType);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthenticationProviderType )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lAuthProvType);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AuthenticationProviderName )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ BSTR *pbstrAuthProvName);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_AuthenticationProviderName )( 
+            IMSMQMessage3 * This,
+            /* [in] */ BSTR bstrAuthProvName);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SenderId )( 
+            IMSMQMessage3 * This,
+            /* [in] */ VARIANT varSenderId);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MsgClass )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ long *plMsgClass);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_MsgClass )( 
+            IMSMQMessage3 * This,
+            /* [in] */ long lMsgClass);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionId )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT *pvarXactId);
+        
+        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IsFirstInTransaction )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ Boolean *pisFirstInXact);
+        
+        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IsLastInTransaction )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ Boolean *pisLastInXact);
+        
+        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo_v2 )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoResponse);
+        
+        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo_v2 )( 
+            IMSMQMessage3 * This,
+            /* [in] */ IMSMQQueueInfo2 *pqinfoResponse);
+        
+        /* [hidden][id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo_v2 )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoAdmin);
+        
+        /* [hidden][id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo_v2 )( 
+            IMSMQMessage3 * This,
+            /* [in] */ IMSMQQueueInfo2 *pqinfoAdmin);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ReceivedAuthenticationLevel )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ short *psReceivedAuthenticationLevel);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseQueueInfo )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoResponse);
+        
+        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseQueueInfo )( 
+            IMSMQMessage3 * This,
+            /* [in] */ IMSMQQueueInfo3 *pqinfoResponse);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_AdminQueueInfo )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoAdmin);
+        
+        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_AdminQueueInfo )( 
+            IMSMQMessage3 * This,
+            /* [in] */ IMSMQQueueInfo3 *pqinfoAdmin);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ResponseDestination )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ IDispatch **ppdestResponse);
+        
+        /* [id][propputref][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *putref_ResponseDestination )( 
+            IMSMQMessage3 * This,
+            /* [in] */ IDispatch *pdestResponse);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Destination )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ IDispatch **ppdestDestination);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_LookupId )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT *pvarLookupId);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsAuthenticated2 )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pisAuthenticated);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsFirstInTransaction2 )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pisFirstInXact);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsLastInTransaction2 )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pisLastInXact);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *AttachCurrentSecurityContext2 )( 
+            IMSMQMessage3 * This);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_SoapEnvelope )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ BSTR *pbstrSoapEnvelope);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_CompoundMessage )( 
+            IMSMQMessage3 * This,
+            /* [retval][out] */ VARIANT *pvarCompoundMessage);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SoapHeader )( 
+            IMSMQMessage3 * This,
+            /* [in] */ BSTR bstrSoapHeader);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_SoapBody )( 
+            IMSMQMessage3 * This,
+            /* [in] */ BSTR bstrSoapBody);
+        
+        END_INTERFACE
+    } IMSMQMessage3Vtbl;
+
+    interface IMSMQMessage3
+    {
+        CONST_VTBL struct IMSMQMessage3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQMessage3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQMessage3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQMessage3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQMessage3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQMessage3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQMessage3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQMessage3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQMessage3_get_Class(This,plClass)	\
+    (This)->lpVtbl -> get_Class(This,plClass)
+
+#define IMSMQMessage3_get_PrivLevel(This,plPrivLevel)	\
+    (This)->lpVtbl -> get_PrivLevel(This,plPrivLevel)
+
+#define IMSMQMessage3_put_PrivLevel(This,lPrivLevel)	\
+    (This)->lpVtbl -> put_PrivLevel(This,lPrivLevel)
+
+#define IMSMQMessage3_get_AuthLevel(This,plAuthLevel)	\
+    (This)->lpVtbl -> get_AuthLevel(This,plAuthLevel)
+
+#define IMSMQMessage3_put_AuthLevel(This,lAuthLevel)	\
+    (This)->lpVtbl -> put_AuthLevel(This,lAuthLevel)
+
+#define IMSMQMessage3_get_IsAuthenticated(This,pisAuthenticated)	\
+    (This)->lpVtbl -> get_IsAuthenticated(This,pisAuthenticated)
+
+#define IMSMQMessage3_get_Delivery(This,plDelivery)	\
+    (This)->lpVtbl -> get_Delivery(This,plDelivery)
+
+#define IMSMQMessage3_put_Delivery(This,lDelivery)	\
+    (This)->lpVtbl -> put_Delivery(This,lDelivery)
+
+#define IMSMQMessage3_get_Trace(This,plTrace)	\
+    (This)->lpVtbl -> get_Trace(This,plTrace)
+
+#define IMSMQMessage3_put_Trace(This,lTrace)	\
+    (This)->lpVtbl -> put_Trace(This,lTrace)
+
+#define IMSMQMessage3_get_Priority(This,plPriority)	\
+    (This)->lpVtbl -> get_Priority(This,plPriority)
+
+#define IMSMQMessage3_put_Priority(This,lPriority)	\
+    (This)->lpVtbl -> put_Priority(This,lPriority)
+
+#define IMSMQMessage3_get_Journal(This,plJournal)	\
+    (This)->lpVtbl -> get_Journal(This,plJournal)
+
+#define IMSMQMessage3_put_Journal(This,lJournal)	\
+    (This)->lpVtbl -> put_Journal(This,lJournal)
+
+#define IMSMQMessage3_get_ResponseQueueInfo_v1(This,ppqinfoResponse)	\
+    (This)->lpVtbl -> get_ResponseQueueInfo_v1(This,ppqinfoResponse)
+
+#define IMSMQMessage3_putref_ResponseQueueInfo_v1(This,pqinfoResponse)	\
+    (This)->lpVtbl -> putref_ResponseQueueInfo_v1(This,pqinfoResponse)
+
+#define IMSMQMessage3_get_AppSpecific(This,plAppSpecific)	\
+    (This)->lpVtbl -> get_AppSpecific(This,plAppSpecific)
+
+#define IMSMQMessage3_put_AppSpecific(This,lAppSpecific)	\
+    (This)->lpVtbl -> put_AppSpecific(This,lAppSpecific)
+
+#define IMSMQMessage3_get_SourceMachineGuid(This,pbstrGuidSrcMachine)	\
+    (This)->lpVtbl -> get_SourceMachineGuid(This,pbstrGuidSrcMachine)
+
+#define IMSMQMessage3_get_BodyLength(This,pcbBody)	\
+    (This)->lpVtbl -> get_BodyLength(This,pcbBody)
+
+#define IMSMQMessage3_get_Body(This,pvarBody)	\
+    (This)->lpVtbl -> get_Body(This,pvarBody)
+
+#define IMSMQMessage3_put_Body(This,varBody)	\
+    (This)->lpVtbl -> put_Body(This,varBody)
+
+#define IMSMQMessage3_get_AdminQueueInfo_v1(This,ppqinfoAdmin)	\
+    (This)->lpVtbl -> get_AdminQueueInfo_v1(This,ppqinfoAdmin)
+
+#define IMSMQMessage3_putref_AdminQueueInfo_v1(This,pqinfoAdmin)	\
+    (This)->lpVtbl -> putref_AdminQueueInfo_v1(This,pqinfoAdmin)
+
+#define IMSMQMessage3_get_Id(This,pvarMsgId)	\
+    (This)->lpVtbl -> get_Id(This,pvarMsgId)
+
+#define IMSMQMessage3_get_CorrelationId(This,pvarMsgId)	\
+    (This)->lpVtbl -> get_CorrelationId(This,pvarMsgId)
+
+#define IMSMQMessage3_put_CorrelationId(This,varMsgId)	\
+    (This)->lpVtbl -> put_CorrelationId(This,varMsgId)
+
+#define IMSMQMessage3_get_Ack(This,plAck)	\
+    (This)->lpVtbl -> get_Ack(This,plAck)
+
+#define IMSMQMessage3_put_Ack(This,lAck)	\
+    (This)->lpVtbl -> put_Ack(This,lAck)
+
+#define IMSMQMessage3_get_Label(This,pbstrLabel)	\
+    (This)->lpVtbl -> get_Label(This,pbstrLabel)
+
+#define IMSMQMessage3_put_Label(This,bstrLabel)	\
+    (This)->lpVtbl -> put_Label(This,bstrLabel)
+
+#define IMSMQMessage3_get_MaxTimeToReachQueue(This,plMaxTimeToReachQueue)	\
+    (This)->lpVtbl -> get_MaxTimeToReachQueue(This,plMaxTimeToReachQueue)
+
+#define IMSMQMessage3_put_MaxTimeToReachQueue(This,lMaxTimeToReachQueue)	\
+    (This)->lpVtbl -> put_MaxTimeToReachQueue(This,lMaxTimeToReachQueue)
+
+#define IMSMQMessage3_get_MaxTimeToReceive(This,plMaxTimeToReceive)	\
+    (This)->lpVtbl -> get_MaxTimeToReceive(This,plMaxTimeToReceive)
+
+#define IMSMQMessage3_put_MaxTimeToReceive(This,lMaxTimeToReceive)	\
+    (This)->lpVtbl -> put_MaxTimeToReceive(This,lMaxTimeToReceive)
+
+#define IMSMQMessage3_get_HashAlgorithm(This,plHashAlg)	\
+    (This)->lpVtbl -> get_HashAlgorithm(This,plHashAlg)
+
+#define IMSMQMessage3_put_HashAlgorithm(This,lHashAlg)	\
+    (This)->lpVtbl -> put_HashAlgorithm(This,lHashAlg)
+
+#define IMSMQMessage3_get_EncryptAlgorithm(This,plEncryptAlg)	\
+    (This)->lpVtbl -> get_EncryptAlgorithm(This,plEncryptAlg)
+
+#define IMSMQMessage3_put_EncryptAlgorithm(This,lEncryptAlg)	\
+    (This)->lpVtbl -> put_EncryptAlgorithm(This,lEncryptAlg)
+
+#define IMSMQMessage3_get_SentTime(This,pvarSentTime)	\
+    (This)->lpVtbl -> get_SentTime(This,pvarSentTime)
+
+#define IMSMQMessage3_get_ArrivedTime(This,plArrivedTime)	\
+    (This)->lpVtbl -> get_ArrivedTime(This,plArrivedTime)
+
+#define IMSMQMessage3_get_DestinationQueueInfo(This,ppqinfoDest)	\
+    (This)->lpVtbl -> get_DestinationQueueInfo(This,ppqinfoDest)
+
+#define IMSMQMessage3_get_SenderCertificate(This,pvarSenderCert)	\
+    (This)->lpVtbl -> get_SenderCertificate(This,pvarSenderCert)
+
+#define IMSMQMessage3_put_SenderCertificate(This,varSenderCert)	\
+    (This)->lpVtbl -> put_SenderCertificate(This,varSenderCert)
+
+#define IMSMQMessage3_get_SenderId(This,pvarSenderId)	\
+    (This)->lpVtbl -> get_SenderId(This,pvarSenderId)
+
+#define IMSMQMessage3_get_SenderIdType(This,plSenderIdType)	\
+    (This)->lpVtbl -> get_SenderIdType(This,plSenderIdType)
+
+#define IMSMQMessage3_put_SenderIdType(This,lSenderIdType)	\
+    (This)->lpVtbl -> put_SenderIdType(This,lSenderIdType)
+
+#define IMSMQMessage3_Send(This,DestinationQueue,Transaction)	\
+    (This)->lpVtbl -> Send(This,DestinationQueue,Transaction)
+
+#define IMSMQMessage3_AttachCurrentSecurityContext(This)	\
+    (This)->lpVtbl -> AttachCurrentSecurityContext(This)
+
+#define IMSMQMessage3_get_SenderVersion(This,plSenderVersion)	\
+    (This)->lpVtbl -> get_SenderVersion(This,plSenderVersion)
+
+#define IMSMQMessage3_get_Extension(This,pvarExtension)	\
+    (This)->lpVtbl -> get_Extension(This,pvarExtension)
+
+#define IMSMQMessage3_put_Extension(This,varExtension)	\
+    (This)->lpVtbl -> put_Extension(This,varExtension)
+
+#define IMSMQMessage3_get_ConnectorTypeGuid(This,pbstrGuidConnectorType)	\
+    (This)->lpVtbl -> get_ConnectorTypeGuid(This,pbstrGuidConnectorType)
+
+#define IMSMQMessage3_put_ConnectorTypeGuid(This,bstrGuidConnectorType)	\
+    (This)->lpVtbl -> put_ConnectorTypeGuid(This,bstrGuidConnectorType)
+
+#define IMSMQMessage3_get_TransactionStatusQueueInfo(This,ppqinfoXactStatus)	\
+    (This)->lpVtbl -> get_TransactionStatusQueueInfo(This,ppqinfoXactStatus)
+
+#define IMSMQMessage3_get_DestinationSymmetricKey(This,pvarDestSymmKey)	\
+    (This)->lpVtbl -> get_DestinationSymmetricKey(This,pvarDestSymmKey)
+
+#define IMSMQMessage3_put_DestinationSymmetricKey(This,varDestSymmKey)	\
+    (This)->lpVtbl -> put_DestinationSymmetricKey(This,varDestSymmKey)
+
+#define IMSMQMessage3_get_Signature(This,pvarSignature)	\
+    (This)->lpVtbl -> get_Signature(This,pvarSignature)
+
+#define IMSMQMessage3_put_Signature(This,varSignature)	\
+    (This)->lpVtbl -> put_Signature(This,varSignature)
+
+#define IMSMQMessage3_get_AuthenticationProviderType(This,plAuthProvType)	\
+    (This)->lpVtbl -> get_AuthenticationProviderType(This,plAuthProvType)
+
+#define IMSMQMessage3_put_AuthenticationProviderType(This,lAuthProvType)	\
+    (This)->lpVtbl -> put_AuthenticationProviderType(This,lAuthProvType)
+
+#define IMSMQMessage3_get_AuthenticationProviderName(This,pbstrAuthProvName)	\
+    (This)->lpVtbl -> get_AuthenticationProviderName(This,pbstrAuthProvName)
+
+#define IMSMQMessage3_put_AuthenticationProviderName(This,bstrAuthProvName)	\
+    (This)->lpVtbl -> put_AuthenticationProviderName(This,bstrAuthProvName)
+
+#define IMSMQMessage3_put_SenderId(This,varSenderId)	\
+    (This)->lpVtbl -> put_SenderId(This,varSenderId)
+
+#define IMSMQMessage3_get_MsgClass(This,plMsgClass)	\
+    (This)->lpVtbl -> get_MsgClass(This,plMsgClass)
+
+#define IMSMQMessage3_put_MsgClass(This,lMsgClass)	\
+    (This)->lpVtbl -> put_MsgClass(This,lMsgClass)
+
+#define IMSMQMessage3_get_Properties(This,ppcolProperties)	\
+    (This)->lpVtbl -> get_Properties(This,ppcolProperties)
+
+#define IMSMQMessage3_get_TransactionId(This,pvarXactId)	\
+    (This)->lpVtbl -> get_TransactionId(This,pvarXactId)
+
+#define IMSMQMessage3_get_IsFirstInTransaction(This,pisFirstInXact)	\
+    (This)->lpVtbl -> get_IsFirstInTransaction(This,pisFirstInXact)
+
+#define IMSMQMessage3_get_IsLastInTransaction(This,pisLastInXact)	\
+    (This)->lpVtbl -> get_IsLastInTransaction(This,pisLastInXact)
+
+#define IMSMQMessage3_get_ResponseQueueInfo_v2(This,ppqinfoResponse)	\
+    (This)->lpVtbl -> get_ResponseQueueInfo_v2(This,ppqinfoResponse)
+
+#define IMSMQMessage3_putref_ResponseQueueInfo_v2(This,pqinfoResponse)	\
+    (This)->lpVtbl -> putref_ResponseQueueInfo_v2(This,pqinfoResponse)
+
+#define IMSMQMessage3_get_AdminQueueInfo_v2(This,ppqinfoAdmin)	\
+    (This)->lpVtbl -> get_AdminQueueInfo_v2(This,ppqinfoAdmin)
+
+#define IMSMQMessage3_putref_AdminQueueInfo_v2(This,pqinfoAdmin)	\
+    (This)->lpVtbl -> putref_AdminQueueInfo_v2(This,pqinfoAdmin)
+
+#define IMSMQMessage3_get_ReceivedAuthenticationLevel(This,psReceivedAuthenticationLevel)	\
+    (This)->lpVtbl -> get_ReceivedAuthenticationLevel(This,psReceivedAuthenticationLevel)
+
+#define IMSMQMessage3_get_ResponseQueueInfo(This,ppqinfoResponse)	\
+    (This)->lpVtbl -> get_ResponseQueueInfo(This,ppqinfoResponse)
+
+#define IMSMQMessage3_putref_ResponseQueueInfo(This,pqinfoResponse)	\
+    (This)->lpVtbl -> putref_ResponseQueueInfo(This,pqinfoResponse)
+
+#define IMSMQMessage3_get_AdminQueueInfo(This,ppqinfoAdmin)	\
+    (This)->lpVtbl -> get_AdminQueueInfo(This,ppqinfoAdmin)
+
+#define IMSMQMessage3_putref_AdminQueueInfo(This,pqinfoAdmin)	\
+    (This)->lpVtbl -> putref_AdminQueueInfo(This,pqinfoAdmin)
+
+#define IMSMQMessage3_get_ResponseDestination(This,ppdestResponse)	\
+    (This)->lpVtbl -> get_ResponseDestination(This,ppdestResponse)
+
+#define IMSMQMessage3_putref_ResponseDestination(This,pdestResponse)	\
+    (This)->lpVtbl -> putref_ResponseDestination(This,pdestResponse)
+
+#define IMSMQMessage3_get_Destination(This,ppdestDestination)	\
+    (This)->lpVtbl -> get_Destination(This,ppdestDestination)
+
+#define IMSMQMessage3_get_LookupId(This,pvarLookupId)	\
+    (This)->lpVtbl -> get_LookupId(This,pvarLookupId)
+
+#define IMSMQMessage3_get_IsAuthenticated2(This,pisAuthenticated)	\
+    (This)->lpVtbl -> get_IsAuthenticated2(This,pisAuthenticated)
+
+#define IMSMQMessage3_get_IsFirstInTransaction2(This,pisFirstInXact)	\
+    (This)->lpVtbl -> get_IsFirstInTransaction2(This,pisFirstInXact)
+
+#define IMSMQMessage3_get_IsLastInTransaction2(This,pisLastInXact)	\
+    (This)->lpVtbl -> get_IsLastInTransaction2(This,pisLastInXact)
+
+#define IMSMQMessage3_AttachCurrentSecurityContext2(This)	\
+    (This)->lpVtbl -> AttachCurrentSecurityContext2(This)
+
+#define IMSMQMessage3_get_SoapEnvelope(This,pbstrSoapEnvelope)	\
+    (This)->lpVtbl -> get_SoapEnvelope(This,pbstrSoapEnvelope)
+
+#define IMSMQMessage3_get_CompoundMessage(This,pvarCompoundMessage)	\
+    (This)->lpVtbl -> get_CompoundMessage(This,pvarCompoundMessage)
+
+#define IMSMQMessage3_put_SoapHeader(This,bstrSoapHeader)	\
+    (This)->lpVtbl -> put_SoapHeader(This,bstrSoapHeader)
+
+#define IMSMQMessage3_put_SoapBody(This,bstrSoapBody)	\
+    (This)->lpVtbl -> put_SoapBody(This,bstrSoapBody)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id][propget][hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Class_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plClass);
+
+
+void __RPC_STUB IMSMQMessage3_get_Class_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_PrivLevel_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plPrivLevel);
+
+
+void __RPC_STUB IMSMQMessage3_get_PrivLevel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_PrivLevel_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lPrivLevel);
+
+
+void __RPC_STUB IMSMQMessage3_put_PrivLevel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AuthLevel_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plAuthLevel);
+
+
+void __RPC_STUB IMSMQMessage3_get_AuthLevel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_AuthLevel_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lAuthLevel);
+
+
+void __RPC_STUB IMSMQMessage3_put_AuthLevel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsAuthenticated_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ Boolean *pisAuthenticated);
+
+
+void __RPC_STUB IMSMQMessage3_get_IsAuthenticated_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Delivery_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plDelivery);
+
+
+void __RPC_STUB IMSMQMessage3_get_Delivery_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Delivery_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lDelivery);
+
+
+void __RPC_STUB IMSMQMessage3_put_Delivery_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Trace_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plTrace);
+
+
+void __RPC_STUB IMSMQMessage3_get_Trace_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Trace_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lTrace);
+
+
+void __RPC_STUB IMSMQMessage3_put_Trace_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Priority_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plPriority);
+
+
+void __RPC_STUB IMSMQMessage3_get_Priority_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Priority_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lPriority);
+
+
+void __RPC_STUB IMSMQMessage3_put_Priority_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Journal_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plJournal);
+
+
+void __RPC_STUB IMSMQMessage3_get_Journal_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Journal_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lJournal);
+
+
+void __RPC_STUB IMSMQMessage3_put_Journal_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ResponseQueueInfo_v1_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ IMSMQQueueInfo **ppqinfoResponse);
+
+
+void __RPC_STUB IMSMQMessage3_get_ResponseQueueInfo_v1_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_ResponseQueueInfo_v1_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ IMSMQQueueInfo *pqinfoResponse);
+
+
+void __RPC_STUB IMSMQMessage3_putref_ResponseQueueInfo_v1_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AppSpecific_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plAppSpecific);
+
+
+void __RPC_STUB IMSMQMessage3_get_AppSpecific_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_AppSpecific_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lAppSpecific);
+
+
+void __RPC_STUB IMSMQMessage3_put_AppSpecific_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SourceMachineGuid_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ BSTR *pbstrGuidSrcMachine);
+
+
+void __RPC_STUB IMSMQMessage3_get_SourceMachineGuid_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_BodyLength_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *pcbBody);
+
+
+void __RPC_STUB IMSMQMessage3_get_BodyLength_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Body_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT *pvarBody);
+
+
+void __RPC_STUB IMSMQMessage3_get_Body_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Body_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ VARIANT varBody);
+
+
+void __RPC_STUB IMSMQMessage3_put_Body_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AdminQueueInfo_v1_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ IMSMQQueueInfo **ppqinfoAdmin);
+
+
+void __RPC_STUB IMSMQMessage3_get_AdminQueueInfo_v1_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_AdminQueueInfo_v1_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ IMSMQQueueInfo *pqinfoAdmin);
+
+
+void __RPC_STUB IMSMQMessage3_putref_AdminQueueInfo_v1_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Id_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT *pvarMsgId);
+
+
+void __RPC_STUB IMSMQMessage3_get_Id_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_CorrelationId_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT *pvarMsgId);
+
+
+void __RPC_STUB IMSMQMessage3_get_CorrelationId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_CorrelationId_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ VARIANT varMsgId);
+
+
+void __RPC_STUB IMSMQMessage3_put_CorrelationId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Ack_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plAck);
+
+
+void __RPC_STUB IMSMQMessage3_get_Ack_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Ack_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lAck);
+
+
+void __RPC_STUB IMSMQMessage3_put_Ack_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Label_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ BSTR *pbstrLabel);
+
+
+void __RPC_STUB IMSMQMessage3_get_Label_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Label_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ BSTR bstrLabel);
+
+
+void __RPC_STUB IMSMQMessage3_put_Label_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_MaxTimeToReachQueue_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plMaxTimeToReachQueue);
+
+
+void __RPC_STUB IMSMQMessage3_get_MaxTimeToReachQueue_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_MaxTimeToReachQueue_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lMaxTimeToReachQueue);
+
+
+void __RPC_STUB IMSMQMessage3_put_MaxTimeToReachQueue_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_MaxTimeToReceive_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plMaxTimeToReceive);
+
+
+void __RPC_STUB IMSMQMessage3_get_MaxTimeToReceive_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_MaxTimeToReceive_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lMaxTimeToReceive);
+
+
+void __RPC_STUB IMSMQMessage3_put_MaxTimeToReceive_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_HashAlgorithm_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plHashAlg);
+
+
+void __RPC_STUB IMSMQMessage3_get_HashAlgorithm_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_HashAlgorithm_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lHashAlg);
+
+
+void __RPC_STUB IMSMQMessage3_put_HashAlgorithm_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_EncryptAlgorithm_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plEncryptAlg);
+
+
+void __RPC_STUB IMSMQMessage3_get_EncryptAlgorithm_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_EncryptAlgorithm_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lEncryptAlg);
+
+
+void __RPC_STUB IMSMQMessage3_put_EncryptAlgorithm_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SentTime_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT *pvarSentTime);
+
+
+void __RPC_STUB IMSMQMessage3_get_SentTime_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ArrivedTime_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT *plArrivedTime);
+
+
+void __RPC_STUB IMSMQMessage3_get_ArrivedTime_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_DestinationQueueInfo_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoDest);
+
+
+void __RPC_STUB IMSMQMessage3_get_DestinationQueueInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SenderCertificate_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT *pvarSenderCert);
+
+
+void __RPC_STUB IMSMQMessage3_get_SenderCertificate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SenderCertificate_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ VARIANT varSenderCert);
+
+
+void __RPC_STUB IMSMQMessage3_put_SenderCertificate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SenderId_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT *pvarSenderId);
+
+
+void __RPC_STUB IMSMQMessage3_get_SenderId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SenderIdType_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plSenderIdType);
+
+
+void __RPC_STUB IMSMQMessage3_get_SenderIdType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SenderIdType_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lSenderIdType);
+
+
+void __RPC_STUB IMSMQMessage3_put_SenderIdType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_Send_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ IDispatch *DestinationQueue,
+    /* [optional][in] */ VARIANT *Transaction);
+
+
+void __RPC_STUB IMSMQMessage3_Send_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_AttachCurrentSecurityContext_Proxy( 
+    IMSMQMessage3 * This);
+
+
+void __RPC_STUB IMSMQMessage3_AttachCurrentSecurityContext_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SenderVersion_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plSenderVersion);
+
+
+void __RPC_STUB IMSMQMessage3_get_SenderVersion_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Extension_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT *pvarExtension);
+
+
+void __RPC_STUB IMSMQMessage3_get_Extension_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Extension_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ VARIANT varExtension);
+
+
+void __RPC_STUB IMSMQMessage3_put_Extension_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ConnectorTypeGuid_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ BSTR *pbstrGuidConnectorType);
+
+
+void __RPC_STUB IMSMQMessage3_get_ConnectorTypeGuid_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_ConnectorTypeGuid_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ BSTR bstrGuidConnectorType);
+
+
+void __RPC_STUB IMSMQMessage3_put_ConnectorTypeGuid_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_TransactionStatusQueueInfo_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoXactStatus);
+
+
+void __RPC_STUB IMSMQMessage3_get_TransactionStatusQueueInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_DestinationSymmetricKey_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT *pvarDestSymmKey);
+
+
+void __RPC_STUB IMSMQMessage3_get_DestinationSymmetricKey_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_DestinationSymmetricKey_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ VARIANT varDestSymmKey);
+
+
+void __RPC_STUB IMSMQMessage3_put_DestinationSymmetricKey_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Signature_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT *pvarSignature);
+
+
+void __RPC_STUB IMSMQMessage3_get_Signature_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_Signature_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ VARIANT varSignature);
+
+
+void __RPC_STUB IMSMQMessage3_put_Signature_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AuthenticationProviderType_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plAuthProvType);
+
+
+void __RPC_STUB IMSMQMessage3_get_AuthenticationProviderType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_AuthenticationProviderType_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lAuthProvType);
+
+
+void __RPC_STUB IMSMQMessage3_put_AuthenticationProviderType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AuthenticationProviderName_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ BSTR *pbstrAuthProvName);
+
+
+void __RPC_STUB IMSMQMessage3_get_AuthenticationProviderName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_AuthenticationProviderName_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ BSTR bstrAuthProvName);
+
+
+void __RPC_STUB IMSMQMessage3_put_AuthenticationProviderName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SenderId_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ VARIANT varSenderId);
+
+
+void __RPC_STUB IMSMQMessage3_put_SenderId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_MsgClass_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ long *plMsgClass);
+
+
+void __RPC_STUB IMSMQMessage3_get_MsgClass_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_MsgClass_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ long lMsgClass);
+
+
+void __RPC_STUB IMSMQMessage3_put_MsgClass_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Properties_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
+
+
+void __RPC_STUB IMSMQMessage3_get_Properties_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_TransactionId_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT *pvarXactId);
+
+
+void __RPC_STUB IMSMQMessage3_get_TransactionId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsFirstInTransaction_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ Boolean *pisFirstInXact);
+
+
+void __RPC_STUB IMSMQMessage3_get_IsFirstInTransaction_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsLastInTransaction_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ Boolean *pisLastInXact);
+
+
+void __RPC_STUB IMSMQMessage3_get_IsLastInTransaction_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ResponseQueueInfo_v2_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoResponse);
+
+
+void __RPC_STUB IMSMQMessage3_get_ResponseQueueInfo_v2_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_ResponseQueueInfo_v2_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ IMSMQQueueInfo2 *pqinfoResponse);
+
+
+void __RPC_STUB IMSMQMessage3_putref_ResponseQueueInfo_v2_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [hidden][id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AdminQueueInfo_v2_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ IMSMQQueueInfo2 **ppqinfoAdmin);
+
+
+void __RPC_STUB IMSMQMessage3_get_AdminQueueInfo_v2_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [hidden][id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_AdminQueueInfo_v2_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ IMSMQQueueInfo2 *pqinfoAdmin);
+
+
+void __RPC_STUB IMSMQMessage3_putref_AdminQueueInfo_v2_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ReceivedAuthenticationLevel_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ short *psReceivedAuthenticationLevel);
+
+
+void __RPC_STUB IMSMQMessage3_get_ReceivedAuthenticationLevel_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ResponseQueueInfo_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoResponse);
+
+
+void __RPC_STUB IMSMQMessage3_get_ResponseQueueInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_ResponseQueueInfo_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ IMSMQQueueInfo3 *pqinfoResponse);
+
+
+void __RPC_STUB IMSMQMessage3_putref_ResponseQueueInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_AdminQueueInfo_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ IMSMQQueueInfo3 **ppqinfoAdmin);
+
+
+void __RPC_STUB IMSMQMessage3_get_AdminQueueInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_AdminQueueInfo_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ IMSMQQueueInfo3 *pqinfoAdmin);
+
+
+void __RPC_STUB IMSMQMessage3_putref_AdminQueueInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_ResponseDestination_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ IDispatch **ppdestResponse);
+
+
+void __RPC_STUB IMSMQMessage3_get_ResponseDestination_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propputref][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_putref_ResponseDestination_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ IDispatch *pdestResponse);
+
+
+void __RPC_STUB IMSMQMessage3_putref_ResponseDestination_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_Destination_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ IDispatch **ppdestDestination);
+
+
+void __RPC_STUB IMSMQMessage3_get_Destination_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_LookupId_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT *pvarLookupId);
+
+
+void __RPC_STUB IMSMQMessage3_get_LookupId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsAuthenticated2_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT_BOOL *pisAuthenticated);
+
+
+void __RPC_STUB IMSMQMessage3_get_IsAuthenticated2_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsFirstInTransaction2_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT_BOOL *pisFirstInXact);
+
+
+void __RPC_STUB IMSMQMessage3_get_IsFirstInTransaction2_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_IsLastInTransaction2_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT_BOOL *pisLastInXact);
+
+
+void __RPC_STUB IMSMQMessage3_get_IsLastInTransaction2_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_AttachCurrentSecurityContext2_Proxy( 
+    IMSMQMessage3 * This);
+
+
+void __RPC_STUB IMSMQMessage3_AttachCurrentSecurityContext2_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_SoapEnvelope_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ BSTR *pbstrSoapEnvelope);
+
+
+void __RPC_STUB IMSMQMessage3_get_SoapEnvelope_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_get_CompoundMessage_Proxy( 
+    IMSMQMessage3 * This,
+    /* [retval][out] */ VARIANT *pvarCompoundMessage);
+
+
+void __RPC_STUB IMSMQMessage3_get_CompoundMessage_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SoapHeader_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ BSTR bstrSoapHeader);
+
+
+void __RPC_STUB IMSMQMessage3_put_SoapHeader_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQMessage3_put_SoapBody_Proxy( 
+    IMSMQMessage3 * This,
+    /* [in] */ BSTR bstrSoapBody);
+
+
+void __RPC_STUB IMSMQMessage3_put_SoapBody_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQMessage3_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_MSMQMessage;
 
 #ifdef __cplusplus
 
@@ -7720,7 +11503,1058 @@ class DECLSPEC_UUID("D7D6E075-DCCD-11d0-AA4B-0060970DEBAE")
 MSMQMessage;
 #endif
 
-DEFINE_GUID(CLSID_MSMQQueue,0xD7D6E079,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+#ifndef __IMSMQQueue3_INTERFACE_DEFINED__
+#define __IMSMQQueue3_INTERFACE_DEFINED__
+
+/* interface IMSMQQueue3 */
+/* [object][dual][hidden][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQQueue3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eba96b1b-2168-11d3-898c-00e02c074f6b")
+    IMSMQQueue3 : public IDispatch
+    {
+    public:
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Access( 
+            /* [retval][out] */ long *plAccess) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ShareMode( 
+            /* [retval][out] */ long *plShareMode) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueInfo( 
+            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfo) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Handle( 
+            /* [retval][out] */ long *plHandle) = 0;
+        
+        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_IsOpen( 
+            /* [retval][out] */ Boolean *pisOpen) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
+        
+        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE Receive_v1( 
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        
+        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE Peek_v1( 
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE EnableNotification( 
+            /* [in] */ IMSMQEvent3 *Event,
+            /* [optional][in] */ VARIANT *Cursor,
+            /* [optional][in] */ VARIANT *ReceiveTimeout) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        
+        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveCurrent_v1( 
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        
+        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekNext_v1( 
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        
+        virtual /* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekCurrent_v1( 
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Receive( 
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Peek( 
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveCurrent( 
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekNext( 
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekCurrent( 
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        
+        virtual /* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE get_Handle2( 
+            /* [retval][out] */ VARIANT *pvarHandle) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveByLookupId( 
+            /* [in] */ VARIANT LookupId,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveNextByLookupId( 
+            /* [in] */ VARIANT LookupId,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceivePreviousByLookupId( 
+            /* [in] */ VARIANT LookupId,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveFirstByLookupId( 
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE ReceiveLastByLookupId( 
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekByLookupId( 
+            /* [in] */ VARIANT LookupId,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekNextByLookupId( 
+            /* [in] */ VARIANT LookupId,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekPreviousByLookupId( 
+            /* [in] */ VARIANT LookupId,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekFirstByLookupId( 
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE PeekLastByLookupId( 
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Purge( void) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsOpen2( 
+            /* [retval][out] */ VARIANT_BOOL *pisOpen) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQQueue3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQQueue3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQQueue3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQQueue3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQQueue3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQQueue3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQQueue3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQQueue3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Access )( 
+            IMSMQQueue3 * This,
+            /* [retval][out] */ long *plAccess);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ShareMode )( 
+            IMSMQQueue3 * This,
+            /* [retval][out] */ long *plShareMode);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueInfo )( 
+            IMSMQQueue3 * This,
+            /* [retval][out] */ IMSMQQueueInfo3 **ppqinfo);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            IMSMQQueue3 * This,
+            /* [retval][out] */ long *plHandle);
+        
+        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IsOpen )( 
+            IMSMQQueue3 * This,
+            /* [retval][out] */ Boolean *pisOpen);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+            IMSMQQueue3 * This);
+        
+        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Receive_v1 )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
+        
+        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Peek_v1 )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *EnableNotification )( 
+            IMSMQQueue3 * This,
+            /* [in] */ IMSMQEvent3 *Event,
+            /* [optional][in] */ VARIANT *Cursor,
+            /* [optional][in] */ VARIANT *ReceiveTimeout);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IMSMQQueue3 * This);
+        
+        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent_v1 )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
+        
+        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekNext_v1 )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
+        
+        /* [hidden][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekCurrent_v1 )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [retval][out] */ IMSMQMessage **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Receive )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Peek )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveCurrent )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekNext )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekCurrent )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *ReceiveTimeout,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQQueue3 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
+        
+        /* [id][propget][helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Handle2 )( 
+            IMSMQQueue3 * This,
+            /* [retval][out] */ VARIANT *pvarHandle);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveByLookupId )( 
+            IMSMQQueue3 * This,
+            /* [in] */ VARIANT LookupId,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveNextByLookupId )( 
+            IMSMQQueue3 * This,
+            /* [in] */ VARIANT LookupId,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceivePreviousByLookupId )( 
+            IMSMQQueue3 * This,
+            /* [in] */ VARIANT LookupId,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveFirstByLookupId )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *ReceiveLastByLookupId )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *Transaction,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekByLookupId )( 
+            IMSMQQueue3 * This,
+            /* [in] */ VARIANT LookupId,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekNextByLookupId )( 
+            IMSMQQueue3 * This,
+            /* [in] */ VARIANT LookupId,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekPreviousByLookupId )( 
+            IMSMQQueue3 * This,
+            /* [in] */ VARIANT LookupId,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekFirstByLookupId )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *PeekLastByLookupId )( 
+            IMSMQQueue3 * This,
+            /* [optional][in] */ VARIANT *WantDestinationQueue,
+            /* [optional][in] */ VARIANT *WantBody,
+            /* [optional][in] */ VARIANT *WantConnectorType,
+            /* [retval][out] */ IMSMQMessage3 **ppmsg);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Purge )( 
+            IMSMQQueue3 * This);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsOpen2 )( 
+            IMSMQQueue3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pisOpen);
+        
+        END_INTERFACE
+    } IMSMQQueue3Vtbl;
+
+    interface IMSMQQueue3
+    {
+        CONST_VTBL struct IMSMQQueue3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQQueue3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQQueue3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQQueue3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQQueue3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQQueue3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQQueue3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQQueue3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQQueue3_get_Access(This,plAccess)	\
+    (This)->lpVtbl -> get_Access(This,plAccess)
+
+#define IMSMQQueue3_get_ShareMode(This,plShareMode)	\
+    (This)->lpVtbl -> get_ShareMode(This,plShareMode)
+
+#define IMSMQQueue3_get_QueueInfo(This,ppqinfo)	\
+    (This)->lpVtbl -> get_QueueInfo(This,ppqinfo)
+
+#define IMSMQQueue3_get_Handle(This,plHandle)	\
+    (This)->lpVtbl -> get_Handle(This,plHandle)
+
+#define IMSMQQueue3_get_IsOpen(This,pisOpen)	\
+    (This)->lpVtbl -> get_IsOpen(This,pisOpen)
+
+#define IMSMQQueue3_Close(This)	\
+    (This)->lpVtbl -> Close(This)
+
+#define IMSMQQueue3_Receive_v1(This,Transaction,WantDestinationQueue,WantBody,ReceiveTimeout,ppmsg)	\
+    (This)->lpVtbl -> Receive_v1(This,Transaction,WantDestinationQueue,WantBody,ReceiveTimeout,ppmsg)
+
+#define IMSMQQueue3_Peek_v1(This,WantDestinationQueue,WantBody,ReceiveTimeout,ppmsg)	\
+    (This)->lpVtbl -> Peek_v1(This,WantDestinationQueue,WantBody,ReceiveTimeout,ppmsg)
+
+#define IMSMQQueue3_EnableNotification(This,Event,Cursor,ReceiveTimeout)	\
+    (This)->lpVtbl -> EnableNotification(This,Event,Cursor,ReceiveTimeout)
+
+#define IMSMQQueue3_Reset(This)	\
+    (This)->lpVtbl -> Reset(This)
+
+#define IMSMQQueue3_ReceiveCurrent_v1(This,Transaction,WantDestinationQueue,WantBody,ReceiveTimeout,ppmsg)	\
+    (This)->lpVtbl -> ReceiveCurrent_v1(This,Transaction,WantDestinationQueue,WantBody,ReceiveTimeout,ppmsg)
+
+#define IMSMQQueue3_PeekNext_v1(This,WantDestinationQueue,WantBody,ReceiveTimeout,ppmsg)	\
+    (This)->lpVtbl -> PeekNext_v1(This,WantDestinationQueue,WantBody,ReceiveTimeout,ppmsg)
+
+#define IMSMQQueue3_PeekCurrent_v1(This,WantDestinationQueue,WantBody,ReceiveTimeout,ppmsg)	\
+    (This)->lpVtbl -> PeekCurrent_v1(This,WantDestinationQueue,WantBody,ReceiveTimeout,ppmsg)
+
+#define IMSMQQueue3_Receive(This,Transaction,WantDestinationQueue,WantBody,ReceiveTimeout,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> Receive(This,Transaction,WantDestinationQueue,WantBody,ReceiveTimeout,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_Peek(This,WantDestinationQueue,WantBody,ReceiveTimeout,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> Peek(This,WantDestinationQueue,WantBody,ReceiveTimeout,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_ReceiveCurrent(This,Transaction,WantDestinationQueue,WantBody,ReceiveTimeout,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> ReceiveCurrent(This,Transaction,WantDestinationQueue,WantBody,ReceiveTimeout,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_PeekNext(This,WantDestinationQueue,WantBody,ReceiveTimeout,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> PeekNext(This,WantDestinationQueue,WantBody,ReceiveTimeout,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_PeekCurrent(This,WantDestinationQueue,WantBody,ReceiveTimeout,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> PeekCurrent(This,WantDestinationQueue,WantBody,ReceiveTimeout,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_get_Properties(This,ppcolProperties)	\
+    (This)->lpVtbl -> get_Properties(This,ppcolProperties)
+
+#define IMSMQQueue3_get_Handle2(This,pvarHandle)	\
+    (This)->lpVtbl -> get_Handle2(This,pvarHandle)
+
+#define IMSMQQueue3_ReceiveByLookupId(This,LookupId,Transaction,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> ReceiveByLookupId(This,LookupId,Transaction,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_ReceiveNextByLookupId(This,LookupId,Transaction,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> ReceiveNextByLookupId(This,LookupId,Transaction,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_ReceivePreviousByLookupId(This,LookupId,Transaction,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> ReceivePreviousByLookupId(This,LookupId,Transaction,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_ReceiveFirstByLookupId(This,Transaction,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> ReceiveFirstByLookupId(This,Transaction,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_ReceiveLastByLookupId(This,Transaction,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> ReceiveLastByLookupId(This,Transaction,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_PeekByLookupId(This,LookupId,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> PeekByLookupId(This,LookupId,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_PeekNextByLookupId(This,LookupId,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> PeekNextByLookupId(This,LookupId,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_PeekPreviousByLookupId(This,LookupId,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> PeekPreviousByLookupId(This,LookupId,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_PeekFirstByLookupId(This,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> PeekFirstByLookupId(This,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_PeekLastByLookupId(This,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)	\
+    (This)->lpVtbl -> PeekLastByLookupId(This,WantDestinationQueue,WantBody,WantConnectorType,ppmsg)
+
+#define IMSMQQueue3_Purge(This)	\
+    (This)->lpVtbl -> Purge(This)
+
+#define IMSMQQueue3_get_IsOpen2(This,pisOpen)	\
+    (This)->lpVtbl -> get_IsOpen2(This,pisOpen)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_Access_Proxy( 
+    IMSMQQueue3 * This,
+    /* [retval][out] */ long *plAccess);
+
+
+void __RPC_STUB IMSMQQueue3_get_Access_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_ShareMode_Proxy( 
+    IMSMQQueue3 * This,
+    /* [retval][out] */ long *plShareMode);
+
+
+void __RPC_STUB IMSMQQueue3_get_ShareMode_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_QueueInfo_Proxy( 
+    IMSMQQueue3 * This,
+    /* [retval][out] */ IMSMQQueueInfo3 **ppqinfo);
+
+
+void __RPC_STUB IMSMQQueue3_get_QueueInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_Handle_Proxy( 
+    IMSMQQueue3 * This,
+    /* [retval][out] */ long *plHandle);
+
+
+void __RPC_STUB IMSMQQueue3_get_Handle_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_IsOpen_Proxy( 
+    IMSMQQueue3 * This,
+    /* [retval][out] */ Boolean *pisOpen);
+
+
+void __RPC_STUB IMSMQQueue3_get_IsOpen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Close_Proxy( 
+    IMSMQQueue3 * This);
+
+
+void __RPC_STUB IMSMQQueue3_Close_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Receive_v1_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_Receive_v1_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Peek_v1_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_Peek_v1_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_EnableNotification_Proxy( 
+    IMSMQQueue3 * This,
+    /* [in] */ IMSMQEvent3 *Event,
+    /* [optional][in] */ VARIANT *Cursor,
+    /* [optional][in] */ VARIANT *ReceiveTimeout);
+
+
+void __RPC_STUB IMSMQQueue3_EnableNotification_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Reset_Proxy( 
+    IMSMQQueue3 * This);
+
+
+void __RPC_STUB IMSMQQueue3_Reset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveCurrent_v1_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_ReceiveCurrent_v1_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekNext_v1_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_PeekNext_v1_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [hidden][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekCurrent_v1_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [retval][out] */ IMSMQMessage **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_PeekCurrent_v1_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Receive_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_Receive_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Peek_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_Peek_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveCurrent_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_ReceiveCurrent_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekNext_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_PeekNext_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekCurrent_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *ReceiveTimeout,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_PeekCurrent_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_Properties_Proxy( 
+    IMSMQQueue3 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
+
+
+void __RPC_STUB IMSMQQueue3_get_Properties_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_Handle2_Proxy( 
+    IMSMQQueue3 * This,
+    /* [retval][out] */ VARIANT *pvarHandle);
+
+
+void __RPC_STUB IMSMQQueue3_get_Handle2_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveByLookupId_Proxy( 
+    IMSMQQueue3 * This,
+    /* [in] */ VARIANT LookupId,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_ReceiveByLookupId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveNextByLookupId_Proxy( 
+    IMSMQQueue3 * This,
+    /* [in] */ VARIANT LookupId,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_ReceiveNextByLookupId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceivePreviousByLookupId_Proxy( 
+    IMSMQQueue3 * This,
+    /* [in] */ VARIANT LookupId,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_ReceivePreviousByLookupId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveFirstByLookupId_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_ReceiveFirstByLookupId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_ReceiveLastByLookupId_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *Transaction,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_ReceiveLastByLookupId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekByLookupId_Proxy( 
+    IMSMQQueue3 * This,
+    /* [in] */ VARIANT LookupId,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_PeekByLookupId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekNextByLookupId_Proxy( 
+    IMSMQQueue3 * This,
+    /* [in] */ VARIANT LookupId,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_PeekNextByLookupId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekPreviousByLookupId_Proxy( 
+    IMSMQQueue3 * This,
+    /* [in] */ VARIANT LookupId,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_PeekPreviousByLookupId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekFirstByLookupId_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_PeekFirstByLookupId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_PeekLastByLookupId_Proxy( 
+    IMSMQQueue3 * This,
+    /* [optional][in] */ VARIANT *WantDestinationQueue,
+    /* [optional][in] */ VARIANT *WantBody,
+    /* [optional][in] */ VARIANT *WantConnectorType,
+    /* [retval][out] */ IMSMQMessage3 **ppmsg);
+
+
+void __RPC_STUB IMSMQQueue3_PeekLastByLookupId_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_Purge_Proxy( 
+    IMSMQQueue3 * This);
+
+
+void __RPC_STUB IMSMQQueue3_Purge_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueue3_get_IsOpen2_Proxy( 
+    IMSMQQueue3 * This,
+    /* [retval][out] */ VARIANT_BOOL *pisOpen);
+
+
+void __RPC_STUB IMSMQQueue3_get_IsOpen2_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQQueue3_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_MSMQQueue;
 
 #ifdef __cplusplus
 
@@ -7735,7 +12569,7 @@ MSMQQueue;
 /* [object][dual][hidden][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQPrivateEvent,0xD7AB3341,0xC9D3,0x11d1,0xBB,0x47,0x00,0x80,0xC7,0xC5,0xA2,0xC0);
+EXTERN_C const IID IID_IMSMQPrivateEvent;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -7744,14 +12578,14 @@ DEFINE_GUID(IID_IMSMQPrivateEvent,0xD7AB3341,0xC9D3,0x11d1,0xBB,0x47,0x00,0x80,0
     {
     public:
         virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Hwnd( 
-            /* [retval][out] */ long __RPC_FAR *phwnd) = 0;
+            /* [retval][out] */ long *phwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FireArrivedEvent( 
-            /* [in] */ IMSMQQueue __RPC_FAR *pq,
+            /* [in] */ IMSMQQueue *pq,
             /* [in] */ long msgcursor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FireArrivedErrorEvent( 
-            /* [in] */ IMSMQQueue __RPC_FAR *pq,
+            /* [in] */ IMSMQQueue *pq,
             /* [in] */ HRESULT hrStatus,
             /* [in] */ long msgcursor) = 0;
         
@@ -7763,58 +12597,58 @@ DEFINE_GUID(IID_IMSMQPrivateEvent,0xD7AB3341,0xC9D3,0x11d1,0xBB,0x47,0x00,0x80,0
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQPrivateEvent __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQPrivateEvent * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQPrivateEvent __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQPrivateEvent * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQPrivateEvent __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQPrivateEvent * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQPrivateEvent __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQPrivateEvent * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQPrivateEvent __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQPrivateEvent * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQPrivateEvent __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQPrivateEvent * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQPrivateEvent __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQPrivateEvent * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Hwnd )( 
-            IMSMQPrivateEvent __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *phwnd);
+        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hwnd )( 
+            IMSMQPrivateEvent * This,
+            /* [retval][out] */ long *phwnd);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FireArrivedEvent )( 
-            IMSMQPrivateEvent __RPC_FAR * This,
-            /* [in] */ IMSMQQueue __RPC_FAR *pq,
+        HRESULT ( STDMETHODCALLTYPE *FireArrivedEvent )( 
+            IMSMQPrivateEvent * This,
+            /* [in] */ IMSMQQueue *pq,
             /* [in] */ long msgcursor);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FireArrivedErrorEvent )( 
-            IMSMQPrivateEvent __RPC_FAR * This,
-            /* [in] */ IMSMQQueue __RPC_FAR *pq,
+        HRESULT ( STDMETHODCALLTYPE *FireArrivedErrorEvent )( 
+            IMSMQPrivateEvent * This,
+            /* [in] */ IMSMQQueue *pq,
             /* [in] */ HRESULT hrStatus,
             /* [in] */ long msgcursor);
         
@@ -7823,7 +12657,7 @@ DEFINE_GUID(IID_IMSMQPrivateEvent,0xD7AB3341,0xC9D3,0x11d1,0xBB,0x47,0x00,0x80,0
 
     interface IMSMQPrivateEvent
     {
-        CONST_VTBL struct IMSMQPrivateEventVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQPrivateEventVtbl *lpVtbl;
     };
 
     
@@ -7871,8 +12705,8 @@ DEFINE_GUID(IID_IMSMQPrivateEvent,0xD7AB3341,0xC9D3,0x11d1,0xBB,0x47,0x00,0x80,0
 
 
 /* [propget] */ HRESULT STDMETHODCALLTYPE IMSMQPrivateEvent_get_Hwnd_Proxy( 
-    IMSMQPrivateEvent __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *phwnd);
+    IMSMQPrivateEvent * This,
+    /* [retval][out] */ long *phwnd);
 
 
 void __RPC_STUB IMSMQPrivateEvent_get_Hwnd_Stub(
@@ -7883,8 +12717,8 @@ void __RPC_STUB IMSMQPrivateEvent_get_Hwnd_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMSMQPrivateEvent_FireArrivedEvent_Proxy( 
-    IMSMQPrivateEvent __RPC_FAR * This,
-    /* [in] */ IMSMQQueue __RPC_FAR *pq,
+    IMSMQPrivateEvent * This,
+    /* [in] */ IMSMQQueue *pq,
     /* [in] */ long msgcursor);
 
 
@@ -7896,8 +12730,8 @@ void __RPC_STUB IMSMQPrivateEvent_FireArrivedEvent_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IMSMQPrivateEvent_FireArrivedErrorEvent_Proxy( 
-    IMSMQPrivateEvent __RPC_FAR * This,
-    /* [in] */ IMSMQQueue __RPC_FAR *pq,
+    IMSMQPrivateEvent * This,
+    /* [in] */ IMSMQQueue *pq,
     /* [in] */ HRESULT hrStatus,
     /* [in] */ long msgcursor);
 
@@ -7920,7 +12754,7 @@ void __RPC_STUB IMSMQPrivateEvent_FireArrivedErrorEvent_Stub(
 /* [hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(DIID__DMSMQEventEvents,0xD7D6E078,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const IID DIID__DMSMQEventEvents;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
@@ -7935,52 +12769,52 @@ DEFINE_GUID(DIID__DMSMQEventEvents,0xD7D6E078,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            _DMSMQEventEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            _DMSMQEventEvents * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            _DMSMQEventEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            _DMSMQEventEvents * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            _DMSMQEventEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            _DMSMQEventEvents * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            _DMSMQEventEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            _DMSMQEventEvents * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            _DMSMQEventEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            _DMSMQEventEvents * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            _DMSMQEventEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            _DMSMQEventEvents * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            _DMSMQEventEvents __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            _DMSMQEventEvents * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } _DMSMQEventEventsVtbl;
 
     interface _DMSMQEventEvents
     {
-        CONST_VTBL struct _DMSMQEventEventsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct _DMSMQEventEventsVtbl *lpVtbl;
     };
 
     
@@ -8019,7 +12853,7 @@ DEFINE_GUID(DIID__DMSMQEventEvents,0xD7D6E078,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,
 #endif 	/* ___DMSMQEventEvents_DISPINTERFACE_DEFINED__ */
 
 
-DEFINE_GUID(CLSID_MSMQEvent,0xD7D6E07A,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const CLSID CLSID_MSMQEvent;
 
 #ifdef __cplusplus
 
@@ -8027,7 +12861,7 @@ class DECLSPEC_UUID("D7D6E07A-DCCD-11d0-AA4B-0060970DEBAE")
 MSMQEvent;
 #endif
 
-DEFINE_GUID(CLSID_MSMQQueueInfo,0xD7D6E07C,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const CLSID CLSID_MSMQQueueInfo;
 
 #ifdef __cplusplus
 
@@ -8035,7 +12869,7 @@ class DECLSPEC_UUID("D7D6E07C-DCCD-11d0-AA4B-0060970DEBAE")
 MSMQQueueInfo;
 #endif
 
-DEFINE_GUID(CLSID_MSMQQueueInfos,0xD7D6E07E,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const CLSID CLSID_MSMQQueueInfos;
 
 #ifdef __cplusplus
 
@@ -8050,7 +12884,7 @@ MSMQQueueInfos;
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQTransaction2,0x2CE0C5B0,0x6E67,0x11D2,0xB0,0xE6,0x00,0xE0,0x2C,0x07,0x4F,0x6B);
+EXTERN_C const IID IID_IMSMQTransaction2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -8062,7 +12896,7 @@ DEFINE_GUID(IID_IMSMQTransaction2,0x2CE0C5B0,0x6E67,0x11D2,0xB0,0xE6,0x00,0xE0,0
             /* [in] */ VARIANT varTransaction) = 0;
         
         virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties) = 0;
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
         
     };
     
@@ -8072,75 +12906,75 @@ DEFINE_GUID(IID_IMSMQTransaction2,0x2CE0C5B0,0x6E67,0x11D2,0xB0,0xE6,0x00,0xE0,0
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQTransaction2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQTransaction2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQTransaction2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQTransaction2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQTransaction2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQTransaction2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQTransaction2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQTransaction2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQTransaction2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQTransaction2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQTransaction2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQTransaction2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQTransaction2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQTransaction2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Transaction )( 
-            IMSMQTransaction2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plTransaction);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Transaction )( 
+            IMSMQTransaction2 * This,
+            /* [retval][out] */ long *plTransaction);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Commit )( 
-            IMSMQTransaction2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *fRetaining,
-            /* [optional][in] */ VARIANT __RPC_FAR *grfTC,
-            /* [optional][in] */ VARIANT __RPC_FAR *grfRM);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Commit )( 
+            IMSMQTransaction2 * This,
+            /* [optional][in] */ VARIANT *fRetaining,
+            /* [optional][in] */ VARIANT *grfTC,
+            /* [optional][in] */ VARIANT *grfRM);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Abort )( 
-            IMSMQTransaction2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *fRetaining,
-            /* [optional][in] */ VARIANT __RPC_FAR *fAsync);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Abort )( 
+            IMSMQTransaction2 * This,
+            /* [optional][in] */ VARIANT *fRetaining,
+            /* [optional][in] */ VARIANT *fAsync);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitNew )( 
-            IMSMQTransaction2 __RPC_FAR * This,
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *InitNew )( 
+            IMSMQTransaction2 * This,
             /* [in] */ VARIANT varTransaction);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
-            IMSMQTransaction2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQTransaction2 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQTransaction2Vtbl;
 
     interface IMSMQTransaction2
     {
-        CONST_VTBL struct IMSMQTransaction2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQTransaction2Vtbl *lpVtbl;
     };
 
     
@@ -8195,7 +13029,7 @@ DEFINE_GUID(IID_IMSMQTransaction2,0x2CE0C5B0,0x6E67,0x11D2,0xB0,0xE6,0x00,0xE0,0
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransaction2_InitNew_Proxy( 
-    IMSMQTransaction2 __RPC_FAR * This,
+    IMSMQTransaction2 * This,
     /* [in] */ VARIANT varTransaction);
 
 
@@ -8207,8 +13041,8 @@ void __RPC_STUB IMSMQTransaction2_InitNew_Stub(
 
 
 /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQTransaction2_get_Properties_Proxy( 
-    IMSMQTransaction2 __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+    IMSMQTransaction2 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQTransaction2_get_Properties_Stub(
@@ -8222,7 +13056,179 @@ void __RPC_STUB IMSMQTransaction2_get_Properties_Stub(
 #endif 	/* __IMSMQTransaction2_INTERFACE_DEFINED__ */
 
 
-DEFINE_GUID(CLSID_MSMQTransaction,0xD7D6E080,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+#ifndef __IMSMQTransaction3_INTERFACE_DEFINED__
+#define __IMSMQTransaction3_INTERFACE_DEFINED__
+
+/* interface IMSMQTransaction3 */
+/* [object][dual][hidden][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQTransaction3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eba96b13-2168-11d3-898c-00e02c074f6b")
+    IMSMQTransaction3 : public IMSMQTransaction2
+    {
+    public:
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ITransaction( 
+            /* [retval][out] */ VARIANT *pvarITransaction) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQTransaction3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQTransaction3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQTransaction3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQTransaction3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQTransaction3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQTransaction3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQTransaction3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQTransaction3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Transaction )( 
+            IMSMQTransaction3 * This,
+            /* [retval][out] */ long *plTransaction);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Commit )( 
+            IMSMQTransaction3 * This,
+            /* [optional][in] */ VARIANT *fRetaining,
+            /* [optional][in] */ VARIANT *grfTC,
+            /* [optional][in] */ VARIANT *grfRM);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Abort )( 
+            IMSMQTransaction3 * This,
+            /* [optional][in] */ VARIANT *fRetaining,
+            /* [optional][in] */ VARIANT *fAsync);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *InitNew )( 
+            IMSMQTransaction3 * This,
+            /* [in] */ VARIANT varTransaction);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQTransaction3 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ITransaction )( 
+            IMSMQTransaction3 * This,
+            /* [retval][out] */ VARIANT *pvarITransaction);
+        
+        END_INTERFACE
+    } IMSMQTransaction3Vtbl;
+
+    interface IMSMQTransaction3
+    {
+        CONST_VTBL struct IMSMQTransaction3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQTransaction3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQTransaction3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQTransaction3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQTransaction3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQTransaction3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQTransaction3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQTransaction3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQTransaction3_get_Transaction(This,plTransaction)	\
+    (This)->lpVtbl -> get_Transaction(This,plTransaction)
+
+#define IMSMQTransaction3_Commit(This,fRetaining,grfTC,grfRM)	\
+    (This)->lpVtbl -> Commit(This,fRetaining,grfTC,grfRM)
+
+#define IMSMQTransaction3_Abort(This,fRetaining,fAsync)	\
+    (This)->lpVtbl -> Abort(This,fRetaining,fAsync)
+
+
+#define IMSMQTransaction3_InitNew(This,varTransaction)	\
+    (This)->lpVtbl -> InitNew(This,varTransaction)
+
+#define IMSMQTransaction3_get_Properties(This,ppcolProperties)	\
+    (This)->lpVtbl -> get_Properties(This,ppcolProperties)
+
+
+#define IMSMQTransaction3_get_ITransaction(This,pvarITransaction)	\
+    (This)->lpVtbl -> get_ITransaction(This,pvarITransaction)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransaction3_get_ITransaction_Proxy( 
+    IMSMQTransaction3 * This,
+    /* [retval][out] */ VARIANT *pvarITransaction);
+
+
+void __RPC_STUB IMSMQTransaction3_get_ITransaction_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQTransaction3_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_MSMQTransaction;
 
 #ifdef __cplusplus
 
@@ -8237,7 +13243,7 @@ MSMQTransaction;
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQCoordinatedTransactionDispenser2,0xeba96b10,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x2c,0x07,0x4f,0x6b);
+EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -8246,10 +13252,10 @@ DEFINE_GUID(IID_IMSMQCoordinatedTransactionDispenser2,0xeba96b10,0x2168,0x11d3,0
     {
     public:
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE BeginTransaction( 
-            /* [retval][out] */ IMSMQTransaction2 __RPC_FAR *__RPC_FAR *ptransaction) = 0;
+            /* [retval][out] */ IMSMQTransaction2 **ptransaction) = 0;
         
         virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties) = 0;
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
         
     };
     
@@ -8259,60 +13265,60 @@ DEFINE_GUID(IID_IMSMQCoordinatedTransactionDispenser2,0xeba96b10,0x2168,0x11d3,0
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQCoordinatedTransactionDispenser2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQCoordinatedTransactionDispenser2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQCoordinatedTransactionDispenser2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQCoordinatedTransactionDispenser2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQCoordinatedTransactionDispenser2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQCoordinatedTransactionDispenser2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQCoordinatedTransactionDispenser2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQCoordinatedTransactionDispenser2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQCoordinatedTransactionDispenser2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQCoordinatedTransactionDispenser2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQCoordinatedTransactionDispenser2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQCoordinatedTransactionDispenser2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQCoordinatedTransactionDispenser2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQCoordinatedTransactionDispenser2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginTransaction )( 
-            IMSMQCoordinatedTransactionDispenser2 __RPC_FAR * This,
-            /* [retval][out] */ IMSMQTransaction2 __RPC_FAR *__RPC_FAR *ptransaction);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
+            IMSMQCoordinatedTransactionDispenser2 * This,
+            /* [retval][out] */ IMSMQTransaction2 **ptransaction);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
-            IMSMQCoordinatedTransactionDispenser2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQCoordinatedTransactionDispenser2 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQCoordinatedTransactionDispenser2Vtbl;
 
     interface IMSMQCoordinatedTransactionDispenser2
     {
-        CONST_VTBL struct IMSMQCoordinatedTransactionDispenser2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQCoordinatedTransactionDispenser2Vtbl *lpVtbl;
     };
 
     
@@ -8357,8 +13363,8 @@ DEFINE_GUID(IID_IMSMQCoordinatedTransactionDispenser2,0xeba96b10,0x2168,0x11d3,0
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser2_BeginTransaction_Proxy( 
-    IMSMQCoordinatedTransactionDispenser2 __RPC_FAR * This,
-    /* [retval][out] */ IMSMQTransaction2 __RPC_FAR *__RPC_FAR *ptransaction);
+    IMSMQCoordinatedTransactionDispenser2 * This,
+    /* [retval][out] */ IMSMQTransaction2 **ptransaction);
 
 
 void __RPC_STUB IMSMQCoordinatedTransactionDispenser2_BeginTransaction_Stub(
@@ -8369,8 +13375,8 @@ void __RPC_STUB IMSMQCoordinatedTransactionDispenser2_BeginTransaction_Stub(
 
 
 /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser2_get_Properties_Proxy( 
-    IMSMQCoordinatedTransactionDispenser2 __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+    IMSMQCoordinatedTransactionDispenser2 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQCoordinatedTransactionDispenser2_get_Properties_Stub(
@@ -8384,7 +13390,161 @@ void __RPC_STUB IMSMQCoordinatedTransactionDispenser2_get_Properties_Stub(
 #endif 	/* __IMSMQCoordinatedTransactionDispenser2_INTERFACE_DEFINED__ */
 
 
-DEFINE_GUID(CLSID_MSMQCoordinatedTransactionDispenser,0xD7D6E082,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+#ifndef __IMSMQCoordinatedTransactionDispenser3_INTERFACE_DEFINED__
+#define __IMSMQCoordinatedTransactionDispenser3_INTERFACE_DEFINED__
+
+/* interface IMSMQCoordinatedTransactionDispenser3 */
+/* [object][dual][hidden][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQCoordinatedTransactionDispenser3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eba96b14-2168-11d3-898c-00e02c074f6b")
+    IMSMQCoordinatedTransactionDispenser3 : public IDispatch
+    {
+    public:
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE BeginTransaction( 
+            /* [retval][out] */ IMSMQTransaction3 **ptransaction) = 0;
+        
+        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQCoordinatedTransactionDispenser3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQCoordinatedTransactionDispenser3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQCoordinatedTransactionDispenser3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQCoordinatedTransactionDispenser3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQCoordinatedTransactionDispenser3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQCoordinatedTransactionDispenser3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQCoordinatedTransactionDispenser3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQCoordinatedTransactionDispenser3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
+            IMSMQCoordinatedTransactionDispenser3 * This,
+            /* [retval][out] */ IMSMQTransaction3 **ptransaction);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQCoordinatedTransactionDispenser3 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
+        
+        END_INTERFACE
+    } IMSMQCoordinatedTransactionDispenser3Vtbl;
+
+    interface IMSMQCoordinatedTransactionDispenser3
+    {
+        CONST_VTBL struct IMSMQCoordinatedTransactionDispenser3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQCoordinatedTransactionDispenser3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQCoordinatedTransactionDispenser3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQCoordinatedTransactionDispenser3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQCoordinatedTransactionDispenser3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQCoordinatedTransactionDispenser3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQCoordinatedTransactionDispenser3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQCoordinatedTransactionDispenser3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQCoordinatedTransactionDispenser3_BeginTransaction(This,ptransaction)	\
+    (This)->lpVtbl -> BeginTransaction(This,ptransaction)
+
+#define IMSMQCoordinatedTransactionDispenser3_get_Properties(This,ppcolProperties)	\
+    (This)->lpVtbl -> get_Properties(This,ppcolProperties)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser3_BeginTransaction_Proxy( 
+    IMSMQCoordinatedTransactionDispenser3 * This,
+    /* [retval][out] */ IMSMQTransaction3 **ptransaction);
+
+
+void __RPC_STUB IMSMQCoordinatedTransactionDispenser3_BeginTransaction_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQCoordinatedTransactionDispenser3_get_Properties_Proxy( 
+    IMSMQCoordinatedTransactionDispenser3 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
+
+
+void __RPC_STUB IMSMQCoordinatedTransactionDispenser3_get_Properties_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQCoordinatedTransactionDispenser3_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_MSMQCoordinatedTransactionDispenser;
 
 #ifdef __cplusplus
 
@@ -8399,7 +13559,7 @@ MSMQCoordinatedTransactionDispenser;
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQTransactionDispenser2,0xeba96b11,0x2168,0x11d3,0x89,0x8c,0x00,0xe0,0x2c,0x07,0x4f,0x6b);
+EXTERN_C const IID IID_IMSMQTransactionDispenser2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -8408,10 +13568,10 @@ DEFINE_GUID(IID_IMSMQTransactionDispenser2,0xeba96b11,0x2168,0x11d3,0x89,0x8c,0x
     {
     public:
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE BeginTransaction( 
-            /* [retval][out] */ IMSMQTransaction2 __RPC_FAR *__RPC_FAR *ptransaction) = 0;
+            /* [retval][out] */ IMSMQTransaction2 **ptransaction) = 0;
         
         virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties) = 0;
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
         
     };
     
@@ -8421,60 +13581,60 @@ DEFINE_GUID(IID_IMSMQTransactionDispenser2,0xeba96b11,0x2168,0x11d3,0x89,0x8c,0x
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQTransactionDispenser2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQTransactionDispenser2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQTransactionDispenser2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQTransactionDispenser2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQTransactionDispenser2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQTransactionDispenser2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQTransactionDispenser2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQTransactionDispenser2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQTransactionDispenser2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQTransactionDispenser2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQTransactionDispenser2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQTransactionDispenser2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQTransactionDispenser2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQTransactionDispenser2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginTransaction )( 
-            IMSMQTransactionDispenser2 __RPC_FAR * This,
-            /* [retval][out] */ IMSMQTransaction2 __RPC_FAR *__RPC_FAR *ptransaction);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
+            IMSMQTransactionDispenser2 * This,
+            /* [retval][out] */ IMSMQTransaction2 **ptransaction);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
-            IMSMQTransactionDispenser2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQTransactionDispenser2 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQTransactionDispenser2Vtbl;
 
     interface IMSMQTransactionDispenser2
     {
-        CONST_VTBL struct IMSMQTransactionDispenser2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQTransactionDispenser2Vtbl *lpVtbl;
     };
 
     
@@ -8519,8 +13679,8 @@ DEFINE_GUID(IID_IMSMQTransactionDispenser2,0xeba96b11,0x2168,0x11d3,0x89,0x8c,0x
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser2_BeginTransaction_Proxy( 
-    IMSMQTransactionDispenser2 __RPC_FAR * This,
-    /* [retval][out] */ IMSMQTransaction2 __RPC_FAR *__RPC_FAR *ptransaction);
+    IMSMQTransactionDispenser2 * This,
+    /* [retval][out] */ IMSMQTransaction2 **ptransaction);
 
 
 void __RPC_STUB IMSMQTransactionDispenser2_BeginTransaction_Stub(
@@ -8531,8 +13691,8 @@ void __RPC_STUB IMSMQTransactionDispenser2_BeginTransaction_Stub(
 
 
 /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser2_get_Properties_Proxy( 
-    IMSMQTransactionDispenser2 __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+    IMSMQTransactionDispenser2 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQTransactionDispenser2_get_Properties_Stub(
@@ -8546,7 +13706,161 @@ void __RPC_STUB IMSMQTransactionDispenser2_get_Properties_Stub(
 #endif 	/* __IMSMQTransactionDispenser2_INTERFACE_DEFINED__ */
 
 
-DEFINE_GUID(CLSID_MSMQTransactionDispenser,0xD7D6E084,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+#ifndef __IMSMQTransactionDispenser3_INTERFACE_DEFINED__
+#define __IMSMQTransactionDispenser3_INTERFACE_DEFINED__
+
+/* interface IMSMQTransactionDispenser3 */
+/* [object][dual][hidden][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQTransactionDispenser3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eba96b15-2168-11d3-898c-00e02c074f6b")
+    IMSMQTransactionDispenser3 : public IDispatch
+    {
+    public:
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE BeginTransaction( 
+            /* [retval][out] */ IMSMQTransaction3 **ptransaction) = 0;
+        
+        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQTransactionDispenser3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQTransactionDispenser3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQTransactionDispenser3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQTransactionDispenser3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQTransactionDispenser3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQTransactionDispenser3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQTransactionDispenser3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQTransactionDispenser3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *BeginTransaction )( 
+            IMSMQTransactionDispenser3 * This,
+            /* [retval][out] */ IMSMQTransaction3 **ptransaction);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQTransactionDispenser3 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
+        
+        END_INTERFACE
+    } IMSMQTransactionDispenser3Vtbl;
+
+    interface IMSMQTransactionDispenser3
+    {
+        CONST_VTBL struct IMSMQTransactionDispenser3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQTransactionDispenser3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQTransactionDispenser3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQTransactionDispenser3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQTransactionDispenser3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQTransactionDispenser3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQTransactionDispenser3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQTransactionDispenser3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQTransactionDispenser3_BeginTransaction(This,ptransaction)	\
+    (This)->lpVtbl -> BeginTransaction(This,ptransaction)
+
+#define IMSMQTransactionDispenser3_get_Properties(This,ppcolProperties)	\
+    (This)->lpVtbl -> get_Properties(This,ppcolProperties)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser3_BeginTransaction_Proxy( 
+    IMSMQTransactionDispenser3 * This,
+    /* [retval][out] */ IMSMQTransaction3 **ptransaction);
+
+
+void __RPC_STUB IMSMQTransactionDispenser3_BeginTransaction_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQTransactionDispenser3_get_Properties_Proxy( 
+    IMSMQTransactionDispenser3 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
+
+
+void __RPC_STUB IMSMQTransactionDispenser3_get_Properties_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQTransactionDispenser3_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_MSMQTransactionDispenser;
 
 #ifdef __cplusplus
 
@@ -8561,7 +13875,7 @@ MSMQTransactionDispenser;
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQApplication,0xD7D6E085,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+EXTERN_C const IID IID_IMSMQApplication;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -8571,7 +13885,7 @@ DEFINE_GUID(IID_IMSMQApplication,0xD7D6E085,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x
     public:
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE MachineIdOfMachineName( 
             /* [in] */ BSTR MachineName,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuid) = 0;
+            /* [retval][out] */ BSTR *pbstrGuid) = 0;
         
     };
     
@@ -8581,57 +13895,57 @@ DEFINE_GUID(IID_IMSMQApplication,0xD7D6E085,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQApplication __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQApplication * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQApplication __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQApplication * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQApplication __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQApplication * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQApplication __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQApplication * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQApplication __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQApplication * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQApplication __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQApplication * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQApplication __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQApplication * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MachineIdOfMachineName )( 
-            IMSMQApplication __RPC_FAR * This,
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *MachineIdOfMachineName )( 
+            IMSMQApplication * This,
             /* [in] */ BSTR MachineName,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuid);
+            /* [retval][out] */ BSTR *pbstrGuid);
         
         END_INTERFACE
     } IMSMQApplicationVtbl;
 
     interface IMSMQApplication
     {
-        CONST_VTBL struct IMSMQApplicationVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQApplicationVtbl *lpVtbl;
     };
 
     
@@ -8673,9 +13987,9 @@ DEFINE_GUID(IID_IMSMQApplication,0xD7D6E085,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication_MachineIdOfMachineName_Proxy( 
-    IMSMQApplication __RPC_FAR * This,
+    IMSMQApplication * This,
     /* [in] */ BSTR MachineName,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrGuid);
+    /* [retval][out] */ BSTR *pbstrGuid);
 
 
 void __RPC_STUB IMSMQApplication_MachineIdOfMachineName_Stub(
@@ -8696,7 +14010,7 @@ void __RPC_STUB IMSMQApplication_MachineIdOfMachineName_Stub(
 /* [object][dual][hidden][helpstringcontext][uuid] */ 
 
 
-DEFINE_GUID(IID_IMSMQApplication2,0x12A30900,0x7300,0x11D2,0xB0,0xE6,0x00,0xE0,0x2C,0x07,0x4F,0x6B);
+EXTERN_C const IID IID_IMSMQApplication2;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -8705,27 +14019,27 @@ DEFINE_GUID(IID_IMSMQApplication2,0x12A30900,0x7300,0x11D2,0xB0,0xE6,0x00,0xE0,0
     {
     public:
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE RegisterCertificate( 
-            /* [optional][in] */ VARIANT __RPC_FAR *Flags,
-            /* [optional][in] */ VARIANT __RPC_FAR *ExternalCertificate) = 0;
+            /* [optional][in] */ VARIANT *Flags,
+            /* [optional][in] */ VARIANT *ExternalCertificate) = 0;
         
         virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE MachineNameOfMachineId( 
             /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMachineName) = 0;
+            /* [retval][out] */ BSTR *pbstrMachineName) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MSMQVersionMajor( 
-            /* [retval][out] */ short __RPC_FAR *psMSMQVersionMajor) = 0;
+            /* [retval][out] */ short *psMSMQVersionMajor) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MSMQVersionMinor( 
-            /* [retval][out] */ short __RPC_FAR *psMSMQVersionMinor) = 0;
+            /* [retval][out] */ short *psMSMQVersionMinor) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MSMQVersionBuild( 
-            /* [retval][out] */ short __RPC_FAR *psMSMQVersionBuild) = 0;
+            /* [retval][out] */ short *psMSMQVersionBuild) = 0;
         
         virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsDsEnabled( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfIsDsEnabled) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pfIsDsEnabled) = 0;
         
         virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties) = 0;
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
         
     };
     
@@ -8735,87 +14049,87 @@ DEFINE_GUID(IID_IMSMQApplication2,0x12A30900,0x7300,0x11D2,0xB0,0xE6,0x00,0xE0,0
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IMSMQApplication2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQApplication2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IMSMQApplication2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQApplication2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IMSMQApplication2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQApplication2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IMSMQApplication2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQApplication2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IMSMQApplication2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQApplication2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IMSMQApplication2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQApplication2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IMSMQApplication2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQApplication2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MachineIdOfMachineName )( 
-            IMSMQApplication2 __RPC_FAR * This,
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *MachineIdOfMachineName )( 
+            IMSMQApplication2 * This,
             /* [in] */ BSTR MachineName,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrGuid);
+            /* [retval][out] */ BSTR *pbstrGuid);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterCertificate )( 
-            IMSMQApplication2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *Flags,
-            /* [optional][in] */ VARIANT __RPC_FAR *ExternalCertificate);
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *RegisterCertificate )( 
+            IMSMQApplication2 * This,
+            /* [optional][in] */ VARIANT *Flags,
+            /* [optional][in] */ VARIANT *ExternalCertificate);
         
-        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MachineNameOfMachineId )( 
-            IMSMQApplication2 __RPC_FAR * This,
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *MachineNameOfMachineId )( 
+            IMSMQApplication2 * This,
             /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrMachineName);
+            /* [retval][out] */ BSTR *pbstrMachineName);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MSMQVersionMajor )( 
-            IMSMQApplication2 __RPC_FAR * This,
-            /* [retval][out] */ short __RPC_FAR *psMSMQVersionMajor);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionMajor )( 
+            IMSMQApplication2 * This,
+            /* [retval][out] */ short *psMSMQVersionMajor);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MSMQVersionMinor )( 
-            IMSMQApplication2 __RPC_FAR * This,
-            /* [retval][out] */ short __RPC_FAR *psMSMQVersionMinor);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionMinor )( 
+            IMSMQApplication2 * This,
+            /* [retval][out] */ short *psMSMQVersionMinor);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MSMQVersionBuild )( 
-            IMSMQApplication2 __RPC_FAR * This,
-            /* [retval][out] */ short __RPC_FAR *psMSMQVersionBuild);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionBuild )( 
+            IMSMQApplication2 * This,
+            /* [retval][out] */ short *psMSMQVersionBuild);
         
-        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsDsEnabled )( 
-            IMSMQApplication2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfIsDsEnabled);
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsDsEnabled )( 
+            IMSMQApplication2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pfIsDsEnabled);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Properties )( 
-            IMSMQApplication2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQApplication2 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
         
         END_INTERFACE
     } IMSMQApplication2Vtbl;
 
     interface IMSMQApplication2
     {
-        CONST_VTBL struct IMSMQApplication2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IMSMQApplication2Vtbl *lpVtbl;
     };
 
     
@@ -8879,9 +14193,9 @@ DEFINE_GUID(IID_IMSMQApplication2,0x12A30900,0x7300,0x11D2,0xB0,0xE6,0x00,0xE0,0
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_RegisterCertificate_Proxy( 
-    IMSMQApplication2 __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *Flags,
-    /* [optional][in] */ VARIANT __RPC_FAR *ExternalCertificate);
+    IMSMQApplication2 * This,
+    /* [optional][in] */ VARIANT *Flags,
+    /* [optional][in] */ VARIANT *ExternalCertificate);
 
 
 void __RPC_STUB IMSMQApplication2_RegisterCertificate_Stub(
@@ -8892,9 +14206,9 @@ void __RPC_STUB IMSMQApplication2_RegisterCertificate_Stub(
 
 
 /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_MachineNameOfMachineId_Proxy( 
-    IMSMQApplication2 __RPC_FAR * This,
+    IMSMQApplication2 * This,
     /* [in] */ BSTR bstrGuid,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrMachineName);
+    /* [retval][out] */ BSTR *pbstrMachineName);
 
 
 void __RPC_STUB IMSMQApplication2_MachineNameOfMachineId_Stub(
@@ -8905,8 +14219,8 @@ void __RPC_STUB IMSMQApplication2_MachineNameOfMachineId_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_MSMQVersionMajor_Proxy( 
-    IMSMQApplication2 __RPC_FAR * This,
-    /* [retval][out] */ short __RPC_FAR *psMSMQVersionMajor);
+    IMSMQApplication2 * This,
+    /* [retval][out] */ short *psMSMQVersionMajor);
 
 
 void __RPC_STUB IMSMQApplication2_get_MSMQVersionMajor_Stub(
@@ -8917,8 +14231,8 @@ void __RPC_STUB IMSMQApplication2_get_MSMQVersionMajor_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_MSMQVersionMinor_Proxy( 
-    IMSMQApplication2 __RPC_FAR * This,
-    /* [retval][out] */ short __RPC_FAR *psMSMQVersionMinor);
+    IMSMQApplication2 * This,
+    /* [retval][out] */ short *psMSMQVersionMinor);
 
 
 void __RPC_STUB IMSMQApplication2_get_MSMQVersionMinor_Stub(
@@ -8929,8 +14243,8 @@ void __RPC_STUB IMSMQApplication2_get_MSMQVersionMinor_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_MSMQVersionBuild_Proxy( 
-    IMSMQApplication2 __RPC_FAR * This,
-    /* [retval][out] */ short __RPC_FAR *psMSMQVersionBuild);
+    IMSMQApplication2 * This,
+    /* [retval][out] */ short *psMSMQVersionBuild);
 
 
 void __RPC_STUB IMSMQApplication2_get_MSMQVersionBuild_Stub(
@@ -8941,8 +14255,8 @@ void __RPC_STUB IMSMQApplication2_get_MSMQVersionBuild_Stub(
 
 
 /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_IsDsEnabled_Proxy( 
-    IMSMQApplication2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pfIsDsEnabled);
+    IMSMQApplication2 * This,
+    /* [retval][out] */ VARIANT_BOOL *pfIsDsEnabled);
 
 
 void __RPC_STUB IMSMQApplication2_get_IsDsEnabled_Stub(
@@ -8953,8 +14267,8 @@ void __RPC_STUB IMSMQApplication2_get_IsDsEnabled_Stub(
 
 
 /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQApplication2_get_Properties_Proxy( 
-    IMSMQApplication2 __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppcolProperties);
+    IMSMQApplication2 * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
 
 
 void __RPC_STUB IMSMQApplication2_get_Properties_Stub(
@@ -8968,12 +14282,2026 @@ void __RPC_STUB IMSMQApplication2_get_Properties_Stub(
 #endif 	/* __IMSMQApplication2_INTERFACE_DEFINED__ */
 
 
-DEFINE_GUID(CLSID_MSMQApplication,0xD7D6E086,0xDCCD,0x11d0,0xAA,0x4B,0x00,0x60,0x97,0x0D,0xEB,0xAE);
+#ifndef __IMSMQApplication3_INTERFACE_DEFINED__
+#define __IMSMQApplication3_INTERFACE_DEFINED__
+
+/* interface IMSMQApplication3 */
+/* [object][dual][hidden][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQApplication3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eba96b1f-2168-11d3-898c-00e02c074f6b")
+    IMSMQApplication3 : public IMSMQApplication2
+    {
+    public:
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ActiveQueues( 
+            /* [retval][out] */ VARIANT *pvActiveQueues) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PrivateQueues( 
+            /* [retval][out] */ VARIANT *pvPrivateQueues) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_DirectoryServiceServer( 
+            /* [retval][out] */ BSTR *pbstrDirectoryServiceServer) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsConnected( 
+            /* [retval][out] */ VARIANT_BOOL *pfIsConnected) = 0;
+        
+        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_BytesInAllQueues( 
+            /* [retval][out] */ VARIANT *pvBytesInAllQueues) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_Machine( 
+            /* [in] */ BSTR bstrMachine) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Machine( 
+            /* [retval][out] */ BSTR *pbstrMachine) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Connect( void) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Tidy( void) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQApplication3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQApplication3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQApplication3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQApplication3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQApplication3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQApplication3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQApplication3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQApplication3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *MachineIdOfMachineName )( 
+            IMSMQApplication3 * This,
+            /* [in] */ BSTR MachineName,
+            /* [retval][out] */ BSTR *pbstrGuid);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *RegisterCertificate )( 
+            IMSMQApplication3 * This,
+            /* [optional][in] */ VARIANT *Flags,
+            /* [optional][in] */ VARIANT *ExternalCertificate);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *MachineNameOfMachineId )( 
+            IMSMQApplication3 * This,
+            /* [in] */ BSTR bstrGuid,
+            /* [retval][out] */ BSTR *pbstrMachineName);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionMajor )( 
+            IMSMQApplication3 * This,
+            /* [retval][out] */ short *psMSMQVersionMajor);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionMinor )( 
+            IMSMQApplication3 * This,
+            /* [retval][out] */ short *psMSMQVersionMinor);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MSMQVersionBuild )( 
+            IMSMQApplication3 * This,
+            /* [retval][out] */ short *psMSMQVersionBuild);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsDsEnabled )( 
+            IMSMQApplication3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pfIsDsEnabled);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQApplication3 * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveQueues )( 
+            IMSMQApplication3 * This,
+            /* [retval][out] */ VARIANT *pvActiveQueues);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateQueues )( 
+            IMSMQApplication3 * This,
+            /* [retval][out] */ VARIANT *pvPrivateQueues);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_DirectoryServiceServer )( 
+            IMSMQApplication3 * This,
+            /* [retval][out] */ BSTR *pbstrDirectoryServiceServer);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsConnected )( 
+            IMSMQApplication3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pfIsConnected);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_BytesInAllQueues )( 
+            IMSMQApplication3 * This,
+            /* [retval][out] */ VARIANT *pvBytesInAllQueues);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_Machine )( 
+            IMSMQApplication3 * This,
+            /* [in] */ BSTR bstrMachine);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Machine )( 
+            IMSMQApplication3 * This,
+            /* [retval][out] */ BSTR *pbstrMachine);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Connect )( 
+            IMSMQApplication3 * This);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
+            IMSMQApplication3 * This);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Tidy )( 
+            IMSMQApplication3 * This);
+        
+        END_INTERFACE
+    } IMSMQApplication3Vtbl;
+
+    interface IMSMQApplication3
+    {
+        CONST_VTBL struct IMSMQApplication3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQApplication3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQApplication3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQApplication3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQApplication3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQApplication3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQApplication3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQApplication3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQApplication3_MachineIdOfMachineName(This,MachineName,pbstrGuid)	\
+    (This)->lpVtbl -> MachineIdOfMachineName(This,MachineName,pbstrGuid)
+
+
+#define IMSMQApplication3_RegisterCertificate(This,Flags,ExternalCertificate)	\
+    (This)->lpVtbl -> RegisterCertificate(This,Flags,ExternalCertificate)
+
+#define IMSMQApplication3_MachineNameOfMachineId(This,bstrGuid,pbstrMachineName)	\
+    (This)->lpVtbl -> MachineNameOfMachineId(This,bstrGuid,pbstrMachineName)
+
+#define IMSMQApplication3_get_MSMQVersionMajor(This,psMSMQVersionMajor)	\
+    (This)->lpVtbl -> get_MSMQVersionMajor(This,psMSMQVersionMajor)
+
+#define IMSMQApplication3_get_MSMQVersionMinor(This,psMSMQVersionMinor)	\
+    (This)->lpVtbl -> get_MSMQVersionMinor(This,psMSMQVersionMinor)
+
+#define IMSMQApplication3_get_MSMQVersionBuild(This,psMSMQVersionBuild)	\
+    (This)->lpVtbl -> get_MSMQVersionBuild(This,psMSMQVersionBuild)
+
+#define IMSMQApplication3_get_IsDsEnabled(This,pfIsDsEnabled)	\
+    (This)->lpVtbl -> get_IsDsEnabled(This,pfIsDsEnabled)
+
+#define IMSMQApplication3_get_Properties(This,ppcolProperties)	\
+    (This)->lpVtbl -> get_Properties(This,ppcolProperties)
+
+
+#define IMSMQApplication3_get_ActiveQueues(This,pvActiveQueues)	\
+    (This)->lpVtbl -> get_ActiveQueues(This,pvActiveQueues)
+
+#define IMSMQApplication3_get_PrivateQueues(This,pvPrivateQueues)	\
+    (This)->lpVtbl -> get_PrivateQueues(This,pvPrivateQueues)
+
+#define IMSMQApplication3_get_DirectoryServiceServer(This,pbstrDirectoryServiceServer)	\
+    (This)->lpVtbl -> get_DirectoryServiceServer(This,pbstrDirectoryServiceServer)
+
+#define IMSMQApplication3_get_IsConnected(This,pfIsConnected)	\
+    (This)->lpVtbl -> get_IsConnected(This,pfIsConnected)
+
+#define IMSMQApplication3_get_BytesInAllQueues(This,pvBytesInAllQueues)	\
+    (This)->lpVtbl -> get_BytesInAllQueues(This,pvBytesInAllQueues)
+
+#define IMSMQApplication3_put_Machine(This,bstrMachine)	\
+    (This)->lpVtbl -> put_Machine(This,bstrMachine)
+
+#define IMSMQApplication3_get_Machine(This,pbstrMachine)	\
+    (This)->lpVtbl -> get_Machine(This,pbstrMachine)
+
+#define IMSMQApplication3_Connect(This)	\
+    (This)->lpVtbl -> Connect(This)
+
+#define IMSMQApplication3_Disconnect(This)	\
+    (This)->lpVtbl -> Disconnect(This)
+
+#define IMSMQApplication3_Tidy(This)	\
+    (This)->lpVtbl -> Tidy(This)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_ActiveQueues_Proxy( 
+    IMSMQApplication3 * This,
+    /* [retval][out] */ VARIANT *pvActiveQueues);
+
+
+void __RPC_STUB IMSMQApplication3_get_ActiveQueues_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_PrivateQueues_Proxy( 
+    IMSMQApplication3 * This,
+    /* [retval][out] */ VARIANT *pvPrivateQueues);
+
+
+void __RPC_STUB IMSMQApplication3_get_PrivateQueues_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_DirectoryServiceServer_Proxy( 
+    IMSMQApplication3 * This,
+    /* [retval][out] */ BSTR *pbstrDirectoryServiceServer);
+
+
+void __RPC_STUB IMSMQApplication3_get_DirectoryServiceServer_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_IsConnected_Proxy( 
+    IMSMQApplication3 * This,
+    /* [retval][out] */ VARIANT_BOOL *pfIsConnected);
+
+
+void __RPC_STUB IMSMQApplication3_get_IsConnected_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_BytesInAllQueues_Proxy( 
+    IMSMQApplication3 * This,
+    /* [retval][out] */ VARIANT *pvBytesInAllQueues);
+
+
+void __RPC_STUB IMSMQApplication3_get_BytesInAllQueues_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_put_Machine_Proxy( 
+    IMSMQApplication3 * This,
+    /* [in] */ BSTR bstrMachine);
+
+
+void __RPC_STUB IMSMQApplication3_put_Machine_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_get_Machine_Proxy( 
+    IMSMQApplication3 * This,
+    /* [retval][out] */ BSTR *pbstrMachine);
+
+
+void __RPC_STUB IMSMQApplication3_get_Machine_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_Connect_Proxy( 
+    IMSMQApplication3 * This);
+
+
+void __RPC_STUB IMSMQApplication3_Connect_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_Disconnect_Proxy( 
+    IMSMQApplication3 * This);
+
+
+void __RPC_STUB IMSMQApplication3_Disconnect_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQApplication3_Tidy_Proxy( 
+    IMSMQApplication3 * This);
+
+
+void __RPC_STUB IMSMQApplication3_Tidy_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQApplication3_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_MSMQApplication;
 
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("D7D6E086-DCCD-11d0-AA4B-0060970DEBAE")
 MSMQApplication;
+#endif
+
+#ifndef __IMSMQDestination_INTERFACE_DEFINED__
+#define __IMSMQDestination_INTERFACE_DEFINED__
+
+/* interface IMSMQDestination */
+/* [object][dual][hidden][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQDestination;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eba96b16-2168-11d3-898c-00e02c074f6b")
+    IMSMQDestination : public IDispatch
+    {
+    public:
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Open( void) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Close( void) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsOpen( 
+            /* [retval][out] */ VARIANT_BOOL *pfIsOpen) = 0;
+        
+        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_IADs( 
+            /* [retval][out] */ IDispatch **ppIADs) = 0;
+        
+        virtual /* [id][propputref][hidden] */ HRESULT STDMETHODCALLTYPE putref_IADs( 
+            /* [in] */ IDispatch *pIADs) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ADsPath( 
+            /* [retval][out] */ BSTR *pbstrADsPath) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_ADsPath( 
+            /* [in] */ BSTR bstrADsPath) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_PathName( 
+            /* [retval][out] */ BSTR *pbstrPathName) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_PathName( 
+            /* [in] */ BSTR bstrPathName) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_FormatName( 
+            /* [retval][out] */ BSTR *pbstrFormatName) = 0;
+        
+        virtual /* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE put_FormatName( 
+            /* [in] */ BSTR bstrFormatName) = 0;
+        
+        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Destinations( 
+            /* [retval][out] */ IDispatch **ppDestinations) = 0;
+        
+        virtual /* [id][propputref][hidden] */ HRESULT STDMETHODCALLTYPE putref_Destinations( 
+            /* [in] */ IDispatch *pDestinations) = 0;
+        
+        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Properties( 
+            /* [retval][out] */ IDispatch **ppcolProperties) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQDestinationVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQDestination * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQDestination * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQDestination * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQDestination * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQDestination * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQDestination * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQDestination * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+            IMSMQDestination * This);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Close )( 
+            IMSMQDestination * This);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsOpen )( 
+            IMSMQDestination * This,
+            /* [retval][out] */ VARIANT_BOOL *pfIsOpen);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_IADs )( 
+            IMSMQDestination * This,
+            /* [retval][out] */ IDispatch **ppIADs);
+        
+        /* [id][propputref][hidden] */ HRESULT ( STDMETHODCALLTYPE *putref_IADs )( 
+            IMSMQDestination * This,
+            /* [in] */ IDispatch *pIADs);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IMSMQDestination * This,
+            /* [retval][out] */ BSTR *pbstrADsPath);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_ADsPath )( 
+            IMSMQDestination * This,
+            /* [in] */ BSTR bstrADsPath);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_PathName )( 
+            IMSMQDestination * This,
+            /* [retval][out] */ BSTR *pbstrPathName);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_PathName )( 
+            IMSMQDestination * This,
+            /* [in] */ BSTR bstrPathName);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+            IMSMQDestination * This,
+            /* [retval][out] */ BSTR *pbstrFormatName);
+        
+        /* [id][propput][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *put_FormatName )( 
+            IMSMQDestination * This,
+            /* [in] */ BSTR bstrFormatName);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Destinations )( 
+            IMSMQDestination * This,
+            /* [retval][out] */ IDispatch **ppDestinations);
+        
+        /* [id][propputref][hidden] */ HRESULT ( STDMETHODCALLTYPE *putref_Destinations )( 
+            IMSMQDestination * This,
+            /* [in] */ IDispatch *pDestinations);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+            IMSMQDestination * This,
+            /* [retval][out] */ IDispatch **ppcolProperties);
+        
+        END_INTERFACE
+    } IMSMQDestinationVtbl;
+
+    interface IMSMQDestination
+    {
+        CONST_VTBL struct IMSMQDestinationVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQDestination_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQDestination_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQDestination_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQDestination_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQDestination_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQDestination_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQDestination_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQDestination_Open(This)	\
+    (This)->lpVtbl -> Open(This)
+
+#define IMSMQDestination_Close(This)	\
+    (This)->lpVtbl -> Close(This)
+
+#define IMSMQDestination_get_IsOpen(This,pfIsOpen)	\
+    (This)->lpVtbl -> get_IsOpen(This,pfIsOpen)
+
+#define IMSMQDestination_get_IADs(This,ppIADs)	\
+    (This)->lpVtbl -> get_IADs(This,ppIADs)
+
+#define IMSMQDestination_putref_IADs(This,pIADs)	\
+    (This)->lpVtbl -> putref_IADs(This,pIADs)
+
+#define IMSMQDestination_get_ADsPath(This,pbstrADsPath)	\
+    (This)->lpVtbl -> get_ADsPath(This,pbstrADsPath)
+
+#define IMSMQDestination_put_ADsPath(This,bstrADsPath)	\
+    (This)->lpVtbl -> put_ADsPath(This,bstrADsPath)
+
+#define IMSMQDestination_get_PathName(This,pbstrPathName)	\
+    (This)->lpVtbl -> get_PathName(This,pbstrPathName)
+
+#define IMSMQDestination_put_PathName(This,bstrPathName)	\
+    (This)->lpVtbl -> put_PathName(This,bstrPathName)
+
+#define IMSMQDestination_get_FormatName(This,pbstrFormatName)	\
+    (This)->lpVtbl -> get_FormatName(This,pbstrFormatName)
+
+#define IMSMQDestination_put_FormatName(This,bstrFormatName)	\
+    (This)->lpVtbl -> put_FormatName(This,bstrFormatName)
+
+#define IMSMQDestination_get_Destinations(This,ppDestinations)	\
+    (This)->lpVtbl -> get_Destinations(This,ppDestinations)
+
+#define IMSMQDestination_putref_Destinations(This,pDestinations)	\
+    (This)->lpVtbl -> putref_Destinations(This,pDestinations)
+
+#define IMSMQDestination_get_Properties(This,ppcolProperties)	\
+    (This)->lpVtbl -> get_Properties(This,ppcolProperties)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_Open_Proxy( 
+    IMSMQDestination * This);
+
+
+void __RPC_STUB IMSMQDestination_Open_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_Close_Proxy( 
+    IMSMQDestination * This);
+
+
+void __RPC_STUB IMSMQDestination_Close_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_IsOpen_Proxy( 
+    IMSMQDestination * This,
+    /* [retval][out] */ VARIANT_BOOL *pfIsOpen);
+
+
+void __RPC_STUB IMSMQDestination_get_IsOpen_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_IADs_Proxy( 
+    IMSMQDestination * This,
+    /* [retval][out] */ IDispatch **ppIADs);
+
+
+void __RPC_STUB IMSMQDestination_get_IADs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propputref][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_putref_IADs_Proxy( 
+    IMSMQDestination * This,
+    /* [in] */ IDispatch *pIADs);
+
+
+void __RPC_STUB IMSMQDestination_putref_IADs_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_ADsPath_Proxy( 
+    IMSMQDestination * This,
+    /* [retval][out] */ BSTR *pbstrADsPath);
+
+
+void __RPC_STUB IMSMQDestination_get_ADsPath_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_put_ADsPath_Proxy( 
+    IMSMQDestination * This,
+    /* [in] */ BSTR bstrADsPath);
+
+
+void __RPC_STUB IMSMQDestination_put_ADsPath_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_PathName_Proxy( 
+    IMSMQDestination * This,
+    /* [retval][out] */ BSTR *pbstrPathName);
+
+
+void __RPC_STUB IMSMQDestination_get_PathName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_put_PathName_Proxy( 
+    IMSMQDestination * This,
+    /* [in] */ BSTR bstrPathName);
+
+
+void __RPC_STUB IMSMQDestination_put_PathName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_FormatName_Proxy( 
+    IMSMQDestination * This,
+    /* [retval][out] */ BSTR *pbstrFormatName);
+
+
+void __RPC_STUB IMSMQDestination_get_FormatName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_put_FormatName_Proxy( 
+    IMSMQDestination * This,
+    /* [in] */ BSTR bstrFormatName);
+
+
+void __RPC_STUB IMSMQDestination_put_FormatName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_Destinations_Proxy( 
+    IMSMQDestination * This,
+    /* [retval][out] */ IDispatch **ppDestinations);
+
+
+void __RPC_STUB IMSMQDestination_get_Destinations_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propputref][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_putref_Destinations_Proxy( 
+    IMSMQDestination * This,
+    /* [in] */ IDispatch *pDestinations);
+
+
+void __RPC_STUB IMSMQDestination_putref_Destinations_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQDestination_get_Properties_Proxy( 
+    IMSMQDestination * This,
+    /* [retval][out] */ IDispatch **ppcolProperties);
+
+
+void __RPC_STUB IMSMQDestination_get_Properties_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQDestination_INTERFACE_DEFINED__ */
+
+
+#ifndef __IMSMQPrivateDestination_INTERFACE_DEFINED__
+#define __IMSMQPrivateDestination_INTERFACE_DEFINED__
+
+/* interface IMSMQPrivateDestination */
+/* [object][dual][hidden][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQPrivateDestination;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("eba96b17-2168-11d3-898c-00e02c074f6b")
+    IMSMQPrivateDestination : public IDispatch
+    {
+    public:
+        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_Handle( 
+            /* [retval][out] */ VARIANT *pvarHandle) = 0;
+        
+        virtual /* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE put_Handle( 
+            /* [in] */ VARIANT varHandle) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQPrivateDestinationVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQPrivateDestination * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQPrivateDestination * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQPrivateDestination * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQPrivateDestination * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQPrivateDestination * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQPrivateDestination * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQPrivateDestination * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            IMSMQPrivateDestination * This,
+            /* [retval][out] */ VARIANT *pvarHandle);
+        
+        /* [id][propput][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_Handle )( 
+            IMSMQPrivateDestination * This,
+            /* [in] */ VARIANT varHandle);
+        
+        END_INTERFACE
+    } IMSMQPrivateDestinationVtbl;
+
+    interface IMSMQPrivateDestination
+    {
+        CONST_VTBL struct IMSMQPrivateDestinationVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQPrivateDestination_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQPrivateDestination_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQPrivateDestination_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQPrivateDestination_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQPrivateDestination_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQPrivateDestination_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQPrivateDestination_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQPrivateDestination_get_Handle(This,pvarHandle)	\
+    (This)->lpVtbl -> get_Handle(This,pvarHandle)
+
+#define IMSMQPrivateDestination_put_Handle(This,varHandle)	\
+    (This)->lpVtbl -> put_Handle(This,varHandle)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQPrivateDestination_get_Handle_Proxy( 
+    IMSMQPrivateDestination * This,
+    /* [retval][out] */ VARIANT *pvarHandle);
+
+
+void __RPC_STUB IMSMQPrivateDestination_get_Handle_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQPrivateDestination_put_Handle_Proxy( 
+    IMSMQPrivateDestination * This,
+    /* [in] */ VARIANT varHandle);
+
+
+void __RPC_STUB IMSMQPrivateDestination_put_Handle_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQPrivateDestination_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_MSMQDestination;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("eba96b18-2168-11d3-898c-00e02c074f6b")
+MSMQDestination;
+#endif
+
+#ifndef __IMSMQCollection_INTERFACE_DEFINED__
+#define __IMSMQCollection_INTERFACE_DEFINED__
+
+/* interface IMSMQCollection */
+/* [object][oleautomation][dual][hidden][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQCollection;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("0188AC2F-ECB3-4173-9779-635CA2039C72")
+    IMSMQCollection : public IDispatch
+    {
+    public:
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Item( 
+            /* [in] */ VARIANT *Index,
+            /* [retval][out] */ VARIANT *pvarRet) = 0;
+        
+        virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Count( 
+            /* [retval][out] */ long *pCount) = 0;
+        
+        virtual /* [restricted][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
+            /* [retval][out] */ IUnknown **ppunk) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQCollectionVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQCollection * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQCollection * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQCollection * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQCollection * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQCollection * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQCollection * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQCollection * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+            IMSMQCollection * This,
+            /* [in] */ VARIANT *Index,
+            /* [retval][out] */ VARIANT *pvarRet);
+        
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IMSMQCollection * This,
+            /* [retval][out] */ long *pCount);
+        
+        /* [restricted][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+            IMSMQCollection * This,
+            /* [retval][out] */ IUnknown **ppunk);
+        
+        END_INTERFACE
+    } IMSMQCollectionVtbl;
+
+    interface IMSMQCollection
+    {
+        CONST_VTBL struct IMSMQCollectionVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQCollection_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQCollection_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQCollection_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQCollection_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQCollection_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQCollection_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQCollection_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQCollection_Item(This,Index,pvarRet)	\
+    (This)->lpVtbl -> Item(This,Index,pvarRet)
+
+#define IMSMQCollection_get_Count(This,pCount)	\
+    (This)->lpVtbl -> get_Count(This,pCount)
+
+#define IMSMQCollection__NewEnum(This,ppunk)	\
+    (This)->lpVtbl -> _NewEnum(This,ppunk)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE IMSMQCollection_Item_Proxy( 
+    IMSMQCollection * This,
+    /* [in] */ VARIANT *Index,
+    /* [retval][out] */ VARIANT *pvarRet);
+
+
+void __RPC_STUB IMSMQCollection_Item_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [propget][id] */ HRESULT STDMETHODCALLTYPE IMSMQCollection_get_Count_Proxy( 
+    IMSMQCollection * This,
+    /* [retval][out] */ long *pCount);
+
+
+void __RPC_STUB IMSMQCollection_get_Count_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [restricted][id] */ HRESULT STDMETHODCALLTYPE IMSMQCollection__NewEnum_Proxy( 
+    IMSMQCollection * This,
+    /* [retval][out] */ IUnknown **ppunk);
+
+
+void __RPC_STUB IMSMQCollection__NewEnum_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQCollection_INTERFACE_DEFINED__ */
+
+
+#ifndef __IMSMQManagement_INTERFACE_DEFINED__
+#define __IMSMQManagement_INTERFACE_DEFINED__
+
+/* interface IMSMQManagement */
+/* [object][dual][hidden][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQManagement;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("BE5F0241-E489-4957-8CC4-A452FCF3E23E")
+    IMSMQManagement : public IDispatch
+    {
+    public:
+        virtual /* [id][helpstringcontext] */ HRESULT STDMETHODCALLTYPE Init( 
+            /* [optional][in] */ VARIANT *Machine,
+            /* [optional][in] */ VARIANT *Pathname,
+            /* [optional][in] */ VARIANT *FormatName) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_FormatName( 
+            /* [retval][out] */ BSTR *pbstrFormatName) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_Machine( 
+            /* [retval][out] */ BSTR *pbstrMachine) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_MessageCount( 
+            /* [retval][out] */ long *plMessageCount) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_ForeignStatus( 
+            /* [retval][out] */ long *plForeignStatus) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_QueueType( 
+            /* [retval][out] */ long *plQueueType) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_IsLocal( 
+            /* [retval][out] */ VARIANT_BOOL *pfIsLocal) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_TransactionalStatus( 
+            /* [retval][out] */ long *plTransactionalStatus) = 0;
+        
+        virtual /* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_BytesInQueue( 
+            /* [retval][out] */ VARIANT *pvBytesInQueue) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQManagementVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQManagement * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQManagement * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQManagement * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQManagement * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQManagement * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQManagement * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQManagement * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+            IMSMQManagement * This,
+            /* [optional][in] */ VARIANT *Machine,
+            /* [optional][in] */ VARIANT *Pathname,
+            /* [optional][in] */ VARIANT *FormatName);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+            IMSMQManagement * This,
+            /* [retval][out] */ BSTR *pbstrFormatName);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Machine )( 
+            IMSMQManagement * This,
+            /* [retval][out] */ BSTR *pbstrMachine);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MessageCount )( 
+            IMSMQManagement * This,
+            /* [retval][out] */ long *plMessageCount);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ForeignStatus )( 
+            IMSMQManagement * This,
+            /* [retval][out] */ long *plForeignStatus);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueType )( 
+            IMSMQManagement * This,
+            /* [retval][out] */ long *plQueueType);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsLocal )( 
+            IMSMQManagement * This,
+            /* [retval][out] */ VARIANT_BOOL *pfIsLocal);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionalStatus )( 
+            IMSMQManagement * This,
+            /* [retval][out] */ long *plTransactionalStatus);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BytesInQueue )( 
+            IMSMQManagement * This,
+            /* [retval][out] */ VARIANT *pvBytesInQueue);
+        
+        END_INTERFACE
+    } IMSMQManagementVtbl;
+
+    interface IMSMQManagement
+    {
+        CONST_VTBL struct IMSMQManagementVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQManagement_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQManagement_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQManagement_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQManagement_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQManagement_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQManagement_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQManagement_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQManagement_Init(This,Machine,Pathname,FormatName)	\
+    (This)->lpVtbl -> Init(This,Machine,Pathname,FormatName)
+
+#define IMSMQManagement_get_FormatName(This,pbstrFormatName)	\
+    (This)->lpVtbl -> get_FormatName(This,pbstrFormatName)
+
+#define IMSMQManagement_get_Machine(This,pbstrMachine)	\
+    (This)->lpVtbl -> get_Machine(This,pbstrMachine)
+
+#define IMSMQManagement_get_MessageCount(This,plMessageCount)	\
+    (This)->lpVtbl -> get_MessageCount(This,plMessageCount)
+
+#define IMSMQManagement_get_ForeignStatus(This,plForeignStatus)	\
+    (This)->lpVtbl -> get_ForeignStatus(This,plForeignStatus)
+
+#define IMSMQManagement_get_QueueType(This,plQueueType)	\
+    (This)->lpVtbl -> get_QueueType(This,plQueueType)
+
+#define IMSMQManagement_get_IsLocal(This,pfIsLocal)	\
+    (This)->lpVtbl -> get_IsLocal(This,pfIsLocal)
+
+#define IMSMQManagement_get_TransactionalStatus(This,plTransactionalStatus)	\
+    (This)->lpVtbl -> get_TransactionalStatus(This,plTransactionalStatus)
+
+#define IMSMQManagement_get_BytesInQueue(This,pvBytesInQueue)	\
+    (This)->lpVtbl -> get_BytesInQueue(This,pvBytesInQueue)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_Init_Proxy( 
+    IMSMQManagement * This,
+    /* [optional][in] */ VARIANT *Machine,
+    /* [optional][in] */ VARIANT *Pathname,
+    /* [optional][in] */ VARIANT *FormatName);
+
+
+void __RPC_STUB IMSMQManagement_Init_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_FormatName_Proxy( 
+    IMSMQManagement * This,
+    /* [retval][out] */ BSTR *pbstrFormatName);
+
+
+void __RPC_STUB IMSMQManagement_get_FormatName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_Machine_Proxy( 
+    IMSMQManagement * This,
+    /* [retval][out] */ BSTR *pbstrMachine);
+
+
+void __RPC_STUB IMSMQManagement_get_Machine_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_MessageCount_Proxy( 
+    IMSMQManagement * This,
+    /* [retval][out] */ long *plMessageCount);
+
+
+void __RPC_STUB IMSMQManagement_get_MessageCount_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_ForeignStatus_Proxy( 
+    IMSMQManagement * This,
+    /* [retval][out] */ long *plForeignStatus);
+
+
+void __RPC_STUB IMSMQManagement_get_ForeignStatus_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_QueueType_Proxy( 
+    IMSMQManagement * This,
+    /* [retval][out] */ long *plQueueType);
+
+
+void __RPC_STUB IMSMQManagement_get_QueueType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_IsLocal_Proxy( 
+    IMSMQManagement * This,
+    /* [retval][out] */ VARIANT_BOOL *pfIsLocal);
+
+
+void __RPC_STUB IMSMQManagement_get_IsLocal_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_TransactionalStatus_Proxy( 
+    IMSMQManagement * This,
+    /* [retval][out] */ long *plTransactionalStatus);
+
+
+void __RPC_STUB IMSMQManagement_get_TransactionalStatus_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQManagement_get_BytesInQueue_Proxy( 
+    IMSMQManagement * This,
+    /* [retval][out] */ VARIANT *pvBytesInQueue);
+
+
+void __RPC_STUB IMSMQManagement_get_BytesInQueue_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQManagement_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_MSMQManagement;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("39CE96FE-F4C5-4484-A143-4C2D5D324229")
+MSMQManagement;
+#endif
+
+#ifndef __IMSMQOutgoingQueueManagement_INTERFACE_DEFINED__
+#define __IMSMQOutgoingQueueManagement_INTERFACE_DEFINED__
+
+/* interface IMSMQOutgoingQueueManagement */
+/* [object][dual][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQOutgoingQueueManagement;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("64C478FB-F9B0-4695-8A7F-439AC94326D3")
+    IMSMQOutgoingQueueManagement : public IMSMQManagement
+    {
+    public:
+        virtual /* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_State( 
+            /* [retval][out] */ long *plState) = 0;
+        
+        virtual /* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_NextHops( 
+            /* [retval][out] */ VARIANT *pvNextHops) = 0;
+        
+        virtual /* [helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE EodGetSendInfo( 
+            /* [retval][out] */ IMSMQCollection **ppCollection) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Resume( void) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
+        
+        virtual /* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE EodResend( void) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQOutgoingQueueManagementVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQOutgoingQueueManagement * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQOutgoingQueueManagement * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [optional][in] */ VARIANT *Machine,
+            /* [optional][in] */ VARIANT *Pathname,
+            /* [optional][in] */ VARIANT *FormatName);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [retval][out] */ BSTR *pbstrFormatName);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Machine )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [retval][out] */ BSTR *pbstrMachine);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MessageCount )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [retval][out] */ long *plMessageCount);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ForeignStatus )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [retval][out] */ long *plForeignStatus);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueType )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [retval][out] */ long *plQueueType);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsLocal )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [retval][out] */ VARIANT_BOOL *pfIsLocal);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionalStatus )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [retval][out] */ long *plTransactionalStatus);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BytesInQueue )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [retval][out] */ VARIANT *pvBytesInQueue);
+        
+        /* [propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_State )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [retval][out] */ long *plState);
+        
+        /* [propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_NextHops )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [retval][out] */ VARIANT *pvNextHops);
+        
+        /* [helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *EodGetSendInfo )( 
+            IMSMQOutgoingQueueManagement * This,
+            /* [retval][out] */ IMSMQCollection **ppCollection);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Resume )( 
+            IMSMQOutgoingQueueManagement * This);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+            IMSMQOutgoingQueueManagement * This);
+        
+        /* [helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *EodResend )( 
+            IMSMQOutgoingQueueManagement * This);
+        
+        END_INTERFACE
+    } IMSMQOutgoingQueueManagementVtbl;
+
+    interface IMSMQOutgoingQueueManagement
+    {
+        CONST_VTBL struct IMSMQOutgoingQueueManagementVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQOutgoingQueueManagement_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQOutgoingQueueManagement_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQOutgoingQueueManagement_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQOutgoingQueueManagement_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQOutgoingQueueManagement_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQOutgoingQueueManagement_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQOutgoingQueueManagement_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQOutgoingQueueManagement_Init(This,Machine,Pathname,FormatName)	\
+    (This)->lpVtbl -> Init(This,Machine,Pathname,FormatName)
+
+#define IMSMQOutgoingQueueManagement_get_FormatName(This,pbstrFormatName)	\
+    (This)->lpVtbl -> get_FormatName(This,pbstrFormatName)
+
+#define IMSMQOutgoingQueueManagement_get_Machine(This,pbstrMachine)	\
+    (This)->lpVtbl -> get_Machine(This,pbstrMachine)
+
+#define IMSMQOutgoingQueueManagement_get_MessageCount(This,plMessageCount)	\
+    (This)->lpVtbl -> get_MessageCount(This,plMessageCount)
+
+#define IMSMQOutgoingQueueManagement_get_ForeignStatus(This,plForeignStatus)	\
+    (This)->lpVtbl -> get_ForeignStatus(This,plForeignStatus)
+
+#define IMSMQOutgoingQueueManagement_get_QueueType(This,plQueueType)	\
+    (This)->lpVtbl -> get_QueueType(This,plQueueType)
+
+#define IMSMQOutgoingQueueManagement_get_IsLocal(This,pfIsLocal)	\
+    (This)->lpVtbl -> get_IsLocal(This,pfIsLocal)
+
+#define IMSMQOutgoingQueueManagement_get_TransactionalStatus(This,plTransactionalStatus)	\
+    (This)->lpVtbl -> get_TransactionalStatus(This,plTransactionalStatus)
+
+#define IMSMQOutgoingQueueManagement_get_BytesInQueue(This,pvBytesInQueue)	\
+    (This)->lpVtbl -> get_BytesInQueue(This,pvBytesInQueue)
+
+
+#define IMSMQOutgoingQueueManagement_get_State(This,plState)	\
+    (This)->lpVtbl -> get_State(This,plState)
+
+#define IMSMQOutgoingQueueManagement_get_NextHops(This,pvNextHops)	\
+    (This)->lpVtbl -> get_NextHops(This,pvNextHops)
+
+#define IMSMQOutgoingQueueManagement_EodGetSendInfo(This,ppCollection)	\
+    (This)->lpVtbl -> EodGetSendInfo(This,ppCollection)
+
+#define IMSMQOutgoingQueueManagement_Resume(This)	\
+    (This)->lpVtbl -> Resume(This)
+
+#define IMSMQOutgoingQueueManagement_Pause(This)	\
+    (This)->lpVtbl -> Pause(This)
+
+#define IMSMQOutgoingQueueManagement_EodResend(This)	\
+    (This)->lpVtbl -> EodResend(This)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_get_State_Proxy( 
+    IMSMQOutgoingQueueManagement * This,
+    /* [retval][out] */ long *plState);
+
+
+void __RPC_STUB IMSMQOutgoingQueueManagement_get_State_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_get_NextHops_Proxy( 
+    IMSMQOutgoingQueueManagement * This,
+    /* [retval][out] */ VARIANT *pvNextHops);
+
+
+void __RPC_STUB IMSMQOutgoingQueueManagement_get_NextHops_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_EodGetSendInfo_Proxy( 
+    IMSMQOutgoingQueueManagement * This,
+    /* [retval][out] */ IMSMQCollection **ppCollection);
+
+
+void __RPC_STUB IMSMQOutgoingQueueManagement_EodGetSendInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_Resume_Proxy( 
+    IMSMQOutgoingQueueManagement * This);
+
+
+void __RPC_STUB IMSMQOutgoingQueueManagement_Resume_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_Pause_Proxy( 
+    IMSMQOutgoingQueueManagement * This);
+
+
+void __RPC_STUB IMSMQOutgoingQueueManagement_Pause_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQOutgoingQueueManagement_EodResend_Proxy( 
+    IMSMQOutgoingQueueManagement * This);
+
+
+void __RPC_STUB IMSMQOutgoingQueueManagement_EodResend_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQOutgoingQueueManagement_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_MSMQOutgoingQueueManagement;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("0188401c-247a-4fed-99c6-bf14119d7055")
+MSMQOutgoingQueueManagement;
+#endif
+
+#ifndef __IMSMQQueueManagement_INTERFACE_DEFINED__
+#define __IMSMQQueueManagement_INTERFACE_DEFINED__
+
+/* interface IMSMQQueueManagement */
+/* [object][dual][helpstringcontext][uuid] */ 
+
+
+EXTERN_C const IID IID_IMSMQQueueManagement;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("7FBE7759-5760-444d-B8A5-5E7AB9A84CCE")
+    IMSMQQueueManagement : public IMSMQManagement
+    {
+    public:
+        virtual /* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE get_JournalMessageCount( 
+            /* [retval][out] */ long *plJournalMessageCount) = 0;
+        
+        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_BytesInJournal( 
+            /* [retval][out] */ VARIANT *pvBytesInJournal) = 0;
+        
+        virtual /* [helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE EodGetReceiveInfo( 
+            /* [retval][out] */ VARIANT *pvCollection) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMSMQQueueManagementVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMSMQQueueManagement * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMSMQQueueManagement * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMSMQQueueManagement * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMSMQQueueManagement * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMSMQQueueManagement * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMSMQQueueManagement * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMSMQQueueManagement * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+            IMSMQQueueManagement * This,
+            /* [optional][in] */ VARIANT *Machine,
+            /* [optional][in] */ VARIANT *Pathname,
+            /* [optional][in] */ VARIANT *FormatName);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_FormatName )( 
+            IMSMQQueueManagement * This,
+            /* [retval][out] */ BSTR *pbstrFormatName);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_Machine )( 
+            IMSMQQueueManagement * This,
+            /* [retval][out] */ BSTR *pbstrMachine);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_MessageCount )( 
+            IMSMQQueueManagement * This,
+            /* [retval][out] */ long *plMessageCount);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_ForeignStatus )( 
+            IMSMQQueueManagement * This,
+            /* [retval][out] */ long *plForeignStatus);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_QueueType )( 
+            IMSMQQueueManagement * This,
+            /* [retval][out] */ long *plQueueType);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_IsLocal )( 
+            IMSMQQueueManagement * This,
+            /* [retval][out] */ VARIANT_BOOL *pfIsLocal);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_TransactionalStatus )( 
+            IMSMQQueueManagement * This,
+            /* [retval][out] */ long *plTransactionalStatus);
+        
+        /* [id][propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_BytesInQueue )( 
+            IMSMQQueueManagement * This,
+            /* [retval][out] */ VARIANT *pvBytesInQueue);
+        
+        /* [propget][helpstringcontext] */ HRESULT ( STDMETHODCALLTYPE *get_JournalMessageCount )( 
+            IMSMQQueueManagement * This,
+            /* [retval][out] */ long *plJournalMessageCount);
+        
+        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_BytesInJournal )( 
+            IMSMQQueueManagement * This,
+            /* [retval][out] */ VARIANT *pvBytesInJournal);
+        
+        /* [helpstringcontext][hidden] */ HRESULT ( STDMETHODCALLTYPE *EodGetReceiveInfo )( 
+            IMSMQQueueManagement * This,
+            /* [retval][out] */ VARIANT *pvCollection);
+        
+        END_INTERFACE
+    } IMSMQQueueManagementVtbl;
+
+    interface IMSMQQueueManagement
+    {
+        CONST_VTBL struct IMSMQQueueManagementVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMSMQQueueManagement_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMSMQQueueManagement_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMSMQQueueManagement_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMSMQQueueManagement_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMSMQQueueManagement_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMSMQQueueManagement_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMSMQQueueManagement_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMSMQQueueManagement_Init(This,Machine,Pathname,FormatName)	\
+    (This)->lpVtbl -> Init(This,Machine,Pathname,FormatName)
+
+#define IMSMQQueueManagement_get_FormatName(This,pbstrFormatName)	\
+    (This)->lpVtbl -> get_FormatName(This,pbstrFormatName)
+
+#define IMSMQQueueManagement_get_Machine(This,pbstrMachine)	\
+    (This)->lpVtbl -> get_Machine(This,pbstrMachine)
+
+#define IMSMQQueueManagement_get_MessageCount(This,plMessageCount)	\
+    (This)->lpVtbl -> get_MessageCount(This,plMessageCount)
+
+#define IMSMQQueueManagement_get_ForeignStatus(This,plForeignStatus)	\
+    (This)->lpVtbl -> get_ForeignStatus(This,plForeignStatus)
+
+#define IMSMQQueueManagement_get_QueueType(This,plQueueType)	\
+    (This)->lpVtbl -> get_QueueType(This,plQueueType)
+
+#define IMSMQQueueManagement_get_IsLocal(This,pfIsLocal)	\
+    (This)->lpVtbl -> get_IsLocal(This,pfIsLocal)
+
+#define IMSMQQueueManagement_get_TransactionalStatus(This,plTransactionalStatus)	\
+    (This)->lpVtbl -> get_TransactionalStatus(This,plTransactionalStatus)
+
+#define IMSMQQueueManagement_get_BytesInQueue(This,pvBytesInQueue)	\
+    (This)->lpVtbl -> get_BytesInQueue(This,pvBytesInQueue)
+
+
+#define IMSMQQueueManagement_get_JournalMessageCount(This,plJournalMessageCount)	\
+    (This)->lpVtbl -> get_JournalMessageCount(This,plJournalMessageCount)
+
+#define IMSMQQueueManagement_get_BytesInJournal(This,pvBytesInJournal)	\
+    (This)->lpVtbl -> get_BytesInJournal(This,pvBytesInJournal)
+
+#define IMSMQQueueManagement_EodGetReceiveInfo(This,pvCollection)	\
+    (This)->lpVtbl -> EodGetReceiveInfo(This,pvCollection)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [propget][helpstringcontext] */ HRESULT STDMETHODCALLTYPE IMSMQQueueManagement_get_JournalMessageCount_Proxy( 
+    IMSMQQueueManagement * This,
+    /* [retval][out] */ long *plJournalMessageCount);
+
+
+void __RPC_STUB IMSMQQueueManagement_get_JournalMessageCount_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [propget] */ HRESULT STDMETHODCALLTYPE IMSMQQueueManagement_get_BytesInJournal_Proxy( 
+    IMSMQQueueManagement * This,
+    /* [retval][out] */ VARIANT *pvBytesInJournal);
+
+
+void __RPC_STUB IMSMQQueueManagement_get_BytesInJournal_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstringcontext][hidden] */ HRESULT STDMETHODCALLTYPE IMSMQQueueManagement_EodGetReceiveInfo_Proxy( 
+    IMSMQQueueManagement * This,
+    /* [retval][out] */ VARIANT *pvCollection);
+
+
+void __RPC_STUB IMSMQQueueManagement_EodGetReceiveInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMSMQQueueManagement_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_MSMQQueueManagement;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("33b6d07e-f27d-42fa-b2d7-bf82e11e9374")
+MSMQQueueManagement;
 #endif
 #endif /* __MSMQ_LIBRARY_DEFINED__ */
 
@@ -8987,8 +16315,4 @@ MSMQApplication;
 
 #endif
 
-
-
-#pragma option pop /*P_O_Pop*/
-#endif //__MQOAI_H__
 

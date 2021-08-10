@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 //----------------------------------------------------------------------------
 // Systems Management Server WBEM SDK
 // 
@@ -4516,4 +4515,3 @@ namespace SMS_UserInstancePermissions
 
 
 #endif //__SMS_SDK_NAMESPACE_ENUMS
-#pragma option pop /*P_O_Pop*/

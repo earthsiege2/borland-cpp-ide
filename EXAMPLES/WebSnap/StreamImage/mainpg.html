@@ -1,0 +1,100 @@
+<!--#include file="..\include\StdDemoHeader.html"-->
+
+
+<P>Here is the image:<br>
+<img
+  src="<%=Adapter1.ImageData.Image.AsHREF%>"
+  width="<%=Adapter1.ImageWidth.Value%>"
+  height="<%=Adapter1.ImageHeight.Value%>">
+
+
+<P>To create this demo, follow these steps:
+<ol>
+  <li>File | New | Other... | WebSnap | WebSnap Application</li>
+  <li>Select <b>Web App Debugger executable</b> and give it a
+    <b>CoClass</b> name of StreamImageTest2</li>
+  <li>In the header file for the WebModule that was created,
+  add: <b>#include &lt;Jpeg.hpp&gt;</b> after all the other includes.</li>
+  <li>In the header file for the WebModule, add: <b>TJPEGImage *m_pjpgImage;</b>
+  to the private section of the class that was generated.</li>
+  <li>Double click on the WebModule, and add the following code in the
+    <b>OnCreate</b> event:
+  <pre><tt>
+  // Create a JPEGImage to keep around. This way we can dynamically
+  // set the width and height of the image inside of the HTML.
+  m_pjpgImage = new TJPEGImage;
+
+  // Notice how I use QualifyFileName to find the full path to the
+  // image from the current directory.
+  AnsiString FileName = QualifyFileName("test.jpg");
+  TFileStream *fsImage = new TFileStream(FileName, fmOpenRead | fmShareDenyNone);
+  __try {
+    m_pjpgImage->LoadFromStream(fsImage);
+  }
+  __finally {
+    delete fsImage;
+  }
+  </tt></pre></li>
+  <li>Select the WebModule and double click on the <b>OnDestroy</b> event
+  from the Object Inspector, and add the following code:
+  <pre><tt>
+  delete m_pjpgImage;
+  </tt></pre> </li>
+  <li>
+  From the WebSnap tab, drop down an <b>Adapter</b>
+  </li>
+  <li>Doubleclick on the Adapter, select the "New Item" button in the
+  fields editor, and select an <b>AdapterImageField</b>.
+  </li>
+  <li>Select the <b>AdapterImageField</b> from the list, and change the
+    Name in the Object Inspector to be <b>ImageData</b></li>
+  <li>Select the Events tab in the Object Inspector, and doubleclick on the
+    OnGetImage event. Add the following code:
+  <pre><tt>
+  Image = new TMemoryStream; // First, create the stream
+  // Then, save the image out to the stream
+  m_pjpgImage->SaveToStream(Image);
+  // Be sure to set the MimeType to a jpeg
+  MimeType = "image/jpeg";
+  </tt></pre></li>
+
+  <li>Doubleclick on the Adapter, select the "New Item" button in the
+    fields editor, and select an <b>AdapterField</b>.
+  <li>Select the <b>AdapterField</b> from the list, and change the
+    Name in the Object Inspector to be <b>ImageWidth</b></li>
+  <li>Select the Events tab in the Object Inspector, and doubleclick on the
+    OnGetValue event. Add the following code:
+
+  <pre><tt>
+      Value = m_pjpgImage->Width;
+  </tt></pre></li>
+
+  <li>Doubleclick on the Adapter, select the "New Item" button in the
+    fields editor, and select an <b>AdapterField</b>.
+  <li>Select the <b>AdapterField</b> from the list, and change the
+    Name in the Object Inspector to be <b>ImageHeight</b></li>
+  <li>Select the Events tab in the Object Inspector, and doubleclick on the
+    OnGetValue event. Add the following code:
+
+  <pre><tt>
+      Value = m_pjpgImage->Height;
+  </tt></pre></li>
+
+  <li>Click on the associated HTML file tab at the bottom of the code editor
+  and add the following HTML to display the image:
+  <pre><tt>
+  &lt;P&gt;Here is the image:&lt;br&gt;
+  &lt;img
+  src="&lt;%=Adapter1.ImageData.Image.AsHREF%&gt;"
+  width="&lt;%=Adapter1.ImageWidth.Value%&gt;"
+  height="&lt;%=Adapter1.ImageHeight.Value%&gt;"&gt;
+  </p>
+  </tt></pre>
+
+  <li>Compile, and run it once to register it
+  <li>Start the WebAppDebugger, and select your ProjectName.CoClassName from
+  the list. That's it!
+
+</ol>
+
+<!--#include file="..\include\StdDemoFooter.html"-->

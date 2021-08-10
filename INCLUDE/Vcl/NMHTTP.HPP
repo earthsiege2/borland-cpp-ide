@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NMHttp.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NMHttp.pas' rev: 6.00
 
 #ifndef NMHttpHPP
 #define NMHttpHPP
@@ -27,8 +27,7 @@ namespace Nmhttp
 {
 //-- type declarations -------------------------------------------------------
 #pragma option push -b-
-enum CmdType { CmdGET, CmdOPTIONS, CmdHEAD, CmdPOST, CmdPUT, CmdPATCH, CmdCOPY, CmdMOVE, CmdDELETE, 
-	CmdLINK, CmdUNLINK, CmdTRACE, CmdWRAPPED };
+enum CmdType { CmdGET, CmdOPTIONS, CmdHEAD, CmdPOST, CmdPUT, CmdPATCH, CmdCOPY, CmdMOVE, CmdDELETE, CmdLINK, CmdUNLINK, CmdTRACE, CmdWRAPPED };
 #pragma option pop
 
 class DELPHICLASS HTTPException;
@@ -38,38 +37,28 @@ class PASCALIMPLEMENTATION HTTPException : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall HTTPException(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall HTTPException(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall HTTPException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall HTTPException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall HTTPException(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall HTTPException(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall HTTPException(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall HTTPException(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall HTTPException(const AnsiString Msg, int AHelpContext) : 
-		Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall HTTPException(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall HTTPException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall HTTPException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall HTTPException(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall HTTPException(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall HTTPException(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall HTTPException(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -180,8 +169,7 @@ __published:
 	__property TResultEvent OnSuccess = {read=FOnSuccess, write=FOnSuccess};
 	__property TResultEvent OnFailure = {read=FOnFailure, write=FOnFailure};
 	__property Psock::THandlerEvent OnRedirect = {read=FOnRedirect, write=FOnRedirect};
-	__property Classes::TNotifyEvent OnAuthenticationNeeded = {read=FOnAuthenticationNeeded, write=FOnAuthenticationNeeded
-		};
+	__property Classes::TNotifyEvent OnAuthenticationNeeded = {read=FOnAuthenticationNeeded, write=FOnAuthenticationNeeded};
 	__property Proxy ;
 	__property ProxyPort ;
 };
@@ -224,9 +212,7 @@ __published:
 #define Cmd_Trace "TRACE "
 
 }	/* namespace Nmhttp */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nmhttp;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

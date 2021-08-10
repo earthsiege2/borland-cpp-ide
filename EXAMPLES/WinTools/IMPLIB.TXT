@@ -41,4 +41,4 @@ this option if you are specifying more than one DLL on the IMPLIB command line.
 -o   Remove module extensions. (16-bit Windows only)
 -w   No warnings.
 
-Copyright   1998 Borland International.
+Copyright   1998-2002 Borland International.

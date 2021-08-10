@@ -3,7 +3,7 @@
 
 :BASE psock.hlp
 :TITLE FastNet Powersock Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 Psock Unit Contents=Scribble1000
 1 TPowersock component
 2 TPowersock component Reference=Scribble1010

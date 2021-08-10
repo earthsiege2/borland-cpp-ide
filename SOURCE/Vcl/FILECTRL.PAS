@@ -3,11 +3,11 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
-unit FileCtrl;
+unit FileCtrl platform;
 
 {$R-,T-,H+,X+}
 
@@ -74,6 +74,11 @@ type
   published
     property Align;
     property Anchors;
+    property AutoComplete;
+    property BevelEdges;
+    property BevelInner;
+    property BevelKind;
+    property BevelOuter;
     property Color;
     property Constraints;
     property Ctl3D;
@@ -167,6 +172,11 @@ type
   published
     property Align;
     property Anchors;
+    property AutoComplete;
+    property BevelEdges;
+    property BevelInner;
+    property BevelKind;
+    property BevelOuter;
     property Color;
     property Columns;
     property Constraints;
@@ -237,6 +247,12 @@ type
     property Drive: Char read FDrive write SetDrive;
   published
     property Anchors;
+    property AutoComplete;
+    property AutoDropDown;
+    property BevelEdges;
+    property BevelInner;
+    property BevelKind;
+    property BevelOuter;
     property Color;
     property Constraints;
     property Ctl3D;
@@ -297,6 +313,12 @@ type
     property Text;
   published
     property Anchors;
+    property AutoComplete;
+    property AutoDropDown;    
+    property BevelEdges;
+    property BevelInner;
+    property BevelKind;
+    property BevelOuter;
     property Color;
     property Constraints;
     property Ctl3D;
@@ -349,13 +371,15 @@ type
 function SelectDirectory(var Directory: string;
   Options: TSelectDirOpts; HelpCtx: Longint): Boolean; overload;
 function SelectDirectory(const Caption: string; const Root: WideString;
-  out Directory: string): Boolean; overload;
+  var Directory: string): Boolean; overload;
 function DirectoryExists(const Name: string): Boolean;
-function ForceDirectories(Dir: string): Boolean;
+{$EXTERNALSYM DirectoryExists}
+function ForceDirectories(const Dir: string): Boolean;
+{$EXTERNALSYM ForceDirectories}
 
 implementation
 
-uses Consts, Dialogs, ShlObj, ActiveX;
+uses Consts, RTLConsts, Dialogs, ShlObj, ActiveX;
 
 {$R FileCtrl}
 
@@ -1935,19 +1959,28 @@ begin
   end;
 end;
 
+function SelectDirCB(Wnd: HWND; uMsg: UINT; lParam, lpData: LPARAM): Integer stdcall;
+begin
+  if (uMsg = BFFM_INITIALIZED) and (lpData <> 0) then
+    SendMessage(Wnd, BFFM_SETSELECTION, Integer(True), lpdata);
+  result := 0;
+end;
+
 function SelectDirectory(const Caption: string; const Root: WideString;
-  out Directory: string): Boolean;
+  var Directory: string): Boolean;
 var
   WindowList: Pointer;
   BrowseInfo: TBrowseInfo;
   Buffer: PChar;
+  OldErrorMode: Cardinal;
   RootItemIDList, ItemIDList: PItemIDList;
   ShellMalloc: IMalloc;
   IDesktopFolder: IShellFolder;
   Eaten, Flags: LongWord;
 begin
   Result := False;
-  Directory := '';
+  if not DirectoryExists(Directory) then
+    Directory := '';
   FillChar(BrowseInfo, SizeOf(BrowseInfo), 0);
   if (ShGetMalloc(ShellMalloc) = S_OK) and (ShellMalloc <> nil) then
   begin
@@ -1967,11 +2000,18 @@ begin
         pszDisplayName := Buffer;
         lpszTitle := PChar(Caption);
         ulFlags := BIF_RETURNONLYFSDIRS;
+        if Directory <> '' then
+        begin
+          lpfn := SelectDirCB;
+          lParam := Integer(PChar(Directory));
+        end;
       end;
       WindowList := DisableTaskWindows(0);
+      OldErrorMode := SetErrorMode(SEM_FAILCRITICALERRORS);
       try
         ItemIDList := ShBrowseForFolder(BrowseInfo);
       finally
+        SetErrorMode(OldErrorMode);
         EnableTaskWindows(WindowList);
       end;
       Result :=  ItemIDList <> nil;
@@ -1988,22 +2028,13 @@ begin
 end;
 
 function DirectoryExists(const Name: string): Boolean;
-var
-  Code: Integer;
 begin
-  Code := GetFileAttributes(PChar(Name));
-  Result := (Code <> -1) and (FILE_ATTRIBUTE_DIRECTORY and Code <> 0);
+  Result := SysUtils.DirectoryExists(Name);
 end;
 
-function ForceDirectories(Dir: string): Boolean;
+function ForceDirectories(const Dir: string): Boolean;
 begin
-  Result := True;
-  if Length(Dir) = 0 then
-    raise Exception.CreateRes(@SCannotCreateDir);
-  Dir := ExcludeTrailingBackslash(Dir);
-  if (Length(Dir) < 3) or DirectoryExists(Dir)
-    or (ExtractFilePath(Dir) = Dir) then Exit; // avoid 'xyz:\' problem.
-  Result := ForceDirectories(ExtractFilePath(Dir)) and CreateDir(Dir);
+  Result := SysUtils.ForceDirectories(Dir);
 end;
 
 end.

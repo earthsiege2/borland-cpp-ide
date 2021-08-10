@@ -1,9 +1,6 @@
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
-USERES("packapi.res");
-USEPACKAGE("vcl50.bpi");
-USEUNIT("wizmain.cpp");
 USEFORM("FormMain.cpp", PackageForm);
 //---------------------------------------------------------------------------
 #pragma package(smart_init)

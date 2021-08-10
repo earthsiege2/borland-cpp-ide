@@ -3,7 +3,6 @@
 //************************************************************************
 
 #ifndef WS2DNET_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define WS2DNET_H
 
 #include <winsock2.h>
@@ -170,5 +169,4 @@ typedef struct nodeent_f FAR * (WSAAPI * LPGETNODEBYNAME)(const char FAR
 *);
 typedef char FAR * (WSAAPI * LPGETNODENAME)(void);
 
-#pragma option pop /*P_O_Pop*/
 #endif	// WS2DNET_H  

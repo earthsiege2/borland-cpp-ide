@@ -1,18 +1,18 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- C++Builder XML Project --><PROJECT>
+<!-- C++Builder XML Project -->
+<PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
-    <PROJECT value="..\..\RICHEDIT\RICHEDIT.FRA"/>
-    <MAINSOURCE value="RICHEDIT.cpp"/>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="..\..\RICHEDIT\richedit.FRA"/>
     <OBJFILES value="RICHEDIT.obj"/>
-    <RESFILES value="Richabt.dfm"/>
-   <IDLFILES value=""/>
+    <RESFILES value="RICHEDIT_DRC.res"/>
+    <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value=""/>
-    <LIBRARIES value=""/>
-    <SPARELIBS value=""/>
+    <LIBRARIES value="rtl.lib"/>
+    <SPARELIBS value="rtl.lib"/>
     <PACKAGES value=""/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
@@ -20,26 +20,39 @@
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
-    <LINKER value="tlink32"/>
+    <LINKER value="ilink32"/>
     <USERDEFINES value=""/>
     <SYSDEFINES value="NO_STRICT"/>
+    <MAINSOURCE value="RICHEDIT.cpp"/>
     <INCLUDEPATH value="$(BCB)\include"/>
     <LIBPATH value="$(BCB)\lib"/>
     <WARNINGS value=""/>
+    <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <CFLAG1 value="-WD -O2 -H=$(BCB)\lib\vcl50.csm -Hc -w -Vx -Ve -x- -RT- -X -a8 -b- -k- -vi
-      -c -w-par -w-8026 -w-8027 -tW -tWM"/>
-    <PFLAGS value="-$Y- -$L- -$I- -$D- -$C- -v -JPHNE -M"/>
+    <CFLAG1 value="-WD -O2 -H=$(BCB)\vcl60.csm -Hc -w -Vx -Ve -x- -RT- -X -a8 -b- -k- -vi -c 
+      -w-par -w-8026 -w-8027 -tW -tWM"/>
+    <PFLAGS value="-$Y- -$L- -$I- -$D- -$C- -$A8 -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zn"/>
-    <LFLAGS value="-aa -Tpd -x -Gn"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpd -x -Gn"/>
+    <OTHERFILES value=""/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="$(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES)"/>
+    <OTHERFILES value=""/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="RICHEDIT.cpp" FORMNAME="" UNITNAME="RICHEDIT" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Richabt.dfm" FORMNAME="Form2" UNITNAME="Form" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Romain.dfm" FORMNAME="MainForm" UNITNAME="Form" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="RICHEDIT_DRC.rc" FORMNAME="" UNITNAME="RICHEDIT_DRC" CONTAINERID="RCCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -73,9 +86,14 @@ DebugSourceDirs=
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
@@ -86,5 +104,10 @@ LinkDebugVcl=1
 ActiveLang=
 ProjectLang=
 RootDir=
+
+[Linker]
+LibPrefix=
+LibSuffix=
+LibVersion=
   </IDEOPTIONS>
 </PROJECT>

@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0268 */
-/* at Fri Jul 09 14:58:21 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for ads.odl:
-    Os (OptLev=s), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Os, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -28,6 +27,10 @@
 
 #ifndef __iads_h__
 #define __iads_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -523,18 +526,6 @@ typedef interface IADsAcl IADsAcl;
 #endif 	/* __IADsAcl_FWD_DEFINED__ */
 
 
-#ifndef __Acl_FWD_DEFINED__
-#define __Acl_FWD_DEFINED__
-
-#ifdef __cplusplus
-typedef class Acl Acl;
-#else
-typedef struct Acl Acl;
-#endif /* __cplusplus */
-
-#endif 	/* __Acl_FWD_DEFINED__ */
-
-
 #ifndef __IADsTimestamp_FWD_DEFINED__
 #define __IADsTimestamp_FWD_DEFINED__
 typedef interface IADsTimestamp IADsTimestamp;
@@ -721,12 +712,30 @@ typedef struct DNWithString DNWithString;
 #endif 	/* __DNWithString_FWD_DEFINED__ */
 
 
+#ifndef __IADsSecurityUtility_FWD_DEFINED__
+#define __IADsSecurityUtility_FWD_DEFINED__
+typedef interface IADsSecurityUtility IADsSecurityUtility;
+#endif 	/* __IADsSecurityUtility_FWD_DEFINED__ */
+
+
+#ifndef __ADsSecurityUtility_FWD_DEFINED__
+#define __ADsSecurityUtility_FWD_DEFINED__
+
+#ifdef __cplusplus
+typedef class ADsSecurityUtility ADsSecurityUtility;
+#else
+typedef struct ADsSecurityUtility ADsSecurityUtility;
+#endif /* __cplusplus */
+
+#endif 	/* __ADsSecurityUtility_FWD_DEFINED__ */
+
+
 #ifdef __cplusplus
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 
 #ifndef __ActiveDs_LIBRARY_DEFINED__
@@ -766,154 +775,154 @@ enum __MIDL___MIDL_itf_ads_0000_0001
 	ADSTYPE_UNKNOWN	= ADSTYPE_NT_SECURITY_DESCRIPTOR + 1,
 	ADSTYPE_DN_WITH_BINARY	= ADSTYPE_UNKNOWN + 1,
 	ADSTYPE_DN_WITH_STRING	= ADSTYPE_DN_WITH_BINARY + 1
-    }	ADSTYPEENUM;
+    } 	ADSTYPEENUM;
 
 typedef ADSTYPEENUM ADSTYPE;
 
 typedef unsigned char BYTE;
 
-typedef unsigned char __RPC_FAR *LPBYTE;
+typedef unsigned char *LPBYTE;
 
-typedef unsigned char __RPC_FAR *PBYTE;
+typedef unsigned char *PBYTE;
 
 typedef LPWSTR ADS_DN_STRING;
 
-typedef LPWSTR __RPC_FAR *PADS_DN_STRING;
+typedef LPWSTR *PADS_DN_STRING;
 
 typedef LPWSTR ADS_CASE_EXACT_STRING;
 
-typedef LPWSTR __RPC_FAR *PADS_CASE_EXACT_STRING;
+typedef LPWSTR *PADS_CASE_EXACT_STRING;
 
 typedef LPWSTR ADS_CASE_IGNORE_STRING;
 
-typedef LPWSTR __RPC_FAR *PADS_CASE_IGNORE_STRING;
+typedef LPWSTR *PADS_CASE_IGNORE_STRING;
 
 typedef LPWSTR ADS_PRINTABLE_STRING;
 
-typedef LPWSTR __RPC_FAR *PADS_PRINTABLE_STRING;
+typedef LPWSTR *PADS_PRINTABLE_STRING;
 
 typedef LPWSTR ADS_NUMERIC_STRING;
 
-typedef LPWSTR __RPC_FAR *PADS_NUMERIC_STRING;
+typedef LPWSTR *PADS_NUMERIC_STRING;
 
 typedef DWORD ADS_BOOLEAN;
 
-typedef DWORD __RPC_FAR *LPNDS_BOOLEAN;
+typedef DWORD *LPNDS_BOOLEAN;
 
 typedef DWORD ADS_INTEGER;
 
-typedef DWORD __RPC_FAR *PADS_INTEGER;
+typedef DWORD *PADS_INTEGER;
 
 typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0002
     {
     DWORD dwLength;
     LPBYTE lpValue;
-    }	ADS_OCTET_STRING;
+    } 	ADS_OCTET_STRING;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0002 __RPC_FAR *PADS_OCTET_STRING;
+typedef struct __MIDL___MIDL_itf_ads_0000_0002 *PADS_OCTET_STRING;
 
 typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0003
     {
     DWORD dwLength;
     LPBYTE lpValue;
-    }	ADS_NT_SECURITY_DESCRIPTOR;
+    } 	ADS_NT_SECURITY_DESCRIPTOR;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0003 __RPC_FAR *PADS_NT_SECURITY_DESCRIPTOR;
+typedef struct __MIDL___MIDL_itf_ads_0000_0003 *PADS_NT_SECURITY_DESCRIPTOR;
 
 typedef SYSTEMTIME ADS_UTC_TIME;
 
-typedef SYSTEMTIME __RPC_FAR *PADS_UTC_TIME;
+typedef SYSTEMTIME *PADS_UTC_TIME;
 
 typedef LARGE_INTEGER ADS_LARGE_INTEGER;
 
-typedef LARGE_INTEGER __RPC_FAR *PADS_LARGE_INTEGER;
+typedef LARGE_INTEGER *PADS_LARGE_INTEGER;
 
 typedef LPWSTR ADS_OBJECT_CLASS;
 
-typedef LPWSTR __RPC_FAR *PADS_OBJECT_CLASS;
+typedef LPWSTR *PADS_OBJECT_CLASS;
 
 typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0004
     {
     DWORD dwLength;
     LPBYTE lpValue;
-    }	ADS_PROV_SPECIFIC;
+    } 	ADS_PROV_SPECIFIC;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0004 __RPC_FAR *PADS_PROV_SPECIFIC;
+typedef struct __MIDL___MIDL_itf_ads_0000_0004 *PADS_PROV_SPECIFIC;
 
 typedef struct _ADS_CASEIGNORE_LIST
     {
-    struct _ADS_CASEIGNORE_LIST __RPC_FAR *Next;
+    struct _ADS_CASEIGNORE_LIST *Next;
     LPWSTR String;
-    }	ADS_CASEIGNORE_LIST;
+    } 	ADS_CASEIGNORE_LIST;
 
-typedef struct _ADS_CASEIGNORE_LIST __RPC_FAR *PADS_CASEIGNORE_LIST;
+typedef struct _ADS_CASEIGNORE_LIST *PADS_CASEIGNORE_LIST;
 
 typedef struct _ADS_OCTET_LIST
     {
-    struct _ADS_OCTET_LIST __RPC_FAR *Next;
+    struct _ADS_OCTET_LIST *Next;
     DWORD Length;
-    BYTE __RPC_FAR *Data;
-    }	ADS_OCTET_LIST;
+    BYTE *Data;
+    } 	ADS_OCTET_LIST;
 
-typedef struct _ADS_OCTET_LIST __RPC_FAR *PADS_OCTET_LIST;
+typedef struct _ADS_OCTET_LIST *PADS_OCTET_LIST;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0005
     {
     DWORD Type;
     LPWSTR VolumeName;
     LPWSTR Path;
-    }	ADS_PATH;
+    } 	ADS_PATH;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0005 __RPC_FAR *PADS_PATH;
+typedef struct __MIDL___MIDL_itf_ads_0000_0005 *PADS_PATH;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0006
     {
     LPWSTR PostalAddress[ 6 ];
-    }	ADS_POSTALADDRESS;
+    } 	ADS_POSTALADDRESS;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0006 __RPC_FAR *PADS_POSTALADDRESS;
+typedef struct __MIDL___MIDL_itf_ads_0000_0006 *PADS_POSTALADDRESS;
 
 typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0007
     {
     DWORD WholeSeconds;
     DWORD EventID;
-    }	ADS_TIMESTAMP;
+    } 	ADS_TIMESTAMP;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0007 __RPC_FAR *PADS_TIMESTAMP;
+typedef struct __MIDL___MIDL_itf_ads_0000_0007 *PADS_TIMESTAMP;
 
 typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0008
     {
     DWORD RemoteID;
     LPWSTR ObjectName;
-    }	ADS_BACKLINK;
+    } 	ADS_BACKLINK;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0008 __RPC_FAR *PADS_BACKLINK;
+typedef struct __MIDL___MIDL_itf_ads_0000_0008 *PADS_BACKLINK;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0009
     {
     LPWSTR ObjectName;
     DWORD Level;
     DWORD Interval;
-    }	ADS_TYPEDNAME;
+    } 	ADS_TYPEDNAME;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0009 __RPC_FAR *PADS_TYPEDNAME;
+typedef struct __MIDL___MIDL_itf_ads_0000_0009 *PADS_TYPEDNAME;
 
 typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0010
     {
     LPWSTR ObjectName;
     DWORD Amount;
-    }	ADS_HOLD;
+    } 	ADS_HOLD;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0010 __RPC_FAR *PADS_HOLD;
+typedef struct __MIDL___MIDL_itf_ads_0000_0010 *PADS_HOLD;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0011
     {
     DWORD AddressType;
     DWORD AddressLength;
-    BYTE __RPC_FAR *Address;
-    }	ADS_NETADDRESS;
+    BYTE *Address;
+    } 	ADS_NETADDRESS;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0011 __RPC_FAR *PADS_NETADDRESS;
+typedef struct __MIDL___MIDL_itf_ads_0000_0011 *PADS_NETADDRESS;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0012
     {
@@ -922,43 +931,43 @@ typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0012
     DWORD ReplicaNumber;
     DWORD Count;
     PADS_NETADDRESS ReplicaAddressHints;
-    }	ADS_REPLICAPOINTER;
+    } 	ADS_REPLICAPOINTER;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0012 __RPC_FAR *PADS_REPLICAPOINTER;
+typedef struct __MIDL___MIDL_itf_ads_0000_0012 *PADS_REPLICAPOINTER;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0013
     {
     LPWSTR TelephoneNumber;
     DWORD NumberOfBits;
     LPBYTE Parameters;
-    }	ADS_FAXNUMBER;
+    } 	ADS_FAXNUMBER;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0013 __RPC_FAR *PADS_FAXNUMBER;
+typedef struct __MIDL___MIDL_itf_ads_0000_0013 *PADS_FAXNUMBER;
 
 typedef /* [public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public][public] */ struct __MIDL___MIDL_itf_ads_0000_0014
     {
     LPWSTR Address;
     DWORD Type;
-    }	ADS_EMAIL;
+    } 	ADS_EMAIL;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0014 __RPC_FAR *PADS_EMAIL;
+typedef struct __MIDL___MIDL_itf_ads_0000_0014 *PADS_EMAIL;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0015
     {
     DWORD dwLength;
     LPBYTE lpBinaryValue;
     LPWSTR pszDNString;
-    }	ADS_DN_WITH_BINARY;
+    } 	ADS_DN_WITH_BINARY;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0015 __RPC_FAR *PADS_DN_WITH_BINARY;
+typedef struct __MIDL___MIDL_itf_ads_0000_0015 *PADS_DN_WITH_BINARY;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_ads_0000_0016
     {
     LPWSTR pszStringValue;
     LPWSTR pszDNString;
-    }	ADS_DN_WITH_STRING;
+    } 	ADS_DN_WITH_STRING;
 
-typedef struct __MIDL___MIDL_itf_ads_0000_0016 __RPC_FAR *PADS_DN_WITH_STRING;
+typedef struct __MIDL___MIDL_itf_ads_0000_0016 *PADS_DN_WITH_STRING;
 
 typedef struct _adsvalue
     {
@@ -992,12 +1001,12 @@ typedef struct _adsvalue
         ADS_NT_SECURITY_DESCRIPTOR SecurityDescriptor;
         PADS_DN_WITH_BINARY pDNWithBinary;
         PADS_DN_WITH_STRING pDNWithString;
-        }	;
-    }	ADSVALUE;
+        } 	;
+    } 	ADSVALUE;
 
-typedef struct _adsvalue __RPC_FAR *PADSVALUE;
+typedef struct _adsvalue *PADSVALUE;
 
-typedef struct _adsvalue __RPC_FAR *LPADSVALUE;
+typedef struct _adsvalue *LPADSVALUE;
 
 typedef struct _ads_attr_info
     {
@@ -1006,9 +1015,9 @@ typedef struct _ads_attr_info
     ADSTYPE dwADsType;
     PADSVALUE pADsValues;
     DWORD dwNumValues;
-    }	ADS_ATTR_INFO;
+    } 	ADS_ATTR_INFO;
 
-typedef struct _ads_attr_info __RPC_FAR *PADS_ATTR_INFO;
+typedef struct _ads_attr_info *PADS_ATTR_INFO;
 
 typedef /* [public] */ 
 enum __MIDL___MIDL_itf_ads_0000_0018
@@ -1022,8 +1031,9 @@ enum __MIDL___MIDL_itf_ads_0000_0018
 	ADS_USE_SIGNING	= 0x40,
 	ADS_USE_SEALING	= 0x80,
 	ADS_USE_DELEGATION	= 0x100,
+	ADS_SERVER_BIND	= 0x200,
 	ADS_AUTH_RESERVED	= 0x80000000
-    }	ADS_AUTHENTICATION_ENUM;
+    } 	ADS_AUTHENTICATION_ENUM;
 
 #define	ADS_ATTR_CLEAR	( 1 )
 
@@ -1040,20 +1050,20 @@ typedef struct _ads_object_info
     LPWSTR pszParentDN;
     LPWSTR pszSchemaDN;
     LPWSTR pszClassName;
-    }	ADS_OBJECT_INFO;
+    } 	ADS_OBJECT_INFO;
 
-typedef struct _ads_object_info __RPC_FAR *PADS_OBJECT_INFO;
+typedef struct _ads_object_info *PADS_OBJECT_INFO;
 
 typedef /* [public][public][public][public][public][public][public] */ 
 enum __MIDL___MIDL_itf_ads_0000_0019
     {	ADS_STATUS_S_OK	= 0,
 	ADS_STATUS_INVALID_SEARCHPREF	= ADS_STATUS_S_OK + 1,
 	ADS_STATUS_INVALID_SEARCHPREFVALUE	= ADS_STATUS_INVALID_SEARCHPREF + 1
-    }	ADS_STATUSENUM;
+    } 	ADS_STATUSENUM;
 
 typedef ADS_STATUSENUM ADS_STATUS;
 
-typedef ADS_STATUSENUM __RPC_FAR *PADS_STATUS;
+typedef ADS_STATUSENUM *PADS_STATUS;
 
 typedef /* [public] */ 
 enum __MIDL___MIDL_itf_ads_0000_0020
@@ -1061,14 +1071,14 @@ enum __MIDL___MIDL_itf_ads_0000_0020
 	ADS_DEREF_SEARCHING	= 1,
 	ADS_DEREF_FINDING	= 2,
 	ADS_DEREF_ALWAYS	= 3
-    }	ADS_DEREFENUM;
+    } 	ADS_DEREFENUM;
 
 typedef /* [public] */ 
 enum __MIDL___MIDL_itf_ads_0000_0021
     {	ADS_SCOPE_BASE	= 0,
 	ADS_SCOPE_ONELEVEL	= 1,
 	ADS_SCOPE_SUBTREE	= 2
-    }	ADS_SCOPEENUM;
+    } 	ADS_SCOPEENUM;
 
 typedef /* [public] */ 
 enum __MIDL___MIDL_itf_ads_0000_0022
@@ -1085,13 +1095,13 @@ enum __MIDL___MIDL_itf_ads_0000_0022
 	ADSIPROP_SORT_ON	= 0xa,
 	ADSIPROP_CACHE_RESULTS	= 0xb,
 	ADSIPROP_ADSIFLAG	= 0xc
-    }	ADS_PREFERENCES_ENUM;
+    } 	ADS_PREFERENCES_ENUM;
 
 typedef /* [public] */ 
 enum __MIDL___MIDL_itf_ads_0000_0023
     {	ADSI_DIALECT_LDAP	= 0,
 	ADSI_DIALECT_SQL	= 0x1
-    }	ADSI_DIALECT_ENUM;
+    } 	ADSI_DIALECT_ENUM;
 
 typedef /* [public] */ 
 enum __MIDL___MIDL_itf_ads_0000_0024
@@ -1099,7 +1109,7 @@ enum __MIDL___MIDL_itf_ads_0000_0024
 	ADS_CHASE_REFERRALS_SUBORDINATE	= 0x20,
 	ADS_CHASE_REFERRALS_EXTERNAL	= 0x40,
 	ADS_CHASE_REFERRALS_ALWAYS	= ADS_CHASE_REFERRALS_SUBORDINATE | ADS_CHASE_REFERRALS_EXTERNAL
-    }	ADS_CHASE_REFERRALS_ENUM;
+    } 	ADS_CHASE_REFERRALS_ENUM;
 
 typedef /* [public][public][public][public][public][public] */ 
 enum __MIDL___MIDL_itf_ads_0000_0025
@@ -1116,8 +1126,11 @@ enum __MIDL___MIDL_itf_ads_0000_0025
 	ADS_SEARCHPREF_SORT_ON	= ADS_SEARCHPREF_CHASE_REFERRALS + 1,
 	ADS_SEARCHPREF_CACHE_RESULTS	= ADS_SEARCHPREF_SORT_ON + 1,
 	ADS_SEARCHPREF_DIRSYNC	= ADS_SEARCHPREF_CACHE_RESULTS + 1,
-	ADS_SEARCHPREF_TOMBSTONE	= ADS_SEARCHPREF_DIRSYNC + 1
-    }	ADS_SEARCHPREF_ENUM;
+	ADS_SEARCHPREF_TOMBSTONE	= ADS_SEARCHPREF_DIRSYNC + 1,
+	ADS_SEARCHPREF_VLV	= ADS_SEARCHPREF_TOMBSTONE + 1,
+	ADS_SEARCHPREF_ATTRIBUTE_QUERY	= ADS_SEARCHPREF_VLV + 1,
+	ADS_SEARCHPREF_SECURITY_MASK	= ADS_SEARCHPREF_ATTRIBUTE_QUERY + 1
+    } 	ADS_SEARCHPREF_ENUM;
 
 typedef ADS_SEARCHPREF_ENUM ADS_SEARCHPREF;
 
@@ -1126,17 +1139,19 @@ typedef struct ads_searchpref_info
     ADS_SEARCHPREF dwSearchPref;
     ADSVALUE vValue;
     ADS_STATUS dwStatus;
-    }	ADS_SEARCHPREF_INFO;
+    } 	ADS_SEARCHPREF_INFO;
 
-typedef struct ads_searchpref_info __RPC_FAR *PADS_SEARCHPREF_INFO;
+typedef struct ads_searchpref_info *PADS_SEARCHPREF_INFO;
 
-typedef struct ads_searchpref_info __RPC_FAR *LPADS_SEARCHPREF_INFO;
+typedef struct ads_searchpref_info *LPADS_SEARCHPREF_INFO;
 
 #define	ADS_DIRSYNC_COOKIE	( L"fc8cb04d-311d-406c-8cb9-1ae8b843b418" )
 
+#define	ADS_VLV_RESPONSE	( L"fc8cb04d-311d-406c-8cb9-1ae8b843b419" )
+
 typedef HANDLE ADS_SEARCH_HANDLE;
 
-typedef HANDLE __RPC_FAR *PADS_SEARCH_HANDLE;
+typedef HANDLE *PADS_SEARCH_HANDLE;
 
 typedef struct ads_search_column
     {
@@ -1145,9 +1160,9 @@ typedef struct ads_search_column
     PADSVALUE pADsValues;
     DWORD dwNumValues;
     HANDLE hReserved;
-    }	ADS_SEARCH_COLUMN;
+    } 	ADS_SEARCH_COLUMN;
 
-typedef struct ads_search_column __RPC_FAR *PADS_SEARCH_COLUMN;
+typedef struct ads_search_column *PADS_SEARCH_COLUMN;
 
 typedef struct _ads_attr_def
     {
@@ -1156,34 +1171,47 @@ typedef struct _ads_attr_def
     DWORD dwMinRange;
     DWORD dwMaxRange;
     BOOL fMultiValued;
-    }	ADS_ATTR_DEF;
+    } 	ADS_ATTR_DEF;
 
-typedef struct _ads_attr_def __RPC_FAR *PADS_ATTR_DEF;
+typedef struct _ads_attr_def *PADS_ATTR_DEF;
 
 typedef struct _ads_class_def
     {
     LPWSTR pszClassName;
     DWORD dwMandatoryAttrs;
-    LPWSTR __RPC_FAR *ppszMandatoryAttrs;
+    LPWSTR *ppszMandatoryAttrs;
     DWORD optionalAttrs;
-    LPWSTR __RPC_FAR *__RPC_FAR *ppszOptionalAttrs;
+    LPWSTR **ppszOptionalAttrs;
     DWORD dwNamingAttrs;
-    LPWSTR __RPC_FAR *__RPC_FAR *ppszNamingAttrs;
+    LPWSTR **ppszNamingAttrs;
     DWORD dwSuperClasses;
-    LPWSTR __RPC_FAR *__RPC_FAR *ppszSuperClasses;
+    LPWSTR **ppszSuperClasses;
     BOOL fIsContainer;
-    }	ADS_CLASS_DEF;
+    } 	ADS_CLASS_DEF;
 
-typedef struct _ads_class_def __RPC_FAR *PADS_CLASS_DEF;
+typedef struct _ads_class_def *PADS_CLASS_DEF;
 
 typedef struct _ads_sortkey
     {
     LPWSTR pszAttrType;
     LPWSTR pszReserved;
     BOOLEAN fReverseorder;
-    }	ADS_SORTKEY;
+    } 	ADS_SORTKEY;
 
-typedef struct _ads_sortkey __RPC_FAR *PADS_SORTKEY;
+typedef struct _ads_sortkey *PADS_SORTKEY;
+
+typedef struct _ads_vlv
+    {
+    DWORD dwBeforeCount;
+    DWORD dwAfterCount;
+    DWORD dwOffset;
+    DWORD dwContentCount;
+    LPWSTR pszTarget;
+    DWORD dwContextIDLength;
+    LPBYTE lpContextID;
+    } 	ADS_VLV;
+
+typedef struct _ads_vlv *PADS_VLV;
 
 #define	ADS_EXT_MINEXTDISPID	( 1 )
 
@@ -1199,10 +1227,10 @@ enum __MIDL___MIDL_itf_ads_0000_0026
 	ADS_PROPERTY_UPDATE	= 2,
 	ADS_PROPERTY_APPEND	= 3,
 	ADS_PROPERTY_DELETE	= 4
-    }	ADS_PROPERTY_OPERATION_ENUM;
+    } 	ADS_PROPERTY_OPERATION_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0121_0001
+enum __MIDL___MIDL_itf_ads_0125_0001
     {	ADS_SYSTEMFLAG_DISALLOW_DELETE	= 0x80000000,
 	ADS_SYSTEMFLAG_CONFIG_ALLOW_RENAME	= 0x40000000,
 	ADS_SYSTEMFLAG_CONFIG_ALLOW_MOVE	= 0x20000000,
@@ -1213,16 +1241,16 @@ enum __MIDL___MIDL_itf_ads_0121_0001
 	ADS_SYSTEMFLAG_CR_NTDS_DOMAIN	= 0x2,
 	ADS_SYSTEMFLAG_ATTR_NOT_REPLICATED	= 0x1,
 	ADS_SYSTEMFLAG_ATTR_IS_CONSTRUCTED	= 0x4
-    }	ADS_SYSTEMFLAG_ENUM;
+    } 	ADS_SYSTEMFLAG_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0127_0001
+enum __MIDL___MIDL_itf_ads_0131_0001
     {	ADS_GROUP_TYPE_GLOBAL_GROUP	= 0x2,
 	ADS_GROUP_TYPE_DOMAIN_LOCAL_GROUP	= 0x4,
 	ADS_GROUP_TYPE_LOCAL_GROUP	= 0x4,
 	ADS_GROUP_TYPE_UNIVERSAL_GROUP	= 0x8,
 	ADS_GROUP_TYPE_SECURITY_ENABLED	= 0x80000000
-    }	ADS_GROUP_TYPE_ENUM;
+    } 	ADS_GROUP_TYPE_ENUM;
 
 typedef 
 enum ADS_USER_FLAG
@@ -1242,11 +1270,15 @@ enum ADS_USER_FLAG
 	ADS_UF_MNS_LOGON_ACCOUNT	= 0x20000,
 	ADS_UF_SMARTCARD_REQUIRED	= 0x40000,
 	ADS_UF_TRUSTED_FOR_DELEGATION	= 0x80000,
-	ADS_UF_NOT_DELEGATED	= 0x100000
-    }	ADS_USER_FLAG_ENUM;
+	ADS_UF_NOT_DELEGATED	= 0x100000,
+	ADS_UF_USE_DES_KEY_ONLY	= 0x200000,
+	ADS_UF_DONT_REQUIRE_PREAUTH	= 0x400000,
+	ADS_UF_PASSWORD_EXPIRED	= 0x800000,
+	ADS_UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION	= 0x1000000
+    } 	ADS_USER_FLAG_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0149_0001
+enum __MIDL___MIDL_itf_ads_0153_0001
     {	ADS_RIGHT_DELETE	= 0x10000,
 	ADS_RIGHT_READ_CONTROL	= 0x20000,
 	ADS_RIGHT_WRITE_DAC	= 0x40000,
@@ -1266,20 +1298,29 @@ enum __MIDL___MIDL_itf_ads_0149_0001
 	ADS_RIGHT_DS_DELETE_TREE	= 0x40,
 	ADS_RIGHT_DS_LIST_OBJECT	= 0x80,
 	ADS_RIGHT_DS_CONTROL_ACCESS	= 0x100
-    }	ADS_RIGHTS_ENUM;
+    } 	ADS_RIGHTS_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0149_0002
+enum __MIDL___MIDL_itf_ads_0153_0002
     {	ADS_ACETYPE_ACCESS_ALLOWED	= 0,
 	ADS_ACETYPE_ACCESS_DENIED	= 0x1,
 	ADS_ACETYPE_SYSTEM_AUDIT	= 0x2,
 	ADS_ACETYPE_ACCESS_ALLOWED_OBJECT	= 0x5,
 	ADS_ACETYPE_ACCESS_DENIED_OBJECT	= 0x6,
-	ADS_ACETYPE_SYSTEM_AUDIT_OBJECT	= 0x7
-    }	ADS_ACETYPE_ENUM;
+	ADS_ACETYPE_SYSTEM_AUDIT_OBJECT	= 0x7,
+	ADS_ACETYPE_SYSTEM_ALARM_OBJECT	= 0x8,
+	ADS_ACETYPE_ACCESS_ALLOWED_CALLBACK	= 0x9,
+	ADS_ACETYPE_ACCESS_DENIED_CALLBACK	= 0xa,
+	ADS_ACETYPE_ACCESS_ALLOWED_CALLBACK_OBJECT	= 0xb,
+	ADS_ACETYPE_ACCESS_DENIED_CALLBACK_OBJECT	= 0xc,
+	ADS_ACETYPE_SYSTEM_AUDIT_CALLBACK	= 0xd,
+	ADS_ACETYPE_SYSTEM_ALARM_CALLBACK	= 0xe,
+	ADS_ACETYPE_SYSTEM_AUDIT_CALLBACK_OBJECT	= 0xf,
+	ADS_ACETYPE_SYSTEM_ALARM_CALLBACK_OBJECT	= 0x10
+    } 	ADS_ACETYPE_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0149_0003
+enum __MIDL___MIDL_itf_ads_0153_0003
     {	ADS_ACEFLAG_INHERIT_ACE	= 0x2,
 	ADS_ACEFLAG_NO_PROPAGATE_INHERIT_ACE	= 0x4,
 	ADS_ACEFLAG_INHERIT_ONLY_ACE	= 0x8,
@@ -1287,16 +1328,16 @@ enum __MIDL___MIDL_itf_ads_0149_0003
 	ADS_ACEFLAG_VALID_INHERIT_FLAGS	= 0x1f,
 	ADS_ACEFLAG_SUCCESSFUL_ACCESS	= 0x40,
 	ADS_ACEFLAG_FAILED_ACCESS	= 0x80
-    }	ADS_ACEFLAG_ENUM;
+    } 	ADS_ACEFLAG_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0149_0004
+enum __MIDL___MIDL_itf_ads_0153_0004
     {	ADS_FLAG_OBJECT_TYPE_PRESENT	= 0x1,
 	ADS_FLAG_INHERITED_OBJECT_TYPE_PRESENT	= 0x2
-    }	ADS_FLAGTYPE_ENUM;
+    } 	ADS_FLAGTYPE_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0149_0005
+enum __MIDL___MIDL_itf_ads_0153_0005
     {	ADS_SD_CONTROL_SE_OWNER_DEFAULTED	= 0x1,
 	ADS_SD_CONTROL_SE_GROUP_DEFAULTED	= 0x2,
 	ADS_SD_CONTROL_SE_DACL_PRESENT	= 0x4,
@@ -1310,15 +1351,15 @@ enum __MIDL___MIDL_itf_ads_0149_0005
 	ADS_SD_CONTROL_SE_DACL_PROTECTED	= 0x1000,
 	ADS_SD_CONTROL_SE_SACL_PROTECTED	= 0x2000,
 	ADS_SD_CONTROL_SE_SELF_RELATIVE	= 0x8000
-    }	ADS_SD_CONTROL_ENUM;
+    } 	ADS_SD_CONTROL_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0149_0006
+enum __MIDL___MIDL_itf_ads_0153_0006
     {	ADS_SD_REVISION_DS	= 4
-    }	ADS_SD_REVISION_ENUM;
+    } 	ADS_SD_REVISION_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0150_0001
+enum __MIDL___MIDL_itf_ads_0154_0001
     {	ADS_NAME_TYPE_1779	= 1,
 	ADS_NAME_TYPE_CANONICAL	= 2,
 	ADS_NAME_TYPE_NT4	= 3,
@@ -1331,42 +1372,42 @@ enum __MIDL___MIDL_itf_ads_0150_0001
 	ADS_NAME_TYPE_CANONICAL_EX	= 10,
 	ADS_NAME_TYPE_SERVICE_PRINCIPAL_NAME	= 11,
 	ADS_NAME_TYPE_SID_OR_SID_HISTORY_NAME	= 12
-    }	ADS_NAME_TYPE_ENUM;
+    } 	ADS_NAME_TYPE_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0150_0002
+enum __MIDL___MIDL_itf_ads_0154_0002
     {	ADS_NAME_INITTYPE_DOMAIN	= 1,
 	ADS_NAME_INITTYPE_SERVER	= 2,
 	ADS_NAME_INITTYPE_GC	= 3
-    }	ADS_NAME_INITTYPE_ENUM;
+    } 	ADS_NAME_INITTYPE_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0164_0001
+enum __MIDL___MIDL_itf_ads_0168_0001
     {	ADS_OPTION_SERVERNAME	= 0,
 	ADS_OPTION_REFERRALS	= ADS_OPTION_SERVERNAME + 1,
 	ADS_OPTION_PAGE_SIZE	= ADS_OPTION_REFERRALS + 1,
 	ADS_OPTION_SECURITY_MASK	= ADS_OPTION_PAGE_SIZE + 1,
 	ADS_OPTION_MUTUAL_AUTH_STATUS	= ADS_OPTION_SECURITY_MASK + 1
-    }	ADS_OPTION_ENUM;
+    } 	ADS_OPTION_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0164_0002
+enum __MIDL___MIDL_itf_ads_0168_0002
     {	ADS_SECURITY_INFO_OWNER	= 0x1,
 	ADS_SECURITY_INFO_GROUP	= 0x2,
 	ADS_SECURITY_INFO_DACL	= 0x4,
 	ADS_SECURITY_INFO_SACL	= 0x8
-    }	ADS_SECURITY_INFO_ENUM;
+    } 	ADS_SECURITY_INFO_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0165_0001
+enum __MIDL___MIDL_itf_ads_0169_0001
     {	ADS_SETTYPE_FULL	= 1,
 	ADS_SETTYPE_PROVIDER	= 2,
 	ADS_SETTYPE_SERVER	= 3,
 	ADS_SETTYPE_DN	= 4
-    }	ADS_SETTYPE_ENUM;
+    } 	ADS_SETTYPE_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0165_0002
+enum __MIDL___MIDL_itf_ads_0169_0002
     {	ADS_FORMAT_WINDOWS	= 1,
 	ADS_FORMAT_WINDOWS_NO_SERVER	= 2,
 	ADS_FORMAT_WINDOWS_DN	= 3,
@@ -1378,21 +1419,35 @@ enum __MIDL___MIDL_itf_ads_0165_0002
 	ADS_FORMAT_SERVER	= 9,
 	ADS_FORMAT_PROVIDER	= 10,
 	ADS_FORMAT_LEAF	= 11
-    }	ADS_FORMAT_ENUM;
+    } 	ADS_FORMAT_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0165_0003
+enum __MIDL___MIDL_itf_ads_0169_0003
     {	ADS_DISPLAY_FULL	= 1,
 	ADS_DISPLAY_VALUE_ONLY	= 2
-    }	ADS_DISPLAY_ENUM;
+    } 	ADS_DISPLAY_ENUM;
 
 typedef /* [public] */ 
-enum __MIDL___MIDL_itf_ads_0165_0004
+enum __MIDL___MIDL_itf_ads_0169_0004
     {	ADS_ESCAPEDMODE_DEFAULT	= 1,
 	ADS_ESCAPEDMODE_ON	= 2,
 	ADS_ESCAPEDMODE_OFF	= 3,
 	ADS_ESCAPEDMODE_OFF_EX	= 4
-    }	ADS_ESCAPE_MODE_ENUM;
+    } 	ADS_ESCAPE_MODE_ENUM;
+
+typedef /* [public] */ 
+enum __MIDL___MIDL_itf_ads_0174_0001
+    {	ADS_PATH_FILE	= 1,
+	ADS_PATH_FILESHARE	= 2,
+	ADS_PATH_REGISTRY	= 3
+    } 	ADS_PATHTYPE_ENUM;
+
+typedef /* [public] */ 
+enum __MIDL___MIDL_itf_ads_0174_0002
+    {	ADS_SD_FORMAT_IID	= 1,
+	ADS_SD_FORMAT_RAW	= 2,
+	ADS_SD_FORMAT_HEXSTRING	= 3
+    } 	ADS_SD_FORMAT_ENUM;
 
 
 EXTERN_C const IID LIBID_ActiveDs;
@@ -1413,22 +1468,22 @@ EXTERN_C const IID IID_IADs;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Class( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GUID( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ADsPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Schema( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetInfo( void) = 0;
         
@@ -1436,7 +1491,7 @@ EXTERN_C const IID IID_IADs;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Get( 
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp) = 0;
+            /* [retval][out] */ VARIANT *pvProp) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Put( 
             /* [in] */ BSTR bstrName,
@@ -1444,7 +1499,7 @@ EXTERN_C const IID IID_IADs;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEx( 
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp) = 0;
+            /* [retval][out] */ VARIANT *pvProp) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE PutEx( 
             /* [in] */ long lnControlCode,
@@ -1463,99 +1518,99 @@ EXTERN_C const IID IID_IADs;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADs __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADs * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADs __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADs * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADs __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADs * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADs __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADs * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADs __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADs * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADs __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADs * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADs __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADs * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADs __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADs * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADs __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADs * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADs __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADs * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADs __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADs * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADs __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADs * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADs __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADs * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADs __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADs * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADs __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADs * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADs __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADs * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADs __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADs * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADs __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADs * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADs __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADs * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADs __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADs * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
@@ -1564,7 +1619,7 @@ EXTERN_C const IID IID_IADs;
 
     interface IADs
     {
-        CONST_VTBL struct IADsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsVtbl *lpVtbl;
     };
 
     
@@ -1642,8 +1697,8 @@ EXTERN_C const IID IID_IADs;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADs_get_Name_Proxy( 
-    IADs __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADs * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADs_get_Name_Stub(
@@ -1654,8 +1709,8 @@ void __RPC_STUB IADs_get_Name_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADs_get_Class_Proxy( 
-    IADs __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADs * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADs_get_Class_Stub(
@@ -1666,8 +1721,8 @@ void __RPC_STUB IADs_get_Class_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADs_get_GUID_Proxy( 
-    IADs __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADs * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADs_get_GUID_Stub(
@@ -1678,8 +1733,8 @@ void __RPC_STUB IADs_get_GUID_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADs_get_ADsPath_Proxy( 
-    IADs __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADs * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADs_get_ADsPath_Stub(
@@ -1690,8 +1745,8 @@ void __RPC_STUB IADs_get_ADsPath_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADs_get_Parent_Proxy( 
-    IADs __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADs * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADs_get_Parent_Stub(
@@ -1702,8 +1757,8 @@ void __RPC_STUB IADs_get_Parent_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADs_get_Schema_Proxy( 
-    IADs __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADs * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADs_get_Schema_Stub(
@@ -1714,7 +1769,7 @@ void __RPC_STUB IADs_get_Schema_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADs_GetInfo_Proxy( 
-    IADs __RPC_FAR * This);
+    IADs * This);
 
 
 void __RPC_STUB IADs_GetInfo_Stub(
@@ -1725,7 +1780,7 @@ void __RPC_STUB IADs_GetInfo_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADs_SetInfo_Proxy( 
-    IADs __RPC_FAR * This);
+    IADs * This);
 
 
 void __RPC_STUB IADs_SetInfo_Stub(
@@ -1736,9 +1791,9 @@ void __RPC_STUB IADs_SetInfo_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADs_Get_Proxy( 
-    IADs __RPC_FAR * This,
+    IADs * This,
     /* [in] */ BSTR bstrName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+    /* [retval][out] */ VARIANT *pvProp);
 
 
 void __RPC_STUB IADs_Get_Stub(
@@ -1749,7 +1804,7 @@ void __RPC_STUB IADs_Get_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADs_Put_Proxy( 
-    IADs __RPC_FAR * This,
+    IADs * This,
     /* [in] */ BSTR bstrName,
     /* [in] */ VARIANT vProp);
 
@@ -1762,9 +1817,9 @@ void __RPC_STUB IADs_Put_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADs_GetEx_Proxy( 
-    IADs __RPC_FAR * This,
+    IADs * This,
     /* [in] */ BSTR bstrName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+    /* [retval][out] */ VARIANT *pvProp);
 
 
 void __RPC_STUB IADs_GetEx_Stub(
@@ -1775,7 +1830,7 @@ void __RPC_STUB IADs_GetEx_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADs_PutEx_Proxy( 
-    IADs __RPC_FAR * This,
+    IADs * This,
     /* [in] */ long lnControlCode,
     /* [in] */ BSTR bstrName,
     /* [in] */ VARIANT vProp);
@@ -1789,7 +1844,7 @@ void __RPC_STUB IADs_PutEx_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADs_GetInfoEx_Proxy( 
-    IADs __RPC_FAR * This,
+    IADs * This,
     /* [in] */ VARIANT vProperties,
     /* [in] */ long lnReserved);
 
@@ -1821,19 +1876,19 @@ EXTERN_C const IID IID_IADsContainer;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Filter( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pVar) = 0;
+            /* [retval][out] */ VARIANT *pVar) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Filter( 
             /* [in] */ VARIANT Var) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Hints( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvFilter) = 0;
+            /* [retval][out] */ VARIANT *pvFilter) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Hints( 
             /* [in] */ VARIANT vHints) = 0;
@@ -1841,12 +1896,12 @@ EXTERN_C const IID IID_IADsContainer;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetObject( 
             /* [in] */ BSTR ClassName,
             /* [in] */ BSTR RelativeName,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject) = 0;
+            /* [retval][out] */ IDispatch **ppObject) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Create( 
             /* [in] */ BSTR ClassName,
             /* [in] */ BSTR RelativeName,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject) = 0;
+            /* [retval][out] */ IDispatch **ppObject) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Delete( 
             /* [in] */ BSTR bstrClassName,
@@ -1855,12 +1910,12 @@ EXTERN_C const IID IID_IADsContainer;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE CopyHere( 
             /* [in] */ BSTR SourceName,
             /* [in] */ BSTR NewName,
-            /* [out][retval] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject) = 0;
+            /* [out][retval] */ IDispatch **ppObject) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE MoveHere( 
             /* [in] */ BSTR SourceName,
             /* [in] */ BSTR NewName,
-            /* [out][retval] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject) = 0;
+            /* [out][retval] */ IDispatch **ppObject) = 0;
         
     };
     
@@ -1870,105 +1925,105 @@ EXTERN_C const IID IID_IADsContainer;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsContainer * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsContainer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsContainer * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsContainer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsContainer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsContainer __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsContainer * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsContainer * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsContainer * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsContainer __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsContainer * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            IADsContainer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IADsContainer * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            IADsContainer __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            IADsContainer * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Filter )( 
-            IADsContainer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVar);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Filter )( 
+            IADsContainer * This,
+            /* [retval][out] */ VARIANT *pVar);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Filter )( 
-            IADsContainer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Filter )( 
+            IADsContainer * This,
             /* [in] */ VARIANT Var);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Hints )( 
-            IADsContainer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvFilter);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Hints )( 
+            IADsContainer * This,
+            /* [retval][out] */ VARIANT *pvFilter);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Hints )( 
-            IADsContainer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Hints )( 
+            IADsContainer * This,
             /* [in] */ VARIANT vHints);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObject )( 
-            IADsContainer __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetObject )( 
+            IADsContainer * This,
             /* [in] */ BSTR ClassName,
             /* [in] */ BSTR RelativeName,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject);
+            /* [retval][out] */ IDispatch **ppObject);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Create )( 
-            IADsContainer __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+            IADsContainer * This,
             /* [in] */ BSTR ClassName,
             /* [in] */ BSTR RelativeName,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject);
+            /* [retval][out] */ IDispatch **ppObject);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
-            IADsContainer __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+            IADsContainer * This,
             /* [in] */ BSTR bstrClassName,
             /* [in] */ BSTR bstrRelativeName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyHere )( 
-            IADsContainer __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CopyHere )( 
+            IADsContainer * This,
             /* [in] */ BSTR SourceName,
             /* [in] */ BSTR NewName,
-            /* [out][retval] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject);
+            /* [out][retval] */ IDispatch **ppObject);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveHere )( 
-            IADsContainer __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *MoveHere )( 
+            IADsContainer * This,
             /* [in] */ BSTR SourceName,
             /* [in] */ BSTR NewName,
-            /* [out][retval] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject);
+            /* [out][retval] */ IDispatch **ppObject);
         
         END_INTERFACE
     } IADsContainerVtbl;
 
     interface IADsContainer
     {
-        CONST_VTBL struct IADsContainerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsContainerVtbl *lpVtbl;
     };
 
     
@@ -2040,8 +2095,8 @@ EXTERN_C const IID IID_IADsContainer;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsContainer_get_Count_Proxy( 
-    IADsContainer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsContainer * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsContainer_get_Count_Stub(
@@ -2052,8 +2107,8 @@ void __RPC_STUB IADsContainer_get_Count_Stub(
 
 
 /* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE IADsContainer_get__NewEnum_Proxy( 
-    IADsContainer __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    IADsContainer * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB IADsContainer_get__NewEnum_Stub(
@@ -2064,8 +2119,8 @@ void __RPC_STUB IADsContainer_get__NewEnum_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsContainer_get_Filter_Proxy( 
-    IADsContainer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVar);
+    IADsContainer * This,
+    /* [retval][out] */ VARIANT *pVar);
 
 
 void __RPC_STUB IADsContainer_get_Filter_Stub(
@@ -2076,7 +2131,7 @@ void __RPC_STUB IADsContainer_get_Filter_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsContainer_put_Filter_Proxy( 
-    IADsContainer __RPC_FAR * This,
+    IADsContainer * This,
     /* [in] */ VARIANT Var);
 
 
@@ -2088,8 +2143,8 @@ void __RPC_STUB IADsContainer_put_Filter_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsContainer_get_Hints_Proxy( 
-    IADsContainer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvFilter);
+    IADsContainer * This,
+    /* [retval][out] */ VARIANT *pvFilter);
 
 
 void __RPC_STUB IADsContainer_get_Hints_Stub(
@@ -2100,7 +2155,7 @@ void __RPC_STUB IADsContainer_get_Hints_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsContainer_put_Hints_Proxy( 
-    IADsContainer __RPC_FAR * This,
+    IADsContainer * This,
     /* [in] */ VARIANT vHints);
 
 
@@ -2112,10 +2167,10 @@ void __RPC_STUB IADsContainer_put_Hints_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsContainer_GetObject_Proxy( 
-    IADsContainer __RPC_FAR * This,
+    IADsContainer * This,
     /* [in] */ BSTR ClassName,
     /* [in] */ BSTR RelativeName,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject);
+    /* [retval][out] */ IDispatch **ppObject);
 
 
 void __RPC_STUB IADsContainer_GetObject_Stub(
@@ -2126,10 +2181,10 @@ void __RPC_STUB IADsContainer_GetObject_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsContainer_Create_Proxy( 
-    IADsContainer __RPC_FAR * This,
+    IADsContainer * This,
     /* [in] */ BSTR ClassName,
     /* [in] */ BSTR RelativeName,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject);
+    /* [retval][out] */ IDispatch **ppObject);
 
 
 void __RPC_STUB IADsContainer_Create_Stub(
@@ -2140,7 +2195,7 @@ void __RPC_STUB IADsContainer_Create_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsContainer_Delete_Proxy( 
-    IADsContainer __RPC_FAR * This,
+    IADsContainer * This,
     /* [in] */ BSTR bstrClassName,
     /* [in] */ BSTR bstrRelativeName);
 
@@ -2153,10 +2208,10 @@ void __RPC_STUB IADsContainer_Delete_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsContainer_CopyHere_Proxy( 
-    IADsContainer __RPC_FAR * This,
+    IADsContainer * This,
     /* [in] */ BSTR SourceName,
     /* [in] */ BSTR NewName,
-    /* [out][retval] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject);
+    /* [out][retval] */ IDispatch **ppObject);
 
 
 void __RPC_STUB IADsContainer_CopyHere_Stub(
@@ -2167,10 +2222,10 @@ void __RPC_STUB IADsContainer_CopyHere_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsContainer_MoveHere_Proxy( 
-    IADsContainer __RPC_FAR * This,
+    IADsContainer * This,
     /* [in] */ BSTR SourceName,
     /* [in] */ BSTR NewName,
-    /* [out][retval] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject);
+    /* [out][retval] */ IDispatch **ppObject);
 
 
 void __RPC_STUB IADsContainer_MoveHere_Stub(
@@ -2200,7 +2255,7 @@ EXTERN_C const IID IID_IADsCollection;
     {
     public:
         virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumerator) = 0;
+            /* [retval][out] */ IUnknown **ppEnumerator) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Add( 
             /* [in] */ BSTR bstrName,
@@ -2211,7 +2266,7 @@ EXTERN_C const IID IID_IADsCollection;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetObject( 
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvItem) = 0;
+            /* [retval][out] */ VARIANT *pvItem) = 0;
         
     };
     
@@ -2221,70 +2276,70 @@ EXTERN_C const IID IID_IADsCollection;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsCollection __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsCollection * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsCollection __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsCollection * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsCollection __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsCollection * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsCollection __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsCollection * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsCollection __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsCollection * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsCollection __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsCollection * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsCollection __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsCollection * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            IADsCollection __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumerator);
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            IADsCollection * This,
+            /* [retval][out] */ IUnknown **ppEnumerator);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Add )( 
-            IADsCollection __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+            IADsCollection * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vItem);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Remove )( 
-            IADsCollection __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+            IADsCollection * This,
             /* [in] */ BSTR bstrItemToBeRemoved);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObject )( 
-            IADsCollection __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetObject )( 
+            IADsCollection * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvItem);
+            /* [retval][out] */ VARIANT *pvItem);
         
         END_INTERFACE
     } IADsCollectionVtbl;
 
     interface IADsCollection
     {
-        CONST_VTBL struct IADsCollectionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsCollectionVtbl *lpVtbl;
     };
 
     
@@ -2335,8 +2390,8 @@ EXTERN_C const IID IID_IADsCollection;
 
 
 /* [propget][id] */ HRESULT STDMETHODCALLTYPE IADsCollection_get__NewEnum_Proxy( 
-    IADsCollection __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumerator);
+    IADsCollection * This,
+    /* [retval][out] */ IUnknown **ppEnumerator);
 
 
 void __RPC_STUB IADsCollection_get__NewEnum_Stub(
@@ -2347,7 +2402,7 @@ void __RPC_STUB IADsCollection_get__NewEnum_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsCollection_Add_Proxy( 
-    IADsCollection __RPC_FAR * This,
+    IADsCollection * This,
     /* [in] */ BSTR bstrName,
     /* [in] */ VARIANT vItem);
 
@@ -2360,7 +2415,7 @@ void __RPC_STUB IADsCollection_Add_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsCollection_Remove_Proxy( 
-    IADsCollection __RPC_FAR * This,
+    IADsCollection * This,
     /* [in] */ BSTR bstrItemToBeRemoved);
 
 
@@ -2372,9 +2427,9 @@ void __RPC_STUB IADsCollection_Remove_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsCollection_GetObject_Proxy( 
-    IADsCollection __RPC_FAR * This,
+    IADsCollection * This,
     /* [in] */ BSTR bstrName,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvItem);
+    /* [retval][out] */ VARIANT *pvItem);
 
 
 void __RPC_STUB IADsCollection_GetObject_Stub(
@@ -2404,13 +2459,13 @@ EXTERN_C const IID IID_IADsMembers;
     {
     public:
         virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumerator) = 0;
+            /* [retval][out] */ IUnknown **ppEnumerator) = 0;
         
         virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_Filter( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvFilter) = 0;
+            /* [retval][out] */ VARIANT *pvFilter) = 0;
         
         virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Filter( 
             /* [in] */ VARIANT pvFilter) = 0;
@@ -2423,60 +2478,60 @@ EXTERN_C const IID IID_IADsMembers;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsMembers __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsMembers * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsMembers __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsMembers * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsMembers __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsMembers * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsMembers __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsMembers * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsMembers __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsMembers * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsMembers __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsMembers * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsMembers __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsMembers * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            IADsMembers __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IADsMembers * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            IADsMembers __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumerator);
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            IADsMembers * This,
+            /* [retval][out] */ IUnknown **ppEnumerator);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Filter )( 
-            IADsMembers __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvFilter);
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Filter )( 
+            IADsMembers * This,
+            /* [retval][out] */ VARIANT *pvFilter);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Filter )( 
-            IADsMembers __RPC_FAR * This,
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Filter )( 
+            IADsMembers * This,
             /* [in] */ VARIANT pvFilter);
         
         END_INTERFACE
@@ -2484,7 +2539,7 @@ EXTERN_C const IID IID_IADsMembers;
 
     interface IADsMembers
     {
-        CONST_VTBL struct IADsMembersVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsMembersVtbl *lpVtbl;
     };
 
     
@@ -2535,8 +2590,8 @@ EXTERN_C const IID IID_IADsMembers;
 
 
 /* [propget][id] */ HRESULT STDMETHODCALLTYPE IADsMembers_get_Count_Proxy( 
-    IADsMembers __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    IADsMembers * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB IADsMembers_get_Count_Stub(
@@ -2547,8 +2602,8 @@ void __RPC_STUB IADsMembers_get_Count_Stub(
 
 
 /* [propget][id] */ HRESULT STDMETHODCALLTYPE IADsMembers_get__NewEnum_Proxy( 
-    IADsMembers __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumerator);
+    IADsMembers * This,
+    /* [retval][out] */ IUnknown **ppEnumerator);
 
 
 void __RPC_STUB IADsMembers_get__NewEnum_Stub(
@@ -2559,8 +2614,8 @@ void __RPC_STUB IADsMembers_get__NewEnum_Stub(
 
 
 /* [propget][id] */ HRESULT STDMETHODCALLTYPE IADsMembers_get_Filter_Proxy( 
-    IADsMembers __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvFilter);
+    IADsMembers * This,
+    /* [retval][out] */ VARIANT *pvFilter);
 
 
 void __RPC_STUB IADsMembers_get_Filter_Stub(
@@ -2571,7 +2626,7 @@ void __RPC_STUB IADsMembers_get_Filter_Stub(
 
 
 /* [propput][id] */ HRESULT STDMETHODCALLTYPE IADsMembers_put_Filter_Proxy( 
-    IADsMembers __RPC_FAR * This,
+    IADsMembers * This,
     /* [in] */ VARIANT pvFilter);
 
 
@@ -2602,10 +2657,10 @@ EXTERN_C const IID IID_IADsPropertyList;
     {
     public:
         virtual /* [propget][id] */ HRESULT STDMETHODCALLTYPE get_PropertyCount( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant) = 0;
+            /* [retval][out] */ VARIANT *pVariant) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ long cElements) = 0;
@@ -2614,12 +2669,12 @@ EXTERN_C const IID IID_IADsPropertyList;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant) = 0;
+            /* [retval][out] */ VARIANT *pVariant) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetPropertyItem( 
             /* [in] */ BSTR bstrName,
             /* [in] */ LONG lnADsType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant) = 0;
+            /* [retval][out] */ VARIANT *pVariant) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE PutPropertyItem( 
             /* [in] */ VARIANT varData) = 0;
@@ -2637,89 +2692,89 @@ EXTERN_C const IID IID_IADsPropertyList;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsPropertyList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsPropertyList * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsPropertyList __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsPropertyList * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsPropertyList __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsPropertyList * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsPropertyList __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsPropertyList * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsPropertyList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsPropertyList * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsPropertyList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsPropertyList * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsPropertyList __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsPropertyList * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PropertyCount )( 
-            IADsPropertyList __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_PropertyCount )( 
+            IADsPropertyList * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IADsPropertyList __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IADsPropertyList * This,
+            /* [retval][out] */ VARIANT *pVariant);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IADsPropertyList __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IADsPropertyList * This,
             /* [in] */ long cElements);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IADsPropertyList __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IADsPropertyList * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
-            IADsPropertyList __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+            IADsPropertyList * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+            /* [retval][out] */ VARIANT *pVariant);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropertyItem )( 
-            IADsPropertyList __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetPropertyItem )( 
+            IADsPropertyList * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ LONG lnADsType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+            /* [retval][out] */ VARIANT *pVariant);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutPropertyItem )( 
-            IADsPropertyList __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutPropertyItem )( 
+            IADsPropertyList * This,
             /* [in] */ VARIANT varData);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetPropertyItem )( 
-            IADsPropertyList __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ResetPropertyItem )( 
+            IADsPropertyList * This,
             /* [in] */ VARIANT varEntry);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PurgePropertyList )( 
-            IADsPropertyList __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PurgePropertyList )( 
+            IADsPropertyList * This);
         
         END_INTERFACE
     } IADsPropertyListVtbl;
 
     interface IADsPropertyList
     {
-        CONST_VTBL struct IADsPropertyListVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsPropertyListVtbl *lpVtbl;
     };
 
     
@@ -2785,8 +2840,8 @@ EXTERN_C const IID IID_IADsPropertyList;
 
 
 /* [propget][id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_get_PropertyCount_Proxy( 
-    IADsPropertyList __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    IADsPropertyList * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB IADsPropertyList_get_PropertyCount_Stub(
@@ -2797,8 +2852,8 @@ void __RPC_STUB IADsPropertyList_get_PropertyCount_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_Next_Proxy( 
-    IADsPropertyList __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+    IADsPropertyList * This,
+    /* [retval][out] */ VARIANT *pVariant);
 
 
 void __RPC_STUB IADsPropertyList_Next_Stub(
@@ -2809,7 +2864,7 @@ void __RPC_STUB IADsPropertyList_Next_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_Skip_Proxy( 
-    IADsPropertyList __RPC_FAR * This,
+    IADsPropertyList * This,
     /* [in] */ long cElements);
 
 
@@ -2821,7 +2876,7 @@ void __RPC_STUB IADsPropertyList_Skip_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_Reset_Proxy( 
-    IADsPropertyList __RPC_FAR * This);
+    IADsPropertyList * This);
 
 
 void __RPC_STUB IADsPropertyList_Reset_Stub(
@@ -2832,9 +2887,9 @@ void __RPC_STUB IADsPropertyList_Reset_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_Item_Proxy( 
-    IADsPropertyList __RPC_FAR * This,
+    IADsPropertyList * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+    /* [retval][out] */ VARIANT *pVariant);
 
 
 void __RPC_STUB IADsPropertyList_Item_Stub(
@@ -2845,10 +2900,10 @@ void __RPC_STUB IADsPropertyList_Item_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_GetPropertyItem_Proxy( 
-    IADsPropertyList __RPC_FAR * This,
+    IADsPropertyList * This,
     /* [in] */ BSTR bstrName,
     /* [in] */ LONG lnADsType,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+    /* [retval][out] */ VARIANT *pVariant);
 
 
 void __RPC_STUB IADsPropertyList_GetPropertyItem_Stub(
@@ -2859,7 +2914,7 @@ void __RPC_STUB IADsPropertyList_GetPropertyItem_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_PutPropertyItem_Proxy( 
-    IADsPropertyList __RPC_FAR * This,
+    IADsPropertyList * This,
     /* [in] */ VARIANT varData);
 
 
@@ -2871,7 +2926,7 @@ void __RPC_STUB IADsPropertyList_PutPropertyItem_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_ResetPropertyItem_Proxy( 
-    IADsPropertyList __RPC_FAR * This,
+    IADsPropertyList * This,
     /* [in] */ VARIANT varEntry);
 
 
@@ -2883,7 +2938,7 @@ void __RPC_STUB IADsPropertyList_ResetPropertyItem_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyList_PurgePropertyList_Proxy( 
-    IADsPropertyList __RPC_FAR * This);
+    IADsPropertyList * This);
 
 
 void __RPC_STUB IADsPropertyList_PurgePropertyList_Stub(
@@ -2915,25 +2970,25 @@ EXTERN_C const IID IID_IADsPropertyEntry;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Clear( void) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
             /* [in] */ BSTR bstrName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ADsType( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ADsType( 
             /* [in] */ long lnADsType) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ControlCode( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ControlCode( 
             /* [in] */ long lnControlCode) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Values( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Values( 
             /* [in] */ VARIANT vValues) = 0;
@@ -2946,79 +3001,79 @@ EXTERN_C const IID IID_IADsPropertyEntry;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsPropertyEntry __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsPropertyEntry * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsPropertyEntry __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsPropertyEntry * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsPropertyEntry __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsPropertyEntry * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsPropertyEntry __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsPropertyEntry * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsPropertyEntry __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsPropertyEntry * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsPropertyEntry __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsPropertyEntry * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsPropertyEntry __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsPropertyEntry * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clear )( 
-            IADsPropertyEntry __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Clear )( 
+            IADsPropertyEntry * This);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsPropertyEntry __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsPropertyEntry * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
-            IADsPropertyEntry __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+            IADsPropertyEntry * This,
             /* [in] */ BSTR bstrName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsType )( 
-            IADsPropertyEntry __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsType )( 
+            IADsPropertyEntry * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ADsType )( 
-            IADsPropertyEntry __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ADsType )( 
+            IADsPropertyEntry * This,
             /* [in] */ long lnADsType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ControlCode )( 
-            IADsPropertyEntry __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ControlCode )( 
+            IADsPropertyEntry * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ControlCode )( 
-            IADsPropertyEntry __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ControlCode )( 
+            IADsPropertyEntry * This,
             /* [in] */ long lnControlCode);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Values )( 
-            IADsPropertyEntry __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Values )( 
+            IADsPropertyEntry * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Values )( 
-            IADsPropertyEntry __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Values )( 
+            IADsPropertyEntry * This,
             /* [in] */ VARIANT vValues);
         
         END_INTERFACE
@@ -3026,7 +3081,7 @@ EXTERN_C const IID IID_IADsPropertyEntry;
 
     interface IADsPropertyEntry
     {
-        CONST_VTBL struct IADsPropertyEntryVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsPropertyEntryVtbl *lpVtbl;
     };
 
     
@@ -3092,7 +3147,7 @@ EXTERN_C const IID IID_IADsPropertyEntry;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_Clear_Proxy( 
-    IADsPropertyEntry __RPC_FAR * This);
+    IADsPropertyEntry * This);
 
 
 void __RPC_STUB IADsPropertyEntry_Clear_Stub(
@@ -3103,8 +3158,8 @@ void __RPC_STUB IADsPropertyEntry_Clear_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_get_Name_Proxy( 
-    IADsPropertyEntry __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPropertyEntry * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPropertyEntry_get_Name_Stub(
@@ -3115,7 +3170,7 @@ void __RPC_STUB IADsPropertyEntry_get_Name_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_put_Name_Proxy( 
-    IADsPropertyEntry __RPC_FAR * This,
+    IADsPropertyEntry * This,
     /* [in] */ BSTR bstrName);
 
 
@@ -3127,8 +3182,8 @@ void __RPC_STUB IADsPropertyEntry_put_Name_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_get_ADsType_Proxy( 
-    IADsPropertyEntry __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPropertyEntry * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPropertyEntry_get_ADsType_Stub(
@@ -3139,7 +3194,7 @@ void __RPC_STUB IADsPropertyEntry_get_ADsType_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_put_ADsType_Proxy( 
-    IADsPropertyEntry __RPC_FAR * This,
+    IADsPropertyEntry * This,
     /* [in] */ long lnADsType);
 
 
@@ -3151,8 +3206,8 @@ void __RPC_STUB IADsPropertyEntry_put_ADsType_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_get_ControlCode_Proxy( 
-    IADsPropertyEntry __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPropertyEntry * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPropertyEntry_get_ControlCode_Stub(
@@ -3163,7 +3218,7 @@ void __RPC_STUB IADsPropertyEntry_get_ControlCode_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_put_ControlCode_Proxy( 
-    IADsPropertyEntry __RPC_FAR * This,
+    IADsPropertyEntry * This,
     /* [in] */ long lnControlCode);
 
 
@@ -3175,8 +3230,8 @@ void __RPC_STUB IADsPropertyEntry_put_ControlCode_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_get_Values_Proxy( 
-    IADsPropertyEntry __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsPropertyEntry * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsPropertyEntry_get_Values_Stub(
@@ -3187,7 +3242,7 @@ void __RPC_STUB IADsPropertyEntry_get_Values_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyEntry_put_Values_Proxy( 
-    IADsPropertyEntry __RPC_FAR * This,
+    IADsPropertyEntry * This,
     /* [in] */ VARIANT vValues);
 
 
@@ -3228,73 +3283,73 @@ EXTERN_C const IID IID_IADsPropertyValue;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Clear( void) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ADsType( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ADsType( 
             /* [in] */ long lnADsType) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DNString( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DNString( 
             /* [in] */ BSTR bstrDNString) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CaseExactString( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_CaseExactString( 
             /* [in] */ BSTR bstrCaseExactString) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CaseIgnoreString( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_CaseIgnoreString( 
             /* [in] */ BSTR bstrCaseIgnoreString) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PrintableString( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PrintableString( 
             /* [in] */ BSTR bstrPrintableString) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NumericString( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NumericString( 
             /* [in] */ BSTR bstrNumericString) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Boolean( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Boolean( 
             /* [in] */ long lnBoolean) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Integer( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Integer( 
             /* [in] */ long lnInteger) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OctetString( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OctetString( 
             /* [in] */ VARIANT vOctetString) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SecurityDescriptor( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IDispatch **retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SecurityDescriptor( 
-            /* [in] */ IDispatch __RPC_FAR *pSecurityDescriptor) = 0;
+            /* [in] */ IDispatch *pSecurityDescriptor) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LargeInteger( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IDispatch **retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LargeInteger( 
-            /* [in] */ IDispatch __RPC_FAR *pLargeInteger) = 0;
+            /* [in] */ IDispatch *pLargeInteger) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UTCTime( 
-            /* [retval][out] */ DATE __RPC_FAR *retval) = 0;
+            /* [retval][out] */ DATE *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_UTCTime( 
             /* [in] */ DATE daUTCTime) = 0;
@@ -3307,143 +3362,143 @@ EXTERN_C const IID IID_IADsPropertyValue;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsPropertyValue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsPropertyValue * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsPropertyValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsPropertyValue * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsPropertyValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsPropertyValue * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsPropertyValue * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsPropertyValue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsPropertyValue * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsPropertyValue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsPropertyValue * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsPropertyValue __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsPropertyValue * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clear )( 
-            IADsPropertyValue __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Clear )( 
+            IADsPropertyValue * This);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsType )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsType )( 
+            IADsPropertyValue * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ADsType )( 
-            IADsPropertyValue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ADsType )( 
+            IADsPropertyValue * This,
             /* [in] */ long lnADsType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DNString )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DNString )( 
+            IADsPropertyValue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DNString )( 
-            IADsPropertyValue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DNString )( 
+            IADsPropertyValue * This,
             /* [in] */ BSTR bstrDNString);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CaseExactString )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CaseExactString )( 
+            IADsPropertyValue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CaseExactString )( 
-            IADsPropertyValue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CaseExactString )( 
+            IADsPropertyValue * This,
             /* [in] */ BSTR bstrCaseExactString);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CaseIgnoreString )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CaseIgnoreString )( 
+            IADsPropertyValue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CaseIgnoreString )( 
-            IADsPropertyValue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CaseIgnoreString )( 
+            IADsPropertyValue * This,
             /* [in] */ BSTR bstrCaseIgnoreString);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrintableString )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrintableString )( 
+            IADsPropertyValue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PrintableString )( 
-            IADsPropertyValue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PrintableString )( 
+            IADsPropertyValue * This,
             /* [in] */ BSTR bstrPrintableString);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NumericString )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumericString )( 
+            IADsPropertyValue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_NumericString )( 
-            IADsPropertyValue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NumericString )( 
+            IADsPropertyValue * This,
             /* [in] */ BSTR bstrNumericString);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Boolean )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Boolean )( 
+            IADsPropertyValue * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Boolean )( 
-            IADsPropertyValue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Boolean )( 
+            IADsPropertyValue * This,
             /* [in] */ long lnBoolean);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Integer )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Integer )( 
+            IADsPropertyValue * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Integer )( 
-            IADsPropertyValue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Integer )( 
+            IADsPropertyValue * This,
             /* [in] */ long lnInteger);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OctetString )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OctetString )( 
+            IADsPropertyValue * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OctetString )( 
-            IADsPropertyValue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OctetString )( 
+            IADsPropertyValue * This,
             /* [in] */ VARIANT vOctetString);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SecurityDescriptor )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SecurityDescriptor )( 
+            IADsPropertyValue * This,
+            /* [retval][out] */ IDispatch **retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SecurityDescriptor )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pSecurityDescriptor);
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SecurityDescriptor )( 
+            IADsPropertyValue * This,
+            /* [in] */ IDispatch *pSecurityDescriptor);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LargeInteger )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LargeInteger )( 
+            IADsPropertyValue * This,
+            /* [retval][out] */ IDispatch **retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LargeInteger )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pLargeInteger);
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LargeInteger )( 
+            IADsPropertyValue * This,
+            /* [in] */ IDispatch *pLargeInteger);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UTCTime )( 
-            IADsPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UTCTime )( 
+            IADsPropertyValue * This,
+            /* [retval][out] */ DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_UTCTime )( 
-            IADsPropertyValue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UTCTime )( 
+            IADsPropertyValue * This,
             /* [in] */ DATE daUTCTime);
         
         END_INTERFACE
@@ -3451,7 +3506,7 @@ EXTERN_C const IID IID_IADsPropertyValue;
 
     interface IADsPropertyValue
     {
-        CONST_VTBL struct IADsPropertyValueVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsPropertyValueVtbl *lpVtbl;
     };
 
     
@@ -3565,7 +3620,7 @@ EXTERN_C const IID IID_IADsPropertyValue;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_Clear_Proxy( 
-    IADsPropertyValue __RPC_FAR * This);
+    IADsPropertyValue * This);
 
 
 void __RPC_STUB IADsPropertyValue_Clear_Stub(
@@ -3576,8 +3631,8 @@ void __RPC_STUB IADsPropertyValue_Clear_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_ADsType_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPropertyValue * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_ADsType_Stub(
@@ -3588,7 +3643,7 @@ void __RPC_STUB IADsPropertyValue_get_ADsType_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_ADsType_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
+    IADsPropertyValue * This,
     /* [in] */ long lnADsType);
 
 
@@ -3600,8 +3655,8 @@ void __RPC_STUB IADsPropertyValue_put_ADsType_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_DNString_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPropertyValue * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_DNString_Stub(
@@ -3612,7 +3667,7 @@ void __RPC_STUB IADsPropertyValue_get_DNString_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_DNString_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
+    IADsPropertyValue * This,
     /* [in] */ BSTR bstrDNString);
 
 
@@ -3624,8 +3679,8 @@ void __RPC_STUB IADsPropertyValue_put_DNString_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_CaseExactString_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPropertyValue * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_CaseExactString_Stub(
@@ -3636,7 +3691,7 @@ void __RPC_STUB IADsPropertyValue_get_CaseExactString_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_CaseExactString_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
+    IADsPropertyValue * This,
     /* [in] */ BSTR bstrCaseExactString);
 
 
@@ -3648,8 +3703,8 @@ void __RPC_STUB IADsPropertyValue_put_CaseExactString_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_CaseIgnoreString_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPropertyValue * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_CaseIgnoreString_Stub(
@@ -3660,7 +3715,7 @@ void __RPC_STUB IADsPropertyValue_get_CaseIgnoreString_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_CaseIgnoreString_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
+    IADsPropertyValue * This,
     /* [in] */ BSTR bstrCaseIgnoreString);
 
 
@@ -3672,8 +3727,8 @@ void __RPC_STUB IADsPropertyValue_put_CaseIgnoreString_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_PrintableString_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPropertyValue * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_PrintableString_Stub(
@@ -3684,7 +3739,7 @@ void __RPC_STUB IADsPropertyValue_get_PrintableString_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_PrintableString_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
+    IADsPropertyValue * This,
     /* [in] */ BSTR bstrPrintableString);
 
 
@@ -3696,8 +3751,8 @@ void __RPC_STUB IADsPropertyValue_put_PrintableString_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_NumericString_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPropertyValue * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_NumericString_Stub(
@@ -3708,7 +3763,7 @@ void __RPC_STUB IADsPropertyValue_get_NumericString_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_NumericString_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
+    IADsPropertyValue * This,
     /* [in] */ BSTR bstrNumericString);
 
 
@@ -3720,8 +3775,8 @@ void __RPC_STUB IADsPropertyValue_put_NumericString_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_Boolean_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPropertyValue * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_Boolean_Stub(
@@ -3732,7 +3787,7 @@ void __RPC_STUB IADsPropertyValue_get_Boolean_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_Boolean_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
+    IADsPropertyValue * This,
     /* [in] */ long lnBoolean);
 
 
@@ -3744,8 +3799,8 @@ void __RPC_STUB IADsPropertyValue_put_Boolean_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_Integer_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPropertyValue * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_Integer_Stub(
@@ -3756,7 +3811,7 @@ void __RPC_STUB IADsPropertyValue_get_Integer_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_Integer_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
+    IADsPropertyValue * This,
     /* [in] */ long lnInteger);
 
 
@@ -3768,8 +3823,8 @@ void __RPC_STUB IADsPropertyValue_put_Integer_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_OctetString_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsPropertyValue * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_OctetString_Stub(
@@ -3780,7 +3835,7 @@ void __RPC_STUB IADsPropertyValue_get_OctetString_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_OctetString_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
+    IADsPropertyValue * This,
     /* [in] */ VARIANT vOctetString);
 
 
@@ -3792,8 +3847,8 @@ void __RPC_STUB IADsPropertyValue_put_OctetString_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_SecurityDescriptor_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retval);
+    IADsPropertyValue * This,
+    /* [retval][out] */ IDispatch **retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_SecurityDescriptor_Stub(
@@ -3804,8 +3859,8 @@ void __RPC_STUB IADsPropertyValue_get_SecurityDescriptor_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_SecurityDescriptor_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pSecurityDescriptor);
+    IADsPropertyValue * This,
+    /* [in] */ IDispatch *pSecurityDescriptor);
 
 
 void __RPC_STUB IADsPropertyValue_put_SecurityDescriptor_Stub(
@@ -3816,8 +3871,8 @@ void __RPC_STUB IADsPropertyValue_put_SecurityDescriptor_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_LargeInteger_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retval);
+    IADsPropertyValue * This,
+    /* [retval][out] */ IDispatch **retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_LargeInteger_Stub(
@@ -3828,8 +3883,8 @@ void __RPC_STUB IADsPropertyValue_get_LargeInteger_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_LargeInteger_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pLargeInteger);
+    IADsPropertyValue * This,
+    /* [in] */ IDispatch *pLargeInteger);
 
 
 void __RPC_STUB IADsPropertyValue_put_LargeInteger_Stub(
@@ -3840,8 +3895,8 @@ void __RPC_STUB IADsPropertyValue_put_LargeInteger_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_get_UTCTime_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *retval);
+    IADsPropertyValue * This,
+    /* [retval][out] */ DATE *retval);
 
 
 void __RPC_STUB IADsPropertyValue_get_UTCTime_Stub(
@@ -3852,7 +3907,7 @@ void __RPC_STUB IADsPropertyValue_get_UTCTime_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue_put_UTCTime_Proxy( 
-    IADsPropertyValue __RPC_FAR * This,
+    IADsPropertyValue * This,
     /* [in] */ DATE daUTCTime);
 
 
@@ -3883,8 +3938,8 @@ EXTERN_C const IID IID_IADsPropertyValue2;
     {
     public:
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetObjectProperty( 
-            /* [out][in] */ long __RPC_FAR *lnADsType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp) = 0;
+            /* [out][in] */ long *lnADsType,
+            /* [retval][out] */ VARIANT *pvProp) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE PutObjectProperty( 
             /* [in] */ long lnADsType,
@@ -3898,53 +3953,53 @@ EXTERN_C const IID IID_IADsPropertyValue2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsPropertyValue2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsPropertyValue2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsPropertyValue2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsPropertyValue2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsPropertyValue2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsPropertyValue2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsPropertyValue2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsPropertyValue2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsPropertyValue2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsPropertyValue2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsPropertyValue2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsPropertyValue2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsPropertyValue2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsPropertyValue2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectProperty )( 
-            IADsPropertyValue2 __RPC_FAR * This,
-            /* [out][in] */ long __RPC_FAR *lnADsType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetObjectProperty )( 
+            IADsPropertyValue2 * This,
+            /* [out][in] */ long *lnADsType,
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutObjectProperty )( 
-            IADsPropertyValue2 __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutObjectProperty )( 
+            IADsPropertyValue2 * This,
             /* [in] */ long lnADsType,
             /* [in] */ VARIANT vProp);
         
@@ -3953,7 +4008,7 @@ EXTERN_C const IID IID_IADsPropertyValue2;
 
     interface IADsPropertyValue2
     {
-        CONST_VTBL struct IADsPropertyValue2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsPropertyValue2Vtbl *lpVtbl;
     };
 
     
@@ -3998,9 +4053,9 @@ EXTERN_C const IID IID_IADsPropertyValue2;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue2_GetObjectProperty_Proxy( 
-    IADsPropertyValue2 __RPC_FAR * This,
-    /* [out][in] */ long __RPC_FAR *lnADsType,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+    IADsPropertyValue2 * This,
+    /* [out][in] */ long *lnADsType,
+    /* [retval][out] */ VARIANT *pvProp);
 
 
 void __RPC_STUB IADsPropertyValue2_GetObjectProperty_Stub(
@@ -4011,7 +4066,7 @@ void __RPC_STUB IADsPropertyValue2_GetObjectProperty_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPropertyValue2_PutObjectProperty_Proxy( 
-    IADsPropertyValue2 __RPC_FAR * This,
+    IADsPropertyValue2 * This,
     /* [in] */ long lnADsType,
     /* [in] */ VARIANT vProp);
 
@@ -4054,29 +4109,29 @@ EXTERN_C const IID IID_IPrivateDispatch;
             /* [in] */ long dwExtensionId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ADSIGetTypeInfoCount( 
-            /* [out] */ UINT __RPC_FAR *pctinfo) = 0;
+            /* [out] */ UINT *pctinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ADSIGetTypeInfo( 
             /* [in] */ UINT itinfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo) = 0;
+            /* [out] */ ITypeInfo **pptinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ADSIGetIDsOfNames( 
             /* [in] */ REFIID riid,
-            /* [in] */ OLECHAR __RPC_FAR *__RPC_FAR *rgszNames,
+            /* [in] */ OLECHAR **rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [out] */ DISPID __RPC_FAR *rgdispid) = 0;
+            /* [out] */ DISPID *rgdispid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ADSIInvoke( 
             /* [in] */ DISPID dispidMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [out] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr) = 0;
+            /* [in] */ DISPPARAMS *pdispparams,
+            /* [out] */ VARIANT *pvarResult,
+            /* [out] */ EXCEPINFO *pexcepinfo,
+            /* [out] */ UINT *puArgErr) = 0;
         
     };
     
@@ -4086,56 +4141,56 @@ EXTERN_C const IID IID_IPrivateDispatch;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPrivateDispatch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPrivateDispatch * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPrivateDispatch __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPrivateDispatch * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPrivateDispatch __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPrivateDispatch * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ADSIInitializeDispatchManager )( 
-            IPrivateDispatch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ADSIInitializeDispatchManager )( 
+            IPrivateDispatch * This,
             /* [in] */ long dwExtensionId);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ADSIGetTypeInfoCount )( 
-            IPrivateDispatch __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *ADSIGetTypeInfoCount )( 
+            IPrivateDispatch * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ADSIGetTypeInfo )( 
-            IPrivateDispatch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ADSIGetTypeInfo )( 
+            IPrivateDispatch * This,
             /* [in] */ UINT itinfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
+            /* [out] */ ITypeInfo **pptinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ADSIGetIDsOfNames )( 
-            IPrivateDispatch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ADSIGetIDsOfNames )( 
+            IPrivateDispatch * This,
             /* [in] */ REFIID riid,
-            /* [in] */ OLECHAR __RPC_FAR *__RPC_FAR *rgszNames,
+            /* [in] */ OLECHAR **rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [out] */ DISPID __RPC_FAR *rgdispid);
+            /* [out] */ DISPID *rgdispid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ADSIInvoke )( 
-            IPrivateDispatch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ADSIInvoke )( 
+            IPrivateDispatch * This,
             /* [in] */ DISPID dispidMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [out] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [in] */ DISPPARAMS *pdispparams,
+            /* [out] */ VARIANT *pvarResult,
+            /* [out] */ EXCEPINFO *pexcepinfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } IPrivateDispatchVtbl;
 
     interface IPrivateDispatch
     {
-        CONST_VTBL struct IPrivateDispatchVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPrivateDispatchVtbl *lpVtbl;
     };
 
     
@@ -4176,7 +4231,7 @@ EXTERN_C const IID IID_IPrivateDispatch;
 
 
 HRESULT STDMETHODCALLTYPE IPrivateDispatch_ADSIInitializeDispatchManager_Proxy( 
-    IPrivateDispatch __RPC_FAR * This,
+    IPrivateDispatch * This,
     /* [in] */ long dwExtensionId);
 
 
@@ -4188,8 +4243,8 @@ void __RPC_STUB IPrivateDispatch_ADSIInitializeDispatchManager_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPrivateDispatch_ADSIGetTypeInfoCount_Proxy( 
-    IPrivateDispatch __RPC_FAR * This,
-    /* [out] */ UINT __RPC_FAR *pctinfo);
+    IPrivateDispatch * This,
+    /* [out] */ UINT *pctinfo);
 
 
 void __RPC_STUB IPrivateDispatch_ADSIGetTypeInfoCount_Stub(
@@ -4200,10 +4255,10 @@ void __RPC_STUB IPrivateDispatch_ADSIGetTypeInfoCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPrivateDispatch_ADSIGetTypeInfo_Proxy( 
-    IPrivateDispatch __RPC_FAR * This,
+    IPrivateDispatch * This,
     /* [in] */ UINT itinfo,
     /* [in] */ LCID lcid,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
+    /* [out] */ ITypeInfo **pptinfo);
 
 
 void __RPC_STUB IPrivateDispatch_ADSIGetTypeInfo_Stub(
@@ -4214,12 +4269,12 @@ void __RPC_STUB IPrivateDispatch_ADSIGetTypeInfo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPrivateDispatch_ADSIGetIDsOfNames_Proxy( 
-    IPrivateDispatch __RPC_FAR * This,
+    IPrivateDispatch * This,
     /* [in] */ REFIID riid,
-    /* [in] */ OLECHAR __RPC_FAR *__RPC_FAR *rgszNames,
+    /* [in] */ OLECHAR **rgszNames,
     /* [in] */ UINT cNames,
     /* [in] */ LCID lcid,
-    /* [out] */ DISPID __RPC_FAR *rgdispid);
+    /* [out] */ DISPID *rgdispid);
 
 
 void __RPC_STUB IPrivateDispatch_ADSIGetIDsOfNames_Stub(
@@ -4230,15 +4285,15 @@ void __RPC_STUB IPrivateDispatch_ADSIGetIDsOfNames_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPrivateDispatch_ADSIInvoke_Proxy( 
-    IPrivateDispatch __RPC_FAR * This,
+    IPrivateDispatch * This,
     /* [in] */ DISPID dispidMember,
     /* [in] */ REFIID riid,
     /* [in] */ LCID lcid,
     /* [in] */ WORD wFlags,
-    /* [in] */ DISPPARAMS __RPC_FAR *pdispparams,
-    /* [out] */ VARIANT __RPC_FAR *pvarResult,
-    /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-    /* [out] */ UINT __RPC_FAR *puArgErr);
+    /* [in] */ DISPPARAMS *pdispparams,
+    /* [out] */ VARIANT *pvarResult,
+    /* [out] */ EXCEPINFO *pexcepinfo,
+    /* [out] */ UINT *puArgErr);
 
 
 void __RPC_STUB IPrivateDispatch_ADSIInvoke_Stub(
@@ -4282,32 +4337,32 @@ EXTERN_C const IID IID_IPrivateUnknown;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPrivateUnknown __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPrivateUnknown * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPrivateUnknown __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPrivateUnknown * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPrivateUnknown __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPrivateUnknown * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ADSIInitializeObject )( 
-            IPrivateUnknown __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ADSIInitializeObject )( 
+            IPrivateUnknown * This,
             /* [in] */ BSTR lpszUserName,
             /* [in] */ BSTR lpszPassword,
             /* [in] */ long lnReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ADSIReleaseObject )( 
-            IPrivateUnknown __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *ADSIReleaseObject )( 
+            IPrivateUnknown * This);
         
         END_INTERFACE
     } IPrivateUnknownVtbl;
 
     interface IPrivateUnknown
     {
-        CONST_VTBL struct IPrivateUnknownVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPrivateUnknownVtbl *lpVtbl;
     };
 
     
@@ -4339,7 +4394,7 @@ EXTERN_C const IID IID_IPrivateUnknown;
 
 
 HRESULT STDMETHODCALLTYPE IPrivateUnknown_ADSIInitializeObject_Proxy( 
-    IPrivateUnknown __RPC_FAR * This,
+    IPrivateUnknown * This,
     /* [in] */ BSTR lpszUserName,
     /* [in] */ BSTR lpszPassword,
     /* [in] */ long lnReserved);
@@ -4353,7 +4408,7 @@ void __RPC_STUB IPrivateUnknown_ADSIInitializeObject_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPrivateUnknown_ADSIReleaseObject_Proxy( 
-    IPrivateUnknown __RPC_FAR * This);
+    IPrivateUnknown * This);
 
 
 void __RPC_STUB IPrivateUnknown_ADSIReleaseObject_Stub(
@@ -4390,20 +4445,20 @@ EXTERN_C const IID IID_IADsExtension;
         
         virtual HRESULT STDMETHODCALLTYPE PrivateGetIDsOfNames( 
             /* [in] */ REFIID riid,
-            /* [in] */ OLECHAR __RPC_FAR *__RPC_FAR *rgszNames,
+            /* [in] */ OLECHAR **rgszNames,
             /* [in] */ unsigned int cNames,
             /* [in] */ LCID lcid,
-            /* [out] */ DISPID __RPC_FAR *rgDispid) = 0;
+            /* [out] */ DISPID *rgDispid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PrivateInvoke( 
             /* [in] */ DISPID dispidMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [out] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ unsigned int __RPC_FAR *puArgErr) = 0;
+            /* [in] */ DISPPARAMS *pdispparams,
+            /* [out] */ VARIANT *pvarResult,
+            /* [out] */ EXCEPINFO *pexcepinfo,
+            /* [out] */ unsigned int *puArgErr) = 0;
         
     };
     
@@ -4413,49 +4468,49 @@ EXTERN_C const IID IID_IADsExtension;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsExtension __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsExtension * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsExtension __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsExtension * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsExtension __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsExtension * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Operate )( 
-            IADsExtension __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Operate )( 
+            IADsExtension * This,
             /* [in] */ DWORD dwCode,
             /* [in] */ VARIANT varData1,
             /* [in] */ VARIANT varData2,
             /* [in] */ VARIANT varData3);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrivateGetIDsOfNames )( 
-            IADsExtension __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *PrivateGetIDsOfNames )( 
+            IADsExtension * This,
             /* [in] */ REFIID riid,
-            /* [in] */ OLECHAR __RPC_FAR *__RPC_FAR *rgszNames,
+            /* [in] */ OLECHAR **rgszNames,
             /* [in] */ unsigned int cNames,
             /* [in] */ LCID lcid,
-            /* [out] */ DISPID __RPC_FAR *rgDispid);
+            /* [out] */ DISPID *rgDispid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrivateInvoke )( 
-            IADsExtension __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *PrivateInvoke )( 
+            IADsExtension * This,
             /* [in] */ DISPID dispidMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [out] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ unsigned int __RPC_FAR *puArgErr);
+            /* [in] */ DISPPARAMS *pdispparams,
+            /* [out] */ VARIANT *pvarResult,
+            /* [out] */ EXCEPINFO *pexcepinfo,
+            /* [out] */ unsigned int *puArgErr);
         
         END_INTERFACE
     } IADsExtensionVtbl;
 
     interface IADsExtension
     {
-        CONST_VTBL struct IADsExtensionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsExtensionVtbl *lpVtbl;
     };
 
     
@@ -4490,7 +4545,7 @@ EXTERN_C const IID IID_IADsExtension;
 
 
 HRESULT STDMETHODCALLTYPE IADsExtension_Operate_Proxy( 
-    IADsExtension __RPC_FAR * This,
+    IADsExtension * This,
     /* [in] */ DWORD dwCode,
     /* [in] */ VARIANT varData1,
     /* [in] */ VARIANT varData2,
@@ -4505,12 +4560,12 @@ void __RPC_STUB IADsExtension_Operate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IADsExtension_PrivateGetIDsOfNames_Proxy( 
-    IADsExtension __RPC_FAR * This,
+    IADsExtension * This,
     /* [in] */ REFIID riid,
-    /* [in] */ OLECHAR __RPC_FAR *__RPC_FAR *rgszNames,
+    /* [in] */ OLECHAR **rgszNames,
     /* [in] */ unsigned int cNames,
     /* [in] */ LCID lcid,
-    /* [out] */ DISPID __RPC_FAR *rgDispid);
+    /* [out] */ DISPID *rgDispid);
 
 
 void __RPC_STUB IADsExtension_PrivateGetIDsOfNames_Stub(
@@ -4521,15 +4576,15 @@ void __RPC_STUB IADsExtension_PrivateGetIDsOfNames_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IADsExtension_PrivateInvoke_Proxy( 
-    IADsExtension __RPC_FAR * This,
+    IADsExtension * This,
     /* [in] */ DISPID dispidMember,
     /* [in] */ REFIID riid,
     /* [in] */ LCID lcid,
     /* [in] */ WORD wFlags,
-    /* [in] */ DISPPARAMS __RPC_FAR *pdispparams,
-    /* [out] */ VARIANT __RPC_FAR *pvarResult,
-    /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-    /* [out] */ unsigned int __RPC_FAR *puArgErr);
+    /* [in] */ DISPPARAMS *pdispparams,
+    /* [out] */ VARIANT *pvarResult,
+    /* [out] */ EXCEPINFO *pexcepinfo,
+    /* [out] */ unsigned int *puArgErr);
 
 
 void __RPC_STUB IADsExtension_PrivateInvoke_Stub(
@@ -4569,48 +4624,48 @@ EXTERN_C const IID IID_IADsDeleteOps;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsDeleteOps __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsDeleteOps * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsDeleteOps __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsDeleteOps * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsDeleteOps __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsDeleteOps * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsDeleteOps __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsDeleteOps * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsDeleteOps __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsDeleteOps * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsDeleteOps __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsDeleteOps * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsDeleteOps __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsDeleteOps * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteObject )( 
-            IADsDeleteOps __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DeleteObject )( 
+            IADsDeleteOps * This,
             /* [in] */ long lnFlags);
         
         END_INTERFACE
@@ -4618,7 +4673,7 @@ EXTERN_C const IID IID_IADsDeleteOps;
 
     interface IADsDeleteOps
     {
-        CONST_VTBL struct IADsDeleteOpsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsDeleteOpsVtbl *lpVtbl;
     };
 
     
@@ -4660,7 +4715,7 @@ EXTERN_C const IID IID_IADsDeleteOps;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsDeleteOps_DeleteObject_Proxy( 
-    IADsDeleteOps __RPC_FAR * This,
+    IADsDeleteOps * This,
     /* [in] */ long lnFlags);
 
 
@@ -4691,7 +4746,7 @@ EXTERN_C const IID IID_IADsNamespaces;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultContainer( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DefaultContainer( 
             /* [in] */ BSTR bstrDefaultContainer) = 0;
@@ -4704,108 +4759,108 @@ EXTERN_C const IID IID_IADsNamespaces;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsNamespaces __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsNamespaces * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsNamespaces __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsNamespaces * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsNamespaces __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsNamespaces * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsNamespaces __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsNamespaces * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsNamespaces __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsNamespaces * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsNamespaces __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsNamespaces * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsNamespaces __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsNamespaces * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsNamespaces __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsNamespaces * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsNamespaces __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsNamespaces * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsNamespaces __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsNamespaces * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsNamespaces __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsNamespaces * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsNamespaces __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsNamespaces * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsNamespaces __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsNamespaces * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsNamespaces __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsNamespaces * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsNamespaces __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsNamespaces * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsNamespaces __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsNamespaces * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsNamespaces __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsNamespaces * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsNamespaces __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsNamespaces * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsNamespaces __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsNamespaces * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsNamespaces __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsNamespaces * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultContainer )( 
-            IADsNamespaces __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultContainer )( 
+            IADsNamespaces * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DefaultContainer )( 
-            IADsNamespaces __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DefaultContainer )( 
+            IADsNamespaces * This,
             /* [in] */ BSTR bstrDefaultContainer);
         
         END_INTERFACE
@@ -4813,7 +4868,7 @@ EXTERN_C const IID IID_IADsNamespaces;
 
     interface IADsNamespaces
     {
-        CONST_VTBL struct IADsNamespacesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsNamespacesVtbl *lpVtbl;
     };
 
     
@@ -4898,8 +4953,8 @@ EXTERN_C const IID IID_IADsNamespaces;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsNamespaces_get_DefaultContainer_Proxy( 
-    IADsNamespaces __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsNamespaces * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsNamespaces_get_DefaultContainer_Stub(
@@ -4910,7 +4965,7 @@ void __RPC_STUB IADsNamespaces_get_DefaultContainer_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsNamespaces_put_DefaultContainer_Proxy( 
-    IADsNamespaces __RPC_FAR * This,
+    IADsNamespaces * This,
     /* [in] */ BSTR bstrDefaultContainer);
 
 
@@ -4941,94 +4996,94 @@ EXTERN_C const IID IID_IADsClass;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PrimaryInterface( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CLSID( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_CLSID( 
             /* [in] */ BSTR bstrCLSID) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OID( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OID( 
             /* [in] */ BSTR bstrOID) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Abstract( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Abstract( 
             /* [in] */ VARIANT_BOOL fAbstract) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Auxiliary( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Auxiliary( 
             /* [in] */ VARIANT_BOOL fAuxiliary) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MandatoryProperties( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MandatoryProperties( 
             /* [in] */ VARIANT vMandatoryProperties) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OptionalProperties( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OptionalProperties( 
             /* [in] */ VARIANT vOptionalProperties) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NamingProperties( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NamingProperties( 
             /* [in] */ VARIANT vNamingProperties) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DerivedFrom( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DerivedFrom( 
             /* [in] */ VARIANT vDerivedFrom) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AuxDerivedFrom( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AuxDerivedFrom( 
             /* [in] */ VARIANT vAuxDerivedFrom) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PossibleSuperiors( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PossibleSuperiors( 
             /* [in] */ VARIANT vPossibleSuperiors) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Containment( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Containment( 
             /* [in] */ VARIANT vContainment) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Container( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Container( 
             /* [in] */ VARIANT_BOOL fContainer) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HelpFileName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HelpFileName( 
             /* [in] */ BSTR bstrHelpFileName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HelpFileContext( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HelpFileContext( 
             /* [in] */ long lnHelpFileContext) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Qualifiers( 
-            /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *ppQualifiers) = 0;
+            /* [retval][out] */ IADsCollection **ppQualifiers) = 0;
         
     };
     
@@ -5038,228 +5093,228 @@ EXTERN_C const IID IID_IADsClass;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsClass __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsClass * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsClass __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsClass * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsClass __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsClass * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsClass __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsClass * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsClass __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsClass * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsClass __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsClass * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsClass __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsClass * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsClass * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsClass * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsClass * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsClass * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsClass * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsClass * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsClass __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsClass * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsClass __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsClass * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsClass __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsClass * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsClass __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsClass * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsClass __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsClass * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsClass __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsClass * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsClass __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsClass * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrimaryInterface )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrimaryInterface )( 
+            IADsClass * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CLSID )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CLSID )( 
+            IADsClass * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CLSID )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CLSID )( 
+            IADsClass * This,
             /* [in] */ BSTR bstrCLSID);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OID )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OID )( 
+            IADsClass * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OID )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OID )( 
+            IADsClass * This,
             /* [in] */ BSTR bstrOID);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Abstract )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Abstract )( 
+            IADsClass * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Abstract )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Abstract )( 
+            IADsClass * This,
             /* [in] */ VARIANT_BOOL fAbstract);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Auxiliary )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Auxiliary )( 
+            IADsClass * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Auxiliary )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Auxiliary )( 
+            IADsClass * This,
             /* [in] */ VARIANT_BOOL fAuxiliary);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MandatoryProperties )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MandatoryProperties )( 
+            IADsClass * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MandatoryProperties )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MandatoryProperties )( 
+            IADsClass * This,
             /* [in] */ VARIANT vMandatoryProperties);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OptionalProperties )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OptionalProperties )( 
+            IADsClass * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OptionalProperties )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OptionalProperties )( 
+            IADsClass * This,
             /* [in] */ VARIANT vOptionalProperties);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NamingProperties )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NamingProperties )( 
+            IADsClass * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_NamingProperties )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NamingProperties )( 
+            IADsClass * This,
             /* [in] */ VARIANT vNamingProperties);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DerivedFrom )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DerivedFrom )( 
+            IADsClass * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DerivedFrom )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DerivedFrom )( 
+            IADsClass * This,
             /* [in] */ VARIANT vDerivedFrom);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AuxDerivedFrom )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AuxDerivedFrom )( 
+            IADsClass * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AuxDerivedFrom )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AuxDerivedFrom )( 
+            IADsClass * This,
             /* [in] */ VARIANT vAuxDerivedFrom);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PossibleSuperiors )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PossibleSuperiors )( 
+            IADsClass * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PossibleSuperiors )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PossibleSuperiors )( 
+            IADsClass * This,
             /* [in] */ VARIANT vPossibleSuperiors);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Containment )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Containment )( 
+            IADsClass * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Containment )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Containment )( 
+            IADsClass * This,
             /* [in] */ VARIANT vContainment);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Container )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Container )( 
+            IADsClass * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Container )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Container )( 
+            IADsClass * This,
             /* [in] */ VARIANT_BOOL fContainer);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HelpFileName )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HelpFileName )( 
+            IADsClass * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HelpFileName )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HelpFileName )( 
+            IADsClass * This,
             /* [in] */ BSTR bstrHelpFileName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HelpFileContext )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HelpFileContext )( 
+            IADsClass * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HelpFileContext )( 
-            IADsClass __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HelpFileContext )( 
+            IADsClass * This,
             /* [in] */ long lnHelpFileContext);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Qualifiers )( 
-            IADsClass __RPC_FAR * This,
-            /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *ppQualifiers);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Qualifiers )( 
+            IADsClass * This,
+            /* [retval][out] */ IADsCollection **ppQualifiers);
         
         END_INTERFACE
     } IADsClassVtbl;
 
     interface IADsClass
     {
-        CONST_VTBL struct IADsClassVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsClassVtbl *lpVtbl;
     };
 
     
@@ -5428,8 +5483,8 @@ EXTERN_C const IID IID_IADsClass;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_PrimaryInterface_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsClass_get_PrimaryInterface_Stub(
@@ -5440,8 +5495,8 @@ void __RPC_STUB IADsClass_get_PrimaryInterface_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_CLSID_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsClass_get_CLSID_Stub(
@@ -5452,7 +5507,7 @@ void __RPC_STUB IADsClass_get_CLSID_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_CLSID_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ BSTR bstrCLSID);
 
 
@@ -5464,8 +5519,8 @@ void __RPC_STUB IADsClass_put_CLSID_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_OID_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsClass_get_OID_Stub(
@@ -5476,7 +5531,7 @@ void __RPC_STUB IADsClass_get_OID_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_OID_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ BSTR bstrOID);
 
 
@@ -5488,8 +5543,8 @@ void __RPC_STUB IADsClass_put_OID_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_Abstract_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsClass_get_Abstract_Stub(
@@ -5500,7 +5555,7 @@ void __RPC_STUB IADsClass_get_Abstract_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_Abstract_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ VARIANT_BOOL fAbstract);
 
 
@@ -5512,8 +5567,8 @@ void __RPC_STUB IADsClass_put_Abstract_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_Auxiliary_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsClass_get_Auxiliary_Stub(
@@ -5524,7 +5579,7 @@ void __RPC_STUB IADsClass_get_Auxiliary_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_Auxiliary_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ VARIANT_BOOL fAuxiliary);
 
 
@@ -5536,8 +5591,8 @@ void __RPC_STUB IADsClass_put_Auxiliary_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_MandatoryProperties_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_MandatoryProperties_Stub(
@@ -5548,7 +5603,7 @@ void __RPC_STUB IADsClass_get_MandatoryProperties_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_MandatoryProperties_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ VARIANT vMandatoryProperties);
 
 
@@ -5560,8 +5615,8 @@ void __RPC_STUB IADsClass_put_MandatoryProperties_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_OptionalProperties_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_OptionalProperties_Stub(
@@ -5572,7 +5627,7 @@ void __RPC_STUB IADsClass_get_OptionalProperties_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_OptionalProperties_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ VARIANT vOptionalProperties);
 
 
@@ -5584,8 +5639,8 @@ void __RPC_STUB IADsClass_put_OptionalProperties_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_NamingProperties_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_NamingProperties_Stub(
@@ -5596,7 +5651,7 @@ void __RPC_STUB IADsClass_get_NamingProperties_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_NamingProperties_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ VARIANT vNamingProperties);
 
 
@@ -5608,8 +5663,8 @@ void __RPC_STUB IADsClass_put_NamingProperties_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_DerivedFrom_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_DerivedFrom_Stub(
@@ -5620,7 +5675,7 @@ void __RPC_STUB IADsClass_get_DerivedFrom_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_DerivedFrom_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ VARIANT vDerivedFrom);
 
 
@@ -5632,8 +5687,8 @@ void __RPC_STUB IADsClass_put_DerivedFrom_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_AuxDerivedFrom_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_AuxDerivedFrom_Stub(
@@ -5644,7 +5699,7 @@ void __RPC_STUB IADsClass_get_AuxDerivedFrom_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_AuxDerivedFrom_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ VARIANT vAuxDerivedFrom);
 
 
@@ -5656,8 +5711,8 @@ void __RPC_STUB IADsClass_put_AuxDerivedFrom_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_PossibleSuperiors_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_PossibleSuperiors_Stub(
@@ -5668,7 +5723,7 @@ void __RPC_STUB IADsClass_get_PossibleSuperiors_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_PossibleSuperiors_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ VARIANT vPossibleSuperiors);
 
 
@@ -5680,8 +5735,8 @@ void __RPC_STUB IADsClass_put_PossibleSuperiors_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_Containment_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsClass_get_Containment_Stub(
@@ -5692,7 +5747,7 @@ void __RPC_STUB IADsClass_get_Containment_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_Containment_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ VARIANT vContainment);
 
 
@@ -5704,8 +5759,8 @@ void __RPC_STUB IADsClass_put_Containment_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_Container_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsClass_get_Container_Stub(
@@ -5716,7 +5771,7 @@ void __RPC_STUB IADsClass_get_Container_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_Container_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ VARIANT_BOOL fContainer);
 
 
@@ -5728,8 +5783,8 @@ void __RPC_STUB IADsClass_put_Container_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_HelpFileName_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsClass_get_HelpFileName_Stub(
@@ -5740,7 +5795,7 @@ void __RPC_STUB IADsClass_get_HelpFileName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_HelpFileName_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ BSTR bstrHelpFileName);
 
 
@@ -5752,8 +5807,8 @@ void __RPC_STUB IADsClass_put_HelpFileName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsClass_get_HelpFileContext_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsClass * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsClass_get_HelpFileContext_Stub(
@@ -5764,7 +5819,7 @@ void __RPC_STUB IADsClass_get_HelpFileContext_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsClass_put_HelpFileContext_Proxy( 
-    IADsClass __RPC_FAR * This,
+    IADsClass * This,
     /* [in] */ long lnHelpFileContext);
 
 
@@ -5776,8 +5831,8 @@ void __RPC_STUB IADsClass_put_HelpFileContext_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsClass_Qualifiers_Proxy( 
-    IADsClass __RPC_FAR * This,
-    /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *ppQualifiers);
+    IADsClass * This,
+    /* [retval][out] */ IADsCollection **ppQualifiers);
 
 
 void __RPC_STUB IADsClass_Qualifiers_Stub(
@@ -5807,37 +5862,37 @@ EXTERN_C const IID IID_IADsProperty;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OID( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OID( 
             /* [in] */ BSTR bstrOID) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Syntax( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Syntax( 
             /* [in] */ BSTR bstrSyntax) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxRange( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxRange( 
             /* [in] */ long lnMaxRange) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MinRange( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MinRange( 
             /* [in] */ long lnMinRange) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MultiValued( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MultiValued( 
             /* [in] */ VARIANT_BOOL fMultiValued) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Qualifiers( 
-            /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *ppQualifiers) = 0;
+            /* [retval][out] */ IADsCollection **ppQualifiers) = 0;
         
     };
     
@@ -5847,152 +5902,152 @@ EXTERN_C const IID IID_IADsProperty;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsProperty __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsProperty * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsProperty __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsProperty * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsProperty __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsProperty * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsProperty __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsProperty * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsProperty __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsProperty * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsProperty __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsProperty * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsProperty __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsProperty * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsProperty __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsProperty * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsProperty __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsProperty * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsProperty __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsProperty * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsProperty __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsProperty * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsProperty __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsProperty * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsProperty __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsProperty * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsProperty __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsProperty * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsProperty __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsProperty * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsProperty __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsProperty * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsProperty __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsProperty * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsProperty __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsProperty * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsProperty __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsProperty * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsProperty __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsProperty * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OID )( 
-            IADsProperty __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OID )( 
+            IADsProperty * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OID )( 
-            IADsProperty __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OID )( 
+            IADsProperty * This,
             /* [in] */ BSTR bstrOID);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Syntax )( 
-            IADsProperty __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Syntax )( 
+            IADsProperty * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Syntax )( 
-            IADsProperty __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Syntax )( 
+            IADsProperty * This,
             /* [in] */ BSTR bstrSyntax);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MaxRange )( 
-            IADsProperty __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxRange )( 
+            IADsProperty * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MaxRange )( 
-            IADsProperty __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxRange )( 
+            IADsProperty * This,
             /* [in] */ long lnMaxRange);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MinRange )( 
-            IADsProperty __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinRange )( 
+            IADsProperty * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MinRange )( 
-            IADsProperty __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MinRange )( 
+            IADsProperty * This,
             /* [in] */ long lnMinRange);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MultiValued )( 
-            IADsProperty __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MultiValued )( 
+            IADsProperty * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MultiValued )( 
-            IADsProperty __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MultiValued )( 
+            IADsProperty * This,
             /* [in] */ VARIANT_BOOL fMultiValued);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Qualifiers )( 
-            IADsProperty __RPC_FAR * This,
-            /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *ppQualifiers);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Qualifiers )( 
+            IADsProperty * This,
+            /* [retval][out] */ IADsCollection **ppQualifiers);
         
         END_INTERFACE
     } IADsPropertyVtbl;
 
     interface IADsProperty
     {
-        CONST_VTBL struct IADsPropertyVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsPropertyVtbl *lpVtbl;
     };
 
     
@@ -6104,8 +6159,8 @@ EXTERN_C const IID IID_IADsProperty;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsProperty_get_OID_Proxy( 
-    IADsProperty __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsProperty * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsProperty_get_OID_Stub(
@@ -6116,7 +6171,7 @@ void __RPC_STUB IADsProperty_get_OID_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsProperty_put_OID_Proxy( 
-    IADsProperty __RPC_FAR * This,
+    IADsProperty * This,
     /* [in] */ BSTR bstrOID);
 
 
@@ -6128,8 +6183,8 @@ void __RPC_STUB IADsProperty_put_OID_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsProperty_get_Syntax_Proxy( 
-    IADsProperty __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsProperty * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsProperty_get_Syntax_Stub(
@@ -6140,7 +6195,7 @@ void __RPC_STUB IADsProperty_get_Syntax_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsProperty_put_Syntax_Proxy( 
-    IADsProperty __RPC_FAR * This,
+    IADsProperty * This,
     /* [in] */ BSTR bstrSyntax);
 
 
@@ -6152,8 +6207,8 @@ void __RPC_STUB IADsProperty_put_Syntax_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsProperty_get_MaxRange_Proxy( 
-    IADsProperty __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsProperty * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsProperty_get_MaxRange_Stub(
@@ -6164,7 +6219,7 @@ void __RPC_STUB IADsProperty_get_MaxRange_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsProperty_put_MaxRange_Proxy( 
-    IADsProperty __RPC_FAR * This,
+    IADsProperty * This,
     /* [in] */ long lnMaxRange);
 
 
@@ -6176,8 +6231,8 @@ void __RPC_STUB IADsProperty_put_MaxRange_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsProperty_get_MinRange_Proxy( 
-    IADsProperty __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsProperty * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsProperty_get_MinRange_Stub(
@@ -6188,7 +6243,7 @@ void __RPC_STUB IADsProperty_get_MinRange_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsProperty_put_MinRange_Proxy( 
-    IADsProperty __RPC_FAR * This,
+    IADsProperty * This,
     /* [in] */ long lnMinRange);
 
 
@@ -6200,8 +6255,8 @@ void __RPC_STUB IADsProperty_put_MinRange_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsProperty_get_MultiValued_Proxy( 
-    IADsProperty __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsProperty * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsProperty_get_MultiValued_Stub(
@@ -6212,7 +6267,7 @@ void __RPC_STUB IADsProperty_get_MultiValued_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsProperty_put_MultiValued_Proxy( 
-    IADsProperty __RPC_FAR * This,
+    IADsProperty * This,
     /* [in] */ VARIANT_BOOL fMultiValued);
 
 
@@ -6224,8 +6279,8 @@ void __RPC_STUB IADsProperty_put_MultiValued_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsProperty_Qualifiers_Proxy( 
-    IADsProperty __RPC_FAR * This,
-    /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *ppQualifiers);
+    IADsProperty * This,
+    /* [retval][out] */ IADsCollection **ppQualifiers);
 
 
 void __RPC_STUB IADsProperty_Qualifiers_Stub(
@@ -6255,7 +6310,7 @@ EXTERN_C const IID IID_IADsSyntax;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OleAutoDataType( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OleAutoDataType( 
             /* [in] */ long lnOleAutoDataType) = 0;
@@ -6268,108 +6323,108 @@ EXTERN_C const IID IID_IADsSyntax;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsSyntax __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsSyntax * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsSyntax __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsSyntax * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsSyntax __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsSyntax * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsSyntax __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsSyntax * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsSyntax __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsSyntax * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsSyntax __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsSyntax * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsSyntax __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsSyntax * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsSyntax __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsSyntax * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsSyntax __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsSyntax * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsSyntax __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsSyntax * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsSyntax __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsSyntax * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsSyntax __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsSyntax * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsSyntax __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsSyntax * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsSyntax __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsSyntax * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsSyntax __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsSyntax * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsSyntax __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsSyntax * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsSyntax __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsSyntax * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsSyntax __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsSyntax * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsSyntax __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsSyntax * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsSyntax __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsSyntax * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OleAutoDataType )( 
-            IADsSyntax __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OleAutoDataType )( 
+            IADsSyntax * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OleAutoDataType )( 
-            IADsSyntax __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OleAutoDataType )( 
+            IADsSyntax * This,
             /* [in] */ long lnOleAutoDataType);
         
         END_INTERFACE
@@ -6377,7 +6432,7 @@ EXTERN_C const IID IID_IADsSyntax;
 
     interface IADsSyntax
     {
-        CONST_VTBL struct IADsSyntaxVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsSyntaxVtbl *lpVtbl;
     };
 
     
@@ -6462,8 +6517,8 @@ EXTERN_C const IID IID_IADsSyntax;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSyntax_get_OleAutoDataType_Proxy( 
-    IADsSyntax __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsSyntax * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsSyntax_get_OleAutoDataType_Stub(
@@ -6474,7 +6529,7 @@ void __RPC_STUB IADsSyntax_get_OleAutoDataType_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSyntax_put_OleAutoDataType_Proxy( 
-    IADsSyntax __RPC_FAR * This,
+    IADsSyntax * This,
     /* [in] */ long lnOleAutoDataType);
 
 
@@ -6505,25 +6560,25 @@ EXTERN_C const IID IID_IADsLocality;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bstrDescription) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LocalityName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LocalityName( 
             /* [in] */ BSTR bstrLocalityName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PostalAddress( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PostalAddress( 
             /* [in] */ BSTR bstrPostalAddress) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SeeAlso( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SeeAlso( 
             /* [in] */ VARIANT vSeeAlso) = 0;
@@ -6536,132 +6591,132 @@ EXTERN_C const IID IID_IADsLocality;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsLocality __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsLocality * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsLocality __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsLocality * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsLocality __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsLocality * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsLocality __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsLocality * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsLocality __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsLocality * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsLocality __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsLocality * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsLocality __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsLocality * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsLocality __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsLocality * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsLocality __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsLocality * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsLocality __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsLocality * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsLocality __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsLocality * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsLocality __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsLocality * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsLocality __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsLocality * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsLocality __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsLocality * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsLocality __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsLocality * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsLocality __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsLocality * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsLocality __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsLocality * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsLocality __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsLocality * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsLocality __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsLocality * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsLocality __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsLocality * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IADsLocality __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IADsLocality * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IADsLocality __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IADsLocality * This,
             /* [in] */ BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalityName )( 
-            IADsLocality __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LocalityName )( 
+            IADsLocality * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalityName )( 
-            IADsLocality __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LocalityName )( 
+            IADsLocality * This,
             /* [in] */ BSTR bstrLocalityName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PostalAddress )( 
-            IADsLocality __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PostalAddress )( 
+            IADsLocality * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PostalAddress )( 
-            IADsLocality __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PostalAddress )( 
+            IADsLocality * This,
             /* [in] */ BSTR bstrPostalAddress);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SeeAlso )( 
-            IADsLocality __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SeeAlso )( 
+            IADsLocality * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SeeAlso )( 
-            IADsLocality __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SeeAlso )( 
+            IADsLocality * This,
             /* [in] */ VARIANT vSeeAlso);
         
         END_INTERFACE
@@ -6669,7 +6724,7 @@ EXTERN_C const IID IID_IADsLocality;
 
     interface IADsLocality
     {
-        CONST_VTBL struct IADsLocalityVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsLocalityVtbl *lpVtbl;
     };
 
     
@@ -6772,8 +6827,8 @@ EXTERN_C const IID IID_IADsLocality;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsLocality_get_Description_Proxy( 
-    IADsLocality __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsLocality * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsLocality_get_Description_Stub(
@@ -6784,7 +6839,7 @@ void __RPC_STUB IADsLocality_get_Description_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsLocality_put_Description_Proxy( 
-    IADsLocality __RPC_FAR * This,
+    IADsLocality * This,
     /* [in] */ BSTR bstrDescription);
 
 
@@ -6796,8 +6851,8 @@ void __RPC_STUB IADsLocality_put_Description_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsLocality_get_LocalityName_Proxy( 
-    IADsLocality __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsLocality * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsLocality_get_LocalityName_Stub(
@@ -6808,7 +6863,7 @@ void __RPC_STUB IADsLocality_get_LocalityName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsLocality_put_LocalityName_Proxy( 
-    IADsLocality __RPC_FAR * This,
+    IADsLocality * This,
     /* [in] */ BSTR bstrLocalityName);
 
 
@@ -6820,8 +6875,8 @@ void __RPC_STUB IADsLocality_put_LocalityName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsLocality_get_PostalAddress_Proxy( 
-    IADsLocality __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsLocality * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsLocality_get_PostalAddress_Stub(
@@ -6832,7 +6887,7 @@ void __RPC_STUB IADsLocality_get_PostalAddress_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsLocality_put_PostalAddress_Proxy( 
-    IADsLocality __RPC_FAR * This,
+    IADsLocality * This,
     /* [in] */ BSTR bstrPostalAddress);
 
 
@@ -6844,8 +6899,8 @@ void __RPC_STUB IADsLocality_put_PostalAddress_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsLocality_get_SeeAlso_Proxy( 
-    IADsLocality __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsLocality * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsLocality_get_SeeAlso_Stub(
@@ -6856,7 +6911,7 @@ void __RPC_STUB IADsLocality_get_SeeAlso_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsLocality_put_SeeAlso_Proxy( 
-    IADsLocality __RPC_FAR * This,
+    IADsLocality * This,
     /* [in] */ VARIANT vSeeAlso);
 
 
@@ -6887,37 +6942,37 @@ EXTERN_C const IID IID_IADsO;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bstrDescription) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LocalityName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LocalityName( 
             /* [in] */ BSTR bstrLocalityName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PostalAddress( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PostalAddress( 
             /* [in] */ BSTR bstrPostalAddress) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephoneNumber( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephoneNumber( 
             /* [in] */ BSTR bstrTelephoneNumber) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FaxNumber( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FaxNumber( 
             /* [in] */ BSTR bstrFaxNumber) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SeeAlso( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SeeAlso( 
             /* [in] */ VARIANT vSeeAlso) = 0;
@@ -6930,148 +6985,148 @@ EXTERN_C const IID IID_IADsO;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsO __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsO * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsO __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsO * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsO __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsO * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsO __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsO * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsO __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsO * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsO __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsO * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsO __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsO * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsO __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsO * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsO __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsO * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsO __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsO * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsO __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsO * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsO __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsO * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsO __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsO * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsO __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsO * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsO __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsO * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsO __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsO * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsO __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsO * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsO __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsO * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsO __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsO * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsO __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsO * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IADsO __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IADsO * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IADsO __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IADsO * This,
             /* [in] */ BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalityName )( 
-            IADsO __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LocalityName )( 
+            IADsO * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalityName )( 
-            IADsO __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LocalityName )( 
+            IADsO * This,
             /* [in] */ BSTR bstrLocalityName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PostalAddress )( 
-            IADsO __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PostalAddress )( 
+            IADsO * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PostalAddress )( 
-            IADsO __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PostalAddress )( 
+            IADsO * This,
             /* [in] */ BSTR bstrPostalAddress);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TelephoneNumber )( 
-            IADsO __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephoneNumber )( 
+            IADsO * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TelephoneNumber )( 
-            IADsO __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephoneNumber )( 
+            IADsO * This,
             /* [in] */ BSTR bstrTelephoneNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FaxNumber )( 
-            IADsO __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
+            IADsO * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FaxNumber )( 
-            IADsO __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FaxNumber )( 
+            IADsO * This,
             /* [in] */ BSTR bstrFaxNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SeeAlso )( 
-            IADsO __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SeeAlso )( 
+            IADsO * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SeeAlso )( 
-            IADsO __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SeeAlso )( 
+            IADsO * This,
             /* [in] */ VARIANT vSeeAlso);
         
         END_INTERFACE
@@ -7079,7 +7134,7 @@ EXTERN_C const IID IID_IADsO;
 
     interface IADsO
     {
-        CONST_VTBL struct IADsOVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsOVtbl *lpVtbl;
     };
 
     
@@ -7194,8 +7249,8 @@ EXTERN_C const IID IID_IADsO;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsO_get_Description_Proxy( 
-    IADsO __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsO * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsO_get_Description_Stub(
@@ -7206,7 +7261,7 @@ void __RPC_STUB IADsO_get_Description_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsO_put_Description_Proxy( 
-    IADsO __RPC_FAR * This,
+    IADsO * This,
     /* [in] */ BSTR bstrDescription);
 
 
@@ -7218,8 +7273,8 @@ void __RPC_STUB IADsO_put_Description_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsO_get_LocalityName_Proxy( 
-    IADsO __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsO * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsO_get_LocalityName_Stub(
@@ -7230,7 +7285,7 @@ void __RPC_STUB IADsO_get_LocalityName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsO_put_LocalityName_Proxy( 
-    IADsO __RPC_FAR * This,
+    IADsO * This,
     /* [in] */ BSTR bstrLocalityName);
 
 
@@ -7242,8 +7297,8 @@ void __RPC_STUB IADsO_put_LocalityName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsO_get_PostalAddress_Proxy( 
-    IADsO __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsO * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsO_get_PostalAddress_Stub(
@@ -7254,7 +7309,7 @@ void __RPC_STUB IADsO_get_PostalAddress_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsO_put_PostalAddress_Proxy( 
-    IADsO __RPC_FAR * This,
+    IADsO * This,
     /* [in] */ BSTR bstrPostalAddress);
 
 
@@ -7266,8 +7321,8 @@ void __RPC_STUB IADsO_put_PostalAddress_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsO_get_TelephoneNumber_Proxy( 
-    IADsO __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsO * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsO_get_TelephoneNumber_Stub(
@@ -7278,7 +7333,7 @@ void __RPC_STUB IADsO_get_TelephoneNumber_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsO_put_TelephoneNumber_Proxy( 
-    IADsO __RPC_FAR * This,
+    IADsO * This,
     /* [in] */ BSTR bstrTelephoneNumber);
 
 
@@ -7290,8 +7345,8 @@ void __RPC_STUB IADsO_put_TelephoneNumber_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsO_get_FaxNumber_Proxy( 
-    IADsO __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsO * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsO_get_FaxNumber_Stub(
@@ -7302,7 +7357,7 @@ void __RPC_STUB IADsO_get_FaxNumber_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsO_put_FaxNumber_Proxy( 
-    IADsO __RPC_FAR * This,
+    IADsO * This,
     /* [in] */ BSTR bstrFaxNumber);
 
 
@@ -7314,8 +7369,8 @@ void __RPC_STUB IADsO_put_FaxNumber_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsO_get_SeeAlso_Proxy( 
-    IADsO __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsO * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsO_get_SeeAlso_Stub(
@@ -7326,7 +7381,7 @@ void __RPC_STUB IADsO_get_SeeAlso_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsO_put_SeeAlso_Proxy( 
-    IADsO __RPC_FAR * This,
+    IADsO * This,
     /* [in] */ VARIANT vSeeAlso);
 
 
@@ -7357,43 +7412,43 @@ EXTERN_C const IID IID_IADsOU;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bstrDescription) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LocalityName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LocalityName( 
             /* [in] */ BSTR bstrLocalityName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PostalAddress( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PostalAddress( 
             /* [in] */ BSTR bstrPostalAddress) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephoneNumber( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephoneNumber( 
             /* [in] */ BSTR bstrTelephoneNumber) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FaxNumber( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FaxNumber( 
             /* [in] */ BSTR bstrFaxNumber) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SeeAlso( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SeeAlso( 
             /* [in] */ VARIANT vSeeAlso) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BusinessCategory( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BusinessCategory( 
             /* [in] */ BSTR bstrBusinessCategory) = 0;
@@ -7406,156 +7461,156 @@ EXTERN_C const IID IID_IADsOU;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsOU __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsOU * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsOU __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsOU * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsOU __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsOU * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsOU __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsOU * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsOU __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsOU * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsOU __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsOU * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsOU __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsOU * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsOU __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsOU * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsOU __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsOU * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsOU __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsOU * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsOU __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsOU * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsOU __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsOU * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsOU __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsOU * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsOU __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsOU * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsOU __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsOU * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsOU __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsOU * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsOU __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsOU * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsOU __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsOU * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsOU __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsOU * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsOU __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsOU * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IADsOU __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IADsOU * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IADsOU __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IADsOU * This,
             /* [in] */ BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalityName )( 
-            IADsOU __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LocalityName )( 
+            IADsOU * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalityName )( 
-            IADsOU __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LocalityName )( 
+            IADsOU * This,
             /* [in] */ BSTR bstrLocalityName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PostalAddress )( 
-            IADsOU __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PostalAddress )( 
+            IADsOU * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PostalAddress )( 
-            IADsOU __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PostalAddress )( 
+            IADsOU * This,
             /* [in] */ BSTR bstrPostalAddress);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TelephoneNumber )( 
-            IADsOU __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephoneNumber )( 
+            IADsOU * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TelephoneNumber )( 
-            IADsOU __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephoneNumber )( 
+            IADsOU * This,
             /* [in] */ BSTR bstrTelephoneNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FaxNumber )( 
-            IADsOU __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
+            IADsOU * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FaxNumber )( 
-            IADsOU __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FaxNumber )( 
+            IADsOU * This,
             /* [in] */ BSTR bstrFaxNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SeeAlso )( 
-            IADsOU __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SeeAlso )( 
+            IADsOU * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SeeAlso )( 
-            IADsOU __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SeeAlso )( 
+            IADsOU * This,
             /* [in] */ VARIANT vSeeAlso);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BusinessCategory )( 
-            IADsOU __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BusinessCategory )( 
+            IADsOU * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BusinessCategory )( 
-            IADsOU __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BusinessCategory )( 
+            IADsOU * This,
             /* [in] */ BSTR bstrBusinessCategory);
         
         END_INTERFACE
@@ -7563,7 +7618,7 @@ EXTERN_C const IID IID_IADsOU;
 
     interface IADsOU
     {
-        CONST_VTBL struct IADsOUVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsOUVtbl *lpVtbl;
     };
 
     
@@ -7684,8 +7739,8 @@ EXTERN_C const IID IID_IADsOU;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_Description_Proxy( 
-    IADsOU __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsOU * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsOU_get_Description_Stub(
@@ -7696,7 +7751,7 @@ void __RPC_STUB IADsOU_get_Description_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_Description_Proxy( 
-    IADsOU __RPC_FAR * This,
+    IADsOU * This,
     /* [in] */ BSTR bstrDescription);
 
 
@@ -7708,8 +7763,8 @@ void __RPC_STUB IADsOU_put_Description_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_LocalityName_Proxy( 
-    IADsOU __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsOU * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsOU_get_LocalityName_Stub(
@@ -7720,7 +7775,7 @@ void __RPC_STUB IADsOU_get_LocalityName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_LocalityName_Proxy( 
-    IADsOU __RPC_FAR * This,
+    IADsOU * This,
     /* [in] */ BSTR bstrLocalityName);
 
 
@@ -7732,8 +7787,8 @@ void __RPC_STUB IADsOU_put_LocalityName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_PostalAddress_Proxy( 
-    IADsOU __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsOU * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsOU_get_PostalAddress_Stub(
@@ -7744,7 +7799,7 @@ void __RPC_STUB IADsOU_get_PostalAddress_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_PostalAddress_Proxy( 
-    IADsOU __RPC_FAR * This,
+    IADsOU * This,
     /* [in] */ BSTR bstrPostalAddress);
 
 
@@ -7756,8 +7811,8 @@ void __RPC_STUB IADsOU_put_PostalAddress_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_TelephoneNumber_Proxy( 
-    IADsOU __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsOU * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsOU_get_TelephoneNumber_Stub(
@@ -7768,7 +7823,7 @@ void __RPC_STUB IADsOU_get_TelephoneNumber_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_TelephoneNumber_Proxy( 
-    IADsOU __RPC_FAR * This,
+    IADsOU * This,
     /* [in] */ BSTR bstrTelephoneNumber);
 
 
@@ -7780,8 +7835,8 @@ void __RPC_STUB IADsOU_put_TelephoneNumber_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_FaxNumber_Proxy( 
-    IADsOU __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsOU * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsOU_get_FaxNumber_Stub(
@@ -7792,7 +7847,7 @@ void __RPC_STUB IADsOU_get_FaxNumber_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_FaxNumber_Proxy( 
-    IADsOU __RPC_FAR * This,
+    IADsOU * This,
     /* [in] */ BSTR bstrFaxNumber);
 
 
@@ -7804,8 +7859,8 @@ void __RPC_STUB IADsOU_put_FaxNumber_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_SeeAlso_Proxy( 
-    IADsOU __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsOU * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsOU_get_SeeAlso_Stub(
@@ -7816,7 +7871,7 @@ void __RPC_STUB IADsOU_get_SeeAlso_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_SeeAlso_Proxy( 
-    IADsOU __RPC_FAR * This,
+    IADsOU * This,
     /* [in] */ VARIANT vSeeAlso);
 
 
@@ -7828,8 +7883,8 @@ void __RPC_STUB IADsOU_put_SeeAlso_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOU_get_BusinessCategory_Proxy( 
-    IADsOU __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsOU * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsOU_get_BusinessCategory_Stub(
@@ -7840,7 +7895,7 @@ void __RPC_STUB IADsOU_get_BusinessCategory_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOU_put_BusinessCategory_Proxy( 
-    IADsOU __RPC_FAR * This,
+    IADsOU * This,
     /* [in] */ BSTR bstrBusinessCategory);
 
 
@@ -7871,52 +7926,52 @@ EXTERN_C const IID IID_IADsDomain;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_IsWorkgroup( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MinPasswordLength( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MinPasswordLength( 
             /* [in] */ long lnMinPasswordLength) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MinPasswordAge( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MinPasswordAge( 
             /* [in] */ long lnMinPasswordAge) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxPasswordAge( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxPasswordAge( 
             /* [in] */ long lnMaxPasswordAge) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxBadPasswordsAllowed( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxBadPasswordsAllowed( 
             /* [in] */ long lnMaxBadPasswordsAllowed) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PasswordHistoryLength( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PasswordHistoryLength( 
             /* [in] */ long lnPasswordHistoryLength) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PasswordAttributes( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PasswordAttributes( 
             /* [in] */ long lnPasswordAttributes) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AutoUnlockInterval( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AutoUnlockInterval( 
             /* [in] */ long lnAutoUnlockInterval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LockoutObservationInterval( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LockoutObservationInterval( 
             /* [in] */ long lnLockoutObservationInterval) = 0;
@@ -7929,168 +7984,168 @@ EXTERN_C const IID IID_IADsDomain;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsDomain __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsDomain * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsDomain __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsDomain * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsDomain __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsDomain * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsDomain __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsDomain * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsDomain __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsDomain * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsDomain __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsDomain * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsDomain __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsDomain * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsDomain * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsDomain * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsDomain * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsDomain * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsDomain * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsDomain * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsDomain __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsDomain * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsDomain __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsDomain * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsDomain __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsDomain * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsDomain __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsDomain * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsDomain __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsDomain * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsDomain __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsDomain * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsDomain __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsDomain * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsWorkgroup )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsWorkgroup )( 
+            IADsDomain * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MinPasswordLength )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinPasswordLength )( 
+            IADsDomain * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MinPasswordLength )( 
-            IADsDomain __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MinPasswordLength )( 
+            IADsDomain * This,
             /* [in] */ long lnMinPasswordLength);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MinPasswordAge )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinPasswordAge )( 
+            IADsDomain * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MinPasswordAge )( 
-            IADsDomain __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MinPasswordAge )( 
+            IADsDomain * This,
             /* [in] */ long lnMinPasswordAge);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MaxPasswordAge )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxPasswordAge )( 
+            IADsDomain * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MaxPasswordAge )( 
-            IADsDomain __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxPasswordAge )( 
+            IADsDomain * This,
             /* [in] */ long lnMaxPasswordAge);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MaxBadPasswordsAllowed )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxBadPasswordsAllowed )( 
+            IADsDomain * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MaxBadPasswordsAllowed )( 
-            IADsDomain __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxBadPasswordsAllowed )( 
+            IADsDomain * This,
             /* [in] */ long lnMaxBadPasswordsAllowed);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PasswordHistoryLength )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PasswordHistoryLength )( 
+            IADsDomain * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PasswordHistoryLength )( 
-            IADsDomain __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PasswordHistoryLength )( 
+            IADsDomain * This,
             /* [in] */ long lnPasswordHistoryLength);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PasswordAttributes )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PasswordAttributes )( 
+            IADsDomain * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PasswordAttributes )( 
-            IADsDomain __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PasswordAttributes )( 
+            IADsDomain * This,
             /* [in] */ long lnPasswordAttributes);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AutoUnlockInterval )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AutoUnlockInterval )( 
+            IADsDomain * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AutoUnlockInterval )( 
-            IADsDomain __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AutoUnlockInterval )( 
+            IADsDomain * This,
             /* [in] */ long lnAutoUnlockInterval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LockoutObservationInterval )( 
-            IADsDomain __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LockoutObservationInterval )( 
+            IADsDomain * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LockoutObservationInterval )( 
-            IADsDomain __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LockoutObservationInterval )( 
+            IADsDomain * This,
             /* [in] */ long lnLockoutObservationInterval);
         
         END_INTERFACE
@@ -8098,7 +8153,7 @@ EXTERN_C const IID IID_IADsDomain;
 
     interface IADsDomain
     {
-        CONST_VTBL struct IADsDomainVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsDomainVtbl *lpVtbl;
     };
 
     
@@ -8228,8 +8283,8 @@ EXTERN_C const IID IID_IADsDomain;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_IsWorkgroup_Proxy( 
-    IADsDomain __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsDomain * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsDomain_get_IsWorkgroup_Stub(
@@ -8240,8 +8295,8 @@ void __RPC_STUB IADsDomain_get_IsWorkgroup_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_MinPasswordLength_Proxy( 
-    IADsDomain __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsDomain * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsDomain_get_MinPasswordLength_Stub(
@@ -8252,7 +8307,7 @@ void __RPC_STUB IADsDomain_get_MinPasswordLength_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_MinPasswordLength_Proxy( 
-    IADsDomain __RPC_FAR * This,
+    IADsDomain * This,
     /* [in] */ long lnMinPasswordLength);
 
 
@@ -8264,8 +8319,8 @@ void __RPC_STUB IADsDomain_put_MinPasswordLength_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_MinPasswordAge_Proxy( 
-    IADsDomain __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsDomain * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsDomain_get_MinPasswordAge_Stub(
@@ -8276,7 +8331,7 @@ void __RPC_STUB IADsDomain_get_MinPasswordAge_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_MinPasswordAge_Proxy( 
-    IADsDomain __RPC_FAR * This,
+    IADsDomain * This,
     /* [in] */ long lnMinPasswordAge);
 
 
@@ -8288,8 +8343,8 @@ void __RPC_STUB IADsDomain_put_MinPasswordAge_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_MaxPasswordAge_Proxy( 
-    IADsDomain __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsDomain * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsDomain_get_MaxPasswordAge_Stub(
@@ -8300,7 +8355,7 @@ void __RPC_STUB IADsDomain_get_MaxPasswordAge_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_MaxPasswordAge_Proxy( 
-    IADsDomain __RPC_FAR * This,
+    IADsDomain * This,
     /* [in] */ long lnMaxPasswordAge);
 
 
@@ -8312,8 +8367,8 @@ void __RPC_STUB IADsDomain_put_MaxPasswordAge_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_MaxBadPasswordsAllowed_Proxy( 
-    IADsDomain __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsDomain * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsDomain_get_MaxBadPasswordsAllowed_Stub(
@@ -8324,7 +8379,7 @@ void __RPC_STUB IADsDomain_get_MaxBadPasswordsAllowed_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_MaxBadPasswordsAllowed_Proxy( 
-    IADsDomain __RPC_FAR * This,
+    IADsDomain * This,
     /* [in] */ long lnMaxBadPasswordsAllowed);
 
 
@@ -8336,8 +8391,8 @@ void __RPC_STUB IADsDomain_put_MaxBadPasswordsAllowed_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_PasswordHistoryLength_Proxy( 
-    IADsDomain __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsDomain * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsDomain_get_PasswordHistoryLength_Stub(
@@ -8348,7 +8403,7 @@ void __RPC_STUB IADsDomain_get_PasswordHistoryLength_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_PasswordHistoryLength_Proxy( 
-    IADsDomain __RPC_FAR * This,
+    IADsDomain * This,
     /* [in] */ long lnPasswordHistoryLength);
 
 
@@ -8360,8 +8415,8 @@ void __RPC_STUB IADsDomain_put_PasswordHistoryLength_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_PasswordAttributes_Proxy( 
-    IADsDomain __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsDomain * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsDomain_get_PasswordAttributes_Stub(
@@ -8372,7 +8427,7 @@ void __RPC_STUB IADsDomain_get_PasswordAttributes_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_PasswordAttributes_Proxy( 
-    IADsDomain __RPC_FAR * This,
+    IADsDomain * This,
     /* [in] */ long lnPasswordAttributes);
 
 
@@ -8384,8 +8439,8 @@ void __RPC_STUB IADsDomain_put_PasswordAttributes_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_AutoUnlockInterval_Proxy( 
-    IADsDomain __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsDomain * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsDomain_get_AutoUnlockInterval_Stub(
@@ -8396,7 +8451,7 @@ void __RPC_STUB IADsDomain_get_AutoUnlockInterval_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_AutoUnlockInterval_Proxy( 
-    IADsDomain __RPC_FAR * This,
+    IADsDomain * This,
     /* [in] */ long lnAutoUnlockInterval);
 
 
@@ -8408,8 +8463,8 @@ void __RPC_STUB IADsDomain_put_AutoUnlockInterval_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDomain_get_LockoutObservationInterval_Proxy( 
-    IADsDomain __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsDomain * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsDomain_get_LockoutObservationInterval_Stub(
@@ -8420,7 +8475,7 @@ void __RPC_STUB IADsDomain_get_LockoutObservationInterval_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDomain_put_LockoutObservationInterval_Proxy( 
-    IADsDomain __RPC_FAR * This,
+    IADsDomain * This,
     /* [in] */ long lnLockoutObservationInterval);
 
 
@@ -8451,97 +8506,97 @@ EXTERN_C const IID IID_IADsComputer;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ComputerID( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Site( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bstrDescription) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Location( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Location( 
             /* [in] */ BSTR bstrLocation) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PrimaryUser( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PrimaryUser( 
             /* [in] */ BSTR bstrPrimaryUser) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Owner( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Owner( 
             /* [in] */ BSTR bstrOwner) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Division( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Division( 
             /* [in] */ BSTR bstrDivision) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Department( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Department( 
             /* [in] */ BSTR bstrDepartment) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Role( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Role( 
             /* [in] */ BSTR bstrRole) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OperatingSystem( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OperatingSystem( 
             /* [in] */ BSTR bstrOperatingSystem) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OperatingSystemVersion( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OperatingSystemVersion( 
             /* [in] */ BSTR bstrOperatingSystemVersion) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Model( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Model( 
             /* [in] */ BSTR bstrModel) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Processor( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Processor( 
             /* [in] */ BSTR bstrProcessor) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ProcessorCount( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ProcessorCount( 
             /* [in] */ BSTR bstrProcessorCount) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MemorySize( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MemorySize( 
             /* [in] */ BSTR bstrMemorySize) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StorageCapacity( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StorageCapacity( 
             /* [in] */ BSTR bstrStorageCapacity) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NetAddresses( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NetAddresses( 
             /* [in] */ VARIANT vNetAddresses) = 0;
@@ -8554,228 +8609,228 @@ EXTERN_C const IID IID_IADsComputer;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsComputer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsComputer * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsComputer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsComputer * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsComputer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsComputer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsComputer __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsComputer * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsComputer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsComputer * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsComputer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsComputer * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsComputer __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsComputer * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsComputer __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsComputer * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsComputer __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsComputer * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsComputer * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsComputer * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ComputerID )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ComputerID )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Site )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Site )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Location )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Location )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Location )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Location )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrLocation);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrimaryUser )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrimaryUser )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PrimaryUser )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PrimaryUser )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrPrimaryUser);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Owner )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Owner )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Owner )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Owner )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrOwner);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Division )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Division )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Division )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Division )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrDivision);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Department )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Department )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Department )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Department )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrDepartment);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Role )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Role )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Role )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Role )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrRole);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OperatingSystem )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OperatingSystem )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OperatingSystem )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OperatingSystem )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrOperatingSystem);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OperatingSystemVersion )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OperatingSystemVersion )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OperatingSystemVersion )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OperatingSystemVersion )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrOperatingSystemVersion);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Model )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Model )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Model )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Model )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrModel);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Processor )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Processor )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Processor )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Processor )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrProcessor);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProcessorCount )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ProcessorCount )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProcessorCount )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ProcessorCount )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrProcessorCount);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MemorySize )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MemorySize )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MemorySize )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MemorySize )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrMemorySize);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StorageCapacity )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StorageCapacity )( 
+            IADsComputer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StorageCapacity )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StorageCapacity )( 
+            IADsComputer * This,
             /* [in] */ BSTR bstrStorageCapacity);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NetAddresses )( 
-            IADsComputer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NetAddresses )( 
+            IADsComputer * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_NetAddresses )( 
-            IADsComputer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NetAddresses )( 
+            IADsComputer * This,
             /* [in] */ VARIANT vNetAddresses);
         
         END_INTERFACE
@@ -8783,7 +8838,7 @@ EXTERN_C const IID IID_IADsComputer;
 
     interface IADsComputer
     {
-        CONST_VTBL struct IADsComputerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsComputerVtbl *lpVtbl;
     };
 
     
@@ -8958,8 +9013,8 @@ EXTERN_C const IID IID_IADsComputer;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_ComputerID_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_ComputerID_Stub(
@@ -8970,8 +9025,8 @@ void __RPC_STUB IADsComputer_get_ComputerID_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Site_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Site_Stub(
@@ -8982,8 +9037,8 @@ void __RPC_STUB IADsComputer_get_Site_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Description_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Description_Stub(
@@ -8994,7 +9049,7 @@ void __RPC_STUB IADsComputer_get_Description_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Description_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrDescription);
 
 
@@ -9006,8 +9061,8 @@ void __RPC_STUB IADsComputer_put_Description_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Location_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Location_Stub(
@@ -9018,7 +9073,7 @@ void __RPC_STUB IADsComputer_get_Location_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Location_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrLocation);
 
 
@@ -9030,8 +9085,8 @@ void __RPC_STUB IADsComputer_put_Location_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_PrimaryUser_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_PrimaryUser_Stub(
@@ -9042,7 +9097,7 @@ void __RPC_STUB IADsComputer_get_PrimaryUser_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_PrimaryUser_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrPrimaryUser);
 
 
@@ -9054,8 +9109,8 @@ void __RPC_STUB IADsComputer_put_PrimaryUser_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Owner_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Owner_Stub(
@@ -9066,7 +9121,7 @@ void __RPC_STUB IADsComputer_get_Owner_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Owner_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrOwner);
 
 
@@ -9078,8 +9133,8 @@ void __RPC_STUB IADsComputer_put_Owner_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Division_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Division_Stub(
@@ -9090,7 +9145,7 @@ void __RPC_STUB IADsComputer_get_Division_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Division_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrDivision);
 
 
@@ -9102,8 +9157,8 @@ void __RPC_STUB IADsComputer_put_Division_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Department_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Department_Stub(
@@ -9114,7 +9169,7 @@ void __RPC_STUB IADsComputer_get_Department_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Department_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrDepartment);
 
 
@@ -9126,8 +9181,8 @@ void __RPC_STUB IADsComputer_put_Department_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Role_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Role_Stub(
@@ -9138,7 +9193,7 @@ void __RPC_STUB IADsComputer_get_Role_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Role_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrRole);
 
 
@@ -9150,8 +9205,8 @@ void __RPC_STUB IADsComputer_put_Role_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_OperatingSystem_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_OperatingSystem_Stub(
@@ -9162,7 +9217,7 @@ void __RPC_STUB IADsComputer_get_OperatingSystem_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_OperatingSystem_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrOperatingSystem);
 
 
@@ -9174,8 +9229,8 @@ void __RPC_STUB IADsComputer_put_OperatingSystem_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_OperatingSystemVersion_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_OperatingSystemVersion_Stub(
@@ -9186,7 +9241,7 @@ void __RPC_STUB IADsComputer_get_OperatingSystemVersion_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_OperatingSystemVersion_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrOperatingSystemVersion);
 
 
@@ -9198,8 +9253,8 @@ void __RPC_STUB IADsComputer_put_OperatingSystemVersion_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Model_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Model_Stub(
@@ -9210,7 +9265,7 @@ void __RPC_STUB IADsComputer_get_Model_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Model_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrModel);
 
 
@@ -9222,8 +9277,8 @@ void __RPC_STUB IADsComputer_put_Model_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_Processor_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_Processor_Stub(
@@ -9234,7 +9289,7 @@ void __RPC_STUB IADsComputer_get_Processor_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_Processor_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrProcessor);
 
 
@@ -9246,8 +9301,8 @@ void __RPC_STUB IADsComputer_put_Processor_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_ProcessorCount_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_ProcessorCount_Stub(
@@ -9258,7 +9313,7 @@ void __RPC_STUB IADsComputer_get_ProcessorCount_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_ProcessorCount_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrProcessorCount);
 
 
@@ -9270,8 +9325,8 @@ void __RPC_STUB IADsComputer_put_ProcessorCount_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_MemorySize_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_MemorySize_Stub(
@@ -9282,7 +9337,7 @@ void __RPC_STUB IADsComputer_get_MemorySize_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_MemorySize_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrMemorySize);
 
 
@@ -9294,8 +9349,8 @@ void __RPC_STUB IADsComputer_put_MemorySize_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_StorageCapacity_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsComputer_get_StorageCapacity_Stub(
@@ -9306,7 +9361,7 @@ void __RPC_STUB IADsComputer_get_StorageCapacity_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_StorageCapacity_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ BSTR bstrStorageCapacity);
 
 
@@ -9318,8 +9373,8 @@ void __RPC_STUB IADsComputer_put_StorageCapacity_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsComputer_get_NetAddresses_Proxy( 
-    IADsComputer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsComputer * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsComputer_get_NetAddresses_Stub(
@@ -9330,7 +9385,7 @@ void __RPC_STUB IADsComputer_get_NetAddresses_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsComputer_put_NetAddresses_Proxy( 
-    IADsComputer __RPC_FAR * This,
+    IADsComputer * This,
     /* [in] */ VARIANT vNetAddresses);
 
 
@@ -9361,7 +9416,7 @@ EXTERN_C const IID IID_IADsComputerOperations;
     {
     public:
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Status( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject) = 0;
+            /* [retval][out] */ IDispatch **ppObject) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Shutdown( 
             /* [in] */ VARIANT_BOOL bReboot) = 0;
@@ -9374,108 +9429,108 @@ EXTERN_C const IID IID_IADsComputerOperations;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsComputerOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsComputerOperations * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsComputerOperations __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsComputerOperations * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsComputerOperations __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsComputerOperations * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsComputerOperations __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsComputerOperations * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsComputerOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsComputerOperations * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsComputerOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsComputerOperations * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsComputerOperations __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsComputerOperations * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsComputerOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsComputerOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsComputerOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsComputerOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsComputerOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsComputerOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsComputerOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsComputerOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsComputerOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsComputerOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsComputerOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsComputerOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsComputerOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsComputerOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsComputerOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsComputerOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsComputerOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsComputerOperations * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsComputerOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsComputerOperations * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsComputerOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsComputerOperations * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsComputerOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsComputerOperations * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsComputerOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsComputerOperations * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Status )( 
-            IADsComputerOperations __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Status )( 
+            IADsComputerOperations * This,
+            /* [retval][out] */ IDispatch **ppObject);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Shutdown )( 
-            IADsComputerOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Shutdown )( 
+            IADsComputerOperations * This,
             /* [in] */ VARIANT_BOOL bReboot);
         
         END_INTERFACE
@@ -9483,7 +9538,7 @@ EXTERN_C const IID IID_IADsComputerOperations;
 
     interface IADsComputerOperations
     {
-        CONST_VTBL struct IADsComputerOperationsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsComputerOperationsVtbl *lpVtbl;
     };
 
     
@@ -9568,8 +9623,8 @@ EXTERN_C const IID IID_IADsComputerOperations;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsComputerOperations_Status_Proxy( 
-    IADsComputerOperations __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject);
+    IADsComputerOperations * This,
+    /* [retval][out] */ IDispatch **ppObject);
 
 
 void __RPC_STUB IADsComputerOperations_Status_Stub(
@@ -9580,7 +9635,7 @@ void __RPC_STUB IADsComputerOperations_Status_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsComputerOperations_Shutdown_Proxy( 
-    IADsComputerOperations __RPC_FAR * This,
+    IADsComputerOperations * This,
     /* [in] */ VARIANT_BOOL bReboot);
 
 
@@ -9611,17 +9666,17 @@ EXTERN_C const IID IID_IADsGroup;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bstrDescription) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Members( 
-            /* [retval][out] */ IADsMembers __RPC_FAR *__RPC_FAR *ppMembers) = 0;
+            /* [retval][out] */ IADsMembers **ppMembers) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsMember( 
             /* [in] */ BSTR bstrMember,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *bMember) = 0;
+            /* [retval][out] */ VARIANT_BOOL *bMember) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Add( 
             /* [in] */ BSTR bstrNewItem) = 0;
@@ -9637,125 +9692,125 @@ EXTERN_C const IID IID_IADsGroup;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsGroup __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsGroup * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsGroup __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsGroup * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsGroup __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsGroup * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsGroup __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsGroup * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsGroup __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsGroup * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsGroup __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsGroup * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsGroup __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsGroup * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsGroup __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsGroup * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsGroup __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsGroup * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsGroup __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsGroup * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsGroup __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsGroup * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsGroup __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsGroup * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsGroup __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsGroup * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsGroup __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsGroup * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsGroup __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsGroup * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsGroup __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsGroup * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsGroup __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsGroup * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsGroup __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsGroup * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsGroup __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsGroup * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsGroup __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsGroup * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IADsGroup __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IADsGroup * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IADsGroup __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IADsGroup * This,
             /* [in] */ BSTR bstrDescription);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Members )( 
-            IADsGroup __RPC_FAR * This,
-            /* [retval][out] */ IADsMembers __RPC_FAR *__RPC_FAR *ppMembers);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Members )( 
+            IADsGroup * This,
+            /* [retval][out] */ IADsMembers **ppMembers);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsMember )( 
-            IADsGroup __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsMember )( 
+            IADsGroup * This,
             /* [in] */ BSTR bstrMember,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *bMember);
+            /* [retval][out] */ VARIANT_BOOL *bMember);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Add )( 
-            IADsGroup __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+            IADsGroup * This,
             /* [in] */ BSTR bstrNewItem);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Remove )( 
-            IADsGroup __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+            IADsGroup * This,
             /* [in] */ BSTR bstrItemToBeRemoved);
         
         END_INTERFACE
@@ -9763,7 +9818,7 @@ EXTERN_C const IID IID_IADsGroup;
 
     interface IADsGroup
     {
-        CONST_VTBL struct IADsGroupVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsGroupVtbl *lpVtbl;
     };
 
     
@@ -9860,8 +9915,8 @@ EXTERN_C const IID IID_IADsGroup;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsGroup_get_Description_Proxy( 
-    IADsGroup __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsGroup * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsGroup_get_Description_Stub(
@@ -9872,7 +9927,7 @@ void __RPC_STUB IADsGroup_get_Description_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsGroup_put_Description_Proxy( 
-    IADsGroup __RPC_FAR * This,
+    IADsGroup * This,
     /* [in] */ BSTR bstrDescription);
 
 
@@ -9884,8 +9939,8 @@ void __RPC_STUB IADsGroup_put_Description_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsGroup_Members_Proxy( 
-    IADsGroup __RPC_FAR * This,
-    /* [retval][out] */ IADsMembers __RPC_FAR *__RPC_FAR *ppMembers);
+    IADsGroup * This,
+    /* [retval][out] */ IADsMembers **ppMembers);
 
 
 void __RPC_STUB IADsGroup_Members_Stub(
@@ -9896,9 +9951,9 @@ void __RPC_STUB IADsGroup_Members_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsGroup_IsMember_Proxy( 
-    IADsGroup __RPC_FAR * This,
+    IADsGroup * This,
     /* [in] */ BSTR bstrMember,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *bMember);
+    /* [retval][out] */ VARIANT_BOOL *bMember);
 
 
 void __RPC_STUB IADsGroup_IsMember_Stub(
@@ -9909,7 +9964,7 @@ void __RPC_STUB IADsGroup_IsMember_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsGroup_Add_Proxy( 
-    IADsGroup __RPC_FAR * This,
+    IADsGroup * This,
     /* [in] */ BSTR bstrNewItem);
 
 
@@ -9921,7 +9976,7 @@ void __RPC_STUB IADsGroup_Add_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsGroup_Remove_Proxy( 
-    IADsGroup __RPC_FAR * This,
+    IADsGroup * This,
     /* [in] */ BSTR bstrItemToBeRemoved);
 
 
@@ -9952,271 +10007,271 @@ EXTERN_C const IID IID_IADsUser;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BadLoginAddress( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BadLoginCount( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LastLogin( 
-            /* [retval][out] */ DATE __RPC_FAR *retval) = 0;
+            /* [retval][out] */ DATE *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LastLogoff( 
-            /* [retval][out] */ DATE __RPC_FAR *retval) = 0;
+            /* [retval][out] */ DATE *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LastFailedLogin( 
-            /* [retval][out] */ DATE __RPC_FAR *retval) = 0;
+            /* [retval][out] */ DATE *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PasswordLastChanged( 
-            /* [retval][out] */ DATE __RPC_FAR *retval) = 0;
+            /* [retval][out] */ DATE *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bstrDescription) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Division( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Division( 
             /* [in] */ BSTR bstrDivision) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Department( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Department( 
             /* [in] */ BSTR bstrDepartment) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_EmployeeID( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EmployeeID( 
             /* [in] */ BSTR bstrEmployeeID) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FullName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FullName( 
             /* [in] */ BSTR bstrFullName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FirstName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FirstName( 
             /* [in] */ BSTR bstrFirstName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LastName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LastName( 
             /* [in] */ BSTR bstrLastName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OtherName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OtherName( 
             /* [in] */ BSTR bstrOtherName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NamePrefix( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NamePrefix( 
             /* [in] */ BSTR bstrNamePrefix) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NameSuffix( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NameSuffix( 
             /* [in] */ BSTR bstrNameSuffix) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Title( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Title( 
             /* [in] */ BSTR bstrTitle) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Manager( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Manager( 
             /* [in] */ BSTR bstrManager) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephoneHome( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephoneHome( 
             /* [in] */ VARIANT vTelephoneHome) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephoneMobile( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephoneMobile( 
             /* [in] */ VARIANT vTelephoneMobile) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephoneNumber( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephoneNumber( 
             /* [in] */ VARIANT vTelephoneNumber) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephonePager( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephonePager( 
             /* [in] */ VARIANT vTelephonePager) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FaxNumber( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FaxNumber( 
             /* [in] */ VARIANT vFaxNumber) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OfficeLocations( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OfficeLocations( 
             /* [in] */ VARIANT vOfficeLocations) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PostalAddresses( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PostalAddresses( 
             /* [in] */ VARIANT vPostalAddresses) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PostalCodes( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PostalCodes( 
             /* [in] */ VARIANT vPostalCodes) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SeeAlso( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SeeAlso( 
             /* [in] */ VARIANT vSeeAlso) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AccountDisabled( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AccountDisabled( 
             /* [in] */ VARIANT_BOOL fAccountDisabled) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AccountExpirationDate( 
-            /* [retval][out] */ DATE __RPC_FAR *retval) = 0;
+            /* [retval][out] */ DATE *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AccountExpirationDate( 
             /* [in] */ DATE daAccountExpirationDate) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GraceLoginsAllowed( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GraceLoginsAllowed( 
             /* [in] */ long lnGraceLoginsAllowed) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GraceLoginsRemaining( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GraceLoginsRemaining( 
             /* [in] */ long lnGraceLoginsRemaining) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_IsAccountLocked( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_IsAccountLocked( 
             /* [in] */ VARIANT_BOOL fIsAccountLocked) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LoginHours( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LoginHours( 
             /* [in] */ VARIANT vLoginHours) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LoginWorkstations( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LoginWorkstations( 
             /* [in] */ VARIANT vLoginWorkstations) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxLogins( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxLogins( 
             /* [in] */ long lnMaxLogins) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxStorage( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxStorage( 
             /* [in] */ long lnMaxStorage) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PasswordExpirationDate( 
-            /* [retval][out] */ DATE __RPC_FAR *retval) = 0;
+            /* [retval][out] */ DATE *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PasswordExpirationDate( 
             /* [in] */ DATE daPasswordExpirationDate) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PasswordMinimumLength( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PasswordMinimumLength( 
             /* [in] */ long lnPasswordMinimumLength) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PasswordRequired( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PasswordRequired( 
             /* [in] */ VARIANT_BOOL fPasswordRequired) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RequireUniquePassword( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_RequireUniquePassword( 
             /* [in] */ VARIANT_BOOL fRequireUniquePassword) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_EmailAddress( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EmailAddress( 
             /* [in] */ BSTR bstrEmailAddress) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HomeDirectory( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HomeDirectory( 
             /* [in] */ BSTR bstrHomeDirectory) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Languages( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Languages( 
             /* [in] */ VARIANT vLanguages) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Profile( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Profile( 
             /* [in] */ BSTR bstrProfile) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LoginScript( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LoginScript( 
             /* [in] */ BSTR bstrLoginScript) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Picture( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Picture( 
             /* [in] */ VARIANT vPicture) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HomePage( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HomePage( 
             /* [in] */ BSTR bstrHomePage) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Groups( 
-            /* [retval][out] */ IADsMembers __RPC_FAR *__RPC_FAR *ppGroups) = 0;
+            /* [retval][out] */ IADsMembers **ppGroups) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetPassword( 
             /* [in] */ BSTR NewPassword) = 0;
@@ -10233,464 +10288,464 @@ EXTERN_C const IID IID_IADsUser;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsUser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsUser * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsUser __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsUser * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsUser __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsUser * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsUser __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsUser * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsUser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsUser * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsUser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsUser * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsUser __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsUser * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsUser __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsUser * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsUser __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsUser * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsUser __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsUser __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsUser __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsUser __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsUser * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsUser __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsUser * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BadLoginAddress )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BadLoginAddress )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BadLoginCount )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BadLoginCount )( 
+            IADsUser * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LastLogin )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastLogin )( 
+            IADsUser * This,
+            /* [retval][out] */ DATE *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LastLogoff )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastLogoff )( 
+            IADsUser * This,
+            /* [retval][out] */ DATE *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LastFailedLogin )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastFailedLogin )( 
+            IADsUser * This,
+            /* [retval][out] */ DATE *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PasswordLastChanged )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PasswordLastChanged )( 
+            IADsUser * This,
+            /* [retval][out] */ DATE *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Division )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Division )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Division )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Division )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrDivision);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Department )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Department )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Department )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Department )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrDepartment);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EmployeeID )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EmployeeID )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EmployeeID )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EmployeeID )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrEmployeeID);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FullName )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FullName )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FullName )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FullName )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrFullName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FirstName )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FirstName )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FirstName )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FirstName )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrFirstName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LastName )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LastName )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LastName )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LastName )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrLastName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OtherName )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OtherName )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OtherName )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OtherName )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrOtherName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NamePrefix )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NamePrefix )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_NamePrefix )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NamePrefix )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrNamePrefix);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NameSuffix )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NameSuffix )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_NameSuffix )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NameSuffix )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrNameSuffix);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Title )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Title )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Title )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Title )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrTitle);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Manager )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Manager )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Manager )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Manager )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrManager);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TelephoneHome )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephoneHome )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TelephoneHome )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephoneHome )( 
+            IADsUser * This,
             /* [in] */ VARIANT vTelephoneHome);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TelephoneMobile )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephoneMobile )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TelephoneMobile )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephoneMobile )( 
+            IADsUser * This,
             /* [in] */ VARIANT vTelephoneMobile);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TelephoneNumber )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephoneNumber )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TelephoneNumber )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephoneNumber )( 
+            IADsUser * This,
             /* [in] */ VARIANT vTelephoneNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TelephonePager )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephonePager )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TelephonePager )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephonePager )( 
+            IADsUser * This,
             /* [in] */ VARIANT vTelephonePager);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FaxNumber )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FaxNumber )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FaxNumber )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FaxNumber )( 
+            IADsUser * This,
             /* [in] */ VARIANT vFaxNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OfficeLocations )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OfficeLocations )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OfficeLocations )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OfficeLocations )( 
+            IADsUser * This,
             /* [in] */ VARIANT vOfficeLocations);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PostalAddresses )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PostalAddresses )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PostalAddresses )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PostalAddresses )( 
+            IADsUser * This,
             /* [in] */ VARIANT vPostalAddresses);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PostalCodes )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PostalCodes )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PostalCodes )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PostalCodes )( 
+            IADsUser * This,
             /* [in] */ VARIANT vPostalCodes);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SeeAlso )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SeeAlso )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SeeAlso )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SeeAlso )( 
+            IADsUser * This,
             /* [in] */ VARIANT vSeeAlso);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AccountDisabled )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AccountDisabled )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AccountDisabled )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AccountDisabled )( 
+            IADsUser * This,
             /* [in] */ VARIANT_BOOL fAccountDisabled);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AccountExpirationDate )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AccountExpirationDate )( 
+            IADsUser * This,
+            /* [retval][out] */ DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AccountExpirationDate )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AccountExpirationDate )( 
+            IADsUser * This,
             /* [in] */ DATE daAccountExpirationDate);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GraceLoginsAllowed )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GraceLoginsAllowed )( 
+            IADsUser * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_GraceLoginsAllowed )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GraceLoginsAllowed )( 
+            IADsUser * This,
             /* [in] */ long lnGraceLoginsAllowed);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GraceLoginsRemaining )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GraceLoginsRemaining )( 
+            IADsUser * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_GraceLoginsRemaining )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GraceLoginsRemaining )( 
+            IADsUser * This,
             /* [in] */ long lnGraceLoginsRemaining);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsAccountLocked )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsAccountLocked )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_IsAccountLocked )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_IsAccountLocked )( 
+            IADsUser * This,
             /* [in] */ VARIANT_BOOL fIsAccountLocked);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LoginHours )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoginHours )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LoginHours )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoginHours )( 
+            IADsUser * This,
             /* [in] */ VARIANT vLoginHours);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LoginWorkstations )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoginWorkstations )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LoginWorkstations )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoginWorkstations )( 
+            IADsUser * This,
             /* [in] */ VARIANT vLoginWorkstations);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MaxLogins )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxLogins )( 
+            IADsUser * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MaxLogins )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxLogins )( 
+            IADsUser * This,
             /* [in] */ long lnMaxLogins);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MaxStorage )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxStorage )( 
+            IADsUser * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MaxStorage )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxStorage )( 
+            IADsUser * This,
             /* [in] */ long lnMaxStorage);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PasswordExpirationDate )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PasswordExpirationDate )( 
+            IADsUser * This,
+            /* [retval][out] */ DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PasswordExpirationDate )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PasswordExpirationDate )( 
+            IADsUser * This,
             /* [in] */ DATE daPasswordExpirationDate);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PasswordMinimumLength )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PasswordMinimumLength )( 
+            IADsUser * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PasswordMinimumLength )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PasswordMinimumLength )( 
+            IADsUser * This,
             /* [in] */ long lnPasswordMinimumLength);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PasswordRequired )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PasswordRequired )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PasswordRequired )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PasswordRequired )( 
+            IADsUser * This,
             /* [in] */ VARIANT_BOOL fPasswordRequired);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RequireUniquePassword )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RequireUniquePassword )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RequireUniquePassword )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RequireUniquePassword )( 
+            IADsUser * This,
             /* [in] */ VARIANT_BOOL fRequireUniquePassword);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EmailAddress )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EmailAddress )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EmailAddress )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EmailAddress )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrEmailAddress);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HomeDirectory )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HomeDirectory )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HomeDirectory )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HomeDirectory )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrHomeDirectory);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Languages )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Languages )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Languages )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Languages )( 
+            IADsUser * This,
             /* [in] */ VARIANT vLanguages);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Profile )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Profile )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Profile )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Profile )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrProfile);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LoginScript )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoginScript )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LoginScript )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoginScript )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrLoginScript);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Picture )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Picture )( 
+            IADsUser * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Picture )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Picture )( 
+            IADsUser * This,
             /* [in] */ VARIANT vPicture);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HomePage )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HomePage )( 
+            IADsUser * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HomePage )( 
-            IADsUser __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HomePage )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrHomePage);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Groups )( 
-            IADsUser __RPC_FAR * This,
-            /* [retval][out] */ IADsMembers __RPC_FAR *__RPC_FAR *ppGroups);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Groups )( 
+            IADsUser * This,
+            /* [retval][out] */ IADsMembers **ppGroups);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPassword )( 
-            IADsUser __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetPassword )( 
+            IADsUser * This,
             /* [in] */ BSTR NewPassword);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ChangePassword )( 
-            IADsUser __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ChangePassword )( 
+            IADsUser * This,
             /* [in] */ BSTR bstrOldPassword,
             /* [in] */ BSTR bstrNewPassword);
         
@@ -10699,7 +10754,7 @@ EXTERN_C const IID IID_IADsUser;
 
     interface IADsUser
     {
-        CONST_VTBL struct IADsUserVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsUserVtbl *lpVtbl;
     };
 
     
@@ -11051,8 +11106,8 @@ EXTERN_C const IID IID_IADsUser;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_BadLoginAddress_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_BadLoginAddress_Stub(
@@ -11063,8 +11118,8 @@ void __RPC_STUB IADsUser_get_BadLoginAddress_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_BadLoginCount_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsUser_get_BadLoginCount_Stub(
@@ -11075,8 +11130,8 @@ void __RPC_STUB IADsUser_get_BadLoginCount_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LastLogin_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ DATE *retval);
 
 
 void __RPC_STUB IADsUser_get_LastLogin_Stub(
@@ -11087,8 +11142,8 @@ void __RPC_STUB IADsUser_get_LastLogin_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LastLogoff_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ DATE *retval);
 
 
 void __RPC_STUB IADsUser_get_LastLogoff_Stub(
@@ -11099,8 +11154,8 @@ void __RPC_STUB IADsUser_get_LastLogoff_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LastFailedLogin_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ DATE *retval);
 
 
 void __RPC_STUB IADsUser_get_LastFailedLogin_Stub(
@@ -11111,8 +11166,8 @@ void __RPC_STUB IADsUser_get_LastFailedLogin_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_PasswordLastChanged_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ DATE *retval);
 
 
 void __RPC_STUB IADsUser_get_PasswordLastChanged_Stub(
@@ -11123,8 +11178,8 @@ void __RPC_STUB IADsUser_get_PasswordLastChanged_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Description_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_Description_Stub(
@@ -11135,7 +11190,7 @@ void __RPC_STUB IADsUser_get_Description_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Description_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrDescription);
 
 
@@ -11147,8 +11202,8 @@ void __RPC_STUB IADsUser_put_Description_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Division_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_Division_Stub(
@@ -11159,7 +11214,7 @@ void __RPC_STUB IADsUser_get_Division_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Division_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrDivision);
 
 
@@ -11171,8 +11226,8 @@ void __RPC_STUB IADsUser_put_Division_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Department_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_Department_Stub(
@@ -11183,7 +11238,7 @@ void __RPC_STUB IADsUser_get_Department_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Department_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrDepartment);
 
 
@@ -11195,8 +11250,8 @@ void __RPC_STUB IADsUser_put_Department_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_EmployeeID_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_EmployeeID_Stub(
@@ -11207,7 +11262,7 @@ void __RPC_STUB IADsUser_get_EmployeeID_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_EmployeeID_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrEmployeeID);
 
 
@@ -11219,8 +11274,8 @@ void __RPC_STUB IADsUser_put_EmployeeID_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_FullName_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_FullName_Stub(
@@ -11231,7 +11286,7 @@ void __RPC_STUB IADsUser_get_FullName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_FullName_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrFullName);
 
 
@@ -11243,8 +11298,8 @@ void __RPC_STUB IADsUser_put_FullName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_FirstName_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_FirstName_Stub(
@@ -11255,7 +11310,7 @@ void __RPC_STUB IADsUser_get_FirstName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_FirstName_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrFirstName);
 
 
@@ -11267,8 +11322,8 @@ void __RPC_STUB IADsUser_put_FirstName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LastName_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_LastName_Stub(
@@ -11279,7 +11334,7 @@ void __RPC_STUB IADsUser_get_LastName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_LastName_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrLastName);
 
 
@@ -11291,8 +11346,8 @@ void __RPC_STUB IADsUser_put_LastName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_OtherName_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_OtherName_Stub(
@@ -11303,7 +11358,7 @@ void __RPC_STUB IADsUser_get_OtherName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_OtherName_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrOtherName);
 
 
@@ -11315,8 +11370,8 @@ void __RPC_STUB IADsUser_put_OtherName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_NamePrefix_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_NamePrefix_Stub(
@@ -11327,7 +11382,7 @@ void __RPC_STUB IADsUser_get_NamePrefix_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_NamePrefix_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrNamePrefix);
 
 
@@ -11339,8 +11394,8 @@ void __RPC_STUB IADsUser_put_NamePrefix_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_NameSuffix_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_NameSuffix_Stub(
@@ -11351,7 +11406,7 @@ void __RPC_STUB IADsUser_get_NameSuffix_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_NameSuffix_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrNameSuffix);
 
 
@@ -11363,8 +11418,8 @@ void __RPC_STUB IADsUser_put_NameSuffix_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Title_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_Title_Stub(
@@ -11375,7 +11430,7 @@ void __RPC_STUB IADsUser_get_Title_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Title_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrTitle);
 
 
@@ -11387,8 +11442,8 @@ void __RPC_STUB IADsUser_put_Title_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Manager_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_Manager_Stub(
@@ -11399,7 +11454,7 @@ void __RPC_STUB IADsUser_get_Manager_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Manager_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrManager);
 
 
@@ -11411,8 +11466,8 @@ void __RPC_STUB IADsUser_put_Manager_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_TelephoneHome_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_TelephoneHome_Stub(
@@ -11423,7 +11478,7 @@ void __RPC_STUB IADsUser_get_TelephoneHome_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_TelephoneHome_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT vTelephoneHome);
 
 
@@ -11435,8 +11490,8 @@ void __RPC_STUB IADsUser_put_TelephoneHome_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_TelephoneMobile_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_TelephoneMobile_Stub(
@@ -11447,7 +11502,7 @@ void __RPC_STUB IADsUser_get_TelephoneMobile_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_TelephoneMobile_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT vTelephoneMobile);
 
 
@@ -11459,8 +11514,8 @@ void __RPC_STUB IADsUser_put_TelephoneMobile_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_TelephoneNumber_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_TelephoneNumber_Stub(
@@ -11471,7 +11526,7 @@ void __RPC_STUB IADsUser_get_TelephoneNumber_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_TelephoneNumber_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT vTelephoneNumber);
 
 
@@ -11483,8 +11538,8 @@ void __RPC_STUB IADsUser_put_TelephoneNumber_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_TelephonePager_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_TelephonePager_Stub(
@@ -11495,7 +11550,7 @@ void __RPC_STUB IADsUser_get_TelephonePager_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_TelephonePager_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT vTelephonePager);
 
 
@@ -11507,8 +11562,8 @@ void __RPC_STUB IADsUser_put_TelephonePager_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_FaxNumber_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_FaxNumber_Stub(
@@ -11519,7 +11574,7 @@ void __RPC_STUB IADsUser_get_FaxNumber_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_FaxNumber_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT vFaxNumber);
 
 
@@ -11531,8 +11586,8 @@ void __RPC_STUB IADsUser_put_FaxNumber_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_OfficeLocations_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_OfficeLocations_Stub(
@@ -11543,7 +11598,7 @@ void __RPC_STUB IADsUser_get_OfficeLocations_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_OfficeLocations_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT vOfficeLocations);
 
 
@@ -11555,8 +11610,8 @@ void __RPC_STUB IADsUser_put_OfficeLocations_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_PostalAddresses_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_PostalAddresses_Stub(
@@ -11567,7 +11622,7 @@ void __RPC_STUB IADsUser_get_PostalAddresses_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_PostalAddresses_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT vPostalAddresses);
 
 
@@ -11579,8 +11634,8 @@ void __RPC_STUB IADsUser_put_PostalAddresses_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_PostalCodes_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_PostalCodes_Stub(
@@ -11591,7 +11646,7 @@ void __RPC_STUB IADsUser_get_PostalCodes_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_PostalCodes_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT vPostalCodes);
 
 
@@ -11603,8 +11658,8 @@ void __RPC_STUB IADsUser_put_PostalCodes_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_SeeAlso_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_SeeAlso_Stub(
@@ -11615,7 +11670,7 @@ void __RPC_STUB IADsUser_get_SeeAlso_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_SeeAlso_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT vSeeAlso);
 
 
@@ -11627,8 +11682,8 @@ void __RPC_STUB IADsUser_put_SeeAlso_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_AccountDisabled_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsUser_get_AccountDisabled_Stub(
@@ -11639,7 +11694,7 @@ void __RPC_STUB IADsUser_get_AccountDisabled_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_AccountDisabled_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT_BOOL fAccountDisabled);
 
 
@@ -11651,8 +11706,8 @@ void __RPC_STUB IADsUser_put_AccountDisabled_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_AccountExpirationDate_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ DATE *retval);
 
 
 void __RPC_STUB IADsUser_get_AccountExpirationDate_Stub(
@@ -11663,7 +11718,7 @@ void __RPC_STUB IADsUser_get_AccountExpirationDate_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_AccountExpirationDate_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ DATE daAccountExpirationDate);
 
 
@@ -11675,8 +11730,8 @@ void __RPC_STUB IADsUser_put_AccountExpirationDate_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_GraceLoginsAllowed_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsUser_get_GraceLoginsAllowed_Stub(
@@ -11687,7 +11742,7 @@ void __RPC_STUB IADsUser_get_GraceLoginsAllowed_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_GraceLoginsAllowed_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ long lnGraceLoginsAllowed);
 
 
@@ -11699,8 +11754,8 @@ void __RPC_STUB IADsUser_put_GraceLoginsAllowed_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_GraceLoginsRemaining_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsUser_get_GraceLoginsRemaining_Stub(
@@ -11711,7 +11766,7 @@ void __RPC_STUB IADsUser_get_GraceLoginsRemaining_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_GraceLoginsRemaining_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ long lnGraceLoginsRemaining);
 
 
@@ -11723,8 +11778,8 @@ void __RPC_STUB IADsUser_put_GraceLoginsRemaining_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_IsAccountLocked_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsUser_get_IsAccountLocked_Stub(
@@ -11735,7 +11790,7 @@ void __RPC_STUB IADsUser_get_IsAccountLocked_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_IsAccountLocked_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT_BOOL fIsAccountLocked);
 
 
@@ -11747,8 +11802,8 @@ void __RPC_STUB IADsUser_put_IsAccountLocked_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LoginHours_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_LoginHours_Stub(
@@ -11759,7 +11814,7 @@ void __RPC_STUB IADsUser_get_LoginHours_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_LoginHours_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT vLoginHours);
 
 
@@ -11771,8 +11826,8 @@ void __RPC_STUB IADsUser_put_LoginHours_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LoginWorkstations_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_LoginWorkstations_Stub(
@@ -11783,7 +11838,7 @@ void __RPC_STUB IADsUser_get_LoginWorkstations_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_LoginWorkstations_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT vLoginWorkstations);
 
 
@@ -11795,8 +11850,8 @@ void __RPC_STUB IADsUser_put_LoginWorkstations_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_MaxLogins_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsUser_get_MaxLogins_Stub(
@@ -11807,7 +11862,7 @@ void __RPC_STUB IADsUser_get_MaxLogins_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_MaxLogins_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ long lnMaxLogins);
 
 
@@ -11819,8 +11874,8 @@ void __RPC_STUB IADsUser_put_MaxLogins_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_MaxStorage_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsUser_get_MaxStorage_Stub(
@@ -11831,7 +11886,7 @@ void __RPC_STUB IADsUser_get_MaxStorage_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_MaxStorage_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ long lnMaxStorage);
 
 
@@ -11843,8 +11898,8 @@ void __RPC_STUB IADsUser_put_MaxStorage_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_PasswordExpirationDate_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ DATE *retval);
 
 
 void __RPC_STUB IADsUser_get_PasswordExpirationDate_Stub(
@@ -11855,7 +11910,7 @@ void __RPC_STUB IADsUser_get_PasswordExpirationDate_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_PasswordExpirationDate_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ DATE daPasswordExpirationDate);
 
 
@@ -11867,8 +11922,8 @@ void __RPC_STUB IADsUser_put_PasswordExpirationDate_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_PasswordMinimumLength_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsUser_get_PasswordMinimumLength_Stub(
@@ -11879,7 +11934,7 @@ void __RPC_STUB IADsUser_get_PasswordMinimumLength_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_PasswordMinimumLength_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ long lnPasswordMinimumLength);
 
 
@@ -11891,8 +11946,8 @@ void __RPC_STUB IADsUser_put_PasswordMinimumLength_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_PasswordRequired_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsUser_get_PasswordRequired_Stub(
@@ -11903,7 +11958,7 @@ void __RPC_STUB IADsUser_get_PasswordRequired_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_PasswordRequired_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT_BOOL fPasswordRequired);
 
 
@@ -11915,8 +11970,8 @@ void __RPC_STUB IADsUser_put_PasswordRequired_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_RequireUniquePassword_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsUser_get_RequireUniquePassword_Stub(
@@ -11927,7 +11982,7 @@ void __RPC_STUB IADsUser_get_RequireUniquePassword_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_RequireUniquePassword_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT_BOOL fRequireUniquePassword);
 
 
@@ -11939,8 +11994,8 @@ void __RPC_STUB IADsUser_put_RequireUniquePassword_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_EmailAddress_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_EmailAddress_Stub(
@@ -11951,7 +12006,7 @@ void __RPC_STUB IADsUser_get_EmailAddress_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_EmailAddress_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrEmailAddress);
 
 
@@ -11963,8 +12018,8 @@ void __RPC_STUB IADsUser_put_EmailAddress_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_HomeDirectory_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_HomeDirectory_Stub(
@@ -11975,7 +12030,7 @@ void __RPC_STUB IADsUser_get_HomeDirectory_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_HomeDirectory_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrHomeDirectory);
 
 
@@ -11987,8 +12042,8 @@ void __RPC_STUB IADsUser_put_HomeDirectory_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Languages_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_Languages_Stub(
@@ -11999,7 +12054,7 @@ void __RPC_STUB IADsUser_get_Languages_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Languages_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT vLanguages);
 
 
@@ -12011,8 +12066,8 @@ void __RPC_STUB IADsUser_put_Languages_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Profile_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_Profile_Stub(
@@ -12023,7 +12078,7 @@ void __RPC_STUB IADsUser_get_Profile_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Profile_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrProfile);
 
 
@@ -12035,8 +12090,8 @@ void __RPC_STUB IADsUser_put_Profile_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_LoginScript_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_LoginScript_Stub(
@@ -12047,7 +12102,7 @@ void __RPC_STUB IADsUser_get_LoginScript_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_LoginScript_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrLoginScript);
 
 
@@ -12059,8 +12114,8 @@ void __RPC_STUB IADsUser_put_LoginScript_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_Picture_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsUser_get_Picture_Stub(
@@ -12071,7 +12126,7 @@ void __RPC_STUB IADsUser_get_Picture_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_Picture_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ VARIANT vPicture);
 
 
@@ -12083,8 +12138,8 @@ void __RPC_STUB IADsUser_put_Picture_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsUser_get_HomePage_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsUser * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsUser_get_HomePage_Stub(
@@ -12095,7 +12150,7 @@ void __RPC_STUB IADsUser_get_HomePage_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsUser_put_HomePage_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrHomePage);
 
 
@@ -12107,8 +12162,8 @@ void __RPC_STUB IADsUser_put_HomePage_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsUser_Groups_Proxy( 
-    IADsUser __RPC_FAR * This,
-    /* [retval][out] */ IADsMembers __RPC_FAR *__RPC_FAR *ppGroups);
+    IADsUser * This,
+    /* [retval][out] */ IADsMembers **ppGroups);
 
 
 void __RPC_STUB IADsUser_Groups_Stub(
@@ -12119,7 +12174,7 @@ void __RPC_STUB IADsUser_Groups_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsUser_SetPassword_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR NewPassword);
 
 
@@ -12131,7 +12186,7 @@ void __RPC_STUB IADsUser_SetPassword_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsUser_ChangePassword_Proxy( 
-    IADsUser __RPC_FAR * This,
+    IADsUser * This,
     /* [in] */ BSTR bstrOldPassword,
     /* [in] */ BSTR bstrNewPassword);
 
@@ -12163,79 +12218,79 @@ EXTERN_C const IID IID_IADsPrintQueue;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PrinterPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PrinterPath( 
             /* [in] */ BSTR bstrPrinterPath) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Model( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Model( 
             /* [in] */ BSTR bstrModel) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Datatype( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Datatype( 
             /* [in] */ BSTR bstrDatatype) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PrintProcessor( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PrintProcessor( 
             /* [in] */ BSTR bstrPrintProcessor) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bstrDescription) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Location( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Location( 
             /* [in] */ BSTR bstrLocation) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StartTime( 
-            /* [retval][out] */ DATE __RPC_FAR *retval) = 0;
+            /* [retval][out] */ DATE *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StartTime( 
             /* [in] */ DATE daStartTime) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UntilTime( 
-            /* [retval][out] */ DATE __RPC_FAR *retval) = 0;
+            /* [retval][out] */ DATE *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_UntilTime( 
             /* [in] */ DATE daUntilTime) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultJobPriority( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DefaultJobPriority( 
             /* [in] */ long lnDefaultJobPriority) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Priority( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Priority( 
             /* [in] */ long lnPriority) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BannerPage( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BannerPage( 
             /* [in] */ BSTR bstrBannerPage) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PrintDevices( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PrintDevices( 
             /* [in] */ VARIANT vPrintDevices) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NetAddresses( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NetAddresses( 
             /* [in] */ VARIANT vNetAddresses) = 0;
@@ -12248,204 +12303,204 @@ EXTERN_C const IID IID_IADsPrintQueue;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsPrintQueue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsPrintQueue * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsPrintQueue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsPrintQueue * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsPrintQueue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsPrintQueue * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsPrintQueue * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsPrintQueue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsPrintQueue * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsPrintQueue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsPrintQueue * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsPrintQueue * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsPrintQueue __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsPrintQueue * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsPrintQueue __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsPrintQueue * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsPrintQueue * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsPrintQueue * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsPrintQueue * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsPrintQueue * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsPrintQueue * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrinterPath )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrinterPath )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PrinterPath )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PrinterPath )( 
+            IADsPrintQueue * This,
             /* [in] */ BSTR bstrPrinterPath);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Model )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Model )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Model )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Model )( 
+            IADsPrintQueue * This,
             /* [in] */ BSTR bstrModel);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Datatype )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Datatype )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Datatype )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Datatype )( 
+            IADsPrintQueue * This,
             /* [in] */ BSTR bstrDatatype);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrintProcessor )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrintProcessor )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PrintProcessor )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PrintProcessor )( 
+            IADsPrintQueue * This,
             /* [in] */ BSTR bstrPrintProcessor);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IADsPrintQueue * This,
             /* [in] */ BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Location )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Location )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Location )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Location )( 
+            IADsPrintQueue * This,
             /* [in] */ BSTR bstrLocation);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StartTime )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StartTime )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartTime )( 
+            IADsPrintQueue * This,
             /* [in] */ DATE daStartTime);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UntilTime )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UntilTime )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_UntilTime )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UntilTime )( 
+            IADsPrintQueue * This,
             /* [in] */ DATE daUntilTime);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DefaultJobPriority )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultJobPriority )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DefaultJobPriority )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DefaultJobPriority )( 
+            IADsPrintQueue * This,
             /* [in] */ long lnDefaultJobPriority);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Priority )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Priority )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+            IADsPrintQueue * This,
             /* [in] */ long lnPriority);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BannerPage )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BannerPage )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BannerPage )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BannerPage )( 
+            IADsPrintQueue * This,
             /* [in] */ BSTR bstrBannerPage);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrintDevices )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrintDevices )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PrintDevices )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PrintDevices )( 
+            IADsPrintQueue * This,
             /* [in] */ VARIANT vPrintDevices);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NetAddresses )( 
-            IADsPrintQueue __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NetAddresses )( 
+            IADsPrintQueue * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_NetAddresses )( 
-            IADsPrintQueue __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NetAddresses )( 
+            IADsPrintQueue * This,
             /* [in] */ VARIANT vNetAddresses);
         
         END_INTERFACE
@@ -12453,7 +12508,7 @@ EXTERN_C const IID IID_IADsPrintQueue;
 
     interface IADsPrintQueue
     {
-        CONST_VTBL struct IADsPrintQueueVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsPrintQueueVtbl *lpVtbl;
     };
 
     
@@ -12610,8 +12665,8 @@ EXTERN_C const IID IID_IADsPrintQueue;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_PrinterPath_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPrintQueue * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_PrinterPath_Stub(
@@ -12622,7 +12677,7 @@ void __RPC_STUB IADsPrintQueue_get_PrinterPath_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_PrinterPath_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
+    IADsPrintQueue * This,
     /* [in] */ BSTR bstrPrinterPath);
 
 
@@ -12634,8 +12689,8 @@ void __RPC_STUB IADsPrintQueue_put_PrinterPath_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Model_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPrintQueue * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_Model_Stub(
@@ -12646,7 +12701,7 @@ void __RPC_STUB IADsPrintQueue_get_Model_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Model_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
+    IADsPrintQueue * This,
     /* [in] */ BSTR bstrModel);
 
 
@@ -12658,8 +12713,8 @@ void __RPC_STUB IADsPrintQueue_put_Model_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Datatype_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPrintQueue * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_Datatype_Stub(
@@ -12670,7 +12725,7 @@ void __RPC_STUB IADsPrintQueue_get_Datatype_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Datatype_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
+    IADsPrintQueue * This,
     /* [in] */ BSTR bstrDatatype);
 
 
@@ -12682,8 +12737,8 @@ void __RPC_STUB IADsPrintQueue_put_Datatype_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_PrintProcessor_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPrintQueue * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_PrintProcessor_Stub(
@@ -12694,7 +12749,7 @@ void __RPC_STUB IADsPrintQueue_get_PrintProcessor_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_PrintProcessor_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
+    IADsPrintQueue * This,
     /* [in] */ BSTR bstrPrintProcessor);
 
 
@@ -12706,8 +12761,8 @@ void __RPC_STUB IADsPrintQueue_put_PrintProcessor_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Description_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPrintQueue * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_Description_Stub(
@@ -12718,7 +12773,7 @@ void __RPC_STUB IADsPrintQueue_get_Description_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Description_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
+    IADsPrintQueue * This,
     /* [in] */ BSTR bstrDescription);
 
 
@@ -12730,8 +12785,8 @@ void __RPC_STUB IADsPrintQueue_put_Description_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Location_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPrintQueue * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_Location_Stub(
@@ -12742,7 +12797,7 @@ void __RPC_STUB IADsPrintQueue_get_Location_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Location_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
+    IADsPrintQueue * This,
     /* [in] */ BSTR bstrLocation);
 
 
@@ -12754,8 +12809,8 @@ void __RPC_STUB IADsPrintQueue_put_Location_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_StartTime_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *retval);
+    IADsPrintQueue * This,
+    /* [retval][out] */ DATE *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_StartTime_Stub(
@@ -12766,7 +12821,7 @@ void __RPC_STUB IADsPrintQueue_get_StartTime_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_StartTime_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
+    IADsPrintQueue * This,
     /* [in] */ DATE daStartTime);
 
 
@@ -12778,8 +12833,8 @@ void __RPC_STUB IADsPrintQueue_put_StartTime_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_UntilTime_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *retval);
+    IADsPrintQueue * This,
+    /* [retval][out] */ DATE *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_UntilTime_Stub(
@@ -12790,7 +12845,7 @@ void __RPC_STUB IADsPrintQueue_get_UntilTime_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_UntilTime_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
+    IADsPrintQueue * This,
     /* [in] */ DATE daUntilTime);
 
 
@@ -12802,8 +12857,8 @@ void __RPC_STUB IADsPrintQueue_put_UntilTime_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_DefaultJobPriority_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPrintQueue * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_DefaultJobPriority_Stub(
@@ -12814,7 +12869,7 @@ void __RPC_STUB IADsPrintQueue_get_DefaultJobPriority_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_DefaultJobPriority_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
+    IADsPrintQueue * This,
     /* [in] */ long lnDefaultJobPriority);
 
 
@@ -12826,8 +12881,8 @@ void __RPC_STUB IADsPrintQueue_put_DefaultJobPriority_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_Priority_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPrintQueue * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_Priority_Stub(
@@ -12838,7 +12893,7 @@ void __RPC_STUB IADsPrintQueue_get_Priority_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_Priority_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
+    IADsPrintQueue * This,
     /* [in] */ long lnPriority);
 
 
@@ -12850,8 +12905,8 @@ void __RPC_STUB IADsPrintQueue_put_Priority_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_BannerPage_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPrintQueue * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_BannerPage_Stub(
@@ -12862,7 +12917,7 @@ void __RPC_STUB IADsPrintQueue_get_BannerPage_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_BannerPage_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
+    IADsPrintQueue * This,
     /* [in] */ BSTR bstrBannerPage);
 
 
@@ -12874,8 +12929,8 @@ void __RPC_STUB IADsPrintQueue_put_BannerPage_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_PrintDevices_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsPrintQueue * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_PrintDevices_Stub(
@@ -12886,7 +12941,7 @@ void __RPC_STUB IADsPrintQueue_get_PrintDevices_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_PrintDevices_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
+    IADsPrintQueue * This,
     /* [in] */ VARIANT vPrintDevices);
 
 
@@ -12898,8 +12953,8 @@ void __RPC_STUB IADsPrintQueue_put_PrintDevices_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_get_NetAddresses_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsPrintQueue * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsPrintQueue_get_NetAddresses_Stub(
@@ -12910,7 +12965,7 @@ void __RPC_STUB IADsPrintQueue_get_NetAddresses_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintQueue_put_NetAddresses_Proxy( 
-    IADsPrintQueue __RPC_FAR * This,
+    IADsPrintQueue * This,
     /* [in] */ VARIANT vNetAddresses);
 
 
@@ -12941,10 +12996,10 @@ EXTERN_C const IID IID_IADsPrintQueueOperations;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE PrintJobs( 
-            /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *pObject) = 0;
+            /* [retval][out] */ IADsCollection **pObject) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
@@ -12960,125 +13015,125 @@ EXTERN_C const IID IID_IADsPrintQueueOperations;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsPrintQueueOperations * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsPrintQueueOperations __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsPrintQueueOperations * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsPrintQueueOperations __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsPrintQueueOperations * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsPrintQueueOperations * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsPrintQueueOperations * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsPrintQueueOperations * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsPrintQueueOperations * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsPrintQueueOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsPrintQueueOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsPrintQueueOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsPrintQueueOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsPrintQueueOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsPrintQueueOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsPrintQueueOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsPrintQueueOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsPrintQueueOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsPrintQueueOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsPrintQueueOperations * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsPrintQueueOperations * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsPrintQueueOperations * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsPrintQueueOperations * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsPrintQueueOperations * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+            IADsPrintQueueOperations * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrintJobs )( 
-            IADsPrintQueueOperations __RPC_FAR * This,
-            /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *pObject);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PrintJobs )( 
+            IADsPrintQueueOperations * This,
+            /* [retval][out] */ IADsCollection **pObject);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Pause )( 
-            IADsPrintQueueOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+            IADsPrintQueueOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Resume )( 
-            IADsPrintQueueOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Resume )( 
+            IADsPrintQueueOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Purge )( 
-            IADsPrintQueueOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Purge )( 
+            IADsPrintQueueOperations * This);
         
         END_INTERFACE
     } IADsPrintQueueOperationsVtbl;
 
     interface IADsPrintQueueOperations
     {
-        CONST_VTBL struct IADsPrintQueueOperationsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsPrintQueueOperationsVtbl *lpVtbl;
     };
 
     
@@ -13172,8 +13227,8 @@ EXTERN_C const IID IID_IADsPrintQueueOperations;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_get_Status_Proxy( 
-    IADsPrintQueueOperations __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPrintQueueOperations * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPrintQueueOperations_get_Status_Stub(
@@ -13184,8 +13239,8 @@ void __RPC_STUB IADsPrintQueueOperations_get_Status_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_PrintJobs_Proxy( 
-    IADsPrintQueueOperations __RPC_FAR * This,
-    /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *pObject);
+    IADsPrintQueueOperations * This,
+    /* [retval][out] */ IADsCollection **pObject);
 
 
 void __RPC_STUB IADsPrintQueueOperations_PrintJobs_Stub(
@@ -13196,7 +13251,7 @@ void __RPC_STUB IADsPrintQueueOperations_PrintJobs_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_Pause_Proxy( 
-    IADsPrintQueueOperations __RPC_FAR * This);
+    IADsPrintQueueOperations * This);
 
 
 void __RPC_STUB IADsPrintQueueOperations_Pause_Stub(
@@ -13207,7 +13262,7 @@ void __RPC_STUB IADsPrintQueueOperations_Pause_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_Resume_Proxy( 
-    IADsPrintQueueOperations __RPC_FAR * This);
+    IADsPrintQueueOperations * This);
 
 
 void __RPC_STUB IADsPrintQueueOperations_Resume_Stub(
@@ -13218,7 +13273,7 @@ void __RPC_STUB IADsPrintQueueOperations_Resume_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPrintQueueOperations_Purge_Proxy( 
-    IADsPrintQueueOperations __RPC_FAR * This);
+    IADsPrintQueueOperations * This);
 
 
 void __RPC_STUB IADsPrintQueueOperations_Purge_Stub(
@@ -13248,55 +13303,55 @@ EXTERN_C const IID IID_IADsPrintJob;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostPrintQueue( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_User( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UserPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TimeSubmitted( 
-            /* [retval][out] */ DATE __RPC_FAR *retval) = 0;
+            /* [retval][out] */ DATE *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TotalPages( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Size( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bstrDescription) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Priority( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Priority( 
             /* [in] */ long lnPriority) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StartTime( 
-            /* [retval][out] */ DATE __RPC_FAR *retval) = 0;
+            /* [retval][out] */ DATE *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StartTime( 
             /* [in] */ DATE daStartTime) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UntilTime( 
-            /* [retval][out] */ DATE __RPC_FAR *retval) = 0;
+            /* [retval][out] */ DATE *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_UntilTime( 
             /* [in] */ DATE daUntilTime) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Notify( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Notify( 
             /* [in] */ BSTR bstrNotify) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_NotifyPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_NotifyPath( 
             /* [in] */ BSTR bstrNotifyPath) = 0;
@@ -13309,172 +13364,172 @@ EXTERN_C const IID IID_IADsPrintJob;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsPrintJob __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsPrintJob * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsPrintJob __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsPrintJob * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsPrintJob __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsPrintJob * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsPrintJob * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsPrintJob __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsPrintJob * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsPrintJob __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsPrintJob * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsPrintJob __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsPrintJob * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsPrintJob __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsPrintJob * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsPrintJob __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsPrintJob * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsPrintJob __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsPrintJob * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsPrintJob __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsPrintJob * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsPrintJob __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsPrintJob * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsPrintJob __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsPrintJob * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsPrintJob __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsPrintJob * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HostPrintQueue )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostPrintQueue )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_User )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_User )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UserPath )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserPath )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TimeSubmitted )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TimeSubmitted )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ DATE *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TotalPages )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TotalPages )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Size )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Size )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IADsPrintJob __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IADsPrintJob * This,
             /* [in] */ BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Priority )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Priority )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Priority )( 
-            IADsPrintJob __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Priority )( 
+            IADsPrintJob * This,
             /* [in] */ long lnPriority);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StartTime )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StartTime )( 
-            IADsPrintJob __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartTime )( 
+            IADsPrintJob * This,
             /* [in] */ DATE daStartTime);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UntilTime )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ DATE __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UntilTime )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ DATE *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_UntilTime )( 
-            IADsPrintJob __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UntilTime )( 
+            IADsPrintJob * This,
             /* [in] */ DATE daUntilTime);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Notify )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Notify )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Notify )( 
-            IADsPrintJob __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Notify )( 
+            IADsPrintJob * This,
             /* [in] */ BSTR bstrNotify);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NotifyPath )( 
-            IADsPrintJob __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NotifyPath )( 
+            IADsPrintJob * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_NotifyPath )( 
-            IADsPrintJob __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NotifyPath )( 
+            IADsPrintJob * This,
             /* [in] */ BSTR bstrNotifyPath);
         
         END_INTERFACE
@@ -13482,7 +13537,7 @@ EXTERN_C const IID IID_IADsPrintJob;
 
     interface IADsPrintJob
     {
-        CONST_VTBL struct IADsPrintJobVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsPrintJobVtbl *lpVtbl;
     };
 
     
@@ -13615,8 +13670,8 @@ EXTERN_C const IID IID_IADsPrintJob;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_HostPrintQueue_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPrintJob * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_HostPrintQueue_Stub(
@@ -13627,8 +13682,8 @@ void __RPC_STUB IADsPrintJob_get_HostPrintQueue_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_User_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPrintJob * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_User_Stub(
@@ -13639,8 +13694,8 @@ void __RPC_STUB IADsPrintJob_get_User_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_UserPath_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPrintJob * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_UserPath_Stub(
@@ -13651,8 +13706,8 @@ void __RPC_STUB IADsPrintJob_get_UserPath_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_TimeSubmitted_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *retval);
+    IADsPrintJob * This,
+    /* [retval][out] */ DATE *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_TimeSubmitted_Stub(
@@ -13663,8 +13718,8 @@ void __RPC_STUB IADsPrintJob_get_TimeSubmitted_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_TotalPages_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPrintJob * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_TotalPages_Stub(
@@ -13675,8 +13730,8 @@ void __RPC_STUB IADsPrintJob_get_TotalPages_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_Size_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPrintJob * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_Size_Stub(
@@ -13687,8 +13742,8 @@ void __RPC_STUB IADsPrintJob_get_Size_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_Description_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPrintJob * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_Description_Stub(
@@ -13699,7 +13754,7 @@ void __RPC_STUB IADsPrintJob_get_Description_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_put_Description_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
+    IADsPrintJob * This,
     /* [in] */ BSTR bstrDescription);
 
 
@@ -13711,8 +13766,8 @@ void __RPC_STUB IADsPrintJob_put_Description_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_Priority_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPrintJob * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_Priority_Stub(
@@ -13723,7 +13778,7 @@ void __RPC_STUB IADsPrintJob_get_Priority_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_put_Priority_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
+    IADsPrintJob * This,
     /* [in] */ long lnPriority);
 
 
@@ -13735,8 +13790,8 @@ void __RPC_STUB IADsPrintJob_put_Priority_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_StartTime_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *retval);
+    IADsPrintJob * This,
+    /* [retval][out] */ DATE *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_StartTime_Stub(
@@ -13747,7 +13802,7 @@ void __RPC_STUB IADsPrintJob_get_StartTime_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_put_StartTime_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
+    IADsPrintJob * This,
     /* [in] */ DATE daStartTime);
 
 
@@ -13759,8 +13814,8 @@ void __RPC_STUB IADsPrintJob_put_StartTime_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_UntilTime_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
-    /* [retval][out] */ DATE __RPC_FAR *retval);
+    IADsPrintJob * This,
+    /* [retval][out] */ DATE *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_UntilTime_Stub(
@@ -13771,7 +13826,7 @@ void __RPC_STUB IADsPrintJob_get_UntilTime_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_put_UntilTime_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
+    IADsPrintJob * This,
     /* [in] */ DATE daUntilTime);
 
 
@@ -13783,8 +13838,8 @@ void __RPC_STUB IADsPrintJob_put_UntilTime_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_Notify_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPrintJob * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_Notify_Stub(
@@ -13795,7 +13850,7 @@ void __RPC_STUB IADsPrintJob_get_Notify_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_put_Notify_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
+    IADsPrintJob * This,
     /* [in] */ BSTR bstrNotify);
 
 
@@ -13807,8 +13862,8 @@ void __RPC_STUB IADsPrintJob_put_Notify_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_get_NotifyPath_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPrintJob * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPrintJob_get_NotifyPath_Stub(
@@ -13819,7 +13874,7 @@ void __RPC_STUB IADsPrintJob_get_NotifyPath_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJob_put_NotifyPath_Proxy( 
-    IADsPrintJob __RPC_FAR * This,
+    IADsPrintJob * This,
     /* [in] */ BSTR bstrNotifyPath);
 
 
@@ -13850,16 +13905,16 @@ EXTERN_C const IID IID_IADsPrintJobOperations;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TimeElapsed( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PagesPrinted( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Position( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Position( 
             /* [in] */ long lnPosition) = 0;
@@ -13876,134 +13931,134 @@ EXTERN_C const IID IID_IADsPrintJobOperations;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsPrintJobOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsPrintJobOperations * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsPrintJobOperations __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsPrintJobOperations * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsPrintJobOperations __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsPrintJobOperations * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsPrintJobOperations __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsPrintJobOperations * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsPrintJobOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsPrintJobOperations * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsPrintJobOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsPrintJobOperations * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsPrintJobOperations __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsPrintJobOperations * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsPrintJobOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsPrintJobOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsPrintJobOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsPrintJobOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsPrintJobOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsPrintJobOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsPrintJobOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsPrintJobOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsPrintJobOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsPrintJobOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsPrintJobOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsPrintJobOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsPrintJobOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsPrintJobOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsPrintJobOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsPrintJobOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsPrintJobOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsPrintJobOperations * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsPrintJobOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsPrintJobOperations * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsPrintJobOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsPrintJobOperations * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsPrintJobOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsPrintJobOperations * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsPrintJobOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsPrintJobOperations * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
-            IADsPrintJobOperations __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+            IADsPrintJobOperations * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TimeElapsed )( 
-            IADsPrintJobOperations __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TimeElapsed )( 
+            IADsPrintJobOperations * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PagesPrinted )( 
-            IADsPrintJobOperations __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PagesPrinted )( 
+            IADsPrintJobOperations * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Position )( 
-            IADsPrintJobOperations __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Position )( 
+            IADsPrintJobOperations * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Position )( 
-            IADsPrintJobOperations __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Position )( 
+            IADsPrintJobOperations * This,
             /* [in] */ long lnPosition);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Pause )( 
-            IADsPrintJobOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+            IADsPrintJobOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Resume )( 
-            IADsPrintJobOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Resume )( 
+            IADsPrintJobOperations * This);
         
         END_INTERFACE
     } IADsPrintJobOperationsVtbl;
 
     interface IADsPrintJobOperations
     {
-        CONST_VTBL struct IADsPrintJobOperationsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsPrintJobOperationsVtbl *lpVtbl;
     };
 
     
@@ -14103,8 +14158,8 @@ EXTERN_C const IID IID_IADsPrintJobOperations;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_get_Status_Proxy( 
-    IADsPrintJobOperations __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPrintJobOperations * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPrintJobOperations_get_Status_Stub(
@@ -14115,8 +14170,8 @@ void __RPC_STUB IADsPrintJobOperations_get_Status_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_get_TimeElapsed_Proxy( 
-    IADsPrintJobOperations __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPrintJobOperations * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPrintJobOperations_get_TimeElapsed_Stub(
@@ -14127,8 +14182,8 @@ void __RPC_STUB IADsPrintJobOperations_get_TimeElapsed_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_get_PagesPrinted_Proxy( 
-    IADsPrintJobOperations __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPrintJobOperations * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPrintJobOperations_get_PagesPrinted_Stub(
@@ -14139,8 +14194,8 @@ void __RPC_STUB IADsPrintJobOperations_get_PagesPrinted_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_get_Position_Proxy( 
-    IADsPrintJobOperations __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPrintJobOperations * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPrintJobOperations_get_Position_Stub(
@@ -14151,7 +14206,7 @@ void __RPC_STUB IADsPrintJobOperations_get_Position_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_put_Position_Proxy( 
-    IADsPrintJobOperations __RPC_FAR * This,
+    IADsPrintJobOperations * This,
     /* [in] */ long lnPosition);
 
 
@@ -14163,7 +14218,7 @@ void __RPC_STUB IADsPrintJobOperations_put_Position_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_Pause_Proxy( 
-    IADsPrintJobOperations __RPC_FAR * This);
+    IADsPrintJobOperations * This);
 
 
 void __RPC_STUB IADsPrintJobOperations_Pause_Stub(
@@ -14174,7 +14229,7 @@ void __RPC_STUB IADsPrintJobOperations_Pause_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPrintJobOperations_Resume_Proxy( 
-    IADsPrintJobOperations __RPC_FAR * This);
+    IADsPrintJobOperations * This);
 
 
 void __RPC_STUB IADsPrintJobOperations_Resume_Stub(
@@ -14204,73 +14259,73 @@ EXTERN_C const IID IID_IADsService;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostComputer( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HostComputer( 
             /* [in] */ BSTR bstrHostComputer) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DisplayName( 
             /* [in] */ BSTR bstrDisplayName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Version( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Version( 
             /* [in] */ BSTR bstrVersion) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ServiceType( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ServiceType( 
             /* [in] */ long lnServiceType) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StartType( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StartType( 
             /* [in] */ long lnStartType) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Path( 
             /* [in] */ BSTR bstrPath) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StartupParameters( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StartupParameters( 
             /* [in] */ BSTR bstrStartupParameters) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ErrorControl( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ErrorControl( 
             /* [in] */ long lnErrorControl) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LoadOrderGroup( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LoadOrderGroup( 
             /* [in] */ BSTR bstrLoadOrderGroup) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ServiceAccountName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ServiceAccountName( 
             /* [in] */ BSTR bstrServiceAccountName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ServiceAccountPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ServiceAccountPath( 
             /* [in] */ BSTR bstrServiceAccountPath) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Dependencies( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Dependencies( 
             /* [in] */ VARIANT vDependencies) = 0;
@@ -14283,196 +14338,196 @@ EXTERN_C const IID IID_IADsService;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsService __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsService * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsService __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsService * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsService __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsService * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsService __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsService * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsService __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsService * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsService __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsService * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsService __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsService * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsService __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsService * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsService __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsService * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsService __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsService * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsService __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsService * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsService __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsService * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsService __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsService * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsService __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsService * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HostComputer )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostComputer )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HostComputer )( 
-            IADsService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HostComputer )( 
+            IADsService * This,
             /* [in] */ BSTR bstrHostComputer);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayName )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplayName )( 
-            IADsService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DisplayName )( 
+            IADsService * This,
             /* [in] */ BSTR bstrDisplayName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Version )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Version )( 
-            IADsService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Version )( 
+            IADsService * This,
             /* [in] */ BSTR bstrVersion);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceType )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceType )( 
+            IADsService * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServiceType )( 
-            IADsService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceType )( 
+            IADsService * This,
             /* [in] */ long lnServiceType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StartType )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartType )( 
+            IADsService * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StartType )( 
-            IADsService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartType )( 
+            IADsService * This,
             /* [in] */ long lnStartType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Path )( 
-            IADsService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+            IADsService * This,
             /* [in] */ BSTR bstrPath);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StartupParameters )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartupParameters )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StartupParameters )( 
-            IADsService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartupParameters )( 
+            IADsService * This,
             /* [in] */ BSTR bstrStartupParameters);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ErrorControl )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ErrorControl )( 
+            IADsService * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ErrorControl )( 
-            IADsService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ErrorControl )( 
+            IADsService * This,
             /* [in] */ long lnErrorControl);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LoadOrderGroup )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoadOrderGroup )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LoadOrderGroup )( 
-            IADsService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoadOrderGroup )( 
+            IADsService * This,
             /* [in] */ BSTR bstrLoadOrderGroup);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceAccountName )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountName )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServiceAccountName )( 
-            IADsService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountName )( 
+            IADsService * This,
             /* [in] */ BSTR bstrServiceAccountName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceAccountPath )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountPath )( 
+            IADsService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServiceAccountPath )( 
-            IADsService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountPath )( 
+            IADsService * This,
             /* [in] */ BSTR bstrServiceAccountPath);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Dependencies )( 
-            IADsService __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Dependencies )( 
+            IADsService * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Dependencies )( 
-            IADsService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Dependencies )( 
+            IADsService * This,
             /* [in] */ VARIANT vDependencies);
         
         END_INTERFACE
@@ -14480,7 +14535,7 @@ EXTERN_C const IID IID_IADsService;
 
     interface IADsService
     {
-        CONST_VTBL struct IADsServiceVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsServiceVtbl *lpVtbl;
     };
 
     
@@ -14631,8 +14686,8 @@ EXTERN_C const IID IID_IADsService;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_HostComputer_Proxy( 
-    IADsService __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsService * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_HostComputer_Stub(
@@ -14643,7 +14698,7 @@ void __RPC_STUB IADsService_get_HostComputer_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_HostComputer_Proxy( 
-    IADsService __RPC_FAR * This,
+    IADsService * This,
     /* [in] */ BSTR bstrHostComputer);
 
 
@@ -14655,8 +14710,8 @@ void __RPC_STUB IADsService_put_HostComputer_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_DisplayName_Proxy( 
-    IADsService __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsService * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_DisplayName_Stub(
@@ -14667,7 +14722,7 @@ void __RPC_STUB IADsService_get_DisplayName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_DisplayName_Proxy( 
-    IADsService __RPC_FAR * This,
+    IADsService * This,
     /* [in] */ BSTR bstrDisplayName);
 
 
@@ -14679,8 +14734,8 @@ void __RPC_STUB IADsService_put_DisplayName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_Version_Proxy( 
-    IADsService __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsService * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_Version_Stub(
@@ -14691,7 +14746,7 @@ void __RPC_STUB IADsService_get_Version_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_Version_Proxy( 
-    IADsService __RPC_FAR * This,
+    IADsService * This,
     /* [in] */ BSTR bstrVersion);
 
 
@@ -14703,8 +14758,8 @@ void __RPC_STUB IADsService_put_Version_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_ServiceType_Proxy( 
-    IADsService __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsService * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsService_get_ServiceType_Stub(
@@ -14715,7 +14770,7 @@ void __RPC_STUB IADsService_get_ServiceType_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_ServiceType_Proxy( 
-    IADsService __RPC_FAR * This,
+    IADsService * This,
     /* [in] */ long lnServiceType);
 
 
@@ -14727,8 +14782,8 @@ void __RPC_STUB IADsService_put_ServiceType_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_StartType_Proxy( 
-    IADsService __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsService * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsService_get_StartType_Stub(
@@ -14739,7 +14794,7 @@ void __RPC_STUB IADsService_get_StartType_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_StartType_Proxy( 
-    IADsService __RPC_FAR * This,
+    IADsService * This,
     /* [in] */ long lnStartType);
 
 
@@ -14751,8 +14806,8 @@ void __RPC_STUB IADsService_put_StartType_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_Path_Proxy( 
-    IADsService __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsService * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_Path_Stub(
@@ -14763,7 +14818,7 @@ void __RPC_STUB IADsService_get_Path_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_Path_Proxy( 
-    IADsService __RPC_FAR * This,
+    IADsService * This,
     /* [in] */ BSTR bstrPath);
 
 
@@ -14775,8 +14830,8 @@ void __RPC_STUB IADsService_put_Path_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_StartupParameters_Proxy( 
-    IADsService __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsService * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_StartupParameters_Stub(
@@ -14787,7 +14842,7 @@ void __RPC_STUB IADsService_get_StartupParameters_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_StartupParameters_Proxy( 
-    IADsService __RPC_FAR * This,
+    IADsService * This,
     /* [in] */ BSTR bstrStartupParameters);
 
 
@@ -14799,8 +14854,8 @@ void __RPC_STUB IADsService_put_StartupParameters_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_ErrorControl_Proxy( 
-    IADsService __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsService * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsService_get_ErrorControl_Stub(
@@ -14811,7 +14866,7 @@ void __RPC_STUB IADsService_get_ErrorControl_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_ErrorControl_Proxy( 
-    IADsService __RPC_FAR * This,
+    IADsService * This,
     /* [in] */ long lnErrorControl);
 
 
@@ -14823,8 +14878,8 @@ void __RPC_STUB IADsService_put_ErrorControl_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_LoadOrderGroup_Proxy( 
-    IADsService __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsService * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_LoadOrderGroup_Stub(
@@ -14835,7 +14890,7 @@ void __RPC_STUB IADsService_get_LoadOrderGroup_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_LoadOrderGroup_Proxy( 
-    IADsService __RPC_FAR * This,
+    IADsService * This,
     /* [in] */ BSTR bstrLoadOrderGroup);
 
 
@@ -14847,8 +14902,8 @@ void __RPC_STUB IADsService_put_LoadOrderGroup_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_ServiceAccountName_Proxy( 
-    IADsService __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsService * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_ServiceAccountName_Stub(
@@ -14859,7 +14914,7 @@ void __RPC_STUB IADsService_get_ServiceAccountName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_ServiceAccountName_Proxy( 
-    IADsService __RPC_FAR * This,
+    IADsService * This,
     /* [in] */ BSTR bstrServiceAccountName);
 
 
@@ -14871,8 +14926,8 @@ void __RPC_STUB IADsService_put_ServiceAccountName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_ServiceAccountPath_Proxy( 
-    IADsService __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsService * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsService_get_ServiceAccountPath_Stub(
@@ -14883,7 +14938,7 @@ void __RPC_STUB IADsService_get_ServiceAccountPath_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_ServiceAccountPath_Proxy( 
-    IADsService __RPC_FAR * This,
+    IADsService * This,
     /* [in] */ BSTR bstrServiceAccountPath);
 
 
@@ -14895,8 +14950,8 @@ void __RPC_STUB IADsService_put_ServiceAccountPath_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsService_get_Dependencies_Proxy( 
-    IADsService __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsService * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsService_get_Dependencies_Stub(
@@ -14907,7 +14962,7 @@ void __RPC_STUB IADsService_get_Dependencies_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsService_put_Dependencies_Proxy( 
-    IADsService __RPC_FAR * This,
+    IADsService * This,
     /* [in] */ VARIANT vDependencies);
 
 
@@ -14938,7 +14993,7 @@ EXTERN_C const IID IID_IADsServiceOperations;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Start( void) = 0;
         
@@ -14959,120 +15014,120 @@ EXTERN_C const IID IID_IADsServiceOperations;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsServiceOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsServiceOperations * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsServiceOperations __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsServiceOperations * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsServiceOperations __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsServiceOperations * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsServiceOperations __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsServiceOperations * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsServiceOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsServiceOperations * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsServiceOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsServiceOperations * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsServiceOperations __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsServiceOperations * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsServiceOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsServiceOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsServiceOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsServiceOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsServiceOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsServiceOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsServiceOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsServiceOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsServiceOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsServiceOperations * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsServiceOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsServiceOperations * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsServiceOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsServiceOperations * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsServiceOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsServiceOperations * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsServiceOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsServiceOperations * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
-            IADsServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+            IADsServiceOperations * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Start )( 
-            IADsServiceOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Start )( 
+            IADsServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
-            IADsServiceOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+            IADsServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Pause )( 
-            IADsServiceOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+            IADsServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Continue )( 
-            IADsServiceOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Continue )( 
+            IADsServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPassword )( 
-            IADsServiceOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetPassword )( 
+            IADsServiceOperations * This,
             /* [in] */ BSTR bstrNewPassword);
         
         END_INTERFACE
@@ -15080,7 +15135,7 @@ EXTERN_C const IID IID_IADsServiceOperations;
 
     interface IADsServiceOperations
     {
-        CONST_VTBL struct IADsServiceOperationsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsServiceOperationsVtbl *lpVtbl;
     };
 
     
@@ -15177,8 +15232,8 @@ EXTERN_C const IID IID_IADsServiceOperations;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsServiceOperations_get_Status_Proxy( 
-    IADsServiceOperations __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsServiceOperations * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsServiceOperations_get_Status_Stub(
@@ -15189,7 +15244,7 @@ void __RPC_STUB IADsServiceOperations_get_Status_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsServiceOperations_Start_Proxy( 
-    IADsServiceOperations __RPC_FAR * This);
+    IADsServiceOperations * This);
 
 
 void __RPC_STUB IADsServiceOperations_Start_Stub(
@@ -15200,7 +15255,7 @@ void __RPC_STUB IADsServiceOperations_Start_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsServiceOperations_Stop_Proxy( 
-    IADsServiceOperations __RPC_FAR * This);
+    IADsServiceOperations * This);
 
 
 void __RPC_STUB IADsServiceOperations_Stop_Stub(
@@ -15211,7 +15266,7 @@ void __RPC_STUB IADsServiceOperations_Stop_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsServiceOperations_Pause_Proxy( 
-    IADsServiceOperations __RPC_FAR * This);
+    IADsServiceOperations * This);
 
 
 void __RPC_STUB IADsServiceOperations_Pause_Stub(
@@ -15222,7 +15277,7 @@ void __RPC_STUB IADsServiceOperations_Pause_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsServiceOperations_Continue_Proxy( 
-    IADsServiceOperations __RPC_FAR * This);
+    IADsServiceOperations * This);
 
 
 void __RPC_STUB IADsServiceOperations_Continue_Stub(
@@ -15233,7 +15288,7 @@ void __RPC_STUB IADsServiceOperations_Continue_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsServiceOperations_SetPassword_Proxy( 
-    IADsServiceOperations __RPC_FAR * This,
+    IADsServiceOperations * This,
     /* [in] */ BSTR bstrNewPassword);
 
 
@@ -15264,13 +15319,13 @@ EXTERN_C const IID IID_IADsFileService;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bstrDescription) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxUserCount( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxUserCount( 
             /* [in] */ long lnMaxUserCount) = 0;
@@ -15283,212 +15338,212 @@ EXTERN_C const IID IID_IADsFileService;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsFileService __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsFileService * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsFileService __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsFileService * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsFileService __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsFileService * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsFileService __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsFileService * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsFileService __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsFileService * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsFileService __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsFileService * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsFileService __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsFileService * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsFileService __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsFileService * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsFileService __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsFileService * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsFileService * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsFileService * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsFileService * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsFileService * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsFileService * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HostComputer )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostComputer )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HostComputer )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HostComputer )( 
+            IADsFileService * This,
             /* [in] */ BSTR bstrHostComputer);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayName )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DisplayName )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplayName )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DisplayName )( 
+            IADsFileService * This,
             /* [in] */ BSTR bstrDisplayName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Version )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Version )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Version )( 
+            IADsFileService * This,
             /* [in] */ BSTR bstrVersion);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceType )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceType )( 
+            IADsFileService * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServiceType )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceType )( 
+            IADsFileService * This,
             /* [in] */ long lnServiceType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StartType )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartType )( 
+            IADsFileService * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StartType )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartType )( 
+            IADsFileService * This,
             /* [in] */ long lnStartType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Path )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+            IADsFileService * This,
             /* [in] */ BSTR bstrPath);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StartupParameters )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartupParameters )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StartupParameters )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartupParameters )( 
+            IADsFileService * This,
             /* [in] */ BSTR bstrStartupParameters);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ErrorControl )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ErrorControl )( 
+            IADsFileService * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ErrorControl )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ErrorControl )( 
+            IADsFileService * This,
             /* [in] */ long lnErrorControl);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LoadOrderGroup )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoadOrderGroup )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LoadOrderGroup )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoadOrderGroup )( 
+            IADsFileService * This,
             /* [in] */ BSTR bstrLoadOrderGroup);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceAccountName )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountName )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServiceAccountName )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountName )( 
+            IADsFileService * This,
             /* [in] */ BSTR bstrServiceAccountName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServiceAccountPath )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServiceAccountPath )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServiceAccountPath )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServiceAccountPath )( 
+            IADsFileService * This,
             /* [in] */ BSTR bstrServiceAccountPath);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Dependencies )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Dependencies )( 
+            IADsFileService * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Dependencies )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Dependencies )( 
+            IADsFileService * This,
             /* [in] */ VARIANT vDependencies);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IADsFileService * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IADsFileService * This,
             /* [in] */ BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MaxUserCount )( 
-            IADsFileService __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxUserCount )( 
+            IADsFileService * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MaxUserCount )( 
-            IADsFileService __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxUserCount )( 
+            IADsFileService * This,
             /* [in] */ long lnMaxUserCount);
         
         END_INTERFACE
@@ -15496,7 +15551,7 @@ EXTERN_C const IID IID_IADsFileService;
 
     interface IADsFileService
     {
-        CONST_VTBL struct IADsFileServiceVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsFileServiceVtbl *lpVtbl;
     };
 
     
@@ -15660,8 +15715,8 @@ EXTERN_C const IID IID_IADsFileService;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileService_get_Description_Proxy( 
-    IADsFileService __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsFileService * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsFileService_get_Description_Stub(
@@ -15672,7 +15727,7 @@ void __RPC_STUB IADsFileService_get_Description_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFileService_put_Description_Proxy( 
-    IADsFileService __RPC_FAR * This,
+    IADsFileService * This,
     /* [in] */ BSTR bstrDescription);
 
 
@@ -15684,8 +15739,8 @@ void __RPC_STUB IADsFileService_put_Description_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileService_get_MaxUserCount_Proxy( 
-    IADsFileService __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsFileService * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsFileService_get_MaxUserCount_Stub(
@@ -15696,7 +15751,7 @@ void __RPC_STUB IADsFileService_get_MaxUserCount_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFileService_put_MaxUserCount_Proxy( 
-    IADsFileService __RPC_FAR * This,
+    IADsFileService * This,
     /* [in] */ long lnMaxUserCount);
 
 
@@ -15727,10 +15782,10 @@ EXTERN_C const IID IID_IADsFileServiceOperations;
     {
     public:
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Sessions( 
-            /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *ppSessions) = 0;
+            /* [retval][out] */ IADsCollection **ppSessions) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Resources( 
-            /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *ppResources) = 0;
+            /* [retval][out] */ IADsCollection **ppResources) = 0;
         
     };
     
@@ -15740,136 +15795,136 @@ EXTERN_C const IID IID_IADsFileServiceOperations;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsFileServiceOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsFileServiceOperations * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsFileServiceOperations __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsFileServiceOperations * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsFileServiceOperations __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsFileServiceOperations * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsFileServiceOperations __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsFileServiceOperations * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsFileServiceOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsFileServiceOperations * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsFileServiceOperations __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsFileServiceOperations * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsFileServiceOperations __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsFileServiceOperations * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsFileServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsFileServiceOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsFileServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsFileServiceOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsFileServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsFileServiceOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsFileServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsFileServiceOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsFileServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsFileServiceOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsFileServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsFileServiceOperations * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsFileServiceOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsFileServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsFileServiceOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsFileServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsFileServiceOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsFileServiceOperations * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsFileServiceOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsFileServiceOperations * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsFileServiceOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsFileServiceOperations * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsFileServiceOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsFileServiceOperations * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsFileServiceOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsFileServiceOperations * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
-            IADsFileServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+            IADsFileServiceOperations * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Start )( 
-            IADsFileServiceOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Start )( 
+            IADsFileServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
-            IADsFileServiceOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+            IADsFileServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Pause )( 
-            IADsFileServiceOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+            IADsFileServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Continue )( 
-            IADsFileServiceOperations __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Continue )( 
+            IADsFileServiceOperations * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPassword )( 
-            IADsFileServiceOperations __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetPassword )( 
+            IADsFileServiceOperations * This,
             /* [in] */ BSTR bstrNewPassword);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Sessions )( 
-            IADsFileServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *ppSessions);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Sessions )( 
+            IADsFileServiceOperations * This,
+            /* [retval][out] */ IADsCollection **ppSessions);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Resources )( 
-            IADsFileServiceOperations __RPC_FAR * This,
-            /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *ppResources);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Resources )( 
+            IADsFileServiceOperations * This,
+            /* [retval][out] */ IADsCollection **ppResources);
         
         END_INTERFACE
     } IADsFileServiceOperationsVtbl;
 
     interface IADsFileServiceOperations
     {
-        CONST_VTBL struct IADsFileServiceOperationsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsFileServiceOperationsVtbl *lpVtbl;
     };
 
     
@@ -15973,8 +16028,8 @@ EXTERN_C const IID IID_IADsFileServiceOperations;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsFileServiceOperations_Sessions_Proxy( 
-    IADsFileServiceOperations __RPC_FAR * This,
-    /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *ppSessions);
+    IADsFileServiceOperations * This,
+    /* [retval][out] */ IADsCollection **ppSessions);
 
 
 void __RPC_STUB IADsFileServiceOperations_Sessions_Stub(
@@ -15985,8 +16040,8 @@ void __RPC_STUB IADsFileServiceOperations_Sessions_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsFileServiceOperations_Resources_Proxy( 
-    IADsFileServiceOperations __RPC_FAR * This,
-    /* [retval][out] */ IADsCollection __RPC_FAR *__RPC_FAR *ppResources);
+    IADsFileServiceOperations * This,
+    /* [retval][out] */ IADsCollection **ppResources);
 
 
 void __RPC_STUB IADsFileServiceOperations_Resources_Stub(
@@ -16016,28 +16071,28 @@ EXTERN_C const IID IID_IADsFileShare;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentUserCount( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Description( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Description( 
             /* [in] */ BSTR bstrDescription) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HostComputer( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HostComputer( 
             /* [in] */ BSTR bstrHostComputer) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Path( 
             /* [in] */ BSTR bstrPath) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxUserCount( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxUserCount( 
             /* [in] */ long lnMaxUserCount) = 0;
@@ -16050,136 +16105,136 @@ EXTERN_C const IID IID_IADsFileShare;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsFileShare __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsFileShare * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsFileShare __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsFileShare * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsFileShare __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsFileShare * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsFileShare __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsFileShare * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsFileShare __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsFileShare * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsFileShare __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsFileShare * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsFileShare __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsFileShare * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsFileShare __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsFileShare * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsFileShare __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsFileShare * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsFileShare __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsFileShare * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsFileShare __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsFileShare * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsFileShare __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsFileShare * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsFileShare __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsFileShare * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsFileShare __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsFileShare * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsFileShare __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsFileShare * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsFileShare __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsFileShare * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsFileShare __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsFileShare * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsFileShare __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsFileShare * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsFileShare __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsFileShare * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsFileShare __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsFileShare * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CurrentUserCount )( 
-            IADsFileShare __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentUserCount )( 
+            IADsFileShare * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Description )( 
-            IADsFileShare __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Description )( 
+            IADsFileShare * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Description )( 
-            IADsFileShare __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Description )( 
+            IADsFileShare * This,
             /* [in] */ BSTR bstrDescription);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HostComputer )( 
-            IADsFileShare __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HostComputer )( 
+            IADsFileShare * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HostComputer )( 
-            IADsFileShare __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HostComputer )( 
+            IADsFileShare * This,
             /* [in] */ BSTR bstrHostComputer);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
-            IADsFileShare __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+            IADsFileShare * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Path )( 
-            IADsFileShare __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+            IADsFileShare * This,
             /* [in] */ BSTR bstrPath);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MaxUserCount )( 
-            IADsFileShare __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxUserCount )( 
+            IADsFileShare * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MaxUserCount )( 
-            IADsFileShare __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxUserCount )( 
+            IADsFileShare * This,
             /* [in] */ long lnMaxUserCount);
         
         END_INTERFACE
@@ -16187,7 +16242,7 @@ EXTERN_C const IID IID_IADsFileShare;
 
     interface IADsFileShare
     {
-        CONST_VTBL struct IADsFileShareVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsFileShareVtbl *lpVtbl;
     };
 
     
@@ -16293,8 +16348,8 @@ EXTERN_C const IID IID_IADsFileShare;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileShare_get_CurrentUserCount_Proxy( 
-    IADsFileShare __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsFileShare * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsFileShare_get_CurrentUserCount_Stub(
@@ -16305,8 +16360,8 @@ void __RPC_STUB IADsFileShare_get_CurrentUserCount_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileShare_get_Description_Proxy( 
-    IADsFileShare __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsFileShare * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsFileShare_get_Description_Stub(
@@ -16317,7 +16372,7 @@ void __RPC_STUB IADsFileShare_get_Description_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFileShare_put_Description_Proxy( 
-    IADsFileShare __RPC_FAR * This,
+    IADsFileShare * This,
     /* [in] */ BSTR bstrDescription);
 
 
@@ -16329,8 +16384,8 @@ void __RPC_STUB IADsFileShare_put_Description_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileShare_get_HostComputer_Proxy( 
-    IADsFileShare __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsFileShare * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsFileShare_get_HostComputer_Stub(
@@ -16341,7 +16396,7 @@ void __RPC_STUB IADsFileShare_get_HostComputer_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFileShare_put_HostComputer_Proxy( 
-    IADsFileShare __RPC_FAR * This,
+    IADsFileShare * This,
     /* [in] */ BSTR bstrHostComputer);
 
 
@@ -16353,8 +16408,8 @@ void __RPC_STUB IADsFileShare_put_HostComputer_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileShare_get_Path_Proxy( 
-    IADsFileShare __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsFileShare * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsFileShare_get_Path_Stub(
@@ -16365,7 +16420,7 @@ void __RPC_STUB IADsFileShare_get_Path_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFileShare_put_Path_Proxy( 
-    IADsFileShare __RPC_FAR * This,
+    IADsFileShare * This,
     /* [in] */ BSTR bstrPath);
 
 
@@ -16377,8 +16432,8 @@ void __RPC_STUB IADsFileShare_put_Path_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFileShare_get_MaxUserCount_Proxy( 
-    IADsFileShare __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsFileShare * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsFileShare_get_MaxUserCount_Stub(
@@ -16389,7 +16444,7 @@ void __RPC_STUB IADsFileShare_get_MaxUserCount_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFileShare_put_MaxUserCount_Proxy( 
-    IADsFileShare __RPC_FAR * This,
+    IADsFileShare * This,
     /* [in] */ long lnMaxUserCount);
 
 
@@ -16420,22 +16475,22 @@ EXTERN_C const IID IID_IADsSession;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_User( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UserPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Computer( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ComputerPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectTime( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_IdleTime( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
     };
     
@@ -16445,132 +16500,132 @@ EXTERN_C const IID IID_IADsSession;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsSession __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsSession * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsSession __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsSession * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsSession __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsSession * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsSession __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsSession * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsSession __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsSession * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsSession __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsSession * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsSession __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsSession * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsSession __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsSession * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsSession __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsSession * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsSession __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsSession * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsSession __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsSession * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsSession __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsSession * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsSession __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsSession * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsSession __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsSession * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsSession __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsSession * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsSession __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsSession * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsSession __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsSession * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsSession __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsSession * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsSession __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsSession * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsSession __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsSession * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_User )( 
-            IADsSession __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_User )( 
+            IADsSession * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UserPath )( 
-            IADsSession __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserPath )( 
+            IADsSession * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Computer )( 
-            IADsSession __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Computer )( 
+            IADsSession * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ComputerPath )( 
-            IADsSession __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ComputerPath )( 
+            IADsSession * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ConnectTime )( 
-            IADsSession __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectTime )( 
+            IADsSession * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IdleTime )( 
-            IADsSession __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IdleTime )( 
+            IADsSession * This,
+            /* [retval][out] */ long *retval);
         
         END_INTERFACE
     } IADsSessionVtbl;
 
     interface IADsSession
     {
-        CONST_VTBL struct IADsSessionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsSessionVtbl *lpVtbl;
     };
 
     
@@ -16667,8 +16722,8 @@ EXTERN_C const IID IID_IADsSession;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSession_get_User_Proxy( 
-    IADsSession __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsSession * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsSession_get_User_Stub(
@@ -16679,8 +16734,8 @@ void __RPC_STUB IADsSession_get_User_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSession_get_UserPath_Proxy( 
-    IADsSession __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsSession * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsSession_get_UserPath_Stub(
@@ -16691,8 +16746,8 @@ void __RPC_STUB IADsSession_get_UserPath_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSession_get_Computer_Proxy( 
-    IADsSession __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsSession * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsSession_get_Computer_Stub(
@@ -16703,8 +16758,8 @@ void __RPC_STUB IADsSession_get_Computer_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSession_get_ComputerPath_Proxy( 
-    IADsSession __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsSession * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsSession_get_ComputerPath_Stub(
@@ -16715,8 +16770,8 @@ void __RPC_STUB IADsSession_get_ComputerPath_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSession_get_ConnectTime_Proxy( 
-    IADsSession __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsSession * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsSession_get_ConnectTime_Stub(
@@ -16727,8 +16782,8 @@ void __RPC_STUB IADsSession_get_ConnectTime_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSession_get_IdleTime_Proxy( 
-    IADsSession __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsSession * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsSession_get_IdleTime_Stub(
@@ -16758,16 +16813,16 @@ EXTERN_C const IID IID_IADsResource;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_User( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UserPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LockCount( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
     };
     
@@ -16777,124 +16832,124 @@ EXTERN_C const IID IID_IADsResource;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsResource __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsResource * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsResource __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsResource * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsResource __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsResource * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsResource __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsResource * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsResource __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsResource * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsResource __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsResource * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsResource __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsResource * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IADsResource __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IADsResource * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Class )( 
-            IADsResource __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Class )( 
+            IADsResource * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GUID )( 
-            IADsResource __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GUID )( 
+            IADsResource * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ADsPath )( 
-            IADsResource __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ADsPath )( 
+            IADsResource * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IADsResource __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IADsResource * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Schema )( 
-            IADsResource __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Schema )( 
+            IADsResource * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfo )( 
-            IADsResource __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfo )( 
+            IADsResource * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInfo )( 
-            IADsResource __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetInfo )( 
+            IADsResource * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsResource __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsResource * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Put )( 
-            IADsResource __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Put )( 
+            IADsResource * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsResource __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsResource * This,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvProp);
+            /* [retval][out] */ VARIANT *pvProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutEx )( 
-            IADsResource __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutEx )( 
+            IADsResource * This,
             /* [in] */ long lnControlCode,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT vProp);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInfoEx )( 
-            IADsResource __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetInfoEx )( 
+            IADsResource * This,
             /* [in] */ VARIANT vProperties,
             /* [in] */ long lnReserved);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_User )( 
-            IADsResource __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_User )( 
+            IADsResource * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UserPath )( 
-            IADsResource __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserPath )( 
+            IADsResource * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
-            IADsResource __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+            IADsResource * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LockCount )( 
-            IADsResource __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LockCount )( 
+            IADsResource * This,
+            /* [retval][out] */ long *retval);
         
         END_INTERFACE
     } IADsResourceVtbl;
 
     interface IADsResource
     {
-        CONST_VTBL struct IADsResourceVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsResourceVtbl *lpVtbl;
     };
 
     
@@ -16985,8 +17040,8 @@ EXTERN_C const IID IID_IADsResource;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsResource_get_User_Proxy( 
-    IADsResource __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsResource * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsResource_get_User_Stub(
@@ -16997,8 +17052,8 @@ void __RPC_STUB IADsResource_get_User_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsResource_get_UserPath_Proxy( 
-    IADsResource __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsResource * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsResource_get_UserPath_Stub(
@@ -17009,8 +17064,8 @@ void __RPC_STUB IADsResource_get_UserPath_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsResource_get_Path_Proxy( 
-    IADsResource __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsResource * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsResource_get_Path_Stub(
@@ -17021,8 +17076,8 @@ void __RPC_STUB IADsResource_get_Path_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsResource_get_LockCount_Proxy( 
-    IADsResource __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsResource * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsResource_get_LockCount_Stub(
@@ -17056,7 +17111,7 @@ EXTERN_C const IID IID_IADsOpenDSObject;
             /* [in] */ BSTR lpszUserName,
             /* [in] */ BSTR lpszPassword,
             /* [in] */ long lnReserved,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppOleDsObj) = 0;
+            /* [retval][out] */ IDispatch **ppOleDsObj) = 0;
         
     };
     
@@ -17066,60 +17121,60 @@ EXTERN_C const IID IID_IADsOpenDSObject;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsOpenDSObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsOpenDSObject * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsOpenDSObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsOpenDSObject * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsOpenDSObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsOpenDSObject * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsOpenDSObject __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsOpenDSObject * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsOpenDSObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsOpenDSObject * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsOpenDSObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsOpenDSObject * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsOpenDSObject __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsOpenDSObject * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenDSObject )( 
-            IADsOpenDSObject __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OpenDSObject )( 
+            IADsOpenDSObject * This,
             /* [in] */ BSTR lpszDNName,
             /* [in] */ BSTR lpszUserName,
             /* [in] */ BSTR lpszPassword,
             /* [in] */ long lnReserved,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppOleDsObj);
+            /* [retval][out] */ IDispatch **ppOleDsObj);
         
         END_INTERFACE
     } IADsOpenDSObjectVtbl;
 
     interface IADsOpenDSObject
     {
-        CONST_VTBL struct IADsOpenDSObjectVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsOpenDSObjectVtbl *lpVtbl;
     };
 
     
@@ -17161,12 +17216,12 @@ EXTERN_C const IID IID_IADsOpenDSObject;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsOpenDSObject_OpenDSObject_Proxy( 
-    IADsOpenDSObject __RPC_FAR * This,
+    IADsOpenDSObject * This,
     /* [in] */ BSTR lpszDNName,
     /* [in] */ BSTR lpszUserName,
     /* [in] */ BSTR lpszPassword,
     /* [in] */ long lnReserved,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppOleDsObj);
+    /* [retval][out] */ IDispatch **ppOleDsObj);
 
 
 void __RPC_STUB IADsOpenDSObject_OpenDSObject_Stub(
@@ -17196,24 +17251,24 @@ EXTERN_C const IID IID_IDirectoryObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetObjectInformation( 
-            /* [out] */ PADS_OBJECT_INFO __RPC_FAR *ppObjInfo) = 0;
+            /* [out] */ PADS_OBJECT_INFO *ppObjInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectAttributes( 
-            /* [in] */ LPWSTR __RPC_FAR *pAttributeNames,
+            /* [in] */ LPWSTR *pAttributeNames,
             /* [in] */ DWORD dwNumberAttributes,
-            /* [out] */ PADS_ATTR_INFO __RPC_FAR *ppAttributeEntries,
-            /* [out] */ DWORD __RPC_FAR *pdwNumAttributesReturned) = 0;
+            /* [out] */ PADS_ATTR_INFO *ppAttributeEntries,
+            /* [out] */ DWORD *pdwNumAttributesReturned) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetObjectAttributes( 
             /* [in] */ PADS_ATTR_INFO pAttributeEntries,
             /* [in] */ DWORD dwNumAttributes,
-            /* [out] */ DWORD __RPC_FAR *pdwNumAttributesModified) = 0;
+            /* [out] */ DWORD *pdwNumAttributesModified) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateDSObject( 
             /* [in] */ LPWSTR pszRDNName,
             /* [in] */ PADS_ATTR_INFO pAttributeEntries,
             /* [in] */ DWORD dwNumAttributes,
-            /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject) = 0;
+            /* [out] */ IDispatch **ppObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteDSObject( 
             /* [in] */ LPWSTR pszRDNName) = 0;
@@ -17226,43 +17281,43 @@ EXTERN_C const IID IID_IDirectoryObject;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDirectoryObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDirectoryObject * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDirectoryObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDirectoryObject * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDirectoryObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDirectoryObject * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectInformation )( 
-            IDirectoryObject __RPC_FAR * This,
-            /* [out] */ PADS_OBJECT_INFO __RPC_FAR *ppObjInfo);
+        HRESULT ( STDMETHODCALLTYPE *GetObjectInformation )( 
+            IDirectoryObject * This,
+            /* [out] */ PADS_OBJECT_INFO *ppObjInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectAttributes )( 
-            IDirectoryObject __RPC_FAR * This,
-            /* [in] */ LPWSTR __RPC_FAR *pAttributeNames,
+        HRESULT ( STDMETHODCALLTYPE *GetObjectAttributes )( 
+            IDirectoryObject * This,
+            /* [in] */ LPWSTR *pAttributeNames,
             /* [in] */ DWORD dwNumberAttributes,
-            /* [out] */ PADS_ATTR_INFO __RPC_FAR *ppAttributeEntries,
-            /* [out] */ DWORD __RPC_FAR *pdwNumAttributesReturned);
+            /* [out] */ PADS_ATTR_INFO *ppAttributeEntries,
+            /* [out] */ DWORD *pdwNumAttributesReturned);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetObjectAttributes )( 
-            IDirectoryObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetObjectAttributes )( 
+            IDirectoryObject * This,
             /* [in] */ PADS_ATTR_INFO pAttributeEntries,
             /* [in] */ DWORD dwNumAttributes,
-            /* [out] */ DWORD __RPC_FAR *pdwNumAttributesModified);
+            /* [out] */ DWORD *pdwNumAttributesModified);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateDSObject )( 
-            IDirectoryObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CreateDSObject )( 
+            IDirectoryObject * This,
             /* [in] */ LPWSTR pszRDNName,
             /* [in] */ PADS_ATTR_INFO pAttributeEntries,
             /* [in] */ DWORD dwNumAttributes,
-            /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject);
+            /* [out] */ IDispatch **ppObject);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteDSObject )( 
-            IDirectoryObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeleteDSObject )( 
+            IDirectoryObject * This,
             /* [in] */ LPWSTR pszRDNName);
         
         END_INTERFACE
@@ -17270,7 +17325,7 @@ EXTERN_C const IID IID_IDirectoryObject;
 
     interface IDirectoryObject
     {
-        CONST_VTBL struct IDirectoryObjectVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDirectoryObjectVtbl *lpVtbl;
     };
 
     
@@ -17311,8 +17366,8 @@ EXTERN_C const IID IID_IDirectoryObject;
 
 
 HRESULT STDMETHODCALLTYPE IDirectoryObject_GetObjectInformation_Proxy( 
-    IDirectoryObject __RPC_FAR * This,
-    /* [out] */ PADS_OBJECT_INFO __RPC_FAR *ppObjInfo);
+    IDirectoryObject * This,
+    /* [out] */ PADS_OBJECT_INFO *ppObjInfo);
 
 
 void __RPC_STUB IDirectoryObject_GetObjectInformation_Stub(
@@ -17323,11 +17378,11 @@ void __RPC_STUB IDirectoryObject_GetObjectInformation_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectoryObject_GetObjectAttributes_Proxy( 
-    IDirectoryObject __RPC_FAR * This,
-    /* [in] */ LPWSTR __RPC_FAR *pAttributeNames,
+    IDirectoryObject * This,
+    /* [in] */ LPWSTR *pAttributeNames,
     /* [in] */ DWORD dwNumberAttributes,
-    /* [out] */ PADS_ATTR_INFO __RPC_FAR *ppAttributeEntries,
-    /* [out] */ DWORD __RPC_FAR *pdwNumAttributesReturned);
+    /* [out] */ PADS_ATTR_INFO *ppAttributeEntries,
+    /* [out] */ DWORD *pdwNumAttributesReturned);
 
 
 void __RPC_STUB IDirectoryObject_GetObjectAttributes_Stub(
@@ -17338,10 +17393,10 @@ void __RPC_STUB IDirectoryObject_GetObjectAttributes_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectoryObject_SetObjectAttributes_Proxy( 
-    IDirectoryObject __RPC_FAR * This,
+    IDirectoryObject * This,
     /* [in] */ PADS_ATTR_INFO pAttributeEntries,
     /* [in] */ DWORD dwNumAttributes,
-    /* [out] */ DWORD __RPC_FAR *pdwNumAttributesModified);
+    /* [out] */ DWORD *pdwNumAttributesModified);
 
 
 void __RPC_STUB IDirectoryObject_SetObjectAttributes_Stub(
@@ -17352,11 +17407,11 @@ void __RPC_STUB IDirectoryObject_SetObjectAttributes_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectoryObject_CreateDSObject_Proxy( 
-    IDirectoryObject __RPC_FAR * This,
+    IDirectoryObject * This,
     /* [in] */ LPWSTR pszRDNName,
     /* [in] */ PADS_ATTR_INFO pAttributeEntries,
     /* [in] */ DWORD dwNumAttributes,
-    /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObject);
+    /* [out] */ IDispatch **ppObject);
 
 
 void __RPC_STUB IDirectoryObject_CreateDSObject_Stub(
@@ -17367,7 +17422,7 @@ void __RPC_STUB IDirectoryObject_CreateDSObject_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectoryObject_DeleteDSObject_Proxy( 
-    IDirectoryObject __RPC_FAR * This,
+    IDirectoryObject * This,
     /* [in] */ LPWSTR pszRDNName);
 
 
@@ -17403,7 +17458,7 @@ EXTERN_C const IID IID_IDirectorySearch;
         
         virtual HRESULT STDMETHODCALLTYPE ExecuteSearch( 
             /* [in] */ LPWSTR pszSearchFilter,
-            /* [in] */ LPWSTR __RPC_FAR *pAttributeNames,
+            /* [in] */ LPWSTR *pAttributeNames,
             /* [in] */ DWORD dwNumberAttributes,
             /* [out] */ PADS_SEARCH_HANDLE phSearchResult) = 0;
         
@@ -17421,7 +17476,7 @@ EXTERN_C const IID IID_IDirectorySearch;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextColumnName( 
             /* [in] */ ADS_SEARCH_HANDLE hSearchHandle,
-            /* [out] */ LPWSTR __RPC_FAR *ppszColumnName) = 0;
+            /* [out] */ LPWSTR *ppszColumnName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetColumn( 
             /* [in] */ ADS_SEARCH_HANDLE hSearchResult,
@@ -17442,62 +17497,62 @@ EXTERN_C const IID IID_IDirectorySearch;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDirectorySearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDirectorySearch * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDirectorySearch __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDirectorySearch * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDirectorySearch __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDirectorySearch * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSearchPreference )( 
-            IDirectorySearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetSearchPreference )( 
+            IDirectorySearch * This,
             /* [in] */ PADS_SEARCHPREF_INFO pSearchPrefs,
             /* [in] */ DWORD dwNumPrefs);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExecuteSearch )( 
-            IDirectorySearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ExecuteSearch )( 
+            IDirectorySearch * This,
             /* [in] */ LPWSTR pszSearchFilter,
-            /* [in] */ LPWSTR __RPC_FAR *pAttributeNames,
+            /* [in] */ LPWSTR *pAttributeNames,
             /* [in] */ DWORD dwNumberAttributes,
             /* [out] */ PADS_SEARCH_HANDLE phSearchResult);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AbandonSearch )( 
-            IDirectorySearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *AbandonSearch )( 
+            IDirectorySearch * This,
             /* [in] */ ADS_SEARCH_HANDLE phSearchResult);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFirstRow )( 
-            IDirectorySearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetFirstRow )( 
+            IDirectorySearch * This,
             /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNextRow )( 
-            IDirectorySearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetNextRow )( 
+            IDirectorySearch * This,
             /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPreviousRow )( 
-            IDirectorySearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetPreviousRow )( 
+            IDirectorySearch * This,
             /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNextColumnName )( 
-            IDirectorySearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetNextColumnName )( 
+            IDirectorySearch * This,
             /* [in] */ ADS_SEARCH_HANDLE hSearchHandle,
-            /* [out] */ LPWSTR __RPC_FAR *ppszColumnName);
+            /* [out] */ LPWSTR *ppszColumnName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetColumn )( 
-            IDirectorySearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetColumn )( 
+            IDirectorySearch * This,
             /* [in] */ ADS_SEARCH_HANDLE hSearchResult,
             /* [in] */ LPWSTR szColumnName,
             /* [out] */ PADS_SEARCH_COLUMN pSearchColumn);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FreeColumn )( 
-            IDirectorySearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *FreeColumn )( 
+            IDirectorySearch * This,
             /* [in] */ PADS_SEARCH_COLUMN pSearchColumn);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseSearchHandle )( 
-            IDirectorySearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CloseSearchHandle )( 
+            IDirectorySearch * This,
             /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
         
         END_INTERFACE
@@ -17505,7 +17560,7 @@ EXTERN_C const IID IID_IDirectorySearch;
 
     interface IDirectorySearch
     {
-        CONST_VTBL struct IDirectorySearchVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDirectorySearchVtbl *lpVtbl;
     };
 
     
@@ -17561,7 +17616,7 @@ EXTERN_C const IID IID_IDirectorySearch;
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_SetSearchPreference_Proxy( 
-    IDirectorySearch __RPC_FAR * This,
+    IDirectorySearch * This,
     /* [in] */ PADS_SEARCHPREF_INFO pSearchPrefs,
     /* [in] */ DWORD dwNumPrefs);
 
@@ -17574,9 +17629,9 @@ void __RPC_STUB IDirectorySearch_SetSearchPreference_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_ExecuteSearch_Proxy( 
-    IDirectorySearch __RPC_FAR * This,
+    IDirectorySearch * This,
     /* [in] */ LPWSTR pszSearchFilter,
-    /* [in] */ LPWSTR __RPC_FAR *pAttributeNames,
+    /* [in] */ LPWSTR *pAttributeNames,
     /* [in] */ DWORD dwNumberAttributes,
     /* [out] */ PADS_SEARCH_HANDLE phSearchResult);
 
@@ -17589,7 +17644,7 @@ void __RPC_STUB IDirectorySearch_ExecuteSearch_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_AbandonSearch_Proxy( 
-    IDirectorySearch __RPC_FAR * This,
+    IDirectorySearch * This,
     /* [in] */ ADS_SEARCH_HANDLE phSearchResult);
 
 
@@ -17601,7 +17656,7 @@ void __RPC_STUB IDirectorySearch_AbandonSearch_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_GetFirstRow_Proxy( 
-    IDirectorySearch __RPC_FAR * This,
+    IDirectorySearch * This,
     /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
 
 
@@ -17613,7 +17668,7 @@ void __RPC_STUB IDirectorySearch_GetFirstRow_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_GetNextRow_Proxy( 
-    IDirectorySearch __RPC_FAR * This,
+    IDirectorySearch * This,
     /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
 
 
@@ -17625,7 +17680,7 @@ void __RPC_STUB IDirectorySearch_GetNextRow_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_GetPreviousRow_Proxy( 
-    IDirectorySearch __RPC_FAR * This,
+    IDirectorySearch * This,
     /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
 
 
@@ -17637,9 +17692,9 @@ void __RPC_STUB IDirectorySearch_GetPreviousRow_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_GetNextColumnName_Proxy( 
-    IDirectorySearch __RPC_FAR * This,
+    IDirectorySearch * This,
     /* [in] */ ADS_SEARCH_HANDLE hSearchHandle,
-    /* [out] */ LPWSTR __RPC_FAR *ppszColumnName);
+    /* [out] */ LPWSTR *ppszColumnName);
 
 
 void __RPC_STUB IDirectorySearch_GetNextColumnName_Stub(
@@ -17650,7 +17705,7 @@ void __RPC_STUB IDirectorySearch_GetNextColumnName_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_GetColumn_Proxy( 
-    IDirectorySearch __RPC_FAR * This,
+    IDirectorySearch * This,
     /* [in] */ ADS_SEARCH_HANDLE hSearchResult,
     /* [in] */ LPWSTR szColumnName,
     /* [out] */ PADS_SEARCH_COLUMN pSearchColumn);
@@ -17664,7 +17719,7 @@ void __RPC_STUB IDirectorySearch_GetColumn_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_FreeColumn_Proxy( 
-    IDirectorySearch __RPC_FAR * This,
+    IDirectorySearch * This,
     /* [in] */ PADS_SEARCH_COLUMN pSearchColumn);
 
 
@@ -17676,7 +17731,7 @@ void __RPC_STUB IDirectorySearch_FreeColumn_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySearch_CloseSearchHandle_Proxy( 
-    IDirectorySearch __RPC_FAR * This,
+    IDirectorySearch * This,
     /* [in] */ ADS_SEARCH_HANDLE hSearchResult);
 
 
@@ -17707,10 +17762,10 @@ EXTERN_C const IID IID_IDirectorySchemaMgmt;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumAttributes( 
-            LPWSTR __RPC_FAR *ppszAttrNames,
+            LPWSTR *ppszAttrNames,
             DWORD dwNumAttributes,
-            PADS_ATTR_DEF __RPC_FAR *ppAttrDefinition,
-            DWORD __RPC_FAR *pdwNumAttributes) = 0;
+            PADS_ATTR_DEF *ppAttrDefinition,
+            DWORD *pdwNumAttributes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateAttributeDefinition( 
             LPWSTR pszAttributeName,
@@ -17724,10 +17779,10 @@ EXTERN_C const IID IID_IDirectorySchemaMgmt;
             LPWSTR pszAttributeName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumClasses( 
-            LPWSTR __RPC_FAR *ppszClassNames,
+            LPWSTR *ppszClassNames,
             DWORD dwNumClasses,
-            PADS_CLASS_DEF __RPC_FAR *ppClassDefinition,
-            DWORD __RPC_FAR *pdwNumClasses) = 0;
+            PADS_CLASS_DEF *ppClassDefinition,
+            DWORD *pdwNumClasses) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WriteClassDefinition( 
             LPWSTR pszClassName,
@@ -17748,57 +17803,57 @@ EXTERN_C const IID IID_IDirectorySchemaMgmt;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDirectorySchemaMgmt __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDirectorySchemaMgmt * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDirectorySchemaMgmt __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDirectorySchemaMgmt * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDirectorySchemaMgmt __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDirectorySchemaMgmt * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumAttributes )( 
-            IDirectorySchemaMgmt __RPC_FAR * This,
-            LPWSTR __RPC_FAR *ppszAttrNames,
+        HRESULT ( STDMETHODCALLTYPE *EnumAttributes )( 
+            IDirectorySchemaMgmt * This,
+            LPWSTR *ppszAttrNames,
             DWORD dwNumAttributes,
-            PADS_ATTR_DEF __RPC_FAR *ppAttrDefinition,
-            DWORD __RPC_FAR *pdwNumAttributes);
+            PADS_ATTR_DEF *ppAttrDefinition,
+            DWORD *pdwNumAttributes);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateAttributeDefinition )( 
-            IDirectorySchemaMgmt __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CreateAttributeDefinition )( 
+            IDirectorySchemaMgmt * This,
             LPWSTR pszAttributeName,
             PADS_ATTR_DEF pAttributeDefinition);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteAttributeDefinition )( 
-            IDirectorySchemaMgmt __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *WriteAttributeDefinition )( 
+            IDirectorySchemaMgmt * This,
             LPWSTR pszAttributeName,
             PADS_ATTR_DEF pAttributeDefinition);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteAttributeDefinition )( 
-            IDirectorySchemaMgmt __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeleteAttributeDefinition )( 
+            IDirectorySchemaMgmt * This,
             LPWSTR pszAttributeName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumClasses )( 
-            IDirectorySchemaMgmt __RPC_FAR * This,
-            LPWSTR __RPC_FAR *ppszClassNames,
+        HRESULT ( STDMETHODCALLTYPE *EnumClasses )( 
+            IDirectorySchemaMgmt * This,
+            LPWSTR *ppszClassNames,
             DWORD dwNumClasses,
-            PADS_CLASS_DEF __RPC_FAR *ppClassDefinition,
-            DWORD __RPC_FAR *pdwNumClasses);
+            PADS_CLASS_DEF *ppClassDefinition,
+            DWORD *pdwNumClasses);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteClassDefinition )( 
-            IDirectorySchemaMgmt __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *WriteClassDefinition )( 
+            IDirectorySchemaMgmt * This,
             LPWSTR pszClassName,
             PADS_CLASS_DEF pClassDefinition);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateClassDefinition )( 
-            IDirectorySchemaMgmt __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CreateClassDefinition )( 
+            IDirectorySchemaMgmt * This,
             LPWSTR pszClassName,
             PADS_CLASS_DEF pClassDefinition);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteClassDefinition )( 
-            IDirectorySchemaMgmt __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeleteClassDefinition )( 
+            IDirectorySchemaMgmt * This,
             LPWSTR pszClassName);
         
         END_INTERFACE
@@ -17806,7 +17861,7 @@ EXTERN_C const IID IID_IDirectorySchemaMgmt;
 
     interface IDirectorySchemaMgmt
     {
-        CONST_VTBL struct IDirectorySchemaMgmtVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDirectorySchemaMgmtVtbl *lpVtbl;
     };
 
     
@@ -17856,11 +17911,11 @@ EXTERN_C const IID IID_IDirectorySchemaMgmt;
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySchemaMgmt_EnumAttributes_Proxy( 
-    IDirectorySchemaMgmt __RPC_FAR * This,
-    LPWSTR __RPC_FAR *ppszAttrNames,
+    IDirectorySchemaMgmt * This,
+    LPWSTR *ppszAttrNames,
     DWORD dwNumAttributes,
-    PADS_ATTR_DEF __RPC_FAR *ppAttrDefinition,
-    DWORD __RPC_FAR *pdwNumAttributes);
+    PADS_ATTR_DEF *ppAttrDefinition,
+    DWORD *pdwNumAttributes);
 
 
 void __RPC_STUB IDirectorySchemaMgmt_EnumAttributes_Stub(
@@ -17871,7 +17926,7 @@ void __RPC_STUB IDirectorySchemaMgmt_EnumAttributes_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySchemaMgmt_CreateAttributeDefinition_Proxy( 
-    IDirectorySchemaMgmt __RPC_FAR * This,
+    IDirectorySchemaMgmt * This,
     LPWSTR pszAttributeName,
     PADS_ATTR_DEF pAttributeDefinition);
 
@@ -17884,7 +17939,7 @@ void __RPC_STUB IDirectorySchemaMgmt_CreateAttributeDefinition_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySchemaMgmt_WriteAttributeDefinition_Proxy( 
-    IDirectorySchemaMgmt __RPC_FAR * This,
+    IDirectorySchemaMgmt * This,
     LPWSTR pszAttributeName,
     PADS_ATTR_DEF pAttributeDefinition);
 
@@ -17897,7 +17952,7 @@ void __RPC_STUB IDirectorySchemaMgmt_WriteAttributeDefinition_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySchemaMgmt_DeleteAttributeDefinition_Proxy( 
-    IDirectorySchemaMgmt __RPC_FAR * This,
+    IDirectorySchemaMgmt * This,
     LPWSTR pszAttributeName);
 
 
@@ -17909,11 +17964,11 @@ void __RPC_STUB IDirectorySchemaMgmt_DeleteAttributeDefinition_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySchemaMgmt_EnumClasses_Proxy( 
-    IDirectorySchemaMgmt __RPC_FAR * This,
-    LPWSTR __RPC_FAR *ppszClassNames,
+    IDirectorySchemaMgmt * This,
+    LPWSTR *ppszClassNames,
     DWORD dwNumClasses,
-    PADS_CLASS_DEF __RPC_FAR *ppClassDefinition,
-    DWORD __RPC_FAR *pdwNumClasses);
+    PADS_CLASS_DEF *ppClassDefinition,
+    DWORD *pdwNumClasses);
 
 
 void __RPC_STUB IDirectorySchemaMgmt_EnumClasses_Stub(
@@ -17924,7 +17979,7 @@ void __RPC_STUB IDirectorySchemaMgmt_EnumClasses_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySchemaMgmt_WriteClassDefinition_Proxy( 
-    IDirectorySchemaMgmt __RPC_FAR * This,
+    IDirectorySchemaMgmt * This,
     LPWSTR pszClassName,
     PADS_CLASS_DEF pClassDefinition);
 
@@ -17937,7 +17992,7 @@ void __RPC_STUB IDirectorySchemaMgmt_WriteClassDefinition_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySchemaMgmt_CreateClassDefinition_Proxy( 
-    IDirectorySchemaMgmt __RPC_FAR * This,
+    IDirectorySchemaMgmt * This,
     LPWSTR pszClassName,
     PADS_CLASS_DEF pClassDefinition);
 
@@ -17950,7 +18005,7 @@ void __RPC_STUB IDirectorySchemaMgmt_CreateClassDefinition_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDirectorySchemaMgmt_DeleteClassDefinition_Proxy( 
-    IDirectorySchemaMgmt __RPC_FAR * This,
+    IDirectorySchemaMgmt * This,
     LPWSTR pszClassName);
 
 
@@ -17981,7 +18036,7 @@ EXTERN_C const IID IID_IADsAggregatee;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ConnectAsAggregatee( 
-            IUnknown __RPC_FAR *pOuterUnknown) = 0;
+            IUnknown *pOuterUnknown) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DisconnectAsAggregatee( void) = 0;
         
@@ -17999,30 +18054,30 @@ EXTERN_C const IID IID_IADsAggregatee;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsAggregatee __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsAggregatee * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsAggregatee __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsAggregatee * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsAggregatee __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsAggregatee * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ConnectAsAggregatee )( 
-            IADsAggregatee __RPC_FAR * This,
-            IUnknown __RPC_FAR *pOuterUnknown);
+        HRESULT ( STDMETHODCALLTYPE *ConnectAsAggregatee )( 
+            IADsAggregatee * This,
+            IUnknown *pOuterUnknown);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisconnectAsAggregatee )( 
-            IADsAggregatee __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *DisconnectAsAggregatee )( 
+            IADsAggregatee * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RelinquishInterface )( 
-            IADsAggregatee __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RelinquishInterface )( 
+            IADsAggregatee * This,
             REFIID riid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RestoreInterface )( 
-            IADsAggregatee __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RestoreInterface )( 
+            IADsAggregatee * This,
             REFIID riid);
         
         END_INTERFACE
@@ -18030,7 +18085,7 @@ EXTERN_C const IID IID_IADsAggregatee;
 
     interface IADsAggregatee
     {
-        CONST_VTBL struct IADsAggregateeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsAggregateeVtbl *lpVtbl;
     };
 
     
@@ -18068,8 +18123,8 @@ EXTERN_C const IID IID_IADsAggregatee;
 
 
 HRESULT STDMETHODCALLTYPE IADsAggregatee_ConnectAsAggregatee_Proxy( 
-    IADsAggregatee __RPC_FAR * This,
-    IUnknown __RPC_FAR *pOuterUnknown);
+    IADsAggregatee * This,
+    IUnknown *pOuterUnknown);
 
 
 void __RPC_STUB IADsAggregatee_ConnectAsAggregatee_Stub(
@@ -18080,7 +18135,7 @@ void __RPC_STUB IADsAggregatee_ConnectAsAggregatee_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IADsAggregatee_DisconnectAsAggregatee_Proxy( 
-    IADsAggregatee __RPC_FAR * This);
+    IADsAggregatee * This);
 
 
 void __RPC_STUB IADsAggregatee_DisconnectAsAggregatee_Stub(
@@ -18091,7 +18146,7 @@ void __RPC_STUB IADsAggregatee_DisconnectAsAggregatee_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IADsAggregatee_RelinquishInterface_Proxy( 
-    IADsAggregatee __RPC_FAR * This,
+    IADsAggregatee * This,
     REFIID riid);
 
 
@@ -18103,7 +18158,7 @@ void __RPC_STUB IADsAggregatee_RelinquishInterface_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IADsAggregatee_RestoreInterface_Proxy( 
-    IADsAggregatee __RPC_FAR * This,
+    IADsAggregatee * This,
     REFIID riid);
 
 
@@ -18134,7 +18189,7 @@ EXTERN_C const IID IID_IADsAggregator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ConnectAsAggregator( 
-            IUnknown __RPC_FAR *pAggregatee) = 0;
+            IUnknown *pAggregatee) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DisconnectAsAggregator( void) = 0;
         
@@ -18146,30 +18201,30 @@ EXTERN_C const IID IID_IADsAggregator;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsAggregator __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsAggregator * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsAggregator __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsAggregator * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsAggregator __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsAggregator * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ConnectAsAggregator )( 
-            IADsAggregator __RPC_FAR * This,
-            IUnknown __RPC_FAR *pAggregatee);
+        HRESULT ( STDMETHODCALLTYPE *ConnectAsAggregator )( 
+            IADsAggregator * This,
+            IUnknown *pAggregatee);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisconnectAsAggregator )( 
-            IADsAggregator __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *DisconnectAsAggregator )( 
+            IADsAggregator * This);
         
         END_INTERFACE
     } IADsAggregatorVtbl;
 
     interface IADsAggregator
     {
-        CONST_VTBL struct IADsAggregatorVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsAggregatorVtbl *lpVtbl;
     };
 
     
@@ -18201,8 +18256,8 @@ EXTERN_C const IID IID_IADsAggregator;
 
 
 HRESULT STDMETHODCALLTYPE IADsAggregator_ConnectAsAggregator_Proxy( 
-    IADsAggregator __RPC_FAR * This,
-    IUnknown __RPC_FAR *pAggregatee);
+    IADsAggregator * This,
+    IUnknown *pAggregatee);
 
 
 void __RPC_STUB IADsAggregator_ConnectAsAggregator_Stub(
@@ -18213,7 +18268,7 @@ void __RPC_STUB IADsAggregator_ConnectAsAggregator_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IADsAggregator_DisconnectAsAggregator_Proxy( 
-    IADsAggregator __RPC_FAR * This);
+    IADsAggregator * This);
 
 
 void __RPC_STUB IADsAggregator_DisconnectAsAggregator_Stub(
@@ -18243,43 +18298,43 @@ EXTERN_C const IID IID_IADsAccessControlEntry;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AccessMask( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AccessMask( 
             /* [in] */ long lnAccessMask) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AceType( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AceType( 
             /* [in] */ long lnAceType) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AceFlags( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AceFlags( 
             /* [in] */ long lnAceFlags) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Flags( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Flags( 
             /* [in] */ long lnFlags) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ObjectType( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ObjectType( 
             /* [in] */ BSTR bstrObjectType) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_InheritedObjectType( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_InheritedObjectType( 
             /* [in] */ BSTR bstrInheritedObjectType) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Trustee( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Trustee( 
             /* [in] */ BSTR bstrTrustee) = 0;
@@ -18292,100 +18347,100 @@ EXTERN_C const IID IID_IADsAccessControlEntry;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsAccessControlEntry __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsAccessControlEntry * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsAccessControlEntry __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsAccessControlEntry * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsAccessControlEntry __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsAccessControlEntry * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsAccessControlEntry __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsAccessControlEntry * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsAccessControlEntry __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsAccessControlEntry * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsAccessControlEntry __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsAccessControlEntry * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsAccessControlEntry __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsAccessControlEntry * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AccessMask )( 
-            IADsAccessControlEntry __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AccessMask )( 
+            IADsAccessControlEntry * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AccessMask )( 
-            IADsAccessControlEntry __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AccessMask )( 
+            IADsAccessControlEntry * This,
             /* [in] */ long lnAccessMask);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AceType )( 
-            IADsAccessControlEntry __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AceType )( 
+            IADsAccessControlEntry * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AceType )( 
-            IADsAccessControlEntry __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AceType )( 
+            IADsAccessControlEntry * This,
             /* [in] */ long lnAceType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AceFlags )( 
-            IADsAccessControlEntry __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AceFlags )( 
+            IADsAccessControlEntry * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AceFlags )( 
-            IADsAccessControlEntry __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AceFlags )( 
+            IADsAccessControlEntry * This,
             /* [in] */ long lnAceFlags);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Flags )( 
-            IADsAccessControlEntry __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Flags )( 
+            IADsAccessControlEntry * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Flags )( 
-            IADsAccessControlEntry __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Flags )( 
+            IADsAccessControlEntry * This,
             /* [in] */ long lnFlags);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ObjectType )( 
-            IADsAccessControlEntry __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ObjectType )( 
+            IADsAccessControlEntry * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ObjectType )( 
-            IADsAccessControlEntry __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ObjectType )( 
+            IADsAccessControlEntry * This,
             /* [in] */ BSTR bstrObjectType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InheritedObjectType )( 
-            IADsAccessControlEntry __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InheritedObjectType )( 
+            IADsAccessControlEntry * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_InheritedObjectType )( 
-            IADsAccessControlEntry __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_InheritedObjectType )( 
+            IADsAccessControlEntry * This,
             /* [in] */ BSTR bstrInheritedObjectType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Trustee )( 
-            IADsAccessControlEntry __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Trustee )( 
+            IADsAccessControlEntry * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Trustee )( 
-            IADsAccessControlEntry __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Trustee )( 
+            IADsAccessControlEntry * This,
             /* [in] */ BSTR bstrTrustee);
         
         END_INTERFACE
@@ -18393,7 +18448,7 @@ EXTERN_C const IID IID_IADsAccessControlEntry;
 
     interface IADsAccessControlEntry
     {
-        CONST_VTBL struct IADsAccessControlEntryVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsAccessControlEntryVtbl *lpVtbl;
     };
 
     
@@ -18474,8 +18529,8 @@ EXTERN_C const IID IID_IADsAccessControlEntry;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_AccessMask_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsAccessControlEntry * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_AccessMask_Stub(
@@ -18486,7 +18541,7 @@ void __RPC_STUB IADsAccessControlEntry_get_AccessMask_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_AccessMask_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
+    IADsAccessControlEntry * This,
     /* [in] */ long lnAccessMask);
 
 
@@ -18498,8 +18553,8 @@ void __RPC_STUB IADsAccessControlEntry_put_AccessMask_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_AceType_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsAccessControlEntry * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_AceType_Stub(
@@ -18510,7 +18565,7 @@ void __RPC_STUB IADsAccessControlEntry_get_AceType_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_AceType_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
+    IADsAccessControlEntry * This,
     /* [in] */ long lnAceType);
 
 
@@ -18522,8 +18577,8 @@ void __RPC_STUB IADsAccessControlEntry_put_AceType_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_AceFlags_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsAccessControlEntry * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_AceFlags_Stub(
@@ -18534,7 +18589,7 @@ void __RPC_STUB IADsAccessControlEntry_get_AceFlags_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_AceFlags_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
+    IADsAccessControlEntry * This,
     /* [in] */ long lnAceFlags);
 
 
@@ -18546,8 +18601,8 @@ void __RPC_STUB IADsAccessControlEntry_put_AceFlags_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_Flags_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsAccessControlEntry * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_Flags_Stub(
@@ -18558,7 +18613,7 @@ void __RPC_STUB IADsAccessControlEntry_get_Flags_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_Flags_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
+    IADsAccessControlEntry * This,
     /* [in] */ long lnFlags);
 
 
@@ -18570,8 +18625,8 @@ void __RPC_STUB IADsAccessControlEntry_put_Flags_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_ObjectType_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsAccessControlEntry * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_ObjectType_Stub(
@@ -18582,7 +18637,7 @@ void __RPC_STUB IADsAccessControlEntry_get_ObjectType_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_ObjectType_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
+    IADsAccessControlEntry * This,
     /* [in] */ BSTR bstrObjectType);
 
 
@@ -18594,8 +18649,8 @@ void __RPC_STUB IADsAccessControlEntry_put_ObjectType_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_InheritedObjectType_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsAccessControlEntry * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_InheritedObjectType_Stub(
@@ -18606,7 +18661,7 @@ void __RPC_STUB IADsAccessControlEntry_get_InheritedObjectType_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_InheritedObjectType_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
+    IADsAccessControlEntry * This,
     /* [in] */ BSTR bstrInheritedObjectType);
 
 
@@ -18618,8 +18673,8 @@ void __RPC_STUB IADsAccessControlEntry_put_InheritedObjectType_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_get_Trustee_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsAccessControlEntry * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsAccessControlEntry_get_Trustee_Stub(
@@ -18630,7 +18685,7 @@ void __RPC_STUB IADsAccessControlEntry_get_Trustee_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlEntry_put_Trustee_Proxy( 
-    IADsAccessControlEntry __RPC_FAR * This,
+    IADsAccessControlEntry * This,
     /* [in] */ BSTR bstrTrustee);
 
 
@@ -18669,28 +18724,28 @@ EXTERN_C const IID IID_IADsAccessControlList;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AclRevision( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AclRevision( 
             /* [in] */ long lnAclRevision) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AceCount( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AceCount( 
             /* [in] */ long lnAceCount) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddAce( 
-            /* [in] */ IDispatch __RPC_FAR *pAccessControlEntry) = 0;
+            /* [in] */ IDispatch *pAccessControlEntry) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE RemoveAce( 
-            /* [in] */ IDispatch __RPC_FAR *pAccessControlEntry) = 0;
+            /* [in] */ IDispatch *pAccessControlEntry) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE CopyAccessList( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppAccessControlList) = 0;
+            /* [retval][out] */ IDispatch **ppAccessControlList) = 0;
         
         virtual /* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
     };
     
@@ -18700,84 +18755,84 @@ EXTERN_C const IID IID_IADsAccessControlList;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsAccessControlList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsAccessControlList * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsAccessControlList __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsAccessControlList * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsAccessControlList __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsAccessControlList * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsAccessControlList __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsAccessControlList * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsAccessControlList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsAccessControlList * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsAccessControlList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsAccessControlList * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsAccessControlList __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsAccessControlList * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AclRevision )( 
-            IADsAccessControlList __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AclRevision )( 
+            IADsAccessControlList * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AclRevision )( 
-            IADsAccessControlList __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AclRevision )( 
+            IADsAccessControlList * This,
             /* [in] */ long lnAclRevision);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AceCount )( 
-            IADsAccessControlList __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AceCount )( 
+            IADsAccessControlList * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AceCount )( 
-            IADsAccessControlList __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AceCount )( 
+            IADsAccessControlList * This,
             /* [in] */ long lnAceCount);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddAce )( 
-            IADsAccessControlList __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pAccessControlEntry);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddAce )( 
+            IADsAccessControlList * This,
+            /* [in] */ IDispatch *pAccessControlEntry);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveAce )( 
-            IADsAccessControlList __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pAccessControlEntry);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *RemoveAce )( 
+            IADsAccessControlList * This,
+            /* [in] */ IDispatch *pAccessControlEntry);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyAccessList )( 
-            IADsAccessControlList __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppAccessControlList);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CopyAccessList )( 
+            IADsAccessControlList * This,
+            /* [retval][out] */ IDispatch **ppAccessControlList);
         
-        /* [id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            IADsAccessControlList __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            IADsAccessControlList * This,
+            /* [retval][out] */ IUnknown **retval);
         
         END_INTERFACE
     } IADsAccessControlListVtbl;
 
     interface IADsAccessControlList
     {
-        CONST_VTBL struct IADsAccessControlListVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsAccessControlListVtbl *lpVtbl;
     };
 
     
@@ -18840,8 +18895,8 @@ EXTERN_C const IID IID_IADsAccessControlList;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_get_AclRevision_Proxy( 
-    IADsAccessControlList __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsAccessControlList * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsAccessControlList_get_AclRevision_Stub(
@@ -18852,7 +18907,7 @@ void __RPC_STUB IADsAccessControlList_get_AclRevision_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_put_AclRevision_Proxy( 
-    IADsAccessControlList __RPC_FAR * This,
+    IADsAccessControlList * This,
     /* [in] */ long lnAclRevision);
 
 
@@ -18864,8 +18919,8 @@ void __RPC_STUB IADsAccessControlList_put_AclRevision_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_get_AceCount_Proxy( 
-    IADsAccessControlList __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsAccessControlList * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsAccessControlList_get_AceCount_Stub(
@@ -18876,7 +18931,7 @@ void __RPC_STUB IADsAccessControlList_get_AceCount_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_put_AceCount_Proxy( 
-    IADsAccessControlList __RPC_FAR * This,
+    IADsAccessControlList * This,
     /* [in] */ long lnAceCount);
 
 
@@ -18888,8 +18943,8 @@ void __RPC_STUB IADsAccessControlList_put_AceCount_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_AddAce_Proxy( 
-    IADsAccessControlList __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pAccessControlEntry);
+    IADsAccessControlList * This,
+    /* [in] */ IDispatch *pAccessControlEntry);
 
 
 void __RPC_STUB IADsAccessControlList_AddAce_Stub(
@@ -18900,8 +18955,8 @@ void __RPC_STUB IADsAccessControlList_AddAce_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_RemoveAce_Proxy( 
-    IADsAccessControlList __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pAccessControlEntry);
+    IADsAccessControlList * This,
+    /* [in] */ IDispatch *pAccessControlEntry);
 
 
 void __RPC_STUB IADsAccessControlList_RemoveAce_Stub(
@@ -18912,8 +18967,8 @@ void __RPC_STUB IADsAccessControlList_RemoveAce_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_CopyAccessList_Proxy( 
-    IADsAccessControlList __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppAccessControlList);
+    IADsAccessControlList * This,
+    /* [retval][out] */ IDispatch **ppAccessControlList);
 
 
 void __RPC_STUB IADsAccessControlList_CopyAccessList_Stub(
@@ -18924,8 +18979,8 @@ void __RPC_STUB IADsAccessControlList_CopyAccessList_Stub(
 
 
 /* [id][restricted][propget] */ HRESULT STDMETHODCALLTYPE IADsAccessControlList_get__NewEnum_Proxy( 
-    IADsAccessControlList __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    IADsAccessControlList * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB IADsAccessControlList_get__NewEnum_Stub(
@@ -18963,67 +19018,67 @@ EXTERN_C const IID IID_IADsSecurityDescriptor;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Revision( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Revision( 
             /* [in] */ long lnRevision) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Control( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Control( 
             /* [in] */ long lnControl) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Owner( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Owner( 
             /* [in] */ BSTR bstrOwner) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OwnerDefaulted( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OwnerDefaulted( 
             /* [in] */ VARIANT_BOOL fOwnerDefaulted) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Group( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Group( 
             /* [in] */ BSTR bstrGroup) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_GroupDefaulted( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_GroupDefaulted( 
             /* [in] */ VARIANT_BOOL fGroupDefaulted) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DiscretionaryAcl( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IDispatch **retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DiscretionaryAcl( 
-            /* [in] */ IDispatch __RPC_FAR *pDiscretionaryAcl) = 0;
+            /* [in] */ IDispatch *pDiscretionaryAcl) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DaclDefaulted( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DaclDefaulted( 
             /* [in] */ VARIANT_BOOL fDaclDefaulted) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SystemAcl( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IDispatch **retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SystemAcl( 
-            /* [in] */ IDispatch __RPC_FAR *pSystemAcl) = 0;
+            /* [in] */ IDispatch *pSystemAcl) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SaclDefaulted( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SaclDefaulted( 
             /* [in] */ VARIANT_BOOL fSaclDefaulted) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE CopySecurityDescriptor( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppSecurityDescriptor) = 0;
+            /* [retval][out] */ IDispatch **ppSecurityDescriptor) = 0;
         
     };
     
@@ -19033,136 +19088,136 @@ EXTERN_C const IID IID_IADsSecurityDescriptor;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsSecurityDescriptor * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsSecurityDescriptor __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsSecurityDescriptor * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsSecurityDescriptor __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsSecurityDescriptor * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsSecurityDescriptor * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsSecurityDescriptor * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsSecurityDescriptor * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsSecurityDescriptor * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Revision )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Revision )( 
+            IADsSecurityDescriptor * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Revision )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Revision )( 
+            IADsSecurityDescriptor * This,
             /* [in] */ long lnRevision);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Control )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Control )( 
+            IADsSecurityDescriptor * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Control )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Control )( 
+            IADsSecurityDescriptor * This,
             /* [in] */ long lnControl);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Owner )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Owner )( 
+            IADsSecurityDescriptor * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Owner )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Owner )( 
+            IADsSecurityDescriptor * This,
             /* [in] */ BSTR bstrOwner);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OwnerDefaulted )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OwnerDefaulted )( 
+            IADsSecurityDescriptor * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OwnerDefaulted )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OwnerDefaulted )( 
+            IADsSecurityDescriptor * This,
             /* [in] */ VARIANT_BOOL fOwnerDefaulted);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Group )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Group )( 
+            IADsSecurityDescriptor * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Group )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Group )( 
+            IADsSecurityDescriptor * This,
             /* [in] */ BSTR bstrGroup);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_GroupDefaulted )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GroupDefaulted )( 
+            IADsSecurityDescriptor * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_GroupDefaulted )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GroupDefaulted )( 
+            IADsSecurityDescriptor * This,
             /* [in] */ VARIANT_BOOL fGroupDefaulted);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DiscretionaryAcl )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiscretionaryAcl )( 
+            IADsSecurityDescriptor * This,
+            /* [retval][out] */ IDispatch **retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DiscretionaryAcl )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pDiscretionaryAcl);
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DiscretionaryAcl )( 
+            IADsSecurityDescriptor * This,
+            /* [in] */ IDispatch *pDiscretionaryAcl);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DaclDefaulted )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DaclDefaulted )( 
+            IADsSecurityDescriptor * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DaclDefaulted )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DaclDefaulted )( 
+            IADsSecurityDescriptor * This,
             /* [in] */ VARIANT_BOOL fDaclDefaulted);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SystemAcl )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SystemAcl )( 
+            IADsSecurityDescriptor * This,
+            /* [retval][out] */ IDispatch **retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SystemAcl )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pSystemAcl);
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SystemAcl )( 
+            IADsSecurityDescriptor * This,
+            /* [in] */ IDispatch *pSystemAcl);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SaclDefaulted )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SaclDefaulted )( 
+            IADsSecurityDescriptor * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SaclDefaulted )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SaclDefaulted )( 
+            IADsSecurityDescriptor * This,
             /* [in] */ VARIANT_BOOL fSaclDefaulted);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopySecurityDescriptor )( 
-            IADsSecurityDescriptor __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppSecurityDescriptor);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CopySecurityDescriptor )( 
+            IADsSecurityDescriptor * This,
+            /* [retval][out] */ IDispatch **ppSecurityDescriptor);
         
         END_INTERFACE
     } IADsSecurityDescriptorVtbl;
 
     interface IADsSecurityDescriptor
     {
-        CONST_VTBL struct IADsSecurityDescriptorVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsSecurityDescriptorVtbl *lpVtbl;
     };
 
     
@@ -19264,8 +19319,8 @@ EXTERN_C const IID IID_IADsSecurityDescriptor;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_Revision_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsSecurityDescriptor * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_Revision_Stub(
@@ -19276,7 +19331,7 @@ void __RPC_STUB IADsSecurityDescriptor_get_Revision_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_Revision_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
+    IADsSecurityDescriptor * This,
     /* [in] */ long lnRevision);
 
 
@@ -19288,8 +19343,8 @@ void __RPC_STUB IADsSecurityDescriptor_put_Revision_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_Control_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsSecurityDescriptor * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_Control_Stub(
@@ -19300,7 +19355,7 @@ void __RPC_STUB IADsSecurityDescriptor_get_Control_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_Control_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
+    IADsSecurityDescriptor * This,
     /* [in] */ long lnControl);
 
 
@@ -19312,8 +19367,8 @@ void __RPC_STUB IADsSecurityDescriptor_put_Control_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_Owner_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsSecurityDescriptor * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_Owner_Stub(
@@ -19324,7 +19379,7 @@ void __RPC_STUB IADsSecurityDescriptor_get_Owner_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_Owner_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
+    IADsSecurityDescriptor * This,
     /* [in] */ BSTR bstrOwner);
 
 
@@ -19336,8 +19391,8 @@ void __RPC_STUB IADsSecurityDescriptor_put_Owner_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_OwnerDefaulted_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsSecurityDescriptor * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_OwnerDefaulted_Stub(
@@ -19348,7 +19403,7 @@ void __RPC_STUB IADsSecurityDescriptor_get_OwnerDefaulted_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_OwnerDefaulted_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
+    IADsSecurityDescriptor * This,
     /* [in] */ VARIANT_BOOL fOwnerDefaulted);
 
 
@@ -19360,8 +19415,8 @@ void __RPC_STUB IADsSecurityDescriptor_put_OwnerDefaulted_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_Group_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsSecurityDescriptor * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_Group_Stub(
@@ -19372,7 +19427,7 @@ void __RPC_STUB IADsSecurityDescriptor_get_Group_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_Group_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
+    IADsSecurityDescriptor * This,
     /* [in] */ BSTR bstrGroup);
 
 
@@ -19384,8 +19439,8 @@ void __RPC_STUB IADsSecurityDescriptor_put_Group_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_GroupDefaulted_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsSecurityDescriptor * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_GroupDefaulted_Stub(
@@ -19396,7 +19451,7 @@ void __RPC_STUB IADsSecurityDescriptor_get_GroupDefaulted_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_GroupDefaulted_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
+    IADsSecurityDescriptor * This,
     /* [in] */ VARIANT_BOOL fGroupDefaulted);
 
 
@@ -19408,8 +19463,8 @@ void __RPC_STUB IADsSecurityDescriptor_put_GroupDefaulted_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_DiscretionaryAcl_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retval);
+    IADsSecurityDescriptor * This,
+    /* [retval][out] */ IDispatch **retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_DiscretionaryAcl_Stub(
@@ -19420,8 +19475,8 @@ void __RPC_STUB IADsSecurityDescriptor_get_DiscretionaryAcl_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_DiscretionaryAcl_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pDiscretionaryAcl);
+    IADsSecurityDescriptor * This,
+    /* [in] */ IDispatch *pDiscretionaryAcl);
 
 
 void __RPC_STUB IADsSecurityDescriptor_put_DiscretionaryAcl_Stub(
@@ -19432,8 +19487,8 @@ void __RPC_STUB IADsSecurityDescriptor_put_DiscretionaryAcl_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_DaclDefaulted_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsSecurityDescriptor * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_DaclDefaulted_Stub(
@@ -19444,7 +19499,7 @@ void __RPC_STUB IADsSecurityDescriptor_get_DaclDefaulted_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_DaclDefaulted_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
+    IADsSecurityDescriptor * This,
     /* [in] */ VARIANT_BOOL fDaclDefaulted);
 
 
@@ -19456,8 +19511,8 @@ void __RPC_STUB IADsSecurityDescriptor_put_DaclDefaulted_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_SystemAcl_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *retval);
+    IADsSecurityDescriptor * This,
+    /* [retval][out] */ IDispatch **retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_SystemAcl_Stub(
@@ -19468,8 +19523,8 @@ void __RPC_STUB IADsSecurityDescriptor_get_SystemAcl_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_SystemAcl_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pSystemAcl);
+    IADsSecurityDescriptor * This,
+    /* [in] */ IDispatch *pSystemAcl);
 
 
 void __RPC_STUB IADsSecurityDescriptor_put_SystemAcl_Stub(
@@ -19480,8 +19535,8 @@ void __RPC_STUB IADsSecurityDescriptor_put_SystemAcl_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_get_SaclDefaulted_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsSecurityDescriptor * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsSecurityDescriptor_get_SaclDefaulted_Stub(
@@ -19492,7 +19547,7 @@ void __RPC_STUB IADsSecurityDescriptor_get_SaclDefaulted_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_put_SaclDefaulted_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
+    IADsSecurityDescriptor * This,
     /* [in] */ VARIANT_BOOL fSaclDefaulted);
 
 
@@ -19504,8 +19559,8 @@ void __RPC_STUB IADsSecurityDescriptor_put_SaclDefaulted_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsSecurityDescriptor_CopySecurityDescriptor_Proxy( 
-    IADsSecurityDescriptor __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppSecurityDescriptor);
+    IADsSecurityDescriptor * This,
+    /* [retval][out] */ IDispatch **ppSecurityDescriptor);
 
 
 void __RPC_STUB IADsSecurityDescriptor_CopySecurityDescriptor_Stub(
@@ -19543,13 +19598,13 @@ EXTERN_C const IID IID_IADsLargeInteger;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_HighPart( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_HighPart( 
             /* [in] */ long lnHighPart) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_LowPart( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LowPart( 
             /* [in] */ long lnLowPart) = 0;
@@ -19562,60 +19617,60 @@ EXTERN_C const IID IID_IADsLargeInteger;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsLargeInteger __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsLargeInteger * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsLargeInteger __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsLargeInteger * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsLargeInteger __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsLargeInteger * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsLargeInteger __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsLargeInteger * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsLargeInteger __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsLargeInteger * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsLargeInteger __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsLargeInteger * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsLargeInteger __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsLargeInteger * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HighPart )( 
-            IADsLargeInteger __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HighPart )( 
+            IADsLargeInteger * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_HighPart )( 
-            IADsLargeInteger __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HighPart )( 
+            IADsLargeInteger * This,
             /* [in] */ long lnHighPart);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LowPart )( 
-            IADsLargeInteger __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LowPart )( 
+            IADsLargeInteger * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LowPart )( 
-            IADsLargeInteger __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LowPart )( 
+            IADsLargeInteger * This,
             /* [in] */ long lnLowPart);
         
         END_INTERFACE
@@ -19623,7 +19678,7 @@ EXTERN_C const IID IID_IADsLargeInteger;
 
     interface IADsLargeInteger
     {
-        CONST_VTBL struct IADsLargeIntegerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsLargeIntegerVtbl *lpVtbl;
     };
 
     
@@ -19674,8 +19729,8 @@ EXTERN_C const IID IID_IADsLargeInteger;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsLargeInteger_get_HighPart_Proxy( 
-    IADsLargeInteger __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsLargeInteger * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsLargeInteger_get_HighPart_Stub(
@@ -19686,7 +19741,7 @@ void __RPC_STUB IADsLargeInteger_get_HighPart_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsLargeInteger_put_HighPart_Proxy( 
-    IADsLargeInteger __RPC_FAR * This,
+    IADsLargeInteger * This,
     /* [in] */ long lnHighPart);
 
 
@@ -19698,8 +19753,8 @@ void __RPC_STUB IADsLargeInteger_put_HighPart_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsLargeInteger_get_LowPart_Proxy( 
-    IADsLargeInteger __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsLargeInteger * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsLargeInteger_get_LowPart_Stub(
@@ -19710,7 +19765,7 @@ void __RPC_STUB IADsLargeInteger_get_LowPart_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsLargeInteger_put_LowPart_Proxy( 
-    IADsLargeInteger __RPC_FAR * This,
+    IADsLargeInteger * This,
     /* [in] */ long lnLowPart);
 
 
@@ -19768,7 +19823,7 @@ EXTERN_C const IID IID_IADsNameTranslate;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Get( 
             /* [in] */ long lnFormatType,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrADsPath) = 0;
+            /* [retval][out] */ BSTR *pbstrADsPath) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetEx( 
             /* [in] */ long lnFormatType,
@@ -19776,7 +19831,7 @@ EXTERN_C const IID IID_IADsNameTranslate;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEx( 
             /* [in] */ long lnFormatType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvar) = 0;
+            /* [retval][out] */ VARIANT *pvar) = 0;
         
     };
     
@@ -19786,89 +19841,89 @@ EXTERN_C const IID IID_IADsNameTranslate;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsNameTranslate __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsNameTranslate * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsNameTranslate __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsNameTranslate * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsNameTranslate __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsNameTranslate * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsNameTranslate __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsNameTranslate * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsNameTranslate __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsNameTranslate * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsNameTranslate __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsNameTranslate * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsNameTranslate __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsNameTranslate * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ChaseReferral )( 
-            IADsNameTranslate __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ChaseReferral )( 
+            IADsNameTranslate * This,
             /* [in] */ long lnChaseReferral);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Init )( 
-            IADsNameTranslate __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+            IADsNameTranslate * This,
             /* [in] */ long lnSetType,
             /* [in] */ BSTR bstrADsPath);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitEx )( 
-            IADsNameTranslate __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *InitEx )( 
+            IADsNameTranslate * This,
             /* [in] */ long lnSetType,
             /* [in] */ BSTR bstrADsPath,
             /* [in] */ BSTR bstrUserID,
             /* [in] */ BSTR bstrDomain,
             /* [in] */ BSTR bstrPassword);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Set )( 
-            IADsNameTranslate __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Set )( 
+            IADsNameTranslate * This,
             /* [in] */ long lnSetType,
             /* [in] */ BSTR bstrADsPath);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Get )( 
-            IADsNameTranslate __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Get )( 
+            IADsNameTranslate * This,
             /* [in] */ long lnFormatType,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrADsPath);
+            /* [retval][out] */ BSTR *pbstrADsPath);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetEx )( 
-            IADsNameTranslate __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetEx )( 
+            IADsNameTranslate * This,
             /* [in] */ long lnFormatType,
             /* [in] */ VARIANT pvar);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEx )( 
-            IADsNameTranslate __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEx )( 
+            IADsNameTranslate * This,
             /* [in] */ long lnFormatType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvar);
+            /* [retval][out] */ VARIANT *pvar);
         
         END_INTERFACE
     } IADsNameTranslateVtbl;
 
     interface IADsNameTranslate
     {
-        CONST_VTBL struct IADsNameTranslateVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsNameTranslateVtbl *lpVtbl;
     };
 
     
@@ -19928,7 +19983,7 @@ EXTERN_C const IID IID_IADsNameTranslate;
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_put_ChaseReferral_Proxy( 
-    IADsNameTranslate __RPC_FAR * This,
+    IADsNameTranslate * This,
     /* [in] */ long lnChaseReferral);
 
 
@@ -19940,7 +19995,7 @@ void __RPC_STUB IADsNameTranslate_put_ChaseReferral_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_Init_Proxy( 
-    IADsNameTranslate __RPC_FAR * This,
+    IADsNameTranslate * This,
     /* [in] */ long lnSetType,
     /* [in] */ BSTR bstrADsPath);
 
@@ -19953,7 +20008,7 @@ void __RPC_STUB IADsNameTranslate_Init_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_InitEx_Proxy( 
-    IADsNameTranslate __RPC_FAR * This,
+    IADsNameTranslate * This,
     /* [in] */ long lnSetType,
     /* [in] */ BSTR bstrADsPath,
     /* [in] */ BSTR bstrUserID,
@@ -19969,7 +20024,7 @@ void __RPC_STUB IADsNameTranslate_InitEx_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_Set_Proxy( 
-    IADsNameTranslate __RPC_FAR * This,
+    IADsNameTranslate * This,
     /* [in] */ long lnSetType,
     /* [in] */ BSTR bstrADsPath);
 
@@ -19982,9 +20037,9 @@ void __RPC_STUB IADsNameTranslate_Set_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_Get_Proxy( 
-    IADsNameTranslate __RPC_FAR * This,
+    IADsNameTranslate * This,
     /* [in] */ long lnFormatType,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrADsPath);
+    /* [retval][out] */ BSTR *pbstrADsPath);
 
 
 void __RPC_STUB IADsNameTranslate_Get_Stub(
@@ -19995,7 +20050,7 @@ void __RPC_STUB IADsNameTranslate_Get_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_SetEx_Proxy( 
-    IADsNameTranslate __RPC_FAR * This,
+    IADsNameTranslate * This,
     /* [in] */ long lnFormatType,
     /* [in] */ VARIANT pvar);
 
@@ -20008,9 +20063,9 @@ void __RPC_STUB IADsNameTranslate_SetEx_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsNameTranslate_GetEx_Proxy( 
-    IADsNameTranslate __RPC_FAR * This,
+    IADsNameTranslate * This,
     /* [in] */ long lnFormatType,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvar);
+    /* [retval][out] */ VARIANT *pvar);
 
 
 void __RPC_STUB IADsNameTranslate_GetEx_Stub(
@@ -20048,7 +20103,7 @@ EXTERN_C const IID IID_IADsCaseIgnoreList;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CaseIgnoreList( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_CaseIgnoreList( 
             /* [in] */ VARIANT vCaseIgnoreList) = 0;
@@ -20061,52 +20116,52 @@ EXTERN_C const IID IID_IADsCaseIgnoreList;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsCaseIgnoreList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsCaseIgnoreList * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsCaseIgnoreList __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsCaseIgnoreList * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsCaseIgnoreList __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsCaseIgnoreList * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsCaseIgnoreList __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsCaseIgnoreList * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsCaseIgnoreList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsCaseIgnoreList * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsCaseIgnoreList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsCaseIgnoreList * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsCaseIgnoreList __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsCaseIgnoreList * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CaseIgnoreList )( 
-            IADsCaseIgnoreList __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CaseIgnoreList )( 
+            IADsCaseIgnoreList * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_CaseIgnoreList )( 
-            IADsCaseIgnoreList __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CaseIgnoreList )( 
+            IADsCaseIgnoreList * This,
             /* [in] */ VARIANT vCaseIgnoreList);
         
         END_INTERFACE
@@ -20114,7 +20169,7 @@ EXTERN_C const IID IID_IADsCaseIgnoreList;
 
     interface IADsCaseIgnoreList
     {
-        CONST_VTBL struct IADsCaseIgnoreListVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsCaseIgnoreListVtbl *lpVtbl;
     };
 
     
@@ -20159,8 +20214,8 @@ EXTERN_C const IID IID_IADsCaseIgnoreList;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsCaseIgnoreList_get_CaseIgnoreList_Proxy( 
-    IADsCaseIgnoreList __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsCaseIgnoreList * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsCaseIgnoreList_get_CaseIgnoreList_Stub(
@@ -20171,7 +20226,7 @@ void __RPC_STUB IADsCaseIgnoreList_get_CaseIgnoreList_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsCaseIgnoreList_put_CaseIgnoreList_Proxy( 
-    IADsCaseIgnoreList __RPC_FAR * This,
+    IADsCaseIgnoreList * This,
     /* [in] */ VARIANT vCaseIgnoreList);
 
 
@@ -20210,13 +20265,13 @@ EXTERN_C const IID IID_IADsFaxNumber;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TelephoneNumber( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_TelephoneNumber( 
             /* [in] */ BSTR bstrTelephoneNumber) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Parameters( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Parameters( 
             /* [in] */ VARIANT vParameters) = 0;
@@ -20229,60 +20284,60 @@ EXTERN_C const IID IID_IADsFaxNumber;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsFaxNumber __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsFaxNumber * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsFaxNumber __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsFaxNumber * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsFaxNumber __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsFaxNumber * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsFaxNumber __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsFaxNumber * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsFaxNumber __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsFaxNumber * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsFaxNumber __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsFaxNumber * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsFaxNumber __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsFaxNumber * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TelephoneNumber )( 
-            IADsFaxNumber __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TelephoneNumber )( 
+            IADsFaxNumber * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TelephoneNumber )( 
-            IADsFaxNumber __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TelephoneNumber )( 
+            IADsFaxNumber * This,
             /* [in] */ BSTR bstrTelephoneNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parameters )( 
-            IADsFaxNumber __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Parameters )( 
+            IADsFaxNumber * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Parameters )( 
-            IADsFaxNumber __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Parameters )( 
+            IADsFaxNumber * This,
             /* [in] */ VARIANT vParameters);
         
         END_INTERFACE
@@ -20290,7 +20345,7 @@ EXTERN_C const IID IID_IADsFaxNumber;
 
     interface IADsFaxNumber
     {
-        CONST_VTBL struct IADsFaxNumberVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsFaxNumberVtbl *lpVtbl;
     };
 
     
@@ -20341,8 +20396,8 @@ EXTERN_C const IID IID_IADsFaxNumber;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFaxNumber_get_TelephoneNumber_Proxy( 
-    IADsFaxNumber __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsFaxNumber * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsFaxNumber_get_TelephoneNumber_Stub(
@@ -20353,7 +20408,7 @@ void __RPC_STUB IADsFaxNumber_get_TelephoneNumber_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFaxNumber_put_TelephoneNumber_Proxy( 
-    IADsFaxNumber __RPC_FAR * This,
+    IADsFaxNumber * This,
     /* [in] */ BSTR bstrTelephoneNumber);
 
 
@@ -20365,8 +20420,8 @@ void __RPC_STUB IADsFaxNumber_put_TelephoneNumber_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsFaxNumber_get_Parameters_Proxy( 
-    IADsFaxNumber __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsFaxNumber * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsFaxNumber_get_Parameters_Stub(
@@ -20377,7 +20432,7 @@ void __RPC_STUB IADsFaxNumber_get_Parameters_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsFaxNumber_put_Parameters_Proxy( 
-    IADsFaxNumber __RPC_FAR * This,
+    IADsFaxNumber * This,
     /* [in] */ VARIANT vParameters);
 
 
@@ -20416,13 +20471,13 @@ EXTERN_C const IID IID_IADsNetAddress;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AddressType( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AddressType( 
             /* [in] */ long lnAddressType) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Address( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Address( 
             /* [in] */ VARIANT vAddress) = 0;
@@ -20435,60 +20490,60 @@ EXTERN_C const IID IID_IADsNetAddress;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsNetAddress __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsNetAddress * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsNetAddress __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsNetAddress * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsNetAddress __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsNetAddress * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsNetAddress __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsNetAddress * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsNetAddress __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsNetAddress * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsNetAddress __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsNetAddress * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsNetAddress __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsNetAddress * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AddressType )( 
-            IADsNetAddress __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AddressType )( 
+            IADsNetAddress * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AddressType )( 
-            IADsNetAddress __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AddressType )( 
+            IADsNetAddress * This,
             /* [in] */ long lnAddressType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Address )( 
-            IADsNetAddress __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Address )( 
+            IADsNetAddress * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Address )( 
-            IADsNetAddress __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Address )( 
+            IADsNetAddress * This,
             /* [in] */ VARIANT vAddress);
         
         END_INTERFACE
@@ -20496,7 +20551,7 @@ EXTERN_C const IID IID_IADsNetAddress;
 
     interface IADsNetAddress
     {
-        CONST_VTBL struct IADsNetAddressVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsNetAddressVtbl *lpVtbl;
     };
 
     
@@ -20547,8 +20602,8 @@ EXTERN_C const IID IID_IADsNetAddress;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsNetAddress_get_AddressType_Proxy( 
-    IADsNetAddress __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsNetAddress * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsNetAddress_get_AddressType_Stub(
@@ -20559,7 +20614,7 @@ void __RPC_STUB IADsNetAddress_get_AddressType_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsNetAddress_put_AddressType_Proxy( 
-    IADsNetAddress __RPC_FAR * This,
+    IADsNetAddress * This,
     /* [in] */ long lnAddressType);
 
 
@@ -20571,8 +20626,8 @@ void __RPC_STUB IADsNetAddress_put_AddressType_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsNetAddress_get_Address_Proxy( 
-    IADsNetAddress __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsNetAddress * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsNetAddress_get_Address_Stub(
@@ -20583,7 +20638,7 @@ void __RPC_STUB IADsNetAddress_get_Address_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsNetAddress_put_Address_Proxy( 
-    IADsNetAddress __RPC_FAR * This,
+    IADsNetAddress * This,
     /* [in] */ VARIANT vAddress);
 
 
@@ -20622,7 +20677,7 @@ EXTERN_C const IID IID_IADsOctetList;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_OctetList( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_OctetList( 
             /* [in] */ VARIANT vOctetList) = 0;
@@ -20635,52 +20690,52 @@ EXTERN_C const IID IID_IADsOctetList;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsOctetList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsOctetList * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsOctetList __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsOctetList * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsOctetList __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsOctetList * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsOctetList __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsOctetList * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsOctetList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsOctetList * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsOctetList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsOctetList * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsOctetList __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsOctetList * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OctetList )( 
-            IADsOctetList __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OctetList )( 
+            IADsOctetList * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OctetList )( 
-            IADsOctetList __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OctetList )( 
+            IADsOctetList * This,
             /* [in] */ VARIANT vOctetList);
         
         END_INTERFACE
@@ -20688,7 +20743,7 @@ EXTERN_C const IID IID_IADsOctetList;
 
     interface IADsOctetList
     {
-        CONST_VTBL struct IADsOctetListVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsOctetListVtbl *lpVtbl;
     };
 
     
@@ -20733,8 +20788,8 @@ EXTERN_C const IID IID_IADsOctetList;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsOctetList_get_OctetList_Proxy( 
-    IADsOctetList __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsOctetList * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsOctetList_get_OctetList_Stub(
@@ -20745,7 +20800,7 @@ void __RPC_STUB IADsOctetList_get_OctetList_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsOctetList_put_OctetList_Proxy( 
-    IADsOctetList __RPC_FAR * This,
+    IADsOctetList * This,
     /* [in] */ VARIANT vOctetList);
 
 
@@ -20784,13 +20839,13 @@ EXTERN_C const IID IID_IADsEmail;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Type( 
             /* [in] */ long lnType) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Address( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Address( 
             /* [in] */ BSTR bstrAddress) = 0;
@@ -20803,60 +20858,60 @@ EXTERN_C const IID IID_IADsEmail;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsEmail __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsEmail * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsEmail __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsEmail * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsEmail __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsEmail * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsEmail __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsEmail * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsEmail __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsEmail * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsEmail __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsEmail * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsEmail __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsEmail * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
-            IADsEmail __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            IADsEmail * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Type )( 
-            IADsEmail __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Type )( 
+            IADsEmail * This,
             /* [in] */ long lnType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Address )( 
-            IADsEmail __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Address )( 
+            IADsEmail * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Address )( 
-            IADsEmail __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Address )( 
+            IADsEmail * This,
             /* [in] */ BSTR bstrAddress);
         
         END_INTERFACE
@@ -20864,7 +20919,7 @@ EXTERN_C const IID IID_IADsEmail;
 
     interface IADsEmail
     {
-        CONST_VTBL struct IADsEmailVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsEmailVtbl *lpVtbl;
     };
 
     
@@ -20915,8 +20970,8 @@ EXTERN_C const IID IID_IADsEmail;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsEmail_get_Type_Proxy( 
-    IADsEmail __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsEmail * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsEmail_get_Type_Stub(
@@ -20927,7 +20982,7 @@ void __RPC_STUB IADsEmail_get_Type_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsEmail_put_Type_Proxy( 
-    IADsEmail __RPC_FAR * This,
+    IADsEmail * This,
     /* [in] */ long lnType);
 
 
@@ -20939,8 +20994,8 @@ void __RPC_STUB IADsEmail_put_Type_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsEmail_get_Address_Proxy( 
-    IADsEmail __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsEmail * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsEmail_get_Address_Stub(
@@ -20951,7 +21006,7 @@ void __RPC_STUB IADsEmail_get_Address_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsEmail_put_Address_Proxy( 
-    IADsEmail __RPC_FAR * This,
+    IADsEmail * This,
     /* [in] */ BSTR bstrAddress);
 
 
@@ -20990,19 +21045,19 @@ EXTERN_C const IID IID_IADsPath;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Type( 
             /* [in] */ long lnType) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_VolumeName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_VolumeName( 
             /* [in] */ BSTR bstrVolumeName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Path( 
             /* [in] */ BSTR bstrPath) = 0;
@@ -21015,68 +21070,68 @@ EXTERN_C const IID IID_IADsPath;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsPath __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsPath * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsPath __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsPath * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsPath __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsPath * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsPath __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsPath * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsPath __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsPath * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsPath __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsPath * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsPath __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsPath * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
-            IADsPath __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            IADsPath * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Type )( 
-            IADsPath __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Type )( 
+            IADsPath * This,
             /* [in] */ long lnType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VolumeName )( 
-            IADsPath __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VolumeName )( 
+            IADsPath * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_VolumeName )( 
-            IADsPath __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_VolumeName )( 
+            IADsPath * This,
             /* [in] */ BSTR bstrVolumeName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
-            IADsPath __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+            IADsPath * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Path )( 
-            IADsPath __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Path )( 
+            IADsPath * This,
             /* [in] */ BSTR bstrPath);
         
         END_INTERFACE
@@ -21084,7 +21139,7 @@ EXTERN_C const IID IID_IADsPath;
 
     interface IADsPath
     {
-        CONST_VTBL struct IADsPathVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsPathVtbl *lpVtbl;
     };
 
     
@@ -21141,8 +21196,8 @@ EXTERN_C const IID IID_IADsPath;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPath_get_Type_Proxy( 
-    IADsPath __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPath * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPath_get_Type_Stub(
@@ -21153,7 +21208,7 @@ void __RPC_STUB IADsPath_get_Type_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPath_put_Type_Proxy( 
-    IADsPath __RPC_FAR * This,
+    IADsPath * This,
     /* [in] */ long lnType);
 
 
@@ -21165,8 +21220,8 @@ void __RPC_STUB IADsPath_put_Type_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPath_get_VolumeName_Proxy( 
-    IADsPath __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPath * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPath_get_VolumeName_Stub(
@@ -21177,7 +21232,7 @@ void __RPC_STUB IADsPath_get_VolumeName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPath_put_VolumeName_Proxy( 
-    IADsPath __RPC_FAR * This,
+    IADsPath * This,
     /* [in] */ BSTR bstrVolumeName);
 
 
@@ -21189,8 +21244,8 @@ void __RPC_STUB IADsPath_put_VolumeName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPath_get_Path_Proxy( 
-    IADsPath __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsPath * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsPath_get_Path_Stub(
@@ -21201,7 +21256,7 @@ void __RPC_STUB IADsPath_get_Path_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPath_put_Path_Proxy( 
-    IADsPath __RPC_FAR * This,
+    IADsPath * This,
     /* [in] */ BSTR bstrPath);
 
 
@@ -21240,31 +21295,31 @@ EXTERN_C const IID IID_IADsReplicaPointer;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ServerName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ServerName( 
             /* [in] */ BSTR bstrServerName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ReplicaType( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ReplicaType( 
             /* [in] */ long lnReplicaType) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ReplicaNumber( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ReplicaNumber( 
             /* [in] */ long lnReplicaNumber) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Count( 
             /* [in] */ long lnCount) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ReplicaAddressHints( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ReplicaAddressHints( 
             /* [in] */ VARIANT vReplicaAddressHints) = 0;
@@ -21277,84 +21332,84 @@ EXTERN_C const IID IID_IADsReplicaPointer;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsReplicaPointer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsReplicaPointer * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsReplicaPointer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsReplicaPointer * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsReplicaPointer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsReplicaPointer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsReplicaPointer __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsReplicaPointer * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsReplicaPointer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsReplicaPointer * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsReplicaPointer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsReplicaPointer * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsReplicaPointer __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsReplicaPointer * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ServerName )( 
-            IADsReplicaPointer __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ServerName )( 
+            IADsReplicaPointer * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ServerName )( 
-            IADsReplicaPointer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ServerName )( 
+            IADsReplicaPointer * This,
             /* [in] */ BSTR bstrServerName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ReplicaType )( 
-            IADsReplicaPointer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReplicaType )( 
+            IADsReplicaPointer * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ReplicaType )( 
-            IADsReplicaPointer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ReplicaType )( 
+            IADsReplicaPointer * This,
             /* [in] */ long lnReplicaType);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ReplicaNumber )( 
-            IADsReplicaPointer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReplicaNumber )( 
+            IADsReplicaPointer * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ReplicaNumber )( 
-            IADsReplicaPointer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ReplicaNumber )( 
+            IADsReplicaPointer * This,
             /* [in] */ long lnReplicaNumber);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            IADsReplicaPointer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IADsReplicaPointer * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Count )( 
-            IADsReplicaPointer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Count )( 
+            IADsReplicaPointer * This,
             /* [in] */ long lnCount);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ReplicaAddressHints )( 
-            IADsReplicaPointer __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReplicaAddressHints )( 
+            IADsReplicaPointer * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ReplicaAddressHints )( 
-            IADsReplicaPointer __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ReplicaAddressHints )( 
+            IADsReplicaPointer * This,
             /* [in] */ VARIANT vReplicaAddressHints);
         
         END_INTERFACE
@@ -21362,7 +21417,7 @@ EXTERN_C const IID IID_IADsReplicaPointer;
 
     interface IADsReplicaPointer
     {
-        CONST_VTBL struct IADsReplicaPointerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsReplicaPointerVtbl *lpVtbl;
     };
 
     
@@ -21431,8 +21486,8 @@ EXTERN_C const IID IID_IADsReplicaPointer;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_ServerName_Proxy( 
-    IADsReplicaPointer __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsReplicaPointer * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsReplicaPointer_get_ServerName_Stub(
@@ -21443,7 +21498,7 @@ void __RPC_STUB IADsReplicaPointer_get_ServerName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_ServerName_Proxy( 
-    IADsReplicaPointer __RPC_FAR * This,
+    IADsReplicaPointer * This,
     /* [in] */ BSTR bstrServerName);
 
 
@@ -21455,8 +21510,8 @@ void __RPC_STUB IADsReplicaPointer_put_ServerName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_ReplicaType_Proxy( 
-    IADsReplicaPointer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsReplicaPointer * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsReplicaPointer_get_ReplicaType_Stub(
@@ -21467,7 +21522,7 @@ void __RPC_STUB IADsReplicaPointer_get_ReplicaType_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_ReplicaType_Proxy( 
-    IADsReplicaPointer __RPC_FAR * This,
+    IADsReplicaPointer * This,
     /* [in] */ long lnReplicaType);
 
 
@@ -21479,8 +21534,8 @@ void __RPC_STUB IADsReplicaPointer_put_ReplicaType_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_ReplicaNumber_Proxy( 
-    IADsReplicaPointer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsReplicaPointer * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsReplicaPointer_get_ReplicaNumber_Stub(
@@ -21491,7 +21546,7 @@ void __RPC_STUB IADsReplicaPointer_get_ReplicaNumber_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_ReplicaNumber_Proxy( 
-    IADsReplicaPointer __RPC_FAR * This,
+    IADsReplicaPointer * This,
     /* [in] */ long lnReplicaNumber);
 
 
@@ -21503,8 +21558,8 @@ void __RPC_STUB IADsReplicaPointer_put_ReplicaNumber_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_Count_Proxy( 
-    IADsReplicaPointer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsReplicaPointer * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsReplicaPointer_get_Count_Stub(
@@ -21515,7 +21570,7 @@ void __RPC_STUB IADsReplicaPointer_get_Count_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_Count_Proxy( 
-    IADsReplicaPointer __RPC_FAR * This,
+    IADsReplicaPointer * This,
     /* [in] */ long lnCount);
 
 
@@ -21527,8 +21582,8 @@ void __RPC_STUB IADsReplicaPointer_put_Count_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_get_ReplicaAddressHints_Proxy( 
-    IADsReplicaPointer __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsReplicaPointer * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsReplicaPointer_get_ReplicaAddressHints_Stub(
@@ -21539,7 +21594,7 @@ void __RPC_STUB IADsReplicaPointer_get_ReplicaAddressHints_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsReplicaPointer_put_ReplicaAddressHints_Proxy( 
-    IADsReplicaPointer __RPC_FAR * This,
+    IADsReplicaPointer * This,
     /* [in] */ VARIANT vReplicaAddressHints);
 
 
@@ -21578,25 +21633,25 @@ EXTERN_C const IID IID_IADsAcl;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ProtectedAttrName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ProtectedAttrName( 
             /* [in] */ BSTR bstrProtectedAttrName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SubjectName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SubjectName( 
             /* [in] */ BSTR bstrSubjectName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Privileges( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Privileges( 
             /* [in] */ long lnPrivileges) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE CopyAcl( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppAcl) = 0;
+            /* [retval][out] */ IDispatch **ppAcl) = 0;
         
     };
     
@@ -21606,80 +21661,80 @@ EXTERN_C const IID IID_IADsAcl;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsAcl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsAcl * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsAcl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsAcl * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsAcl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsAcl * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsAcl __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsAcl * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsAcl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsAcl * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsAcl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsAcl * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsAcl __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsAcl * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ProtectedAttrName )( 
-            IADsAcl __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ProtectedAttrName )( 
+            IADsAcl * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ProtectedAttrName )( 
-            IADsAcl __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ProtectedAttrName )( 
+            IADsAcl * This,
             /* [in] */ BSTR bstrProtectedAttrName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SubjectName )( 
-            IADsAcl __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubjectName )( 
+            IADsAcl * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_SubjectName )( 
-            IADsAcl __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SubjectName )( 
+            IADsAcl * This,
             /* [in] */ BSTR bstrSubjectName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Privileges )( 
-            IADsAcl __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Privileges )( 
+            IADsAcl * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Privileges )( 
-            IADsAcl __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Privileges )( 
+            IADsAcl * This,
             /* [in] */ long lnPrivileges);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyAcl )( 
-            IADsAcl __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppAcl);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CopyAcl )( 
+            IADsAcl * This,
+            /* [retval][out] */ IDispatch **ppAcl);
         
         END_INTERFACE
     } IADsAclVtbl;
 
     interface IADsAcl
     {
-        CONST_VTBL struct IADsAclVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsAclVtbl *lpVtbl;
     };
 
     
@@ -21739,8 +21794,8 @@ EXTERN_C const IID IID_IADsAcl;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAcl_get_ProtectedAttrName_Proxy( 
-    IADsAcl __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsAcl * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsAcl_get_ProtectedAttrName_Stub(
@@ -21751,7 +21806,7 @@ void __RPC_STUB IADsAcl_get_ProtectedAttrName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAcl_put_ProtectedAttrName_Proxy( 
-    IADsAcl __RPC_FAR * This,
+    IADsAcl * This,
     /* [in] */ BSTR bstrProtectedAttrName);
 
 
@@ -21763,8 +21818,8 @@ void __RPC_STUB IADsAcl_put_ProtectedAttrName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAcl_get_SubjectName_Proxy( 
-    IADsAcl __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsAcl * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsAcl_get_SubjectName_Stub(
@@ -21775,7 +21830,7 @@ void __RPC_STUB IADsAcl_get_SubjectName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAcl_put_SubjectName_Proxy( 
-    IADsAcl __RPC_FAR * This,
+    IADsAcl * This,
     /* [in] */ BSTR bstrSubjectName);
 
 
@@ -21787,8 +21842,8 @@ void __RPC_STUB IADsAcl_put_SubjectName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsAcl_get_Privileges_Proxy( 
-    IADsAcl __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsAcl * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsAcl_get_Privileges_Stub(
@@ -21799,7 +21854,7 @@ void __RPC_STUB IADsAcl_get_Privileges_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsAcl_put_Privileges_Proxy( 
-    IADsAcl __RPC_FAR * This,
+    IADsAcl * This,
     /* [in] */ long lnPrivileges);
 
 
@@ -21811,8 +21866,8 @@ void __RPC_STUB IADsAcl_put_Privileges_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsAcl_CopyAcl_Proxy( 
-    IADsAcl __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppAcl);
+    IADsAcl * This,
+    /* [retval][out] */ IDispatch **ppAcl);
 
 
 void __RPC_STUB IADsAcl_CopyAcl_Stub(
@@ -21825,14 +21880,6 @@ void __RPC_STUB IADsAcl_CopyAcl_Stub(
 
 #endif 	/* __IADsAcl_INTERFACE_DEFINED__ */
 
-
-EXTERN_C const CLSID CLSID_Acl;
-
-#ifdef __cplusplus
-
-class DECLSPEC_UUID("7af1efb6-0869-11d1-a377-00c04fb950dc")
-Acl;
-#endif
 
 #ifndef __IADsTimestamp_INTERFACE_DEFINED__
 #define __IADsTimestamp_INTERFACE_DEFINED__
@@ -21850,13 +21897,13 @@ EXTERN_C const IID IID_IADsTimestamp;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_WholeSeconds( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_WholeSeconds( 
             /* [in] */ long lnWholeSeconds) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_EventID( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EventID( 
             /* [in] */ long lnEventID) = 0;
@@ -21869,60 +21916,60 @@ EXTERN_C const IID IID_IADsTimestamp;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsTimestamp __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsTimestamp * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsTimestamp __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsTimestamp * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsTimestamp __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsTimestamp * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsTimestamp __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsTimestamp * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsTimestamp __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsTimestamp * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsTimestamp __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsTimestamp * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsTimestamp __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsTimestamp * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_WholeSeconds )( 
-            IADsTimestamp __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_WholeSeconds )( 
+            IADsTimestamp * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_WholeSeconds )( 
-            IADsTimestamp __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_WholeSeconds )( 
+            IADsTimestamp * This,
             /* [in] */ long lnWholeSeconds);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EventID )( 
-            IADsTimestamp __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EventID )( 
+            IADsTimestamp * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EventID )( 
-            IADsTimestamp __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventID )( 
+            IADsTimestamp * This,
             /* [in] */ long lnEventID);
         
         END_INTERFACE
@@ -21930,7 +21977,7 @@ EXTERN_C const IID IID_IADsTimestamp;
 
     interface IADsTimestamp
     {
-        CONST_VTBL struct IADsTimestampVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsTimestampVtbl *lpVtbl;
     };
 
     
@@ -21981,8 +22028,8 @@ EXTERN_C const IID IID_IADsTimestamp;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsTimestamp_get_WholeSeconds_Proxy( 
-    IADsTimestamp __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsTimestamp * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsTimestamp_get_WholeSeconds_Stub(
@@ -21993,7 +22040,7 @@ void __RPC_STUB IADsTimestamp_get_WholeSeconds_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsTimestamp_put_WholeSeconds_Proxy( 
-    IADsTimestamp __RPC_FAR * This,
+    IADsTimestamp * This,
     /* [in] */ long lnWholeSeconds);
 
 
@@ -22005,8 +22052,8 @@ void __RPC_STUB IADsTimestamp_put_WholeSeconds_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsTimestamp_get_EventID_Proxy( 
-    IADsTimestamp __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsTimestamp * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsTimestamp_get_EventID_Stub(
@@ -22017,7 +22064,7 @@ void __RPC_STUB IADsTimestamp_get_EventID_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsTimestamp_put_EventID_Proxy( 
-    IADsTimestamp __RPC_FAR * This,
+    IADsTimestamp * This,
     /* [in] */ long lnEventID);
 
 
@@ -22056,7 +22103,7 @@ EXTERN_C const IID IID_IADsPostalAddress;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PostalAddress( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_PostalAddress( 
             /* [in] */ VARIANT vPostalAddress) = 0;
@@ -22069,52 +22116,52 @@ EXTERN_C const IID IID_IADsPostalAddress;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsPostalAddress __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsPostalAddress * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsPostalAddress __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsPostalAddress * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsPostalAddress __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsPostalAddress * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsPostalAddress __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsPostalAddress * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsPostalAddress __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsPostalAddress * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsPostalAddress __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsPostalAddress * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsPostalAddress __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsPostalAddress * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PostalAddress )( 
-            IADsPostalAddress __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PostalAddress )( 
+            IADsPostalAddress * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_PostalAddress )( 
-            IADsPostalAddress __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PostalAddress )( 
+            IADsPostalAddress * This,
             /* [in] */ VARIANT vPostalAddress);
         
         END_INTERFACE
@@ -22122,7 +22169,7 @@ EXTERN_C const IID IID_IADsPostalAddress;
 
     interface IADsPostalAddress
     {
-        CONST_VTBL struct IADsPostalAddressVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsPostalAddressVtbl *lpVtbl;
     };
 
     
@@ -22167,8 +22214,8 @@ EXTERN_C const IID IID_IADsPostalAddress;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPostalAddress_get_PostalAddress_Proxy( 
-    IADsPostalAddress __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsPostalAddress * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsPostalAddress_get_PostalAddress_Stub(
@@ -22179,7 +22226,7 @@ void __RPC_STUB IADsPostalAddress_get_PostalAddress_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPostalAddress_put_PostalAddress_Proxy( 
-    IADsPostalAddress __RPC_FAR * This,
+    IADsPostalAddress * This,
     /* [in] */ VARIANT vPostalAddress);
 
 
@@ -22218,13 +22265,13 @@ EXTERN_C const IID IID_IADsBackLink;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_RemoteID( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_RemoteID( 
             /* [in] */ long lnRemoteID) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ObjectName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ObjectName( 
             /* [in] */ BSTR bstrObjectName) = 0;
@@ -22237,60 +22284,60 @@ EXTERN_C const IID IID_IADsBackLink;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsBackLink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsBackLink * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsBackLink __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsBackLink * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsBackLink __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsBackLink * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsBackLink __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsBackLink * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsBackLink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsBackLink * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsBackLink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsBackLink * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsBackLink __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsBackLink * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RemoteID )( 
-            IADsBackLink __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RemoteID )( 
+            IADsBackLink * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RemoteID )( 
-            IADsBackLink __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RemoteID )( 
+            IADsBackLink * This,
             /* [in] */ long lnRemoteID);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ObjectName )( 
-            IADsBackLink __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ObjectName )( 
+            IADsBackLink * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ObjectName )( 
-            IADsBackLink __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ObjectName )( 
+            IADsBackLink * This,
             /* [in] */ BSTR bstrObjectName);
         
         END_INTERFACE
@@ -22298,7 +22345,7 @@ EXTERN_C const IID IID_IADsBackLink;
 
     interface IADsBackLink
     {
-        CONST_VTBL struct IADsBackLinkVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsBackLinkVtbl *lpVtbl;
     };
 
     
@@ -22349,8 +22396,8 @@ EXTERN_C const IID IID_IADsBackLink;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsBackLink_get_RemoteID_Proxy( 
-    IADsBackLink __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsBackLink * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsBackLink_get_RemoteID_Stub(
@@ -22361,7 +22408,7 @@ void __RPC_STUB IADsBackLink_get_RemoteID_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsBackLink_put_RemoteID_Proxy( 
-    IADsBackLink __RPC_FAR * This,
+    IADsBackLink * This,
     /* [in] */ long lnRemoteID);
 
 
@@ -22373,8 +22420,8 @@ void __RPC_STUB IADsBackLink_put_RemoteID_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsBackLink_get_ObjectName_Proxy( 
-    IADsBackLink __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsBackLink * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsBackLink_get_ObjectName_Stub(
@@ -22385,7 +22432,7 @@ void __RPC_STUB IADsBackLink_get_ObjectName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsBackLink_put_ObjectName_Proxy( 
-    IADsBackLink __RPC_FAR * This,
+    IADsBackLink * This,
     /* [in] */ BSTR bstrObjectName);
 
 
@@ -22424,19 +22471,19 @@ EXTERN_C const IID IID_IADsTypedName;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ObjectName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ObjectName( 
             /* [in] */ BSTR bstrObjectName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Level( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Level( 
             /* [in] */ long lnLevel) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Interval( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Interval( 
             /* [in] */ long lnInterval) = 0;
@@ -22449,68 +22496,68 @@ EXTERN_C const IID IID_IADsTypedName;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsTypedName __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsTypedName * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsTypedName __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsTypedName * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsTypedName __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsTypedName * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsTypedName __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsTypedName * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsTypedName __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsTypedName * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsTypedName __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsTypedName * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsTypedName __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsTypedName * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ObjectName )( 
-            IADsTypedName __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ObjectName )( 
+            IADsTypedName * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ObjectName )( 
-            IADsTypedName __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ObjectName )( 
+            IADsTypedName * This,
             /* [in] */ BSTR bstrObjectName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Level )( 
-            IADsTypedName __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Level )( 
+            IADsTypedName * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Level )( 
-            IADsTypedName __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Level )( 
+            IADsTypedName * This,
             /* [in] */ long lnLevel);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Interval )( 
-            IADsTypedName __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Interval )( 
+            IADsTypedName * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Interval )( 
-            IADsTypedName __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Interval )( 
+            IADsTypedName * This,
             /* [in] */ long lnInterval);
         
         END_INTERFACE
@@ -22518,7 +22565,7 @@ EXTERN_C const IID IID_IADsTypedName;
 
     interface IADsTypedName
     {
-        CONST_VTBL struct IADsTypedNameVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsTypedNameVtbl *lpVtbl;
     };
 
     
@@ -22575,8 +22622,8 @@ EXTERN_C const IID IID_IADsTypedName;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsTypedName_get_ObjectName_Proxy( 
-    IADsTypedName __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsTypedName * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsTypedName_get_ObjectName_Stub(
@@ -22587,7 +22634,7 @@ void __RPC_STUB IADsTypedName_get_ObjectName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsTypedName_put_ObjectName_Proxy( 
-    IADsTypedName __RPC_FAR * This,
+    IADsTypedName * This,
     /* [in] */ BSTR bstrObjectName);
 
 
@@ -22599,8 +22646,8 @@ void __RPC_STUB IADsTypedName_put_ObjectName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsTypedName_get_Level_Proxy( 
-    IADsTypedName __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsTypedName * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsTypedName_get_Level_Stub(
@@ -22611,7 +22658,7 @@ void __RPC_STUB IADsTypedName_get_Level_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsTypedName_put_Level_Proxy( 
-    IADsTypedName __RPC_FAR * This,
+    IADsTypedName * This,
     /* [in] */ long lnLevel);
 
 
@@ -22623,8 +22670,8 @@ void __RPC_STUB IADsTypedName_put_Level_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsTypedName_get_Interval_Proxy( 
-    IADsTypedName __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsTypedName * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsTypedName_get_Interval_Stub(
@@ -22635,7 +22682,7 @@ void __RPC_STUB IADsTypedName_get_Interval_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsTypedName_put_Interval_Proxy( 
-    IADsTypedName __RPC_FAR * This,
+    IADsTypedName * This,
     /* [in] */ long lnInterval);
 
 
@@ -22674,13 +22721,13 @@ EXTERN_C const IID IID_IADsHold;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ObjectName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ObjectName( 
             /* [in] */ BSTR bstrObjectName) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Amount( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Amount( 
             /* [in] */ long lnAmount) = 0;
@@ -22693,60 +22740,60 @@ EXTERN_C const IID IID_IADsHold;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsHold __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsHold * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsHold __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsHold * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsHold __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsHold * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsHold __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsHold * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsHold __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsHold * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsHold __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsHold * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsHold __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsHold * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ObjectName )( 
-            IADsHold __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ObjectName )( 
+            IADsHold * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ObjectName )( 
-            IADsHold __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ObjectName )( 
+            IADsHold * This,
             /* [in] */ BSTR bstrObjectName);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Amount )( 
-            IADsHold __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Amount )( 
+            IADsHold * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Amount )( 
-            IADsHold __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Amount )( 
+            IADsHold * This,
             /* [in] */ long lnAmount);
         
         END_INTERFACE
@@ -22754,7 +22801,7 @@ EXTERN_C const IID IID_IADsHold;
 
     interface IADsHold
     {
-        CONST_VTBL struct IADsHoldVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsHoldVtbl *lpVtbl;
     };
 
     
@@ -22805,8 +22852,8 @@ EXTERN_C const IID IID_IADsHold;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsHold_get_ObjectName_Proxy( 
-    IADsHold __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsHold * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsHold_get_ObjectName_Stub(
@@ -22817,7 +22864,7 @@ void __RPC_STUB IADsHold_get_ObjectName_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsHold_put_ObjectName_Proxy( 
-    IADsHold __RPC_FAR * This,
+    IADsHold * This,
     /* [in] */ BSTR bstrObjectName);
 
 
@@ -22829,8 +22876,8 @@ void __RPC_STUB IADsHold_put_ObjectName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsHold_get_Amount_Proxy( 
-    IADsHold __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsHold * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsHold_get_Amount_Stub(
@@ -22841,7 +22888,7 @@ void __RPC_STUB IADsHold_get_Amount_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsHold_put_Amount_Proxy( 
-    IADsHold __RPC_FAR * This,
+    IADsHold * This,
     /* [in] */ long lnAmount);
 
 
@@ -22881,7 +22928,7 @@ EXTERN_C const IID IID_IADsObjectOptions;
     public:
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetOption( 
             /* [in] */ long lnOption,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvValue) = 0;
+            /* [retval][out] */ VARIANT *pvValue) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetOption( 
             /* [in] */ long lnOption,
@@ -22895,53 +22942,53 @@ EXTERN_C const IID IID_IADsObjectOptions;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsObjectOptions __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsObjectOptions * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsObjectOptions __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsObjectOptions * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsObjectOptions __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsObjectOptions * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsObjectOptions __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsObjectOptions * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsObjectOptions __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsObjectOptions * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsObjectOptions __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsObjectOptions * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsObjectOptions __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsObjectOptions * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOption )( 
-            IADsObjectOptions __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetOption )( 
+            IADsObjectOptions * This,
             /* [in] */ long lnOption,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvValue);
+            /* [retval][out] */ VARIANT *pvValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetOption )( 
-            IADsObjectOptions __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetOption )( 
+            IADsObjectOptions * This,
             /* [in] */ long lnOption,
             /* [in] */ VARIANT vValue);
         
@@ -22950,7 +22997,7 @@ EXTERN_C const IID IID_IADsObjectOptions;
 
     interface IADsObjectOptions
     {
-        CONST_VTBL struct IADsObjectOptionsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsObjectOptionsVtbl *lpVtbl;
     };
 
     
@@ -22995,9 +23042,9 @@ EXTERN_C const IID IID_IADsObjectOptions;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsObjectOptions_GetOption_Proxy( 
-    IADsObjectOptions __RPC_FAR * This,
+    IADsObjectOptions * This,
     /* [in] */ long lnOption,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvValue);
+    /* [retval][out] */ VARIANT *pvValue);
 
 
 void __RPC_STUB IADsObjectOptions_GetOption_Stub(
@@ -23008,7 +23055,7 @@ void __RPC_STUB IADsObjectOptions_GetOption_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsObjectOptions_SetOption_Proxy( 
-    IADsObjectOptions __RPC_FAR * This,
+    IADsObjectOptions * This,
     /* [in] */ long lnOption,
     /* [in] */ VARIANT vValue);
 
@@ -23048,14 +23095,14 @@ EXTERN_C const IID IID_IADsPathname;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE Retrieve( 
             /* [in] */ long lnFormatType,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrADsPath) = 0;
+            /* [retval][out] */ BSTR *pbstrADsPath) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetNumElements( 
-            /* [retval][out] */ long __RPC_FAR *plnNumPathElements) = 0;
+            /* [retval][out] */ long *plnNumPathElements) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetElement( 
             /* [in] */ long lnElementIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrElement) = 0;
+            /* [retval][out] */ BSTR *pbstrElement) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddLeafElement( 
             /* [in] */ BSTR bstrLeafElement) = 0;
@@ -23063,15 +23110,15 @@ EXTERN_C const IID IID_IADsPathname;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE RemoveLeafElement( void) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE CopyPath( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppAdsPath) = 0;
+            /* [retval][out] */ IDispatch **ppAdsPath) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetEscapedElement( 
             /* [in] */ long lnReserved,
             /* [in] */ BSTR bstrInStr,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrOutStr) = 0;
+            /* [retval][out] */ BSTR *pbstrOutStr) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_EscapedMode( 
-            /* [retval][out] */ long __RPC_FAR *retval) = 0;
+            /* [retval][out] */ long *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EscapedMode( 
             /* [in] */ long lnEscapedMode) = 0;
@@ -23084,92 +23131,92 @@ EXTERN_C const IID IID_IADsPathname;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsPathname __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsPathname * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsPathname __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsPathname * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsPathname __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsPathname * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsPathname __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsPathname * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsPathname __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsPathname * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsPathname __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsPathname * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsPathname __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsPathname * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Set )( 
-            IADsPathname __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Set )( 
+            IADsPathname * This,
             /* [in] */ BSTR bstrADsPath,
             /* [in] */ long lnSetType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDisplayType )( 
-            IADsPathname __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetDisplayType )( 
+            IADsPathname * This,
             /* [in] */ long lnDisplayType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Retrieve )( 
-            IADsPathname __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Retrieve )( 
+            IADsPathname * This,
             /* [in] */ long lnFormatType,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrADsPath);
+            /* [retval][out] */ BSTR *pbstrADsPath);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNumElements )( 
-            IADsPathname __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plnNumPathElements);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetNumElements )( 
+            IADsPathname * This,
+            /* [retval][out] */ long *plnNumPathElements);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetElement )( 
-            IADsPathname __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetElement )( 
+            IADsPathname * This,
             /* [in] */ long lnElementIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrElement);
+            /* [retval][out] */ BSTR *pbstrElement);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddLeafElement )( 
-            IADsPathname __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddLeafElement )( 
+            IADsPathname * This,
             /* [in] */ BSTR bstrLeafElement);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveLeafElement )( 
-            IADsPathname __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *RemoveLeafElement )( 
+            IADsPathname * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CopyPath )( 
-            IADsPathname __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppAdsPath);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *CopyPath )( 
+            IADsPathname * This,
+            /* [retval][out] */ IDispatch **ppAdsPath);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEscapedElement )( 
-            IADsPathname __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetEscapedElement )( 
+            IADsPathname * This,
             /* [in] */ long lnReserved,
             /* [in] */ BSTR bstrInStr,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrOutStr);
+            /* [retval][out] */ BSTR *pbstrOutStr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_EscapedMode )( 
-            IADsPathname __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EscapedMode )( 
+            IADsPathname * This,
+            /* [retval][out] */ long *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EscapedMode )( 
-            IADsPathname __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EscapedMode )( 
+            IADsPathname * This,
             /* [in] */ long lnEscapedMode);
         
         END_INTERFACE
@@ -23177,7 +23224,7 @@ EXTERN_C const IID IID_IADsPathname;
 
     interface IADsPathname
     {
-        CONST_VTBL struct IADsPathnameVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsPathnameVtbl *lpVtbl;
     };
 
     
@@ -23249,7 +23296,7 @@ EXTERN_C const IID IID_IADsPathname;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_Set_Proxy( 
-    IADsPathname __RPC_FAR * This,
+    IADsPathname * This,
     /* [in] */ BSTR bstrADsPath,
     /* [in] */ long lnSetType);
 
@@ -23262,7 +23309,7 @@ void __RPC_STUB IADsPathname_Set_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_SetDisplayType_Proxy( 
-    IADsPathname __RPC_FAR * This,
+    IADsPathname * This,
     /* [in] */ long lnDisplayType);
 
 
@@ -23274,9 +23321,9 @@ void __RPC_STUB IADsPathname_SetDisplayType_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_Retrieve_Proxy( 
-    IADsPathname __RPC_FAR * This,
+    IADsPathname * This,
     /* [in] */ long lnFormatType,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrADsPath);
+    /* [retval][out] */ BSTR *pbstrADsPath);
 
 
 void __RPC_STUB IADsPathname_Retrieve_Stub(
@@ -23287,8 +23334,8 @@ void __RPC_STUB IADsPathname_Retrieve_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_GetNumElements_Proxy( 
-    IADsPathname __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plnNumPathElements);
+    IADsPathname * This,
+    /* [retval][out] */ long *plnNumPathElements);
 
 
 void __RPC_STUB IADsPathname_GetNumElements_Stub(
@@ -23299,9 +23346,9 @@ void __RPC_STUB IADsPathname_GetNumElements_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_GetElement_Proxy( 
-    IADsPathname __RPC_FAR * This,
+    IADsPathname * This,
     /* [in] */ long lnElementIndex,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrElement);
+    /* [retval][out] */ BSTR *pbstrElement);
 
 
 void __RPC_STUB IADsPathname_GetElement_Stub(
@@ -23312,7 +23359,7 @@ void __RPC_STUB IADsPathname_GetElement_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_AddLeafElement_Proxy( 
-    IADsPathname __RPC_FAR * This,
+    IADsPathname * This,
     /* [in] */ BSTR bstrLeafElement);
 
 
@@ -23324,7 +23371,7 @@ void __RPC_STUB IADsPathname_AddLeafElement_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_RemoveLeafElement_Proxy( 
-    IADsPathname __RPC_FAR * This);
+    IADsPathname * This);
 
 
 void __RPC_STUB IADsPathname_RemoveLeafElement_Stub(
@@ -23335,8 +23382,8 @@ void __RPC_STUB IADsPathname_RemoveLeafElement_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_CopyPath_Proxy( 
-    IADsPathname __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppAdsPath);
+    IADsPathname * This,
+    /* [retval][out] */ IDispatch **ppAdsPath);
 
 
 void __RPC_STUB IADsPathname_CopyPath_Stub(
@@ -23347,10 +23394,10 @@ void __RPC_STUB IADsPathname_CopyPath_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsPathname_GetEscapedElement_Proxy( 
-    IADsPathname __RPC_FAR * This,
+    IADsPathname * This,
     /* [in] */ long lnReserved,
     /* [in] */ BSTR bstrInStr,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrOutStr);
+    /* [retval][out] */ BSTR *pbstrOutStr);
 
 
 void __RPC_STUB IADsPathname_GetEscapedElement_Stub(
@@ -23361,8 +23408,8 @@ void __RPC_STUB IADsPathname_GetEscapedElement_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsPathname_get_EscapedMode_Proxy( 
-    IADsPathname __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *retval);
+    IADsPathname * This,
+    /* [retval][out] */ long *retval);
 
 
 void __RPC_STUB IADsPathname_get_EscapedMode_Stub(
@@ -23373,7 +23420,7 @@ void __RPC_STUB IADsPathname_get_EscapedMode_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsPathname_put_EscapedMode_Proxy( 
-    IADsPathname __RPC_FAR * This,
+    IADsPathname * This,
     /* [in] */ long lnEscapedMode);
 
 
@@ -23412,43 +23459,43 @@ EXTERN_C const IID IID_IADsADSystemInfo;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UserName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ComputerName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SiteName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DomainShortName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DomainDNSName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ForestDNSName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PDCRoleOwner( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SchemaRoleOwner( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_IsNativeMode( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT_BOOL *retval) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetAnyDCName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pszDCName) = 0;
+            /* [retval][out] */ BSTR *pszDCName) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetDCSiteName( 
             /* [in] */ BSTR szServer,
-            /* [retval][out] */ BSTR __RPC_FAR *pszSiteName) = 0;
+            /* [retval][out] */ BSTR *pszSiteName) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE RefreshSchemaCache( void) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetTrees( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvTrees) = 0;
+            /* [retval][out] */ VARIANT *pvTrees) = 0;
         
     };
     
@@ -23458,104 +23505,104 @@ EXTERN_C const IID IID_IADsADSystemInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsADSystemInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsADSystemInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsADSystemInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsADSystemInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsADSystemInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsADSystemInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsADSystemInfo __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsADSystemInfo * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsADSystemInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsADSystemInfo * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsADSystemInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsADSystemInfo * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsADSystemInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsADSystemInfo * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UserName )( 
-            IADsADSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserName )( 
+            IADsADSystemInfo * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ComputerName )( 
-            IADsADSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ComputerName )( 
+            IADsADSystemInfo * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SiteName )( 
-            IADsADSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SiteName )( 
+            IADsADSystemInfo * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DomainShortName )( 
-            IADsADSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DomainShortName )( 
+            IADsADSystemInfo * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DomainDNSName )( 
-            IADsADSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DomainDNSName )( 
+            IADsADSystemInfo * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ForestDNSName )( 
-            IADsADSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ForestDNSName )( 
+            IADsADSystemInfo * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PDCRoleOwner )( 
-            IADsADSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PDCRoleOwner )( 
+            IADsADSystemInfo * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SchemaRoleOwner )( 
-            IADsADSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SchemaRoleOwner )( 
+            IADsADSystemInfo * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_IsNativeMode )( 
-            IADsADSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsNativeMode )( 
+            IADsADSystemInfo * This,
+            /* [retval][out] */ VARIANT_BOOL *retval);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAnyDCName )( 
-            IADsADSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pszDCName);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetAnyDCName )( 
+            IADsADSystemInfo * This,
+            /* [retval][out] */ BSTR *pszDCName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDCSiteName )( 
-            IADsADSystemInfo __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetDCSiteName )( 
+            IADsADSystemInfo * This,
             /* [in] */ BSTR szServer,
-            /* [retval][out] */ BSTR __RPC_FAR *pszSiteName);
+            /* [retval][out] */ BSTR *pszSiteName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RefreshSchemaCache )( 
-            IADsADSystemInfo __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *RefreshSchemaCache )( 
+            IADsADSystemInfo * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTrees )( 
-            IADsADSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvTrees);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetTrees )( 
+            IADsADSystemInfo * This,
+            /* [retval][out] */ VARIANT *pvTrees);
         
         END_INTERFACE
     } IADsADSystemInfoVtbl;
 
     interface IADsADSystemInfo
     {
-        CONST_VTBL struct IADsADSystemInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsADSystemInfoVtbl *lpVtbl;
     };
 
     
@@ -23633,8 +23680,8 @@ EXTERN_C const IID IID_IADsADSystemInfo;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_UserName_Proxy( 
-    IADsADSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsADSystemInfo * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_UserName_Stub(
@@ -23645,8 +23692,8 @@ void __RPC_STUB IADsADSystemInfo_get_UserName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_ComputerName_Proxy( 
-    IADsADSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsADSystemInfo * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_ComputerName_Stub(
@@ -23657,8 +23704,8 @@ void __RPC_STUB IADsADSystemInfo_get_ComputerName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_SiteName_Proxy( 
-    IADsADSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsADSystemInfo * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_SiteName_Stub(
@@ -23669,8 +23716,8 @@ void __RPC_STUB IADsADSystemInfo_get_SiteName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_DomainShortName_Proxy( 
-    IADsADSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsADSystemInfo * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_DomainShortName_Stub(
@@ -23681,8 +23728,8 @@ void __RPC_STUB IADsADSystemInfo_get_DomainShortName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_DomainDNSName_Proxy( 
-    IADsADSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsADSystemInfo * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_DomainDNSName_Stub(
@@ -23693,8 +23740,8 @@ void __RPC_STUB IADsADSystemInfo_get_DomainDNSName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_ForestDNSName_Proxy( 
-    IADsADSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsADSystemInfo * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_ForestDNSName_Stub(
@@ -23705,8 +23752,8 @@ void __RPC_STUB IADsADSystemInfo_get_ForestDNSName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_PDCRoleOwner_Proxy( 
-    IADsADSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsADSystemInfo * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_PDCRoleOwner_Stub(
@@ -23717,8 +23764,8 @@ void __RPC_STUB IADsADSystemInfo_get_PDCRoleOwner_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_SchemaRoleOwner_Proxy( 
-    IADsADSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsADSystemInfo * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_SchemaRoleOwner_Stub(
@@ -23729,8 +23776,8 @@ void __RPC_STUB IADsADSystemInfo_get_SchemaRoleOwner_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_get_IsNativeMode_Proxy( 
-    IADsADSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *retval);
+    IADsADSystemInfo * This,
+    /* [retval][out] */ VARIANT_BOOL *retval);
 
 
 void __RPC_STUB IADsADSystemInfo_get_IsNativeMode_Stub(
@@ -23741,8 +23788,8 @@ void __RPC_STUB IADsADSystemInfo_get_IsNativeMode_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_GetAnyDCName_Proxy( 
-    IADsADSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pszDCName);
+    IADsADSystemInfo * This,
+    /* [retval][out] */ BSTR *pszDCName);
 
 
 void __RPC_STUB IADsADSystemInfo_GetAnyDCName_Stub(
@@ -23753,9 +23800,9 @@ void __RPC_STUB IADsADSystemInfo_GetAnyDCName_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_GetDCSiteName_Proxy( 
-    IADsADSystemInfo __RPC_FAR * This,
+    IADsADSystemInfo * This,
     /* [in] */ BSTR szServer,
-    /* [retval][out] */ BSTR __RPC_FAR *pszSiteName);
+    /* [retval][out] */ BSTR *pszSiteName);
 
 
 void __RPC_STUB IADsADSystemInfo_GetDCSiteName_Stub(
@@ -23766,7 +23813,7 @@ void __RPC_STUB IADsADSystemInfo_GetDCSiteName_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_RefreshSchemaCache_Proxy( 
-    IADsADSystemInfo __RPC_FAR * This);
+    IADsADSystemInfo * This);
 
 
 void __RPC_STUB IADsADSystemInfo_RefreshSchemaCache_Stub(
@@ -23777,8 +23824,8 @@ void __RPC_STUB IADsADSystemInfo_RefreshSchemaCache_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IADsADSystemInfo_GetTrees_Proxy( 
-    IADsADSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvTrees);
+    IADsADSystemInfo * This,
+    /* [retval][out] */ VARIANT *pvTrees);
 
 
 void __RPC_STUB IADsADSystemInfo_GetTrees_Stub(
@@ -23816,16 +23863,16 @@ EXTERN_C const IID IID_IADsWinNTSystemInfo;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UserName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ComputerName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DomainName( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_PDC( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
     };
     
@@ -23835,68 +23882,68 @@ EXTERN_C const IID IID_IADsWinNTSystemInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsWinNTSystemInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsWinNTSystemInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsWinNTSystemInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsWinNTSystemInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsWinNTSystemInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsWinNTSystemInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsWinNTSystemInfo __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsWinNTSystemInfo * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsWinNTSystemInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsWinNTSystemInfo * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsWinNTSystemInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsWinNTSystemInfo * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsWinNTSystemInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsWinNTSystemInfo * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UserName )( 
-            IADsWinNTSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserName )( 
+            IADsWinNTSystemInfo * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ComputerName )( 
-            IADsWinNTSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ComputerName )( 
+            IADsWinNTSystemInfo * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DomainName )( 
-            IADsWinNTSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DomainName )( 
+            IADsWinNTSystemInfo * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PDC )( 
-            IADsWinNTSystemInfo __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PDC )( 
+            IADsWinNTSystemInfo * This,
+            /* [retval][out] */ BSTR *retval);
         
         END_INTERFACE
     } IADsWinNTSystemInfoVtbl;
 
     interface IADsWinNTSystemInfo
     {
-        CONST_VTBL struct IADsWinNTSystemInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsWinNTSystemInfoVtbl *lpVtbl;
     };
 
     
@@ -23947,8 +23994,8 @@ EXTERN_C const IID IID_IADsWinNTSystemInfo;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsWinNTSystemInfo_get_UserName_Proxy( 
-    IADsWinNTSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsWinNTSystemInfo * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsWinNTSystemInfo_get_UserName_Stub(
@@ -23959,8 +24006,8 @@ void __RPC_STUB IADsWinNTSystemInfo_get_UserName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsWinNTSystemInfo_get_ComputerName_Proxy( 
-    IADsWinNTSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsWinNTSystemInfo * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsWinNTSystemInfo_get_ComputerName_Stub(
@@ -23971,8 +24018,8 @@ void __RPC_STUB IADsWinNTSystemInfo_get_ComputerName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsWinNTSystemInfo_get_DomainName_Proxy( 
-    IADsWinNTSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsWinNTSystemInfo * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsWinNTSystemInfo_get_DomainName_Stub(
@@ -23983,8 +24030,8 @@ void __RPC_STUB IADsWinNTSystemInfo_get_DomainName_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsWinNTSystemInfo_get_PDC_Proxy( 
-    IADsWinNTSystemInfo __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsWinNTSystemInfo * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsWinNTSystemInfo_get_PDC_Stub(
@@ -24022,13 +24069,13 @@ EXTERN_C const IID IID_IADsDNWithBinary;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_BinaryValue( 
-            /* [retval][out] */ VARIANT __RPC_FAR *retval) = 0;
+            /* [retval][out] */ VARIANT *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_BinaryValue( 
             /* [in] */ VARIANT vBinaryValue) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DNString( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DNString( 
             /* [in] */ BSTR bstrDNString) = 0;
@@ -24041,60 +24088,60 @@ EXTERN_C const IID IID_IADsDNWithBinary;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsDNWithBinary __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsDNWithBinary * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsDNWithBinary __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsDNWithBinary * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsDNWithBinary __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsDNWithBinary * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsDNWithBinary __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsDNWithBinary * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsDNWithBinary __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsDNWithBinary * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsDNWithBinary __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsDNWithBinary * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsDNWithBinary __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsDNWithBinary * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BinaryValue )( 
-            IADsDNWithBinary __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BinaryValue )( 
+            IADsDNWithBinary * This,
+            /* [retval][out] */ VARIANT *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BinaryValue )( 
-            IADsDNWithBinary __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BinaryValue )( 
+            IADsDNWithBinary * This,
             /* [in] */ VARIANT vBinaryValue);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DNString )( 
-            IADsDNWithBinary __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DNString )( 
+            IADsDNWithBinary * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DNString )( 
-            IADsDNWithBinary __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DNString )( 
+            IADsDNWithBinary * This,
             /* [in] */ BSTR bstrDNString);
         
         END_INTERFACE
@@ -24102,7 +24149,7 @@ EXTERN_C const IID IID_IADsDNWithBinary;
 
     interface IADsDNWithBinary
     {
-        CONST_VTBL struct IADsDNWithBinaryVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsDNWithBinaryVtbl *lpVtbl;
     };
 
     
@@ -24153,8 +24200,8 @@ EXTERN_C const IID IID_IADsDNWithBinary;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDNWithBinary_get_BinaryValue_Proxy( 
-    IADsDNWithBinary __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *retval);
+    IADsDNWithBinary * This,
+    /* [retval][out] */ VARIANT *retval);
 
 
 void __RPC_STUB IADsDNWithBinary_get_BinaryValue_Stub(
@@ -24165,7 +24212,7 @@ void __RPC_STUB IADsDNWithBinary_get_BinaryValue_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDNWithBinary_put_BinaryValue_Proxy( 
-    IADsDNWithBinary __RPC_FAR * This,
+    IADsDNWithBinary * This,
     /* [in] */ VARIANT vBinaryValue);
 
 
@@ -24177,8 +24224,8 @@ void __RPC_STUB IADsDNWithBinary_put_BinaryValue_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDNWithBinary_get_DNString_Proxy( 
-    IADsDNWithBinary __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsDNWithBinary * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsDNWithBinary_get_DNString_Stub(
@@ -24189,7 +24236,7 @@ void __RPC_STUB IADsDNWithBinary_get_DNString_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDNWithBinary_put_DNString_Proxy( 
-    IADsDNWithBinary __RPC_FAR * This,
+    IADsDNWithBinary * This,
     /* [in] */ BSTR bstrDNString);
 
 
@@ -24228,13 +24275,13 @@ EXTERN_C const IID IID_IADsDNWithString;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_StringValue( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_StringValue( 
             /* [in] */ BSTR bstrStringValue) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_DNString( 
-            /* [retval][out] */ BSTR __RPC_FAR *retval) = 0;
+            /* [retval][out] */ BSTR *retval) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_DNString( 
             /* [in] */ BSTR bstrDNString) = 0;
@@ -24247,60 +24294,60 @@ EXTERN_C const IID IID_IADsDNWithString;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IADsDNWithString __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsDNWithString * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IADsDNWithString __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsDNWithString * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IADsDNWithString __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsDNWithString * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IADsDNWithString __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsDNWithString * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IADsDNWithString __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsDNWithString * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IADsDNWithString __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsDNWithString * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IADsDNWithString __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsDNWithString * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StringValue )( 
-            IADsDNWithString __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StringValue )( 
+            IADsDNWithString * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StringValue )( 
-            IADsDNWithString __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StringValue )( 
+            IADsDNWithString * This,
             /* [in] */ BSTR bstrStringValue);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DNString )( 
-            IADsDNWithString __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *retval);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DNString )( 
+            IADsDNWithString * This,
+            /* [retval][out] */ BSTR *retval);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DNString )( 
-            IADsDNWithString __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DNString )( 
+            IADsDNWithString * This,
             /* [in] */ BSTR bstrDNString);
         
         END_INTERFACE
@@ -24308,7 +24355,7 @@ EXTERN_C const IID IID_IADsDNWithString;
 
     interface IADsDNWithString
     {
-        CONST_VTBL struct IADsDNWithStringVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IADsDNWithStringVtbl *lpVtbl;
     };
 
     
@@ -24359,8 +24406,8 @@ EXTERN_C const IID IID_IADsDNWithString;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDNWithString_get_StringValue_Proxy( 
-    IADsDNWithString __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsDNWithString * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsDNWithString_get_StringValue_Stub(
@@ -24371,7 +24418,7 @@ void __RPC_STUB IADsDNWithString_get_StringValue_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDNWithString_put_StringValue_Proxy( 
-    IADsDNWithString __RPC_FAR * This,
+    IADsDNWithString * This,
     /* [in] */ BSTR bstrStringValue);
 
 
@@ -24383,8 +24430,8 @@ void __RPC_STUB IADsDNWithString_put_StringValue_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsDNWithString_get_DNString_Proxy( 
-    IADsDNWithString __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *retval);
+    IADsDNWithString * This,
+    /* [retval][out] */ BSTR *retval);
 
 
 void __RPC_STUB IADsDNWithString_get_DNString_Stub(
@@ -24395,7 +24442,7 @@ void __RPC_STUB IADsDNWithString_get_DNString_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsDNWithString_put_DNString_Proxy( 
-    IADsDNWithString __RPC_FAR * This,
+    IADsDNWithString * This,
     /* [in] */ BSTR bstrDNString);
 
 
@@ -24417,6 +24464,261 @@ EXTERN_C const CLSID CLSID_DNWithString;
 class DECLSPEC_UUID("334857cc-f934-11d2-ba96-00c04fb6d0d1")
 DNWithString;
 #endif
+
+#ifndef __IADsSecurityUtility_INTERFACE_DEFINED__
+#define __IADsSecurityUtility_INTERFACE_DEFINED__
+
+/* interface IADsSecurityUtility */
+/* [object][dual][oleautomation][uuid] */ 
+
+
+EXTERN_C const IID IID_IADsSecurityUtility;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("a63251b2-5f21-474b-ab52-4a8efad10895")
+    IADsSecurityUtility : public IDispatch
+    {
+    public:
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetSecurityDescriptor( 
+            /* [in] */ VARIANT varPath,
+            /* [in] */ long lPathFormat,
+            /* [in] */ long lFormat,
+            /* [retval][out] */ VARIANT *pVariant) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetSecurityDescriptor( 
+            /* [in] */ VARIANT varPath,
+            /* [in] */ long lPathFormat,
+            /* [in] */ VARIANT varData,
+            /* [in] */ long lDataFormat) = 0;
+        
+        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConvertSecurityDescriptor( 
+            /* [in] */ VARIANT varSD,
+            /* [in] */ long lDataFormat,
+            /* [in] */ long lOutFormat,
+            /* [retval][out] */ VARIANT *pResult) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SecurityMask( 
+            /* [retval][out] */ long *retval) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SecurityMask( 
+            /* [in] */ long lnSecurityMask) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IADsSecurityUtilityVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IADsSecurityUtility * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IADsSecurityUtility * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IADsSecurityUtility * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IADsSecurityUtility * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IADsSecurityUtility * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IADsSecurityUtility * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IADsSecurityUtility * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetSecurityDescriptor )( 
+            IADsSecurityUtility * This,
+            /* [in] */ VARIANT varPath,
+            /* [in] */ long lPathFormat,
+            /* [in] */ long lFormat,
+            /* [retval][out] */ VARIANT *pVariant);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetSecurityDescriptor )( 
+            IADsSecurityUtility * This,
+            /* [in] */ VARIANT varPath,
+            /* [in] */ long lPathFormat,
+            /* [in] */ VARIANT varData,
+            /* [in] */ long lDataFormat);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConvertSecurityDescriptor )( 
+            IADsSecurityUtility * This,
+            /* [in] */ VARIANT varSD,
+            /* [in] */ long lDataFormat,
+            /* [in] */ long lOutFormat,
+            /* [retval][out] */ VARIANT *pResult);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SecurityMask )( 
+            IADsSecurityUtility * This,
+            /* [retval][out] */ long *retval);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SecurityMask )( 
+            IADsSecurityUtility * This,
+            /* [in] */ long lnSecurityMask);
+        
+        END_INTERFACE
+    } IADsSecurityUtilityVtbl;
+
+    interface IADsSecurityUtility
+    {
+        CONST_VTBL struct IADsSecurityUtilityVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IADsSecurityUtility_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IADsSecurityUtility_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IADsSecurityUtility_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IADsSecurityUtility_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IADsSecurityUtility_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IADsSecurityUtility_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IADsSecurityUtility_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IADsSecurityUtility_GetSecurityDescriptor(This,varPath,lPathFormat,lFormat,pVariant)	\
+    (This)->lpVtbl -> GetSecurityDescriptor(This,varPath,lPathFormat,lFormat,pVariant)
+
+#define IADsSecurityUtility_SetSecurityDescriptor(This,varPath,lPathFormat,varData,lDataFormat)	\
+    (This)->lpVtbl -> SetSecurityDescriptor(This,varPath,lPathFormat,varData,lDataFormat)
+
+#define IADsSecurityUtility_ConvertSecurityDescriptor(This,varSD,lDataFormat,lOutFormat,pResult)	\
+    (This)->lpVtbl -> ConvertSecurityDescriptor(This,varSD,lDataFormat,lOutFormat,pResult)
+
+#define IADsSecurityUtility_get_SecurityMask(This,retval)	\
+    (This)->lpVtbl -> get_SecurityMask(This,retval)
+
+#define IADsSecurityUtility_put_SecurityMask(This,lnSecurityMask)	\
+    (This)->lpVtbl -> put_SecurityMask(This,lnSecurityMask)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE IADsSecurityUtility_GetSecurityDescriptor_Proxy( 
+    IADsSecurityUtility * This,
+    /* [in] */ VARIANT varPath,
+    /* [in] */ long lPathFormat,
+    /* [in] */ long lFormat,
+    /* [retval][out] */ VARIANT *pVariant);
+
+
+void __RPC_STUB IADsSecurityUtility_GetSecurityDescriptor_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE IADsSecurityUtility_SetSecurityDescriptor_Proxy( 
+    IADsSecurityUtility * This,
+    /* [in] */ VARIANT varPath,
+    /* [in] */ long lPathFormat,
+    /* [in] */ VARIANT varData,
+    /* [in] */ long lDataFormat);
+
+
+void __RPC_STUB IADsSecurityUtility_SetSecurityDescriptor_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id] */ HRESULT STDMETHODCALLTYPE IADsSecurityUtility_ConvertSecurityDescriptor_Proxy( 
+    IADsSecurityUtility * This,
+    /* [in] */ VARIANT varSD,
+    /* [in] */ long lDataFormat,
+    /* [in] */ long lOutFormat,
+    /* [retval][out] */ VARIANT *pResult);
+
+
+void __RPC_STUB IADsSecurityUtility_ConvertSecurityDescriptor_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget] */ HRESULT STDMETHODCALLTYPE IADsSecurityUtility_get_SecurityMask_Proxy( 
+    IADsSecurityUtility * This,
+    /* [retval][out] */ long *retval);
+
+
+void __RPC_STUB IADsSecurityUtility_get_SecurityMask_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput] */ HRESULT STDMETHODCALLTYPE IADsSecurityUtility_put_SecurityMask_Proxy( 
+    IADsSecurityUtility * This,
+    /* [in] */ long lnSecurityMask);
+
+
+void __RPC_STUB IADsSecurityUtility_put_SecurityMask_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IADsSecurityUtility_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_ADsSecurityUtility;
+
+#ifdef __cplusplus
+
+class DECLSPEC_UUID("f270c64a-ffb8-4ae4-85fe-3a75e5347966")
+ADsSecurityUtility;
+#endif
 #endif /* __ActiveDs_LIBRARY_DEFINED__ */
 
 /* Additional Prototypes for ALL interfaces */
@@ -24428,6 +24730,7 @@ DNWithString;
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

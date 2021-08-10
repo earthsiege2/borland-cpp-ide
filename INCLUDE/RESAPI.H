@@ -1,7 +1,6 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*++
 
-Copyright (c) 1995-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Module Name:
 
@@ -282,6 +281,21 @@ typedef struct CLRES_FUNCTION_TABLE {
 #endif
 
 //
+// large ints need more space than what was originally allocated.
+//
+typedef struct RESUTIL_LARGEINT_DATA {
+    LARGE_INTEGER   Default;
+    LARGE_INTEGER   Minimum;
+    LARGE_INTEGER   Maximum;
+} RESUTIL_LARGEINT_DATA, *PRESUTIL_LARGEINT_DATA;
+
+typedef struct RESUTIL_ULARGEINT_DATA {
+    ULARGE_INTEGER  Default;
+    ULARGE_INTEGER  Minimum;
+    ULARGE_INTEGER  Maximum;
+} RESUTIL_ULARGEINT_DATA, *PRESUTIL_ULARGEINT_DATA;
+
+//
 // Property list structures and functions
 //
 typedef struct RESUTIL_PROPERTY_ITEM {
@@ -289,9 +303,11 @@ typedef struct RESUTIL_PROPERTY_ITEM {
     LPWSTR  KeyName;            // Name of value in cluster database
     DWORD   Format;             // Format: REG_SZ, REG_DWORD, etc.
     union {
-        DWORD_PTR  DefaultPtr;
-        DWORD      Default;     // Default value
-        LPVOID     lpDefault;
+        DWORD_PTR               DefaultPtr;
+        DWORD                   Default;     // Default value
+        LPVOID                  lpDefault;
+        PRESUTIL_LARGEINT_DATA  LargeIntData;
+        PRESUTIL_ULARGEINT_DATA ULargeIntData;
     };
     DWORD   Minimum;            // Minimum value
     DWORD   Maximum;            // Maximum value
@@ -625,7 +641,7 @@ ResUtilGetExpandSzValue(
     IN BOOL bExpand
     );
 
-__inline
+FORCEINLINE
 DWORD
 WINAPI
 ResUtilGetMultiSzValue(
@@ -883,6 +899,7 @@ ClusWorkerTerminate(
 //Define enumerate resource callback function. This gets called for each resource enumerated
 //by ResUtilEnumResources
 typedef   DWORD (*LPRESOURCE_CALLBACK)( HRESOURCE, HRESOURCE , PVOID );
+typedef   DWORD (*LPRESOURCE_CALLBACK_EX)( HCLUSTER, HRESOURCE, HRESOURCE , PVOID );
 
 
 BOOL
@@ -914,6 +931,16 @@ ResUtilEnumResources(
     IN LPCWSTR              lpszResTypeName,
     IN LPRESOURCE_CALLBACK  pResCallBack,
     IN PVOID                pParameter
+    );
+
+DWORD
+WINAPI
+ResUtilEnumResourcesEx(
+    IN HCLUSTER                 hCluster,
+    IN HRESOURCE                hSelf,
+    IN LPCWSTR                  lpszResTypeName,
+    IN LPRESOURCE_CALLBACK_EX   pResCallBack,
+    IN PVOID                    pParameter
     );
 
 HRESOURCE
@@ -962,11 +989,49 @@ ResUtilGetResourceDependentIPAddressProps(
 
 DWORD
 WINAPI
-ResUtilFindDependentDiskResourceDriveLetter( 
+ResUtilFindDependentDiskResourceDriveLetter(
     IN     HCLUSTER  hCluster,             // handle to cluster
     IN     HRESOURCE hResource,            // handle to resource to query for dependencies
     IN     LPWSTR    pszDriveLetter,       // buffer to store drive letter (ex. "X:\0")
-    IN OUT DWORD     *pcchDriveLetter      // IN size of the pszDriveLetter buffer, OUT size of buffer required
+    IN OUT DWORD *   pcchDriveLetter       // IN size of the pszDriveLetter buffer, OUT size of buffer required
+    );
+
+DWORD
+WINAPI
+ResUtilTerminateServiceProcessFromResDll(
+    IN  DWORD               dwServicePid,
+    IN  BOOL                bOffline,
+    OUT PDWORD              pdwResourceState,
+    IN  PLOG_EVENT_ROUTINE  pfnLogEvent,
+    IN  RESOURCE_HANDLE     hResourceHandle
+    );
+
+DWORD
+WINAPI
+ResUtilGetPropertyFormats(
+    IN const PRESUTIL_PROPERTY_ITEM pPropertyTable,
+    OUT PVOID                       pOutPropertyFormatList,
+    IN DWORD                        cbPropertyFormatListSize,
+    OUT LPDWORD                     pcbBytesReturned,
+    OUT LPDWORD                     pcbRequired
+    );
+
+
+DWORD
+WINAPI
+ResUtilGetCoreClusterResources(
+      IN    HCLUSTER      hCluster
+    , OUT   HRESOURCE *   phClusterNameResource
+    , OUT   HRESOURCE *   phClusterIPAddressResource
+    , OUT   HRESOURCE *   phClusterQuorumResource
+    );
+
+DWORD
+WINAPI
+ResUtilGetResourceName(
+      IN        HRESOURCE hResource
+    , OUT       WCHAR *   pszResourceName
+    , IN OUT    DWORD *   pcchResourceName
     );
 
 #ifdef __cplusplus
@@ -975,4 +1040,3 @@ ResUtilFindDependentDiskResourceDriveLetter(
 
 
 #endif // ifdef _RESAPI_DEFINES_
-#pragma option pop /*P_O_Pop*/

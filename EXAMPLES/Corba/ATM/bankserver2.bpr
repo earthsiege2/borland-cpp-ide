@@ -2,18 +2,18 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
-    <PROJECT value="bankserver2.exe"/>
-    <OBJFILES value="BankServer2.obj bankunit2.obj"/>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="BankServer2.exe"/>
+    <OBJFILES value="BankServer2.obj bankunit2.obj Banking_s.obj Banking_c.obj xaction_s.obj xaction_c.obj"/>
     <RESFILES value="BankServer2.res"/>
     <IDLFILES value="xaction.idl Banking.idl"/>
     <IDLGENFILES value="Banking_s.cpp Banking_c.cpp xaction_s.cpp xaction_c.cpp"/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) bankunit2.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="vcl50.lib"/>
-    <SPARELIBS value="vcl50.lib"/>
-    <PACKAGES value=""/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="rtl.lib vcl.lib"/>
+    <PACKAGES value="vcl.bpi rtl.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -21,7 +21,7 @@
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="ilink32"/>
-    <USERDEFINES value="WIN32"/>
+    <USERDEFINES value="WIN32;_USE_OLD_RW_STL"/>
     <SYSDEFINES value="_RTLDLL"/>
     <MAINSOURCE value="BankServer2.cpp"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;$(VBROKERDIR)\include"/>
@@ -29,20 +29,41 @@
     <WARNINGS value="-w-par -w-8027 -w-8026"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -I$(VBROKERDIR)\include -src_suffix 
-      cpp -DWIN32 -boa"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -Tkh30000 -X- -r- -a8 -b- -k -y -v 
-      -vi- -c -tW -tWM"/>
+    <IDLCFLAGS value="-src_suffix cpp -DWIN32 -I$(BCB)\include -I$(BCB)\include\vcl 
+      -I$(VBROKERDIR)\include -boa"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -Tkh30000 -X- -r- -a8 
+      -b- -k -y -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -DWIN32 -v -JPHN -M"/>
     <RFLAGS value="-DWIN32"/>
     <AFLAGS value="/mx /w2 /zd /dWIN32"/>
     <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0w32.obj Memmgr.Lib sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="orb_br.lib $(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="BankServer2.cpp" FORMNAME="" UNITNAME="BankServer2" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="BankServer2.res" FORMNAME="" UNITNAME="BankServer2" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="bankunit2.cpp" FORMNAME="Bank2Form" UNITNAME="bankunit2" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="xaction.idl" FORMNAME="" UNITNAME="xaction" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Banking.idl" FORMNAME="" UNITNAME="Banking" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
+  <FILES>
+    <FILE type="depend" value="Banking.idl" translator="idl2cpp">
+      <IDLROOTDIR value=" -root_dir .\ "/>
+      <DEPENDENT value="Banking_s.cpp"/>
+      <DEPENDENT value="Banking_c.cpp"/>
+    </FILE>
+    <FILE type="depend" value="xaction.idl" translator="idl2cpp">
+      <IDLROOTDIR value=" -root_dir .\ "/>
+      <DEPENDENT value="xaction_s.cpp"/>
+      <DEPENDENT value="xaction_c.cpp"/>
+    </FILE>
+  </FILES>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -72,29 +93,26 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=1
-Item0=$(BCB)\include;$(BCB)\include\vcl;$(VBROKERDIR)\include
 
 [HistoryLists\hlLibraryPath]
-Count=1
-Item0=$(BCB)\lib\obj;$(BCB)\lib;$(VBROKERDIR)\lib
 
 [HistoryLists\hlDebugSourcePath]
-Count=1
-Item0=$(BCB)\source\vcl
 
 [HistoryLists\hlConditionals]
-Count=1
-Item0=WIN32
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
@@ -112,17 +130,4 @@ ActiveLang=
 ProjectLang=
 RootDir=
   </IDEOPTIONS>
-
-  <FILES>
-    <FILE type="depend" value="Banking.idl" translator="idl2cpp">
-      <IDLROOTDIR value=""/>
-      <DEPENDENT value="Banking_s.cpp"/>
-      <DEPENDENT value="Banking_c.cpp"/>
-    </FILE>
-    <FILE type="depend" value="xaction.idl" translator="idl2cpp">
-      <IDLROOTDIR value=""/>
-      <DEPENDENT value="xaction_s.cpp"/>
-      <DEPENDENT value="xaction_c.cpp"/>
-    </FILE>
-  </FILES>
 </PROJECT>

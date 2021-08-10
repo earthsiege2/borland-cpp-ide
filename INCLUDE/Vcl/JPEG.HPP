@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'jpeg.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'jpeg.pas' rev: 6.00
 
 #ifndef jpegHPP
 #define jpegHPP
@@ -93,7 +93,7 @@ private:
 protected:
 	virtual void __fastcall AssignTo(Classes::TPersistent* Dest);
 	virtual void __fastcall Changed(System::TObject* Sender);
-	virtual void __fastcall Draw(Graphics::TCanvas* ACanvas, const Windows::TRect &Rect);
+	virtual void __fastcall Draw(Graphics::TCanvas* ACanvas, const Types::TRect &Rect);
 	virtual bool __fastcall Equals(Graphics::TGraphic* Graphic);
 	void __fastcall FreeBitmap(void);
 	virtual bool __fastcall GetEmpty(void);
@@ -122,12 +122,10 @@ public:
 	virtual void __fastcall LoadFromClipboardFormat(Word AFormat, unsigned AData, HPALETTE APalette);
 	virtual void __fastcall SaveToClipboardFormat(Word &AFormat, unsigned &AData, HPALETTE &APalette);
 	__property bool Grayscale = {read=GetGrayscale, write=SetGrayscale, nodefault};
-	__property bool ProgressiveEncoding = {read=FProgressiveEncoding, write=FProgressiveEncoding, nodefault
-		};
+	__property bool ProgressiveEncoding = {read=FProgressiveEncoding, write=FProgressiveEncoding, nodefault};
 	__property TJPEGQualityRange CompressionQuality = {read=FQuality, write=FQuality, nodefault};
 	__property TJPEGPixelFormat PixelFormat = {read=FPixelFormat, write=SetPixelFormat, nodefault};
-	__property bool ProgressiveDisplay = {read=FProgressiveDisplay, write=FProgressiveDisplay, nodefault
-		};
+	__property bool ProgressiveDisplay = {read=FProgressiveDisplay, write=FProgressiveDisplay, nodefault};
 	__property TJPEGPerformance Performance = {read=FPerformance, write=SetPerformance, nodefault};
 	__property TJPEGScale Scale = {read=FScale, write=SetScale, nodefault};
 	__property bool Smoothing = {read=FSmoothing, write=SetSmoothing, nodefault};
@@ -152,9 +150,7 @@ struct TJPEGDefaults
 extern PACKAGE TJPEGDefaults JPEGDefaults;
 
 }	/* namespace Jpeg */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Jpeg;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

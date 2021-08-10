@@ -1,4 +1,4 @@
-[!outputon] // $Revision:   1.12.1.5  $
+[!outputon] // $Revision:   1.14.1.0.1.1  $
 [!if=(FreeThreadedMarshaler, "TRUE")]
   [!set(NeedsGetControllingUnknown, "TRUE")]
 [!endif]
@@ -6,6 +6,22 @@
 
 #ifndef [!IDEHeaderName]
 #define [!IDEHeaderName]
+
+[!if=(ThreadingModel, "Single")]
+#define ATL_APARTMENT_THREADED
+[!endif]
+[!if=(ThreadingModel, "Apartment")]
+#define ATL_APARTMENT_THREADED
+[!endif]
+[!if=(ThreadingModel, "Both")]
+#define ATL_FREE_THREADED
+[!endif]
+[!if=(ThreadingModel, "Free")]
+#define ATL_FREE_THREADED
+[!endif]
+[!if=(ThreadingModel, "Neutral")]
+#define ATL_APARTMENT_THREADED
+[!endif]
 
 #include "[!TypeLibModuleName].H"
 

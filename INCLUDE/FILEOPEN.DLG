@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -39,7 +39,7 @@ Revision History:
 //  New File Open and Save As Dialogs.
 //
 
-NEWFILEOPENV2ORD DIALOG DISCARDABLE  0, 0, 370, 197
+NEWFILEOPENV2ORD DIALOG DISCARDABLE  0, 0, 370, 237
 STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CAPTION |
       WS_SYSMENU | DS_CONTEXTHELP | WS_CLIPCHILDREN
 CAPTION "Open"
@@ -54,28 +54,28 @@ BEGIN
     CONTROL         "", ctl1, TOOLBARCLASSNAME,  WS_TABSTOP |
                     CCS_NODIVIDER |CCS_NOPARENTALIGN | CCS_NORESIZE | TBSTYLE_WRAPABLE |
                     TBSTYLE_FLAT | TBSTYLE_TOOLTIPS | TBSTYLE_CUSTOMERASE,
-                    4,22,58,168 ,  WS_EX_CLIENTEDGE
-    LISTBOX         lst1, 66, 22, 300, 116,
+                    4,22,58,208 ,  WS_EX_CLIENTEDGE
+    LISTBOX         lst1, 66, 22, 300, 156,
                     LBS_SORT | LBS_NOINTEGRALHEIGHT | LBS_MULTICOLUMN |
                     WS_HSCROLL | NOT WS_VISIBLE
 
-    LTEXT           "File &name:", stc3, 67, 147, 58, 8, SS_NOTIFY
+    LTEXT           "File &name:", stc3, 67, 187, 58, 8, SS_NOTIFY
 
-    EDITTEXT         edt1, 130,144, 164, 12, WS_TABSTOP | ES_AUTOHSCROLL
+    EDITTEXT         edt1, 130,184, 164, 12, WS_TABSTOP | ES_AUTOHSCROLL
 
     CONTROL          "", cmb13, WC_COMBOBOXEX, WS_TABSTOP| WS_VSCROLL |
                      CBS_DROPDOWN | CBS_AUTOHSCROLL,
-                     130, 144, 164, 150
+                     130, 184, 164, 150
 
-    LTEXT           "Files of &type:", stc2, 67, 163, 58, 8, SS_NOTIFY
-    COMBOBOX        cmb1, 130, 161, 164, 100,
+    LTEXT           "Files of &type:", stc2, 67, 203, 58, 8, SS_NOTIFY
+    COMBOBOX        cmb1, 130, 201, 164, 100,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
 
-    AUTOCHECKBOX    "Open as &read-only", chx1, 130, 177, 160, 8, WS_TABSTOP
+    AUTOCHECKBOX    "Open as &read-only", chx1, 130, 217, 160, 8, WS_TABSTOP
 
-    DEFPUSHBUTTON   "&Open", IDOK, 316, 144, 50, 14, WS_GROUP
-    PUSHBUTTON      "Cancel", IDCANCEL, 316, 160, 50, 14, WS_GROUP
-    PUSHBUTTON      "&Help", pshHelp, 316, 178, 50, 14, WS_GROUP
+    DEFPUSHBUTTON   "&Open", IDOK, 316, 184, 50, 14, WS_GROUP
+    PUSHBUTTON      "Cancel", IDCANCEL, 316, 200, 50, 14, WS_GROUP
+    PUSHBUTTON      "&Help", pshHelp, 316, 218, 50, 14, WS_GROUP
 END
 
 

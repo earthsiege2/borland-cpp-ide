@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Wed Aug 25 16:06:07 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for certpol.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -38,6 +36,10 @@
 #ifndef __certpol_h__
 #define __certpol_h__
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
 /* Forward Declarations */ 
 
 #ifndef __ICertPolicy_FWD_DEFINED__
@@ -46,16 +48,22 @@ typedef interface ICertPolicy ICertPolicy;
 #endif 	/* __ICertPolicy_FWD_DEFINED__ */
 
 
+#ifndef __ICertPolicy2_FWD_DEFINED__
+#define __ICertPolicy2_FWD_DEFINED__
+typedef interface ICertPolicy2 ICertPolicy2;
+#endif 	/* __ICertPolicy2_FWD_DEFINED__ */
+
+
 /* header files for imported files */
 #include "wtypes.h"
-#include "oaidl.h"
+#include "certmod.h"
 
 #ifdef __cplusplus
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 #ifndef __ICertPolicy_INTERFACE_DEFINED__
 #define __ICertPolicy_INTERFACE_DEFINED__
@@ -80,10 +88,10 @@ EXTERN_C const IID IID_ICertPolicy;
             /* [in] */ LONG Context,
             /* [in] */ LONG bNewRequest,
             /* [in] */ LONG Flags,
-            /* [retval][out] */ LONG __RPC_FAR *pDisposition) = 0;
+            /* [retval][out] */ LONG *pDisposition) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDescription( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstrDescription) = 0;
+            /* [retval][out] */ BSTR *pstrDescription) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShutDown( void) = 0;
         
@@ -95,71 +103,71 @@ EXTERN_C const IID IID_ICertPolicy;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICertPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICertPolicy * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICertPolicy __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICertPolicy * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICertPolicy __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICertPolicy * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ICertPolicy __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ICertPolicy * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ICertPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ICertPolicy * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ICertPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ICertPolicy * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ICertPolicy __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ICertPolicy * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            ICertPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+            ICertPolicy * This,
             /* [in] */ const BSTR strConfig);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *VerifyRequest )( 
-            ICertPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *VerifyRequest )( 
+            ICertPolicy * This,
             /* [in] */ const BSTR strConfig,
             /* [in] */ LONG Context,
             /* [in] */ LONG bNewRequest,
             /* [in] */ LONG Flags,
-            /* [retval][out] */ LONG __RPC_FAR *pDisposition);
+            /* [retval][out] */ LONG *pDisposition);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescription )( 
-            ICertPolicy __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrDescription);
+        HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
+            ICertPolicy * This,
+            /* [retval][out] */ BSTR *pstrDescription);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShutDown )( 
-            ICertPolicy __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *ShutDown )( 
+            ICertPolicy * This);
         
         END_INTERFACE
     } ICertPolicyVtbl;
 
     interface ICertPolicy
     {
-        CONST_VTBL struct ICertPolicyVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICertPolicyVtbl *lpVtbl;
     };
 
     
@@ -210,7 +218,7 @@ EXTERN_C const IID IID_ICertPolicy;
 
 
 HRESULT STDMETHODCALLTYPE ICertPolicy_Initialize_Proxy( 
-    ICertPolicy __RPC_FAR * This,
+    ICertPolicy * This,
     /* [in] */ const BSTR strConfig);
 
 
@@ -222,12 +230,12 @@ void __RPC_STUB ICertPolicy_Initialize_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertPolicy_VerifyRequest_Proxy( 
-    ICertPolicy __RPC_FAR * This,
+    ICertPolicy * This,
     /* [in] */ const BSTR strConfig,
     /* [in] */ LONG Context,
     /* [in] */ LONG bNewRequest,
     /* [in] */ LONG Flags,
-    /* [retval][out] */ LONG __RPC_FAR *pDisposition);
+    /* [retval][out] */ LONG *pDisposition);
 
 
 void __RPC_STUB ICertPolicy_VerifyRequest_Stub(
@@ -238,8 +246,8 @@ void __RPC_STUB ICertPolicy_VerifyRequest_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertPolicy_GetDescription_Proxy( 
-    ICertPolicy __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrDescription);
+    ICertPolicy * This,
+    /* [retval][out] */ BSTR *pstrDescription);
 
 
 void __RPC_STUB ICertPolicy_GetDescription_Stub(
@@ -250,7 +258,7 @@ void __RPC_STUB ICertPolicy_GetDescription_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertPolicy_ShutDown_Proxy( 
-    ICertPolicy __RPC_FAR * This);
+    ICertPolicy * This);
 
 
 void __RPC_STUB ICertPolicy_ShutDown_Stub(
@@ -264,12 +272,176 @@ void __RPC_STUB ICertPolicy_ShutDown_Stub(
 #endif 	/* __ICertPolicy_INTERFACE_DEFINED__ */
 
 
+#ifndef __ICertPolicy2_INTERFACE_DEFINED__
+#define __ICertPolicy2_INTERFACE_DEFINED__
+
+/* interface ICertPolicy2 */
+/* [unique][helpstring][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_ICertPolicy2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("3db4910e-8001-4bf1-aa1b-f43a808317a0")
+    ICertPolicy2 : public ICertPolicy
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetManageModule( 
+            /* [retval][out] */ ICertManageModule **ppManageModule) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct ICertPolicy2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICertPolicy2 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICertPolicy2 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICertPolicy2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ICertPolicy2 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ICertPolicy2 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ICertPolicy2 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ICertPolicy2 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+            ICertPolicy2 * This,
+            /* [in] */ const BSTR strConfig);
+        
+        HRESULT ( STDMETHODCALLTYPE *VerifyRequest )( 
+            ICertPolicy2 * This,
+            /* [in] */ const BSTR strConfig,
+            /* [in] */ LONG Context,
+            /* [in] */ LONG bNewRequest,
+            /* [in] */ LONG Flags,
+            /* [retval][out] */ LONG *pDisposition);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
+            ICertPolicy2 * This,
+            /* [retval][out] */ BSTR *pstrDescription);
+        
+        HRESULT ( STDMETHODCALLTYPE *ShutDown )( 
+            ICertPolicy2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetManageModule )( 
+            ICertPolicy2 * This,
+            /* [retval][out] */ ICertManageModule **ppManageModule);
+        
+        END_INTERFACE
+    } ICertPolicy2Vtbl;
+
+    interface ICertPolicy2
+    {
+        CONST_VTBL struct ICertPolicy2Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define ICertPolicy2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define ICertPolicy2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define ICertPolicy2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define ICertPolicy2_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define ICertPolicy2_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define ICertPolicy2_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define ICertPolicy2_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define ICertPolicy2_Initialize(This,strConfig)	\
+    (This)->lpVtbl -> Initialize(This,strConfig)
+
+#define ICertPolicy2_VerifyRequest(This,strConfig,Context,bNewRequest,Flags,pDisposition)	\
+    (This)->lpVtbl -> VerifyRequest(This,strConfig,Context,bNewRequest,Flags,pDisposition)
+
+#define ICertPolicy2_GetDescription(This,pstrDescription)	\
+    (This)->lpVtbl -> GetDescription(This,pstrDescription)
+
+#define ICertPolicy2_ShutDown(This)	\
+    (This)->lpVtbl -> ShutDown(This)
+
+
+#define ICertPolicy2_GetManageModule(This,ppManageModule)	\
+    (This)->lpVtbl -> GetManageModule(This,ppManageModule)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE ICertPolicy2_GetManageModule_Proxy( 
+    ICertPolicy2 * This,
+    /* [retval][out] */ ICertManageModule **ppManageModule);
+
+
+void __RPC_STUB ICertPolicy2_GetManageModule_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __ICertPolicy2_INTERFACE_DEFINED__ */
+
+
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
 /* end of Additional Prototypes */
 
@@ -280,4 +452,3 @@ void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

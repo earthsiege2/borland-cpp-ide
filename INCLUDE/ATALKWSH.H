@@ -17,7 +17,6 @@ Revision History:
 --*/
 
 #ifndef	_ATALKWSH_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define	_ATALKWSH_
 
 #if _MSC_VER > 1000
@@ -198,6 +197,5 @@ typedef struct _WSH_PAP_GET_SERVER_STATUS
 
 } WSH_PAP_GET_SERVER_STATUS, *PWSH_PAP_GET_SERVER_STATUS;
 
-#pragma option pop /*P_O_Pop*/
 #endif	// _ATALKWSH_
 

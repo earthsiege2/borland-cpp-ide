@@ -35,7 +35,7 @@ procedure:
 
 Transfer (or delete) the experts DLL (EXPERTS.DLL) from the C++Builder
 BIN directory (BCB\BIN). Execute the registry editor (REGEDIT)
-and locate HKEY_CURRENT_USER\Software\Borland\C++Builder\4.0\Experts.
+and locate HKEY_CURRENT_USER\Software\Borland\C++Builder\5.0\Experts.
 
 Under the "Experts" key, insert (or delete) the string value
 (Edit|New|StringValue) "ExptDemo". If you are installing the expert DLL,

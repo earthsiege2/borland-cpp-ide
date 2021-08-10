@@ -2,7 +2,6 @@
 // Copyright (c) 1996-1999 Microsoft Corporation
 
 #ifndef __FTSIFACE_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __FTSIFACE_H__
 
 #if _MSC_VER > 1000
@@ -170,5 +169,4 @@ int APIENTRY QueryHilites(HHILITER hhil, int base, int limit,
 
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // __FTSIFACE_H__

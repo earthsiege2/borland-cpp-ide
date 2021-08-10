@@ -10,6 +10,7 @@
 #include <ImgList.hpp>
 #include <Menus.hpp>
 #include "Trayicon.h"
+#include "trayicon.h"
 //---------------------------------------------------------------------------
 class TFormMain : public TForm
 {

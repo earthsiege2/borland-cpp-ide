@@ -1,6 +1,6 @@
-LIBRARY ACLUI
+LIBRARY AclUI
 EXPORTS
 
-    CreateSecurityPage                       = 'ACLUI.DLL'.* @1 @0
-    EditSecurity                             = 'ACLUI.DLL'.* @2 @1
-    _IID_ISecurityInformation                = 'ACLUI.DLL'.* @16 @15
+    CreateSecurityPage        @1
+    EditSecurity        @2
+    _IID_ISecurityInformation        = IID_ISecurityInformation        @16

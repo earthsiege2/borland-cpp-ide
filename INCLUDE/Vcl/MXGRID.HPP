@@ -1,25 +1,25 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxgrid.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MXGRID.pas' rev: 6.00
 
-#ifndef mxgridHPP
-#define mxgridHPP
+#ifndef MXGRIDHPP
+#define MXGRIDHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
 #include <ImgList.hpp>	// Pascal unit
-#include <mxcommon.hpp>	// Pascal unit
-#include <mxbutton.hpp>	// Pascal unit
-#include <mxDB.hpp>	// Pascal unit
-#include <mxConsts.hpp>	// Pascal unit
-#include <mxarrays.hpp>	// Pascal unit
+#include <MXCOMMON.hpp>	// Pascal unit
+#include <MXBUTTON.hpp>	// Pascal unit
+#include <MXDB.hpp>	// Pascal unit
+#include <Mxconsts.hpp>	// Pascal unit
+#include <Mxarrays.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Grids.hpp>	// Pascal unit
 #include <Menus.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -42,8 +42,7 @@ class PASCALIMPLEMENTATION TValueArray : public Mxarrays::TSmallIntArray
 	
 public:
 	#pragma option push -w-inl
-	/* TSmallIntArray.Create */ inline __fastcall virtual TValueArray(int itemcount, int dummy) : Mxarrays::TSmallIntArray(
-		itemcount, dummy) { }
+	/* TSmallIntArray.Create */ inline __fastcall virtual TValueArray(int itemcount, int dummy) : Mxarrays::TSmallIntArray(itemcount, dummy) { }
 	#pragma option pop
 	
 public:
@@ -65,9 +64,7 @@ enum TDecisionGridState { csNormal, csPivoting };
 #pragma option pop
 
 #pragma option push -b-
-enum TDecisionDrawStates { dsGroupStart, dsRowCaption, dsColCaption, dsSum, dsRowValue, dsColValue, 
-	dsData, dsOpenAfter, dsCloseAfter, dsCloseBefore, dsOpenBefore, dsRowIndicator, dsColIndicator, dsRowPlus, 
-	dsColPlus, dsNone };
+enum TDecisionDrawStates { dsGroupStart, dsRowCaption, dsColCaption, dsSum, dsRowValue, dsColValue, dsData, dsOpenAfter, dsCloseAfter, dsCloseBefore, dsOpenBefore, dsRowIndicator, dsColIndicator, dsRowPlus, dsColPlus, dsNone };
 #pragma option pop
 
 #pragma option push -b-
@@ -76,16 +73,12 @@ enum TDecisionPivotState { psNone, psLeftPivot, psMiddlePivot, psRightPivot, psT
 
 typedef Set<TDecisionDrawStates, dsGroupStart, dsNone>  TDecisionDrawState;
 
-typedef void __fastcall (__closure *TDecisionDrawCellEvent)(System::TObject* Sender, int Col, int Row
-	, AnsiString &Value, Graphics::TFont* &aFont, Graphics::TColor &aColor, Grids::TGridDrawState AState
-	, TDecisionDrawState aDrawState);
+typedef void __fastcall (__closure *TDecisionDrawCellEvent)(System::TObject* Sender, int Col, int Row, AnsiString &Value, Graphics::TFont* &aFont, Graphics::TColor &aColor, Grids::TGridDrawState AState, TDecisionDrawState aDrawState);
 
-typedef void __fastcall (__closure *TDecisionExamineCellEvent)(System::TObject* Sender, int iCol, int 
-	iRow, int iSum, const TValueArray* ValueArray);
+typedef void __fastcall (__closure *TDecisionExamineCellEvent)(System::TObject* Sender, int iCol, int iRow, int iSum, const TValueArray* ValueArray);
 
 #pragma option push -b-
-enum TDecisionCellType { ctNone, ctCaptionRow, ctCaptionCol, ctNewCaptionCol, ctRowLabel, ctColLabel, 
-	ctData, ctRowPlus, ctColPlus, ctRowIndicator, ctColIndicator };
+enum TDecisionCellType { ctNone, ctCaptionRow, ctCaptionCol, ctNewCaptionCol, ctRowLabel, ctColLabel, ctData, ctRowPlus, ctColPlus, ctRowIndicator, ctColIndicator };
 #pragma option pop
 
 #pragma option push -b-
@@ -106,6 +99,9 @@ class PASCALIMPLEMENTATION TDisplayDims : public Classes::TCollection
 {
 	typedef Classes::TCollection inherited;
 	
+public:
+	TDisplayDim* operator[](int Index) { return Items[Index]; }
+	
 private:
 	bool bQuiet;
 	TDisplayDim* __fastcall GetDisplayDim(int Index);
@@ -120,10 +116,8 @@ protected:
 public:
 	__property TDisplayDim* Items[int Index] = {read=GetDisplayDim, write=SetDisplayDim/*, default*/};
 public:
-		
 	#pragma option push -w-inl
-	/* TCollection.Create */ inline __fastcall TDisplayDims(TMetaClass* ItemClass) : Classes::TCollection(
-		ItemClass) { }
+	/* TCollection.Create */ inline __fastcall TDisplayDims(TMetaClass* ItemClass) : Classes::TCollection(ItemClass) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCollection.Destroy */ inline __fastcall virtual ~TDisplayDims(void) { }
@@ -178,19 +172,15 @@ private:
 	void __fastcall DataToRawCoord(int &X, int &Y);
 	int __fastcall DataToRawX(int X);
 	int __fastcall DataToRawY(int Y);
-	void __fastcall DrawSpecialState(Graphics::TCanvas* ACanvas, const Windows::TRect &ARect, TDecisionDrawState 
-		DrawState, TDecisionPivotState PivotState);
+	void __fastcall DrawSpecialState(Graphics::TCanvas* ACanvas, const Types::TRect &ARect, TDecisionDrawState DrawState, TDecisionPivotState PivotState);
 	TDecisionPivotState __fastcall GetSpecialState(int ARow, int AColumn);
-	AnsiString __fastcall GetDataPoint(int ARow, int AColumn, TDecisionDrawState &State, Classes::TAlignment 
-		&Alignment);
+	AnsiString __fastcall GetDataPoint(int ARow, int AColumn, TDecisionDrawState &State, Classes::TAlignment &Alignment);
 	TDecisionCellType __fastcall WhichCoord(const Grids::TGridCoord &Coord);
 	TDecisionCellType __fastcall WhichCoordExCap(const Grids::TGridCoord &Coord);
-	int __fastcall GetDimensionIndex(TDecisionCellType cellType, const Grids::TGridCoord &Coord, Mxdb::TDimGroup 
-		&dimGroup, bool &bExists);
+	int __fastcall GetDimensionIndex(TDecisionCellType cellType, const Grids::TGridCoord &Coord, Mxdb::TDimGroup &dimGroup, bool &bExists);
 	Grids::TGridCoord __fastcall MouseToDataCoord(int X, int Y);
 	void __fastcall SetNearestTargetCell(int X, int Y);
-	void __fastcall GetHitTypes(int ARow, int AColumn, int &ValueIndex, TDecisionDrawState &DrawState, 
-		TDecisionCellType &CellType);
+	void __fastcall GetHitTypes(int ARow, int AColumn, int &ValueIndex, TDecisionDrawState &DrawState, TDecisionCellType &CellType);
 	void __fastcall NewDataStructure(void);
 	void __fastcall NewGridLayout(void);
 	AnsiString __fastcall GetData(int ARow, int AColumn, int &SubLevel);
@@ -228,13 +218,10 @@ private:
 	
 protected:
 	TDecisionGridState FGridStateX;
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
-	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int 
-		Y);
-	virtual void __fastcall DrawCell(int ACol, int ARow, const Windows::TRect &ARect, Grids::TGridDrawState 
-		AState);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	virtual void __fastcall DrawCell(int ACol, int ARow, const Types::TRect &ARect, Grids::TGridDrawState AState);
 	virtual bool __fastcall SelectCell(int Arow, int AColumn);
 	DYNAMIC void __fastcall TopLeftChanged(void);
 	DYNAMIC void __fastcall ColWidthsChanged(void);
@@ -242,8 +229,7 @@ protected:
 	virtual void __fastcall Paint(void);
 	__property TDecisionGridOptions Options = {read=FOptions, write=SetOptions, default=7};
 	__property int GridLineWidth = {read=FGridLineWidth, write=SetGridLineWidth, nodefault};
-	__property Graphics::TColor GridLineColor = {read=FGridLineColor, write=SetGridLineColor, nodefault
-		};
+	__property Graphics::TColor GridLineColor = {read=FGridLineColor, write=SetGridLineColor, nodefault};
 	__property Graphics::TFont* CaptionFont = {read=FCaptionFont, write=SetCaptionFont};
 	__property Graphics::TColor CaptionColor = {read=FCaptionColor, write=SetCaptionColor, nodefault};
 	__property Graphics::TFont* DataFont = {read=FDataFont, write=SetDataFont};
@@ -251,8 +237,7 @@ protected:
 	__property Graphics::TColor DataSumColor = {read=FDataSumColor, write=SetDataSumColor, nodefault};
 	__property Graphics::TFont* LabelFont = {read=FLabelFont, write=SetLabelFont};
 	__property Graphics::TColor LabelColor = {read=FLabelColor, write=SetLabelColor, nodefault};
-	__property Graphics::TColor LabelSumColor = {read=FLabelSumColor, write=SetLabelSumColor, nodefault
-		};
+	__property Graphics::TColor LabelSumColor = {read=FLabelSumColor, write=SetLabelSumColor, nodefault};
 	__property TDisplayDims* Dimensions = {read=FDisplayDims, write=FDisplayDims};
 	AnsiString __fastcall GetCells(int ACol, int ARow);
 	__property int FixedRows = {read=GetFixedRows, nodefault};
@@ -265,27 +250,20 @@ protected:
 public:
 	__fastcall virtual TCustomDecisionGrid(Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomDecisionGrid(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
-	__property Mxdb::TDecisionSource* DecisionSource = {read=GeTDecisionSource, write=SeTDecisionSource
-		};
-	HIDESBASE Windows::TRect __fastcall CellRect(int ACol, int ARow);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
+	__property Mxdb::TDecisionSource* DecisionSource = {read=GeTDecisionSource, write=SeTDecisionSource};
+	HIDESBASE Types::TRect __fastcall CellRect(int ACol, int ARow);
 	bool __fastcall CellValueArray(int ACol, int ARow, TValueArray* &ValueArray);
-	bool __fastcall CellDrawState(int ACol, int ARow, AnsiString &Value, TDecisionDrawState &DrawState)
-		;
+	bool __fastcall CellDrawState(int ACol, int ARow, AnsiString &Value, TDecisionDrawState &DrawState);
 	__property bool Totals = {read=GetTotals, write=SetTotals, nodefault};
-	__property TDecisionExamineCellEvent OnDecisionExamineCell = {read=FOnDecisionExamineCell, write=FOnDecisionExamineCell
-		};
-	__property TDecisionDrawCellEvent OnDecisionDrawCell = {read=FOnDecisionDrawCell, write=FOnDecisionDrawCell
-		};
-	__property Classes::TNotifyEvent OnTopLeftChanged = {read=FOnTopLeftChanged, write=FOnTopLeftChanged
-		};
+	__property TDecisionExamineCellEvent OnDecisionExamineCell = {read=FOnDecisionExamineCell, write=FOnDecisionExamineCell};
+	__property TDecisionDrawCellEvent OnDecisionDrawCell = {read=FOnDecisionDrawCell, write=FOnDecisionDrawCell};
+	__property Classes::TNotifyEvent OnTopLeftChanged = {read=FOnTopLeftChanged, write=FOnTopLeftChanged};
 	__property AnsiString Cells[int ACol][int ARow] = {read=GetCells};
 	__property bool ShowCubeEditor = {read=FShowCubeEditor, write=FShowCubeEditor, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomDecisionGrid(HWND ParentWindow) : Grids::TCustomGrid(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomDecisionGrid(HWND ParentWindow) : Grids::TCustomGrid(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -358,7 +336,7 @@ public:
 	__property FixedCols ;
 	
 __published:
-	__property Options ;
+	__property Options  = {default=7};
 	__property DefaultColWidth ;
 	__property DefaultRowHeight ;
 	__property CaptionColor ;
@@ -373,28 +351,28 @@ __published:
 	__property Dimensions ;
 	__property Totals ;
 	__property ShowCubeEditor ;
-	__property Align ;
-	__property Anchors ;
-	__property BorderStyle ;
-	__property Color ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property BorderStyle  = {default=1};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DefaultDrawing ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DefaultDrawing  = {default=1};
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property GridLineWidth ;
 	__property GridLineColor ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property ScrollBars ;
+	__property ScrollBars  = {default=3};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnDblClick ;
 	__property OnDragDrop ;
@@ -415,8 +393,7 @@ __published:
 	__property OnTopLeftChanged ;
 public:
 	#pragma option push -w-inl
-	/* TCustomDecisionGrid.Create */ inline __fastcall virtual TDecisionGrid(Classes::TComponent* AOwner
-		) : TCustomDecisionGrid(AOwner) { }
+	/* TCustomDecisionGrid.Create */ inline __fastcall virtual TDecisionGrid(Classes::TComponent* AOwner) : TCustomDecisionGrid(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomDecisionGrid.Destroy */ inline __fastcall virtual ~TDecisionGrid(void) { }
@@ -424,8 +401,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDecisionGrid(HWND ParentWindow) : TCustomDecisionGrid(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDecisionGrid(HWND ParentWindow) : TCustomDecisionGrid(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -434,12 +410,10 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Mxgrid */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxgrid;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxgrid
+#endif	// MXGRID

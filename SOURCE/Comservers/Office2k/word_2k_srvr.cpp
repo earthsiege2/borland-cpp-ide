@@ -9,21 +9,21 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.1.1  $
-// File generated on 1/24/2000 09:45:30 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/28/2002 8:27:42 AM from Type Library described below.
 
-// ************************************************************************ //
-// Type Lib: d:\tlbgen\rampage\typelib\TypeLibraries\MSWORD9.olb (1)
-// IID\LCID: {00020905-0000-0000-C000-000000000046}\0
-// Helpfile: d:\tlbgen\rampage\typelib\TypeLibraries\VBAWRD9.CHM
+// ************************************************************************  //
+// Type Lib: c:\program files\microsoft office\office\msword9.olb (1)
+// LIBID: {00020905-0000-0000-C000-000000000046}
+// LCID: 0
+// Helpfile: c:\program files\microsoft office\office\VBAWRD9.CHM
+// HelpString: Microsoft Word 9.0 Object Library
 // DepndLst: 
-//   (1) v2.0 stdole, (D:\WINNT\System32\stdole2.tlb)
-//   (2) v2.1 Office, (D:\msof2k\Office\mso9.dll)
-//   (3) v5.3 VBIDE, (D:\Program Files\Common Files\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB)
-//   (4) v4.0 StdVCL, (D:\tlbgen\rampage\typelib\typelibraries\testing\stdvcl40.tlb)
+//   (1) v2.0 stdole, (C:\WINNT\System32\stdole2.tlb)
+//   (2) v2.1 Office, (C:\Program Files\Microsoft Office\Office\MSO9.DLL)
+//   (3) v5.3 VBIDE, (C:\Program Files\Common Files\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB)
 // Errors:
 //   Hint: Symbol 'Window' renamed to 'WINDOW'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
 //   Hint: Symbol 'System' renamed to 'SYSTEM'
 //   Hint: Symbol 'Global' renamed to 'WordGlobal'
 //   Hint: Symbol 'Application' renamed to 'WordApplication'
@@ -47,22 +47,10 @@
 //   Hint: Enum Member 'emptyenum' of 'WdHelpTypeHID' changed to 'emptyenum_____________'
 //   Hint: Enum Member 'emptyenum' of 'WdDictionaryTypeHID' changed to 'emptyenum______________'
 //   Hint: Enum Member 'emptyenum' of 'WdTextOrientationHID' changed to 'emptyenum_______________'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Symbol 'ExitWindows' renamed to 'ExitWindoz'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'Window' renamed to 'WINDOW'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
 //   Hint: Symbol 'System' renamed to 'SYSTEM'
 //   Hint: Symbol 'Global' renamed to 'WordGlobal'
 //   Hint: Symbol 'Application' renamed to 'WordApplication'
@@ -86,17 +74,6 @@
 //   Hint: Enum Member 'emptyenum' of 'WdHelpTypeHID' changed to 'emptyenum_____________'
 //   Hint: Enum Member 'emptyenum' of 'WdDictionaryTypeHID' changed to 'emptyenum______________'
 //   Hint: Enum Member 'emptyenum' of 'WdTextOrientationHID' changed to 'emptyenum_______________'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Symbol 'ExitWindows' renamed to 'ExitWindoz'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
@@ -105,11 +82,12 @@
 #include <vcl.h>
 #pragma hdrstop
 
+#include <oleserver.hpp>
 #if defined(USING_ATL)
 #include <atl\atlvcl.h>
 #endif
 
-#include "Word_2K_SRVR.h"
+#include "Word_2k_srvr.h"
 
 #if !defined(__PRAGMA_PACKAGE_SMART_INIT)
 #define      __PRAGMA_PACKAGE_SMART_INIT
@@ -237,62 +215,88 @@ void __fastcall TWordApplication::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TWordApplication::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TWordApplication::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 1:
-      if (OnStartup)
+    case 1: {
+      if (OnStartup) {
         (OnStartup)(this);
+      }
       break;
-    case 2:
-      if (OnQuit)
+      }
+    case 2: {
+      if (OnQuit) {
         (OnQuit)(this);
+      }
       break;
-    case 3:
-      if (OnDocumentChange)
+      }
+    case 3: {
+      if (OnDocumentChange) {
         (OnDocumentChange)(this);
+      }
       break;
-    case 4:
-      if (OnDocumentOpen)
+      }
+    case 4: {
+      if (OnDocumentOpen) {
         (OnDocumentOpen)(this, (Word_2k::WordDocument*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 6:
-      if (OnDocumentBeforeClose)
+      }
+    case 6: {
+      if (OnDocumentBeforeClose) {
         (OnDocumentBeforeClose)(this, (Word_2k::WordDocument*)(LPDISPATCH)TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 7:
-      if (OnDocumentBeforePrint)
+      }
+    case 7: {
+      if (OnDocumentBeforePrint) {
         (OnDocumentBeforePrint)(this, (Word_2k::WordDocument*)(LPDISPATCH)TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 8:
-      if (OnDocumentBeforeSave)
+      }
+    case 8: {
+      if (OnDocumentBeforeSave) {
         (OnDocumentBeforeSave)(this, (Word_2k::WordDocument*)(LPDISPATCH)TVariant(params[0]), TVariant(params[1]), TVariant(params[2]));
+      }
       break;
-    case 9:
-      if (OnNewDocument)
+      }
+    case 9: {
+      if (OnNewDocument) {
         (OnNewDocument)(this, (Word_2k::WordDocument*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 10:
-      if (OnWindowActivate)
+      }
+    case 10: {
+      if (OnWindowActivate) {
         (OnWindowActivate)(this, (Word_2k::WordDocument*)(LPDISPATCH)TVariant(params[0]), (Word_2k::WINDOW*)(LPDISPATCH)TVariant(params[1]));
+      }
       break;
-    case 11:
-      if (OnWindowDeactivate)
+      }
+    case 11: {
+      if (OnWindowDeactivate) {
         (OnWindowDeactivate)(this, (Word_2k::WordDocument*)(LPDISPATCH)TVariant(params[0]), (Word_2k::WINDOW*)(LPDISPATCH)TVariant(params[1]));
+      }
       break;
-    case 12:
-      if (OnWindowSelectionChange)
+      }
+    case 12: {
+      if (OnWindowSelectionChange) {
         (OnWindowSelectionChange)(this, (Word_2k::Selection*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 13:
-      if (OnWindowBeforeRightClick)
+      }
+    case 13: {
+      if (OnWindowBeforeRightClick) {
         (OnWindowBeforeRightClick)(this, (Word_2k::Selection*)(LPDISPATCH)TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 14:
-      if (OnWindowBeforeDoubleClick)
+      }
+    case 14: {
+      if (OnWindowBeforeDoubleClick) {
         (OnWindowBeforeDoubleClick)(this, (Word_2k::Selection*)(LPDISPATCH)TVariant(params[0]), TVariant(params[1]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -357,22 +361,28 @@ void __fastcall TWordDocument::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TWordDocument::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TWordDocument::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 4:
-      if (OnNew)
+    case 4: {
+      if (OnNew) {
         (OnNew)(this);
+      }
       break;
-    case 5:
-      if (OnOpen)
+      }
+    case 5: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 6:
-      if (OnClose)
+      }
+    case 6: {
+      if (OnClose) {
         (OnClose)(this);
+      }
       break;
+      }
     default:
       break;
   }
@@ -579,7 +589,7 @@ void __fastcall PACKAGE Register()
                               __classid(Word_2k::TWordParagraphFormat), 
                               __classid(Word_2k::TWordLetterContent)
                            };
-  RegisterComponents("Servers", cls_svr,
+  RegisterComponents("Office2k", cls_svr,
                      sizeof(cls_svr)/sizeof(cls_svr[0])-1);
 }
 

@@ -2,7 +2,7 @@
 //
 //  File: QRYCODES.H
 //
-//  Copyright (c) 1994, 1995 Microsoft Corp.
+//  Copyright (c) 1994 - 1999 Microsoft Corp.
 //
 //
 //
@@ -17,7 +17,6 @@
 // *************************************************************************
 
 #ifndef _QUERYCODES_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _QUERYCODES_H_
 
 // Query Operators.
@@ -276,7 +275,6 @@ static char *OpName[] = {
     /* QOP_SECOND_LTE, */       "second is at or before"
 };
 
-#pragma option pop /*P_O_Pop*/
 #endif  // _QUERYCODES_H_
 
 

@@ -5,7 +5,7 @@
  *
  * compnent.h - #defines for all unfinished or broken components 
  *
- * $Id: compnent.h,v 1.38 1996/08/28 01:28:29 smithey Exp $
+ * $Id: compnent.h,v 9.9 2001/07/10 17:24:10 nyork Exp $
  *
  ***************************************************************************
  *

@@ -1,21 +1,21 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxcommon.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MXCOMMON.pas' rev: 6.00
 
-#ifndef mxcommonHPP
-#define mxcommonHPP
+#ifndef MXCOMMONHPP
+#define MXCOMMONHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <mxConsts.hpp>	// Pascal unit
-#include <mxarrays.hpp>	// Pascal unit
-#include <Bde.hpp>	// Pascal unit
+#include <Mxconsts.hpp>	// Pascal unit
+#include <Mxarrays.hpp>	// Pascal unit
+#include <BDE.hpp>	// Pascal unit
 #include <DBCommon.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <IniFiles.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -25,6 +25,7 @@
 #include <Messages.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -40,38 +41,28 @@ class PASCALIMPLEMENTATION EDimensionMapError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EDimensionMapError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EDimensionMapError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EDimensionMapError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EDimensionMapError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EDimensionMapError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EDimensionMapError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EDimensionMapError(int Ident, const System::TVarRec 
-		* Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EDimensionMapError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EDimensionMapError(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EDimensionMapError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EDimensionMapError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EDimensionMapError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EDimensionMapError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EDimensionMapError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EDimensionMapError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EDimensionMapError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -83,8 +74,7 @@ public:
 
 
 #pragma option push -b-
-enum TQueryError { tqeOK, tqeNoDimensions, tqeNoAggs, tqeNotGrouped, tqeNotInitialized, tqeMapCorrupt, 
-	tqeUnKnownDims };
+enum TQueryError { tqeOK, tqeNoDimensions, tqeNoAggs, tqeNotGrouped, tqeNotInitialized, tqeMapCorrupt, tqeUnKnownDims };
 #pragma option pop
 
 #pragma option push -b-
@@ -98,8 +88,7 @@ enum TActiveFlags { diActive, diAsNeeded, diInactive };
 #pragma option pop
 
 #pragma option push -b-
-enum TDimFlags { dimDimension, dimSum, dimCount, dimAverage, dimMin, dimMax, dimGenericAgg, dimUnknown 
-	};
+enum TDimFlags { dimDimension, dimSum, dimCount, dimAverage, dimMin, dimMax, dimGenericAgg, dimUnknown };
 #pragma option pop
 
 #pragma option push -b-
@@ -168,6 +157,9 @@ class PASCALIMPLEMENTATION TDimensionItems : public Classes::TCollection
 {
 	typedef Classes::TCollection inherited;
 	
+public:
+	TDimensionItem* operator[](int Index) { return Items[Index]; }
+	
 private:
 	Classes::TPersistent* FOwner;
 	bool bQuiet;
@@ -189,8 +181,7 @@ public:
 	int __fastcall AddDerivedField(int Index, TDimFlags dimType);
 	bool __fastcall AverageFieldCheck(int Index, int &SumIndex, int &CountIndex);
 	bool __fastcall AlreadyExists(AnsiString BaseName, TDimFlags sType);
-	__property TDimensionItem* Items[int Index] = {read=GetDimensionItem, write=SetDimensionItem/*, default
-		*/};
+	__property TDimensionItem* Items[int Index] = {read=GetDimensionItem, write=SetDimensionItem/*, default*/};
 	__property int DimensionCount = {read=GetDimCount, nodefault};
 	__property int SummaryCount = {read=GetSumCount, nodefault};
 	__property int ActiveDimensionCount = {read=GetActiveDimCount, nodefault};
@@ -206,6 +197,7 @@ public:
 struct TTickInfoRec;
 typedef TTickInfoRec *PTickInfoRec;
 
+#pragma pack(push, 4)
 struct TTickInfoRec
 {
 	int StartTicks;
@@ -213,6 +205,7 @@ struct TTickInfoRec
 	int TotalTicks;
 	AnsiString SName;
 } ;
+#pragma pack(pop)
 
 class DELPHICLASS TTicks;
 class PASCALIMPLEMENTATION TTicks : public System::TObject 
@@ -252,8 +245,7 @@ public:
 	__fastcall virtual ~TBinData(void);
 	void __fastcall Clear(void);
 	virtual void __fastcall Assign(Classes::TPersistent* Value);
-	void __fastcall AddBinValues(AnsiString BinName, const System::TVarRec * Values, const int Values_Size
-		);
+	void __fastcall AddBinValues(AnsiString BinName, const System::TVarRec * Values, const int Values_Size);
 	int __fastcall AddBinValue(AnsiString BinName, const Variant &Value);
 	int __fastcall BinValueCount(AnsiString BinName);
 	int __fastcall GetAllBinValueCount(void);
@@ -279,10 +271,8 @@ public:
 extern PACKAGE bool __fastcall IsBDEAvailable(void);
 extern PACKAGE AnsiString __fastcall GetAggName(TDimFlags aType, AnsiString FieldName);
 extern PACKAGE int __fastcall FieldTypeToVarType(Db::TFieldType DataType);
-extern PACKAGE TQueryError __fastcall VerifyRTQuery(Db::TDataSet* aDataSet, TDimensionItems* Map, bool 
-	&bDataSetMatch);
-extern PACKAGE TQueryError __fastcall BuildDataSetMap(Db::TDataSet* aDataSet, TDimensionItems* Map, 
-	bool &bParsed, bool &bDataSetMatch);
+extern PACKAGE TQueryError __fastcall VerifyRTQuery(Db::TDataSet* aDataSet, TDimensionItems* Map, bool &bDataSetMatch);
+extern PACKAGE TQueryError __fastcall BuildDataSetMap(Db::TDataSet* aDataSet, TDimensionItems* Map, bool &bParsed, bool &bDataSetMatch);
 extern PACKAGE bool __fastcall IsAggValid(TDimFlags AggType, Db::TFieldType FieldType);
 extern PACKAGE void __fastcall AddToQuerySelect(AnsiString &SQLString, AnsiString Select);
 extern PACKAGE bool __fastcall CheckIfEmptyQuery(AnsiString &SQLString);
@@ -292,12 +282,10 @@ extern PACKAGE AnsiString __fastcall NextArg(int &aPos, AnsiString Source);
 extern PACKAGE Dbtables::TDatabase* __fastcall HookToDataBase(Db::TDataSet* aDataSet);
 
 }	/* namespace Mxcommon */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxcommon;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxcommon
+#endif	// MXCOMMON

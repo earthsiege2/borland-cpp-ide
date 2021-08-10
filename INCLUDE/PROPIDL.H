@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:37:31 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for propidl.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -37,6 +36,10 @@
 
 #ifndef __propidl_h__
 #define __propidl_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -72,8 +75,8 @@ typedef interface IEnumSTATPROPSETSTG IEnumSTATPROPSETSTG;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_propidl_0000 */
 /* [local] */ 
@@ -81,7 +84,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //--------------------------------------------------------------------------
 #if ( _MSC_VER >= 800 )
@@ -100,10 +103,10 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 typedef struct tagVersionedStream
     {
     GUID guidVersion;
-    IStream __RPC_FAR *pStream;
-    }	VERSIONEDSTREAM;
+    IStream *pStream;
+    } 	VERSIONEDSTREAM;
 
-typedef struct tagVersionedStream __RPC_FAR *LPVERSIONEDSTREAM;
+typedef struct tagVersionedStream *LPVERSIONEDSTREAM;
 
 
 // Flags for IPropertySetStorage::Create
@@ -134,134 +137,134 @@ typedef struct tagPROPVARIANT PROPVARIANT;
 typedef struct tagCAC
     {
     ULONG cElems;
-    /* [size_is] */ CHAR __RPC_FAR *pElems;
-    }	CAC;
+    /* [size_is] */ CHAR *pElems;
+    } 	CAC;
 
 typedef struct tagCAUB
     {
     ULONG cElems;
-    /* [size_is] */ UCHAR __RPC_FAR *pElems;
-    }	CAUB;
+    /* [size_is] */ UCHAR *pElems;
+    } 	CAUB;
 
 typedef struct tagCAI
     {
     ULONG cElems;
-    /* [size_is] */ SHORT __RPC_FAR *pElems;
-    }	CAI;
+    /* [size_is] */ SHORT *pElems;
+    } 	CAI;
 
 typedef struct tagCAUI
     {
     ULONG cElems;
-    /* [size_is] */ USHORT __RPC_FAR *pElems;
-    }	CAUI;
+    /* [size_is] */ USHORT *pElems;
+    } 	CAUI;
 
 typedef struct tagCAL
     {
     ULONG cElems;
-    /* [size_is] */ LONG __RPC_FAR *pElems;
-    }	CAL;
+    /* [size_is] */ LONG *pElems;
+    } 	CAL;
 
 typedef struct tagCAUL
     {
     ULONG cElems;
-    /* [size_is] */ ULONG __RPC_FAR *pElems;
-    }	CAUL;
+    /* [size_is] */ ULONG *pElems;
+    } 	CAUL;
 
 typedef struct tagCAFLT
     {
     ULONG cElems;
-    /* [size_is] */ FLOAT __RPC_FAR *pElems;
-    }	CAFLT;
+    /* [size_is] */ FLOAT *pElems;
+    } 	CAFLT;
 
 typedef struct tagCADBL
     {
     ULONG cElems;
-    /* [size_is] */ DOUBLE __RPC_FAR *pElems;
-    }	CADBL;
+    /* [size_is] */ DOUBLE *pElems;
+    } 	CADBL;
 
 typedef struct tagCACY
     {
     ULONG cElems;
-    /* [size_is] */ CY __RPC_FAR *pElems;
-    }	CACY;
+    /* [size_is] */ CY *pElems;
+    } 	CACY;
 
 typedef struct tagCADATE
     {
     ULONG cElems;
-    /* [size_is] */ DATE __RPC_FAR *pElems;
-    }	CADATE;
+    /* [size_is] */ DATE *pElems;
+    } 	CADATE;
 
 typedef struct tagCABSTR
     {
     ULONG cElems;
-    /* [size_is] */ BSTR __RPC_FAR *pElems;
-    }	CABSTR;
+    /* [size_is] */ BSTR *pElems;
+    } 	CABSTR;
 
 typedef struct tagCABSTRBLOB
     {
     ULONG cElems;
-    /* [size_is] */ BSTRBLOB __RPC_FAR *pElems;
-    }	CABSTRBLOB;
+    /* [size_is] */ BSTRBLOB *pElems;
+    } 	CABSTRBLOB;
 
 typedef struct tagCABOOL
     {
     ULONG cElems;
-    /* [size_is] */ VARIANT_BOOL __RPC_FAR *pElems;
-    }	CABOOL;
+    /* [size_is] */ VARIANT_BOOL *pElems;
+    } 	CABOOL;
 
 typedef struct tagCASCODE
     {
     ULONG cElems;
-    /* [size_is] */ SCODE __RPC_FAR *pElems;
-    }	CASCODE;
+    /* [size_is] */ SCODE *pElems;
+    } 	CASCODE;
 
 typedef struct tagCAPROPVARIANT
     {
     ULONG cElems;
-    /* [size_is] */ PROPVARIANT __RPC_FAR *pElems;
-    }	CAPROPVARIANT;
+    /* [size_is] */ PROPVARIANT *pElems;
+    } 	CAPROPVARIANT;
 
 typedef struct tagCAH
     {
     ULONG cElems;
-    /* [size_is] */ LARGE_INTEGER __RPC_FAR *pElems;
-    }	CAH;
+    /* [size_is] */ LARGE_INTEGER *pElems;
+    } 	CAH;
 
 typedef struct tagCAUH
     {
     ULONG cElems;
-    /* [size_is] */ ULARGE_INTEGER __RPC_FAR *pElems;
-    }	CAUH;
+    /* [size_is] */ ULARGE_INTEGER *pElems;
+    } 	CAUH;
 
 typedef struct tagCALPSTR
     {
     ULONG cElems;
-    /* [size_is] */ LPSTR __RPC_FAR *pElems;
-    }	CALPSTR;
+    /* [size_is] */ LPSTR *pElems;
+    } 	CALPSTR;
 
 typedef struct tagCALPWSTR
     {
     ULONG cElems;
-    /* [size_is] */ LPWSTR __RPC_FAR *pElems;
-    }	CALPWSTR;
+    /* [size_is] */ LPWSTR *pElems;
+    } 	CALPWSTR;
 
 typedef struct tagCAFILETIME
     {
     ULONG cElems;
-    /* [size_is] */ FILETIME __RPC_FAR *pElems;
-    }	CAFILETIME;
+    /* [size_is] */ FILETIME *pElems;
+    } 	CAFILETIME;
 
 typedef struct tagCACLIPDATA
     {
     ULONG cElems;
-    /* [size_is] */ CLIPDATA __RPC_FAR *pElems;
-    }	CACLIPDATA;
+    /* [size_is] */ CLIPDATA *pElems;
+    } 	CACLIPDATA;
 
 typedef struct tagCACLSID
     {
     ULONG cElems;
-    /* [size_is] */ CLSID __RPC_FAR *pElems;
-    }	CACLSID;
+    /* [size_is] */ CLSID *pElems;
+    } 	CACLSID;
 
 #ifdef MIDL_PASS
 // This is the PROPVARIANT padding layout for marshaling.
@@ -309,17 +312,17 @@ struct tag_inner_PROPVARIANT
         /* [case()] */ CY cyVal;
         /* [case()] */ DATE date;
         /* [case()] */ FILETIME filetime;
-        /* [case()] */ CLSID __RPC_FAR *puuid;
-        /* [case()] */ CLIPDATA __RPC_FAR *pclipdata;
+        /* [case()] */ CLSID *puuid;
+        /* [case()] */ CLIPDATA *pclipdata;
         /* [case()] */ BSTR bstrVal;
         /* [case()] */ BSTRBLOB bstrblobVal;
         /* [case()] */ BLOB blob;
         /* [case()] */ LPSTR pszVal;
         /* [case()] */ LPWSTR pwszVal;
-        /* [case()] */ IUnknown __RPC_FAR *punkVal;
-        /* [case()] */ IDispatch __RPC_FAR *pdispVal;
-        /* [case()] */ IStream __RPC_FAR *pStream;
-        /* [case()] */ IStorage __RPC_FAR *pStorage;
+        /* [case()] */ IUnknown *punkVal;
+        /* [case()] */ IDispatch *pdispVal;
+        /* [case()] */ IStream *pStream;
+        /* [case()] */ IStorage *pStorage;
         /* [case()] */ LPVERSIONEDSTREAM pVersionedStream;
         /* [case()] */ LPSAFEARRAY parray;
         /* [case()] */ CAC cac;
@@ -344,28 +347,28 @@ struct tag_inner_PROPVARIANT
         /* [case()] */ CALPSTR calpstr;
         /* [case()] */ CALPWSTR calpwstr;
         /* [case()] */ CAPROPVARIANT capropvar;
-        /* [case()] */ CHAR __RPC_FAR *pcVal;
-        /* [case()] */ UCHAR __RPC_FAR *pbVal;
-        /* [case()] */ SHORT __RPC_FAR *piVal;
-        /* [case()] */ USHORT __RPC_FAR *puiVal;
-        /* [case()] */ LONG __RPC_FAR *plVal;
-        /* [case()] */ ULONG __RPC_FAR *pulVal;
-        /* [case()] */ INT __RPC_FAR *pintVal;
-        /* [case()] */ UINT __RPC_FAR *puintVal;
-        /* [case()] */ FLOAT __RPC_FAR *pfltVal;
-        /* [case()] */ DOUBLE __RPC_FAR *pdblVal;
-        /* [case()] */ VARIANT_BOOL __RPC_FAR *pboolVal;
-        /* [case()] */ DECIMAL __RPC_FAR *pdecVal;
-        /* [case()] */ SCODE __RPC_FAR *pscode;
-        /* [case()] */ CY __RPC_FAR *pcyVal;
-        /* [case()] */ DATE __RPC_FAR *pdate;
-        /* [case()] */ BSTR __RPC_FAR *pbstrVal;
-        /* [case()] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkVal;
-        /* [case()] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispVal;
-        /* [case()] */ LPSAFEARRAY __RPC_FAR *pparray;
-        /* [case()] */ PROPVARIANT __RPC_FAR *pvarVal;
-        }	;
-    };
+        /* [case()] */ CHAR *pcVal;
+        /* [case()] */ UCHAR *pbVal;
+        /* [case()] */ SHORT *piVal;
+        /* [case()] */ USHORT *puiVal;
+        /* [case()] */ LONG *plVal;
+        /* [case()] */ ULONG *pulVal;
+        /* [case()] */ INT *pintVal;
+        /* [case()] */ UINT *puintVal;
+        /* [case()] */ FLOAT *pfltVal;
+        /* [case()] */ DOUBLE *pdblVal;
+        /* [case()] */ VARIANT_BOOL *pboolVal;
+        /* [case()] */ DECIMAL *pdecVal;
+        /* [case()] */ SCODE *pscode;
+        /* [case()] */ CY *pcyVal;
+        /* [case()] */ DATE *pdate;
+        /* [case()] */ BSTR *pbstrVal;
+        /* [case()] */ IUnknown **ppunkVal;
+        /* [case()] */ IDispatch **ppdispVal;
+        /* [case()] */ LPSAFEARRAY *pparray;
+        /* [case()] */ PROPVARIANT *pvarVal;
+        } 	;
+    } ;
 #ifndef MIDL_PASS
     DECIMAL decVal;
   };
@@ -373,7 +376,7 @@ struct tag_inner_PROPVARIANT
 #endif
 #ifdef MIDL_PASS
 // This is the LPPROPVARIANT definition for marshaling.
-typedef struct tag_inner_PROPVARIANT __RPC_FAR *LPPROPVARIANT;
+typedef struct tag_inner_PROPVARIANT *LPPROPVARIANT;
 
 #else
 // This is the standard C layout of the PROPVARIANT.
@@ -473,7 +476,7 @@ enum PIDMSI_STATUS_VALUE
 	PIDMSI_STATUS_PROOF	= PIDMSI_STATUS_REVIEW + 1,
 	PIDMSI_STATUS_FINAL	= PIDMSI_STATUS_PROOF + 1,
 	PIDMSI_STATUS_OTHER	= 0x7fff
-    };
+    } ;
 #define	PRSPEC_INVALID	( 0xffffffff )
 
 #define	PRSPEC_LPWSTR	( 0 )
@@ -488,15 +491,15 @@ typedef struct tagPROPSPEC
         /* [case()] */ PROPID propid;
         /* [case()] */ LPOLESTR lpwstr;
         /* [default] */  /* Empty union arm */ 
-        }	;
-    }	PROPSPEC;
+        } 	;
+    } 	PROPSPEC;
 
 typedef struct tagSTATPROPSTG
     {
     LPOLESTR lpwstrName;
     PROPID propid;
     VARTYPE vt;
-    }	STATPROPSTG;
+    } 	STATPROPSTG;
 
 // Macros for parsing the OS Version of the Property Set Header
 #define PROPSETHDR_OSVER_KIND(dwOSVer)      HIWORD( (dwOSVer) )
@@ -512,7 +515,7 @@ typedef struct tagSTATPROPSETSTG
     FILETIME ctime;
     FILETIME atime;
     DWORD dwOSVersion;
-    }	STATPROPSETSTG;
+    } 	STATPROPSETSTG;
 
 
 
@@ -536,32 +539,32 @@ EXTERN_C const IID IID_IPropertyStorage;
     public:
         virtual HRESULT STDMETHODCALLTYPE ReadMultiple( 
             /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC __RPC_FAR rgpspec[  ],
-            /* [size_is][out] */ PROPVARIANT __RPC_FAR rgpropvar[  ]) = 0;
+            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
+            /* [size_is][out] */ PROPVARIANT rgpropvar[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WriteMultiple( 
             /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC __RPC_FAR rgpspec[  ],
-            /* [size_is][in] */ const PROPVARIANT __RPC_FAR rgpropvar[  ],
+            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
+            /* [size_is][in] */ const PROPVARIANT rgpropvar[  ],
             /* [in] */ PROPID propidNameFirst) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMultiple( 
             /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC __RPC_FAR rgpspec[  ]) = 0;
+            /* [size_is][in] */ const PROPSPEC rgpspec[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadPropertyNames( 
             /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID __RPC_FAR rgpropid[  ],
-            /* [size_is][out] */ LPOLESTR __RPC_FAR rglpwstrName[  ]) = 0;
+            /* [size_is][in] */ const PROPID rgpropid[  ],
+            /* [size_is][out] */ LPOLESTR rglpwstrName[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WritePropertyNames( 
             /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID __RPC_FAR rgpropid[  ],
-            /* [size_is][in] */ const LPOLESTR __RPC_FAR rglpwstrName[  ]) = 0;
+            /* [size_is][in] */ const PROPID rgpropid[  ],
+            /* [size_is][in] */ const LPOLESTR rglpwstrName[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeletePropertyNames( 
             /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID __RPC_FAR rgpropid[  ]) = 0;
+            /* [size_is][in] */ const PROPID rgpropid[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( 
             /* [in] */ DWORD grfCommitFlags) = 0;
@@ -569,18 +572,18 @@ EXTERN_C const IID IID_IPropertyStorage;
         virtual HRESULT STDMETHODCALLTYPE Revert( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enum( 
-            /* [out] */ IEnumSTATPROPSTG __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumSTATPROPSTG **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTimes( 
-            /* [in] */ const FILETIME __RPC_FAR *pctime,
-            /* [in] */ const FILETIME __RPC_FAR *patime,
-            /* [in] */ const FILETIME __RPC_FAR *pmtime) = 0;
+            /* [in] */ const FILETIME *pctime,
+            /* [in] */ const FILETIME *patime,
+            /* [in] */ const FILETIME *pmtime) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClass( 
             /* [in] */ REFCLSID clsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stat( 
-            /* [out] */ STATPROPSETSTG __RPC_FAR *pstatpsstg) = 0;
+            /* [out] */ STATPROPSETSTG *pstatpsstg) = 0;
         
     };
     
@@ -590,83 +593,83 @@ EXTERN_C const IID IID_IPropertyStorage;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPropertyStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPropertyStorage * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPropertyStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPropertyStorage * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPropertyStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPropertyStorage * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReadMultiple )( 
-            IPropertyStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ReadMultiple )( 
+            IPropertyStorage * This,
             /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC __RPC_FAR rgpspec[  ],
-            /* [size_is][out] */ PROPVARIANT __RPC_FAR rgpropvar[  ]);
+            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
+            /* [size_is][out] */ PROPVARIANT rgpropvar[  ]);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WriteMultiple )( 
-            IPropertyStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *WriteMultiple )( 
+            IPropertyStorage * This,
             /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC __RPC_FAR rgpspec[  ],
-            /* [size_is][in] */ const PROPVARIANT __RPC_FAR rgpropvar[  ],
+            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
+            /* [size_is][in] */ const PROPVARIANT rgpropvar[  ],
             /* [in] */ PROPID propidNameFirst);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteMultiple )( 
-            IPropertyStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeleteMultiple )( 
+            IPropertyStorage * This,
             /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC __RPC_FAR rgpspec[  ]);
+            /* [size_is][in] */ const PROPSPEC rgpspec[  ]);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReadPropertyNames )( 
-            IPropertyStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ReadPropertyNames )( 
+            IPropertyStorage * This,
             /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID __RPC_FAR rgpropid[  ],
-            /* [size_is][out] */ LPOLESTR __RPC_FAR rglpwstrName[  ]);
+            /* [size_is][in] */ const PROPID rgpropid[  ],
+            /* [size_is][out] */ LPOLESTR rglpwstrName[  ]);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *WritePropertyNames )( 
-            IPropertyStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *WritePropertyNames )( 
+            IPropertyStorage * This,
             /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID __RPC_FAR rgpropid[  ],
-            /* [size_is][in] */ const LPOLESTR __RPC_FAR rglpwstrName[  ]);
+            /* [size_is][in] */ const PROPID rgpropid[  ],
+            /* [size_is][in] */ const LPOLESTR rglpwstrName[  ]);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeletePropertyNames )( 
-            IPropertyStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeletePropertyNames )( 
+            IPropertyStorage * This,
             /* [in] */ ULONG cpropid,
-            /* [size_is][in] */ const PROPID __RPC_FAR rgpropid[  ]);
+            /* [size_is][in] */ const PROPID rgpropid[  ]);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Commit )( 
-            IPropertyStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Commit )( 
+            IPropertyStorage * This,
             /* [in] */ DWORD grfCommitFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Revert )( 
-            IPropertyStorage __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Revert )( 
+            IPropertyStorage * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Enum )( 
-            IPropertyStorage __RPC_FAR * This,
-            /* [out] */ IEnumSTATPROPSTG __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Enum )( 
+            IPropertyStorage * This,
+            /* [out] */ IEnumSTATPROPSTG **ppenum);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTimes )( 
-            IPropertyStorage __RPC_FAR * This,
-            /* [in] */ const FILETIME __RPC_FAR *pctime,
-            /* [in] */ const FILETIME __RPC_FAR *patime,
-            /* [in] */ const FILETIME __RPC_FAR *pmtime);
+        HRESULT ( STDMETHODCALLTYPE *SetTimes )( 
+            IPropertyStorage * This,
+            /* [in] */ const FILETIME *pctime,
+            /* [in] */ const FILETIME *patime,
+            /* [in] */ const FILETIME *pmtime);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetClass )( 
-            IPropertyStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetClass )( 
+            IPropertyStorage * This,
             /* [in] */ REFCLSID clsid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stat )( 
-            IPropertyStorage __RPC_FAR * This,
-            /* [out] */ STATPROPSETSTG __RPC_FAR *pstatpsstg);
+        HRESULT ( STDMETHODCALLTYPE *Stat )( 
+            IPropertyStorage * This,
+            /* [out] */ STATPROPSETSTG *pstatpsstg);
         
         END_INTERFACE
     } IPropertyStorageVtbl;
 
     interface IPropertyStorage
     {
-        CONST_VTBL struct IPropertyStorageVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPropertyStorageVtbl *lpVtbl;
     };
 
     
@@ -728,10 +731,10 @@ EXTERN_C const IID IID_IPropertyStorage;
 
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_ReadMultiple_Proxy( 
-    IPropertyStorage __RPC_FAR * This,
+    IPropertyStorage * This,
     /* [in] */ ULONG cpspec,
-    /* [size_is][in] */ const PROPSPEC __RPC_FAR rgpspec[  ],
-    /* [size_is][out] */ PROPVARIANT __RPC_FAR rgpropvar[  ]);
+    /* [size_is][in] */ const PROPSPEC rgpspec[  ],
+    /* [size_is][out] */ PROPVARIANT rgpropvar[  ]);
 
 
 void __RPC_STUB IPropertyStorage_ReadMultiple_Stub(
@@ -742,10 +745,10 @@ void __RPC_STUB IPropertyStorage_ReadMultiple_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_WriteMultiple_Proxy( 
-    IPropertyStorage __RPC_FAR * This,
+    IPropertyStorage * This,
     /* [in] */ ULONG cpspec,
-    /* [size_is][in] */ const PROPSPEC __RPC_FAR rgpspec[  ],
-    /* [size_is][in] */ const PROPVARIANT __RPC_FAR rgpropvar[  ],
+    /* [size_is][in] */ const PROPSPEC rgpspec[  ],
+    /* [size_is][in] */ const PROPVARIANT rgpropvar[  ],
     /* [in] */ PROPID propidNameFirst);
 
 
@@ -757,9 +760,9 @@ void __RPC_STUB IPropertyStorage_WriteMultiple_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_DeleteMultiple_Proxy( 
-    IPropertyStorage __RPC_FAR * This,
+    IPropertyStorage * This,
     /* [in] */ ULONG cpspec,
-    /* [size_is][in] */ const PROPSPEC __RPC_FAR rgpspec[  ]);
+    /* [size_is][in] */ const PROPSPEC rgpspec[  ]);
 
 
 void __RPC_STUB IPropertyStorage_DeleteMultiple_Stub(
@@ -770,10 +773,10 @@ void __RPC_STUB IPropertyStorage_DeleteMultiple_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_ReadPropertyNames_Proxy( 
-    IPropertyStorage __RPC_FAR * This,
+    IPropertyStorage * This,
     /* [in] */ ULONG cpropid,
-    /* [size_is][in] */ const PROPID __RPC_FAR rgpropid[  ],
-    /* [size_is][out] */ LPOLESTR __RPC_FAR rglpwstrName[  ]);
+    /* [size_is][in] */ const PROPID rgpropid[  ],
+    /* [size_is][out] */ LPOLESTR rglpwstrName[  ]);
 
 
 void __RPC_STUB IPropertyStorage_ReadPropertyNames_Stub(
@@ -784,10 +787,10 @@ void __RPC_STUB IPropertyStorage_ReadPropertyNames_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_WritePropertyNames_Proxy( 
-    IPropertyStorage __RPC_FAR * This,
+    IPropertyStorage * This,
     /* [in] */ ULONG cpropid,
-    /* [size_is][in] */ const PROPID __RPC_FAR rgpropid[  ],
-    /* [size_is][in] */ const LPOLESTR __RPC_FAR rglpwstrName[  ]);
+    /* [size_is][in] */ const PROPID rgpropid[  ],
+    /* [size_is][in] */ const LPOLESTR rglpwstrName[  ]);
 
 
 void __RPC_STUB IPropertyStorage_WritePropertyNames_Stub(
@@ -798,9 +801,9 @@ void __RPC_STUB IPropertyStorage_WritePropertyNames_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_DeletePropertyNames_Proxy( 
-    IPropertyStorage __RPC_FAR * This,
+    IPropertyStorage * This,
     /* [in] */ ULONG cpropid,
-    /* [size_is][in] */ const PROPID __RPC_FAR rgpropid[  ]);
+    /* [size_is][in] */ const PROPID rgpropid[  ]);
 
 
 void __RPC_STUB IPropertyStorage_DeletePropertyNames_Stub(
@@ -811,7 +814,7 @@ void __RPC_STUB IPropertyStorage_DeletePropertyNames_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_Commit_Proxy( 
-    IPropertyStorage __RPC_FAR * This,
+    IPropertyStorage * This,
     /* [in] */ DWORD grfCommitFlags);
 
 
@@ -823,7 +826,7 @@ void __RPC_STUB IPropertyStorage_Commit_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_Revert_Proxy( 
-    IPropertyStorage __RPC_FAR * This);
+    IPropertyStorage * This);
 
 
 void __RPC_STUB IPropertyStorage_Revert_Stub(
@@ -834,8 +837,8 @@ void __RPC_STUB IPropertyStorage_Revert_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_Enum_Proxy( 
-    IPropertyStorage __RPC_FAR * This,
-    /* [out] */ IEnumSTATPROPSTG __RPC_FAR *__RPC_FAR *ppenum);
+    IPropertyStorage * This,
+    /* [out] */ IEnumSTATPROPSTG **ppenum);
 
 
 void __RPC_STUB IPropertyStorage_Enum_Stub(
@@ -846,10 +849,10 @@ void __RPC_STUB IPropertyStorage_Enum_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_SetTimes_Proxy( 
-    IPropertyStorage __RPC_FAR * This,
-    /* [in] */ const FILETIME __RPC_FAR *pctime,
-    /* [in] */ const FILETIME __RPC_FAR *patime,
-    /* [in] */ const FILETIME __RPC_FAR *pmtime);
+    IPropertyStorage * This,
+    /* [in] */ const FILETIME *pctime,
+    /* [in] */ const FILETIME *patime,
+    /* [in] */ const FILETIME *pmtime);
 
 
 void __RPC_STUB IPropertyStorage_SetTimes_Stub(
@@ -860,7 +863,7 @@ void __RPC_STUB IPropertyStorage_SetTimes_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_SetClass_Proxy( 
-    IPropertyStorage __RPC_FAR * This,
+    IPropertyStorage * This,
     /* [in] */ REFCLSID clsid);
 
 
@@ -872,8 +875,8 @@ void __RPC_STUB IPropertyStorage_SetClass_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertyStorage_Stat_Proxy( 
-    IPropertyStorage __RPC_FAR * This,
-    /* [out] */ STATPROPSETSTG __RPC_FAR *pstatpsstg);
+    IPropertyStorage * This,
+    /* [out] */ STATPROPSETSTG *pstatpsstg);
 
 
 void __RPC_STUB IPropertyStorage_Stat_Stub(
@@ -893,7 +896,7 @@ void __RPC_STUB IPropertyStorage_Stat_Stub(
 /* interface IPropertySetStorage */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IPropertySetStorage __RPC_FAR *LPPROPERTYSETSTORAGE;
+typedef /* [unique] */ IPropertySetStorage *LPPROPERTYSETSTORAGE;
 
 
 EXTERN_C const IID IID_IPropertySetStorage;
@@ -906,21 +909,21 @@ EXTERN_C const IID IID_IPropertySetStorage;
     public:
         virtual HRESULT STDMETHODCALLTYPE Create( 
             /* [in] */ REFFMTID rfmtid,
-            /* [unique][in] */ const CLSID __RPC_FAR *pclsid,
+            /* [unique][in] */ const CLSID *pclsid,
             /* [in] */ DWORD grfFlags,
             /* [in] */ DWORD grfMode,
-            /* [out] */ IPropertyStorage __RPC_FAR *__RPC_FAR *ppprstg) = 0;
+            /* [out] */ IPropertyStorage **ppprstg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Open( 
             /* [in] */ REFFMTID rfmtid,
             /* [in] */ DWORD grfMode,
-            /* [out] */ IPropertyStorage __RPC_FAR *__RPC_FAR *ppprstg) = 0;
+            /* [out] */ IPropertyStorage **ppprstg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
             /* [in] */ REFFMTID rfmtid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enum( 
-            /* [out] */ IEnumSTATPROPSETSTG __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumSTATPROPSETSTG **ppenum) = 0;
         
     };
     
@@ -930,45 +933,45 @@ EXTERN_C const IID IID_IPropertySetStorage;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPropertySetStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPropertySetStorage * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPropertySetStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPropertySetStorage * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPropertySetStorage __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPropertySetStorage * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Create )( 
-            IPropertySetStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Create )( 
+            IPropertySetStorage * This,
             /* [in] */ REFFMTID rfmtid,
-            /* [unique][in] */ const CLSID __RPC_FAR *pclsid,
+            /* [unique][in] */ const CLSID *pclsid,
             /* [in] */ DWORD grfFlags,
             /* [in] */ DWORD grfMode,
-            /* [out] */ IPropertyStorage __RPC_FAR *__RPC_FAR *ppprstg);
+            /* [out] */ IPropertyStorage **ppprstg);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
-            IPropertySetStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Open )( 
+            IPropertySetStorage * This,
             /* [in] */ REFFMTID rfmtid,
             /* [in] */ DWORD grfMode,
-            /* [out] */ IPropertyStorage __RPC_FAR *__RPC_FAR *ppprstg);
+            /* [out] */ IPropertyStorage **ppprstg);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
-            IPropertySetStorage __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Delete )( 
+            IPropertySetStorage * This,
             /* [in] */ REFFMTID rfmtid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Enum )( 
-            IPropertySetStorage __RPC_FAR * This,
-            /* [out] */ IEnumSTATPROPSETSTG __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Enum )( 
+            IPropertySetStorage * This,
+            /* [out] */ IEnumSTATPROPSETSTG **ppenum);
         
         END_INTERFACE
     } IPropertySetStorageVtbl;
 
     interface IPropertySetStorage
     {
-        CONST_VTBL struct IPropertySetStorageVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPropertySetStorageVtbl *lpVtbl;
     };
 
     
@@ -1006,12 +1009,12 @@ EXTERN_C const IID IID_IPropertySetStorage;
 
 
 HRESULT STDMETHODCALLTYPE IPropertySetStorage_Create_Proxy( 
-    IPropertySetStorage __RPC_FAR * This,
+    IPropertySetStorage * This,
     /* [in] */ REFFMTID rfmtid,
-    /* [unique][in] */ const CLSID __RPC_FAR *pclsid,
+    /* [unique][in] */ const CLSID *pclsid,
     /* [in] */ DWORD grfFlags,
     /* [in] */ DWORD grfMode,
-    /* [out] */ IPropertyStorage __RPC_FAR *__RPC_FAR *ppprstg);
+    /* [out] */ IPropertyStorage **ppprstg);
 
 
 void __RPC_STUB IPropertySetStorage_Create_Stub(
@@ -1022,10 +1025,10 @@ void __RPC_STUB IPropertySetStorage_Create_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertySetStorage_Open_Proxy( 
-    IPropertySetStorage __RPC_FAR * This,
+    IPropertySetStorage * This,
     /* [in] */ REFFMTID rfmtid,
     /* [in] */ DWORD grfMode,
-    /* [out] */ IPropertyStorage __RPC_FAR *__RPC_FAR *ppprstg);
+    /* [out] */ IPropertyStorage **ppprstg);
 
 
 void __RPC_STUB IPropertySetStorage_Open_Stub(
@@ -1036,7 +1039,7 @@ void __RPC_STUB IPropertySetStorage_Open_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertySetStorage_Delete_Proxy( 
-    IPropertySetStorage __RPC_FAR * This,
+    IPropertySetStorage * This,
     /* [in] */ REFFMTID rfmtid);
 
 
@@ -1048,8 +1051,8 @@ void __RPC_STUB IPropertySetStorage_Delete_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertySetStorage_Enum_Proxy( 
-    IPropertySetStorage __RPC_FAR * This,
-    /* [out] */ IEnumSTATPROPSETSTG __RPC_FAR *__RPC_FAR *ppenum);
+    IPropertySetStorage * This,
+    /* [out] */ IEnumSTATPROPSETSTG **ppenum);
 
 
 void __RPC_STUB IPropertySetStorage_Enum_Stub(
@@ -1069,7 +1072,7 @@ void __RPC_STUB IPropertySetStorage_Enum_Stub(
 /* interface IEnumSTATPROPSTG */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEnumSTATPROPSTG __RPC_FAR *LPENUMSTATPROPSTG;
+typedef /* [unique] */ IEnumSTATPROPSTG *LPENUMSTATPROPSTG;
 
 
 EXTERN_C const IID IID_IEnumSTATPROPSTG;
@@ -1082,8 +1085,8 @@ EXTERN_C const IID IID_IEnumSTATPROPSTG;
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATPROPSTG __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [length_is][size_is][out] */ STATPROPSTG *rgelt,
+            /* [out] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -1091,7 +1094,7 @@ EXTERN_C const IID IID_IEnumSTATPROPSTG;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumSTATPROPSTG __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumSTATPROPSTG **ppenum) = 0;
         
     };
     
@@ -1101,40 +1104,40 @@ EXTERN_C const IID IID_IEnumSTATPROPSTG;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumSTATPROPSTG __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumSTATPROPSTG * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumSTATPROPSTG __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumSTATPROPSTG * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumSTATPROPSTG __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumSTATPROPSTG * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumSTATPROPSTG __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumSTATPROPSTG * This,
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATPROPSTG __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+            /* [length_is][size_is][out] */ STATPROPSTG *rgelt,
+            /* [out] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumSTATPROPSTG __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumSTATPROPSTG * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumSTATPROPSTG __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumSTATPROPSTG * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumSTATPROPSTG __RPC_FAR * This,
-            /* [out] */ IEnumSTATPROPSTG __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumSTATPROPSTG * This,
+            /* [out] */ IEnumSTATPROPSTG **ppenum);
         
         END_INTERFACE
     } IEnumSTATPROPSTGVtbl;
 
     interface IEnumSTATPROPSTG
     {
-        CONST_VTBL struct IEnumSTATPROPSTGVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumSTATPROPSTGVtbl *lpVtbl;
     };
 
     
@@ -1172,10 +1175,10 @@ EXTERN_C const IID IID_IEnumSTATPROPSTG;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_RemoteNext_Proxy( 
-    IEnumSTATPROPSTG __RPC_FAR * This,
+    IEnumSTATPROPSTG * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSTG __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ STATPROPSTG *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumSTATPROPSTG_RemoteNext_Stub(
@@ -1186,7 +1189,7 @@ void __RPC_STUB IEnumSTATPROPSTG_RemoteNext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Skip_Proxy( 
-    IEnumSTATPROPSTG __RPC_FAR * This,
+    IEnumSTATPROPSTG * This,
     /* [in] */ ULONG celt);
 
 
@@ -1198,7 +1201,7 @@ void __RPC_STUB IEnumSTATPROPSTG_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Reset_Proxy( 
-    IEnumSTATPROPSTG __RPC_FAR * This);
+    IEnumSTATPROPSTG * This);
 
 
 void __RPC_STUB IEnumSTATPROPSTG_Reset_Stub(
@@ -1209,8 +1212,8 @@ void __RPC_STUB IEnumSTATPROPSTG_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Clone_Proxy( 
-    IEnumSTATPROPSTG __RPC_FAR * This,
-    /* [out] */ IEnumSTATPROPSTG __RPC_FAR *__RPC_FAR *ppenum);
+    IEnumSTATPROPSTG * This,
+    /* [out] */ IEnumSTATPROPSTG **ppenum);
 
 
 void __RPC_STUB IEnumSTATPROPSTG_Clone_Stub(
@@ -1230,7 +1233,7 @@ void __RPC_STUB IEnumSTATPROPSTG_Clone_Stub(
 /* interface IEnumSTATPROPSETSTG */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEnumSTATPROPSETSTG __RPC_FAR *LPENUMSTATPROPSETSTG;
+typedef /* [unique] */ IEnumSTATPROPSETSTG *LPENUMSTATPROPSETSTG;
 
 
 EXTERN_C const IID IID_IEnumSTATPROPSETSTG;
@@ -1243,8 +1246,8 @@ EXTERN_C const IID IID_IEnumSTATPROPSETSTG;
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATPROPSETSTG __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [length_is][size_is][out] */ STATPROPSETSTG *rgelt,
+            /* [out] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -1252,7 +1255,7 @@ EXTERN_C const IID IID_IEnumSTATPROPSETSTG;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumSTATPROPSETSTG __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumSTATPROPSETSTG **ppenum) = 0;
         
     };
     
@@ -1262,40 +1265,40 @@ EXTERN_C const IID IID_IEnumSTATPROPSETSTG;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumSTATPROPSETSTG __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumSTATPROPSETSTG * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumSTATPROPSETSTG __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumSTATPROPSETSTG * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumSTATPROPSETSTG __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumSTATPROPSETSTG * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumSTATPROPSETSTG __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumSTATPROPSETSTG * This,
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ STATPROPSETSTG __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+            /* [length_is][size_is][out] */ STATPROPSETSTG *rgelt,
+            /* [out] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumSTATPROPSETSTG __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumSTATPROPSETSTG * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumSTATPROPSETSTG __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumSTATPROPSETSTG * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumSTATPROPSETSTG __RPC_FAR * This,
-            /* [out] */ IEnumSTATPROPSETSTG __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumSTATPROPSETSTG * This,
+            /* [out] */ IEnumSTATPROPSETSTG **ppenum);
         
         END_INTERFACE
     } IEnumSTATPROPSETSTGVtbl;
 
     interface IEnumSTATPROPSETSTG
     {
-        CONST_VTBL struct IEnumSTATPROPSETSTGVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumSTATPROPSETSTGVtbl *lpVtbl;
     };
 
     
@@ -1333,10 +1336,10 @@ EXTERN_C const IID IID_IEnumSTATPROPSETSTG;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_RemoteNext_Proxy( 
-    IEnumSTATPROPSETSTG __RPC_FAR * This,
+    IEnumSTATPROPSETSTG * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSETSTG __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ STATPROPSETSTG *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumSTATPROPSETSTG_RemoteNext_Stub(
@@ -1347,7 +1350,7 @@ void __RPC_STUB IEnumSTATPROPSETSTG_RemoteNext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Skip_Proxy( 
-    IEnumSTATPROPSETSTG __RPC_FAR * This,
+    IEnumSTATPROPSETSTG * This,
     /* [in] */ ULONG celt);
 
 
@@ -1359,7 +1362,7 @@ void __RPC_STUB IEnumSTATPROPSETSTG_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Reset_Proxy( 
-    IEnumSTATPROPSETSTG __RPC_FAR * This);
+    IEnumSTATPROPSETSTG * This);
 
 
 void __RPC_STUB IEnumSTATPROPSETSTG_Reset_Stub(
@@ -1370,8 +1373,8 @@ void __RPC_STUB IEnumSTATPROPSETSTG_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Clone_Proxy( 
-    IEnumSTATPROPSETSTG __RPC_FAR * This,
-    /* [out] */ IEnumSTATPROPSETSTG __RPC_FAR *__RPC_FAR *ppenum);
+    IEnumSTATPROPSETSTG * This,
+    /* [out] */ IEnumSTATPROPSETSTG **ppenum);
 
 
 void __RPC_STUB IEnumSTATPROPSETSTG_Clone_Stub(
@@ -1385,10 +1388,10 @@ void __RPC_STUB IEnumSTATPROPSETSTG_Clone_Stub(
 #endif 	/* __IEnumSTATPROPSETSTG_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_propidl_0109 */
+/* interface __MIDL_itf_propidl_0114 */
 /* [local] */ 
 
-typedef /* [unique] */ IPropertyStorage __RPC_FAR *LPPROPERTYSTORAGE;
+typedef /* [unique] */ IPropertyStorage *LPPROPERTYSTORAGE;
 
 WINOLEAPI PropVariantCopy ( PROPVARIANT * pvarDest, const PROPVARIANT * pvarSrc );
 WINOLEAPI PropVariantClear ( PROPVARIANT * pvar );
@@ -1422,46 +1425,46 @@ WINOLEAPI PropStgNameToFmtId( const LPOLESTR oszName, FMTID *pfmtid );
 #endif
 
 
-extern RPC_IF_HANDLE __MIDL_itf_propidl_0109_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_propidl_0109_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_propidl_0114_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_propidl_0114_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-unsigned long             __RPC_USER  LPSAFEARRAY_UserSize(     unsigned long __RPC_FAR *, unsigned long            , LPSAFEARRAY __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  LPSAFEARRAY_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, LPSAFEARRAY __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  LPSAFEARRAY_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, LPSAFEARRAY __RPC_FAR * ); 
-void                      __RPC_USER  LPSAFEARRAY_UserFree(     unsigned long __RPC_FAR *, LPSAFEARRAY __RPC_FAR * ); 
+unsigned long             __RPC_USER  LPSAFEARRAY_UserSize(     unsigned long *, unsigned long            , LPSAFEARRAY * ); 
+unsigned char * __RPC_USER  LPSAFEARRAY_UserMarshal(  unsigned long *, unsigned char *, LPSAFEARRAY * ); 
+unsigned char * __RPC_USER  LPSAFEARRAY_UserUnmarshal(unsigned long *, unsigned char *, LPSAFEARRAY * ); 
+void                      __RPC_USER  LPSAFEARRAY_UserFree(     unsigned long *, LPSAFEARRAY * ); 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Next_Proxy( 
-    IEnumSTATPROPSTG __RPC_FAR * This,
+    IEnumSTATPROPSTG * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSTG __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ STATPROPSTG *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSTG_Next_Stub( 
-    IEnumSTATPROPSTG __RPC_FAR * This,
+    IEnumSTATPROPSTG * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSTG __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ STATPROPSTG *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Next_Proxy( 
-    IEnumSTATPROPSETSTG __RPC_FAR * This,
+    IEnumSTATPROPSETSTG * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSETSTG __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ STATPROPSETSTG *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumSTATPROPSETSTG_Next_Stub( 
-    IEnumSTATPROPSETSTG __RPC_FAR * This,
+    IEnumSTATPROPSETSTG * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ STATPROPSETSTG __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ STATPROPSETSTG *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 
@@ -1472,6 +1475,7 @@ void                      __RPC_USER  LPSAFEARRAY_UserFree(     unsigned long __
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

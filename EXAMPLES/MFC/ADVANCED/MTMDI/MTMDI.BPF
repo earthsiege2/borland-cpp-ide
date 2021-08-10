@@ -1,9 +1,10 @@
-USEUNIT("bounce.cpp");
-USEUNIT("hello.cpp");
-USEUNIT("mainfrm.cpp");
-USEUNIT("mdi.cpp");
-USEUNIT("mtbounce.cpp");
-USEUNIT("stdafx.cpp");
-USERC("mtmdi.rc");
+USEUNIT(".\Bounce.cpp");
+USEUNIT(".\Hello.cpp");
+USEUNIT(".\Mainfrm.cpp");
+USEUNIT(".\Mdi.cpp");
+USEUNIT(".\Mtbounce.cpp");
+USEUNIT(".\Stdafx.cpp");
+USERC(".\Mtmdi.rc");
+USEFILE("vctobpr.log");
 
 #define WinMain

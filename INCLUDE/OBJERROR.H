@@ -1,8 +1,7 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 //+---------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  File:       objerror.h
 //
@@ -13,4 +12,3 @@
 #endif
 
 #include <winerror.h>
-#pragma option pop /*P_O_Pop*/

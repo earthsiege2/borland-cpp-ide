@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxdsql.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MXDSQL.pas' rev: 6.00
 
-#ifndef mxdsqlHPP
-#define mxdsqlHPP
+#ifndef MXDSQLHPP
+#define MXDSQLHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -14,7 +14,7 @@
 #include <DBGrids.hpp>	// Pascal unit
 #include <Grids.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -46,12 +46,10 @@ public:
 	bool __fastcall SInitialize(AnsiString DataBaseName, AnsiString SQL);
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TSQLWindow(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TSQLWindow(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TSQLWindow(Classes::TComponent* AOwner, int Dummy
-		) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TSQLWindow(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TSQLWindow(void) { }
@@ -59,8 +57,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TSQLWindow(HWND ParentWindow) : Forms::TForm(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TSQLWindow(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -71,12 +68,10 @@ extern PACKAGE TSQLWindow* Form2;
 extern PACKAGE void __fastcall ShowSQLWindow(AnsiString DataBaseName, AnsiString SQL);
 
 }	/* namespace Mxdsql */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxdsql;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxdsql
+#endif	// MXDSQL

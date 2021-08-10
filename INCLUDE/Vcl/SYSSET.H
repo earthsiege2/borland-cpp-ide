@@ -1,5 +1,5 @@
 // SYSSET.H: Pascal Set types
-// Copyright (c) 1997, 1999 Borland International
+// Copyright (c) 1997, 2002 Borland Software Corporation
 
 #if !defined(SYSSET_H)
 #define SYSSET_H
@@ -143,9 +143,20 @@ namespace System
     Set& __fastcall Clear()
     {
   #pragma option push -w-inl
-    for (int i = 0; i < sizeof (Data); i++)
-      Data[i] = 0;
+    memset(Data, 0, sizeof (Data));
     return *this;
+  #pragma option pop
+    }
+
+    bool __fastcall Empty() const
+    {
+  #pragma option push -w-inl
+    for (int i = (sizeof(Data) >> 1)-1; i >= 0; --i)
+      if (((short *) Data)[i] != 0)
+        return false;
+    if (sizeof(Data) & 1)
+      return (Data[sizeof(Data)-1] == 0);
+    return true;
   #pragma option pop
     }
 

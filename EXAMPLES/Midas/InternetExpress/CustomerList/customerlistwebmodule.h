@@ -13,6 +13,9 @@
 #include <MidProd.hpp>
 #include <PagItems.hpp>
 #include <XMLBrokr.hpp>
+#include <DB.hpp>
+#include <HTTPProd.hpp>
+#include <WebComp.hpp>
 //---------------------------------------------------------------------------
 class TWebModule1 : public TWebModule
 {

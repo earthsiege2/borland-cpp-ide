@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{ Copyright (c) 1995-2001 Borland Software Corporation  }
 {                                                       }
 {*******************************************************}
 
@@ -11,7 +11,7 @@ unit EditIntf;
 
 interface
 
-uses SysUtils, Windows, VirtIntf;
+uses SysUtils, Windows, Classes, VirtIntf;
 
 const
   cursorPos = Integer(0);
@@ -457,7 +457,7 @@ type
   TIModuleNotifier = class(TInterface)
   public
     procedure Notify(NotifyCode: TNotifyCode); virtual; stdcall; abstract;
-    procedure ComponentRenamed(ComponentHandle: Pointer;
+    procedure ComponentRenamed(const AComponent: TComponent;
       const OldName, NewName: string); virtual; stdcall; abstract;
   end;
 

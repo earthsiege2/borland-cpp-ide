@@ -14,7 +14,7 @@ unit DataBkr;
 
 interface
 
-uses Windows, ActiveX, Classes, Midas, Forms, Provider, SysUtils;
+uses Windows, Variants, ActiveX, Classes, Midas, Provider, SysUtils;
 
 type
   { TRemoteDataModule }
@@ -23,6 +23,7 @@ type
   private
     FProviders: TList;
     FLock: TRTLCriticalSection;
+    function GetProviderCount: integer;
   protected
     function GetProvider(const ProviderName: string): TCustomProvider; virtual;
     class procedure UpdateRegistry(Register: Boolean; const ClassID, ProgID: string); override;
@@ -49,6 +50,7 @@ type
     procedure Lock; virtual;
     procedure Unlock; virtual;
     property Providers[const ProviderName: string]: TCustomProvider read GetProvider;
+    property ProviderCount: integer read GetProviderCount;
   end;
 
 { TCRemoteDataModule --- a slimmed down RDM that doesn't implement IAppServer,
@@ -58,6 +60,7 @@ type
  private
   FProviders: TList;
   FLock: TRTLCriticalSection;
+  function GetProviderCount: integer;
  public
   constructor Create(AOwner: TComponent); override;
   destructor Destroy; override;
@@ -68,6 +71,7 @@ type
   function CRDMGetProviderNames: OleVariant;
   function GetProvider(const ProviderName: string): TCustomProvider; virtual;
   property Providers[const ProviderName:string]:TCustomProvider read GetProvider;
+  property ProviderCount: integer read GetProviderCount;
  end;
 
 procedure RegisterPooled(const ClassID: string; Max, Timeout: Integer; Singleton: Boolean = False);
@@ -102,7 +106,10 @@ var
 begin
   Status := RegOpenKey(HKEY_CLASSES_ROOT, PChar(Key), Handle);
   if Status = 0 then
+  begin
     RegDeleteValue(Handle, PChar(ValueName));
+    RegCloseKey(Handle);
+  end;
 end;
 
 procedure UnregisterPooled(const ClassID: string);
@@ -131,18 +138,6 @@ end;
 procedure DisableWebTransport(const ClassID: string);
 begin
   DeleteRegValue(SClsid + ClassID, SWeb);
-end;
-
-function VarArrayFromStrings(Strings: TStrings): Variant;
-var
-  I: Integer;
-begin
-  Result := Null;
-  if Strings.Count > 0 then
-  begin
-    Result := VarArrayCreate([0, Strings.Count - 1], varOleStr);
-    for I := 0 to Strings.Count - 1 do Result[I] := WideString(Strings[I]);
-  end;
 end;
 
 { TRemoteDataModule }
@@ -187,7 +182,7 @@ var
 begin
   Result := nil;
   for i := 0 to FProviders.Count - 1 do
-    if AnsiCompareStr(TCustomProvider(FProviders[i]).Name, ProviderName) = 0 then
+    if AnsiCompareText(TCustomProvider(FProviders[i]).Name, ProviderName) = 0 then
     begin
       Result := TCustomProvider(FProviders[i]);
       if not Result.Exported then
@@ -311,27 +306,32 @@ begin
     end else
     begin
       OleCheck(CatReg.UnRegisterClassImplCategories(StringToGUID(ClassID), 1, @CATID_MIDASAppServer));
-      DeleteRegKey(Format(SCatImplBaseKey, [ClassID]));
+      DeleteRegKey(Format(SClsid + SCatImplBaseKey, [ClassID]));
     end;
   end else
   begin
     if Register then
     begin
       CreateRegKey('Component Categories\' + GUIDToString(CATID_MIDASAppServer), '409', MIDAS_CatDesc);
-      CreateRegKey(Format(SCatImplKey, [ClassID, GUIDToString(CATID_MIDASAppServer)]), '', '');
+      CreateRegKey(Format(SClsid + SCatImplKey, [ClassID, GUIDToString(CATID_MIDASAppServer)]), '', '');
     end else
     begin
-      DeleteRegKey(Format(SCatImplKey, [ClassID, GUIDToString(CATID_MIDASAppServer)]));
-      DeleteRegKey(Format(SCatImplBaseKey, [ClassID]));
+      DeleteRegKey(Format(SClsid + SCatImplKey, [ClassID, GUIDToString(CATID_MIDASAppServer)]));
+      DeleteRegKey(Format(SClsid + SCatImplBaseKey, [ClassID]));
     end;
   end;
   if Register then
   begin
-    Description := GetRegStringValue('CLSID\' + ClassID, '');
+    Description := GetRegStringValue(SClsid + ClassID, '');
     CreateRegKey('AppID\' + ClassID, '', Description);
-    CreateRegKey('CLSID\' + ClassID, 'AppID', ClassID);
+    CreateRegKey(SClsid + ClassID, 'AppID', ClassID);
   end else
     DeleteRegKey('AppID\' + ClassID);
+end;
+
+function TRemoteDataModule.GetProviderCount: integer;
+begin
+  Result := FProviders.Count;
 end;
 
 {TCRemoteDataModule}
@@ -375,7 +375,7 @@ var
   List: TStringList;
   I, J: Integer;
 begin
-  Lock;
+Lock;
   try
     List := TStringList.Create;
     try
@@ -413,5 +413,10 @@ begin
   if not Assigned(Result) then
     raise Exception.CreateResFmt(@SProviderNotExported, [ProviderName]);
 end;
+
+function TCRemoteDataModule.GetProviderCount: integer;
+begin                                                 
+  Result := FProviders.Count;                       
+end;                                                  
 
 end.

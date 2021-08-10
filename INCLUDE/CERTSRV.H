@@ -10,7 +10,6 @@
 //----------------------------------------------------------------------------
 
 #if !defined( _CERTSRV_H_ )
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _CERTSRV_H_
 
 #include <certadm.h>
@@ -58,19 +57,35 @@
 
 //======================================================================
 // Values Under "CertSvc\Configuration":
-#define wszREGACTIVE		     TEXT("Active")
-#define wszREGDIRECTORY		     TEXT("ConfigurationDirectory")
-#define wszREGDBDIRECTORY            TEXT("DBDirectory")
-#define wszREGDBLOGDIRECTORY         TEXT("DBLogDirectory")
-#define wszREGDBSYSDIRECTORY         TEXT("DBSystemDirectory")
-#define wszREGDBTEMPDIRECTORY        TEXT("DBTempDirectory")
-#define wszREGDBSESSIONCOUNT	     TEXT("DBSessionCount")
-#define wszREGWEBCLIENTCAMACHINE     TEXT("WebClientCAMachine")
-#define wszREGWEBCLIENTCANAME        TEXT("WebClientCAName")
-#define wszREGWEBCLIENTCATYPE        TEXT("WebClientCAType")
+#define wszREGACTIVE		      TEXT("Active")
+#define wszREGDIRECTORY		      TEXT("ConfigurationDirectory")
+#define wszREGDBDIRECTORY             TEXT("DBDirectory")
+#define wszREGDBLOGDIRECTORY          TEXT("DBLogDirectory")
+#define wszREGDBSYSDIRECTORY          TEXT("DBSystemDirectory")
+#define wszREGDBTEMPDIRECTORY         TEXT("DBTempDirectory")
+#define wszREGDBSESSIONCOUNT	      TEXT("DBSessionCount")
+#define wszREGDBLASTFULLBACKUP	      TEXT("DBLastFullBackup")
+#define wszREGDBLASTINCREMENTALBACKUP TEXT("DBLastIncrementalBackup")
+#define wszREGDBLASTRECOVERY	      TEXT("DBLastRecovery")
+#define wszREGWEBCLIENTCAMACHINE      TEXT("WebClientCAMachine")
+#define wszREGVERSION		      TEXT("Version")
+#define wszREGWEBCLIENTCANAME         TEXT("WebClientCAName")
+#define wszREGWEBCLIENTCATYPE         TEXT("WebClientCAType")
+#define wszREGDBOPTIONALFLAGS         TEXT("DBOptionalFlags")
+
 
 // Default value for wszREGDBSESSIONCOUNT
 #define DBSESSIONCOUNTDEFAULT	     20
+
+// Default value for wszREGMAXINCOMINGMESSAGESIZE
+#define MAXINCOMINGMESSAGESIZEDEFAULT	     (64 * 1024)
+
+// Value for wszREGVERSION:
+#define CSVER_MAJOR		     2	// high 16 bits
+#define CSVER_MINOR		     1	// low 16 bits
+
+// stamp, for all time,the whistler version:
+#define CSVER_WHISTLER               ((2<<16)|(1))
 
 // Keys Under "CertSvc\Configuration":
 #define wszREGKEYRESTOREINPROGRESS   TEXT("RestoreInProgress")
@@ -80,28 +95,50 @@
 #define wszREGCADESCRIPTION          TEXT("CADescription")
 #define wszREGCACERTHASH	     TEXT("CACertHash")
 #define wszREGCASERIALNUMBER	     TEXT("CACertSerialNumber")
+#define wszREGCAXCHGCERTHASH	     TEXT("CAXchgCertHash")
+#define wszREGKRACERTHASH	     TEXT("KRACertHash")
+#define wszREGKRACERTCOUNT	     TEXT("KRACertCount")
+#define wszREGKRAFLAGS		     TEXT("KRAFlags")
 #define wszREGCATYPE		     TEXT("CAType")
 #define wszREGCERTENROLLCOMPATIBLE   TEXT("CertEnrollCompatible")
 #define wszREGENFORCEX500NAMELENGTHS TEXT("EnforceX500NameLengths")
 #define wszREGCOMMONNAME	     TEXT("CommonName")
 #define wszREGCLOCKSKEWMINUTES	     TEXT("ClockSkewMinutes")
+
 #define wszREGCRLNEXTPUBLISH         TEXT("CRLNextPublish")
-#define wszREGCRLPERIOD		     TEXT("CRLPeriod")
-#define wszREGCRLUNITS		     TEXT("CRLPeriodUnits")
-#define wszREGCRLOVERLAPPERIOD   TEXT("CRLOverlapPeriod")
-#define wszREGCRLOVERLAPUNITS    TEXT("CRLOverlapUnits")
-#define wszREGCRLPATH                TEXT("CRLPath")
+#define wszREGCRLPERIODSTRING	     TEXT("CRLPeriod")
+#define wszREGCRLPERIODCOUNT	     TEXT("CRLPeriodUnits")
+#define wszREGCRLOVERLAPPERIODSTRING TEXT("CRLOverlapPeriod")
+#define wszREGCRLOVERLAPPERIODCOUNT  TEXT("CRLOverlapUnits")
+
+#define wszREGCRLDELTANEXTPUBLISH    TEXT("CRLDeltaNextPublish")
+#define wszREGCRLDELTAPERIODSTRING   TEXT("CRLDeltaPeriod")
+#define wszREGCRLDELTAPERIODCOUNT    TEXT("CRLDeltaPeriodUnits")
+#define wszREGCRLDELTAOVERLAPPERIODSTRING TEXT("CRLDeltaOverlapPeriod")
+#define wszREGCRLDELTAOVERLAPPERIODCOUNT  TEXT("CRLDeltaOverlapUnits")
+
+#define wszREGCRLPUBLICATIONURLS     TEXT("CRLPublicationURLs")
+#define wszREGCACERTPUBLICATIONURLS  TEXT("CACertPublicationURLs")
+
+#define wszREGCAXCHGVALIDITYPERIODSTRING  TEXT("CAXchgValidityPeriod")
+#define wszREGCAXCHGVALIDITYPERIODCOUNT   TEXT("CAXchgValidityPeriodUnits")
+#define wszREGCAXCHGOVERLAPPERIODSTRING   TEXT("CAXchgOverlapPeriod")
+#define wszREGCAXCHGOVERLAPPERIODCOUNT    TEXT("CAXchgOverlapPeriodUnits")
+
+#define wszREGCRLPATH_OLD            TEXT("CRLPath")
 #define wszREGCRLEDITFLAGS	     TEXT("CRLEditFlags")
+#define wszREGCRLFLAGS		     TEXT("CRLFlags")
 #define wszREGCRLATTEMPTREPUBLISH    TEXT("CRLAttemptRepublish")
 #define wszREGENABLED		     TEXT("Enabled")
 #define wszREGFORCETELETEX           TEXT("ForceTeletex")
 #define wszREGLOGLEVEL		     TEXT("LogLevel")
+#define wszREGHIGHSERIAL	     TEXT("HighSerial")
 #define wszREGPOLICYFLAGS	     TEXT("PolicyFlags")
 #define wszREGNAMESEPARATOR          TEXT("SubjectNameSeparator")
 #define wszREGSUBJECTTEMPLATE	     TEXT("SubjectTemplate")
 #define wszREGCAUSEDS		     TEXT("UseDS")
-#define wszREGDURATIONPERIOD	     TEXT("ValidityPeriod")
-#define wszREGDURATIONUNITS	     TEXT("ValidityPeriodUnits")
+#define wszREGVALIDITYPERIODSTRING   TEXT("ValidityPeriod")
+#define wszREGVALIDITYPERIODCOUNT    TEXT("ValidityPeriodUnits")
 #define wszREGPARENTCAMACHINE        TEXT("ParentCAMachine")
 #define wszREGPARENTCANAME           TEXT("ParentCAName")
 #define wszREGREQUESTFILENAME        TEXT("RequestFileName")
@@ -111,8 +148,15 @@
 #define wszREGCASERVERNAME           TEXT("CAServerName")
 #define wszREGCACERTFILENAME         TEXT("CACertFileName")
 #define wszREGCASECURITY             TEXT("Security")
+#define wszREGAUDITFILTER            TEXT("AuditFilter")
+#define wszREGOFFICERRIGHTS          TEXT("OfficerRights")
+#define wszREGMAXINCOMINGMESSAGESIZE TEXT("MaxIncomingMessageSize")
+#define wszREGROLESEPARATIONENABLED  TEXT("RoleSeparationEnabled")
 
 #define wszREGSETUPSTATUS            TEXT("SetupStatus")
+#define wszLOCKICERTREQUEST          TEXT("LockICertRequest")    
+#define wszREGDSCONFIGDN	     TEXT("DSConfigDN")    
+#define wszREGDSDOMAINDN	     TEXT("DSDomainDN")    
 
 #define wszPFXFILENAMEEXT	     TEXT(".p12")
 #define wszDATFILENAMEEXT	     TEXT(".dat")
@@ -123,8 +167,7 @@
 #define wszDBBASENAMEPARM	     TEXT(szDBBASENAMEPARM)
 #define wszLOGPATH		     TEXT("CertLog")
 #define wszDBBACKUPSUBDIR	     TEXT("DataBase")
-#define wszDBBACKUPCERTBACKDAT	     TEXT("certback.dat")
-
+#define wszDBBACKUPCERTBACKDAT	     TEXT("certbkxp.dat")
 
 #ifndef __ENUM_CATYPES__
 #define __ENUM_CATYPES__
@@ -142,7 +185,37 @@ typedef enum {
 #endif __ENUM_CATYPES__
 
 // Default value for wszREGCLOCKSKEWMINUTES
-#define CCLOCKSKEWMINUTESDEFAULT	10
+#define CCLOCKSKEWMINUTESDEFAULT	      10
+
+// Default validity period for ROOT CA certs:
+#define dwVALIDITYPERIODCOUNTDEFAULT_ROOT	5
+
+// Default validity periods for certs issued by a CA:
+#define dwVALIDITYPERIODCOUNTDEFAULT_ENTERPRISE	2
+#define dwVALIDITYPERIODCOUNTDEFAULT_STANDALONE	1
+#define dwVALIDITYPERIODENUMDEFAULT	      ENUM_PERIOD_YEARS
+#define wszVALIDITYPERIODSTRINGDEFAULT	      wszPERIODYEARS
+
+#define dwCAXCHGVALIDITYPERIODCOUNTDEFAULT    1
+#define dwCAXCHGVALIDITYPERIODENUMDEFAULT     ENUM_PERIOD_WEEKS
+#define wszCAXCHGVALIDITYPERIODSTRINGDEFAULT  wszPERIODWEEKS
+
+#define dwCAXCHGOVERLAPPERIODCOUNTDEFAULT     1
+#define dwCAXCHGOVERLAPPERIODENUMDEFAULT      ENUM_PERIOD_DAYS
+#define wszCAXCHGOVERLAPPERIODSTRINGDEFAULT   wszPERIODDAYS
+
+#define dwCRLPERIODCOUNTDEFAULT		      1
+#define wszCRLPERIODSTRINGDEFAULT	      wszPERIODWEEKS
+
+#define dwCRLOVERLAPPERIODCOUNTDEFAULT	      0		// 0 --> disabled
+#define wszCRLOVERLAPPERIODSTRINGDEFAULT      wszPERIODHOURS
+
+#define dwCRLDELTAPERIODCOUNTDEFAULT          1
+#define wszCRLDELTAPERIODSTRINGDEFAULT        wszPERIODDAYS
+
+#define dwCRLDELTAOVERLAPPERIODCOUNTDEFAULT   0		// 0 --> disabled
+#define wszCRLDELTAOVERLAPPERIODSTRINGDEFAULT wszPERIODMINUTES
+
 
 // Values for wszREGLOGLEVEL:
 #define CERTLOG_MINIMAL		(DWORD) 0
@@ -161,19 +234,52 @@ typedef enum {
 #define SETUP_DENIED_FLAG		0x00000020	// request denied
 #define SETUP_CREATEDB_FLAG		0x00000040	// create new DB
 #define SETUP_ATTEMPT_VROOT_CREATE	0x00000080	// try to create vroots
-#define SETUP_FORCECRL_FLAG		0x00000100	// force new CRL(s)
+#define SETUP_FORCECRL_FLAG		     0x00000100	// force new CRL(s)
+#define SETUP_UPDATE_CAOBJECT_SVRTYPE	     0x00000200	// add server type to CA DS object "flags" attr
+#define SETUP_SERVER_UPGRADED_FLAG	     0x00000400	// server was upgraded
+#define SETUP_W2K_SECURITY_NOT_UPGRADED_FLAG 0x00000800 // still need to upgrade security
 
+// Values for wszREGCRLFLAGS:
+#define CRLF_DELTA_USE_OLDEST_UNEXPIRED_BASE	0x00000001 // use oldest base:
+// else use newest base CRL that satisfies base CRL propagation delay
 
+#define CRLF_DELETE_EXPIRED_CRLS		0x00000002
+#define CRLF_CRLNUMBER_CRITICAL			0x00000004
+#define CRLF_REVCHECK_IGNORE_OFFLINE		0x00000008
+#define CRLF_IGNORE_INVALID_POLICIES		0x00000010
+#define CRLF_REBUILD_MODIFIED_SUBJECT_ONLY	0x00000020
+#define CRLF_SAVE_FAILED_CERTS			0x00000040
+#define CRLF_IGNORE_UNKNOWN_CMC_ATTRIBUTES	0x00000080
+#define CRLF_ACCEPT_OLDRFC_CMC			0x00000100
+#define CRLF_PUBLISH_EXPIRED_CERT_CRLS		0x00000200
+
+// Values for wszREGKRAFLAGS:
+#define KRAF_ENABLEFOREIGN	0x00000001 // allow foreign cert, key archival
+#define KRAF_SAVEBADREQUESTKEY	0x00000002 // save failed request w/archived key
+
+// Values for numeric prefixes for
+// wszREGCRLPUBLICATIONURLS and wszREGCACERTPUBLICATIONURLS:
+//
+// URL publication template Flags values, encoded as a decimal prefix for URL
+// publication templates in the registry:
+//   "1:c:\winnt\System32\CertSrv\CertEnroll\MyCA.crl"
+//   "2:http:\//MyServer.MyDomain.com/CertEnroll\MyCA.crl"
+
+#define CSURL_SERVERPUBLISH	0x00000001
+#define CSURL_ADDTOCERTCDP	0x00000002
+#define CSURL_ADDTOFRESHESTCRL	0x00000004
+#define CSURL_ADDTOCRLCDP	0x00000008
+#define CSURL_PUBLISHRETRY	0x00000010
+#define CSURL_ADDTOCERTOCSP	0x00000020
 //======================================================================
 // Keys Under "CertSvc\Configuration\<CAName>":
 #define wszREGKEYCSP			TEXT("CSP")
+#define wszREGKEYENCRYPTIONCSP		TEXT("EncryptionCSP")
 #define wszREGKEYEXITMODULES		TEXT("ExitModules")
 #define wszREGKEYPOLICYMODULES	        TEXT("PolicyModules")
 #define wszSECUREDATTRIBUTES		TEXT("SignedAttributes")
 
-#define wszDEFAULTSIGNEDATTRIBUTES      TEXT("RequesterName\0") \
-                                        TEXT("RequesterAddress\0") \
-                                        TEXT("RequesterToken\0")
+#define wszzDEFAULTSIGNEDATTRIBUTES     TEXT("RequesterName\0")
 
 //======================================================================
 // Values Under "CertSvc\Configuration\RestoreInProgress":
@@ -203,10 +309,13 @@ typedef enum {
 
 //======================================================================
 // Values Under "CertSvc\Configuration\<CAName>\CSP":
-#define wszREGPROVIDERTYPE    TEXT("ProviderType")
-#define wszREGPROVIDER        TEXT("Provider")
-#define wszHASHALGORITHM      TEXT("HashAlgorithm")
-#define wszMACHINEKEYSET      TEXT("MachineKeyset")
+// and "CertSvc\Configuration\<CAName>\EncryptionCSP":
+#define wszREGPROVIDERTYPE     TEXT("ProviderType")
+#define wszREGPROVIDER         TEXT("Provider")
+#define wszHASHALGORITHM       TEXT("HashAlgorithm")
+#define wszENCRYPTIONALGORITHM TEXT("EncryptionAlgorithm")
+#define wszMACHINEKEYSET       TEXT("MachineKeyset")
+#define wszREGKEYSIZE	       TEXT("KeySize")
 
 
 //======================================================================
@@ -216,14 +325,14 @@ typedef enum {
 
 
 //======================================================================
-// Value strings for "CertSvc\Configuration\<CAName>\ValidityPeriod":
-#define wszDURATIONUNITSYEARS	TEXT("Years")
-#define wszDURATIONUNITSMONTHS	TEXT("Months")
-#define wszDURATIONUNITSWEEKS	TEXT("Weeks")
-#define wszDURATIONUNITSDAYS	TEXT("Days")
-#define wszDURATIONUNITSHOURS	TEXT("Hours")
-#define wszDURATIONUNITSMINUTES	TEXT("Minutes")
-#define wszDURATIONUNITSSECONDS	TEXT("Seconds")
+// Value strings for "CertSvc\Configuration\<CAName>\ValidityPeriod", etc.:
+#define wszPERIODYEARS		TEXT("Years")
+#define wszPERIODMONTHS		TEXT("Months")
+#define wszPERIODWEEKS		TEXT("Weeks")
+#define wszPERIODDAYS		TEXT("Days")
+#define wszPERIODHOURS		TEXT("Hours")
+#define wszPERIODMINUTES	TEXT("Minutes")
+#define wszPERIODSECONDS	TEXT("Seconds")
 
 //======================================================================
 // Values Under "CertSvc\Configuration\<CAName>\PolicyModules\<ProgId>":
@@ -235,20 +344,22 @@ typedef enum {
 #define wszREGCAPATHLENGTH	    TEXT("CAPathLength")
 #define wszREGREVOCATIONTYPE	    TEXT("RevocationType")
 
-#define wszREGLDAPREVOCATIONCRLURL  TEXT("LDAPRevocationCRLURL")
-#define wszREGREVOCATIONCRLURL	    TEXT("RevocationCRLURL")
-#define wszREGFTPREVOCATIONCRLURL   TEXT("FTPRevocationCRLURL")
-#define wszREGFILEREVOCATIONCRLURL  TEXT("FileRevocationCRLURL")
+#define wszREGLDAPREVOCATIONCRLURL_OLD	TEXT("LDAPRevocationCRLURL")
+#define wszREGREVOCATIONCRLURL_OLD	TEXT("RevocationCRLURL")
+#define wszREGFTPREVOCATIONCRLURL_OLD	TEXT("FTPRevocationCRLURL")
+#define wszREGFILEREVOCATIONCRLURL_OLD	TEXT("FileRevocationCRLURL")
 
-#define wszREGREVOCATIONURL	    TEXT("RevocationURL")
+#define wszREGREVOCATIONURL		TEXT("RevocationURL")
 
-#define wszREGLDAPISSUERCERTURL	    TEXT("LDAPIssuerCertURL")
-#define wszREGISSUERCERTURL         TEXT("IssuerCertURL")
-#define wszREGFTPISSUERCERTURL      TEXT("FTPIssuerCertURL")
-#define wszREGFILEISSUERCERTURL     TEXT("FileIssuerCertURL")
+#define wszREGLDAPISSUERCERTURL_OLD	TEXT("LDAPIssuerCertURL")
+#define wszREGISSUERCERTURL_OLD		TEXT("IssuerCertURL")
+#define wszREGFTPISSUERCERTURL_OLD	TEXT("FTPIssuerCertURL")
+#define wszREGFILEISSUERCERTURL_OLD	TEXT("FileIssuerCertURL")
 
 #define wszREGENABLEREQUESTEXTENSIONLIST  TEXT("EnableRequestExtensionList")
 #define wszREGDISABLEEXTENSIONLIST  TEXT("DisableExtensionList")
+
+#define wszREGDEFAULTSMIME		TEXT("DefaultSMIME")
 
 // wszREGCAPATHLENGTH Values:
 #define CAPATHLENGTH_INFINITE		0xffffffff
@@ -264,47 +375,30 @@ typedef enum {
 #define REQDISP_DEFAULT_ENTERPRISE	(REQDISP_ISSUE)
 
 // wszREGREVOCATIONTYPE Values:
-#define REVEXT_CDPLDAPURL		0x00000001
-#define REVEXT_CDPHTTPURL		0x00000002
-#define REVEXT_CDPFTPURL		0x00000004
-#define REVEXT_CDPFILEURL		0x00000008
-#define REVEXT_CDPURLMASK		0x000000ff
+#define REVEXT_CDPLDAPURL_OLD		0x00000001
+#define REVEXT_CDPHTTPURL_OLD		0x00000002
+#define REVEXT_CDPFTPURL_OLD		0x00000004
+#define REVEXT_CDPFILEURL_OLD		0x00000008
+#define REVEXT_CDPURLMASK_OLD		0x000000ff
 #define REVEXT_CDPENABLE		0x00000100
 #define REVEXT_ASPENABLE		0x00000200
-#define REVEXT_DEFAULT_NODS	(REVEXT_CDPENABLE | \
-				 REVEXT_CDPLDAPURL | \
-				 REVEXT_CDPHTTPURL | \
-				 REVEXT_CDPFILEURL)
 
-// Suppress FILE URLs if a DS is available, as LDAP access within the
-// enterprise should suffice, and http: should work outside the enterprise.
-// Certs with too many URLs don't always fit on smart cards.
-
-#define REVEXT_DEFAULT_DS	(REVEXT_CDPENABLE | \
-				 REVEXT_CDPLDAPURL | \
-				 REVEXT_CDPHTTPURL)
+#define REVEXT_DEFAULT_NODS		(REVEXT_CDPENABLE)
+#define REVEXT_DEFAULT_DS		(REVEXT_CDPENABLE)
 
 // wszREGISSUERCERTURLFLAGS Values:
-#define ISSCERT_LDAPURL			0x00000001
-#define ISSCERT_HTTPURL			0x00000002
-#define ISSCERT_FTPURL			0x00000004
-#define ISSCERT_FILEURL			0x00000008
-#define ISSCERT_URLMASK			0x000000ff
+#define ISSCERT_LDAPURL_OLD		0x00000001
+#define ISSCERT_HTTPURL_OLD		0x00000002
+#define ISSCERT_FTPURL_OLD		0x00000004
+#define ISSCERT_FILEURL_OLD		0x00000008
+#define ISSCERT_URLMASK_OLD		0x000000ff
 #define ISSCERT_ENABLE			0x00000100
-#define ISSCERT_DEFAULT_NODS	(ISSCERT_ENABLE | \
-				 ISSCERT_LDAPURL | \
-				 ISSCERT_HTTPURL | \
-				 ISSCERT_FILEURL)
 
-// Suppress FILE URLs if a DS is available, as LDAP access within the
-// enterprise should suffice, and http: should work outside the enterprise.
-// Certs with too many URLs don't always fit on smart cards.
-
-#define ISSCERT_DEFAULT_DS	(ISSCERT_ENABLE | \
-				 ISSCERT_LDAPURL | \
-				 ISSCERT_HTTPURL)
+#define ISSCERT_DEFAULT_NODS		(ISSCERT_ENABLE)
+#define ISSCERT_DEFAULT_DS		(ISSCERT_ENABLE)
 
 // wszREGEDITFLAGS Values:				   Defaults:
+// Under CA key: wszREGCRLEDITFLAGS Values (EDITF_ENABLEAKI* only):
 #define EDITF_ENABLEREQUESTEXTENSIONS	0x00000001	// neither
 #define EDITF_REQUESTEXTENSIONLIST	0x00000002	// Standalone
 #define EDITF_DISABLEEXTENSIONLIST	0x00000004	// both
@@ -315,10 +409,13 @@ typedef enum {
 #define EDITF_BASICCONSTRAINTSCA	0x00000080	// Standalone
 #define EDITF_ENABLEAKIKEYID		0x00000100	// both
 #define EDITF_ATTRIBUTECA		0x00000200	// Standalone
-#define EDITF_IGNOREREQUESTERGROUP      0x00000400	// both
+#define EDITF_IGNOREREQUESTERGROUP      0x00000400	// Standalone
 #define EDITF_ENABLEAKIISSUERNAME	0x00000800	// both
 #define EDITF_ENABLEAKIISSUERSERIAL	0x00001000	// both
 #define EDITF_ENABLEAKICRITICAL		0x00002000	// both
+#define EDITF_SERVERUPGRADED		0x00004000	// neither
+#define EDITF_ATTRIBUTEEKU		0x00008000	// Standalone
+#define EDITF_ENABLEDEFAULTSMIME	0x00010000	// Enterprise
 
 #define EDITF_DEFAULT_STANDALONE	(EDITF_REQUESTEXTENSIONLIST | \
 					 EDITF_DISABLEEXTENSIONLIST | \
@@ -328,24 +425,22 @@ typedef enum {
 					 EDITF_BASICCONSTRAINTSCA | \
 					 EDITF_ENABLEAKIKEYID | \
 					 EDITF_ATTRIBUTECA | \
-					 EDITF_ENABLEAKIISSUERNAME | \
-					 EDITF_ENABLEAKIISSUERSERIAL)
+					 EDITF_ATTRIBUTEEKU)
 
 #define EDITF_DEFAULT_ENTERPRISE	(EDITF_REQUESTEXTENSIONLIST | \
 					 EDITF_DISABLEEXTENSIONLIST | \
                                          EDITF_BASICCONSTRAINTSCRITICAL | \
                                          EDITF_ENABLEAKIKEYID | \
 					 EDITF_ADDOLDKEYUSAGE | \
-					 EDITF_ENABLEAKIISSUERNAME | \
-					 EDITF_ENABLEAKIISSUERSERIAL)
+					 EDITF_ENABLEDEFAULTSMIME)
 
 
 //======================================================================
 // Values Under "CertSvc\Configuration\<CAName>\ExitModules\<ProgId>":
 
 // LDAP based CRL and URL issuance
-#define wszREGLDAPREVOCATIONDN	   TEXT("LDAPRevocationDN")
-#define wszREGLDAPREVOCATIONDNTEMPLATE	   TEXT("LDAPRevocationDNTemplate")
+#define wszREGLDAPREVOCATIONDN_OLD	   TEXT("LDAPRevocationDN")
+#define wszREGLDAPREVOCATIONDNTEMPLATE_OLD TEXT("LDAPRevocationDNTemplate")
 #define wszCRLPUBLISHRETRYCOUNT    TEXT("CRLPublishRetryCount")
 #define wszREGCERTPUBLISHFLAGS     TEXT("PublishCertFlags")
 
@@ -354,7 +449,7 @@ typedef enum {
 #define EXITPUB_ACTIVEDIRECTORY		0x00000002
 #define EXITPUB_EMAILNOTIFYALL		0x00000004
 #define EXITPUB_EMAILNOTIFYSMARTCARD	0x00000008
-#define EXITPUB_REMOVEOLDCERTS   	0x00000010
+#define EXITPUB_REMOVEOLDCERTS		0x00000010
 
 #define EXITPUB_DEFAULT_ENTERPRISE	EXITPUB_ACTIVEDIRECTORY
 
@@ -388,13 +483,73 @@ typedef enum {
 #define wszCLASS_CERTPOLICY	wszMICROSOFTCERTMODULE_PREFIX wszCERTPOLICYMODULE_POSTFIX
 
 
+#define wszCAPOLICYFILE			L"CAPolicy.inf"
+
+#define wszINFSECTION_CDP		L"CRLDistributionPoint"
+#define wszINFSECTION_AIA		L"AuthorityInformationAccess"
+#define wszINFSECTION_EKU		L"EnhancedKeyUsageExtension"
+#define wszINFSECTION_CCDP		L"CrossCertificateDistributionPointsExtension"
+
+#define wszINFSECTION_CERTSERVER	L"certsrv_server"
+#define wszINFKEY_RENEWALKEYLENGTH	L"RenewalKeyLength"
+#define wszINFKEY_RENEWALVALIDITYPERIODSTRING	L"RenewalValidityPeriod"
+#define wszINFKEY_RENEWALVALIDITYPERIODCOUNT	L"RenewalValidityPeriodUnits"
+#define wszINFKEY_UTF8			L"UTF8"
+#define wszINFKEY_CRLPERIODSTRING	wszREGCRLPERIODSTRING
+#define wszINFKEY_CRLPERIODCOUNT	wszREGCRLPERIODCOUNT
+#define wszINFKEY_CRLDELTAPERIODSTRING	wszREGCRLDELTAPERIODSTRING
+#define wszINFKEY_CRLDELTAPERIODCOUNT	wszREGCRLDELTAPERIODCOUNT
+
+#define wszINFKEY_CRITICAL		L"Critical"
+#define wszINFKEY_EMPTY			L"Empty"
+
+#define wszINFKEY_CCDPSYNCDELTATIME	L"SyncDeltaTime"
+
+#define wszINFSECTION_CAPOLICY		L"CAPolicy"
+#define wszINFSECTION_POLICYSTATEMENT	L"PolicyStatementExtension"
+#define wszINFSECTION_APPLICATIONPOLICYSTATEMENT	L"ApplicationPolicyStatementExtension"
+#define wszINFKEY_POLICIES		L"Policies"
+#define wszINFKEY_OID			L"OID"
+#define wszINFKEY_NOTICE		L"Notice"
+
+#define wszINFSECTION_REQUESTATTRIBUTES	L"RequestAttributes"
+
+#define wszINFSECTION_NAMECONSTRAINTS	L"NameConstraintsExtension"
+#define wszINFKEY_INCLUDE		L"Include"
+#define wszINFKEY_EXCLUDE		L"Exclude"
+
+#define wszINFKEY_UPN			L"UPN"
+#define wszINFKEY_EMAIL			L"EMail"
+#define wszINFKEY_DNS			L"DNS"
+#define wszINFKEY_DIRECTORYNAME		L"DirectoryName"
+#define wszINFKEY_URL			L"URL"
+#define wszINFKEY_IPADDRESS		L"IPAddress"
+#define wszINFKEY_REGISTEREDID		L"RegisteredId"
+
+#define wszINFSECTION_POLICYMAPPINGS	L"PolicyMappingsExtension"
+#define wszINFSECTION_APPLICATIONPOLICYMAPPINGS	L"ApplicationPolicyMappingsExtension"
+
+#define wszINFSECTION_POLICYCONSTRAINTS	L"PolicyConstraintsExtension"
+#define wszINFSECTION_APPLICATIONPOLICYCONSTRAINTS	L"ApplicationPolicyConstraintsExtension"
+#define wszINFKEY_REQUIREEXPLICITPOLICY	L"RequireExplicitPolicy"
+#define wszINFKEY_INHIBITPOLICYMAPPING	L"InhibitPolicyMapping"
+
+#define wszINFSECTION_BASICCONSTRAINTS	L"BasicConstraintsExtension"
+#define wszINFKEY_PATHLENGTH		L"PathLength"
+
+
+// exit module mail support
+#define wszREGEXITSMTPKEY		L"SMTP"
+#define wszREGEXITSMTPFROM		L"From"
+#define wszREGEXITSMTPCC		L"CC"
+#define wszREGEXITSMTPSUBJECT		L"Subject"
+
 
 //+--------------------------------------------------------------------------
 // Name properties:
 
 #define wszPROPDISTINGUISHEDNAME   TEXT("DistinguishedName")
 #define wszPROPRAWNAME             TEXT("RawName")
-#define wszPROPNAMETYPE            TEXT("NameType")
 
 #define wszPROPCOUNTRY             TEXT("Country")
 #define wszPROPORGANIZATION        TEXT("Organization")
@@ -420,7 +575,6 @@ typedef enum {
 #define wszPROPSUBJECTDISTINGUISHEDNAME \
 				    wszPROPSUBJECTDOT wszPROPDISTINGUISHEDNAME
 #define wszPROPSUBJECTRAWNAME       wszPROPSUBJECTDOT wszPROPRAWNAME
-#define wszPROPSUBJECTNAMETYPE      wszPROPSUBJECTDOT wszPROPNAMETYPE
 
 #define wszPROPSUBJECTCOUNTRY       wszPROPSUBJECTDOT wszPROPCOUNTRY
 #define wszPROPSUBJECTORGANIZATION  wszPROPSUBJECTDOT wszPROPORGANIZATION
@@ -439,55 +593,6 @@ typedef enum {
 #define wszPROPSUBJECTUNSTRUCTUREDADDRESS wszPROPSUBJECTDOT wszPROPUNSTRUCTUREDADDRESS
 #define wszPROPSUBJECTDEVICESERIALNUMBER wszPROPSUBJECTDOT wszPROPDEVICESERIALNUMBER
 
-#define wszPROPSUBJECTCOUNTRYOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_COUNTRY_NAME)
-
-#define wszPROPSUBJECTORGANIZATIONOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_ORGANIZATION_NAME)
-
-#define wszPROPSUBJECTORGUNITOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_ORGANIZATIONAL_UNIT_NAME)
-
-#define wszPROPSUBJECTCOMMONNAMEOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_COMMON_NAME)
-
-#define wszPROPSUBJECTLOCALITYOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_LOCALITY_NAME)
-
-#define wszPROPSUBJECTSTATEOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_STATE_OR_PROVINCE_NAME)
-
-#define wszPROPSUBJECTTITLEOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_TITLE)
-
-#define wszPROPSUBJECTGIVENNAMEOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_GIVEN_NAME)
-
-#define wszPROPSUBJECTINITIALSOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_INITIALS)
-
-#define wszPROPSUBJECTSURNAMEOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_SUR_NAME)
-
-#define wszPROPSUBJECTDOMAINCOMPONENTOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_DOMAIN_COMPONENT)
-
-#define wszPROPSUBJECTEMAILOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_RSA_emailAddr)
-
-#define wszPROPSUBJECTSTREETADDRESSOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_STREET_ADDRESS)
-
-#define wszPROPSUBJECTUNSTRUCTUREDNAMEOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_RSA_unstructName)
-
-#define wszPROPSUBJECTUNSTRUCTUREDADDRESSOBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_RSA_unstructAddr)
-
-#define wszPROPSUBJECTDEVICESERIALNUMBEROBJID \
-    wszPROPSUBJECTDOT TEXT(szOID_DEVICE_SERIAL_NUMBER)
-
-
 
 //+--------------------------------------------------------------------------
 // Request properties:
@@ -495,6 +600,8 @@ typedef enum {
 
 #define wszPROPREQUESTREQUESTID		    TEXT("RequestID")
 #define wszPROPREQUESTRAWREQUEST	    TEXT("RawRequest")
+#define wszPROPREQUESTRAWARCHIVEDKEY	    TEXT("RawArchivedKey")
+#define wszPROPREQUESTKEYRECOVERYHASHES	    TEXT("KeyRecoveryHashes")
 #define wszPROPREQUESTRAWOLDCERTIFICATE	    TEXT("RawOldCertificate")
 #define wszPROPREQUESTATTRIBUTES	    TEXT("RequestAttributes")
 #define wszPROPREQUESTTYPE		    TEXT("RequestType")
@@ -508,6 +615,9 @@ typedef enum {
 #define wszPROPREQUESTREVOKEDEFFECTIVEWHEN  TEXT("RevokedEffectiveWhen")
 #define wszPROPREQUESTREVOKEDREASON	    TEXT("RevokedReason")
 #define wszPROPREQUESTERNAME		    TEXT("RequesterName")
+#define wszPROPCALLERNAME		    TEXT("CallerName")
+#define wszPROPSIGNERPOLICIES		    TEXT("SignerPolicies")
+#define wszPROPSIGNERAPPLICATIONPOLICIES    TEXT("SignerApplicationPolicies")
 
 //+--------------------------------------------------------------------------
 // Request attribute properties:
@@ -519,17 +629,23 @@ typedef enum {
 #define wszPROPDISPOSITIONDENY		TEXT("Deny")
 #define wszPROPDISPOSITIONPENDING	TEXT("Pending")
 
-#define wszPROPVALIDITYPERIOD		TEXT("ValidityPeriod")
-#define wszPROPVALIDITYPERIODUNITS	TEXT("ValidityPeriodUnits")
+#define wszPROPVALIDITYPERIODSTRING	TEXT("ValidityPeriod")
+#define wszPROPVALIDITYPERIODCOUNT	TEXT("ValidityPeriodUnits")
 
 #define wszPROPCERTTYPE			TEXT("CertType")
 #define wszPROPCERTTEMPLATE		TEXT("CertificateTemplate")
+#define wszPROPCERTUSAGE		TEXT("CertificateUsage")
 
 #define wszPROPREQUESTOSVERSION		TEXT("RequestOSVersion")
 #define wszPROPREQUESTCSPPROVIDER       TEXT("RequestCSPProvider")
 
+#define wszPROPEXITCERTFILE		TEXT("CertFile")
+#define wszPROPCLIENTBROWSERMACHINE	TEXT("cbm")
+#define wszPROPCERTCLIENTMACHINE	TEXT("ccm")
+
+
 //+--------------------------------------------------------------------------
-// Hardcoded properties
+// "System" properties
 // ".#" means ".0", ".1", ".2" ... may be appended to the property name to
 // collect context specific values.  For some properties, the suffix selects
 // the CA certificate context.  For others, it selects the the CA CRL context.
@@ -539,8 +655,18 @@ typedef enum {
 #define wszPROPSANITIZEDSHORTNAME       TEXT("SanitizedShortName")
 #define wszPROPMACHINEDNSNAME           TEXT("MachineDNSName")
 #define wszPROPMODULEREGLOC             TEXT("ModuleRegistryLocation")
-#define wszPROPREQUESTERCAACCESS	TEXT("RequesterCAAccess")
 #define wszPROPUSEDS                    TEXT("fUseDS")
+#define wszPROPSERVERUPGRADED           TEXT("fServerUpgraded")
+#define wszPROPCONFIGDN			TEXT("ConfigDN")
+#define wszPROPDOMAINDN			TEXT("DomainDN")
+#define wszPROPLOGLEVEL			TEXT("LogLevel")
+
+// Request Context properties:
+
+#define wszPROPREQUESTERCAACCESS	TEXT("RequesterCAAccess")
+#define wszPROPUSERDN			TEXT("UserDN")
+#define wszPROPTEMPLATECHANGESEQUENCENUMBER     TEXT("TemplateChangeSequenceNumber")
+
 
 // CA Certificate properties: (all ".#" extensible except wszPROPCERTCOUNT)
 
@@ -552,6 +678,7 @@ typedef enum {
 // CA CRL properties: (all ".#" extensible)
 
 #define wszPROPRAWCRL                   TEXT("RawCRL")
+#define wszPROPRAWDELTACRL              TEXT("RawDeltaCRL")
 #define wszPROPCRLINDEX                 TEXT("CRLIndex")
 #define wszPROPCRLSTATE                 TEXT("CRLState")
 #define wszPROPCRLSUFFIX                TEXT("CRLSuffix")
@@ -560,7 +687,7 @@ typedef enum {
 //   CA_DISP_REVOKED    // This Cert has been revoked.
 //   CA_DISP_VALID      // This Cert is still valid
 //   CA_DISP_INVALID    // This Cert has expired.
-//   CA_DISP_ERROR      // Never returned.
+//   CA_DISP_ERROR      // Cert unavailable (placehholder in registry?)
 
 // Values for wszPROPCRLSTATE (see certadm.h):
 //   CA_DISP_REVOKED	// All unexpired certs using this Cert's CRL have been
@@ -569,22 +696,36 @@ typedef enum {
 //   CA_DISP_INVALID    // All certs using this Cert's CRL are expired.
 //   CA_DISP_ERROR      // This Cert's CRL is managed by another Cert.
 
+// "Settable" system properties:
+#define wszPROPEVENTLOGTERSE		TEXT("EventLogTerse")
+#define wszPROPEVENTLOGERROR		TEXT("EventLogError")
+#define wszPROPEVENTLOGWARNING		TEXT("EventLogWarning")
+#define wszPROPEVENTLOGVERBOSE		TEXT("EventLogVerbose")
+
 //+--------------------------------------------------------------------------
 // Certificate properties:
 
-#define wszPROPCERTIFICATEREQUESTID	    TEXT("RequestID")
-#define wszPROPRAWCERTIFICATE		    TEXT("RawCertificate")
-#define wszPROPCERTIFICATEHASH		    TEXT("CertificateHash")
-#define wszPROPCERTIFICATETYPE		    TEXT("CertificateType")
-#define wszPROPCERTIFICATESERIALNUMBER	    TEXT("SerialNumber")
-#define wszPROPCERTIFICATENOTBEFOREDATE	    TEXT("NotBefore")
-#define wszPROPCERTIFICATENOTAFTERDATE	    TEXT("NotAfter")
-#define wszPROPCERTIFICATERAWPUBLICKEY	    TEXT("RawPublicKey")
-#define wszPROPCERTIFICATEPUBLICKEYALGORITHM TEXT("PublicKeyAlgorithm")
+#define wszPROPCERTIFICATEREQUESTID	       TEXT("RequestID")
+#define wszPROPRAWCERTIFICATE		       TEXT("RawCertificate")
+#define wszPROPCERTIFICATEHASH		       TEXT("CertificateHash")
+#define wszPROPCERTIFICATETEMPLATE	       TEXT("CertificateTemplate")
+#define wszPROPCERTIFICATEENROLLMENTFLAGS      TEXT("EnrollmentFlags")
+#define wszPROPCERTIFICATEGENERALFLAGS         TEXT("GeneralFlags")
+#define wszPROPCERTIFICATESERIALNUMBER	       TEXT("SerialNumber")
+#define wszPROPCERTIFICATENOTBEFOREDATE	       TEXT("NotBefore")
+#define wszPROPCERTIFICATENOTAFTERDATE	       TEXT("NotAfter")
+#define wszPROPCERTIFICATESUBJECTKEYIDENTIFIER TEXT("SubjectKeyIdentifier")
+#define wszPROPCERTIFICATERAWPUBLICKEY	       TEXT("RawPublicKey")
+#define wszPROPCERTIFICATEPUBLICKEYLENGTH      TEXT("PublicKeyLength")
+#define wszPROPCERTIFICATEPUBLICKEYALGORITHM   TEXT("PublicKeyAlgorithm")
 #define wszPROPCERTIFICATERAWPUBLICKEYALGORITHMPARAMETERS \
     TEXT("RawPublicKeyAlgorithmParameters")
+#define wszPROPCERTIFICATEUPN		       TEXT("UPN")
 
+// Obsolete:
+#define wszPROPCERTIFICATETYPE		       TEXT("CertificateType")
 #define wszPROPCERTIFICATERAWSMIMECAPABILITIES TEXT("RawSMIMECapabilities")
+#define wszPROPNAMETYPE			       TEXT("NameType")
 
 //+--------------------------------------------------------------------------
 // Certificate extension properties:
@@ -600,7 +741,59 @@ typedef enum {
 #define EXTENSION_ORIGIN_RENEWALCERT  0x00050000
 #define EXTENSION_ORIGIN_IMPORTEDCERT 0x00060000
 #define EXTENSION_ORIGIN_PKCS7	      0x00070000
+#define EXTENSION_ORIGIN_CMC	      0x00080000
 #define EXTENSION_ORIGIN_MASK	      0x000f0000
+
+//+--------------------------------------------------------------------------
+// Extension properties:
+
+#define wszPROPEXTREQUESTID		TEXT("ExtensionRequestId")
+#define wszPROPEXTNAME			TEXT("ExtensionName")
+#define wszPROPEXTFLAGS			TEXT("ExtensionFlags")
+#define wszPROPEXTRAWVALUE		TEXT("ExtensionRawValue")
+
+//+--------------------------------------------------------------------------
+// Attribute properties:
+
+#define wszPROPATTRIBREQUESTID		TEXT("AttributeRequestId")
+#define wszPROPATTRIBNAME		TEXT("AttributeName")
+#define wszPROPATTRIBVALUE		TEXT("AttributeValue")
+
+//+--------------------------------------------------------------------------
+// CRL properties:
+
+#define wszPROPCRLROWID			TEXT("CRLRowId")
+#define wszPROPCRLNUMBER		TEXT("CRLNumber")
+#define wszPROPCRLMINBASE		TEXT("CRLMinBase") // Delta CRLs only
+#define wszPROPCRLNAMEID		TEXT("CRLNameId")
+#define wszPROPCRLCOUNT			TEXT("CRLCount")
+#define wszPROPCRLTHISUPDATE		TEXT("CRLThisUpdate")
+#define wszPROPCRLNEXTUPDATE		TEXT("CRLNextUpdate")
+#define wszPROPCRLTHISPUBLISH		TEXT("CRLThisPublish")
+#define wszPROPCRLNEXTPUBLISH		TEXT("CRLNextPublish")
+#define wszPROPCRLEFFECTIVE		TEXT("CRLEffective")
+#define wszPROPCRLPROPAGATIONCOMPLETE	TEXT("CRLPropagationComplete")
+#define wszPROPCRLLASTPUBLISHED		TEXT("CRLLastPublished")
+#define wszPROPCRLPUBLISHATTEMPTS	TEXT("CRLPublishAttempts")
+#define wszPROPCRLPUBLISHFLAGS		TEXT("CRLPublishFlags")
+#define wszPROPCRLPUBLISHSTATUSCODE	TEXT("CRLPublishStatusCode")
+#define wszPROPCRLPUBLISHERROR		TEXT("CRLPublishError")
+#define wszPROPCRLRAWCRL		TEXT("CRLRawCRL")
+
+//+--------------------------------------------------------------------------
+// CRL Published Flags:
+
+#define CPF_BASE		0x00000001
+#define CPF_DELTA		0x00000002
+#define CPF_COMPLETE		0x00000004
+#define CPF_SHADOW		0x00000008
+#define CPF_CASTORE_ERROR	0x00000010
+#define CPF_BADURL_ERROR	0x00000020
+#define CPF_MANUAL		0x00000040
+#define CPF_LDAP_ERROR		0x00000100
+#define CPF_FILE_ERROR		0x00000200
+#define CPF_FTP_ERROR		0x00000400
+#define CPF_HTTP_ERROR		0x00000800
 
 //+--------------------------------------------------------------------------
 // GetProperty/SetProperty Flags:
@@ -621,12 +814,18 @@ typedef enum {
 #define PROPCALLER_ADMIN	 0x00000400
 #define PROPCALLER_REQUEST	 0x00000500
 #define PROPCALLER_MASK		 0x00000f00
+#define PROPFLAGS_INDEXED	 0x00010000	
 
 // RequestFlags definitions:
 
-#define CR_FLG_FORCETELETEX	0x00000001
-#define CR_FLG_RENEWAL		0x00000002
-#define CR_FLG_FORCEUTF8	0x00000004
+#define CR_FLG_FORCETELETEX	 0x00000001
+#define CR_FLG_RENEWAL		 0x00000002
+#define CR_FLG_FORCEUTF8	 0x00000004
+#define CR_FLG_CAXCHGCERT	 0x00000008
+#define CR_FLG_ENROLLONBEHALFOF	 0x00000010
+#define CR_FLG_SUBJECTUNMODIFIED 0x00000020
+#define CR_FLG_OLDRFCCMC	 0x40000000	// BUGBUG: temporary!!!
+#define CR_FLG_PUBLISHERROR	 0x80000000
 
 // Disposition property values:
 
@@ -635,8 +834,11 @@ typedef enum {
 #define DB_DISP_PENDING		9	// taken under submission
 #define DB_DISP_QUEUE_MAX	9	// max disposition value for queue view
 
+#define DB_DISP_FOREIGN		12	// archived foreign cert
+
 #define DB_DISP_CA_CERT		15	// CA cert
 #define DB_DISP_CA_CERT_CHAIN	16	// CA cert chain
+#define DB_DISP_KRA_CERT	17	// KRA cert
 
 // Disposition values for requests in the log:
 #define DB_DISP_LOG_MIN		20	// min disposition value for log view
@@ -681,5 +883,4 @@ typedef enum {
 #define wszCERT_VERSION_2	L"2"		// Version two certificate
 #define wszCERT_VERSION_3	L"3"		// Version three certificate
 
-#pragma option pop /*P_O_Pop*/
 #endif // _CERTSRV_H_

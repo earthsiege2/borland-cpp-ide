@@ -26,7 +26,6 @@ Notes:
 --*/
 
 #ifndef _NSPAPI_INCLUDED
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _NSPAPI_INCLUDED
 
 #ifdef __cplusplus
@@ -686,7 +685,6 @@ GetServiceW (
 }
 #endif  /* __cplusplus */
 
-#pragma option pop /*P_O_Pop*/
 #endif  // _NSPAPI_INCLUDED
 
 

@@ -1,22 +1,27 @@
-LIBRARY PSAPI
+LIBRARY Psapi
 EXPORTS
 
-    EmptyWorkingSet                          = 'PSAPI.DLL'.*
-    EnumDeviceDrivers                        = 'PSAPI.DLL'.*
-    EnumProcessModules                       = 'PSAPI.DLL'.*
-    EnumProcesses                            = 'PSAPI.DLL'.*
-    GetDeviceDriverBaseNameA                 = 'PSAPI.DLL'.*
-    GetDeviceDriverBaseNameW                 = 'PSAPI.DLL'.*
-    GetDeviceDriverFileNameA                 = 'PSAPI.DLL'.*
-    GetDeviceDriverFileNameW                 = 'PSAPI.DLL'.*
-    GetMappedFileNameA                       = 'PSAPI.DLL'.*
-    GetMappedFileNameW                       = 'PSAPI.DLL'.*
-    GetModuleBaseNameA                       = 'PSAPI.DLL'.*
-    GetModuleBaseNameW                       = 'PSAPI.DLL'.*
-    GetModuleFileNameExA                     = 'PSAPI.DLL'.*
-    GetModuleFileNameExW                     = 'PSAPI.DLL'.*
-    GetModuleInformation                     = 'PSAPI.DLL'.*
-    GetProcessMemoryInfo                     = 'PSAPI.DLL'.*
-    GetWsChanges                             = 'PSAPI.DLL'.*
-    InitializeProcessForWsWatch              = 'PSAPI.DLL'.*
-    QueryWorkingSet                          = 'PSAPI.DLL'.*
+    EmptyWorkingSet
+    EnumDeviceDrivers
+    EnumPageFilesA
+    EnumPageFilesW
+    EnumProcessModules
+    EnumProcesses
+    GetDeviceDriverBaseNameA
+    GetDeviceDriverBaseNameW
+    GetDeviceDriverFileNameA
+    GetDeviceDriverFileNameW
+    GetMappedFileNameA
+    GetMappedFileNameW
+    GetModuleBaseNameA
+    GetModuleBaseNameW
+    GetModuleFileNameExA
+    GetModuleFileNameExW
+    GetModuleInformation
+    GetPerformanceInfo
+    GetProcessImageFileNameA
+    GetProcessImageFileNameW
+    GetProcessMemoryInfo
+    GetWsChanges
+    InitializeProcessForWsWatch
+    QueryWorkingSet

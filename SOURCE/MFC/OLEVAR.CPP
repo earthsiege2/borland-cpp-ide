@@ -2882,6 +2882,7 @@ void COleSafeArray::Create(VARTYPE vtSrc, DWORD dwDims, SAFEARRAYBOUND* rgsaboun
 #else
 	vt = unsigned short(vtSrc | VT_ARRAY);
 #endif //__BORLANDC__
+
 	m_dwDims = dwDims;
 	m_dwElementSize = GetElemSize();
 }

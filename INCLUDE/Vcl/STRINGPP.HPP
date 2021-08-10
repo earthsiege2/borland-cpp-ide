@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'StringPP.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'StringPP.pas' rev: 6.00
 
 #ifndef StringPPHPP
 #define StringPPHPP
@@ -57,8 +57,7 @@ public:
 	virtual void __fastcall UpdateObject(void);
 public:
 	#pragma option push -w-inl
-	/* TPropertyPage.Create */ inline __fastcall virtual TStringsPropPage(Classes::TComponent* AOwner) : 
-		Axctrls::TPropertyPage(AOwner) { }
+	/* TPropertyPage.Create */ inline __fastcall virtual TStringsPropPage(Classes::TComponent* AOwner) : Axctrls::TPropertyPage(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TPropertyPage.Destroy */ inline __fastcall virtual ~TStringsPropPage(void) { }
@@ -66,14 +65,12 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TStringsPropPage(Classes::TComponent* AOwner, 
-		int Dummy) : Axctrls::TPropertyPage(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TStringsPropPage(Classes::TComponent* AOwner, int Dummy) : Axctrls::TPropertyPage(AOwner, Dummy) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TStringsPropPage(HWND ParentWindow) : Axctrls::TPropertyPage(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TStringsPropPage(HWND ParentWindow) : Axctrls::TPropertyPage(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -82,9 +79,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Stringpp */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Stringpp;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

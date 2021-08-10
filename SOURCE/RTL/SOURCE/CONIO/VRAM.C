@@ -8,14 +8,14 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1991, 2000 by Inprise Corporation
+ *      Copyright (c) 1991, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.1  $        */
+/* $Revision: 9.6.2.1 $        */
 
 #define INCL_CON
 #include <ntbc.h>
@@ -39,7 +39,7 @@ Description     Moves len character-attribute pairs from user buffer
 
 *------------------------------------------------------------------------*/
 
-void __putline (int dx, int dy, void *buffer, int len)
+void _RTLENTRY _EXPFUNC __putline (int dx, int dy, void *buffer, int len)
 {
     CHAR_INFO ch[BUF_SIZE]; /* character info buffer */
     CHAR_INFO *chp;
@@ -104,7 +104,7 @@ Description     Moves len character-attribute pairs to user buffer
 
 *------------------------------------------------------------------------*/
 
-void __getline (void *buffer, int sx, int sy, int len)
+void _RTLENTRY _EXPFUNC __getline (void *buffer, int sx, int sy, int len)
 {
     CHAR_INFO ch[BUF_SIZE]; /* character info buffer */
     CHAR_INFO *chp;
@@ -166,7 +166,7 @@ Description     Moves len character-attribute pairs from one line in
 
 *------------------------------------------------------------------------*/
 
-void __moveline (int dx, int dy, int sx, int sy, int len)
+void _RTLENTRY _EXPFUNC __moveline (int dx, int dy, int sx, int sy, int len)
 {
     SMALL_RECT sr;      /* scroll rectangle */
     SMALL_RECT cr;      /* clip rectangle */

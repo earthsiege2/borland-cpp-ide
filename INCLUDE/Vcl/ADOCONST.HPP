@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ADOConst.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ADOConst.pas' rev: 6.00
 
 #ifndef ADOConstHPP
 #define ADOConstHPP
@@ -45,11 +45,11 @@ extern PACKAGE System::ResourceString _SCantRequery;
 #define Adoconst_SCantRequery System::LoadResourceString(&Adoconst::_SCantRequery)
 extern PACKAGE System::ResourceString _SNoFilterOptions;
 #define Adoconst_SNoFilterOptions System::LoadResourceString(&Adoconst::_SNoFilterOptions)
+extern PACKAGE System::ResourceString _SRecordsetNotOpen;
+#define Adoconst_SRecordsetNotOpen System::LoadResourceString(&Adoconst::_SRecordsetNotOpen)
 
 }	/* namespace Adoconst */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Adoconst;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

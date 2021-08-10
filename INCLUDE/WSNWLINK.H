@@ -28,7 +28,6 @@
  */
 
 #ifndef _WSNWLINK_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WSNWLINK_
 
 #if _MSC_VER > 1000
@@ -280,6 +279,5 @@ typedef struct _IPX_SPXCONNSTATUS_DATA {
 
 #define IPX_IMMEDIATESPXACK     0x4010
 
-#pragma option pop /*P_O_Pop*/
 #endif
 

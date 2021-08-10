@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1998 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1998-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // This project demonstrates using client datasets in an ActiveForm.
@@ -48,7 +48,7 @@ STDMETHODIMP TEmpEditXImpl::_set_Font(IFontDisp* Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::get_Active(TOLEBOOL* Value)
+STDMETHODIMP TEmpEditXImpl::get_Active(VARIANT_BOOL* Value)
 {
   try
   {
@@ -62,7 +62,7 @@ STDMETHODIMP TEmpEditXImpl::get_Active(TOLEBOOL* Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::get_AutoScroll(TOLEBOOL* Value)
+STDMETHODIMP TEmpEditXImpl::get_AutoScroll(VARIANT_BOOL* Value)
 {
   try
   {
@@ -105,7 +105,7 @@ STDMETHODIMP TEmpEditXImpl::get_Caption(BSTR* Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::get_Color(OLE_COLOR* Value)
+STDMETHODIMP TEmpEditXImpl::get_Color(::OLE_COLOR* Value)
 {
   try
   {
@@ -133,7 +133,7 @@ STDMETHODIMP TEmpEditXImpl::get_Cursor(short* Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::get_DropTarget(TOLEBOOL* Value)
+STDMETHODIMP TEmpEditXImpl::get_DropTarget(VARIANT_BOOL* Value)
 {
   try
   {
@@ -147,7 +147,7 @@ STDMETHODIMP TEmpEditXImpl::get_DropTarget(TOLEBOOL* Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::get_Enabled(TOLEBOOL* Value)
+STDMETHODIMP TEmpEditXImpl::get_Enabled(VARIANT_BOOL* Value)
 {
   try
   {
@@ -192,7 +192,7 @@ STDMETHODIMP TEmpEditXImpl::get_HelpFile(BSTR* Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::get_KeyPreview(TOLEBOOL* Value)
+STDMETHODIMP TEmpEditXImpl::get_KeyPreview(VARIANT_BOOL* Value)
 {
   try
   {
@@ -234,7 +234,7 @@ STDMETHODIMP TEmpEditXImpl::get_PrintScale(TxPrintScale* Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::get_Scaled(TOLEBOOL* Value)
+STDMETHODIMP TEmpEditXImpl::get_Scaled(VARIANT_BOOL* Value)
 {
   try
   {
@@ -248,7 +248,7 @@ STDMETHODIMP TEmpEditXImpl::get_Scaled(TOLEBOOL* Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::get_Visible(TOLEBOOL* Value)
+STDMETHODIMP TEmpEditXImpl::get_Visible(VARIANT_BOOL* Value)
 {
   try
   {
@@ -276,7 +276,7 @@ STDMETHODIMP TEmpEditXImpl::get_WindowState(TxWindowState* Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::set_AutoScroll(TOLEBOOL Value)
+STDMETHODIMP TEmpEditXImpl::set_AutoScroll(VARIANT_BOOL Value)
 {
   try
   {
@@ -331,7 +331,7 @@ STDMETHODIMP TEmpEditXImpl::set_Caption(BSTR Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::set_Color(OLE_COLOR Value)
+STDMETHODIMP TEmpEditXImpl::set_Color(::OLE_COLOR Value)
 {
   try
   {
@@ -367,7 +367,7 @@ STDMETHODIMP TEmpEditXImpl::set_Cursor(short Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::set_DropTarget(TOLEBOOL Value)
+STDMETHODIMP TEmpEditXImpl::set_DropTarget(VARIANT_BOOL Value)
 {
   try
   {
@@ -385,7 +385,7 @@ STDMETHODIMP TEmpEditXImpl::set_DropTarget(TOLEBOOL Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::set_Enabled(TOLEBOOL Value)
+STDMETHODIMP TEmpEditXImpl::set_Enabled(VARIANT_BOOL Value)
 {
   try
   {
@@ -439,7 +439,7 @@ STDMETHODIMP TEmpEditXImpl::set_HelpFile(BSTR Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::set_KeyPreview(TOLEBOOL Value)
+STDMETHODIMP TEmpEditXImpl::set_KeyPreview(VARIANT_BOOL Value)
 {
   try
   {
@@ -493,7 +493,7 @@ STDMETHODIMP TEmpEditXImpl::set_PrintScale(TxPrintScale Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::set_Scaled(TOLEBOOL Value)
+STDMETHODIMP TEmpEditXImpl::set_Scaled(VARIANT_BOOL Value)
 {
   try
   {
@@ -511,7 +511,7 @@ STDMETHODIMP TEmpEditXImpl::set_Scaled(TOLEBOOL Value)
 };
 //---------------------------------------------------------------------------
 
-STDMETHODIMP TEmpEditXImpl::set_Visible(TOLEBOOL Value)
+STDMETHODIMP TEmpEditXImpl::set_Visible(VARIANT_BOOL Value)
 {
   try
   {
@@ -622,8 +622,8 @@ void __fastcall TEmpEditX::UndoButtonClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 void __fastcall TEmpEditX::EmployeesReconcileError(
-      TClientDataSet *DataSet, EReconcileError *E, TUpdateKind UpdateKind,
-      TReconcileAction &Action)
+      TCustomClientDataSet *DataSet, EReconcileError *E,
+      TUpdateKind UpdateKind, TReconcileAction &Action)
 {
   // This is the event handler which is called when there are errors during the
   // update process.  To demonstrate, you can create an error by running two
@@ -646,4 +646,3 @@ void __fastcall TEmpEditX::EmpDataDataChange(TObject *Sender,
 }
 //---------------------------------------------------------------------------
 
-   

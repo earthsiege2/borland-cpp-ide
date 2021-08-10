@@ -43,6 +43,7 @@ xmlRowSet.prototype.BeforePost=function(a,r){return r;}
 xmlRowSet.prototype.AfterPost=function(a,r){return r;}
 xmlRowSet.prototype.OnError=function(s){alert(s);return 1;}
 xmlRowSet.prototype.OnNewRow=function(){return null;}
+xmlRowSet.prototype.BeforeApply=function(){return 1;}
 
 function xmlRowSet(doc, parent, linkFld) 
 {
@@ -139,6 +140,7 @@ rsd.resetDets();
 function dsApply(frm,el)
 {
 if(frm==null||el==null||this.forcepost()!=0||this.DeltaChanges.row.length==0)return;
+if (this.BeforeApply()==0)return;
 var delta=this.getDelta();
 if(delta.childNodes.item(1).childNodes.length==0) return;
 el.value=(delta.xml!=null)?delta.xml:delta.xmlstr();
@@ -729,7 +731,7 @@ this.sort(null);
 }
 function idxadd(e){this.map[e]=this.map.length;}
 function idxpos(i){return this.map[i];}
-function idxrow(i){if(i>=this.rs.RowCnt) return null;i=this.pos(i);return this.rs.RowData.childNodes.item(i);}
+function idxrow(i){if(i>=this.rs.RowCnt) return null;i=this.pos(i);return (i!=null)?this.rs.RowData.childNodes.item(i):null;}
 function idxrem(e){var i,l=this.map.length,v=this.map[e];for(i=e;i<l;i++) this.map[i]=this.map[i+1];this.map.length=l-1;for(i=0;i<l-1;i++)if(this.map[i]>v) this.map[i]--;}
 
 function idxsort(name)

@@ -6,12 +6,12 @@
 {                                                       }
 {*******************************************************}
 
-unit Dbexcept;
+unit DbExcept;
 
 interface
 
 uses Windows, SysUtils, Classes, Graphics, Forms, Controls, Buttons,
-  StdCtrls, ExtCtrls, Db, DBTables;
+  StdCtrls, ExtCtrls, DB, DBTables;
 
 type
   TDbEngineErrorDlg = class(TForm)
@@ -58,7 +58,7 @@ var
 
 implementation
 
-{$R *.DFM}
+{$R *.dfm}
 
 procedure TDbEngineErrorDlg.HandleException(Sender: TObject; E: Exception);
 begin

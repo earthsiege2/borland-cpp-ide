@@ -1,5 +1,4 @@
 #ifndef _FILTERR_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _FILTERR_H_
 #ifndef FACILITY_WINDOWS
 //
@@ -175,5 +174,4 @@
 //
 #define FILTER_E_UNKNOWNFORMAT           ((HRESULT)0x8004170CL)
 
-#pragma option pop /*P_O_Pop*/
 #endif // _FILTERR_H_

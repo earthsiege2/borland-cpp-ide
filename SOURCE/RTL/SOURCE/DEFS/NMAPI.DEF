@@ -1,119 +1,163 @@
-LIBRARY NMAPI
+LIBRARY nmapi
 EXPORTS
 
-    AddAddress                               = 'NMAPI.DLL'.*
-    AddProperty                              = 'NMAPI.DLL'.*
-    AddressTypeToMacType                     = 'NMAPI.DLL'.*
-    AdjustSystemTime                         = 'NMAPI.DLL'.*
-    AttachPropertyInstance                   = 'NMAPI.DLL'.*
-    AttachPropertyInstanceEx                 = 'NMAPI.DLL'.*
-    BHGetLastError                           = 'NMAPI.DLL'.*
-    BHSetLastError                           = 'NMAPI.DLL'.*
-    CCHeapAlloc                              = 'NMAPI.DLL'.*
-    CCHeapFree                               = 'NMAPI.DLL'.*
-    CCHeapReAlloc                            = 'NMAPI.DLL'.*
-    CCHeapSize                               = 'NMAPI.DLL'.*
-    CompareAddresses                         = 'NMAPI.DLL'.*
-    CompareFrameDestAddress                  = 'NMAPI.DLL'.*
-    CompareFrameSourceAddress                = 'NMAPI.DLL'.*
-    CompareRawAddresses                      = 'NMAPI.DLL'.*
-    CreateAddressDatabase                    = 'NMAPI.DLL'.*
-    CreateCapture                            = 'NMAPI.DLL'.*
-    CreateErrorLogEntry                      = 'NMAPI.DLL'.*
-    CreateFrame                              = 'NMAPI.DLL'.*
-    CreateHandoffTable                       = 'NMAPI.DLL'.*
-    CreatePropertyDatabase                   = 'NMAPI.DLL'.*
-    CreateProtocol                           = 'NMAPI.DLL'.*
-    DebugGetFrameLocks                       = 'NMAPI.DLL'.*
-    DebugIsRemote                            = 'NMAPI.DLL'.*
-    DebugShowLocks                           = 'NMAPI.DLL'.*
-    DecodeSNMPObjectIdentifier               = 'NMAPI.DLL'.*
-    DeleteAddress                            = 'NMAPI.DLL'.*
-    DeleteFrame                              = 'NMAPI.DLL'.*
-    DestroyAddressDatabase                   = 'NMAPI.DLL'.*
-    DestroyCapture                           = 'NMAPI.DLL'.*
-    DestroyFrame                             = 'NMAPI.DLL'.*
-    DestroyHandoffTable                      = 'NMAPI.DLL'.*
-    DestroyPropertyDatabase                  = 'NMAPI.DLL'.*
-    DestroyProtocol                          = 'NMAPI.DLL'.*
-    DisableProtocol                          = 'NMAPI.DLL'.*
-    EmptyAddressDatabase                     = 'NMAPI.DLL'.*
-    EnableProtocol                           = 'NMAPI.DLL'.*
-    EncodeSNMPObjectIdentifier               = 'NMAPI.DLL'.*
-    EnumAddresses                            = 'NMAPI.DLL'.*
-    EnumProtocols                            = 'NMAPI.DLL'.*
-    FindAddressInfoByAddress                 = 'NMAPI.DLL'.*
-    FindAddressInfoByName                    = 'NMAPI.DLL'.*
-    FindNextFrame                            = 'NMAPI.DLL'.*
-    FindPreviousFrame                        = 'NMAPI.DLL'.*
-    FindPropertyInstance                     = 'NMAPI.DLL'.*
-    _FormatPropertyInstance                  = 'NMAPI.DLL'.FormatPropertyInstance
-    FrameRecognize                           = 'NMAPI.DLL'.*
-    GetASRThWnd                              = 'NMAPI.DLL'.*
-    GetAddressDatabaseInstanceData           = 'NMAPI.DLL'.*
-    GetAddressInfo                           = 'NMAPI.DLL'.*
-    GetAddressInfoByName                     = 'NMAPI.DLL'.*
-    GetCCInstPtr                             = 'NMAPI.DLL'.*
-    GetCaptureAddressDB                      = 'NMAPI.DLL'.*
-    GetCaptureBuffer                         = 'NMAPI.DLL'.*
-    GetCaptureComment                        = 'NMAPI.DLL'.*
-    GetCaptureCommentFromFilename            = 'NMAPI.DLL'.*
-    GetCaptureInstanceData                   = 'NMAPI.DLL'.*
-    GetCaptureTimeStamp                      = 'NMAPI.DLL'.*
-    GetCaptureTotalFrames                    = 'NMAPI.DLL'.*
-    GetEnabledProtocols                      = 'NMAPI.DLL'.*
-    GetFrame                                 = 'NMAPI.DLL'.*
-    GetFrameCaptureHandle                    = 'NMAPI.DLL'.*
-    GetFrameDestAddress                      = 'NMAPI.DLL'.*
-    GetFrameDstAddressOffset                 = 'NMAPI.DLL'.*
-    GetFrameLength                           = 'NMAPI.DLL'.*
-    GetFrameMacHeaderLength                  = 'NMAPI.DLL'.*
-    GetFrameMacType                          = 'NMAPI.DLL'.*
-    GetFrameNumber                           = 'NMAPI.DLL'.*
-    GetFrameRecognizeData                    = 'NMAPI.DLL'.*
-    GetFrameRoutingInformation               = 'NMAPI.DLL'.*
-    GetFrameSourceAddress                    = 'NMAPI.DLL'.*
-    GetFrameSrcAddressOffset                 = 'NMAPI.DLL'.*
-    GetFrameStoredLength                     = 'NMAPI.DLL'.*
-    GetFrameTimeStamp                        = 'NMAPI.DLL'.*
-    GetMaxAmountOfProtocols                  = 'NMAPI.DLL'.*
-    GetProperty                              = 'NMAPI.DLL'.*
-    GetPropertyInfo                          = 'NMAPI.DLL'.*
-    GetPropertyText                          = 'NMAPI.DLL'.*
-    GetProtocolDLLName                       = 'NMAPI.DLL'.*
-    GetProtocolFromName                      = 'NMAPI.DLL'.*
-    GetProtocolFromProperty                  = 'NMAPI.DLL'.*
-    GetProtocolFromProtocolID                = 'NMAPI.DLL'.*
-    GetProtocolFromTable                     = 'NMAPI.DLL'.*
-    GetProtocolInfo                          = 'NMAPI.DLL'.*
-    GetProtocolStartOffset                   = 'NMAPI.DLL'.*
-    GetProtocolStartOffsetHandle             = 'NMAPI.DLL'.*
-    GetSystemPath                            = 'NMAPI.DLL'.*
-    InsertFrame                              = 'NMAPI.DLL'.*
-    IsRawIPXEnabled                          = 'NMAPI.DLL'.*
-    IsValidSNMPObjectIdentifier              = 'NMAPI.DLL'.*
-    KernelNetworkProc                        = 'NMAPI.DLL'.*
-    LoadCapture                              = 'NMAPI.DLL'.*
-    LockFrame                                = 'NMAPI.DLL'.*
-    LockFramePropertyTable                   = 'NMAPI.DLL'.*
-    LockFrameText                            = 'NMAPI.DLL'.*
-    MacTypeToAddressType                     = 'NMAPI.DLL'.*
-    ModifyFrame                              = 'NMAPI.DLL'.*
-    ObjectIdentifierContains                 = 'NMAPI.DLL'.*
-    PanicMessage                             = 'NMAPI.DLL'.*
-    ParserTemporaryLockFrame                 = 'NMAPI.DLL'.*
-    QueryProtocolState                       = 'NMAPI.DLL'.*
-    ResetPropertyInstanceLength              = 'NMAPI.DLL'.*
-    SaveCapture                              = 'NMAPI.DLL'.*
-    SetAddressDatabaseInstanceData           = 'NMAPI.DLL'.*
-    SetCCInstPtr                             = 'NMAPI.DLL'.*
-    SetCaptureAddressDB                      = 'NMAPI.DLL'.*
-    SetCaptureInstanceData                   = 'NMAPI.DLL'.*
-    SetMaxAmountOfProtocols                  = 'NMAPI.DLL'.*
-    TransmitCapture                          = 'NMAPI.DLL'.*
-    TransmitFrame                            = 'NMAPI.DLL'.*
-    UnlockFrame                              = 'NMAPI.DLL'.*
-    UnlockFramePropertyTable                 = 'NMAPI.DLL'.*
-    UnlockFrameText                          = 'NMAPI.DLL'.*
-    _bInsert                                 = 'NMAPI.DLL'.bInsert
-    _eprintf                                 = 'NMAPI.DLL'.eprintf
+    AbortExpert
+    AddAddress
+    AddExpertToGroup
+    AddGroup
+    AddProperty
+    AddressTypeToMacType
+    AdjustSystemTime
+    AttachPropertyInstance
+    AttachPropertyInstanceEx
+    BHGetLastError
+    BHSetLastError
+    CCHeapAlloc
+    CCHeapFree
+    CCHeapReAlloc
+    CCHeapSize
+    CompareAddresses
+    CompareFrameDestAddress
+    CompareFrameSourceAddress
+    CompareRawAddresses
+    CreateAddressDatabase
+    CreateCapture
+    CreateErrorLogEntry
+    CreateFilter
+    CreateFrame
+    CreateHandoffTable
+    CreatePropertyDatabase
+    CreateProtocol
+    DebugGetFrameLocks
+    DebugShowLocks
+    DecodeSNMPObjectIdentifier
+    DeleteAddress
+    DeleteExpertFromGroup
+    DeleteFrame
+    DeleteGroup
+    DestroyAddressDatabase
+    DestroyCapture
+    DestroyFilter
+    DestroyFrame
+    DestroyHandoffTable
+    DestroyPropertyDatabase
+    DestroyProtocol
+    DisableParserFilter
+    DisableProtocol
+    EmptyAddressDatabase
+    EnableParserFilter
+    EnableProtocol
+    EncodeSNMPObjectIdentifier
+    EnumAddresses
+    EnumExpertHandles
+    EnumExpertInfos
+    EnumGroups
+    EnumProtocols
+    ExpertAllocMemory
+    ExpertFreeMemory
+    ExpertGetFrame
+    ExpertGetStartupInfo
+    ExpertIndicateStatus
+    ExpertMemorySize
+    ExpertReallocMemory
+    ExpertSubmitEvent
+    FilterAddObject
+    FilterAttachesProperties
+    FilterDuplicate
+    FilterFindFrame
+    FilterFindPropertyInstance
+    FilterFlushBits
+    FilterFrame
+    FindAddressInfoByAddress
+    FindAddressInfoByName
+    FindNextFrame
+    FindPreviousFrame
+    FindPropertyInstance
+    FindPropertyInstanceRestart
+    _FormatPropertyInstance        = FormatPropertyInstance
+    FrameRecognize
+    GetASRThWnd
+    GetAddressDatabaseInstanceData
+    GetAddressInfo
+    GetAddressInfoByName
+    GetCCInstPtr
+    GetCaptureAddressDB
+    GetCaptureComment
+    GetCaptureCommentFromFilename
+    GetCaptureInstanceData
+    GetCaptureMacType
+    GetCaptureTimeStamp
+    GetCaptureTotalFrames
+    GetCurrentFilter
+    GetEnabledProtocols
+    GetExpertFromName
+    GetExpertInfo
+    GetExpertStatus
+    GetFrame
+    GetFrameCaptureHandle
+    GetFrameDestAddress
+    GetFrameDstAddressOffset
+    GetFrameFromFrameHandle
+    GetFrameLength
+    GetFrameMacHeaderLength
+    GetFrameMacType
+    GetFrameNumber
+    GetFrameRecognizeData
+    GetFrameRoutingInformation
+    GetFrameSourceAddress
+    GetFrameSrcAddressOffset
+    GetFrameStoredLength
+    GetFrameTimeStamp
+    GetGroupName
+    GetMaxAmountOfProtocols
+    GetPreviousProtocolOffsetByName
+    GetProperty
+    GetPropertyInfo
+    GetPropertyText
+    GetProtocolDLLName
+    GetProtocolFromName
+    GetProtocolFromProperty
+    GetProtocolFromProtocolID
+    GetProtocolFromTable
+    GetProtocolInfo
+    GetProtocolStartOffset
+    GetProtocolStartOffsetHandle
+    GetSystemPath
+    HelperFormatUnicodeString
+    InsertFrame
+    IsRawIPXEnabled
+    IsValidSNMPObjectIdentifier
+    LoadCapture
+    LoadCaptureW
+    LoadExpertConfiguration
+    LockFrame
+    LockFramePropertyTable
+    LockFrameText
+    MacTypeToAddressType
+    ModifyFrame
+    ObjectIdentifierContains
+    PanicMessage
+    ParserTemporaryLockFrame
+    PopupExpertConfigurationUI
+    QueryProtocolState
+    ReleaseFrame
+    ResetPropertyInstanceLength
+    RunExperts
+    SaveCapture
+    SaveCaptureW
+    SaveDownLevelCapture
+    SaveExpertConfiguration
+    SetAddressDatabaseInstanceData
+    SetCCInstPtr
+    SetCaptureAddressDB
+    SetCaptureInstanceData
+    SetCaptureMacType
+    SetCaptureTimeStamp
+    SetCurrentFilter
+    SetGroupName
+    _SetMaxAmountOfProtocols        = SetMaxAmountOfProtocols
+    UnlockFrame
+    UnlockFramePropertyTable
+    UnlockFrameText
+    _bInsert        = bInsert
+    _eprintf        = eprintf

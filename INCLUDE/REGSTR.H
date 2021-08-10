@@ -2,7 +2,7 @@
  *
  *  This module contains public registry string definitions.
  *
- *  Copyright (c) 1992-1999 Microsoft Corporation
+ *  Copyright (c) Microsoft Corporation.  All rights reserved.
  *  Created     12/10/92
  *
  *  MODIFICATION HISTORY
@@ -10,7 +10,6 @@
 
 
 #ifndef _INC_REGSTR
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_REGSTR
 
 #if _MSC_VER > 1000
@@ -77,7 +76,8 @@
 #define REGSTR_PATH_REALMODENET          TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Network\\Real Mode Net")
 #define REGSTR_PATH_NETEQUIV             TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Network\\Equivalent")
 #define REGSTR_PATH_CVNETWORK            TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Network")
-#define REGSTR_PATH_RELIABILITY     TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Reliability")
+#define REGSTR_PATH_RELIABILITY          TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Reliability")
+#define REGSTR_PATH_REINSTALL            TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Reinstall")
 #define REGSTR_PATH_NT_CURRENTVERSION TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion")
 
 #define REGSTR_PATH_VOLUMECACHE TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VolumeCaches")
@@ -97,10 +97,12 @@
 #define REGSTR_PATH_HWPROFILES  TEXT("System\\CurrentControlSet\\Hardware Profiles")
 #define REGSTR_PATH_HWPROFILESCURRENT TEXT("System\\CurrentControlSet\\Hardware Profiles\\Current")
 #define REGSTR_PATH_CLASS_NT    TEXT("System\\CurrentControlSet\\Control\\Class")
+#define REGSTR_PATH_PER_HW_ID_STORAGE TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\PerHwIdStorage")
 
 #define REGSTR_PATH_DEVICE_CLASSES TEXT("System\\CurrentControlSet\\Control\\DeviceClasses")
 
 #define REGSTR_PATH_CODEVICEINSTALLERS TEXT("System\\CurrentControlSet\\Control\\CoDeviceInstallers")
+#define REGSTR_PATH_BUSINFORMATION TEXT("System\\CurrentControlSet\\Control\\PnP\\BusInformation")
 
 #define REGSTR_PATH_SERVICES    TEXT("System\\CurrentControlSet\\Services")
 #define REGSTR_PATH_VXD         TEXT("System\\CurrentControlSet\\Services\\VxD")
@@ -133,7 +135,7 @@
 //
 // Values used by user mode Pnp Manager
 //
-
+#define REGSTR_KEY_DEVICE_PROPERTIES               TEXT("Properties")
 #define REGSTR_VAL_SLOTNUMBER                      TEXT("SlotNumber")
 #define REGSTR_VAL_ATTACHEDCOMPONENTS              TEXT("AttachedComponents")
 #define REGSTR_VAL_BASEDEVICEPATH                  TEXT("BaseDevicePath")
@@ -164,30 +166,31 @@
 #define REGSTR_VAL_DEVICE_CHARACTERISTICS          TEXT("DeviceCharacteristics")
 #define REGSTR_VAL_DEVICE_SECURITY_DESCRIPTOR      TEXT("Security")
 #define REGSTR_VAL_DEVICE_EXCLUSIVE                TEXT("Exclusive")
-#define REGSTR_KEY_DEVICE_PROPERTIES               TEXT("Properties")
 #define REGSTR_VAL_RESOURCE_PICKER_TAGS            TEXT("ResourcePickerTags")
 #define REGSTR_VAL_RESOURCE_PICKER_EXCEPTIONS      TEXT("ResourcePickerExceptions")
+#define REGSTR_VAL_CUSTOM_PROPERTY_CACHE_DATE      TEXT("CustomPropertyCacheDate")
+#define REGSTR_VAL_CUSTOM_PROPERTY_HW_ID_KEY       TEXT("CustomPropertyHwIdKey")
+#define REGSTR_VAL_LAST_UPDATE_TIME                TEXT("LastUpdateTime")
 
 //
 // Values used by kernel mode Pnp Manager
 //
-
-#define REGSTR_VALUE_DEVICE_OBJECT_NAME              TEXT("DeviceObjectName")
-#define REGSTR_VALUE_DEVICE_SYMBOLIC_NAME            TEXT("DeviceSymbolicName")
+#define REGSTR_VALUE_DEVICE_OBJECT_NAME            TEXT("DeviceObjectName")
+#define REGSTR_VALUE_DEVICE_SYMBOLIC_NAME          TEXT("DeviceSymbolicName")
+#define REGSTR_VAL_EJECT_PRIORITY                  TEXT("EjectPriority")
 
 //
 // Values used by both kernel-mode and user-mode PnP Managers
 //
-
-#define REGSTR_KEY_CONTROL                           TEXT("Control")
-#define REGSTR_VAL_ACTIVESERVICE                     TEXT("ActiveService")
-#define REGSTR_VAL_LINKED                            TEXT("Linked")
-#define REGSTR_VAL_PHYSICALDEVICEOBJECT              TEXT("PhysicalDeviceObject")
+#define REGSTR_KEY_CONTROL                         TEXT("Control")
+#define REGSTR_VAL_ACTIVESERVICE                   TEXT("ActiveService")
+#define REGSTR_VAL_LINKED                          TEXT("Linked")
+#define REGSTR_VAL_PHYSICALDEVICEOBJECT            TEXT("PhysicalDeviceObject")
+#define REGSTR_VAL_REMOVAL_POLICY                  TEXT("RemovalPolicy")
 
 //
 // Values under REGSTR_PATH_NT_CURRENTVERSION
 //
-
 #define REGSTR_VAL_CURRENT_VERSION  TEXT("CurrentVersion")
 #define REGSTR_VAL_CURRENT_BUILD    TEXT("CurrentBuildNumber")
 #define REGSTR_VAL_CURRENT_CSDVERSION TEXT("CSDVersion")
@@ -257,19 +260,29 @@
 #define REGSTR_VAL_FIRSTINSTALLDATETIME TEXT("FirstInstallDateTime") // will Win 95 install date-time
 
 #define REGSTR_VAL_INSTALLTYPE          TEXT("InstallType")
+//  Values for InstallType
+#define IT_COMPACT          0x0000
+#define IT_TYPICAL          0x0001
+#define IT_PORTABLE         0x0002
+#define IT_CUSTOM           0x0003
 
 #define REGSTR_VAL_WRAPPER              TEXT("Wrapper")
 
 #define REGSTR_VAL_LASTALIVEINTERVAL    TEXT("TimeStampInterval")
 #define REGSTR_VAL_LASTALIVESTAMP       TEXT("LastAliveStamp")
 #define REGSTR_VAL_SHUTDOWNREASON       TEXT("ShutdownReason")
-#define REGSTR_VAL_SHOWREASONUI         TEXT("ShutdownReasonUI")
-
-//  Values for InstallType
-#define IT_COMPACT          0x0000
-#define IT_TYPICAL          0x0001
-#define IT_PORTABLE         0x0002
-#define IT_CUSTOM           0x0003
+#define REGSTR_VAL_SHUTDOWNREASON_CODE          TEXT("ShutdownReasonCode")
+#define REGSTR_VAL_SHUTDOWNREASON_COMMENT       TEXT("ShutdownReasonComment")
+#define REGSTR_VAL_SHUTDOWNREASON_PROCESS       TEXT("ShutdownReasonProcess")
+#define REGSTR_VAL_SHUTDOWNREASON_USERNAME      TEXT("ShutdownReasonUserName")
+#define REGSTR_VAL_SHOWREASONUI                 TEXT("ShutdownReasonUI")
+#define REGSTR_VAL_SHUTDOWN_IGNORE_PREDEFINED   TEXT("ShutdownIgnorePredefinedReasons")
+#define REGSTR_VAL_SHUTDOWN_DO_STATE_SNAPSHOT   TEXT("ShutdownDoStateSnapshot")
+// Values for ShutDownDoStateSnapshot
+#define DO_SNAPSHOT_ON_UNPLANNED 0
+#define DO_SNAPSHOT_ALWAYS 1
+#define DO_SNAPSHOT_NEVER  2
+#define REGSTR_VAL_SHUTDOWN_STATE_SNAPSHOT      TEXT("ShutdownStateSnapshot")
 
 #define REGSTR_KEY_SETUP                TEXT("\\Setup")
 #define REGSTR_VAL_BOOTDIR              TEXT("BootDir")
@@ -363,6 +376,12 @@
 #define VPDF_DISABLEPWRSTATUSPOLL   0x00000008  // Don't poll power status
 #define VPDF_DISABLERINGRESUME      0x00000010  // Don't let the modem wake the machine (APM 1.2 only)
 #define VPDF_SHOWMULTIBATT          0x00000020  // Show all batteries checkbox in power control panel
+
+//
+// Entries under REGSTR_PATH_BUSINFORMATION
+//
+#define BIF_SHOWSIMILARDRIVERS      0x00000001  // Show similar drivers instead of all class drivers in UI.
+#define BIF_RAWDEVICENEEDSDRIVER    0x00000002  // RAW device needs a driver installed.
 
 //
 //  Entries under REGSTR_PATH_VNETSUP
@@ -577,38 +596,26 @@
 #define PCI_OPTIONS_USE_BIOS            0x00000001l
 #define PCI_OPTIONS_USE_IRQ_STEERING    0x00000002l
 
-#define PCI_FLAG_NO_VIDEO_IRQ           0x00000001l
-#define PCI_FLAG_PCMCIA_WANT_IRQ        0x00000002l
-#define PCI_FLAG_DUAL_IDE               0x00000004l
-#define PCI_FLAG_NO_ENUM_AT_ALL         0x00000008l
-#define PCI_FLAG_ENUM_NO_RESOURCE       0x00000010l
-#define PCI_FLAG_NEED_DWORD_ACCESS      0x00000020l
-#define PCI_FLAG_SINGLE_FUNCTION        0x00000040l
-#define PCI_FLAG_ALWAYS_ENABLED         0x00000080l
-#define PCI_FLAG_IS_IDE                 0x00000100l
-#define PCI_FLAG_IS_VIDEO               0x00000200l
-#define PCI_FLAG_FAIL_START             0x00000400l
-#define PCI_FLAG_GHOST                  0x00000800l
-#define PCI_FLAG_DOUBLE_DECKER          0x00001000l
-#define PCI_FLAG_ONE_CHILD              0x00002000l
-#define PCI_FLAG_PRESERVE_COMMAND       0x00004000l
-#define PCI_FLAG_IS_VGA                 0x00008000l
-#define PCI_FLAG_CB_SHARE_CMD_BITS      0x00010000l
-#define PCI_FLAG_STRAIGHT_IRQ_ROUTING   0x00020000l
-#define PCI_FLAG_SUBTRACTIVE_DECODE     0x00040000l
-#define PCI_FLAG_FDMA_ISA               0x00080000l
-#define PCI_FLAG_EXCLUSIVE              0x00100000l
-#define PCI_FLAG_EDGE                   0x00200000l
-#define PCI_FLAG_NO_SUBSYSTEM           0x00400000l
-#define PCI_FLAG_NO_WPE                 0x00800000l
-#define PCI_FLAG_OLD_ID                 0x01000000l
-#define PCI_FLAG_DONT_SHRINK_BRIDGE     0x02000000l
-#define PCI_FLAG_TURN_OFF_PARITY        0x04000000l
-#define PCI_FLAG_NO_NON_PCI_CHILD_BAR   0x08000000l
-#define PCI_FLAG_NO_ENUM_WITH_DISABLE   0x10000000l
-#define PCI_FLAG_NO_PM_CAPS             0x20000000l
-#define PCI_FLAG_NO_DISABLE_DECODES     0x40000000l
-#define PCI_FLAG_NO_SUBSYSTEM_AFTER_D3  0x80000000l
+//
+//  Values under PATH_CLASS\AGPxxxx
+//
+//  note:  These flags affect standard AGP capabilities,
+//         and are set in agplib
+//
+#define AGP_FLAG_NO_1X_RATE             0x00000001l
+#define AGP_FLAG_NO_2X_RATE             0x00000002l
+#define AGP_FLAG_NO_4X_RATE             0x00000004l
+#define AGP_FLAG_NO_8X_RATE             0x00000008l
+#define AGP_FLAG_REVERSE_INITIALIZATION 0x00000080l
+
+#define AGP_FLAG_NO_SBA_ENABLE          0x00000100l
+
+//
+// AGP flags > AGP_SPECIAL_TARGET are platform specific
+//
+#define AGP_FLAG_SPECIAL_TARGET         0x000FFFFFl
+#define AGP_FLAG_SPECIAL_RESERVE        0x000F0000l
+
 //
 // Detection related values
 //
@@ -756,6 +763,8 @@
 #define CONFIGFLAG_NETBOOT_CARD         0x00001000      // This is the remote boot network card
 #endif // defined(REMOTE_BOOT)
 #define CONFIGFLAG_PARTIAL_LOG_CONF     0x00002000      // This device has a partial logconfig
+#define CONFIGFLAG_SUPPRESS_SURPRISE    0x00004000      // Set if unsafe removals should be ignored
+#define CONFIGFLAG_VERIFY_HARDWARE      0x00008000      // Set if hardware should be tested for logo failures
 
 #define CSCONFIGFLAG_BITS               0x00000007      // OR of below bits
 #define CSCONFIGFLAG_DISABLED           0x00000001      // Set if
@@ -834,6 +843,8 @@
 #define REGSTR_VAL_DRIVERDATE   TEXT("DriverDate")      // value of DRV
 #define REGSTR_VAL_DRIVERDATEDATA TEXT("DriverDateData")// value of DRV
 #define REGSTR_VAL_DRIVERVERSION TEXT("DriverVersion")  // value of DRV
+#define REGSTR_VAL_LOCATION_INFORMATION_OVERRIDE    TEXT("LocationInformationOverride")  // value of DRV
+
 
 //
 //  Driver keys
@@ -1075,6 +1086,10 @@
 #define REGSTR_VAL_NOENTIRENETWORK                      TEXT("NoEntireNetwork")
 #define REGSTR_VAL_NOWORKGROUPCONTENTS          TEXT("NoWorkgroupContents")
 
+// (following are values REG_DWORD, legal values 0 or 1, treat as TEXT("1") if value not present)
+// policies under Policies\SYSTEM key
+#define REGSTR_VAL_UNDOCK_WITHOUT_LOGON         TEXT("UndockWithoutLogon")
+
 // REG_DWORD, 0=off, otherwise value is minimum # of chars to allow in password
 #define REGSTR_VAL_MINPWDLEN                    TEXT("MinPwdLen")
 // REG_DWORD, 0=off, otherwise value is # of days for pwd to expire
@@ -1180,6 +1195,13 @@
 #define REGSTR_VAL_UNINSTALLER_COMMANDLINE     TEXT("UninstallString")
 
 //
+// Entries for values in uninstaller keys under REGSTR_PATH_REINSTALL \ instanceid
+//
+#define REGSTR_VAL_REINSTALL_DISPLAYNAME        TEXT("DisplayName")
+#define REGSTR_VAL_REINSTALL_STRING             TEXT("ReinstallString")
+#define REGSTR_VAL_REINSTALL_DEVICEINSTANCEIDS  TEXT("DeviceInstanceIds")
+
+//
 //      Entries for known per user settings: Under HKEY_CURRENT_USER
 //
 #define REGSTR_PATH_DESKTOP     REGSTR_PATH_SCREENSAVE
@@ -1240,7 +1262,7 @@
 #define REGSTR_PATH_CHKLASTCHECK        TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Applets\\Check Drive\\LastCheck")
 #define REGSTR_PATH_CHKLASTSURFAN       TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Applets\\Check Drive\\LastSurfaceAnalysis")
 
-#ifndef _KERNEL_PNPI_
+#ifndef _IN_KERNEL_
 
 //
 // The above 2 keys record the following binary structure which is
@@ -1309,6 +1331,7 @@ typedef struct _DSKTLSYSTEMTIME {
 #define REGSTR_PATH_NAMES           REGSTR_PATH_SCHEMES TEXT("\\Names")
 #define REGSTR_PATH_MULTIMEDIA      REGSTR_PATH_SETUP TEXT("\\Multimedia")
 #define REGSTR_PATH_MULTIMEDIA_AUDIO TEXT("Software\\Microsoft\\Multimedia\\Audio")
+#define REGSTR_PATH_MULTIMEDIA_AUDIO_IMAGES REGSTR_PATH_MULTIMEDIA_AUDIO TEXT("\\Images")
 
 //
 // Entries for MultiMedia under HKEY_LOCAL_MACHINE
@@ -1363,6 +1386,10 @@ typedef struct _DSKTLSYSTEMTIME {
 #define REGSTR_VAL_JOYOEMCAL11          TEXT("OEMCal11")
 #define REGSTR_VAL_JOYOEMCAL12          TEXT("OEMCal12")
 
+// Image values under REGSTR_PATH_MULTIMEDIA_AUDIO_IMAGES
+#define REGSTR_VAL_AUDIO_BITMAP TEXT("bitmap")
+#define REGSTR_VAL_AUDIO_ICON TEXT("icon")
+
 //
 // Entries for Device Installer under HKEY_CURRENT_USER
 //
@@ -1372,7 +1399,7 @@ typedef struct _DSKTLSYSTEMTIME {
 #define REGSTR_VAL_SEARCHOPTIONS        TEXT("SearchOptions")
 
 // BiosInfo defines.
-#ifndef _KERNEL_PNPI_
+#ifndef _IN_KERNEL_
 
 #define REGSTR_PATH_BIOSINFO            TEXT("System\\CurrentControlSet\\Control\\BiosInfo")
 
@@ -1383,7 +1410,7 @@ typedef struct _DSKTLSYSTEMTIME {
 #endif
 
 // Pci Irq Routing registry defines.
-#ifndef _KERNEL_PNPI_
+#ifndef _IN_KERNEL_
 
 #define REGSTR_PATH_PCIIR               TEXT("System\\CurrentControlSet\\Control\\Pnp\\PciIrqRouting")
 #define REGSTR_VAL_OPTIONS              TEXT("Options")
@@ -1433,6 +1460,21 @@ typedef struct _DSKTLSYSTEMTIME {
 #define PIR_STATUS_MINIPORT_INVALID                 0x00000007
 #define PIR_STATUS_MINIPORT_MAX             0x00000008
 
-#pragma option pop /*P_O_Pop*/
+//
+// entries for LastKnownGood
+// each value name under this key is SubPath/File (note reversal of '\\' to '/')
+// each value is an indication of post-processing to be done after files have been recovered
+// LASTGOOD_OPERATION bits indicate the primary post-processing operation
+// remaining bits may be used as flags (allocate flags from highest bits first)
+// a value of 0 is the same as the value being omitted, ie, no post processing.
+//
+
+#define REGSTR_PATH_LASTGOOD            TEXT("System\\LastKnownGoodRecovery\\LastGood")
+#define REGSTR_PATH_LASTGOODTMP         TEXT("System\\LastKnownGoodRecovery\\LastGood.Tmp")
+
+#define LASTGOOD_OPERATION              0x000000FF // operation to perform
+#define LASTGOOD_OPERATION_NOPOSTPROC   0x00000000 // no post-processing
+#define LASTGOOD_OPERATION_DELETE       0x00000001 // Delete file during recovery
+
 #endif  //_INC_REGSTR
 

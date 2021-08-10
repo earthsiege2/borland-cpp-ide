@@ -1,0 +1,267 @@
+<!--#include file="..\include\StdDemoHeader.html"-->
+<!--#include file="MyStyles.html"-->
+
+<P>
+<%
+  // Display server-side errors that may have occured.
+   var UserAdapter = Modules.PhotoData.Users;
+
+   e = new Enumerator(UserAdapter.Errors)
+   if (!e.atEnd())
+   {
+     Response.Write('<p>The following error(s) happened with Users:');
+     for (; !e.atEnd(); e.moveNext())
+      Response.Write("<li>" + e.item().Message)
+   }
+
+   var Categories = Modules.PhotoData.Categories;
+   e = new Enumerator(Categories.Errors)
+   if (!e.atEnd())
+   {
+     Response.Write('<p>The following error(s) happened with Categories:');
+     for (; !e.atEnd(); e.moveNext())
+      Response.Write("<li>" + e.item().Message)
+   }
+
+%>
+
+<center>
+
+<table width="80%" border=1 cellspacing=0 cellpadding=3 bordercolor="#666666">
+<tr>
+	<td colspan=4 align="middle">
+    <font face="Arial" size="2"><b>Modify Categories</b></font>
+  </td>
+</tr>
+
+<tr>
+  <td align="middle"><font face="Arial" size="2">Category ID</font></td>
+  <td><font face="Arial" size="2">Category Name</font></td>
+  <td colspan="2">&nbsp;</td>
+</tr>
+
+
+<%
+  // Shortcuts to the categories fields; this speeds up processing of the script.
+  Categories_CAT_NAME = Categories.CAT_NAME;
+%>
+
+<form method="post" name="EditCategory">
+<input type=hidden name="__act"> <% // This will tell WebSnap what action to execut %>
+<%
+  Categories.Mode = 'Edit';
+
+  e = new Enumerator(Categories.Records);
+  for (e.moveFirst(); !e.atEnd(); e.moveNext())
+  {
+		%>
+    <tr>
+      <td align="middle">
+        <font face="Arial" size="2"><%=Categories.CAT_ID.DisplayText%></font>
+      </td>
+      <td>
+      	<input
+          TYPE=text
+          NAME="<%=Categories_CAT_NAME.InputName%>"
+          value="<%=Categories_CAT_NAME.DisplayText%>">&nbsp;
+      </td>
+      <td align="middle">
+
+        <input type="submit"
+          value="Apply Changes"
+          onclick="EditCategory.__act.value='<%=Categories.Apply.LinkToPage(Page.Name, Page.Name).AsFieldValue%>'"
+          class="submitButton">
+      </td>
+      <td align="middle">
+        <input type="submit"
+          value="Delete"
+          onclick="EditCategory.__act.value='<%=Categories.DeleteRow.LinkToPage(Page.Name, Page.Name).AsFieldValue%>'"
+          class="submitButton">
+      </td>
+    </tr>
+		<%
+    // Write out hidden fields for each record (needed to maintain state)
+    if (Categories.HiddenRecordFields != null)
+      Categories.HiddenRecordFields.WriteFields(Response)
+  }
+  e.moveFirst(); // Move back to the first record, for inserting.
+
+  // Write out hidden fields for the whole adapter (needed to maintain state)
+  if (Categories.HiddenFields != null)
+    Categories.HiddenFields.WriteFields(Response)
+%>
+</form>
+
+<%
+  // Add the option to insert a new category
+  // Notice how __act is set to the NewRow as the action.
+  Categories.Mode = 'Insert';
+%>
+<tr>
+    <form method="post" name="Up"
+      action="<%=Request.ScriptName%>/<%=Page.Name%>">
+  <td colspan=3 align="right">
+    <font face="Arial" size="2">New Category:</font>
+  	<input TYPE=text
+      name="<%=Categories_CAT_NAME.InputName%>"
+      value="">&nbsp;
+  </td>
+	<td colspan=1 align="middle">
+  	<input TYPE="hidden"
+      NAME="__act"
+      value="<%=Categories.Apply.LinkToPage(Page.Name, Page.Name).AsFieldValue%>">
+	  <input TYPE="submit" value="Add" class="submitButton">
+	</td>
+
+<%  // Write out hidden fields (needed to maintain state)
+    if (Categories.HiddenFields != null)
+      Categories.HiddenFields.WriteFields(Response)
+
+    if (Categories.HiddenRecordFields != null)
+      Categories.HiddenRecordFields.WriteFields(Response)
+    
+%>
+    </form>
+</tr>
+
+</table>
+
+
+<P>
+
+<form method="post" name="UserEditForm">
+<input type="hidden" name="__act"> <% // the __act value is set in the onclick of the button %>
+
+<table width="80%" border=1 cellspacing=0 cellpadding=3 bordercolor="#666666">
+  <tr>
+    <td colspan="1"><font face="Arial" size="2"><b>Login</b></font></td>
+    <td colspan="1"><font face="Arial" size="2"><b>Password</b></font></td>    
+    <td colspan="1"><font face="Arial" size="2"><b>Access Rights</b></font></td>
+    <td colspan="1"><font face="Arial" size="2"><b>&nbsp;</b></font></td>
+    <td colspan="1"><font face="Arial" size="2"><b>&nbsp;</b></font></td>
+  </tr>
+<%
+  e = new Enumerator(UserAdapter.Records);
+  UserAdapter.Mode = 'Edit';
+  var UserAdapterLogin = UserAdapter.USR_LOGIN;
+  var UserRights = UserAdapter.USR_RIGHTS;
+  for (; !e.atEnd(); e.moveNext())
+  {
+		%>
+
+    <tr>
+      <td>
+        <input type="text"
+          name="<%=UserAdapterLogin.InputName%>"
+          value="<%=UserAdapterLogin.DisplayText%>">
+      </td>
+      <td>
+        <input
+          type="password"
+          name="<%=UserAdapter.USR_PASSWORD.InputName%>"
+          value="<%=UserAdapter.USR_PASSWORD.DisplayText%>"
+          >
+      </td>
+      <td>
+        <select name="<%=UserRights.InputName%>">
+        <%
+        rights = new Enumerator(AccessRightsList.Records);
+        for (; !rights.atEnd(); rights.moveNext())
+        {
+          Response.Write('\t<option value=' + AccessRightsList.Value);
+          if (UserRights.Value == AccessRightsList.Value)
+            Response.Write(' selected');
+          Response.Write('>' + AccessRightsList.ValueName + '\n');
+        }
+        %>
+        </select>
+      </td>
+
+      <td align="middle">
+        <input type="submit"
+          value="Update User"
+          onclick="UserEditForm.__act.value='<%=UserAdapter.Apply.LinkToPage(Page.Name, Page.Name).AsFieldValue%>'"
+          class="submitButton">
+      </td>
+
+      <td align="middle">
+        <input type="submit"
+          value="Delete User"
+          onclick="UserEditForm.__act.value='<%=UserAdapter.DeleteRow.LinkToPage(Page.Name, Page.Name).AsFieldValue%>'"
+          class="submitButton">
+      </td>
+
+    </tr>
+		<%
+    // Write out hidden fields for each record (needed to maintain state)
+    if (UserAdapter.HiddenRecordFields != null)
+      UserAdapter.HiddenRecordFields.WriteFields(Response)
+  }
+  // Write out hidden fields for the entire form
+  if (UserAdapter.HiddenFields != null)
+    UserAdapter.HiddenFields.WriteFields(Response)
+%>
+</form>
+
+<form method="post" name="AddUserForm">
+<input type="hidden"
+  name="__act"
+  value="<%=UserAdapter.Apply.LinkToPage(Page.Name, Page.Name).AsFieldValue%>">
+<%
+  // Now, add the ability to add a new user  - it must be in a new form
+  e.moveFirst(); // we have to be at the start to insert a new record
+  UserAdapter.Mode = 'Insert';
+%>
+  <tr>
+    <td colspan="5"> --  Add a new user -- </td>
+  </tr>
+  <tr>
+    <td>
+      <input type="text"
+        name="<%=UserAdapterLogin.InputName%>"
+        value="">
+    </td>
+      <td>
+        <input
+          type="password"
+          name="<%=UserAdapter.USR_PASSWORD.InputName%>"
+          value=""
+          >
+      </td>
+    <td>
+      <select name="<%=UserRights.InputName%>">
+      <%
+      rights = new Enumerator(AccessRightsList.Records);
+      for (; !rights.atEnd(); rights.moveNext())
+      {
+        Response.Write('\t<option value=' + AccessRightsList.Value);
+        Response.Write('>' + AccessRightsList.ValueName + '\n');
+      }
+      %>
+      </select>
+    </td>
+
+    <td align="middle">
+      <input type="submit"
+        value="Add User"
+        class="submitButton">
+    </td>
+
+    <td align="middle">
+    &nbsp;
+    </td>
+
+  </tr>
+</table>
+<%
+  // Write out hidden fields for the entire form
+  if (UserAdapter.HiddenFields != null)
+    UserAdapter.HiddenFields.WriteFields(Response)
+
+%>
+</form>
+
+</center>
+
+
+<!--#include file="..\include\StdDemoFooter.html"-->

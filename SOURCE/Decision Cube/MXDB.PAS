@@ -6,14 +6,14 @@
 {                                                       }
 {*******************************************************}
 
-unit mxDB;
+unit MXDB;
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  Menus, Bde, DB, DBTables, mxArrays, mxStore, mxConsts, mxcommon, mxtables,
-  mxqparse, mxqedcom;
+  Variants, Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  Dialogs, Menus, BDE, DB, DBTables, Mxarrays, Mxstore, Mxconsts, MXCOMMON,
+  MXTABLES, MXQPARSE, MXQEDCOM;
 
 type
   EArrayError = class(Exception);
@@ -317,9 +317,9 @@ implementation
 
 { TDecisionCube }
 
-uses Math, mxdcube
+uses Math, MXDCUBE
 {$IFDEF PDEBUGS}
-  ,mxdssqry, mxdsql
+  ,MXDSSQRY, MXDSQL
 {$ENDIF};
 
   const
@@ -570,7 +570,7 @@ var
 begin
   aWindow := TDSSCubeEditor.Create(application);
   try
-    if aWindow.SInitialize(nil, self) then
+    if aWindow.SInitialize(self) then
     begin
       x := (Screen.Width - aWindow.Width) div 2;
       y := (Screen.Height - aWindow.Height) div 2;
@@ -703,7 +703,7 @@ begin
     aQuery := TQuery(DataSet);
   aWindow := TDSSQueryEditor.Create(application);
   try
-    if aWindow.SInitialize(nil, aQuery) then
+    if aWindow.SInitialize(aQuery) then
     begin
       x := (Screen.Width - aWindow.Width) div 2;
       y := (Screen.Height - aWindow.Height) div 2;
@@ -2412,6 +2412,11 @@ begin
   if (FColSubs <> Value.FColSubs) then Exit;
   Result := DimInfo.isEqual(Value.DimInfo);
 end;
+
+initialization
+  StartClassGroup(TControl);
+  GroupDescendentsWith(TDecisionCube, TControl);
+  GroupDescendentsWith(TDecisionSource, TControl);
 
 end.
 

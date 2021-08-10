@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'AppEvnts.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'AppEvnts.pas' rev: 6.00
 
 #ifndef AppEvntsHPP
 #define AppEvntsHPP
@@ -34,7 +34,7 @@ private:
 	Actnlist::TActionEvent FOnActionUpdate;
 	Forms::TExceptionEvent FOnException;
 	Forms::TMessageEvent FOnMessage;
-	Classes::THelpEvent FOnHelp;
+	Forms::THelpEvent FOnHelp;
 	Classes::TNotifyEvent FOnHint;
 	Forms::TIdleEvent FOnIdle;
 	Classes::TNotifyEvent FOnDeactivate;
@@ -43,6 +43,7 @@ private:
 	Classes::TNotifyEvent FOnRestore;
 	Forms::TShortCutEvent FOnShortCut;
 	Forms::TShowHintEvent FOnShowHint;
+	Forms::TSettingChangeEvent FOnSettingChange;
 	void __fastcall DoActionExecute(Classes::TBasicAction* Action, bool &Handled);
 	void __fastcall DoActionUpdate(Classes::TBasicAction* Action, bool &Handled);
 	void __fastcall DoActivate(System::TObject* Sender);
@@ -56,22 +57,23 @@ private:
 	void __fastcall DoRestore(System::TObject* Sender);
 	void __fastcall DoShowHint(AnsiString &HintStr, bool &CanShow, Forms::THintInfo &HintInfo);
 	void __fastcall DoShortcut(Messages::TWMKey &Msg, bool &Handled);
+	void __fastcall DoSettingChange(System::TObject* Sender, int Flag, const AnsiString Section, int &Result);
 	
 protected:
-	__property Actnlist::TActionEvent OnActionExecute = {read=FOnActionExecute, write=FOnActionExecute}
-		;
+	__property Actnlist::TActionEvent OnActionExecute = {read=FOnActionExecute, write=FOnActionExecute};
 	__property Actnlist::TActionEvent OnActionUpdate = {read=FOnActionUpdate, write=FOnActionUpdate};
 	__property Classes::TNotifyEvent OnActivate = {read=FOnActivate, write=FOnActivate};
 	__property Classes::TNotifyEvent OnDeactivate = {read=FOnDeactivate, write=FOnDeactivate};
 	__property Forms::TExceptionEvent OnException = {read=FOnException, write=FOnException};
 	__property Forms::TIdleEvent OnIdle = {read=FOnIdle, write=FOnIdle};
-	__property Classes::THelpEvent OnHelp = {read=FOnHelp, write=FOnHelp};
+	__property Forms::THelpEvent OnHelp = {read=FOnHelp, write=FOnHelp};
 	__property Classes::TNotifyEvent OnHint = {read=FOnHint, write=FOnHint};
 	__property Forms::TMessageEvent OnMessage = {read=FOnMessage, write=FOnMessage};
 	__property Classes::TNotifyEvent OnMinimize = {read=FOnMinimize, write=FOnMinimize};
 	__property Classes::TNotifyEvent OnRestore = {read=FOnRestore, write=FOnRestore};
 	__property Forms::TShowHintEvent OnShowHint = {read=FOnShowHint, write=FOnShowHint};
 	__property Forms::TShortCutEvent OnShortCut = {read=FOnShortCut, write=FOnShortCut};
+	__property Forms::TSettingChangeEvent OnSettingChange = {read=FOnSettingChange, write=FOnSettingChange};
 	
 public:
 	__fastcall virtual TCustomApplicationEvents(Classes::TComponent* AOwner);
@@ -104,10 +106,10 @@ __published:
 	__property OnRestore ;
 	__property OnShowHint ;
 	__property OnShortCut ;
+	__property OnSettingChange ;
 public:
 	#pragma option push -w-inl
-	/* TCustomApplicationEvents.Create */ inline __fastcall virtual TApplicationEvents(Classes::TComponent* 
-		AOwner) : TCustomApplicationEvents(AOwner) { }
+	/* TCustomApplicationEvents.Create */ inline __fastcall virtual TApplicationEvents(Classes::TComponent* AOwner) : TCustomApplicationEvents(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -121,9 +123,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Appevnts */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Appevnts;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

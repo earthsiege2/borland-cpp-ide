@@ -1,7 +1,7 @@
 /*
  * isguids.h - Internet Shortcut GUID definitions.
  *
- * Copyright (c) 1995-1998, Microsoft Corporation.  All rights reserved.
+ * Copyright (c) Microsoft Corporation. All rights reserved.
  */
 
 
@@ -9,7 +9,6 @@
  ********/
 
 #ifndef _ISGUIDS_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _ISGUIDS_H_
 
 DEFINE_GUID(CLSID_InternetShortcut,       0xFBF23B40L, 0xE3F0, 0x101B, 0x84, 0x88, 0x00, 0xAA, 0x00, 0x3E, 0x56, 0xF8);
@@ -23,5 +22,4 @@ DEFINE_GUID(IID_IUniformResourceLocatorW, 0xCABB0DA0L, 0xDA57, 0x11CF, 0x99, 0x7
 #define IID_IUniformResourceLocator     IID_IUniformResourceLocatorA
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif

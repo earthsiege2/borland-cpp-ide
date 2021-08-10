@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- C++Builder XML Project --><PROJECT>
+<!-- C++Builder XML Project -->
+<PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="buggy.exe"/>
     <OBJFILES value="buggy.obj"/>
     <RESFILES value="buggy.res"/>
@@ -11,8 +12,8 @@
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value=""/>
     <LIBRARIES value=""/>
-    <SPARELIBS value="Vcl50.lib"/>
-    <PACKAGES value="Vcl50.bpi Vclx50.bpi"/>
+    <SPARELIBS value="rtl.lib vcl.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -28,19 +29,24 @@
     <WARNINGS value="-w-par -w-8027 -w-8026"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I$(BCB)\include\vcl -I$(BCB)\include -src_suffixcpp"/>
-    <CFLAG1 value="-vGc -vGt -vGd -Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a8 -k -y -v 
-      -vi- -c -b- -tW -tWM"/>
+    <IDLCFLAGS value="-src_suffix cpp -I$(BCB)\include\vcl -I$(BCB)\include"/>
+    <CFLAG1 value="-vGc -vGt -vGd -Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- 
+      -r- -a8 -b- -k -y -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -Gn -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="cg32.lib c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="cg32.lib $(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="buggy.cpp" FORMNAME="" UNITNAME="buggy" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="buggy.res" FORMNAME="" UNITNAME="buggy" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -69,44 +75,13 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 
-[HistoryLists\hlIncludePath]
-Count=2
-Item0=$(BCB)\include\vcl;$(BCB)\include
-Item1=$(BCB)\include\vcl;$(BCB)\include;
-
-[HistoryLists\hlLibraryPath]
-Count=2
-Item0=$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\lib\release;$(BCB)\lib\debug
-Item1=$(BCB)\lib;$(BCB)\lib\obj
-
-[HistoryLists\hlDebugSourcePath]
-Count=0
-
 [Debugging]
 DebugSourceDirs=
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
-RemoteHost=
-RemotePath=
-RemoteDebug=0
-
-[Compiler]
-InMemoryExe=0
-ShowInfoMsgs=0
-LinkDebugVcl=0
-LinkCGLIB=1
-
-[CORBA]
-AddServerUnit=1
-AddClientUnit=1
-PrecompiledHeaders=1
-
-[Language]
-ActiveLang=
-ProjectLang=
-RootDir=
-  </IDEOPTIONS>
-
-</PROJECT>
+RemoteHost

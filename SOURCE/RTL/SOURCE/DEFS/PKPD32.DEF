@@ -1,37 +1,37 @@
 LIBRARY PKPD32
 EXPORTS
 
-    AddInksetInterval                        = 'PKPD32.DLL'.*
-    AddPointsPenData                         = 'PKPD32.DLL'.*
-    BoundingRectFromPoints                   = 'PKPD32.DLL'.*
-    CompressPenData                          = 'PKPD32.DLL'.*
-    CreateInkset                             = 'PKPD32.DLL'.*
-    CreatePenDataEx                          = 'PKPD32.DLL'.*
-    CreatePenDataRegion                      = 'PKPD32.DLL'.*
-    DestroyInkset                            = 'PKPD32.DLL'.*
-    DestroyPenData                           = 'PKPD32.DLL'.*
-    DrawPenDataEx                            = 'PKPD32.DLL'.*
-    DuplicatePenData                         = 'PKPD32.DLL'.*
-    ExtractPenDataPoints                     = 'PKPD32.DLL'.*
-    ExtractPenDataStrokes                    = 'PKPD32.DLL'.*
-    GetInksetInterval                        = 'PKPD32.DLL'.*
-    GetInksetIntervalCount                   = 'PKPD32.DLL'.*
-    GetPenDataAttributes                     = 'PKPD32.DLL'.*
-    GetPenDataInfo                           = 'PKPD32.DLL'.*
-    GetPointsFromPenData                     = 'PKPD32.DLL'.*
-    GetStrokeAttributes                      = 'PKPD32.DLL'.*
-    GetStrokeTableAttributes                 = 'PKPD32.DLL'.*
-    HitTestPenData                           = 'PKPD32.DLL'.*
-    InsertPenData                            = 'PKPD32.DLL'.*
-    InsertPenDataPoints                      = 'PKPD32.DLL'.*
-    InsertPenDataStroke                      = 'PKPD32.DLL'.*
-    MetricScalePenData                       = 'PKPD32.DLL'.*
-    OffsetPenData                            = 'PKPD32.DLL'.*
-    PenDataFromBuffer                        = 'PKPD32.DLL'.*
-    PenDataToBuffer                          = 'PKPD32.DLL'.*
-    RedisplayPenData                         = 'PKPD32.DLL'.*
-    RemovePenDataStrokes                     = 'PKPD32.DLL'.*
-    ResizePenData                            = 'PKPD32.DLL'.*
-    SetStrokeAttributes                      = 'PKPD32.DLL'.*
-    SetStrokeTableAttributes                 = 'PKPD32.DLL'.*
-    TrimPenData                              = 'PKPD32.DLL'.*
+    AddInksetInterval                        
+    AddPointsPenData                         
+    BoundingRectFromPoints                   
+    CompressPenData                          
+    CreateInkset                             
+    CreatePenDataEx                          
+    CreatePenDataRegion                      
+    DestroyInkset                            
+    DestroyPenData                           
+    DrawPenDataEx                            
+    DuplicatePenData                         
+    ExtractPenDataPoints                     
+    ExtractPenDataStrokes                    
+    GetInksetInterval                        
+    GetInksetIntervalCount                   
+    GetPenDataAttributes                     
+    GetPenDataInfo                           
+    GetPointsFromPenData                     
+    GetStrokeAttributes                      
+    GetStrokeTableAttributes                 
+    HitTestPenData                           
+    InsertPenData                            
+    InsertPenDataPoints                      
+    InsertPenDataStroke                      
+    MetricScalePenData                       
+    OffsetPenData                            
+    PenDataFromBuffer                        
+    PenDataToBuffer                          
+    RedisplayPenData                         
+    RemovePenDataStrokes                     
+    ResizePenData                            
+    SetStrokeAttributes                      
+    SetStrokeTableAttributes                 
+    TrimPenData                              

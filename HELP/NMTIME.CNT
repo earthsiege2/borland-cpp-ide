@@ -3,7 +3,7 @@
 
 :BASE nmtime.hlp
 :TITLE FastNet Time Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 TNMTime component
 2 TNMTime component Reference=Scribble1010
 2 Properties

@@ -5,7 +5,6 @@
 // Microsoft Confidential.	Public header file for COM+ 1.0 release.
 //*****************************************************************************
 #ifndef _CORREG_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _CORREG_H_
 #if _MSC_VER >= 1000
 #pragma once
@@ -55,24 +54,24 @@ STDAPI_(void)	CoUninitializeCor(void);
 //*****************************************************************************
 //*****************************************************************************
 // Token  definitions
-typedef __int32 mdScope;	 // scope token
+typedef INT_PTR mdScope;	 // scope token
 #define mdScopeNil ((mdScope)0)
 
-typedef __int32 mdToken;				// Generic token
-typedef __int32 mdModule;				// Module token (roughly, a scope)
-typedef __int32 mdTypeDef;				// TypeDef in this scope
-typedef __int32 mdInterfaceImpl;		// interface implementation token
-typedef __int32 mdTypeRef;				// TypeRef reference (this or other scope)
-typedef __int32 mdNamespace;			// namespace token
-typedef __int32 mdCustomValue;			// attribute token
+typedef INT_PTR mdToken;				// Generic token
+typedef INT_PTR mdModule;				// Module token (roughly, a scope)
+typedef INT_PTR mdTypeDef;				// TypeDef in this scope
+typedef INT_PTR mdInterfaceImpl;		// interface implementation token
+typedef INT_PTR mdTypeRef;				// TypeRef reference (this or other scope)
+typedef INT_PTR mdNamespace;			// namespace token
+typedef INT_PTR mdCustomValue;			// attribute token
 
-typedef __int32 mdResource; 			// CompReg.Resource
-typedef __int32 mdCocatdef; 			// CompReg.Cocat
-typedef __int32 mdCocatImpl;			// CompReg.CoclassCat
-typedef __int32 mdMimeTypeImpl; 		// CompReg.CoclassMIME
-typedef __int32 mdFormatImpl;			// CompReg.CoclassFormats
-typedef __int32 mdProgID;				// CompReg.RedirectProgID
-typedef __int32 mdRoleCheck;			// CompReg.RoleCheck
+typedef INT_PTR mdResource; 			// CompReg.Resource
+typedef INT_PTR mdCocatdef; 			// CompReg.Cocat
+typedef INT_PTR mdCocatImpl;			// CompReg.CoclassCat
+typedef INT_PTR mdMimeTypeImpl; 		// CompReg.CoclassMIME
+typedef INT_PTR mdFormatImpl;			// CompReg.CoclassFormats
+typedef INT_PTR mdProgID;				// CompReg.RedirectProgID
+typedef INT_PTR mdRoleCheck;			// CompReg.RoleCheck
 
 typedef unsigned long RID;
 
@@ -933,7 +932,6 @@ DECLARE_INTERFACE_(INTERFACE, IUnknown)
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _CORREG_H_
 // EOF =======================================================================
 

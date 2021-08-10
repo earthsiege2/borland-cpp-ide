@@ -6,14 +6,14 @@
 {                                                       }
 {*******************************************************}
 
-unit mxdssqry;
+unit MXDSSQRY;
 
 interface
 
 uses
  Windows, Messages, SysUtils, Classes, Dialogs, Controls, StdCtrls, Graphics,
- DB, dbtables, Grids, forms, ExtCtrls, Buttons, ComCtrls, Menus,
- mxConsts, mxgrid, mxdb, mxcommon, mxstore, mxtables, mxqparse;
+ DB, DBTables, Grids, Forms, ExtCtrls, Buttons, ComCtrls, Menus,
+ Mxconsts, MXGRID, MXDB, MXCOMMON, Mxstore, MXTABLES, MXQPARSE, DesignIntf;
 
 type
   ECubeDesignError = class(Exception);
@@ -151,9 +151,9 @@ procedure ShowDSSQueryEditor(const Designer: IDesigner; aQuery: TQuery);
 implementation
 
 uses
-  GQEDelph;
+  GqeDelph;
 
-{$R *.DFM}
+{$R *.dfm}
 
 
   { Query Editor }

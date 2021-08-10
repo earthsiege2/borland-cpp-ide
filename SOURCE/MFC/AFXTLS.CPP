@@ -70,7 +70,7 @@ void* PASCAL CNoTrackObject::operator new(size_t nSize, LPCSTR, int)
 	return CNoTrackObject::operator new(nSize);
 }
 
-#if 0 //_MSC_VER >= 1200
+#if _MSC_VER >= 1200
 void PASCAL CNoTrackObject::operator delete(void* pObject, LPCSTR, int)
 {
 	if (pObject != NULL)

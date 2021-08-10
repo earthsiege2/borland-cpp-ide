@@ -1,0 +1,57 @@
+<!-- #include file="..\include\StdDemoHeader.html" -->
+<p>
+</TD>
+</TABLE>
+<TABLE BORDER=1>
+  <TR>
+    <TH>
+       Name
+    </TH>
+    <TH>
+       Details
+    </TH>
+  </TR>
+  <% i = 0 %>
+  <% e = new Enumerator(Adapter.Records) %>
+  <% for (; !e.atEnd(); e.moveNext()) %>
+  <% { %>
+    <% if ((i % 2) == 0) bgcolor = 'red'; else bgcolor = 'blue'; %>
+    <% td = 'style="color: ' + bgcolor + '"' %>
+    <TR >
+      <TD align=center <%=td%>>
+        <%= Adapter.Name.DisplayText %>
+      </TD>
+      <TD>
+        <TABLE>
+          <TR>
+            <TH align=left>Capital:&nbsp</TH>
+            <TD <%=td%>>
+              <%= Adapter.Capital.DisplayText %>
+            </TD>
+          </TR>
+          <TR>
+            <TH align=left>Continent:&nbsp</TH>
+            <TD <%=td%>>
+              <%= Adapter.Continent.DisplayText %>
+            </TD>
+          </TR>
+          <TR>
+            <TH align=left>Area:&nbsp</TH>
+            <TD <%=td%>>
+              <%= Adapter.Area.DisplayText %>
+            </TD>
+          </TR>
+          <TR align=left>
+            <TH>Population:&nbsp</TH>
+            <TD <%=td%>>
+              <%= Adapter.Population.DisplayText %>
+            </TD>
+          </TR>
+        </TABLE>
+      </TD>
+     </TR>
+     <% i = i + 1 %>
+  <% } %>
+</TABLE>
+<!-- #include file="..\include\StdDemoFooter.html" -->
+ 

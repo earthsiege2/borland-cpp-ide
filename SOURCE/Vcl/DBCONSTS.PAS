@@ -1,13 +1,13 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Kylix and Delphi Cross-Platform Visual Component Library                    }
+{                                                                             }
+{ Copyright (c) 1997, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{                                                       }
-{       Copyright (c) 1997,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
-unit DbConsts;
+unit DBConsts;
 
 interface
 
@@ -22,6 +22,7 @@ resourcestring
   SFieldAccessError = 'Cannot access field ''%s'' as type %s';
   SFieldValueError = 'Invalid value for field ''%s''';
   SFieldRangeError = '%g is not a valid value for field ''%s''. The allowed range is %g to %g';
+  SBcdFieldRangeError = '%s is not a valid value for field ''%s''. The allowed range is %s to %s';
   SInvalidIntegerValue = '''%s'' is not a valid integer value for field ''%s''';
   SInvalidBoolValue = '''%s'' is not a valid boolean value for field ''%s''';
   SInvalidFloatValue = '''%s'' is not a valid floating point value for field ''%s''';
@@ -29,7 +30,7 @@ resourcestring
   SFieldSizeMismatch = 'Size mismatch for field ''%s'', expecting: %d actual: %d';
   SInvalidVarByteArray = 'Invalid variant type or size for field ''%s''';
   SFieldOutOfRange = 'Value of field ''%s'' is out of range';
-  SBCDOverflow = '(Overflow)';
+//  SBCDOverflow = '(Overflow)';
   SFieldRequired = 'Field ''%s'' must have a value';
   SDataSetMissing = 'Field ''%s'' has no dataset';
   SInvalidCalcType = 'Field ''%s'' cannot be a calculated or lookup field';
@@ -44,6 +45,7 @@ resourcestring
   SDuplicateName = 'Duplicate name ''%s'' in %s';
   SCircularDataLink = 'Circular datalinks are not allowed';
   SLookupInfoError = 'Lookup information for field ''%s'' is incomplete';
+  SNewLookupFieldCaption = 'New Lookup Field';
   SDataSourceChange = 'DataSource cannot be changed';
   SNoNestedMasterSource = 'Nested datasets cannot have a MasterSource';
   SDataSetOpen = 'Cannot perform this operation on an open dataset';
@@ -84,32 +86,26 @@ resourcestring
   SProviderSQLNotSupported = 'SQL not supported: %s';
   SProviderExecuteNotSupported = 'Execute not supported: %s';
   SExprNoAggOnCalcs = 'Field ''%s'' is not the correct type of calculated field to be used in an aggregate, use an internalcalc';
-  SRecordChanged = 'Record changed by another user';
-   
-  { DBCtrls }
-  SFirstRecord = 'First record';
-  SPriorRecord = 'Prior record';
-  SNextRecord = 'Next record';
-  SLastRecord = 'Last record';
-  SInsertRecord = 'Insert record';
-  SDeleteRecord = 'Delete record';
-  SEditRecord = 'Edit record';
-  SPostEdit = 'Post edit';
-  SCancelEdit = 'Cancel edit';
-  SRefreshRecord = 'Refresh data';
+  SRecordChanged = 'Record not found or changed by another user';
+  SDataSetUnidirectional = 'Operation not allowed on a unidirectional dataset';
+  SUnassignedVar = 'Unassigned variant value';
+  SRecordNotFound = 'Record not found';
+  SFileNameBlank = 'FileName property cannot be blank';
+
+{ For FMTBcd }
+
+  SBcdOverflow = 'BCD overflow';
+  SInvalidBcdValue = '%s is not a valid BCD value';
+  SInvalidFormatType = 'Invalid format type for BCD';
+
+{ For SqlTimSt }
+
+  SCouldNotParseTimeStamp = 'Could not parse SQL TimeStamp string';
+  SInvalidSqlTimeStamp = 'Invalid SQL date/time values';
+
   SDeleteRecordQuestion = 'Delete record?';
   SDeleteMultipleRecordsQuestion = 'Delete all selected records?';
-  SRecordNotFound = 'Record not found';
-  SDataSourceFixed = 'Operation not allowed in a DBCtrlGrid';
-  SNotReplicatable = 'Control cannot be used in a DBCtrlGrid';
-  SPropDefByLookup = 'Property already defined by lookup field';
   STooManyColumns = 'Grid requested to display more than 256 columns';
-  
-  { DBLogDlg }
-  SRemoteLogin = 'Remote Login';
-
-  { DBOleEdt }
-  SDataBindings = 'Data Bindings...';
 
 implementation
 

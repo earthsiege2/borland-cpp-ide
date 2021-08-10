@@ -6,11 +6,11 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
-unit Ddeml;
+unit DDEml;
 
 {$WEAKPACKAGEUNIT}
 
@@ -187,11 +187,11 @@ const
   CP_WINUNICODE = 1200;
 
   {$EXTERNALSYM CP_WINNEUTRAL}
-	{$IFDEF UNICODE}
-	CP_WINNEUTRAL = CP_WINUNICODE;
-	{$ELSE}
+	
+
+
 	CP_WINNEUTRAL = CP_WINANSI;
-	{$ENDIF}
+	
   { transaction types }
 
   {$EXTERNALSYM XTYPF_NOBLOCK}
@@ -685,6 +685,9 @@ const
 
 
   ddelib = 'user32.dll';
+
+
+
 
 implementation
 

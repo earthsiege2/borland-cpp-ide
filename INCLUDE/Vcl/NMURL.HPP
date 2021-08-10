@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NMURL.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NMURL.pas' rev: 6.00
 
 #ifndef NMURLHPP
 #define NMURLHPP
@@ -21,8 +21,7 @@
 namespace Nmurl
 {
 //-- type declarations -------------------------------------------------------
-typedef void __fastcall (__closure *TOnErrorEvent)(System::TObject* Sender, AnsiString Operation, AnsiString 
-	ErrMsg);
+typedef void __fastcall (__closure *TOnErrorEvent)(System::TObject* Sender, AnsiString Operation, AnsiString ErrMsg);
 
 class DELPHICLASS TNMURL;
 class PASCALIMPLEMENTATION TNMURL : public Classes::TComponent 
@@ -52,9 +51,7 @@ __published:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Nmurl */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nmurl;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

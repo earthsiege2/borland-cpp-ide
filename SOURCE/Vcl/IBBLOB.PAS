@@ -1,24 +1,37 @@
-{********************************************************}
-{                                                        }
-{       Borland Delphi Visual Component Library          }
-{       InterBase Express core components                }
-{                                                        }
-{       Copyright (c) 1998-1999 Inprise Corporation      }
-{                                                        }
-{    InterBase Express is based in part on the product   }
-{    Free IB Components, written by Gregory H. Deatz for }
-{    Hoagland, Longo, Moran, Dunst & Doukas Company.     }
-{    Free IB Components is used under license.           }
-{                                                        }
-{********************************************************}
+{************************************************************************}
+{                                                                        }
+{       Borland Delphi Visual Component Library                          }
+{       InterBase Express core components                                }
+{                                                                        }
+{       Copyright (c) 1998-2001 Borland Software Corporation             }
+{                                                                        }
+{    InterBase Express is based in part on the product                   }
+{    Free IB Components, written by Gregory H. Deatz for                 }
+{    Hoagland, Longo, Moran, Dunst & Doukas Company.                     }
+{    Free IB Components is used under license.                           }
+{                                                                        }
+{    The contents of this file are subject to the InterBase              }
+{    Public License Version 1.0 (the "License"); you may not             }
+{    use this file except in compliance with the License. You may obtain }
+{    a copy of the License at http://www.borland.com/interbase/IPL.html  }
+{    Software distributed under the License is distributed on            }
+{    an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either              }
+{    express or implied. See the License for the specific language       }
+{    governing rights and limitations under the License.                 }
+{    The Original Code was created by InterBase Software Corporation     }
+{       and its successors.                                              }
+{    Portions created by Borland Software Corporation are Copyright      }
+{       (C) Borland Software Corporation. All Rights Reserved.           }
+{    Contributor(s): Jeff Overcash                                       }
+{                                                                        }
+{************************************************************************}
 
 unit IBBlob;
 
 interface
 
 uses
-  Windows, SysUtils, Classes, Forms, IBHeader, IBErrorCodes, IBExternals,
-  DB, IB, IBDatabase, IBUtils;
+  SysUtils, Classes, IBHeader, IBErrorCodes, IBExternals, DB, IB, IBDatabase, IBUtils;
 
 const
   DefaultBlobSegmentSize = 16 * 1024; 
@@ -57,6 +70,7 @@ type
     constructor Create;
     destructor Destroy; override;
     function Call(ErrCode: ISC_STATUS; RaiseError: Boolean): ISC_STATUS;
+    procedure Cancel;
     procedure CheckReadable;
     procedure CheckWritable;
     procedure Finalize;
@@ -194,18 +208,21 @@ begin
   result := 0;
   if Transaction <> nil then
     result := Transaction.Call(ErrCode, RaiseError)
-  else if RaiseError and (ErrCode > 0) then
-    IBDataBaseError;
+  else
+    if RaiseError and (ErrCode > 0) then
+      IBDataBaseError;
 end;
 
 procedure TIBBlobStream.CheckReadable;
 begin
-  if FMode = bmWrite then IBError(ibxeBlobCannotBeRead, [nil]);
+  if FMode = bmWrite then
+    IBError(ibxeBlobCannotBeRead, [nil]);
 end;
 
 procedure TIBBlobStream.CheckWritable;
 begin
-  if FMode = bmRead then IBError(ibxeBlobCannotBeWritten, [nil]);
+  if FMode = bmRead then
+    IBError(ibxeBlobCannotBeWritten, [nil]);
 end;
 
 procedure TIBBlobStream.CloseBlob;
@@ -245,7 +262,7 @@ end;
 
 procedure TIBBlobStream.Finalize;
 begin
-  if (not FBlobInitialized) or (FMode = bmRead) or (not FModified) then
+  if (not FBlobInitialized) or (FMode = bmRead) then
     exit;
   { need to start writing to a blob, create one }
   Call(isc_create_blob2(StatusVector, DBHandle, TRHandle, @FHandle, @FBlobID,
@@ -426,6 +443,15 @@ begin
   Move(Buffer, FBuffer[FPosition], Count);
   Inc(FPosition, Count);
   FModified := True;
+end;
+
+procedure TIBBlobStream.Cancel;
+begin
+  if (not FBlobInitialized) or (FMode = bmRead) then
+    exit;
+  if FModified then
+    OpenBlob;
+  FModified := False;
 end;
 
 end.

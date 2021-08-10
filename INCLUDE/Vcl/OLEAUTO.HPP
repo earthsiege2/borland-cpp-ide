@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OleAuto.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'OleAuto.pas' rev: 6.00
 
 #ifndef OleAutoHPP
 #define OleAutoHPP
@@ -12,7 +12,7 @@
 #pragma option push -Vx
 #include <SysUtils.hpp>	// Pascal unit
 #include <OleCtl.hpp>	// Pascal unit
-#include <OLE2.hpp>	// Pascal unit
+#include <Ole2.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
@@ -29,6 +29,7 @@ typedef TMetaClass*TAutoClass;
 enum TAutoClassInstancing { acInternal, acSingleInstance, acMultiInstance };
 #pragma option pop
 
+#pragma pack(push, 4)
 struct TAutoClassInfo
 {
 	TMetaClass*AutoClass;
@@ -37,6 +38,7 @@ struct TAutoClassInfo
 	AnsiString Description;
 	TAutoClassInstancing Instancing;
 } ;
+#pragma pack(pop)
 
 class DELPHICLASS TRegistryClass;
 class PASCALIMPLEMENTATION TRegistryClass : public System::TObject 
@@ -100,38 +102,28 @@ class PASCALIMPLEMENTATION EOleError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EOleError(const AnsiString Msg) : Sysutils::Exception(Msg)
-		 { }
+	/* Exception.Create */ inline __fastcall EOleError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EOleError(const AnsiString Msg, const System::TVarRec * 
-		Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EOleError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EOleError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EOleError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EOleError(int Ident, const System::TVarRec * Args, const 
-		int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EOleError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EOleError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(
-		Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EOleError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EOleError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EOleError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EOleError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EOleError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EOleError(System::PResStringRec ResStringRec, const 
-		System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EOleError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -155,34 +147,25 @@ public:
 	__property int ErrorCode = {read=FErrorCode, nodefault};
 public:
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EOleSysError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : EOleError(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EOleSysError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : EOleError(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EOleSysError(int Ident, const double* Dummy)/* overload */ : EOleError(Ident
-		) { }
+	/* Exception.CreateRes */ inline __fastcall EOleSysError(int Ident, const double* Dummy)/* overload */ : EOleError(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EOleSysError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : EOleError(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EOleSysError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : EOleError(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EOleSysError(const AnsiString Msg, int AHelpContext) : 
-		EOleError(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EOleSysError(const AnsiString Msg, int AHelpContext) : EOleError(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EOleSysError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : EOleError(Msg, Args, Args_Size, AHelpContext) { }
-		
+	/* Exception.CreateFmtHelp */ inline __fastcall EOleSysError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : EOleError(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EOleSysError(int Ident, int AHelpContext)/* overload */
-		 : EOleError(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EOleSysError(int Ident, int AHelpContext)/* overload */ : EOleError(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EOleSysError(System::PResStringRec ResStringRec, 
-		const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : EOleError(ResStringRec
-		, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EOleSysError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : EOleError(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -210,34 +193,25 @@ public:
 	__property AnsiString Source = {read=FSource};
 public:
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EOleException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : EOleError(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EOleException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : EOleError(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EOleException(int Ident, const double* Dummy)/* overload */ : EOleError(Ident
-		) { }
+	/* Exception.CreateRes */ inline __fastcall EOleException(int Ident, const double* Dummy)/* overload */ : EOleError(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EOleException(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : EOleError(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EOleException(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : EOleError(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EOleException(const AnsiString Msg, int AHelpContext) : 
-		EOleError(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EOleException(const AnsiString Msg, int AHelpContext) : EOleError(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EOleException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : EOleError(Msg, Args, Args_Size, AHelpContext) { }
-		
+	/* Exception.CreateFmtHelp */ inline __fastcall EOleException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : EOleError(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EOleException(int Ident, int AHelpContext)/* overload */
-		 : EOleError(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EOleException(int Ident, int AHelpContext)/* overload */ : EOleError(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EOleException(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : EOleError(ResStringRec
-		, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EOleException(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : EOleError(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -247,19 +221,6 @@ public:
 	
 };
 
-
-struct TCallDesc;
-typedef TCallDesc *PCallDesc;
-
-#pragma pack(push, 1)
-struct TCallDesc
-{
-	Byte CallType;
-	Byte ArgCount;
-	Byte NamedArgCount;
-	Byte ArgTypes[256];
-} ;
-#pragma pack(pop)
 
 //-- var, const, procedure ---------------------------------------------------
 static const Shortint MaxDispArgs = 0x20;
@@ -274,8 +235,7 @@ extern PACKAGE Variant __fastcall VarFromInterface(IUnknown* Unknown);
 extern PACKAGE IDispatch* __fastcall VarToInterface(const Variant &V);
 extern PACKAGE Variant __fastcall CreateOleObject(const AnsiString ClassName);
 extern PACKAGE Variant __fastcall GetActiveOleObject(const AnsiString ClassName);
-extern PACKAGE void __fastcall DispInvoke(IDispatch* Dispatch, PCallDesc CallDesc, Ole2::PDispIDList 
-	DispIDs, void * Params, System::PVariant Result);
+extern PACKAGE void __fastcall DispInvoke(IDispatch* Dispatch, System::PCallDesc CallDesc, Ole2::PDispIDList DispIDs, void * Params, System::PVariant Result);
 extern PACKAGE void __fastcall DispInvokeError(HRESULT Status, const tagEXCEPINFO &ExcepInfo);
 extern PACKAGE HRESULT __stdcall DllGetClassObject(const GUID &CLSID, const GUID &IID, void *Obj);
 extern PACKAGE HRESULT __stdcall DllCanUnloadNow(void);
@@ -283,9 +243,7 @@ extern PACKAGE HRESULT __stdcall DllRegisterServer(void);
 extern PACKAGE HRESULT __stdcall DllUnregisterServer(void);
 
 }	/* namespace Oleauto */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Oleauto;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

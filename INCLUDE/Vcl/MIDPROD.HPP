@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'MidProd.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MidProd.pas' rev: 6.00
 
 #ifndef MidProdHPP
 #define MidProdHPP
@@ -10,28 +10,30 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
+#include <MidComp.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <WebComp.hpp>	// Pascal unit
 #include <CompProd.hpp>	// Pascal unit
 #include <XMLBrokr.hpp>	// Pascal unit
 #include <PagItems.hpp>	// Pascal unit
+#include <HTTPProd.hpp>	// Pascal unit
 #include <HTTPApp.hpp>	// Pascal unit
-#include <ImgList.hpp>	// Pascal unit
-#include <Messages.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
 //-- user supplied -----------------------------------------------------------
+namespace Midprod {
+  using Midcomp::IScriptProducer;
+};
 
 namespace Midprod
 {
 //-- type declarations -------------------------------------------------------
-typedef void __fastcall (__closure *TXMLDataEvent)(System::TObject* Sender, Httpapp::TWebRequest* Request
-	, Xmlbrokr::TXMLBroker* XMLBroker, OleVariant &OwnerData);
+typedef void __fastcall (__closure *TXMLDataEvent)(System::TObject* Sender, Httpapp::TWebRequest* Request, Xmlbrokr::TXMLBroker* XMLBroker, OleVariant &OwnerData);
 
-class DELPHICLASS TMidasPageElements;
-class PASCALIMPLEMENTATION TMidasPageElements : public System::TObject 
+class DELPHICLASS TInetXPageElements;
+class PASCALIMPLEMENTATION TInetXPageElements : public System::TObject 
 {
 	typedef System::TObject inherited;
 	
@@ -44,14 +46,17 @@ public:
 	virtual AnsiString __fastcall BodyContent();
 public:
 	#pragma option push -w-inl
-	/* TObject.Create */ inline __fastcall TMidasPageElements(void) : System::TObject() { }
+	/* TObject.Create */ inline __fastcall TInetXPageElements(void) : System::TObject() { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TObject.Destroy */ inline __fastcall virtual ~TMidasPageElements(void) { }
+	/* TObject.Destroy */ inline __fastcall virtual ~TInetXPageElements(void) { }
 	#pragma option pop
 	
 };
 
+
+typedef TInetXPageElements TMidasPageElements;
+;
 
 #pragma option push -b-
 enum TStdInclude { jsDom, jsDB, jsDisp, jsBind, jsErrDisp, jsShow };
@@ -59,24 +64,26 @@ enum TStdInclude { jsDom, jsDB, jsDisp, jsBind, jsErrDisp, jsShow };
 
 typedef Set<TStdInclude, jsDom, jsShow>  TStdIncludes;
 
-class DELPHICLASS TCustomMidasPageProducer;
-class PASCALIMPLEMENTATION TCustomMidasPageProducer : public Pagitems::TPageItemsProducer 
+class DELPHICLASS TBaseInetXPageProducer;
+class PASCALIMPLEMENTATION TBaseInetXPageProducer : public Pagitems::TBasePageItemsProducer 
 {
-	typedef Pagitems::TPageItemsProducer inherited;
+	typedef Pagitems::TBasePageItemsProducer inherited;
 	
 private:
-	TMidasPageElements* FPageElements;
+	TInetXPageElements* FPageElements;
 	Classes::TStrings* FStyles;
 	bool FEnableXMLIslands;
 	AnsiString FIncludePathURL;
-	Webcomp::_di_IScriptManager FScriptManager;
+	Midcomp::_di_IScriptManager FScriptManager;
 	TXMLDataEvent FBeforeGetXMLData;
 	TXMLDataEvent FAfterGetXMLData;
 	AnsiString FStylesFile;
 	Classes::TNotifyEvent FBeforeGetContent;
 	Classes::TNotifyEvent FAfterGetContent;
+	Webcomp::TWebContentOptions* FContentOptions;
 	
 protected:
+	void __fastcall SetWebContentOptions(Webcomp::TWebContentOptions* AOptions);
 	bool __fastcall CanAddClass(Classes::TComponent* AParent, TMetaClass* AClass);
 	virtual bool __fastcall ImplCanAddClass(Classes::TComponent* AParent, TMetaClass* AClass);
 	void __fastcall DoBeforeGetXMLData(Xmlbrokr::TXMLBroker* XMLBroker, OleVariant &OwnerData);
@@ -84,14 +91,11 @@ protected:
 	void __fastcall DoBeforeGetContent(void);
 	void __fastcall DoAfterGetContent(void);
 	virtual void __fastcall GeneratePageElements(void);
-	DYNAMIC void __fastcall DoTagEvent(Httpapp::TTag Tag, const AnsiString TagString, Classes::TStrings* 
-		TagParams, AnsiString &ReplaceText);
+	DYNAMIC void __fastcall DoTagEvent(Httpprod::TTag Tag, const AnsiString TagString, Classes::TStrings* TagParams, AnsiString &ReplaceText);
 	virtual Webcomp::TWebContentOptions* __fastcall GetContentOptions(bool &Owned);
-	AnsiString __fastcall WebContent(Webcomp::TWebContentOptions* Options, System::TObject* Layout);
-	Webcomp::_di_IScriptManager __fastcall GetScriptManager();
+	Midcomp::_di_IScriptManager __fastcall GetScriptManager();
 	AnsiString __fastcall GetXMLDelta(Xmlbrokr::TXMLBroker* XMLBroker);
 	AnsiString __fastcall GetXMLErrors(Xmlbrokr::TXMLBroker* XMLBroker);
-	virtual AnsiString __fastcall GetDefaultTemplate();
 	virtual bool __fastcall GetUseXMLIslands(void);
 	virtual AnsiString __fastcall DeclareRowSets();
 	virtual AnsiString __fastcall DeclareXMLDocuments();
@@ -104,49 +108,84 @@ protected:
 	virtual void __fastcall AddScriptComponents(void);
 	virtual void __fastcall AddIncludes(void);
 	virtual System::TObject* __fastcall CreateScriptManager(Webcomp::TWebContentOptions* Options);
-	virtual TMidasPageElements* __fastcall CreatePageElements(void);
-	__property Webcomp::_di_IScriptManager ScriptManager = {read=GetScriptManager};
-	__property TMidasPageElements* PageElements = {read=FPageElements};
+	virtual TInetXPageElements* __fastcall CreatePageElements(void);
+	__property Midcomp::_di_IScriptManager ScriptManager = {read=GetScriptManager};
+	__property TInetXPageElements* PageElements = {read=FPageElements};
+	virtual AnsiString __fastcall GetDefaultTemplate();
 	
 public:
-	__fastcall virtual TCustomMidasPageProducer(Classes::TComponent* AComponent);
-	__fastcall virtual ~TCustomMidasPageProducer(void);
+	__fastcall virtual TBaseInetXPageProducer(Classes::TComponent* AComponent);
+	__fastcall virtual ~TBaseInetXPageProducer(void);
 	virtual Xmlbrokr::TXMLBroker* __fastcall FindXMLBroker(Classes::TStrings* TagParams);
 	virtual AnsiString __fastcall FindXMLBrokerName(Classes::TStrings* TagParams);
-	virtual AnsiString __fastcall GetXMLData(Xmlbrokr::TXMLBroker* XMLBroker, Xmlbrokr::TXMLOptions XMLOptions
-		);
-	virtual AnsiString __fastcall Content();
+	virtual AnsiString __fastcall GetXMLData(Xmlbrokr::TXMLBroker* XMLBroker, Xmlbrokr::TXMLOptions XMLOptions);
+	virtual AnsiString __fastcall ContentFromStream(Classes::TStream* InStream);
+	/* virtual class method */ virtual AnsiString __fastcall GetRequiredTags(TMetaClass* vmt);
 	void __fastcall SetIncludePathURL(const AnsiString Value);
 	void __fastcall SetStyles(Classes::TStrings* Value);
 	void __fastcall SetStylesFile(const AnsiString Value);
 	__property AnsiString IncludePathURL = {read=FIncludePathURL, write=SetIncludePathURL};
 	__property TXMLDataEvent OnBeforeGetXMLData = {read=FBeforeGetXMLData, write=FBeforeGetXMLData};
 	__property TXMLDataEvent OnAfterGetXMLData = {read=FAfterGetXMLData, write=FAfterGetXMLData};
-	__property Classes::TNotifyEvent OnBeforeGetContent = {read=FBeforeGetContent, write=FBeforeGetContent
-		};
-	__property Classes::TNotifyEvent OnAfterGetContent = {read=FAfterGetContent, write=FAfterGetContent
-		};
+	__property Classes::TNotifyEvent OnBeforeGetContent = {read=FBeforeGetContent, write=FBeforeGetContent};
+	__property Classes::TNotifyEvent OnAfterGetContent = {read=FAfterGetContent, write=FAfterGetContent};
 	__property Classes::TStrings* Styles = {read=FStyles, write=SetStyles};
 	__property AnsiString StylesFile = {read=FStylesFile, write=SetStylesFile};
 	__property bool EnableXMLIslands = {read=FEnableXMLIslands, write=FEnableXMLIslands, default=1};
 private:
-		
-	void *__IWebContent;	/* Webcomp::IWebContent [Content=WebContent] */
 	void *__IWebComponentEditor;	/* Webcomp::IWebComponentEditor */
-	void *__IScriptProducer;	/* Webcomp::IScriptProducer */
+	void *__IScriptProducer;	/* Midcomp::IScriptProducer */
+	void *__ISetWebContentOptions;	/* Webcomp::ISetWebContentOptions */
 	
 public:
+	operator ISetWebContentOptions*(void) { return (ISetWebContentOptions*)&__ISetWebContentOptions; }
 	operator IScriptProducer*(void) { return (IScriptProducer*)&__IScriptProducer; }
 	operator IWebComponentEditor*(void) { return (IWebComponentEditor*)&__IWebComponentEditor; }
+	
+};
+
+
+typedef TBaseInetXPageProducer TBaseMidasPageProducer;
+;
+
+class DELPHICLASS TCustomInetXPageProducer;
+class PASCALIMPLEMENTATION TCustomInetXPageProducer : public TBaseInetXPageProducer 
+{
+	typedef TBaseInetXPageProducer inherited;
+	
+private:
+	AnsiString FHTMLFile;
+	Classes::TStrings* FHTMLDoc;
+	void __fastcall SetHTMLDoc(const Classes::TStrings* Value);
+	void __fastcall SetHTMLFile(const AnsiString Value);
+	
+protected:
+	virtual AnsiString __fastcall GetTemplateFileName();
+	virtual Classes::TStream* __fastcall GetTemplateStream(/* out */ bool &AOwned);
+	AnsiString __fastcall WebContent(Webcomp::TWebContentOptions* Options, System::TObject* Layout);
+	
+public:
+	__fastcall virtual TCustomInetXPageProducer(Classes::TComponent* AOwner);
+	virtual AnsiString __fastcall Content();
+	__fastcall virtual ~TCustomInetXPageProducer(void);
+	__property Classes::TStrings* HTMLDoc = {read=FHTMLDoc, write=SetHTMLDoc};
+	__property AnsiString HTMLFile = {read=FHTMLFile, write=SetHTMLFile};
+private:
+	void *__IWebContent;	/* Webcomp::IWebContent [Content=WebContent] */
+	
+public:
 	operator IWebContent*(void) { return (IWebContent*)&__IWebContent; }
 	
 };
 
 
-class DELPHICLASS TMidasPageProducer;
-class PASCALIMPLEMENTATION TMidasPageProducer : public TCustomMidasPageProducer 
+typedef TCustomInetXPageProducer TCustomMidasPageProducer;
+;
+
+class DELPHICLASS TInetXPageProducer;
+class PASCALIMPLEMENTATION TInetXPageProducer : public TCustomInetXPageProducer 
 {
-	typedef TCustomMidasPageProducer inherited;
+	typedef TCustomInetXPageProducer inherited;
 	
 __published:
 	__property IncludePathURL ;
@@ -157,14 +196,32 @@ __published:
 	__property Styles ;
 	__property StylesFile ;
 	__property WebPageItems ;
-	__property EnableXMLIslands ;
+	__property EnableXMLIslands  = {default=1};
+	__property HTMLDoc ;
+	__property HTMLFile ;
+	__property ScriptEngine ;
 public:
 	#pragma option push -w-inl
-	/* TCustomMidasPageProducer.Create */ inline __fastcall virtual TMidasPageProducer(Classes::TComponent* 
-		AComponent) : TCustomMidasPageProducer(AComponent) { }
+	/* TCustomInetXPageProducer.Create */ inline __fastcall virtual TInetXPageProducer(Classes::TComponent* AOwner) : TCustomInetXPageProducer(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomMidasPageProducer.Destroy */ inline __fastcall virtual ~TMidasPageProducer(void) { }
+	/* TCustomInetXPageProducer.Destroy */ inline __fastcall virtual ~TInetXPageProducer(void) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TMidasPageProducer;
+class PASCALIMPLEMENTATION TMidasPageProducer : public TInetXPageProducer 
+{
+	typedef TInetXPageProducer inherited;
+	
+public:
+	#pragma option push -w-inl
+	/* TCustomInetXPageProducer.Create */ inline __fastcall virtual TMidasPageProducer(Classes::TComponent* AOwner) : TInetXPageProducer(AOwner) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TCustomInetXPageProducer.Destroy */ inline __fastcall virtual ~TMidasPageProducer(void) { }
 	#pragma option pop
 	
 };
@@ -174,13 +231,10 @@ public:
 #define sXMLBroker "XMLBROKER"
 #define sXMLReadyVar "xml_ready"
 extern PACKAGE AnsiString __fastcall PathInfoToRelativePath(const AnsiString PathInfo);
-extern PACKAGE void __fastcall AddStdIncludes(TStdIncludes StdIncludes, Webcomp::_di_IAddScriptElements 
-	AddIntf);
+extern PACKAGE void __fastcall AddStdIncludes(TStdIncludes StdIncludes, Midcomp::_di_IAddScriptElements AddIntf);
 
 }	/* namespace Midprod */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Midprod;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

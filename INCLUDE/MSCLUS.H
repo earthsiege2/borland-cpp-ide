@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Mon Aug 09 16:47:17 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for msclus.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -37,6 +35,10 @@
 
 #ifndef __msclus_h__
 #define __msclus_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -750,8 +752,8 @@ typedef interface ISClusResDependents ISClusResDependents;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_msclus_0000 */
 /* [local] */ 
@@ -759,37 +761,37 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef _CLUSTER_API_TYPES_
 #define _CLUSTER_API_TYPES_
 #pragma once
-typedef struct _HCLUSTER __RPC_FAR *HCLUSTER;
+typedef struct _HCLUSTER *HCLUSTER;
 
-typedef struct _HNODE __RPC_FAR *HNODE;
+typedef struct _HNODE *HNODE;
 
-typedef struct _HRESOURCE __RPC_FAR *HRESOURCE;
+typedef struct _HRESOURCE *HRESOURCE;
 
-typedef struct _HGROUP __RPC_FAR *HGROUP;
+typedef struct _HGROUP *HGROUP;
 
-typedef struct _HNETWORK __RPC_FAR *HNETWORK;
+typedef struct _HNETWORK *HNETWORK;
 
-typedef struct _HNETINTERFACE __RPC_FAR *HNETINTERFACE;
+typedef struct _HNETINTERFACE *HNETINTERFACE;
 
-typedef struct _HCHANGE __RPC_FAR *HCHANGE;
+typedef struct _HCHANGE *HCHANGE;
 
-typedef struct _HCLUSENUM __RPC_FAR *HCLUSENUM;
+typedef struct _HCLUSENUM *HCLUSENUM;
 
-typedef struct _HGROUPENUM __RPC_FAR *HGROUPENUM;
+typedef struct _HGROUPENUM *HGROUPENUM;
 
-typedef struct _HRESENUM __RPC_FAR *HRESENUM;
+typedef struct _HRESENUM *HRESENUM;
 
-typedef struct _HNETWORKENUM __RPC_FAR *HNETWORKENUM;
+typedef struct _HNETWORKENUM *HNETWORKENUM;
 
-typedef struct _HNODEENUM __RPC_FAR *HNODEENUM;
+typedef struct _HNODEENUM *HNODEENUM;
 
-typedef struct _HRESTYPEENUM __RPC_FAR *HRESTYPEENUM;
+typedef struct _HRESTYPEENUM *HRESTYPEENUM;
 
 typedef 
 enum CLUSTER_QUORUM_TYPE
     {	OperationalQuorum	= 0,
 	ModifyQuorum	= OperationalQuorum + 1
-    }	CLUSTER_QUORUM_TYPE;
+    } 	CLUSTER_QUORUM_TYPE;
 
 typedef 
 enum CLUSTER_CHANGE
@@ -812,6 +814,7 @@ enum CLUSTER_CHANGE
 	CLUSTER_CHANGE_RESOURCE_TYPE_DELETED	= 0x10000,
 	CLUSTER_CHANGE_RESOURCE_TYPE_ADDED	= 0x20000,
 	CLUSTER_CHANGE_RESOURCE_TYPE_PROPERTY	= 0x40000,
+	CLUSTER_CHANGE_CLUSTER_RECONNECT	= 0x80000,
 	CLUSTER_CHANGE_NETWORK_STATE	= 0x100000,
 	CLUSTER_CHANGE_NETWORK_DELETED	= 0x200000,
 	CLUSTER_CHANGE_NETWORK_ADDED	= 0x400000,
@@ -824,8 +827,8 @@ enum CLUSTER_CHANGE
 	CLUSTER_CHANGE_CLUSTER_STATE	= 0x20000000,
 	CLUSTER_CHANGE_CLUSTER_PROPERTY	= 0x40000000,
 	CLUSTER_CHANGE_HANDLE_CLOSE	= 0x80000000,
-	CLUSTER_CHANGE_ALL	= CLUSTER_CHANGE_NODE_STATE | CLUSTER_CHANGE_NODE_DELETED | CLUSTER_CHANGE_NODE_ADDED | CLUSTER_CHANGE_NODE_PROPERTY | CLUSTER_CHANGE_REGISTRY_NAME | CLUSTER_CHANGE_REGISTRY_ATTRIBUTES | CLUSTER_CHANGE_REGISTRY_VALUE | CLUSTER_CHANGE_REGISTRY_SUBTREE | CLUSTER_CHANGE_RESOURCE_STATE | CLUSTER_CHANGE_RESOURCE_DELETED | CLUSTER_CHANGE_RESOURCE_ADDED | CLUSTER_CHANGE_RESOURCE_PROPERTY | CLUSTER_CHANGE_GROUP_STATE | CLUSTER_CHANGE_GROUP_DELETED | CLUSTER_CHANGE_GROUP_ADDED | CLUSTER_CHANGE_GROUP_PROPERTY | CLUSTER_CHANGE_RESOURCE_TYPE_DELETED | CLUSTER_CHANGE_RESOURCE_TYPE_ADDED | CLUSTER_CHANGE_RESOURCE_TYPE_PROPERTY | CLUSTER_CHANGE_NETWORK_STATE | CLUSTER_CHANGE_NETWORK_DELETED | CLUSTER_CHANGE_NETWORK_ADDED | CLUSTER_CHANGE_NETWORK_PROPERTY | CLUSTER_CHANGE_NETINTERFACE_STATE | CLUSTER_CHANGE_NETINTERFACE_DELETED | CLUSTER_CHANGE_NETINTERFACE_ADDED | CLUSTER_CHANGE_NETINTERFACE_PROPERTY | CLUSTER_CHANGE_QUORUM_STATE | CLUSTER_CHANGE_CLUSTER_STATE | CLUSTER_CHANGE_CLUSTER_PROPERTY | CLUSTER_CHANGE_HANDLE_CLOSE
-    }	CLUSTER_CHANGE;
+	CLUSTER_CHANGE_ALL	= CLUSTER_CHANGE_NODE_STATE | CLUSTER_CHANGE_NODE_DELETED | CLUSTER_CHANGE_NODE_ADDED | CLUSTER_CHANGE_NODE_PROPERTY | CLUSTER_CHANGE_REGISTRY_NAME | CLUSTER_CHANGE_REGISTRY_ATTRIBUTES | CLUSTER_CHANGE_REGISTRY_VALUE | CLUSTER_CHANGE_REGISTRY_SUBTREE | CLUSTER_CHANGE_RESOURCE_STATE | CLUSTER_CHANGE_RESOURCE_DELETED | CLUSTER_CHANGE_RESOURCE_ADDED | CLUSTER_CHANGE_RESOURCE_PROPERTY | CLUSTER_CHANGE_GROUP_STATE | CLUSTER_CHANGE_GROUP_DELETED | CLUSTER_CHANGE_GROUP_ADDED | CLUSTER_CHANGE_GROUP_PROPERTY | CLUSTER_CHANGE_RESOURCE_TYPE_DELETED | CLUSTER_CHANGE_RESOURCE_TYPE_ADDED | CLUSTER_CHANGE_RESOURCE_TYPE_PROPERTY | CLUSTER_CHANGE_NETWORK_STATE | CLUSTER_CHANGE_NETWORK_DELETED | CLUSTER_CHANGE_NETWORK_ADDED | CLUSTER_CHANGE_NETWORK_PROPERTY | CLUSTER_CHANGE_NETINTERFACE_STATE | CLUSTER_CHANGE_NETINTERFACE_DELETED | CLUSTER_CHANGE_NETINTERFACE_ADDED | CLUSTER_CHANGE_NETINTERFACE_PROPERTY | CLUSTER_CHANGE_QUORUM_STATE | CLUSTER_CHANGE_CLUSTER_STATE | CLUSTER_CHANGE_CLUSTER_PROPERTY | CLUSTER_CHANGE_CLUSTER_RECONNECT | CLUSTER_CHANGE_HANDLE_CLOSE
+    } 	CLUSTER_CHANGE;
 
 typedef 
 enum CLUSTER_ENUM
@@ -837,13 +840,13 @@ enum CLUSTER_ENUM
 	CLUSTER_ENUM_NETINTERFACE	= 0x20,
 	CLUSTER_ENUM_INTERNAL_NETWORK	= 0x80000000,
 	CLUSTER_ENUM_ALL	= CLUSTER_ENUM_NODE | CLUSTER_ENUM_RESTYPE | CLUSTER_ENUM_RESOURCE | CLUSTER_ENUM_GROUP | CLUSTER_ENUM_NETWORK | CLUSTER_ENUM_NETINTERFACE
-    }	CLUSTER_ENUM;
+    } 	CLUSTER_ENUM;
 
 typedef 
 enum CLUSTER_NODE_ENUM
     {	CLUSTER_NODE_ENUM_NETINTERFACES	= 0x1,
 	CLUSTER_NODE_ENUM_ALL	= CLUSTER_NODE_ENUM_NETINTERFACES
-    }	CLUSTER_NODE_ENUM;
+    } 	CLUSTER_NODE_ENUM;
 
 typedef 
 enum CLUSTER_NODE_STATE
@@ -852,14 +855,14 @@ enum CLUSTER_NODE_STATE
 	ClusterNodeDown	= ClusterNodeUp + 1,
 	ClusterNodePaused	= ClusterNodeDown + 1,
 	ClusterNodeJoining	= ClusterNodePaused + 1
-    }	CLUSTER_NODE_STATE;
+    } 	CLUSTER_NODE_STATE;
 
 typedef 
 enum CLUSTER_GROUP_ENUM
     {	CLUSTER_GROUP_ENUM_CONTAINS	= 0x1,
 	CLUSTER_GROUP_ENUM_NODES	= 0x2,
 	CLUSTER_GROUP_ENUM_ALL	= CLUSTER_GROUP_ENUM_CONTAINS | CLUSTER_GROUP_ENUM_NODES
-    }	CLUSTER_GROUP_ENUM;
+    } 	CLUSTER_GROUP_ENUM;
 
 typedef 
 enum CLUSTER_GROUP_STATE
@@ -869,14 +872,14 @@ enum CLUSTER_GROUP_STATE
 	ClusterGroupFailed	= ClusterGroupOffline + 1,
 	ClusterGroupPartialOnline	= ClusterGroupFailed + 1,
 	ClusterGroupPending	= ClusterGroupPartialOnline + 1
-    }	CLUSTER_GROUP_STATE;
+    } 	CLUSTER_GROUP_STATE;
 
 typedef 
 enum CLUSTER_GROUP_AUTOFAILBACK_TYPE
     {	ClusterGroupPreventFailback	= 0,
 	ClusterGroupAllowFailback	= ClusterGroupPreventFailback + 1,
 	ClusterGroupFailbackTypeCount	= ClusterGroupAllowFailback + 1
-    }	CLUSTER_GROUP_AUTOFAILBACK_TYPE;
+    } 	CLUSTER_GROUP_AUTOFAILBACK_TYPE;
 
 typedef enum CLUSTER_GROUP_AUTOFAILBACK_TYPE CGAFT;
 
@@ -891,7 +894,7 @@ enum CLUSTER_RESOURCE_STATE
 	ClusterResourcePending	= 128,
 	ClusterResourceOnlinePending	= ClusterResourcePending + 1,
 	ClusterResourceOfflinePending	= ClusterResourceOnlinePending + 1
-    }	CLUSTER_RESOURCE_STATE;
+    } 	CLUSTER_RESOURCE_STATE;
 
 typedef 
 enum CLUSTER_RESOURCE_RESTART_ACTION
@@ -899,7 +902,7 @@ enum CLUSTER_RESOURCE_RESTART_ACTION
 	ClusterResourceRestartNoNotify	= ClusterResourceDontRestart + 1,
 	ClusterResourceRestartNotify	= ClusterResourceRestartNoNotify + 1,
 	ClusterResourceRestartActionCount	= ClusterResourceRestartNotify + 1
-    }	CLUSTER_RESOURCE_RESTART_ACTION;
+    } 	CLUSTER_RESOURCE_RESTART_ACTION;
 
 typedef enum CLUSTER_RESOURCE_RESTART_ACTION CRRA;
 
@@ -908,7 +911,7 @@ enum CLUSTER_RESOURCE_CREATE_FLAGS
     {	CLUSTER_RESOURCE_DEFAULT_MONITOR	= 0,
 	CLUSTER_RESOURCE_SEPARATE_MONITOR	= 1,
 	CLUSTER_RESOURCE_VALID_FLAGS	= CLUSTER_RESOURCE_SEPARATE_MONITOR
-    }	CLUSTER_RESOURCE_CREATE_FLAGS;
+    } 	CLUSTER_RESOURCE_CREATE_FLAGS;
 
 typedef 
 enum CLUSTER_PROPERTY_TYPE
@@ -923,8 +926,9 @@ enum CLUSTER_PROPERTY_TYPE
 	CLUSPROP_TYPE_DISK_NUMBER	= CLUSPROP_TYPE_SCSI_ADDRESS + 1,
 	CLUSPROP_TYPE_PARTITION_INFO	= CLUSPROP_TYPE_DISK_NUMBER + 1,
 	CLUSPROP_TYPE_FTSET_INFO	= CLUSPROP_TYPE_PARTITION_INFO + 1,
+	CLUSPROP_TYPE_DISK_SERIALNUMBER	= CLUSPROP_TYPE_FTSET_INFO + 1,
 	CLUSPROP_TYPE_USER	= 32768
-    }	CLUSTER_PROPERTY_TYPE;
+    } 	CLUSTER_PROPERTY_TYPE;
 
 typedef 
 enum CLUSTER_PROPERTY_FORMAT
@@ -939,8 +943,9 @@ enum CLUSTER_PROPERTY_FORMAT
 	CLUSPROP_FORMAT_EXPANDED_SZ	= CLUSPROP_FORMAT_LONG + 1,
 	CLUSPROP_FORMAT_SECURITY_DESCRIPTOR	= CLUSPROP_FORMAT_EXPANDED_SZ + 1,
 	CLUSPROP_FORMAT_LARGE_INTEGER	= CLUSPROP_FORMAT_SECURITY_DESCRIPTOR + 1,
+	CLUSPROP_FORMAT_WORD	= CLUSPROP_FORMAT_LARGE_INTEGER + 1,
 	CLUSPROP_FORMAT_USER	= 32768
-    }	CLUSTER_PROPERTY_FORMAT;
+    } 	CLUSTER_PROPERTY_FORMAT;
 
 typedef 
 enum CLUSTER_PROPERTY_SYNTAX
@@ -960,8 +965,9 @@ enum CLUSTER_PROPERTY_SYNTAX
 	CLUSPROP_SYNTAX_SCSI_ADDRESS	= ( DWORD  )(CLUSPROP_TYPE_SCSI_ADDRESS << 16 | CLUSPROP_FORMAT_DWORD),
 	CLUSPROP_SYNTAX_DISK_NUMBER	= ( DWORD  )(CLUSPROP_TYPE_DISK_NUMBER << 16 | CLUSPROP_FORMAT_DWORD),
 	CLUSPROP_SYNTAX_PARTITION_INFO	= ( DWORD  )(CLUSPROP_TYPE_PARTITION_INFO << 16 | CLUSPROP_FORMAT_BINARY),
-	CLUSPROP_SYNTAX_FTSET_INFO	= ( DWORD  )(CLUSPROP_TYPE_FTSET_INFO << 16 | CLUSPROP_FORMAT_BINARY)
-    }	;
+	CLUSPROP_SYNTAX_FTSET_INFO	= ( DWORD  )(CLUSPROP_TYPE_FTSET_INFO << 16 | CLUSPROP_FORMAT_BINARY),
+	CLUSPROP_SYNTAX_DISK_SERIALNUMBER	= ( DWORD  )(CLUSPROP_TYPE_DISK_SERIALNUMBER << 16 | CLUSPROP_FORMAT_SZ)
+    } 	;
 
 typedef 
 enum CLUSTER_CONTROL_OBJECT
@@ -974,7 +980,7 @@ enum CLUSTER_CONTROL_OBJECT
 	CLUS_OBJECT_NETINTERFACE	= CLUS_OBJECT_NETWORK + 1,
 	CLUS_OBJECT_CLUSTER	= CLUS_OBJECT_NETINTERFACE + 1,
 	CLUS_OBJECT_USER	= 128
-    }	CLUSTER_CONTROL_OBJECT;
+    } 	CLUSTER_CONTROL_OBJECT;
 
 typedef 
 enum CLCTL_CODES
@@ -988,22 +994,28 @@ enum CLCTL_CODES
 	CLCTL_GET_NODE	= 0x1 << 0 | 0 + 12 << 2 | 0 << 22,
 	CLCTL_GET_NETWORK	= 0x1 << 0 | 0 + 13 << 2 | 0 << 22,
 	CLCTL_GET_ID	= 0x1 << 0 | 0 + 14 << 2 | 0 << 22,
+	CLCTL_GET_FQDN	= 0x1 << 0 | 0 + 15 << 2 | 0 << 22,
 	CLCTL_ENUM_COMMON_PROPERTIES	= 0x1 << 0 | 0 + 20 << 2 | 0 << 22,
 	CLCTL_GET_RO_COMMON_PROPERTIES	= 0x1 << 0 | 0 + 21 << 2 | 0 << 22,
 	CLCTL_GET_COMMON_PROPERTIES	= 0x1 << 0 | 0 + 22 << 2 | 0 << 22,
 	CLCTL_SET_COMMON_PROPERTIES	= 0x2 << 0 | 0 + 23 << 2 | 0x1 << 22,
 	CLCTL_VALIDATE_COMMON_PROPERTIES	= 0x1 << 0 | 0 + 24 << 2 | 0 << 22,
+	CLCTL_GET_COMMON_PROPERTY_FMTS	= 0x1 << 0 | 0 + 25 << 2 | 0 << 22,
+	CLCTL_GET_COMMON_RESOURCE_PROPERTY_FMTS	= 0x1 << 0 | 0 + 26 << 2 | 0 << 22,
 	CLCTL_ENUM_PRIVATE_PROPERTIES	= 0x1 << 0 | 0 + 30 << 2 | 0 << 22,
 	CLCTL_GET_RO_PRIVATE_PROPERTIES	= 0x1 << 0 | 0 + 31 << 2 | 0 << 22,
 	CLCTL_GET_PRIVATE_PROPERTIES	= 0x1 << 0 | 0 + 32 << 2 | 0 << 22,
 	CLCTL_SET_PRIVATE_PROPERTIES	= 0x2 << 0 | 0 + 33 << 2 | 0x1 << 22,
 	CLCTL_VALIDATE_PRIVATE_PROPERTIES	= 0x1 << 0 | 0 + 34 << 2 | 0 << 22,
+	CLCTL_GET_PRIVATE_PROPERTY_FMTS	= 0x1 << 0 | 0 + 35 << 2 | 0 << 22,
+	CLCTL_GET_PRIVATE_RESOURCE_PROPERTY_FMTS	= 0x1 << 0 | 0 + 36 << 2 | 0 << 22,
 	CLCTL_ADD_REGISTRY_CHECKPOINT	= 0x2 << 0 | 0 + 40 << 2 | 0x1 << 22,
 	CLCTL_DELETE_REGISTRY_CHECKPOINT	= 0x2 << 0 | 0 + 41 << 2 | 0x1 << 22,
 	CLCTL_GET_REGISTRY_CHECKPOINTS	= 0x1 << 0 | 0 + 42 << 2 | 0 << 22,
 	CLCTL_ADD_CRYPTO_CHECKPOINT	= 0x2 << 0 | 0 + 43 << 2 | 0x1 << 22,
 	CLCTL_DELETE_CRYPTO_CHECKPOINT	= 0x2 << 0 | 0 + 44 << 2 | 0x1 << 22,
 	CLCTL_GET_CRYPTO_CHECKPOINTS	= 0x1 << 0 | 0 + 45 << 2 | 0 << 22,
+	CLCTL_RESOURCE_UPGRADE_DLL	= 0x2 << 0 | 0 + 46 << 2 | 0x1 << 22,
 	CLCTL_GET_LOADBAL_PROCESS_LIST	= 0x1 << 0 | 0 + 50 << 2 | 0 << 22,
 	CLCTL_GET_NETWORK_NAME	= 0x1 << 0 | 0 + 90 << 2 | 0 << 22,
 	CLCTL_STORAGE_GET_DISK_INFO	= 0x1 << 0 | 0 + 100 << 2 | 0 << 22,
@@ -1025,8 +1037,9 @@ enum CLCTL_CODES
 	CLCTL_STARTING_PHASE1	= 0x2 << 0 | 1 << 20 | 0 + 13 << 2 | 0x1 << 22,
 	CLCTL_STARTING_PHASE2	= 0x2 << 0 | 1 << 20 | 0 + 14 << 2 | 0x1 << 22,
 	CLCTL_HOLD_IO	= 0x2 << 0 | 1 << 20 | 0 + 15 << 2 | 0x1 << 22,
-	CLCTL_RESUME_IO	= 0x2 << 0 | 1 << 20 | 0 + 16 << 2 | 0x1 << 22
-    }	CLCTL_CODES;
+	CLCTL_RESUME_IO	= 0x2 << 0 | 1 << 20 | 0 + 16 << 2 | 0x1 << 22,
+	CLCTL_FORCE_QUORUM	= 0x2 << 0 | 1 << 20 | 0 + 17 << 2 | 0x1 << 22
+    } 	CLCTL_CODES;
 
 typedef 
 enum CLUSCTL_RESOURCE_CODES
@@ -1043,11 +1056,13 @@ enum CLUSCTL_RESOURCE_CODES
 	CLUSCTL_RESOURCE_GET_COMMON_PROPERTIES	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_GET_COMMON_PROPERTIES,
 	CLUSCTL_RESOURCE_SET_COMMON_PROPERTIES	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_SET_COMMON_PROPERTIES,
 	CLUSCTL_RESOURCE_VALIDATE_COMMON_PROPERTIES	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_VALIDATE_COMMON_PROPERTIES,
+	CLUSCTL_RESOURCE_GET_COMMON_PROPERTY_FMTS	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_GET_COMMON_PROPERTY_FMTS,
 	CLUSCTL_RESOURCE_ENUM_PRIVATE_PROPERTIES	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_ENUM_PRIVATE_PROPERTIES,
 	CLUSCTL_RESOURCE_GET_RO_PRIVATE_PROPERTIES	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_GET_RO_PRIVATE_PROPERTIES,
 	CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_GET_PRIVATE_PROPERTIES,
 	CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_SET_PRIVATE_PROPERTIES,
 	CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_VALIDATE_PRIVATE_PROPERTIES,
+	CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTY_FMTS	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_GET_PRIVATE_PROPERTY_FMTS,
 	CLUSCTL_RESOURCE_ADD_REGISTRY_CHECKPOINT	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_ADD_REGISTRY_CHECKPOINT,
 	CLUSCTL_RESOURCE_DELETE_REGISTRY_CHECKPOINT	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_DELETE_REGISTRY_CHECKPOINT,
 	CLUSCTL_RESOURCE_GET_REGISTRY_CHECKPOINTS	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_GET_REGISTRY_CHECKPOINTS,
@@ -1059,6 +1074,7 @@ enum CLUSCTL_RESOURCE_CODES
 	CLUSCTL_RESOURCE_STORAGE_GET_DISK_INFO	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_STORAGE_GET_DISK_INFO,
 	CLUSCTL_RESOURCE_STORAGE_IS_PATH_VALID	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_STORAGE_IS_PATH_VALID,
 	CLUSCTL_RESOURCE_QUERY_DELETE	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_QUERY_DELETE,
+	CLUSCTL_RESOURCE_UPGRADE_DLL	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_RESOURCE_UPGRADE_DLL,
 	CLUSCTL_RESOURCE_DELETE	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_DELETE,
 	CLUSCTL_RESOURCE_INSTALL_NODE	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_INSTALL_NODE,
 	CLUSCTL_RESOURCE_EVICT_NODE	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_EVICT_NODE,
@@ -1068,8 +1084,9 @@ enum CLUSCTL_RESOURCE_CODES
 	CLUSCTL_RESOURCE_REMOVE_OWNER	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_REMOVE_OWNER,
 	CLUSCTL_RESOURCE_SET_NAME	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_SET_NAME,
 	CLUSCTL_RESOURCE_CLUSTER_NAME_CHANGED	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_CLUSTER_NAME_CHANGED,
-	CLUSCTL_RESOURCE_CLUSTER_VERSION_CHANGED	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_CLUSTER_VERSION_CHANGED
-    }	CLUSCTL_RESOURCE_CODES;
+	CLUSCTL_RESOURCE_CLUSTER_VERSION_CHANGED	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_CLUSTER_VERSION_CHANGED,
+	CLUSCTL_RESOURCE_FORCE_QUORUM	= CLUS_OBJECT_RESOURCE << 24 | CLCTL_FORCE_QUORUM
+    } 	CLUSCTL_RESOURCE_CODES;
 
 typedef 
 enum CLUSCTL_RESOURCE_TYPE_CODES
@@ -1083,11 +1100,15 @@ enum CLUSCTL_RESOURCE_TYPE_CODES
 	CLUSCTL_RESOURCE_TYPE_GET_COMMON_PROPERTIES	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_GET_COMMON_PROPERTIES,
 	CLUSCTL_RESOURCE_TYPE_VALIDATE_COMMON_PROPERTIES	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_VALIDATE_COMMON_PROPERTIES,
 	CLUSCTL_RESOURCE_TYPE_SET_COMMON_PROPERTIES	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_SET_COMMON_PROPERTIES,
+	CLUSCTL_RESOURCE_TYPE_GET_COMMON_PROPERTY_FMTS	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_GET_COMMON_PROPERTY_FMTS,
+	CLUSCTL_RESOURCE_TYPE_GET_COMMON_RESOURCE_PROPERTY_FMTS	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_GET_COMMON_RESOURCE_PROPERTY_FMTS,
 	CLUSCTL_RESOURCE_TYPE_ENUM_PRIVATE_PROPERTIES	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_ENUM_PRIVATE_PROPERTIES,
 	CLUSCTL_RESOURCE_TYPE_GET_RO_PRIVATE_PROPERTIES	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_GET_RO_PRIVATE_PROPERTIES,
 	CLUSCTL_RESOURCE_TYPE_GET_PRIVATE_PROPERTIES	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_GET_PRIVATE_PROPERTIES,
 	CLUSCTL_RESOURCE_TYPE_SET_PRIVATE_PROPERTIES	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_SET_PRIVATE_PROPERTIES,
 	CLUSCTL_RESOURCE_TYPE_VALIDATE_PRIVATE_PROPERTIES	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_VALIDATE_PRIVATE_PROPERTIES,
+	CLUSCTL_RESOURCE_TYPE_GET_PRIVATE_PROPERTY_FMTS	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_GET_PRIVATE_PROPERTY_FMTS,
+	CLUSCTL_RESOURCE_TYPE_GET_PRIVATE_RESOURCE_PROPERTY_FMTS	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_GET_PRIVATE_RESOURCE_PROPERTY_FMTS,
 	CLUSCTL_RESOURCE_TYPE_GET_REGISTRY_CHECKPOINTS	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_GET_REGISTRY_CHECKPOINTS,
 	CLUSCTL_RESOURCE_TYPE_GET_CRYPTO_CHECKPOINTS	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_GET_CRYPTO_CHECKPOINTS,
 	CLUSCTL_RESOURCE_TYPE_STORAGE_GET_AVAILABLE_DISKS	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_STORAGE_GET_AVAILABLE_DISKS,
@@ -1100,7 +1121,7 @@ enum CLUSCTL_RESOURCE_TYPE_CODES
 	CLUSCTL_RESOURCE_TYPE_STARTING_PHASE2	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_STARTING_PHASE2,
 	CLUSCTL_RESOURCE_TYPE_HOLD_IO	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_HOLD_IO,
 	CLUSCTL_RESOURCE_TYPE_RESUME_IO	= CLUS_OBJECT_RESOURCE_TYPE << 24 | CLCTL_RESUME_IO
-    }	CLUSCTL_RESOURCE_TYPE_CODES;
+    } 	CLUSCTL_RESOURCE_TYPE_CODES;
 
 typedef 
 enum CLUSCTL_GROUP_CODES
@@ -1119,8 +1140,10 @@ enum CLUSCTL_GROUP_CODES
 	CLUSCTL_GROUP_GET_PRIVATE_PROPERTIES	= CLUS_OBJECT_GROUP << 24 | CLCTL_GET_PRIVATE_PROPERTIES,
 	CLUSCTL_GROUP_SET_PRIVATE_PROPERTIES	= CLUS_OBJECT_GROUP << 24 | CLCTL_SET_PRIVATE_PROPERTIES,
 	CLUSCTL_GROUP_VALIDATE_PRIVATE_PROPERTIES	= CLUS_OBJECT_GROUP << 24 | CLCTL_VALIDATE_PRIVATE_PROPERTIES,
-	CLUSCTL_GROUP_QUERY_DELETE	= CLUS_OBJECT_GROUP << 24 | CLCTL_QUERY_DELETE
-    }	CLUSCTL_GROUP_CODES;
+	CLUSCTL_GROUP_QUERY_DELETE	= CLUS_OBJECT_GROUP << 24 | CLCTL_QUERY_DELETE,
+	CLUSCTL_GROUP_GET_COMMON_PROPERTY_FMTS	= CLUS_OBJECT_GROUP << 24 | CLCTL_GET_COMMON_PROPERTY_FMTS,
+	CLUSCTL_GROUP_GET_PRIVATE_PROPERTY_FMTS	= CLUS_OBJECT_GROUP << 24 | CLCTL_GET_PRIVATE_PROPERTY_FMTS
+    } 	CLUSCTL_GROUP_CODES;
 
 typedef 
 enum CLUSCTL_NODE_CODES
@@ -1138,8 +1161,10 @@ enum CLUSCTL_NODE_CODES
 	CLUSCTL_NODE_GET_RO_PRIVATE_PROPERTIES	= CLUS_OBJECT_NODE << 24 | CLCTL_GET_RO_PRIVATE_PROPERTIES,
 	CLUSCTL_NODE_GET_PRIVATE_PROPERTIES	= CLUS_OBJECT_NODE << 24 | CLCTL_GET_PRIVATE_PROPERTIES,
 	CLUSCTL_NODE_SET_PRIVATE_PROPERTIES	= CLUS_OBJECT_NODE << 24 | CLCTL_SET_PRIVATE_PROPERTIES,
-	CLUSCTL_NODE_VALIDATE_PRIVATE_PROPERTIES	= CLUS_OBJECT_NODE << 24 | CLCTL_VALIDATE_PRIVATE_PROPERTIES
-    }	CLUSCTL_NODE_CODES;
+	CLUSCTL_NODE_VALIDATE_PRIVATE_PROPERTIES	= CLUS_OBJECT_NODE << 24 | CLCTL_VALIDATE_PRIVATE_PROPERTIES,
+	CLUSCTL_NODE_GET_COMMON_PROPERTY_FMTS	= CLUS_OBJECT_NODE << 24 | CLCTL_GET_COMMON_PROPERTY_FMTS,
+	CLUSCTL_NODE_GET_PRIVATE_PROPERTY_FMTS	= CLUS_OBJECT_NODE << 24 | CLCTL_GET_PRIVATE_PROPERTY_FMTS
+    } 	CLUSCTL_NODE_CODES;
 
 typedef 
 enum CLUSCTL_NETWORK_CODES
@@ -1157,8 +1182,10 @@ enum CLUSCTL_NETWORK_CODES
 	CLUSCTL_NETWORK_GET_RO_PRIVATE_PROPERTIES	= CLUS_OBJECT_NETWORK << 24 | CLCTL_GET_RO_PRIVATE_PROPERTIES,
 	CLUSCTL_NETWORK_GET_PRIVATE_PROPERTIES	= CLUS_OBJECT_NETWORK << 24 | CLCTL_GET_PRIVATE_PROPERTIES,
 	CLUSCTL_NETWORK_SET_PRIVATE_PROPERTIES	= CLUS_OBJECT_NETWORK << 24 | CLCTL_SET_PRIVATE_PROPERTIES,
-	CLUSCTL_NETWORK_VALIDATE_PRIVATE_PROPERTIES	= CLUS_OBJECT_NETWORK << 24 | CLCTL_VALIDATE_PRIVATE_PROPERTIES
-    }	CLUSCTL_NETWORK_CODES;
+	CLUSCTL_NETWORK_VALIDATE_PRIVATE_PROPERTIES	= CLUS_OBJECT_NETWORK << 24 | CLCTL_VALIDATE_PRIVATE_PROPERTIES,
+	CLUSCTL_NETWORK_GET_COMMON_PROPERTY_FMTS	= CLUS_OBJECT_NETWORK << 24 | CLCTL_GET_COMMON_PROPERTY_FMTS,
+	CLUSCTL_NETWORK_GET_PRIVATE_PROPERTY_FMTS	= CLUS_OBJECT_NETWORK << 24 | CLCTL_GET_PRIVATE_PROPERTY_FMTS
+    } 	CLUSCTL_NETWORK_CODES;
 
 typedef 
 enum CLUSCTL_NETINTERFACE_CODES
@@ -1178,12 +1205,15 @@ enum CLUSCTL_NETINTERFACE_CODES
 	CLUSCTL_NETINTERFACE_GET_RO_PRIVATE_PROPERTIES	= CLUS_OBJECT_NETINTERFACE << 24 | CLCTL_GET_RO_PRIVATE_PROPERTIES,
 	CLUSCTL_NETINTERFACE_GET_PRIVATE_PROPERTIES	= CLUS_OBJECT_NETINTERFACE << 24 | CLCTL_GET_PRIVATE_PROPERTIES,
 	CLUSCTL_NETINTERFACE_SET_PRIVATE_PROPERTIES	= CLUS_OBJECT_NETINTERFACE << 24 | CLCTL_SET_PRIVATE_PROPERTIES,
-	CLUSCTL_NETINTERFACE_VALIDATE_PRIVATE_PROPERTIES	= CLUS_OBJECT_NETINTERFACE << 24 | CLCTL_VALIDATE_PRIVATE_PROPERTIES
-    }	CLUSCTL_NETINTERFACE_CODES;
+	CLUSCTL_NETINTERFACE_VALIDATE_PRIVATE_PROPERTIES	= CLUS_OBJECT_NETINTERFACE << 24 | CLCTL_VALIDATE_PRIVATE_PROPERTIES,
+	CLUSCTL_NETINTERFACE_GET_COMMON_PROPERTY_FMTS	= CLUS_OBJECT_NETINTERFACE << 24 | CLCTL_GET_COMMON_PROPERTY_FMTS,
+	CLUSCTL_NETINTERFACE_GET_PRIVATE_PROPERTY_FMTS	= CLUS_OBJECT_NETINTERFACE << 24 | CLCTL_GET_PRIVATE_PROPERTY_FMTS
+    } 	CLUSCTL_NETINTERFACE_CODES;
 
 typedef 
 enum CLUSCTL_CLUSTER_CODES
     {	CLUSCTL_CLUSTER_UNKNOWN	= CLUS_OBJECT_CLUSTER << 24 | CLCTL_UNKNOWN,
+	CLUSCTL_CLUSTER_GET_FQDN	= CLUS_OBJECT_CLUSTER << 24 | CLCTL_GET_FQDN,
 	CLUSCTL_CLUSTER_ENUM_COMMON_PROPERTIES	= CLUS_OBJECT_CLUSTER << 24 | CLCTL_ENUM_COMMON_PROPERTIES,
 	CLUSCTL_CLUSTER_GET_RO_COMMON_PROPERTIES	= CLUS_OBJECT_CLUSTER << 24 | CLCTL_GET_RO_COMMON_PROPERTIES,
 	CLUSCTL_CLUSTER_GET_COMMON_PROPERTIES	= CLUS_OBJECT_CLUSTER << 24 | CLCTL_GET_COMMON_PROPERTIES,
@@ -1193,39 +1223,44 @@ enum CLUSCTL_CLUSTER_CODES
 	CLUSCTL_CLUSTER_GET_RO_PRIVATE_PROPERTIES	= CLUS_OBJECT_CLUSTER << 24 | CLCTL_GET_RO_PRIVATE_PROPERTIES,
 	CLUSCTL_CLUSTER_GET_PRIVATE_PROPERTIES	= CLUS_OBJECT_CLUSTER << 24 | CLCTL_GET_PRIVATE_PROPERTIES,
 	CLUSCTL_CLUSTER_SET_PRIVATE_PROPERTIES	= CLUS_OBJECT_CLUSTER << 24 | CLCTL_SET_PRIVATE_PROPERTIES,
-	CLUSCTL_CLUSTER_VALIDATE_PRIVATE_PROPERTIES	= CLUS_OBJECT_CLUSTER << 24 | CLCTL_VALIDATE_PRIVATE_PROPERTIES
-    }	CLUSCTL_CLUSTER_CODES;
+	CLUSCTL_CLUSTER_VALIDATE_PRIVATE_PROPERTIES	= CLUS_OBJECT_CLUSTER << 24 | CLCTL_VALIDATE_PRIVATE_PROPERTIES,
+	CLUSCTL_CLUSTER_GET_COMMON_PROPERTY_FMTS	= CLUS_OBJECT_CLUSTER << 24 | CLCTL_GET_COMMON_PROPERTY_FMTS,
+	CLUSCTL_CLUSTER_GET_PRIVATE_PROPERTY_FMTS	= CLUS_OBJECT_CLUSTER << 24 | CLCTL_GET_PRIVATE_PROPERTY_FMTS
+    } 	CLUSCTL_CLUSTER_CODES;
 
 typedef 
 enum CLUSTER_RESOURCE_CLASS
     {	CLUS_RESCLASS_UNKNOWN	= 0,
 	CLUS_RESCLASS_STORAGE	= CLUS_RESCLASS_UNKNOWN + 1,
 	CLUS_RESCLASS_USER	= 32768
-    }	CLUSTER_RESOURCE_CLASS;
+    } 	CLUSTER_RESOURCE_CLASS;
 
 typedef 
 enum CLUS_RESSUBCLASS
     {	CLUS_RESSUBCLASS_SHARED	= 0x80000000
-    }	CLUS_RESSUBCLASS;
+    } 	CLUS_RESSUBCLASS;
 
 typedef 
 enum CLUS_CHARACTERISTICS
     {	CLUS_CHAR_UNKNOWN	= 0,
 	CLUS_CHAR_QUORUM	= 0x1,
-	CLUS_CHAR_DELETE_REQUIRES_ALL_NODES	= 0x2
-    }	CLUS_CHARACTERISTICS;
+	CLUS_CHAR_DELETE_REQUIRES_ALL_NODES	= 0x2,
+	CLUS_CHAR_LOCAL_QUORUM	= 0x4,
+	CLUS_CHAR_LOCAL_QUORUM_DEBUG	= 0x8
+    } 	CLUS_CHARACTERISTICS;
 
 typedef 
 enum CLUS_FLAGS
     {	CLUS_FLAG_CORE	= 0x1
-    }	CLUS_FLAGS;
+    } 	CLUS_FLAGS;
 
 typedef 
 enum CLUSPROP_PIFLAGS
     {	CLUSPROP_PIFLAG_STICKY	= 0x1,
 	CLUSPROP_PIFLAG_REMOVABLE	= 0x2,
-	CLUSPROP_PIFLAG_USABLE	= 0x4
-    }	CLUSPROP_PIFLAGS;
+	CLUSPROP_PIFLAG_USABLE	= 0x4,
+	CLUSPROP_PIFLAG_DEFAULT_QUORUM	= 0x8
+    } 	CLUSPROP_PIFLAGS;
 
 typedef 
 enum CLUSTER_RESOURCE_ENUM
@@ -1233,19 +1268,19 @@ enum CLUSTER_RESOURCE_ENUM
 	CLUSTER_RESOURCE_ENUM_PROVIDES	= 0x2,
 	CLUSTER_RESOURCE_ENUM_NODES	= 0x4,
 	CLUSTER_RESOURCE_ENUM_ALL	= CLUSTER_RESOURCE_ENUM_DEPENDS | CLUSTER_RESOURCE_ENUM_PROVIDES | CLUSTER_RESOURCE_ENUM_NODES
-    }	CLUSTER_RESOURCE_ENUM;
+    } 	CLUSTER_RESOURCE_ENUM;
 
 typedef 
 enum CLUSTER_RESOURCE_TYPE_ENUM
     {	CLUSTER_RESOURCE_TYPE_ENUM_NODES	= 0x1,
 	CLUSTER_RESOURCE_TYPE_ENUM_ALL	= CLUSTER_RESOURCE_TYPE_ENUM_NODES
-    }	CLUSTER_RESOURCE_TYPE_ENUM;
+    } 	CLUSTER_RESOURCE_TYPE_ENUM;
 
 typedef 
 enum CLUSTER_NETWORK_ENUM
     {	CLUSTER_NETWORK_ENUM_NETINTERFACES	= 0x1,
 	CLUSTER_NETWORK_ENUM_ALL	= CLUSTER_NETWORK_ENUM_NETINTERFACES
-    }	CLUSTER_NETWORK_ENUM;
+    } 	CLUSTER_NETWORK_ENUM;
 
 typedef 
 enum CLUSTER_NETWORK_STATE
@@ -1254,7 +1289,7 @@ enum CLUSTER_NETWORK_STATE
 	ClusterNetworkDown	= ClusterNetworkUnavailable + 1,
 	ClusterNetworkPartitioned	= ClusterNetworkDown + 1,
 	ClusterNetworkUp	= ClusterNetworkPartitioned + 1
-    }	CLUSTER_NETWORK_STATE;
+    } 	CLUSTER_NETWORK_STATE;
 
 typedef 
 enum CLUSTER_NETWORK_ROLE
@@ -1262,7 +1297,7 @@ enum CLUSTER_NETWORK_ROLE
 	ClusterNetworkRoleInternalUse	= 0x1,
 	ClusterNetworkRoleClientAccess	= 0x2,
 	ClusterNetworkRoleInternalAndClient	= 0x3
-    }	CLUSTER_NETWORK_ROLE;
+    } 	CLUSTER_NETWORK_ROLE;
 
 typedef 
 enum CLUSTER_NETINTERFACE_STATE
@@ -1271,7 +1306,7 @@ enum CLUSTER_NETINTERFACE_STATE
 	ClusterNetInterfaceFailed	= ClusterNetInterfaceUnavailable + 1,
 	ClusterNetInterfaceUnreachable	= ClusterNetInterfaceFailed + 1,
 	ClusterNetInterfaceUp	= ClusterNetInterfaceUnreachable + 1
-    }	CLUSTER_NETINTERFACE_STATE;
+    } 	CLUSTER_NETINTERFACE_STATE;
 
 #endif // _CLUSTER_API_TYPES_
 
@@ -1658,15 +1693,15 @@ EXTERN_C const IID IID_ISClusApplication;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DomainNames( 
-            /* [retval][out] */ ISDomainNames __RPC_FAR *__RPC_FAR *ppDomains) = 0;
+            /* [retval][out] */ ISDomainNames **ppDomains) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ClusterNames( 
             /* [in] */ BSTR bstrDomainName,
-            /* [retval][out] */ ISClusterNames __RPC_FAR *__RPC_FAR *ppClusters) = 0;
+            /* [retval][out] */ ISClusterNames **ppClusters) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenCluster( 
             /* [in] */ BSTR bstrClusterName,
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *pCluster) = 0;
+            /* [retval][out] */ ISCluster **pCluster) = 0;
         
     };
     
@@ -1676,66 +1711,66 @@ EXTERN_C const IID IID_ISClusApplication;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusApplication __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusApplication * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusApplication __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusApplication * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusApplication __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusApplication * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusApplication __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusApplication * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusApplication __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusApplication * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusApplication __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusApplication * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusApplication __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusApplication * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DomainNames )( 
-            ISClusApplication __RPC_FAR * This,
-            /* [retval][out] */ ISDomainNames __RPC_FAR *__RPC_FAR *ppDomains);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DomainNames )( 
+            ISClusApplication * This,
+            /* [retval][out] */ ISDomainNames **ppDomains);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ClusterNames )( 
-            ISClusApplication __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClusterNames )( 
+            ISClusApplication * This,
             /* [in] */ BSTR bstrDomainName,
-            /* [retval][out] */ ISClusterNames __RPC_FAR *__RPC_FAR *ppClusters);
+            /* [retval][out] */ ISClusterNames **ppClusters);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OpenCluster )( 
-            ISClusApplication __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OpenCluster )( 
+            ISClusApplication * This,
             /* [in] */ BSTR bstrClusterName,
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *pCluster);
+            /* [retval][out] */ ISCluster **pCluster);
         
         END_INTERFACE
     } ISClusApplicationVtbl;
 
     interface ISClusApplication
     {
-        CONST_VTBL struct ISClusApplicationVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusApplicationVtbl *lpVtbl;
     };
 
     
@@ -1783,8 +1818,8 @@ EXTERN_C const IID IID_ISClusApplication;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusApplication_get_DomainNames_Proxy( 
-    ISClusApplication __RPC_FAR * This,
-    /* [retval][out] */ ISDomainNames __RPC_FAR *__RPC_FAR *ppDomains);
+    ISClusApplication * This,
+    /* [retval][out] */ ISDomainNames **ppDomains);
 
 
 void __RPC_STUB ISClusApplication_get_DomainNames_Stub(
@@ -1795,9 +1830,9 @@ void __RPC_STUB ISClusApplication_get_DomainNames_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusApplication_get_ClusterNames_Proxy( 
-    ISClusApplication __RPC_FAR * This,
+    ISClusApplication * This,
     /* [in] */ BSTR bstrDomainName,
-    /* [retval][out] */ ISClusterNames __RPC_FAR *__RPC_FAR *ppClusters);
+    /* [retval][out] */ ISClusterNames **ppClusters);
 
 
 void __RPC_STUB ISClusApplication_get_ClusterNames_Stub(
@@ -1808,9 +1843,9 @@ void __RPC_STUB ISClusApplication_get_ClusterNames_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusApplication_OpenCluster_Proxy( 
-    ISClusApplication __RPC_FAR * This,
+    ISClusApplication * This,
     /* [in] */ BSTR bstrClusterName,
-    /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *pCluster);
+    /* [retval][out] */ ISCluster **pCluster);
 
 
 void __RPC_STUB ISClusApplication_OpenCluster_Stub(
@@ -1840,16 +1875,16 @@ EXTERN_C const IID IID_ISDomainNames;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDomainName) = 0;
+            /* [retval][out] */ BSTR *pbstrDomainName) = 0;
         
     };
     
@@ -1859,68 +1894,68 @@ EXTERN_C const IID IID_ISDomainNames;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISDomainNames __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISDomainNames * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISDomainNames __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISDomainNames * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISDomainNames __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISDomainNames * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISDomainNames __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISDomainNames * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISDomainNames __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISDomainNames * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISDomainNames __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISDomainNames * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISDomainNames __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISDomainNames * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISDomainNames __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISDomainNames * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISDomainNames __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISDomainNames * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISDomainNames __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISDomainNames * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISDomainNames __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISDomainNames * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDomainName);
+            /* [retval][out] */ BSTR *pbstrDomainName);
         
         END_INTERFACE
     } ISDomainNamesVtbl;
 
     interface ISDomainNames
     {
-        CONST_VTBL struct ISDomainNamesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISDomainNamesVtbl *lpVtbl;
     };
 
     
@@ -1971,8 +2006,8 @@ EXTERN_C const IID IID_ISDomainNames;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISDomainNames_get_Count_Proxy( 
-    ISDomainNames __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISDomainNames * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISDomainNames_get_Count_Stub(
@@ -1983,8 +2018,8 @@ void __RPC_STUB ISDomainNames_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISDomainNames_get__NewEnum_Proxy( 
-    ISDomainNames __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISDomainNames * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISDomainNames_get__NewEnum_Stub(
@@ -1995,7 +2030,7 @@ void __RPC_STUB ISDomainNames_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISDomainNames_Refresh_Proxy( 
-    ISDomainNames __RPC_FAR * This);
+    ISDomainNames * This);
 
 
 void __RPC_STUB ISDomainNames_Refresh_Stub(
@@ -2006,9 +2041,9 @@ void __RPC_STUB ISDomainNames_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISDomainNames_get_Item_Proxy( 
-    ISDomainNames __RPC_FAR * This,
+    ISDomainNames * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrDomainName);
+    /* [retval][out] */ BSTR *pbstrDomainName);
 
 
 void __RPC_STUB ISDomainNames_get_Item_Stub(
@@ -2038,19 +2073,19 @@ EXTERN_C const IID IID_ISClusterNames;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrClusterName) = 0;
+            /* [retval][out] */ BSTR *pbstrClusterName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DomainName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDomainName) = 0;
+            /* [retval][out] */ BSTR *pbstrDomainName) = 0;
         
     };
     
@@ -2060,72 +2095,72 @@ EXTERN_C const IID IID_ISClusterNames;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusterNames __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusterNames * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusterNames __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusterNames * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusterNames __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusterNames * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusterNames __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusterNames * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusterNames __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusterNames * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusterNames __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusterNames * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusterNames __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusterNames * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusterNames __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusterNames * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusterNames __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusterNames * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusterNames __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusterNames * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusterNames __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusterNames * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrClusterName);
+            /* [retval][out] */ BSTR *pbstrClusterName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DomainName )( 
-            ISClusterNames __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDomainName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DomainName )( 
+            ISClusterNames * This,
+            /* [retval][out] */ BSTR *pbstrDomainName);
         
         END_INTERFACE
     } ISClusterNamesVtbl;
 
     interface ISClusterNames
     {
-        CONST_VTBL struct ISClusterNamesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusterNamesVtbl *lpVtbl;
     };
 
     
@@ -2179,8 +2214,8 @@ EXTERN_C const IID IID_ISClusterNames;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusterNames_get_Count_Proxy( 
-    ISClusterNames __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusterNames * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusterNames_get_Count_Stub(
@@ -2191,8 +2226,8 @@ void __RPC_STUB ISClusterNames_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusterNames_get__NewEnum_Proxy( 
-    ISClusterNames __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusterNames * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusterNames_get__NewEnum_Stub(
@@ -2203,7 +2238,7 @@ void __RPC_STUB ISClusterNames_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusterNames_Refresh_Proxy( 
-    ISClusterNames __RPC_FAR * This);
+    ISClusterNames * This);
 
 
 void __RPC_STUB ISClusterNames_Refresh_Stub(
@@ -2214,9 +2249,9 @@ void __RPC_STUB ISClusterNames_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusterNames_get_Item_Proxy( 
-    ISClusterNames __RPC_FAR * This,
+    ISClusterNames * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrClusterName);
+    /* [retval][out] */ BSTR *pbstrClusterName);
 
 
 void __RPC_STUB ISClusterNames_get_Item_Stub(
@@ -2227,8 +2262,8 @@ void __RPC_STUB ISClusterNames_get_Item_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusterNames_get_DomainName_Proxy( 
-    ISClusterNames __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrDomainName);
+    ISClusterNames * This,
+    /* [retval][out] */ BSTR *pbstrDomainName);
 
 
 void __RPC_STUB ISClusterNames_get_DomainName_Stub(
@@ -2258,7 +2293,7 @@ EXTERN_C const IID IID_ISClusRefObject;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Handle( 
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle) = 0;
+            /* [retval][out] */ ULONG_PTR *phandle) = 0;
         
     };
     
@@ -2268,56 +2303,56 @@ EXTERN_C const IID IID_ISClusRefObject;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusRefObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusRefObject * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusRefObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusRefObject * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusRefObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusRefObject * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusRefObject __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusRefObject * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusRefObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusRefObject * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusRefObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusRefObject * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusRefObject __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusRefObject * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Handle )( 
-            ISClusRefObject __RPC_FAR * This,
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            ISClusRefObject * This,
+            /* [retval][out] */ ULONG_PTR *phandle);
         
         END_INTERFACE
     } ISClusRefObjectVtbl;
 
     interface ISClusRefObject
     {
-        CONST_VTBL struct ISClusRefObjectVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusRefObjectVtbl *lpVtbl;
     };
 
     
@@ -2359,8 +2394,8 @@ EXTERN_C const IID IID_ISClusRefObject;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusRefObject_get_Handle_Proxy( 
-    ISClusRefObject __RPC_FAR * This,
-    /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+    ISClusRefObject * This,
+    /* [retval][out] */ ULONG_PTR *phandle);
 
 
 void __RPC_STUB ISClusRefObject_get_Handle_Stub(
@@ -2390,34 +2425,34 @@ EXTERN_C const IID IID_ISClusVersion;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrClusterName) = 0;
+            /* [retval][out] */ BSTR *pbstrClusterName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MajorVersion( 
-            /* [retval][out] */ long __RPC_FAR *pnMajorVersion) = 0;
+            /* [retval][out] */ long *pnMajorVersion) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MinorVersion( 
-            /* [retval][out] */ long __RPC_FAR *pnMinorVersion) = 0;
+            /* [retval][out] */ long *pnMinorVersion) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BuildNumber( 
-            /* [retval][out] */ SHORT __RPC_FAR *pnBuildNumber) = 0;
+            /* [retval][out] */ SHORT *pnBuildNumber) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VendorId( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVendorId) = 0;
+            /* [retval][out] */ BSTR *pbstrVendorId) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CSDVersion( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCSDVersion) = 0;
+            /* [retval][out] */ BSTR *pbstrCSDVersion) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ClusterHighestVersion( 
-            /* [retval][out] */ long __RPC_FAR *pnClusterHighestVersion) = 0;
+            /* [retval][out] */ long *pnClusterHighestVersion) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ClusterLowestVersion( 
-            /* [retval][out] */ long __RPC_FAR *pnClusterLowestVersion) = 0;
+            /* [retval][out] */ long *pnClusterLowestVersion) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Flags( 
-            /* [retval][out] */ long __RPC_FAR *pnFlags) = 0;
+            /* [retval][out] */ long *pnFlags) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MixedVersion( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarMixedVersion) = 0;
+            /* [retval][out] */ VARIANT *pvarMixedVersion) = 0;
         
     };
     
@@ -2427,92 +2462,92 @@ EXTERN_C const IID IID_ISClusVersion;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusVersion __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusVersion * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusVersion __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusVersion * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusVersion __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusVersion * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusVersion __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusVersion * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusVersion __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusVersion * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusVersion __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusVersion * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusVersion __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusVersion * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            ISClusVersion __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrClusterName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            ISClusVersion * This,
+            /* [retval][out] */ BSTR *pbstrClusterName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MajorVersion )( 
-            ISClusVersion __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pnMajorVersion);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MajorVersion )( 
+            ISClusVersion * This,
+            /* [retval][out] */ long *pnMajorVersion);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MinorVersion )( 
-            ISClusVersion __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pnMinorVersion);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinorVersion )( 
+            ISClusVersion * This,
+            /* [retval][out] */ long *pnMinorVersion);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BuildNumber )( 
-            ISClusVersion __RPC_FAR * This,
-            /* [retval][out] */ SHORT __RPC_FAR *pnBuildNumber);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BuildNumber )( 
+            ISClusVersion * This,
+            /* [retval][out] */ SHORT *pnBuildNumber);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VendorId )( 
-            ISClusVersion __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVendorId);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VendorId )( 
+            ISClusVersion * This,
+            /* [retval][out] */ BSTR *pbstrVendorId);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CSDVersion )( 
-            ISClusVersion __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCSDVersion);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CSDVersion )( 
+            ISClusVersion * This,
+            /* [retval][out] */ BSTR *pbstrCSDVersion);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ClusterHighestVersion )( 
-            ISClusVersion __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pnClusterHighestVersion);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClusterHighestVersion )( 
+            ISClusVersion * This,
+            /* [retval][out] */ long *pnClusterHighestVersion);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ClusterLowestVersion )( 
-            ISClusVersion __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pnClusterLowestVersion);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClusterLowestVersion )( 
+            ISClusVersion * This,
+            /* [retval][out] */ long *pnClusterLowestVersion);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Flags )( 
-            ISClusVersion __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pnFlags);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Flags )( 
+            ISClusVersion * This,
+            /* [retval][out] */ long *pnFlags);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MixedVersion )( 
-            ISClusVersion __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarMixedVersion);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MixedVersion )( 
+            ISClusVersion * This,
+            /* [retval][out] */ VARIANT *pvarMixedVersion);
         
         END_INTERFACE
     } ISClusVersionVtbl;
 
     interface ISClusVersion
     {
-        CONST_VTBL struct ISClusVersionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusVersionVtbl *lpVtbl;
     };
 
     
@@ -2581,8 +2616,8 @@ EXTERN_C const IID IID_ISClusVersion;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusVersion_get_Name_Proxy( 
-    ISClusVersion __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrClusterName);
+    ISClusVersion * This,
+    /* [retval][out] */ BSTR *pbstrClusterName);
 
 
 void __RPC_STUB ISClusVersion_get_Name_Stub(
@@ -2593,8 +2628,8 @@ void __RPC_STUB ISClusVersion_get_Name_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusVersion_get_MajorVersion_Proxy( 
-    ISClusVersion __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pnMajorVersion);
+    ISClusVersion * This,
+    /* [retval][out] */ long *pnMajorVersion);
 
 
 void __RPC_STUB ISClusVersion_get_MajorVersion_Stub(
@@ -2605,8 +2640,8 @@ void __RPC_STUB ISClusVersion_get_MajorVersion_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusVersion_get_MinorVersion_Proxy( 
-    ISClusVersion __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pnMinorVersion);
+    ISClusVersion * This,
+    /* [retval][out] */ long *pnMinorVersion);
 
 
 void __RPC_STUB ISClusVersion_get_MinorVersion_Stub(
@@ -2617,8 +2652,8 @@ void __RPC_STUB ISClusVersion_get_MinorVersion_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusVersion_get_BuildNumber_Proxy( 
-    ISClusVersion __RPC_FAR * This,
-    /* [retval][out] */ SHORT __RPC_FAR *pnBuildNumber);
+    ISClusVersion * This,
+    /* [retval][out] */ SHORT *pnBuildNumber);
 
 
 void __RPC_STUB ISClusVersion_get_BuildNumber_Stub(
@@ -2629,8 +2664,8 @@ void __RPC_STUB ISClusVersion_get_BuildNumber_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusVersion_get_VendorId_Proxy( 
-    ISClusVersion __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrVendorId);
+    ISClusVersion * This,
+    /* [retval][out] */ BSTR *pbstrVendorId);
 
 
 void __RPC_STUB ISClusVersion_get_VendorId_Stub(
@@ -2641,8 +2676,8 @@ void __RPC_STUB ISClusVersion_get_VendorId_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusVersion_get_CSDVersion_Proxy( 
-    ISClusVersion __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrCSDVersion);
+    ISClusVersion * This,
+    /* [retval][out] */ BSTR *pbstrCSDVersion);
 
 
 void __RPC_STUB ISClusVersion_get_CSDVersion_Stub(
@@ -2653,8 +2688,8 @@ void __RPC_STUB ISClusVersion_get_CSDVersion_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusVersion_get_ClusterHighestVersion_Proxy( 
-    ISClusVersion __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pnClusterHighestVersion);
+    ISClusVersion * This,
+    /* [retval][out] */ long *pnClusterHighestVersion);
 
 
 void __RPC_STUB ISClusVersion_get_ClusterHighestVersion_Stub(
@@ -2665,8 +2700,8 @@ void __RPC_STUB ISClusVersion_get_ClusterHighestVersion_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusVersion_get_ClusterLowestVersion_Proxy( 
-    ISClusVersion __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pnClusterLowestVersion);
+    ISClusVersion * This,
+    /* [retval][out] */ long *pnClusterLowestVersion);
 
 
 void __RPC_STUB ISClusVersion_get_ClusterLowestVersion_Stub(
@@ -2677,8 +2712,8 @@ void __RPC_STUB ISClusVersion_get_ClusterLowestVersion_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusVersion_get_Flags_Proxy( 
-    ISClusVersion __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pnFlags);
+    ISClusVersion * This,
+    /* [retval][out] */ long *pnFlags);
 
 
 void __RPC_STUB ISClusVersion_get_Flags_Stub(
@@ -2689,8 +2724,8 @@ void __RPC_STUB ISClusVersion_get_Flags_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusVersion_get_MixedVersion_Proxy( 
-    ISClusVersion __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarMixedVersion);
+    ISClusVersion * This,
+    /* [retval][out] */ VARIANT *pvarMixedVersion);
 
 
 void __RPC_STUB ISClusVersion_get_MixedVersion_Stub(
@@ -2720,67 +2755,67 @@ EXTERN_C const IID IID_ISCluster;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_Handle( 
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle) = 0;
+            /* [retval][out] */ ULONG_PTR *phandle) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Open( 
             /* [in] */ BSTR bstrClusterName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+            /* [retval][out] */ BSTR *pbstrName) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
             /* [in] */ BSTR bstrClusterName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Version( 
-            /* [retval][out] */ ISClusVersion __RPC_FAR *__RPC_FAR *ppClusVersion) = 0;
+            /* [retval][out] */ ISClusVersion **ppClusVersion) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_QuorumResource( 
-            /* [in] */ ISClusResource __RPC_FAR *pClusterResource) = 0;
+            /* [in] */ ISClusResource *pClusterResource) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_QuorumResource( 
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *pClusterResource) = 0;
+            /* [retval][out] */ ISClusResource **pClusterResource) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_QuorumLogSize( 
-            /* [retval][out] */ long __RPC_FAR *pnLogSize) = 0;
+            /* [retval][out] */ long *pnLogSize) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_QuorumLogSize( 
             /* [in] */ long nLogSize) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_QuorumPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *ppPath) = 0;
+            /* [retval][out] */ BSTR *ppPath) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_QuorumPath( 
             BSTR pPath) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Nodes( 
-            /* [retval][out] */ ISClusNodes __RPC_FAR *__RPC_FAR *ppNodes) = 0;
+            /* [retval][out] */ ISClusNodes **ppNodes) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ResourceGroups( 
-            /* [retval][out] */ ISClusResGroups __RPC_FAR *__RPC_FAR *ppClusterResourceGroups) = 0;
+            /* [retval][out] */ ISClusResGroups **ppClusterResourceGroups) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Resources( 
-            /* [retval][out] */ ISClusResources __RPC_FAR *__RPC_FAR *ppClusterResources) = 0;
+            /* [retval][out] */ ISClusResources **ppClusterResources) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ResourceTypes( 
-            /* [retval][out] */ ISClusResTypes __RPC_FAR *__RPC_FAR *ppResourceTypes) = 0;
+            /* [retval][out] */ ISClusResTypes **ppResourceTypes) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Networks( 
-            /* [retval][out] */ ISClusNetworks __RPC_FAR *__RPC_FAR *ppNetworks) = 0;
+            /* [retval][out] */ ISClusNetworks **ppNetworks) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NetInterfaces( 
-            /* [retval][out] */ ISClusNetInterfaces __RPC_FAR *__RPC_FAR *ppNetInterfaces) = 0;
+            /* [retval][out] */ ISClusNetInterfaces **ppNetInterfaces) = 0;
         
     };
     
@@ -2790,136 +2825,136 @@ EXTERN_C const IID IID_ISCluster;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISCluster __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISCluster * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISCluster __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISCluster * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISCluster __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISCluster * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISCluster __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISCluster * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISCluster __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISCluster * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISCluster __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISCluster * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISCluster __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISCluster * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonProperties )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonProperties )( 
+            ISCluster * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateProperties )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateProperties )( 
+            ISCluster * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonROProperties )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonROProperties )( 
+            ISCluster * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateROProperties )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateROProperties )( 
+            ISCluster * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Handle )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+        /* [helpstring][id][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            ISCluster * This,
+            /* [retval][out] */ ULONG_PTR *phandle);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
-            ISCluster __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Open )( 
+            ISCluster * This,
             /* [in] */ BSTR bstrClusterName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            ISCluster * This,
+            /* [retval][out] */ BSTR *pbstrName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
-            ISCluster __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+            ISCluster * This,
             /* [in] */ BSTR bstrClusterName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Version )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ ISClusVersion __RPC_FAR *__RPC_FAR *ppClusVersion);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+            ISCluster * This,
+            /* [retval][out] */ ISClusVersion **ppClusVersion);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_QuorumResource )( 
-            ISCluster __RPC_FAR * This,
-            /* [in] */ ISClusResource __RPC_FAR *pClusterResource);
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_QuorumResource )( 
+            ISCluster * This,
+            /* [in] */ ISClusResource *pClusterResource);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_QuorumResource )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *pClusterResource);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QuorumResource )( 
+            ISCluster * This,
+            /* [retval][out] */ ISClusResource **pClusterResource);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_QuorumLogSize )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pnLogSize);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QuorumLogSize )( 
+            ISCluster * This,
+            /* [retval][out] */ long *pnLogSize);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_QuorumLogSize )( 
-            ISCluster __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_QuorumLogSize )( 
+            ISCluster * This,
             /* [in] */ long nLogSize);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_QuorumPath )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *ppPath);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QuorumPath )( 
+            ISCluster * This,
+            /* [retval][out] */ BSTR *ppPath);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_QuorumPath )( 
-            ISCluster __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_QuorumPath )( 
+            ISCluster * This,
             BSTR pPath);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Nodes )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ ISClusNodes __RPC_FAR *__RPC_FAR *ppNodes);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Nodes )( 
+            ISCluster * This,
+            /* [retval][out] */ ISClusNodes **ppNodes);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ResourceGroups )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ ISClusResGroups __RPC_FAR *__RPC_FAR *ppClusterResourceGroups);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ResourceGroups )( 
+            ISCluster * This,
+            /* [retval][out] */ ISClusResGroups **ppClusterResourceGroups);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Resources )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ ISClusResources __RPC_FAR *__RPC_FAR *ppClusterResources);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Resources )( 
+            ISCluster * This,
+            /* [retval][out] */ ISClusResources **ppClusterResources);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ResourceTypes )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ ISClusResTypes __RPC_FAR *__RPC_FAR *ppResourceTypes);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ResourceTypes )( 
+            ISCluster * This,
+            /* [retval][out] */ ISClusResTypes **ppResourceTypes);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Networks )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ ISClusNetworks __RPC_FAR *__RPC_FAR *ppNetworks);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Networks )( 
+            ISCluster * This,
+            /* [retval][out] */ ISClusNetworks **ppNetworks);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NetInterfaces )( 
-            ISCluster __RPC_FAR * This,
-            /* [retval][out] */ ISClusNetInterfaces __RPC_FAR *__RPC_FAR *ppNetInterfaces);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NetInterfaces )( 
+            ISCluster * This,
+            /* [retval][out] */ ISClusNetInterfaces **ppNetInterfaces);
         
         END_INTERFACE
     } ISClusterVtbl;
 
     interface ISCluster
     {
-        CONST_VTBL struct ISClusterVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusterVtbl *lpVtbl;
     };
 
     
@@ -3021,8 +3056,8 @@ EXTERN_C const IID IID_ISCluster;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_CommonProperties_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISCluster * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISCluster_get_CommonProperties_Stub(
@@ -3033,8 +3068,8 @@ void __RPC_STUB ISCluster_get_CommonProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_PrivateProperties_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISCluster * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISCluster_get_PrivateProperties_Stub(
@@ -3045,8 +3080,8 @@ void __RPC_STUB ISCluster_get_PrivateProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_CommonROProperties_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISCluster * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISCluster_get_CommonROProperties_Stub(
@@ -3057,8 +3092,8 @@ void __RPC_STUB ISCluster_get_CommonROProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_PrivateROProperties_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISCluster * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISCluster_get_PrivateROProperties_Stub(
@@ -3069,8 +3104,8 @@ void __RPC_STUB ISCluster_get_PrivateROProperties_Stub(
 
 
 /* [helpstring][id][hidden][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_Handle_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+    ISCluster * This,
+    /* [retval][out] */ ULONG_PTR *phandle);
 
 
 void __RPC_STUB ISCluster_get_Handle_Stub(
@@ -3081,7 +3116,7 @@ void __RPC_STUB ISCluster_get_Handle_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISCluster_Open_Proxy( 
-    ISCluster __RPC_FAR * This,
+    ISCluster * This,
     /* [in] */ BSTR bstrClusterName);
 
 
@@ -3093,8 +3128,8 @@ void __RPC_STUB ISCluster_Open_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_Name_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+    ISCluster * This,
+    /* [retval][out] */ BSTR *pbstrName);
 
 
 void __RPC_STUB ISCluster_get_Name_Stub(
@@ -3105,7 +3140,7 @@ void __RPC_STUB ISCluster_get_Name_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISCluster_put_Name_Proxy( 
-    ISCluster __RPC_FAR * This,
+    ISCluster * This,
     /* [in] */ BSTR bstrClusterName);
 
 
@@ -3117,8 +3152,8 @@ void __RPC_STUB ISCluster_put_Name_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_Version_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ ISClusVersion __RPC_FAR *__RPC_FAR *ppClusVersion);
+    ISCluster * This,
+    /* [retval][out] */ ISClusVersion **ppClusVersion);
 
 
 void __RPC_STUB ISCluster_get_Version_Stub(
@@ -3129,8 +3164,8 @@ void __RPC_STUB ISCluster_get_Version_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISCluster_put_QuorumResource_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [in] */ ISClusResource __RPC_FAR *pClusterResource);
+    ISCluster * This,
+    /* [in] */ ISClusResource *pClusterResource);
 
 
 void __RPC_STUB ISCluster_put_QuorumResource_Stub(
@@ -3141,8 +3176,8 @@ void __RPC_STUB ISCluster_put_QuorumResource_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_QuorumResource_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *pClusterResource);
+    ISCluster * This,
+    /* [retval][out] */ ISClusResource **pClusterResource);
 
 
 void __RPC_STUB ISCluster_get_QuorumResource_Stub(
@@ -3153,8 +3188,8 @@ void __RPC_STUB ISCluster_get_QuorumResource_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_QuorumLogSize_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pnLogSize);
+    ISCluster * This,
+    /* [retval][out] */ long *pnLogSize);
 
 
 void __RPC_STUB ISCluster_get_QuorumLogSize_Stub(
@@ -3165,7 +3200,7 @@ void __RPC_STUB ISCluster_get_QuorumLogSize_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISCluster_put_QuorumLogSize_Proxy( 
-    ISCluster __RPC_FAR * This,
+    ISCluster * This,
     /* [in] */ long nLogSize);
 
 
@@ -3177,8 +3212,8 @@ void __RPC_STUB ISCluster_put_QuorumLogSize_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_QuorumPath_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *ppPath);
+    ISCluster * This,
+    /* [retval][out] */ BSTR *ppPath);
 
 
 void __RPC_STUB ISCluster_get_QuorumPath_Stub(
@@ -3189,7 +3224,7 @@ void __RPC_STUB ISCluster_get_QuorumPath_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISCluster_put_QuorumPath_Proxy( 
-    ISCluster __RPC_FAR * This,
+    ISCluster * This,
     BSTR pPath);
 
 
@@ -3201,8 +3236,8 @@ void __RPC_STUB ISCluster_put_QuorumPath_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_Nodes_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ ISClusNodes __RPC_FAR *__RPC_FAR *ppNodes);
+    ISCluster * This,
+    /* [retval][out] */ ISClusNodes **ppNodes);
 
 
 void __RPC_STUB ISCluster_get_Nodes_Stub(
@@ -3213,8 +3248,8 @@ void __RPC_STUB ISCluster_get_Nodes_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_ResourceGroups_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ ISClusResGroups __RPC_FAR *__RPC_FAR *ppClusterResourceGroups);
+    ISCluster * This,
+    /* [retval][out] */ ISClusResGroups **ppClusterResourceGroups);
 
 
 void __RPC_STUB ISCluster_get_ResourceGroups_Stub(
@@ -3225,8 +3260,8 @@ void __RPC_STUB ISCluster_get_ResourceGroups_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_Resources_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ ISClusResources __RPC_FAR *__RPC_FAR *ppClusterResources);
+    ISCluster * This,
+    /* [retval][out] */ ISClusResources **ppClusterResources);
 
 
 void __RPC_STUB ISCluster_get_Resources_Stub(
@@ -3237,8 +3272,8 @@ void __RPC_STUB ISCluster_get_Resources_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_ResourceTypes_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ ISClusResTypes __RPC_FAR *__RPC_FAR *ppResourceTypes);
+    ISCluster * This,
+    /* [retval][out] */ ISClusResTypes **ppResourceTypes);
 
 
 void __RPC_STUB ISCluster_get_ResourceTypes_Stub(
@@ -3249,8 +3284,8 @@ void __RPC_STUB ISCluster_get_ResourceTypes_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_Networks_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ ISClusNetworks __RPC_FAR *__RPC_FAR *ppNetworks);
+    ISCluster * This,
+    /* [retval][out] */ ISClusNetworks **ppNetworks);
 
 
 void __RPC_STUB ISCluster_get_Networks_Stub(
@@ -3261,8 +3296,8 @@ void __RPC_STUB ISCluster_get_Networks_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISCluster_get_NetInterfaces_Proxy( 
-    ISCluster __RPC_FAR * This,
-    /* [retval][out] */ ISClusNetInterfaces __RPC_FAR *__RPC_FAR *ppNetInterfaces);
+    ISCluster * This,
+    /* [retval][out] */ ISClusNetInterfaces **ppNetInterfaces);
 
 
 void __RPC_STUB ISCluster_get_NetInterfaces_Stub(
@@ -3292,28 +3327,28 @@ EXTERN_C const IID IID_ISClusNode;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+            /* [retval][out] */ BSTR *pbstrName) = 0;
         
         virtual /* [helpstring][id][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_Handle( 
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle) = 0;
+            /* [retval][out] */ ULONG_PTR *phandle) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NodeID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrNodeID) = 0;
+            /* [retval][out] */ BSTR *pbstrNodeID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ CLUSTER_NODE_STATE __RPC_FAR *dwState) = 0;
+            /* [retval][out] */ CLUSTER_NODE_STATE *dwState) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
@@ -3322,13 +3357,13 @@ EXTERN_C const IID IID_ISClusNode;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Evict( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ResourceGroups( 
-            /* [retval][out] */ ISClusResGroups __RPC_FAR *__RPC_FAR *ppResourceGroups) = 0;
+            /* [retval][out] */ ISClusResGroups **ppResourceGroups) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Cluster( 
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster) = 0;
+            /* [retval][out] */ ISCluster **ppCluster) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NetInterfaces( 
-            /* [retval][out] */ ISClusNodeNetInterfaces __RPC_FAR *__RPC_FAR *ppClusNetInterfaces) = 0;
+            /* [retval][out] */ ISClusNodeNetInterfaces **ppClusNetInterfaces) = 0;
         
     };
     
@@ -3338,105 +3373,105 @@ EXTERN_C const IID IID_ISClusNode;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusNode __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusNode * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusNode __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusNode * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusNode __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusNode * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusNode __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusNode * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusNode __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusNode * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusNode __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusNode * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusNode __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusNode * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonProperties )( 
-            ISClusNode __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonProperties )( 
+            ISClusNode * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateProperties )( 
-            ISClusNode __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateProperties )( 
+            ISClusNode * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonROProperties )( 
-            ISClusNode __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonROProperties )( 
+            ISClusNode * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateROProperties )( 
-            ISClusNode __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateROProperties )( 
+            ISClusNode * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            ISClusNode __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            ISClusNode * This,
+            /* [retval][out] */ BSTR *pbstrName);
         
-        /* [helpstring][id][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Handle )( 
-            ISClusNode __RPC_FAR * This,
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+        /* [helpstring][id][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            ISClusNode * This,
+            /* [retval][out] */ ULONG_PTR *phandle);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NodeID )( 
-            ISClusNode __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrNodeID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NodeID )( 
+            ISClusNode * This,
+            /* [retval][out] */ BSTR *pbstrNodeID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
-            ISClusNode __RPC_FAR * This,
-            /* [retval][out] */ CLUSTER_NODE_STATE __RPC_FAR *dwState);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_State )( 
+            ISClusNode * This,
+            /* [retval][out] */ CLUSTER_NODE_STATE *dwState);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Pause )( 
-            ISClusNode __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+            ISClusNode * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Resume )( 
-            ISClusNode __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Resume )( 
+            ISClusNode * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Evict )( 
-            ISClusNode __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Evict )( 
+            ISClusNode * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ResourceGroups )( 
-            ISClusNode __RPC_FAR * This,
-            /* [retval][out] */ ISClusResGroups __RPC_FAR *__RPC_FAR *ppResourceGroups);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ResourceGroups )( 
+            ISClusNode * This,
+            /* [retval][out] */ ISClusResGroups **ppResourceGroups);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Cluster )( 
-            ISClusNode __RPC_FAR * This,
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Cluster )( 
+            ISClusNode * This,
+            /* [retval][out] */ ISCluster **ppCluster);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NetInterfaces )( 
-            ISClusNode __RPC_FAR * This,
-            /* [retval][out] */ ISClusNodeNetInterfaces __RPC_FAR *__RPC_FAR *ppClusNetInterfaces);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NetInterfaces )( 
+            ISClusNode * This,
+            /* [retval][out] */ ISClusNodeNetInterfaces **ppClusNetInterfaces);
         
         END_INTERFACE
     } ISClusNodeVtbl;
 
     interface ISClusNode
     {
-        CONST_VTBL struct ISClusNodeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusNodeVtbl *lpVtbl;
     };
 
     
@@ -3517,8 +3552,8 @@ EXTERN_C const IID IID_ISClusNode;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNode_get_CommonProperties_Proxy( 
-    ISClusNode __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusNode * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusNode_get_CommonProperties_Stub(
@@ -3529,8 +3564,8 @@ void __RPC_STUB ISClusNode_get_CommonProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNode_get_PrivateProperties_Proxy( 
-    ISClusNode __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusNode * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusNode_get_PrivateProperties_Stub(
@@ -3541,8 +3576,8 @@ void __RPC_STUB ISClusNode_get_PrivateProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNode_get_CommonROProperties_Proxy( 
-    ISClusNode __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusNode * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusNode_get_CommonROProperties_Stub(
@@ -3553,8 +3588,8 @@ void __RPC_STUB ISClusNode_get_CommonROProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNode_get_PrivateROProperties_Proxy( 
-    ISClusNode __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusNode * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusNode_get_PrivateROProperties_Stub(
@@ -3565,8 +3600,8 @@ void __RPC_STUB ISClusNode_get_PrivateROProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNode_get_Name_Proxy( 
-    ISClusNode __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+    ISClusNode * This,
+    /* [retval][out] */ BSTR *pbstrName);
 
 
 void __RPC_STUB ISClusNode_get_Name_Stub(
@@ -3577,8 +3612,8 @@ void __RPC_STUB ISClusNode_get_Name_Stub(
 
 
 /* [helpstring][id][hidden][propget] */ HRESULT STDMETHODCALLTYPE ISClusNode_get_Handle_Proxy( 
-    ISClusNode __RPC_FAR * This,
-    /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+    ISClusNode * This,
+    /* [retval][out] */ ULONG_PTR *phandle);
 
 
 void __RPC_STUB ISClusNode_get_Handle_Stub(
@@ -3589,8 +3624,8 @@ void __RPC_STUB ISClusNode_get_Handle_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNode_get_NodeID_Proxy( 
-    ISClusNode __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrNodeID);
+    ISClusNode * This,
+    /* [retval][out] */ BSTR *pbstrNodeID);
 
 
 void __RPC_STUB ISClusNode_get_NodeID_Stub(
@@ -3601,8 +3636,8 @@ void __RPC_STUB ISClusNode_get_NodeID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNode_get_State_Proxy( 
-    ISClusNode __RPC_FAR * This,
-    /* [retval][out] */ CLUSTER_NODE_STATE __RPC_FAR *dwState);
+    ISClusNode * This,
+    /* [retval][out] */ CLUSTER_NODE_STATE *dwState);
 
 
 void __RPC_STUB ISClusNode_get_State_Stub(
@@ -3613,7 +3648,7 @@ void __RPC_STUB ISClusNode_get_State_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusNode_Pause_Proxy( 
-    ISClusNode __RPC_FAR * This);
+    ISClusNode * This);
 
 
 void __RPC_STUB ISClusNode_Pause_Stub(
@@ -3624,7 +3659,7 @@ void __RPC_STUB ISClusNode_Pause_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusNode_Resume_Proxy( 
-    ISClusNode __RPC_FAR * This);
+    ISClusNode * This);
 
 
 void __RPC_STUB ISClusNode_Resume_Stub(
@@ -3635,7 +3670,7 @@ void __RPC_STUB ISClusNode_Resume_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusNode_Evict_Proxy( 
-    ISClusNode __RPC_FAR * This);
+    ISClusNode * This);
 
 
 void __RPC_STUB ISClusNode_Evict_Stub(
@@ -3646,8 +3681,8 @@ void __RPC_STUB ISClusNode_Evict_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNode_get_ResourceGroups_Proxy( 
-    ISClusNode __RPC_FAR * This,
-    /* [retval][out] */ ISClusResGroups __RPC_FAR *__RPC_FAR *ppResourceGroups);
+    ISClusNode * This,
+    /* [retval][out] */ ISClusResGroups **ppResourceGroups);
 
 
 void __RPC_STUB ISClusNode_get_ResourceGroups_Stub(
@@ -3658,8 +3693,8 @@ void __RPC_STUB ISClusNode_get_ResourceGroups_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNode_get_Cluster_Proxy( 
-    ISClusNode __RPC_FAR * This,
-    /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster);
+    ISClusNode * This,
+    /* [retval][out] */ ISCluster **ppCluster);
 
 
 void __RPC_STUB ISClusNode_get_Cluster_Stub(
@@ -3670,8 +3705,8 @@ void __RPC_STUB ISClusNode_get_Cluster_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNode_get_NetInterfaces_Proxy( 
-    ISClusNode __RPC_FAR * This,
-    /* [retval][out] */ ISClusNodeNetInterfaces __RPC_FAR *__RPC_FAR *ppClusNetInterfaces);
+    ISClusNode * This,
+    /* [retval][out] */ ISClusNodeNetInterfaces **ppClusNetInterfaces);
 
 
 void __RPC_STUB ISClusNode_get_NetInterfaces_Stub(
@@ -3701,16 +3736,16 @@ EXTERN_C const IID IID_ISClusNodes;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppNode) = 0;
+            /* [retval][out] */ ISClusNode **ppNode) = 0;
         
     };
     
@@ -3720,68 +3755,68 @@ EXTERN_C const IID IID_ISClusNodes;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusNodes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusNodes * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusNodes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusNodes * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusNodes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusNodes * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusNodes __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusNodes * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusNodes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusNodes * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusNodes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusNodes * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusNodes __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusNodes * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusNodes __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusNodes * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusNodes __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusNodes * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusNodes __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusNodes * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusNodes __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusNodes * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppNode);
+            /* [retval][out] */ ISClusNode **ppNode);
         
         END_INTERFACE
     } ISClusNodesVtbl;
 
     interface ISClusNodes
     {
-        CONST_VTBL struct ISClusNodesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusNodesVtbl *lpVtbl;
     };
 
     
@@ -3832,8 +3867,8 @@ EXTERN_C const IID IID_ISClusNodes;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNodes_get_Count_Proxy( 
-    ISClusNodes __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusNodes * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusNodes_get_Count_Stub(
@@ -3844,8 +3879,8 @@ void __RPC_STUB ISClusNodes_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusNodes_get__NewEnum_Proxy( 
-    ISClusNodes __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusNodes * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusNodes_get__NewEnum_Stub(
@@ -3856,7 +3891,7 @@ void __RPC_STUB ISClusNodes_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusNodes_Refresh_Proxy( 
-    ISClusNodes __RPC_FAR * This);
+    ISClusNodes * This);
 
 
 void __RPC_STUB ISClusNodes_Refresh_Stub(
@@ -3867,9 +3902,9 @@ void __RPC_STUB ISClusNodes_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNodes_get_Item_Proxy( 
-    ISClusNodes __RPC_FAR * This,
+    ISClusNodes * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppNode);
+    /* [retval][out] */ ISClusNode **ppNode);
 
 
 void __RPC_STUB ISClusNodes_get_Item_Stub(
@@ -3899,37 +3934,37 @@ EXTERN_C const IID IID_ISClusNetwork;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_Handle( 
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle) = 0;
+            /* [retval][out] */ ULONG_PTR *phandle) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+            /* [retval][out] */ BSTR *pbstrName) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
             /* [in] */ BSTR bstrNetworkName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NetworkID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrNetworkID) = 0;
+            /* [retval][out] */ BSTR *pbstrNetworkID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ CLUSTER_NETWORK_STATE __RPC_FAR *dwState) = 0;
+            /* [retval][out] */ CLUSTER_NETWORK_STATE *dwState) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NetInterfaces( 
-            /* [retval][out] */ ISClusNetworkNetInterfaces __RPC_FAR *__RPC_FAR *ppClusNetInterfaces) = 0;
+            /* [retval][out] */ ISClusNetworkNetInterfaces **ppClusNetInterfaces) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Cluster( 
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster) = 0;
+            /* [retval][out] */ ISCluster **ppCluster) = 0;
         
     };
     
@@ -3939,96 +3974,96 @@ EXTERN_C const IID IID_ISClusNetwork;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusNetwork __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusNetwork * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusNetwork __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusNetwork * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusNetwork __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusNetwork * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusNetwork __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusNetwork * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusNetwork __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusNetwork * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusNetwork __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusNetwork * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusNetwork __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusNetwork * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonProperties )( 
-            ISClusNetwork __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonProperties )( 
+            ISClusNetwork * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateProperties )( 
-            ISClusNetwork __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateProperties )( 
+            ISClusNetwork * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonROProperties )( 
-            ISClusNetwork __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonROProperties )( 
+            ISClusNetwork * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateROProperties )( 
-            ISClusNetwork __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateROProperties )( 
+            ISClusNetwork * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Handle )( 
-            ISClusNetwork __RPC_FAR * This,
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+        /* [helpstring][id][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            ISClusNetwork * This,
+            /* [retval][out] */ ULONG_PTR *phandle);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            ISClusNetwork __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            ISClusNetwork * This,
+            /* [retval][out] */ BSTR *pbstrName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
-            ISClusNetwork __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+            ISClusNetwork * This,
             /* [in] */ BSTR bstrNetworkName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NetworkID )( 
-            ISClusNetwork __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrNetworkID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NetworkID )( 
+            ISClusNetwork * This,
+            /* [retval][out] */ BSTR *pbstrNetworkID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
-            ISClusNetwork __RPC_FAR * This,
-            /* [retval][out] */ CLUSTER_NETWORK_STATE __RPC_FAR *dwState);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_State )( 
+            ISClusNetwork * This,
+            /* [retval][out] */ CLUSTER_NETWORK_STATE *dwState);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_NetInterfaces )( 
-            ISClusNetwork __RPC_FAR * This,
-            /* [retval][out] */ ISClusNetworkNetInterfaces __RPC_FAR *__RPC_FAR *ppClusNetInterfaces);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NetInterfaces )( 
+            ISClusNetwork * This,
+            /* [retval][out] */ ISClusNetworkNetInterfaces **ppClusNetInterfaces);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Cluster )( 
-            ISClusNetwork __RPC_FAR * This,
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Cluster )( 
+            ISClusNetwork * This,
+            /* [retval][out] */ ISCluster **ppCluster);
         
         END_INTERFACE
     } ISClusNetworkVtbl;
 
     interface ISClusNetwork
     {
-        CONST_VTBL struct ISClusNetworkVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusNetworkVtbl *lpVtbl;
     };
 
     
@@ -4100,8 +4135,8 @@ EXTERN_C const IID IID_ISClusNetwork;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetwork_get_CommonProperties_Proxy( 
-    ISClusNetwork __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusNetwork * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusNetwork_get_CommonProperties_Stub(
@@ -4112,8 +4147,8 @@ void __RPC_STUB ISClusNetwork_get_CommonProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetwork_get_PrivateProperties_Proxy( 
-    ISClusNetwork __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusNetwork * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusNetwork_get_PrivateProperties_Stub(
@@ -4124,8 +4159,8 @@ void __RPC_STUB ISClusNetwork_get_PrivateProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetwork_get_CommonROProperties_Proxy( 
-    ISClusNetwork __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusNetwork * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusNetwork_get_CommonROProperties_Stub(
@@ -4136,8 +4171,8 @@ void __RPC_STUB ISClusNetwork_get_CommonROProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetwork_get_PrivateROProperties_Proxy( 
-    ISClusNetwork __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusNetwork * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusNetwork_get_PrivateROProperties_Stub(
@@ -4148,8 +4183,8 @@ void __RPC_STUB ISClusNetwork_get_PrivateROProperties_Stub(
 
 
 /* [helpstring][id][hidden][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetwork_get_Handle_Proxy( 
-    ISClusNetwork __RPC_FAR * This,
-    /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+    ISClusNetwork * This,
+    /* [retval][out] */ ULONG_PTR *phandle);
 
 
 void __RPC_STUB ISClusNetwork_get_Handle_Stub(
@@ -4160,8 +4195,8 @@ void __RPC_STUB ISClusNetwork_get_Handle_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetwork_get_Name_Proxy( 
-    ISClusNetwork __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+    ISClusNetwork * This,
+    /* [retval][out] */ BSTR *pbstrName);
 
 
 void __RPC_STUB ISClusNetwork_get_Name_Stub(
@@ -4172,7 +4207,7 @@ void __RPC_STUB ISClusNetwork_get_Name_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISClusNetwork_put_Name_Proxy( 
-    ISClusNetwork __RPC_FAR * This,
+    ISClusNetwork * This,
     /* [in] */ BSTR bstrNetworkName);
 
 
@@ -4184,8 +4219,8 @@ void __RPC_STUB ISClusNetwork_put_Name_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetwork_get_NetworkID_Proxy( 
-    ISClusNetwork __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrNetworkID);
+    ISClusNetwork * This,
+    /* [retval][out] */ BSTR *pbstrNetworkID);
 
 
 void __RPC_STUB ISClusNetwork_get_NetworkID_Stub(
@@ -4196,8 +4231,8 @@ void __RPC_STUB ISClusNetwork_get_NetworkID_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetwork_get_State_Proxy( 
-    ISClusNetwork __RPC_FAR * This,
-    /* [retval][out] */ CLUSTER_NETWORK_STATE __RPC_FAR *dwState);
+    ISClusNetwork * This,
+    /* [retval][out] */ CLUSTER_NETWORK_STATE *dwState);
 
 
 void __RPC_STUB ISClusNetwork_get_State_Stub(
@@ -4208,8 +4243,8 @@ void __RPC_STUB ISClusNetwork_get_State_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetwork_get_NetInterfaces_Proxy( 
-    ISClusNetwork __RPC_FAR * This,
-    /* [retval][out] */ ISClusNetworkNetInterfaces __RPC_FAR *__RPC_FAR *ppClusNetInterfaces);
+    ISClusNetwork * This,
+    /* [retval][out] */ ISClusNetworkNetInterfaces **ppClusNetInterfaces);
 
 
 void __RPC_STUB ISClusNetwork_get_NetInterfaces_Stub(
@@ -4220,8 +4255,8 @@ void __RPC_STUB ISClusNetwork_get_NetInterfaces_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetwork_get_Cluster_Proxy( 
-    ISClusNetwork __RPC_FAR * This,
-    /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster);
+    ISClusNetwork * This,
+    /* [retval][out] */ ISCluster **ppCluster);
 
 
 void __RPC_STUB ISClusNetwork_get_Cluster_Stub(
@@ -4251,16 +4286,16 @@ EXTERN_C const IID IID_ISClusNetworks;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNetwork __RPC_FAR *__RPC_FAR *ppClusNetwork) = 0;
+            /* [retval][out] */ ISClusNetwork **ppClusNetwork) = 0;
         
     };
     
@@ -4270,68 +4305,68 @@ EXTERN_C const IID IID_ISClusNetworks;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusNetworks __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusNetworks * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusNetworks __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusNetworks * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusNetworks __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusNetworks * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusNetworks __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusNetworks * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusNetworks __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusNetworks * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusNetworks __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusNetworks * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusNetworks __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusNetworks * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusNetworks __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusNetworks * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusNetworks __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusNetworks * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusNetworks __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusNetworks * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusNetworks __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusNetworks * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNetwork __RPC_FAR *__RPC_FAR *ppClusNetwork);
+            /* [retval][out] */ ISClusNetwork **ppClusNetwork);
         
         END_INTERFACE
     } ISClusNetworksVtbl;
 
     interface ISClusNetworks
     {
-        CONST_VTBL struct ISClusNetworksVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusNetworksVtbl *lpVtbl;
     };
 
     
@@ -4382,8 +4417,8 @@ EXTERN_C const IID IID_ISClusNetworks;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetworks_get_Count_Proxy( 
-    ISClusNetworks __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusNetworks * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusNetworks_get_Count_Stub(
@@ -4394,8 +4429,8 @@ void __RPC_STUB ISClusNetworks_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetworks_get__NewEnum_Proxy( 
-    ISClusNetworks __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusNetworks * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusNetworks_get__NewEnum_Stub(
@@ -4406,7 +4441,7 @@ void __RPC_STUB ISClusNetworks_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusNetworks_Refresh_Proxy( 
-    ISClusNetworks __RPC_FAR * This);
+    ISClusNetworks * This);
 
 
 void __RPC_STUB ISClusNetworks_Refresh_Stub(
@@ -4417,9 +4452,9 @@ void __RPC_STUB ISClusNetworks_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetworks_get_Item_Proxy( 
-    ISClusNetworks __RPC_FAR * This,
+    ISClusNetworks * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusNetwork __RPC_FAR *__RPC_FAR *ppClusNetwork);
+    /* [retval][out] */ ISClusNetwork **ppClusNetwork);
 
 
 void __RPC_STUB ISClusNetworks_get_Item_Stub(
@@ -4449,28 +4484,28 @@ EXTERN_C const IID IID_ISClusNetInterface;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+            /* [retval][out] */ BSTR *pbstrName) = 0;
         
         virtual /* [helpstring][id][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_Handle( 
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle) = 0;
+            /* [retval][out] */ ULONG_PTR *phandle) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ CLUSTER_NETINTERFACE_STATE __RPC_FAR *dwState) = 0;
+            /* [retval][out] */ CLUSTER_NETINTERFACE_STATE *dwState) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Cluster( 
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster) = 0;
+            /* [retval][out] */ ISCluster **ppCluster) = 0;
         
     };
     
@@ -4480,84 +4515,84 @@ EXTERN_C const IID IID_ISClusNetInterface;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusNetInterface __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusNetInterface * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusNetInterface __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusNetInterface * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusNetInterface __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusNetInterface * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusNetInterface __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusNetInterface * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusNetInterface __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusNetInterface * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusNetInterface __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusNetInterface * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusNetInterface __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusNetInterface * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonProperties )( 
-            ISClusNetInterface __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonProperties )( 
+            ISClusNetInterface * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateProperties )( 
-            ISClusNetInterface __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateProperties )( 
+            ISClusNetInterface * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonROProperties )( 
-            ISClusNetInterface __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonROProperties )( 
+            ISClusNetInterface * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateROProperties )( 
-            ISClusNetInterface __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateROProperties )( 
+            ISClusNetInterface * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            ISClusNetInterface __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            ISClusNetInterface * This,
+            /* [retval][out] */ BSTR *pbstrName);
         
-        /* [helpstring][id][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Handle )( 
-            ISClusNetInterface __RPC_FAR * This,
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+        /* [helpstring][id][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            ISClusNetInterface * This,
+            /* [retval][out] */ ULONG_PTR *phandle);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
-            ISClusNetInterface __RPC_FAR * This,
-            /* [retval][out] */ CLUSTER_NETINTERFACE_STATE __RPC_FAR *dwState);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_State )( 
+            ISClusNetInterface * This,
+            /* [retval][out] */ CLUSTER_NETINTERFACE_STATE *dwState);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Cluster )( 
-            ISClusNetInterface __RPC_FAR * This,
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Cluster )( 
+            ISClusNetInterface * This,
+            /* [retval][out] */ ISCluster **ppCluster);
         
         END_INTERFACE
     } ISClusNetInterfaceVtbl;
 
     interface ISClusNetInterface
     {
-        CONST_VTBL struct ISClusNetInterfaceVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusNetInterfaceVtbl *lpVtbl;
     };
 
     
@@ -4620,8 +4655,8 @@ EXTERN_C const IID IID_ISClusNetInterface;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetInterface_get_CommonProperties_Proxy( 
-    ISClusNetInterface __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusNetInterface * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusNetInterface_get_CommonProperties_Stub(
@@ -4632,8 +4667,8 @@ void __RPC_STUB ISClusNetInterface_get_CommonProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetInterface_get_PrivateProperties_Proxy( 
-    ISClusNetInterface __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusNetInterface * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusNetInterface_get_PrivateProperties_Stub(
@@ -4644,8 +4679,8 @@ void __RPC_STUB ISClusNetInterface_get_PrivateProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetInterface_get_CommonROProperties_Proxy( 
-    ISClusNetInterface __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusNetInterface * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusNetInterface_get_CommonROProperties_Stub(
@@ -4656,8 +4691,8 @@ void __RPC_STUB ISClusNetInterface_get_CommonROProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetInterface_get_PrivateROProperties_Proxy( 
-    ISClusNetInterface __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusNetInterface * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusNetInterface_get_PrivateROProperties_Stub(
@@ -4668,8 +4703,8 @@ void __RPC_STUB ISClusNetInterface_get_PrivateROProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetInterface_get_Name_Proxy( 
-    ISClusNetInterface __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+    ISClusNetInterface * This,
+    /* [retval][out] */ BSTR *pbstrName);
 
 
 void __RPC_STUB ISClusNetInterface_get_Name_Stub(
@@ -4680,8 +4715,8 @@ void __RPC_STUB ISClusNetInterface_get_Name_Stub(
 
 
 /* [helpstring][id][hidden][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetInterface_get_Handle_Proxy( 
-    ISClusNetInterface __RPC_FAR * This,
-    /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+    ISClusNetInterface * This,
+    /* [retval][out] */ ULONG_PTR *phandle);
 
 
 void __RPC_STUB ISClusNetInterface_get_Handle_Stub(
@@ -4692,8 +4727,8 @@ void __RPC_STUB ISClusNetInterface_get_Handle_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetInterface_get_State_Proxy( 
-    ISClusNetInterface __RPC_FAR * This,
-    /* [retval][out] */ CLUSTER_NETINTERFACE_STATE __RPC_FAR *dwState);
+    ISClusNetInterface * This,
+    /* [retval][out] */ CLUSTER_NETINTERFACE_STATE *dwState);
 
 
 void __RPC_STUB ISClusNetInterface_get_State_Stub(
@@ -4704,8 +4739,8 @@ void __RPC_STUB ISClusNetInterface_get_State_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetInterface_get_Cluster_Proxy( 
-    ISClusNetInterface __RPC_FAR * This,
-    /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster);
+    ISClusNetInterface * This,
+    /* [retval][out] */ ISCluster **ppCluster);
 
 
 void __RPC_STUB ISClusNetInterface_get_Cluster_Stub(
@@ -4735,16 +4770,16 @@ EXTERN_C const IID IID_ISClusNetInterfaces;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNetInterface __RPC_FAR *__RPC_FAR *ppClusNetInterface) = 0;
+            /* [retval][out] */ ISClusNetInterface **ppClusNetInterface) = 0;
         
     };
     
@@ -4754,68 +4789,68 @@ EXTERN_C const IID IID_ISClusNetInterfaces;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusNetInterfaces __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusNetInterfaces * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusNetInterfaces __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusNetInterfaces * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusNetInterfaces __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusNetInterfaces * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusNetInterfaces __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusNetInterfaces * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusNetInterfaces __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusNetInterfaces * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusNetInterfaces __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusNetInterfaces * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusNetInterfaces __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusNetInterfaces * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusNetInterfaces __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusNetInterfaces * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusNetInterfaces __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusNetInterfaces * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusNetInterfaces __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusNetInterfaces * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusNetInterfaces __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusNetInterfaces * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNetInterface __RPC_FAR *__RPC_FAR *ppClusNetInterface);
+            /* [retval][out] */ ISClusNetInterface **ppClusNetInterface);
         
         END_INTERFACE
     } ISClusNetInterfacesVtbl;
 
     interface ISClusNetInterfaces
     {
-        CONST_VTBL struct ISClusNetInterfacesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusNetInterfacesVtbl *lpVtbl;
     };
 
     
@@ -4866,8 +4901,8 @@ EXTERN_C const IID IID_ISClusNetInterfaces;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetInterfaces_get_Count_Proxy( 
-    ISClusNetInterfaces __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusNetInterfaces * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusNetInterfaces_get_Count_Stub(
@@ -4878,8 +4913,8 @@ void __RPC_STUB ISClusNetInterfaces_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetInterfaces_get__NewEnum_Proxy( 
-    ISClusNetInterfaces __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusNetInterfaces * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusNetInterfaces_get__NewEnum_Stub(
@@ -4890,7 +4925,7 @@ void __RPC_STUB ISClusNetInterfaces_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusNetInterfaces_Refresh_Proxy( 
-    ISClusNetInterfaces __RPC_FAR * This);
+    ISClusNetInterfaces * This);
 
 
 void __RPC_STUB ISClusNetInterfaces_Refresh_Stub(
@@ -4901,9 +4936,9 @@ void __RPC_STUB ISClusNetInterfaces_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetInterfaces_get_Item_Proxy( 
-    ISClusNetInterfaces __RPC_FAR * This,
+    ISClusNetInterfaces * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusNetInterface __RPC_FAR *__RPC_FAR *ppClusNetInterface);
+    /* [retval][out] */ ISClusNetInterface **ppClusNetInterface);
 
 
 void __RPC_STUB ISClusNetInterfaces_get_Item_Stub(
@@ -4933,16 +4968,16 @@ EXTERN_C const IID IID_ISClusNodeNetInterfaces;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNetInterface __RPC_FAR *__RPC_FAR *ppClusNetInterface) = 0;
+            /* [retval][out] */ ISClusNetInterface **ppClusNetInterface) = 0;
         
     };
     
@@ -4952,68 +4987,68 @@ EXTERN_C const IID IID_ISClusNodeNetInterfaces;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusNodeNetInterfaces __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusNodeNetInterfaces * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusNodeNetInterfaces __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusNodeNetInterfaces * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusNodeNetInterfaces __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusNodeNetInterfaces * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusNodeNetInterfaces __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusNodeNetInterfaces * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusNodeNetInterfaces __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusNodeNetInterfaces * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusNodeNetInterfaces __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusNodeNetInterfaces * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusNodeNetInterfaces __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusNodeNetInterfaces * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusNodeNetInterfaces __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusNodeNetInterfaces * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusNodeNetInterfaces __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusNodeNetInterfaces * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusNodeNetInterfaces __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusNodeNetInterfaces * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusNodeNetInterfaces __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusNodeNetInterfaces * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNetInterface __RPC_FAR *__RPC_FAR *ppClusNetInterface);
+            /* [retval][out] */ ISClusNetInterface **ppClusNetInterface);
         
         END_INTERFACE
     } ISClusNodeNetInterfacesVtbl;
 
     interface ISClusNodeNetInterfaces
     {
-        CONST_VTBL struct ISClusNodeNetInterfacesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusNodeNetInterfacesVtbl *lpVtbl;
     };
 
     
@@ -5064,8 +5099,8 @@ EXTERN_C const IID IID_ISClusNodeNetInterfaces;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNodeNetInterfaces_get_Count_Proxy( 
-    ISClusNodeNetInterfaces __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusNodeNetInterfaces * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusNodeNetInterfaces_get_Count_Stub(
@@ -5076,8 +5111,8 @@ void __RPC_STUB ISClusNodeNetInterfaces_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusNodeNetInterfaces_get__NewEnum_Proxy( 
-    ISClusNodeNetInterfaces __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusNodeNetInterfaces * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusNodeNetInterfaces_get__NewEnum_Stub(
@@ -5088,7 +5123,7 @@ void __RPC_STUB ISClusNodeNetInterfaces_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusNodeNetInterfaces_Refresh_Proxy( 
-    ISClusNodeNetInterfaces __RPC_FAR * This);
+    ISClusNodeNetInterfaces * This);
 
 
 void __RPC_STUB ISClusNodeNetInterfaces_Refresh_Stub(
@@ -5099,9 +5134,9 @@ void __RPC_STUB ISClusNodeNetInterfaces_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNodeNetInterfaces_get_Item_Proxy( 
-    ISClusNodeNetInterfaces __RPC_FAR * This,
+    ISClusNodeNetInterfaces * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusNetInterface __RPC_FAR *__RPC_FAR *ppClusNetInterface);
+    /* [retval][out] */ ISClusNetInterface **ppClusNetInterface);
 
 
 void __RPC_STUB ISClusNodeNetInterfaces_get_Item_Stub(
@@ -5131,16 +5166,16 @@ EXTERN_C const IID IID_ISClusNetworkNetInterfaces;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNetInterface __RPC_FAR *__RPC_FAR *ppClusNetInterface) = 0;
+            /* [retval][out] */ ISClusNetInterface **ppClusNetInterface) = 0;
         
     };
     
@@ -5150,68 +5185,68 @@ EXTERN_C const IID IID_ISClusNetworkNetInterfaces;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusNetworkNetInterfaces __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusNetworkNetInterfaces * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusNetworkNetInterfaces __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusNetworkNetInterfaces * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusNetworkNetInterfaces __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusNetworkNetInterfaces * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusNetworkNetInterfaces __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusNetworkNetInterfaces * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusNetworkNetInterfaces __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusNetworkNetInterfaces * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusNetworkNetInterfaces __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusNetworkNetInterfaces * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusNetworkNetInterfaces __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusNetworkNetInterfaces * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusNetworkNetInterfaces __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusNetworkNetInterfaces * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusNetworkNetInterfaces __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusNetworkNetInterfaces * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusNetworkNetInterfaces __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusNetworkNetInterfaces * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusNetworkNetInterfaces __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusNetworkNetInterfaces * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNetInterface __RPC_FAR *__RPC_FAR *ppClusNetInterface);
+            /* [retval][out] */ ISClusNetInterface **ppClusNetInterface);
         
         END_INTERFACE
     } ISClusNetworkNetInterfacesVtbl;
 
     interface ISClusNetworkNetInterfaces
     {
-        CONST_VTBL struct ISClusNetworkNetInterfacesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusNetworkNetInterfacesVtbl *lpVtbl;
     };
 
     
@@ -5262,8 +5297,8 @@ EXTERN_C const IID IID_ISClusNetworkNetInterfaces;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetworkNetInterfaces_get_Count_Proxy( 
-    ISClusNetworkNetInterfaces __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusNetworkNetInterfaces * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusNetworkNetInterfaces_get_Count_Stub(
@@ -5274,8 +5309,8 @@ void __RPC_STUB ISClusNetworkNetInterfaces_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetworkNetInterfaces_get__NewEnum_Proxy( 
-    ISClusNetworkNetInterfaces __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusNetworkNetInterfaces * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusNetworkNetInterfaces_get__NewEnum_Stub(
@@ -5286,7 +5321,7 @@ void __RPC_STUB ISClusNetworkNetInterfaces_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusNetworkNetInterfaces_Refresh_Proxy( 
-    ISClusNetworkNetInterfaces __RPC_FAR * This);
+    ISClusNetworkNetInterfaces * This);
 
 
 void __RPC_STUB ISClusNetworkNetInterfaces_Refresh_Stub(
@@ -5297,9 +5332,9 @@ void __RPC_STUB ISClusNetworkNetInterfaces_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusNetworkNetInterfaces_get_Item_Proxy( 
-    ISClusNetworkNetInterfaces __RPC_FAR * This,
+    ISClusNetworkNetInterfaces * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusNetInterface __RPC_FAR *__RPC_FAR *ppClusNetInterface);
+    /* [retval][out] */ ISClusNetInterface **ppClusNetInterface);
 
 
 void __RPC_STUB ISClusNetworkNetInterfaces_get_Item_Stub(
@@ -5329,56 +5364,56 @@ EXTERN_C const IID IID_ISClusResGroup;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_Handle( 
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle) = 0;
+            /* [retval][out] */ ULONG_PTR *phandle) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+            /* [retval][out] */ BSTR *pbstrName) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
             /* [in] */ BSTR bstrGroupName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ CLUSTER_GROUP_STATE __RPC_FAR *dwState) = 0;
+            /* [retval][out] */ CLUSTER_GROUP_STATE *dwState) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OwnerNode( 
-            /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppOwnerNode) = 0;
+            /* [retval][out] */ ISClusNode **ppOwnerNode) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Resources( 
-            /* [retval][out] */ ISClusResGroupResources __RPC_FAR *__RPC_FAR *ppClusterGroupResources) = 0;
+            /* [retval][out] */ ISClusResGroupResources **ppClusterGroupResources) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PreferredOwnerNodes( 
-            /* [retval][out] */ ISClusResGroupPreferredOwnerNodes __RPC_FAR *__RPC_FAR *ppOwnerNodes) = 0;
+            /* [retval][out] */ ISClusResGroupPreferredOwnerNodes **ppOwnerNodes) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Online( 
             /* [in] */ VARIANT varTimeout,
             /* [optional][in] */ VARIANT varNode,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPending) = 0;
+            /* [retval][out] */ VARIANT *pvarPending) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Move( 
             /* [in] */ VARIANT varTimeout,
             /* [optional][in] */ VARIANT varNode,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPending) = 0;
+            /* [retval][out] */ VARIANT *pvarPending) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Offline( 
             /* [in] */ VARIANT varTimeout,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPending) = 0;
+            /* [retval][out] */ VARIANT *pvarPending) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Cluster( 
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster) = 0;
+            /* [retval][out] */ ISCluster **ppCluster) = 0;
         
     };
     
@@ -5388,120 +5423,120 @@ EXTERN_C const IID IID_ISClusResGroup;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusResGroup __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusResGroup * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusResGroup __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusResGroup * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusResGroup __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusResGroup * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusResGroup __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusResGroup * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusResGroup __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusResGroup * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusResGroup __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusResGroup * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusResGroup __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusResGroup * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonProperties )( 
-            ISClusResGroup __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonProperties )( 
+            ISClusResGroup * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateProperties )( 
-            ISClusResGroup __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateProperties )( 
+            ISClusResGroup * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonROProperties )( 
-            ISClusResGroup __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonROProperties )( 
+            ISClusResGroup * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateROProperties )( 
-            ISClusResGroup __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateROProperties )( 
+            ISClusResGroup * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Handle )( 
-            ISClusResGroup __RPC_FAR * This,
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+        /* [helpstring][id][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            ISClusResGroup * This,
+            /* [retval][out] */ ULONG_PTR *phandle);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            ISClusResGroup __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            ISClusResGroup * This,
+            /* [retval][out] */ BSTR *pbstrName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
-            ISClusResGroup __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+            ISClusResGroup * This,
             /* [in] */ BSTR bstrGroupName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
-            ISClusResGroup __RPC_FAR * This,
-            /* [retval][out] */ CLUSTER_GROUP_STATE __RPC_FAR *dwState);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_State )( 
+            ISClusResGroup * This,
+            /* [retval][out] */ CLUSTER_GROUP_STATE *dwState);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OwnerNode )( 
-            ISClusResGroup __RPC_FAR * This,
-            /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppOwnerNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OwnerNode )( 
+            ISClusResGroup * This,
+            /* [retval][out] */ ISClusNode **ppOwnerNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Resources )( 
-            ISClusResGroup __RPC_FAR * This,
-            /* [retval][out] */ ISClusResGroupResources __RPC_FAR *__RPC_FAR *ppClusterGroupResources);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Resources )( 
+            ISClusResGroup * This,
+            /* [retval][out] */ ISClusResGroupResources **ppClusterGroupResources);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PreferredOwnerNodes )( 
-            ISClusResGroup __RPC_FAR * This,
-            /* [retval][out] */ ISClusResGroupPreferredOwnerNodes __RPC_FAR *__RPC_FAR *ppOwnerNodes);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PreferredOwnerNodes )( 
+            ISClusResGroup * This,
+            /* [retval][out] */ ISClusResGroupPreferredOwnerNodes **ppOwnerNodes);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
-            ISClusResGroup __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+            ISClusResGroup * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Online )( 
-            ISClusResGroup __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Online )( 
+            ISClusResGroup * This,
             /* [in] */ VARIANT varTimeout,
             /* [optional][in] */ VARIANT varNode,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPending);
+            /* [retval][out] */ VARIANT *pvarPending);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Move )( 
-            ISClusResGroup __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Move )( 
+            ISClusResGroup * This,
             /* [in] */ VARIANT varTimeout,
             /* [optional][in] */ VARIANT varNode,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPending);
+            /* [retval][out] */ VARIANT *pvarPending);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Offline )( 
-            ISClusResGroup __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Offline )( 
+            ISClusResGroup * This,
             /* [in] */ VARIANT varTimeout,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPending);
+            /* [retval][out] */ VARIANT *pvarPending);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Cluster )( 
-            ISClusResGroup __RPC_FAR * This,
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Cluster )( 
+            ISClusResGroup * This,
+            /* [retval][out] */ ISCluster **ppCluster);
         
         END_INTERFACE
     } ISClusResGroupVtbl;
 
     interface ISClusResGroup
     {
-        CONST_VTBL struct ISClusResGroupVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusResGroupVtbl *lpVtbl;
     };
 
     
@@ -5588,8 +5623,8 @@ EXTERN_C const IID IID_ISClusResGroup;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_get_CommonProperties_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusResGroup * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusResGroup_get_CommonProperties_Stub(
@@ -5600,8 +5635,8 @@ void __RPC_STUB ISClusResGroup_get_CommonProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_get_PrivateProperties_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusResGroup * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusResGroup_get_PrivateProperties_Stub(
@@ -5612,8 +5647,8 @@ void __RPC_STUB ISClusResGroup_get_PrivateProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_get_CommonROProperties_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusResGroup * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusResGroup_get_CommonROProperties_Stub(
@@ -5624,8 +5659,8 @@ void __RPC_STUB ISClusResGroup_get_CommonROProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_get_PrivateROProperties_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusResGroup * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusResGroup_get_PrivateROProperties_Stub(
@@ -5636,8 +5671,8 @@ void __RPC_STUB ISClusResGroup_get_PrivateROProperties_Stub(
 
 
 /* [helpstring][id][hidden][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_get_Handle_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
-    /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+    ISClusResGroup * This,
+    /* [retval][out] */ ULONG_PTR *phandle);
 
 
 void __RPC_STUB ISClusResGroup_get_Handle_Stub(
@@ -5648,8 +5683,8 @@ void __RPC_STUB ISClusResGroup_get_Handle_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_get_Name_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+    ISClusResGroup * This,
+    /* [retval][out] */ BSTR *pbstrName);
 
 
 void __RPC_STUB ISClusResGroup_get_Name_Stub(
@@ -5660,7 +5695,7 @@ void __RPC_STUB ISClusResGroup_get_Name_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_put_Name_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
+    ISClusResGroup * This,
     /* [in] */ BSTR bstrGroupName);
 
 
@@ -5672,8 +5707,8 @@ void __RPC_STUB ISClusResGroup_put_Name_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_get_State_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
-    /* [retval][out] */ CLUSTER_GROUP_STATE __RPC_FAR *dwState);
+    ISClusResGroup * This,
+    /* [retval][out] */ CLUSTER_GROUP_STATE *dwState);
 
 
 void __RPC_STUB ISClusResGroup_get_State_Stub(
@@ -5684,8 +5719,8 @@ void __RPC_STUB ISClusResGroup_get_State_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_get_OwnerNode_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
-    /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppOwnerNode);
+    ISClusResGroup * This,
+    /* [retval][out] */ ISClusNode **ppOwnerNode);
 
 
 void __RPC_STUB ISClusResGroup_get_OwnerNode_Stub(
@@ -5696,8 +5731,8 @@ void __RPC_STUB ISClusResGroup_get_OwnerNode_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_get_Resources_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
-    /* [retval][out] */ ISClusResGroupResources __RPC_FAR *__RPC_FAR *ppClusterGroupResources);
+    ISClusResGroup * This,
+    /* [retval][out] */ ISClusResGroupResources **ppClusterGroupResources);
 
 
 void __RPC_STUB ISClusResGroup_get_Resources_Stub(
@@ -5708,8 +5743,8 @@ void __RPC_STUB ISClusResGroup_get_Resources_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_get_PreferredOwnerNodes_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
-    /* [retval][out] */ ISClusResGroupPreferredOwnerNodes __RPC_FAR *__RPC_FAR *ppOwnerNodes);
+    ISClusResGroup * This,
+    /* [retval][out] */ ISClusResGroupPreferredOwnerNodes **ppOwnerNodes);
 
 
 void __RPC_STUB ISClusResGroup_get_PreferredOwnerNodes_Stub(
@@ -5720,7 +5755,7 @@ void __RPC_STUB ISClusResGroup_get_PreferredOwnerNodes_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_Delete_Proxy( 
-    ISClusResGroup __RPC_FAR * This);
+    ISClusResGroup * This);
 
 
 void __RPC_STUB ISClusResGroup_Delete_Stub(
@@ -5731,10 +5766,10 @@ void __RPC_STUB ISClusResGroup_Delete_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_Online_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
+    ISClusResGroup * This,
     /* [in] */ VARIANT varTimeout,
     /* [optional][in] */ VARIANT varNode,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPending);
+    /* [retval][out] */ VARIANT *pvarPending);
 
 
 void __RPC_STUB ISClusResGroup_Online_Stub(
@@ -5745,10 +5780,10 @@ void __RPC_STUB ISClusResGroup_Online_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_Move_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
+    ISClusResGroup * This,
     /* [in] */ VARIANT varTimeout,
     /* [optional][in] */ VARIANT varNode,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPending);
+    /* [retval][out] */ VARIANT *pvarPending);
 
 
 void __RPC_STUB ISClusResGroup_Move_Stub(
@@ -5759,9 +5794,9 @@ void __RPC_STUB ISClusResGroup_Move_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_Offline_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
+    ISClusResGroup * This,
     /* [in] */ VARIANT varTimeout,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPending);
+    /* [retval][out] */ VARIANT *pvarPending);
 
 
 void __RPC_STUB ISClusResGroup_Offline_Stub(
@@ -5772,8 +5807,8 @@ void __RPC_STUB ISClusResGroup_Offline_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroup_get_Cluster_Proxy( 
-    ISClusResGroup __RPC_FAR * This,
-    /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster);
+    ISClusResGroup * This,
+    /* [retval][out] */ ISCluster **ppCluster);
 
 
 void __RPC_STUB ISClusResGroup_get_Cluster_Stub(
@@ -5803,20 +5838,20 @@ EXTERN_C const IID IID_ISClusResGroups;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResGroup __RPC_FAR *__RPC_FAR *ppClusResGroup) = 0;
+            /* [retval][out] */ ISClusResGroup **ppClusResGroup) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateItem( 
             /* [in] */ BSTR bstrResourceGroupName,
-            /* [retval][out] */ ISClusResGroup __RPC_FAR *__RPC_FAR *ppResourceGroup) = 0;
+            /* [retval][out] */ ISClusResGroup **ppResourceGroup) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteItem( 
             /* [in] */ VARIANT varIndex) = 0;
@@ -5829,69 +5864,69 @@ EXTERN_C const IID IID_ISClusResGroups;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusResGroups __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusResGroups * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusResGroups __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusResGroups * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusResGroups __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusResGroups * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusResGroups __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusResGroups * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusResGroups __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusResGroups * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusResGroups __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusResGroups * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusResGroups __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusResGroups * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusResGroups __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusResGroups * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusResGroups __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusResGroups * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusResGroups __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusResGroups * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusResGroups __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusResGroups * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResGroup __RPC_FAR *__RPC_FAR *ppClusResGroup);
+            /* [retval][out] */ ISClusResGroup **ppClusResGroup);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateItem )( 
-            ISClusResGroups __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateItem )( 
+            ISClusResGroups * This,
             /* [in] */ BSTR bstrResourceGroupName,
-            /* [retval][out] */ ISClusResGroup __RPC_FAR *__RPC_FAR *ppResourceGroup);
+            /* [retval][out] */ ISClusResGroup **ppResourceGroup);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteItem )( 
-            ISClusResGroups __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
+            ISClusResGroups * This,
             /* [in] */ VARIANT varIndex);
         
         END_INTERFACE
@@ -5899,7 +5934,7 @@ EXTERN_C const IID IID_ISClusResGroups;
 
     interface ISClusResGroups
     {
-        CONST_VTBL struct ISClusResGroupsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusResGroupsVtbl *lpVtbl;
     };
 
     
@@ -5956,8 +5991,8 @@ EXTERN_C const IID IID_ISClusResGroups;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroups_get_Count_Proxy( 
-    ISClusResGroups __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusResGroups * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusResGroups_get_Count_Stub(
@@ -5968,8 +6003,8 @@ void __RPC_STUB ISClusResGroups_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroups_get__NewEnum_Proxy( 
-    ISClusResGroups __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusResGroups * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusResGroups_get__NewEnum_Stub(
@@ -5980,7 +6015,7 @@ void __RPC_STUB ISClusResGroups_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroups_Refresh_Proxy( 
-    ISClusResGroups __RPC_FAR * This);
+    ISClusResGroups * This);
 
 
 void __RPC_STUB ISClusResGroups_Refresh_Stub(
@@ -5991,9 +6026,9 @@ void __RPC_STUB ISClusResGroups_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroups_get_Item_Proxy( 
-    ISClusResGroups __RPC_FAR * This,
+    ISClusResGroups * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusResGroup __RPC_FAR *__RPC_FAR *ppClusResGroup);
+    /* [retval][out] */ ISClusResGroup **ppClusResGroup);
 
 
 void __RPC_STUB ISClusResGroups_get_Item_Stub(
@@ -6004,9 +6039,9 @@ void __RPC_STUB ISClusResGroups_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroups_CreateItem_Proxy( 
-    ISClusResGroups __RPC_FAR * This,
+    ISClusResGroups * This,
     /* [in] */ BSTR bstrResourceGroupName,
-    /* [retval][out] */ ISClusResGroup __RPC_FAR *__RPC_FAR *ppResourceGroup);
+    /* [retval][out] */ ISClusResGroup **ppResourceGroup);
 
 
 void __RPC_STUB ISClusResGroups_CreateItem_Stub(
@@ -6017,7 +6052,7 @@ void __RPC_STUB ISClusResGroups_CreateItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroups_DeleteItem_Proxy( 
-    ISClusResGroups __RPC_FAR * This,
+    ISClusResGroups * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -6048,31 +6083,31 @@ EXTERN_C const IID IID_ISClusResource;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_Handle( 
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle) = 0;
+            /* [retval][out] */ ULONG_PTR *phandle) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+            /* [retval][out] */ BSTR *pbstrName) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
             /* [in] */ BSTR bstrResourceName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_State( 
-            /* [retval][out] */ CLUSTER_RESOURCE_STATE __RPC_FAR *dwState) = 0;
+            /* [retval][out] */ CLUSTER_RESOURCE_STATE *dwState) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CoreFlag( 
-            /* [retval][out] */ CLUS_FLAGS __RPC_FAR *dwCoreFlag) = 0;
+            /* [retval][out] */ CLUS_FLAGS *dwCoreFlag) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE BecomeQuorumResource( 
             /* [in] */ BSTR bstrDevicePath,
@@ -6084,60 +6119,60 @@ EXTERN_C const IID IID_ISClusResource;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Online( 
             /* [in] */ long nTimeout,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPending) = 0;
+            /* [retval][out] */ VARIANT *pvarPending) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Offline( 
             /* [in] */ long nTimeout,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPending) = 0;
+            /* [retval][out] */ VARIANT *pvarPending) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ChangeResourceGroup( 
-            /* [in] */ ISClusResGroup __RPC_FAR *pResourceGroup) = 0;
+            /* [in] */ ISClusResGroup *pResourceGroup) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddResourceNode( 
-            /* [in] */ ISClusNode __RPC_FAR *pNode) = 0;
+            /* [in] */ ISClusNode *pNode) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveResourceNode( 
-            /* [in] */ ISClusNode __RPC_FAR *pNode) = 0;
+            /* [in] */ ISClusNode *pNode) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CanResourceBeDependent( 
-            /* [in] */ ISClusResource __RPC_FAR *pResource,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarDependent) = 0;
+            /* [in] */ ISClusResource *pResource,
+            /* [retval][out] */ VARIANT *pvarDependent) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PossibleOwnerNodes( 
-            /* [retval][out] */ ISClusResPossibleOwnerNodes __RPC_FAR *__RPC_FAR *ppOwnerNodes) = 0;
+            /* [retval][out] */ ISClusResPossibleOwnerNodes **ppOwnerNodes) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Dependencies( 
-            /* [retval][out] */ ISClusResDependencies __RPC_FAR *__RPC_FAR *ppResDependencies) = 0;
+            /* [retval][out] */ ISClusResDependencies **ppResDependencies) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Dependents( 
-            /* [retval][out] */ ISClusResDependents __RPC_FAR *__RPC_FAR *ppResDependents) = 0;
+            /* [retval][out] */ ISClusResDependents **ppResDependents) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Group( 
-            /* [retval][out] */ ISClusResGroup __RPC_FAR *__RPC_FAR *ppResGroup) = 0;
+            /* [retval][out] */ ISClusResGroup **ppResGroup) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OwnerNode( 
-            /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppOwnerNode) = 0;
+            /* [retval][out] */ ISClusNode **ppOwnerNode) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Cluster( 
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster) = 0;
+            /* [retval][out] */ ISCluster **ppCluster) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ClassInfo( 
-            /* [retval][out] */ CLUSTER_RESOURCE_CLASS __RPC_FAR *prcClassInfo) = 0;
+            /* [retval][out] */ CLUSTER_RESOURCE_CLASS *prcClassInfo) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Disk( 
-            /* [retval][out] */ ISClusDisk __RPC_FAR *__RPC_FAR *ppDisk) = 0;
+            /* [retval][out] */ ISClusDisk **ppDisk) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RegistryKeys( 
-            /* [retval][out] */ ISClusRegistryKeys __RPC_FAR *__RPC_FAR *ppRegistryKeys) = 0;
+            /* [retval][out] */ ISClusRegistryKeys **ppRegistryKeys) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CryptoKeys( 
-            /* [retval][out] */ ISClusCryptoKeys __RPC_FAR *__RPC_FAR *ppCryptoKeys) = 0;
+            /* [retval][out] */ ISClusCryptoKeys **ppCryptoKeys) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TypeName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrTypeName) = 0;
+            /* [retval][out] */ BSTR *pbstrTypeName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ ISClusResType __RPC_FAR *__RPC_FAR *ppResourceType) = 0;
+            /* [retval][out] */ ISClusResType **ppResourceType) = 0;
         
     };
     
@@ -6147,174 +6182,174 @@ EXTERN_C const IID IID_ISClusResource;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusResource __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusResource * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusResource __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusResource * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusResource __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusResource * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusResource __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusResource * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusResource __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusResource * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusResource __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusResource * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusResource __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusResource * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonProperties )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonProperties )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateProperties )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateProperties )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonROProperties )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonROProperties )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateROProperties )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateROProperties )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Handle )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+        /* [helpstring][id][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Handle )( 
+            ISClusResource * This,
+            /* [retval][out] */ ULONG_PTR *phandle);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            ISClusResource * This,
+            /* [retval][out] */ BSTR *pbstrName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Name )( 
-            ISClusResource __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+            ISClusResource * This,
             /* [in] */ BSTR bstrResourceName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_State )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ CLUSTER_RESOURCE_STATE __RPC_FAR *dwState);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_State )( 
+            ISClusResource * This,
+            /* [retval][out] */ CLUSTER_RESOURCE_STATE *dwState);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CoreFlag )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ CLUS_FLAGS __RPC_FAR *dwCoreFlag);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CoreFlag )( 
+            ISClusResource * This,
+            /* [retval][out] */ CLUS_FLAGS *dwCoreFlag);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BecomeQuorumResource )( 
-            ISClusResource __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *BecomeQuorumResource )( 
+            ISClusResource * This,
             /* [in] */ BSTR bstrDevicePath,
             /* [in] */ long lMaxLogSize);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
-            ISClusResource __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+            ISClusResource * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Fail )( 
-            ISClusResource __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Fail )( 
+            ISClusResource * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Online )( 
-            ISClusResource __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Online )( 
+            ISClusResource * This,
             /* [in] */ long nTimeout,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPending);
+            /* [retval][out] */ VARIANT *pvarPending);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Offline )( 
-            ISClusResource __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Offline )( 
+            ISClusResource * This,
             /* [in] */ long nTimeout,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPending);
+            /* [retval][out] */ VARIANT *pvarPending);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ChangeResourceGroup )( 
-            ISClusResource __RPC_FAR * This,
-            /* [in] */ ISClusResGroup __RPC_FAR *pResourceGroup);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ChangeResourceGroup )( 
+            ISClusResource * This,
+            /* [in] */ ISClusResGroup *pResourceGroup);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddResourceNode )( 
-            ISClusResource __RPC_FAR * This,
-            /* [in] */ ISClusNode __RPC_FAR *pNode);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddResourceNode )( 
+            ISClusResource * This,
+            /* [in] */ ISClusNode *pNode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveResourceNode )( 
-            ISClusResource __RPC_FAR * This,
-            /* [in] */ ISClusNode __RPC_FAR *pNode);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveResourceNode )( 
+            ISClusResource * This,
+            /* [in] */ ISClusNode *pNode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanResourceBeDependent )( 
-            ISClusResource __RPC_FAR * This,
-            /* [in] */ ISClusResource __RPC_FAR *pResource,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarDependent);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CanResourceBeDependent )( 
+            ISClusResource * This,
+            /* [in] */ ISClusResource *pResource,
+            /* [retval][out] */ VARIANT *pvarDependent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PossibleOwnerNodes )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISClusResPossibleOwnerNodes __RPC_FAR *__RPC_FAR *ppOwnerNodes);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PossibleOwnerNodes )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISClusResPossibleOwnerNodes **ppOwnerNodes);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Dependencies )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISClusResDependencies __RPC_FAR *__RPC_FAR *ppResDependencies);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Dependencies )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISClusResDependencies **ppResDependencies);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Dependents )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISClusResDependents __RPC_FAR *__RPC_FAR *ppResDependents);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Dependents )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISClusResDependents **ppResDependents);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Group )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISClusResGroup __RPC_FAR *__RPC_FAR *ppResGroup);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Group )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISClusResGroup **ppResGroup);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OwnerNode )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppOwnerNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OwnerNode )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISClusNode **ppOwnerNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Cluster )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Cluster )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISCluster **ppCluster);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ClassInfo )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ CLUSTER_RESOURCE_CLASS __RPC_FAR *prcClassInfo);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassInfo )( 
+            ISClusResource * This,
+            /* [retval][out] */ CLUSTER_RESOURCE_CLASS *prcClassInfo);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Disk )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISClusDisk __RPC_FAR *__RPC_FAR *ppDisk);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Disk )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISClusDisk **ppDisk);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RegistryKeys )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISClusRegistryKeys __RPC_FAR *__RPC_FAR *ppRegistryKeys);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RegistryKeys )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISClusRegistryKeys **ppRegistryKeys);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CryptoKeys )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISClusCryptoKeys __RPC_FAR *__RPC_FAR *ppCryptoKeys);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CryptoKeys )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISClusCryptoKeys **ppCryptoKeys);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TypeName )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TypeName )( 
+            ISClusResource * This,
+            /* [retval][out] */ BSTR *pbstrTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
-            ISClusResource __RPC_FAR * This,
-            /* [retval][out] */ ISClusResType __RPC_FAR *__RPC_FAR *ppResourceType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            ISClusResource * This,
+            /* [retval][out] */ ISClusResType **ppResourceType);
         
         END_INTERFACE
     } ISClusResourceVtbl;
 
     interface ISClusResource
     {
-        CONST_VTBL struct ISClusResourceVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusResourceVtbl *lpVtbl;
     };
 
     
@@ -6443,8 +6478,8 @@ EXTERN_C const IID IID_ISClusResource;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_CommonProperties_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusResource * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusResource_get_CommonProperties_Stub(
@@ -6455,8 +6490,8 @@ void __RPC_STUB ISClusResource_get_CommonProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_PrivateProperties_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusResource * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusResource_get_PrivateProperties_Stub(
@@ -6467,8 +6502,8 @@ void __RPC_STUB ISClusResource_get_PrivateProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_CommonROProperties_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusResource * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusResource_get_CommonROProperties_Stub(
@@ -6479,8 +6514,8 @@ void __RPC_STUB ISClusResource_get_CommonROProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_PrivateROProperties_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusResource * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusResource_get_PrivateROProperties_Stub(
@@ -6491,8 +6526,8 @@ void __RPC_STUB ISClusResource_get_PrivateROProperties_Stub(
 
 
 /* [helpstring][id][hidden][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_Handle_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ULONG_PTR __RPC_FAR *phandle);
+    ISClusResource * This,
+    /* [retval][out] */ ULONG_PTR *phandle);
 
 
 void __RPC_STUB ISClusResource_get_Handle_Stub(
@@ -6503,8 +6538,8 @@ void __RPC_STUB ISClusResource_get_Handle_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_Name_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+    ISClusResource * This,
+    /* [retval][out] */ BSTR *pbstrName);
 
 
 void __RPC_STUB ISClusResource_get_Name_Stub(
@@ -6515,7 +6550,7 @@ void __RPC_STUB ISClusResource_get_Name_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISClusResource_put_Name_Proxy( 
-    ISClusResource __RPC_FAR * This,
+    ISClusResource * This,
     /* [in] */ BSTR bstrResourceName);
 
 
@@ -6527,8 +6562,8 @@ void __RPC_STUB ISClusResource_put_Name_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_State_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ CLUSTER_RESOURCE_STATE __RPC_FAR *dwState);
+    ISClusResource * This,
+    /* [retval][out] */ CLUSTER_RESOURCE_STATE *dwState);
 
 
 void __RPC_STUB ISClusResource_get_State_Stub(
@@ -6539,8 +6574,8 @@ void __RPC_STUB ISClusResource_get_State_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_CoreFlag_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ CLUS_FLAGS __RPC_FAR *dwCoreFlag);
+    ISClusResource * This,
+    /* [retval][out] */ CLUS_FLAGS *dwCoreFlag);
 
 
 void __RPC_STUB ISClusResource_get_CoreFlag_Stub(
@@ -6551,7 +6586,7 @@ void __RPC_STUB ISClusResource_get_CoreFlag_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResource_BecomeQuorumResource_Proxy( 
-    ISClusResource __RPC_FAR * This,
+    ISClusResource * This,
     /* [in] */ BSTR bstrDevicePath,
     /* [in] */ long lMaxLogSize);
 
@@ -6564,7 +6599,7 @@ void __RPC_STUB ISClusResource_BecomeQuorumResource_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResource_Delete_Proxy( 
-    ISClusResource __RPC_FAR * This);
+    ISClusResource * This);
 
 
 void __RPC_STUB ISClusResource_Delete_Stub(
@@ -6575,7 +6610,7 @@ void __RPC_STUB ISClusResource_Delete_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResource_Fail_Proxy( 
-    ISClusResource __RPC_FAR * This);
+    ISClusResource * This);
 
 
 void __RPC_STUB ISClusResource_Fail_Stub(
@@ -6586,9 +6621,9 @@ void __RPC_STUB ISClusResource_Fail_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResource_Online_Proxy( 
-    ISClusResource __RPC_FAR * This,
+    ISClusResource * This,
     /* [in] */ long nTimeout,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPending);
+    /* [retval][out] */ VARIANT *pvarPending);
 
 
 void __RPC_STUB ISClusResource_Online_Stub(
@@ -6599,9 +6634,9 @@ void __RPC_STUB ISClusResource_Online_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResource_Offline_Proxy( 
-    ISClusResource __RPC_FAR * This,
+    ISClusResource * This,
     /* [in] */ long nTimeout,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPending);
+    /* [retval][out] */ VARIANT *pvarPending);
 
 
 void __RPC_STUB ISClusResource_Offline_Stub(
@@ -6612,8 +6647,8 @@ void __RPC_STUB ISClusResource_Offline_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResource_ChangeResourceGroup_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [in] */ ISClusResGroup __RPC_FAR *pResourceGroup);
+    ISClusResource * This,
+    /* [in] */ ISClusResGroup *pResourceGroup);
 
 
 void __RPC_STUB ISClusResource_ChangeResourceGroup_Stub(
@@ -6624,8 +6659,8 @@ void __RPC_STUB ISClusResource_ChangeResourceGroup_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResource_AddResourceNode_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [in] */ ISClusNode __RPC_FAR *pNode);
+    ISClusResource * This,
+    /* [in] */ ISClusNode *pNode);
 
 
 void __RPC_STUB ISClusResource_AddResourceNode_Stub(
@@ -6636,8 +6671,8 @@ void __RPC_STUB ISClusResource_AddResourceNode_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResource_RemoveResourceNode_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [in] */ ISClusNode __RPC_FAR *pNode);
+    ISClusResource * This,
+    /* [in] */ ISClusNode *pNode);
 
 
 void __RPC_STUB ISClusResource_RemoveResourceNode_Stub(
@@ -6648,9 +6683,9 @@ void __RPC_STUB ISClusResource_RemoveResourceNode_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResource_CanResourceBeDependent_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [in] */ ISClusResource __RPC_FAR *pResource,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarDependent);
+    ISClusResource * This,
+    /* [in] */ ISClusResource *pResource,
+    /* [retval][out] */ VARIANT *pvarDependent);
 
 
 void __RPC_STUB ISClusResource_CanResourceBeDependent_Stub(
@@ -6661,8 +6696,8 @@ void __RPC_STUB ISClusResource_CanResourceBeDependent_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_PossibleOwnerNodes_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISClusResPossibleOwnerNodes __RPC_FAR *__RPC_FAR *ppOwnerNodes);
+    ISClusResource * This,
+    /* [retval][out] */ ISClusResPossibleOwnerNodes **ppOwnerNodes);
 
 
 void __RPC_STUB ISClusResource_get_PossibleOwnerNodes_Stub(
@@ -6673,8 +6708,8 @@ void __RPC_STUB ISClusResource_get_PossibleOwnerNodes_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_Dependencies_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISClusResDependencies __RPC_FAR *__RPC_FAR *ppResDependencies);
+    ISClusResource * This,
+    /* [retval][out] */ ISClusResDependencies **ppResDependencies);
 
 
 void __RPC_STUB ISClusResource_get_Dependencies_Stub(
@@ -6685,8 +6720,8 @@ void __RPC_STUB ISClusResource_get_Dependencies_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_Dependents_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISClusResDependents __RPC_FAR *__RPC_FAR *ppResDependents);
+    ISClusResource * This,
+    /* [retval][out] */ ISClusResDependents **ppResDependents);
 
 
 void __RPC_STUB ISClusResource_get_Dependents_Stub(
@@ -6697,8 +6732,8 @@ void __RPC_STUB ISClusResource_get_Dependents_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_Group_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISClusResGroup __RPC_FAR *__RPC_FAR *ppResGroup);
+    ISClusResource * This,
+    /* [retval][out] */ ISClusResGroup **ppResGroup);
 
 
 void __RPC_STUB ISClusResource_get_Group_Stub(
@@ -6709,8 +6744,8 @@ void __RPC_STUB ISClusResource_get_Group_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_OwnerNode_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppOwnerNode);
+    ISClusResource * This,
+    /* [retval][out] */ ISClusNode **ppOwnerNode);
 
 
 void __RPC_STUB ISClusResource_get_OwnerNode_Stub(
@@ -6721,8 +6756,8 @@ void __RPC_STUB ISClusResource_get_OwnerNode_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_Cluster_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster);
+    ISClusResource * This,
+    /* [retval][out] */ ISCluster **ppCluster);
 
 
 void __RPC_STUB ISClusResource_get_Cluster_Stub(
@@ -6733,8 +6768,8 @@ void __RPC_STUB ISClusResource_get_Cluster_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_ClassInfo_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ CLUSTER_RESOURCE_CLASS __RPC_FAR *prcClassInfo);
+    ISClusResource * This,
+    /* [retval][out] */ CLUSTER_RESOURCE_CLASS *prcClassInfo);
 
 
 void __RPC_STUB ISClusResource_get_ClassInfo_Stub(
@@ -6745,8 +6780,8 @@ void __RPC_STUB ISClusResource_get_ClassInfo_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_Disk_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISClusDisk __RPC_FAR *__RPC_FAR *ppDisk);
+    ISClusResource * This,
+    /* [retval][out] */ ISClusDisk **ppDisk);
 
 
 void __RPC_STUB ISClusResource_get_Disk_Stub(
@@ -6757,8 +6792,8 @@ void __RPC_STUB ISClusResource_get_Disk_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_RegistryKeys_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISClusRegistryKeys __RPC_FAR *__RPC_FAR *ppRegistryKeys);
+    ISClusResource * This,
+    /* [retval][out] */ ISClusRegistryKeys **ppRegistryKeys);
 
 
 void __RPC_STUB ISClusResource_get_RegistryKeys_Stub(
@@ -6769,8 +6804,8 @@ void __RPC_STUB ISClusResource_get_RegistryKeys_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_CryptoKeys_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISClusCryptoKeys __RPC_FAR *__RPC_FAR *ppCryptoKeys);
+    ISClusResource * This,
+    /* [retval][out] */ ISClusCryptoKeys **ppCryptoKeys);
 
 
 void __RPC_STUB ISClusResource_get_CryptoKeys_Stub(
@@ -6781,8 +6816,8 @@ void __RPC_STUB ISClusResource_get_CryptoKeys_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_TypeName_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrTypeName);
+    ISClusResource * This,
+    /* [retval][out] */ BSTR *pbstrTypeName);
 
 
 void __RPC_STUB ISClusResource_get_TypeName_Stub(
@@ -6793,8 +6828,8 @@ void __RPC_STUB ISClusResource_get_TypeName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResource_get_Type_Proxy( 
-    ISClusResource __RPC_FAR * This,
-    /* [retval][out] */ ISClusResType __RPC_FAR *__RPC_FAR *ppResourceType);
+    ISClusResource * This,
+    /* [retval][out] */ ISClusResType **ppResourceType);
 
 
 void __RPC_STUB ISClusResource_get_Type_Stub(
@@ -6824,28 +6859,28 @@ EXTERN_C const IID IID_ISClusResDependencies;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource) = 0;
+            /* [retval][out] */ ISClusResource **ppClusResource) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateItem( 
             /* [in] */ BSTR bstrResourceName,
             /* [in] */ BSTR bstrResourceType,
             /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource) = 0;
+            /* [retval][out] */ ISClusResource **ppClusterResource) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteItem( 
             /* [in] */ VARIANT varIndex) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddItem( 
-            /* [in] */ ISClusResource __RPC_FAR *pResource) = 0;
+            /* [in] */ ISClusResource *pResource) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveItem( 
             /* [in] */ VARIANT varIndex) = 0;
@@ -6858,79 +6893,79 @@ EXTERN_C const IID IID_ISClusResDependencies;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusResDependencies __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusResDependencies * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusResDependencies __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusResDependencies * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusResDependencies __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusResDependencies * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusResDependencies __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusResDependencies * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusResDependencies __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusResDependencies * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusResDependencies __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusResDependencies * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusResDependencies __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusResDependencies * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusResDependencies __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusResDependencies * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusResDependencies __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusResDependencies * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusResDependencies __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusResDependencies * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusResDependencies __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusResDependencies * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource);
+            /* [retval][out] */ ISClusResource **ppClusResource);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateItem )( 
-            ISClusResDependencies __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateItem )( 
+            ISClusResDependencies * This,
             /* [in] */ BSTR bstrResourceName,
             /* [in] */ BSTR bstrResourceType,
             /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource);
+            /* [retval][out] */ ISClusResource **ppClusterResource);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteItem )( 
-            ISClusResDependencies __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
+            ISClusResDependencies * This,
             /* [in] */ VARIANT varIndex);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddItem )( 
-            ISClusResDependencies __RPC_FAR * This,
-            /* [in] */ ISClusResource __RPC_FAR *pResource);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddItem )( 
+            ISClusResDependencies * This,
+            /* [in] */ ISClusResource *pResource);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveItem )( 
-            ISClusResDependencies __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveItem )( 
+            ISClusResDependencies * This,
             /* [in] */ VARIANT varIndex);
         
         END_INTERFACE
@@ -6938,7 +6973,7 @@ EXTERN_C const IID IID_ISClusResDependencies;
 
     interface ISClusResDependencies
     {
-        CONST_VTBL struct ISClusResDependenciesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusResDependenciesVtbl *lpVtbl;
     };
 
     
@@ -7001,8 +7036,8 @@ EXTERN_C const IID IID_ISClusResDependencies;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResDependencies_get_Count_Proxy( 
-    ISClusResDependencies __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusResDependencies * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusResDependencies_get_Count_Stub(
@@ -7013,8 +7048,8 @@ void __RPC_STUB ISClusResDependencies_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusResDependencies_get__NewEnum_Proxy( 
-    ISClusResDependencies __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusResDependencies * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusResDependencies_get__NewEnum_Stub(
@@ -7025,7 +7060,7 @@ void __RPC_STUB ISClusResDependencies_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResDependencies_Refresh_Proxy( 
-    ISClusResDependencies __RPC_FAR * This);
+    ISClusResDependencies * This);
 
 
 void __RPC_STUB ISClusResDependencies_Refresh_Stub(
@@ -7036,9 +7071,9 @@ void __RPC_STUB ISClusResDependencies_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResDependencies_get_Item_Proxy( 
-    ISClusResDependencies __RPC_FAR * This,
+    ISClusResDependencies * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource);
+    /* [retval][out] */ ISClusResource **ppClusResource);
 
 
 void __RPC_STUB ISClusResDependencies_get_Item_Stub(
@@ -7049,11 +7084,11 @@ void __RPC_STUB ISClusResDependencies_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResDependencies_CreateItem_Proxy( 
-    ISClusResDependencies __RPC_FAR * This,
+    ISClusResDependencies * This,
     /* [in] */ BSTR bstrResourceName,
     /* [in] */ BSTR bstrResourceType,
     /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-    /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource);
+    /* [retval][out] */ ISClusResource **ppClusterResource);
 
 
 void __RPC_STUB ISClusResDependencies_CreateItem_Stub(
@@ -7064,7 +7099,7 @@ void __RPC_STUB ISClusResDependencies_CreateItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResDependencies_DeleteItem_Proxy( 
-    ISClusResDependencies __RPC_FAR * This,
+    ISClusResDependencies * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -7076,8 +7111,8 @@ void __RPC_STUB ISClusResDependencies_DeleteItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResDependencies_AddItem_Proxy( 
-    ISClusResDependencies __RPC_FAR * This,
-    /* [in] */ ISClusResource __RPC_FAR *pResource);
+    ISClusResDependencies * This,
+    /* [in] */ ISClusResource *pResource);
 
 
 void __RPC_STUB ISClusResDependencies_AddItem_Stub(
@@ -7088,7 +7123,7 @@ void __RPC_STUB ISClusResDependencies_AddItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResDependencies_RemoveItem_Proxy( 
-    ISClusResDependencies __RPC_FAR * This,
+    ISClusResDependencies * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -7119,22 +7154,22 @@ EXTERN_C const IID IID_ISClusResGroupResources;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource) = 0;
+            /* [retval][out] */ ISClusResource **ppClusResource) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateItem( 
             /* [in] */ BSTR bstrResourceName,
             /* [in] */ BSTR bstrResourceType,
             /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource) = 0;
+            /* [retval][out] */ ISClusResource **ppClusterResource) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteItem( 
             /* [in] */ VARIANT varIndex) = 0;
@@ -7147,71 +7182,71 @@ EXTERN_C const IID IID_ISClusResGroupResources;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusResGroupResources __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusResGroupResources * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusResGroupResources __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusResGroupResources * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusResGroupResources __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusResGroupResources * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusResGroupResources __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusResGroupResources * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusResGroupResources __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusResGroupResources * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusResGroupResources __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusResGroupResources * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusResGroupResources __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusResGroupResources * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusResGroupResources __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusResGroupResources * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusResGroupResources __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusResGroupResources * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusResGroupResources __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusResGroupResources * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusResGroupResources __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusResGroupResources * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource);
+            /* [retval][out] */ ISClusResource **ppClusResource);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateItem )( 
-            ISClusResGroupResources __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateItem )( 
+            ISClusResGroupResources * This,
             /* [in] */ BSTR bstrResourceName,
             /* [in] */ BSTR bstrResourceType,
             /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource);
+            /* [retval][out] */ ISClusResource **ppClusterResource);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteItem )( 
-            ISClusResGroupResources __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
+            ISClusResGroupResources * This,
             /* [in] */ VARIANT varIndex);
         
         END_INTERFACE
@@ -7219,7 +7254,7 @@ EXTERN_C const IID IID_ISClusResGroupResources;
 
     interface ISClusResGroupResources
     {
-        CONST_VTBL struct ISClusResGroupResourcesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusResGroupResourcesVtbl *lpVtbl;
     };
 
     
@@ -7276,8 +7311,8 @@ EXTERN_C const IID IID_ISClusResGroupResources;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroupResources_get_Count_Proxy( 
-    ISClusResGroupResources __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusResGroupResources * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusResGroupResources_get_Count_Stub(
@@ -7288,8 +7323,8 @@ void __RPC_STUB ISClusResGroupResources_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroupResources_get__NewEnum_Proxy( 
-    ISClusResGroupResources __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusResGroupResources * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusResGroupResources_get__NewEnum_Stub(
@@ -7300,7 +7335,7 @@ void __RPC_STUB ISClusResGroupResources_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroupResources_Refresh_Proxy( 
-    ISClusResGroupResources __RPC_FAR * This);
+    ISClusResGroupResources * This);
 
 
 void __RPC_STUB ISClusResGroupResources_Refresh_Stub(
@@ -7311,9 +7346,9 @@ void __RPC_STUB ISClusResGroupResources_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroupResources_get_Item_Proxy( 
-    ISClusResGroupResources __RPC_FAR * This,
+    ISClusResGroupResources * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource);
+    /* [retval][out] */ ISClusResource **ppClusResource);
 
 
 void __RPC_STUB ISClusResGroupResources_get_Item_Stub(
@@ -7324,11 +7359,11 @@ void __RPC_STUB ISClusResGroupResources_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroupResources_CreateItem_Proxy( 
-    ISClusResGroupResources __RPC_FAR * This,
+    ISClusResGroupResources * This,
     /* [in] */ BSTR bstrResourceName,
     /* [in] */ BSTR bstrResourceType,
     /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-    /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource);
+    /* [retval][out] */ ISClusResource **ppClusterResource);
 
 
 void __RPC_STUB ISClusResGroupResources_CreateItem_Stub(
@@ -7339,7 +7374,7 @@ void __RPC_STUB ISClusResGroupResources_CreateItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroupResources_DeleteItem_Proxy( 
-    ISClusResGroupResources __RPC_FAR * This,
+    ISClusResGroupResources * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -7370,22 +7405,22 @@ EXTERN_C const IID IID_ISClusResTypeResources;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource) = 0;
+            /* [retval][out] */ ISClusResource **ppClusResource) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateItem( 
             /* [in] */ BSTR bstrResourceName,
             /* [in] */ BSTR bstrGroupName,
             /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource) = 0;
+            /* [retval][out] */ ISClusResource **ppClusterResource) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteItem( 
             /* [in] */ VARIANT varIndex) = 0;
@@ -7398,71 +7433,71 @@ EXTERN_C const IID IID_ISClusResTypeResources;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusResTypeResources __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusResTypeResources * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusResTypeResources __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusResTypeResources * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusResTypeResources __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusResTypeResources * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusResTypeResources __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusResTypeResources * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusResTypeResources __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusResTypeResources * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusResTypeResources __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusResTypeResources * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusResTypeResources __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusResTypeResources * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusResTypeResources __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusResTypeResources * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusResTypeResources __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusResTypeResources * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusResTypeResources __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusResTypeResources * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusResTypeResources __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusResTypeResources * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource);
+            /* [retval][out] */ ISClusResource **ppClusResource);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateItem )( 
-            ISClusResTypeResources __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateItem )( 
+            ISClusResTypeResources * This,
             /* [in] */ BSTR bstrResourceName,
             /* [in] */ BSTR bstrGroupName,
             /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource);
+            /* [retval][out] */ ISClusResource **ppClusterResource);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteItem )( 
-            ISClusResTypeResources __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
+            ISClusResTypeResources * This,
             /* [in] */ VARIANT varIndex);
         
         END_INTERFACE
@@ -7470,7 +7505,7 @@ EXTERN_C const IID IID_ISClusResTypeResources;
 
     interface ISClusResTypeResources
     {
-        CONST_VTBL struct ISClusResTypeResourcesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusResTypeResourcesVtbl *lpVtbl;
     };
 
     
@@ -7527,8 +7562,8 @@ EXTERN_C const IID IID_ISClusResTypeResources;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResTypeResources_get_Count_Proxy( 
-    ISClusResTypeResources __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusResTypeResources * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusResTypeResources_get_Count_Stub(
@@ -7539,8 +7574,8 @@ void __RPC_STUB ISClusResTypeResources_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusResTypeResources_get__NewEnum_Proxy( 
-    ISClusResTypeResources __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusResTypeResources * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusResTypeResources_get__NewEnum_Stub(
@@ -7551,7 +7586,7 @@ void __RPC_STUB ISClusResTypeResources_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResTypeResources_Refresh_Proxy( 
-    ISClusResTypeResources __RPC_FAR * This);
+    ISClusResTypeResources * This);
 
 
 void __RPC_STUB ISClusResTypeResources_Refresh_Stub(
@@ -7562,9 +7597,9 @@ void __RPC_STUB ISClusResTypeResources_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResTypeResources_get_Item_Proxy( 
-    ISClusResTypeResources __RPC_FAR * This,
+    ISClusResTypeResources * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource);
+    /* [retval][out] */ ISClusResource **ppClusResource);
 
 
 void __RPC_STUB ISClusResTypeResources_get_Item_Stub(
@@ -7575,11 +7610,11 @@ void __RPC_STUB ISClusResTypeResources_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResTypeResources_CreateItem_Proxy( 
-    ISClusResTypeResources __RPC_FAR * This,
+    ISClusResTypeResources * This,
     /* [in] */ BSTR bstrResourceName,
     /* [in] */ BSTR bstrGroupName,
     /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-    /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource);
+    /* [retval][out] */ ISClusResource **ppClusterResource);
 
 
 void __RPC_STUB ISClusResTypeResources_CreateItem_Stub(
@@ -7590,7 +7625,7 @@ void __RPC_STUB ISClusResTypeResources_CreateItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResTypeResources_DeleteItem_Proxy( 
-    ISClusResTypeResources __RPC_FAR * This,
+    ISClusResTypeResources * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -7621,23 +7656,23 @@ EXTERN_C const IID IID_ISClusResources;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource) = 0;
+            /* [retval][out] */ ISClusResource **ppClusResource) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateItem( 
             /* [in] */ BSTR bstrResourceName,
             /* [in] */ BSTR bstrResourceType,
             /* [in] */ BSTR bstrGroupName,
             /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource) = 0;
+            /* [retval][out] */ ISClusResource **ppClusterResource) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteItem( 
             /* [in] */ VARIANT varIndex) = 0;
@@ -7650,72 +7685,72 @@ EXTERN_C const IID IID_ISClusResources;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusResources __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusResources * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusResources __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusResources * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusResources __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusResources * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusResources __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusResources * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusResources __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusResources * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusResources __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusResources * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusResources __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusResources * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusResources __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusResources * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusResources __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusResources * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusResources __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusResources * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusResources __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusResources * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource);
+            /* [retval][out] */ ISClusResource **ppClusResource);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateItem )( 
-            ISClusResources __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateItem )( 
+            ISClusResources * This,
             /* [in] */ BSTR bstrResourceName,
             /* [in] */ BSTR bstrResourceType,
             /* [in] */ BSTR bstrGroupName,
             /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource);
+            /* [retval][out] */ ISClusResource **ppClusterResource);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteItem )( 
-            ISClusResources __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
+            ISClusResources * This,
             /* [in] */ VARIANT varIndex);
         
         END_INTERFACE
@@ -7723,7 +7758,7 @@ EXTERN_C const IID IID_ISClusResources;
 
     interface ISClusResources
     {
-        CONST_VTBL struct ISClusResourcesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusResourcesVtbl *lpVtbl;
     };
 
     
@@ -7780,8 +7815,8 @@ EXTERN_C const IID IID_ISClusResources;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResources_get_Count_Proxy( 
-    ISClusResources __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusResources * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusResources_get_Count_Stub(
@@ -7792,8 +7827,8 @@ void __RPC_STUB ISClusResources_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusResources_get__NewEnum_Proxy( 
-    ISClusResources __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusResources * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusResources_get__NewEnum_Stub(
@@ -7804,7 +7839,7 @@ void __RPC_STUB ISClusResources_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResources_Refresh_Proxy( 
-    ISClusResources __RPC_FAR * This);
+    ISClusResources * This);
 
 
 void __RPC_STUB ISClusResources_Refresh_Stub(
@@ -7815,9 +7850,9 @@ void __RPC_STUB ISClusResources_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResources_get_Item_Proxy( 
-    ISClusResources __RPC_FAR * This,
+    ISClusResources * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource);
+    /* [retval][out] */ ISClusResource **ppClusResource);
 
 
 void __RPC_STUB ISClusResources_get_Item_Stub(
@@ -7828,12 +7863,12 @@ void __RPC_STUB ISClusResources_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResources_CreateItem_Proxy( 
-    ISClusResources __RPC_FAR * This,
+    ISClusResources * This,
     /* [in] */ BSTR bstrResourceName,
     /* [in] */ BSTR bstrResourceType,
     /* [in] */ BSTR bstrGroupName,
     /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-    /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource);
+    /* [retval][out] */ ISClusResource **ppClusterResource);
 
 
 void __RPC_STUB ISClusResources_CreateItem_Stub(
@@ -7844,7 +7879,7 @@ void __RPC_STUB ISClusResources_CreateItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResources_DeleteItem_Proxy( 
-    ISClusResources __RPC_FAR * This,
+    ISClusResources * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -7875,31 +7910,31 @@ EXTERN_C const IID IID_ISClusResGroupPreferredOwnerNodes;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppNode) = 0;
+            /* [retval][out] */ ISClusNode **ppNode) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InsertItem( 
-            /* [in] */ ISClusNode __RPC_FAR *pNode,
+            /* [in] */ ISClusNode *pNode,
             /* [in] */ long nPosition) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveItem( 
             /* [in] */ VARIANT varIndex) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Modified( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarModified) = 0;
+            /* [retval][out] */ VARIANT *pvarModified) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SaveChanges( void) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddItem( 
-            /* [in] */ ISClusNode __RPC_FAR *pNode) = 0;
+            /* [in] */ ISClusNode *pNode) = 0;
         
     };
     
@@ -7909,88 +7944,88 @@ EXTERN_C const IID IID_ISClusResGroupPreferredOwnerNodes;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusResGroupPreferredOwnerNodes * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusResGroupPreferredOwnerNodes * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusResGroupPreferredOwnerNodes * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusResGroupPreferredOwnerNodes * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusResGroupPreferredOwnerNodes * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusResGroupPreferredOwnerNodes * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusResGroupPreferredOwnerNodes * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusResGroupPreferredOwnerNodes * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusResGroupPreferredOwnerNodes * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusResGroupPreferredOwnerNodes * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusResGroupPreferredOwnerNodes * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppNode);
+            /* [retval][out] */ ISClusNode **ppNode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertItem )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
-            /* [in] */ ISClusNode __RPC_FAR *pNode,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InsertItem )( 
+            ISClusResGroupPreferredOwnerNodes * This,
+            /* [in] */ ISClusNode *pNode,
             /* [in] */ long nPosition);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveItem )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveItem )( 
+            ISClusResGroupPreferredOwnerNodes * This,
             /* [in] */ VARIANT varIndex);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Modified )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarModified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Modified )( 
+            ISClusResGroupPreferredOwnerNodes * This,
+            /* [retval][out] */ VARIANT *pvarModified);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveChanges )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SaveChanges )( 
+            ISClusResGroupPreferredOwnerNodes * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddItem )( 
-            ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
-            /* [in] */ ISClusNode __RPC_FAR *pNode);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddItem )( 
+            ISClusResGroupPreferredOwnerNodes * This,
+            /* [in] */ ISClusNode *pNode);
         
         END_INTERFACE
     } ISClusResGroupPreferredOwnerNodesVtbl;
 
     interface ISClusResGroupPreferredOwnerNodes
     {
-        CONST_VTBL struct ISClusResGroupPreferredOwnerNodesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusResGroupPreferredOwnerNodesVtbl *lpVtbl;
     };
 
     
@@ -8056,8 +8091,8 @@ EXTERN_C const IID IID_ISClusResGroupPreferredOwnerNodes;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroupPreferredOwnerNodes_get_Count_Proxy( 
-    ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusResGroupPreferredOwnerNodes * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusResGroupPreferredOwnerNodes_get_Count_Stub(
@@ -8068,8 +8103,8 @@ void __RPC_STUB ISClusResGroupPreferredOwnerNodes_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroupPreferredOwnerNodes_get__NewEnum_Proxy( 
-    ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusResGroupPreferredOwnerNodes * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusResGroupPreferredOwnerNodes_get__NewEnum_Stub(
@@ -8080,7 +8115,7 @@ void __RPC_STUB ISClusResGroupPreferredOwnerNodes_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroupPreferredOwnerNodes_Refresh_Proxy( 
-    ISClusResGroupPreferredOwnerNodes __RPC_FAR * This);
+    ISClusResGroupPreferredOwnerNodes * This);
 
 
 void __RPC_STUB ISClusResGroupPreferredOwnerNodes_Refresh_Stub(
@@ -8091,9 +8126,9 @@ void __RPC_STUB ISClusResGroupPreferredOwnerNodes_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroupPreferredOwnerNodes_get_Item_Proxy( 
-    ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
+    ISClusResGroupPreferredOwnerNodes * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppNode);
+    /* [retval][out] */ ISClusNode **ppNode);
 
 
 void __RPC_STUB ISClusResGroupPreferredOwnerNodes_get_Item_Stub(
@@ -8104,8 +8139,8 @@ void __RPC_STUB ISClusResGroupPreferredOwnerNodes_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroupPreferredOwnerNodes_InsertItem_Proxy( 
-    ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
-    /* [in] */ ISClusNode __RPC_FAR *pNode,
+    ISClusResGroupPreferredOwnerNodes * This,
+    /* [in] */ ISClusNode *pNode,
     /* [in] */ long nPosition);
 
 
@@ -8117,7 +8152,7 @@ void __RPC_STUB ISClusResGroupPreferredOwnerNodes_InsertItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroupPreferredOwnerNodes_RemoveItem_Proxy( 
-    ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
+    ISClusResGroupPreferredOwnerNodes * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -8129,8 +8164,8 @@ void __RPC_STUB ISClusResGroupPreferredOwnerNodes_RemoveItem_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResGroupPreferredOwnerNodes_get_Modified_Proxy( 
-    ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarModified);
+    ISClusResGroupPreferredOwnerNodes * This,
+    /* [retval][out] */ VARIANT *pvarModified);
 
 
 void __RPC_STUB ISClusResGroupPreferredOwnerNodes_get_Modified_Stub(
@@ -8141,7 +8176,7 @@ void __RPC_STUB ISClusResGroupPreferredOwnerNodes_get_Modified_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroupPreferredOwnerNodes_SaveChanges_Proxy( 
-    ISClusResGroupPreferredOwnerNodes __RPC_FAR * This);
+    ISClusResGroupPreferredOwnerNodes * This);
 
 
 void __RPC_STUB ISClusResGroupPreferredOwnerNodes_SaveChanges_Stub(
@@ -8152,8 +8187,8 @@ void __RPC_STUB ISClusResGroupPreferredOwnerNodes_SaveChanges_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResGroupPreferredOwnerNodes_AddItem_Proxy( 
-    ISClusResGroupPreferredOwnerNodes __RPC_FAR * This,
-    /* [in] */ ISClusNode __RPC_FAR *pNode);
+    ISClusResGroupPreferredOwnerNodes * This,
+    /* [in] */ ISClusNode *pNode);
 
 
 void __RPC_STUB ISClusResGroupPreferredOwnerNodes_AddItem_Stub(
@@ -8183,25 +8218,25 @@ EXTERN_C const IID IID_ISClusResPossibleOwnerNodes;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppNode) = 0;
+            /* [retval][out] */ ISClusNode **ppNode) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddItem( 
-            /* [in] */ ISClusNode __RPC_FAR *pNode) = 0;
+            /* [in] */ ISClusNode *pNode) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveItem( 
             /* [in] */ VARIANT varIndex) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Modified( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarModified) = 0;
+            /* [retval][out] */ VARIANT *pvarModified) = 0;
         
     };
     
@@ -8211,80 +8246,80 @@ EXTERN_C const IID IID_ISClusResPossibleOwnerNodes;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusResPossibleOwnerNodes * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusResPossibleOwnerNodes * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusResPossibleOwnerNodes * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusResPossibleOwnerNodes * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusResPossibleOwnerNodes * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusResPossibleOwnerNodes * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusResPossibleOwnerNodes * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusResPossibleOwnerNodes * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusResPossibleOwnerNodes * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusResPossibleOwnerNodes * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusResPossibleOwnerNodes * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppNode);
+            /* [retval][out] */ ISClusNode **ppNode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddItem )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This,
-            /* [in] */ ISClusNode __RPC_FAR *pNode);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddItem )( 
+            ISClusResPossibleOwnerNodes * This,
+            /* [in] */ ISClusNode *pNode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveItem )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveItem )( 
+            ISClusResPossibleOwnerNodes * This,
             /* [in] */ VARIANT varIndex);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Modified )( 
-            ISClusResPossibleOwnerNodes __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarModified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Modified )( 
+            ISClusResPossibleOwnerNodes * This,
+            /* [retval][out] */ VARIANT *pvarModified);
         
         END_INTERFACE
     } ISClusResPossibleOwnerNodesVtbl;
 
     interface ISClusResPossibleOwnerNodes
     {
-        CONST_VTBL struct ISClusResPossibleOwnerNodesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusResPossibleOwnerNodesVtbl *lpVtbl;
     };
 
     
@@ -8344,8 +8379,8 @@ EXTERN_C const IID IID_ISClusResPossibleOwnerNodes;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResPossibleOwnerNodes_get_Count_Proxy( 
-    ISClusResPossibleOwnerNodes __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusResPossibleOwnerNodes * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusResPossibleOwnerNodes_get_Count_Stub(
@@ -8356,8 +8391,8 @@ void __RPC_STUB ISClusResPossibleOwnerNodes_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusResPossibleOwnerNodes_get__NewEnum_Proxy( 
-    ISClusResPossibleOwnerNodes __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusResPossibleOwnerNodes * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusResPossibleOwnerNodes_get__NewEnum_Stub(
@@ -8368,7 +8403,7 @@ void __RPC_STUB ISClusResPossibleOwnerNodes_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResPossibleOwnerNodes_Refresh_Proxy( 
-    ISClusResPossibleOwnerNodes __RPC_FAR * This);
+    ISClusResPossibleOwnerNodes * This);
 
 
 void __RPC_STUB ISClusResPossibleOwnerNodes_Refresh_Stub(
@@ -8379,9 +8414,9 @@ void __RPC_STUB ISClusResPossibleOwnerNodes_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResPossibleOwnerNodes_get_Item_Proxy( 
-    ISClusResPossibleOwnerNodes __RPC_FAR * This,
+    ISClusResPossibleOwnerNodes * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppNode);
+    /* [retval][out] */ ISClusNode **ppNode);
 
 
 void __RPC_STUB ISClusResPossibleOwnerNodes_get_Item_Stub(
@@ -8392,8 +8427,8 @@ void __RPC_STUB ISClusResPossibleOwnerNodes_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResPossibleOwnerNodes_AddItem_Proxy( 
-    ISClusResPossibleOwnerNodes __RPC_FAR * This,
-    /* [in] */ ISClusNode __RPC_FAR *pNode);
+    ISClusResPossibleOwnerNodes * This,
+    /* [in] */ ISClusNode *pNode);
 
 
 void __RPC_STUB ISClusResPossibleOwnerNodes_AddItem_Stub(
@@ -8404,7 +8439,7 @@ void __RPC_STUB ISClusResPossibleOwnerNodes_AddItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResPossibleOwnerNodes_RemoveItem_Proxy( 
-    ISClusResPossibleOwnerNodes __RPC_FAR * This,
+    ISClusResPossibleOwnerNodes * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -8416,8 +8451,8 @@ void __RPC_STUB ISClusResPossibleOwnerNodes_RemoveItem_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResPossibleOwnerNodes_get_Modified_Proxy( 
-    ISClusResPossibleOwnerNodes __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarModified);
+    ISClusResPossibleOwnerNodes * This,
+    /* [retval][out] */ VARIANT *pvarModified);
 
 
 void __RPC_STUB ISClusResPossibleOwnerNodes_get_Modified_Stub(
@@ -8447,16 +8482,16 @@ EXTERN_C const IID IID_ISClusResTypePossibleOwnerNodes;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppNode) = 0;
+            /* [retval][out] */ ISClusNode **ppNode) = 0;
         
     };
     
@@ -8466,68 +8501,68 @@ EXTERN_C const IID IID_ISClusResTypePossibleOwnerNodes;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusResTypePossibleOwnerNodes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusResTypePossibleOwnerNodes * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusResTypePossibleOwnerNodes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusResTypePossibleOwnerNodes * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusResTypePossibleOwnerNodes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusResTypePossibleOwnerNodes * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusResTypePossibleOwnerNodes __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusResTypePossibleOwnerNodes * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusResTypePossibleOwnerNodes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusResTypePossibleOwnerNodes * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusResTypePossibleOwnerNodes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusResTypePossibleOwnerNodes * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusResTypePossibleOwnerNodes __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusResTypePossibleOwnerNodes * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusResTypePossibleOwnerNodes __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusResTypePossibleOwnerNodes * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusResTypePossibleOwnerNodes __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusResTypePossibleOwnerNodes * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusResTypePossibleOwnerNodes __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusResTypePossibleOwnerNodes * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusResTypePossibleOwnerNodes __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusResTypePossibleOwnerNodes * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppNode);
+            /* [retval][out] */ ISClusNode **ppNode);
         
         END_INTERFACE
     } ISClusResTypePossibleOwnerNodesVtbl;
 
     interface ISClusResTypePossibleOwnerNodes
     {
-        CONST_VTBL struct ISClusResTypePossibleOwnerNodesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusResTypePossibleOwnerNodesVtbl *lpVtbl;
     };
 
     
@@ -8578,8 +8613,8 @@ EXTERN_C const IID IID_ISClusResTypePossibleOwnerNodes;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResTypePossibleOwnerNodes_get_Count_Proxy( 
-    ISClusResTypePossibleOwnerNodes __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusResTypePossibleOwnerNodes * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusResTypePossibleOwnerNodes_get_Count_Stub(
@@ -8590,8 +8625,8 @@ void __RPC_STUB ISClusResTypePossibleOwnerNodes_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusResTypePossibleOwnerNodes_get__NewEnum_Proxy( 
-    ISClusResTypePossibleOwnerNodes __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusResTypePossibleOwnerNodes * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusResTypePossibleOwnerNodes_get__NewEnum_Stub(
@@ -8602,7 +8637,7 @@ void __RPC_STUB ISClusResTypePossibleOwnerNodes_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResTypePossibleOwnerNodes_Refresh_Proxy( 
-    ISClusResTypePossibleOwnerNodes __RPC_FAR * This);
+    ISClusResTypePossibleOwnerNodes * This);
 
 
 void __RPC_STUB ISClusResTypePossibleOwnerNodes_Refresh_Stub(
@@ -8613,9 +8648,9 @@ void __RPC_STUB ISClusResTypePossibleOwnerNodes_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResTypePossibleOwnerNodes_get_Item_Proxy( 
-    ISClusResTypePossibleOwnerNodes __RPC_FAR * This,
+    ISClusResTypePossibleOwnerNodes * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusNode __RPC_FAR *__RPC_FAR *ppNode);
+    /* [retval][out] */ ISClusNode **ppNode);
 
 
 void __RPC_STUB ISClusResTypePossibleOwnerNodes_get_Item_Stub(
@@ -8645,33 +8680,33 @@ EXTERN_C const IID IID_ISClusResType;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CommonROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrivateROProperties( 
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties) = 0;
+            /* [retval][out] */ ISClusProperties **ppProperties) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+            /* [retval][out] */ BSTR *pbstrName) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Cluster( 
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster) = 0;
+            /* [retval][out] */ ISCluster **ppCluster) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Resources( 
-            /* [retval][out] */ ISClusResTypeResources __RPC_FAR *__RPC_FAR *ppClusterResTypeResources) = 0;
+            /* [retval][out] */ ISClusResTypeResources **ppClusterResTypeResources) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PossibleOwnerNodes( 
-            /* [retval][out] */ ISClusResTypePossibleOwnerNodes __RPC_FAR *__RPC_FAR *ppOwnerNodes) = 0;
+            /* [retval][out] */ ISClusResTypePossibleOwnerNodes **ppOwnerNodes) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AvailableDisks( 
-            /* [retval][out] */ ISClusDisks __RPC_FAR *__RPC_FAR *ppAvailableDisks) = 0;
+            /* [retval][out] */ ISClusDisks **ppAvailableDisks) = 0;
         
     };
     
@@ -8681,91 +8716,91 @@ EXTERN_C const IID IID_ISClusResType;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusResType __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusResType * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusResType __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusResType * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusResType __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusResType * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusResType __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusResType * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusResType __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusResType * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusResType __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusResType * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusResType __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusResType * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonProperties )( 
-            ISClusResType __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonProperties )( 
+            ISClusResType * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateProperties )( 
-            ISClusResType __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateProperties )( 
+            ISClusResType * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_CommonROProperties )( 
-            ISClusResType __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CommonROProperties )( 
+            ISClusResType * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PrivateROProperties )( 
-            ISClusResType __RPC_FAR * This,
-            /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrivateROProperties )( 
+            ISClusResType * This,
+            /* [retval][out] */ ISClusProperties **ppProperties);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            ISClusResType __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            ISClusResType * This,
+            /* [retval][out] */ BSTR *pbstrName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Delete )( 
-            ISClusResType __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+            ISClusResType * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Cluster )( 
-            ISClusResType __RPC_FAR * This,
-            /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Cluster )( 
+            ISClusResType * This,
+            /* [retval][out] */ ISCluster **ppCluster);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Resources )( 
-            ISClusResType __RPC_FAR * This,
-            /* [retval][out] */ ISClusResTypeResources __RPC_FAR *__RPC_FAR *ppClusterResTypeResources);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Resources )( 
+            ISClusResType * This,
+            /* [retval][out] */ ISClusResTypeResources **ppClusterResTypeResources);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PossibleOwnerNodes )( 
-            ISClusResType __RPC_FAR * This,
-            /* [retval][out] */ ISClusResTypePossibleOwnerNodes __RPC_FAR *__RPC_FAR *ppOwnerNodes);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PossibleOwnerNodes )( 
+            ISClusResType * This,
+            /* [retval][out] */ ISClusResTypePossibleOwnerNodes **ppOwnerNodes);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AvailableDisks )( 
-            ISClusResType __RPC_FAR * This,
-            /* [retval][out] */ ISClusDisks __RPC_FAR *__RPC_FAR *ppAvailableDisks);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AvailableDisks )( 
+            ISClusResType * This,
+            /* [retval][out] */ ISClusDisks **ppAvailableDisks);
         
         END_INTERFACE
     } ISClusResTypeVtbl;
 
     interface ISClusResType
     {
-        CONST_VTBL struct ISClusResTypeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusResTypeVtbl *lpVtbl;
     };
 
     
@@ -8834,8 +8869,8 @@ EXTERN_C const IID IID_ISClusResType;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResType_get_CommonProperties_Proxy( 
-    ISClusResType __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusResType * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusResType_get_CommonProperties_Stub(
@@ -8846,8 +8881,8 @@ void __RPC_STUB ISClusResType_get_CommonProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResType_get_PrivateProperties_Proxy( 
-    ISClusResType __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusResType * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusResType_get_PrivateProperties_Stub(
@@ -8858,8 +8893,8 @@ void __RPC_STUB ISClusResType_get_PrivateProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResType_get_CommonROProperties_Proxy( 
-    ISClusResType __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusResType * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusResType_get_CommonROProperties_Stub(
@@ -8870,8 +8905,8 @@ void __RPC_STUB ISClusResType_get_CommonROProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResType_get_PrivateROProperties_Proxy( 
-    ISClusResType __RPC_FAR * This,
-    /* [retval][out] */ ISClusProperties __RPC_FAR *__RPC_FAR *ppProperties);
+    ISClusResType * This,
+    /* [retval][out] */ ISClusProperties **ppProperties);
 
 
 void __RPC_STUB ISClusResType_get_PrivateROProperties_Stub(
@@ -8882,8 +8917,8 @@ void __RPC_STUB ISClusResType_get_PrivateROProperties_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResType_get_Name_Proxy( 
-    ISClusResType __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+    ISClusResType * This,
+    /* [retval][out] */ BSTR *pbstrName);
 
 
 void __RPC_STUB ISClusResType_get_Name_Stub(
@@ -8894,7 +8929,7 @@ void __RPC_STUB ISClusResType_get_Name_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResType_Delete_Proxy( 
-    ISClusResType __RPC_FAR * This);
+    ISClusResType * This);
 
 
 void __RPC_STUB ISClusResType_Delete_Stub(
@@ -8905,8 +8940,8 @@ void __RPC_STUB ISClusResType_Delete_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResType_get_Cluster_Proxy( 
-    ISClusResType __RPC_FAR * This,
-    /* [retval][out] */ ISCluster __RPC_FAR *__RPC_FAR *ppCluster);
+    ISClusResType * This,
+    /* [retval][out] */ ISCluster **ppCluster);
 
 
 void __RPC_STUB ISClusResType_get_Cluster_Stub(
@@ -8917,8 +8952,8 @@ void __RPC_STUB ISClusResType_get_Cluster_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResType_get_Resources_Proxy( 
-    ISClusResType __RPC_FAR * This,
-    /* [retval][out] */ ISClusResTypeResources __RPC_FAR *__RPC_FAR *ppClusterResTypeResources);
+    ISClusResType * This,
+    /* [retval][out] */ ISClusResTypeResources **ppClusterResTypeResources);
 
 
 void __RPC_STUB ISClusResType_get_Resources_Stub(
@@ -8929,8 +8964,8 @@ void __RPC_STUB ISClusResType_get_Resources_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResType_get_PossibleOwnerNodes_Proxy( 
-    ISClusResType __RPC_FAR * This,
-    /* [retval][out] */ ISClusResTypePossibleOwnerNodes __RPC_FAR *__RPC_FAR *ppOwnerNodes);
+    ISClusResType * This,
+    /* [retval][out] */ ISClusResTypePossibleOwnerNodes **ppOwnerNodes);
 
 
 void __RPC_STUB ISClusResType_get_PossibleOwnerNodes_Stub(
@@ -8941,8 +8976,8 @@ void __RPC_STUB ISClusResType_get_PossibleOwnerNodes_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResType_get_AvailableDisks_Proxy( 
-    ISClusResType __RPC_FAR * This,
-    /* [retval][out] */ ISClusDisks __RPC_FAR *__RPC_FAR *ppAvailableDisks);
+    ISClusResType * This,
+    /* [retval][out] */ ISClusDisks **ppAvailableDisks);
 
 
 void __RPC_STUB ISClusResType_get_AvailableDisks_Stub(
@@ -8972,16 +9007,16 @@ EXTERN_C const IID IID_ISClusResTypes;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResType __RPC_FAR *__RPC_FAR *ppClusResType) = 0;
+            /* [retval][out] */ ISClusResType **ppClusResType) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateItem( 
             /* [in] */ BSTR bstrResourceTypeName,
@@ -8989,7 +9024,7 @@ EXTERN_C const IID IID_ISClusResTypes;
             /* [in] */ BSTR bstrResourceTypeDll,
             /* [in] */ long dwLooksAlivePollInterval,
             /* [in] */ long dwIsAlivePollInterval,
-            /* [retval][out] */ ISClusResType __RPC_FAR *__RPC_FAR *ppResourceType) = 0;
+            /* [retval][out] */ ISClusResType **ppResourceType) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteItem( 
             /* [in] */ VARIANT varIndex) = 0;
@@ -9002,73 +9037,73 @@ EXTERN_C const IID IID_ISClusResTypes;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusResTypes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusResTypes * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusResTypes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusResTypes * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusResTypes __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusResTypes * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusResTypes __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusResTypes * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusResTypes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusResTypes * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusResTypes __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusResTypes * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusResTypes __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusResTypes * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusResTypes __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusResTypes * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusResTypes __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusResTypes * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusResTypes __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusResTypes * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusResTypes __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusResTypes * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResType __RPC_FAR *__RPC_FAR *ppClusResType);
+            /* [retval][out] */ ISClusResType **ppClusResType);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateItem )( 
-            ISClusResTypes __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateItem )( 
+            ISClusResTypes * This,
             /* [in] */ BSTR bstrResourceTypeName,
             /* [in] */ BSTR bstrDisplayName,
             /* [in] */ BSTR bstrResourceTypeDll,
             /* [in] */ long dwLooksAlivePollInterval,
             /* [in] */ long dwIsAlivePollInterval,
-            /* [retval][out] */ ISClusResType __RPC_FAR *__RPC_FAR *ppResourceType);
+            /* [retval][out] */ ISClusResType **ppResourceType);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteItem )( 
-            ISClusResTypes __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
+            ISClusResTypes * This,
             /* [in] */ VARIANT varIndex);
         
         END_INTERFACE
@@ -9076,7 +9111,7 @@ EXTERN_C const IID IID_ISClusResTypes;
 
     interface ISClusResTypes
     {
-        CONST_VTBL struct ISClusResTypesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusResTypesVtbl *lpVtbl;
     };
 
     
@@ -9133,8 +9168,8 @@ EXTERN_C const IID IID_ISClusResTypes;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResTypes_get_Count_Proxy( 
-    ISClusResTypes __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusResTypes * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusResTypes_get_Count_Stub(
@@ -9145,8 +9180,8 @@ void __RPC_STUB ISClusResTypes_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusResTypes_get__NewEnum_Proxy( 
-    ISClusResTypes __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusResTypes * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusResTypes_get__NewEnum_Stub(
@@ -9157,7 +9192,7 @@ void __RPC_STUB ISClusResTypes_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResTypes_Refresh_Proxy( 
-    ISClusResTypes __RPC_FAR * This);
+    ISClusResTypes * This);
 
 
 void __RPC_STUB ISClusResTypes_Refresh_Stub(
@@ -9168,9 +9203,9 @@ void __RPC_STUB ISClusResTypes_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResTypes_get_Item_Proxy( 
-    ISClusResTypes __RPC_FAR * This,
+    ISClusResTypes * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusResType __RPC_FAR *__RPC_FAR *ppClusResType);
+    /* [retval][out] */ ISClusResType **ppClusResType);
 
 
 void __RPC_STUB ISClusResTypes_get_Item_Stub(
@@ -9181,13 +9216,13 @@ void __RPC_STUB ISClusResTypes_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResTypes_CreateItem_Proxy( 
-    ISClusResTypes __RPC_FAR * This,
+    ISClusResTypes * This,
     /* [in] */ BSTR bstrResourceTypeName,
     /* [in] */ BSTR bstrDisplayName,
     /* [in] */ BSTR bstrResourceTypeDll,
     /* [in] */ long dwLooksAlivePollInterval,
     /* [in] */ long dwIsAlivePollInterval,
-    /* [retval][out] */ ISClusResType __RPC_FAR *__RPC_FAR *ppResourceType);
+    /* [retval][out] */ ISClusResType **ppResourceType);
 
 
 void __RPC_STUB ISClusResTypes_CreateItem_Stub(
@@ -9198,7 +9233,7 @@ void __RPC_STUB ISClusResTypes_CreateItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResTypes_DeleteItem_Proxy( 
-    ISClusResTypes __RPC_FAR * This,
+    ISClusResTypes * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -9229,46 +9264,46 @@ EXTERN_C const IID IID_ISClusProperty;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName) = 0;
+            /* [retval][out] */ BSTR *pbstrName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Length( 
-            /* [retval][out] */ long __RPC_FAR *pLength) = 0;
+            /* [retval][out] */ long *pLength) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ValueCount( 
-            /* [retval][out] */ long __RPC_FAR *pCount) = 0;
+            /* [retval][out] */ long *pCount) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Values( 
-            /* [retval][out] */ ISClusPropertyValues __RPC_FAR *__RPC_FAR *ppClusterPropertyValues) = 0;
+            /* [retval][out] */ ISClusPropertyValues **ppClusterPropertyValues) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Value( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarValue) = 0;
+            /* [retval][out] */ VARIANT *pvarValue) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Value( 
             /* [in] */ VARIANT varValue) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ CLUSTER_PROPERTY_TYPE __RPC_FAR *pType) = 0;
+            /* [retval][out] */ CLUSTER_PROPERTY_TYPE *pType) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Type( 
             /* [in] */ CLUSTER_PROPERTY_TYPE Type) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Format( 
-            /* [retval][out] */ CLUSTER_PROPERTY_FORMAT __RPC_FAR *pFormat) = 0;
+            /* [retval][out] */ CLUSTER_PROPERTY_FORMAT *pFormat) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Format( 
             /* [in] */ CLUSTER_PROPERTY_FORMAT Format) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReadOnly( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarReadOnly) = 0;
+            /* [retval][out] */ VARIANT *pvarReadOnly) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Private( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPrivate) = 0;
+            /* [retval][out] */ VARIANT *pvarPrivate) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Common( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarCommon) = 0;
+            /* [retval][out] */ VARIANT *pvarCommon) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Modified( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarModified) = 0;
+            /* [retval][out] */ VARIANT *pvarModified) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE UseDefaultValue( void) = 0;
         
@@ -9280,111 +9315,111 @@ EXTERN_C const IID IID_ISClusProperty;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusProperty __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusProperty * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusProperty __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusProperty * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusProperty __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusProperty * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusProperty __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusProperty * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusProperty __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusProperty * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusProperty __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusProperty * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusProperty __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusProperty * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            ISClusProperty __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            ISClusProperty * This,
+            /* [retval][out] */ BSTR *pbstrName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Length )( 
-            ISClusProperty __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pLength);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Length )( 
+            ISClusProperty * This,
+            /* [retval][out] */ long *pLength);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ValueCount )( 
-            ISClusProperty __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ValueCount )( 
+            ISClusProperty * This,
+            /* [retval][out] */ long *pCount);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Values )( 
-            ISClusProperty __RPC_FAR * This,
-            /* [retval][out] */ ISClusPropertyValues __RPC_FAR *__RPC_FAR *ppClusterPropertyValues);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Values )( 
+            ISClusProperty * This,
+            /* [retval][out] */ ISClusPropertyValues **ppClusterPropertyValues);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Value )( 
-            ISClusProperty __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Value )( 
+            ISClusProperty * This,
+            /* [retval][out] */ VARIANT *pvarValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Value )( 
-            ISClusProperty __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Value )( 
+            ISClusProperty * This,
             /* [in] */ VARIANT varValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
-            ISClusProperty __RPC_FAR * This,
-            /* [retval][out] */ CLUSTER_PROPERTY_TYPE __RPC_FAR *pType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            ISClusProperty * This,
+            /* [retval][out] */ CLUSTER_PROPERTY_TYPE *pType);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Type )( 
-            ISClusProperty __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Type )( 
+            ISClusProperty * This,
             /* [in] */ CLUSTER_PROPERTY_TYPE Type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Format )( 
-            ISClusProperty __RPC_FAR * This,
-            /* [retval][out] */ CLUSTER_PROPERTY_FORMAT __RPC_FAR *pFormat);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Format )( 
+            ISClusProperty * This,
+            /* [retval][out] */ CLUSTER_PROPERTY_FORMAT *pFormat);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Format )( 
-            ISClusProperty __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Format )( 
+            ISClusProperty * This,
             /* [in] */ CLUSTER_PROPERTY_FORMAT Format);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ReadOnly )( 
-            ISClusProperty __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarReadOnly);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReadOnly )( 
+            ISClusProperty * This,
+            /* [retval][out] */ VARIANT *pvarReadOnly);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Private )( 
-            ISClusProperty __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPrivate);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Private )( 
+            ISClusProperty * This,
+            /* [retval][out] */ VARIANT *pvarPrivate);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Common )( 
-            ISClusProperty __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarCommon);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Common )( 
+            ISClusProperty * This,
+            /* [retval][out] */ VARIANT *pvarCommon);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Modified )( 
-            ISClusProperty __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarModified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Modified )( 
+            ISClusProperty * This,
+            /* [retval][out] */ VARIANT *pvarModified);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UseDefaultValue )( 
-            ISClusProperty __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *UseDefaultValue )( 
+            ISClusProperty * This);
         
         END_INTERFACE
     } ISClusPropertyVtbl;
 
     interface ISClusProperty
     {
-        CONST_VTBL struct ISClusPropertyVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusPropertyVtbl *lpVtbl;
     };
 
     
@@ -9468,8 +9503,8 @@ EXTERN_C const IID IID_ISClusProperty;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperty_get_Name_Proxy( 
-    ISClusProperty __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrName);
+    ISClusProperty * This,
+    /* [retval][out] */ BSTR *pbstrName);
 
 
 void __RPC_STUB ISClusProperty_get_Name_Stub(
@@ -9480,8 +9515,8 @@ void __RPC_STUB ISClusProperty_get_Name_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperty_get_Length_Proxy( 
-    ISClusProperty __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pLength);
+    ISClusProperty * This,
+    /* [retval][out] */ long *pLength);
 
 
 void __RPC_STUB ISClusProperty_get_Length_Stub(
@@ -9492,8 +9527,8 @@ void __RPC_STUB ISClusProperty_get_Length_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperty_get_ValueCount_Proxy( 
-    ISClusProperty __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pCount);
+    ISClusProperty * This,
+    /* [retval][out] */ long *pCount);
 
 
 void __RPC_STUB ISClusProperty_get_ValueCount_Stub(
@@ -9504,8 +9539,8 @@ void __RPC_STUB ISClusProperty_get_ValueCount_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperty_get_Values_Proxy( 
-    ISClusProperty __RPC_FAR * This,
-    /* [retval][out] */ ISClusPropertyValues __RPC_FAR *__RPC_FAR *ppClusterPropertyValues);
+    ISClusProperty * This,
+    /* [retval][out] */ ISClusPropertyValues **ppClusterPropertyValues);
 
 
 void __RPC_STUB ISClusProperty_get_Values_Stub(
@@ -9516,8 +9551,8 @@ void __RPC_STUB ISClusProperty_get_Values_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperty_get_Value_Proxy( 
-    ISClusProperty __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarValue);
+    ISClusProperty * This,
+    /* [retval][out] */ VARIANT *pvarValue);
 
 
 void __RPC_STUB ISClusProperty_get_Value_Stub(
@@ -9528,7 +9563,7 @@ void __RPC_STUB ISClusProperty_get_Value_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISClusProperty_put_Value_Proxy( 
-    ISClusProperty __RPC_FAR * This,
+    ISClusProperty * This,
     /* [in] */ VARIANT varValue);
 
 
@@ -9540,8 +9575,8 @@ void __RPC_STUB ISClusProperty_put_Value_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperty_get_Type_Proxy( 
-    ISClusProperty __RPC_FAR * This,
-    /* [retval][out] */ CLUSTER_PROPERTY_TYPE __RPC_FAR *pType);
+    ISClusProperty * This,
+    /* [retval][out] */ CLUSTER_PROPERTY_TYPE *pType);
 
 
 void __RPC_STUB ISClusProperty_get_Type_Stub(
@@ -9552,7 +9587,7 @@ void __RPC_STUB ISClusProperty_get_Type_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISClusProperty_put_Type_Proxy( 
-    ISClusProperty __RPC_FAR * This,
+    ISClusProperty * This,
     /* [in] */ CLUSTER_PROPERTY_TYPE Type);
 
 
@@ -9564,8 +9599,8 @@ void __RPC_STUB ISClusProperty_put_Type_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperty_get_Format_Proxy( 
-    ISClusProperty __RPC_FAR * This,
-    /* [retval][out] */ CLUSTER_PROPERTY_FORMAT __RPC_FAR *pFormat);
+    ISClusProperty * This,
+    /* [retval][out] */ CLUSTER_PROPERTY_FORMAT *pFormat);
 
 
 void __RPC_STUB ISClusProperty_get_Format_Stub(
@@ -9576,7 +9611,7 @@ void __RPC_STUB ISClusProperty_get_Format_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISClusProperty_put_Format_Proxy( 
-    ISClusProperty __RPC_FAR * This,
+    ISClusProperty * This,
     /* [in] */ CLUSTER_PROPERTY_FORMAT Format);
 
 
@@ -9588,8 +9623,8 @@ void __RPC_STUB ISClusProperty_put_Format_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperty_get_ReadOnly_Proxy( 
-    ISClusProperty __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarReadOnly);
+    ISClusProperty * This,
+    /* [retval][out] */ VARIANT *pvarReadOnly);
 
 
 void __RPC_STUB ISClusProperty_get_ReadOnly_Stub(
@@ -9600,8 +9635,8 @@ void __RPC_STUB ISClusProperty_get_ReadOnly_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperty_get_Private_Proxy( 
-    ISClusProperty __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPrivate);
+    ISClusProperty * This,
+    /* [retval][out] */ VARIANT *pvarPrivate);
 
 
 void __RPC_STUB ISClusProperty_get_Private_Stub(
@@ -9612,8 +9647,8 @@ void __RPC_STUB ISClusProperty_get_Private_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperty_get_Common_Proxy( 
-    ISClusProperty __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarCommon);
+    ISClusProperty * This,
+    /* [retval][out] */ VARIANT *pvarCommon);
 
 
 void __RPC_STUB ISClusProperty_get_Common_Stub(
@@ -9624,8 +9659,8 @@ void __RPC_STUB ISClusProperty_get_Common_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperty_get_Modified_Proxy( 
-    ISClusProperty __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarModified);
+    ISClusProperty * This,
+    /* [retval][out] */ VARIANT *pvarModified);
 
 
 void __RPC_STUB ISClusProperty_get_Modified_Stub(
@@ -9636,7 +9671,7 @@ void __RPC_STUB ISClusProperty_get_Modified_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusProperty_UseDefaultValue_Proxy( 
-    ISClusProperty __RPC_FAR * This);
+    ISClusProperty * This);
 
 
 void __RPC_STUB ISClusProperty_UseDefaultValue_Stub(
@@ -9666,31 +9701,31 @@ EXTERN_C const IID IID_ISClusPropertyValue;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Value( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarValue) = 0;
+            /* [retval][out] */ VARIANT *pvarValue) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Value( 
             /* [in] */ VARIANT varValue) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ CLUSTER_PROPERTY_TYPE __RPC_FAR *pType) = 0;
+            /* [retval][out] */ CLUSTER_PROPERTY_TYPE *pType) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Type( 
             /* [in] */ CLUSTER_PROPERTY_TYPE Type) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Format( 
-            /* [retval][out] */ CLUSTER_PROPERTY_FORMAT __RPC_FAR *pFormat) = 0;
+            /* [retval][out] */ CLUSTER_PROPERTY_FORMAT *pFormat) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Format( 
             /* [in] */ CLUSTER_PROPERTY_FORMAT Format) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Length( 
-            /* [retval][out] */ long __RPC_FAR *pLength) = 0;
+            /* [retval][out] */ long *pLength) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DataCount( 
-            /* [retval][out] */ long __RPC_FAR *pCount) = 0;
+            /* [retval][out] */ long *pCount) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Data( 
-            /* [retval][out] */ ISClusPropertyValueData __RPC_FAR *__RPC_FAR *ppClusterPropertyValueData) = 0;
+            /* [retval][out] */ ISClusPropertyValueData **ppClusterPropertyValueData) = 0;
         
     };
     
@@ -9700,88 +9735,88 @@ EXTERN_C const IID IID_ISClusPropertyValue;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusPropertyValue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusPropertyValue * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusPropertyValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusPropertyValue * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusPropertyValue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusPropertyValue * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusPropertyValue __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusPropertyValue * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusPropertyValue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusPropertyValue * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusPropertyValue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusPropertyValue * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusPropertyValue __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusPropertyValue * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Value )( 
-            ISClusPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Value )( 
+            ISClusPropertyValue * This,
+            /* [retval][out] */ VARIANT *pvarValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Value )( 
-            ISClusPropertyValue __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Value )( 
+            ISClusPropertyValue * This,
             /* [in] */ VARIANT varValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
-            ISClusPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ CLUSTER_PROPERTY_TYPE __RPC_FAR *pType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            ISClusPropertyValue * This,
+            /* [retval][out] */ CLUSTER_PROPERTY_TYPE *pType);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Type )( 
-            ISClusPropertyValue __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Type )( 
+            ISClusPropertyValue * This,
             /* [in] */ CLUSTER_PROPERTY_TYPE Type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Format )( 
-            ISClusPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ CLUSTER_PROPERTY_FORMAT __RPC_FAR *pFormat);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Format )( 
+            ISClusPropertyValue * This,
+            /* [retval][out] */ CLUSTER_PROPERTY_FORMAT *pFormat);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Format )( 
-            ISClusPropertyValue __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Format )( 
+            ISClusPropertyValue * This,
             /* [in] */ CLUSTER_PROPERTY_FORMAT Format);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Length )( 
-            ISClusPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pLength);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Length )( 
+            ISClusPropertyValue * This,
+            /* [retval][out] */ long *pLength);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DataCount )( 
-            ISClusPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DataCount )( 
+            ISClusPropertyValue * This,
+            /* [retval][out] */ long *pCount);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Data )( 
-            ISClusPropertyValue __RPC_FAR * This,
-            /* [retval][out] */ ISClusPropertyValueData __RPC_FAR *__RPC_FAR *ppClusterPropertyValueData);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Data )( 
+            ISClusPropertyValue * This,
+            /* [retval][out] */ ISClusPropertyValueData **ppClusterPropertyValueData);
         
         END_INTERFACE
     } ISClusPropertyValueVtbl;
 
     interface ISClusPropertyValue
     {
-        CONST_VTBL struct ISClusPropertyValueVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusPropertyValueVtbl *lpVtbl;
     };
 
     
@@ -9847,8 +9882,8 @@ EXTERN_C const IID IID_ISClusPropertyValue;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValue_get_Value_Proxy( 
-    ISClusPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarValue);
+    ISClusPropertyValue * This,
+    /* [retval][out] */ VARIANT *pvarValue);
 
 
 void __RPC_STUB ISClusPropertyValue_get_Value_Stub(
@@ -9859,7 +9894,7 @@ void __RPC_STUB ISClusPropertyValue_get_Value_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValue_put_Value_Proxy( 
-    ISClusPropertyValue __RPC_FAR * This,
+    ISClusPropertyValue * This,
     /* [in] */ VARIANT varValue);
 
 
@@ -9871,8 +9906,8 @@ void __RPC_STUB ISClusPropertyValue_put_Value_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValue_get_Type_Proxy( 
-    ISClusPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ CLUSTER_PROPERTY_TYPE __RPC_FAR *pType);
+    ISClusPropertyValue * This,
+    /* [retval][out] */ CLUSTER_PROPERTY_TYPE *pType);
 
 
 void __RPC_STUB ISClusPropertyValue_get_Type_Stub(
@@ -9883,7 +9918,7 @@ void __RPC_STUB ISClusPropertyValue_get_Type_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValue_put_Type_Proxy( 
-    ISClusPropertyValue __RPC_FAR * This,
+    ISClusPropertyValue * This,
     /* [in] */ CLUSTER_PROPERTY_TYPE Type);
 
 
@@ -9895,8 +9930,8 @@ void __RPC_STUB ISClusPropertyValue_put_Type_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValue_get_Format_Proxy( 
-    ISClusPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ CLUSTER_PROPERTY_FORMAT __RPC_FAR *pFormat);
+    ISClusPropertyValue * This,
+    /* [retval][out] */ CLUSTER_PROPERTY_FORMAT *pFormat);
 
 
 void __RPC_STUB ISClusPropertyValue_get_Format_Stub(
@@ -9907,7 +9942,7 @@ void __RPC_STUB ISClusPropertyValue_get_Format_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValue_put_Format_Proxy( 
-    ISClusPropertyValue __RPC_FAR * This,
+    ISClusPropertyValue * This,
     /* [in] */ CLUSTER_PROPERTY_FORMAT Format);
 
 
@@ -9919,8 +9954,8 @@ void __RPC_STUB ISClusPropertyValue_put_Format_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValue_get_Length_Proxy( 
-    ISClusPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pLength);
+    ISClusPropertyValue * This,
+    /* [retval][out] */ long *pLength);
 
 
 void __RPC_STUB ISClusPropertyValue_get_Length_Stub(
@@ -9931,8 +9966,8 @@ void __RPC_STUB ISClusPropertyValue_get_Length_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValue_get_DataCount_Proxy( 
-    ISClusPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pCount);
+    ISClusPropertyValue * This,
+    /* [retval][out] */ long *pCount);
 
 
 void __RPC_STUB ISClusPropertyValue_get_DataCount_Stub(
@@ -9943,8 +9978,8 @@ void __RPC_STUB ISClusPropertyValue_get_DataCount_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValue_get_Data_Proxy( 
-    ISClusPropertyValue __RPC_FAR * This,
-    /* [retval][out] */ ISClusPropertyValueData __RPC_FAR *__RPC_FAR *ppClusterPropertyValueData);
+    ISClusPropertyValue * This,
+    /* [retval][out] */ ISClusPropertyValueData **ppClusterPropertyValueData);
 
 
 void __RPC_STUB ISClusPropertyValue_get_Data_Stub(
@@ -9974,19 +10009,19 @@ EXTERN_C const IID IID_ISClusPropertyValues;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusPropertyValue __RPC_FAR *__RPC_FAR *ppPropertyValue) = 0;
+            /* [retval][out] */ ISClusPropertyValue **ppPropertyValue) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateItem( 
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT varValue,
-            /* [retval][out] */ ISClusPropertyValue __RPC_FAR *__RPC_FAR *ppPropertyValue) = 0;
+            /* [retval][out] */ ISClusPropertyValue **ppPropertyValue) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveItem( 
             /* [in] */ VARIANT varIndex) = 0;
@@ -9999,67 +10034,67 @@ EXTERN_C const IID IID_ISClusPropertyValues;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusPropertyValues __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusPropertyValues * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusPropertyValues __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusPropertyValues * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusPropertyValues __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusPropertyValues * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusPropertyValues __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusPropertyValues * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusPropertyValues __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusPropertyValues * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusPropertyValues __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusPropertyValues * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusPropertyValues __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusPropertyValues * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusPropertyValues __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusPropertyValues * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusPropertyValues __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusPropertyValues * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusPropertyValues __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusPropertyValues * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusPropertyValue __RPC_FAR *__RPC_FAR *ppPropertyValue);
+            /* [retval][out] */ ISClusPropertyValue **ppPropertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateItem )( 
-            ISClusPropertyValues __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateItem )( 
+            ISClusPropertyValues * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT varValue,
-            /* [retval][out] */ ISClusPropertyValue __RPC_FAR *__RPC_FAR *ppPropertyValue);
+            /* [retval][out] */ ISClusPropertyValue **ppPropertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveItem )( 
-            ISClusPropertyValues __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveItem )( 
+            ISClusPropertyValues * This,
             /* [in] */ VARIANT varIndex);
         
         END_INTERFACE
@@ -10067,7 +10102,7 @@ EXTERN_C const IID IID_ISClusPropertyValues;
 
     interface ISClusPropertyValues
     {
-        CONST_VTBL struct ISClusPropertyValuesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusPropertyValuesVtbl *lpVtbl;
     };
 
     
@@ -10121,8 +10156,8 @@ EXTERN_C const IID IID_ISClusPropertyValues;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValues_get_Count_Proxy( 
-    ISClusPropertyValues __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusPropertyValues * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusPropertyValues_get_Count_Stub(
@@ -10133,8 +10168,8 @@ void __RPC_STUB ISClusPropertyValues_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValues_get__NewEnum_Proxy( 
-    ISClusPropertyValues __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusPropertyValues * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusPropertyValues_get__NewEnum_Stub(
@@ -10145,9 +10180,9 @@ void __RPC_STUB ISClusPropertyValues_get__NewEnum_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValues_get_Item_Proxy( 
-    ISClusPropertyValues __RPC_FAR * This,
+    ISClusPropertyValues * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusPropertyValue __RPC_FAR *__RPC_FAR *ppPropertyValue);
+    /* [retval][out] */ ISClusPropertyValue **ppPropertyValue);
 
 
 void __RPC_STUB ISClusPropertyValues_get_Item_Stub(
@@ -10158,10 +10193,10 @@ void __RPC_STUB ISClusPropertyValues_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValues_CreateItem_Proxy( 
-    ISClusPropertyValues __RPC_FAR * This,
+    ISClusPropertyValues * This,
     /* [in] */ BSTR bstrName,
     /* [in] */ VARIANT varValue,
-    /* [retval][out] */ ISClusPropertyValue __RPC_FAR *__RPC_FAR *ppPropertyValue);
+    /* [retval][out] */ ISClusPropertyValue **ppPropertyValue);
 
 
 void __RPC_STUB ISClusPropertyValues_CreateItem_Stub(
@@ -10172,7 +10207,7 @@ void __RPC_STUB ISClusPropertyValues_CreateItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValues_RemoveItem_Proxy( 
-    ISClusPropertyValues __RPC_FAR * This,
+    ISClusPropertyValues * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -10203,39 +10238,39 @@ EXTERN_C const IID IID_ISClusProperties;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusProperty __RPC_FAR *__RPC_FAR *ppClusProperty) = 0;
+            /* [retval][out] */ ISClusProperty **ppClusProperty) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateItem( 
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT varValue,
-            /* [retval][out] */ ISClusProperty __RPC_FAR *__RPC_FAR *pProperty) = 0;
+            /* [retval][out] */ ISClusProperty **pProperty) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE UseDefaultValue( 
             /* [in] */ VARIANT varIndex) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SaveChanges( 
-            /* [defaultvalue][out] */ VARIANT __RPC_FAR *pvarStatusCode = 0) = 0;
+            /* [defaultvalue][out] */ VARIANT *pvarStatusCode = 0) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReadOnly( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarReadOnly) = 0;
+            /* [retval][out] */ VARIANT *pvarReadOnly) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Private( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPrivate) = 0;
+            /* [retval][out] */ VARIANT *pvarPrivate) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Common( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarCommon) = 0;
+            /* [retval][out] */ VARIANT *pvarCommon) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Modified( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarModified) = 0;
+            /* [retval][out] */ VARIANT *pvarModified) = 0;
         
     };
     
@@ -10245,98 +10280,98 @@ EXTERN_C const IID IID_ISClusProperties;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusProperties __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusProperties * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusProperties __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusProperties * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusProperties __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusProperties * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusProperties __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusProperties * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusProperties __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusProperties * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusProperties __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusProperties * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusProperties __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusProperties * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusProperties __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusProperties * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusProperties __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusProperties * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusProperties __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusProperties * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusProperties __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusProperties * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusProperty __RPC_FAR *__RPC_FAR *ppClusProperty);
+            /* [retval][out] */ ISClusProperty **ppClusProperty);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateItem )( 
-            ISClusProperties __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateItem )( 
+            ISClusProperties * This,
             /* [in] */ BSTR bstrName,
             /* [in] */ VARIANT varValue,
-            /* [retval][out] */ ISClusProperty __RPC_FAR *__RPC_FAR *pProperty);
+            /* [retval][out] */ ISClusProperty **pProperty);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UseDefaultValue )( 
-            ISClusProperties __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *UseDefaultValue )( 
+            ISClusProperties * This,
             /* [in] */ VARIANT varIndex);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveChanges )( 
-            ISClusProperties __RPC_FAR * This,
-            /* [defaultvalue][out] */ VARIANT __RPC_FAR *pvarStatusCode);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SaveChanges )( 
+            ISClusProperties * This,
+            /* [defaultvalue][out] */ VARIANT *pvarStatusCode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ReadOnly )( 
-            ISClusProperties __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarReadOnly);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReadOnly )( 
+            ISClusProperties * This,
+            /* [retval][out] */ VARIANT *pvarReadOnly);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Private )( 
-            ISClusProperties __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPrivate);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Private )( 
+            ISClusProperties * This,
+            /* [retval][out] */ VARIANT *pvarPrivate);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Common )( 
-            ISClusProperties __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarCommon);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Common )( 
+            ISClusProperties * This,
+            /* [retval][out] */ VARIANT *pvarCommon);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Modified )( 
-            ISClusProperties __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarModified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Modified )( 
+            ISClusProperties * This,
+            /* [retval][out] */ VARIANT *pvarModified);
         
         END_INTERFACE
     } ISClusPropertiesVtbl;
 
     interface ISClusProperties
     {
-        CONST_VTBL struct ISClusPropertiesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusPropertiesVtbl *lpVtbl;
     };
 
     
@@ -10408,8 +10443,8 @@ EXTERN_C const IID IID_ISClusProperties;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperties_get_Count_Proxy( 
-    ISClusProperties __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusProperties * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusProperties_get_Count_Stub(
@@ -10420,8 +10455,8 @@ void __RPC_STUB ISClusProperties_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperties_get__NewEnum_Proxy( 
-    ISClusProperties __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusProperties * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusProperties_get__NewEnum_Stub(
@@ -10432,7 +10467,7 @@ void __RPC_STUB ISClusProperties_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusProperties_Refresh_Proxy( 
-    ISClusProperties __RPC_FAR * This);
+    ISClusProperties * This);
 
 
 void __RPC_STUB ISClusProperties_Refresh_Stub(
@@ -10443,9 +10478,9 @@ void __RPC_STUB ISClusProperties_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperties_get_Item_Proxy( 
-    ISClusProperties __RPC_FAR * This,
+    ISClusProperties * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusProperty __RPC_FAR *__RPC_FAR *ppClusProperty);
+    /* [retval][out] */ ISClusProperty **ppClusProperty);
 
 
 void __RPC_STUB ISClusProperties_get_Item_Stub(
@@ -10456,10 +10491,10 @@ void __RPC_STUB ISClusProperties_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusProperties_CreateItem_Proxy( 
-    ISClusProperties __RPC_FAR * This,
+    ISClusProperties * This,
     /* [in] */ BSTR bstrName,
     /* [in] */ VARIANT varValue,
-    /* [retval][out] */ ISClusProperty __RPC_FAR *__RPC_FAR *pProperty);
+    /* [retval][out] */ ISClusProperty **pProperty);
 
 
 void __RPC_STUB ISClusProperties_CreateItem_Stub(
@@ -10470,7 +10505,7 @@ void __RPC_STUB ISClusProperties_CreateItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusProperties_UseDefaultValue_Proxy( 
-    ISClusProperties __RPC_FAR * This,
+    ISClusProperties * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -10482,8 +10517,8 @@ void __RPC_STUB ISClusProperties_UseDefaultValue_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusProperties_SaveChanges_Proxy( 
-    ISClusProperties __RPC_FAR * This,
-    /* [defaultvalue][out] */ VARIANT __RPC_FAR *pvarStatusCode);
+    ISClusProperties * This,
+    /* [defaultvalue][out] */ VARIANT *pvarStatusCode);
 
 
 void __RPC_STUB ISClusProperties_SaveChanges_Stub(
@@ -10494,8 +10529,8 @@ void __RPC_STUB ISClusProperties_SaveChanges_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperties_get_ReadOnly_Proxy( 
-    ISClusProperties __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarReadOnly);
+    ISClusProperties * This,
+    /* [retval][out] */ VARIANT *pvarReadOnly);
 
 
 void __RPC_STUB ISClusProperties_get_ReadOnly_Stub(
@@ -10506,8 +10541,8 @@ void __RPC_STUB ISClusProperties_get_ReadOnly_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperties_get_Private_Proxy( 
-    ISClusProperties __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPrivate);
+    ISClusProperties * This,
+    /* [retval][out] */ VARIANT *pvarPrivate);
 
 
 void __RPC_STUB ISClusProperties_get_Private_Stub(
@@ -10518,8 +10553,8 @@ void __RPC_STUB ISClusProperties_get_Private_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperties_get_Common_Proxy( 
-    ISClusProperties __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarCommon);
+    ISClusProperties * This,
+    /* [retval][out] */ VARIANT *pvarCommon);
 
 
 void __RPC_STUB ISClusProperties_get_Common_Stub(
@@ -10530,8 +10565,8 @@ void __RPC_STUB ISClusProperties_get_Common_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusProperties_get_Modified_Proxy( 
-    ISClusProperties __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarModified);
+    ISClusProperties * This,
+    /* [retval][out] */ VARIANT *pvarModified);
 
 
 void __RPC_STUB ISClusProperties_get_Modified_Stub(
@@ -10561,18 +10596,18 @@ EXTERN_C const IID IID_ISClusPropertyValueData;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarValue) = 0;
+            /* [retval][out] */ VARIANT *pvarValue) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateItem( 
             /* [in] */ VARIANT varValue,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarData) = 0;
+            /* [retval][out] */ VARIANT *pvarData) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveItem( 
             /* [in] */ VARIANT varIndex) = 0;
@@ -10585,66 +10620,66 @@ EXTERN_C const IID IID_ISClusPropertyValueData;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusPropertyValueData __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusPropertyValueData * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusPropertyValueData __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusPropertyValueData * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusPropertyValueData __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusPropertyValueData * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusPropertyValueData __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusPropertyValueData * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusPropertyValueData __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusPropertyValueData * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusPropertyValueData __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusPropertyValueData * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusPropertyValueData __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusPropertyValueData * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusPropertyValueData __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusPropertyValueData * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusPropertyValueData __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusPropertyValueData * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusPropertyValueData __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusPropertyValueData * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarValue);
+            /* [retval][out] */ VARIANT *pvarValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateItem )( 
-            ISClusPropertyValueData __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateItem )( 
+            ISClusPropertyValueData * This,
             /* [in] */ VARIANT varValue,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarData);
+            /* [retval][out] */ VARIANT *pvarData);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveItem )( 
-            ISClusPropertyValueData __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveItem )( 
+            ISClusPropertyValueData * This,
             /* [in] */ VARIANT varIndex);
         
         END_INTERFACE
@@ -10652,7 +10687,7 @@ EXTERN_C const IID IID_ISClusPropertyValueData;
 
     interface ISClusPropertyValueData
     {
-        CONST_VTBL struct ISClusPropertyValueDataVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusPropertyValueDataVtbl *lpVtbl;
     };
 
     
@@ -10706,8 +10741,8 @@ EXTERN_C const IID IID_ISClusPropertyValueData;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValueData_get_Count_Proxy( 
-    ISClusPropertyValueData __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusPropertyValueData * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusPropertyValueData_get_Count_Stub(
@@ -10718,8 +10753,8 @@ void __RPC_STUB ISClusPropertyValueData_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValueData_get__NewEnum_Proxy( 
-    ISClusPropertyValueData __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusPropertyValueData * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusPropertyValueData_get__NewEnum_Stub(
@@ -10730,9 +10765,9 @@ void __RPC_STUB ISClusPropertyValueData_get__NewEnum_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValueData_get_Item_Proxy( 
-    ISClusPropertyValueData __RPC_FAR * This,
+    ISClusPropertyValueData * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarValue);
+    /* [retval][out] */ VARIANT *pvarValue);
 
 
 void __RPC_STUB ISClusPropertyValueData_get_Item_Stub(
@@ -10743,9 +10778,9 @@ void __RPC_STUB ISClusPropertyValueData_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValueData_CreateItem_Proxy( 
-    ISClusPropertyValueData __RPC_FAR * This,
+    ISClusPropertyValueData * This,
     /* [in] */ VARIANT varValue,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarData);
+    /* [retval][out] */ VARIANT *pvarData);
 
 
 void __RPC_STUB ISClusPropertyValueData_CreateItem_Stub(
@@ -10756,7 +10791,7 @@ void __RPC_STUB ISClusPropertyValueData_CreateItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusPropertyValueData_RemoveItem_Proxy( 
-    ISClusPropertyValueData __RPC_FAR * This,
+    ISClusPropertyValueData * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -10787,25 +10822,25 @@ EXTERN_C const IID IID_ISClusPartition;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Flags( 
-            /* [retval][out] */ long __RPC_FAR *plFlags) = 0;
+            /* [retval][out] */ long *plFlags) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceName( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDeviceName) = 0;
+            /* [retval][out] */ BSTR *pbstrDeviceName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VolumeLabel( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVolumeLabel) = 0;
+            /* [retval][out] */ BSTR *pbstrVolumeLabel) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SerialNumber( 
-            /* [retval][out] */ long __RPC_FAR *plSerialNumber) = 0;
+            /* [retval][out] */ long *plSerialNumber) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MaximumComponentLength( 
-            /* [retval][out] */ long __RPC_FAR *plMaximumComponentLength) = 0;
+            /* [retval][out] */ long *plMaximumComponentLength) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FileSystemFlags( 
-            /* [retval][out] */ long __RPC_FAR *plFileSystemFlags) = 0;
+            /* [retval][out] */ long *plFileSystemFlags) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FileSystem( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFileSystem) = 0;
+            /* [retval][out] */ BSTR *pbstrFileSystem) = 0;
         
     };
     
@@ -10815,80 +10850,80 @@ EXTERN_C const IID IID_ISClusPartition;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusPartition __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusPartition * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusPartition __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusPartition * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusPartition __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusPartition * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusPartition __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusPartition * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusPartition __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusPartition * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusPartition __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusPartition * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusPartition __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusPartition * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Flags )( 
-            ISClusPartition __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plFlags);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Flags )( 
+            ISClusPartition * This,
+            /* [retval][out] */ long *plFlags);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DeviceName )( 
-            ISClusPartition __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDeviceName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceName )( 
+            ISClusPartition * This,
+            /* [retval][out] */ BSTR *pbstrDeviceName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_VolumeLabel )( 
-            ISClusPartition __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrVolumeLabel);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VolumeLabel )( 
+            ISClusPartition * This,
+            /* [retval][out] */ BSTR *pbstrVolumeLabel);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SerialNumber )( 
-            ISClusPartition __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plSerialNumber);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SerialNumber )( 
+            ISClusPartition * This,
+            /* [retval][out] */ long *plSerialNumber);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MaximumComponentLength )( 
-            ISClusPartition __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plMaximumComponentLength);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaximumComponentLength )( 
+            ISClusPartition * This,
+            /* [retval][out] */ long *plMaximumComponentLength);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FileSystemFlags )( 
-            ISClusPartition __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plFileSystemFlags);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileSystemFlags )( 
+            ISClusPartition * This,
+            /* [retval][out] */ long *plFileSystemFlags);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FileSystem )( 
-            ISClusPartition __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFileSystem);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileSystem )( 
+            ISClusPartition * This,
+            /* [retval][out] */ BSTR *pbstrFileSystem);
         
         END_INTERFACE
     } ISClusPartitionVtbl;
 
     interface ISClusPartition
     {
-        CONST_VTBL struct ISClusPartitionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusPartitionVtbl *lpVtbl;
     };
 
     
@@ -10948,8 +10983,8 @@ EXTERN_C const IID IID_ISClusPartition;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPartition_get_Flags_Proxy( 
-    ISClusPartition __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plFlags);
+    ISClusPartition * This,
+    /* [retval][out] */ long *plFlags);
 
 
 void __RPC_STUB ISClusPartition_get_Flags_Stub(
@@ -10960,8 +10995,8 @@ void __RPC_STUB ISClusPartition_get_Flags_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPartition_get_DeviceName_Proxy( 
-    ISClusPartition __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrDeviceName);
+    ISClusPartition * This,
+    /* [retval][out] */ BSTR *pbstrDeviceName);
 
 
 void __RPC_STUB ISClusPartition_get_DeviceName_Stub(
@@ -10972,8 +11007,8 @@ void __RPC_STUB ISClusPartition_get_DeviceName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPartition_get_VolumeLabel_Proxy( 
-    ISClusPartition __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrVolumeLabel);
+    ISClusPartition * This,
+    /* [retval][out] */ BSTR *pbstrVolumeLabel);
 
 
 void __RPC_STUB ISClusPartition_get_VolumeLabel_Stub(
@@ -10984,8 +11019,8 @@ void __RPC_STUB ISClusPartition_get_VolumeLabel_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPartition_get_SerialNumber_Proxy( 
-    ISClusPartition __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plSerialNumber);
+    ISClusPartition * This,
+    /* [retval][out] */ long *plSerialNumber);
 
 
 void __RPC_STUB ISClusPartition_get_SerialNumber_Stub(
@@ -10996,8 +11031,8 @@ void __RPC_STUB ISClusPartition_get_SerialNumber_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPartition_get_MaximumComponentLength_Proxy( 
-    ISClusPartition __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plMaximumComponentLength);
+    ISClusPartition * This,
+    /* [retval][out] */ long *plMaximumComponentLength);
 
 
 void __RPC_STUB ISClusPartition_get_MaximumComponentLength_Stub(
@@ -11008,8 +11043,8 @@ void __RPC_STUB ISClusPartition_get_MaximumComponentLength_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPartition_get_FileSystemFlags_Proxy( 
-    ISClusPartition __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plFileSystemFlags);
+    ISClusPartition * This,
+    /* [retval][out] */ long *plFileSystemFlags);
 
 
 void __RPC_STUB ISClusPartition_get_FileSystemFlags_Stub(
@@ -11020,8 +11055,8 @@ void __RPC_STUB ISClusPartition_get_FileSystemFlags_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPartition_get_FileSystem_Proxy( 
-    ISClusPartition __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFileSystem);
+    ISClusPartition * This,
+    /* [retval][out] */ BSTR *pbstrFileSystem);
 
 
 void __RPC_STUB ISClusPartition_get_FileSystem_Stub(
@@ -11051,14 +11086,14 @@ EXTERN_C const IID IID_ISClusPartitions;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusPartition __RPC_FAR *__RPC_FAR *ppPartition) = 0;
+            /* [retval][out] */ ISClusPartition **ppPartition) = 0;
         
     };
     
@@ -11068,65 +11103,65 @@ EXTERN_C const IID IID_ISClusPartitions;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusPartitions __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusPartitions * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusPartitions __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusPartitions * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusPartitions __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusPartitions * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusPartitions __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusPartitions * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusPartitions __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusPartitions * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusPartitions __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusPartitions * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusPartitions __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusPartitions * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusPartitions __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusPartitions * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusPartitions __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusPartitions * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusPartitions __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusPartitions * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusPartition __RPC_FAR *__RPC_FAR *ppPartition);
+            /* [retval][out] */ ISClusPartition **ppPartition);
         
         END_INTERFACE
     } ISClusPartitionsVtbl;
 
     interface ISClusPartitions
     {
-        CONST_VTBL struct ISClusPartitionsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusPartitionsVtbl *lpVtbl;
     };
 
     
@@ -11174,8 +11209,8 @@ EXTERN_C const IID IID_ISClusPartitions;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPartitions_get_Count_Proxy( 
-    ISClusPartitions __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusPartitions * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusPartitions_get_Count_Stub(
@@ -11186,8 +11221,8 @@ void __RPC_STUB ISClusPartitions_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusPartitions_get__NewEnum_Proxy( 
-    ISClusPartitions __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusPartitions * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusPartitions_get__NewEnum_Stub(
@@ -11198,9 +11233,9 @@ void __RPC_STUB ISClusPartitions_get__NewEnum_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusPartitions_get_Item_Proxy( 
-    ISClusPartitions __RPC_FAR * This,
+    ISClusPartitions * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusPartition __RPC_FAR *__RPC_FAR *ppPartition);
+    /* [retval][out] */ ISClusPartition **ppPartition);
 
 
 void __RPC_STUB ISClusPartitions_get_Item_Stub(
@@ -11230,16 +11265,16 @@ EXTERN_C const IID IID_ISClusDisk;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Signature( 
-            /* [retval][out] */ long __RPC_FAR *plSignature) = 0;
+            /* [retval][out] */ long *plSignature) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ScsiAddress( 
-            /* [retval][out] */ ISClusScsiAddress __RPC_FAR *__RPC_FAR *ppScsiAddress) = 0;
+            /* [retval][out] */ ISClusScsiAddress **ppScsiAddress) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DiskNumber( 
-            /* [retval][out] */ long __RPC_FAR *plDiskNumber) = 0;
+            /* [retval][out] */ long *plDiskNumber) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Partitions( 
-            /* [retval][out] */ ISClusPartitions __RPC_FAR *__RPC_FAR *ppPartitions) = 0;
+            /* [retval][out] */ ISClusPartitions **ppPartitions) = 0;
         
     };
     
@@ -11249,68 +11284,68 @@ EXTERN_C const IID IID_ISClusDisk;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusDisk __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusDisk * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusDisk __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusDisk * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusDisk __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusDisk * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusDisk __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusDisk * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusDisk __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusDisk * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusDisk __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusDisk * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusDisk __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusDisk * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Signature )( 
-            ISClusDisk __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plSignature);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Signature )( 
+            ISClusDisk * This,
+            /* [retval][out] */ long *plSignature);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ScsiAddress )( 
-            ISClusDisk __RPC_FAR * This,
-            /* [retval][out] */ ISClusScsiAddress __RPC_FAR *__RPC_FAR *ppScsiAddress);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ScsiAddress )( 
+            ISClusDisk * This,
+            /* [retval][out] */ ISClusScsiAddress **ppScsiAddress);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DiskNumber )( 
-            ISClusDisk __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plDiskNumber);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DiskNumber )( 
+            ISClusDisk * This,
+            /* [retval][out] */ long *plDiskNumber);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Partitions )( 
-            ISClusDisk __RPC_FAR * This,
-            /* [retval][out] */ ISClusPartitions __RPC_FAR *__RPC_FAR *ppPartitions);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Partitions )( 
+            ISClusDisk * This,
+            /* [retval][out] */ ISClusPartitions **ppPartitions);
         
         END_INTERFACE
     } ISClusDiskVtbl;
 
     interface ISClusDisk
     {
-        CONST_VTBL struct ISClusDiskVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusDiskVtbl *lpVtbl;
     };
 
     
@@ -11361,8 +11396,8 @@ EXTERN_C const IID IID_ISClusDisk;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusDisk_get_Signature_Proxy( 
-    ISClusDisk __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plSignature);
+    ISClusDisk * This,
+    /* [retval][out] */ long *plSignature);
 
 
 void __RPC_STUB ISClusDisk_get_Signature_Stub(
@@ -11373,8 +11408,8 @@ void __RPC_STUB ISClusDisk_get_Signature_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusDisk_get_ScsiAddress_Proxy( 
-    ISClusDisk __RPC_FAR * This,
-    /* [retval][out] */ ISClusScsiAddress __RPC_FAR *__RPC_FAR *ppScsiAddress);
+    ISClusDisk * This,
+    /* [retval][out] */ ISClusScsiAddress **ppScsiAddress);
 
 
 void __RPC_STUB ISClusDisk_get_ScsiAddress_Stub(
@@ -11385,8 +11420,8 @@ void __RPC_STUB ISClusDisk_get_ScsiAddress_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusDisk_get_DiskNumber_Proxy( 
-    ISClusDisk __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plDiskNumber);
+    ISClusDisk * This,
+    /* [retval][out] */ long *plDiskNumber);
 
 
 void __RPC_STUB ISClusDisk_get_DiskNumber_Stub(
@@ -11397,8 +11432,8 @@ void __RPC_STUB ISClusDisk_get_DiskNumber_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusDisk_get_Partitions_Proxy( 
-    ISClusDisk __RPC_FAR * This,
-    /* [retval][out] */ ISClusPartitions __RPC_FAR *__RPC_FAR *ppPartitions);
+    ISClusDisk * This,
+    /* [retval][out] */ ISClusPartitions **ppPartitions);
 
 
 void __RPC_STUB ISClusDisk_get_Partitions_Stub(
@@ -11428,14 +11463,14 @@ EXTERN_C const IID IID_ISClusDisks;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusDisk __RPC_FAR *__RPC_FAR *ppDisk) = 0;
+            /* [retval][out] */ ISClusDisk **ppDisk) = 0;
         
     };
     
@@ -11445,65 +11480,65 @@ EXTERN_C const IID IID_ISClusDisks;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusDisks __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusDisks * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusDisks __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusDisks * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusDisks __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusDisks * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusDisks __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusDisks * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusDisks __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusDisks * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusDisks __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusDisks * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusDisks __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusDisks * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusDisks __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusDisks * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusDisks __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusDisks * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusDisks __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusDisks * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusDisk __RPC_FAR *__RPC_FAR *ppDisk);
+            /* [retval][out] */ ISClusDisk **ppDisk);
         
         END_INTERFACE
     } ISClusDisksVtbl;
 
     interface ISClusDisks
     {
-        CONST_VTBL struct ISClusDisksVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusDisksVtbl *lpVtbl;
     };
 
     
@@ -11551,8 +11586,8 @@ EXTERN_C const IID IID_ISClusDisks;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusDisks_get_Count_Proxy( 
-    ISClusDisks __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusDisks * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusDisks_get_Count_Stub(
@@ -11563,8 +11598,8 @@ void __RPC_STUB ISClusDisks_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusDisks_get__NewEnum_Proxy( 
-    ISClusDisks __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusDisks * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusDisks_get__NewEnum_Stub(
@@ -11575,9 +11610,9 @@ void __RPC_STUB ISClusDisks_get__NewEnum_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusDisks_get_Item_Proxy( 
-    ISClusDisks __RPC_FAR * This,
+    ISClusDisks * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusDisk __RPC_FAR *__RPC_FAR *ppDisk);
+    /* [retval][out] */ ISClusDisk **ppDisk);
 
 
 void __RPC_STUB ISClusDisks_get_Item_Stub(
@@ -11607,16 +11642,16 @@ EXTERN_C const IID IID_ISClusScsiAddress;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PortNumber( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPortNumber) = 0;
+            /* [retval][out] */ VARIANT *pvarPortNumber) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PathId( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPathId) = 0;
+            /* [retval][out] */ VARIANT *pvarPathId) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TargetId( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarTargetId) = 0;
+            /* [retval][out] */ VARIANT *pvarTargetId) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Lun( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarLun) = 0;
+            /* [retval][out] */ VARIANT *pvarLun) = 0;
         
     };
     
@@ -11626,68 +11661,68 @@ EXTERN_C const IID IID_ISClusScsiAddress;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusScsiAddress __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusScsiAddress * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusScsiAddress __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusScsiAddress * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusScsiAddress __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusScsiAddress * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusScsiAddress __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusScsiAddress * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusScsiAddress __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusScsiAddress * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusScsiAddress __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusScsiAddress * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusScsiAddress __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusScsiAddress * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PortNumber )( 
-            ISClusScsiAddress __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPortNumber);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PortNumber )( 
+            ISClusScsiAddress * This,
+            /* [retval][out] */ VARIANT *pvarPortNumber);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_PathId )( 
-            ISClusScsiAddress __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPathId);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PathId )( 
+            ISClusScsiAddress * This,
+            /* [retval][out] */ VARIANT *pvarPathId);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TargetId )( 
-            ISClusScsiAddress __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarTargetId);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TargetId )( 
+            ISClusScsiAddress * This,
+            /* [retval][out] */ VARIANT *pvarTargetId);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Lun )( 
-            ISClusScsiAddress __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarLun);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Lun )( 
+            ISClusScsiAddress * This,
+            /* [retval][out] */ VARIANT *pvarLun);
         
         END_INTERFACE
     } ISClusScsiAddressVtbl;
 
     interface ISClusScsiAddress
     {
-        CONST_VTBL struct ISClusScsiAddressVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusScsiAddressVtbl *lpVtbl;
     };
 
     
@@ -11738,8 +11773,8 @@ EXTERN_C const IID IID_ISClusScsiAddress;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusScsiAddress_get_PortNumber_Proxy( 
-    ISClusScsiAddress __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPortNumber);
+    ISClusScsiAddress * This,
+    /* [retval][out] */ VARIANT *pvarPortNumber);
 
 
 void __RPC_STUB ISClusScsiAddress_get_PortNumber_Stub(
@@ -11750,8 +11785,8 @@ void __RPC_STUB ISClusScsiAddress_get_PortNumber_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusScsiAddress_get_PathId_Proxy( 
-    ISClusScsiAddress __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPathId);
+    ISClusScsiAddress * This,
+    /* [retval][out] */ VARIANT *pvarPathId);
 
 
 void __RPC_STUB ISClusScsiAddress_get_PathId_Stub(
@@ -11762,8 +11797,8 @@ void __RPC_STUB ISClusScsiAddress_get_PathId_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusScsiAddress_get_TargetId_Proxy( 
-    ISClusScsiAddress __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarTargetId);
+    ISClusScsiAddress * This,
+    /* [retval][out] */ VARIANT *pvarTargetId);
 
 
 void __RPC_STUB ISClusScsiAddress_get_TargetId_Stub(
@@ -11774,8 +11809,8 @@ void __RPC_STUB ISClusScsiAddress_get_TargetId_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusScsiAddress_get_Lun_Proxy( 
-    ISClusScsiAddress __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarLun);
+    ISClusScsiAddress * This,
+    /* [retval][out] */ VARIANT *pvarLun);
 
 
 void __RPC_STUB ISClusScsiAddress_get_Lun_Stub(
@@ -11805,16 +11840,16 @@ EXTERN_C const IID IID_ISClusRegistryKeys;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrRegistryKey) = 0;
+            /* [retval][out] */ BSTR *pbstrRegistryKey) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddItem( 
             /* [in] */ BSTR bstrRegistryKey) = 0;
@@ -11830,68 +11865,68 @@ EXTERN_C const IID IID_ISClusRegistryKeys;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusRegistryKeys __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusRegistryKeys * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusRegistryKeys __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusRegistryKeys * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusRegistryKeys __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusRegistryKeys * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusRegistryKeys __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusRegistryKeys * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusRegistryKeys __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusRegistryKeys * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusRegistryKeys __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusRegistryKeys * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusRegistryKeys __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusRegistryKeys * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusRegistryKeys __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusRegistryKeys * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusRegistryKeys __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusRegistryKeys * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusRegistryKeys __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusRegistryKeys * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusRegistryKeys __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusRegistryKeys * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrRegistryKey);
+            /* [retval][out] */ BSTR *pbstrRegistryKey);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddItem )( 
-            ISClusRegistryKeys __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddItem )( 
+            ISClusRegistryKeys * This,
             /* [in] */ BSTR bstrRegistryKey);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveItem )( 
-            ISClusRegistryKeys __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveItem )( 
+            ISClusRegistryKeys * This,
             /* [in] */ VARIANT varIndex);
         
         END_INTERFACE
@@ -11899,7 +11934,7 @@ EXTERN_C const IID IID_ISClusRegistryKeys;
 
     interface ISClusRegistryKeys
     {
-        CONST_VTBL struct ISClusRegistryKeysVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusRegistryKeysVtbl *lpVtbl;
     };
 
     
@@ -11956,8 +11991,8 @@ EXTERN_C const IID IID_ISClusRegistryKeys;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusRegistryKeys_get_Count_Proxy( 
-    ISClusRegistryKeys __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusRegistryKeys * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusRegistryKeys_get_Count_Stub(
@@ -11968,8 +12003,8 @@ void __RPC_STUB ISClusRegistryKeys_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusRegistryKeys_get__NewEnum_Proxy( 
-    ISClusRegistryKeys __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusRegistryKeys * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusRegistryKeys_get__NewEnum_Stub(
@@ -11980,7 +12015,7 @@ void __RPC_STUB ISClusRegistryKeys_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusRegistryKeys_Refresh_Proxy( 
-    ISClusRegistryKeys __RPC_FAR * This);
+    ISClusRegistryKeys * This);
 
 
 void __RPC_STUB ISClusRegistryKeys_Refresh_Stub(
@@ -11991,9 +12026,9 @@ void __RPC_STUB ISClusRegistryKeys_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusRegistryKeys_get_Item_Proxy( 
-    ISClusRegistryKeys __RPC_FAR * This,
+    ISClusRegistryKeys * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrRegistryKey);
+    /* [retval][out] */ BSTR *pbstrRegistryKey);
 
 
 void __RPC_STUB ISClusRegistryKeys_get_Item_Stub(
@@ -12004,7 +12039,7 @@ void __RPC_STUB ISClusRegistryKeys_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusRegistryKeys_AddItem_Proxy( 
-    ISClusRegistryKeys __RPC_FAR * This,
+    ISClusRegistryKeys * This,
     /* [in] */ BSTR bstrRegistryKey);
 
 
@@ -12016,7 +12051,7 @@ void __RPC_STUB ISClusRegistryKeys_AddItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusRegistryKeys_RemoveItem_Proxy( 
-    ISClusRegistryKeys __RPC_FAR * This,
+    ISClusRegistryKeys * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -12047,16 +12082,16 @@ EXTERN_C const IID IID_ISClusCryptoKeys;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCyrptoKey) = 0;
+            /* [retval][out] */ BSTR *pbstrCyrptoKey) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddItem( 
             /* [in] */ BSTR bstrCryptoKey) = 0;
@@ -12072,68 +12107,68 @@ EXTERN_C const IID IID_ISClusCryptoKeys;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusCryptoKeys __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusCryptoKeys * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusCryptoKeys __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusCryptoKeys * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusCryptoKeys __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusCryptoKeys * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusCryptoKeys __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusCryptoKeys * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusCryptoKeys __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusCryptoKeys * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusCryptoKeys __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusCryptoKeys * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusCryptoKeys __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusCryptoKeys * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusCryptoKeys __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusCryptoKeys * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusCryptoKeys __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusCryptoKeys * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusCryptoKeys __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusCryptoKeys * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusCryptoKeys __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusCryptoKeys * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrCyrptoKey);
+            /* [retval][out] */ BSTR *pbstrCyrptoKey);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddItem )( 
-            ISClusCryptoKeys __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddItem )( 
+            ISClusCryptoKeys * This,
             /* [in] */ BSTR bstrCryptoKey);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveItem )( 
-            ISClusCryptoKeys __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveItem )( 
+            ISClusCryptoKeys * This,
             /* [in] */ VARIANT varIndex);
         
         END_INTERFACE
@@ -12141,7 +12176,7 @@ EXTERN_C const IID IID_ISClusCryptoKeys;
 
     interface ISClusCryptoKeys
     {
-        CONST_VTBL struct ISClusCryptoKeysVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusCryptoKeysVtbl *lpVtbl;
     };
 
     
@@ -12198,8 +12233,8 @@ EXTERN_C const IID IID_ISClusCryptoKeys;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusCryptoKeys_get_Count_Proxy( 
-    ISClusCryptoKeys __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusCryptoKeys * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusCryptoKeys_get_Count_Stub(
@@ -12210,8 +12245,8 @@ void __RPC_STUB ISClusCryptoKeys_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusCryptoKeys_get__NewEnum_Proxy( 
-    ISClusCryptoKeys __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusCryptoKeys * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusCryptoKeys_get__NewEnum_Stub(
@@ -12222,7 +12257,7 @@ void __RPC_STUB ISClusCryptoKeys_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusCryptoKeys_Refresh_Proxy( 
-    ISClusCryptoKeys __RPC_FAR * This);
+    ISClusCryptoKeys * This);
 
 
 void __RPC_STUB ISClusCryptoKeys_Refresh_Stub(
@@ -12233,9 +12268,9 @@ void __RPC_STUB ISClusCryptoKeys_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusCryptoKeys_get_Item_Proxy( 
-    ISClusCryptoKeys __RPC_FAR * This,
+    ISClusCryptoKeys * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrCyrptoKey);
+    /* [retval][out] */ BSTR *pbstrCyrptoKey);
 
 
 void __RPC_STUB ISClusCryptoKeys_get_Item_Stub(
@@ -12246,7 +12281,7 @@ void __RPC_STUB ISClusCryptoKeys_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusCryptoKeys_AddItem_Proxy( 
-    ISClusCryptoKeys __RPC_FAR * This,
+    ISClusCryptoKeys * This,
     /* [in] */ BSTR bstrCryptoKey);
 
 
@@ -12258,7 +12293,7 @@ void __RPC_STUB ISClusCryptoKeys_AddItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusCryptoKeys_RemoveItem_Proxy( 
-    ISClusCryptoKeys __RPC_FAR * This,
+    ISClusCryptoKeys * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -12289,28 +12324,28 @@ EXTERN_C const IID IID_ISClusResDependents;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval) = 0;
+            /* [retval][out] */ IUnknown **retval) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource) = 0;
+            /* [retval][out] */ ISClusResource **ppClusResource) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateItem( 
             /* [in] */ BSTR bstrResourceName,
             /* [in] */ BSTR bstrResourceType,
             /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource) = 0;
+            /* [retval][out] */ ISClusResource **ppClusterResource) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteItem( 
             /* [in] */ VARIANT varIndex) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddItem( 
-            /* [in] */ ISClusResource __RPC_FAR *pResource) = 0;
+            /* [in] */ ISClusResource *pResource) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveItem( 
             /* [in] */ VARIANT varIndex) = 0;
@@ -12323,79 +12358,79 @@ EXTERN_C const IID IID_ISClusResDependents;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISClusResDependents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISClusResDependents * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISClusResDependents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISClusResDependents * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISClusResDependents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISClusResDependents * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISClusResDependents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISClusResDependents * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISClusResDependents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISClusResDependents * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISClusResDependents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISClusResDependents * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISClusResDependents __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISClusResDependents * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISClusResDependents __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISClusResDependents * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__NewEnum )( 
-            ISClusResDependents __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+        /* [helpstring][id][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+            ISClusResDependents * This,
+            /* [retval][out] */ IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            ISClusResDependents __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            ISClusResDependents * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Item )( 
-            ISClusResDependents __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+            ISClusResDependents * This,
             /* [in] */ VARIANT varIndex,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource);
+            /* [retval][out] */ ISClusResource **ppClusResource);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateItem )( 
-            ISClusResDependents __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateItem )( 
+            ISClusResDependents * This,
             /* [in] */ BSTR bstrResourceName,
             /* [in] */ BSTR bstrResourceType,
             /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-            /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource);
+            /* [retval][out] */ ISClusResource **ppClusterResource);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteItem )( 
-            ISClusResDependents __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteItem )( 
+            ISClusResDependents * This,
             /* [in] */ VARIANT varIndex);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddItem )( 
-            ISClusResDependents __RPC_FAR * This,
-            /* [in] */ ISClusResource __RPC_FAR *pResource);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddItem )( 
+            ISClusResDependents * This,
+            /* [in] */ ISClusResource *pResource);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveItem )( 
-            ISClusResDependents __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveItem )( 
+            ISClusResDependents * This,
             /* [in] */ VARIANT varIndex);
         
         END_INTERFACE
@@ -12403,7 +12438,7 @@ EXTERN_C const IID IID_ISClusResDependents;
 
     interface ISClusResDependents
     {
-        CONST_VTBL struct ISClusResDependentsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISClusResDependentsVtbl *lpVtbl;
     };
 
     
@@ -12466,8 +12501,8 @@ EXTERN_C const IID IID_ISClusResDependents;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResDependents_get_Count_Proxy( 
-    ISClusResDependents __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISClusResDependents * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISClusResDependents_get_Count_Stub(
@@ -12478,8 +12513,8 @@ void __RPC_STUB ISClusResDependents_get_Count_Stub(
 
 
 /* [helpstring][id][restricted][propget] */ HRESULT STDMETHODCALLTYPE ISClusResDependents_get__NewEnum_Proxy( 
-    ISClusResDependents __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retval);
+    ISClusResDependents * This,
+    /* [retval][out] */ IUnknown **retval);
 
 
 void __RPC_STUB ISClusResDependents_get__NewEnum_Stub(
@@ -12490,7 +12525,7 @@ void __RPC_STUB ISClusResDependents_get__NewEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResDependents_Refresh_Proxy( 
-    ISClusResDependents __RPC_FAR * This);
+    ISClusResDependents * This);
 
 
 void __RPC_STUB ISClusResDependents_Refresh_Stub(
@@ -12501,9 +12536,9 @@ void __RPC_STUB ISClusResDependents_Refresh_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISClusResDependents_get_Item_Proxy( 
-    ISClusResDependents __RPC_FAR * This,
+    ISClusResDependents * This,
     /* [in] */ VARIANT varIndex,
-    /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusResource);
+    /* [retval][out] */ ISClusResource **ppClusResource);
 
 
 void __RPC_STUB ISClusResDependents_get_Item_Stub(
@@ -12514,11 +12549,11 @@ void __RPC_STUB ISClusResDependents_get_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResDependents_CreateItem_Proxy( 
-    ISClusResDependents __RPC_FAR * This,
+    ISClusResDependents * This,
     /* [in] */ BSTR bstrResourceName,
     /* [in] */ BSTR bstrResourceType,
     /* [in] */ CLUSTER_RESOURCE_CREATE_FLAGS dwFlags,
-    /* [retval][out] */ ISClusResource __RPC_FAR *__RPC_FAR *ppClusterResource);
+    /* [retval][out] */ ISClusResource **ppClusterResource);
 
 
 void __RPC_STUB ISClusResDependents_CreateItem_Stub(
@@ -12529,7 +12564,7 @@ void __RPC_STUB ISClusResDependents_CreateItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResDependents_DeleteItem_Proxy( 
-    ISClusResDependents __RPC_FAR * This,
+    ISClusResDependents * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -12541,8 +12576,8 @@ void __RPC_STUB ISClusResDependents_DeleteItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResDependents_AddItem_Proxy( 
-    ISClusResDependents __RPC_FAR * This,
-    /* [in] */ ISClusResource __RPC_FAR *pResource);
+    ISClusResDependents * This,
+    /* [in] */ ISClusResource *pResource);
 
 
 void __RPC_STUB ISClusResDependents_AddItem_Stub(
@@ -12553,7 +12588,7 @@ void __RPC_STUB ISClusResDependents_AddItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISClusResDependents_RemoveItem_Proxy( 
-    ISClusResDependents __RPC_FAR * This,
+    ISClusResDependents * This,
     /* [in] */ VARIANT varIndex);
 
 
@@ -12570,15 +12605,15 @@ void __RPC_STUB ISClusResDependents_RemoveItem_Stub(
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
+unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
+void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
 /* end of Additional Prototypes */
 
@@ -12589,4 +12624,3 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

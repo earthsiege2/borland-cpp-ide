@@ -1,98 +1,108 @@
-LIBRARY IMAGEHLP
+LIBRARY ImageHlp
 EXPORTS
 
-    BindImage                                = 'IMAGEHLP.DLL'.*
-    BindImageEx                              = 'IMAGEHLP.DLL'.*
-    CheckSumMappedFile                       = 'IMAGEHLP.DLL'.*
-    EnumerateLoadedModules64                 = 'IMAGEHLP.DLL'.*
-    EnumerateLoadedModules                   = 'IMAGEHLP.DLL'.*
-    FindDebugInfoFile                        = 'IMAGEHLP.DLL'.*
-    FindDebugInfoFileEx                      = 'IMAGEHLP.DLL'.*
-    FindExecutableImage                      = 'IMAGEHLP.DLL'.*
-    GetImageConfigInformation                = 'IMAGEHLP.DLL'.*
-    GetImageUnusedHeaderBytes                = 'IMAGEHLP.DLL'.*
-    GetTimestampForLoadedLibrary             = 'IMAGEHLP.DLL'.*
-    ImageAddCertificate                      = 'IMAGEHLP.DLL'.*
-    ImageDirectoryEntryToData                = 'IMAGEHLP.DLL'.*
-    ImageDirectoryEntryToDataEx              = 'IMAGEHLP.DLL'.*
-    ImageEnumerateCertificates               = 'IMAGEHLP.DLL'.*
-    ImageGetCertificateData                  = 'IMAGEHLP.DLL'.*
-    ImageGetCertificateHeader                = 'IMAGEHLP.DLL'.*
-    ImageGetDigestStream                     = 'IMAGEHLP.DLL'.*
-    ImageLoad                                = 'IMAGEHLP.DLL'.*
-    ImageNtHeader                            = 'IMAGEHLP.DLL'.*
-    ImageRemoveCertificate                   = 'IMAGEHLP.DLL'.*
-    ImageRvaToSection                        = 'IMAGEHLP.DLL'.*
-    ImageRvaToVa                             = 'IMAGEHLP.DLL'.*
-    ImageUnload                              = 'IMAGEHLP.DLL'.*
-    ImagehlpApiVersion                       = 'IMAGEHLP.DLL'.*
-    ImagehlpApiVersionEx                     = 'IMAGEHLP.DLL'.*
-    MakeSureDirectoryPathExists              = 'IMAGEHLP.DLL'.*
-    MapAndLoad                               = 'IMAGEHLP.DLL'.*
-    MapDebugInformation                      = 'IMAGEHLP.DLL'.*
-    MapFileAndCheckSumA                      = 'IMAGEHLP.DLL'.*
-    MapFileAndCheckSumW                      = 'IMAGEHLP.DLL'.*
-    ReBaseImage64                            = 'IMAGEHLP.DLL'.*
-    ReBaseImage                              = 'IMAGEHLP.DLL'.*
-    SearchTreeForFile                        = 'IMAGEHLP.DLL'.*
-    SetImageConfigInformation                = 'IMAGEHLP.DLL'.*
-    SplitSymbols                             = 'IMAGEHLP.DLL'.*
-    StackWalk64                              = 'IMAGEHLP.DLL'.*
-    StackWalk                                = 'IMAGEHLP.DLL'.*
-    SymCleanup                               = 'IMAGEHLP.DLL'.*
-    SymEnumerateModules64                    = 'IMAGEHLP.DLL'.*
-    SymEnumerateModules                      = 'IMAGEHLP.DLL'.*
-    SymEnumerateSymbols64                    = 'IMAGEHLP.DLL'.*
-    SymEnumerateSymbols                      = 'IMAGEHLP.DLL'.*
-    SymEnumerateSymbolsW64                   = 'IMAGEHLP.DLL'.*
-    SymEnumerateSymbolsW                     = 'IMAGEHLP.DLL'.*
-    SymFunctionTableAccess64                 = 'IMAGEHLP.DLL'.*
-    SymFunctionTableAccess                   = 'IMAGEHLP.DLL'.*
-    SymGetLineFromAddr64                     = 'IMAGEHLP.DLL'.*
-    SymGetLineFromAddr                       = 'IMAGEHLP.DLL'.*
-    SymGetLineFromName64                     = 'IMAGEHLP.DLL'.*
-    SymGetLineFromName                       = 'IMAGEHLP.DLL'.*
-    SymGetLineNext64                         = 'IMAGEHLP.DLL'.*
-    SymGetLineNext                           = 'IMAGEHLP.DLL'.*
-    SymGetLinePrev64                         = 'IMAGEHLP.DLL'.*
-    SymGetLinePrev                           = 'IMAGEHLP.DLL'.*
-    SymGetModuleBase64                       = 'IMAGEHLP.DLL'.*
-    SymGetModuleBase                         = 'IMAGEHLP.DLL'.*
-    SymGetModuleInfo64                       = 'IMAGEHLP.DLL'.*
-    SymGetModuleInfo                         = 'IMAGEHLP.DLL'.*
-    SymGetModuleInfoEx64                     = 'IMAGEHLP.DLL'.*
-    SymGetModuleInfoEx                       = 'IMAGEHLP.DLL'.*
-    SymGetModuleInfoW64                      = 'IMAGEHLP.DLL'.*
-    SymGetModuleInfoW                        = 'IMAGEHLP.DLL'.*
-    SymGetOptions                            = 'IMAGEHLP.DLL'.*
-    SymGetSearchPath                         = 'IMAGEHLP.DLL'.*
-    SymGetSymFromAddr64                      = 'IMAGEHLP.DLL'.*
-    SymGetSymFromAddr                        = 'IMAGEHLP.DLL'.*
-    SymGetSymFromName64                      = 'IMAGEHLP.DLL'.*
-    SymGetSymFromName                        = 'IMAGEHLP.DLL'.*
-    SymGetSymNext64                          = 'IMAGEHLP.DLL'.*
-    SymGetSymNext                            = 'IMAGEHLP.DLL'.*
-    SymGetSymPrev64                          = 'IMAGEHLP.DLL'.*
-    SymGetSymPrev                            = 'IMAGEHLP.DLL'.*
-    SymGetSymbolInfo64                       = 'IMAGEHLP.DLL'.*
-    SymGetSymbolInfo                         = 'IMAGEHLP.DLL'.*
-    SymInitialize                            = 'IMAGEHLP.DLL'.*
-    SymLoadModule64                          = 'IMAGEHLP.DLL'.*
-    SymLoadModule                            = 'IMAGEHLP.DLL'.*
-    SymMatchFileName                         = 'IMAGEHLP.DLL'.*
-    SymRegisterCallback64                    = 'IMAGEHLP.DLL'.*
-    SymRegisterCallback                      = 'IMAGEHLP.DLL'.*
-    SymRegisterFunctionEntryCallback64       = 'IMAGEHLP.DLL'.*
-    SymRegisterFunctionEntryCallback         = 'IMAGEHLP.DLL'.*
-    SymSetOptions                            = 'IMAGEHLP.DLL'.*
-    SymSetSearchPath                         = 'IMAGEHLP.DLL'.*
-    SymUnDName64                             = 'IMAGEHLP.DLL'.*
-    SymUnDName                               = 'IMAGEHLP.DLL'.*
-    SymUnloadModule64                        = 'IMAGEHLP.DLL'.*
-    SymUnloadModule                          = 'IMAGEHLP.DLL'.*
-    TouchFileTimes                           = 'IMAGEHLP.DLL'.*
-    UnDecorateSymbolName                     = 'IMAGEHLP.DLL'.*
-    UnMapAndLoad                             = 'IMAGEHLP.DLL'.*
-    UnmapDebugInformation                    = 'IMAGEHLP.DLL'.*
-    UpdateDebugInfoFile                      = 'IMAGEHLP.DLL'.*
-    UpdateDebugInfoFileEx                    = 'IMAGEHLP.DLL'.*
+    BindImage
+    BindImageEx
+    CheckSumMappedFile
+    EnumerateLoadedModules64
+    EnumerateLoadedModules
+    FindDebugInfoFile
+    FindDebugInfoFileEx
+    FindExecutableImage
+    FindExecutableImageEx
+    FindFileInPath
+    FindFileInSearchPath
+    GetImageConfigInformation
+    GetImageUnusedHeaderBytes
+    GetTimestampForLoadedLibrary
+    ImageAddCertificate
+    ImageDirectoryEntryToData
+    ImageDirectoryEntryToDataEx
+    ImageEnumerateCertificates
+    ImageGetCertificateData
+    ImageGetCertificateHeader
+    ImageGetDigestStream
+    ImageLoad
+    ImageNtHeader
+    ImageRemoveCertificate
+    ImageRvaToSection
+    ImageRvaToVa
+    ImageUnload
+    ImagehlpApiVersion
+    ImagehlpApiVersionEx
+    MakeSureDirectoryPathExists
+    MapAndLoad
+    MapDebugInformation
+    MapFileAndCheckSumA
+    MapFileAndCheckSumW
+    ReBaseImage64
+    ReBaseImage
+    SearchTreeForFile
+    SetImageConfigInformation
+    SplitSymbols
+    StackWalk64
+    StackWalk
+    SymCleanup
+    SymEnumSourceFiles
+    SymEnumSym
+    SymEnumSymbols
+    SymEnumTypes
+    SymEnumerateModules64
+    SymEnumerateModules
+    SymEnumerateSymbols64
+    SymEnumerateSymbols
+    SymEnumerateSymbolsW64
+    SymEnumerateSymbolsW
+    SymFindFileInPath
+    SymFromAddr
+    SymFromName
+    SymFunctionTableAccess64
+    SymFunctionTableAccess
+    SymGetLineFromAddr64
+    SymGetLineFromAddr
+    SymGetLineFromName64
+    SymGetLineFromName
+    SymGetLineNext64
+    SymGetLineNext
+    SymGetLinePrev64
+    SymGetLinePrev
+    SymGetModuleBase64
+    SymGetModuleBase
+    SymGetModuleInfo64
+    SymGetModuleInfo
+    SymGetModuleInfoW64
+    SymGetModuleInfoW
+    SymGetOptions
+    SymGetSearchPath
+    SymGetSymFromAddr64
+    SymGetSymFromAddr
+    SymGetSymFromName64
+    SymGetSymFromName
+    SymGetSymNext64
+    SymGetSymNext
+    SymGetSymPrev64
+    SymGetSymPrev
+    SymGetTypeFromName
+    SymGetTypeInfo
+    SymInitialize
+    SymLoadModule64
+    SymLoadModule
+    SymMatchFileName
+    SymMatchString
+    SymRegisterCallback64
+    SymRegisterCallback
+    SymRegisterFunctionEntryCallback64
+    SymRegisterFunctionEntryCallback
+    SymSetContext
+    SymSetOptions
+    SymSetSearchPath
+    SymUnDName64
+    SymUnDName
+    SymUnloadModule64
+    SymUnloadModule
+    TouchFileTimes
+    UnDecorateSymbolName
+    UnMapAndLoad
+    UnmapDebugInformation
+    UpdateDebugInfoFile
+    UpdateDebugInfoFileEx

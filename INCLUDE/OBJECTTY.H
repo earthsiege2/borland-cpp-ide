@@ -2,7 +2,7 @@
 //
 //  File: OBJECTTY.H
 //
-//  Copyright (c) 1994, 1995 Microsoft Corp.
+//  Copyright (c) 1994 - 1999 Microsoft Corp.
 //
 //  This is the header file for the obejctity engine. The objectity
 //  engine is the core of the SMS API set.
@@ -15,7 +15,6 @@
 //
 
 #ifndef _OBJECTITY_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _OBJECTITY_H_
 
 // ====================================================================
@@ -370,7 +369,6 @@ typedef struct _FOLDER_INFO {
 
 
 
-#pragma option pop /*P_O_Pop*/
 #endif  // _OBJECTITY_H_
 
 /* EOF: objectty.h */

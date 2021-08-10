@@ -1,13 +1,13 @@
 ; C0NT.ASM - C/C++ run time library entry point for Win32 apps.
 
 ;
-;       C/C++ Run Time Library - Version 10.0
+;       C/C++ Run Time Library - Version 11.0
 ; 
-;       Copyright (c) 1991, 2000 by Inprise Corporation
+;       Copyright (c) 1991, 2002 by Borland Software Corporation
 ;       All Rights Reserved.
 ; 
 
-; $Revision:   9.41  $
+; $Revision: 9.45.2.1 $
 
                 .386P
 ifndef MASM
@@ -37,7 +37,7 @@ _TEXT           ENDS
 ; Data segments
 
 _DATA           SEGMENT PUBLIC DWORD USE32 PUBLIC 'DATA'
-                db      'Borland C++ - Copyright 1999 Inprise Corporation',0
+                db      'Borland C++ - Copyright 2002 Borland Corporation',0
 _DATA           ENDS
 
 _INIT_          SEGMENT PUBLIC WORD USE32 PUBLIC 'INITDATA'
@@ -442,6 +442,7 @@ _TEXT           SEGMENT  DWORD USE32 PUBLIC 'CODE'
 __acrtused      PROC NEAR
  ;
  ; The entrypoint of all PE files will now contain a jump around the address
+ ; of the debugger hook vector.  Eventually, the debugger will load it from
  ; here, but for now the debugger still looks for the exported name.
  ;
  ; We need to touch this symbol somewhere in the startup code so that it
@@ -960,8 +961,8 @@ ifdef VCLPACKAGE
 ;
 ; This code provides some of the support needed for loading VCL Packages.
 ;
-extrn @System@@PackageLoad$qqrpx23System@PackageInfoTable:near
-extrn @System@@PackageUnload$qqrpx23System@PackageInfoTable:near
+extrn @System@@PackageLoad$qqrpx23System@PackageInfoTablep17System@TLibModule:near
+extrn @System@@PackageUnload$qqrpx23System@PackageInfoTablep17System@TLibModule:near
 extrn __PackageInfoTable:near
 
 public @GetPackageInfoTable
@@ -985,7 +986,7 @@ public @GetPackageInfoTable
 Initialize proc near
                 mov     eax, offset __PackageInfoTable
                 mov     edx, [eax]
-                call    @System@@PackageLoad$qqrpx23System@PackageInfoTable
+                call    @System@@PackageLoad$qqrpx23System@PackageInfoTablep17System@TLibModule
                 ret
 ;@PackageLoad endp
 Initialize endp
@@ -995,7 +996,7 @@ Initialize endp
 Finalize proc near
                 mov     eax, offset __PackageInfoTable
                 mov     edx, [eax]
-                call    @System@@PackageUnload$qqrpx23System@PackageInfoTable
+                call    @System@@PackageUnload$qqrpx23System@PackageInfoTablep17System@TLibModule
                 ret
 ;@PackageUnload endp
 Finalize endp

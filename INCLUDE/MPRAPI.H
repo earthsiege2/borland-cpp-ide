@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1995 -1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -117,7 +117,6 @@ Abstract:
 
 
 #ifndef __ROUTING_MPRADMIN_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __ROUTING_MPRADMIN_H__
 
 #if _MSC_VER > 1000
@@ -273,6 +272,11 @@ MPR_INTERFACE_1, *PMPR_INTERFACE_1;
 #define MPRIO_SharedPhoneNumbers        RASEO_SharedPhoneNumbers
 #define MPRIO_RequireCHAP               RASEO_RequireCHAP
 #define MPRIO_RequireMsCHAP             RASEO_RequireMsCHAP
+#define MPRIO_RequireMsCHAP2            RASEO_RequireMsCHAP2
+
+#if (WINVER >= 0x501)
+#define MPRIO_IpSecPreSharedKey         0x80000000
+#endif
 
 //
 // MPR_INTERFACE_2 'dwProtocols' bit flags.
@@ -311,6 +315,7 @@ MPR_INTERFACE_1, *PMPR_INTERFACE_1;
 // MPR_INTERFACE_2 'dwDialMode' values.
 //
 
+#define MPRDM_DialFirst                0
 #define MPRDM_DialAll                  RASEDM_DialAll
 #define MPRDM_DialAsNeeded             RASEDM_DialAsNeeded
 
@@ -499,6 +504,13 @@ typedef struct _MPR_CREDENTIALSEX_0
     LPBYTE lpbCredentialsInfo;
 }
 MPR_CREDENTIALSEX_0, *PMPR_CREDENTIALSEX_0;
+
+typedef struct _MPR_CREDENTIALSEX_1
+{
+    DWORD  dwSize;
+    LPBYTE lpbCredentialsInfo;
+}
+MPR_CREDENTIALSEX_1, *PMPR_CREDENTIALSEX_1;
 
 #endif /* WINVER >= 0x0500 */
 
@@ -750,7 +762,10 @@ PPP_INFO_2;
 
 #define RAS_FLAGS_PPP_CONNECTION        0x00000001
 #define RAS_FLAGS_MESSENGER_PRESENT     0x00000002
+
+#if(WINVER < 0x0501)
 #define RAS_FLAGS_RAS_CONNECTION        0x00000004
+#endif
 
 typedef struct _RAS_CONNECTION_0
 {
@@ -1055,6 +1070,24 @@ MprAdminServerDisconnect(
     IN      MPR_SERVER_HANDLE       hMprServer
 );
 
+#if (WINVER >= 0x501)
+DWORD APIENTRY
+MprAdminServerGetCredentials(
+        IN  MPR_SERVER_HANDLE       hMprServer,
+        IN  DWORD                   dwLevel,
+        IN  LPBYTE *                lplpbBuffer
+);
+
+DWORD APIENTRY
+MprAdminServerSetCredentials(
+    IN      MPR_SERVER_HANDLE       hMprServer,
+    IN      DWORD                   dwLevel,
+    IN      LPBYTE                  lpbBuffer
+);
+
+
+#endif
+
 DWORD APIENTRY
 MprAdminBufferFree(
     IN      LPVOID                  pBuffer
@@ -1262,9 +1295,9 @@ DWORD APIENTRY
 MprAdminInterfaceGetCredentials(
     IN      LPWSTR                  lpwsServer              OPTIONAL,
     IN      LPWSTR                  lpwsInterfaceName,
-    IN      LPWSTR                  lpwsUserName            OPTIONAL,
-    IN      LPWSTR                  lpwsPassword            OPTIONAL,
-    IN      LPWSTR                  lpwsDomainName          OPTIONAL
+    OUT     LPWSTR                  lpwsUserName            OPTIONAL,
+    OUT     LPWSTR                  lpwsPassword            OPTIONAL,
+    OUT     LPWSTR                  lpwsDomainName          OPTIONAL
 );
 
 #if(WINVER >= 0x0500)
@@ -1282,7 +1315,7 @@ MprAdminInterfaceGetCredentialsEx(
     IN      MPR_SERVER_HANDLE       hMprServer,
     IN      HANDLE                  hInterface,
     IN      DWORD                   dwLevel,
-    IN      LPBYTE *                lplpbBuffer
+    OUT     LPBYTE *                lplpbBuffer
 );
 
 #endif /* WINVER >= 0x0500 */
@@ -1444,6 +1477,12 @@ MprAdminMIBBufferFree(
 //
 // Configuration APIs
 //
+
+DWORD APIENTRY
+MprConfigServerInstall(
+    IN      DWORD                   dwLevel,
+    IN      PVOID                   pBuffer
+);
 
 DWORD APIENTRY
 MprConfigServerConnect(
@@ -1726,6 +1765,11 @@ MprInfoBlockFind(
     OUT     LPBYTE*                 lplpItemData        // OPTIONAL
 );
 
+DWORD APIENTRY
+MprInfoBlockQuerySize(
+    IN      LPVOID                  lpHeader
+);
+
 //
 // BOOL APIENTRY
 // MprInfoBlockExists(
@@ -1743,6 +1787,5 @@ MprInfoBlockFind(
 
 //#endif /* WINVER >= 0x0403 */
 
-#pragma option pop /*P_O_Pop*/
 #endif // __ROUTING_MPRADMIN_H__
 

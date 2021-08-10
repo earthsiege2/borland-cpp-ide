@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //Borland C++Builder
-//Copyright (c) 1987, 1998 Borland International Inc. All Rights Reserved.
+//Copyright (c) 1987, 1998-2002 Borland International Inc. All Rights Reserved.
 //----------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 #include <vcl.h>
@@ -9,6 +9,7 @@
 #include "canmain.h"
 #include "math.h"
 #include <stdlib.h>
+#include <algorithm>
 //---------------------------------------------------------------------------
 #pragma resource "*.dfm"
 TFormMain *FormMain;
@@ -30,7 +31,7 @@ void __fastcall TFormMain::FormPaint(TObject *Sender)
 {
 	int centerX = ClientWidth / 2;
 	int centerY = ClientHeight / 2;
-	int radius = min(centerY, centerX);
+	int radius = std::min(centerY, centerX);
 
 	Canvas->Ellipse(0, 0, radius*2, radius*2);
 	int i,j;

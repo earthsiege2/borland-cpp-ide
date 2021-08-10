@@ -28,11 +28,10 @@
 //       boolSafeVector              -    bool
 //       CWbemClassObjectSafeVector  -    IWbemClassObject (uses CWbemClassObject)
 //
-//  Copyright (c)1997-99 Microsoft Corporation, All Rights Reserved
+//  Copyright (c)1997 - 1999 Microsoft Corporation, All Rights Reserved
 //------------------------------------------------------------------------------------
 
 #if !defined(__T_SafeVector_H)
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define      __T_SafeVector_H
 #pragma once
 
@@ -482,5 +481,4 @@ CWbemClassObjectSafeVector;
 #endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // __T_SafeVector_H

@@ -1,18 +1,18 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DbOleCtl.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DBOleCtl.pas' rev: 6.00
 
-#ifndef DbOleCtlHPP
-#define DbOleCtlHPP
+#ifndef DBOleCtlHPP
+#define DBOleCtlHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
 #include <ActiveX.hpp>	// Pascal unit
 #include <DBCtrls.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <OleCtrls.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -20,6 +20,7 @@
 #include <SysUtils.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -42,8 +43,7 @@ private:
 	void __fastcall SetDataSource(Db::TDataSource* Value);
 	
 protected:
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual HRESULT __stdcall OnChanged(int dispid);
 	virtual HRESULT __stdcall OnRequestEdit(int dispid);
 	
@@ -56,8 +56,7 @@ __published:
 	__property TDataBindings* DataBindings = {read=FDataBindings, write=FDataBindings};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBOleControl(HWND ParentWindow) : Olectrls::TOleControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBOleControl(HWND ParentWindow) : Olectrls::TOleControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -66,6 +65,9 @@ public:
 class PASCALIMPLEMENTATION TDataBindings : public Classes::TCollection 
 {
 	typedef Classes::TCollection inherited;
+	
+public:
+	TDataBindItem* operator[](int Index) { return Items[Index]; }
 	
 private:
 	TDBOleControl* FDBOleControl;
@@ -114,12 +116,10 @@ __published:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Dbolectl */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dbolectl;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// DbOleCtl
+#endif	// DBOleCtl

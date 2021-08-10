@@ -1,11 +1,11 @@
 LIBRARY RULECLS
 EXPORTS
 
-    HrActionToString                         = 'RULECLS.DLL'.*
-    HrCopyActions                            = 'RULECLS.DLL'.*
-    HrCopyRestriction                        = 'RULECLS.DLL'.*
-    HrFolderRulesGetProviders                = 'RULECLS.DLL'.*
-    HrFolderRulesOpen                        = 'RULECLS.DLL'.*
-    HrRestrictionToString                    = 'RULECLS.DLL'.*
-    HrStringToAction                         = 'RULECLS.DLL'.*
-    HrStringToRestriction                    = 'RULECLS.DLL'.*
+    HrActionToString                         
+    HrCopyActions                            
+    HrCopyRestriction                        
+    HrFolderRulesGetProviders                
+    HrFolderRulesOpen                        
+    HrRestrictionToString                    
+    HrStringToAction                         
+    HrStringToRestriction                    

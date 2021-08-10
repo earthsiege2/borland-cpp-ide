@@ -12,10 +12,6 @@ Abstract:
     Application or Smart Card Service Provider to access the Smartcard
     Subsystem.
 
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
 Environment:
 
     Win32
@@ -25,7 +21,6 @@ Notes:
 --*/
 
 #ifndef _WINSCARD_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINSCARD_H_
 
 #if defined (_MSC_VER) && (_MSC_VER >= 1020)
@@ -457,6 +452,12 @@ SCardFreeMemory(
     IN SCARDCONTEXT hContext,
     IN LPCVOID pvMem);
 
+extern WINSCARDAPI HANDLE WINAPI
+SCardAccessStartedEvent(void);
+
+extern WINSCARDAPI void WINAPI
+SCardReleaseStartedEvent(void);
+
 
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -579,6 +580,34 @@ SCardLocateCardsW(
 #else
 #define SCardLocateCards  SCardLocateCardsA
 #endif // !UNICODE
+
+typedef struct _SCARD_ATRMASK {
+    DWORD       cbAtr;          // Number of bytes in the ATR and the mask.
+    BYTE        rgbAtr[36];     // Atr of card (extra alignment bytes)
+    BYTE        rgbMask[36];    // Mask for the Atr (extra alignment bytes)
+} SCARD_ATRMASK, *PSCARD_ATRMASK, *LPSCARD_ATRMASK;
+
+
+extern WINSCARDAPI LONG WINAPI
+SCardLocateCardsByATRA(
+    IN      SCARDCONTEXT hContext,
+    IN      LPSCARD_ATRMASK rgAtrMasks,
+    IN      DWORD cAtrs,
+    IN OUT  LPSCARD_READERSTATEA rgReaderStates,
+    IN      DWORD cReaders);
+extern WINSCARDAPI LONG WINAPI
+SCardLocateCardsByATRW(
+    IN      SCARDCONTEXT hContext,
+    IN      LPSCARD_ATRMASK rgAtrMasks,
+    IN      DWORD cAtrs,
+    IN OUT  LPSCARD_READERSTATEW rgReaderStates,
+    IN      DWORD cReaders);
+#ifdef UNICODE
+#define SCardLocateCardsByATR  SCardLocateCardsByATRW
+#else
+#define SCardLocateCardsByATR  SCardLocateCardsByATRA
+#endif // !UNICODE
+
 
 extern WINSCARDAPI LONG WINAPI
 SCardGetStatusChangeA(
@@ -1038,6 +1067,5 @@ SCardDlgExtendedError (void);
 #ifdef __cplusplus
 }
 #endif
-#pragma option pop /*P_O_Pop*/
 #endif // _WINSCARD_H_
 

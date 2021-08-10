@@ -19,14 +19,14 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1998, 2000 by Inprise Corporation
+ *      Copyright (c) 1998, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.5  $        */
+/* $Revision: 9.10.2.1 $        */
 
 #include <_defs.h>
 #include <_io.h>
@@ -327,6 +327,9 @@ BOOL WINAPI _EXPFUNC ___CRTL_TLS_Free (DWORD id)
     _lock_tls();
     freeTlsIndex(id);
     --CurrentlyUsed;
+    // Added to release used slot when the EXE exits
+    if ((CurrentlyUsed == 0) &&(SystemIndex != TLS_ERROR_ID))
+          TlsFree(SystemIndex);
     _unlock_tls();
     return TRUE;
 }

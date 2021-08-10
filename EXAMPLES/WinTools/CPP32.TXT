@@ -102,4 +102,4 @@ MIDL -ms_ext -cpp_cmd {CPP|CPP32} -cpp_opt "-P- -oCON
 
 {CPP32 options}" {MIDL options} {.idl/.acf file}
 
-Copyright © 1998 Borland International.
+Copyright © 1998-2002 Borland International.

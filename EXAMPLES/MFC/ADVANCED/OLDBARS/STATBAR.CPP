@@ -25,6 +25,7 @@
 #include <Script.h>
 #include <macname2.h>
 #endif
+#include <algorithm>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -125,7 +126,7 @@ void CStatusBar::OnWinIniChange(LPCTSTR /*lpszSection*/)
 		CalcInsideRect(rect, TRUE);
 
 		// the size box is based off the size of a scrollbar
-		m_cxSizeBox = min(GetSystemMetrics(SM_CXVSCROLL)+1, rect.Height());
+		m_cxSizeBox = std::min(GetSystemMetrics(SM_CXVSCROLL)+1, rect.Height());
 	}
 }
 
@@ -293,11 +294,11 @@ void CStatusBar::GetItemRect(int nIndex, LPRECT lpRect) const
 			cxExtra = 0;
 		}
 		rect.right = rect.left + cxText + CX_BORDER * 4;
-		rect.right = min(rect.right, xMax);
+		rect.right = std::min(rect.right, xMax);
 		if (i == nIndex)
 			break;  // stop with correct rectangle (includes border)
 		rect.left = rect.right + m_cxDefaultGap;
-		rect.left = min(rect.left, xMax);
+		rect.left = std::min(rect.left, xMax);
 	}
 	ASSERT(i == nIndex);
 	*lpRect = rect;
@@ -455,7 +456,7 @@ void CStatusBar::DoPaint(CDC* pDC)
 			cxExtra = 0;
 		}
 		rect.right = rect.left + cxText + CX_BORDER * 4;
-		rect.right = min(rect.right, xMax);
+		rect.right = std::min(rect.right, xMax);
 		if (!globalData.bWin32s || pDC->RectVisible(&rect))
 			DrawStatusText(pDC, rect, pSBP->lpszText, pSBP->nStyle);
 		rect.left = rect.right + m_cxDefaultGap;
@@ -467,7 +468,7 @@ void CStatusBar::DoPaint(CDC* pDC)
 	// draw the size box in the bottom right corner
 	if (cxSizeBox != 0)
 	{
-		int cxMax = min(cxSizeBox, rect.Height()+m_cyTopBorder);
+		int cxMax = std::min(cxSizeBox, rect.Height()+m_cyTopBorder);
 		rect.left = xMax + (cxSizeBox - cxMax) + CX_BORDER;
 		rect.bottom -= CX_BORDER;
 		HPEN hPenOld = (HPEN)pDC->SelectObject(globalData.hpenBtnHilite);
@@ -564,7 +565,7 @@ UINT CStatusBar::OnNcHitTest(CPoint point)
 		CRect rect;
 		GetClientRect(rect);
 		CalcInsideRect(rect, TRUE);
-		int cxMax = min(m_cxSizeBox-1, rect.Height());
+		int cxMax = std::min(m_cxSizeBox-1, rect.Height());
 		rect.left = rect.right - cxMax;
 		ClientToScreen(&rect);
 		if (rect.PtInRect(point))

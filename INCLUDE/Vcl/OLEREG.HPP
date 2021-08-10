@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OLEReg.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'OleReg.pas' rev: 6.00
 
-#ifndef OLERegHPP
-#define OLERegHPP
+#ifndef OleRegHPP
+#define OleRegHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -22,12 +22,10 @@ namespace Olereg
 extern PACKAGE void __fastcall Register(void);
 
 }	/* namespace Olereg */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Olereg;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// OLEReg
+#endif	// OleReg

@@ -3,7 +3,7 @@
 
 :BASE nmsmtp.hlp
 :TITLE FastNet SMTP Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 TPostMessage object
 2 TPostMessage object Reference=Scribble1010
 2 Properties

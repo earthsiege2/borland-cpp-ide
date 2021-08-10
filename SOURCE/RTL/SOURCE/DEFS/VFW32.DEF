@@ -1,130 +1,130 @@
-LIBRARY VFW32
+LIBRARY Vfw32
 EXPORTS
 
-    VideoForWindowsVersion                   = 'MSVFW32.DLL'.* @2 @1
-    StretchDIB                               = 'MSVFW32.DLL'.*
-    _MCIWndRegisterClass                     = 'MSVFW32.DLL'.MCIWndRegisterClass
-    _MCIWndCreateW                           = 'MSVFW32.DLL'.MCIWndCreateW
-    _MCIWndCreateA                           = 'MSVFW32.DLL'.MCIWndCreateA
-    _MCIWndCreate                            = 'MSVFW32.DLL'.MCIWndCreate
-    ICSeqCompressFrameStart                  = 'MSVFW32.DLL'.*
-    ICSeqCompressFrameEnd                    = 'MSVFW32.DLL'.*
-    ICSeqCompressFrame                       = 'MSVFW32.DLL'.*
-    ICSendMessage                            = 'MSVFW32.DLL'.*
-    ICRemove                                 = 'MSVFW32.DLL'.*
-    ICOpenFunction                           = 'MSVFW32.DLL'.*
-    ICOpen                                   = 'MSVFW32.DLL'.*
-    ICMThunk32                               = 'MSVFW32.DLL'.*
-    ICLocate                                 = 'MSVFW32.DLL'.*
-    ICInstall                                = 'MSVFW32.DLL'.*
-    ICInfo                                   = 'MSVFW32.DLL'.*
-    ICImageDecompress                        = 'MSVFW32.DLL'.*
-    ICImageCompress                          = 'MSVFW32.DLL'.*
-    ICGetInfo                                = 'MSVFW32.DLL'.*
-    ICGetDisplayFormat                       = 'MSVFW32.DLL'.*
-    _ICDrawBegin                             = 'MSVFW32.DLL'.ICDrawBegin
-    _ICDraw                                  = 'MSVFW32.DLL'.ICDraw
-    _ICDecompress                            = 'MSVFW32.DLL'.ICDecompress
-    ICCompressorFree                         = 'MSVFW32.DLL'.*
-    ICCompressorChoose                       = 'MSVFW32.DLL'.*
-    _ICCompress                              = 'MSVFW32.DLL'.ICCompress
-    ICClose                                  = 'MSVFW32.DLL'.*
-    GetSaveFileNamePreviewW                  = 'MSVFW32.DLL'.*
-    GetSaveFileNamePreviewA                  = 'MSVFW32.DLL'.*
-    GetOpenFileNamePreviewW                  = 'MSVFW32.DLL'.*
-    GetOpenFileNamePreviewA                  = 'MSVFW32.DLL'.*
-    GetOpenFileNamePreview                   = 'MSVFW32.DLL'.*
-    DrawDibTime                              = 'MSVFW32.DLL'.*
-    DrawDibStop                              = 'MSVFW32.DLL'.*
-    DrawDibStart                             = 'MSVFW32.DLL'.*
-    DrawDibSetPalette                        = 'MSVFW32.DLL'.*
-    DrawDibRealize                           = 'MSVFW32.DLL'.*
-    DrawDibProfileDisplay                    = 'MSVFW32.DLL'.*
-    DrawDibOpen                              = 'MSVFW32.DLL'.*
-    DrawDibGetPalette                        = 'MSVFW32.DLL'.*
-    DrawDibGetBuffer                         = 'MSVFW32.DLL'.*
-    DrawDibEnd                               = 'MSVFW32.DLL'.*
-    DrawDibDraw                              = 'MSVFW32.DLL'.*
-    DrawDibClose                             = 'MSVFW32.DLL'.*
-    DrawDibChangePalette                     = 'MSVFW32.DLL'.*
-    DrawDibBegin                             = 'MSVFW32.DLL'.*
-    _IID_IGetFrame                           = 'AVIFIL32.DLL'.IID_IGetFrame
-    _IID_IAVIStream                          = 'AVIFIL32.DLL'.IID_IAVIStream
-    _IID_IAVIFile                            = 'AVIFIL32.DLL'.IID_IAVIFile
-    _IID_IAVIEditStream                      = 'AVIFIL32.DLL'.IID_IAVIEditStream
-    EditStreamSetNameW                       = 'AVIFIL32.DLL'.*
-    EditStreamSetNameA                       = 'AVIFIL32.DLL'.*
-    EditStreamSetName                        = 'AVIFIL32.DLL'.*
-    EditStreamSetInfoW                       = 'AVIFIL32.DLL'.*
-    EditStreamSetInfoA                       = 'AVIFIL32.DLL'.*
-    EditStreamSetInfo                        = 'AVIFIL32.DLL'.*
-    EditStreamPaste                          = 'AVIFIL32.DLL'.*
-    EditStreamCut                            = 'AVIFIL32.DLL'.*
-    EditStreamCopy                           = 'AVIFIL32.DLL'.*
-    EditStreamClone                          = 'AVIFIL32.DLL'.*
-    CreateEditableStream                     = 'AVIFIL32.DLL'.*
-    AVIStreamWriteData                       = 'AVIFIL32.DLL'.*
-    AVIStreamWrite                           = 'AVIFIL32.DLL'.*
-    AVIStreamTimeToSample                    = 'AVIFIL32.DLL'.*
-    AVIStreamStart                           = 'AVIFIL32.DLL'.*
-    AVIStreamSetFormat                       = 'AVIFIL32.DLL'.*
-    AVIStreamSampleToTime                    = 'AVIFIL32.DLL'.*
-    AVIStreamRelease                         = 'AVIFIL32.DLL'.*
-    AVIStreamReadFormat                      = 'AVIFIL32.DLL'.*
-    AVIStreamReadData                        = 'AVIFIL32.DLL'.*
-    AVIStreamRead                            = 'AVIFIL32.DLL'.*
-    AVIStreamOpenFromFileW                   = 'AVIFIL32.DLL'.*
-    AVIStreamOpenFromFileA                   = 'AVIFIL32.DLL'.*
-    AVIStreamOpenFromFile                    = 'AVIFIL32.DLL'.*
-    AVIStreamLength                          = 'AVIFIL32.DLL'.*
-    AVIStreamInfoW                           = 'AVIFIL32.DLL'.*
-    AVIStreamInfoA                           = 'AVIFIL32.DLL'.*
-    AVIStreamInfo                            = 'AVIFIL32.DLL'.*
-    AVIStreamGetFrameOpen                    = 'AVIFIL32.DLL'.*
-    AVIStreamGetFrameClose                   = 'AVIFIL32.DLL'.*
-    AVIStreamGetFrame                        = 'AVIFIL32.DLL'.*
-    AVIStreamFindSample                      = 'AVIFIL32.DLL'.*
-    AVIStreamEndStreaming                    = 'AVIFIL32.DLL'.*
-    AVIStreamCreate                          = 'AVIFIL32.DLL'.*
-    AVIStreamBeginStreaming                  = 'AVIFIL32.DLL'.*
-    AVIStreamAddRef                          = 'AVIFIL32.DLL'.*
-    _AVISaveW                                = 'AVIFIL32.DLL'.AVISaveW
-    AVISaveVW                                = 'AVIFIL32.DLL'.*
-    AVISaveVA                                = 'AVIFIL32.DLL'.*
-    AVISaveV                                 = 'AVIFIL32.DLL'.*
-    AVISaveOptionsFree                       = 'AVIFIL32.DLL'.*
-    AVISaveOptions                           = 'AVIFIL32.DLL'.*
-    _AVISaveA                                = 'AVIFIL32.DLL'.AVISaveA
-    _AVISave                                 = 'AVIFIL32.DLL'.AVISave
-    AVIPutFileOnClipboard                    = 'AVIFIL32.DLL'.*
-    AVIMakeStreamFromClipboard               = 'AVIFIL32.DLL'.*
-    AVIMakeFileFromStreams                   = 'AVIFIL32.DLL'.*
-    AVIMakeCompressedStream                  = 'AVIFIL32.DLL'.*
-    AVIGetFromClipboard                      = 'AVIFIL32.DLL'.*
-    AVIFileWriteData                         = 'AVIFIL32.DLL'.*
-    AVIFileRelease                           = 'AVIFIL32.DLL'.*
-    AVIFileReadData                          = 'AVIFIL32.DLL'.*
-    AVIFileOpenW                             = 'AVIFIL32.DLL'.*
-    AVIFileOpenA                             = 'AVIFIL32.DLL'.*
-    AVIFileOpen                              = 'AVIFIL32.DLL'.*
-    AVIFileInit                              = 'AVIFIL32.DLL'.*
-    AVIFileInfoW                             = 'AVIFIL32.DLL'.*
-    AVIFileInfoA                             = 'AVIFIL32.DLL'.*
-    AVIFileInfo                              = 'AVIFIL32.DLL'.*
-    AVIFileGetStream                         = 'AVIFIL32.DLL'.*
-    AVIFileExit                              = 'AVIFIL32.DLL'.*
-    AVIFileEndRecord                         = 'AVIFIL32.DLL'.*
-    AVIFileCreateStreamW                     = 'AVIFIL32.DLL'.*
-    AVIFileCreateStreamA                     = 'AVIFIL32.DLL'.*
-    AVIFileCreateStream                      = 'AVIFIL32.DLL'.*
-    AVIFileAddRef                            = 'AVIFIL32.DLL'.*
-    AVIClearClipboard                        = 'AVIFIL32.DLL'.*
-    AVIBuildFilterW                          = 'AVIFIL32.DLL'.*
-    AVIBuildFilterA                          = 'AVIFIL32.DLL'.*
-    AVIBuildFilter                           = 'AVIFIL32.DLL'.*
-    videoThunk32                             = 'AVICAP32.DLL'.*
-    capGetDriverDescriptionW                 = 'AVICAP32.DLL'.*
-    capGetDriverDescriptionA                 = 'AVICAP32.DLL'.*
-    capCreateCaptureWindowW                  = 'AVICAP32.DLL'.*
-    capCreateCaptureWindowA                  = 'AVICAP32.DLL'.*
-    AppCleanup                               = 'AVICAP32.DLL'.*
+    VideoForWindowsVersion        @2
+    StretchDIB
+    _MCIWndRegisterClass        = MCIWndRegisterClass
+    _MCIWndCreateW        = MCIWndCreateW
+    _MCIWndCreateA        = MCIWndCreateA
+    _MCIWndCreate        = MCIWndCreate
+    ICSeqCompressFrameStart
+    ICSeqCompressFrameEnd
+    ICSeqCompressFrame
+    ICSendMessage
+    ICRemove
+    ICOpenFunction
+    ICOpen
+    ICMThunk32
+    ICLocate
+    ICInstall
+    ICInfo
+    ICImageDecompress
+    ICImageCompress
+    ICGetInfo
+    ICGetDisplayFormat
+    _ICDrawBegin        = ICDrawBegin
+    _ICDraw        = ICDraw
+    _ICDecompress        = ICDecompress
+    ICCompressorFree
+    ICCompressorChoose
+    _ICCompress        = ICCompress
+    ICClose
+    GetSaveFileNamePreviewW
+    GetSaveFileNamePreviewA
+    GetOpenFileNamePreviewW
+    GetOpenFileNamePreviewA
+    GetOpenFileNamePreview
+    DrawDibTime
+    DrawDibStop
+    DrawDibStart
+    DrawDibSetPalette
+    DrawDibRealize
+    DrawDibProfileDisplay
+    DrawDibOpen
+    DrawDibGetPalette
+    DrawDibGetBuffer
+    DrawDibEnd
+    DrawDibDraw
+    DrawDibClose
+    DrawDibChangePalette
+    DrawDibBegin
+    _IID_IGetFrame        = IID_IGetFrame
+    _IID_IAVIStream        = IID_IAVIStream
+    _IID_IAVIFile        = IID_IAVIFile
+    _IID_IAVIEditStream        = IID_IAVIEditStream
+    EditStreamSetNameW
+    EditStreamSetNameA
+    EditStreamSetName
+    EditStreamSetInfoW
+    EditStreamSetInfoA
+    EditStreamSetInfo
+    EditStreamPaste
+    EditStreamCut
+    EditStreamCopy
+    EditStreamClone
+    CreateEditableStream
+    AVIStreamWriteData
+    AVIStreamWrite
+    AVIStreamTimeToSample
+    AVIStreamStart
+    AVIStreamSetFormat
+    AVIStreamSampleToTime
+    AVIStreamRelease
+    AVIStreamReadFormat
+    AVIStreamReadData
+    AVIStreamRead
+    AVIStreamOpenFromFileW
+    AVIStreamOpenFromFileA
+    AVIStreamOpenFromFile
+    AVIStreamLength
+    AVIStreamInfoW
+    AVIStreamInfoA
+    AVIStreamInfo
+    AVIStreamGetFrameOpen
+    AVIStreamGetFrameClose
+    AVIStreamGetFrame
+    AVIStreamFindSample
+    AVIStreamEndStreaming
+    AVIStreamCreate
+    AVIStreamBeginStreaming
+    AVIStreamAddRef
+    _AVISaveW        = AVISaveW
+    AVISaveVW
+    AVISaveVA
+    AVISaveV
+    AVISaveOptionsFree
+    AVISaveOptions
+    _AVISaveA        = AVISaveA
+    _AVISave        = AVISave
+    AVIPutFileOnClipboard
+    AVIMakeStreamFromClipboard
+    AVIMakeFileFromStreams
+    AVIMakeCompressedStream
+    AVIGetFromClipboard
+    AVIFileWriteData
+    AVIFileRelease
+    AVIFileReadData
+    AVIFileOpenW
+    AVIFileOpenA
+    AVIFileOpen
+    AVIFileInit
+    AVIFileInfoW
+    AVIFileInfoA
+    AVIFileInfo
+    AVIFileGetStream
+    AVIFileExit
+    AVIFileEndRecord
+    AVIFileCreateStreamW
+    AVIFileCreateStreamA
+    AVIFileCreateStream
+    AVIFileAddRef
+    AVIClearClipboard
+    AVIBuildFilterW
+    AVIBuildFilterA
+    AVIBuildFilter
+    videoThunk32
+    capGetDriverDescriptionW
+    capGetDriverDescriptionA
+    capCreateCaptureWindowW
+    capCreateCaptureWindowA
+    AppCleanup

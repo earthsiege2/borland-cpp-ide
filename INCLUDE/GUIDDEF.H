@@ -1,8 +1,7 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 //+---------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998-1999.
+//  Copyright (c) Microsoft Corporation.  All rights reserved.
 //
 //  File:       guiddef.h
 //
@@ -12,16 +11,21 @@
 
 #ifndef GUID_DEFINED
 #define GUID_DEFINED
-#ifdef __midl
+#if defined(__midl)
 typedef struct {
+    unsigned long  Data1;
+    unsigned short Data2;
+    unsigned short Data3;
+    byte           Data4[ 8 ];
+} GUID;
 #else
 typedef struct _GUID {
-#endif
     unsigned long  Data1;
     unsigned short Data2;
     unsigned short Data3;
     unsigned char  Data4[ 8 ];
 } GUID;
+#endif
 #endif
 
 #ifndef FAR
@@ -33,7 +37,7 @@ typedef struct _GUID {
 #endif
 
 #ifndef DECLSPEC_SELECTANY
-#if (_MSC_VER >= 1100)
+#if (_MSC_VER >= 1100) || (__BORLANDC__ >= 0x0550)
 #define DECLSPEC_SELECTANY  __declspec(selectany)
 #else
 #define DECLSPEC_SELECTANY
@@ -185,9 +189,7 @@ __inline int IsEqualGUID(REFGUID rguid1, REFGUID rguid2)
 // A couple of C++ helpers
 
 #ifdef __cplusplus
-#ifdef __BORLANDC__
 extern "C++" {
-#endif
 __inline int operator==(REFGUID guidOne, REFGUID guidOther)
 {
     return IsEqualGUID(guidOne,guidOther);
@@ -197,13 +199,9 @@ __inline int operator!=(REFGUID guidOne, REFGUID guidOther)
 {
     return !(guidOne == guidOther);
 }
-#ifdef __BORLANDC__
-} // extern "C++"
-#endif
-
+}
 #endif
 #endif  // _SYS_GUID_OPERATOR_EQ_
 #endif  // _SYS_GUID_OPERATORS_
 #endif  // __midl
 #endif  // _GUIDDEF_H_
-#pragma option pop /*P_O_Pop*/

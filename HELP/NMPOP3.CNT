@@ -3,7 +3,7 @@
 
 :BASE nmpop3.hlp
 :TITLE FastNet POP3 Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 TMailMessage object
 2 TMailMessage object Reference=Scribble1010
 2 Properties

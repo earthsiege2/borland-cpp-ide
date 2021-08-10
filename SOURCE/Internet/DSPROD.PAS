@@ -1,19 +1,26 @@
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
+{ *************************************************************************** }
+{                                                                             }
+{ Delphi and Kylix Cross-Platform Visual Component Library                    }
+{ Internet Application Runtime                                                }
+{                                                                             }
+{ Copyright (C) 1995, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ Licensees holding a valid Borland No-Nonsense License for this Software may }
+{ use this file in accordance with such license, which appears in the file    }
+{ license.txt that came with this Software.                                   }
+{                                                                             }
+{ *************************************************************************** }
 
-unit DSProd;
+
+unit DSProd;    
 
 interface
 
-uses Classes, HTTPApp, DB;
+uses Classes, HTTPApp, HTTPProd, DB, SysUtils;
 
 type
-  TDataSetPageProducer = class(TPageProducer)
+
+  TCustomDataSetPageProducer = class(TCustomPageProducer)
   private
     FDataSet: TDataSet;
   protected
@@ -24,19 +31,28 @@ type
       var ReplaceText: string); override;
   public
     function Content: string; override;
-  published
     property DataSet: TDataSet read GetDataSet write SetDataSet;
+  end;
+
+  TDataSetPageProducer = class(TCustomDataSetPageProducer)
+  published
+    property HTMLDoc;
+    property HTMLFile;
+    property DataSet;
     property OnHTMLTag;
+{$IFDEF MSWINDOWS}
+    property ScriptEngine;
+{$ENDIF}
   end;
 
 implementation
 
-function TDataSetPageProducer.GetDataSet: TDataSet;
+function TCustomDataSetPageProducer.GetDataSet: TDataSet;
 begin
   Result := FDataSet;
 end;
 
-procedure TDataSetPageProducer.SetDataSet(ADataSet: TDataSet);
+procedure TCustomDataSetPageProducer.SetDataSet(ADataSet: TDataSet);
 begin
   if FDataSet <> ADataSet then
   begin
@@ -45,14 +61,14 @@ begin
   end;
 end;
 
-procedure TDataSetPageProducer.Notification(AComponent: TComponent; Operation: TOperation);
+procedure TCustomDataSetPageProducer.Notification(AComponent: TComponent; Operation: TOperation);
 begin
   inherited Notification(AComponent, Operation);
   if (Operation = opRemove) and (AComponent = FDataSet) then
     FDataSet := nil;
 end;
 
-procedure TDataSetPageProducer.DoTagEvent(Tag: TTag; const TagString: string;
+procedure TCustomDataSetPageProducer.DoTagEvent(Tag: TTag; const TagString: string;
   TagParams: TStrings; var ReplaceText: string);
 var
   Field: TField;
@@ -66,7 +82,7 @@ begin
   inherited DoTagEvent(Tag, TagString, TagParams, ReplaceText);
 end;
 
-function TDataSetPageProducer.Content: string;
+function TCustomDataSetPageProducer.Content: string;
 begin
   if (FDataSet <> nil) and not FDataSet.Active then
     FDataSet.Open;

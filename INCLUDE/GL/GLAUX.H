@@ -14,7 +14,6 @@ Abstract:
 --*/
 
 #ifndef __GLAUX_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push_S*/
 #define __GLAUX_H__
 
 /*
@@ -371,5 +370,4 @@ GLenum APIENTRY auxGetDisplayMode(void);
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif /* __GLAUX_H__ */

@@ -3,7 +3,7 @@
 
 #pragma hdrstop
 
-#include "SingleAppInstance.h"
+#include "SingleInstance.h"
 #include "SingleAppInstanceDesignTimeCode.h"
 #include "SingleAppInstanceDesignMarkerForm.h"
 

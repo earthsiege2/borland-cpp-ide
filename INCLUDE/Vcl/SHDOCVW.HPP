@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'SHDocVw.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'SHDocVw.pas' rev: 6.00
 
 #ifndef SHDocVwHPP
 #define SHDocVwHPP
@@ -47,8 +47,48 @@ typedef Activex::TOleEnum BrowserNavConstants;
 
 __interface IWebBrowser;
 typedef System::DelphiInterface<IWebBrowser> _di_IWebBrowser;
+typedef IWebBrowser WebBrowser_V1;
+;
+
+__interface IWebBrowser2;
+typedef System::DelphiInterface<IWebBrowser2> _di_IWebBrowser2;
+typedef IWebBrowser2 WebBrowser;
+;
+
+typedef IWebBrowser2 InternetExplorer;
+;
+
+typedef IWebBrowser2 ShellBrowserWindow;
+;
+
+__interface IShellWindows;
+typedef System::DelphiInterface<IShellWindows> _di_IShellWindows;
+typedef IShellWindows ShellWindows;
+;
+
+__interface IShellUIHelper;
+typedef System::DelphiInterface<IShellUIHelper> _di_IShellUIHelper;
+typedef IShellUIHelper ShellUIHelper;
+;
+
+__interface IShellFavoritesNameSpace;
+typedef System::DelphiInterface<IShellFavoritesNameSpace> _di_IShellFavoritesNameSpace;
+typedef IShellFavoritesNameSpace ShellFavoritesNameSpace;
+;
+
+__interface IScriptErrorList;
+typedef System::DelphiInterface<IScriptErrorList> _di_IScriptErrorList;
+typedef IScriptErrorList CScriptErrorList;
+;
+
+__interface ISearchAssistantOC;
+typedef System::DelphiInterface<ISearchAssistantOC> _di_ISearchAssistantOC;
+typedef ISearchAssistantOC SearchAssistantOC;
+;
+
+typedef OleVariant *POleVariant1;
+
 __interface INTERFACE_UUID("{EAB22AC1-30C1-11CF-A7EB-0000C05BAE0B}") IWebBrowser  : public IDispatch 
-	
 {
 	
 public:
@@ -56,8 +96,7 @@ public:
 	virtual HRESULT __safecall GoForward(void) = 0 ;
 	virtual HRESULT __safecall GoHome(void) = 0 ;
 	virtual HRESULT __safecall GoSearch(void) = 0 ;
-	virtual HRESULT __safecall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName
-		, OleVariant &PostData, OleVariant &Headers) = 0 ;
+	virtual HRESULT __safecall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData, OleVariant &Headers) = 0 ;
 	virtual HRESULT __safecall Refresh(void) = 0 ;
 	virtual HRESULT __safecall Refresh2(OleVariant &Level) = 0 ;
 	virtual HRESULT __safecall Stop(void) = 0 ;
@@ -79,87 +118,83 @@ public:
 	virtual HRESULT __safecall Get_LocationURL(WideString &Get_LocationURL_result) = 0 ;
 	virtual HRESULT __safecall Get_Busy(Word &Get_Busy_result) = 0 ;
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline _di_IDispatch _scw_Get_Application() { _di_IDispatch r; HRESULT hr = Get_Application(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline _di_IDispatch _scw_Get_Application() { _di_IDispatch r; HRESULT hr = Get_Application(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property _di_IDispatch Application = {read=_scw_Get_Application};
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline _di_IDispatch _scw_Get_Parent() { _di_IDispatch r; HRESULT hr = Get_Parent(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline _di_IDispatch _scw_Get_Parent() { _di_IDispatch r; HRESULT hr = Get_Parent(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property _di_IDispatch Parent = {read=_scw_Get_Parent};
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline _di_IDispatch _scw_Get_Container() { _di_IDispatch r; HRESULT hr = Get_Container(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline _di_IDispatch _scw_Get_Container() { _di_IDispatch r; HRESULT hr = Get_Container(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property _di_IDispatch Container = {read=_scw_Get_Container};
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline _di_IDispatch _scw_Get_Document() { _di_IDispatch r; HRESULT hr = Get_Document(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline _di_IDispatch _scw_Get_Document() { _di_IDispatch r; HRESULT hr = Get_Document(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property _di_IDispatch Document = {read=_scw_Get_Document};
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline Word _scw_Get_TopLevelContainer() { Word r; HRESULT hr = Get_TopLevelContainer(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline Word _scw_Get_TopLevelContainer() { Word r; HRESULT hr = Get_TopLevelContainer(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property Word TopLevelContainer = {read=_scw_Get_TopLevelContainer};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline WideString _scw_Get_Type_() { WideString r; HRESULT hr = Get_Type_(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property WideString Type_ = {read=_scw_Get_Type_};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline int _scw_Get_Left() { int r; HRESULT hr = Get_Left(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property int Left = {read=_scw_Get_Left, write=Set_Left};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline int _scw_Get_Top() { int r; HRESULT hr = Get_Top(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property int Top = {read=_scw_Get_Top, write=Set_Top};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline int _scw_Get_Width() { int r; HRESULT hr = Get_Width(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property int Width = {read=_scw_Get_Width, write=Set_Width};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline int _scw_Get_Height() { int r; HRESULT hr = Get_Height(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property int Height = {read=_scw_Get_Height, write=Set_Height};
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline WideString _scw_Get_LocationName() { WideString r; HRESULT hr = Get_LocationName(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline WideString _scw_Get_LocationName() { WideString r; HRESULT hr = Get_LocationName(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property WideString LocationName = {read=_scw_Get_LocationName};
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline WideString _scw_Get_LocationURL() { WideString r; HRESULT hr = Get_LocationURL(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline WideString _scw_Get_LocationURL() { WideString r; HRESULT hr = Get_LocationURL(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property WideString LocationURL = {read=_scw_Get_LocationURL};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline Word _scw_Get_Busy() { Word r; HRESULT hr = Get_Busy(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property Word Busy = {read=_scw_Get_Busy};
 };
-typedef IWebBrowser WebBrowser_V1;
 
-__interface IWebBrowser2;
-typedef System::DelphiInterface<IWebBrowser2> _di_IWebBrowser2;
+__dispinterface IWebBrowserDisp;
+typedef System::DelphiInterface<IWebBrowserDisp> _di_IWebBrowserDisp;
+__dispinterface INTERFACE_UUID("{EAB22AC1-30C1-11CF-A7EB-0000C05BAE0B}") IWebBrowserDisp  : public IDispatch 
+{
+	
+};
+
+__dispinterface DWebBrowserEvents;
+typedef System::DelphiInterface<DWebBrowserEvents> _di_DWebBrowserEvents;
+__dispinterface INTERFACE_UUID("{EAB22AC2-30C1-11CF-A7EB-0000C05BAE0B}") DWebBrowserEvents  : public IDispatch 
+{
+	
+};
+
 __interface IWebBrowserApp;
 typedef System::DelphiInterface<IWebBrowserApp> _di_IWebBrowserApp;
 __interface INTERFACE_UUID("{0002DF05-0000-0000-C000-000000000046}") IWebBrowserApp  : public IWebBrowser 
-	
 {
 	
 public:
 	virtual HRESULT __safecall Quit(void) = 0 ;
 	virtual HRESULT __safecall ClientToWindow(int &pcx, int &pcy) = 0 ;
 	virtual HRESULT __safecall PutProperty(const WideString Property_, const OleVariant vtValue) = 0 ;
-	virtual HRESULT __safecall GetProperty(const WideString Property_, OleVariant &GetProperty_result) = 0 
-		;
+	virtual HRESULT __safecall GetProperty(const WideString Property_, OleVariant &GetProperty_result) = 0 ;
 	virtual HRESULT __safecall Get_Name(WideString &Get_Name_result) = 0 ;
 	virtual HRESULT __safecall Get_HWND(int &Get_HWND_result) = 0 ;
 	virtual HRESULT __safecall Get_FullName(WideString &Get_FullName_result) = 0 ;
@@ -178,69 +213,61 @@ public:
 	virtual HRESULT __safecall Set_FullScreen(Word pbFullScreen) = 0 ;
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline WideString _scw_Get_Name() { WideString r; HRESULT hr = Get_Name(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property WideString Name = {read=_scw_Get_Name};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline int _scw_Get_HWND() { int r; HRESULT hr = Get_HWND(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property int HWND = {read=_scw_Get_HWND};
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline WideString _scw_Get_FullName() { WideString r; HRESULT hr = Get_FullName(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline WideString _scw_Get_FullName() { WideString r; HRESULT hr = Get_FullName(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property WideString FullName = {read=_scw_Get_FullName};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline WideString _scw_Get_Path() { WideString r; HRESULT hr = Get_Path(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property WideString Path = {read=_scw_Get_Path};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline Word _scw_Get_Visible() { Word r; HRESULT hr = Get_Visible(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property Word Visible = {read=_scw_Get_Visible, write=Set_Visible};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline Word _scw_Get_StatusBar() { Word r; HRESULT hr = Get_StatusBar(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property Word StatusBar = {read=_scw_Get_StatusBar, write=Set_StatusBar};
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline WideString _scw_Get_StatusText() { WideString r; HRESULT hr = Get_StatusText(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline WideString _scw_Get_StatusText() { WideString r; HRESULT hr = Get_StatusText(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property WideString StatusText = {read=_scw_Get_StatusText, write=Set_StatusText};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline int _scw_Get_ToolBar() { int r; HRESULT hr = Get_ToolBar(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property int ToolBar = {read=_scw_Get_ToolBar, write=Set_ToolBar};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline Word _scw_Get_MenuBar() { Word r; HRESULT hr = Get_MenuBar(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property Word MenuBar = {read=_scw_Get_MenuBar, write=Set_MenuBar};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline Word _scw_Get_FullScreen() { Word r; HRESULT hr = Get_FullScreen(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property Word FullScreen = {read=_scw_Get_FullScreen, write=Set_FullScreen};
 };
 
-__interface INTERFACE_UUID("{D30C1661-CDAF-11D0-8A3E-00C04FC9E26E}") IWebBrowser2  : public IWebBrowserApp 
+__dispinterface IWebBrowserAppDisp;
+typedef System::DelphiInterface<IWebBrowserAppDisp> _di_IWebBrowserAppDisp;
+__dispinterface INTERFACE_UUID("{0002DF05-0000-0000-C000-000000000046}") IWebBrowserAppDisp  : public IDispatch 
+{
 	
+};
+
+__interface INTERFACE_UUID("{D30C1661-CDAF-11D0-8A3E-00C04FC9E26E}") IWebBrowser2  : public IWebBrowserApp 
 {
 	
 public:
-	virtual HRESULT __safecall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName
-		, OleVariant &PostData, OleVariant &Headers) = 0 ;
-	virtual HRESULT __safecall QueryStatusWB(Activex::TOleEnum cmdID, Activex::TOleEnum &QueryStatusWB_result
-		) = 0 ;
-	virtual HRESULT __safecall ExecWB(Activex::TOleEnum cmdID, Activex::TOleEnum cmdexecopt, OleVariant 
-		&pvaIn, OleVariant &pvaOut) = 0 ;
-	virtual HRESULT __safecall ShowBrowserBar(OleVariant &pvaClsid, OleVariant &pvarShow, OleVariant &pvarSize
-		) = 0 ;
+	virtual HRESULT __safecall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData, OleVariant &Headers) = 0 ;
+	virtual HRESULT __safecall QueryStatusWB(Activex::TOleEnum cmdID, Activex::TOleEnum &QueryStatusWB_result) = 0 ;
+	virtual HRESULT __safecall ExecWB(Activex::TOleEnum cmdID, Activex::TOleEnum cmdexecopt, OleVariant &pvaIn, OleVariant &pvaOut) = 0 ;
+	virtual HRESULT __safecall ShowBrowserBar(OleVariant &pvaClsid, OleVariant &pvarShow, OleVariant &pvarSize) = 0 ;
 	virtual HRESULT __safecall Get_ReadyState(Activex::TOleEnum &Get_ReadyState_result) = 0 ;
 	virtual HRESULT __safecall Get_Offline(Word &Get_Offline_result) = 0 ;
 	virtual HRESULT __safecall Set_Offline(Word pbOffline) = 0 ;
@@ -257,89 +284,89 @@ public:
 	virtual HRESULT __safecall Get_Resizable(Word &Get_Resizable_result) = 0 ;
 	virtual HRESULT __safecall Set_Resizable(Word Value) = 0 ;
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline Activex::TOleEnum _scw_Get_ReadyState() { Activex::TOleEnum r; HRESULT hr = Get_ReadyState(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline Activex::TOleEnum _scw_Get_ReadyState() { Activex::TOleEnum r; HRESULT hr = Get_ReadyState(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property Activex::TOleEnum ReadyState = {read=_scw_Get_ReadyState};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline Word _scw_Get_Offline() { Word r; HRESULT hr = Get_Offline(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property Word Offline = {read=_scw_Get_Offline, write=Set_Offline};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline Word _scw_Get_Silent() { Word r; HRESULT hr = Get_Silent(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property Word Silent = {read=_scw_Get_Silent, write=Set_Silent};
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline Word _scw_Get_RegisterAsBrowser() { Word r; HRESULT hr = Get_RegisterAsBrowser(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline Word _scw_Get_RegisterAsBrowser() { Word r; HRESULT hr = Get_RegisterAsBrowser(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property Word RegisterAsBrowser = {read=_scw_Get_RegisterAsBrowser, write=Set_RegisterAsBrowser};
-		
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline Word _scw_Get_RegisterAsDropTarget() { Word r; HRESULT hr = Get_RegisterAsDropTarget(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline Word _scw_Get_RegisterAsDropTarget() { Word r; HRESULT hr = Get_RegisterAsDropTarget(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
-	__property Word RegisterAsDropTarget = {read=_scw_Get_RegisterAsDropTarget, write=Set_RegisterAsDropTarget
-		};
+	__property Word RegisterAsDropTarget = {read=_scw_Get_RegisterAsDropTarget, write=Set_RegisterAsDropTarget};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline Word _scw_Get_TheaterMode() { Word r; HRESULT hr = Get_TheaterMode(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property Word TheaterMode = {read=_scw_Get_TheaterMode, write=Set_TheaterMode};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline Word _scw_Get_AddressBar() { Word r; HRESULT hr = Get_AddressBar(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property Word AddressBar = {read=_scw_Get_AddressBar, write=Set_AddressBar};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline Word _scw_Get_Resizable() { Word r; HRESULT hr = Get_Resizable(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property Word Resizable = {read=_scw_Get_Resizable, write=Set_Resizable};
 };
-typedef IWebBrowser2 WebBrowser;
 
-typedef IWebBrowser2 InternetExplorer;
-;
-
-typedef IWebBrowser2 ShellBrowserWindow;
-;
-
-__interface IShellWindows;
-typedef System::DelphiInterface<IShellWindows> _di_IShellWindows;
-__interface INTERFACE_UUID("{85CB6900-4D95-11CF-960C-0080C7F4EE85}") IShellWindows  : public IDispatch 
+__dispinterface IWebBrowser2Disp;
+typedef System::DelphiInterface<IWebBrowser2Disp> _di_IWebBrowser2Disp;
+__dispinterface INTERFACE_UUID("{D30C1661-CDAF-11D0-8A3E-00C04FC9E26E}") IWebBrowser2Disp  : public IDispatch 
+{
 	
+};
+
+__dispinterface DWebBrowserEvents2;
+typedef System::DelphiInterface<DWebBrowserEvents2> _di_DWebBrowserEvents2;
+__dispinterface INTERFACE_UUID("{34A715A0-6587-11D0-924A-0020AFC7AC4D}") DWebBrowserEvents2  : public IDispatch 
+{
+	
+};
+
+__dispinterface DShellWindowsEvents;
+typedef System::DelphiInterface<DShellWindowsEvents> _di_DShellWindowsEvents;
+__dispinterface INTERFACE_UUID("{FE4106E0-399A-11D0-A48C-00A0C90A8F39}") DShellWindowsEvents  : public IDispatch 
+{
+	
+};
+
+__interface INTERFACE_UUID("{85CB6900-4D95-11CF-960C-0080C7F4EE85}") IShellWindows  : public IDispatch 
 {
 	
 public:
 	virtual HRESULT __safecall Get_Count(int &Get_Count_result) = 0 ;
 	virtual HRESULT __safecall Item(const OleVariant index, _di_IDispatch &Item_result) = 0 ;
-	virtual HRESULT __safecall _NewEnum(_di_IUnknown &_NewEnum_result) = 0 ;
-	virtual HRESULT __safecall Register(const _di_IDispatch pid, int HWND, int swClass, /* out */ int &
-		plCookie) = 0 ;
-	virtual HRESULT __safecall RegisterPending(int lThreadId, OleVariant &pvarloc, OleVariant &pvarlocRoot
-		, int swClass, /* out */ int &plCookie) = 0 ;
+	virtual HRESULT __safecall _NewEnum(System::_di_IInterface &_NewEnum_result) = 0 ;
+	virtual HRESULT __safecall Register(const _di_IDispatch pid, int HWND, int swClass, /* out */ int &plCookie) = 0 ;
+	virtual HRESULT __safecall RegisterPending(int lThreadId, OleVariant &pvarloc, OleVariant &pvarlocRoot, int swClass, /* out */ int &plCookie) = 0 ;
 	virtual HRESULT __safecall Revoke(int lCookie) = 0 ;
 	virtual HRESULT __safecall OnNavigate(int lCookie, OleVariant &pvarloc) = 0 ;
 	virtual HRESULT __safecall OnActivated(int lCookie, Word fActive) = 0 ;
-	virtual HRESULT __safecall FindWindow(OleVariant &pvarloc, OleVariant &pvarlocRoot, int swClass, /* out */ 
-		int &pHWND, int swfwOptions, _di_IDispatch &FindWindow_result) = 0 ;
-	virtual HRESULT __safecall OnCreated(int lCookie, const _di_IUnknown punk) = 0 ;
+	virtual HRESULT __safecall FindWindow(OleVariant &pvarloc, OleVariant &pvarlocRoot, int swClass, /* out */ int &pHWND, int swfwOptions, _di_IDispatch &FindWindow_result) = 0 ;
+	virtual HRESULT __safecall OnCreated(int lCookie, const System::_di_IInterface punk) = 0 ;
 	virtual HRESULT __safecall ProcessAttachDetach(Word fAttach) = 0 ;
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline int _scw_Get_Count() { int r; HRESULT hr = Get_Count(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property int Count = {read=_scw_Get_Count};
 };
-typedef IShellWindows ShellWindows;
 
-__interface IShellUIHelper;
-typedef System::DelphiInterface<IShellUIHelper> _di_IShellUIHelper;
-__interface INTERFACE_UUID("{729FE2F8-1EA8-11D1-8F85-00C04FC2FBE1}") IShellUIHelper  : public IDispatch 
+__dispinterface IShellWindowsDisp;
+typedef System::DelphiInterface<IShellWindowsDisp> _di_IShellWindowsDisp;
+__dispinterface INTERFACE_UUID("{85CB6900-4D95-11CF-960C-0080C7F4EE85}") IShellWindowsDisp  : public IDispatch 
+{
 	
+};
+
+__interface INTERFACE_UUID("{729FE2F8-1EA8-11D1-8F85-00C04FC2FBE1}") IShellUIHelper  : public IDispatch 
 {
 	
 public:
@@ -348,26 +375,31 @@ public:
 	virtual HRESULT __safecall RefreshOfflineDesktop(void) = 0 ;
 	virtual HRESULT __safecall AddFavorite(const WideString URL, OleVariant &Title) = 0 ;
 	virtual HRESULT __safecall AddChannel(const WideString URL) = 0 ;
-	virtual HRESULT __safecall AddDesktopComponent(const WideString URL, const WideString Type_, OleVariant 
-		&Left, OleVariant &Top, OleVariant &Width, OleVariant &Height) = 0 ;
+	virtual HRESULT __safecall AddDesktopComponent(const WideString URL, const WideString Type_, OleVariant &Left, OleVariant &Top, OleVariant &Width, OleVariant &Height) = 0 ;
 	virtual HRESULT __safecall IsSubscribed(const WideString URL, Word &IsSubscribed_result) = 0 ;
-	virtual HRESULT __safecall NavigateAndFind(const WideString URL, const WideString strQuery, OleVariant 
-		&varTargetFrame) = 0 ;
-	virtual HRESULT __safecall ImportExportFavorites(Word fImport, const WideString strImpExpPath) = 0 
-		;
+	virtual HRESULT __safecall NavigateAndFind(const WideString URL, const WideString strQuery, OleVariant &varTargetFrame) = 0 ;
+	virtual HRESULT __safecall ImportExportFavorites(Word fImport, const WideString strImpExpPath) = 0 ;
 	virtual HRESULT __safecall AutoCompleteSaveForm(OleVariant &Form) = 0 ;
-	virtual HRESULT __safecall AutoScan(const WideString strSearch, const WideString strFailureUrl, OleVariant 
-		&pvarTargetFrame) = 0 ;
+	virtual HRESULT __safecall AutoScan(const WideString strSearch, const WideString strFailureUrl, OleVariant &pvarTargetFrame) = 0 ;
 	virtual HRESULT __safecall AutoCompleteAttach(OleVariant &Reserved) = 0 ;
-	virtual HRESULT __safecall ShowBrowserUI(const WideString bstrName, OleVariant &pvarIn, OleVariant &ShowBrowserUI_result
-		) = 0 ;
+	virtual HRESULT __safecall ShowBrowserUI(const WideString bstrName, OleVariant &pvarIn, OleVariant &ShowBrowserUI_result) = 0 ;
 };
-typedef IShellUIHelper ShellUIHelper;
 
-__interface IShellFavoritesNameSpace;
-typedef System::DelphiInterface<IShellFavoritesNameSpace> _di_IShellFavoritesNameSpace;
-__interface INTERFACE_UUID("{55136804-B2DE-11D1-B9F2-00A0C98BC547}") IShellFavoritesNameSpace  : public IDispatch 
+__dispinterface IShellUIHelperDisp;
+typedef System::DelphiInterface<IShellUIHelperDisp> _di_IShellUIHelperDisp;
+__dispinterface INTERFACE_UUID("{729FE2F8-1EA8-11D1-8F85-00C04FC2FBE1}") IShellUIHelperDisp  : public IDispatch 
+{
 	
+};
+
+__dispinterface _ShellFavoritesNameSpaceEvents;
+typedef System::DelphiInterface<_ShellFavoritesNameSpaceEvents> _di__ShellFavoritesNameSpaceEvents;
+__dispinterface INTERFACE_UUID("{55136806-B2DE-11D1-B9F2-00A0C98BC547}") _ShellFavoritesNameSpaceEvents  : public IDispatch 
+{
+	
+};
+
+__interface INTERFACE_UUID("{55136804-B2DE-11D1-B9F2-00A0C98BC547}") IShellFavoritesNameSpace  : public IDispatch 
 {
 	
 public:
@@ -381,23 +413,23 @@ public:
 	virtual HRESULT __safecall InvokeContextMenuCommand(const WideString strCommand) = 0 ;
 	virtual HRESULT __safecall MoveSelectionTo(void) = 0 ;
 	virtual HRESULT __safecall Get_FOfflinePackInstalled(Word &Get_FOfflinePackInstalled_result) = 0 ;
-	virtual HRESULT __safecall CreateSubscriptionForSelection(Word &CreateSubscriptionForSelection_result
-		) = 0 ;
-	virtual HRESULT __safecall DeleteSubscriptionForSelection(Word &DeleteSubscriptionForSelection_result
-		) = 0 ;
+	virtual HRESULT __safecall CreateSubscriptionForSelection(Word &CreateSubscriptionForSelection_result) = 0 ;
+	virtual HRESULT __safecall DeleteSubscriptionForSelection(Word &DeleteSubscriptionForSelection_result) = 0 ;
 	virtual HRESULT __safecall SetRoot(const WideString bstrFullPath) = 0 ;
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline Word _scw_Get_FOfflinePackInstalled() { Word r; HRESULT hr = Get_FOfflinePackInstalled(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline Word _scw_Get_FOfflinePackInstalled() { Word r; HRESULT hr = Get_FOfflinePackInstalled(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property Word FOfflinePackInstalled = {read=_scw_Get_FOfflinePackInstalled};
 };
-typedef IShellFavoritesNameSpace ShellFavoritesNameSpace;
 
-__interface IScriptErrorList;
-typedef System::DelphiInterface<IScriptErrorList> _di_IScriptErrorList;
-__interface INTERFACE_UUID("{F3470F24-15FD-11D2-BB2E-00805FF7EFCA}") IScriptErrorList  : public IDispatch 
+__dispinterface IShellFavoritesNameSpaceDisp;
+typedef System::DelphiInterface<IShellFavoritesNameSpaceDisp> _di_IShellFavoritesNameSpaceDisp;
+__dispinterface INTERFACE_UUID("{55136804-B2DE-11D1-B9F2-00A0C98BC547}") IShellFavoritesNameSpaceDisp  : public IDispatch 
+{
 	
+};
+
+__interface INTERFACE_UUID("{F3470F24-15FD-11D2-BB2E-00805FF7EFCA}") IScriptErrorList  : public IDispatch 
 {
 	
 public:
@@ -416,175 +448,10 @@ public:
 	virtual HRESULT __safecall getPerErrorDisplay(int &getPerErrorDisplay_result) = 0 ;
 	virtual HRESULT __safecall setPerErrorDisplay(int fPerErrorDisplay) = 0 ;
 };
-typedef IScriptErrorList CScriptErrorList;
-
-__interface ISearchAssistantOC;
-typedef System::DelphiInterface<ISearchAssistantOC> _di_ISearchAssistantOC;
-__interface ISearches;
-typedef System::DelphiInterface<ISearches> _di_ISearches;
-__interface INTERFACE_UUID("{72423E8F-8011-11D2-BE79-00A0C9A83DA1}") ISearchAssistantOC  : public IDispatch 
-	
-{
-	
-public:
-	virtual HRESULT __safecall AddNextMenuItem(const WideString bstrText, int idItem) = 0 ;
-	virtual HRESULT __safecall SetDefaultSearchUrl(const WideString bstrUrl) = 0 ;
-	virtual HRESULT __safecall NavigateToDefaultSearch(void) = 0 ;
-	virtual HRESULT __safecall IsRestricted(const WideString bstrGuid, Word &IsRestricted_result) = 0 ;
-		
-	virtual HRESULT __safecall Get_ShellFeaturesEnabled(Word &Get_ShellFeaturesEnabled_result) = 0 ;
-	virtual HRESULT __safecall Get_SearchAssistantDefault(Word &Get_SearchAssistantDefault_result) = 0 
-		;
-	virtual HRESULT __safecall Get_Searches(_di_ISearches &Get_Searches_result) = 0 ;
-	virtual HRESULT __safecall Get_InWebFolder(Word &Get_InWebFolder_result) = 0 ;
-	virtual HRESULT __safecall PutProperty(Word bPerLocale, const WideString bstrName, const WideString 
-		bstrValue) = 0 ;
-	virtual HRESULT __safecall GetProperty(Word bPerLocale, const WideString bstrName, WideString &GetProperty_result
-		) = 0 ;
-	virtual HRESULT __safecall Set_EventHandled(Word Param1) = 0 ;
-	virtual HRESULT __safecall ResetNextMenu(void) = 0 ;
-	virtual HRESULT __safecall FindOnWeb(void) = 0 ;
-	virtual HRESULT __safecall FindFilesOrFolders(void) = 0 ;
-	virtual HRESULT __safecall FindComputer(void) = 0 ;
-	virtual HRESULT __safecall FindPrinter(void) = 0 ;
-	virtual HRESULT __safecall FindPeople(void) = 0 ;
-	virtual HRESULT __safecall GetSearchAssistantURL(Word bSubstitute, Word bCustomize, WideString &GetSearchAssistantURL_result
-		) = 0 ;
-	virtual HRESULT __safecall NotifySearchSettingsChanged(void) = 0 ;
-	virtual HRESULT __safecall Set_ASProvider(const WideString pProvider) = 0 ;
-	virtual HRESULT __safecall Get_ASProvider(WideString &Get_ASProvider_result) = 0 ;
-	virtual HRESULT __safecall Set_ASSetting(int pSetting) = 0 ;
-	virtual HRESULT __safecall Get_ASSetting(int &Get_ASSetting_result) = 0 ;
-	virtual HRESULT __safecall NETDetectNextNavigate(void) = 0 ;
-	virtual HRESULT __safecall PutFindText(const WideString FindText) = 0 ;
-	virtual HRESULT __safecall Get_Version(int &Get_Version_result) = 0 ;
-	virtual HRESULT __safecall EncodeString(const WideString bstrValue, const WideString bstrCharSet, Word 
-		bUseUTF8, WideString &EncodeString_result) = 0 ;
-	#pragma option push -w-inl
-	/* safecall wrapper */ inline Word _scw_Get_ShellFeaturesEnabled() { Word r; HRESULT hr = Get_ShellFeaturesEnabled(
-		r); System::CheckSafecallResult(hr); return r; }
-	#pragma option pop
-	__property Word ShellFeaturesEnabled = {read=_scw_Get_ShellFeaturesEnabled};
-	#pragma option push -w-inl
-	/* safecall wrapper */ inline Word _scw_Get_SearchAssistantDefault() { Word r; HRESULT hr = Get_SearchAssistantDefault(
-		r); System::CheckSafecallResult(hr); return r; }
-	#pragma option pop
-	__property Word SearchAssistantDefault = {read=_scw_Get_SearchAssistantDefault};
-	#pragma option push -w-inl
-	/* safecall wrapper */ inline _di_ISearches _scw_Get_Searches() { _di_ISearches r; HRESULT hr = Get_Searches(
-		r); System::CheckSafecallResult(hr); return r; }
-	#pragma option pop
-	__property _di_ISearches Searches = {read=_scw_Get_Searches};
-	#pragma option push -w-inl
-	/* safecall wrapper */ inline Word _scw_Get_InWebFolder() { Word r; HRESULT hr = Get_InWebFolder(r); System::CheckSafecallResult(hr); return r; }
-		
-	#pragma option pop
-	__property Word InWebFolder = {read=_scw_Get_InWebFolder};
-	__property Word EventHandled = {write=Set_EventHandled};
-	#pragma option push -w-inl
-	/* safecall wrapper */ inline WideString _scw_Get_ASProvider() { WideString r; HRESULT hr = Get_ASProvider(
-		r); System::CheckSafecallResult(hr); return r; }
-	#pragma option pop
-	__property WideString ASProvider = {read=_scw_Get_ASProvider, write=Set_ASProvider};
-	#pragma option push -w-inl
-	/* safecall wrapper */ inline int _scw_Get_ASSetting() { int r; HRESULT hr = Get_ASSetting(r); System::CheckSafecallResult(hr); return r; }
-		
-	#pragma option pop
-	__property int ASSetting = {read=_scw_Get_ASSetting, write=Set_ASSetting};
-	#pragma option push -w-inl
-	/* safecall wrapper */ inline int _scw_Get_Version() { int r; HRESULT hr = Get_Version(r); System::CheckSafecallResult(hr); return r; }
-		
-	#pragma option pop
-	__property int Version = {read=_scw_Get_Version};
-};
-typedef ISearchAssistantOC SearchAssistantOC;
-
-typedef OleVariant *POleVariant1;
-
-__dispinterface IWebBrowserDisp;
-typedef System::DelphiInterface<IWebBrowserDisp> _di_IWebBrowserDisp;
-__dispinterface INTERFACE_UUID("{EAB22AC1-30C1-11CF-A7EB-0000C05BAE0B}") IWebBrowserDisp  : public IDispatch 
-	
-{
-	
-};
-
-__dispinterface DWebBrowserEvents;
-typedef System::DelphiInterface<DWebBrowserEvents> _di_DWebBrowserEvents;
-__dispinterface INTERFACE_UUID("{EAB22AC2-30C1-11CF-A7EB-0000C05BAE0B}") DWebBrowserEvents  : public IDispatch 
-	
-{
-	
-};
-
-__dispinterface IWebBrowserAppDisp;
-typedef System::DelphiInterface<IWebBrowserAppDisp> _di_IWebBrowserAppDisp;
-__dispinterface INTERFACE_UUID("{0002DF05-0000-0000-C000-000000000046}") IWebBrowserAppDisp  : public IDispatch 
-	
-{
-	
-};
-
-__dispinterface IWebBrowser2Disp;
-typedef System::DelphiInterface<IWebBrowser2Disp> _di_IWebBrowser2Disp;
-__dispinterface INTERFACE_UUID("{D30C1661-CDAF-11D0-8A3E-00C04FC9E26E}") IWebBrowser2Disp  : public IDispatch 
-	
-{
-	
-};
-
-__dispinterface DWebBrowserEvents2;
-typedef System::DelphiInterface<DWebBrowserEvents2> _di_DWebBrowserEvents2;
-__dispinterface INTERFACE_UUID("{34A715A0-6587-11D0-924A-0020AFC7AC4D}") DWebBrowserEvents2  : public IDispatch 
-	
-{
-	
-};
-
-__dispinterface DShellWindowsEvents;
-typedef System::DelphiInterface<DShellWindowsEvents> _di_DShellWindowsEvents;
-__dispinterface INTERFACE_UUID("{FE4106E0-399A-11D0-A48C-00A0C90A8F39}") DShellWindowsEvents  : public IDispatch 
-	
-{
-	
-};
-
-__dispinterface IShellWindowsDisp;
-typedef System::DelphiInterface<IShellWindowsDisp> _di_IShellWindowsDisp;
-__dispinterface INTERFACE_UUID("{85CB6900-4D95-11CF-960C-0080C7F4EE85}") IShellWindowsDisp  : public IDispatch 
-	
-{
-	
-};
-
-__dispinterface IShellUIHelperDisp;
-typedef System::DelphiInterface<IShellUIHelperDisp> _di_IShellUIHelperDisp;
-__dispinterface INTERFACE_UUID("{729FE2F8-1EA8-11D1-8F85-00C04FC2FBE1}") IShellUIHelperDisp  : public IDispatch 
-	
-{
-	
-};
-
-__dispinterface _ShellFavoritesNameSpaceEvents;
-typedef System::DelphiInterface<_ShellFavoritesNameSpaceEvents> _di__ShellFavoritesNameSpaceEvents;
-__dispinterface INTERFACE_UUID("{55136806-B2DE-11D1-B9F2-00A0C98BC547}") _ShellFavoritesNameSpaceEvents 
-	 : public IDispatch 
-{
-	
-};
-
-__dispinterface IShellFavoritesNameSpaceDisp;
-typedef System::DelphiInterface<IShellFavoritesNameSpaceDisp> _di_IShellFavoritesNameSpaceDisp;
-__dispinterface INTERFACE_UUID("{55136804-B2DE-11D1-B9F2-00A0C98BC547}") IShellFavoritesNameSpaceDisp 
-	 : public IDispatch 
-{
-	
-};
 
 __dispinterface IScriptErrorListDisp;
 typedef System::DelphiInterface<IScriptErrorListDisp> _di_IScriptErrorListDisp;
 __dispinterface INTERFACE_UUID("{F3470F24-15FD-11D2-BB2E-00805FF7EFCA}") IScriptErrorListDisp  : public IDispatch 
-	
 {
 	
 };
@@ -600,17 +467,14 @@ public:
 	virtual HRESULT __safecall Get_URL(WideString &Get_URL_result) = 0 ;
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline WideString _scw_Get_Title() { WideString r; HRESULT hr = Get_Title(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property WideString Title = {read=_scw_Get_Title};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline WideString _scw_Get_Id() { WideString r; HRESULT hr = Get_Id(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property WideString Id = {read=_scw_Get_Id};
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline WideString _scw_Get_URL() { WideString r; HRESULT hr = Get_URL(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property WideString URL = {read=_scw_Get_URL};
 };
@@ -618,11 +482,12 @@ public:
 __dispinterface ISearchDisp;
 typedef System::DelphiInterface<ISearchDisp> _di_ISearchDisp;
 __dispinterface INTERFACE_UUID("{BA9239A4-3DD5-11D2-BF8B-00C04FB93661}") ISearchDisp  : public IDispatch 
-	
 {
 	
 };
 
+__interface ISearches;
+typedef System::DelphiInterface<ISearches> _di_ISearches;
 __interface INTERFACE_UUID("{47C922A2-3DD5-11D2-BF8B-00C04FB93661}") ISearches  : public IDispatch 
 {
 	
@@ -630,15 +495,13 @@ public:
 	virtual HRESULT __safecall Get_Count(int &Get_Count_result) = 0 ;
 	virtual HRESULT __safecall Get_Default(WideString &Get_Default_result) = 0 ;
 	virtual HRESULT __safecall Item(const OleVariant index, _di_ISearch &Item_result) = 0 ;
-	virtual HRESULT __safecall _NewEnum(_di_IUnknown &_NewEnum_result) = 0 ;
+	virtual HRESULT __safecall _NewEnum(System::_di_IInterface &_NewEnum_result) = 0 ;
 	#pragma option push -w-inl
 	/* safecall wrapper */ inline int _scw_Get_Count() { int r; HRESULT hr = Get_Count(r); System::CheckSafecallResult(hr); return r; }
-		
 	#pragma option pop
 	__property int Count = {read=_scw_Get_Count};
 	#pragma option push -w-inl
-	/* safecall wrapper */ inline WideString _scw_Get_Default() { WideString r; HRESULT hr = Get_Default(
-		r); System::CheckSafecallResult(hr); return r; }
+	/* safecall wrapper */ inline WideString _scw_Get_Default() { WideString r; HRESULT hr = Get_Default(r); System::CheckSafecallResult(hr); return r; }
 	#pragma option pop
 	__property WideString Default = {read=_scw_Get_Default};
 };
@@ -646,15 +509,75 @@ public:
 __dispinterface ISearchesDisp;
 typedef System::DelphiInterface<ISearchesDisp> _di_ISearchesDisp;
 __dispinterface INTERFACE_UUID("{47C922A2-3DD5-11D2-BF8B-00C04FB93661}") ISearchesDisp  : public IDispatch 
-	
 {
 	
+};
+
+__interface INTERFACE_UUID("{72423E8F-8011-11D2-BE79-00A0C9A83DA1}") ISearchAssistantOC  : public IDispatch 
+{
+	
+public:
+	virtual HRESULT __safecall AddNextMenuItem(const WideString bstrText, int idItem) = 0 ;
+	virtual HRESULT __safecall SetDefaultSearchUrl(const WideString bstrUrl) = 0 ;
+	virtual HRESULT __safecall NavigateToDefaultSearch(void) = 0 ;
+	virtual HRESULT __safecall IsRestricted(const WideString bstrGuid, Word &IsRestricted_result) = 0 ;
+	virtual HRESULT __safecall Get_ShellFeaturesEnabled(Word &Get_ShellFeaturesEnabled_result) = 0 ;
+	virtual HRESULT __safecall Get_SearchAssistantDefault(Word &Get_SearchAssistantDefault_result) = 0 ;
+	virtual HRESULT __safecall Get_Searches(_di_ISearches &Get_Searches_result) = 0 ;
+	virtual HRESULT __safecall Get_InWebFolder(Word &Get_InWebFolder_result) = 0 ;
+	virtual HRESULT __safecall PutProperty(Word bPerLocale, const WideString bstrName, const WideString bstrValue) = 0 ;
+	virtual HRESULT __safecall GetProperty(Word bPerLocale, const WideString bstrName, WideString &GetProperty_result) = 0 ;
+	virtual HRESULT __safecall Set_EventHandled(Word Param1) = 0 ;
+	virtual HRESULT __safecall ResetNextMenu(void) = 0 ;
+	virtual HRESULT __safecall FindOnWeb(void) = 0 ;
+	virtual HRESULT __safecall FindFilesOrFolders(void) = 0 ;
+	virtual HRESULT __safecall FindComputer(void) = 0 ;
+	virtual HRESULT __safecall FindPrinter(void) = 0 ;
+	virtual HRESULT __safecall FindPeople(void) = 0 ;
+	virtual HRESULT __safecall GetSearchAssistantURL(Word bSubstitute, Word bCustomize, WideString &GetSearchAssistantURL_result) = 0 ;
+	virtual HRESULT __safecall NotifySearchSettingsChanged(void) = 0 ;
+	virtual HRESULT __safecall Set_ASProvider(const WideString pProvider) = 0 ;
+	virtual HRESULT __safecall Get_ASProvider(WideString &Get_ASProvider_result) = 0 ;
+	virtual HRESULT __safecall Set_ASSetting(int pSetting) = 0 ;
+	virtual HRESULT __safecall Get_ASSetting(int &Get_ASSetting_result) = 0 ;
+	virtual HRESULT __safecall NETDetectNextNavigate(void) = 0 ;
+	virtual HRESULT __safecall PutFindText(const WideString FindText) = 0 ;
+	virtual HRESULT __safecall Get_Version(int &Get_Version_result) = 0 ;
+	virtual HRESULT __safecall EncodeString(const WideString bstrValue, const WideString bstrCharSet, Word bUseUTF8, WideString &EncodeString_result) = 0 ;
+	#pragma option push -w-inl
+	/* safecall wrapper */ inline Word _scw_Get_ShellFeaturesEnabled() { Word r; HRESULT hr = Get_ShellFeaturesEnabled(r); System::CheckSafecallResult(hr); return r; }
+	#pragma option pop
+	__property Word ShellFeaturesEnabled = {read=_scw_Get_ShellFeaturesEnabled};
+	#pragma option push -w-inl
+	/* safecall wrapper */ inline Word _scw_Get_SearchAssistantDefault() { Word r; HRESULT hr = Get_SearchAssistantDefault(r); System::CheckSafecallResult(hr); return r; }
+	#pragma option pop
+	__property Word SearchAssistantDefault = {read=_scw_Get_SearchAssistantDefault};
+	#pragma option push -w-inl
+	/* safecall wrapper */ inline _di_ISearches _scw_Get_Searches() { _di_ISearches r; HRESULT hr = Get_Searches(r); System::CheckSafecallResult(hr); return r; }
+	#pragma option pop
+	__property _di_ISearches Searches = {read=_scw_Get_Searches};
+	#pragma option push -w-inl
+	/* safecall wrapper */ inline Word _scw_Get_InWebFolder() { Word r; HRESULT hr = Get_InWebFolder(r); System::CheckSafecallResult(hr); return r; }
+	#pragma option pop
+	__property Word InWebFolder = {read=_scw_Get_InWebFolder};
+	__property Word EventHandled = {write=Set_EventHandled};
+	#pragma option push -w-inl
+	/* safecall wrapper */ inline WideString _scw_Get_ASProvider() { WideString r; HRESULT hr = Get_ASProvider(r); System::CheckSafecallResult(hr); return r; }
+	#pragma option pop
+	__property WideString ASProvider = {read=_scw_Get_ASProvider, write=Set_ASProvider};
+	#pragma option push -w-inl
+	/* safecall wrapper */ inline int _scw_Get_ASSetting() { int r; HRESULT hr = Get_ASSetting(r); System::CheckSafecallResult(hr); return r; }
+	#pragma option pop
+	__property int ASSetting = {read=_scw_Get_ASSetting, write=Set_ASSetting};
+	#pragma option push -w-inl
+	/* safecall wrapper */ inline int _scw_Get_Version() { int r; HRESULT hr = Get_Version(r); System::CheckSafecallResult(hr); return r; }
+	#pragma option pop
+	__property int Version = {read=_scw_Get_Version};
 };
 
 __dispinterface ISearchAssistantOCDisp;
 typedef System::DelphiInterface<ISearchAssistantOCDisp> _di_ISearchAssistantOCDisp;
 __dispinterface INTERFACE_UUID("{72423E8F-8011-11D2-BE79-00A0C9A83DA1}") ISearchAssistantOCDisp  : public IDispatch 
-	
 {
 	
 };
@@ -662,49 +585,33 @@ __dispinterface INTERFACE_UUID("{72423E8F-8011-11D2-BE79-00A0C9A83DA1}") ISearch
 __dispinterface _SearchAssistantEvents;
 typedef System::DelphiInterface<_SearchAssistantEvents> _di__SearchAssistantEvents;
 __dispinterface INTERFACE_UUID("{1611FDDA-445B-11D2-85DE-00C04FA35C89}") _SearchAssistantEvents  : public IDispatch 
-	
 {
 	
 };
 
-typedef void __fastcall (__closure *TWebBrowser_V1BeforeNavigate)(System::TObject* Sender, const WideString 
-	URL, int Flags, const WideString TargetFrameName, OleVariant &PostData, const WideString Headers, Word 
-	&Cancel);
+typedef void __fastcall (__closure *TWebBrowser_V1BeforeNavigate)(System::TObject* Sender, const WideString URL, int Flags, const WideString TargetFrameName, OleVariant &PostData, const WideString Headers, Word &Cancel);
 
-typedef void __fastcall (__closure *TWebBrowser_V1NavigateComplete)(System::TObject* Sender, const WideString 
-	URL);
+typedef void __fastcall (__closure *TWebBrowser_V1NavigateComplete)(System::TObject* Sender, const WideString URL);
 
-typedef void __fastcall (__closure *TWebBrowser_V1StatusTextChange)(System::TObject* Sender, const WideString 
-	Text);
+typedef void __fastcall (__closure *TWebBrowser_V1StatusTextChange)(System::TObject* Sender, const WideString Text);
 
-typedef void __fastcall (__closure *TWebBrowser_V1ProgressChange)(System::TObject* Sender, int Progress
-	, int ProgressMax);
+typedef void __fastcall (__closure *TWebBrowser_V1ProgressChange)(System::TObject* Sender, int Progress, int ProgressMax);
 
-typedef void __fastcall (__closure *TWebBrowser_V1CommandStateChange)(System::TObject* Sender, int Command
-	, Word Enable);
+typedef void __fastcall (__closure *TWebBrowser_V1CommandStateChange)(System::TObject* Sender, int Command, Word Enable);
 
-typedef void __fastcall (__closure *TWebBrowser_V1NewWindow)(System::TObject* Sender, const WideString 
-	URL, int Flags, const WideString TargetFrameName, OleVariant &PostData, const WideString Headers, Word 
-	&Processed);
+typedef void __fastcall (__closure *TWebBrowser_V1NewWindow)(System::TObject* Sender, const WideString URL, int Flags, const WideString TargetFrameName, OleVariant &PostData, const WideString Headers, Word &Processed);
 
-typedef void __fastcall (__closure *TWebBrowser_V1TitleChange)(System::TObject* Sender, const WideString 
-	Text);
+typedef void __fastcall (__closure *TWebBrowser_V1TitleChange)(System::TObject* Sender, const WideString Text);
 
-typedef void __fastcall (__closure *TWebBrowser_V1FrameBeforeNavigate)(System::TObject* Sender, const 
-	WideString URL, int Flags, const WideString TargetFrameName, OleVariant &PostData, const WideString 
-	Headers, Word &Cancel);
+typedef void __fastcall (__closure *TWebBrowser_V1FrameBeforeNavigate)(System::TObject* Sender, const WideString URL, int Flags, const WideString TargetFrameName, OleVariant &PostData, const WideString Headers, Word &Cancel);
 
-typedef void __fastcall (__closure *TWebBrowser_V1FrameNavigateComplete)(System::TObject* Sender, const 
-	WideString URL);
+typedef void __fastcall (__closure *TWebBrowser_V1FrameNavigateComplete)(System::TObject* Sender, const WideString URL);
 
-typedef void __fastcall (__closure *TWebBrowser_V1FrameNewWindow)(System::TObject* Sender, const WideString 
-	URL, int Flags, const WideString TargetFrameName, OleVariant &PostData, const WideString Headers, Word 
-	&Processed);
+typedef void __fastcall (__closure *TWebBrowser_V1FrameNewWindow)(System::TObject* Sender, const WideString URL, int Flags, const WideString TargetFrameName, OleVariant &PostData, const WideString Headers, Word &Processed);
 
 typedef void __fastcall (__closure *TWebBrowser_V1Quit)(System::TObject* Sender, Word &Cancel);
 
-typedef void __fastcall (__closure *TWebBrowser_V1PropertyChange)(System::TObject* Sender, const WideString 
-	Property_);
+typedef void __fastcall (__closure *TWebBrowser_V1PropertyChange)(System::TObject* Sender, const WideString Property_);
 
 class DELPHICLASS TWebBrowser_V1;
 class PASCALIMPLEMENTATION TWebBrowser_V1 : public Olectrls::TOleControl 
@@ -747,12 +654,9 @@ public:
 	void __fastcall GoSearch(void);
 	void __fastcall Navigate(const WideString URL)/* overload */;
 	void __fastcall Navigate(const WideString URL, OleVariant &Flags)/* overload */;
-	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName)/* overload */
-		;
-	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant 
-		&PostData)/* overload */;
-	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant 
-		&PostData, OleVariant &Headers)/* overload */;
+	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName)/* overload */;
+	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData)/* overload */;
+	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData, OleVariant &Headers)/* overload */;
 	HIDESBASE void __fastcall Refresh(void);
 	void __fastcall Refresh2(void)/* overload */;
 	void __fastcall Refresh2(OleVariant &Level)/* overload */;
@@ -770,54 +674,41 @@ public:
 	__property Word Busy = {read=GetWordBoolProp, index=212, nodefault};
 	
 __published:
-	__property TabStop ;
-	__property Align ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property ParentShowHint ;
+	__property TabStop  = {default=1};
+	__property Align  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property Visible  = {default=1};
 	__property OnDragDrop ;
 	__property OnDragOver ;
 	__property OnEndDrag ;
 	__property OnEnter ;
 	__property OnExit ;
 	__property OnStartDrag ;
-	__property TWebBrowser_V1BeforeNavigate OnBeforeNavigate = {read=FOnBeforeNavigate, write=FOnBeforeNavigate
-		};
-	__property TWebBrowser_V1NavigateComplete OnNavigateComplete = {read=FOnNavigateComplete, write=FOnNavigateComplete
-		};
-	__property TWebBrowser_V1StatusTextChange OnStatusTextChange = {read=FOnStatusTextChange, write=FOnStatusTextChange
-		};
-	__property TWebBrowser_V1ProgressChange OnProgressChange = {read=FOnProgressChange, write=FOnProgressChange
-		};
-	__property Classes::TNotifyEvent OnDownloadComplete = {read=FOnDownloadComplete, write=FOnDownloadComplete
-		};
-	__property TWebBrowser_V1CommandStateChange OnCommandStateChange = {read=FOnCommandStateChange, write=
-		FOnCommandStateChange};
+	__property TWebBrowser_V1BeforeNavigate OnBeforeNavigate = {read=FOnBeforeNavigate, write=FOnBeforeNavigate};
+	__property TWebBrowser_V1NavigateComplete OnNavigateComplete = {read=FOnNavigateComplete, write=FOnNavigateComplete};
+	__property TWebBrowser_V1StatusTextChange OnStatusTextChange = {read=FOnStatusTextChange, write=FOnStatusTextChange};
+	__property TWebBrowser_V1ProgressChange OnProgressChange = {read=FOnProgressChange, write=FOnProgressChange};
+	__property Classes::TNotifyEvent OnDownloadComplete = {read=FOnDownloadComplete, write=FOnDownloadComplete};
+	__property TWebBrowser_V1CommandStateChange OnCommandStateChange = {read=FOnCommandStateChange, write=FOnCommandStateChange};
 	__property Classes::TNotifyEvent OnDownloadBegin = {read=FOnDownloadBegin, write=FOnDownloadBegin};
-		
 	__property TWebBrowser_V1NewWindow OnNewWindow = {read=FOnNewWindow, write=FOnNewWindow};
 	__property TWebBrowser_V1TitleChange OnTitleChange = {read=FOnTitleChange, write=FOnTitleChange};
-	__property TWebBrowser_V1FrameBeforeNavigate OnFrameBeforeNavigate = {read=FOnFrameBeforeNavigate, 
-		write=FOnFrameBeforeNavigate};
-	__property TWebBrowser_V1FrameNavigateComplete OnFrameNavigateComplete = {read=FOnFrameNavigateComplete
-		, write=FOnFrameNavigateComplete};
-	__property TWebBrowser_V1FrameNewWindow OnFrameNewWindow = {read=FOnFrameNewWindow, write=FOnFrameNewWindow
-		};
+	__property TWebBrowser_V1FrameBeforeNavigate OnFrameBeforeNavigate = {read=FOnFrameBeforeNavigate, write=FOnFrameBeforeNavigate};
+	__property TWebBrowser_V1FrameNavigateComplete OnFrameNavigateComplete = {read=FOnFrameNavigateComplete, write=FOnFrameNavigateComplete};
+	__property TWebBrowser_V1FrameNewWindow OnFrameNewWindow = {read=FOnFrameNewWindow, write=FOnFrameNewWindow};
 	__property TWebBrowser_V1Quit OnQuit = {read=FOnQuit, write=FOnQuit};
 	__property Classes::TNotifyEvent OnWindowMove = {read=FOnWindowMove, write=FOnWindowMove};
 	__property Classes::TNotifyEvent OnWindowResize = {read=FOnWindowResize, write=FOnWindowResize};
-	__property Classes::TNotifyEvent OnWindowActivate = {read=FOnWindowActivate, write=FOnWindowActivate
-		};
-	__property TWebBrowser_V1PropertyChange OnPropertyChange = {read=FOnPropertyChange, write=FOnPropertyChange
-		};
+	__property Classes::TNotifyEvent OnWindowActivate = {read=FOnWindowActivate, write=FOnWindowActivate};
+	__property TWebBrowser_V1PropertyChange OnPropertyChange = {read=FOnPropertyChange, write=FOnPropertyChange};
 public:
 	#pragma option push -w-inl
-	/* TOleControl.Create */ inline __fastcall virtual TWebBrowser_V1(Classes::TComponent* AOwner) : Olectrls::TOleControl(
-		AOwner) { }
+	/* TOleControl.Create */ inline __fastcall virtual TWebBrowser_V1(Classes::TComponent* AOwner) : Olectrls::TOleControl(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TOleControl.Destroy */ inline __fastcall virtual ~TWebBrowser_V1(void) { }
@@ -825,40 +716,29 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TWebBrowser_V1(HWND ParentWindow) : Olectrls::TOleControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TWebBrowser_V1(HWND ParentWindow) : Olectrls::TOleControl(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
-typedef void __fastcall (__closure *TWebBrowserStatusTextChange)(System::TObject* Sender, const WideString 
-	Text);
+typedef void __fastcall (__closure *TWebBrowserStatusTextChange)(System::TObject* Sender, const WideString Text);
 
-typedef void __fastcall (__closure *TWebBrowserProgressChange)(System::TObject* Sender, int Progress
-	, int ProgressMax);
+typedef void __fastcall (__closure *TWebBrowserProgressChange)(System::TObject* Sender, int Progress, int ProgressMax);
 
-typedef void __fastcall (__closure *TWebBrowserCommandStateChange)(System::TObject* Sender, int Command
-	, Word Enable);
+typedef void __fastcall (__closure *TWebBrowserCommandStateChange)(System::TObject* Sender, int Command, Word Enable);
 
-typedef void __fastcall (__closure *TWebBrowserTitleChange)(System::TObject* Sender, const WideString 
-	Text);
+typedef void __fastcall (__closure *TWebBrowserTitleChange)(System::TObject* Sender, const WideString Text);
 
-typedef void __fastcall (__closure *TWebBrowserPropertyChange)(System::TObject* Sender, const WideString 
-	szProperty);
+typedef void __fastcall (__closure *TWebBrowserPropertyChange)(System::TObject* Sender, const WideString szProperty);
 
-typedef void __fastcall (__closure *TWebBrowserBeforeNavigate2)(System::TObject* Sender, const _di_IDispatch 
-	pDisp, OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData, OleVariant 
-	&Headers, Word &Cancel);
+typedef void __fastcall (__closure *TWebBrowserBeforeNavigate2)(System::TObject* Sender, const _di_IDispatch pDisp, OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData, OleVariant &Headers, Word &Cancel);
 
-typedef void __fastcall (__closure *TWebBrowserNewWindow2)(System::TObject* Sender, _di_IDispatch &ppDisp
-	, Word &Cancel);
+typedef void __fastcall (__closure *TWebBrowserNewWindow2)(System::TObject* Sender, _di_IDispatch &ppDisp, Word &Cancel);
 
-typedef void __fastcall (__closure *TWebBrowserNavigateComplete2)(System::TObject* Sender, const _di_IDispatch 
-	pDisp, OleVariant &URL);
+typedef void __fastcall (__closure *TWebBrowserNavigateComplete2)(System::TObject* Sender, const _di_IDispatch pDisp, OleVariant &URL);
 
-typedef void __fastcall (__closure *TWebBrowserDocumentComplete)(System::TObject* Sender, const _di_IDispatch 
-	pDisp, OleVariant &URL);
+typedef void __fastcall (__closure *TWebBrowserDocumentComplete)(System::TObject* Sender, const _di_IDispatch pDisp, OleVariant &URL);
 
 typedef void __fastcall (__closure *TWebBrowserOnVisible)(System::TObject* Sender, Word Visible);
 
@@ -866,14 +746,11 @@ typedef void __fastcall (__closure *TWebBrowserOnToolBar)(System::TObject* Sende
 
 typedef void __fastcall (__closure *TWebBrowserOnMenuBar)(System::TObject* Sender, Word MenuBar);
 
-typedef void __fastcall (__closure *TWebBrowserOnStatusBar)(System::TObject* Sender, Word StatusBar)
-	;
+typedef void __fastcall (__closure *TWebBrowserOnStatusBar)(System::TObject* Sender, Word StatusBar);
 
-typedef void __fastcall (__closure *TWebBrowserOnFullScreen)(System::TObject* Sender, Word FullScreen
-	);
+typedef void __fastcall (__closure *TWebBrowserOnFullScreen)(System::TObject* Sender, Word FullScreen);
 
-typedef void __fastcall (__closure *TWebBrowserOnTheaterMode)(System::TObject* Sender, Word TheaterMode
-	);
+typedef void __fastcall (__closure *TWebBrowserOnTheaterMode)(System::TObject* Sender, Word TheaterMode);
 
 class DELPHICLASS TWebBrowser;
 class PASCALIMPLEMENTATION TWebBrowser : public Olectrls::TOleControl 
@@ -917,12 +794,9 @@ public:
 	void __fastcall GoSearch(void);
 	void __fastcall Navigate(const WideString URL)/* overload */;
 	void __fastcall Navigate(const WideString URL, OleVariant &Flags)/* overload */;
-	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName)/* overload */
-		;
-	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant 
-		&PostData)/* overload */;
-	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant 
-		&PostData, OleVariant &Headers)/* overload */;
+	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName)/* overload */;
+	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData)/* overload */;
+	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData, OleVariant &Headers)/* overload */;
 	HIDESBASE void __fastcall Refresh(void);
 	void __fastcall Refresh2(void)/* overload */;
 	void __fastcall Refresh2(OleVariant &Level)/* overload */;
@@ -933,22 +807,16 @@ public:
 	HIDESBASE OleVariant __fastcall GetProperty(const WideString Property_);
 	void __fastcall Navigate2(OleVariant &URL)/* overload */;
 	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags)/* overload */;
-	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName)/* overload */
-		;
-	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant 
-		&PostData)/* overload */;
-	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant 
-		&PostData, OleVariant &Headers)/* overload */;
+	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName)/* overload */;
+	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData)/* overload */;
+	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData, OleVariant &Headers)/* overload */;
 	Activex::TOleEnum __fastcall QueryStatusWB(Activex::TOleEnum cmdID);
 	void __fastcall ExecWB(Activex::TOleEnum cmdID, Activex::TOleEnum cmdexecopt)/* overload */;
-	void __fastcall ExecWB(Activex::TOleEnum cmdID, Activex::TOleEnum cmdexecopt, OleVariant &pvaIn)/* overload */
-		;
-	void __fastcall ExecWB(Activex::TOleEnum cmdID, Activex::TOleEnum cmdexecopt, OleVariant &pvaIn, OleVariant 
-		&pvaOut)/* overload */;
+	void __fastcall ExecWB(Activex::TOleEnum cmdID, Activex::TOleEnum cmdexecopt, OleVariant &pvaIn)/* overload */;
+	void __fastcall ExecWB(Activex::TOleEnum cmdID, Activex::TOleEnum cmdexecopt, OleVariant &pvaIn, OleVariant &pvaOut)/* overload */;
 	void __fastcall ShowBrowserBar(OleVariant &pvaClsid)/* overload */;
 	void __fastcall ShowBrowserBar(OleVariant &pvaClsid, OleVariant &pvarShow)/* overload */;
-	void __fastcall ShowBrowserBar(OleVariant &pvaClsid, OleVariant &pvarShow, OleVariant &pvarSize)/* overload */
-		;
+	void __fastcall ShowBrowserBar(OleVariant &pvaClsid, OleVariant &pvarShow, OleVariant &pvarSize)/* overload */;
 	__property _di_IWebBrowser2 ControlInterface = {read=GetControlInterface};
 	__property _di_IWebBrowser2 DefaultInterface = {read=GetControlInterface};
 	__property _di_IDispatch Application = {read=GetIDispatchProp, index=200};
@@ -967,66 +835,44 @@ public:
 	__property Activex::TOleEnum ReadyState = {read=GetTOleEnumProp, index=-525, nodefault};
 	
 __published:
-	__property TabStop ;
-	__property Align ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property ParentShowHint ;
+	__property TabStop  = {default=1};
+	__property Align  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
+	__property TabOrder  = {default=-1};
 	__property OnDragDrop ;
 	__property OnDragOver ;
 	__property OnEndDrag ;
 	__property OnEnter ;
 	__property OnExit ;
 	__property OnStartDrag ;
-	__property Word Visible = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=402, nodefault
-		};
-	__property Word StatusBar = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=403, 
-		nodefault};
-	__property WideString StatusText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, 
-		index=404};
-	__property int ToolBar = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=405, nodefault
-		};
-	__property Word MenuBar = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=406, nodefault
-		};
-	__property Word FullScreen = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=407, 
-		nodefault};
-	__property Word Offline = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=550, nodefault
-		};
-	__property Word Silent = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=551, nodefault
-		};
-	__property Word RegisterAsBrowser = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=552
-		, nodefault};
-	__property Word RegisterAsDropTarget = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, 
-		index=553, nodefault};
-	__property Word TheaterMode = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=554
-		, nodefault};
-	__property Word AddressBar = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=555, 
-		nodefault};
-	__property Word Resizable = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=556, 
-		nodefault};
-	__property TWebBrowserStatusTextChange OnStatusTextChange = {read=FOnStatusTextChange, write=FOnStatusTextChange
-		};
-	__property TWebBrowserProgressChange OnProgressChange = {read=FOnProgressChange, write=FOnProgressChange
-		};
-	__property TWebBrowserCommandStateChange OnCommandStateChange = {read=FOnCommandStateChange, write=
-		FOnCommandStateChange};
+	__property Word Visible = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=402, nodefault};
+	__property Word StatusBar = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=403, nodefault};
+	__property WideString StatusText = {read=GetWideStringProp, write=SetWideStringProp, stored=false, index=404};
+	__property int ToolBar = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=405, nodefault};
+	__property Word MenuBar = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=406, nodefault};
+	__property Word FullScreen = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=407, nodefault};
+	__property Word Offline = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=550, nodefault};
+	__property Word Silent = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=551, nodefault};
+	__property Word RegisterAsBrowser = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=552, nodefault};
+	__property Word RegisterAsDropTarget = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=553, nodefault};
+	__property Word TheaterMode = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=554, nodefault};
+	__property Word AddressBar = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=555, nodefault};
+	__property Word Resizable = {read=GetWordBoolProp, write=SetWordBoolProp, stored=false, index=556, nodefault};
+	__property TWebBrowserStatusTextChange OnStatusTextChange = {read=FOnStatusTextChange, write=FOnStatusTextChange};
+	__property TWebBrowserProgressChange OnProgressChange = {read=FOnProgressChange, write=FOnProgressChange};
+	__property TWebBrowserCommandStateChange OnCommandStateChange = {read=FOnCommandStateChange, write=FOnCommandStateChange};
 	__property Classes::TNotifyEvent OnDownloadBegin = {read=FOnDownloadBegin, write=FOnDownloadBegin};
-		
-	__property Classes::TNotifyEvent OnDownloadComplete = {read=FOnDownloadComplete, write=FOnDownloadComplete
-		};
+	__property Classes::TNotifyEvent OnDownloadComplete = {read=FOnDownloadComplete, write=FOnDownloadComplete};
 	__property TWebBrowserTitleChange OnTitleChange = {read=FOnTitleChange, write=FOnTitleChange};
-	__property TWebBrowserPropertyChange OnPropertyChange = {read=FOnPropertyChange, write=FOnPropertyChange
-		};
-	__property TWebBrowserBeforeNavigate2 OnBeforeNavigate2 = {read=FOnBeforeNavigate2, write=FOnBeforeNavigate2
-		};
+	__property TWebBrowserPropertyChange OnPropertyChange = {read=FOnPropertyChange, write=FOnPropertyChange};
+	__property TWebBrowserBeforeNavigate2 OnBeforeNavigate2 = {read=FOnBeforeNavigate2, write=FOnBeforeNavigate2};
 	__property TWebBrowserNewWindow2 OnNewWindow2 = {read=FOnNewWindow2, write=FOnNewWindow2};
-	__property TWebBrowserNavigateComplete2 OnNavigateComplete2 = {read=FOnNavigateComplete2, write=FOnNavigateComplete2
-		};
-	__property TWebBrowserDocumentComplete OnDocumentComplete = {read=FOnDocumentComplete, write=FOnDocumentComplete
-		};
+	__property TWebBrowserNavigateComplete2 OnNavigateComplete2 = {read=FOnNavigateComplete2, write=FOnNavigateComplete2};
+	__property TWebBrowserDocumentComplete OnDocumentComplete = {read=FOnDocumentComplete, write=FOnDocumentComplete};
 	__property Classes::TNotifyEvent OnQuit = {read=FOnQuit, write=FOnQuit};
 	__property TWebBrowserOnVisible OnVisible = {read=FOnVisible, write=FOnVisible};
 	__property TWebBrowserOnToolBar OnToolBar = {read=FOnToolBar, write=FOnToolBar};
@@ -1035,10 +881,8 @@ __published:
 	__property TWebBrowserOnFullScreen OnFullScreen = {read=FOnFullScreen, write=FOnFullScreen};
 	__property TWebBrowserOnTheaterMode OnTheaterMode = {read=FOnTheaterMode, write=FOnTheaterMode};
 public:
-		
 	#pragma option push -w-inl
-	/* TOleControl.Create */ inline __fastcall virtual TWebBrowser(Classes::TComponent* AOwner) : Olectrls::TOleControl(
-		AOwner) { }
+	/* TOleControl.Create */ inline __fastcall virtual TWebBrowser(Classes::TComponent* AOwner) : Olectrls::TOleControl(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TOleControl.Destroy */ inline __fastcall virtual ~TWebBrowser(void) { }
@@ -1046,8 +890,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TWebBrowser(HWND ParentWindow) : Olectrls::TOleControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TWebBrowser(HWND ParentWindow) : Olectrls::TOleControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1060,8 +903,7 @@ class PASCALIMPLEMENTATION CoInternetExplorer : public System::TObject
 	
 public:
 	/*         class method */ static _di_IWebBrowser2 __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IWebBrowser2 __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IWebBrowser2 __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoInternetExplorer(void) : System::TObject() { }
@@ -1073,51 +915,35 @@ public:
 };
 
 
-typedef void __fastcall (__closure *TInternetExplorerStatusTextChange)(System::TObject* Sender, OleVariant 
-	&Text);
+typedef void __fastcall (__closure *TInternetExplorerStatusTextChange)(System::TObject* Sender, OleVariant &Text);
 
-typedef void __fastcall (__closure *TInternetExplorerProgressChange)(System::TObject* Sender, int Progress
-	, int ProgressMax);
+typedef void __fastcall (__closure *TInternetExplorerProgressChange)(System::TObject* Sender, int Progress, int ProgressMax);
 
-typedef void __fastcall (__closure *TInternetExplorerCommandStateChange)(System::TObject* Sender, int 
-	Command, Word Enable);
+typedef void __fastcall (__closure *TInternetExplorerCommandStateChange)(System::TObject* Sender, int Command, Word Enable);
 
-typedef void __fastcall (__closure *TInternetExplorerTitleChange)(System::TObject* Sender, OleVariant 
-	&Text);
+typedef void __fastcall (__closure *TInternetExplorerTitleChange)(System::TObject* Sender, OleVariant &Text);
 
-typedef void __fastcall (__closure *TInternetExplorerPropertyChange)(System::TObject* Sender, OleVariant 
-	&szProperty);
+typedef void __fastcall (__closure *TInternetExplorerPropertyChange)(System::TObject* Sender, OleVariant &szProperty);
 
-typedef void __fastcall (__closure *TInternetExplorerBeforeNavigate2)(System::TObject* Sender, OleVariant 
-	&pDisp, OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData, OleVariant 
-	&Headers, OleVariant &Cancel);
+typedef void __fastcall (__closure *TInternetExplorerBeforeNavigate2)(System::TObject* Sender, OleVariant &pDisp, OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData, OleVariant &Headers, OleVariant &Cancel);
 
-typedef void __fastcall (__closure *TInternetExplorerNewWindow2)(System::TObject* Sender, OleVariant 
-	&ppDisp, OleVariant &Cancel);
+typedef void __fastcall (__closure *TInternetExplorerNewWindow2)(System::TObject* Sender, OleVariant &ppDisp, OleVariant &Cancel);
 
-typedef void __fastcall (__closure *TInternetExplorerNavigateComplete2)(System::TObject* Sender, OleVariant 
-	&pDisp, OleVariant &URL);
+typedef void __fastcall (__closure *TInternetExplorerNavigateComplete2)(System::TObject* Sender, OleVariant &pDisp, OleVariant &URL);
 
-typedef void __fastcall (__closure *TInternetExplorerDocumentComplete)(System::TObject* Sender, OleVariant 
-	&pDisp, OleVariant &URL);
+typedef void __fastcall (__closure *TInternetExplorerDocumentComplete)(System::TObject* Sender, OleVariant &pDisp, OleVariant &URL);
 
-typedef void __fastcall (__closure *TInternetExplorerOnVisible)(System::TObject* Sender, Word Visible
-	);
+typedef void __fastcall (__closure *TInternetExplorerOnVisible)(System::TObject* Sender, Word Visible);
 
-typedef void __fastcall (__closure *TInternetExplorerOnToolBar)(System::TObject* Sender, Word ToolBar
-	);
+typedef void __fastcall (__closure *TInternetExplorerOnToolBar)(System::TObject* Sender, Word ToolBar);
 
-typedef void __fastcall (__closure *TInternetExplorerOnMenuBar)(System::TObject* Sender, Word MenuBar
-	);
+typedef void __fastcall (__closure *TInternetExplorerOnMenuBar)(System::TObject* Sender, Word MenuBar);
 
-typedef void __fastcall (__closure *TInternetExplorerOnStatusBar)(System::TObject* Sender, Word StatusBar
-	);
+typedef void __fastcall (__closure *TInternetExplorerOnStatusBar)(System::TObject* Sender, Word StatusBar);
 
-typedef void __fastcall (__closure *TInternetExplorerOnFullScreen)(System::TObject* Sender, Word FullScreen
-	);
+typedef void __fastcall (__closure *TInternetExplorerOnFullScreen)(System::TObject* Sender, Word FullScreen);
 
-typedef void __fastcall (__closure *TInternetExplorerOnTheaterMode)(System::TObject* Sender, Word TheaterMode
-	);
+typedef void __fastcall (__closure *TInternetExplorerOnTheaterMode)(System::TObject* Sender, Word TheaterMode);
 
 class DELPHICLASS TInternetExplorer;
 class PASCALIMPLEMENTATION TInternetExplorer : public Oleserver::TOleServer 
@@ -1210,12 +1036,9 @@ public:
 	void __fastcall GoSearch(void);
 	void __fastcall Navigate(const WideString URL)/* overload */;
 	void __fastcall Navigate(const WideString URL, OleVariant &Flags)/* overload */;
-	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName)/* overload */
-		;
-	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant 
-		&PostData)/* overload */;
-	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant 
-		&PostData, OleVariant &Headers)/* overload */;
+	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName)/* overload */;
+	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData)/* overload */;
+	void __fastcall Navigate(const WideString URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData, OleVariant &Headers)/* overload */;
 	void __fastcall Refresh(void);
 	void __fastcall Refresh2(void)/* overload */;
 	void __fastcall Refresh2(OleVariant &Level)/* overload */;
@@ -1226,22 +1049,16 @@ public:
 	OleVariant __fastcall GetProperty(const WideString Property_);
 	void __fastcall Navigate2(OleVariant &URL)/* overload */;
 	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags)/* overload */;
-	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName)/* overload */
-		;
-	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant 
-		&PostData)/* overload */;
-	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant 
-		&PostData, OleVariant &Headers)/* overload */;
+	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName)/* overload */;
+	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData)/* overload */;
+	void __fastcall Navigate2(OleVariant &URL, OleVariant &Flags, OleVariant &TargetFrameName, OleVariant &PostData, OleVariant &Headers)/* overload */;
 	Activex::TOleEnum __fastcall QueryStatusWB(Activex::TOleEnum cmdID);
 	void __fastcall ExecWB(Activex::TOleEnum cmdID, Activex::TOleEnum cmdexecopt)/* overload */;
-	void __fastcall ExecWB(Activex::TOleEnum cmdID, Activex::TOleEnum cmdexecopt, OleVariant &pvaIn)/* overload */
-		;
-	void __fastcall ExecWB(Activex::TOleEnum cmdID, Activex::TOleEnum cmdexecopt, OleVariant &pvaIn, OleVariant 
-		&pvaOut)/* overload */;
+	void __fastcall ExecWB(Activex::TOleEnum cmdID, Activex::TOleEnum cmdexecopt, OleVariant &pvaIn)/* overload */;
+	void __fastcall ExecWB(Activex::TOleEnum cmdID, Activex::TOleEnum cmdexecopt, OleVariant &pvaIn, OleVariant &pvaOut)/* overload */;
 	void __fastcall ShowBrowserBar(OleVariant &pvaClsid)/* overload */;
 	void __fastcall ShowBrowserBar(OleVariant &pvaClsid, OleVariant &pvarShow)/* overload */;
-	void __fastcall ShowBrowserBar(OleVariant &pvaClsid, OleVariant &pvarShow, OleVariant &pvarSize)/* overload */
-		;
+	void __fastcall ShowBrowserBar(OleVariant &pvaClsid, OleVariant &pvarShow, OleVariant &pvarSize)/* overload */;
 	__property _di_IWebBrowser2 DefaultInterface = {read=GetDefaultInterface};
 	__property _di_IDispatch Application = {read=Get_Application};
 	__property _di_IDispatch Parent = {read=Get_Parent};
@@ -1269,44 +1086,31 @@ public:
 	__property Word FullScreen = {read=Get_FullScreen, write=Set_FullScreen, nodefault};
 	__property Word Offline = {read=Get_Offline, write=Set_Offline, nodefault};
 	__property Word Silent = {read=Get_Silent, write=Set_Silent, nodefault};
-	__property Word RegisterAsBrowser = {read=Get_RegisterAsBrowser, write=Set_RegisterAsBrowser, nodefault
-		};
-	__property Word RegisterAsDropTarget = {read=Get_RegisterAsDropTarget, write=Set_RegisterAsDropTarget
-		, nodefault};
+	__property Word RegisterAsBrowser = {read=Get_RegisterAsBrowser, write=Set_RegisterAsBrowser, nodefault};
+	__property Word RegisterAsDropTarget = {read=Get_RegisterAsDropTarget, write=Set_RegisterAsDropTarget, nodefault};
 	__property Word TheaterMode = {read=Get_TheaterMode, write=Set_TheaterMode, nodefault};
 	__property Word AddressBar = {read=Get_AddressBar, write=Set_AddressBar, nodefault};
 	__property Word Resizable = {read=Get_Resizable, write=Set_Resizable, nodefault};
 	
 __published:
-	__property TInternetExplorerStatusTextChange OnStatusTextChange = {read=FOnStatusTextChange, write=
-		FOnStatusTextChange};
-	__property TInternetExplorerProgressChange OnProgressChange = {read=FOnProgressChange, write=FOnProgressChange
-		};
-	__property TInternetExplorerCommandStateChange OnCommandStateChange = {read=FOnCommandStateChange, 
-		write=FOnCommandStateChange};
+	__property TInternetExplorerStatusTextChange OnStatusTextChange = {read=FOnStatusTextChange, write=FOnStatusTextChange};
+	__property TInternetExplorerProgressChange OnProgressChange = {read=FOnProgressChange, write=FOnProgressChange};
+	__property TInternetExplorerCommandStateChange OnCommandStateChange = {read=FOnCommandStateChange, write=FOnCommandStateChange};
 	__property Classes::TNotifyEvent OnDownloadBegin = {read=FOnDownloadBegin, write=FOnDownloadBegin};
-		
-	__property Classes::TNotifyEvent OnDownloadComplete = {read=FOnDownloadComplete, write=FOnDownloadComplete
-		};
-	__property TInternetExplorerTitleChange OnTitleChange = {read=FOnTitleChange, write=FOnTitleChange}
-		;
-	__property TInternetExplorerPropertyChange OnPropertyChange = {read=FOnPropertyChange, write=FOnPropertyChange
-		};
-	__property TInternetExplorerBeforeNavigate2 OnBeforeNavigate2 = {read=FOnBeforeNavigate2, write=FOnBeforeNavigate2
-		};
+	__property Classes::TNotifyEvent OnDownloadComplete = {read=FOnDownloadComplete, write=FOnDownloadComplete};
+	__property TInternetExplorerTitleChange OnTitleChange = {read=FOnTitleChange, write=FOnTitleChange};
+	__property TInternetExplorerPropertyChange OnPropertyChange = {read=FOnPropertyChange, write=FOnPropertyChange};
+	__property TInternetExplorerBeforeNavigate2 OnBeforeNavigate2 = {read=FOnBeforeNavigate2, write=FOnBeforeNavigate2};
 	__property TInternetExplorerNewWindow2 OnNewWindow2 = {read=FOnNewWindow2, write=FOnNewWindow2};
-	__property TInternetExplorerNavigateComplete2 OnNavigateComplete2 = {read=FOnNavigateComplete2, write=
-		FOnNavigateComplete2};
-	__property TInternetExplorerDocumentComplete OnDocumentComplete = {read=FOnDocumentComplete, write=
-		FOnDocumentComplete};
+	__property TInternetExplorerNavigateComplete2 OnNavigateComplete2 = {read=FOnNavigateComplete2, write=FOnNavigateComplete2};
+	__property TInternetExplorerDocumentComplete OnDocumentComplete = {read=FOnDocumentComplete, write=FOnDocumentComplete};
 	__property Classes::TNotifyEvent OnQuit = {read=FOnQuit, write=FOnQuit};
 	__property TInternetExplorerOnVisible OnVisible = {read=FOnVisible, write=FOnVisible};
 	__property TInternetExplorerOnToolBar OnToolBar = {read=FOnToolBar, write=FOnToolBar};
 	__property TInternetExplorerOnMenuBar OnMenuBar = {read=FOnMenuBar, write=FOnMenuBar};
 	__property TInternetExplorerOnStatusBar OnStatusBar = {read=FOnStatusBar, write=FOnStatusBar};
 	__property TInternetExplorerOnFullScreen OnFullScreen = {read=FOnFullScreen, write=FOnFullScreen};
-	__property TInternetExplorerOnTheaterMode OnTheaterMode = {read=FOnTheaterMode, write=FOnTheaterMode
-		};
+	__property TInternetExplorerOnTheaterMode OnTheaterMode = {read=FOnTheaterMode, write=FOnTheaterMode};
 };
 
 
@@ -1317,8 +1121,7 @@ class PASCALIMPLEMENTATION CoShellBrowserWindow : public System::TObject
 	
 public:
 	/*         class method */ static _di_IWebBrowser2 __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IWebBrowser2 __fastcall CreateRemote(TMetaClass* vmt, const AnsiString 
-		MachineName);
+	/*         class method */ static _di_IWebBrowser2 __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoShellBrowserWindow(void) : System::TObject() { }
@@ -1337,8 +1140,7 @@ class PASCALIMPLEMENTATION CoShellWindows : public System::TObject
 	
 public:
 	/*         class method */ static _di_IShellWindows __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IShellWindows __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IShellWindows __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoShellWindows(void) : System::TObject() { }
@@ -1350,11 +1152,9 @@ public:
 };
 
 
-typedef void __fastcall (__closure *TShellWindowsWindowRegistered)(System::TObject* Sender, int lCookie
-	);
+typedef void __fastcall (__closure *TShellWindowsWindowRegistered)(System::TObject* Sender, int lCookie);
 
-typedef void __fastcall (__closure *TShellWindowsWindowRevoked)(System::TObject* Sender, int lCookie
-	);
+typedef void __fastcall (__closure *TShellWindowsWindowRevoked)(System::TObject* Sender, int lCookie);
 
 class DELPHICLASS TShellWindows;
 class PASCALIMPLEMENTATION TShellWindows : public Oleserver::TOleServer 
@@ -1380,25 +1180,21 @@ public:
 	virtual void __fastcall Disconnect(void);
 	_di_IDispatch __fastcall Item()/* overload */;
 	_di_IDispatch __fastcall Item(const OleVariant &index)/* overload */;
-	_di_IUnknown __fastcall _NewEnum();
+	System::_di_IInterface __fastcall _NewEnum();
 	void __fastcall Register(const _di_IDispatch pid, int HWND, int swClass, /* out */ int &plCookie);
-	void __fastcall RegisterPending(int lThreadId, OleVariant &pvarloc, OleVariant &pvarlocRoot, int swClass
-		, /* out */ int &plCookie);
+	void __fastcall RegisterPending(int lThreadId, OleVariant &pvarloc, OleVariant &pvarlocRoot, int swClass, /* out */ int &plCookie);
 	void __fastcall Revoke(int lCookie);
 	void __fastcall OnNavigate(int lCookie, OleVariant &pvarloc);
 	void __fastcall OnActivated(int lCookie, Word fActive);
-	_di_IDispatch __fastcall FindWindow(OleVariant &pvarloc, OleVariant &pvarlocRoot, int swClass, /* out */ 
-		int &pHWND, int swfwOptions);
-	void __fastcall OnCreated(int lCookie, const _di_IUnknown punk);
+	_di_IDispatch __fastcall FindWindow(OleVariant &pvarloc, OleVariant &pvarlocRoot, int swClass, /* out */ int &pHWND, int swfwOptions);
+	void __fastcall OnCreated(int lCookie, const System::_di_IInterface punk);
 	void __fastcall ProcessAttachDetach(Word fAttach);
 	__property _di_IShellWindows DefaultInterface = {read=GetDefaultInterface};
 	__property int Count = {read=Get_Count, nodefault};
 	
 __published:
-	__property TShellWindowsWindowRegistered OnWindowRegistered = {read=FOnWindowRegistered, write=FOnWindowRegistered
-		};
-	__property TShellWindowsWindowRevoked OnWindowRevoked = {read=FOnWindowRevoked, write=FOnWindowRevoked
-		};
+	__property TShellWindowsWindowRegistered OnWindowRegistered = {read=FOnWindowRegistered, write=FOnWindowRegistered};
+	__property TShellWindowsWindowRevoked OnWindowRevoked = {read=FOnWindowRevoked, write=FOnWindowRevoked};
 };
 
 
@@ -1409,8 +1205,7 @@ class PASCALIMPLEMENTATION CoShellUIHelper : public System::TObject
 	
 public:
 	/*         class method */ static _di_IShellUIHelper __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IShellUIHelper __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IShellUIHelper __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoShellUIHelper(void) : System::TObject() { }
@@ -1447,24 +1242,17 @@ public:
 	void __fastcall AddFavorite(const WideString URL, OleVariant &Title)/* overload */;
 	void __fastcall AddChannel(const WideString URL);
 	void __fastcall AddDesktopComponent(const WideString URL, const WideString Type_)/* overload */;
-	void __fastcall AddDesktopComponent(const WideString URL, const WideString Type_, OleVariant &Left)
-		/* overload */;
-	void __fastcall AddDesktopComponent(const WideString URL, const WideString Type_, OleVariant &Left, 
-		OleVariant &Top)/* overload */;
-	void __fastcall AddDesktopComponent(const WideString URL, const WideString Type_, OleVariant &Left, 
-		OleVariant &Top, OleVariant &Width)/* overload */;
-	void __fastcall AddDesktopComponent(const WideString URL, const WideString Type_, OleVariant &Left, 
-		OleVariant &Top, OleVariant &Width, OleVariant &Height)/* overload */;
+	void __fastcall AddDesktopComponent(const WideString URL, const WideString Type_, OleVariant &Left)/* overload */;
+	void __fastcall AddDesktopComponent(const WideString URL, const WideString Type_, OleVariant &Left, OleVariant &Top)/* overload */;
+	void __fastcall AddDesktopComponent(const WideString URL, const WideString Type_, OleVariant &Left, OleVariant &Top, OleVariant &Width)/* overload */;
+	void __fastcall AddDesktopComponent(const WideString URL, const WideString Type_, OleVariant &Left, OleVariant &Top, OleVariant &Width, OleVariant &Height)/* overload */;
 	Word __fastcall IsSubscribed(const WideString URL);
-	void __fastcall NavigateAndFind(const WideString URL, const WideString strQuery, OleVariant &varTargetFrame
-		);
+	void __fastcall NavigateAndFind(const WideString URL, const WideString strQuery, OleVariant &varTargetFrame);
 	void __fastcall ImportExportFavorites(Word fImport, const WideString strImpExpPath);
 	void __fastcall AutoCompleteSaveForm(void)/* overload */;
 	void __fastcall AutoCompleteSaveForm(OleVariant &Form)/* overload */;
 	void __fastcall AutoScan(const WideString strSearch, const WideString strFailureUrl)/* overload */;
-		
-	void __fastcall AutoScan(const WideString strSearch, const WideString strFailureUrl, OleVariant &pvarTargetFrame
-		)/* overload */;
+	void __fastcall AutoScan(const WideString strSearch, const WideString strFailureUrl, OleVariant &pvarTargetFrame)/* overload */;
 	void __fastcall AutoCompleteAttach(void)/* overload */;
 	void __fastcall AutoCompleteAttach(OleVariant &Reserved)/* overload */;
 	OleVariant __fastcall ShowBrowserUI(const WideString bstrName, OleVariant &pvarIn);
@@ -1479,8 +1267,7 @@ class PASCALIMPLEMENTATION CoShellFavoritesNameSpace : public System::TObject
 	
 public:
 	/*         class method */ static _di_IShellFavoritesNameSpace __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IShellFavoritesNameSpace __fastcall CreateRemote(TMetaClass* vmt
-		, const AnsiString MachineName);
+	/*         class method */ static _di_IShellFavoritesNameSpace __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoShellFavoritesNameSpace(void) : System::TObject() { }
@@ -1492,9 +1279,7 @@ public:
 };
 
 
-typedef void __fastcall (__closure *TShellFavoritesNameSpaceFavoritesSelectionChange)(System::TObject* 
-	Sender, int cItems, int hItem, OleVariant &strName, OleVariant &strUrl, int cVisits, OleVariant &strDate
-	, int fAvailableOffline);
+typedef void __fastcall (__closure *TShellFavoritesNameSpaceFavoritesSelectionChange)(System::TObject* Sender, int cItems, int hItem, OleVariant &strName, OleVariant &strUrl, int cVisits, OleVariant &strDate, int fAvailableOffline);
 
 class DELPHICLASS TShellFavoritesNameSpace;
 class PASCALIMPLEMENTATION TShellFavoritesNameSpace : public Oleserver::TOleServer 
@@ -1533,8 +1318,7 @@ public:
 	__property Word FOfflinePackInstalled = {read=Get_FOfflinePackInstalled, nodefault};
 	
 __published:
-	__property TShellFavoritesNameSpaceFavoritesSelectionChange OnFavoritesSelectionChange = {read=FOnFavoritesSelectionChange
-		, write=FOnFavoritesSelectionChange};
+	__property TShellFavoritesNameSpaceFavoritesSelectionChange OnFavoritesSelectionChange = {read=FOnFavoritesSelectionChange, write=FOnFavoritesSelectionChange};
 };
 
 
@@ -1545,8 +1329,7 @@ class PASCALIMPLEMENTATION CoCScriptErrorList : public System::TObject
 	
 public:
 	/*         class method */ static _di_IScriptErrorList __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_IScriptErrorList __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_IScriptErrorList __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoCScriptErrorList(void) : System::TObject() { }
@@ -1565,8 +1348,7 @@ class PASCALIMPLEMENTATION CoSearchAssistantOC : public System::TObject
 	
 public:
 	/*         class method */ static _di_ISearchAssistantOC __fastcall Create(TMetaClass* vmt);
-	/*         class method */ static _di_ISearchAssistantOC __fastcall CreateRemote(TMetaClass* vmt, const 
-		AnsiString MachineName);
+	/*         class method */ static _di_ISearchAssistantOC __fastcall CreateRemote(TMetaClass* vmt, const AnsiString MachineName);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall CoSearchAssistantOC(void) : System::TObject() { }
@@ -1690,9 +1472,7 @@ static const Shortint navAllowAutosearch = 0x10;
 static const Shortint navBrowserBar = 0x20;
 
 }	/* namespace Shdocvw */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Shdocvw;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

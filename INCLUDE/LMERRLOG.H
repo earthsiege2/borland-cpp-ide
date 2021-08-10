@@ -24,7 +24,6 @@ Notes:
 --*/
 
 #ifndef _LMERRLOG_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMERRLOG_
 
 #if _MSC_VER > 1000
@@ -591,7 +590,12 @@ NetErrorLogWrite (
 
 #define NELOG_NetlogonAuthDCFail        (ERRLOG_BASE + 110)
     /*
-    *Failed to authenticate with %2, a Windows NT or Windows 2000 domain controller for domain %1.
+    *This computer could not authenticate with %2, a Windows domain controller
+    * for domain %1, and therefore this computer might deny logon requests.
+    * This inability to authenticate might be caused by another computer on the
+    * same network using the same name or the password for this computer account
+    * is not recognized. If this message appears again, contact your system
+    * administrator.
     */
 
 #define NELOG_ReplLogonFailed           (ERRLOG_BASE + 111)
@@ -800,6 +804,11 @@ NetErrorLogWrite (
     * system crashed while working on the error log.
     */
 
+#define NELOG_Joined_Domain         (ERRLOG_BASE + 160)
+    /*
+    * This computer has been successfully joined to %1 '%2'.
+    */
+
 
 //
 // Microsoft has created a generic error log entry for OEMs to use to
@@ -953,8 +962,9 @@ NetErrorLogWrite (
 
 #define NELOG_NetlogonAuthNoDomainController    (ERRLOG2_BASE + 19)
     /*
-     * No Windows NT or Windows 2000 Domain Controller is available for domain %1.
-     * The following error occurred:%n%2
+     * No Domain Controller is available for domain %1 due to the following: %n%2.
+     * %nMake sure that the computer is connected to the network and try
+     * again. If the problem persists, please contact your domain administrator.
      */
 
 #define NELOG_NetlogonAuthNoTrustLsaSecret      (ERRLOG2_BASE + 20)
@@ -973,7 +983,7 @@ NetErrorLogWrite (
 #define NELOG_NetlogonServerAuthFailed          (ERRLOG2_BASE + 22)
     /*
      * The session setup from the computer %1 failed to authenticate.
-     * The name of the account referenced in the security database is
+     * The name(s) of the account(s) referenced in the security database is
      * %2.  The following error occurred: %n%3
      */
 
@@ -1134,7 +1144,7 @@ NetErrorLogWrite (
 
 #define NELOG_RplWkstaMemory                      (ERRLOG2_BASE + 48)
     /*
-    * Client with computer name %1 was not booted due to insufficent memory
+    * Client with computer name %1 was not booted due to insufficient memory
     * at the remote boot server.
     */
 
@@ -1238,7 +1248,7 @@ NetErrorLogWrite (
     */
 #define NELOG_RplRestoreDatabaseSuccess           (ERRLOG2_BASE + 68)
     /*
-    * Service sucessfully restored its database from the backup.
+    * Service successfully restored its database from the backup.
     */
 #define NELOG_RplInitRestoredDatabase             (ERRLOG2_BASE + 69)
     /*
@@ -1271,18 +1281,26 @@ NetErrorLogWrite (
      */
 #define NELOG_NetlogonNoDynamicDns                (ERRLOG2_BASE + 73)
     /*
-     * The DNS server for this DC does not support dynamic DNS.
+     * The DNS server (with IP address %1) for this DC does not support dynamic DNS.
      * Add the DNS records from the file '%SystemRoot%\System32\Config\netlogon.dns'
-     * to the DNS server serving the domain referenced in that file.
+     * to the DNS server serving the domain referenced in that file. The DNS server
+     * returned an error code given in the Data field.
      */
 #define NELOG_NetlogonDynamicDnsRegisterFailure   (ERRLOG2_BASE + 74)
     /*
-     * Registration of the DNS record '%1' failed with the following error: %n%2
+     * Registration of the DNS record '%1' failed on the DNS server (with IP address %3)
+     * with the following error: %n%2
+     * %nThe DNS server returned an error code given in the Data field.
      */
 
 #define NELOG_NetlogonDynamicDnsDeregisterFailure (ERRLOG2_BASE + 75)
     /*
-     * Deregistration of the DNS record '%1' failed with the following error: %n%2
+     * Deregistration of the DNS record '%1' failed on the DNS server (with IP address %3)
+     * with the following error: %n%2
+     * %nThe DNS server returned an error code given in the Data field.
+     * %nAlthough this is not a critical error as it doesn't prevent normal behavior of
+     * the Domain Controller, we strongly recommend to ensure the deletion of the record
+     * from DNS to prevent unnecessary connections to this computer.
      */
 
 #define NELOG_NetlogonFailedFileCreate            (ERRLOG2_BASE + 76)
@@ -1297,11 +1315,11 @@ NetErrorLogWrite (
      */
 
 #define NELOG_NetlogonNoSiteForClient              (ERRLOG2_BASE + 78)
-    /*
-     * '%1' tried to determine its site by looking up its IP address ('%2')
-     * in the Configuration\Sites\Subnets container in the DS.  No subnet matched
-     * the IP address.  Consider adding a subnet object for this IP address.
-     */
+   /*
+    * '%1' tried to determine its site by looking up its IP address ('%2')
+    * in the Configuration\Sites\Subnets container in the DS.  No subnet matched
+    * the IP address.  Consider adding a subnet object for this IP address.
+    */
 
 #define NELOG_NetlogonBadSiteName                  (ERRLOG2_BASE + 79)
     /*
@@ -1340,43 +1358,203 @@ NetErrorLogWrite (
     /*
      * Site '%2' does not have any Domain Controllers for domain '%3'.
      * Domain Controllers in site '%1' have been automatically
-     * selected to cover site '%2' based on configured Directory Server
-     * replication costs.
+     * selected to cover site '%2' for domain '%3' based on configured
+     * Directory Server replication costs.
      */
 
 #define NELOG_NetlogonDcSiteNotCovered             (ERRLOG2_BASE + 85)
     /*
-     * This Domain Controller no longer automatically covers site '%1'.
+     * This Domain Controller no longer automatically covers site '%1' for domain '%2'.
      */
 
 #define NELOG_NetlogonGcSiteCovered                (ERRLOG2_BASE + 86)
     /*
-     * Site '%2' does not have any Global Catalog servers.
+     * Site '%2' does not have any Global Catalog servers for forest '%3'.
      * Global Catalog servers in site '%1' have been automatically
-     * selected to cover site '%2' based on configured Directory Server
-     * replication costs.
+     * selected to cover site '%2' for forest '%3' based on configured
+     * Directory Server replication costs.
      */
 
 #define NELOG_NetlogonGcSiteNotCovered             (ERRLOG2_BASE + 87)
     /*
-     * This Global Catalog server no longer automatically covers site '%1'.
+     * This Global Catalog server no longer automatically covers site '%1' for forest '%2'.
      */
 
 #define NELOG_NetlogonFailedSpnUpdate              (ERRLOG2_BASE + 88)
     /*
-     * Attemp to update Service Principal Name (SPN) of the computer object 
-     * in Active Directory failed.  The following error occurred: %n%1
+     * Attempt to update HOST Service Principal Names (SPNs) of the computer
+     * object in Active Directory failed. The updated values were '%1' and '%2'.
+     * The following error occurred: %n%3
      */
 
 #define NELOG_NetlogonFailedDnsHostNameUpdate      (ERRLOG2_BASE + 89)
     /*
-     * Attemp to update DNS Host Name of the computer object 
-     * in Active Directory failed.  The following error occurred: %n%1
+     * Attempt to update DNS Host Name of the computer object
+     * in Active Directory failed. The updated value was '%1'.
+     * The following error occurred: %n%2
+     */
+
+#define NELOG_NetlogonAuthNoUplevelDomainController (ERRLOG2_BASE + 90)
+    /*
+     * No suitable Domain Controller is available for domain %1.
+     * An NT4 or older domain controller is available but it cannot
+     * be used for authentication purposes in the Windows 2000 or newer
+     * domain that this computer is a member of.
+     * The following error occurred:%n%2
+     */
+
+#define NELOG_NetlogonAuthDomainDowngraded         (ERRLOG2_BASE + 91)
+    /*
+     * The domain of this computer, %1 has been downgraded from Windows 2000
+     * or newer to Windows NT4 or older. The computer cannot function properly
+     * in this case for authentication purposes. This computer needs to rejoin
+     * the domain.
+     * The following error occurred:%n%2
+     */
+
+#define NELOG_NetlogonNdncSiteCovered                (ERRLOG2_BASE + 92)
+    /*
+     * Site '%2' does not have any LDAP servers for non-domain NC '%3'.
+     * LDAP servers in site '%1' have been automatically selected to
+     * cover site '%2' for non-domain NC '%3' based on configured
+     * Directory Server replication costs.
+     */
+
+#define NELOG_NetlogonNdncSiteNotCovered             (ERRLOG2_BASE + 93)
+    /*
+     * This LDAP server no longer automatically covers site '%1' for non-domain NC '%2'.
+     */
+
+#define NELOG_NetlogonDcOldSiteCovered               (ERRLOG2_BASE + 94)
+    /*
+     * Site '%2' is no longer manually configured in the registry as
+     * covered by this Domain Controller for domain '%3'. As a result,
+     * site '%2' does not have any Domain Controllers for domain '%3'.
+     * Domain Controllers in site '%1' have been automatically
+     * selected to cover site '%2' for domain '%3' based on configured
+     * Directory Server replication costs.
+     */
+
+#define NELOG_NetlogonDcSiteNotCoveredAuto           (ERRLOG2_BASE + 95)
+    /*
+     * This Domain Controller no longer automatically covers site '%1' for domain '%2'.
+     * However, site '%1' is still (manually) covered by this Domain Controller for
+     * domain '%2' since this site has been manually configured in the registry.
+     */
+
+#define NELOG_NetlogonGcOldSiteCovered               (ERRLOG2_BASE + 96)
+    /*
+     * Site '%2' is no longer manually configured in the registry as
+     * covered by this Global Catalog server for forest '%3'. As a result,
+     * site '%2' does not have any Global Catalog servers for forest '%3'.
+     * Global Catalog servers in site '%1' have been automatically
+     * selected to cover site '%2' for forest '%3' based on configured
+     * Directory Server replication costs.
+     */
+
+#define NELOG_NetlogonGcSiteNotCoveredAuto           (ERRLOG2_BASE + 97)
+    /*
+     * This Global Catalog server no longer automatically covers site '%1' for forest '%2'.
+     * However, site '%1' is still (manually) covered by this Global catalog for
+     * forest '%2' since this site has been manually configured in the registry.
+     */
+
+#define NELOG_NetlogonNdncOldSiteCovered             (ERRLOG2_BASE + 98)
+    /*
+     * Site '%2' is no longer manually configured in the registry as
+     * covered by this LDAP server for non-domain NC '%3'. As a result,
+     * site '%2' does not have any LDAP servers for non-domain NC '%3'.
+     * LDAP servers in site '%1' have been automatically
+     * selected to cover site '%2' for non-domain NC '%3' based on
+     * configured Directory Server replication costs.
+     */
+
+#define NELOG_NetlogonNdncSiteNotCoveredAuto         (ERRLOG2_BASE + 99)
+    /*
+     * This LDAP server no longer automatically covers site '%1' for non-domain NC '%2'.
+     * However, site '%1' is still (manually) covered by this LDAP server for
+     * non-domain NC '%2' since this site has been manually configured in the registry.
+     */
+
+#define NELOG_NetlogonSpnMultipleSamAccountNames     (ERRLOG2_BASE + 100)
+    /*
+     * Attempt to update DnsHostName and HOST Service Principal Name (SPN) attributes
+     * of the computer object in Active Directory failed because the Domain Controller
+     * '%1' had more than one account with the name '%2' corresponding to this computer.
+     * Not having SPNs registered may result in authentication failures for this computer.
+     * Contact your domain administrator who may need to manually resolve the account name
+     * collision.
+     */
+
+#define NELOG_NetlogonSpnCrackNamesFailure           (ERRLOG2_BASE + 101)
+    /*
+     * Attempt to update DnsHostName and HOST Service Principal Name (SPN) attributes
+     * of the computer object in Active Directory failed because this computer account
+     * name, '%2' could not be mapped to the computer object on Domain Controller '%1'.
+     * Not having SPNs registered may result in authentication failures for this computer.
+     * Contact your domain administrator. The following technical information may be
+     * useful for the resolution of this failure:%n
+     * DsCrackNames status = 0x%3, crack error = 0x%4.
+     */
+
+#define NELOG_NetlogonNoAddressToSiteMapping         (ERRLOG2_BASE + 102)
+    /*
+     * None of the IP addresses (%2) of this Domain Controller map to the configured site '%1'.
+     * While this may be a temporary situation due to IP address changes, it is generally
+     * recommended that the IP address of the Domain Controller (accessible to machines in
+     * its domain) maps to the Site which it services. If the above list of IP addresses is
+     * stable, consider moving this server to a site (or create one if it does not already
+     * exist) such that the above IP address maps to the selected site. This may require the
+     * creation of a new subnet object (whose range includes the above IP address) which maps
+     * to the selected site object.
+     */
+
+#define NELOG_NetlogonInvalidGenericParameterValue   (ERRLOG2_BASE + 103)
+    /*
+     * The following error occurred while reading a parameter '%2' in the
+     * Netlogon %1 registry section:%n%3
+     */
+
+#define NELOG_NetlogonInvalidDwordParameterValue     (ERRLOG2_BASE + 104)
+    /*
+     * The Netlogon %1 registry key contains an invalid value 0x%2 for parameter '%3'.
+     * The minimum and maximum values allowed for this parameter are 0x%4 and 0x%5, respectively.
+     * The value of 0x%6 has been assigned to this parameter.
+     */
+
+#define NELOG_NetlogonServerAuthFailedNoAccount      (ERRLOG2_BASE + 105)
+    /*
+     * The session setup from the computer %1 failed to authenticate.
+     * The following error occurred: %n%2
+     */
+
+#define NELOG_NetlogonNoSiteForClients               (ERRLOG2_BASE + 107)
+    /*
+     * During the past %1 hours there have been %2 connections to this Domain
+     * Controller from client machines whose IP addresses don't map to any of
+     * the existing sites in the enterprise. Those clients, therefore, have
+     * undefined sites and may connect to any Domain Controller including
+     * those that are in far distant locations from the clients. A client's site
+     * is determined by the mapping of its subnet to one of the existing sites.
+     * To move the above clients to one of the sites, please consider creating
+     * subnet object(s) covering the above IP addresses with mapping to one of the
+     * existing sites.  The names and IP addresses of the clients in question have
+     * been logged on this computer in the following log file
+     * '%SystemRoot%\debug\netlogon.log' and, potentially, in the log file
+     * '%SystemRoot%\debug\netlogon.bak' created if the former log becomes full.
+     * The log(s) may contain additional unrelated debugging information. To filter
+     * out the needed information, please search for lines which contain text
+     * 'NO_CLIENT_SITE:'. The first word after this string is the client name and
+     * the second word is the client IP address. The maximum size of the log(s) is
+     * controlled by the following registry DWORD value
+     * 'HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters\LogFileMaxSize';
+     * the default is %3 bytes.  The current maximum size is %4 bytes.  To set a
+     * different maximum size, create the above registry value and set the desired
+     * maximum size in bytes.
      */
 
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _LMERRLOG_

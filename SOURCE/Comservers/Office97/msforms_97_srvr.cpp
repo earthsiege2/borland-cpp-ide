@@ -9,47 +9,28 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.2.1  $
-// File generated on 1/24/2000 9:49:38 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/28/2002 7:55:37 AM from Type Library described below.
 
-// ************************************************************************ //
+// ************************************************************************  //
 // Type Lib: C:\WINNT\System32\FM20.DLL (1)
-// IID\LCID: {0D452EE1-E08F-101A-852E-02608C4D0BB4}\0
+// LIBID: {0D452EE1-E08F-101A-852E-02608C4D0BB4}
+// LCID: 0
 // Helpfile: C:\WINNT\System32\fm20.hlp
+// HelpString: Microsoft Forms 2.0 Object Library
 // DepndLst: 
 //   (1) v2.0 stdole, (C:\WINNT\System32\stdole2.tlb)
 // Parent TypeLibrary:
-//   (0) v8.0 Outlook, (g:\rampage\typelib\TypeLibraries\MSOUTL8.olb)
+//   (0) v8.0 Outlook, (c:\program files\microsoft office\office97\office\msoutl8.olb)
 // Errors:
 //   Hint: Symbol 'Controls' renamed to 'Controls_'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
 // ************************************************************************ //
 
 #include <vcl.h>
 #pragma hdrstop
 
-#include "dbolectl.hpp"
+#include <oleserver.hpp>
+#include <dbolectl.hpp>
 #if defined(USING_ATL)
 #include <atl\atlvcl.h>
 #endif

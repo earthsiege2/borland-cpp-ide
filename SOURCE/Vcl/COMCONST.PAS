@@ -1,11 +1,10 @@
-
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
-{                                                       }
-{       Copyright (C) 1997,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1999-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 unit ComConst;
 
@@ -20,6 +19,7 @@ resourcestring
   SDispIntfMissing = 'Dispatch interface missing from class %s';
   SNoMethod = 'Method ''%s'' not supported by automation object';
   SVarNotObject = 'Variant does not reference an automation object';
+  STooManyParams = 'Dispatch methods do not support more than 64 parameters';
   SDCOMNotInstalled = 'DCOM not installed';
   SDAXError = 'DAX Error';
 

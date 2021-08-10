@@ -3,7 +3,7 @@
 
 :BASE nmecho.hlp
 :TITLE FastNet Echo Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 TNMEcho component
 2 TNMEcho component Reference=Scribble1010
 2 Properties

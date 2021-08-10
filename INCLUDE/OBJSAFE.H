@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:34:52 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for objsafe.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -38,6 +37,10 @@
 #ifndef __objsafe_h__
 #define __objsafe_h__
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
 /* Forward Declarations */ 
 
 #ifndef __IObjectSafety_FWD_DEFINED__
@@ -53,8 +56,8 @@ typedef interface IObjectSafety IObjectSafety;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_objsafe_0000 */
 /* [local] */ 
@@ -126,8 +129,8 @@ EXTERN_C const IID IID_IObjectSafety;
     public:
         virtual HRESULT STDMETHODCALLTYPE GetInterfaceSafetyOptions( 
             /* [in] */ REFIID riid,
-            /* [out] */ DWORD __RPC_FAR *pdwSupportedOptions,
-            /* [out] */ DWORD __RPC_FAR *pdwEnabledOptions) = 0;
+            /* [out] */ DWORD *pdwSupportedOptions,
+            /* [out] */ DWORD *pdwEnabledOptions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInterfaceSafetyOptions( 
             /* [in] */ REFIID riid,
@@ -142,25 +145,25 @@ EXTERN_C const IID IID_IObjectSafety;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IObjectSafety __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IObjectSafety * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IObjectSafety __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IObjectSafety * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IObjectSafety __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IObjectSafety * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInterfaceSafetyOptions )( 
-            IObjectSafety __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetInterfaceSafetyOptions )( 
+            IObjectSafety * This,
             /* [in] */ REFIID riid,
-            /* [out] */ DWORD __RPC_FAR *pdwSupportedOptions,
-            /* [out] */ DWORD __RPC_FAR *pdwEnabledOptions);
+            /* [out] */ DWORD *pdwSupportedOptions,
+            /* [out] */ DWORD *pdwEnabledOptions);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInterfaceSafetyOptions )( 
-            IObjectSafety __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetInterfaceSafetyOptions )( 
+            IObjectSafety * This,
             /* [in] */ REFIID riid,
             /* [in] */ DWORD dwOptionSetMask,
             /* [in] */ DWORD dwEnabledOptions);
@@ -170,7 +173,7 @@ EXTERN_C const IID IID_IObjectSafety;
 
     interface IObjectSafety
     {
-        CONST_VTBL struct IObjectSafetyVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IObjectSafetyVtbl *lpVtbl;
     };
 
     
@@ -202,10 +205,10 @@ EXTERN_C const IID IID_IObjectSafety;
 
 
 HRESULT STDMETHODCALLTYPE IObjectSafety_GetInterfaceSafetyOptions_Proxy( 
-    IObjectSafety __RPC_FAR * This,
+    IObjectSafety * This,
     /* [in] */ REFIID riid,
-    /* [out] */ DWORD __RPC_FAR *pdwSupportedOptions,
-    /* [out] */ DWORD __RPC_FAR *pdwEnabledOptions);
+    /* [out] */ DWORD *pdwSupportedOptions,
+    /* [out] */ DWORD *pdwEnabledOptions);
 
 
 void __RPC_STUB IObjectSafety_GetInterfaceSafetyOptions_Stub(
@@ -216,7 +219,7 @@ void __RPC_STUB IObjectSafety_GetInterfaceSafetyOptions_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IObjectSafety_SetInterfaceSafetyOptions_Proxy( 
-    IObjectSafety __RPC_FAR * This,
+    IObjectSafety * This,
     /* [in] */ REFIID riid,
     /* [in] */ DWORD dwOptionSetMask,
     /* [in] */ DWORD dwEnabledOptions);
@@ -236,7 +239,7 @@ void __RPC_STUB IObjectSafety_SetInterfaceSafetyOptions_Stub(
 /* interface __MIDL_itf_objsafe_0009 */
 /* [local] */ 
 
-typedef /* [unique] */ IObjectSafety __RPC_FAR *LPOBJECTSAFETY;
+typedef /* [unique] */ IObjectSafety *LPOBJECTSAFETY;
 
 #endif
 
@@ -253,6 +256,7 @@ extern RPC_IF_HANDLE __MIDL_itf_objsafe_0009_v0_0_s_ifspec;
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

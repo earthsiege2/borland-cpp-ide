@@ -9,7 +9,6 @@
 \*****************************************************************************/
 
 #ifndef _INC_WINDOWSX
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_WINDOWSX
 
 #if (_MSC_VER >= 1020)
@@ -1371,5 +1370,4 @@ LONG MwMapWindowRect(HWND, HWND, RECT *);
 }                       /* End of extern "C" { */
 #endif       /* __cplusplus */
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* !_INC_WINDOWSX */

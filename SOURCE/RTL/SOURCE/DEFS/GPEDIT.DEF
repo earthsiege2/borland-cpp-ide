@@ -1,7 +1,9 @@
-LIBRARY GPEDIT
+LIBRARY GPEdit
 EXPORTS
 
-    BrowseForGPO                             = 'GPEDIT.DLL'.*
-    CreateGPOLink                            = 'GPEDIT.DLL'.*
-    DeleteAllGPOLinks                        = 'GPEDIT.DLL'.*
-    DeleteGPOLink                            = 'GPEDIT.DLL'.*
+    BrowseForGPO
+    CreateGPOLink
+    DeleteAllGPOLinks
+    DeleteGPOLink
+    ExportRSoPData
+    ImportRSoPData

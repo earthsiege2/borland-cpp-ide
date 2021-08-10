@@ -11,6 +11,7 @@
 // Microsoft Foundation Classes product.
 
 #include "threads.h"
+#include <afxtempl.h>
 
 class CThreadView : public CView
 {

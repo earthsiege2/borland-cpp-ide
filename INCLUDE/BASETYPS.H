@@ -1,13 +1,12 @@
 //+---------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  File:       basetyps.h
 //
 //----------------------------------------------------------------------------
 #if !defined( _BASETYPS_H_ )
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _BASETYPS_H_
 
 #if _MSC_VER > 1000
@@ -208,6 +207,5 @@ typedef unsigned short wchar_t;
 #define _WCHAR_T_DEFINED
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif
 

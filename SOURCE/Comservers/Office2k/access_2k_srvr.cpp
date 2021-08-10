@@ -9,20 +9,21 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.1.1  $
-// File generated on 1/24/2000 09:38:17 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/28/2002 8:27:17 AM from Type Library described below.
 
-// ************************************************************************ //
-// Type Lib: d:\tlbgen\rampage\typelib\TypeLibraries\MSACC9.olb (1)
-// IID\LCID: {4AFFC9A0-5F99-101B-AF4E-00AA003F0F07}\0
-// Helpfile: d:\tlbgen\rampage\typelib\TypeLibraries\acmain9.chm
+// ************************************************************************  //
+// Type Lib: c:\program files\microsoft office\office\msacc9.olb (1)
+// LIBID: {4AFFC9A0-5F99-101B-AF4E-00AA003F0F07}
+// LCID: 0
+// Helpfile: c:\program files\microsoft office\office\acmain9.chm
+// HelpString: Microsoft Access 9.0 Object Library
 // DepndLst: 
-//   (1) v2.0 stdole, (D:\WINNT\System32\stdole2.tlb)
-//   (2) v2.1 ADODB, (D:\tlbgen\rampage\typelib\typelibraries\testing\msado21.tlb)
-//   (3) v5.0 DAO, (D:\Program Files\Common Files\Microsoft Shared\DAO\dao360.dll)
-//   (4) v2.1 Office, (D:\msof2k\Office\mso9.dll)
-//   (5) v5.3 VBIDE, (D:\Program Files\Common Files\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB)
-//   (6) v4.0 StdVCL, (D:\tlbgen\rampage\typelib\typelibraries\testing\stdvcl40.tlb)
+//   (1) v2.0 stdole, (C:\WINNT\System32\stdole2.tlb)
+//   (2) v5.0 DAO, (C:\Program Files\Common Files\Microsoft Shared\DAO\dao360.dll)
+//   (3) v2.1 Office, (C:\Program Files\Microsoft Office\Office\MSO9.DLL)
+//   (4) v2.1 ADODB, (C:\dev\riptide\typelib\typelib\typelibraries\testing\msado21.tlb)
+//   (5) v5.3 VBIDE, (C:\Program Files\Common Files\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB)
 // Errors:
 //   Hint: Symbol 'Hyperlink' renamed to 'AccessHyperlink'
 //   Hint: Symbol 'Page' renamed to 'AccessPage'
@@ -56,24 +57,7 @@
 //   Hint: Symbol 'Application' renamed to 'AccessApplication'
 //   Hint: Symbol 'References' renamed to 'AccessReferences'
 //   Hint: Symbol 'WebOptions' renamed to 'AccessWebOptions'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
+//   Hint: Symbol 'Set' renamed to 'Set_'
 //   Hint: Symbol 'Hyperlink' renamed to 'AccessHyperlink'
 //   Hint: Symbol 'Page' renamed to 'AccessPage'
 //   Hint: Symbol 'Control' renamed to 'AccessControl'
@@ -106,34 +90,18 @@
 //   Hint: Symbol 'Application' renamed to 'AccessApplication'
 //   Hint: Symbol 'References' renamed to 'AccessReferences'
 //   Hint: Symbol 'WebOptions' renamed to 'AccessWebOptions'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
+//   Hint: Symbol 'Set' renamed to 'Set_'
 // ************************************************************************ //
 
 #include <vcl.h>
 #pragma hdrstop
 
+#include <oleserver.hpp>
 #if defined(USING_ATL)
 #include <atl\atlvcl.h>
 #endif
 
-#include "Access_2K_SRVR.h"
+#include "Access_2k_srvr.h"
 
 #if !defined(__PRAGMA_PACKAGE_SMART_INIT)
 #define      __PRAGMA_PACKAGE_SMART_INIT
@@ -320,130 +288,190 @@ void __fastcall TAccessForm::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TAccessForm::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TAccessForm::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 2067:
-      if (OnLoad1)
+    case 2067: {
+      if (OnLoad1) {
         (OnLoad1)(this);
+      }
       break;
-    case 2058:
-      if (OnCurrent1)
+      }
+    case 2058: {
+      if (OnCurrent1) {
         (OnCurrent1)(this);
+      }
       break;
-    case 2059:
-      if (OnBeforeInsert)
+      }
+    case 2059: {
+      if (OnBeforeInsert) {
         (OnBeforeInsert)(this, TVariant(params[0]));
+      }
       break;
-    case 2060:
-      if (OnAfterInsert)
+      }
+    case 2060: {
+      if (OnAfterInsert) {
         (OnAfterInsert)(this);
+      }
       break;
-    case 2061:
-      if (OnBeforeUpdate)
+      }
+    case 2061: {
+      if (OnBeforeUpdate) {
         (OnBeforeUpdate)(this, TVariant(params[0]));
+      }
       break;
-    case 2062:
-      if (OnAfterUpdate)
+      }
+    case 2062: {
+      if (OnAfterUpdate) {
         (OnAfterUpdate)(this);
+      }
       break;
-    case 2063:
-      if (OnDelete1)
+      }
+    case 2063: {
+      if (OnDelete1) {
         (OnDelete1)(this, TVariant(params[0]));
+      }
       break;
-    case 2064:
-      if (OnBeforeDelConfirm)
+      }
+    case 2064: {
+      if (OnBeforeDelConfirm) {
         (OnBeforeDelConfirm)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 2065:
-      if (OnAfterDelConfirm)
+      }
+    case 2065: {
+      if (OnAfterDelConfirm) {
         (OnAfterDelConfirm)(this, TVariant(params[0]));
+      }
       break;
-    case 2066:
-      if (OnOpen1)
+      }
+    case 2066: {
+      if (OnOpen1) {
         (OnOpen1)(this, TVariant(params[0]));
+      }
       break;
-    case 2068:
-      if (OnResize1)
+      }
+    case 2068: {
+      if (OnResize1) {
         (OnResize1)(this);
+      }
       break;
-    case 2069:
-      if (OnUnload1)
+      }
+    case 2069: {
+      if (OnUnload1) {
         (OnUnload1)(this, TVariant(params[0]));
+      }
       break;
-    case 2070:
-      if (OnClose1)
+      }
+    case 2070: {
+      if (OnClose1) {
         (OnClose1)(this);
+      }
       break;
-    case 2071:
-      if (OnActivate1)
+      }
+    case 2071: {
+      if (OnActivate1) {
         (OnActivate1)(this);
+      }
       break;
-    case 2072:
-      if (OnDeactivate1)
+      }
+    case 2072: {
+      if (OnDeactivate1) {
         (OnDeactivate1)(this);
+      }
       break;
-    case 2073:
-      if (OnGotFocus1)
+      }
+    case 2073: {
+      if (OnGotFocus1) {
         (OnGotFocus1)(this);
+      }
       break;
-    case 2074:
-      if (OnLostFocus1)
+      }
+    case 2074: {
+      if (OnLostFocus1) {
         (OnLostFocus1)(this);
+      }
       break;
-    case -600:
-      if (On_Click)
-        (On_Click)(this);
+      }
+    case -600: {
+      if (OnClick1) {
+        (OnClick1)(this);
+      }
       break;
-    case -601:
-      if (OnDblClick1)
+      }
+    case -601: {
+      if (OnDblClick1) {
         (OnDblClick1)(this, TVariant(params[0]));
+      }
       break;
-    case -605:
-      if (OnMouseDown1)
+      }
+    case -605: {
+      if (OnMouseDown1) {
         (OnMouseDown1)(this, TVariant(params[0]), TVariant(params[1]), TVariant(params[2]), TVariant(params[3]));
+      }
       break;
-    case -606:
-      if (OnMouseMove1)
+      }
+    case -606: {
+      if (OnMouseMove1) {
         (OnMouseMove1)(this, TVariant(params[0]), TVariant(params[1]), TVariant(params[2]), TVariant(params[3]));
+      }
       break;
-    case -607:
-      if (OnMouseUp1)
+      }
+    case -607: {
+      if (OnMouseUp1) {
         (OnMouseUp1)(this, TVariant(params[0]), TVariant(params[1]), TVariant(params[2]), TVariant(params[3]));
+      }
       break;
-    case -602:
-      if (OnKeyDown1)
+      }
+    case -602: {
+      if (OnKeyDown1) {
         (OnKeyDown1)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case -603:
-      if (OnKeyPress1)
+      }
+    case -603: {
+      if (OnKeyPress1) {
         (OnKeyPress1)(this, TVariant(params[0]));
+      }
       break;
-    case -604:
-      if (OnKeyUp1)
+      }
+    case -604: {
+      if (OnKeyUp1) {
         (OnKeyUp1)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 2083:
-      if (OnError1)
+      }
+    case 2083: {
+      if (OnError1) {
         (OnError1)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 2084:
-      if (OnTimer1)
+      }
+    case 2084: {
+      if (OnTimer1) {
         (OnTimer1)(this);
+      }
       break;
-    case 2155:
-      if (OnFilter1)
+      }
+    case 2155: {
+      if (OnFilter1) {
         (OnFilter1)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 2156:
-      if (OnApplyFilter1)
+      }
+    case 2156: {
+      if (OnApplyFilter1) {
         (OnApplyFilter1)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 2205:
-      if (OnDirty1)
+      }
+    case 2205: {
+      if (OnDirty1) {
         (OnDirty1)(this, TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -508,38 +536,52 @@ void __fastcall TAccessReport::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TAccessReport::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TAccessReport::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 2066:
-      if (OnOpen1)
+    case 2066: {
+      if (OnOpen1) {
         (OnOpen1)(this, TVariant(params[0]));
+      }
       break;
-    case 2070:
-      if (OnClose1)
+      }
+    case 2070: {
+      if (OnClose1) {
         (OnClose1)(this);
+      }
       break;
-    case 2071:
-      if (OnActivate1)
+      }
+    case 2071: {
+      if (OnActivate1) {
         (OnActivate1)(this);
+      }
       break;
-    case 2072:
-      if (OnDeactivate1)
+      }
+    case 2072: {
+      if (OnDeactivate1) {
         (OnDeactivate1)(this);
+      }
       break;
-    case 2083:
-      if (OnError1)
+      }
+    case 2083: {
+      if (OnError1) {
         (OnError1)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 2161:
-      if (OnNoData1)
+      }
+    case 2161: {
+      if (OnNoData1) {
         (OnNoData1)(this, TVariant(params[0]));
+      }
       break;
-    case 2162:
-      if (OnPage1)
+      }
+    case 2162: {
+      if (OnPage1) {
         (OnPage1)(this);
+      }
       break;
+      }
     default:
       break;
   }
@@ -663,18 +705,22 @@ void __fastcall TAccessReferences::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TAccessReferences::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TAccessReferences::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 0:
-      if (OnItemAdded)
+    case 0: {
+      if (OnItemAdded) {
         (OnItemAdded)(this, (Access_2k::Reference*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 1:
-      if (OnItemRemoved)
+      }
+    case 1: {
+      if (OnItemRemoved) {
         (OnItemRemoved)(this, (Access_2k::Reference*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -1724,7 +1770,7 @@ void __fastcall PACKAGE Register()
                               __classid(Access_2k::TDefaultWebOptions), 
                               __classid(Access_2k::TAccessWebOptions)
                            };
-  RegisterComponents("Servers", cls_svr,
+  RegisterComponents("Office2k", cls_svr,
                      sizeof(cls_svr)/sizeof(cls_svr[0])-1);
 }
 

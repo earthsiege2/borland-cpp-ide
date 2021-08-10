@@ -1,6 +1,6 @@
 /*
 
-    Copyright (c) 1997-1999  Microsoft Corporation
+    Copyright (c) Microsoft Corporation. All rights reserved.
 
     Module Name:
         rnderr.h
@@ -8,7 +8,6 @@
 */
 
 #ifndef __RND_ERROR_CODES__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __RND_ERROR_CODES__
 
 #include <blberr.h>
@@ -22,5 +21,4 @@
 #define RND_ALREADY_CONNECTED             0xe0000202
 #define RND_NOT_CONNECTED                 0xe0000203
 
-#pragma option pop /*P_O_Pop*/
 #endif // __RND_ERROR_CODES__

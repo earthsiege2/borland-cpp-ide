@@ -5,13 +5,13 @@
 DWALIGN equ     1               ; set to 1 to enable dword-aligning of string
 
 ;
-;       C/C++ Run Time Library - Version 10.0
+;       C/C++ Run Time Library - Version 11.0
 ; 
-;       Copyright (c) 1992, 2000 by Inprise Corporation
+;       Copyright (c) 1992, 2002 by Borland Software Corporation
 ;       All Rights Reserved.
 ; 
 
-; $Revision:   9.0  $
+; $Revision: 9.4.2.1 $
 
         include RULES.ASI
 

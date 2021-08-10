@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OleDlg.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'OleDlg.pas' rev: 6.00
 
 #ifndef OleDlgHPP
 #define OleDlgHPP
@@ -11,7 +11,7 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <ActiveX.hpp>	// Pascal unit
-#include <Commctrl.hpp>	// Pascal unit
+#include <CommCtrl.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
@@ -73,9 +73,7 @@ typedef tagOLEUIOBJECTPROPSA  TOleUIObjectProps;
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Oledlg */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Oledlg;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

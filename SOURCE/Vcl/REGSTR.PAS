@@ -1,11 +1,13 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1996-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
 {       Win32 registry interface unit                   }
-{                                                       }
-{       Copyright (C) 1996,99 Inprise Corporation       }
-{                                                       }
 {*******************************************************}
 
 unit RegStr;
@@ -639,7 +641,7 @@ const
   REGSTR_VAL_PCMCIA_OPT       = 'Options';
   {$EXTERNALSYM PCMCIA_OPT_HAVE_SOCKET}
   PCMCIA_OPT_HAVE_SOCKET      = $00000001;
-{ PCMCIA_OPT_ENABLED	         = $00000002l; }
+{ PCMCIA_OPT_ENABLED          = $00000002l; }
   {$EXTERNALSYM PCMCIA_OPT_AUTOMEM}
   PCMCIA_OPT_AUTOMEM          = $00000004;
   {$EXTERNALSYM PCMCIA_OPT_NO_SOUND}
@@ -1388,7 +1390,7 @@ const
   {$EXTERNALSYM REGSTR_VALUE_DEFAULTLOC}
   REGSTR_VALUE_DEFAULTLOC     = 'UseDefaultNetLocation';
 
-{ 	Entries under REGSTR_PATH_POLICIES }
+{ Entries under REGSTR_PATH_POLICIES }
 
   {$EXTERNALSYM REGSTR_KEY_NETWORK}
   REGSTR_KEY_NETWORK                  = 'Network';
@@ -1571,11 +1573,11 @@ const
   {$EXTERNALSYM REGSTR_PATH_HACKINIFILE}
   REGSTR_PATH_HACKINIFILE      = 'System\CurrentControlSet\Control\SessionManager\HackIniFiles';
 
-{ 	Keys here for bad applications we want to warn the user about before running }
+{ Keys here for bad applications we want to warn the user about before running }
   {$EXTERNALSYM REGSTR_PATH_CHECKBADAPPS}
   REGSTR_PATH_CHECKBADAPPS     = 'System\CurrentControlSet\Control\SessionManager\CheckBadApps';
 
-{ 	Keys here for applications we need to patch }
+{ Keys here for applications we need to patch }
   {$EXTERNALSYM REGSTR_PATH_APPPATCH}
   REGSTR_PATH_APPPATCH     = 'System\CurrentControlSet\Control\SessionManager\AppPatches';
 

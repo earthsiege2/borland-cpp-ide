@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'LibHelp.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'LibHelp.pas' rev: 6.00
 
 #ifndef LibHelpHPP
 #define LibHelpHPP
@@ -25,6 +25,7 @@ static const Word hcDMediaPlayerOpen = 0x61bc;
 static const Word hcRedirectLinkError = 0x61c6;
 static const Word hcRedirectLinkDlg = 0x61c7;
 static const Word hcDStringListEditor = 0x6590;
+static const Word hcDValueListEditor = 0x6595;
 static const Word hcDFilterEditor = 0x659a;
 static const Word hcDNotebookEditor = 0x65a4;
 static const Word hcDPictureEditor = 0x65ae;
@@ -43,6 +44,7 @@ static const Word hcDCollectionEditor = 0x6626;
 static const Word hcDResponseEditor = 0x6630;
 static const Word hcDActionListEditor = 0x663a;
 static const Word hcDNewStdAction = 0x663b;
+static const Word hcDIconViewItemEdit = 0x663c;
 static const Word hcmCollectionAdd = 0x6659;
 static const Word hcmCollectionDelete = 0x665a;
 static const Word hcmCollectionMoveUp = 0x665b;
@@ -148,9 +150,7 @@ static const Word hcDVCSLockArchives = 0xc788;
 static const Word hcDVCSUnlockArchives = 0xc792;
 
 }	/* namespace Libhelp */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Libhelp;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

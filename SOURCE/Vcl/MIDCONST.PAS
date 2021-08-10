@@ -1,11 +1,11 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Kylix and Delphi Cross-Platform Visual Component Library                    }
+{                                                                             }
+{ Copyright (c) 1997, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{                                                       }
-{       Copyright (c) 1997,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
 unit MidConst;
 
@@ -13,9 +13,11 @@ interface
 
 const
 { Do not localize }
-  MIDAS_CatDesc = 'Borland MIDAS Application Servers';
+  MIDAS_CatDesc = 'Borland DataSnap Application Servers';
   CATID_MIDASAppServer: TGUID = '{13E85B3C-9508-11D2-AB63-00C04FA35CFA}';
-  SCatImplBaseKey = 'CLSID\%s\Implemented Categories';
+  MIDASInterceptor_CatDesc = 'Borland DataSnap Application Servers';
+  CATID_MIDASInterceptor: TGUID = '{6BFD12F2-7004-11D4-BE3C-0001023E6E0F}';
+  SCatImplBaseKey = '%s\Implemented Categories';
   SCatImplKey = SCatImplBaseKey + '\%s';
   MIDAS_DLL = 'MIDAS.DLL';
   SClsid = 'CLSID\';
@@ -26,7 +28,8 @@ const
   SSockets = 'Sockets';
   SWeb = 'Web';
   SFlagOn = '1';
-  SFlagOff = '0'; 
+  SFlagOff = '0';
+  MINDATAPACKETSIZE = 8;   
 
 resourcestring
   { App Server }
@@ -44,12 +47,16 @@ resourcestring
   SNoCircularReference = 'Circular provider references not allowed';
   SErrorLoadingMidas = 'Error loading MIDAS.DLL';
   SCannotCreateDataSet = 'No fields defined.  Cannot create dataset';
+  SFieldNameTooLarge = 'Fieldname %s exceeds %d chars';
+  SInvalidClone = 'CloneConnection invalid: distinct ClientDataSet descendents';
 
   { MConnect }
   SSocketReadError = 'Error reading from socket';
   SInvalidProviderName = 'Provider name "%s" was not recognized by the server';
   SBadVariantType = 'Unsupported variant type: %s';
   SInvalidAction = 'Invalid action received: %d';
+  SNoParentConnection = 'ParentConnection is not assigned';
+  SBlankChildName = 'ChildName cannot be blank';
 
   { Resolver }
   SInvalidResponse = 'Invalid response';
@@ -75,10 +82,16 @@ resourcestring
   SNoDeletesAllowed = 'Deletes are not allowed';
   SNoInsertsAllowed = 'Inserts are not allowed';
   SCannotChangeCommandText = 'CommandText changes are not allowed';
+  SAggregatesActive = 'Operation not allowed with aggregates active';
 
   { ObjectBroker }
   SNoServers = 'No server available';
 
+  { ConnectionBroker }
+
+  SConnectionMissing = 'Requires Connection before opening';
+  SNoCircularConnection = 'Circular reference to Connection not allowed';
+  
   { Socket Connection }
   SReturnError = 'Expected return value not received';
   SNoWinSock2 = 'WinSock 2 must be installed to use the socket connection';
@@ -90,6 +103,9 @@ resourcestring
   SServerIsBusy = 'Server is busy';
 
   SObjectNotAvailable = 'Object not available: %s';
+
+  { SuperComponents }
+  SMasterNotOpen = 'Cannot open detail table with master closed';
 
 implementation
 

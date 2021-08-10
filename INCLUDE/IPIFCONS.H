@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1995-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -9,14 +9,17 @@ Module Name:
 Abstract:
     Constants needed for the Interface Object
 
-       */
+--*/
 
 #ifndef __IPIFCONS_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __IPIFCONS_H__
 
 #if _MSC_VER > 1000
 #pragma once
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -171,8 +174,9 @@ Abstract:
 #define IF_TYPE_IPFORWARD               142 // IP Forwarding Interface
 #define IF_TYPE_MSDSL                   143 // Multi-rate Symmetric DSL
 #define IF_TYPE_IEEE1394                144 // IEEE1394 High Perf Serial Bus
+#define IF_TYPE_RECEIVE_ONLY            145 // TV adapter type
 
-#define MAX_IF_TYPE                     144
+#define MAX_IF_TYPE                     145
 
 //////////////////////////////////////////////////////////////////////////////
 //                                                                          //
@@ -184,6 +188,17 @@ Abstract:
 #define IF_ACCESS_BROADCAST             2
 #define IF_ACCESS_POINTTOPOINT          3
 #define IF_ACCESS_POINTTOMULTIPOINT     4
+
+//////////////////////////////////////////////////////////////////////////////
+//                                                                          //
+// Interface Capabilities (bit flags)                                       //
+//                                                                          //
+//////////////////////////////////////////////////////////////////////////////
+
+#define IF_CHECK_NONE                   0x00
+#define IF_CHECK_MCAST                  0x01
+#define IF_CHECK_SEND                   0x02
+
 
 //////////////////////////////////////////////////////////////////////////////
 //                                                                          //
@@ -254,5 +269,8 @@ Abstract:
 #define MIB_IF_OPER_STATUS_CONNECTED            4
 #define MIB_IF_OPER_STATUS_OPERATIONAL          5
 
-#pragma option pop /*P_O_Pop*/
+#ifdef __cplusplus
+}
+#endif
+
 #endif //__ROUTING_IPIFCONS_H__

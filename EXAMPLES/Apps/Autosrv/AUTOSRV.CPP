@@ -3,12 +3,7 @@
 #pragma hdrstop
 #include <atl\atlmod.h>
 #include "EditServerImpl.h"
-USERES("autosrv.res");
 USEFORM("main.cpp", Form1);
-USETLB("autosrv.tlb");
-USEUNIT("autosrv_TLB.cpp");
-USEUNIT("EditServerImpl.cpp"); /* EditServer: CoClass */
-USEUNIT("autosrv_ATL.cpp");
 //---------------------------------------------------------------------------
 TComModule _ProjectModule(0 /*InitATLServer*/);
 TComModule &_Module = _ProjectModule;

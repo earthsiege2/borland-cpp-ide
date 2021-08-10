@@ -10,8 +10,7 @@
 const char *sShowXML = "Show XML";
 const char *sShowDelta = "Show Delta";
 
-void __fastcall TCustomShowXMLButton::ImplAddElements(
-  Webcomp::_di_IAddScriptElements AddIntf)
+void __fastcall TCustomShowXMLButton::ImplAddElements(_di_IAddScriptElements AddIntf)
 {
   inherited::ImplAddElements(AddIntf);
   AddIntf->AddIncludeFile("xmlshow.js");

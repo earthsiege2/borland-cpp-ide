@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'WebComp.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'WebComp.pas' rev: 6.00
 
 #ifndef WebCompHPP
 #define WebCompHPP
@@ -11,7 +11,7 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <Masks.hpp>	// Pascal unit
-#include <Midas.hpp>	// Pascal unit
+#include <HTTPProd.hpp>	// Pascal unit
 #include <HTTPApp.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
@@ -22,260 +22,68 @@
 namespace Webcomp
 {
 //-- type declarations -------------------------------------------------------
-__interface IScriptProducer;
-typedef System::DelphiInterface<IScriptProducer> _di_IScriptProducer;
-__interface IScriptManager;
-typedef System::DelphiInterface<IScriptManager> _di_IScriptManager;
-__interface INTERFACE_UUID("{555DA472-F254-11D2-AA55-00A024C11562}") IScriptProducer  : public IUnknown 
-	
+__interface IProducerEditorViewSupport;
+typedef System::DelphiInterface<IProducerEditorViewSupport> _di_IProducerEditorViewSupport;
+__interface INTERFACE_UUID("{72B13C95-E75C-11D4-A549-00C04F6BB853}") IProducerEditorViewSupport  : public IInterface 
 {
 	
 public:
-	virtual _di_IScriptManager __fastcall GetScriptManager(void) = 0 ;
-	__property _di_IScriptManager ScriptManager = {read=GetScriptManager};
+	virtual bool __fastcall HasScriptView(void) = 0 ;
+	virtual bool __fastcall HasXMLBrowserView(void) = 0 ;
+	virtual bool __fastcall HasXSLBrowserView(void) = 0 ;
+	virtual bool __fastcall HasHTMLBrowserView(void) = 0 ;
+	virtual Classes::TStream* __fastcall GetXMLData(bool &Owned) = 0 ;
+	virtual Classes::TStream* __fastcall GetXSLData(bool &Owned) = 0 ;
+	virtual AnsiString __fastcall GetTemplateFileType(void) = 0 ;
 };
 
-__interface IXMLDocuments;
-typedef System::DelphiInterface<IXMLDocuments> _di_IXMLDocuments;
-__interface IIncludeFiles;
-typedef System::DelphiInterface<IIncludeFiles> _di_IIncludeFiles;
-__interface IFunctions;
-typedef System::DelphiInterface<IFunctions> _di_IFunctions;
-__interface IScriptBlocks;
-typedef System::DelphiInterface<IScriptBlocks> _di_IScriptBlocks;
-__interface IVars;
-typedef System::DelphiInterface<IVars> _di_IVars;
-__interface IHTMLBlocks;
-typedef System::DelphiInterface<IHTMLBlocks> _di_IHTMLBlocks;
+__interface IGetXMLStream;
+typedef System::DelphiInterface<IGetXMLStream> _di_IGetXMLStream;
+__interface INTERFACE_UUID("{646363DA-6311-4750-A187-A9B416B7CAF8}") IGetXMLStream  : public IInterface 
+{
+	
+public:
+	virtual Classes::TStream* __fastcall GetXMLStream(bool &Owned) = 0 ;
+};
+
+__interface ISetWebContentOptions;
+typedef System::DelphiInterface<ISetWebContentOptions> _di_ISetWebContentOptions;
 class DELPHICLASS TWebContentOptions;
-__interface IAddScriptElements;
-typedef System::DelphiInterface<IAddScriptElements> _di_IAddScriptElements;
-__interface INTERFACE_UUID("{94B8B14E-E6D6-11D2-AFA6-00C04FB16EC3}") IScriptManager  : public IUnknown 
-	
+__interface INTERFACE_UUID("{7FD48995-5814-11D4-A492-00C04F6BB853}") ISetWebContentOptions  : public IInterface 
 {
 	
 public:
-	virtual _di_IXMLDocuments __fastcall GetXMLDocuments(void) = 0 ;
-	virtual _di_IIncludeFiles __fastcall GetIncludeFiles(void) = 0 ;
-	virtual _di_IFunctions __fastcall GetFunctions(void) = 0 ;
-	virtual Classes::TStrings* __fastcall GetWarnings(void) = 0 ;
-	virtual _di_IScriptBlocks __fastcall GetScriptBlocks(void) = 0 ;
-	virtual _di_IVars __fastcall GetVars(void) = 0 ;
-	virtual _di_IHTMLBlocks __fastcall GetHTMLBlocks(void) = 0 ;
-	virtual TWebContentOptions* __fastcall GetOptions(void) = 0 ;
-	virtual _di_IAddScriptElements __fastcall GetAddElementsIntf(void) = 0 ;
-	virtual void __fastcall AddError(const AnsiString Error) = 0 ;
-	__property _di_IXMLDocuments XMLDocuments = {read=GetXMLDocuments};
-	__property _di_IIncludeFiles IncludeFiles = {read=GetIncludeFiles};
-	__property Classes::TStrings* Warnings = {read=GetWarnings};
-	__property _di_IFunctions Functions = {read=GetFunctions};
-	__property _di_IVars Vars = {read=GetVars};
-	__property _di_IScriptBlocks ScriptBlocks = {read=GetScriptBlocks};
-	__property _di_IHTMLBlocks HTMLBlocks = {read=GetHTMLBlocks};
-	__property TWebContentOptions* Options = {read=GetOptions};
-	__property _di_IAddScriptElements AddElementsIntf = {read=GetAddElementsIntf};
+	virtual void __fastcall SetWebContentOptions(TWebContentOptions* AOptions) = 0 ;
 };
 
-__interface IIncludeFile;
-typedef System::DelphiInterface<IIncludeFile> _di_IIncludeFile;
-__interface INTERFACE_UUID("{F735BC77-E7A4-11D2-AFA7-00C04FB16EC3}") IIncludeFiles  : public IUnknown 
-	
+__interface INotifyWebActivate;
+typedef System::DelphiInterface<INotifyWebActivate> _di_INotifyWebActivate;
+__interface INTERFACE_UUID("{CE18BE42-1358-11D4-ABF4-F18FFAD12B3C}") INotifyWebActivate  : public IInterface 
 {
 	
 public:
-	virtual int __fastcall GetCount(void) = 0 ;
-	virtual _di_IIncludeFile __fastcall GetItem(int I) = 0 ;
-	__property int Count = {read=GetCount};
-	__property _di_IIncludeFile Items[int I] = {read=GetItem};
+	virtual void __fastcall NotifyActivate(void) = 0 ;
+	virtual void __fastcall NotifyDeactivate(void) = 0 ;
 };
 
-__interface INTERFACE_UUID("{F735BC78-E7A4-11D2-AFA7-00C04FB16EC3}") IIncludeFile  : public IUnknown 
-	
+__interface INotifyActivateModule;
+typedef System::DelphiInterface<INotifyActivateModule> _di_INotifyActivateModule;
+__interface INTERFACE_UUID("{02B08C86-80D4-42D7-A84A-C0A09F42BDD1}") INotifyActivateModule  : public IInterface 
 {
 	
 public:
-	virtual AnsiString __fastcall GetFileName(void) = 0 ;
-	__property AnsiString FileName = {read=GetFileName};
+	virtual void __fastcall NotifyActivateModule(Classes::TComponent* AWebModule) = 0 ;
+	virtual void __fastcall NotifyDeactivateModule(Classes::TComponent* AWebModule) = 0 ;
 };
 
-__interface IFunction;
-typedef System::DelphiInterface<IFunction> _di_IFunction;
-__interface INTERFACE_UUID("{3AA43171-EC43-11D2-AFAE-00C04FB16EC3}") IFunctions  : public IUnknown 
+__interface IWebVariablesContainerName;
+typedef System::DelphiInterface<IWebVariablesContainerName> _di_IWebVariablesContainerName;
+__interface INTERFACE_UUID("{14A3B5AC-7A5C-4279-BB7C-B3D6E2EDD7F1}") IWebVariablesContainerName  : public IInterface 
 {
 	
 public:
-	virtual int __fastcall GetCount(void) = 0 ;
-	virtual _di_IFunction __fastcall GetItem(int I) = 0 ;
-	__property int Count = {read=GetCount};
-	__property _di_IFunction Items[int I] = {read=GetItem};
-};
-
-__interface INTERFACE_UUID("{3AA43172-EC43-11D2-AFAE-00C04FB16EC3}") IFunction  : public IUnknown 
-{
-	
-public:
-	virtual AnsiString __fastcall GetFunctionName(void) = 0 ;
-	virtual AnsiString __fastcall GetBody(void) = 0 ;
-	__property AnsiString FunctionName = {read=GetFunctionName};
-	__property AnsiString Body = {read=GetBody};
-};
-
-__interface IVar;
-typedef System::DelphiInterface<IVar> _di_IVar;
-__interface INTERFACE_UUID("{8AFBBDE2-2A11-11D3-AAAB-00A024C11562}") IVars  : public IUnknown 
-{
-	
-public:
-	virtual int __fastcall GetCount(void) = 0 ;
-	virtual _di_IVar __fastcall GetItem(int I) = 0 ;
-	__property int Count = {read=GetCount};
-	__property _di_IVar Items[int I] = {read=GetItem};
-};
-
-__interface INTERFACE_UUID("{8AFBBDE3-2A11-11D3-AAAB-00A024C11562}") IVar  : public IUnknown 
-{
-	
-public:
-	virtual AnsiString __fastcall GetVarName(void) = 0 ;
-	virtual AnsiString __fastcall GetScript(void) = 0 ;
-	__property AnsiString VarName = {read=GetVarName};
-	__property AnsiString Script = {read=GetScript};
-};
-
-__interface IHTMLBlock;
-typedef System::DelphiInterface<IHTMLBlock> _di_IHTMLBlock;
-__interface INTERFACE_UUID("{8AFBBDE4-2A11-11D3-AAAB-00A024C11562}") IHTMLBlocks  : public IUnknown 
-	
-{
-	
-public:
-	virtual int __fastcall GetCount(void) = 0 ;
-	virtual _di_IHTMLBlock __fastcall GetItem(int I) = 0 ;
-	__property int Count = {read=GetCount};
-	__property _di_IHTMLBlock Items[int I] = {read=GetItem};
-};
-
-__interface INTERFACE_UUID("{8AFBBDE5-2A11-11D3-AAAB-00A024C11562}") IHTMLBlock  : public IUnknown 
-{
-	
-public:
-	virtual AnsiString __fastcall GetBlockName(void) = 0 ;
-	virtual AnsiString __fastcall GetHTML(void) = 0 ;
-	__property AnsiString BlockName = {read=GetBlockName};
-	__property AnsiString HTML = {read=GetHTML};
-};
-
-__interface IScriptBlock;
-typedef System::DelphiInterface<IScriptBlock> _di_IScriptBlock;
-__interface INTERFACE_UUID("{8AFBBDE6-2A11-11D3-AAAB-00A024C11562}") IScriptBlocks  : public IUnknown 
-	
-{
-	
-public:
-	virtual int __fastcall GetCount(void) = 0 ;
-	virtual _di_IScriptBlock __fastcall GetItem(int I) = 0 ;
-	__property int Count = {read=GetCount};
-	__property _di_IScriptBlock Items[int I] = {read=GetItem};
-};
-
-__interface INTERFACE_UUID("{8AFBBDE7-2A11-11D3-AAAB-00A024C11562}") IScriptBlock  : public IUnknown 
-	
-{
-	
-public:
-	virtual AnsiString __fastcall GetBlockName(void) = 0 ;
-	virtual AnsiString __fastcall GetScript(void) = 0 ;
-	__property AnsiString BlockName = {read=GetBlockName};
-	__property AnsiString Script = {read=GetScript};
-};
-
-__interface IXMLDocument;
-typedef System::DelphiInterface<IXMLDocument> _di_IXMLDocument;
-__interface INTERFACE_UUID("{94B8B150-E6D6-11D2-AFA6-00C04FB16EC3}") IXMLDocuments  : public IUnknown 
-	
-{
-	
-public:
-	virtual int __fastcall GetCount(void) = 0 ;
-	virtual _di_IXMLDocument __fastcall GetItem(int I) = 0 ;
-	__property int Count = {read=GetCount};
-	__property _di_IXMLDocument Items[int I] = {read=GetItem};
-};
-
-__interface IXMLRowSets;
-typedef System::DelphiInterface<IXMLRowSets> _di_IXMLRowSets;
-__interface INTERFACE_UUID("{94B8B151-E6D6-11D2-AFA6-00C04FB16EC3}") IXMLDocument  : public IUnknown 
-	
-{
-	
-public:
-	virtual _di_IXMLRowSets __fastcall GetRowSets(void) = 0 ;
-	virtual Classes::TComponent* __fastcall GetComponent(void) = 0 ;
-	virtual AnsiString __fastcall GetDocumentVarName(void) = 0 ;
-	virtual AnsiString __fastcall GetXMLVarName(void) = 0 ;
-	__property _di_IXMLRowSets RowSets = {read=GetRowSets};
-	__property Classes::TComponent* Component = {read=GetComponent};
-	__property AnsiString DocumentVarName = {read=GetDocumentVarName};
-	__property AnsiString XMLVarName = {read=GetXMLVarName};
-};
-
-__interface IXMLRowSet;
-typedef System::DelphiInterface<IXMLRowSet> _di_IXMLRowSet;
-__interface INTERFACE_UUID("{94B8B152-E6D6-11D2-AFA6-00C04FB16EC3}") IXMLRowSets  : public IUnknown 
-	
-{
-	
-public:
-	virtual int __fastcall GetCount(void) = 0 ;
-	virtual _di_IXMLRowSet __fastcall GetItem(int I) = 0 ;
-	__property int Count = {read=GetCount};
-	__property _di_IXMLRowSet Items[int I] = {read=GetItem};
-};
-
-__interface INTERFACE_UUID("{94B8B14F-E6D6-11D2-AFA6-00C04FB16EC3}") IXMLRowSet  : public IUnknown 
-{
-	
-public:
-	virtual Classes::TStrings* __fastcall GetPath(void) = 0 ;
-	virtual AnsiString __fastcall GetRowSetVarName(void) = 0 ;
-	virtual AnsiString __fastcall GetMasterRowSetVarName(void) = 0 ;
-	virtual AnsiString __fastcall GetMasterDataSetFieldName(void) = 0 ;
-	__property AnsiString MasterRowSetVarName = {read=GetMasterRowSetVarName};
-	__property AnsiString MasterDataSetFieldName = {read=GetMasterDataSetFieldName};
-	__property AnsiString RowSetVarName = {read=GetRowSetVarName};
-};
-
-typedef void __fastcall (__closure *TAddScriptElementsEvent)(void * Data, _di_IAddScriptElements AddScriptElements
-	);
-
-__interface INTERFACE_UUID("{2FF3A331-E790-11D2-AFA7-00C04FB16EC3}") IAddScriptElements  : public IUnknown 
-	
-{
-	
-public:
-	virtual _di_IScriptManager __fastcall GetScriptManager(void) = 0 ;
-	virtual bool __fastcall AddIncludeFile(AnsiString FileName) = 0 ;
-	virtual bool __fastcall AddRowSet(Classes::TComponent* XMLProducer, Classes::TStrings* Path) = 0 ;
-	virtual bool __fastcall AddScriptBlock(AnsiString Name, AnsiString Script) = 0 ;
-	virtual bool __fastcall AddHTMLBlock(AnsiString Name, AnsiString HTML) = 0 ;
-	virtual bool __fastcall AddVar(AnsiString Name, AnsiString Script) = 0 ;
-	virtual bool __fastcall AddFunction(AnsiString Name, AnsiString Body) = 0 ;
-	virtual void __fastcall AddError(AnsiString Text) = 0 ;
-	virtual void __fastcall AddPass(TAddScriptElementsEvent Event, void * Data) = 0 ;
-	virtual void __fastcall AddScriptComponents(System::TObject* List) = 0 ;
-	__property _di_IScriptManager ScriptManager = {read=GetScriptManager};
-};
-
-__interface IScriptComponent;
-typedef System::DelphiInterface<IScriptComponent> _di_IScriptComponent;
-__interface INTERFACE_UUID("{1B9B0962-D28E-11D2-AF8A-00C04FB16EC3}") IScriptComponent  : public IUnknown 
-	
-{
-	
-public:
-	virtual void __fastcall AddElements(_di_IAddScriptElements AddIntf) = 0 ;
-	virtual System::TObject* __fastcall GetSubComponents(void) = 0 ;
-	__property System::TObject* SubComponents = {read=GetSubComponents};
+	virtual AnsiString __fastcall GetContainerName(void) = 0 ;
+	__property AnsiString ContainerName = {read=GetContainerName};
 };
 
 typedef TObject TWebComponentContainer;
@@ -283,8 +91,7 @@ typedef TObject TWebComponentContainer;
 
 __interface IWebComponentContainer;
 typedef System::DelphiInterface<IWebComponentContainer> _di_IWebComponentContainer;
-__interface INTERFACE_UUID("{44957E12-E039-11D2-AA46-00A024C11562}") IWebComponentContainer  : public IUnknown 
-	
+__interface INTERFACE_UUID("{44957E12-E039-11D2-AA46-00A024C11562}") IWebComponentContainer  : public IInterface 
 {
 	
 public:
@@ -296,29 +103,46 @@ public:
 
 __interface IWebComponentEditor;
 typedef System::DelphiInterface<IWebComponentEditor> _di_IWebComponentEditor;
-__interface INTERFACE_UUID("{13F59F61-EF85-11D2-AFB1-00C04FB16EC3}") IWebComponentEditor  : public IUnknown 
-	
+__interface INTERFACE_UUID("{13F59F61-EF85-11D2-AFB1-00C04FB16EC3}") IWebComponentEditor  : public IInterface 
 {
 	
 public:
 	virtual bool __fastcall CanAddClass(Classes::TComponent* AParent, TMetaClass* AClass) = 0 ;
 };
 
-__interface IWebComponentEditorHelper;
-typedef System::DelphiInterface<IWebComponentEditorHelper> _di_IWebComponentEditorHelper;
-__interface INTERFACE_UUID("{13F59F61-EF85-11D2-AFB1-00C04FB16EC3}") IWebComponentEditorHelper  : public IUnknown 
-	
+__interface IAddFieldsEditor;
+typedef System::DelphiInterface<IAddFieldsEditor> _di_IAddFieldsEditor;
+__interface INTERFACE_UUID("{73506463-4D5E-11D4-A48B-00C04F6BB853}") IAddFieldsEditor  : public IInterface 
 {
 	
 public:
-	virtual bool __fastcall CanAddClassHelper(Classes::TComponent* AEditor, Classes::TComponent* AParent
-		, TMetaClass* AClass) = 0 ;
+	virtual AnsiString __fastcall GetNewFieldPrefix(void) = 0 ;
+	virtual AnsiString __fastcall GetAddFieldsItem(void) = 0 ;
+	virtual AnsiString __fastcall GetAddAllFieldsItem(void) = 0 ;
+	virtual AnsiString __fastcall GetAddFieldsDlgCaption(void) = 0 ;
+};
+
+__interface IGetWebComponentNodeName;
+typedef System::DelphiInterface<IGetWebComponentNodeName> _di_IGetWebComponentNodeName;
+__interface INTERFACE_UUID("{CB84BC91-4C65-11D4-A48B-00C04F6BB853}") IGetWebComponentNodeName  : public IInterface 
+{
+	
+public:
+	virtual AnsiString __fastcall GetWebComponentNodeName(void) = 0 ;
+};
+
+__interface IWebComponentEditorHelper;
+typedef System::DelphiInterface<IWebComponentEditorHelper> _di_IWebComponentEditorHelper;
+__interface INTERFACE_UUID("{13F59F61-EF85-11D2-AFB1-00C04FB16EC3}") IWebComponentEditorHelper  : public IInterface 
+{
+	
+public:
+	virtual bool __fastcall CanAddClassHelper(Classes::TComponent* AEditor, Classes::TComponent* AParent, TMetaClass* AClass) = 0 ;
 };
 
 __interface IWebComponentCommands;
 typedef System::DelphiInterface<IWebComponentCommands> _di_IWebComponentCommands;
-__interface INTERFACE_UUID("{FCB67B0D-F357-11D2-AFB6-00C04FB16EC3}") IWebComponentCommands  : public IUnknown 
-	
+__interface INTERFACE_UUID("{FCB67B0D-F357-11D2-AFB6-00C04FB16EC3}") IWebComponentCommands  : public IInterface 
 {
 	
 public:
@@ -329,8 +153,7 @@ public:
 
 __interface IWebComponent;
 typedef System::DelphiInterface<IWebComponent> _di_IWebComponent;
-__interface INTERFACE_UUID("{EB813782-EEAE-11D2-AFB0-00C04FB16EC3}") IWebComponent  : public IUnknown 
-	
+__interface INTERFACE_UUID("{EB813782-EEAE-11D2-AFB0-00C04FB16EC3}") IWebComponent  : public IInterface 
 {
 	
 public:
@@ -344,10 +167,16 @@ public:
 	__property System::TObject* ComponentList = {write=SetComponentList};
 };
 
+__interface ITopLevelWebComponent;
+typedef System::DelphiInterface<ITopLevelWebComponent> _di_ITopLevelWebComponent;
+__interface INTERFACE_UUID("{B591F71D-94D0-11D4-A4EA-00C04F6BB853}") ITopLevelWebComponent  : public IInterface 
+{
+	
+};
+
 __interface IGetWebComponentList;
 typedef System::DelphiInterface<IGetWebComponentList> _di_IGetWebComponentList;
-__interface INTERFACE_UUID("{5CDEB0F2-EEF9-11D2-AFB1-00C04FB16EC3}") IGetWebComponentList  : public IUnknown 
-	
+__interface INTERFACE_UUID("{5CDEB0F2-EEF9-11D2-AFB1-00C04FB16EC3}") IGetWebComponentList  : public IInterface 
 {
 	
 public:
@@ -356,10 +185,10 @@ public:
 };
 
 #pragma option push -b-
-enum TWebContentFlag { coNoScript, coLocalPaths };
+enum TWebContentFlag { coNoScript, coLocalPaths, coNoExecuteScript };
 #pragma option pop
 
-typedef Set<TWebContentFlag, coNoScript, coLocalPaths>  TWebContentFlags;
+typedef Set<TWebContentFlag, coNoScript, coNoExecuteScript>  TWebContentFlags;
 
 class PASCALIMPLEMENTATION TWebContentOptions : public System::TObject 
 {
@@ -384,13 +213,11 @@ typedef TObject TLayout;
 
 __interface IWebContent;
 typedef System::DelphiInterface<IWebContent> _di_IWebContent;
-__interface INTERFACE_UUID("{1B3E1CD1-DF59-11D2-AA45-00A024C11562}") IWebContent  : public IUnknown 
-	
+__interface INTERFACE_UUID("{1B3E1CD1-DF59-11D2-AA45-00A024C11562}") IWebContent  : public IInterface 
 {
 	
 public:
-	virtual AnsiString __fastcall Content(TWebContentOptions* Options, System::TObject* ParentLayout) = 0 
-		;
+	virtual AnsiString __fastcall Content(TWebContentOptions* Options, System::TObject* ParentLayout) = 0 ;
 };
 
 #pragma option push -b-
@@ -417,19 +244,14 @@ public:
 
 __interface ILayoutWebContent;
 typedef System::DelphiInterface<ILayoutWebContent> _di_ILayoutWebContent;
-__interface INTERFACE_UUID("{4E810ED1-F09B-11D2-AA53-00A024C11562}") ILayoutWebContent  : public IUnknown 
-	
+__interface INTERFACE_UUID("{4E810ED1-F09B-11D2-AA53-00A024C11562}") ILayoutWebContent  : public IInterface 
 {
 	
 public:
-	virtual AnsiString __fastcall LayoutButton(const AnsiString HTMLButton, TLayoutAttributes* Attributes
-		) = 0 ;
-	virtual AnsiString __fastcall LayoutField(const AnsiString HTMLField, TLayoutAttributes* Attributes
-		) = 0 ;
-	virtual AnsiString __fastcall LayoutLabelAndField(const AnsiString HTMLLabel, const AnsiString HTMLField
-		, TLayoutAttributes* Attributes) = 0 ;
-	virtual AnsiString __fastcall LayoutTable(const AnsiString HTMLTable, TLayoutAttributes* Attributes
-		) = 0 ;
+	virtual AnsiString __fastcall LayoutButton(const AnsiString HTMLButton, TLayoutAttributes* Attributes) = 0 ;
+	virtual AnsiString __fastcall LayoutField(const AnsiString HTMLField, TLayoutAttributes* Attributes) = 0 ;
+	virtual AnsiString __fastcall LayoutLabelAndField(const AnsiString HTMLLabel, const AnsiString HTMLField, TLayoutAttributes* Attributes) = 0 ;
+	virtual AnsiString __fastcall LayoutTable(const AnsiString HTMLTable, TLayoutAttributes* Attributes) = 0 ;
 };
 
 class DELPHICLASS TLayoutWebContent;
@@ -446,17 +268,12 @@ protected:
 	int __stdcall _Release(void);
 	AnsiString __fastcall LayoutButton(const AnsiString HTMLButton, TLayoutAttributes* Attributes);
 	AnsiString __fastcall LayoutField(const AnsiString HTMLField, TLayoutAttributes* Attributes);
-	AnsiString __fastcall LayoutLabelAndField(const AnsiString HTMLLabel, const AnsiString HTMLField, TLayoutAttributes* 
-		Attributes);
+	AnsiString __fastcall LayoutLabelAndField(const AnsiString HTMLLabel, const AnsiString HTMLField, TLayoutAttributes* Attributes);
 	AnsiString __fastcall LayoutTable(const AnsiString HTMLTable, TLayoutAttributes* Attributes);
-	virtual AnsiString __fastcall ImplLayoutButton(const AnsiString HTMLButton, TLayoutAttributes* Attributes
-		) = 0 ;
-	virtual AnsiString __fastcall ImplLayoutField(const AnsiString HTMLField, TLayoutAttributes* Attributes
-		) = 0 ;
-	virtual AnsiString __fastcall ImplLayoutLabelAndField(const AnsiString HTMLLabel, const AnsiString 
-		HTMLField, TLayoutAttributes* Attributes) = 0 ;
-	virtual AnsiString __fastcall ImplLayoutTable(const AnsiString HTMLTable, TLayoutAttributes* Attributes
-		) = 0 ;
+	virtual AnsiString __fastcall ImplLayoutButton(const AnsiString HTMLButton, TLayoutAttributes* Attributes) = 0 ;
+	virtual AnsiString __fastcall ImplLayoutField(const AnsiString HTMLField, TLayoutAttributes* Attributes) = 0 ;
+	virtual AnsiString __fastcall ImplLayoutLabelAndField(const AnsiString HTMLLabel, const AnsiString HTMLField, TLayoutAttributes* Attributes) = 0 ;
+	virtual AnsiString __fastcall ImplLayoutTable(const AnsiString HTMLTable, TLayoutAttributes* Attributes) = 0 ;
 	
 public:
 	__fastcall TLayoutWebContent(System::TObject* AParentLayout);
@@ -476,15 +293,23 @@ public:
 
 
 class DELPHICLASS TWebComponentList;
-class PASCALIMPLEMENTATION TWebComponentList : public System::TObject 
+class PASCALIMPLEMENTATION TWebComponentList : public Classes::TPersistent 
 {
-	typedef System::TObject inherited;
+	typedef Classes::TPersistent inherited;
+	
+public:
+	Classes::TComponent* operator[](int Index) { return WebComponents[Index]; }
 	
 private:
 	Classes::TComponent* FParentComponent;
 	Classes::TList* FList;
+	Classes::TNotifyEvent FOnChange;
+	int FLockNotifyCount;
+	bool FNotifyPending;
 	
 protected:
+	DYNAMIC Classes::TPersistent* __fastcall GetOwner(void);
+	void __fastcall Changed(void);
 	int __fastcall GetCount(void);
 	Classes::TComponent* __fastcall GetComponent(int Index);
 	virtual Classes::TComponent* __fastcall NewComponent(Classes::TComponent* AOwner);
@@ -497,6 +322,9 @@ protected:
 public:
 	__fastcall TWebComponentList(Classes::TComponent* AParentComponent);
 	__fastcall virtual ~TWebComponentList(void);
+	void __fastcall LockNotify(void);
+	void __fastcall UnlockNotify(void);
+	bool __fastcall NotifyLocked(void);
 	void __fastcall Add(Classes::TComponent* Component);
 	void __fastcall SetComponentIndex(Classes::TComponent* Component, int Value);
 	void __fastcall Clear(void);
@@ -505,19 +333,38 @@ public:
 	__property int Count = {read=GetCount, nodefault};
 	__property Classes::TComponent* WebComponents[int Index] = {read=GetComponent/*, default*/};
 	__property Classes::TComponent* ParentComponent = {read=FParentComponent};
+	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 private:
-	void *__IWebComponentContainer;	/* Webcomp::IWebComponentContainer [GetComponent=WebComponentContainer_GetComponent, 
-		GetComponentCount=WebComponentContainer_GetComponentCount] */
+	void *__IWebComponentContainer;	/* Webcomp::IWebComponentContainer [GetComponent=WebComponentContainer_GetComponent, GetComponentCount=WebComponentContainer_GetComponentCount] */
 	
 public:
 	operator IWebComponentContainer*(void) { return (IWebComponentContainer*)&__IWebComponentContainer; }
-		
 	
 };
 
 
-typedef void __fastcall (__closure *TEnumWebComponentsProc)(TMetaClass* WebComponentClass, System::TObject* 
-	Editor, void * Info);
+class DELPHICLASS TWebComponentClassDescription;
+class PASCALIMPLEMENTATION TWebComponentClassDescription : public System::TObject 
+{
+	typedef System::TObject inherited;
+	
+public:
+	TMetaClass*ComponentClass;
+	AnsiString ComponentClassName;
+	System::TObject* Editor;
+	bool FrameClass;
+public:
+	#pragma option push -w-inl
+	/* TObject.Create */ inline __fastcall TWebComponentClassDescription(void) : System::TObject() { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TObject.Destroy */ inline __fastcall virtual ~TWebComponentClassDescription(void) { }
+	#pragma option pop
+	
+};
+
+
+typedef void __fastcall (__closure *TEnumWebComponentsProc)(TWebComponentClassDescription* WebComponentClass, void * Info);
 
 class DELPHICLASS TWebComponentsEditorHelper;
 class PASCALIMPLEMENTATION TWebComponentsEditorHelper : public System::TObject 
@@ -528,10 +375,8 @@ protected:
 	virtual HRESULT __stdcall QueryInterface(const GUID &IID, /* out */ void *Obj);
 	int __stdcall _AddRef(void);
 	int __stdcall _Release(void);
-	bool __fastcall CanAddClassHelper(Classes::TComponent* AEditor, Classes::TComponent* AParent, TMetaClass* 
-		AClass);
-	virtual bool __fastcall ImplCanAddClassHelper(Classes::TComponent* AEditor, Classes::TComponent* AParent
-		, TMetaClass* AClass);
+	bool __fastcall CanAddClassHelper(Classes::TComponent* AEditor, Classes::TComponent* AParent, TMetaClass* AClass);
+	virtual bool __fastcall ImplCanAddClassHelper(Classes::TComponent* AEditor, Classes::TComponent* AParent, TMetaClass* AClass);
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall TWebComponentsEditorHelper(void) : System::TObject() { }
@@ -545,31 +390,200 @@ private:
 	
 public:
 	operator IWebComponentEditorHelper*(void) { return (IWebComponentEditorHelper*)&__IWebComponentEditorHelper; }
-		
+	
+};
+
+
+typedef void __fastcall (__closure *TGetComponentListEvent)(System::TObject* Sender, TWebComponentList* &AList);
+
+typedef void __fastcall (__closure *TSetComponentListEvent)(System::TObject* Sender, TWebComponentList* AList);
+
+class DELPHICLASS TWebContainerComponentHelper;
+class PASCALIMPLEMENTATION TWebContainerComponentHelper : public System::TObject 
+{
+	typedef System::TObject inherited;
+	
+private:
+	Classes::TComponent* FComponent;
+	TWebComponentList* FWebComponents;
+	TGetComponentListEvent FOnGetDefaultComponentList;
+	TSetComponentListEvent FOnSetDefaultComponentList;
+	
+protected:
+	System::TObject* __fastcall GetComponentList(void);
+	System::TObject* __fastcall GetDefaultComponentList(void);
+	TWebComponentList* __fastcall GetDefaultWebComponents(void);
+	void __fastcall SetDefaultWebComponents(TWebComponentList* AList);
+	__property TGetComponentListEvent OnGetDefaultComponentList = {read=FOnGetDefaultComponentList, write=FOnGetDefaultComponentList};
+	__property TSetComponentListEvent OnSetDefaultComponentList = {read=FOnSetDefaultComponentList, write=FOnSetDefaultComponentList};
+	
+public:
+	void __fastcall GetChildren(Classes::TGetChildProc Proc, Classes::TComponent* Root);
+	void __fastcall SetChildOrder(Classes::TComponent* Component, int Order);
+	__fastcall TWebContainerComponentHelper(Classes::TComponent* AComponent, TGetComponentListEvent AOnGetDefaultComponentList, TSetComponentListEvent AOnSetDefaultComponentList);
+	__fastcall virtual ~TWebContainerComponentHelper(void);
+	__property TWebComponentList* Webcomponents = {read=FWebComponents};
+	__property TWebComponentList* DefaultWebComponents = {read=GetDefaultWebComponents, write=SetDefaultWebComponents};
+};
+
+
+class DELPHICLASS TWebContainerComponent;
+class PASCALIMPLEMENTATION TWebContainerComponent : public Classes::TComponent 
+{
+	typedef Classes::TComponent inherited;
+	
+private:
+	TWebContainerComponentHelper* FWebContainerComponentHelper;
+	void __fastcall OnGetDefaultComponentList(System::TObject* Sender, TWebComponentList* &AList);
+	void __fastcall OnSetDefaultComponentList(System::TObject* Sender, TWebComponentList* AList);
+	
+protected:
+	virtual System::TObject* __fastcall ImplGetDefaultComponentList(void);
+	DYNAMIC void __fastcall GetChildren(Classes::TGetChildProc Proc, Classes::TComponent* Root);
+	DYNAMIC void __fastcall SetChildOrder(Classes::TComponent* Component, int Order);
+	__property TWebContainerComponentHelper* WebContainerComponentHelper = {read=FWebContainerComponentHelper};
+	TWebComponentList* __fastcall GetWebComponents(void);
+	virtual TWebComponentList* __fastcall GetDefaultWebComponents(void);
+	virtual void __fastcall SetDefaultWebComponents(TWebComponentList* AList);
+	
+public:
+	__fastcall virtual TWebContainerComponent(Classes::TComponent* AOwner);
+	__fastcall virtual ~TWebContainerComponent(void);
+private:
+	void *__IGetWebComponentList;	/* Webcomp::IGetWebComponentList */
+	
+public:
+	operator IGetWebComponentList*(void) { return (IGetWebComponentList*)&__IGetWebComponentList; }
+	
+};
+
+
+class DELPHICLASS TWebContainedComponentHelper;
+class PASCALIMPLEMENTATION TWebContainedComponentHelper : public System::TObject 
+{
+	typedef System::TObject inherited;
+	
+private:
+	Classes::TComponent* FComponent;
+	bool FDefaultField;
+	TWebComponentList* FContainerList;
+	Classes::TComponent* FWebParent;
+	Classes::TNotifyEvent FOnParentChanged;
+	
+protected:
+	int __fastcall GetIndex(void);
+	void __fastcall SetIndex(int Value);
+	void __fastcall SetContainer(System::TObject* Container);
+	System::TObject* __fastcall GetContainer(void);
+	void __fastcall SetComponentList(System::TObject* List);
+	void __fastcall SetWebParent(Classes::TComponent* Value);
+	virtual void __fastcall ParentChanged(void);
+	__property Classes::TNotifyEvent OnParentChanged = {read=FOnParentChanged, write=FOnParentChanged};
+	
+public:
+	__fastcall TWebContainedComponentHelper(Classes::TComponent* AComponent, Classes::TNotifyEvent AOnParentChanged);
+	__fastcall virtual ~TWebContainedComponentHelper(void);
+	bool __fastcall IsDefaultField(void);
+	__property Classes::TComponent* WebParent = {read=FWebParent};
+	__property TWebComponentList* ContainerList = {read=FContainerList};
+};
+
+
+class DELPHICLASS TWebContainedComponent;
+class PASCALIMPLEMENTATION TWebContainedComponent : public Classes::TComponent 
+{
+	typedef Classes::TComponent inherited;
+	
+private:
+	TWebContainedComponentHelper* FWebContainedComponentHelper;
+	void __fastcall OnParentChanged(System::TObject* Sender);
+	Classes::TComponent* __fastcall GetWebParent(void);
+	
+protected:
+	DYNAMIC void __fastcall SetParentComponent(Classes::TComponent* AParent);
+	void __fastcall SetWebParent(Classes::TComponent* Value);
+	virtual void __fastcall ReadState(Classes::TReader* Reader);
+	virtual bool __fastcall IsDefaultField(void);
+	virtual void __fastcall ParentChanged(void);
+	TWebComponentList* __fastcall GetContainerList(void);
+	__property TWebContainedComponentHelper* WebContainedComponentHelper = {read=FWebContainedComponentHelper};
+	__property Classes::TComponent* WebParent = {read=GetWebParent};
+	
+public:
+	DYNAMIC Classes::TComponent* __fastcall GetParentComponent(void);
+	__fastcall virtual TWebContainedComponent(Classes::TComponent* AOwner);
+	__fastcall virtual ~TWebContainedComponent(void);
+	DYNAMIC bool __fastcall HasParent(void);
+private:
+	void *__IWebComponent;	/* Webcomp::IWebComponent */
+	
+public:
+	operator IWebComponent*(void) { return (IWebComponent*)&__IWebComponent; }
+	
+};
+
+
+class DELPHICLASS TWebContainedContainerComponent;
+class PASCALIMPLEMENTATION TWebContainedContainerComponent : public Classes::TComponent 
+{
+	typedef Classes::TComponent inherited;
+	
+private:
+	TWebContainerComponentHelper* FWebContainerComponentHelper;
+	TWebContainedComponentHelper* FWebContainedComponentHelper;
+	void __fastcall OnParentChanged(System::TObject* Sender);
+	void __fastcall OnGetDefaultComponentList(System::TObject* Sender, TWebComponentList* &AList);
+	void __fastcall OnSetDefaultComponentList(System::TObject* Sender, TWebComponentList* AList);
+	Classes::TComponent* __fastcall GetWebParent(void);
+	
+protected:
+	DYNAMIC void __fastcall SetParentComponent(Classes::TComponent* AParent);
+	void __fastcall SetWebParent(Classes::TComponent* Value);
+	virtual void __fastcall ReadState(Classes::TReader* Reader);
+	virtual bool __fastcall IsDefaultField(void);
+	virtual void __fastcall ParentChanged(void);
+	virtual System::TObject* __fastcall ImplGetDefaultComponentList(void);
+	DYNAMIC void __fastcall GetChildren(Classes::TGetChildProc Proc, Classes::TComponent* Root);
+	DYNAMIC void __fastcall SetChildOrder(Classes::TComponent* Component, int Order);
+	__property TWebContainerComponentHelper* WebContainerComponentHelper = {read=FWebContainerComponentHelper};
+	__property TWebContainedComponentHelper* WebContainedComponentHelper = {read=FWebContainedComponentHelper};
+	TWebComponentList* __fastcall GetWebComponents(void);
+	TWebComponentList* __fastcall GetContainerList(void);
+	virtual TWebComponentList* __fastcall GetDefaultWebComponents(void);
+	virtual void __fastcall SetDefaultWebComponents(TWebComponentList* AList);
+	__property Classes::TComponent* WebParent = {read=GetWebParent};
+	
+public:
+	__fastcall virtual TWebContainedContainerComponent(Classes::TComponent* AOwner);
+	__fastcall virtual ~TWebContainedContainerComponent(void);
+	DYNAMIC Classes::TComponent* __fastcall GetParentComponent(void);
+	DYNAMIC bool __fastcall HasParent(void);
+private:
+	void *__IGetWebComponentList;	/* Webcomp::IGetWebComponentList */
+	void *__IWebComponent;	/* Webcomp::IWebComponent */
+	
+public:
+	operator IWebComponent*(void) { return (IWebComponent*)&__IWebComponent; }
+	operator IGetWebComponentList*(void) { return (IGetWebComponentList*)&__IGetWebComponentList; }
 	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE void __fastcall (*RegisterWebComponentsProc)(TMetaClass* const * AClasses, const int 
-	AClasses_Size, System::TObject* Editor);
-extern PACKAGE void __fastcall (*UnRegisterWebComponentsProc)(TMetaClass* const * AClasses, const int 
-	AClasses_Size);
-extern PACKAGE void __fastcall (*EnumRegisteredWebComponentsProc)(TEnumWebComponentsProc Proc, void * 
-	Info);
+extern PACKAGE void __fastcall (*RegisterWebComponentsProc)(TMetaClass* * AClasses, const int AClasses_Size, System::TObject* Editor);
+extern PACKAGE void __fastcall (*UnRegisterWebComponentsProc)(TMetaClass* * AClasses, const int AClasses_Size);
+extern PACKAGE void __fastcall (*EnumRegisteredWebComponentsProc)(TEnumWebComponentsProc Proc, void * Info);
 extern PACKAGE System::TObject* __fastcall (*FindWebComponentEditorHelperProc)(TMetaClass* AClass);
-extern PACKAGE void __fastcall RegisterWebComponents(TMetaClass** AClasses, const int AClasses_Size
-	, System::TObject* Editor);
-extern PACKAGE void __fastcall UnRegisterWebComponents(TMetaClass** AClasses, const int AClasses_Size
-	);
-extern PACKAGE void __fastcall EnumRegisteredWebComponents(TEnumWebComponentsProc Proc, void * Info)
-	;
+extern PACKAGE AnsiString __fastcall QualifyFileName(const AnsiString AFileName);
+extern PACKAGE bool __fastcall DesigningComponent(Classes::TComponent* AComponent);
+extern PACKAGE void __fastcall RegisterWebComponents(TMetaClass* * AClasses, const int AClasses_Size, System::TObject* Editor = (System::TObject*)(0x0));
+extern PACKAGE void __fastcall UnRegisterWebComponents(TMetaClass* * AClasses, const int AClasses_Size);
+extern PACKAGE void __fastcall EnumRegisteredWebComponents(TEnumWebComponentsProc Proc, void * Info);
 extern PACKAGE System::TObject* __fastcall FindWebComponentEditorHelper(TMetaClass* AClass);
+extern PACKAGE void __fastcall ValidateWebParent(Classes::TComponent* AComponent, Classes::TComponent* AParent);
 
 }	/* namespace Webcomp */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Webcomp;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

@@ -6,13 +6,15 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
 unit PenWin;
 
 {$WEAKPACKAGEUNIT}
+
+{$HPPEMIT '#include "penwin.h"'}
 
 { Pen Windows functions, types, and definitions  }
 
@@ -1151,7 +1153,7 @@ const
 {$EXTERNALSYM IEREC_NONE}
   IEREC_GESTURE               = $0001;  { Gesture recognition }
 {$EXTERNALSYM IEREC_GESTURE}
-{$DEFINE IEREC_ALL}
+
   IEREC_RESERVED              = $FFFE;  { Reserved }
 {$EXTERNALSYM IEREC_RESERVED}
 
@@ -2326,7 +2328,7 @@ type
     rgwOemData: packed array[0..MAXOEMDATAWORDS-1] of UINT;{ OEM-specific data }
     dwTime: DWORD;
   end;
-{$EXTERNALSYM tagOEMPENPACKET}
+
   TOEMPenPacket = tagOEMPENPACKET;
   OEMPENPACKET = tagOEMPENPACKET;
 {$EXTERNALSYM OEMPENPACKET}
@@ -2550,6 +2552,7 @@ type
 {$EXTERNALSYM LPINKINGINFO}
 
   PSYC = ^TSYC;
+{$EXTERNALSYM PSYC}
   tagSYC = packed record        { 1.0 Symbol Correspondence for Ink }
     wStrokeFirst: UINT;         { first stroke, inclusive }
     wPntFirst: UINT;            { first point in first stroke, inclusive }
@@ -2559,6 +2562,7 @@ type
   end;
 {$EXTERNALSYM tagSYC}
   TSYC = tagSYC;
+{$EXTERNALSYM TSYC}
   SYC = tagSYC;
 {$EXTERNALSYM SYC}
   LPSYC = PSYC;
@@ -2571,7 +2575,9 @@ type
     cl: CL;                     { confidence level }
     iSyc: Integer;                  { SYC index }
   end;
-{$EXTERNALSYM tagSYE}
+
+{$EXTERNALSYM PSYE}
+
   TSYE = tagSYE;
   SYE = tagSYE;
 {$EXTERNALSYM SYE}
@@ -2579,6 +2585,7 @@ type
 {$EXTERNALSYM LPSYE}
 
   PSYG = ^TSYG;
+{$EXTERNALSYM PSYG}
   tagSYG = packed record        { 1.0 Symbol Graph }
     rgpntHotSpots: packed array[0..MAXHOTSPOT-1] of TPoint;{ hot spots (max 8) }
     cHotSpot: Integer;              { number of valid hot spots in rgpntHotSpots }
@@ -2591,6 +2598,7 @@ type
   end;
 {$EXTERNALSYM tagSYG}
   TSYG = tagSYG;
+{$EXTERNALSYM TSYG}
   SYG = tagSYG;
 {$EXTERNALSYM SYG}
   LPSYG = PSYG;
@@ -2629,7 +2637,7 @@ type
     dwRecognizer: DWORD;        { for app use to be passed on to recognizer }
     rgwReserved: packed array[0..cwRcReservedMax-1] of UINT;{ reserved for future use by Windows }
   end;
-{$EXTERNALSYM tagRC}
+
   TRC = tagRC;
   RC = tagRC;
 {$EXTERNALSYM RC}
@@ -2637,6 +2645,7 @@ type
 {$EXTERNALSYM LPRC}
 
   PRCResult = ^TRCResult;
+{$EXTERNALSYM PRCResult}
   tagRCRESULT = packed record   { 1.0 Recognition Result }
     syg: TSYG;                   { symbol graph }
     wResultsType: UINT;         { see RCRT_xx }
@@ -2652,6 +2661,7 @@ type
   end;
 {$EXTERNALSYM tagRCRESULT}
   TRCResult = tagRCRESULT;
+{$EXTERNALSYM TRCResult}
   RCRESULT = tagRCRESULT;
 {$EXTERNALSYM RCRESULT}
   LPRCRESULT = PRCResult;
@@ -2660,6 +2670,7 @@ type
   LPFUNCRESULTS = function(p1: PRCResult; p2: REC): Integer stdcall;
 {$EXTERNALSYM LPFUNCRESULTS}
   TFNFuncResults = LPFUNCRESULTS;
+{$EXTERNALSYM TFNFuncResults}
 
   PTarget = ^TTarget;
   tagTARGET = packed record     { 2.0 Geometry for a single target. }
@@ -2710,6 +2721,7 @@ type
 {$EXTERNALSYM LPINPPARAMS}
 
   PSKBInfo = ^TSKBInfo;
+{$EXTERNALSYM PSKBINFO}
   tagSKBINFO = packed record
     handle: HWnd;
     nPad: Word;
@@ -2720,6 +2732,7 @@ type
   end;
 {$EXTERNALSYM tagSKBINFO}
   TSKBInfo = tagSKBINFO;
+{$EXTERNALSYM TSKBINFO}
   SKBINFO = tagSKBINFO;
 {$EXTERNALSYM SKBINFO}
   LPSKBINFO = PSKBInfo;

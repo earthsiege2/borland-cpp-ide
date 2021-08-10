@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -29,6 +29,7 @@ type
     FOnRestore: TNotifyEvent;
     FOnShortCut: TShortCutEvent;
     FOnShowHint: TShowHintEvent;
+    FOnSettingChange: TSettingChangeEvent;
     procedure DoActionExecute(Action: TBasicAction; var Handled: Boolean);
     procedure DoActionUpdate(Action: TBasicAction; var Handled: Boolean);
     procedure DoActivate(Sender: TObject);
@@ -43,6 +44,7 @@ type
     procedure DoShowHint(var HintStr: string; var CanShow: Boolean;
       var HintInfo: THintInfo);
     procedure DoShortcut(var Msg: TWMKey; var Handled: Boolean);
+    procedure DoSettingChange(Sender: TObject; Flag: Integer; const Section: string; var Result: Longint);
   protected
     property OnActionExecute: TActionEvent read FOnActionExecute write FOnActionExecute;
     property OnActionUpdate: TActionEvent read FOnActionUpdate write FOnActionUpdate;
@@ -57,6 +59,7 @@ type
     property OnRestore: TNotifyEvent read FOnRestore write FOnRestore;
     property OnShowHint: TShowHintEvent read FOnShowHint write FOnShowHint;
     property OnShortCut: TShortCutEvent read FOnShortCut write FOnShortCut;
+    property OnSettingChange: TSettingChangeEvent read FOnSettingChange write FOnSettingChange;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Activate;
@@ -78,17 +81,22 @@ type
     property OnRestore;
     property OnShowHint;
     property OnShortCut;
+    property OnSettingChange;
   end;
 
 implementation
 
-uses Contnrs, Consts, StdActns;
+uses Contnrs, Consts, StdActns, Controls;
 
 type
   TMultiCaster = class(TComponent)
   private
     FAppEvents: TComponentList;
-    FDispatching: Boolean;
+    FCacheAppEvent: TCustomApplicationEvents;
+    FCancelDispatching: Boolean;
+    FDispatching: Integer;
+    procedure BeginDispatch;
+    procedure EndDispatch;
     procedure DoActionExecute(Action: TBasicAction; var Handled: Boolean);
     procedure DoActionUpdate(Action: TBasicAction; var Handled: Boolean);
     procedure DoActivate(Sender: TObject);
@@ -103,6 +111,7 @@ type
     procedure DoShowHint(var HintStr: string; var CanShow: Boolean;
       var HintInfo: THintInfo);
     procedure DoShortcut(var Msg: TWMKey; var Handled: Boolean);
+    procedure DoSettingChange(Sender: TObject; Flag: Integer; const Section: string; var Result: Longint);
     function GetCount: Integer;
     function GetAppEvents(Index: Integer): TCustomApplicationEvents;
   public
@@ -111,7 +120,7 @@ type
     procedure Activate(AppEvent: TCustomApplicationEvents);
     procedure AddAppEvent(AppEvent: TCustomApplicationEvents);
     procedure CancelDispatch;
-    procedure CheckDispatching;
+    function CheckDispatching(AppEvents: TCustomApplicationEvents): Boolean;
 
     property AppEvents[Index: Integer]: TCustomApplicationEvents
       read GetAppEvents; default;
@@ -125,18 +134,21 @@ var
 
 procedure TCustomApplicationEvents.Activate;
 begin
-  MultiCaster.Activate(Self);
+  if Assigned(MultiCaster) then
+    MultiCaster.Activate(Self);
 end;
 
 procedure TCustomApplicationEvents.CancelDispatch;
 begin
-  MultiCaster.CancelDispatch;
+  if Assigned(MultiCaster) then
+    MultiCaster.CancelDispatch;
 end;
 
 constructor TCustomApplicationEvents.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  MultiCaster.AddAppEvent(Self);
+  if Assigned(MultiCaster) then
+    MultiCaster.AddAppEvent(Self);
 end;
 
 procedure TCustomApplicationEvents.DoActionExecute(Action: TBasicAction;
@@ -164,15 +176,8 @@ end;
 procedure TCustomApplicationEvents.DoException(Sender: TObject;
   E: Exception);
 begin
-  if E is Exception then
-  begin
-    if not (E is EAbort) then
-      if Assigned(FOnException) then
-        FOnException(Sender, E)
-      else
-        Application.ShowException(E);
-  end else
-    SysUtils.ShowException(E, ExceptAddr);
+  if not (E is EAbort) and Assigned(FOnException) then
+    FOnException(Sender, E)
 end;
 
 function TCustomApplicationEvents.DoHelp(Command: Word; Data: Integer;
@@ -188,7 +193,7 @@ begin
   if Assigned(FOnHint) then
     FOnHint(Sender)
   else
-    with THintAction.Create(Application) do
+    with THintAction.Create(Self) do
     try
       Hint := Application.Hint;
       Execute;
@@ -229,12 +234,18 @@ begin
   if Assigned(FOnShowHint) then FOnShowHint(HintStr, CanShow, HintInfo);
 end;
 
+procedure TCustomApplicationEvents.DoSettingChange(Sender: TObject; Flag: Integer;
+  const Section: string; var Result: Longint);
+begin
+  if Assigned(FOnSettingChange) then FOnSettingChange(Sender, Flag, Section, Result);
+end;
+
 { TMultiCaster }
 
 procedure TMultiCaster.Activate(AppEvent: TCustomApplicationEvents);
 begin
-  CheckDispatching;
-  if FAppEvents.IndexOf(AppEvent) < FAppEvents.Count - 1 then
+  if CheckDispatching(AppEvent) and
+    (FAppEvents.IndexOf(AppEvent) < FAppEvents.Count - 1) then
   begin
     FAppEvents.Remove(AppEvent);
     FAppEvents.Add(AppEvent);
@@ -247,15 +258,21 @@ begin
     FAppEvents.Add(AppEvent);
 end;
 
-procedure TMultiCaster.CancelDispatch;
+procedure TMultiCaster.BeginDispatch;
 begin
-  FDispatching := False;
+  Inc(FDispatching);
 end;
 
-procedure TMultiCaster.CheckDispatching;
+procedure TMultiCaster.CancelDispatch;
 begin
-  if FDispatching then
-    raise Exception.CreateRes(@sOperationNotAllowed);
+  FCancelDispatching := True;
+end;
+
+function TMultiCaster.CheckDispatching(AppEvents: TCustomApplicationEvents): Boolean;
+begin
+  Result := FDispatching = 0;
+  if not Result then
+    FCacheAppEvent := AppEvents;
 end;
 
 constructor TMultiCaster.Create(AOwner: TComponent);
@@ -277,11 +294,13 @@ begin
     OnRestore := DoRestore;
     OnShowHint := DoShowHint;
     OnShortCut := DoShortcut;
+    OnSettingChange := DoSettingChange;
   end;
 end;
 
 destructor TMultiCaster.Destroy;
 begin
+  MultiCaster := nil;
   with Application do
   begin
     OnActionExecute := nil;
@@ -297,6 +316,7 @@ begin
     OnRestore := nil;
     OnShowHint := nil;
     OnShortCut := nil;
+    OnSettingChange := nil;
   end;
   FAppEvents.Free;
   inherited Destroy;
@@ -306,15 +326,15 @@ procedure TMultiCaster.DoActionExecute(Action: TBasicAction; var Handled: Boolea
 var
   I: Integer;
 begin
-  FDispatching := True;
+  BeginDispatch;
   try
     for I := Count - 1 downto 0 do
     begin
       AppEvents[I].DoActionExecute(Action, Handled);
-      if not FDispatching then Break;
+      if FCancelDispatching then Break;
     end;
   finally
-    FDispatching := False;
+    EndDispatch;
   end;
 end;
 
@@ -322,15 +342,15 @@ procedure TMultiCaster.DoActionUpdate(Action: TBasicAction; var Handled: Boolean
 var
   I: Integer;
 begin
-  FDispatching := True;
+  BeginDispatch;
   try
     for I := Count - 1 downto 0 do
     begin
       AppEvents[I].DoActionUpdate(Action, Handled);
-      if not FDispatching then Break;
+      if FCancelDispatching then Break;
     end;
   finally
-    FDispatching := False;
+    EndDispatch;
   end;
 end;
 
@@ -338,15 +358,15 @@ procedure TMultiCaster.DoActivate(Sender: TObject);
 var
   I: Integer;
 begin
-  FDispatching := True;
+  BeginDispatch;
   try
     for I := Count - 1 downto 0 do
     begin
       AppEvents[I].DoActivate(Sender);
-      if not FDispatching then Break;
+      if FCancelDispatching then Break;
     end;
   finally
-    FDispatching := False;
+    EndDispatch;
   end;
 end;
 
@@ -354,31 +374,40 @@ procedure TMultiCaster.DoDeactivate(Sender: TObject);
 var
   I: Integer;
 begin
-  FDispatching := True;
+  BeginDispatch;
   try
     for I := Count - 1 downto 0 do
     begin
       AppEvents[I].DoDeactivate(Sender);
-      if not FDispatching then Break;
+      if FCancelDispatching then Break;
     end;
   finally
-    FDispatching := False;
+    EndDispatch;
   end;
 end;
 
 procedure TMultiCaster.DoException(Sender: TObject; E: Exception);
 var
   I: Integer;
+  FExceptionHandled: Boolean;
 begin
-  FDispatching := True;
+  BeginDispatch;
+  FExceptionHandled := False;
   try
     for I := Count - 1 downto 0 do
     begin
-      AppEvents[I].DoException(Sender, E);
-      if not FDispatching then Break;
+      if Assigned(AppEvents[I].OnException) then
+      begin
+        FExceptionHandled := True;
+        AppEvents[I].DoException(Sender, E);
+        if FCancelDispatching then Break;
+      end;
     end;
   finally
-    FDispatching := False;
+    if not FExceptionHandled then
+      if not (E is EAbort) then
+        Application.ShowException(E);
+    EndDispatch;
   end;
 end;
 
@@ -386,16 +415,16 @@ function TMultiCaster.DoHelp(Command: Word; Data: Integer; var CallHelp: Boolean
 var
   I: Integer;
 begin
-  FDispatching := True;
+  BeginDispatch;
   try
     Result := False;
     for I := Count - 1 downto 0 do
     begin
       Result := Result or AppEvents[I].DoHelp(Command, Data, CallHelp);
-      if not FDispatching then Break;
+      if FCancelDispatching then Break;
     end;
   finally
-    FDispatching := False;
+    EndDispatch;
   end;
 end;
 
@@ -403,15 +432,15 @@ procedure TMultiCaster.DoHint(Sender: TObject);
 var
   I: Integer;
 begin
-  FDispatching := True;
+  BeginDispatch;
   try
     for I := Count - 1 downto 0 do
     begin
       AppEvents[I].DoHint(Sender);
-      if not FDispatching then Break;
+      if FCancelDispatching then Break;
     end;
   finally
-    FDispatching := False;
+    EndDispatch;
   end;
 end;
 
@@ -419,15 +448,15 @@ procedure TMultiCaster.DoIdle(Sender: TObject; var Done: Boolean);
 var
   I: Integer;
 begin
-  FDispatching := True;
+  BeginDispatch;
   try
     for I := Count - 1 downto 0 do
     begin
       AppEvents[I].DoIdle(Sender, Done);
-      if not FDispatching then Break;
+      if FCancelDispatching then Break;
     end;
   finally
-    FDispatching := False;
+    EndDispatch;
   end;
 end;
 
@@ -435,15 +464,15 @@ procedure TMultiCaster.DoMessage(var Msg: TMsg; var Handled: Boolean);
 var
   I: Integer;
 begin
-  FDispatching := True;
+  BeginDispatch;
   try
     for I := Count - 1 downto 0 do
     begin
       AppEvents[I].DoMessage(Msg, Handled);
-      if not FDispatching then Break;
+      if FCancelDispatching then Break;
     end;
   finally
-    FDispatching := False;
+    EndDispatch;
   end;
 end;
 
@@ -451,15 +480,15 @@ procedure TMultiCaster.DoMinimize(Sender: TObject);
 var
   I: Integer;
 begin
-  FDispatching := True;
+  BeginDispatch;
   try
     for I := Count - 1 downto 0 do
     begin
       AppEvents[I].DoMinimize(Sender);
-      if not FDispatching then Break;
+      if FCancelDispatching then Break;
     end;
   finally
-    FDispatching := False;
+    EndDispatch;
   end;
 end;
 
@@ -467,15 +496,15 @@ procedure TMultiCaster.DoRestore(Sender: TObject);
 var
   I: Integer;
 begin
-  FDispatching := True;
+  BeginDispatch;
   try
     for I := Count - 1 downto 0 do
     begin
       AppEvents[I].DoRestore(Sender);
-      if not FDispatching then Break;
+      if FCancelDispatching then Break;
     end;
   finally
-    FDispatching := False;
+    EndDispatch;
   end;
 end;
 
@@ -483,15 +512,15 @@ procedure TMultiCaster.DoShortcut(var Msg: TWMKey; var Handled: Boolean);
 var
   I: Integer;
 begin
-  FDispatching := True;
+  BeginDispatch;
   try
     for I := Count - 1 downto 0 do
     begin
       AppEvents[I].DoShortcut(Msg, Handled);
-      if not FDispatching then Break;
+      if FCancelDispatching then Break;
     end;
   finally
-    FDispatching := False;
+    EndDispatch;
   end;
 end;
 
@@ -500,15 +529,48 @@ procedure TMultiCaster.DoShowHint(var HintStr: string;
 var
   I: Integer;
 begin
-  FDispatching := True;
+  BeginDispatch;
   try
     for I := Count - 1 downto 0 do
     begin
       AppEvents[I].DoShowHint(HintStr, CanShow, HintInfo);
-      if not FDispatching then Break;
+      if FCancelDispatching then Break;
     end;
   finally
-    FDispatching := False;
+    EndDispatch;
+  end;
+end;
+
+procedure TMultiCaster.DoSettingChange(Sender: TObject;
+  Flag: Integer; const Section: string; var Result: Longint);
+var
+  I: Integer;
+begin
+  BeginDispatch;
+  try
+    for I := Count - 1 downto 0 do
+    begin
+      AppEvents[I].DoSettingChange(Sender, Flag, Section, Result);
+      if FCancelDispatching then Break;
+    end;
+  finally
+    EndDispatch;
+  end;
+end;
+
+procedure TMultiCaster.EndDispatch;
+begin
+  if FDispatching > 0 then
+  begin
+    Dec(FDispatching);
+    FCancelDispatching := False;
+    if (FDispatching = 0) and (FCacheAppEvent <> nil) and
+      (FAppEvents.IndexOf(FCacheAppEvent) < FAppEvents.Count - 1) then
+    begin
+      FAppEvents.Remove(FCacheAppEvent);
+      FAppEvents.Add(FCacheAppEvent);
+      FCacheAppEvent := nil;
+    end;
   end;
 end;
 
@@ -523,5 +585,6 @@ begin
 end;
 
 initialization
+  GroupDescendentsWith(TCustomApplicationEvents, Controls.TControl);
   MultiCaster := TMultiCaster.Create(Application);
 end.

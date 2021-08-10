@@ -1,16 +1,19 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Db.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DB.pas' rev: 6.00
 
-#ifndef DbHPP
-#define DbHPP
+#ifndef DBHPP
+#define DBHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <Graphics.hpp>	// Pascal unit
+#include <FMTBcd.hpp>	// Pascal unit
+#include <SqlTimSt.hpp>	// Pascal unit
+#include <MaskUtils.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
@@ -33,38 +36,28 @@ class PASCALIMPLEMENTATION EDatabaseError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EDatabaseError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EDatabaseError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EDatabaseError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EDatabaseError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EDatabaseError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EDatabaseError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EDatabaseError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EDatabaseError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EDatabaseError(const AnsiString Msg, int AHelpContext)
-		 : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EDatabaseError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EDatabaseError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EDatabaseError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EDatabaseError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EDatabaseError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EDatabaseError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EDatabaseError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -87,8 +80,7 @@ private:
 	Sysutils::Exception* FOriginalException;
 	
 public:
-	__fastcall EUpdateError(AnsiString NativeError, AnsiString Context, int ErrCode, int PrevError, Sysutils::Exception* 
-		E);
+	__fastcall EUpdateError(AnsiString NativeError, AnsiString Context, int ErrCode, int PrevError, Sysutils::Exception* E);
 	__fastcall virtual ~EUpdateError(void);
 	__property AnsiString Context = {read=FContext};
 	__property int ErrorCode = {read=FErrorCode, nodefault};
@@ -96,55 +88,40 @@ public:
 	__property Sysutils::Exception* OriginalException = {read=FOriginalException};
 public:
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EUpdateError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : EDatabaseError(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EUpdateError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : EDatabaseError(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EUpdateError(int Ident)/* overload */ : EDatabaseError(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EUpdateError(int Ident)/* overload */ : EDatabaseError(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EUpdateError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : EDatabaseError(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EUpdateError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : EDatabaseError(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EUpdateError(const AnsiString Msg, int AHelpContext) : 
-		EDatabaseError(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EUpdateError(const AnsiString Msg, int AHelpContext) : EDatabaseError(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EUpdateError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : EDatabaseError(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EUpdateError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : EDatabaseError(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EUpdateError(int Ident, int AHelpContext)/* overload */
-		 : EDatabaseError(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EUpdateError(int Ident, int AHelpContext)/* overload */ : EDatabaseError(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EUpdateError(System::PResStringRec ResStringRec, 
-		const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : EDatabaseError(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EUpdateError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : EDatabaseError(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 };
 
 
 #pragma option push -b-
-enum TFieldType { ftUnknown, ftString, ftSmallint, ftInteger, ftWord, ftBoolean, ftFloat, ftCurrency, 
-	ftBCD, ftDate, ftTime, ftDateTime, ftBytes, ftVarBytes, ftAutoInc, ftBlob, ftMemo, ftGraphic, ftFmtMemo, 
-	ftParadoxOle, ftDBaseOle, ftTypedBinary, ftCursor, ftFixedChar, ftWideString, ftLargeint, ftADT, ftArray, 
-	ftReference, ftDataSet, ftOraBlob, ftOraClob, ftVariant, ftInterface, ftIDispatch, ftGuid };
+enum TFieldType { ftUnknown, ftString, ftSmallint, ftInteger, ftWord, ftBoolean, ftFloat, ftCurrency, ftBCD, ftDate, ftTime, ftDateTime, ftBytes, ftVarBytes, ftAutoInc, ftBlob, ftMemo, ftGraphic, ftFmtMemo, ftParadoxOle, ftDBaseOle, ftTypedBinary, ftCursor, ftFixedChar, ftWideString, ftLargeint, ftADT, ftArray, ftReference, ftDataSet, ftOraBlob, ftOraClob, ftVariant, ftInterface, ftIDispatch, ftGuid, ftTimeStamp, ftFMTBcd };
 #pragma option pop
 
 #pragma option push -b-
-enum TDataSetState { dsInactive, dsBrowse, dsEdit, dsInsert, dsSetKey, dsCalcFields, dsFilter, dsNewValue, 
-	dsOldValue, dsCurValue, dsBlockRead, dsInternalCalc, dsOpening };
+enum TDataSetState { dsInactive, dsBrowse, dsEdit, dsInsert, dsSetKey, dsCalcFields, dsFilter, dsNewValue, dsOldValue, dsCurValue, dsBlockRead, dsInternalCalc, dsOpening };
 #pragma option pop
 
 #pragma option push -b-
-enum TDataEvent { deFieldChange, deRecordChange, deDataSetChange, deDataSetScroll, deLayoutChange, deUpdateRecord, 
-	deUpdateState, deCheckBrowseMode, dePropertyChange, deFieldListChange, deFocusControl, deParentScroll, 
-	deConnectChange };
+enum TDataEvent { deFieldChange, deRecordChange, deDataSetChange, deDataSetScroll, deLayoutChange, deUpdateRecord, deUpdateState, deCheckBrowseMode, dePropertyChange, deFieldListChange, deFocusControl, deParentScroll, deConnectChange };
 #pragma option pop
 
 #pragma option push -b-
@@ -158,10 +135,10 @@ enum TUpdateAction { uaFail, uaAbort, uaSkip, uaRetry, uaApplied };
 #pragma option pop
 
 #pragma option push -b-
-enum Db__3 { rtModified, rtInserted, rtDeleted, rtUnmodified };
+enum DB__3 { rtModified, rtInserted, rtDeleted, rtUnmodified };
 #pragma option pop
 
-typedef Set<Db__3, rtModified, rtUnmodified>  TUpdateRecordTypes;
+typedef Set<DB__3, rtModified, rtUnmodified>  TUpdateRecordTypes;
 
 #pragma option push -b-
 enum TUpdateMode { upWhereAll, upWhereChanged, upWhereKeyOnly };
@@ -172,14 +149,11 @@ enum TUpdateKind { ukModify, ukInsert, ukDelete };
 #pragma option pop
 
 class DELPHICLASS TDataSet;
-typedef void __fastcall (__closure *TUpdateErrorEvent)(TDataSet* DataSet, EDatabaseError* E, TUpdateKind 
-	UpdateKind, TUpdateAction &UpdateAction);
+typedef void __fastcall (__closure *TUpdateErrorEvent)(TDataSet* DataSet, EDatabaseError* E, TUpdateKind UpdateKind, TUpdateAction &UpdateAction);
 
-typedef void __fastcall (__closure *TUpdateRecordEvent)(TDataSet* DataSet, TUpdateKind UpdateKind, TUpdateAction 
-	&UpdateAction);
+typedef void __fastcall (__closure *TUpdateRecordEvent)(TDataSet* DataSet, TUpdateKind UpdateKind, TUpdateAction &UpdateAction);
 
-typedef void __fastcall (__closure *TLoginEvent)(System::TObject* Sender, AnsiString Username, AnsiString 
-	Password);
+typedef void __fastcall (__closure *TLoginEvent)(System::TObject* Sender, AnsiString Username, AnsiString Password);
 
 typedef void __fastcall (__closure *TConnectChangeEvent)(System::TObject* Sender, bool Connecting);
 
@@ -207,11 +181,10 @@ protected:
 	virtual TDataSet* __fastcall GetDataSet(int Index);
 	virtual int __fastcall GetDataSetCount(void);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall RegisterClient(System::TObject* Client, TConnectChangeEvent Event);
+	virtual void __fastcall RegisterClient(System::TObject* Client, TConnectChangeEvent Event = 0x0);
 	virtual void __fastcall SetConnected(bool Value);
 	void __fastcall SendConnectEvent(bool Connecting);
 	__property bool StreamedConnected = {read=FStreamedConnected, write=FStreamedConnected, nodefault};
-		
 	virtual void __fastcall UnRegisterClient(System::TObject* Client);
 	
 public:
@@ -226,9 +199,7 @@ public:
 	__property Classes::TNotifyEvent AfterConnect = {read=FAfterConnect, write=FAfterConnect};
 	__property Classes::TNotifyEvent BeforeConnect = {read=FBeforeConnect, write=FBeforeConnect};
 	__property Classes::TNotifyEvent AfterDisconnect = {read=FAfterDisconnect, write=FAfterDisconnect};
-		
-	__property Classes::TNotifyEvent BeforeDisconnect = {read=FBeforeDisconnect, write=FBeforeDisconnect
-		};
+	__property Classes::TNotifyEvent BeforeDisconnect = {read=FBeforeDisconnect, write=FBeforeDisconnect};
 	__property TLoginEvent OnLogin = {read=FOnLogin, write=FOnLogin};
 };
 
@@ -249,8 +220,7 @@ __published:
 	__property AnsiString Name = {read=FName, write=SetDisplayName};
 public:
 	#pragma option push -w-inl
-	/* TCollectionItem.Create */ inline __fastcall virtual TNamedItem(Classes::TCollection* Collection)
-		 : Classes::TCollectionItem(Collection) { }
+	/* TCollectionItem.Create */ inline __fastcall virtual TNamedItem(Classes::TCollection* Collection) : Classes::TCollectionItem(Collection) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCollectionItem.Destroy */ inline __fastcall virtual ~TNamedItem(void) { }
@@ -308,6 +278,9 @@ class PASCALIMPLEMENTATION TFieldDefs : public TDefCollection
 {
 	typedef TDefCollection inherited;
 	
+public:
+	TFieldDef* operator[](int Index) { return Items[Index]; }
+	
 private:
 	TFieldDef* FParentDef;
 	bool FHiddenFields;
@@ -325,8 +298,7 @@ public:
 	TFieldDef* __fastcall AddFieldDef(void);
 	HIDESBASE TFieldDef* __fastcall Find(const AnsiString Name);
 	HIDESBASE void __fastcall Update(void);
-	HIDESBASE void __fastcall Add(const AnsiString Name, TFieldType DataType, int Size, bool Required);
-		
+	HIDESBASE void __fastcall Add(const AnsiString Name, TFieldType DataType, int Size = 0x0, bool Required = false);
 	__property bool HiddenFields = {read=FHiddenFields, write=SetHiddenFields, nodefault};
 	__property TFieldDef* Items[int Index] = {read=GetFieldDef, write=SetFieldDef/*, default*/};
 	__property TFieldDef* ParentDef = {read=FParentDef};
@@ -352,8 +324,7 @@ private:
 	bool FInternalCalcField;
 	TFieldType FDataType;
 	TFieldAttributes FAttributes;
-	TField* __fastcall CreateFieldComponent(Classes::TComponent* Owner, TObjectField* ParentField, AnsiString 
-		FieldName);
+	TField* __fastcall CreateFieldComponent(Classes::TComponent* Owner, TObjectField* ParentField = (TObjectField*)(0x0), AnsiString FieldName = "");
 	TFieldDefs* __fastcall GetChildDefs(void);
 	TMetaClass* __fastcall GetFieldClass(void);
 	int __fastcall GetFieldNo(void);
@@ -372,18 +343,15 @@ protected:
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
 	
 public:
-	__fastcall TFieldDef(TFieldDefs* Owner, const AnsiString Name, TFieldType DataType, int Size, bool 
-		Required, int FieldNo)/* overload */;
+	__fastcall TFieldDef(TFieldDefs* Owner, const AnsiString Name, TFieldType DataType, int Size, bool Required, int FieldNo)/* overload */;
 	__fastcall virtual ~TFieldDef(void);
 	TFieldDef* __fastcall AddChild(void);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
-	TField* __fastcall CreateField(Classes::TComponent* Owner, TObjectField* ParentField, const AnsiString 
-		FieldName, bool CreateChildren);
+	TField* __fastcall CreateField(Classes::TComponent* Owner, TObjectField* ParentField = (TObjectField*)(0x0), const AnsiString FieldName = "", bool CreateChildren = true);
 	bool __fastcall HasChildDefs(void);
 	__property TMetaClass* FieldClass = {read=GetFieldClass};
 	__property int FieldNo = {read=GetFieldNo, write=FFieldNo, stored=false, nodefault};
 	__property bool InternalCalcField = {read=FInternalCalcField, write=FInternalCalcField, nodefault};
-		
 	__property TFieldDef* ParentDef = {read=GetParentDef};
 	__property bool Required = {read=GetRequired, write=SetRequired, nodefault};
 	
@@ -397,8 +365,7 @@ __published:
 
 
 #pragma option push -b-
-enum TIndexOption { ixPrimary, ixUnique, ixDescending, ixCaseInsensitive, ixExpression, ixNonMaintained 
-	};
+enum TIndexOption { ixPrimary, ixUnique, ixDescending, ixCaseInsensitive, ixExpression, ixNonMaintained };
 #pragma option pop
 
 typedef Set<TIndexOption, ixPrimary, ixNonMaintained>  TIndexOptions;
@@ -429,8 +396,7 @@ protected:
 	virtual AnsiString __fastcall GetDisplayName();
 	
 public:
-	__fastcall TIndexDef(TIndexDefs* Owner, const AnsiString Name, const AnsiString Fields, TIndexOptions 
-		Options)/* overload */;
+	__fastcall TIndexDef(TIndexDefs* Owner, const AnsiString Name, const AnsiString Fields, TIndexOptions Options)/* overload */;
 	virtual void __fastcall Assign(Classes::TPersistent* ASource);
 	__property AnsiString FieldExpression = {read=FFieldExpression};
 	
@@ -454,6 +420,9 @@ class PASCALIMPLEMENTATION TIndexDefs : public TDefCollection
 {
 	typedef TDefCollection inherited;
 	
+public:
+	TIndexDef* operator[](int Index) { return Items[Index]; }
+	
 private:
 	TIndexDef* __fastcall GetIndexDef(int Index);
 	void __fastcall SetIndexDef(int Index, TIndexDef* Value);
@@ -465,11 +434,9 @@ public:
 	HIDESBASE void __fastcall Update(void);
 	TIndexDef* __fastcall FindIndexForFields(const AnsiString Fields);
 	TIndexDef* __fastcall GetIndexForFields(const AnsiString Fields, bool CaseInsensitive);
-	HIDESBASE void __fastcall Add(const AnsiString Name, const AnsiString Fields, TIndexOptions Options
-		);
+	HIDESBASE void __fastcall Add(const AnsiString Name, const AnsiString Fields, TIndexOptions Options);
 	__property TIndexDef* Items[int Index] = {read=GetIndexDef, write=SetIndexDef/*, default*/};
 public:
-		
 	#pragma option push -w-inl
 	/* TCollection.Destroy */ inline __fastcall virtual ~TIndexDefs(void) { }
 	#pragma option pop
@@ -513,6 +480,9 @@ class PASCALIMPLEMENTATION TFieldDefList : public TFlatList
 {
 	typedef TFlatList inherited;
 	
+public:
+	TFieldDef* operator[](int Index) { return FieldDefs[Index]; }
+	
 private:
 	TFieldDef* __fastcall GetFieldDef(int Index);
 	
@@ -527,7 +497,6 @@ public:
 public:
 	#pragma option push -w-inl
 	/* TFlatList.Create */ inline __fastcall TFieldDefList(TDataSet* ADataSet) : TFlatList(ADataSet) { }
-		
 	#pragma option pop
 	
 public:
@@ -542,6 +511,9 @@ class DELPHICLASS TFieldList;
 class PASCALIMPLEMENTATION TFieldList : public TFlatList 
 {
 	typedef TFlatList inherited;
+	
+public:
+	TField* operator[](int Index) { return Fields[Index]; }
 	
 private:
 	TField* __fastcall GetField(int Index);
@@ -577,6 +549,9 @@ class PASCALIMPLEMENTATION TFields : public System::TObject
 {
 	typedef System::TObject inherited;
 	
+public:
+	TField* operator[](int Index) { return Fields[Index]; }
+	
 private:
 	Classes::TList* FList;
 	TDataSet* FDataSet;
@@ -593,8 +568,7 @@ protected:
 	void __fastcall SetFieldIndex(TField* Field, int Value);
 	__property int SparseFields = {read=FSparseFields, write=FSparseFields, nodefault};
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
-	__property TFieldKinds ValidFieldKinds = {read=FValidFieldKinds, write=FValidFieldKinds, nodefault}
-		;
+	__property TFieldKinds ValidFieldKinds = {read=FValidFieldKinds, write=FValidFieldKinds, nodefault};
 	
 public:
 	__fastcall TFields(TDataSet* ADataSet);
@@ -623,8 +597,7 @@ typedef Set<TProviderFlag, pfInUpdate, pfHidden>  TProviderFlags;
 
 typedef void __fastcall (__closure *TFieldNotifyEvent)(TField* Sender);
 
-typedef void __fastcall (__closure *TFieldGetTextEvent)(TField* Sender, AnsiString &Text, bool DisplayText
-	);
+typedef void __fastcall (__closure *TFieldGetTextEvent)(TField* Sender, AnsiString &Text, bool DisplayText);
 
 typedef void __fastcall (__closure *TFieldSetTextEvent)(TField* Sender, const AnsiString Text);
 
@@ -750,21 +723,19 @@ protected:
 	DYNAMIC EDatabaseError* __fastcall AccessError(const AnsiString TypeName);
 	virtual void __fastcall Bind(bool Binding);
 	void __fastcall CheckInactive(void);
-	#pragma option push -w-inl
-	/* virtual class method */ virtual void __fastcall CheckTypeSize(int Value) { CheckTypeSize(__classid(TField)
-		, Value); }
-	#pragma option pop
-	/*         class method */ static void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
+	/* virtual class method */ virtual void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
 	virtual void __fastcall Change(void);
 	void __fastcall DataChanged(void);
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
 	virtual void __fastcall FreeBuffers(void);
+	virtual Fmtbcd::TBcd __fastcall GetAsBCD();
 	virtual bool __fastcall GetAsBoolean(void);
 	virtual Variant __fastcall GetAsByteArray();
 	virtual System::Currency __fastcall GetAsCurrency(void);
 	virtual System::TDateTime __fastcall GetAsDateTime(void);
 	virtual double __fastcall GetAsFloat(void);
 	virtual int __fastcall GetAsInteger(void);
+	virtual Sqltimst::TSQLTimeStamp __fastcall GetAsSqlTimeStamp();
 	virtual AnsiString __fastcall GetAsString();
 	virtual Variant __fastcall GetAsVariant();
 	virtual bool __fastcall GetCanModify(void);
@@ -777,16 +748,17 @@ protected:
 	virtual bool __fastcall GetIsNull(void);
 	virtual int __fastcall GetSize(void);
 	virtual void __fastcall GetText(AnsiString &Text, bool DisplayText);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	void __fastcall PropertyChanged(bool LayoutAffected);
 	virtual void __fastcall ReadState(Classes::TReader* Reader);
+	virtual void __fastcall SetAsBCD(const Fmtbcd::TBcd &Value);
 	virtual void __fastcall SetAsBoolean(bool Value);
 	virtual void __fastcall SetAsByteArray(const Variant &Value);
 	virtual void __fastcall SetAsCurrency(System::Currency Value);
 	virtual void __fastcall SetAsDateTime(System::TDateTime Value);
 	virtual void __fastcall SetAsFloat(double Value);
 	virtual void __fastcall SetAsInteger(int Value);
+	virtual void __fastcall SetAsSQLTimeStamp(const Sqltimst::TSQLTimeStamp &Value);
 	virtual void __fastcall SetAsString(const AnsiString Value);
 	virtual void __fastcall SetAsVariant(const Variant &Value);
 	virtual void __fastcall SetDataSet(TDataSet* ADataSet);
@@ -806,21 +778,20 @@ public:
 	void __fastcall AssignValue(const System::TVarRec &Value);
 	virtual void __fastcall Clear(void);
 	void __fastcall FocusControl(void);
-	bool __fastcall GetData(void * Buffer, bool NativeFormat);
+	bool __fastcall GetData(void * Buffer, bool NativeFormat = true);
 	DYNAMIC Classes::TComponent* __fastcall GetParentComponent(void);
 	DYNAMIC bool __fastcall HasParent(void);
-	#pragma option push -w-inl
-	/* virtual class method */ virtual bool __fastcall IsBlob() { return IsBlob(__classid(TField)); }
-	#pragma option pop
-	/*         class method */ static bool __fastcall IsBlob(TMetaClass* vmt);
+	/* virtual class method */ virtual bool __fastcall IsBlob(TMetaClass* vmt);
 	virtual bool __fastcall IsValidChar(char InputChar);
 	void __fastcall RefreshLookupList(void);
-	void __fastcall SetData(void * Buffer, bool NativeFormat);
+	void __fastcall SetData(void * Buffer, bool NativeFormat = true);
 	virtual void __fastcall SetFieldType(TFieldType Value);
 	void __fastcall Validate(void * Buffer);
+	__property Fmtbcd::TBcd AsBCD = {read=GetAsBCD, write=SetAsBCD};
 	__property bool AsBoolean = {read=GetAsBoolean, write=SetAsBoolean, nodefault};
 	__property System::Currency AsCurrency = {read=GetAsCurrency, write=SetAsCurrency};
 	__property System::TDateTime AsDateTime = {read=GetAsDateTime, write=SetAsDateTime};
+	__property Sqltimst::TSQLTimeStamp AsSQLTimeStamp = {read=GetAsSqlTimeStamp, write=SetAsSQLTimeStamp};
 	__property double AsFloat = {read=GetAsFloat, write=SetAsFloat};
 	__property int AsInteger = {read=GetAsInteger, write=SetAsInteger, nodefault};
 	__property AnsiString AsString = {read=GetAsString, write=SetAsString};
@@ -853,19 +824,15 @@ public:
 	
 __published:
 	__property Classes::TAlignment Alignment = {read=FAlignment, write=SetAlignment, default=0};
-	__property TAutoRefreshFlag AutoGenerateValue = {read=FAutoGenerateValue, write=SetAutoGenerateValue
-		, default=0};
+	__property TAutoRefreshFlag AutoGenerateValue = {read=FAutoGenerateValue, write=SetAutoGenerateValue, default=0};
 	__property AnsiString CustomConstraint = {read=FCustomConstraint, write=FCustomConstraint};
-	__property AnsiString ConstraintErrorMessage = {read=FConstraintErrorMessage, write=FConstraintErrorMessage
-		};
+	__property AnsiString ConstraintErrorMessage = {read=FConstraintErrorMessage, write=FConstraintErrorMessage};
 	__property AnsiString DefaultExpression = {read=FDefaultExpression, write=FDefaultExpression};
-	__property AnsiString DisplayLabel = {read=GetDisplayLabel, write=SetDisplayLabel, stored=IsDisplayLabelStored
-		};
-	__property int DisplayWidth = {read=GetDisplayWidth, write=SetDisplayWidth, stored=IsDisplayWidthStored
-		, nodefault};
+	__property AnsiString DisplayLabel = {read=GetDisplayLabel, write=SetDisplayLabel, stored=IsDisplayLabelStored};
+	__property int DisplayWidth = {read=GetDisplayWidth, write=SetDisplayWidth, stored=IsDisplayWidthStored, nodefault};
 	__property TFieldKind FieldKind = {read=FFieldKind, write=SetFieldKind, default=0};
 	__property AnsiString FieldName = {read=FFieldName, write=SetFieldName};
-	__property bool HasConstraints = {read=GetHasConstraints, nodefault};
+	__property bool HasConstraints = {read=GetHasConstraints, default=0};
 	__property int Index = {read=GetIndex, write=SetIndex, stored=false, nodefault};
 	__property AnsiString ImportedConstraint = {read=FImportedConstraint, write=FImportedConstraint};
 	__property TDataSet* LookupDataSet = {read=FLookupDataSet, write=SetLookupDataSet};
@@ -895,25 +862,25 @@ private:
 	bool FTransliterate;
 	
 protected:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual void __fastcall CheckTypeSize(int Value) { CheckTypeSize(__classid(TStringField)
-		, Value); }
-	#pragma option pop
-	/*         class method */ static void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
+	/* virtual class method */ virtual void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
+	virtual Fmtbcd::TBcd __fastcall GetAsBCD();
 	virtual bool __fastcall GetAsBoolean(void);
 	virtual System::TDateTime __fastcall GetAsDateTime(void);
 	virtual double __fastcall GetAsFloat(void);
 	virtual int __fastcall GetAsInteger(void);
+	virtual Sqltimst::TSQLTimeStamp __fastcall GetAsSqlTimeStamp();
 	virtual AnsiString __fastcall GetAsString();
 	virtual Variant __fastcall GetAsVariant();
 	virtual int __fastcall GetDataSize(void);
 	virtual int __fastcall GetDefaultWidth(void);
 	virtual void __fastcall GetText(AnsiString &Text, bool DisplayText);
 	bool __fastcall GetValue(AnsiString &Value);
+	virtual void __fastcall SetAsBCD(const Fmtbcd::TBcd &Value);
 	virtual void __fastcall SetAsBoolean(bool Value);
 	virtual void __fastcall SetAsDateTime(System::TDateTime Value);
 	virtual void __fastcall SetAsFloat(double Value);
 	virtual void __fastcall SetAsInteger(int Value);
+	virtual void __fastcall SetAsSQLTimeStamp(const Sqltimst::TSQLTimeStamp &Value);
 	virtual void __fastcall SetAsString(const AnsiString Value);
 	virtual void __fastcall SetVarValue(const Variant &Value);
 	
@@ -924,7 +891,7 @@ public:
 __published:
 	__property EditMask ;
 	__property bool FixedChar = {read=FFixedChar, write=FFixedChar, default=0};
-	__property Size ;
+	__property Size  = {default=20};
 	__property bool Transliterate = {read=FTransliterate, write=FTransliterate, default=1};
 public:
 	#pragma option push -w-inl
@@ -940,11 +907,8 @@ class PASCALIMPLEMENTATION TWideStringField : public TStringField
 	typedef TStringField inherited;
 	
 protected:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual void __fastcall CheckTypeSize(int Value) { CheckTypeSize(__classid(TWideStringField)
-		, Value); }
-	#pragma option pop
-	/*         class method */ static void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
+	/* virtual class method */ virtual void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
+	virtual void __fastcall CopyData(void * Source, void * Dest);
 	virtual AnsiString __fastcall GetAsString();
 	virtual Variant __fastcall GetAsVariant();
 	WideString __fastcall GetAsWideString();
@@ -982,7 +946,7 @@ public:
 	__fastcall virtual TNumericField(Classes::TComponent* AOwner);
 	
 __published:
-	__property Alignment ;
+	__property Alignment  = {default=1};
 	__property AnsiString DisplayFormat = {read=FDisplayFormat, write=SetDisplayFormat};
 	__property AnsiString EditFormat = {read=FEditFormat, write=SetEditFormat};
 public:
@@ -1185,7 +1149,7 @@ public:
 	__fastcall virtual TCurrencyField(Classes::TComponent* AOwner);
 	
 __published:
-	__property Currency ;
+	__property currency  = {default=1};
 public:
 	#pragma option push -w-inl
 	/* TField.Destroy */ inline __fastcall virtual ~TCurrencyField(void) { }
@@ -1194,7 +1158,7 @@ public:
 };
 
 
-typedef AnsiString Db__82[2];
+typedef AnsiString DB__82[2];
 
 class DELPHICLASS TBooleanField;
 class PASCALIMPLEMENTATION TBooleanField : public TField 
@@ -1270,6 +1234,45 @@ public:
 };
 
 
+class DELPHICLASS TSQLTimeStampField;
+class PASCALIMPLEMENTATION TSQLTimeStampField : public TField 
+{
+	typedef TField inherited;
+	
+private:
+	AnsiString FDisplayFormat;
+	bool __fastcall GetValue(Sqltimst::TSQLTimeStamp &Value);
+	void __fastcall SetDisplayFormat(const AnsiString Value);
+	
+protected:
+	virtual void __fastcall CopyData(void * Source, void * Dest);
+	virtual Sqltimst::TSQLTimeStamp __fastcall GetAsSQLTimeStamp();
+	virtual System::TDateTime __fastcall GetAsDateTime(void);
+	virtual AnsiString __fastcall GetAsString();
+	virtual Variant __fastcall GetAsVariant();
+	virtual int __fastcall GetDataSize(void);
+	virtual int __fastcall GetDefaultWidth(void);
+	virtual void __fastcall GetText(AnsiString &Text, bool DisplayText);
+	virtual void __fastcall SetAsSQLTimeStamp(const Sqltimst::TSQLTimeStamp &Value);
+	virtual void __fastcall SetAsDateTime(System::TDateTime Value);
+	virtual void __fastcall SetAsString(const AnsiString Value);
+	virtual void __fastcall SetVarValue(const Variant &Value);
+	
+public:
+	__fastcall virtual TSQLTimeStampField(Classes::TComponent* AOwner);
+	__property Sqltimst::TSQLTimeStamp Value = {read=GetAsSqlTimeStamp, write=SetAsSQLTimeStamp};
+	
+__published:
+	__property AnsiString DisplayFormat = {read=FDisplayFormat, write=SetDisplayFormat};
+	__property EditMask ;
+public:
+	#pragma option push -w-inl
+	/* TField.Destroy */ inline __fastcall virtual ~TSQLTimeStampField(void) { }
+	#pragma option pop
+	
+};
+
+
 class DELPHICLASS TDateField;
 class PASCALIMPLEMENTATION TDateField : public TDateTimeField 
 {
@@ -1312,11 +1315,7 @@ class PASCALIMPLEMENTATION TBinaryField : public TField
 	typedef TField inherited;
 	
 protected:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual void __fastcall CheckTypeSize(int Value) { CheckTypeSize(__classid(TBinaryField)
-		, Value); }
-	#pragma option pop
-	/*         class method */ static void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
+	/* virtual class method */ virtual void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
 	virtual void __fastcall CopyData(void * Source, void * Dest);
 	virtual AnsiString __fastcall GetAsString();
 	virtual void __fastcall GetText(AnsiString &Text, bool DisplayText);
@@ -1329,7 +1328,7 @@ public:
 	__fastcall virtual TBinaryField(Classes::TComponent* AOwner);
 	
 __published:
-	__property Size ;
+	__property Size  = {default=16};
 public:
 	#pragma option push -w-inl
 	/* TField.Destroy */ inline __fastcall virtual ~TBinaryField(void) { }
@@ -1375,18 +1374,6 @@ public:
 };
 
 
-struct TBcd;
-typedef TBcd *PBcd;
-
-#pragma pack(push, 1)
-struct TBcd
-{
-	Byte Precision;
-	Byte SignSpecialPlaces;
-	Byte Fraction[32];
-} ;
-#pragma pack(pop)
-
 class DELPHICLASS TBCDField;
 class PASCALIMPLEMENTATION TBCDField : public TNumericField 
 {
@@ -1405,12 +1392,9 @@ private:
 	void __fastcall UpdateCheckRange(void);
 	
 protected:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual void __fastcall CheckTypeSize(int Value) { CheckTypeSize(__classid(TBCDField)
-		, Value); }
-	#pragma option pop
-	/*         class method */ static void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
+	/* virtual class method */ virtual void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
 	virtual void __fastcall CopyData(void * Source, void * Dest);
+	virtual Fmtbcd::TBcd __fastcall GetAsBCD();
 	virtual System::Currency __fastcall GetAsCurrency(void);
 	virtual double __fastcall GetAsFloat(void);
 	virtual int __fastcall GetAsInteger(void);
@@ -1420,6 +1404,7 @@ protected:
 	virtual int __fastcall GetDefaultWidth(void);
 	virtual void __fastcall GetText(AnsiString &Text, bool DisplayText);
 	bool __fastcall GetValue(System::Currency &Value);
+	virtual void __fastcall SetAsBCD(const Fmtbcd::TBcd &Value);
 	virtual void __fastcall SetAsCurrency(System::Currency Value);
 	virtual void __fastcall SetAsFloat(double Value);
 	virtual void __fastcall SetAsInteger(int Value);
@@ -1435,10 +1420,66 @@ __published:
 	__property System::Currency MaxValue = {read=FMaxValue, write=SetMaxValue};
 	__property System::Currency MinValue = {read=FMinValue, write=SetMinValue};
 	__property int Precision = {read=FPrecision, write=SetPrecision, default=0};
-	__property Size ;
+	__property Size  = {default=4};
 public:
 	#pragma option push -w-inl
 	/* TField.Destroy */ inline __fastcall virtual ~TBCDField(void) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TFMTBCDField;
+class PASCALIMPLEMENTATION TFMTBCDField : public TNumericField 
+{
+	typedef TNumericField inherited;
+	
+private:
+	bool FCurrency;
+	bool FCheckRange;
+	AnsiString FMinValue;
+	AnsiString FMaxValue;
+	int FPrecision;
+	void __fastcall BcdRangeError(const Variant &Value, AnsiString Max, AnsiString Min);
+	void __fastcall SetCurrency(bool Value);
+	void __fastcall SetMaxValue(AnsiString Value);
+	void __fastcall SetMinValue(AnsiString Value);
+	void __fastcall SetPrecision(int Value);
+	void __fastcall UpdateCheckRange(void);
+	
+protected:
+	/* virtual class method */ virtual void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
+	virtual void __fastcall CopyData(void * Source, void * Dest);
+	virtual System::Currency __fastcall GetAsCurrency(void);
+	virtual Fmtbcd::TBcd __fastcall GetAsBCD();
+	virtual double __fastcall GetAsFloat(void);
+	virtual int __fastcall GetAsInteger(void);
+	virtual AnsiString __fastcall GetAsString();
+	virtual Variant __fastcall GetAsVariant();
+	virtual int __fastcall GetDataSize(void);
+	virtual int __fastcall GetDefaultWidth(void);
+	virtual void __fastcall GetText(AnsiString &Text, bool DisplayText);
+	bool __fastcall GetValue(Fmtbcd::TBcd &Value);
+	virtual void __fastcall SetAsCurrency(System::Currency Value);
+	virtual void __fastcall SetAsBCD(const Fmtbcd::TBcd &Value);
+	virtual void __fastcall SetAsFloat(double Value);
+	virtual void __fastcall SetAsInteger(int Value);
+	virtual void __fastcall SetAsString(const AnsiString Value);
+	virtual void __fastcall SetVarValue(const Variant &Value);
+	
+public:
+	__fastcall virtual TFMTBCDField(Classes::TComponent* AOwner);
+	__property Fmtbcd::TBcd Value = {read=GetAsBCD, write=SetAsBCD};
+	
+__published:
+	__property bool currency = {read=FCurrency, write=SetCurrency, default=0};
+	__property AnsiString MaxValue = {read=FMaxValue, write=SetMaxValue};
+	__property AnsiString MinValue = {read=FMinValue, write=SetMinValue};
+	__property int Precision = {read=FPrecision, write=SetPrecision, default=0};
+	__property Size  = {default=4};
+public:
+	#pragma option push -w-inl
+	/* TField.Destroy */ inline __fastcall virtual ~TFMTBCDField(void) { }
 	#pragma option pop
 	
 };
@@ -1452,18 +1493,20 @@ class PASCALIMPLEMENTATION TBlobField : public TField
 	typedef TField inherited;
 	
 private:
-	bool FModified;
 	int FModifiedRecord;
+	bool FModified;
+	bool FGraphicHeader;
 	bool FTransliterate;
 	TBlobType __fastcall GetBlobType(void);
 	bool __fastcall GetModified(void);
 	void __fastcall LoadFromBlob(TBlobField* Blob);
-	void __fastcall LoadFromBitmap(Graphics::TBitmap* Bitmap);
 	void __fastcall LoadFromStrings(Classes::TStrings* Strings);
-	void __fastcall SaveToBitmap(Graphics::TBitmap* Bitmap);
+	void __fastcall LoadFromStreamPersist(Classes::_di_IStreamPersist StreamPersist);
 	void __fastcall SaveToStrings(Classes::TStrings* Strings);
+	void __fastcall SaveToStreamPersist(Classes::_di_IStreamPersist StreamPersist);
 	void __fastcall SetBlobType(TBlobType Value);
 	void __fastcall SetModified(bool Value);
+	bool __fastcall SupportsStreamPersist(const Classes::TPersistent* Persistent, Classes::_di_IStreamPersist &StreamPersist);
 	
 protected:
 	virtual void __fastcall AssignTo(Classes::TPersistent* Dest);
@@ -1482,11 +1525,7 @@ public:
 	__fastcall virtual TBlobField(Classes::TComponent* AOwner);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	virtual void __fastcall Clear(void);
-	#pragma option push -w-inl
-	/* virtual class method */ virtual bool __fastcall IsBlob() { return IsBlob(__classid(TBlobField)); }
-		
-	#pragma option pop
-	/*         class method */ static bool __fastcall IsBlob(TMetaClass* vmt);
+	/* virtual class method */ virtual bool __fastcall IsBlob(TMetaClass* vmt);
 	void __fastcall LoadFromFile(const AnsiString FileName);
 	void __fastcall LoadFromStream(Classes::TStream* Stream);
 	void __fastcall SaveToFile(const AnsiString FileName);
@@ -1498,8 +1537,9 @@ public:
 	__property bool Transliterate = {read=FTransliterate, write=FTransliterate, nodefault};
 	
 __published:
-	__property TBlobType BlobType = {read=GetBlobType, write=SetBlobType, nodefault};
-	__property Size ;
+	__property TBlobType BlobType = {read=GetBlobType, write=SetBlobType, default=15};
+	__property bool GraphicHeader = {read=FGraphicHeader, write=FGraphicHeader, default=1};
+	__property Size  = {default=0};
 public:
 	#pragma option push -w-inl
 	/* TField.Destroy */ inline __fastcall virtual ~TBlobField(void) { }
@@ -1517,7 +1557,7 @@ public:
 	__fastcall virtual TMemoField(Classes::TComponent* AOwner);
 	
 __published:
-	__property Transliterate ;
+	__property Transliterate  = {default=1};
 public:
 	#pragma option push -w-inl
 	/* TField.Destroy */ inline __fastcall virtual ~TMemoField(void) { }
@@ -1545,6 +1585,9 @@ class PASCALIMPLEMENTATION TObjectField : public TField
 {
 	typedef TField inherited;
 	
+public:
+	Variant operator[](int Index) { return FieldValues[Index]; }
+	
 private:
 	TFields* FFields;
 	TFields* FOwnedFields;
@@ -1556,11 +1599,7 @@ private:
 	void __fastcall WriteUnNamed(Classes::TWriter* Writer);
 	
 protected:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual void __fastcall CheckTypeSize(int Value) { CheckTypeSize(__classid(TObjectField)
-		, Value); }
-	#pragma option pop
-	/*         class method */ static void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
+	/* virtual class method */ virtual void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
 	virtual void __fastcall FreeBuffers(void);
 	virtual AnsiString __fastcall GetAsString();
@@ -1585,7 +1624,6 @@ public:
 	__property int FieldCount = {read=GetFieldCount, nodefault};
 	__property TFields* Fields = {read=GetFields};
 	__property Variant FieldValues[int Index] = {read=GetFieldValue, write=SetFieldValue/*, default*/};
-		
 	__property bool UnNamed = {read=FUnNamed, default=0};
 	
 __published:
@@ -1625,7 +1663,7 @@ protected:
 	
 public:
 	__fastcall virtual TArrayField(Classes::TComponent* AOwner);
-	__property Size ;
+	__property Size  = {default=10};
 public:
 	#pragma option push -w-inl
 	/* TObjectField.Destroy */ inline __fastcall virtual ~TArrayField(void) { }
@@ -1658,8 +1696,7 @@ public:
 	__property TDataSet* NestedDataSet = {read=GetNestedDataSet};
 	
 __published:
-	__property bool IncludeObjectField = {read=FIncludeObjectField, write=SetIncludeObjectField, nodefault
-		};
+	__property bool IncludeObjectField = {read=FIncludeObjectField, write=SetIncludeObjectField, default=0};
 };
 
 
@@ -1682,7 +1719,7 @@ public:
 	
 __published:
 	__property AnsiString ReferenceTableName = {read=FReferenceTableName, write=FReferenceTableName};
-	__property Size ;
+	__property Size  = {default=0};
 public:
 	#pragma option push -w-inl
 	/* TDataSetField.Destroy */ inline __fastcall virtual ~TReferenceField(void) { }
@@ -1697,19 +1734,19 @@ class PASCALIMPLEMENTATION TVariantField : public TField
 	typedef TField inherited;
 	
 protected:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual void __fastcall CheckTypeSize(int Value) { CheckTypeSize(__classid(TVariantField)
-		, Value); }
-	#pragma option pop
-	/*         class method */ static void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
+	/* virtual class method */ virtual void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
+	virtual Fmtbcd::TBcd __fastcall GetAsBCD();
 	virtual bool __fastcall GetAsBoolean(void);
 	virtual System::TDateTime __fastcall GetAsDateTime(void);
+	virtual Sqltimst::TSQLTimeStamp __fastcall GetAsSqlTimeStamp();
 	virtual double __fastcall GetAsFloat(void);
 	virtual int __fastcall GetAsInteger(void);
 	virtual AnsiString __fastcall GetAsString();
 	virtual Variant __fastcall GetAsVariant();
 	virtual int __fastcall GetDefaultWidth(void);
+	virtual void __fastcall SetAsBCD(const Fmtbcd::TBcd &Value);
 	virtual void __fastcall SetAsBoolean(bool Value);
+	virtual void __fastcall SetAsSqlTimeStamp(const Sqltimst::TSQLTimeStamp &Value);
 	virtual void __fastcall SetAsDateTime(System::TDateTime Value);
 	virtual void __fastcall SetAsFloat(double Value);
 	virtual void __fastcall SetAsInteger(int Value);
@@ -1732,19 +1769,15 @@ class PASCALIMPLEMENTATION TInterfaceField : public TField
 	typedef TField inherited;
 	
 protected:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual void __fastcall CheckTypeSize(int Value) { CheckTypeSize(__classid(TInterfaceField)
-		, Value); }
-	#pragma option pop
-	/*         class method */ static void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
-	_di_IUnknown __fastcall GetValue();
+	/* virtual class method */ virtual void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
+	System::_di_IInterface __fastcall GetValue();
 	virtual Variant __fastcall GetAsVariant();
-	void __fastcall SetValue(const _di_IUnknown Value);
+	void __fastcall SetValue(const System::_di_IInterface Value);
 	virtual void __fastcall SetVarValue(const Variant &Value);
 	
 public:
 	__fastcall virtual TInterfaceField(Classes::TComponent* AOwner);
-	__property _di_IUnknown Value = {read=GetValue, write=SetValue};
+	__property System::_di_IInterface Value = {read=GetValue, write=SetValue};
 public:
 	#pragma option push -w-inl
 	/* TField.Destroy */ inline __fastcall virtual ~TInterfaceField(void) { }
@@ -1779,11 +1812,7 @@ class PASCALIMPLEMENTATION TGuidField : public TStringField
 	typedef TStringField inherited;
 	
 protected:
-	#pragma option push -w-inl
-	/* virtual class method */ virtual void __fastcall CheckTypeSize(int Value) { CheckTypeSize(__classid(TGuidField)
-		, Value); }
-	#pragma option pop
-	/*         class method */ static void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
+	/* virtual class method */ virtual void __fastcall CheckTypeSize(TMetaClass* vmt, int Value);
 	GUID __fastcall GetAsGuid();
 	virtual int __fastcall GetDefaultWidth(void);
 	void __fastcall SetAsGuid(const GUID &Value);
@@ -1842,11 +1871,11 @@ __published:
 	__property AnsiString DisplayName = {read=FDisplayName, write=FDisplayName};
 	__property AnsiString DisplayFormat = {read=FDisplayFormat, write=SetDisplayFormat};
 	__property AnsiString Expression = {read=FExpression, write=SetExpression};
-	__property FieldKind ;
+	__property FieldKind  = {default=4};
 	__property int GroupingLevel = {read=FGroupingLevel, write=SetGroupingLevel, default=0};
 	__property AnsiString IndexName = {read=FIndexName, write=SetIndexName};
 	__property int Precision = {read=FPrecision, write=SetPrecision, default=15};
-	__property Visible ;
+	__property Visible  = {default=0};
 public:
 	#pragma option push -w-inl
 	/* TField.Destroy */ inline __fastcall virtual ~TAggregateField(void) { }
@@ -2015,7 +2044,6 @@ public:
 	__property Classes::TList* Fields = {read=FFields};
 	__property Classes::TNotifyEvent OnMasterChange = {read=FOnMasterChange, write=FOnMasterChange};
 	__property Classes::TNotifyEvent OnMasterDisable = {read=FOnMasterDisable, write=FOnMasterDisable};
-		
 };
 
 
@@ -2061,11 +2089,9 @@ __published:
 	__property AnsiString ErrorMessage = {read=FErrorMessage, write=SetErrorMessage};
 	__property bool FromDictionary = {read=FFromDictionary, write=FFromDictionary, nodefault};
 	__property AnsiString ImportedConstraint = {read=FImportedConstraint, write=SetImportedConstraint};
-		
 public:
 	#pragma option push -w-inl
-	/* TCollectionItem.Create */ inline __fastcall virtual TCheckConstraint(Classes::TCollection* Collection
-		) : Classes::TCollectionItem(Collection) { }
+	/* TCollectionItem.Create */ inline __fastcall virtual TCheckConstraint(Classes::TCollection* Collection) : Classes::TCollectionItem(Collection) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCollectionItem.Destroy */ inline __fastcall virtual ~TCheckConstraint(void) { }
@@ -2078,6 +2104,9 @@ class DELPHICLASS TCheckConstraints;
 class PASCALIMPLEMENTATION TCheckConstraints : public Classes::TCollection 
 {
 	typedef Classes::TCollection inherited;
+	
+public:
+	TCheckConstraint* operator[](int Index) { return Items[Index]; }
 	
 private:
 	Classes::TPersistent* FOwner;
@@ -2117,11 +2146,14 @@ private:
 	TParam* FParamRef;
 	AnsiString FNativeStr;
 	Variant FData;
+	int FPrecision;
+	int FNumericScale;
 	bool FNull;
 	AnsiString FName;
 	TFieldType FDataType;
 	bool FBound;
 	TParamType FParamType;
+	int FSize;
 	TParam* __fastcall ParamRef(void);
 	TDataSet* __fastcall GetDataSet(void);
 	bool __fastcall IsParamStored(void);
@@ -2132,9 +2164,11 @@ private:
 protected:
 	void __fastcall AssignParam(TParam* Param);
 	virtual void __fastcall AssignTo(Classes::TPersistent* Dest);
+	Fmtbcd::TBcd __fastcall GetAsFMTBCD();
 	System::Currency __fastcall GetAsBCD(void);
 	bool __fastcall GetAsBoolean(void);
 	System::TDateTime __fastcall GetAsDateTime(void);
+	Sqltimst::TSQLTimeStamp __fastcall GetAsSQLTimeStamp();
 	System::Currency __fastcall GetAsCurrency(void);
 	double __fastcall GetAsFloat(void);
 	int __fastcall GetAsInteger(void);
@@ -2144,11 +2178,13 @@ protected:
 	bool __fastcall GetIsNull(void);
 	bool __fastcall IsEqual(TParam* Value);
 	void __fastcall SetAsBCD(const System::Currency Value);
+	void __fastcall SetAsFMTBCD(const Fmtbcd::TBcd &Value);
 	void __fastcall SetAsBlob(const AnsiString Value);
 	void __fastcall SetAsBoolean(bool Value);
 	void __fastcall SetAsCurrency(const System::Currency Value);
 	void __fastcall SetAsDate(const System::TDateTime Value);
 	void __fastcall SetAsDateTime(const System::TDateTime Value);
+	void __fastcall SetAsSQLTimeStamp(const Sqltimst::TSQLTimeStamp &Value);
 	void __fastcall SetAsFloat(const double Value);
 	void __fastcall SetAsInteger(int Value);
 	void __fastcall SetAsMemo(const AnsiString Value);
@@ -2176,6 +2212,7 @@ public:
 	void __fastcall SetBlobData(void * Buffer, int Size);
 	void __fastcall SetData(void * Buffer);
 	__property System::Currency AsBCD = {read=GetAsBCD, write=SetAsBCD};
+	__property Fmtbcd::TBcd AsFMTBCD = {read=GetAsFMTBCD, write=SetAsFMTBCD};
 	__property AnsiString AsBlob = {read=GetAsString, write=SetAsBlob};
 	__property bool AsBoolean = {read=GetAsBoolean, write=SetAsBoolean, nodefault};
 	__property System::Currency AsCurrency = {read=GetAsCurrency, write=SetAsCurrency};
@@ -2184,6 +2221,7 @@ public:
 	__property double AsFloat = {read=GetAsFloat, write=SetAsFloat};
 	__property int AsInteger = {read=GetAsInteger, write=SetAsInteger, nodefault};
 	__property int AsSmallInt = {read=GetAsInteger, write=SetAsSmallInt, nodefault};
+	__property Sqltimst::TSQLTimeStamp AsSQLTimeStamp = {read=GetAsSQLTimeStamp, write=SetAsSQLTimeStamp};
 	__property AnsiString AsMemo = {read=GetAsMemo, write=SetAsMemo};
 	__property AnsiString AsString = {read=GetAsString, write=SetAsString};
 	__property System::TDateTime AsTime = {read=GetAsDateTime, write=SetAsTime};
@@ -2195,8 +2233,11 @@ public:
 	
 __published:
 	__property TFieldType DataType = {read=GetDataType, write=SetDataType, nodefault};
+	__property int Precision = {read=FPrecision, write=FPrecision, default=0};
+	__property int NumericScale = {read=FNumericScale, write=FNumericScale, default=0};
 	__property AnsiString Name = {read=FName, write=FName};
 	__property TParamType ParamType = {read=GetParamType, write=SetParamType, nodefault};
+	__property int Size = {read=FSize, write=FSize, default=0};
 	__property Variant Value = {read=GetAsVariant, write=SetAsVariant, stored=IsParamStored};
 public:
 	#pragma option push -w-inl
@@ -2209,6 +2250,9 @@ public:
 class PASCALIMPLEMENTATION TParams : public Classes::TCollection 
 {
 	typedef Classes::TCollection inherited;
+	
+public:
+	TParam* operator[](int Index) { return Items[Index]; }
 	
 private:
 	Classes::TPersistent* FOwner;
@@ -2231,8 +2275,7 @@ public:
 	__fastcall TParams(void)/* overload */;
 	void __fastcall AddParam(TParam* Value);
 	void __fastcall RemoveParam(TParam* Value);
-	TParam* __fastcall CreateParam(TFieldType FldType, const AnsiString ParamName, TParamType ParamType
-		);
+	TParam* __fastcall CreateParam(TFieldType FldType, const AnsiString ParamName, TParamType ParamType);
 	void __fastcall GetParamList(Classes::TList* List, const AnsiString ParamNames);
 	bool __fastcall IsEqual(TParams* Value);
 	AnsiString __fastcall ParseSQL(AnsiString SQL, bool DoCreate);
@@ -2241,7 +2284,6 @@ public:
 	__property TParam* Items[int Index] = {read=GetItem, write=SetItem/*, default*/};
 	__property Variant ParamValues[AnsiString ParamName] = {read=GetParamValue, write=SetParamValue};
 public:
-		
 	#pragma option push -w-inl
 	/* TCollection.Destroy */ inline __fastcall virtual ~TParams(void) { }
 	#pragma option pop
@@ -2251,23 +2293,21 @@ public:
 
 __interface IProviderSupport;
 typedef System::DelphiInterface<IProviderSupport> _di_IProviderSupport;
-__interface IProviderSupport  : public IUnknown 
+__interface IProviderSupport  : public IInterface 
 {
 	
 public:
 	virtual void __fastcall PSEndTransaction(bool Commit) = 0 ;
 	virtual void __fastcall PSExecute(void) = 0 ;
-	virtual int __fastcall PSExecuteStatement(const AnsiString ASQL, TParams* AParams, void * ResultSet
-		) = 0 ;
+	virtual int __fastcall PSExecuteStatement(const AnsiString ASQL, TParams* AParams, void * ResultSet = (void *)(0x0)) = 0 ;
 	virtual void __fastcall PSGetAttributes(Classes::TList* List) = 0 ;
 	virtual TIndexDef* __fastcall PSGetDefaultOrder(void) = 0 ;
 	virtual AnsiString __fastcall PSGetKeyFields(void) = 0 ;
 	virtual TParams* __fastcall PSGetParams(void) = 0 ;
 	virtual AnsiString __fastcall PSGetQuoteChar(void) = 0 ;
 	virtual AnsiString __fastcall PSGetTableName(void) = 0 ;
-	virtual TIndexDefs* __fastcall PSGetIndexDefs(TIndexOptions IndexTypes) = 0 ;
-	virtual EUpdateError* __fastcall PSGetUpdateException(Sysutils::Exception* E, EUpdateError* Prev) = 0 
-		;
+	virtual TIndexDefs* __fastcall PSGetIndexDefs(TIndexOptions IndexTypes = (System::Set<TIndexOption, ixPrimary, ixNonMaintained> () << TIndexOption(0) << TIndexOption(1) << TIndexOption(2) << TIndexOption(3) << TIndexOption(4) << TIndexOption(5) )) = 0 ;
+	virtual EUpdateError* __fastcall PSGetUpdateException(Sysutils::Exception* E, EUpdateError* Prev) = 0 ;
 	virtual bool __fastcall PSInTransaction(void) = 0 ;
 	virtual bool __fastcall PSIsSQLBased(void) = 0 ;
 	virtual bool __fastcall PSIsSQLSupported(void) = 0 ;
@@ -2299,10 +2339,10 @@ enum TGetResult { grOK, grBOF, grEOF, grError };
 #pragma option pop
 
 #pragma option push -b-
-enum Db__85 { rmExact, rmCenter };
+enum DB__06 { rmExact, rmCenter };
 #pragma option pop
 
-typedef Set<Db__85, rmExact, rmCenter>  TResyncMode;
+typedef Set<DB__06, rmExact, rmCenter>  TResyncMode;
 
 #pragma option push -b-
 enum TDataAction { daFail, daAbort, daRetry };
@@ -2322,8 +2362,7 @@ typedef void __fastcall (__closure *TDataOperation)(void);
 
 typedef void __fastcall (__closure *TDataSetNotifyEvent)(TDataSet* DataSet);
 
-typedef void __fastcall (__closure *TDataSetErrorEvent)(TDataSet* DataSet, EDatabaseError* E, TDataAction 
-	&Action);
+typedef void __fastcall (__closure *TDataSetErrorEvent)(TDataSet* DataSet, EDatabaseError* E, TDataAction &Action);
 
 #pragma option push -b-
 enum TFilterOption { foCaseInsensitive, foNoPartialCompare };
@@ -2355,6 +2394,9 @@ class PASCALIMPLEMENTATION TDataSet : public Classes::TComponent
 {
 	typedef Classes::TComponent inherited;
 	
+public:
+	Variant operator[](AnsiString FieldName) { return FieldValues[FieldName]; }
+	
 private:
 	TFields* FFields;
 	TFields* FAggFields;
@@ -2378,6 +2420,7 @@ private:
 	int FBlockReadSize;
 	TCheckConstraints* FConstraints;
 	TDataSetField* FDataSetField;
+	bool FIsUniDirectional;
 	Classes::TList* FNestedDataSets;
 	TMetaClass*FNestedDatasetClass;
 	void *FReserved;
@@ -2448,8 +2491,7 @@ private:
 protected:
 	virtual void __fastcall PSEndTransaction(bool Commit);
 	virtual void __fastcall PSExecute(void);
-	virtual int __fastcall PSExecuteStatement(const AnsiString ASQL, TParams* AParams, void * ResultSet
-		);
+	virtual int __fastcall PSExecuteStatement(const AnsiString ASQL, TParams* AParams, void * ResultSet = (void *)(0x0));
 	virtual void __fastcall PSGetAttributes(Classes::TList* List);
 	virtual TIndexDef* __fastcall PSGetDefaultOrder(void);
 	virtual AnsiString __fastcall PSGetKeyFields();
@@ -2471,6 +2513,7 @@ protected:
 	bool __fastcall BookmarkAvailable(void);
 	virtual void __fastcall CalculateFields(char * Buffer);
 	virtual void __fastcall CheckActive(void);
+	void __fastcall CheckBiDirectional(void);
 	virtual void __fastcall CheckFieldCompatibility(TField* Field, TFieldDef* FieldDef);
 	virtual void __fastcall CheckInactive(void);
 	virtual void __fastcall ClearBuffers(void);
@@ -2505,7 +2548,6 @@ protected:
 	virtual void __fastcall DoOnNewRecord(void);
 	TField* __fastcall FieldByNumber(int FieldNo);
 	virtual bool __fastcall FindRecord(bool Restart, bool GoForward);
-	void __fastcall OpenCursorComplete(void);
 	virtual void __fastcall FreeFieldBuffers(void);
 	virtual Variant __fastcall GetAggregateValue(TField* Field);
 	virtual int __fastcall GetAggRecordCount(TGroupPosInd Grp);
@@ -2534,7 +2576,8 @@ protected:
 	virtual void __fastcall InternalInsert(void);
 	virtual void __fastcall InternalRefresh(void);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall OpenCursor(bool InfoQuery);
+	virtual void __fastcall OpenCursor(bool InfoQuery = false);
+	void __fastcall OpenCursorComplete(void);
 	void __fastcall OpenParentDataSet(TDataSet* ParentDataSet);
 	virtual void __fastcall RefreshInternalCalcFields(char * Buffer);
 	void __fastcall RestoreState(const TDataSetState Value);
@@ -2542,7 +2585,7 @@ protected:
 	virtual void __fastcall SetActive(bool Value);
 	virtual void __fastcall SetBookmarkStr(const AnsiString Value);
 	virtual void __fastcall SetBlockReadSize(int Value);
-	void __fastcall SetBufListSize(int Value);
+	virtual void __fastcall SetBufListSize(int Value);
 	DYNAMIC void __fastcall SetChildOrder(Classes::TComponent* Component, int Order);
 	virtual void __fastcall SetCurrentRecord(int Index);
 	virtual void __fastcall SetDataSetField(const TDataSetField* Value);
@@ -2557,9 +2600,9 @@ protected:
 	virtual void __fastcall SetOnFilterRecord(const TFilterRecordEvent Value);
 	virtual void __fastcall SetRecNo(int Value);
 	void __fastcall SetState(TDataSetState Value);
-	virtual void __fastcall SetStateFieldValue(TDataSetState State, TField* Field, const Variant &Value
-		);
+	virtual void __fastcall SetStateFieldValue(TDataSetState State, TField* Field, const Variant &Value);
 	TDataSetState __fastcall SetTempState(const TDataSetState Value);
+	void __fastcall SetUniDirectional(const bool Value);
 	char * __fastcall TempBuffer(void);
 	void __fastcall UpdateBufferCount(void);
 	virtual void __fastcall UpdateIndexDefs(void);
@@ -2577,30 +2620,29 @@ protected:
 	__property Classes::TList* NestedDataSets = {read=GetNestedDataSets};
 	__property TMetaClass* NestedDataSetClass = {read=FNestedDatasetClass, write=FNestedDatasetClass};
 	__property void * Reserved = {read=FReserved, write=FReserved};
-	virtual char * __fastcall AllocRecordBuffer(void) = 0 ;
-	virtual void __fastcall FreeRecordBuffer(char * &Buffer) = 0 ;
-	virtual void __fastcall GetBookmarkData(char * Buffer, void * Data) = 0 ;
-	virtual TBookmarkFlag __fastcall GetBookmarkFlag(char * Buffer) = 0 ;
+	virtual char * __fastcall AllocRecordBuffer(void);
+	virtual void __fastcall FreeRecordBuffer(char * &Buffer);
+	virtual void __fastcall GetBookmarkData(char * Buffer, void * Data);
+	virtual TBookmarkFlag __fastcall GetBookmarkFlag(char * Buffer);
+	virtual Word __fastcall GetRecordSize(void);
+	virtual void __fastcall InternalAddRecord(void * Buffer, bool Append);
+	virtual void __fastcall InternalDelete(void);
+	virtual void __fastcall InternalFirst(void);
+	virtual void __fastcall InternalGotoBookmark(void * Bookmark);
+	virtual void __fastcall InternalInitRecord(char * Buffer);
+	virtual void __fastcall InternalLast(void);
+	virtual void __fastcall InternalPost(void);
+	virtual void __fastcall InternalSetToRecord(char * Buffer);
+	virtual void __fastcall SetBookmarkFlag(char * Buffer, TBookmarkFlag Value);
+	virtual void __fastcall SetBookmarkData(char * Buffer, void * Data);
+	virtual void __fastcall SetFieldData(TField* Field, void * Buffer)/* overload */;
+	virtual void __fastcall SetFieldData(TField* Field, void * Buffer, bool NativeFormat)/* overload */;
 	virtual TGetResult __fastcall GetRecord(char * Buffer, TGetMode GetMode, bool DoCheck) = 0 ;
-	virtual Word __fastcall GetRecordSize(void) = 0 ;
-	virtual void __fastcall InternalAddRecord(void * Buffer, bool Append) = 0 ;
 	virtual void __fastcall InternalClose(void) = 0 ;
-	virtual void __fastcall InternalDelete(void) = 0 ;
-	virtual void __fastcall InternalFirst(void) = 0 ;
-	virtual void __fastcall InternalGotoBookmark(void * Bookmark) = 0 ;
 	virtual void __fastcall InternalHandleException(void) = 0 ;
 	virtual void __fastcall InternalInitFieldDefs(void) = 0 ;
-	virtual void __fastcall InternalInitRecord(char * Buffer) = 0 ;
-	virtual void __fastcall InternalLast(void) = 0 ;
 	virtual void __fastcall InternalOpen(void) = 0 ;
-	virtual void __fastcall InternalPost(void) = 0 ;
-	virtual void __fastcall InternalSetToRecord(char * Buffer) = 0 ;
 	virtual bool __fastcall IsCursorOpen(void) = 0 ;
-	virtual void __fastcall SetBookmarkFlag(char * Buffer, TBookmarkFlag Value) = 0 ;
-	virtual void __fastcall SetBookmarkData(char * Buffer, void * Data) = 0 ;
-	virtual void __fastcall SetFieldData(TField* Field, void * Buffer) = 0 /* overload */;
-	virtual void __fastcall SetFieldData(TField* Field, void * Buffer, bool NativeFormat)/* overload */
-		;
 	
 public:
 	__fastcall virtual TDataSet(Classes::TComponent* AOwner);
@@ -2631,14 +2673,12 @@ public:
 	virtual void __fastcall FreeBookmark(void * Bookmark);
 	virtual void * __fastcall GetBookmark(void);
 	virtual bool __fastcall GetCurrentRecord(char * Buffer);
-	void __fastcall GetDetailDataSets(Classes::TList* List);
-	virtual void __fastcall GetDetailLinkFields(Classes::TList* MasterFields, Classes::TList* DetailFields
-		);
+	virtual void __fastcall GetDetailDataSets(Classes::TList* List);
+	virtual void __fastcall GetDetailLinkFields(Classes::TList* MasterFields, Classes::TList* DetailFields);
 	virtual int __fastcall GetBlobFieldData(int FieldNo, TBlobByteData &Buffer);
 	virtual bool __fastcall GetFieldData(TField* Field, void * Buffer)/* overload */;
 	virtual bool __fastcall GetFieldData(int FieldNo, void * Buffer)/* overload */;
-	virtual bool __fastcall GetFieldData(TField* Field, void * Buffer, bool NativeFormat)/* overload */
-		;
+	virtual bool __fastcall GetFieldData(TField* Field, void * Buffer, bool NativeFormat)/* overload */;
 	void __fastcall GetFieldList(Classes::TList* List, const AnsiString FieldNames);
 	void __fastcall GetFieldNames(Classes::TStrings* List);
 	void __fastcall GotoBookmark(void * Bookmark);
@@ -2648,10 +2688,8 @@ public:
 	bool __fastcall IsLinkedTo(TDataSource* DataSource);
 	virtual bool __fastcall IsSequenced(void);
 	void __fastcall Last(void);
-	virtual bool __fastcall Locate(const AnsiString KeyFields, const Variant &KeyValues, TLocateOptions 
-		Options);
-	virtual Variant __fastcall Lookup(const AnsiString KeyFields, const Variant &KeyValues, const AnsiString 
-		ResultFields);
+	virtual bool __fastcall Locate(const AnsiString KeyFields, const Variant &KeyValues, TLocateOptions Options);
+	virtual Variant __fastcall Lookup(const AnsiString KeyFields, const Variant &KeyValues, const AnsiString ResultFields);
 	int __fastcall MoveBy(int Distance);
 	void __fastcall Next(void);
 	void __fastcall Open(void);
@@ -2679,9 +2717,9 @@ public:
 	__property TFieldDefList* FieldDefList = {read=FFieldDefList};
 	__property TFields* Fields = {read=FFields};
 	__property TFieldList* FieldList = {read=FFieldList};
-	__property Variant FieldValues[AnsiString FieldName] = {read=GetFieldValue, write=SetFieldValue/*, 
-		default*/};
+	__property Variant FieldValues[AnsiString FieldName] = {read=GetFieldValue, write=SetFieldValue/*, default*/};
 	__property bool Found = {read=GetFound, nodefault};
+	__property bool IsUniDirectional = {read=FIsUniDirectional, default=0};
 	__property bool Modified = {read=FModified, nodefault};
 	__property bool ObjectView = {read=FObjectView, write=SetObjectView, nodefault};
 	__property int RecordCount = {read=GetRecordCount, nodefault};
@@ -2692,7 +2730,6 @@ public:
 	__property AnsiString Filter = {read=FFilterText, write=SetFilterText};
 	__property bool Filtered = {read=FFiltered, write=SetFiltered, default=0};
 	__property TFilterOptions FilterOptions = {read=FFilterOptions, write=SetFilterOptions, default=0};
-		
 	__property bool Active = {read=GetActive, write=SetActive, default=0};
 	__property bool AutoCalcFields = {read=FAutoCalcFields, write=FAutoCalcFields, default=1};
 	__property TDataSetNotifyEvent BeforeOpen = {read=FBeforeOpen, write=FBeforeOpen};
@@ -2752,43 +2789,78 @@ struct TDateTimeRec
 	};
 } ;
 
-typedef AnsiString Db__06[36];
+typedef AnsiString DB__26[38];
+
+#pragma option push -b-
+enum TDBScreenCursor { dcrDefault, dcrHourGlass, dcrSQLWait, dcrOther };
+#pragma option pop
+
+__interface IDBScreen;
+typedef System::DelphiInterface<IDBScreen> _di_IDBScreen;
+__interface INTERFACE_UUID("{29A1C508-6ADC-44CD-88DE-4F51B25D5995}") IDBScreen  : public IInterface 
+{
+	
+public:
+	virtual TDBScreenCursor __fastcall GetCursor(void) = 0 ;
+	virtual void __fastcall SetCursor(TDBScreenCursor Cursor) = 0 ;
+	__property TDBScreenCursor Cursor = {read=GetCursor, write=SetCursor};
+};
+
+__interface IDBApplication;
+typedef System::DelphiInterface<IDBApplication> _di_IDBApplication;
+__interface INTERFACE_UUID("{FAA0DF76-EC6A-48AA-9754-2D36DF815C0D}") IDBApplication  : public IInterface 
+{
+	
+public:
+	virtual AnsiString __fastcall GetTitle(void) = 0 ;
+	virtual void __fastcall ProcessMessages(void) = 0 ;
+	virtual void __fastcall SetTitle(const AnsiString Value) = 0 ;
+	__property AnsiString Title = {read=GetTitle, write=SetTitle};
+};
+
+__interface IDBSession;
+typedef System::DelphiInterface<IDBSession> _di_IDBSession;
+__interface INTERFACE_UUID("{CC2448FB-B672-4BA2-93F7-77CBEDA815FE}") IDBSession  : public IInterface 
+{
+	
+public:
+	virtual void __fastcall AddPassword(const AnsiString APassword) = 0 ;
+	virtual void __fastcall RemovePassword(const AnsiString APassword) = 0 ;
+	virtual void __fastcall RemoveAllPasswords(void) = 0 ;
+};
 
 //-- var, const, procedure ---------------------------------------------------
-#define ftNonTextTypes (System::Set<TFieldType, ftUnknown, ftGuid> () )
-#define ftFixedSizeTypes (System::Set<TFieldType, ftUnknown, ftGuid> () )
-#define dsEditModes (System::Set<TDataSetState, dsInactive, dsOpening> () )
-#define dsWriteModes (System::Set<TDataSetState, dsInactive, dsOpening> () )
-extern PACKAGE TMetaClass*DefaultFieldClasses[36];
-extern PACKAGE AnsiString FieldTypeNames[36];
-extern PACKAGE Word FieldTypeVarMap[36];
-#define ObjectFieldTypes (System::Set<TFieldType, ftUnknown, ftGuid> () )
+#define ftNonTextTypes (System::Set<TFieldType, ftUnknown, ftFMTBcd> () << TFieldType(12) << TFieldType(13) << TFieldType(15) << TFieldType(16) << TFieldType(17) << TFieldType(18) << TFieldType(19) << TFieldType(20) << TFieldType(21) << TFieldType(22) << TFieldType(26) << TFieldType(27) << TFieldType(28) << TFieldType(29) )
+#define ftFixedSizeTypes (System::Set<TFieldType, ftUnknown, ftFMTBcd> () << TFieldType(2) << TFieldType(3) << TFieldType(4) << TFieldType(5) << TFieldType(6) << TFieldType(7) << TFieldType(9) << TFieldType(10) << TFieldType(11) << TFieldType(14) << TFieldType(25) << TFieldType(34) << TFieldType(35) << TFieldType(36) << TFieldType(37) << TFieldType(38) << TFieldType(39) )
+#define dsEditModes (System::Set<TDataSetState, dsInactive, dsOpening> () << TDataSetState(2) << TDataSetState(3) << TDataSetState(4) )
+#define dsWriteModes (System::Set<TDataSetState, dsInactive, dsOpening> () << TDataSetState(2) << TDataSetState(3) << TDataSetState(4) << TDataSetState(5) << TDataSetState(6) << TDataSetState(7) << TDataSetState(11) )
+extern PACKAGE TMetaClass*DefaultFieldClasses[38];
+extern PACKAGE AnsiString FieldTypeNames[38];
+extern PACKAGE Word FieldTypeVarMap[38];
+#define ObjectFieldTypes (System::Set<TFieldType, ftUnknown, ftFMTBcd> () << TFieldType(26) << TFieldType(27) << TFieldType(28) << TFieldType(29) )
 static const Word dsMaxStringSize = 0x2000;
-extern PACKAGE void __fastcall (*RegisterFieldsProc)(TMetaClass* const * FieldClassess, const int FieldClassess_Size
-	);
-extern PACKAGE void __fastcall DatabaseError(const AnsiString Message, Classes::TComponent* Component
-	);
-extern PACKAGE void __fastcall DatabaseErrorFmt(const AnsiString Message, const System::TVarRec * Args
-	, const int Args_Size, Classes::TComponent* Component);
-extern PACKAGE TField* __fastcall GetFieldProperty(TDataSet* DataSet, Classes::TComponent* Control, 
-	const AnsiString FieldName);
+extern PACKAGE void __fastcall (*RegisterFieldsProc)(TMetaClass* * FieldClassess, const int FieldClassess_Size);
+extern PACKAGE bool __fastcall (*LoginDialogProc)(const AnsiString ADatabaseName, AnsiString &AUserName, AnsiString &APassword);
+extern PACKAGE bool __fastcall (*LoginDialogExProc)(const AnsiString ADatabaseName, AnsiString &AUserName, AnsiString &APassword, bool NameReadOnly);
+extern PACKAGE bool __fastcall (*RemoteLoginDialogProc)(AnsiString &AUserName, AnsiString &APassword);
+extern PACKAGE void __fastcall (*ScreenCursorProc)(const int CurIndex);
+extern PACKAGE bool __fastcall (*PasswordDialog)(const _di_IDBSession ASession);
+extern PACKAGE _di_IDBScreen DBScreen;
+extern PACKAGE _di_IDBApplication DBApplication;
+extern PACKAGE void __fastcall DatabaseError(const AnsiString Message, Classes::TComponent* Component = (Classes::TComponent*)(0x0));
+extern PACKAGE void __fastcall DatabaseErrorFmt(const AnsiString Message, const System::TVarRec * Args, const int Args_Size, Classes::TComponent* Component = (Classes::TComponent*)(0x0));
+extern PACKAGE TField* __fastcall GetFieldProperty(TDataSet* DataSet, Classes::TComponent* Control, const AnsiString FieldName);
 extern PACKAGE void __fastcall DisposeMem(void *Buffer, int Size);
 extern PACKAGE bool __fastcall BuffersEqual(void * Buf1, void * Buf2, int Size);
-extern PACKAGE bool __fastcall CurrToBCD(System::Currency Curr, TBcd &BCD, int Precision, int Decimals
-	);
-extern PACKAGE bool __fastcall BCDToCurr(const TBcd &BCD, System::Currency &Curr);
 extern PACKAGE AnsiString __fastcall ExtractFieldName(const AnsiString Fields, int &Pos);
-extern PACKAGE void __fastcall RegisterFields(TMetaClass* const * FieldClasses, const int FieldClasses_Size
-	);
+extern PACKAGE void __fastcall RegisterFields(TMetaClass* * FieldClasses, const int FieldClasses_Size);
 extern PACKAGE TFieldType __fastcall VarTypeToDataType(int VarType);
 
 }	/* namespace Db */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Db;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Db
+#endif	// DB

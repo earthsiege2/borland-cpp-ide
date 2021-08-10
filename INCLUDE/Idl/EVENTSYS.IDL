@@ -187,6 +187,36 @@ interface IEventClass : IDispatch
 		HRESULT TypeLib([in] BSTR bstrTypeLib);
 };
 
+[
+ object,
+ uuid(fb2b72a1-7a68-11d1-88f9-0080c7d771bf),
+ dual,
+ helpstring("IEventClass2 Interface"),
+ pointer_default(unique)
+]
+interface IEventClass2 : IEventClass
+{
+	[id(8), propget, helpstring("property PublisherID")]
+		HRESULT PublisherID([out,retval] BSTR* pbstrPublisherID);
+	[id(8), propput, helpstring("property PublisherID")]
+		HRESULT PublisherID([in] BSTR bstrPublisherID);
+
+	[id(9), propget, helpstring("property MultiInterfacePublisherFilterCLSID")]
+		HRESULT MultiInterfacePublisherFilterCLSID([out,retval] BSTR* pbstrPubFilCLSID);
+	[id(9), propput, helpstring("property MultiInterfacePublisherFilterCLSID")]
+		HRESULT MultiInterfacePublisherFilterCLSID([in] BSTR bstrPubFilCLSID);
+
+	[id(10), propget, helpstring("property AllowInprocActivation")]
+		HRESULT AllowInprocActivation([out,retval]BOOL* pfAllowInprocActivation);
+	[id(10), propput, helpstring("property AllowInprocActivation")]
+		HRESULT AllowInprocActivation([in]BOOL fAllowInprocActivation);
+
+	[id(11), propget, helpstring("property FireInParallel")]
+		HRESULT FireInParallel([out,retval]BOOL* pfFireInParallel);
+	[id(11), propput, helpstring("property FireInParallel")]
+		HRESULT FireInParallel([in]BOOL fFireInParallel);
+}
+
 // --------------------------------------------------------------------------
 //
 //   IEventSubscription -- event system subscriptions
@@ -387,6 +417,43 @@ interface IEventObjectChange : IUnknown
 	[helpstring("method ChangedPublisher")]
 		HRESULT ChangedPublisher([in] EOC_ChangeType changeType,
 								 [in] BSTR bstrPublisherID);
+};
+
+// --------------------------------------------------------------------------
+//
+//   IEventObjectChange2
+//
+// --------------------------------------------------------------------------
+cpp_quote( "#ifndef _COMEVENTSYSCHANGEINFO_" )
+cpp_quote( "#define _COMEVENTSYSCHANGEINFO_" )
+
+
+typedef [hidden] struct
+{
+	DWORD				cbSize;			// size of this struct
+	EOC_ChangeType		changeType;		// the type of change that was made
+	BSTR				objectId;		// the EventClassID or SubscriptionID affected.
+	BSTR				partitionId;	// the EventClassPartitionID or SubscriberPartitionID affected.
+	BSTR				applicationId;  // the EventClassApplicationID or SubscriberApplicationID affected.
+	GUID				reserved [10];
+} COMEVENTSYSCHANGEINFO ;
+
+cpp_quote( "#endif _COMEVENTSYSCHANGEINFO_" )
+
+[
+ object,
+ uuid(7701A9C3-BD68-438f-83E0-67BF4F53A422),
+ helpstring("IEventObjectChange2 Interface"),
+ pointer_default(unique)
+]
+interface IEventObjectChange2 : IUnknown
+{
+	[helpstring("method ChangedSubscription")]
+		HRESULT ChangedSubscription([in] COMEVENTSYSCHANGEINFO* pInfo);
+	
+	[helpstring("method ChangedEventClass")]
+		HRESULT ChangedEventClass([in] COMEVENTSYSCHANGEINFO* pInfo);
+	
 };
 
 
@@ -616,6 +683,17 @@ library DummyEventSystemLib
     coclass EventObjectChange
     {
         [default] interface IEventObjectChange;
+    };
+
+	// EventObjectChange2 is the EventClassID used by COM+ Events to
+	// publish IEventObjectChange2 notifications.
+    [
+        uuid(BB07BACD-CD56-4e63-A8FF-CBF0355FB9F4),
+        version(1.0)
+    ]
+    coclass EventObjectChange2
+    {
+        [default] interface IEventObjectChange2;
     };
 
 }

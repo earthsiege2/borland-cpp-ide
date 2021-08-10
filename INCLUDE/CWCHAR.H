@@ -1,18 +1,19 @@
-/*  cwchar.h
-
-    Standard C header file wrapper for wchar.h
-*/
+/**************************************************************************
+ *  Wrapper header file used to select STL via defines.
+ *  Default is STLport.
+ **************************************************************************/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1997, 2000 by Inprise Corporation
+ *      Copyright (c) 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.0  $ */
 
-#define  __USING_CNAME__
-#include <wchar.h>
-#undef   __USING_CNAME__
+#ifdef _USE_OLD_RW_STL
+# include <oldstl\cwchar.h>
+#else
+# include <stlport\cwchar>
+#endif

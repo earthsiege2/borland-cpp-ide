@@ -6,7 +6,7 @@ the   API/SPI  for  making  applications/drivers  that  interface  with  the
 specification provided that this paragraph and the Intel/Microsoft copyright
 statement is maintained as is in the text and source code files.
 
-Copyright (c) 1992-1998  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 Portions copyright 1992, 1993 Intel/Microsoft, all rights reserved.
 
 Module Name:
@@ -21,7 +21,6 @@ Notes:
 --*/
 
 #ifndef TSPI_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define TSPI_H
 
 
@@ -60,8 +59,8 @@ extern "C" {            /* Assume C declarations for C++ */
 DECLARE_OPAQUE(HDRVCALL);
 DECLARE_OPAQUE(HDRVLINE);
 DECLARE_OPAQUE(HDRVPHONE);
-DECLARE_OPAQUE(HDRVDIALOGINSTANCE);
 DECLARE_OPAQUE(HDRVMSPLINE);
+DECLARE_OPAQUE(HDRVDIALOGINSTANCE);
 
 typedef HDRVCALL FAR * LPHDRVCALL;
 typedef HDRVLINE FAR * LPHDRVLINE;
@@ -72,8 +71,9 @@ typedef HDRVMSPLINE FAR * LPHDRVMSPLINE;
 DECLARE_OPAQUE(HTAPICALL);
 DECLARE_OPAQUE(HTAPILINE);
 DECLARE_OPAQUE(HTAPIPHONE);
-DECLARE_OPAQUE(HTAPIDIALOGINSTANCE);
-DECLARE_OPAQUE(HTAPIMSPLINE);
+
+DECLARE_OPAQUE32(HTAPIDIALOGINSTANCE);
+DECLARE_OPAQUE32(HTAPIMSPLINE);
 
 typedef HTAPICALL FAR * LPHTAPICALL;
 typedef HTAPILINE FAR * LPHTAPILINE;
@@ -1710,5 +1710,5 @@ TSPI_phoneConfigDialog(
 }                       /* End of extern "C" { */
 #endif  /* __cplusplus */
 
-#pragma option pop /*P_O_Pop*/
 #endif  // TSPI_H
+

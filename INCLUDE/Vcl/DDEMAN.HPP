@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DdeMan.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DdeMan.pas' rev: 6.00
 
 #ifndef DdeManHPP
 #define DdeManHPP
@@ -10,11 +10,9 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <StdCtrls.hpp>	// Pascal unit
-#include <Ddeml.hpp>	// Pascal unit
+#include <DDEml.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
-#include <Graphics.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
@@ -78,8 +76,7 @@ protected:
 	DYNAMIC void __fastcall Open(void);
 	bool __fastcall ChangeLink(const AnsiString App, const AnsiString Topic, const AnsiString Item);
 	void __fastcall ClearItems(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TDdeClientConv(Classes::TComponent* AOwner);
@@ -127,8 +124,7 @@ private:
 	void __fastcall OnAdvise(void);
 	
 protected:
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TDdeClientItem(Classes::TComponent* AOwner);
@@ -187,8 +183,7 @@ protected:
 	void __fastcall SetText(const AnsiString Item);
 	void __fastcall SetLines(Classes::TStrings* Value);
 	void __fastcall SetServerConv(TDdeServerConv* SConv);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TDdeServerItem(Classes::TComponent* AOwner);
@@ -245,13 +240,10 @@ public:
 
 //-- var, const, procedure ---------------------------------------------------
 extern PACKAGE TDdeMgr* ddeMgr;
-extern PACKAGE bool __fastcall GetPasteLinkInfo(AnsiString &Service, AnsiString &Topic, AnsiString &
-	Item);
+extern PACKAGE bool __fastcall GetPasteLinkInfo(AnsiString &Service, AnsiString &Topic, AnsiString &Item);
 
 }	/* namespace Ddeman */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ddeman;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

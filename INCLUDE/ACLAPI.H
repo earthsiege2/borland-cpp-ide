@@ -14,7 +14,6 @@ Abstract:
 
 --*/
 #ifndef __ACCESS_CONTROL_API__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __ACCESS_CONTROL_API__
 
 #include <windows.h>
@@ -23,6 +22,28 @@ Abstract:
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+//
+// Progress Function:
+// Caller of tree operation implements this Progress function, then
+// passes its function pointer to tree operation.
+// Tree operation invokes Progress function to provide progress and error
+// information to the caller during the potentially long execution
+// of the tree operation.  Tree operation provides the name of the object
+// last processed and the error status of the operation on that object.
+// Tree operation also passes the current InvokeSetting value.
+// Caller may change the InvokeSetting value, for example, from "Always"
+// to "Only On Error."
+//
+
+typedef VOID (*FN_PROGRESS) (
+    IN LPWSTR                   pObjectName,    // name of object just processed
+    IN DWORD                    Status,         // status of operation on object
+    IN OUT PPROG_INVOKE_SETTING pInvokeSetting, // Never, always,
+    IN PVOID                    Args,           // Caller specific data
+    IN BOOL                     SecuritySet     // Whether security was set
+    );
+
 
 WINADVAPI
 DWORD
@@ -208,6 +229,89 @@ SetSecurityInfo(
     IN PACL                  pSacl
     );
 
+
+WINADVAPI
+DWORD
+WINAPI
+GetInheritanceSourceA(
+    IN  LPSTR                  pObjectName,
+    IN  SE_OBJECT_TYPE           ObjectType,
+    IN  SECURITY_INFORMATION     SecurityInfo,
+    IN  BOOL                     Container,
+    IN  GUID                  ** pObjectClassGuids OPTIONAL,
+    IN  DWORD                    GuidCount,
+    IN  PACL                     pAcl,
+    IN  PFN_OBJECT_MGR_FUNCTS    pfnArray OPTIONAL,
+    IN  PGENERIC_MAPPING         pGenericMapping,
+    OUT PINHERITED_FROMA         pInheritArray
+    );
+WINADVAPI
+DWORD
+WINAPI
+GetInheritanceSourceW(
+    IN  LPWSTR                  pObjectName,
+    IN  SE_OBJECT_TYPE           ObjectType,
+    IN  SECURITY_INFORMATION     SecurityInfo,
+    IN  BOOL                     Container,
+    IN  GUID                  ** pObjectClassGuids OPTIONAL,
+    IN  DWORD                    GuidCount,
+    IN  PACL                     pAcl,
+    IN  PFN_OBJECT_MGR_FUNCTS    pfnArray OPTIONAL,
+    IN  PGENERIC_MAPPING         pGenericMapping,
+    OUT PINHERITED_FROMW         pInheritArray
+    );
+#ifdef UNICODE
+#define GetInheritanceSource  GetInheritanceSourceW
+#else
+#define GetInheritanceSource  GetInheritanceSourceA
+#endif // !UNICODE
+
+WINADVAPI
+DWORD
+WINAPI
+FreeInheritedFromArray(
+    IN PINHERITED_FROMW pInheritArray,
+    IN USHORT AceCnt,
+    IN PFN_OBJECT_MGR_FUNCTS   pfnArray OPTIONAL
+    );
+
+WINADVAPI
+DWORD
+WINAPI
+TreeResetNamedSecurityInfoA(
+    IN LPSTR              pObjectName,
+    IN SE_OBJECT_TYPE       ObjectType,
+    IN SECURITY_INFORMATION SecurityInfo,
+    IN PSID                 pOwner,
+    IN PSID                 pGroup,
+    IN PACL                 pDacl,
+    IN PACL                 pSacl,
+    IN BOOL                 KeepExplicit,
+    IN FN_PROGRESS          fnProgress,
+    IN PROG_INVOKE_SETTING  ProgressInvokeSetting,
+    IN PVOID                Args
+    );
+WINADVAPI
+DWORD
+WINAPI
+TreeResetNamedSecurityInfoW(
+    IN LPWSTR              pObjectName,
+    IN SE_OBJECT_TYPE       ObjectType,
+    IN SECURITY_INFORMATION SecurityInfo,
+    IN PSID                 pOwner,
+    IN PSID                 pGroup,
+    IN PACL                 pDacl,
+    IN PACL                 pSacl,
+    IN BOOL                 KeepExplicit,
+    IN FN_PROGRESS          fnProgress,
+    IN PROG_INVOKE_SETTING  ProgressInvokeSetting,
+    IN PVOID                Args
+    );
+#ifdef UNICODE
+#define TreeResetNamedSecurityInfo  TreeResetNamedSecurityInfoW
+#else
+#define TreeResetNamedSecurityInfo  TreeResetNamedSecurityInfoA
+#endif // !UNICODE
 
 //----------------------------------------------------------------------------
 // The following API are provided for trusted servers to use to
@@ -552,6 +656,5 @@ GetMultipleTrusteeW(
 #endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // __ACCESS_CONTROL_API__
 

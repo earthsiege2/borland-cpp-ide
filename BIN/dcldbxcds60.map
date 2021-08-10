@@ -1,0 +1,396 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 000027B0H .text                   CODE
+ 0002:00000000 00000034H .data                   DATA
+ 0002:00000034 00000051H .bss                    BSS
+
+
+Detailed map of segments
+
+ 0001:00000000 000000BE C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:000000C0 000001EC C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:000002AC 0000000E C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:000002BC 0000000E C=CODE     S=.text    G=(none)   M=SysConst ACBP=A9
+ 0001:000002CC 00000038 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:00000304 0000000E C=CODE     S=.text    G=(none)   M=Types    ACBP=A9
+ 0001:00000314 0000001E C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:00000334 0000000E C=CODE     S=.text    G=(none)   M=ActiveX  ACBP=A9
+ 0001:00000344 00000038 C=CODE     S=.text    G=(none)   M=Messages ACBP=A9
+ 0001:0000037C 0000000E C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:0000038C 0000000E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:0000039C 0000000E C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:000003AC 0000000E C=CODE     S=.text    G=(none)   M=RTLConsts ACBP=A9
+ 0001:000003BC 00000036 C=CODE     S=.text    G=(none)   M=DBClient ACBP=A9
+ 0001:000003F4 0000000E C=CODE     S=.text    G=(none)   M=SqlTimSt ACBP=A9
+ 0001:00000404 0000000E C=CODE     S=.text    G=(none)   M=DBConsts ACBP=A9
+ 0001:00000414 0000000E C=CODE     S=.text    G=(none)   M=DateUtils ACBP=A9
+ 0001:00000424 0000000E C=CODE     S=.text    G=(none)   M=Math     ACBP=A9
+ 0001:00000434 0000000E C=CODE     S=.text    G=(none)   M=Midas    ACBP=A9
+ 0001:00000444 00000016 C=CODE     S=.text    G=(none)   M=DBCommon ACBP=A9
+ 0001:0000045C 00000046 C=CODE     S=.text    G=(none)   M=DB       ACBP=A9
+ 0001:000004A4 0000000E C=CODE     S=.text    G=(none)   M=FMTBcd   ACBP=A9
+ 0001:000004B4 0000000E C=CODE     S=.text    G=(none)   M=MaskUtils ACBP=A9
+ 0001:000004C4 0000000E C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:000004D4 0000000E C=CODE     S=.text    G=(none)   M=ComConst ACBP=A9
+ 0001:000004E4 0000000E C=CODE     S=.text    G=(none)   M=DSIntf   ACBP=A9
+ 0001:000004F4 0000000E C=CODE     S=.text    G=(none)   M=MidConst ACBP=A9
+ 0001:00000504 0000000E C=CODE     S=.text    G=(none)   M=Provider ACBP=A9
+ 0001:00000514 0000000E C=CODE     S=.text    G=(none)   M=DataBkr  ACBP=A9
+ 0001:00000524 0000002E C=CODE     S=.text    G=(none)   M=FldLinks ACBP=A9
+ 0001:00000554 000000C6 C=CODE     S=.text    G=(none)   M=DesignEditors ACBP=A9
+ 0001:0000061C 0000000E C=CODE     S=.text    G=(none)   M=DesignMenus ACBP=A9
+ 0001:0000062C 00000026 C=CODE     S=.text    G=(none)   M=DesignIntf ACBP=A9
+ 0001:00000654 0000000E C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00000664 0000000E C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:00000674 0000000E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:00000684 0000000E C=CODE     S=.text    G=(none)   M=ImgList  ACBP=A9
+ 0001:00000694 00000038 C=CODE     S=.text    G=(none)   M=CommCtrl ACBP=A9
+ 0001:000006CC 0000000E C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:000006DC 0000000E C=CODE     S=.text    G=(none)   M=Consts   ACBP=A9
+ 0001:000006EC 0000000E C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:000006FC 0000000E C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:0000070C 0000000E C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:0000071C 00000038 C=CODE     S=.text    G=(none)   M=Imm      ACBP=A9
+ 0001:00000754 0000000E C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000764 0000000E C=CODE     S=.text    G=(none)   M=WinHelpViewer ACBP=A9
+ 0001:00000774 0000000E C=CODE     S=.text    G=(none)   M=StdActns ACBP=A9
+ 0001:00000784 0000000E C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:00000794 00000038 C=CODE     S=.text    G=(none)   M=ShlObj   ACBP=A9
+ 0001:000007CC 00000038 C=CODE     S=.text    G=(none)   M=UrlMon   ACBP=A9
+ 0001:00000804 00000038 C=CODE     S=.text    G=(none)   M=WinInet  ACBP=A9
+ 0001:0000083C 00000038 C=CODE     S=.text    G=(none)   M=RegStr   ACBP=A9
+ 0001:00000874 00000038 C=CODE     S=.text    G=(none)   M=ShellAPI ACBP=A9
+ 0001:000008AC 0000000E C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:000008BC 00000038 C=CODE     S=.text    G=(none)   M=WinSpool ACBP=A9
+ 0001:000008F4 0000000E C=CODE     S=.text    G=(none)   M=StdCtrls ACBP=A9
+ 0001:00000904 00000038 C=CODE     S=.text    G=(none)   M=CommDlg  ACBP=A9
+ 0001:0000093C 00000038 C=CODE     S=.text    G=(none)   M=Dlgs     ACBP=A9
+ 0001:00000974 0000000E C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00000984 0000000E C=CODE     S=.text    G=(none)   M=StrUtils ACBP=A9
+ 0001:00000994 0000000E C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:000009A4 0000000E C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:000009B4 0000000E C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:000009C4 0000000E C=CODE     S=.text    G=(none)   M=Proxies  ACBP=A9
+ 0001:000009D4 0000000E C=CODE     S=.text    G=(none)   M=DesignConst ACBP=A9
+ 0001:000009E4 0000000E C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:000009F4 0000000E C=CODE     S=.text    G=(none)   M=DsnDBCst ACBP=A9
+ 0001:00000A04 0000000E C=CODE     S=.text    G=(none)   M=LibHelp  ACBP=A9
+ 0001:00000A14 0000001E C=CODE     S=.text    G=(none)   M=DBReg    ACBP=A9
+ 0001:00000A34 0000000E C=CODE     S=.text    G=(none)   M=DSDesign ACBP=A9
+ 0001:00000A44 0000000E C=CODE     S=.text    G=(none)   M=DrpCtrls ACBP=A9
+ 0001:00000A54 0000000E C=CODE     S=.text    G=(none)   M=DesignWindows ACBP=A9
+ 0001:00000A64 0000000E C=CODE     S=.text    G=(none)   M=ComponentDesigner ACBP=A9
+ 0001:00000A74 0000000E C=CODE     S=.text    G=(none)   M=EditIntf ACBP=A9
+ 0001:00000A84 0000000E C=CODE     S=.text    G=(none)   M=VirtIntf ACBP=A9
+ 0001:00000A94 0000000E C=CODE     S=.text    G=(none)   M=Events   ACBP=A9
+ 0001:00000AA4 0000000E C=CODE     S=.text    G=(none)   M=ToolUtils ACBP=A9
+ 0001:00000AB4 0000000E C=CODE     S=.text    G=(none)   M=ToolsAPI ACBP=A9
+ 0001:00000AC4 0000000E C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:00000AD4 0000000E C=CODE     S=.text    G=(none)   M=ListActns ACBP=A9
+ 0001:00000AE4 0000000E C=CODE     S=.text    G=(none)   M=ToolWin  ACBP=A9
+ 0001:00000AF4 00000038 C=CODE     S=.text    G=(none)   M=RichEdit ACBP=A9
+ 0001:00000B2C 0000000E C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00000B3C 0000000E C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:00000B4C 0000000E C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:00000B5C 0000000E C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:00000B6C 0000000E C=CODE     S=.text    G=(none)   M=ComStrs  ACBP=A9
+ 0001:00000B7C 0000000E C=CODE     S=.text    G=(none)   M=Update   ACBP=A9
+ 0001:00000B8C 0000000E C=CODE     S=.text    G=(none)   M=LibConst ACBP=A9
+ 0001:00000B9C 0000000E C=CODE     S=.text    G=(none)   M=Designer ACBP=A9
+ 0001:00000BAC 0000000E C=CODE     S=.text    G=(none)   M=TopLevels ACBP=A9
+ 0001:00000BBC 0000000E C=CODE     S=.text    G=(none)   M=StFilSys ACBP=A9
+ 0001:00000BCC 0000000E C=CODE     S=.text    G=(none)   M=IStreams ACBP=A9
+ 0001:00000BDC 0000000E C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00000BEC 0000000E C=CODE     S=.text    G=(none)   M=StdVCL   ACBP=A9
+ 0001:00000BFC 000001D6 C=CODE     S=.text    G=(none)   M=TreeIntf ACBP=A9
+ 0001:00000DD4 0000000E C=CODE     S=.text    G=(none)   M=VCLEditors ACBP=A9
+ 0001:00000DE4 0000000E C=CODE     S=.text    G=(none)   M=DBCtrls  ACBP=A9
+ 0001:00000DF4 0000000E C=CODE     S=.text    G=(none)   M=Mask     ACBP=A9
+ 0001:00000E04 0000000E C=CODE     S=.text    G=(none)   M=VDBConsts ACBP=A9
+ 0001:00000E14 0000000E C=CODE     S=.text    G=(none)   M=DBPWDlg  ACBP=A9
+ 0001:00000E24 0000000E C=CODE     S=.text    G=(none)   M=DBLogDlg ACBP=A9
+ 0001:00000E34 0000000E C=CODE     S=.text    G=(none)   M=DSDefine ACBP=A9
+ 0001:00000E44 0000000E C=CODE     S=.text    G=(none)   M=DSAdd    ACBP=A9
+ 0001:00000E54 0000000E C=CODE     S=.text    G=(none)   M=DBGrids  ACBP=A9
+ 0001:00000E64 0000000E C=CODE     S=.text    G=(none)   M=Grids    ACBP=A9
+ 0001:00000E74 0000000E C=CODE     S=.text    G=(none)   M=DBColnEd ACBP=A9
+ 0001:00000E84 0000000E C=CODE     S=.text    G=(none)   M=ToolWnds ACBP=A9
+ 0001:00000E94 0000000E C=CODE     S=.text    G=(none)   M=ColnEdit ACBP=A9
+ 0001:00000EA4 0000000E C=CODE     S=.text    G=(none)   M=DBActRes ACBP=A9
+ 0001:00000EB4 0000000E C=CODE     S=.text    G=(none)   M=DBActns  ACBP=A9
+ 0001:00000EC4 0000000E C=CODE     S=.text    G=(none)   M=DBLReg   ACBP=A9
+ 0001:00000ED4 00000016 C=CODE     S=.text    G=(none)   M=CDSEdit  ACBP=A9
+ 0001:00000EEC 00000016 C=CODE     S=.text    G=(none)   M=DBLocal  ACBP=A9
+ 0001:00000F04 00000046 C=CODE     S=.text    G=(none)   M=SqlExpr  ACBP=A9
+ 0001:00000F4C 0000000E C=CODE     S=.text    G=(none)   M=DBXpress ACBP=A9
+ 0001:00000F5C 0000000E C=CODE     S=.text    G=(none)   M=DBConnAdmin ACBP=A9
+ 0001:00000F6C 0000000E C=CODE     S=.text    G=(none)   M=SqlConst ACBP=A9
+ 0001:00000F7C 00000046 C=CODE     S=.text    G=(none)   M=DBLocalS ACBP=A9
+ 0001:00000FC4 0000000E C=CODE     S=.text    G=(none)   M=SqlReg   ACBP=A9
+ 0001:00000FD4 0000000E C=CODE     S=.text    G=(none)   M=DiagramSupport ACBP=A9
+ 0001:00000FE4 0000000E C=CODE     S=.text    G=(none)   M=DiagramViewModels ACBP=A9
+ 0001:00000FF4 0000000E C=CODE     S=.text    G=(none)   M=ModelPrimitives ACBP=A9
+ 0001:00001004 0000000E C=CODE     S=.text    G=(none)   M=ModelFactories ACBP=A9
+ 0001:00001014 0000000E C=CODE     S=.text    G=(none)   M=ModelDesigner ACBP=A9
+ 0001:00001024 0000000E C=CODE     S=.text    G=(none)   M=ModelViews ACBP=A9
+ 0001:00001034 0000000E C=CODE     S=.text    G=(none)   M=ModelTypes ACBP=A9
+ 0001:00001044 0000000E C=CODE     S=.text    G=(none)   M=ModelClasses ACBP=A9
+ 0001:00001054 0000000E C=CODE     S=.text    G=(none)   M=StringScanner ACBP=A9
+ 0001:00001064 0000000E C=CODE     S=.text    G=(none)   M=ModelUtils ACBP=A9
+ 0001:00001074 0000000E C=CODE     S=.text    G=(none)   M=ModelCaps ACBP=A9
+ 0001:00001084 0000000E C=CODE     S=.text    G=(none)   M=ModelControl ACBP=A9
+ 0001:00001094 0000000E C=CODE     S=.text    G=(none)   M=EditorViewSupport ACBP=A9
+ 0001:000010A4 0000000E C=CODE     S=.text    G=(none)   M=DsnDb    ACBP=A9
+ 0001:000010B4 0000000E C=CODE     S=.text    G=(none)   M=StrEdit  ACBP=A9
+ 0001:000010C4 0000000E C=CODE     S=.text    G=(none)   M=ValueEdit ACBP=A9
+ 0001:000010D4 0000000E C=CODE     S=.text    G=(none)   M=ValEdit  ACBP=A9
+ 0001:000010E4 0000000E C=CODE     S=.text    G=(none)   M=StringsEdit ACBP=A9
+ 0001:000010F4 0000000E C=CODE     S=.text    G=(none)   M=DBConnEd ACBP=A9
+ 0001:00001104 0000000E C=CODE     S=.text    G=(none)   M=DBDrvEd  ACBP=A9
+ 0001:00001114 0000000E C=CODE     S=.text    G=(none)   M=AddConn  ACBP=A9
+ 0001:00001124 0000000E C=CODE     S=.text    G=(none)   M=FldEdit  ACBP=A9
+ 0001:00001134 00000016 C=CODE     S=.text    G=(none)   M=SqlEdit  ACBP=A9
+ 0001:0000114C 000011A9 C=CODE     S=.text    G=(none)   M=DBLRegS  ACBP=A9
+ 0001:000022F8 000004B5 C=CODE     S=.text    G=(none)   M=dcldbxcds ACBP=A9
+ 0002:00000000 00000028 C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00001000 00000018 C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00001018 00000004 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0002:0000101C 00000004 C=BSS      S=.bss     G=DGROUP   M=Messages ACBP=A9
+ 0002:00001020 00000004 C=BSS      S=.bss     G=DGROUP   M=CommCtrl ACBP=A9
+ 0002:00001024 00000004 C=BSS      S=.bss     G=DGROUP   M=Imm      ACBP=A9
+ 0002:00001028 00000004 C=BSS      S=.bss     G=DGROUP   M=ShlObj   ACBP=A9
+ 0002:0000102C 00000004 C=BSS      S=.bss     G=DGROUP   M=UrlMon   ACBP=A9
+ 0002:00001030 00000004 C=BSS      S=.bss     G=DGROUP   M=WinInet  ACBP=A9
+ 0002:00001034 00000004 C=BSS      S=.bss     G=DGROUP   M=RegStr   ACBP=A9
+ 0002:00001038 00000004 C=BSS      S=.bss     G=DGROUP   M=ShellAPI ACBP=A9
+ 0002:0000103C 00000004 C=BSS      S=.bss     G=DGROUP   M=WinSpool ACBP=A9
+ 0002:00001040 00000004 C=BSS      S=.bss     G=DGROUP   M=CommDlg  ACBP=A9
+ 0002:00001044 00000004 C=BSS      S=.bss     G=DGROUP   M=Dlgs     ACBP=A9
+ 0002:00001048 00000004 C=BSS      S=.bss     G=DGROUP   M=RichEdit ACBP=A9
+ 0002:0000104C 00000004 C=BSS      S=.bss     G=DGROUP   M=DBLRegS  ACBP=A9
+
+
+  Address         Publics by Name
+
+ 0002:00001010       .1
+ 0002:00001044       .1
+ 0002:00001028       .1
+ 0002:0000102C       .1
+ 0002:00001038       .1
+ 0002:00001024       .1
+ 0002:00001048       .1
+ 0002:00001030       .1
+ 0002:00001020       .1
+ 0002:00001040       .1
+ 0002:00001034       .1
+ 0002:0000101C       .1
+ 0002:00001018       .3
+ 0002:0000103C       .3
+ 0002:0000104C       .6
+ 0001:00002788       @GetPackageInfoTable
+ 0001:000001F8       @InitPkg
+ 0001:00002790       @PackageLoad
+ 0001:0000025C       @PackageLoad
+ 0001:00000268       @PackageUnload
+ 0001:0000279C       @PackageUnload
+ 0001:000000F8       AllocTlsBuffer
+ 0001:000006C4       CommCtrl
+ 0001:00000934       CommDlg
+ 0001:000022E0       DBLRegS
+ 0001:000027A8       dcldbxcds
+ 0001:0000096C       Dlgs
+ 0001:000001A4       ExitProcessTLS
+ 0001:0000017C       ExitThreadTLS
+ 0001:00000794       Finalization
+ 0001:0000071C       Finalization
+ 0001:00000694       Finalization
+ 0001:000007CC       Finalization
+ 0001:00000344       Finalization
+ 0001:000002CC       Finalization
+ 0001:00000274       Finalization
+ 0001:00000904       Finalization
+ 0001:00000804       Finalization
+ 0001:00000AF4       Finalization
+ 0001:0000083C       Finalization
+ 0001:000022B0       Finalization
+ 0001:00000874       Finalization
+ 0001:000008BC       Finalization
+ 0001:0000093C       Finalization
+ 0001:000000C0       FreeLibrary
+ 0001:00000104       GetTlsSize
+ 0002:0000100C       HInstance
+ 0001:0000074C       Imm
+ 0001:000001C8       InitializeModule
+ 0001:00000150       InitProcessTLS
+ 0001:0000010C       InitThreadTLS
+ 0001:0000168C       LoadSQLClientDatasetFromFile
+ 0001:000000C8       LocalAlloc
+ 0001:000000D0       LocalFree
+ 0001:00000374       Messages
+ 0002:00000000       Module
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0001:0000207C       Register
+ 0001:0000086C       RegStr
+ 0001:00000B24       RichEdit
+ 0001:000008A4       ShellAPI
+ 0001:000007C4       ShlObj
+ 0001:000002A4       SysInit
+ 0001:00001704       TLocalCDSEditProperty.Activate
+ 0001:00001A88       TLocalCDSEditProperty.AutoFill
+ 0001:00001960       TLocalCDSEditProperty.Edit
+ 0001:00001720       TLocalCDSEditProperty.EditSQLText
+ 0001:000016E4       TLocalCDSEditProperty.GetAttributes
+ 0001:00001A2C       TLocalCDSEditProperty.GetConnection
+ 0001:00001854       TLocalCDSEditProperty.GetValueList
+ 0001:00001AB8       TLocalCDSIndexNameProperty.Activate
+ 0001:00001E4C       TLocalCDSKeyNameProperty.Activate
+ 0001:000000D8       TlsAlloc
+ 0002:00001014       tlsBuffer
+ 0001:000000E0       TlsFree
+ 0001:000000E8       TlsGetValue
+ 0002:00001004       TlsIndex
+ 0002:AFE2C000       TlsLast
+ 0002:00000018       TlsProc
+ 0001:000000F0       TlsSetValue
+ 0001:00001B94       TSQLClientDataSetFieldLinkProperty.Edit
+ 0001:00001C90       TSQLClientDataSetFieldLinkProperty.GetFieldNamesForIndex
+ 0001:00001D28       TSQLClientDataSetFieldLinkProperty.GetIndexBased
+ 0001:00001D2C       TSQLClientDataSetFieldLinkProperty.GetIndexDefs
+ 0001:00001D50       TSQLClientDataSetFieldLinkProperty.GetIndexFieldNames
+ 0001:00001D7C       TSQLClientDataSetFieldLinkProperty.GetIndexName
+ 0001:00001DA8       TSQLClientDataSetFieldLinkProperty.GetMasterFields
+ 0001:00001DD4       TSQLClientDataSetFieldLinkProperty.SetIndexFieldNames
+ 0001:00001DFC       TSQLClientDataSetFieldLinkProperty.SetIndexName
+ 0001:00001E24       TSQLClientDataSetFieldLinkProperty.SetMasterFields
+ 0001:00001E54       TSQLClientDataSetSelectionEditor.RequiresUnits
+ 0001:00001E78       TSQLClientDataSetSprig.AnyProblems
+ 0001:00001EDC       TSQLClientDataSetSprig.Caption
+ 0001:00001F88       TSQLClientDataSetSprig.DragDropTo
+ 0001:00001FD4       TSQLClientDataSetSprig.DragOverTo
+ 0001:00001F50       TSQLClientDataSetSprig.FigureParent
+ 0001:00002048       TSQLClientDataSetSprig.PaletteOverTo
+ 0001:00001A20       TSQLConnectionsProperty.GetValueList
+ 0001:000001D4       UninitializeModule
+ 0001:000007FC       UrlMon
+ 0001:000002FC       Windows
+ 0001:00000834       WinInet
+ 0001:000008EC       WinSpool
+
+
+  Address         Publics by Value
+
+ 0002:AFE2C000       TlsLast
+ 0001:000000C0       FreeLibrary
+ 0001:000000C8       LocalAlloc
+ 0001:000000D0       LocalFree
+ 0001:000000D8       TlsAlloc
+ 0001:000000E0       TlsFree
+ 0001:000000E8       TlsGetValue
+ 0001:000000F0       TlsSetValue
+ 0001:000000F8       AllocTlsBuffer
+ 0001:00000104       GetTlsSize
+ 0001:0000010C       InitThreadTLS
+ 0001:00000150       InitProcessTLS
+ 0001:0000017C       ExitThreadTLS
+ 0001:000001A4       ExitProcessTLS
+ 0001:000001C8       InitializeModule
+ 0001:000001D4       UninitializeModule
+ 0001:000001F8       @InitPkg
+ 0001:0000025C       @PackageLoad
+ 0001:00000268       @PackageUnload
+ 0001:00000274       Finalization
+ 0001:000002A4       SysInit
+ 0001:000002CC       Finalization
+ 0001:000002FC       Windows
+ 0001:00000344       Finalization
+ 0001:00000374       Messages
+ 0001:00000694       Finalization
+ 0001:000006C4       CommCtrl
+ 0001:0000071C       Finalization
+ 0001:0000074C       Imm
+ 0001:00000794       Finalization
+ 0001:000007C4       ShlObj
+ 0001:000007CC       Finalization
+ 0001:000007FC       UrlMon
+ 0001:00000804       Finalization
+ 0001:00000834       WinInet
+ 0001:0000083C       Finalization
+ 0001:0000086C       RegStr
+ 0001:00000874       Finalization
+ 0001:000008A4       ShellAPI
+ 0001:000008BC       Finalization
+ 0001:000008EC       WinSpool
+ 0001:00000904       Finalization
+ 0001:00000934       CommDlg
+ 0001:0000093C       Finalization
+ 0001:0000096C       Dlgs
+ 0001:00000AF4       Finalization
+ 0001:00000B24       RichEdit
+ 0001:0000168C       LoadSQLClientDatasetFromFile
+ 0001:000016E4       TLocalCDSEditProperty.GetAttributes
+ 0001:00001704       TLocalCDSEditProperty.Activate
+ 0001:00001720       TLocalCDSEditProperty.EditSQLText
+ 0001:00001854       TLocalCDSEditProperty.GetValueList
+ 0001:00001960       TLocalCDSEditProperty.Edit
+ 0001:00001A20       TSQLConnectionsProperty.GetValueList
+ 0001:00001A2C       TLocalCDSEditProperty.GetConnection
+ 0001:00001A88       TLocalCDSEditProperty.AutoFill
+ 0001:00001AB8       TLocalCDSIndexNameProperty.Activate
+ 0001:00001B94       TSQLClientDataSetFieldLinkProperty.Edit
+ 0001:00001C90       TSQLClientDataSetFieldLinkProperty.GetFieldNamesForIndex
+ 0001:00001D28       TSQLClientDataSetFieldLinkProperty.GetIndexBased
+ 0001:00001D2C       TSQLClientDataSetFieldLinkProperty.GetIndexDefs
+ 0001:00001D50       TSQLClientDataSetFieldLinkProperty.GetIndexFieldNames
+ 0001:00001D7C       TSQLClientDataSetFieldLinkProperty.GetIndexName
+ 0001:00001DA8       TSQLClientDataSetFieldLinkProperty.GetMasterFields
+ 0001:00001DD4       TSQLClientDataSetFieldLinkProperty.SetIndexFieldNames
+ 0001:00001DFC       TSQLClientDataSetFieldLinkProperty.SetIndexName
+ 0001:00001E24       TSQLClientDataSetFieldLinkProperty.SetMasterFields
+ 0001:00001E4C       TLocalCDSKeyNameProperty.Activate
+ 0001:00001E54       TSQLClientDataSetSelectionEditor.RequiresUnits
+ 0001:00001E78       TSQLClientDataSetSprig.AnyProblems
+ 0001:00001EDC       TSQLClientDataSetSprig.Caption
+ 0001:00001F50       TSQLClientDataSetSprig.FigureParent
+ 0001:00001F88       TSQLClientDataSetSprig.DragDropTo
+ 0001:00001FD4       TSQLClientDataSetSprig.DragOverTo
+ 0001:00002048       TSQLClientDataSetSprig.PaletteOverTo
+ 0001:0000207C       Register
+ 0001:000022B0       Finalization
+ 0001:000022E0       DBLRegS
+ 0001:00002788       @GetPackageInfoTable
+ 0001:00002790       @PackageLoad
+ 0001:0000279C       @PackageUnload
+ 0001:000027A8       dcldbxcds
+ 0002:00000000       Module
+ 0002:00000018       TlsProc
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0002:00001004       TlsIndex
+ 0002:0000100C       HInstance
+ 0002:00001010       .1
+ 0002:00001014       tlsBuffer
+ 0002:00001018       .3
+ 0002:0000101C       .1
+ 0002:00001020       .1
+ 0002:00001024       .1
+ 0002:00001028       .1
+ 0002:0000102C       .1
+ 0002:00001030       .1
+ 0002:00001034       .1
+ 0002:00001038       .1
+ 0002:0000103C       .3
+ 0002:00001040       .1
+ 0002:00001044       .1
+ 0002:00001048       .1
+ 0002:0000104C       .6
+
+
+Bound resource files
+
+dcldbxcds.res
+c:\bcb\db\DBLRegS.dcr
+C:\DOCUME~1\~storm\LOCALS~1\Temp\dtf7114.tmp
+
+
+Program entry point at 0001:000027A8

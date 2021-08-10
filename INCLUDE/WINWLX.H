@@ -25,7 +25,6 @@ Revision History:
 --*/
 
 #ifndef _WINWLX_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINWLX_
 
 #if _MSC_VER > 1000
@@ -54,7 +53,8 @@ Revision History:
 #define WLX_VERSION_1_1             (0X00010001)
 #define WLX_VERSION_1_2             (0X00010002)
 #define WLX_VERSION_1_3             (0X00010003)
-#define WLX_CURRENT_VERSION         (WLX_VERSION_1_3)
+#define WLX_VERSION_1_4             (0X00010004)
+#define WLX_CURRENT_VERSION         (WLX_VERSION_1_4)
 
 
 /////////////////////////////////////////////////////////////////////////
@@ -91,6 +91,10 @@ Revision History:
 #define WLX_SAS_TYPE_USER_LOGOFF                (4)
 #define WLX_SAS_TYPE_SC_INSERT                  (5)
 #define WLX_SAS_TYPE_SC_REMOVE                  (6)
+#define WLX_SAS_TYPE_AUTHENTICATED              (7)
+#define WLX_SAS_TYPE_SC_FIRST_READER_ARRIVED    (8)
+#define WLX_SAS_TYPE_SC_LAST_READER_REMOVED     (9)
+#define WLX_SAS_TYPE_SWITCHUSER                 (10)
 #define WLX_SAS_TYPE_MAX_MSFT_VALUE             (127)
 
 
@@ -189,6 +193,7 @@ typedef struct _WLX_SC_NOTIFICATION_INFO {
 #define WLX_SAS_ACTION_SHUTDOWN_HIBERNATE           (14)
 #define WLX_SAS_ACTION_RECONNECTED                  (15)
 #define WLX_SAS_ACTION_DELAYED_FORCE_LOGOFF         (16)
+#define WLX_SAS_ACTION_SWITCH_CONSOLE               (17)
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -463,6 +468,7 @@ typedef struct _WLX_TERMINAL_SERVICES_DATA {
 //
 
 #define WLX_CREDENTIAL_TYPE_V1_0            (1)
+#define WLX_CREDENTIAL_TYPE_V2_0            (2)
 
 typedef struct _WLX_CLIENT_CREDENTIALS_INFO {
 
@@ -490,9 +496,93 @@ typedef struct _WLX_CLIENT_CREDENTIALS_INFO {
 
 } WLX_CLIENT_CREDENTIALS_INFO_V1_0, * PWLX_CLIENT_CREDENTIALS_INFO_V1_0;
 
+typedef struct _WLX_CLIENT_CREDENTIALS_INFO_2_0 {
 
+    DWORD           dwType;
+    PWSTR           pszUserName;
+    PWSTR           pszDomain;
+    PWSTR           pszPassword;
+    BOOL            fPromptForPassword;
+
+    //
+    // This field tells winlogon to disconnect/abort the logon attempt if the
+    // provided password is incorrect, or if it should reprompt (current
+    // behavior)
+    //
+
+    BOOL            fDisconnectOnLogonFailure;
+
+} WLX_CLIENT_CREDENTIALS_INFO_V2_0, * PWLX_CLIENT_CREDENTIALS_INFO_V2_0;
 
 
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+//
+// The WLX_CONSOLESWITCH_CREDENTIALS_INFO structure is returned
+// from gina in response to WlxGetConsoleSwitchCredentials calls.
+
+// This structure is also returned from winlogon in response to 
+// to WlxQueryConsoleSwitchCredentials call
+//
+// This is used to implement single session Terminal Server. A remote 
+// session winlogon calls WlxGetConsoleSwitchCredentials to get the token
+// and other info of the logged on user from msgina. This info is then passed to
+// the console session winlogon to autologon the user on the console session.
+// The gina on console session calls WlxQueryConsoleSwitchCredentials to get 
+// this info from winlogon and logs on the user.
+//
+// The caller is responsible for freeing the memory
+// and substrings with LocalFree().
+//
+
+
+#define WLX_CONSOLESWITCHCREDENTIAL_TYPE_V1_0            (1)
+
+typedef struct _WLX_CONSOLESWITCH_CREDENTIALS_INFO {
+
+    //
+    // This field identifies the type of credentials structure being allocated
+    // Credential types are defined with the prefix
+    // WLX_CONSOLESWITCHCREDENTIAL_TYPE_xxx.  It allows Winlogon to typecast the
+    // structure so the remainder of the structure may be referenced.
+    //
+
+    DWORD            dwType;
+
+    HANDLE           UserToken;
+    LUID             LogonId;
+    QUOTA_LIMITS     Quotas;
+    PWSTR            UserName;
+    PWSTR            Domain;
+    LARGE_INTEGER    LogonTime;
+    BOOL             SmartCardLogon;
+    ULONG            ProfileLength;
+
+    //
+    // From MSV1_0_INTERACTIVE_PROFILE 
+    //
+    DWORD            MessageType;
+    USHORT           LogonCount;
+    USHORT           BadPasswordCount;
+    LARGE_INTEGER    ProfileLogonTime;
+    LARGE_INTEGER    LogoffTime;
+    LARGE_INTEGER    KickOffTime;
+    LARGE_INTEGER    PasswordLastSet;
+    LARGE_INTEGER    PasswordCanChange;
+    LARGE_INTEGER    PasswordMustChange;
+    PWSTR            LogonScript;
+    PWSTR            HomeDirectory;
+    PWSTR            FullName;
+    PWSTR            ProfilePath;
+    PWSTR            HomeDirectoryDrive;
+    PWSTR            LogonServer;
+    ULONG            UserFlags;
+    ULONG            PrivateDataLen;
+    PBYTE            PrivateData;
+
+} WLX_CONSOLESWITCH_CREDENTIALS_INFO_V1_0, * PWLX_CONSOLESWITCH_CREDENTIALS_INFO_V1_0;
+
+
 ////////////////////////////////////////////////////////////////////////
 //                                                                    //
 //  Services that replacement GINAs   ** MUST ** provide              //
@@ -651,6 +741,28 @@ WlxRemoveStatusMessage(
     PVOID                   pWlxContext
     );
 
+
+//
+// New for 1.4
+//
+BOOL
+WINAPI
+WlxGetConsoleSwitchCredentials (
+    PVOID                   pWlxContext,
+    PVOID                   pCredInfo
+    );
+
+VOID
+WINAPI
+WlxReconnectNotify (
+    PVOID                   pWlxContext
+    );
+
+VOID
+WINAPI
+WlxDisconnectNotify (
+    PVOID                   pWlxContext
+    );
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -830,18 +942,27 @@ typedef BOOL
     PWLX_CLIENT_CREDENTIALS_INFO_V1_0 pCred
     );
 
+typedef BOOL
+(WINAPI * PWLX_QUERY_TS_LOGON_CREDENTIALS)(
+    PWLX_CLIENT_CREDENTIALS_INFO_V2_0 pCred
+    );
 
 typedef BOOL
 (WINAPI * PWLX_DISCONNECT)(
     );
 
-typedef BOOL
+typedef DWORD
 (WINAPI * PWLX_QUERY_TERMINAL_SERVICES_DATA)(
     HANDLE hWlx,
     PWLX_TERMINAL_SERVICES_DATA pTSData,
-    PWSTR UserName,
-    PWSTR Domain
+    WCHAR * UserName,
+    WCHAR * Domain
     );
+
+typedef DWORD
+(WINAPI * PWLX_QUERY_CONSOLESWITCH_CREDENTIALS)(
+      PWLX_CONSOLESWITCH_CREDENTIALS_INFO_V1_0 pCred
+     );
 
 
 //
@@ -853,6 +974,7 @@ typedef BOOL
 #define WLX_OPTION_USE_SMART_CARD       0x00000003
 #define WLX_OPTION_FORCE_LOGOFF_TIME    0x00000004
 #define WLX_OPTION_IGNORE_AUTO_LOGON    0x00000008
+#define WLX_OPTION_NO_SWITCH_ON_SAS     0x00000009
 
 //
 // Options that can be queried only:
@@ -957,6 +1079,35 @@ typedef struct _WLX_DISPATCH_VERSION_1_3 {
     PWLX_QUERY_TERMINAL_SERVICES_DATA WlxQueryTerminalServicesData;
 } WLX_DISPATCH_VERSION_1_3, * PWLX_DISPATCH_VERSION_1_3;
 
+typedef struct _WLX_DISPATCH_VERSION_1_4 {
+    PWLX_USE_CTRL_ALT_DEL               WlxUseCtrlAltDel;
+    PWLX_SET_CONTEXT_POINTER            WlxSetContextPointer;
+    PWLX_SAS_NOTIFY                     WlxSasNotify;
+    PWLX_SET_TIMEOUT                    WlxSetTimeout;
+    PWLX_ASSIGN_SHELL_PROTECTION        WlxAssignShellProtection;
+    PWLX_MESSAGE_BOX                    WlxMessageBox;
+    PWLX_DIALOG_BOX                     WlxDialogBox;
+    PWLX_DIALOG_BOX_PARAM               WlxDialogBoxParam;
+    PWLX_DIALOG_BOX_INDIRECT            WlxDialogBoxIndirect;
+    PWLX_DIALOG_BOX_INDIRECT_PARAM      WlxDialogBoxIndirectParam;
+    PWLX_SWITCH_DESKTOP_TO_USER         WlxSwitchDesktopToUser;
+    PWLX_SWITCH_DESKTOP_TO_WINLOGON     WlxSwitchDesktopToWinlogon;
+    PWLX_CHANGE_PASSWORD_NOTIFY         WlxChangePasswordNotify;
+    PWLX_GET_SOURCE_DESKTOP             WlxGetSourceDesktop;
+    PWLX_SET_RETURN_DESKTOP             WlxSetReturnDesktop;
+    PWLX_CREATE_USER_DESKTOP            WlxCreateUserDesktop;
+    PWLX_CHANGE_PASSWORD_NOTIFY_EX      WlxChangePasswordNotifyEx;
+    PWLX_CLOSE_USER_DESKTOP             WlxCloseUserDesktop ;
+    PWLX_SET_OPTION                     WlxSetOption;
+    PWLX_GET_OPTION                     WlxGetOption;
+    PWLX_WIN31_MIGRATE                  WlxWin31Migrate;
+    PWLX_QUERY_CLIENT_CREDENTIALS       WlxQueryClientCredentials;
+    PWLX_QUERY_IC_CREDENTIALS           WlxQueryInetConnectorCredentials;
+    PWLX_DISCONNECT                     WlxDisconnect;
+    PWLX_QUERY_TERMINAL_SERVICES_DATA   WlxQueryTerminalServicesData;
+    PWLX_QUERY_CONSOLESWITCH_CREDENTIALS WlxQueryConsoleSwitchCredentials;
+    PWLX_QUERY_TS_LOGON_CREDENTIALS     WlxQueryTsLogonCredentials;
+} WLX_DISPATCH_VERSION_1_4, * PWLX_DISPATCH_VERSION_1_4;
 
 
 //
@@ -978,5 +1129,4 @@ typedef struct _WLX_NOTIFICATION_INFO {
 
 
 
-#pragma option pop /*P_O_Pop*/
 #endif /* _WINWLX_ */

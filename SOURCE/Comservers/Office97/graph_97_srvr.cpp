@@ -9,35 +9,31 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.2.3  $
-// File generated on 1/24/2000 9:50:22 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/28/2002 7:56:07 AM from Type Library described below.
 
-// ************************************************************************ //
-// Type Lib: g:\rampage\typelib\TypeLibraries\GRAPH8.olb (1)
-// IID\LCID: {00020802-0000-0000-C000-000000000046}\0
-// Helpfile: D:\Program Files\Microsoft Office\Office\VBAGRP8.HLP
+// ************************************************************************  //
+// Type Lib: c:\program files\microsoft office\office97\office\graph8.olb (1)
+// LIBID: {00020802-0000-0000-C000-000000000046}
+// LCID: 0
+// Helpfile: C:\Program Files\Microsoft Office\office97\Office\VBAGRP8.HLP
+// HelpString: Microsoft Graph 8.0 Object Library
 // DepndLst: 
 //   (1) v2.0 stdole, (C:\WINNT\System32\stdole2.tlb)
-//   (2) v2.0 Office, (D:\Program Files\Microsoft Office\Office\MSO97.DLL)
-//   (3) v4.0 StdVCL, (C:\WINNT\System32\STDVCL40.DLL)
+//   (2) v2.0 Office, (C:\Program Files\Microsoft Office\office97\Office\MSO97.DLL)
 // Errors:
-//   Hint: Symbol 'IFont' renamed to 'GraphIFont'
-//   Hint: Symbol 'Application' renamed to 'GraphApplication'
-//   Hint: Symbol 'Update' renamed to '_Update'
+//   Hint: Symbol 'Application' renamed to 'App'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
-//   Hint: Symbol 'IFont' renamed to 'GraphIFont'
-//   Hint: Symbol 'Application' renamed to 'GraphApplication'
-//   Hint: Symbol 'Update' renamed to '_Update'
+//   Hint: Symbol 'Application' renamed to 'App'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 // ************************************************************************ //
 
 #include <vcl.h>
 #pragma hdrstop
 
+#include <oleserver.hpp>
 #if defined(USING_ATL)
 #include <atl\atlvcl.h>
 #endif
@@ -52,86 +48,5 @@
 namespace Graph_97
 {
 
-_GlobalPtr& TGlobal::GetDefaultInterface()
-{
-  if (!m_DefaultIntf)
-    Connect();
-  return m_DefaultIntf;
-}
-
-_di_IUnknown __fastcall TGlobal::GetDunk()
-{
-  _di_IUnknown diUnk;
-  if (m_DefaultIntf) {
-    IUnknownPtr punk = m_DefaultIntf;
-    diUnk = LPUNKNOWN(punk);
-  }
-  return diUnk;
-}
-
-void __fastcall TGlobal::Connect()
-{
-  if (!m_DefaultIntf) {
-    _di_IUnknown punk = GetServer();
-    m_DefaultIntf = punk;
-    if (ServerData->EventIID != GUID_NULL)
-      ConnectEvents(GetDunk());
-  }
-}
-
-void __fastcall TGlobal::Disconnect()
-{
-  if (m_DefaultIntf) {
-    
-    if (ServerData->EventIID != GUID_NULL)
-      DisconnectEvents(GetDunk());
-    m_DefaultIntf.Reset();
-  }
-}
-
-void __fastcall TGlobal::BeforeDestruction()
-{
-  Disconnect();
-}
-
-void __fastcall TGlobal::ConnectTo(_GlobalPtr intf)
-{
-  Disconnect();
-  m_DefaultIntf = intf;
-  if (ServerData->EventIID != GUID_NULL)
-    ConnectEvents(GetDunk());
-}
-
-void __fastcall TGlobal::InitServerData()
-{
-  static Oleserver::TServerData sd;
-  sd.ClassID = CLSID_Global;
-  sd.IntfIID = __uuidof(_Global);
-  sd.EventIID= GUID_NULL;
-  ServerData = &sd;
-}
-
 
 };     // namespace Graph_97
-
-
-// *********************************************************************//
-// The Register function is invoked by the IDE when this module is 
-// installed in a Package. It provides the list of Components (including
-// OCXes) implemented by this module. The following implementation
-// informs the IDE of the OCX proxy classes implemented here.
-// *********************************************************************//
-namespace Graph_97_srvr
-{
-
-void __fastcall PACKAGE Register()
-{
-  // [1]
-  TComponentClass cls_svr[] = {
-                              __classid(Graph_97::TGlobal)
-                           };
-  RegisterComponents("Servers", cls_svr,
-                     sizeof(cls_svr)/sizeof(cls_svr[0])-1);
-}
-
-};     // namespace Graph_97_srvr

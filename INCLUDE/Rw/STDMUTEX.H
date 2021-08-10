@@ -7,7 +7,7 @@
 /*
  * Declarations for class _RWSTDMutex and _RWSTDGuard.
  *
- * $Id: stdmutex.h,v 1.14 1996/08/28 01:30:38 smithey Exp $
+ * $Id: stdmutex.h,v 9.9 2001/07/10 17:24:13 nyork Exp $
  *
  ***************************************************************************
  *

@@ -25,7 +25,6 @@ Notes:
 --*/
 
 #ifndef _LMSERVER_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMSERVER_
 
 #if _MSC_VER > 1000
@@ -433,7 +432,11 @@ typedef struct _SERVER_INFO_598 {
     GUID            sv598_serverguid;
     DWORD           sv598_ConnectionNoSessionsTimeout;
     DWORD           sv598_IdleThreadTimeOut;
-    BOOL            sv598_enableW9xsecuritysignature;
+    BOOL            sv598_enableW9xsecuritysignature;    
+    BOOL            sv598_enforcekerberosreauthentication;
+    BOOL            sv598_disabledos;
+    DWORD           sv598_lowdiskspaceminimum;
+    BOOL            sv598_disablestrictnamechecking;
 } SERVER_INFO_598, *PSERVER_INFO_598, *LPSERVER_INFO_598;
 
 typedef struct _SERVER_INFO_1005 {
@@ -796,6 +799,22 @@ typedef struct _SERVER_INFO_1598 {
     DWORD          sv1598_enableW9xsecuritysignature;
 } SERVER_INFO_1598, *PSERVER_INFO_1598, *LPSERVER_INFO_1598;
 
+typedef struct _SERVER_INFO_1599 {
+    BOOLEAN        sv1598_enforcekerberosreauthentication;
+} SERVER_INFO_1599, *PSERVER_INFO_1599, *LPSERVER_INFO_1599;
+
+typedef struct _SERVER_INFO_1600 {
+    BOOLEAN        sv1598_disabledos;
+} SERVER_INFO_1600, *PSERVER_INFO_1600, *LPSERVER_INFO_1600;
+
+typedef struct _SERVER_INFO_1601 {
+    DWORD          sv1598_lowdiskspaceminimum;
+} SERVER_INFO_1601, *PSERVER_INFO_1601, *LPSERVER_INFO_1601;
+
+typedef struct _SERVER_INFO_1602 {
+    BOOL           sv_1598_disablestrictnamechecking;
+} SERVER_INFO_1602, *PSERVER_INFO_1602, *LPSERVER_INFO_1602;
+
 //
 // A special structure definition is required in order for this
 // structure to work with RPC.  The problem is that having addresslength
@@ -937,6 +956,7 @@ typedef struct _SERVER_TRANSPORT_INFO_3 {
 #define SV_TYPE_DFS                 0x00800000  /* Root of a DFS tree */
 #define SV_TYPE_CLUSTER_NT          0x01000000  /* NT Cluster */
 #define SV_TYPE_TERMINALSERVER      0x02000000  /* Terminal Server(Hydra) */
+#define SV_TYPE_CLUSTER_VS_NT       0x04000000  /* NT Cluster Virtual Server Name */
 #define SV_TYPE_DCE                 0x10000000  /* IBM DSS (Directory and Security Services) or equivalent */
 #define SV_TYPE_ALTERNATE_XPORT     0x20000000  /* return list for alternate transport */
 #define SV_TYPE_LOCAL_LIST_ONLY     0x40000000  /* Return local list only */
@@ -1102,6 +1122,10 @@ typedef struct _SERVER_TRANSPORT_INFO_3 {
 #define SV_CONNECTIONNOSESSIONSTIMEOUT_PARMNUM 596
 #define SV_IDLETHREADTIMEOUT_PARMNUM        597
 #define SV_ENABLEW9XSECURITYSIGNATURE_PARMNUM        598
+#define SV_ENFORCEKERBEROSREAUTHENTICATION_PARMNUM   599
+#define SV_DISABLEDOS_PARMNUM                        600
+#define SV_LOWDISKSPACEMINIMUM_PARMNUM               601
+#define SV_DISABLESTRICTNAMECHECKING_PARMNUM         602
 
 //
 // Single-field infolevels for NetServerSetInfo.
@@ -1287,6 +1311,14 @@ typedef struct _SERVER_TRANSPORT_INFO_3 {
             (PARMNUM_BASE_INFOLEVEL + SV_IDLETHREADTIMEOUT_PARMNUM)
 #define SV_ENABLEW9XSECURITYSIGNATURE_INFOLEVEL     \
             (PARMNUM_BASE_INFOLEVEL + SV_ENABLEW9XSECURITYSIGNATURE_PARMNUM)
+#define SV_ENFORCEKERBEROSREAUTHENTICATION_INFOLEVEL \
+            (PARMNUM_BASE_INFOLEVEL + SV_ENFORCEKERBEROSREAUTHENTICATION_PARMNUM)
+#define SV_DISABLEDOS_INFOLEVEL \
+            (PARMNUM_BASE_INFOLEVEL + SV_DISABLEDOS_PARMNUM)
+#define SV_LOWDISKSPACEMINIMUM_INFOLEVEL \
+            (PARMNUM_BASE_INFOLEVEL + SV_LOWDISKSPACEMINIMUM_PARMNUM)
+#define SV_DISABLESTRICTNAMECHECKING_INFOLEVEL \
+            (PARMNUM_BASE_INFOLEVEL + SV_DISABLESTRICTNAMECHECKING_PARMNUM)
 
 #define SVI1_NUM_ELEMENTS       5
 #define SVI2_NUM_ELEMENTS       40
@@ -1327,6 +1359,5 @@ typedef struct _SERVER_TRANSPORT_INFO_3 {
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _LMSERVER_
 

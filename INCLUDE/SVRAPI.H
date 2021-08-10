@@ -1,6 +1,6 @@
 /********************************************************************/
 /**                     Microsoft Windows                          **/
-/**               Copyright(c) Microsoft Corp., 1995               **/
+/**               Copyright(c) Microsoft Corp., 1995 - 1999        **/
 /********************************************************************/
 
 /********************************************************************
@@ -50,7 +50,6 @@
 
 /*NOINC*/
 #ifndef SVRAPI_INCLUDED
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define SVRAPI_INCLUDED
 
 #include <lmcons.h>
@@ -1312,6 +1311,5 @@ struct security_info_1 {
 #pragma pack()          /* Revert to default packing */
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif /* SVRAPI_INCLUDED */
 /*INC*/

@@ -5,7 +5,7 @@
  * for_each.cpp - Example program for applying a function to each element 
  *                in a range. See Class Reference Section
  *
- * $Id: for_each.cpp,v 1.12 1996/08/28 01:16:49 smithey Exp $
+ * $Id: for_each.cpp,v 9.5 2001/07/10 17:24:09 nyork Exp $
  *
  ***************************************************************************
  *

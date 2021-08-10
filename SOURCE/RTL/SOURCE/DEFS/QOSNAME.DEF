@@ -1,6 +1,6 @@
-LIBRARY QOSNAME
+LIBRARY QosName
 EXPORTS
 
-    WPUGetQOSTemplate                        = 'QOSNAME.DLL'.*
-    WSCInstallQOSTemplate                    = 'QOSNAME.DLL'.*
-    WSCRemoveQOSTemplate                     = 'QOSNAME.DLL'.*
+    WPUGetQOSTemplate
+    WSCInstallQOSTemplate
+    WSCRemoveQOSTemplate

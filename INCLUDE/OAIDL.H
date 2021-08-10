@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:37:37 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for oaidl.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -37,6 +36,10 @@
 
 #ifndef __oaidl_h__
 #define __oaidl_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -167,8 +170,8 @@ typedef interface IPropertyBag IPropertyBag;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_oaidl_0000 */
 /* [local] */ 
@@ -176,7 +179,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //--------------------------------------------------------------------------
 #if ( _MSC_VER >= 800 )
@@ -223,51 +226,51 @@ typedef struct tagSAFEARRAYBOUND
     {
     ULONG cElements;
     LONG lLbound;
-    }	SAFEARRAYBOUND;
+    } 	SAFEARRAYBOUND;
 
-typedef struct tagSAFEARRAYBOUND __RPC_FAR *LPSAFEARRAYBOUND;
+typedef struct tagSAFEARRAYBOUND *LPSAFEARRAYBOUND;
 
 /* the following is what MIDL knows how to remote */
-typedef /* [unique] */ struct _wireVARIANT __RPC_FAR *wireVARIANT;
+typedef /* [unique] */ struct _wireVARIANT *wireVARIANT;
 
-typedef /* [unique] */ struct _wireBRECORD __RPC_FAR *wireBRECORD;
+typedef /* [unique] */ struct _wireBRECORD *wireBRECORD;
 
 typedef struct _wireSAFEARR_BSTR
     {
     ULONG Size;
-    /* [ref][size_is] */ wireBSTR __RPC_FAR *aBstr;
-    }	SAFEARR_BSTR;
+    /* [ref][size_is] */ wireBSTR *aBstr;
+    } 	SAFEARR_BSTR;
 
 typedef struct _wireSAFEARR_UNKNOWN
     {
     ULONG Size;
-    /* [ref][size_is] */ IUnknown __RPC_FAR *__RPC_FAR *apUnknown;
-    }	SAFEARR_UNKNOWN;
+    /* [ref][size_is] */ IUnknown **apUnknown;
+    } 	SAFEARR_UNKNOWN;
 
 typedef struct _wireSAFEARR_DISPATCH
     {
     ULONG Size;
-    /* [ref][size_is] */ IDispatch __RPC_FAR *__RPC_FAR *apDispatch;
-    }	SAFEARR_DISPATCH;
+    /* [ref][size_is] */ IDispatch **apDispatch;
+    } 	SAFEARR_DISPATCH;
 
 typedef struct _wireSAFEARR_VARIANT
     {
     ULONG Size;
-    /* [ref][size_is] */ wireVARIANT __RPC_FAR *aVariant;
-    }	SAFEARR_VARIANT;
+    /* [ref][size_is] */ wireVARIANT *aVariant;
+    } 	SAFEARR_VARIANT;
 
 typedef struct _wireSAFEARR_BRECORD
     {
     ULONG Size;
-    /* [ref][size_is] */ wireBRECORD __RPC_FAR *aRecord;
-    }	SAFEARR_BRECORD;
+    /* [ref][size_is] */ wireBRECORD *aRecord;
+    } 	SAFEARR_BRECORD;
 
 typedef struct _wireSAFEARR_HAVEIID
     {
     ULONG Size;
-    /* [ref][size_is] */ IUnknown __RPC_FAR *__RPC_FAR *apUnknown;
+    /* [ref][size_is] */ IUnknown **apUnknown;
     IID iid;
-    }	SAFEARR_HAVEIID;
+    } 	SAFEARR_HAVEIID;
 
 typedef /* [v1_enum] */ 
 enum tagSF_TYPE
@@ -282,7 +285,7 @@ enum tagSF_TYPE
 	SF_VARIANT	= VT_VARIANT,
 	SF_RECORD	= VT_RECORD,
 	SF_HAVEIID	= VT_UNKNOWN | VT_RESERVED
-    }	SF_TYPE;
+    } 	SF_TYPE;
 
 typedef struct _wireSAFEARRAY_UNION
     {
@@ -299,8 +302,8 @@ typedef struct _wireSAFEARRAY_UNION
         /* [case()] */ WORD_SIZEDARR WordStr;
         /* [case()] */ DWORD_SIZEDARR LongStr;
         /* [case()] */ HYPER_SIZEDARR HyperStr;
-        }	u;
-    }	SAFEARRAYUNION;
+        } 	u;
+    } 	SAFEARRAYUNION;
 
 typedef /* [unique] */ struct _wireSAFEARRAY
     {
@@ -310,9 +313,9 @@ typedef /* [unique] */ struct _wireSAFEARRAY
     ULONG cLocks;
     SAFEARRAYUNION uArrayStructs;
     /* [size_is] */ SAFEARRAYBOUND rgsabound[ 1 ];
-    }	__RPC_FAR *wireSAFEARRAY;
+    } 	*wireSAFEARRAY;
 
-typedef /* [unique] */ wireSAFEARRAY __RPC_FAR *wirePSAFEARRAY;
+typedef /* [unique] */ wireSAFEARRAY *wirePSAFEARRAY;
 
 typedef struct tagSAFEARRAY
     {
@@ -322,9 +325,9 @@ typedef struct tagSAFEARRAY
     ULONG cLocks;
     PVOID pvData;
     SAFEARRAYBOUND rgsabound[ 1 ];
-    }	SAFEARRAY;
+    } 	SAFEARRAY;
 
-typedef /* [wire_marshal] */ SAFEARRAY __RPC_FAR *LPSAFEARRAY;
+typedef /* [wire_marshal] */ SAFEARRAY *LPSAFEARRAY;
 
 #define	FADF_AUTO	( 0x1 )
 
@@ -357,7 +360,6 @@ typedef /* [wire_marshal] */ SAFEARRAY __RPC_FAR *LPSAFEARRAY;
  *  WORD wReserved2;
  *  WORD wReserved3;
  *  union {
- *    ULONGLONG      VT_UI8
  *    LONGLONG       VT_I8
  *    LONG           VT_I4
  *    BYTE           VT_UI1
@@ -391,6 +393,7 @@ typedef /* [wire_marshal] */ SAFEARRAY __RPC_FAR *LPSAFEARRAY;
  *    CHAR           VT_I1
  *    USHORT         VT_UI2
  *    ULONG          VT_UI4
+ *    ULONGLONG      VT_UI8
  *    INT            VT_INT
  *    UINT           VT_UINT
  *    DECIMAL *      VT_BYREF|VT_DECIMAL
@@ -429,7 +432,6 @@ struct tagVARIANT
             WORD wReserved3;
             union 
                 {
-                ULONGLONG ullVal;
                 LONGLONG llVal;
                 LONG lVal;
                 BYTE bVal;
@@ -442,62 +444,63 @@ struct tagVARIANT
                 CY cyVal;
                 DATE date;
                 BSTR bstrVal;
-                IUnknown __RPC_FAR *punkVal;
-                IDispatch __RPC_FAR *pdispVal;
-                SAFEARRAY __RPC_FAR *parray;
-                BYTE __RPC_FAR *pbVal;
-                SHORT __RPC_FAR *piVal;
-                LONG __RPC_FAR *plVal;
-                LONGLONG __RPC_FAR *pllVal;
-                FLOAT __RPC_FAR *pfltVal;
-                DOUBLE __RPC_FAR *pdblVal;
-                VARIANT_BOOL __RPC_FAR *pboolVal;
-                _VARIANT_BOOL __RPC_FAR *pbool;
-                SCODE __RPC_FAR *pscode;
-                CY __RPC_FAR *pcyVal;
-                DATE __RPC_FAR *pdate;
-                BSTR __RPC_FAR *pbstrVal;
-                IUnknown __RPC_FAR *__RPC_FAR *ppunkVal;
-                IDispatch __RPC_FAR *__RPC_FAR *ppdispVal;
-                SAFEARRAY __RPC_FAR *__RPC_FAR *pparray;
-                VARIANT __RPC_FAR *pvarVal;
+                IUnknown *punkVal;
+                IDispatch *pdispVal;
+                SAFEARRAY *parray;
+                BYTE *pbVal;
+                SHORT *piVal;
+                LONG *plVal;
+                LONGLONG *pllVal;
+                FLOAT *pfltVal;
+                DOUBLE *pdblVal;
+                VARIANT_BOOL *pboolVal;
+                _VARIANT_BOOL *pbool;
+                SCODE *pscode;
+                CY *pcyVal;
+                DATE *pdate;
+                BSTR *pbstrVal;
+                IUnknown **ppunkVal;
+                IDispatch **ppdispVal;
+                SAFEARRAY **pparray;
+                VARIANT *pvarVal;
                 PVOID byref;
                 CHAR cVal;
                 USHORT uiVal;
                 ULONG ulVal;
+                ULONGLONG ullVal;
                 INT intVal;
                 UINT uintVal;
-                DECIMAL __RPC_FAR *pdecVal;
-                CHAR __RPC_FAR *pcVal;
-                USHORT __RPC_FAR *puiVal;
-                ULONG __RPC_FAR *pulVal;
-                ULONGLONG __RPC_FAR *pullVal;
-                INT __RPC_FAR *pintVal;
-                UINT __RPC_FAR *puintVal;
+                DECIMAL *pdecVal;
+                CHAR *pcVal;
+                USHORT *puiVal;
+                ULONG *pulVal;
+                ULONGLONG *pullVal;
+                INT *pintVal;
+                UINT *puintVal;
                 struct __tagBRECORD
                     {
                     PVOID pvRecord;
-                    IRecordInfo __RPC_FAR *pRecInfo;
-                    }	__VARIANT_NAME_4;
-                }	__VARIANT_NAME_3;
-            }	__VARIANT_NAME_2;
+                    IRecordInfo *pRecInfo;
+                    } 	__VARIANT_NAME_4;
+                } 	__VARIANT_NAME_3;
+            } 	__VARIANT_NAME_2;
         DECIMAL decVal;
-        }	__VARIANT_NAME_1;
-    };
-typedef VARIANT __RPC_FAR *LPVARIANT;
+        } 	__VARIANT_NAME_1;
+    } ;
+typedef VARIANT *LPVARIANT;
 
 typedef VARIANT VARIANTARG;
 
-typedef VARIANT __RPC_FAR *LPVARIANTARG;
+typedef VARIANT *LPVARIANTARG;
 
 /* the following is what MIDL knows how to remote */
 struct _wireBRECORD
     {
     ULONG fFlags;
     ULONG clSize;
-    IRecordInfo __RPC_FAR *pRecInfo;
-    /* [size_is] */ byte __RPC_FAR *pRecord;
-    };
+    IRecordInfo *pRecInfo;
+    /* [size_is] */ byte *pRecord;
+    } ;
 struct _wireVARIANT
     {
     DWORD clSize;
@@ -508,6 +511,7 @@ struct _wireVARIANT
     USHORT wReserved3;
     /* [switch_is][switch_type] */ union 
         {
+        /* [case()] */ LONGLONG llVal;
         /* [case()] */ LONG lVal;
         /* [case()] */ BYTE bVal;
         /* [case()] */ SHORT iVal;
@@ -518,40 +522,43 @@ struct _wireVARIANT
         /* [case()] */ CY cyVal;
         /* [case()] */ DATE date;
         /* [case()] */ wireBSTR bstrVal;
-        /* [case()] */ IUnknown __RPC_FAR *punkVal;
-        /* [case()] */ IDispatch __RPC_FAR *pdispVal;
+        /* [case()] */ IUnknown *punkVal;
+        /* [case()] */ IDispatch *pdispVal;
         /* [case()] */ wirePSAFEARRAY parray;
         /* [case()] */ wireBRECORD brecVal;
-        /* [case()] */ BYTE __RPC_FAR *pbVal;
-        /* [case()] */ SHORT __RPC_FAR *piVal;
-        /* [case()] */ LONG __RPC_FAR *plVal;
-        /* [case()] */ FLOAT __RPC_FAR *pfltVal;
-        /* [case()] */ DOUBLE __RPC_FAR *pdblVal;
-        /* [case()] */ VARIANT_BOOL __RPC_FAR *pboolVal;
-        /* [case()] */ SCODE __RPC_FAR *pscode;
-        /* [case()] */ CY __RPC_FAR *pcyVal;
-        /* [case()] */ DATE __RPC_FAR *pdate;
-        /* [case()] */ wireBSTR __RPC_FAR *pbstrVal;
-        /* [case()] */ IUnknown __RPC_FAR *__RPC_FAR *ppunkVal;
-        /* [case()] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispVal;
-        /* [case()] */ wirePSAFEARRAY __RPC_FAR *pparray;
-        /* [case()] */ wireVARIANT __RPC_FAR *pvarVal;
+        /* [case()] */ BYTE *pbVal;
+        /* [case()] */ SHORT *piVal;
+        /* [case()] */ LONG *plVal;
+        /* [case()] */ LONGLONG *pllVal;
+        /* [case()] */ FLOAT *pfltVal;
+        /* [case()] */ DOUBLE *pdblVal;
+        /* [case()] */ VARIANT_BOOL *pboolVal;
+        /* [case()] */ SCODE *pscode;
+        /* [case()] */ CY *pcyVal;
+        /* [case()] */ DATE *pdate;
+        /* [case()] */ wireBSTR *pbstrVal;
+        /* [case()] */ IUnknown **ppunkVal;
+        /* [case()] */ IDispatch **ppdispVal;
+        /* [case()] */ wirePSAFEARRAY *pparray;
+        /* [case()] */ wireVARIANT *pvarVal;
         /* [case()] */ CHAR cVal;
         /* [case()] */ USHORT uiVal;
         /* [case()] */ ULONG ulVal;
+        /* [case()] */ ULONGLONG ullVal;
         /* [case()] */ INT intVal;
         /* [case()] */ UINT uintVal;
         /* [case()] */ DECIMAL decVal;
-        /* [case()] */ DECIMAL __RPC_FAR *pdecVal;
-        /* [case()] */ CHAR __RPC_FAR *pcVal;
-        /* [case()] */ USHORT __RPC_FAR *puiVal;
-        /* [case()] */ ULONG __RPC_FAR *pulVal;
-        /* [case()] */ INT __RPC_FAR *pintVal;
-        /* [case()] */ UINT __RPC_FAR *puintVal;
+        /* [case()] */ DECIMAL *pdecVal;
+        /* [case()] */ CHAR *pcVal;
+        /* [case()] */ USHORT *puiVal;
+        /* [case()] */ ULONG *pulVal;
+        /* [case()] */ ULONGLONG *pullVal;
+        /* [case()] */ INT *pintVal;
+        /* [case()] */ UINT *puintVal;
         /* [case()] */  /* Empty union arm */ 
         /* [case()] */  /* Empty union arm */ 
-        }	;
-    };
+        } 	;
+    } ;
 typedef LONG DISPID;
 
 typedef DISPID MEMBERID;
@@ -569,42 +576,42 @@ enum tagTYPEKIND
 	TKIND_ALIAS	= TKIND_COCLASS + 1,
 	TKIND_UNION	= TKIND_ALIAS + 1,
 	TKIND_MAX	= TKIND_UNION + 1
-    }	TYPEKIND;
+    } 	TYPEKIND;
 
 typedef struct tagTYPEDESC
     {
     /* [switch_is][switch_type] */ union 
         {
-        /* [case()] */ struct tagTYPEDESC __RPC_FAR *lptdesc;
-        /* [case()] */ struct tagARRAYDESC __RPC_FAR *lpadesc;
+        /* [case()] */ struct tagTYPEDESC *lptdesc;
+        /* [case()] */ struct tagARRAYDESC *lpadesc;
         /* [case()] */ HREFTYPE hreftype;
         /* [default] */  /* Empty union arm */ 
-        }	;
+        } 	;
     VARTYPE vt;
-    }	TYPEDESC;
+    } 	TYPEDESC;
 
 typedef struct tagARRAYDESC
     {
     TYPEDESC tdescElem;
     USHORT cDims;
     /* [size_is] */ SAFEARRAYBOUND rgbounds[ 1 ];
-    }	ARRAYDESC;
+    } 	ARRAYDESC;
 
 typedef struct tagPARAMDESCEX
     {
     ULONG cBytes;
     VARIANTARG varDefaultValue;
-    }	PARAMDESCEX;
+    } 	PARAMDESCEX;
 
-typedef struct tagPARAMDESCEX __RPC_FAR *LPPARAMDESCEX;
+typedef struct tagPARAMDESCEX *LPPARAMDESCEX;
 
 typedef struct tagPARAMDESC
     {
     LPPARAMDESCEX pparamdescex;
     USHORT wParamFlags;
-    }	PARAMDESC;
+    } 	PARAMDESC;
 
-typedef struct tagPARAMDESC __RPC_FAR *LPPARAMDESC;
+typedef struct tagPARAMDESC *LPPARAMDESC;
 
 #define	PARAMFLAG_NONE	( 0 )
 
@@ -626,9 +633,9 @@ typedef struct tagIDLDESC
     {
     ULONG_PTR dwReserved;
     USHORT wIDLFlags;
-    }	IDLDESC;
+    } 	IDLDESC;
 
-typedef struct tagIDLDESC __RPC_FAR *LPIDLDESC;
+typedef struct tagIDLDESC *LPIDLDESC;
 
 #define	IDLFLAG_NONE	( PARAMFLAG_NONE )
 
@@ -647,7 +654,7 @@ typedef struct tagELEMDESC
     {
     TYPEDESC tdesc;
     PARAMDESC paramdesc;
-    }	ELEMDESC;
+    } 	ELEMDESC;
 
 #else /* 0 */
 //;end_internal
@@ -681,21 +688,22 @@ typedef struct tagTYPEATTR
     WORD wMinorVerNum;
     TYPEDESC tdescAlias;
     IDLDESC idldescType;
-    }	TYPEATTR;
+    } 	TYPEATTR;
 
-typedef struct tagTYPEATTR __RPC_FAR *LPTYPEATTR;
+typedef struct tagTYPEATTR *LPTYPEATTR;
 
 typedef struct tagDISPPARAMS
     {
-    /* [size_is] */ VARIANTARG __RPC_FAR *rgvarg;
-    /* [size_is] */ DISPID __RPC_FAR *rgdispidNamedArgs;
+    /* [size_is] */ VARIANTARG *rgvarg;
+    /* [size_is] */ DISPID *rgdispidNamedArgs;
     UINT cArgs;
     UINT cNamedArgs;
-    }	DISPPARAMS;
+    } 	DISPPARAMS;
 
 //;begin_internal
 #if 0
 /* the following is what MIDL knows how to remote */
+
 typedef struct tagEXCEPINFO
     {
     WORD wCode;
@@ -704,10 +712,10 @@ typedef struct tagEXCEPINFO
     BSTR bstrDescription;
     BSTR bstrHelpFile;
     DWORD dwHelpContext;
-    ULONG pvReserved;
-    ULONG pfnDeferredFillIn;
+    ULONG_PTR pvReserved;
+    ULONG_PTR pfnDeferredFillIn;
     SCODE scode;
-    }	EXCEPINFO;
+    } 	EXCEPINFO;
 
 #else /* 0 */
 //;end_internal
@@ -738,7 +746,7 @@ enum tagCALLCONV
 	CC_MPWCDECL	= CC_SYSCALL + 1,
 	CC_MPWPASCAL	= CC_MPWCDECL + 1,
 	CC_MAX	= CC_MPWPASCAL + 1
-    }	CALLCONV;
+    } 	CALLCONV;
 
 typedef /* [v1_enum] */ 
 enum tagFUNCKIND
@@ -747,7 +755,7 @@ enum tagFUNCKIND
 	FUNC_NONVIRTUAL	= FUNC_PUREVIRTUAL + 1,
 	FUNC_STATIC	= FUNC_NONVIRTUAL + 1,
 	FUNC_DISPATCH	= FUNC_STATIC + 1
-    }	FUNCKIND;
+    } 	FUNCKIND;
 
 typedef /* [v1_enum] */ 
 enum tagINVOKEKIND
@@ -755,13 +763,13 @@ enum tagINVOKEKIND
 	INVOKE_PROPERTYGET	= 2,
 	INVOKE_PROPERTYPUT	= 4,
 	INVOKE_PROPERTYPUTREF	= 8
-    }	INVOKEKIND;
+    } 	INVOKEKIND;
 
 typedef struct tagFUNCDESC
     {
     MEMBERID memid;
-    /* [size_is] */ SCODE __RPC_FAR *lprgscode;
-    /* [size_is] */ ELEMDESC __RPC_FAR *lprgelemdescParam;
+    /* [size_is] */ SCODE *lprgscode;
+    /* [size_is] */ ELEMDESC *lprgelemdescParam;
     FUNCKIND funckind;
     INVOKEKIND invkind;
     CALLCONV callconv;
@@ -771,9 +779,9 @@ typedef struct tagFUNCDESC
     SHORT cScodes;
     ELEMDESC elemdescFunc;
     WORD wFuncFlags;
-    }	FUNCDESC;
+    } 	FUNCDESC;
 
-typedef struct tagFUNCDESC __RPC_FAR *LPFUNCDESC;
+typedef struct tagFUNCDESC *LPFUNCDESC;
 
 typedef /* [v1_enum] */ 
 enum tagVARKIND
@@ -781,7 +789,7 @@ enum tagVARKIND
 	VAR_STATIC	= VAR_PERINSTANCE + 1,
 	VAR_CONST	= VAR_STATIC + 1,
 	VAR_DISPATCH	= VAR_CONST + 1
-    }	VARKIND;
+    } 	VARKIND;
 
 #define	IMPLTYPEFLAG_FDEFAULT	( 0x1 )
 
@@ -798,14 +806,14 @@ typedef struct tagVARDESC
     /* [switch_is][switch_type] */ union 
         {
         /* [case()] */ ULONG oInst;
-        /* [case()] */ VARIANT __RPC_FAR *lpvarValue;
-        }	;
+        /* [case()] */ VARIANT *lpvarValue;
+        } 	;
     ELEMDESC elemdescVar;
     WORD wVarFlags;
     VARKIND varkind;
-    }	VARDESC;
+    } 	VARDESC;
 
-typedef struct tagVARDESC __RPC_FAR *LPVARDESC;
+typedef struct tagVARDESC *LPVARDESC;
 
 typedef 
 enum tagTYPEFLAGS
@@ -824,7 +832,7 @@ enum tagTYPEFLAGS
 	TYPEFLAG_FDISPATCHABLE	= 0x1000,
 	TYPEFLAG_FREVERSEBIND	= 0x2000,
 	TYPEFLAG_FPROXY	= 0x4000
-    }	TYPEFLAGS;
+    } 	TYPEFLAGS;
 
 typedef 
 enum tagFUNCFLAGS
@@ -841,7 +849,7 @@ enum tagFUNCFLAGS
 	FUNCFLAG_FNONBROWSABLE	= 0x400,
 	FUNCFLAG_FREPLACEABLE	= 0x800,
 	FUNCFLAG_FIMMEDIATEBIND	= 0x1000
-    }	FUNCFLAGS;
+    } 	FUNCFLAGS;
 
 typedef 
 enum tagVARFLAGS
@@ -858,30 +866,30 @@ enum tagVARFLAGS
 	VARFLAG_FNONBROWSABLE	= 0x400,
 	VARFLAG_FREPLACEABLE	= 0x800,
 	VARFLAG_FIMMEDIATEBIND	= 0x1000
-    }	VARFLAGS;
+    } 	VARFLAGS;
 
 typedef /* [wire_marshal] */ struct tagCLEANLOCALSTORAGE
     {
-    IUnknown __RPC_FAR *pInterface;
+    IUnknown *pInterface;
     PVOID pStorage;
     DWORD flags;
-    }	CLEANLOCALSTORAGE;
+    } 	CLEANLOCALSTORAGE;
 
 typedef struct tagCUSTDATAITEM
     {
     GUID guid;
     VARIANTARG varValue;
-    }	CUSTDATAITEM;
+    } 	CUSTDATAITEM;
 
-typedef struct tagCUSTDATAITEM __RPC_FAR *LPCUSTDATAITEM;
+typedef struct tagCUSTDATAITEM *LPCUSTDATAITEM;
 
 typedef struct tagCUSTDATA
     {
     DWORD cCustData;
     /* [size_is] */ LPCUSTDATAITEM prgCustData;
-    }	CUSTDATA;
+    } 	CUSTDATA;
 
-typedef struct tagCUSTDATA __RPC_FAR *LPCUSTDATA;
+typedef struct tagCUSTDATA *LPCUSTDATA;
 
 
 
@@ -895,7 +903,7 @@ extern RPC_IF_HANDLE IOleAutomationTypes_v1_0_s_ifspec;
 /* interface ICreateTypeInfo */
 /* [local][unique][uuid][object] */ 
 
-typedef /* [unique] */ ICreateTypeInfo __RPC_FAR *LPCREATETYPEINFO;
+typedef /* [unique] */ ICreateTypeInfo *LPCREATETYPEINFO;
 
 
 EXTERN_C const IID IID_ICreateTypeInfo;
@@ -923,12 +931,12 @@ EXTERN_C const IID IID_ICreateTypeInfo;
             /* [in] */ WORD wMinorVerNum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddRefTypeInfo( 
-            /* [in] */ ITypeInfo __RPC_FAR *pTInfo,
-            /* [in] */ HREFTYPE __RPC_FAR *phRefType) = 0;
+            /* [in] */ ITypeInfo *pTInfo,
+            /* [in] */ HREFTYPE *phRefType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddFuncDesc( 
             /* [in] */ UINT index,
-            /* [in] */ FUNCDESC __RPC_FAR *pFuncDesc) = 0;
+            /* [in] */ FUNCDESC *pFuncDesc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddImplType( 
             /* [in] */ UINT index,
@@ -946,11 +954,11 @@ EXTERN_C const IID IID_ICreateTypeInfo;
         
         virtual HRESULT STDMETHODCALLTYPE AddVarDesc( 
             /* [in] */ UINT index,
-            /* [in] */ VARDESC __RPC_FAR *pVarDesc) = 0;
+            /* [in] */ VARDESC *pVarDesc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFuncAndParamNames( 
             /* [in] */ UINT index,
-            /* [in][size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [in][size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetVarName( 
@@ -958,7 +966,7 @@ EXTERN_C const IID IID_ICreateTypeInfo;
             /* [in] */ LPOLESTR szName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTypeDescAlias( 
-            /* [in] */ TYPEDESC __RPC_FAR *pTDescAlias) = 0;
+            /* [in] */ TYPEDESC *pTDescAlias) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DefineFuncAsDllEntry( 
             /* [in] */ UINT index,
@@ -986,7 +994,7 @@ EXTERN_C const IID IID_ICreateTypeInfo;
             /* [in] */ BSTR bstrMops) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTypeIdldesc( 
-            /* [in] */ IDLDESC __RPC_FAR *pIdlDesc) = 0;
+            /* [in] */ IDLDESC *pIdlDesc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LayOut( void) = 0;
         
@@ -998,130 +1006,130 @@ EXTERN_C const IID IID_ICreateTypeInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICreateTypeInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICreateTypeInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICreateTypeInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICreateTypeInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICreateTypeInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetGuid )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetGuid )( 
+            ICreateTypeInfo * This,
             /* [in] */ REFGUID guid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTypeFlags )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetTypeFlags )( 
+            ICreateTypeInfo * This,
             /* [in] */ UINT uTypeFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDocString )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetDocString )( 
+            ICreateTypeInfo * This,
             /* [in] */ LPOLESTR pStrDoc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHelpContext )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetHelpContext )( 
+            ICreateTypeInfo * This,
             /* [in] */ DWORD dwHelpContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVersion )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetVersion )( 
+            ICreateTypeInfo * This,
             /* [in] */ WORD wMajorVerNum,
             /* [in] */ WORD wMinorVerNum);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddRefTypeInfo )( 
-            ICreateTypeInfo __RPC_FAR * This,
-            /* [in] */ ITypeInfo __RPC_FAR *pTInfo,
-            /* [in] */ HREFTYPE __RPC_FAR *phRefType);
+        HRESULT ( STDMETHODCALLTYPE *AddRefTypeInfo )( 
+            ICreateTypeInfo * This,
+            /* [in] */ ITypeInfo *pTInfo,
+            /* [in] */ HREFTYPE *phRefType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddFuncDesc )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *AddFuncDesc )( 
+            ICreateTypeInfo * This,
             /* [in] */ UINT index,
-            /* [in] */ FUNCDESC __RPC_FAR *pFuncDesc);
+            /* [in] */ FUNCDESC *pFuncDesc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddImplType )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *AddImplType )( 
+            ICreateTypeInfo * This,
             /* [in] */ UINT index,
             /* [in] */ HREFTYPE hRefType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetImplTypeFlags )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetImplTypeFlags )( 
+            ICreateTypeInfo * This,
             /* [in] */ UINT index,
             /* [in] */ INT implTypeFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAlignment )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetAlignment )( 
+            ICreateTypeInfo * This,
             /* [in] */ WORD cbAlignment);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSchema )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetSchema )( 
+            ICreateTypeInfo * This,
             /* [in] */ LPOLESTR pStrSchema);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddVarDesc )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *AddVarDesc )( 
+            ICreateTypeInfo * This,
             /* [in] */ UINT index,
-            /* [in] */ VARDESC __RPC_FAR *pVarDesc);
+            /* [in] */ VARDESC *pVarDesc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFuncAndParamNames )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetFuncAndParamNames )( 
+            ICreateTypeInfo * This,
             /* [in] */ UINT index,
-            /* [in][size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [in][size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVarName )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetVarName )( 
+            ICreateTypeInfo * This,
             /* [in] */ UINT index,
             /* [in] */ LPOLESTR szName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTypeDescAlias )( 
-            ICreateTypeInfo __RPC_FAR * This,
-            /* [in] */ TYPEDESC __RPC_FAR *pTDescAlias);
+        HRESULT ( STDMETHODCALLTYPE *SetTypeDescAlias )( 
+            ICreateTypeInfo * This,
+            /* [in] */ TYPEDESC *pTDescAlias);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DefineFuncAsDllEntry )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DefineFuncAsDllEntry )( 
+            ICreateTypeInfo * This,
             /* [in] */ UINT index,
             /* [in] */ LPOLESTR szDllName,
             /* [in] */ LPOLESTR szProcName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFuncDocString )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetFuncDocString )( 
+            ICreateTypeInfo * This,
             /* [in] */ UINT index,
             /* [in] */ LPOLESTR szDocString);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVarDocString )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetVarDocString )( 
+            ICreateTypeInfo * This,
             /* [in] */ UINT index,
             /* [in] */ LPOLESTR szDocString);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFuncHelpContext )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetFuncHelpContext )( 
+            ICreateTypeInfo * This,
             /* [in] */ UINT index,
             /* [in] */ DWORD dwHelpContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVarHelpContext )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetVarHelpContext )( 
+            ICreateTypeInfo * This,
             /* [in] */ UINT index,
             /* [in] */ DWORD dwHelpContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMops )( 
-            ICreateTypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetMops )( 
+            ICreateTypeInfo * This,
             /* [in] */ UINT index,
             /* [in] */ BSTR bstrMops);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTypeIdldesc )( 
-            ICreateTypeInfo __RPC_FAR * This,
-            /* [in] */ IDLDESC __RPC_FAR *pIdlDesc);
+        HRESULT ( STDMETHODCALLTYPE *SetTypeIdldesc )( 
+            ICreateTypeInfo * This,
+            /* [in] */ IDLDESC *pIdlDesc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LayOut )( 
-            ICreateTypeInfo __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *LayOut )( 
+            ICreateTypeInfo * This);
         
         END_INTERFACE
     } ICreateTypeInfoVtbl;
 
     interface ICreateTypeInfo
     {
-        CONST_VTBL struct ICreateTypeInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICreateTypeInfoVtbl *lpVtbl;
     };
 
     
@@ -1216,7 +1224,7 @@ EXTERN_C const IID IID_ICreateTypeInfo;
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetGuid_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ REFGUID guid);
 
 
@@ -1228,7 +1236,7 @@ void __RPC_STUB ICreateTypeInfo_SetGuid_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetTypeFlags_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ UINT uTypeFlags);
 
 
@@ -1240,7 +1248,7 @@ void __RPC_STUB ICreateTypeInfo_SetTypeFlags_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetDocString_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ LPOLESTR pStrDoc);
 
 
@@ -1252,7 +1260,7 @@ void __RPC_STUB ICreateTypeInfo_SetDocString_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetHelpContext_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ DWORD dwHelpContext);
 
 
@@ -1264,7 +1272,7 @@ void __RPC_STUB ICreateTypeInfo_SetHelpContext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetVersion_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ WORD wMajorVerNum,
     /* [in] */ WORD wMinorVerNum);
 
@@ -1277,9 +1285,9 @@ void __RPC_STUB ICreateTypeInfo_SetVersion_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_AddRefTypeInfo_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
-    /* [in] */ ITypeInfo __RPC_FAR *pTInfo,
-    /* [in] */ HREFTYPE __RPC_FAR *phRefType);
+    ICreateTypeInfo * This,
+    /* [in] */ ITypeInfo *pTInfo,
+    /* [in] */ HREFTYPE *phRefType);
 
 
 void __RPC_STUB ICreateTypeInfo_AddRefTypeInfo_Stub(
@@ -1290,9 +1298,9 @@ void __RPC_STUB ICreateTypeInfo_AddRefTypeInfo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_AddFuncDesc_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ UINT index,
-    /* [in] */ FUNCDESC __RPC_FAR *pFuncDesc);
+    /* [in] */ FUNCDESC *pFuncDesc);
 
 
 void __RPC_STUB ICreateTypeInfo_AddFuncDesc_Stub(
@@ -1303,7 +1311,7 @@ void __RPC_STUB ICreateTypeInfo_AddFuncDesc_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_AddImplType_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ UINT index,
     /* [in] */ HREFTYPE hRefType);
 
@@ -1316,7 +1324,7 @@ void __RPC_STUB ICreateTypeInfo_AddImplType_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetImplTypeFlags_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ UINT index,
     /* [in] */ INT implTypeFlags);
 
@@ -1329,7 +1337,7 @@ void __RPC_STUB ICreateTypeInfo_SetImplTypeFlags_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetAlignment_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ WORD cbAlignment);
 
 
@@ -1341,7 +1349,7 @@ void __RPC_STUB ICreateTypeInfo_SetAlignment_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetSchema_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ LPOLESTR pStrSchema);
 
 
@@ -1353,9 +1361,9 @@ void __RPC_STUB ICreateTypeInfo_SetSchema_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_AddVarDesc_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ UINT index,
-    /* [in] */ VARDESC __RPC_FAR *pVarDesc);
+    /* [in] */ VARDESC *pVarDesc);
 
 
 void __RPC_STUB ICreateTypeInfo_AddVarDesc_Stub(
@@ -1366,9 +1374,9 @@ void __RPC_STUB ICreateTypeInfo_AddVarDesc_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetFuncAndParamNames_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ UINT index,
-    /* [in][size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+    /* [in][size_is][in] */ LPOLESTR *rgszNames,
     /* [in] */ UINT cNames);
 
 
@@ -1380,7 +1388,7 @@ void __RPC_STUB ICreateTypeInfo_SetFuncAndParamNames_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetVarName_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ UINT index,
     /* [in] */ LPOLESTR szName);
 
@@ -1393,8 +1401,8 @@ void __RPC_STUB ICreateTypeInfo_SetVarName_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetTypeDescAlias_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
-    /* [in] */ TYPEDESC __RPC_FAR *pTDescAlias);
+    ICreateTypeInfo * This,
+    /* [in] */ TYPEDESC *pTDescAlias);
 
 
 void __RPC_STUB ICreateTypeInfo_SetTypeDescAlias_Stub(
@@ -1405,7 +1413,7 @@ void __RPC_STUB ICreateTypeInfo_SetTypeDescAlias_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_DefineFuncAsDllEntry_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ UINT index,
     /* [in] */ LPOLESTR szDllName,
     /* [in] */ LPOLESTR szProcName);
@@ -1419,7 +1427,7 @@ void __RPC_STUB ICreateTypeInfo_DefineFuncAsDllEntry_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetFuncDocString_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ UINT index,
     /* [in] */ LPOLESTR szDocString);
 
@@ -1432,7 +1440,7 @@ void __RPC_STUB ICreateTypeInfo_SetFuncDocString_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetVarDocString_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ UINT index,
     /* [in] */ LPOLESTR szDocString);
 
@@ -1445,7 +1453,7 @@ void __RPC_STUB ICreateTypeInfo_SetVarDocString_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetFuncHelpContext_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ UINT index,
     /* [in] */ DWORD dwHelpContext);
 
@@ -1458,7 +1466,7 @@ void __RPC_STUB ICreateTypeInfo_SetFuncHelpContext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetVarHelpContext_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ UINT index,
     /* [in] */ DWORD dwHelpContext);
 
@@ -1471,7 +1479,7 @@ void __RPC_STUB ICreateTypeInfo_SetVarHelpContext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetMops_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
+    ICreateTypeInfo * This,
     /* [in] */ UINT index,
     /* [in] */ BSTR bstrMops);
 
@@ -1484,8 +1492,8 @@ void __RPC_STUB ICreateTypeInfo_SetMops_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_SetTypeIdldesc_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This,
-    /* [in] */ IDLDESC __RPC_FAR *pIdlDesc);
+    ICreateTypeInfo * This,
+    /* [in] */ IDLDESC *pIdlDesc);
 
 
 void __RPC_STUB ICreateTypeInfo_SetTypeIdldesc_Stub(
@@ -1496,7 +1504,7 @@ void __RPC_STUB ICreateTypeInfo_SetTypeIdldesc_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo_LayOut_Proxy( 
-    ICreateTypeInfo __RPC_FAR * This);
+    ICreateTypeInfo * This);
 
 
 void __RPC_STUB ICreateTypeInfo_LayOut_Stub(
@@ -1516,7 +1524,7 @@ void __RPC_STUB ICreateTypeInfo_LayOut_Stub(
 /* interface ICreateTypeInfo2 */
 /* [local][unique][uuid][object] */ 
 
-typedef /* [unique] */ ICreateTypeInfo2 __RPC_FAR *LPCREATETYPEINFO2;
+typedef /* [unique] */ ICreateTypeInfo2 *LPCREATETYPEINFO2;
 
 
 EXTERN_C const IID IID_ICreateTypeInfo2;
@@ -1545,28 +1553,28 @@ EXTERN_C const IID IID_ICreateTypeInfo2;
         
         virtual HRESULT STDMETHODCALLTYPE SetCustData( 
             /* [in] */ REFGUID guid,
-            /* [in] */ VARIANT __RPC_FAR *pVarVal) = 0;
+            /* [in] */ VARIANT *pVarVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFuncCustData( 
             /* [in] */ UINT index,
             /* [in] */ REFGUID guid,
-            /* [in] */ VARIANT __RPC_FAR *pVarVal) = 0;
+            /* [in] */ VARIANT *pVarVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetParamCustData( 
             /* [in] */ UINT indexFunc,
             /* [in] */ UINT indexParam,
             /* [in] */ REFGUID guid,
-            /* [in] */ VARIANT __RPC_FAR *pVarVal) = 0;
+            /* [in] */ VARIANT *pVarVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetVarCustData( 
             /* [in] */ UINT index,
             /* [in] */ REFGUID guid,
-            /* [in] */ VARIANT __RPC_FAR *pVarVal) = 0;
+            /* [in] */ VARIANT *pVarVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetImplTypeCustData( 
             /* [in] */ UINT index,
             /* [in] */ REFGUID guid,
-            /* [in] */ VARIANT __RPC_FAR *pVarVal) = 0;
+            /* [in] */ VARIANT *pVarVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetHelpStringContext( 
             /* [in] */ ULONG dwHelpStringContext) = 0;
@@ -1592,194 +1600,194 @@ EXTERN_C const IID IID_ICreateTypeInfo2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICreateTypeInfo2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICreateTypeInfo2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICreateTypeInfo2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICreateTypeInfo2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetGuid )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetGuid )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ REFGUID guid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTypeFlags )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetTypeFlags )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT uTypeFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDocString )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetDocString )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ LPOLESTR pStrDoc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHelpContext )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetHelpContext )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ DWORD dwHelpContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVersion )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetVersion )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ WORD wMajorVerNum,
             /* [in] */ WORD wMinorVerNum);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddRefTypeInfo )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
-            /* [in] */ ITypeInfo __RPC_FAR *pTInfo,
-            /* [in] */ HREFTYPE __RPC_FAR *phRefType);
+        HRESULT ( STDMETHODCALLTYPE *AddRefTypeInfo )( 
+            ICreateTypeInfo2 * This,
+            /* [in] */ ITypeInfo *pTInfo,
+            /* [in] */ HREFTYPE *phRefType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddFuncDesc )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *AddFuncDesc )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
-            /* [in] */ FUNCDESC __RPC_FAR *pFuncDesc);
+            /* [in] */ FUNCDESC *pFuncDesc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddImplType )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *AddImplType )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ HREFTYPE hRefType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetImplTypeFlags )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetImplTypeFlags )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ INT implTypeFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAlignment )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetAlignment )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ WORD cbAlignment);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSchema )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetSchema )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ LPOLESTR pStrSchema);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddVarDesc )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *AddVarDesc )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
-            /* [in] */ VARDESC __RPC_FAR *pVarDesc);
+            /* [in] */ VARDESC *pVarDesc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFuncAndParamNames )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetFuncAndParamNames )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
-            /* [in][size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [in][size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVarName )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetVarName )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ LPOLESTR szName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTypeDescAlias )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
-            /* [in] */ TYPEDESC __RPC_FAR *pTDescAlias);
+        HRESULT ( STDMETHODCALLTYPE *SetTypeDescAlias )( 
+            ICreateTypeInfo2 * This,
+            /* [in] */ TYPEDESC *pTDescAlias);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DefineFuncAsDllEntry )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DefineFuncAsDllEntry )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ LPOLESTR szDllName,
             /* [in] */ LPOLESTR szProcName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFuncDocString )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetFuncDocString )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ LPOLESTR szDocString);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVarDocString )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetVarDocString )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ LPOLESTR szDocString);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFuncHelpContext )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetFuncHelpContext )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ DWORD dwHelpContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVarHelpContext )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetVarHelpContext )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ DWORD dwHelpContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMops )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetMops )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ BSTR bstrMops);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetTypeIdldesc )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
-            /* [in] */ IDLDESC __RPC_FAR *pIdlDesc);
+        HRESULT ( STDMETHODCALLTYPE *SetTypeIdldesc )( 
+            ICreateTypeInfo2 * This,
+            /* [in] */ IDLDESC *pIdlDesc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LayOut )( 
-            ICreateTypeInfo2 __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *LayOut )( 
+            ICreateTypeInfo2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteFuncDesc )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeleteFuncDesc )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteFuncDescByMemId )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeleteFuncDescByMemId )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ MEMBERID memid,
             /* [in] */ INVOKEKIND invKind);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteVarDesc )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeleteVarDesc )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteVarDescByMemId )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeleteVarDescByMemId )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ MEMBERID memid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteImplType )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeleteImplType )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCustData )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetCustData )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ REFGUID guid,
-            /* [in] */ VARIANT __RPC_FAR *pVarVal);
+            /* [in] */ VARIANT *pVarVal);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFuncCustData )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetFuncCustData )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ REFGUID guid,
-            /* [in] */ VARIANT __RPC_FAR *pVarVal);
+            /* [in] */ VARIANT *pVarVal);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetParamCustData )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetParamCustData )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT indexFunc,
             /* [in] */ UINT indexParam,
             /* [in] */ REFGUID guid,
-            /* [in] */ VARIANT __RPC_FAR *pVarVal);
+            /* [in] */ VARIANT *pVarVal);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVarCustData )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetVarCustData )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ REFGUID guid,
-            /* [in] */ VARIANT __RPC_FAR *pVarVal);
+            /* [in] */ VARIANT *pVarVal);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetImplTypeCustData )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetImplTypeCustData )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ REFGUID guid,
-            /* [in] */ VARIANT __RPC_FAR *pVarVal);
+            /* [in] */ VARIANT *pVarVal);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHelpStringContext )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetHelpStringContext )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ ULONG dwHelpStringContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetFuncHelpStringContext )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetFuncHelpStringContext )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ ULONG dwHelpStringContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVarHelpStringContext )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetVarHelpStringContext )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ ULONG dwHelpStringContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invalidate )( 
-            ICreateTypeInfo2 __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Invalidate )( 
+            ICreateTypeInfo2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
-            ICreateTypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetName )( 
+            ICreateTypeInfo2 * This,
             /* [in] */ LPOLESTR szName);
         
         END_INTERFACE
@@ -1787,7 +1795,7 @@ EXTERN_C const IID IID_ICreateTypeInfo2;
 
     interface ICreateTypeInfo2
     {
-        CONST_VTBL struct ICreateTypeInfo2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICreateTypeInfo2Vtbl *lpVtbl;
     };
 
     
@@ -1928,7 +1936,7 @@ EXTERN_C const IID IID_ICreateTypeInfo2;
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_DeleteFuncDesc_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ UINT index);
 
 
@@ -1940,7 +1948,7 @@ void __RPC_STUB ICreateTypeInfo2_DeleteFuncDesc_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_DeleteFuncDescByMemId_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ MEMBERID memid,
     /* [in] */ INVOKEKIND invKind);
 
@@ -1953,7 +1961,7 @@ void __RPC_STUB ICreateTypeInfo2_DeleteFuncDescByMemId_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_DeleteVarDesc_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ UINT index);
 
 
@@ -1965,7 +1973,7 @@ void __RPC_STUB ICreateTypeInfo2_DeleteVarDesc_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_DeleteVarDescByMemId_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ MEMBERID memid);
 
 
@@ -1977,7 +1985,7 @@ void __RPC_STUB ICreateTypeInfo2_DeleteVarDescByMemId_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_DeleteImplType_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ UINT index);
 
 
@@ -1989,9 +1997,9 @@ void __RPC_STUB ICreateTypeInfo2_DeleteImplType_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_SetCustData_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ REFGUID guid,
-    /* [in] */ VARIANT __RPC_FAR *pVarVal);
+    /* [in] */ VARIANT *pVarVal);
 
 
 void __RPC_STUB ICreateTypeInfo2_SetCustData_Stub(
@@ -2002,10 +2010,10 @@ void __RPC_STUB ICreateTypeInfo2_SetCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_SetFuncCustData_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ UINT index,
     /* [in] */ REFGUID guid,
-    /* [in] */ VARIANT __RPC_FAR *pVarVal);
+    /* [in] */ VARIANT *pVarVal);
 
 
 void __RPC_STUB ICreateTypeInfo2_SetFuncCustData_Stub(
@@ -2016,11 +2024,11 @@ void __RPC_STUB ICreateTypeInfo2_SetFuncCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_SetParamCustData_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ UINT indexFunc,
     /* [in] */ UINT indexParam,
     /* [in] */ REFGUID guid,
-    /* [in] */ VARIANT __RPC_FAR *pVarVal);
+    /* [in] */ VARIANT *pVarVal);
 
 
 void __RPC_STUB ICreateTypeInfo2_SetParamCustData_Stub(
@@ -2031,10 +2039,10 @@ void __RPC_STUB ICreateTypeInfo2_SetParamCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_SetVarCustData_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ UINT index,
     /* [in] */ REFGUID guid,
-    /* [in] */ VARIANT __RPC_FAR *pVarVal);
+    /* [in] */ VARIANT *pVarVal);
 
 
 void __RPC_STUB ICreateTypeInfo2_SetVarCustData_Stub(
@@ -2045,10 +2053,10 @@ void __RPC_STUB ICreateTypeInfo2_SetVarCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_SetImplTypeCustData_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ UINT index,
     /* [in] */ REFGUID guid,
-    /* [in] */ VARIANT __RPC_FAR *pVarVal);
+    /* [in] */ VARIANT *pVarVal);
 
 
 void __RPC_STUB ICreateTypeInfo2_SetImplTypeCustData_Stub(
@@ -2059,7 +2067,7 @@ void __RPC_STUB ICreateTypeInfo2_SetImplTypeCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_SetHelpStringContext_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ ULONG dwHelpStringContext);
 
 
@@ -2071,7 +2079,7 @@ void __RPC_STUB ICreateTypeInfo2_SetHelpStringContext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_SetFuncHelpStringContext_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ UINT index,
     /* [in] */ ULONG dwHelpStringContext);
 
@@ -2084,7 +2092,7 @@ void __RPC_STUB ICreateTypeInfo2_SetFuncHelpStringContext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_SetVarHelpStringContext_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ UINT index,
     /* [in] */ ULONG dwHelpStringContext);
 
@@ -2097,7 +2105,7 @@ void __RPC_STUB ICreateTypeInfo2_SetVarHelpStringContext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_Invalidate_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This);
+    ICreateTypeInfo2 * This);
 
 
 void __RPC_STUB ICreateTypeInfo2_Invalidate_Stub(
@@ -2108,7 +2116,7 @@ void __RPC_STUB ICreateTypeInfo2_Invalidate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeInfo2_SetName_Proxy( 
-    ICreateTypeInfo2 __RPC_FAR * This,
+    ICreateTypeInfo2 * This,
     /* [in] */ LPOLESTR szName);
 
 
@@ -2129,7 +2137,7 @@ void __RPC_STUB ICreateTypeInfo2_SetName_Stub(
 /* interface ICreateTypeLib */
 /* [local][unique][uuid][object] */ 
 
-typedef /* [unique] */ ICreateTypeLib __RPC_FAR *LPCREATETYPELIB;
+typedef /* [unique] */ ICreateTypeLib *LPCREATETYPELIB;
 
 
 EXTERN_C const IID IID_ICreateTypeLib;
@@ -2143,7 +2151,7 @@ EXTERN_C const IID IID_ICreateTypeLib;
         virtual HRESULT STDMETHODCALLTYPE CreateTypeInfo( 
             /* [in] */ LPOLESTR szName,
             /* [in] */ TYPEKIND tkind,
-            /* [out] */ ICreateTypeInfo __RPC_FAR *__RPC_FAR *ppCTInfo) = 0;
+            /* [out] */ ICreateTypeInfo **ppCTInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
             /* [in] */ LPOLESTR szName) = 0;
@@ -2180,65 +2188,65 @@ EXTERN_C const IID IID_ICreateTypeLib;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICreateTypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICreateTypeLib * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICreateTypeLib __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICreateTypeLib * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICreateTypeLib __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICreateTypeLib * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateTypeInfo )( 
-            ICreateTypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CreateTypeInfo )( 
+            ICreateTypeLib * This,
             /* [in] */ LPOLESTR szName,
             /* [in] */ TYPEKIND tkind,
-            /* [out] */ ICreateTypeInfo __RPC_FAR *__RPC_FAR *ppCTInfo);
+            /* [out] */ ICreateTypeInfo **ppCTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
-            ICreateTypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetName )( 
+            ICreateTypeLib * This,
             /* [in] */ LPOLESTR szName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVersion )( 
-            ICreateTypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetVersion )( 
+            ICreateTypeLib * This,
             /* [in] */ WORD wMajorVerNum,
             /* [in] */ WORD wMinorVerNum);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetGuid )( 
-            ICreateTypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetGuid )( 
+            ICreateTypeLib * This,
             /* [in] */ REFGUID guid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDocString )( 
-            ICreateTypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetDocString )( 
+            ICreateTypeLib * This,
             /* [in] */ LPOLESTR szDoc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHelpFileName )( 
-            ICreateTypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetHelpFileName )( 
+            ICreateTypeLib * This,
             /* [in] */ LPOLESTR szHelpFileName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHelpContext )( 
-            ICreateTypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetHelpContext )( 
+            ICreateTypeLib * This,
             /* [in] */ DWORD dwHelpContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLcid )( 
-            ICreateTypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetLcid )( 
+            ICreateTypeLib * This,
             /* [in] */ LCID lcid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLibFlags )( 
-            ICreateTypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetLibFlags )( 
+            ICreateTypeLib * This,
             /* [in] */ UINT uLibFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveAllChanges )( 
-            ICreateTypeLib __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *SaveAllChanges )( 
+            ICreateTypeLib * This);
         
         END_INTERFACE
     } ICreateTypeLibVtbl;
 
     interface ICreateTypeLib
     {
-        CONST_VTBL struct ICreateTypeLibVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICreateTypeLibVtbl *lpVtbl;
     };
 
     
@@ -2294,10 +2302,10 @@ EXTERN_C const IID IID_ICreateTypeLib;
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib_CreateTypeInfo_Proxy( 
-    ICreateTypeLib __RPC_FAR * This,
+    ICreateTypeLib * This,
     /* [in] */ LPOLESTR szName,
     /* [in] */ TYPEKIND tkind,
-    /* [out] */ ICreateTypeInfo __RPC_FAR *__RPC_FAR *ppCTInfo);
+    /* [out] */ ICreateTypeInfo **ppCTInfo);
 
 
 void __RPC_STUB ICreateTypeLib_CreateTypeInfo_Stub(
@@ -2308,7 +2316,7 @@ void __RPC_STUB ICreateTypeLib_CreateTypeInfo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib_SetName_Proxy( 
-    ICreateTypeLib __RPC_FAR * This,
+    ICreateTypeLib * This,
     /* [in] */ LPOLESTR szName);
 
 
@@ -2320,7 +2328,7 @@ void __RPC_STUB ICreateTypeLib_SetName_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib_SetVersion_Proxy( 
-    ICreateTypeLib __RPC_FAR * This,
+    ICreateTypeLib * This,
     /* [in] */ WORD wMajorVerNum,
     /* [in] */ WORD wMinorVerNum);
 
@@ -2333,7 +2341,7 @@ void __RPC_STUB ICreateTypeLib_SetVersion_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib_SetGuid_Proxy( 
-    ICreateTypeLib __RPC_FAR * This,
+    ICreateTypeLib * This,
     /* [in] */ REFGUID guid);
 
 
@@ -2345,7 +2353,7 @@ void __RPC_STUB ICreateTypeLib_SetGuid_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib_SetDocString_Proxy( 
-    ICreateTypeLib __RPC_FAR * This,
+    ICreateTypeLib * This,
     /* [in] */ LPOLESTR szDoc);
 
 
@@ -2357,7 +2365,7 @@ void __RPC_STUB ICreateTypeLib_SetDocString_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib_SetHelpFileName_Proxy( 
-    ICreateTypeLib __RPC_FAR * This,
+    ICreateTypeLib * This,
     /* [in] */ LPOLESTR szHelpFileName);
 
 
@@ -2369,7 +2377,7 @@ void __RPC_STUB ICreateTypeLib_SetHelpFileName_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib_SetHelpContext_Proxy( 
-    ICreateTypeLib __RPC_FAR * This,
+    ICreateTypeLib * This,
     /* [in] */ DWORD dwHelpContext);
 
 
@@ -2381,7 +2389,7 @@ void __RPC_STUB ICreateTypeLib_SetHelpContext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib_SetLcid_Proxy( 
-    ICreateTypeLib __RPC_FAR * This,
+    ICreateTypeLib * This,
     /* [in] */ LCID lcid);
 
 
@@ -2393,7 +2401,7 @@ void __RPC_STUB ICreateTypeLib_SetLcid_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib_SetLibFlags_Proxy( 
-    ICreateTypeLib __RPC_FAR * This,
+    ICreateTypeLib * This,
     /* [in] */ UINT uLibFlags);
 
 
@@ -2405,7 +2413,7 @@ void __RPC_STUB ICreateTypeLib_SetLibFlags_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib_SaveAllChanges_Proxy( 
-    ICreateTypeLib __RPC_FAR * This);
+    ICreateTypeLib * This);
 
 
 void __RPC_STUB ICreateTypeLib_SaveAllChanges_Stub(
@@ -2425,7 +2433,7 @@ void __RPC_STUB ICreateTypeLib_SaveAllChanges_Stub(
 /* interface ICreateTypeLib2 */
 /* [local][unique][uuid][object] */ 
 
-typedef /* [unique] */ ICreateTypeLib2 __RPC_FAR *LPCREATETYPELIB2;
+typedef /* [unique] */ ICreateTypeLib2 *LPCREATETYPELIB2;
 
 
 EXTERN_C const IID IID_ICreateTypeLib2;
@@ -2441,7 +2449,7 @@ EXTERN_C const IID IID_ICreateTypeLib2;
         
         virtual HRESULT STDMETHODCALLTYPE SetCustData( 
             /* [in] */ REFGUID guid,
-            /* [in] */ VARIANT __RPC_FAR *pVarVal) = 0;
+            /* [in] */ VARIANT *pVarVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetHelpStringContext( 
             /* [in] */ ULONG dwHelpStringContext) = 0;
@@ -2457,74 +2465,74 @@ EXTERN_C const IID IID_ICreateTypeLib2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICreateTypeLib2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICreateTypeLib2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICreateTypeLib2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICreateTypeLib2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICreateTypeLib2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateTypeInfo )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CreateTypeInfo )( 
+            ICreateTypeLib2 * This,
             /* [in] */ LPOLESTR szName,
             /* [in] */ TYPEKIND tkind,
-            /* [out] */ ICreateTypeInfo __RPC_FAR *__RPC_FAR *ppCTInfo);
+            /* [out] */ ICreateTypeInfo **ppCTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetName )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetName )( 
+            ICreateTypeLib2 * This,
             /* [in] */ LPOLESTR szName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetVersion )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetVersion )( 
+            ICreateTypeLib2 * This,
             /* [in] */ WORD wMajorVerNum,
             /* [in] */ WORD wMinorVerNum);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetGuid )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetGuid )( 
+            ICreateTypeLib2 * This,
             /* [in] */ REFGUID guid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDocString )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetDocString )( 
+            ICreateTypeLib2 * This,
             /* [in] */ LPOLESTR szDoc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHelpFileName )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetHelpFileName )( 
+            ICreateTypeLib2 * This,
             /* [in] */ LPOLESTR szHelpFileName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHelpContext )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetHelpContext )( 
+            ICreateTypeLib2 * This,
             /* [in] */ DWORD dwHelpContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLcid )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetLcid )( 
+            ICreateTypeLib2 * This,
             /* [in] */ LCID lcid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetLibFlags )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetLibFlags )( 
+            ICreateTypeLib2 * This,
             /* [in] */ UINT uLibFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveAllChanges )( 
-            ICreateTypeLib2 __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *SaveAllChanges )( 
+            ICreateTypeLib2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteTypeInfo )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeleteTypeInfo )( 
+            ICreateTypeLib2 * This,
             /* [in] */ LPOLESTR szName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCustData )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetCustData )( 
+            ICreateTypeLib2 * This,
             /* [in] */ REFGUID guid,
-            /* [in] */ VARIANT __RPC_FAR *pVarVal);
+            /* [in] */ VARIANT *pVarVal);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHelpStringContext )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetHelpStringContext )( 
+            ICreateTypeLib2 * This,
             /* [in] */ ULONG dwHelpStringContext);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHelpStringDll )( 
-            ICreateTypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetHelpStringDll )( 
+            ICreateTypeLib2 * This,
             /* [in] */ LPOLESTR szFileName);
         
         END_INTERFACE
@@ -2532,7 +2540,7 @@ EXTERN_C const IID IID_ICreateTypeLib2;
 
     interface ICreateTypeLib2
     {
-        CONST_VTBL struct ICreateTypeLib2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICreateTypeLib2Vtbl *lpVtbl;
     };
 
     
@@ -2601,7 +2609,7 @@ EXTERN_C const IID IID_ICreateTypeLib2;
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib2_DeleteTypeInfo_Proxy( 
-    ICreateTypeLib2 __RPC_FAR * This,
+    ICreateTypeLib2 * This,
     /* [in] */ LPOLESTR szName);
 
 
@@ -2613,9 +2621,9 @@ void __RPC_STUB ICreateTypeLib2_DeleteTypeInfo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib2_SetCustData_Proxy( 
-    ICreateTypeLib2 __RPC_FAR * This,
+    ICreateTypeLib2 * This,
     /* [in] */ REFGUID guid,
-    /* [in] */ VARIANT __RPC_FAR *pVarVal);
+    /* [in] */ VARIANT *pVarVal);
 
 
 void __RPC_STUB ICreateTypeLib2_SetCustData_Stub(
@@ -2626,7 +2634,7 @@ void __RPC_STUB ICreateTypeLib2_SetCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib2_SetHelpStringContext_Proxy( 
-    ICreateTypeLib2 __RPC_FAR * This,
+    ICreateTypeLib2 * This,
     /* [in] */ ULONG dwHelpStringContext);
 
 
@@ -2638,7 +2646,7 @@ void __RPC_STUB ICreateTypeLib2_SetHelpStringContext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateTypeLib2_SetHelpStringDll_Proxy( 
-    ICreateTypeLib2 __RPC_FAR * This,
+    ICreateTypeLib2 * This,
     /* [in] */ LPOLESTR szFileName);
 
 
@@ -2659,7 +2667,7 @@ void __RPC_STUB ICreateTypeLib2_SetHelpStringDll_Stub(
 /* interface IDispatch */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IDispatch __RPC_FAR *LPDISPATCH;
+typedef /* [unique] */ IDispatch *LPDISPATCH;
 
 /* DISPID reserved to indicate an "unknown" name */
 /* only reserved for data members (properties); reused as a method dispid below */
@@ -2702,29 +2710,29 @@ EXTERN_C const IID IID_IDispatch;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount( 
-            /* [out] */ UINT __RPC_FAR *pctinfo) = 0;
+            /* [out] */ UINT *pctinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeInfo( 
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo) = 0;
+            /* [out] */ ITypeInfo **ppTInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIDsOfNames( 
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId) = 0;
+            /* [size_is][out] */ DISPID *rgDispId) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Invoke( 
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr) = 0;
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr) = 0;
         
     };
     
@@ -2734,52 +2742,52 @@ EXTERN_C const IID IID_IDispatch;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDispatch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDispatch * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDispatch __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDispatch * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDispatch __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDispatch * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IDispatch __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IDispatch * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IDispatch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IDispatch * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IDispatch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IDispatch * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IDispatch __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IDispatch * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } IDispatchVtbl;
 
     interface IDispatch
     {
-        CONST_VTBL struct IDispatchVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDispatchVtbl *lpVtbl;
     };
 
     
@@ -2817,8 +2825,8 @@ EXTERN_C const IID IID_IDispatch;
 
 
 HRESULT STDMETHODCALLTYPE IDispatch_GetTypeInfoCount_Proxy( 
-    IDispatch __RPC_FAR * This,
-    /* [out] */ UINT __RPC_FAR *pctinfo);
+    IDispatch * This,
+    /* [out] */ UINT *pctinfo);
 
 
 void __RPC_STUB IDispatch_GetTypeInfoCount_Stub(
@@ -2829,10 +2837,10 @@ void __RPC_STUB IDispatch_GetTypeInfoCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDispatch_GetTypeInfo_Proxy( 
-    IDispatch __RPC_FAR * This,
+    IDispatch * This,
     /* [in] */ UINT iTInfo,
     /* [in] */ LCID lcid,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+    /* [out] */ ITypeInfo **ppTInfo);
 
 
 void __RPC_STUB IDispatch_GetTypeInfo_Stub(
@@ -2843,12 +2851,12 @@ void __RPC_STUB IDispatch_GetTypeInfo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDispatch_GetIDsOfNames_Proxy( 
-    IDispatch __RPC_FAR * This,
+    IDispatch * This,
     /* [in] */ REFIID riid,
-    /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+    /* [size_is][in] */ LPOLESTR *rgszNames,
     /* [in] */ UINT cNames,
     /* [in] */ LCID lcid,
-    /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+    /* [size_is][out] */ DISPID *rgDispId);
 
 
 void __RPC_STUB IDispatch_GetIDsOfNames_Stub(
@@ -2859,18 +2867,18 @@ void __RPC_STUB IDispatch_GetIDsOfNames_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IDispatch_RemoteInvoke_Proxy( 
-    IDispatch __RPC_FAR * This,
+    IDispatch * This,
     /* [in] */ DISPID dispIdMember,
     /* [in] */ REFIID riid,
     /* [in] */ LCID lcid,
     /* [in] */ DWORD dwFlags,
-    /* [in] */ DISPPARAMS __RPC_FAR *pDispParams,
-    /* [out] */ VARIANT __RPC_FAR *pVarResult,
-    /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-    /* [out] */ UINT __RPC_FAR *pArgErr,
+    /* [in] */ DISPPARAMS *pDispParams,
+    /* [out] */ VARIANT *pVarResult,
+    /* [out] */ EXCEPINFO *pExcepInfo,
+    /* [out] */ UINT *pArgErr,
     /* [in] */ UINT cVarRef,
-    /* [size_is][in] */ UINT __RPC_FAR *rgVarRefIdx,
-    /* [size_is][out][in] */ VARIANTARG __RPC_FAR *rgVarRef);
+    /* [size_is][in] */ UINT *rgVarRefIdx,
+    /* [size_is][out][in] */ VARIANTARG *rgVarRef);
 
 
 void __RPC_STUB IDispatch_RemoteInvoke_Stub(
@@ -2890,7 +2898,7 @@ void __RPC_STUB IDispatch_RemoteInvoke_Stub(
 /* interface IEnumVARIANT */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEnumVARIANT __RPC_FAR *LPENUMVARIANT;
+typedef /* [unique] */ IEnumVARIANT *LPENUMVARIANT;
 
 
 EXTERN_C const IID IID_IEnumVARIANT;
@@ -2903,8 +2911,8 @@ EXTERN_C const IID IID_IEnumVARIANT;
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VARIANT __RPC_FAR *rgVar,
-            /* [out] */ ULONG __RPC_FAR *pCeltFetched) = 0;
+            /* [length_is][size_is][out] */ VARIANT *rgVar,
+            /* [out] */ ULONG *pCeltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -2912,7 +2920,7 @@ EXTERN_C const IID IID_IEnumVARIANT;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumVARIANT __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+            /* [out] */ IEnumVARIANT **ppEnum) = 0;
         
     };
     
@@ -2922,40 +2930,40 @@ EXTERN_C const IID IID_IEnumVARIANT;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumVARIANT __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumVARIANT * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumVARIANT __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumVARIANT * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumVARIANT __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumVARIANT * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumVARIANT __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumVARIANT * This,
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VARIANT __RPC_FAR *rgVar,
-            /* [out] */ ULONG __RPC_FAR *pCeltFetched);
+            /* [length_is][size_is][out] */ VARIANT *rgVar,
+            /* [out] */ ULONG *pCeltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumVARIANT __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumVARIANT * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumVARIANT __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumVARIANT * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumVARIANT __RPC_FAR * This,
-            /* [out] */ IEnumVARIANT __RPC_FAR *__RPC_FAR *ppEnum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumVARIANT * This,
+            /* [out] */ IEnumVARIANT **ppEnum);
         
         END_INTERFACE
     } IEnumVARIANTVtbl;
 
     interface IEnumVARIANT
     {
-        CONST_VTBL struct IEnumVARIANTVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumVARIANTVtbl *lpVtbl;
     };
 
     
@@ -2993,10 +3001,10 @@ EXTERN_C const IID IID_IEnumVARIANT;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumVARIANT_RemoteNext_Proxy( 
-    IEnumVARIANT __RPC_FAR * This,
+    IEnumVARIANT * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ VARIANT __RPC_FAR *rgVar,
-    /* [out] */ ULONG __RPC_FAR *pCeltFetched);
+    /* [length_is][size_is][out] */ VARIANT *rgVar,
+    /* [out] */ ULONG *pCeltFetched);
 
 
 void __RPC_STUB IEnumVARIANT_RemoteNext_Stub(
@@ -3007,7 +3015,7 @@ void __RPC_STUB IEnumVARIANT_RemoteNext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumVARIANT_Skip_Proxy( 
-    IEnumVARIANT __RPC_FAR * This,
+    IEnumVARIANT * This,
     /* [in] */ ULONG celt);
 
 
@@ -3019,7 +3027,7 @@ void __RPC_STUB IEnumVARIANT_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumVARIANT_Reset_Proxy( 
-    IEnumVARIANT __RPC_FAR * This);
+    IEnumVARIANT * This);
 
 
 void __RPC_STUB IEnumVARIANT_Reset_Stub(
@@ -3030,8 +3038,8 @@ void __RPC_STUB IEnumVARIANT_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumVARIANT_Clone_Proxy( 
-    IEnumVARIANT __RPC_FAR * This,
-    /* [out] */ IEnumVARIANT __RPC_FAR *__RPC_FAR *ppEnum);
+    IEnumVARIANT * This,
+    /* [out] */ IEnumVARIANT **ppEnum);
 
 
 void __RPC_STUB IEnumVARIANT_Clone_Stub(
@@ -3051,7 +3059,7 @@ void __RPC_STUB IEnumVARIANT_Clone_Stub(
 /* interface ITypeComp */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ ITypeComp __RPC_FAR *LPTYPECOMP;
+typedef /* [unique] */ ITypeComp *LPTYPECOMP;
 
 typedef /* [v1_enum] */ 
 enum tagDESCKIND
@@ -3061,16 +3069,16 @@ enum tagDESCKIND
 	DESCKIND_TYPECOMP	= DESCKIND_VARDESC + 1,
 	DESCKIND_IMPLICITAPPOBJ	= DESCKIND_TYPECOMP + 1,
 	DESCKIND_MAX	= DESCKIND_IMPLICITAPPOBJ + 1
-    }	DESCKIND;
+    } 	DESCKIND;
 
 typedef union tagBINDPTR
     {
-    FUNCDESC __RPC_FAR *lpfuncdesc;
-    VARDESC __RPC_FAR *lpvardesc;
-    ITypeComp __RPC_FAR *lptcomp;
-    }	BINDPTR;
+    FUNCDESC *lpfuncdesc;
+    VARDESC *lpvardesc;
+    ITypeComp *lptcomp;
+    } 	BINDPTR;
 
-typedef union tagBINDPTR __RPC_FAR *LPBINDPTR;
+typedef union tagBINDPTR *LPBINDPTR;
 
 
 EXTERN_C const IID IID_ITypeComp;
@@ -3085,15 +3093,15 @@ EXTERN_C const IID IID_ITypeComp;
             /* [in] */ LPOLESTR szName,
             /* [in] */ ULONG lHashVal,
             /* [in] */ WORD wFlags,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-            /* [out] */ DESCKIND __RPC_FAR *pDescKind,
-            /* [out] */ BINDPTR __RPC_FAR *pBindPtr) = 0;
+            /* [out] */ ITypeInfo **ppTInfo,
+            /* [out] */ DESCKIND *pDescKind,
+            /* [out] */ BINDPTR *pBindPtr) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE BindType( 
             /* [in] */ LPOLESTR szName,
             /* [in] */ ULONG lHashVal,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-            /* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTComp) = 0;
+            /* [out] */ ITypeInfo **ppTInfo,
+            /* [out] */ ITypeComp **ppTComp) = 0;
         
     };
     
@@ -3103,39 +3111,39 @@ EXTERN_C const IID IID_ITypeComp;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITypeComp __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITypeComp * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITypeComp __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITypeComp * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITypeComp __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITypeComp * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Bind )( 
-            ITypeComp __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Bind )( 
+            ITypeComp * This,
             /* [in] */ LPOLESTR szName,
             /* [in] */ ULONG lHashVal,
             /* [in] */ WORD wFlags,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-            /* [out] */ DESCKIND __RPC_FAR *pDescKind,
-            /* [out] */ BINDPTR __RPC_FAR *pBindPtr);
+            /* [out] */ ITypeInfo **ppTInfo,
+            /* [out] */ DESCKIND *pDescKind,
+            /* [out] */ BINDPTR *pBindPtr);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BindType )( 
-            ITypeComp __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *BindType )( 
+            ITypeComp * This,
             /* [in] */ LPOLESTR szName,
             /* [in] */ ULONG lHashVal,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-            /* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTComp);
+            /* [out] */ ITypeInfo **ppTInfo,
+            /* [out] */ ITypeComp **ppTComp);
         
         END_INTERFACE
     } ITypeCompVtbl;
 
     interface ITypeComp
     {
-        CONST_VTBL struct ITypeCompVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITypeCompVtbl *lpVtbl;
     };
 
     
@@ -3167,16 +3175,16 @@ EXTERN_C const IID IID_ITypeComp;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeComp_RemoteBind_Proxy( 
-    ITypeComp __RPC_FAR * This,
+    ITypeComp * This,
     /* [in] */ LPOLESTR szName,
     /* [in] */ ULONG lHashVal,
     /* [in] */ WORD wFlags,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-    /* [out] */ DESCKIND __RPC_FAR *pDescKind,
-    /* [out] */ LPFUNCDESC __RPC_FAR *ppFuncDesc,
-    /* [out] */ LPVARDESC __RPC_FAR *ppVarDesc,
-    /* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTypeComp,
-    /* [out] */ CLEANLOCALSTORAGE __RPC_FAR *pDummy);
+    /* [out] */ ITypeInfo **ppTInfo,
+    /* [out] */ DESCKIND *pDescKind,
+    /* [out] */ LPFUNCDESC *ppFuncDesc,
+    /* [out] */ LPVARDESC *ppVarDesc,
+    /* [out] */ ITypeComp **ppTypeComp,
+    /* [out] */ CLEANLOCALSTORAGE *pDummy);
 
 
 void __RPC_STUB ITypeComp_RemoteBind_Stub(
@@ -3187,10 +3195,10 @@ void __RPC_STUB ITypeComp_RemoteBind_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeComp_RemoteBindType_Proxy( 
-    ITypeComp __RPC_FAR * This,
+    ITypeComp * This,
     /* [in] */ LPOLESTR szName,
     /* [in] */ ULONG lHashVal,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+    /* [out] */ ITypeInfo **ppTInfo);
 
 
 void __RPC_STUB ITypeComp_RemoteBindType_Stub(
@@ -3210,7 +3218,7 @@ void __RPC_STUB ITypeComp_RemoteBindType_Stub(
 /* interface ITypeInfo */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ ITypeInfo __RPC_FAR *LPTYPEINFO;
+typedef /* [unique] */ ITypeInfo *LPTYPEINFO;
 
 
 EXTERN_C const IID IID_ITypeInfo;
@@ -3222,91 +3230,91 @@ EXTERN_C const IID IID_ITypeInfo;
     {
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetTypeAttr( 
-            /* [out] */ TYPEATTR __RPC_FAR *__RPC_FAR *ppTypeAttr) = 0;
+            /* [out] */ TYPEATTR **ppTypeAttr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeComp( 
-            /* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTComp) = 0;
+            /* [out] */ ITypeComp **ppTComp) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetFuncDesc( 
             /* [in] */ UINT index,
-            /* [out] */ FUNCDESC __RPC_FAR *__RPC_FAR *ppFuncDesc) = 0;
+            /* [out] */ FUNCDESC **ppFuncDesc) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetVarDesc( 
             /* [in] */ UINT index,
-            /* [out] */ VARDESC __RPC_FAR *__RPC_FAR *ppVarDesc) = 0;
+            /* [out] */ VARDESC **ppVarDesc) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetNames( 
             /* [in] */ MEMBERID memid,
-            /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames,
+            /* [length_is][size_is][out] */ BSTR *rgBstrNames,
             /* [in] */ UINT cMaxNames,
-            /* [out] */ UINT __RPC_FAR *pcNames) = 0;
+            /* [out] */ UINT *pcNames) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRefTypeOfImplType( 
             /* [in] */ UINT index,
-            /* [out] */ HREFTYPE __RPC_FAR *pRefType) = 0;
+            /* [out] */ HREFTYPE *pRefType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetImplTypeFlags( 
             /* [in] */ UINT index,
-            /* [out] */ INT __RPC_FAR *pImplTypeFlags) = 0;
+            /* [out] */ INT *pImplTypeFlags) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetIDsOfNames( 
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
-            /* [size_is][out] */ MEMBERID __RPC_FAR *pMemId) = 0;
+            /* [size_is][out] */ MEMBERID *pMemId) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Invoke( 
             /* [in] */ PVOID pvInstance,
             /* [in] */ MEMBERID memid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr) = 0;
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetDocumentation( 
             /* [in] */ MEMBERID memid,
-            /* [out] */ BSTR __RPC_FAR *pBstrName,
-            /* [out] */ BSTR __RPC_FAR *pBstrDocString,
-            /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
-            /* [out] */ BSTR __RPC_FAR *pBstrHelpFile) = 0;
+            /* [out] */ BSTR *pBstrName,
+            /* [out] */ BSTR *pBstrDocString,
+            /* [out] */ DWORD *pdwHelpContext,
+            /* [out] */ BSTR *pBstrHelpFile) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetDllEntry( 
             /* [in] */ MEMBERID memid,
             /* [in] */ INVOKEKIND invKind,
-            /* [out] */ BSTR __RPC_FAR *pBstrDllName,
-            /* [out] */ BSTR __RPC_FAR *pBstrName,
-            /* [out] */ WORD __RPC_FAR *pwOrdinal) = 0;
+            /* [out] */ BSTR *pBstrDllName,
+            /* [out] */ BSTR *pBstrName,
+            /* [out] */ WORD *pwOrdinal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRefTypeInfo( 
             /* [in] */ HREFTYPE hRefType,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo) = 0;
+            /* [out] */ ITypeInfo **ppTInfo) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE AddressOfMember( 
             /* [in] */ MEMBERID memid,
             /* [in] */ INVOKEKIND invKind,
-            /* [out] */ PVOID __RPC_FAR *ppv) = 0;
+            /* [out] */ PVOID *ppv) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateInstance( 
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
+            /* [in] */ IUnknown *pUnkOuter,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ PVOID __RPC_FAR *ppvObj) = 0;
+            /* [iid_is][out] */ PVOID *ppvObj) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMops( 
             /* [in] */ MEMBERID memid,
-            /* [out] */ BSTR __RPC_FAR *pBstrMops) = 0;
+            /* [out] */ BSTR *pBstrMops) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetContainingTypeLib( 
-            /* [out] */ ITypeLib __RPC_FAR *__RPC_FAR *ppTLib,
-            /* [out] */ UINT __RPC_FAR *pIndex) = 0;
+            /* [out] */ ITypeLib **ppTLib,
+            /* [out] */ UINT *pIndex) = 0;
         
         virtual /* [local] */ void STDMETHODCALLTYPE ReleaseTypeAttr( 
-            /* [in] */ TYPEATTR __RPC_FAR *pTypeAttr) = 0;
+            /* [in] */ TYPEATTR *pTypeAttr) = 0;
         
         virtual /* [local] */ void STDMETHODCALLTYPE ReleaseFuncDesc( 
-            /* [in] */ FUNCDESC __RPC_FAR *pFuncDesc) = 0;
+            /* [in] */ FUNCDESC *pFuncDesc) = 0;
         
         virtual /* [local] */ void STDMETHODCALLTYPE ReleaseVarDesc( 
-            /* [in] */ VARDESC __RPC_FAR *pVarDesc) = 0;
+            /* [in] */ VARDESC *pVarDesc) = 0;
         
     };
     
@@ -3316,129 +3324,129 @@ EXTERN_C const IID IID_ITypeInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITypeInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITypeInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITypeInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITypeInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITypeInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeAttr )( 
-            ITypeInfo __RPC_FAR * This,
-            /* [out] */ TYPEATTR __RPC_FAR *__RPC_FAR *ppTypeAttr);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetTypeAttr )( 
+            ITypeInfo * This,
+            /* [out] */ TYPEATTR **ppTypeAttr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeComp )( 
-            ITypeInfo __RPC_FAR * This,
-            /* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTComp);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeComp )( 
+            ITypeInfo * This,
+            /* [out] */ ITypeComp **ppTComp);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFuncDesc )( 
-            ITypeInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetFuncDesc )( 
+            ITypeInfo * This,
             /* [in] */ UINT index,
-            /* [out] */ FUNCDESC __RPC_FAR *__RPC_FAR *ppFuncDesc);
+            /* [out] */ FUNCDESC **ppFuncDesc);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVarDesc )( 
-            ITypeInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetVarDesc )( 
+            ITypeInfo * This,
             /* [in] */ UINT index,
-            /* [out] */ VARDESC __RPC_FAR *__RPC_FAR *ppVarDesc);
+            /* [out] */ VARDESC **ppVarDesc);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNames )( 
-            ITypeInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetNames )( 
+            ITypeInfo * This,
             /* [in] */ MEMBERID memid,
-            /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames,
+            /* [length_is][size_is][out] */ BSTR *rgBstrNames,
             /* [in] */ UINT cMaxNames,
-            /* [out] */ UINT __RPC_FAR *pcNames);
+            /* [out] */ UINT *pcNames);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRefTypeOfImplType )( 
-            ITypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetRefTypeOfImplType )( 
+            ITypeInfo * This,
             /* [in] */ UINT index,
-            /* [out] */ HREFTYPE __RPC_FAR *pRefType);
+            /* [out] */ HREFTYPE *pRefType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetImplTypeFlags )( 
-            ITypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetImplTypeFlags )( 
+            ITypeInfo * This,
             /* [in] */ UINT index,
-            /* [out] */ INT __RPC_FAR *pImplTypeFlags);
+            /* [out] */ INT *pImplTypeFlags);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ITypeInfo __RPC_FAR * This,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITypeInfo * This,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
-            /* [size_is][out] */ MEMBERID __RPC_FAR *pMemId);
+            /* [size_is][out] */ MEMBERID *pMemId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ITypeInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITypeInfo * This,
             /* [in] */ PVOID pvInstance,
             /* [in] */ MEMBERID memid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDocumentation )( 
-            ITypeInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDocumentation )( 
+            ITypeInfo * This,
             /* [in] */ MEMBERID memid,
-            /* [out] */ BSTR __RPC_FAR *pBstrName,
-            /* [out] */ BSTR __RPC_FAR *pBstrDocString,
-            /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
-            /* [out] */ BSTR __RPC_FAR *pBstrHelpFile);
+            /* [out] */ BSTR *pBstrName,
+            /* [out] */ BSTR *pBstrDocString,
+            /* [out] */ DWORD *pdwHelpContext,
+            /* [out] */ BSTR *pBstrHelpFile);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDllEntry )( 
-            ITypeInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDllEntry )( 
+            ITypeInfo * This,
             /* [in] */ MEMBERID memid,
             /* [in] */ INVOKEKIND invKind,
-            /* [out] */ BSTR __RPC_FAR *pBstrDllName,
-            /* [out] */ BSTR __RPC_FAR *pBstrName,
-            /* [out] */ WORD __RPC_FAR *pwOrdinal);
+            /* [out] */ BSTR *pBstrDllName,
+            /* [out] */ BSTR *pBstrName,
+            /* [out] */ WORD *pwOrdinal);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRefTypeInfo )( 
-            ITypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetRefTypeInfo )( 
+            ITypeInfo * This,
             /* [in] */ HREFTYPE hRefType,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddressOfMember )( 
-            ITypeInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *AddressOfMember )( 
+            ITypeInfo * This,
             /* [in] */ MEMBERID memid,
             /* [in] */ INVOKEKIND invKind,
-            /* [out] */ PVOID __RPC_FAR *ppv);
+            /* [out] */ PVOID *ppv);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateInstance )( 
-            ITypeInfo __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateInstance )( 
+            ITypeInfo * This,
+            /* [in] */ IUnknown *pUnkOuter,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ PVOID __RPC_FAR *ppvObj);
+            /* [iid_is][out] */ PVOID *ppvObj);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMops )( 
-            ITypeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetMops )( 
+            ITypeInfo * This,
             /* [in] */ MEMBERID memid,
-            /* [out] */ BSTR __RPC_FAR *pBstrMops);
+            /* [out] */ BSTR *pBstrMops);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetContainingTypeLib )( 
-            ITypeInfo __RPC_FAR * This,
-            /* [out] */ ITypeLib __RPC_FAR *__RPC_FAR *ppTLib,
-            /* [out] */ UINT __RPC_FAR *pIndex);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetContainingTypeLib )( 
+            ITypeInfo * This,
+            /* [out] */ ITypeLib **ppTLib,
+            /* [out] */ UINT *pIndex);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *ReleaseTypeAttr )( 
-            ITypeInfo __RPC_FAR * This,
-            /* [in] */ TYPEATTR __RPC_FAR *pTypeAttr);
+        /* [local] */ void ( STDMETHODCALLTYPE *ReleaseTypeAttr )( 
+            ITypeInfo * This,
+            /* [in] */ TYPEATTR *pTypeAttr);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *ReleaseFuncDesc )( 
-            ITypeInfo __RPC_FAR * This,
-            /* [in] */ FUNCDESC __RPC_FAR *pFuncDesc);
+        /* [local] */ void ( STDMETHODCALLTYPE *ReleaseFuncDesc )( 
+            ITypeInfo * This,
+            /* [in] */ FUNCDESC *pFuncDesc);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *ReleaseVarDesc )( 
-            ITypeInfo __RPC_FAR * This,
-            /* [in] */ VARDESC __RPC_FAR *pVarDesc);
+        /* [local] */ void ( STDMETHODCALLTYPE *ReleaseVarDesc )( 
+            ITypeInfo * This,
+            /* [in] */ VARDESC *pVarDesc);
         
         END_INTERFACE
     } ITypeInfoVtbl;
 
     interface ITypeInfo
     {
-        CONST_VTBL struct ITypeInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITypeInfoVtbl *lpVtbl;
     };
 
     
@@ -3521,9 +3529,9 @@ EXTERN_C const IID IID_ITypeInfo;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_RemoteGetTypeAttr_Proxy( 
-    ITypeInfo __RPC_FAR * This,
-    /* [out] */ LPTYPEATTR __RPC_FAR *ppTypeAttr,
-    /* [out] */ CLEANLOCALSTORAGE __RPC_FAR *pDummy);
+    ITypeInfo * This,
+    /* [out] */ LPTYPEATTR *ppTypeAttr,
+    /* [out] */ CLEANLOCALSTORAGE *pDummy);
 
 
 void __RPC_STUB ITypeInfo_RemoteGetTypeAttr_Stub(
@@ -3534,8 +3542,8 @@ void __RPC_STUB ITypeInfo_RemoteGetTypeAttr_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo_GetTypeComp_Proxy( 
-    ITypeInfo __RPC_FAR * This,
-    /* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTComp);
+    ITypeInfo * This,
+    /* [out] */ ITypeComp **ppTComp);
 
 
 void __RPC_STUB ITypeInfo_GetTypeComp_Stub(
@@ -3546,10 +3554,10 @@ void __RPC_STUB ITypeInfo_GetTypeComp_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_RemoteGetFuncDesc_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ UINT index,
-    /* [out] */ LPFUNCDESC __RPC_FAR *ppFuncDesc,
-    /* [out] */ CLEANLOCALSTORAGE __RPC_FAR *pDummy);
+    /* [out] */ LPFUNCDESC *ppFuncDesc,
+    /* [out] */ CLEANLOCALSTORAGE *pDummy);
 
 
 void __RPC_STUB ITypeInfo_RemoteGetFuncDesc_Stub(
@@ -3560,10 +3568,10 @@ void __RPC_STUB ITypeInfo_RemoteGetFuncDesc_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_RemoteGetVarDesc_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ UINT index,
-    /* [out] */ LPVARDESC __RPC_FAR *ppVarDesc,
-    /* [out] */ CLEANLOCALSTORAGE __RPC_FAR *pDummy);
+    /* [out] */ LPVARDESC *ppVarDesc,
+    /* [out] */ CLEANLOCALSTORAGE *pDummy);
 
 
 void __RPC_STUB ITypeInfo_RemoteGetVarDesc_Stub(
@@ -3574,11 +3582,11 @@ void __RPC_STUB ITypeInfo_RemoteGetVarDesc_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_RemoteGetNames_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ MEMBERID memid,
-    /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames,
+    /* [length_is][size_is][out] */ BSTR *rgBstrNames,
     /* [in] */ UINT cMaxNames,
-    /* [out] */ UINT __RPC_FAR *pcNames);
+    /* [out] */ UINT *pcNames);
 
 
 void __RPC_STUB ITypeInfo_RemoteGetNames_Stub(
@@ -3589,9 +3597,9 @@ void __RPC_STUB ITypeInfo_RemoteGetNames_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo_GetRefTypeOfImplType_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ UINT index,
-    /* [out] */ HREFTYPE __RPC_FAR *pRefType);
+    /* [out] */ HREFTYPE *pRefType);
 
 
 void __RPC_STUB ITypeInfo_GetRefTypeOfImplType_Stub(
@@ -3602,9 +3610,9 @@ void __RPC_STUB ITypeInfo_GetRefTypeOfImplType_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo_GetImplTypeFlags_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ UINT index,
-    /* [out] */ INT __RPC_FAR *pImplTypeFlags);
+    /* [out] */ INT *pImplTypeFlags);
 
 
 void __RPC_STUB ITypeInfo_GetImplTypeFlags_Stub(
@@ -3615,7 +3623,7 @@ void __RPC_STUB ITypeInfo_GetImplTypeFlags_Stub(
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_LocalGetIDsOfNames_Proxy( 
-    ITypeInfo __RPC_FAR * This);
+    ITypeInfo * This);
 
 
 void __RPC_STUB ITypeInfo_LocalGetIDsOfNames_Stub(
@@ -3626,7 +3634,7 @@ void __RPC_STUB ITypeInfo_LocalGetIDsOfNames_Stub(
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_LocalInvoke_Proxy( 
-    ITypeInfo __RPC_FAR * This);
+    ITypeInfo * This);
 
 
 void __RPC_STUB ITypeInfo_LocalInvoke_Stub(
@@ -3637,13 +3645,13 @@ void __RPC_STUB ITypeInfo_LocalInvoke_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_RemoteGetDocumentation_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ MEMBERID memid,
     /* [in] */ DWORD refPtrFlags,
-    /* [out] */ BSTR __RPC_FAR *pBstrName,
-    /* [out] */ BSTR __RPC_FAR *pBstrDocString,
-    /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
-    /* [out] */ BSTR __RPC_FAR *pBstrHelpFile);
+    /* [out] */ BSTR *pBstrName,
+    /* [out] */ BSTR *pBstrDocString,
+    /* [out] */ DWORD *pdwHelpContext,
+    /* [out] */ BSTR *pBstrHelpFile);
 
 
 void __RPC_STUB ITypeInfo_RemoteGetDocumentation_Stub(
@@ -3654,13 +3662,13 @@ void __RPC_STUB ITypeInfo_RemoteGetDocumentation_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_RemoteGetDllEntry_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ MEMBERID memid,
     /* [in] */ INVOKEKIND invKind,
     /* [in] */ DWORD refPtrFlags,
-    /* [out] */ BSTR __RPC_FAR *pBstrDllName,
-    /* [out] */ BSTR __RPC_FAR *pBstrName,
-    /* [out] */ WORD __RPC_FAR *pwOrdinal);
+    /* [out] */ BSTR *pBstrDllName,
+    /* [out] */ BSTR *pBstrName,
+    /* [out] */ WORD *pwOrdinal);
 
 
 void __RPC_STUB ITypeInfo_RemoteGetDllEntry_Stub(
@@ -3671,9 +3679,9 @@ void __RPC_STUB ITypeInfo_RemoteGetDllEntry_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo_GetRefTypeInfo_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ HREFTYPE hRefType,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+    /* [out] */ ITypeInfo **ppTInfo);
 
 
 void __RPC_STUB ITypeInfo_GetRefTypeInfo_Stub(
@@ -3684,7 +3692,7 @@ void __RPC_STUB ITypeInfo_GetRefTypeInfo_Stub(
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_LocalAddressOfMember_Proxy( 
-    ITypeInfo __RPC_FAR * This);
+    ITypeInfo * This);
 
 
 void __RPC_STUB ITypeInfo_LocalAddressOfMember_Stub(
@@ -3695,9 +3703,9 @@ void __RPC_STUB ITypeInfo_LocalAddressOfMember_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_RemoteCreateInstance_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObj);
+    /* [iid_is][out] */ IUnknown **ppvObj);
 
 
 void __RPC_STUB ITypeInfo_RemoteCreateInstance_Stub(
@@ -3708,9 +3716,9 @@ void __RPC_STUB ITypeInfo_RemoteCreateInstance_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo_GetMops_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ MEMBERID memid,
-    /* [out] */ BSTR __RPC_FAR *pBstrMops);
+    /* [out] */ BSTR *pBstrMops);
 
 
 void __RPC_STUB ITypeInfo_GetMops_Stub(
@@ -3721,9 +3729,9 @@ void __RPC_STUB ITypeInfo_GetMops_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_RemoteGetContainingTypeLib_Proxy( 
-    ITypeInfo __RPC_FAR * This,
-    /* [out] */ ITypeLib __RPC_FAR *__RPC_FAR *ppTLib,
-    /* [out] */ UINT __RPC_FAR *pIndex);
+    ITypeInfo * This,
+    /* [out] */ ITypeLib **ppTLib,
+    /* [out] */ UINT *pIndex);
 
 
 void __RPC_STUB ITypeInfo_RemoteGetContainingTypeLib_Stub(
@@ -3734,7 +3742,7 @@ void __RPC_STUB ITypeInfo_RemoteGetContainingTypeLib_Stub(
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_LocalReleaseTypeAttr_Proxy( 
-    ITypeInfo __RPC_FAR * This);
+    ITypeInfo * This);
 
 
 void __RPC_STUB ITypeInfo_LocalReleaseTypeAttr_Stub(
@@ -3745,7 +3753,7 @@ void __RPC_STUB ITypeInfo_LocalReleaseTypeAttr_Stub(
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_LocalReleaseFuncDesc_Proxy( 
-    ITypeInfo __RPC_FAR * This);
+    ITypeInfo * This);
 
 
 void __RPC_STUB ITypeInfo_LocalReleaseFuncDesc_Stub(
@@ -3756,7 +3764,7 @@ void __RPC_STUB ITypeInfo_LocalReleaseFuncDesc_Stub(
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_LocalReleaseVarDesc_Proxy( 
-    ITypeInfo __RPC_FAR * This);
+    ITypeInfo * This);
 
 
 void __RPC_STUB ITypeInfo_LocalReleaseVarDesc_Stub(
@@ -3776,7 +3784,7 @@ void __RPC_STUB ITypeInfo_LocalReleaseVarDesc_Stub(
 /* interface ITypeInfo2 */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ ITypeInfo2 __RPC_FAR *LPTYPEINFO2;
+typedef /* [unique] */ ITypeInfo2 *LPTYPEINFO2;
 
 
 EXTERN_C const IID IID_ITypeInfo2;
@@ -3788,71 +3796,71 @@ EXTERN_C const IID IID_ITypeInfo2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTypeKind( 
-            /* [out] */ TYPEKIND __RPC_FAR *pTypeKind) = 0;
+            /* [out] */ TYPEKIND *pTypeKind) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeFlags( 
-            /* [out] */ ULONG __RPC_FAR *pTypeFlags) = 0;
+            /* [out] */ ULONG *pTypeFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFuncIndexOfMemId( 
             /* [in] */ MEMBERID memid,
             /* [in] */ INVOKEKIND invKind,
-            /* [out] */ UINT __RPC_FAR *pFuncIndex) = 0;
+            /* [out] */ UINT *pFuncIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVarIndexOfMemId( 
             /* [in] */ MEMBERID memid,
-            /* [out] */ UINT __RPC_FAR *pVarIndex) = 0;
+            /* [out] */ UINT *pVarIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCustData( 
             /* [in] */ REFGUID guid,
-            /* [out] */ VARIANT __RPC_FAR *pVarVal) = 0;
+            /* [out] */ VARIANT *pVarVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFuncCustData( 
             /* [in] */ UINT index,
             /* [in] */ REFGUID guid,
-            /* [out] */ VARIANT __RPC_FAR *pVarVal) = 0;
+            /* [out] */ VARIANT *pVarVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParamCustData( 
             /* [in] */ UINT indexFunc,
             /* [in] */ UINT indexParam,
             /* [in] */ REFGUID guid,
-            /* [out] */ VARIANT __RPC_FAR *pVarVal) = 0;
+            /* [out] */ VARIANT *pVarVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVarCustData( 
             /* [in] */ UINT index,
             /* [in] */ REFGUID guid,
-            /* [out] */ VARIANT __RPC_FAR *pVarVal) = 0;
+            /* [out] */ VARIANT *pVarVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetImplTypeCustData( 
             /* [in] */ UINT index,
             /* [in] */ REFGUID guid,
-            /* [out] */ VARIANT __RPC_FAR *pVarVal) = 0;
+            /* [out] */ VARIANT *pVarVal) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetDocumentation2( 
             /* [in] */ MEMBERID memid,
             /* [in] */ LCID lcid,
-            /* [out] */ BSTR __RPC_FAR *pbstrHelpString,
-            /* [out] */ DWORD __RPC_FAR *pdwHelpStringContext,
-            /* [out] */ BSTR __RPC_FAR *pbstrHelpStringDll) = 0;
+            /* [out] */ BSTR *pbstrHelpString,
+            /* [out] */ DWORD *pdwHelpStringContext,
+            /* [out] */ BSTR *pbstrHelpStringDll) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllCustData( 
-            /* [out] */ CUSTDATA __RPC_FAR *pCustData) = 0;
+            /* [out] */ CUSTDATA *pCustData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllFuncCustData( 
             /* [in] */ UINT index,
-            /* [out] */ CUSTDATA __RPC_FAR *pCustData) = 0;
+            /* [out] */ CUSTDATA *pCustData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllParamCustData( 
             /* [in] */ UINT indexFunc,
             /* [in] */ UINT indexParam,
-            /* [out] */ CUSTDATA __RPC_FAR *pCustData) = 0;
+            /* [out] */ CUSTDATA *pCustData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllVarCustData( 
             /* [in] */ UINT index,
-            /* [out] */ CUSTDATA __RPC_FAR *pCustData) = 0;
+            /* [out] */ CUSTDATA *pCustData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllImplTypeCustData( 
             /* [in] */ UINT index,
-            /* [out] */ CUSTDATA __RPC_FAR *pCustData) = 0;
+            /* [out] */ CUSTDATA *pCustData) = 0;
         
     };
     
@@ -3862,211 +3870,211 @@ EXTERN_C const IID IID_ITypeInfo2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITypeInfo2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITypeInfo2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITypeInfo2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITypeInfo2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITypeInfo2 * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeAttr )( 
-            ITypeInfo2 __RPC_FAR * This,
-            /* [out] */ TYPEATTR __RPC_FAR *__RPC_FAR *ppTypeAttr);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetTypeAttr )( 
+            ITypeInfo2 * This,
+            /* [out] */ TYPEATTR **ppTypeAttr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeComp )( 
-            ITypeInfo2 __RPC_FAR * This,
-            /* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTComp);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeComp )( 
+            ITypeInfo2 * This,
+            /* [out] */ ITypeComp **ppTComp);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFuncDesc )( 
-            ITypeInfo2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetFuncDesc )( 
+            ITypeInfo2 * This,
             /* [in] */ UINT index,
-            /* [out] */ FUNCDESC __RPC_FAR *__RPC_FAR *ppFuncDesc);
+            /* [out] */ FUNCDESC **ppFuncDesc);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVarDesc )( 
-            ITypeInfo2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetVarDesc )( 
+            ITypeInfo2 * This,
             /* [in] */ UINT index,
-            /* [out] */ VARDESC __RPC_FAR *__RPC_FAR *ppVarDesc);
+            /* [out] */ VARDESC **ppVarDesc);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetNames )( 
-            ITypeInfo2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetNames )( 
+            ITypeInfo2 * This,
             /* [in] */ MEMBERID memid,
-            /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames,
+            /* [length_is][size_is][out] */ BSTR *rgBstrNames,
             /* [in] */ UINT cMaxNames,
-            /* [out] */ UINT __RPC_FAR *pcNames);
+            /* [out] */ UINT *pcNames);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRefTypeOfImplType )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetRefTypeOfImplType )( 
+            ITypeInfo2 * This,
             /* [in] */ UINT index,
-            /* [out] */ HREFTYPE __RPC_FAR *pRefType);
+            /* [out] */ HREFTYPE *pRefType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetImplTypeFlags )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetImplTypeFlags )( 
+            ITypeInfo2 * This,
             /* [in] */ UINT index,
-            /* [out] */ INT __RPC_FAR *pImplTypeFlags);
+            /* [out] */ INT *pImplTypeFlags);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ITypeInfo2 __RPC_FAR * This,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITypeInfo2 * This,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
-            /* [size_is][out] */ MEMBERID __RPC_FAR *pMemId);
+            /* [size_is][out] */ MEMBERID *pMemId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ITypeInfo2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITypeInfo2 * This,
             /* [in] */ PVOID pvInstance,
             /* [in] */ MEMBERID memid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDocumentation )( 
-            ITypeInfo2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDocumentation )( 
+            ITypeInfo2 * This,
             /* [in] */ MEMBERID memid,
-            /* [out] */ BSTR __RPC_FAR *pBstrName,
-            /* [out] */ BSTR __RPC_FAR *pBstrDocString,
-            /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
-            /* [out] */ BSTR __RPC_FAR *pBstrHelpFile);
+            /* [out] */ BSTR *pBstrName,
+            /* [out] */ BSTR *pBstrDocString,
+            /* [out] */ DWORD *pdwHelpContext,
+            /* [out] */ BSTR *pBstrHelpFile);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDllEntry )( 
-            ITypeInfo2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDllEntry )( 
+            ITypeInfo2 * This,
             /* [in] */ MEMBERID memid,
             /* [in] */ INVOKEKIND invKind,
-            /* [out] */ BSTR __RPC_FAR *pBstrDllName,
-            /* [out] */ BSTR __RPC_FAR *pBstrName,
-            /* [out] */ WORD __RPC_FAR *pwOrdinal);
+            /* [out] */ BSTR *pBstrDllName,
+            /* [out] */ BSTR *pBstrName,
+            /* [out] */ WORD *pwOrdinal);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRefTypeInfo )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetRefTypeInfo )( 
+            ITypeInfo2 * This,
             /* [in] */ HREFTYPE hRefType,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddressOfMember )( 
-            ITypeInfo2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *AddressOfMember )( 
+            ITypeInfo2 * This,
             /* [in] */ MEMBERID memid,
             /* [in] */ INVOKEKIND invKind,
-            /* [out] */ PVOID __RPC_FAR *ppv);
+            /* [out] */ PVOID *ppv);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateInstance )( 
-            ITypeInfo2 __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateInstance )( 
+            ITypeInfo2 * This,
+            /* [in] */ IUnknown *pUnkOuter,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ PVOID __RPC_FAR *ppvObj);
+            /* [iid_is][out] */ PVOID *ppvObj);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMops )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetMops )( 
+            ITypeInfo2 * This,
             /* [in] */ MEMBERID memid,
-            /* [out] */ BSTR __RPC_FAR *pBstrMops);
+            /* [out] */ BSTR *pBstrMops);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetContainingTypeLib )( 
-            ITypeInfo2 __RPC_FAR * This,
-            /* [out] */ ITypeLib __RPC_FAR *__RPC_FAR *ppTLib,
-            /* [out] */ UINT __RPC_FAR *pIndex);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetContainingTypeLib )( 
+            ITypeInfo2 * This,
+            /* [out] */ ITypeLib **ppTLib,
+            /* [out] */ UINT *pIndex);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *ReleaseTypeAttr )( 
-            ITypeInfo2 __RPC_FAR * This,
-            /* [in] */ TYPEATTR __RPC_FAR *pTypeAttr);
+        /* [local] */ void ( STDMETHODCALLTYPE *ReleaseTypeAttr )( 
+            ITypeInfo2 * This,
+            /* [in] */ TYPEATTR *pTypeAttr);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *ReleaseFuncDesc )( 
-            ITypeInfo2 __RPC_FAR * This,
-            /* [in] */ FUNCDESC __RPC_FAR *pFuncDesc);
+        /* [local] */ void ( STDMETHODCALLTYPE *ReleaseFuncDesc )( 
+            ITypeInfo2 * This,
+            /* [in] */ FUNCDESC *pFuncDesc);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *ReleaseVarDesc )( 
-            ITypeInfo2 __RPC_FAR * This,
-            /* [in] */ VARDESC __RPC_FAR *pVarDesc);
+        /* [local] */ void ( STDMETHODCALLTYPE *ReleaseVarDesc )( 
+            ITypeInfo2 * This,
+            /* [in] */ VARDESC *pVarDesc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeKind )( 
-            ITypeInfo2 __RPC_FAR * This,
-            /* [out] */ TYPEKIND __RPC_FAR *pTypeKind);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeKind )( 
+            ITypeInfo2 * This,
+            /* [out] */ TYPEKIND *pTypeKind);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeFlags )( 
-            ITypeInfo2 __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pTypeFlags);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeFlags )( 
+            ITypeInfo2 * This,
+            /* [out] */ ULONG *pTypeFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFuncIndexOfMemId )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetFuncIndexOfMemId )( 
+            ITypeInfo2 * This,
             /* [in] */ MEMBERID memid,
             /* [in] */ INVOKEKIND invKind,
-            /* [out] */ UINT __RPC_FAR *pFuncIndex);
+            /* [out] */ UINT *pFuncIndex);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVarIndexOfMemId )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetVarIndexOfMemId )( 
+            ITypeInfo2 * This,
             /* [in] */ MEMBERID memid,
-            /* [out] */ UINT __RPC_FAR *pVarIndex);
+            /* [out] */ UINT *pVarIndex);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCustData )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetCustData )( 
+            ITypeInfo2 * This,
             /* [in] */ REFGUID guid,
-            /* [out] */ VARIANT __RPC_FAR *pVarVal);
+            /* [out] */ VARIANT *pVarVal);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFuncCustData )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetFuncCustData )( 
+            ITypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ REFGUID guid,
-            /* [out] */ VARIANT __RPC_FAR *pVarVal);
+            /* [out] */ VARIANT *pVarVal);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParamCustData )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetParamCustData )( 
+            ITypeInfo2 * This,
             /* [in] */ UINT indexFunc,
             /* [in] */ UINT indexParam,
             /* [in] */ REFGUID guid,
-            /* [out] */ VARIANT __RPC_FAR *pVarVal);
+            /* [out] */ VARIANT *pVarVal);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetVarCustData )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetVarCustData )( 
+            ITypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ REFGUID guid,
-            /* [out] */ VARIANT __RPC_FAR *pVarVal);
+            /* [out] */ VARIANT *pVarVal);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetImplTypeCustData )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetImplTypeCustData )( 
+            ITypeInfo2 * This,
             /* [in] */ UINT index,
             /* [in] */ REFGUID guid,
-            /* [out] */ VARIANT __RPC_FAR *pVarVal);
+            /* [out] */ VARIANT *pVarVal);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDocumentation2 )( 
-            ITypeInfo2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDocumentation2 )( 
+            ITypeInfo2 * This,
             /* [in] */ MEMBERID memid,
             /* [in] */ LCID lcid,
-            /* [out] */ BSTR __RPC_FAR *pbstrHelpString,
-            /* [out] */ DWORD __RPC_FAR *pdwHelpStringContext,
-            /* [out] */ BSTR __RPC_FAR *pbstrHelpStringDll);
+            /* [out] */ BSTR *pbstrHelpString,
+            /* [out] */ DWORD *pdwHelpStringContext,
+            /* [out] */ BSTR *pbstrHelpStringDll);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllCustData )( 
-            ITypeInfo2 __RPC_FAR * This,
-            /* [out] */ CUSTDATA __RPC_FAR *pCustData);
+        HRESULT ( STDMETHODCALLTYPE *GetAllCustData )( 
+            ITypeInfo2 * This,
+            /* [out] */ CUSTDATA *pCustData);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllFuncCustData )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetAllFuncCustData )( 
+            ITypeInfo2 * This,
             /* [in] */ UINT index,
-            /* [out] */ CUSTDATA __RPC_FAR *pCustData);
+            /* [out] */ CUSTDATA *pCustData);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllParamCustData )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetAllParamCustData )( 
+            ITypeInfo2 * This,
             /* [in] */ UINT indexFunc,
             /* [in] */ UINT indexParam,
-            /* [out] */ CUSTDATA __RPC_FAR *pCustData);
+            /* [out] */ CUSTDATA *pCustData);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllVarCustData )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetAllVarCustData )( 
+            ITypeInfo2 * This,
             /* [in] */ UINT index,
-            /* [out] */ CUSTDATA __RPC_FAR *pCustData);
+            /* [out] */ CUSTDATA *pCustData);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllImplTypeCustData )( 
-            ITypeInfo2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetAllImplTypeCustData )( 
+            ITypeInfo2 * This,
             /* [in] */ UINT index,
-            /* [out] */ CUSTDATA __RPC_FAR *pCustData);
+            /* [out] */ CUSTDATA *pCustData);
         
         END_INTERFACE
     } ITypeInfo2Vtbl;
 
     interface ITypeInfo2
     {
-        CONST_VTBL struct ITypeInfo2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITypeInfo2Vtbl *lpVtbl;
     };
 
     
@@ -4195,8 +4203,8 @@ EXTERN_C const IID IID_ITypeInfo2;
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetTypeKind_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
-    /* [out] */ TYPEKIND __RPC_FAR *pTypeKind);
+    ITypeInfo2 * This,
+    /* [out] */ TYPEKIND *pTypeKind);
 
 
 void __RPC_STUB ITypeInfo2_GetTypeKind_Stub(
@@ -4207,8 +4215,8 @@ void __RPC_STUB ITypeInfo2_GetTypeKind_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetTypeFlags_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pTypeFlags);
+    ITypeInfo2 * This,
+    /* [out] */ ULONG *pTypeFlags);
 
 
 void __RPC_STUB ITypeInfo2_GetTypeFlags_Stub(
@@ -4219,10 +4227,10 @@ void __RPC_STUB ITypeInfo2_GetTypeFlags_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetFuncIndexOfMemId_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ MEMBERID memid,
     /* [in] */ INVOKEKIND invKind,
-    /* [out] */ UINT __RPC_FAR *pFuncIndex);
+    /* [out] */ UINT *pFuncIndex);
 
 
 void __RPC_STUB ITypeInfo2_GetFuncIndexOfMemId_Stub(
@@ -4233,9 +4241,9 @@ void __RPC_STUB ITypeInfo2_GetFuncIndexOfMemId_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetVarIndexOfMemId_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ MEMBERID memid,
-    /* [out] */ UINT __RPC_FAR *pVarIndex);
+    /* [out] */ UINT *pVarIndex);
 
 
 void __RPC_STUB ITypeInfo2_GetVarIndexOfMemId_Stub(
@@ -4246,9 +4254,9 @@ void __RPC_STUB ITypeInfo2_GetVarIndexOfMemId_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetCustData_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ REFGUID guid,
-    /* [out] */ VARIANT __RPC_FAR *pVarVal);
+    /* [out] */ VARIANT *pVarVal);
 
 
 void __RPC_STUB ITypeInfo2_GetCustData_Stub(
@@ -4259,10 +4267,10 @@ void __RPC_STUB ITypeInfo2_GetCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetFuncCustData_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ UINT index,
     /* [in] */ REFGUID guid,
-    /* [out] */ VARIANT __RPC_FAR *pVarVal);
+    /* [out] */ VARIANT *pVarVal);
 
 
 void __RPC_STUB ITypeInfo2_GetFuncCustData_Stub(
@@ -4273,11 +4281,11 @@ void __RPC_STUB ITypeInfo2_GetFuncCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetParamCustData_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ UINT indexFunc,
     /* [in] */ UINT indexParam,
     /* [in] */ REFGUID guid,
-    /* [out] */ VARIANT __RPC_FAR *pVarVal);
+    /* [out] */ VARIANT *pVarVal);
 
 
 void __RPC_STUB ITypeInfo2_GetParamCustData_Stub(
@@ -4288,10 +4296,10 @@ void __RPC_STUB ITypeInfo2_GetParamCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetVarCustData_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ UINT index,
     /* [in] */ REFGUID guid,
-    /* [out] */ VARIANT __RPC_FAR *pVarVal);
+    /* [out] */ VARIANT *pVarVal);
 
 
 void __RPC_STUB ITypeInfo2_GetVarCustData_Stub(
@@ -4302,10 +4310,10 @@ void __RPC_STUB ITypeInfo2_GetVarCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetImplTypeCustData_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ UINT index,
     /* [in] */ REFGUID guid,
-    /* [out] */ VARIANT __RPC_FAR *pVarVal);
+    /* [out] */ VARIANT *pVarVal);
 
 
 void __RPC_STUB ITypeInfo2_GetImplTypeCustData_Stub(
@@ -4316,13 +4324,13 @@ void __RPC_STUB ITypeInfo2_GetImplTypeCustData_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo2_RemoteGetDocumentation2_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ MEMBERID memid,
     /* [in] */ LCID lcid,
     /* [in] */ DWORD refPtrFlags,
-    /* [out] */ BSTR __RPC_FAR *pbstrHelpString,
-    /* [out] */ DWORD __RPC_FAR *pdwHelpStringContext,
-    /* [out] */ BSTR __RPC_FAR *pbstrHelpStringDll);
+    /* [out] */ BSTR *pbstrHelpString,
+    /* [out] */ DWORD *pdwHelpStringContext,
+    /* [out] */ BSTR *pbstrHelpStringDll);
 
 
 void __RPC_STUB ITypeInfo2_RemoteGetDocumentation2_Stub(
@@ -4333,8 +4341,8 @@ void __RPC_STUB ITypeInfo2_RemoteGetDocumentation2_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetAllCustData_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
-    /* [out] */ CUSTDATA __RPC_FAR *pCustData);
+    ITypeInfo2 * This,
+    /* [out] */ CUSTDATA *pCustData);
 
 
 void __RPC_STUB ITypeInfo2_GetAllCustData_Stub(
@@ -4345,9 +4353,9 @@ void __RPC_STUB ITypeInfo2_GetAllCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetAllFuncCustData_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ UINT index,
-    /* [out] */ CUSTDATA __RPC_FAR *pCustData);
+    /* [out] */ CUSTDATA *pCustData);
 
 
 void __RPC_STUB ITypeInfo2_GetAllFuncCustData_Stub(
@@ -4358,10 +4366,10 @@ void __RPC_STUB ITypeInfo2_GetAllFuncCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetAllParamCustData_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ UINT indexFunc,
     /* [in] */ UINT indexParam,
-    /* [out] */ CUSTDATA __RPC_FAR *pCustData);
+    /* [out] */ CUSTDATA *pCustData);
 
 
 void __RPC_STUB ITypeInfo2_GetAllParamCustData_Stub(
@@ -4372,9 +4380,9 @@ void __RPC_STUB ITypeInfo2_GetAllParamCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetAllVarCustData_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ UINT index,
-    /* [out] */ CUSTDATA __RPC_FAR *pCustData);
+    /* [out] */ CUSTDATA *pCustData);
 
 
 void __RPC_STUB ITypeInfo2_GetAllVarCustData_Stub(
@@ -4385,9 +4393,9 @@ void __RPC_STUB ITypeInfo2_GetAllVarCustData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeInfo2_GetAllImplTypeCustData_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ UINT index,
-    /* [out] */ CUSTDATA __RPC_FAR *pCustData);
+    /* [out] */ CUSTDATA *pCustData);
 
 
 void __RPC_STUB ITypeInfo2_GetAllImplTypeCustData_Stub(
@@ -4412,8 +4420,8 @@ enum tagSYSKIND
     {	SYS_WIN16	= 0,
 	SYS_WIN32	= SYS_WIN16 + 1,
 	SYS_MAC	= SYS_WIN32 + 1,
-	SYS_WIN64	= SYS_WIN32
-    }	SYSKIND;
+	SYS_WIN64	= SYS_MAC + 1
+    } 	SYSKIND;
 
 typedef /* [v1_enum] */ 
 enum tagLIBFLAGS
@@ -4421,9 +4429,9 @@ enum tagLIBFLAGS
 	LIBFLAG_FCONTROL	= 0x2,
 	LIBFLAG_FHIDDEN	= 0x4,
 	LIBFLAG_FHASDISKIMAGE	= 0x8
-    }	LIBFLAGS;
+    } 	LIBFLAGS;
 
-typedef /* [unique] */ ITypeLib __RPC_FAR *LPTYPELIB;
+typedef /* [unique] */ ITypeLib *LPTYPELIB;
 
 typedef struct tagTLIBATTR
     {
@@ -4433,9 +4441,9 @@ typedef struct tagTLIBATTR
     WORD wMajorVerNum;
     WORD wMinorVerNum;
     WORD wLibFlags;
-    }	TLIBATTR;
+    } 	TLIBATTR;
 
-typedef struct tagTLIBATTR __RPC_FAR *LPTLIBATTR;
+typedef struct tagTLIBATTR *LPTLIBATTR;
 
 
 EXTERN_C const IID IID_ITypeLib;
@@ -4450,43 +4458,43 @@ EXTERN_C const IID IID_ITypeLib;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeInfo( 
             /* [in] */ UINT index,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo) = 0;
+            /* [out] */ ITypeInfo **ppTInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeInfoType( 
             /* [in] */ UINT index,
-            /* [out] */ TYPEKIND __RPC_FAR *pTKind) = 0;
+            /* [out] */ TYPEKIND *pTKind) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeInfoOfGuid( 
             /* [in] */ REFGUID guid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTinfo) = 0;
+            /* [out] */ ITypeInfo **ppTinfo) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetLibAttr( 
-            /* [out] */ TLIBATTR __RPC_FAR *__RPC_FAR *ppTLibAttr) = 0;
+            /* [out] */ TLIBATTR **ppTLibAttr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeComp( 
-            /* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTComp) = 0;
+            /* [out] */ ITypeComp **ppTComp) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetDocumentation( 
             /* [in] */ INT index,
-            /* [out] */ BSTR __RPC_FAR *pBstrName,
-            /* [out] */ BSTR __RPC_FAR *pBstrDocString,
-            /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
-            /* [out] */ BSTR __RPC_FAR *pBstrHelpFile) = 0;
+            /* [out] */ BSTR *pBstrName,
+            /* [out] */ BSTR *pBstrDocString,
+            /* [out] */ DWORD *pdwHelpContext,
+            /* [out] */ BSTR *pBstrHelpFile) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE IsName( 
             /* [out][in] */ LPOLESTR szNameBuf,
             /* [in] */ ULONG lHashVal,
-            /* [out] */ BOOL __RPC_FAR *pfName) = 0;
+            /* [out] */ BOOL *pfName) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE FindName( 
             /* [out][in] */ LPOLESTR szNameBuf,
             /* [in] */ ULONG lHashVal,
-            /* [length_is][size_is][out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-            /* [length_is][size_is][out] */ MEMBERID __RPC_FAR *rgMemId,
-            /* [out][in] */ USHORT __RPC_FAR *pcFound) = 0;
+            /* [length_is][size_is][out] */ ITypeInfo **ppTInfo,
+            /* [length_is][size_is][out] */ MEMBERID *rgMemId,
+            /* [out][in] */ USHORT *pcFound) = 0;
         
         virtual /* [local] */ void STDMETHODCALLTYPE ReleaseTLibAttr( 
-            /* [in] */ TLIBATTR __RPC_FAR *pTLibAttr) = 0;
+            /* [in] */ TLIBATTR *pTLibAttr) = 0;
         
     };
     
@@ -4496,75 +4504,75 @@ EXTERN_C const IID IID_ITypeLib;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITypeLib * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITypeLib __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITypeLib * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITypeLib __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITypeLib * This);
         
-        /* [local] */ UINT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ITypeLib __RPC_FAR * This);
+        /* [local] */ UINT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITypeLib * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ITypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITypeLib * This,
             /* [in] */ UINT index,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoType )( 
-            ITypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoType )( 
+            ITypeLib * This,
             /* [in] */ UINT index,
-            /* [out] */ TYPEKIND __RPC_FAR *pTKind);
+            /* [out] */ TYPEKIND *pTKind);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoOfGuid )( 
-            ITypeLib __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoOfGuid )( 
+            ITypeLib * This,
             /* [in] */ REFGUID guid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTinfo);
+            /* [out] */ ITypeInfo **ppTinfo);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLibAttr )( 
-            ITypeLib __RPC_FAR * This,
-            /* [out] */ TLIBATTR __RPC_FAR *__RPC_FAR *ppTLibAttr);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetLibAttr )( 
+            ITypeLib * This,
+            /* [out] */ TLIBATTR **ppTLibAttr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeComp )( 
-            ITypeLib __RPC_FAR * This,
-            /* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTComp);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeComp )( 
+            ITypeLib * This,
+            /* [out] */ ITypeComp **ppTComp);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDocumentation )( 
-            ITypeLib __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDocumentation )( 
+            ITypeLib * This,
             /* [in] */ INT index,
-            /* [out] */ BSTR __RPC_FAR *pBstrName,
-            /* [out] */ BSTR __RPC_FAR *pBstrDocString,
-            /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
-            /* [out] */ BSTR __RPC_FAR *pBstrHelpFile);
+            /* [out] */ BSTR *pBstrName,
+            /* [out] */ BSTR *pBstrDocString,
+            /* [out] */ DWORD *pdwHelpContext,
+            /* [out] */ BSTR *pBstrHelpFile);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsName )( 
-            ITypeLib __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *IsName )( 
+            ITypeLib * This,
             /* [out][in] */ LPOLESTR szNameBuf,
             /* [in] */ ULONG lHashVal,
-            /* [out] */ BOOL __RPC_FAR *pfName);
+            /* [out] */ BOOL *pfName);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindName )( 
-            ITypeLib __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *FindName )( 
+            ITypeLib * This,
             /* [out][in] */ LPOLESTR szNameBuf,
             /* [in] */ ULONG lHashVal,
-            /* [length_is][size_is][out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-            /* [length_is][size_is][out] */ MEMBERID __RPC_FAR *rgMemId,
-            /* [out][in] */ USHORT __RPC_FAR *pcFound);
+            /* [length_is][size_is][out] */ ITypeInfo **ppTInfo,
+            /* [length_is][size_is][out] */ MEMBERID *rgMemId,
+            /* [out][in] */ USHORT *pcFound);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *ReleaseTLibAttr )( 
-            ITypeLib __RPC_FAR * This,
-            /* [in] */ TLIBATTR __RPC_FAR *pTLibAttr);
+        /* [local] */ void ( STDMETHODCALLTYPE *ReleaseTLibAttr )( 
+            ITypeLib * This,
+            /* [in] */ TLIBATTR *pTLibAttr);
         
         END_INTERFACE
     } ITypeLibVtbl;
 
     interface ITypeLib
     {
-        CONST_VTBL struct ITypeLibVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITypeLibVtbl *lpVtbl;
     };
 
     
@@ -4620,8 +4628,8 @@ EXTERN_C const IID IID_ITypeLib;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib_RemoteGetTypeInfoCount_Proxy( 
-    ITypeLib __RPC_FAR * This,
-    /* [out] */ UINT __RPC_FAR *pcTInfo);
+    ITypeLib * This,
+    /* [out] */ UINT *pcTInfo);
 
 
 void __RPC_STUB ITypeLib_RemoteGetTypeInfoCount_Stub(
@@ -4632,9 +4640,9 @@ void __RPC_STUB ITypeLib_RemoteGetTypeInfoCount_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeLib_GetTypeInfo_Proxy( 
-    ITypeLib __RPC_FAR * This,
+    ITypeLib * This,
     /* [in] */ UINT index,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+    /* [out] */ ITypeInfo **ppTInfo);
 
 
 void __RPC_STUB ITypeLib_GetTypeInfo_Stub(
@@ -4645,9 +4653,9 @@ void __RPC_STUB ITypeLib_GetTypeInfo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeLib_GetTypeInfoType_Proxy( 
-    ITypeLib __RPC_FAR * This,
+    ITypeLib * This,
     /* [in] */ UINT index,
-    /* [out] */ TYPEKIND __RPC_FAR *pTKind);
+    /* [out] */ TYPEKIND *pTKind);
 
 
 void __RPC_STUB ITypeLib_GetTypeInfoType_Stub(
@@ -4658,9 +4666,9 @@ void __RPC_STUB ITypeLib_GetTypeInfoType_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeLib_GetTypeInfoOfGuid_Proxy( 
-    ITypeLib __RPC_FAR * This,
+    ITypeLib * This,
     /* [in] */ REFGUID guid,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTinfo);
+    /* [out] */ ITypeInfo **ppTinfo);
 
 
 void __RPC_STUB ITypeLib_GetTypeInfoOfGuid_Stub(
@@ -4671,9 +4679,9 @@ void __RPC_STUB ITypeLib_GetTypeInfoOfGuid_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib_RemoteGetLibAttr_Proxy( 
-    ITypeLib __RPC_FAR * This,
-    /* [out] */ LPTLIBATTR __RPC_FAR *ppTLibAttr,
-    /* [out] */ CLEANLOCALSTORAGE __RPC_FAR *pDummy);
+    ITypeLib * This,
+    /* [out] */ LPTLIBATTR *ppTLibAttr,
+    /* [out] */ CLEANLOCALSTORAGE *pDummy);
 
 
 void __RPC_STUB ITypeLib_RemoteGetLibAttr_Stub(
@@ -4684,8 +4692,8 @@ void __RPC_STUB ITypeLib_RemoteGetLibAttr_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeLib_GetTypeComp_Proxy( 
-    ITypeLib __RPC_FAR * This,
-    /* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTComp);
+    ITypeLib * This,
+    /* [out] */ ITypeComp **ppTComp);
 
 
 void __RPC_STUB ITypeLib_GetTypeComp_Stub(
@@ -4696,13 +4704,13 @@ void __RPC_STUB ITypeLib_GetTypeComp_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib_RemoteGetDocumentation_Proxy( 
-    ITypeLib __RPC_FAR * This,
+    ITypeLib * This,
     /* [in] */ INT index,
     /* [in] */ DWORD refPtrFlags,
-    /* [out] */ BSTR __RPC_FAR *pBstrName,
-    /* [out] */ BSTR __RPC_FAR *pBstrDocString,
-    /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
-    /* [out] */ BSTR __RPC_FAR *pBstrHelpFile);
+    /* [out] */ BSTR *pBstrName,
+    /* [out] */ BSTR *pBstrDocString,
+    /* [out] */ DWORD *pdwHelpContext,
+    /* [out] */ BSTR *pBstrHelpFile);
 
 
 void __RPC_STUB ITypeLib_RemoteGetDocumentation_Stub(
@@ -4713,11 +4721,11 @@ void __RPC_STUB ITypeLib_RemoteGetDocumentation_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib_RemoteIsName_Proxy( 
-    ITypeLib __RPC_FAR * This,
+    ITypeLib * This,
     /* [in] */ LPOLESTR szNameBuf,
     /* [in] */ ULONG lHashVal,
-    /* [out] */ BOOL __RPC_FAR *pfName,
-    /* [out] */ BSTR __RPC_FAR *pBstrLibName);
+    /* [out] */ BOOL *pfName,
+    /* [out] */ BSTR *pBstrLibName);
 
 
 void __RPC_STUB ITypeLib_RemoteIsName_Stub(
@@ -4728,13 +4736,13 @@ void __RPC_STUB ITypeLib_RemoteIsName_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib_RemoteFindName_Proxy( 
-    ITypeLib __RPC_FAR * This,
+    ITypeLib * This,
     /* [in] */ LPOLESTR szNameBuf,
     /* [in] */ ULONG lHashVal,
-    /* [length_is][size_is][out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-    /* [length_is][size_is][out] */ MEMBERID __RPC_FAR *rgMemId,
-    /* [out][in] */ USHORT __RPC_FAR *pcFound,
-    /* [out] */ BSTR __RPC_FAR *pBstrLibName);
+    /* [length_is][size_is][out] */ ITypeInfo **ppTInfo,
+    /* [length_is][size_is][out] */ MEMBERID *rgMemId,
+    /* [out][in] */ USHORT *pcFound,
+    /* [out] */ BSTR *pBstrLibName);
 
 
 void __RPC_STUB ITypeLib_RemoteFindName_Stub(
@@ -4745,7 +4753,7 @@ void __RPC_STUB ITypeLib_RemoteFindName_Stub(
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib_LocalReleaseTLibAttr_Proxy( 
-    ITypeLib __RPC_FAR * This);
+    ITypeLib * This);
 
 
 void __RPC_STUB ITypeLib_LocalReleaseTLibAttr_Stub(
@@ -4765,7 +4773,7 @@ void __RPC_STUB ITypeLib_LocalReleaseTLibAttr_Stub(
 /* interface ITypeLib2 */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ ITypeLib2 __RPC_FAR *LPTYPELIB2;
+typedef /* [unique] */ ITypeLib2 *LPTYPELIB2;
 
 
 EXTERN_C const IID IID_ITypeLib2;
@@ -4778,21 +4786,21 @@ EXTERN_C const IID IID_ITypeLib2;
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCustData( 
             /* [in] */ REFGUID guid,
-            /* [out] */ VARIANT __RPC_FAR *pVarVal) = 0;
+            /* [out] */ VARIANT *pVarVal) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetLibStatistics( 
-            /* [out] */ ULONG __RPC_FAR *pcUniqueNames,
-            /* [out] */ ULONG __RPC_FAR *pcchUniqueNames) = 0;
+            /* [out] */ ULONG *pcUniqueNames,
+            /* [out] */ ULONG *pcchUniqueNames) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetDocumentation2( 
             /* [in] */ INT index,
             /* [in] */ LCID lcid,
-            /* [out] */ BSTR __RPC_FAR *pbstrHelpString,
-            /* [out] */ DWORD __RPC_FAR *pdwHelpStringContext,
-            /* [out] */ BSTR __RPC_FAR *pbstrHelpStringDll) = 0;
+            /* [out] */ BSTR *pbstrHelpString,
+            /* [out] */ DWORD *pdwHelpStringContext,
+            /* [out] */ BSTR *pbstrHelpStringDll) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAllCustData( 
-            /* [out] */ CUSTDATA __RPC_FAR *pCustData) = 0;
+            /* [out] */ CUSTDATA *pCustData) = 0;
         
     };
     
@@ -4802,97 +4810,97 @@ EXTERN_C const IID IID_ITypeLib2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITypeLib2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITypeLib2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITypeLib2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITypeLib2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITypeLib2 * This);
         
-        /* [local] */ UINT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ITypeLib2 __RPC_FAR * This);
+        /* [local] */ UINT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITypeLib2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ITypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITypeLib2 * This,
             /* [in] */ UINT index,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoType )( 
-            ITypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoType )( 
+            ITypeLib2 * This,
             /* [in] */ UINT index,
-            /* [out] */ TYPEKIND __RPC_FAR *pTKind);
+            /* [out] */ TYPEKIND *pTKind);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoOfGuid )( 
-            ITypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoOfGuid )( 
+            ITypeLib2 * This,
             /* [in] */ REFGUID guid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTinfo);
+            /* [out] */ ITypeInfo **ppTinfo);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLibAttr )( 
-            ITypeLib2 __RPC_FAR * This,
-            /* [out] */ TLIBATTR __RPC_FAR *__RPC_FAR *ppTLibAttr);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetLibAttr )( 
+            ITypeLib2 * This,
+            /* [out] */ TLIBATTR **ppTLibAttr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeComp )( 
-            ITypeLib2 __RPC_FAR * This,
-            /* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTComp);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeComp )( 
+            ITypeLib2 * This,
+            /* [out] */ ITypeComp **ppTComp);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDocumentation )( 
-            ITypeLib2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDocumentation )( 
+            ITypeLib2 * This,
             /* [in] */ INT index,
-            /* [out] */ BSTR __RPC_FAR *pBstrName,
-            /* [out] */ BSTR __RPC_FAR *pBstrDocString,
-            /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
-            /* [out] */ BSTR __RPC_FAR *pBstrHelpFile);
+            /* [out] */ BSTR *pBstrName,
+            /* [out] */ BSTR *pBstrDocString,
+            /* [out] */ DWORD *pdwHelpContext,
+            /* [out] */ BSTR *pBstrHelpFile);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsName )( 
-            ITypeLib2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *IsName )( 
+            ITypeLib2 * This,
             /* [out][in] */ LPOLESTR szNameBuf,
             /* [in] */ ULONG lHashVal,
-            /* [out] */ BOOL __RPC_FAR *pfName);
+            /* [out] */ BOOL *pfName);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindName )( 
-            ITypeLib2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *FindName )( 
+            ITypeLib2 * This,
             /* [out][in] */ LPOLESTR szNameBuf,
             /* [in] */ ULONG lHashVal,
-            /* [length_is][size_is][out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-            /* [length_is][size_is][out] */ MEMBERID __RPC_FAR *rgMemId,
-            /* [out][in] */ USHORT __RPC_FAR *pcFound);
+            /* [length_is][size_is][out] */ ITypeInfo **ppTInfo,
+            /* [length_is][size_is][out] */ MEMBERID *rgMemId,
+            /* [out][in] */ USHORT *pcFound);
         
-        /* [local] */ void ( STDMETHODCALLTYPE __RPC_FAR *ReleaseTLibAttr )( 
-            ITypeLib2 __RPC_FAR * This,
-            /* [in] */ TLIBATTR __RPC_FAR *pTLibAttr);
+        /* [local] */ void ( STDMETHODCALLTYPE *ReleaseTLibAttr )( 
+            ITypeLib2 * This,
+            /* [in] */ TLIBATTR *pTLibAttr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCustData )( 
-            ITypeLib2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetCustData )( 
+            ITypeLib2 * This,
             /* [in] */ REFGUID guid,
-            /* [out] */ VARIANT __RPC_FAR *pVarVal);
+            /* [out] */ VARIANT *pVarVal);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLibStatistics )( 
-            ITypeLib2 __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pcUniqueNames,
-            /* [out] */ ULONG __RPC_FAR *pcchUniqueNames);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetLibStatistics )( 
+            ITypeLib2 * This,
+            /* [out] */ ULONG *pcUniqueNames,
+            /* [out] */ ULONG *pcchUniqueNames);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDocumentation2 )( 
-            ITypeLib2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetDocumentation2 )( 
+            ITypeLib2 * This,
             /* [in] */ INT index,
             /* [in] */ LCID lcid,
-            /* [out] */ BSTR __RPC_FAR *pbstrHelpString,
-            /* [out] */ DWORD __RPC_FAR *pdwHelpStringContext,
-            /* [out] */ BSTR __RPC_FAR *pbstrHelpStringDll);
+            /* [out] */ BSTR *pbstrHelpString,
+            /* [out] */ DWORD *pdwHelpStringContext,
+            /* [out] */ BSTR *pbstrHelpStringDll);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllCustData )( 
-            ITypeLib2 __RPC_FAR * This,
-            /* [out] */ CUSTDATA __RPC_FAR *pCustData);
+        HRESULT ( STDMETHODCALLTYPE *GetAllCustData )( 
+            ITypeLib2 * This,
+            /* [out] */ CUSTDATA *pCustData);
         
         END_INTERFACE
     } ITypeLib2Vtbl;
 
     interface ITypeLib2
     {
-        CONST_VTBL struct ITypeLib2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITypeLib2Vtbl *lpVtbl;
     };
 
     
@@ -4961,9 +4969,9 @@ EXTERN_C const IID IID_ITypeLib2;
 
 
 HRESULT STDMETHODCALLTYPE ITypeLib2_GetCustData_Proxy( 
-    ITypeLib2 __RPC_FAR * This,
+    ITypeLib2 * This,
     /* [in] */ REFGUID guid,
-    /* [out] */ VARIANT __RPC_FAR *pVarVal);
+    /* [out] */ VARIANT *pVarVal);
 
 
 void __RPC_STUB ITypeLib2_GetCustData_Stub(
@@ -4974,9 +4982,9 @@ void __RPC_STUB ITypeLib2_GetCustData_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib2_RemoteGetLibStatistics_Proxy( 
-    ITypeLib2 __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pcUniqueNames,
-    /* [out] */ ULONG __RPC_FAR *pcchUniqueNames);
+    ITypeLib2 * This,
+    /* [out] */ ULONG *pcUniqueNames,
+    /* [out] */ ULONG *pcchUniqueNames);
 
 
 void __RPC_STUB ITypeLib2_RemoteGetLibStatistics_Stub(
@@ -4987,13 +4995,13 @@ void __RPC_STUB ITypeLib2_RemoteGetLibStatistics_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib2_RemoteGetDocumentation2_Proxy( 
-    ITypeLib2 __RPC_FAR * This,
+    ITypeLib2 * This,
     /* [in] */ INT index,
     /* [in] */ LCID lcid,
     /* [in] */ DWORD refPtrFlags,
-    /* [out] */ BSTR __RPC_FAR *pbstrHelpString,
-    /* [out] */ DWORD __RPC_FAR *pdwHelpStringContext,
-    /* [out] */ BSTR __RPC_FAR *pbstrHelpStringDll);
+    /* [out] */ BSTR *pbstrHelpString,
+    /* [out] */ DWORD *pdwHelpStringContext,
+    /* [out] */ BSTR *pbstrHelpStringDll);
 
 
 void __RPC_STUB ITypeLib2_RemoteGetDocumentation2_Stub(
@@ -5004,8 +5012,8 @@ void __RPC_STUB ITypeLib2_RemoteGetDocumentation2_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeLib2_GetAllCustData_Proxy( 
-    ITypeLib2 __RPC_FAR * This,
-    /* [out] */ CUSTDATA __RPC_FAR *pCustData);
+    ITypeLib2 * This,
+    /* [out] */ CUSTDATA *pCustData);
 
 
 void __RPC_STUB ITypeLib2_GetAllCustData_Stub(
@@ -5025,7 +5033,7 @@ void __RPC_STUB ITypeLib2_GetAllCustData_Stub(
 /* interface ITypeChangeEvents */
 /* [local][unique][uuid][object] */ 
 
-typedef /* [unique] */ ITypeChangeEvents __RPC_FAR *LPTYPECHANGEEVENTS;
+typedef /* [unique] */ ITypeChangeEvents *LPTYPECHANGEEVENTS;
 
 typedef 
 enum tagCHANGEKIND
@@ -5037,7 +5045,7 @@ enum tagCHANGEKIND
 	CHANGEKIND_INVALIDATE	= CHANGEKIND_GENERAL + 1,
 	CHANGEKIND_CHANGEFAILED	= CHANGEKIND_INVALIDATE + 1,
 	CHANGEKIND_MAX	= CHANGEKIND_CHANGEFAILED + 1
-    }	CHANGEKIND;
+    } 	CHANGEKIND;
 
 
 EXTERN_C const IID IID_ITypeChangeEvents;
@@ -5050,13 +5058,13 @@ EXTERN_C const IID IID_ITypeChangeEvents;
     public:
         virtual HRESULT STDMETHODCALLTYPE RequestTypeChange( 
             /* [in] */ CHANGEKIND changeKind,
-            /* [in] */ ITypeInfo __RPC_FAR *pTInfoBefore,
+            /* [in] */ ITypeInfo *pTInfoBefore,
             /* [in] */ LPOLESTR pStrName,
-            /* [out] */ INT __RPC_FAR *pfCancel) = 0;
+            /* [out] */ INT *pfCancel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AfterTypeChange( 
             /* [in] */ CHANGEKIND changeKind,
-            /* [in] */ ITypeInfo __RPC_FAR *pTInfoAfter,
+            /* [in] */ ITypeInfo *pTInfoAfter,
             /* [in] */ LPOLESTR pStrName) = 0;
         
     };
@@ -5067,28 +5075,28 @@ EXTERN_C const IID IID_ITypeChangeEvents;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITypeChangeEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITypeChangeEvents * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITypeChangeEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITypeChangeEvents * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITypeChangeEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITypeChangeEvents * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestTypeChange )( 
-            ITypeChangeEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RequestTypeChange )( 
+            ITypeChangeEvents * This,
             /* [in] */ CHANGEKIND changeKind,
-            /* [in] */ ITypeInfo __RPC_FAR *pTInfoBefore,
+            /* [in] */ ITypeInfo *pTInfoBefore,
             /* [in] */ LPOLESTR pStrName,
-            /* [out] */ INT __RPC_FAR *pfCancel);
+            /* [out] */ INT *pfCancel);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AfterTypeChange )( 
-            ITypeChangeEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *AfterTypeChange )( 
+            ITypeChangeEvents * This,
             /* [in] */ CHANGEKIND changeKind,
-            /* [in] */ ITypeInfo __RPC_FAR *pTInfoAfter,
+            /* [in] */ ITypeInfo *pTInfoAfter,
             /* [in] */ LPOLESTR pStrName);
         
         END_INTERFACE
@@ -5096,7 +5104,7 @@ EXTERN_C const IID IID_ITypeChangeEvents;
 
     interface ITypeChangeEvents
     {
-        CONST_VTBL struct ITypeChangeEventsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITypeChangeEventsVtbl *lpVtbl;
     };
 
     
@@ -5128,11 +5136,11 @@ EXTERN_C const IID IID_ITypeChangeEvents;
 
 
 HRESULT STDMETHODCALLTYPE ITypeChangeEvents_RequestTypeChange_Proxy( 
-    ITypeChangeEvents __RPC_FAR * This,
+    ITypeChangeEvents * This,
     /* [in] */ CHANGEKIND changeKind,
-    /* [in] */ ITypeInfo __RPC_FAR *pTInfoBefore,
+    /* [in] */ ITypeInfo *pTInfoBefore,
     /* [in] */ LPOLESTR pStrName,
-    /* [out] */ INT __RPC_FAR *pfCancel);
+    /* [out] */ INT *pfCancel);
 
 
 void __RPC_STUB ITypeChangeEvents_RequestTypeChange_Stub(
@@ -5143,9 +5151,9 @@ void __RPC_STUB ITypeChangeEvents_RequestTypeChange_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeChangeEvents_AfterTypeChange_Proxy( 
-    ITypeChangeEvents __RPC_FAR * This,
+    ITypeChangeEvents * This,
     /* [in] */ CHANGEKIND changeKind,
-    /* [in] */ ITypeInfo __RPC_FAR *pTInfoAfter,
+    /* [in] */ ITypeInfo *pTInfoAfter,
     /* [in] */ LPOLESTR pStrName);
 
 
@@ -5166,7 +5174,7 @@ void __RPC_STUB ITypeChangeEvents_AfterTypeChange_Stub(
 /* interface IErrorInfo */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IErrorInfo __RPC_FAR *LPERRORINFO;
+typedef /* [unique] */ IErrorInfo *LPERRORINFO;
 
 
 EXTERN_C const IID IID_IErrorInfo;
@@ -5178,19 +5186,19 @@ EXTERN_C const IID IID_IErrorInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetGUID( 
-            /* [out] */ GUID __RPC_FAR *pGUID) = 0;
+            /* [out] */ GUID *pGUID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSource( 
-            /* [out] */ BSTR __RPC_FAR *pBstrSource) = 0;
+            /* [out] */ BSTR *pBstrSource) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDescription( 
-            /* [out] */ BSTR __RPC_FAR *pBstrDescription) = 0;
+            /* [out] */ BSTR *pBstrDescription) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHelpFile( 
-            /* [out] */ BSTR __RPC_FAR *pBstrHelpFile) = 0;
+            /* [out] */ BSTR *pBstrHelpFile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHelpContext( 
-            /* [out] */ DWORD __RPC_FAR *pdwHelpContext) = 0;
+            /* [out] */ DWORD *pdwHelpContext) = 0;
         
     };
     
@@ -5200,43 +5208,43 @@ EXTERN_C const IID IID_IErrorInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IErrorInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IErrorInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IErrorInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IErrorInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IErrorInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IErrorInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGUID )( 
-            IErrorInfo __RPC_FAR * This,
-            /* [out] */ GUID __RPC_FAR *pGUID);
+        HRESULT ( STDMETHODCALLTYPE *GetGUID )( 
+            IErrorInfo * This,
+            /* [out] */ GUID *pGUID);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSource )( 
-            IErrorInfo __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pBstrSource);
+        HRESULT ( STDMETHODCALLTYPE *GetSource )( 
+            IErrorInfo * This,
+            /* [out] */ BSTR *pBstrSource);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDescription )( 
-            IErrorInfo __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pBstrDescription);
+        HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
+            IErrorInfo * This,
+            /* [out] */ BSTR *pBstrDescription);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHelpFile )( 
-            IErrorInfo __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pBstrHelpFile);
+        HRESULT ( STDMETHODCALLTYPE *GetHelpFile )( 
+            IErrorInfo * This,
+            /* [out] */ BSTR *pBstrHelpFile);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHelpContext )( 
-            IErrorInfo __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwHelpContext);
+        HRESULT ( STDMETHODCALLTYPE *GetHelpContext )( 
+            IErrorInfo * This,
+            /* [out] */ DWORD *pdwHelpContext);
         
         END_INTERFACE
     } IErrorInfoVtbl;
 
     interface IErrorInfo
     {
-        CONST_VTBL struct IErrorInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IErrorInfoVtbl *lpVtbl;
     };
 
     
@@ -5277,8 +5285,8 @@ EXTERN_C const IID IID_IErrorInfo;
 
 
 HRESULT STDMETHODCALLTYPE IErrorInfo_GetGUID_Proxy( 
-    IErrorInfo __RPC_FAR * This,
-    /* [out] */ GUID __RPC_FAR *pGUID);
+    IErrorInfo * This,
+    /* [out] */ GUID *pGUID);
 
 
 void __RPC_STUB IErrorInfo_GetGUID_Stub(
@@ -5289,8 +5297,8 @@ void __RPC_STUB IErrorInfo_GetGUID_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IErrorInfo_GetSource_Proxy( 
-    IErrorInfo __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pBstrSource);
+    IErrorInfo * This,
+    /* [out] */ BSTR *pBstrSource);
 
 
 void __RPC_STUB IErrorInfo_GetSource_Stub(
@@ -5301,8 +5309,8 @@ void __RPC_STUB IErrorInfo_GetSource_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IErrorInfo_GetDescription_Proxy( 
-    IErrorInfo __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pBstrDescription);
+    IErrorInfo * This,
+    /* [out] */ BSTR *pBstrDescription);
 
 
 void __RPC_STUB IErrorInfo_GetDescription_Stub(
@@ -5313,8 +5321,8 @@ void __RPC_STUB IErrorInfo_GetDescription_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IErrorInfo_GetHelpFile_Proxy( 
-    IErrorInfo __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pBstrHelpFile);
+    IErrorInfo * This,
+    /* [out] */ BSTR *pBstrHelpFile);
 
 
 void __RPC_STUB IErrorInfo_GetHelpFile_Stub(
@@ -5325,8 +5333,8 @@ void __RPC_STUB IErrorInfo_GetHelpFile_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IErrorInfo_GetHelpContext_Proxy( 
-    IErrorInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwHelpContext);
+    IErrorInfo * This,
+    /* [out] */ DWORD *pdwHelpContext);
 
 
 void __RPC_STUB IErrorInfo_GetHelpContext_Stub(
@@ -5346,7 +5354,7 @@ void __RPC_STUB IErrorInfo_GetHelpContext_Stub(
 /* interface ICreateErrorInfo */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ ICreateErrorInfo __RPC_FAR *LPCREATEERRORINFO;
+typedef /* [unique] */ ICreateErrorInfo *LPCREATEERRORINFO;
 
 
 EXTERN_C const IID IID_ICreateErrorInfo;
@@ -5380,35 +5388,35 @@ EXTERN_C const IID IID_ICreateErrorInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICreateErrorInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICreateErrorInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICreateErrorInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICreateErrorInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICreateErrorInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICreateErrorInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetGUID )( 
-            ICreateErrorInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetGUID )( 
+            ICreateErrorInfo * This,
             /* [in] */ REFGUID rguid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSource )( 
-            ICreateErrorInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetSource )( 
+            ICreateErrorInfo * This,
             /* [in] */ LPOLESTR szSource);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDescription )( 
-            ICreateErrorInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetDescription )( 
+            ICreateErrorInfo * This,
             /* [in] */ LPOLESTR szDescription);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHelpFile )( 
-            ICreateErrorInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetHelpFile )( 
+            ICreateErrorInfo * This,
             /* [in] */ LPOLESTR szHelpFile);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHelpContext )( 
-            ICreateErrorInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetHelpContext )( 
+            ICreateErrorInfo * This,
             /* [in] */ DWORD dwHelpContext);
         
         END_INTERFACE
@@ -5416,7 +5424,7 @@ EXTERN_C const IID IID_ICreateErrorInfo;
 
     interface ICreateErrorInfo
     {
-        CONST_VTBL struct ICreateErrorInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICreateErrorInfoVtbl *lpVtbl;
     };
 
     
@@ -5457,7 +5465,7 @@ EXTERN_C const IID IID_ICreateErrorInfo;
 
 
 HRESULT STDMETHODCALLTYPE ICreateErrorInfo_SetGUID_Proxy( 
-    ICreateErrorInfo __RPC_FAR * This,
+    ICreateErrorInfo * This,
     /* [in] */ REFGUID rguid);
 
 
@@ -5469,7 +5477,7 @@ void __RPC_STUB ICreateErrorInfo_SetGUID_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateErrorInfo_SetSource_Proxy( 
-    ICreateErrorInfo __RPC_FAR * This,
+    ICreateErrorInfo * This,
     /* [in] */ LPOLESTR szSource);
 
 
@@ -5481,7 +5489,7 @@ void __RPC_STUB ICreateErrorInfo_SetSource_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateErrorInfo_SetDescription_Proxy( 
-    ICreateErrorInfo __RPC_FAR * This,
+    ICreateErrorInfo * This,
     /* [in] */ LPOLESTR szDescription);
 
 
@@ -5493,7 +5501,7 @@ void __RPC_STUB ICreateErrorInfo_SetDescription_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateErrorInfo_SetHelpFile_Proxy( 
-    ICreateErrorInfo __RPC_FAR * This,
+    ICreateErrorInfo * This,
     /* [in] */ LPOLESTR szHelpFile);
 
 
@@ -5505,7 +5513,7 @@ void __RPC_STUB ICreateErrorInfo_SetHelpFile_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICreateErrorInfo_SetHelpContext_Proxy( 
-    ICreateErrorInfo __RPC_FAR * This,
+    ICreateErrorInfo * This,
     /* [in] */ DWORD dwHelpContext);
 
 
@@ -5526,7 +5534,7 @@ void __RPC_STUB ICreateErrorInfo_SetHelpContext_Stub(
 /* interface ISupportErrorInfo */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ ISupportErrorInfo __RPC_FAR *LPSUPPORTERRORINFO;
+typedef /* [unique] */ ISupportErrorInfo *LPSUPPORTERRORINFO;
 
 
 EXTERN_C const IID IID_ISupportErrorInfo;
@@ -5548,19 +5556,19 @@ EXTERN_C const IID IID_ISupportErrorInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISupportErrorInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISupportErrorInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISupportErrorInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISupportErrorInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISupportErrorInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISupportErrorInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InterfaceSupportsErrorInfo )( 
-            ISupportErrorInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *InterfaceSupportsErrorInfo )( 
+            ISupportErrorInfo * This,
             /* [in] */ REFIID riid);
         
         END_INTERFACE
@@ -5568,7 +5576,7 @@ EXTERN_C const IID IID_ISupportErrorInfo;
 
     interface ISupportErrorInfo
     {
-        CONST_VTBL struct ISupportErrorInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISupportErrorInfoVtbl *lpVtbl;
     };
 
     
@@ -5597,7 +5605,7 @@ EXTERN_C const IID IID_ISupportErrorInfo;
 
 
 HRESULT STDMETHODCALLTYPE ISupportErrorInfo_InterfaceSupportsErrorInfo_Proxy( 
-    ISupportErrorInfo __RPC_FAR * This,
+    ISupportErrorInfo * This,
     /* [in] */ REFIID riid);
 
 
@@ -5628,9 +5636,9 @@ EXTERN_C const IID IID_ITypeFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateFromTypeInfo( 
-            /* [in] */ ITypeInfo __RPC_FAR *pTypeInfo,
+            /* [in] */ ITypeInfo *pTypeInfo,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppv) = 0;
+            /* [iid_is][out] */ IUnknown **ppv) = 0;
         
     };
     
@@ -5640,29 +5648,29 @@ EXTERN_C const IID IID_ITypeFactory;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITypeFactory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITypeFactory * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITypeFactory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITypeFactory * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITypeFactory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITypeFactory * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateFromTypeInfo )( 
-            ITypeFactory __RPC_FAR * This,
-            /* [in] */ ITypeInfo __RPC_FAR *pTypeInfo,
+        HRESULT ( STDMETHODCALLTYPE *CreateFromTypeInfo )( 
+            ITypeFactory * This,
+            /* [in] */ ITypeInfo *pTypeInfo,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppv);
+            /* [iid_is][out] */ IUnknown **ppv);
         
         END_INTERFACE
     } ITypeFactoryVtbl;
 
     interface ITypeFactory
     {
-        CONST_VTBL struct ITypeFactoryVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITypeFactoryVtbl *lpVtbl;
     };
 
     
@@ -5691,10 +5699,10 @@ EXTERN_C const IID IID_ITypeFactory;
 
 
 HRESULT STDMETHODCALLTYPE ITypeFactory_CreateFromTypeInfo_Proxy( 
-    ITypeFactory __RPC_FAR * This,
-    /* [in] */ ITypeInfo __RPC_FAR *pTypeInfo,
+    ITypeFactory * This,
+    /* [in] */ ITypeInfo *pTypeInfo,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppv);
+    /* [iid_is][out] */ IUnknown **ppv);
 
 
 void __RPC_STUB ITypeFactory_CreateFromTypeInfo_Stub(
@@ -5727,22 +5735,22 @@ EXTERN_C const IID IID_ITypeMarshal;
             /* [in] */ PVOID pvType,
             /* [in] */ DWORD dwDestContext,
             /* [in] */ PVOID pvDestContext,
-            /* [out] */ ULONG __RPC_FAR *pSize) = 0;
+            /* [out] */ ULONG *pSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Marshal( 
             /* [in] */ PVOID pvType,
             /* [in] */ DWORD dwDestContext,
             /* [in] */ PVOID pvDestContext,
             /* [in] */ ULONG cbBufferLength,
-            /* [out] */ BYTE __RPC_FAR *pBuffer,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten) = 0;
+            /* [out] */ BYTE *pBuffer,
+            /* [out] */ ULONG *pcbWritten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unmarshal( 
             /* [out] */ PVOID pvType,
             /* [in] */ DWORD dwFlags,
             /* [in] */ ULONG cbBufferLength,
-            /* [in] */ BYTE __RPC_FAR *pBuffer,
-            /* [out] */ ULONG __RPC_FAR *pcbRead) = 0;
+            /* [in] */ BYTE *pBuffer,
+            /* [out] */ ULONG *pcbRead) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Free( 
             /* [in] */ PVOID pvType) = 0;
@@ -5755,43 +5763,43 @@ EXTERN_C const IID IID_ITypeMarshal;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITypeMarshal __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITypeMarshal * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITypeMarshal __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITypeMarshal * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITypeMarshal __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITypeMarshal * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Size )( 
-            ITypeMarshal __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Size )( 
+            ITypeMarshal * This,
             /* [in] */ PVOID pvType,
             /* [in] */ DWORD dwDestContext,
             /* [in] */ PVOID pvDestContext,
-            /* [out] */ ULONG __RPC_FAR *pSize);
+            /* [out] */ ULONG *pSize);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Marshal )( 
-            ITypeMarshal __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Marshal )( 
+            ITypeMarshal * This,
             /* [in] */ PVOID pvType,
             /* [in] */ DWORD dwDestContext,
             /* [in] */ PVOID pvDestContext,
             /* [in] */ ULONG cbBufferLength,
-            /* [out] */ BYTE __RPC_FAR *pBuffer,
-            /* [out] */ ULONG __RPC_FAR *pcbWritten);
+            /* [out] */ BYTE *pBuffer,
+            /* [out] */ ULONG *pcbWritten);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unmarshal )( 
-            ITypeMarshal __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Unmarshal )( 
+            ITypeMarshal * This,
             /* [out] */ PVOID pvType,
             /* [in] */ DWORD dwFlags,
             /* [in] */ ULONG cbBufferLength,
-            /* [in] */ BYTE __RPC_FAR *pBuffer,
-            /* [out] */ ULONG __RPC_FAR *pcbRead);
+            /* [in] */ BYTE *pBuffer,
+            /* [out] */ ULONG *pcbRead);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Free )( 
-            ITypeMarshal __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Free )( 
+            ITypeMarshal * This,
             /* [in] */ PVOID pvType);
         
         END_INTERFACE
@@ -5799,7 +5807,7 @@ EXTERN_C const IID IID_ITypeMarshal;
 
     interface ITypeMarshal
     {
-        CONST_VTBL struct ITypeMarshalVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITypeMarshalVtbl *lpVtbl;
     };
 
     
@@ -5837,11 +5845,11 @@ EXTERN_C const IID IID_ITypeMarshal;
 
 
 HRESULT STDMETHODCALLTYPE ITypeMarshal_Size_Proxy( 
-    ITypeMarshal __RPC_FAR * This,
+    ITypeMarshal * This,
     /* [in] */ PVOID pvType,
     /* [in] */ DWORD dwDestContext,
     /* [in] */ PVOID pvDestContext,
-    /* [out] */ ULONG __RPC_FAR *pSize);
+    /* [out] */ ULONG *pSize);
 
 
 void __RPC_STUB ITypeMarshal_Size_Stub(
@@ -5852,13 +5860,13 @@ void __RPC_STUB ITypeMarshal_Size_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeMarshal_Marshal_Proxy( 
-    ITypeMarshal __RPC_FAR * This,
+    ITypeMarshal * This,
     /* [in] */ PVOID pvType,
     /* [in] */ DWORD dwDestContext,
     /* [in] */ PVOID pvDestContext,
     /* [in] */ ULONG cbBufferLength,
-    /* [out] */ BYTE __RPC_FAR *pBuffer,
-    /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    /* [out] */ BYTE *pBuffer,
+    /* [out] */ ULONG *pcbWritten);
 
 
 void __RPC_STUB ITypeMarshal_Marshal_Stub(
@@ -5869,12 +5877,12 @@ void __RPC_STUB ITypeMarshal_Marshal_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeMarshal_Unmarshal_Proxy( 
-    ITypeMarshal __RPC_FAR * This,
+    ITypeMarshal * This,
     /* [out] */ PVOID pvType,
     /* [in] */ DWORD dwFlags,
     /* [in] */ ULONG cbBufferLength,
-    /* [in] */ BYTE __RPC_FAR *pBuffer,
-    /* [out] */ ULONG __RPC_FAR *pcbRead);
+    /* [in] */ BYTE *pBuffer,
+    /* [out] */ ULONG *pcbRead);
 
 
 void __RPC_STUB ITypeMarshal_Unmarshal_Stub(
@@ -5885,7 +5893,7 @@ void __RPC_STUB ITypeMarshal_Unmarshal_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITypeMarshal_Free_Proxy( 
-    ITypeMarshal __RPC_FAR * This,
+    ITypeMarshal * This,
     /* [in] */ PVOID pvType);
 
 
@@ -5906,7 +5914,7 @@ void __RPC_STUB ITypeMarshal_Free_Stub(
 /* interface IRecordInfo */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ IRecordInfo __RPC_FAR *LPRECORDINFO;
+typedef /* [unique] */ IRecordInfo *LPRECORDINFO;
 
 
 EXTERN_C const IID IID_IRecordInfo;
@@ -5928,52 +5936,52 @@ EXTERN_C const IID IID_IRecordInfo;
             /* [out] */ PVOID pvNew) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetGuid( 
-            /* [out] */ GUID __RPC_FAR *pguid) = 0;
+            /* [out] */ GUID *pguid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [out] */ BSTR __RPC_FAR *pbstrName) = 0;
+            /* [out] */ BSTR *pbstrName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSize( 
-            /* [out] */ ULONG __RPC_FAR *pcbSize) = 0;
+            /* [out] */ ULONG *pcbSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTypeInfo( 
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTypeInfo) = 0;
+            /* [out] */ ITypeInfo **ppTypeInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetField( 
             /* [in] */ PVOID pvData,
             /* [in] */ LPCOLESTR szFieldName,
-            /* [out] */ VARIANT __RPC_FAR *pvarField) = 0;
+            /* [out] */ VARIANT *pvarField) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFieldNoCopy( 
             /* [in] */ PVOID pvData,
             /* [in] */ LPCOLESTR szFieldName,
-            /* [out] */ VARIANT __RPC_FAR *pvarField,
-            /* [out] */ PVOID __RPC_FAR *ppvDataCArray) = 0;
+            /* [out] */ VARIANT *pvarField,
+            /* [out] */ PVOID *ppvDataCArray) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutField( 
             /* [in] */ ULONG wFlags,
             /* [out][in] */ PVOID pvData,
             /* [in] */ LPCOLESTR szFieldName,
-            /* [in] */ VARIANT __RPC_FAR *pvarField) = 0;
+            /* [in] */ VARIANT *pvarField) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PutFieldNoCopy( 
             /* [in] */ ULONG wFlags,
             /* [out][in] */ PVOID pvData,
             /* [in] */ LPCOLESTR szFieldName,
-            /* [in] */ VARIANT __RPC_FAR *pvarField) = 0;
+            /* [in] */ VARIANT *pvarField) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFieldNames( 
-            /* [out][in] */ ULONG __RPC_FAR *pcNames,
-            /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames) = 0;
+            /* [out][in] */ ULONG *pcNames,
+            /* [length_is][size_is][out] */ BSTR *rgBstrNames) = 0;
         
         virtual BOOL STDMETHODCALLTYPE IsMatchingType( 
-            /* [in] */ IRecordInfo __RPC_FAR *pRecordInfo) = 0;
+            /* [in] */ IRecordInfo *pRecordInfo) = 0;
         
         virtual PVOID STDMETHODCALLTYPE RecordCreate( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RecordCreateCopy( 
             /* [in] */ PVOID pvSource,
-            /* [out] */ PVOID __RPC_FAR *ppvDest) = 0;
+            /* [out] */ PVOID *ppvDest) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RecordDestroy( 
             /* [in] */ PVOID pvRecord) = 0;
@@ -5986,92 +5994,92 @@ EXTERN_C const IID IID_IRecordInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IRecordInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IRecordInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IRecordInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IRecordInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IRecordInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IRecordInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RecordInit )( 
-            IRecordInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RecordInit )( 
+            IRecordInfo * This,
             /* [out] */ PVOID pvNew);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RecordClear )( 
-            IRecordInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RecordClear )( 
+            IRecordInfo * This,
             /* [in] */ PVOID pvExisting);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RecordCopy )( 
-            IRecordInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RecordCopy )( 
+            IRecordInfo * This,
             /* [in] */ PVOID pvExisting,
             /* [out] */ PVOID pvNew);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetGuid )( 
-            IRecordInfo __RPC_FAR * This,
-            /* [out] */ GUID __RPC_FAR *pguid);
+        HRESULT ( STDMETHODCALLTYPE *GetGuid )( 
+            IRecordInfo * This,
+            /* [out] */ GUID *pguid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
-            IRecordInfo __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrName);
+        HRESULT ( STDMETHODCALLTYPE *GetName )( 
+            IRecordInfo * This,
+            /* [out] */ BSTR *pbstrName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSize )( 
-            IRecordInfo __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pcbSize);
+        HRESULT ( STDMETHODCALLTYPE *GetSize )( 
+            IRecordInfo * This,
+            /* [out] */ ULONG *pcbSize);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IRecordInfo __RPC_FAR * This,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTypeInfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IRecordInfo * This,
+            /* [out] */ ITypeInfo **ppTypeInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetField )( 
-            IRecordInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetField )( 
+            IRecordInfo * This,
             /* [in] */ PVOID pvData,
             /* [in] */ LPCOLESTR szFieldName,
-            /* [out] */ VARIANT __RPC_FAR *pvarField);
+            /* [out] */ VARIANT *pvarField);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFieldNoCopy )( 
-            IRecordInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetFieldNoCopy )( 
+            IRecordInfo * This,
             /* [in] */ PVOID pvData,
             /* [in] */ LPCOLESTR szFieldName,
-            /* [out] */ VARIANT __RPC_FAR *pvarField,
-            /* [out] */ PVOID __RPC_FAR *ppvDataCArray);
+            /* [out] */ VARIANT *pvarField,
+            /* [out] */ PVOID *ppvDataCArray);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutField )( 
-            IRecordInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *PutField )( 
+            IRecordInfo * This,
             /* [in] */ ULONG wFlags,
             /* [out][in] */ PVOID pvData,
             /* [in] */ LPCOLESTR szFieldName,
-            /* [in] */ VARIANT __RPC_FAR *pvarField);
+            /* [in] */ VARIANT *pvarField);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutFieldNoCopy )( 
-            IRecordInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *PutFieldNoCopy )( 
+            IRecordInfo * This,
             /* [in] */ ULONG wFlags,
             /* [out][in] */ PVOID pvData,
             /* [in] */ LPCOLESTR szFieldName,
-            /* [in] */ VARIANT __RPC_FAR *pvarField);
+            /* [in] */ VARIANT *pvarField);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetFieldNames )( 
-            IRecordInfo __RPC_FAR * This,
-            /* [out][in] */ ULONG __RPC_FAR *pcNames,
-            /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames);
+        HRESULT ( STDMETHODCALLTYPE *GetFieldNames )( 
+            IRecordInfo * This,
+            /* [out][in] */ ULONG *pcNames,
+            /* [length_is][size_is][out] */ BSTR *rgBstrNames);
         
-        BOOL ( STDMETHODCALLTYPE __RPC_FAR *IsMatchingType )( 
-            IRecordInfo __RPC_FAR * This,
-            /* [in] */ IRecordInfo __RPC_FAR *pRecordInfo);
+        BOOL ( STDMETHODCALLTYPE *IsMatchingType )( 
+            IRecordInfo * This,
+            /* [in] */ IRecordInfo *pRecordInfo);
         
-        PVOID ( STDMETHODCALLTYPE __RPC_FAR *RecordCreate )( 
-            IRecordInfo __RPC_FAR * This);
+        PVOID ( STDMETHODCALLTYPE *RecordCreate )( 
+            IRecordInfo * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RecordCreateCopy )( 
-            IRecordInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RecordCreateCopy )( 
+            IRecordInfo * This,
             /* [in] */ PVOID pvSource,
-            /* [out] */ PVOID __RPC_FAR *ppvDest);
+            /* [out] */ PVOID *ppvDest);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RecordDestroy )( 
-            IRecordInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RecordDestroy )( 
+            IRecordInfo * This,
             /* [in] */ PVOID pvRecord);
         
         END_INTERFACE
@@ -6079,7 +6087,7 @@ EXTERN_C const IID IID_IRecordInfo;
 
     interface IRecordInfo
     {
-        CONST_VTBL struct IRecordInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IRecordInfoVtbl *lpVtbl;
     };
 
     
@@ -6153,7 +6161,7 @@ EXTERN_C const IID IID_IRecordInfo;
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_RecordInit_Proxy( 
-    IRecordInfo __RPC_FAR * This,
+    IRecordInfo * This,
     /* [out] */ PVOID pvNew);
 
 
@@ -6165,7 +6173,7 @@ void __RPC_STUB IRecordInfo_RecordInit_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_RecordClear_Proxy( 
-    IRecordInfo __RPC_FAR * This,
+    IRecordInfo * This,
     /* [in] */ PVOID pvExisting);
 
 
@@ -6177,7 +6185,7 @@ void __RPC_STUB IRecordInfo_RecordClear_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_RecordCopy_Proxy( 
-    IRecordInfo __RPC_FAR * This,
+    IRecordInfo * This,
     /* [in] */ PVOID pvExisting,
     /* [out] */ PVOID pvNew);
 
@@ -6190,8 +6198,8 @@ void __RPC_STUB IRecordInfo_RecordCopy_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_GetGuid_Proxy( 
-    IRecordInfo __RPC_FAR * This,
-    /* [out] */ GUID __RPC_FAR *pguid);
+    IRecordInfo * This,
+    /* [out] */ GUID *pguid);
 
 
 void __RPC_STUB IRecordInfo_GetGuid_Stub(
@@ -6202,8 +6210,8 @@ void __RPC_STUB IRecordInfo_GetGuid_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_GetName_Proxy( 
-    IRecordInfo __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrName);
+    IRecordInfo * This,
+    /* [out] */ BSTR *pbstrName);
 
 
 void __RPC_STUB IRecordInfo_GetName_Stub(
@@ -6214,8 +6222,8 @@ void __RPC_STUB IRecordInfo_GetName_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_GetSize_Proxy( 
-    IRecordInfo __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pcbSize);
+    IRecordInfo * This,
+    /* [out] */ ULONG *pcbSize);
 
 
 void __RPC_STUB IRecordInfo_GetSize_Stub(
@@ -6226,8 +6234,8 @@ void __RPC_STUB IRecordInfo_GetSize_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_GetTypeInfo_Proxy( 
-    IRecordInfo __RPC_FAR * This,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTypeInfo);
+    IRecordInfo * This,
+    /* [out] */ ITypeInfo **ppTypeInfo);
 
 
 void __RPC_STUB IRecordInfo_GetTypeInfo_Stub(
@@ -6238,10 +6246,10 @@ void __RPC_STUB IRecordInfo_GetTypeInfo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_GetField_Proxy( 
-    IRecordInfo __RPC_FAR * This,
+    IRecordInfo * This,
     /* [in] */ PVOID pvData,
     /* [in] */ LPCOLESTR szFieldName,
-    /* [out] */ VARIANT __RPC_FAR *pvarField);
+    /* [out] */ VARIANT *pvarField);
 
 
 void __RPC_STUB IRecordInfo_GetField_Stub(
@@ -6252,11 +6260,11 @@ void __RPC_STUB IRecordInfo_GetField_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_GetFieldNoCopy_Proxy( 
-    IRecordInfo __RPC_FAR * This,
+    IRecordInfo * This,
     /* [in] */ PVOID pvData,
     /* [in] */ LPCOLESTR szFieldName,
-    /* [out] */ VARIANT __RPC_FAR *pvarField,
-    /* [out] */ PVOID __RPC_FAR *ppvDataCArray);
+    /* [out] */ VARIANT *pvarField,
+    /* [out] */ PVOID *ppvDataCArray);
 
 
 void __RPC_STUB IRecordInfo_GetFieldNoCopy_Stub(
@@ -6267,11 +6275,11 @@ void __RPC_STUB IRecordInfo_GetFieldNoCopy_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_PutField_Proxy( 
-    IRecordInfo __RPC_FAR * This,
+    IRecordInfo * This,
     /* [in] */ ULONG wFlags,
     /* [out][in] */ PVOID pvData,
     /* [in] */ LPCOLESTR szFieldName,
-    /* [in] */ VARIANT __RPC_FAR *pvarField);
+    /* [in] */ VARIANT *pvarField);
 
 
 void __RPC_STUB IRecordInfo_PutField_Stub(
@@ -6282,11 +6290,11 @@ void __RPC_STUB IRecordInfo_PutField_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_PutFieldNoCopy_Proxy( 
-    IRecordInfo __RPC_FAR * This,
+    IRecordInfo * This,
     /* [in] */ ULONG wFlags,
     /* [out][in] */ PVOID pvData,
     /* [in] */ LPCOLESTR szFieldName,
-    /* [in] */ VARIANT __RPC_FAR *pvarField);
+    /* [in] */ VARIANT *pvarField);
 
 
 void __RPC_STUB IRecordInfo_PutFieldNoCopy_Stub(
@@ -6297,9 +6305,9 @@ void __RPC_STUB IRecordInfo_PutFieldNoCopy_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_GetFieldNames_Proxy( 
-    IRecordInfo __RPC_FAR * This,
-    /* [out][in] */ ULONG __RPC_FAR *pcNames,
-    /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames);
+    IRecordInfo * This,
+    /* [out][in] */ ULONG *pcNames,
+    /* [length_is][size_is][out] */ BSTR *rgBstrNames);
 
 
 void __RPC_STUB IRecordInfo_GetFieldNames_Stub(
@@ -6310,8 +6318,8 @@ void __RPC_STUB IRecordInfo_GetFieldNames_Stub(
 
 
 BOOL STDMETHODCALLTYPE IRecordInfo_IsMatchingType_Proxy( 
-    IRecordInfo __RPC_FAR * This,
-    /* [in] */ IRecordInfo __RPC_FAR *pRecordInfo);
+    IRecordInfo * This,
+    /* [in] */ IRecordInfo *pRecordInfo);
 
 
 void __RPC_STUB IRecordInfo_IsMatchingType_Stub(
@@ -6322,7 +6330,7 @@ void __RPC_STUB IRecordInfo_IsMatchingType_Stub(
 
 
 PVOID STDMETHODCALLTYPE IRecordInfo_RecordCreate_Proxy( 
-    IRecordInfo __RPC_FAR * This);
+    IRecordInfo * This);
 
 
 void __RPC_STUB IRecordInfo_RecordCreate_Stub(
@@ -6333,9 +6341,9 @@ void __RPC_STUB IRecordInfo_RecordCreate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_RecordCreateCopy_Proxy( 
-    IRecordInfo __RPC_FAR * This,
+    IRecordInfo * This,
     /* [in] */ PVOID pvSource,
-    /* [out] */ PVOID __RPC_FAR *ppvDest);
+    /* [out] */ PVOID *ppvDest);
 
 
 void __RPC_STUB IRecordInfo_RecordCreateCopy_Stub(
@@ -6346,7 +6354,7 @@ void __RPC_STUB IRecordInfo_RecordCreateCopy_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IRecordInfo_RecordDestroy_Proxy( 
-    IRecordInfo __RPC_FAR * This,
+    IRecordInfo * This,
     /* [in] */ PVOID pvRecord);
 
 
@@ -6367,7 +6375,7 @@ void __RPC_STUB IRecordInfo_RecordDestroy_Stub(
 /* interface IErrorLog */
 /* [unique][uuid][object] */ 
 
-typedef IErrorLog __RPC_FAR *LPERRORLOG;
+typedef IErrorLog *LPERRORLOG;
 
 
 EXTERN_C const IID IID_IErrorLog;
@@ -6380,7 +6388,7 @@ EXTERN_C const IID IID_IErrorLog;
     public:
         virtual HRESULT STDMETHODCALLTYPE AddError( 
             /* [in] */ LPCOLESTR pszPropName,
-            /* [in] */ EXCEPINFO __RPC_FAR *pExcepInfo) = 0;
+            /* [in] */ EXCEPINFO *pExcepInfo) = 0;
         
     };
     
@@ -6390,28 +6398,28 @@ EXTERN_C const IID IID_IErrorLog;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IErrorLog __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IErrorLog * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IErrorLog __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IErrorLog * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IErrorLog __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IErrorLog * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddError )( 
-            IErrorLog __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *AddError )( 
+            IErrorLog * This,
             /* [in] */ LPCOLESTR pszPropName,
-            /* [in] */ EXCEPINFO __RPC_FAR *pExcepInfo);
+            /* [in] */ EXCEPINFO *pExcepInfo);
         
         END_INTERFACE
     } IErrorLogVtbl;
 
     interface IErrorLog
     {
-        CONST_VTBL struct IErrorLogVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IErrorLogVtbl *lpVtbl;
     };
 
     
@@ -6440,9 +6448,9 @@ EXTERN_C const IID IID_IErrorLog;
 
 
 HRESULT STDMETHODCALLTYPE IErrorLog_AddError_Proxy( 
-    IErrorLog __RPC_FAR * This,
+    IErrorLog * This,
     /* [in] */ LPCOLESTR pszPropName,
-    /* [in] */ EXCEPINFO __RPC_FAR *pExcepInfo);
+    /* [in] */ EXCEPINFO *pExcepInfo);
 
 
 void __RPC_STUB IErrorLog_AddError_Stub(
@@ -6462,7 +6470,7 @@ void __RPC_STUB IErrorLog_AddError_Stub(
 /* interface IPropertyBag */
 /* [unique][uuid][object] */ 
 
-typedef IPropertyBag __RPC_FAR *LPPROPERTYBAG;
+typedef IPropertyBag *LPPROPERTYBAG;
 
 
 EXTERN_C const IID IID_IPropertyBag;
@@ -6475,12 +6483,12 @@ EXTERN_C const IID IID_IPropertyBag;
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Read( 
             /* [in] */ LPCOLESTR pszPropName,
-            /* [out][in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ IErrorLog __RPC_FAR *pErrorLog) = 0;
+            /* [out][in] */ VARIANT *pVar,
+            /* [in] */ IErrorLog *pErrorLog) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Write( 
             /* [in] */ LPCOLESTR pszPropName,
-            /* [in] */ VARIANT __RPC_FAR *pVar) = 0;
+            /* [in] */ VARIANT *pVar) = 0;
         
     };
     
@@ -6490,34 +6498,34 @@ EXTERN_C const IID IID_IPropertyBag;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPropertyBag __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPropertyBag * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPropertyBag __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPropertyBag * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPropertyBag __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPropertyBag * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Read )( 
-            IPropertyBag __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Read )( 
+            IPropertyBag * This,
             /* [in] */ LPCOLESTR pszPropName,
-            /* [out][in] */ VARIANT __RPC_FAR *pVar,
-            /* [in] */ IErrorLog __RPC_FAR *pErrorLog);
+            /* [out][in] */ VARIANT *pVar,
+            /* [in] */ IErrorLog *pErrorLog);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Write )( 
-            IPropertyBag __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Write )( 
+            IPropertyBag * This,
             /* [in] */ LPCOLESTR pszPropName,
-            /* [in] */ VARIANT __RPC_FAR *pVar);
+            /* [in] */ VARIANT *pVar);
         
         END_INTERFACE
     } IPropertyBagVtbl;
 
     interface IPropertyBag
     {
-        CONST_VTBL struct IPropertyBagVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPropertyBagVtbl *lpVtbl;
     };
 
     
@@ -6549,12 +6557,12 @@ EXTERN_C const IID IID_IPropertyBag;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IPropertyBag_RemoteRead_Proxy( 
-    IPropertyBag __RPC_FAR * This,
+    IPropertyBag * This,
     /* [in] */ LPCOLESTR pszPropName,
-    /* [out] */ VARIANT __RPC_FAR *pVar,
-    /* [in] */ IErrorLog __RPC_FAR *pErrorLog,
+    /* [out] */ VARIANT *pVar,
+    /* [in] */ IErrorLog *pErrorLog,
     /* [in] */ DWORD varType,
-    /* [in] */ IUnknown __RPC_FAR *pUnkObj);
+    /* [in] */ IUnknown *pUnkObj);
 
 
 void __RPC_STUB IPropertyBag_RemoteRead_Stub(
@@ -6565,9 +6573,9 @@ void __RPC_STUB IPropertyBag_RemoteRead_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPropertyBag_Write_Proxy( 
-    IPropertyBag __RPC_FAR * This,
+    IPropertyBag * This,
     /* [in] */ LPCOLESTR pszPropName,
-    /* [in] */ VARIANT __RPC_FAR *pVar);
+    /* [in] */ VARIANT *pVar);
 
 
 void __RPC_STUB IPropertyBag_Write_Stub(
@@ -6581,7 +6589,7 @@ void __RPC_STUB IPropertyBag_Write_Stub(
 #endif 	/* __IPropertyBag_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_oaidl_0103 */
+/* interface __MIDL_itf_oaidl_0108 */
 /* [local] */ 
 
 #if ( _MSC_VER >= 800 )
@@ -6593,404 +6601,404 @@ void __RPC_STUB IPropertyBag_Write_Stub(
 #endif
 
 
-extern RPC_IF_HANDLE __MIDL_itf_oaidl_0103_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_oaidl_0103_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_oaidl_0108_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_oaidl_0108_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-unsigned long             __RPC_USER  CLEANLOCALSTORAGE_UserSize(     unsigned long __RPC_FAR *, unsigned long            , CLEANLOCALSTORAGE __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  CLEANLOCALSTORAGE_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, CLEANLOCALSTORAGE __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  CLEANLOCALSTORAGE_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, CLEANLOCALSTORAGE __RPC_FAR * ); 
-void                      __RPC_USER  CLEANLOCALSTORAGE_UserFree(     unsigned long __RPC_FAR *, CLEANLOCALSTORAGE __RPC_FAR * ); 
+unsigned long             __RPC_USER  CLEANLOCALSTORAGE_UserSize(     unsigned long *, unsigned long            , CLEANLOCALSTORAGE * ); 
+unsigned char * __RPC_USER  CLEANLOCALSTORAGE_UserMarshal(  unsigned long *, unsigned char *, CLEANLOCALSTORAGE * ); 
+unsigned char * __RPC_USER  CLEANLOCALSTORAGE_UserUnmarshal(unsigned long *, unsigned char *, CLEANLOCALSTORAGE * ); 
+void                      __RPC_USER  CLEANLOCALSTORAGE_UserFree(     unsigned long *, CLEANLOCALSTORAGE * ); 
 
-unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
+unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
+void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IDispatch_Invoke_Proxy( 
-    IDispatch __RPC_FAR * This,
+    IDispatch * This,
     /* [in] */ DISPID dispIdMember,
     /* [in] */ REFIID riid,
     /* [in] */ LCID lcid,
     /* [in] */ WORD wFlags,
-    /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-    /* [out] */ VARIANT __RPC_FAR *pVarResult,
-    /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-    /* [out] */ UINT __RPC_FAR *puArgErr);
+    /* [out][in] */ DISPPARAMS *pDispParams,
+    /* [out] */ VARIANT *pVarResult,
+    /* [out] */ EXCEPINFO *pExcepInfo,
+    /* [out] */ UINT *puArgErr);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IDispatch_Invoke_Stub( 
-    IDispatch __RPC_FAR * This,
+    IDispatch * This,
     /* [in] */ DISPID dispIdMember,
     /* [in] */ REFIID riid,
     /* [in] */ LCID lcid,
     /* [in] */ DWORD dwFlags,
-    /* [in] */ DISPPARAMS __RPC_FAR *pDispParams,
-    /* [out] */ VARIANT __RPC_FAR *pVarResult,
-    /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-    /* [out] */ UINT __RPC_FAR *pArgErr,
+    /* [in] */ DISPPARAMS *pDispParams,
+    /* [out] */ VARIANT *pVarResult,
+    /* [out] */ EXCEPINFO *pExcepInfo,
+    /* [out] */ UINT *pArgErr,
     /* [in] */ UINT cVarRef,
-    /* [size_is][in] */ UINT __RPC_FAR *rgVarRefIdx,
-    /* [size_is][out][in] */ VARIANTARG __RPC_FAR *rgVarRef);
+    /* [size_is][in] */ UINT *rgVarRefIdx,
+    /* [size_is][out][in] */ VARIANTARG *rgVarRef);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEnumVARIANT_Next_Proxy( 
-    IEnumVARIANT __RPC_FAR * This,
+    IEnumVARIANT * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ VARIANT __RPC_FAR *rgVar,
-    /* [out] */ ULONG __RPC_FAR *pCeltFetched);
+    /* [length_is][size_is][out] */ VARIANT *rgVar,
+    /* [out] */ ULONG *pCeltFetched);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumVARIANT_Next_Stub( 
-    IEnumVARIANT __RPC_FAR * This,
+    IEnumVARIANT * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ VARIANT __RPC_FAR *rgVar,
-    /* [out] */ ULONG __RPC_FAR *pCeltFetched);
+    /* [length_is][size_is][out] */ VARIANT *rgVar,
+    /* [out] */ ULONG *pCeltFetched);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeComp_Bind_Proxy( 
-    ITypeComp __RPC_FAR * This,
+    ITypeComp * This,
     /* [in] */ LPOLESTR szName,
     /* [in] */ ULONG lHashVal,
     /* [in] */ WORD wFlags,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-    /* [out] */ DESCKIND __RPC_FAR *pDescKind,
-    /* [out] */ BINDPTR __RPC_FAR *pBindPtr);
+    /* [out] */ ITypeInfo **ppTInfo,
+    /* [out] */ DESCKIND *pDescKind,
+    /* [out] */ BINDPTR *pBindPtr);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeComp_Bind_Stub( 
-    ITypeComp __RPC_FAR * This,
+    ITypeComp * This,
     /* [in] */ LPOLESTR szName,
     /* [in] */ ULONG lHashVal,
     /* [in] */ WORD wFlags,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-    /* [out] */ DESCKIND __RPC_FAR *pDescKind,
-    /* [out] */ LPFUNCDESC __RPC_FAR *ppFuncDesc,
-    /* [out] */ LPVARDESC __RPC_FAR *ppVarDesc,
-    /* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTypeComp,
-    /* [out] */ CLEANLOCALSTORAGE __RPC_FAR *pDummy);
+    /* [out] */ ITypeInfo **ppTInfo,
+    /* [out] */ DESCKIND *pDescKind,
+    /* [out] */ LPFUNCDESC *ppFuncDesc,
+    /* [out] */ LPVARDESC *ppVarDesc,
+    /* [out] */ ITypeComp **ppTypeComp,
+    /* [out] */ CLEANLOCALSTORAGE *pDummy);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeComp_BindType_Proxy( 
-    ITypeComp __RPC_FAR * This,
+    ITypeComp * This,
     /* [in] */ LPOLESTR szName,
     /* [in] */ ULONG lHashVal,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-    /* [out] */ ITypeComp __RPC_FAR *__RPC_FAR *ppTComp);
+    /* [out] */ ITypeInfo **ppTInfo,
+    /* [out] */ ITypeComp **ppTComp);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeComp_BindType_Stub( 
-    ITypeComp __RPC_FAR * This,
+    ITypeComp * This,
     /* [in] */ LPOLESTR szName,
     /* [in] */ ULONG lHashVal,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+    /* [out] */ ITypeInfo **ppTInfo);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetTypeAttr_Proxy( 
-    ITypeInfo __RPC_FAR * This,
-    /* [out] */ TYPEATTR __RPC_FAR *__RPC_FAR *ppTypeAttr);
+    ITypeInfo * This,
+    /* [out] */ TYPEATTR **ppTypeAttr);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetTypeAttr_Stub( 
-    ITypeInfo __RPC_FAR * This,
-    /* [out] */ LPTYPEATTR __RPC_FAR *ppTypeAttr,
-    /* [out] */ CLEANLOCALSTORAGE __RPC_FAR *pDummy);
+    ITypeInfo * This,
+    /* [out] */ LPTYPEATTR *ppTypeAttr,
+    /* [out] */ CLEANLOCALSTORAGE *pDummy);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetFuncDesc_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ UINT index,
-    /* [out] */ FUNCDESC __RPC_FAR *__RPC_FAR *ppFuncDesc);
+    /* [out] */ FUNCDESC **ppFuncDesc);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetFuncDesc_Stub( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ UINT index,
-    /* [out] */ LPFUNCDESC __RPC_FAR *ppFuncDesc,
-    /* [out] */ CLEANLOCALSTORAGE __RPC_FAR *pDummy);
+    /* [out] */ LPFUNCDESC *ppFuncDesc,
+    /* [out] */ CLEANLOCALSTORAGE *pDummy);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetVarDesc_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ UINT index,
-    /* [out] */ VARDESC __RPC_FAR *__RPC_FAR *ppVarDesc);
+    /* [out] */ VARDESC **ppVarDesc);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetVarDesc_Stub( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ UINT index,
-    /* [out] */ LPVARDESC __RPC_FAR *ppVarDesc,
-    /* [out] */ CLEANLOCALSTORAGE __RPC_FAR *pDummy);
+    /* [out] */ LPVARDESC *ppVarDesc,
+    /* [out] */ CLEANLOCALSTORAGE *pDummy);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetNames_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ MEMBERID memid,
-    /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames,
+    /* [length_is][size_is][out] */ BSTR *rgBstrNames,
     /* [in] */ UINT cMaxNames,
-    /* [out] */ UINT __RPC_FAR *pcNames);
+    /* [out] */ UINT *pcNames);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetNames_Stub( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ MEMBERID memid,
-    /* [length_is][size_is][out] */ BSTR __RPC_FAR *rgBstrNames,
+    /* [length_is][size_is][out] */ BSTR *rgBstrNames,
     /* [in] */ UINT cMaxNames,
-    /* [out] */ UINT __RPC_FAR *pcNames);
+    /* [out] */ UINT *pcNames);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetIDsOfNames_Proxy( 
-    ITypeInfo __RPC_FAR * This,
-    /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+    ITypeInfo * This,
+    /* [size_is][in] */ LPOLESTR *rgszNames,
     /* [in] */ UINT cNames,
-    /* [size_is][out] */ MEMBERID __RPC_FAR *pMemId);
+    /* [size_is][out] */ MEMBERID *pMemId);
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetIDsOfNames_Stub( 
-    ITypeInfo __RPC_FAR * This);
+    ITypeInfo * This);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_Invoke_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ PVOID pvInstance,
     /* [in] */ MEMBERID memid,
     /* [in] */ WORD wFlags,
-    /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-    /* [out] */ VARIANT __RPC_FAR *pVarResult,
-    /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-    /* [out] */ UINT __RPC_FAR *puArgErr);
+    /* [out][in] */ DISPPARAMS *pDispParams,
+    /* [out] */ VARIANT *pVarResult,
+    /* [out] */ EXCEPINFO *pExcepInfo,
+    /* [out] */ UINT *puArgErr);
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_Invoke_Stub( 
-    ITypeInfo __RPC_FAR * This);
+    ITypeInfo * This);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetDocumentation_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ MEMBERID memid,
-    /* [out] */ BSTR __RPC_FAR *pBstrName,
-    /* [out] */ BSTR __RPC_FAR *pBstrDocString,
-    /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
-    /* [out] */ BSTR __RPC_FAR *pBstrHelpFile);
+    /* [out] */ BSTR *pBstrName,
+    /* [out] */ BSTR *pBstrDocString,
+    /* [out] */ DWORD *pdwHelpContext,
+    /* [out] */ BSTR *pBstrHelpFile);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetDocumentation_Stub( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ MEMBERID memid,
     /* [in] */ DWORD refPtrFlags,
-    /* [out] */ BSTR __RPC_FAR *pBstrName,
-    /* [out] */ BSTR __RPC_FAR *pBstrDocString,
-    /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
-    /* [out] */ BSTR __RPC_FAR *pBstrHelpFile);
+    /* [out] */ BSTR *pBstrName,
+    /* [out] */ BSTR *pBstrDocString,
+    /* [out] */ DWORD *pdwHelpContext,
+    /* [out] */ BSTR *pBstrHelpFile);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetDllEntry_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ MEMBERID memid,
     /* [in] */ INVOKEKIND invKind,
-    /* [out] */ BSTR __RPC_FAR *pBstrDllName,
-    /* [out] */ BSTR __RPC_FAR *pBstrName,
-    /* [out] */ WORD __RPC_FAR *pwOrdinal);
+    /* [out] */ BSTR *pBstrDllName,
+    /* [out] */ BSTR *pBstrName,
+    /* [out] */ WORD *pwOrdinal);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetDllEntry_Stub( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ MEMBERID memid,
     /* [in] */ INVOKEKIND invKind,
     /* [in] */ DWORD refPtrFlags,
-    /* [out] */ BSTR __RPC_FAR *pBstrDllName,
-    /* [out] */ BSTR __RPC_FAR *pBstrName,
-    /* [out] */ WORD __RPC_FAR *pwOrdinal);
+    /* [out] */ BSTR *pBstrDllName,
+    /* [out] */ BSTR *pBstrName,
+    /* [out] */ WORD *pwOrdinal);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_AddressOfMember_Proxy( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ MEMBERID memid,
     /* [in] */ INVOKEKIND invKind,
-    /* [out] */ PVOID __RPC_FAR *ppv);
+    /* [out] */ PVOID *ppv);
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_AddressOfMember_Stub( 
-    ITypeInfo __RPC_FAR * This);
+    ITypeInfo * This);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_CreateInstance_Proxy( 
-    ITypeInfo __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pUnkOuter,
+    ITypeInfo * This,
+    /* [in] */ IUnknown *pUnkOuter,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ PVOID __RPC_FAR *ppvObj);
+    /* [iid_is][out] */ PVOID *ppvObj);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_CreateInstance_Stub( 
-    ITypeInfo __RPC_FAR * This,
+    ITypeInfo * This,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObj);
+    /* [iid_is][out] */ IUnknown **ppvObj);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetContainingTypeLib_Proxy( 
-    ITypeInfo __RPC_FAR * This,
-    /* [out] */ ITypeLib __RPC_FAR *__RPC_FAR *ppTLib,
-    /* [out] */ UINT __RPC_FAR *pIndex);
+    ITypeInfo * This,
+    /* [out] */ ITypeLib **ppTLib,
+    /* [out] */ UINT *pIndex);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_GetContainingTypeLib_Stub( 
-    ITypeInfo __RPC_FAR * This,
-    /* [out] */ ITypeLib __RPC_FAR *__RPC_FAR *ppTLib,
-    /* [out] */ UINT __RPC_FAR *pIndex);
+    ITypeInfo * This,
+    /* [out] */ ITypeLib **ppTLib,
+    /* [out] */ UINT *pIndex);
 
 /* [local] */ void STDMETHODCALLTYPE ITypeInfo_ReleaseTypeAttr_Proxy( 
-    ITypeInfo __RPC_FAR * This,
-    /* [in] */ TYPEATTR __RPC_FAR *pTypeAttr);
+    ITypeInfo * This,
+    /* [in] */ TYPEATTR *pTypeAttr);
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_ReleaseTypeAttr_Stub( 
-    ITypeInfo __RPC_FAR * This);
+    ITypeInfo * This);
 
 /* [local] */ void STDMETHODCALLTYPE ITypeInfo_ReleaseFuncDesc_Proxy( 
-    ITypeInfo __RPC_FAR * This,
-    /* [in] */ FUNCDESC __RPC_FAR *pFuncDesc);
+    ITypeInfo * This,
+    /* [in] */ FUNCDESC *pFuncDesc);
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_ReleaseFuncDesc_Stub( 
-    ITypeInfo __RPC_FAR * This);
+    ITypeInfo * This);
 
 /* [local] */ void STDMETHODCALLTYPE ITypeInfo_ReleaseVarDesc_Proxy( 
-    ITypeInfo __RPC_FAR * This,
-    /* [in] */ VARDESC __RPC_FAR *pVarDesc);
+    ITypeInfo * This,
+    /* [in] */ VARDESC *pVarDesc);
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo_ReleaseVarDesc_Stub( 
-    ITypeInfo __RPC_FAR * This);
+    ITypeInfo * This);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeInfo2_GetDocumentation2_Proxy( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ MEMBERID memid,
     /* [in] */ LCID lcid,
-    /* [out] */ BSTR __RPC_FAR *pbstrHelpString,
-    /* [out] */ DWORD __RPC_FAR *pdwHelpStringContext,
-    /* [out] */ BSTR __RPC_FAR *pbstrHelpStringDll);
+    /* [out] */ BSTR *pbstrHelpString,
+    /* [out] */ DWORD *pdwHelpStringContext,
+    /* [out] */ BSTR *pbstrHelpStringDll);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeInfo2_GetDocumentation2_Stub( 
-    ITypeInfo2 __RPC_FAR * This,
+    ITypeInfo2 * This,
     /* [in] */ MEMBERID memid,
     /* [in] */ LCID lcid,
     /* [in] */ DWORD refPtrFlags,
-    /* [out] */ BSTR __RPC_FAR *pbstrHelpString,
-    /* [out] */ DWORD __RPC_FAR *pdwHelpStringContext,
-    /* [out] */ BSTR __RPC_FAR *pbstrHelpStringDll);
+    /* [out] */ BSTR *pbstrHelpString,
+    /* [out] */ DWORD *pdwHelpStringContext,
+    /* [out] */ BSTR *pbstrHelpStringDll);
 
 /* [local] */ UINT STDMETHODCALLTYPE ITypeLib_GetTypeInfoCount_Proxy( 
-    ITypeLib __RPC_FAR * This);
+    ITypeLib * This);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib_GetTypeInfoCount_Stub( 
-    ITypeLib __RPC_FAR * This,
-    /* [out] */ UINT __RPC_FAR *pcTInfo);
+    ITypeLib * This,
+    /* [out] */ UINT *pcTInfo);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeLib_GetLibAttr_Proxy( 
-    ITypeLib __RPC_FAR * This,
-    /* [out] */ TLIBATTR __RPC_FAR *__RPC_FAR *ppTLibAttr);
+    ITypeLib * This,
+    /* [out] */ TLIBATTR **ppTLibAttr);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib_GetLibAttr_Stub( 
-    ITypeLib __RPC_FAR * This,
-    /* [out] */ LPTLIBATTR __RPC_FAR *ppTLibAttr,
-    /* [out] */ CLEANLOCALSTORAGE __RPC_FAR *pDummy);
+    ITypeLib * This,
+    /* [out] */ LPTLIBATTR *ppTLibAttr,
+    /* [out] */ CLEANLOCALSTORAGE *pDummy);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeLib_GetDocumentation_Proxy( 
-    ITypeLib __RPC_FAR * This,
+    ITypeLib * This,
     /* [in] */ INT index,
-    /* [out] */ BSTR __RPC_FAR *pBstrName,
-    /* [out] */ BSTR __RPC_FAR *pBstrDocString,
-    /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
-    /* [out] */ BSTR __RPC_FAR *pBstrHelpFile);
+    /* [out] */ BSTR *pBstrName,
+    /* [out] */ BSTR *pBstrDocString,
+    /* [out] */ DWORD *pdwHelpContext,
+    /* [out] */ BSTR *pBstrHelpFile);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib_GetDocumentation_Stub( 
-    ITypeLib __RPC_FAR * This,
+    ITypeLib * This,
     /* [in] */ INT index,
     /* [in] */ DWORD refPtrFlags,
-    /* [out] */ BSTR __RPC_FAR *pBstrName,
-    /* [out] */ BSTR __RPC_FAR *pBstrDocString,
-    /* [out] */ DWORD __RPC_FAR *pdwHelpContext,
-    /* [out] */ BSTR __RPC_FAR *pBstrHelpFile);
+    /* [out] */ BSTR *pBstrName,
+    /* [out] */ BSTR *pBstrDocString,
+    /* [out] */ DWORD *pdwHelpContext,
+    /* [out] */ BSTR *pBstrHelpFile);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeLib_IsName_Proxy( 
-    ITypeLib __RPC_FAR * This,
+    ITypeLib * This,
     /* [out][in] */ LPOLESTR szNameBuf,
     /* [in] */ ULONG lHashVal,
-    /* [out] */ BOOL __RPC_FAR *pfName);
+    /* [out] */ BOOL *pfName);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib_IsName_Stub( 
-    ITypeLib __RPC_FAR * This,
+    ITypeLib * This,
     /* [in] */ LPOLESTR szNameBuf,
     /* [in] */ ULONG lHashVal,
-    /* [out] */ BOOL __RPC_FAR *pfName,
-    /* [out] */ BSTR __RPC_FAR *pBstrLibName);
+    /* [out] */ BOOL *pfName,
+    /* [out] */ BSTR *pBstrLibName);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeLib_FindName_Proxy( 
-    ITypeLib __RPC_FAR * This,
+    ITypeLib * This,
     /* [out][in] */ LPOLESTR szNameBuf,
     /* [in] */ ULONG lHashVal,
-    /* [length_is][size_is][out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-    /* [length_is][size_is][out] */ MEMBERID __RPC_FAR *rgMemId,
-    /* [out][in] */ USHORT __RPC_FAR *pcFound);
+    /* [length_is][size_is][out] */ ITypeInfo **ppTInfo,
+    /* [length_is][size_is][out] */ MEMBERID *rgMemId,
+    /* [out][in] */ USHORT *pcFound);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib_FindName_Stub( 
-    ITypeLib __RPC_FAR * This,
+    ITypeLib * This,
     /* [in] */ LPOLESTR szNameBuf,
     /* [in] */ ULONG lHashVal,
-    /* [length_is][size_is][out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo,
-    /* [length_is][size_is][out] */ MEMBERID __RPC_FAR *rgMemId,
-    /* [out][in] */ USHORT __RPC_FAR *pcFound,
-    /* [out] */ BSTR __RPC_FAR *pBstrLibName);
+    /* [length_is][size_is][out] */ ITypeInfo **ppTInfo,
+    /* [length_is][size_is][out] */ MEMBERID *rgMemId,
+    /* [out][in] */ USHORT *pcFound,
+    /* [out] */ BSTR *pBstrLibName);
 
 /* [local] */ void STDMETHODCALLTYPE ITypeLib_ReleaseTLibAttr_Proxy( 
-    ITypeLib __RPC_FAR * This,
-    /* [in] */ TLIBATTR __RPC_FAR *pTLibAttr);
+    ITypeLib * This,
+    /* [in] */ TLIBATTR *pTLibAttr);
 
 
 /* [nocode][call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib_ReleaseTLibAttr_Stub( 
-    ITypeLib __RPC_FAR * This);
+    ITypeLib * This);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeLib2_GetLibStatistics_Proxy( 
-    ITypeLib2 __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pcUniqueNames,
-    /* [out] */ ULONG __RPC_FAR *pcchUniqueNames);
+    ITypeLib2 * This,
+    /* [out] */ ULONG *pcUniqueNames,
+    /* [out] */ ULONG *pcchUniqueNames);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib2_GetLibStatistics_Stub( 
-    ITypeLib2 __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pcUniqueNames,
-    /* [out] */ ULONG __RPC_FAR *pcchUniqueNames);
+    ITypeLib2 * This,
+    /* [out] */ ULONG *pcUniqueNames,
+    /* [out] */ ULONG *pcchUniqueNames);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITypeLib2_GetDocumentation2_Proxy( 
-    ITypeLib2 __RPC_FAR * This,
+    ITypeLib2 * This,
     /* [in] */ INT index,
     /* [in] */ LCID lcid,
-    /* [out] */ BSTR __RPC_FAR *pbstrHelpString,
-    /* [out] */ DWORD __RPC_FAR *pdwHelpStringContext,
-    /* [out] */ BSTR __RPC_FAR *pbstrHelpStringDll);
+    /* [out] */ BSTR *pbstrHelpString,
+    /* [out] */ DWORD *pdwHelpStringContext,
+    /* [out] */ BSTR *pbstrHelpStringDll);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITypeLib2_GetDocumentation2_Stub( 
-    ITypeLib2 __RPC_FAR * This,
+    ITypeLib2 * This,
     /* [in] */ INT index,
     /* [in] */ LCID lcid,
     /* [in] */ DWORD refPtrFlags,
-    /* [out] */ BSTR __RPC_FAR *pbstrHelpString,
-    /* [out] */ DWORD __RPC_FAR *pdwHelpStringContext,
-    /* [out] */ BSTR __RPC_FAR *pbstrHelpStringDll);
+    /* [out] */ BSTR *pbstrHelpString,
+    /* [out] */ DWORD *pdwHelpStringContext,
+    /* [out] */ BSTR *pbstrHelpStringDll);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IPropertyBag_Read_Proxy( 
-    IPropertyBag __RPC_FAR * This,
+    IPropertyBag * This,
     /* [in] */ LPCOLESTR pszPropName,
-    /* [out][in] */ VARIANT __RPC_FAR *pVar,
-    /* [in] */ IErrorLog __RPC_FAR *pErrorLog);
+    /* [out][in] */ VARIANT *pVar,
+    /* [in] */ IErrorLog *pErrorLog);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IPropertyBag_Read_Stub( 
-    IPropertyBag __RPC_FAR * This,
+    IPropertyBag * This,
     /* [in] */ LPCOLESTR pszPropName,
-    /* [out] */ VARIANT __RPC_FAR *pVar,
-    /* [in] */ IErrorLog __RPC_FAR *pErrorLog,
+    /* [out] */ VARIANT *pVar,
+    /* [in] */ IErrorLog *pErrorLog,
     /* [in] */ DWORD varType,
-    /* [in] */ IUnknown __RPC_FAR *pUnkObj);
+    /* [in] */ IUnknown *pUnkObj);
 
 
 
@@ -7001,6 +7009,7 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

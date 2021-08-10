@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Grids.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Grids.pas' rev: 6.00
 
 #ifndef GridsHPP
 #define GridsHPP
@@ -16,6 +16,7 @@
 #include <Controls.hpp>	// Pascal unit
 #include <Menus.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
@@ -35,38 +36,28 @@ class PASCALIMPLEMENTATION EInvalidGridOperation : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EInvalidGridOperation(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EInvalidGridOperation(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EInvalidGridOperation(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EInvalidGridOperation(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EInvalidGridOperation(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EInvalidGridOperation(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EInvalidGridOperation(int Ident, const System::TVarRec 
-		* Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EInvalidGridOperation(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EInvalidGridOperation(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EInvalidGridOperation(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EInvalidGridOperation(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EInvalidGridOperation(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EInvalidGridOperation(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EInvalidGridOperation(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidGridOperation(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EInvalidGridOperation(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -107,21 +98,25 @@ typedef TGridState TGridMovement;
 
 class DELPHICLASS TInplaceEdit;
 class DELPHICLASS TCustomGrid;
+#pragma pack(push, 4)
 struct TGridCoord
 {
 	int X;
 	int Y;
 } ;
+#pragma pack(pop)
 
 #pragma option push -b-
-enum TGridOption { goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, 
-	goRowSizing, goColSizing, goRowMoving, goColMoving, goEditing, goTabs, goRowSelect, goAlwaysShowEditor, 
-	goThumbTracking };
+enum TGridOption { goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goRowMoving, goColMoving, goEditing, goTabs, goRowSelect, goAlwaysShowEditor, goThumbTracking };
 #pragma option pop
 
 typedef Set<TGridOption, goFixedVertLine, goThumbTracking>  TGridOptions;
 
 struct TGridRect;
+#pragma option push -b-
+enum TEditStyle { esSimple, esEllipsis, esPickList };
+#pragma option pop
+
 #pragma option push -b-
 enum Grids__3 { gdSelected, gdFocused, gdFixed };
 #pragma option pop
@@ -162,7 +157,10 @@ private:
 	int FSizingOfs;
 	int FMoveIndex;
 	int FMovePos;
-	Windows::TPoint FHitTest;
+	#pragma pack(push, 1)
+	Types::TPoint FHitTest;
+	#pragma pack(pop)
+	
 	TInplaceEdit* FInplaceEdit;
 	int FInplaceCol;
 	int FInplaceRow;
@@ -173,24 +171,17 @@ private:
 	void __fastcall CalcDrawInfoXY(TGridDrawInfo &DrawInfo, int UseWidth, int UseHeight);
 	TGridCoord __fastcall CalcMaxTopLeft(const TGridCoord &Coord, const TGridDrawInfo &DrawInfo);
 	void __fastcall CancelMode(void);
-	void __fastcall ChangeGridOrientation(bool RightToLeftOrientation);
 	void __fastcall ChangeSize(int NewColCount, int NewRowCount);
 	void __fastcall ClampInView(const TGridCoord &Coord);
 	void __fastcall DrawSizingLine(const TGridDrawInfo &DrawInfo);
 	void __fastcall DrawMove(void);
-	void __fastcall FocusCell(int ACol, int ARow, bool MoveAnchor);
-	void __fastcall GridRectToScreenRect(const TGridRect &GridRect, Windows::TRect &ScreenRect, bool IncludeLine
-		);
-	void __fastcall HideEdit(void);
+	void __fastcall GridRectToScreenRect(const TGridRect &GridRect, Types::TRect &ScreenRect, bool IncludeLine);
 	void __fastcall Initialize(void);
-	void __fastcall InvalidateGrid(void);
 	void __fastcall InvalidateRect(const TGridRect &ARect);
-	void __fastcall ModifyScrollBar(unsigned ScrollBar, unsigned ScrollCode, unsigned Pos, bool UseRightToLeft
-		);
+	void __fastcall ModifyScrollBar(unsigned ScrollBar, unsigned ScrollCode, unsigned Pos, bool UseRightToLeft);
 	void __fastcall MoveAdjust(int &CellPos, int FromIndex, int ToIndex);
 	void __fastcall MoveAnchor(const TGridCoord &NewAnchor);
-	void __fastcall MoveAndScroll(int Mouse, int CellHit, TGridDrawInfo &DrawInfo, TGridAxisDrawInfo &Axis
-		, int Scrollbar, const Windows::TPoint &MousePt);
+	void __fastcall MoveAndScroll(int Mouse, int CellHit, TGridDrawInfo &DrawInfo, TGridAxisDrawInfo &Axis, int Scrollbar, const Types::TPoint &MousePt);
 	void __fastcall MoveCurrent(int ACol, int ARow, bool MoveAnchor, bool Show);
 	void __fastcall MoveTopLeft(int ALeft, int ATop);
 	void __fastcall ResizeCol(int Index, int OldSize, int NewSize);
@@ -260,45 +251,44 @@ protected:
 	bool VirtualView;
 	void __fastcall CalcDrawInfo(TGridDrawInfo &DrawInfo);
 	void __fastcall CalcFixedInfo(TGridDrawInfo &DrawInfo);
-	virtual void __fastcall CalcSizingState(int X, int Y, TGridState &State, int &Index, int &SizingPos
-		, int &SizingOfs, TGridDrawInfo &FixedInfo);
+	virtual void __fastcall CalcSizingState(int X, int Y, TGridState &State, int &Index, int &SizingPos, int &SizingOfs, TGridDrawInfo &FixedInfo);
+	void __fastcall ChangeGridOrientation(bool RightToLeftOrientation);
 	virtual TInplaceEdit* __fastcall CreateEditor(void);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
 	DYNAMIC void __fastcall KeyPress(char &Key);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
-	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int 
-		Y);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	HIDESBASEDYNAMIC void __fastcall AdjustSize(int Index, int Amount, bool Rows);
-	Windows::TRect __fastcall BoxRect(int ALeft, int ATop, int ARight, int ABottom);
+	Types::TRect __fastcall BoxRect(int ALeft, int ATop, int ARight, int ABottom);
 	DYNAMIC void __fastcall DoExit(void);
-	Windows::TRect __fastcall CellRect(int ACol, int ARow);
+	Types::TRect __fastcall CellRect(int ACol, int ARow);
 	DYNAMIC bool __fastcall CanEditAcceptKey(char Key);
 	DYNAMIC bool __fastcall CanGridAcceptKey(Word Key, Classes::TShiftState Shift);
 	DYNAMIC bool __fastcall CanEditModify(void);
 	virtual bool __fastcall CanEditShow(void);
-	DYNAMIC bool __fastcall DoMouseWheelDown(Classes::TShiftState Shift, const Windows::TPoint &MousePos
-		);
-	DYNAMIC bool __fastcall DoMouseWheelUp(Classes::TShiftState Shift, const Windows::TPoint &MousePos)
-		;
+	DYNAMIC bool __fastcall DoMouseWheelDown(Classes::TShiftState Shift, const Types::TPoint &MousePos);
+	DYNAMIC bool __fastcall DoMouseWheelUp(Classes::TShiftState Shift, const Types::TPoint &MousePos);
+	void __fastcall FocusCell(int ACol, int ARow, bool MoveAnchor);
 	DYNAMIC AnsiString __fastcall GetEditText(int ACol, int ARow);
 	DYNAMIC void __fastcall SetEditText(int ACol, int ARow, const AnsiString Value);
-	DYNAMIC AnsiString __fastcall GetEditMask(int ACol, int ARow);
 	DYNAMIC int __fastcall GetEditLimit(void);
+	DYNAMIC AnsiString __fastcall GetEditMask(int ACol, int ARow);
+	DYNAMIC TEditStyle __fastcall GetEditStyle(int ACol, int ARow);
 	int __fastcall GetGridWidth(void);
 	int __fastcall GetGridHeight(void);
+	void __fastcall HideEdit(void);
 	void __fastcall HideEditor(void);
 	void __fastcall ShowEditor(void);
 	void __fastcall ShowEditorChar(char Ch);
 	void __fastcall InvalidateEditor(void);
+	void __fastcall InvalidateGrid(void);
 	void __fastcall MoveColumn(int FromIndex, int ToIndex);
 	DYNAMIC void __fastcall ColumnMoved(int FromIndex, int ToIndex);
 	void __fastcall MoveRow(int FromIndex, int ToIndex);
 	DYNAMIC void __fastcall RowMoved(int FromIndex, int ToIndex);
-	virtual void __fastcall DrawCell(int ACol, int ARow, const Windows::TRect &ARect, TGridDrawState AState
-		) = 0 ;
+	virtual void __fastcall DrawCell(int ACol, int ARow, const Types::TRect &ARect, TGridDrawState AState) = 0 ;
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
 	void __fastcall MoveColRow(int ACol, int ARow, bool MoveAnchor, bool Show);
 	virtual bool __fastcall SelectCell(int ACol, int ARow);
@@ -316,38 +306,32 @@ protected:
 	virtual void __fastcall DeleteColumn(int ACol);
 	virtual void __fastcall DeleteRow(int ARow);
 	void __fastcall UpdateDesigner(void);
-	DYNAMIC bool __fastcall BeginColumnDrag(int &Origin, int &Destination, const Windows::TPoint &MousePt
-		);
-	DYNAMIC bool __fastcall BeginRowDrag(int &Origin, int &Destination, const Windows::TPoint &MousePt)
-		;
-	DYNAMIC bool __fastcall CheckColumnDrag(int &Origin, int &Destination, const Windows::TPoint &MousePt
-		);
-	DYNAMIC bool __fastcall CheckRowDrag(int &Origin, int &Destination, const Windows::TPoint &MousePt)
-		;
-	DYNAMIC bool __fastcall EndColumnDrag(int &Origin, int &Destination, const Windows::TPoint &MousePt
-		);
-	DYNAMIC bool __fastcall EndRowDrag(int &Origin, int &Destination, const Windows::TPoint &MousePt);
+	DYNAMIC bool __fastcall BeginColumnDrag(int &Origin, int &Destination, const Types::TPoint &MousePt);
+	DYNAMIC bool __fastcall BeginRowDrag(int &Origin, int &Destination, const Types::TPoint &MousePt);
+	DYNAMIC bool __fastcall CheckColumnDrag(int &Origin, int &Destination, const Types::TPoint &MousePt);
+	DYNAMIC bool __fastcall CheckRowDrag(int &Origin, int &Destination, const Types::TPoint &MousePt);
+	DYNAMIC bool __fastcall EndColumnDrag(int &Origin, int &Destination, const Types::TPoint &MousePt);
+	DYNAMIC bool __fastcall EndRowDrag(int &Origin, int &Destination, const Types::TPoint &MousePt);
 	__property Forms::TBorderStyle BorderStyle = {read=FBorderStyle, write=SetBorderStyle, default=1};
 	__property int Col = {read=FCurrent.X, write=SetCol, nodefault};
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property int ColCount = {read=FColCount, write=SetColCount, default=5};
 	__property int ColWidths[int Index] = {read=GetColWidths, write=SetColWidths};
 	__property int DefaultColWidth = {read=FDefaultColWidth, write=SetDefaultColWidth, default=64};
 	__property bool DefaultDrawing = {read=FDefaultDrawing, write=FDefaultDrawing, default=1};
 	__property int DefaultRowHeight = {read=FDefaultRowHeight, write=SetDefaultRowHeight, default=24};
 	__property bool EditorMode = {read=FEditorMode, write=SetEditorMode, nodefault};
-	__property Graphics::TColor FixedColor = {read=FFixedColor, write=SetFixedColor, default=-2147483633
-		};
+	__property Graphics::TColor FixedColor = {read=FFixedColor, write=SetFixedColor, default=-2147483633};
 	__property int FixedCols = {read=FFixedCols, write=SetFixedCols, default=1};
 	__property int FixedRows = {read=FFixedRows, write=SetFixedRows, default=1};
 	__property int GridHeight = {read=GetGridHeight, nodefault};
 	__property int GridLineWidth = {read=FGridLineWidth, write=SetGridLineWidth, default=1};
 	__property int GridWidth = {read=GetGridWidth, nodefault};
-	__property Windows::TPoint HitTest = {read=FHitTest};
+	__property Types::TPoint HitTest = {read=FHitTest};
 	__property TInplaceEdit* InplaceEditor = {read=FInplaceEdit};
 	__property int LeftCol = {read=FTopLeft.X, write=SetLeftCol, nodefault};
 	__property TGridOptions Options = {read=FOptions, write=SetOptions, default=31};
-	__property ParentColor ;
+	__property ParentColor  = {default=0};
 	__property int Row = {read=FCurrent.Y, write=SetRow, nodefault};
 	__property int RowCount = {read=FRowCount, write=SetRowCount, default=5};
 	__property int RowHeights[int Index] = {read=GetRowHeights, write=SetRowHeights};
@@ -364,11 +348,10 @@ public:
 	TGridCoord __fastcall MouseCoord(int X, int Y);
 	
 __published:
-	__property TabStop ;
+	__property TabStop  = {default=1};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomGrid(HWND ParentWindow) : Controls::TCustomControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomGrid(HWND ParentWindow) : Controls::TCustomControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -381,7 +364,7 @@ class PASCALIMPLEMENTATION TInplaceEdit : public Mask::TCustomMaskEdit
 private:
 	TCustomGrid* FGrid;
 	int FClickTime;
-	void __fastcall InternalMove(const Windows::TRect &Loc, bool Redraw);
+	void __fastcall InternalMove(const Types::TRect &Loc, bool Redraw);
 	void __fastcall SetGrid(TCustomGrid* Value);
 	HIDESBASE MESSAGE void __fastcall CMShowingChanged(Messages::TMessage &Message);
 	MESSAGE void __fastcall WMGetDlgCode(Messages::TWMNoParams &Message);
@@ -392,8 +375,7 @@ private:
 protected:
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	DYNAMIC void __fastcall DblClick(void);
-	DYNAMIC bool __fastcall DoMouseWheel(Classes::TShiftState Shift, int WheelDelta, const Windows::TPoint 
-		&MousePos);
+	DYNAMIC bool __fastcall DoMouseWheel(Classes::TShiftState Shift, int WheelDelta, const Types::TPoint &MousePos);
 	virtual bool __fastcall EditCanModify(void);
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
 	DYNAMIC void __fastcall KeyPress(char &Key);
@@ -408,15 +390,14 @@ public:
 	void __fastcall Deselect(void);
 	HIDESBASE void __fastcall Hide(void);
 	HIDESBASE void __fastcall Invalidate(void);
-	void __fastcall Move(const Windows::TRect &Loc);
-	bool __fastcall PosEqual(const Windows::TRect &Rect);
+	void __fastcall Move(const Types::TRect &Loc);
+	bool __fastcall PosEqual(const Types::TRect &Rect);
 	HIDESBASE void __fastcall SetFocus(void);
-	void __fastcall UpdateLoc(const Windows::TRect &Loc);
+	void __fastcall UpdateLoc(const Types::TRect &Loc);
 	HIDESBASE bool __fastcall Visible(void);
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TInplaceEdit(HWND ParentWindow) : Mask::TCustomMaskEdit(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TInplaceEdit(HWND ParentWindow) : Mask::TCustomMaskEdit(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TInplaceEdit(void) { }
@@ -425,6 +406,7 @@ public:
 };
 
 
+#pragma pack(push, 4)
 struct TGridRect
 {
 	
@@ -447,24 +429,20 @@ struct TGridRect
 		
 	};
 } ;
+#pragma pack(pop)
 
-typedef void __fastcall (__closure *TSelectCellEvent)(System::TObject* Sender, int ACol, int ARow, bool 
-	&CanSelect);
+typedef void __fastcall (__closure *TSelectCellEvent)(System::TObject* Sender, int ACol, int ARow, bool &CanSelect);
 
-typedef void __fastcall (__closure *TDrawCellEvent)(System::TObject* Sender, int ACol, int ARow, const 
-	Windows::TRect &Rect, TGridDrawState State);
+typedef void __fastcall (__closure *TDrawCellEvent)(System::TObject* Sender, int ACol, int ARow, const Types::TRect &Rect, TGridDrawState State);
 
-typedef void __fastcall (__closure *TGetEditEvent)(System::TObject* Sender, int ACol, int ARow, AnsiString 
-	&Value);
+typedef void __fastcall (__closure *TGetEditEvent)(System::TObject* Sender, int ACol, int ARow, AnsiString &Value);
 
-typedef void __fastcall (__closure *TSetEditEvent)(System::TObject* Sender, int ACol, int ARow, const 
-	AnsiString Value);
+typedef void __fastcall (__closure *TSetEditEvent)(System::TObject* Sender, int ACol, int ARow, const AnsiString Value);
 
-typedef void __fastcall (__closure *TMovedEvent)(System::TObject* Sender, int FromIndex, int ToIndex
-	);
+typedef void __fastcall (__closure *TMovedEvent)(System::TObject* Sender, int FromIndex, int ToIndex);
 
-class DELPHICLASS TDrawGrid;
-class PASCALIMPLEMENTATION TDrawGrid : public TCustomGrid 
+class DELPHICLASS TCustomDrawGrid;
+class PASCALIMPLEMENTATION TCustomDrawGrid : public TCustomGrid 
 {
 	typedef TCustomGrid inherited;
 	
@@ -480,17 +458,24 @@ private:
 	
 protected:
 	DYNAMIC void __fastcall ColumnMoved(int FromIndex, int ToIndex);
-	virtual void __fastcall DrawCell(int ACol, int ARow, const Windows::TRect &ARect, TGridDrawState AState
-		);
+	virtual void __fastcall DrawCell(int ACol, int ARow, const Types::TRect &ARect, TGridDrawState AState);
 	DYNAMIC AnsiString __fastcall GetEditMask(int ACol, int ARow);
 	DYNAMIC AnsiString __fastcall GetEditText(int ACol, int ARow);
 	DYNAMIC void __fastcall RowMoved(int FromIndex, int ToIndex);
 	virtual bool __fastcall SelectCell(int ACol, int ARow);
 	DYNAMIC void __fastcall SetEditText(int ACol, int ARow, const AnsiString Value);
 	DYNAMIC void __fastcall TopLeftChanged(void);
+	__property TMovedEvent OnColumnMoved = {read=FOnColumnMoved, write=FOnColumnMoved};
+	__property TDrawCellEvent OnDrawCell = {read=FOnDrawCell, write=FOnDrawCell};
+	__property TGetEditEvent OnGetEditMask = {read=FOnGetEditMask, write=FOnGetEditMask};
+	__property TGetEditEvent OnGetEditText = {read=FOnGetEditText, write=FOnGetEditText};
+	__property TMovedEvent OnRowMoved = {read=FOnRowMoved, write=FOnRowMoved};
+	__property TSelectCellEvent OnSelectCell = {read=FOnSelectCell, write=FOnSelectCell};
+	__property TSetEditEvent OnSetEditText = {read=FOnSetEditText, write=FOnSetEditText};
+	__property Classes::TNotifyEvent OnTopLeftChanged = {read=FOnTopLeftChanged, write=FOnTopLeftChanged};
 	
 public:
-	HIDESBASE Windows::TRect __fastcall CellRect(int ACol, int ARow);
+	HIDESBASE Types::TRect __fastcall CellRect(int ACol, int ARow);
 	void __fastcall MouseToCell(int X, int Y, int &ACol, int &ARow);
 	__property Canvas ;
 	__property Col ;
@@ -504,56 +489,75 @@ public:
 	__property RowHeights ;
 	__property TabStops ;
 	__property TopRow ;
+public:
+	#pragma option push -w-inl
+	/* TCustomGrid.Create */ inline __fastcall virtual TCustomDrawGrid(Classes::TComponent* AOwner) : TCustomGrid(AOwner) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TCustomGrid.Destroy */ inline __fastcall virtual ~TCustomDrawGrid(void) { }
+	#pragma option pop
+	
+public:
+	#pragma option push -w-inl
+	/* TWinControl.CreateParented */ inline __fastcall TCustomDrawGrid(HWND ParentWindow) : TCustomGrid(ParentWindow) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TDrawGrid;
+class PASCALIMPLEMENTATION TDrawGrid : public TCustomDrawGrid 
+{
+	typedef TCustomDrawGrid inherited;
 	
 __published:
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
-	__property BorderStyle ;
-	__property Color ;
-	__property ColCount ;
+	__property BorderStyle  = {default=1};
+	__property Color  = {default=-2147483643};
+	__property ColCount  = {default=5};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DefaultColWidth ;
-	__property DefaultRowHeight ;
-	__property DefaultDrawing ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
-	__property FixedColor ;
-	__property FixedCols ;
-	__property RowCount ;
-	__property FixedRows ;
+	__property DefaultColWidth  = {default=64};
+	__property DefaultRowHeight  = {default=24};
+	__property DefaultDrawing  = {default=1};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
+	__property FixedColor  = {default=-2147483633};
+	__property FixedCols  = {default=1};
+	__property RowCount  = {default=5};
+	__property FixedRows  = {default=1};
 	__property Font ;
-	__property GridLineWidth ;
-	__property Options ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property GridLineWidth  = {default=1};
+	__property Options  = {default=31};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property ScrollBars ;
+	__property ScrollBars  = {default=3};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property Visible  = {default=1};
 	__property VisibleColCount ;
 	__property VisibleRowCount ;
 	__property OnClick ;
-	__property TMovedEvent OnColumnMoved = {read=FOnColumnMoved, write=FOnColumnMoved};
+	__property OnColumnMoved ;
 	__property OnContextPopup ;
 	__property OnDblClick ;
 	__property OnDragDrop ;
 	__property OnDragOver ;
-	__property TDrawCellEvent OnDrawCell = {read=FOnDrawCell, write=FOnDrawCell};
+	__property OnDrawCell ;
 	__property OnEndDock ;
 	__property OnEndDrag ;
 	__property OnEnter ;
 	__property OnExit ;
-	__property TGetEditEvent OnGetEditMask = {read=FOnGetEditMask, write=FOnGetEditMask};
-	__property TGetEditEvent OnGetEditText = {read=FOnGetEditText, write=FOnGetEditText};
+	__property OnGetEditMask ;
+	__property OnGetEditText ;
 	__property OnKeyDown ;
 	__property OnKeyPress ;
 	__property OnKeyUp ;
@@ -562,17 +566,15 @@ __published:
 	__property OnMouseUp ;
 	__property OnMouseWheelDown ;
 	__property OnMouseWheelUp ;
-	__property TMovedEvent OnRowMoved = {read=FOnRowMoved, write=FOnRowMoved};
-	__property TSelectCellEvent OnSelectCell = {read=FOnSelectCell, write=FOnSelectCell};
-	__property TSetEditEvent OnSetEditText = {read=FOnSetEditText, write=FOnSetEditText};
+	__property OnRowMoved ;
+	__property OnSelectCell ;
+	__property OnSetEditText ;
 	__property OnStartDock ;
 	__property OnStartDrag ;
-	__property Classes::TNotifyEvent OnTopLeftChanged = {read=FOnTopLeftChanged, write=FOnTopLeftChanged
-		};
+	__property OnTopLeftChanged ;
 public:
 	#pragma option push -w-inl
-	/* TCustomGrid.Create */ inline __fastcall virtual TDrawGrid(Classes::TComponent* AOwner) : TCustomGrid(
-		AOwner) { }
+	/* TCustomGrid.Create */ inline __fastcall virtual TDrawGrid(Classes::TComponent* AOwner) : TCustomDrawGrid(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomGrid.Destroy */ inline __fastcall virtual ~TDrawGrid(void) { }
@@ -580,8 +582,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDrawGrid(HWND ParentWindow) : TCustomGrid(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDrawGrid(HWND ParentWindow) : TCustomDrawGrid(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -618,8 +619,7 @@ private:
 	
 protected:
 	DYNAMIC void __fastcall ColumnMoved(int FromIndex, int ToIndex);
-	virtual void __fastcall DrawCell(int ACol, int ARow, const Windows::TRect &ARect, TGridDrawState AState
-		);
+	virtual void __fastcall DrawCell(int ACol, int ARow, const Types::TRect &ARect, TGridDrawState AState);
 	DYNAMIC AnsiString __fastcall GetEditText(int ACol, int ARow);
 	DYNAMIC void __fastcall SetEditText(int ACol, int ARow, const AnsiString Value);
 	DYNAMIC void __fastcall RowMoved(int FromIndex, int ToIndex);
@@ -633,8 +633,7 @@ public:
 	__property Classes::TStrings* Rows[int Index] = {read=GetRows, write=SetRows};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TStringGrid(HWND ParentWindow) : TDrawGrid(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TStringGrid(HWND ParentWindow) : TDrawGrid(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -672,14 +671,84 @@ public:
 };
 
 
+typedef void __fastcall (__closure *TOnGetPickListItems)(int ACol, int ARow, Classes::TStrings* Items);
+
+class DELPHICLASS TInplaceEditList;
+class PASCALIMPLEMENTATION TInplaceEditList : public TInplaceEdit 
+{
+	typedef TInplaceEdit inherited;
+	
+private:
+	int FButtonWidth;
+	Stdctrls::TCustomListBox* FPickList;
+	Controls::TWinControl* FActiveList;
+	TEditStyle FEditStyle;
+	int FDropDownRows;
+	bool FListVisible;
+	bool FTracking;
+	bool FPressed;
+	bool FPickListLoaded;
+	TOnGetPickListItems FOnGetPickListitems;
+	Classes::TNotifyEvent FOnEditButtonClick;
+	Stdctrls::TCustomListBox* __fastcall GetPickList(void);
+	MESSAGE void __fastcall CMCancelMode(Controls::TCMCancelMode &Message);
+	HIDESBASE MESSAGE void __fastcall WMCancelMode(Messages::TMessage &Message);
+	HIDESBASE MESSAGE void __fastcall WMKillFocus(Messages::TMessage &Message);
+	HIDESBASE MESSAGE void __fastcall WMLButtonDblClk(Messages::TWMMouse &Message);
+	HIDESBASE MESSAGE void __fastcall WMPaint(Messages::TWMPaint &Message);
+	HIDESBASE MESSAGE void __fastcall WMSetCursor(Messages::TWMSetCursor &Message);
+	
+protected:
+	virtual void __fastcall BoundsChanged(void);
+	Types::TRect __fastcall ButtonRect();
+	DYNAMIC void __fastcall CloseUp(bool Accept);
+	DYNAMIC void __fastcall DblClick(void);
+	virtual void __fastcall DoDropDownKeys(Word &Key, Classes::TShiftState Shift);
+	virtual void __fastcall DoEditButtonClick(void);
+	DYNAMIC void __fastcall DoGetPickListItems(void);
+	DYNAMIC void __fastcall DropDown(void);
+	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
+	void __fastcall ListMouseUp(System::TObject* Sender, Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	bool __fastcall OverButton(const Types::TPoint &P);
+	virtual void __fastcall PaintWindow(HDC DC);
+	void __fastcall StopTracking(void);
+	void __fastcall TrackButton(int X, int Y);
+	virtual void __fastcall UpdateContents(void);
+	virtual void __fastcall WndProc(Messages::TMessage &Message);
+	
+public:
+	__fastcall virtual TInplaceEditList(Classes::TComponent* Owner);
+	void __fastcall RestoreContents(void);
+	__property Controls::TWinControl* ActiveList = {read=FActiveList, write=FActiveList};
+	__property int ButtonWidth = {read=FButtonWidth, write=FButtonWidth, nodefault};
+	__property int DropDownRows = {read=FDropDownRows, write=FDropDownRows, nodefault};
+	__property TEditStyle EditStyle = {read=FEditStyle, nodefault};
+	__property bool ListVisible = {read=FListVisible, write=FListVisible, nodefault};
+	__property Stdctrls::TCustomListBox* PickList = {read=GetPickList};
+	__property bool PickListLoaded = {read=FPickListLoaded, write=FPickListLoaded, nodefault};
+	__property bool Pressed = {read=FPressed, nodefault};
+	__property Classes::TNotifyEvent OnEditButtonClick = {read=FOnEditButtonClick, write=FOnEditButtonClick};
+	__property TOnGetPickListItems OnGetPickListitems = {read=FOnGetPickListitems, write=FOnGetPickListitems};
+public:
+	#pragma option push -w-inl
+	/* TWinControl.CreateParented */ inline __fastcall TInplaceEditList(HWND ParentWindow) : TInplaceEdit(ParentWindow) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TWinControl.Destroy */ inline __fastcall virtual ~TInplaceEditList(void) { }
+	#pragma option pop
+	
+};
+
+
 //-- var, const, procedure ---------------------------------------------------
 static const int MaxCustomExtents = 0x7ffffff;
 static const Shortint MaxShortInt = 0x7f;
 
 }	/* namespace Grids */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Grids;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

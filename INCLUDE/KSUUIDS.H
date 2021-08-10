@@ -1,17 +1,11 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
-//==========================================================================;
+//------------------------------------------------------------------------------
+// File: ksuuids.h
 //
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
+// Desc: Contains the GUIDs for the MediaType type, subtype fields and format
+//       types for DVD/MPEG2 media types.
 //
-//  Copyright (c) 1992 - 1997  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// contains the GUIDs for the MediaType type, subtype fields and format types 
-// for DVD/MPEG2 media types.
+// Copyright (c) 1992 - 2000, Microsoft Corporation.  All rights reserved.
+//------------------------------------------------------------------------------
 
 
 //
@@ -55,6 +49,10 @@ OUR_GUID_ENTRY(MEDIASUBTYPE_MPEG2_PROGRAM,
 OUR_GUID_ENTRY(MEDIASUBTYPE_MPEG2_TRANSPORT,
 0xe06d8023, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x05f, 0x6c, 0xbb, 0xea)
 
+// 138AA9A4-1EE2-4c5b-988E-19ABFDBC8A11
+OUR_GUID_ENTRY(MEDIASUBTYPE_MPEG2_TRANSPORT_STRIDE,
+0x138aa9a4, 0x1ee2, 0x4c5b, 0x98, 0x8e, 0x19, 0xab, 0xfd, 0xbc, 0x8a, 0x11)
+
 // e06d802b-db46-11cf-b4d1-00805f6cbbea
 OUR_GUID_ENTRY(MEDIASUBTYPE_MPEG2_AUDIO,
 0xe06d802b, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x05f, 0x6c, 0xbb, 0xea)
@@ -71,6 +69,14 @@ OUR_GUID_ENTRY(MEDIASUBTYPE_DVD_SUBPICTURE,
 OUR_GUID_ENTRY(MEDIASUBTYPE_DVD_LPCM_AUDIO,
 0xe06d8032, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x05f, 0x6c, 0xbb, 0xea)
 
+// e06d8033-db46-11cf-b4d1-00805f6cbbea
+OUR_GUID_ENTRY(MEDIASUBTYPE_DTS,
+0xe06d8033, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x05f, 0x6c, 0xbb, 0xea)
+
+// e06d8034-db46-11cf-b4d1-00805f6cbbea
+OUR_GUID_ENTRY(MEDIASUBTYPE_SDDS,
+0xe06d8034, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x05f, 0x6c, 0xbb, 0xea)
+
 // DVD-related mediatypes
 // ED0B916A-044D-11d1-AA78-00C04FC31D60
 OUR_GUID_ENTRY(MEDIATYPE_DVD_ENCRYPTED_PACK,
@@ -81,7 +87,7 @@ OUR_GUID_ENTRY(MEDIATYPE_DVD_NAVIGATION,
 0xe06d802e, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x05f, 0x6c, 0xbb, 0xea)
 
 // e06d802f-db46-11cf-b4d1-00805f6cbbea
-OUR_GUID_ENTRY(MEDIASUBTYPE_DVD_NAVIGATION_PCI,                             
+OUR_GUID_ENTRY(MEDIASUBTYPE_DVD_NAVIGATION_PCI,
 0xe06d802f, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x05f, 0x6c, 0xbb, 0xea)
 
 // e06d8030-db46-11cf-b4d1-00805f6cbbea
@@ -130,9 +136,20 @@ OUR_GUID_ENTRY(AM_KSPROPSETID_CopyProt,
 0x0E8A0A40, 0x6AEF, 0x11D0, 0x9E, 0xD0, 0x00, 0xA0, 0x24, 0xCA, 0x19, 0xB3)
 
 // A503C5C0-1D1D-11d1-AD80-444553540000
-OUR_GUID_ENTRY(AM_KSPROPSETID_TSRateChange, 
+OUR_GUID_ENTRY(AM_KSPROPSETID_TSRateChange,
 0xa503c5c0, 0x1d1d, 0x11d1, 0xad, 0x80, 0x44, 0x45, 0x53, 0x54, 0x0, 0x0)
 
+// 3577EB09-9582-477f-B29C-B0C452A4FF9A
+OUR_GUID_ENTRY(AM_KSPROPSETID_DVD_RateChange,
+0x3577eb09, 0x9582, 0x477f, 0xb2, 0x9c, 0xb0, 0xc4, 0x52, 0xa4, 0xff, 0x9a)
+
+// ae4720ae-aa71-42d8-b82a-fffdf58b76fd
+OUR_GUID_ENTRY(AM_KSPROPSETID_DvdKaraoke,
+0xae4720ae, 0xaa71, 0x42d8, 0xb8, 0x2a, 0xff, 0xfd, 0xf5, 0x8b, 0x76, 0xfd)
+
+// c830acbd-ab07-492f-8852-45b6987c2979
+OUR_GUID_ENTRY(AM_KSPROPSETID_FrameStep,
+0xc830acbd, 0xab07, 0x492f, 0x88, 0x52, 0x45, 0xb6, 0x98, 0x7c, 0x29, 0x79)
 
 //
 // KS categories from ks.h and ksmedia.h
@@ -165,7 +182,7 @@ OUR_GUID_ENTRY(AM_KSCATEGORY_TVTUNER,
 
 // a799a801-a46d-11d0-a18c-00a02401dcd4
 OUR_GUID_ENTRY(AM_KSCATEGORY_CROSSBAR,
-0xa799a801L, 0xa46d, 0x11d0, 0xa1, 0x8c, 0x00, 0xa0, 0x24, 0x01, 0xdc, 0xd4)               
+0xa799a801L, 0xa46d, 0x11d0, 0xa1, 0x8c, 0x00, 0xa0, 0x24, 0x01, 0xdc, 0xd4)
 
 // a799a802-a46d-11d0-a18c-00a02401dcd4
 OUR_GUID_ENTRY(AM_KSCATEGORY_TVAUDIO,
@@ -209,4 +226,3 @@ OUR_GUID_ENTRY(IID_IKsPinFactory,
 // 1A8766A0-62CE-11CF-A5D6-28DB04C10000
 OUR_GUID_ENTRY(AM_INTERFACESETID_Standard,
 0x1A8766A0L, 0x62CE, 0x11CF, 0xA5, 0xD6, 0x28, 0xDB, 0x04, 0xC1, 0x00, 0x00)
-#pragma option pop /*P_O_Pop*/

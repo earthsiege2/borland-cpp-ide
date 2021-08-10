@@ -2,7 +2,7 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="TestProject.exe"/>
     <OBJFILES value="TestProject.obj"/>
     <RESFILES value="Test.res"/>
@@ -10,10 +10,10 @@
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
-    <LIBFILES value=""/>
+    <LIBFILES value="rtl.bpi vcl.bpi vclx.bpi"/>
     <LIBRARIES value=""/>
-    <SPARELIBS value=""/>
-    <PACKAGES value="vcl50.bpi vclx50.bpi"/>
+    <SPARELIBS value="rtl.lib vcl.lib vclx.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -34,13 +34,22 @@
     <PFLAGS value="-$YD -$W -$O- -v -JPHN -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-ap -Tpe -x -Gn -v"/>
+    <LFLAGS value="-D&quot;&quot; -ap -Tpe -x -Gn -v"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0x32.obj $(PACKAGES) $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) import32.lib cw32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="TestProject.cpp" FORMNAME="" UNITNAME="TestProject" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="ReadMe.txt" FORMNAME="" UNITNAME="ReadMe" CONTAINERID="File" DESIGNCLASS=""/>
+      <FILE FILENAME="Test.rc" FORMNAME="" UNITNAME="Test" CONTAINERID="RCCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="rtl.bpi" FORMNAME="" UNITNAME="vcl60" CONTAINERID="BPITool" DESIGNCLASS=""/>
+      <FILE FILENAME="vcl.bpi" FORMNAME="" UNITNAME="vcl60" CONTAINERID="BPITool" DESIGNCLASS=""/>
+      <FILE FILENAME="vclx.bpi" FORMNAME="" UNITNAME="vcl60" CONTAINERID="BPITool" DESIGNCLASS=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -74,19 +83,19 @@ DebugSourceDirs=
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
 ShowInfoMsgs=0
 LinkDebugVcl=0
 LinkCGLIB=0
-
-[CORBA]
-AddServerUnit=1
-AddClientUnit=1
-PrecompiledHeaders=1
   </IDEOPTIONS>
 </PROJECT>

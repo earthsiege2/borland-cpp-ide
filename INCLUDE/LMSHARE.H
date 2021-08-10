@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
 Copyright (c) 1990-1999  Microsoft Corporation
@@ -219,6 +218,7 @@ typedef struct _SHARE_INFO_1501 {
 #define STYPE_DEVICE            2
 #define STYPE_IPC               3
 
+#define STYPE_TEMPORARY         0x40000000
 #define STYPE_SPECIAL           0x80000000
 
 #define SHI_USES_UNLIMITED      (DWORD)-1
@@ -466,4 +466,3 @@ typedef struct _FILE_INFO_3 {
 #endif
 
 #endif // _LMFILE_
-#pragma option pop /*P_O_Pop*/

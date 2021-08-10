@@ -1,53 +1,53 @@
 LIBRARY BDNAPI
 EXPORTS
 
-    BdnConnectionClose                       = 'BDNAPI.DLL'.*
-    BdnCreateRegulatedMulticast              = 'BDNAPI.DLL'.*
-    BdnCreateRegulatedMulticastRaw           = 'BDNAPI.DLL'.*
-    BdnForwardMulticast                      = 'BDNAPI.DLL'.*
-    BdnGetReservationA                       = 'BDNAPI.DLL'.*
-    BdnGetReservationW                       = 'BDNAPI.DLL'.*
-    BdnLookupReservationA                    = 'BDNAPI.DLL'.*
-    BdnLookupReservationW                    = 'BDNAPI.DLL'.*
-    BdnLookupServiceA                        = 'BDNAPI.DLL'.*
-    BdnLookupServiceW                        = 'BDNAPI.DLL'.*
-    BdnOpenTunnel                            = 'BDNAPI.DLL'.*
-    BdnReleaseAddress                        = 'BDNAPI.DLL'.*
-    BdnReserveAddress                        = 'BDNAPI.DLL'.*
-    BdnReserveBandwidthA                     = 'BDNAPI.DLL'.*
-    BdnReserveBandwidthW                     = 'BDNAPI.DLL'.*
-    BdnSend                                  = 'BDNAPI.DLL'.*
-    BdnSendRaw                               = 'BDNAPI.DLL'.*
-    BdnSendTo                                = 'BDNAPI.DLL'.*
-    BdnServiceClose                          = 'BDNAPI.DLL'.*
-    BdnServiceCreate                         = 'BDNAPI.DLL'.*
-    BdnServiceGetValue                       = 'BDNAPI.DLL'.*
-    BdnServiceGetValueStringA                = 'BDNAPI.DLL'.*
-    BdnServiceGetValueStringW                = 'BDNAPI.DLL'.*
-    BdnServiceSetValue                       = 'BDNAPI.DLL'.*
-    BdnServiceSetValueStringA                = 'BDNAPI.DLL'.*
-    BdnServiceSetValueStringW                = 'BDNAPI.DLL'.*
-    BdnStopMulticast                         = 'BDNAPI.DLL'.*
-;    DllMain                                  = 'BDNAPI.DLL'.*
-    msbdnClearReservation                    = 'BDNAPI.DLL'.*
-    msbdnClearReservationEx                  = 'BDNAPI.DLL'.*
-    msbdnClose                               = 'BDNAPI.DLL'.*
-    _msbdnCreateRegulatedMulticast           = 'BDNAPI.DLL'.msbdnCreateRegulatedMulticast
-    msbdnForwardMulticast                    = 'BDNAPI.DLL'.*
-    msbdnForwardMulticastEx                  = 'BDNAPI.DLL'.*
-    msbdnGetReservationEx                    = 'BDNAPI.DLL'.*
-    msbdnLookupReservation                   = 'BDNAPI.DLL'.*
-    msbdnLookupReservationEx                 = 'BDNAPI.DLL'.*
-    _msbdnOpenTunnel                         = 'BDNAPI.DLL'.msbdnOpenTunnel
-    msbdnOpenTunnelEx                        = 'BDNAPI.DLL'.*
-    msbdnRelinquishAddress                   = 'BDNAPI.DLL'.*
-    msbdnRelinquishAddressEx                 = 'BDNAPI.DLL'.*
-    msbdnReserveAddress                      = 'BDNAPI.DLL'.*
-    msbdnReserveAddressEx                    = 'BDNAPI.DLL'.*
-    msbdnReserveBandwidth                    = 'BDNAPI.DLL'.*
-    msbdnReserveBandwidthEx                  = 'BDNAPI.DLL'.*
-    msbdnSend                                = 'BDNAPI.DLL'.*
-    msbdnSendRaw                             = 'BDNAPI.DLL'.*
-    msbdnSendTo                              = 'BDNAPI.DLL'.*
-    msbdnStopMulticast                       = 'BDNAPI.DLL'.*
-    msbdnStopMulticastEx                     = 'BDNAPI.DLL'.*
+    BdnConnectionClose                       
+    BdnCreateRegulatedMulticast              
+    BdnCreateRegulatedMulticastRaw           
+    BdnForwardMulticast                      
+    BdnGetReservationA                       
+    BdnGetReservationW                       
+    BdnLookupReservationA                    
+    BdnLookupReservationW                    
+    BdnLookupServiceA                        
+    BdnLookupServiceW                        
+    BdnOpenTunnel                            
+    BdnReleaseAddress                        
+    BdnReserveAddress                        
+    BdnReserveBandwidthA                     
+    BdnReserveBandwidthW                     
+    BdnSend                                  
+    BdnSendRaw                               
+    BdnSendTo                                
+    BdnServiceClose                          
+    BdnServiceCreate                         
+    BdnServiceGetValue                       
+    BdnServiceGetValueStringA                
+    BdnServiceGetValueStringW                
+    BdnServiceSetValue                       
+    BdnServiceSetValueStringA                
+    BdnServiceSetValueStringW                
+    BdnStopMulticast                         
+;    DllMain                                  
+    msbdnClearReservation                    
+    msbdnClearReservationEx                  
+    msbdnClose                               
+    _msbdnCreateRegulatedMulticast           = msbdnCreateRegulatedMulticast
+    msbdnForwardMulticast                    
+    msbdnForwardMulticastEx                  
+    msbdnGetReservationEx                    
+    msbdnLookupReservation                   
+    msbdnLookupReservationEx                 
+    _msbdnOpenTunnel                         = msbdnOpenTunnel
+    msbdnOpenTunnelEx                        
+    msbdnRelinquishAddress                   
+    msbdnRelinquishAddressEx                 
+    msbdnReserveAddress                      
+    msbdnReserveAddressEx                    
+    msbdnReserveBandwidth                    
+    msbdnReserveBandwidthEx                  
+    msbdnSend                                
+    msbdnSendRaw                             
+    msbdnSendTo                              
+    msbdnStopMulticast                       
+    msbdnStopMulticastEx                     

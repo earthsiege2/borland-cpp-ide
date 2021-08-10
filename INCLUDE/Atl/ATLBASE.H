@@ -4806,11 +4806,11 @@ public:
 
 	LONG Create(HKEY hKeyParent, LPCTSTR lpszKeyName,
 		LPTSTR lpszClass = REG_NONE, DWORD dwOptions = REG_OPTION_NON_VOLATILE,
-		REGSAM samDesired = KEY_ALL_ACCESS,
+		REGSAM samDesired = KEY_READ | KEY_WRITE,
 		LPSECURITY_ATTRIBUTES lpSecAttr = NULL,
 		LPDWORD lpdwDisposition = NULL);
 	LONG Open(HKEY hKeyParent, LPCTSTR lpszKeyName,
-		REGSAM samDesired = KEY_ALL_ACCESS);
+		REGSAM samDesired = KEY_READ | KEY_WRITE);
 	LONG Close();
 	HKEY Detach();
 	void Attach(HKEY hKey);
@@ -4978,7 +4978,7 @@ inline LONG CRegKey::RecurseDeleteKey(LPCTSTR lpszKey)
 inline HRESULT CComModule::RegisterProgID(LPCTSTR lpszCLSID, LPCTSTR lpszProgID, LPCTSTR lpszUserDesc)
 {
 	CRegKey keyProgID;
-	LONG lRes = keyProgID.Create(HKEY_CLASSES_ROOT, lpszProgID, REG_NONE, REG_OPTION_NON_VOLATILE, KEY_READ);
+	LONG lRes = keyProgID.Create(HKEY_CLASSES_ROOT, lpszProgID, REG_NONE, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE);
 	if (lRes == ERROR_SUCCESS)
 	{
 		keyProgID.SetValue(lpszUserDesc);
@@ -4989,7 +4989,10 @@ inline HRESULT CComModule::RegisterProgID(LPCTSTR lpszCLSID, LPCTSTR lpszProgID,
 }
 
 #ifdef _ATL_STATIC_REGISTRY
+}
 #include <statreg.h>
+namespace ATL
+{
 
 // Statically linking to Registry Ponent
 inline HRESULT WINAPI CComModule::UpdateRegistryFromResourceS(UINT nResID, BOOL bRegister,
@@ -5115,7 +5118,7 @@ inline HRESULT WINAPI CComModule::RegisterClassHelper(const CLSID& clsid, LPCTST
 		lRes = key.Open(HKEY_CLASSES_ROOT, _T("CLSID"), KEY_READ);
 		if (lRes == ERROR_SUCCESS)
 		{
-			lRes = key.Create(key, lpsz, REG_NONE, REG_OPTION_NON_VOLATILE, KEY_READ);
+			lRes = key.Create(key, lpsz, REG_NONE, REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE);
 			if (lRes == ERROR_SUCCESS)
 			{
 				key.SetValue(szDesc);

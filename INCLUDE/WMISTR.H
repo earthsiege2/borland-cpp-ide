@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1995 Microsoft Corporation
+Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Module Name:
 
@@ -10,19 +10,13 @@ Abstract:
 
     WMI structure definitions
 
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
 --*/
 
 #ifndef _WMISTR_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WMISTR_
 
 #pragma warning(disable: 4200) // nonstandard extension used : zero-sized array in struct/union
+#pragma warning(disable: 4201) // nonstandard extension used : nameless struct/union
 
 //
 // WNODE definition
@@ -33,15 +27,16 @@ typedef struct _WNODE_HEADER
     union
     {
         ULONG64 HistoricalContext;  // Logger use
-	struct
-	{
+    	struct
+	    {
             ULONG Version;           // Reserved
             ULONG Linkage;           // Linkage field reserved for WMI
-	};
+    	};
     };
 
     union
     {
+        ULONG CountLost;         // Reserved
         HANDLE KernelHandle;     // Kernel handle for data block
         LARGE_INTEGER TimeStamp; // Timestamp as returned in units of 100ns
                                  // since 1/1/1601
@@ -87,6 +82,7 @@ typedef struct _WNODE_HEADER
                                  // timestamp should not be modified by
                                  // a historical logger
 #define WNODE_FLAG_USE_TIMESTAMP 0x00000200
+#define WNODE_FLAG_PERSIST_EVENT 0x00000400
 
 #define WNODE_FLAG_EVENT_REFERENCE 0x00002000
 
@@ -109,7 +105,7 @@ typedef struct _WNODE_HEADER
 
 #define WNODE_FLAG_USE_MOF_PTR   0x00100000 // MOF data are dereferenced
 
-#define WNODE_FLAG_INTERNAL2     0x00200000  // Used internally by WMI
+#define WNODE_FLAG_NO_HEADER     0x00200000 // Trace without header
 
 // Set for events that are WNODE_EVENT_REFERENCE
 // Mask for event severity level. Level 0xff is the most severe type of event
@@ -421,13 +417,17 @@ typedef enum
 //
 // GuidTypes 
 //
-#ifndef _WMIKM_
+//#ifndef _WMIKM_
 #define WMI_GUIDTYPE_TRACECONTROL 0
 #define WMI_GUIDTYPE_TRACE        1
 #define WMI_GUIDTYPE_DATA         2
 #define WMI_GUIDTYPE_EVENT        3
-#endif
+//#endif
 
+//
+// Specific rights for WMI guid objects. These are available from 0x0001 to
+// 0xffff (ie up to 16 rights)
+//
 #define WMIGUID_QUERY                 0x0001
 #define WMIGUID_SET                   0x0002
 #define WMIGUID_NOTIFICATION          0x0004
@@ -439,8 +439,10 @@ typedef enum
 #define TRACELOG_ACCESS_KERNEL_LOGGER 0x0100
 #define TRACELOG_CREATE_INPROC        0x0200
 #define TRACELOG_ACCESS_REALTIME      0x0400
+#define TRACELOG_REGISTER_GUIDS       0x0800
 
 #define WMIGUID_ALL_ACCESS (STANDARD_RIGHTS_READ |     \
+                            SYNCHRONIZE | \
                             WMIGUID_QUERY |                \
                             WMIGUID_SET |                  \
                             WMIGUID_NOTIFICATION |         \
@@ -451,11 +453,11 @@ typedef enum
                             TRACELOG_GUID_ENABLE |         \
                             TRACELOG_ACCESS_KERNEL_LOGGER |\
                             TRACELOG_CREATE_INPROC | \
-                            TRACELOG_ACCESS_REALTIME)
+                            TRACELOG_ACCESS_REALTIME | \
+                            TRACELOG_REGISTER_GUIDS  )
 
 #define WMI_GLOBAL_LOGGER_ID          0x0001
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif
 

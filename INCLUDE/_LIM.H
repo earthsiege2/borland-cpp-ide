@@ -5,9 +5,9 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
@@ -17,9 +17,7 @@
 #define __LIMITS_H
 #define _INC_LIMITS  /* MSC Guard name */
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 #define CHAR_BIT        8               /* number of bits in a char */
 #define MB_LEN_MAX      2               /* max. # bytes in multibyte char */

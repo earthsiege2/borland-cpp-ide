@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OleCtnrs.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'OleCtnrs.pas' rev: 6.00
 
 #ifndef OleCtnrsHPP
 #define OleCtnrsHPP
@@ -19,7 +19,7 @@
 #include <SysUtils.hpp>	// Pascal unit
 #include <OleDlg.hpp>	// Pascal unit
 #include <ActiveX.hpp>	// Pascal unit
-#include <Commctrl.hpp>	// Pascal unit
+#include <CommCtrl.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
@@ -35,7 +35,6 @@ __interface IVCLFrameForm;
 typedef System::DelphiInterface<IVCLFrameForm> _di_IVCLFrameForm;
 class DELPHICLASS TOleContainer;
 __interface INTERFACE_UUID("{CD02E1C0-52DA-11D0-9EA6-0020AF3D82DA}") IVCLFrameForm  : public IOleInPlaceFrame 
-	
 {
 	
 public:
@@ -61,6 +60,7 @@ enum TObjectState { osEmpty, osLoaded, osRunning, osOpen, osInPlaceActive, osUIA
 enum TCreateType { ctNewObject, ctFromFile, ctLinkToFile, ctFromData, ctLinkFromData };
 #pragma option pop
 
+#pragma pack(push, 4)
 struct TCreateInfo
 {
 	TCreateType CreateType;
@@ -70,6 +70,7 @@ struct TCreateInfo
 	WideString FileName;
 	_di_IDataObject DataObject;
 } ;
+#pragma pack(pop)
 
 #pragma pack(push, 1)
 struct TVerbInfo
@@ -79,8 +80,7 @@ struct TVerbInfo
 } ;
 #pragma pack(pop)
 
-typedef void __fastcall (__closure *TObjectMoveEvent)(TOleContainer* OleContainer, const Windows::TRect 
-	&Bounds);
+typedef void __fastcall (__closure *TObjectMoveEvent)(TOleContainer* OleContainer, const Types::TRect &Bounds);
 
 class PASCALIMPLEMENTATION TOleContainer : public Controls::TCustomControl 
 {
@@ -92,7 +92,10 @@ private:
 	_di_IStorage FStorage;
 	_di_IOleObject FOleObject;
 	int FDrawAspect;
-	Windows::TPoint FViewSize;
+	#pragma pack(push, 1)
+	Types::TPoint FViewSize;
+	#pragma pack(pop)
+	
 	Classes::TStringList* FObjectVerbs;
 	int FDataConnection;
 	_di_IVCLFrameForm FDocForm;
@@ -133,30 +136,24 @@ private:
 	HRESULT __stdcall CanInPlaceActivate(void);
 	HRESULT __stdcall OnInPlaceActivate(void);
 	HRESULT __stdcall OnUIActivate(void);
-	HRESULT __stdcall GetWindowContext(/* out */ _di_IOleInPlaceFrame &frame, /* out */ _di_IOleInPlaceUIWindow 
-		&doc, /* out */ Windows::TRect &rcPosRect, /* out */ Windows::TRect &rcClipRect, /* out */ tagOIFI 
-		&frameInfo);
-	HRESULT __stdcall Scroll(const Windows::TPoint scrollExtent);
+	HRESULT __stdcall GetWindowContext(/* out */ _di_IOleInPlaceFrame &frame, /* out */ _di_IOleInPlaceUIWindow &doc, /* out */ Types::TRect &rcPosRect, /* out */ Types::TRect &rcClipRect, /* out */ tagOIFI &frameInfo);
+	HRESULT __stdcall Scroll(const Types::TPoint scrollExtent);
 	HRESULT __stdcall OnUIDeactivate(BOOL fUndoable);
 	HRESULT __stdcall OnInPlaceDeactivate(void);
 	HRESULT __stdcall DiscardUndoState(void);
 	HRESULT __stdcall DeactivateAndUndo(void);
-	HRESULT __stdcall OnPosRectChange(const Windows::TRect &rcPosRect);
+	HRESULT __stdcall OnPosRectChange(const Types::TRect &rcPosRect);
 	void __stdcall OnDataChange(const tagFORMATETC &formatetc, const tagSTGMEDIUM &stgmed);
 	void __stdcall OnViewChange(int dwAspect, int lindex);
 	void __stdcall OnRename(const _di_IMoniker mk);
 	void __stdcall OnSave(void);
 	void __stdcall OnClose(void);
 	HRESULT __stdcall ActivateMe(_di_IOleDocumentView View);
-	HRESULT __stdcall GetObjectInfo(int dwObject, int &dwObjSize, char * &lpszLabel, char * &lpszType, 
-		char * &lpszShortType, char * &lpszLocation);
-	HRESULT __stdcall GetConvertInfo(int dwObject, GUID &ClassID, Word &wFormat, GUID &ConvertDefaultClassID
-		, System::PGUID &lpClsidExclude, int &cClsidExclude);
+	HRESULT __stdcall GetObjectInfo(int dwObject, int &dwObjSize, char * &lpszLabel, char * &lpszType, char * &lpszShortType, char * &lpszLocation);
+	HRESULT __stdcall GetConvertInfo(int dwObject, GUID &ClassID, Word &wFormat, GUID &ConvertDefaultClassID, System::PGUID &lpClsidExclude, int &cClsidExclude);
 	HRESULT __stdcall ConvertObject(int dwObject, const GUID &clsidNew);
-	HRESULT __stdcall GetViewInfo(int dwObject, unsigned &hMetaPict, int &dvAspect, int &nCurrentScale)
-		;
-	HRESULT __stdcall SetViewInfo(int dwObject, unsigned hMetaPict, int dvAspect, int nCurrentScale, BOOL 
-		bRelativeToOrig);
+	HRESULT __stdcall GetViewInfo(int dwObject, unsigned &hMetaPict, int &dvAspect, int &nCurrentScale);
+	HRESULT __stdcall SetViewInfo(int dwObject, unsigned hMetaPict, int dvAspect, int nCurrentScale, BOOL bRelativeToOrig);
 	void __fastcall AdjustBounds(void);
 	void __fastcall CheckObject(void);
 	void __fastcall CreateAccelTable(void);
@@ -176,7 +173,7 @@ private:
 	AnsiString __fastcall GetSourceDoc();
 	TObjectState __fastcall GetState(void);
 	void __fastcall InitObject(void);
-	void __fastcall ObjectMoved(const Windows::TRect &ObjectRect);
+	void __fastcall ObjectMoved(const Types::TRect &ObjectRect);
 	void __fastcall PopupVerbMenuClick(System::TObject* Sender);
 	void __fastcall SetBorderStyle(Forms::TBorderStyle Value);
 	void __fastcall SetDrawAspect(bool Iconic, unsigned IconMetaPict);
@@ -206,8 +203,7 @@ protected:
 	DYNAMIC void __fastcall DoEnter(void);
 	DYNAMIC Menus::TPopupMenu* __fastcall GetPopupMenu(void);
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	virtual void __fastcall Paint(void);
 	
 public:
@@ -253,28 +249,28 @@ __published:
 	__property bool AllowActiveDoc = {read=FAllowActiveDoc, write=FAllowActiveDoc, default=1};
 	__property TAutoActivate AutoActivate = {read=FAutoActivate, write=FAutoActivate, default=2};
 	__property bool AutoVerbMenu = {read=FAutoVerbMenu, write=FAutoVerbMenu, default=1};
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
 	__property Forms::TBorderStyle BorderStyle = {read=FBorderStyle, write=SetBorderStyle, default=1};
 	__property Caption ;
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property bool CopyOnSave = {read=FCopyOnSave, write=FCopyOnSave, default=1};
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property bool Iconic = {read=GetIconic, write=SetIconic, stored=false, nodefault};
 	__property bool OldStreamFormat = {read=FOldStreamFormat, write=FOldStreamFormat, default=0};
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentShowHint ;
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
 	__property TSizeMode SizeMode = {read=FSizeMode, write=SetSizeMode, default=0};
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property Classes::TNotifyEvent OnActivate = {read=FOnActivate, write=FOnActivate};
 	__property Classes::TNotifyEvent OnDeactivate = {read=FOnDeactivate, write=FOnDeactivate};
 	__property OnDragDrop ;
@@ -293,8 +289,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TOleContainer(HWND ParentWindow) : Controls::TCustomControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TOleContainer(HWND ParentWindow) : Controls::TCustomControl(ParentWindow) { }
 	#pragma option pop
 	
 private:
@@ -310,7 +305,7 @@ public:
 	operator IAdviseSink*(void) { return (IAdviseSink*)&__IAdviseSink; }
 	operator IOleInPlaceSite*(void) { return (IOleInPlaceSite*)&__IOleInPlaceSite; }
 	operator IOleClientSite*(void) { return (IOleClientSite*)&__IOleClientSite; }
-	operator IUnknown*(void) { return (IUnknown*)&__IOleUIObjInfo; }
+	operator IInterface*(void) { return (IInterface*)&__IOleUIObjInfo; }
 	
 };
 
@@ -332,11 +327,10 @@ private:
 	void __fastcall OnResize(void);
 	HRESULT __stdcall GetWindow(/* out */ HWND &wnd);
 	HRESULT __stdcall ContextSensitiveHelp(BOOL fEnterMode);
-	HRESULT __stdcall GetBorder(/* out */ Windows::TRect &BorderRect);
-	HRESULT __stdcall RequestBorderSpace(const Windows::TRect &borderwidths);
-	HRESULT __stdcall SetBorderSpace(Windows::PRect pborderwidths);
-	HRESULT __stdcall SetActiveObject(const _di_IOleInPlaceActiveObject ActiveObject, wchar_t * pszObjName
-		);
+	HRESULT __stdcall GetBorder(/* out */ Types::TRect &BorderRect);
+	HRESULT __stdcall RequestBorderSpace(const Types::TRect &borderwidths);
+	HRESULT __stdcall SetBorderSpace(Types::PRect pborderwidths);
+	HRESULT __stdcall SetActiveObject(const _di_IOleInPlaceActiveObject ActiveObject, wchar_t * pszObjName);
 	HRESULT __stdcall InsertMenus(HMENU hmenuShared, tagOleMenuGroupWidths &menuWidths);
 	HRESULT __stdcall SetMenu(HMENU hmenuShared, HMENU holemenu, HWND hwndActiveObject);
 	HRESULT __stdcall RemoveMenus(HMENU hmenuShared);
@@ -378,9 +372,7 @@ static const int ovPrimary = 0xffff0000;
 extern PACKAGE void __fastcall DestroyMetaPict(unsigned MetaPict);
 
 }	/* namespace Olectnrs */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Olectnrs;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

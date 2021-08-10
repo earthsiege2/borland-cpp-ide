@@ -4,7 +4,6 @@
 //*********************************************************************
 
 #ifndef __MSXMLDID_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __MSXMLDID_H__
 
 #define DISPID_XOBJ_MIN                 0x00010000
@@ -60,5 +59,4 @@
 #define DISPID_XMLATTRIBUTE_VALUE               DISPID_XMLATTRIBUTE + 2
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // __MSXMLDID_H__

@@ -11,6 +11,7 @@
 #include <DBGrids.hpp>
 #include <ExtCtrls.hpp>
 #include <Grids.hpp>
+#include <DB.hpp>
 //---------------------------------------------------------------------------
 class TShapeForm : public TForm
 {

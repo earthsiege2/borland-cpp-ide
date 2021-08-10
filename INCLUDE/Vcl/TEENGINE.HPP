@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'TeEngine.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'TeEngine.pas' rev: 6.00
 
 #ifndef TeEngineHPP
 #define TeEngineHPP
@@ -11,13 +11,13 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <ExtCtrls.hpp>	// Pascal unit
-#include <Controls.hpp>	// Pascal unit
 #include <TeCanvas.hpp>	// Pascal unit
 #include <TeeProcs.hpp>	// Pascal unit
-#include <Graphics.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
-#include <Windows.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
+#include <Controls.hpp>	// Pascal unit
+#include <Graphics.hpp>	// Pascal unit
+#include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -27,8 +27,7 @@ namespace Teengine
 {
 //-- type declarations -------------------------------------------------------
 #pragma option push -b-
-enum TSeriesMarksStyle { smsValue, smsPercent, smsLabel, smsLabelPercent, smsLabelValue, smsLegend, 
-	smsPercentTotal, smsLabelPercentTotal, smsXValue };
+enum TSeriesMarksStyle { smsValue, smsPercent, smsLabel, smsLabelPercent, smsLabelValue, smsLegend, smsPercentTotal, smsLabelPercentTotal, smsXValue };
 #pragma option pop
 
 typedef double *PChartValue;
@@ -65,8 +64,7 @@ __published:
 	__property Font ;
 public:
 	#pragma option push -w-inl
-	/* TChartFontObject.Create */ inline __fastcall TChartAxisTitle(Teeprocs::TCustomTeePanel* AOwner) : 
-		Teeprocs::TChartFontObject(AOwner) { }
+	/* TChartFontObject.Create */ inline __fastcall TChartAxisTitle(Teeprocs::TCustomTeePanel* AOwner) : Teeprocs::TChartFontObject(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TChartFontObject.Destroy */ inline __fastcall virtual ~TChartAxisTitle(void) { }
@@ -85,6 +83,9 @@ class PASCALIMPLEMENTATION TChartSeriesList : public Classes::TList
 {
 	typedef Classes::TList inherited;
 	
+public:
+	TChartSeries* operator[](int Index) { return Series[Index]; }
+	
 private:
 	TCustomAxisPanel* FOwner;
 	void __fastcall SetSeries(int Index, TChartSeries* Series);
@@ -95,7 +96,6 @@ public:
 	__property TCustomAxisPanel* Owner = {read=FOwner};
 	__property TChartSeries* Series[int Index] = {read=GetSeries, write=SetSeries/*, default*/};
 public:
-		
 	#pragma option push -w-inl
 	/* TList.Destroy */ inline __fastcall virtual ~TChartSeriesList(void) { }
 	#pragma option pop
@@ -204,10 +204,10 @@ private:
 	void __fastcall SetTitleSize(int Value);
 	void __fastcall SetValuesFormat(const AnsiString Value);
 	void __fastcall SetVisible(bool Value);
-	int __fastcall ApplyPosition(int APos, const Windows::TRect &R);
+	int __fastcall ApplyPosition(int APos, const Types::TRect &R);
 	double __fastcall CalcDateTimeIncrement(int MaxNumLabels);
 	double __fastcall CalcLabelsIncrement(int MaxNumLabels);
-	int __fastcall GetRectangleEdge(const Windows::TRect &R);
+	int __fastcall GetRectangleEdge(const Types::TRect &R);
 	int __fastcall InternalCalcLogPosValue(bool IsX, const double Value);
 	int __fastcall InternalCalcDepthPosValue(const double Value);
 	double __fastcall InternalCalcLog(double &LogMax, double &LogMin);
@@ -226,10 +226,9 @@ public:
 	int IAxisSize;
 	bool IsDepthAxis;
 	void __fastcall InternalCalcPositions(void);
-	int __fastcall InternalCalcSize(Graphics::TFont* tmpFont, int tmpAngle, const AnsiString tmpText, int 
-		tmpSize);
+	int __fastcall InternalCalcSize(Graphics::TFont* tmpFont, int tmpAngle, const AnsiString tmpText, int tmpSize);
 	void __fastcall InternalSetInverted(bool Value);
-	void __fastcall CalcRect(Windows::TRect &R, bool InflateChartRectangle);
+	void __fastcall CalcRect(Types::TRect &R, bool InflateChartRectangle);
 	void __fastcall InternalSetMaximum(const double Value);
 	void __fastcall InternalSetMinimum(const double Value);
 	int __fastcall SizeTickAxis(void);
@@ -250,14 +249,10 @@ public:
 	int __fastcall CalcYPosValue(const double Value);
 	int __fastcall CalcSizeValue(const double Value);
 	double __fastcall CalcPosPoint(int Value);
-	void __fastcall CustomDrawMinMax(int APosLabels, int APosTitle, int APosAxis, bool GridVisible, const 
-		double AMinimum, const double AMaximum, const double AIncrement);
+	void __fastcall CustomDrawMinMax(int APosLabels, int APosTitle, int APosAxis, bool GridVisible, const double AMinimum, const double AMaximum, const double AIncrement);
 	void __fastcall CustomDraw(int APosLabels, int APosTitle, int APosAxis, bool GridVisible);
-	void __fastcall CustomDrawStartEnd(int APosLabels, int APosTitle, int APosAxis, bool GridVisible, int 
-		AStartPos, int AEndPos);
-	void __fastcall CustomDrawMinMaxStartEnd(int APosLabels, int APosTitle, int APosAxis, bool GridVisible
-		, const double AMinimum, const double AMaximum, const double AIncrement, int AStartPos, int AEndPos
-		);
+	void __fastcall CustomDrawStartEnd(int APosLabels, int APosTitle, int APosAxis, bool GridVisible, int AStartPos, int AEndPos);
+	void __fastcall CustomDrawMinMaxStartEnd(int APosLabels, int APosTitle, int APosAxis, bool GridVisible, const double AMinimum, const double AMaximum, const double AIncrement, int AStartPos, int AEndPos);
 	void __fastcall Draw(bool CalcPosAxis);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	void __fastcall AdjustMaxMin(void);
@@ -268,9 +263,8 @@ public:
 	void __fastcall SetMinMax(double AMin, double AMax);
 	double __fastcall CalcXYIncrement(int MaxLabelSize);
 	double __fastcall CalcIncrement(void);
-	void __fastcall AdjustMaxMinRect(const Windows::TRect &Rect);
-	void __fastcall IncDecDateTime(bool Increment, double &Value, const double AnIncrement, Teeprocs::TDateTimeStep 
-		tmpWhichDateTime);
+	void __fastcall AdjustMaxMinRect(const Types::TRect &Rect);
+	void __fastcall IncDecDateTime(bool Increment, double &Value, const double AnIncrement, Teeprocs::TDateTimeStep tmpWhichDateTime);
 	__property bool Horizontal = {read=FHorizontal, write=FHorizontal, nodefault};
 	__property bool OtherSide = {read=FOtherSide, write=FOtherSide, nodefault};
 	__property int PosAxis = {read=FPosAxis, nodefault};
@@ -281,8 +275,7 @@ public:
 	__property bool AutomaticMaximum = {read=FAutomaticMaximum, write=SetAutomaticMaximum, default=1};
 	__property bool AutomaticMinimum = {read=FAutomaticMinimum, write=SetAutomaticMinimum, default=1};
 	__property Tecanvas::TChartAxisPen* Axis = {read=FAxis, write=SetAxis};
-	__property AnsiString AxisValuesFormat = {read=FAxisValuesFormat, write=SetValuesFormat, stored=IsAxisValuesFormatStored
-		};
+	__property AnsiString AxisValuesFormat = {read=FAxisValuesFormat, write=SetValuesFormat, stored=IsAxisValuesFormatStored};
 	__property AnsiString DateTimeFormat = {read=FDateTimeFormat, write=SetDateTimeFormat};
 	__property bool ExactDateTime = {read=FExactDateTime, write=SetExactDateTime, default=1};
 	__property Tecanvas::TDottedGrayPen* Grid = {read=FGrid, write=SetGrid};
@@ -291,8 +284,7 @@ public:
 	__property bool Inverted = {read=FInverted, write=SetInverted, default=0};
 	__property bool Labels = {read=FLabels, write=SetLabels, default=1};
 	__property int LabelsAngle = {read=FLabelsAngle, write=SetLabelsAngle, default=0};
-	__property Graphics::TFont* LabelsFont = {read=FLabelsFont, write=SetLabelsFont, stored=IsFontStored
-		};
+	__property Graphics::TFont* LabelsFont = {read=FLabelsFont, write=SetLabelsFont, stored=IsFontStored};
 	__property bool LabelsMultiLine = {read=FLabelsMultiLine, write=SetLabelsMultiLine, default=0};
 	__property bool LabelsOnAxis = {read=FLabelsOnAxis, write=SetLabelsOnAxis, default=1};
 	__property int LabelsSeparation = {read=FLabelsSeparation, write=SetLabelsSeparation, default=10};
@@ -306,11 +298,9 @@ public:
 	__property int MinorTickCount = {read=FMinorTickCount, write=SetMinorTickCount, default=3};
 	__property int MinorTickLength = {read=FMinorTickLength, write=SetMinorTickLength, default=2};
 	__property Tecanvas::TDarkGrayPen* MinorTicks = {read=FMinorTicks, write=SetMinorTicks};
-	__property double StartPosition = {read=FStartPosition, write=SetStartPosition, stored=IsStartStored
-		};
+	__property double StartPosition = {read=FStartPosition, write=SetStartPosition, stored=IsStartStored};
 	__property double EndPosition = {read=FEndPosition, write=SetEndPosition, stored=IsEndStored};
-	__property double PositionPercent = {read=FPositionPercent, write=SetPositionPercent, stored=IsPosStored
-		};
+	__property double PositionPercent = {read=FPositionPercent, write=SetPositionPercent, stored=IsPosStored};
 	__property bool RoundFirstLabel = {read=FRoundFirstLabel, write=SetRoundFirstLabel, default=1};
 	__property int TickInnerLength = {read=FTickInnerLength, write=SetTickInnerLength, default=0};
 	__property int TickLength = {read=FTickLength, write=SetTickLength, default=4};
@@ -328,45 +318,44 @@ class PASCALIMPLEMENTATION TChartDepthAxis : public TCustomChartAxis
 	typedef TCustomChartAxis inherited;
 	
 __published:
-	__property Automatic ;
-	__property AutomaticMaximum ;
-	__property AutomaticMinimum ;
+	__property Automatic  = {default=1};
+	__property AutomaticMaximum  = {default=1};
+	__property AutomaticMinimum  = {default=1};
 	__property Axis ;
 	__property AxisValuesFormat ;
 	__property DateTimeFormat ;
-	__property ExactDateTime ;
+	__property ExactDateTime  = {default=1};
 	__property Grid ;
 	__property Increment ;
-	__property Inverted ;
-	__property Labels ;
-	__property LabelsAngle ;
+	__property Inverted  = {default=0};
+	__property Labels  = {default=1};
+	__property LabelsAngle  = {default=0};
 	__property LabelsFont ;
-	__property LabelsMultiLine ;
-	__property LabelsOnAxis ;
-	__property LabelsSeparation ;
-	__property LabelsSize ;
-	__property LabelStyle ;
-	__property Logarithmic ;
-	__property LogarithmicBase ;
+	__property LabelsMultiLine  = {default=0};
+	__property LabelsOnAxis  = {default=1};
+	__property LabelsSeparation  = {default=10};
+	__property LabelsSize  = {default=0};
+	__property LabelStyle  = {default=0};
+	__property Logarithmic  = {default=0};
+	__property LogarithmicBase  = {default=10};
 	__property Maximum ;
 	__property Minimum ;
 	__property MinorGrid ;
-	__property MinorTickCount ;
-	__property MinorTickLength ;
+	__property MinorTickCount  = {default=3};
+	__property MinorTickLength  = {default=2};
 	__property MinorTicks ;
-	__property RoundFirstLabel ;
-	__property TickInnerLength ;
-	__property TickLength ;
-	__property TickOnLabelsOnly ;
+	__property RoundFirstLabel  = {default=1};
+	__property TickInnerLength  = {default=0};
+	__property TickLength  = {default=4};
+	__property TickOnLabelsOnly  = {default=1};
 	__property Ticks ;
 	__property TicksInner ;
 	__property Title ;
-	__property TitleSize ;
-	__property Visible ;
+	__property TitleSize  = {default=0};
+	__property Visible  = {default=0};
 public:
 	#pragma option push -w-inl
-	/* TCustomChartAxis.Create */ inline __fastcall TChartDepthAxis(TCustomAxisPanel* AOwner) : TCustomChartAxis(
-		AOwner) { }
+	/* TCustomChartAxis.Create */ inline __fastcall TChartDepthAxis(TCustomAxisPanel* AOwner) : TCustomChartAxis(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomChartAxis.Destroy */ inline __fastcall virtual ~TChartDepthAxis(void) { }
@@ -375,15 +364,16 @@ public:
 };
 
 
-typedef void __fastcall (__closure *TAxisOnGetLabel)(TChartAxis* Sender, TChartSeries* Series, int ValueIndex
-	, AnsiString &LabelText);
+typedef void __fastcall (__closure *TAxisOnGetLabel)(TChartAxis* Sender, TChartSeries* Series, int ValueIndex, AnsiString &LabelText);
 
-typedef void __fastcall (__closure *TAxisOnGetNextLabel)(TChartAxis* Sender, int LabelIndex, double 
-	&LabelValue, bool &Stop);
+typedef void __fastcall (__closure *TAxisOnGetNextLabel)(TChartAxis* Sender, int LabelIndex, double &LabelValue, bool &Stop);
 
 class PASCALIMPLEMENTATION TCustomAxisPanel : public Teeprocs::TCustomTeePanelExtended 
 {
 	typedef Teeprocs::TCustomTeePanelExtended inherited;
+	
+public:
+	TChartSeries* operator[](int Index) { return Series[Index]; }
 	
 private:
 	TChartSeriesList* FSeriesList;
@@ -448,7 +438,7 @@ public:
 	TChartSeries* __fastcall GetAxisSeries(TCustomChartAxis* Axis);
 	Graphics::TColor __fastcall GetFreeSeriesColor(bool CheckBackground);
 	int __fastcall GetMaxValuesCount(void);
-	virtual void __fastcall InternalDraw(const Windows::TRect &UserRectangle);
+	virtual void __fastcall InternalDraw(const Types::TRect &UserRectangle);
 	virtual bool __fastcall IsFreeSeriesColor(Graphics::TColor AColor, bool CheckBackground) = 0 ;
 	virtual bool __fastcall IsValidDataSource(TChartSeries* ASeries, Classes::TComponent* AComponent);
 	double __fastcall MaxXValue(TChartAxis* AAxis);
@@ -469,7 +459,7 @@ public:
 	__property bool AxisVisible = {read=FAxisVisible, write=SetAxisVisible, default=1};
 	__property TChartAxis* BottomAxis = {read=FBottomAxis, write=SetBottomAxis};
 	__property bool ClipPoints = {read=FClipPoints, write=SetClipPoints, default=1};
-	__property Color ;
+	__property Color  = {default=-2147483633};
 	__property TChartDepthAxis* DepthAxis = {read=FDepthAxis, write=SetDepthAxis};
 	__property TChartAxis* LeftAxis = {read=FLeftAxis, write=SetLeftAxis};
 	__property int MaxPointsPerPage = {read=FMaxPointsPerPage, write=SetMaxPointsPerPage, default=0};
@@ -479,18 +469,14 @@ public:
 	__property TChartSeriesList* SeriesList = {read=FSeriesList};
 	__property TChartAxis* TopAxis = {read=FTopAxis, write=SetTopAxis};
 	__property bool View3DWalls = {read=FView3DWalls, write=SetView3DWalls, default=1};
-	__property Classes::TNotifyEvent OnBeforeDrawAxes = {read=FOnBeforeDrawAxes, write=FOnBeforeDrawAxes
-		};
-	__property Classes::TNotifyEvent OnBeforeDrawSeries = {read=FOnBeforeDrawSeries, write=FOnBeforeDrawSeries
-		};
+	__property Classes::TNotifyEvent OnBeforeDrawAxes = {read=FOnBeforeDrawAxes, write=FOnBeforeDrawAxes};
+	__property Classes::TNotifyEvent OnBeforeDrawSeries = {read=FOnBeforeDrawSeries, write=FOnBeforeDrawSeries};
 	__property TAxisOnGetLabel OnGetAxisLabel = {read=FOnGetAxisLabel, write=FOnGetAxisLabel};
-	__property TAxisOnGetNextLabel OnGetNextAxisLabel = {read=FOnGetNextAxisLabel, write=FOnGetNextAxisLabel
-		};
+	__property TAxisOnGetNextLabel OnGetNextAxisLabel = {read=FOnGetNextAxisLabel, write=FOnGetNextAxisLabel};
 	__property Classes::TNotifyEvent OnPageChange = {read=FOnPageChange, write=FOnPageChange};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomAxisPanel(HWND ParentWindow) : Teeprocs::TCustomTeePanelExtended(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomAxisPanel(HWND ParentWindow) : Teeprocs::TCustomTeePanelExtended(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -502,49 +488,48 @@ class PASCALIMPLEMENTATION TChartAxis : public TCustomChartAxis
 	typedef TCustomChartAxis inherited;
 	
 __published:
-	__property Automatic ;
-	__property AutomaticMaximum ;
-	__property AutomaticMinimum ;
+	__property Automatic  = {default=1};
+	__property AutomaticMaximum  = {default=1};
+	__property AutomaticMinimum  = {default=1};
 	__property Axis ;
 	__property AxisValuesFormat ;
 	__property DateTimeFormat ;
-	__property ExactDateTime ;
+	__property ExactDateTime  = {default=1};
 	__property Grid ;
-	__property GridCentered ;
+	__property GridCentered  = {default=0};
 	__property Increment ;
-	__property Inverted ;
-	__property Labels ;
-	__property LabelsAngle ;
+	__property Inverted  = {default=0};
+	__property Labels  = {default=1};
+	__property LabelsAngle  = {default=0};
 	__property LabelsFont ;
-	__property LabelsMultiLine ;
-	__property LabelsOnAxis ;
-	__property LabelsSeparation ;
-	__property LabelsSize ;
-	__property LabelStyle ;
-	__property Logarithmic ;
-	__property LogarithmicBase ;
+	__property LabelsMultiLine  = {default=0};
+	__property LabelsOnAxis  = {default=1};
+	__property LabelsSeparation  = {default=10};
+	__property LabelsSize  = {default=0};
+	__property LabelStyle  = {default=0};
+	__property Logarithmic  = {default=0};
+	__property LogarithmicBase  = {default=10};
 	__property Maximum ;
 	__property Minimum ;
 	__property MinorGrid ;
-	__property MinorTickCount ;
-	__property MinorTickLength ;
+	__property MinorTickCount  = {default=3};
+	__property MinorTickLength  = {default=2};
 	__property MinorTicks ;
 	__property StartPosition ;
 	__property EndPosition ;
 	__property PositionPercent ;
-	__property RoundFirstLabel ;
-	__property TickInnerLength ;
-	__property TickLength ;
-	__property TickOnLabelsOnly ;
+	__property RoundFirstLabel  = {default=1};
+	__property TickInnerLength  = {default=0};
+	__property TickLength  = {default=4};
+	__property TickOnLabelsOnly  = {default=1};
 	__property Ticks ;
 	__property TicksInner ;
 	__property Title ;
-	__property TitleSize ;
-	__property Visible ;
+	__property TitleSize  = {default=0};
+	__property Visible  = {default=1};
 public:
 	#pragma option push -w-inl
-	/* TCustomChartAxis.Create */ inline __fastcall TChartAxis(TCustomAxisPanel* AOwner) : TCustomChartAxis(
-		AOwner) { }
+	/* TCustomChartAxis.Create */ inline __fastcall TChartAxis(TCustomAxisPanel* AOwner) : TCustomChartAxis(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomChartAxis.Destroy */ inline __fastcall virtual ~TChartAxis(void) { }
@@ -560,14 +545,16 @@ class PASCALIMPLEMENTATION TSeriesMarksPositions : public Classes::TList
 {
 	typedef Classes::TList inherited;
 	
+public:
+	TSeriesMarkPosition* operator[](int Index) { return Position[Index]; }
+	
 private:
 	void __fastcall SetPosition(int Index, TSeriesMarkPosition* APosition);
 	TSeriesMarkPosition* __fastcall GetPosition(int Index);
 	
 public:
 	void __fastcall Automatic(int Index);
-	__property TSeriesMarkPosition* Position[int Index] = {read=GetPosition, write=SetPosition/*, default
-		*/};
+	__property TSeriesMarkPosition* Position[int Index] = {read=GetPosition, write=SetPosition/*, default*/};
 public:
 	#pragma option push -w-inl
 	/* TList.Destroy */ inline __fastcall virtual ~TSeriesMarksPositions(void) { }
@@ -618,8 +605,7 @@ public:
 	__fastcall virtual ~TSeriesMarks(void);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	int __fastcall Clicked(int X, int Y);
-	void __fastcall Draw(int Index, Graphics::TColor AColor, const AnsiString St, TSeriesMarkPosition* 
-		APosition);
+	void __fastcall Draw(int Index, Graphics::TColor AColor, const AnsiString St, TSeriesMarkPosition* APosition);
 	__property TChartSeries* ParentSeries = {read=FParent};
 	__property TSeriesMarksPositions* Positions = {read=FPositions};
 	__property int ZPosition = {read=FZPosition, write=FZPosition, nodefault};
@@ -641,6 +627,9 @@ class DELPHICLASS TChartValueLists;
 class PASCALIMPLEMENTATION TChartValueLists : public Classes::TList 
 {
 	typedef Classes::TList inherited;
+	
+public:
+	TChartValueList* operator[](int Index) { return ValueList[Index]; }
 	
 private:
 	TChartValueList* __fastcall GetValueList(int Index);
@@ -703,12 +692,9 @@ protected:
 	DYNAMIC void __fastcall SetParentComponent(Classes::TComponent* Value);
 	void __fastcall InternalSetPeriod(const double APeriod);
 	void __fastcall AddFunctionXY(bool YMandatorySource, double tmpX, double tmpY);
-	virtual void __fastcall CalculatePeriod(TChartSeries* Source, const double tmpX, int FirstIndex, int 
-		LastIndex);
-	virtual void __fastcall CalculateAllPoints(TChartSeries* Source, TChartValueList* NotMandatorySource
-		);
-	virtual void __fastcall CalculateByPeriod(TChartSeries* Source, TChartValueList* NotMandatorySource
-		);
+	virtual void __fastcall CalculatePeriod(TChartSeries* Source, const double tmpX, int FirstIndex, int LastIndex);
+	virtual void __fastcall CalculateAllPoints(TChartSeries* Source, TChartValueList* NotMandatorySource);
+	virtual void __fastcall CalculateByPeriod(TChartSeries* Source, TChartValueList* NotMandatorySource);
 	TChartValueList* __fastcall ValueList(TChartSeries* ASeries);
 	
 public:
@@ -728,9 +714,7 @@ public:
 __published:
 	__property double Period = {read=FPeriod, write=SetPeriod};
 	__property TFunctionPeriodAlign PeriodAlign = {read=FPeriodAlign, write=SetPeriodAlign, default=1};
-		
 	__property TFunctionPeriodStyle PeriodStyle = {read=FPeriodStyle, write=SetPeriodStyle, default=0};
-		
 public:
 	#pragma option push -w-inl
 	/* TComponent.Destroy */ inline __fastcall virtual ~TTeeFunction(void) { }
@@ -740,8 +724,7 @@ public:
 
 
 #pragma option push -b-
-enum TeEngine__51 { tssIsTemplate, tssDenyChangeType, tssDenyDelete, tssDenyClone, tssIsPersistent, 
-	tssHideDataSource };
+enum TeEngine__51 { tssIsTemplate, tssDenyChangeType, tssDenyDelete, tssDenyClone, tssIsPersistent, tssHideDataSource };
 #pragma option pop
 
 typedef Set<TeEngine__51, tssIsTemplate, tssHideDataSource>  TChartSeriesStyle;
@@ -752,19 +735,16 @@ typedef bool __fastcall (__closure *TSeriesOnBeforeAdd)(TChartSeries* Sender);
 
 typedef void __fastcall (__closure *TSeriesOnClear)(TChartSeries* Sender);
 
-typedef void __fastcall (__closure *TSeriesClick)(TChartSeries* Sender, int ValueIndex, Controls::TMouseButton 
-	Button, Classes::TShiftState Shift, int X, int Y);
+typedef void __fastcall (__closure *TSeriesClick)(TChartSeries* Sender, int ValueIndex, Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 
-typedef void __fastcall (__closure *TSeriesOnGetMarkText)(TChartSeries* Sender, int ValueIndex, AnsiString 
-	&MarkText);
+typedef void __fastcall (__closure *TSeriesOnGetMarkText)(TChartSeries* Sender, int ValueIndex, AnsiString &MarkText);
 
 #pragma option push -b-
 enum TValueEvent { veClear, veAdd, veDelete, veRefresh, veModify };
 #pragma option pop
 
 #pragma option push -b-
-enum TLegendTextStyle { ltsPlain, ltsLeftValue, ltsRightValue, ltsLeftPercent, ltsRightPercent, ltsXValue 
-	};
+enum TLegendTextStyle { ltsPlain, ltsLeftValue, ltsRightValue, ltsLeftPercent, ltsRightPercent, ltsXValue };
 #pragma option pop
 
 class PASCALIMPLEMENTATION TChartSeries : public Classes::TComponent 
@@ -853,8 +833,7 @@ protected:
 	virtual void __fastcall DoBeforeDrawChart(void);
 	virtual void __fastcall DoBeforeDrawValues(void);
 	virtual void __fastcall DrawAllValues(void);
-	virtual void __fastcall DrawMark(int ValueIndex, const AnsiString St, TSeriesMarkPosition* APosition
-		);
+	virtual void __fastcall DrawMark(int ValueIndex, const AnsiString St, TSeriesMarkPosition* APosition);
 	void __fastcall DrawMarks(void);
 	virtual void __fastcall DrawValue(int ValueIndex);
 	bool __fastcall FirstInZOrder(void);
@@ -865,8 +844,7 @@ protected:
 	virtual double __fastcall GetxValue(int Index);
 	virtual double __fastcall GetyValue(int Index);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall NotifyNewValue(TChartSeries* Sender, int ValueIndex);
 	void __fastcall NotifyValue(TValueEvent ValueEvent, int ValueIndex);
 	virtual bool __fastcall MoreSameZOrder(void);
@@ -897,19 +875,17 @@ public:
 	int EndZ;
 	__fastcall virtual TChartSeries(Classes::TComponent* AOwner);
 	__fastcall virtual ~TChartSeries(void);
-	virtual int __fastcall Add(const double AValue, const AnsiString ALabel, Graphics::TColor AColor);
+	virtual int __fastcall Add(const double AValue, const AnsiString ALabel = "", Graphics::TColor AColor = (Graphics::TColor)(0x20000000));
 	int __fastcall AddArray(const double * Values, const int Values_Size);
 	void __fastcall AddLinkedSeries(TChartSeries* ASeries);
-	virtual int __fastcall AddNull(const AnsiString ALabel);
+	virtual int __fastcall AddNull(const AnsiString ALabel = "");
 	virtual int __fastcall AddNullXY(const double X, const double Y, const AnsiString ALabel);
-	int __fastcall AddX(const double AXValue, const AnsiString ALabel, Graphics::TColor AColor);
-	virtual int __fastcall AddXY(const double AXValue, const double AYValue, const AnsiString ALabel, Graphics::TColor 
-		AColor);
-	int __fastcall AddY(const double AYValue, const AnsiString ALabel, Graphics::TColor AColor);
+	int __fastcall AddX(const double AXValue, const AnsiString ALabel = "", Graphics::TColor AColor = (Graphics::TColor)(0x20000000));
+	virtual int __fastcall AddXY(const double AXValue, const double AYValue, const AnsiString ALabel = "", Graphics::TColor AColor = (Graphics::TColor)(0x20000000));
+	int __fastcall AddY(const double AYValue, const AnsiString ALabel = "", Graphics::TColor AColor = (Graphics::TColor)(0x20000000));
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	virtual bool __fastcall AssociatedToAxis(TCustomChartAxis* Axis);
-	void __fastcall CalcRandomBounds(int NumValues, double &tmpX, double &StepX, double &tmpY, double &
-		MinY, double &DifY);
+	void __fastcall CalcRandomBounds(int NumValues, double &tmpX, double &StepX, double &tmpY, double &MinY, double &DifY);
 	virtual void __fastcall Clear(void);
 	int __fastcall Count(void);
 	virtual int __fastcall CountLegendItems(void);
@@ -954,8 +930,7 @@ public:
 	double __fastcall YScreenToValue(int ScreenPos);
 	AnsiString __fastcall XValueToText(const double AValue);
 	AnsiString __fastcall YValueToText(const double AValue);
-	void __fastcall ColorRange(TChartValueList* AValueList, const double FromValue, const double ToValue
-		, Graphics::TColor AColor);
+	void __fastcall ColorRange(TChartValueList* AValueList, const double FromValue, const double ToValue, Graphics::TColor AColor);
 	void __fastcall CheckDataSource(void);
 	virtual void __fastcall AddValue(int ValueIndex);
 	__property Classes::TList* Labels = {read=FXLabels};
@@ -982,21 +957,17 @@ public:
 	virtual bool __fastcall DrawValuesForward(void);
 	virtual bool __fastcall DrawSeriesForward(int ValueIndex);
 	virtual void __fastcall SwapValueIndex(int a, int b);
-	__property TSeriesRecalcOptions RecalcOptions = {read=FRecalcOptions, write=SetRecalcOptions, default=15
-		};
+	__property TSeriesRecalcOptions RecalcOptions = {read=FRecalcOptions, write=SetRecalcOptions, default=15};
 	virtual void __fastcall CalcZOrder(void);
 	virtual void __fastcall DoSeriesMouseMove(Classes::TShiftState Shift, int X, int Y);
-	virtual bool __fastcall DoSeriesClick(TChartSeries* Sender, int ValueIndex, Controls::TMouseButton 
-		Button, Classes::TShiftState Shift, int X, int Y);
-	virtual void __fastcall DoSeriesMouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, 
-		int X, int Y);
+	virtual bool __fastcall DoSeriesClick(TChartSeries* Sender, int ValueIndex, Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	virtual void __fastcall DoSeriesMouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	int __fastcall GetCursorValueIndex(void);
 	void __fastcall GetCursorValues(double &x, double &y);
 	virtual void __fastcall ClearTempValue(TChartValueList* ValueList);
-	virtual void __fastcall DrawLegend(int ValueIndex, const Windows::TRect &Rect);
-	virtual void __fastcall DrawLegendShape(int ValueIndex, const Windows::TRect &Rect);
-	virtual void __fastcall PrepareLegendCanvas(int ValueIndex, Graphics::TColor &BackColor, Graphics::TBrushStyle 
-		&BrushStyle);
+	virtual void __fastcall DrawLegend(int ValueIndex, const Types::TRect &Rect);
+	virtual void __fastcall DrawLegendShape(int ValueIndex, const Types::TRect &Rect);
+	virtual void __fastcall PrepareLegendCanvas(int ValueIndex, Graphics::TColor &BackColor, Graphics::TBrushStyle &BrushStyle);
 	virtual void __fastcall CalcHorizMargins(int &LeftMargin, int &RightMargin);
 	virtual void __fastcall CalcVerticalMargins(int &TopMargin, int &BottomMargin);
 	virtual bool __fastcall UseAxis(void);
@@ -1029,19 +1000,15 @@ __published:
 	__property TSeriesMarks* Marks = {read=FMarks, write=SetMarks};
 	__property TCustomAxisPanel* ParentChart = {read=FParent, write=SetParentChart, stored=false};
 	__property Classes::TComponent* DataSource = {read=GetDataSource, write=SetDataSource};
-	__property AnsiString PercentFormat = {read=FPercentFormat, write=SetPercentFormat, stored=IsPercentFormatStored
-		};
-	__property Graphics::TColor SeriesColor = {read=FColor, write=SetSeriesColor, nodefault};
+	__property AnsiString PercentFormat = {read=FPercentFormat, write=SetPercentFormat, stored=IsPercentFormatStored};
+	__property Graphics::TColor SeriesColor = {read=FColor, write=SetSeriesColor, default=536870912};
 	__property bool ShowInLegend = {read=FShowInLegend, write=SetShowInLegend, default=1};
 	__property AnsiString Title = {read=FTitle, write=SetTitle};
-	__property AnsiString ValueFormat = {read=FValueFormat, write=SetValueFormat, stored=IsValueFormatStored
-		};
+	__property AnsiString ValueFormat = {read=FValueFormat, write=SetValueFormat, stored=IsValueFormatStored};
 	__property TVertAxis VertAxis = {read=FVertAxis, write=SetVertAxis, default=0};
 	__property AnsiString XLabelsSource = {read=FLabelsSource, write=SetLabelsSource};
 	__property Classes::TNotifyEvent AfterDrawValues = {read=FAfterDrawValues, write=FAfterDrawValues};
-		
-	__property Classes::TNotifyEvent BeforeDrawValues = {read=FBeforeDrawValues, write=FBeforeDrawValues
-		};
+	__property Classes::TNotifyEvent BeforeDrawValues = {read=FBeforeDrawValues, write=FBeforeDrawValues};
 	__property TSeriesOnAfterAdd OnAfterAdd = {read=FOnAfterAdd, write=FOnAfterAdd};
 	__property TSeriesOnBeforeAdd OnBeforeAdd = {read=FOnBeforeAdd, write=FOnBeforeAdd};
 	__property TSeriesOnClear OnClearValues = {read=FOnClearValues, write=FOnClearValues};
@@ -1054,6 +1021,9 @@ __published:
 class PASCALIMPLEMENTATION TChartValueList : public Classes::TPersistent 
 {
 	typedef Classes::TPersistent inherited;
+	
+public:
+	double operator[](int Index) { return Value[Index]; }
 	
 private:
 	bool FDateTime;
@@ -1121,38 +1091,28 @@ class PASCALIMPLEMENTATION AxisException : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall AxisException(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall AxisException(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall AxisException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall AxisException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall AxisException(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall AxisException(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall AxisException(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall AxisException(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall AxisException(const AnsiString Msg, int AHelpContext) : 
-		Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall AxisException(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall AxisException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall AxisException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall AxisException(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall AxisException(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall AxisException(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall AxisException(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -1163,8 +1123,7 @@ public:
 };
 
 
-typedef void __fastcall (__closure *TSeriesMouseMove)(TChartSeries* Sender, Classes::TShiftState Shift
-	, int X, int Y);
+typedef void __fastcall (__closure *TSeriesMouseMove)(TChartSeries* Sender, Classes::TShiftState Shift, int X, int Y);
 
 typedef void __fastcall (__closure *TSeriesDblClick)(TChartSeries* Sender, int ValueIndex);
 
@@ -1187,14 +1146,23 @@ class PASCALIMPLEMENTATION TSeriesMarkPosition : public System::TObject
 	typedef System::TObject inherited;
 	
 public:
-	Windows::TPoint ArrowFrom;
-	Windows::TPoint ArrowTo;
+	#pragma pack(push, 1)
+	Types::TPoint ArrowFrom;
+	#pragma pack(pop)
+	
+	#pragma pack(push, 1)
+	Types::TPoint ArrowTo;
+	#pragma pack(pop)
+	
 	bool Custom;
 	int Height;
-	Windows::TPoint LeftTop;
+	#pragma pack(push, 1)
+	Types::TPoint LeftTop;
+	#pragma pack(pop)
+	
 	int Width;
 	void __fastcall Assign(TSeriesMarkPosition* Source);
-	Windows::TRect __fastcall Bounds();
+	Types::TRect __fastcall Bounds();
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall TSeriesMarkPosition(void) : System::TObject() { }
@@ -1213,20 +1181,18 @@ typedef TMetaClass*TTeeFunctionClass;
 //-- var, const, procedure ---------------------------------------------------
 static const int ChartMarkColor = 0x80ffff;
 static const Shortint TeeAllValues = 0xffffffff;
-static const Graphics::TColor clTeeColor = 0x80000000;
+static const int clTeeColor = 0x20000000;
 static const Word ChartSamplesMax = 0x3e8;
-extern PACKAGE bool TeeDrawAxisBeforeSeries;
 static const Shortint TeeAutoZOrder = 0xffffffff;
 static const Shortint TeeNoPointClicked = 0xffffffff;
-extern PACKAGE bool TeeCheckMarkArrowColor;
 static const Word TeeMaxAxisTicks = 0x7d0;
+extern PACKAGE bool TeeDrawAxisBeforeSeries;
+extern PACKAGE bool TeeCheckMarkArrowColor;
 extern PACKAGE int TeeAxisClickGap;
 extern PACKAGE int TeeDefaultCapacity;
 
 }	/* namespace Teengine */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Teengine;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

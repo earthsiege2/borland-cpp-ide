@@ -3,11 +3,11 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1996,99 Inprise Corporation       }
+{ Copyright (c) 1996-1999 Borland Software Corporation  }
 {                                                       }
 {*******************************************************}
 
-unit DBInpReq;
+unit dbinpreq;
 
 {$R-}
 
@@ -42,7 +42,7 @@ implementation
 
 uses DB, DBTables;
 
-{$R *.DFM}
+{$R *.dfm}
 
 function InputRequest(var InputReqInfo: CBInputDesc): CBRType;
 begin

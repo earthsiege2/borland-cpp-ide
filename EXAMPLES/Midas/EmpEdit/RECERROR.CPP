@@ -3,7 +3,7 @@
 //  C++Builder Visual Component Library
 //  ClientDataSet Standard Reconcile Error Dialog
 //
-//  Copyright (c) 2000 Borland International
+//  Copyright (c) 2000-2002 Borland International
 //
 //---------------------------------------------------------------------------
 // To use this dialog you should add a call to HandleReconcileError in

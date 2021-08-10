@@ -1,6 +1,6 @@
 /*
 
-    Copyright (c) 1998-1999  Microsoft Corporation
+    Copyright (c) Microsoft Corporation. All rights reserved.
 
 */
 
@@ -149,6 +149,7 @@ class ATL_NO_VTABLE CSafeComEnum :
 protected:
     IUnknown * m_pFTM; // pointer to free thread marshaler
 };
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // _MSPENUM_H_

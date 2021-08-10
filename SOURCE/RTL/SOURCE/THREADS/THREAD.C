@@ -13,14 +13,14 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1991, 2000 by Inprise Corporation
+ *      Copyright (c) 1991, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.5  $        */
+/* $Revision: 9.10.2.1 $        */
 
 #define INCL_ERROR_H
 #include <ntbc.h>
@@ -31,6 +31,7 @@
 #include <_thread.h>
 #include <string.h>
 #include <process.h>
+#include <float.h>      /* _control87(), _fpreset */
 
 extern DWORD __thread _tlsindex;                        /* in tls.c */
 extern DWORD __thread _stkindex;                        /* in tls.c */
@@ -96,6 +97,9 @@ static DWORD _RTLENTRY new_thread(THREAD_DATA *t, void (_RTLENTRY *endfunc) (uns
      */
     _setexc(&hand);
     t->thread_excep = &hand;
+
+    /* Reset the fpu control word since the OS has probably changed it on us */
+    _fpreset();
 
     /* Call the thread starting address.  If the function returns a value,
        we hold it in retval, and pass it along to the endfunc.  This allows

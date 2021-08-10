@@ -1,5 +1,5 @@
-:Base WINSIGHT.HLP>main
+:Base winsight.hlp>main
 :Title Winsight Help
-:Index Winsight Help=WINSIGHT.HLP
-:INCLUDE BCB5XTRA.OHL
-:INCLUDE WINSIGHT.TOC
+:Index Winsight Help=winsight.hlp
+:include bcb6xtra.ohl
+:include winsight.toc

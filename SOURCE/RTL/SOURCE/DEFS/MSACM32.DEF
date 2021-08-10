@@ -1,47 +1,47 @@
-LIBRARY MSACM32
+LIBRARY MSAcm32
 EXPORTS
 
-    XRegThunkEntry                           = 'MSACM32.DLL'.*
-    acmDriverAddA                            = 'MSACM32.DLL'.*
-    acmDriverAddW                            = 'MSACM32.DLL'.*
-    acmDriverClose                           = 'MSACM32.DLL'.*
-    acmDriverDetailsA                        = 'MSACM32.DLL'.*
-    acmDriverDetailsW                        = 'MSACM32.DLL'.*
-    acmDriverEnum                            = 'MSACM32.DLL'.*
-    acmDriverID                              = 'MSACM32.DLL'.*
-    acmDriverMessage                         = 'MSACM32.DLL'.*
-    acmDriverOpen                            = 'MSACM32.DLL'.*
-    acmDriverPriority                        = 'MSACM32.DLL'.*
-    acmDriverRemove                          = 'MSACM32.DLL'.*
-    acmFilterChooseA                         = 'MSACM32.DLL'.*
-    acmFilterChooseW                         = 'MSACM32.DLL'.*
-    acmFilterDetailsA                        = 'MSACM32.DLL'.*
-    acmFilterDetailsW                        = 'MSACM32.DLL'.*
-    acmFilterEnumA                           = 'MSACM32.DLL'.*
-    acmFilterEnumW                           = 'MSACM32.DLL'.*
-    acmFilterTagDetailsA                     = 'MSACM32.DLL'.*
-    acmFilterTagDetailsW                     = 'MSACM32.DLL'.*
-    acmFilterTagEnumA                        = 'MSACM32.DLL'.*
-    acmFilterTagEnumW                        = 'MSACM32.DLL'.*
-    acmFormatChooseA                         = 'MSACM32.DLL'.*
-    acmFormatChooseW                         = 'MSACM32.DLL'.*
-    acmFormatDetailsA                        = 'MSACM32.DLL'.*
-    acmFormatDetailsW                        = 'MSACM32.DLL'.*
-    acmFormatEnumA                           = 'MSACM32.DLL'.*
-    acmFormatEnumW                           = 'MSACM32.DLL'.*
-    acmFormatSuggest                         = 'MSACM32.DLL'.*
-    acmFormatTagDetailsA                     = 'MSACM32.DLL'.*
-    acmFormatTagDetailsW                     = 'MSACM32.DLL'.*
-    acmFormatTagEnumA                        = 'MSACM32.DLL'.*
-    acmFormatTagEnumW                        = 'MSACM32.DLL'.*
-    acmGetVersion                            = 'MSACM32.DLL'.*
-    acmMessage32                             = 'MSACM32.DLL'.*
-    acmMetrics                               = 'MSACM32.DLL'.*
-    acmStreamClose                           = 'MSACM32.DLL'.*
-    acmStreamConvert                         = 'MSACM32.DLL'.*
-    acmStreamMessage                         = 'MSACM32.DLL'.*
-    acmStreamOpen                            = 'MSACM32.DLL'.*
-    acmStreamPrepareHeader                   = 'MSACM32.DLL'.*
-    acmStreamReset                           = 'MSACM32.DLL'.*
-    acmStreamSize                            = 'MSACM32.DLL'.*
-    acmStreamUnprepareHeader                 = 'MSACM32.DLL'.*
+    XRegThunkEntry
+    acmDriverAddA
+    acmDriverAddW
+    acmDriverClose
+    acmDriverDetailsA
+    acmDriverDetailsW
+    acmDriverEnum
+    acmDriverID
+    acmDriverMessage
+    acmDriverOpen
+    acmDriverPriority
+    acmDriverRemove
+    acmFilterChooseA
+    acmFilterChooseW
+    acmFilterDetailsA
+    acmFilterDetailsW
+    acmFilterEnumA
+    acmFilterEnumW
+    acmFilterTagDetailsA
+    acmFilterTagDetailsW
+    acmFilterTagEnumA
+    acmFilterTagEnumW
+    acmFormatChooseA
+    acmFormatChooseW
+    acmFormatDetailsA
+    acmFormatDetailsW
+    acmFormatEnumA
+    acmFormatEnumW
+    acmFormatSuggest
+    acmFormatTagDetailsA
+    acmFormatTagDetailsW
+    acmFormatTagEnumA
+    acmFormatTagEnumW
+    acmGetVersion
+    acmMessage32
+    acmMetrics
+    acmStreamClose
+    acmStreamConvert
+    acmStreamMessage
+    acmStreamOpen
+    acmStreamPrepareHeader
+    acmStreamReset
+    acmStreamSize
+    acmStreamUnprepareHeader

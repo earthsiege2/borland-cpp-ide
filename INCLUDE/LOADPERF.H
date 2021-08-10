@@ -1,6 +1,6 @@
 /*++
 
-Copyright (C) 1995-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Module Name:
 
@@ -18,7 +18,6 @@ Revision History
 --*/
 
 #ifndef _LOADPERF_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LOADPERF_H_
 
 #if _MSC_VER > 1000
@@ -167,5 +166,4 @@ SetServiceAsTrustedW (
 #endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // _LOADPERF_H_

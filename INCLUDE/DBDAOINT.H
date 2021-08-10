@@ -2,7 +2,7 @@
 **	D B D A O I N T. H													*
 **																		*
 ************************************************************************* 
-** Copyright (C) 1995-1999 by Microsoft Corporation						*
+** Copyright (C) 1995-1997 by Microsoft Corporation						*
 **		   All Rights Reserved					 						*
 ************************************************************************/ 
 /*
@@ -14,7 +14,6 @@ Microsoft Data Access Objects SDK product.
  
 */
 #ifndef _DBDAOINT_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _DBDAOINT_H_
 
 #ifndef _INC_TCHAR
@@ -2018,5 +2017,4 @@ DECLARE_INTERFACE_(DAOIndexFields, _DAODynaCollection)
  /* [retval][out] */ VARIANT __RPC_FAR *pvar ) PURE;
 	};// end interface;
 
-#pragma option pop /*P_O_Pop*/
 #endif // _DBDAOINT_H_

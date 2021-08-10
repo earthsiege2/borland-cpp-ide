@@ -14,7 +14,6 @@ Abstract:
 --*/
 
 #ifndef _SCHEDULE_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _SCHEDULE_H_
 
 #if _MSC_VER > 1000
@@ -76,6 +75,5 @@ typedef struct _SCHEDULE {
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _SCHEDULE_H_
 

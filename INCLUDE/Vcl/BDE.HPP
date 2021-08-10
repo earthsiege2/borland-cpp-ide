@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Bde.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'BDE.pas' rev: 6.00
 
-#ifndef BdeHPP
-#define BdeHPP
+#ifndef BDEHPP
+#define BDEHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -156,6 +156,9 @@ struct SYSConfig
 } ;
 #pragma pack(pop)
 
+struct SYSInfo;
+typedef SYSInfo *pSYSInfo;
+
 #pragma pack(push, 1)
 struct SYSInfo
 {
@@ -169,7 +172,8 @@ struct SYSInfo
 } ;
 #pragma pack(pop)
 
-typedef SYSInfo *pSYSInfo;
+struct CLIENTInfo;
+typedef CLIENTInfo *pCLIENTInfo;
 
 #pragma pack(push, 1)
 struct CLIENTInfo
@@ -180,8 +184,6 @@ struct CLIENTInfo
 	char szLang[32];
 } ;
 #pragma pack(pop)
-
-typedef CLIENTInfo *pCLIENTInfo;
 
 struct SESInfo;
 typedef SESInfo *pSESInfo;
@@ -305,6 +307,9 @@ enum RINTType { rintMASTER, rintDEPENDENT };
 enum RINTQual { rintRESTRICT, rintCASCADE };
 #pragma option pop
 
+struct RINTDesc;
+typedef RINTDesc *pRINTDesc;
+
 #pragma pack(push, 1)
 struct RINTDesc
 {
@@ -319,8 +324,6 @@ struct RINTDesc
 	Word aiOthTabFld[16];
 } ;
 #pragma pack(pop)
-
-typedef RINTDesc *pRINTDesc;
 
 typedef int PRVType;
 
@@ -339,8 +342,7 @@ struct SECDesc
 #pragma pack(pop)
 
 #pragma option push -b
-enum DBIOBJType { objFILLER, objSYSTEM, objSESSION, objDRIVER, objDATABASE, objCURSOR, objSTATEMENT, 
-	objCLIENT, objDBSEC, objREPOSITORY };
+enum DBIOBJType { objFILLER, objSYSTEM, objSESSION, objDRIVER, objDATABASE, objCURSOR, objSTATEMENT, objCLIENT, objDBSEC, objREPOSITORY };
 #pragma option pop
 
 struct ObjAttrDesc;
@@ -354,6 +356,9 @@ struct ObjAttrDesc
 } ;
 #pragma pack(pop)
 
+struct ObjTypeDesc;
+typedef ObjTypeDesc *pObjTypeDesc;
+
 #pragma pack(push, 1)
 struct ObjTypeDesc
 {
@@ -362,7 +367,8 @@ struct ObjTypeDesc
 } ;
 #pragma pack(pop)
 
-typedef ObjTypeDesc *pObjTypeDesc;
+struct ObjParentDesc;
+typedef ObjParentDesc *pObjParentDesc;
 
 #pragma pack(push, 1)
 struct ObjParentDesc
@@ -371,8 +377,6 @@ struct ObjParentDesc
 	Word iParentFldNum;
 } ;
 #pragma pack(pop)
-
-typedef ObjParentDesc *pObjParentDesc;
 
 #pragma option push -b
 enum DBIShareMode { dbiOPENSHARED, dbiOPENEXCL };
@@ -455,8 +459,7 @@ struct CURProps
 #pragma pack(pop)
 
 #pragma option push -b
-enum DBIDelayedUpdCmd { dbiDelayedUpdCommit, dbiDelayedUpdCancel, dbiDelayedUpdCancelCurrent, dbiDelayedUpdPrepare 
-	};
+enum DBIDelayedUpdCmd { dbiDelayedUpdCommit, dbiDelayedUpdCancel, dbiDelayedUpdCancelCurrent, dbiDelayedUpdPrepare };
 #pragma option pop
 
 struct RECProps;
@@ -485,6 +488,9 @@ enum eXEnd { xendCOMMIT, xendCOMMITKEEP, xendABORT };
 enum eXState { xsINACTIVE, xsACTIVE };
 #pragma option pop
 
+struct XInfo;
+typedef XInfo *pXInfo;
+
 #pragma pack(push, 1)
 struct XInfo
 {
@@ -493,8 +499,6 @@ struct XInfo
 	Word uNests;
 } ;
 #pragma pack(pop)
-
-typedef XInfo *pXInfo;
 
 typedef int *PCMPBkMkRslt;
 
@@ -505,8 +509,7 @@ enum DBISearchCond { keySEARCHEQ, keySEARCHGT, keySEARCHGEQ };
 #pragma option pop
 
 #pragma option push -b
-enum CROpType { crNOOP, crADD, crCOPY, crMODIFY, crDROP, crREDO, crTABLE, crGROUP, crFAMILY, crDONE, 
-	crDROPADD };
+enum CROpType { crNOOP, crADD, crCOPY, crMODIFY, crDROP, crREDO, crTABLE, crGROUP, crFAMILY, crDONE, crDROPADD };
 #pragma option pop
 
 typedef CROpType *pCROpType;
@@ -569,7 +572,6 @@ enum SORTOrder { sortASCEND, sortDESCEND };
 typedef SORTOrder *pSORTOrder;
 
 typedef short __fastcall (*pfSORTCompFn)(void * &LdObj, void * &Value1, void * &Value2, short iLen);
-	
 
 typedef pfSORTCompFn *ppfSORTCompFn;
 
@@ -694,18 +696,13 @@ enum PROPValid { epropINVALID, epropCANGET, epropCANSET };
 #pragma option pop
 
 #pragma option push -b
-enum CBType { cbGENERAL, cbRESERVED1, cbRESERVED2, cbINPUTREQ, cbRESERVED4, cbRESERVED5, cbBATCHRESULT, 
-	cbRESERVED7, cbRESTRUCTURE, cbRESERVED9, cbRESERVED10, cbRESERVED11, cbRESERVED12, cbRESERVED13, cbRESERVED14, 
-	cbRESERVED15, cbRESERVED16, cbRESERVED17, cbTABLECHANGED, cbRESERVED19, cbCANCELQRY, cbSERVERCALL, 
-	cbRESERVED22, cbGENPROGRESS, cbDBASELOGIN, cbDELAYEDUPD, cbFIELDRECALC, cbTRACE, cbDBLOGIN, cbDETACHNOTIFY, 
-	cbNBROFCBS };
+enum CBType { cbGENERAL, cbRESERVED1, cbRESERVED2, cbINPUTREQ, cbRESERVED4, cbRESERVED5, cbBATCHRESULT, cbRESERVED7, cbRESTRUCTURE, cbRESERVED9, cbRESERVED10, cbRESERVED11, cbRESERVED12, cbRESERVED13, cbRESERVED14, cbRESERVED15, cbRESERVED16, cbRESERVED17, cbTABLECHANGED, cbRESERVED19, cbCANCELQRY, cbSERVERCALL, cbRESERVED22, cbGENPROGRESS, cbDBASELOGIN, cbDELAYEDUPD, cbFIELDRECALC, cbTRACE, cbDBLOGIN, cbDETACHNOTIFY, cbNBROFCBS };
 #pragma option pop
 
 typedef CBType *pCBType;
 
 #pragma option push -b
-enum CBRType { cbrUSEDEF, cbrCONTINUE, cbrABORT, cbrCHKINPUT, cbrYES, cbrNO, cbrPARTIALASSIST, cbrSKIP, 
-	cbrRETRY };
+enum CBRType { cbrUSEDEF, cbrCONTINUE, cbrABORT, cbrCHKINPUT, cbrYES, cbrNO, cbrPARTIALASSIST, cbrSKIP, cbrRETRY };
 #pragma option pop
 
 typedef CBRType *pCBRType;
@@ -729,6 +726,9 @@ struct CBPROGRESSDesc
 enum DelayUpdErrOpType { delayupdNONE, delayupdMODIFY, delayupdINSERT, delayupdDELETE };
 #pragma option pop
 
+struct DELAYUPDCbDesc;
+typedef DELAYUPDCbDesc *PDELAYUPDCbDesc;
+
 #pragma pack(push, 1)
 struct DELAYUPDCbDesc
 {
@@ -740,11 +740,8 @@ struct DELAYUPDCbDesc
 } ;
 #pragma pack(pop)
 
-typedef DELAYUPDCbDesc *PDELAYUPDCbDesc;
-
 #pragma option push -b
-enum RESTErrObjType { restrNONE, restrNEWFLD, restrOLDFLD, restrNEWINDEX, restrOLDINDEX, restrNEWVCHK, 
-	restrOLDVCHK, restrNEWRINT, restrOLDRINT, restrNEWSEC, restrOLDSEC, restrNEWTABLE };
+enum RESTErrObjType { restrNONE, restrNEWFLD, restrOLDFLD, restrNEWINDEX, restrOLDINDEX, restrNEWVCHK, restrOLDVCHK, restrNEWRINT, restrOLDRINT, restrNEWSEC, restrOLDSEC, restrNEWTABLE };
 #pragma option pop
 
 struct TCBDBLogin;
@@ -834,8 +831,7 @@ struct CBEntry
 #pragma pack(pop)
 
 #pragma option push -b
-enum CBInputId { cbiFILLER, cbiMDXMISSING, cbiPDXLOOKUP, cbiPDXBLOB, cbiDBTMISSING, cbiDRINPUT, cbiRINTMISSING 
-	};
+enum CBInputId { cbiFILLER, cbiMDXMISSING, cbiPDXLOOKUP, cbiPDXBLOB, cbiDBTMISSING, cbiDRINPUT, cbiRINTMISSING };
 #pragma option pop
 
 struct CBInputDesc;
@@ -1044,6 +1040,9 @@ struct FILEDesc
 } ;
 #pragma pack(pop)
 
+struct SPDesc;
+typedef SPDesc *pSPDesc;
+
 #pragma pack(push, 1)
 struct SPDesc
 {
@@ -1052,8 +1051,6 @@ struct SPDesc
 	int tmTime;
 } ;
 #pragma pack(pop)
-
-typedef SPDesc *pSPDesc;
 
 struct SPParamDesc;
 typedef SPParamDesc *pSPParamDesc;
@@ -1075,18 +1072,8 @@ struct SPParamDesc
 #pragma pack(pop)
 
 #pragma option push -b
-enum DBISTDFuncs { fnAVG, fnCOUNT, fnMIN, fnMAX, fnSUM, fnSTDDEV, fnVARIANCE, fnABS, fnCEIL, fnCOS, 
-	fnCOSH, fnEXP, fnFLOOR, fnLN, fnLOG, fnMOD, fnPOWER, fnROUND, fnSIGN, fnSIN, fnSINH, fnSQRT, fnTAN, 
-	fnTANH, fnTRUNC, fnCHR, fnCONCAT, fnINITCAP, fnLOWER, fnLPAD, fnLTRIM, fnNLS_INITCAP, fnNLS_LOWER, 
-	fnNLS_UPPER, fnREPLACE, fnRPAD, fnRTRIM, fnSOUNDEX, fnSUBSTR, fnSUBSTRB, fnTRANSLATE, fnUPPER, fnASCII, 
-	fnINSTR, fnINSTRB, fnLENGTH, fnLENGTHB, fnNLSSORT, fnADD_MONTHS, fnLAST_DAY, fnMONTHS_BETWEEN, fnNEW_TIME, 
-	fnNEXT_DAY, fnSYSDATE, fnCONVERT, fnTO_CHAR, fnTO_DATE, fnTO_MULTI_BYTE, fnTO_NUMBER, fnTO_SINGLE_BYTE, 
-	fnUID, fnUSER, fnORACLEMISC, fnACOS, fnASIN, fnATAN, fnATN2, fnCOT, fnDEGREES, fnLOG10, fnPI, fnRADIANS, 
-	fnRAND, fnTEXTPTR, fnTEXTVALID, fnCHARINDEX, fnDIFFERENCE, fnPATINDEX, fnREPLICATE, fnREVERSE, fnRIGHT, 
-	fnSPACE, fnSTR, fnSTUFF, fnCOL_NAME, fnCOL_LENGTH, fnDATALENGTH, fnDB_ID, fnDB_NAME, fnHOST_ID, fnHOST_NAME, 
-	fnINDEX_COL, fnOBJECT_ID, fnOBJECT_NAME, fnUSER_ID, fnUSER_NAME, fnLEFT, fnLOCATE, fnTRUNCATE, fnCURTIME, 
-	fnDAYNAME, fnDAYOFMONTH, fnDAYOFWEEK, fnDAYOFYEAR, fnHOUR, fnMINUTE, fnMONTH, fnMONTHNAME, fnNOW, fnQUARTER, 
-	fnSECOND, fnWEEK, fnYEAR, fnDAY, fnWEEKDAY, fnTODAY, fnDATE, fnINFMISC };
+enum DBISTDFuncs { fnAVG, fnCOUNT, fnMIN, fnMAX, fnSUM, fnSTDDEV, fnVARIANCE, fnABS, fnCEIL, fnCOS, fnCOSH, fnEXP, fnFLOOR, fnLN, fnLOG, fnMOD, fnPOWER, fnROUND, fnSIGN, fnSIN, fnSINH, fnSQRT, fnTAN, fnTANH, fnTRUNC, fnCHR, fnCONCAT, fnINITCAP, fnLOWER, fnLPAD, fnLTRIM, fnNLS_INITCAP, fnNLS_LOWER, fnNLS_UPPER, fnREPLACE, fnRPAD, fnRTRIM, fnSOUNDEX, fnSUBSTR, fnSUBSTRB, fnTRANSLATE, fnUPPER, fnASCII, fnINSTR, fnINSTRB, fnLENGTH, fnLENGTHB, fnNLSSORT, fnADD_MONTHS, fnLAST_DAY, fnMONTHS_BETWEEN, fnNEW_TIME, fnNEXT_DAY, fnSYSDATE, fnCONVERT, fnTO_CHAR, fnTO_DATE, fnTO_MULTI_BYTE, fnTO_NUMBER, fnTO_SINGLE_BYTE, fnUID, fnUSER, fnORACLEMISC, fnACOS, fnASIN, fnATAN, fnATN2, fnCOT, fnDEGREES, fnLOG10, fnPI, fnRADIANS, fnRAND, fnTEXTPTR, fnTEXTVALID, fnCHARINDEX, fnDIFFERENCE, fnPATINDEX, fnREPLICATE, fnREVERSE, fnRIGHT, fnSPACE, fnSTR, fnSTUFF, fnCOL_NAME, fnCOL_LENGTH, fnDATALENGTH, fnDB_ID, fnDB_NAME, fnHOST_ID, fnHOST_NAME, fnINDEX_COL, fnOBJECT_ID, fnOBJECT_NAME, fnUSER_ID, fnUSER_NAME, fnLEFT, fnLOCATE
+	, fnTRUNCATE, fnCURTIME, fnDAYNAME, fnDAYOFMONTH, fnDAYOFWEEK, fnDAYOFYEAR, fnHOUR, fnMINUTE, fnMONTH, fnMONTHNAME, fnNOW, fnQUARTER, fnSECOND, fnWEEK, fnYEAR, fnDAY, fnWEEKDAY, fnTODAY, fnDATE, fnINFMISC };
 #pragma option pop
 
 typedef int DBIFuncFlags;
@@ -1108,6 +1095,9 @@ struct DBIFUNCDesc
 } ;
 #pragma pack(pop)
 
+struct DBIFUNCArgDesc;
+typedef DBIFUNCArgDesc *pDBIFUNCArgDesc;
+
 #pragma pack(push, 1)
 struct DBIFUNCArgDesc
 {
@@ -1117,8 +1107,6 @@ struct DBIFUNCArgDesc
 	Word ufuncFlags;
 } ;
 #pragma pack(pop)
-
-typedef DBIFUNCArgDesc *pDBIFUNCArgDesc;
 
 #pragma option push -b
 enum CFGMode { cfgPersistent, cfgSession, cfgAll };
@@ -1145,11 +1133,13 @@ struct CFGDesc
 #pragma pack(pop)
 
 #pragma option push -b
-enum FMLType { fmlUNKNOWN, fmlTABLE, fmlINDEX, fmlFORM, fmlREPORT, fmlVALCHECK, fmlSECINDEX, fmlSECINDEX2, 
-	fmlBLOBFILE };
+enum FMLType { fmlUNKNOWN, fmlTABLE, fmlINDEX, fmlFORM, fmlREPORT, fmlVALCHECK, fmlSECINDEX, fmlSECINDEX2, fmlBLOBFILE };
 #pragma option pop
 
 typedef FMLType *pFMLType;
+
+struct FMLDesc;
+typedef FMLDesc *pFMLDesc;
 
 #pragma pack(push, 1)
 struct FMLDesc
@@ -1161,7 +1151,8 @@ struct FMLDesc
 } ;
 #pragma pack(pop)
 
-typedef FMLDesc *pFMLDesc;
+struct LDDesc;
+typedef LDDesc *pLDDesc;
 
 #pragma pack(push, 1)
 struct LDDesc
@@ -1174,7 +1165,8 @@ struct LDDesc
 } ;
 #pragma pack(pop)
 
-typedef LDDesc *pLDDesc;
+struct LOCKDesc;
+typedef LOCKDesc *pLOCKDesc;
 
 #pragma pack(push, 1)
 struct LOCKDesc
@@ -1188,20 +1180,14 @@ struct LOCKDesc
 } ;
 #pragma pack(pop)
 
-typedef LOCKDesc *pLOCKDesc;
-
 #pragma option push -b
-enum CANOp { canNOTDEFINED, canISBLANK, canNOTBLANK, canEQ, canNE, canGT, canLT, canGE, canLE, canNOT, 
-	canAND, canOR, canTUPLE2, canFIELD2, canCONST2, canMINUS, canADD, canSUB, canMUL, canDIV, canMOD, canREM, 
-	canSUM, canCOUNT, canMIN, canMAX, canAVG, canCONT, canUDF2, canCONTINUE2, canLIKE, canIN, canLIST2, 
-	canUPPER, canLOWER, canFUNC2, canLISTELEM2, canASSIGN };
+enum CANOp { canNOTDEFINED, canISBLANK, canNOTBLANK, canEQ, canNE, canGT, canLT, canGE, canLE, canNOT, canAND, canOR, canTUPLE2, canFIELD2, canCONST2, canMINUS, canADD, canSUB, canMUL, canDIV, canMOD, canREM, canSUM, canCOUNT, canMIN, canMAX, canAVG, canCONT, canUDF2, canCONTINUE2, canLIKE, canIN, canLIST2, canUPPER, canLOWER, canFUNC2, canLISTELEM2, canASSIGN };
 #pragma option pop
 
 typedef CANOp *pCANOp;
 
 #pragma option push -b
-enum NODEClass { nodeNULL, nodeUNARY, nodeBINARY, nodeCOMPARE, nodeFIELD, nodeCONST, nodeTUPLE, nodeCONTINUE, 
-	nodeUDF, nodeLIST, nodeFUNC, nodeLISTELEM };
+enum NODEClass { nodeNULL, nodeUNARY, nodeBINARY, nodeCOMPARE, nodeFIELD, nodeCONST, nodeTUPLE, nodeCONTINUE, nodeUDF, nodeLIST, nodeFUNC, nodeLISTELEM };
 #pragma option pop
 
 #pragma pack(push, 1)
@@ -1214,6 +1200,9 @@ struct CANHdr
 
 typedef CANHdr *pCANHdr;
 
+struct CANUnary;
+typedef CANUnary *pCANUnary;
+
 #pragma pack(push, 1)
 struct CANUnary
 {
@@ -1223,7 +1212,8 @@ struct CANUnary
 } ;
 #pragma pack(pop)
 
-typedef CANUnary *pCANUnary;
+struct CANBinary;
+typedef CANBinary *pCANBinary;
 
 #pragma pack(push, 1)
 struct CANBinary
@@ -1235,7 +1225,8 @@ struct CANBinary
 } ;
 #pragma pack(pop)
 
-typedef CANBinary *pCANBinary;
+struct CANField;
+typedef CANField *pCANField;
 
 #pragma pack(push, 1)
 struct CANField
@@ -1247,7 +1238,8 @@ struct CANField
 } ;
 #pragma pack(pop)
 
-typedef CANField *pCANField;
+struct CANConst;
+typedef CANConst *pCANConst;
 
 #pragma pack(push, 1)
 struct CANConst
@@ -1260,7 +1252,8 @@ struct CANConst
 } ;
 #pragma pack(pop)
 
-typedef CANConst *pCANConst;
+struct CANTuple;
+typedef CANTuple *pCANTuple;
 
 #pragma pack(push, 1)
 struct CANTuple
@@ -1271,7 +1264,8 @@ struct CANTuple
 } ;
 #pragma pack(pop)
 
-typedef CANTuple *pCANTuple;
+struct CANContinue;
+typedef CANContinue *pCANContinue;
 
 #pragma pack(push, 1)
 struct CANContinue
@@ -1281,8 +1275,6 @@ struct CANContinue
 	Word iContOperand;
 } ;
 #pragma pack(pop)
-
-typedef CANContinue *pCANContinue;
 
 struct CANCompare;
 typedef CANCompare *pCANCompare;
@@ -1299,6 +1291,9 @@ struct CANCompare
 } ;
 #pragma pack(pop)
 
+struct CANFunc;
+typedef CANFunc *pCANFunc;
+
 #pragma pack(push, 1)
 struct CANFunc
 {
@@ -1309,7 +1304,8 @@ struct CANFunc
 } ;
 #pragma pack(pop)
 
-typedef CANFunc *pCANFunc;
+struct CANListElem;
+typedef CANListElem *pCANListElem;
 
 #pragma pack(push, 1)
 struct CANListElem
@@ -1321,7 +1317,8 @@ struct CANListElem
 } ;
 #pragma pack(pop)
 
-typedef CANListElem *pCANListElem;
+struct CANUdf;
+typedef CANUdf *pCANUdf;
 
 #pragma pack(push, 1)
 struct CANUdf
@@ -1335,7 +1332,8 @@ struct CANUdf
 } ;
 #pragma pack(pop)
 
-typedef CANUdf *pCANUdf;
+struct CANList;
+typedef CANList *pCANList;
 
 #pragma pack(push, 1)
 struct CANList
@@ -1349,8 +1347,6 @@ struct CANList
 	Word iOffset;
 } ;
 #pragma pack(pop)
-
-typedef CANList *pCANList;
 
 #pragma pack(push, 1)
 struct CANNode
@@ -1420,6 +1416,11 @@ struct CANNode
 
 typedef CANNode *pCANNode;
 
+struct CANExpr;
+typedef CANExpr *pCANExpr;
+
+typedef pCANExpr *ppCANExpr;
+
 #pragma pack(push, 1)
 struct CANExpr
 {
@@ -1430,10 +1431,6 @@ struct CANExpr
 	Word iLiteralStart;
 } ;
 #pragma pack(pop)
-
-typedef CANExpr *pCANExpr;
-
-typedef pCANExpr *ppCANExpr;
 
 typedef short __stdcall (*pfGENFilter)(int ulClientData, void * pRecBuf, int iPhyRecNum);
 
@@ -1475,6 +1472,9 @@ struct DBIQryProp
 enum DBIQryType { dbiqryDEFAULT, dbiqryDIRTY, dbiqryCLEAN, dbiqryRESTART };
 #pragma option pop
 
+struct DBIQryProgress;
+typedef DBIQryProgress *pDBIQryProgress;
+
 #pragma pack(push, 1)
 struct DBIQryProgress
 {
@@ -1484,8 +1484,6 @@ struct DBIQryProgress
 	int elemCompleted;
 } ;
 #pragma pack(pop)
-
-typedef DBIQryProgress *pDBIQryProgress;
 
 #pragma option push -b
 enum QryEvalMode { qryModeNONE, qryModeLOCAL, qryModeSERVER, qryModeEITHER, qryModeNOWLOCAL };
@@ -1586,9 +1584,7 @@ struct SQLConstant
 #pragma pack(pop)
 
 #pragma option push -b
-enum SQLOp { opUNKNOWNOP, opEQUAL, opNOTEQ, opLESSEQUAL, opGREQUAL, opLESS, opGREATER, opLIKE, opNOT, 
-	opPLUSX, opMINUSX, opTIMESX, opDIVX, opAND, opOR, opBLANK, opAS, opOUTERJOIN, opNOTLIKE, opCHANGETO, 
-	opUPPER, opLOWER, opTRIM, opSUBSTRING, opPAND, opPOR, opPNOT, opEXTRACT, opFULLOTRJOIN };
+enum SQLOp { opUNKNOWNOP, opEQUAL, opNOTEQ, opLESSEQUAL, opGREQUAL, opLESS, opGREATER, opLIKE, opNOT, opPLUSX, opMINUSX, opTIMESX, opDIVX, opAND, opOR, opBLANK, opAS, opOUTERJOIN, opNOTLIKE, opCHANGETO, opUPPER, opLOWER, opTRIM, opSUBSTRING, opPAND, opPOR, opPNOT, opEXTRACT, opFULLOTRJOIN };
 #pragma option pop
 
 #pragma pack(push, 1)
@@ -1674,6 +1670,9 @@ struct SQLObject
 } ;
 #pragma pack(pop)
 
+struct TSQLRequest;
+typedef TSQLRequest *PSQLRequest;
+
 #pragma pack(push, 1)
 struct TSQLRequest
 {
@@ -1695,8 +1694,6 @@ struct TSQLRequest
 	LIST *plAlias;
 } ;
 #pragma pack(pop)
-
-typedef TSQLRequest *PSQLRequest;
 
 struct STMTBaseDesc;
 typedef STMTBaseDesc *PSTMTBaseDesc;
@@ -1876,6 +1873,9 @@ struct DRRELType
 } ;
 #pragma pack(pop)
 
+struct DRObject;
+typedef DRObject *pDRObject;
+
 #pragma pack(push, 1)
 struct DRObject
 {
@@ -1883,8 +1883,6 @@ struct DRObject
 	Word iVersion;
 } ;
 #pragma pack(pop)
-
-typedef DRObject *pDRObject;
 
 struct DataSources;
 typedef DataSources *pDataSources;
@@ -1906,12 +1904,10 @@ struct DataSources
 #pragma pack(pop)
 
 #pragma option push -b
-enum DsInfoReq { dsNumSources, dsDefSources, dsSource, dsFieldSource, dsFieldDefault, dsFieldDomainExpr, 
-	dsTblConstraint, dsNumTblConstraint };
+enum DsInfoReq { dsNumSources, dsDefSources, dsSource, dsFieldSource, dsFieldDefault, dsFieldDomainExpr, dsTblConstraint, dsNumTblConstraint };
 #pragma option pop
 
-typedef Word __stdcall (*pfDataSourcesCallback)(int lUserVal, DsInfoReq Req, pDataSources pDsSources
-	);
+typedef Word __stdcall (*pfDataSourcesCallback)(int lUserVal, DsInfoReq Req, pDataSources pDsSources);
 
 #pragma option push -b
 enum EXPType { expDomain, expRecConstr, expDefault };
@@ -1993,7 +1989,8 @@ static const Shortint fldADT = 0x14;
 static const Shortint fldARRAY = 0x15;
 static const Shortint fldREF = 0x16;
 static const Shortint fldTABLE = 0x17;
-static const Shortint MAXLOGFLDTYPES = 0x18;
+static const Shortint fldDATETIME = 0x18;
+static const Shortint MAXLOGFLDTYPES = 0x19;
 static const Shortint fldstMONEY = 0x15;
 static const Shortint fldstMEMO = 0x16;
 static const Shortint fldstBINARY = 0x17;
@@ -2012,6 +2009,8 @@ static const Shortint fldstUNICODE = 0x20;
 static const Shortint fldstAUTOINC = 0x1d;
 static const Shortint fldstADTNestedTable = 0x23;
 static const Shortint fldstADTDATE = 0x25;
+static const Shortint fldstGUID = 0x26;
+static const Shortint fldstINT64 = 0x27;
 static const Word fldPDXCHAR = 0x101;
 static const Word fldPDXNUM = 0x102;
 static const Word fldPDXMONEY = 0x103;
@@ -2445,7 +2444,7 @@ static const Shortint REQVERSION = 0x3;
 #define szCFGFALSE "FALSE"
 #define szOPENMODE "OPEN MODE"
 #define szREADWRITE "READ/WRITE"
-#define szREADONLY "READ ONLY"
+#define szREADONLy "READ ONLY"
 #define szSHAREMODE "SHARE MODE"
 #define szEXCLUSIVE "EXCLUSIVE"
 #define szSHARED "SHARED"
@@ -4058,90 +4057,55 @@ extern PACKAGE Word __fastcall ErrCat(Word rslt);
 extern PACKAGE Word __fastcall ErrCode(Word rslt);
 extern PACKAGE Word __stdcall DbiInit(pDBIEnv pEnv);
 extern PACKAGE Word __fastcall DbiDatabaseFlush(hDBIDb hDb);
-extern PACKAGE Word __stdcall DbiOpenRef(hDBICur hCursor, Word iFieldNo, BOOL bReadOnly, BOOL bUniDirectional
-	, hDBICur &hRefCursor);
-extern PACKAGE Word __stdcall DbiOpenNestedTable(hDBICur hCursor, Word iFieldNo, BOOL bReadOnly, BOOL 
-	bUniDirectional, hDBICur &hCursorNested);
-extern PACKAGE Word __stdcall DbiCheckSQLExpression(hDBICur hCur, char * pszExpr, char * pszFldName, 
-	EXPType expType, pfDataSourcesCallback pDsCB, int iClientData);
+extern PACKAGE Word __stdcall DbiOpenRef(hDBICur hCursor, Word iFieldNo, BOOL bReadOnly, BOOL bUniDirectional, hDBICur &hRefCursor);
+extern PACKAGE Word __stdcall DbiOpenNestedTable(hDBICur hCursor, Word iFieldNo, BOOL bReadOnly, BOOL bUniDirectional, hDBICur &hCursorNested);
+extern PACKAGE Word __stdcall DbiCheckSQLExpression(hDBICur hCur, char * pszExpr, char * pszFldName, EXPType expType, pfDataSourcesCallback pDsCB, int iClientData);
 extern PACKAGE Word __stdcall DbiEndConstraintLayer(hDBICur &hCur);
-extern PACKAGE Word __stdcall DsResolver(int iNoOfDataSources, PPacketList Packets, hDBIDb hDb, char * 
-	szDbName, char * szDbType, char * szDbPassword, PNameList pszSqlStr, PNameList ppTableName, Windows::PInteger 
-	piClientData, PCBList ppfReconcile, PCBList ppDsCB, int ClientData, Windows::PInteger piMaxErrorRecords
-	, PPacketList pppErrPacket);
-extern PACKAGE Word __stdcall DsProviderGetDataPacket(hDBICur hCur, int eProvOptions, void * pDsCB, 
-	int iClientData, Windows::PInteger piMaxRecords, System::PVarArray &Packet, BOOL &pbEndOfData);
-extern PACKAGE Word __stdcall DbiBeginConstraintLayer(hDBIDb hDb, hDBICur &hCur, pfDataSourcesCallback 
-	pDsCb, int lUserVal);
-extern PACKAGE Word __stdcall DbiSQLTextToCanEx(hDBIStmt hStmt, char * pExprText, Word iFields, pFLDDesc 
-	pFlds, EXPType exType, char * pszFldName, char * pszSourceDb, Word &piCanSize, Windows::PByte pCanEx
-	);
+extern PACKAGE Word __stdcall DsResolver(int iNoOfDataSources, PPacketList Packets, hDBIDb hDb, char * szDbName, char * szDbType, char * szDbPassword, PNameList pszSqlStr, PNameList ppTableName, System::PInteger piClientData, PCBList ppfReconcile, PCBList ppDsCB, int ClientData, System::PInteger piMaxErrorRecords, PPacketList pppErrPacket);
+extern PACKAGE Word __stdcall DsProviderGetDataPacket(hDBICur hCur, int eProvOptions, void * pDsCB, int iClientData, System::PInteger piMaxRecords, System::PVarArray &Packet, BOOL &pbEndOfData);
+extern PACKAGE Word __stdcall DbiBeginConstraintLayer(hDBIDb hDb, hDBICur &hCur, pfDataSourcesCallback pDsCb, int lUserVal);
+extern PACKAGE Word __stdcall DbiSQLTextToCanEx(hDBIStmt hStmt, char * pExprText, Word iFields, pFLDDesc pFlds, EXPType exType, char * pszFldName, char * pszSourceDb, Word &piCanSize, System::PByte pCanEx);
 extern PACKAGE Word __stdcall DbiImportODBC(hDBICfg hCfg, BOOL bPersist);
 extern PACKAGE Word __stdcall DbiDeleteDriver(hDBICfg hCfg, char * pszDriverName, BOOL bSave);
-extern PACKAGE Word __stdcall DbiAddDriver(hDBICfg hCfg, char * pszDriverName, char * pszParams, BOOL 
-	bPersist);
+extern PACKAGE Word __stdcall DbiAddDriver(hDBICfg hCfg, char * pszDriverName, char * pszParams, BOOL bPersist);
 extern PACKAGE Word __stdcall DbiSchemaCacheFlush(hDBIDb hDb, char * pszTableName);
 extern PACKAGE Word __stdcall DbiDRDrop(char * pszDrName);
 extern PACKAGE Word __stdcall DbiDRAdd(pDRDesc pdrdesc);
-extern PACKAGE Word __stdcall DbiDRGetRelatedObject(hDBIDR hDataRepos, pDRObject pdrObjIDSrc, char * 
-	pszRelTypeName, pDRObject pdrObjIDDest);
+extern PACKAGE Word __stdcall DbiDRGetRelatedObject(hDBIDR hDataRepos, pDRObject pdrObjIDSrc, char * pszRelTypeName, pDRObject pdrObjIDDest);
 extern PACKAGE Word __stdcall DbiOpenSessionRepository(hDBISes hSes, hDBIDR &hDataRepos);
 extern PACKAGE Word __stdcall DbiGetDefaultRepository(char * pszDRName);
 extern PACKAGE Word __stdcall DbiSetDefaultRepository(char * pszDRName);
 extern PACKAGE Word __stdcall DbiOpenRepositoryList(hDBICur &hCur);
-extern PACKAGE Word __stdcall DbiDRGetEnumAttrDomain(hDBIDR hDataRepos, Word iNumVals, pDREnumAttrDomain 
-	peAttrDomain);
-extern PACKAGE Word __stdcall DbiDRDeleteEnumAttrDomain(hDBIDR hDataRepos, char * pszEnumAttrDomain)
-	;
-extern PACKAGE Word __stdcall DbiDRModifyEnumAttrDomain(hDBIDR hDataRepos, pDREnumAttrDomain peAttrDomain
-	);
-extern PACKAGE Word __stdcall DbiDRCreateEnumAttrDomain(hDBIDR hDataRepos, pDREnumAttrDomain peAttrDomain
-	);
+extern PACKAGE Word __stdcall DbiDRGetEnumAttrDomain(hDBIDR hDataRepos, Word iNumVals, pDREnumAttrDomain peAttrDomain);
+extern PACKAGE Word __stdcall DbiDRDeleteEnumAttrDomain(hDBIDR hDataRepos, char * pszEnumAttrDomain);
+extern PACKAGE Word __stdcall DbiDRModifyEnumAttrDomain(hDBIDR hDataRepos, pDREnumAttrDomain peAttrDomain);
+extern PACKAGE Word __stdcall DbiDRCreateEnumAttrDomain(hDBIDR hDataRepos, pDREnumAttrDomain peAttrDomain);
 extern PACKAGE Word __stdcall DbiDeleteAlias(hDBICfg hCfg, char * pszAliasName);
-extern PACKAGE Word __stdcall DbiAddAlias(hDBICfg hCfg, char * pszAliasName, char * pszDriverType, char * 
-	pszParams, BOOL bPersist);
-extern PACKAGE Word __stdcall DbiOpenFunctionArgList(hDBIDb hDb, char * pszFuncName, Word uOverload, 
-	phDBICur phCur);
+extern PACKAGE Word __stdcall DbiAddAlias(hDBICfg hCfg, char * pszAliasName, char * pszDriverType, char * pszParams, BOOL bPersist);
+extern PACKAGE Word __stdcall DbiOpenFunctionArgList(hDBIDb hDb, char * pszFuncName, Word uOverload, phDBICur phCur);
 extern PACKAGE Word __stdcall DbiOpenFunctionList(hDBIDb hDb, DBIFUNCOpts eoptBits, phDBICur phCur);
-	
 extern PACKAGE Word __stdcall DbiDRDelete(char * pszDrName);
 extern PACKAGE Word __stdcall DbiDRCreate(pDRDesc pdrDesc, phDBIDR phDataRepos);
-extern PACKAGE Word __stdcall DbiDRLoadDBObject(hDBIDR hDataRepos, hDBIDb hDb, char * pszDatabaseName
-	, BOOL bSystemTables, int lNumObjs, pDROBJDesc paObjDesc);
-extern PACKAGE Word __stdcall DbiDRSetToObjName(hDBICur hCurObj, char * pszName, BOOL bUseAliasName)
-	;
+extern PACKAGE Word __stdcall DbiDRLoadDBObject(hDBIDR hDataRepos, hDBIDb hDb, char * pszDatabaseName, BOOL bSystemTables, int lNumObjs, pDROBJDesc paObjDesc);
+extern PACKAGE Word __stdcall DbiDRSetToObjName(hDBICur hCurObj, char * pszName, BOOL bUseAliasName);
 extern PACKAGE Word __stdcall DbiDRSetToObjID(hDBICur hCurObj, pDRObject pdrObjID);
 extern PACKAGE Word __stdcall DbiDRGetObjID(hDBICur hCurObj, pDRObject pdrObjID);
-extern PACKAGE Word __stdcall DbiDROpenRelSet(hDBIDR hDataRepos, char * pszRelTypeName, pDRObject pdrSrcObjID
-	, pDRObject pdrDestObjID, char * pszCondList, hDBICur &hCurObj);
-extern PACKAGE Word __stdcall DbiDROpenObjSet(hDBIDR hDataRepos, char * pszObjTypeName, pDRObject pdrSrcObjID
-	, char * pszNavRelName, char * pszCondList, hDBICur &hCurObj);
-extern PACKAGE Word __stdcall DbiDRGetRelTypeInfo(hDBIDR hDataRepos, char * pszRelTypeName, pDRRELType 
-	prelType);
-extern PACKAGE Word __stdcall DbiDRGetAttrDescs(hDBIDR hDataRepos, char * pszTypeName, Word iNumAttr
-	, pDRATTRDesc pattrDesc);
-extern PACKAGE Word __stdcall DbiDRGetObjTypeInfo(hDBIDR hDataRepos, char * pszObjTypeName, pDROBJType 
-	pobjType);
-extern PACKAGE Word __stdcall DbiDROpenRelTypeList(hDBIDR hDataRepos, char * pszObjTypeName, hDBICur 
-	&hRelTypeCur);
-extern PACKAGE Word __stdcall DbiDROpenAttrTypeList(hDBIDR hDataRepos, char * pszTypeName, hDBICur &
-	hAttrTypeCur);
+extern PACKAGE Word __stdcall DbiDROpenRelSet(hDBIDR hDataRepos, char * pszRelTypeName, pDRObject pdrSrcObjID, pDRObject pdrDestObjID, char * pszCondList, hDBICur &hCurObj);
+extern PACKAGE Word __stdcall DbiDROpenObjSet(hDBIDR hDataRepos, char * pszObjTypeName, pDRObject pdrSrcObjID, char * pszNavRelName, char * pszCondList, hDBICur &hCurObj);
+extern PACKAGE Word __stdcall DbiDRGetRelTypeInfo(hDBIDR hDataRepos, char * pszRelTypeName, pDRRELType prelType);
+extern PACKAGE Word __stdcall DbiDRGetAttrDescs(hDBIDR hDataRepos, char * pszTypeName, Word iNumAttr, pDRATTRDesc pattrDesc);
+extern PACKAGE Word __stdcall DbiDRGetObjTypeInfo(hDBIDR hDataRepos, char * pszObjTypeName, pDROBJType pobjType);
+extern PACKAGE Word __stdcall DbiDROpenRelTypeList(hDBIDR hDataRepos, char * pszObjTypeName, hDBICur &hRelTypeCur);
+extern PACKAGE Word __stdcall DbiDROpenAttrTypeList(hDBIDR hDataRepos, char * pszTypeName, hDBICur &hAttrTypeCur);
 extern PACKAGE Word __stdcall DbiDROpenObjectTypeList(hDBIDR hDataRepos, hDBICur &hObjTypeCur);
-extern PACKAGE Word __stdcall DbiDRDeleteObjectType(hDBIDR hDataRepos, char * pszObjTypeName, BOOL bDeleteAssocRelTypes
-	);
+extern PACKAGE Word __stdcall DbiDRDeleteObjectType(hDBIDR hDataRepos, char * pszObjTypeName, BOOL bDeleteAssocRelTypes);
 extern PACKAGE Word __stdcall DbiDRDeleteRelationType(hDBIDR hDataRepos, char * pszRelTypeName);
-extern PACKAGE Word __stdcall DbiDRCreateRelationType(hDBIDR hDataRepos, pDRRELType prelType, pDRATTRDesc 
-	pattrDesc);
-extern PACKAGE Word __stdcall DbiDRDropAttr(hDBIDR hDataRepos, char * pszTypeName, Word iAttr, pDRATTRDesc 
-	pattrDesc);
-extern PACKAGE Word __stdcall DbiDRAddAttr(hDBIDR hDataRepos, char * pszTypeName, Word iAttr, pDRATTRDesc 
-	pattrDesc);
-extern PACKAGE Word __stdcall DbiDRCreateObjectType(hDBIDR hDataRepos, pDROBJType pobjType, pDRATTRDesc 
-	pattrDesc);
-extern PACKAGE Word __stdcall DbiDRExportToFile(hDBIDR hDataRepos, int ulNumObjs, pDRExportDesc padrExportDesc
-	, char * pszExportFile);
-extern PACKAGE Word __stdcall DbiDRImportFromFile(hDBIDR hDataRepos, int ulNumObjs, pDRExportDesc padrExportDesc
-	, char * pszImportFile);
+extern PACKAGE Word __stdcall DbiDRCreateRelationType(hDBIDR hDataRepos, pDRRELType prelType, pDRATTRDesc pattrDesc);
+extern PACKAGE Word __stdcall DbiDRDropAttr(hDBIDR hDataRepos, char * pszTypeName, Word iAttr, pDRATTRDesc pattrDesc);
+extern PACKAGE Word __stdcall DbiDRAddAttr(hDBIDR hDataRepos, char * pszTypeName, Word iAttr, pDRATTRDesc pattrDesc);
+extern PACKAGE Word __stdcall DbiDRCreateObjectType(hDBIDR hDataRepos, pDROBJType pobjType, pDRATTRDesc pattrDesc);
+extern PACKAGE Word __stdcall DbiDRExportToFile(hDBIDR hDataRepos, int ulNumObjs, pDRExportDesc padrExportDesc, char * pszExportFile);
+extern PACKAGE Word __stdcall DbiDRImportFromFile(hDBIDR hDataRepos, int ulNumObjs, pDRExportDesc padrExportDesc, char * pszImportFile);
 extern PACKAGE Word __stdcall DbiDRClose(phDBIDR phDataRepos);
 extern PACKAGE Word __stdcall DbiDROpen(char * pszDrName, phDBIDR phDataRepos);
 extern PACKAGE Word __stdcall DbiDRGetDesc(char * pszDrName, pDRDesc pdrDesc);
@@ -4149,61 +4113,38 @@ extern PACKAGE Word __stdcall DbiApplyDelayedUpdates(hDBICur hCursor, DBIDelayed
 extern PACKAGE Word __stdcall DbiEndDelayedUpdates(hDBICur &hCursor);
 extern PACKAGE Word __stdcall DbiBeginDelayedUpdates(hDBICur &hCursor);
 extern PACKAGE Word __stdcall DbiFreeSQLRequest(PSQLRequest pReq);
-extern PACKAGE Word __stdcall DbiGetSQLRequest(hDBIDb hDb, Windows::PByte pszSQLStmt, bool &bIsDDL, 
-	PSQLRequest &pReq);
-extern PACKAGE Word __stdcall DbiQPrepareExt(hDBIDb hDb, DBIQryLang eQryLang, char * pszQuery, Word 
-	propBits, hDBIStmt &hStmt);
-extern PACKAGE Word __stdcall DbiQExecProcDirect(hDBIDb hDb, char * pszProc, Word uParamDescs, pSPParamDesc 
-	paParamDescs, void * pRecBuff, hDBICur &hCur);
-extern PACKAGE Word __stdcall DbiQSetProcParams(hDBIStmt hStmt, Word uParamDescs, pSPParamDesc paParamDescs
-	, void * pRecBuff);
-extern PACKAGE Word __stdcall DbiQPrepareProc(hDBIDb hDb, char * pszProc, Word uParamDescs, pSPParamDesc 
-	paParamDescs, void * pRecBuff, hDBIStmt &hStmt);
-extern PACKAGE Word __stdcall DbiOpenSPParamList(hDBIDb hDb, char * pszSPName, BOOL bPhyTypes, Word 
-	uOverload, hDBICur &hCur);
-extern PACKAGE Word __stdcall DbiOpenSPList(hDBIDb hDb, BOOL bExtended, BOOL bSystem, char * pszQual
-	, hDBICur &hCur);
+extern PACKAGE Word __stdcall DbiGetSQLRequest(hDBIDb hDb, System::PByte pszSQLStmt, bool &bIsDDL, PSQLRequest &pReq);
+extern PACKAGE Word __stdcall DbiQPrepareExt(hDBIDb hDb, DBIQryLang eQryLang, char * pszQuery, Word propBits, hDBIStmt &hStmt);
+extern PACKAGE Word __stdcall DbiQExecProcDirect(hDBIDb hDb, char * pszProc, Word uParamDescs, pSPParamDesc paParamDescs, void * pRecBuff, hDBICur &hCur);
+extern PACKAGE Word __stdcall DbiQSetProcParams(hDBIStmt hStmt, Word uParamDescs, pSPParamDesc paParamDescs, void * pRecBuff);
+extern PACKAGE Word __stdcall DbiQPrepareProc(hDBIDb hDb, char * pszProc, Word uParamDescs, pSPParamDesc paParamDescs, void * pRecBuff, hDBIStmt &hStmt);
+extern PACKAGE Word __stdcall DbiOpenSPParamList(hDBIDb hDb, char * pszSPName, BOOL bPhyTypes, Word uOverload, hDBICur &hCur);
+extern PACKAGE Word __stdcall DbiOpenSPList(hDBIDb hDb, BOOL bExtended, BOOL bSystem, char * pszQual, hDBICur &hCur);
 extern PACKAGE Word __stdcall DbiGetRintDesc(hDBICur hCursor, Word iRintSeqNo, pRINTDesc printDesc);
-	
 extern PACKAGE Word __stdcall DbiGetVchkDesc(hDBICur hCursor, Word iValSeqNo, pVCHKDesc pvalDesc);
-extern PACKAGE Word __stdcall DbiOpenFieldXlt(char * pszSrcTblType, char * pszSrcLangDrv, pFLDDesc pfldSrc
-	, char * pszDestTblType, char * pszDstLangDrv, pFLDDesc pfldDest, BOOL &bDataLoss, hDBIXlt &hXlt);
+extern PACKAGE Word __stdcall DbiOpenFieldXlt(char * pszSrcTblType, char * pszSrcLangDrv, pFLDDesc pfldSrc, char * pszDestTblType, char * pszDstLangDrv, pFLDDesc pfldDest, BOOL &bDataLoss, hDBIXlt &hXlt);
 extern PACKAGE Word __stdcall DbiValidateProp(hDBIObj hObj, int iProp, BOOL bSetting);
 extern PACKAGE Word __stdcall DbiCloseFieldXlt(hDBIXlt hXlt);
 extern PACKAGE Word __stdcall DbiTranslateField(hDBIXlt hXlt, void * pSrc, void * pDest);
-extern PACKAGE Word __stdcall DbiTranslateRecordStructure(char * pszSrcDriverType, Word iFlds, pFLDDesc 
-	pfldsSrc, char * pszDstDriverType, char * pszLangDriver, pFLDDesc pfldsDst, BOOL bCreatable);
-extern PACKAGE Word __stdcall DbiGetFilterInfo(hDBICur hCur, hDBIFilter hFilter, Word iFilterId, Word 
-	iFilterSeqNo, FILTERInfo &Filterinfo);
+extern PACKAGE Word __stdcall DbiTranslateRecordStructure(char * pszSrcDriverType, Word iFlds, pFLDDesc pfldsSrc, char * pszDstDriverType, char * pszLangDriver, pFLDDesc pfldsDst, BOOL bCreatable);
+extern PACKAGE Word __stdcall DbiGetFilterInfo(hDBICur hCur, hDBIFilter hFilter, Word iFilterId, Word iFilterSeqNo, FILTERInfo &Filterinfo);
 extern PACKAGE Word __stdcall DbiGetObjFromObj(hDBIObj hObj, DBIOBJType eObjType, hDBIObj &hObjOut);
-	
-extern PACKAGE Word __stdcall DbiBcdFromFloat(double &iVal, Word iPrecision, Word iPlaces, FMTBcd &Bcd
-	);
+extern PACKAGE Word __stdcall DbiBcdFromFloat(double &iVal, Word iPrecision, Word iPlaces, FMTBcd &Bcd);
 extern PACKAGE Word __stdcall DbiBcdToFloat(FMTBcd &Bcd, double &iVal);
-extern PACKAGE Word __stdcall DbiGetObjFromName(DBIOBJType eObjType, char * pszObjName, hDBIObj &hObj
-	);
+extern PACKAGE Word __stdcall DbiGetObjFromName(DBIOBJType eObjType, char * pszObjName, hDBIObj &hObj);
 extern PACKAGE Word __stdcall DbiSetProp(hDBIObj hObj, int iProp, int iPropValue);
-extern PACKAGE Word __stdcall DbiGetProp(hDBIObj hObj, int iProp, void * PropValue, Word iMaxLen, Word 
-	&iLen);
-extern PACKAGE Word __stdcall DbiAnsiToNative(void * LdObj, char * pNativeStr, char * pAnsiStr, int 
-	iLen, BOOL &bDataLoss);
-extern PACKAGE Word __stdcall DbiNativeToAnsi(void * LdObj, char * pAnsiStr, char * pNativeStr, int 
-	iLen, BOOL &bDataLoss);
+extern PACKAGE Word __stdcall DbiGetProp(hDBIObj hObj, int iProp, void * PropValue, Word iMaxLen, Word &iLen);
+extern PACKAGE Word __stdcall DbiAnsiToNative(void * LdObj, char * pNativeStr, char * pAnsiStr, int iLen, BOOL &bDataLoss);
+extern PACKAGE Word __stdcall DbiNativeToAnsi(void * LdObj, char * pAnsiStr, char * pNativeStr, int iLen, BOOL &bDataLoss);
 extern PACKAGE Word __stdcall DbiMakePermanent(hDBICur hCursor, char * pszName, BOOL bOverWrite);
 extern PACKAGE Word __stdcall DbiGetIndexDescs(hDBICur hCursor, pIDXDesc idxDesc);
-extern PACKAGE Word __stdcall DbiCloseConfigFile(hDBICfg &hCfg, BOOL bSave, BOOL bDefault, BOOL bSaveAs16
-	);
+extern PACKAGE Word __stdcall DbiCloseConfigFile(hDBICfg &hCfg, BOOL bSave, BOOL bDefault, BOOL bSaveAs16);
 extern PACKAGE Word __stdcall DbiOpenConfigFile(char * pszDirPath, BOOL bCreate, hDBICfg &hCfg);
-extern PACKAGE Word __stdcall DbiOpenCfgInfoList(hDBICfg hCfg, DBIOpenMode eOpenMode, CFGMode eConfigMode
-	, char * pszCfgPath, hDBICur &hCur);
-extern PACKAGE BOOL __stdcall OsLdBuildCharSetXform(char * pCharMap, void * pLdObjSrc, void * pLdObjDest
-	, BOOL &DataLoss);
+extern PACKAGE Word __stdcall DbiOpenCfgInfoList(hDBICfg hCfg, DBIOpenMode eOpenMode, CFGMode eConfigMode, char * pszCfgPath, hDBICur &hCur);
+extern PACKAGE BOOL __stdcall OsLdBuildCharSetXform(char * pCharMap, void * pLdObjSrc, void * pLdObjDest, BOOL &DataLoss);
 extern PACKAGE Shortint __stdcall OsLdStrnColli(void * pBlObj, char * str1, char * str2, Word iLen);
-	
-extern PACKAGE Shortint __stdcall OsLdStrnColl(void * pLdObj, Windows::PByte Str1, Windows::PByte Str2
-	, Word Maxlen);
-extern PACKAGE Shortint __stdcall OsLdExStrCmp(void * pLdObj, Windows::PByte Right, Shortint RightLen
-	, Windows::PByte Left, Shortint LeftLen, BOOL Exact);
+extern PACKAGE Shortint __stdcall OsLdStrnColl(void * pLdObj, System::PByte Str1, System::PByte Str2, Word Maxlen);
+extern PACKAGE Shortint __stdcall OsLdExStrCmp(void * pLdObj, System::PByte Right, Shortint RightLen, System::PByte Left, Shortint LeftLen, BOOL Exact);
 extern PACKAGE Word __stdcall OsLdLoadByDriverId(Word iDriverId, void * &pLdObj);
 extern PACKAGE Word __stdcall OsLdGetDriverId(void * pLdObj, Word &DriverId);
 extern PACKAGE Word __stdcall OsLdGetFuncAddrLdStrnCmpi_(void * &ppf);
@@ -4211,23 +4152,15 @@ extern PACKAGE Word __stdcall OsLdGetFuncAddrLdStrnColl_(void * &ppf);
 extern PACKAGE Word __stdcall OsLdGetFuncAddrLdStrnColli_(void * &ppf);
 extern PACKAGE Word __stdcall DbiGetExactRecordCount(hDBICur hCursor, int &iRecCount);
 extern PACKAGE Word __stdcall DbiGetLdNameFromDb(hDBIDb hDb, char * DbName, char * pldName);
-extern PACKAGE Word __stdcall DbiSortTable(hDBIDb hDb, char * pszTableName, char * pszDriverType, hDBICur 
-	hSrcCur, char * pszSortedName, phDBICur phSortedCur, hDBICur hDstCur, Word iSortFields, PWORD piFieldNum
-	, PBOOL pbCaseInsensitive, pSORTOrder pSortOrder, ppfSORTCompFn ppfSortFn, BOOL bRemoveDups, hDBICur 
-	hDuplicatesCur, int &lRecsSort);
+extern PACKAGE Word __stdcall DbiSortTable(hDBIDb hDb, char * pszTableName, char * pszDriverType, hDBICur hSrcCur, char * pszSortedName, phDBICur phSortedCur, hDBICur hDstCur, Word iSortFields, PWORD piFieldNum, PBOOL pbCaseInsensitive, pSORTOrder pSortOrder, ppfSORTCompFn ppfSortFn, BOOL bRemoveDups, hDBICur hDuplicatesCur, int &lRecsSort);
 extern PACKAGE Word __stdcall DbiGetTranInfo(hDBIDb hDb, hDBIXact hXact, pXInfo pxInfo);
 extern PACKAGE Word __stdcall DbiEndTran(hDBIDb hDb, hDBIXact hXact, eXEnd eEnd);
 extern PACKAGE Word __stdcall DbiBeginTran(hDBIDb hDb, eXILType eXIL, hDBIXact &hXact);
-extern PACKAGE Word __stdcall DbiBatchMove(pBATTblDesc pSrcTblDesc, hDBICur hSrcCur, pBATTblDesc pDstTblDesc
-	, hDBICur hDstCur, eBATMode ebatMode, Word iFldCount, PWORD pSrcFldMap, char * pszIndexName, char * 
-	pszIndexTagName, Word iIndexId, char * pszKeyviolName, char * pszProblemsName, char * pszChangedName
-	, Windows::PLongint lProbRecs, Windows::PLongint lKeyvRecs, Windows::PLongint lChangedRecs, BOOL bAbortOnFirstProb
-	, BOOL bAbortOnFirstKeyviol, int &lRecsToMove, BOOL bTransliterate);
+extern PACKAGE Word __stdcall DbiBatchMove(pBATTblDesc pSrcTblDesc, hDBICur hSrcCur, pBATTblDesc pDstTblDesc, hDBICur hDstCur, eBATMode ebatMode, Word iFldCount, PWORD pSrcFldMap, char * pszIndexName, char * pszIndexTagName, Word iIndexId, char * pszKeyviolName, char * pszProblemsName, char * pszChangedName, PLongint lProbRecs, PLongint lKeyvRecs, PLongint lChangedRecs, BOOL bAbortOnFirstProb, BOOL bAbortOnFirstKeyviol, int &lRecsToMove, BOOL bTransliterate);
 extern PACKAGE Word __stdcall DbiDeactivateFilter(hDBICur hCursor, hDBIFilter hFilter);
 extern PACKAGE Word __stdcall DbiActivateFilter(hDBICur hCursor, hDBIFilter hFilter);
 extern PACKAGE Word __stdcall DbiDropFilter(hDBICur hCursor, hDBIFilter hFilter);
-extern PACKAGE Word __stdcall DbiAddFilter(hDBICur hCursor, int iClientData, Word iPriority, BOOL bCanAbort
-	, pCANExpr pcanExpr, pfGENFilter pfFilter, hDBIFilter &hFilter);
+extern PACKAGE Word __stdcall DbiAddFilter(hDBICur hCursor, int iClientData, Word iPriority, BOOL bCanAbort, pCANExpr pcanExpr, pfGENFilter pfFilter, hDBIFilter &hFilter);
 extern PACKAGE Word __stdcall DbiGetLdName(char * pszDriver, char * pObjName, char * pLdName);
 extern PACKAGE Word __stdcall DbiUndeleteRecord(hDBICur hCursor);
 extern PACKAGE Word __stdcall DbiGetClientInfo(CLIENTInfo &clientInfo);
@@ -4238,7 +4171,7 @@ extern PACKAGE Word __stdcall OsLdSearchEnd(void * SHandle);
 extern PACKAGE Word __fastcall OsLdLoadByLCID(int _lcid, void * &pLdObj);
 extern PACKAGE Word __stdcall OsLdSearchNext(void * SHandle, void * &ppLdObj);
 extern PACKAGE Word __stdcall OsLdSearchInit(void * &SHandle);
-extern PACKAGE Word __stdcall OsLdGetDescName(void * pLdObj, Windows::PByte pDescName);
+extern PACKAGE Word __stdcall OsLdGetDescName(void * pLdObj, System::PByte pDescName);
 extern PACKAGE Byte __stdcall OsLdCharToLower(void * pLdObj, Byte ch);
 extern PACKAGE Byte __stdcall OsLdCharToUpper(void * pLdObj, Byte ch);
 extern PACKAGE BOOL __stdcall OsLdIsDigit(void * pLdObj, Byte ch);
@@ -4248,20 +4181,18 @@ extern PACKAGE Byte __stdcall OsLdOemCharToAnsi(void * pLdObj, Byte ch);
 extern PACKAGE Byte __stdcall OsLdAnsiCharToOem(void * pLdObj, Byte ch);
 extern PACKAGE BOOL __stdcall OsLdIsOemCharInAnsiCp(void * pLdObj, char OemCh);
 extern PACKAGE BOOL __stdcall OsLdIsAnsiCharInOemCp(void * pLdObj, char AnsiCh);
-extern PACKAGE Word __stdcall OsLdOemToAnsi(void * pLdObj, char * AnsiStr, char * OemStr, Word Len, 
-	BOOL &DataLoss);
-extern PACKAGE Word __stdcall OsLdAnsiToOem(void * pLdObj, char * OemStr, char * AnsiStr, Word Len, 
-	BOOL &DataLoss);
+extern PACKAGE Word __stdcall OsLdOemToAnsi(void * pLdObj, char * AnsiStr, char * OemStr, Word Len, BOOL &DataLoss);
+extern PACKAGE Word __stdcall OsLdAnsiToOem(void * pLdObj, char * OemStr, char * AnsiStr, Word Len, BOOL &DataLoss);
 extern PACKAGE Word __stdcall OsLdGetFName(void * pLdObj, char * PName);
 extern PACKAGE Word __stdcall OsLdGetCodePage(void * pLdObj, short &CodePage);
 extern PACKAGE Word __stdcall OsLdGetSortsig(void * pLdObj, short &SortSig);
-extern PACKAGE Word __stdcall OsLdGetSymbName(void * pLdObj, Windows::PByte pSymbName);
-extern PACKAGE Word __stdcall OsLdStrnToUpper(void * pLdObj, Windows::PByte Str, Word Len);
-extern PACKAGE Word __stdcall OsLdStrToUpper(void * pLdObj, Windows::PByte Str);
+extern PACKAGE Word __stdcall OsLdGetSymbName(void * pLdObj, System::PByte pSymbName);
+extern PACKAGE Word __stdcall OsLdStrnToUpper(void * pLdObj, System::PByte Str, Word Len);
+extern PACKAGE Word __stdcall OsLdStrToUpper(void * pLdObj, System::PByte Str);
 extern PACKAGE short __stdcall OsLdStrnCmpi(void * pLdObj, char * Str1, char * Str2, Word Len);
 extern PACKAGE short __stdcall OsLdStrCmpi(void * pLdObj, char * str1, char * str2);
-extern PACKAGE Word __stdcall OsLdStrnToLower(void * pLdObj, Windows::PByte Str, Word Len);
-extern PACKAGE Word __stdcall OsLdStrToLower(void * pLdObj, Windows::PByte Str);
+extern PACKAGE Word __stdcall OsLdStrnToLower(void * pLdObj, System::PByte Str, Word Len);
+extern PACKAGE Word __stdcall OsLdStrToLower(void * pLdObj, System::PByte Str);
 extern PACKAGE Word __stdcall OsLdStrCmp(void * pLdObj, char * Str1, char * Str2);
 extern PACKAGE Word __stdcall OsLdStrnCmp(void * pLdObj, char * Str1, char * Str2, Word Len);
 extern PACKAGE Word __stdcall OsLdLoadBySymbName(char * pSymbName, void * &pLdObj);
@@ -4278,135 +4209,92 @@ extern PACKAGE Word __stdcall DbiGetTimeFormat(FMTTime &fmtTime);
 extern PACKAGE Word __stdcall DbiSetDateFormat(FMTDate &fmtDate);
 extern PACKAGE Word __stdcall DbiGetDateFormat(FMTDate &fmtDate);
 extern PACKAGE Word __stdcall DbiCfgMerge(hDBICfg hCfgDest, hDBICfg hCfgSrc, char * pszSrcPath);
-extern PACKAGE Word __stdcall DbiCfgGetHelp(hDBICfg hCfg, char * pszConfigPath, char * pszFldName, char * 
-	pszHelpString);
-extern PACKAGE Word __stdcall DbiCfgTranslate(hDBICfg hCfg, char * pszConfigPath, char * pszTrans, Word 
-	iFields, pFLDDesc pfldDesc, void * pRec);
+extern PACKAGE Word __stdcall DbiCfgGetHelp(hDBICfg hCfg, char * pszConfigPath, char * pszFldName, char * pszHelpString);
+extern PACKAGE Word __stdcall DbiCfgTranslate(hDBICfg hCfg, char * pszConfigPath, char * pszTrans, Word iFields, pFLDDesc pfldDesc, void * pRec);
 extern PACKAGE Word __stdcall DbiCfgDropRecord(hDBICfg hCfg, char * pszCfgPath);
-extern PACKAGE Word __stdcall DbiCfgModifyRecord(hDBICfg hCfg, char * pszCfgPath, Word iFields, pFLDDesc 
-	pfldDesc, void * pRec);
-extern PACKAGE Word __stdcall DbiCfgAddRecord(hDBICfg hCfg, char * pszCfgPath, Word iFields, pFLDDesc 
-	pfldDesc, void * pRec);
-extern PACKAGE Word __stdcall DbiCfgGetRecord(hDBICfg hCfg, char * pszCfgPath, Word &iFields, pFLDDesc 
-	pfldDesc, void * pRec);
+extern PACKAGE Word __stdcall DbiCfgModifyRecord(hDBICfg hCfg, char * pszCfgPath, Word iFields, pFLDDesc pfldDesc, void * pRec);
+extern PACKAGE Word __stdcall DbiCfgAddRecord(hDBICfg hCfg, char * pszCfgPath, Word iFields, pFLDDesc pfldDesc, void * pRec);
+extern PACKAGE Word __stdcall DbiCfgGetRecord(hDBICfg hCfg, char * pszCfgPath, Word &iFields, pFLDDesc pfldDesc, void * pRec);
 extern PACKAGE Word __stdcall DbiCfgGetNextNode(hDBICfg hCfg, char * pszNodeName);
 extern PACKAGE Word __stdcall DbiCfgPosition(hDBICfg hCfg, char * pszCfgPath);
-extern PACKAGE Word __stdcall DbiCfgBuildPath(hDBICfg hCfg, char * pszCategory, char * pszGroup, char * 
-	pszSection, char * pszCfgPath);
+extern PACKAGE Word __stdcall DbiCfgBuildPath(hDBICfg hCfg, char * pszCategory, char * pszGroup, char * pszSection, char * pszCfgPath);
 extern PACKAGE Word __stdcall DbiCfgSave(hDBICfg hCfg, char * pszNewFile, BOOL bSaveAs16);
-extern PACKAGE Word __stdcall DbiGetCallBack(hDBICur hCursor, CBType ecbType, Windows::PLongint piClientData
-	, PWORD piCbBufLen, void * ppCbBuf, pfDBICallBack &pfCb);
+extern PACKAGE Word __stdcall DbiGetCallBack(hDBICur hCursor, CBType ecbType, PLongint piClientData, PWORD piCbBufLen, void * ppCbBuf, pfDBICallBack &pfCb);
 extern PACKAGE Word __stdcall DbiCheckRefresh(void);
 extern PACKAGE Word __stdcall DbiGetErrorEntry(Word uEntry, int &ulNativeError, char * pszError);
 extern PACKAGE Word __stdcall DbiGetErrorContext(short eContext, char * pszContext);
 extern PACKAGE Word __stdcall DbiGetErrorString(Word rslt, char * pszError);
-extern PACKAGE Word __stdcall DbiFormFullName(hDBIDb hDb, char * pszTableName, char * pszDriverType, 
-	char * pszFullName);
+extern PACKAGE Word __stdcall DbiFormFullName(hDBIDb hDb, char * pszTableName, char * pszDriverType, char * pszFullName);
 extern PACKAGE Word __stdcall DbiCreateTempTable(hDBIDb hDb, CRTblDesc &crTblDsc, hDBICur &hCursor);
-	
 extern PACKAGE Word __stdcall DbiUseIdleTime(void);
 extern PACKAGE Word __stdcall DbiGetLdObj(hDBICur hCursor, void * &pLdObj);
 extern PACKAGE Word __stdcall DbiGetErrorInfo(BOOL bFull, DBIErrInfo &ErrInfo);
 extern PACKAGE Word __stdcall DbiSetFieldMap(hDBICur hCur, Word iFields, pFLDDesc pFldDesc);
-extern PACKAGE Word __stdcall DbiGetRecordForKey(hDBICur hCursor, BOOL bDirectKey, Word iFields, Word 
-	iLen, void * pKey, void * pRecBuff);
-extern PACKAGE Word __stdcall DbiCompareKeys(hDBICur hCursor, void * pKey1, void * pKey2, Word iFields
-	, Word iLen, short &iResult);
+extern PACKAGE Word __stdcall DbiGetRecordForKey(hDBICur hCursor, BOOL bDirectKey, Word iFields, Word iLen, void * pKey, void * pRecBuff);
+extern PACKAGE Word __stdcall DbiCompareKeys(hDBICur hCursor, void * pKey1, void * pKey2, Word iFields, Word iLen, short &iResult);
 extern PACKAGE Word __stdcall DbiAppendRecord(hDBICur hCursor, void * pRecBuff);
 extern PACKAGE Word __stdcall DbiRegenIndexes(hDBICur hCursor);
-extern PACKAGE Word __stdcall DbiRegenIndex(hDBIDb hDb, hDBICur hCursor, char * pszTableName, char * 
-	pszDriverType, char * pszIndexName, char * pszIndexTagName, Word iIndexId);
-extern PACKAGE Word __stdcall DbiEmptyTable(hDBIDb hDb, hDBICur hCursor, char * pszTableName, char * 
-	pszDriverType);
-extern PACKAGE Word __stdcall DbiPackTable(hDBIDb hDb, hDBICur hCursor, char * pszTableName, char * 
-	pszDriverType, BOOL bRegenIdxs);
+extern PACKAGE Word __stdcall DbiRegenIndex(hDBIDb hDb, hDBICur hCursor, char * pszTableName, char * pszDriverType, char * pszIndexName, char * pszIndexTagName, Word iIndexId);
+extern PACKAGE Word __stdcall DbiEmptyTable(hDBIDb hDb, hDBICur hCursor, char * pszTableName, char * pszDriverType);
+extern PACKAGE Word __stdcall DbiPackTable(hDBIDb hDb, hDBICur hCursor, char * pszTableName, char * pszDriverType, BOOL bRegenIdxs);
 extern PACKAGE Word __stdcall DbiTimeStampDecode(double tsTS, int &dateD, int &timeT);
 extern PACKAGE Word __stdcall DbiTimeStampEncode(int dateD, int timeT, double &tsTS);
 extern PACKAGE Word __stdcall DbiTimeDecode(int timeT, Word &iHour, Word &iMin, Word &iMilSec);
 extern PACKAGE Word __stdcall DbiTimeEncode(Word iHour, Word iMin, Word iMilSec, int &timeT);
-extern PACKAGE Word __stdcall DbiDoRestructure(hDBIDb hDb, Word iTblDescCount, pCRTblDesc pTblDesc, 
-	char * pszSaveAs, char * pszKeyviolName, char * pszProblemsName, BOOL bAnalyzeOnly);
+extern PACKAGE Word __stdcall DbiDoRestructure(hDBIDb hDb, Word iTblDescCount, pCRTblDesc pTblDesc, char * pszSaveAs, char * pszKeyviolName, char * pszProblemsName, BOOL bAnalyzeOnly);
 extern PACKAGE Word __stdcall DbiSetToRecordNo(hDBICur hCursor, int iRecNo);
-extern PACKAGE Word __stdcall DbiGetIndexSeqNo(hDBICur hCursor, char * pszIndexName, char * pszTagName
-	, Word iIndexId, Word &iIndexSeqNo);
-extern PACKAGE Word __stdcall DbiGetIndexForField(hDBICur hCursor, Word iFld, BOOL bProdTagOnly, IDXDesc 
-	&idxDesc);
-extern PACKAGE Word __stdcall DbiDeleteIndex(hDBIDb hDb, hDBICur hCursor, char * pszTableName, char * 
-	pszDriverType, char * pszIndexName, char * pszIndexTagName, Word iIndexId);
-extern PACKAGE Word __stdcall DbiAddIndex(hDBIDb hDb, hDBICur hCursor, char * pszTableName, char * pszDriverType
-	, IDXDesc &IdxDesc, char * pszKeyviolName);
+extern PACKAGE Word __stdcall DbiGetIndexSeqNo(hDBICur hCursor, char * pszIndexName, char * pszTagName, Word iIndexId, Word &iIndexSeqNo);
+extern PACKAGE Word __stdcall DbiGetIndexForField(hDBICur hCursor, Word iFld, BOOL bProdTagOnly, IDXDesc &idxDesc);
+extern PACKAGE Word __stdcall DbiDeleteIndex(hDBIDb hDb, hDBICur hCursor, char * pszTableName, char * pszDriverType, char * pszIndexName, char * pszIndexTagName, Word iIndexId);
+extern PACKAGE Word __stdcall DbiAddIndex(hDBIDb hDb, hDBICur hCursor, char * pszTableName, char * pszDriverType, IDXDesc &IdxDesc, char * pszKeyviolName);
 extern PACKAGE Word __stdcall DbiDeleteTable(hDBIDb hDb, char * pszTableName, char * pszDriverType);
-	
-extern PACKAGE Word __stdcall DbiRenameTable(hDBIDb hDb, char * pszOldName, char * pszDriverType, char * 
-	pszNewName);
-extern PACKAGE Word __stdcall DbiCopyTable(hDBIDb hDb, BOOL bOverWrite, char * pszSrcTableName, char * 
-	pszSrcDriverType, char * pszDestTableName);
+extern PACKAGE Word __stdcall DbiRenameTable(hDBIDb hDb, char * pszOldName, char * pszDriverType, char * pszNewName);
+extern PACKAGE Word __stdcall DbiCopyTable(hDBIDb hDb, BOOL bOverWrite, char * pszSrcTableName, char * pszSrcDriverType, char * pszDestTableName);
 extern PACKAGE Word __stdcall DbiCreateTable(hDBIDb hDb, BOOL bOverWrite, CRTblDesc &crTblDsc);
-extern PACKAGE Word __stdcall DbiVerifyField(hDBICur hCursor, Word iField, void * pSrc, BOOL &bBlank
-	);
+extern PACKAGE Word __stdcall DbiVerifyField(hDBICur hCursor, Word iField, void * pSrc, BOOL &bBlank);
 extern PACKAGE Word __stdcall DbiSetToSeqNo(hDBICur hCursor, int iSeqNo);
 extern PACKAGE Word __stdcall DbiInitRecord(hDBICur hCursor, void * pRecBuff);
-extern PACKAGE Word __stdcall DbiCloneCursor(hDBICur hCurSrc, BOOL bReadOnly, BOOL bUniDirectional, 
-	hDBICur &hCurNew);
-extern PACKAGE Word __stdcall DbiCompareBookMarks(hDBICur hCur, void * pBookMark1, void * pBookMark2
-	, int &CmpBkmkResult);
+extern PACKAGE Word __stdcall DbiCloneCursor(hDBICur hCurSrc, BOOL bReadOnly, BOOL bUniDirectional, hDBICur &hCurNew);
+extern PACKAGE Word __stdcall DbiCompareBookMarks(hDBICur hCur, void * pBookMark1, void * pBookMark2, int &CmpBkmkResult);
 extern PACKAGE Word __stdcall DbiSetToBookMark(hDBICur hCur, void * pBookMark);
 extern PACKAGE Word __stdcall DbiGetBookMark(hDBICur hCur, void * pBookMark);
 extern PACKAGE Word __stdcall DbiExtractKey(hDBICur hCursor, void * pRecBuf, void * pKeyBuf);
 extern PACKAGE Word __stdcall DbiGetIndexDesc(hDBICur hCursor, Word iIndexSeqNo, IDXDesc &idxDesc);
-extern PACKAGE Word __stdcall DbiSwitchToIndex(hDBICur &hCursor, char * pszIndexName, char * pszTagName
-	, Word iIndexId, BOOL bCurrRec);
+extern PACKAGE Word __stdcall DbiSwitchToIndex(hDBICur &hCursor, char * pszIndexName, char * pszTagName, Word iIndexId, BOOL bCurrRec);
 extern PACKAGE Word __stdcall DbiCloseIndex(hDBICur hCursor, char * pszIndexName, Word iIndexId);
 extern PACKAGE Word __stdcall DbiOpenIndex(hDBICur hCursor, char * pszIndexName, Word iIndexId);
 extern PACKAGE Word __stdcall DbiDateDecode(int dateD, Word &iMon, Word &iDay, short &iYear);
 extern PACKAGE Word __stdcall DbiDateEncode(Word iMon, Word iDay, short iYear, int &dateD);
-extern PACKAGE Word __stdcall DbiPutField(hDBICur hCursor, Word iField, void * pRecBuff, void * pSrc
-	);
-extern PACKAGE Word __stdcall DbiGetField(hDBICur hCursor, Word iField, void * pRecBuff, void * pDest
-	, BOOL &bBlank);
-extern PACKAGE Word __stdcall DbiRegisterCallBack(hDBICur hCursor, CBType ecbType, int iClientData, 
-	Word iCbBufLen, void * CbBuf, pfDBICallBack pfCb);
+extern PACKAGE Word __stdcall DbiPutField(hDBICur hCursor, Word iField, void * pRecBuff, void * pSrc);
+extern PACKAGE Word __stdcall DbiGetField(hDBICur hCursor, Word iField, void * pRecBuff, void * pDest, BOOL &bBlank);
+extern PACKAGE Word __stdcall DbiRegisterCallBack(hDBICur hCursor, CBType ecbType, int iClientData, Word iCbBufLen, void * CbBuf, pfDBICallBack pfCb);
 extern PACKAGE Word __stdcall DbiQGetBaseDescs(hDBIStmt hStmt, hDBICur &hCur);
 extern PACKAGE Word __stdcall DbiQAlloc(hDBIDb hDb, DBIQryLang eQryLang, hDBIStmt &hStmt);
 extern PACKAGE Word __stdcall DbiQFree(hDBIStmt &hStmt);
-extern PACKAGE Word __stdcall DbiQInstantiateAnswer(hDBIStmt hStmt, hDBICur hCur, char * pszAnswerName
-	, char * pszAnswerType, BOOL bOverWrite, phDBICur phCur);
-extern PACKAGE Word __stdcall DbiQSetParams(hDBIStmt hStmt, Word uFldDescs, pFLDDesc paFldDescs, void * 
-	pRecBuff);
+extern PACKAGE Word __stdcall DbiQInstantiateAnswer(hDBIStmt hStmt, hDBICur hCur, char * pszAnswerName, char * pszAnswerType, BOOL bOverWrite, phDBICur phCur);
+extern PACKAGE Word __stdcall DbiQSetParams(hDBIStmt hStmt, Word uFldDescs, pFLDDesc paFldDescs, void * pRecBuff);
 extern PACKAGE Word __stdcall DbiQExec(hDBIStmt hStmt, phDBICur phCur);
 extern PACKAGE Word __stdcall DbiQPrepare(hDBIStmt hStmt, char * pszQuery);
-extern PACKAGE Word __stdcall DbiQExecDirect(hDBIDb hDb, DBIQryLang eQryLang, char * pszQuery, phDBICur 
-	phCur);
+extern PACKAGE Word __stdcall DbiQExecDirect(hDBIDb hDb, DBIQryLang eQryLang, char * pszQuery, phDBICur phCur);
 extern PACKAGE Word __stdcall DbiGetNetUserName(char * pszNetUserName);
 extern PACKAGE Word __stdcall DbiGetSesInfo(SESInfo &sesInfo);
 extern PACKAGE Word __stdcall DbiGetSysInfo(SYSInfo &sysInfo);
 extern PACKAGE Word __stdcall DbiGetSysConfig(SYSConfig &sysConfig);
 extern PACKAGE Word __stdcall DbiGetSysVersion(SYSVersion &sysVersion);
-extern PACKAGE Word __stdcall DbiGetBlobHeading(hDBICur hCursor, Word iField, void * pRecBuf, void * 
-	pDest);
+extern PACKAGE Word __stdcall DbiGetBlobHeading(hDBICur hCursor, Word iField, void * pRecBuf, void * pDest);
 extern PACKAGE Word __stdcall DbiFreeBlob(hDBICur hCursor, void * pRecBuf, Word iField);
-extern PACKAGE Word __stdcall DbiTruncateBlob(hDBICur hCursor, void * pRecBuf, Word iField, int iLen
-	);
-extern PACKAGE Word __stdcall DbiPutBlob(hDBICur hCursor, void * pRecBuf, Word iField, int iOffSet, 
-	int iLen, void * pSrc);
-extern PACKAGE Word __stdcall DbiGetBlob(hDBICur hCursor, void * pRecBuf, Word iField, int iOffSet, 
-	int iLen, void * pDest, int &iRead);
-extern PACKAGE Word __stdcall DbiGetBlobSize(hDBICur hCursor, void * pRecBuf, Word iField, int &iSize
-	);
-extern PACKAGE Word __stdcall DbiOpenBlob(hDBICur hCursor, void * pRecBuf, Word iField, DBIOpenMode 
-	eOpenMode);
-extern PACKAGE Word __stdcall DbiGetTableOpenCount(hDBIDb hDb, char * pszTableName, char * pszDriverType
-	, Word &iOpenCount);
+extern PACKAGE Word __stdcall DbiTruncateBlob(hDBICur hCursor, void * pRecBuf, Word iField, int iLen);
+extern PACKAGE Word __stdcall DbiPutBlob(hDBICur hCursor, void * pRecBuf, Word iField, int iOffSet, int iLen, void * pSrc);
+extern PACKAGE Word __stdcall DbiGetBlob(hDBICur hCursor, void * pRecBuf, Word iField, int iOffSet, int iLen, void * pDest, int &iRead);
+extern PACKAGE Word __stdcall DbiGetBlobSize(hDBICur hCursor, void * pRecBuf, Word iField, int &iSize);
+extern PACKAGE Word __stdcall DbiOpenBlob(hDBICur hCursor, void * pRecBuf, Word iField, DBIOpenMode eOpenMode);
+extern PACKAGE Word __stdcall DbiGetTableOpenCount(hDBIDb hDb, char * pszTableName, char * pszDriverType, Word &iOpenCount);
 extern PACKAGE Word __stdcall DbiLoadDriver(char * pszDriverType);
-extern PACKAGE Word __stdcall DbiGetIndexTypeDesc(char * pszDriverType, char * pszIndexType, IDXType 
-	&idxType);
+extern PACKAGE Word __stdcall DbiGetIndexTypeDesc(char * pszDriverType, char * pszIndexType, IDXType &idxType);
 extern PACKAGE Word __stdcall DbiOpenIndexTypesList(char * pszDriverType, hDBICur &hCur);
-extern PACKAGE Word __stdcall DbiGetFieldTypeDesc(char * pszDriverType, char * pszTableType, char * 
-	pszFieldType, FLDType &fldType);
-extern PACKAGE Word __stdcall DbiOpenFieldTypesList(char * pszDriverType, char * pszTblType, hDBICur 
-	&hCur);
-extern PACKAGE Word __stdcall DbiGetTableTypeDesc(char * pszDriverType, char * pszTableType, TBLType 
-	&tblType);
+extern PACKAGE Word __stdcall DbiGetFieldTypeDesc(char * pszDriverType, char * pszTableType, char * pszFieldType, FLDType &fldType);
+extern PACKAGE Word __stdcall DbiOpenFieldTypesList(char * pszDriverType, char * pszTblType, hDBICur &hCur);
+extern PACKAGE Word __stdcall DbiGetTableTypeDesc(char * pszDriverType, char * pszTableType, TBLType &tblType);
 extern PACKAGE Word __stdcall DbiOpenTableTypesList(char * pszDriverType, hDBICur &hCur);
 extern PACKAGE Word __stdcall DbiGetDatabaseDesc(char * pszName, pDBDesc pdbDesc);
 extern PACKAGE Word __stdcall DbiOpenDatabaseList(hDBICur &hCur);
@@ -4414,8 +4302,7 @@ extern PACKAGE Word __stdcall DbiGetDriverDesc(char * pszDriverType, DRVType &dr
 extern PACKAGE Word __stdcall DbiOpenDriverList(hDBICur &hCur);
 extern PACKAGE Word __stdcall DbiSetLockRetry(short iWait);
 extern PACKAGE Word __stdcall DbiSetPrivateDir(char * pszDir);
-extern PACKAGE Word __stdcall DbiOpenLockList(hDBICur hCursor, BOOL bAllUsers, BOOL bAllLockTypes, hDBICur 
-	&hLocks);
+extern PACKAGE Word __stdcall DbiOpenLockList(hDBICur hCursor, BOOL bAllUsers, BOOL bAllLockTypes, hDBICur &hLocks);
 extern PACKAGE Word __stdcall DbiOpenUserList(hDBICur &hUsers);
 extern PACKAGE Word __stdcall DbiDropPassword(char * pszPassword);
 extern PACKAGE Word __stdcall DbiAddPassword(char * pszPassword);
@@ -4424,94 +4311,67 @@ extern PACKAGE Word __stdcall DbiGetCurrSession(hDBISes &hSes);
 extern PACKAGE Word __stdcall DbiSetCurrSession(hDBISes hSes);
 extern PACKAGE Word __stdcall DbiStartSession(char * pszName, hDBISes &hSes, char * pNetDir);
 extern PACKAGE Word __stdcall DbiForceRecordReread(hDBICur hCursor, void * pRecBuff);
-extern PACKAGE Word __stdcall DbiGetCursorForTable(hDBIDb hDb, char * pszTableName, char * pszDriverType
-	, hDBICur &hCursor);
+extern PACKAGE Word __stdcall DbiGetCursorForTable(hDBIDb hDb, char * pszTableName, char * pszDriverType, hDBICur &hCursor);
 extern PACKAGE Word __stdcall DbiForceReread(hDBICur hCursor);
 extern PACKAGE Word __stdcall DbiSaveChanges(hDBICur hCursor);
-extern PACKAGE Word __stdcall DbiRelPersistTableLock(hDBIDb hDb, char * pszTableName, char * pszDriverType
-	);
-extern PACKAGE Word __stdcall DbiAcqPersistTableLock(hDBIDb hDb, char * pszTableName, char * pszDriverType
-	);
+extern PACKAGE Word __stdcall DbiRelPersistTableLock(hDBIDb hDb, char * pszTableName, char * pszDriverType);
+extern PACKAGE Word __stdcall DbiAcqPersistTableLock(hDBIDb hDb, char * pszTableName, char * pszDriverType);
 extern PACKAGE Word __stdcall DbiRelRecordLock(hDBICur hCursor, BOOL bAll);
 extern PACKAGE Word __stdcall DbiRelTableLock(hDBICur hCursor, BOOL bAll, DBILockType eLockType);
 extern PACKAGE Word __stdcall DbiAcqTableLock(hDBICur hCursor, DBILockType eLockType);
-extern PACKAGE Word __stdcall DbiLinkDetailToExp(hDBICur hCursorMstr, hDBICur hCursorDetl, Word iKeyLen
-	, char * pszMstrExp);
+extern PACKAGE Word __stdcall DbiLinkDetailToExp(hDBICur hCursorMstr, hDBICur hCursorDetl, Word iKeyLen, char * pszMstrExp);
 extern PACKAGE Word __stdcall DbiIsTableShared(hDBICur hCursor, BOOL &bShared);
 extern PACKAGE Word __stdcall DbiIsTableLocked(hDBICur hCursor, DBILockType epdxLock, Word &iLocks);
-	
 extern PACKAGE Word __stdcall DbiIsRecordLocked(hDBICur hCursor, BOOL &bLocked);
-extern PACKAGE Word __stdcall DbiGetLinkStatus(hDBICur hCursor, hDBICur &hCursorMstr, hDBICur &hCursorDet
-	, hDBICur &hCursorSib);
+extern PACKAGE Word __stdcall DbiGetLinkStatus(hDBICur hCursor, hDBICur &hCursorMstr, hDBICur &hCursorDet, hDBICur &hCursorSib);
 extern PACKAGE Word __stdcall DbiUnlinkDetail(hDBICur hDetlCursor);
-extern PACKAGE Word __stdcall DbiLinkDetail(hDBICur hMstrCursor, hDBICur hDetlCursor, Word iLnkFields
-	, PWORD piMstrFields, PWORD piDetlFields);
+extern PACKAGE Word __stdcall DbiLinkDetail(hDBICur hMstrCursor, hDBICur hDetlCursor, Word iLnkFields, PWORD piMstrFields, PWORD piDetlFields);
 extern PACKAGE Word __stdcall DbiEndLinkMode(hDBICur &hCursor);
 extern PACKAGE Word __stdcall DbiBeginLinkMode(hDBICur &hCursor);
 extern PACKAGE Word __stdcall DbiWriteBlock(hDBICur hCursor, int &iRecords, void * pBuf);
 extern PACKAGE Word __stdcall DbiReadBlock(hDBICur hCursor, int &iRecords, void * pBuf);
-extern PACKAGE Word __stdcall DbiCreateInMemTable(hDBIDb hDb, char * pszName, Word iFields, pFLDDesc 
-	pfldDesc, hDBICur &hCursor);
-extern PACKAGE Word __stdcall DbiOpenSecurityList(hDBIDb hDb, char * pszTableName, char * pszDriverType
-	, hDBICur &hSecCur);
-extern PACKAGE Word __stdcall DbiOpenFamilyList(hDBIDb hDb, char * pszTableName, char * pszDriverType
-	, hDBICur &hFmlCur);
-extern PACKAGE Word __stdcall DbiOpenRintList(hDBIDb hDb, char * pszTableName, char * pszDriverType, 
-	hDBICur &hChkCur);
-extern PACKAGE Word __stdcall DbiOpenVchkList(hDBIDb hDb, char * pszTableName, char * pszDriverType, 
-	hDBICur &hChkCur);
+extern PACKAGE Word __stdcall DbiCreateInMemTable(hDBIDb hDb, char * pszName, Word iFields, pFLDDesc pfldDesc, hDBICur &hCursor);
+extern PACKAGE Word __stdcall DbiOpenSecurityList(hDBIDb hDb, char * pszTableName, char * pszDriverType, hDBICur &hSecCur);
+extern PACKAGE Word __stdcall DbiOpenFamilyList(hDBIDb hDb, char * pszTableName, char * pszDriverType, hDBICur &hFmlCur);
+extern PACKAGE Word __stdcall DbiOpenRintList(hDBIDb hDb, char * pszTableName, char * pszDriverType, hDBICur &hChkCur);
+extern PACKAGE Word __stdcall DbiOpenVchkList(hDBIDb hDb, char * pszTableName, char * pszDriverType, hDBICur &hChkCur);
 extern PACKAGE Word __stdcall DbiOpenLdList(hDBICur &hCur);
-extern PACKAGE Word __stdcall DbiOpenFieldList(hDBIDb hDb, char * pszTableName, char * pszDriverType
-	, BOOL bPhyTypes, hDBICur &hCur);
-extern PACKAGE Word __stdcall DbiOpenIndexList(hDBIDb hDb, char * pszTableName, char * pszDriverType
-	, hDBICur &hCur);
+extern PACKAGE Word __stdcall DbiOpenFieldList(hDBIDb hDb, char * pszTableName, char * pszDriverType, BOOL bPhyTypes, hDBICur &hCur);
+extern PACKAGE Word __stdcall DbiOpenIndexList(hDBIDb hDb, char * pszTableName, char * pszDriverType, hDBICur &hCur);
 extern PACKAGE Word __stdcall DbiOpenFileList(hDBIDb hDb, char * pszWild, hDBICur &hCur);
-extern PACKAGE Word __stdcall DbiOpenTableList(hDBIDb hDb, BOOL bExtended, BOOL bSystem, char * pszWild
-	, hDBICur &hCur);
+extern PACKAGE Word __stdcall DbiOpenTableList(hDBIDb hDb, BOOL bExtended, BOOL bSystem, char * pszWild, hDBICur &hCur);
 extern PACKAGE Word __stdcall DbiSetDirectory(hDBIDb hDb, char * pszDir);
 extern PACKAGE Word __stdcall DbiGetDirectory(hDBIDb hDb, BOOL bDefault, char * pszDir);
-extern PACKAGE Word __stdcall DbiSetToKey(hDBICur hCursor, DBISearchCond eSearchCond, BOOL bDirectKey
-	, Word iFields, Word iLen, void * pBuff);
+extern PACKAGE Word __stdcall DbiSetToKey(hDBICur hCursor, DBISearchCond eSearchCond, BOOL bDirectKey, Word iFields, Word iLen, void * pBuff);
 extern PACKAGE Word __stdcall DbiResetRange(hDBICur hCursor);
-extern PACKAGE Word __stdcall DbiSetRange(hDBICur hCursor, BOOL bKeyItself, Word iFields1, Word iLen1
-	, void * pKey1, BOOL bKey1Incl, Word iFields2, Word iLen2, void * pKey2, BOOL bKey2Incl);
+extern PACKAGE Word __stdcall DbiSetRange(hDBICur hCursor, BOOL bKeyItself, Word iFields1, Word iLen1, void * pKey1, BOOL bKey1Incl, Word iFields2, Word iLen2, void * pKey2, BOOL bKey2Incl);
 extern PACKAGE Word __stdcall DbiGetSeqNo(hDBICur hCursor, int &iSeqNo);
 extern PACKAGE Word __stdcall DbiDeleteRecord(hDBICur hCursor, void * pRecBuf);
 extern PACKAGE Word __stdcall DbiModifyRecord(hDBICur hCursor, void * pRecBuf, BOOL bFreeLock);
 extern PACKAGE Word __stdcall DbiInsertRecord(hDBICur hCursor, DBILockType eLock, void * pRecBuff);
 extern PACKAGE Word __stdcall DbiGetRecordCount(hDBICur hCursor, int &iRecCount);
-extern PACKAGE Word __stdcall DbiGetRelativeRecord(hDBICur hCursor, int iPosOffset, DBILockType eLock
-	, void * pRecBuff, pRECProps precProps);
-extern PACKAGE Word __stdcall DbiGetRecord(hDBICur hCursor, DBILockType eLock, void * pRecBuff, pRECProps 
-	precProps);
-extern PACKAGE Word __stdcall DbiGetPriorRecord(hDBICur hCursor, DBILockType eLock, void * pRecBuff, 
-	pRECProps precProps);
-extern PACKAGE Word __stdcall DbiGetNextRecord(hDBICur hCursor, DBILockType eLock, void * pRecBuff, 
-	pRECProps precProps);
+extern PACKAGE Word __stdcall DbiGetRelativeRecord(hDBICur hCursor, int iPosOffset, DBILockType eLock, void * pRecBuff, pRECProps precProps);
+extern PACKAGE Word __stdcall DbiGetRecord(hDBICur hCursor, DBILockType eLock, void * pRecBuff, pRECProps precProps);
+extern PACKAGE Word __stdcall DbiGetPriorRecord(hDBICur hCursor, DBILockType eLock, void * pRecBuff, pRECProps precProps);
+extern PACKAGE Word __stdcall DbiGetNextRecord(hDBICur hCursor, DBILockType eLock, void * pRecBuff, pRECProps precProps);
 extern PACKAGE Word __stdcall DbiSetToCursor(hDBICur hDest, hDBICur hSrc);
 extern PACKAGE Word __stdcall DbiSetToEnd(hDBICur hCursor);
 extern PACKAGE Word __stdcall DbiSetToBegin(hDBICur hCursor);
 extern PACKAGE Word __stdcall DbiCloseCursor(hDBICur &hCursor);
 extern PACKAGE Word __stdcall DbiGetFieldDescs(hDBICur hCursor, pFLDDesc pfldDesc);
 extern PACKAGE Word __stdcall DbiGetCursorProps(hDBICur hCursor, CURProps &curProps);
-extern PACKAGE Word __stdcall DbiOpenTable(hDBIDb hDb, char * pszTableName, char * pszDriverType, char * 
-	pszIndexName, char * pszIndexTagName, Word iIndexId, DBIOpenMode eOpenMode, DBIShareMode eShareMode
-	, XLTMode exltMode, BOOL bUniDirectional, void * pOptParams, hDBICur &hCursor);
+extern PACKAGE Word __stdcall DbiOpenTable(hDBIDb hDb, char * pszTableName, char * pszDriverType, char * pszIndexName, char * pszIndexTagName, Word iIndexId, DBIOpenMode eOpenMode, DBIShareMode eShareMode, XLTMode exltMode, BOOL bUniDirectional, void * pOptParams, hDBICur &hCursor);
 extern PACKAGE Word __stdcall DbiCloseDatabase(hDBIDb &hDb);
-extern PACKAGE Word __stdcall DbiOpenDatabase(char * pszDbName, char * pszDbType, DBIOpenMode eOpenMode
-	, DBIShareMode eShareMode, char * pszPassword, Word iOptFlds, pFLDDesc pOptFldDesc, void * pOptParams
-	, hDBIDb &hDb);
+extern PACKAGE Word __stdcall DbiOpenDatabase(char * pszDbName, char * pszDbType, DBIOpenMode eOpenMode, DBIShareMode eShareMode, char * pszPassword, Word iOptFlds, pFLDDesc pOptFldDesc, void * pOptParams, hDBIDb &hDb);
 extern PACKAGE Word __stdcall DbiInitFn(Word iVer, pDBIEnv pEnv);
 extern PACKAGE Word __stdcall DbiExit(void);
 extern PACKAGE Word __stdcall DbiDLLExit(void);
 
 }	/* namespace Bde */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Bde;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Bde
+#endif	// BDE

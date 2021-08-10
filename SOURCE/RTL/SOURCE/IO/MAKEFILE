@@ -14,7 +14,7 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
-# $Revision:   9.4  $                                                                #
+# $Revision: 9.8 $                                                                #
 #                                                                           #
 #############################################################################
 
@@ -145,6 +145,7 @@ OBJS =               \
         getdcwd.obj  \
         getdfree.obj \
         getdisk.obj  \
+	getdrive.obj \
         getftime.obj \
         gets.obj     \
         getw.obj     \

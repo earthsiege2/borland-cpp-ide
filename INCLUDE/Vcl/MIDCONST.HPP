@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'MidConst.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MidConst.pas' rev: 6.00
 
 #ifndef MidConstHPP
 #define MidConstHPP
@@ -19,10 +19,12 @@ namespace Midconst
 {
 //-- type declarations -------------------------------------------------------
 //-- var, const, procedure ---------------------------------------------------
-#define MIDAS_CatDesc "Borland MIDAS Application Servers"
+#define MIDAS_CatDesc "Borland DataSnap Application Servers"
 extern PACKAGE GUID CATID_MIDASAppServer;
-#define SCatImplBaseKey "CLSID\\%s\\Implemented Categories"
-#define SCatImplKey "CLSID\\%s\\Implemented Categories\\%s"
+#define MIDASInterceptor_CatDesc "Borland DataSnap Application Servers"
+extern PACKAGE GUID CATID_MIDASInterceptor;
+#define SCatImplBaseKey "%s\\Implemented Categories"
+#define SCatImplKey "%s\\Implemented Categories\\%s"
 #define MIDAS_DLL "MIDAS.DLL"
 #define SClsid "CLSID\\"
 #define SPooled "Pooled"
@@ -33,6 +35,7 @@ extern PACKAGE GUID CATID_MIDASAppServer;
 #define SWeb "Web"
 static const char SFlagOn = '\x31';
 static const char SFlagOff = '\x30';
+static const Shortint MINDATAPACKETSIZE = 0x8;
 extern PACKAGE System::ResourceString _SProviderNotExported;
 #define Midconst_SProviderNotExported System::LoadResourceString(&Midconst::_SProviderNotExported)
 extern PACKAGE System::ResourceString _SNoDataProvider;
@@ -57,6 +60,10 @@ extern PACKAGE System::ResourceString _SErrorLoadingMidas;
 #define Midconst_SErrorLoadingMidas System::LoadResourceString(&Midconst::_SErrorLoadingMidas)
 extern PACKAGE System::ResourceString _SCannotCreateDataSet;
 #define Midconst_SCannotCreateDataSet System::LoadResourceString(&Midconst::_SCannotCreateDataSet)
+extern PACKAGE System::ResourceString _SFieldNameTooLarge;
+#define Midconst_SFieldNameTooLarge System::LoadResourceString(&Midconst::_SFieldNameTooLarge)
+extern PACKAGE System::ResourceString _SInvalidClone;
+#define Midconst_SInvalidClone System::LoadResourceString(&Midconst::_SInvalidClone)
 extern PACKAGE System::ResourceString _SSocketReadError;
 #define Midconst_SSocketReadError System::LoadResourceString(&Midconst::_SSocketReadError)
 extern PACKAGE System::ResourceString _SInvalidProviderName;
@@ -65,13 +72,16 @@ extern PACKAGE System::ResourceString _SBadVariantType;
 #define Midconst_SBadVariantType System::LoadResourceString(&Midconst::_SBadVariantType)
 extern PACKAGE System::ResourceString _SInvalidAction;
 #define Midconst_SInvalidAction System::LoadResourceString(&Midconst::_SInvalidAction)
+extern PACKAGE System::ResourceString _SNoParentConnection;
+#define Midconst_SNoParentConnection System::LoadResourceString(&Midconst::_SNoParentConnection)
+extern PACKAGE System::ResourceString _SBlankChildName;
+#define Midconst_SBlankChildName System::LoadResourceString(&Midconst::_SBlankChildName)
 extern PACKAGE System::ResourceString _SInvalidResponse;
 #define Midconst_SInvalidResponse System::LoadResourceString(&Midconst::_SInvalidResponse)
 extern PACKAGE System::ResourceString _SRecordNotFound;
 #define Midconst_SRecordNotFound System::LoadResourceString(&Midconst::_SRecordNotFound)
 extern PACKAGE System::ResourceString _STooManyRecordsModified;
 #define Midconst_STooManyRecordsModified System::LoadResourceString(&Midconst::_STooManyRecordsModified)
-	
 extern PACKAGE System::ResourceString _SInvalidOptParamType;
 #define Midconst_SInvalidOptParamType System::LoadResourceString(&Midconst::_SInvalidOptParamType)
 extern PACKAGE System::ResourceString _SMissingDataSet;
@@ -106,9 +116,14 @@ extern PACKAGE System::ResourceString _SNoInsertsAllowed;
 #define Midconst_SNoInsertsAllowed System::LoadResourceString(&Midconst::_SNoInsertsAllowed)
 extern PACKAGE System::ResourceString _SCannotChangeCommandText;
 #define Midconst_SCannotChangeCommandText System::LoadResourceString(&Midconst::_SCannotChangeCommandText)
-	
+extern PACKAGE System::ResourceString _SAggregatesActive;
+#define Midconst_SAggregatesActive System::LoadResourceString(&Midconst::_SAggregatesActive)
 extern PACKAGE System::ResourceString _SNoServers;
 #define Midconst_SNoServers System::LoadResourceString(&Midconst::_SNoServers)
+extern PACKAGE System::ResourceString _SConnectionMissing;
+#define Midconst_SConnectionMissing System::LoadResourceString(&Midconst::_SConnectionMissing)
+extern PACKAGE System::ResourceString _SNoCircularConnection;
+#define Midconst_SNoCircularConnection System::LoadResourceString(&Midconst::_SNoCircularConnection)
 extern PACKAGE System::ResourceString _SReturnError;
 #define Midconst_SReturnError System::LoadResourceString(&Midconst::_SReturnError)
 extern PACKAGE System::ResourceString _SNoWinSock2;
@@ -123,11 +138,11 @@ extern PACKAGE System::ResourceString _SServerIsBusy;
 #define Midconst_SServerIsBusy System::LoadResourceString(&Midconst::_SServerIsBusy)
 extern PACKAGE System::ResourceString _SObjectNotAvailable;
 #define Midconst_SObjectNotAvailable System::LoadResourceString(&Midconst::_SObjectNotAvailable)
+extern PACKAGE System::ResourceString _SMasterNotOpen;
+#define Midconst_SMasterNotOpen System::LoadResourceString(&Midconst::_SMasterNotOpen)
 
 }	/* namespace Midconst */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Midconst;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

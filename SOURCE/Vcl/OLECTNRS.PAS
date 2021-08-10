@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -12,6 +12,7 @@
 unit OleCtnrs;
 
 {$T-,H+,X+}
+{$WARN SYMBOL_PLATFORM OFF}
 
 interface
 
@@ -1641,11 +1642,30 @@ begin
 end;
 
 procedure TOleContainer.InitObject;
+
+  function FindForm(Component: TComponent): TCustomForm;
+  begin
+    while Component <> nil do
+      if Component is TCustomForm then
+      begin
+        Result := TCustomForm(Component);
+        Exit;
+      end
+      else
+        Component := Component.Owner;
+    Result := nil;
+  end;
+
 var
   DataObject: IDataObject;
   FormatEtc: TFormatEtc;
+  DocForm: TCustomForm;
 begin
-  FDocForm := GetVCLFrameForm(ValidParentForm(Self));
+  DocForm := GetParentForm(Self);
+  if DocForm = nil then
+    DocForm := FindForm(Self);
+  if DocForm = nil then ValidParentForm(Self);
+  FDocForm := GetVCLFrameForm(DocForm);
   FFrameForm := FDocForm;
   FDocForm.AddContainer(Self);
   if IsFormMDIChild(FDocForm.Form) then

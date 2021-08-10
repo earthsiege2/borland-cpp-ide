@@ -1,6 +1,6 @@
 /* WS2SPI.H -- definitions to be used with the WinSock service provider.
  *
- * Copyright (c) 1997-1999  Microsoft Corporation
+ * Copyright (c) Microsoft Corporation. All rights reserved.
  *
  * This header file corresponds to version 2.2.x of the WinSock SPI
  * specification.
@@ -12,7 +12,6 @@
  */
 
 #ifndef _WINSOCK2SPI_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINSOCK2SPI_
 
 #if _MSC_VER > 1000
@@ -648,6 +647,22 @@ int
     LPINT lpErrno
     );
 
+#if defined(_WIN64)
+/*
+ * 64-bit architectures capable of running 32-bit code have
+ * separate 64-bit and 32-bit catalogs.  API with '32' prefix
+ * allow 32 bit catalog manipulations by 64 bit process.
+ */
+int
+WSPAPI
+WSCEnumProtocols32(
+    IN LPINT lpiProtocols,
+    OUT LPWSAPROTOCOL_INFOW lpProtocolBuffer,
+    IN OUT LPDWORD lpdwBufferLength,
+    OUT LPINT lpErrno
+    );
+#endif
+
 int
 WSPAPI
 WSCDeinstallProvider(
@@ -661,6 +676,15 @@ int
     LPGUID lpProviderId,
     LPINT lpErrno
     );
+
+#if defined(_WIN64)
+int
+WSPAPI
+WSCDeinstallProvider32(
+    IN LPGUID lpProviderId,
+    OUT LPINT lpErrno
+    );
+#endif
 
 int
 WSPAPI
@@ -682,6 +706,23 @@ int
     LPINT lpErrno
     );
 
+#if defined(_WIN64)
+/*
+ * This API manipulates 64-bit and 32-bit catalogs simulteneously.
+ * It is needed to guarantee the same catalog IDs for provider catalog
+ * entries in both 64-bit and 32-bit catalogs.
+ */
+int
+WSPAPI
+WSCInstallProvider64_32(
+    IN LPGUID lpProviderId,
+    IN const WCHAR FAR * lpszProviderDllPath,
+    IN const LPWSAPROTOCOL_INFOW lpProtocolInfoList,
+    IN DWORD dwNumberOfEntries,
+    OUT LPINT lpErrno
+    );
+#endif
+
 int
 WSPAPI
 WSCGetProviderPath(
@@ -699,6 +740,49 @@ int
     LPINT lpProviderDllPathLen,
     LPINT lpErrno
     );
+
+#if defined(_WIN64)
+int
+WSPAPI
+WSCGetProviderPath32(
+    IN LPGUID lpProviderId,
+    OUT WCHAR FAR * lpszProviderDllPath,
+    IN OUT LPINT lpProviderDllPathLen,
+    OUT LPINT lpErrno
+    );
+#endif
+
+int
+WSPAPI
+WSCUpdateProvider(
+    IN  LPGUID lpProviderId,
+    IN  const WCHAR FAR * lpszProviderDllPath,
+    IN  const LPWSAPROTOCOL_INFOW lpProtocolInfoList,
+    IN  DWORD dwNumberOfEntries,
+    OUT LPINT lpErrno
+    );
+
+typedef
+int
+(WSPAPI * LPWSCUPDATEPROVIDER)(
+    LPGUID lpProviderId,
+    const WCHAR FAR * lpszProviderDllPath,
+    const LPWSAPROTOCOL_INFOW lpProtocolInfoList,
+    DWORD dwNumberOfEntries,
+    LPINT lpErrno
+    );
+
+#if defined(_WIN64)
+int
+WSPAPI
+WSCUpdateProvider32(
+    IN  LPGUID lpProviderId,
+    IN  const WCHAR FAR * lpszProviderDllPath,
+    IN  const LPWSAPROTOCOL_INFOW lpProtocolInfoList,
+    IN  DWORD dwNumberOfEntries,
+    OUT LPINT lpErrno
+    );
+#endif
 
 int
 WSPAPI
@@ -846,9 +930,41 @@ WPUCompleteOverlappedRequest (
     LPINT lpErrno
 );
 
+int
+WSPAPI
+WPUOpenCurrentThread(
+    LPWSATHREADID lpThreadId,
+    LPINT lpErrno
+    );
+
+int
+WSPAPI
+WPUCloseThread(
+    LPWSATHREADID lpThreadId,
+    LPINT lpErrno
+    );
+
 /*
  * Installing and uninstalling name space providers.
  */
+
+/*
+ * SPI and API for enumerating name space providers are
+ * currently equivalent since there is no concept of a hidden
+ * name space provider
+ */
+#define WSCEnumNameSpaceProviders WSAEnumNameSpaceProvidersW
+#define LPFN_WSCENUMNAMESPACEPROVIDERS LPFN_WSAENUMNAMESPACEPROVIDERSW
+
+#if defined(_WIN64)
+INT
+WSAAPI
+WSCEnumNameSpaceProviders32(
+    IN OUT LPDWORD              lpdwBufferLength,
+    OUT    LPWSANAMESPACE_INFOW lpnspBuffer
+    );
+#endif
+
 
 INT
 WSPAPI
@@ -870,6 +986,18 @@ INT
     LPGUID lpProviderId
     );
 
+#if defined(_WIN64)
+INT
+WSPAPI
+WSCInstallNameSpace32 (
+    IN LPWSTR lpszIdentifier,
+    IN LPWSTR lpszPathName,
+    IN DWORD dwNameSpace,
+    IN DWORD dwVersion,
+    IN LPGUID lpProviderId
+    );
+#endif
+
 INT
 WSPAPI
 WSCUnInstallNameSpace (
@@ -881,6 +1009,14 @@ INT
 (WSPAPI * LPWSCUNINSTALLNAMESPACE)(
     LPGUID lpProviderId
     );
+
+#if defined(_WIN64)
+INT
+WSPAPI
+WSCUnInstallNameSpace32 (
+    IN LPGUID lpProviderId
+    );
+#endif
 
 INT
 WSPAPI
@@ -895,6 +1031,16 @@ INT
     LPGUID lpProviderId,
     BOOL fEnable
     );
+
+#if defined(_WIN64)
+INT
+WSPAPI
+WSCEnableNSProvider32 (
+    IN LPGUID lpProviderId,
+    IN BOOL fEnable
+    );
+#endif
+
 
 /*
  * Pointers to the individual entries in the namespace proc table.
@@ -923,6 +1069,20 @@ INT
     DWORD dwControlFlags,
     LPDWORD lpdwBufferLength,
     LPWSAQUERYSETW lpqsResults
+    );
+
+typedef
+INT
+(WSAAPI * LPNSPIOCTL)(
+    HANDLE          hLookup,
+    DWORD           dwControlCode,
+    LPVOID          lpvInBuffer,
+    DWORD           cbInBuffer,
+    LPVOID          lpvOutBuffer,
+    DWORD           cbOutBuffer,
+    LPDWORD         lpcbBytesReturned,
+    LPWSACOMPLETION lpCompletion,
+    LPWSATHREADID   lpThreadId
     );
 
 typedef
@@ -985,6 +1145,12 @@ typedef struct _NSP_ROUTINE {
     LPNSPREMOVESERVICECLASS  NSPRemoveServiceClass;
     LPNSPGETSERVICECLASSINFO NSPGetServiceClassInfo;
 
+    // These APIs were added later, so must appear here
+    // to keep the pointers in the structure in order.
+    // Namespaces unaware of these APIs will set cbSize
+    // to match the size of FIELD_OFFSET(NSP_ROUTINE, NSPIoctl).
+    LPNSPIOCTL               NSPIoctl;
+
 } NSP_ROUTINE, FAR * LPNSP_ROUTINE;
 
 /*
@@ -1014,6 +1180,5 @@ INT
 #include <poppack.h>
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* _WINSOCK2SPI_ */
 

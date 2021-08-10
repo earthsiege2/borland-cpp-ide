@@ -1,7 +1,7 @@
 //+---------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  File:       OLE2.h
 //  Contents:   Main OLE2 header; Defines Linking and Emmebbeding interfaces, and API's.
@@ -425,6 +425,7 @@ WINOLEAPI OleConvertOLESTREAMToIStorageEx
 #endif // _WIN32
 
 #endif // _MAC
+
 
 #pragma option pop /*P_O_Pop*/
 #endif     // __OLE2_H__

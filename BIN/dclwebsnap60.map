@@ -1,0 +1,2176 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 0001CBD8H .text                   CODE
+ 0002:00000000 00000458H .data                   DATA
+ 0002:00000458 00000101H .bss                    BSS
+
+
+Detailed map of segments
+
+ 0001:00000000 00000286 C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000288 000001EC C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:00000474 00000088 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:000004FC 0000000E C=CODE     S=.text    G=(none)   M=Types    ACBP=A9
+ 0001:0000050C 000000AE C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:000005BC 0000000E C=CODE     S=.text    G=(none)   M=SysConst ACBP=A9
+ 0001:000005CC 000000BE C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:0000068C 0000002E C=CODE     S=.text    G=(none)   M=ActiveX  ACBP=A9
+ 0001:000006BC 00000038 C=CODE     S=.text    G=(none)   M=Messages ACBP=A9
+ 0001:000006F4 0000002E C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:00000724 0000000E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:00000734 0000000E C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:00000744 0000000E C=CODE     S=.text    G=(none)   M=RTLConsts ACBP=A9
+ 0001:00000754 00000016 C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:0000076C 00000038 C=CODE     S=.text    G=(none)   M=ShlObj   ACBP=A9
+ 0001:000007A4 00000038 C=CODE     S=.text    G=(none)   M=UrlMon   ACBP=A9
+ 0001:000007DC 00000038 C=CODE     S=.text    G=(none)   M=WinInet  ACBP=A9
+ 0001:00000814 00000038 C=CODE     S=.text    G=(none)   M=RegStr   ACBP=A9
+ 0001:0000084C 00000038 C=CODE     S=.text    G=(none)   M=ShellAPI ACBP=A9
+ 0001:00000884 00000038 C=CODE     S=.text    G=(none)   M=CommCtrl ACBP=A9
+ 0001:000008BC 0000000E C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:000008CC 0000017E C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:00000A4C 0000000E C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000A5C 0000005E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:00000ABC 0000000E C=CODE     S=.text    G=(none)   M=Math     ACBP=A9
+ 0001:00000ACC 0000000E C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:00000ADC 0000000E C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:00000AEC 0000000E C=CODE     S=.text    G=(none)   M=ImgList  ACBP=A9
+ 0001:00000AFC 0000000E C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:00000B0C 0000000E C=CODE     S=.text    G=(none)   M=Consts   ACBP=A9
+ 0001:00000B1C 0000014E C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00000C6C 00000038 C=CODE     S=.text    G=(none)   M=Imm      ACBP=A9
+ 0001:00000CA4 0000000E C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000CB4 0000000E C=CODE     S=.text    G=(none)   M=WinHelpViewer ACBP=A9
+ 0001:00000CC4 0000000E C=CODE     S=.text    G=(none)   M=StdActns ACBP=A9
+ 0001:00000CD4 00000038 C=CODE     S=.text    G=(none)   M=WinSpool ACBP=A9
+ 0001:00000D0C 00000036 C=CODE     S=.text    G=(none)   M=StdCtrls ACBP=A9
+ 0001:00000D44 00000038 C=CODE     S=.text    G=(none)   M=CommDlg  ACBP=A9
+ 0001:00000D7C 00000038 C=CODE     S=.text    G=(none)   M=Dlgs     ACBP=A9
+ 0001:00000DB4 0000000E C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00000DC4 0000000E C=CODE     S=.text    G=(none)   M=StrUtils ACBP=A9
+ 0001:00000DD4 0000000E C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:00000DE4 0000000E C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:00000DF4 00000036 C=CODE     S=.text    G=(none)   M=ToolsAPI ACBP=A9
+ 0001:00000E2C 0000003E C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:00000E6C 0000000E C=CODE     S=.text    G=(none)   M=ListActns ACBP=A9
+ 0001:00000E7C 0000000E C=CODE     S=.text    G=(none)   M=ToolWin  ACBP=A9
+ 0001:00000E8C 00000038 C=CODE     S=.text    G=(none)   M=RichEdit ACBP=A9
+ 0001:00000EC4 0000000E C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00000ED4 00000046 C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:00000F1C 0000000E C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00000F2C 0000000E C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:00000F3C 0000000E C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:00000F4C 0000000E C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:00000F5C 0000000E C=CODE     S=.text    G=(none)   M=ComStrs  ACBP=A9
+ 0001:00000F6C 00000026 C=CODE     S=.text    G=(none)   M=DesignIntf ACBP=A9
+ 0001:00000F94 0000000E C=CODE     S=.text    G=(none)   M=DesignMenus ACBP=A9
+ 0001:00000FA4 0000000E C=CODE     S=.text    G=(none)   M=WebSess  ACBP=A9
+ 0001:00000FB4 0000000E C=CODE     S=.text    G=(none)   M=WebDisp  ACBP=A9
+ 0001:00000FC4 0000000E C=CODE     S=.text    G=(none)   M=SiteComp ACBP=A9
+ 0001:00000FD4 0000001E C=CODE     S=.text    G=(none)   M=WebCntxt ACBP=A9
+ 0001:00000FF4 00000046 C=CODE     S=.text    G=(none)   M=HTTPApp  ACBP=A9
+ 0001:0000103C 0000000E C=CODE     S=.text    G=(none)   M=Masks    ACBP=A9
+ 0001:0000104C 0000000E C=CODE     S=.text    G=(none)   M=BrkrConst ACBP=A9
+ 0001:0000105C 0000000E C=CODE     S=.text    G=(none)   M=WebConst ACBP=A9
+ 0001:0000106C 0000000E C=CODE     S=.text    G=(none)   M=HTTPProd ACBP=A9
+ 0001:0000107C 0000000E C=CODE     S=.text    G=(none)   M=CopyPrsr ACBP=A9
+ 0001:0000108C 00000036 C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:000010C4 0000000E C=CODE     S=.text    G=(none)   M=ComConst ACBP=A9
+ 0001:000010D4 0000000E C=CODE     S=.text    G=(none)   M=WebContnrs ACBP=A9
+ 0001:000010E4 0000002E C=CODE     S=.text    G=(none)   M=WebComp  ACBP=A9
+ 0001:00001114 0000000E C=CODE     S=.text    G=(none)   M=WbmConst ACBP=A9
+ 0001:00001124 0000000E C=CODE     S=.text    G=(none)   M=SiteConst ACBP=A9
+ 0001:00001134 0000000E C=CODE     S=.text    G=(none)   M=AdaptReq ACBP=A9
+ 0001:00001144 0000000E C=CODE     S=.text    G=(none)   M=SessColn ACBP=A9
+ 0001:00001154 0000000E C=CODE     S=.text    G=(none)   M=SyncObjs ACBP=A9
+ 0001:00001164 0000000E C=CODE     S=.text    G=(none)   M=DateUtils ACBP=A9
+ 0001:00001174 0000006E C=CODE     S=.text    G=(none)   M=WebScript ACBP=A9
+ 0001:000011E4 0000000E C=CODE     S=.text    G=(none)   M=WebAuto  ACBP=A9
+ 0001:000011F4 0000000E C=CODE     S=.text    G=(none)   M=WebScript_TLB ACBP=A9
+ 0001:00001204 0000000E C=CODE     S=.text    G=(none)   M=StdVCL   ACBP=A9
+ 0001:00001214 0000000E C=CODE     S=.text    G=(none)   M=AscrLib  ACBP=A9
+ 0001:00001224 0000000E C=CODE     S=.text    G=(none)   M=AutoAdap ACBP=A9
+ 0001:00001234 0000000E C=CODE     S=.text    G=(none)   M=WebAdapt ACBP=A9
+ 0001:00001244 0000000E C=CODE     S=.text    G=(none)   M=DB       ACBP=A9
+ 0001:00001254 0000000E C=CODE     S=.text    G=(none)   M=FMTBcd   ACBP=A9
+ 0001:00001264 0000000E C=CODE     S=.text    G=(none)   M=DBConsts ACBP=A9
+ 0001:00001274 0000000E C=CODE     S=.text    G=(none)   M=SqlTimSt ACBP=A9
+ 0001:00001284 0000000E C=CODE     S=.text    G=(none)   M=MaskUtils ACBP=A9
+ 0001:00001294 0000001E C=CODE     S=.text    G=(none)   M=MidItems ACBP=A9
+ 0001:000012B4 0000000E C=CODE     S=.text    G=(none)   M=MidComp  ACBP=A9
+ 0001:000012C4 00000016 C=CODE     S=.text    G=(none)   M=MidProd  ACBP=A9
+ 0001:000012DC 0000000E C=CODE     S=.text    G=(none)   M=CompProd ACBP=A9
+ 0001:000012EC 00000016 C=CODE     S=.text    G=(none)   M=XMLBrokr ACBP=A9
+ 0001:00001304 0000000E C=CODE     S=.text    G=(none)   M=AutoDisp ACBP=A9
+ 0001:00001314 0000000E C=CODE     S=.text    G=(none)   M=Midas    ACBP=A9
+ 0001:00001324 0000000E C=CODE     S=.text    G=(none)   M=Provider ACBP=A9
+ 0001:00001334 0000000E C=CODE     S=.text    G=(none)   M=DSIntf   ACBP=A9
+ 0001:00001344 0000000E C=CODE     S=.text    G=(none)   M=DBCommon ACBP=A9
+ 0001:00001354 0000000E C=CODE     S=.text    G=(none)   M=MidConst ACBP=A9
+ 0001:00001364 0000000E C=CODE     S=.text    G=(none)   M=DBClient ACBP=A9
+ 0001:00001374 0000000E C=CODE     S=.text    G=(none)   M=DataBkr  ACBP=A9
+ 0001:00001384 0000000E C=CODE     S=.text    G=(none)   M=DBWeb    ACBP=A9
+ 0001:00001394 0000000E C=CODE     S=.text    G=(none)   M=PagItems ACBP=A9
+ 0001:000013A4 0000000E C=CODE     S=.text    G=(none)   M=ScrptMgr ACBP=A9
+ 0001:000013B4 0000012E C=CODE     S=.text    G=(none)   M=DesignEditors ACBP=A9
+ 0001:000014E4 0000000E C=CODE     S=.text    G=(none)   M=Proxies  ACBP=A9
+ 0001:000014F4 0000000E C=CODE     S=.text    G=(none)   M=DesignConst ACBP=A9
+ 0001:00001504 0000000E C=CODE     S=.text    G=(none)   M=WebFact  ACBP=A9
+ 0001:00001514 00001221 C=CODE     S=.text    G=(none)   M=ProdTemplateReg ACBP=A9
+ 0001:00002738 0000115C C=CODE     S=.text    G=(none)   M=NwPageFrame ACBP=A9
+ 0001:00003894 000004EC C=CODE     S=.text    G=(none)   M=NwWebPageMod ACBP=A9
+ 0001:00003D80 00000320 C=CODE     S=.text    G=(none)   M=NwWebDataMod ACBP=A9
+ 0001:000040A0 0000000E C=CODE     S=.text    G=(none)   M=WebUsers ACBP=A9
+ 0001:000040B0 0000037C C=CODE     S=.text    G=(none)   M=NwAppPage ACBP=A9
+ 0001:0000442C 0000000E C=CODE     S=.text    G=(none)   M=NetConst ACBP=A9
+ 0001:0000443C 0000000E C=CODE     S=.text    G=(none)   M=WebModu  ACBP=A9
+ 0001:0000444C 0000000E C=CODE     S=.text    G=(none)   M=DMForm   ACBP=A9
+ 0001:0000445C 0000000E C=CODE     S=.text    G=(none)   M=VCLEditors ACBP=A9
+ 0001:0000446C 00000016 C=CODE     S=.text    G=(none)   M=ComponentDesigner ACBP=A9
+ 0001:00004484 0000000E C=CODE     S=.text    G=(none)   M=EditIntf ACBP=A9
+ 0001:00004494 0000000E C=CODE     S=.text    G=(none)   M=VirtIntf ACBP=A9
+ 0001:000044A4 0000000E C=CODE     S=.text    G=(none)   M=Events   ACBP=A9
+ 0001:000044B4 0000000E C=CODE     S=.text    G=(none)   M=ToolUtils ACBP=A9
+ 0001:000044C4 0000000E C=CODE     S=.text    G=(none)   M=Update   ACBP=A9
+ 0001:000044D4 0000000E C=CODE     S=.text    G=(none)   M=LibConst ACBP=A9
+ 0001:000044E4 0000000E C=CODE     S=.text    G=(none)   M=Designer ACBP=A9
+ 0001:000044F4 0000000E C=CODE     S=.text    G=(none)   M=TopLevels ACBP=A9
+ 0001:00004504 0000000E C=CODE     S=.text    G=(none)   M=StFilSys ACBP=A9
+ 0001:00004514 0000000E C=CODE     S=.text    G=(none)   M=IStreams ACBP=A9
+ 0001:00004524 0000000E C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00004534 0000022E C=CODE     S=.text    G=(none)   M=TreeIntf ACBP=A9
+ 0001:00004764 0000013F C=CODE     S=.text    G=(none)   M=WSvcReg  ACBP=A9
+ 0001:000048A4 00000870 C=CODE     S=.text    G=(none)   M=NwAppServices ACBP=A9
+ 0001:00005114 00000EAC C=CODE     S=.text    G=(none)   M=NwSiteSrv ACBP=A9
+ 0001:00005FC0 0000001E C=CODE     S=.text    G=(none)   M=SiteProd ACBP=A9
+ 0001:00005FE0 00000016 C=CODE     S=.text    G=(none)   M=WebForm  ACBP=A9
+ 0001:00005FF8 0000000E C=CODE     S=.text    G=(none)   M=DSProd   ACBP=A9
+ 0001:00006008 00000584 C=CODE     S=.text    G=(none)   M=ActiveScriptCat ACBP=A9
+ 0001:0000658C 0000073E C=CODE     S=.text    G=(none)   M=WProdReg ACBP=A9
+ 0001:00006CCC 0000860C C=CODE     S=.text    G=(none)   M=SiteWiz  ACBP=A9
+ 0001:0000F2D8 00000D99 C=CODE     S=.text    G=(none)   M=DsgnCntxt ACBP=A9
+ 0001:00010074 0000000E C=CODE     S=.text    G=(none)   M=DBAdapt  ACBP=A9
+ 0001:00010084 0000000E C=CODE     S=.text    G=(none)   M=DBAdaptImg ACBP=A9
+ 0001:00010094 0000000E C=CODE     S=.text    G=(none)   M=jpeg     ACBP=A9
+ 0001:000100A4 0000000E C=CODE     S=.text    G=(none)   M=JConsts  ACBP=A9
+ 0001:000100B4 00000026 C=CODE     S=.text    G=(none)   M=InetReg  ACBP=A9
+ 0001:000100DC 0000000E C=CODE     S=.text    G=(none)   M=StrEdit  ACBP=A9
+ 0001:000100EC 0000000E C=CODE     S=.text    G=(none)   M=ValueEdit ACBP=A9
+ 0001:000100FC 0000000E C=CODE     S=.text    G=(none)   M=ValEdit  ACBP=A9
+ 0001:0001010C 0000000E C=CODE     S=.text    G=(none)   M=Grids    ACBP=A9
+ 0001:0001011C 0000000E C=CODE     S=.text    G=(none)   M=Mask     ACBP=A9
+ 0001:0001012C 0000000E C=CODE     S=.text    G=(none)   M=StringsEdit ACBP=A9
+ 0001:0001013C 00000016 C=CODE     S=.text    G=(none)   M=ColnEdit ACBP=A9
+ 0001:00010154 0000000E C=CODE     S=.text    G=(none)   M=ToolWnds ACBP=A9
+ 0001:00010164 0000000E C=CODE     S=.text    G=(none)   M=DesignWindows ACBP=A9
+ 0001:00010174 0000000E C=CODE     S=.text    G=(none)   M=xmldom   ACBP=A9
+ 0001:00010184 0000000E C=CODE     S=.text    G=(none)   M=msxmldom ACBP=A9
+ 0001:00010194 0000000E C=CODE     S=.text    G=(none)   M=msxml    ACBP=A9
+ 0001:000101A4 0000000E C=CODE     S=.text    G=(none)   M=XMLDoc   ACBP=A9
+ 0001:000101B4 0000000E C=CODE     S=.text    G=(none)   M=XMLIntf  ACBP=A9
+ 0001:000101C4 0000000E C=CODE     S=.text    G=(none)   M=XMLSchema ACBP=A9
+ 0001:000101D4 0000000E C=CODE     S=.text    G=(none)   M=XMLSchemaTags ACBP=A9
+ 0001:000101E4 0000000E C=CODE     S=.text    G=(none)   M=XMLBindExpert ACBP=A9
+ 0001:000101F4 0000000E C=CODE     S=.text    G=(none)   M=XMLBindPasGen ACBP=A9
+ 0001:00010204 0000000E C=CODE     S=.text    G=(none)   M=XMLBindMgr ACBP=A9
+ 0001:00010214 0000000E C=CODE     S=.text    G=(none)   M=XMLBindCppGen ACBP=A9
+ 0001:00010224 0000000E C=CODE     S=.text    G=(none)   M=XMLBindConst ACBP=A9
+ 0001:00010234 0000000E C=CODE     S=.text    G=(none)   M=XMLBindForm ACBP=A9
+ 0001:00010244 0000000E C=CODE     S=.text    G=(none)   M=XDRSchema ACBP=A9
+ 0001:00010254 0000000E C=CODE     S=.text    G=(none)   M=XMLDataToSchema ACBP=A9
+ 0001:00010264 0000000E C=CODE     S=.text    G=(none)   M=DTDSchema ACBP=A9
+ 0001:00010274 0000000E C=CODE     S=.text    G=(none)   M=PasSym   ACBP=A9
+ 0001:00010284 0000000E C=CODE     S=.text    G=(none)   M=Symbols  ACBP=A9
+ 0001:00010294 0000000E C=CODE     S=.text    G=(none)   M=CppSym   ACBP=A9
+ 0001:000102A4 0000000E C=CODE     S=.text    G=(none)   M=XMLBindOptions ACBP=A9
+ 0001:000102B4 0000000E C=CODE     S=.text    G=(none)   M=ExptIntf ACBP=A9
+ 0001:000102C4 0000000E C=CODE     S=.text    G=(none)   M=ToolIntf ACBP=A9
+ 0001:000102D4 0000000E C=CODE     S=.text    G=(none)   M=FileIntf ACBP=A9
+ 0001:000102E4 0000000E C=CODE     S=.text    G=(none)   M=SocketsEditor ACBP=A9
+ 0001:000102F4 0000000E C=CODE     S=.text    G=(none)   M=Sockets  ACBP=A9
+ 0001:00010304 00000038 C=CODE     S=.text    G=(none)   M=WinSock  ACBP=A9
+ 0001:0001033C 0000000E C=CODE     S=.text    G=(none)   M=oxmldom  ACBP=A9
+ 0001:0001034C 0000000E C=CODE     S=.text    G=(none)   M=xdom     ACBP=A9
+ 0001:0001035C 0000000E C=CODE     S=.text    G=(none)   M=DBXpressWeb ACBP=A9
+ 0001:0001036C 0000000E C=CODE     S=.text    G=(none)   M=SqlExpr  ACBP=A9
+ 0001:0001037C 0000000E C=CODE     S=.text    G=(none)   M=DBXpress ACBP=A9
+ 0001:0001038C 0000000E C=CODE     S=.text    G=(none)   M=DBConnAdmin ACBP=A9
+ 0001:0001039C 0000000E C=CODE     S=.text    G=(none)   M=SqlConst ACBP=A9
+ 0001:000103AC 0000000E C=CODE     S=.text    G=(none)   M=DBBdeWeb ACBP=A9
+ 0001:000103BC 0000000E C=CODE     S=.text    G=(none)   M=DBTables ACBP=A9
+ 0001:000103CC 0000000E C=CODE     S=.text    G=(none)   M=SMINTF   ACBP=A9
+ 0001:000103DC 0000000E C=CODE     S=.text    G=(none)   M=BDE      ACBP=A9
+ 0001:000103EC 0000000E C=CODE     S=.text    G=(none)   M=bdeconst ACBP=A9
+ 0001:000103FC 0000000E C=CODE     S=.text    G=(none)   M=LibHelp  ACBP=A9
+ 0001:0001040C 0000000E C=CODE     S=.text    G=(none)   M=HtColEdt ACBP=A9
+ 0001:0001041C 0000000E C=CODE     S=.text    G=(none)   M=MSHTML   ACBP=A9
+ 0001:0001042C 0000000E C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:0001043C 0000000E C=CODE     S=.text    G=(none)   M=OleConst ACBP=A9
+ 0001:0001044C 0000000E C=CODE     S=.text    G=(none)   M=OleServer ACBP=A9
+ 0001:0001045C 0000000E C=CODE     S=.text    G=(none)   M=SHDocVw  ACBP=A9
+ 0001:0001046C 0000000E C=CODE     S=.text    G=(none)   M=HostIE   ACBP=A9
+ 0001:0001047C 0000000E C=CODE     S=.text    G=(none)   M=IDocIntf ACBP=A9
+ 0001:0001048C 000000AE C=CODE     S=.text    G=(none)   M=WCmpEdit ACBP=A9
+ 0001:0001053C 0000000E C=CODE     S=.text    G=(none)   M=AddWComp ACBP=A9
+ 0001:0001054C 0000000E C=CODE     S=.text    G=(none)   M=DsnConst ACBP=A9
+ 0001:0001055C 0000000E C=CODE     S=.text    G=(none)   M=StdConst ACBP=A9
+ 0001:0001056C 00000016 C=CODE     S=.text    G=(none)   M=AddWFld  ACBP=A9
+ 0001:00010584 0000000E C=CODE     S=.text    G=(none)   M=WbmDCnst ACBP=A9
+ 0001:00010594 000034E8 C=CODE     S=.text    G=(none)   M=SiteEdit ACBP=A9
+ 0001:00013A7C 0000000E C=CODE     S=.text    G=(none)   M=DsnDb    ACBP=A9
+ 0001:00013A8C 0000000E C=CODE     S=.text    G=(none)   M=DiagramSupport ACBP=A9
+ 0001:00013A9C 0000000E C=CODE     S=.text    G=(none)   M=DiagramViewModels ACBP=A9
+ 0001:00013AAC 0000000E C=CODE     S=.text    G=(none)   M=ModelPrimitives ACBP=A9
+ 0001:00013ABC 0000000E C=CODE     S=.text    G=(none)   M=ModelFactories ACBP=A9
+ 0001:00013ACC 0000000E C=CODE     S=.text    G=(none)   M=ModelDesigner ACBP=A9
+ 0001:00013ADC 0000000E C=CODE     S=.text    G=(none)   M=ModelViews ACBP=A9
+ 0001:00013AEC 0000000E C=CODE     S=.text    G=(none)   M=ModelTypes ACBP=A9
+ 0001:00013AFC 0000000E C=CODE     S=.text    G=(none)   M=ModelClasses ACBP=A9
+ 0001:00013B0C 0000000E C=CODE     S=.text    G=(none)   M=StringScanner ACBP=A9
+ 0001:00013B1C 0000000E C=CODE     S=.text    G=(none)   M=ModelUtils ACBP=A9
+ 0001:00013B2C 0000000E C=CODE     S=.text    G=(none)   M=ModelCaps ACBP=A9
+ 0001:00013B3C 0000000E C=CODE     S=.text    G=(none)   M=ModelControl ACBP=A9
+ 0001:00013B4C 0000000E C=CODE     S=.text    G=(none)   M=EditorViewSupport ACBP=A9
+ 0001:00013B5C 0000000E C=CODE     S=.text    G=(none)   M=DSDefine ACBP=A9
+ 0001:00013B6C 0000000E C=CODE     S=.text    G=(none)   M=DSDesign ACBP=A9
+ 0001:00013B7C 0000000E C=CODE     S=.text    G=(none)   M=DrpCtrls ACBP=A9
+ 0001:00013B8C 0000000E C=CODE     S=.text    G=(none)   M=DsnDBCst ACBP=A9
+ 0001:00013B9C 0000000E C=CODE     S=.text    G=(none)   M=DBCtrls  ACBP=A9
+ 0001:00013BAC 0000000E C=CODE     S=.text    G=(none)   M=VDBConsts ACBP=A9
+ 0001:00013BBC 0000000E C=CODE     S=.text    G=(none)   M=DBPWDlg  ACBP=A9
+ 0001:00013BCC 0000000E C=CODE     S=.text    G=(none)   M=DBLogDlg ACBP=A9
+ 0001:00013BDC 0000000E C=CODE     S=.text    G=(none)   M=DSAdd    ACBP=A9
+ 0001:00013BEC 0000000E C=CODE     S=.text    G=(none)   M=DBGrids  ACBP=A9
+ 0001:00013BFC 0000371C C=CODE     S=.text    G=(none)   M=WebSprig ACBP=A9
+ 0001:00017318 00000036 C=CODE     S=.text    G=(none)   M=WCompReg ACBP=A9
+ 0001:00017350 0000000E C=CODE     S=.text    G=(none)   M=Xmlxform ACBP=A9
+ 0001:00017360 0000000E C=CODE     S=.text    G=(none)   M=xmlutil  ACBP=A9
+ 0001:00017370 0000000E C=CODE     S=.text    G=(none)   M=WItemEdt ACBP=A9
+ 0001:00017380 0000000E C=CODE     S=.text    G=(none)   M=WFldEdit ACBP=A9
+ 0001:00017390 0000000E C=CODE     S=.text    G=(none)   M=MConnect ACBP=A9
+ 0001:000173A0 0000000E C=CODE     S=.text    G=(none)   M=SConnect ACBP=A9
+ 0001:000173B0 0000000E C=CODE     S=.text    G=(none)   M=ScktComp ACBP=A9
+ 0001:000173C0 0000000E C=CODE     S=.text    G=(none)   M=SItemEdt ACBP=A9
+ 0001:000173D0 00000478 C=CODE     S=.text    G=(none)   M=InetFileTypeReg ACBP=A9
+ 0001:00017848 0000000E C=CODE     S=.text    G=(none)   M=XSLProd  ACBP=A9
+ 0001:00017858 00002A4B C=CODE     S=.text    G=(none)   M=SiteReg  ACBP=A9
+ 0001:0001A2A4 00000DC0 C=CODE     S=.text    G=(none)   M=ActivDbgLib ACBP=A9
+ 0001:0001B064 00000FC8 C=CODE     S=.text    G=(none)   M=DbgSite  ACBP=A9
+ 0001:0001C02C 000003A2 C=CODE     S=.text    G=(none)   M=DesignerDbgSite ACBP=A9
+ 0001:0001C3D0 00000805 C=CODE     S=.text    G=(none)   M=dclwebsnap ACBP=A9
+ 0002:00000000 00000028 C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00000028 00000010 C=DATA     S=.data    G=DGROUP   M=ActiveScriptCat ACBP=A9
+ 0002:00000038 00000068 C=DATA     S=.data    G=DGROUP   M=SiteWiz  ACBP=A9
+ 0002:000000A0 00000330 C=DATA     S=.data    G=DGROUP   M=ActivDbgLib ACBP=A9
+ 0002:000003D0 00000001 C=DATA     S=.data    G=DGROUP   M=DesignerDbgSite ACBP=A9
+ 0002:00001000 00000018 C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00001018 00000004 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0002:0000101C 00000004 C=BSS      S=.bss     G=DGROUP   M=Messages ACBP=A9
+ 0002:00001020 00000004 C=BSS      S=.bss     G=DGROUP   M=ShlObj   ACBP=A9
+ 0002:00001024 00000004 C=BSS      S=.bss     G=DGROUP   M=UrlMon   ACBP=A9
+ 0002:00001028 00000004 C=BSS      S=.bss     G=DGROUP   M=WinInet  ACBP=A9
+ 0002:0000102C 00000004 C=BSS      S=.bss     G=DGROUP   M=RegStr   ACBP=A9
+ 0002:00001030 00000004 C=BSS      S=.bss     G=DGROUP   M=ShellAPI ACBP=A9
+ 0002:00001034 00000004 C=BSS      S=.bss     G=DGROUP   M=CommCtrl ACBP=A9
+ 0002:00001038 00000004 C=BSS      S=.bss     G=DGROUP   M=Imm      ACBP=A9
+ 0002:0000103C 00000004 C=BSS      S=.bss     G=DGROUP   M=WinSpool ACBP=A9
+ 0002:00001040 00000004 C=BSS      S=.bss     G=DGROUP   M=CommDlg  ACBP=A9
+ 0002:00001044 00000004 C=BSS      S=.bss     G=DGROUP   M=Dlgs     ACBP=A9
+ 0002:00001048 00000004 C=BSS      S=.bss     G=DGROUP   M=RichEdit ACBP=A9
+ 0002:0000104C 00000008 C=BSS      S=.bss     G=DGROUP   M=ProdTemplateReg ACBP=A9
+ 0002:00001054 00000004 C=BSS      S=.bss     G=DGROUP   M=NwPageFrame ACBP=A9
+ 0002:00001058 00000008 C=BSS      S=.bss     G=DGROUP   M=NwWebPageMod ACBP=A9
+ 0002:00001060 00000008 C=BSS      S=.bss     G=DGROUP   M=NwWebDataMod ACBP=A9
+ 0002:00001068 00000008 C=BSS      S=.bss     G=DGROUP   M=NwAppPage ACBP=A9
+ 0002:00001070 00000008 C=BSS      S=.bss     G=DGROUP   M=WSvcReg  ACBP=A9
+ 0002:00001078 00000008 C=BSS      S=.bss     G=DGROUP   M=NwAppServices ACBP=A9
+ 0002:00001080 0000000C C=BSS      S=.bss     G=DGROUP   M=NwSiteSrv ACBP=A9
+ 0002:0000108C 00000008 C=BSS      S=.bss     G=DGROUP   M=ActiveScriptCat ACBP=A9
+ 0002:00001094 00000010 C=BSS      S=.bss     G=DGROUP   M=WProdReg ACBP=A9
+ 0002:000010A4 00000010 C=BSS      S=.bss     G=DGROUP   M=SiteWiz  ACBP=A9
+ 0002:000010B4 00000008 C=BSS      S=.bss     G=DGROUP   M=DsgnCntxt ACBP=A9
+ 0002:000010BC 00000004 C=BSS      S=.bss     G=DGROUP   M=WinSock  ACBP=A9
+ 0002:000010C0 00000004 C=BSS      S=.bss     G=DGROUP   M=SiteEdit ACBP=A9
+ 0002:000010C4 00000004 C=BSS      S=.bss     G=DGROUP   M=WebSprig ACBP=A9
+ 0002:000010C8 00000008 C=BSS      S=.bss     G=DGROUP   M=InetFileTypeReg ACBP=A9
+ 0002:000010D0 00000004 C=BSS      S=.bss     G=DGROUP   M=SiteReg  ACBP=A9
+ 0002:000010D4 00000004 C=BSS      S=.bss     G=DGROUP   M=ActivDbgLib ACBP=A9
+ 0002:000010D8 00000024 C=BSS      S=.bss     G=DGROUP   M=DbgSite  ACBP=A9
+ 0002:000010FC 00000004 C=BSS      S=.bss     G=DGROUP   M=DesignerDbgSite ACBP=A9
+
+
+  Address         Publics by Name
+
+ 0002:0000101C       .1
+ 0002:0000102C       .1
+ 0002:000010D4       .1
+ 0002:00001044       .1
+ 0002:00001010       .1
+ 0002:00001048       .1
+ 0002:00001040       .1
+ 0002:00001020       .1
+ 0002:00001028       .1
+ 0002:00001030       .1
+ 0002:00001034       .1
+ 0002:00001070       .1
+ 0002:000010BC       .1
+ 0002:00001038       .1
+ 0002:00001024       .1
+ 0002:0000104C       .11
+ 0002:00001064       .2
+ 0002:00001080       .2
+ 0002:0000106C       .2
+ 0002:0000107C       .2
+ 0002:0000109C       .2
+ 0002:00001054       .2
+ 0002:0000108C       .2
+ 0002:0000105C       .2
+ 0002:000010FC       .2
+ 0002:000010C8       .3
+ 0002:0000103C       .3
+ 0002:000010D8       .3
+ 0002:00001018       .3
+ 0002:000010A4       .43
+ 0002:000010B4       .5
+ 0002:000010D0       .51
+ 0002:000010C0       .81
+ 0002:000010C4       .82
+ 0001:0001CBB0       @GetPackageInfoTable
+ 0001:000003C0       @InitPkg
+ 0001:0001CBB8       @PackageLoad
+ 0001:00000424       @PackageLoad
+ 0001:00000430       @PackageUnload
+ 0001:0001CBC4       @PackageUnload
+ 0001:0001B05C       ActivDbgLib
+ 0001:00006584       ActiveScriptCat
+ 0001:0000BE40       AddOption
+ 0001:0000CD3C       AddService
+ 0001:000002C0       AllocTlsBuffer
+ 0002:00001084       Arg
+ 0001:00003B88       CacheModeToIndex
+ 0002:00000028       CATID_ActiveScriptParse
+ 0001:00011E0C       Clear
+ 0001:000008B4       CommCtrl
+ 0001:00000D74       CommDlg
+ 0001:0001B880       CreateDebugManager
+ 0001:00003BB0       CreateModeToIndex
+ 0001:000118D8       CreateUniqueName
+ 0001:00011634       CrunchFieldName
+ 0001:0001C024       DbgSite
+ 0001:0001CBD0       dclwebsnap
+ 0002:00000038       DefaultServiceClasses
+ 0001:0001C398       DesignerDbgSite
+ 0001:00000DAC       Dlgs
+ 0001:0000DB40       DoneWeb
+ 0001:00010040       DsgnCntxt
+ 0001:000175E8       EnumInetFileTypes
+ 0001:00006908       EnumRegisteredModulePageProducers
+ 0001:00001E40       EnumRegisteredProducerTemplates
+ 0001:00001E88       EnumRegisteredProducerTemplatesOfClass
+ 0001:00004810       EnumRegisteredWebAppServices
+ 0002:000010DC       ExcepInfo
+ 0001:0000036C       ExitProcessTLS
+ 0001:00000344       ExitThreadTLS
+ 0002:000010CC       FileTypesList
+ 0001:000026E0       Finalization
+ 0001:00019FEC       Finalization
+ 0001:000177C8       Finalization
+ 0001:000172E0       Finalization
+ 0001:00013A44       Finalization
+ 0001:00010304       Finalization
+ 0001:0000FFD8       Finalization
+ 0001:0000F1E0       Finalization
+ 0001:0000385C       Finalization
+ 0001:00000E8C       Finalization
+ 0001:00000D7C       Finalization
+ 0001:00000D44       Finalization
+ 0001:00000CD4       Finalization
+ 0001:00000C6C       Finalization
+ 0001:00000884       Finalization
+ 0001:0000084C       Finalization
+ 0001:00000814       Finalization
+ 0001:000007DC       Finalization
+ 0001:000007A4       Finalization
+ 0001:00006C54       Finalization
+ 0001:0000076C       Finalization
+ 0001:00003D48       Finalization
+ 0001:000006BC       Finalization
+ 0001:000004C4       Finalization
+ 0001:00006548       Finalization
+ 0001:00004068       Finalization
+ 0001:0001B02C       Finalization
+ 0001:0000043C       Finalization
+ 0001:00005F7C       Finalization
+ 0001:0001BFE4       Finalization
+ 0001:0001C344       Finalization
+ 0001:000050DC       Finalization
+ 0001:000043F4       Finalization
+ 0001:0000484C       Finalization
+ 0001:0001767C       FindInetFileExt
+ 0001:00017630       FindInetFileType
+ 0001:0000FA5C       FindModuleComponent
+ 0001:0000F974       FindModuleInfo
+ 0001:00006948       FindModulePageProducerInfo
+ 0001:0000F7F4       FindPageFileName
+ 0001:00000494       FindResource
+ 0001:0000B7D8       FormatSubObjects
+ 0001:0000B6F4       FormatSubProperties
+ 0002:00001088       Found
+ 0001:00000288       FreeLibrary
+ 0001:000116B0       GenerateName
+ 0001:00009108       GetActiveProject
+ 0001:00009040       GetActiveProjectGroup
+ 0001:000061A8       GetActiveScriptParse
+ 0001:0000CF80       GetAppModuleComponents
+ 0002:00001094       GetDefaultTemplateFileExt
+ 0001:00009204       GetHTMLFileExt
+ 0001:00009268       GetHTMLSampleImage
+ 0001:0000697C       GetHTMLTemplateFileExt
+ 0001:0000F8AC       GetProjectGroup
+ 0001:00018478       GetPropertyValue
+ 0001:00009160       GetRegKey
+ 0001:0000C350       GetTemplateExt
+ 0001:000002CC       GetTlsSize
+ 0001:00018ACC       GetTopParent
+ 0001:00008FF0       GetWebAppServices
+ 0001:0000FCCC       GetWebContext
+ 0001:000069B0       GetXSLTemplateFileExt
+ 0001:00011D8C       HasChildItems
+ 0002:0000100C       HInstance
+ 0002:000000B0       IID_IActiveScriptDebug
+ 0002:000001B0       IID_IActiveScriptErrorDebug
+ 0002:00000110       IID_IActiveScriptSiteDebug
+ 0002:000001A0       IID_IApplicationDebugger
+ 0002:00000310       IID_IApplicationDebuggerUI
+ 0002:00000130       IID_IDebugApplication
+ 0002:000001E0       IID_IDebugApplicationNode
+ 0002:00000380       IID_IDebugApplicationNodeEvents
+ 0002:00000170       IID_IDebugApplicationThread
+ 0002:00000250       IID_IDebugAsyncOperation
+ 0002:00000260       IID_IDebugAsyncOperationCallBack
+ 0002:000000D0       IID_IDebugCodeContext
+ 0002:00000390       IID_IDebugCookie
+ 0002:00000100       IID_IDebugDocument
+ 0002:000000E0       IID_IDebugDocumentContext
+ 0002:000002E0       IID_IDebugDocumentHelper
+ 0002:000002F0       IID_IDebugDocumentHost
+ 0002:000000F0       IID_IDebugDocumentInfo
+ 0002:000001D0       IID_IDebugDocumentProvider
+ 0002:000002A0       IID_IDebugDocumentText
+ 0002:000002C0       IID_IDebugDocumentTextAuthor
+ 0002:000002B0       IID_IDebugDocumentTextEvents
+ 0002:000002D0       IID_IDebugDocumentTextExternalAuthor
+ 0002:00000220       IID_IDebugExpression
+ 0002:00000230       IID_IDebugExpressionCallBack
+ 0002:00000210       IID_IDebugExpressionContext
+ 0002:000003A0       IID_IDebugFormatter
+ 0002:000003C0       IID_IDebugHelper
+ 0002:00000190       IID_IDebugProperty
+ 0002:00000300       IID_IDebugSessionProvider
+ 0002:00000160       IID_IDebugStackFrame
+ 0002:00000270       IID_IDebugStackFrameSniffer
+ 0002:00000290       IID_IDebugStackFrameSnifferEx
+ 0002:00000240       IID_IDebugSyncOperation
+ 0002:00000180       IID_IDebugThreadCall
+ 0002:000001F0       IID_IEnumDebugApplicationNodes
+ 0002:000000C0       IID_IEnumDebugCodeContexts
+ 0002:00000200       IID_IEnumDebugExpressionContexts
+ 0002:00000150       IID_IEnumDebugStackFrames
+ 0002:00000330       IID_IEnumRemoteDebugApplications
+ 0002:000001C0       IID_IEnumRemoteDebugApplicationThreads
+ 0002:00000320       IID_IMachineDebugManager
+ 0002:00000340       IID_IMachineDebugManagerCookie
+ 0002:00000350       IID_IMachineDebugManagerEvents
+ 0002:00000360       IID_IProcessDebugManager
+ 0002:00000280       IID_IProvideExpressionContexts
+ 0002:00000120       IID_IRemoteDebugApplication
+ 0002:00000370       IID_IRemoteDebugApplicationEvents
+ 0002:00000140       IID_IRemoteDebugApplicationThread
+ 0002:000003B0       IID_ISimpleConnectionPoint
+ 0001:00000C9C       Imm
+ 0001:0001B3D8       IncSecond
+ 0001:00003B74       IndexToCacheMode
+ 0001:00003B9C       IndexToCreateMode
+ 0001:0001780C       InetFileTypeReg
+ 0001:00000390       InitializeModule
+ 0001:00000318       InitProcessTLS
+ 0001:000002D4       InitThreadTLS
+ 0001:0000DA94       InitWeb
+ 0002:00000058       IsDelphi
+ 0001:00011874       IsUnique
+ 0002:000000A0       LIBID_ActivDbg
+ 0001:00002BEC       ListChanged
+ 0001:000004AC       LoadIcon
+ 0001:0000049C       LoadResource
+ 0001:00000290       LocalAlloc
+ 0001:00000298       LocalFree
+ 0001:000004A4       LockResource
+ 0001:000006EC       Messages
+ 0002:00000000       Module
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0002:000010A0       ModulePageProducers
+ 0002:00001068       NewWebAppPageForm
+ 0002:00001078       NewWebAppServices
+ 0002:00001060       NewWebDataModForm
+ 0002:00001058       NewWebPageForm
+ 0002:00001098       NoScriptEngines
+ 0001:00004424       NwAppPage
+ 0001:0000510C       NwAppServices
+ 0001:0000388C       NwPageFrame
+ 0001:00005FB8       NwSiteSrv
+ 0001:00004098       NwWebDataMod
+ 0001:00003D78       NwWebPageMod
+ 0001:00002718       ProdTemplateReg
+ 0002:00001050       ProducerTemplatesInfoList
+ 0002:00001090       ProgIDList
+ 0002:000010AC       ProjectCoClassName
+ 0002:000010A8       ProjectType
+ 0002:0000005C       PROJ_EXT
+ 0001:00000474       RegCloseKey
+ 0001:0000047C       RegEnumKey
+ 0001:00008ED4       Register
+ 0001:00018BE8       Register
+ 0001:000175A8       RegisterInetFileType
+ 0001:000066A4       RegisterModulePageProducers
+ 0001:00001D50       RegisterProducerTemplates
+ 0001:000047AC       RegisterWebAppServices
+ 0001:00000484       RegOpenKey
+ 0001:0000048C       RegQueryValue
+ 0001:00000844       RegStr
+ 0001:0000AB20       RestoreWebAppDefaults
+ 0001:0000A2CC       RestoreWebPageDefaults
+ 0001:00000EBC       RichEdit
+ 0002:00000064       sAppModuleTypeNames
+ 0001:0000A704       SaveWebAppDefaults
+ 0001:0000A038       SaveWebPageDefaults
+ 0001:0000CE10       ServiceToPropertyName
+ 0002:000003D0       SetBreak
+ 0001:0000FCD4       SetWebContext
+ 0001:0000087C       ShellAPI
+ 0001:0000079C       ShlObj
+ 0001:00013A74       SiteEdit
+ 0001:0001A28C       SiteReg
+ 0001:0000F298       SiteWiz
+ 0001:0000D840       SkipComment
+ 0001:0000D86C       SkipCommentBlock
+ 0001:0000D898       SkipContent
+ 0002:0000006C       sProjectTypeNames
+ 0001:000004B4       Succeeded
+ 0002:00000080       sWebAppServiceTypeNames
+ 0001:0000046C       SysInit
+ 0001:00001F4C       TAbstractProducerTemplate.GetName
+ 0001:00001F58       TAbstractProducerTemplate.GetText
+ 0001:00001F6C       TAbstractProducerTemplate.IsDefault
+ 0001:00001F70       TAbstractProducerTemplate.SupportsClass
+ 0001:00001F74       TAbstractProducerTemplate.SupportsFileType
+ 0001:00001FA4       TAbstractProducerTemplate.SupportsScriptEngine
+ 0001:00001FD4       TAbstractProducerTemplates.GetCount
+ 0001:00001FD8       TAbstractProducerTemplates.GetTemplate
+ 0001:00015F20       TAbstractSprigEditor.Create
+ 0001:00015F74       TAbstractSprigEditor.Destroy
+ 0001:00015EF8       TAbstractSprigEditor.GetDesigner
+ 0001:0001675C       TAbstractWebComponentListSprig.AddType
+ 0001:00016768       TAbstractWebComponentListSprig.AddTypeCount
+ 0001:00016688       TAbstractWebComponentListSprig.Caption
+ 0001:00016700       TAbstractWebComponentListSprig.Create
+ 0001:000166A4       TAbstractWebComponentListSprig.CustomDelete
+ 0001:000166A0       TAbstractWebComponentListSprig.DeleteStyle
+ 0001:00016794       TAbstractWebComponentListSprig.Destroy
+ 0001:000166A8       TAbstractWebComponentListSprig.FigureParent
+ 0001:00016774       TAbstractWebComponentListSprig.GetAddType
+ 0001:000167E0       TAbstractWebComponentListSprig.GetEditorClass
+ 0001:000166BC       TAbstractWebComponentListSprig.Name
+ 0001:00016790       TAbstractWebComponentListSprig.Owner
+ 0001:000167E4       TAbstractWebComponentListSprig.PrepareMenu
+ 0001:000167D4       TAbstractWebComponentListSprig.SetComponent
+ 0001:000167C4       TAbstractWebComponentListSprig.SetOwner
+ 0001:000166B8       TAbstractWebComponentListSprig.SortByIndex
+ 0001:000131F0       TAbstractWebEditorHelper.AddType
+ 0001:00013210       TAbstractWebEditorHelper.AddTypeCount
+ 0001:00012F40       TAbstractWebEditorHelper.ExecuteAddItem
+ 0001:00012F44       TAbstractWebEditorHelper.ExecuteOtherItem
+ 0001:000130D8       TAbstractWebEditorHelper.ExecuteVerb
+ 0001:00012F48       TAbstractWebEditorHelper.GetAddItem
+ 0001:00012F4C       TAbstractWebEditorHelper.GetAddItemCount
+ 0001:00012F50       TAbstractWebEditorHelper.GetAddItemState
+ 0001:000131F8       TAbstractWebEditorHelper.GetAddType
+ 0001:00012F5C       TAbstractWebEditorHelper.GetOtherItem
+ 0001:00012F60       TAbstractWebEditorHelper.GetOtherItemCount
+ 0001:00012F64       TAbstractWebEditorHelper.GetOtherItemState
+ 0001:00013120       TAbstractWebEditorHelper.GetVerb
+ 0001:00013170       TAbstractWebEditorHelper.GetVerbCount
+ 0001:000131A0       TAbstractWebEditorHelper.GetVerbState
+ 0001:000130B8       TAbstractWebEditorHelper.HandleOtherItemClick
+ 0001:00013218       TAbstractWebEditorHelper.LockState
+ 0001:00012FD4       TAbstractWebEditorHelper.PrepareMenu
+ 0001:0001321C       TAbstractWebEditorHelper.SetSelection
+ 0001:00013220       TAbstractWebEditorHelper.UnlockState
+ 0001:000119FC       TAbstractWebFieldsEditor.AddFields
+ 0001:00011974       TAbstractWebFieldsEditor.AnySelection
+ 0001:00011A08       TAbstractWebFieldsEditor.Create
+ 0001:00011A50       TAbstractWebFieldsEditor.Destroy
+ 0001:00011968       TAbstractWebFieldsEditor.ExecuteVerb
+ 0001:000119F0       TAbstractWebFieldsEditor.GetFieldsList
+ 0001:00011AA8       TAbstractWebFieldsEditor.GetVerb
+ 0001:00011D80       TAbstractWebFieldsEditor.GetVerbCount
+ 0001:00011A8C       TAbstractWebFieldsEditor.GetVerbState
+ 0001:000119A0       TAbstractWebFieldsEditor.IsFieldInUse
+ 0001:00011A80       TAbstractWebFieldsEditor.RestoreDefaults
+ 0001:00011AC4       TAbstractWebFieldsEditor.SetHelper
+ 0001:0001193C       TAbstractWebFieldsEditor.UniqueName
+ 0001:00011EAC       TAbstractWebFieldsEditorHelper.AddFields
+ 0001:00011AE8       TAbstractWebFieldsEditorHelper.ExecuteAddItem
+ 0001:00011B30       TAbstractWebFieldsEditorHelper.ExecuteOtherItem
+ 0001:00011C68       TAbstractWebFieldsEditorHelper.GetAddAllFieldsItem
+ 0001:00012200       TAbstractWebFieldsEditorHelper.GetAddFieldsDlgCaption
+ 0001:000121B8       TAbstractWebFieldsEditorHelper.GetAddFieldsEditorIntf
+ 0001:00011BFC       TAbstractWebFieldsEditorHelper.GetAddFieldsItem
+ 0001:00011CD4       TAbstractWebFieldsEditorHelper.GetAddItem
+ 0001:00011D60       TAbstractWebFieldsEditorHelper.GetAddItemCount
+ 0001:00011B68       TAbstractWebFieldsEditorHelper.GetAddItemState
+ 0001:0001226C       TAbstractWebFieldsEditorHelper.GetDefaultAddAllFieldsItem
+ 0001:00012280       TAbstractWebFieldsEditorHelper.GetDefaultAddFieldsDlgCaption
+ 0001:00012294       TAbstractWebFieldsEditorHelper.GetDefaultAddFieldsItem
+ 0001:000122A8       TAbstractWebFieldsEditorHelper.GetDefaultNewFieldPrefix
+ 0001:000122B4       TAbstractWebFieldsEditorHelper.GetNewFieldPrefix
+ 0001:00011D20       TAbstractWebFieldsEditorHelper.GetOtherItem
+ 0001:00011D70       TAbstractWebFieldsEditorHelper.GetOtherItemCount
+ 0001:00011BBC       TAbstractWebFieldsEditorHelper.GetOtherItemState
+ 0001:00012108       TAbstractWebFieldsEditorHelper.RestoreDefaults
+ 0001:00012B20       TAbstractWebNewEditorHelper.CheckClass
+ 0001:00012320       TAbstractWebNewEditorHelper.CreateFields
+ 0001:00012EC0       TAbstractWebNewEditorHelper.ExecuteAddItem
+ 0001:00012ED0       TAbstractWebNewEditorHelper.GetAddItem
+ 0001:00012EE4       TAbstractWebNewEditorHelper.GetAddItemCount
+ 0001:00012EEC       TAbstractWebNewEditorHelper.GetAddItemState
+ 0001:00012F10       TAbstractWebNewEditorHelper.InitializeField
+ 0001:00012D4C       TAbstractWebNewEditorHelper.InsertFrame
+ 0001:00012D50       TAbstractWebNewEditorHelper.InsertNewComponent
+ 0001:00012BAC       TAbstractWebNewEditorHelper.NewComponent
+ 0001:00012E34       TAbstractWebNewEditorHelper.UniqueName
+ 0001:00012F38       TAbstractWebNewEditorHelper.WebComponentInserted
+ 0001:00012F3C       TAbstractWebNewEditorHelper.WebComponentsCleared
+ 0001:000064B0       TActiveScriptEngines.Create
+ 0001:00006520       TActiveScriptEngines.GetCount
+ 0001:0000652C       TActiveScriptEngines.GetItems
+ 0001:00018458       TAdapterActionNameActionNameProperty.GetAttributes
+ 0001:000184BC       TAdapterActionNameActionNameProperty.GetValues
+ 0001:00018828       TAdapterActionNameProperty.GetAttributes
+ 0001:00018848       TAdapterActionNameProperty.GetValues
+ 0001:00018958       TAdapterAvailableFieldNameProperty.GetAttributes
+ 0001:00018978       TAdapterAvailableFieldNameProperty.GetValues
+ 0001:00019AC0       TAdapterComponentProperty.GetGuid
+ 0001:00018AAC       TAdapterDisplayComponentProperty.GetAttributes
+ 0001:00018AF4       TAdapterDisplayComponentProperty.GetValues
+ 0001:000186F8       TAdapterFieldNameProperty.GetAttributes
+ 0001:00018718       TAdapterFieldNameProperty.GetValues
+ 0001:00019C1C       TAdapterFieldsComponentEditor.ExecuteVerb
+ 0001:00019D64       TAdapterFieldsComponentEditor.GetDesignerClass
+ 0001:00019D34       TAdapterFieldsComponentEditor.GetVerb
+ 0001:00019D5C       TAdapterFieldsComponentEditor.GetVerbCount
+ 0001:00019AE0       TAdapterModeProperty.GetAttributes
+ 0001:00019B00       TAdapterModeProperty.GetValues
+ 0001:0001BFE0       TBaseDebugScriptSite.BreakOnFirstStatement
+ 0001:0001B474       TBaseDebugScriptSite.EnableModeless
+ 0001:0001B5E0       TBaseDebugScriptSite.GetApplication
+ 0001:0001B480       TBaseDebugScriptSite.GetDeferredText
+ 0001:0001B548       TBaseDebugScriptSite.GetDocumentContextFromPosition
+ 0001:0001B4FC       TBaseDebugScriptSite.GetFileName
+ 0001:0001B4B0       TBaseDebugScriptSite.GetPathName
+ 0001:0001B604       TBaseDebugScriptSite.GetRootApplicationNode
+ 0001:0001B48C       TBaseDebugScriptSite.GetScriptTextAttributes
+ 0001:0001B468       TBaseDebugScriptSite.GetWindow
+ 0001:0001B63C       TBaseDebugScriptSite.HandleScriptError
+ 0001:0001B53C       TBaseDebugScriptSite.NotifyChanged
+ 0001:0001B498       TBaseDebugScriptSite.OnCreateDocumentContext
+ 0001:0001B648       TBaseDebugScriptSite.OnScriptErrorDebug
+ 0001:0001BB64       TBaseDebugScriptSite.RunExpression
+ 0001:0001B928       TBaseDebugScriptSite.SetupDebugApplication
+ 0001:0001B748       TBaseDebugScriptSite.SetupDebugDocumentHelper
+ 0001:0001B694       TBaseDebugScriptSite.SetupDebugScript
+ 0001:0000C69C       TBaseHTMLFile.GetAge
+ 0001:0000C6B4       TBaseHTMLFile.GetSource
+ 0001:0000DEDC       TBaseWebDataModuleCreator.CreateModule
+ 0001:0000DF40       TBaseWebDataModuleCreator.ImplNewImplSource
+ 0001:0000DFD8       TBaseWebDataModuleCreator.ImplNewIntfSource
+ 0001:0000BD28       TBaseWebDataModuleFile.CreateModule
+ 0001:00011920       TBaseWebFieldsEditor.SetHelper
+ 0001:0000E188       TBaseWebFormFile.Create
+ 0001:0000E1F4       TBaseWebFormFile.GetAge
+ 0001:0000E20C       TBaseWebFormFile.GetSource
+ 0001:0000E220       TBaseWebFormFile.ImplGetSource
+ 0001:0000B2B4       TBaseWebModuleCreator.CreateModule
+ 0001:0000B52C       TBaseWebModuleCreator.Destroy
+ 0001:0000B55C       TBaseWebModuleCreator.FormatFields
+ 0001:0000B988       TBaseWebModuleCreator.FormatObjects
+ 0001:0000BA08       TBaseWebModuleCreator.FormatProperties
+ 0001:0000B3B0       TBaseWebModuleCreator.FormCreated
+ 0001:0000B3B4       TBaseWebModuleCreator.GetAncestorName
+ 0001:0000BAFC       TBaseWebModuleCreator.GetComponentsList
+ 0001:0000B40C       TBaseWebModuleCreator.GetCreatorType
+ 0001:0000B430       TBaseWebModuleCreator.GetExisting
+ 0001:0000B434       TBaseWebModuleCreator.GetFileSystem
+ 0001:0000B440       TBaseWebModuleCreator.GetFormName
+ 0001:0000B454       TBaseWebModuleCreator.GetImplFileName
+ 0001:0000B468       TBaseWebModuleCreator.GetIntfFileName
+ 0001:0000B474       TBaseWebModuleCreator.GetMainForm
+ 0001:0000B478       TBaseWebModuleCreator.GetOwner
+ 0001:0000B484       TBaseWebModuleCreator.GetShowForm
+ 0001:0000B488       TBaseWebModuleCreator.GetShowSource
+ 0001:0000B48C       TBaseWebModuleCreator.GetUnnamed
+ 0001:0000B4B4       TBaseWebModuleCreator.ImplNewFormFile
+ 0001:0000B6C8       TBaseWebModuleCreator.MinFormHeight
+ 0001:0000B6C0       TBaseWebModuleCreator.MinFormWidth
+ 0001:0000B490       TBaseWebModuleCreator.NewFormFile
+ 0001:0000B4C4       TBaseWebModuleCreator.NewImplSource
+ 0001:0000B4EC       TBaseWebModuleCreator.NewIntfSource
+ 0001:0000BAF8       TBaseWebModuleCreator.PopulateComponentsList
+ 0001:0000BDE8       TBaseWebModuleFile.CacheOption
+ 0001:0000C294       TBaseWebModuleFile.CreateModule
+ 0001:0000C234       TBaseWebModuleFile.CreateOption
+ 0001:0000C39C       TBaseWebModuleFile.FormatFactory
+ 0001:0000C324       TBaseWebModuleFile.GetAge
+ 0001:0000C33C       TBaseWebModuleFile.GetSource
+ 0001:0000C528       TBaseWebModuleFile.ImplGetSource
+ 0001:0000BF3C       TBaseWebModuleFile.PageInfo
+ 0001:0000D1F8       TBaseWebModuleIntfFile.CreateModule
+ 0001:0000D26C       TBaseWebModuleIntfFile.GetAge
+ 0001:0000D284       TBaseWebModuleIntfFile.GetSource
+ 0001:0000D298       TBaseWebModuleIntfFile.ImplGetIntfSource
+ 0001:0000D404       TBaseWebPageModuleCreator.CreateModule
+ 0001:0000D3AC       TBaseWebPageModuleCreator.GetAdditionalFileExt
+ 0001:0000D3A0       TBaseWebPageModuleCreator.GetAdditionalFileName
+ 0001:0000D3D0       TBaseWebPageModuleCreator.GetAdditionalFilesCount
+ 0001:0000D474       TBaseWebPageModuleCreator.ImplNewHTMLSource
+ 0001:0000D4B4       TBaseWebPageModuleCreator.ImplNewImplSource
+ 0001:0000D57C       TBaseWebPageModuleCreator.ImplNewIntfSource
+ 0001:0000D3E0       TBaseWebPageModuleCreator.NewAdditionalFileSource
+ 0001:0000D60C       TBaseWebPageModuleCreator.PopulateComponentsList
+ 0001:0000BD8C       TBaseWebPageModuleFile.CreateModule
+ 0001:0000977C       TBaseWebProjectCreator.GetCreatorType
+ 0001:000097F0       TBaseWebProjectCreator.GetExisting
+ 0001:00009814       TBaseWebProjectCreator.GetFileName
+ 0001:00009A5C       TBaseWebProjectCreator.GetFileSystem
+ 0001:00009A68       TBaseWebProjectCreator.GetOptionFileName
+ 0001:00009A74       TBaseWebProjectCreator.GetOwner
+ 0001:00009A80       TBaseWebProjectCreator.GetServices
+ 0001:00009A98       TBaseWebProjectCreator.GetShowSource
+ 0001:00009A9C       TBaseWebProjectCreator.GetUnnamed
+ 0001:00009AA0       TBaseWebProjectCreator.NewDefaultModule
+ 0001:00009BF4       TBaseWebProjectCreator.NewOptionSource
+ 0001:00009C00       TBaseWebProjectCreator.NewProjectResource
+ 0001:00009C04       TBaseWebProjectCreator.NewProjectSource
+ 0001:0000F14C       TComponentObjectItem.Destroy
+ 0001:0001C0FC       TDesignerDebugScriptSite.BreakOnFirstStatement
+ 0001:0001C104       TDesignerDebugScriptSite.HandleScriptError
+ 0001:0000FFB0       TDesignWebPageInfo.GetPageFile
+ 0001:0000FFC4       TDesignWebPageInfo.GetPageName
+ 0001:00002088       TFormatProducerTemplate.Create
+ 0001:00002158       TFormatProducerTemplate.Destroy
+ 0001:00002198       TFormatProducerTemplate.GetName
+ 0001:000021AC       TFormatProducerTemplate.GetText
+ 0001:0000222C       TFormatProducerTemplate.IsDefault
+ 0001:00002230       TFormatProducerTemplate.SupportsClass
+ 0001:0000229C       TFormatProducerTemplate.SupportsFileType
+ 0001:00002304       TFormatProducerTemplateScript.Create
+ 0001:000023B4       TFormatProducerTemplateScript.Destroy
+ 0001:000023E4       TFormatProducerTemplateScript.SupportsScriptEngine
+ 0001:0000EB44       TFormComponentsList.AddObject
+ 0001:0000EB90       TFormComponentsList.AddProperty
+ 0001:0000EBCC       TFormComponentsList.Create
+ 0001:0000EC24       TFormComponentsList.Destroy
+ 0001:0000EC5C       TFormComponentsList.GetObjectItem
+ 0001:0000EC7C       TFormComponentsList.GetPropertyItem
+ 0001:0000EC9C       TFormComponentsList.ObjectCount
+ 0001:0000ECA4       TFormComponentsList.PropertyCount
+ 0001:0000D7E8       THTMLFile.CreateModule
+ 0001:0000D82C       THTMLFile.ImplGetSource
+ 0001:0001BA6C       TimeoutError
+ 0001:000176C8       TInetFileType.AddFileExt
+ 0001:000176E8       TInetFileType.Create
+ 0001:00017748       TInetFileType.Destroy
+ 0001:00017784       TInetFileType.GetExtCount
+ 0001:00017790       TInetFileType.GetFileExt
+ 0001:000177AC       TInetFileType.GetTypeID
+ 0001:000177C0       TInetFileTypes.FindFileExt
+ 0001:00017258       TInetxDataFieldsComponentListSprig.GetEditorClass
+ 0001:000172A0       TInetxDataFieldsContainerSprig.GetEditorClass
+ 0001:0001383C       TInetxDataFieldsEditorHelper.GetDataSetComponentIntf
+ 0001:000137C8       TInetxDataFieldsEditorHelper.GetDataSetFieldsIntf
+ 0001:000138B0       TInetxDataFieldsEditorHelper.GetFieldsList
+ 0001:00013924       TInetxDataFieldsEditorHelper.IsFieldInUse
+ 0001:000139AC       TInetxDataFieldsEditorHelper.SetConnected
+ 0001:00015FB4       TInetxDataFieldsSprigEditor.CreateHelper
+ 0001:00016BEC       TInetxDataFieldsSprigEditorHelper.AnySelection
+ 0001:00016A24       TInetxDataFieldsSprigEditorHelper.ChildComponent
+ 0001:00016B50       TInetxDataFieldsSprigEditorHelper.ChildContainer
+ 0001:00016B44       TInetxDataFieldsSprigEditorHelper.ComponentOwner
+ 0001:00016A2C       TInetxDataFieldsSprigEditorHelper.Create
+ 0001:00016A68       TInetxDataFieldsSprigEditorHelper.FocusChildren
+ 0001:00016A6C       TInetxDataFieldsSprigEditorHelper.GetDesigner
+ 0001:00016A80       TInetxDataFieldsSprigEditorHelper.GetSelectedComponents
+ 0001:00016BD0       TInetxDataFieldsSprigEditorHelper.WebComponentInserted
+ 0001:00013600       TInetxFieldsEditorHelper.InitializeField
+ 0001:00013690       TInetxFieldsEditorHelper.RestoreField
+ 0001:00013700       TInetxFieldsEditorHelper.UniqueName
+ 0001:000002A0       TlsAlloc
+ 0002:00001014       tlsBuffer
+ 0001:000002A8       TlsFree
+ 0001:000002B0       TlsGetValue
+ 0002:00001004       TlsIndex
+ 0002:AFC92000       TlsLast
+ 0002:00000018       TlsProc
+ 0001:000002B8       TlsSetValue
+ 0001:00019DC0       TMasterAdapterComponentProperty.GetValues
+ 0001:00019DB0       TMasterAdapterComponentProperty.IsType
+ 0001:00019D6C       TMasterAdapterComponentProperty.RcvComponentNames
+ 0001:00019E2C       TMasterAdapterComponentProperty.SetValue
+ 0001:000069D0       TModulePageProducerInfo.Create
+ 0001:00006A38       TModulePageProducerInfo.Destroy
+ 0001:00006A68       TModulePageProducerInfo.ProducerName
+ 0001:00006ABC       TModulePageProducerInfo.RaiseMissingScriptEngine
+ 0001:00006BB4       TModulePageProducerInfo.SupportsScriptEngine
+ 0001:00006C30       TModulePageProducerInfo.TemplateFileExtension
+ 0001:0000368C       TNewPageFrame.cbScriptEngineChange
+ 0001:000032F8       TNewPageFrame.ClassListClick
+ 0001:00002F30       TNewPageFrame.ClassNameChange
+ 0001:00003574       TNewPageFrame.Create
+ 0001:00003284       TNewPageFrame.DoOK
+ 0001:000033F0       TNewPageFrame.edPageNameChange
+ 0001:00003130       TNewPageFrame.EnableActionExecute
+ 0001:00003134       TNewPageFrame.EnableActionUpdate
+ 0001:000033B0       TNewPageFrame.GetAccess
+ 0001:0000366C       TNewPageFrame.GetCreateHTMLModule
+ 0001:00002FC4       TNewPageFrame.GetDefaultPageName
+ 0001:00003744       TNewPageFrame.GetIsDefaultPageName
+ 0001:00003768       TNewPageFrame.GetIsDefaultPageTitle
+ 0001:00003694       TNewPageFrame.GetNewTemplateFile
+ 0001:00003030       TNewPageFrame.GetPageName
+ 0001:00003478       TNewPageFrame.GetPageTitle
+ 0001:00003308       TNewPageFrame.GetProducerClassName
+ 0001:0000349C       TNewPageFrame.GetScriptEngine
+ 0001:00003334       TNewPageFrame.GetSelectedProducerInfo
+ 0001:00003538       TNewPageFrame.GetSelectedTemplate
+ 0001:000036B8       TNewPageFrame.GetSelectedTemplateName
+ 0001:00003828       TNewPageFrame.GetTemplateFileExt
+ 0001:00003840       TNewPageFrame.GetTemplateFileType
+ 0001:00002E78       TNewPageFrame.RefreshEnginesList
+ 0001:00002C50       TNewPageFrame.RefreshList
+ 0001:0000378C       TNewPageFrame.RefreshTemplateExtensionName
+ 0001:00002E00       TNewPageFrame.RefreshTemplatesList
+ 0001:0000337C       TNewPageFrame.SetAccess
+ 0001:0000367C       TNewPageFrame.SetCreateHTMLModule
+ 0001:000036A4       TNewPageFrame.SetNewTemplateFile
+ 0001:00003048       TNewPageFrame.SetPageName
+ 0001:00003490       TNewPageFrame.SetPageTitle
+ 0001:00003710       TNewPageFrame.SetProducerClassName
+ 0001:000034F0       TNewPageFrame.SetScriptEngine
+ 0001:00003624       TNewPageFrame.SetSelectedProducerInfo
+ 0001:000035E4       TNewPageFrame.SetSelectedTemplate
+ 0001:000036E4       TNewPageFrame.SetSelectedTemplateName
+ 0001:00003054       TNewPageFrame.ValidateFields
+ 0001:0000E8A8       TNewPageHelper.Create
+ 0001:0000E73C       TNewPageHelper.ExtractTemplate
+ 0001:0000EB38       TNewPageHelper.GetTemplate
+ 0001:0000EB40       TNewPageHelper.HaveTemplate
+ 0001:0000E584       TNewPageHelper.ListEngines
+ 0001:0000E3FC       TNewPageHelper.ListProducers
+ 0001:0000E358       TNewPageHelper.ListProducersCallback
+ 0001:0000E40C       TNewPageHelper.ListTemplates
+ 0001:0000E3AC       TNewPageHelper.ListTemplatesCallback
+ 0001:0000E7E0       TNewPageHelper.PageNameOfClassName
+ 0001:0000E9CC       TNewPageHelper.RestoreOptions
+ 0001:0000EA54       TNewPageHelper.SaveOptions
+ 0001:00005C0C       TNewSiteSrvForm.bpServicesClick
+ 0001:00005B08       TNewSiteSrvForm.cbAppModuleTypeClick
+ 0001:00005A50       TNewSiteSrvForm.ClassNameChange
+ 0001:000055F4       TNewSiteSrvForm.EnableActionExecute
+ 0001:000055F8       TNewSiteSrvForm.EnableActionUpdate
+ 0001:0000563C       TNewSiteSrvForm.EnableCoClassName
+ 0001:00005E88       TNewSiteSrvForm.EnumCallback
+ 0001:00005EFC       TNewSiteSrvForm.FindServiceClass
+ 0001:000059DC       TNewSiteSrvForm.FormCreate
+ 0001:00005B30       TNewSiteSrvForm.FormDestroy
+ 0001:00005990       TNewSiteSrvForm.GetAppModuleType
+ 0001:00005838       TNewSiteSrvForm.GetCacheMode
+ 0001:00005CF4       TNewSiteSrvForm.GetCacheModeIndex
+ 0001:000058E0       TNewSiteSrvForm.GetDefaultPageName
+ 0001:00005E04       TNewSiteSrvForm.GetIncludeService
+ 0001:00005F50       TNewSiteSrvForm.GetIsDefaultPageName
+ 0001:00005850       TNewSiteSrvForm.GetModuleClassName
+ 0001:0000594C       TNewSiteSrvForm.GetPageName
+ 0001:00005D14       TNewSiteSrvForm.GetProjectType
+ 0001:00005CB0       TNewSiteSrvForm.GetSelectedServices
+ 0001:00005CBC       TNewSiteSrvForm.GetServiceClasses
+ 0001:00005E18       TNewSiteSrvForm.GetServiceClassName
+ 0001:00005A3C       TNewSiteSrvForm.HasPage
+ 0001:000055DC       TNewSiteSrvForm.HelpButtonClick
+ 0001:000057A8       TNewSiteSrvForm.OKButtonClick
+ 0001:00005B3C       TNewSiteSrvForm.pbPageOptionsClick
+ 0001:000059B0       TNewSiteSrvForm.SetAppModuleType
+ 0001:00005970       TNewSiteSrvForm.SetCacheMode
+ 0001:00005D04       TNewSiteSrvForm.SetCacheModeIndex
+ 0001:00005E58       TNewSiteSrvForm.SetIncludeService
+ 0001:00005964       TNewSiteSrvForm.SetPageName
+ 0001:00005B10       TNewSiteSrvForm.SetPageNameOfClassNameCallback
+ 0001:00005D8C       TNewSiteSrvForm.SetProjectType
+ 0001:00005CD0       TNewSiteSrvForm.SetSelectedServices
+ 0001:00005CE0       TNewSiteSrvForm.SetServiceClasses
+ 0001:00005F2C       TNewSiteSrvForm.SetServiceClassName
+ 0001:00005660       TNewSiteSrvForm.ValidateFields
+ 0001:00004354       TNewWebAppPageForm.EnableActionExecute
+ 0001:00004358       TNewWebAppPageForm.EnableActionUpdate
+ 0001:000043E4       TNewWebAppPageForm.FormCreate
+ 0001:0000433C       TNewWebAppPageForm.HelpButtonClick
+ 0001:00004370       TNewWebAppPageForm.OKButtonClick
+ 0001:00004328       TNewWebAppPageForm.ValidateFields
+ 0001:00004CC4       TNewWebAppServices.EnableActionExecute
+ 0001:00004CC8       TNewWebAppServices.EnableActionUpdate
+ 0001:00004DAC       TNewWebAppServices.EnumCallback
+ 0001:00004FCC       TNewWebAppServices.FormCreate
+ 0001:00005018       TNewWebAppServices.GetSelectedServices
+ 0001:00004FD4       TNewWebAppServices.GetServiceClasses
+ 0001:00004CAC       TNewWebAppServices.HelpButtonClick
+ 0001:00004E50       TNewWebAppServices.PopulateLists
+ 0001:00004CCC       TNewWebAppServices.ServiceTypeToCheckBox
+ 0001:00004D3C       TNewWebAppServices.ServiceTypeToComboBox
+ 0001:00004EA8       TNewWebAppServices.ServiceTypeToInterface
+ 0001:0000505C       TNewWebAppServices.SetSelectedServices
+ 0001:00005094       TNewWebAppServices.SetServiceClasses
+ 0001:00004038       TNewWebDataModForm.FormCreate
+ 0001:00003FC8       TNewWebDataModForm.GetCacheMode
+ 0001:00003FE0       TNewWebDataModForm.GetCreateMode
+ 0001:00004050       TNewWebDataModForm.HelpButtonClick
+ 0001:00003FF8       TNewWebDataModForm.SetCacheMode
+ 0001:00004018       TNewWebDataModForm.SetCreateMode
+ 0001:00003C78       TNewWebPageForm.EnableActionExecute
+ 0001:00003C7C       TNewWebPageForm.EnableActionUpdate
+ 0001:00003C48       TNewWebPageForm.FormCreate
+ 0001:00003BD8       TNewWebPageForm.GetCacheMode
+ 0001:00003D08       TNewWebPageForm.GetCacheModeIndex
+ 0001:00003BF0       TNewWebPageForm.GetCreateMode
+ 0001:00003D18       TNewWebPageForm.GetCreateModeIndex
+ 0001:00003C60       TNewWebPageForm.HelpButtonClick
+ 0001:00003C94       TNewWebPageForm.OKButtonClick
+ 0001:00003C08       TNewWebPageForm.SetCacheMode
+ 0001:00003D28       TNewWebPageForm.SetCacheModeIndex
+ 0001:00003C28       TNewWebPageForm.SetCreateMode
+ 0001:00003D38       TNewWebPageForm.SetCreateModeIndex
+ 0001:00003BC4       TNewWebPageForm.ValidateFields
+ 0001:00002634       TProducerTemplateScriptStream.Create
+ 0001:0000269C       TProducerTemplateScriptStream.GetFormat
+ 0001:000025B8       TProducerTemplateScriptString.Create
+ 0001:00002620       TProducerTemplateScriptString.GetFormat
+ 0001:00001F24       TProducerTemplatesInfo.Destroy
+ 0001:00001FDC       TProducerTemplatesList.Add
+ 0001:00001FE8       TProducerTemplatesList.Create
+ 0001:00002030       TProducerTemplatesList.Destroy
+ 0001:00002060       TProducerTemplatesList.GetCount
+ 0001:00002068       TProducerTemplatesList.GetTemplate
+ 0001:000024DC       TProducerTemplateStream.Create
+ 0001:00002540       TProducerTemplateStream.Destroy
+ 0001:00002574       TProducerTemplateStream.GetFormat
+ 0001:00002464       TProducerTemplateString.Create
+ 0001:000024C8       TProducerTemplateString.GetFormat
+ 0001:00009C40       TProjectFile.CreateNamedProject
+ 0001:00009CBC       TProjectFile.GetAge
+ 0001:00009CD4       TProjectFile.GetSource
+ 0001:0001C2E0       TScriptDebugger.CanDebugScript
+ 0001:0001C258       TScriptDebugger.DebugScript
+ 0001:000185E0       TScriptEngineProperty.GetAttributes
+ 0001:00018600       TScriptEngineProperty.GetValues
+ 0001:0001727C       TSimpleFieldsSprigEditor.CreateHelper
+ 0001:00016F84       TSimpleFieldsSprigEditorHelper.AnySelection
+ 0001:00016E84       TSimpleFieldsSprigEditorHelper.ChildComponent
+ 0001:00016EE8       TSimpleFieldsSprigEditorHelper.ChildContainer
+ 0001:00016EDC       TSimpleFieldsSprigEditorHelper.ComponentOwner
+ 0001:00016E8C       TSimpleFieldsSprigEditorHelper.Create
+ 0001:00016EC8       TSimpleFieldsSprigEditorHelper.GetDesigner
+ 0001:00016F68       TSimpleFieldsSprigEditorHelper.WebComponentInserted
+ 0001:0001728C       TSimpleWebComponentListSprig.GetEditorClass
+ 0001:000133EC       TSiteActionsEditorHelper.GetDefaultAddAllFieldsItem
+ 0001:00013414       TSiteActionsEditorHelper.GetDefaultAddFieldsDlgCaption
+ 0001:00013400       TSiteActionsEditorHelper.GetDefaultAddFieldsItem
+ 0001:00013428       TSiteActionsEditorHelper.InitializeField
+ 0001:000134B8       TSiteActionsEditorHelper.RestoreField
+ 0001:00013528       TSiteActionsEditorHelper.UniqueName
+ 0001:00012688       TSiteActionsListComponentEditorHelper.AnySelection
+ 0001:00012738       TSiteActionsListComponentEditorHelper.ChildComponent
+ 0001:00012614       TSiteActionsListComponentEditorHelper.ChildContainer
+ 0001:00012728       TSiteActionsListComponentEditorHelper.ComponentOwner
+ 0001:00012620       TSiteActionsListComponentEditorHelper.Create
+ 0001:0001265C       TSiteActionsListComponentEditorHelper.FocusChildren
+ 0001:00012674       TSiteActionsListComponentEditorHelper.GetDesigner
+ 0001:00012694       TSiteActionsListComponentEditorHelper.GetSelectedComponents
+ 0001:00012704       TSiteActionsListComponentEditorHelper.LockState
+ 0001:00012710       TSiteActionsListComponentEditorHelper.SetSelection
+ 0001:0001271C       TSiteActionsListComponentEditorHelper.UnlockState
+ 0001:000125FC       TSiteActionsListComponentEditorHelper.WebComponentInserted
+ 0001:00012608       TSiteActionsListComponentEditorHelper.WebComponentsCleared
+ 0001:000172B0       TSiteActionsListComponentListSprig.GetEditorClass
+ 0001:000172A8       TSiteActionsListContainerSprig.GetEditorClass
+ 0001:00013A34       TSiteActionsListEditor.CreateHelper
+ 0001:000129B4       TSiteActionsListEditorHelper.GetActionsListIntf
+ 0001:00012A28       TSiteActionsListEditorHelper.GetFieldsList
+ 0001:00012A98       TSiteActionsListEditorHelper.IsFieldInUse
+ 0001:00015FC4       TSiteActionsListSprigEditor.CreateHelper
+ 0001:00016E1C       TSiteActionsListSprigEditorHelper.AnySelection
+ 0001:00016C54       TSiteActionsListSprigEditorHelper.ChildComponent
+ 0001:00016D80       TSiteActionsListSprigEditorHelper.ChildContainer
+ 0001:00016D74       TSiteActionsListSprigEditorHelper.ComponentOwner
+ 0001:00016C5C       TSiteActionsListSprigEditorHelper.Create
+ 0001:00016C98       TSiteActionsListSprigEditorHelper.FocusChildren
+ 0001:00016C9C       TSiteActionsListSprigEditorHelper.GetDesigner
+ 0001:00016CB0       TSiteActionsListSprigEditorHelper.GetSelectedComponents
+ 0001:00016E00       TSiteActionsListSprigEditorHelper.WebComponentInserted
+ 0001:0001253C       TSiteDataFieldsComponentEditorHelper.AnySelection
+ 0001:000125F0       TSiteDataFieldsComponentEditorHelper.ChildComponent
+ 0001:000124C8       TSiteDataFieldsComponentEditorHelper.ChildContainer
+ 0001:000125E0       TSiteDataFieldsComponentEditorHelper.ComponentOwner
+ 0001:000124D4       TSiteDataFieldsComponentEditorHelper.Create
+ 0001:00012510       TSiteDataFieldsComponentEditorHelper.FocusChildren
+ 0001:00012528       TSiteDataFieldsComponentEditorHelper.GetDesigner
+ 0001:00012548       TSiteDataFieldsComponentEditorHelper.GetSelectedComponents
+ 0001:000125BC       TSiteDataFieldsComponentEditorHelper.LockState
+ 0001:000125C8       TSiteDataFieldsComponentEditorHelper.SetSelection
+ 0001:000125D4       TSiteDataFieldsComponentEditorHelper.UnlockState
+ 0001:000124B0       TSiteDataFieldsComponentEditorHelper.WebComponentInserted
+ 0001:000124BC       TSiteDataFieldsComponentEditorHelper.WebComponentsCleared
+ 0001:00017250       TSiteDataFieldsComponentListSprig.GetEditorClass
+ 0001:00017298       TSiteDataFieldsContainerSprig.GetEditorClass
+ 0001:000127B8       TSiteDataFieldsEditorHelper.GetDataFieldsIntf
+ 0001:00012744       TSiteDataFieldsEditorHelper.GetDataSetComponentIntf
+ 0001:0001282C       TSiteDataFieldsEditorHelper.GetFieldsList
+ 0001:000128A0       TSiteDataFieldsEditorHelper.IsFieldInUse
+ 0001:00012928       TSiteDataFieldsEditorHelper.SetConnected
+ 0001:00017260       TSiteDataFieldsRootContainerSprig.GetComponentListSprigClass
+ 0001:00017268       TSiteDataFieldsRootContainerSprig.IsComponentListObject
+ 0001:00015FA4       TSiteDataFieldsSprigEditor.CreateHelper
+ 0001:000169BC       TSiteDataFieldsSprigEditorHelper.AnySelection
+ 0001:000167F4       TSiteDataFieldsSprigEditorHelper.ChildComponent
+ 0001:00016920       TSiteDataFieldsSprigEditorHelper.ChildContainer
+ 0001:00016914       TSiteDataFieldsSprigEditorHelper.ComponentOwner
+ 0001:000167FC       TSiteDataFieldsSprigEditorHelper.Create
+ 0001:00016838       TSiteDataFieldsSprigEditorHelper.FocusChildren
+ 0001:0001683C       TSiteDataFieldsSprigEditorHelper.GetDesigner
+ 0001:00016850       TSiteDataFieldsSprigEditorHelper.GetSelectedComponents
+ 0001:000169A0       TSiteDataFieldsSprigEditorHelper.WebComponentInserted
+ 0001:000135F0       TSiteFieldsEditor.CreateHelper
+ 0001:00013224       TSiteFieldsEditorHelper.InitializeField
+ 0001:000132B4       TSiteFieldsEditorHelper.RestoreField
+ 0001:00013324       TSiteFieldsEditorHelper.UniqueName
+ 0001:0000EE88       TStandardProducerTemplates.Create
+ 0001:0001B354       TTimeoutThread.Create
+ 0001:0001B404       TTimeoutThread.Execute
+ 0001:0000DCF4       TWebAppDataModuleCreator.CreateModule
+ 0001:0000DE4C       TWebAppDataModuleCreator.ImplNewFormFile
+ 0001:0000DE40       TWebAppDataModuleCreator.PopulateComponentsList
+ 0001:0000CAF4       TWebAppPageModuleCreator.CreateModule
+ 0001:0000D124       TWebAppPageModuleCreator.GetModuleClassName
+ 0001:0000D168       TWebAppPageModuleCreator.ImplNewFormFile
+ 0001:0000D108       TWebAppPageModuleCreator.PopulateComponentsList
+ 0001:00009368       TWebAppWizard.Execute
+ 0001:00009698       TWebAppWizard.GetAuthor
+ 0001:000096BC       TWebAppWizard.GetComment
+ 0001:0000975C       TWebAppWizard.GetDesigner
+ 0001:000096D0       TWebAppWizard.GetGlyph
+ 0001:000096EC       TWebAppWizard.GetIDString
+ 0001:00009728       TWebAppWizard.GetName
+ 0001:0000973C       TWebAppWizard.GetPage
+ 0001:00009750       TWebAppWizard.GetState
+ 0001:00009298       TWebAppWizard.PageNameOfClassName
+ 0001:00016558       TWebComponentContainerSprig.AddType
+ 0001:00016568       TWebComponentContainerSprig.AddTypeCount
+ 0001:00016650       TWebComponentContainerSprig.CanEdit
+ 0001:00016580       TWebComponentContainerSprig.Create
+ 0001:00016624       TWebComponentContainerSprig.DeleteStyle
+ 0001:000165F4       TWebComponentContainerSprig.Destroy
+ 0001:0001652C       TWebComponentContainerSprig.GetAddType
+ 0001:00016664       TWebComponentContainerSprig.GetEditorClass
+ 0001:00016654       TWebComponentContainerSprig.PrepareMenu
+ 0001:0001657C       TWebComponentContainerSprig.SortByIndex
+ 0001:00017294       TWebComponentListContainerSprig.IsComponentListContainer
+ 0001:0001666C       TWebComponentRootContainerSprig.GetComponentListSprigClass
+ 0001:00016674       TWebComponentRootContainerSprig.IsComponentListObject
+ 0001:00015FD4       TWebComponentSprig.Component
+ 0001:000163C0       TWebComponentSprig.DragDropTo
+ 0001:00016338       TWebComponentSprig.DragOverTo
+ 0001:000161FC       TWebComponentSprig.FigureChildren
+ 0001:00016058       TWebComponentSprig.FigureParent
+ 0001:00016314       TWebComponentSprig.GetComponentListSprigClass
+ 0001:00016134       TWebComponentSprig.Hidden
+ 0001:00015FE8       TWebComponentSprig.IndexOfItem
+ 0001:0001631C       TWebComponentSprig.IsComponentListContainer
+ 0001:00016318       TWebComponentSprig.IsComponentListObject
+ 0001:00016320       TWebComponentSprig.ItemIndex
+ 0001:00016138       TWebComponentSprig.UniqueName
+ 0001:0000E0C4       TWebDataModuleCreator.CreateModule
+ 0001:0000ECAC       TWebDataModuleWizard.Create
+ 0001:0000ED58       TWebDataModuleWizard.ImplExecute
+ 0001:00016FEC       TWebDataSetAdapterSprig.AnyProblems
+ 0001:0001707C       TWebDataSetAdapterSprig.DragDropTo
+ 0001:000170D8       TWebDataSetAdapterSprig.DragOverTo
+ 0001:000171EC       TWebDataSetAdapterSprig.FigureParent
+ 0001:00017108       TWebDataSetAdapterSprig.GetDataSet
+ 0001:0001721C       TWebDataSetAdapterSprig.PaletteOverTo
+ 0001:0001717C       TWebDataSetAdapterSprig.SetDataSet
+ 0001:0000F610       TWebDesignContext.Create
+ 0001:0000F67C       TWebDesignContext.Destroy
+ 0001:0000FD04       TWebDesignContext.FindApplicationModule
+ 0001:0000FFAC       TWebDesignContext.FindDefaultPageInfo
+ 0001:0000F7F0       TWebDesignContext.FindModuleClass
+ 0001:0000FB94       TWebDesignContext.FindModuleName
+ 0001:0000F6D4       TWebDesignContext.FindPage
+ 0001:0000F6FC       TWebDesignContext.FindPageInfo
+ 0001:0000FCBC       TWebDesignContext.FindVariableContainer
+ 0001:0000FF44       TWebDesignContext.GetAdapterRequest
+ 0001:0000FF50       TWebDesignContext.GetAdapterResponse
+ 0001:0000FEF4       TWebDesignContext.GetDispatchedPageName
+ 0001:0000FEE8       TWebDesignContext.GetEndUser
+ 0001:0000FCDC       TWebDesignContext.GetPageCount
+ 0001:0000FCE0       TWebDesignContext.GetPageInfo
+ 0001:0000FF08       TWebDesignContext.GetRequestedPageName
+ 0001:0000FE70       TWebDesignContext.GetSession
+ 0001:0000FCE4       TWebDesignContext.GetWebModules
+ 0001:0000FCC4       TWebDesignContext.GetWebRequest
+ 0001:0000FCC8       TWebDesignContext.GetWebResponse
+ 0001:0000FF5C       TWebDesignContext.SetAdapterRequest
+ 0001:0000FF84       TWebDesignContext.SetAdapterResponse
+ 0001:0000FF1C       TWebDesignContext.SetDispatchedPageName
+ 0001:0000FF30       TWebDesignContext.SetRequestedPageName
+ 0001:0000FEB8       TWebDesignModuleList.AddModuleClass
+ 0001:0000FEBC       TWebDesignModuleList.AddModuleName
+ 0001:0000FEC0       TWebDesignModuleList.FindModuleClass
+ 0001:0000FEC4       TWebDesignModuleList.FindModuleName
+ 0001:0000FEC8       TWebDesignModuleList.GetFactory
+ 0001:0000FECC       TWebDesignModuleList.GetFactoryCount
+ 0001:0000FED0       TWebDesignModuleList.GetItem
+ 0001:0000FED4       TWebDesignModuleList.GetItemCount
+ 0001:0000FED8       TWebDesignModuleList.GetOnModuleAdded
+ 0001:0000FEE0       TWebDesignModuleList.SetOnModuleAdded
+ 0001:0000FE74       TWebDesignSession.GetSessionID
+ 0001:0000FE94       TWebDesignSession.GetTimeoutMinutes
+ 0001:0000FE98       TWebDesignSession.GetValue
+ 0001:0000FEA8       TWebDesignSession.SetTimeoutMinutes
+ 0001:0000FEAC       TWebDesignSession.SetValue
+ 0001:0000FEB0       TWebDesignSession.Terminate
+ 0001:0000FEB4       TWebDesignSession.UpdateResponse
+ 0001:0000BB18       TWebModuleCOMFormCreator.CreateModule
+ 0001:0000BBD8       TWebModuleCOMFormCreator.FormCreated
+ 0001:0000BBDC       TWebModuleCOMFormCreator.GetAncestorName
+ 0001:0000BBE8       TWebModuleCOMFormCreator.GetCreatorType
+ 0001:0000BC0C       TWebModuleCOMFormCreator.GetExisting
+ 0001:0000BC10       TWebModuleCOMFormCreator.GetFileSystem
+ 0001:0000BC1C       TWebModuleCOMFormCreator.GetFormName
+ 0001:0000BC30       TWebModuleCOMFormCreator.GetImplFileName
+ 0001:0000BC44       TWebModuleCOMFormCreator.GetIntfFileName
+ 0001:0000BC50       TWebModuleCOMFormCreator.GetMainForm
+ 0001:0000BC54       TWebModuleCOMFormCreator.GetOwner
+ 0001:0000BC60       TWebModuleCOMFormCreator.GetShowForm
+ 0001:0000BC64       TWebModuleCOMFormCreator.GetShowSource
+ 0001:0000BC68       TWebModuleCOMFormCreator.GetUnnamed
+ 0001:0000BC6C       TWebModuleCOMFormCreator.NewFormFile
+ 0001:0000BC7C       TWebModuleCOMFormCreator.NewImplSource
+ 0001:0000BCC8       TWebModuleCOMFormCreator.NewIntfSource
+ 0001:0000C6C8       TWebModuleCOMFormFile.CreateModule
+ 0001:0000C728       TWebModuleCOMFormFile.ImplGetSource
+ 0001:0000C7D4       TWebModuleCOMFormIntfFile.CreateModule
+ 0001:0000C834       TWebModuleCOMFormIntfFile.ImplGetIntfSource
+ 0001:0000D8C8       TWebModuleResources.Create
+ 0001:0000DA58       TWebModuleResources.Destroy
+ 0001:00009E64       TWebModuleWizard.Execute
+ 0001:00009EC8       TWebModuleWizard.GetAuthor
+ 0001:00009EEC       TWebModuleWizard.GetComment
+ 0001:00009F00       TWebModuleWizard.GetDesigner
+ 0001:00009F20       TWebModuleWizard.GetGlyph
+ 0001:00009F3C       TWebModuleWizard.GetIDString
+ 0001:00009F50       TWebModuleWizard.GetName
+ 0001:00009F64       TWebModuleWizard.GetPage
+ 0001:00009F78       TWebModuleWizard.GetState
+ 0001:0000C924       TWebPageModuleCreator.CreateModule
+ 0001:0000CA20       TWebPageModuleCreator.GetModuleClassName
+ 0001:0000CA64       TWebPageModuleCreator.ImplNewFormFile
+ 0001:0000E068       TWebPageModuleFile.CreateModule
+ 0001:00009F84       TWebPageModuleWizard.Create
+ 0001:0000B03C       TWebPageModuleWizard.ImplExecute
+ 0001:0000DC4C       TWebProjectWDataModuleCreator.CreateProject
+ 0001:0000DC90       TWebProjectWDataModuleCreator.GetAppModuleCreator
+ 0001:0000DB4C       TWebProjectWPageModuleCreator.CreateProject
+ 0001:0000DBB0       TWebProjectWPageModuleCreator.GetAppModuleCreator
+ 0001:00019AB0       TWebSiteItemsPropertyEditor.GetEditorClass
+ 0001:00019AB8       TWebSitePageEditor.GetEditorClass
+ 0001:00019F44       TWebUserListComponentEditor.Edit
+ 0001:00019FB0       TWebUserListComponentEditor.ExecuteVerb
+ 0001:00019FC4       TWebUserListComponentEditor.GetVerb
+ 0001:00019FE4       TWebUserListComponentEditor.GetVerbCount
+ 0001:00019EA0       TXMLDataComponentProperty.SupportsInterface
+ 0001:000172B8       TXMLDisplayGroupSprig.AnyProblems
+ 0001:000172CC       TXMLDisplayReferenceGroupSprig.AnyProblems
+ 0001:0000039C       UninitializeModule
+ 0001:000068D0       UnRegisterAllModulePageProducers
+ 0001:00001E34       UnRegisterAllProducerTemplates
+ 0001:00006828       UnRegisterModulePageProducers
+ 0001:00001DD0       UnRegisterProducerTemplates
+ 0001:000047D4       UnRegisterWebAppServices
+ 0001:00012F70       UpdateMenuState
+ 0001:000007D4       UrlMon
+ 0001:00002B64       ValidatePageName
+ 0001:000060A4       ValidProgID
+ 0002:00001074       WebAppServices
+ 0002:000010B8       WebContext
+ 0002:000010B0       WebModuleResources
+ 0001:00017310       WebSprig
+ 0001:000004F4       Windows
+ 0001:0000080C       WinInet
+ 0001:00010334       WinSock
+ 0001:00000D04       WinSpool
+ 0001:00006C94       WProdReg
+ 0001:00004888       WSvcReg
+
+
+  Address         Publics by Value
+
+ 0002:AFC92000       TlsLast
+ 0001:00000288       FreeLibrary
+ 0001:00000290       LocalAlloc
+ 0001:00000298       LocalFree
+ 0001:000002A0       TlsAlloc
+ 0001:000002A8       TlsFree
+ 0001:000002B0       TlsGetValue
+ 0001:000002B8       TlsSetValue
+ 0001:000002C0       AllocTlsBuffer
+ 0001:000002CC       GetTlsSize
+ 0001:000002D4       InitThreadTLS
+ 0001:00000318       InitProcessTLS
+ 0001:00000344       ExitThreadTLS
+ 0001:0000036C       ExitProcessTLS
+ 0001:00000390       InitializeModule
+ 0001:0000039C       UninitializeModule
+ 0001:000003C0       @InitPkg
+ 0001:00000424       @PackageLoad
+ 0001:00000430       @PackageUnload
+ 0001:0000043C       Finalization
+ 0001:0000046C       SysInit
+ 0001:00000474       RegCloseKey
+ 0001:0000047C       RegEnumKey
+ 0001:00000484       RegOpenKey
+ 0001:0000048C       RegQueryValue
+ 0001:00000494       FindResource
+ 0001:0000049C       LoadResource
+ 0001:000004A4       LockResource
+ 0001:000004AC       LoadIcon
+ 0001:000004B4       Succeeded
+ 0001:000004C4       Finalization
+ 0001:000004F4       Windows
+ 0001:000006BC       Finalization
+ 0001:000006EC       Messages
+ 0001:0000076C       Finalization
+ 0001:0000079C       ShlObj
+ 0001:000007A4       Finalization
+ 0001:000007D4       UrlMon
+ 0001:000007DC       Finalization
+ 0001:0000080C       WinInet
+ 0001:00000814       Finalization
+ 0001:00000844       RegStr
+ 0001:0000084C       Finalization
+ 0001:0000087C       ShellAPI
+ 0001:00000884       Finalization
+ 0001:000008B4       CommCtrl
+ 0001:00000C6C       Finalization
+ 0001:00000C9C       Imm
+ 0001:00000CD4       Finalization
+ 0001:00000D04       WinSpool
+ 0001:00000D44       Finalization
+ 0001:00000D74       CommDlg
+ 0001:00000D7C       Finalization
+ 0001:00000DAC       Dlgs
+ 0001:00000E8C       Finalization
+ 0001:00000EBC       RichEdit
+ 0001:00001D50       RegisterProducerTemplates
+ 0001:00001DD0       UnRegisterProducerTemplates
+ 0001:00001E34       UnRegisterAllProducerTemplates
+ 0001:00001E40       EnumRegisteredProducerTemplates
+ 0001:00001E88       EnumRegisteredProducerTemplatesOfClass
+ 0001:00001F24       TProducerTemplatesInfo.Destroy
+ 0001:00001F4C       TAbstractProducerTemplate.GetName
+ 0001:00001F58       TAbstractProducerTemplate.GetText
+ 0001:00001F6C       TAbstractProducerTemplate.IsDefault
+ 0001:00001F70       TAbstractProducerTemplate.SupportsClass
+ 0001:00001F74       TAbstractProducerTemplate.SupportsFileType
+ 0001:00001FA4       TAbstractProducerTemplate.SupportsScriptEngine
+ 0001:00001FD4       TAbstractProducerTemplates.GetCount
+ 0001:00001FD8       TAbstractProducerTemplates.GetTemplate
+ 0001:00001FDC       TProducerTemplatesList.Add
+ 0001:00001FE8       TProducerTemplatesList.Create
+ 0001:00002030       TProducerTemplatesList.Destroy
+ 0001:00002060       TProducerTemplatesList.GetCount
+ 0001:00002068       TProducerTemplatesList.GetTemplate
+ 0001:00002088       TFormatProducerTemplate.Create
+ 0001:00002158       TFormatProducerTemplate.Destroy
+ 0001:00002198       TFormatProducerTemplate.GetName
+ 0001:000021AC       TFormatProducerTemplate.GetText
+ 0001:0000222C       TFormatProducerTemplate.IsDefault
+ 0001:00002230       TFormatProducerTemplate.SupportsClass
+ 0001:0000229C       TFormatProducerTemplate.SupportsFileType
+ 0001:00002304       TFormatProducerTemplateScript.Create
+ 0001:000023B4       TFormatProducerTemplateScript.Destroy
+ 0001:000023E4       TFormatProducerTemplateScript.SupportsScriptEngine
+ 0001:00002464       TProducerTemplateString.Create
+ 0001:000024C8       TProducerTemplateString.GetFormat
+ 0001:000024DC       TProducerTemplateStream.Create
+ 0001:00002540       TProducerTemplateStream.Destroy
+ 0001:00002574       TProducerTemplateStream.GetFormat
+ 0001:000025B8       TProducerTemplateScriptString.Create
+ 0001:00002620       TProducerTemplateScriptString.GetFormat
+ 0001:00002634       TProducerTemplateScriptStream.Create
+ 0001:0000269C       TProducerTemplateScriptStream.GetFormat
+ 0001:000026E0       Finalization
+ 0001:00002718       ProdTemplateReg
+ 0001:00002B64       ValidatePageName
+ 0001:00002BEC       ListChanged
+ 0001:00002C50       TNewPageFrame.RefreshList
+ 0001:00002E00       TNewPageFrame.RefreshTemplatesList
+ 0001:00002E78       TNewPageFrame.RefreshEnginesList
+ 0001:00002F30       TNewPageFrame.ClassNameChange
+ 0001:00002FC4       TNewPageFrame.GetDefaultPageName
+ 0001:00003030       TNewPageFrame.GetPageName
+ 0001:00003048       TNewPageFrame.SetPageName
+ 0001:00003054       TNewPageFrame.ValidateFields
+ 0001:00003130       TNewPageFrame.EnableActionExecute
+ 0001:00003134       TNewPageFrame.EnableActionUpdate
+ 0001:00003284       TNewPageFrame.DoOK
+ 0001:000032F8       TNewPageFrame.ClassListClick
+ 0001:00003308       TNewPageFrame.GetProducerClassName
+ 0001:00003334       TNewPageFrame.GetSelectedProducerInfo
+ 0001:0000337C       TNewPageFrame.SetAccess
+ 0001:000033B0       TNewPageFrame.GetAccess
+ 0001:000033F0       TNewPageFrame.edPageNameChange
+ 0001:00003478       TNewPageFrame.GetPageTitle
+ 0001:00003490       TNewPageFrame.SetPageTitle
+ 0001:0000349C       TNewPageFrame.GetScriptEngine
+ 0001:000034F0       TNewPageFrame.SetScriptEngine
+ 0001:00003538       TNewPageFrame.GetSelectedTemplate
+ 0001:00003574       TNewPageFrame.Create
+ 0001:000035E4       TNewPageFrame.SetSelectedTemplate
+ 0001:00003624       TNewPageFrame.SetSelectedProducerInfo
+ 0001:0000366C       TNewPageFrame.GetCreateHTMLModule
+ 0001:0000367C       TNewPageFrame.SetCreateHTMLModule
+ 0001:0000368C       TNewPageFrame.cbScriptEngineChange
+ 0001:00003694       TNewPageFrame.GetNewTemplateFile
+ 0001:000036A4       TNewPageFrame.SetNewTemplateFile
+ 0001:000036B8       TNewPageFrame.GetSelectedTemplateName
+ 0001:000036E4       TNewPageFrame.SetSelectedTemplateName
+ 0001:00003710       TNewPageFrame.SetProducerClassName
+ 0001:00003744       TNewPageFrame.GetIsDefaultPageName
+ 0001:00003768       TNewPageFrame.GetIsDefaultPageTitle
+ 0001:0000378C       TNewPageFrame.RefreshTemplateExtensionName
+ 0001:00003828       TNewPageFrame.GetTemplateFileExt
+ 0001:00003840       TNewPageFrame.GetTemplateFileType
+ 0001:0000385C       Finalization
+ 0001:0000388C       NwPageFrame
+ 0001:00003B74       IndexToCacheMode
+ 0001:00003B88       CacheModeToIndex
+ 0001:00003B9C       IndexToCreateMode
+ 0001:00003BB0       CreateModeToIndex
+ 0001:00003BC4       TNewWebPageForm.ValidateFields
+ 0001:00003BD8       TNewWebPageForm.GetCacheMode
+ 0001:00003BF0       TNewWebPageForm.GetCreateMode
+ 0001:00003C08       TNewWebPageForm.SetCacheMode
+ 0001:00003C28       TNewWebPageForm.SetCreateMode
+ 0001:00003C48       TNewWebPageForm.FormCreate
+ 0001:00003C60       TNewWebPageForm.HelpButtonClick
+ 0001:00003C78       TNewWebPageForm.EnableActionExecute
+ 0001:00003C7C       TNewWebPageForm.EnableActionUpdate
+ 0001:00003C94       TNewWebPageForm.OKButtonClick
+ 0001:00003D08       TNewWebPageForm.GetCacheModeIndex
+ 0001:00003D18       TNewWebPageForm.GetCreateModeIndex
+ 0001:00003D28       TNewWebPageForm.SetCacheModeIndex
+ 0001:00003D38       TNewWebPageForm.SetCreateModeIndex
+ 0001:00003D48       Finalization
+ 0001:00003D78       NwWebPageMod
+ 0001:00003FC8       TNewWebDataModForm.GetCacheMode
+ 0001:00003FE0       TNewWebDataModForm.GetCreateMode
+ 0001:00003FF8       TNewWebDataModForm.SetCacheMode
+ 0001:00004018       TNewWebDataModForm.SetCreateMode
+ 0001:00004038       TNewWebDataModForm.FormCreate
+ 0001:00004050       TNewWebDataModForm.HelpButtonClick
+ 0001:00004068       Finalization
+ 0001:00004098       NwWebDataMod
+ 0001:00004328       TNewWebAppPageForm.ValidateFields
+ 0001:0000433C       TNewWebAppPageForm.HelpButtonClick
+ 0001:00004354       TNewWebAppPageForm.EnableActionExecute
+ 0001:00004358       TNewWebAppPageForm.EnableActionUpdate
+ 0001:00004370       TNewWebAppPageForm.OKButtonClick
+ 0001:000043E4       TNewWebAppPageForm.FormCreate
+ 0001:000043F4       Finalization
+ 0001:00004424       NwAppPage
+ 0001:000047AC       RegisterWebAppServices
+ 0001:000047D4       UnRegisterWebAppServices
+ 0001:00004810       EnumRegisteredWebAppServices
+ 0001:0000484C       Finalization
+ 0001:00004888       WSvcReg
+ 0001:00004CAC       TNewWebAppServices.HelpButtonClick
+ 0001:00004CC4       TNewWebAppServices.EnableActionExecute
+ 0001:00004CC8       TNewWebAppServices.EnableActionUpdate
+ 0001:00004CCC       TNewWebAppServices.ServiceTypeToCheckBox
+ 0001:00004D3C       TNewWebAppServices.ServiceTypeToComboBox
+ 0001:00004DAC       TNewWebAppServices.EnumCallback
+ 0001:00004E50       TNewWebAppServices.PopulateLists
+ 0001:00004EA8       TNewWebAppServices.ServiceTypeToInterface
+ 0001:00004FCC       TNewWebAppServices.FormCreate
+ 0001:00004FD4       TNewWebAppServices.GetServiceClasses
+ 0001:00005018       TNewWebAppServices.GetSelectedServices
+ 0001:0000505C       TNewWebAppServices.SetSelectedServices
+ 0001:00005094       TNewWebAppServices.SetServiceClasses
+ 0001:000050DC       Finalization
+ 0001:0000510C       NwAppServices
+ 0001:000055DC       TNewSiteSrvForm.HelpButtonClick
+ 0001:000055F4       TNewSiteSrvForm.EnableActionExecute
+ 0001:000055F8       TNewSiteSrvForm.EnableActionUpdate
+ 0001:0000563C       TNewSiteSrvForm.EnableCoClassName
+ 0001:00005660       TNewSiteSrvForm.ValidateFields
+ 0001:000057A8       TNewSiteSrvForm.OKButtonClick
+ 0001:00005838       TNewSiteSrvForm.GetCacheMode
+ 0001:00005850       TNewSiteSrvForm.GetModuleClassName
+ 0001:000058E0       TNewSiteSrvForm.GetDefaultPageName
+ 0001:0000594C       TNewSiteSrvForm.GetPageName
+ 0001:00005964       TNewSiteSrvForm.SetPageName
+ 0001:00005970       TNewSiteSrvForm.SetCacheMode
+ 0001:00005990       TNewSiteSrvForm.GetAppModuleType
+ 0001:000059B0       TNewSiteSrvForm.SetAppModuleType
+ 0001:000059DC       TNewSiteSrvForm.FormCreate
+ 0001:00005A3C       TNewSiteSrvForm.HasPage
+ 0001:00005A50       TNewSiteSrvForm.ClassNameChange
+ 0001:00005B08       TNewSiteSrvForm.cbAppModuleTypeClick
+ 0001:00005B10       TNewSiteSrvForm.SetPageNameOfClassNameCallback
+ 0001:00005B30       TNewSiteSrvForm.FormDestroy
+ 0001:00005B3C       TNewSiteSrvForm.pbPageOptionsClick
+ 0001:00005C0C       TNewSiteSrvForm.bpServicesClick
+ 0001:00005CB0       TNewSiteSrvForm.GetSelectedServices
+ 0001:00005CBC       TNewSiteSrvForm.GetServiceClasses
+ 0001:00005CD0       TNewSiteSrvForm.SetSelectedServices
+ 0001:00005CE0       TNewSiteSrvForm.SetServiceClasses
+ 0001:00005CF4       TNewSiteSrvForm.GetCacheModeIndex
+ 0001:00005D04       TNewSiteSrvForm.SetCacheModeIndex
+ 0001:00005D14       TNewSiteSrvForm.GetProjectType
+ 0001:00005D8C       TNewSiteSrvForm.SetProjectType
+ 0001:00005E04       TNewSiteSrvForm.GetIncludeService
+ 0001:00005E18       TNewSiteSrvForm.GetServiceClassName
+ 0001:00005E58       TNewSiteSrvForm.SetIncludeService
+ 0001:00005E88       TNewSiteSrvForm.EnumCallback
+ 0001:00005EFC       TNewSiteSrvForm.FindServiceClass
+ 0001:00005F2C       TNewSiteSrvForm.SetServiceClassName
+ 0001:00005F50       TNewSiteSrvForm.GetIsDefaultPageName
+ 0001:00005F7C       Finalization
+ 0001:00005FB8       NwSiteSrv
+ 0001:000060A4       ValidProgID
+ 0001:000061A8       GetActiveScriptParse
+ 0001:000064B0       TActiveScriptEngines.Create
+ 0001:00006520       TActiveScriptEngines.GetCount
+ 0001:0000652C       TActiveScriptEngines.GetItems
+ 0001:00006548       Finalization
+ 0001:00006584       ActiveScriptCat
+ 0001:000066A4       RegisterModulePageProducers
+ 0001:00006828       UnRegisterModulePageProducers
+ 0001:000068D0       UnRegisterAllModulePageProducers
+ 0001:00006908       EnumRegisteredModulePageProducers
+ 0001:00006948       FindModulePageProducerInfo
+ 0001:0000697C       GetHTMLTemplateFileExt
+ 0001:000069B0       GetXSLTemplateFileExt
+ 0001:000069D0       TModulePageProducerInfo.Create
+ 0001:00006A38       TModulePageProducerInfo.Destroy
+ 0001:00006A68       TModulePageProducerInfo.ProducerName
+ 0001:00006ABC       TModulePageProducerInfo.RaiseMissingScriptEngine
+ 0001:00006BB4       TModulePageProducerInfo.SupportsScriptEngine
+ 0001:00006C30       TModulePageProducerInfo.TemplateFileExtension
+ 0001:00006C54       Finalization
+ 0001:00006C94       WProdReg
+ 0001:00008ED4       Register
+ 0001:00008FF0       GetWebAppServices
+ 0001:00009040       GetActiveProjectGroup
+ 0001:00009108       GetActiveProject
+ 0001:00009160       GetRegKey
+ 0001:00009204       GetHTMLFileExt
+ 0001:00009268       GetHTMLSampleImage
+ 0001:00009298       TWebAppWizard.PageNameOfClassName
+ 0001:00009368       TWebAppWizard.Execute
+ 0001:00009698       TWebAppWizard.GetAuthor
+ 0001:000096BC       TWebAppWizard.GetComment
+ 0001:000096D0       TWebAppWizard.GetGlyph
+ 0001:000096EC       TWebAppWizard.GetIDString
+ 0001:00009728       TWebAppWizard.GetName
+ 0001:0000973C       TWebAppWizard.GetPage
+ 0001:00009750       TWebAppWizard.GetState
+ 0001:0000975C       TWebAppWizard.GetDesigner
+ 0001:0000977C       TBaseWebProjectCreator.GetCreatorType
+ 0001:000097F0       TBaseWebProjectCreator.GetExisting
+ 0001:00009814       TBaseWebProjectCreator.GetFileName
+ 0001:00009A5C       TBaseWebProjectCreator.GetFileSystem
+ 0001:00009A68       TBaseWebProjectCreator.GetOptionFileName
+ 0001:00009A74       TBaseWebProjectCreator.GetOwner
+ 0001:00009A80       TBaseWebProjectCreator.GetServices
+ 0001:00009A98       TBaseWebProjectCreator.GetShowSource
+ 0001:00009A9C       TBaseWebProjectCreator.GetUnnamed
+ 0001:00009AA0       TBaseWebProjectCreator.NewDefaultModule
+ 0001:00009BF4       TBaseWebProjectCreator.NewOptionSource
+ 0001:00009C00       TBaseWebProjectCreator.NewProjectResource
+ 0001:00009C04       TBaseWebProjectCreator.NewProjectSource
+ 0001:00009C40       TProjectFile.CreateNamedProject
+ 0001:00009CBC       TProjectFile.GetAge
+ 0001:00009CD4       TProjectFile.GetSource
+ 0001:00009E64       TWebModuleWizard.Execute
+ 0001:00009EC8       TWebModuleWizard.GetAuthor
+ 0001:00009EEC       TWebModuleWizard.GetComment
+ 0001:00009F00       TWebModuleWizard.GetDesigner
+ 0001:00009F20       TWebModuleWizard.GetGlyph
+ 0001:00009F3C       TWebModuleWizard.GetIDString
+ 0001:00009F50       TWebModuleWizard.GetName
+ 0001:00009F64       TWebModuleWizard.GetPage
+ 0001:00009F78       TWebModuleWizard.GetState
+ 0001:00009F84       TWebPageModuleWizard.Create
+ 0001:0000A038       SaveWebPageDefaults
+ 0001:0000A2CC       RestoreWebPageDefaults
+ 0001:0000A704       SaveWebAppDefaults
+ 0001:0000AB20       RestoreWebAppDefaults
+ 0001:0000B03C       TWebPageModuleWizard.ImplExecute
+ 0001:0000B2B4       TBaseWebModuleCreator.CreateModule
+ 0001:0000B3B0       TBaseWebModuleCreator.FormCreated
+ 0001:0000B3B4       TBaseWebModuleCreator.GetAncestorName
+ 0001:0000B40C       TBaseWebModuleCreator.GetCreatorType
+ 0001:0000B430       TBaseWebModuleCreator.GetExisting
+ 0001:0000B434       TBaseWebModuleCreator.GetFileSystem
+ 0001:0000B440       TBaseWebModuleCreator.GetFormName
+ 0001:0000B454       TBaseWebModuleCreator.GetImplFileName
+ 0001:0000B468       TBaseWebModuleCreator.GetIntfFileName
+ 0001:0000B474       TBaseWebModuleCreator.GetMainForm
+ 0001:0000B478       TBaseWebModuleCreator.GetOwner
+ 0001:0000B484       TBaseWebModuleCreator.GetShowForm
+ 0001:0000B488       TBaseWebModuleCreator.GetShowSource
+ 0001:0000B48C       TBaseWebModuleCreator.GetUnnamed
+ 0001:0000B490       TBaseWebModuleCreator.NewFormFile
+ 0001:0000B4B4       TBaseWebModuleCreator.ImplNewFormFile
+ 0001:0000B4C4       TBaseWebModuleCreator.NewImplSource
+ 0001:0000B4EC       TBaseWebModuleCreator.NewIntfSource
+ 0001:0000B52C       TBaseWebModuleCreator.Destroy
+ 0001:0000B55C       TBaseWebModuleCreator.FormatFields
+ 0001:0000B6C0       TBaseWebModuleCreator.MinFormWidth
+ 0001:0000B6C8       TBaseWebModuleCreator.MinFormHeight
+ 0001:0000B6F4       FormatSubProperties
+ 0001:0000B7D8       FormatSubObjects
+ 0001:0000B988       TBaseWebModuleCreator.FormatObjects
+ 0001:0000BA08       TBaseWebModuleCreator.FormatProperties
+ 0001:0000BAF8       TBaseWebModuleCreator.PopulateComponentsList
+ 0001:0000BAFC       TBaseWebModuleCreator.GetComponentsList
+ 0001:0000BB18       TWebModuleCOMFormCreator.CreateModule
+ 0001:0000BBD8       TWebModuleCOMFormCreator.FormCreated
+ 0001:0000BBDC       TWebModuleCOMFormCreator.GetAncestorName
+ 0001:0000BBE8       TWebModuleCOMFormCreator.GetCreatorType
+ 0001:0000BC0C       TWebModuleCOMFormCreator.GetExisting
+ 0001:0000BC10       TWebModuleCOMFormCreator.GetFileSystem
+ 0001:0000BC1C       TWebModuleCOMFormCreator.GetFormName
+ 0001:0000BC30       TWebModuleCOMFormCreator.GetImplFileName
+ 0001:0000BC44       TWebModuleCOMFormCreator.GetIntfFileName
+ 0001:0000BC50       TWebModuleCOMFormCreator.GetMainForm
+ 0001:0000BC54       TWebModuleCOMFormCreator.GetOwner
+ 0001:0000BC60       TWebModuleCOMFormCreator.GetShowForm
+ 0001:0000BC64       TWebModuleCOMFormCreator.GetShowSource
+ 0001:0000BC68       TWebModuleCOMFormCreator.GetUnnamed
+ 0001:0000BC6C       TWebModuleCOMFormCreator.NewFormFile
+ 0001:0000BC7C       TWebModuleCOMFormCreator.NewImplSource
+ 0001:0000BCC8       TWebModuleCOMFormCreator.NewIntfSource
+ 0001:0000BD28       TBaseWebDataModuleFile.CreateModule
+ 0001:0000BD8C       TBaseWebPageModuleFile.CreateModule
+ 0001:0000BDE8       TBaseWebModuleFile.CacheOption
+ 0001:0000BE40       AddOption
+ 0001:0000BF3C       TBaseWebModuleFile.PageInfo
+ 0001:0000C234       TBaseWebModuleFile.CreateOption
+ 0001:0000C294       TBaseWebModuleFile.CreateModule
+ 0001:0000C324       TBaseWebModuleFile.GetAge
+ 0001:0000C33C       TBaseWebModuleFile.GetSource
+ 0001:0000C350       GetTemplateExt
+ 0001:0000C39C       TBaseWebModuleFile.FormatFactory
+ 0001:0000C528       TBaseWebModuleFile.ImplGetSource
+ 0001:0000C69C       TBaseHTMLFile.GetAge
+ 0001:0000C6B4       TBaseHTMLFile.GetSource
+ 0001:0000C6C8       TWebModuleCOMFormFile.CreateModule
+ 0001:0000C728       TWebModuleCOMFormFile.ImplGetSource
+ 0001:0000C7D4       TWebModuleCOMFormIntfFile.CreateModule
+ 0001:0000C834       TWebModuleCOMFormIntfFile.ImplGetIntfSource
+ 0001:0000C924       TWebPageModuleCreator.CreateModule
+ 0001:0000CA20       TWebPageModuleCreator.GetModuleClassName
+ 0001:0000CA64       TWebPageModuleCreator.ImplNewFormFile
+ 0001:0000CAF4       TWebAppPageModuleCreator.CreateModule
+ 0001:0000CD3C       AddService
+ 0001:0000CE10       ServiceToPropertyName
+ 0001:0000CF80       GetAppModuleComponents
+ 0001:0000D108       TWebAppPageModuleCreator.PopulateComponentsList
+ 0001:0000D124       TWebAppPageModuleCreator.GetModuleClassName
+ 0001:0000D168       TWebAppPageModuleCreator.ImplNewFormFile
+ 0001:0000D1F8       TBaseWebModuleIntfFile.CreateModule
+ 0001:0000D26C       TBaseWebModuleIntfFile.GetAge
+ 0001:0000D284       TBaseWebModuleIntfFile.GetSource
+ 0001:0000D298       TBaseWebModuleIntfFile.ImplGetIntfSource
+ 0001:0000D3A0       TBaseWebPageModuleCreator.GetAdditionalFileName
+ 0001:0000D3AC       TBaseWebPageModuleCreator.GetAdditionalFileExt
+ 0001:0000D3D0       TBaseWebPageModuleCreator.GetAdditionalFilesCount
+ 0001:0000D3E0       TBaseWebPageModuleCreator.NewAdditionalFileSource
+ 0001:0000D404       TBaseWebPageModuleCreator.CreateModule
+ 0001:0000D474       TBaseWebPageModuleCreator.ImplNewHTMLSource
+ 0001:0000D4B4       TBaseWebPageModuleCreator.ImplNewImplSource
+ 0001:0000D57C       TBaseWebPageModuleCreator.ImplNewIntfSource
+ 0001:0000D60C       TBaseWebPageModuleCreator.PopulateComponentsList
+ 0001:0000D7E8       THTMLFile.CreateModule
+ 0001:0000D82C       THTMLFile.ImplGetSource
+ 0001:0000D840       SkipComment
+ 0001:0000D86C       SkipCommentBlock
+ 0001:0000D898       SkipContent
+ 0001:0000D8C8       TWebModuleResources.Create
+ 0001:0000DA58       TWebModuleResources.Destroy
+ 0001:0000DA94       InitWeb
+ 0001:0000DB40       DoneWeb
+ 0001:0000DB4C       TWebProjectWPageModuleCreator.CreateProject
+ 0001:0000DBB0       TWebProjectWPageModuleCreator.GetAppModuleCreator
+ 0001:0000DC4C       TWebProjectWDataModuleCreator.CreateProject
+ 0001:0000DC90       TWebProjectWDataModuleCreator.GetAppModuleCreator
+ 0001:0000DCF4       TWebAppDataModuleCreator.CreateModule
+ 0001:0000DE40       TWebAppDataModuleCreator.PopulateComponentsList
+ 0001:0000DE4C       TWebAppDataModuleCreator.ImplNewFormFile
+ 0001:0000DEDC       TBaseWebDataModuleCreator.CreateModule
+ 0001:0000DF40       TBaseWebDataModuleCreator.ImplNewImplSource
+ 0001:0000DFD8       TBaseWebDataModuleCreator.ImplNewIntfSource
+ 0001:0000E068       TWebPageModuleFile.CreateModule
+ 0001:0000E0C4       TWebDataModuleCreator.CreateModule
+ 0001:0000E188       TBaseWebFormFile.Create
+ 0001:0000E1F4       TBaseWebFormFile.GetAge
+ 0001:0000E20C       TBaseWebFormFile.GetSource
+ 0001:0000E220       TBaseWebFormFile.ImplGetSource
+ 0001:0000E358       TNewPageHelper.ListProducersCallback
+ 0001:0000E3AC       TNewPageHelper.ListTemplatesCallback
+ 0001:0000E3FC       TNewPageHelper.ListProducers
+ 0001:0000E40C       TNewPageHelper.ListTemplates
+ 0001:0000E584       TNewPageHelper.ListEngines
+ 0001:0000E73C       TNewPageHelper.ExtractTemplate
+ 0001:0000E7E0       TNewPageHelper.PageNameOfClassName
+ 0001:0000E8A8       TNewPageHelper.Create
+ 0001:0000E9CC       TNewPageHelper.RestoreOptions
+ 0001:0000EA54       TNewPageHelper.SaveOptions
+ 0001:0000EB38       TNewPageHelper.GetTemplate
+ 0001:0000EB40       TNewPageHelper.HaveTemplate
+ 0001:0000EB44       TFormComponentsList.AddObject
+ 0001:0000EB90       TFormComponentsList.AddProperty
+ 0001:0000EBCC       TFormComponentsList.Create
+ 0001:0000EC24       TFormComponentsList.Destroy
+ 0001:0000EC5C       TFormComponentsList.GetObjectItem
+ 0001:0000EC7C       TFormComponentsList.GetPropertyItem
+ 0001:0000EC9C       TFormComponentsList.ObjectCount
+ 0001:0000ECA4       TFormComponentsList.PropertyCount
+ 0001:0000ECAC       TWebDataModuleWizard.Create
+ 0001:0000ED58       TWebDataModuleWizard.ImplExecute
+ 0001:0000EE88       TStandardProducerTemplates.Create
+ 0001:0000F14C       TComponentObjectItem.Destroy
+ 0001:0000F1E0       Finalization
+ 0001:0000F298       SiteWiz
+ 0001:0000F610       TWebDesignContext.Create
+ 0001:0000F67C       TWebDesignContext.Destroy
+ 0001:0000F6D4       TWebDesignContext.FindPage
+ 0001:0000F6FC       TWebDesignContext.FindPageInfo
+ 0001:0000F7F0       TWebDesignContext.FindModuleClass
+ 0001:0000F7F4       FindPageFileName
+ 0001:0000F8AC       GetProjectGroup
+ 0001:0000F974       FindModuleInfo
+ 0001:0000FA5C       FindModuleComponent
+ 0001:0000FB94       TWebDesignContext.FindModuleName
+ 0001:0000FCBC       TWebDesignContext.FindVariableContainer
+ 0001:0000FCC4       TWebDesignContext.GetWebRequest
+ 0001:0000FCC8       TWebDesignContext.GetWebResponse
+ 0001:0000FCCC       GetWebContext
+ 0001:0000FCD4       SetWebContext
+ 0001:0000FCDC       TWebDesignContext.GetPageCount
+ 0001:0000FCE0       TWebDesignContext.GetPageInfo
+ 0001:0000FCE4       TWebDesignContext.GetWebModules
+ 0001:0000FD04       TWebDesignContext.FindApplicationModule
+ 0001:0000FE70       TWebDesignContext.GetSession
+ 0001:0000FE74       TWebDesignSession.GetSessionID
+ 0001:0000FE94       TWebDesignSession.GetTimeoutMinutes
+ 0001:0000FE98       TWebDesignSession.GetValue
+ 0001:0000FEA8       TWebDesignSession.SetTimeoutMinutes
+ 0001:0000FEAC       TWebDesignSession.SetValue
+ 0001:0000FEB0       TWebDesignSession.Terminate
+ 0001:0000FEB4       TWebDesignSession.UpdateResponse
+ 0001:0000FEB8       TWebDesignModuleList.AddModuleClass
+ 0001:0000FEBC       TWebDesignModuleList.AddModuleName
+ 0001:0000FEC0       TWebDesignModuleList.FindModuleClass
+ 0001:0000FEC4       TWebDesignModuleList.FindModuleName
+ 0001:0000FEC8       TWebDesignModuleList.GetFactory
+ 0001:0000FECC       TWebDesignModuleList.GetFactoryCount
+ 0001:0000FED0       TWebDesignModuleList.GetItem
+ 0001:0000FED4       TWebDesignModuleList.GetItemCount
+ 0001:0000FED8       TWebDesignModuleList.GetOnModuleAdded
+ 0001:0000FEE0       TWebDesignModuleList.SetOnModuleAdded
+ 0001:0000FEE8       TWebDesignContext.GetEndUser
+ 0001:0000FEF4       TWebDesignContext.GetDispatchedPageName
+ 0001:0000FF08       TWebDesignContext.GetRequestedPageName
+ 0001:0000FF1C       TWebDesignContext.SetDispatchedPageName
+ 0001:0000FF30       TWebDesignContext.SetRequestedPageName
+ 0001:0000FF44       TWebDesignContext.GetAdapterRequest
+ 0001:0000FF50       TWebDesignContext.GetAdapterResponse
+ 0001:0000FF5C       TWebDesignContext.SetAdapterRequest
+ 0001:0000FF84       TWebDesignContext.SetAdapterResponse
+ 0001:0000FFAC       TWebDesignContext.FindDefaultPageInfo
+ 0001:0000FFB0       TDesignWebPageInfo.GetPageFile
+ 0001:0000FFC4       TDesignWebPageInfo.GetPageName
+ 0001:0000FFD8       Finalization
+ 0001:00010040       DsgnCntxt
+ 0001:00010304       Finalization
+ 0001:00010334       WinSock
+ 0001:00011634       CrunchFieldName
+ 0001:000116B0       GenerateName
+ 0001:00011874       IsUnique
+ 0001:000118D8       CreateUniqueName
+ 0001:00011920       TBaseWebFieldsEditor.SetHelper
+ 0001:0001193C       TAbstractWebFieldsEditor.UniqueName
+ 0001:00011968       TAbstractWebFieldsEditor.ExecuteVerb
+ 0001:00011974       TAbstractWebFieldsEditor.AnySelection
+ 0001:000119A0       TAbstractWebFieldsEditor.IsFieldInUse
+ 0001:000119F0       TAbstractWebFieldsEditor.GetFieldsList
+ 0001:000119FC       TAbstractWebFieldsEditor.AddFields
+ 0001:00011A08       TAbstractWebFieldsEditor.Create
+ 0001:00011A50       TAbstractWebFieldsEditor.Destroy
+ 0001:00011A80       TAbstractWebFieldsEditor.RestoreDefaults
+ 0001:00011A8C       TAbstractWebFieldsEditor.GetVerbState
+ 0001:00011AA8       TAbstractWebFieldsEditor.GetVerb
+ 0001:00011AC4       TAbstractWebFieldsEditor.SetHelper
+ 0001:00011AE8       TAbstractWebFieldsEditorHelper.ExecuteAddItem
+ 0001:00011B30       TAbstractWebFieldsEditorHelper.ExecuteOtherItem
+ 0001:00011B68       TAbstractWebFieldsEditorHelper.GetAddItemState
+ 0001:00011BBC       TAbstractWebFieldsEditorHelper.GetOtherItemState
+ 0001:00011BFC       TAbstractWebFieldsEditorHelper.GetAddFieldsItem
+ 0001:00011C68       TAbstractWebFieldsEditorHelper.GetAddAllFieldsItem
+ 0001:00011CD4       TAbstractWebFieldsEditorHelper.GetAddItem
+ 0001:00011D20       TAbstractWebFieldsEditorHelper.GetOtherItem
+ 0001:00011D60       TAbstractWebFieldsEditorHelper.GetAddItemCount
+ 0001:00011D70       TAbstractWebFieldsEditorHelper.GetOtherItemCount
+ 0001:00011D80       TAbstractWebFieldsEditor.GetVerbCount
+ 0001:00011D8C       HasChildItems
+ 0001:00011E0C       Clear
+ 0001:00011EAC       TAbstractWebFieldsEditorHelper.AddFields
+ 0001:00012108       TAbstractWebFieldsEditorHelper.RestoreDefaults
+ 0001:000121B8       TAbstractWebFieldsEditorHelper.GetAddFieldsEditorIntf
+ 0001:00012200       TAbstractWebFieldsEditorHelper.GetAddFieldsDlgCaption
+ 0001:0001226C       TAbstractWebFieldsEditorHelper.GetDefaultAddAllFieldsItem
+ 0001:00012280       TAbstractWebFieldsEditorHelper.GetDefaultAddFieldsDlgCaption
+ 0001:00012294       TAbstractWebFieldsEditorHelper.GetDefaultAddFieldsItem
+ 0001:000122A8       TAbstractWebFieldsEditorHelper.GetDefaultNewFieldPrefix
+ 0001:000122B4       TAbstractWebFieldsEditorHelper.GetNewFieldPrefix
+ 0001:00012320       TAbstractWebNewEditorHelper.CreateFields
+ 0001:000124B0       TSiteDataFieldsComponentEditorHelper.WebComponentInserted
+ 0001:000124BC       TSiteDataFieldsComponentEditorHelper.WebComponentsCleared
+ 0001:000124C8       TSiteDataFieldsComponentEditorHelper.ChildContainer
+ 0001:000124D4       TSiteDataFieldsComponentEditorHelper.Create
+ 0001:00012510       TSiteDataFieldsComponentEditorHelper.FocusChildren
+ 0001:00012528       TSiteDataFieldsComponentEditorHelper.GetDesigner
+ 0001:0001253C       TSiteDataFieldsComponentEditorHelper.AnySelection
+ 0001:00012548       TSiteDataFieldsComponentEditorHelper.GetSelectedComponents
+ 0001:000125BC       TSiteDataFieldsComponentEditorHelper.LockState
+ 0001:000125C8       TSiteDataFieldsComponentEditorHelper.SetSelection
+ 0001:000125D4       TSiteDataFieldsComponentEditorHelper.UnlockState
+ 0001:000125E0       TSiteDataFieldsComponentEditorHelper.ComponentOwner
+ 0001:000125F0       TSiteDataFieldsComponentEditorHelper.ChildComponent
+ 0001:000125FC       TSiteActionsListComponentEditorHelper.WebComponentInserted
+ 0001:00012608       TSiteActionsListComponentEditorHelper.WebComponentsCleared
+ 0001:00012614       TSiteActionsListComponentEditorHelper.ChildContainer
+ 0001:00012620       TSiteActionsListComponentEditorHelper.Create
+ 0001:0001265C       TSiteActionsListComponentEditorHelper.FocusChildren
+ 0001:00012674       TSiteActionsListComponentEditorHelper.GetDesigner
+ 0001:00012688       TSiteActionsListComponentEditorHelper.AnySelection
+ 0001:00012694       TSiteActionsListComponentEditorHelper.GetSelectedComponents
+ 0001:00012704       TSiteActionsListComponentEditorHelper.LockState
+ 0001:00012710       TSiteActionsListComponentEditorHelper.SetSelection
+ 0001:0001271C       TSiteActionsListComponentEditorHelper.UnlockState
+ 0001:00012728       TSiteActionsListComponentEditorHelper.ComponentOwner
+ 0001:00012738       TSiteActionsListComponentEditorHelper.ChildComponent
+ 0001:00012744       TSiteDataFieldsEditorHelper.GetDataSetComponentIntf
+ 0001:000127B8       TSiteDataFieldsEditorHelper.GetDataFieldsIntf
+ 0001:0001282C       TSiteDataFieldsEditorHelper.GetFieldsList
+ 0001:000128A0       TSiteDataFieldsEditorHelper.IsFieldInUse
+ 0001:00012928       TSiteDataFieldsEditorHelper.SetConnected
+ 0001:000129B4       TSiteActionsListEditorHelper.GetActionsListIntf
+ 0001:00012A28       TSiteActionsListEditorHelper.GetFieldsList
+ 0001:00012A98       TSiteActionsListEditorHelper.IsFieldInUse
+ 0001:00012B20       TAbstractWebNewEditorHelper.CheckClass
+ 0001:00012BAC       TAbstractWebNewEditorHelper.NewComponent
+ 0001:00012D4C       TAbstractWebNewEditorHelper.InsertFrame
+ 0001:00012D50       TAbstractWebNewEditorHelper.InsertNewComponent
+ 0001:00012E34       TAbstractWebNewEditorHelper.UniqueName
+ 0001:00012EC0       TAbstractWebNewEditorHelper.ExecuteAddItem
+ 0001:00012ED0       TAbstractWebNewEditorHelper.GetAddItem
+ 0001:00012EE4       TAbstractWebNewEditorHelper.GetAddItemCount
+ 0001:00012EEC       TAbstractWebNewEditorHelper.GetAddItemState
+ 0001:00012F10       TAbstractWebNewEditorHelper.InitializeField
+ 0001:00012F38       TAbstractWebNewEditorHelper.WebComponentInserted
+ 0001:00012F3C       TAbstractWebNewEditorHelper.WebComponentsCleared
+ 0001:00012F40       TAbstractWebEditorHelper.ExecuteAddItem
+ 0001:00012F44       TAbstractWebEditorHelper.ExecuteOtherItem
+ 0001:00012F48       TAbstractWebEditorHelper.GetAddItem
+ 0001:00012F4C       TAbstractWebEditorHelper.GetAddItemCount
+ 0001:00012F50       TAbstractWebEditorHelper.GetAddItemState
+ 0001:00012F5C       TAbstractWebEditorHelper.GetOtherItem
+ 0001:00012F60       TAbstractWebEditorHelper.GetOtherItemCount
+ 0001:00012F64       TAbstractWebEditorHelper.GetOtherItemState
+ 0001:00012F70       UpdateMenuState
+ 0001:00012FD4       TAbstractWebEditorHelper.PrepareMenu
+ 0001:000130B8       TAbstractWebEditorHelper.HandleOtherItemClick
+ 0001:000130D8       TAbstractWebEditorHelper.ExecuteVerb
+ 0001:00013120       TAbstractWebEditorHelper.GetVerb
+ 0001:00013170       TAbstractWebEditorHelper.GetVerbCount
+ 0001:000131A0       TAbstractWebEditorHelper.GetVerbState
+ 0001:000131F0       TAbstractWebEditorHelper.AddType
+ 0001:000131F8       TAbstractWebEditorHelper.GetAddType
+ 0001:00013210       TAbstractWebEditorHelper.AddTypeCount
+ 0001:00013218       TAbstractWebEditorHelper.LockState
+ 0001:0001321C       TAbstractWebEditorHelper.SetSelection
+ 0001:00013220       TAbstractWebEditorHelper.UnlockState
+ 0001:00013224       TSiteFieldsEditorHelper.InitializeField
+ 0001:000132B4       TSiteFieldsEditorHelper.RestoreField
+ 0001:00013324       TSiteFieldsEditorHelper.UniqueName
+ 0001:000133EC       TSiteActionsEditorHelper.GetDefaultAddAllFieldsItem
+ 0001:00013400       TSiteActionsEditorHelper.GetDefaultAddFieldsItem
+ 0001:00013414       TSiteActionsEditorHelper.GetDefaultAddFieldsDlgCaption
+ 0001:00013428       TSiteActionsEditorHelper.InitializeField
+ 0001:000134B8       TSiteActionsEditorHelper.RestoreField
+ 0001:00013528       TSiteActionsEditorHelper.UniqueName
+ 0001:000135F0       TSiteFieldsEditor.CreateHelper
+ 0001:00013600       TInetxFieldsEditorHelper.InitializeField
+ 0001:00013690       TInetxFieldsEditorHelper.RestoreField
+ 0001:00013700       TInetxFieldsEditorHelper.UniqueName
+ 0001:000137C8       TInetxDataFieldsEditorHelper.GetDataSetFieldsIntf
+ 0001:0001383C       TInetxDataFieldsEditorHelper.GetDataSetComponentIntf
+ 0001:000138B0       TInetxDataFieldsEditorHelper.GetFieldsList
+ 0001:00013924       TInetxDataFieldsEditorHelper.IsFieldInUse
+ 0001:000139AC       TInetxDataFieldsEditorHelper.SetConnected
+ 0001:00013A34       TSiteActionsListEditor.CreateHelper
+ 0001:00013A44       Finalization
+ 0001:00013A74       SiteEdit
+ 0001:00015EF8       TAbstractSprigEditor.GetDesigner
+ 0001:00015F20       TAbstractSprigEditor.Create
+ 0001:00015F74       TAbstractSprigEditor.Destroy
+ 0001:00015FA4       TSiteDataFieldsSprigEditor.CreateHelper
+ 0001:00015FB4       TInetxDataFieldsSprigEditor.CreateHelper
+ 0001:00015FC4       TSiteActionsListSprigEditor.CreateHelper
+ 0001:00015FD4       TWebComponentSprig.Component
+ 0001:00015FE8       TWebComponentSprig.IndexOfItem
+ 0001:00016058       TWebComponentSprig.FigureParent
+ 0001:00016134       TWebComponentSprig.Hidden
+ 0001:00016138       TWebComponentSprig.UniqueName
+ 0001:000161FC       TWebComponentSprig.FigureChildren
+ 0001:00016314       TWebComponentSprig.GetComponentListSprigClass
+ 0001:00016318       TWebComponentSprig.IsComponentListObject
+ 0001:0001631C       TWebComponentSprig.IsComponentListContainer
+ 0001:00016320       TWebComponentSprig.ItemIndex
+ 0001:00016338       TWebComponentSprig.DragOverTo
+ 0001:000163C0       TWebComponentSprig.DragDropTo
+ 0001:0001652C       TWebComponentContainerSprig.GetAddType
+ 0001:00016558       TWebComponentContainerSprig.AddType
+ 0001:00016568       TWebComponentContainerSprig.AddTypeCount
+ 0001:0001657C       TWebComponentContainerSprig.SortByIndex
+ 0001:00016580       TWebComponentContainerSprig.Create
+ 0001:000165F4       TWebComponentContainerSprig.Destroy
+ 0001:00016624       TWebComponentContainerSprig.DeleteStyle
+ 0001:00016650       TWebComponentContainerSprig.CanEdit
+ 0001:00016654       TWebComponentContainerSprig.PrepareMenu
+ 0001:00016664       TWebComponentContainerSprig.GetEditorClass
+ 0001:0001666C       TWebComponentRootContainerSprig.GetComponentListSprigClass
+ 0001:00016674       TWebComponentRootContainerSprig.IsComponentListObject
+ 0001:00016688       TAbstractWebComponentListSprig.Caption
+ 0001:000166A0       TAbstractWebComponentListSprig.DeleteStyle
+ 0001:000166A4       TAbstractWebComponentListSprig.CustomDelete
+ 0001:000166A8       TAbstractWebComponentListSprig.FigureParent
+ 0001:000166B8       TAbstractWebComponentListSprig.SortByIndex
+ 0001:000166BC       TAbstractWebComponentListSprig.Name
+ 0001:00016700       TAbstractWebComponentListSprig.Create
+ 0001:0001675C       TAbstractWebComponentListSprig.AddType
+ 0001:00016768       TAbstractWebComponentListSprig.AddTypeCount
+ 0001:00016774       TAbstractWebComponentListSprig.GetAddType
+ 0001:00016790       TAbstractWebComponentListSprig.Owner
+ 0001:00016794       TAbstractWebComponentListSprig.Destroy
+ 0001:000167C4       TAbstractWebComponentListSprig.SetOwner
+ 0001:000167D4       TAbstractWebComponentListSprig.SetComponent
+ 0001:000167E0       TAbstractWebComponentListSprig.GetEditorClass
+ 0001:000167E4       TAbstractWebComponentListSprig.PrepareMenu
+ 0001:000167F4       TSiteDataFieldsSprigEditorHelper.ChildComponent
+ 0001:000167FC       TSiteDataFieldsSprigEditorHelper.Create
+ 0001:00016838       TSiteDataFieldsSprigEditorHelper.FocusChildren
+ 0001:0001683C       TSiteDataFieldsSprigEditorHelper.GetDesigner
+ 0001:00016850       TSiteDataFieldsSprigEditorHelper.GetSelectedComponents
+ 0001:00016914       TSiteDataFieldsSprigEditorHelper.ComponentOwner
+ 0001:00016920       TSiteDataFieldsSprigEditorHelper.ChildContainer
+ 0001:000169A0       TSiteDataFieldsSprigEditorHelper.WebComponentInserted
+ 0001:000169BC       TSiteDataFieldsSprigEditorHelper.AnySelection
+ 0001:00016A24       TInetxDataFieldsSprigEditorHelper.ChildComponent
+ 0001:00016A2C       TInetxDataFieldsSprigEditorHelper.Create
+ 0001:00016A68       TInetxDataFieldsSprigEditorHelper.FocusChildren
+ 0001:00016A6C       TInetxDataFieldsSprigEditorHelper.GetDesigner
+ 0001:00016A80       TInetxDataFieldsSprigEditorHelper.GetSelectedComponents
+ 0001:00016B44       TInetxDataFieldsSprigEditorHelper.ComponentOwner
+ 0001:00016B50       TInetxDataFieldsSprigEditorHelper.ChildContainer
+ 0001:00016BD0       TInetxDataFieldsSprigEditorHelper.WebComponentInserted
+ 0001:00016BEC       TInetxDataFieldsSprigEditorHelper.AnySelection
+ 0001:00016C54       TSiteActionsListSprigEditorHelper.ChildComponent
+ 0001:00016C5C       TSiteActionsListSprigEditorHelper.Create
+ 0001:00016C98       TSiteActionsListSprigEditorHelper.FocusChildren
+ 0001:00016C9C       TSiteActionsListSprigEditorHelper.GetDesigner
+ 0001:00016CB0       TSiteActionsListSprigEditorHelper.GetSelectedComponents
+ 0001:00016D74       TSiteActionsListSprigEditorHelper.ComponentOwner
+ 0001:00016D80       TSiteActionsListSprigEditorHelper.ChildContainer
+ 0001:00016E00       TSiteActionsListSprigEditorHelper.WebComponentInserted
+ 0001:00016E1C       TSiteActionsListSprigEditorHelper.AnySelection
+ 0001:00016E84       TSimpleFieldsSprigEditorHelper.ChildComponent
+ 0001:00016E8C       TSimpleFieldsSprigEditorHelper.Create
+ 0001:00016EC8       TSimpleFieldsSprigEditorHelper.GetDesigner
+ 0001:00016EDC       TSimpleFieldsSprigEditorHelper.ComponentOwner
+ 0001:00016EE8       TSimpleFieldsSprigEditorHelper.ChildContainer
+ 0001:00016F68       TSimpleFieldsSprigEditorHelper.WebComponentInserted
+ 0001:00016F84       TSimpleFieldsSprigEditorHelper.AnySelection
+ 0001:00016FEC       TWebDataSetAdapterSprig.AnyProblems
+ 0001:0001707C       TWebDataSetAdapterSprig.DragDropTo
+ 0001:000170D8       TWebDataSetAdapterSprig.DragOverTo
+ 0001:00017108       TWebDataSetAdapterSprig.GetDataSet
+ 0001:0001717C       TWebDataSetAdapterSprig.SetDataSet
+ 0001:000171EC       TWebDataSetAdapterSprig.FigureParent
+ 0001:0001721C       TWebDataSetAdapterSprig.PaletteOverTo
+ 0001:00017250       TSiteDataFieldsComponentListSprig.GetEditorClass
+ 0001:00017258       TInetxDataFieldsComponentListSprig.GetEditorClass
+ 0001:00017260       TSiteDataFieldsRootContainerSprig.GetComponentListSprigClass
+ 0001:00017268       TSiteDataFieldsRootContainerSprig.IsComponentListObject
+ 0001:0001727C       TSimpleFieldsSprigEditor.CreateHelper
+ 0001:0001728C       TSimpleWebComponentListSprig.GetEditorClass
+ 0001:00017294       TWebComponentListContainerSprig.IsComponentListContainer
+ 0001:00017298       TSiteDataFieldsContainerSprig.GetEditorClass
+ 0001:000172A0       TInetxDataFieldsContainerSprig.GetEditorClass
+ 0001:000172A8       TSiteActionsListContainerSprig.GetEditorClass
+ 0001:000172B0       TSiteActionsListComponentListSprig.GetEditorClass
+ 0001:000172B8       TXMLDisplayGroupSprig.AnyProblems
+ 0001:000172CC       TXMLDisplayReferenceGroupSprig.AnyProblems
+ 0001:000172E0       Finalization
+ 0001:00017310       WebSprig
+ 0001:000175A8       RegisterInetFileType
+ 0001:000175E8       EnumInetFileTypes
+ 0001:00017630       FindInetFileType
+ 0001:0001767C       FindInetFileExt
+ 0001:000176C8       TInetFileType.AddFileExt
+ 0001:000176E8       TInetFileType.Create
+ 0001:00017748       TInetFileType.Destroy
+ 0001:00017784       TInetFileType.GetExtCount
+ 0001:00017790       TInetFileType.GetFileExt
+ 0001:000177AC       TInetFileType.GetTypeID
+ 0001:000177C0       TInetFileTypes.FindFileExt
+ 0001:000177C8       Finalization
+ 0001:0001780C       InetFileTypeReg
+ 0001:00018458       TAdapterActionNameActionNameProperty.GetAttributes
+ 0001:00018478       GetPropertyValue
+ 0001:000184BC       TAdapterActionNameActionNameProperty.GetValues
+ 0001:000185E0       TScriptEngineProperty.GetAttributes
+ 0001:00018600       TScriptEngineProperty.GetValues
+ 0001:000186F8       TAdapterFieldNameProperty.GetAttributes
+ 0001:00018718       TAdapterFieldNameProperty.GetValues
+ 0001:00018828       TAdapterActionNameProperty.GetAttributes
+ 0001:00018848       TAdapterActionNameProperty.GetValues
+ 0001:00018958       TAdapterAvailableFieldNameProperty.GetAttributes
+ 0001:00018978       TAdapterAvailableFieldNameProperty.GetValues
+ 0001:00018AAC       TAdapterDisplayComponentProperty.GetAttributes
+ 0001:00018ACC       GetTopParent
+ 0001:00018AF4       TAdapterDisplayComponentProperty.GetValues
+ 0001:00018BE8       Register
+ 0001:00019AB0       TWebSiteItemsPropertyEditor.GetEditorClass
+ 0001:00019AB8       TWebSitePageEditor.GetEditorClass
+ 0001:00019AC0       TAdapterComponentProperty.GetGuid
+ 0001:00019AE0       TAdapterModeProperty.GetAttributes
+ 0001:00019B00       TAdapterModeProperty.GetValues
+ 0001:00019C1C       TAdapterFieldsComponentEditor.ExecuteVerb
+ 0001:00019D34       TAdapterFieldsComponentEditor.GetVerb
+ 0001:00019D5C       TAdapterFieldsComponentEditor.GetVerbCount
+ 0001:00019D64       TAdapterFieldsComponentEditor.GetDesignerClass
+ 0001:00019D6C       TMasterAdapterComponentProperty.RcvComponentNames
+ 0001:00019DB0       TMasterAdapterComponentProperty.IsType
+ 0001:00019DC0       TMasterAdapterComponentProperty.GetValues
+ 0001:00019E2C       TMasterAdapterComponentProperty.SetValue
+ 0001:00019EA0       TXMLDataComponentProperty.SupportsInterface
+ 0001:00019F44       TWebUserListComponentEditor.Edit
+ 0001:00019FB0       TWebUserListComponentEditor.ExecuteVerb
+ 0001:00019FC4       TWebUserListComponentEditor.GetVerb
+ 0001:00019FE4       TWebUserListComponentEditor.GetVerbCount
+ 0001:00019FEC       Finalization
+ 0001:0001A28C       SiteReg
+ 0001:0001B02C       Finalization
+ 0001:0001B05C       ActivDbgLib
+ 0001:0001B354       TTimeoutThread.Create
+ 0001:0001B3D8       IncSecond
+ 0001:0001B404       TTimeoutThread.Execute
+ 0001:0001B468       TBaseDebugScriptSite.GetWindow
+ 0001:0001B474       TBaseDebugScriptSite.EnableModeless
+ 0001:0001B480       TBaseDebugScriptSite.GetDeferredText
+ 0001:0001B48C       TBaseDebugScriptSite.GetScriptTextAttributes
+ 0001:0001B498       TBaseDebugScriptSite.OnCreateDocumentContext
+ 0001:0001B4B0       TBaseDebugScriptSite.GetPathName
+ 0001:0001B4FC       TBaseDebugScriptSite.GetFileName
+ 0001:0001B53C       TBaseDebugScriptSite.NotifyChanged
+ 0001:0001B548       TBaseDebugScriptSite.GetDocumentContextFromPosition
+ 0001:0001B5E0       TBaseDebugScriptSite.GetApplication
+ 0001:0001B604       TBaseDebugScriptSite.GetRootApplicationNode
+ 0001:0001B63C       TBaseDebugScriptSite.HandleScriptError
+ 0001:0001B648       TBaseDebugScriptSite.OnScriptErrorDebug
+ 0001:0001B694       TBaseDebugScriptSite.SetupDebugScript
+ 0001:0001B748       TBaseDebugScriptSite.SetupDebugDocumentHelper
+ 0001:0001B880       CreateDebugManager
+ 0001:0001B928       TBaseDebugScriptSite.SetupDebugApplication
+ 0001:0001BA6C       TimeoutError
+ 0001:0001BB64       TBaseDebugScriptSite.RunExpression
+ 0001:0001BFE0       TBaseDebugScriptSite.BreakOnFirstStatement
+ 0001:0001BFE4       Finalization
+ 0001:0001C024       DbgSite
+ 0001:0001C0FC       TDesignerDebugScriptSite.BreakOnFirstStatement
+ 0001:0001C104       TDesignerDebugScriptSite.HandleScriptError
+ 0001:0001C258       TScriptDebugger.DebugScript
+ 0001:0001C2E0       TScriptDebugger.CanDebugScript
+ 0001:0001C344       Finalization
+ 0001:0001C398       DesignerDbgSite
+ 0001:0001CBB0       @GetPackageInfoTable
+ 0001:0001CBB8       @PackageLoad
+ 0001:0001CBC4       @PackageUnload
+ 0001:0001CBD0       dclwebsnap
+ 0002:00000000       Module
+ 0002:00000018       TlsProc
+ 0002:00000028       CATID_ActiveScriptParse
+ 0002:00000038       DefaultServiceClasses
+ 0002:00000058       IsDelphi
+ 0002:0000005C       PROJ_EXT
+ 0002:00000064       sAppModuleTypeNames
+ 0002:0000006C       sProjectTypeNames
+ 0002:00000080       sWebAppServiceTypeNames
+ 0002:000000A0       LIBID_ActivDbg
+ 0002:000000B0       IID_IActiveScriptDebug
+ 0002:000000C0       IID_IEnumDebugCodeContexts
+ 0002:000000D0       IID_IDebugCodeContext
+ 0002:000000E0       IID_IDebugDocumentContext
+ 0002:000000F0       IID_IDebugDocumentInfo
+ 0002:00000100       IID_IDebugDocument
+ 0002:00000110       IID_IActiveScriptSiteDebug
+ 0002:00000120       IID_IRemoteDebugApplication
+ 0002:00000130       IID_IDebugApplication
+ 0002:00000140       IID_IRemoteDebugApplicationThread
+ 0002:00000150       IID_IEnumDebugStackFrames
+ 0002:00000160       IID_IDebugStackFrame
+ 0002:00000170       IID_IDebugApplicationThread
+ 0002:00000180       IID_IDebugThreadCall
+ 0002:00000190       IID_IDebugProperty
+ 0002:000001A0       IID_IApplicationDebugger
+ 0002:000001B0       IID_IActiveScriptErrorDebug
+ 0002:000001C0       IID_IEnumRemoteDebugApplicationThreads
+ 0002:000001D0       IID_IDebugDocumentProvider
+ 0002:000001E0       IID_IDebugApplicationNode
+ 0002:000001F0       IID_IEnumDebugApplicationNodes
+ 0002:00000200       IID_IEnumDebugExpressionContexts
+ 0002:00000210       IID_IDebugExpressionContext
+ 0002:00000220       IID_IDebugExpression
+ 0002:00000230       IID_IDebugExpressionCallBack
+ 0002:00000240       IID_IDebugSyncOperation
+ 0002:00000250       IID_IDebugAsyncOperation
+ 0002:00000260       IID_IDebugAsyncOperationCallBack
+ 0002:00000270       IID_IDebugStackFrameSniffer
+ 0002:00000280       IID_IProvideExpressionContexts
+ 0002:00000290       IID_IDebugStackFrameSnifferEx
+ 0002:000002A0       IID_IDebugDocumentText
+ 0002:000002B0       IID_IDebugDocumentTextEvents
+ 0002:000002C0       IID_IDebugDocumentTextAuthor
+ 0002:000002D0       IID_IDebugDocumentTextExternalAuthor
+ 0002:000002E0       IID_IDebugDocumentHelper
+ 0002:000002F0       IID_IDebugDocumentHost
+ 0002:00000300       IID_IDebugSessionProvider
+ 0002:00000310       IID_IApplicationDebuggerUI
+ 0002:00000320       IID_IMachineDebugManager
+ 0002:00000330       IID_IEnumRemoteDebugApplications
+ 0002:00000340       IID_IMachineDebugManagerCookie
+ 0002:00000350       IID_IMachineDebugManagerEvents
+ 0002:00000360       IID_IProcessDebugManager
+ 0002:00000370       IID_IRemoteDebugApplicationEvents
+ 0002:00000380       IID_IDebugApplicationNodeEvents
+ 0002:00000390       IID_IDebugCookie
+ 0002:000003A0       IID_IDebugFormatter
+ 0002:000003B0       IID_ISimpleConnectionPoint
+ 0002:000003C0       IID_IDebugHelper
+ 0002:000003D0       SetBreak
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0002:00001004       TlsIndex
+ 0002:0000100C       HInstance
+ 0002:00001010       .1
+ 0002:00001014       tlsBuffer
+ 0002:00001018       .3
+ 0002:0000101C       .1
+ 0002:00001020       .1
+ 0002:00001024       .1
+ 0002:00001028       .1
+ 0002:0000102C       .1
+ 0002:00001030       .1
+ 0002:00001034       .1
+ 0002:00001038       .1
+ 0002:0000103C       .3
+ 0002:00001040       .1
+ 0002:00001044       .1
+ 0002:00001048       .1
+ 0002:0000104C       .11
+ 0002:00001050       ProducerTemplatesInfoList
+ 0002:00001054       .2
+ 0002:00001058       NewWebPageForm
+ 0002:0000105C       .2
+ 0002:00001060       NewWebDataModForm
+ 0002:00001064       .2
+ 0002:00001068       NewWebAppPageForm
+ 0002:0000106C       .2
+ 0002:00001070       .1
+ 0002:00001074       WebAppServices
+ 0002:00001078       NewWebAppServices
+ 0002:0000107C       .2
+ 0002:00001080       .2
+ 0002:00001084       Arg
+ 0002:00001088       Found
+ 0002:0000108C       .2
+ 0002:00001090       ProgIDList
+ 0002:00001094       GetDefaultTemplateFileExt
+ 0002:00001098       NoScriptEngines
+ 0002:0000109C       .2
+ 0002:000010A0       ModulePageProducers
+ 0002:000010A4       .43
+ 0002:000010A8       ProjectType
+ 0002:000010AC       ProjectCoClassName
+ 0002:000010B0       WebModuleResources
+ 0002:000010B4       .5
+ 0002:000010B8       WebContext
+ 0002:000010BC       .1
+ 0002:000010C0       .81
+ 0002:000010C4       .82
+ 0002:000010C8       .3
+ 0002:000010CC       FileTypesList
+ 0002:000010D0       .51
+ 0002:000010D4       .1
+ 0002:000010D8       .3
+ 0002:000010DC       ExcepInfo
+ 0002:000010FC       .2
+
+
+Bound resource files
+
+NwPageFrame.dfm
+NwWebPageMod.dfm
+NwWebDataMod.dfm
+NwAppPage.dfm
+NwAppServices.dfm
+NwSiteSrv.dfm
+SiteWiz.res
+dclwebsnap.res
+SiteReg.dcr
+C:\DOCUME~1\~storm\LOCALS~1\Temp\dtf7234.tmp
+
+
+Program entry point at 0001:0001CBD0

@@ -6,12 +6,11 @@
 *                                                                             *
 * NOTE: windows.h/winbase.h must be #included first                           *
 *                                                                             *
-* Copyright (c) 1994-1999, Microsoft Corp.   All rights reserved.             *
+* Copyright (c) Microsoft Corp.  All rights reserved.                         *
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef _INC_TOOLHELP32
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_TOOLHELP32
 
 #if _MSC_VER > 1000
@@ -51,6 +50,7 @@ CreateToolhelp32Snapshot(
 #define TH32CS_SNAPPROCESS  0x00000002
 #define TH32CS_SNAPTHREAD   0x00000004
 #define TH32CS_SNAPMODULE   0x00000008
+#define TH32CS_SNAPMODULE32 0x00000010
 #define TH32CS_SNAPALL      (TH32CS_SNAPHEAPLIST | TH32CS_SNAPPROCESS | TH32CS_SNAPTHREAD | TH32CS_SNAPMODULE)
 #define TH32CS_INHERIT      0x80000000
 //
@@ -129,8 +129,8 @@ Toolhelp32ReadProcessMemory(
     DWORD   th32ProcessID,
     LPCVOID lpBaseAddress,
     LPVOID  lpBuffer,
-    DWORD   cbRead,
-    LPDWORD lpNumberOfBytesRead
+    SIZE_T  cbRead,
+    SIZE_T *lpNumberOfBytesRead
     );
 
 /***** Process walking *************************************************/
@@ -313,5 +313,4 @@ Module32Next(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _INC_TOOLHELP32

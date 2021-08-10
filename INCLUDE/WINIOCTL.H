@@ -1,7 +1,6 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
-/*++ BUILD Version: 0013    // Increment this if a change has global effects
+/*++ BUILD Version: 0015    // Increment this if a change has global effects
 
-Copyright (c) 1990-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -17,7 +16,7 @@ Revision History:
 
 
 //
-// Interface GUIDs
+// Device interface class GUIDs.
 //
 // need these GUIDs outside conditional includes so that user can
 //   #include <winioctl.h> in precompiled header
@@ -36,18 +35,36 @@ Revision History:
 #endif
 #endif
 
-DEFINE_GUID(DiskClassGuid,               0x53f56307L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
-DEFINE_GUID(CdRomClassGuid,              0x53f56308L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
-DEFINE_GUID(PartitionClassGuid,          0x53f5630aL, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
-DEFINE_GUID(TapeClassGuid,               0x53f5630bL, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
-DEFINE_GUID(WriteOnceDiskClassGuid,      0x53f5630cL, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
-DEFINE_GUID(VolumeClassGuid,             0x53f5630dL, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
-DEFINE_GUID(MediumChangerClassGuid,      0x53f56310L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
-DEFINE_GUID(FloppyClassGuid,             0x53f56311L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
-DEFINE_GUID(CdChangerClassGuid,          0x53f56312L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
-DEFINE_GUID(StoragePortClassGuid,        0x2accfe60L, 0xc130, 0x11d2, 0xb0, 0x82, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
-DEFINE_GUID(GUID_CLASS_COMPORT,          0x86e0d1e0L, 0x8089, 0x11d0, 0x9c, 0xe4, 0x08, 0x00, 0x3e, 0x30, 0x1f, 0x73);
-DEFINE_GUID(GUID_SERENUM_BUS_ENUMERATOR, 0x4D36E978L, 0xE325, 0x11CE, 0xBF, 0xC1, 0x08, 0x00, 0x2B, 0xE1, 0x03, 0x18);
+DEFINE_GUID(GUID_DEVINTERFACE_DISK,                   0x53f56307L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
+DEFINE_GUID(GUID_DEVINTERFACE_CDROM,                  0x53f56308L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
+DEFINE_GUID(GUID_DEVINTERFACE_PARTITION,              0x53f5630aL, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
+DEFINE_GUID(GUID_DEVINTERFACE_TAPE,                   0x53f5630bL, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
+DEFINE_GUID(GUID_DEVINTERFACE_WRITEONCEDISK,          0x53f5630cL, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
+DEFINE_GUID(GUID_DEVINTERFACE_VOLUME,                 0x53f5630dL, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
+DEFINE_GUID(GUID_DEVINTERFACE_MEDIUMCHANGER,          0x53f56310L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
+DEFINE_GUID(GUID_DEVINTERFACE_FLOPPY,                 0x53f56311L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
+DEFINE_GUID(GUID_DEVINTERFACE_CDCHANGER,              0x53f56312L, 0xb6bf, 0x11d0, 0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
+DEFINE_GUID(GUID_DEVINTERFACE_STORAGEPORT,            0x2accfe60L, 0xc130, 0x11d2, 0xb0, 0x82, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b);
+DEFINE_GUID(GUID_DEVINTERFACE_COMPORT,                0x86e0d1e0L, 0x8089, 0x11d0, 0x9c, 0xe4, 0x08, 0x00, 0x3e, 0x30, 0x1f, 0x73);
+DEFINE_GUID(GUID_DEVINTERFACE_SERENUM_BUS_ENUMERATOR, 0x4D36E978L, 0xE325, 0x11CE, 0xBF, 0xC1, 0x08, 0x00, 0x2B, 0xE1, 0x03, 0x18);
+
+//
+// Obsolete device interface class GUID names.
+// (use of above GUID_DEVINTERFACE_* names is recommended).
+//
+#define DiskClassGuid               GUID_DEVINTERFACE_DISK
+#define CdRomClassGuid              GUID_DEVINTERFACE_CDROM
+#define PartitionClassGuid          GUID_DEVINTERFACE_PARTITION
+#define TapeClassGuid               GUID_DEVINTERFACE_TAPE
+#define WriteOnceDiskClassGuid      GUID_DEVINTERFACE_WRITEONCEDISK
+#define VolumeClassGuid             GUID_DEVINTERFACE_VOLUME
+#define MediumChangerClassGuid      GUID_DEVINTERFACE_MEDIUMCHANGER
+#define FloppyClassGuid             GUID_DEVINTERFACE_FLOPPY
+#define CdChangerClassGuid          GUID_DEVINTERFACE_CDCHANGER
+#define StoragePortClassGuid        GUID_DEVINTERFACE_STORAGEPORT
+#define GUID_CLASS_COMPORT          GUID_DEVINTERFACE_COMPORT
+#define GUID_SERENUM_BUS_ENUMERATOR GUID_DEVINTERFACE_SERENUM_BUS_ENUMERATOR
+
 #endif // DEFINE_GUID
 
 #ifndef _WINIOCTL_
@@ -123,6 +140,7 @@ DEFINE_GUID(GUID_SERENUM_BUS_ENUMERATOR, 0x4D36E978L, 0xE325, 0x11CE, 0xBF, 0xC1
 #define FILE_DEVICE_SERENUM             0x00000037
 #define FILE_DEVICE_TERMSRV             0x00000038
 #define FILE_DEVICE_KSEC                0x00000039
+#define FILE_DEVICE_FIPS		0x0000003A
 
 //
 // Macro definition for defining IOCTL and FSCTL function control codes.  Note
@@ -192,28 +210,31 @@ extern "C" {
 // common codes
 //
 
-#define IOCTL_STORAGE_CHECK_VERIFY     CTL_CODE(IOCTL_STORAGE_BASE, 0x0200, METHOD_BUFFERED, FILE_READ_ACCESS)
-#define IOCTL_STORAGE_CHECK_VERIFY2    CTL_CODE(IOCTL_STORAGE_BASE, 0x0200, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_STORAGE_MEDIA_REMOVAL    CTL_CODE(IOCTL_STORAGE_BASE, 0x0201, METHOD_BUFFERED, FILE_READ_ACCESS)
-#define IOCTL_STORAGE_EJECT_MEDIA      CTL_CODE(IOCTL_STORAGE_BASE, 0x0202, METHOD_BUFFERED, FILE_READ_ACCESS)
-#define IOCTL_STORAGE_LOAD_MEDIA       CTL_CODE(IOCTL_STORAGE_BASE, 0x0203, METHOD_BUFFERED, FILE_READ_ACCESS)
-#define IOCTL_STORAGE_LOAD_MEDIA2      CTL_CODE(IOCTL_STORAGE_BASE, 0x0203, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_STORAGE_RESERVE          CTL_CODE(IOCTL_STORAGE_BASE, 0x0204, METHOD_BUFFERED, FILE_READ_ACCESS)
-#define IOCTL_STORAGE_RELEASE          CTL_CODE(IOCTL_STORAGE_BASE, 0x0205, METHOD_BUFFERED, FILE_READ_ACCESS)
-#define IOCTL_STORAGE_FIND_NEW_DEVICES CTL_CODE(IOCTL_STORAGE_BASE, 0x0206, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_CHECK_VERIFY            CTL_CODE(IOCTL_STORAGE_BASE, 0x0200, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_CHECK_VERIFY2           CTL_CODE(IOCTL_STORAGE_BASE, 0x0200, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_STORAGE_MEDIA_REMOVAL           CTL_CODE(IOCTL_STORAGE_BASE, 0x0201, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_EJECT_MEDIA             CTL_CODE(IOCTL_STORAGE_BASE, 0x0202, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_LOAD_MEDIA              CTL_CODE(IOCTL_STORAGE_BASE, 0x0203, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_LOAD_MEDIA2             CTL_CODE(IOCTL_STORAGE_BASE, 0x0203, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_STORAGE_RESERVE                 CTL_CODE(IOCTL_STORAGE_BASE, 0x0204, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_RELEASE                 CTL_CODE(IOCTL_STORAGE_BASE, 0x0205, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_FIND_NEW_DEVICES        CTL_CODE(IOCTL_STORAGE_BASE, 0x0206, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-#define IOCTL_STORAGE_EJECTION_CONTROL CTL_CODE(IOCTL_STORAGE_BASE, 0x0250, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_STORAGE_MCN_CONTROL      CTL_CODE(IOCTL_STORAGE_BASE, 0x0251, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_STORAGE_EJECTION_CONTROL        CTL_CODE(IOCTL_STORAGE_BASE, 0x0250, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_STORAGE_MCN_CONTROL             CTL_CODE(IOCTL_STORAGE_BASE, 0x0251, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-#define IOCTL_STORAGE_GET_MEDIA_TYPES  CTL_CODE(IOCTL_STORAGE_BASE, 0x0300, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define IOCTL_STORAGE_GET_MEDIA_TYPES_EX CTL_CODE(IOCTL_STORAGE_BASE, 0x0301, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_STORAGE_GET_MEDIA_TYPES         CTL_CODE(IOCTL_STORAGE_BASE, 0x0300, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_STORAGE_GET_MEDIA_TYPES_EX      CTL_CODE(IOCTL_STORAGE_BASE, 0x0301, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_STORAGE_GET_MEDIA_SERIAL_NUMBER CTL_CODE(IOCTL_STORAGE_BASE, 0x0304, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_STORAGE_GET_HOTPLUG_INFO        CTL_CODE(IOCTL_STORAGE_BASE, 0x0305, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_STORAGE_SET_HOTPLUG_INFO        CTL_CODE(IOCTL_STORAGE_BASE, 0x0306, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
-#define IOCTL_STORAGE_RESET_BUS        CTL_CODE(IOCTL_STORAGE_BASE, 0x0400, METHOD_BUFFERED, FILE_READ_ACCESS)
-#define IOCTL_STORAGE_RESET_DEVICE     CTL_CODE(IOCTL_STORAGE_BASE, 0x0401, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_RESET_BUS               CTL_CODE(IOCTL_STORAGE_BASE, 0x0400, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_RESET_DEVICE            CTL_CODE(IOCTL_STORAGE_BASE, 0x0401, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_STORAGE_BREAK_RESERVATION       CTL_CODE(IOCTL_STORAGE_BASE, 0x0405, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-#define IOCTL_STORAGE_GET_DEVICE_NUMBER CTL_CODE(IOCTL_STORAGE_BASE, 0x0420, METHOD_BUFFERED, FILE_ANY_ACCESS)
-
-#define IOCTL_STORAGE_PREDICT_FAILURE CTL_CODE(IOCTL_STORAGE_BASE, 0x0440, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_STORAGE_GET_DEVICE_NUMBER       CTL_CODE(IOCTL_STORAGE_BASE, 0x0420, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_STORAGE_PREDICT_FAILURE         CTL_CODE(IOCTL_STORAGE_BASE, 0x0440, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 
 //
@@ -223,6 +244,19 @@ extern "C" {
 
 #define OBSOLETE_IOCTL_STORAGE_RESET_BUS        CTL_CODE(IOCTL_STORAGE_BASE, 0x0400, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define OBSOLETE_IOCTL_STORAGE_RESET_DEVICE     CTL_CODE(IOCTL_STORAGE_BASE, 0x0401, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+
+
+//
+// IOCTL_STORAGE_GET_HOTPLUG_INFO
+//
+
+typedef struct _STORAGE_HOTPLUG_INFO {
+    DWORD Size; // version
+    BOOLEAN MediaRemovable; // ie. zip, jaz, cdrom, mo, etc. vs hdd
+    BOOLEAN MediaHotplug;   // ie. does the device succeed a lock even though its not lockable media?
+    BOOLEAN DeviceHotplug;  // ie. 1394, USB, etc.
+    BOOLEAN WriteCacheEnableOverride; // This field should not be relied upon because it is no longer used
+} STORAGE_HOTPLUG_INFO, *PSTORAGE_HOTPLUG_INFO;
 
 //
 // IOCTL_STORAGE_GET_DEVICE_NUMBER
@@ -340,6 +374,7 @@ typedef enum _STORAGE_MEDIA_TYPE {
     // F3_128Mb_512,           // 3.5" MO 128Mb   512 bytes/sector
     // F3_230Mb_512,           // 3.5" MO 230Mb   512 bytes/sector
     // F8_256_128,             // 8",     256KB,  128 bytes/sector
+    // F3_200Mb_512,           // 3.5",   200M Floppy (HiFD)
     //
 
     DDS_4mm = 0x20,            // Tape - DAT DDS1,2,... (all vendors)
@@ -348,7 +383,7 @@ typedef enum _STORAGE_MEDIA_TYPE {
     QIC,                       // Tape - QIC
     MP_8mm,                    // Tape - 8mm Exabyte Metal Particle
     AME_8mm,                   // Tape - 8mm Exabyte Advanced Metal Evap
-    AIT1_8mm,                  // Tape - 8mm Sony AIT1
+    AIT1_8mm,                  // Tape - 8mm Sony AIT
     DLT,                       // Tape - DLT Compact IIIxt, IV
     NCTP,                      // Tape - Philips NCTP
     IBM_3480,                  // Tape - IBM 3480
@@ -395,9 +430,13 @@ typedef enum _STORAGE_MEDIA_TYPE {
     DST_L,                     // Ampex DST Large Tapes
     VXATape_1,                 // Ecrix 8mm Tape
     VXATape_2,                 // Ecrix 8mm Tape
-    STK_EAGLE,                 // STK Eagle
+    STK_9840,                  // STK 9840
     LTO_Ultrium,               // IBM, HP, Seagate LTO Ultrium
-    LTO_Accelis                // IBM, HP, Seagate LTO Accelis
+    LTO_Accelis,               // IBM, HP, Seagate LTO Accelis
+    DVD_RAM,                   // Opt_Disk - DVD-RAM
+    AIT_8mm,                   // AIT2 or higher
+    ADR_1,                     // OnStream ADR Mediatypes
+    ADR_2
 } STORAGE_MEDIA_TYPE, *PSTORAGE_MEDIA_TYPE;
 
 #define MEDIA_ERASEABLE         0x00000001
@@ -524,6 +563,8 @@ typedef struct _STORAGE_PREDICT_FAILURE
 #define IOCTL_DISK_HISTOGRAM_RESET      CTL_CODE(IOCTL_DISK_BASE, 0x000e, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_DISK_REQUEST_STRUCTURE    CTL_CODE(IOCTL_DISK_BASE, 0x000f, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define IOCTL_DISK_REQUEST_DATA         CTL_CODE(IOCTL_DISK_BASE, 0x0010, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_PERFORMANCE_OFF      CTL_CODE(IOCTL_DISK_BASE, 0x0018, METHOD_BUFFERED, FILE_ANY_ACCESS)
+
 
 
 #if(_WIN32_WINNT >= 0x0400)
@@ -537,17 +578,44 @@ typedef struct _STORAGE_PREDICT_FAILURE
 #define SMART_SEND_DRIVE_COMMAND        CTL_CODE(IOCTL_DISK_BASE, 0x0021, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 #define SMART_RCV_DRIVE_DATA            CTL_CODE(IOCTL_DISK_BASE, 0x0022, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
-
 #endif /* _WIN32_WINNT >= 0x0400 */
 
+#if (_WIN32_WINNT >= 0x500)
+
+//
+// New IOCTLs for GUID Partition tabled disks.
+//
+
+#define IOCTL_DISK_GET_PARTITION_INFO_EX    CTL_CODE(IOCTL_DISK_BASE, 0x0012, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_SET_PARTITION_INFO_EX    CTL_CODE(IOCTL_DISK_BASE, 0x0013, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#define IOCTL_DISK_GET_DRIVE_LAYOUT_EX      CTL_CODE(IOCTL_DISK_BASE, 0x0014, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_DISK_SET_DRIVE_LAYOUT_EX      CTL_CODE(IOCTL_DISK_BASE, 0x0015, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#define IOCTL_DISK_CREATE_DISK              CTL_CODE(IOCTL_DISK_BASE, 0x0016, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#define IOCTL_DISK_GET_LENGTH_INFO          CTL_CODE(IOCTL_DISK_BASE, 0x0017, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_DISK_GET_DRIVE_GEOMETRY_EX    CTL_CODE(IOCTL_DISK_BASE, 0x0028, METHOD_BUFFERED, FILE_ANY_ACCESS)
+
+#endif /* _WIN32_WINNT >= 0x0500 */
+
+
 #if(_WIN32_WINNT >= 0x0500)
-#define IOCTL_DISK_UPDATE_DRIVE_SIZE    CTL_CODE(IOCTL_DISK_BASE, 0x0032, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
-#define IOCTL_DISK_GROW_PARTITION       CTL_CODE(IOCTL_DISK_BASE, 0x0034, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#define IOCTL_DISK_UPDATE_DRIVE_SIZE        CTL_CODE(IOCTL_DISK_BASE, 0x0032, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#define IOCTL_DISK_GROW_PARTITION           CTL_CODE(IOCTL_DISK_BASE, 0x0034, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
 
-#define IOCTL_DISK_GET_CACHE_INFORMATION CTL_CODE(IOCTL_DISK_BASE, 0x0035, METHOD_BUFFERED, FILE_READ_ACCESS)
-#define IOCTL_DISK_SET_CACHE_INFORMATION CTL_CODE(IOCTL_DISK_BASE, 0x0036, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#define IOCTL_DISK_GET_CACHE_INFORMATION    CTL_CODE(IOCTL_DISK_BASE, 0x0035, METHOD_BUFFERED, FILE_READ_ACCESS)
+#define IOCTL_DISK_SET_CACHE_INFORMATION    CTL_CODE(IOCTL_DISK_BASE, 0x0036, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#define IOCTL_DISK_GET_WRITE_CACHE_STATE    CTL_CODE(IOCTL_DISK_BASE, 0x0037, METHOD_BUFFERED, FILE_READ_ACCESS)
 
-#define IOCTL_DISK_DELETE_DRIVE_LAYOUT  CTL_CODE(IOCTL_DISK_BASE, 0x0040, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+#define IOCTL_DISK_DELETE_DRIVE_LAYOUT      CTL_CODE(IOCTL_DISK_BASE, 0x0040, METHOD_BUFFERED, FILE_READ_ACCESS | FILE_WRITE_ACCESS)
+
+//
+// Called to flush cached information that the driver may have about this
+// device's characteristics.  Not all drivers cache characteristics, and not
+// cached properties can be flushed.  This simply serves as an update to the
+// driver that it may want to do an expensive reexamination of the device's
+// characteristics now (fixed media size, partition table, etc...)
+//
+
+#define IOCTL_DISK_UPDATE_PROPERTIES    CTL_CODE(IOCTL_DISK_BASE, 0x0050, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 //
 //  Special IOCTLs needed to support PC-98 machines in Japan
@@ -587,6 +655,7 @@ typedef struct _STORAGE_PREDICT_FAILURE
 #define PARTITION_EXTENDED              0x05      // Extended partition entry
 #define PARTITION_HUGE                  0x06      // Huge partition MS-DOS V4
 #define PARTITION_IFS                   0x07      // IFS Partition
+#define PARTITION_OS2BOOTMGR            0x0A      // OS/2 Boot Manager/OPUS/Coherent swap
 #define PARTITION_FAT32                 0x0B      // FAT32
 #define PARTITION_FAT32_XINT13          0x0C      // FAT32 using extended int13 services
 #define PARTITION_XINT13                0x0E      // Win95 partition using extended int13 services
@@ -632,21 +701,20 @@ typedef struct _STORAGE_PREDICT_FAILURE
 //
 //--
 
-#define IsRecognizedPartition( PartitionType ) (       \
+#define IsRecognizedPartition( PartitionType ) (    \
      ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_FAT_12)) ||  \
-     ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_FAT_16)) ||  \
      ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_IFS)) ||  \
      ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_HUGE)) ||  \
      ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_FAT32)) ||  \
      ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_FAT32_XINT13)) ||  \
      ((PartitionType & PARTITION_NTFT) && ((PartitionType & ~0xC0) == PARTITION_XINT13)) ||  \
-     ((PartitionType & ~PARTITION_NTFT) == PARTITION_FAT_12) ||  \
-     ((PartitionType & ~PARTITION_NTFT) == PARTITION_FAT_16) ||  \
-     ((PartitionType & ~PARTITION_NTFT) == PARTITION_IFS)    ||  \
-     ((PartitionType & ~PARTITION_NTFT) == PARTITION_HUGE)    ||  \
-     ((PartitionType & ~PARTITION_NTFT) == PARTITION_FAT32)  || \
-     ((PartitionType & ~PARTITION_NTFT) == PARTITION_FAT32_XINT13) || \
-     ((PartitionType & ~PARTITION_NTFT) == PARTITION_XINT13) )
+     ((PartitionType) == PARTITION_FAT_12)          ||  \
+     ((PartitionType) == PARTITION_FAT_16)          ||  \
+     ((PartitionType) == PARTITION_IFS)             ||  \
+     ((PartitionType) == PARTITION_HUGE)            ||  \
+     ((PartitionType) == PARTITION_FAT32)           ||  \
+     ((PartitionType) == PARTITION_FAT32_XINT13)    ||  \
+     ((PartitionType) == PARTITION_XINT13) )
 
 //++
 //
@@ -673,6 +741,32 @@ typedef struct _STORAGE_PREDICT_FAILURE
 
 #define IsContainerPartition( PartitionType ) \
     ((PartitionType == PARTITION_EXTENDED) || (PartitionType == PARTITION_XINT13_EXTENDED))
+
+//++
+//
+// BOOLEAN
+// IsFTPartition(
+//     IN DWORD PartitionType
+//     )
+//
+// Routine Description:
+//
+//     This macro is used to determine if the given partition is an FT
+//     partition.
+//
+// Arguments:
+//
+//     PartitionType - Supplies the type of the partition being examined.
+//
+// Return Value:
+//
+//     The return value is TRUE if the partition type is an FT partition,
+//     otherwise FALSE is returned.
+//
+//--
+
+#define IsFTPartition( PartitionType ) \
+    (((PartitionType)&PARTITION_NTFT) && IsRecognizedPartition(PartitionType))
 
 //
 // Define the media types supported by the driver.
@@ -701,7 +795,10 @@ typedef enum _MEDIA_TYPE {
     F5_1Pt23_1024,          // 5.25",  1.23MB, 1024 bytes/sector
     F3_128Mb_512,           // 3.5" MO 128Mb   512 bytes/sector
     F3_230Mb_512,           // 3.5" MO 230Mb   512 bytes/sector
-    F8_256_128              // 8",     256KB,  128 bytes/sector
+    F8_256_128,             // 8",     256KB,  128 bytes/sector
+    F3_200Mb_512,           // 3.5",   200M Floppy (HiFD)
+    F3_240M_512,            // 3.5",   240Mb Floppy (HiFD)
+    F3_32M_512              // 3.5",   32Mb Floppy
 } MEDIA_TYPE, *PMEDIA_TYPE;
 
 //
@@ -756,6 +853,7 @@ typedef struct _DISK_GEOMETRY {
     DWORD SectorsPerTrack;
     DWORD BytesPerSector;
 } DISK_GEOMETRY, *PDISK_GEOMETRY;
+
 
 
 //
@@ -824,6 +922,279 @@ typedef struct _REASSIGN_BLOCKS {
     DWORD BlockNumber[1];
 } REASSIGN_BLOCKS, *PREASSIGN_BLOCKS;
 
+
+#if(_WIN32_WINNT >= 0x500)
+
+//
+// Support for GUID Partition Table (GPT) disks.
+//
+
+//
+// There are currently two ways a disk can be partitioned. With a traditional
+// AT-style master boot record (PARTITION_STYLE_MBR) and with a new, GPT
+// partition table (PARTITION_STYLE_GPT). RAW is for an unrecognizable
+// partition style. There are a very limited number of things you can
+// do with a RAW partititon.
+//
+
+typedef enum _PARTITION_STYLE {
+    PARTITION_STYLE_MBR,
+    PARTITION_STYLE_GPT,
+    PARTITION_STYLE_RAW
+} PARTITION_STYLE;
+
+
+//
+// The following structure defines information in a GPT partition that is
+// not common to both GPT and MBR partitions.
+//
+
+typedef struct _PARTITION_INFORMATION_GPT {
+    GUID PartitionType;                 // Partition type. See table 16-3.
+    GUID PartitionId;                   // Unique GUID for this partition.
+    DWORD64 Attributes;                 // See table 16-4.
+    WCHAR Name [36];                    // Partition Name in Unicode.
+} PARTITION_INFORMATION_GPT, *PPARTITION_INFORMATION_GPT;
+
+//
+//  The following are GPT partition attributes applicable for any
+//  partition type. These attributes are not OS-specific
+//
+
+#define GPT_ATTRIBUTE_PLATFORM_REQUIRED             (0x0000000000000001)
+
+//
+// The following are GPT partition attributes applicable when the
+// PartitionType is PARTITION_BASIC_DATA_GUID.
+//
+
+#define GPT_BASIC_DATA_ATTRIBUTE_NO_DRIVE_LETTER    (0x8000000000000000)
+#define GPT_BASIC_DATA_ATTRIBUTE_HIDDEN             (0x4000000000000000)
+#define GPT_BASIC_DATA_ATTRIBUTE_READ_ONLY          (0x1000000000000000)
+
+//
+// The following structure defines information in an MBR partition that is not
+// common to both GPT and MBR partitions.
+//
+
+typedef struct _PARTITION_INFORMATION_MBR {
+    BYTE  PartitionType;
+    BOOLEAN BootIndicator;
+    BOOLEAN RecognizedPartition;
+    DWORD HiddenSectors;
+} PARTITION_INFORMATION_MBR, *PPARTITION_INFORMATION_MBR;
+
+
+//
+// The structure SET_PARTITION_INFO_EX is used with the ioctl
+// IOCTL_SET_PARTITION_INFO_EX to set information about a specific
+// partition. Note that for MBR partitions, you can only set the partition
+// signature, whereas GPT partitions allow setting of all fields that
+// you can get.
+//
+
+typedef SET_PARTITION_INFORMATION SET_PARTITION_INFORMATION_MBR;
+typedef PARTITION_INFORMATION_GPT SET_PARTITION_INFORMATION_GPT;
+
+
+typedef struct _SET_PARTITION_INFORMATION_EX {
+    PARTITION_STYLE PartitionStyle;
+    union {
+        SET_PARTITION_INFORMATION_MBR Mbr;
+        SET_PARTITION_INFORMATION_GPT Gpt;
+    };
+} SET_PARTITION_INFORMATION_EX, *PSET_PARTITION_INFORMATION_EX;
+
+
+//
+// The structure CREATE_DISK_GPT with the ioctl IOCTL_DISK_CREATE_DISK
+// to initialize an virgin disk with an empty GPT partition table.
+//
+
+typedef struct _CREATE_DISK_GPT {
+    GUID DiskId;                    // Unique disk id for the disk.
+    DWORD MaxPartitionCount;        // Maximim number of partitions allowable.
+} CREATE_DISK_GPT, *PCREATE_DISK_GPT;
+
+//
+// The structure CREATE_DISK_MBR with the ioctl IOCTL_DISK_CREATE_DISK
+// to initialize an virgin disk with an empty MBR partition table.
+//
+
+typedef struct _CREATE_DISK_MBR {
+    DWORD Signature;
+} CREATE_DISK_MBR, *PCREATE_DISK_MBR;
+
+
+typedef struct _CREATE_DISK {
+    PARTITION_STYLE PartitionStyle;
+    union {
+        CREATE_DISK_MBR Mbr;
+        CREATE_DISK_GPT Gpt;
+    };
+} CREATE_DISK, *PCREATE_DISK;
+
+
+//
+// The structure GET_LENGTH_INFORMATION is used with the ioctl
+// IOCTL_DISK_GET_LENGTH_INFO to obtain the length, in bytes, of the
+// disk, partition, or volume.
+//
+
+typedef struct _GET_LENGTH_INFORMATION {
+    LARGE_INTEGER   Length;
+} GET_LENGTH_INFORMATION, *PGET_LENGTH_INFORMATION;
+
+//
+// The PARTITION_INFORMATION_EX structure is used with the
+// IOCTL_DISK_GET_DRIVE_LAYOUT_EX, IOCTL_DISK_SET_DRIVE_LAYOUT_EX,
+// IOCTL_DISK_GET_PARTITION_INFO_EX and IOCTL_DISK_GET_PARTITION_INFO_EX calls.
+//
+
+typedef struct _PARTITION_INFORMATION_EX {
+    PARTITION_STYLE PartitionStyle;
+    LARGE_INTEGER StartingOffset;
+    LARGE_INTEGER PartitionLength;
+    DWORD PartitionNumber;
+    BOOLEAN RewritePartition;
+    union {
+        PARTITION_INFORMATION_MBR Mbr;
+        PARTITION_INFORMATION_GPT Gpt;
+    };
+} PARTITION_INFORMATION_EX, *PPARTITION_INFORMATION_EX;
+
+
+//
+// GPT specific drive layout information.
+//
+
+typedef struct _DRIVE_LAYOUT_INFORMATION_GPT {
+    GUID DiskId;
+    LARGE_INTEGER StartingUsableOffset;
+    LARGE_INTEGER UsableLength;
+    DWORD MaxPartitionCount;
+} DRIVE_LAYOUT_INFORMATION_GPT, *PDRIVE_LAYOUT_INFORMATION_GPT;
+
+
+//
+// MBR specific drive layout information.
+//
+
+typedef struct _DRIVE_LAYOUT_INFORMATION_MBR {
+    DWORD Signature;
+} DRIVE_LAYOUT_INFORMATION_MBR, *PDRIVE_LAYOUT_INFORMATION_MBR;
+
+//
+// The structure DRIVE_LAYOUT_INFORMATION_EX is used with the
+// IOCTL_SET_DRIVE_LAYOUT_EX and IOCTL_GET_DRIVE_LAYOUT_EX calls.
+//
+
+typedef struct _DRIVE_LAYOUT_INFORMATION_EX {
+    DWORD PartitionStyle;
+    DWORD PartitionCount;
+    union {
+        DRIVE_LAYOUT_INFORMATION_MBR Mbr;
+        DRIVE_LAYOUT_INFORMATION_GPT Gpt;
+    };
+    PARTITION_INFORMATION_EX PartitionEntry[1];
+} DRIVE_LAYOUT_INFORMATION_EX, *PDRIVE_LAYOUT_INFORMATION_EX;
+
+
+#endif // (_WIN32_WINNT >= 0x0500)
+
+
+#if(_WIN32_WINNT >= 0x0500)
+
+//
+// The DISK_GEOMETRY_EX structure is returned on issuing an
+// IOCTL_DISK_GET_DRIVE_GEOMETRY_EX ioctl.
+//
+
+typedef enum _DETECTION_TYPE {
+        DetectNone,
+        DetectInt13,
+        DetectExInt13
+} DETECTION_TYPE;
+
+typedef struct _DISK_INT13_INFO {
+        WORD   DriveSelect;
+        DWORD MaxCylinders;
+        WORD   SectorsPerTrack;
+        WORD   MaxHeads;
+        WORD   NumberDrives;
+} DISK_INT13_INFO, *PDISK_INT13_INFO;
+
+typedef struct _DISK_EX_INT13_INFO {
+        WORD   ExBufferSize;
+        WORD   ExFlags;
+        DWORD ExCylinders;
+        DWORD ExHeads;
+        DWORD ExSectorsPerTrack;
+        DWORD64 ExSectorsPerDrive;
+        WORD   ExSectorSize;
+        WORD   ExReserved;
+} DISK_EX_INT13_INFO, *PDISK_EX_INT13_INFO;
+
+typedef struct _DISK_DETECTION_INFO {
+        DWORD SizeOfDetectInfo;
+        DETECTION_TYPE DetectionType;
+        union {
+                struct {
+
+                        //
+                        // If DetectionType == DETECTION_INT13 then we have just the Int13
+                        // information.
+                        //
+
+                        DISK_INT13_INFO Int13;
+
+                        //
+                        // If DetectionType == DETECTION_EX_INT13, then we have the
+                        // extended int 13 information.
+                        //
+
+                        DISK_EX_INT13_INFO ExInt13;     // If DetectionType == DetectExInt13
+                };
+        };
+} DISK_DETECTION_INFO, *PDISK_DETECTION_INFO;
+
+
+typedef struct _DISK_PARTITION_INFO {
+        DWORD SizeOfPartitionInfo;
+        PARTITION_STYLE PartitionStyle;                 // PartitionStyle = RAW, GPT or MBR
+        union {
+                struct {                                                        // If PartitionStyle == MBR
+                        DWORD Signature;                                // MBR Signature
+                        DWORD CheckSum;                                 // MBR CheckSum
+                } Mbr;
+                struct {                                                        // If PartitionStyle == GPT
+                        GUID DiskId;
+                } Gpt;
+        };
+} DISK_PARTITION_INFO, *PDISK_PARTITION_INFO;
+
+
+//
+// The Geometry structure is a variable length structure composed of a
+// DISK_GEOMETRY_EX structure followed by a DISK_PARTITION_INFO structure
+// followed by a DISK_DETECTION_DATA structure.
+//
+
+#define DiskGeometryGetPartition(Geometry)\
+                        ((PDISK_PARTITION_INFO)((Geometry)+1))
+
+#define DiskGeometryGetDetect(Geometry)\
+                        ((PDISK_DETECTION_INFO)(((PBYTE)DiskGeometryGetPartition(Geometry)+\
+                                        DiskGeometryGetPartition(Geometry)->SizeOfPartitionInfo)))
+
+typedef struct _DISK_GEOMETRY_EX {
+        DISK_GEOMETRY Geometry;                                 // Standard disk geometry: may be faked by driver.
+        LARGE_INTEGER DiskSize;                                 // Must always be correct
+        BYTE  Data[1];                                                  // Partition, Detect info
+} DISK_GEOMETRY_EX, *PDISK_GEOMETRY_EX;
+
+#endif // (_WIN32_WINNT > 0x0500)
+
 #if(_WIN32_WINNT >= 0x0400)
 //
 // IOCTL_DISK_CONTROLLER_NUMBER returns the controller and disk
@@ -859,6 +1230,12 @@ typedef enum {
     KeepPrefetchedData,
     KeepReadData
 } DISK_CACHE_RETENTION_PRIORITY;
+
+typedef enum _DISK_WRITE_CACHE_STATE {
+    DiskWriteCacheNormal,
+    DiskWriteCacheForceDisable,
+    DiskWriteCacheDisableNotSupported
+} DISK_WRITE_CACHE_STATE, *PDISK_WRITE_CACHE_STATE;
 
 
 typedef struct _DISK_CACHE_INFORMATION {
@@ -1236,6 +1613,16 @@ typedef struct _DRIVERSTATUS {
 #define SMART_NOT_SUPPORTED     9       // Invalid cmd flag set
 #define SMART_NO_IDE_DEVICE     10      // Cmd issued to device not present
                                         // although drive number is valid
+//
+// SMART sub commands for execute offline diags
+//
+#define SMART_OFFLINE_ROUTINE_OFFLINE       0
+#define SMART_SHORT_SELFTEST_OFFLINE        1
+#define SMART_EXTENDED_SELFTEST_OFFLINE     2
+#define SMART_ABORT_OFFLINE_SELFTEST        127
+#define SMART_SHORT_SELFTEST_CAPTIVE        129
+#define SMART_EXTENDED_SELFTEST_CAPTIVE     130
+
 
 #include <pshpack1.h>
 typedef struct _SENDCMDOUTPARAMS {
@@ -1249,6 +1636,7 @@ typedef struct _SENDCMDOUTPARAMS {
 #define READ_ATTRIBUTE_BUFFER_SIZE  512
 #define IDENTIFY_BUFFER_SIZE        512
 #define READ_THRESHOLD_BUFFER_SIZE  512
+#define SMART_LOG_SECTOR_SIZE       512
 
 //
 // Feature register defines for SMART "sub commands"
@@ -1259,6 +1647,8 @@ typedef struct _SENDCMDOUTPARAMS {
 #define ENABLE_DISABLE_AUTOSAVE 0xD2
 #define SAVE_ATTRIBUTE_VALUES   0xD3
 #define EXECUTE_OFFLINE_DIAGS   0xD4
+#define SMART_READ_LOG          0xD5
+#define SMART_WRITE_LOG         0xd6
 #define ENABLE_SMART            0xD8
 #define DISABLE_SMART           0xD9
 #define RETURN_SMART_STATUS     0xDA
@@ -1653,7 +2043,89 @@ typedef  struct _CHANGER_ELEMENT_STATUS {
     //
 
     BYTE  AlternateVolumeID[MAX_VOLUME_ID_SIZE];
+
 } CHANGER_ELEMENT_STATUS, *PCHANGER_ELEMENT_STATUS;
+
+//
+// Output buffer. This is same as CHANGER_ELEMENT_STATUS with
+// the addition of product info fields. New applications should
+// use this struct instead of the older CHANGER_ELEMENT_STATUS
+//
+
+typedef  struct _CHANGER_ELEMENT_STATUS_EX {
+
+    //
+    // Element to which this structure refers.
+    //
+
+    CHANGER_ELEMENT Element;
+
+    //
+    // Address of the element from which the media was originally moved.
+    // Valid if ELEMENT_STATUS_SVALID bit of Flags DWORD is set.
+    // Needs to be converted to a zero-based offset from the device-unique value.
+    //
+
+    CHANGER_ELEMENT SrcElementAddress;
+
+    //
+    // See below.
+    //
+
+    DWORD Flags;
+
+    //
+    // See below for possible values.
+    //
+
+    DWORD ExceptionCode;
+
+    //
+    // Scsi Target Id of this element.
+    // Valid only if ELEMENT_STATUS_ID_VALID is set in Flags.
+    //
+
+    BYTE  TargetId;
+
+    //
+    // LogicalUnitNumber of this element.
+    // Valid only if ELEMENT_STATUS_LUN_VALID is set in Flags.
+    //
+
+    BYTE  Lun;
+    WORD   Reserved;
+
+    //
+    // Primary volume identification for the media.
+    // Valid only if ELEMENT_STATUS_PVOLTAG bit is set in Flags.
+    //
+
+    BYTE  PrimaryVolumeID[MAX_VOLUME_ID_SIZE];
+
+    //
+    // Alternate volume identification for the media.
+    // Valid for two-sided media only, and pertains to the id. of the inverted side.
+    // Valid only if ELEMENT_STATUS_AVOLTAG bit is set in Flags.
+    //
+
+    BYTE  AlternateVolumeID[MAX_VOLUME_ID_SIZE];
+
+    //
+    // Vendor ID
+    //
+    BYTE  VendorIdentification[VENDOR_ID_LENGTH];
+
+    //
+    // Product ID
+    //
+    BYTE  ProductIdentification[PRODUCT_ID_LENGTH];
+
+    //
+    // Serial number
+    //
+    BYTE  SerialNumber[SERIAL_NUMBER_LENGTH];
+
+} CHANGER_ELEMENT_STATUS_EX, *PCHANGER_ELEMENT_STATUS_EX;
 
 //
 // Possible flag values
@@ -1665,6 +2137,8 @@ typedef  struct _CHANGER_ELEMENT_STATUS {
 #define ELEMENT_STATUS_ACCESS    0x00000008 // Access to the i/e port from the medium changer is allowed.
 #define ELEMENT_STATUS_EXENAB    0x00000010 // Export of media is supported.
 #define ELEMENT_STATUS_INENAB    0x00000020 // Import of media is supported.
+
+#define ELEMENT_STATUS_PRODUCT_DATA 0x00000040 // Serial number valid for the drive
 
 #define ELEMENT_STATUS_LUN_VALID 0x00001000 // Lun information is valid.
 #define ELEMENT_STATUS_ID_VALID  0x00002000 // SCSI Id information is valid.
@@ -1880,6 +2354,26 @@ typedef struct _READ_ELEMENT_ADDRESS_INFO {
 #define UNDEFINE_ALTERNATE 0xD // Undefine - the alternate volume tag - current tag ignored.
 
 
+//
+// Changer diagnostic test related definitions
+//
+typedef enum _CHANGER_DEVICE_PROBLEM_TYPE {
+   DeviceProblemNone,
+   DeviceProblemHardware,
+   DeviceProblemCHMError,
+   DeviceProblemDoorOpen,
+   DeviceProblemCalibrationError,
+   DeviceProblemTargetFailure,
+   DeviceProblemCHMMoveError,
+   DeviceProblemCHMZeroError,
+   DeviceProblemCartridgeInsertError,
+   DeviceProblemPositionError,
+   DeviceProblemSensorError,
+   DeviceProblemCartridgeEjectError,
+   DeviceProblemGripperError,
+   DeviceProblemDriveError
+} CHANGER_DEVICE_PROBLEM_TYPE, *PCHANGER_DEVICE_PROBLEM_TYPE;
+
 
 #define IOCTL_SERIAL_LSRMST_INSERT      CTL_CODE(FILE_DEVICE_SERIAL_PORT,31,METHOD_BUFFERED,FILE_ANY_ACCESS)
 
@@ -1978,16 +2472,16 @@ typedef struct _READ_ELEMENT_ADDRESS_INFO {
 #define FSCTL_GET_RETRIEVAL_POINTERS    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 28,  METHOD_NEITHER, FILE_ANY_ACCESS) // STARTING_VCN_INPUT_BUFFER, RETRIEVAL_POINTERS_BUFFER
 #define FSCTL_MOVE_FILE                 CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 29, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // MOVE_FILE_DATA,
 #define FSCTL_IS_VOLUME_DIRTY           CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 30, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define FSCTL_GET_HFS_INFORMATION       CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 31, METHOD_BUFFERED, FILE_ANY_ACCESS)
+// decomissioned fsctl value                                              31
 #define FSCTL_ALLOW_EXTENDED_DASD_IO    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 32, METHOD_NEITHER,  FILE_ANY_ACCESS)
 #endif /* _WIN32_WINNT >= 0x0400 */
 
 #if(_WIN32_WINNT >= 0x0500)
-#define FSCTL_READ_PROPERTY_DATA        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 33, METHOD_NEITHER, FILE_ANY_ACCESS)
-#define FSCTL_WRITE_PROPERTY_DATA       CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 34, METHOD_NEITHER, FILE_ANY_ACCESS)
+// decommissioned fsctl value                                             33
+// decommissioned fsctl value                                             34
 #define FSCTL_FIND_FILES_BY_SID         CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 35, METHOD_NEITHER, FILE_ANY_ACCESS)
 // decommissioned fsctl value                                             36
-#define FSCTL_DUMP_PROPERTY_DATA        CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 37,  METHOD_NEITHER, FILE_ANY_ACCESS)
+// decommissioned fsctl value                                             37
 #define FSCTL_SET_OBJECT_ID             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 38, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // FILE_OBJECTID_BUFFER
 #define FSCTL_GET_OBJECT_ID             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 39, METHOD_BUFFERED, FILE_ANY_ACCESS) // FILE_OBJECTID_BUFFER
 #define FSCTL_DELETE_OBJECT_ID          CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 40, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
@@ -2002,7 +2496,7 @@ typedef struct _READ_ELEMENT_ADDRESS_INFO {
 #define FSCTL_SET_SPARSE                CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 49, METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
 #define FSCTL_SET_ZERO_DATA             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 50, METHOD_BUFFERED, FILE_WRITE_DATA) // FILE_ZERO_DATA_INFORMATION,
 #define FSCTL_QUERY_ALLOCATED_RANGES    CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 51,  METHOD_NEITHER, FILE_READ_DATA)  // FILE_ALLOCATED_RANGE_BUFFER, FILE_ALLOCATED_RANGE_BUFFER
-#define FSCTL_ENABLE_UPGRADE            CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 52, METHOD_BUFFERED, FILE_WRITE_DATA)
+// decommissioned fsctl value                                             52
 #define FSCTL_SET_ENCRYPTION            CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 53,  METHOD_NEITHER, FILE_ANY_ACCESS) // ENCRYPTION_BUFFER, DECRYPTION_STATUS_BUFFER
 #define FSCTL_ENCRYPTION_FSCTL_IO       CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 54,  METHOD_NEITHER, FILE_ANY_ACCESS)
 #define FSCTL_WRITE_RAW_ENCRYPTED       CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 55,  METHOD_NEITHER, FILE_SPECIAL_ACCESS) // ENCRYPTED_DATA_INFO,
@@ -2017,19 +2511,17 @@ typedef struct _READ_ELEMENT_ADDRESS_INFO {
 #define FSCTL_SIS_COPYFILE              CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 64, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_SIS_LINK_FILES            CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 65, METHOD_BUFFERED, FILE_READ_DATA | FILE_WRITE_DATA)
 #define FSCTL_HSM_MSG                   CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 66, METHOD_BUFFERED, FILE_READ_DATA | FILE_WRITE_DATA)
-#define FSCTL_NSS_CONTROL               CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 67, METHOD_BUFFERED, FILE_WRITE_DATA)
+// decommissioned fsctl value                                             67
 #define FSCTL_HSM_DATA                  CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 68, METHOD_NEITHER, FILE_READ_DATA | FILE_WRITE_DATA)
 #define FSCTL_RECALL_FILE               CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 69, METHOD_NEITHER, FILE_ANY_ACCESS)
-#define FSCTL_NSS_RCONTROL              CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 70, METHOD_BUFFERED, FILE_READ_DATA)
+// decommissioned fsctl value                                             70
+#define FSCTL_READ_FROM_PLEX            CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 71, METHOD_OUT_DIRECT, FILE_READ_DATA)
+#define FSCTL_FILE_PREFETCH             CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 72, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // FILE_PREFETCH
 #endif /* _WIN32_WINNT >= 0x0500 */
 
 //
 // The following long list of structs are associated with the preceeding
 // file system fsctls.
-//
-// Note that the structs for the property sets fsctls are not included
-// in this file.  They can be found in ntfsprop.h where they should stay
-// because of their dependency on objidl.h.
 //
 
 //
@@ -2166,20 +2658,21 @@ typedef struct {
     DWORD ClusterCount;
 
 } MOVE_FILE_DATA, *PMOVE_FILE_DATA;
-#endif /* _WIN32_WINNT >= 0x0400 */
 
-#if(_WIN32_WINNT >= 0x0400)
-
+#if defined(_WIN64)
 //
-//
-// Structure for FSCTL_GET_HFS_INFORMATION
+//  32/64 Bit thunking support structure
 //
 
-typedef struct {
+typedef struct _MOVE_FILE_DATA32 {
 
-    BYTE  FinderInfo[32];
+    UINT32 FileHandle;
+    LARGE_INTEGER StartingVcn;
+    LARGE_INTEGER StartingLcn;
+    DWORD ClusterCount;
 
-} HFS_INFORMATION_BUFFER, *PHFS_INFORMATION_BUFFER;
+} MOVE_FILE_DATA32, *PMOVE_FILE_DATA32;
+#endif
 #endif /* _WIN32_WINNT >= 0x0400 */
 
 #if(_WIN32_WINNT >= 0x0500)
@@ -2344,6 +2837,20 @@ typedef struct {
 
 } MARK_HANDLE_INFO, *PMARK_HANDLE_INFO;
 
+#if defined(_WIN64)
+//
+//  32/64 Bit thunking support structure
+//
+
+typedef struct {
+
+    DWORD UsnSourceInfo;
+    UINT32 VolumeHandle;
+    DWORD HandleInfo;
+
+} MARK_HANDLE_INFO32, *PMARK_HANDLE_INFO32;
+#endif
+
 //
 //  Flags for the additional source information above.
 //
@@ -2363,6 +2870,15 @@ typedef struct {
 #define USN_SOURCE_DATA_MANAGEMENT          (0x00000001)
 #define USN_SOURCE_AUXILIARY_DATA           (0x00000002)
 #define USN_SOURCE_REPLICATION_MANAGEMENT   (0x00000004)
+
+//
+//  Flags for the HandleInfo field above
+//
+//  MARK_HANDLE_PROTECT_CLUSTERS - disallow any defragmenting (FSCTL_MOVE_FILE) until the
+//      the handle is closed
+//
+
+#define MARK_HANDLE_PROTECT_CLUSTERS        (0x00000001)
 
 #endif /* _WIN32_WINNT >= 0x0500 */
 
@@ -2389,6 +2905,17 @@ typedef struct {
 #endif /* _WIN32_WINNT >= 0x0500 */
 
 //
+// Structures for FSCTL_FILE_PREFETCH
+//
+
+typedef struct _FILE_PREFETCH {
+    DWORD Type;
+    DWORD Count;
+    DWORDLONG Prefetch[1];
+} FILE_PREFETCH, *PFILE_PREFETCH;
+
+#define FILE_PREFETCH_TYPE_FOR_CREATE    0x1
+
 // Structures for FSCTL_FILESYSTEM_GET_STATISTICS
 //
 // Filesystem performance counters
@@ -2553,6 +3080,11 @@ typedef struct _NTFS_STATISTICS {
 // Structure for FSCTL_SET_OBJECT_ID, FSCTL_GET_OBJECT_ID, and FSCTL_CREATE_OR_GET_OBJECT_ID
 //
 
+#if _MSC_VER >= 1200
+#pragma warning(push)
+#endif
+#pragma warning(disable:4201)       // unnamed struct
+
 typedef struct _FILE_OBJECTID_BUFFER {
 
     //
@@ -2576,6 +3108,13 @@ typedef struct _FILE_OBJECTID_BUFFER {
     };
 
 } FILE_OBJECTID_BUFFER, *PFILE_OBJECTID_BUFFER;
+
+#if _MSC_VER >= 1200
+#pragma warning(pop)
+#else
+#pragma warning( default : 4201 )
+#endif
+
 #endif /* _WIN32_WINNT >= 0x0500 */
 
 
@@ -2830,6 +3369,33 @@ typedef ENCRYPTED_DATA_INFO *PENCRYPTED_DATA_INFO;
 
 #if(_WIN32_WINNT >= 0x0500)
 //
+//  FSCTL_READ_FROM_PLEX support
+//  Request Plex Read Data structure.  This is used to indicate
+//  the range of the file to read.  It also describes
+//  which plex to perform the read from.
+//
+
+typedef struct _PLEX_READ_DATA_REQUEST {
+
+    //
+    //  Requested offset and length to read.
+    //  The offset can be the virtual offset (vbo) in to a file,
+    //  or a volume. In the case of a file offset,
+    //  the fsd will round the starting offset down
+    //  to a file system boundary.  It will also
+    //  round the length up to a file system boundary and
+    //  enforce any other applicable limits.
+    //
+
+    LARGE_INTEGER ByteOffset;
+    DWORD ByteLength;
+    DWORD PlexNumber;
+
+} PLEX_READ_DATA_REQUEST, *PPLEX_READ_DATA_REQUEST;
+#endif /* _WIN32_WINNT >= 0x0500 */
+
+#if(_WIN32_WINNT >= 0x0500)
+//
 // FSCTL_SIS_COPYFILE support
 // Source and destination file names are passed in the FileNameBuffer.
 // Both strings are null terminated, with the source name starting at
@@ -2849,21 +3415,6 @@ typedef struct _SI_COPYFILE {
 #define COPYFILE_SIS_FLAGS      0x0003
 #endif /* _WIN32_WINNT >= 0x0500 */
 
-#if(_WIN32_WINNT >= 0x0500)
-//
-// FSCTL_NSS_CONTROL support
-// Used to mark/unmark files as NSS
-//
-typedef struct _NSS_CONTROL {
-    DWORD   code;
-    DWORD   param;
-} NSS_CONTROL, *PNSS_CONTROL;
-
-#define NSS_CONTROL_MARK           1    // FSCTL_NSS_CONTROL
-#define NSS_CONTROL_UNMARK         2    // FSCTL_NSS_CONTROL
-#define NSS_CONTROL_ISNSSFILE      4    // FSCTL_NSS_RCONTROL
-#endif /* _WIN32_WINNT >= 0x0500 */
-
 #endif // _FILESYSTEMFSCTL_
 
 
@@ -2874,6 +3425,7 @@ typedef struct _NSS_CONTROL {
 #define IOCTL_VOLUME_BASE   ((DWORD) 'V')
 
 #define IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS    CTL_CODE(IOCTL_VOLUME_BASE, 0, METHOD_BUFFERED, FILE_ANY_ACCESS)
+#define IOCTL_VOLUME_IS_CLUSTERED               CTL_CODE(IOCTL_VOLUME_BASE, 12, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 //
 // Disk extent definition.
@@ -2897,4 +3449,3 @@ typedef struct _VOLUME_DISK_EXTENTS {
 
 #endif // _WINIOCTL_
 
-#pragma option pop /*P_O_Pop*/

@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:32:44 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for exdisp.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -28,6 +26,10 @@
 
 #ifndef __exdisp_h__
 #define __exdisp_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -151,10 +153,10 @@ typedef struct ShellUIHelper ShellUIHelper;
 #endif 	/* __ShellUIHelper_FWD_DEFINED__ */
 
 
-#ifndef ___ShellFavoritesNameSpaceEvents_FWD_DEFINED__
-#define ___ShellFavoritesNameSpaceEvents_FWD_DEFINED__
-typedef interface _ShellFavoritesNameSpaceEvents _ShellFavoritesNameSpaceEvents;
-#endif 	/* ___ShellFavoritesNameSpaceEvents_FWD_DEFINED__ */
+#ifndef __DShellNameSpaceEvents_FWD_DEFINED__
+#define __DShellNameSpaceEvents_FWD_DEFINED__
+typedef interface DShellNameSpaceEvents DShellNameSpaceEvents;
+#endif 	/* __DShellNameSpaceEvents_FWD_DEFINED__ */
 
 
 #ifndef __IShellFavoritesNameSpace_FWD_DEFINED__
@@ -163,16 +165,22 @@ typedef interface IShellFavoritesNameSpace IShellFavoritesNameSpace;
 #endif 	/* __IShellFavoritesNameSpace_FWD_DEFINED__ */
 
 
-#ifndef __ShellFavoritesNameSpace_FWD_DEFINED__
-#define __ShellFavoritesNameSpace_FWD_DEFINED__
+#ifndef __IShellNameSpace_FWD_DEFINED__
+#define __IShellNameSpace_FWD_DEFINED__
+typedef interface IShellNameSpace IShellNameSpace;
+#endif 	/* __IShellNameSpace_FWD_DEFINED__ */
+
+
+#ifndef __ShellNameSpace_FWD_DEFINED__
+#define __ShellNameSpace_FWD_DEFINED__
 
 #ifdef __cplusplus
-typedef class ShellFavoritesNameSpace ShellFavoritesNameSpace;
+typedef class ShellNameSpace ShellNameSpace;
 #else
-typedef struct ShellFavoritesNameSpace ShellFavoritesNameSpace;
+typedef struct ShellNameSpace ShellNameSpace;
 #endif /* __cplusplus */
 
-#endif 	/* __ShellFavoritesNameSpace_FWD_DEFINED__ */
+#endif 	/* __ShellNameSpace_FWD_DEFINED__ */
 
 
 #ifndef __IScriptErrorList_FWD_DEFINED__
@@ -217,6 +225,12 @@ typedef interface ISearchAssistantOC2 ISearchAssistantOC2;
 #endif 	/* __ISearchAssistantOC2_FWD_DEFINED__ */
 
 
+#ifndef __ISearchAssistantOC3_FWD_DEFINED__
+#define __ISearchAssistantOC3_FWD_DEFINED__
+typedef interface ISearchAssistantOC3 ISearchAssistantOC3;
+#endif 	/* __ISearchAssistantOC3_FWD_DEFINED__ */
+
+
 #ifndef ___SearchAssistantEvents_FWD_DEFINED__
 #define ___SearchAssistantEvents_FWD_DEFINED__
 typedef interface _SearchAssistantEvents _SearchAssistantEvents;
@@ -243,17 +257,8 @@ typedef struct SearchAssistantOC SearchAssistantOC;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
-
-/* interface __MIDL_itf_exdisp_0000 */
-/* [local] */ 
-
-#pragma once
-
-
-extern RPC_IF_HANDLE __MIDL_itf_exdisp_0000_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_exdisp_0000_v0_0_s_ifspec;
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 
 #ifndef __SHDocVw_LIBRARY_DEFINED__
@@ -267,7 +272,18 @@ enum CommandStateChangeConstants
     {	CSC_UPDATECOMMANDS	= 0xffffffff,
 	CSC_NAVIGATEFORWARD	= 0x1,
 	CSC_NAVIGATEBACK	= 0x2
-    }	CommandStateChangeConstants;
+    } 	CommandStateChangeConstants;
+
+typedef /* [helpstring][uuid] */  DECLSPEC_UUID("65507BE0-91A8-11d3-A845-009027220E6D") 
+enum SecureLockIconConstants
+    {	secureLockIconUnsecure	= 0,
+	secureLockIconMixed	= 0x1,
+	secureLockIconSecureUnknownBits	= 0x2,
+	secureLockIconSecure40Bit	= 0x3,
+	secureLockIconSecure56Bit	= 0x4,
+	secureLockIconSecureFortezza	= 0x5,
+	secureLockIconSecure128Bit	= 0x6
+    } 	SecureLockIconConstants;
 
 typedef /* [helpstring][uuid] */  DECLSPEC_UUID("F41E6981-28E5-11d0-82B4-00A0C90C29C5") 
 enum ShellWindowTypeConstants
@@ -275,14 +291,14 @@ enum ShellWindowTypeConstants
 	SWC_BROWSER	= 0x1,
 	SWC_3RDPARTY	= 0x2,
 	SWC_CALLBACK	= 0x4
-    }	ShellWindowTypeConstants;
+    } 	ShellWindowTypeConstants;
 
 typedef /* [hidden][helpstring][uuid] */  DECLSPEC_UUID("7716a370-38ca-11d0-a48b-00a0c90a8f39") 
 enum ShellWindowFindWindowOptions
     {	SWFO_NEEDDISPATCH	= 0x1,
 	SWFO_INCLUDEPENDING	= 0x2,
 	SWFO_COOKIEPASSED	= 0x4
-    }	ShellWindowFindWindowOptions;
+    } 	ShellWindowFindWindowOptions;
 
 
 EXTERN_C const IID LIBID_SHDocVw;
@@ -300,15 +316,17 @@ enum BrowserNavConstants
 	navNoReadFromCache	= 0x4,
 	navNoWriteToCache	= 0x8,
 	navAllowAutosearch	= 0x10,
-	navBrowserBar	= 0x20
-    }	BrowserNavConstants;
+	navBrowserBar	= 0x20,
+	navHyperlink	= 0x40,
+	navEnforceRestricted	= 0x80
+    } 	BrowserNavConstants;
 
 typedef /* [helpstring][uuid] */  DECLSPEC_UUID("C317C261-A991-11cf-A731-00A0C9082637") 
 enum RefreshConstants
     {	REFRESH_NORMAL	= 0,
 	REFRESH_IFEXPIRED	= 1,
 	REFRESH_COMPLETELY	= 3
-    }	RefreshConstants;
+    } 	RefreshConstants;
 
 
 EXTERN_C const IID IID_IWebBrowser;
@@ -329,68 +347,68 @@ EXTERN_C const IID IID_IWebBrowser;
         
         virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Navigate( 
             /* [in] */ BSTR URL,
-            /* [optional][in] */ VARIANT __RPC_FAR *Flags,
-            /* [optional][in] */ VARIANT __RPC_FAR *TargetFrameName,
-            /* [optional][in] */ VARIANT __RPC_FAR *PostData,
-            /* [optional][in] */ VARIANT __RPC_FAR *Headers) = 0;
+            /* [optional][in] */ VARIANT *Flags,
+            /* [optional][in] */ VARIANT *TargetFrameName,
+            /* [optional][in] */ VARIANT *PostData,
+            /* [optional][in] */ VARIANT *Headers) = 0;
         
         virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
         virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Refresh2( 
-            /* [optional][in] */ VARIANT __RPC_FAR *Level) = 0;
+            /* [optional][in] */ VARIANT *Level) = 0;
         
         virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Application( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
+            /* [retval][out] */ IDispatch **ppDisp) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Parent( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
+            /* [retval][out] */ IDispatch **ppDisp) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Container( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
+            /* [retval][out] */ IDispatch **ppDisp) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Document( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
+            /* [retval][out] */ IDispatch **ppDisp) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_TopLevelContainer( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ BSTR __RPC_FAR *Type) = 0;
+            /* [retval][out] */ BSTR *Type) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Left( 
-            /* [retval][out] */ long __RPC_FAR *pl) = 0;
+            /* [retval][out] */ long *pl) = 0;
         
         virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Left( 
             /* [in] */ long Left) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Top( 
-            /* [retval][out] */ long __RPC_FAR *pl) = 0;
+            /* [retval][out] */ long *pl) = 0;
         
         virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Top( 
             /* [in] */ long Top) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Width( 
-            /* [retval][out] */ long __RPC_FAR *pl) = 0;
+            /* [retval][out] */ long *pl) = 0;
         
         virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Width( 
             /* [in] */ long Width) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Height( 
-            /* [retval][out] */ long __RPC_FAR *pl) = 0;
+            /* [retval][out] */ long *pl) = 0;
         
         virtual /* [propput][id] */ HRESULT STDMETHODCALLTYPE put_Height( 
             /* [in] */ long Height) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_LocationName( 
-            /* [retval][out] */ BSTR __RPC_FAR *LocationName) = 0;
+            /* [retval][out] */ BSTR *LocationName) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_LocationURL( 
-            /* [retval][out] */ BSTR __RPC_FAR *LocationURL) = 0;
+            /* [retval][out] */ BSTR *LocationURL) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Busy( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
         
     };
     
@@ -400,150 +418,150 @@ EXTERN_C const IID IID_IWebBrowser;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWebBrowser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWebBrowser * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWebBrowser __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWebBrowser * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWebBrowser __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWebBrowser * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IWebBrowser * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IWebBrowser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IWebBrowser * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IWebBrowser __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IWebBrowser * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IWebBrowser __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IWebBrowser * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GoBack )( 
-            IWebBrowser __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoBack )( 
+            IWebBrowser * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GoForward )( 
-            IWebBrowser __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoForward )( 
+            IWebBrowser * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GoHome )( 
-            IWebBrowser __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoHome )( 
+            IWebBrowser * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GoSearch )( 
-            IWebBrowser __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoSearch )( 
+            IWebBrowser * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Navigate )( 
-            IWebBrowser __RPC_FAR * This,
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Navigate )( 
+            IWebBrowser * This,
             /* [in] */ BSTR URL,
-            /* [optional][in] */ VARIANT __RPC_FAR *Flags,
-            /* [optional][in] */ VARIANT __RPC_FAR *TargetFrameName,
-            /* [optional][in] */ VARIANT __RPC_FAR *PostData,
-            /* [optional][in] */ VARIANT __RPC_FAR *Headers);
+            /* [optional][in] */ VARIANT *Flags,
+            /* [optional][in] */ VARIANT *TargetFrameName,
+            /* [optional][in] */ VARIANT *PostData,
+            /* [optional][in] */ VARIANT *Headers);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            IWebBrowser __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            IWebBrowser * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh2 )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *Level);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh2 )( 
+            IWebBrowser * This,
+            /* [optional][in] */ VARIANT *Level);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
-            IWebBrowser __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+            IWebBrowser * This);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            IWebBrowser * This,
+            /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IWebBrowser * This,
+            /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Container )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Container )( 
+            IWebBrowser * This,
+            /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Document )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Document )( 
+            IWebBrowser * This,
+            /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TopLevelContainer )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_TopLevelContainer )( 
+            IWebBrowser * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *Type);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            IWebBrowser * This,
+            /* [retval][out] */ BSTR *Type);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Left )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Left )( 
+            IWebBrowser * This,
+            /* [retval][out] */ long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Left )( 
-            IWebBrowser __RPC_FAR * This,
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Left )( 
+            IWebBrowser * This,
             /* [in] */ long Left);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Top )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Top )( 
+            IWebBrowser * This,
+            /* [retval][out] */ long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Top )( 
-            IWebBrowser __RPC_FAR * This,
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Top )( 
+            IWebBrowser * This,
             /* [in] */ long Top);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Width )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Width )( 
+            IWebBrowser * This,
+            /* [retval][out] */ long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Width )( 
-            IWebBrowser __RPC_FAR * This,
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Width )( 
+            IWebBrowser * This,
             /* [in] */ long Width);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Height )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Height )( 
+            IWebBrowser * This,
+            /* [retval][out] */ long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Height )( 
-            IWebBrowser __RPC_FAR * This,
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Height )( 
+            IWebBrowser * This,
             /* [in] */ long Height);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocationName )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *LocationName);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationName )( 
+            IWebBrowser * This,
+            /* [retval][out] */ BSTR *LocationName);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocationURL )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *LocationURL);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationURL )( 
+            IWebBrowser * This,
+            /* [retval][out] */ BSTR *LocationURL);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Busy )( 
-            IWebBrowser __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Busy )( 
+            IWebBrowser * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
         END_INTERFACE
     } IWebBrowserVtbl;
 
     interface IWebBrowser
     {
-        CONST_VTBL struct IWebBrowserVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWebBrowserVtbl *lpVtbl;
     };
 
     
@@ -657,7 +675,7 @@ EXTERN_C const IID IID_IWebBrowser;
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_GoBack_Proxy( 
-    IWebBrowser __RPC_FAR * This);
+    IWebBrowser * This);
 
 
 void __RPC_STUB IWebBrowser_GoBack_Stub(
@@ -668,7 +686,7 @@ void __RPC_STUB IWebBrowser_GoBack_Stub(
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_GoForward_Proxy( 
-    IWebBrowser __RPC_FAR * This);
+    IWebBrowser * This);
 
 
 void __RPC_STUB IWebBrowser_GoForward_Stub(
@@ -679,7 +697,7 @@ void __RPC_STUB IWebBrowser_GoForward_Stub(
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_GoHome_Proxy( 
-    IWebBrowser __RPC_FAR * This);
+    IWebBrowser * This);
 
 
 void __RPC_STUB IWebBrowser_GoHome_Stub(
@@ -690,7 +708,7 @@ void __RPC_STUB IWebBrowser_GoHome_Stub(
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_GoSearch_Proxy( 
-    IWebBrowser __RPC_FAR * This);
+    IWebBrowser * This);
 
 
 void __RPC_STUB IWebBrowser_GoSearch_Stub(
@@ -701,12 +719,12 @@ void __RPC_STUB IWebBrowser_GoSearch_Stub(
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_Navigate_Proxy( 
-    IWebBrowser __RPC_FAR * This,
+    IWebBrowser * This,
     /* [in] */ BSTR URL,
-    /* [optional][in] */ VARIANT __RPC_FAR *Flags,
-    /* [optional][in] */ VARIANT __RPC_FAR *TargetFrameName,
-    /* [optional][in] */ VARIANT __RPC_FAR *PostData,
-    /* [optional][in] */ VARIANT __RPC_FAR *Headers);
+    /* [optional][in] */ VARIANT *Flags,
+    /* [optional][in] */ VARIANT *TargetFrameName,
+    /* [optional][in] */ VARIANT *PostData,
+    /* [optional][in] */ VARIANT *Headers);
 
 
 void __RPC_STUB IWebBrowser_Navigate_Stub(
@@ -717,7 +735,7 @@ void __RPC_STUB IWebBrowser_Navigate_Stub(
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_Refresh_Proxy( 
-    IWebBrowser __RPC_FAR * This);
+    IWebBrowser * This);
 
 
 void __RPC_STUB IWebBrowser_Refresh_Stub(
@@ -728,8 +746,8 @@ void __RPC_STUB IWebBrowser_Refresh_Stub(
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_Refresh2_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [optional][in] */ VARIANT __RPC_FAR *Level);
+    IWebBrowser * This,
+    /* [optional][in] */ VARIANT *Level);
 
 
 void __RPC_STUB IWebBrowser_Refresh2_Stub(
@@ -740,7 +758,7 @@ void __RPC_STUB IWebBrowser_Refresh2_Stub(
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_Stop_Proxy( 
-    IWebBrowser __RPC_FAR * This);
+    IWebBrowser * This);
 
 
 void __RPC_STUB IWebBrowser_Stop_Stub(
@@ -751,8 +769,8 @@ void __RPC_STUB IWebBrowser_Stop_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Application_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+    IWebBrowser * This,
+    /* [retval][out] */ IDispatch **ppDisp);
 
 
 void __RPC_STUB IWebBrowser_get_Application_Stub(
@@ -763,8 +781,8 @@ void __RPC_STUB IWebBrowser_get_Application_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Parent_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+    IWebBrowser * This,
+    /* [retval][out] */ IDispatch **ppDisp);
 
 
 void __RPC_STUB IWebBrowser_get_Parent_Stub(
@@ -775,8 +793,8 @@ void __RPC_STUB IWebBrowser_get_Parent_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Container_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+    IWebBrowser * This,
+    /* [retval][out] */ IDispatch **ppDisp);
 
 
 void __RPC_STUB IWebBrowser_get_Container_Stub(
@@ -787,8 +805,8 @@ void __RPC_STUB IWebBrowser_get_Container_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Document_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+    IWebBrowser * This,
+    /* [retval][out] */ IDispatch **ppDisp);
 
 
 void __RPC_STUB IWebBrowser_get_Document_Stub(
@@ -799,8 +817,8 @@ void __RPC_STUB IWebBrowser_get_Document_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_TopLevelContainer_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+    IWebBrowser * This,
+    /* [retval][out] */ VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IWebBrowser_get_TopLevelContainer_Stub(
@@ -811,8 +829,8 @@ void __RPC_STUB IWebBrowser_get_TopLevelContainer_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Type_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *Type);
+    IWebBrowser * This,
+    /* [retval][out] */ BSTR *Type);
 
 
 void __RPC_STUB IWebBrowser_get_Type_Stub(
@@ -823,8 +841,8 @@ void __RPC_STUB IWebBrowser_get_Type_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Left_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pl);
+    IWebBrowser * This,
+    /* [retval][out] */ long *pl);
 
 
 void __RPC_STUB IWebBrowser_get_Left_Stub(
@@ -835,7 +853,7 @@ void __RPC_STUB IWebBrowser_get_Left_Stub(
 
 
 /* [propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_put_Left_Proxy( 
-    IWebBrowser __RPC_FAR * This,
+    IWebBrowser * This,
     /* [in] */ long Left);
 
 
@@ -847,8 +865,8 @@ void __RPC_STUB IWebBrowser_put_Left_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Top_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pl);
+    IWebBrowser * This,
+    /* [retval][out] */ long *pl);
 
 
 void __RPC_STUB IWebBrowser_get_Top_Stub(
@@ -859,7 +877,7 @@ void __RPC_STUB IWebBrowser_get_Top_Stub(
 
 
 /* [propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_put_Top_Proxy( 
-    IWebBrowser __RPC_FAR * This,
+    IWebBrowser * This,
     /* [in] */ long Top);
 
 
@@ -871,8 +889,8 @@ void __RPC_STUB IWebBrowser_put_Top_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Width_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pl);
+    IWebBrowser * This,
+    /* [retval][out] */ long *pl);
 
 
 void __RPC_STUB IWebBrowser_get_Width_Stub(
@@ -883,7 +901,7 @@ void __RPC_STUB IWebBrowser_get_Width_Stub(
 
 
 /* [propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_put_Width_Proxy( 
-    IWebBrowser __RPC_FAR * This,
+    IWebBrowser * This,
     /* [in] */ long Width);
 
 
@@ -895,8 +913,8 @@ void __RPC_STUB IWebBrowser_put_Width_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Height_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pl);
+    IWebBrowser * This,
+    /* [retval][out] */ long *pl);
 
 
 void __RPC_STUB IWebBrowser_get_Height_Stub(
@@ -907,7 +925,7 @@ void __RPC_STUB IWebBrowser_get_Height_Stub(
 
 
 /* [propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_put_Height_Proxy( 
-    IWebBrowser __RPC_FAR * This,
+    IWebBrowser * This,
     /* [in] */ long Height);
 
 
@@ -919,8 +937,8 @@ void __RPC_STUB IWebBrowser_put_Height_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_LocationName_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *LocationName);
+    IWebBrowser * This,
+    /* [retval][out] */ BSTR *LocationName);
 
 
 void __RPC_STUB IWebBrowser_get_LocationName_Stub(
@@ -931,8 +949,8 @@ void __RPC_STUB IWebBrowser_get_LocationName_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_LocationURL_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *LocationURL);
+    IWebBrowser * This,
+    /* [retval][out] */ BSTR *LocationURL);
 
 
 void __RPC_STUB IWebBrowser_get_LocationURL_Stub(
@@ -943,8 +961,8 @@ void __RPC_STUB IWebBrowser_get_LocationURL_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser_get_Busy_Proxy( 
-    IWebBrowser __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+    IWebBrowser * This,
+    /* [retval][out] */ VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IWebBrowser_get_Busy_Stub(
@@ -980,52 +998,52 @@ EXTERN_C const IID DIID_DWebBrowserEvents;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            DWebBrowserEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            DWebBrowserEvents * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            DWebBrowserEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            DWebBrowserEvents * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            DWebBrowserEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            DWebBrowserEvents * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            DWebBrowserEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            DWebBrowserEvents * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            DWebBrowserEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            DWebBrowserEvents * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            DWebBrowserEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            DWebBrowserEvents * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            DWebBrowserEvents __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            DWebBrowserEvents * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } DWebBrowserEventsVtbl;
 
     interface DWebBrowserEvents
     {
-        CONST_VTBL struct DWebBrowserEventsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct DWebBrowserEventsVtbl *lpVtbl;
     };
 
     
@@ -1082,8 +1100,8 @@ EXTERN_C const IID IID_IWebBrowserApp;
         virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Quit( void) = 0;
         
         virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE ClientToWindow( 
-            /* [out][in] */ int __RPC_FAR *pcx,
-            /* [out][in] */ int __RPC_FAR *pcy) = 0;
+            /* [out][in] */ int *pcx,
+            /* [out][in] */ int *pcy) = 0;
         
         virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE PutProperty( 
             /* [in] */ BSTR Property,
@@ -1091,52 +1109,52 @@ EXTERN_C const IID IID_IWebBrowserApp;
         
         virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE GetProperty( 
             /* [in] */ BSTR Property,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvtValue) = 0;
+            /* [retval][out] */ VARIANT *pvtValue) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR __RPC_FAR *Name) = 0;
+            /* [retval][out] */ BSTR *Name) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_HWND( 
-            /* [retval][out] */ long __RPC_FAR *pHWND) = 0;
+            /* [retval][out] */ SHANDLE_PTR *pHWND) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_FullName( 
-            /* [retval][out] */ BSTR __RPC_FAR *FullName) = 0;
+            /* [retval][out] */ BSTR *FullName) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Path( 
-            /* [retval][out] */ BSTR __RPC_FAR *Path) = 0;
+            /* [retval][out] */ BSTR *Path) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Visible( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
         
         virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Visible( 
             /* [in] */ VARIANT_BOOL Value) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_StatusBar( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
         
         virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_StatusBar( 
             /* [in] */ VARIANT_BOOL Value) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_StatusText( 
-            /* [retval][out] */ BSTR __RPC_FAR *StatusText) = 0;
+            /* [retval][out] */ BSTR *StatusText) = 0;
         
         virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_StatusText( 
             /* [in] */ BSTR StatusText) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_ToolBar( 
-            /* [retval][out] */ int __RPC_FAR *Value) = 0;
+            /* [retval][out] */ int *Value) = 0;
         
         virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_ToolBar( 
             /* [in] */ int Value) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_MenuBar( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Value) = 0;
+            /* [retval][out] */ VARIANT_BOOL *Value) = 0;
         
         virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_MenuBar( 
             /* [in] */ VARIANT_BOOL Value) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_FullScreen( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbFullScreen) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pbFullScreen) = 0;
         
         virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_FullScreen( 
             /* [in] */ VARIANT_BOOL bFullScreen) = 0;
@@ -1149,224 +1167,224 @@ EXTERN_C const IID IID_IWebBrowserApp;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWebBrowserApp __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWebBrowserApp * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWebBrowserApp __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWebBrowserApp * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWebBrowserApp __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWebBrowserApp * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IWebBrowserApp * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IWebBrowserApp __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IWebBrowserApp * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IWebBrowserApp __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IWebBrowserApp * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IWebBrowserApp * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GoBack )( 
-            IWebBrowserApp __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoBack )( 
+            IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GoForward )( 
-            IWebBrowserApp __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoForward )( 
+            IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GoHome )( 
-            IWebBrowserApp __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoHome )( 
+            IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GoSearch )( 
-            IWebBrowserApp __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoSearch )( 
+            IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Navigate )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Navigate )( 
+            IWebBrowserApp * This,
             /* [in] */ BSTR URL,
-            /* [optional][in] */ VARIANT __RPC_FAR *Flags,
-            /* [optional][in] */ VARIANT __RPC_FAR *TargetFrameName,
-            /* [optional][in] */ VARIANT __RPC_FAR *PostData,
-            /* [optional][in] */ VARIANT __RPC_FAR *Headers);
+            /* [optional][in] */ VARIANT *Flags,
+            /* [optional][in] */ VARIANT *TargetFrameName,
+            /* [optional][in] */ VARIANT *PostData,
+            /* [optional][in] */ VARIANT *Headers);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            IWebBrowserApp __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh2 )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *Level);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh2 )( 
+            IWebBrowserApp * This,
+            /* [optional][in] */ VARIANT *Level);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
-            IWebBrowserApp __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+            IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Container )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Container )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Document )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Document )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TopLevelContainer )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_TopLevelContainer )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *Type);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ BSTR *Type);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Left )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Left )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Left )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Left )( 
+            IWebBrowserApp * This,
             /* [in] */ long Left);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Top )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Top )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Top )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Top )( 
+            IWebBrowserApp * This,
             /* [in] */ long Top);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Width )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Width )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Width )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Width )( 
+            IWebBrowserApp * This,
             /* [in] */ long Width);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Height )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Height )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Height )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Height )( 
+            IWebBrowserApp * This,
             /* [in] */ long Height);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocationName )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *LocationName);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationName )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ BSTR *LocationName);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocationURL )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *LocationURL);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationURL )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ BSTR *LocationURL);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Busy )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Busy )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Quit )( 
-            IWebBrowserApp __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Quit )( 
+            IWebBrowserApp * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ClientToWindow )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [out][in] */ int __RPC_FAR *pcx,
-            /* [out][in] */ int __RPC_FAR *pcy);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ClientToWindow )( 
+            IWebBrowserApp * This,
+            /* [out][in] */ int *pcx,
+            /* [out][in] */ int *pcy);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutProperty )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
+            IWebBrowserApp * This,
             /* [in] */ BSTR Property,
             /* [in] */ VARIANT vtValue);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProperty )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+            IWebBrowserApp * This,
             /* [in] */ BSTR Property,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvtValue);
+            /* [retval][out] */ VARIANT *pvtValue);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *Name);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ BSTR *Name);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HWND )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pHWND);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_HWND )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ SHANDLE_PTR *pHWND);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FullName )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *FullName);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FullName )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ BSTR *FullName);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *Path);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ BSTR *Path);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Visible )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Visible )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Visible )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Visible )( 
+            IWebBrowserApp * This,
             /* [in] */ VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusBar )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StatusBar )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusBar )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StatusBar )( 
+            IWebBrowserApp * This,
             /* [in] */ VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusText )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *StatusText);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StatusText )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ BSTR *StatusText);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusText )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StatusText )( 
+            IWebBrowserApp * This,
             /* [in] */ BSTR StatusText);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ToolBar )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ int __RPC_FAR *Value);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ToolBar )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ int *Value);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ToolBar )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ToolBar )( 
+            IWebBrowserApp * This,
             /* [in] */ int Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MenuBar )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Value);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_MenuBar )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ VARIANT_BOOL *Value);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MenuBar )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_MenuBar )( 
+            IWebBrowserApp * This,
             /* [in] */ VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FullScreen )( 
-            IWebBrowserApp __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbFullScreen);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FullScreen )( 
+            IWebBrowserApp * This,
+            /* [retval][out] */ VARIANT_BOOL *pbFullScreen);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FullScreen )( 
-            IWebBrowserApp __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_FullScreen )( 
+            IWebBrowserApp * This,
             /* [in] */ VARIANT_BOOL bFullScreen);
         
         END_INTERFACE
@@ -1374,7 +1392,7 @@ EXTERN_C const IID IID_IWebBrowserApp;
 
     interface IWebBrowserApp
     {
-        CONST_VTBL struct IWebBrowserAppVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWebBrowserAppVtbl *lpVtbl;
     };
 
     
@@ -1549,7 +1567,7 @@ EXTERN_C const IID IID_IWebBrowserApp;
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_Quit_Proxy( 
-    IWebBrowserApp __RPC_FAR * This);
+    IWebBrowserApp * This);
 
 
 void __RPC_STUB IWebBrowserApp_Quit_Stub(
@@ -1560,9 +1578,9 @@ void __RPC_STUB IWebBrowserApp_Quit_Stub(
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_ClientToWindow_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
-    /* [out][in] */ int __RPC_FAR *pcx,
-    /* [out][in] */ int __RPC_FAR *pcy);
+    IWebBrowserApp * This,
+    /* [out][in] */ int *pcx,
+    /* [out][in] */ int *pcy);
 
 
 void __RPC_STUB IWebBrowserApp_ClientToWindow_Stub(
@@ -1573,7 +1591,7 @@ void __RPC_STUB IWebBrowserApp_ClientToWindow_Stub(
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_PutProperty_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
+    IWebBrowserApp * This,
     /* [in] */ BSTR Property,
     /* [in] */ VARIANT vtValue);
 
@@ -1586,9 +1604,9 @@ void __RPC_STUB IWebBrowserApp_PutProperty_Stub(
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_GetProperty_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
+    IWebBrowserApp * This,
     /* [in] */ BSTR Property,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvtValue);
+    /* [retval][out] */ VARIANT *pvtValue);
 
 
 void __RPC_STUB IWebBrowserApp_GetProperty_Stub(
@@ -1599,8 +1617,8 @@ void __RPC_STUB IWebBrowserApp_GetProperty_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_Name_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *Name);
+    IWebBrowserApp * This,
+    /* [retval][out] */ BSTR *Name);
 
 
 void __RPC_STUB IWebBrowserApp_get_Name_Stub(
@@ -1611,8 +1629,8 @@ void __RPC_STUB IWebBrowserApp_get_Name_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_HWND_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pHWND);
+    IWebBrowserApp * This,
+    /* [retval][out] */ SHANDLE_PTR *pHWND);
 
 
 void __RPC_STUB IWebBrowserApp_get_HWND_Stub(
@@ -1623,8 +1641,8 @@ void __RPC_STUB IWebBrowserApp_get_HWND_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_FullName_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *FullName);
+    IWebBrowserApp * This,
+    /* [retval][out] */ BSTR *FullName);
 
 
 void __RPC_STUB IWebBrowserApp_get_FullName_Stub(
@@ -1635,8 +1653,8 @@ void __RPC_STUB IWebBrowserApp_get_FullName_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_Path_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *Path);
+    IWebBrowserApp * This,
+    /* [retval][out] */ BSTR *Path);
 
 
 void __RPC_STUB IWebBrowserApp_get_Path_Stub(
@@ -1647,8 +1665,8 @@ void __RPC_STUB IWebBrowserApp_get_Path_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_Visible_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+    IWebBrowserApp * This,
+    /* [retval][out] */ VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IWebBrowserApp_get_Visible_Stub(
@@ -1659,7 +1677,7 @@ void __RPC_STUB IWebBrowserApp_get_Visible_Stub(
 
 
 /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_Visible_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
+    IWebBrowserApp * This,
     /* [in] */ VARIANT_BOOL Value);
 
 
@@ -1671,8 +1689,8 @@ void __RPC_STUB IWebBrowserApp_put_Visible_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_StatusBar_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+    IWebBrowserApp * This,
+    /* [retval][out] */ VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IWebBrowserApp_get_StatusBar_Stub(
@@ -1683,7 +1701,7 @@ void __RPC_STUB IWebBrowserApp_get_StatusBar_Stub(
 
 
 /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_StatusBar_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
+    IWebBrowserApp * This,
     /* [in] */ VARIANT_BOOL Value);
 
 
@@ -1695,8 +1713,8 @@ void __RPC_STUB IWebBrowserApp_put_StatusBar_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_StatusText_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *StatusText);
+    IWebBrowserApp * This,
+    /* [retval][out] */ BSTR *StatusText);
 
 
 void __RPC_STUB IWebBrowserApp_get_StatusText_Stub(
@@ -1707,7 +1725,7 @@ void __RPC_STUB IWebBrowserApp_get_StatusText_Stub(
 
 
 /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_StatusText_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
+    IWebBrowserApp * This,
     /* [in] */ BSTR StatusText);
 
 
@@ -1719,8 +1737,8 @@ void __RPC_STUB IWebBrowserApp_put_StatusText_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_ToolBar_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
-    /* [retval][out] */ int __RPC_FAR *Value);
+    IWebBrowserApp * This,
+    /* [retval][out] */ int *Value);
 
 
 void __RPC_STUB IWebBrowserApp_get_ToolBar_Stub(
@@ -1731,7 +1749,7 @@ void __RPC_STUB IWebBrowserApp_get_ToolBar_Stub(
 
 
 /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_ToolBar_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
+    IWebBrowserApp * This,
     /* [in] */ int Value);
 
 
@@ -1743,8 +1761,8 @@ void __RPC_STUB IWebBrowserApp_put_ToolBar_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_MenuBar_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Value);
+    IWebBrowserApp * This,
+    /* [retval][out] */ VARIANT_BOOL *Value);
 
 
 void __RPC_STUB IWebBrowserApp_get_MenuBar_Stub(
@@ -1755,7 +1773,7 @@ void __RPC_STUB IWebBrowserApp_get_MenuBar_Stub(
 
 
 /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_MenuBar_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
+    IWebBrowserApp * This,
     /* [in] */ VARIANT_BOOL Value);
 
 
@@ -1767,8 +1785,8 @@ void __RPC_STUB IWebBrowserApp_put_MenuBar_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_get_FullScreen_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbFullScreen);
+    IWebBrowserApp * This,
+    /* [retval][out] */ VARIANT_BOOL *pbFullScreen);
 
 
 void __RPC_STUB IWebBrowserApp_get_FullScreen_Stub(
@@ -1779,7 +1797,7 @@ void __RPC_STUB IWebBrowserApp_get_FullScreen_Stub(
 
 
 /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowserApp_put_FullScreen_Proxy( 
-    IWebBrowserApp __RPC_FAR * This,
+    IWebBrowserApp * This,
     /* [in] */ VARIANT_BOOL bFullScreen);
 
 
@@ -1810,68 +1828,68 @@ EXTERN_C const IID IID_IWebBrowser2;
     {
     public:
         virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE Navigate2( 
-            /* [in] */ VARIANT __RPC_FAR *URL,
-            /* [optional][in] */ VARIANT __RPC_FAR *Flags,
-            /* [optional][in] */ VARIANT __RPC_FAR *TargetFrameName,
-            /* [optional][in] */ VARIANT __RPC_FAR *PostData,
-            /* [optional][in] */ VARIANT __RPC_FAR *Headers) = 0;
+            /* [in] */ VARIANT *URL,
+            /* [optional][in] */ VARIANT *Flags,
+            /* [optional][in] */ VARIANT *TargetFrameName,
+            /* [optional][in] */ VARIANT *PostData,
+            /* [optional][in] */ VARIANT *Headers) = 0;
         
         virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE QueryStatusWB( 
             /* [in] */ OLECMDID cmdID,
-            /* [retval][out] */ OLECMDF __RPC_FAR *pcmdf) = 0;
+            /* [retval][out] */ OLECMDF *pcmdf) = 0;
         
         virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE ExecWB( 
             /* [in] */ OLECMDID cmdID,
             /* [in] */ OLECMDEXECOPT cmdexecopt,
-            /* [optional][in] */ VARIANT __RPC_FAR *pvaIn,
-            /* [optional][in][out] */ VARIANT __RPC_FAR *pvaOut) = 0;
+            /* [optional][in] */ VARIANT *pvaIn,
+            /* [optional][in][out] */ VARIANT *pvaOut) = 0;
         
         virtual /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE ShowBrowserBar( 
-            /* [in] */ VARIANT __RPC_FAR *pvaClsid,
-            /* [optional][in] */ VARIANT __RPC_FAR *pvarShow,
-            /* [optional][in] */ VARIANT __RPC_FAR *pvarSize) = 0;
+            /* [in] */ VARIANT *pvaClsid,
+            /* [optional][in] */ VARIANT *pvarShow,
+            /* [optional][in] */ VARIANT *pvarSize) = 0;
         
         virtual /* [bindable][propget][id] */ HRESULT STDMETHODCALLTYPE get_ReadyState( 
-            /* [out][retval] */ READYSTATE __RPC_FAR *plReadyState) = 0;
+            /* [out][retval] */ READYSTATE *plReadyState) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Offline( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbOffline) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pbOffline) = 0;
         
         virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Offline( 
             /* [in] */ VARIANT_BOOL bOffline) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Silent( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbSilent) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pbSilent) = 0;
         
         virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Silent( 
             /* [in] */ VARIANT_BOOL bSilent) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_RegisterAsBrowser( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbRegister) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pbRegister) = 0;
         
         virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_RegisterAsBrowser( 
             /* [in] */ VARIANT_BOOL bRegister) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_RegisterAsDropTarget( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbRegister) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pbRegister) = 0;
         
         virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_RegisterAsDropTarget( 
             /* [in] */ VARIANT_BOOL bRegister) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_TheaterMode( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbRegister) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pbRegister) = 0;
         
         virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_TheaterMode( 
             /* [in] */ VARIANT_BOOL bRegister) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_AddressBar( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Value) = 0;
+            /* [retval][out] */ VARIANT_BOOL *Value) = 0;
         
         virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_AddressBar( 
             /* [in] */ VARIANT_BOOL Value) = 0;
         
         virtual /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Resizable( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Value) = 0;
+            /* [retval][out] */ VARIANT_BOOL *Value) = 0;
         
         virtual /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Resizable( 
             /* [in] */ VARIANT_BOOL Value) = 0;
@@ -1884,310 +1902,310 @@ EXTERN_C const IID IID_IWebBrowser2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWebBrowser2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWebBrowser2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWebBrowser2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWebBrowser2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWebBrowser2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWebBrowser2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IWebBrowser2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IWebBrowser2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IWebBrowser2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IWebBrowser2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IWebBrowser2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IWebBrowser2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GoBack )( 
-            IWebBrowser2 __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoBack )( 
+            IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GoForward )( 
-            IWebBrowser2 __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoForward )( 
+            IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GoHome )( 
-            IWebBrowser2 __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoHome )( 
+            IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GoSearch )( 
-            IWebBrowser2 __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GoSearch )( 
+            IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Navigate )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Navigate )( 
+            IWebBrowser2 * This,
             /* [in] */ BSTR URL,
-            /* [optional][in] */ VARIANT __RPC_FAR *Flags,
-            /* [optional][in] */ VARIANT __RPC_FAR *TargetFrameName,
-            /* [optional][in] */ VARIANT __RPC_FAR *PostData,
-            /* [optional][in] */ VARIANT __RPC_FAR *Headers);
+            /* [optional][in] */ VARIANT *Flags,
+            /* [optional][in] */ VARIANT *TargetFrameName,
+            /* [optional][in] */ VARIANT *PostData,
+            /* [optional][in] */ VARIANT *Headers);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh )( 
-            IWebBrowser2 __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+            IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Refresh2 )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [optional][in] */ VARIANT __RPC_FAR *Level);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Refresh2 )( 
+            IWebBrowser2 * This,
+            /* [optional][in] */ VARIANT *Level);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Stop )( 
-            IWebBrowser2 __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+            IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Application )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Application )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Parent )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Parent )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Container )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Container )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Document )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Document )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ IDispatch **ppDisp);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TopLevelContainer )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_TopLevelContainer )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Type )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *Type);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ BSTR *Type);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Left )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Left )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Left )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Left )( 
+            IWebBrowser2 * This,
             /* [in] */ long Left);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Top )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Top )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Top )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Top )( 
+            IWebBrowser2 * This,
             /* [in] */ long Top);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Width )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Width )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Width )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Width )( 
+            IWebBrowser2 * This,
             /* [in] */ long Width);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Height )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pl);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Height )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ long *pl);
         
-        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Height )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Height )( 
+            IWebBrowser2 * This,
             /* [in] */ long Height);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocationName )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *LocationName);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationName )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ BSTR *LocationName);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocationURL )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *LocationURL);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_LocationURL )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ BSTR *LocationURL);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Busy )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Busy )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Quit )( 
-            IWebBrowser2 __RPC_FAR * This);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Quit )( 
+            IWebBrowser2 * This);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ClientToWindow )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [out][in] */ int __RPC_FAR *pcx,
-            /* [out][in] */ int __RPC_FAR *pcy);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ClientToWindow )( 
+            IWebBrowser2 * This,
+            /* [out][in] */ int *pcx,
+            /* [out][in] */ int *pcy);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutProperty )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
+            IWebBrowser2 * This,
             /* [in] */ BSTR Property,
             /* [in] */ VARIANT vtValue);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProperty )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+            IWebBrowser2 * This,
             /* [in] */ BSTR Property,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvtValue);
+            /* [retval][out] */ VARIANT *pvtValue);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Name )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *Name);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ BSTR *Name);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_HWND )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pHWND);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_HWND )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ SHANDLE_PTR *pHWND);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FullName )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *FullName);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FullName )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ BSTR *FullName);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Path )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *Path);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Path )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ BSTR *Path);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Visible )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Visible )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Visible )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Visible )( 
+            IWebBrowser2 * This,
             /* [in] */ VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusBar )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StatusBar )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusBar )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StatusBar )( 
+            IWebBrowser2 * This,
             /* [in] */ VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_StatusText )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *StatusText);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_StatusText )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ BSTR *StatusText);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_StatusText )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_StatusText )( 
+            IWebBrowser2 * This,
             /* [in] */ BSTR StatusText);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ToolBar )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ int __RPC_FAR *Value);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ToolBar )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ int *Value);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ToolBar )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_ToolBar )( 
+            IWebBrowser2 * This,
             /* [in] */ int Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MenuBar )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Value);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_MenuBar )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ VARIANT_BOOL *Value);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MenuBar )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_MenuBar )( 
+            IWebBrowser2 * This,
             /* [in] */ VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FullScreen )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbFullScreen);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_FullScreen )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pbFullScreen);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_FullScreen )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_FullScreen )( 
+            IWebBrowser2 * This,
             /* [in] */ VARIANT_BOOL bFullScreen);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Navigate2 )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *URL,
-            /* [optional][in] */ VARIANT __RPC_FAR *Flags,
-            /* [optional][in] */ VARIANT __RPC_FAR *TargetFrameName,
-            /* [optional][in] */ VARIANT __RPC_FAR *PostData,
-            /* [optional][in] */ VARIANT __RPC_FAR *Headers);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Navigate2 )( 
+            IWebBrowser2 * This,
+            /* [in] */ VARIANT *URL,
+            /* [optional][in] */ VARIANT *Flags,
+            /* [optional][in] */ VARIANT *TargetFrameName,
+            /* [optional][in] */ VARIANT *PostData,
+            /* [optional][in] */ VARIANT *Headers);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryStatusWB )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *QueryStatusWB )( 
+            IWebBrowser2 * This,
             /* [in] */ OLECMDID cmdID,
-            /* [retval][out] */ OLECMDF __RPC_FAR *pcmdf);
+            /* [retval][out] */ OLECMDF *pcmdf);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ExecWB )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ExecWB )( 
+            IWebBrowser2 * This,
             /* [in] */ OLECMDID cmdID,
             /* [in] */ OLECMDEXECOPT cmdexecopt,
-            /* [optional][in] */ VARIANT __RPC_FAR *pvaIn,
-            /* [optional][in][out] */ VARIANT __RPC_FAR *pvaOut);
+            /* [optional][in] */ VARIANT *pvaIn,
+            /* [optional][in][out] */ VARIANT *pvaOut);
         
-        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowBrowserBar )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pvaClsid,
-            /* [optional][in] */ VARIANT __RPC_FAR *pvarShow,
-            /* [optional][in] */ VARIANT __RPC_FAR *pvarSize);
+        /* [helpcontext][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ShowBrowserBar )( 
+            IWebBrowser2 * This,
+            /* [in] */ VARIANT *pvaClsid,
+            /* [optional][in] */ VARIANT *pvarShow,
+            /* [optional][in] */ VARIANT *pvarSize);
         
-        /* [bindable][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ReadyState )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [out][retval] */ READYSTATE __RPC_FAR *plReadyState);
+        /* [bindable][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_ReadyState )( 
+            IWebBrowser2 * This,
+            /* [out][retval] */ READYSTATE *plReadyState);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Offline )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbOffline);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Offline )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pbOffline);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Offline )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Offline )( 
+            IWebBrowser2 * This,
             /* [in] */ VARIANT_BOOL bOffline);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Silent )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbSilent);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Silent )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pbSilent);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Silent )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Silent )( 
+            IWebBrowser2 * This,
             /* [in] */ VARIANT_BOOL bSilent);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RegisterAsBrowser )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbRegister);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RegisterAsBrowser )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pbRegister);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RegisterAsBrowser )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RegisterAsBrowser )( 
+            IWebBrowser2 * This,
             /* [in] */ VARIANT_BOOL bRegister);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_RegisterAsDropTarget )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbRegister);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_RegisterAsDropTarget )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pbRegister);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_RegisterAsDropTarget )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_RegisterAsDropTarget )( 
+            IWebBrowser2 * This,
             /* [in] */ VARIANT_BOOL bRegister);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_TheaterMode )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbRegister);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_TheaterMode )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pbRegister);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_TheaterMode )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_TheaterMode )( 
+            IWebBrowser2 * This,
             /* [in] */ VARIANT_BOOL bRegister);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AddressBar )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Value);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_AddressBar )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ VARIANT_BOOL *Value);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AddressBar )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_AddressBar )( 
+            IWebBrowser2 * This,
             /* [in] */ VARIANT_BOOL Value);
         
-        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Resizable )( 
-            IWebBrowser2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Value);
+        /* [helpcontext][helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Resizable )( 
+            IWebBrowser2 * This,
+            /* [retval][out] */ VARIANT_BOOL *Value);
         
-        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Resizable )( 
-            IWebBrowser2 __RPC_FAR * This,
+        /* [helpcontext][helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Resizable )( 
+            IWebBrowser2 * This,
             /* [in] */ VARIANT_BOOL Value);
         
         END_INTERFACE
@@ -2195,7 +2213,7 @@ EXTERN_C const IID IID_IWebBrowser2;
 
     interface IWebBrowser2
     {
-        CONST_VTBL struct IWebBrowser2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWebBrowser2Vtbl *lpVtbl;
     };
 
     
@@ -2428,12 +2446,12 @@ EXTERN_C const IID IID_IWebBrowser2;
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_Navigate2_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *URL,
-    /* [optional][in] */ VARIANT __RPC_FAR *Flags,
-    /* [optional][in] */ VARIANT __RPC_FAR *TargetFrameName,
-    /* [optional][in] */ VARIANT __RPC_FAR *PostData,
-    /* [optional][in] */ VARIANT __RPC_FAR *Headers);
+    IWebBrowser2 * This,
+    /* [in] */ VARIANT *URL,
+    /* [optional][in] */ VARIANT *Flags,
+    /* [optional][in] */ VARIANT *TargetFrameName,
+    /* [optional][in] */ VARIANT *PostData,
+    /* [optional][in] */ VARIANT *Headers);
 
 
 void __RPC_STUB IWebBrowser2_Navigate2_Stub(
@@ -2444,9 +2462,9 @@ void __RPC_STUB IWebBrowser2_Navigate2_Stub(
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_QueryStatusWB_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
+    IWebBrowser2 * This,
     /* [in] */ OLECMDID cmdID,
-    /* [retval][out] */ OLECMDF __RPC_FAR *pcmdf);
+    /* [retval][out] */ OLECMDF *pcmdf);
 
 
 void __RPC_STUB IWebBrowser2_QueryStatusWB_Stub(
@@ -2457,11 +2475,11 @@ void __RPC_STUB IWebBrowser2_QueryStatusWB_Stub(
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_ExecWB_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
+    IWebBrowser2 * This,
     /* [in] */ OLECMDID cmdID,
     /* [in] */ OLECMDEXECOPT cmdexecopt,
-    /* [optional][in] */ VARIANT __RPC_FAR *pvaIn,
-    /* [optional][in][out] */ VARIANT __RPC_FAR *pvaOut);
+    /* [optional][in] */ VARIANT *pvaIn,
+    /* [optional][in][out] */ VARIANT *pvaOut);
 
 
 void __RPC_STUB IWebBrowser2_ExecWB_Stub(
@@ -2472,10 +2490,10 @@ void __RPC_STUB IWebBrowser2_ExecWB_Stub(
 
 
 /* [helpcontext][helpstring][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_ShowBrowserBar_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *pvaClsid,
-    /* [optional][in] */ VARIANT __RPC_FAR *pvarShow,
-    /* [optional][in] */ VARIANT __RPC_FAR *pvarSize);
+    IWebBrowser2 * This,
+    /* [in] */ VARIANT *pvaClsid,
+    /* [optional][in] */ VARIANT *pvarShow,
+    /* [optional][in] */ VARIANT *pvarSize);
 
 
 void __RPC_STUB IWebBrowser2_ShowBrowserBar_Stub(
@@ -2486,8 +2504,8 @@ void __RPC_STUB IWebBrowser2_ShowBrowserBar_Stub(
 
 
 /* [bindable][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_ReadyState_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
-    /* [out][retval] */ READYSTATE __RPC_FAR *plReadyState);
+    IWebBrowser2 * This,
+    /* [out][retval] */ READYSTATE *plReadyState);
 
 
 void __RPC_STUB IWebBrowser2_get_ReadyState_Stub(
@@ -2498,8 +2516,8 @@ void __RPC_STUB IWebBrowser2_get_ReadyState_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_Offline_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbOffline);
+    IWebBrowser2 * This,
+    /* [retval][out] */ VARIANT_BOOL *pbOffline);
 
 
 void __RPC_STUB IWebBrowser2_get_Offline_Stub(
@@ -2510,7 +2528,7 @@ void __RPC_STUB IWebBrowser2_get_Offline_Stub(
 
 
 /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_Offline_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
+    IWebBrowser2 * This,
     /* [in] */ VARIANT_BOOL bOffline);
 
 
@@ -2522,8 +2540,8 @@ void __RPC_STUB IWebBrowser2_put_Offline_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_Silent_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbSilent);
+    IWebBrowser2 * This,
+    /* [retval][out] */ VARIANT_BOOL *pbSilent);
 
 
 void __RPC_STUB IWebBrowser2_get_Silent_Stub(
@@ -2534,7 +2552,7 @@ void __RPC_STUB IWebBrowser2_get_Silent_Stub(
 
 
 /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_Silent_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
+    IWebBrowser2 * This,
     /* [in] */ VARIANT_BOOL bSilent);
 
 
@@ -2546,8 +2564,8 @@ void __RPC_STUB IWebBrowser2_put_Silent_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_RegisterAsBrowser_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbRegister);
+    IWebBrowser2 * This,
+    /* [retval][out] */ VARIANT_BOOL *pbRegister);
 
 
 void __RPC_STUB IWebBrowser2_get_RegisterAsBrowser_Stub(
@@ -2558,7 +2576,7 @@ void __RPC_STUB IWebBrowser2_get_RegisterAsBrowser_Stub(
 
 
 /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_RegisterAsBrowser_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
+    IWebBrowser2 * This,
     /* [in] */ VARIANT_BOOL bRegister);
 
 
@@ -2570,8 +2588,8 @@ void __RPC_STUB IWebBrowser2_put_RegisterAsBrowser_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_RegisterAsDropTarget_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbRegister);
+    IWebBrowser2 * This,
+    /* [retval][out] */ VARIANT_BOOL *pbRegister);
 
 
 void __RPC_STUB IWebBrowser2_get_RegisterAsDropTarget_Stub(
@@ -2582,7 +2600,7 @@ void __RPC_STUB IWebBrowser2_get_RegisterAsDropTarget_Stub(
 
 
 /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_RegisterAsDropTarget_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
+    IWebBrowser2 * This,
     /* [in] */ VARIANT_BOOL bRegister);
 
 
@@ -2594,8 +2612,8 @@ void __RPC_STUB IWebBrowser2_put_RegisterAsDropTarget_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_TheaterMode_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbRegister);
+    IWebBrowser2 * This,
+    /* [retval][out] */ VARIANT_BOOL *pbRegister);
 
 
 void __RPC_STUB IWebBrowser2_get_TheaterMode_Stub(
@@ -2606,7 +2624,7 @@ void __RPC_STUB IWebBrowser2_get_TheaterMode_Stub(
 
 
 /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_TheaterMode_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
+    IWebBrowser2 * This,
     /* [in] */ VARIANT_BOOL bRegister);
 
 
@@ -2618,8 +2636,8 @@ void __RPC_STUB IWebBrowser2_put_TheaterMode_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_AddressBar_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Value);
+    IWebBrowser2 * This,
+    /* [retval][out] */ VARIANT_BOOL *Value);
 
 
 void __RPC_STUB IWebBrowser2_get_AddressBar_Stub(
@@ -2630,7 +2648,7 @@ void __RPC_STUB IWebBrowser2_get_AddressBar_Stub(
 
 
 /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_AddressBar_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
+    IWebBrowser2 * This,
     /* [in] */ VARIANT_BOOL Value);
 
 
@@ -2642,8 +2660,8 @@ void __RPC_STUB IWebBrowser2_put_AddressBar_Stub(
 
 
 /* [helpcontext][helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_get_Resizable_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *Value);
+    IWebBrowser2 * This,
+    /* [retval][out] */ VARIANT_BOOL *Value);
 
 
 void __RPC_STUB IWebBrowser2_get_Resizable_Stub(
@@ -2654,7 +2672,7 @@ void __RPC_STUB IWebBrowser2_get_Resizable_Stub(
 
 
 /* [helpcontext][helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE IWebBrowser2_put_Resizable_Proxy( 
-    IWebBrowser2 __RPC_FAR * This,
+    IWebBrowser2 * This,
     /* [in] */ VARIANT_BOOL Value);
 
 
@@ -2691,52 +2709,52 @@ EXTERN_C const IID DIID_DWebBrowserEvents2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            DWebBrowserEvents2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            DWebBrowserEvents2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            DWebBrowserEvents2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            DWebBrowserEvents2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            DWebBrowserEvents2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            DWebBrowserEvents2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            DWebBrowserEvents2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            DWebBrowserEvents2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            DWebBrowserEvents2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            DWebBrowserEvents2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            DWebBrowserEvents2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            DWebBrowserEvents2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            DWebBrowserEvents2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            DWebBrowserEvents2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } DWebBrowserEvents2Vtbl;
 
     interface DWebBrowserEvents2
     {
-        CONST_VTBL struct DWebBrowserEvents2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct DWebBrowserEvents2Vtbl *lpVtbl;
     };
 
     
@@ -2829,52 +2847,52 @@ EXTERN_C const IID DIID_DShellWindowsEvents;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            DShellWindowsEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            DShellWindowsEvents * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            DShellWindowsEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            DShellWindowsEvents * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            DShellWindowsEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            DShellWindowsEvents * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            DShellWindowsEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            DShellWindowsEvents * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            DShellWindowsEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            DShellWindowsEvents * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            DShellWindowsEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            DShellWindowsEvents * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            DShellWindowsEvents __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            DShellWindowsEvents * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } DShellWindowsEventsVtbl;
 
     interface DShellWindowsEvents
     {
-        CONST_VTBL struct DShellWindowsEventsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct DShellWindowsEventsVtbl *lpVtbl;
     };
 
     
@@ -2929,50 +2947,50 @@ EXTERN_C const IID IID_IShellWindows;
     {
     public:
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *Count) = 0;
+            /* [retval][out] */ long *Count) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
             /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *Folder) = 0;
+            /* [retval][out] */ IDispatch **Folder) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk) = 0;
+            /* [retval][out] */ IUnknown **ppunk) = 0;
         
         virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE Register( 
-            /* [in] */ IDispatch __RPC_FAR *pid,
+            /* [in] */ IDispatch *pid,
             /* [in] */ long hwnd,
             /* [in] */ int swClass,
-            /* [out] */ long __RPC_FAR *plCookie) = 0;
+            /* [out] */ long *plCookie) = 0;
         
         virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE RegisterPending( 
             /* [in] */ long lThreadId,
-            /* [in] */ VARIANT __RPC_FAR *pvarloc,
-            /* [in] */ VARIANT __RPC_FAR *pvarlocRoot,
+            /* [in] */ VARIANT *pvarloc,
+            /* [in] */ VARIANT *pvarlocRoot,
             /* [in] */ int swClass,
-            /* [out] */ long __RPC_FAR *plCookie) = 0;
+            /* [out] */ long *plCookie) = 0;
         
         virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE Revoke( 
             /* [in] */ long lCookie) = 0;
         
         virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE OnNavigate( 
             /* [in] */ long lCookie,
-            /* [in] */ VARIANT __RPC_FAR *pvarLoc) = 0;
+            /* [in] */ VARIANT *pvarLoc) = 0;
         
         virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE OnActivated( 
             /* [in] */ long lCookie,
             /* [in] */ VARIANT_BOOL fActive) = 0;
         
-        virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE FindWindow( 
-            /* [in] */ VARIANT __RPC_FAR *pvarLoc,
-            /* [in] */ VARIANT __RPC_FAR *pvarLocRoot,
+        virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE FindWindowSW( 
+            /* [in] */ VARIANT *pvarLoc,
+            /* [in] */ VARIANT *pvarLocRoot,
             /* [in] */ int swClass,
-            /* [out] */ long __RPC_FAR *phwnd,
+            /* [out] */ long *phwnd,
             /* [in] */ int swfwOptions,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispOut) = 0;
+            /* [retval][out] */ IDispatch **ppdispOut) = 0;
         
         virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE OnCreated( 
             /* [in] */ long lCookie,
-            /* [in] */ IUnknown __RPC_FAR *punk) = 0;
+            /* [in] */ IUnknown *punk) = 0;
         
         virtual /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE ProcessAttachDetach( 
             /* [in] */ VARIANT_BOOL fAttach) = 0;
@@ -2985,104 +3003,104 @@ EXTERN_C const IID IID_IShellWindows;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IShellWindows __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IShellWindows * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IShellWindows __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IShellWindows * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IShellWindows __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IShellWindows * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IShellWindows __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IShellWindows * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IShellWindows __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IShellWindows * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IShellWindows __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IShellWindows * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IShellWindows __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IShellWindows * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            IShellWindows __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *Count);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            IShellWindows * This,
+            /* [retval][out] */ long *Count);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
-            IShellWindows __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+            IShellWindows * This,
             /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *Folder);
+            /* [retval][out] */ IDispatch **Folder);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
-            IShellWindows __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+            IShellWindows * This,
+            /* [retval][out] */ IUnknown **ppunk);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Register )( 
-            IShellWindows __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pid,
+        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Register )( 
+            IShellWindows * This,
+            /* [in] */ IDispatch *pid,
             /* [in] */ long hwnd,
             /* [in] */ int swClass,
-            /* [out] */ long __RPC_FAR *plCookie);
+            /* [out] */ long *plCookie);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterPending )( 
-            IShellWindows __RPC_FAR * This,
+        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *RegisterPending )( 
+            IShellWindows * This,
             /* [in] */ long lThreadId,
-            /* [in] */ VARIANT __RPC_FAR *pvarloc,
-            /* [in] */ VARIANT __RPC_FAR *pvarlocRoot,
+            /* [in] */ VARIANT *pvarloc,
+            /* [in] */ VARIANT *pvarlocRoot,
             /* [in] */ int swClass,
-            /* [out] */ long __RPC_FAR *plCookie);
+            /* [out] */ long *plCookie);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Revoke )( 
-            IShellWindows __RPC_FAR * This,
+        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Revoke )( 
+            IShellWindows * This,
             /* [in] */ long lCookie);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnNavigate )( 
-            IShellWindows __RPC_FAR * This,
+        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *OnNavigate )( 
+            IShellWindows * This,
             /* [in] */ long lCookie,
-            /* [in] */ VARIANT __RPC_FAR *pvarLoc);
+            /* [in] */ VARIANT *pvarLoc);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnActivated )( 
-            IShellWindows __RPC_FAR * This,
+        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *OnActivated )( 
+            IShellWindows * This,
             /* [in] */ long lCookie,
             /* [in] */ VARIANT_BOOL fActive);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindWindow )( 
-            IShellWindows __RPC_FAR * This,
-            /* [in] */ VARIANT __RPC_FAR *pvarLoc,
-            /* [in] */ VARIANT __RPC_FAR *pvarLocRoot,
+        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindWindowSW )( 
+            IShellWindows * This,
+            /* [in] */ VARIANT *pvarLoc,
+            /* [in] */ VARIANT *pvarLocRoot,
             /* [in] */ int swClass,
-            /* [out] */ long __RPC_FAR *phwnd,
+            /* [out] */ long *phwnd,
             /* [in] */ int swfwOptions,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispOut);
+            /* [retval][out] */ IDispatch **ppdispOut);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnCreated )( 
-            IShellWindows __RPC_FAR * This,
+        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *OnCreated )( 
+            IShellWindows * This,
             /* [in] */ long lCookie,
-            /* [in] */ IUnknown __RPC_FAR *punk);
+            /* [in] */ IUnknown *punk);
         
-        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ProcessAttachDetach )( 
-            IShellWindows __RPC_FAR * This,
+        /* [hidden][helpstring] */ HRESULT ( STDMETHODCALLTYPE *ProcessAttachDetach )( 
+            IShellWindows * This,
             /* [in] */ VARIANT_BOOL fAttach);
         
         END_INTERFACE
@@ -3090,7 +3108,7 @@ EXTERN_C const IID IID_IShellWindows;
 
     interface IShellWindows
     {
-        CONST_VTBL struct IShellWindowsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IShellWindowsVtbl *lpVtbl;
     };
 
     
@@ -3145,8 +3163,8 @@ EXTERN_C const IID IID_IShellWindows;
 #define IShellWindows_OnActivated(This,lCookie,fActive)	\
     (This)->lpVtbl -> OnActivated(This,lCookie,fActive)
 
-#define IShellWindows_FindWindow(This,pvarLoc,pvarLocRoot,swClass,phwnd,swfwOptions,ppdispOut)	\
-    (This)->lpVtbl -> FindWindow(This,pvarLoc,pvarLocRoot,swClass,phwnd,swfwOptions,ppdispOut)
+#define IShellWindows_FindWindowSW(This,pvarLoc,pvarLocRoot,swClass,phwnd,swfwOptions,ppdispOut)	\
+    (This)->lpVtbl -> FindWindowSW(This,pvarLoc,pvarLocRoot,swClass,phwnd,swfwOptions,ppdispOut)
 
 #define IShellWindows_OnCreated(This,lCookie,punk)	\
     (This)->lpVtbl -> OnCreated(This,lCookie,punk)
@@ -3162,8 +3180,8 @@ EXTERN_C const IID IID_IShellWindows;
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IShellWindows_get_Count_Proxy( 
-    IShellWindows __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *Count);
+    IShellWindows * This,
+    /* [retval][out] */ long *Count);
 
 
 void __RPC_STUB IShellWindows_get_Count_Stub(
@@ -3174,9 +3192,9 @@ void __RPC_STUB IShellWindows_get_Count_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellWindows_Item_Proxy( 
-    IShellWindows __RPC_FAR * This,
+    IShellWindows * This,
     /* [optional][in] */ VARIANT index,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *Folder);
+    /* [retval][out] */ IDispatch **Folder);
 
 
 void __RPC_STUB IShellWindows_Item_Stub(
@@ -3187,8 +3205,8 @@ void __RPC_STUB IShellWindows_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellWindows__NewEnum_Proxy( 
-    IShellWindows __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+    IShellWindows * This,
+    /* [retval][out] */ IUnknown **ppunk);
 
 
 void __RPC_STUB IShellWindows__NewEnum_Stub(
@@ -3199,11 +3217,11 @@ void __RPC_STUB IShellWindows__NewEnum_Stub(
 
 
 /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_Register_Proxy( 
-    IShellWindows __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pid,
+    IShellWindows * This,
+    /* [in] */ IDispatch *pid,
     /* [in] */ long hwnd,
     /* [in] */ int swClass,
-    /* [out] */ long __RPC_FAR *plCookie);
+    /* [out] */ long *plCookie);
 
 
 void __RPC_STUB IShellWindows_Register_Stub(
@@ -3214,12 +3232,12 @@ void __RPC_STUB IShellWindows_Register_Stub(
 
 
 /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_RegisterPending_Proxy( 
-    IShellWindows __RPC_FAR * This,
+    IShellWindows * This,
     /* [in] */ long lThreadId,
-    /* [in] */ VARIANT __RPC_FAR *pvarloc,
-    /* [in] */ VARIANT __RPC_FAR *pvarlocRoot,
+    /* [in] */ VARIANT *pvarloc,
+    /* [in] */ VARIANT *pvarlocRoot,
     /* [in] */ int swClass,
-    /* [out] */ long __RPC_FAR *plCookie);
+    /* [out] */ long *plCookie);
 
 
 void __RPC_STUB IShellWindows_RegisterPending_Stub(
@@ -3230,7 +3248,7 @@ void __RPC_STUB IShellWindows_RegisterPending_Stub(
 
 
 /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_Revoke_Proxy( 
-    IShellWindows __RPC_FAR * This,
+    IShellWindows * This,
     /* [in] */ long lCookie);
 
 
@@ -3242,9 +3260,9 @@ void __RPC_STUB IShellWindows_Revoke_Stub(
 
 
 /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_OnNavigate_Proxy( 
-    IShellWindows __RPC_FAR * This,
+    IShellWindows * This,
     /* [in] */ long lCookie,
-    /* [in] */ VARIANT __RPC_FAR *pvarLoc);
+    /* [in] */ VARIANT *pvarLoc);
 
 
 void __RPC_STUB IShellWindows_OnNavigate_Stub(
@@ -3255,7 +3273,7 @@ void __RPC_STUB IShellWindows_OnNavigate_Stub(
 
 
 /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_OnActivated_Proxy( 
-    IShellWindows __RPC_FAR * This,
+    IShellWindows * This,
     /* [in] */ long lCookie,
     /* [in] */ VARIANT_BOOL fActive);
 
@@ -3267,17 +3285,17 @@ void __RPC_STUB IShellWindows_OnActivated_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_FindWindow_Proxy( 
-    IShellWindows __RPC_FAR * This,
-    /* [in] */ VARIANT __RPC_FAR *pvarLoc,
-    /* [in] */ VARIANT __RPC_FAR *pvarLocRoot,
+/* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_FindWindowSW_Proxy( 
+    IShellWindows * This,
+    /* [in] */ VARIANT *pvarLoc,
+    /* [in] */ VARIANT *pvarLocRoot,
     /* [in] */ int swClass,
-    /* [out] */ long __RPC_FAR *phwnd,
+    /* [out] */ long *phwnd,
     /* [in] */ int swfwOptions,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispOut);
+    /* [retval][out] */ IDispatch **ppdispOut);
 
 
-void __RPC_STUB IShellWindows_FindWindow_Stub(
+void __RPC_STUB IShellWindows_FindWindowSW_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -3285,9 +3303,9 @@ void __RPC_STUB IShellWindows_FindWindow_Stub(
 
 
 /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_OnCreated_Proxy( 
-    IShellWindows __RPC_FAR * This,
+    IShellWindows * This,
     /* [in] */ long lCookie,
-    /* [in] */ IUnknown __RPC_FAR *punk);
+    /* [in] */ IUnknown *punk);
 
 
 void __RPC_STUB IShellWindows_OnCreated_Stub(
@@ -3298,7 +3316,7 @@ void __RPC_STUB IShellWindows_OnCreated_Stub(
 
 
 /* [hidden][helpstring] */ HRESULT STDMETHODCALLTYPE IShellWindows_ProcessAttachDetach_Proxy( 
-    IShellWindows __RPC_FAR * This,
+    IShellWindows * This,
     /* [in] */ VARIANT_BOOL fAttach);
 
 
@@ -3344,7 +3362,7 @@ EXTERN_C const IID IID_IShellUIHelper;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddFavorite( 
             /* [in] */ BSTR URL,
-            /* [in][optional] */ VARIANT __RPC_FAR *Title) = 0;
+            /* [in][optional] */ VARIANT *Title) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddChannel( 
             /* [in] */ BSTR URL) = 0;
@@ -3352,39 +3370,39 @@ EXTERN_C const IID IID_IShellUIHelper;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddDesktopComponent( 
             /* [in] */ BSTR URL,
             /* [in] */ BSTR Type,
-            /* [in][optional] */ VARIANT __RPC_FAR *Left,
-            /* [in][optional] */ VARIANT __RPC_FAR *Top,
-            /* [in][optional] */ VARIANT __RPC_FAR *Width,
-            /* [in][optional] */ VARIANT __RPC_FAR *Height) = 0;
+            /* [in][optional] */ VARIANT *Left,
+            /* [in][optional] */ VARIANT *Top,
+            /* [in][optional] */ VARIANT *Width,
+            /* [in][optional] */ VARIANT *Height) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsSubscribed( 
             /* [in] */ BSTR URL,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE NavigateAndFind( 
             /* [in] */ BSTR URL,
             /* [in] */ BSTR strQuery,
-            /* [in] */ VARIANT __RPC_FAR *varTargetFrame) = 0;
+            /* [in] */ VARIANT *varTargetFrame) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ImportExportFavorites( 
             /* [in] */ VARIANT_BOOL fImport,
             /* [in] */ BSTR strImpExpPath) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE AutoCompleteSaveForm( 
-            /* [in][optional] */ VARIANT __RPC_FAR *Form) = 0;
+            /* [in][optional] */ VARIANT *Form) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE AutoScan( 
             /* [in] */ BSTR strSearch,
             /* [in] */ BSTR strFailureUrl,
-            /* [in][optional] */ VARIANT __RPC_FAR *pvarTargetFrame) = 0;
+            /* [in][optional] */ VARIANT *pvarTargetFrame) = 0;
         
         virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE AutoCompleteAttach( 
-            /* [in][optional] */ VARIANT __RPC_FAR *Reserved) = 0;
+            /* [in][optional] */ VARIANT *Reserved) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE ShowBrowserUI( 
             /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT __RPC_FAR *pvarIn,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarOut) = 0;
+            /* [in] */ VARIANT *pvarIn,
+            /* [retval][out] */ VARIANT *pvarOut) = 0;
         
     };
     
@@ -3394,115 +3412,115 @@ EXTERN_C const IID IID_IShellUIHelper;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IShellUIHelper __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IShellUIHelper * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IShellUIHelper __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IShellUIHelper * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IShellUIHelper __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IShellUIHelper * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IShellUIHelper __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IShellUIHelper * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IShellUIHelper __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IShellUIHelper * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IShellUIHelper __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IShellUIHelper * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IShellUIHelper __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IShellUIHelper * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetFirstBootMode )( 
-            IShellUIHelper __RPC_FAR * This);
+        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE *ResetFirstBootMode )( 
+            IShellUIHelper * This);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetSafeMode )( 
-            IShellUIHelper __RPC_FAR * This);
+        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE *ResetSafeMode )( 
+            IShellUIHelper * This);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RefreshOfflineDesktop )( 
-            IShellUIHelper __RPC_FAR * This);
+        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE *RefreshOfflineDesktop )( 
+            IShellUIHelper * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddFavorite )( 
-            IShellUIHelper __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddFavorite )( 
+            IShellUIHelper * This,
             /* [in] */ BSTR URL,
-            /* [in][optional] */ VARIANT __RPC_FAR *Title);
+            /* [in][optional] */ VARIANT *Title);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddChannel )( 
-            IShellUIHelper __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddChannel )( 
+            IShellUIHelper * This,
             /* [in] */ BSTR URL);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddDesktopComponent )( 
-            IShellUIHelper __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddDesktopComponent )( 
+            IShellUIHelper * This,
             /* [in] */ BSTR URL,
             /* [in] */ BSTR Type,
-            /* [in][optional] */ VARIANT __RPC_FAR *Left,
-            /* [in][optional] */ VARIANT __RPC_FAR *Top,
-            /* [in][optional] */ VARIANT __RPC_FAR *Width,
-            /* [in][optional] */ VARIANT __RPC_FAR *Height);
+            /* [in][optional] */ VARIANT *Left,
+            /* [in][optional] */ VARIANT *Top,
+            /* [in][optional] */ VARIANT *Width,
+            /* [in][optional] */ VARIANT *Height);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsSubscribed )( 
-            IShellUIHelper __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsSubscribed )( 
+            IShellUIHelper * This,
             /* [in] */ BSTR URL,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NavigateAndFind )( 
-            IShellUIHelper __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateAndFind )( 
+            IShellUIHelper * This,
             /* [in] */ BSTR URL,
             /* [in] */ BSTR strQuery,
-            /* [in] */ VARIANT __RPC_FAR *varTargetFrame);
+            /* [in] */ VARIANT *varTargetFrame);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ImportExportFavorites )( 
-            IShellUIHelper __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ImportExportFavorites )( 
+            IShellUIHelper * This,
             /* [in] */ VARIANT_BOOL fImport,
             /* [in] */ BSTR strImpExpPath);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AutoCompleteSaveForm )( 
-            IShellUIHelper __RPC_FAR * This,
-            /* [in][optional] */ VARIANT __RPC_FAR *Form);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AutoCompleteSaveForm )( 
+            IShellUIHelper * This,
+            /* [in][optional] */ VARIANT *Form);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AutoScan )( 
-            IShellUIHelper __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AutoScan )( 
+            IShellUIHelper * This,
             /* [in] */ BSTR strSearch,
             /* [in] */ BSTR strFailureUrl,
-            /* [in][optional] */ VARIANT __RPC_FAR *pvarTargetFrame);
+            /* [in][optional] */ VARIANT *pvarTargetFrame);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AutoCompleteAttach )( 
-            IShellUIHelper __RPC_FAR * This,
-            /* [in][optional] */ VARIANT __RPC_FAR *Reserved);
+        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE *AutoCompleteAttach )( 
+            IShellUIHelper * This,
+            /* [in][optional] */ VARIANT *Reserved);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowBrowserUI )( 
-            IShellUIHelper __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ShowBrowserUI )( 
+            IShellUIHelper * This,
             /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT __RPC_FAR *pvarIn,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarOut);
+            /* [in] */ VARIANT *pvarIn,
+            /* [retval][out] */ VARIANT *pvarOut);
         
         END_INTERFACE
     } IShellUIHelperVtbl;
 
     interface IShellUIHelper
     {
-        CONST_VTBL struct IShellUIHelperVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IShellUIHelperVtbl *lpVtbl;
     };
 
     
@@ -3580,7 +3598,7 @@ EXTERN_C const IID IID_IShellUIHelper;
 
 
 /* [id][hidden] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_ResetFirstBootMode_Proxy( 
-    IShellUIHelper __RPC_FAR * This);
+    IShellUIHelper * This);
 
 
 void __RPC_STUB IShellUIHelper_ResetFirstBootMode_Stub(
@@ -3591,7 +3609,7 @@ void __RPC_STUB IShellUIHelper_ResetFirstBootMode_Stub(
 
 
 /* [id][hidden] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_ResetSafeMode_Proxy( 
-    IShellUIHelper __RPC_FAR * This);
+    IShellUIHelper * This);
 
 
 void __RPC_STUB IShellUIHelper_ResetSafeMode_Stub(
@@ -3602,7 +3620,7 @@ void __RPC_STUB IShellUIHelper_ResetSafeMode_Stub(
 
 
 /* [id][hidden] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_RefreshOfflineDesktop_Proxy( 
-    IShellUIHelper __RPC_FAR * This);
+    IShellUIHelper * This);
 
 
 void __RPC_STUB IShellUIHelper_RefreshOfflineDesktop_Stub(
@@ -3613,9 +3631,9 @@ void __RPC_STUB IShellUIHelper_RefreshOfflineDesktop_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_AddFavorite_Proxy( 
-    IShellUIHelper __RPC_FAR * This,
+    IShellUIHelper * This,
     /* [in] */ BSTR URL,
-    /* [in][optional] */ VARIANT __RPC_FAR *Title);
+    /* [in][optional] */ VARIANT *Title);
 
 
 void __RPC_STUB IShellUIHelper_AddFavorite_Stub(
@@ -3626,7 +3644,7 @@ void __RPC_STUB IShellUIHelper_AddFavorite_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_AddChannel_Proxy( 
-    IShellUIHelper __RPC_FAR * This,
+    IShellUIHelper * This,
     /* [in] */ BSTR URL);
 
 
@@ -3638,13 +3656,13 @@ void __RPC_STUB IShellUIHelper_AddChannel_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_AddDesktopComponent_Proxy( 
-    IShellUIHelper __RPC_FAR * This,
+    IShellUIHelper * This,
     /* [in] */ BSTR URL,
     /* [in] */ BSTR Type,
-    /* [in][optional] */ VARIANT __RPC_FAR *Left,
-    /* [in][optional] */ VARIANT __RPC_FAR *Top,
-    /* [in][optional] */ VARIANT __RPC_FAR *Width,
-    /* [in][optional] */ VARIANT __RPC_FAR *Height);
+    /* [in][optional] */ VARIANT *Left,
+    /* [in][optional] */ VARIANT *Top,
+    /* [in][optional] */ VARIANT *Width,
+    /* [in][optional] */ VARIANT *Height);
 
 
 void __RPC_STUB IShellUIHelper_AddDesktopComponent_Stub(
@@ -3655,9 +3673,9 @@ void __RPC_STUB IShellUIHelper_AddDesktopComponent_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_IsSubscribed_Proxy( 
-    IShellUIHelper __RPC_FAR * This,
+    IShellUIHelper * This,
     /* [in] */ BSTR URL,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+    /* [retval][out] */ VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IShellUIHelper_IsSubscribed_Stub(
@@ -3668,10 +3686,10 @@ void __RPC_STUB IShellUIHelper_IsSubscribed_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_NavigateAndFind_Proxy( 
-    IShellUIHelper __RPC_FAR * This,
+    IShellUIHelper * This,
     /* [in] */ BSTR URL,
     /* [in] */ BSTR strQuery,
-    /* [in] */ VARIANT __RPC_FAR *varTargetFrame);
+    /* [in] */ VARIANT *varTargetFrame);
 
 
 void __RPC_STUB IShellUIHelper_NavigateAndFind_Stub(
@@ -3682,7 +3700,7 @@ void __RPC_STUB IShellUIHelper_NavigateAndFind_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_ImportExportFavorites_Proxy( 
-    IShellUIHelper __RPC_FAR * This,
+    IShellUIHelper * This,
     /* [in] */ VARIANT_BOOL fImport,
     /* [in] */ BSTR strImpExpPath);
 
@@ -3695,8 +3713,8 @@ void __RPC_STUB IShellUIHelper_ImportExportFavorites_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_AutoCompleteSaveForm_Proxy( 
-    IShellUIHelper __RPC_FAR * This,
-    /* [in][optional] */ VARIANT __RPC_FAR *Form);
+    IShellUIHelper * This,
+    /* [in][optional] */ VARIANT *Form);
 
 
 void __RPC_STUB IShellUIHelper_AutoCompleteSaveForm_Stub(
@@ -3707,10 +3725,10 @@ void __RPC_STUB IShellUIHelper_AutoCompleteSaveForm_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_AutoScan_Proxy( 
-    IShellUIHelper __RPC_FAR * This,
+    IShellUIHelper * This,
     /* [in] */ BSTR strSearch,
     /* [in] */ BSTR strFailureUrl,
-    /* [in][optional] */ VARIANT __RPC_FAR *pvarTargetFrame);
+    /* [in][optional] */ VARIANT *pvarTargetFrame);
 
 
 void __RPC_STUB IShellUIHelper_AutoScan_Stub(
@@ -3721,8 +3739,8 @@ void __RPC_STUB IShellUIHelper_AutoScan_Stub(
 
 
 /* [id][hidden] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_AutoCompleteAttach_Proxy( 
-    IShellUIHelper __RPC_FAR * This,
-    /* [in][optional] */ VARIANT __RPC_FAR *Reserved);
+    IShellUIHelper * This,
+    /* [in][optional] */ VARIANT *Reserved);
 
 
 void __RPC_STUB IShellUIHelper_AutoCompleteAttach_Stub(
@@ -3733,10 +3751,10 @@ void __RPC_STUB IShellUIHelper_AutoCompleteAttach_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IShellUIHelper_ShowBrowserUI_Proxy( 
-    IShellUIHelper __RPC_FAR * This,
+    IShellUIHelper * This,
     /* [in] */ BSTR bstrName,
-    /* [in] */ VARIANT __RPC_FAR *pvarIn,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarOut);
+    /* [in] */ VARIANT *pvarIn,
+    /* [retval][out] */ VARIANT *pvarOut);
 
 
 void __RPC_STUB IShellUIHelper_ShowBrowserUI_Stub(
@@ -3758,74 +3776,74 @@ class DECLSPEC_UUID("64AB4BB7-111E-11d1-8F79-00C04FC2FBE1")
 ShellUIHelper;
 #endif
 
-#ifndef ___ShellFavoritesNameSpaceEvents_DISPINTERFACE_DEFINED__
-#define ___ShellFavoritesNameSpaceEvents_DISPINTERFACE_DEFINED__
+#ifndef __DShellNameSpaceEvents_DISPINTERFACE_DEFINED__
+#define __DShellNameSpaceEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _ShellFavoritesNameSpaceEvents */
+/* dispinterface DShellNameSpaceEvents */
 /* [uuid] */ 
 
 
-EXTERN_C const IID DIID__ShellFavoritesNameSpaceEvents;
+EXTERN_C const IID DIID_DShellNameSpaceEvents;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
 
     MIDL_INTERFACE("55136806-B2DE-11D1-B9F2-00A0C98BC547")
-    _ShellFavoritesNameSpaceEvents : public IDispatch
+    DShellNameSpaceEvents : public IDispatch
     {
     };
     
 #else 	/* C style interface */
 
-    typedef struct _ShellFavoritesNameSpaceEventsVtbl
+    typedef struct DShellNameSpaceEventsVtbl
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            _ShellFavoritesNameSpaceEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            DShellNameSpaceEvents * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            _ShellFavoritesNameSpaceEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            DShellNameSpaceEvents * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            _ShellFavoritesNameSpaceEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            DShellNameSpaceEvents * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            _ShellFavoritesNameSpaceEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            DShellNameSpaceEvents * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            _ShellFavoritesNameSpaceEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            DShellNameSpaceEvents * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            _ShellFavoritesNameSpaceEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            DShellNameSpaceEvents * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            _ShellFavoritesNameSpaceEvents __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            DShellNameSpaceEvents * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
-    } _ShellFavoritesNameSpaceEventsVtbl;
+    } DShellNameSpaceEventsVtbl;
 
-    interface _ShellFavoritesNameSpaceEvents
+    interface DShellNameSpaceEvents
     {
-        CONST_VTBL struct _ShellFavoritesNameSpaceEventsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct DShellNameSpaceEventsVtbl *lpVtbl;
     };
 
     
@@ -3833,26 +3851,26 @@ EXTERN_C const IID DIID__ShellFavoritesNameSpaceEvents;
 #ifdef COBJMACROS
 
 
-#define _ShellFavoritesNameSpaceEvents_QueryInterface(This,riid,ppvObject)	\
+#define DShellNameSpaceEvents_QueryInterface(This,riid,ppvObject)	\
     (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
 
-#define _ShellFavoritesNameSpaceEvents_AddRef(This)	\
+#define DShellNameSpaceEvents_AddRef(This)	\
     (This)->lpVtbl -> AddRef(This)
 
-#define _ShellFavoritesNameSpaceEvents_Release(This)	\
+#define DShellNameSpaceEvents_Release(This)	\
     (This)->lpVtbl -> Release(This)
 
 
-#define _ShellFavoritesNameSpaceEvents_GetTypeInfoCount(This,pctinfo)	\
+#define DShellNameSpaceEvents_GetTypeInfoCount(This,pctinfo)	\
     (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
 
-#define _ShellFavoritesNameSpaceEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+#define DShellNameSpaceEvents_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
     (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
 
-#define _ShellFavoritesNameSpaceEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+#define DShellNameSpaceEvents_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
     (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
 
-#define _ShellFavoritesNameSpaceEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+#define DShellNameSpaceEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
 #endif /* COBJMACROS */
@@ -3861,14 +3879,14 @@ EXTERN_C const IID DIID__ShellFavoritesNameSpaceEvents;
 #endif 	/* C style interface */
 
 
-#endif 	/* ___ShellFavoritesNameSpaceEvents_DISPINTERFACE_DEFINED__ */
+#endif 	/* __DShellNameSpaceEvents_DISPINTERFACE_DEFINED__ */
 
 
 #ifndef __IShellFavoritesNameSpace_INTERFACE_DEFINED__
 #define __IShellFavoritesNameSpace_INTERFACE_DEFINED__
 
 /* interface IShellFavoritesNameSpace */
-/* [unique][helpstring][dual][uuid][object] */ 
+/* [hidden][unique][helpstring][dual][uuid][object] */ 
 
 
 EXTERN_C const IID IID_IShellFavoritesNameSpace;
@@ -3879,35 +3897,35 @@ EXTERN_C const IID IID_IShellFavoritesNameSpace;
     IShellFavoritesNameSpace : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE MoveSelectionUp( void) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MoveSelectionUp( void) = 0;
         
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE MoveSelectionDown( void) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MoveSelectionDown( void) = 0;
         
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE ResetSort( void) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ResetSort( void) = 0;
         
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE NewFolder( void) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NewFolder( void) = 0;
         
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE Synchronize( void) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Synchronize( void) = 0;
         
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE Import( void) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Import( void) = 0;
         
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE Export( void) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Export( void) = 0;
         
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE InvokeContextMenuCommand( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InvokeContextMenuCommand( 
             /* [in] */ BSTR strCommand) = 0;
         
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE MoveSelectionTo( void) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MoveSelectionTo( void) = 0;
         
-        virtual /* [helpstring][id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_FOfflinePackInstalled( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool) = 0;
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubscriptionsEnabled( 
+            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
         
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE CreateSubscriptionForSelection( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateSubscriptionForSelection( 
+            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
         
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE DeleteSubscriptionForSelection( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool) = 0;
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteSubscriptionForSelection( 
+            /* [retval][out] */ VARIANT_BOOL *pBool) = 0;
         
-        virtual /* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE SetRoot( 
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetRoot( 
             /* [in] */ BSTR bstrFullPath) = 0;
         
     };
@@ -3918,88 +3936,88 @@ EXTERN_C const IID IID_IShellFavoritesNameSpace;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IShellFavoritesNameSpace __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IShellFavoritesNameSpace * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IShellFavoritesNameSpace __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IShellFavoritesNameSpace * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IShellFavoritesNameSpace __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IShellFavoritesNameSpace * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IShellFavoritesNameSpace __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IShellFavoritesNameSpace * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IShellFavoritesNameSpace __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IShellFavoritesNameSpace * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IShellFavoritesNameSpace __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IShellFavoritesNameSpace * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IShellFavoritesNameSpace __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IShellFavoritesNameSpace * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveSelectionUp )( 
-            IShellFavoritesNameSpace __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MoveSelectionUp )( 
+            IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveSelectionDown )( 
-            IShellFavoritesNameSpace __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MoveSelectionDown )( 
+            IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetSort )( 
-            IShellFavoritesNameSpace __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ResetSort )( 
+            IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NewFolder )( 
-            IShellFavoritesNameSpace __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
+            IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Synchronize )( 
-            IShellFavoritesNameSpace __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
+            IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Import )( 
-            IShellFavoritesNameSpace __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Import )( 
+            IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Export )( 
-            IShellFavoritesNameSpace __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Export )( 
+            IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InvokeContextMenuCommand )( 
-            IShellFavoritesNameSpace __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InvokeContextMenuCommand )( 
+            IShellFavoritesNameSpace * This,
             /* [in] */ BSTR strCommand);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MoveSelectionTo )( 
-            IShellFavoritesNameSpace __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MoveSelectionTo )( 
+            IShellFavoritesNameSpace * This);
         
-        /* [helpstring][id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_FOfflinePackInstalled )( 
-            IShellFavoritesNameSpace __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubscriptionsEnabled )( 
+            IShellFavoritesNameSpace * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateSubscriptionForSelection )( 
-            IShellFavoritesNameSpace __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateSubscriptionForSelection )( 
+            IShellFavoritesNameSpace * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteSubscriptionForSelection )( 
-            IShellFavoritesNameSpace __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteSubscriptionForSelection )( 
+            IShellFavoritesNameSpace * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
         
-        /* [helpstring][id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRoot )( 
-            IShellFavoritesNameSpace __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetRoot )( 
+            IShellFavoritesNameSpace * This,
             /* [in] */ BSTR bstrFullPath);
         
         END_INTERFACE
@@ -4007,7 +4025,7 @@ EXTERN_C const IID IID_IShellFavoritesNameSpace;
 
     interface IShellFavoritesNameSpace
     {
-        CONST_VTBL struct IShellFavoritesNameSpaceVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IShellFavoritesNameSpaceVtbl *lpVtbl;
     };
 
     
@@ -4065,8 +4083,8 @@ EXTERN_C const IID IID_IShellFavoritesNameSpace;
 #define IShellFavoritesNameSpace_MoveSelectionTo(This)	\
     (This)->lpVtbl -> MoveSelectionTo(This)
 
-#define IShellFavoritesNameSpace_get_FOfflinePackInstalled(This,pBool)	\
-    (This)->lpVtbl -> get_FOfflinePackInstalled(This,pBool)
+#define IShellFavoritesNameSpace_get_SubscriptionsEnabled(This,pBool)	\
+    (This)->lpVtbl -> get_SubscriptionsEnabled(This,pBool)
 
 #define IShellFavoritesNameSpace_CreateSubscriptionForSelection(This,pBool)	\
     (This)->lpVtbl -> CreateSubscriptionForSelection(This,pBool)
@@ -4084,8 +4102,8 @@ EXTERN_C const IID IID_IShellFavoritesNameSpace;
 
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_MoveSelectionUp_Proxy( 
-    IShellFavoritesNameSpace __RPC_FAR * This);
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_MoveSelectionUp_Proxy( 
+    IShellFavoritesNameSpace * This);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_MoveSelectionUp_Stub(
@@ -4095,8 +4113,8 @@ void __RPC_STUB IShellFavoritesNameSpace_MoveSelectionUp_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_MoveSelectionDown_Proxy( 
-    IShellFavoritesNameSpace __RPC_FAR * This);
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_MoveSelectionDown_Proxy( 
+    IShellFavoritesNameSpace * This);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_MoveSelectionDown_Stub(
@@ -4106,8 +4124,8 @@ void __RPC_STUB IShellFavoritesNameSpace_MoveSelectionDown_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_ResetSort_Proxy( 
-    IShellFavoritesNameSpace __RPC_FAR * This);
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_ResetSort_Proxy( 
+    IShellFavoritesNameSpace * This);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_ResetSort_Stub(
@@ -4117,8 +4135,8 @@ void __RPC_STUB IShellFavoritesNameSpace_ResetSort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_NewFolder_Proxy( 
-    IShellFavoritesNameSpace __RPC_FAR * This);
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_NewFolder_Proxy( 
+    IShellFavoritesNameSpace * This);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_NewFolder_Stub(
@@ -4128,8 +4146,8 @@ void __RPC_STUB IShellFavoritesNameSpace_NewFolder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_Synchronize_Proxy( 
-    IShellFavoritesNameSpace __RPC_FAR * This);
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_Synchronize_Proxy( 
+    IShellFavoritesNameSpace * This);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_Synchronize_Stub(
@@ -4139,8 +4157,8 @@ void __RPC_STUB IShellFavoritesNameSpace_Synchronize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_Import_Proxy( 
-    IShellFavoritesNameSpace __RPC_FAR * This);
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_Import_Proxy( 
+    IShellFavoritesNameSpace * This);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_Import_Stub(
@@ -4150,8 +4168,8 @@ void __RPC_STUB IShellFavoritesNameSpace_Import_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_Export_Proxy( 
-    IShellFavoritesNameSpace __RPC_FAR * This);
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_Export_Proxy( 
+    IShellFavoritesNameSpace * This);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_Export_Stub(
@@ -4161,8 +4179,8 @@ void __RPC_STUB IShellFavoritesNameSpace_Export_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_InvokeContextMenuCommand_Proxy( 
-    IShellFavoritesNameSpace __RPC_FAR * This,
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_InvokeContextMenuCommand_Proxy( 
+    IShellFavoritesNameSpace * This,
     /* [in] */ BSTR strCommand);
 
 
@@ -4173,8 +4191,8 @@ void __RPC_STUB IShellFavoritesNameSpace_InvokeContextMenuCommand_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_MoveSelectionTo_Proxy( 
-    IShellFavoritesNameSpace __RPC_FAR * This);
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_MoveSelectionTo_Proxy( 
+    IShellFavoritesNameSpace * This);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_MoveSelectionTo_Stub(
@@ -4184,21 +4202,21 @@ void __RPC_STUB IShellFavoritesNameSpace_MoveSelectionTo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_get_FOfflinePackInstalled_Proxy( 
-    IShellFavoritesNameSpace __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_get_SubscriptionsEnabled_Proxy( 
+    IShellFavoritesNameSpace * This,
+    /* [retval][out] */ VARIANT_BOOL *pBool);
 
 
-void __RPC_STUB IShellFavoritesNameSpace_get_FOfflinePackInstalled_Stub(
+void __RPC_STUB IShellFavoritesNameSpace_get_SubscriptionsEnabled_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_CreateSubscriptionForSelection_Proxy( 
-    IShellFavoritesNameSpace __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_CreateSubscriptionForSelection_Proxy( 
+    IShellFavoritesNameSpace * This,
+    /* [retval][out] */ VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_CreateSubscriptionForSelection_Stub(
@@ -4208,9 +4226,9 @@ void __RPC_STUB IShellFavoritesNameSpace_CreateSubscriptionForSelection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_DeleteSubscriptionForSelection_Proxy( 
-    IShellFavoritesNameSpace __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pBool);
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_DeleteSubscriptionForSelection_Proxy( 
+    IShellFavoritesNameSpace * This,
+    /* [retval][out] */ VARIANT_BOOL *pBool);
 
 
 void __RPC_STUB IShellFavoritesNameSpace_DeleteSubscriptionForSelection_Stub(
@@ -4220,8 +4238,8 @@ void __RPC_STUB IShellFavoritesNameSpace_DeleteSubscriptionForSelection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][hidden] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_SetRoot_Proxy( 
-    IShellFavoritesNameSpace __RPC_FAR * This,
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellFavoritesNameSpace_SetRoot_Proxy( 
+    IShellFavoritesNameSpace * This,
     /* [in] */ BSTR bstrFullPath);
 
 
@@ -4236,12 +4254,668 @@ void __RPC_STUB IShellFavoritesNameSpace_SetRoot_Stub(
 #endif 	/* __IShellFavoritesNameSpace_INTERFACE_DEFINED__ */
 
 
-EXTERN_C const CLSID CLSID_ShellFavoritesNameSpace;
+#ifndef __IShellNameSpace_INTERFACE_DEFINED__
+#define __IShellNameSpace_INTERFACE_DEFINED__
+
+/* interface IShellNameSpace */
+/* [hidden][unique][helpstring][dual][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IShellNameSpace;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("e572d3c9-37be-4ae2-825d-d521763e3108")
+    IShellNameSpace : public IShellFavoritesNameSpace
+    {
+    public:
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnumOptions( 
+            /* [retval][out] */ LONG *pgrfEnumFlags) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnumOptions( 
+            /* [in] */ LONG lVal) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SelectedItem( 
+            /* [retval][out] */ IDispatch **pItem) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SelectedItem( 
+            /* [in] */ IDispatch *pItem) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Root( 
+            /* [retval][out] */ VARIANT *pvar) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Root( 
+            /* [in] */ VARIANT var) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Depth( 
+            /* [retval][out] */ int *piDepth) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Depth( 
+            /* [in] */ int iDepth) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Mode( 
+            /* [retval][out] */ UINT *puMode) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Mode( 
+            /* [in] */ UINT uMode) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Flags( 
+            /* [retval][out] */ DWORD *pdwFlags) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Flags( 
+            /* [in] */ DWORD dwFlags) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_TVFlags( 
+            /* [in] */ DWORD dwFlags) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TVFlags( 
+            /* [retval][out] */ DWORD *dwFlags) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Columns( 
+            /* [retval][out] */ BSTR *bstrColumns) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Columns( 
+            /* [in] */ BSTR bstrColumns) = 0;
+        
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CountViewTypes( 
+            /* [retval][out] */ int *piTypes) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetViewType( 
+            /* [in] */ int iType) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectedItems( 
+            /* [retval][out] */ IDispatch **ppid) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Expand( 
+            /* [in] */ VARIANT var,
+            int iDepth) = 0;
+        
+        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE UnselectAll( void) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IShellNameSpaceVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IShellNameSpace * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IShellNameSpace * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IShellNameSpace * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IShellNameSpace * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IShellNameSpace * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IShellNameSpace * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IShellNameSpace * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MoveSelectionUp )( 
+            IShellNameSpace * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MoveSelectionDown )( 
+            IShellNameSpace * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ResetSort )( 
+            IShellNameSpace * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NewFolder )( 
+            IShellNameSpace * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
+            IShellNameSpace * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Import )( 
+            IShellNameSpace * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Export )( 
+            IShellNameSpace * This);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InvokeContextMenuCommand )( 
+            IShellNameSpace * This,
+            /* [in] */ BSTR strCommand);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MoveSelectionTo )( 
+            IShellNameSpace * This);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubscriptionsEnabled )( 
+            IShellNameSpace * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateSubscriptionForSelection )( 
+            IShellNameSpace * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteSubscriptionForSelection )( 
+            IShellNameSpace * This,
+            /* [retval][out] */ VARIANT_BOOL *pBool);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetRoot )( 
+            IShellNameSpace * This,
+            /* [in] */ BSTR bstrFullPath);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnumOptions )( 
+            IShellNameSpace * This,
+            /* [retval][out] */ LONG *pgrfEnumFlags);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnumOptions )( 
+            IShellNameSpace * This,
+            /* [in] */ LONG lVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SelectedItem )( 
+            IShellNameSpace * This,
+            /* [retval][out] */ IDispatch **pItem);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SelectedItem )( 
+            IShellNameSpace * This,
+            /* [in] */ IDispatch *pItem);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Root )( 
+            IShellNameSpace * This,
+            /* [retval][out] */ VARIANT *pvar);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Root )( 
+            IShellNameSpace * This,
+            /* [in] */ VARIANT var);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Depth )( 
+            IShellNameSpace * This,
+            /* [retval][out] */ int *piDepth);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Depth )( 
+            IShellNameSpace * This,
+            /* [in] */ int iDepth);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Mode )( 
+            IShellNameSpace * This,
+            /* [retval][out] */ UINT *puMode);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Mode )( 
+            IShellNameSpace * This,
+            /* [in] */ UINT uMode);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Flags )( 
+            IShellNameSpace * This,
+            /* [retval][out] */ DWORD *pdwFlags);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Flags )( 
+            IShellNameSpace * This,
+            /* [in] */ DWORD dwFlags);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_TVFlags )( 
+            IShellNameSpace * This,
+            /* [in] */ DWORD dwFlags);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TVFlags )( 
+            IShellNameSpace * This,
+            /* [retval][out] */ DWORD *dwFlags);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Columns )( 
+            IShellNameSpace * This,
+            /* [retval][out] */ BSTR *bstrColumns);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Columns )( 
+            IShellNameSpace * This,
+            /* [in] */ BSTR bstrColumns);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CountViewTypes )( 
+            IShellNameSpace * This,
+            /* [retval][out] */ int *piTypes);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetViewType )( 
+            IShellNameSpace * This,
+            /* [in] */ int iType);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SelectedItems )( 
+            IShellNameSpace * This,
+            /* [retval][out] */ IDispatch **ppid);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Expand )( 
+            IShellNameSpace * This,
+            /* [in] */ VARIANT var,
+            int iDepth);
+        
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *UnselectAll )( 
+            IShellNameSpace * This);
+        
+        END_INTERFACE
+    } IShellNameSpaceVtbl;
+
+    interface IShellNameSpace
+    {
+        CONST_VTBL struct IShellNameSpaceVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IShellNameSpace_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IShellNameSpace_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IShellNameSpace_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IShellNameSpace_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IShellNameSpace_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IShellNameSpace_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IShellNameSpace_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IShellNameSpace_MoveSelectionUp(This)	\
+    (This)->lpVtbl -> MoveSelectionUp(This)
+
+#define IShellNameSpace_MoveSelectionDown(This)	\
+    (This)->lpVtbl -> MoveSelectionDown(This)
+
+#define IShellNameSpace_ResetSort(This)	\
+    (This)->lpVtbl -> ResetSort(This)
+
+#define IShellNameSpace_NewFolder(This)	\
+    (This)->lpVtbl -> NewFolder(This)
+
+#define IShellNameSpace_Synchronize(This)	\
+    (This)->lpVtbl -> Synchronize(This)
+
+#define IShellNameSpace_Import(This)	\
+    (This)->lpVtbl -> Import(This)
+
+#define IShellNameSpace_Export(This)	\
+    (This)->lpVtbl -> Export(This)
+
+#define IShellNameSpace_InvokeContextMenuCommand(This,strCommand)	\
+    (This)->lpVtbl -> InvokeContextMenuCommand(This,strCommand)
+
+#define IShellNameSpace_MoveSelectionTo(This)	\
+    (This)->lpVtbl -> MoveSelectionTo(This)
+
+#define IShellNameSpace_get_SubscriptionsEnabled(This,pBool)	\
+    (This)->lpVtbl -> get_SubscriptionsEnabled(This,pBool)
+
+#define IShellNameSpace_CreateSubscriptionForSelection(This,pBool)	\
+    (This)->lpVtbl -> CreateSubscriptionForSelection(This,pBool)
+
+#define IShellNameSpace_DeleteSubscriptionForSelection(This,pBool)	\
+    (This)->lpVtbl -> DeleteSubscriptionForSelection(This,pBool)
+
+#define IShellNameSpace_SetRoot(This,bstrFullPath)	\
+    (This)->lpVtbl -> SetRoot(This,bstrFullPath)
+
+
+#define IShellNameSpace_get_EnumOptions(This,pgrfEnumFlags)	\
+    (This)->lpVtbl -> get_EnumOptions(This,pgrfEnumFlags)
+
+#define IShellNameSpace_put_EnumOptions(This,lVal)	\
+    (This)->lpVtbl -> put_EnumOptions(This,lVal)
+
+#define IShellNameSpace_get_SelectedItem(This,pItem)	\
+    (This)->lpVtbl -> get_SelectedItem(This,pItem)
+
+#define IShellNameSpace_put_SelectedItem(This,pItem)	\
+    (This)->lpVtbl -> put_SelectedItem(This,pItem)
+
+#define IShellNameSpace_get_Root(This,pvar)	\
+    (This)->lpVtbl -> get_Root(This,pvar)
+
+#define IShellNameSpace_put_Root(This,var)	\
+    (This)->lpVtbl -> put_Root(This,var)
+
+#define IShellNameSpace_get_Depth(This,piDepth)	\
+    (This)->lpVtbl -> get_Depth(This,piDepth)
+
+#define IShellNameSpace_put_Depth(This,iDepth)	\
+    (This)->lpVtbl -> put_Depth(This,iDepth)
+
+#define IShellNameSpace_get_Mode(This,puMode)	\
+    (This)->lpVtbl -> get_Mode(This,puMode)
+
+#define IShellNameSpace_put_Mode(This,uMode)	\
+    (This)->lpVtbl -> put_Mode(This,uMode)
+
+#define IShellNameSpace_get_Flags(This,pdwFlags)	\
+    (This)->lpVtbl -> get_Flags(This,pdwFlags)
+
+#define IShellNameSpace_put_Flags(This,dwFlags)	\
+    (This)->lpVtbl -> put_Flags(This,dwFlags)
+
+#define IShellNameSpace_put_TVFlags(This,dwFlags)	\
+    (This)->lpVtbl -> put_TVFlags(This,dwFlags)
+
+#define IShellNameSpace_get_TVFlags(This,dwFlags)	\
+    (This)->lpVtbl -> get_TVFlags(This,dwFlags)
+
+#define IShellNameSpace_get_Columns(This,bstrColumns)	\
+    (This)->lpVtbl -> get_Columns(This,bstrColumns)
+
+#define IShellNameSpace_put_Columns(This,bstrColumns)	\
+    (This)->lpVtbl -> put_Columns(This,bstrColumns)
+
+#define IShellNameSpace_get_CountViewTypes(This,piTypes)	\
+    (This)->lpVtbl -> get_CountViewTypes(This,piTypes)
+
+#define IShellNameSpace_SetViewType(This,iType)	\
+    (This)->lpVtbl -> SetViewType(This,iType)
+
+#define IShellNameSpace_SelectedItems(This,ppid)	\
+    (This)->lpVtbl -> SelectedItems(This,ppid)
+
+#define IShellNameSpace_Expand(This,var,iDepth)	\
+    (This)->lpVtbl -> Expand(This,var,iDepth)
+
+#define IShellNameSpace_UnselectAll(This)	\
+    (This)->lpVtbl -> UnselectAll(This)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_EnumOptions_Proxy( 
+    IShellNameSpace * This,
+    /* [retval][out] */ LONG *pgrfEnumFlags);
+
+
+void __RPC_STUB IShellNameSpace_get_EnumOptions_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_EnumOptions_Proxy( 
+    IShellNameSpace * This,
+    /* [in] */ LONG lVal);
+
+
+void __RPC_STUB IShellNameSpace_put_EnumOptions_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_SelectedItem_Proxy( 
+    IShellNameSpace * This,
+    /* [retval][out] */ IDispatch **pItem);
+
+
+void __RPC_STUB IShellNameSpace_get_SelectedItem_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_SelectedItem_Proxy( 
+    IShellNameSpace * This,
+    /* [in] */ IDispatch *pItem);
+
+
+void __RPC_STUB IShellNameSpace_put_SelectedItem_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Root_Proxy( 
+    IShellNameSpace * This,
+    /* [retval][out] */ VARIANT *pvar);
+
+
+void __RPC_STUB IShellNameSpace_get_Root_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Root_Proxy( 
+    IShellNameSpace * This,
+    /* [in] */ VARIANT var);
+
+
+void __RPC_STUB IShellNameSpace_put_Root_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Depth_Proxy( 
+    IShellNameSpace * This,
+    /* [retval][out] */ int *piDepth);
+
+
+void __RPC_STUB IShellNameSpace_get_Depth_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Depth_Proxy( 
+    IShellNameSpace * This,
+    /* [in] */ int iDepth);
+
+
+void __RPC_STUB IShellNameSpace_put_Depth_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Mode_Proxy( 
+    IShellNameSpace * This,
+    /* [retval][out] */ UINT *puMode);
+
+
+void __RPC_STUB IShellNameSpace_get_Mode_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Mode_Proxy( 
+    IShellNameSpace * This,
+    /* [in] */ UINT uMode);
+
+
+void __RPC_STUB IShellNameSpace_put_Mode_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Flags_Proxy( 
+    IShellNameSpace * This,
+    /* [retval][out] */ DWORD *pdwFlags);
+
+
+void __RPC_STUB IShellNameSpace_get_Flags_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Flags_Proxy( 
+    IShellNameSpace * This,
+    /* [in] */ DWORD dwFlags);
+
+
+void __RPC_STUB IShellNameSpace_put_Flags_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_TVFlags_Proxy( 
+    IShellNameSpace * This,
+    /* [in] */ DWORD dwFlags);
+
+
+void __RPC_STUB IShellNameSpace_put_TVFlags_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_TVFlags_Proxy( 
+    IShellNameSpace * This,
+    /* [retval][out] */ DWORD *dwFlags);
+
+
+void __RPC_STUB IShellNameSpace_get_TVFlags_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_Columns_Proxy( 
+    IShellNameSpace * This,
+    /* [retval][out] */ BSTR *bstrColumns);
+
+
+void __RPC_STUB IShellNameSpace_get_Columns_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_put_Columns_Proxy( 
+    IShellNameSpace * This,
+    /* [in] */ BSTR bstrColumns);
+
+
+void __RPC_STUB IShellNameSpace_put_Columns_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_get_CountViewTypes_Proxy( 
+    IShellNameSpace * This,
+    /* [retval][out] */ int *piTypes);
+
+
+void __RPC_STUB IShellNameSpace_get_CountViewTypes_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_SetViewType_Proxy( 
+    IShellNameSpace * This,
+    /* [in] */ int iType);
+
+
+void __RPC_STUB IShellNameSpace_SetViewType_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_SelectedItems_Proxy( 
+    IShellNameSpace * This,
+    /* [retval][out] */ IDispatch **ppid);
+
+
+void __RPC_STUB IShellNameSpace_SelectedItems_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_Expand_Proxy( 
+    IShellNameSpace * This,
+    /* [in] */ VARIANT var,
+    int iDepth);
+
+
+void __RPC_STUB IShellNameSpace_Expand_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IShellNameSpace_UnselectAll_Proxy( 
+    IShellNameSpace * This);
+
+
+void __RPC_STUB IShellNameSpace_UnselectAll_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IShellNameSpace_INTERFACE_DEFINED__ */
+
+
+EXTERN_C const CLSID CLSID_ShellNameSpace;
 
 #ifdef __cplusplus
 
 class DECLSPEC_UUID("55136805-B2DE-11D1-B9F2-00A0C98BC547")
-ShellFavoritesNameSpace;
+ShellNameSpace;
 #endif
 
 #ifndef __IScriptErrorList_INTERFACE_DEFINED__
@@ -4264,37 +4938,37 @@ EXTERN_C const IID IID_IScriptErrorList;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE retreatError( void) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE canAdvanceError( 
-            /* [retval][out] */ BOOL __RPC_FAR *pfCanAdvance) = 0;
+            /* [retval][out] */ BOOL *pfCanAdvance) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE canRetreatError( 
-            /* [retval][out] */ BOOL __RPC_FAR *pfCanRetreat) = 0;
+            /* [retval][out] */ BOOL *pfCanRetreat) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE getErrorLine( 
-            /* [retval][out] */ LONG __RPC_FAR *plLine) = 0;
+            /* [retval][out] */ LONG *plLine) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE getErrorChar( 
-            /* [retval][out] */ LONG __RPC_FAR *plChar) = 0;
+            /* [retval][out] */ LONG *plChar) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE getErrorCode( 
-            /* [retval][out] */ LONG __RPC_FAR *plCode) = 0;
+            /* [retval][out] */ LONG *plCode) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE getErrorMsg( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstr) = 0;
+            /* [retval][out] */ BSTR *pstr) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE getErrorUrl( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstr) = 0;
+            /* [retval][out] */ BSTR *pstr) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE getAlwaysShowLockState( 
-            /* [retval][out] */ BOOL __RPC_FAR *pfAlwaysShowLocked) = 0;
+            /* [retval][out] */ BOOL *pfAlwaysShowLocked) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE getDetailsPaneOpen( 
-            /* [retval][out] */ BOOL __RPC_FAR *pfDetailsPaneOpen) = 0;
+            /* [retval][out] */ BOOL *pfDetailsPaneOpen) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE setDetailsPaneOpen( 
             BOOL fDetailsPaneOpen) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE getPerErrorDisplay( 
-            /* [retval][out] */ BOOL __RPC_FAR *pfPerErrorDisplay) = 0;
+            /* [retval][out] */ BOOL *pfPerErrorDisplay) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE setPerErrorDisplay( 
             BOOL fPerErrorDisplay) = 0;
@@ -4307,98 +4981,98 @@ EXTERN_C const IID IID_IScriptErrorList;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IScriptErrorList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IScriptErrorList * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IScriptErrorList __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IScriptErrorList * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IScriptErrorList __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IScriptErrorList * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IScriptErrorList __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IScriptErrorList * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IScriptErrorList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IScriptErrorList * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IScriptErrorList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IScriptErrorList * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IScriptErrorList __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IScriptErrorList * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *advanceError )( 
-            IScriptErrorList __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *advanceError )( 
+            IScriptErrorList * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *retreatError )( 
-            IScriptErrorList __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *retreatError )( 
+            IScriptErrorList * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *canAdvanceError )( 
-            IScriptErrorList __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pfCanAdvance);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *canAdvanceError )( 
+            IScriptErrorList * This,
+            /* [retval][out] */ BOOL *pfCanAdvance);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *canRetreatError )( 
-            IScriptErrorList __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pfCanRetreat);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *canRetreatError )( 
+            IScriptErrorList * This,
+            /* [retval][out] */ BOOL *pfCanRetreat);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getErrorLine )( 
-            IScriptErrorList __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plLine);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getErrorLine )( 
+            IScriptErrorList * This,
+            /* [retval][out] */ LONG *plLine);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getErrorChar )( 
-            IScriptErrorList __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plChar);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getErrorChar )( 
+            IScriptErrorList * This,
+            /* [retval][out] */ LONG *plChar);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getErrorCode )( 
-            IScriptErrorList __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *plCode);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getErrorCode )( 
+            IScriptErrorList * This,
+            /* [retval][out] */ LONG *plCode);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getErrorMsg )( 
-            IScriptErrorList __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstr);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getErrorMsg )( 
+            IScriptErrorList * This,
+            /* [retval][out] */ BSTR *pstr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getErrorUrl )( 
-            IScriptErrorList __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstr);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getErrorUrl )( 
+            IScriptErrorList * This,
+            /* [retval][out] */ BSTR *pstr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAlwaysShowLockState )( 
-            IScriptErrorList __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pfAlwaysShowLocked);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getAlwaysShowLockState )( 
+            IScriptErrorList * This,
+            /* [retval][out] */ BOOL *pfAlwaysShowLocked);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getDetailsPaneOpen )( 
-            IScriptErrorList __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pfDetailsPaneOpen);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getDetailsPaneOpen )( 
+            IScriptErrorList * This,
+            /* [retval][out] */ BOOL *pfDetailsPaneOpen);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setDetailsPaneOpen )( 
-            IScriptErrorList __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *setDetailsPaneOpen )( 
+            IScriptErrorList * This,
             BOOL fDetailsPaneOpen);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getPerErrorDisplay )( 
-            IScriptErrorList __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *pfPerErrorDisplay);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *getPerErrorDisplay )( 
+            IScriptErrorList * This,
+            /* [retval][out] */ BOOL *pfPerErrorDisplay);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setPerErrorDisplay )( 
-            IScriptErrorList __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *setPerErrorDisplay )( 
+            IScriptErrorList * This,
             BOOL fPerErrorDisplay);
         
         END_INTERFACE
@@ -4406,7 +5080,7 @@ EXTERN_C const IID IID_IScriptErrorList;
 
     interface IScriptErrorList
     {
-        CONST_VTBL struct IScriptErrorListVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IScriptErrorListVtbl *lpVtbl;
     };
 
     
@@ -4487,7 +5161,7 @@ EXTERN_C const IID IID_IScriptErrorList;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_advanceError_Proxy( 
-    IScriptErrorList __RPC_FAR * This);
+    IScriptErrorList * This);
 
 
 void __RPC_STUB IScriptErrorList_advanceError_Stub(
@@ -4498,7 +5172,7 @@ void __RPC_STUB IScriptErrorList_advanceError_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_retreatError_Proxy( 
-    IScriptErrorList __RPC_FAR * This);
+    IScriptErrorList * This);
 
 
 void __RPC_STUB IScriptErrorList_retreatError_Stub(
@@ -4509,8 +5183,8 @@ void __RPC_STUB IScriptErrorList_retreatError_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_canAdvanceError_Proxy( 
-    IScriptErrorList __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pfCanAdvance);
+    IScriptErrorList * This,
+    /* [retval][out] */ BOOL *pfCanAdvance);
 
 
 void __RPC_STUB IScriptErrorList_canAdvanceError_Stub(
@@ -4521,8 +5195,8 @@ void __RPC_STUB IScriptErrorList_canAdvanceError_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_canRetreatError_Proxy( 
-    IScriptErrorList __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pfCanRetreat);
+    IScriptErrorList * This,
+    /* [retval][out] */ BOOL *pfCanRetreat);
 
 
 void __RPC_STUB IScriptErrorList_canRetreatError_Stub(
@@ -4533,8 +5207,8 @@ void __RPC_STUB IScriptErrorList_canRetreatError_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorLine_Proxy( 
-    IScriptErrorList __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *plLine);
+    IScriptErrorList * This,
+    /* [retval][out] */ LONG *plLine);
 
 
 void __RPC_STUB IScriptErrorList_getErrorLine_Stub(
@@ -4545,8 +5219,8 @@ void __RPC_STUB IScriptErrorList_getErrorLine_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorChar_Proxy( 
-    IScriptErrorList __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *plChar);
+    IScriptErrorList * This,
+    /* [retval][out] */ LONG *plChar);
 
 
 void __RPC_STUB IScriptErrorList_getErrorChar_Stub(
@@ -4557,8 +5231,8 @@ void __RPC_STUB IScriptErrorList_getErrorChar_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorCode_Proxy( 
-    IScriptErrorList __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *plCode);
+    IScriptErrorList * This,
+    /* [retval][out] */ LONG *plCode);
 
 
 void __RPC_STUB IScriptErrorList_getErrorCode_Stub(
@@ -4569,8 +5243,8 @@ void __RPC_STUB IScriptErrorList_getErrorCode_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorMsg_Proxy( 
-    IScriptErrorList __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstr);
+    IScriptErrorList * This,
+    /* [retval][out] */ BSTR *pstr);
 
 
 void __RPC_STUB IScriptErrorList_getErrorMsg_Stub(
@@ -4581,8 +5255,8 @@ void __RPC_STUB IScriptErrorList_getErrorMsg_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getErrorUrl_Proxy( 
-    IScriptErrorList __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstr);
+    IScriptErrorList * This,
+    /* [retval][out] */ BSTR *pstr);
 
 
 void __RPC_STUB IScriptErrorList_getErrorUrl_Stub(
@@ -4593,8 +5267,8 @@ void __RPC_STUB IScriptErrorList_getErrorUrl_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getAlwaysShowLockState_Proxy( 
-    IScriptErrorList __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pfAlwaysShowLocked);
+    IScriptErrorList * This,
+    /* [retval][out] */ BOOL *pfAlwaysShowLocked);
 
 
 void __RPC_STUB IScriptErrorList_getAlwaysShowLockState_Stub(
@@ -4605,8 +5279,8 @@ void __RPC_STUB IScriptErrorList_getAlwaysShowLockState_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getDetailsPaneOpen_Proxy( 
-    IScriptErrorList __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pfDetailsPaneOpen);
+    IScriptErrorList * This,
+    /* [retval][out] */ BOOL *pfDetailsPaneOpen);
 
 
 void __RPC_STUB IScriptErrorList_getDetailsPaneOpen_Stub(
@@ -4617,7 +5291,7 @@ void __RPC_STUB IScriptErrorList_getDetailsPaneOpen_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_setDetailsPaneOpen_Proxy( 
-    IScriptErrorList __RPC_FAR * This,
+    IScriptErrorList * This,
     BOOL fDetailsPaneOpen);
 
 
@@ -4629,8 +5303,8 @@ void __RPC_STUB IScriptErrorList_setDetailsPaneOpen_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_getPerErrorDisplay_Proxy( 
-    IScriptErrorList __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *pfPerErrorDisplay);
+    IScriptErrorList * This,
+    /* [retval][out] */ BOOL *pfPerErrorDisplay);
 
 
 void __RPC_STUB IScriptErrorList_getPerErrorDisplay_Stub(
@@ -4641,7 +5315,7 @@ void __RPC_STUB IScriptErrorList_getPerErrorDisplay_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IScriptErrorList_setPerErrorDisplay_Proxy( 
-    IScriptErrorList __RPC_FAR * This,
+    IScriptErrorList * This,
     BOOL fPerErrorDisplay);
 
 
@@ -4680,13 +5354,13 @@ EXTERN_C const IID IID_ISearch;
     {
     public:
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Title( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrTitle) = 0;
+            /* [retval][out] */ BSTR *pbstrTitle) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Id( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrId) = 0;
+            /* [retval][out] */ BSTR *pbstrId) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Url( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrUrl) = 0;
+            /* [retval][out] */ BSTR *pbstrUrl) = 0;
         
     };
     
@@ -4696,64 +5370,64 @@ EXTERN_C const IID IID_ISearch;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISearch * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISearch __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISearch * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISearch __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISearch * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISearch __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISearch * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISearch * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISearch __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISearch * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISearch __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISearch * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Title )( 
-            ISearch __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrTitle);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Title )( 
+            ISearch * This,
+            /* [retval][out] */ BSTR *pbstrTitle);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Id )( 
-            ISearch __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrId);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Id )( 
+            ISearch * This,
+            /* [retval][out] */ BSTR *pbstrId);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Url )( 
-            ISearch __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrUrl);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Url )( 
+            ISearch * This,
+            /* [retval][out] */ BSTR *pbstrUrl);
         
         END_INTERFACE
     } ISearchVtbl;
 
     interface ISearch
     {
-        CONST_VTBL struct ISearchVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISearchVtbl *lpVtbl;
     };
 
     
@@ -4801,8 +5475,8 @@ EXTERN_C const IID IID_ISearch;
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISearch_get_Title_Proxy( 
-    ISearch __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrTitle);
+    ISearch * This,
+    /* [retval][out] */ BSTR *pbstrTitle);
 
 
 void __RPC_STUB ISearch_get_Title_Stub(
@@ -4813,8 +5487,8 @@ void __RPC_STUB ISearch_get_Title_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISearch_get_Id_Proxy( 
-    ISearch __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrId);
+    ISearch * This,
+    /* [retval][out] */ BSTR *pbstrId);
 
 
 void __RPC_STUB ISearch_get_Id_Stub(
@@ -4825,8 +5499,8 @@ void __RPC_STUB ISearch_get_Id_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISearch_get_Url_Proxy( 
-    ISearch __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrUrl);
+    ISearch * This,
+    /* [retval][out] */ BSTR *pbstrUrl);
 
 
 void __RPC_STUB ISearch_get_Url_Stub(
@@ -4856,17 +5530,17 @@ EXTERN_C const IID IID_ISearches;
     {
     public:
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long __RPC_FAR *plCount) = 0;
+            /* [retval][out] */ long *plCount) = 0;
         
         virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Default( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDefault) = 0;
+            /* [retval][out] */ BSTR *pbstrDefault) = 0;
         
         virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Item( 
             /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ ISearch __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ ISearch **ppid) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk) = 0;
+            /* [retval][out] */ IUnknown **ppunk) = 0;
         
     };
     
@@ -4876,69 +5550,69 @@ EXTERN_C const IID IID_ISearches;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISearches __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISearches * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISearches __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISearches * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISearches __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISearches * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISearches __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISearches * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISearches __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISearches * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISearches __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISearches * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISearches __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISearches * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Count )( 
-            ISearches __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plCount);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+            ISearches * This,
+            /* [retval][out] */ long *plCount);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Default )( 
-            ISearches __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrDefault);
+        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Default )( 
+            ISearches * This,
+            /* [retval][out] */ BSTR *pbstrDefault);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Item )( 
-            ISearches __RPC_FAR * This,
+        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+            ISearches * This,
             /* [optional][in] */ VARIANT index,
-            /* [retval][out] */ ISearch __RPC_FAR *__RPC_FAR *ppid);
+            /* [retval][out] */ ISearch **ppid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *_NewEnum )( 
-            ISearches __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+            ISearches * This,
+            /* [retval][out] */ IUnknown **ppunk);
         
         END_INTERFACE
     } ISearchesVtbl;
 
     interface ISearches
     {
-        CONST_VTBL struct ISearchesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISearchesVtbl *lpVtbl;
     };
 
     
@@ -4989,8 +5663,8 @@ EXTERN_C const IID IID_ISearches;
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISearches_get_Count_Proxy( 
-    ISearches __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plCount);
+    ISearches * This,
+    /* [retval][out] */ long *plCount);
 
 
 void __RPC_STUB ISearches_get_Count_Stub(
@@ -5001,8 +5675,8 @@ void __RPC_STUB ISearches_get_Count_Stub(
 
 
 /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE ISearches_get_Default_Proxy( 
-    ISearches __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrDefault);
+    ISearches * This,
+    /* [retval][out] */ BSTR *pbstrDefault);
 
 
 void __RPC_STUB ISearches_get_Default_Stub(
@@ -5013,9 +5687,9 @@ void __RPC_STUB ISearches_get_Default_Stub(
 
 
 /* [helpstring] */ HRESULT STDMETHODCALLTYPE ISearches_Item_Proxy( 
-    ISearches __RPC_FAR * This,
+    ISearches * This,
     /* [optional][in] */ VARIANT index,
-    /* [retval][out] */ ISearch __RPC_FAR *__RPC_FAR *ppid);
+    /* [retval][out] */ ISearch **ppid);
 
 
 void __RPC_STUB ISearches_Item_Stub(
@@ -5026,8 +5700,8 @@ void __RPC_STUB ISearches_Item_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISearches__NewEnum_Proxy( 
-    ISearches __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+    ISearches * This,
+    /* [retval][out] */ IUnknown **ppunk);
 
 
 void __RPC_STUB ISearches__NewEnum_Stub(
@@ -5067,19 +5741,19 @@ EXTERN_C const IID IID_ISearchAssistantOC;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsRestricted( 
             /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ShellFeaturesEnabled( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchAssistantDefault( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Searches( 
-            /* [retval][out] */ ISearches __RPC_FAR *__RPC_FAR *ppid) = 0;
+            /* [retval][out] */ ISearches **ppid) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_InWebFolder( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE PutProperty( 
             /* [in] */ VARIANT_BOOL bPerLocale,
@@ -5089,7 +5763,7 @@ EXTERN_C const IID IID_ISearchAssistantOC;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetProperty( 
             /* [in] */ VARIANT_BOOL bPerLocale,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrValue) = 0;
+            /* [retval][out] */ BSTR *pbstrValue) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_EventHandled( 
             /* [in] */ VARIANT_BOOL bHandled) = 0;
@@ -5109,7 +5783,7 @@ EXTERN_C const IID IID_ISearchAssistantOC;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetSearchAssistantURL( 
             /* [in] */ VARIANT_BOOL bSubstitute,
             /* [in] */ VARIANT_BOOL bCustomize,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrValue) = 0;
+            /* [retval][out] */ BSTR *pbstrValue) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE NotifySearchSettingsChanged( void) = 0;
         
@@ -5117,13 +5791,13 @@ EXTERN_C const IID IID_ISearchAssistantOC;
             /* [in] */ BSTR Provider) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ASProvider( 
-            /* [retval][out] */ BSTR __RPC_FAR *pProvider) = 0;
+            /* [retval][out] */ BSTR *pProvider) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ASSetting( 
             /* [in] */ int Setting) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ASSetting( 
-            /* [retval][out] */ int __RPC_FAR *pSetting) = 0;
+            /* [retval][out] */ int *pSetting) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE NETDetectNextNavigate( void) = 0;
         
@@ -5131,13 +5805,13 @@ EXTERN_C const IID IID_ISearchAssistantOC;
             /* [in] */ BSTR FindText) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Version( 
-            /* [retval][out] */ int __RPC_FAR *pVersion) = 0;
+            /* [retval][out] */ int *pVersion) = 0;
         
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE EncodeString( 
             /* [in] */ BSTR bstrValue,
             /* [in] */ BSTR bstrCharSet,
             /* [in] */ VARIANT_BOOL bUseUTF8,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrResult) = 0;
+            /* [retval][out] */ BSTR *pbstrResult) = 0;
         
     };
     
@@ -5147,162 +5821,162 @@ EXTERN_C const IID IID_ISearchAssistantOC;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISearchAssistantOC * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISearchAssistantOC __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISearchAssistantOC * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISearchAssistantOC __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISearchAssistantOC * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISearchAssistantOC __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISearchAssistantOC * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISearchAssistantOC * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISearchAssistantOC * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISearchAssistantOC * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddNextMenuItem )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddNextMenuItem )( 
+            ISearchAssistantOC * This,
             /* [in] */ BSTR bstrText,
             /* [in] */ long idItem);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDefaultSearchUrl )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetDefaultSearchUrl )( 
+            ISearchAssistantOC * This,
             /* [in] */ BSTR bstrUrl);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NavigateToDefaultSearch )( 
-            ISearchAssistantOC __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateToDefaultSearch )( 
+            ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsRestricted )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
+            ISearchAssistantOC * This,
             /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal);
+            /* [retval][out] */ VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShellFeaturesEnabled )( 
-            ISearchAssistantOC __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShellFeaturesEnabled )( 
+            ISearchAssistantOC * This,
+            /* [retval][out] */ VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SearchAssistantDefault )( 
-            ISearchAssistantOC __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchAssistantDefault )( 
+            ISearchAssistantOC * This,
+            /* [retval][out] */ VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Searches )( 
-            ISearchAssistantOC __RPC_FAR * This,
-            /* [retval][out] */ ISearches __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Searches )( 
+            ISearchAssistantOC * This,
+            /* [retval][out] */ ISearches **ppid);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InWebFolder )( 
-            ISearchAssistantOC __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InWebFolder )( 
+            ISearchAssistantOC * This,
+            /* [retval][out] */ VARIANT_BOOL *pVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutProperty )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
+            ISearchAssistantOC * This,
             /* [in] */ VARIANT_BOOL bPerLocale,
             /* [in] */ BSTR bstrName,
             /* [in] */ BSTR bstrValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProperty )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+            ISearchAssistantOC * This,
             /* [in] */ VARIANT_BOOL bPerLocale,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrValue);
+            /* [retval][out] */ BSTR *pbstrValue);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EventHandled )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventHandled )( 
+            ISearchAssistantOC * This,
             /* [in] */ VARIANT_BOOL bHandled);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetNextMenu )( 
-            ISearchAssistantOC __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ResetNextMenu )( 
+            ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindOnWeb )( 
-            ISearchAssistantOC __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindOnWeb )( 
+            ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindFilesOrFolders )( 
-            ISearchAssistantOC __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindFilesOrFolders )( 
+            ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindComputer )( 
-            ISearchAssistantOC __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+            ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindPrinter )( 
-            ISearchAssistantOC __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
+            ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindPeople )( 
-            ISearchAssistantOC __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindPeople )( 
+            ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSearchAssistantURL )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetSearchAssistantURL )( 
+            ISearchAssistantOC * This,
             /* [in] */ VARIANT_BOOL bSubstitute,
             /* [in] */ VARIANT_BOOL bCustomize,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrValue);
+            /* [retval][out] */ BSTR *pbstrValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NotifySearchSettingsChanged )( 
-            ISearchAssistantOC __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NotifySearchSettingsChanged )( 
+            ISearchAssistantOC * This);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ASProvider )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ASProvider )( 
+            ISearchAssistantOC * This,
             /* [in] */ BSTR Provider);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ASProvider )( 
-            ISearchAssistantOC __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pProvider);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ASProvider )( 
+            ISearchAssistantOC * This,
+            /* [retval][out] */ BSTR *pProvider);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ASSetting )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ASSetting )( 
+            ISearchAssistantOC * This,
             /* [in] */ int Setting);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ASSetting )( 
-            ISearchAssistantOC __RPC_FAR * This,
-            /* [retval][out] */ int __RPC_FAR *pSetting);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ASSetting )( 
+            ISearchAssistantOC * This,
+            /* [retval][out] */ int *pSetting);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NETDetectNextNavigate )( 
-            ISearchAssistantOC __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NETDetectNextNavigate )( 
+            ISearchAssistantOC * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutFindText )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutFindText )( 
+            ISearchAssistantOC * This,
             /* [in] */ BSTR FindText);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Version )( 
-            ISearchAssistantOC __RPC_FAR * This,
-            /* [retval][out] */ int __RPC_FAR *pVersion);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+            ISearchAssistantOC * This,
+            /* [retval][out] */ int *pVersion);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EncodeString )( 
-            ISearchAssistantOC __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EncodeString )( 
+            ISearchAssistantOC * This,
             /* [in] */ BSTR bstrValue,
             /* [in] */ BSTR bstrCharSet,
             /* [in] */ VARIANT_BOOL bUseUTF8,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrResult);
+            /* [retval][out] */ BSTR *pbstrResult);
         
         END_INTERFACE
     } ISearchAssistantOCVtbl;
 
     interface ISearchAssistantOC
     {
-        CONST_VTBL struct ISearchAssistantOCVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISearchAssistantOCVtbl *lpVtbl;
     };
 
     
@@ -5422,7 +6096,7 @@ EXTERN_C const IID IID_ISearchAssistantOC;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_AddNextMenuItem_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
+    ISearchAssistantOC * This,
     /* [in] */ BSTR bstrText,
     /* [in] */ long idItem);
 
@@ -5435,7 +6109,7 @@ void __RPC_STUB ISearchAssistantOC_AddNextMenuItem_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_SetDefaultSearchUrl_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
+    ISearchAssistantOC * This,
     /* [in] */ BSTR bstrUrl);
 
 
@@ -5447,7 +6121,7 @@ void __RPC_STUB ISearchAssistantOC_SetDefaultSearchUrl_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_NavigateToDefaultSearch_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This);
+    ISearchAssistantOC * This);
 
 
 void __RPC_STUB ISearchAssistantOC_NavigateToDefaultSearch_Stub(
@@ -5458,9 +6132,9 @@ void __RPC_STUB ISearchAssistantOC_NavigateToDefaultSearch_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_IsRestricted_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
+    ISearchAssistantOC * This,
     /* [in] */ BSTR bstrGuid,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal);
+    /* [retval][out] */ VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB ISearchAssistantOC_IsRestricted_Stub(
@@ -5471,8 +6145,8 @@ void __RPC_STUB ISearchAssistantOC_IsRestricted_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_ShellFeaturesEnabled_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal);
+    ISearchAssistantOC * This,
+    /* [retval][out] */ VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB ISearchAssistantOC_get_ShellFeaturesEnabled_Stub(
@@ -5483,8 +6157,8 @@ void __RPC_STUB ISearchAssistantOC_get_ShellFeaturesEnabled_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_SearchAssistantDefault_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal);
+    ISearchAssistantOC * This,
+    /* [retval][out] */ VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB ISearchAssistantOC_get_SearchAssistantDefault_Stub(
@@ -5495,8 +6169,8 @@ void __RPC_STUB ISearchAssistantOC_get_SearchAssistantDefault_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_Searches_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
-    /* [retval][out] */ ISearches __RPC_FAR *__RPC_FAR *ppid);
+    ISearchAssistantOC * This,
+    /* [retval][out] */ ISearches **ppid);
 
 
 void __RPC_STUB ISearchAssistantOC_get_Searches_Stub(
@@ -5507,8 +6181,8 @@ void __RPC_STUB ISearchAssistantOC_get_Searches_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_InWebFolder_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal);
+    ISearchAssistantOC * This,
+    /* [retval][out] */ VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB ISearchAssistantOC_get_InWebFolder_Stub(
@@ -5519,7 +6193,7 @@ void __RPC_STUB ISearchAssistantOC_get_InWebFolder_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_PutProperty_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
+    ISearchAssistantOC * This,
     /* [in] */ VARIANT_BOOL bPerLocale,
     /* [in] */ BSTR bstrName,
     /* [in] */ BSTR bstrValue);
@@ -5533,10 +6207,10 @@ void __RPC_STUB ISearchAssistantOC_PutProperty_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_GetProperty_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
+    ISearchAssistantOC * This,
     /* [in] */ VARIANT_BOOL bPerLocale,
     /* [in] */ BSTR bstrName,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrValue);
+    /* [retval][out] */ BSTR *pbstrValue);
 
 
 void __RPC_STUB ISearchAssistantOC_GetProperty_Stub(
@@ -5547,7 +6221,7 @@ void __RPC_STUB ISearchAssistantOC_GetProperty_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_put_EventHandled_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
+    ISearchAssistantOC * This,
     /* [in] */ VARIANT_BOOL bHandled);
 
 
@@ -5559,7 +6233,7 @@ void __RPC_STUB ISearchAssistantOC_put_EventHandled_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_ResetNextMenu_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This);
+    ISearchAssistantOC * This);
 
 
 void __RPC_STUB ISearchAssistantOC_ResetNextMenu_Stub(
@@ -5570,7 +6244,7 @@ void __RPC_STUB ISearchAssistantOC_ResetNextMenu_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindOnWeb_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This);
+    ISearchAssistantOC * This);
 
 
 void __RPC_STUB ISearchAssistantOC_FindOnWeb_Stub(
@@ -5581,7 +6255,7 @@ void __RPC_STUB ISearchAssistantOC_FindOnWeb_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindFilesOrFolders_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This);
+    ISearchAssistantOC * This);
 
 
 void __RPC_STUB ISearchAssistantOC_FindFilesOrFolders_Stub(
@@ -5592,7 +6266,7 @@ void __RPC_STUB ISearchAssistantOC_FindFilesOrFolders_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindComputer_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This);
+    ISearchAssistantOC * This);
 
 
 void __RPC_STUB ISearchAssistantOC_FindComputer_Stub(
@@ -5603,7 +6277,7 @@ void __RPC_STUB ISearchAssistantOC_FindComputer_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindPrinter_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This);
+    ISearchAssistantOC * This);
 
 
 void __RPC_STUB ISearchAssistantOC_FindPrinter_Stub(
@@ -5614,7 +6288,7 @@ void __RPC_STUB ISearchAssistantOC_FindPrinter_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_FindPeople_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This);
+    ISearchAssistantOC * This);
 
 
 void __RPC_STUB ISearchAssistantOC_FindPeople_Stub(
@@ -5625,10 +6299,10 @@ void __RPC_STUB ISearchAssistantOC_FindPeople_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_GetSearchAssistantURL_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
+    ISearchAssistantOC * This,
     /* [in] */ VARIANT_BOOL bSubstitute,
     /* [in] */ VARIANT_BOOL bCustomize,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrValue);
+    /* [retval][out] */ BSTR *pbstrValue);
 
 
 void __RPC_STUB ISearchAssistantOC_GetSearchAssistantURL_Stub(
@@ -5639,7 +6313,7 @@ void __RPC_STUB ISearchAssistantOC_GetSearchAssistantURL_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_NotifySearchSettingsChanged_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This);
+    ISearchAssistantOC * This);
 
 
 void __RPC_STUB ISearchAssistantOC_NotifySearchSettingsChanged_Stub(
@@ -5650,7 +6324,7 @@ void __RPC_STUB ISearchAssistantOC_NotifySearchSettingsChanged_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_put_ASProvider_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
+    ISearchAssistantOC * This,
     /* [in] */ BSTR Provider);
 
 
@@ -5662,8 +6336,8 @@ void __RPC_STUB ISearchAssistantOC_put_ASProvider_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_ASProvider_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pProvider);
+    ISearchAssistantOC * This,
+    /* [retval][out] */ BSTR *pProvider);
 
 
 void __RPC_STUB ISearchAssistantOC_get_ASProvider_Stub(
@@ -5674,7 +6348,7 @@ void __RPC_STUB ISearchAssistantOC_get_ASProvider_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_put_ASSetting_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
+    ISearchAssistantOC * This,
     /* [in] */ int Setting);
 
 
@@ -5686,8 +6360,8 @@ void __RPC_STUB ISearchAssistantOC_put_ASSetting_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_ASSetting_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
-    /* [retval][out] */ int __RPC_FAR *pSetting);
+    ISearchAssistantOC * This,
+    /* [retval][out] */ int *pSetting);
 
 
 void __RPC_STUB ISearchAssistantOC_get_ASSetting_Stub(
@@ -5698,7 +6372,7 @@ void __RPC_STUB ISearchAssistantOC_get_ASSetting_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_NETDetectNextNavigate_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This);
+    ISearchAssistantOC * This);
 
 
 void __RPC_STUB ISearchAssistantOC_NETDetectNextNavigate_Stub(
@@ -5709,7 +6383,7 @@ void __RPC_STUB ISearchAssistantOC_NETDetectNextNavigate_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_PutFindText_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
+    ISearchAssistantOC * This,
     /* [in] */ BSTR FindText);
 
 
@@ -5721,8 +6395,8 @@ void __RPC_STUB ISearchAssistantOC_PutFindText_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_get_Version_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
-    /* [retval][out] */ int __RPC_FAR *pVersion);
+    ISearchAssistantOC * This,
+    /* [retval][out] */ int *pVersion);
 
 
 void __RPC_STUB ISearchAssistantOC_get_Version_Stub(
@@ -5733,11 +6407,11 @@ void __RPC_STUB ISearchAssistantOC_get_Version_Stub(
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC_EncodeString_Proxy( 
-    ISearchAssistantOC __RPC_FAR * This,
+    ISearchAssistantOC * This,
     /* [in] */ BSTR bstrValue,
     /* [in] */ BSTR bstrCharSet,
     /* [in] */ VARIANT_BOOL bUseUTF8,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrResult);
+    /* [retval][out] */ BSTR *pbstrResult);
 
 
 void __RPC_STUB ISearchAssistantOC_EncodeString_Stub(
@@ -5767,7 +6441,7 @@ EXTERN_C const IID IID_ISearchAssistantOC2;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ShowFindPrinter( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbShowFindPrinter) = 0;
+            /* [retval][out] */ VARIANT_BOOL *pbShowFindPrinter) = 0;
         
     };
     
@@ -5777,166 +6451,166 @@ EXTERN_C const IID IID_ISearchAssistantOC2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISearchAssistantOC2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISearchAssistantOC2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISearchAssistantOC2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISearchAssistantOC2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISearchAssistantOC2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddNextMenuItem )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddNextMenuItem )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ BSTR bstrText,
             /* [in] */ long idItem);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDefaultSearchUrl )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetDefaultSearchUrl )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ BSTR bstrUrl);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NavigateToDefaultSearch )( 
-            ISearchAssistantOC2 __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateToDefaultSearch )( 
+            ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsRestricted )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ BSTR bstrGuid,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal);
+            /* [retval][out] */ VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShellFeaturesEnabled )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShellFeaturesEnabled )( 
+            ISearchAssistantOC2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SearchAssistantDefault )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchAssistantDefault )( 
+            ISearchAssistantOC2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Searches )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
-            /* [retval][out] */ ISearches __RPC_FAR *__RPC_FAR *ppid);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Searches )( 
+            ISearchAssistantOC2 * This,
+            /* [retval][out] */ ISearches **ppid);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_InWebFolder )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pVal);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InWebFolder )( 
+            ISearchAssistantOC2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutProperty )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ VARIANT_BOOL bPerLocale,
             /* [in] */ BSTR bstrName,
             /* [in] */ BSTR bstrValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProperty )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ VARIANT_BOOL bPerLocale,
             /* [in] */ BSTR bstrName,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrValue);
+            /* [retval][out] */ BSTR *pbstrValue);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EventHandled )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventHandled )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ VARIANT_BOOL bHandled);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResetNextMenu )( 
-            ISearchAssistantOC2 __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ResetNextMenu )( 
+            ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindOnWeb )( 
-            ISearchAssistantOC2 __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindOnWeb )( 
+            ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindFilesOrFolders )( 
-            ISearchAssistantOC2 __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindFilesOrFolders )( 
+            ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindComputer )( 
-            ISearchAssistantOC2 __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+            ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindPrinter )( 
-            ISearchAssistantOC2 __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
+            ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindPeople )( 
-            ISearchAssistantOC2 __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindPeople )( 
+            ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSearchAssistantURL )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetSearchAssistantURL )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ VARIANT_BOOL bSubstitute,
             /* [in] */ VARIANT_BOOL bCustomize,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrValue);
+            /* [retval][out] */ BSTR *pbstrValue);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NotifySearchSettingsChanged )( 
-            ISearchAssistantOC2 __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NotifySearchSettingsChanged )( 
+            ISearchAssistantOC2 * This);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ASProvider )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ASProvider )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ BSTR Provider);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ASProvider )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pProvider);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ASProvider )( 
+            ISearchAssistantOC2 * This,
+            /* [retval][out] */ BSTR *pProvider);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ASSetting )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ASSetting )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ int Setting);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ASSetting )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
-            /* [retval][out] */ int __RPC_FAR *pSetting);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ASSetting )( 
+            ISearchAssistantOC2 * This,
+            /* [retval][out] */ int *pSetting);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NETDetectNextNavigate )( 
-            ISearchAssistantOC2 __RPC_FAR * This);
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NETDetectNextNavigate )( 
+            ISearchAssistantOC2 * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PutFindText )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutFindText )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ BSTR FindText);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Version )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
-            /* [retval][out] */ int __RPC_FAR *pVersion);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+            ISearchAssistantOC2 * This,
+            /* [retval][out] */ int *pVersion);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EncodeString )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EncodeString )( 
+            ISearchAssistantOC2 * This,
             /* [in] */ BSTR bstrValue,
             /* [in] */ BSTR bstrCharSet,
             /* [in] */ VARIANT_BOOL bUseUTF8,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrResult);
+            /* [retval][out] */ BSTR *pbstrResult);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowFindPrinter )( 
-            ISearchAssistantOC2 __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbShowFindPrinter);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShowFindPrinter )( 
+            ISearchAssistantOC2 * This,
+            /* [retval][out] */ VARIANT_BOOL *pbShowFindPrinter);
         
         END_INTERFACE
     } ISearchAssistantOC2Vtbl;
 
     interface ISearchAssistantOC2
     {
-        CONST_VTBL struct ISearchAssistantOC2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISearchAssistantOC2Vtbl *lpVtbl;
     };
 
     
@@ -6060,8 +6734,8 @@ EXTERN_C const IID IID_ISearchAssistantOC2;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC2_get_ShowFindPrinter_Proxy( 
-    ISearchAssistantOC2 __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbShowFindPrinter);
+    ISearchAssistantOC2 * This,
+    /* [retval][out] */ VARIANT_BOOL *pbShowFindPrinter);
 
 
 void __RPC_STUB ISearchAssistantOC2_get_ShowFindPrinter_Stub(
@@ -6073,6 +6747,382 @@ void __RPC_STUB ISearchAssistantOC2_get_ShowFindPrinter_Stub(
 
 
 #endif 	/* __ISearchAssistantOC2_INTERFACE_DEFINED__ */
+
+
+#ifndef __ISearchAssistantOC3_INTERFACE_DEFINED__
+#define __ISearchAssistantOC3_INTERFACE_DEFINED__
+
+/* interface ISearchAssistantOC3 */
+/* [unique][helpstring][dual][hidden][uuid][object] */ 
+
+
+EXTERN_C const IID IID_ISearchAssistantOC3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("72423E8F-8011-11d2-BE79-00A0C9A83DA3")
+    ISearchAssistantOC3 : public ISearchAssistantOC2
+    {
+    public:
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SearchCompanionAvailable( 
+            /* [retval][out] */ VARIANT_BOOL *pbAvailable) = 0;
+        
+        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_UseSearchCompanion( 
+            /* [in] */ VARIANT_BOOL bUseSC) = 0;
+        
+        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UseSearchCompanion( 
+            /* [retval][out] */ VARIANT_BOOL *pbUseSC) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct ISearchAssistantOC3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISearchAssistantOC3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISearchAssistantOC3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ISearchAssistantOC3 * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *AddNextMenuItem )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ BSTR bstrText,
+            /* [in] */ long idItem);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetDefaultSearchUrl )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ BSTR bstrUrl);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NavigateToDefaultSearch )( 
+            ISearchAssistantOC3 * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsRestricted )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ BSTR bstrGuid,
+            /* [retval][out] */ VARIANT_BOOL *pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShellFeaturesEnabled )( 
+            ISearchAssistantOC3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchAssistantDefault )( 
+            ISearchAssistantOC3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pVal);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Searches )( 
+            ISearchAssistantOC3 * This,
+            /* [retval][out] */ ISearches **ppid);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InWebFolder )( 
+            ISearchAssistantOC3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pVal);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ VARIANT_BOOL bPerLocale,
+            /* [in] */ BSTR bstrName,
+            /* [in] */ BSTR bstrValue);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ VARIANT_BOOL bPerLocale,
+            /* [in] */ BSTR bstrName,
+            /* [retval][out] */ BSTR *pbstrValue);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EventHandled )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ VARIANT_BOOL bHandled);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ResetNextMenu )( 
+            ISearchAssistantOC3 * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindOnWeb )( 
+            ISearchAssistantOC3 * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindFilesOrFolders )( 
+            ISearchAssistantOC3 * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindComputer )( 
+            ISearchAssistantOC3 * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindPrinter )( 
+            ISearchAssistantOC3 * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *FindPeople )( 
+            ISearchAssistantOC3 * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetSearchAssistantURL )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ VARIANT_BOOL bSubstitute,
+            /* [in] */ VARIANT_BOOL bCustomize,
+            /* [retval][out] */ BSTR *pbstrValue);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NotifySearchSettingsChanged )( 
+            ISearchAssistantOC3 * This);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ASProvider )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ BSTR Provider);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ASProvider )( 
+            ISearchAssistantOC3 * This,
+            /* [retval][out] */ BSTR *pProvider);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ASSetting )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ int Setting);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ASSetting )( 
+            ISearchAssistantOC3 * This,
+            /* [retval][out] */ int *pSetting);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *NETDetectNextNavigate )( 
+            ISearchAssistantOC3 * This);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PutFindText )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ BSTR FindText);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Version )( 
+            ISearchAssistantOC3 * This,
+            /* [retval][out] */ int *pVersion);
+        
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EncodeString )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ BSTR bstrValue,
+            /* [in] */ BSTR bstrCharSet,
+            /* [in] */ VARIANT_BOOL bUseUTF8,
+            /* [retval][out] */ BSTR *pbstrResult);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ShowFindPrinter )( 
+            ISearchAssistantOC3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pbShowFindPrinter);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SearchCompanionAvailable )( 
+            ISearchAssistantOC3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pbAvailable);
+        
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UseSearchCompanion )( 
+            ISearchAssistantOC3 * This,
+            /* [in] */ VARIANT_BOOL bUseSC);
+        
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UseSearchCompanion )( 
+            ISearchAssistantOC3 * This,
+            /* [retval][out] */ VARIANT_BOOL *pbUseSC);
+        
+        END_INTERFACE
+    } ISearchAssistantOC3Vtbl;
+
+    interface ISearchAssistantOC3
+    {
+        CONST_VTBL struct ISearchAssistantOC3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define ISearchAssistantOC3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define ISearchAssistantOC3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define ISearchAssistantOC3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define ISearchAssistantOC3_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define ISearchAssistantOC3_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define ISearchAssistantOC3_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define ISearchAssistantOC3_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define ISearchAssistantOC3_AddNextMenuItem(This,bstrText,idItem)	\
+    (This)->lpVtbl -> AddNextMenuItem(This,bstrText,idItem)
+
+#define ISearchAssistantOC3_SetDefaultSearchUrl(This,bstrUrl)	\
+    (This)->lpVtbl -> SetDefaultSearchUrl(This,bstrUrl)
+
+#define ISearchAssistantOC3_NavigateToDefaultSearch(This)	\
+    (This)->lpVtbl -> NavigateToDefaultSearch(This)
+
+#define ISearchAssistantOC3_IsRestricted(This,bstrGuid,pVal)	\
+    (This)->lpVtbl -> IsRestricted(This,bstrGuid,pVal)
+
+#define ISearchAssistantOC3_get_ShellFeaturesEnabled(This,pVal)	\
+    (This)->lpVtbl -> get_ShellFeaturesEnabled(This,pVal)
+
+#define ISearchAssistantOC3_get_SearchAssistantDefault(This,pVal)	\
+    (This)->lpVtbl -> get_SearchAssistantDefault(This,pVal)
+
+#define ISearchAssistantOC3_get_Searches(This,ppid)	\
+    (This)->lpVtbl -> get_Searches(This,ppid)
+
+#define ISearchAssistantOC3_get_InWebFolder(This,pVal)	\
+    (This)->lpVtbl -> get_InWebFolder(This,pVal)
+
+#define ISearchAssistantOC3_PutProperty(This,bPerLocale,bstrName,bstrValue)	\
+    (This)->lpVtbl -> PutProperty(This,bPerLocale,bstrName,bstrValue)
+
+#define ISearchAssistantOC3_GetProperty(This,bPerLocale,bstrName,pbstrValue)	\
+    (This)->lpVtbl -> GetProperty(This,bPerLocale,bstrName,pbstrValue)
+
+#define ISearchAssistantOC3_put_EventHandled(This,bHandled)	\
+    (This)->lpVtbl -> put_EventHandled(This,bHandled)
+
+#define ISearchAssistantOC3_ResetNextMenu(This)	\
+    (This)->lpVtbl -> ResetNextMenu(This)
+
+#define ISearchAssistantOC3_FindOnWeb(This)	\
+    (This)->lpVtbl -> FindOnWeb(This)
+
+#define ISearchAssistantOC3_FindFilesOrFolders(This)	\
+    (This)->lpVtbl -> FindFilesOrFolders(This)
+
+#define ISearchAssistantOC3_FindComputer(This)	\
+    (This)->lpVtbl -> FindComputer(This)
+
+#define ISearchAssistantOC3_FindPrinter(This)	\
+    (This)->lpVtbl -> FindPrinter(This)
+
+#define ISearchAssistantOC3_FindPeople(This)	\
+    (This)->lpVtbl -> FindPeople(This)
+
+#define ISearchAssistantOC3_GetSearchAssistantURL(This,bSubstitute,bCustomize,pbstrValue)	\
+    (This)->lpVtbl -> GetSearchAssistantURL(This,bSubstitute,bCustomize,pbstrValue)
+
+#define ISearchAssistantOC3_NotifySearchSettingsChanged(This)	\
+    (This)->lpVtbl -> NotifySearchSettingsChanged(This)
+
+#define ISearchAssistantOC3_put_ASProvider(This,Provider)	\
+    (This)->lpVtbl -> put_ASProvider(This,Provider)
+
+#define ISearchAssistantOC3_get_ASProvider(This,pProvider)	\
+    (This)->lpVtbl -> get_ASProvider(This,pProvider)
+
+#define ISearchAssistantOC3_put_ASSetting(This,Setting)	\
+    (This)->lpVtbl -> put_ASSetting(This,Setting)
+
+#define ISearchAssistantOC3_get_ASSetting(This,pSetting)	\
+    (This)->lpVtbl -> get_ASSetting(This,pSetting)
+
+#define ISearchAssistantOC3_NETDetectNextNavigate(This)	\
+    (This)->lpVtbl -> NETDetectNextNavigate(This)
+
+#define ISearchAssistantOC3_PutFindText(This,FindText)	\
+    (This)->lpVtbl -> PutFindText(This,FindText)
+
+#define ISearchAssistantOC3_get_Version(This,pVersion)	\
+    (This)->lpVtbl -> get_Version(This,pVersion)
+
+#define ISearchAssistantOC3_EncodeString(This,bstrValue,bstrCharSet,bUseUTF8,pbstrResult)	\
+    (This)->lpVtbl -> EncodeString(This,bstrValue,bstrCharSet,bUseUTF8,pbstrResult)
+
+
+#define ISearchAssistantOC3_get_ShowFindPrinter(This,pbShowFindPrinter)	\
+    (This)->lpVtbl -> get_ShowFindPrinter(This,pbShowFindPrinter)
+
+
+#define ISearchAssistantOC3_get_SearchCompanionAvailable(This,pbAvailable)	\
+    (This)->lpVtbl -> get_SearchCompanionAvailable(This,pbAvailable)
+
+#define ISearchAssistantOC3_put_UseSearchCompanion(This,bUseSC)	\
+    (This)->lpVtbl -> put_UseSearchCompanion(This,bUseSC)
+
+#define ISearchAssistantOC3_get_UseSearchCompanion(This,pbUseSC)	\
+    (This)->lpVtbl -> get_UseSearchCompanion(This,pbUseSC)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC3_get_SearchCompanionAvailable_Proxy( 
+    ISearchAssistantOC3 * This,
+    /* [retval][out] */ VARIANT_BOOL *pbAvailable);
+
+
+void __RPC_STUB ISearchAssistantOC3_get_SearchCompanionAvailable_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propput] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC3_put_UseSearchCompanion_Proxy( 
+    ISearchAssistantOC3 * This,
+    /* [in] */ VARIANT_BOOL bUseSC);
+
+
+void __RPC_STUB ISearchAssistantOC3_put_UseSearchCompanion_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [id][propget] */ HRESULT STDMETHODCALLTYPE ISearchAssistantOC3_get_UseSearchCompanion_Proxy( 
+    ISearchAssistantOC3 * This,
+    /* [retval][out] */ VARIANT_BOOL *pbUseSC);
+
+
+void __RPC_STUB ISearchAssistantOC3_get_UseSearchCompanion_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __ISearchAssistantOC3_INTERFACE_DEFINED__ */
 
 
 #ifndef ___SearchAssistantEvents_DISPINTERFACE_DEFINED__
@@ -6097,52 +7147,52 @@ EXTERN_C const IID DIID__SearchAssistantEvents;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            _SearchAssistantEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            _SearchAssistantEvents * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            _SearchAssistantEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            _SearchAssistantEvents * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            _SearchAssistantEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            _SearchAssistantEvents * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            _SearchAssistantEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            _SearchAssistantEvents * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            _SearchAssistantEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            _SearchAssistantEvents * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            _SearchAssistantEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            _SearchAssistantEvents * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            _SearchAssistantEvents __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            _SearchAssistantEvents * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } _SearchAssistantEventsVtbl;
 
     interface _SearchAssistantEvents
     {
-        CONST_VTBL struct _SearchAssistantEventsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct _SearchAssistantEventsVtbl *lpVtbl;
     };
 
     
@@ -6201,4 +7251,3 @@ SearchAssistantOC;
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

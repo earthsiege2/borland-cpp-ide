@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Sat Jul 31 00:53:16 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for confpriv.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -20,7 +18,7 @@
 
 /* verify that the <rpcndr.h> version is high enough to compile this file*/
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
-#define __REQUIRED_RPCNDR_H_VERSION__ 440
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
 
 #include "rpc.h"
@@ -38,12 +36,16 @@
 #ifndef __confpriv_h__
 #define __confpriv_h__
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
 /* Forward Declarations */ 
 
-#ifndef __ITParticipant_FWD_DEFINED__
-#define __ITParticipant_FWD_DEFINED__
-typedef interface ITParticipant ITParticipant;
-#endif 	/* __ITParticipant_FWD_DEFINED__ */
+#ifndef __IDummy_FWD_DEFINED__
+#define __IDummy_FWD_DEFINED__
+typedef interface IDummy IDummy;
+#endif 	/* __IDummy_FWD_DEFINED__ */
 
 
 #ifndef __ITLocalParticipant_FWD_DEFINED__
@@ -76,173 +78,78 @@ typedef interface ITParticipantEvent ITParticipantEvent;
 #endif 	/* __ITParticipantEvent_FWD_DEFINED__ */
 
 
+#ifndef __IMulticastControl_FWD_DEFINED__
+#define __IMulticastControl_FWD_DEFINED__
+typedef interface IMulticastControl IMulticastControl;
+#endif 	/* __IMulticastControl_FWD_DEFINED__ */
+
+
 /* header files for imported files */
-#include "tapi3if.h"
+#include "ipmsp.h"
 
 #ifdef __cplusplus
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_confpriv_0000 */
 /* [local] */ 
 
-/* Copyright (c) 1998-1999  Microsoft Corporation  */
-#define	MAX_PARTICIPANT_TYPED_INFO_LENGTH	( 256 )
-
+/* Copyright (c) Microsoft Corporation. All rights reserved.*/
 typedef 
-enum PARTICIPANT_TYPED_INFO
-    {	PTI_CANONICALNAME	= 0,
-	PTI_NAME	= PTI_CANONICALNAME + 1,
-	PTI_EMAILADDRESS	= PTI_NAME + 1,
-	PTI_PHONENUMBER	= PTI_EMAILADDRESS + 1,
-	PTI_LOCATION	= PTI_PHONENUMBER + 1,
-	PTI_TOOL	= PTI_LOCATION + 1,
-	PTI_NOTES	= PTI_TOOL + 1,
-	PTI_PRIVATE	= PTI_NOTES + 1
-    }	PARTICIPANT_TYPED_INFO;
-
-typedef 
-enum PARTICIPANT_EVENT
-    {	PE_NEW_PARTICIPANT	= 0,
-	PE_INFO_CHANGE	= PE_NEW_PARTICIPANT + 1,
-	PE_PARTICIPANT_LEAVE	= PE_INFO_CHANGE + 1,
-	PE_NEW_SUBSTREAM	= PE_PARTICIPANT_LEAVE + 1,
-	PE_SUBSTREAM_REMOVED	= PE_NEW_SUBSTREAM + 1,
-	PE_SUBSTREAM_MAPPED	= PE_SUBSTREAM_REMOVED + 1,
-	PE_SUBSTREAM_UNMAPPED	= PE_SUBSTREAM_MAPPED + 1,
-	PE_PARTICIPANT_TIMEOUT	= PE_SUBSTREAM_UNMAPPED + 1,
-	PE_PARTICIPANT_RECOVERED	= PE_PARTICIPANT_TIMEOUT + 1,
-	PE_PARTICIPANT_ACTIVE	= PE_PARTICIPANT_RECOVERED + 1,
-	PE_PARTICIPANT_INACTIVE	= PE_PARTICIPANT_ACTIVE + 1,
-	PE_LOCAL_TALKING	= PE_PARTICIPANT_INACTIVE + 1,
-	PE_LOCAL_SILENT	= PE_LOCAL_TALKING + 1
-    }	PARTICIPANT_EVENT;
+enum MULTICAST_LOOPBACK_MODE
+    {	MM_NO_LOOPBACK	= 0,
+	MM_FULL_LOOPBACK	= MM_NO_LOOPBACK + 1,
+	MM_SELECTIVE_LOOPBACK	= MM_FULL_LOOPBACK + 1
+    } 	MULTICAST_LOOPBACK_MODE;
 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_confpriv_0000_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_confpriv_0000_v0_0_s_ifspec;
 
-#ifndef __ITParticipant_INTERFACE_DEFINED__
-#define __ITParticipant_INTERFACE_DEFINED__
+#ifndef __IDummy_INTERFACE_DEFINED__
+#define __IDummy_INTERFACE_DEFINED__
 
-/* interface ITParticipant */
-/* [object][dual][unique][helpstring][uuid] */ 
+/* interface IDummy */
+/* [object][unique][helpstring][uuid] */ 
 
 
-EXTERN_C const IID IID_ITParticipant;
+EXTERN_C const IID IID_IDummy;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    MIDL_INTERFACE("5899b820-5a34-11d2-95a0-00a0244d2298")
-    ITParticipant : public IDispatch
+    MIDL_INTERFACE("0d7ca54a-d252-4fcb-9104-f6ddd310b3f9")
+    IDummy : public IUnknown
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParticipantTypedInfo( 
-            /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-            /* [retval][out] */ BSTR __RPC_FAR *ppInfo) = 0;
-        
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MediaTypes( 
-            /* [retval][out] */ long __RPC_FAR *plMediaType) = 0;
-        
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Status( 
-            /* [in] */ ITStream __RPC_FAR *pITStream,
-            /* [in] */ VARIANT_BOOL fEnable) = 0;
-        
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [in] */ ITStream __RPC_FAR *pITStream,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pStatus) = 0;
-        
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Streams( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant) = 0;
-        
-        virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE EnumerateStreams( 
-            /* [retval][out] */ IEnumStream __RPC_FAR *__RPC_FAR *ppEnumStream) = 0;
-        
     };
     
 #else 	/* C style interface */
 
-    typedef struct ITParticipantVtbl
+    typedef struct IDummyVtbl
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITParticipant __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDummy * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITParticipant __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDummy * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITParticipant __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ITParticipant __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ITParticipant __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ITParticipant __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
-        
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ITParticipant __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
-        
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ParticipantTypedInfo )( 
-            ITParticipant __RPC_FAR * This,
-            /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-            /* [retval][out] */ BSTR __RPC_FAR *ppInfo);
-        
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MediaTypes )( 
-            ITParticipant __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plMediaType);
-        
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Status )( 
-            ITParticipant __RPC_FAR * This,
-            /* [in] */ ITStream __RPC_FAR *pITStream,
-            /* [in] */ VARIANT_BOOL fEnable);
-        
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Status )( 
-            ITParticipant __RPC_FAR * This,
-            /* [in] */ ITStream __RPC_FAR *pITStream,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pStatus);
-        
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Streams )( 
-            ITParticipant __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
-        
-        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateStreams )( 
-            ITParticipant __RPC_FAR * This,
-            /* [retval][out] */ IEnumStream __RPC_FAR *__RPC_FAR *ppEnumStream);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDummy * This);
         
         END_INTERFACE
-    } ITParticipantVtbl;
+    } IDummyVtbl;
 
-    interface ITParticipant
+    interface IDummy
     {
-        CONST_VTBL struct ITParticipantVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDummyVtbl *lpVtbl;
     };
 
     
@@ -250,46 +157,15 @@ EXTERN_C const IID IID_ITParticipant;
 #ifdef COBJMACROS
 
 
-#define ITParticipant_QueryInterface(This,riid,ppvObject)	\
+#define IDummy_QueryInterface(This,riid,ppvObject)	\
     (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
 
-#define ITParticipant_AddRef(This)	\
+#define IDummy_AddRef(This)	\
     (This)->lpVtbl -> AddRef(This)
 
-#define ITParticipant_Release(This)	\
+#define IDummy_Release(This)	\
     (This)->lpVtbl -> Release(This)
 
-
-#define ITParticipant_GetTypeInfoCount(This,pctinfo)	\
-    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
-
-#define ITParticipant_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
-    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
-
-#define ITParticipant_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
-    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
-
-#define ITParticipant_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
-    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
-
-
-#define ITParticipant_get_ParticipantTypedInfo(This,InfoType,ppInfo)	\
-    (This)->lpVtbl -> get_ParticipantTypedInfo(This,InfoType,ppInfo)
-
-#define ITParticipant_get_MediaTypes(This,plMediaType)	\
-    (This)->lpVtbl -> get_MediaTypes(This,plMediaType)
-
-#define ITParticipant_put_Status(This,pITStream,fEnable)	\
-    (This)->lpVtbl -> put_Status(This,pITStream,fEnable)
-
-#define ITParticipant_get_Status(This,pITStream,pStatus)	\
-    (This)->lpVtbl -> get_Status(This,pITStream,pStatus)
-
-#define ITParticipant_get_Streams(This,pVariant)	\
-    (This)->lpVtbl -> get_Streams(This,pVariant)
-
-#define ITParticipant_EnumerateStreams(This,ppEnumStream)	\
-    (This)->lpVtbl -> EnumerateStreams(This,ppEnumStream)
 
 #endif /* COBJMACROS */
 
@@ -298,83 +174,8 @@ EXTERN_C const IID IID_ITParticipant;
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipant_get_ParticipantTypedInfo_Proxy( 
-    ITParticipant __RPC_FAR * This,
-    /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-    /* [retval][out] */ BSTR __RPC_FAR *ppInfo);
 
-
-void __RPC_STUB ITParticipant_get_ParticipantTypedInfo_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipant_get_MediaTypes_Proxy( 
-    ITParticipant __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plMediaType);
-
-
-void __RPC_STUB ITParticipant_get_MediaTypes_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITParticipant_put_Status_Proxy( 
-    ITParticipant __RPC_FAR * This,
-    /* [in] */ ITStream __RPC_FAR *pITStream,
-    /* [in] */ VARIANT_BOOL fEnable);
-
-
-void __RPC_STUB ITParticipant_put_Status_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipant_get_Status_Proxy( 
-    ITParticipant __RPC_FAR * This,
-    /* [in] */ ITStream __RPC_FAR *pITStream,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pStatus);
-
-
-void __RPC_STUB ITParticipant_get_Status_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipant_get_Streams_Proxy( 
-    ITParticipant __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
-
-
-void __RPC_STUB ITParticipant_get_Streams_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-/* [hidden][id] */ HRESULT STDMETHODCALLTYPE ITParticipant_EnumerateStreams_Proxy( 
-    ITParticipant __RPC_FAR * This,
-    /* [retval][out] */ IEnumStream __RPC_FAR *__RPC_FAR *ppEnumStream);
-
-
-void __RPC_STUB ITParticipant_EnumerateStreams_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __ITParticipant_INTERFACE_DEFINED__ */
+#endif 	/* __IDummy_INTERFACE_DEFINED__ */
 
 
 #ifndef __ITLocalParticipant_INTERFACE_DEFINED__
@@ -394,11 +195,11 @@ EXTERN_C const IID IID_ITLocalParticipant;
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LocalParticipantTypedInfo( 
             /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-            /* [retval][out] */ BSTR __RPC_FAR *ppInfo) = 0;
+            /* [retval][out] */ BSTR *ppInfo) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LocalParticipantTypedInfo( 
             /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-            /* [in] */ BSTR ppInfo) = 0;
+            /* [in] */ BSTR pInfo) = 0;
         
     };
     
@@ -408,62 +209,62 @@ EXTERN_C const IID IID_ITLocalParticipant;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITLocalParticipant __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITLocalParticipant * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITLocalParticipant __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITLocalParticipant * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITLocalParticipant __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITLocalParticipant * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ITLocalParticipant __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITLocalParticipant * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ITLocalParticipant __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITLocalParticipant * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ITLocalParticipant __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITLocalParticipant * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ITLocalParticipant __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITLocalParticipant * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocalParticipantTypedInfo )( 
-            ITLocalParticipant __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LocalParticipantTypedInfo )( 
+            ITLocalParticipant * This,
             /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-            /* [retval][out] */ BSTR __RPC_FAR *ppInfo);
+            /* [retval][out] */ BSTR *ppInfo);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocalParticipantTypedInfo )( 
-            ITLocalParticipant __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LocalParticipantTypedInfo )( 
+            ITLocalParticipant * This,
             /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-            /* [in] */ BSTR ppInfo);
+            /* [in] */ BSTR pInfo);
         
         END_INTERFACE
     } ITLocalParticipantVtbl;
 
     interface ITLocalParticipant
     {
-        CONST_VTBL struct ITLocalParticipantVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITLocalParticipantVtbl *lpVtbl;
     };
 
     
@@ -497,8 +298,8 @@ EXTERN_C const IID IID_ITLocalParticipant;
 #define ITLocalParticipant_get_LocalParticipantTypedInfo(This,InfoType,ppInfo)	\
     (This)->lpVtbl -> get_LocalParticipantTypedInfo(This,InfoType,ppInfo)
 
-#define ITLocalParticipant_put_LocalParticipantTypedInfo(This,InfoType,ppInfo)	\
-    (This)->lpVtbl -> put_LocalParticipantTypedInfo(This,InfoType,ppInfo)
+#define ITLocalParticipant_put_LocalParticipantTypedInfo(This,InfoType,pInfo)	\
+    (This)->lpVtbl -> put_LocalParticipantTypedInfo(This,InfoType,pInfo)
 
 #endif /* COBJMACROS */
 
@@ -508,9 +309,9 @@ EXTERN_C const IID IID_ITLocalParticipant;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITLocalParticipant_get_LocalParticipantTypedInfo_Proxy( 
-    ITLocalParticipant __RPC_FAR * This,
+    ITLocalParticipant * This,
     /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-    /* [retval][out] */ BSTR __RPC_FAR *ppInfo);
+    /* [retval][out] */ BSTR *ppInfo);
 
 
 void __RPC_STUB ITLocalParticipant_get_LocalParticipantTypedInfo_Stub(
@@ -521,9 +322,9 @@ void __RPC_STUB ITLocalParticipant_get_LocalParticipantTypedInfo_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITLocalParticipant_put_LocalParticipantTypedInfo_Proxy( 
-    ITLocalParticipant __RPC_FAR * This,
+    ITLocalParticipant * This,
     /* [in] */ PARTICIPANT_TYPED_INFO InfoType,
-    /* [in] */ BSTR ppInfo);
+    /* [in] */ BSTR pInfo);
 
 
 void __RPC_STUB ITLocalParticipant_put_LocalParticipantTypedInfo_Stub(
@@ -554,8 +355,8 @@ EXTERN_C const IID IID_IEnumParticipant;
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [out] */ ITParticipant __RPC_FAR *__RPC_FAR *ppElements,
-            /* [full][out][in] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [out] */ ITParticipant **ppElements,
+            /* [full][out][in] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
@@ -563,7 +364,7 @@ EXTERN_C const IID IID_IEnumParticipant;
             /* [in] */ ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumParticipant __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+            /* [retval][out] */ IEnumParticipant **ppEnum) = 0;
         
     };
     
@@ -573,40 +374,40 @@ EXTERN_C const IID IID_IEnumParticipant;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumParticipant __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumParticipant * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumParticipant __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumParticipant * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumParticipant __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumParticipant * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumParticipant __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumParticipant * This,
             /* [in] */ ULONG celt,
-            /* [out] */ ITParticipant __RPC_FAR *__RPC_FAR *ppElements,
-            /* [full][out][in] */ ULONG __RPC_FAR *pceltFetched);
+            /* [out] */ ITParticipant **ppElements,
+            /* [full][out][in] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumParticipant __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumParticipant * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumParticipant __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumParticipant * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumParticipant __RPC_FAR * This,
-            /* [retval][out] */ IEnumParticipant __RPC_FAR *__RPC_FAR *ppEnum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumParticipant * This,
+            /* [retval][out] */ IEnumParticipant **ppEnum);
         
         END_INTERFACE
     } IEnumParticipantVtbl;
 
     interface IEnumParticipant
     {
-        CONST_VTBL struct IEnumParticipantVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumParticipantVtbl *lpVtbl;
     };
 
     
@@ -644,10 +445,10 @@ EXTERN_C const IID IID_IEnumParticipant;
 
 
 HRESULT STDMETHODCALLTYPE IEnumParticipant_Next_Proxy( 
-    IEnumParticipant __RPC_FAR * This,
+    IEnumParticipant * This,
     /* [in] */ ULONG celt,
-    /* [out] */ ITParticipant __RPC_FAR *__RPC_FAR *ppElements,
-    /* [full][out][in] */ ULONG __RPC_FAR *pceltFetched);
+    /* [out] */ ITParticipant **ppElements,
+    /* [full][out][in] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumParticipant_Next_Stub(
@@ -658,7 +459,7 @@ void __RPC_STUB IEnumParticipant_Next_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumParticipant_Reset_Proxy( 
-    IEnumParticipant __RPC_FAR * This);
+    IEnumParticipant * This);
 
 
 void __RPC_STUB IEnumParticipant_Reset_Stub(
@@ -669,7 +470,7 @@ void __RPC_STUB IEnumParticipant_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumParticipant_Skip_Proxy( 
-    IEnumParticipant __RPC_FAR * This,
+    IEnumParticipant * This,
     /* [in] */ ULONG celt);
 
 
@@ -681,8 +482,8 @@ void __RPC_STUB IEnumParticipant_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumParticipant_Clone_Proxy( 
-    IEnumParticipant __RPC_FAR * This,
-    /* [retval][out] */ IEnumParticipant __RPC_FAR *__RPC_FAR *ppEnum);
+    IEnumParticipant * This,
+    /* [retval][out] */ IEnumParticipant **ppEnum);
 
 
 void __RPC_STUB IEnumParticipant_Clone_Stub(
@@ -712,10 +513,10 @@ EXTERN_C const IID IID_ITParticipantControl;
     {
     public:
         virtual /* [hidden][id] */ HRESULT STDMETHODCALLTYPE EnumerateParticipants( 
-            /* [retval][out] */ IEnumParticipant __RPC_FAR *__RPC_FAR *ppEnumParticipants) = 0;
+            /* [retval][out] */ IEnumParticipant **ppEnumParticipants) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Participants( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant) = 0;
+            /* [retval][out] */ VARIANT *pVariant) = 0;
         
     };
     
@@ -725,60 +526,60 @@ EXTERN_C const IID IID_ITParticipantControl;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITParticipantControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITParticipantControl * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITParticipantControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITParticipantControl * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITParticipantControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITParticipantControl * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ITParticipantControl __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITParticipantControl * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ITParticipantControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITParticipantControl * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ITParticipantControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITParticipantControl * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ITParticipantControl __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITParticipantControl * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateParticipants )( 
-            ITParticipantControl __RPC_FAR * This,
-            /* [retval][out] */ IEnumParticipant __RPC_FAR *__RPC_FAR *ppEnumParticipants);
+        /* [hidden][id] */ HRESULT ( STDMETHODCALLTYPE *EnumerateParticipants )( 
+            ITParticipantControl * This,
+            /* [retval][out] */ IEnumParticipant **ppEnumParticipants);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Participants )( 
-            ITParticipantControl __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Participants )( 
+            ITParticipantControl * This,
+            /* [retval][out] */ VARIANT *pVariant);
         
         END_INTERFACE
     } ITParticipantControlVtbl;
 
     interface ITParticipantControl
     {
-        CONST_VTBL struct ITParticipantControlVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITParticipantControlVtbl *lpVtbl;
     };
 
     
@@ -823,8 +624,8 @@ EXTERN_C const IID IID_ITParticipantControl;
 
 
 /* [hidden][id] */ HRESULT STDMETHODCALLTYPE ITParticipantControl_EnumerateParticipants_Proxy( 
-    ITParticipantControl __RPC_FAR * This,
-    /* [retval][out] */ IEnumParticipant __RPC_FAR *__RPC_FAR *ppEnumParticipants);
+    ITParticipantControl * This,
+    /* [retval][out] */ IEnumParticipant **ppEnumParticipants);
 
 
 void __RPC_STUB ITParticipantControl_EnumerateParticipants_Stub(
@@ -835,8 +636,8 @@ void __RPC_STUB ITParticipantControl_EnumerateParticipants_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipantControl_get_Participants_Proxy( 
-    ITParticipantControl __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pVariant);
+    ITParticipantControl * This,
+    /* [retval][out] */ VARIANT *pVariant);
 
 
 void __RPC_STUB ITParticipantControl_get_Participants_Stub(
@@ -866,16 +667,16 @@ EXTERN_C const IID IID_ITParticipantSubStreamControl;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubStreamFromParticipant( 
-            /* [in] */ ITParticipant __RPC_FAR *pParticipant,
-            /* [retval][out] */ ITSubStream __RPC_FAR *__RPC_FAR *ppITSubStream) = 0;
+            /* [in] */ ITParticipant *pParticipant,
+            /* [retval][out] */ ITSubStream **ppITSubStream) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParticipantFromSubStream( 
-            /* [in] */ ITSubStream __RPC_FAR *pITSubStream,
-            /* [retval][out] */ ITParticipant __RPC_FAR *__RPC_FAR *ppParticipant) = 0;
+            /* [in] */ ITSubStream *pITSubStream,
+            /* [retval][out] */ ITParticipant **ppParticipant) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SwitchTerminalToSubStream( 
-            /* [in] */ ITTerminal __RPC_FAR *pITTerminal,
-            /* [in] */ ITSubStream __RPC_FAR *pITSubStream) = 0;
+            /* [in] */ ITTerminal *pITTerminal,
+            /* [in] */ ITSubStream *pITSubStream) = 0;
         
     };
     
@@ -885,67 +686,67 @@ EXTERN_C const IID IID_ITParticipantSubStreamControl;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITParticipantSubStreamControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITParticipantSubStreamControl * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITParticipantSubStreamControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITParticipantSubStreamControl * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITParticipantSubStreamControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITParticipantSubStreamControl * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ITParticipantSubStreamControl __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITParticipantSubStreamControl * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ITParticipantSubStreamControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITParticipantSubStreamControl * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ITParticipantSubStreamControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITParticipantSubStreamControl * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ITParticipantSubStreamControl __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITParticipantSubStreamControl * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SubStreamFromParticipant )( 
-            ITParticipantSubStreamControl __RPC_FAR * This,
-            /* [in] */ ITParticipant __RPC_FAR *pParticipant,
-            /* [retval][out] */ ITSubStream __RPC_FAR *__RPC_FAR *ppITSubStream);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubStreamFromParticipant )( 
+            ITParticipantSubStreamControl * This,
+            /* [in] */ ITParticipant *pParticipant,
+            /* [retval][out] */ ITSubStream **ppITSubStream);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ParticipantFromSubStream )( 
-            ITParticipantSubStreamControl __RPC_FAR * This,
-            /* [in] */ ITSubStream __RPC_FAR *pITSubStream,
-            /* [retval][out] */ ITParticipant __RPC_FAR *__RPC_FAR *ppParticipant);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParticipantFromSubStream )( 
+            ITParticipantSubStreamControl * This,
+            /* [in] */ ITSubStream *pITSubStream,
+            /* [retval][out] */ ITParticipant **ppParticipant);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SwitchTerminalToSubStream )( 
-            ITParticipantSubStreamControl __RPC_FAR * This,
-            /* [in] */ ITTerminal __RPC_FAR *pITTerminal,
-            /* [in] */ ITSubStream __RPC_FAR *pITSubStream);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SwitchTerminalToSubStream )( 
+            ITParticipantSubStreamControl * This,
+            /* [in] */ ITTerminal *pITTerminal,
+            /* [in] */ ITSubStream *pITSubStream);
         
         END_INTERFACE
     } ITParticipantSubStreamControlVtbl;
 
     interface ITParticipantSubStreamControl
     {
-        CONST_VTBL struct ITParticipantSubStreamControlVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITParticipantSubStreamControlVtbl *lpVtbl;
     };
 
     
@@ -993,9 +794,9 @@ EXTERN_C const IID IID_ITParticipantSubStreamControl;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipantSubStreamControl_get_SubStreamFromParticipant_Proxy( 
-    ITParticipantSubStreamControl __RPC_FAR * This,
-    /* [in] */ ITParticipant __RPC_FAR *pParticipant,
-    /* [retval][out] */ ITSubStream __RPC_FAR *__RPC_FAR *ppITSubStream);
+    ITParticipantSubStreamControl * This,
+    /* [in] */ ITParticipant *pParticipant,
+    /* [retval][out] */ ITSubStream **ppITSubStream);
 
 
 void __RPC_STUB ITParticipantSubStreamControl_get_SubStreamFromParticipant_Stub(
@@ -1006,9 +807,9 @@ void __RPC_STUB ITParticipantSubStreamControl_get_SubStreamFromParticipant_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipantSubStreamControl_get_ParticipantFromSubStream_Proxy( 
-    ITParticipantSubStreamControl __RPC_FAR * This,
-    /* [in] */ ITSubStream __RPC_FAR *pITSubStream,
-    /* [retval][out] */ ITParticipant __RPC_FAR *__RPC_FAR *ppParticipant);
+    ITParticipantSubStreamControl * This,
+    /* [in] */ ITSubStream *pITSubStream,
+    /* [retval][out] */ ITParticipant **ppParticipant);
 
 
 void __RPC_STUB ITParticipantSubStreamControl_get_ParticipantFromSubStream_Stub(
@@ -1019,9 +820,9 @@ void __RPC_STUB ITParticipantSubStreamControl_get_ParticipantFromSubStream_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITParticipantSubStreamControl_SwitchTerminalToSubStream_Proxy( 
-    ITParticipantSubStreamControl __RPC_FAR * This,
-    /* [in] */ ITTerminal __RPC_FAR *pITTerminal,
-    /* [in] */ ITSubStream __RPC_FAR *pITSubStream);
+    ITParticipantSubStreamControl * This,
+    /* [in] */ ITTerminal *pITTerminal,
+    /* [in] */ ITSubStream *pITSubStream);
 
 
 void __RPC_STUB ITParticipantSubStreamControl_SwitchTerminalToSubStream_Stub(
@@ -1051,13 +852,13 @@ EXTERN_C const IID IID_ITParticipantEvent;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Event( 
-            /* [retval][out] */ PARTICIPANT_EVENT __RPC_FAR *pParticipantEvent) = 0;
+            /* [retval][out] */ PARTICIPANT_EVENT *pParticipantEvent) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Participant( 
-            /* [retval][out] */ ITParticipant __RPC_FAR *__RPC_FAR *ppParticipant) = 0;
+            /* [retval][out] */ ITParticipant **ppParticipant) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubStream( 
-            /* [retval][out] */ ITSubStream __RPC_FAR *__RPC_FAR *ppSubStream) = 0;
+            /* [retval][out] */ ITSubStream **ppSubStream) = 0;
         
     };
     
@@ -1067,64 +868,64 @@ EXTERN_C const IID IID_ITParticipantEvent;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITParticipantEvent __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITParticipantEvent * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITParticipantEvent __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITParticipantEvent * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITParticipantEvent __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITParticipantEvent * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ITParticipantEvent __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ITParticipantEvent * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ITParticipantEvent __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ITParticipantEvent * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ITParticipantEvent __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ITParticipantEvent * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ITParticipantEvent __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ITParticipantEvent * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Event )( 
-            ITParticipantEvent __RPC_FAR * This,
-            /* [retval][out] */ PARTICIPANT_EVENT __RPC_FAR *pParticipantEvent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Event )( 
+            ITParticipantEvent * This,
+            /* [retval][out] */ PARTICIPANT_EVENT *pParticipantEvent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Participant )( 
-            ITParticipantEvent __RPC_FAR * This,
-            /* [retval][out] */ ITParticipant __RPC_FAR *__RPC_FAR *ppParticipant);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Participant )( 
+            ITParticipantEvent * This,
+            /* [retval][out] */ ITParticipant **ppParticipant);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SubStream )( 
-            ITParticipantEvent __RPC_FAR * This,
-            /* [retval][out] */ ITSubStream __RPC_FAR *__RPC_FAR *ppSubStream);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubStream )( 
+            ITParticipantEvent * This,
+            /* [retval][out] */ ITSubStream **ppSubStream);
         
         END_INTERFACE
     } ITParticipantEventVtbl;
 
     interface ITParticipantEvent
     {
-        CONST_VTBL struct ITParticipantEventVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITParticipantEventVtbl *lpVtbl;
     };
 
     
@@ -1172,8 +973,8 @@ EXTERN_C const IID IID_ITParticipantEvent;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipantEvent_get_Event_Proxy( 
-    ITParticipantEvent __RPC_FAR * This,
-    /* [retval][out] */ PARTICIPANT_EVENT __RPC_FAR *pParticipantEvent);
+    ITParticipantEvent * This,
+    /* [retval][out] */ PARTICIPANT_EVENT *pParticipantEvent);
 
 
 void __RPC_STUB ITParticipantEvent_get_Event_Stub(
@@ -1184,8 +985,8 @@ void __RPC_STUB ITParticipantEvent_get_Event_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipantEvent_get_Participant_Proxy( 
-    ITParticipantEvent __RPC_FAR * This,
-    /* [retval][out] */ ITParticipant __RPC_FAR *__RPC_FAR *ppParticipant);
+    ITParticipantEvent * This,
+    /* [retval][out] */ ITParticipant **ppParticipant);
 
 
 void __RPC_STUB ITParticipantEvent_get_Participant_Stub(
@@ -1196,8 +997,8 @@ void __RPC_STUB ITParticipantEvent_get_Participant_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITParticipantEvent_get_SubStream_Proxy( 
-    ITParticipantEvent __RPC_FAR * This,
-    /* [retval][out] */ ITSubStream __RPC_FAR *__RPC_FAR *ppSubStream);
+    ITParticipantEvent * This,
+    /* [retval][out] */ ITSubStream **ppSubStream);
 
 
 void __RPC_STUB ITParticipantEvent_get_SubStream_Stub(
@@ -1211,17 +1012,171 @@ void __RPC_STUB ITParticipantEvent_get_SubStream_Stub(
 #endif 	/* __ITParticipantEvent_INTERFACE_DEFINED__ */
 
 
+#ifndef __IMulticastControl_INTERFACE_DEFINED__
+#define __IMulticastControl_INTERFACE_DEFINED__
+
+/* interface IMulticastControl */
+/* [object][dual][unique][helpstring][uuid] */ 
+
+
+EXTERN_C const IID IID_IMulticastControl;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("410fa507-4dc6-415a-9014-633875d5406e")
+    IMulticastControl : public IDispatch
+    {
+    public:
+        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LoopbackMode( 
+            /* [retval][out] */ MULTICAST_LOOPBACK_MODE *pMode) = 0;
+        
+        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LoopbackMode( 
+            /* [in] */ MULTICAST_LOOPBACK_MODE mode) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IMulticastControlVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IMulticastControl * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IMulticastControl * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IMulticastControl * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IMulticastControl * This,
+            /* [out] */ UINT *pctinfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IMulticastControl * This,
+            /* [in] */ UINT iTInfo,
+            /* [in] */ LCID lcid,
+            /* [out] */ ITypeInfo **ppTInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IMulticastControl * This,
+            /* [in] */ REFIID riid,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
+            /* [in] */ UINT cNames,
+            /* [in] */ LCID lcid,
+            /* [size_is][out] */ DISPID *rgDispId);
+        
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IMulticastControl * This,
+            /* [in] */ DISPID dispIdMember,
+            /* [in] */ REFIID riid,
+            /* [in] */ LCID lcid,
+            /* [in] */ WORD wFlags,
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
+        
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoopbackMode )( 
+            IMulticastControl * This,
+            /* [retval][out] */ MULTICAST_LOOPBACK_MODE *pMode);
+        
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoopbackMode )( 
+            IMulticastControl * This,
+            /* [in] */ MULTICAST_LOOPBACK_MODE mode);
+        
+        END_INTERFACE
+    } IMulticastControlVtbl;
+
+    interface IMulticastControl
+    {
+        CONST_VTBL struct IMulticastControlVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IMulticastControl_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IMulticastControl_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IMulticastControl_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IMulticastControl_GetTypeInfoCount(This,pctinfo)	\
+    (This)->lpVtbl -> GetTypeInfoCount(This,pctinfo)
+
+#define IMulticastControl_GetTypeInfo(This,iTInfo,lcid,ppTInfo)	\
+    (This)->lpVtbl -> GetTypeInfo(This,iTInfo,lcid,ppTInfo)
+
+#define IMulticastControl_GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)	\
+    (This)->lpVtbl -> GetIDsOfNames(This,riid,rgszNames,cNames,lcid,rgDispId)
+
+#define IMulticastControl_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
+    (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
+
+
+#define IMulticastControl_get_LoopbackMode(This,pMode)	\
+    (This)->lpVtbl -> get_LoopbackMode(This,pMode)
+
+#define IMulticastControl_put_LoopbackMode(This,mode)	\
+    (This)->lpVtbl -> put_LoopbackMode(This,mode)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMulticastControl_get_LoopbackMode_Proxy( 
+    IMulticastControl * This,
+    /* [retval][out] */ MULTICAST_LOOPBACK_MODE *pMode);
+
+
+void __RPC_STUB IMulticastControl_get_LoopbackMode_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMulticastControl_put_LoopbackMode_Proxy( 
+    IMulticastControl * This,
+    /* [in] */ MULTICAST_LOOPBACK_MODE mode);
+
+
+void __RPC_STUB IMulticastControl_put_LoopbackMode_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IMulticastControl_INTERFACE_DEFINED__ */
+
+
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
+unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
+void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
 /* end of Additional Prototypes */
 
@@ -1232,4 +1187,3 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

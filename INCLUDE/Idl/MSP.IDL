@@ -1,8 +1,7 @@
 //
-// Copyright (c) 1998-1999  Microsoft Corporation
-//
+// Copyright (c) Microsoft Corporation. All rights reserved.
 
-cpp_quote("/* Copyright (c) 1998-1999  Microsoft Corporation  */")
+cpp_quote("/* Copyright (c) Microsoft Corporation. All rights reserved.*/")
 
 ///////////////////////////////////////////////////////////////////////////
 // msp.idl : IDL source for Media Service Provider interface
@@ -92,8 +91,11 @@ typedef enum
     CALL_CAUSE_MEDIA_TIMEOUT,
     // the media that carries the stream is temporarily not available.
 
-    CALL_CAUSE_MEDIA_RECOVERED
+    CALL_CAUSE_MEDIA_RECOVERED,
     // the media goes back to normal from a temporary deny of service.
+
+	CALL_CAUSE_QUALITY_OF_SERVICE
+	// the event is because qos does/doesn't allow the media to send.
 
 } MSP_CALL_EVENT_CAUSE;
 
@@ -102,8 +104,11 @@ typedef enum
     ME_ADDRESS_EVENT,
     ME_CALL_EVENT,
     ME_TSP_DATA,
-    ME_PRIVATE_EVENT
-
+    ME_PRIVATE_EVENT,
+    ME_ASR_TERMINAL_EVENT,
+    ME_TTS_TERMINAL_EVENT,
+    ME_FILE_TERMINAL_EVENT,
+    ME_TONE_TERMINAL_EVENT
 } MSP_EVENT;
 
 
@@ -151,6 +156,36 @@ typedef struct
 
         } MSP_PRIVATE_EVENT_INFO;
 
+        [case(ME_FILE_TERMINAL_EVENT)]
+        struct
+        {
+            ITTerminal                      * pParentFileTerminal;
+            ITFileTrack                     * pFileTrack;
+            TERMINAL_MEDIA_STATE              TerminalMediaState;
+            FT_STATE_EVENT_CAUSE              ftecEventCause;
+            HRESULT                           hrErrorCode;
+        } MSP_FILE_TERMINAL_EVENT_INFO;
+
+        [case(ME_ASR_TERMINAL_EVENT)]
+        struct
+        {
+            ITTerminal                      * pASRTerminal;
+            HRESULT                           hrErrorCode;
+        } MSP_ASR_TERMINAL_EVENT_INFO;
+
+        [case(ME_TTS_TERMINAL_EVENT)]
+        struct
+        {
+            ITTerminal                      * pTTSTerminal;
+            HRESULT                           hrErrorCode;
+        } MSP_TTS_TERMINAL_EVENT_INFO;
+
+        [case(ME_TONE_TERMINAL_EVENT)]
+        struct
+        {
+            ITTerminal                      * pToneTerminal;
+            HRESULT                           hrErrorCode;
+        } MSP_TONE_TERMINAL_EVENT_INFO;
     };
 
 } MSP_EVENT_INFO;
@@ -159,6 +194,33 @@ typedef struct
 /////////////////////////////////////////////////////////////////////////////
 // Interface definitions
 /////////////////////////////////////////////////////////////////////////////
+
+[
+    uuid(6E0887BE-BA1A-492e-BD10-4020EC5E33E0),
+    helpstring("ITPluggableTerminalEventSink"),
+    pointer_default(unique)
+]
+interface ITPluggableTerminalEventSink : IUnknown
+{
+    HRESULT FireEvent(
+        [in] const MSP_EVENT_INFO *pMspEventInfo
+        );
+}
+
+[
+    uuid(F7115709-A216-4957-A759-060AB32A90D1),
+    helpstring("ITPluggableTerminalEventSinkRegistration"),
+    pointer_default(unique)
+]
+interface ITPluggableTerminalEventSinkRegistration : IUnknown
+{
+    HRESULT RegisterSink(
+        [in] ITPluggableTerminalEventSink* pEventSink
+        );
+
+    HRESULT UnregisterSink(
+        );
+}
 
 [
     uuid(EE3BD600-3868-11D2-A045-00C04FB6809F),

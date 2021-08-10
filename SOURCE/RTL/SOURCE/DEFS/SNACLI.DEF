@@ -1,316 +1,316 @@
 LIBRARY SNACLI
 EXPORTS
 
-    sepwdomfree                              = 'SNADMOD.DLL'.*
-    sepwdomain                               = 'SNADMOD.DLL'.*
-    seputrtr                                 = 'SNADMOD.DLL'.*
-    seputrsv                                 = 'SNADMOD.DLL'.*
-    seputrsn                                 = 'SNADMOD.DLL'.*
-    seputrlu                                 = 'SNADMOD.DLL'.*
-    seputrhv                                 = 'SNADMOD.DLL'.*
-    seputrdx                                 = 'SNADMOD.DLL'.*
-    seputrdi                                 = 'SNADMOD.DLL'.*
-    seputrdf                                 = 'SNADMOD.DLL'.*
-    seputrcn                                 = 'SNADMOD.DLL'.*
-    seputrc_w                                = 'SNADMOD.DLL'.*
-    seputrc                                  = 'SNADMOD.DLL'.*
-    seputrap                                 = 'SNADMOD.DLL'.*
-    sepulog_w                                = 'SNADMOD.DLL'.*
-    sepibdsd                                 = 'SNADMOD.DLL'.*
-    sepfutoan                                = 'SNADMOD.DLL'.*
-    sepfutoa                                 = 'SNADMOD.DLL'.*
-    sepfatoun                                = 'SNADMOD.DLL'.*
-    sepfatou                                 = 'SNADMOD.DLL'.*
-    sepdvers                                 = 'SNADMOD.DLL'.*
-    sepdusrv                                 = 'SNADMOD.DLL'.*
-    sepduser                                 = 'SNADMOD.DLL'.*
-    sepdusck                                 = 'SNADMOD.DLL'.*
-    sepdtrtp                                 = 'SNADMOD.DLL'.*
-    sepdtrci                                 = 'SNADMOD.DLL'.*
-    sepdtral                                 = 'SNADMOD.DLL'.*
-    sepdtend                                 = 'SNADMOD.DLL'.*
-    sepdsses                                 = 'SNADMOD.DLL'.*
-    sepdsrq                                  = 'SNADMOD.DLL'.*
-    sepdsini                                 = 'SNADMOD.DLL'.*
-    sepdrpip                                 = 'SNADMOD.DLL'.*
-    sepdrout                                 = 'SNADMOD.DLL'.*
-    sepdregnm                                = 'SNADMOD.DLL'.*
-    sepdq2                                   = 'SNADMOD.DLL'.*
-    sepdpop                                  = 'SNADMOD.DLL'.*
-    sepdoutd                                 = 'SNADMOD.DLL'.*
-    sepdopcf                                 = 'SNADMOD.DLL'.*
-    sepdnsrv                                 = 'SNADMOD.DLL'.*
-    sepdnsrc                                 = 'SNADMOD.DLL'.*
-    sepdnode                                 = 'SNADMOD.DLL'.*
-    sepdnmsv                                 = 'SNADMOD.DLL'.*
-    sepdnmss                                 = 'SNADMOD.DLL'.*
-    sepdnmsd                                 = 'SNADMOD.DLL'.*
-    sepdname                                 = 'SNADMOD.DLL'.*
-    sepdlogu                                 = 'SNADMOD.DLL'.*
-    sepdlogi                                 = 'SNADMOD.DLL'.*
-    sepdlink                                 = 'SNADMOD.DLL'.*
-    sepdkilr                                 = 'SNADMOD.DLL'.*
-    sepdinms                                 = 'SNADMOD.DLL'.*
-    sepdinm2                                 = 'SNADMOD.DLL'.*
-    sepdiag                                  = 'SNADMOD.DLL'.*
-    sepdhalt                                 = 'SNADMOD.DLL'.*
-    sepdgstu                                 = 'SNADMOD.DLL'.*
-    sepdgshn                                 = 'SNADMOD.DLL'.*
-    sepdgplp                                 = 'SNADMOD.DLL'.*
-    sepdgorp                                 = 'SNADMOD.DLL'.*
-    sepdgll                                  = 'SNADMOD.DLL'.*
-    sepdgfre                                 = 'SNADMOD.DLL'.*
-    sepdgetinfo                              = 'SNADMOD.DLL'.*
-    sepdgcst                                 = 'SNADMOD.DLL'.*
-    sepdgalc                                 = 'SNADMOD.DLL'.*
-    sepdexec                                 = 'SNADMOD.DLL'.*
-    sepddlck                                 = 'SNADMOD.DLL'.*
-    sepddefl                                 = 'SNADMOD.DLL'.*
-    sepdcrec                                 = 'SNADMOD.DLL'.*
-    sepdconf                                 = 'SNADMOD.DLL'.*
-    sepdcomn                                 = 'SNADMOD.DLL'.*
-    sepdcnap                                 = 'SNADMOD.DLL'.*
-    sepdclps                                 = 'SNADMOD.DLL'.*
-    sepdchnk                                 = 'SNADMOD.DLL'.*
-    sepdchdr                                 = 'SNADMOD.DLL'.*
-    sepdburl                                 = 'SNADMOD.DLL'.*
-    sepdbubl                                 = 'SNADMOD.DLL'.*
-    sbputerm                                 = 'SNADMOD.DLL'.*
-    sbpusend                                 = 'SNADMOD.DLL'.*
-    sbpurcvx                                 = 'SNADMOD.DLL'.*
-    sbpurcv                                  = 'SNADMOD.DLL'.*
-    sbpuinit_dll                             = 'SNADMOD.DLL'.*
-    sbprorsp                                 = 'SNADMOD.DLL'.*
-    sbprlloc                                 = 'SNADMOD.DLL'.*
-    sbprlctr                                 = 'SNADMOD.DLL'.*
-    sbpiglnm                                 = 'SNADMOD.DLL'.*
-    sbpidead                                 = 'SNADMOD.DLL'.*
-    sbpibnob                                 = 'SNADMOD.DLL'.*
-    sbpibhrl                                 = 'SNADMOD.DLL'.*
-    sbpibhgt                                 = 'SNADMOD.DLL'.*
-    sbpiberl                                 = 'SNADMOD.DLL'.*
-    sbpibegt                                 = 'SNADMOD.DLL'.*
-    sbpdterm                                 = 'SNADMOD.DLL'.*
-    sbpdsvst                                 = 'SNADMOD.DLL'.*
-    sbpdout_dll                              = 'SNADMOD.DLL'.*
-    sbpdlocl                                 = 'SNADMOD.DLL'.*
-    sbpdkill                                 = 'SNADMOD.DLL'.*
-    sbpdinit_dll                             = 'SNADMOD.DLL'.*
-    sbpdin                                   = 'SNADMOD.DLL'.*
-    sbpdfind                                 = 'SNADMOD.DLL'.*
-    sbpddropall                              = 'SNADMOD.DLL'.*
-    sbpddrop_client                          = 'SNADMOD.DLL'.*
-    sbpddrop                                 = 'SNADMOD.DLL'.*
-    sbpburel                                 = 'SNADMOD.DLL'.*
-    sbpbumod                                 = 'SNADMOD.DLL'.*
-    sbpbufcp                                 = 'SNADMOD.DLL'.*
-    sbpbubld                                 = 'SNADMOD.DLL'.*
-    init_async                               = 'SNADMOD.DLL'.*
-    get_time                                 = 'SNADMOD.DLL'.*
-    com_mess                                 = 'SNADMOD.DLL'.*
-    WhoIsSponsor                             = 'SNADMOD.DLL'.*
-    WhoIsClient                              = 'SNADMOD.DLL'.*
-    UpdateTransports                         = 'SNADMOD.DLL'.*
-    UpdateShareConfig                        = 'SNADMOD.DLL'.*
-    UpdateConfigTypeAndPath                  = 'SNADMOD.DLL'.*
-    TransportSize                            = 'SNADMOD.DLL'.*
-    StopMailSlotRoute                        = 'SNADMOD.DLL'.*
-    StartSnaLinksEx                          = 'SNADMOD.DLL'.*
-    StartSnaLinks                            = 'SNADMOD.DLL'.*
-    StartNodeLinkService                     = 'SNADMOD.DLL'.*
-    StartMailSlotRoute                       = 'SNADMOD.DLL'.*
-    StartDefaultNode                         = 'SNADMOD.DLL'.*
-    _SnaLog                                  = 'SNADMOD.DLL'.SnaLog
-    SidPack                                  = 'SNADMOD.DLL'.*
-    SetServiceWord                           = 'SNADMOD.DLL'.*
-    SetRegNotifyEvent                        = 'SNADMOD.DLL'.*
-    SetProcessTypes                          = 'SNADMOD.DLL'.*
-    SetPartnerLong                           = 'SNADMOD.DLL'.*
-    SetLtabVersion                           = 'SNADMOD.DLL'.*
-    SetLtabLong                              = 'SNADMOD.DLL'.*
-    SetDomainWord                            = 'SNADMOD.DLL'.*
-    SetDomainLong                            = 'SNADMOD.DLL'.*
-    SetDmodBroadcasts                        = 'SNADMOD.DLL'.*
-    SetConfigUpdateEvent                     = 'SNADMOD.DLL'.*
-    SetConfigCallback                        = 'SNADMOD.DLL'.*
-    ServiceCheckPoint                        = 'SNADMOD.DLL'.*
-    SendToPartner                            = 'SNADMOD.DLL'.*
-    SendDloadMsg                             = 'SNADMOD.DLL'.*
-    SendDatagramTo                           = 'SNADMOD.DLL'.*
-    SendBackupInfoToClient                   = 'SNADMOD.DLL'.*
-    SNAReleaseHeader                         = 'SNADMOD.DLL'.*
-    SNAReleaseElement                        = 'SNADMOD.DLL'.*
-    SNAReleaseBuffer                         = 'SNADMOD.DLL'.*
-    SNAGetUserRecord                         = 'SNADMOD.DLL'.*
-    SNAGetSystemInfo                         = 'SNADMOD.DLL'.*
-    SNAGetHeader                             = 'SNADMOD.DLL'.*
-    SNAGetFreeBufferCount                    = 'SNADMOD.DLL'.*
-    SNAGetElement                            = 'SNADMOD.DLL'.*
-    SNAGetBuffer                             = 'SNADMOD.DLL'.*
-    SNABufferFree                            = 'SNADMOD.DLL'.*
-    SNABufferAlloc                           = 'SNADMOD.DLL'.*
-    RpcUnpack                                = 'SNADMOD.DLL'.*
-    RpcTerm                                  = 'SNADMOD.DLL'.*
-    RpcRequestAllocBuffer                    = 'SNADMOD.DLL'.*
-    RpcRequest                               = 'SNADMOD.DLL'.*
-    RpcPack                                  = 'SNADMOD.DLL'.*
-    RoutePopUpMessage                        = 'SNADMOD.DLL'.*
-    RouteOutdMessage                         = 'SNADMOD.DLL'.*
-    RouteNapMessage                          = 'SNADMOD.DLL'.*
-    RouteDloadMessage                        = 'SNADMOD.DLL'.*
-    RouteDiagMessage                         = 'SNADMOD.DLL'.*
-    RepCfgIfNeeded                           = 'SNADMOD.DLL'.*
-    RemoveSvceEntry                          = 'SNADMOD.DLL'.*
-    RemoveRoutProc                           = 'SNADMOD.DLL'.*
-    ReleaseSNALicenseUnit                    = 'SNADMOD.DLL'.*
-    RPCGetAppcConfig                         = 'SNADMOD.DLL'.*
-    QueryLuAppcCallBack                      = 'SNADMOD.DLL'.*
-    ProcessSnapsMessage                      = 'SNADMOD.DLL'.*
-    ProcessSTUCMsg                           = 'SNADMOD.DLL'.*
-    ProcessRemotePopup                       = 'SNADMOD.DLL'.*
-    ProcessNapMessage                        = 'SNADMOD.DLL'.*
-    ProcessInternalMessage                   = 'SNADMOD.DLL'.*
-    ProcessIncomingMsg                       = 'SNADMOD.DLL'.*
-    NodeSessionsChanged                      = 'SNADMOD.DLL'.*
-    LocalProcessRpc                          = 'SNADMOD.DLL'.*
-    IsPrimaryNode                            = 'SNADMOD.DLL'.*
-    IsNameInExpressionW                      = 'SNADMOD.DLL'.*
-    IsNameInExpressionA                      = 'SNADMOD.DLL'.*
-    InsertPrivateService                     = 'SNADMOD.DLL'.*
-    InitBufferManager                        = 'SNADMOD.DLL'.*
-    IncrementLvalUsageCount                  = 'SNADMOD.DLL'.*
-    GetWorldSid                              = 'SNADMOD.DLL'.*
-    GetUserEncryptionFlag_cb                 = 'SNADMOD.DLL'.*
-    GetSponsorName                           = 'SNADMOD.DLL'.*
-    GetServiceWord                           = 'SNADMOD.DLL'.*
-    GetSchedulingSemaphoreName               = 'SNADMOD.DLL'.*
-    GetSNALicenseUnit                        = 'SNADMOD.DLL'.*
-    GetRegName                               = 'SNADMOD.DLL'.*
-    GetPartnerLong                           = 'SNADMOD.DLL'.*
-    GetOurToken                              = 'SNADMOD.DLL'.*
-    GetMachineName                           = 'SNADMOD.DLL'.*
-    GetLtabVersion                           = 'SNADMOD.DLL'.*
-    GetLtabUserandDomain                     = 'SNADMOD.DLL'.*
-    GetLtabTransport                         = 'SNADMOD.DLL'.*
-    GetLtabRpcCorr                           = 'SNADMOD.DLL'.*
-    GetLtabOs                                = 'SNADMOD.DLL'.*
-    GetLtabLong                              = 'SNADMOD.DLL'.*
-    GetLtabInuseFlag                         = 'SNADMOD.DLL'.*
-    GetDomainWord                            = 'SNADMOD.DLL'.*
-    GetDomainLong                            = 'SNADMOD.DLL'.*
-    GetClientWorkstationName                 = 'SNADMOD.DLL'.*
-    GetClientTransportAddress                = 'SNADMOD.DLL'.*
-    GetClientTokenLval                       = 'SNADMOD.DLL'.*
-    GetClientToken                           = 'SNADMOD.DLL'.*
-    GetCSRootDir                             = 'SNADMOD.DLL'.*
-    GetBufferShortagePtr                     = 'SNADMOD.DLL'.*
-    FoundServer                              = 'SNADMOD.DLL'.*
-    ForceServiceUpdate                       = 'SNADMOD.DLL'.*
-    FindSourcePartner                        = 'SNADMOD.DLL'.*
-    FindSnaServices                          = 'SNADMOD.DLL'.*
-    FindPartnerType                          = 'SNADMOD.DLL'.*
-    FindPartner                              = 'SNADMOD.DLL'.*
-    FindConfigPath                           = 'SNADMOD.DLL'.*
-    FetchRole                                = 'SNADMOD.DLL'.*
-    FetchComponentType                       = 'SNADMOD.DLL'.*
-    FServerInDomain                          = 'SNADMOD.DLL'.*
-    FIsLogLocal                              = 'SNADMOD.DLL'.*
-    EnumServices                             = 'SNADMOD.DLL'.*
-    DmodTpEnd                                = 'SNADMOD.DLL'.*
-    DMODUpdateService                        = 'SNADMOD.DLL'.*
-    DMODStartRAMPipe                         = 'SNADMOD.DLL'.*
-    DMODStartNtService                       = 'SNADMOD.DLL'.*
-    DMODSignalServiceTermination             = 'SNADMOD.DLL'.*
-    DMODSetWriteThresholds                   = 'SNADMOD.DLL'.*
-    DMODRemoveHost                           = 'SNADMOD.DLL'.*
-    DMODReleaseLtab                          = 'SNADMOD.DLL'.*
-    DMODRegisterTermCallback                 = 'SNADMOD.DLL'.*
-    DMODReadDatagram                         = 'SNADMOD.DLL'.*
-    DMODProcessManageOpenMessage             = 'SNADMOD.DLL'.*
-    DMODModifyService                        = 'SNADMOD.DLL'.*
-    DMODInitSharedMemory                     = 'SNADMOD.DLL'.*
-    DMODInitCompressSendContext              = 'SNADMOD.DLL'.*
-    DMODInitCompressRecvContext              = 'SNADMOD.DLL'.*
-    DMODGetWkstaUserInfo                     = 'SNADMOD.DLL'.*
-    DMODGetServerIPAddresses                 = 'SNADMOD.DLL'.*
-    DMODGetMailSlot                          = 'SNADMOD.DLL'.*
-    DMODGetLocalRole                         = 'SNADMOD.DLL'.*
-    DMODGetLocalComputerName                 = 'SNADMOD.DLL'.*
-    DMODGetCompressContextSizes              = 'SNADMOD.DLL'.*
-    DMODGetAdlocInfo                         = 'SNADMOD.DLL'.*
-    DMODFreeWkstaUserInfo                    = 'SNADMOD.DLL'.*
-    DMODEnumServices                         = 'SNADMOD.DLL'.*
-    DMODDecompressData                       = 'SNADMOD.DLL'.*
-    DMODCreateSecurityAttribute              = 'SNADMOD.DLL'.*
-    DMODCreateMslot                          = 'SNADMOD.DLL'.*
-    DMODControlNtService                     = 'SNADMOD.DLL'.*
-    DMODCompressData                         = 'SNADMOD.DLL'.*
-    DMODClosePipes                           = 'SNADMOD.DLL'.*
-    DMODCloseMslot                           = 'SNADMOD.DLL'.*
-    DMODBuildVersionString                   = 'SNADMOD.DLL'.*
-    DMODBuildNosBlock                        = 'SNADMOD.DLL'.*
-    DMODAddNewService                        = 'SNADMOD.DLL'.*
-    DMODAddHost                              = 'SNADMOD.DLL'.*
-    CopyTransports                           = 'SNADMOD.DLL'.*
-    BuildSrvList                             = 'SNADMOD.DLL'.*
-    AsyncSepdveluEx                          = 'SNADMOD.DLL'.*
-    AsyncSepdvelu                            = 'SNADMOD.DLL'.*
-    AsyncRequestDdidx                        = 'SNADMOD.DLL'.*
-    AsyncRequest                             = 'SNADMOD.DLL'.*
-    AddressPartner                           = 'SNADMOD.DLL'.*
-    AddressNosBlock                          = 'SNADMOD.DLL'.*
-    AddAceToObjectAcl                        = 'SNADMOD.DLL'.*
-    seputrsv_d                               = 'SNATRC.DLL'.*
-    seputrsr_d                               = 'SNATRC.DLL'.*
-    seputrsn_init                            = 'SNATRC.DLL'.*
-    seputrlu_d                               = 'SNATRC.DLL'.*
-    seputrl2_d                               = 'SNATRC.DLL'.*
-    seputrdi_d                               = 'SNATRC.DLL'.*
-    seputrcp_d                               = 'SNATRC.DLL'.*
-    seputrcn_d                               = 'SNATRC.DLL'.*
-    seputrc_init                             = 'SNATRC.DLL'.*
-    seputrc_d                                = 'SNATRC.DLL'.*
-    seputrap_d                               = 'SNATRC.DLL'.*
-    sepulogs                                 = 'SNATRC.DLL'.*
-    sepulogm                                 = 'SNATRC.DLL'.*
-    sepulog_term                             = 'SNATRC.DLL'.*
-    sepulog_init                             = 'SNATRC.DLL'.*
-    sepulog_d                                = 'SNATRC.DLL'.*
-    sepulnk_init                             = 'SNATRC.DLL'.*
-    sepuinfo                                 = 'SNATRC.DLL'.*
-    sepuapi_init                             = 'SNATRC.DLL'.*
-    sepualrt                                 = 'SNATRC.DLL'.*
-    com_unlock_file                          = 'SNATRC.DLL'.*
-    com_trunc                                = 'SNATRC.DLL'.*
-    com_trin                                 = 'SNATRC.DLL'.*
-    com_trc_sep                              = 'SNATRC.DLL'.*
-    com_trc_line                             = 'SNATRC.DLL'.*
-    com_trc_hdr                              = 'SNATRC.DLL'.*
-    com_trc_dump                             = 'SNATRC.DLL'.*
-    com_lock_file                            = 'SNATRC.DLL'.*
-    com_datetime                             = 'SNATRC.DLL'.*
-    com_close_trace                          = 'SNATRC.DLL'.*
-    TestForSharedMemory                      = 'SNATRC.DLL'.*
-    SendPopupRequest                         = 'SNATRC.DLL'.*
-    RegPopupApp                              = 'SNATRC.DLL'.*
-    ReceivePopupRequest                      = 'SNATRC.DLL'.*
-    _InternalTrace                           = 'SNATRC.DLL'.InternalTrace
-    ___dwMessageTraces                       = 'DBGTRACE.DLL'.__dwMessageTraces
-    ___dwEnabledTraces                       = 'DBGTRACE.DLL'.__dwEnabledTraces
-    ___dwAPITraces                           = 'DBGTRACE.DLL'.__dwAPITraces
-    TermAsyncTrace                           = 'DBGTRACE.DLL'.*
-    SetMessageTraceParams                    = 'DBGTRACE.DLL'.*
-    SetAsyncTraceParams                      = 'DBGTRACE.DLL'.*
-    SetAPITraceParams                        = 'DBGTRACE.DLL'.*
-    MessageBinaryTrace                       = 'DBGTRACE.DLL'.*
-    InitAsyncTraceEx                         = 'DBGTRACE.DLL'.*
-    InitAsyncTrace                           = 'DBGTRACE.DLL'.*
-    GetTraceCtrlBlock                        = 'DBGTRACE.DLL'.*
-    FlushMessageTrace                        = 'DBGTRACE.DLL'.*
-    FlushAsyncTrace                          = 'DBGTRACE.DLL'.*
-    FlushAPITrace                            = 'DBGTRACE.DLL'.*
-    AsyncStringTrace                         = 'DBGTRACE.DLL'.*
-    AsyncMessageTrace                        = 'DBGTRACE.DLL'.*
-    AsyncBinaryTrace                         = 'DBGTRACE.DLL'.*
-    AsyncAPITrace                            = 'DBGTRACE.DLL'.*
-    APIBinaryTrace                           = 'DBGTRACE.DLL'.*
+    sepwdomfree                              
+    sepwdomain                               
+    seputrtr                                 
+    seputrsv                                 
+    seputrsn                                 
+    seputrlu                                 
+    seputrhv                                 
+    seputrdx                                 
+    seputrdi                                 
+    seputrdf                                 
+    seputrcn                                 
+    seputrc_w                                
+    seputrc                                  
+    seputrap                                 
+    sepulog_w                                
+    sepibdsd                                 
+    sepfutoan                                
+    sepfutoa                                 
+    sepfatoun                                
+    sepfatou                                 
+    sepdvers                                 
+    sepdusrv                                 
+    sepduser                                 
+    sepdusck                                 
+    sepdtrtp                                 
+    sepdtrci                                 
+    sepdtral                                 
+    sepdtend                                 
+    sepdsses                                 
+    sepdsrq                                  
+    sepdsini                                 
+    sepdrpip                                 
+    sepdrout                                 
+    sepdregnm                                
+    sepdq2                                   
+    sepdpop                                  
+    sepdoutd                                 
+    sepdopcf                                 
+    sepdnsrv                                 
+    sepdnsrc                                 
+    sepdnode                                 
+    sepdnmsv                                 
+    sepdnmss                                 
+    sepdnmsd                                 
+    sepdname                                 
+    sepdlogu                                 
+    sepdlogi                                 
+    sepdlink                                 
+    sepdkilr                                 
+    sepdinms                                 
+    sepdinm2                                 
+    sepdiag                                  
+    sepdhalt                                 
+    sepdgstu                                 
+    sepdgshn                                 
+    sepdgplp                                 
+    sepdgorp                                 
+    sepdgll                                  
+    sepdgfre                                 
+    sepdgetinfo                              
+    sepdgcst                                 
+    sepdgalc                                 
+    sepdexec                                 
+    sepddlck                                 
+    sepddefl                                 
+    sepdcrec                                 
+    sepdconf                                 
+    sepdcomn                                 
+    sepdcnap                                 
+    sepdclps                                 
+    sepdchnk                                 
+    sepdchdr                                 
+    sepdburl                                 
+    sepdbubl                                 
+    sbputerm                                 
+    sbpusend                                 
+    sbpurcvx                                 
+    sbpurcv                                  
+    sbpuinit_dll                             
+    sbprorsp                                 
+    sbprlloc                                 
+    sbprlctr                                 
+    sbpiglnm                                 
+    sbpidead                                 
+    sbpibnob                                 
+    sbpibhrl                                 
+    sbpibhgt                                 
+    sbpiberl                                 
+    sbpibegt                                 
+    sbpdterm                                 
+    sbpdsvst                                 
+    sbpdout_dll                              
+    sbpdlocl                                 
+    sbpdkill                                 
+    sbpdinit_dll                             
+    sbpdin                                   
+    sbpdfind                                 
+    sbpddropall                              
+    sbpddrop_client                          
+    sbpddrop                                 
+    sbpburel                                 
+    sbpbumod                                 
+    sbpbufcp                                 
+    sbpbubld                                 
+    init_async                               
+    get_time                                 
+    com_mess                                 
+    WhoIsSponsor                             
+    WhoIsClient                              
+    UpdateTransports                         
+    UpdateShareConfig                        
+    UpdateConfigTypeAndPath                  
+    TransportSize                            
+    StopMailSlotRoute                        
+    StartSnaLinksEx                          
+    StartSnaLinks                            
+    StartNodeLinkService                     
+    StartMailSlotRoute                       
+    StartDefaultNode                         
+    _SnaLog                                  = SnaLog
+    SidPack                                  
+    SetServiceWord                           
+    SetRegNotifyEvent                        
+    SetProcessTypes                          
+    SetPartnerLong                           
+    SetLtabVersion                           
+    SetLtabLong                              
+    SetDomainWord                            
+    SetDomainLong                            
+    SetDmodBroadcasts                        
+    SetConfigUpdateEvent                     
+    SetConfigCallback                        
+    ServiceCheckPoint                        
+    SendToPartner                            
+    SendDloadMsg                             
+    SendDatagramTo                           
+    SendBackupInfoToClient                   
+    SNAReleaseHeader                         
+    SNAReleaseElement                        
+    SNAReleaseBuffer                         
+    SNAGetUserRecord                         
+    SNAGetSystemInfo                         
+    SNAGetHeader                             
+    SNAGetFreeBufferCount                    
+    SNAGetElement                            
+    SNAGetBuffer                             
+    SNABufferFree                            
+    SNABufferAlloc                           
+    RpcUnpack                                
+    RpcTerm                                  
+    RpcRequestAllocBuffer                    
+    RpcRequest                               
+    RpcPack                                  
+    RoutePopUpMessage                        
+    RouteOutdMessage                         
+    RouteNapMessage                          
+    RouteDloadMessage                        
+    RouteDiagMessage                         
+    RepCfgIfNeeded                           
+    RemoveSvceEntry                          
+    RemoveRoutProc                           
+    ReleaseSNALicenseUnit                    
+    RPCGetAppcConfig                         
+    QueryLuAppcCallBack                      
+    ProcessSnapsMessage                      
+    ProcessSTUCMsg                           
+    ProcessRemotePopup                       
+    ProcessNapMessage                        
+    ProcessInternalMessage                   
+    ProcessIncomingMsg                       
+    NodeSessionsChanged                      
+    LocalProcessRpc                          
+    IsPrimaryNode                            
+    IsNameInExpressionW                      
+    IsNameInExpressionA                      
+    InsertPrivateService                     
+    InitBufferManager                        
+    IncrementLvalUsageCount                  
+    GetWorldSid                              
+    GetUserEncryptionFlag_cb                 
+    GetSponsorName                           
+    GetServiceWord                           
+    GetSchedulingSemaphoreName               
+    GetSNALicenseUnit                        
+    GetRegName                               
+    GetPartnerLong                           
+    GetOurToken                              
+    GetMachineName                           
+    GetLtabVersion                           
+    GetLtabUserandDomain                     
+    GetLtabTransport                         
+    GetLtabRpcCorr                           
+    GetLtabOs                                
+    GetLtabLong                              
+    GetLtabInuseFlag                         
+    GetDomainWord                            
+    GetDomainLong                            
+    GetClientWorkstationName                 
+    GetClientTransportAddress                
+    GetClientTokenLval                       
+    GetClientToken                           
+    GetCSRootDir                             
+    GetBufferShortagePtr                     
+    FoundServer                              
+    ForceServiceUpdate                       
+    FindSourcePartner                        
+    FindSnaServices                          
+    FindPartnerType                          
+    FindPartner                              
+    FindConfigPath                           
+    FetchRole                                
+    FetchComponentType                       
+    FServerInDomain                          
+    FIsLogLocal                              
+    EnumServices                             
+    DmodTpEnd                                
+    DMODUpdateService                        
+    DMODStartRAMPipe                         
+    DMODStartNtService                       
+    DMODSignalServiceTermination             
+    DMODSetWriteThresholds                   
+    DMODRemoveHost                           
+    DMODReleaseLtab                          
+    DMODRegisterTermCallback                 
+    DMODReadDatagram                         
+    DMODProcessManageOpenMessage             
+    DMODModifyService                        
+    DMODInitSharedMemory                     
+    DMODInitCompressSendContext              
+    DMODInitCompressRecvContext              
+    DMODGetWkstaUserInfo                     
+    DMODGetServerIPAddresses                 
+    DMODGetMailSlot                          
+    DMODGetLocalRole                         
+    DMODGetLocalComputerName                 
+    DMODGetCompressContextSizes              
+    DMODGetAdlocInfo                         
+    DMODFreeWkstaUserInfo                    
+    DMODEnumServices                         
+    DMODDecompressData                       
+    DMODCreateSecurityAttribute              
+    DMODCreateMslot                          
+    DMODControlNtService                     
+    DMODCompressData                         
+    DMODClosePipes                           
+    DMODCloseMslot                           
+    DMODBuildVersionString                   
+    DMODBuildNosBlock                        
+    DMODAddNewService                        
+    DMODAddHost                              
+    CopyTransports                           
+    BuildSrvList                             
+    AsyncSepdveluEx                          
+    AsyncSepdvelu                            
+    AsyncRequestDdidx                        
+    AsyncRequest                             
+    AddressPartner                           
+    AddressNosBlock                          
+    AddAceToObjectAcl                        
+    seputrsv_d                               
+    seputrsr_d                               
+    seputrsn_init                            
+    seputrlu_d                               
+    seputrl2_d                               
+    seputrdi_d                               
+    seputrcp_d                               
+    seputrcn_d                               
+    seputrc_init                             
+    seputrc_d                                
+    seputrap_d                               
+    sepulogs                                 
+    sepulogm                                 
+    sepulog_term                             
+    sepulog_init                             
+    sepulog_d                                
+    sepulnk_init                             
+    sepuinfo                                 
+    sepuapi_init                             
+    sepualrt                                 
+    com_unlock_file                          
+    com_trunc                                
+    com_trin                                 
+    com_trc_sep                              
+    com_trc_line                             
+    com_trc_hdr                              
+    com_trc_dump                             
+    com_lock_file                            
+    com_datetime                             
+    com_close_trace                          
+    TestForSharedMemory                      
+    SendPopupRequest                         
+    RegPopupApp                              
+    ReceivePopupRequest                      
+    _InternalTrace                           = InternalTrace
+    ___dwMessageTraces                       = __dwMessageTraces
+    ___dwEnabledTraces                       = __dwEnabledTraces
+    ___dwAPITraces                           = __dwAPITraces
+    TermAsyncTrace                           
+    SetMessageTraceParams                    
+    SetAsyncTraceParams                      
+    SetAPITraceParams                        
+    MessageBinaryTrace                       
+    InitAsyncTraceEx                         
+    InitAsyncTrace                           
+    GetTraceCtrlBlock                        
+    FlushMessageTrace                        
+    FlushAsyncTrace                          
+    FlushAPITrace                            
+    AsyncStringTrace                         
+    AsyncMessageTrace                        
+    AsyncBinaryTrace                         
+    AsyncAPITrace                            
+    APIBinaryTrace                           

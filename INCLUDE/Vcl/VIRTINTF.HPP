@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'VirtIntf.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'VirtIntf.pas' rev: 6.00
 
 #ifndef VirtIntfHPP
 #define VirtIntfHPP
@@ -42,8 +42,7 @@ public:
 
 __interface IStreamModifyTime;
 typedef System::DelphiInterface<IStreamModifyTime> _di_IStreamModifyTime;
-__interface INTERFACE_UUID("{12452621-5F8A-11D1-9FB6-0020AF3D82DA}") IStreamModifyTime  : public IUnknown 
-	
+__interface INTERFACE_UUID("{12452621-5F8A-11D1-9FB6-0020AF3D82DA}") IStreamModifyTime  : public IInterface 
 {
 	
 public:
@@ -55,9 +54,7 @@ public:
 extern PACKAGE AnsiString __fastcall ReleaseException();
 
 }	/* namespace Virtintf */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Virtintf;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

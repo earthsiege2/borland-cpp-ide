@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 #pragma hdrstop   
 #include <SysUtils.hpp>
@@ -14,26 +14,11 @@
 
 #include <memory>          //For use of auto_ptr
 #include  "piereg.h"
-#include "pies.cpp"
 #include "samp.h"
 
 #pragma resource "*.dfm"
 #pragma resource "*.res"    
 #pragma package(smart_init)
-
-//---------------------------------------------------------------------------
-namespace Piereg{
-void __fastcall PACKAGE Register()
-{
-  TComponentClass classes[1] = {__classid(TPie)};
-  RegisterComponents(LoadStr(Tab_101), classes, 0);
-  RegisterComponentEditor(__classid(TPie), __classid(TPieEditor));
-  RegisterPropertyEditor(__typeinfo(TAngles),
-                         NULL,
-                         "",
-                         __classid(TAnglesProperty));
-}
-} //namespace
 
 //---------------------------------------------------------------------------
 String loadString(unsigned long id)
@@ -55,6 +40,23 @@ String loadString(unsigned long id)
    return str;
 
 }
+
+namespace Piereg
+{
+//---------------------------------------------------------------------------
+void __fastcall PACKAGE Register()
+{
+  TComponentClass classes[1] = {__classid(TPie)};
+  //RegisterComponents(loadString(Tab_101), classes, 0);
+  RegisterComponents(LoadStr(Tab_101), classes, 0);
+  RegisterComponentEditor(__classid(TPie), __classid(TPieEditor));
+  RegisterPropertyEditor(__typeinfo(TAngles),
+                         NULL,
+                         "",
+                         __classid(TAnglesProperty));
+}
+} //namespace
+
 // TAngleEditorDlg
 
 __fastcall TAngleEditorDlg::TAngleEditorDlg(TComponent* AOwner) : TForm(AOwner) { }
@@ -104,7 +106,7 @@ void __fastcall TAngleEditorDlg::CancelClick(TObject* /*Sender*/)
 //---------------------------------------------------------------------------
 // TAnglesProperty
 
-__fastcall TAnglesProperty::TAnglesProperty(const _di_IFormDesigner ADesigner, int APropCount) : TClassProperty(ADesigner, APropCount) { }
+__fastcall TAnglesProperty::TAnglesProperty(const _di_IDesigner ADesigner, int APropCount) : TClassProperty(ADesigner, APropCount) { }
 __fastcall TAnglesProperty::~TAnglesProperty(void) { }
 
 void __fastcall TAnglesProperty::Edit()
@@ -125,17 +127,15 @@ TPropertyAttributes __fastcall TAnglesProperty::GetAttributes()
 
 //---------------------------------------------------------------------------
 //TPieEditor
-__fastcall TPieEditor::TPieEditor(TComponent* AComponent, _di_IFormDesigner ADesigner)
+__fastcall TPieEditor::TPieEditor(TComponent* AComponent, _di_IDesigner ADesigner)
                       : TDefaultEditor(AComponent, ADesigner) { }
 __fastcall TPieEditor::~TPieEditor(void) { }
 
-void __fastcall TPieEditor::EditProperty(TPropertyEditor* PropertyEditor,
-                                         bool& Continue,
-                                         bool& /*FreeEditor*/)
-{
-  String PropName(PropertyEditor->GetName());
+void __fastcall TPieEditor::EditProperty(const _di_IProperty Prop, bool& Continue)
+ {
+  String PropName(Prop->GetName());
   if (strcmpi(PropName.c_str(),"ANGLES") == 0){
-    PropertyEditor->Edit();
+    Prop->Edit();
     Continue = false;
   }
 }

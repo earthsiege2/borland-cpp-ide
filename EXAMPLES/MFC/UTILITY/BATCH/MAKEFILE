@@ -8,10 +8,21 @@
 # See these sources for detailed information regarding the
 # Microsoft Foundation Classes product.
 
+PROJ=BATCH
 OBJS= BATCH.obj BATCHDOC.obj BATCHVW.obj COMPRESS.obj DESTDIRD.obj \
 	INTERLEA.obj MAINFRM.obj STDAFX.obj
 
-PROJ = batch
-AFXDLL=1
+#!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+!include <..\..\mfcrules.mak>
 
-!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+default: integration
+	$(MAKE) -f $(PROJ).mak
+
+clean:
+	$(CLEAN_MFC)
+                                
+integration: $(PROJ).bpr $(PROJ).mak
+    $(NOP)
+
+batch.bpr: batch.dsp
+	$(VCTOBPR) -I"$(BCB)\include;$(BCB)\include\idl" -2 $?

@@ -1,9 +1,8 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 //-----------------------------------------------------------------------------
 //
 // GPEDIT.H - Definitions and prototypes for Group Policy
 //
-// Copyright 1997-1999, Microsoft Corporation
+// Copyright 1997-2000, Microsoft Corporation
 //
 //-----------------------------------------------------------------------------
 
@@ -91,10 +90,67 @@ DEFINE_GUID(CLSID_GroupPolicyObject, 0xea502722, 0xa23d, 0x11d1, 0xa7, 0xd3, 0x0
 
 DEFINE_GUID(IID_IGroupPolicyObject, 0xea502723, 0xa23d, 0x11d1, 0xa7, 0xd3, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
+
 //
 // GUID that identifies the registry extension
 //
+
 #define REGISTRY_EXTENSION_GUID  { 0x35378EAC, 0x683F, 0x11D2, 0xA8, 0x9A, 0x00, 0xC0, 0x4F, 0xBB, 0xCF, 0xA2 }
+
+
+
+//========================================================================================
+//
+// Resultant Set of Policy node ids
+//
+//========================================================================================
+
+//
+// Resultant Set of Policy MMC SnapIn GUID
+//
+// {6DC3804B-7212-458D-ADB0-9A07E2AE1FA2}
+
+DEFINE_GUID(CLSID_RSOPSnapIn, 0x6dc3804b, 0x7212, 0x458d, 0xad, 0xb0, 0x9a, 0x07, 0xe2, 0xae, 0x1f, 0xa2);
+
+
+//
+// Computer Configuration\Windows Settings
+// {BD4C1A2E-0B7A-4A62-A6B0-C0577539C97E}
+//
+
+DEFINE_GUID(NODEID_RSOPMachine, 0xbd4c1a2e, 0x0b7a, 0x4a62, 0xa6, 0xb0, 0xc0, 0x57, 0x75, 0x39, 0xc9, 0x7e);
+
+
+//
+// Computer Configuration\Software Settings
+// {6A76273E-EB8E-45DB-94C5-25663A5f2C1A}
+//
+
+DEFINE_GUID(NODEID_RSOPMachineSWSettings, 0x6a76273e, 0xeb8e, 0x45db, 0x94, 0xc5, 0x25, 0x66, 0x3a, 0x5f, 0x2c, 0x1a);
+
+
+//
+// User Configuration\Windows Settings
+// {AB87364F-0CEC-4CD8-9BF8-898F34628FB8}
+//
+
+DEFINE_GUID(NODEID_RSOPUser, 0xab87364f, 0x0cec, 0x4cd8, 0x9b, 0xf8, 0x89, 0x8f, 0x34, 0x62, 0x8f, 0xb8);
+
+
+//
+// User Configuration\Software Settings
+// {E52C5CE3-FD27-4402-84DE-D9A5F2858910}
+//
+
+DEFINE_GUID(NODEID_RSOPUserSWSettings, 0xe52c5ce3, 0xfd27, 0x4402, 0x84, 0xde, 0xd9, 0xa5, 0xf2, 0x85, 0x89, 0x10);
+
+
+//
+// IRSOPInformation interface id
+//
+// {9A5A81B5-D9C7-49EF-9D11-DDF50968C48D}
+
+DEFINE_GUID(IID_IRSOPInformation, 0x9a5a81b5, 0xd9c7, 0x49ef, 0x9d, 0x11, 0xdd, 0xf5, 0x09, 0x68, 0xc4, 0x8d);
 
 
 #ifndef _GPEDIT_H_
@@ -149,7 +205,7 @@ typedef enum _GROUP_POLICY_HINT_TYPE {
     GPHintMachine,                          // GPO linked to a machine (local or remote)
     GPHintSite,                             // GPO linked to a site
     GPHintDomain,                           // GPO linked to a domain
-    GPHintOrganizationalUnit                // GPO linked to a organizational unit
+    GPHintOrganizationalUnit,               // GPO linked to a organizational unit
 } GROUP_POLICY_HINT_TYPE, *PGROUP_POLICY_HINT_TYPE;
 
 
@@ -298,6 +354,7 @@ typedef IGPEInformation *LPGPEINFORMATION;
 
 #define GPO_OPEN_LOAD_REGISTRY      0x00000001  // Load the registry files
 #define GPO_OPEN_READ_ONLY          0x00000002  // Open the GPO as read only
+
 
 
 //
@@ -562,6 +619,61 @@ DECLARE_INTERFACE_(IGroupPolicyObject, IUnknown)
 typedef IGroupPolicyObject *LPGROUPPOLICYOBJECT;
 
 
+//
+// RSOP flags
+//
+
+#define RSOP_INFO_FLAG_DIAGNOSTIC_MODE  0x00000001      // Running in diagnostic mode vs planning mode
+
+#undef INTERFACE
+#define INTERFACE   IRSOPInformation
+DECLARE_INTERFACE_(IRSOPInformation, IUnknown)
+{
+    // *** IUnknown methods ***
+    STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
+    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+    STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+
+    // *** IRSOPInformation methods ***
+
+    //
+    // Returns the namespace for the RSOP data
+    //
+    // dwSection is either GPO_SECTION_USER or GPO_SECTION_MACHINE
+    // pszName contains the namespace on return
+    // cchMaxLength is the max number of characters that can be stored in pszName
+    //
+
+    STDMETHOD(GetNamespace) (THIS_ DWORD dwSection, LPOLESTR pszName, int cchMaxLength) PURE;
+
+
+    //
+    // Returns information about the RSOP session
+    //
+    // pdwFlags points to a DWORD which contains the flags on return
+    //
+
+    STDMETHOD(GetFlags) (THIS_ DWORD * pdwFlags) PURE;
+
+
+    //
+    // Returns the event log text for a specific entry
+    //
+    // lpEventSource - event log source name
+    // lpEventLogName - event log name
+    // lpEventTime - event log time in WMI datetime format
+    // dwEventID - event ID
+    // lpText - Receives a pointer to a buffer containing the text.
+    //          The caller should free this buffer with CoTaskMemFree.
+    //
+
+    STDMETHOD(GetEventLogEntryText) (THIS_ LPOLESTR pszEventSource, LPOLESTR pszEventLogName,
+                                           LPOLESTR pszEventTime, DWORD dwEventID,  LPOLESTR *ppszText) PURE;
+
+};
+typedef IRSOPInformation *LPRSOPINFORMATION;
+
 
 //=============================================================================
 //
@@ -646,6 +758,7 @@ DeleteAllGPOLinks(
 #define GPO_BROWSE_NOCOMPUTERS          0x00000002   // Removes the Computers tab
 #define GPO_BROWSE_NODSGPOS             0x00000004   // Removes the Domain/OU and Sites tabs
 #define GPO_BROWSE_OPENBUTTON           0x00000008   // Change the Ok button to say Open
+#define GPO_BROWSE_INITTOALL            0x00000010   // Initialize the dialog focused on the All pane
 
 typedef struct tag_GPOBROWSEINFO
 {
@@ -671,10 +784,57 @@ BrowseForGPO(
     LPGPOBROWSEINFO lpBrowseInfo);
 
 
+//=============================================================================
+//
+// ImportRSoPData
+//
+// Imports a data file generated by ExportRSoPData
+//
+// lpNameSpace   - Namespace to place the data in
+// lpFileName    - Filename containing the data
+//
+// Returns:  S_OK if successful
+//
+// Notes:    The namespace specified in lpNameSpace must exist prior to calling
+//           this function.
+//
+//=============================================================================
+
+GPEDITAPI
+HRESULT
+WINAPI
+ImportRSoPData(
+    LPOLESTR lpNameSpace,
+    LPOLESTR lpFileName);
+
+
+//=============================================================================
+//
+// ExportRSoPData
+//
+// Exports a WBEM namespace containing RSoP information to a data file.
+// This data file can be imported to a WBEM namespace using ImportRSoPData.
+//
+// lpNameSpace   - Namespace to read the data from
+// lpFileName    - Filename to receive the data
+//
+// Returns:  S_OK if successful
+//
+// Notes:    This function should be called twice.  Once for the user data
+//           and once for the computer data.
+//
+//=============================================================================
+
+GPEDITAPI
+HRESULT
+WINAPI
+ExportRSoPData(
+    LPOLESTR lpNameSpace,
+    LPOLESTR lpFileName);
+
 #ifdef __cplusplus
 }
 #endif
 
 
 #endif  /* _GPEDIT_H_ */
-#pragma option pop /*P_O_Pop*/

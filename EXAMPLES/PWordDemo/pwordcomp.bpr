@@ -2,8 +2,8 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
-    <PROJECT value="PWordComp.exe"/>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="pwordcomp.exe"/>
     <OBJFILES value="PWordComp.obj main.obj"/>
     <RESFILES value="PWordComp.res"/>
     <IDLFILES value=""/>
@@ -11,36 +11,49 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) main.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value=""/>
-    <SPARELIBS value=""/>
+    <LIBRARIES value="bcb2kaxserver.lib bdertl.lib vcldb.lib dbrtl.lib"/>
+    <SPARELIBS value="vcl.lib rtl.lib dbrtl.lib vcldb.lib bdertl.lib 
+      bcb2kaxserver.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
-    <LINKER value="tlink32"/>
+    <LINKER value="ilink32"/>
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
     <MAINSOURCE value="PWordComp.cpp"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
+    <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -D_DEBUG -boa"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
+    <IDLCFLAGS value="-src_suffix cpp -D_DEBUG -I$(BCB)\include -I$(BCB)\include\vcl -boa"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
       -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
     <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
+    <OTHERFILES value=""/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
+    <OTHERFILES value=""/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="PWordComp.cpp" FORMNAME="" UNITNAME="PWordComp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="PWordComp.res" FORMNAME="" UNITNAME="PWordComp" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="main.cpp" FORMNAME="PWordForm" UNITNAME="main" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -74,9 +87,14 @@ DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]

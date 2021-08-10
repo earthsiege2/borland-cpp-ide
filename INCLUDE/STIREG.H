@@ -19,7 +19,6 @@ Revision History:
 --*/
 
 #ifndef _STIREG_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _STIREG_
 
 //
@@ -45,6 +44,14 @@ Revision History:
 #define REGSTR_VAL_LAUNCHABLE         TEXT("Launchable")
 
 //
+// CustomDeviceProperty names and values
+//
+#define IS_DIGITAL_CAMERA_STR   L"IsDigitalCamera"
+#define IS_DIGITAL_CAMERA_VAL   1
+#define SUPPORTS_MSCPLUS_STR    L"SupportsMSCPlus"
+#define SUPPORTS_MSCPLUS_VAL    1
+
+//
 // Device instance value names
 //
 #define STI_DEVICE_VALUE_TWAIN_NAME    L"TwainDS"
@@ -64,6 +71,5 @@ Revision History:
 #define REGSTR_VAL_BAUDRATE_A            "BaudRate"
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // _STIREG_
 

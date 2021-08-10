@@ -40,7 +40,7 @@ The file BUILTINS.MAK contains standard rules and macros that MAKE uses when it 
 Here is the default text of BUILTINS.MAK:
 
 #
-# Borland C++ - (C) Copyright 1997 by Borland International
+# Borland C++ - (C) Copyright 1997-2002 by Borland International
 #
 
 CC       = bcc32

@@ -1,0 +1,663 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 0000AE64H .text                   CODE
+ 0002:00000000 00000240H .data                   DATA
+ 0002:00000240 0000006DH .bss                    BSS
+
+
+Detailed map of segments
+
+ 0001:00000000 000001E6 C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:000001E8 000001EC C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:000003D4 0000017E C=CODE     S=.text    G=(none)   M=ITECommon ACBP=A9
+ 0001:00000554 0000003E C=CODE     S=.text    G=(none)   M=ITEOTA   ACBP=A9
+ 0001:00000594 0000001E C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:000005B4 0000000E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:000005C4 0000005E C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:00000624 0000000E C=CODE     S=.text    G=(none)   M=ActiveX  ACBP=A9
+ 0001:00000634 00000038 C=CODE     S=.text    G=(none)   M=Messages ACBP=A9
+ 0001:0000066C 00000058 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:000006C4 0000000E C=CODE     S=.text    G=(none)   M=Types    ACBP=A9
+ 0001:000006D4 0000000E C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:000006E4 000000D6 C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:000007BC 0000000E C=CODE     S=.text    G=(none)   M=SysConst ACBP=A9
+ 0001:000007CC 0000000E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:000007DC 0000000E C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:000007EC 0000000E C=CODE     S=.text    G=(none)   M=RTLConsts ACBP=A9
+ 0001:000007FC 0000000E C=CODE     S=.text    G=(none)   M=Math     ACBP=A9
+ 0001:0000080C 0000000E C=CODE     S=.text    G=(none)   M=ImgList  ACBP=A9
+ 0001:0000081C 00000038 C=CODE     S=.text    G=(none)   M=CommCtrl ACBP=A9
+ 0001:00000854 00000016 C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:0000086C 0000000E C=CODE     S=.text    G=(none)   M=Consts   ACBP=A9
+ 0001:0000087C 0000012E C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:000009AC 0000000E C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:000009BC 0000000E C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:000009CC 00000136 C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00000B04 00000038 C=CODE     S=.text    G=(none)   M=Imm      ACBP=A9
+ 0001:00000B3C 0000001E C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000B5C 0000000E C=CODE     S=.text    G=(none)   M=WinHelpViewer ACBP=A9
+ 0001:00000B6C 0000000E C=CODE     S=.text    G=(none)   M=StdActns ACBP=A9
+ 0001:00000B7C 0000001E C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:00000B9C 00000038 C=CODE     S=.text    G=(none)   M=ShlObj   ACBP=A9
+ 0001:00000BD4 00000038 C=CODE     S=.text    G=(none)   M=UrlMon   ACBP=A9
+ 0001:00000C0C 00000038 C=CODE     S=.text    G=(none)   M=WinInet  ACBP=A9
+ 0001:00000C44 00000038 C=CODE     S=.text    G=(none)   M=RegStr   ACBP=A9
+ 0001:00000C7C 00000038 C=CODE     S=.text    G=(none)   M=ShellAPI ACBP=A9
+ 0001:00000CB4 0000000E C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00000CC4 00000038 C=CODE     S=.text    G=(none)   M=WinSpool ACBP=A9
+ 0001:00000CFC 0000000E C=CODE     S=.text    G=(none)   M=StdCtrls ACBP=A9
+ 0001:00000D0C 00000038 C=CODE     S=.text    G=(none)   M=CommDlg  ACBP=A9
+ 0001:00000D44 00000038 C=CODE     S=.text    G=(none)   M=Dlgs     ACBP=A9
+ 0001:00000D7C 0000000E C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00000D8C 0000000E C=CODE     S=.text    G=(none)   M=StrUtils ACBP=A9
+ 0001:00000D9C 0000000E C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:00000DAC 0000000E C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:00000DBC 00000076 C=CODE     S=.text    G=(none)   M=Grids    ACBP=A9
+ 0001:00000E34 0000000E C=CODE     S=.text    G=(none)   M=Mask     ACBP=A9
+ 0001:00000E44 0000000E C=CODE     S=.text    G=(none)   M=MaskUtils ACBP=A9
+ 0001:00000E54 0000001E C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:00000E74 0000000E C=CODE     S=.text    G=(none)   M=ToolIntf ACBP=A9
+ 0001:00000E84 0000000E C=CODE     S=.text    G=(none)   M=FileIntf ACBP=A9
+ 0001:00000E94 0000000E C=CODE     S=.text    G=(none)   M=VirtIntf ACBP=A9
+ 0001:00000EA4 0000000E C=CODE     S=.text    G=(none)   M=EditIntf ACBP=A9
+ 0001:00000EB4 0000000E C=CODE     S=.text    G=(none)   M=ITEGridColor ACBP=A9
+ 0001:00000EC4 0000004E C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:00000F14 0000000E C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00000F24 0000000E C=CODE     S=.text    G=(none)   M=ITEStrs  ACBP=A9
+ 0001:00000F34 00000096 C=CODE     S=.text    G=(none)   M=ITEIntlPars ACBP=A9
+ 0001:00000FCC 0000000E C=CODE     S=.text    G=(none)   M=ITEIntlStrm ACBP=A9
+ 0001:00000FDC 0000000E C=CODE     S=.text    G=(none)   M=ITEConst ACBP=A9
+ 0001:00000FEC 0000000E C=CODE     S=.text    G=(none)   M=ToolsAPI ACBP=A9
+ 0001:00000FFC 00000056 C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:00001054 0000000E C=CODE     S=.text    G=(none)   M=ListActns ACBP=A9
+ 0001:00001064 0000000E C=CODE     S=.text    G=(none)   M=ToolWin  ACBP=A9
+ 0001:00001074 00000038 C=CODE     S=.text    G=(none)   M=RichEdit ACBP=A9
+ 0001:000010AC 0000000E C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:000010BC 0000000E C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:000010CC 0000000E C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:000010DC 0000000E C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:000010EC 0000000E C=CODE     S=.text    G=(none)   M=ComStrs  ACBP=A9
+ 0001:000010FC 0000000E C=CODE     S=.text    G=(none)   M=DesignIntf ACBP=A9
+ 0001:0000110C 0000000E C=CODE     S=.text    G=(none)   M=DesignMenus ACBP=A9
+ 0001:0000111C 0000000E C=CODE     S=.text    G=(none)   M=ITERepositoryService ACBP=A9
+ 0001:0000112C 00000016 C=CODE     S=.text    G=(none)   M=IDEPropSet ACBP=A9
+ 0001:00001144 0000000E C=CODE     S=.text    G=(none)   M=IDEConst ACBP=A9
+ 0001:00001154 0000000E C=CODE     S=.text    G=(none)   M=ITERepositoryEngine ACBP=A9
+ 0001:00001164 0000000E C=CODE     S=.text    G=(none)   M=ITEXML   ACBP=A9
+ 0001:00001174 0000000E C=CODE     S=.text    G=(none)   M=ITEMSXML_TLB ACBP=A9
+ 0001:00001184 0000000E C=CODE     S=.text    G=(none)   M=StdVCL   ACBP=A9
+ 0001:00001194 0000000E C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:000011A4 0000000E C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:000011B4 0000000E C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:000011C4 0000000E C=CODE     S=.text    G=(none)   M=ComConst ACBP=A9
+ 0001:000011D4 0000000E C=CODE     S=.text    G=(none)   M=OleConst ACBP=A9
+ 0001:000011E4 0000000E C=CODE     S=.text    G=(none)   M=IStreams ACBP=A9
+ 0001:000011F4 0000000E C=CODE     S=.text    G=(none)   M=ITEINTOptionProp ACBP=A9
+ 0001:00001204 0000000E C=CODE     S=.text    G=(none)   M=IDERegIniPropSet ACBP=A9
+ 0001:00001214 0000000E C=CODE     S=.text    G=(none)   M=IDEHistoryManager ACBP=A9
+ 0001:00001224 0000000E C=CODE     S=.text    G=(none)   M=ITEGetTranslationDlg ACBP=A9
+ 0001:00001234 000001AE C=CODE     S=.text    G=(none)   M=ITEControls ACBP=A9
+ 0001:000013E4 0000000E C=CODE     S=.text    G=(none)   M=ITESWFrm ACBP=A9
+ 0001:000013F4 0000000E C=CODE     S=.text    G=(none)   M=OpenGL   ACBP=A9
+ 0001:00001404 00000016 C=CODE     S=.text    G=(none)   M=ITEGridFont ACBP=A9
+ 0001:0000141C 0000000E C=CODE     S=.text    G=(none)   M=ITEAddTranslationDlg ACBP=A9
+ 0001:0000142C 000002FC C=CODE     S=.text    G=(none)   M=ITERCCommon ACBP=A9
+ 0001:00001728 0000002E C=CODE     S=.text    G=(none)   M=ITESearchResults ACBP=A9
+ 0001:00001758 0000000E C=CODE     S=.text    G=(none)   M=ITEListBox ACBP=A9
+ 0001:00001768 00000036 C=CODE     S=.text    G=(none)   M=ITESearchForm ACBP=A9
+ 0001:000017A0 00000016 C=CODE     S=.text    G=(none)   M=FileCtrl ACBP=A9
+ 0001:000017B8 00000016 C=CODE     S=.text    G=(none)   M=ITEDialogs ACBP=A9
+ 0001:000017D0 0000000E C=CODE     S=.text    G=(none)   M=ITESelectFontDlg ACBP=A9
+ 0001:000017E0 0000000E C=CODE     S=.text    G=(none)   M=ITESearchInit ACBP=A9
+ 0001:000017F0 0000000E C=CODE     S=.text    G=(none)   M=ITEExplorer ACBP=A9
+ 0001:00001800 00000016 C=CODE     S=.text    G=(none)   M=ITEInputQueryDlg ACBP=A9
+ 0001:00001818 00000016 C=CODE     S=.text    G=(none)   M=ITEMultiLineDlg ACBP=A9
+ 0001:00001830 0000000E C=CODE     S=.text    G=(none)   M=AppEvnts ACBP=A9
+ 0001:00001840 00001A88 C=CODE     S=.text    G=(none)   M=ITERCUpdater ACBP=A9
+ 0001:000032C8 0000236C C=CODE     S=.text    G=(none)   M=ITERCMgr ACBP=A9
+ 0001:00005634 0000548D C=CODE     S=.text    G=(none)   M=ITERCForm ACBP=A9
+ 0001:0000AAC4 0000039D C=CODE     S=.text    G=(none)   M=rc       ACBP=A9
+ 0002:00000000 00000028 C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00000028 000000F0 C=DATA     S=.data    G=DGROUP   M=ITERCCommon ACBP=A9
+ 0002:00000118 00000004 C=DATA     S=.data    G=DGROUP   M=ITERCUpdater ACBP=A9
+ 0002:0000011C 0000001C C=DATA     S=.data    G=DGROUP   M=ITERCMgr ACBP=A9
+ 0002:00000138 00000010 C=DATA     S=.data    G=DGROUP   M=ITERCForm ACBP=A9
+ 0002:00001000 00000018 C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00001018 00000004 C=BSS      S=.bss     G=DGROUP   M=Messages ACBP=A9
+ 0002:0000101C 00000004 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0002:00001020 00000004 C=BSS      S=.bss     G=DGROUP   M=CommCtrl ACBP=A9
+ 0002:00001024 00000004 C=BSS      S=.bss     G=DGROUP   M=Imm      ACBP=A9
+ 0002:00001028 00000004 C=BSS      S=.bss     G=DGROUP   M=ShlObj   ACBP=A9
+ 0002:0000102C 00000004 C=BSS      S=.bss     G=DGROUP   M=UrlMon   ACBP=A9
+ 0002:00001030 00000004 C=BSS      S=.bss     G=DGROUP   M=WinInet  ACBP=A9
+ 0002:00001034 00000004 C=BSS      S=.bss     G=DGROUP   M=RegStr   ACBP=A9
+ 0002:00001038 00000004 C=BSS      S=.bss     G=DGROUP   M=ShellAPI ACBP=A9
+ 0002:0000103C 00000004 C=BSS      S=.bss     G=DGROUP   M=WinSpool ACBP=A9
+ 0002:00001040 00000004 C=BSS      S=.bss     G=DGROUP   M=CommDlg  ACBP=A9
+ 0002:00001044 00000004 C=BSS      S=.bss     G=DGROUP   M=Dlgs     ACBP=A9
+ 0002:00001048 00000004 C=BSS      S=.bss     G=DGROUP   M=RichEdit ACBP=A9
+ 0002:0000104C 00000004 C=BSS      S=.bss     G=DGROUP   M=ITERCCommon ACBP=A9
+ 0002:00001050 00000004 C=BSS      S=.bss     G=DGROUP   M=ITERCUpdater ACBP=A9
+ 0002:00001054 00000004 C=BSS      S=.bss     G=DGROUP   M=ITERCMgr ACBP=A9
+ 0002:00001058 00000014 C=BSS      S=.bss     G=DGROUP   M=ITERCForm ACBP=A9
+
+
+  Address         Publics by Name
+
+ 0002:00001038       .1
+ 0002:00001034       .1
+ 0002:00001018       .1
+ 0002:00001048       .1
+ 0002:0000102C       .1
+ 0002:00001030       .1
+ 0002:00001044       .1
+ 0002:00001028       .1
+ 0002:00001024       .1
+ 0002:00001040       .1
+ 0002:00001020       .1
+ 0002:00001010       .1
+ 0002:00001050       .2
+ 0002:0000105C       .2
+ 0002:0000104C       .2
+ 0002:00001054       .3
+ 0002:0000101C       .3
+ 0002:0000103C       .3
+ 0001:0000AE3C       @GetPackageInfoTable
+ 0001:00000320       @InitPkg
+ 0001:0000AE44       @PackageLoad
+ 0001:00000384       @PackageLoad
+ 0001:00000390       @PackageUnload
+ 0001:0000AE50       @PackageUnload
+ 0001:000028B4       AdjustQuickStarts
+ 0001:00004BB0       AdjustQuickStarts
+ 0001:00000220       AllocTlsBuffer
+ 0002:00000118       ARCUpdater
+ 0002:00000120       BeginMarkers
+ 0001:0000A214       CanEnableCopyPreviousLine
+ 0001:00003A2C       CheckRCStats
+ 0001:00005EA4       ColToEnum
+ 0001:0000084C       CommCtrl
+ 0001:00000D3C       CommDlg
+ 0001:0000066C       CopyFile
+ 0001:00002ACC       CreateUnusedSection
+ 0001:00005E8C       CurrentRcMgr
+ 0001:00000D74       Dlgs
+ 0001:00003684       DoDictionary
+ 0001:0000355C       DoEggBuild
+ 0001:0000A8B0       DoFinalization
+ 0001:0000A6E8       DoInitialization
+ 0001:000050AC       DoLine
+ 0001:00003410       DoListEvent
+ 0001:00003408       DoMiscEvent
+ 0001:00003458       DoPurge
+ 0001:00001A7C       DoRCFile
+ 0001:00009848       DoRow
+ 0001:0000A144       EnableChangeStatusToTranslated
+ 0002:00000128       EndMarkers
+ 0001:00005368       EndOfString
+ 0001:00005EB0       EnumToCol
+ 0001:000002CC       ExitProcessTLS
+ 0001:000002A4       ExitThreadTLS
+ 0001:00007A0C       FillUpGrid
+ 0001:00001074       Finalization
+ 0001:00000D44       Finalization
+ 0001:00000D0C       Finalization
+ 0001:00001678       Finalization
+ 0001:00000CC4       Finalization
+ 0001:00000C7C       Finalization
+ 0001:00000C44       Finalization
+ 0001:00000BD4       Finalization
+ 0001:00000B9C       Finalization
+ 0001:000055BC       Finalization
+ 0001:00000B04       Finalization
+ 0001:0000081C       Finalization
+ 0001:0000068C       Finalization
+ 0001:00000634       Finalization
+ 0001:0000039C       Finalization
+ 0001:0000AA00       Finalization
+ 0001:0000327C       Finalization
+ 0001:00000C0C       Finalization
+ 0001:000001E8       FreeLibrary
+ 0002:00001058       frmITERCForm
+ 0001:00008C80       GetCurrID
+ 0001:00003B4C       GetRCStats
+ 0001:0000022C       GetTlsSize
+ 0001:00006514       GotoLineNumber
+ 0002:0000100C       HInstance
+ 0001:00000B34       Imm
+ 0002:0000011C       InCheckRCStats
+ 0001:000002F0       InitializeModule
+ 0001:00000278       InitProcessTLS
+ 0001:00000234       InitThreadTLS
+ 0002:00000138       InSaveToFile
+ 0001:00000674       IsDBCSLeadByteEx
+ 0001:00001714       ITERCCommon
+ 0001:0000AA78       ITERCForm
+ 0001:0000562C       ITERCMgr
+ 0001:000032C0       ITERCUpdater
+ 0002:00000130       LineMarkers
+ 0001:0000067C       LoadBitmap
+ 0001:000001F0       LocalAlloc
+ 0001:000001F8       LocalFree
+ 0001:00005080       LoopThruColumns
+ 0001:0000514C       LoopThruMgr
+ 0001:00000664       Messages
+ 0002:00000000       Module
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0002:0000013C       MsgDlgButtons
+ 0001:0000453C       NextRCStringBlock
+ 0001:00004D14       PerformSearch
+ 0001:0000AE5C       rc
+ 0001:00003924       RCAddlInfo
+ 0002:00001060       RCColIds
+ 0002:00000028       RCColInfo
+ 0001:00003C88       RCStringToString
+ 0001:00003250       RCUpdater
+ 0001:00000C74       RegStr
+ 0001:000010A4       RichEdit
+ 0001:0000380C       RowFound
+ 0002:00000140       S1
+ 0001:000040CC       SearchRcFile
+ 0001:00000684       SendMessage
+ 0001:00003BBC       SetRCStats
+ 0001:00000CAC       ShellAPI
+ 0001:00000BCC       ShlObj
+ 0001:000083F0       ShowSettings
+ 0001:00005EDC       StatusToEnum
+ 0001:00003E90       StringToRCString
+ 0001:000003CC       SysInit
+ 0001:0000A2A8       TfrmITERCForm.ActionList1Update
+ 0001:0000647C       TfrmITERCForm.BuildRowText
+ 0001:00007584       TfrmITERCForm.CanQuit
+ 0001:00006468       TfrmITERCForm.ChangeSize
+ 0001:0000A028       TfrmITERCForm.ChangeToXLatExecute
+ 0001:00009F60       TfrmITERCForm.CopyOrigExecute
+ 0001:00009C7C       TfrmITERCForm.CopyPrevLineExecute
+ 0001:00009E84       TfrmITERCForm.CopyPrevXlatExecute
+ 0001:00008C48       TfrmITERCForm.Create
+ 0001:00005F70       TfrmITERCForm.CreateParams
+ 0001:00009F78       TfrmITERCForm.DoChangeToXLatExecute
+ 0001:00009D00       TfrmITERCForm.DoCopyCommand
+ 0001:00009E9C       TfrmITERCForm.DoCopyOrigExecute
+ 0001:00009DC0       TfrmITERCForm.DoCopyPrevXlatExecute
+ 0001:00007464       TfrmITERCForm.DoIdle
+ 0001:00006430       TfrmITERCForm.EditFile
+ 0001:0000808C       TfrmITERCForm.EditFindExecute
+ 0001:000080F8       TfrmITERCForm.EditFindInFilesExecute
+ 0001:000080E0       TfrmITERCForm.EditFindUpdate
+ 0001:00007680       TfrmITERCForm.EditResetExecute
+ 0001:00007434       TfrmITERCForm.FileSave1Execute
+ 0001:00007448       TfrmITERCForm.FileSave1Update
+ 0001:0000A040       TfrmITERCForm.FindNextExecute
+ 0001:00008FF4       TfrmITERCForm.FormatRCDirective
+ 0001:000074BC       TfrmITERCForm.FormCloseQuery
+ 0001:00005F94       TfrmITERCForm.FormCreate
+ 0001:0000638C       TfrmITERCForm.FormDestroy
+ 0001:000081D8       TfrmITERCForm.FormResize
+ 0001:00006348       TfrmITERCForm.FormShow
+ 0001:00006360       TfrmITERCForm.frmITERCFormHide
+ 0001:000081E8       TfrmITERCForm.GridToRCMgr
+ 0001:000081A8       TfrmITERCForm.HideDockPanel
+ 0001:000074B0       TfrmITERCForm.Idle
+ 0001:00006874       TfrmITERCForm.InitColumns
+ 0001:00006844       TfrmITERCForm.InitFilters
+ 0001:000070A8       TfrmITERCForm.IsDirty
+ 0001:0000A3E0       TfrmITERCForm.ITEGridAddedToRepository
+ 0001:0000A618       TfrmITERCForm.ITEGridCellValueChangedEvent
+ 0001:00007014       TfrmITERCForm.ITEGridColumnMoved
+ 0001:00009A3C       TfrmITERCForm.ITEGridEditMenuClick
+ 0001:000093B8       TfrmITERCForm.ITEGridEditMenuPoping
+ 0001:00006FB0       TfrmITERCForm.ITEGridFixedColClick
+ 0001:00007098       TfrmITERCForm.ITEGridHomeClick
+ 0001:00008F54       TfrmITERCForm.ITEGridInplaceComboBoxCloseUp
+ 0001:00008F6C       TfrmITERCForm.ITEGridInplaceComboBoxShowing
+ 0001:00006CA0       TfrmITERCForm.ITEGridProcessFilters
+ 0001:0000A508       TfrmITERCForm.ITEGridPulledFromRepository
+ 0001:000065C0       TfrmITERCForm.LoadFromFile
+ 0001:00007FA8       TfrmITERCForm.LoadRcFile
+ 0001:00007040       TfrmITERCForm.MoveEnum
+ 0001:00008B6C       TfrmITERCForm.OnSearchEnd
+ 0001:00008A18       TfrmITERCForm.OnSearchFound
+ 0001:00008A10       TfrmITERCForm.OnSearchStart
+ 0001:000081A0       TfrmITERCForm.pnlSearchResultsDockDrop
+ 0001:000081D0       TfrmITERCForm.pnlSearchResultsUnDock
+ 0001:00006E6C       TfrmITERCForm.ProcessStatus
+ 0001:0000A608       TfrmITERCForm.RCFormEnter
+ 0001:000070D0       TfrmITERCForm.ResetColumns
+ 0001:000070E0       TfrmITERCForm.ResetDirtyList
+ 0001:000070C0       TfrmITERCForm.ResetFilters
+ 0001:00007298       TfrmITERCForm.SaveToFile
+ 0001:00008784       TfrmITERCForm.SearchRc
+ 0001:0000A12C       TfrmITERCForm.SelectAllExecute
+ 0001:00008C40       TfrmITERCForm.SetToolServ
+ 0001:00008154       TfrmITERCForm.ShowDockPanel
+ 0001:000090AC       TfrmITERCForm.ShowMultiLineEditExecute
+ 0001:00009128       TfrmITERCForm.ShowMultiLineEditUpdate
+ 0001:00009170       TfrmITERCForm.ShowSettingsActionExecute
+ 0001:000073F4       TfrmITERCForm.TextWidthOf
+ 0001:000091D0       TfrmITERCForm.ToggleTextLabelsExecute
+ 0001:00007190       TfrmITERCForm.UpdateDirty
+ 0001:00008CCC       TfrmITERCForm.UpdateStatusBar
+ 0001:000077FC       TfrmITERCForm.ValidateStatus
+ 0001:000079B0       TfrmITERCForm.ValidateText
+ 0002:00001064       TheExts
+ 0001:00000200       TlsAlloc
+ 0002:00001014       tlsBuffer
+ 0001:00000208       TlsFree
+ 0001:00000210       TlsGetValue
+ 0002:00001004       TlsIndex
+ 0002:AD834000       TlsLast
+ 0002:00000018       TlsProc
+ 0001:00000218       TlsSetValue
+ 0002:00001068       ToolServ
+ 0001:00004A68       TRCMgr.CalcRCStats
+ 0001:000042F0       TRCMgr.ClearList
+ 0001:00004328       TRCMgr.Create
+ 0001:000043CC       TRCMgr.Destroy
+ 0001:00004410       TRCMgr.DoSearchEnd
+ 0001:00004438       TRCMgr.DoSearchFound
+ 0001:00004478       TRCMgr.DoSearchStart
+ 0001:00005388       TRCMgr.EggBuild
+ 0001:0000449C       TRCMgr.GetCount
+ 0001:000044A8       TRCMgr.GetStrings
+ 0001:000044D8       TRCMgr.InitSearchLocale
+ 0001:00004760       TRCMgr.LoadFromStream
+ 0001:00005460       TRCMgr.MakeDictionary
+ 0001:000052D0       TRCMgr.Purge
+ 0001:00004988       TRCMgr.ReCalcRCStats
+ 0001:00004B20       TRCMgr.Save
+ 0001:00004C18       TRCMgr.SaveStringList
+ 0001:000051C0       TRCMgr.Search
+ 0001:000052A4       TRCMgr.SetStrings
+ 0001:00005550       TRCSearchSettings.Create
+ 0001:0000558C       TRCSearchSettings.Destroy
+ 0001:00001FA0       TRCUpdater.ActionForRCString
+ 0001:00002918       TRCUpdater.AddRCString
+ 0001:00002B90       TRCUpdater.AddUnusedRCString
+ 0001:00002764       TRCUpdater.CopyOverTheUnusedSection
+ 0001:000018F0       TRCUpdater.Create
+ 0001:000019C8       TRCUpdater.DataHasNotChanged
+ 0001:00001978       TRCUpdater.Destroy
+ 0001:00001F20       TRCUpdater.Execute
+ 0001:000023B0       TRCUpdater.GetRCList
+ 0001:0000205C       TRCUpdater.GetRCStrings
+ 0001:00002590       TRCUpdater.GetXlatRCFileName
+ 0001:00002CEC       TRCUpdater.NewRCString
+ 0001:00003270       TRCUpdater.TranslatorCount
+ 0001:00002D68       TRCUpdater.UnusedRCString
+ 0001:00002F14       TRCUpdater.UpdateRCFile
+ 0001:00002DDC       TRCUpdater.UpdateRCString
+ 0001:000002FC       UninitializeModule
+ 0001:00001CF8       UpdateFromOrig
+ 0001:00001E38       UpdateFromTrans
+ 0001:00000C04       UrlMon
+ 0001:000006BC       Windows
+ 0001:00000C3C       WinInet
+ 0001:00000CF4       WinSpool
+
+
+  Address         Publics by Value
+
+ 0002:AD834000       TlsLast
+ 0001:000001E8       FreeLibrary
+ 0001:000001F0       LocalAlloc
+ 0001:000001F8       LocalFree
+ 0001:00000200       TlsAlloc
+ 0001:00000208       TlsFree
+ 0001:00000210       TlsGetValue
+ 0001:00000218       TlsSetValue
+ 0001:00000220       AllocTlsBuffer
+ 0001:0000022C       GetTlsSize
+ 0001:00000234       InitThreadTLS
+ 0001:00000278       InitProcessTLS
+ 0001:000002A4       ExitThreadTLS
+ 0001:000002CC       ExitProcessTLS
+ 0001:000002F0       InitializeModule
+ 0001:000002FC       UninitializeModule
+ 0001:00000320       @InitPkg
+ 0001:00000384       @PackageLoad
+ 0001:00000390       @PackageUnload
+ 0001:0000039C       Finalization
+ 0001:000003CC       SysInit
+ 0001:00000634       Finalization
+ 0001:00000664       Messages
+ 0001:0000066C       CopyFile
+ 0001:00000674       IsDBCSLeadByteEx
+ 0001:0000067C       LoadBitmap
+ 0001:00000684       SendMessage
+ 0001:0000068C       Finalization
+ 0001:000006BC       Windows
+ 0001:0000081C       Finalization
+ 0001:0000084C       CommCtrl
+ 0001:00000B04       Finalization
+ 0001:00000B34       Imm
+ 0001:00000B9C       Finalization
+ 0001:00000BCC       ShlObj
+ 0001:00000BD4       Finalization
+ 0001:00000C04       UrlMon
+ 0001:00000C0C       Finalization
+ 0001:00000C3C       WinInet
+ 0001:00000C44       Finalization
+ 0001:00000C74       RegStr
+ 0001:00000C7C       Finalization
+ 0001:00000CAC       ShellAPI
+ 0001:00000CC4       Finalization
+ 0001:00000CF4       WinSpool
+ 0001:00000D0C       Finalization
+ 0001:00000D3C       CommDlg
+ 0001:00000D44       Finalization
+ 0001:00000D74       Dlgs
+ 0001:00001074       Finalization
+ 0001:000010A4       RichEdit
+ 0001:00001678       Finalization
+ 0001:00001714       ITERCCommon
+ 0001:000018F0       TRCUpdater.Create
+ 0001:00001978       TRCUpdater.Destroy
+ 0001:000019C8       TRCUpdater.DataHasNotChanged
+ 0001:00001A7C       DoRCFile
+ 0001:00001CF8       UpdateFromOrig
+ 0001:00001E38       UpdateFromTrans
+ 0001:00001F20       TRCUpdater.Execute
+ 0001:00001FA0       TRCUpdater.ActionForRCString
+ 0001:0000205C       TRCUpdater.GetRCStrings
+ 0001:000023B0       TRCUpdater.GetRCList
+ 0001:00002590       TRCUpdater.GetXlatRCFileName
+ 0001:00002764       TRCUpdater.CopyOverTheUnusedSection
+ 0001:000028B4       AdjustQuickStarts
+ 0001:00002918       TRCUpdater.AddRCString
+ 0001:00002ACC       CreateUnusedSection
+ 0001:00002B90       TRCUpdater.AddUnusedRCString
+ 0001:00002CEC       TRCUpdater.NewRCString
+ 0001:00002D68       TRCUpdater.UnusedRCString
+ 0001:00002DDC       TRCUpdater.UpdateRCString
+ 0001:00002F14       TRCUpdater.UpdateRCFile
+ 0001:00003250       RCUpdater
+ 0001:00003270       TRCUpdater.TranslatorCount
+ 0001:0000327C       Finalization
+ 0001:000032C0       ITERCUpdater
+ 0001:00003408       DoMiscEvent
+ 0001:00003410       DoListEvent
+ 0001:00003458       DoPurge
+ 0001:0000355C       DoEggBuild
+ 0001:00003684       DoDictionary
+ 0001:0000380C       RowFound
+ 0001:00003924       RCAddlInfo
+ 0001:00003A2C       CheckRCStats
+ 0001:00003B4C       GetRCStats
+ 0001:00003BBC       SetRCStats
+ 0001:00003C88       RCStringToString
+ 0001:00003E90       StringToRCString
+ 0001:000040CC       SearchRcFile
+ 0001:000042F0       TRCMgr.ClearList
+ 0001:00004328       TRCMgr.Create
+ 0001:000043CC       TRCMgr.Destroy
+ 0001:00004410       TRCMgr.DoSearchEnd
+ 0001:00004438       TRCMgr.DoSearchFound
+ 0001:00004478       TRCMgr.DoSearchStart
+ 0001:0000449C       TRCMgr.GetCount
+ 0001:000044A8       TRCMgr.GetStrings
+ 0001:000044D8       TRCMgr.InitSearchLocale
+ 0001:0000453C       NextRCStringBlock
+ 0001:00004760       TRCMgr.LoadFromStream
+ 0001:00004988       TRCMgr.ReCalcRCStats
+ 0001:00004A68       TRCMgr.CalcRCStats
+ 0001:00004B20       TRCMgr.Save
+ 0001:00004BB0       AdjustQuickStarts
+ 0001:00004C18       TRCMgr.SaveStringList
+ 0001:00004D14       PerformSearch
+ 0001:00005080       LoopThruColumns
+ 0001:000050AC       DoLine
+ 0001:0000514C       LoopThruMgr
+ 0001:000051C0       TRCMgr.Search
+ 0001:000052A4       TRCMgr.SetStrings
+ 0001:000052D0       TRCMgr.Purge
+ 0001:00005368       EndOfString
+ 0001:00005388       TRCMgr.EggBuild
+ 0001:00005460       TRCMgr.MakeDictionary
+ 0001:00005550       TRCSearchSettings.Create
+ 0001:0000558C       TRCSearchSettings.Destroy
+ 0001:000055BC       Finalization
+ 0001:0000562C       ITERCMgr
+ 0001:00005E8C       CurrentRcMgr
+ 0001:00005EA4       ColToEnum
+ 0001:00005EB0       EnumToCol
+ 0001:00005EDC       StatusToEnum
+ 0001:00005F70       TfrmITERCForm.CreateParams
+ 0001:00005F94       TfrmITERCForm.FormCreate
+ 0001:00006348       TfrmITERCForm.FormShow
+ 0001:00006360       TfrmITERCForm.frmITERCFormHide
+ 0001:0000638C       TfrmITERCForm.FormDestroy
+ 0001:00006430       TfrmITERCForm.EditFile
+ 0001:00006468       TfrmITERCForm.ChangeSize
+ 0001:0000647C       TfrmITERCForm.BuildRowText
+ 0001:00006514       GotoLineNumber
+ 0001:000065C0       TfrmITERCForm.LoadFromFile
+ 0001:00006844       TfrmITERCForm.InitFilters
+ 0001:00006874       TfrmITERCForm.InitColumns
+ 0001:00006CA0       TfrmITERCForm.ITEGridProcessFilters
+ 0001:00006E6C       TfrmITERCForm.ProcessStatus
+ 0001:00006FB0       TfrmITERCForm.ITEGridFixedColClick
+ 0001:00007014       TfrmITERCForm.ITEGridColumnMoved
+ 0001:00007040       TfrmITERCForm.MoveEnum
+ 0001:00007098       TfrmITERCForm.ITEGridHomeClick
+ 0001:000070A8       TfrmITERCForm.IsDirty
+ 0001:000070C0       TfrmITERCForm.ResetFilters
+ 0001:000070D0       TfrmITERCForm.ResetColumns
+ 0001:000070E0       TfrmITERCForm.ResetDirtyList
+ 0001:00007190       TfrmITERCForm.UpdateDirty
+ 0001:00007298       TfrmITERCForm.SaveToFile
+ 0001:000073F4       TfrmITERCForm.TextWidthOf
+ 0001:00007434       TfrmITERCForm.FileSave1Execute
+ 0001:00007448       TfrmITERCForm.FileSave1Update
+ 0001:00007464       TfrmITERCForm.DoIdle
+ 0001:000074B0       TfrmITERCForm.Idle
+ 0001:000074BC       TfrmITERCForm.FormCloseQuery
+ 0001:00007584       TfrmITERCForm.CanQuit
+ 0001:00007680       TfrmITERCForm.EditResetExecute
+ 0001:000077FC       TfrmITERCForm.ValidateStatus
+ 0001:000079B0       TfrmITERCForm.ValidateText
+ 0001:00007A0C       FillUpGrid
+ 0001:00007FA8       TfrmITERCForm.LoadRcFile
+ 0001:0000808C       TfrmITERCForm.EditFindExecute
+ 0001:000080E0       TfrmITERCForm.EditFindUpdate
+ 0001:000080F8       TfrmITERCForm.EditFindInFilesExecute
+ 0001:00008154       TfrmITERCForm.ShowDockPanel
+ 0001:000081A0       TfrmITERCForm.pnlSearchResultsDockDrop
+ 0001:000081A8       TfrmITERCForm.HideDockPanel
+ 0001:000081D0       TfrmITERCForm.pnlSearchResultsUnDock
+ 0001:000081D8       TfrmITERCForm.FormResize
+ 0001:000081E8       TfrmITERCForm.GridToRCMgr
+ 0001:000083F0       ShowSettings
+ 0001:00008784       TfrmITERCForm.SearchRc
+ 0001:00008A10       TfrmITERCForm.OnSearchStart
+ 0001:00008A18       TfrmITERCForm.OnSearchFound
+ 0001:00008B6C       TfrmITERCForm.OnSearchEnd
+ 0001:00008C40       TfrmITERCForm.SetToolServ
+ 0001:00008C48       TfrmITERCForm.Create
+ 0001:00008C80       GetCurrID
+ 0001:00008CCC       TfrmITERCForm.UpdateStatusBar
+ 0001:00008F54       TfrmITERCForm.ITEGridInplaceComboBoxCloseUp
+ 0001:00008F6C       TfrmITERCForm.ITEGridInplaceComboBoxShowing
+ 0001:00008FF4       TfrmITERCForm.FormatRCDirective
+ 0001:000090AC       TfrmITERCForm.ShowMultiLineEditExecute
+ 0001:00009128       TfrmITERCForm.ShowMultiLineEditUpdate
+ 0001:00009170       TfrmITERCForm.ShowSettingsActionExecute
+ 0001:000091D0       TfrmITERCForm.ToggleTextLabelsExecute
+ 0001:000093B8       TfrmITERCForm.ITEGridEditMenuPoping
+ 0001:00009848       DoRow
+ 0001:00009A3C       TfrmITERCForm.ITEGridEditMenuClick
+ 0001:00009C7C       TfrmITERCForm.CopyPrevLineExecute
+ 0001:00009D00       TfrmITERCForm.DoCopyCommand
+ 0001:00009DC0       TfrmITERCForm.DoCopyPrevXlatExecute
+ 0001:00009E84       TfrmITERCForm.CopyPrevXlatExecute
+ 0001:00009E9C       TfrmITERCForm.DoCopyOrigExecute
+ 0001:00009F60       TfrmITERCForm.CopyOrigExecute
+ 0001:00009F78       TfrmITERCForm.DoChangeToXLatExecute
+ 0001:0000A028       TfrmITERCForm.ChangeToXLatExecute
+ 0001:0000A040       TfrmITERCForm.FindNextExecute
+ 0001:0000A12C       TfrmITERCForm.SelectAllExecute
+ 0001:0000A144       EnableChangeStatusToTranslated
+ 0001:0000A214       CanEnableCopyPreviousLine
+ 0001:0000A2A8       TfrmITERCForm.ActionList1Update
+ 0001:0000A3E0       TfrmITERCForm.ITEGridAddedToRepository
+ 0001:0000A508       TfrmITERCForm.ITEGridPulledFromRepository
+ 0001:0000A608       TfrmITERCForm.RCFormEnter
+ 0001:0000A618       TfrmITERCForm.ITEGridCellValueChangedEvent
+ 0001:0000A6E8       DoInitialization
+ 0001:0000A8B0       DoFinalization
+ 0001:0000AA00       Finalization
+ 0001:0000AA78       ITERCForm
+ 0001:0000AE3C       @GetPackageInfoTable
+ 0001:0000AE44       @PackageLoad
+ 0001:0000AE50       @PackageUnload
+ 0001:0000AE5C       rc
+ 0002:00000000       Module
+ 0002:00000018       TlsProc
+ 0002:00000028       RCColInfo
+ 0002:00000118       ARCUpdater
+ 0002:0000011C       InCheckRCStats
+ 0002:00000120       BeginMarkers
+ 0002:00000128       EndMarkers
+ 0002:00000130       LineMarkers
+ 0002:00000138       InSaveToFile
+ 0002:0000013C       MsgDlgButtons
+ 0002:00000140       S1
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0002:00001004       TlsIndex
+ 0002:0000100C       HInstance
+ 0002:00001010       .1
+ 0002:00001014       tlsBuffer
+ 0002:00001018       .1
+ 0002:0000101C       .3
+ 0002:00001020       .1
+ 0002:00001024       .1
+ 0002:00001028       .1
+ 0002:0000102C       .1
+ 0002:00001030       .1
+ 0002:00001034       .1
+ 0002:00001038       .1
+ 0002:0000103C       .3
+ 0002:00001040       .1
+ 0002:00001044       .1
+ 0002:00001048       .1
+ 0002:0000104C       .2
+ 0002:00001050       .2
+ 0002:00001054       .3
+ 0002:00001058       frmITERCForm
+ 0002:0000105C       .2
+ 0002:00001060       RCColIds
+ 0002:00001064       TheExts
+ 0002:00001068       ToolServ
+
+
+Bound resource files
+
+rcdata.res
+ITERCForm.dfm
+rc.res
+C:\DOCUME~1\~storm\LOCALS~1\Temp\dtf72D5.tmp
+
+
+Program entry point at 0001:0000AE5C

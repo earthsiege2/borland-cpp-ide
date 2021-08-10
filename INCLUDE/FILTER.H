@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:37:43 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for filter.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -38,6 +36,10 @@
 #ifndef __filter_h__
 #define __filter_h__
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
 /* Forward Declarations */ 
 
 #ifndef __IFilter_FWD_DEFINED__
@@ -55,8 +57,8 @@ typedef interface IFilter IFilter;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_filter_0000 */
 /* [local] */ 
@@ -73,7 +75,7 @@ typedef struct tagFULLPROPSPEC
     {
     GUID guidPropSet;
     PROPSPEC psProperty;
-    }	FULLPROPSPEC;
+    } 	FULLPROPSPEC;
 
 #endif // #if !defined(_TAGFULLPROPSPEC_DEFINED_)
 
@@ -98,7 +100,7 @@ enum tagIFILTER_INIT
 	IFILTER_INIT_APPLY_OTHER_ATTRIBUTES	= 32,
 	IFILTER_INIT_INDEXING_ONLY	= 64,
 	IFILTER_INIT_SEARCH_LINKS	= 128
-    }	IFILTER_INIT;
+    } 	IFILTER_INIT;
 
 #define _tagIFILTER_INIT_DEFINED
 #define _IFILTER_INIT_DEFINED
@@ -107,7 +109,7 @@ enum tagIFILTER_INIT
 typedef 
 enum tagIFILTER_FLAGS
     {	IFILTER_FLAGS_OLE_PROPERTIES	= 1
-    }	IFILTER_FLAGS;
+    } 	IFILTER_FLAGS;
 
 #define _tagIFILTER_FLAGS_DEFINED
 #define _IFILTER_FLAGS_DEFINED
@@ -117,7 +119,7 @@ typedef
 enum tagCHUNKSTATE
     {	CHUNK_TEXT	= 0x1,
 	CHUNK_VALUE	= 0x2
-    }	CHUNKSTATE;
+    } 	CHUNKSTATE;
 
 #define _tagCHUNKSTATE_DEFINED
 #define _CHUNKSTATE_DEFINED
@@ -130,7 +132,7 @@ enum tagCHUNK_BREAKTYPE
 	CHUNK_EOS	= 2,
 	CHUNK_EOP	= 3,
 	CHUNK_EOC	= 4
-    }	CHUNK_BREAKTYPE;
+    } 	CHUNK_BREAKTYPE;
 
 #define _tagCHUNK_BREAKTYPE_DEFINED
 #define _CHUNK_BREAKTYPE_DEFINED
@@ -141,7 +143,7 @@ typedef struct tagFILTERREGION
     ULONG idChunk;
     ULONG cwcStart;
     ULONG cwcExtent;
-    }	FILTERREGION;
+    } 	FILTERREGION;
 
 #define _tagFILTERREGION_DEFINED
 #define _FILTERREGION_DEFINED
@@ -157,7 +159,7 @@ typedef struct tagSTAT_CHUNK
     ULONG idChunkSource;
     ULONG cwcStartSource;
     ULONG cwcLenSource;
-    }	STAT_CHUNK;
+    } 	STAT_CHUNK;
 
 #define _tagSTAT_CHUNK_DEFINED
 #define _STAT_CHUNK_DEFINED
@@ -174,23 +176,23 @@ EXTERN_C const IID IID_IFilter;
         virtual SCODE STDMETHODCALLTYPE Init( 
             /* [in] */ ULONG grfFlags,
             /* [in] */ ULONG cAttributes,
-            /* [size_is][in] */ const FULLPROPSPEC __RPC_FAR *aAttributes,
-            /* [out] */ ULONG __RPC_FAR *pFlags) = 0;
+            /* [size_is][in] */ const FULLPROPSPEC *aAttributes,
+            /* [out] */ ULONG *pFlags) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetChunk( 
-            /* [out] */ STAT_CHUNK __RPC_FAR *pStat) = 0;
+            /* [out] */ STAT_CHUNK *pStat) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetText( 
-            /* [out][in] */ ULONG __RPC_FAR *pcwcBuffer,
-            /* [size_is][out] */ WCHAR __RPC_FAR *awcBuffer) = 0;
+            /* [out][in] */ ULONG *pcwcBuffer,
+            /* [size_is][out] */ WCHAR *awcBuffer) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetValue( 
-            /* [out] */ PROPVARIANT __RPC_FAR *__RPC_FAR *ppPropValue) = 0;
+            /* [out] */ PROPVARIANT **ppPropValue) = 0;
         
         virtual SCODE STDMETHODCALLTYPE BindRegion( 
             /* [in] */ FILTERREGION origPos,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppunk) = 0;
+            /* [out] */ void **ppunk) = 0;
         
     };
     
@@ -200,49 +202,49 @@ EXTERN_C const IID IID_IFilter;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IFilter __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IFilter * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IFilter __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IFilter * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IFilter __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IFilter * This);
         
-        SCODE ( STDMETHODCALLTYPE __RPC_FAR *Init )( 
-            IFilter __RPC_FAR * This,
+        SCODE ( STDMETHODCALLTYPE *Init )( 
+            IFilter * This,
             /* [in] */ ULONG grfFlags,
             /* [in] */ ULONG cAttributes,
-            /* [size_is][in] */ const FULLPROPSPEC __RPC_FAR *aAttributes,
-            /* [out] */ ULONG __RPC_FAR *pFlags);
+            /* [size_is][in] */ const FULLPROPSPEC *aAttributes,
+            /* [out] */ ULONG *pFlags);
         
-        SCODE ( STDMETHODCALLTYPE __RPC_FAR *GetChunk )( 
-            IFilter __RPC_FAR * This,
-            /* [out] */ STAT_CHUNK __RPC_FAR *pStat);
+        SCODE ( STDMETHODCALLTYPE *GetChunk )( 
+            IFilter * This,
+            /* [out] */ STAT_CHUNK *pStat);
         
-        SCODE ( STDMETHODCALLTYPE __RPC_FAR *GetText )( 
-            IFilter __RPC_FAR * This,
-            /* [out][in] */ ULONG __RPC_FAR *pcwcBuffer,
-            /* [size_is][out] */ WCHAR __RPC_FAR *awcBuffer);
+        SCODE ( STDMETHODCALLTYPE *GetText )( 
+            IFilter * This,
+            /* [out][in] */ ULONG *pcwcBuffer,
+            /* [size_is][out] */ WCHAR *awcBuffer);
         
-        SCODE ( STDMETHODCALLTYPE __RPC_FAR *GetValue )( 
-            IFilter __RPC_FAR * This,
-            /* [out] */ PROPVARIANT __RPC_FAR *__RPC_FAR *ppPropValue);
+        SCODE ( STDMETHODCALLTYPE *GetValue )( 
+            IFilter * This,
+            /* [out] */ PROPVARIANT **ppPropValue);
         
-        SCODE ( STDMETHODCALLTYPE __RPC_FAR *BindRegion )( 
-            IFilter __RPC_FAR * This,
+        SCODE ( STDMETHODCALLTYPE *BindRegion )( 
+            IFilter * This,
             /* [in] */ FILTERREGION origPos,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppunk);
+            /* [out] */ void **ppunk);
         
         END_INTERFACE
     } IFilterVtbl;
 
     interface IFilter
     {
-        CONST_VTBL struct IFilterVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IFilterVtbl *lpVtbl;
     };
 
     
@@ -283,11 +285,11 @@ EXTERN_C const IID IID_IFilter;
 
 
 SCODE STDMETHODCALLTYPE IFilter_Init_Proxy( 
-    IFilter __RPC_FAR * This,
+    IFilter * This,
     /* [in] */ ULONG grfFlags,
     /* [in] */ ULONG cAttributes,
-    /* [size_is][in] */ const FULLPROPSPEC __RPC_FAR *aAttributes,
-    /* [out] */ ULONG __RPC_FAR *pFlags);
+    /* [size_is][in] */ const FULLPROPSPEC *aAttributes,
+    /* [out] */ ULONG *pFlags);
 
 
 void __RPC_STUB IFilter_Init_Stub(
@@ -298,8 +300,8 @@ void __RPC_STUB IFilter_Init_Stub(
 
 
 SCODE STDMETHODCALLTYPE IFilter_GetChunk_Proxy( 
-    IFilter __RPC_FAR * This,
-    /* [out] */ STAT_CHUNK __RPC_FAR *pStat);
+    IFilter * This,
+    /* [out] */ STAT_CHUNK *pStat);
 
 
 void __RPC_STUB IFilter_GetChunk_Stub(
@@ -310,9 +312,9 @@ void __RPC_STUB IFilter_GetChunk_Stub(
 
 
 SCODE STDMETHODCALLTYPE IFilter_GetText_Proxy( 
-    IFilter __RPC_FAR * This,
-    /* [out][in] */ ULONG __RPC_FAR *pcwcBuffer,
-    /* [size_is][out] */ WCHAR __RPC_FAR *awcBuffer);
+    IFilter * This,
+    /* [out][in] */ ULONG *pcwcBuffer,
+    /* [size_is][out] */ WCHAR *awcBuffer);
 
 
 void __RPC_STUB IFilter_GetText_Stub(
@@ -323,8 +325,8 @@ void __RPC_STUB IFilter_GetText_Stub(
 
 
 SCODE STDMETHODCALLTYPE IFilter_GetValue_Proxy( 
-    IFilter __RPC_FAR * This,
-    /* [out] */ PROPVARIANT __RPC_FAR *__RPC_FAR *ppPropValue);
+    IFilter * This,
+    /* [out] */ PROPVARIANT **ppPropValue);
 
 
 void __RPC_STUB IFilter_GetValue_Stub(
@@ -335,10 +337,10 @@ void __RPC_STUB IFilter_GetValue_Stub(
 
 
 SCODE STDMETHODCALLTYPE IFilter_BindRegion_Proxy( 
-    IFilter __RPC_FAR * This,
+    IFilter * This,
     /* [in] */ FILTERREGION origPos,
     /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppunk);
+    /* [out] */ void **ppunk);
 
 
 void __RPC_STUB IFilter_BindRegion_Stub(
@@ -363,4 +365,3 @@ void __RPC_STUB IFilter_BindRegion_Stub(
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

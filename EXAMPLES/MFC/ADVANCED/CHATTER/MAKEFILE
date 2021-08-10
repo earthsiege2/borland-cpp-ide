@@ -12,4 +12,14 @@ PROJ=CHATTER
 OBJS=chatter.obj chatdoc.obj chatsock.obj chatvw.obj mainfrm.obj \
 	msg.obj sendvw.obj setupdlg.obj 
 
-!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+#!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+!include <..\..\mfcrules.mak>
+
+default: integration
+	$(MAKE) -f $(PROJ).mak
+
+clean:
+	$(CLEAN_MFC)
+                                
+integration: $(PROJ).bpr $(PROJ).mak
+    $(NOP)

@@ -441,7 +441,12 @@ cpp_quote("/* OLECMDID_STOPDOWNLOAD and OLECMDID_ALLOWUILESSSAVEAS are supported
                 OLECMDID_SHOWPRINT                      = 44,
                 OLECMDID_CLOSE                          = 45,
                 OLECMDID_ALLOWUILESSSAVEAS              = 46,
-				OLECMDID_DONTDOWNLOADCSS				= 47,
+                OLECMDID_DONTDOWNLOADCSS                = 47,
+                OLECMDID_UPDATEPAGESTATUS               = 48,
+                OLECMDID_PRINT2                         = 49,
+                OLECMDID_PRINTPREVIEW2                  = 50,
+                OLECMDID_SETPRINTTEMPLATE               = 51,
+                OLECMDID_GETPRINTTEMPLATE               = 52,
         } OLECMDID;
 
 /* error codes */
@@ -487,7 +492,8 @@ cpp_quote("      OLECMDIDF_REFRESH_NO_CACHE        = 4,")
 cpp_quote("      OLECMDIDF_REFRESH_RELOAD          = 5,")
 cpp_quote("      OLECMDIDF_REFRESH_LEVELMASK       = 0x00FF,")
 cpp_quote("      OLECMDIDF_REFRESH_CLEARUSERINPUT  = 0x1000,")
-cpp_quote("      OLECMDIDF_REFRESH_PROMPTIFOFFLINE = 0x2000")
+cpp_quote("      OLECMDIDF_REFRESH_PROMPTIFOFFLINE = 0x2000,")
+cpp_quote("      OLECMDIDF_REFRESH_THROUGHSCRIPT   = 0x4000")
 cpp_quote("} OLECMDID_REFRESHFLAG;")
 
 cpp_quote("")

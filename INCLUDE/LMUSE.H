@@ -27,7 +27,6 @@ Notes:
 --*/
 
 #ifndef _LMUSE_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMUSE_
 
 #if _MSC_VER > 1000
@@ -165,10 +164,10 @@ typedef struct _USE_INFO_3 {
 #define CREATE_BYPASS_CSC 0x2        // force connection to server, bypassing CSC
                                      //  all ops on this connection go to the server,
                                      //  never to the cache
+#define USE_DEFAULT_CREDENTIALS 0x4  // No explicit credentials passed to NetUseAdd
 
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _LMUSE_

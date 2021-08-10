@@ -1,15 +1,18 @@
 /*
- *  M A P I F O R M . H
+ *	M A P I F O R M . H
  *
- *  Declarations of interfaces for clients and providers of MAPI
+ *	Declarations of interfaces for clients and providers of MAPI
  *  forms and form registries.
  *
- *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1999 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef MAPIFORM_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define MAPIFORM_H
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 /* Include common MAPI header files if they haven't been already. */
 
@@ -67,7 +70,7 @@ STDAPI MAPIOpenLocalFormContainer(LPMAPIFORMCONTAINER FAR * ppfcnt);
 #define MAPI_GETLASTERROR_METHOD(IPURE)                                 \
     MAPIMETHOD(GetLastError) (THIS_                                     \
         /*in*/  HRESULT hResult,                                        \
-    /*in*/  ULONG ulFlags,                                          \
+	/*in*/  ULONG ulFlags,                                          \
         /*out*/ LPMAPIERROR FAR * lppMAPIError) IPURE;                  \
 
 
@@ -85,8 +88,8 @@ STDAPI MAPIOpenLocalFormContainer(LPMAPIFORMCONTAINER FAR * ppfcnt);
     MAPIMETHOD(Load)(THIS_                                              \
         /*in*/ LPMAPIMESSAGESITE pMessageSite,                          \
         /*in*/ LPMESSAGE pMessage,                                      \
-        /*in*/ ULONG ulMessageStatus,                                   \
-        /*in*/ ULONG ulMessageFlags) IPURE;                             \
+		/*in*/ ULONG ulMessageStatus,                                   \
+		/*in*/ ULONG ulMessageFlags) IPURE;                             \
     MAPIMETHOD(Save)(THIS_                                              \
         /*in*/ LPMESSAGE pMessage,                                      \
         /*in*/ ULONG fSameAsLoad) IPURE;                                \
@@ -98,10 +101,10 @@ STDAPI MAPIOpenLocalFormContainer(LPMAPIFORMCONTAINER FAR * ppfcnt);
 #define INTERFACE IPersistMessage
 DECLARE_MAPI_INTERFACE_(IPersistMessage, IUnknown)
 {
-    BEGIN_INTERFACE
-    MAPI_IUNKNOWN_METHODS(PURE)
-    MAPI_GETLASTERROR_METHOD(PURE)
-    MAPI_IPERSISTMESSAGE_METHODS(PURE)
+	BEGIN_INTERFACE
+	MAPI_IUNKNOWN_METHODS(PURE)
+	MAPI_GETLASTERROR_METHOD(PURE)
+	MAPI_IPERSISTMESSAGE_METHODS(PURE)
 };
 
 
@@ -136,18 +139,18 @@ DECLARE_MAPI_INTERFACE_(IPersistMessage, IUnknown)
         /*in*/  LPCRECT prcPosRect) IPURE;                              \
     MAPIMETHOD(SaveMessage) (THIS) IPURE;                               \
     MAPIMETHOD(SubmitMessage) (THIS_                                    \
-        /*in*/ ULONG ulFlags) IPURE;                                    \
+		/*in*/ ULONG ulFlags) IPURE;                                    \
     MAPIMETHOD(GetSiteStatus) (THIS_                                    \
-        /*out*/ LPULONG lpulStatus) IPURE;                              \
+		/*out*/ LPULONG lpulStatus) IPURE;                              \
 
 #undef INTERFACE
 #define INTERFACE IMAPIMessageSite
 DECLARE_MAPI_INTERFACE_(IMAPIMessageSite, IUnknown)
 {
-    BEGIN_INTERFACE
-    MAPI_IUNKNOWN_METHODS(PURE)
-    MAPI_GETLASTERROR_METHOD(PURE)
-    MAPI_IMAPIMESSAGESITE_METHODS(PURE)
+	BEGIN_INTERFACE
+	MAPI_IUNKNOWN_METHODS(PURE)
+	MAPI_GETLASTERROR_METHOD(PURE)
+	MAPI_IMAPIMESSAGESITE_METHODS(PURE)
 };
 
 
@@ -179,17 +182,17 @@ DECLARE_MAPI_INTERFACE_(IMAPIMessageSite, IUnknown)
 #define INTERFACE IMAPIForm
 DECLARE_MAPI_INTERFACE_(IMAPIForm, IUnknown)
 {
-    BEGIN_INTERFACE
-    MAPI_IUNKNOWN_METHODS(PURE)
-    MAPI_GETLASTERROR_METHOD(PURE)
-    MAPI_IMAPIFORM_METHODS(PURE)
+	BEGIN_INTERFACE
+	MAPI_IUNKNOWN_METHODS(PURE)
+	MAPI_GETLASTERROR_METHOD(PURE)
+	MAPI_IMAPIFORM_METHODS(PURE)
 };
 
 typedef enum tagSAVEOPTS
 {
-    SAVEOPTS_SAVEIFDIRTY = 0,
-    SAVEOPTS_NOSAVE = 1,
-    SAVEOPTS_PROMPTSAVE = 2
+	SAVEOPTS_SAVEIFDIRTY = 0,
+	SAVEOPTS_NOSAVE = 1,
+	SAVEOPTS_PROMPTSAVE = 2
 } SAVEOPTS;
 
 
@@ -200,11 +203,11 @@ typedef enum tagSAVEOPTS
 /* Structure passed in GetPrintSetup  */
 
 typedef struct {
-    ULONG ulFlags;  /* MAPI_UNICODE */
-    HGLOBAL hDevMode;
-    HGLOBAL hDevNames;
-    ULONG ulFirstPageNumber;
-    ULONG fPrintAttachments;
+	ULONG ulFlags;  /* MAPI_UNICODE */
+	HGLOBAL hDevMode;
+	HGLOBAL hDevNames;
+	ULONG ulFirstPageNumber;
+	ULONG fPrintAttachments;
 } FORMPRINTSETUP, FAR * LPFORMPRINTSETUP;
 
 /* Values for pulFormat in GetSaveStream */
@@ -228,16 +231,16 @@ typedef struct {
         /*out*/ ULONG FAR * pulFormat,                                  \
         /*out*/ LPSTREAM FAR * ppstm) IPURE;                            \
     MAPIMETHOD(GetViewStatus) (THIS_                                    \
-        /*out*/ LPULONG lpulStatus) IPURE;                              \
+		/*out*/ LPULONG lpulStatus) IPURE;                              \
 
 #undef INTERFACE
 #define INTERFACE IMAPIViewContext
 DECLARE_MAPI_INTERFACE_(IMAPIViewContext, IUnknown)
 {
-    BEGIN_INTERFACE
-    MAPI_IUNKNOWN_METHODS(PURE)
-    MAPI_GETLASTERROR_METHOD(PURE)
-    MAPI_IMAPIVIEWCONTEXT_METHODS(PURE)
+	BEGIN_INTERFACE
+	MAPI_IUNKNOWN_METHODS(PURE)
+	MAPI_GETLASTERROR_METHOD(PURE)
+	MAPI_IMAPIVIEWCONTEXT_METHODS(PURE)
 };
 
 #define VCSTATUS_NEXT                           0x00000001
@@ -279,9 +282,9 @@ DECLARE_MAPI_INTERFACE_(IMAPIViewContext, IUnknown)
 #define INTERFACE IMAPIFormAdviseSink
 DECLARE_MAPI_INTERFACE_(IMAPIFormAdviseSink, IUnknown)
 {
-    BEGIN_INTERFACE
-    MAPI_IUNKNOWN_METHODS(PURE)
-    MAPI_IMAPIFORMADVISESINK_METHODS(PURE)
+	BEGIN_INTERFACE
+	MAPI_IUNKNOWN_METHODS(PURE)
+	MAPI_IMAPIFORMADVISESINK_METHODS(PURE)
 };
 
 
@@ -302,9 +305,9 @@ DECLARE_MAPI_INTERFACE_(IMAPIFormAdviseSink, IUnknown)
 #define INTERFACE IMAPIViewAdviseSink
 DECLARE_MAPI_INTERFACE_(IMAPIViewAdviseSink, IUnknown)
 {
-    BEGIN_INTERFACE
-    MAPI_IUNKNOWN_METHODS(PURE)
-    MAPI_IMAPIVIEWADVISESINK_METHODS(PURE)
+	BEGIN_INTERFACE
+	MAPI_IUNKNOWN_METHODS(PURE)
+	MAPI_IMAPIVIEWADVISESINK_METHODS(PURE)
 };
 
 
@@ -315,9 +318,9 @@ DECLARE_MAPI_INTERFACE_(IMAPIViewAdviseSink, IUnknown)
 /* Single enum value */
 
 typedef struct
-{                               /* fpev */
-    LPTSTR pszDisplayName;      /* carries the display string */
-    ULONG nVal;                 /* the value for the above enumeration */
+{								/* fpev */
+	LPTSTR pszDisplayName;		/* carries the display string */
+	ULONG nVal;					/* the value for the above enumeration */
 } SMAPIFormPropEnumVal, FAR * LPMAPIFORMPROPENUMVAL;
 
 /* MAPI Form property descriptor */
@@ -336,29 +339,29 @@ typedef ULONG FORMPROPSPECIALTYPE;
 
 typedef struct
 {
-    ULONG ulFlags;              /* Contains MAPI_UNICODE if strings are UNICODE */
-    ULONG nPropType;            /* type of the property, hiword is 0 */
-    MAPINAMEID nmid;            /* id of the property */
-    LPTSTR pszDisplayName;
-    FORMPROPSPECIALTYPE nSpecialType;   /* tag for the following union */
-    union
-    {
-        struct
-        {
-            MAPINAMEID nmidIdx;
-            ULONG cfpevAvailable;   /* # of enums */
-            LPMAPIFORMPROPENUMVAL pfpevAvailable;
-        } s1;                   /* Property String/Number association Enumeration */
-    } u;
+	ULONG ulFlags;				/* Contains MAPI_UNICODE if strings are UNICODE */
+	ULONG nPropType;			/* type of the property, hiword is 0 */
+	MAPINAMEID nmid;			/* id of the property */
+	LPTSTR pszDisplayName;
+	FORMPROPSPECIALTYPE nSpecialType;	/* tag for the following union */
+	union
+	{
+		struct
+		{
+			MAPINAMEID nmidIdx;
+			ULONG cfpevAvailable;	/* # of enums */
+			LPMAPIFORMPROPENUMVAL pfpevAvailable;
+		} s1;					/* Property String/Number association Enumeration */
+	} u;
 } SMAPIFormProp, FAR * LPMAPIFORMPROP;
 
 /* Array of form properties */
 
 typedef struct
 {
-    ULONG cProps;
-    ULONG ulPad;                /* Pad to 8-byte alignment for insurance */
-    SMAPIFormProp aFormProp[MAPI_DIM];
+	ULONG cProps;
+	ULONG ulPad;				/* Pad to 8-byte alignment for insurance */
+	SMAPIFormProp aFormProp[MAPI_DIM];
 } SMAPIFormPropArray, FAR * LPMAPIFORMPROPARRAY;
 
 #define CbMAPIFormPropArray(_c) \
@@ -369,19 +372,19 @@ typedef struct
 
 typedef struct
 {
-    LONG lVerb;
-    LPTSTR szVerbname;
-    DWORD fuFlags;
-    DWORD grfAttribs;
-    ULONG ulFlags;              /* Either 0 or MAPI_UNICODE */
+	LONG lVerb;
+	LPTSTR szVerbname;
+	DWORD fuFlags;
+	DWORD grfAttribs;
+	ULONG ulFlags;				/* Either 0 or MAPI_UNICODE */
 } SMAPIVerb, FAR * LPMAPIVERB;
 
 /* Structure used for returning arrays of mapi verbs */
 
 typedef struct
 {
-    ULONG cMAPIVerb;            /* Number of verbs in the structure */
-    SMAPIVerb aMAPIVerb[MAPI_DIM];
+	ULONG cMAPIVerb;			/* Number of verbs in the structure */
+	SMAPIVerb aMAPIVerb[MAPI_DIM];
 } SMAPIVerbArray, FAR * LPMAPIVERBARRAY;
 
 #define CbMAPIVerbArray(_c) \
@@ -407,17 +410,17 @@ typedef struct
 #define INTERFACE IMAPIFormInfo
 DECLARE_MAPI_INTERFACE_(IMAPIFormInfo, IMAPIProp)
 {
-    BEGIN_INTERFACE
-    MAPI_IUNKNOWN_METHODS(PURE)
-    MAPI_IMAPIPROP_METHODS(PURE)    /* note: subsumes getlasterror */
-    MAPI_IMAPIFORMINFO_METHODS(PURE)
+	BEGIN_INTERFACE
+	MAPI_IUNKNOWN_METHODS(PURE)
+	MAPI_IMAPIPROP_METHODS(PURE) 	/* note: subsumes getlasterror */
+	MAPI_IMAPIFORMINFO_METHODS(PURE)
 };
 
 
 /* Enumeration of permissible values for PR_FORM_MESSAGE_BEHAVIOR */
 
-#define MAPI_MESSAGE_BEHAVIOR_IPM 0
-#define MAPI_MESSAGE_BEHAVIOR_FOLDER 1
+#define	MAPI_MESSAGE_BEHAVIOR_IPM 0
+#define	MAPI_MESSAGE_BEHAVIOR_FOLDER 1
 
 
 /*-- IMAPIFormMgr ----------------------------------------------------------*/
@@ -428,8 +431,8 @@ DECLARE_MAPI_INTERFACE_(IMAPIFormInfo, IMAPIProp)
 
 typedef struct
 {
-    ULONG cValues;
-    LPCSTR aMessageClass[MAPI_DIM];
+	ULONG cValues;
+	LPCSTR aMessageClass[MAPI_DIM];
 } SMessageClassArray, FAR * LPSMESSAGECLASSARRAY;
 
 #define CbMessageClassArray(_c) \
@@ -439,8 +442,8 @@ typedef struct
 
 typedef struct
 {
-    ULONG cForms;
-    LPMAPIFORMINFO aFormInfo[MAPI_DIM];
+	ULONG cForms;
+	LPMAPIFORMINFO aFormInfo[MAPI_DIM];
 } SMAPIFormInfoArray, FAR * LPSMAPIFORMINFOARRAY;
 
 #define CbMAPIFormInfoArray(_c) \
@@ -531,10 +534,10 @@ typedef struct
 #define         INTERFACE    IMAPIFormMgr
 DECLARE_MAPI_INTERFACE_(IMAPIFormMgr, IUnknown)
 {
-    BEGIN_INTERFACE
-    MAPI_IUNKNOWN_METHODS(PURE)
-    MAPI_GETLASTERROR_METHOD(PURE)
-    MAPI_IMAPIFORMMGR_METHODS(PURE)
+	BEGIN_INTERFACE
+	MAPI_IUNKNOWN_METHODS(PURE)
+	MAPI_GETLASTERROR_METHOD(PURE)
+	MAPI_IMAPIFORMMGR_METHODS(PURE)
 };
 
 /* Platform numbers (used in .CFG files for forms) */
@@ -596,10 +599,10 @@ DECLARE_MAPI_INTERFACE_(IMAPIFormMgr, IUnknown)
 #define INTERFACE IMAPIFormContainer
 DECLARE_MAPI_INTERFACE_(IMAPIFormContainer, IUnknown)
 {
-    BEGIN_INTERFACE
-    MAPI_IUNKNOWN_METHODS(PURE)
-    MAPI_GETLASTERROR_METHOD(PURE)
-    MAPI_IMAPIFORMCONTAINER_METHODS(PURE)
+	BEGIN_INTERFACE
+	MAPI_IUNKNOWN_METHODS(PURE)
+	MAPI_GETLASTERROR_METHOD(PURE)
+	MAPI_IMAPIFORMCONTAINER_METHODS(PURE)
 };
 
 /*-- IMAPIFormFactory ------------------------------------------------------*/
@@ -617,12 +620,11 @@ DECLARE_MAPI_INTERFACE_(IMAPIFormContainer, IUnknown)
 #define INTERFACE IMAPIFormFactory
 DECLARE_MAPI_INTERFACE_(IMAPIFormFactory, IUnknown)
 {
-    BEGIN_INTERFACE
-    MAPI_IUNKNOWN_METHODS(PURE)
-    MAPI_GETLASTERROR_METHOD(PURE)
-    MAPI_IMAPIFORMFACTORY_METHODS(PURE)
+	BEGIN_INTERFACE
+	MAPI_IUNKNOWN_METHODS(PURE)
+	MAPI_GETLASTERROR_METHOD(PURE)
+	MAPI_IMAPIFORMFACTORY_METHODS(PURE)
 };
 
-#pragma option pop /*P_O_Pop*/
-#endif                          /* MAPIFORM_H */
+#endif							/* MAPIFORM_H */
 

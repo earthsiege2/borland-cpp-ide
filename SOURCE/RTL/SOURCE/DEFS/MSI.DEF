@@ -1,156 +1,156 @@
 LIBRARY MSI
 EXPORTS
 
-    MsiCloseAllHandles                       = 'MSI.DLL'.*
-    MsiCloseHandle                           = 'MSI.DLL'.*
-    MsiCollectUserInfoA                      = 'MSI.DLL'.*
-    MsiCollectUserInfoW                      = 'MSI.DLL'.*
-    MsiConfigureFeatureA                     = 'MSI.DLL'.*
-    MsiConfigureFeatureW                     = 'MSI.DLL'.*
-    MsiConfigureProductA                     = 'MSI.DLL'.*
-    MsiConfigureProductW                     = 'MSI.DLL'.*
-    MsiCreateRecord                          = 'MSI.DLL'.*
-    MsiDatabaseApplyTransformA               = 'MSI.DLL'.*
-    MsiDatabaseApplyTransformW               = 'MSI.DLL'.*
-    MsiDatabaseCommit                        = 'MSI.DLL'.*
-    MsiDatabaseExportA                       = 'MSI.DLL'.*
-    MsiDatabaseExportW                       = 'MSI.DLL'.*
-    MsiDatabaseGenerateTransformA            = 'MSI.DLL'.*
-    MsiDatabaseGenerateTransformW            = 'MSI.DLL'.*
-    MsiDatabaseGetPrimaryKeysA               = 'MSI.DLL'.*
-    MsiDatabaseGetPrimaryKeysW               = 'MSI.DLL'.*
-    MsiDatabaseImportA                       = 'MSI.DLL'.*
-    MsiDatabaseImportW                       = 'MSI.DLL'.*
-    MsiDatabaseIsTablePersistentA            = 'MSI.DLL'.*
-    MsiDatabaseIsTablePersistentW            = 'MSI.DLL'.*
-    MsiDatabaseMergeA                        = 'MSI.DLL'.*
-    MsiDatabaseMergeW                        = 'MSI.DLL'.*
-    MsiDatabaseOpenViewA                     = 'MSI.DLL'.*
-    MsiDatabaseOpenViewW                     = 'MSI.DLL'.*
-    MsiDoActionA                             = 'MSI.DLL'.*
-    MsiDoActionW                             = 'MSI.DLL'.*
-    MsiEnableLogA                            = 'MSI.DLL'.*
-    MsiEnableLogW                            = 'MSI.DLL'.*
-    MsiEnableUIPreview                       = 'MSI.DLL'.*
-    MsiEnumClientsA                          = 'MSI.DLL'.*
-    MsiEnumClientsW                          = 'MSI.DLL'.*
-    MsiEnumComponentQualifiersA              = 'MSI.DLL'.*
-    MsiEnumComponentQualifiersW              = 'MSI.DLL'.*
-    MsiEnumComponentsA                       = 'MSI.DLL'.*
-    MsiEnumComponentsW                       = 'MSI.DLL'.*
-    MsiEnumFeaturesA                         = 'MSI.DLL'.*
-    MsiEnumFeaturesW                         = 'MSI.DLL'.*
-    MsiEnumProductsA                         = 'MSI.DLL'.*
-    MsiEnumProductsW                         = 'MSI.DLL'.*
-    MsiEvaluateConditionA                    = 'MSI.DLL'.*
-    MsiEvaluateConditionW                    = 'MSI.DLL'.*
-    MsiFormatRecordA                         = 'MSI.DLL'.*
-    MsiFormatRecordW                         = 'MSI.DLL'.*
-    MsiGetActiveDatabase                     = 'MSI.DLL'.*
-    MsiGetComponentStateA                    = 'MSI.DLL'.*
-    MsiGetComponentStateW                    = 'MSI.DLL'.*
-    MsiGetDatabaseState                      = 'MSI.DLL'.*
-    MsiGetFeatureCostA                       = 'MSI.DLL'.*
-    MsiGetFeatureCostW                       = 'MSI.DLL'.*
-    MsiGetFeatureInfoA                       = 'MSI.DLL'.*
-    MsiGetFeatureInfoW                       = 'MSI.DLL'.*
-    MsiGetFeatureStateA                      = 'MSI.DLL'.*
-    MsiGetFeatureStateW                      = 'MSI.DLL'.*
-    MsiGetFeatureUsageA                      = 'MSI.DLL'.*
-    MsiGetFeatureUsageW                      = 'MSI.DLL'.*
-    MsiGetFeatureValidStatesA                = 'MSI.DLL'.*
-    MsiGetFeatureValidStatesW                = 'MSI.DLL'.*
-    MsiGetLanguage                           = 'MSI.DLL'.*
-    MsiGetMode                               = 'MSI.DLL'.*
-    MsiGetProductCodeA                       = 'MSI.DLL'.*
-    MsiGetProductCodeW                       = 'MSI.DLL'.*
-    MsiGetProductInfoA                       = 'MSI.DLL'.*
-    MsiGetProductInfoW                       = 'MSI.DLL'.*
-    MsiGetProductPropertyA                   = 'MSI.DLL'.*
-    MsiGetProductPropertyW                   = 'MSI.DLL'.*
-    MsiGetPropertyA                          = 'MSI.DLL'.*
-    MsiGetPropertyW                          = 'MSI.DLL'.*
-    MsiGetSourcePathA                        = 'MSI.DLL'.*
-    MsiGetSourcePathW                        = 'MSI.DLL'.*
-    MsiGetSummaryInformationA                = 'MSI.DLL'.*
-    MsiGetSummaryInformationW                = 'MSI.DLL'.*
-    MsiGetTargetPathA                        = 'MSI.DLL'.*
-    MsiGetTargetPathW                        = 'MSI.DLL'.*
-    MsiGetUserInfoA                          = 'MSI.DLL'.*
-    MsiGetUserInfoW                          = 'MSI.DLL'.*
-    MsiInstallMissingComponentA              = 'MSI.DLL'.*
-    MsiInstallMissingComponentW              = 'MSI.DLL'.*
-    MsiInstallMissingFileA                   = 'MSI.DLL'.*
-    MsiInstallMissingFileW                   = 'MSI.DLL'.*
-    MsiInstallProductA                       = 'MSI.DLL'.*
-    MsiInstallProductW                       = 'MSI.DLL'.*
-    MsiLocateComponentA                      = 'MSI.DLL'.*
-    MsiLocateComponentW                      = 'MSI.DLL'.*
-    MsiOpenDatabaseA                         = 'MSI.DLL'.*
-    MsiOpenDatabaseW                         = 'MSI.DLL'.*
-    MsiOpenPackageA                          = 'MSI.DLL'.*
-    MsiOpenPackageW                          = 'MSI.DLL'.*
-    MsiOpenProductA                          = 'MSI.DLL'.*
-    MsiOpenProductW                          = 'MSI.DLL'.*
-    MsiPreviewBillboardA                     = 'MSI.DLL'.*
-    MsiPreviewBillboardW                     = 'MSI.DLL'.*
-    MsiPreviewDialogA                        = 'MSI.DLL'.*
-    MsiPreviewDialogW                        = 'MSI.DLL'.*
-    MsiProcessMessage                        = 'MSI.DLL'.*
-    MsiProvideComponentA                     = 'MSI.DLL'.*
-    MsiProvideComponentW                     = 'MSI.DLL'.*
-    MsiProvideQualifiedComponentA            = 'MSI.DLL'.*
-    MsiProvideQualifiedComponentW            = 'MSI.DLL'.*
-    MsiQueryFeatureStateA                    = 'MSI.DLL'.*
-    MsiQueryFeatureStateW                    = 'MSI.DLL'.*
-    MsiQueryProductStateA                    = 'MSI.DLL'.*
-    MsiQueryProductStateW                    = 'MSI.DLL'.*
-    MsiRecordClearData                       = 'MSI.DLL'.*
-    MsiRecordDataSize                        = 'MSI.DLL'.*
-    MsiRecordGetFieldCount                   = 'MSI.DLL'.*
-    MsiRecordGetInteger                      = 'MSI.DLL'.*
-    MsiRecordGetStringA                      = 'MSI.DLL'.*
-    MsiRecordGetStringW                      = 'MSI.DLL'.*
-    MsiRecordIsNull                          = 'MSI.DLL'.*
-    MsiRecordReadStream                      = 'MSI.DLL'.*
-    MsiRecordSetInteger                      = 'MSI.DLL'.*
-    MsiRecordSetStreamA                      = 'MSI.DLL'.*
-    MsiRecordSetStreamW                      = 'MSI.DLL'.*
-    MsiRecordSetStringA                      = 'MSI.DLL'.*
-    MsiRecordSetStringW                      = 'MSI.DLL'.*
-    MsiReinstallFeatureA                     = 'MSI.DLL'.*
-    MsiReinstallFeatureW                     = 'MSI.DLL'.*
-    MsiReinstallProductA                     = 'MSI.DLL'.*
-    MsiReinstallProductW                     = 'MSI.DLL'.*
-    MsiSequenceA                             = 'MSI.DLL'.*
-    MsiSequenceW                             = 'MSI.DLL'.*
-    MsiSetComponentStateA                    = 'MSI.DLL'.*
-    MsiSetComponentStateW                    = 'MSI.DLL'.*
-    MsiSetExternalUIA                        = 'MSI.DLL'.*
-    MsiSetExternalUIW                        = 'MSI.DLL'.*
-    MsiSetFeatureStateA                      = 'MSI.DLL'.*
-    MsiSetFeatureStateW                      = 'MSI.DLL'.*
-    MsiSetInstallLevel                       = 'MSI.DLL'.*
-    MsiSetInternalUI                         = 'MSI.DLL'.*
-    MsiSetMode                               = 'MSI.DLL'.*
-    MsiSetPropertyA                          = 'MSI.DLL'.*
-    MsiSetPropertyW                          = 'MSI.DLL'.*
-    MsiSetTargetPathA                        = 'MSI.DLL'.*
-    MsiSetTargetPathW                        = 'MSI.DLL'.*
-    MsiSummaryInfoGetPropertyA               = 'MSI.DLL'.*
-    MsiSummaryInfoGetPropertyCount           = 'MSI.DLL'.*
-    MsiSummaryInfoGetPropertyW               = 'MSI.DLL'.*
-    MsiSummaryInfoPersist                    = 'MSI.DLL'.*
-    MsiSummaryInfoSetPropertyA               = 'MSI.DLL'.*
-    MsiSummaryInfoSetPropertyW               = 'MSI.DLL'.*
-    MsiUseFeatureA                           = 'MSI.DLL'.*
-    MsiUseFeatureW                           = 'MSI.DLL'.*
-    MsiVerifyPackageA                        = 'MSI.DLL'.*
-    MsiVerifyPackageW                        = 'MSI.DLL'.*
-    MsiViewClose                             = 'MSI.DLL'.*
-    MsiViewExecute                           = 'MSI.DLL'.*
-    MsiViewFetch                             = 'MSI.DLL'.*
-    MsiViewGetColumnInfo                     = 'MSI.DLL'.*
-    MsiViewGetErrorA                         = 'MSI.DLL'.*
-    MsiViewGetErrorW                         = 'MSI.DLL'.*
-    MsiViewModify                            = 'MSI.DLL'.*
+    MsiCloseAllHandles                       
+    MsiCloseHandle                           
+    MsiCollectUserInfoA                      
+    MsiCollectUserInfoW                      
+    MsiConfigureFeatureA                     
+    MsiConfigureFeatureW                     
+    MsiConfigureProductA                     
+    MsiConfigureProductW                     
+    MsiCreateRecord                          
+    MsiDatabaseApplyTransformA               
+    MsiDatabaseApplyTransformW               
+    MsiDatabaseCommit                        
+    MsiDatabaseExportA                       
+    MsiDatabaseExportW                       
+    MsiDatabaseGenerateTransformA            
+    MsiDatabaseGenerateTransformW            
+    MsiDatabaseGetPrimaryKeysA               
+    MsiDatabaseGetPrimaryKeysW               
+    MsiDatabaseImportA                       
+    MsiDatabaseImportW                       
+    MsiDatabaseIsTablePersistentA            
+    MsiDatabaseIsTablePersistentW            
+    MsiDatabaseMergeA                        
+    MsiDatabaseMergeW                        
+    MsiDatabaseOpenViewA                     
+    MsiDatabaseOpenViewW                     
+    MsiDoActionA                             
+    MsiDoActionW                             
+    MsiEnableLogA                            
+    MsiEnableLogW                            
+    MsiEnableUIPreview                       
+    MsiEnumClientsA                          
+    MsiEnumClientsW                          
+    MsiEnumComponentQualifiersA              
+    MsiEnumComponentQualifiersW              
+    MsiEnumComponentsA                       
+    MsiEnumComponentsW                       
+    MsiEnumFeaturesA                         
+    MsiEnumFeaturesW                         
+    MsiEnumProductsA                         
+    MsiEnumProductsW                         
+    MsiEvaluateConditionA                    
+    MsiEvaluateConditionW                    
+    MsiFormatRecordA                         
+    MsiFormatRecordW                         
+    MsiGetActiveDatabase                     
+    MsiGetComponentStateA                    
+    MsiGetComponentStateW                    
+    MsiGetDatabaseState                      
+    MsiGetFeatureCostA                       
+    MsiGetFeatureCostW                       
+    MsiGetFeatureInfoA                       
+    MsiGetFeatureInfoW                       
+    MsiGetFeatureStateA                      
+    MsiGetFeatureStateW                      
+    MsiGetFeatureUsageA                      
+    MsiGetFeatureUsageW                      
+    MsiGetFeatureValidStatesA                
+    MsiGetFeatureValidStatesW                
+    MsiGetLanguage                           
+    MsiGetMode                               
+    MsiGetProductCodeA                       
+    MsiGetProductCodeW                       
+    MsiGetProductInfoA                       
+    MsiGetProductInfoW                       
+    MsiGetProductPropertyA                   
+    MsiGetProductPropertyW                   
+    MsiGetPropertyA                          
+    MsiGetPropertyW                          
+    MsiGetSourcePathA                        
+    MsiGetSourcePathW                        
+    MsiGetSummaryInformationA                
+    MsiGetSummaryInformationW                
+    MsiGetTargetPathA                        
+    MsiGetTargetPathW                        
+    MsiGetUserInfoA                          
+    MsiGetUserInfoW                          
+    MsiInstallMissingComponentA              
+    MsiInstallMissingComponentW              
+    MsiInstallMissingFileA                   
+    MsiInstallMissingFileW                   
+    MsiInstallProductA                       
+    MsiInstallProductW                       
+    MsiLocateComponentA                      
+    MsiLocateComponentW                      
+    MsiOpenDatabaseA                         
+    MsiOpenDatabaseW                         
+    MsiOpenPackageA                          
+    MsiOpenPackageW                          
+    MsiOpenProductA                          
+    MsiOpenProductW                          
+    MsiPreviewBillboardA                     
+    MsiPreviewBillboardW                     
+    MsiPreviewDialogA                        
+    MsiPreviewDialogW                        
+    MsiProcessMessage                        
+    MsiProvideComponentA                     
+    MsiProvideComponentW                     
+    MsiProvideQualifiedComponentA            
+    MsiProvideQualifiedComponentW            
+    MsiQueryFeatureStateA                    
+    MsiQueryFeatureStateW                    
+    MsiQueryProductStateA                    
+    MsiQueryProductStateW                    
+    MsiRecordClearData                       
+    MsiRecordDataSize                        
+    MsiRecordGetFieldCount                   
+    MsiRecordGetInteger                      
+    MsiRecordGetStringA                      
+    MsiRecordGetStringW                      
+    MsiRecordIsNull                          
+    MsiRecordReadStream                      
+    MsiRecordSetInteger                      
+    MsiRecordSetStreamA                      
+    MsiRecordSetStreamW                      
+    MsiRecordSetStringA                      
+    MsiRecordSetStringW                      
+    MsiReinstallFeatureA                     
+    MsiReinstallFeatureW                     
+    MsiReinstallProductA                     
+    MsiReinstallProductW                     
+    MsiSequenceA                             
+    MsiSequenceW                             
+    MsiSetComponentStateA                    
+    MsiSetComponentStateW                    
+    MsiSetExternalUIA                        
+    MsiSetExternalUIW                        
+    MsiSetFeatureStateA                      
+    MsiSetFeatureStateW                      
+    MsiSetInstallLevel                       
+    MsiSetInternalUI                         
+    MsiSetMode                               
+    MsiSetPropertyA                          
+    MsiSetPropertyW                          
+    MsiSetTargetPathA                        
+    MsiSetTargetPathW                        
+    MsiSummaryInfoGetPropertyA               
+    MsiSummaryInfoGetPropertyCount           
+    MsiSummaryInfoGetPropertyW               
+    MsiSummaryInfoPersist                    
+    MsiSummaryInfoSetPropertyA               
+    MsiSummaryInfoSetPropertyW               
+    MsiUseFeatureA                           
+    MsiUseFeatureW                           
+    MsiVerifyPackageA                        
+    MsiVerifyPackageW                        
+    MsiViewClose                             
+    MsiViewExecute                           
+    MsiViewFetch                             
+    MsiViewGetColumnInfo                     
+    MsiViewGetErrorA                         
+    MsiViewGetErrorW                         
+    MsiViewModify                            

@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //Borland C++Builder
-//Copyright (c) 1987, 1998 Borland International Inc. All Rights Reserved.
+//Copyright (c) 1987, 1998-2002 Borland International Inc. All Rights Reserved.
 //----------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 #include <vcl.h>
@@ -64,7 +64,7 @@ void __fastcall TCacheDemoForm::UseUpdateSQLClick(TObject *Sender)
 //---------------------------------------------------------------------
 void __fastcall TCacheDemoForm::ApplyUpdatesBtnClick(TObject *Sender)
 {
-   FDataSet->Database->ApplyUpdates(OPENARRAY(TDBDataSet*, (FDataSet)));
+   FDataSet->Database->ApplyUpdates((const TDBDataSet **) &FDataSet, 1);
 }
 //---------------------------------------------------------------------
 void __fastcall TCacheDemoForm::CancelUpdatesBtnClick(TObject *Sender)

@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Ddeml.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DDEml.pas' rev: 6.00
 
-#ifndef DdemlHPP
-#define DdemlHPP
+#ifndef DDEmlHPP
+#define DDEmlHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -40,8 +40,7 @@ typedef tagCONVINFO *PConvInfo;
 
 typedef tagCONVINFO  TConvInfo;
 
-typedef int __stdcall (*TFNCallback)(unsigned CallType, unsigned Fmt, int Conv, int hsz1, int hsz2, 
-	int Data, unsigned Data1, unsigned Data2);
+typedef int __stdcall (*TFNCallback)(unsigned CallType, unsigned Fmt, int Conv, int hsz1, int hsz2, int Data, unsigned Data1, unsigned Data2);
 
 typedef tagDDEML_MSG_HOOK_DATA  TDdemlMsgHookData;
 
@@ -71,12 +70,10 @@ typedef tagMONCONVSTRUCT  TMonConvStruct;
 #define ddelib "user32.dll"
 
 }	/* namespace Ddeml */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ddeml;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Ddeml
+#endif	// DDEml

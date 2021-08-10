@@ -6,12 +6,12 @@
 {                                                       }
 {*******************************************************}
 
-unit mxarrays;
+unit Mxarrays;
 
 interface
 
 uses
-  SysUtils, Windows, Classes, mxconsts;
+  SysUtils, Windows, Variants, Classes, Mxconsts;
 
 type
   { Exceptions }
@@ -1895,7 +1895,21 @@ begin
   begin
      case VarData.vType of
        varEmpty,
-       varNull :       begin         Inc(FBlankCount);         case FDataType of           varDate    : Value := VarAsType(BlankDateVal, varDouble);           varString  : Value := VarAsType(BlankStringVal, varString);           varBoolean : Value := VarAsType(BlankBoolVal, varSmallInt);           else             Value := VarAsType(0, FDataType);         end;       end;       varDouble : if (FDataType = varCurrency) then                     Value := VarAsType(Value, varCurrency);     end;  end;  case FDataType of
+       varNull :
+       begin
+         Inc(FBlankCount);
+         case FDataType of
+           varDate    : Value := VarAsType(BlankDateVal, varDouble);
+           varString  : Value := VarAsType(BlankStringVal, varString);
+           varBoolean : Value := VarAsType(BlankBoolVal, varSmallInt);
+           else
+             Value := VarAsType(0, FDataType);
+         end;
+       end;
+       varDouble : if (FDataType = varCurrency) then
+                     Value := VarAsType(Value, varCurrency);
+     end;
+  end;  case FDataType of
     varSmallint: TSmallIntArray(FArray)[Index] := Value.VSmallInt;
     varDate:     TDoubleArray(FArray)[Index] := TVarData(Value).VDouble;
     varInteger:  TIntArray(FArray)[Index] := Value;
@@ -2009,7 +2023,21 @@ begin
   begin
      case VarData.vType of
        varEmpty,
-       varNull :       begin         Inc(FBlankCount);         case FDataType of           varDate    : Value := VarAsType(BlankDateVal, varDouble);           varString  : Value := VarAsType(BlankStringVal, varString);           varBoolean : Value := VarAsType(BlankBoolVal, varSmallInt);           else             Value := VarAsType(0, FDataType);         end;       end;       varDouble : if (FDataType = varCurrency) then                     Value := VarAsType(Value, varCurrency);     end;  end;  case FDataType of
+       varNull :
+       begin
+         Inc(FBlankCount);
+         case FDataType of
+           varDate    : Value := VarAsType(BlankDateVal, varDouble);
+           varString  : Value := VarAsType(BlankStringVal, varString);
+           varBoolean : Value := VarAsType(BlankBoolVal, varSmallInt);
+           else
+             Value := VarAsType(0, FDataType);
+         end;
+       end;
+       varDouble : if (FDataType = varCurrency) then
+                     Value := VarAsType(Value, varCurrency);
+     end;
+  end;  case FDataType of
     varString   : Result := TStringArray(FArray).Add(VarToStr(Value));
     varSmallint : Result := TSmallIntArray(FArray).Add(TVarData(Value).VSmallint);
     varInteger  : Result := TIntArray(FArray).Add(TVarData(Value).VInteger);

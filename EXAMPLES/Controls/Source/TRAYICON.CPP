@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 2000 Inprise Corporation. All Rights Reserved.
+// Copyright (c) 1987, 2000-2002 Borland Corporation. All Rights Reserved.
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
@@ -296,22 +296,14 @@ void __fastcall TTrayIcon::DoMessage(TMessage &Message)
 //---------------------------------------------------------------------------
 void __fastcall TTrayIcon::ShowMenu()
 {
-   TPoint *point = new TPoint;
+   TPoint point;
 
-   GetCursorPos((tagPOINT*)point);
+   GetCursorPos(&point);
 
-   try
-   {
-      if (Screen->ActiveForm->Handle != NULL)
-         SetForegroundWindow(Screen->ActiveForm->Handle);
-   }
-   catch (...)
-   {
-   }
+   if (Screen->ActiveForm && (Screen->ActiveForm->Handle != NULL))
+      SetForegroundWindow(Screen->ActiveForm->Handle);
 
-   FPopupMenu->Popup(point->x, point->y);
-
-   delete point;
+   FPopupMenu->Popup(point.x, point.y);
 }
 //---------------------------------------------------------------------------
 void __fastcall TTrayIcon::DoClick()
@@ -461,14 +453,6 @@ HWND __fastcall TTrayIcon::GetHandle()
 static inline void ValidCtrCheck(TTrayIcon *)
 {
    new TTrayIcon(NULL);
-}
-namespace Trayicon
-{
-   void __fastcall PACKAGE Register()
-   {
-       TComponentClass classes[1] = {__classid(TTrayIcon)};
-       RegisterComponents(LoadStr(Tab_101), classes, 0);
-   }
 }
 //---------------------------------------------------------------------------
 

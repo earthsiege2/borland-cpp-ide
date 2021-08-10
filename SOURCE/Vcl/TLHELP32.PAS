@@ -1,14 +1,16 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1996-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
 {       Tool Help Functions, Types, and Definitions     }
-{                                                       }
-{       Copyright (C) 1996,99 Inprise Corporation       }
-{                                                       }
 {*******************************************************}
 
-unit TLHelp32;
+unit TlHelp32;
 
 {$WEAKPACKAGEUNIT}
 
@@ -35,11 +37,11 @@ type
 // process.
 //
 // NOTE that all of the snapshots are global except for the heap and module
-//	lists which are process specific. To enumerate the heap or module
-//	state for all WIN32 processes call with TH32CS_SNAPALL and the
-//	current process. Then for each process in the TH32CS_SNAPPROCESS
-//	list that isn't the current process, do a call with just
-//	TH32CS_SNAPHEAPLIST and/or TH32CS_SNAPMODULE.
+//  lists which are process specific. To enumerate the heap or module
+//  state for all WIN32 processes call with TH32CS_SNAPALL and the
+//  current process. Then for each process in the TH32CS_SNAPPROCESS
+//  list that isn't the current process, do a call with just
+//  TH32CS_SNAPHEAPLIST and/or TH32CS_SNAPMODULE.
 //
 // dwFlags
 //
@@ -101,7 +103,7 @@ type
   tagHEAPENTRY32 = record
     dwSize: DWORD;
     hHandle: THandle;     // Handle of this heap block
-    dwAddress: DWORD;	  // Linear address of start of block
+    dwAddress: DWORD;     // Linear address of start of block
     dwBlockSize: DWORD;   // Size of block in bytes
     dwFlags: DWORD;
     dwLockCount: DWORD;
@@ -155,7 +157,7 @@ type
     th32ModuleID: DWORD;        // associated exe
     cntThreads: DWORD;
     th32ParentProcessID: DWORD; // this process's parent process
-    pcPriClassBase: Longint;	// Base priority of process's threads
+    pcPriClassBase: Longint;    // Base priority of process's threads
     dwFlags: DWORD;
     szExeFile: array[0..MAX_PATH - 1] of WChar;// Path
   end;
@@ -185,7 +187,7 @@ type
     th32ModuleID: DWORD;        // associated exe
     cntThreads: DWORD;
     th32ParentProcessID: DWORD; // this process's parent process
-    pcPriClassBase: Longint;	// Base priority of process's threads
+    pcPriClassBase: Longint;    // Base priority of process's threads
     dwFlags: DWORD;
     szExeFile: array[0..MAX_PATH - 1] of Char;// Path
   end;

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'CopyPrsr.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'CopyPrsr.pas' rev: 6.00
 
 #ifndef CopyPrsrHPP
 #define CopyPrsrHPP
@@ -58,8 +58,7 @@ public:
 	AnsiString __fastcall CopyToEOF();
 	void __fastcall CopyTokenToOutput(void);
 	void __fastcall Error(const AnsiString Ident);
-	void __fastcall ErrorFmt(const AnsiString Ident, const System::TVarRec * Args, const int Args_Size)
-		;
+	void __fastcall ErrorFmt(const AnsiString Ident, const System::TVarRec * Args, const int Args_Size);
 	void __fastcall ErrorStr(const AnsiString Message);
 	char __fastcall NextToken(void);
 	char __fastcall SkipToken(bool CopyBlanks);
@@ -76,6 +75,7 @@ public:
 	bool __fastcall TokenSymbolIs(const AnsiString S);
 	__property int SourceLine = {read=FSourceLine, nodefault};
 	__property char Token = {read=FToken, nodefault};
+	__property Classes::TStream* OutputStream = {read=FOutStream, write=FOutStream};
 };
 
 
@@ -83,9 +83,7 @@ public:
 static const char toEOL = '\x5';
 
 }	/* namespace Copyprsr */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Copyprsr;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

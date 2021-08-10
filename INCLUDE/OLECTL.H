@@ -4,20 +4,19 @@
 //
 //              OLE Version 2.0
 //
-//              Copyright (c) 1992-1999, Microsoft Corp. All rights reserved.
+//              Copyright (c) Microsoft Corporation. All rights reserved.
 //
 /////////////////////////////////////////////////////////////////////////////
 
 
 #ifndef _OLECTL_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _OLECTL_H_
+
+#if !defined(__MKTYPLIB__) && !defined(__midl)
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
-
-#if !defined(__MKTYPLIB__) && !defined(__midl)
 
 #if defined(_MAC)
 #include <macocidl.h>
@@ -610,9 +609,12 @@ WINOLECTLAPI_(HCURSOR) OleIconToCursor(HINSTANCE hinstExe, HICON hIcon);
 // Names of modules containing type libraries for standard types
 
 #define STDOLE_TLB "stdole2.tlb"
+#ifdef _WIN64
+#define STDTYPE_TLB "stdole2.tlb"
+#else
 #define STDTYPE_TLB "olepro32.dll"
+#endif
 
 #endif // defined(__MKTYPLIB__) || defined(__midl)
 
-#pragma option pop /*P_O_Pop*/
 #endif // _OLECTL_H_

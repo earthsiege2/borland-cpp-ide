@@ -2,7 +2,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{       Copyright (c) 1995,2000 Inprise Corporation     }
 {                                                       }
 {*******************************************************}
 
@@ -11,7 +11,7 @@ unit CtlPanel;
 interface
 
 uses
-  SysUtils, Classes, Forms, Windows, Graphics, cpl, Dialogs;
+  Windows, SysUtils, Classes, Graphics, Cpl;
 
 type
   EAppletException = class(Exception);
@@ -79,9 +79,10 @@ type
   TCPLAppletClass = class of TAppletModule;
   TDataModuleClass = class of TDataModule;
 
+  TOnAppletExceptionEvent = procedure (Sender: TObject; E: Exception) of object;
+
   TAppletApplication = class(TComponent)
   private
-    FComponentClass: TComponentClass;
     FControlPanelHandle: THandle;
     FModules: TList;
     FOnInit: TInitEvent;
@@ -89,13 +90,13 @@ type
     FOnExit: TExitEvent;
     FOnSetup: TSetupEvent;
     FModuleCount: Integer;
-    procedure OnExceptionHandler(Sender: TObject; E: Exception);
+    FOnException: TOnAppletExceptionEvent;
     function GetModules(Index: Integer): TAppletModule;
     procedure SetModules(Index: Integer; const Value: TAppletModule);
     procedure SetModuleCount(const Value: Integer);
     function GetModuleCount: Integer;
   protected
-    procedure DoHandleException(E: Exception); dynamic;
+    procedure DoHandleException(Sender: TObject; E: Exception); dynamic;
     procedure DoInit(var AppInitOK: Boolean); dynamic;
     procedure DoCount(var AppCount: Integer); dynamic;
     procedure DoExit; dynamic;
@@ -104,6 +105,7 @@ type
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure CreateForm(InstanceClass: TComponentClass; var Reference); virtual;
+    procedure HandleException(Sender: TObject);
     procedure Initialize; virtual;
     procedure Run; virtual;
     property Modules[Index: Integer]: TAppletModule read GetModules write SetModules;
@@ -111,6 +113,7 @@ type
     property ControlPanelHandle: THandle read FControlPanelHandle;
     property OnInit: TInitEvent read FOnInit write FOnInit;
     property OnCount: TCountEvent read FOnCount write FOnCount;
+    property OnException: TOnAppletExceptionEvent read FOnException write FOnException; 
     property OnExit: TExitEvent read FOnExit write FOnExit;
     property OnSetup: TSetupEvent read FOnSetup write FOnSetup;
   end;
@@ -123,10 +126,10 @@ var
 
 implementation
 
-{ TAppletApp }
+uses
+  CtlConsts;
 
-resourcestring
-  sInvalidClassReference = 'Invalid class reference for TAppletApplication';
+{ TAppletApp }
 
 constructor TAppletApplication.Create(AOwner: TComponent);
 begin
@@ -136,15 +139,17 @@ end;
 
 procedure TAppletApplication.CreateForm(InstanceClass: TComponentClass;
   var Reference);
+var
+  Instance: TComponent;
 begin
-  if InstanceClass.InheritsFrom(TCustomForm) or InstanceClass.InheritsFrom(TDataModule) then
-  begin
-    if (FComponentClass = nil) or (FComponentClass <> InstanceClass) then
-      FComponentClass := TComponentClass(InstanceClass);
-    TComponent(Reference) := FComponentClass.Create(Self);
-  end
-  else
-    raise Exception.CreateRes(@sInvalidClassReference);
+  Instance := TComponent(InstanceClass.NewInstance);
+  TComponent(Reference) := Instance;
+  try
+    Instance.Create(Self);
+  except
+    TComponent(Reference) := nil;
+    raise EAppletException.CreateRes(@sInvalidClassReference);
+  end;
 end;
 
 destructor TAppletApplication.Destroy;
@@ -153,35 +158,40 @@ begin
     TObject(FModules[0]).Free;
 
   FModules.Free;
-  Forms.Application.OnException := nil;
   inherited Destroy;
+  Classes.ApplicationHandleException := nil;
 end;
 
 procedure TAppletApplication.DoCount(var AppCount: Integer);
 begin
-  if assigned(FOnCount) then
+  if Assigned(FOnCount) then
     FOnCount(Self, AppCount);
 end;
 
 procedure TAppletApplication.DoExit;
 begin
-  if assigned(FOnExit) then
+  if Assigned(FOnExit) then
     FOnExit(Self);
 end;
 
-procedure TAppletApplication.DoHandleException(E: Exception);
+procedure TAppletApplication.DoHandleException(Sender: TObject; E: Exception);
 begin
+  if not (E is EAbort) then
+    if Assigned(FOnException) then
+      FOnException(Sender, E)
+    else
+      ShowException(E, ExceptAddr);
 end;
 
 procedure TAppletApplication.DoInit(var AppInitOK: Boolean);
 begin
-  if assigned(FOnInit) then
+  if Assigned(FOnInit) then
     FOnInit(Self, AppInitOK);
 end;
 
 procedure TAppletApplication.DoSetup;
 begin
-  if assigned(FOnSetup) then
+  if Assigned(FOnSetup) then
     FOnSetup(Self);
 end;
 
@@ -199,14 +209,18 @@ procedure TAppletApplication.Initialize;
 begin
 end;
 
-procedure TAppletApplication.OnExceptionHandler(Sender: TObject; E: Exception);
+procedure TAppletApplication.HandleException(Sender: TObject);
 begin
-  DoHandleException(E);
+  if ExceptObject is Exception then
+    DoHandleException(Sender, Exception(ExceptObject))
+  else
+    SysUtils.ShowException(ExceptObject, ExceptAddr);
 end;
 
 procedure TAppletApplication.Run;
 begin
-  Forms.Application.OnException := OnExceptionHandler;
+  if not Assigned(Classes.ApplicationHandleException) then
+    Classes.ApplicationHandleException := HandleException;
 end;
 
 procedure InitApplication;
@@ -223,34 +237,42 @@ end;
 function CPlApplet(hwndCPl: THandle; uMsg: DWORD; lParam1, lParam2: Longint): Longint;
 var
   Temp: Boolean;
-  
 begin
   Result := 0;
   Temp := True;
+  try
+    with Application, Application.Modules[lParam1] do
+    begin
+      FControlPanelHandle := hwndCPl;
 
-  with Application, Application.Modules[lParam1] do
-  begin
-    FControlPanelHandle := hwndCPl;
-
-    case (umsg) of
-      CPL_INIT : DoInit(Temp);
-      CPL_GETCOUNT:
-      begin
-        Result := ModuleCount;
-        DoCount(Result);
-        Exit;
+      case (umsg) of
+        CPL_INIT :
+        begin
+          DoInit(Temp);
+          Result := Integer(Temp);
+        end;
+        CPL_GETCOUNT:
+        begin
+          Result := ModuleCount;
+          DoCount(Result);
+        end;
+        CPL_STARTWPARMS :
+        begin
+          DoStartWParms(PChar(LParam2));
+          Result := 1;
+        end;
+        CPL_INQUIRE     : DoInquire(PCplInfo(lParam2)^);
+        CPL_NEWINQUIRE  : DoNewInquire(PNewCPLInfo(lParam2)^);
+        CPL_DBLCLK      : DoActivate(LongInt(lParam2));
+        CPL_STOP        : DoStop(LongInt(LParam2));
+        CPL_EXIT        : DoExit;
+        CPL_SETUP       : DoSetup;
       end;
-      CPL_INQUIRE     : DoInquire(PCplInfo(lParam2)^);
-      CPL_NEWINQUIRE  : DoNewInquire(PNewCPLInfo(lParam2)^);
-      CPL_DBLCLK      : DoActivate(LongInt(lParam2));
-      CPL_STOP        : DoStop(LongInt(LParam2));
-      CPL_EXIT        : DoExit;
-      CPL_STARTWPARMS : DoStartWParms(PChar(LParam2));
-      CPL_SETUP       : DoSetup;
     end;
+  except
+    Application.HandleException(Application);
+    Result := 1;
   end;
-
-  Result := Integer(Temp);
 end;
 
 constructor TAppletModule.Create(AOwner: TComponent);
@@ -277,7 +299,7 @@ end;
 
 procedure TAppletModule.DoActivate(Data: Integer);
 begin
-  if assigned(FOnActivate) then
+  if Assigned(FOnActivate) then
     FOnActivate(Self, Data);
 end;
 
@@ -291,7 +313,7 @@ begin
     lData := FData;
   end;
 
-  if assigned(FOnInquire) then
+  if Assigned(FOnInquire) then
     with ACPLInfo do
       FOnInquire(Self, idIcon, idName, idInfo, lData);
 end;
@@ -308,30 +330,30 @@ begin
       hIcon := LoadIcon(hInstance, MakeIntResource(FResidIcon));
   end;
 
-  if assigned(fOnNewInquire) then
+  if Assigned(fOnNewInquire) then
     with ANewCPLInfo do
       FOnNewInquire(Self, lData, hIcon, FCaption, FHelp);
 
   if (FResidName = CPL_DYNAMIC_RES) then
-    StrLCopy(ANewCPLInfo.szName, PChar(FCaption), SizeOf(ANewCPLInfo.szName))
+    StrLCopy(ANewCPLInfo.szName, PChar(FCaption), SizeOf(ANewCPLInfo.szName)-1)
   else
-    StrLCopy(ANewCPLInfo.szName, PChar(LoadStr(FResidName)), SizeOf(ANewCPLInfo.szName));
+    StrLCopy(ANewCPLInfo.szName, PChar(LoadStr(FResidName)), SizeOf(ANewCPLInfo.szName)-1);
 
   if (FResidInfo = CPL_DYNAMIC_RES) then
-    StrLCopy(ANewCPLInfo.szInfo, PChar(FHelp), SizeOf(ANewCPLInfo.szInfo))
+    StrLCopy(ANewCPLInfo.szInfo, PChar(FHelp), SizeOf(ANewCPLInfo.szInfo)-1)
   else
-    StrLCopy(ANewCPLInfo.szInfo, PChar(LoadStr(FResidInfo)), SizeOf(ANewCPLInfo.szInfo));
+    StrLCopy(ANewCPLInfo.szInfo, PChar(LoadStr(FResidInfo)), SizeOf(ANewCPLInfo.szInfo)-1);
 end;
 
 procedure TAppletModule.DoStartWParms(Params: string);
 begin
-  if assigned(FOnStartWParms) then
+  if Assigned(FOnStartWParms) then
     FOnStartWParms(Self, Params);
 end;
 
 procedure TAppletModule.DoStop(Data: Integer);
 begin
-  if assigned(FOnStop) then
+  if Assigned(FOnStop) then
     FOnStop(Self, Data);
 end;
 

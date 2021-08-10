@@ -3,7 +3,7 @@
 
 :BASE nmurl.hlp
 :TITLE FastNet URL Encode/Decode Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 TNMURL component
 2 TNMURL component Reference=Scribble1010
 2 Properties

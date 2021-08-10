@@ -1,11 +1,13 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1997-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
 {       Windows socket components                       }
-{                                                       }
-{       Copyright (c) 1997,99 Inprise Corporation       }
-{                                                       }
 {*******************************************************}
 
 unit ScktComp;
@@ -52,7 +54,7 @@ type
   TSocketEvent = (seLookup, seConnecting, seConnect, seDisconnect, seListen,
     seAccept, seWrite, seRead);
   TLookupState = (lsIdle, lsLookupAddress, lsLookupService);
-  TErrorEvent = (eeGeneral, eeSend, eeReceive, eeConnect, eeDisconnect, eeAccept);
+  TErrorEvent = (eeGeneral, eeSend, eeReceive, eeConnect, eeDisconnect, eeAccept, eeLookup);
 
   TSocketEventEvent = procedure (Sender: TObject; Socket: TCustomWinSocket;
     SocketEvent: TSocketEvent) of object;
@@ -470,7 +472,7 @@ function SetErrorProc(ErrorProc: TSocketErrorProc): TSocketErrorProc;
 
 implementation
 
-uses Forms, Consts;
+uses RTLConsts;
 
 threadvar
   SocketErrorProc: TSocketErrorProc;
@@ -551,6 +553,8 @@ end;
 
 procedure TCustomWinSocket.AsyncInitSocket(const Name, Address,
   Service: string; Port: Word; QueueSize: Integer; Client: Boolean);
+var
+  ErrorCode: Integer;
 begin
   try
     case FLookupState of
@@ -577,7 +581,15 @@ begin
           begin
             FLookupState := lsLookupAddress;
             FAddr.sin_addr.S_addr := inet_addr(PChar(Address));
-          end else raise ESocketError.CreateRes(@sNoAddress);
+          end else
+          begin
+            ErrorCode := 1110;
+            Error(Self, eeLookup, ErrorCode);
+            Disconnect(FSocket);
+            if ErrorCode <> 0 then
+              raise ESocketError.CreateRes(@sNoAddress);
+            Exit;
+          end;
         end;
       lsLookupAddress:
         begin
@@ -1149,7 +1161,8 @@ begin
   try
     Dispatch(Message);
   except
-    Application.HandleException(Self);
+    if Assigned(ApplicationHandleException) then
+      ApplicationHandleException(Self);
   end;
 end;
 
@@ -1160,15 +1173,21 @@ begin
 end;
 
 procedure TCustomWinSocket.CMLookupComplete(var Message: TCMLookupComplete);
+var
+  ErrorCode: Integer;
 begin
   if Message.LookupHandle = FLookupHandle then
   begin
     FLookupHandle := 0;
     if Message.AsyncError <> 0 then
     begin
+      ErrorCode := Message.AsyncError;
+      Error(Self, eeLookup, ErrorCode);
       Disconnect(FSocket);
-      raise ESocketError.CreateResFmt(@sWindowsSocketError,
-        [SysErrorMessage(Message.AsyncError), Message.ASyncError, 'ASync Lookup']);
+      if ErrorCode <> 0 then
+        raise ESocketError.CreateResFmt(@sWindowsSocketError,
+          [SysErrorMessage(Message.AsyncError), Message.ASyncError, 'ASync Lookup']);
+      Exit;
     end;
     if FLookupState = lsLookupAddress then
     begin
@@ -1614,7 +1633,8 @@ begin
   if GetCapture <> 0 then SendMessage(GetCapture, WM_CANCELMODE, 0, 0);
   if FException is Exception then
   begin
-    Application.ShowException(FException);
+    if Assigned(ApplicationShowException) then
+      ApplicationShowException(FException);
   end else
     SysUtils.ShowException(FException, nil);
 end;

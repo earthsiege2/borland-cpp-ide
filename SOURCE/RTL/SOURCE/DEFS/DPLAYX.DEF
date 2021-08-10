@@ -1,10 +1,10 @@
 LIBRARY DPLAYX
 EXPORTS
 
-    DirectPlayCreate                         = 'DPLAYX.DLL'.*
-    DirectPlayEnumerate                      = 'DPLAYX.DLL'.*
-    DirectPlayEnumerateA                     = 'DPLAYX.DLL'.*
-    DirectPlayEnumerateW                     = 'DPLAYX.DLL'.*
-    DirectPlayLobbyCreateA                   = 'DPLAYX.DLL'.*
-    DirectPlayLobbyCreateW                   = 'DPLAYX.DLL'.*
-    _gdwDPlaySPRefCount                      = 'DPLAYX.DLL'.gdwDPlaySPRefCount
+    DirectPlayCreate                         
+    DirectPlayEnumerate                      
+    DirectPlayEnumerateA                     
+    DirectPlayEnumerateW                     
+    DirectPlayLobbyCreateA                   
+    DirectPlayLobbyCreateW                   
+    _gdwDPlaySPRefCount                      = gdwDPlaySPRefCount

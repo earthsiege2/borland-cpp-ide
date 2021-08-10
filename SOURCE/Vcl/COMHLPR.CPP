@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////
 //  COMHLPR.CPP
 //
-//  $Revision:   1.0.1.2  $
-//  $Date:   31 Oct 1999 01:02:22  $
+//  $Revision:   1.2.2.0.1.0  $
+//  $Date:   25 Jan 2002 13:02:00  $
 //
-//  Copyright (c) 1999, 2000 Borland International
+//  Copyright (c) 1999, 2002 Borland Software Corporation
 //////////////////////////////////////////////////////////////////////////
 #include <oleserver.hpp>
 #include <utilcls.h>

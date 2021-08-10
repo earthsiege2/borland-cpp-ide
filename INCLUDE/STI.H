@@ -16,7 +16,6 @@ Revision History:
 --*/
 
 #ifndef _STICOM_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _STICOM_
 
 //
@@ -153,7 +152,8 @@ DEFINE_GUID(GUID_STIUserDefined3,
 typedef enum _STI_DEVICE_MJ_TYPE {
     StiDeviceTypeDefault          = 0,
     StiDeviceTypeScanner          = 1,
-    StiDeviceTypeDigitalCamera    = 2
+    StiDeviceTypeDigitalCamera    = 2,
+    StiDeviceTypeStreamingVideo   = 3
 } STI_DEVICE_MJ_TYPE;
 
 typedef DWORD STI_DEVICE_TYPE;
@@ -214,6 +214,19 @@ typedef struct _STI_DEV_CAPS {
 //
 #define STI_GENCAP_AUTO_PORTSELECT   0x00000008
 
+//
+// WIA capability bit.
+// This capability indicates that USD is WIA capable.
+//
+#define STI_GENCAP_WIA              0x00000010
+
+//
+// Subset driver bit.
+// This capability indicates that there is more featured driver exists. All 
+// of inbox driver has this bit set. Fully featured (IHV) driver shouldn't have
+// this bit set.
+//
+#define STI_GENCAP_SUBSET           0x00000020
 
 //
 //
@@ -995,7 +1008,6 @@ DECLARE_INTERFACE_(IStiDevice, IUnknown)
 //
 #include <poppack.h>
 
-#pragma option pop /*P_O_Pop*/
 #endif // _STICOM_
 
 

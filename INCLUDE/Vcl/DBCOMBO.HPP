@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DBCombo.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DbCombo.pas' rev: 6.00
 
-#ifndef DBComboHPP
-#define DBComboHPP
+#ifndef DbComboHPP
+#define DbComboHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -49,8 +49,7 @@ public:
 	__property Classes::TStrings* AliasList = {read=FAliasList};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TAliasDrive(HWND ParentWindow) : Filectrl::TDriveComboBox(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TAliasDrive(HWND ParentWindow) : Filectrl::TDriveComboBox(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -78,8 +77,7 @@ public:
 	__property bool ShowAlias = {read=FShowAlias, write=FShowAlias, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TAliasListBox(HWND ParentWindow) : Filectrl::TDirectoryListBox(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TAliasListBox(HWND ParentWindow) : Filectrl::TDirectoryListBox(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -107,24 +105,20 @@ public:
 	__property bool System = {read=FSystem, write=FSystem, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TAliasFileListBox(HWND ParentWindow) : Filectrl::TFileListBox(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TAliasFileListBox(HWND ParentWindow) : Filectrl::TFileListBox(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE void __fastcall ProcessAlias(AnsiString EditText, AnsiString &Alias, AnsiString &DirPart
-	, AnsiString &FilePart);
+extern PACKAGE void __fastcall ProcessAlias(AnsiString EditText, AnsiString &Alias, AnsiString &DirPart, AnsiString &FilePart);
 
 }	/* namespace Dbcombo */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dbcombo;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// DBCombo
+#endif	// DbCombo

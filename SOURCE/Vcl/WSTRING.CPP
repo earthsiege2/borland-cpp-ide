@@ -1,6 +1,6 @@
 //  wstring.cpp - support for delphi WideString
-//  $Revision:   1.5.1.0  $
-//  Copyright (c) 1997, 1999 Borland International
+//  $Revision:   1.7.1.0.1.1  $
+//  Copyright (c) 1997, 2002 Borland Software Corporation
 
 #pragma inline
 
@@ -10,10 +10,11 @@
 #include <stdlib.h>
 #include <wstring.h>
 #include <utilcls.h>
+#include <stdio.h>
 
-#ifdef near
 #undef near
-#endif
+#undef printf
+#undef vprintf
 
 namespace System
 {
@@ -92,15 +93,89 @@ namespace System
     }
   }
 
+
+  __fastcall WideString::WideString(char src)
+    : Data(0)
+  {
+    printf(L"%c", src);
+  }
+
+  __fastcall WideString::WideString(short src)
+    : Data(0)
+  {
+    printf(L"%hd", src);
+  }
+
+  __fastcall WideString::WideString(unsigned short src)
+    : Data(0)
+  {
+    printf(L"%hu", src);
+  }
+
+  __fastcall WideString::WideString(int src)
+    : Data(0)
+  {
+    printf(L"%d", src);
+  }
+
+  __fastcall WideString::WideString(unsigned int src)
+    : Data(0)
+  {
+    printf(L"%u", src);
+  }
+
+  __fastcall WideString::WideString(long src)
+    : Data(0)
+  {
+    printf(L"%ld", src);
+  }
+
+  __fastcall WideString::WideString(unsigned long src)
+    : Data(0)
+  {
+    printf(L"%lu", src);
+  }
+
+  __fastcall WideString::WideString(__int64 src)
+    : Data(0)
+  {
+    printf(L"%Ld", src);
+  }
+
+  __fastcall WideString::WideString(unsigned __int64 src)
+    : Data(0)
+  {
+    printf(L"%Lu", src);
+  }
+
+  __fastcall WideString::WideString(float src)
+    : Data(0)
+  {
+    printf(L"%g", src);
+  }
+
+  __fastcall WideString::WideString(double src)
+    : Data(0)
+  {
+    printf(L"%g", src);
+  }
+
+  __fastcall WideString::WideString(long double src)
+    : Data(0)
+  {
+    printf(L"%Lg", src);
+  }
+  
   __fastcall WideString::~WideString()
   {
     asm
     {
-      extrn @System@@WStrClr$qqrr17System@WideString:near
+      extrn @System@@WStrClr$qqrpv:near
       mov   eax, this
-      call  @System@@WStrClr$qqrr17System@WideString
+      call  @System@@WStrClr$qqrpv
     }
   }
+
 
   WideString& __fastcall WideString::operator=(const WideString&)
   {
@@ -352,6 +427,23 @@ namespace System
   {
     return ::SysAllocStringLen(src, ::SysStringLen(src));
   }
+  
+  int __cdecl WideString::vprintf(const wchar_t* fmt, va_list ap)
+  {
+    int n = vsnwprintf(NULL, 0, fmt, ap);
+    SetLength(n);
+    return vsnwprintf(Data, n + 1, fmt, ap);
+  }
+
+  int __cdecl WideString::printf(const wchar_t *fmt, ...)
+  {
+    va_list ap;
+    va_start(ap, fmt);
+    int rc = vprintf(fmt, ap);
+    va_end(ap);
+    return rc;
+  }
+
 
 }
 

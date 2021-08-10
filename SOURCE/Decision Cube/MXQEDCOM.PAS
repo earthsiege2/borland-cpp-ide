@@ -8,7 +8,7 @@
 
 { BDE Query Edit COM API  }
 
-unit mxqedcom;
+unit MXQEDCOM;
 
 interface
 

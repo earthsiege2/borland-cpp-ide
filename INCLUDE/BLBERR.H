@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 1998-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
     blberr.h
@@ -13,7 +13,6 @@ Author:
 */
 
 #ifndef __SDPBLB_ERROR_CODES__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __SDPBLB_ERROR_CODES__
 
 #include <sdperr.h>
@@ -23,6 +22,5 @@ Author:
 
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // __SDPBLB_ERROR_CODES__
 

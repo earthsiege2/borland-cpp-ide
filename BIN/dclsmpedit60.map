@@ -1,0 +1,491 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 00008F70H .text                   CODE
+ 0002:00000000 00000034H .data                   DATA
+ 0002:00000034 00000061H .bss                    BSS
+
+
+Detailed map of segments
+
+ 0001:00000000 000000FE C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:00000100 000001EC C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:000002EC 00000038 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:00000324 0000000E C=CODE     S=.text    G=(none)   M=Types    ACBP=A9
+ 0001:00000334 00000046 C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:0000037C 0000000E C=CODE     S=.text    G=(none)   M=ActiveX  ACBP=A9
+ 0001:0000038C 00000038 C=CODE     S=.text    G=(none)   M=Messages ACBP=A9
+ 0001:000003C4 0000000E C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:000003D4 0000000E C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:000003E4 0000000E C=CODE     S=.text    G=(none)   M=SysConst ACBP=A9
+ 0001:000003F4 0000000E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:00000404 0000000E C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:00000414 0000000E C=CODE     S=.text    G=(none)   M=RTLConsts ACBP=A9
+ 0001:00000424 0000002E C=CODE     S=.text    G=(none)   M=ToolsAPI ACBP=A9
+ 0001:00000454 0000000E C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:00000464 0000000E C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:00000474 0000000E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:00000484 0000000E C=CODE     S=.text    G=(none)   M=Math     ACBP=A9
+ 0001:00000494 0000000E C=CODE     S=.text    G=(none)   M=ImgList  ACBP=A9
+ 0001:000004A4 00000038 C=CODE     S=.text    G=(none)   M=CommCtrl ACBP=A9
+ 0001:000004DC 0000000E C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:000004EC 0000000E C=CODE     S=.text    G=(none)   M=Consts   ACBP=A9
+ 0001:000004FC 0000012E C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:0000062C 0000000E C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:0000063C 0000000E C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:0000064C 000000EE C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:0000073C 00000038 C=CODE     S=.text    G=(none)   M=Imm      ACBP=A9
+ 0001:00000774 00000026 C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:0000079C 0000000E C=CODE     S=.text    G=(none)   M=WinHelpViewer ACBP=A9
+ 0001:000007AC 0000000E C=CODE     S=.text    G=(none)   M=StdActns ACBP=A9
+ 0001:000007BC 00000016 C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:000007D4 00000038 C=CODE     S=.text    G=(none)   M=ShlObj   ACBP=A9
+ 0001:0000080C 00000038 C=CODE     S=.text    G=(none)   M=UrlMon   ACBP=A9
+ 0001:00000844 00000038 C=CODE     S=.text    G=(none)   M=WinInet  ACBP=A9
+ 0001:0000087C 00000038 C=CODE     S=.text    G=(none)   M=RegStr   ACBP=A9
+ 0001:000008B4 00000038 C=CODE     S=.text    G=(none)   M=ShellAPI ACBP=A9
+ 0001:000008EC 0000000E C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:000008FC 00000038 C=CODE     S=.text    G=(none)   M=WinSpool ACBP=A9
+ 0001:00000934 0000000E C=CODE     S=.text    G=(none)   M=StdCtrls ACBP=A9
+ 0001:00000944 00000038 C=CODE     S=.text    G=(none)   M=CommDlg  ACBP=A9
+ 0001:0000097C 00000038 C=CODE     S=.text    G=(none)   M=Dlgs     ACBP=A9
+ 0001:000009B4 0000000E C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:000009C4 0000000E C=CODE     S=.text    G=(none)   M=StrUtils ACBP=A9
+ 0001:000009D4 0000000E C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:000009E4 0000000E C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:000009F4 0000000E C=CODE     S=.text    G=(none)   M=ListActns ACBP=A9
+ 0001:00000A04 0000000E C=CODE     S=.text    G=(none)   M=ToolWin  ACBP=A9
+ 0001:00000A14 00000038 C=CODE     S=.text    G=(none)   M=RichEdit ACBP=A9
+ 0001:00000A4C 0000000E C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00000A5C 0000000E C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:00000A6C 0000000E C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00000A7C 0000000E C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:00000A8C 0000000E C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:00000A9C 0000000E C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:00000AAC 0000000E C=CODE     S=.text    G=(none)   M=ComStrs  ACBP=A9
+ 0001:00000ABC 0000000E C=CODE     S=.text    G=(none)   M=DesignIntf ACBP=A9
+ 0001:00000ACC 0000000E C=CODE     S=.text    G=(none)   M=DesignMenus ACBP=A9
+ 0001:00000ADC 00000238 C=CODE     S=.text    G=(none)   M=BufferListForm ACBP=A9
+ 0001:00000D14 00001310 C=CODE     S=.text    G=(none)   M=BaseBindings ACBP=A9
+ 0001:00002024 000002B4 C=CODE     S=.text    G=(none)   M=SaveKeyMacro ACBP=A9
+ 0001:000022D8 00006A78 C=CODE     S=.text    G=(none)   M=BufferList ACBP=A9
+ 0001:00008D50 0000021D C=CODE     S=.text    G=(none)   M=dclsmpedit ACBP=A9
+ 0002:00000000 00000028 C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00001000 00000018 C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00001018 00000004 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0002:0000101C 00000004 C=BSS      S=.bss     G=DGROUP   M=Messages ACBP=A9
+ 0002:00001020 00000004 C=BSS      S=.bss     G=DGROUP   M=CommCtrl ACBP=A9
+ 0002:00001024 00000004 C=BSS      S=.bss     G=DGROUP   M=Imm      ACBP=A9
+ 0002:00001028 00000004 C=BSS      S=.bss     G=DGROUP   M=ShlObj   ACBP=A9
+ 0002:0000102C 00000004 C=BSS      S=.bss     G=DGROUP   M=UrlMon   ACBP=A9
+ 0002:00001030 00000004 C=BSS      S=.bss     G=DGROUP   M=WinInet  ACBP=A9
+ 0002:00001034 00000004 C=BSS      S=.bss     G=DGROUP   M=RegStr   ACBP=A9
+ 0002:00001038 00000004 C=BSS      S=.bss     G=DGROUP   M=ShellAPI ACBP=A9
+ 0002:0000103C 00000004 C=BSS      S=.bss     G=DGROUP   M=WinSpool ACBP=A9
+ 0002:00001040 00000004 C=BSS      S=.bss     G=DGROUP   M=CommDlg  ACBP=A9
+ 0002:00001044 00000004 C=BSS      S=.bss     G=DGROUP   M=Dlgs     ACBP=A9
+ 0002:00001048 00000004 C=BSS      S=.bss     G=DGROUP   M=RichEdit ACBP=A9
+ 0002:0000104C 00000004 C=BSS      S=.bss     G=DGROUP   M=BufferListForm ACBP=A9
+ 0002:00001050 00000004 C=BSS      S=.bss     G=DGROUP   M=BaseBindings ACBP=A9
+ 0002:00001054 00000008 C=BSS      S=.bss     G=DGROUP   M=SaveKeyMacro ACBP=A9
+ 0002:0000105C 00000004 C=BSS      S=.bss     G=DGROUP   M=BufferList ACBP=A9
+
+
+  Address         Publics by Name
+
+ 0002:00001044       .1
+ 0002:00001048       .1
+ 0002:0000101C       .1
+ 0002:00001038       .1
+ 0002:00001034       .1
+ 0002:00001010       .1
+ 0002:00001040       .1
+ 0002:00001030       .1
+ 0002:0000102C       .1
+ 0002:00001028       .1
+ 0002:00001024       .1
+ 0002:0000105C       .1
+ 0002:00001020       .1
+ 0002:00001058       .2
+ 0002:0000104C       .2
+ 0002:00001050       .2
+ 0002:00001018       .3
+ 0002:0000103C       .3
+ 0001:00008F48       @GetPackageInfoTable
+ 0001:00000238       @InitPkg
+ 0001:00008F50       @PackageLoad
+ 0001:0000029C       @PackageLoad
+ 0001:00008F5C       @PackageUnload
+ 0001:000002A8       @PackageUnload
+ 0001:00000138       AllocTlsBuffer
+ 0001:0000201C       BaseBindings
+ 0001:00008D48       BufferList
+ 0001:00000D0C       BufferListForm
+ 0001:000004D4       CommCtrl
+ 0001:00000974       CommDlg
+ 0001:00008F68       dclsmpedit
+ 0001:000009AC       Dlgs
+ 0001:000001E4       ExitProcessTLS
+ 0001:000001BC       ExitThreadTLS
+ 0001:0000087C       Finalization
+ 0001:00000A14       Finalization
+ 0001:00000844       Finalization
+ 0001:000008B4       Finalization
+ 0001:00000CDC       Finalization
+ 0001:0000080C       Finalization
+ 0001:000007D4       Finalization
+ 0001:0000073C       Finalization
+ 0001:00008D18       Finalization
+ 0001:000004A4       Finalization
+ 0001:000022A0       Finalization
+ 0001:000008FC       Finalization
+ 0001:0000038C       Finalization
+ 0001:000002EC       Finalization
+ 0001:000002B4       Finalization
+ 0001:00001FEC       Finalization
+ 0001:00000944       Finalization
+ 0001:0000097C       Finalization
+ 0001:00000100       FreeLibrary
+ 0001:00000144       GetTlsSize
+ 0002:0000100C       HInstance
+ 0001:0000076C       Imm
+ 0001:00000208       InitializeModule
+ 0001:00000190       InitProcessTLS
+ 0001:0000014C       InitThreadTLS
+ 0001:00000108       LocalAlloc
+ 0001:00000110       LocalFree
+ 0001:000003BC       Messages
+ 0002:00000000       Module
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0001:0000252C       Register
+ 0001:000008AC       RegStr
+ 0001:00000A44       RichEdit
+ 0001:000022D0       SaveKeyMacro
+ 0002:00001054       SaveKeyMacroDlg
+ 0001:000008E4       ShellAPI
+ 0001:00000804       ShlObj
+ 0001:000002E4       SysInit
+ 0001:00000E3C       TBaseBindings.AddWatchAtCursor
+ 0001:00000FF8       TBaseBindings.AutoCodeInsight
+ 0001:000010E8       TBaseBindings.BlockSave
+ 0001:00001154       TBaseBindings.BrowseSymbolAtCursor
+ 0001:000011E8       TBaseBindings.ClassComplete
+ 0001:0000127C       TBaseBindings.ClassNavigate
+ 0001:00001314       TBaseBindings.ClipClear
+ 0001:0000137C       TBaseBindings.ClipCopy
+ 0001:000013E8       TBaseBindings.ClipCut
+ 0001:00001454       TBaseBindings.ClipPaste
+ 0001:000014BC       TBaseBindings.CodeCompletion
+ 0001:0000155C       TBaseBindings.CodeTemplate
+ 0001:000015F0       TBaseBindings.DebugInspect
+ 0001:00000F64       TBaseBindings.EvaluateModify
+ 0001:00001684       TBaseBindings.GotoLine
+ 0001:000016F0       TBaseBindings.HelpKeyword
+ 0001:00001784       TBaseBindings.IncrementalSearch
+ 0001:00001818       TBaseBindings.InsertCompilerOptions
+ 0001:000018AC       TBaseBindings.InsertNewGUID
+ 0001:00001940       TBaseBindings.MarkWord
+ 0001:00001A58       TBaseBindings.NullCmd
+ 0001:00001A68       TBaseBindings.OpenFileAtCursor
+ 0001:00001AFC       TBaseBindings.OpenLine
+ 0001:00001BA0       TBaseBindings.Print
+ 0001:00000ED0       TBaseBindings.RunToCursor
+ 0001:00001BF4       TBaseBindings.SearchAgain
+ 0001:00001C5C       TBaseBindings.SearchFind
+ 0001:00001CC8       TBaseBindings.SearchReplace
+ 0001:00001D34       TBaseBindings.SetBlockStyle
+ 0001:00001DA8       TBaseBindings.SlideBlock
+ 0001:00001EBC       TBaseBindings.SwapCPPHeader
+ 0001:00001F54       TBaseBindings.ViewExplorer
+ 0001:000025E4       TBufferList.BindKeyboard
+ 0001:00002624       TBufferList.BufferListProc
+ 0001:00002824       TBufferList.GetBindingType
+ 0001:00002828       TBufferList.GetDisplayName
+ 0001:0000283C       TBufferList.GetName
+ 0001:00000CBC       TBufferListFrm.BufferListBoxDblClick
+ 0001:00006A08       TClassicBinding.AdjustBlockCase
+ 0001:000066E4       TClassicBinding.AdjustWordCase
+ 0001:00005914       TClassicBinding.BackspaceDelete
+ 0001:0000286C       TClassicBinding.BindKeyboard
+ 0001:00006E50       TClassicBinding.ClassicBlockDelete
+ 0001:00007E0C       TClassicBinding.ClassicDeleteLine
+ 0001:000086DC       TClassicBinding.ClassicMarkToBOF
+ 0001:000089F8       TClassicBinding.ClassicMarkToBOL
+ 0001:00008800       TClassicBinding.ClassicMarkToEOF
+ 0001:00008B20       TClassicBinding.ClassicMarkToEOL
+ 0001:000081F4       TClassicBinding.ClassicMarkToViewBottom
+ 0001:0000832C       TClassicBinding.ClassicMarkToViewTop
+ 0001:00006B8C       TClassicBinding.ClassicMarkWord
+ 0001:00006C30       TClassicBinding.ClassicMoveBlock
+ 0001:00006FB8       TClassicBinding.ClassicToggleCase
+ 0001:0000659C       TClassicBinding.CopyBlock
+ 0001:00005AC8       TClassicBinding.CursorLeft
+ 0001:00005980       TClassicBinding.CursorRight
+ 0001:00005FE8       TClassicBinding.DeleteChar
+ 0001:000054CC       TClassicBinding.DeleteToEOL
+ 0001:000056F8       TClassicBinding.DeleteWordLeft
+ 0001:00005C10       TClassicBinding.DeleteWordRight
+ 0001:000061C4       TClassicBinding.EndCursor
+ 0001:00005484       TClassicBinding.GetBindingType
+ 0001:00005488       TClassicBinding.GetDisplayName
+ 0001:0000549C       TClassicBinding.GetName
+ 0001:00007B40       TClassicBinding.GotoBookmark
+ 0001:00006124       TClassicBinding.HomeCursor
+ 0001:000068E0       TClassicBinding.IndentBlock
+ 0001:00008180       TClassicBinding.InsertCharacter
+ 0001:00006AE8       TClassicBinding.InsertFile
+ 0001:0000744C       TClassicBinding.InsertLiteralKey
+ 0001:00006054       TClassicBinding.InsertTab
+ 0001:00005B34       TClassicBinding.LineDown
+ 0001:000059F0       TClassicBinding.LineUp
+ 0001:00007128       TClassicBinding.LiteralKeyProc
+ 0001:00007284       TClassicBinding.LoadKeyMacro
+ 0001:00006264       TClassicBinding.MarkBlockBegin
+ 0001:0000642C       TClassicBinding.MarkBlockEnd
+ 0001:0000690C       TClassicBinding.MarkLine
+ 0001:00008C48       TClassicBinding.MarkToPageDown
+ 0001:00008CB0       TClassicBinding.MarkToPageUp
+ 0001:00008910       TClassicBinding.MarkToRelativeHoriz
+ 0001:00008984       TClassicBinding.MarkToRelativeVert
+ 0001:00008464       TClassicBinding.MarkToWordLeft
+ 0001:000085A0       TClassicBinding.MarkToWordRight
+ 0001:00008098       TClassicBinding.MoveCursorHorizontal
+ 0001:00007520       TClassicBinding.MoveCursorToBOF
+ 0001:00007740       TClassicBinding.MoveCursorToBOL
+ 0001:00007594       TClassicBinding.MoveCursorToEOF
+ 0001:000077A8       TClassicBinding.MoveCursorToEOL
+ 0001:00007954       TClassicBinding.MoveCursorToLastEdit
+ 0001:000075FC       TClassicBinding.MoveCursorToMarkBegin
+ 0001:00007810       TClassicBinding.MoveCursorToMarkEnd
+ 0001:0000810C       TClassicBinding.MoveCursorVertical
+ 0001:00007A00       TClassicBinding.MoveLineViewBottom
+ 0001:00007AB0       TClassicBinding.MoveLineViewTop
+ 0001:00005A5C       TClassicBinding.PageDown
+ 0001:00005BA4       TClassicBinding.PageUp
+ 0001:00005EE4       TClassicBinding.Scroll
+ 0001:00006F40       TClassicBinding.SetBookmark
+ 0001:00006844       TClassicBinding.ToggleBlock
+ 0001:00007BB8       TClassicBinding.ToggleInsertMode
+ 0001:00007C58       TClassicBinding.ToggleMacroRecord
+ 0001:000055C0       TClassicBinding.WordLeft
+ 0001:0000565C       TClassicBinding.WordRight
+ 0001:00000118       TlsAlloc
+ 0002:00001014       tlsBuffer
+ 0001:00000120       TlsFree
+ 0001:00000128       TlsGetValue
+ 0002:00001004       TlsIndex
+ 0002:AFD66000       TlsLast
+ 0002:00000018       TlsProc
+ 0001:00000130       TlsSetValue
+ 0001:0000223C       TSaveKeyMacroDlg.Button1Click
+ 0001:00000214       UninitializeModule
+ 0001:0000083C       UrlMon
+ 0001:0000031C       Windows
+ 0001:00000874       WinInet
+ 0001:0000092C       WinSpool
+
+
+  Address         Publics by Value
+
+ 0002:AFD66000       TlsLast
+ 0001:00000100       FreeLibrary
+ 0001:00000108       LocalAlloc
+ 0001:00000110       LocalFree
+ 0001:00000118       TlsAlloc
+ 0001:00000120       TlsFree
+ 0001:00000128       TlsGetValue
+ 0001:00000130       TlsSetValue
+ 0001:00000138       AllocTlsBuffer
+ 0001:00000144       GetTlsSize
+ 0001:0000014C       InitThreadTLS
+ 0001:00000190       InitProcessTLS
+ 0001:000001BC       ExitThreadTLS
+ 0001:000001E4       ExitProcessTLS
+ 0001:00000208       InitializeModule
+ 0001:00000214       UninitializeModule
+ 0001:00000238       @InitPkg
+ 0001:0000029C       @PackageLoad
+ 0001:000002A8       @PackageUnload
+ 0001:000002B4       Finalization
+ 0001:000002E4       SysInit
+ 0001:000002EC       Finalization
+ 0001:0000031C       Windows
+ 0001:0000038C       Finalization
+ 0001:000003BC       Messages
+ 0001:000004A4       Finalization
+ 0001:000004D4       CommCtrl
+ 0001:0000073C       Finalization
+ 0001:0000076C       Imm
+ 0001:000007D4       Finalization
+ 0001:00000804       ShlObj
+ 0001:0000080C       Finalization
+ 0001:0000083C       UrlMon
+ 0001:00000844       Finalization
+ 0001:00000874       WinInet
+ 0001:0000087C       Finalization
+ 0001:000008AC       RegStr
+ 0001:000008B4       Finalization
+ 0001:000008E4       ShellAPI
+ 0001:000008FC       Finalization
+ 0001:0000092C       WinSpool
+ 0001:00000944       Finalization
+ 0001:00000974       CommDlg
+ 0001:0000097C       Finalization
+ 0001:000009AC       Dlgs
+ 0001:00000A14       Finalization
+ 0001:00000A44       RichEdit
+ 0001:00000CBC       TBufferListFrm.BufferListBoxDblClick
+ 0001:00000CDC       Finalization
+ 0001:00000D0C       BufferListForm
+ 0001:00000E3C       TBaseBindings.AddWatchAtCursor
+ 0001:00000ED0       TBaseBindings.RunToCursor
+ 0001:00000F64       TBaseBindings.EvaluateModify
+ 0001:00000FF8       TBaseBindings.AutoCodeInsight
+ 0001:000010E8       TBaseBindings.BlockSave
+ 0001:00001154       TBaseBindings.BrowseSymbolAtCursor
+ 0001:000011E8       TBaseBindings.ClassComplete
+ 0001:0000127C       TBaseBindings.ClassNavigate
+ 0001:00001314       TBaseBindings.ClipClear
+ 0001:0000137C       TBaseBindings.ClipCopy
+ 0001:000013E8       TBaseBindings.ClipCut
+ 0001:00001454       TBaseBindings.ClipPaste
+ 0001:000014BC       TBaseBindings.CodeCompletion
+ 0001:0000155C       TBaseBindings.CodeTemplate
+ 0001:000015F0       TBaseBindings.DebugInspect
+ 0001:00001684       TBaseBindings.GotoLine
+ 0001:000016F0       TBaseBindings.HelpKeyword
+ 0001:00001784       TBaseBindings.IncrementalSearch
+ 0001:00001818       TBaseBindings.InsertCompilerOptions
+ 0001:000018AC       TBaseBindings.InsertNewGUID
+ 0001:00001940       TBaseBindings.MarkWord
+ 0001:00001A58       TBaseBindings.NullCmd
+ 0001:00001A68       TBaseBindings.OpenFileAtCursor
+ 0001:00001AFC       TBaseBindings.OpenLine
+ 0001:00001BA0       TBaseBindings.Print
+ 0001:00001BF4       TBaseBindings.SearchAgain
+ 0001:00001C5C       TBaseBindings.SearchFind
+ 0001:00001CC8       TBaseBindings.SearchReplace
+ 0001:00001D34       TBaseBindings.SetBlockStyle
+ 0001:00001DA8       TBaseBindings.SlideBlock
+ 0001:00001EBC       TBaseBindings.SwapCPPHeader
+ 0001:00001F54       TBaseBindings.ViewExplorer
+ 0001:00001FEC       Finalization
+ 0001:0000201C       BaseBindings
+ 0001:0000223C       TSaveKeyMacroDlg.Button1Click
+ 0001:000022A0       Finalization
+ 0001:000022D0       SaveKeyMacro
+ 0001:0000252C       Register
+ 0001:000025E4       TBufferList.BindKeyboard
+ 0001:00002624       TBufferList.BufferListProc
+ 0001:00002824       TBufferList.GetBindingType
+ 0001:00002828       TBufferList.GetDisplayName
+ 0001:0000283C       TBufferList.GetName
+ 0001:0000286C       TClassicBinding.BindKeyboard
+ 0001:00005484       TClassicBinding.GetBindingType
+ 0001:00005488       TClassicBinding.GetDisplayName
+ 0001:0000549C       TClassicBinding.GetName
+ 0001:000054CC       TClassicBinding.DeleteToEOL
+ 0001:000055C0       TClassicBinding.WordLeft
+ 0001:0000565C       TClassicBinding.WordRight
+ 0001:000056F8       TClassicBinding.DeleteWordLeft
+ 0001:00005914       TClassicBinding.BackspaceDelete
+ 0001:00005980       TClassicBinding.CursorRight
+ 0001:000059F0       TClassicBinding.LineUp
+ 0001:00005A5C       TClassicBinding.PageDown
+ 0001:00005AC8       TClassicBinding.CursorLeft
+ 0001:00005B34       TClassicBinding.LineDown
+ 0001:00005BA4       TClassicBinding.PageUp
+ 0001:00005C10       TClassicBinding.DeleteWordRight
+ 0001:00005EE4       TClassicBinding.Scroll
+ 0001:00005FE8       TClassicBinding.DeleteChar
+ 0001:00006054       TClassicBinding.InsertTab
+ 0001:00006124       TClassicBinding.HomeCursor
+ 0001:000061C4       TClassicBinding.EndCursor
+ 0001:00006264       TClassicBinding.MarkBlockBegin
+ 0001:0000642C       TClassicBinding.MarkBlockEnd
+ 0001:0000659C       TClassicBinding.CopyBlock
+ 0001:000066E4       TClassicBinding.AdjustWordCase
+ 0001:00006844       TClassicBinding.ToggleBlock
+ 0001:000068E0       TClassicBinding.IndentBlock
+ 0001:0000690C       TClassicBinding.MarkLine
+ 0001:00006A08       TClassicBinding.AdjustBlockCase
+ 0001:00006AE8       TClassicBinding.InsertFile
+ 0001:00006B8C       TClassicBinding.ClassicMarkWord
+ 0001:00006C30       TClassicBinding.ClassicMoveBlock
+ 0001:00006E50       TClassicBinding.ClassicBlockDelete
+ 0001:00006F40       TClassicBinding.SetBookmark
+ 0001:00006FB8       TClassicBinding.ClassicToggleCase
+ 0001:00007128       TClassicBinding.LiteralKeyProc
+ 0001:00007284       TClassicBinding.LoadKeyMacro
+ 0001:0000744C       TClassicBinding.InsertLiteralKey
+ 0001:00007520       TClassicBinding.MoveCursorToBOF
+ 0001:00007594       TClassicBinding.MoveCursorToEOF
+ 0001:000075FC       TClassicBinding.MoveCursorToMarkBegin
+ 0001:00007740       TClassicBinding.MoveCursorToBOL
+ 0001:000077A8       TClassicBinding.MoveCursorToEOL
+ 0001:00007810       TClassicBinding.MoveCursorToMarkEnd
+ 0001:00007954       TClassicBinding.MoveCursorToLastEdit
+ 0001:00007A00       TClassicBinding.MoveLineViewBottom
+ 0001:00007AB0       TClassicBinding.MoveLineViewTop
+ 0001:00007B40       TClassicBinding.GotoBookmark
+ 0001:00007BB8       TClassicBinding.ToggleInsertMode
+ 0001:00007C58       TClassicBinding.ToggleMacroRecord
+ 0001:00007E0C       TClassicBinding.ClassicDeleteLine
+ 0001:00008098       TClassicBinding.MoveCursorHorizontal
+ 0001:0000810C       TClassicBinding.MoveCursorVertical
+ 0001:00008180       TClassicBinding.InsertCharacter
+ 0001:000081F4       TClassicBinding.ClassicMarkToViewBottom
+ 0001:0000832C       TClassicBinding.ClassicMarkToViewTop
+ 0001:00008464       TClassicBinding.MarkToWordLeft
+ 0001:000085A0       TClassicBinding.MarkToWordRight
+ 0001:000086DC       TClassicBinding.ClassicMarkToBOF
+ 0001:00008800       TClassicBinding.ClassicMarkToEOF
+ 0001:00008910       TClassicBinding.MarkToRelativeHoriz
+ 0001:00008984       TClassicBinding.MarkToRelativeVert
+ 0001:000089F8       TClassicBinding.ClassicMarkToBOL
+ 0001:00008B20       TClassicBinding.ClassicMarkToEOL
+ 0001:00008C48       TClassicBinding.MarkToPageDown
+ 0001:00008CB0       TClassicBinding.MarkToPageUp
+ 0001:00008D18       Finalization
+ 0001:00008D48       BufferList
+ 0001:00008F48       @GetPackageInfoTable
+ 0001:00008F50       @PackageLoad
+ 0001:00008F5C       @PackageUnload
+ 0001:00008F68       dclsmpedit
+ 0002:00000000       Module
+ 0002:00000018       TlsProc
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0002:00001004       TlsIndex
+ 0002:0000100C       HInstance
+ 0002:00001010       .1
+ 0002:00001014       tlsBuffer
+ 0002:00001018       .3
+ 0002:0000101C       .1
+ 0002:00001020       .1
+ 0002:00001024       .1
+ 0002:00001028       .1
+ 0002:0000102C       .1
+ 0002:00001030       .1
+ 0002:00001034       .1
+ 0002:00001038       .1
+ 0002:0000103C       .3
+ 0002:00001040       .1
+ 0002:00001044       .1
+ 0002:00001048       .1
+ 0002:0000104C       .2
+ 0002:00001050       .2
+ 0002:00001054       SaveKeyMacroDlg
+ 0002:00001058       .2
+ 0002:0000105C       .1
+
+
+Bound resource files
+
+BufferListForm.dfm
+SaveKeyMacro.dfm
+dclsmpedit.res
+C:\DOCUME~1\~storm\LOCALS~1\Temp\dtf72E6.tmp
+
+
+Program entry point at 0001:00008F68

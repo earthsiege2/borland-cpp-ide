@@ -9,7 +9,6 @@
 *******************************************************************************/
 
 #ifndef _INC_WFEXT
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_WFEXT            /* #defined if wfext.h has been included */
 
 #if _MSC_VER > 1000
@@ -186,6 +185,5 @@ LONG WINAPI FMExtensionProc(HWND hwnd, WORD wEvent, LONG lParam);
 }                  /* End of extern "C" { */
 #endif             /* __cplusplus */
 
-#pragma option pop /*P_O_Pop*/
 #endif             /* _INC_WFEXT */
 

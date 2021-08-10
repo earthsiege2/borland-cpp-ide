@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //Borland C++Builder
-//Copyright (c) 1987, 1998 Borland International Inc. All Rights Reserved.
+//Copyright (c) 1987, 1998-2002 Borland International Inc. All Rights Reserved.
 //----------------------------------------------------------------------------
 /* This program works in conjunction with the Monitor.mak project to demonstrate
   advanced Win32 programming topics.  See Monform.cpp for more information */

@@ -1,13 +1,14 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 #ifndef PieRegHPP
 #define PieRegHPP
 //----------------------------------------------------------------------------
 #include <ComCtrls.hpp>
 #include <StdCtrls.hpp>
-#include <DsgnIntf.hpp>
+#include <DesignIntf.hpp>
+#include <DesignEditors.hpp>
 #include <Buttons.hpp>
 #include <Controls.hpp>
 #include <Forms.hpp>
@@ -51,20 +52,19 @@ public:
 	virtual void __fastcall Edit();
 	virtual TPropertyAttributes __fastcall GetAttributes(void);
 	__fastcall virtual ~TAnglesProperty(void);
-	__fastcall TAnglesProperty(const _di_IFormDesigner ADesigner, int APropCount);
+	__fastcall TAnglesProperty(const _di_IDesigner ADesigner, int APropCount);
 };
 
 class PACKAGE TPieEditor : public TDefaultEditor
 {
 protected:
-	virtual void __fastcall EditProperty(TPropertyEditor* PropertyEditor,
-                                         bool& Continue, bool& FreeEditor);
+  virtual void __fastcall EditProperty(const  _di_IProperty Prop, bool& Continue);
 public:
   //      virtual void __fastcall Edit();
 	virtual void __fastcall ExecuteVerb(int Index);
 	virtual AnsiString __fastcall GetVerb(int Index);
 	virtual int __fastcall GetVerbCount(void);
-	__fastcall virtual TPieEditor(TComponent* AComponent, _di_IFormDesigner ADesigner);
+	__fastcall virtual TPieEditor(TComponent* AComponent, _di_IDesigner ADesigner);
 	__fastcall virtual ~TPieEditor(void);
 };
 

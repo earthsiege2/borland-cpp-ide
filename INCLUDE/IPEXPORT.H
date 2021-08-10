@@ -1,6 +1,6 @@
 /********************************************************************/
 /**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1999          **/
+/**     Copyright (c) Microsoft Corporation. All rights reserved.  **/
 /********************************************************************/
 /* :ts=4 */
 
@@ -11,24 +11,51 @@
 //
 
 #ifndef IP_EXPORT_INCLUDED
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define IP_EXPORT_INCLUDED  1
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-//#include <windef.h> // for FAR decl
-#undef FAR
-#define FAR
-
 //
 // IP type definitions.
 //
-typedef unsigned long   IPAddr;     // An IP address.
-typedef unsigned long   IPMask;     // An IP subnet mask.
-typedef unsigned long   IP_STATUS;  // Status code returned from IP APIs.
+typedef ULONG IPAddr;       // An IP address.
+typedef ULONG IPMask;       // An IP subnet mask.
+typedef ULONG IP_STATUS;    // Status code returned from IP APIs.
 
+#ifndef s6_addr
+//
+// Duplicate these definitions here so that this file can be included by
+// kernel-mode components which cannot include ws2tcpip.h, as well as
+// by user-mode components which do.
+//
+
+typedef struct in6_addr {
+    union {
+        UCHAR       Byte[16];
+        USHORT      Word[8];
+    } u;
+} IN6_ADDR;
+
+#define in_addr6 in6_addr
+
+//
+// Defines to match RFC 2553.
+//
+#define _S6_un      u
+#define _S6_u8      Byte
+#define s6_addr     _S6_un._S6_u8
+
+//
+// Defines for our implementation.
+//
+#define s6_bytes    u.Byte
+#define s6_words    u.Word
+
+#endif
+
+typedef struct in6_addr IPv6Addr;
 
 /*INC*/
 
@@ -44,83 +71,94 @@ typedef unsigned long   IP_STATUS;  // Status code returned from IP APIs.
 // data and the option will be reformatted accordingly. Otherwise, the route
 // option should be formatted as specified in RFC 791.
 //
-struct ip_option_information {
-    unsigned char      Ttl;             // Time To Live
-    unsigned char      Tos;             // Type Of Service
-    unsigned char      Flags;           // IP header flags
-    unsigned char      OptionsSize;     // Size in bytes of options data
-    unsigned char FAR *OptionsData;     // Pointer to options data
-}; /* ip_option_information */
+
+typedef struct ip_option_information {
+    UCHAR   Ttl;                // Time To Live
+    UCHAR   Tos;                // Type Of Service
+    UCHAR   Flags;              // IP header flags
+    UCHAR   OptionsSize;        // Size in bytes of options data
+    PUCHAR  OptionsData;        // Pointer to options data
+} IP_OPTION_INFORMATION, *PIP_OPTION_INFORMATION;
+
+#if defined(_WIN64)
+
+typedef struct ip_option_information32 {
+    UCHAR   Ttl;
+    UCHAR   Tos;
+    UCHAR   Flags;
+    UCHAR   OptionsSize;
+    UCHAR * POINTER_32 OptionsData;
+} IP_OPTION_INFORMATION32, *PIP_OPTION_INFORMATION32;
+
+#endif // _WIN64
 
 //
 // The icmp_echo_reply structure describes the data returned in response
 // to an echo request.
 //
-struct icmp_echo_reply {
-    IPAddr                         Address;         // Replying address
-    unsigned long                  Status;          // Reply IP_STATUS
-    unsigned long                  RoundTripTime;   // RTT in milliseconds
-    unsigned short                 DataSize;        // Reply data size in bytes
-    unsigned short                 Reserved;        // Reserved for system use
-    void FAR                      *Data;            // Pointer to the reply data
-    struct ip_option_information   Options;         // Reply options
-}; /* icmp_echo_reply */
 
+typedef struct icmp_echo_reply {
+    IPAddr  Address;            // Replying address
+    ULONG   Status;             // Reply IP_STATUS
+    ULONG   RoundTripTime;      // RTT in milliseconds
+    USHORT  DataSize;           // Reply data size in bytes
+    USHORT  Reserved;           // Reserved for system use
+    PVOID   Data;               // Pointer to the reply data
+    struct ip_option_information Options; // Reply options
+} ICMP_ECHO_REPLY, *PICMP_ECHO_REPLY;
 
-/*NOINC*/
+#if defined(_WIN64)
 
-typedef struct ip_option_information IP_OPTION_INFORMATION,
-                                     FAR *PIP_OPTION_INFORMATION;
+typedef struct icmp_echo_reply32 {
+    IPAddr  Address;
+    ULONG   Status;
+    ULONG   RoundTripTime;
+    USHORT  DataSize;
+    USHORT  Reserved;
+    VOID * POINTER_32 Data;
+    struct ip_option_information32 Options;
+} ICMP_ECHO_REPLY32, *PICMP_ECHO_REPLY32;
 
-typedef struct icmp_echo_reply ICMP_ECHO_REPLY,
-                               FAR *PICMP_ECHO_REPLY;
+#endif // _WIN64
 
-/*INC*/
+typedef struct arp_send_reply {
+    IPAddr  DestAddress;
+    IPAddr  SrcAddress;
+} ARP_SEND_REPLY, *PARP_SEND_REPLY;
 
-
-
-struct ArpRequestBuffer {
-   IPAddr DestAddress;
-   IPAddr SrcAddress;
-}; /* ArpRequestBuffer */
-
-/*NOINC*/
-
-typedef struct ArpRequestBuffer ARP_SEND_REPLY,
-                               FAR *PARP_SEND_REPLY;
-
-typedef struct _TCP_RESERVE_PORT_RANGE
-{
-
-   USHORT  UpperRange;
-   USHORT  LowerRange;
-}TCP_RESERVE_PORT_RANGE, *PTCP_RESERVE_PORT_RANGE;
+typedef struct tcp_reserve_port_range {
+    USHORT  UpperRange;
+    USHORT  LowerRange;
+} TCP_RESERVE_PORT_RANGE, *PTCP_RESERVE_PORT_RANGE;
 
 #define MAX_ADAPTER_NAME 128
 
-typedef struct _IP_ADAPTER_INDEX_MAP
-{
-   ULONG Index;
-   WCHAR  Name[MAX_ADAPTER_NAME];
-}IP_ADAPTER_INDEX_MAP, *PIP_ADAPTER_INDEX_MAP;
+typedef struct _IP_ADAPTER_INDEX_MAP {
+    ULONG   Index;
+    WCHAR   Name[MAX_ADAPTER_NAME];
+} IP_ADAPTER_INDEX_MAP, *PIP_ADAPTER_INDEX_MAP;
 
-typedef struct _IP_INTERFACE_INFO
-{
-     LONG    NumAdapters;
-     IP_ADAPTER_INDEX_MAP Adapter[1];
+typedef struct _IP_INTERFACE_INFO {
+    LONG    NumAdapters;
+    IP_ADAPTER_INDEX_MAP Adapter[1];
 } IP_INTERFACE_INFO,*PIP_INTERFACE_INFO;
 
-typedef struct _IP_UNIDIRECTIONAL_ADAPTER_ADDRESS
-{
-     ULONG    NumAdapters;
-     IPAddr  Address[1];
+typedef struct _IP_UNIDIRECTIONAL_ADAPTER_ADDRESS {
+    ULONG   NumAdapters;
+    IPAddr  Address[1];
 } IP_UNIDIRECTIONAL_ADAPTER_ADDRESS, *PIP_UNIDIRECTIONAL_ADAPTER_ADDRESS;
 
-typedef struct _IP_ADAPTER_ORDER_MAP
-{
-    ULONG NumAdapters;
-    ULONG AdapterOrder[1];
+typedef struct _IP_ADAPTER_ORDER_MAP {
+    ULONG   NumAdapters;
+    ULONG   AdapterOrder[1];
 } IP_ADAPTER_ORDER_MAP, *PIP_ADAPTER_ORDER_MAP;
+
+typedef struct _IP_MCAST_COUNTER_INFO {
+    ULONG64 InMcastOctets;
+    ULONG64 OutMcastOctets;
+    ULONG64 InMcastPkts;
+    ULONG64 OutMcastPkts;
+} IP_MCAST_COUNTER_INFO, *PIP_MCAST_COUNTER_INFO;
 
 //
 // IP_STATUS codes returned from IP APIs
@@ -148,6 +186,28 @@ typedef struct _IP_ADAPTER_ORDER_MAP
 #define IP_OPTION_TOO_BIG           (IP_STATUS_BASE + 17)
 #define IP_BAD_DESTINATION          (IP_STATUS_BASE + 18)
 
+//
+// Variants of the above using IPv6 terminology, where different
+//
+
+#define IP_DEST_NO_ROUTE            (IP_STATUS_BASE + 2)
+#define IP_DEST_ADDR_UNREACHABLE    (IP_STATUS_BASE + 3)
+#define IP_DEST_PROHIBITED          (IP_STATUS_BASE + 4)
+#define IP_DEST_PORT_UNREACHABLE    (IP_STATUS_BASE + 5)
+#define IP_HOP_LIMIT_EXCEEDED       (IP_STATUS_BASE + 13)
+#define IP_REASSEMBLY_TIME_EXCEEDED (IP_STATUS_BASE + 14)
+#define IP_PARAMETER_PROBLEM        (IP_STATUS_BASE + 15)
+
+//
+// IPv6-only status codes
+//
+
+#define IP_DEST_UNREACHABLE         (IP_STATUS_BASE + 40)
+#define IP_TIME_EXCEEDED            (IP_STATUS_BASE + 41)
+#define IP_BAD_HEADER               (IP_STATUS_BASE + 42)
+#define IP_UNRECOGNIZED_NEXT_HEADER (IP_STATUS_BASE + 43)
+#define IP_ICMP_ERROR               (IP_STATUS_BASE + 44)
+#define IP_DEST_SCOPE_MISMATCH      (IP_STATUS_BASE + 45)
 
 //
 // The next group are status codes passed up on status indications to
@@ -214,6 +274,5 @@ typedef struct _IP_ADAPTER_ORDER_MAP
 #endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // IP_EXPORT_INCLUDED
 

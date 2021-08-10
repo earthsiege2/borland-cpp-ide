@@ -6,7 +6,7 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
@@ -18,6 +18,15 @@ unit Windows;
 
 interface
 
+
+uses Types{$IFDEF LINUX}, Libc {$ENDIF};
+
+(*$HPPEMIT '// WINVER check BEGIN ' *)
+(*$HPPEMIT '#if (WINVER < 0x0400)' *)
+(*$HPPEMIT '#error WINVER < 0x0400' *)
+(*$HPPEMIT '#endif' *)
+(*$HPPEMIT '// WINVER check END. ' *)
+(*$HPPEMIT '' *)
 (*$HPPEMIT '// WIN2K SDK fixes BEGIN ' *)
 (*$HPPEMIT '#ifndef WINTRUST_H' *)
 (*$HPPEMIT '#include<wintrust.h>' *)
@@ -56,7 +65,45 @@ interface
 (*$HPPEMIT '' *)
 (*$HPPEMIT 'namespace Windows {'*)
 (*$HPPEMIT 'typedef _LARGE_INTEGER TLargeInteger;'*)
+(*$HPPEMIT ''*)
+(*$HPPEMIT '#if (WINVER >= 0x0500)'*)
+(*$HPPEMIT 'typedef BITMAPV5HEADER *PBitmapV5Header;'*)
+(*$HPPEMIT 'typedef BITMAPV5HEADER  TBitmapV5Header;'*)
+(*$HPPEMIT 'typedef tagEMRGRADIENTFILL *PEMGradientFill;'*)
+(*$HPPEMIT 'typedef tagEMRGRADIENTFILL  TEMGradientFill;'*)
+(*$HPPEMIT 'typedef tagEMRALPHABLEND *PEMRAlphaBlend;'*)
+(*$HPPEMIT 'typedef tagEMRALPHABLEND  TEMRAlphaBlend;'*)
+(*$HPPEMIT 'typedef tagEMRTRANSPARENTBLT *PEMRTransparentBLT;'*)
+(*$HPPEMIT 'typedef tagEMRTRANSPARENTBLT  TEMRTransparentBLT;'*)
+(*$HPPEMIT 'typedef _WGLSWAP *PWGLSwap;'*)
+(*$HPPEMIT 'typedef _WGLSWAP  TWGLSwap;'*)
+(*$HPPEMIT 'typedef tagMOUSEMOVEPOINT *PMouseMovePoint;'*)
+(*$HPPEMIT 'typedef tagMOUSEMOVEPOINT  TMouseMovePoint;'*)
+(*$HPPEMIT 'typedef FLASHWINFO  TFlashWInfo;'*)
+(*$HPPEMIT 'typedef tagMENUINFO *PMenuInfo;'*)
+(*$HPPEMIT 'typedef tagMENUINFO  TMenuInfo;'*)
+(*$HPPEMIT 'typedef tagMENUGETOBJECTINFO *PMenuGetObjectInfo;'*)
+(*$HPPEMIT 'typedef tagMENUGETOBJECTINFO  TMenuGetObjectInfo;'*)
+(*$HPPEMIT 'typedef tagGUITHREADINFO *PGUIThreadInfo;'*)
+(*$HPPEMIT 'typedef tagGUITHREADINFO  TGUIThreadInfo;'*)
+(*$HPPEMIT 'typedef tagCURSORINFO *PCursorInfo;'*)
+(*$HPPEMIT 'typedef tagCURSORINFO  TCursorInfo;'*)
+(*$HPPEMIT 'typedef tagWINDOWINFO *PWindowInfo;'*)
+(*$HPPEMIT 'typedef tagWINDOWINFO  TWindowInfo;'*)
+(*$HPPEMIT 'typedef tagTITLEBARINFO *PTitleBarInfo;'*)
+(*$HPPEMIT 'typedef tagTITLEBARINFO  TTitleBarInfo;'*)
+(*$HPPEMIT 'typedef tagMENUBARINFO *PMenuBarInfo;'*)
+(*$HPPEMIT 'typedef tagMENUBARINFO  TMenuBarInfo;'*)
+(*$HPPEMIT 'typedef tagSCROLLBARINFO *PScrollBarInfo;'*)
+(*$HPPEMIT 'typedef tagSCROLLBARINFO  TScrollBarInfo;'*)
+(*$HPPEMIT 'typedef tagCOMBOBOXINFO *PComboBoxInfo;'*)
+(*$HPPEMIT 'typedef tagCOMBOBOXINFO  TComboBoxInfo;'*)
+(*$HPPEMIT 'typedef tagALTTABINFO *PAltTabInfo;'*)
+(*$HPPEMIT 'typedef tagALTTABINFO  TAltTabInfo;'*)
+(*$HPPEMIT '#endif'*)
+(*$HPPEMIT ''*)
 (*$HPPEMIT '} // namespace Windows'*)
+(*$HPPEMIT ''*)
 
 type
 { Translated from WINDEF.H }
@@ -82,13 +129,13 @@ type
   LPCWSTR = PWideChar;
   {$EXTERNALSYM LPCWSTR}
 
-  DWORD = LongWord;
+  DWORD = Types.DWORD;
   {$EXTERNALSYM DWORD}
   BOOL = LongBool;
   {$EXTERNALSYM BOOL}
   PBOOL = ^BOOL;
   {$EXTERNALSYM PBOOL}
-  PByte = ^Byte;
+  PByte = Types.PByte;
   PINT = ^Integer;
   {$EXTERNALSYM PINT}
   PSingle = ^Single;
@@ -113,19 +160,25 @@ type
   {$EXTERNALSYM ULONG}
   PULONG = ^ULONG;
   {$EXTERNALSYM PULONG}
-  PLongint = ^Longint;
-  PInteger = ^Integer;
-  PLongWord = ^LongWord;
-  PSmallInt = ^Smallint;
-  PDouble = ^Double;
-  PShortInt = ^ShortInt;
+  PLongint = System.PLongint;
+  {$EXTERNALSYM PLongint}
+  PInteger = System.PInteger;
+  {$EXTERNALSYM PInteger}
+  PLongWord = System.PLongWord;
+  {$EXTERNALSYM PLongWord}
+  PSmallInt = System.PSmallInt;
+  {$EXTERNALSYM PSmallInt}
+  PDouble = System.PDouble;
+  {$EXTERNALSYM PDouble}
+  PShortInt = System.PShortInt;
+  {$EXTERNALSYM PShortInt}
 
   LCID = DWORD;
   {$EXTERNALSYM LCID}
   LANGID = Word;
   {$EXTERNALSYM LANGID}
 
-  THandle = LongWord;
+  THandle = System.THandle;
   PHandle = ^THandle;
 
 const
@@ -2075,6 +2128,10 @@ type
   RTL_CRITICAL_SECTION = _RTL_CRITICAL_SECTION;
   {$EXTERNALSYM RTL_CRITICAL_SECTION}
 
+
+
+
+
 const
   RTL_CRITSECT_TYPE = 0;
   {$EXTERNALSYM RTL_CRITSECT_TYPE}
@@ -2272,7 +2329,8 @@ type
 function HiByte(W: Word): Byte;
 {$EXTERNALSYM HiByte}
 
-type
+type
+
 
 
 
@@ -2291,7 +2349,8 @@ type
   HWND = type LongWord;
   {$EXTERNALSYM HWND}
   HHOOK = type LongWord;
-  {$EXTERNALSYM HHOOK}
+  {$EXTERNALSYM HHOOK}
+
 
   ATOM = Word;
   {$EXTERNALSYM ATOM}
@@ -2305,7 +2364,8 @@ type
   {$EXTERNALSYM FARPROC}
   TFarProc = Pointer;
   PROC_22 = Pointer;
-
+
+
 
 
 
@@ -2444,8 +2504,8 @@ type
   {$EXTERNALSYM HMENU}
   HMETAFILE = type LongWord;
   {$EXTERNALSYM HMETAFILE}
-  HINST = type LongWord;
-  HMODULE = HINST;              { HMODULEs can be used in place of HINSTs }
+  HINST = System.HINST;
+  HMODULE = System.HMODULE;      { HMODULEs can be used in place of HINSTs }
   {$EXTERNALSYM HMODULE}
   HPALETTE = type LongWord;
   {$EXTERNALSYM HPALETTE}
@@ -2453,7 +2513,7 @@ type
   {$EXTERNALSYM HPEN}
   HRGN = type LongWord;
   {$EXTERNALSYM HRGN}
-  HRSRC = type LongWord;
+  HRSRC = System.HRSRC;
   {$EXTERNALSYM HRSRC}
   HSTR = type LongWord;
   {$EXTERNALSYM HSTR}
@@ -2463,7 +2523,8 @@ type
   {$EXTERNALSYM HWINSTA}
   HKL = type LongWord;
   {$EXTERNALSYM HKL}
-
+
+
 
   HFILE = LongWord;
   {$EXTERNALSYM HFILE}
@@ -2479,66 +2540,18 @@ const
   {$EXTERNALSYM HFILE_ERROR}
 
 type
-  PPoint = ^TPoint;
-  TPoint = record
-    x: Longint;
-    y: Longint;
-  end;
+  PPoint = Types.PPoint;
+  TPoint = Types.TPoint;
   {$NODEFINE TPoint}
-  tagPOINT = TPoint;
-  {$NODEFINE tagPOINT}
-
-  PRect = ^TRect;
-
-  TRect = record
-    case Integer of
-      0: (Left, Top, Right, Bottom: Integer);
-      1: (TopLeft, BottomRight: TPoint);
-  end;
+  {$NODEFINE PPoint}
+  tagPoint = Types.tagPoint;
+  {$NODEFINE tagPoint}
+  PRect = Types.PRect;
+  TRect = Types.TRect;
   {$NODEFINE TRect}
+  {$NODEFINE PRect}
 
-  (*$HPPEMIT 'namespace Windows'*)
-  (*$HPPEMIT '{'*)
-  (*$HPPEMIT '  struct TPoint : public POINT'*)
-  (*$HPPEMIT '  {'*)
-  (*$HPPEMIT '    TPoint() {}'*)
-  (*$HPPEMIT '    TPoint(int _x, int _y) { x=_x; y=_y; }'*)
-  (*$HPPEMIT '    TPoint(POINT& pt)'*)
-  (*$HPPEMIT '    {'*)
-  (*$HPPEMIT '      x = pt.x;'*)
-  (*$HPPEMIT '      y = pt.y;'*)
-  (*$HPPEMIT '    }'*)
-  (*$HPPEMIT '  };'*)
-  (*$HPPEMIT ' '*)
-  (*$HPPEMIT '  struct TRect : public RECT'*)
-  (*$HPPEMIT '  {'*)
-  (*$HPPEMIT '    TRect() {}'*)
-  (*$HPPEMIT '    TRect(const TPoint& TL, const TPoint& BR) { left=TL.x; top=TL.y; right=BR.x; bottom=BR.y; }'*)
-  (*$HPPEMIT '    TRect(int l, int t, int r, int b)         { left=l;    top=t;    right=r;    bottom=b;    }'*)
-  (*$HPPEMIT '    TRect(RECT& r)'*)
-  (*$HPPEMIT '    {'*)
-  (*$HPPEMIT '      left    = r.left;'*)
-  (*$HPPEMIT '      top     = r.top;'*)
-  (*$HPPEMIT '      right   = r.right;'*)
-  (*$HPPEMIT '      bottom  = r.bottom;'*)
-  (*$HPPEMIT '    }'*)
-  (*$HPPEMIT '    int Width () const { return right  - left; }'*)
-  (*$HPPEMIT '    int Height() const { return bottom - top ; }'*)
-  (*$HPPEMIT '    bool operator ==(const TRect& rc) const '*)
-  (*$HPPEMIT '    {'*)
-  (*$HPPEMIT '       return left ==  rc.left  && top==rc.top &&     '*)
-  (*$HPPEMIT '              right == rc.right && bottom==rc.bottom; '*)
-  (*$HPPEMIT '    }'*)
-  (*$HPPEMIT '    bool operator !=(const TRect& rc) const '*)
-  (*$HPPEMIT '    {  return !(rc==*this); }'*)
-  (*$HPPEMIT ' '*)
-  (*$HPPEMIT '       __property LONG Left    = { read=left,   write=left   }; '*)
-  (*$HPPEMIT '       __property LONG Top     = { read=top,       write=top }; '*)
-  (*$HPPEMIT '       __property LONG Right   = { read=right,  write=right  }; '*)
-  (*$HPPEMIT '       __property LONG Bottom  = { read=bottom, write=bottom }; '*)
-  (*$HPPEMIT '  };'*)
-  (*$HPPEMIT '} /* namespace Windows */'*)
-
+type
   _POINTL = packed record      { ptl }
     x: Longint;
     y: Longint;
@@ -2547,22 +2560,17 @@ type
   PPointL = ^TPointL;
   TPointL = _POINTL;
 
-  PSize = ^TSize;
-  tagSIZE = record
-    cx: Longint;
-    cy: Longint;
-  end;
-  {$EXTERNALSYM tagSIZE}
-  TSize = tagSIZE;
-  SIZE = tagSIZE;
+  PSize = Types.PSize;
+  {$EXTERNALSYM PSize}
+  TSize = Types.TSize;
+  {$EXTERNALSYM TSize}
+  SIZE = Types.SIZE;
   {$EXTERNALSYM SIZE}
 
-  PSmallPoint = ^TSmallPoint;
-  TSmallPoint = packed record
-    x: SHORT;
-    y: SHORT;
-  end;
-
+  PSmallPoint = Types.PSmallPoint;
+  {$EXTERNALSYM PSmallPoint}
+  TSmallPoint = Types.TSmallPoint;
+  {$EXTERNALSYM TSmallPoint}
 { Translated from WINBASE.H }
 
 { Compatiblity functions and procedures }
@@ -2836,6 +2844,7 @@ type
   PROCESS_INFORMATION = _PROCESS_INFORMATION;
   {$EXTERNALSYM PROCESS_INFORMATION}
 
+{$IFDEF MSWINDOWS}
   { File System time stamps are represented with the following structure: }
   PFileTime = ^TFileTime;
   _FILETIME = record
@@ -2846,6 +2855,15 @@ type
   TFileTime = _FILETIME;
   FILETIME = _FILETIME;
   {$EXTERNALSYM FILETIME}
+{$ENDIF}
+{$IFDEF LINUX}
+  _FILETIME = Types._FILETIME;
+  {$EXTERNALSYM _FILETIME}
+  PFileTime = Types.PFileTime;
+  TFileTime = Types.TFileTime;
+  FILETIME = Types.FILETIME;
+  {$EXTERNALSYM FILETIME}
+{$ENDIF}
 
   { System time is represented with the following structure: }
   PSystemTime = ^TSystemTime;
@@ -2863,12 +2881,14 @@ type
   TSystemTime = _SYSTEMTIME;
   SYSTEMTIME = _SYSTEMTIME;
   {$EXTERNALSYM SYSTEMTIME}
-
+
+
 
 
 
   TFNThreadStartRoutine = TFarProc;
-  TFNFiberStartRoutine = TFarProc;
+  TFNFiberStartRoutine = TFarProc;
+
 
 const
   MUTEX_MODIFY_STATE = MUTANT_QUERY_STATE;
@@ -3891,15 +3911,19 @@ function InterlockedExchange(var Target: Integer; Value: Integer): Integer; stdc
 {$EXTERNALSYM InterlockedExchange}
 function InterlockedCompareExchange(var Destination: Pointer; Exchange: Pointer; Comperand: Pointer): Pointer stdcall;
 {$EXTERNALSYM InterlockedCompareExchange}
-function InterlockedExchangeAdd(Addend: PLongint; Value: Longint): Longint stdcall;
+function InterlockedExchangeAdd(Addend: PLongint; Value: Longint): Longint stdcall; overload;
+{$EXTERNALSYM InterlockedExchangeAdd}
+function InterlockedExchangeAdd(var Addend: Longint; Value: Longint): Longint stdcall; overload;
 {$EXTERNALSYM InterlockedExchangeAdd}
 
+{$IFDEF MSWINDOWS}
 function FreeResource(hResData: HGLOBAL): BOOL; stdcall;
 {$EXTERNALSYM FreeResource}
 function LockResource(hResData: HGLOBAL): Pointer; stdcall;
 {$EXTERNALSYM LockResource}
 function UnlockResource(hResData: THandle): BOOL;
 {$EXTERNALSYM UnlockResource}
+{$ENDIF}
 
 const
   MAXINTATOM = $C000;
@@ -4077,21 +4101,21 @@ const
   SCS_OS216_BINARY = 5;
   {$EXTERNALSYM SCS_OS216_BINARY}
 
+function GetBinaryType(lpApplicationName: PChar; var lpBinaryType: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetBinaryType}
 function GetBinaryTypeA(lpApplicationName: PAnsiChar; var lpBinaryType: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetBinaryTypeA}
 function GetBinaryTypeW(lpApplicationName: PWideChar; var lpBinaryType: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetBinaryTypeW}
-function GetBinaryType(lpApplicationName: PChar; var lpBinaryType: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetBinaryType}
+function GetShortPathName(lpszLongPath: PChar; lpszShortPath: PChar;
+  cchBuffer: DWORD): DWORD; stdcall;
+{$EXTERNALSYM GetShortPathName}
 function GetShortPathNameA(lpszLongPath: PAnsiChar; lpszShortPath: PAnsiChar;
   cchBuffer: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetShortPathNameA}
 function GetShortPathNameW(lpszLongPath: PWideChar; lpszShortPath: PWideChar;
   cchBuffer: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetShortPathNameW}
-function GetShortPathName(lpszLongPath: PChar; lpszShortPath: PChar;
-  cchBuffer: DWORD): DWORD; stdcall;
-{$EXTERNALSYM GetShortPathName}
 function GetProcessAffinityMask(hProcess: THandle;
   var lpProcessAffinityMask, lpSystemAffinityMask: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetProcessAffinityMask}
@@ -4121,18 +4145,18 @@ function GetExitCodeProcess(hProcess: THandle; var lpExitCode: DWORD): BOOL; std
 {$EXTERNALSYM GetExitCodeProcess}
 procedure FatalExit(ExitCode: Integer); stdcall;
 {$EXTERNALSYM FatalExit}
+function GetEnvironmentStrings: PChar; stdcall;
+{$EXTERNALSYM GetEnvironmentStrings}
 function GetEnvironmentStringsA: PAnsiChar; stdcall;
 {$EXTERNALSYM GetEnvironmentStringsA}
 function GetEnvironmentStringsW: PWideChar; stdcall;
 {$EXTERNALSYM GetEnvironmentStringsW}
-function GetEnvironmentStrings: PChar; stdcall;
-{$EXTERNALSYM GetEnvironmentStrings}
-function FreeEnvironmentStringsA(p1: PAnsiChar): BOOL; stdcall;
-{$EXTERNALSYM FreeEnvironmentStringsA}
-function FreeEnvironmentStringsW(p1: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM FreeEnvironmentStringsW}
-function FreeEnvironmentStrings(p1: PChar): BOOL; stdcall;
+function FreeEnvironmentStrings(EnvBlock: PChar): BOOL; stdcall;
 {$EXTERNALSYM FreeEnvironmentStrings}
+function FreeEnvironmentStringsA(EnvBlock: PAnsiChar): BOOL; stdcall;
+{$EXTERNALSYM FreeEnvironmentStringsA}
+function FreeEnvironmentStringsW(EnvBlock: PWideChar): BOOL; stdcall;
+{$EXTERNALSYM FreeEnvironmentStringsW}
 procedure RaiseException(dwExceptionCode, dwExceptionFlags, nNumberOfArguments: DWORD;
   lpArguments: PDWORD); stdcall;
 {$EXTERNALSYM RaiseException}
@@ -4150,10 +4174,12 @@ function SwitchToFiber(lpFiber: Pointer): BOOL; stdcall;
 function SwitchToThread: BOOL; stdcall;
 {$EXTERNALSYM SwitchToThread}
 
-type
+type
 
 
-  TFNTopLevelExceptionFilter = TFarProc;
+
+  TFNTopLevelExceptionFilter = TFarProc;
+
 
 function SetUnhandledExceptionFilter(lpTopLevelExceptionFilter: TFNTopLevelExceptionFilter):
   TFNTopLevelExceptionFilter; stdcall;
@@ -4243,10 +4269,12 @@ function SuspendThread(hThread: THandle): DWORD; stdcall;
 function ResumeThread(hThread: THandle): DWORD; stdcall;
 {$EXTERNALSYM ResumeThread}
 
-type
+type
 
 
-  TFNAPCProc = TFarProc;
+
+  TFNAPCProc = TFarProc;
+
 
 function QueueUserAPC(pfnAPC: TFNAPCProc; hThread: THandle; dwData: DWORD): BOOL; stdcall;
 {$EXTERNALSYM QueueUserAPC}
@@ -4258,19 +4286,19 @@ function ContinueDebugEvent(dwProcessId, dwThreadId, dwContinueStatus: DWORD): B
 {$EXTERNALSYM ContinueDebugEvent}
 function DebugActiveProcess(dwProcessId: DWORD): BOOL; stdcall;
 {$EXTERNALSYM DebugActiveProcess}
-procedure InitializeCriticalSection(var lpCriticalSection: TRTLCriticalSection); stdcall;
+procedure InitializeCriticalSection(var lpCriticalSection: TRTLCriticalSection); stdcall; 
 {$EXTERNALSYM InitializeCriticalSection}
-procedure EnterCriticalSection(var lpCriticalSection: TRTLCriticalSection); stdcall;
+procedure EnterCriticalSection(var lpCriticalSection: TRTLCriticalSection);  stdcall; 
 {$EXTERNALSYM EnterCriticalSection}
-procedure LeaveCriticalSection(var lpCriticalSection: TRTLCriticalSection); stdcall;
+procedure LeaveCriticalSection(var lpCriticalSection: TRTLCriticalSection);  stdcall; 
 {$EXTERNALSYM LeaveCriticalSection}
 function InitializeCriticalSectionAndSpinCount(var lpCriticalSection: TRTLCriticalSection; dwSpinCount: DWORD): BOOL; stdcall;
 {$EXTERNALSYM InitializeCriticalSectionAndSpinCount}
 function SetCriticalSectionSpinCount(var lpCriticalSection: TRTLCriticalSection; dwSpinCount: DWORD): DWORD; stdcall;
 {$EXTERNALSYM SetCriticalSectionSpinCount}
-function TryEnterCriticalSection(var lpCriticalSection: TRTLCriticalSection): BOOL; stdcall;
+function TryEnterCriticalSection(var lpCriticalSection: TRTLCriticalSection): BOOL;  stdcall; 
 {$EXTERNALSYM TryEnterCriticalSection}
-procedure DeleteCriticalSection(var lpCriticalSection: TRTLCriticalSection); stdcall;
+procedure DeleteCriticalSection(var lpCriticalSection: TRTLCriticalSection);  stdcall; 
 {$EXTERNALSYM DeleteCriticalSection}
 function SetEvent(hEvent: THandle): BOOL; stdcall;
 {$EXTERNALSYM SetEvent}
@@ -4295,10 +4323,12 @@ function WaitForMultipleObjects(nCount: DWORD; lpHandles: PWOHandleArray;
 {$EXTERNALSYM WaitForMultipleObjects}
 procedure Sleep(dwMilliseconds: DWORD); stdcall;
 {$EXTERNALSYM Sleep}
+{$IFDEF MSWINDOWS}
 function LoadResource(hModule: HINST; hResInfo: HRSRC): HGLOBAL; stdcall;
 {$EXTERNALSYM LoadResource}
 function SizeofResource(hModule: HINST; hResInfo: HRSRC): DWORD; stdcall;
 {$EXTERNALSYM SizeofResource}
+{$ENDIF}
 function GlobalDeleteAtom(nAtom: ATOM): ATOM; stdcall;
 {$EXTERNALSYM GlobalDeleteAtom}
 function InitAtomTable(nSize: DWORD): BOOL; stdcall;
@@ -4547,15 +4577,15 @@ function SetSystemTimeAdjustment(dwTimeAdjustment: DWORD; bTimeAdjustmentDisable
 function GetSystemTimeAdjustment(var lpTimeAdjustment, lpTimeIncrement: DWORD;
   var lpTimeAdjustmentDisabled: BOOL): BOOL; stdcall;
 {$EXTERNALSYM GetSystemTimeAdjustment}
+function FormatMessage(dwFlags: DWORD; lpSource: Pointer; dwMessageId: DWORD; dwLanguageId: DWORD;
+  lpBuffer: PChar; nSize: DWORD; Arguments: Pointer): DWORD; stdcall;
+{$EXTERNALSYM FormatMessage}
 function FormatMessageA(dwFlags: DWORD; lpSource: Pointer; dwMessageId: DWORD; dwLanguageId: DWORD;
   lpBuffer: PAnsiChar; nSize: DWORD; Arguments: Pointer): DWORD; stdcall;
 {$EXTERNALSYM FormatMessageA}
 function FormatMessageW(dwFlags: DWORD; lpSource: Pointer; dwMessageId: DWORD; dwLanguageId: DWORD;
   lpBuffer: PWideChar; nSize: DWORD; Arguments: Pointer): DWORD; stdcall;
 {$EXTERNALSYM FormatMessageW}
-function FormatMessage(dwFlags: DWORD; lpSource: Pointer; dwMessageId: DWORD; dwLanguageId: DWORD;
-  lpBuffer: PChar; nSize: DWORD; Arguments: Pointer): DWORD; stdcall;
-{$EXTERNALSYM FormatMessage}
 
 const
   FORMAT_MESSAGE_ALLOCATE_BUFFER = $100;
@@ -4594,15 +4624,15 @@ function TransactNamedPipe(hNamedPipe: THandle; lpInBuffer: Pointer; nInBufferSi
   lpOverlapped: POverlapped): BOOL; stdcall;
 {$EXTERNALSYM TransactNamedPipe}
 
+function CreateMailslot(lpName: PChar; nMaxMessageSize: DWORD;
+  lReadTimeout: DWORD; lpSecurityAttributes: PSecurityAttributes): THandle; stdcall;
+{$EXTERNALSYM CreateMailslot}
 function CreateMailslotA(lpName: PAnsiChar; nMaxMessageSize: DWORD;
   lReadTimeout: DWORD; lpSecurityAttributes: PSecurityAttributes): THandle; stdcall;
 {$EXTERNALSYM CreateMailslotA}
 function CreateMailslotW(lpName: PWideChar; nMaxMessageSize: DWORD;
   lReadTimeout: DWORD; lpSecurityAttributes: PSecurityAttributes): THandle; stdcall;
 {$EXTERNALSYM CreateMailslotW}
-function CreateMailslot(lpName: PChar; nMaxMessageSize: DWORD;
-  lReadTimeout: DWORD; lpSecurityAttributes: PSecurityAttributes): THandle; stdcall;
-{$EXTERNALSYM CreateMailslot}
 function GetMailslotInfo(hMailslot: THandle; lpMaxMessageSize: Pointer;
   var lpNextSize: DWORD; lpMessageCount, lpReadTimeout: Pointer): BOOL; stdcall;
 {$EXTERNALSYM GetMailslotInfo}
@@ -4615,18 +4645,18 @@ function FlushViewOfFile(const lpBaseAddress: Pointer; dwNumberOfBytesToFlush: D
 {$EXTERNALSYM FlushViewOfFile}
 function UnmapViewOfFile(lpBaseAddress: Pointer): BOOL; stdcall;
 {$EXTERNALSYM UnmapViewOfFile}
+function EncryptFile(lpFilename: PChar): BOOL; stdcall;
+{$EXTERNALSYM EncryptFile}
 function EncryptFileA(lpFilename: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM EncryptFileA}
 function EncryptFileW(lpFilename: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM EncryptFileW}
-function EncryptFile(lpFilename: PChar): BOOL; stdcall;
-{$EXTERNALSYM EncryptFile}
+function DecryptFile(lpFilename: PChar; dwReserved: DWORD): BOOL; stdcall;
+{$EXTERNALSYM DecryptFile}
 function DecryptFileA(lpFilename: PAnsiChar; dwReserved: DWORD): BOOL; stdcall;
 {$EXTERNALSYM DecryptFileA}
 function DecryptFileW(lpFilename: PWideChar; dwReserved: DWORD): BOOL; stdcall;
 {$EXTERNALSYM DecryptFileW}
-function DecryptFile(lpFilename: PChar; dwReserved: DWORD): BOOL; stdcall;
-{$EXTERNALSYM DecryptFile}
 
 const
   { Currently defined recovery flags }
@@ -4644,12 +4674,12 @@ const
   CREATE_FOR_DIR = 2;
   {$EXTERNALSYM CREATE_FOR_DIR}
 
+function OpenRaw(lpFilename: PChar; ulFlags: ULONG; pvContext: Pointer): DWORD; stdcall;
+{$EXTERNALSYM OpenRaw}
 function OpenRawA(lpFilename: PAnsiChar; ulFlags: ULONG; pvContext: Pointer): DWORD; stdcall;
 {$EXTERNALSYM OpenRawA}
 function OpenRawW(lpFilename: PWideChar; ulFlags: ULONG; pvContext: Pointer): DWORD; stdcall;
 {$EXTERNALSYM OpenRawW}
-function OpenRaw(lpFilename: PChar; ulFlags: ULONG; pvContext: Pointer): DWORD; stdcall;
-{$EXTERNALSYM OpenRaw}
 function ReadRaw(pfExportCallback: TFNExportFunc; pvCallbackContext, pvContext: Pointer): DWORD; stdcall;
 {$EXTERNALSYM ReadRaw}
 function WriteRaw(pfExportCallback: TFNImportFunc; pvCallbackContext, pvContext: Pointer): DWORD; stdcall;
@@ -4683,51 +4713,51 @@ type
   //{$EXTERNALSYM RECOVERY_AGENT_INFORMATIONW}
   RECOVERY_AGENT_INFORMATION = RECOVERY_AGENT_INFORMATIONA;
 
+function QueryRecoveryAgents(p1: PChar; var p2: Pointer; var p3: TRecoveryAgentInformation): DWORD; stdcall;
+{$EXTERNALSYM QueryRecoveryAgents}
 function QueryRecoveryAgentsA(p1: PAnsiChar; var p2: Pointer; var p3: TRecoveryAgentInformationA): DWORD; stdcall;
 {$EXTERNALSYM QueryRecoveryAgentsA}
 function QueryRecoveryAgentsW(p1: PWideChar; var p2: Pointer; var p3: TRecoveryAgentInformationW): DWORD; stdcall;
 {$EXTERNALSYM QueryRecoveryAgentsW}
-function QueryRecoveryAgents(p1: PChar; var p2: Pointer; var p3: TRecoveryAgentInformation): DWORD; stdcall;
-{$EXTERNALSYM QueryRecoveryAgents}
 
 { _l Compat Functions }
 
+function lstrcmp(lpString1, lpString2: PChar): Integer; stdcall;
+{$EXTERNALSYM lstrcmp}
 function lstrcmpA(lpString1, lpString2: PAnsiChar): Integer; stdcall;
 {$EXTERNALSYM lstrcmpA}
 function lstrcmpW(lpString1, lpString2: PWideChar): Integer; stdcall;
 {$EXTERNALSYM lstrcmpW}
-function lstrcmp(lpString1, lpString2: PChar): Integer; stdcall;
-{$EXTERNALSYM lstrcmp}
+function lstrcmpi(lpString1, lpString2: PChar): Integer; stdcall;
+{$EXTERNALSYM lstrcmpi}
 function lstrcmpiA(lpString1, lpString2: PAnsiChar): Integer; stdcall;
 {$EXTERNALSYM lstrcmpiA}
 function lstrcmpiW(lpString1, lpString2: PWideChar): Integer; stdcall;
 {$EXTERNALSYM lstrcmpiW}
-function lstrcmpi(lpString1, lpString2: PChar): Integer; stdcall;
-{$EXTERNALSYM lstrcmpi}
+function lstrcpyn(lpString1, lpString2: PChar; iMaxLength: Integer): PChar; stdcall;
+{$EXTERNALSYM lstrcpyn}
 function lstrcpynA(lpString1, lpString2: PAnsiChar; iMaxLength: Integer): PAnsiChar; stdcall;
 {$EXTERNALSYM lstrcpynA}
 function lstrcpynW(lpString1, lpString2: PWideChar; iMaxLength: Integer): PWideChar; stdcall;
 {$EXTERNALSYM lstrcpynW}
-function lstrcpyn(lpString1, lpString2: PChar; iMaxLength: Integer): PChar; stdcall;
-{$EXTERNALSYM lstrcpyn}
+function lstrcpy(lpString1, lpString2: PChar): PChar; stdcall;
+{$EXTERNALSYM lstrcpy}
 function lstrcpyA(lpString1, lpString2: PAnsiChar): PAnsiChar; stdcall;
 {$EXTERNALSYM lstrcpyA}
 function lstrcpyW(lpString1, lpString2: PWideChar): PWideChar; stdcall;
 {$EXTERNALSYM lstrcpyW}
-function lstrcpy(lpString1, lpString2: PChar): PChar; stdcall;
-{$EXTERNALSYM lstrcpy}
+function lstrcat(lpString1, lpString2: PChar): PChar; stdcall;
+{$EXTERNALSYM lstrcat}
 function lstrcatA(lpString1, lpString2: PAnsiChar): PAnsiChar; stdcall;
 {$EXTERNALSYM lstrcatA}
 function lstrcatW(lpString1, lpString2: PWideChar): PWideChar; stdcall;
 {$EXTERNALSYM lstrcatW}
-function lstrcat(lpString1, lpString2: PChar): PChar; stdcall;
-{$EXTERNALSYM lstrcat}
+function lstrlen(lpString: PChar): Integer; stdcall;
+{$EXTERNALSYM lstrlen}
 function lstrlenA(lpString: PAnsiChar): Integer; stdcall;
 {$EXTERNALSYM lstrlenA}
 function lstrlenW(lpString: PWideChar): Integer; stdcall;
 {$EXTERNALSYM lstrlenW}
-function lstrlen(lpString: PChar): Integer; stdcall;
-{$EXTERNALSYM lstrlen}
 
 function OpenFile(const lpFileName: LPCSTR; var lpReOpenBuff: TOFStruct; uStyle: UINT): HFILE; stdcall;
 {$EXTERNALSYM OpenFile}
@@ -4763,12 +4793,14 @@ function TlsSetValue(dwTlsIndex: DWORD; lpTlsValue: Pointer): BOOL; stdcall;
 function TlsFree(dwTlsIndex: DWORD): BOOL; stdcall;
 {$EXTERNALSYM TlsFree}
 
-type
+type
 
 
 
 
-  TPROverlappedCompletionRoutine = TFarProc;
+
+  TPROverlappedCompletionRoutine = TFarProc;
+
 
 function SleepEx(dwMilliseconds: DWORD; bAlertable: BOOL): DWORD; stdcall;
 {$EXTERNALSYM SleepEx}
@@ -4946,109 +4978,111 @@ type
   WIN32_FILE_ATTRIBUTE_DATA = _WIN32_FILE_ATTRIBUTE_DATA;
   {$EXTERNALSYM WIN32_FILE_ATTRIBUTE_DATA}
 
+function CreateMutex(lpMutexAttributes: PSecurityAttributes; bInitialOwner: BOOL; lpName: PChar): THandle; stdcall;
+{$EXTERNALSYM CreateMutex}
 function CreateMutexA(lpMutexAttributes: PSecurityAttributes; bInitialOwner: BOOL; lpName: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM CreateMutexA}
 function CreateMutexW(lpMutexAttributes: PSecurityAttributes; bInitialOwner: BOOL; lpName: PWideChar): THandle; stdcall;
 {$EXTERNALSYM CreateMutexW}
-function CreateMutex(lpMutexAttributes: PSecurityAttributes; bInitialOwner: BOOL; lpName: PChar): THandle; stdcall;
-{$EXTERNALSYM CreateMutex}
+function OpenMutex(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PChar): THandle; stdcall;
+{$EXTERNALSYM OpenMutex}
 function OpenMutexA(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM OpenMutexA}
 function OpenMutexW(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PWideChar): THandle; stdcall;
 {$EXTERNALSYM OpenMutexW}
-function OpenMutex(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PChar): THandle; stdcall;
-{$EXTERNALSYM OpenMutex}
+function CreateEvent(lpEventAttributes: PSecurityAttributes;
+  bManualReset, bInitialState: BOOL; lpName: PChar): THandle; stdcall;
+{$EXTERNALSYM CreateEvent}
 function CreateEventA(lpEventAttributes: PSecurityAttributes;
   bManualReset, bInitialState: BOOL; lpName: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM CreateEventA}
 function CreateEventW(lpEventAttributes: PSecurityAttributes;
   bManualReset, bInitialState: BOOL; lpName: PWideChar): THandle; stdcall;
 {$EXTERNALSYM CreateEventW}
-function CreateEvent(lpEventAttributes: PSecurityAttributes;
-  bManualReset, bInitialState: BOOL; lpName: PChar): THandle; stdcall;
-{$EXTERNALSYM CreateEvent}
+{$EXTERNALSYM OpenEvent}
+function OpenEvent(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PChar): THandle; stdcall;
 {$EXTERNALSYM OpenEventA}
 function OpenEventA(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM OpenEventW}
 function OpenEventW(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PWideChar): THandle; stdcall;
-{$EXTERNALSYM OpenEvent}
-function OpenEvent(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PChar): THandle; stdcall;
+function CreateSemaphore(lpSemaphoreAttributes: PSecurityAttributes;
+  lInitialCount, lMaximumCount: Longint; lpName: PChar): THandle; stdcall;
+{$EXTERNALSYM CreateSemaphore}
 function CreateSemaphoreA(lpSemaphoreAttributes: PSecurityAttributes;
   lInitialCount, lMaximumCount: Longint; lpName: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM CreateSemaphoreA}
 function CreateSemaphoreW(lpSemaphoreAttributes: PSecurityAttributes;
   lInitialCount, lMaximumCount: Longint; lpName: PWideChar): THandle; stdcall;
 {$EXTERNALSYM CreateSemaphoreW}
-function CreateSemaphore(lpSemaphoreAttributes: PSecurityAttributes;
-  lInitialCount, lMaximumCount: Longint; lpName: PChar): THandle; stdcall;
-{$EXTERNALSYM CreateSemaphore}
+function OpenSemaphore(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PChar): THandle; stdcall;
+{$EXTERNALSYM OpenSemaphore}
 function OpenSemaphoreA(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM OpenSemaphoreA}
 function OpenSemaphoreW(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PWideChar): THandle; stdcall;
 {$EXTERNALSYM OpenSemaphoreW}
-function OpenSemaphore(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PChar): THandle; stdcall;
-{$EXTERNALSYM OpenSemaphore}
 
-type
+type
 
 
 
-  TFNTimerAPCRoutine = TFarProc;
 
+  TFNTimerAPCRoutine = TFarProc;
+
+
+function CreateWaitableTimer(lpTimerAttributes: PSecurityAttributes; bManualReset: BOOL; lpTimerName: PChar): THandle; stdcall;
+{$EXTERNALSYM CreateWaitableTimer}
 function CreateWaitableTimerA(lpTimerAttributes: PSecurityAttributes; bManualReset: BOOL; lpTimerName: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM CreateWaitableTimerA}
 function CreateWaitableTimerW(lpTimerAttributes: PSecurityAttributes; bManualReset: BOOL; lpTimerName: PWideChar): THandle; stdcall;
 {$EXTERNALSYM CreateWaitableTimerW}
-function CreateWaitableTimer(lpTimerAttributes: PSecurityAttributes; bManualReset: BOOL; lpTimerName: PChar): THandle; stdcall;
-{$EXTERNALSYM CreateWaitableTimer}
+function OpenWaitableTimer(dwDesiredAccess: DWORD; bInheritHandle: BOOL;
+  lpTimerName: PChar): THandle; stdcall;
+{$EXTERNALSYM OpenWaitableTimer}
 function OpenWaitableTimerA(dwDesiredAccess: DWORD; bInheritHandle: BOOL;
   lpTimerName: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM OpenWaitableTimerA}
 function OpenWaitableTimerW(dwDesiredAccess: DWORD; bInheritHandle: BOOL;
   lpTimerName: PWideChar): THandle; stdcall;
 {$EXTERNALSYM OpenWaitableTimerW}
-function OpenWaitableTimer(dwDesiredAccess: DWORD; bInheritHandle: BOOL;
-  lpTimerName: PChar): THandle; stdcall;
-{$EXTERNALSYM OpenWaitableTimer}
 function SetWaitableTimer(hTimer: THandle; var lpDueTime: TLargeInteger;
   lPeriod: Longint; pfnCompletionRoutine: TFNTimerAPCRoutine;
   lpArgToCompletionRoutine: Pointer; fResume: BOOL): BOOL; stdcall;
 {$EXTERNALSYM SetWaitableTimer}
 function CancelWaitableTimer(hTimer: THandle): BOOL; stdcall;
 {$EXTERNALSYM CancelWaitableTimer}
+function CreateFileMapping(hFile: THandle; lpFileMappingAttributes: PSecurityAttributes;
+  flProtect, dwMaximumSizeHigh, dwMaximumSizeLow: DWORD; lpName: PChar): THandle; stdcall;
+{$EXTERNALSYM CreateFileMapping}
 function CreateFileMappingA(hFile: THandle; lpFileMappingAttributes: PSecurityAttributes;
   flProtect, dwMaximumSizeHigh, dwMaximumSizeLow: DWORD; lpName: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM CreateFileMappingA}
 function CreateFileMappingW(hFile: THandle; lpFileMappingAttributes: PSecurityAttributes;
   flProtect, dwMaximumSizeHigh, dwMaximumSizeLow: DWORD; lpName: PWideChar): THandle; stdcall;
 {$EXTERNALSYM CreateFileMappingW}
-function CreateFileMapping(hFile: THandle; lpFileMappingAttributes: PSecurityAttributes;
-  flProtect, dwMaximumSizeHigh, dwMaximumSizeLow: DWORD; lpName: PChar): THandle; stdcall;
-{$EXTERNALSYM CreateFileMapping}
+function OpenFileMapping(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PChar): THandle; stdcall;
+{$EXTERNALSYM OpenFileMapping}
 function OpenFileMappingA(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM OpenFileMappingA}
 function OpenFileMappingW(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PWideChar): THandle; stdcall;
 {$EXTERNALSYM OpenFileMappingW}
-function OpenFileMapping(dwDesiredAccess: DWORD; bInheritHandle: BOOL; lpName: PChar): THandle; stdcall;
-{$EXTERNALSYM OpenFileMapping}
+function GetLogicalDriveStrings(nBufferLength: DWORD; lpBuffer: PAnsiChar): DWORD; stdcall;
+{$EXTERNALSYM GetLogicalDriveStrings}
 function GetLogicalDriveStringsA(nBufferLength: DWORD; lpBuffer: PAnsiChar): DWORD; stdcall;
 {$EXTERNALSYM GetLogicalDriveStringsA}
 function GetLogicalDriveStringsW(nBufferLength: DWORD; lpBuffer: PAnsiChar): DWORD; stdcall;
 {$EXTERNALSYM GetLogicalDriveStringsW}
-function GetLogicalDriveStrings(nBufferLength: DWORD; lpBuffer: PAnsiChar): DWORD; stdcall;
-{$EXTERNALSYM GetLogicalDriveStrings}
+function LoadLibrary(lpLibFileName: PChar): HMODULE; stdcall;
+{$EXTERNALSYM LoadLibrary}
 function LoadLibraryA(lpLibFileName: PAnsiChar): HMODULE; stdcall;
 {$EXTERNALSYM LoadLibraryA}
 function LoadLibraryW(lpLibFileName: PWideChar): HMODULE; stdcall;
 {$EXTERNALSYM LoadLibraryW}
-function LoadLibrary(lpLibFileName: PChar): HMODULE; stdcall;
-{$EXTERNALSYM LoadLibrary}
+function LoadLibraryEx(lpLibFileName: PChar; hFile: THandle; dwFlags: DWORD): HMODULE; stdcall;
+{$EXTERNALSYM LoadLibraryEx}
 function LoadLibraryExA(lpLibFileName: PAnsiChar; hFile: THandle; dwFlags: DWORD): HMODULE; stdcall;
 {$EXTERNALSYM LoadLibraryExA}
 function LoadLibraryExW(lpLibFileName: PWideChar; hFile: THandle; dwFlags: DWORD): HMODULE; stdcall;
 {$EXTERNALSYM LoadLibraryExW}
-function LoadLibraryEx(lpLibFileName: PChar; hFile: THandle; dwFlags: DWORD): HMODULE; stdcall;
-{$EXTERNALSYM LoadLibraryEx}
 
 const
   DONT_RESOLVE_DLL_REFERENCES = 1;
@@ -5058,18 +5092,24 @@ const
   LOAD_WITH_ALTERED_SEARCH_PATH = 8;
   {$EXTERNALSYM LOAD_WITH_ALTERED_SEARCH_PATH}
 
+function GetModuleFileName(hModule: HINST; lpFilename: PChar; nSize: DWORD): DWORD; stdcall;
+{$EXTERNALSYM GetModuleFileName}
 function GetModuleFileNameA(hModule: HINST; lpFilename: PAnsiChar; nSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetModuleFileNameA}
 function GetModuleFileNameW(hModule: HINST; lpFilename: PWideChar; nSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetModuleFileNameW}
-function GetModuleFileName(hModule: HINST; lpFilename: PChar; nSize: DWORD): DWORD; stdcall;
-{$EXTERNALSYM GetModuleFileName}
+function GetModuleHandle(lpModuleName: PChar): HMODULE; stdcall;
+{$EXTERNALSYM GetModuleHandle}
 function GetModuleHandleA(lpModuleName: PAnsiChar): HMODULE; stdcall;
 {$EXTERNALSYM GetModuleHandleA}
 function GetModuleHandleW(lpModuleName: PWideChar): HMODULE; stdcall;
 {$EXTERNALSYM GetModuleHandleW}
-function GetModuleHandle(lpModuleName: PChar): HMODULE; stdcall;
-{$EXTERNALSYM GetModuleHandle}
+function CreateProcess(lpApplicationName: PChar; lpCommandLine: PChar;
+  lpProcessAttributes, lpThreadAttributes: PSecurityAttributes;
+  bInheritHandles: BOOL; dwCreationFlags: DWORD; lpEnvironment: Pointer;
+  lpCurrentDirectory: PChar; const lpStartupInfo: TStartupInfo;
+  var lpProcessInformation: TProcessInformation): BOOL; stdcall;
+{$EXTERNALSYM CreateProcess}
 function CreateProcessA(lpApplicationName: PAnsiChar; lpCommandLine: PAnsiChar;
   lpProcessAttributes, lpThreadAttributes: PSecurityAttributes;
   bInheritHandles: BOOL; dwCreationFlags: DWORD; lpEnvironment: Pointer;
@@ -5082,72 +5122,68 @@ function CreateProcessW(lpApplicationName: PWideChar; lpCommandLine: PWideChar;
   lpCurrentDirectory: PWideChar; const lpStartupInfo: TStartupInfo;
   var lpProcessInformation: TProcessInformation): BOOL; stdcall;
 {$EXTERNALSYM CreateProcessW}
-function CreateProcess(lpApplicationName: PChar; lpCommandLine: PChar;
-  lpProcessAttributes, lpThreadAttributes: PSecurityAttributes;
-  bInheritHandles: BOOL; dwCreationFlags: DWORD; lpEnvironment: Pointer;
-  lpCurrentDirectory: PChar; const lpStartupInfo: TStartupInfo;
-  var lpProcessInformation: TProcessInformation): BOOL; stdcall;
-{$EXTERNALSYM CreateProcess}
 function SetProcessShutdownParameters(dwLevel, dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SetProcessShutdownParameters}
 function GetProcessShutdownParameters(var lpdwLevel, lpdwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetProcessShutdownParameters}
 function GetProcessVersion(ProcessId: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetProcessVersion}
+procedure FatalAppExit(uAction: UINT; lpMessageText: PChar); stdcall;
+{$EXTERNALSYM FatalAppExit}
 procedure FatalAppExitA(uAction: UINT; lpMessageText: PAnsiChar); stdcall;
 {$EXTERNALSYM FatalAppExitA}
 procedure FatalAppExitW(uAction: UINT; lpMessageText: PWideChar); stdcall;
 {$EXTERNALSYM FatalAppExitW}
-procedure FatalAppExit(uAction: UINT; lpMessageText: PChar); stdcall;
-{$EXTERNALSYM FatalAppExit}
+procedure GetStartupInfo(var lpStartupInfo: TStartupInfo); stdcall;
+{$EXTERNALSYM GetStartupInfo}
 procedure GetStartupInfoA(var lpStartupInfo: TStartupInfo); stdcall;
 {$EXTERNALSYM GetStartupInfoA}
 procedure GetStartupInfoW(var lpStartupInfo: TStartupInfo); stdcall;
 {$EXTERNALSYM GetStartupInfoW}
-procedure GetStartupInfo(var lpStartupInfo: TStartupInfo); stdcall;
-{$EXTERNALSYM GetStartupInfo}
+function GetCommandLine: PChar; stdcall;
+{$EXTERNALSYM GetCommandLine}
 function GetCommandLineA: PAnsiChar; stdcall;
 {$EXTERNALSYM GetCommandLineA}
 function GetCommandLineW: PWideChar; stdcall;
 {$EXTERNALSYM GetCommandLineW}
-function GetCommandLine: PChar; stdcall;
-{$EXTERNALSYM GetCommandLine}
-function GetEnvironmentVariableA(lpName: PAnsiChar; lpBuffer: PAnsiChar; nSize: DWORD): DWORD; stdcall;
-{$EXTERNALSYM GetEnvironmentVariableA}
-function GetEnvironmentVariableW(lpName: PWideChar; lpBuffer: PWideChar; nSize: DWORD): DWORD; stdcall;
-{$EXTERNALSYM GetEnvironmentVariableW}
-function GetEnvironmentVariable(lpName: PChar; lpBuffer: PChar; nSize: DWORD): DWORD; stdcall;
+function GetEnvironmentVariable(lpName: PChar; lpBuffer: PChar; nSize: DWORD): DWORD; stdcall; overload;
 {$EXTERNALSYM GetEnvironmentVariable}
+function GetEnvironmentVariableA(lpName: PAnsiChar; lpBuffer: PAnsiChar; nSize: DWORD): DWORD; stdcall; overload;
+{$EXTERNALSYM GetEnvironmentVariableA}
+function GetEnvironmentVariableW(lpName: PWideChar; lpBuffer: PWideChar; nSize: DWORD): DWORD; stdcall; overload;
+{$EXTERNALSYM GetEnvironmentVariableW}
+function SetEnvironmentVariable(lpName, lpValue: PChar): BOOL; stdcall;
+{$EXTERNALSYM SetEnvironmentVariable}
 function SetEnvironmentVariableA(lpName, lpValue: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM SetEnvironmentVariableA}
 function SetEnvironmentVariableW(lpName, lpValue: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM SetEnvironmentVariableW}
-function SetEnvironmentVariable(lpName, lpValue: PChar): BOOL; stdcall;
-{$EXTERNALSYM SetEnvironmentVariable}
+function ExpandEnvironmentStrings(lpSrc: PChar; lpDst: PChar; nSize: DWORD): DWORD; stdcall;
+{$EXTERNALSYM ExpandEnvironmentStrings}
 function ExpandEnvironmentStringsA(lpSrc: PAnsiChar; lpDst: PAnsiChar; nSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM ExpandEnvironmentStringsA}
 function ExpandEnvironmentStringsW(lpSrc: PWideChar; lpDst: PWideChar; nSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM ExpandEnvironmentStringsW}
-function ExpandEnvironmentStrings(lpSrc: PChar; lpDst: PChar; nSize: DWORD): DWORD; stdcall;
-{$EXTERNALSYM ExpandEnvironmentStrings}
+procedure OutputDebugString(lpOutputString: PChar); stdcall;
+{$EXTERNALSYM OutputDebugString}
 procedure OutputDebugStringA(lpOutputString: PAnsiChar); stdcall;
 {$EXTERNALSYM OutputDebugStringA}
 procedure OutputDebugStringW(lpOutputString: PWideChar); stdcall;
 {$EXTERNALSYM OutputDebugStringW}
-procedure OutputDebugString(lpOutputString: PChar); stdcall;
-{$EXTERNALSYM OutputDebugString}
+{$IFDEF MSWINDOWS}
+function FindResource(hModule: HMODULE; lpName, lpType: PChar): HRSRC; stdcall;
+{$EXTERNALSYM FindResource}
 function FindResourceA(hModule: HMODULE; lpName, lpType: PAnsiChar): HRSRC; stdcall;
 {$EXTERNALSYM FindResourceA}
 function FindResourceW(hModule: HMODULE; lpName, lpType: PWideChar): HRSRC; stdcall;
 {$EXTERNALSYM FindResourceW}
-function FindResource(hModule: HMODULE; lpName, lpType: PChar): HRSRC; stdcall;
-{$EXTERNALSYM FindResource}
+{$ENDIF}
+function FindResourceEx(hModule: HMODULE; lpType, lpName: PChar; wLanguage: Word): HRSRC; stdcall;
+{$EXTERNALSYM FindResourceEx}
 function FindResourceExA(hModule: HMODULE; lpType, lpName: PAnsiChar; wLanguage: Word): HRSRC; stdcall;
 {$EXTERNALSYM FindResourceExA}
 function FindResourceExW(hModule: HMODULE; lpType, lpName: PWideChar; wLanguage: Word): HRSRC; stdcall;
 {$EXTERNALSYM FindResourceExW}
-function FindResourceEx(hModule: HMODULE; lpType, lpName: PChar; wLanguage: Word): HRSRC; stdcall;
-{$EXTERNALSYM FindResourceEx}
 
 type
   ENUMRESTYPEPROC = FARPROC;
@@ -5157,276 +5193,276 @@ type
   ENUMRESLANGPROC = FARPROC;
   {$EXTERNALSYM ENUMRESLANGPROC}
 
+function EnumResourceTypes(hModule: HMODULE; lpEnumFunc: ENUMRESTYPEPROC;
+  lParam: Longint): BOOL; stdcall;
+{$EXTERNALSYM EnumResourceTypes}
 function EnumResourceTypesA(hModule: HMODULE; lpEnumFunc: ENUMRESTYPEPROC;
   lParam: Longint): BOOL; stdcall;
 {$EXTERNALSYM EnumResourceTypesA}
 function EnumResourceTypesW(hModule: HMODULE; lpEnumFunc: ENUMRESTYPEPROC;
   lParam: Longint): BOOL; stdcall;
 {$EXTERNALSYM EnumResourceTypesW}
-function EnumResourceTypes(hModule: HMODULE; lpEnumFunc: ENUMRESTYPEPROC;
-  lParam: Longint): BOOL; stdcall;
-{$EXTERNALSYM EnumResourceTypes}
+function EnumResourceNames(hModule: HMODULE; lpType: PChar;
+  lpEnumFunc: ENUMRESNAMEPROC; lParam: Longint): BOOL; stdcall;
+{$EXTERNALSYM EnumResourceNames}
 function EnumResourceNamesA(hModule: HMODULE; lpType: PAnsiChar;
   lpEnumFunc: ENUMRESNAMEPROC; lParam: Longint): BOOL; stdcall;
 {$EXTERNALSYM EnumResourceNamesA}
 function EnumResourceNamesW(hModule: HMODULE; lpType: PWideChar;
   lpEnumFunc: ENUMRESNAMEPROC; lParam: Longint): BOOL; stdcall;
 {$EXTERNALSYM EnumResourceNamesW}
-function EnumResourceNames(hModule: HMODULE; lpType: PChar;
-  lpEnumFunc: ENUMRESNAMEPROC; lParam: Longint): BOOL; stdcall;
-{$EXTERNALSYM EnumResourceNames}
+function EnumResourceLanguages(hModule: HMODULE; lpType, lpName: PChar;
+  lpEnumFunc: ENUMRESLANGPROC; lParam: Longint): BOOL; stdcall;
+{$EXTERNALSYM EnumResourceLanguages}
 function EnumResourceLanguagesA(hModule: HMODULE; lpType, lpName: PAnsiChar;
   lpEnumFunc: ENUMRESLANGPROC; lParam: Longint): BOOL; stdcall;
 {$EXTERNALSYM EnumResourceLanguagesA}
 function EnumResourceLanguagesW(hModule: HMODULE; lpType, lpName: PWideChar;
   lpEnumFunc: ENUMRESLANGPROC; lParam: Longint): BOOL; stdcall;
 {$EXTERNALSYM EnumResourceLanguagesW}
-function EnumResourceLanguages(hModule: HMODULE; lpType, lpName: PChar;
-  lpEnumFunc: ENUMRESLANGPROC; lParam: Longint): BOOL; stdcall;
-{$EXTERNALSYM EnumResourceLanguages}
+function BeginUpdateResource(pFileName: PChar; bDeleteExistingResources: BOOL): THandle; stdcall;
+{$EXTERNALSYM BeginUpdateResource}
 function BeginUpdateResourceA(pFileName: PAnsiChar; bDeleteExistingResources: BOOL): THandle; stdcall;
 {$EXTERNALSYM BeginUpdateResourceA}
 function BeginUpdateResourceW(pFileName: PWideChar; bDeleteExistingResources: BOOL): THandle; stdcall;
 {$EXTERNALSYM BeginUpdateResourceW}
-function BeginUpdateResource(pFileName: PChar; bDeleteExistingResources: BOOL): THandle; stdcall;
-{$EXTERNALSYM BeginUpdateResource}
+function UpdateResource(hUpdate: THandle; lpType, lpName: PChar;
+  wLanguage: Word; lpData: Pointer; cbData: DWORD): BOOL; stdcall;
+{$EXTERNALSYM UpdateResource}
 function UpdateResourceA(hUpdate: THandle; lpType, lpName: PAnsiChar;
   wLanguage: Word; lpData: Pointer; cbData: DWORD): BOOL; stdcall;
 {$EXTERNALSYM UpdateResourceA}
 function UpdateResourceW(hUpdate: THandle; lpType, lpName: PWideChar;
   wLanguage: Word; lpData: Pointer; cbData: DWORD): BOOL; stdcall;
 {$EXTERNALSYM UpdateResourceW}
-function UpdateResource(hUpdate: THandle; lpType, lpName: PChar;
-  wLanguage: Word; lpData: Pointer; cbData: DWORD): BOOL; stdcall;
-{$EXTERNALSYM UpdateResource}
+function EndUpdateResource(hUpdate: THandle; fDiscard: BOOL): BOOL; stdcall;
+{$EXTERNALSYM EndUpdateResource}
 function EndUpdateResourceA(hUpdate: THandle; fDiscard: BOOL): BOOL; stdcall;
 {$EXTERNALSYM EndUpdateResourceA}
 function EndUpdateResourceW(hUpdate: THandle; fDiscard: BOOL): BOOL; stdcall;
 {$EXTERNALSYM EndUpdateResourceW}
-function EndUpdateResource(hUpdate: THandle; fDiscard: BOOL): BOOL; stdcall;
-{$EXTERNALSYM EndUpdateResource}
+function GlobalAddAtom(lpString: PChar): ATOM; stdcall;
+{$EXTERNALSYM GlobalAddAtom}
 function GlobalAddAtomA(lpString: PAnsiChar): ATOM; stdcall;
 {$EXTERNALSYM GlobalAddAtomA}
 function GlobalAddAtomW(lpString: PWideChar): ATOM; stdcall;
 {$EXTERNALSYM GlobalAddAtomW}
-function GlobalAddAtom(lpString: PChar): ATOM; stdcall;
-{$EXTERNALSYM GlobalAddAtom}
+function GlobalFindAtom(lpString: PChar): ATOM; stdcall;
+{$EXTERNALSYM GlobalFindAtom}
 function GlobalFindAtomA(lpString: PAnsiChar): ATOM; stdcall;
 {$EXTERNALSYM GlobalFindAtomA}
 function GlobalFindAtomW(lpString: PWideChar): ATOM; stdcall;
 {$EXTERNALSYM GlobalFindAtomW}
-function GlobalFindAtom(lpString: PChar): ATOM; stdcall;
-{$EXTERNALSYM GlobalFindAtom}
+function GlobalGetAtomName(nAtom: ATOM; lpBuffer: PChar; nSize: Integer): UINT; stdcall;
+{$EXTERNALSYM GlobalGetAtomName}
 function GlobalGetAtomNameA(nAtom: ATOM; lpBuffer: PAnsiChar; nSize: Integer): UINT; stdcall;
 {$EXTERNALSYM GlobalGetAtomNameA}
 function GlobalGetAtomNameW(nAtom: ATOM; lpBuffer: PWideChar; nSize: Integer): UINT; stdcall;
 {$EXTERNALSYM GlobalGetAtomNameW}
-function GlobalGetAtomName(nAtom: ATOM; lpBuffer: PChar; nSize: Integer): UINT; stdcall;
-{$EXTERNALSYM GlobalGetAtomName}
+function AddAtom(lpString: PChar): ATOM; stdcall;
+{$EXTERNALSYM AddAtom}
 function AddAtomA(lpString: PAnsiChar): ATOM; stdcall;
 {$EXTERNALSYM AddAtomA}
 function AddAtomW(lpString: PWideChar): ATOM; stdcall;
 {$EXTERNALSYM AddAtomW}
-function AddAtom(lpString: PChar): ATOM; stdcall;
-{$EXTERNALSYM AddAtom}
+function FindAtom(lpString: PChar): ATOM; stdcall;
+{$EXTERNALSYM FindAtom}
 function FindAtomA(lpString: PAnsiChar): ATOM; stdcall;
 {$EXTERNALSYM FindAtomA}
 function FindAtomW(lpString: PWideChar): ATOM; stdcall;
 {$EXTERNALSYM FindAtomW}
-function FindAtom(lpString: PChar): ATOM; stdcall;
-{$EXTERNALSYM FindAtom}
+function GetAtomName(nAtom: ATOM; lpBuffer: PChar; nSize: Integer): UINT; stdcall;
+{$EXTERNALSYM GetAtomName}
 function GetAtomNameA(nAtom: ATOM; lpBuffer: PAnsiChar; nSize: Integer): UINT; stdcall;
 {$EXTERNALSYM GetAtomNameA}
 function GetAtomNameW(nAtom: ATOM; lpBuffer: PWideChar; nSize: Integer): UINT; stdcall;
 {$EXTERNALSYM GetAtomNameW}
-function GetAtomName(nAtom: ATOM; lpBuffer: PChar; nSize: Integer): UINT; stdcall;
-{$EXTERNALSYM GetAtomName}
+function GetProfileInt(lpAppName, lpKeyName: PChar; nDefault: Integer): UINT; stdcall;
+{$EXTERNALSYM GetProfileInt}
 function GetProfileIntA(lpAppName, lpKeyName: PAnsiChar; nDefault: Integer): UINT; stdcall;
 {$EXTERNALSYM GetProfileIntA}
 function GetProfileIntW(lpAppName, lpKeyName: PWideChar; nDefault: Integer): UINT; stdcall;
 {$EXTERNALSYM GetProfileIntW}
-function GetProfileInt(lpAppName, lpKeyName: PChar; nDefault: Integer): UINT; stdcall;
-{$EXTERNALSYM GetProfileInt}
+function GetProfileString(lpAppName, lpKeyName, lpDefault: PChar;
+  lpReturnedString: PChar; nSize: DWORD): DWORD; stdcall;
+{$EXTERNALSYM GetProfileString}
 function GetProfileStringA(lpAppName, lpKeyName, lpDefault: PAnsiChar;
   lpReturnedString: PAnsiChar; nSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetProfileStringA}
 function GetProfileStringW(lpAppName, lpKeyName, lpDefault: PWideChar;
   lpReturnedString: PWideChar; nSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetProfileStringW}
-function GetProfileString(lpAppName, lpKeyName, lpDefault: PChar;
-  lpReturnedString: PChar; nSize: DWORD): DWORD; stdcall;
-{$EXTERNALSYM GetProfileString}
+function WriteProfileString(lpAppName, lpKeyName, lpString: PChar): BOOL; stdcall;
+{$EXTERNALSYM WriteProfileString}
 function WriteProfileStringA(lpAppName, lpKeyName, lpString: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM WriteProfileStringA}
 function WriteProfileStringW(lpAppName, lpKeyName, lpString: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM WriteProfileStringW}
-function WriteProfileString(lpAppName, lpKeyName, lpString: PChar): BOOL; stdcall;
-{$EXTERNALSYM WriteProfileString}
+function GetProfileSection(lpAppName: PChar; lpReturnedString: PChar; nSize: DWORD): DWORD; stdcall;
+{$EXTERNALSYM GetProfileSection}
 function GetProfileSectionA(lpAppName: PAnsiChar; lpReturnedString: PAnsiChar; nSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetProfileSectionA}
 function GetProfileSectionW(lpAppName: PWideChar; lpReturnedString: PWideChar; nSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetProfileSectionW}
-function GetProfileSection(lpAppName: PChar; lpReturnedString: PChar; nSize: DWORD): DWORD; stdcall;
-{$EXTERNALSYM GetProfileSection}
+function WriteProfileSection(lpAppName, lpString: PChar): BOOL; stdcall;
+{$EXTERNALSYM WriteProfileSection}
 function WriteProfileSectionA(lpAppName, lpString: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM WriteProfileSectionA}
 function WriteProfileSectionW(lpAppName, lpString: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM WriteProfileSectionW}
-function WriteProfileSection(lpAppName, lpString: PChar): BOOL; stdcall;
-{$EXTERNALSYM WriteProfileSection}
+function GetPrivateProfileInt(lpAppName, lpKeyName: PChar; nDefault: Integer; lpFileName: PChar): UINT; stdcall;
+{$EXTERNALSYM GetPrivateProfileInt}
 function GetPrivateProfileIntA(lpAppName, lpKeyName: PAnsiChar; nDefault: Integer; lpFileName: PAnsiChar): UINT; stdcall;
 {$EXTERNALSYM GetPrivateProfileIntA}
 function GetPrivateProfileIntW(lpAppName, lpKeyName: PWideChar; nDefault: Integer; lpFileName: PWideChar): UINT; stdcall;
 {$EXTERNALSYM GetPrivateProfileIntW}
-function GetPrivateProfileInt(lpAppName, lpKeyName: PChar; nDefault: Integer; lpFileName: PChar): UINT; stdcall;
-{$EXTERNALSYM GetPrivateProfileInt}
+function GetPrivateProfileString(lpAppName, lpKeyName, lpDefault: PChar;
+  lpReturnedString: PChar; nSize: DWORD; lpFileName: PChar): DWORD; stdcall;
+{$EXTERNALSYM GetPrivateProfileString}
 function GetPrivateProfileStringA(lpAppName, lpKeyName, lpDefault: PAnsiChar;
   lpReturnedString: PAnsiChar; nSize: DWORD; lpFileName: PAnsiChar): DWORD; stdcall;
 {$EXTERNALSYM GetPrivateProfileStringA}
 function GetPrivateProfileStringW(lpAppName, lpKeyName, lpDefault: PWideChar;
   lpReturnedString: PWideChar; nSize: DWORD; lpFileName: PWideChar): DWORD; stdcall;
 {$EXTERNALSYM GetPrivateProfileStringW}
-function GetPrivateProfileString(lpAppName, lpKeyName, lpDefault: PChar;
-  lpReturnedString: PChar; nSize: DWORD; lpFileName: PChar): DWORD; stdcall;
-{$EXTERNALSYM GetPrivateProfileString}
+function WritePrivateProfileString(lpAppName, lpKeyName, lpString, lpFileName: PChar): BOOL; stdcall;
+{$EXTERNALSYM WritePrivateProfileString}
 function WritePrivateProfileStringA(lpAppName, lpKeyName, lpString, lpFileName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM WritePrivateProfileStringA}
 function WritePrivateProfileStringW(lpAppName, lpKeyName, lpString, lpFileName: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM WritePrivateProfileStringW}
-function WritePrivateProfileString(lpAppName, lpKeyName, lpString, lpFileName: PChar): BOOL; stdcall;
-{$EXTERNALSYM WritePrivateProfileString}
+function GetPrivateProfileSection(lpAppName: PChar; lpReturnedString: PChar; nSize: DWORD; lpFileName: PChar): DWORD; stdcall;
+{$EXTERNALSYM GetPrivateProfileSection}
 function GetPrivateProfileSectionA(lpAppName: PAnsiChar; lpReturnedString: PAnsiChar; nSize: DWORD; lpFileName: PAnsiChar): DWORD; stdcall;
 {$EXTERNALSYM GetPrivateProfileSectionA}
 function GetPrivateProfileSectionW(lpAppName: PWideChar; lpReturnedString: PWideChar; nSize: DWORD; lpFileName: PWideChar): DWORD; stdcall;
 {$EXTERNALSYM GetPrivateProfileSectionW}
-function GetPrivateProfileSection(lpAppName: PChar; lpReturnedString: PChar; nSize: DWORD; lpFileName: PChar): DWORD; stdcall;
-{$EXTERNALSYM GetPrivateProfileSection}
+function WritePrivateProfileSection(lpAppName, lpString, lpFileName: PChar): BOOL; stdcall;
+{$EXTERNALSYM WritePrivateProfileSection}
 function WritePrivateProfileSectionA(lpAppName, lpString, lpFileName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM WritePrivateProfileSectionA}
 function WritePrivateProfileSectionW(lpAppName, lpString, lpFileName: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM WritePrivateProfileSectionW}
-function WritePrivateProfileSection(lpAppName, lpString, lpFileName: PChar): BOOL; stdcall;
-{$EXTERNALSYM WritePrivateProfileSection}
+function GetPrivateProfileSectionNames(lpszReturnBuffer: PChar; nSize: DWORD; lpFileName: PChar): DWORD; stdcall;
+{$EXTERNALSYM GetPrivateProfileSectionNames}
 function GetPrivateProfileSectionNamesA(lpszReturnBuffer: PAnsiChar; nSize: DWORD; lpFileName: PAnsiChar): DWORD; stdcall;
 {$EXTERNALSYM GetPrivateProfileSectionNamesA}
 function GetPrivateProfileSectionNamesW(lpszReturnBuffer: PWideChar; nSize: DWORD; lpFileName: PWideChar): DWORD; stdcall;
 {$EXTERNALSYM GetPrivateProfileSectionNamesW}
-function GetPrivateProfileSectionNames(lpszReturnBuffer: PChar; nSize: DWORD; lpFileName: PChar): DWORD; stdcall;
-{$EXTERNALSYM GetPrivateProfileSectionNames}
+function GetPrivateProfileStruct(lpszSection, lpszKey: PChar;
+  lpStruct: Pointer; uSizeStruct: UINT; szFile: PChar): BOOL; stdcall;
+{$EXTERNALSYM GetPrivateProfileStruct}
 function GetPrivateProfileStructA(lpszSection, lpszKey: PAnsiChar;
   lpStruct: Pointer; uSizeStruct: UINT; szFile: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM GetPrivateProfileStructA}
 function GetPrivateProfileStructW(lpszSection, lpszKey: PWideChar;
   lpStruct: Pointer; uSizeStruct: UINT; szFile: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM GetPrivateProfileStructW}
-function GetPrivateProfileStruct(lpszSection, lpszKey: PChar;
+function WritePrivateProfileStruct(lpszSection, lpszKey: PChar;
   lpStruct: Pointer; uSizeStruct: UINT; szFile: PChar): BOOL; stdcall;
-{$EXTERNALSYM GetPrivateProfileStruct}
+{$EXTERNALSYM WritePrivateProfileStruct}
 function WritePrivateProfileStructA(lpszSection, lpszKey: PAnsiChar;
   lpStruct: Pointer; uSizeStruct: UINT; szFile: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM WritePrivateProfileStructA}
 function WritePrivateProfileStructW(lpszSection, lpszKey: PWideChar;
   lpStruct: Pointer; uSizeStruct: UINT; szFile: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM WritePrivateProfileStructW}
-function WritePrivateProfileStruct(lpszSection, lpszKey: PChar;
-  lpStruct: Pointer; uSizeStruct: UINT; szFile: PChar): BOOL; stdcall;
-{$EXTERNALSYM WritePrivateProfileStruct}
+function GetDriveType(lpRootPathName: PChar): UINT; stdcall;
+{$EXTERNALSYM GetDriveType}
 function GetDriveTypeA(lpRootPathName: PAnsiChar): UINT; stdcall;
 {$EXTERNALSYM GetDriveTypeA}
 function GetDriveTypeW(lpRootPathName: PWideChar): UINT; stdcall;
 {$EXTERNALSYM GetDriveTypeW}
-function GetDriveType(lpRootPathName: PChar): UINT; stdcall;
-{$EXTERNALSYM GetDriveType}
+function GetSystemDirectory(lpBuffer: PChar; uSize: UINT): UINT; stdcall;
+{$EXTERNALSYM GetSystemDirectory}
 function GetSystemDirectoryA(lpBuffer: PAnsiChar; uSize: UINT): UINT; stdcall;
 {$EXTERNALSYM GetSystemDirectoryA}
 function GetSystemDirectoryW(lpBuffer: PWideChar; uSize: UINT): UINT; stdcall;
 {$EXTERNALSYM GetSystemDirectoryW}
-function GetSystemDirectory(lpBuffer: PChar; uSize: UINT): UINT; stdcall;
-{$EXTERNALSYM GetSystemDirectory}
+function GetTempPath(nBufferLength: DWORD; lpBuffer: PChar): DWORD; stdcall;
+{$EXTERNALSYM GetTempPath}
 function GetTempPathA(nBufferLength: DWORD; lpBuffer: PAnsiChar): DWORD; stdcall;
 {$EXTERNALSYM GetTempPathA}
 function GetTempPathW(nBufferLength: DWORD; lpBuffer: PWideChar): DWORD; stdcall;
 {$EXTERNALSYM GetTempPathW}
-function GetTempPath(nBufferLength: DWORD; lpBuffer: PChar): DWORD; stdcall;
-{$EXTERNALSYM GetTempPath}
+function GetTempFileName(lpPathName, lpPrefixString: PChar;
+  uUnique: UINT; lpTempFileName: PChar): UINT; stdcall;
+{$EXTERNALSYM GetTempFileName}
 function GetTempFileNameA(lpPathName, lpPrefixString: PAnsiChar;
   uUnique: UINT; lpTempFileName: PAnsiChar): UINT; stdcall;
 {$EXTERNALSYM GetTempFileNameA}
 function GetTempFileNameW(lpPathName, lpPrefixString: PWideChar;
   uUnique: UINT; lpTempFileName: PWideChar): UINT; stdcall;
 {$EXTERNALSYM GetTempFileNameW}
-function GetTempFileName(lpPathName, lpPrefixString: PChar;
-  uUnique: UINT; lpTempFileName: PChar): UINT; stdcall;
-{$EXTERNALSYM GetTempFileName}
+function GetWindowsDirectory(lpBuffer: PChar; uSize: UINT): UINT; stdcall;
+{$EXTERNALSYM GetWindowsDirectory}
 function GetWindowsDirectoryA(lpBuffer: PAnsiChar; uSize: UINT): UINT; stdcall;
 {$EXTERNALSYM GetWindowsDirectoryA}
 function GetWindowsDirectoryW(lpBuffer: PWideChar; uSize: UINT): UINT; stdcall;
 {$EXTERNALSYM GetWindowsDirectoryW}
-function GetWindowsDirectory(lpBuffer: PChar; uSize: UINT): UINT; stdcall;
-{$EXTERNALSYM GetWindowsDirectory}
+function SetCurrentDirectory(lpPathName: PChar): BOOL; stdcall;
+{$EXTERNALSYM SetCurrentDirectory}
 function SetCurrentDirectoryA(lpPathName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM SetCurrentDirectoryA}
 function SetCurrentDirectoryW(lpPathName: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM SetCurrentDirectoryW}
-function SetCurrentDirectory(lpPathName: PChar): BOOL; stdcall;
-{$EXTERNALSYM SetCurrentDirectory}
+function GetCurrentDirectory(nBufferLength: DWORD; lpBuffer: PChar): DWORD; stdcall;
+{$EXTERNALSYM GetCurrentDirectory}
 function GetCurrentDirectoryA(nBufferLength: DWORD; lpBuffer: PAnsiChar): DWORD; stdcall;
 {$EXTERNALSYM GetCurrentDirectoryA}
 function GetCurrentDirectoryW(nBufferLength: DWORD; lpBuffer: PWideChar): DWORD; stdcall;
 {$EXTERNALSYM GetCurrentDirectoryW}
-function GetCurrentDirectory(nBufferLength: DWORD; lpBuffer: PChar): DWORD; stdcall;
-{$EXTERNALSYM GetCurrentDirectory}
+function GetDiskFreeSpace(lpRootPathName: PChar;
+  var lpSectorsPerCluster, lpBytesPerSector, lpNumberOfFreeClusters, lpTotalNumberOfClusters: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetDiskFreeSpace}
 function GetDiskFreeSpaceA(lpRootPathName: PAnsiChar;
   var lpSectorsPerCluster, lpBytesPerSector, lpNumberOfFreeClusters, lpTotalNumberOfClusters: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetDiskFreeSpaceA}
 function GetDiskFreeSpaceW(lpRootPathName: PWideChar;
   var lpSectorsPerCluster, lpBytesPerSector, lpNumberOfFreeClusters, lpTotalNumberOfClusters: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetDiskFreeSpaceW}
-function GetDiskFreeSpace(lpRootPathName: PChar;
-  var lpSectorsPerCluster, lpBytesPerSector, lpNumberOfFreeClusters, lpTotalNumberOfClusters: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetDiskFreeSpace}
+function GetDiskFreeSpaceEx(lpDirectoryName: PChar;
+  var lpFreeBytesAvailableToCaller, lpTotalNumberOfBytes; lpTotalNumberOfFreeBytes: PLargeInteger): BOOL; stdcall;
+{$EXTERNALSYM GetDiskFreeSpaceEx}
 function GetDiskFreeSpaceExA(lpDirectoryName: PAnsiChar;
   var lpFreeBytesAvailableToCaller, lpTotalNumberOfBytes; lpTotalNumberOfFreeBytes: PLargeInteger): BOOL; stdcall;
 {$EXTERNALSYM GetDiskFreeSpaceExA}
 function GetDiskFreeSpaceExW(lpDirectoryName: PWideChar;
   var lpFreeBytesAvailableToCaller, lpTotalNumberOfBytes; lpTotalNumberOfFreeBytes: PLargeInteger): BOOL; stdcall;
 {$EXTERNALSYM GetDiskFreeSpaceExW}
-function GetDiskFreeSpaceEx(lpDirectoryName: PChar;
-  var lpFreeBytesAvailableToCaller, lpTotalNumberOfBytes; lpTotalNumberOfFreeBytes: PLargeInteger): BOOL; stdcall;
-{$EXTERNALSYM GetDiskFreeSpaceEx}
+function CreateDirectory(lpPathName: PChar;
+  lpSecurityAttributes: PSecurityAttributes): BOOL; stdcall;
+{$EXTERNALSYM CreateDirectory}
 function CreateDirectoryA(lpPathName: PAnsiChar;
   lpSecurityAttributes: PSecurityAttributes): BOOL; stdcall;
 {$EXTERNALSYM CreateDirectoryA}
 function CreateDirectoryW(lpPathName: PWideChar;
   lpSecurityAttributes: PSecurityAttributes): BOOL; stdcall;
 {$EXTERNALSYM CreateDirectoryW}
-function CreateDirectory(lpPathName: PChar;
+function CreateDirectoryEx(lpTemplateDirectory, lpNewDirectory: PChar;
   lpSecurityAttributes: PSecurityAttributes): BOOL; stdcall;
-{$EXTERNALSYM CreateDirectory}
+{$EXTERNALSYM CreateDirectoryEx}
 function CreateDirectoryExA(lpTemplateDirectory, lpNewDirectory: PAnsiChar;
   lpSecurityAttributes: PSecurityAttributes): BOOL; stdcall;
 {$EXTERNALSYM CreateDirectoryExA}
 function CreateDirectoryExW(lpTemplateDirectory, lpNewDirectory: PWideChar;
   lpSecurityAttributes: PSecurityAttributes): BOOL; stdcall;
 {$EXTERNALSYM CreateDirectoryExW}
-function CreateDirectoryEx(lpTemplateDirectory, lpNewDirectory: PChar;
-  lpSecurityAttributes: PSecurityAttributes): BOOL; stdcall;
-{$EXTERNALSYM CreateDirectoryEx}
+function RemoveDirectory(lpPathName: PChar): BOOL; stdcall;
+{$EXTERNALSYM RemoveDirectory}
 function RemoveDirectoryA(lpPathName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM RemoveDirectoryA}
 function RemoveDirectoryW(lpPathName: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM RemoveDirectoryW}
-function RemoveDirectory(lpPathName: PChar): BOOL; stdcall;
-{$EXTERNALSYM RemoveDirectory}
+function GetFullPathName(lpFileName: PChar; nBufferLength: DWORD;
+  lpBuffer: PChar; var lpFilePart: PChar): DWORD; stdcall;
+{$EXTERNALSYM GetFullPathName}
 function GetFullPathNameA(lpFileName: PAnsiChar; nBufferLength: DWORD;
   lpBuffer: PAnsiChar; var lpFilePart: PAnsiChar): DWORD; stdcall;
 {$EXTERNALSYM GetFullPathNameA}
 function GetFullPathNameW(lpFileName: PWideChar; nBufferLength: DWORD;
   lpBuffer: PWideChar; var lpFilePart: PWideChar): DWORD; stdcall;
 {$EXTERNALSYM GetFullPathNameW}
-function GetFullPathName(lpFileName: PChar; nBufferLength: DWORD;
-  lpBuffer: PChar; var lpFilePart: PChar): DWORD; stdcall;
-{$EXTERNALSYM GetFullPathName}
 
 const
   DDD_RAW_TARGET_PATH             = $00000001;
@@ -5438,18 +5474,22 @@ const
   DDD_NO_BROADCAST_SYSTEM         = $00000008;
   {$EXTERNALSYM DDD_NO_BROADCAST_SYSTEM}
 
+function DefineDosDevice(dwFlags: DWORD; lpDeviceName, lpTargetPath: PChar): BOOL; stdcall;
+{$EXTERNALSYM DefineDosDevice}
 function DefineDosDeviceA(dwFlags: DWORD; lpDeviceName, lpTargetPath: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM DefineDosDeviceA}
 function DefineDosDeviceW(dwFlags: DWORD; lpDeviceName, lpTargetPath: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM DefineDosDeviceW}
-function DefineDosDevice(dwFlags: DWORD; lpDeviceName, lpTargetPath: PChar): BOOL; stdcall;
-{$EXTERNALSYM DefineDosDevice}
+function QueryDosDevice(lpDeviceName: PChar; lpTargetPath: PChar; ucchMax: DWORD): DWORD; stdcall;
+{$EXTERNALSYM QueryDosDevice}
 function QueryDosDeviceA(lpDeviceName: PAnsiChar; lpTargetPath: PAnsiChar; ucchMax: DWORD): DWORD; stdcall;
 {$EXTERNALSYM QueryDosDeviceA}
 function QueryDosDeviceW(lpDeviceName: PWideChar; lpTargetPath: PWideChar; ucchMax: DWORD): DWORD; stdcall;
 {$EXTERNALSYM QueryDosDeviceW}
-function QueryDosDevice(lpDeviceName: PChar; lpTargetPath: PChar; ucchMax: DWORD): DWORD; stdcall;
-{$EXTERNALSYM QueryDosDevice}
+function CreateFile(lpFileName: PChar; dwDesiredAccess, dwShareMode: DWORD;
+  lpSecurityAttributes: PSecurityAttributes; dwCreationDisposition, dwFlagsAndAttributes: DWORD;
+  hTemplateFile: THandle): THandle; stdcall;
+{$EXTERNALSYM CreateFile}
 function CreateFileA(lpFileName: PAnsiChar; dwDesiredAccess, dwShareMode: DWORD;
   lpSecurityAttributes: PSecurityAttributes; dwCreationDisposition, dwFlagsAndAttributes: DWORD;
   hTemplateFile: THandle): THandle; stdcall;
@@ -5458,49 +5498,45 @@ function CreateFileW(lpFileName: PWideChar; dwDesiredAccess, dwShareMode: DWORD;
   lpSecurityAttributes: PSecurityAttributes; dwCreationDisposition, dwFlagsAndAttributes: DWORD;
   hTemplateFile: THandle): THandle; stdcall;
 {$EXTERNALSYM CreateFileW}
-function CreateFile(lpFileName: PChar; dwDesiredAccess, dwShareMode: DWORD;
-  lpSecurityAttributes: PSecurityAttributes; dwCreationDisposition, dwFlagsAndAttributes: DWORD;
-  hTemplateFile: THandle): THandle; stdcall;
-{$EXTERNALSYM CreateFile}
+function SetFileAttributes(lpFileName: PChar; dwFileAttributes: DWORD): BOOL; stdcall;
+{$EXTERNALSYM SetFileAttributes}
 function SetFileAttributesA(lpFileName: PAnsiChar; dwFileAttributes: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SetFileAttributesA}
 function SetFileAttributesW(lpFileName: PWideChar; dwFileAttributes: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SetFileAttributesW}
-function SetFileAttributes(lpFileName: PChar; dwFileAttributes: DWORD): BOOL; stdcall;
-{$EXTERNALSYM SetFileAttributes}
+function GetFileAttributes(lpFileName: PChar): DWORD; stdcall;
+{$EXTERNALSYM GetFileAttributes}
 function GetFileAttributesA(lpFileName: PAnsiChar): DWORD; stdcall;
 {$EXTERNALSYM GetFileAttributesA}
 function GetFileAttributesW(lpFileName: PWideChar): DWORD; stdcall;
 {$EXTERNALSYM GetFileAttributesW}
-function GetFileAttributes(lpFileName: PChar): DWORD; stdcall;
-{$EXTERNALSYM GetFileAttributes}
 type
   _GET_FILEEX_INFO_LEVELS = (GetFileExInfoStandard, GetFileExMaxInfoLevel);
   {$EXTERNALSYM _GET_FILEEX_INFO_LEVELS}
   TGetFileExInfoLevels = _GET_FILEEX_INFO_LEVELS;
   GET_FILEEX_INFO_LEVELS = _GET_FILEEX_INFO_LEVELS;
   {$EXTERNALSYM GET_FILEEX_INFO_LEVELS}
+function GetFileAttributesEx(lpFileName: PChar;
+  fInfoLevelId: TGetFileExInfoLevels; lpFileInformation: Pointer): BOOL; stdcall;
+{$EXTERNALSYM GetFileAttributesEx}
 function GetFileAttributesExA(lpFileName: PAnsiChar;
   fInfoLevelId: TGetFileExInfoLevels; lpFileInformation: Pointer): BOOL; stdcall;
 {$EXTERNALSYM GetFileAttributesExA}
 function GetFileAttributesExW(lpFileName: PWideChar;
   fInfoLevelId: TGetFileExInfoLevels; lpFileInformation: Pointer): BOOL; stdcall;
 {$EXTERNALSYM GetFileAttributesExW}
-function GetFileAttributesEx(lpFileName: PChar;
-  fInfoLevelId: TGetFileExInfoLevels; lpFileInformation: Pointer): BOOL; stdcall;
-{$EXTERNALSYM GetFileAttributesEx}
+function GetCompressedFileSize(lpFileName: PChar; lpFileSizeHigh: PDWORD): DWORD; stdcall;
+{$EXTERNALSYM GetCompressedFileSize}
 function GetCompressedFileSizeA(lpFileName: PAnsiChar; lpFileSizeHigh: PDWORD): DWORD; stdcall;
 {$EXTERNALSYM GetCompressedFileSizeA}
 function GetCompressedFileSizeW(lpFileName: PWideChar; lpFileSizeHigh: PDWORD): DWORD; stdcall;
 {$EXTERNALSYM GetCompressedFileSizeW}
-function GetCompressedFileSize(lpFileName: PChar; lpFileSizeHigh: PDWORD): DWORD; stdcall;
-{$EXTERNALSYM GetCompressedFileSize}
+function DeleteFile(lpFileName: PChar): BOOL; stdcall;
+{$EXTERNALSYM DeleteFile}
 function DeleteFileA(lpFileName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM DeleteFileA}
 function DeleteFileW(lpFileName: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM DeleteFileW}
-function DeleteFile(lpFileName: PChar): BOOL; stdcall;
-{$EXTERNALSYM DeleteFile}
 type
   _FINDEX_INFO_LEVELS = (FindExInfoStandard, FindExInfoMaxInfoLevel);
   {$EXTERNALSYM _FINDEX_INFO_LEVELS}
@@ -5518,6 +5554,10 @@ const
   FIND_FIRST_EX_CASE_SENSITIVE = $00000001;
   {$EXTERNALSYM FIND_FIRST_EX_CASE_SENSITIVE}
 
+function FindFirstFileEx(lpFileName: PChar; fInfoLevelId: TFindexInfoLevels;
+  lpFindFileData: Pointer; fSearchOp: TFindexSearchOps; lpSearchFilter: Pointer;
+  dwAdditionalFlags: DWORD): BOOL; stdcall;
+{$EXTERNALSYM FindFirstFileEx}
 function FindFirstFileExA(lpFileName: PAnsiChar; fInfoLevelId: TFindexInfoLevels;
   lpFindFileData: Pointer; fSearchOp: TFindexSearchOps; lpSearchFilter: Pointer;
   dwAdditionalFlags: DWORD): BOOL; stdcall;
@@ -5526,46 +5566,48 @@ function FindFirstFileExW(lpFileName: PWideChar; fInfoLevelId: TFindexInfoLevels
   lpFindFileData: Pointer; fSearchOp: TFindexSearchOps; lpSearchFilter: Pointer;
   dwAdditionalFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM FindFirstFileExW}
-function FindFirstFileEx(lpFileName: PChar; fInfoLevelId: TFindexInfoLevels;
-  lpFindFileData: Pointer; fSearchOp: TFindexSearchOps; lpSearchFilter: Pointer;
-  dwAdditionalFlags: DWORD): BOOL; stdcall;
-{$EXTERNALSYM FindFirstFileEx}
+function FindFirstFile(lpFileName: PChar; var lpFindFileData: TWIN32FindData): THandle; stdcall;
+{$EXTERNALSYM FindFirstFile}
 function FindFirstFileA(lpFileName: PAnsiChar; var lpFindFileData: TWIN32FindDataA): THandle; stdcall;
 {$EXTERNALSYM FindFirstFileA}
 function FindFirstFileW(lpFileName: PWideChar; var lpFindFileData: TWIN32FindDataW): THandle; stdcall;
 {$EXTERNALSYM FindFirstFileW}
-function FindFirstFile(lpFileName: PChar; var lpFindFileData: TWIN32FindData): THandle; stdcall;
-{$EXTERNALSYM FindFirstFile}
+function FindNextFile(hFindFile: THandle; var lpFindFileData: TWIN32FindData): BOOL; stdcall;
+{$EXTERNALSYM FindNextFile}
 function FindNextFileA(hFindFile: THandle; var lpFindFileData: TWIN32FindDataA): BOOL; stdcall;
 {$EXTERNALSYM FindNextFileA}
 function FindNextFileW(hFindFile: THandle; var lpFindFileData: TWIN32FindDataW): BOOL; stdcall;
 {$EXTERNALSYM FindNextFileW}
-function FindNextFile(hFindFile: THandle; var lpFindFileData: TWIN32FindData): BOOL; stdcall;
-{$EXTERNALSYM FindNextFile}
+function SearchPath(lpPath, lpFileName, lpExtension: PChar;
+  nBufferLength: DWORD; lpBuffer: PChar; var lpFilePart: PChar): DWORD; stdcall;
+{$EXTERNALSYM SearchPath}
 function SearchPathA(lpPath, lpFileName, lpExtension: PAnsiChar;
   nBufferLength: DWORD; lpBuffer: PAnsiChar; var lpFilePart: PAnsiChar): DWORD; stdcall;
 {$EXTERNALSYM SearchPathA}
 function SearchPathW(lpPath, lpFileName, lpExtension: PWideChar;
   nBufferLength: DWORD; lpBuffer: PWideChar; var lpFilePart: PWideChar): DWORD; stdcall;
 {$EXTERNALSYM SearchPathW}
-function SearchPath(lpPath, lpFileName, lpExtension: PChar;
-  nBufferLength: DWORD; lpBuffer: PChar; var lpFilePart: PChar): DWORD; stdcall;
-{$EXTERNALSYM SearchPath}
+function CopyFile(lpExistingFileName, lpNewFileName: PChar; bFailIfExists: BOOL): BOOL; stdcall;
+{$EXTERNALSYM CopyFile}
 function CopyFileA(lpExistingFileName, lpNewFileName: PAnsiChar; bFailIfExists: BOOL): BOOL; stdcall;
 {$EXTERNALSYM CopyFileA}
 function CopyFileW(lpExistingFileName, lpNewFileName: PWideChar; bFailIfExists: BOOL): BOOL; stdcall;
 {$EXTERNALSYM CopyFileW}
-function CopyFile(lpExistingFileName, lpNewFileName: PChar; bFailIfExists: BOOL): BOOL; stdcall;
-{$EXTERNALSYM CopyFile}
 
-type
+type
 
 
 
 
 
-  TFNProgressRoutine = TFarProc;
 
+  TFNProgressRoutine = TFarProc;
+
+
+function CopyFileEx(lpExistingFileName, lpNewFileName: PChar;
+  lpProgressRoutine: TFNProgressRoutine; lpData: Pointer; pbCancel: PBool;
+  dwCopyFlags: DWORD): BOOL; stdcall;
+{$EXTERNALSYM CopyFileEx}
 function CopyFileExA(lpExistingFileName, lpNewFileName: PAnsiChar;
   lpProgressRoutine: TFNProgressRoutine; lpData: Pointer; pbCancel: PBool;
   dwCopyFlags: DWORD): BOOL; stdcall;
@@ -5574,31 +5616,27 @@ function CopyFileExW(lpExistingFileName, lpNewFileName: PWideChar;
   lpProgressRoutine: TFNProgressRoutine; lpData: Pointer; pbCancel: PBool;
   dwCopyFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM CopyFileExW}
-function CopyFileEx(lpExistingFileName, lpNewFileName: PChar;
-  lpProgressRoutine: TFNProgressRoutine; lpData: Pointer; pbCancel: PBool;
-  dwCopyFlags: DWORD): BOOL; stdcall;
-{$EXTERNALSYM CopyFileEx}
+function MoveFile(lpExistingFileName, lpNewFileName: PChar): BOOL; stdcall;
+{$EXTERNALSYM MoveFile}
 function MoveFileA(lpExistingFileName, lpNewFileName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM MoveFileA}
 function MoveFileW(lpExistingFileName, lpNewFileName: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM MoveFileW}
-function MoveFile(lpExistingFileName, lpNewFileName: PChar): BOOL; stdcall;
-{$EXTERNALSYM MoveFile}
+function MoveFileEx(lpExistingFileName, lpNewFileName: PChar; dwFlags: DWORD): BOOL; stdcall;
+{$EXTERNALSYM MoveFileEx}
 function MoveFileExA(lpExistingFileName, lpNewFileName: PAnsiChar; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM MoveFileExA}
 function MoveFileExW(lpExistingFileName, lpNewFileName: PWideChar; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM MoveFileExW}
-function MoveFileEx(lpExistingFileName, lpNewFileName: PChar; dwFlags: DWORD): BOOL; stdcall;
-{$EXTERNALSYM MoveFileEx}
+function MoveFileWithProgress(lpExistingFileName, lpNewFileName: PChar; lpProgressRoutine: TFNProgressRoutine;
+  lpData: Pointer; dwFlags: DWORD): BOOL; stdcall;
+{$EXTERNALSYM MoveFileWithProgress}
 function MoveFileWithProgressA(lpExistingFileName, lpNewFileName: PAnsiChar; lpProgressRoutine: TFNProgressRoutine;
   lpData: Pointer; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM MoveFileWithProgressA}
 function MoveFileWithProgressW(lpExistingFileName, lpNewFileName: PWideChar; lpProgressRoutine: TFNProgressRoutine;
   lpData: Pointer; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM MoveFileWithProgressW}
-function MoveFileWithProgress(lpExistingFileName, lpNewFileName: PChar; lpProgressRoutine: TFNProgressRoutine;
-  lpData: Pointer; dwFlags: DWORD): BOOL; stdcall;
-{$EXTERNALSYM MoveFileWithProgress}
 
 const
   MOVEFILE_REPLACE_EXISTING       = $00000001;
@@ -5614,15 +5652,19 @@ const
   MOVEFILE_FAIL_IF_NOT_TRACKABLE  = $00000020;
   {$EXTERNALSYM MOVEFILE_FAIL_IF_NOT_TRACKABLE}
 
+function CreateHardLink(lpFileName, lpExistingFileName: PChar;
+  lpSecurityAttributes: PSecurityAttributes): BOOL; stdcall;
+{$EXTERNALSYM CreateHardLink}
 function CreateHardLinkA(lpFileName, lpExistingFileName: PAnsiChar;
   lpSecurityAttributes: PSecurityAttributes): BOOL; stdcall;
 {$EXTERNALSYM CreateHardLinkA}
 function CreateHardLinkW(lpFileName, lpExistingFileName: PWideChar;
   lpSecurityAttributes: PSecurityAttributes): BOOL; stdcall;
 {$EXTERNALSYM CreateHardLinkW}
-function CreateHardLink(lpFileName, lpExistingFileName: PChar;
-  lpSecurityAttributes: PSecurityAttributes): BOOL; stdcall;
-{$EXTERNALSYM CreateHardLink}
+function CreateNamedPipe(lpName: PChar;
+  dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut: DWORD;
+  lpSecurityAttributes: PSecurityAttributes): THandle; stdcall;
+{$EXTERNALSYM CreateNamedPipe}
 function CreateNamedPipeA(lpName: PAnsiChar;
   dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut: DWORD;
   lpSecurityAttributes: PSecurityAttributes): THandle; stdcall;
@@ -5631,10 +5673,10 @@ function CreateNamedPipeW(lpName: PWideChar;
   dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut: DWORD;
   lpSecurityAttributes: PSecurityAttributes): THandle; stdcall;
 {$EXTERNALSYM CreateNamedPipeW}
-function CreateNamedPipe(lpName: PChar;
-  dwOpenMode, dwPipeMode, nMaxInstances, nOutBufferSize, nInBufferSize, nDefaultTimeOut: DWORD;
-  lpSecurityAttributes: PSecurityAttributes): THandle; stdcall;
-{$EXTERNALSYM CreateNamedPipe}
+function GetNamedPipeHandleState(hNamedPipe: THandle;
+  lpState, lpCurInstances, lpMaxCollectionCount, lpCollectDataTimeout: PDWORD;
+  lpUserName: PChar; nMaxUserNameSize: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetNamedPipeHandleState}
 function GetNamedPipeHandleStateA(hNamedPipe: THandle;
   lpState, lpCurInstances, lpMaxCollectionCount, lpCollectDataTimeout: PDWORD;
   lpUserName: PAnsiChar; nMaxUserNameSize: DWORD): BOOL; stdcall;
@@ -5643,10 +5685,10 @@ function GetNamedPipeHandleStateW(hNamedPipe: THandle;
   lpState, lpCurInstances, lpMaxCollectionCount, lpCollectDataTimeout: PDWORD;
   lpUserName: PWideChar; nMaxUserNameSize: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetNamedPipeHandleStateW}
-function GetNamedPipeHandleState(hNamedPipe: THandle;
-  lpState, lpCurInstances, lpMaxCollectionCount, lpCollectDataTimeout: PDWORD;
-  lpUserName: PChar; nMaxUserNameSize: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetNamedPipeHandleState}
+function CallNamedPipe(lpNamedPipeName: PChar; lpInBuffer: Pointer;
+  nInBufferSize: DWORD; lpOutBuffer: Pointer; nOutBufferSize: DWORD;
+  var lpBytesRead: DWORD; nTimeOut: DWORD): BOOL; stdcall;
+{$EXTERNALSYM CallNamedPipe}
 function CallNamedPipeA(lpNamedPipeName: PAnsiChar; lpInBuffer: Pointer;
   nInBufferSize: DWORD; lpOutBuffer: Pointer; nOutBufferSize: DWORD;
   var lpBytesRead: DWORD; nTimeOut: DWORD): BOOL; stdcall;
@@ -5655,28 +5697,29 @@ function CallNamedPipeW(lpNamedPipeName: PWideChar; lpInBuffer: Pointer;
   nInBufferSize: DWORD; lpOutBuffer: Pointer; nOutBufferSize: DWORD;
   var lpBytesRead: DWORD; nTimeOut: DWORD): BOOL; stdcall;
 {$EXTERNALSYM CallNamedPipeW}
-function CallNamedPipe(lpNamedPipeName: PChar; lpInBuffer: Pointer;
-  nInBufferSize: DWORD; lpOutBuffer: Pointer; nOutBufferSize: DWORD;
-  var lpBytesRead: DWORD; nTimeOut: DWORD): BOOL; stdcall;
-{$EXTERNALSYM CallNamedPipe}
+function WaitNamedPipe(lpNamedPipeName: PChar; nTimeOut: DWORD): BOOL; stdcall;
+{$EXTERNALSYM WaitNamedPipe}
 function WaitNamedPipeA(lpNamedPipeName: PAnsiChar; nTimeOut: DWORD): BOOL; stdcall;
 {$EXTERNALSYM WaitNamedPipeA}
 function WaitNamedPipeW(lpNamedPipeName: PWideChar; nTimeOut: DWORD): BOOL; stdcall;
 {$EXTERNALSYM WaitNamedPipeW}
-function WaitNamedPipe(lpNamedPipeName: PChar; nTimeOut: DWORD): BOOL; stdcall;
-{$EXTERNALSYM WaitNamedPipe}
+function SetVolumeLabel(lpRootPathName: PChar; lpVolumeName: PAnsiChar): BOOL; stdcall;
+{$EXTERNALSYM SetVolumeLabel}
 function SetVolumeLabelA(lpRootPathName: PAnsiChar; lpVolumeName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM SetVolumeLabelA}
 function SetVolumeLabelW(lpRootPathName: PWideChar; lpVolumeName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM SetVolumeLabelW}
-function SetVolumeLabel(lpRootPathName: PChar; lpVolumeName: PAnsiChar): BOOL; stdcall;
-{$EXTERNALSYM SetVolumeLabel}
 procedure SetFileApisToOEM; stdcall;
 {$EXTERNALSYM SetFileApisToOEM}
 procedure SetFileApisToANSI; stdcall;
 {$EXTERNALSYM SetFileApisToANSI}
 function AreFileApisANSI: BOOL; stdcall;
 {$EXTERNALSYM AreFileApisANSI}
+function GetVolumeInformation(lpRootPathName: PChar;
+  lpVolumeNameBuffer: PChar; nVolumeNameSize: DWORD; lpVolumeSerialNumber: PDWORD;
+  var lpMaximumComponentLength, lpFileSystemFlags: DWORD;
+  lpFileSystemNameBuffer: PChar; nFileSystemNameSize: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetVolumeInformation}
 function GetVolumeInformationA(lpRootPathName: PAnsiChar;
   lpVolumeNameBuffer: PAnsiChar; nVolumeNameSize: DWORD; lpVolumeSerialNumber: PDWORD;
   var lpMaximumComponentLength, lpFileSystemFlags: DWORD;
@@ -5687,29 +5730,24 @@ function GetVolumeInformationW(lpRootPathName: PWideChar;
   var lpMaximumComponentLength, lpFileSystemFlags: DWORD;
   lpFileSystemNameBuffer: PWideChar; nFileSystemNameSize: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetVolumeInformationW}
-function GetVolumeInformation(lpRootPathName: PChar;
-  lpVolumeNameBuffer: PChar; nVolumeNameSize: DWORD; lpVolumeSerialNumber: PDWORD;
-  var lpMaximumComponentLength, lpFileSystemFlags: DWORD;
-  lpFileSystemNameBuffer: PChar; nFileSystemNameSize: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetVolumeInformation}
 
 function CancelIo(hFile: THandle): BOOL; stdcall;
 {$EXTERNALSYM CancelIo}
 
 { Event logging APIs }
 
+function ClearEventLog(hEventLog: THandle; lpBackupFileName: PChar): BOOL; stdcall;
+{$EXTERNALSYM ClearEventLog}
 function ClearEventLogA(hEventLog: THandle; lpBackupFileName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM ClearEventLogA}
 function ClearEventLogW(hEventLog: THandle; lpBackupFileName: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM ClearEventLogW}
-function ClearEventLog(hEventLog: THandle; lpBackupFileName: PChar): BOOL; stdcall;
-{$EXTERNALSYM ClearEventLog}
+function BackupEventLog(hEventLog: THandle; lpBackupFileName: PChar): BOOL; stdcall;
+{$EXTERNALSYM BackupEventLog}
 function BackupEventLogA(hEventLog: THandle; lpBackupFileName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM BackupEventLogA}
 function BackupEventLogW(hEventLog: THandle; lpBackupFileName: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM BackupEventLogW}
-function BackupEventLog(hEventLog: THandle; lpBackupFileName: PChar): BOOL; stdcall;
-{$EXTERNALSYM BackupEventLog}
 function CloseEventLog(hEventLog: THandle): BOOL; stdcall;
 {$EXTERNALSYM CloseEventLog}
 function DeregisterEventSource(hEventLog: THandle): BOOL; stdcall;
@@ -5720,24 +5758,28 @@ function GetNumberOfEventLogRecords(hEventLog: THandle; var NumberOfRecords: DWO
 {$EXTERNALSYM GetNumberOfEventLogRecords}
 function GetOldestEventLogRecord(hEventLog: THandle; var OldestRecord: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetOldestEventLogRecord}
+function OpenEventLog(lpUNCServerName, lpSourceName: PChar): THandle; stdcall;
+{$EXTERNALSYM OpenEventLog}
 function OpenEventLogA(lpUNCServerName, lpSourceName: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM OpenEventLogA}
 function OpenEventLogW(lpUNCServerName, lpSourceName: PWideChar): THandle; stdcall;
 {$EXTERNALSYM OpenEventLogW}
-function OpenEventLog(lpUNCServerName, lpSourceName: PChar): THandle; stdcall;
-{$EXTERNALSYM OpenEventLog}
+function RegisterEventSource(lpUNCServerName, lpSourceName: PChar): THandle; stdcall;
+{$EXTERNALSYM RegisterEventSource}
 function RegisterEventSourceA(lpUNCServerName, lpSourceName: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM RegisterEventSourceA}
 function RegisterEventSourceW(lpUNCServerName, lpSourceName: PWideChar): THandle; stdcall;
 {$EXTERNALSYM RegisterEventSourceW}
-function RegisterEventSource(lpUNCServerName, lpSourceName: PChar): THandle; stdcall;
-{$EXTERNALSYM RegisterEventSource}
+function OpenBackupEventLog(lpUNCServerName, lpFileName: PChar): THandle; stdcall;
+{$EXTERNALSYM OpenBackupEventLog}
 function OpenBackupEventLogA(lpUNCServerName, lpFileName: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM OpenBackupEventLogA}
 function OpenBackupEventLogW(lpUNCServerName, lpFileName: PWideChar): THandle; stdcall;
 {$EXTERNALSYM OpenBackupEventLogW}
-function OpenBackupEventLog(lpUNCServerName, lpFileName: PChar): THandle; stdcall;
-{$EXTERNALSYM OpenBackupEventLog}
+function ReadEventLog(hEventLog: THandle; dwReadFlags, dwRecordOffset: DWORD;
+  lpBuffer: Pointer; nNumberOfBytesToRead: DWORD;
+  var pnBytesRead, pnMinNumberOfBytesNeeded: DWORD): BOOL; stdcall;
+{$EXTERNALSYM ReadEventLog}
 function ReadEventLogA(hEventLog: THandle; dwReadFlags, dwRecordOffset: DWORD;
   lpBuffer: Pointer; nNumberOfBytesToRead: DWORD;
   var pnBytesRead, pnMinNumberOfBytesNeeded: DWORD): BOOL; stdcall;
@@ -5746,10 +5788,10 @@ function ReadEventLogW(hEventLog: THandle; dwReadFlags, dwRecordOffset: DWORD;
   lpBuffer: Pointer; nNumberOfBytesToRead: DWORD;
   var pnBytesRead, pnMinNumberOfBytesNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM ReadEventLogW}
-function ReadEventLog(hEventLog: THandle; dwReadFlags, dwRecordOffset: DWORD;
-  lpBuffer: Pointer; nNumberOfBytesToRead: DWORD;
-  var pnBytesRead, pnMinNumberOfBytesNeeded: DWORD): BOOL; stdcall;
-{$EXTERNALSYM ReadEventLog}
+function ReportEvent(hEventLog: THandle; wType, wCategory: Word;
+  dwEventID: DWORD; lpUserSid: Pointer; wNumStrings: Word;
+  dwDataSize: DWORD; lpStrings, lpRawData: Pointer): BOOL; stdcall;
+{$EXTERNALSYM ReportEvent}
 function ReportEventA(hEventLog: THandle; wType, wCategory: Word;
   dwEventID: DWORD; lpUserSid: Pointer; wNumStrings: Word;
   dwDataSize: DWORD; lpStrings, lpRawData: Pointer): BOOL; stdcall;
@@ -5758,10 +5800,6 @@ function ReportEventW(hEventLog: THandle; wType, wCategory: Word;
   dwEventID: DWORD; lpUserSid: Pointer; wNumStrings: Word;
   dwDataSize: DWORD; lpStrings, lpRawData: Pointer): BOOL; stdcall;
 {$EXTERNALSYM ReportEventW}
-function ReportEvent(hEventLog: THandle; wType, wCategory: Word;
-  dwEventID: DWORD; lpUserSid: Pointer; wNumStrings: Word;
-  dwDataSize: DWORD; lpStrings, lpRawData: Pointer): BOOL; stdcall;
-{$EXTERNALSYM ReportEvent}
 
 { Security APIs }
 
@@ -5826,6 +5864,12 @@ function AdjustTokenGroups(TokenHandle: THandle; ResetToDefault: BOOL;
 function PrivilegeCheck(ClientToken: THandle; const RequiredPrivileges: TPrivilegeSet;
   var pfResult: BOOL): BOOL; stdcall;
 {$EXTERNALSYM PrivilegeCheck}
+function AccessCheckAndAuditAlarm(SubsystemName: PChar;
+  HandleId: Pointer; ObjectTypeName, ObjectName: PChar;
+  SecurityDescriptor: PSecurityDescriptor; DesiredAccess: DWORD;
+  const GenericMapping: TGenericMapping;  ObjectCreation: BOOL;
+  var GrantedAccess: DWORD; var AccessStatus, pfGenerateOnClose: BOOL): BOOL; stdcall;
+{$EXTERNALSYM AccessCheckAndAuditAlarm}
 function AccessCheckAndAuditAlarmA(SubsystemName: PAnsiChar;
   HandleId: Pointer; ObjectTypeName, ObjectName: PAnsiChar;
   SecurityDescriptor: PSecurityDescriptor; DesiredAccess: DWORD;
@@ -5838,12 +5882,13 @@ function AccessCheckAndAuditAlarmW(SubsystemName: PWideChar;
   const GenericMapping: TGenericMapping;  ObjectCreation: BOOL;
   var GrantedAccess: DWORD; var AccessStatus, pfGenerateOnClose: BOOL): BOOL; stdcall;
 {$EXTERNALSYM AccessCheckAndAuditAlarmW}
-function AccessCheckAndAuditAlarm(SubsystemName: PChar;
+function AccessCheckByTypeAndAuditAlarm(SubsystemName: PChar;
   HandleId: Pointer; ObjectTypeName, ObjectName: PChar;
-  SecurityDescriptor: PSecurityDescriptor; DesiredAccess: DWORD;
-  const GenericMapping: TGenericMapping;  ObjectCreation: BOOL;
+  SecurityDescriptor: PSecurityDescriptor; PrincipalSelfSid: PSID; DesiredAccess: DWORD;
+  AuditType: AUDIT_EVENT_TYPE; Flags: DWORD; ObjectTypeList: PObjectTypeList;
+  ObjectTypeListLength: DWORD; const GenericMapping: TGenericMapping;  ObjectCreation: BOOL;
   var GrantedAccess: DWORD; var AccessStatus, pfGenerateOnClose: BOOL): BOOL; stdcall;
-{$EXTERNALSYM AccessCheckAndAuditAlarm}
+{$EXTERNALSYM AccessCheckByTypeAndAuditAlarm}
 function AccessCheckByTypeAndAuditAlarmA(SubsystemName: PAnsiChar;
   HandleId: Pointer; ObjectTypeName, ObjectName: PAnsiChar;
   SecurityDescriptor: PSecurityDescriptor; PrincipalSelfSid: PSID; DesiredAccess: DWORD;
@@ -5858,13 +5903,13 @@ function AccessCheckByTypeAndAuditAlarmW(SubsystemName: PWideChar;
   ObjectTypeListLength: DWORD; const GenericMapping: TGenericMapping;  ObjectCreation: BOOL;
   var GrantedAccess: DWORD; var AccessStatus, pfGenerateOnClose: BOOL): BOOL; stdcall;
 {$EXTERNALSYM AccessCheckByTypeAndAuditAlarmW}
-function AccessCheckByTypeAndAuditAlarm(SubsystemName: PChar;
+function AccessCheckByTypeResultListAndAuditAlarm(SubsystemName: PChar;
   HandleId: Pointer; ObjectTypeName, ObjectName: PChar;
   SecurityDescriptor: PSecurityDescriptor; PrincipalSelfSid: PSID; DesiredAccess: DWORD;
   AuditType: AUDIT_EVENT_TYPE; Flags: DWORD; ObjectTypeList: PObjectTypeList;
   ObjectTypeListLength: DWORD; const GenericMapping: TGenericMapping;  ObjectCreation: BOOL;
-  var GrantedAccess: DWORD; var AccessStatus, pfGenerateOnClose: BOOL): BOOL; stdcall;
-{$EXTERNALSYM AccessCheckByTypeAndAuditAlarm}
+  var GrantedAccess: DWORD; var AccessStatusList: DWORD; var pfGenerateOnClose: BOOL): BOOL; stdcall;
+{$EXTERNALSYM AccessCheckByTypeResultListAndAuditAlarm}
 function AccessCheckByTypeResultListAndAuditAlarmA(SubsystemName: PAnsiChar;
   HandleId: Pointer; ObjectTypeName, ObjectName: PAnsiChar;
   SecurityDescriptor: PSecurityDescriptor; PrincipalSelfSid: PSID; DesiredAccess: DWORD;
@@ -5879,13 +5924,12 @@ function AccessCheckByTypeResultListAndAuditAlarmW(SubsystemName: PWideChar;
   ObjectTypeListLength: DWORD; const GenericMapping: TGenericMapping;  ObjectCreation: BOOL;
   var GrantedAccess: DWORD; var AccessStatusList: DWORD; var pfGenerateOnClose: BOOL): BOOL; stdcall;
 {$EXTERNALSYM AccessCheckByTypeResultListAndAuditAlarmW}
-function AccessCheckByTypeResultListAndAuditAlarm(SubsystemName: PChar;
-  HandleId: Pointer; ObjectTypeName, ObjectName: PChar;
-  SecurityDescriptor: PSecurityDescriptor; PrincipalSelfSid: PSID; DesiredAccess: DWORD;
-  AuditType: AUDIT_EVENT_TYPE; Flags: DWORD; ObjectTypeList: PObjectTypeList;
-  ObjectTypeListLength: DWORD; const GenericMapping: TGenericMapping;  ObjectCreation: BOOL;
-  var GrantedAccess: DWORD; var AccessStatusList: DWORD; var pfGenerateOnClose: BOOL): BOOL; stdcall;
-{$EXTERNALSYM AccessCheckByTypeResultListAndAuditAlarm}
+function ObjectOpenAuditAlarm(SubsystemName: PChar; HandleId: Pointer;
+  ObjectTypeName: PChar; ObjectName: PChar; pSecurityDescriptor: PSecurityDescriptor;
+  ClientToken: THandle; DesiredAccess, GrantedAccess: DWORD;
+  var Privileges: TPrivilegeSet; ObjectCreation, AccessGranted: BOOL;
+  var GenerateOnClose: BOOL): BOOL; stdcall;
+{$EXTERNALSYM ObjectOpenAuditAlarm}
 function ObjectOpenAuditAlarmA(SubsystemName: PAnsiChar; HandleId: Pointer;
   ObjectTypeName: PAnsiChar; ObjectName: PAnsiChar; pSecurityDescriptor: PSecurityDescriptor;
   ClientToken: THandle; DesiredAccess, GrantedAccess: DWORD;
@@ -5898,12 +5942,10 @@ function ObjectOpenAuditAlarmW(SubsystemName: PWideChar; HandleId: Pointer;
   var Privileges: TPrivilegeSet; ObjectCreation, AccessGranted: BOOL;
   var GenerateOnClose: BOOL): BOOL; stdcall;
 {$EXTERNALSYM ObjectOpenAuditAlarmW}
-function ObjectOpenAuditAlarm(SubsystemName: PChar; HandleId: Pointer;
-  ObjectTypeName: PChar; ObjectName: PChar; pSecurityDescriptor: PSecurityDescriptor;
-  ClientToken: THandle; DesiredAccess, GrantedAccess: DWORD;
-  var Privileges: TPrivilegeSet; ObjectCreation, AccessGranted: BOOL;
-  var GenerateOnClose: BOOL): BOOL; stdcall;
-{$EXTERNALSYM ObjectOpenAuditAlarm}
+function ObjectPrivilegeAuditAlarm(SubsystemName: PChar;
+  HandleId: Pointer; ClientToken: THandle; DesiredAccess: DWORD;
+  var Privileges: TPrivilegeSet; AccessGranted: BOOL): BOOL; stdcall;
+{$EXTERNALSYM ObjectPrivilegeAuditAlarm}
 function ObjectPrivilegeAuditAlarmA(SubsystemName: PAnsiChar;
   HandleId: Pointer; ClientToken: THandle; DesiredAccess: DWORD;
   var Privileges: TPrivilegeSet; AccessGranted: BOOL): BOOL; stdcall;
@@ -5912,37 +5954,33 @@ function ObjectPrivilegeAuditAlarmW(SubsystemName: PWideChar;
   HandleId: Pointer; ClientToken: THandle; DesiredAccess: DWORD;
   var Privileges: TPrivilegeSet; AccessGranted: BOOL): BOOL; stdcall;
 {$EXTERNALSYM ObjectPrivilegeAuditAlarmW}
-function ObjectPrivilegeAuditAlarm(SubsystemName: PChar;
-  HandleId: Pointer; ClientToken: THandle; DesiredAccess: DWORD;
-  var Privileges: TPrivilegeSet; AccessGranted: BOOL): BOOL; stdcall;
-{$EXTERNALSYM ObjectPrivilegeAuditAlarm}
+function ObjectCloseAuditAlarm(SubsystemName: PChar;
+  HandleId: Pointer; GenerateOnClose: BOOL): BOOL; stdcall;
+{$EXTERNALSYM ObjectCloseAuditAlarm}
 function ObjectCloseAuditAlarmA(SubsystemName: PAnsiChar;
   HandleId: Pointer; GenerateOnClose: BOOL): BOOL; stdcall;
 {$EXTERNALSYM ObjectCloseAuditAlarmA}
 function ObjectCloseAuditAlarmW(SubsystemName: PWideChar;
   HandleId: Pointer; GenerateOnClose: BOOL): BOOL; stdcall;
 {$EXTERNALSYM ObjectCloseAuditAlarmW}
-function ObjectCloseAuditAlarm(SubsystemName: PChar;
+function ObjectDeleteAuditAlarm(SubsystemName: PChar;
   HandleId: Pointer; GenerateOnClose: BOOL): BOOL; stdcall;
-{$EXTERNALSYM ObjectCloseAuditAlarm}
+{$EXTERNALSYM ObjectDeleteAuditAlarm}
 function ObjectDeleteAuditAlarmA(SubsystemName: PAnsiChar;
   HandleId: Pointer; GenerateOnClose: BOOL): BOOL; stdcall;
 {$EXTERNALSYM ObjectDeleteAuditAlarmA}
 function ObjectDeleteAuditAlarmW(SubsystemName: PWideChar;
   HandleId: Pointer; GenerateOnClose: BOOL): BOOL; stdcall;
 {$EXTERNALSYM ObjectDeleteAuditAlarmW}
-function ObjectDeleteAuditAlarm(SubsystemName: PChar;
-  HandleId: Pointer; GenerateOnClose: BOOL): BOOL; stdcall;
-{$EXTERNALSYM ObjectDeleteAuditAlarm}
+function PrivilegedServiceAuditAlarm(SubsystemName, ServiceName: PChar;
+  ClientToken: THandle; var Privileges: TPrivilegeSet; AccessGranted: BOOL): BOOL; stdcall;
+{$EXTERNALSYM PrivilegedServiceAuditAlarm}
 function PrivilegedServiceAuditAlarmA(SubsystemName, ServiceName: PAnsiChar;
   ClientToken: THandle; var Privileges: TPrivilegeSet; AccessGranted: BOOL): BOOL; stdcall;
 {$EXTERNALSYM PrivilegedServiceAuditAlarmA}
 function PrivilegedServiceAuditAlarmW(SubsystemName, ServiceName: PWideChar;
   ClientToken: THandle; var Privileges: TPrivilegeSet; AccessGranted: BOOL): BOOL; stdcall;
 {$EXTERNALSYM PrivilegedServiceAuditAlarmW}
-function PrivilegedServiceAuditAlarm(SubsystemName, ServiceName: PChar;
-  ClientToken: THandle; var Privileges: TPrivilegeSet; AccessGranted: BOOL): BOOL; stdcall;
-{$EXTERNALSYM PrivilegedServiceAuditAlarm}
 function IsValidSid(pSid: Pointer): BOOL; stdcall;
 {$EXTERNALSYM IsValidSid}
 function EqualSid(pSid1, pSid2: Pointer): BOOL; stdcall;
@@ -6098,36 +6136,36 @@ function MakeAbsoluteSD(pSelfRelativeSecurityDescriptor: PSecurityDescriptor;
   pPrimaryGroup: Pointer; var lpdwPrimaryGroupSize: DWORD): BOOL; stdcall;
 {$EXTERNALSYM MakeAbsoluteSD}
 
+function SetFileSecurity(lpFileName: PChar; SecurityInformation: SECURITY_INFORMATION;
+  pSecurityDescriptor: PSecurityDescriptor): BOOL; stdcall;
+{$EXTERNALSYM SetFileSecurity}
 function SetFileSecurityA(lpFileName: PAnsiChar; SecurityInformation: SECURITY_INFORMATION;
   pSecurityDescriptor: PSecurityDescriptor): BOOL; stdcall;
 {$EXTERNALSYM SetFileSecurityA}
 function SetFileSecurityW(lpFileName: PWideChar; SecurityInformation: SECURITY_INFORMATION;
   pSecurityDescriptor: PSecurityDescriptor): BOOL; stdcall;
 {$EXTERNALSYM SetFileSecurityW}
-function SetFileSecurity(lpFileName: PChar; SecurityInformation: SECURITY_INFORMATION;
-  pSecurityDescriptor: PSecurityDescriptor): BOOL; stdcall;
-{$EXTERNALSYM SetFileSecurity}
+function GetFileSecurity(lpFileName: PChar; RequestedInformation: SECURITY_INFORMATION;
+  pSecurityDescriptor: PSecurityDescriptor; nLength: DWORD; var lpnLengthNeeded: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetFileSecurity}
 function GetFileSecurityA(lpFileName: PAnsiChar; RequestedInformation: SECURITY_INFORMATION;
   pSecurityDescriptor: PSecurityDescriptor; nLength: DWORD; var lpnLengthNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetFileSecurityA}
 function GetFileSecurityW(lpFileName: PWideChar; RequestedInformation: SECURITY_INFORMATION;
   pSecurityDescriptor: PSecurityDescriptor; nLength: DWORD; var lpnLengthNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetFileSecurityW}
-function GetFileSecurity(lpFileName: PChar; RequestedInformation: SECURITY_INFORMATION;
-  pSecurityDescriptor: PSecurityDescriptor; nLength: DWORD; var lpnLengthNeeded: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetFileSecurity}
 function SetKernelObjectSecurity(Handle: THandle; SecurityInformation: SECURITY_INFORMATION;
   SecurityDescriptor: PSecurityDescriptor): BOOL; stdcall;
 {$EXTERNALSYM SetKernelObjectSecurity}
+function FindFirstChangeNotification(lpPathName: PChar;
+  bWatchSubtree: BOOL; dwNotifyFilter: DWORD): THandle; stdcall;
+{$EXTERNALSYM FindFirstChangeNotification}
 function FindFirstChangeNotificationA(lpPathName: PAnsiChar;
   bWatchSubtree: BOOL; dwNotifyFilter: DWORD): THandle; stdcall;
 {$EXTERNALSYM FindFirstChangeNotificationA}
 function FindFirstChangeNotificationW(lpPathName: PWideChar;
   bWatchSubtree: BOOL; dwNotifyFilter: DWORD): THandle; stdcall;
 {$EXTERNALSYM FindFirstChangeNotificationW}
-function FindFirstChangeNotification(lpPathName: PChar;
-  bWatchSubtree: BOOL; dwNotifyFilter: DWORD): THandle; stdcall;
-{$EXTERNALSYM FindFirstChangeNotification}
 function FindNextChangeNotification(hChangeHandle: THandle): BOOL; stdcall;
 {$EXTERNALSYM FindNextChangeNotification}
 function FindCloseChangeNotification(hChangeHandle: THandle): BOOL; stdcall;
@@ -6164,12 +6202,16 @@ function IsBadHugeWritePtr(lp: Pointer; ucb: UINT): BOOL; stdcall;
 {$EXTERNALSYM IsBadHugeWritePtr}
 function IsBadCodePtr(lpfn: FARPROC): BOOL; stdcall;
 {$EXTERNALSYM IsBadCodePtr}
+function IsBadStringPtr(lpsz: PChar; ucchMax: UINT): BOOL; stdcall;
+{$EXTERNALSYM IsBadStringPtr}
 function IsBadStringPtrA(lpsz: PAnsiChar; ucchMax: UINT): BOOL; stdcall;
 {$EXTERNALSYM IsBadStringPtrA}
 function IsBadStringPtrW(lpsz: PWideChar; ucchMax: UINT): BOOL; stdcall;
 {$EXTERNALSYM IsBadStringPtrW}
-function IsBadStringPtr(lpsz: PChar; ucchMax: UINT): BOOL; stdcall;
-{$EXTERNALSYM IsBadStringPtr}
+function LookupAccountSid(lpSystemName: PChar; Sid: PSID;
+  Name: PChar; var cbName: DWORD; ReferencedDomainName: PChar;
+  var cbReferencedDomainName: DWORD; var peUse: SID_NAME_USE): BOOL; stdcall;
+{$EXTERNALSYM LookupAccountSid}
 function LookupAccountSidA(lpSystemName: PAnsiChar; Sid: PSID;
   Name: PAnsiChar; var cbName: DWORD; ReferencedDomainName: PAnsiChar;
   var cbReferencedDomainName: DWORD; var peUse: SID_NAME_USE): BOOL; stdcall;
@@ -6178,10 +6220,10 @@ function LookupAccountSidW(lpSystemName: PWideChar; Sid: PSID;
   Name: PWideChar; var cbName: DWORD; ReferencedDomainName: PWideChar;
   var cbReferencedDomainName: DWORD; var peUse: SID_NAME_USE): BOOL; stdcall;
 {$EXTERNALSYM LookupAccountSidW}
-function LookupAccountSid(lpSystemName: PChar; Sid: PSID;
-  Name: PChar; var cbName: DWORD; ReferencedDomainName: PChar;
+function LookupAccountName(lpSystemName, lpAccountName: PChar;
+  Sid: PSID; var cbSid: DWORD; ReferencedDomainName: PChar;
   var cbReferencedDomainName: DWORD; var peUse: SID_NAME_USE): BOOL; stdcall;
-{$EXTERNALSYM LookupAccountSid}
+{$EXTERNALSYM LookupAccountName}
 function LookupAccountNameA(lpSystemName, lpAccountName: PAnsiChar;
   Sid: PSID; var cbSid: DWORD; ReferencedDomainName: PAnsiChar;
   var cbReferencedDomainName: DWORD; var peUse: SID_NAME_USE): BOOL; stdcall;
@@ -6190,100 +6232,96 @@ function LookupAccountNameW(lpSystemName, lpAccountName: PWideChar;
   Sid: PSID; var cbSid: DWORD; ReferencedDomainName: PWideChar;
   var cbReferencedDomainName: DWORD; var peUse: SID_NAME_USE): BOOL; stdcall;
 {$EXTERNALSYM LookupAccountNameW}
-function LookupAccountName(lpSystemName, lpAccountName: PChar;
-  Sid: PSID; var cbSid: DWORD; ReferencedDomainName: PChar;
-  var cbReferencedDomainName: DWORD; var peUse: SID_NAME_USE): BOOL; stdcall;
-{$EXTERNALSYM LookupAccountName}
+function LookupPrivilegeValue(lpSystemName, lpName: PChar;
+  var lpLuid: TLargeInteger): BOOL; stdcall;
+{$EXTERNALSYM LookupPrivilegeValue}
 function LookupPrivilegeValueA(lpSystemName, lpName: PAnsiChar;
   var lpLuid: TLargeInteger): BOOL; stdcall;
 {$EXTERNALSYM LookupPrivilegeValueA}
 function LookupPrivilegeValueW(lpSystemName, lpName: PWideChar;
   var lpLuid: TLargeInteger): BOOL; stdcall;
 {$EXTERNALSYM LookupPrivilegeValueW}
-function LookupPrivilegeValue(lpSystemName, lpName: PChar;
-  var lpLuid: TLargeInteger): BOOL; stdcall;
-{$EXTERNALSYM LookupPrivilegeValue}
+function LookupPrivilegeName(lpSystemName: PChar;
+  var lpLuid: TLargeInteger; lpName: PChar; var cbName: DWORD): BOOL; stdcall;
+{$EXTERNALSYM LookupPrivilegeName}
 function LookupPrivilegeNameA(lpSystemName: PAnsiChar;
   var lpLuid: TLargeInteger; lpName: PAnsiChar; var cbName: DWORD): BOOL; stdcall;
 {$EXTERNALSYM LookupPrivilegeNameA}
 function LookupPrivilegeNameW(lpSystemName: PWideChar;
   var lpLuid: TLargeInteger; lpName: PWideChar; var cbName: DWORD): BOOL; stdcall;
 {$EXTERNALSYM LookupPrivilegeNameW}
-function LookupPrivilegeName(lpSystemName: PChar;
-  var lpLuid: TLargeInteger; lpName: PChar; var cbName: DWORD): BOOL; stdcall;
-{$EXTERNALSYM LookupPrivilegeName}
+function LookupPrivilegeDisplayName(lpSystemName, lpName: PAnsiChar;
+  lpDisplayName: PChar; var cbDisplayName, lpLanguageId: DWORD): BOOL; stdcall;
+{$EXTERNALSYM LookupPrivilegeDisplayName}
 function LookupPrivilegeDisplayNameA(lpSystemName, lpName: PAnsiChar;
   lpDisplayName: PAnsiChar; var cbDisplayName, lpLanguageId: DWORD): BOOL; stdcall;
 {$EXTERNALSYM LookupPrivilegeDisplayNameA}
 function LookupPrivilegeDisplayNameW(lpSystemName, lpName: PAnsiChar;
   lpDisplayName: PWideChar; var cbDisplayName, lpLanguageId: DWORD): BOOL; stdcall;
 {$EXTERNALSYM LookupPrivilegeDisplayNameW}
-function LookupPrivilegeDisplayName(lpSystemName, lpName: PAnsiChar;
-  lpDisplayName: PChar; var cbDisplayName, lpLanguageId: DWORD): BOOL; stdcall;
-{$EXTERNALSYM LookupPrivilegeDisplayName}
 function AllocateLocallyUniqueId(var Luid: TLargeInteger): BOOL; stdcall;
+{$EXTERNALSYM AllocateLocallyUniqueId}
+function BuildCommDCB(lpDef: PChar; var lpDCB: TDCB): BOOL; stdcall;
+{$EXTERNALSYM BuildCommDCB}
 {$EXTERNALSYM AllocateLocallyUniqueId}
 function BuildCommDCBA(lpDef: PAnsiChar; var lpDCB: TDCB): BOOL; stdcall;
 {$EXTERNALSYM BuildCommDCBA}
 {$EXTERNALSYM AllocateLocallyUniqueId}
 function BuildCommDCBW(lpDef: PWideChar; var lpDCB: TDCB): BOOL; stdcall;
 {$EXTERNALSYM BuildCommDCBW}
-{$EXTERNALSYM AllocateLocallyUniqueId}
-function BuildCommDCB(lpDef: PChar; var lpDCB: TDCB): BOOL; stdcall;
-{$EXTERNALSYM BuildCommDCB}
+function BuildCommDCBAndTimeouts(lpDef: PChar; var lpDCB: TDCB;
+  var lpCommTimeouts: TCommTimeouts): BOOL; stdcall;
+{$EXTERNALSYM BuildCommDCBAndTimeouts}
 function BuildCommDCBAndTimeoutsA(lpDef: PAnsiChar; var lpDCB: TDCB;
   var lpCommTimeouts: TCommTimeouts): BOOL; stdcall;
 {$EXTERNALSYM BuildCommDCBAndTimeoutsA}
 function BuildCommDCBAndTimeoutsW(lpDef: PWideChar; var lpDCB: TDCB;
   var lpCommTimeouts: TCommTimeouts): BOOL; stdcall;
 {$EXTERNALSYM BuildCommDCBAndTimeoutsW}
-function BuildCommDCBAndTimeouts(lpDef: PChar; var lpDCB: TDCB;
-  var lpCommTimeouts: TCommTimeouts): BOOL; stdcall;
-{$EXTERNALSYM BuildCommDCBAndTimeouts}
+function CommConfigDialog(lpszName: PChar; hWnd: HWND; var lpCC: TCommConfig): BOOL; stdcall;
+{$EXTERNALSYM CommConfigDialog}
 function CommConfigDialogA(lpszName: PAnsiChar; hWnd: HWND; var lpCC: TCommConfig): BOOL; stdcall;
 {$EXTERNALSYM CommConfigDialogA}
 function CommConfigDialogW(lpszName: PWideChar; hWnd: HWND; var lpCC: TCommConfig): BOOL; stdcall;
 {$EXTERNALSYM CommConfigDialogW}
-function CommConfigDialog(lpszName: PChar; hWnd: HWND; var lpCC: TCommConfig): BOOL; stdcall;
-{$EXTERNALSYM CommConfigDialog}
+function GetDefaultCommConfig(lpszName: PChar;
+  var lpCC: TCommConfig; var lpdwSize: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetDefaultCommConfig}
 function GetDefaultCommConfigA(lpszName: PAnsiChar;
   var lpCC: TCommConfig; var lpdwSize: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetDefaultCommConfigA}
 function GetDefaultCommConfigW(lpszName: PWideChar;
   var lpCC: TCommConfig; var lpdwSize: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetDefaultCommConfigW}
-function GetDefaultCommConfig(lpszName: PChar;
-  var lpCC: TCommConfig; var lpdwSize: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetDefaultCommConfig}
+function SetDefaultCommConfig(lpszName: PChar; lpCC: PCommConfig; dwSize: DWORD): BOOL; stdcall;
+{$EXTERNALSYM SetDefaultCommConfig}
 function SetDefaultCommConfigA(lpszName: PAnsiChar; lpCC: PCommConfig; dwSize: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SetDefaultCommConfigA}
 function SetDefaultCommConfigW(lpszName: PWideChar; lpCC: PCommConfig; dwSize: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SetDefaultCommConfigW}
-function SetDefaultCommConfig(lpszName: PChar; lpCC: PCommConfig; dwSize: DWORD): BOOL; stdcall;
-{$EXTERNALSYM SetDefaultCommConfig}
 
 const
   MAX_COMPUTERNAME_LENGTH = 15;
   {$EXTERNALSYM MAX_COMPUTERNAME_LENGTH}
 
+function GetComputerName(lpBuffer: PChar; var nSize: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetComputerName}
 function GetComputerNameA(lpBuffer: PAnsiChar; var nSize: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetComputerNameA}
 function GetComputerNameW(lpBuffer: PWideChar; var nSize: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetComputerNameW}
-function GetComputerName(lpBuffer: PChar; var nSize: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetComputerName}
+function SetComputerName(lpComputerName: PChar): BOOL; stdcall;
+{$EXTERNALSYM SetComputerName}
 function SetComputerNameA(lpComputerName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM SetComputerNameA}
 function SetComputerNameW(lpComputerName: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM SetComputerNameW}
-function SetComputerName(lpComputerName: PChar): BOOL; stdcall;
-{$EXTERNALSYM SetComputerName}
+function GetUserName(lpBuffer: PChar; var nSize: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetUserName}
 function GetUserNameA(lpBuffer: PAnsiChar; var nSize: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetUserNameA}
 function GetUserNameW(lpBuffer: PWideChar; var nSize: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetUserNameW}
-function GetUserName(lpBuffer: PChar; var nSize: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetUserName}
 
 { Logon Support APIs }
 
@@ -6306,17 +6344,23 @@ const
   LOGON32_PROVIDER_WINNT50 = 3;
   {$EXTERNALSYM LOGON32_PROVIDER_WINNT50}
 
+function LogonUser(lpszUsername, lpszDomain, lpszPassword: PChar;
+  dwLogonType, dwLogonProvider: DWORD; var phToken: THandle): BOOL; stdcall;
+{$EXTERNALSYM LogonUser}
 function LogonUserA(lpszUsername, lpszDomain, lpszPassword: PAnsiChar;
   dwLogonType, dwLogonProvider: DWORD; var phToken: THandle): BOOL; stdcall;
 {$EXTERNALSYM LogonUserA}
 function LogonUserW(lpszUsername, lpszDomain, lpszPassword: PWideChar;
   dwLogonType, dwLogonProvider: DWORD; var phToken: THandle): BOOL; stdcall;
 {$EXTERNALSYM LogonUserW}
-function LogonUser(lpszUsername, lpszDomain, lpszPassword: PChar;
-  dwLogonType, dwLogonProvider: DWORD; var phToken: THandle): BOOL; stdcall;
-{$EXTERNALSYM LogonUser}
 function ImpersonateLoggedOnUser(hToken: THandle): BOOL; stdcall;
 {$EXTERNALSYM ImpersonateLoggedOnUser}
+function CreateProcessAsUser(hToken: THandle; lpApplicationName: PChar;
+  lpCommandLine: PChar; lpProcessAttributes: PSecurityAttributes;
+  lpThreadAttributes: PSecurityAttributes; bInheritHandles: BOOL;
+  dwCreationFlags: DWORD; lpEnvironment: Pointer; lpCurrentDirectory: PChar;
+  const lpStartupInfo: TStartupInfo; var lpProcessInformation: TProcessInformation): BOOL; stdcall;
+{$EXTERNALSYM CreateProcessAsUser}
 function CreateProcessAsUserA(hToken: THandle; lpApplicationName: PAnsiChar;
   lpCommandLine: PAnsiChar; lpProcessAttributes: PSecurityAttributes;
   lpThreadAttributes: PSecurityAttributes; bInheritHandles: BOOL;
@@ -6329,12 +6373,6 @@ function CreateProcessAsUserW(hToken: THandle; lpApplicationName: PWideChar;
   dwCreationFlags: DWORD; lpEnvironment: Pointer; lpCurrentDirectory: PWideChar;
   const lpStartupInfo: TStartupInfo; var lpProcessInformation: TProcessInformation): BOOL; stdcall;
 {$EXTERNALSYM CreateProcessAsUserW}
-function CreateProcessAsUser(hToken: THandle; lpApplicationName: PChar;
-  lpCommandLine: PChar; lpProcessAttributes: PSecurityAttributes;
-  lpThreadAttributes: PSecurityAttributes; bInheritHandles: BOOL;
-  dwCreationFlags: DWORD; lpEnvironment: Pointer; lpCurrentDirectory: PChar;
-  const lpStartupInfo: TStartupInfo; var lpProcessInformation: TProcessInformation): BOOL; stdcall;
-{$EXTERNALSYM CreateProcessAsUser}
 
 function DuplicateTokenEx(hExistingToken: THandle; dwDesiredAccess: DWORD;
   lpTokenAttributes: PSecurityAttributes;
@@ -6386,12 +6424,12 @@ type
   {$EXTERNALSYM HW_PROFILE_INFOW}
   HW_PROFILE_INFO = HW_PROFILE_INFOA;
 
+function GetCurrentHwProfile(var lpHwProfileInfo: THWProfileInfo): BOOL; stdcall;
+{$EXTERNALSYM GetCurrentHwProfile}
 function GetCurrentHwProfileA(var lpHwProfileInfo: THWProfileInfoA): BOOL; stdcall;
 {$EXTERNALSYM GetCurrentHwProfileA}
 function GetCurrentHwProfileW(var lpHwProfileInfo: THWProfileInfoW): BOOL; stdcall;
 {$EXTERNALSYM GetCurrentHwProfileW}
-function GetCurrentHwProfile(var lpHwProfileInfo: THWProfileInfo): BOOL; stdcall;
-{$EXTERNALSYM GetCurrentHwProfile}
 
 { Performance counter API's }
 
@@ -6443,12 +6481,12 @@ const
   VER_PLATFORM_WIN32_NT = 2;
   {$EXTERNALSYM VER_PLATFORM_WIN32_NT}
 
+function GetVersionEx(var lpVersionInformation: TOSVersionInfo): BOOL; stdcall;
+{$EXTERNALSYM GetVersionEx}
 function GetVersionExA(var lpVersionInformation: TOSVersionInfo): BOOL; stdcall;
 {$EXTERNALSYM GetVersionExA}
 function GetVersionExW(var lpVersionInformation: TOSVersionInfo): BOOL; stdcall;
 {$EXTERNALSYM GetVersionExW}
-function GetVersionEx(var lpVersionInformation: TOSVersionInfo): BOOL; stdcall;
-{$EXTERNALSYM GetVersionEx}
 
 { DOS and OS/2 Compatible Error Code definitions returned by the Win32 Base
   API functions. }
@@ -10398,6 +10436,7 @@ const
 
   { FACILITY_STORAGE }
 
+{$IFDEF MSWINDOWS}
   { Unable to perform requested operation. }
   STG_E_INVALIDFUNCTION = HRESULT($80030001);
   {$EXTERNALSYM STG_E_INVALIDFUNCTION}
@@ -10565,7 +10604,175 @@ const
   { The notified event sink will not influence the storage operation. }
   STG_S_MONITORING = $00030203;
   {$EXTERNALSYM STG_S_MONITORING}
+{$ENDIF}
+{$IFDEF LINUX}
+  STG_E_INVALIDFUNCTION = Types.STG_E_INVALIDFUNCTION;
+  {$EXTERNALSYM STG_E_INVALIDFUNCTION}
 
+  { %l could not be found. }
+  STG_E_FILENOTFOUND = Types.STG_E_FILENOTFOUND;
+  {$EXTERNALSYM STG_E_FILENOTFOUND}
+
+  { The path %l could not be found. }
+  STG_E_PATHNOTFOUND = Types.STG_E_PATHNOTFOUND;
+  {$EXTERNALSYM STG_E_PATHNOTFOUND}
+
+  { There are insufficient resources to open another file. }
+  STG_E_TOOMANYOPENFILES = Types.STG_E_TOOMANYOPENFILES;
+  {$EXTERNALSYM STG_E_TOOMANYOPENFILES}
+
+  { Access Denied. }
+  STG_E_ACCESSDENIED = Types.STG_E_ACCESSDENIED;
+  {$EXTERNALSYM STG_E_ACCESSDENIED}
+
+  { Attempted an operation on an invalid object. }
+  STG_E_INVALIDHANDLE = Types.STG_E_INVALIDHANDLE;
+  {$EXTERNALSYM STG_E_INVALIDHANDLE}
+
+  { There is insufficient memory available to complete operation. }
+  STG_E_INSUFFICIENTMEMORY = Types.STG_E_INSUFFICIENTMEMORY;
+  {$EXTERNALSYM STG_E_INSUFFICIENTMEMORY}
+
+  { Invalid pointer error. }
+  STG_E_INVALIDPOINTER = Types.STG_E_INVALIDPOINTER;
+  {$EXTERNALSYM STG_E_INVALIDPOINTER}
+
+  { There are no more entries to return. }
+  STG_E_NOMOREFILES = Types.STG_E_NOMOREFILES;
+  {$EXTERNALSYM STG_E_NOMOREFILES}
+
+  { Disk is write-protected. }
+  STG_E_DISKISWRITEPROTECTED = Types.STG_E_DISKISWRITEPROTECTED;
+  {$EXTERNALSYM STG_E_DISKISWRITEPROTECTED}
+
+  { An error occurred during a seek operation. }
+  STG_E_SEEKERROR = Types.STG_E_SEEKERROR;
+  {$EXTERNALSYM STG_E_SEEKERROR}
+
+  { A disk error occurred during a write operation. }
+  STG_E_WRITEFAULT = Types.STG_E_WRITEFAULT;
+  {$EXTERNALSYM STG_E_WRITEFAULT}
+
+  { A disk error occurred during a read operation. }
+  STG_E_READFAULT = Types.STG_E_READFAULT;
+  {$EXTERNALSYM STG_E_READFAULT}
+
+  { A share violation has occurred. }
+  STG_E_SHAREVIOLATION = Types.STG_E_SHAREVIOLATION;
+  {$EXTERNALSYM STG_E_SHAREVIOLATION}
+
+  { A lock violation has occurred. }
+  STG_E_LOCKVIOLATION = Types.STG_E_LOCKVIOLATION;
+  {$EXTERNALSYM STG_E_LOCKVIOLATION}
+
+  { %l already exists. }
+  STG_E_FILEALREADYEXISTS = Types.STG_E_FILEALREADYEXISTS;
+  {$EXTERNALSYM STG_E_FILEALREADYEXISTS}
+
+  { Invalid parameter error. }
+  STG_E_INVALIDPARAMETER = Types.STG_E_INVALIDPARAMETER;
+  {$EXTERNALSYM STG_E_INVALIDPARAMETER}
+
+  { There is insufficient disk space to complete operation. }
+  STG_E_MEDIUMFULL = Types.STG_E_MEDIUMFULL;
+  {$EXTERNALSYM STG_E_MEDIUMFULL}
+
+  { Illegal write of non-simple property to simple property set. }
+  STG_E_PROPSETMISMATCHED = Types.STG_E_PROPSETMISMATCHED;
+  {$EXTERNALSYM STG_E_PROPSETMISMATCHED}
+
+  { An API call exited abnormally. }
+  STG_E_ABNORMALAPIEXIT = Types.STG_E_ABNORMALAPIEXIT;
+  {$EXTERNALSYM STG_E_ABNORMALAPIEXIT}
+
+  { The file %l is not a valid compound file. }
+  STG_E_INVALIDHEADER = Types.STG_E_INVALIDHEADER;
+  {$EXTERNALSYM STG_E_INVALIDHEADER}
+
+  { The name %l is not valid. }
+  STG_E_INVALIDNAME = Types.STG_E_INVALIDNAME;
+  {$EXTERNALSYM STG_E_INVALIDNAME}
+
+  { An unexpected error occurred. }
+  STG_E_UNKNOWN = Types.STG_E_UNKNOWN;
+  {$EXTERNALSYM STG_E_UNKNOWN}
+
+  { That function is not implemented. }
+  STG_E_UNIMPLEMENTEDFUNCTION = Types.STG_E_UNIMPLEMENTEDFUNCTION;
+  {$EXTERNALSYM STG_E_UNIMPLEMENTEDFUNCTION}
+
+  { Invalid flag error. }
+  STG_E_INVALIDFLAG = Types.STG_E_INVALIDFLAG;
+  {$EXTERNALSYM STG_E_INVALIDFLAG}
+
+  { Attempted to use an object that is busy. }
+  STG_E_INUSE = Types.STG_E_INUSE;
+  {$EXTERNALSYM STG_E_INUSE}
+
+  { The storage has been changed since the last commit. }
+  STG_E_NOTCURRENT = Types.STG_E_NOTCURRENT;
+  {$EXTERNALSYM STG_E_NOTCURRENT}
+
+  { Attempted to use an object that has ceased to exist. }
+  STG_E_REVERTED = Types.STG_E_REVERTED;
+  {$EXTERNALSYM STG_E_REVERTED}
+
+  { Can't save. }
+  STG_E_CANTSAVE = Types.STG_E_CANTSAVE;
+  {$EXTERNALSYM STG_E_CANTSAVE}
+
+  { The compound file %l was produced with an incompatible version of storage. }
+  STG_E_OLDFORMAT = Types.STG_E_OLDFORMAT;
+  {$EXTERNALSYM STG_E_OLDFORMAT}
+
+  { The compound file %l was produced with a newer version of storage. }
+  STG_E_OLDDLL = Types.STG_E_OLDDLL;
+  {$EXTERNALSYM STG_E_OLDDLL}
+
+  { Share.exe or equivalent is required for operation. }
+  STG_E_SHAREREQUIRED = Types.STG_E_SHAREREQUIRED;
+  {$EXTERNALSYM STG_E_SHAREREQUIRED}
+
+  { Illegal operation called on non-file based storage. }
+  STG_E_NOTFILEBASEDSTORAGE = Types.STG_E_NOTFILEBASEDSTORAGE;
+  {$EXTERNALSYM STG_E_NOTFILEBASEDSTORAGE}
+
+  { Illegal operation called on object with extant marshallings. }
+  STG_E_EXTANTMARSHALLINGS = Types.STG_E_EXTANTMARSHALLINGS;
+  {$EXTERNALSYM STG_E_EXTANTMARSHALLINGS}
+
+  { The docfile has been corrupted. }
+  STG_E_DOCFILECORRUPT = Types.STG_E_DOCFILECORRUPT;
+  {$EXTERNALSYM STG_E_DOCFILECORRUPT}
+
+  { OLE32.DLL has been loaded at the wrong address. }
+  STG_E_BADBASEADDRESS = Types.STG_E_BADBASEADDRESS;
+  {$EXTERNALSYM STG_E_BADBASEADDRESS}
+
+  { The file download was aborted abnormally.  The file is incomplete. }
+  STG_E_INCOMPLETE = Types.STG_E_INCOMPLETE;
+  {$EXTERNALSYM STG_E_INCOMPLETE}
+
+  { The file download has been terminated. }
+  STG_E_TERMINATED = Types.STG_E_TERMINATED;
+  {$EXTERNALSYM STG_E_TERMINATED}
+
+  { The underlying file was converted to compound file format. }
+  STG_S_CONVERTED = Types.STG_S_CONVERTED ;
+  {$EXTERNALSYM STG_S_CONVERTED}
+
+  { The storage operation should block until more data is available. }
+  STG_S_BLOCK = Types.STG_S_BLOCK ;
+  {$EXTERNALSYM STG_S_BLOCK}
+
+  { The storage operation should retry immediately. }
+  STG_S_RETRYNOW = Types.STG_S_RETRYNOW ;
+  {$EXTERNALSYM STG_S_RETRYNOW}
+
+  { The notified event sink will not influence the storage operation. }
+  STG_S_MONITORING = Types.STG_S_MONITORING ;
+  {$EXTERNALSYM STG_S_MONITORING}
+{$ENDIF}
 
   { FACILITY_RPC }
 
@@ -12098,6 +12305,7 @@ type
   end;
   TBitmapV4Header = BITMAPV4HEADER;
 
+  {$EXTERNALSYM PBitmapV5Header}
   PBitmapV5Header = ^TBitmapV5Header;
   {$EXTERNALSYM BITMAPV5HEADER}
   BITMAPV5HEADER = packed record
@@ -12126,6 +12334,7 @@ type
     bV5ProfileSize: DWORD;
     bV5Reserved: DWORD;
   end;
+  {$EXTERNALSYM TBitmapV5Header}
   TBitmapV5Header = BITMAPV5HEADER;
 
 const
@@ -14796,7 +15005,8 @@ const
   {$EXTERNALSYM PFD_STEREO_DONTCARE}
   PFD_STEREO_DONTCARE             = DWORD($80000000);
 
-type
+type
+
 
 
 
@@ -14815,18 +15025,19 @@ type
   TFNLineDDAProc = TFarProc;
   TFNFontEnumProcA = TFarProc;
   TFNFontEnumProcW = TFarProc;
-  TFNFontEnumProc = TFNFontEnumProcA;
+  TFNFontEnumProc = TFNFontEnumProcA;
 
 
 
-{$EXTERNALSYM AddFontResourceA}
-function AddFontResourceA(p1: PAnsiChar): Integer; stdcall;
-{$EXTERNALSYM AddFontResourceW}
-function AddFontResourceW(p1: PWideChar): Integer; stdcall;
+
 {$EXTERNALSYM AddFontResource}
-function AddFontResource(p1: PChar): Integer; stdcall;
+function AddFontResource(FileName: PChar): Integer; stdcall;
+{$EXTERNALSYM AddFontResourceA}
+function AddFontResourceA(FileName: PAnsiChar): Integer; stdcall;
+{$EXTERNALSYM AddFontResourceW}
+function AddFontResourceW(FileName: PWideChar): Integer; stdcall;
 {$EXTERNALSYM AnimatePalette}
-function AnimatePalette(p1: HPALETTE; p2, p3: UINT; p4: PPaletteEntry): BOOL; stdcall;
+function AnimatePalette(PHandle: HPALETTE; StartIndex, Entries: UINT; Replacement: PPaletteEntry): BOOL; stdcall;
 {$EXTERNALSYM Arc}
 function Arc(hDC: HDC; left, top, right, bottom, startX, startY, endX, endY: Integer): BOOL; stdcall;
 {$EXTERNALSYM BitBlt}
@@ -14842,12 +15053,12 @@ function ChoosePixelFormat(DC: HDC; p2: PPixelFormatDescriptor): Integer; stdcal
 function CloseMetaFile(DC: HDC): HMETAFILE; stdcall;
 {$EXTERNALSYM CombineRgn}
 function CombineRgn(p1, p2, p3: HRGN; p4: Integer): Integer; stdcall;
+{$EXTERNALSYM CopyMetaFile}
+function CopyMetaFile(p1: HMETAFILE; p2: PChar): HMETAFILE; stdcall;
 {$EXTERNALSYM CopyMetaFileA}
 function CopyMetaFileA(p1: HMETAFILE; p2: PAnsiChar): HMETAFILE; stdcall;
 {$EXTERNALSYM CopyMetaFileW}
 function CopyMetaFileW(p1: HMETAFILE; p2: PWideChar): HMETAFILE; stdcall;
-{$EXTERNALSYM CopyMetaFile}
-function CopyMetaFile(p1: HMETAFILE; p2: PChar): HMETAFILE; stdcall;
 {$EXTERNALSYM CreateBitmap}
 function CreateBitmap(Width, Height: Integer; Planes, BitCount: Longint;
   Bits: Pointer): HBITMAP; stdcall;
@@ -14861,15 +15072,15 @@ function CreateCompatibleBitmap(DC: HDC; Width, Height: Integer): HBITMAP; stdca
 function CreateDiscardableBitmap(DC: HDC; p2, p3: Integer): HBITMAP; stdcall;
 {$EXTERNALSYM CreateCompatibleDC}
 function CreateCompatibleDC(DC: HDC): HDC; stdcall;
+{$EXTERNALSYM CreateDC}
+function CreateDC(lpszDriver, lpszDevice, lpszOutput: PChar;
+  lpdvmInit: PDeviceMode): HDC; stdcall;
 {$EXTERNALSYM CreateDCA}
 function CreateDCA(lpszDriver, lpszDevice, lpszOutput: PAnsiChar;
   lpdvmInit: PDeviceModeA): HDC; stdcall;
 {$EXTERNALSYM CreateDCW}
 function CreateDCW(lpszDriver, lpszDevice, lpszOutput: PWideChar;
   lpdvmInit: PDeviceModeW): HDC; stdcall;
-{$EXTERNALSYM CreateDC}
-function CreateDC(lpszDriver, lpszDevice, lpszOutput: PChar;
-  lpdvmInit: PDeviceMode): HDC; stdcall;
 {$EXTERNALSYM CreateDIBitmap}
 function CreateDIBitmap(DC: HDC; var InfoHeader: TBitmapInfoHeader;
   dwUsage: DWORD; InitBits: PChar; var InitInfo: TBitmapInfo;
@@ -14882,12 +15093,16 @@ function CreateDIBPatternBrushPt(const p1: Pointer; p2: UINT): HBRUSH; stdcall;
 function CreateEllipticRgn(p1, p2, p3, p4: Integer): HRGN; stdcall;
 {$EXTERNALSYM CreateEllipticRgnIndirect}
 function CreateEllipticRgnIndirect(const p1: TRect): HRGN; stdcall;
+{$EXTERNALSYM CreateFontIndirect}
+function CreateFontIndirect(const p1: TLogFont): HFONT; stdcall;
 {$EXTERNALSYM CreateFontIndirectA}
 function CreateFontIndirectA(const p1: TLogFontA): HFONT; stdcall;
 {$EXTERNALSYM CreateFontIndirectW}
 function CreateFontIndirectW(const p1: TLogFontW): HFONT; stdcall;
-{$EXTERNALSYM CreateFontIndirect}
-function CreateFontIndirect(const p1: TLogFont): HFONT; stdcall;
+{$EXTERNALSYM CreateFont}
+function CreateFont(nHeight, nWidth, nEscapement, nOrientaion, fnWeight: Integer;
+  fdwItalic, fdwUnderline, fdwStrikeOut, fdwCharSet, fdwOutputPrecision,
+  fdwClipPrecision, fdwQuality, fdwPitchAndFamily: DWORD; lpszFace: PChar): HFONT; stdcall;
 {$EXTERNALSYM CreateFontA}
 function CreateFontA(nHeight, nWidth, nEscapement, nOrientaion, fnWeight: Integer;
   fdwItalic, fdwUnderline, fdwStrikeOut, fdwCharSet, fdwOutputPrecision,
@@ -14896,24 +15111,20 @@ function CreateFontA(nHeight, nWidth, nEscapement, nOrientaion, fnWeight: Intege
 function CreateFontW(nHeight, nWidth, nEscapement, nOrientaion, fnWeight: Integer;
   fdwItalic, fdwUnderline, fdwStrikeOut, fdwCharSet, fdwOutputPrecision,
   fdwClipPrecision, fdwQuality, fdwPitchAndFamily: DWORD; lpszFace: PWideChar): HFONT; stdcall;
-{$EXTERNALSYM CreateFont}
-function CreateFont(nHeight, nWidth, nEscapement, nOrientaion, fnWeight: Integer;
-  fdwItalic, fdwUnderline, fdwStrikeOut, fdwCharSet, fdwOutputPrecision,
-  fdwClipPrecision, fdwQuality, fdwPitchAndFamily: DWORD; lpszFace: PChar): HFONT; stdcall;
 {$EXTERNALSYM CreateHatchBrush}
 function CreateHatchBrush(p1: Integer; p2: COLORREF): HBRUSH; stdcall;
+{$EXTERNALSYM CreateIC}
+function CreateIC(lpszDriver, lpszDevice, lpszOutput: PChar; lpdvmInit: PDeviceMode): HDC; stdcall;
 {$EXTERNALSYM CreateICA}
 function CreateICA(lpszDriver, lpszDevice, lpszOutput: PAnsiChar; lpdvmInit: PDeviceModeA): HDC; stdcall;
 {$EXTERNALSYM CreateICW}
 function CreateICW(lpszDriver, lpszDevice, lpszOutput: PWideChar; lpdvmInit: PDeviceModeW): HDC; stdcall;
-{$EXTERNALSYM CreateIC}
-function CreateIC(lpszDriver, lpszDevice, lpszOutput: PChar; lpdvmInit: PDeviceMode): HDC; stdcall;
+{$EXTERNALSYM CreateMetaFile}
+function CreateMetaFile(p1: PChar): HDC; stdcall;
 {$EXTERNALSYM CreateMetaFileA}
 function CreateMetaFileA(p1: PAnsiChar): HDC; stdcall;
 {$EXTERNALSYM CreateMetaFileW}
 function CreateMetaFileW(p1: PWideChar): HDC; stdcall;
-{$EXTERNALSYM CreateMetaFile}
-function CreateMetaFile(p1: PChar): HDC; stdcall;
 {$EXTERNALSYM CreatePalette}
 function CreatePalette(const LogPalette: TLogPalette): HPalette; stdcall;
 {$EXTERNALSYM CreatePen}
@@ -14930,12 +15141,12 @@ function CreateRectRgn(p1, p2, p3, p4: Integer): HRGN; stdcall;
 function CreateRectRgnIndirect(const p1: TRect): HRGN; stdcall;
 {$EXTERNALSYM CreateRoundRectRgn}
 function CreateRoundRectRgn(p1, p2, p3, p4, p5, p6: Integer): HRGN; stdcall;
+{$EXTERNALSYM CreateScalableFontResource}
+function CreateScalableFontResource(p1: DWORD; p2, p3, p4: PChar): BOOL; stdcall;
 {$EXTERNALSYM CreateScalableFontResourceA}
 function CreateScalableFontResourceA(p1: DWORD; p2, p3, p4: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM CreateScalableFontResourceW}
 function CreateScalableFontResourceW(p1: DWORD; p2, p3, p4: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM CreateScalableFontResource}
-function CreateScalableFontResource(p1: DWORD; p2, p3, p4: PChar): BOOL; stdcall;
 {$EXTERNALSYM CreateSolidBrush}
 function CreateSolidBrush(p1: COLORREF): HBRUSH; stdcall;
 {$EXTERNALSYM DeleteDC}
@@ -14950,17 +15161,21 @@ function DescribePixelFormat(DC: HDC; p2: Integer; p3: UINT; var p4: TPixelForma
 { define types of pointers to ExtDeviceMode() and DeviceCapabilities()
   functions for Win 3.1 compatibility }
 
-type
+type
 
 
 
 
-  TFNDevMode = TFarProc;
-
+
+  TFNDevMode = TFarProc;
 
 
 
-  TFNDevCaps = TFarProc;
+
+
+
+  TFNDevCaps = TFarProc;
+
 
 const
   { mode selections for the device mode function }
@@ -15085,43 +15300,43 @@ const
   DCBA_FACEDOWNRIGHT = 259;
 
 
+{$EXTERNALSYM DeviceCapabilities}
+function DeviceCapabilities(pDriverName, pDeviceName, pPort: PChar;
+  iIndex: Integer; pOutput: PChar; DevMode: PDeviceMode): Integer; stdcall;
 {$EXTERNALSYM DeviceCapabilitiesA}
 function DeviceCapabilitiesA(pDriverName, pDeviceName, pPort: PAnsiChar;
   iIndex: Integer; pOutput: PAnsiChar; DevMode: PDeviceModeA): Integer; stdcall;
 {$EXTERNALSYM DeviceCapabilitiesW}
 function DeviceCapabilitiesW(pDriverName, pDeviceName, pPort: PWideChar;
   iIndex: Integer; pOutput: PWideChar; DevMode: PDeviceModeW): Integer; stdcall;
-{$EXTERNALSYM DeviceCapabilities}
-function DeviceCapabilities(pDriverName, pDeviceName, pPort: PChar;
-  iIndex: Integer; pOutput: PChar; DevMode: PDeviceMode): Integer; stdcall;
 
 {$EXTERNALSYM DrawEscape}
 function DrawEscape(DC: HDC; p2, p3: Integer; p4: LPCSTR): BOOL; stdcall;
 {$EXTERNALSYM Ellipse}
 function Ellipse(DC: HDC; X1, Y1, X2, Y2: Integer): BOOL; stdcall;
+{$EXTERNALSYM EnumFontFamiliesEx}
+function EnumFontFamiliesEx(DC: HDC; var p2: TLogFont;
+  p3: TFNFontEnumProc; p4: LPARAM; p5: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumFontFamiliesExA}
 function EnumFontFamiliesExA(DC: HDC; var p2: TLogFontA;
   p3: TFNFontEnumProcA; p4: LPARAM; p5: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumFontFamiliesExW}
 function EnumFontFamiliesExW(DC: HDC; var p2: TLogFontW;
   p3: TFNFontEnumProcW; p4: LPARAM; p5: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumFontFamiliesEx}
-function EnumFontFamiliesEx(DC: HDC; var p2: TLogFont;
-  p3: TFNFontEnumProc; p4: LPARAM; p5: DWORD): BOOL; stdcall;
+{$EXTERNALSYM EnumFontFamilies}
+function EnumFontFamilies(DC: HDC; p2: PChar; p3: TFNFontEnumProc; p4: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM EnumFontFamiliesA}
 function EnumFontFamiliesA(DC: HDC; p2: PAnsiChar; p3: TFNFontEnumProcA; p4: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM EnumFontFamiliesW}
 function EnumFontFamiliesW(DC: HDC; p2: PWideChar; p3: TFNFontEnumProcW; p4: LPARAM): BOOL; stdcall;
-{$EXTERNALSYM EnumFontFamilies}
-function EnumFontFamilies(DC: HDC; p2: PChar; p3: TFNFontEnumProc; p4: LPARAM): BOOL; stdcall;
+{$EXTERNALSYM EnumFonts}
+function EnumFonts(DC: HDC; lpszFace: PChar; fntenmprc: TFNFontEnumProc;
+  lpszData: PChar): Integer; stdcall;
 {$EXTERNALSYM EnumFontsA}
 function EnumFontsA(DC: HDC; lpszFace: PAnsiChar; fntenmprc: TFNFontEnumProcA;
   lpszData: PChar): Integer; stdcall;
 {$EXTERNALSYM EnumFontsW}
 function EnumFontsW(DC: HDC; lpszFace: PWideChar; fntenmprc: TFNFontEnumProcW;
-  lpszData: PChar): Integer; stdcall;
-{$EXTERNALSYM EnumFonts}
-function EnumFonts(DC: HDC; lpszFace: PChar; fntenmprc: TFNFontEnumProc;
   lpszData: PChar): Integer; stdcall;
 {$EXTERNALSYM EnumObjects}
 function EnumObjects(DC: HDC; p2: Integer; p3: TFNGObjEnumProc; p4: LPARAM): Integer; stdcall;
@@ -15133,21 +15348,21 @@ function Escape(DC: HDC; p2, p3: Integer; p4: LPCSTR; p5: Pointer): Integer; std
 function ExtEscape(DC: HDC; p2, p3: Integer;
   const p4: LPCSTR; p5: Integer; p6: LPSTR): Integer; stdcall;
 {$EXTERNALSYM ExcludeClipRect}
-function ExcludeClipRect(DC: HDC; p2, p3, p4, p5: Integer): Integer; stdcall;
+function ExcludeClipRect(DC: HDC; LeftRect, TopRect, RightRect, BottomRect: Integer): Integer; stdcall;
 {$EXTERNALSYM ExtCreateRegion}
-function ExtCreateRegion(p1: PXForm; p2: DWORD; const p3: TRgnData): HRGN; stdcall;
+function ExtCreateRegion(XForm: PXForm; Count: DWORD; const RgnData: TRgnData): HRGN; stdcall;
 {$EXTERNALSYM ExtFloodFill}
 function ExtFloodFill(DC: HDC; X, Y: Integer; Color: COLORREF; FillType: UINT): BOOL; stdcall;
 {$EXTERNALSYM FillRgn}
-function FillRgn(DC: HDC; p2: HRGN; p3: HBRUSH): BOOL; stdcall;
+function FillRgn(DC: HDC; hrgn: HRGN; hbr: HBRUSH): BOOL; stdcall;
 {$EXTERNALSYM FloodFill}
 function FloodFill(DC: HDC; nXStart, nYStart: Integer; crFill: COLORREF): BOOL; stdcall;
 {$EXTERNALSYM FrameRgn}
-function FrameRgn(DC: HDC; p2: HRGN; p3: HBRUSH; p4, p5: Integer): BOOL; stdcall;
+function FrameRgn(DC: HDC; hrgn: HRGN; hbr: HBRUSH; Width, Height: Integer): BOOL; stdcall;
 {$EXTERNALSYM GetROP2}
 function GetROP2(DC: HDC): Integer; stdcall;
 {$EXTERNALSYM GetAspectRatioFilterEx}
-function GetAspectRatioFilterEx(DC: HDC; var p2: TSize): BOOL; stdcall;
+function GetAspectRatioFilterEx(DC: HDC; var AspectRatio: TSize): BOOL; stdcall;
 {$EXTERNALSYM GetBkColor}
 function GetBkColor(hDC: HDC): COLORREF; stdcall;
 {$EXTERNALSYM GetDCBrushColor}
@@ -15160,41 +15375,41 @@ function GetBkMode(hDC: HDC): Integer; stdcall;
 function GetBitmapBits(Bitmap: HBITMAP; Count: Longint;
   Bits: Pointer): Longint; stdcall;
 {$EXTERNALSYM GetBitmapDimensionEx}
-function GetBitmapDimensionEx(p1: HBITMAP; var p2: TSize): BOOL; stdcall;
+function GetBitmapDimensionEx(Bitmap: HBITMAP; var Dimension: TSize): BOOL; stdcall;
 {$EXTERNALSYM GetBoundsRect}
-function GetBoundsRect(DC: HDC; var p2: TRect; p3: UINT): UINT; stdcall;
+function GetBoundsRect(DC: HDC; var Bounds: TRect; Flags: UINT): UINT; stdcall;
 {$EXTERNALSYM GetBrushOrgEx}
-function GetBrushOrgEx(DC: HDC; var p2: TPoint): BOOL; stdcall;
-{$EXTERNALSYM GetCharWidthA}
-function GetCharWidthA(DC: HDC; p2, p3: UINT; const Widths): BOOL; stdcall;
-{$EXTERNALSYM GetCharWidthW}
-function GetCharWidthW(DC: HDC; p2, p3: UINT; const Widths): BOOL; stdcall;
+function GetBrushOrgEx(DC: HDC; var lppt: TPoint): BOOL; stdcall;
 {$EXTERNALSYM GetCharWidth}
-function GetCharWidth(DC: HDC; p2, p3: UINT; const Widths): BOOL; stdcall;
-{$EXTERNALSYM GetCharWidth32A}
-function GetCharWidth32A(DC: HDC; p2, p3: UINT; const Widths): BOOL; stdcall;
-{$EXTERNALSYM GetCharWidth32W}
-function GetCharWidth32W(DC: HDC; p2, p3: UINT; const Widths): BOOL; stdcall;
+function GetCharWidth(DC: HDC; FirstChar, LastChar: UINT; const Widths): BOOL; stdcall;
+{$EXTERNALSYM GetCharWidthA}
+function GetCharWidthA(DC: HDC; FirstChar, LastChar: UINT; const Widths): BOOL; stdcall;
+{$EXTERNALSYM GetCharWidthW}
+function GetCharWidthW(DC: HDC; FirstChar, LastChar: UINT; const Widths): BOOL; stdcall;
 {$EXTERNALSYM GetCharWidth32}
-function GetCharWidth32(DC: HDC; p2, p3: UINT; const Widths): BOOL; stdcall;
-{$EXTERNALSYM GetCharWidthFloatA}
-function GetCharWidthFloatA(DC: HDC; p2, p3: UINT; const Widths): BOOL; stdcall;
-{$EXTERNALSYM GetCharWidthFloatW}
-function GetCharWidthFloatW(DC: HDC; p2, p3: UINT; const Widths): BOOL; stdcall;
+function GetCharWidth32(DC: HDC; FirstChar, LastChar: UINT; const Widths): BOOL; stdcall;
+{$EXTERNALSYM GetCharWidth32A}
+function GetCharWidth32A(DC: HDC; FirstChar, LastChar: UINT; const Widths): BOOL; stdcall;
+{$EXTERNALSYM GetCharWidth32W}
+function GetCharWidth32W(DC: HDC; FirstChar, LastChar: UINT; const Widths): BOOL; stdcall;
 {$EXTERNALSYM GetCharWidthFloat}
-function GetCharWidthFloat(DC: HDC; p2, p3: UINT; const Widths): BOOL; stdcall;
-{$EXTERNALSYM GetCharABCWidthsA}
-function GetCharABCWidthsA(DC: HDC; p2, p3: UINT; const ABCStructs): BOOL; stdcall;
-{$EXTERNALSYM GetCharABCWidthsW}
-function GetCharABCWidthsW(DC: HDC; p2, p3: UINT; const ABCStructs): BOOL; stdcall;
+function GetCharWidthFloat(DC: HDC; FirstChar, LastChar: UINT; const Widths): BOOL; stdcall;
+{$EXTERNALSYM GetCharWidthFloatA}
+function GetCharWidthFloatA(DC: HDC; FirstChar, LastChar: UINT; const Widths): BOOL; stdcall;
+{$EXTERNALSYM GetCharWidthFloatW}
+function GetCharWidthFloatW(DC: HDC; FirstChar, LastChar: UINT; const Widths): BOOL; stdcall;
 {$EXTERNALSYM GetCharABCWidths}
-function GetCharABCWidths(DC: HDC; p2, p3: UINT; const ABCStructs): BOOL; stdcall;
-{$EXTERNALSYM GetCharABCWidthsFloatA}
-function GetCharABCWidthsFloatA(DC: HDC; p2, p3: UINT; const ABCFloatSturcts): BOOL; stdcall;
-{$EXTERNALSYM GetCharABCWidthsFloatW}
-function GetCharABCWidthsFloatW(DC: HDC; p2, p3: UINT; const ABCFloatSturcts): BOOL; stdcall;
+function GetCharABCWidths(DC: HDC; FirstChar, LastChar: UINT; const ABCStructs): BOOL; stdcall;
+{$EXTERNALSYM GetCharABCWidthsA}
+function GetCharABCWidthsA(DC: HDC; FirstChar, LastChar: UINT; const ABCStructs): BOOL; stdcall;
+{$EXTERNALSYM GetCharABCWidthsW}
+function GetCharABCWidthsW(DC: HDC; FirstChar, LastChar: UINT; const ABCStructs): BOOL; stdcall;
 {$EXTERNALSYM GetCharABCWidthsFloat}
-function GetCharABCWidthsFloat(DC: HDC; p2, p3: UINT; const ABCFloatSturcts): BOOL; stdcall;
+function GetCharABCWidthsFloat(DC: HDC; FirstChar, LastChar: UINT; const ABCFloatSturcts): BOOL; stdcall;
+{$EXTERNALSYM GetCharABCWidthsFloatA}
+function GetCharABCWidthsFloatA(DC: HDC; FirstChar, LastChar: UINT; const ABCFloatSturcts): BOOL; stdcall;
+{$EXTERNALSYM GetCharABCWidthsFloatW}
+function GetCharABCWidthsFloatW(DC: HDC; FirstChar, LastChar: UINT; const ABCFloatSturcts): BOOL; stdcall;
 {$EXTERNALSYM GetClipBox}
 function GetClipBox(DC: HDC; var Rect: TRect): Integer; stdcall;
 {$EXTERNALSYM GetClipRgn}
@@ -15212,39 +15427,39 @@ function GetDIBits(DC: HDC; Bitmap: HBitmap; StartScan, NumScans: UINT;
   Bits: Pointer; var BitInfo: TBitmapInfo; Usage: UINT): Integer; stdcall;
 {$EXTERNALSYM GetFontData}
 function GetFontData(DC: HDC; p2, p3: DWORD; p4: Pointer; p5: DWORD): DWORD; stdcall;
-{$EXTERNALSYM GetGlyphOutlineA}
-function GetGlyphOutlineA(DC: HDC; p2, p3: UINT;
-  const p4: TGlyphMetrics; p5: DWORD; p6: Pointer; const p7: TMat2): DWORD; stdcall;
-{$EXTERNALSYM GetGlyphOutlineW}
-function GetGlyphOutlineW(DC: HDC; p2, p3: UINT;
-  const p4: TGlyphMetrics; p5: DWORD; p6: Pointer; const p7: TMat2): DWORD; stdcall;
 {$EXTERNALSYM GetGlyphOutline}
-function GetGlyphOutline(DC: HDC; p2, p3: UINT;
-  const p4: TGlyphMetrics; p5: DWORD; p6: Pointer; const p7: TMat2): DWORD; stdcall;
+function GetGlyphOutline(DC: HDC; uChar, uFormat: UINT;
+  const lpgm: TGlyphMetrics; cbBuffer: DWORD; lpvBuffer: Pointer; const lpmat2: TMat2): DWORD; stdcall;
+{$EXTERNALSYM GetGlyphOutlineA}
+function GetGlyphOutlineA(DC: HDC; uChar, uFormat: UINT;
+  const lpgm: TGlyphMetrics; cbBuffer: DWORD; lpvBuffer: Pointer; const lpmat2: TMat2): DWORD; stdcall;
+{$EXTERNALSYM GetGlyphOutlineW}
+function GetGlyphOutlineW(DC: HDC; uChar, uFormat: UINT;
+  const lpgm: TGlyphMetrics; cbBuffer: DWORD; lpvBuffer: Pointer; const lpmat2: TMat2): DWORD; stdcall;
 {$EXTERNALSYM GetGraphicsMode}
 function GetGraphicsMode(DC: HDC): Integer; stdcall;
 {$EXTERNALSYM GetMapMode}
 function GetMapMode(DC: HDC): Integer; stdcall;
 {$EXTERNALSYM GetMetaFileBitsEx}
 function GetMetaFileBitsEx(p1: HMETAFILE; p2: UINT; p3: Pointer): UINT; stdcall;
+{$EXTERNALSYM GetMetaFile}
+function GetMetaFile(p1: PChar): HMETAFILE; stdcall;
 {$EXTERNALSYM GetMetaFileA}
 function GetMetaFileA(p1: PAnsiChar): HMETAFILE; stdcall;
 {$EXTERNALSYM GetMetaFileW}
 function GetMetaFileW(p1: PWideChar): HMETAFILE; stdcall;
-{$EXTERNALSYM GetMetaFile}
-function GetMetaFile(p1: PChar): HMETAFILE; stdcall;
 {$EXTERNALSYM GetNearestColor}
 function GetNearestColor(DC: HDC; p2: COLORREF): COLORREF; stdcall;
 {$EXTERNALSYM GetNearestPaletteIndex}
 function GetNearestPaletteIndex(p1: HPALETTE; p2: COLORREF): UINT; stdcall;
 {$EXTERNALSYM GetObjectType}
 function GetObjectType(h: HGDIOBJ): DWORD; stdcall;
+{$EXTERNALSYM GetOutlineTextMetrics}
+function GetOutlineTextMetrics(DC: HDC; p2: UINT; OTMetricStructs: Pointer): UINT; stdcall;
 {$EXTERNALSYM GetOutlineTextMetricsA}
 function GetOutlineTextMetricsA(DC: HDC; p2: UINT; OTMetricStructs: Pointer): UINT; stdcall;
 {$EXTERNALSYM GetOutlineTextMetricsW}
 function GetOutlineTextMetricsW(DC: HDC; p2: UINT; OTMetricStructs: Pointer): UINT; stdcall;
-{$EXTERNALSYM GetOutlineTextMetrics}
-function GetOutlineTextMetrics(DC: HDC; p2: UINT; OTMetricStructs: Pointer): UINT; stdcall;
 {$EXTERNALSYM GetPaletteEntries}
 function GetPaletteEntries(Palette: HPALETTE; StartIndex, NumEntries: UINT;
   var PaletteEntries): UINT; stdcall;
@@ -15275,14 +15490,17 @@ function GetTextCharacterExtra(DC: HDC): Integer; stdcall;
 function GetTextAlign(DC: HDC): UINT; stdcall;
 {$EXTERNALSYM GetTextColor}
 function GetTextColor(DC: HDC): COLORREF; stdcall;
+{$EXTERNALSYM GetTextExtentPoint}
+function GetTextExtentPoint(DC: HDC; Str: PChar; Count: Integer;
+  var Size: TSize): BOOL; stdcall;
 {$EXTERNALSYM GetTextExtentPointA}
 function GetTextExtentPointA(DC: HDC; Str: PAnsiChar; Count: Integer;
   var Size: TSize): BOOL; stdcall;
 {$EXTERNALSYM GetTextExtentPointW}
 function GetTextExtentPointW(DC: HDC; Str: PWideChar; Count: Integer;
   var Size: TSize): BOOL; stdcall;
-{$EXTERNALSYM GetTextExtentPoint}
-function GetTextExtentPoint(DC: HDC; Str: PChar; Count: Integer;
+{$EXTERNALSYM GetTextExtentPoint32}
+function GetTextExtentPoint32(DC: HDC; Str: PChar; Count: Integer;
   var Size: TSize): BOOL; stdcall;
 {$EXTERNALSYM GetTextExtentPoint32A}
 function GetTextExtentPoint32A(DC: HDC; Str: PAnsiChar; Count: Integer;
@@ -15290,17 +15508,14 @@ function GetTextExtentPoint32A(DC: HDC; Str: PAnsiChar; Count: Integer;
 {$EXTERNALSYM GetTextExtentPoint32W}
 function GetTextExtentPoint32W(DC: HDC; Str: PWideChar; Count: Integer;
   var Size: TSize): BOOL; stdcall;
-{$EXTERNALSYM GetTextExtentPoint32}
-function GetTextExtentPoint32(DC: HDC; Str: PChar; Count: Integer;
-  var Size: TSize): BOOL; stdcall;
+{$EXTERNALSYM GetTextExtentExPoint}
+function GetTextExtentExPoint(DC: HDC; p2: PChar;
+  p3, p4: Integer; p5, p6: PInteger; var p7: TSize): BOOL; stdcall;
 {$EXTERNALSYM GetTextExtentExPointA}
 function GetTextExtentExPointA(DC: HDC; p2: PAnsiChar;
   p3, p4: Integer; p5, p6: PInteger; var p7: TSize): BOOL; stdcall;
 {$EXTERNALSYM GetTextExtentExPointW}
 function GetTextExtentExPointW(DC: HDC; p2: PWideChar;
-  p3, p4: Integer; p5, p6: PInteger; var p7: TSize): BOOL; stdcall;
-{$EXTERNALSYM GetTextExtentExPoint}
-function GetTextExtentExPoint(DC: HDC; p2: PChar;
   p3, p4: Integer; p5, p6: PInteger; var p7: TSize): BOOL; stdcall;
 {$EXTERNALSYM GetTextCharset}
 function GetTextCharset(hdc: HDC): Integer; stdcall;
@@ -15310,14 +15525,14 @@ function GetTextCharsetInfo(hdc: HDC; lpSig: PFontSignature; dwFlags: DWORD): BO
 function TranslateCharsetInfo(var lpSrc: DWORD; var lpCs: TCharsetInfo; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetFontLanguageInfo}
 function GetFontLanguageInfo(DC: HDC): DWORD; stdcall;
+{$EXTERNALSYM GetCharacterPlacement}
+function GetCharacterPlacement(DC: HDC; p2: PChar; p3, p4: BOOL;
+  var p5: TGCPResults; p6: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetCharacterPlacementA}
 function GetCharacterPlacementA(DC: HDC; p2: PAnsiChar; p3, p4: BOOL;
   var p5: TGCPResults; p6: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetCharacterPlacementW}
 function GetCharacterPlacementW(DC: HDC; p2: PWideChar; p3, p4: BOOL;
-  var p5: TGCPResults; p6: DWORD): DWORD; stdcall;
-{$EXTERNALSYM GetCharacterPlacement}
-function GetCharacterPlacement(DC: HDC; p2: PChar; p3, p4: BOOL;
   var p5: TGCPResults; p6: DWORD): DWORD; stdcall;
 
 type
@@ -15350,12 +15565,12 @@ const
 
 {$EXTERNALSYM GetFontUnicodeRanges}
 function GetFontUnicodeRanges(DC: HDC; lpgs: PGlyphSet): DWORD; stdcall;
+{$EXTERNALSYM GetGlyphIndices}
+function GetGlyphIndices(DC: HDC; p2: PAnsiChar; p3: Integer; p4: PWORD; p5: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetGlyphIndicesA}
 function GetGlyphIndicesA(DC: HDC; p2: PAnsiChar; p3: Integer; p4: PWORD; p5: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetGlyphIndicesW}
 function GetGlyphIndicesW(DC: HDC; p2: PAnsiChar; p3: Integer; p4: PWORD; p5: DWORD): DWORD; stdcall;
-{$EXTERNALSYM GetGlyphIndices}
-function GetGlyphIndices(DC: HDC; p2: PAnsiChar; p3: Integer; p4: PWORD; p5: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetTextExtentPointI}
 function GetTextExtentPointI(DC: HDC; p2: PWORD; p3: Integer; var p4: TSize): BOOL; stdcall;
 {$EXTERNALSYM GetTextExtentExPointI}
@@ -15383,18 +15598,18 @@ type
   end;
   TDesignVector = tagDESIGNVECTOR;
 
+{$EXTERNALSYM AddFontResourceEx}
+function AddFontResourceEx(p1: PAnsiChar; p2: DWORD; p3: PDesignVector): Integer; stdcall;
 {$EXTERNALSYM AddFontResourceExA}
 function AddFontResourceExA(p1: PAnsiChar; p2: DWORD; p3: PDesignVector): Integer; stdcall;
 {$EXTERNALSYM AddFontResourceExW}
 function AddFontResourceExW(p1: PAnsiChar; p2: DWORD; p3: PDesignVector): Integer; stdcall;
-{$EXTERNALSYM AddFontResourceEx}
-function AddFontResourceEx(p1: PAnsiChar; p2: DWORD; p3: PDesignVector): Integer; stdcall;
+{$EXTERNALSYM RemoveFontResourceEx}
+function RemoveFontResourceEx(p1: PAnsiChar; p2: DWORD; p3: PDesignVector): BOOL; stdcall;
 {$EXTERNALSYM RemoveFontResourceExA}
 function RemoveFontResourceExA(p1: PAnsiChar; p2: DWORD; p3: PDesignVector): BOOL; stdcall;
 {$EXTERNALSYM RemoveFontResourceExW}
 function RemoveFontResourceExW(p1: PAnsiChar; p2: DWORD; p3: PDesignVector): BOOL; stdcall;
-{$EXTERNALSYM RemoveFontResourceEx}
-function RemoveFontResourceEx(p1: PAnsiChar; p2: DWORD; p3: PDesignVector): BOOL; stdcall;
 
 {$EXTERNALSYM AddFontMemResourceEx}
 function AddFontMemResourceEx(p1: Pointer; p2: DWORD; p3: PDesignVector; p4: LPDWORD): THandle; stdcall;
@@ -15462,12 +15677,12 @@ type
   TEnumLogFontExDVW = tagENUMLOGFONTEXDVW;
   PEnumLogFontExDV = PEnumLogFontExDVA;
 
+{$EXTERNALSYM CreateFontIndirectEx}
+function CreateFontIndirectEx(const p1: PEnumLogFontExDV): HFONT; stdcall;
 {$EXTERNALSYM CreateFontIndirectExA}
 function CreateFontIndirectExA(const p1: PEnumLogFontExDVA): HFONT; stdcall;
 {$EXTERNALSYM CreateFontIndirectExW}
 function CreateFontIndirectExW(const p1: PEnumLogFontExDVW): HFONT; stdcall;
-{$EXTERNALSYM CreateFontIndirectEx}
-function CreateFontIndirectEx(const p1: PEnumLogFontExDV): HFONT; stdcall;
 
 type
   PEnumTextMetricA = ^TEnumTextMetricA;
@@ -15499,19 +15714,19 @@ function IntersectClipRect(DC: HDC; X1, Y1, X2, Y2: Integer): Integer; stdcall;
 {$EXTERNALSYM InvertRgn}
 function InvertRgn(DC: HDC; p2: HRGN): BOOL; stdcall;
 {$EXTERNALSYM LineDDA}
-function LineDDA(p1, p2, p3, p4: Integer; p5: TFNLineDDAProc; p6: LPARAM): BOOL; stdcall;
+function LineDDA(XStart, YStart, XEnd, YEnd: Integer; LineFunc: TFNLineDDAProc; Data: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM LineTo}
 function LineTo(DC: HDC; X, Y: Integer): BOOL; stdcall;
 {$EXTERNALSYM MaskBlt}
-function MaskBlt(DC: HDC; p2, p3, p4, p5: Integer; p6: HDC;
-  p7, p8: Integer; p9: HBITMAP; p10, p11: Integer; p12: DWORD): BOOL; stdcall;
+function MaskBlt(DestDC: HDC; XDest, YDest, Width, Height: Integer; SrcDC: HDC;
+  XScr, YScr: Integer; Mask: HBITMAP; xMask, yMask: Integer; Rop: DWORD): BOOL; stdcall;
 {$EXTERNALSYM PlgBlt}
-function PlgBlt(DC: HDC; const PointsArray; p3: HDC;
-  p4, p5, p6, p7: Integer; p8: HBITMAP; p9, p10: Integer): BOOL; stdcall;
+function PlgBlt(DestDC: HDC; const PointsArray; SrcDC: HDC;
+  XSrc, YSrc, Width, Height: Integer; Mask: HBITMAP; xMask, yMask: Integer): BOOL; stdcall;
 {$EXTERNALSYM OffsetClipRgn}
-function OffsetClipRgn(DC: HDC; p2, p3: Integer): Integer; stdcall;
+function OffsetClipRgn(DC: HDC; XOffset, YOffset: Integer): Integer; stdcall;
 {$EXTERNALSYM OffsetRgn}
-function OffsetRgn(RGN: HRGN; p2, p3: Integer): Integer; stdcall;
+function OffsetRgn(RGN: HRGN; XOffset, YOffset: Integer): Integer; stdcall;
 {$EXTERNALSYM PatBlt}
 function PatBlt(DC: HDC; X, Y, Width, Height: Integer; Rop: DWORD): BOOL; stdcall;
 {$EXTERNALSYM Pie}
@@ -15523,41 +15738,41 @@ function PaintRgn(DC: HDC; RGN: HRGN): BOOL; stdcall;
 {$EXTERNALSYM PolyPolygon}
 function PolyPolygon(DC: HDC; var Points; var nPoints; p4: Integer): BOOL; stdcall;
 {$EXTERNALSYM PtInRegion}
-function PtInRegion(RGN: HRGN; p2, p3: Integer): BOOL; stdcall;
+function PtInRegion(RGN: HRGN; X, Y: Integer): BOOL; stdcall;
 {$EXTERNALSYM PtVisible}
-function PtVisible(DC: HDC; p2, p3: Integer): BOOL; stdcall;
+function PtVisible(DC: HDC; X, Y: Integer): BOOL; stdcall;
 {$EXTERNALSYM RectInRegion}
-function RectInRegion(RGN: HRGN; const p2: TRect): BOOL; stdcall;
+function RectInRegion(RGN: HRGN; const Rect: TRect): BOOL; stdcall;
 {$EXTERNALSYM RectVisible}
 function RectVisible(DC: HDC; const Rect: TRect): BOOL; stdcall;
 {$EXTERNALSYM Rectangle}
 function Rectangle(DC: HDC; X1, Y1, X2, Y2: Integer): BOOL; stdcall;
 {$EXTERNALSYM RestoreDC}
 function RestoreDC(DC: HDC; SavedDC: Integer): BOOL; stdcall;
-{$EXTERNALSYM ResetDCA}
-function ResetDCA(DC: HDC; const p2: TDeviceModeA): HDC; stdcall;
-{$EXTERNALSYM ResetDCW}
-function ResetDCW(DC: HDC; const p2: TDeviceModeW): HDC; stdcall;
 {$EXTERNALSYM ResetDC}
-function ResetDC(DC: HDC; const p2: TDeviceMode): HDC; stdcall;
+function ResetDC(DC: HDC; const InitData: TDeviceMode): HDC; stdcall;
+{$EXTERNALSYM ResetDCA}
+function ResetDCA(DC: HDC; const InitData: TDeviceModeA): HDC; stdcall;
+{$EXTERNALSYM ResetDCW}
+function ResetDCW(DC: HDC; const InitData: TDeviceModeW): HDC; stdcall;
 {$EXTERNALSYM RealizePalette}
 function RealizePalette(DC: HDC): UINT; stdcall;
-{$EXTERNALSYM RemoveFontResourceA}
-function RemoveFontResourceA(p1: PAnsiChar): BOOL; stdcall;
-{$EXTERNALSYM RemoveFontResourceW}
-function RemoveFontResourceW(p1: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM RemoveFontResource}
-function RemoveFontResource(p1: PChar): BOOL; stdcall;
+function RemoveFontResource(FileName: PChar): BOOL; stdcall;
+{$EXTERNALSYM RemoveFontResourceA}
+function RemoveFontResourceA(FileName: PAnsiChar): BOOL; stdcall;
+{$EXTERNALSYM RemoveFontResourceW}
+function RemoveFontResourceW(FileName: PWideChar): BOOL; stdcall;
 {$EXTERNALSYM RoundRect}
 function RoundRect(DC: HDC; X1, Y1, X2, Y2, X3, Y3: Integer): BOOL; stdcall;
 {$EXTERNALSYM ResizePalette}
-function ResizePalette(p1: HPALETTE; p2: UINT): BOOL; stdcall;
+function ResizePalette(Palette: HPALETTE; Entries: UINT): BOOL; stdcall;
 {$EXTERNALSYM SaveDC}
 function SaveDC(DC: HDC): Integer; stdcall;
 {$EXTERNALSYM SelectClipRgn}
-function SelectClipRgn(DC: HDC; p2: HRGN): Integer; stdcall;
+function SelectClipRgn(DC: HDC; Region: HRGN): Integer; stdcall;
 {$EXTERNALSYM ExtSelectClipRgn}
-function ExtSelectClipRgn(DC: HDC; p2: HRGN; p3: Integer): Integer; stdcall;
+function ExtSelectClipRgn(DC: HDC; Region: HRGN; Mode: Integer): Integer; stdcall;
 {$EXTERNALSYM SetMetaRgn}
 function SetMetaRgn(DC: HDC): Integer; stdcall;
 {$EXTERNALSYM SelectObject}
@@ -15591,7 +15806,7 @@ function SetGraphicsMode(hdc: HDC; iMode: Integer): Integer; stdcall;
 {$EXTERNALSYM SetMapMode}
 function SetMapMode(DC: HDC; p2: Integer): Integer; stdcall;
 {$EXTERNALSYM SetMetaFileBitsEx}
-function SetMetaFileBitsEx(p1: UINT; const p2: PChar): HMETAFILE; stdcall;
+function SetMetaFileBitsEx(Size: UINT; const Data: PChar): HMETAFILE; stdcall;
 {$EXTERNALSYM SetPaletteEntries}
 function SetPaletteEntries(Palette: HPALETTE; StartIndex, NumEntries: UINT;
   var PaletteEntries): UINT; stdcall;
@@ -15600,7 +15815,7 @@ function SetPixel(DC: HDC; X, Y: Integer; Color: COLORREF): COLORREF; stdcall;
 {$EXTERNALSYM SetPixelV}
 function SetPixelV(DC: HDC; X, Y: Integer; Color: COLORREF): BOOL; stdcall;
 {$EXTERNALSYM SetPixelFormat}
-function SetPixelFormat(DC: HDC; p2: Integer; p3: PPixelFormatDescriptor): BOOL; stdcall;
+function SetPixelFormat(DC: HDC; PixelFormat: Integer; FormatDef: PPixelFormatDescriptor): BOOL; stdcall;
 {$EXTERNALSYM SetPolyFillMode}
 function SetPolyFillMode(DC: HDC; PolyFillMode: Integer): Integer; stdcall;
 {$EXTERNALSYM StretchBlt}
@@ -15608,14 +15823,14 @@ function StretchBlt(DestDC: HDC; X, Y, Width, Height: Integer; SrcDC: HDC;
   XSrc, YSrc, SrcWidth, SrcHeight: Integer; Rop: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SetRectRgn}
 function SetRectRgn(Rgn: HRgn; X1, Y1, X2, Y2: Integer): BOOL; stdcall;
-{$EXTERNALSYM StretchDIBits}
-function StretchDIBits(DC: HDC; DestX, DestY, DestWidth, DestHegiht, SrcX,
+function StretchDIBits(DC: HDC; DestX, DestY, DestWidth, DestHeight, SrcX,
   SrcY, SrcWidth, SrcHeight: Integer; Bits: Pointer; var BitsInfo: TBitmapInfo;
   Usage: UINT; Rop: DWORD): Integer; stdcall;
+{$EXTERNALSYM StretchDIBits}
 {$EXTERNALSYM SetROP2}
 function SetROP2(DC: HDC; p2: Integer): Integer; stdcall;
 {$EXTERNALSYM SetStretchBltMode}
-function SetStretchBltMode(DC: HDC; p2: Integer): Integer; stdcall;
+function SetStretchBltMode(DC: HDC; StretchMode: Integer): Integer; stdcall;
 {$EXTERNALSYM SetSystemPaletteUse}
 function SetSystemPaletteUse(DC: HDC; p2: UINT): UINT; stdcall;
 {$EXTERNALSYM SetTextCharacterExtra}
@@ -15684,6 +15899,8 @@ const
   { currentlly defined blend function }
   {$EXTERNALSYM AC_SRC_OVER}
   AC_SRC_OVER = $00;
+  {$EXTERNALSYM AC_SRC_ALPHA}
+  AC_SRC_ALPHA = $01;
 
   { alpha format flags }
   {$EXTERNALSYM AC_SRC_NO_PREMULT_ALPHA}
@@ -15718,57 +15935,59 @@ const
   GRADIENT_FILL_OP_FLAG = $000000ff;
 
 {$EXTERNALSYM GradientFill}
-function GradientFill(DC: HDC; var p2: TTriVertex; p3: ULONG; p4: Pointer; p5, p6: ULONG): BOOL; stdcall;
+function GradientFill(DC: HDC; var Vertex: TTriVertex; NumVertex: ULONG; Mesh: Pointer; NumMesh, Mode: ULONG): BOOL; stdcall;
 
 {$EXTERNALSYM PlayMetaFileRecord}
 function PlayMetaFileRecord(DC: HDC; const p2: THandleTable; const p3: TMetaRecord; p4: UINT): BOOL; stdcall;
 
-type
+type
+
 
 
 
 
 
   TFNMFEnumProc = TFarProc;
-  TFNEnhMFEnumProc = TFarProc;
+  TFNEnhMFEnumProc = TFarProc;
+
 
 {$EXTERNALSYM EnumMetaFile}
-function EnumMetaFile(DC: HDC; p2: HMETAFILE; p3: TFNMFEnumProc; p4: LPARAM): BOOL; stdcall;
+function EnumMetaFile(DC: HDC; Handle: HMETAFILE; MetaFunc: TFNMFEnumProc; lParam: LPARAM): BOOL; stdcall;
 
 { Enhanced Metafile Function Declarations }
 
 {$EXTERNALSYM CloseEnhMetaFile}
 function CloseEnhMetaFile(DC: HDC): HENHMETAFILE; stdcall;
+{$EXTERNALSYM CopyEnhMetaFile}
+function CopyEnhMetaFile(p1: HENHMETAFILE; p2: PChar): HENHMETAFILE; stdcall;
 {$EXTERNALSYM CopyEnhMetaFileA}
 function CopyEnhMetaFileA(p1: HENHMETAFILE; p2: PAnsiChar): HENHMETAFILE; stdcall;
 {$EXTERNALSYM CopyEnhMetaFileW}
 function CopyEnhMetaFileW(p1: HENHMETAFILE; p2: PWideChar): HENHMETAFILE; stdcall;
-{$EXTERNALSYM CopyEnhMetaFile}
-function CopyEnhMetaFile(p1: HENHMETAFILE; p2: PChar): HENHMETAFILE; stdcall;
-{$EXTERNALSYM CreateEnhMetaFileA}
-function CreateEnhMetaFileA(DC: HDC; p2: PAnsiChar; p3: PRect; p4: PAnsiChar): HDC; stdcall;
-{$EXTERNALSYM CreateEnhMetaFileW}
-function CreateEnhMetaFileW(DC: HDC; p2: PWideChar; p3: PRect; p4: PWideChar): HDC; stdcall;
 {$EXTERNALSYM CreateEnhMetaFile}
-function CreateEnhMetaFile(DC: HDC; p2: PChar; p3: PRect; p4: PChar): HDC; stdcall;
+function CreateEnhMetaFile(DC: HDC; FileName: PChar; Rect: PRect; Desc: PChar): HDC; stdcall;
+{$EXTERNALSYM CreateEnhMetaFileA}
+function CreateEnhMetaFileA(DC: HDC; FileName: PAnsiChar; Rect: PRect; Desc: PAnsiChar): HDC; stdcall;
+{$EXTERNALSYM CreateEnhMetaFileW}
+function CreateEnhMetaFileW(DC: HDC; FileName: PWideChar; Rect: PRect; Desc: PWideChar): HDC; stdcall;
 {$EXTERNALSYM DeleteEnhMetaFile}
 function DeleteEnhMetaFile(p1: HENHMETAFILE): BOOL; stdcall;
 {$EXTERNALSYM EnumEnhMetaFile}
-function EnumEnhMetaFile(DC: HDC; p2: HENHMETAFILE; p3: TFNEnhMFEnumProc; p4: Pointer; const p5: TRect): BOOL; stdcall;
+function EnumEnhMetaFile(DC: HDC; Emf: HENHMETAFILE; EnhMetaFunc: TFNEnhMFEnumProc; Data: Pointer; const Rect: TRect): BOOL; stdcall;
+{$EXTERNALSYM GetEnhMetaFile}
+function GetEnhMetaFile(p1: PChar): HENHMETAFILE; stdcall;
 {$EXTERNALSYM GetEnhMetaFileA}
 function GetEnhMetaFileA(p1: PAnsiChar): HENHMETAFILE; stdcall;
 {$EXTERNALSYM GetEnhMetaFileW}
 function GetEnhMetaFileW(p1: PWideChar): HENHMETAFILE; stdcall;
-{$EXTERNALSYM GetEnhMetaFile}
-function GetEnhMetaFile(p1: PChar): HENHMETAFILE; stdcall;
 {$EXTERNALSYM GetEnhMetaFileBits}
 function GetEnhMetaFileBits(p1: HENHMETAFILE; p2: UINT; p3: PByte): UINT; stdcall;
+{$EXTERNALSYM GetEnhMetaFileDescription}
+function GetEnhMetaFileDescription(p1: HENHMETAFILE; p2: UINT; p3: PChar): UINT; stdcall;
 {$EXTERNALSYM GetEnhMetaFileDescriptionA}
 function GetEnhMetaFileDescriptionA(p1: HENHMETAFILE; p2: UINT; p3: PAnsiChar): UINT; stdcall;
 {$EXTERNALSYM GetEnhMetaFileDescriptionW}
 function GetEnhMetaFileDescriptionW(p1: HENHMETAFILE; p2: UINT; p3: PWideChar): UINT; stdcall;
-{$EXTERNALSYM GetEnhMetaFileDescription}
-function GetEnhMetaFileDescription(p1: HENHMETAFILE; p2: UINT; p3: PChar): UINT; stdcall;
 {$EXTERNALSYM GetEnhMetaFileHeader}
 function GetEnhMetaFileHeader(p1: HENHMETAFILE; p2: UINT; p3: PEnhMetaHeader): UINT; stdcall;
 {$EXTERNALSYM GetEnhMetaFilePaletteEntries}
@@ -15791,12 +16010,12 @@ function SetWinMetaFileBits(p1: UINT; p2: PChar; p3: HDC;
   const p4: TMetaFilePict): HENHMETAFILE; stdcall;
 {$EXTERNALSYM GdiComment}
 function GdiComment(DC: HDC; p2: UINT; p3: PChar): BOOL; stdcall;
+{$EXTERNALSYM GetTextMetrics}
+function GetTextMetrics(DC: HDC; var TM: TTextMetric): BOOL; stdcall;
 {$EXTERNALSYM GetTextMetricsA}
 function GetTextMetricsA(DC: HDC; var TM: TTextMetricA): BOOL; stdcall;
 {$EXTERNALSYM GetTextMetricsW}
 function GetTextMetricsW(DC: HDC; var TM: TTextMetricW): BOOL; stdcall;
-{$EXTERNALSYM GetTextMetrics}
-function GetTextMetrics(DC: HDC; var TM: TTextMetric): BOOL; stdcall;
 
 { new GDI }
 
@@ -15960,12 +16179,12 @@ const
   {$EXTERNALSYM DI_APPBANDING}
   DI_APPBANDING = 1;
 
+{$EXTERNALSYM StartDoc}
+function StartDoc(DC: HDC; const p2: TDocInfo): Integer; stdcall;
 {$EXTERNALSYM StartDocA}
 function StartDocA(DC: HDC; const p2: TDocInfoA): Integer; stdcall;
 {$EXTERNALSYM StartDocW}
 function StartDocW(DC: HDC; const p2: TDocInfoW): Integer; stdcall;
-{$EXTERNALSYM StartDoc}
-function StartDoc(DC: HDC; const p2: TDocInfo): Integer; stdcall;
 {$EXTERNALSYM EndDoc}
 function EndDoc(DC: HDC): Integer; stdcall;
 {$EXTERNALSYM StartPage}
@@ -16016,35 +16235,35 @@ function ExtCreatePen(PenStyle, Width: DWORD; const Brush: TLogBrush;
 function GetMiterLimit(DC: HDC; var Limit: Single): BOOL; stdcall;
 {$EXTERNALSYM GetArcDirection}
 function GetArcDirection(DC: HDC): Integer; stdcall;
+{$EXTERNALSYM GetObject}
+function GetObject(p1: HGDIOBJ; p2: Integer; p3: Pointer): Integer; stdcall;
 {$EXTERNALSYM GetObjectA}
 function GetObjectA(p1: HGDIOBJ; p2: Integer; p3: Pointer): Integer; stdcall;
 {$EXTERNALSYM GetObjectW}
 function GetObjectW(p1: HGDIOBJ; p2: Integer; p3: Pointer): Integer; stdcall;
-{$EXTERNALSYM GetObject}
-function GetObject(p1: HGDIOBJ; p2: Integer; p3: Pointer): Integer; stdcall;
 {$EXTERNALSYM MoveToEx}
 function MoveToEx(DC: HDC; p2, p3: Integer; p4: PPoint): BOOL; stdcall;
+{$EXTERNALSYM TextOut}
+function TextOut(DC: HDC; X, Y: Integer; Str: PChar; Count: Integer): BOOL; stdcall;
 {$EXTERNALSYM TextOutA}
 function TextOutA(DC: HDC; X, Y: Integer; Str: PAnsiChar; Count: Integer): BOOL; stdcall;
 {$EXTERNALSYM TextOutW}
 function TextOutW(DC: HDC; X, Y: Integer; Str: PWideChar; Count: Integer): BOOL; stdcall;
-{$EXTERNALSYM TextOut}
-function TextOut(DC: HDC; X, Y: Integer; Str: PChar; Count: Integer): BOOL; stdcall;
+{$EXTERNALSYM ExtTextOut}
+function ExtTextOut(DC: HDC; X, Y: Integer; Options: Longint;
+  Rect: PRect; Str: PChar; Count: Longint; Dx: PInteger): BOOL; stdcall;
 {$EXTERNALSYM ExtTextOutA}
 function ExtTextOutA(DC: HDC; X, Y: Integer; Options: Longint;
   Rect: PRect; Str: PAnsiChar; Count: Longint; Dx: PInteger): BOOL; stdcall;
 {$EXTERNALSYM ExtTextOutW}
 function ExtTextOutW(DC: HDC; X, Y: Integer; Options: Longint;
   Rect: PRect; Str: PWideChar; Count: Longint; Dx: PInteger): BOOL; stdcall;
-{$EXTERNALSYM ExtTextOut}
-function ExtTextOut(DC: HDC; X, Y: Integer; Options: Longint;
-  Rect: PRect; Str: PChar; Count: Longint; Dx: PInteger): BOOL; stdcall;
+{$EXTERNALSYM PolyTextOut}
+function PolyTextOut(DC: HDC; const PolyTextArray; Strings: Integer): BOOL; stdcall;
 {$EXTERNALSYM PolyTextOutA}
 function PolyTextOutA(DC: HDC; const PolyTextArray; Strings: Integer): BOOL; stdcall;
 {$EXTERNALSYM PolyTextOutW}
 function PolyTextOutW(DC: HDC; const PolyTextArray; Strings: Integer): BOOL; stdcall;
-{$EXTERNALSYM PolyTextOut}
-function PolyTextOut(DC: HDC; const PolyTextArray; Strings: Integer): BOOL; stdcall;
 {$EXTERNALSYM CreatePolygonRgn}
 function CreatePolygonRgn(const Points; Count, FillMode: Integer): HRGN; stdcall;
 {$EXTERNALSYM DPtoLP}
@@ -16085,12 +16304,12 @@ function ScaleWindowExtEx(DC: HDC; XM, XD, YM, YD: Integer; Size: PSize): BOOL; 
 function SetBitmapDimensionEx(hBitmap: HBITMAP; Width, Height: Integer; Size: PSize): BOOL; stdcall;
 {$EXTERNALSYM SetBrushOrgEx}
 function SetBrushOrgEx(DC: HDC; X, Y: Integer; PrevPt: PPoint): BOOL; stdcall;
+{$EXTERNALSYM GetTextFace}
+function GetTextFace(DC: HDC; Count: Integer; Buffer: PChar): Integer; stdcall;
 {$EXTERNALSYM GetTextFaceA}
 function GetTextFaceA(DC: HDC; Count: Integer; Buffer: PAnsiChar): Integer; stdcall;
 {$EXTERNALSYM GetTextFaceW}
 function GetTextFaceW(DC: HDC; Count: Integer; Buffer: PWideChar): Integer; stdcall;
-{$EXTERNALSYM GetTextFace}
-function GetTextFace(DC: HDC; Count: Integer; Buffer: PChar): Integer; stdcall;
 
 const
   {$EXTERNALSYM FONTMAPPER_MAX}
@@ -16150,34 +16369,34 @@ function SetICMMode(DC: HDC; Mode: Integer): Integer; stdcall;
 function CheckColorsInGamut(DC: HDC; var RGBQuads, Results; Count: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetColorSpace}
 function GetColorSpace(DC: HDC): THandle; stdcall;
+{$EXTERNALSYM GetLogColorSpace}
+function GetLogColorSpace(p1: HCOLORSPACE; var ColorSpace: TLogColorSpace; Size: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetLogColorSpaceA}
 function GetLogColorSpaceA(p1: HCOLORSPACE; var ColorSpace: TLogColorSpaceA; Size: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetLogColorSpaceW}
 function GetLogColorSpaceW(p1: HCOLORSPACE; var ColorSpace: TLogColorSpaceW; Size: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetLogColorSpace}
-function GetLogColorSpace(p1: HCOLORSPACE; var ColorSpace: TLogColorSpace; Size: DWORD): BOOL; stdcall;
+{$EXTERNALSYM CreateColorSpace}
+function CreateColorSpace(var ColorSpace: TLogColorSpace): HCOLORSPACE; stdcall;
 {$EXTERNALSYM CreateColorSpaceA}
 function CreateColorSpaceA(var ColorSpace: TLogColorSpaceA): HCOLORSPACE; stdcall;
 {$EXTERNALSYM CreateColorSpaceW}
 function CreateColorSpaceW(var ColorSpace: TLogColorSpaceW): HCOLORSPACE; stdcall;
-{$EXTERNALSYM CreateColorSpace}
-function CreateColorSpace(var ColorSpace: TLogColorSpace): HCOLORSPACE; stdcall;
 {$EXTERNALSYM SetColorSpace}
 function SetColorSpace(DC: HDC; ColorSpace: HCOLORSPACE): BOOL; stdcall;
 {$EXTERNALSYM DeleteColorSpace}
 function DeleteColorSpace(ColorSpace: HCOLORSPACE): BOOL; stdcall;
+{$EXTERNALSYM GetICMProfile}
+function GetICMProfile(DC: HDC; var Size: DWORD; Name: PChar): BOOL; stdcall;
 {$EXTERNALSYM GetICMProfileA}
 function GetICMProfileA(DC: HDC; var Size: DWORD; Name: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM GetICMProfileW}
 function GetICMProfileW(DC: HDC; var Size: DWORD; Name: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM GetICMProfile}
-function GetICMProfile(DC: HDC; var Size: DWORD; Name: PChar): BOOL; stdcall;
+{$EXTERNALSYM SetICMProfile}
+function SetICMProfile(DC: HDC; Name: PChar): BOOL; stdcall;
 {$EXTERNALSYM SetICMProfileA}
 function SetICMProfileA(DC: HDC; Name: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM SetICMProfileW}
 function SetICMProfileW(DC: HDC; Name: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM SetICMProfile}
-function SetICMProfile(DC: HDC; Name: PChar): BOOL; stdcall;
 {$EXTERNALSYM GetDeviceGammaRamp}
 function GetDeviceGammaRamp(DC: HDC; var Ramp): BOOL; stdcall;
 {$EXTERNALSYM SetDeviceGammaRamp}
@@ -16185,24 +16404,26 @@ function SetDeviceGammaRamp(DC: HDC; var Ramp): BOOL; stdcall;
 {$EXTERNALSYM ColorMatchToTarget}
 function ColorMatchToTarget(DC: HDC; Target: HDC; Action: DWORD): BOOL; stdcall;
 
-type
+type
 
 
-  TFNICMEnumProc = TFarProc;
 
+  TFNICMEnumProc = TFarProc;
+
+
+{$EXTERNALSYM EnumICMProfiles}
+function EnumICMProfiles(DC: HDC; ICMProc: TFNICMEnumProc; p3: LPARAM): Integer; stdcall;
 {$EXTERNALSYM EnumICMProfilesA}
 function EnumICMProfilesA(DC: HDC; ICMProc: TFNICMEnumProc; p3: LPARAM): Integer; stdcall;
 {$EXTERNALSYM EnumICMProfilesW}
 function EnumICMProfilesW(DC: HDC; ICMProc: TFNICMEnumProc; p3: LPARAM): Integer; stdcall;
-{$EXTERNALSYM EnumICMProfiles}
-function EnumICMProfiles(DC: HDC; ICMProc: TFNICMEnumProc; p3: LPARAM): Integer; stdcall;
 
+{$EXTERNALSYM UpdateICMRegKey}
+function UpdateICMRegKey(p1: DWORD; p2, p3: PChar; p4: UINT): BOOL; stdcall;
 {$EXTERNALSYM UpdateICMRegKeyA}
 function UpdateICMRegKeyA(p1: DWORD; p2, p3: PAnsiChar; p4: UINT): BOOL; stdcall;
 {$EXTERNALSYM UpdateICMRegKeyW}
 function UpdateICMRegKeyW(p1: DWORD; p2, p3: PWideChar; p4: UINT): BOOL; stdcall;
-{$EXTERNALSYM UpdateICMRegKey}
-function UpdateICMRegKey(p1: DWORD; p2, p3: PChar; p4: UINT): BOOL; stdcall;
 
 {$EXTERNALSYM ColorCorrectPalette}
 function ColorCorrectPalette(DC: HDC; p2: HPALETTE; p3, p4: DWORD): BOOL; stdcall;
@@ -17021,6 +17242,7 @@ type
   {$EXTERNALSYM EMRFRAMERGN}
   EMRFRAMERGN = tagEMRFRAMERGN;
 
+  {$EXTERNALSYM PEMGradientFill}
   PEMGradientFill = ^TEMGradientFill;
   {$EXTERNALSYM tagEMRGRADIENTFILL}
   tagEMRGRADIENTFILL = record
@@ -17031,8 +17253,9 @@ type
     ulMode: ULONG;
     Ver: array[0..0] of TTriVertex;
   end;
+  {$EXTERNALSYM TEMGradientFill}
   TEMGradientFill = tagEMRGRADIENTFILL;
-  {$EXTERNALSYM EMRFRAMERGN}
+  {$EXTERNALSYM EMRGRADIENTFILL}
   EMRGRADIENTFILL = tagEMRGRADIENTFILL;
 
   PEMRExtSelectClipRgn = ^TEMRExtSelectClipRgn;
@@ -17238,6 +17461,7 @@ type
   {$EXTERNALSYM EMRSTRETCHDIBITS}
   EMRSTRETCHDIBITS = tagEMRSTRETCHDIBITS;
 
+  {$EXTERNALSYM PEMRAlphaBlend}
   PEMRAlphaBlend = ^TEMRAlphaBlend;
   {$EXTERNALSYM tagEMRALPHABLEND}
   tagEMRALPHABLEND = packed record
@@ -17260,6 +17484,7 @@ type
     cxSrc: Longint;
     cySrc: Longint;
   end;
+  {$EXTERNALSYM TEMRAlphaBlend}
   TEMRAlphaBlend = tagEMRALPHABLEND;
   {$EXTERNALSYM EMRALPHABLEND}
   EMRALPHABLEND = tagEMRALPHABLEND;
@@ -17477,12 +17702,12 @@ function wglGetCurrentDC: HDC; stdcall;
 function wglMakeCurrent(DC: HDC; p2: HGLRC): BOOL; stdcall;
 {$EXTERNALSYM wglShareLists}
 function wglShareLists(p1, p2: HGLRC): BOOL; stdcall;
+{$EXTERNALSYM wglUseFontBitmaps}
+function wglUseFontBitmaps(DC: HDC; p2, p3, p4: DWORD): BOOL; stdcall;
 {$EXTERNALSYM wglUseFontBitmapsA}
 function wglUseFontBitmapsA(DC: HDC; p2, p3, p4: DWORD): BOOL; stdcall;
 {$EXTERNALSYM wglUseFontBitmapsW}
 function wglUseFontBitmapsW(DC: HDC; p2, p3, p4: DWORD): BOOL; stdcall;
-{$EXTERNALSYM wglUseFontBitmaps}
-function wglUseFontBitmaps(DC: HDC; p2, p3, p4: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SwapBuffers}
 function SwapBuffers(DC: HDC): BOOL; stdcall;
 
@@ -17516,14 +17741,14 @@ const
   {$EXTERNALSYM WGL_FONT_POLYGONS}
   WGL_FONT_POLYGONS = 1;
 
+{$EXTERNALSYM wglUseFontOutlines}
+function wglUseFontOutlines(p1: HDC; p2, p3, p4: DWORD;
+  p5, p6: Single; p7: Integer; p8: PGlyphMetricsFloat): BOOL; stdcall;
 {$EXTERNALSYM wglUseFontOutlinesA}
 function wglUseFontOutlinesA(p1: HDC; p2, p3, p4: DWORD;
   p5, p6: Single; p7: Integer; p8: PGlyphMetricsFloat): BOOL; stdcall;
 {$EXTERNALSYM wglUseFontOutlinesW}
 function wglUseFontOutlinesW(p1: HDC; p2, p3, p4: DWORD;
-  p5, p6: Single; p7: Integer; p8: PGlyphMetricsFloat): BOOL; stdcall;
-{$EXTERNALSYM wglUseFontOutlines}
-function wglUseFontOutlines(p1: HDC; p2, p3, p4: DWORD;
   p5, p6: Single; p7: Integer; p8: PGlyphMetricsFloat): BOOL; stdcall;
 
 { Layer plane descriptor }
@@ -17668,12 +17893,14 @@ function wglRealizeLayerPalette(p1: HDC; p2: Integer; p3: BOOL): BOOL; stdcall;
 function wglSwapLayerBuffers(p1: HDC; p2: Cardinal): BOOL; stdcall;
 
 type
+  {$EXTERNALSYM PWGLSwap}
   PWGLSwap = ^TWGLSwap;
   {$EXTERNALSYM _WGLSWAP}
   _WGLSWAP = packed record
     hdc: HDC;
     uiFlags: UINT;
   end;
+  {$EXTERNALSYM TWGLSwap}
   TWGLSwap = _WGLSWAP;
   {$EXTERNALSYM WGLSWAP}
   WGLSWAP = _WGLSWAP;
@@ -17694,7 +17921,8 @@ type
   {$EXTERNALSYM PMENUTEMPLATE}
   {$EXTERNALSYM va_list}
   va_list = PChar;
-
+
+
 
 
 
@@ -17709,11 +17937,13 @@ type
   TFNGrayStringProc = TFarProc;
   TFNWndEnumProc = TFarProc;
   TFNSendAsyncProc = TFarProc;
-  TFNDrawStateProc = TFarProc;
+  TFNDrawStateProc = TFarProc;
+
 
   TFNHookProc = function (code: Integer; wparam: WPARAM; lparam: LPARAM): LRESULT stdcall;
 
-type
+type
+
 
 
 
@@ -17723,7 +17953,8 @@ type
   TFNPropEnumProc = TFarProc;
   TFNPropEnumProcEx = TFarProc;
   TFNEditWordBreakProc = TFarProc;
-  TFNNameEnumProc = TFarProc;
+  TFNNameEnumProc = TFarProc;
+
   TFNWinStaEnumProc = TFNNameEnumProc;
   TFNDeskTopEnumProc = TFNNameEnumProc;
 
@@ -17752,7 +17983,7 @@ const
   {$EXTERNALSYM RT_ACCELERATOR}
   RT_ACCELERATOR  = MakeIntResource(9);
   {$EXTERNALSYM RT_RCDATA}
-  RT_RCDATA       = MakeIntResource(10);
+  RT_RCDATA       = Types.RT_RCDATA; //MakeIntResource(10);
   {$EXTERNALSYM RT_MESSAGETABLE}
   RT_MESSAGETABLE = MakeIntResource(11);
 
@@ -17776,18 +18007,18 @@ const
   {$EXTERNALSYM RT_ANIICON}
   RT_ANIICON      = MakeIntResource(22);
 
+{$EXTERNALSYM wvsprintf}
+function wvsprintf(Output: PChar; Format: PChar; arglist: va_list): Integer; stdcall;
 {$EXTERNALSYM wvsprintfA}
 function wvsprintfA(Output: PAnsiChar; Format: PAnsiChar; arglist: va_list): Integer; stdcall;
 {$EXTERNALSYM wvsprintfW}
 function wvsprintfW(Output: PWideChar; Format: PWideChar; arglist: va_list): Integer; stdcall;
-{$EXTERNALSYM wvsprintf}
-function wvsprintf(Output: PChar; Format: PChar; arglist: va_list): Integer; stdcall;
+{$EXTERNALSYM wsprintf}
+function wsprintf(Output: PChar; Format: PChar): Integer; stdcall;
 {$EXTERNALSYM wsprintfA}
 function wsprintfA(Output: PAnsiChar; Format: PAnsiChar): Integer; stdcall;
 {$EXTERNALSYM wsprintfW}
 function wsprintfW(Output: PWideChar; Format: PWideChar): Integer; stdcall;
-{$EXTERNALSYM wsprintf}
-function wsprintf(Output: PChar; Format: PChar): Integer; stdcall;
 
 const
   { Scroll Bar Constants }
@@ -18429,12 +18660,12 @@ const
   KL_NAMELENGTH = 9;
 
 
+{$EXTERNALSYM LoadKeyboardLayout}
+function LoadKeyboardLayout(pwszKLID: PChar; Flags: UINT): HKL; stdcall;
 {$EXTERNALSYM LoadKeyboardLayoutA}
 function LoadKeyboardLayoutA(pwszKLID: PAnsiChar; Flags: UINT): HKL; stdcall;
 {$EXTERNALSYM LoadKeyboardLayoutW}
 function LoadKeyboardLayoutW(pwszKLID: PWideChar; Flags: UINT): HKL; stdcall;
-{$EXTERNALSYM LoadKeyboardLayout}
-function LoadKeyboardLayout(pwszKLID: PChar; Flags: UINT): HKL; stdcall;
 {$EXTERNALSYM ActivateKeyboardLayout}
 function ActivateKeyboardLayout(hkl: HKL; Flags: UINT): HKL; stdcall;
 {$EXTERNALSYM UnloadKeyboardLayout}
@@ -18442,18 +18673,19 @@ function UnloadKeyboardLayout(hkl: HKL): BOOL; stdcall;
 {$EXTERNALSYM ToUnicodeEx}
 function ToUnicodeEx(wVirtKey, wScanCode: UINT; lpKeyState: PByte;
   pwszBuff: PWideChar; cchBuff: Integer; wFlags: UINT; dwhkl: HKL): Integer; stdcall;
+{$EXTERNALSYM GetKeyboardLayoutName}
+function GetKeyboardLayoutName(pwszKLID: PChar): BOOL; stdcall;
 {$EXTERNALSYM GetKeyboardLayoutNameA}
 function GetKeyboardLayoutNameA(pwszKLID: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM GetKeyboardLayoutNameW}
 function GetKeyboardLayoutNameW(pwszKLID: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM GetKeyboardLayoutName}
-function GetKeyboardLayoutName(pwszKLID: PChar): BOOL; stdcall;
 {$EXTERNALSYM GetKeyboardLayoutList}
 function GetKeyboardLayoutList(nBuff: Integer; var List): UINT; stdcall;
 {$EXTERNALSYM GetKeyboardLayout}
 function GetKeyboardLayout(dwLayout: DWORD): HKL; stdcall;
 
 type
+  {$EXTERNALSYM PMouseMovePoint}
   PMouseMovePoint = ^TMouseMovePoint;
   {$EXTERNALSYM tagMOUSEMOVEPOINT}
   tagMOUSEMOVEPOINT = packed record
@@ -18462,6 +18694,7 @@ type
     time: DWORD;
     dwExtraInfo: DWORD;
   end;
+  {$EXTERNALSYM TMouseMovePoint}
   TMouseMovePoint = tagMOUSEMOVEPOINT;
   {$EXTERNALSYM MOUSEMOVEPOINT}
   MOUSEMOVEPOINT = tagMOUSEMOVEPOINT;
@@ -18504,6 +18737,10 @@ const
   DF_ALLOWOTHERACCOUNTHOOK = 1;
 
 
+{$EXTERNALSYM CreateDesktop}
+function CreateDesktop(lpszDesktop, lpszDevice: PChar;
+  pDevmode: PDeviceMode; dwFlags: DWORD; dwDesiredAccess:
+  DWORD; lpsa: PSecurityAttributes): HDESK; stdcall;
 {$EXTERNALSYM CreateDesktopA}
 function CreateDesktopA(lpszDesktop, lpszDevice: PAnsiChar;
   pDevmode: PDeviceModeA; dwFlags: DWORD; dwDesiredAccess:
@@ -18512,25 +18749,21 @@ function CreateDesktopA(lpszDesktop, lpszDevice: PAnsiChar;
 function CreateDesktopW(lpszDesktop, lpszDevice: PWideChar;
   pDevmode: PDeviceModeW; dwFlags: DWORD; dwDesiredAccess:
   DWORD; lpsa: PSecurityAttributes): HDESK; stdcall;
-{$EXTERNALSYM CreateDesktop}
-function CreateDesktop(lpszDesktop, lpszDevice: PChar;
-  pDevmode: PDeviceMode; dwFlags: DWORD; dwDesiredAccess:
-  DWORD; lpsa: PSecurityAttributes): HDESK; stdcall;
+{$EXTERNALSYM OpenDesktop}
+function OpenDesktop(lpszDesktop: PChar; dwFlags: DWORD; fInherit: BOOL;
+  dwDesiredAccess: DWORD): HDESK; stdcall;
 {$EXTERNALSYM OpenDesktopA}
 function OpenDesktopA(lpszDesktop: PAnsiChar; dwFlags: DWORD; fInherit: BOOL;
   dwDesiredAccess: DWORD): HDESK; stdcall;
 {$EXTERNALSYM OpenDesktopW}
 function OpenDesktopW(lpszDesktop: PWideChar; dwFlags: DWORD; fInherit: BOOL;
   dwDesiredAccess: DWORD): HDESK; stdcall;
-{$EXTERNALSYM OpenDesktop}
-function OpenDesktop(lpszDesktop: PChar; dwFlags: DWORD; fInherit: BOOL;
-  dwDesiredAccess: DWORD): HDESK; stdcall;
+{$EXTERNALSYM EnumDesktops}
+function EnumDesktops(hwinsta: HWINSTA; lpEnumFunc: TFNDeskTopEnumProc; lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM EnumDesktopsA}
 function EnumDesktopsA(hwinsta: HWINSTA; lpEnumFunc: TFNDeskTopEnumProc; lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM EnumDesktopsW}
 function EnumDesktopsW(hwinsta: HWINSTA; lpEnumFunc: TFNDeskTopEnumProc; lParam: LPARAM): BOOL; stdcall;
-{$EXTERNALSYM EnumDesktops}
-function EnumDesktops(hwinsta: HWINSTA; lpEnumFunc: TFNDeskTopEnumProc; lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM OpenInputDesktop}
 function OpenInputDesktop(dwFlags: DWORD; fInherit: BOOL; dwDesiredAccess: DWORD): HDESK; stdcall;
 {$EXTERNALSYM EnumDesktopWindows}
@@ -18569,30 +18802,30 @@ const
   {$EXTERNALSYM WSF_VISIBLE}
   WSF_VISIBLE = 1;
 
+{$EXTERNALSYM CreateWindowStation}
+function CreateWindowStation(lpwinsta: PChar; dwReserved, dwDesiredAccess: DWORD;
+  lpsa: PSecurityAttributes): HWINSTA; stdcall;
 {$EXTERNALSYM CreateWindowStationA}
 function CreateWindowStationA(lpwinsta: PAnsiChar; dwReserved, dwDesiredAccess: DWORD;
   lpsa: PSecurityAttributes): HWINSTA; stdcall;
 {$EXTERNALSYM CreateWindowStationW}
 function CreateWindowStationW(lpwinsta: PWideChar; dwReserved, dwDesiredAccess: DWORD;
   lpsa: PSecurityAttributes): HWINSTA; stdcall;
-{$EXTERNALSYM CreateWindowStation}
-function CreateWindowStation(lpwinsta: PChar; dwReserved, dwDesiredAccess: DWORD;
-  lpsa: PSecurityAttributes): HWINSTA; stdcall;
+{$EXTERNALSYM OpenWindowStation}
+function OpenWindowStation(lpszWinSta: PChar; fInherit: BOOL;
+  dwDesiredAccess: DWORD): HWINSTA; stdcall;
 {$EXTERNALSYM OpenWindowStationA}
 function OpenWindowStationA(lpszWinSta: PAnsiChar; fInherit: BOOL;
   dwDesiredAccess: DWORD): HWINSTA; stdcall;
 {$EXTERNALSYM OpenWindowStationW}
 function OpenWindowStationW(lpszWinSta: PWideChar; fInherit: BOOL;
   dwDesiredAccess: DWORD): HWINSTA; stdcall;
-{$EXTERNALSYM OpenWindowStation}
-function OpenWindowStation(lpszWinSta: PChar; fInherit: BOOL;
-  dwDesiredAccess: DWORD): HWINSTA; stdcall;
+{$EXTERNALSYM EnumWindowStations}
+function EnumWindowStations(lpEnumFunc: TFNWinStaEnumProc; lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM EnumWindowStationsA}
 function EnumWindowStationsA(lpEnumFunc: TFNWinStaEnumProc; lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM EnumWindowStationsW}
 function EnumWindowStationsW(lpEnumFunc: TFNWinStaEnumProc; lParam: LPARAM): BOOL; stdcall;
-{$EXTERNALSYM EnumWindowStations}
-function EnumWindowStations(lpEnumFunc: TFNWinStaEnumProc; lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM CloseWindowStation}
 function CloseWindowStation(hWinSta: HWINSTA): BOOL; stdcall;
 {$EXTERNALSYM SetProcessWindowStation}
@@ -18628,23 +18861,23 @@ type
   {$EXTERNALSYM USEROBJECTFLAGS}
   USEROBJECTFLAGS = tagUSEROBJECTFLAGS;
 
+{$EXTERNALSYM GetUserObjectInformation}
+function GetUserObjectInformation(hObj: THandle; nIndex: Integer; pvInfo: Pointer;
+  nLength: DWORD; var lpnLengthNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetUserObjectInformationA}
 function GetUserObjectInformationA(hObj: THandle; nIndex: Integer; pvInfo: Pointer;
   nLength: DWORD; var lpnLengthNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetUserObjectInformationW}
 function GetUserObjectInformationW(hObj: THandle; nIndex: Integer; pvInfo: Pointer;
   nLength: DWORD; var lpnLengthNeeded: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetUserObjectInformation}
-function GetUserObjectInformation(hObj: THandle; nIndex: Integer; pvInfo: Pointer;
-  nLength: DWORD; var lpnLengthNeeded: DWORD): BOOL; stdcall;
+{$EXTERNALSYM SetUserObjectInformation}
+function SetUserObjectInformation(hObj: THandle; nIndex: Integer;
+  pvInfo: Pointer; nLength: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SetUserObjectInformationA}
 function SetUserObjectInformationA(hObj: THandle; nIndex: Integer;
   pvInfo: Pointer; nLength: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SetUserObjectInformationW}
 function SetUserObjectInformationW(hObj: THandle; nIndex: Integer;
-  pvInfo: Pointer; nLength: DWORD): BOOL; stdcall;
-{$EXTERNALSYM SetUserObjectInformation}
-function SetUserObjectInformation(hObj: THandle; nIndex: Integer;
   pvInfo: Pointer; nLength: DWORD): BOOL; stdcall;
 
 type
@@ -18736,7 +18969,6 @@ type
 
 { Message structure }
   PMsg = ^TMsg;
-  {$EXTERNALSYM tagMSG}
   tagMSG = packed record
     hwnd: HWND;
     message: UINT;
@@ -18745,18 +18977,21 @@ type
     time: DWORD;
     pt: TPoint;
   end;
+  {$EXTERNALSYM tagMSG}
   TMsg = tagMSG;
-  {$EXTERNALSYM MSG}
   MSG = tagMSG;
+  {$EXTERNALSYM MSG}
 
 function SmallPointToPoint(const P: TSmallPoint): TPoint;
+{$EXTERNALSYM SmallPointToPoint}
 function PointToSmallPoint(const P: TPoint): TSmallPoint;
-{$EXTERNALSYM MakeWParam}
+{$EXTERNALSYM PointToSmallPoint}
 function MakeWParam(l, h: Word): WPARAM;
-{$EXTERNALSYM MakeLParam}
+{$EXTERNALSYM MakeWParam}
 function MakeLParam(l, h: Word): LPARAM;
-{$EXTERNALSYM MakeLResult}
+{$EXTERNALSYM MakeLParam}
 function MakeLResult(l, h: Word): LRESULT;
+{$EXTERNALSYM MakeLResult}
 
 
 const
@@ -19012,12 +19247,12 @@ const
   {$EXTERNALSYM ICON_BIG}
   ICON_BIG = 1;
 
-{$EXTERNALSYM RegisterWindowMessageA}
-function RegisterWindowMessageA(lpString: PAnsiChar): UINT; stdcall;
-{$EXTERNALSYM RegisterWindowMessageW}
-function RegisterWindowMessageW(lpString: PWideChar): UINT; stdcall;
-{$EXTERNALSYM RegisterWindowMessage}
 function RegisterWindowMessage(lpString: PChar): UINT; stdcall;
+{$EXTERNALSYM RegisterWindowMessage}
+function RegisterWindowMessageA(lpString: PAnsiChar): UINT; stdcall;
+{$EXTERNALSYM RegisterWindowMessageA}
+function RegisterWindowMessageW(lpString: PWideChar): UINT; stdcall;
+{$EXTERNALSYM RegisterWindowMessageW}
 
 const
   { WM_SIZE message wParam values }
@@ -19240,6 +19475,15 @@ const
   WS_EX_OVERLAPPEDWINDOW = (WS_EX_WINDOWEDGE or WS_EX_CLIENTEDGE);
   {$EXTERNALSYM WS_EX_PALETTEWINDOW}
   WS_EX_PALETTEWINDOW = (WS_EX_WINDOWEDGE or WS_EX_TOOLWINDOW or WS_EX_TOPMOST);
+
+  {$EXTERNALSYM WS_EX_LAYERED}
+  WS_EX_LAYERED = $00080000;
+  {$EXTERNALSYM WS_EX_NOINHERITLAYOUT}
+  WS_EX_NOINHERITLAYOUT = $00100000; // Disable inheritence of mirroring by children
+  {$EXTERNALSYM WS_EX_LAYOUTRTL}
+  WS_EX_LAYOUTRTL = $00400000; // Right to left mirroring
+  {$EXTERNALSYM WS_EX_NOACTIVATE}
+  WS_EX_NOACTIVATE = $08000000;
 
   { Class styles }
   {$EXTERNALSYM CS_VREDRAW}
@@ -19728,33 +19972,33 @@ type
 
 { Message Function Templates }
 
+{$EXTERNALSYM GetMessage}
+function GetMessage(var lpMsg: TMsg; hWnd: HWND;
+  wMsgFilterMin, wMsgFilterMax: UINT): BOOL; stdcall;
 {$EXTERNALSYM GetMessageA}
 function GetMessageA(var lpMsg: TMsg; hWnd: HWND;
   wMsgFilterMin, wMsgFilterMax: UINT): BOOL; stdcall;
 {$EXTERNALSYM GetMessageW}
 function GetMessageW(var lpMsg: TMsg; hWnd: HWND;
   wMsgFilterMin, wMsgFilterMax: UINT): BOOL; stdcall;
-{$EXTERNALSYM GetMessage}
-function GetMessage(var lpMsg: TMsg; hWnd: HWND;
-  wMsgFilterMin, wMsgFilterMax: UINT): BOOL; stdcall;
+{$EXTERNALSYM DispatchMessage}
+function DispatchMessage(const lpMsg: TMsg): Longint; stdcall;
 {$EXTERNALSYM DispatchMessageA}
 function DispatchMessageA(const lpMsg: TMsg): Longint; stdcall;
 {$EXTERNALSYM DispatchMessageW}
 function DispatchMessageW(const lpMsg: TMsg): Longint; stdcall;
-{$EXTERNALSYM DispatchMessage}
-function DispatchMessage(const lpMsg: TMsg): Longint; stdcall;
 {$EXTERNALSYM TranslateMessage}
 function TranslateMessage(const lpMsg: TMsg): BOOL; stdcall;
 {$EXTERNALSYM SetMessageQueue}
 function SetMessageQueue(cMessagesMax: Integer): BOOL; stdcall;
+{$EXTERNALSYM PeekMessage}
+function PeekMessage(var lpMsg: TMsg; hWnd: HWND;
+  wMsgFilterMin, wMsgFilterMax, wRemoveMsg: UINT): BOOL; stdcall;
 {$EXTERNALSYM PeekMessageA}
 function PeekMessageA(var lpMsg: TMsg; hWnd: HWND;
   wMsgFilterMin, wMsgFilterMax, wRemoveMsg: UINT): BOOL; stdcall;
 {$EXTERNALSYM PeekMessageW}
 function PeekMessageW(var lpMsg: TMsg; hWnd: HWND;
-  wMsgFilterMin, wMsgFilterMax, wRemoveMsg: UINT): BOOL; stdcall;
-{$EXTERNALSYM PeekMessage}
-function PeekMessage(var lpMsg: TMsg; hWnd: HWND;
   wMsgFilterMin, wMsgFilterMax, wRemoveMsg: UINT): BOOL; stdcall;
 
 const
@@ -19826,47 +20070,47 @@ function GetMessageExtraInfo: Longint; stdcall;
 {$EXTERNALSYM SetMessageExtraInfo}
 function SetMessageExtraInfo(lParam: LPARAM): LPARAM; stdcall;
 
+{$EXTERNALSYM SendMessage}
+function SendMessage(hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM SendMessageA}
 function SendMessageA(hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM SendMessageW}
 function SendMessageW(hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
-{$EXTERNALSYM SendMessage}
-function SendMessage(hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
+{$EXTERNALSYM SendMessageTimeout}
+function SendMessageTimeout(hWnd: HWND; Msg: UINT; wParam: WPARAM;
+  lParam: LPARAM; fuFlags, uTimeout: UINT; var lpdwResult: DWORD): LRESULT; stdcall;
 {$EXTERNALSYM SendMessageTimeoutA}
 function SendMessageTimeoutA(hWnd: HWND; Msg: UINT; wParam: WPARAM;
   lParam: LPARAM; fuFlags, uTimeout: UINT; var lpdwResult: DWORD): LRESULT; stdcall;
 {$EXTERNALSYM SendMessageTimeoutW}
 function SendMessageTimeoutW(hWnd: HWND; Msg: UINT; wParam: WPARAM;
   lParam: LPARAM; fuFlags, uTimeout: UINT; var lpdwResult: DWORD): LRESULT; stdcall;
-{$EXTERNALSYM SendMessageTimeout}
-function SendMessageTimeout(hWnd: HWND; Msg: UINT; wParam: WPARAM;
-  lParam: LPARAM; fuFlags, uTimeout: UINT; var lpdwResult: DWORD): LRESULT; stdcall;
+{$EXTERNALSYM SendNotifyMessage}
+function SendNotifyMessage(hWnd: HWND; Msg: UINT; wParam: WPARAM;
+  lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM SendNotifyMessageA}
 function SendNotifyMessageA(hWnd: HWND; Msg: UINT; wParam: WPARAM;
   lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM SendNotifyMessageW}
 function SendNotifyMessageW(hWnd: HWND; Msg: UINT; wParam: WPARAM;
   lParam: LPARAM): BOOL; stdcall;
-{$EXTERNALSYM SendNotifyMessage}
-function SendNotifyMessage(hWnd: HWND; Msg: UINT; wParam: WPARAM;
-  lParam: LPARAM): BOOL; stdcall;
+{$EXTERNALSYM SendMessageCallback}
+function SendMessageCallback(hWnd: HWND; Msg: UINT; wParam: WPARAM;
+  lParam: LPARAM; lpResultCallBack: TFNSendAsyncProc; dwData: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SendMessageCallbackA}
 function SendMessageCallbackA(hWnd: HWND; Msg: UINT; wParam: WPARAM;
   lParam: LPARAM; lpResultCallBack: TFNSendAsyncProc; dwData: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SendMessageCallbackW}
 function SendMessageCallbackW(hWnd: HWND; Msg: UINT; wParam: WPARAM;
   lParam: LPARAM; lpResultCallBack: TFNSendAsyncProc; dwData: DWORD): BOOL; stdcall;
-{$EXTERNALSYM SendMessageCallback}
-function SendMessageCallback(hWnd: HWND; Msg: UINT; wParam: WPARAM;
-  lParam: LPARAM; lpResultCallBack: TFNSendAsyncProc; dwData: DWORD): BOOL; stdcall;
+{$EXTERNALSYM BroadcastSystemMessage}
+function BroadcastSystemMessage(Flags: DWORD; Recipients: PDWORD;
+  uiMessage: UINT; wParam: WPARAM; lParam: LPARAM): Longint; stdcall;
 {$EXTERNALSYM BroadcastSystemMessageA}
 function BroadcastSystemMessageA(Flags: DWORD; Recipients: PDWORD;
   uiMessage: UINT; wParam: WPARAM; lParam: LPARAM): Longint; stdcall;
 {$EXTERNALSYM BroadcastSystemMessageW}
 function BroadcastSystemMessageW(Flags: DWORD; Recipients: PDWORD;
-  uiMessage: UINT; wParam: WPARAM; lParam: LPARAM): Longint; stdcall;
-{$EXTERNALSYM BroadcastSystemMessage}
-function BroadcastSystemMessage(Flags: DWORD; Recipients: PDWORD;
   uiMessage: UINT; wParam: WPARAM; lParam: LPARAM): Longint; stdcall;
 
 const
@@ -19929,33 +20173,33 @@ const
   {$EXTERNALSYM DEVICE_NOTIFY_WINDOW_HANDLE}
   DEVICE_NOTIFY_WINDOW_HANDLE = 0;
 
+{$EXTERNALSYM RegisterDeviceNotification}
+function RegisterDeviceNotification(hRecipient: THandle; NotificationFilter: Pointer; Flags: DWORD): HDEVNOTIFY; stdcall;
 {$EXTERNALSYM RegisterDeviceNotificationA}
 function RegisterDeviceNotificationA(hRecipient: THandle; NotificationFilter: Pointer; Flags: DWORD): HDEVNOTIFY; stdcall;
 {$EXTERNALSYM RegisterDeviceNotificationW}
 function RegisterDeviceNotificationW(hRecipient: THandle; NotificationFilter: Pointer; Flags: DWORD): HDEVNOTIFY; stdcall;
-{$EXTERNALSYM RegisterDeviceNotification}
-function RegisterDeviceNotification(hRecipient: THandle; NotificationFilter: Pointer; Flags: DWORD): HDEVNOTIFY; stdcall;
 {$EXTERNALSYM UnregisterDeviceNotification}
 function UnregisterDeviceNotification(Handle: HDEVNOTIFY): BOOL; stdcall;
 
+{$EXTERNALSYM PostMessage}
+function PostMessage(hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM PostMessageA}
 function PostMessageA(hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM PostMessageW}
 function PostMessageW(hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL; stdcall;
-{$EXTERNALSYM PostMessage}
-function PostMessage(hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL; stdcall;
+{$EXTERNALSYM PostThreadMessage}
+function PostThreadMessage(idThread: DWORD; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM PostThreadMessageA}
 function PostThreadMessageA(idThread: DWORD; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM PostThreadMessageW}
 function PostThreadMessageW(idThread: DWORD; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL; stdcall;
-{$EXTERNALSYM PostThreadMessage}
-function PostThreadMessage(idThread: DWORD; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL; stdcall;
+{$EXTERNALSYM PostAppMessage}
+function PostAppMessage(idThread: DWORD; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL;
 {$EXTERNALSYM PostAppMessageA}
 function PostAppMessageA(idThread: DWORD; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL;
 {$EXTERNALSYM PostAppMessageW}
 function PostAppMessageW(idThread: DWORD; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL;
-{$EXTERNALSYM PostAppMessage}
-function PostAppMessage(idThread: DWORD; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL;
 
 const
   { Special HWND value for use with PostMessage() and SendMessage() }
@@ -19975,18 +20219,18 @@ function ReplyMessage(lResult: LRESULT): BOOL; stdcall;
 function WaitMessage: BOOL; stdcall;
 {$EXTERNALSYM WaitForInputIdle}
 function WaitForInputIdle(hProcess: THandle; dwMilliseconds: DWORD): DWORD; stdcall;
+{$EXTERNALSYM DefWindowProc}
+function DefWindowProc(hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM DefWindowProcA}
 function DefWindowProcA(hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM DefWindowProcW}
 function DefWindowProcW(hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
-{$EXTERNALSYM DefWindowProc}
-function DefWindowProc(hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
+{$EXTERNALSYM CallWindowProc}
+function CallWindowProc(lpPrevWndFunc: TFNWndProc; hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM CallWindowProcA}
 function CallWindowProcA(lpPrevWndFunc: TFNWndProc; hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM CallWindowProcW}
 function CallWindowProcW(lpPrevWndFunc: TFNWndProc; hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
-{$EXTERNALSYM CallWindowProc}
-function CallWindowProc(lpPrevWndFunc: TFNWndProc; hWnd: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM PostQuitMessage}
 procedure PostQuitMessage(nExitCode: Integer); stdcall;
 {$EXTERNALSYM InSendMessage}
@@ -20011,39 +20255,39 @@ const
 function GetDoubleClickTime: UINT; stdcall;
 {$EXTERNALSYM SetDoubleClickTime}
 function SetDoubleClickTime(Interval: UINT): BOOL; stdcall;
+{$EXTERNALSYM RegisterClass}
+function RegisterClass(const lpWndClass: TWndClass): ATOM; stdcall;
 {$EXTERNALSYM RegisterClassA}
 function RegisterClassA(const lpWndClass: TWndClassA): ATOM; stdcall;
 {$EXTERNALSYM RegisterClassW}
 function RegisterClassW(const lpWndClass: TWndClassW): ATOM; stdcall;
-{$EXTERNALSYM RegisterClass}
-function RegisterClass(const lpWndClass: TWndClass): ATOM; stdcall;
+{$EXTERNALSYM UnregisterClass}
+function UnregisterClass(lpClassName: PChar; hInstance: HINST): BOOL; stdcall;
 {$EXTERNALSYM UnregisterClassA}
 function UnregisterClassA(lpClassName: PAnsiChar; hInstance: HINST): BOOL; stdcall;
 {$EXTERNALSYM UnregisterClassW}
 function UnregisterClassW(lpClassName: PWideChar; hInstance: HINST): BOOL; stdcall;
-{$EXTERNALSYM UnregisterClass}
-function UnregisterClass(lpClassName: PChar; hInstance: HINST): BOOL; stdcall;
+{$EXTERNALSYM GetClassInfo}
+function GetClassInfo(hInstance: HINST; lpClassName: PChar;
+  var lpWndClass: TWndClass): BOOL; stdcall;
 {$EXTERNALSYM GetClassInfoA}
 function GetClassInfoA(hInstance: HINST; lpClassName: PAnsiChar;
   var lpWndClass: TWndClassA): BOOL; stdcall;
 {$EXTERNALSYM GetClassInfoW}
 function GetClassInfoW(hInstance: HINST; lpClassName: PWideChar;
   var lpWndClass: TWndClassW): BOOL; stdcall;
-{$EXTERNALSYM GetClassInfo}
-function GetClassInfo(hInstance: HINST; lpClassName: PChar;
-  var lpWndClass: TWndClass): BOOL; stdcall;
+{$EXTERNALSYM RegisterClassEx}
+function RegisterClassEx(const WndClass: TWndClassEx): ATOM; stdcall;
 {$EXTERNALSYM RegisterClassExA}
 function RegisterClassExA(const WndClass: TWndClassExA): ATOM; stdcall;
 {$EXTERNALSYM RegisterClassExW}
 function RegisterClassExW(const WndClass: TWndClassExW): ATOM; stdcall;
-{$EXTERNALSYM RegisterClassEx}
-function RegisterClassEx(const WndClass: TWndClassEx): ATOM; stdcall;
+{$EXTERNALSYM GetClassInfoEx}
+function GetClassInfoEx(Instance: HINST; Classname: PChar; var WndClass: TWndClassEx): BOOL; stdcall;
 {$EXTERNALSYM GetClassInfoExA}
 function GetClassInfoExA(Instance: HINST; Classname: PAnsiChar; var WndClass: TWndClassExA): BOOL; stdcall;
 {$EXTERNALSYM GetClassInfoExW}
 function GetClassInfoExW(Instance: HINST; Classname: PWideChar; var WndClass: TWndClassExW): BOOL; stdcall;
-{$EXTERNALSYM GetClassInfoEx}
-function GetClassInfoEx(Instance: HINST; Classname: PChar; var WndClass: TWndClassEx): BOOL; stdcall;
 
 const
   {$EXTERNALSYM CW_USEDEFAULT}
@@ -20053,6 +20297,10 @@ const
   {$EXTERNALSYM HWND_DESKTOP}
   HWND_DESKTOP = 0;
 
+{$EXTERNALSYM CreateWindowEx}
+function CreateWindowEx(dwExStyle: DWORD; lpClassName: PChar;
+  lpWindowName: PChar; dwStyle: DWORD; X, Y, nWidth, nHeight: Integer;
+  hWndParent: HWND; hMenu: HMENU; hInstance: HINST; lpParam: Pointer): HWND; stdcall;
 {$EXTERNALSYM CreateWindowExA}
 function CreateWindowExA(dwExStyle: DWORD; lpClassName: PAnsiChar;
   lpWindowName: PAnsiChar; dwStyle: DWORD; X, Y, nWidth, nHeight: Integer;
@@ -20061,20 +20309,16 @@ function CreateWindowExA(dwExStyle: DWORD; lpClassName: PAnsiChar;
 function CreateWindowExW(dwExStyle: DWORD; lpClassName: PWideChar;
   lpWindowName: PWideChar; dwStyle: DWORD; X, Y, nWidth, nHeight: Integer;
   hWndParent: HWND; hMenu: HMENU; hInstance: HINST; lpParam: Pointer): HWND; stdcall;
-{$EXTERNALSYM CreateWindowEx}
-function CreateWindowEx(dwExStyle: DWORD; lpClassName: PChar;
-  lpWindowName: PChar; dwStyle: DWORD; X, Y, nWidth, nHeight: Integer;
-  hWndParent: HWND; hMenu: HMENU; hInstance: HINST; lpParam: Pointer): HWND; stdcall;
+{$EXTERNALSYM CreateWindow}
+function CreateWindow(lpClassName: PChar; lpWindowName: PChar;
+  dwStyle: DWORD; X, Y, nWidth, nHeight: Integer; hWndParent: HWND;
+  hMenu: HMENU; hInstance: HINST; lpParam: Pointer): HWND;
 {$EXTERNALSYM CreateWindowA}
 function CreateWindowA(lpClassName: PAnsiChar; lpWindowName: PAnsiChar;
   dwStyle: DWORD; X, Y, nWidth, nHeight: Integer; hWndParent: HWND;
   hMenu: HMENU; hInstance: HINST; lpParam: Pointer): HWND;
 {$EXTERNALSYM CreateWindowW}
 function CreateWindowW(lpClassName: PWideChar; lpWindowName: PWideChar;
-  dwStyle: DWORD; X, Y, nWidth, nHeight: Integer; hWndParent: HWND;
-  hMenu: HMENU; hInstance: HINST; lpParam: Pointer): HWND;
-{$EXTERNALSYM CreateWindow}
-function CreateWindow(lpClassName: PChar; lpWindowName: PChar;
   dwStyle: DWORD; X, Y, nWidth, nHeight: Integer; hWndParent: HWND;
   hMenu: HMENU; hInstance: HINST; lpParam: Pointer): HWND;
 
@@ -20094,8 +20338,27 @@ function AnimateWindow(hWnd: HWND; dwTime: DWORD; dwFlags: DWORD): BOOL; stdcall
 function ShowWindowAsync(hWnd: HWND; nCmdShow: Integer): BOOL; stdcall;
 {$EXTERNALSYM FlashWindow}
 function FlashWindow(hWnd: HWND; bInvert: BOOL): BOOL; stdcall;
+{$EXTERNALSYM UpdateLayeredWindow}
+function UpdateLayeredWindow(Handle: THandle; hdcDest: HDC; pptDst: PPoint; _psize: PSize;
+                             hdcSrc: HDC; pptSrc: PPoint; crKey: COLORREF; pblend: PBLENDFUNCTION; dwFlags: DWORD): Boolean; stdcall;
+{$EXTERNALSYM SetLayeredWindowAttributes}
+function SetLayeredWindowAttributes(Hwnd: THandle; crKey: COLORREF; bAlpha: Byte; dwFlags: DWORD): Boolean; stdcall;
+
+const
+{$EXTERNALSYM LWA_COLORKEY}
+  LWA_COLORKEY = $00000001;
+{$EXTERNALSYM LWA_ALPHA}
+  LWA_ALPHA = $00000002;
+
+{$EXTERNALSYM ULW_COLORKEY}
+  ULW_COLORKEY = $00000001;
+{$EXTERNALSYM ULW_ALPHA}
+  ULW_ALPHA = $00000002;
+{$EXTERNALSYM ULW_OPAQUE}
+  ULW_OPAQUE = $00000004;
 
 type
+  {$EXTERNALSYM FLASHWINFO}
   FLASHWINFO = record
     cbSize: UINT;
     hwnd: HWND;
@@ -20103,9 +20366,9 @@ type
     uCount: UINT;
     dwTimeout: DWORD;
   end;
-  {$EXTERNALSYM FLASHWINFO}
-  PFLASHWINFO = ^FLASHWINFO;
   {$EXTERNALSYM PFLASHWINFO}
+  PFLASHWINFO = ^FLASHWINFO;
+  {$EXTERNALSYM TFlashWInfo}
   TFlashWInfo = FLASHWINFO;
 
 function FlashWindowEx(var pfwi: FLASHWINFO): BOOL; stdcall;
@@ -20230,14 +20493,17 @@ type
   end;
   TDlgItemTemplate = DLGITEMTEMPLATE;
 
+{$EXTERNALSYM CreateDialogParam}
+function CreateDialogParam(hInstance: HINST; lpTemplateName: PChar;
+  hWndParent: HWND; lpDialogFunc: TFNDlgProc; dwInitParam: LPARAM): HWND; stdcall;
 {$EXTERNALSYM CreateDialogParamA}
 function CreateDialogParamA(hInstance: HINST; lpTemplateName: PAnsiChar;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc; dwInitParam: LPARAM): HWND; stdcall;
 {$EXTERNALSYM CreateDialogParamW}
 function CreateDialogParamW(hInstance: HINST; lpTemplateName: PWideChar;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc; dwInitParam: LPARAM): HWND; stdcall;
-{$EXTERNALSYM CreateDialogParam}
-function CreateDialogParam(hInstance: HINST; lpTemplateName: PChar;
+{$EXTERNALSYM CreateDialogIndirectParam}
+function CreateDialogIndirectParam(hInstance: HINST; const lpTemplate: TDlgTemplate;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc; dwInitParam: LPARAM): HWND; stdcall;
 {$EXTERNALSYM CreateDialogIndirectParamA}
 function CreateDialogIndirectParamA(hInstance: HINST; const lpTemplate: TDlgTemplate;
@@ -20245,17 +20511,17 @@ function CreateDialogIndirectParamA(hInstance: HINST; const lpTemplate: TDlgTemp
 {$EXTERNALSYM CreateDialogIndirectParamW}
 function CreateDialogIndirectParamW(hInstance: HINST; const lpTemplate: TDlgTemplate;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc; dwInitParam: LPARAM): HWND; stdcall;
-{$EXTERNALSYM CreateDialogIndirectParam}
-function CreateDialogIndirectParam(hInstance: HINST; const lpTemplate: TDlgTemplate;
-  hWndParent: HWND; lpDialogFunc: TFNDlgProc; dwInitParam: LPARAM): HWND; stdcall;
+{$EXTERNALSYM CreateDialog}
+function CreateDialog(hInstance: HINST; lpTemplateName: PChar;
+  hWndParent: HWND; lpDialogFunc: TFNDlgProc): HWND;
 {$EXTERNALSYM CreateDialogA}
 function CreateDialogA(hInstance: HINST; lpTemplateName: PAnsiChar;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): HWND;
 {$EXTERNALSYM CreateDialogW}
 function CreateDialogW(hInstance: HINST; lpTemplateName: PWideChar;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): HWND;
-{$EXTERNALSYM CreateDialog}
-function CreateDialog(hInstance: HINST; lpTemplateName: PChar;
+{$EXTERNALSYM CreateDialogIndirect}
+function CreateDialogIndirect(hInstance: HINST; const lpTemplate: TDlgTemplate;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): HWND;
 {$EXTERNALSYM CreateDialogIndirectA}
 function CreateDialogIndirectA(hInstance: HINST; const lpTemplate: TDlgTemplate;
@@ -20263,17 +20529,17 @@ function CreateDialogIndirectA(hInstance: HINST; const lpTemplate: TDlgTemplate;
 {$EXTERNALSYM CreateDialogIndirectW}
 function CreateDialogIndirectW(hInstance: HINST; const lpTemplate: TDlgTemplate;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): HWND;
-{$EXTERNALSYM CreateDialogIndirect}
-function CreateDialogIndirect(hInstance: HINST; const lpTemplate: TDlgTemplate;
-  hWndParent: HWND; lpDialogFunc: TFNDlgProc): HWND;
+{$EXTERNALSYM DialogBoxParam}
+function DialogBoxParam(hInstance: HINST; lpTemplateName: PChar;
+  hWndParent: HWND; lpDialogFunc: TFNDlgProc; dwInitParam: LPARAM): Integer; stdcall;
 {$EXTERNALSYM DialogBoxParamA}
 function DialogBoxParamA(hInstance: HINST; lpTemplateName: PAnsiChar;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc; dwInitParam: LPARAM): Integer; stdcall;
 {$EXTERNALSYM DialogBoxParamW}
 function DialogBoxParamW(hInstance: HINST; lpTemplateName: PWideChar;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc; dwInitParam: LPARAM): Integer; stdcall;
-{$EXTERNALSYM DialogBoxParam}
-function DialogBoxParam(hInstance: HINST; lpTemplateName: PChar;
+{$EXTERNALSYM DialogBoxIndirectParam}
+function DialogBoxIndirectParam(hInstance: HINST; const lpDialogTemplate: TDlgTemplate;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc; dwInitParam: LPARAM): Integer; stdcall;
 {$EXTERNALSYM DialogBoxIndirectParamA}
 function DialogBoxIndirectParamA(hInstance: HINST; const lpDialogTemplate: TDlgTemplate;
@@ -20281,26 +20547,23 @@ function DialogBoxIndirectParamA(hInstance: HINST; const lpDialogTemplate: TDlgT
 {$EXTERNALSYM DialogBoxIndirectParamW}
 function DialogBoxIndirectParamW(hInstance: HINST; const lpDialogTemplate: TDlgTemplate;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc; dwInitParam: LPARAM): Integer; stdcall;
-{$EXTERNALSYM DialogBoxIndirectParam}
-function DialogBoxIndirectParam(hInstance: HINST; const lpDialogTemplate: TDlgTemplate;
-  hWndParent: HWND; lpDialogFunc: TFNDlgProc; dwInitParam: LPARAM): Integer; stdcall;
+{$EXTERNALSYM DialogBox}
+function DialogBox(hInstance: HINST; lpTemplate: PChar;
+  hWndParent: HWND; lpDialogFunc: TFNDlgProc): Integer;
 {$EXTERNALSYM DialogBoxA}
 function DialogBoxA(hInstance: HINST; lpTemplate: PAnsiChar;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): Integer;
 {$EXTERNALSYM DialogBoxW}
 function DialogBoxW(hInstance: HINST; lpTemplate: PWideChar;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): Integer;
-{$EXTERNALSYM DialogBox}
-function DialogBox(hInstance: HINST; lpTemplate: PChar;
+{$EXTERNALSYM DialogBoxIndirect}
+function DialogBoxIndirect(hInstance: HINST; const lpDialogTemplate: TDlgTemplate;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): Integer;
 {$EXTERNALSYM DialogBoxIndirectA}
 function DialogBoxIndirectA(hInstance: HINST; const lpDialogTemplate: TDlgTemplate;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): Integer;
 {$EXTERNALSYM DialogBoxIndirectW}
 function DialogBoxIndirectW(hInstance: HINST; const lpDialogTemplate: TDlgTemplate;
-  hWndParent: HWND; lpDialogFunc: TFNDlgProc): Integer;
-{$EXTERNALSYM DialogBoxIndirect}
-function DialogBoxIndirect(hInstance: HINST; const lpDialogTemplate: TDlgTemplate;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): Integer;
 {$EXTERNALSYM EndDialog}
 function EndDialog(hDlg: HWND; nResult: Integer): BOOL; stdcall;
@@ -20311,35 +20574,35 @@ function SetDlgItemInt(hDlg: HWND; nIDDlgItem: Integer; uValue: UINT; bSigned: B
 {$EXTERNALSYM GetDlgItemInt}
 function GetDlgItemInt(hDlg: HWND; nIDDlgItem: Integer;
   var lpTranslated: BOOL; bSigned: BOOL): UINT; stdcall;
+{$EXTERNALSYM SetDlgItemText}
+function SetDlgItemText(hDlg: HWND; nIDDlgItem: Integer; lpString: PChar): BOOL; stdcall;
 {$EXTERNALSYM SetDlgItemTextA}
 function SetDlgItemTextA(hDlg: HWND; nIDDlgItem: Integer; lpString: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM SetDlgItemTextW}
 function SetDlgItemTextW(hDlg: HWND; nIDDlgItem: Integer; lpString: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM SetDlgItemText}
-function SetDlgItemText(hDlg: HWND; nIDDlgItem: Integer; lpString: PChar): BOOL; stdcall;
+{$EXTERNALSYM GetDlgItemText}
+function GetDlgItemText(hDlg: HWND; nIDDlgItem: Integer;
+  lpString: PChar; nMaxCount: Integer): UINT; stdcall;
 {$EXTERNALSYM GetDlgItemTextA}
 function GetDlgItemTextA(hDlg: HWND; nIDDlgItem: Integer;
   lpString: PAnsiChar; nMaxCount: Integer): UINT; stdcall;
 {$EXTERNALSYM GetDlgItemTextW}
 function GetDlgItemTextW(hDlg: HWND; nIDDlgItem: Integer;
   lpString: PWideChar; nMaxCount: Integer): UINT; stdcall;
-{$EXTERNALSYM GetDlgItemText}
-function GetDlgItemText(hDlg: HWND; nIDDlgItem: Integer;
-  lpString: PChar; nMaxCount: Integer): UINT; stdcall;
 {$EXTERNALSYM CheckDlgButton}
 function CheckDlgButton(hDlg: HWND; nIDButton: Integer; uCheck: UINT): BOOL; stdcall;
 {$EXTERNALSYM CheckRadioButton}
 function CheckRadioButton(hDlg: HWND; nIDFirstButton, nIDLastButton, nIDCheckButton: Integer): BOOL; stdcall;
 {$EXTERNALSYM IsDlgButtonChecked}
 function IsDlgButtonChecked(hDlg: HWND; nIDButton: Integer): UINT; stdcall;
+{$EXTERNALSYM SendDlgItemMessage}
+function SendDlgItemMessage(hDlg: HWND; nIDDlgItem: Integer;
+  Msg: UINT; wParam: WPARAM; lParam: LPARAM): Longint; stdcall;
 {$EXTERNALSYM SendDlgItemMessageA}
 function SendDlgItemMessageA(hDlg: HWND; nIDDlgItem: Integer;
   Msg: UINT; wParam: WPARAM; lParam: LPARAM): Longint; stdcall;
 {$EXTERNALSYM SendDlgItemMessageW}
 function SendDlgItemMessageW(hDlg: HWND; nIDDlgItem: Integer;
-  Msg: UINT; wParam: WPARAM; lParam: LPARAM): Longint; stdcall;
-{$EXTERNALSYM SendDlgItemMessage}
-function SendDlgItemMessage(hDlg: HWND; nIDDlgItem: Integer;
   Msg: UINT; wParam: WPARAM; lParam: LPARAM): Longint; stdcall;
 {$EXTERNALSYM GetNextDlgGroupItem}
 function GetNextDlgGroupItem(hDlg: HWND; hCtl: HWND; bPrevious: BOOL): HWND; stdcall;
@@ -20349,24 +20612,24 @@ function GetNextDlgTabItem(hDlg: HWND; hCtl: HWND; bPrevious: BOOL): HWND; stdca
 function GetDlgCtrlID(hWnd: HWND): Integer; stdcall;
 {$EXTERNALSYM GetDialogBaseUnits}
 function GetDialogBaseUnits: Longint; stdcall;
+{$EXTERNALSYM DefDlgProc}
+function DefDlgProc(hDlg: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM DefDlgProcA}
 function DefDlgProcA(hDlg: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM DefDlgProcW}
 function DefDlgProcW(hDlg: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
-{$EXTERNALSYM DefDlgProc}
-function DefDlgProc(hDlg: HWND; Msg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 
 const
   { Window extra byted needed for private dialog classes. }
   {$EXTERNALSYM DLGWINDOWEXTRA}
   DLGWINDOWEXTRA = 30;
 
+{$EXTERNALSYM CallMsgFilter}
+function CallMsgFilter(var lpMsg: TMsg; nCode: Integer): BOOL; stdcall;
 {$EXTERNALSYM CallMsgFilterA}
 function CallMsgFilterA(var lpMsg: TMsg; nCode: Integer): BOOL; stdcall;
 {$EXTERNALSYM CallMsgFilterW}
 function CallMsgFilterW(var lpMsg: TMsg; nCode: Integer): BOOL; stdcall;
-{$EXTERNALSYM CallMsgFilter}
-function CallMsgFilter(var lpMsg: TMsg; nCode: Integer): BOOL; stdcall;
 
 { Clipboard Manager Functions }
 
@@ -20388,24 +20651,24 @@ function ChangeClipboardChain(hWndRemove, hWndNewNext: HWND): BOOL; stdcall;
 function SetClipboardData(uFormat: UINT; hMem: THandle): THandle; stdcall;
 {$EXTERNALSYM GetClipboardData}
 function GetClipboardData(uFormat: UINT): THandle; stdcall;
+{$EXTERNALSYM RegisterClipboardFormat}
+function RegisterClipboardFormat(lpszFormat: PChar): UINT; stdcall;
 {$EXTERNALSYM RegisterClipboardFormatA}
 function RegisterClipboardFormatA(lpszFormat: PAnsiChar): UINT; stdcall;
 {$EXTERNALSYM RegisterClipboardFormatW}
 function RegisterClipboardFormatW(lpszFormat: PWideChar): UINT; stdcall;
-{$EXTERNALSYM RegisterClipboardFormat}
-function RegisterClipboardFormat(lpszFormat: PChar): UINT; stdcall;
 {$EXTERNALSYM CountClipboardFormats}
 function CountClipboardFormats: Integer; stdcall;
 {$EXTERNALSYM EnumClipboardFormats}
 function EnumClipboardFormats(format: UINT): UINT; stdcall;
+{$EXTERNALSYM GetClipboardFormatName}
+function GetClipboardFormatName(format: UINT; lpszFormatName: PChar;
+  cchMaxCount: Integer): Integer; stdcall;
 {$EXTERNALSYM GetClipboardFormatNameA}
 function GetClipboardFormatNameA(format: UINT; lpszFormatName: PAnsiChar;
   cchMaxCount: Integer): Integer; stdcall;
 {$EXTERNALSYM GetClipboardFormatNameW}
 function GetClipboardFormatNameW(format: UINT; lpszFormatName: PWideChar;
-  cchMaxCount: Integer): Integer; stdcall;
-{$EXTERNALSYM GetClipboardFormatName}
-function GetClipboardFormatName(format: UINT; lpszFormatName: PChar;
   cchMaxCount: Integer): Integer; stdcall;
 {$EXTERNALSYM EmptyClipboard}
 function EmptyClipboard: BOOL; stdcall;
@@ -20418,66 +20681,66 @@ function GetOpenClipboardWindow: HWND; stdcall;
 
 { Character Translation Routines }
 
+{$EXTERNALSYM CharToOem}
+function CharToOem(lpszSrc: PChar; lpszDst: PChar): BOOL; stdcall;
 {$EXTERNALSYM CharToOemA}
 function CharToOemA(lpszSrc: PAnsiChar; lpszDst: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM CharToOemW}
 function CharToOemW(lpszSrc: PWideChar; lpszDst: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM CharToOem}
-function CharToOem(lpszSrc: PChar; lpszDst: PChar): BOOL; stdcall;
+{$EXTERNALSYM OemToChar}
+function OemToChar(lpszSrc: PChar; lpszDst: PChar): BOOL; stdcall;
 {$EXTERNALSYM OemToCharA}
 function OemToCharA(lpszSrc: PAnsiChar; lpszDst: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM OemToCharW}
 function OemToCharW(lpszSrc: PWideChar; lpszDst: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM OemToChar}
-function OemToChar(lpszSrc: PChar; lpszDst: PChar): BOOL; stdcall;
+{$EXTERNALSYM CharToOemBuff}
+function CharToOemBuff(lpszSrc: PChar; lpszDst: PChar; cchDstLength: DWORD): BOOL; stdcall;
 {$EXTERNALSYM CharToOemBuffA}
 function CharToOemBuffA(lpszSrc: PAnsiChar; lpszDst: PAnsiChar; cchDstLength: DWORD): BOOL; stdcall;
 {$EXTERNALSYM CharToOemBuffW}
 function CharToOemBuffW(lpszSrc: PWideChar; lpszDst: PWideChar; cchDstLength: DWORD): BOOL; stdcall;
-{$EXTERNALSYM CharToOemBuff}
-function CharToOemBuff(lpszSrc: PChar; lpszDst: PChar; cchDstLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM OemToCharBuff}
+function OemToCharBuff(lpszSrc: PChar; lpszDst: PChar; cchDstLength: DWORD): BOOL; stdcall;
 {$EXTERNALSYM OemToCharBuffA}
 function OemToCharBuffA(lpszSrc: PAnsiChar; lpszDst: PAnsiChar; cchDstLength: DWORD): BOOL; stdcall;
 {$EXTERNALSYM OemToCharBuffW}
 function OemToCharBuffW(lpszSrc: PWideChar; lpszDst: PWideChar; cchDstLength: DWORD): BOOL; stdcall;
-{$EXTERNALSYM OemToCharBuff}
-function OemToCharBuff(lpszSrc: PChar; lpszDst: PChar; cchDstLength: DWORD): BOOL; stdcall;
+{$EXTERNALSYM CharUpper}
+function CharUpper(lpsz: PChar): PChar; stdcall;
 {$EXTERNALSYM CharUpperA}
 function CharUpperA(lpsz: PAnsiChar): PAnsiChar; stdcall;
 {$EXTERNALSYM CharUpperW}
 function CharUpperW(lpsz: PWideChar): PWideChar; stdcall;
-{$EXTERNALSYM CharUpper}
-function CharUpper(lpsz: PChar): PChar; stdcall;
+{$EXTERNALSYM CharUpperBuff}
+function CharUpperBuff(lpsz: PChar; cchLength: DWORD): DWORD; stdcall;
 {$EXTERNALSYM CharUpperBuffA}
 function CharUpperBuffA(lpsz: PAnsiChar; cchLength: DWORD): DWORD; stdcall;
 {$EXTERNALSYM CharUpperBuffW}
 function CharUpperBuffW(lpsz: PWideChar; cchLength: DWORD): DWORD; stdcall;
-{$EXTERNALSYM CharUpperBuff}
-function CharUpperBuff(lpsz: PChar; cchLength: DWORD): DWORD; stdcall;
+{$EXTERNALSYM CharLower}
+function CharLower(lpsz: PChar): PChar; stdcall;
 {$EXTERNALSYM CharLowerA}
 function CharLowerA(lpsz: PAnsiChar): PAnsiChar; stdcall;
 {$EXTERNALSYM CharLowerW}
 function CharLowerW(lpsz: PWideChar): PWideChar; stdcall;
-{$EXTERNALSYM CharLower}
-function CharLower(lpsz: PChar): PChar; stdcall;
+{$EXTERNALSYM CharLowerBuff}
+function CharLowerBuff(lpsz: PChar; cchLength: DWORD): DWORD; stdcall;
 {$EXTERNALSYM CharLowerBuffA}
 function CharLowerBuffA(lpsz: PAnsiChar; cchLength: DWORD): DWORD; stdcall;
 {$EXTERNALSYM CharLowerBuffW}
 function CharLowerBuffW(lpsz: PWideChar; cchLength: DWORD): DWORD; stdcall;
-{$EXTERNALSYM CharLowerBuff}
-function CharLowerBuff(lpsz: PChar; cchLength: DWORD): DWORD; stdcall;
+{$EXTERNALSYM CharNext}
+function CharNext(lpsz: PChar): PChar; stdcall;
 {$EXTERNALSYM CharNextA}
 function CharNextA(lpsz: PAnsiChar): PAnsiChar; stdcall;
 {$EXTERNALSYM CharNextW}
 function CharNextW(lpsz: PWideChar): PWideChar; stdcall;
-{$EXTERNALSYM CharNext}
-function CharNext(lpsz: PChar): PChar; stdcall;
+{$EXTERNALSYM CharPrev}
+function CharPrev(lpszStart: PChar; lpszCurrent: PChar): PChar; stdcall;
 {$EXTERNALSYM CharPrevA}
 function CharPrevA(lpszStart: PAnsiChar; lpszCurrent: PAnsiChar): PAnsiChar; stdcall;
 {$EXTERNALSYM CharPrevW}
 function CharPrevW(lpszStart: PWideChar; lpszCurrent: PWideChar): PWideChar; stdcall;
-{$EXTERNALSYM CharPrev}
-function CharPrev(lpszStart: PChar; lpszCurrent: PChar): PChar; stdcall;
 
 {$EXTERNALSYM CharNextExA}
 function CharNextExA(CodePage: Word; lpCurrentChar: LPCSTR; dwFlags: DWORD): LPSTR; stdcall;
@@ -20513,30 +20776,30 @@ function AnsiPrev(const lpszStart: LPCSTR; const lpszCurrent: LPCSTR): LPSTR; st
 
 { Language dependent Routines }
 
+{$EXTERNALSYM IsCharAlpha}
+function IsCharAlpha(ch: Char): BOOL; stdcall;
 {$EXTERNALSYM IsCharAlphaA}
 function IsCharAlphaA(ch: AnsiChar): BOOL; stdcall;
 {$EXTERNALSYM IsCharAlphaW}
 function IsCharAlphaW(ch: WideChar): BOOL; stdcall;
-{$EXTERNALSYM IsCharAlpha}
-function IsCharAlpha(ch: Char): BOOL; stdcall;
+{$EXTERNALSYM IsCharAlphaNumeric}
+function IsCharAlphaNumeric(ch: Char): BOOL; stdcall;
 {$EXTERNALSYM IsCharAlphaNumericA}
 function IsCharAlphaNumericA(ch: AnsiChar): BOOL; stdcall;
 {$EXTERNALSYM IsCharAlphaNumericW}
 function IsCharAlphaNumericW(ch: WideChar): BOOL; stdcall;
-{$EXTERNALSYM IsCharAlphaNumeric}
-function IsCharAlphaNumeric(ch: Char): BOOL; stdcall;
+{$EXTERNALSYM IsCharUpper}
+function IsCharUpper(ch: Char): BOOL; stdcall;
 {$EXTERNALSYM IsCharUpperA}
 function IsCharUpperA(ch: AnsiChar): BOOL; stdcall;
 {$EXTERNALSYM IsCharUpperW}
 function IsCharUpperW(ch: WideChar): BOOL; stdcall;
-{$EXTERNALSYM IsCharUpper}
-function IsCharUpper(ch: Char): BOOL; stdcall;
+{$EXTERNALSYM IsCharLower}
+function IsCharLower(ch: Char): BOOL; stdcall;
 {$EXTERNALSYM IsCharLowerA}
 function IsCharLowerA(ch: AnsiChar): BOOL; stdcall;
 {$EXTERNALSYM IsCharLowerW}
 function IsCharLowerW(ch: WideChar): BOOL; stdcall;
-{$EXTERNALSYM IsCharLower}
-function IsCharLower(ch: Char): BOOL; stdcall;
 
 {$EXTERNALSYM SetFocus}
 function SetFocus(hWnd: HWND): HWND; stdcall;
@@ -20559,12 +20822,12 @@ type
 function GetKeyboardState(var KeyState: TKeyboardState): BOOL; stdcall;
 {$EXTERNALSYM SetKeyboardState}
 function SetKeyboardState(var KeyState: TKeyboardState): BOOL; stdcall;
+{$EXTERNALSYM GetKeyNameText}
+function GetKeyNameText(lParam: Longint; lpString: PChar; nSize: Integer): Integer; stdcall;
 {$EXTERNALSYM GetKeyNameTextA}
 function GetKeyNameTextA(lParam: Longint; lpString: PAnsiChar; nSize: Integer): Integer; stdcall;
 {$EXTERNALSYM GetKeyNameTextW}
 function GetKeyNameTextW(lParam: Longint; lpString: PWideChar; nSize: Integer): Integer; stdcall;
-{$EXTERNALSYM GetKeyNameText}
-function GetKeyNameText(lParam: Longint; lpString: PChar; nSize: Integer): Integer; stdcall;
 {$EXTERNALSYM GetKeyboardType}
 function GetKeyboardType(nTypeFlag: Integer): Integer; stdcall;
 {$EXTERNALSYM ToAscii}
@@ -20579,18 +20842,18 @@ function ToUnicode(wVirtKey, wScanCode: UINT; const KeyState: TKeyboardState;
 {$EXTERNALSYM OemKeyScan}
 function OemKeyScan(wOemChar: Word): DWORD; stdcall;
 
+{$EXTERNALSYM VkKeyScan}
+function VkKeyScan(ch: Char): SHORT; stdcall;
 {$EXTERNALSYM VkKeyScanA}
 function VkKeyScanA(ch: AnsiChar): SHORT; stdcall;
 {$EXTERNALSYM VkKeyScanW}
 function VkKeyScanW(ch: WideChar): SHORT; stdcall;
-{$EXTERNALSYM VkKeyScan}
-function VkKeyScan(ch: Char): SHORT; stdcall;
+{$EXTERNALSYM VkKeyScanEx}
+function VkKeyScanEx(ch: Char; dwhkl: HKL): SHORT; stdcall;
 {$EXTERNALSYM VkKeyScanExA}
 function VkKeyScanExA(ch: AnsiChar; dwhkl: HKL): SHORT; stdcall;
 {$EXTERNALSYM VkKeyScanExW}
 function VkKeyScanExW(ch: WideChar; dwhkl: HKL): SHORT; stdcall;
-{$EXTERNALSYM VkKeyScanEx}
-function VkKeyScanEx(ch: Char; dwhkl: HKL): SHORT; stdcall;
 
 const
   {$EXTERNALSYM KEYEVENTF_EXTENDEDKEY}
@@ -20692,18 +20955,18 @@ type
 {$EXTERNALSYM GetLastInputInfo}
 function GetLastInputInfo(var plii: TLastInputInfo): BOOL; stdcall;
 
+{$EXTERNALSYM MapVirtualKey}
+function MapVirtualKey(uCode, uMapType: UINT): UINT; stdcall;
 {$EXTERNALSYM MapVirtualKeyA}
 function MapVirtualKeyA(uCode, uMapType: UINT): UINT; stdcall;
 {$EXTERNALSYM MapVirtualKeyW}
 function MapVirtualKeyW(uCode, uMapType: UINT): UINT; stdcall;
-{$EXTERNALSYM MapVirtualKey}
-function MapVirtualKey(uCode, uMapType: UINT): UINT; stdcall;
+{$EXTERNALSYM MapVirtualKeyEx}
+function MapVirtualKeyEx(uCode, uMapType: UINT; dwhkl: HKL): UINT; stdcall;
 {$EXTERNALSYM MapVirtualKeyExA}
 function MapVirtualKeyExA(uCode, uMapType: UINT; dwhkl: HKL): UINT; stdcall;
 {$EXTERNALSYM MapVirtualKeyExW}
 function MapVirtualKeyExW(uCode, uMapType: UINT; dwhkl: HKL): UINT; stdcall;
-{$EXTERNALSYM MapVirtualKeyEx}
-function MapVirtualKeyEx(uCode, uMapType: UINT; dwhkl: HKL): UINT; stdcall;
 {$EXTERNALSYM GetInputState}
 function GetInputState: BOOL; stdcall;
 {$EXTERNALSYM GetQueueStatus}
@@ -20772,30 +21035,30 @@ function IsWindowUnicode(hWnd: HWND): BOOL; stdcall;
 function EnableWindow(hWnd: HWND; bEnable: BOOL): BOOL; stdcall;
 {$EXTERNALSYM IsWindowEnabled}
 function IsWindowEnabled(hWnd: HWND): BOOL; stdcall;
+{$EXTERNALSYM LoadAccelerators}
+function LoadAccelerators(hInstance: HINST; lpTableName: PChar): HACCEL; stdcall;
 {$EXTERNALSYM LoadAcceleratorsA}
 function LoadAcceleratorsA(hInstance: HINST; lpTableName: PAnsiChar): HACCEL; stdcall;
 {$EXTERNALSYM LoadAcceleratorsW}
 function LoadAcceleratorsW(hInstance: HINST; lpTableName: PWideChar): HACCEL; stdcall;
-{$EXTERNALSYM LoadAccelerators}
-function LoadAccelerators(hInstance: HINST; lpTableName: PChar): HACCEL; stdcall;
+{$EXTERNALSYM CreateAcceleratorTable}
+function CreateAcceleratorTable(var Accel; Count: Integer): HACCEL; stdcall;
 {$EXTERNALSYM CreateAcceleratorTableA}
 function CreateAcceleratorTableA(var Accel; Count: Integer): HACCEL; stdcall;
 {$EXTERNALSYM CreateAcceleratorTableW}
 function CreateAcceleratorTableW(var Accel; Count: Integer): HACCEL; stdcall;
-{$EXTERNALSYM CreateAcceleratorTable}
-function CreateAcceleratorTable(var Accel; Count: Integer): HACCEL; stdcall;
+{$EXTERNALSYM CopyAcceleratorTable}
+function CopyAcceleratorTable(hAccelSrc: HACCEL; var lpAccelDst; cAccelEntries: Integer): Integer; stdcall;
 {$EXTERNALSYM CopyAcceleratorTableA}
 function CopyAcceleratorTableA(hAccelSrc: HACCEL; var lpAccelDst; cAccelEntries: Integer): Integer; stdcall;
 {$EXTERNALSYM CopyAcceleratorTableW}
 function CopyAcceleratorTableW(hAccelSrc: HACCEL; var lpAccelDst; cAccelEntries: Integer): Integer; stdcall;
-{$EXTERNALSYM CopyAcceleratorTable}
-function CopyAcceleratorTable(hAccelSrc: HACCEL; var lpAccelDst; cAccelEntries: Integer): Integer; stdcall;
+{$EXTERNALSYM TranslateAccelerator}
+function TranslateAccelerator(hWnd: HWND; hAccTable: HACCEL; var lpMsg: TMsg): Integer; stdcall;
 {$EXTERNALSYM TranslateAcceleratorA}
 function TranslateAcceleratorA(hWnd: HWND; hAccTable: HACCEL; var lpMsg: TMsg): Integer; stdcall;
 {$EXTERNALSYM TranslateAcceleratorW}
 function TranslateAcceleratorW(hWnd: HWND; hAccTable: HACCEL; var lpMsg: TMsg): Integer; stdcall;
-{$EXTERNALSYM TranslateAccelerator}
-function TranslateAccelerator(hWnd: HWND; hAccTable: HACCEL; var lpMsg: TMsg): Integer; stdcall;
 {$EXTERNALSYM DestroyAcceleratorTable}
 function DestroyAcceleratorTable(hAccel: HACCEL): BOOL; stdcall;
 
@@ -20962,42 +21225,42 @@ const
 
 {$EXTERNALSYM GetSystemMetrics}
 function GetSystemMetrics(nIndex: Integer): Integer; stdcall;
+{$EXTERNALSYM LoadMenu}
+function LoadMenu(hInstance: HINST; lpMenuName: PAnsiChar): HMENU; stdcall;
 {$EXTERNALSYM LoadMenuA}
 function LoadMenuA(hInstance: HINST; lpMenuName: PAnsiChar): HMENU; stdcall;
 {$EXTERNALSYM LoadMenuW}
 function LoadMenuW(hInstance: HINST; lpMenuName: PAnsiChar): HMENU; stdcall;
-{$EXTERNALSYM LoadMenu}
-function LoadMenu(hInstance: HINST; lpMenuName: PAnsiChar): HMENU; stdcall;
+{$EXTERNALSYM LoadMenuIndirect}
+function LoadMenuIndirect(lpMenuTemplate: Pointer): HMENU; stdcall;
 {$EXTERNALSYM LoadMenuIndirectA}
 function LoadMenuIndirectA(lpMenuTemplate: Pointer): HMENU; stdcall;
 {$EXTERNALSYM LoadMenuIndirectW}
 function LoadMenuIndirectW(lpMenuTemplate: Pointer): HMENU; stdcall;
-{$EXTERNALSYM LoadMenuIndirect}
-function LoadMenuIndirect(lpMenuTemplate: Pointer): HMENU; stdcall;
 {$EXTERNALSYM GetMenu}
 function GetMenu(hWnd: HWND): HMENU; stdcall;
 {$EXTERNALSYM SetMenu}
 function SetMenu(hWnd: HWND; hMenu: HMENU): BOOL; stdcall;
+{$EXTERNALSYM ChangeMenu}
+function ChangeMenu(hMenu: HMENU; cmd: UINT; lpszNewItem: PChar;
+  cmdInsert: UINT; flags: UINT): BOOL; stdcall;
 {$EXTERNALSYM ChangeMenuA}
 function ChangeMenuA(hMenu: HMENU; cmd: UINT; lpszNewItem: PAnsiChar;
   cmdInsert: UINT; flags: UINT): BOOL; stdcall;
 {$EXTERNALSYM ChangeMenuW}
 function ChangeMenuW(hMenu: HMENU; cmd: UINT; lpszNewItem: PWideChar;
   cmdInsert: UINT; flags: UINT): BOOL; stdcall;
-{$EXTERNALSYM ChangeMenu}
-function ChangeMenu(hMenu: HMENU; cmd: UINT; lpszNewItem: PChar;
-  cmdInsert: UINT; flags: UINT): BOOL; stdcall;
 {$EXTERNALSYM HiliteMenuItem}
 function HiliteMenuItem(hWnd: HWND; hMenu: HMENU; uIDHiliteItem: UINT;
   uHilite: UINT): BOOL; stdcall;
+{$EXTERNALSYM GetMenuString}
+function GetMenuString(hMenu: HMENU; uIDItem: UINT; lpString: PChar;
+  nMaxCount: Integer; uFlag: UINT): Integer; stdcall;
 {$EXTERNALSYM GetMenuStringA}
 function GetMenuStringA(hMenu: HMENU; uIDItem: UINT; lpString: PAnsiChar;
   nMaxCount: Integer; uFlag: UINT): Integer; stdcall;
 {$EXTERNALSYM GetMenuStringW}
 function GetMenuStringW(hMenu: HMENU; uIDItem: UINT; lpString: PWideChar;
-  nMaxCount: Integer; uFlag: UINT): Integer; stdcall;
-{$EXTERNALSYM GetMenuString}
-function GetMenuString(hMenu: HMENU; uIDItem: UINT; lpString: PChar;
   nMaxCount: Integer; uFlag: UINT): Integer; stdcall;
 {$EXTERNALSYM GetMenuState}
 function GetMenuState(hMenu: HMENU; uId, uFlags: UINT): UINT; stdcall;
@@ -21021,14 +21284,17 @@ function GetSubMenu(hMenu: HMENU; nPos: Integer): HMENU; stdcall;
 function GetMenuItemID(hMenu: HMENU; nPos: Integer): UINT; stdcall;
 {$EXTERNALSYM GetMenuItemCount}
 function GetMenuItemCount(hMenu: HMENU): Integer; stdcall;
+{$EXTERNALSYM InsertMenu}
+function InsertMenu(hMenu: HMENU; uPosition, uFlags, uIDNewItem: UINT;
+  lpNewItem: PChar): BOOL; stdcall;
 {$EXTERNALSYM InsertMenuA}
 function InsertMenuA(hMenu: HMENU; uPosition, uFlags, uIDNewItem: UINT;
   lpNewItem: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM InsertMenuW}
 function InsertMenuW(hMenu: HMENU; uPosition, uFlags, uIDNewItem: UINT;
   lpNewItem: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM InsertMenu}
-function InsertMenu(hMenu: HMENU; uPosition, uFlags, uIDNewItem: UINT;
+{$EXTERNALSYM AppendMenu}
+function AppendMenu(hMenu: HMENU; uFlags, uIDNewItem: UINT;
   lpNewItem: PChar): BOOL; stdcall;
 {$EXTERNALSYM AppendMenuA}
 function AppendMenuA(hMenu: HMENU; uFlags, uIDNewItem: UINT;
@@ -21036,8 +21302,8 @@ function AppendMenuA(hMenu: HMENU; uFlags, uIDNewItem: UINT;
 {$EXTERNALSYM AppendMenuW}
 function AppendMenuW(hMenu: HMENU; uFlags, uIDNewItem: UINT;
   lpNewItem: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM AppendMenu}
-function AppendMenu(hMenu: HMENU; uFlags, uIDNewItem: UINT;
+{$EXTERNALSYM ModifyMenu}
+function ModifyMenu(hMnu: HMENU; uPosition, uFlags, uIDNewItem: UINT;
   lpNewItem: PChar): BOOL; stdcall;
 {$EXTERNALSYM ModifyMenuA}
 function ModifyMenuA(hMnu: HMENU; uPosition, uFlags, uIDNewItem: UINT;
@@ -21045,9 +21311,6 @@ function ModifyMenuA(hMnu: HMENU; uPosition, uFlags, uIDNewItem: UINT;
 {$EXTERNALSYM ModifyMenuW}
 function ModifyMenuW(hMnu: HMENU; uPosition, uFlags, uIDNewItem: UINT;
   lpNewItem: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM ModifyMenu}
-function ModifyMenu(hMnu: HMENU; uPosition, uFlags, uIDNewItem: UINT;
-  lpNewItem: PChar): BOOL; stdcall;
 {$EXTERNALSYM RemoveMenu}
 function RemoveMenu(hMenu: HMENU; uPosition, uFlags: UINT): BOOL; stdcall;
 {$EXTERNALSYM DeleteMenu}
@@ -21116,6 +21379,7 @@ const
   MIM_APPLYTOSUBMENUS = $80000000;
 
 type
+  {$EXTERNALSYM PMenuInfo}
   PMenuInfo = ^TMenuInfo;
   {$EXTERNALSYM tagMENUINFO}
   tagMENUINFO = packed record
@@ -21127,6 +21391,7 @@ type
     dwContextHelpID: DWORD;
     dwMenuData: DWORD;
   end;
+  {$EXTERNALSYM TMenuInfo}
   TMenuInfo = tagMENUINFO;
 
 {$EXTERNALSYM GetMenuInfo}
@@ -21144,6 +21409,7 @@ const
   MND_ENDMENU = 1;
 
 type
+  {$EXTERNALSYM PMenuGetObjectInfo}
   PMenuGetObjectInfo = ^TMenuGetObjectInfo;
   {$EXTERNALSYM tagMENUGETOBJECTINFO}
   tagMENUGETOBJECTINFO = packed record
@@ -21153,6 +21419,7 @@ type
     riid: Pointer;
     pvObj: Pointer;
   end;
+  {$EXTERNALSYM TMenuGetObjectInfo}
   TMenuGetObjectInfo = tagMENUGETOBJECTINFO;
 
 
@@ -21256,24 +21523,24 @@ type
   {$EXTERNALSYM MENUITEMINFO}
   MENUITEMINFO = MENUITEMINFOA;
 
+{$EXTERNALSYM InsertMenuItem}
+function InsertMenuItem(p1: HMENU; p2: UINT; p3: BOOL; const p4: TMenuItemInfo): BOOL; stdcall;
 {$EXTERNALSYM InsertMenuItemA}
 function InsertMenuItemA(p1: HMENU; p2: UINT; p3: BOOL; const p4: TMenuItemInfoA): BOOL; stdcall;
 {$EXTERNALSYM InsertMenuItemW}
 function InsertMenuItemW(p1: HMENU; p2: UINT; p3: BOOL; const p4: TMenuItemInfoW): BOOL; stdcall;
-{$EXTERNALSYM InsertMenuItem}
-function InsertMenuItem(p1: HMENU; p2: UINT; p3: BOOL; const p4: TMenuItemInfo): BOOL; stdcall;
+{$EXTERNALSYM GetMenuItemInfo}
+function GetMenuItemInfo(p1: HMENU; p2: UINT; p3: BOOL; var p4: TMenuItemInfo): BOOL; stdcall;
 {$EXTERNALSYM GetMenuItemInfoA}
 function GetMenuItemInfoA(p1: HMENU; p2: UINT; p3: BOOL; var p4: TMenuItemInfoA): BOOL; stdcall;
 {$EXTERNALSYM GetMenuItemInfoW}
 function GetMenuItemInfoW(p1: HMENU; p2: UINT; p3: BOOL; var p4: TMenuItemInfoW): BOOL; stdcall;
-{$EXTERNALSYM GetMenuItemInfo}
-function GetMenuItemInfo(p1: HMENU; p2: UINT; p3: BOOL; var p4: TMenuItemInfo): BOOL; stdcall;
+{$EXTERNALSYM SetMenuItemInfo}
+function SetMenuItemInfo(p1: HMENU; p2: UINT; p3: BOOL; const p4: TMenuItemInfo): BOOL; stdcall;
 {$EXTERNALSYM SetMenuItemInfoA}
 function SetMenuItemInfoA(p1: HMENU; p2: UINT; p3: BOOL; const p4: TMenuItemInfoA): BOOL; stdcall;
 {$EXTERNALSYM SetMenuItemInfoW}
 function SetMenuItemInfoW(p1: HMENU; p2: UINT; p3: BOOL; const p4: TMenuItemInfoW): BOOL; stdcall;
-{$EXTERNALSYM SetMenuItemInfo}
-function SetMenuItemInfo(p1: HMENU; p2: UINT; p3: BOOL; const p4: TMenuItemInfo): BOOL; stdcall;
 
 const
   {$EXTERNALSYM GMDI_USEDISABLED}
@@ -21440,32 +21707,32 @@ type
   {$EXTERNALSYM DRAWTEXTPARAMS}
   DRAWTEXTPARAMS = tagDRAWTEXTPARAMS;
 
+{$EXTERNALSYM DrawText}
+function DrawText(hDC: HDC; lpString: PChar; nCount: Integer;
+  var lpRect: TRect; uFormat: UINT): Integer; stdcall;
 {$EXTERNALSYM DrawTextA}
 function DrawTextA(hDC: HDC; lpString: PAnsiChar; nCount: Integer;
   var lpRect: TRect; uFormat: UINT): Integer; stdcall;
 {$EXTERNALSYM DrawTextW}
 function DrawTextW(hDC: HDC; lpString: PWideChar; nCount: Integer;
   var lpRect: TRect; uFormat: UINT): Integer; stdcall;
-{$EXTERNALSYM DrawText}
-function DrawText(hDC: HDC; lpString: PChar; nCount: Integer;
-  var lpRect: TRect; uFormat: UINT): Integer; stdcall;
+{$EXTERNALSYM DrawTextEx}
+function DrawTextEx(DC: HDC; lpchText: PChar; cchText: Integer; var p4: TRect;
+  dwDTFormat: UINT; DTParams: PDrawTextParams): Integer; stdcall;
 {$EXTERNALSYM DrawTextExA}
 function DrawTextExA(DC: HDC; lpchText: PAnsiChar; cchText: Integer; var p4: TRect;
   dwDTFormat: UINT; DTParams: PDrawTextParams): Integer; stdcall;
 {$EXTERNALSYM DrawTextExW}
 function DrawTextExW(DC: HDC; lpchText: PWideChar; cchText: Integer; var p4: TRect;
   dwDTFormat: UINT; DTParams: PDrawTextParams): Integer; stdcall;
-{$EXTERNALSYM DrawTextEx}
-function DrawTextEx(DC: HDC; lpchText: PChar; cchText: Integer; var p4: TRect;
-  dwDTFormat: UINT; DTParams: PDrawTextParams): Integer; stdcall;
+{$EXTERNALSYM GrayString}
+function GrayString(hDC: HDC; hBrush: HBRUSH; lpOutputFunc: TFNGrayStringProc;
+  lpData: LPARAM; nCount, X, Y, nWidth, nHeight: Integer): BOOL; stdcall;
 {$EXTERNALSYM GrayStringA}
 function GrayStringA(hDC: HDC; hBrush: HBRUSH; lpOutputFunc: TFNGrayStringProc;
   lpData: LPARAM; nCount, X, Y, nWidth, nHeight: Integer): BOOL; stdcall;
 {$EXTERNALSYM GrayStringW}
 function GrayStringW(hDC: HDC; hBrush: HBRUSH; lpOutputFunc: TFNGrayStringProc;
-  lpData: LPARAM; nCount, X, Y, nWidth, nHeight: Integer): BOOL; stdcall;
-{$EXTERNALSYM GrayString}
-function GrayString(hDC: HDC; hBrush: HBRUSH; lpOutputFunc: TFNGrayStringProc;
   lpData: LPARAM; nCount, X, Y, nWidth, nHeight: Integer): BOOL; stdcall;
 
 
@@ -21496,32 +21763,32 @@ const
   {$EXTERNALSYM DSS_RIGHT}
   DSS_RIGHT = $8000;
 
-{$EXTERNALSYM DrawStateA}
-function DrawStateA(DC: HDC; p2: HBRUSH; p3: TFNDrawStateProc;
-  p4: LPARAM; p5: WPARAM; p6, p7, p8, p9: Integer; p10: UINT): BOOL; stdcall;
-{$EXTERNALSYM DrawStateW}
-function DrawStateW(DC: HDC; p2: HBRUSH; p3: TFNDrawStateProc;
-  p4: LPARAM; p5: WPARAM; p6, p7, p8, p9: Integer; p10: UINT): BOOL; stdcall;
 {$EXTERNALSYM DrawState}
-function DrawState(DC: HDC; p2: HBRUSH; p3: TFNDrawStateProc;
-  p4: LPARAM; p5: WPARAM; p6, p7, p8, p9: Integer; p10: UINT): BOOL; stdcall;
+function DrawState(DC: HDC; Brush: HBRUSH; CBFunc: TFNDrawStateProc;
+  lData: LPARAM; wData: WPARAM; x, y, cx, cy: Integer; Flags: UINT): BOOL; stdcall;
+{$EXTERNALSYM DrawStateA}
+function DrawStateA(DC: HDC; Brush: HBRUSH; CBFunc: TFNDrawStateProc;
+  lData: LPARAM; wData: WPARAM; x, y, cx, cy: Integer; Flags: UINT): BOOL; stdcall;
+{$EXTERNALSYM DrawStateW}
+function DrawStateW(DC: HDC; Brush: HBRUSH; CBFunc: TFNDrawStateProc;
+  lData: LPARAM; wData: WPARAM; x, y, cx, cy: Integer; Flags: UINT): BOOL; stdcall;
+{$EXTERNALSYM TabbedTextOut}
+function TabbedTextOut(hDC: HDC; X, Y: Integer; lpString: PChar; nCount, nTabPositions: Integer;
+  var lpnTabStopPositions; nTabOrigin: Integer): Longint; stdcall;
 {$EXTERNALSYM TabbedTextOutA}
 function TabbedTextOutA(hDC: HDC; X, Y: Integer; lpString: PAnsiChar; nCount, nTabPositions: Integer;
   var lpnTabStopPositions; nTabOrigin: Integer): Longint; stdcall;
 {$EXTERNALSYM TabbedTextOutW}
 function TabbedTextOutW(hDC: HDC; X, Y: Integer; lpString: PWideChar; nCount, nTabPositions: Integer;
   var lpnTabStopPositions; nTabOrigin: Integer): Longint; stdcall;
-{$EXTERNALSYM TabbedTextOut}
-function TabbedTextOut(hDC: HDC; X, Y: Integer; lpString: PChar; nCount, nTabPositions: Integer;
-  var lpnTabStopPositions; nTabOrigin: Integer): Longint; stdcall;
+{$EXTERNALSYM GetTabbedTextExtent}
+function GetTabbedTextExtent(hDC: HDC; lpString: PChar;
+  nCount, nTabPositions: Integer; var lpnTabStopPositions): DWORD; stdcall;
 {$EXTERNALSYM GetTabbedTextExtentA}
 function GetTabbedTextExtentA(hDC: HDC; lpString: PAnsiChar;
   nCount, nTabPositions: Integer; var lpnTabStopPositions): DWORD; stdcall;
 {$EXTERNALSYM GetTabbedTextExtentW}
 function GetTabbedTextExtentW(hDC: HDC; lpString: PWideChar;
-  nCount, nTabPositions: Integer; var lpnTabStopPositions): DWORD; stdcall;
-{$EXTERNALSYM GetTabbedTextExtent}
-function GetTabbedTextExtent(hDC: HDC; lpString: PChar;
   nCount, nTabPositions: Integer; var lpnTabStopPositions): DWORD; stdcall;
 {$EXTERNALSYM UpdateWindow}
 function UpdateWindow(hWnd: HWND): BOOL; stdcall;
@@ -21682,54 +21949,54 @@ const
   {$EXTERNALSYM ESB_DISABLE_RTDN}
   ESB_DISABLE_RTDN = ESB_DISABLE_RIGHT;
 
+{$EXTERNALSYM SetProp}
+function SetProp(hWnd: HWND; lpString: PChar; hData: THandle): BOOL; stdcall;
 {$EXTERNALSYM SetPropA}
 function SetPropA(hWnd: HWND; lpString: PAnsiChar; hData: THandle): BOOL; stdcall;
 {$EXTERNALSYM SetPropW}
 function SetPropW(hWnd: HWND; lpString: PWideChar; hData: THandle): BOOL; stdcall;
-{$EXTERNALSYM SetProp}
-function SetProp(hWnd: HWND; lpString: PChar; hData: THandle): BOOL; stdcall;
+{$EXTERNALSYM GetProp}
+function GetProp(hWnd: HWND; lpString: PChar): THandle; stdcall;
 {$EXTERNALSYM GetPropA}
 function GetPropA(hWnd: HWND; lpString: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM GetPropW}
 function GetPropW(hWnd: HWND; lpString: PWideChar): THandle; stdcall;
-{$EXTERNALSYM GetProp}
-function GetProp(hWnd: HWND; lpString: PChar): THandle; stdcall;
+{$EXTERNALSYM RemoveProp}
+function RemoveProp(hWnd: HWND; lpString: PChar): THandle; stdcall;
 {$EXTERNALSYM RemovePropA}
 function RemovePropA(hWnd: HWND; lpString: PAnsiChar): THandle; stdcall;
 {$EXTERNALSYM RemovePropW}
 function RemovePropW(hWnd: HWND; lpString: PWideChar): THandle; stdcall;
-{$EXTERNALSYM RemoveProp}
-function RemoveProp(hWnd: HWND; lpString: PChar): THandle; stdcall;
+{$EXTERNALSYM EnumPropsEx}
+function EnumPropsEx(hWnd: HWND; lpEnumFunc: TFNPropEnumProcEx; lParam: LPARAM): Integer; stdcall;
 {$EXTERNALSYM EnumPropsExA}
 function EnumPropsExA(hWnd: HWND; lpEnumFunc: TFNPropEnumProcEx; lParam: LPARAM): Integer; stdcall;
 {$EXTERNALSYM EnumPropsExW}
 function EnumPropsExW(hWnd: HWND; lpEnumFunc: TFNPropEnumProcEx; lParam: LPARAM): Integer; stdcall;
-{$EXTERNALSYM EnumPropsEx}
-function EnumPropsEx(hWnd: HWND; lpEnumFunc: TFNPropEnumProcEx; lParam: LPARAM): Integer; stdcall;
+{$EXTERNALSYM EnumProps}
+function EnumProps(hWnd: HWND; lpEnumFunc: TFNPropEnumProc): Integer; stdcall;
 {$EXTERNALSYM EnumPropsA}
 function EnumPropsA(hWnd: HWND; lpEnumFunc: TFNPropEnumProc): Integer; stdcall;
 {$EXTERNALSYM EnumPropsW}
 function EnumPropsW(hWnd: HWND; lpEnumFunc: TFNPropEnumProc): Integer; stdcall;
-{$EXTERNALSYM EnumProps}
-function EnumProps(hWnd: HWND; lpEnumFunc: TFNPropEnumProc): Integer; stdcall;
+{$EXTERNALSYM SetWindowText}
+function SetWindowText(hWnd: HWND; lpString: PChar): BOOL; stdcall;
 {$EXTERNALSYM SetWindowTextA}
 function SetWindowTextA(hWnd: HWND; lpString: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM SetWindowTextW}
 function SetWindowTextW(hWnd: HWND; lpString: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM SetWindowText}
-function SetWindowText(hWnd: HWND; lpString: PChar): BOOL; stdcall;
+{$EXTERNALSYM GetWindowText}
+function GetWindowText(hWnd: HWND; lpString: PChar; nMaxCount: Integer): Integer; stdcall;
 {$EXTERNALSYM GetWindowTextA}
 function GetWindowTextA(hWnd: HWND; lpString: PAnsiChar; nMaxCount: Integer): Integer; stdcall;
 {$EXTERNALSYM GetWindowTextW}
 function GetWindowTextW(hWnd: HWND; lpString: PWideChar; nMaxCount: Integer): Integer; stdcall;
-{$EXTERNALSYM GetWindowText}
-function GetWindowText(hWnd: HWND; lpString: PChar; nMaxCount: Integer): Integer; stdcall;
+{$EXTERNALSYM GetWindowTextLength}
+function GetWindowTextLength(hWnd: HWND): Integer; stdcall;
 {$EXTERNALSYM GetWindowTextLengthA}
 function GetWindowTextLengthA(hWnd: HWND): Integer; stdcall;
 {$EXTERNALSYM GetWindowTextLengthW}
 function GetWindowTextLengthW(hWnd: HWND): Integer; stdcall;
-{$EXTERNALSYM GetWindowTextLength}
-function GetWindowTextLength(hWnd: HWND): Integer; stdcall;
 
 {$EXTERNALSYM GetClientRect}
 function GetClientRect(hWnd: HWND; var lpRect: TRect): BOOL; stdcall;
@@ -21853,20 +22120,20 @@ const
   MB_MISCMASK = $0000C000;
 
 
+{$EXTERNALSYM MessageBox}
+function MessageBox(hWnd: HWND; lpText, lpCaption: PChar; uType: UINT): Integer; stdcall;
 {$EXTERNALSYM MessageBoxA}
 function MessageBoxA(hWnd: HWND; lpText, lpCaption: PAnsiChar; uType: UINT): Integer; stdcall;
 {$EXTERNALSYM MessageBoxW}
 function MessageBoxW(hWnd: HWND; lpText, lpCaption: PWideChar; uType: UINT): Integer; stdcall;
-{$EXTERNALSYM MessageBox}
-function MessageBox(hWnd: HWND; lpText, lpCaption: PChar; uType: UINT): Integer; stdcall;
+{$EXTERNALSYM MessageBoxEx}
+function MessageBoxEx(hWnd: HWND; lpText, lpCaption: PChar;
+  uType: UINT; wLanguageId: Word): Integer; stdcall;
 {$EXTERNALSYM MessageBoxExA}
 function MessageBoxExA(hWnd: HWND; lpText, lpCaption: PAnsiChar;
   uType: UINT; wLanguageId: Word): Integer; stdcall;
 {$EXTERNALSYM MessageBoxExW}
 function MessageBoxExW(hWnd: HWND; lpText, lpCaption: PWideChar;
-  uType: UINT; wLanguageId: Word): Integer; stdcall;
-{$EXTERNALSYM MessageBoxEx}
-function MessageBoxEx(hWnd: HWND; lpText, lpCaption: PChar;
   uType: UINT; wLanguageId: Word): Integer; stdcall;
 
 type
@@ -21913,12 +22180,12 @@ type
   {$EXTERNALSYM MSGBOXPARAMS}
   MSGBOXPARAMS = MSGBOXPARAMSA;
 
+{$EXTERNALSYM MessageBoxIndirect}
+function MessageBoxIndirect(const MsgBoxParams: TMsgBoxParams): BOOL; stdcall;
 {$EXTERNALSYM MessageBoxIndirectA}
 function MessageBoxIndirectA(const MsgBoxParams: TMsgBoxParamsA): BOOL; stdcall;
 {$EXTERNALSYM MessageBoxIndirectW}
 function MessageBoxIndirectW(const MsgBoxParams: TMsgBoxParamsW): BOOL; stdcall;
-{$EXTERNALSYM MessageBoxIndirect}
-function MessageBoxIndirect(const MsgBoxParams: TMsgBoxParams): BOOL; stdcall;
 
 {$EXTERNALSYM MessageBeep}
 function MessageBeep(uType: UINT): BOOL; stdcall;
@@ -22046,13 +22313,21 @@ const
   COLOR_INFOTEXT = 23;
   {$EXTERNALSYM COLOR_INFOBK}
   COLOR_INFOBK = 24;
+
   {$EXTERNALSYM COLOR_HOTLIGHT}
   COLOR_HOTLIGHT = 26;
   {$EXTERNALSYM COLOR_GRADIENTACTIVECAPTION}
   COLOR_GRADIENTACTIVECAPTION = 27;
   {$EXTERNALSYM COLOR_GRADIENTINACTIVECAPTION}
   COLOR_GRADIENTINACTIVECAPTION = 28;
-  COLOR_ENDCOLORS = COLOR_GRADIENTINACTIVECAPTION;
+
+  {$EXTERNALSYM COLOR_MENUHILIGHT}
+  COLOR_MENUHILIGHT = 29;
+  {$EXTERNALSYM COLOR_MENUBAR}
+  COLOR_MENUBAR = 30;
+
+  COLOR_ENDCOLORS = COLOR_MENUBAR;
+
   {$EXTERNALSYM COLOR_DESKTOP}
   COLOR_DESKTOP = COLOR_BACKGROUND;
   {$EXTERNALSYM COLOR_3DFACE}
@@ -22107,34 +22382,34 @@ function PtInRect(const lprc: TRect; pt: TPoint): BOOL; stdcall;
 function GetWindowWord(hWnd: HWND; nIndex: Integer): Word; stdcall;
 {$EXTERNALSYM SetWindowWord}
 function SetWindowWord(hWnd: HWND; nIndex: Integer; wNewWord: Word): Word; stdcall;
+{$EXTERNALSYM GetWindowLong}
+function GetWindowLong(hWnd: HWND; nIndex: Integer): Longint; stdcall;
 {$EXTERNALSYM GetWindowLongA}
 function GetWindowLongA(hWnd: HWND; nIndex: Integer): Longint; stdcall;
 {$EXTERNALSYM GetWindowLongW}
 function GetWindowLongW(hWnd: HWND; nIndex: Integer): Longint; stdcall;
-{$EXTERNALSYM GetWindowLong}
-function GetWindowLong(hWnd: HWND; nIndex: Integer): Longint; stdcall;
+{$EXTERNALSYM SetWindowLong}
+function SetWindowLong(hWnd: HWND; nIndex: Integer; dwNewLong: Longint): Longint; stdcall;
 {$EXTERNALSYM SetWindowLongA}
 function SetWindowLongA(hWnd: HWND; nIndex: Integer; dwNewLong: Longint): Longint; stdcall;
 {$EXTERNALSYM SetWindowLongW}
 function SetWindowLongW(hWnd: HWND; nIndex: Integer; dwNewLong: Longint): Longint; stdcall;
-{$EXTERNALSYM SetWindowLong}
-function SetWindowLong(hWnd: HWND; nIndex: Integer; dwNewLong: Longint): Longint; stdcall;
 {$EXTERNALSYM GetClassWord}
 function GetClassWord(hWnd: HWND; nIndex: Integer): Word; stdcall;
 {$EXTERNALSYM SetClassWord}
 function SetClassWord(hWnd: HWND; nIndex: Integer; wNewWord: Word): Word; stdcall;
+{$EXTERNALSYM GetClassLong}
+function GetClassLong(hWnd: HWND; nIndex: Integer): DWORD; stdcall;
 {$EXTERNALSYM GetClassLongA}
 function GetClassLongA(hWnd: HWND; nIndex: Integer): DWORD; stdcall;
 {$EXTERNALSYM GetClassLongW}
 function GetClassLongW(hWnd: HWND; nIndex: Integer): DWORD; stdcall;
-{$EXTERNALSYM GetClassLong}
-function GetClassLong(hWnd: HWND; nIndex: Integer): DWORD; stdcall;
+{$EXTERNALSYM SetClassLong}
+function SetClassLong(hWnd: HWND; nIndex: Integer; dwNewLong: Longint): DWORD; stdcall;
 {$EXTERNALSYM SetClassLongA}
 function SetClassLongA(hWnd: HWND; nIndex: Integer; dwNewLong: Longint): DWORD; stdcall;
 {$EXTERNALSYM SetClassLongW}
 function SetClassLongW(hWnd: HWND; nIndex: Integer; dwNewLong: Longint): DWORD; stdcall;
-{$EXTERNALSYM SetClassLong}
-function SetClassLong(hWnd: HWND; nIndex: Integer; dwNewLong: Longint): DWORD; stdcall;
 {$EXTERNALSYM GetDesktopWindow}
 function GetDesktopWindow: HWND; stdcall;
 {$EXTERNALSYM GetParent}
@@ -22144,40 +22419,41 @@ function SetParent(hWndChild, hWndNewParent: HWND): HWND; stdcall;
 {$EXTERNALSYM EnumChildWindows}
 function EnumChildWindows(hWndParent: HWND; lpEnumFunc: TFNWndEnumProc;
   lParam: LPARAM): BOOL; stdcall;
+{$EXTERNALSYM FindWindow}
+function FindWindow(lpClassName, lpWindowName: PChar): HWND; stdcall;
 {$EXTERNALSYM FindWindowA}
 function FindWindowA(lpClassName, lpWindowName: PAnsiChar): HWND; stdcall;
 {$EXTERNALSYM FindWindowW}
 function FindWindowW(lpClassName, lpWindowName: PWideChar): HWND; stdcall;
-{$EXTERNALSYM FindWindow}
-function FindWindow(lpClassName, lpWindowName: PChar): HWND; stdcall;
+{$EXTERNALSYM FindWindowEx}
+function FindWindowEx(Parent, Child: HWND; ClassName, WindowName: PChar): HWND; stdcall;
 {$EXTERNALSYM FindWindowExA}
 function FindWindowExA(Parent, Child: HWND; ClassName, WindowName: PAnsiChar): HWND; stdcall;
 {$EXTERNALSYM FindWindowExW}
 function FindWindowExW(Parent, Child: HWND; ClassName, WindowName: PWideChar): HWND; stdcall;
-{$EXTERNALSYM FindWindowEx}
-function FindWindowEx(Parent, Child: HWND; ClassName, WindowName: PChar): HWND; stdcall;
 {$EXTERNALSYM EnumWindows}
 function EnumWindows(lpEnumFunc: TFNWndEnumProc; lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM EnumThreadWindows}
 function EnumThreadWindows(dwThreadId: DWORD; lpfn: TFNWndEnumProc; lParam: LPARAM): BOOL; stdcall;
 {$EXTERNALSYM EnumTaskWindows}
 function EnumTaskWindows(hTask: THandle; lpfn: FARPROC; lParam: LPARAM): BOOL;
+{$EXTERNALSYM GetClassName}
+function GetClassName(hWnd: HWND; lpClassName: PChar; nMaxCount: Integer): Integer; stdcall;
 {$EXTERNALSYM GetClassNameA}
 function GetClassNameA(hWnd: HWND; lpClassName: PAnsiChar; nMaxCount: Integer): Integer; stdcall;
 {$EXTERNALSYM GetClassNameW}
 function GetClassNameW(hWnd: HWND; lpClassName: PWideChar; nMaxCount: Integer): Integer; stdcall;
-{$EXTERNALSYM GetClassName}
-function GetClassName(hWnd: HWND; lpClassName: PChar; nMaxCount: Integer): Integer; stdcall;
-{$EXTERNALSYM GetTopWindow}
 function GetTopWindow(hWnd: HWND): HWND; stdcall;
-{$EXTERNALSYM GetNextWindow}
+{$EXTERNALSYM GetTopWindow}
 function GetNextWindow(hWnd: HWND; uCmd: UINT): HWND; stdcall;
+{$EXTERNALSYM GetNextWindow}
+function GetWindowThreadProcessId(hWnd: HWND; lpdwProcessId: Pointer = nil): DWORD; stdcall; overload;
 {$EXTERNALSYM GetWindowThreadProcessId}
-function GetWindowThreadProcessId(hWnd: HWND; lpdwProcessId: Pointer): DWORD; stdcall;
-{$EXTERNALSYM GetWindowTask}
+function GetWindowThreadProcessId(hWnd: HWND; var dwProcessId: DWORD): DWORD; stdcall; overload;
 function GetWindowTask(hWnd: HWND): THandle;
-{$EXTERNALSYM GetLastActivePopup}
+{$EXTERNALSYM GetWindowTask}
 function GetLastActivePopup(hWnd: HWND): HWND; stdcall;
+{$EXTERNALSYM GetLastActivePopup}
 
 const
   { GetWindow() Constants }
@@ -22198,18 +22474,18 @@ const
 
 {$EXTERNALSYM GetWindow}
 function GetWindow(hWnd: HWND; uCmd: UINT): HWND; stdcall;
+{$EXTERNALSYM SetWindowsHook}
+function SetWindowsHook(nFilterType: Integer; pfnFilterProc: TFNHookProc): HHOOK; stdcall;
 {$EXTERNALSYM SetWindowsHookA}
 function SetWindowsHookA(nFilterType: Integer; pfnFilterProc: TFNHookProc): HHOOK; stdcall;
 {$EXTERNALSYM SetWindowsHookW}
 function SetWindowsHookW(nFilterType: Integer; pfnFilterProc: TFNHookProc): HHOOK; stdcall;
-{$EXTERNALSYM SetWindowsHook}
-function SetWindowsHook(nFilterType: Integer; pfnFilterProc: TFNHookProc): HHOOK; stdcall;
+{$EXTERNALSYM SetWindowsHookEx}
+function SetWindowsHookEx(idHook: Integer; lpfn: TFNHookProc; hmod: HINST; dwThreadId: DWORD): HHOOK; stdcall;
 {$EXTERNALSYM SetWindowsHookExA}
 function SetWindowsHookExA(idHook: Integer; lpfn: TFNHookProc; hmod: HINST; dwThreadId: DWORD): HHOOK; stdcall;
 {$EXTERNALSYM SetWindowsHookExW}
 function SetWindowsHookExW(idHook: Integer; lpfn: TFNHookProc; hmod: HINST; dwThreadId: DWORD): HHOOK; stdcall;
-{$EXTERNALSYM SetWindowsHookEx}
-function SetWindowsHookEx(idHook: Integer; lpfn: TFNHookProc; hmod: HINST; dwThreadId: DWORD): HHOOK; stdcall;
 {$EXTERNALSYM UnhookWindowsHook}
 function UnhookWindowsHook(nCode: Integer; pfnFilterProc: TFNHookProc): BOOL; stdcall;
 {$EXTERNALSYM UnhookWindowsHookEx}
@@ -22415,24 +22691,24 @@ const
 
 { Resource Loading Routines }
 
+{$EXTERNALSYM LoadBitmap}
+function LoadBitmap(hInstance: HINST; lpBitmapName: PAnsiChar): HBITMAP; stdcall;
 {$EXTERNALSYM LoadBitmapA}
 function LoadBitmapA(hInstance: HINST; lpBitmapName: PAnsiChar): HBITMAP; stdcall;
 {$EXTERNALSYM LoadBitmapW}
 function LoadBitmapW(hInstance: HINST; lpBitmapName: PAnsiChar): HBITMAP; stdcall;
-{$EXTERNALSYM LoadBitmap}
-function LoadBitmap(hInstance: HINST; lpBitmapName: PAnsiChar): HBITMAP; stdcall;
+{$EXTERNALSYM LoadCursor}
+function LoadCursor(hInstance: HINST; lpCursorName: PAnsiChar): HCURSOR; stdcall;
 {$EXTERNALSYM LoadCursorA}
 function LoadCursorA(hInstance: HINST; lpCursorName: PAnsiChar): HCURSOR; stdcall;
 {$EXTERNALSYM LoadCursorW}
 function LoadCursorW(hInstance: HINST; lpCursorName: PAnsiChar): HCURSOR; stdcall;
-{$EXTERNALSYM LoadCursor}
-function LoadCursor(hInstance: HINST; lpCursorName: PAnsiChar): HCURSOR; stdcall;
+{$EXTERNALSYM LoadCursorFromFile}
+function LoadCursorFromFile(lpFileName: PAnsiChar): HCURSOR; stdcall;
 {$EXTERNALSYM LoadCursorFromFileA}
 function LoadCursorFromFileA(lpFileName: PAnsiChar): HCURSOR; stdcall;
 {$EXTERNALSYM LoadCursorFromFileW}
 function LoadCursorFromFileW(lpFileName: PAnsiChar): HCURSOR; stdcall;
-{$EXTERNALSYM LoadCursorFromFile}
-function LoadCursorFromFile(lpFileName: PAnsiChar): HCURSOR; stdcall;
 {$EXTERNALSYM CreateCursor}
 function CreateCursor(hInst: HINST; xHotSpot, yHotSpot, nWidth, nHeight: Integer;
   pvANDPlaneter, pvXORPlane: Pointer): HCURSOR; stdcall;
@@ -22491,12 +22767,12 @@ type
   {$EXTERNALSYM ICONINFO}
   ICONINFO = _ICONINFO;
 
+{$EXTERNALSYM LoadIcon}
+function LoadIcon(hInstance: HINST; lpIconName: PChar): HICON; stdcall;
 {$EXTERNALSYM LoadIconA}
 function LoadIconA(hInstance: HINST; lpIconName: PAnsiChar): HICON; stdcall;
 {$EXTERNALSYM LoadIconW}
 function LoadIconW(hInstance: HINST; lpIconName: PWideChar): HICON; stdcall;
-{$EXTERNALSYM LoadIcon}
-function LoadIcon(hInstance: HINST; lpIconName: PChar): HICON; stdcall;
 {$EXTERNALSYM CreateIcon}
 function CreateIcon(hInstance: HINST; nWidth, nHeight: Integer;
   cPlanes, cBitsPixel: Byte; lpbANDbits, lpbXORbits: Pointer): HICON; stdcall;
@@ -22569,12 +22845,12 @@ const
   {$EXTERNALSYM LR_SHARED}
   LR_SHARED = $8000;
 
+{$EXTERNALSYM LoadImage}
+function LoadImage(hInst: HINST; ImageName: PChar; ImageType: UINT; X, Y: Integer; Flags: UINT): THandle; stdcall;
 {$EXTERNALSYM LoadImageA}
 function LoadImageA(hInst: HINST; ImageName: PAnsiChar; ImageType: UINT; X, Y: Integer; Flags: UINT): THandle; stdcall;
 {$EXTERNALSYM LoadImageW}
 function LoadImageW(hInst: HINST; ImageName: PWideChar; ImageType: UINT; X, Y: Integer; Flags: UINT): THandle; stdcall;
-{$EXTERNALSYM LoadImage}
-function LoadImage(hInst: HINST; ImageName: PChar; ImageType: UINT; X, Y: Integer; Flags: UINT): THandle; stdcall;
 {$EXTERNALSYM CopyImage}
 function CopyImage(hImage: THandle; ImageType: UINT; X, Y: Integer; Flags: UINT): THandle; stdcall;
 
@@ -22753,12 +23029,12 @@ const
   {$EXTERNALSYM IDI_INFORMATION}
   IDI_INFORMATION = IDI_ASTERISK;
 
+{$EXTERNALSYM LoadString}
+function LoadString(hInstance: HINST; uID: UINT; lpBuffer: PChar; nBufferMax: Integer): Integer; stdcall;
 {$EXTERNALSYM LoadStringA}
 function LoadStringA(hInstance: HINST; uID: UINT; lpBuffer: PAnsiChar; nBufferMax: Integer): Integer; stdcall;
 {$EXTERNALSYM LoadStringW}
 function LoadStringW(hInstance: HINST; uID: UINT; lpBuffer: PWideChar; nBufferMax: Integer): Integer; stdcall;
-{$EXTERNALSYM LoadString}
-function LoadString(hInstance: HINST; uID: UINT; lpBuffer: PChar; nBufferMax: Integer): Integer; stdcall;
 
 const
   { Dialog Box Command IDs }
@@ -22780,6 +23056,10 @@ const
   IDCLOSE = 8;       ID_CLOSE = IDCLOSE;
   {$EXTERNALSYM IDHELP}
   IDHELP = 9;        ID_HELP = IDHELP;
+  {$EXTERNALSYM IDTRYAGAIN}
+  IDTRYAGAIN = 10;
+  {$EXTERNALSYM IDCONTINUE}
+  IDCONTINUE = 11;
 
 
 { Control Manager Structures and Definitions }
@@ -23003,22 +23283,22 @@ const
 
 { Dialog Manager Routines }
 
+{$EXTERNALSYM IsDialogMessage}
+function IsDialogMessage(hDlg: HWND; var lpMsg: TMsg): BOOL; stdcall;
 {$EXTERNALSYM IsDialogMessageA}
 function IsDialogMessageA(hDlg: HWND; var lpMsg: TMsg): BOOL; stdcall;
 {$EXTERNALSYM IsDialogMessageW}
 function IsDialogMessageW(hDlg: HWND; var lpMsg: TMsg): BOOL; stdcall;
-{$EXTERNALSYM IsDialogMessage}
-function IsDialogMessage(hDlg: HWND; var lpMsg: TMsg): BOOL; stdcall;
 {$EXTERNALSYM MapDialogRect}
 function MapDialogRect(hDlg: HWND; var lpRect: TRect): BOOL; stdcall;
+{$EXTERNALSYM DlgDirList}
+function DlgDirList(hDlg: HWND; lpPathSpec: PChar;
+  nIDListBox, nIDStaticPath: Integer; uFileType: UINT): Integer; stdcall;
 {$EXTERNALSYM DlgDirListA}
 function DlgDirListA(hDlg: HWND; lpPathSpec: PAnsiChar;
   nIDListBox, nIDStaticPath: Integer; uFileType: UINT): Integer; stdcall;
 {$EXTERNALSYM DlgDirListW}
 function DlgDirListW(hDlg: HWND; lpPathSpec: PWideChar;
-  nIDListBox, nIDStaticPath: Integer; uFileType: UINT): Integer; stdcall;
-{$EXTERNALSYM DlgDirList}
-function DlgDirList(hDlg: HWND; lpPathSpec: PChar;
   nIDListBox, nIDStaticPath: Integer; uFileType: UINT): Integer; stdcall;
 
 const
@@ -23043,29 +23323,29 @@ const
   {$EXTERNALSYM DDL_EXCLUSIVE}
   DDL_EXCLUSIVE = $8000;
 
+{$EXTERNALSYM DlgDirSelectEx}
+function DlgDirSelectEx(hDlg: HWND; lpString: PChar; nCount, nIDListBox: Integer): BOOL; stdcall;
 {$EXTERNALSYM DlgDirSelectExA}
 function DlgDirSelectExA(hDlg: HWND; lpString: PAnsiChar; nCount, nIDListBox: Integer): BOOL; stdcall;
 {$EXTERNALSYM DlgDirSelectExW}
 function DlgDirSelectExW(hDlg: HWND; lpString: PWideChar; nCount, nIDListBox: Integer): BOOL; stdcall;
-{$EXTERNALSYM DlgDirSelectEx}
-function DlgDirSelectEx(hDlg: HWND; lpString: PChar; nCount, nIDListBox: Integer): BOOL; stdcall;
+{$EXTERNALSYM DlgDirListComboBox}
+function DlgDirListComboBox(hDlg: HWND; lpPathSpec: PChar;
+  nIDComboBox, nIDStaticPath: Integer; uFiletype: UINT): Integer; stdcall;
 {$EXTERNALSYM DlgDirListComboBoxA}
 function DlgDirListComboBoxA(hDlg: HWND; lpPathSpec: PAnsiChar;
   nIDComboBox, nIDStaticPath: Integer; uFiletype: UINT): Integer; stdcall;
 {$EXTERNALSYM DlgDirListComboBoxW}
 function DlgDirListComboBoxW(hDlg: HWND; lpPathSpec: PWideChar;
   nIDComboBox, nIDStaticPath: Integer; uFiletype: UINT): Integer; stdcall;
-{$EXTERNALSYM DlgDirListComboBox}
-function DlgDirListComboBox(hDlg: HWND; lpPathSpec: PChar;
-  nIDComboBox, nIDStaticPath: Integer; uFiletype: UINT): Integer; stdcall;
+{$EXTERNALSYM DlgDirSelectComboBoxEx}
+function DlgDirSelectComboBoxEx(hDlg: HWND; lpString: PChar;
+  nCount, nIDComboBox: Integer): BOOL; stdcall;
 {$EXTERNALSYM DlgDirSelectComboBoxExA}
 function DlgDirSelectComboBoxExA(hDlg: HWND; lpString: PAnsiChar;
   nCount, nIDComboBox: Integer): BOOL; stdcall;
 {$EXTERNALSYM DlgDirSelectComboBoxExW}
 function DlgDirSelectComboBoxExW(hDlg: HWND; lpString: PWideChar;
-  nCount, nIDComboBox: Integer): BOOL; stdcall;
-{$EXTERNALSYM DlgDirSelectComboBoxEx}
-function DlgDirSelectComboBoxEx(hDlg: HWND; lpString: PChar;
   nCount, nIDComboBox: Integer): BOOL; stdcall;
 
 const
@@ -23350,32 +23630,32 @@ type
   {$EXTERNALSYM CLIENTCREATESTRUCT}
   CLIENTCREATESTRUCT = tagCLIENTCREATESTRUCT;
 
+{$EXTERNALSYM DefFrameProc}
+function DefFrameProc(hWnd, hWndMDIClient: HWND; uMsg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM DefFrameProcA}
 function DefFrameProcA(hWnd, hWndMDIClient: HWND; uMsg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM DefFrameProcW}
 function DefFrameProcW(hWnd, hWndMDIClient: HWND; uMsg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
-{$EXTERNALSYM DefFrameProc}
-function DefFrameProc(hWnd, hWndMDIClient: HWND; uMsg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
+{$EXTERNALSYM DefMDIChildProc}
+function DefMDIChildProc(hWnd: HWND; uMsg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM DefMDIChildProcA}
 function DefMDIChildProcA(hWnd: HWND; uMsg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM DefMDIChildProcW}
 function DefMDIChildProcW(hWnd: HWND; uMsg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
-{$EXTERNALSYM DefMDIChildProc}
-function DefMDIChildProc(hWnd: HWND; uMsg: UINT; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 {$EXTERNALSYM TranslateMDISysAccel}
 function TranslateMDISysAccel(hWndClient: HWND; const lpMsg: TMsg): BOOL; stdcall;
 {$EXTERNALSYM ArrangeIconicWindows}
 function ArrangeIconicWindows(hWnd: HWND): UINT; stdcall;
+{$EXTERNALSYM CreateMDIWindow}
+function CreateMDIWindow(lpClassName, lpWindowName: PChar;
+  dwStyle: DWORD; X, Y, nWidth, nHeight: Integer;
+  hWndParent: HWND; hInstance: HINST; lParam: LPARAM): HWND; stdcall;
 {$EXTERNALSYM CreateMDIWindowA}
 function CreateMDIWindowA(lpClassName, lpWindowName: PAnsiChar;
   dwStyle: DWORD; X, Y, nWidth, nHeight: Integer;
   hWndParent: HWND; hInstance: HINST; lParam: LPARAM): HWND; stdcall;
 {$EXTERNALSYM CreateMDIWindowW}
 function CreateMDIWindowW(lpClassName, lpWindowName: PWideChar;
-  dwStyle: DWORD; X, Y, nWidth, nHeight: Integer;
-  hWndParent: HWND; hInstance: HINST; lParam: LPARAM): HWND; stdcall;
-{$EXTERNALSYM CreateMDIWindow}
-function CreateMDIWindow(lpClassName, lpWindowName: PChar;
   dwStyle: DWORD; X, Y, nWidth, nHeight: Integer;
   hWndParent: HWND; hInstance: HINST; lParam: LPARAM): HWND; stdcall;
 {$EXTERNALSYM TileWindows}
@@ -23566,12 +23846,12 @@ const
   {$EXTERNALSYM IDH_HELP}
   IDH_HELP = 28445;
 
+{$EXTERNALSYM WinHelp}
+function WinHelp(hWndMain: HWND; lpszHelp: PChar; uCommand: UINT; dwData: DWORD): BOOL; stdcall;
 {$EXTERNALSYM WinHelpA}
 function WinHelpA(hWndMain: HWND; lpszHelp: PAnsiChar; uCommand: UINT; dwData: DWORD): BOOL; stdcall;
 {$EXTERNALSYM WinHelpW}
 function WinHelpW(hWndMain: HWND; lpszHelp: PWideChar; uCommand: UINT; dwData: DWORD): BOOL; stdcall;
-{$EXTERNALSYM WinHelp}
-function WinHelp(hWndMain: HWND; lpszHelp: PChar; uCommand: UINT; dwData: DWORD): BOOL; stdcall;
 
 const
   {$EXTERNALSYM GR_GDIOBJECTS}
@@ -23790,12 +24070,16 @@ const
                                          // WM_SETTINGCHANGE (equivalent to
                                          // WM_WININICHANGE) when the scroll
                                          // lines has changed.  Applications
-                                         // will recieve the WM_SETTINGCHANGE
+                                         // will receive the WM_SETTINGCHANGE
                                          // message with the wParam set to
                                          // SPI_SETWHEELSCROLLLINES.  When
-                                         // this message is recieved the
+                                         // this message is received the
                                          // application should query Mswheel for
                                          // the new setting.
+  {$EXTERNALSYM SPI_GETMENUSHOWDELAY}
+  SPI_GETMENUSHOWDELAY = 106;
+  {$EXTERNALSYM SPI_SETMENUSHOWDELAY}
+  SPI_SETMENUSHOWDELAY = 107;
   {$EXTERNALSYM SPI_GETSHOWIMEUI}
   SPI_GETSHOWIMEUI = 110;
   {$EXTERNALSYM SPI_SETSHOWIMEUI}
@@ -23827,10 +24111,14 @@ const
   SPI_GETGRADIENTCAPTIONS = $1008;
   {$EXTERNALSYM SPI_SETGRADIENTCAPTIONS}
   SPI_SETGRADIENTCAPTIONS = $1009;
+  {$EXTERNALSYM SPI_GETKEYBOARDCUES}
+  SPI_GETKEYBOARDCUES = $100A;
+  {$EXTERNALSYM SPI_SETKEYBOARDCUES}
+  SPI_SETKEYBOARDCUES = $100B;
   {$EXTERNALSYM SPI_GETMENUUNDERLINES}
-  SPI_GETMENUUNDERLINES = $100A;
+  SPI_GETMENUUNDERLINES = SPI_GETKEYBOARDCUES;
   {$EXTERNALSYM SPI_SETMENUUNDERLINES}
-  SPI_SETMENUUNDERLINES = $100B;
+  SPI_SETMENUUNDERLINES = SPI_SETKEYBOARDCUES;
   {$EXTERNALSYM SPI_GETACTIVEWNDTRKZORDER}
   SPI_GETACTIVEWNDTRKZORDER = $100C;
   {$EXTERNALSYM SPI_SETACTIVEWNDTRKZORDER}
@@ -23839,6 +24127,33 @@ const
   SPI_GETHOTTRACKING = $100E;
   {$EXTERNALSYM SPI_SETHOTTRACKING}
   SPI_SETHOTTRACKING = $100F;
+
+  {$EXTERNALSYM SPI_GETMENUFADE}
+  SPI_GETMENUFADE = $1012;
+  {$EXTERNALSYM SPI_SETMENUFADE}
+  SPI_SETMENUFADE = $1013;
+  {$EXTERNALSYM SPI_GETSELECTIONFADE}
+  SPI_GETSELECTIONFADE = $1014;
+  {$EXTERNALSYM SPI_SETSELECTIONFADE}
+  SPI_SETSELECTIONFADE = $1015;
+  {$EXTERNALSYM SPI_GETTOOLTIPANIMATION}
+  SPI_GETTOOLTIPANIMATION = $1016;
+  {$EXTERNALSYM SPI_SETTOOLTIPANIMATION}
+  SPI_SETTOOLTIPANIMATION = $1017;
+  {$EXTERNALSYM SPI_GETTOOLTIPFADE}
+  SPI_GETTOOLTIPFADE = $1018;
+  {$EXTERNALSYM SPI_SETTOOLTIPFADE}
+  SPI_SETTOOLTIPFADE = $1019;
+  {$EXTERNALSYM SPI_GETCURSORSHADOW}
+  SPI_GETCURSORSHADOW = $101A;
+  {$EXTERNALSYM SPI_SETCURSORSHADOW}
+  SPI_SETCURSORSHADOW = $101B;
+
+  {$EXTERNALSYM SPI_GETUIEFFECTS}
+  SPI_GETUIEFFECTS = $103E;
+  {$EXTERNALSYM SPI_SETUIEFFECTS}
+  SPI_SETUIEFFECTS = $103F;
+
   {$EXTERNALSYM SPI_GETFOREGROUNDLOCKTIMEOUT}
   SPI_GETFOREGROUNDLOCKTIMEOUT = $2000;
   {$EXTERNALSYM SPI_SETFOREGROUNDLOCKTIMEOUT}
@@ -23851,6 +24166,10 @@ const
   SPI_GETFOREGROUNDFLASHCOUNT = $2004;
   {$EXTERNALSYM SPI_SETFOREGROUNDFLASHCOUNT}
   SPI_SETFOREGROUNDFLASHCOUNT = $2005;
+  {$EXTERNALSYM SPI_GETCARETWIDTH}
+  SPI_GETCARETWIDTH = $2006;
+  {$EXTERNALSYM SPI_SETCARETWIDTH}
+  SPI_SETCARETWIDTH = $2007;
 
   { Flags }
   {$EXTERNALSYM SPIF_UPDATEINIFILE}
@@ -24126,48 +24445,48 @@ const
   DISP_CHANGE_BADPARAM            = -5;
 
 
+{$EXTERNALSYM ChangeDisplaySettings}
+function ChangeDisplaySettings(var lpDevMode: TDeviceMode; dwFlags: DWORD): Longint; stdcall;
 {$EXTERNALSYM ChangeDisplaySettingsA}
 function ChangeDisplaySettingsA(var lpDevMode: TDeviceModeA; dwFlags: DWORD): Longint; stdcall;
 {$EXTERNALSYM ChangeDisplaySettingsW}
 function ChangeDisplaySettingsW(var lpDevMode: TDeviceModeW; dwFlags: DWORD): Longint; stdcall;
-{$EXTERNALSYM ChangeDisplaySettings}
-function ChangeDisplaySettings(var lpDevMode: TDeviceMode; dwFlags: DWORD): Longint; stdcall;
+{$EXTERNALSYM ChangeDisplaySettingsEx}
+function ChangeDisplaySettingsEx(lpszDeviceName: PChar; var lpDevMode: TDeviceMode;
+        wnd: HWND; dwFlags: DWORD; lParam: Pointer): Longint; stdcall;
 {$EXTERNALSYM ChangeDisplaySettingsExA}
 function ChangeDisplaySettingsExA(lpszDeviceName: PAnsiChar; var lpDevMode: TDeviceModeA;
         wnd: HWND; dwFlags: DWORD; lParam: Pointer): Longint; stdcall;
 {$EXTERNALSYM ChangeDisplaySettingsExW}
 function ChangeDisplaySettingsExW(lpszDeviceName: PWideChar; var lpDevMode: TDeviceModeW;
         wnd: HWND; dwFlags: DWORD; lParam: Pointer): Longint; stdcall;
-{$EXTERNALSYM ChangeDisplaySettingsEx}
-function ChangeDisplaySettingsEx(lpszDeviceName: PChar; var lpDevMode: TDeviceMode;
-        wnd: HWND; dwFlags: DWORD; lParam: Pointer): Longint; stdcall;
+{$EXTERNALSYM EnumDisplaySettings}
+function EnumDisplaySettings(lpszDeviceName: PChar; iModeNum: DWORD;
+  var lpDevMode: TDeviceMode): BOOL; stdcall;
 {$EXTERNALSYM EnumDisplaySettingsA}
 function EnumDisplaySettingsA(lpszDeviceName: PAnsiChar; iModeNum: DWORD;
   var lpDevMode: TDeviceModeA): BOOL; stdcall;
 {$EXTERNALSYM EnumDisplaySettingsW}
 function EnumDisplaySettingsW(lpszDeviceName: PWideChar; iModeNum: DWORD;
   var lpDevMode: TDeviceModeW): BOOL; stdcall;
-{$EXTERNALSYM EnumDisplaySettings}
-function EnumDisplaySettings(lpszDeviceName: PChar; iModeNum: DWORD;
-  var lpDevMode: TDeviceMode): BOOL; stdcall;
 {#END}
+{$EXTERNALSYM EnumDisplayDevices}
+function EnumDisplayDevices(Unused: Pointer; iDevNum: DWORD;
+  var lpDisplayDevice: TDisplayDevice; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumDisplayDevicesA}
 function EnumDisplayDevicesA(Unused: Pointer; iDevNum: DWORD;
   var lpDisplayDevice: TDisplayDeviceA; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumDisplayDevicesW}
 function EnumDisplayDevicesW(Unused: Pointer; iDevNum: DWORD;
   var lpDisplayDevice: TDisplayDeviceW; dwFlags: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumDisplayDevices}
-function EnumDisplayDevices(Unused: Pointer; iDevNum: DWORD;
-  var lpDisplayDevice: TDisplayDevice; dwFlags: DWORD): BOOL; stdcall;
+{$EXTERNALSYM SystemParametersInfo}
+function SystemParametersInfo(uiAction, uiParam: UINT;
+  pvParam: Pointer; fWinIni: UINT): BOOL; stdcall;
 {$EXTERNALSYM SystemParametersInfoA}
 function SystemParametersInfoA(uiAction, uiParam: UINT;
   pvParam: Pointer; fWinIni: UINT): BOOL; stdcall;
 {$EXTERNALSYM SystemParametersInfoW}
 function SystemParametersInfoW(uiAction, uiParam: UINT;
-  pvParam: Pointer; fWinIni: UINT): BOOL; stdcall;
-{$EXTERNALSYM SystemParametersInfo}
-function SystemParametersInfo(uiAction, uiParam: UINT;
   pvParam: Pointer; fWinIni: UINT): BOOL; stdcall;
 
 type
@@ -24657,6 +24976,7 @@ const
   WINEVENT_INCONTEXT = $0004;  { Events are SYNC, this causes your dll to be injected into every process }
 
 type
+  {$EXTERNALSYM PGUIThreadInfo}
   PGUIThreadInfo = ^TGUIThreadInfo;
   {$EXTERNALSYM tagGUITHREADINFO}
   tagGUITHREADINFO = packed record
@@ -24670,6 +24990,7 @@ type
     hwndCaret: HWND;
     rcCaret: TRect;
   end;
+  {$EXTERNALSYM TGUIThreadInfo}
   TGUIThreadInfo = tagGUITHREADINFO;
 
 const
@@ -24687,12 +25008,12 @@ const
 {$EXTERNALSYM GetGUIThreadInfo}
 function GetGUIThreadInfo (idThread: DWORD; var pgui: TGUIThreadinfo): BOOL; stdcall;
 
+{$EXTERNALSYM GetWindowModuleFileName}
+function GetWindowModuleFileName(hwnd: HWND; pszFileName: PAnsiChar; cchFileNameMax: UINT): UINT; stdcall;
 {$EXTERNALSYM GetWindowModuleFileNameA}
 function GetWindowModuleFileNameA(hwnd: HWND; pszFileName: PAnsiChar; cchFileNameMax: UINT): UINT; stdcall;
 {$EXTERNALSYM GetWindowModuleFileNameW}
 function GetWindowModuleFileNameW(hwnd: HWND; pszFileName: PAnsiChar; cchFileNameMax: UINT): UINT; stdcall;
-{$EXTERNALSYM GetWindowModuleFileName}
-function GetWindowModuleFileName(hwnd: HWND; pszFileName: PAnsiChar; cchFileNameMax: UINT): UINT; stdcall;
 
 const
   {$EXTERNALSYM STATE_SYSTEM_UNAVAILABLE}
@@ -24763,6 +25084,7 @@ const
 
 type
   { Information about the global cursor. }
+  {$EXTERNALSYM PCursorInfo}
   PCursorInfo = ^TCursorInfo;
   {$EXTERNALSYM tagCURSORINFO}
   tagCURSORINFO = packed record
@@ -24771,6 +25093,7 @@ type
     hCursor: HCURSOR;
     ptScreenPos: TPoint;
   end;
+  {$EXTERNALSYM TCursorInfo}
   TCursorInfo = tagCURSORINFO;
 
 const
@@ -24782,6 +25105,7 @@ function GetCursorInfo(var pci: TCursorInfo): BOOL; stdcall;
 
 type
   { Window information snapshot }
+  {$EXTERNALSYM PWindowInfo}
   PWindowInfo = ^TWindowInfo;
   {$EXTERNALSYM tagWINDOWINFO}
   tagWINDOWINFO = packed record
@@ -24796,6 +25120,7 @@ type
     atomWindowType: TAtom;
     wCreatorVersion: WORD;
   end;
+  {$EXTERNALSYM TWindowInfo}
   TWindowInfo = tagWINDOWINFO;
 
 const
@@ -24807,6 +25132,7 @@ function GetWindowInfo(hwnd: HWND; var pwi: TWindowInfo): BOOL; stdcall;
 
 type
   { Titlebar information. }
+  {$EXTERNALSYM PTitleBarInfo}
   PTitleBarInfo = ^TTitleBarInfo;
   {$EXTERNALSYM tagTITLEBARINFO}
   tagTITLEBARINFO = packed record
@@ -24814,6 +25140,7 @@ type
     rcTitleBar: TRect;
     rgstate: array [0..CCHILDREN_TITLEBAR] of DWORD;
   end;
+  {$EXTERNALSYM TTitleBarInfo}
   TTitleBarInfo = tagTITLEBARINFO;
 
 {$EXTERNALSYM GetTitleBarInfo}
@@ -24821,6 +25148,7 @@ function GetTitleBarInfo(hwnd: HWND; var pti: TTitleBarInfo): BOOL; stdcall;
 
 type
   { Menubar information }
+  {$EXTERNALSYM PMenuBarInfo}
   PMenuBarInfo = ^TMenuBarInfo;
   {$EXTERNALSYM tagMENUBARINFO}
   tagMENUBARINFO = packed record
@@ -24832,6 +25160,7 @@ type
 {    fFocused:1: BOOL; }  { item has the focus }
     FocusedBits: BYTE;
   end;
+  {$EXTERNALSYM TMenuBarInfo}
   TMenuBarInfo = tagMENUBARINFO;
 
 {$EXTERNALSYM GetMenuBarInfo}
@@ -24840,6 +25169,7 @@ function GetMenuBarInfo(hend: HWND; idObject, idItem: Longint;
 
 type
   { Scrollbar information }
+  {$EXTERNALSYM PScrollBarInfo}
   PScrollBarInfo = ^TScrollBarInfo;
   {$EXTERNALSYM tagSCROLLBARINFO}
   tagSCROLLBARINFO = packed record
@@ -24851,6 +25181,7 @@ type
     bogus: Integer;
     rgstate: array[0..CCHILDREN_SCROLLBAR] of DWORD;
   end;
+  {$EXTERNALSYM TScrollBarInfo}
   TScrollBarInfo = tagSCROLLBARINFO;
 
 {$EXTERNALSYM GetScrollBarInfo}
@@ -24859,6 +25190,7 @@ Function GetScrollBarInfo(hwnd: HWND; idObject: Longint;
 
 type
   { Combobox information }
+  {$EXTERNALSYM PComboBoxInfo}
   PComboBoxInfo = ^TComboBoxInfo;
   {$EXTERNALSYM tagCOMBOBOXINFO}
   tagCOMBOBOXINFO = packed record
@@ -24870,6 +25202,7 @@ type
     hwndItem: HWND;
     hwndList: HWND;
   end;
+  {$EXTERNALSYM TComboBoxInfo}
   TComboBoxInfo = tagCOMBOBOXINFO;
 
 {$EXTERNALSYM GetComboBoxInfo}
@@ -24894,15 +25227,16 @@ FUNCTION GetAncestor(hwnd: HWND; gaFlags: UINT): HWND; stdcall;
 {$EXTERNALSYM RealChildWindowFromPoint}
 FUNCTION RealChildWindowFromPoint(hwndParent: HWND; ptParentClientCoords: TPoint): HWND; stdcall;
 
+{$EXTERNALSYM RealGetWindowClass}
+function RealGetWindowClass(hwnd: HWND; pszType: PChar; cchType: UINT): UINT; stdcall;
 {$EXTERNALSYM RealGetWindowClassA}
 function RealGetWindowClassA(hwnd: HWND; pszType: PAnsiChar; cchType: UINT): UINT; stdcall;
 {$EXTERNALSYM RealGetWindowClassW}
 function RealGetWindowClassW(hwnd: HWND; pszType: PWideChar; cchType: UINT): UINT; stdcall;
-{$EXTERNALSYM RealGetWindowClass}
-function RealGetWindowClass(hwnd: HWND; pszType: PChar; cchType: UINT): UINT; stdcall;
 
 type
   { Alt-Tab Switch window information. }
+  {$EXTERNALSYM PAltTabInfo}
   PAltTabInfo = ^TAltTabInfo;
   {$EXTERNALSYM tagALTTABINFO}
   tagALTTABINFO = packed record
@@ -24916,17 +25250,18 @@ type
     cyItem: Integer;
     ptStart: TPoint;
   end;
+  {$EXTERNALSYM TAltTabInfo}
   TAltTabInfo = tagALTTABINFO;
 
+{$EXTERNALSYM GetAltTabInfo}
+function GetAltTabInfo(hwnd: HWND; iItem: Integer; var pati: TAltTabInfo;
+  pszItemText: PChar; cchItemText: UINT): BOOL; stdcall;
 {$EXTERNALSYM GetAltTabInfoA}
 function GetAltTabInfoA(hwnd: HWND; iItem: Integer; var pati: TAltTabInfo;
   pszItemText: PAnsiChar; cchItemText: UINT): BOOL; stdcall;
 {$EXTERNALSYM GetAltTabInfoW}
 function GetAltTabInfoW(hwnd: HWND; iItem: Integer; var pati: TAltTabInfo;
   pszItemText: PWideChar; cchItemText: UINT): BOOL; stdcall;
-{$EXTERNALSYM GetAltTabInfo}
-function GetAltTabInfo(hwnd: HWND; iItem: Integer; var pati: TAltTabInfo;
-  pszItemText: PChar; cchItemText: UINT): BOOL; stdcall;
 
 { Listbox information. Returns the number of items per row. }
 {$EXTERNALSYM GetListBoxInfo}
@@ -25683,7 +26018,8 @@ type
   CURRENCYFMT = CURRENCYFMTA;
 
 { Enumeration function constants. }
-
+
+
 
 
 
@@ -25694,7 +26030,8 @@ type
   TFNCodepageEnumProc = TFarProc;
   TFNDateFmtEnumProc = TFarProc;
   TFNTimeFmtEnumProc = TFarProc;
-  TFNCalInfoEnumProc = TFarProc;
+  TFNCalInfoEnumProc = TFarProc;
+
 
 
 { Code Page Dependent APIs. }
@@ -25722,98 +26059,98 @@ function WideCharToMultiByte(CodePage: UINT; dwFlags: DWORD;
 
 { Locale Dependent APIs. }
 
+{$EXTERNALSYM CompareString}
+function CompareString(Locale: LCID; dwCmpFlags: DWORD; lpString1: PChar;
+  cchCount1: Integer; lpString2: PChar; cchCount2: Integer): Integer; stdcall;
 {$EXTERNALSYM CompareStringA}
 function CompareStringA(Locale: LCID; dwCmpFlags: DWORD; lpString1: PAnsiChar;
   cchCount1: Integer; lpString2: PAnsiChar; cchCount2: Integer): Integer; stdcall;
 {$EXTERNALSYM CompareStringW}
 function CompareStringW(Locale: LCID; dwCmpFlags: DWORD; lpString1: PWideChar;
   cchCount1: Integer; lpString2: PWideChar; cchCount2: Integer): Integer; stdcall;
-{$EXTERNALSYM CompareString}
-function CompareString(Locale: LCID; dwCmpFlags: DWORD; lpString1: PChar;
-  cchCount1: Integer; lpString2: PChar; cchCount2: Integer): Integer; stdcall;
+{$EXTERNALSYM LCMapString}
+function LCMapString(Locale: LCID; dwMapFlags: DWORD; lpSrcStr: PChar;
+  cchSrc: Integer; lpDestStr: PChar; cchDest: Integer): Integer; stdcall;
 {$EXTERNALSYM LCMapStringA}
 function LCMapStringA(Locale: LCID; dwMapFlags: DWORD; lpSrcStr: PAnsiChar;
   cchSrc: Integer; lpDestStr: PAnsiChar; cchDest: Integer): Integer; stdcall;
 {$EXTERNALSYM LCMapStringW}
 function LCMapStringW(Locale: LCID; dwMapFlags: DWORD; lpSrcStr: PWideChar;
   cchSrc: Integer; lpDestStr: PWideChar; cchDest: Integer): Integer; stdcall;
-{$EXTERNALSYM LCMapString}
-function LCMapString(Locale: LCID; dwMapFlags: DWORD; lpSrcStr: PChar;
-  cchSrc: Integer; lpDestStr: PChar; cchDest: Integer): Integer; stdcall;
+{$EXTERNALSYM GetLocaleInfo}
+function GetLocaleInfo(Locale: LCID; LCType: LCTYPE; lpLCData: PChar; cchData: Integer): Integer; stdcall;
 {$EXTERNALSYM GetLocaleInfoA}
 function GetLocaleInfoA(Locale: LCID; LCType: LCTYPE; lpLCData: PAnsiChar; cchData: Integer): Integer; stdcall;
 {$EXTERNALSYM GetLocaleInfoW}
 function GetLocaleInfoW(Locale: LCID; LCType: LCTYPE; lpLCData: PWideChar; cchData: Integer): Integer; stdcall;
-{$EXTERNALSYM GetLocaleInfo}
-function GetLocaleInfo(Locale: LCID; LCType: LCTYPE; lpLCData: PChar; cchData: Integer): Integer; stdcall;
+{$EXTERNALSYM SetLocaleInfo}
+function SetLocaleInfo(Locale: LCID; LCType: LCTYPE; lpLCData: PChar): BOOL; stdcall;
 {$EXTERNALSYM SetLocaleInfoA}
 function SetLocaleInfoA(Locale: LCID; LCType: LCTYPE; lpLCData: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM SetLocaleInfoW}
 function SetLocaleInfoW(Locale: LCID; LCType: LCTYPE; lpLCData: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM SetLocaleInfo}
-function SetLocaleInfo(Locale: LCID; LCType: LCTYPE; lpLCData: PChar): BOOL; stdcall;
+{$EXTERNALSYM GetTimeFormat}
+function GetTimeFormat(Locale: LCID; dwFlags: DWORD; lpTime: PSystemTime;
+  lpFormat: PChar; lpTimeStr: PChar; cchTime: Integer): Integer; stdcall;
 {$EXTERNALSYM GetTimeFormatA}
 function GetTimeFormatA(Locale: LCID; dwFlags: DWORD; lpTime: PSystemTime;
   lpFormat: PAnsiChar; lpTimeStr: PAnsiChar; cchTime: Integer): Integer; stdcall;
 {$EXTERNALSYM GetTimeFormatW}
 function GetTimeFormatW(Locale: LCID; dwFlags: DWORD; lpTime: PSystemTime;
   lpFormat: PWideChar; lpTimeStr: PWideChar; cchTime: Integer): Integer; stdcall;
-{$EXTERNALSYM GetTimeFormat}
-function GetTimeFormat(Locale: LCID; dwFlags: DWORD; lpTime: PSystemTime;
-  lpFormat: PChar; lpTimeStr: PChar; cchTime: Integer): Integer; stdcall;
+{$EXTERNALSYM GetDateFormat}
+function GetDateFormat(Locale: LCID; dwFlags: DWORD; lpDate: PSystemTime;
+  lpFormat: PChar; lpDateStr: PChar; cchDate: Integer): Integer; stdcall;
 {$EXTERNALSYM GetDateFormatA}
 function GetDateFormatA(Locale: LCID; dwFlags: DWORD; lpDate: PSystemTime;
   lpFormat: PAnsiChar; lpDateStr: PAnsiChar; cchDate: Integer): Integer; stdcall;
 {$EXTERNALSYM GetDateFormatW}
 function GetDateFormatW(Locale: LCID; dwFlags: DWORD; lpDate: PSystemTime;
   lpFormat: PWideChar; lpDateStr: PWideChar; cchDate: Integer): Integer; stdcall;
-{$EXTERNALSYM GetDateFormat}
-function GetDateFormat(Locale: LCID; dwFlags: DWORD; lpDate: PSystemTime;
-  lpFormat: PChar; lpDateStr: PChar; cchDate: Integer): Integer; stdcall;
+{$EXTERNALSYM GetNumberFormat}
+function GetNumberFormat(Locale: LCID; dwFlags: DWORD; lpValue: PChar;
+  lpFormat: PNumberFmt; lpNumberStr: PChar; cchNumber: Integer): Integer; stdcall;
 {$EXTERNALSYM GetNumberFormatA}
 function GetNumberFormatA(Locale: LCID; dwFlags: DWORD; lpValue: PAnsiChar;
   lpFormat: PNumberFmtA; lpNumberStr: PAnsiChar; cchNumber: Integer): Integer; stdcall;
 {$EXTERNALSYM GetNumberFormatW}
 function GetNumberFormatW(Locale: LCID; dwFlags: DWORD; lpValue: PWideChar;
   lpFormat: PNumberFmtW; lpNumberStr: PWideChar; cchNumber: Integer): Integer; stdcall;
-{$EXTERNALSYM GetNumberFormat}
-function GetNumberFormat(Locale: LCID; dwFlags: DWORD; lpValue: PChar;
-  lpFormat: PNumberFmt; lpNumberStr: PChar; cchNumber: Integer): Integer; stdcall;
+{$EXTERNALSYM GetCurrencyFormat}
+function GetCurrencyFormat(Locale: LCID; dwFlags: DWORD; lpValue: PChar;
+  lpFormat: PCurrencyFmt; lpCurrencyStr: PChar; cchCurrency: Integer): Integer; stdcall;
 {$EXTERNALSYM GetCurrencyFormatA}
 function GetCurrencyFormatA(Locale: LCID; dwFlags: DWORD; lpValue: PAnsiChar;
   lpFormat: PCurrencyFmtA; lpCurrencyStr: PAnsiChar; cchCurrency: Integer): Integer; stdcall;
 {$EXTERNALSYM GetCurrencyFormatW}
 function GetCurrencyFormatW(Locale: LCID; dwFlags: DWORD; lpValue: PWideChar;
   lpFormat: PCurrencyFmtW; lpCurrencyStr: PWideChar; cchCurrency: Integer): Integer; stdcall;
-{$EXTERNALSYM GetCurrencyFormat}
-function GetCurrencyFormat(Locale: LCID; dwFlags: DWORD; lpValue: PChar;
-  lpFormat: PCurrencyFmt; lpCurrencyStr: PChar; cchCurrency: Integer): Integer; stdcall;
+{$EXTERNALSYM EnumCalendarInfo}
+function EnumCalendarInfo(lpCalInfoEnumProc: TFNCalInfoEnumProc; Locale: LCID;
+  Calendar: CALID; CalType: CALTYPE): BOOL; stdcall;
 {$EXTERNALSYM EnumCalendarInfoA}
 function EnumCalendarInfoA(lpCalInfoEnumProc: TFNCalInfoEnumProc; Locale: LCID;
   Calendar: CALID; CalType: CALTYPE): BOOL; stdcall;
 {$EXTERNALSYM EnumCalendarInfoW}
 function EnumCalendarInfoW(lpCalInfoEnumProc: TFNCalInfoEnumProc; Locale: LCID;
   Calendar: CALID; CalType: CALTYPE): BOOL; stdcall;
-{$EXTERNALSYM EnumCalendarInfo}
-function EnumCalendarInfo(lpCalInfoEnumProc: TFNCalInfoEnumProc; Locale: LCID;
-  Calendar: CALID; CalType: CALTYPE): BOOL; stdcall;
+{$EXTERNALSYM EnumTimeFormats}
+function EnumTimeFormats(lpTimeFmtEnumProc: TFNTimeFmtEnumProc;
+  Locale: LCID; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumTimeFormatsA}
 function EnumTimeFormatsA(lpTimeFmtEnumProc: TFNTimeFmtEnumProc;
   Locale: LCID; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumTimeFormatsW}
 function EnumTimeFormatsW(lpTimeFmtEnumProc: TFNTimeFmtEnumProc;
   Locale: LCID; dwFlags: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumTimeFormats}
-function EnumTimeFormats(lpTimeFmtEnumProc: TFNTimeFmtEnumProc;
+{$EXTERNALSYM EnumDateFormats}
+function EnumDateFormats(lpDateFmtEnumProc: TFNDateFmtEnumProc;
   Locale: LCID; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumDateFormatsA}
 function EnumDateFormatsA(lpDateFmtEnumProc: TFNDateFmtEnumProc;
   Locale: LCID; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumDateFormatsW}
 function EnumDateFormatsW(lpDateFmtEnumProc: TFNDateFmtEnumProc;
-  Locale: LCID; dwFlags: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumDateFormats}
-function EnumDateFormats(lpDateFmtEnumProc: TFNDateFmtEnumProc;
   Locale: LCID; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM IsValidLocale}
 function IsValidLocale(Locale: LCID; dwFlags: DWORD): BOOL; stdcall;
@@ -25834,15 +26171,15 @@ function GetUserDefaultLCID: LCID; stdcall;
 
 { Locale Independent APIs. }
 
+{$EXTERNALSYM GetStringTypeEx}
+function GetStringTypeEx(Locale: LCID; dwInfoType: DWORD;
+  lpSrcStr: PChar; cchSrc: Integer; var lpCharType): BOOL; stdcall;
 {$EXTERNALSYM GetStringTypeExA}
 function GetStringTypeExA(Locale: LCID; dwInfoType: DWORD;
   lpSrcStr: PAnsiChar; cchSrc: Integer; var lpCharType): BOOL; stdcall;
 {$EXTERNALSYM GetStringTypeExW}
 function GetStringTypeExW(Locale: LCID; dwInfoType: DWORD;
   lpSrcStr: PWideChar; cchSrc: Integer; var lpCharType): BOOL; stdcall;
-{$EXTERNALSYM GetStringTypeEx}
-function GetStringTypeEx(Locale: LCID; dwInfoType: DWORD;
-  lpSrcStr: PChar; cchSrc: Integer; var lpCharType): BOOL; stdcall;
 
 {  NOTE: The parameters for GetStringTypeA and GetStringTypeW are
          NOT the same.  The W version was shipped in NT 3.1.  The
@@ -25859,27 +26196,27 @@ function GetStringTypeA(Locale: LCID; dwInfoType: DWORD; const lpSrcStr: LPCSTR;
 {$EXTERNALSYM GetStringTypeW}
 function GetStringTypeW(dwInfoType: DWORD; const lpSrcStr: WCHAR; cchSrc: BOOL; var lpCharType: Word): BOOL;
 
+{$EXTERNALSYM FoldString}
+function FoldString(dwMapFlags: DWORD; lpSrcStr: PChar; cchSrc: Integer;
+  lpDestStr: PChar; cchDest: Integer): Integer; stdcall;
 {$EXTERNALSYM FoldStringA}
 function FoldStringA(dwMapFlags: DWORD; lpSrcStr: PAnsiChar; cchSrc: Integer;
   lpDestStr: PAnsiChar; cchDest: Integer): Integer; stdcall;
 {$EXTERNALSYM FoldStringW}
 function FoldStringW(dwMapFlags: DWORD; lpSrcStr: PWideChar; cchSrc: Integer;
   lpDestStr: PWideChar; cchDest: Integer): Integer; stdcall;
-{$EXTERNALSYM FoldString}
-function FoldString(dwMapFlags: DWORD; lpSrcStr: PChar; cchSrc: Integer;
-  lpDestStr: PChar; cchDest: Integer): Integer; stdcall;
+{$EXTERNALSYM EnumSystemLocales}
+function EnumSystemLocales(lpLocaleEnumProc: TFNLocaleEnumProc; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumSystemLocalesA}
 function EnumSystemLocalesA(lpLocaleEnumProc: TFNLocaleEnumProc; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumSystemLocalesW}
 function EnumSystemLocalesW(lpLocaleEnumProc: TFNLocaleEnumProc; dwFlags: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumSystemLocales}
-function EnumSystemLocales(lpLocaleEnumProc: TFNLocaleEnumProc; dwFlags: DWORD): BOOL; stdcall;
+{$EXTERNALSYM EnumSystemCodePages}
+function EnumSystemCodePages(lpCodePageEnumProc: TFNCodepageEnumProc; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumSystemCodePagesA}
 function EnumSystemCodePagesA(lpCodePageEnumProc: TFNCodepageEnumProc; dwFlags: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumSystemCodePagesW}
 function EnumSystemCodePagesW(lpCodePageEnumProc: TFNCodepageEnumProc; dwFlags: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumSystemCodePages}
-function EnumSystemCodePages(lpCodePageEnumProc: TFNCodepageEnumProc; dwFlags: DWORD): BOOL; stdcall;
 
 
 { Translated from WINCON.H }
@@ -26101,10 +26438,12 @@ type
   TConsoleCursorInfo = _CONSOLE_CURSOR_INFO;
   {$EXTERNALSYM CONSOLE_CURSOR_INFO}
   CONSOLE_CURSOR_INFO = _CONSOLE_CURSOR_INFO;
-
 
 
-  TFNHandlerRoutine = TFarProc;
+
+
+  TFNHandlerRoutine = TFarProc;
+
 
 const
   {$EXTERNALSYM CTRL_C_EVENT}
@@ -26136,14 +26475,17 @@ const
   ENABLE_WRAP_AT_EOL_OUTPUT = 2;
 
 { direct API definitions. }
+{$EXTERNALSYM PeekConsoleInput}
+function PeekConsoleInput(hConsoleInput: THandle; var lpBuffer: TInputRecord;
+  nLength: DWORD; var lpNumberOfEventsRead: DWORD): BOOL; stdcall;
 {$EXTERNALSYM PeekConsoleInputA}
 function PeekConsoleInputA(hConsoleInput: THandle; var lpBuffer: TInputRecord;
   nLength: DWORD; var lpNumberOfEventsRead: DWORD): BOOL; stdcall;
 {$EXTERNALSYM PeekConsoleInputW}
 function PeekConsoleInputW(hConsoleInput: THandle; var lpBuffer: TInputRecord;
   nLength: DWORD; var lpNumberOfEventsRead: DWORD): BOOL; stdcall;
-{$EXTERNALSYM PeekConsoleInput}
-function PeekConsoleInput(hConsoleInput: THandle; var lpBuffer: TInputRecord;
+{$EXTERNALSYM ReadConsoleInput}
+function ReadConsoleInput(hConsoleInput: THandle; var lpBuffer: TInputRecord;
   nLength: DWORD; var lpNumberOfEventsRead: DWORD): BOOL; stdcall;
 {$EXTERNALSYM ReadConsoleInputA}
 function ReadConsoleInputA(hConsoleInput: THandle; var lpBuffer: TInputRecord;
@@ -26151,68 +26493,65 @@ function ReadConsoleInputA(hConsoleInput: THandle; var lpBuffer: TInputRecord;
 {$EXTERNALSYM ReadConsoleInputW}
 function ReadConsoleInputW(hConsoleInput: THandle; var lpBuffer: TInputRecord;
   nLength: DWORD; var lpNumberOfEventsRead: DWORD): BOOL; stdcall;
-{$EXTERNALSYM ReadConsoleInput}
-function ReadConsoleInput(hConsoleInput: THandle; var lpBuffer: TInputRecord;
-  nLength: DWORD; var lpNumberOfEventsRead: DWORD): BOOL; stdcall;
+{$EXTERNALSYM WriteConsoleInput}
+function WriteConsoleInput(hConsoleInput: THandle; const lpBuffer: TInputRecord;
+  nLength: DWORD; var lpNumberOfEventsWritten: DWORD): BOOL; stdcall;
 {$EXTERNALSYM WriteConsoleInputA}
 function WriteConsoleInputA(hConsoleInput: THandle; const lpBuffer: TInputRecord;
   nLength: DWORD; var lpNumberOfEventsWritten: DWORD): BOOL; stdcall;
 {$EXTERNALSYM WriteConsoleInputW}
 function WriteConsoleInputW(hConsoleInput: THandle; const lpBuffer: TInputRecord;
   nLength: DWORD; var lpNumberOfEventsWritten: DWORD): BOOL; stdcall;
-{$EXTERNALSYM WriteConsoleInput}
-function WriteConsoleInput(hConsoleInput: THandle; const lpBuffer: TInputRecord;
-  nLength: DWORD; var lpNumberOfEventsWritten: DWORD): BOOL; stdcall;
+{$EXTERNALSYM ReadConsoleOutput}
+function ReadConsoleOutput(hConsoleOutput: THandle; lpBuffer: Pointer;
+  dwBufferSize, dwBufferCoord: TCoord; var lpReadRegion: TSmallRect): BOOL; stdcall;
 {$EXTERNALSYM ReadConsoleOutputA}
 function ReadConsoleOutputA(hConsoleOutput: THandle; lpBuffer: Pointer;
   dwBufferSize, dwBufferCoord: TCoord; var lpReadRegion: TSmallRect): BOOL; stdcall;
 {$EXTERNALSYM ReadConsoleOutputW}
 function ReadConsoleOutputW(hConsoleOutput: THandle; lpBuffer: Pointer;
   dwBufferSize, dwBufferCoord: TCoord; var lpReadRegion: TSmallRect): BOOL; stdcall;
-{$EXTERNALSYM ReadConsoleOutput}
-function ReadConsoleOutput(hConsoleOutput: THandle; lpBuffer: Pointer;
-  dwBufferSize, dwBufferCoord: TCoord; var lpReadRegion: TSmallRect): BOOL; stdcall;
+{$EXTERNALSYM WriteConsoleOutput}
+function WriteConsoleOutput(hConsoleOutput: THandle; lpBuffer: Pointer;
+  dwBufferSize, dwBufferCoord: TCoord; var lpWriteRegion: TSmallRect): BOOL; stdcall;
 {$EXTERNALSYM WriteConsoleOutputA}
 function WriteConsoleOutputA(hConsoleOutput: THandle; lpBuffer: Pointer;
   dwBufferSize, dwBufferCoord: TCoord; var lpWriteRegion: TSmallRect): BOOL; stdcall;
 {$EXTERNALSYM WriteConsoleOutputW}
 function WriteConsoleOutputW(hConsoleOutput: THandle; lpBuffer: Pointer;
   dwBufferSize, dwBufferCoord: TCoord; var lpWriteRegion: TSmallRect): BOOL; stdcall;
-{$EXTERNALSYM WriteConsoleOutput}
-function WriteConsoleOutput(hConsoleOutput: THandle; lpBuffer: Pointer;
-  dwBufferSize, dwBufferCoord: TCoord; var lpWriteRegion: TSmallRect): BOOL; stdcall;
+{$EXTERNALSYM ReadConsoleOutputCharacter}
+function ReadConsoleOutputCharacter(hConsoleOutput: THandle; lpCharacter: PAnsiChar;
+  nLength: DWORD; dwReadCoord: TCoord; var lpNumberOfCharsRead: DWORD): BOOL; stdcall;
 {$EXTERNALSYM ReadConsoleOutputCharacterA}
 function ReadConsoleOutputCharacterA(hConsoleOutput: THandle; lpCharacter: PAnsiChar;
   nLength: DWORD; dwReadCoord: TCoord; var lpNumberOfCharsRead: DWORD): BOOL; stdcall;
 {$EXTERNALSYM ReadConsoleOutputCharacterW}
 function ReadConsoleOutputCharacterW(hConsoleOutput: THandle; lpCharacter: PAnsiChar;
   nLength: DWORD; dwReadCoord: TCoord; var lpNumberOfCharsRead: DWORD): BOOL; stdcall;
-{$EXTERNALSYM ReadConsoleOutputCharacter}
-function ReadConsoleOutputCharacter(hConsoleOutput: THandle; lpCharacter: PAnsiChar;
-  nLength: DWORD; dwReadCoord: TCoord; var lpNumberOfCharsRead: DWORD): BOOL; stdcall;
 {$EXTERNALSYM ReadConsoleOutputAttribute}
 function ReadConsoleOutputAttribute(hConsoleOutput: THandle; lpAttribute: Pointer;
   nLength: DWORD; dwReadCoord: TCoord; var lpNumberOfAttrsRead: DWORD): BOOL; stdcall;
+{$EXTERNALSYM WriteConsoleOutputCharacter}
+function WriteConsoleOutputCharacter(hConsoleOutput: THandle;lpCharacter: PChar;
+  nLength: DWORD; dwWriteCoord: TCoord; var lpNumberOfCharsWritten: DWORD): BOOL; stdcall;
 {$EXTERNALSYM WriteConsoleOutputCharacterA}
 function WriteConsoleOutputCharacterA(hConsoleOutput: THandle;lpCharacter: PAnsiChar;
   nLength: DWORD; dwWriteCoord: TCoord; var lpNumberOfCharsWritten: DWORD): BOOL; stdcall;
 {$EXTERNALSYM WriteConsoleOutputCharacterW}
 function WriteConsoleOutputCharacterW(hConsoleOutput: THandle;lpCharacter: PWideChar;
   nLength: DWORD; dwWriteCoord: TCoord; var lpNumberOfCharsWritten: DWORD): BOOL; stdcall;
-{$EXTERNALSYM WriteConsoleOutputCharacter}
-function WriteConsoleOutputCharacter(hConsoleOutput: THandle;lpCharacter: PChar;
-  nLength: DWORD; dwWriteCoord: TCoord; var lpNumberOfCharsWritten: DWORD): BOOL; stdcall;
 {$EXTERNALSYM WriteConsoleOutputAttribute}
 function WriteConsoleOutputAttribute(hConsoleOutput: THandle; lpAttribute: Pointer;
   nLength: DWORD; dwWriteCoord: TCoord; var lpNumberOfAttrsWritten: DWORD): BOOL; stdcall;
+{$EXTERNALSYM FillConsoleOutputCharacter}
+function FillConsoleOutputCharacter(hConsoleOutput: THandle; cCharacter: Char;
+  nLength: DWORD; dwWriteCoord: TCoord; var lpNumberOfCharsWritten: DWORD): BOOL; stdcall;
 {$EXTERNALSYM FillConsoleOutputCharacterA}
 function FillConsoleOutputCharacterA(hConsoleOutput: THandle; cCharacter: AnsiChar;
   nLength: DWORD; dwWriteCoord: TCoord; var lpNumberOfCharsWritten: DWORD): BOOL; stdcall;
 {$EXTERNALSYM FillConsoleOutputCharacterW}
 function FillConsoleOutputCharacterW(hConsoleOutput: THandle; cCharacter: WideChar;
-  nLength: DWORD; dwWriteCoord: TCoord; var lpNumberOfCharsWritten: DWORD): BOOL; stdcall;
-{$EXTERNALSYM FillConsoleOutputCharacter}
-function FillConsoleOutputCharacter(hConsoleOutput: THandle; cCharacter: Char;
   nLength: DWORD; dwWriteCoord: TCoord; var lpNumberOfCharsWritten: DWORD): BOOL; stdcall;
 {$EXTERNALSYM FillConsoleOutputAttribute}
 function FillConsoleOutputAttribute(hConsoleOutput: THandle; wAttribute: Word;
@@ -26245,16 +26584,16 @@ function SetConsoleCursorPosition(hConsoleOutput: THandle; dwCursorPosition: TCo
 {$EXTERNALSYM SetConsoleCursorInfo}
 function SetConsoleCursorInfo(hConsoleOutput: THandle;
   const lpConsoleCursorInfo: TConsoleCursorInfo): BOOL; stdcall;
+{$EXTERNALSYM ScrollConsoleScreenBuffer}
+function ScrollConsoleScreenBuffer(hConsoleOutput: THandle;
+  const lpScrollRectangle: TSmallRect; lpClipRectangle: PSmallRect;
+  dwDestinationOrigin: TCoord; var lpFill: TCharInfo): BOOL; stdcall;
 {$EXTERNALSYM ScrollConsoleScreenBufferA}
 function ScrollConsoleScreenBufferA(hConsoleOutput: THandle;
   const lpScrollRectangle: TSmallRect; lpClipRectangle: PSmallRect;
   dwDestinationOrigin: TCoord; var lpFill: TCharInfo): BOOL; stdcall;
 {$EXTERNALSYM ScrollConsoleScreenBufferW}
 function ScrollConsoleScreenBufferW(hConsoleOutput: THandle;
-  const lpScrollRectangle: TSmallRect; lpClipRectangle: PSmallRect;
-  dwDestinationOrigin: TCoord; var lpFill: TCharInfo): BOOL; stdcall;
-{$EXTERNALSYM ScrollConsoleScreenBuffer}
-function ScrollConsoleScreenBuffer(hConsoleOutput: THandle;
   const lpScrollRectangle: TSmallRect; lpClipRectangle: PSmallRect;
   dwDestinationOrigin: TCoord; var lpFill: TCharInfo): BOOL; stdcall;
 {$EXTERNALSYM SetConsoleWindowInfo}
@@ -26270,35 +26609,35 @@ function GenerateConsoleCtrlEvent(dwCtrlEvent: DWORD; dwProcessGroupId: DWORD): 
 function AllocConsole: BOOL; stdcall;
 {$EXTERNALSYM FreeConsole}
 function FreeConsole: BOOL; stdcall;
+{$EXTERNALSYM GetConsoleTitle}
+function GetConsoleTitle(lpConsoleTitle: PChar; nSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetConsoleTitleA}
 function GetConsoleTitleA(lpConsoleTitle: PAnsiChar; nSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetConsoleTitleW}
 function GetConsoleTitleW(lpConsoleTitle: PWideChar; nSize: DWORD): DWORD; stdcall;
-{$EXTERNALSYM GetConsoleTitle}
-function GetConsoleTitle(lpConsoleTitle: PChar; nSize: DWORD): DWORD; stdcall;
+{$EXTERNALSYM SetConsoleTitle}
+function SetConsoleTitle(lpConsoleTitle: PChar): BOOL; stdcall;
 {$EXTERNALSYM SetConsoleTitleA}
 function SetConsoleTitleA(lpConsoleTitle: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM SetConsoleTitleW}
 function SetConsoleTitleW(lpConsoleTitle: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM SetConsoleTitle}
-function SetConsoleTitle(lpConsoleTitle: PChar): BOOL; stdcall;
+{$EXTERNALSYM ReadConsole}
+function ReadConsole(hConsoleInput: THandle; lpBuffer: Pointer;
+  nNumberOfCharsToRead: DWORD; var lpNumberOfCharsRead: DWORD; lpReserved: Pointer): BOOL; stdcall;
 {$EXTERNALSYM ReadConsoleA}
 function ReadConsoleA(hConsoleInput: THandle; lpBuffer: Pointer;
   nNumberOfCharsToRead: DWORD; var lpNumberOfCharsRead: DWORD; lpReserved: Pointer): BOOL; stdcall;
 {$EXTERNALSYM ReadConsoleW}
 function ReadConsoleW(hConsoleInput: THandle; lpBuffer: Pointer;
   nNumberOfCharsToRead: DWORD; var lpNumberOfCharsRead: DWORD; lpReserved: Pointer): BOOL; stdcall;
-{$EXTERNALSYM ReadConsole}
-function ReadConsole(hConsoleInput: THandle; lpBuffer: Pointer;
-  nNumberOfCharsToRead: DWORD; var lpNumberOfCharsRead: DWORD; lpReserved: Pointer): BOOL; stdcall;
+{$EXTERNALSYM WriteConsole}
+function WriteConsole(hConsoleOutput: THandle; const lpBuffer: Pointer;
+  nNumberOfCharsToWrite: DWORD; var lpNumberOfCharsWritten: DWORD; lpReserved: Pointer): BOOL; stdcall;
 {$EXTERNALSYM WriteConsoleA}
 function WriteConsoleA(hConsoleOutput: THandle; const lpBuffer: Pointer;
   nNumberOfCharsToWrite: DWORD; var lpNumberOfCharsWritten: DWORD; lpReserved: Pointer): BOOL; stdcall;
 {$EXTERNALSYM WriteConsoleW}
 function WriteConsoleW(hConsoleOutput: THandle; const lpBuffer: Pointer;
-  nNumberOfCharsToWrite: DWORD; var lpNumberOfCharsWritten: DWORD; lpReserved: Pointer): BOOL; stdcall;
-{$EXTERNALSYM WriteConsole}
-function WriteConsole(hConsoleOutput: THandle; const lpBuffer: Pointer;
   nNumberOfCharsToWrite: DWORD; var lpNumberOfCharsWritten: DWORD; lpReserved: Pointer): BOOL; stdcall;
 
 const
@@ -26529,15 +26868,19 @@ type
   {$EXTERNALSYM VS_FIXEDFILEINFO}
   VS_FIXEDFILEINFO = tagVS_FIXEDFILEINFO;
 
+{$EXTERNALSYM VerFindFile}
+function VerFindFile(uFlags: DWORD; szFileName, szWinDir, szAppDir, szCurDir: PChar;
+  var lpuCurDirLen: UINT; szDestDir: PChar; var lpuDestDirLen: UINT): DWORD; stdcall;
 {$EXTERNALSYM VerFindFileA}
 function VerFindFileA(uFlags: DWORD; szFileName, szWinDir, szAppDir, szCurDir: PAnsiChar;
   var lpuCurDirLen: UINT; szDestDir: PAnsiChar; var lpuDestDirLen: UINT): DWORD; stdcall;
 {$EXTERNALSYM VerFindFileW}
 function VerFindFileW(uFlags: DWORD; szFileName, szWinDir, szAppDir, szCurDir: PWideChar;
   var lpuCurDirLen: UINT; szDestDir: PWideChar; var lpuDestDirLen: UINT): DWORD; stdcall;
-{$EXTERNALSYM VerFindFile}
-function VerFindFile(uFlags: DWORD; szFileName, szWinDir, szAppDir, szCurDir: PChar;
-  var lpuCurDirLen: UINT; szDestDir: PChar; var lpuDestDirLen: UINT): DWORD; stdcall;
+{$EXTERNALSYM VerInstallFile}
+function VerInstallFile(uFlags: DWORD;
+  szSrcFileName, szDestFileName, szSrcDir, szDestDir, szCurDir, szTmpFile: PChar;
+  var lpuTmpFileLen: UINT): DWORD; stdcall;
 {$EXTERNALSYM VerInstallFileA}
 function VerInstallFileA(uFlags: DWORD;
   szSrcFileName, szDestFileName, szSrcDir, szDestDir, szCurDir, szTmpFile: PAnsiChar;
@@ -26546,40 +26889,36 @@ function VerInstallFileA(uFlags: DWORD;
 function VerInstallFileW(uFlags: DWORD;
   szSrcFileName, szDestFileName, szSrcDir, szDestDir, szCurDir, szTmpFile: PWideChar;
   var lpuTmpFileLen: UINT): DWORD; stdcall;
-{$EXTERNALSYM VerInstallFile}
-function VerInstallFile(uFlags: DWORD;
-  szSrcFileName, szDestFileName, szSrcDir, szDestDir, szCurDir, szTmpFile: PChar;
-  var lpuTmpFileLen: UINT): DWORD; stdcall;
 
+{$EXTERNALSYM GetFileVersionInfoSize}
+function GetFileVersionInfoSize(lptstrFilename: PChar; var lpdwHandle: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetFileVersionInfoSizeA}
 function GetFileVersionInfoSizeA(lptstrFilename: PAnsiChar; var lpdwHandle: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetFileVersionInfoSizeW}
 function GetFileVersionInfoSizeW(lptstrFilename: PWideChar; var lpdwHandle: DWORD): DWORD; stdcall;
-{$EXTERNALSYM GetFileVersionInfoSize}
-function GetFileVersionInfoSize(lptstrFilename: PChar; var lpdwHandle: DWORD): DWORD; stdcall;
+{$EXTERNALSYM GetFileVersionInfo}
+function GetFileVersionInfo(lptstrFilename: PChar; dwHandle, dwLen: DWORD;
+  lpData: Pointer): BOOL; stdcall;
 {$EXTERNALSYM GetFileVersionInfoA}
 function GetFileVersionInfoA(lptstrFilename: PAnsiChar; dwHandle, dwLen: DWORD;
   lpData: Pointer): BOOL; stdcall;
 {$EXTERNALSYM GetFileVersionInfoW}
 function GetFileVersionInfoW(lptstrFilename: PWideChar; dwHandle, dwLen: DWORD;
   lpData: Pointer): BOOL; stdcall;
-{$EXTERNALSYM GetFileVersionInfo}
-function GetFileVersionInfo(lptstrFilename: PChar; dwHandle, dwLen: DWORD;
-  lpData: Pointer): BOOL; stdcall;
+{$EXTERNALSYM VerLanguageName}
+function VerLanguageName(wLang: DWORD; szLang: PChar; nSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM VerLanguageNameA}
 function VerLanguageNameA(wLang: DWORD; szLang: PAnsiChar; nSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM VerLanguageNameW}
 function VerLanguageNameW(wLang: DWORD; szLang: PWideChar; nSize: DWORD): DWORD; stdcall;
-{$EXTERNALSYM VerLanguageName}
-function VerLanguageName(wLang: DWORD; szLang: PChar; nSize: DWORD): DWORD; stdcall;
+{$EXTERNALSYM VerQueryValue}
+function VerQueryValue(pBlock: Pointer; lpSubBlock: PChar;
+  var lplpBuffer: Pointer; var puLen: UINT): BOOL; stdcall;
 {$EXTERNALSYM VerQueryValueA}
 function VerQueryValueA(pBlock: Pointer; lpSubBlock: PAnsiChar;
   var lplpBuffer: Pointer; var puLen: UINT): BOOL; stdcall;
 {$EXTERNALSYM VerQueryValueW}
 function VerQueryValueW(pBlock: Pointer; lpSubBlock: PWideChar;
-  var lplpBuffer: Pointer; var puLen: UINT): BOOL; stdcall;
-{$EXTERNALSYM VerQueryValue}
-function VerQueryValue(pBlock: Pointer; lpSubBlock: PChar;
   var lplpBuffer: Pointer; var puLen: UINT): BOOL; stdcall;
 
 
@@ -26591,7 +26930,8 @@ function VerQueryValue(pBlock: Pointer; lpSubBlock: PChar;
 type
   {$EXTERNALSYM REGSAM}
   REGSAM = ACCESS_MASK;  { Requested Key access mask type. }
-
+
+
 
 
 
@@ -26599,7 +26939,8 @@ type
 
 
   {$EXTERNALSYM HKEY}
-  HKEY = type LongWord;
+  HKEY = type LongWord;
+
   PHKEY = ^HKEY;
 
 const
@@ -26659,12 +27000,14 @@ type
   TPValueA = pvalueA;
   TPValueW = pvalueW;
   TPValue = TPValueA;
-
 
 
 
 
-  TFNQueryHandler = TFarProc;
+
+
+  TFNQueryHandler = TFarProc;
+
   PFNQueryHandler = ^TFNQueryHandler;
 
   PProviderInfo = ^TProviderInfo;
@@ -26721,14 +27064,17 @@ type
 {$EXTERNALSYM RegCloseKey}
 function RegCloseKey(hKey: HKEY): Longint; stdcall;
 
+{$EXTERNALSYM RegConnectRegistry}
+function RegConnectRegistry(lpMachineName: PChar; hKey: HKEY;
+  var phkResult: HKEY): Longint; stdcall;
 {$EXTERNALSYM RegConnectRegistryA}
 function RegConnectRegistryA(lpMachineName: PAnsiChar; hKey: HKEY;
   var phkResult: HKEY): Longint; stdcall;
 {$EXTERNALSYM RegConnectRegistryW}
 function RegConnectRegistryW(lpMachineName: PWideChar; hKey: HKEY;
   var phkResult: HKEY): Longint; stdcall;
-{$EXTERNALSYM RegConnectRegistry}
-function RegConnectRegistry(lpMachineName: PChar; hKey: HKEY;
+{$EXTERNALSYM RegCreateKey}
+function RegCreateKey(hKey: HKEY; lpSubKey: PChar;
   var phkResult: HKEY): Longint; stdcall;
 {$EXTERNALSYM RegCreateKeyA}
 function RegCreateKeyA(hKey: HKEY; lpSubKey: PAnsiChar;
@@ -26736,9 +27082,11 @@ function RegCreateKeyA(hKey: HKEY; lpSubKey: PAnsiChar;
 {$EXTERNALSYM RegCreateKeyW}
 function RegCreateKeyW(hKey: HKEY; lpSubKey: PWideChar;
   var phkResult: HKEY): Longint; stdcall;
-{$EXTERNALSYM RegCreateKey}
-function RegCreateKey(hKey: HKEY; lpSubKey: PChar;
-  var phkResult: HKEY): Longint; stdcall;
+{$EXTERNALSYM RegCreateKeyEx}
+function RegCreateKeyEx(hKey: HKEY; lpSubKey: PChar;
+  Reserved: DWORD; lpClass: PChar; dwOptions: DWORD; samDesired: REGSAM;
+  lpSecurityAttributes: PSecurityAttributes; var phkResult: HKEY;
+  lpdwDisposition: PDWORD): Longint; stdcall;
 {$EXTERNALSYM RegCreateKeyExA}
 function RegCreateKeyExA(hKey: HKEY; lpSubKey: PAnsiChar;
   Reserved: DWORD; lpClass: PAnsiChar; dwOptions: DWORD; samDesired: REGSAM;
@@ -26749,29 +27097,28 @@ function RegCreateKeyExW(hKey: HKEY; lpSubKey: PWideChar;
   Reserved: DWORD; lpClass: PWideChar; dwOptions: DWORD; samDesired: REGSAM;
   lpSecurityAttributes: PSecurityAttributes; var phkResult: HKEY;
   lpdwDisposition: PDWORD): Longint; stdcall;
-{$EXTERNALSYM RegCreateKeyEx}
-function RegCreateKeyEx(hKey: HKEY; lpSubKey: PChar;
-  Reserved: DWORD; lpClass: PChar; dwOptions: DWORD; samDesired: REGSAM;
-  lpSecurityAttributes: PSecurityAttributes; var phkResult: HKEY;
-  lpdwDisposition: PDWORD): Longint; stdcall;
+{$EXTERNALSYM RegDeleteKey}
+function RegDeleteKey(hKey: HKEY; lpSubKey: PChar): Longint; stdcall;
 {$EXTERNALSYM RegDeleteKeyA}
 function RegDeleteKeyA(hKey: HKEY; lpSubKey: PAnsiChar): Longint; stdcall;
 {$EXTERNALSYM RegDeleteKeyW}
 function RegDeleteKeyW(hKey: HKEY; lpSubKey: PWideChar): Longint; stdcall;
-{$EXTERNALSYM RegDeleteKey}
-function RegDeleteKey(hKey: HKEY; lpSubKey: PChar): Longint; stdcall;
+{$EXTERNALSYM RegDeleteValue}
+function RegDeleteValue(hKey: HKEY; lpValueName: PChar): Longint; stdcall;
 {$EXTERNALSYM RegDeleteValueA}
 function RegDeleteValueA(hKey: HKEY; lpValueName: PAnsiChar): Longint; stdcall;
 {$EXTERNALSYM RegDeleteValueW}
 function RegDeleteValueW(hKey: HKEY; lpValueName: PWideChar): Longint; stdcall;
-{$EXTERNALSYM RegDeleteValue}
-function RegDeleteValue(hKey: HKEY; lpValueName: PChar): Longint; stdcall;
+{$EXTERNALSYM RegEnumKey}
+function RegEnumKey(hKey: HKEY; dwIndex: DWORD; lpName: PChar; cbName: DWORD): Longint; stdcall;
 {$EXTERNALSYM RegEnumKeyA}
 function RegEnumKeyA(hKey: HKEY; dwIndex: DWORD; lpName: PAnsiChar; cbName: DWORD): Longint; stdcall;
 {$EXTERNALSYM RegEnumKeyW}
 function RegEnumKeyW(hKey: HKEY; dwIndex: DWORD; lpName: PWideChar; cbName: DWORD): Longint; stdcall;
-{$EXTERNALSYM RegEnumKey}
-function RegEnumKey(hKey: HKEY; dwIndex: DWORD; lpName: PChar; cbName: DWORD): Longint; stdcall;
+{$EXTERNALSYM RegEnumKeyEx}
+function RegEnumKeyEx(hKey: HKEY; dwIndex: DWORD; lpName: PChar;
+  var lpcbName: DWORD; lpReserved: Pointer; lpClass: PChar;
+  lpcbClass: PDWORD; lpftLastWriteTime: PFileTime): Longint; stdcall;
 {$EXTERNALSYM RegEnumKeyExA}
 function RegEnumKeyExA(hKey: HKEY; dwIndex: DWORD; lpName: PAnsiChar;
   var lpcbName: DWORD; lpReserved: Pointer; lpClass: PAnsiChar;
@@ -26780,10 +27127,10 @@ function RegEnumKeyExA(hKey: HKEY; dwIndex: DWORD; lpName: PAnsiChar;
 function RegEnumKeyExW(hKey: HKEY; dwIndex: DWORD; lpName: PWideChar;
   var lpcbName: DWORD; lpReserved: Pointer; lpClass: PWideChar;
   lpcbClass: PDWORD; lpftLastWriteTime: PFileTime): Longint; stdcall;
-{$EXTERNALSYM RegEnumKeyEx}
-function RegEnumKeyEx(hKey: HKEY; dwIndex: DWORD; lpName: PChar;
-  var lpcbName: DWORD; lpReserved: Pointer; lpClass: PChar;
-  lpcbClass: PDWORD; lpftLastWriteTime: PFileTime): Longint; stdcall;
+{$EXTERNALSYM RegEnumValue}
+function RegEnumValue(hKey: HKEY; dwIndex: DWORD; lpValueName: PChar;
+  var lpcbValueName: DWORD; lpReserved: Pointer; lpType: PDWORD;
+  lpData: PByte; lpcbData: PDWORD): Longint; stdcall;
 {$EXTERNALSYM RegEnumValueA}
 function RegEnumValueA(hKey: HKEY; dwIndex: DWORD; lpValueName: PChar;
   var lpcbValueName: DWORD; lpReserved: Pointer; lpType: PDWORD;
@@ -26792,39 +27139,41 @@ function RegEnumValueA(hKey: HKEY; dwIndex: DWORD; lpValueName: PChar;
 function RegEnumValueW(hKey: HKEY; dwIndex: DWORD; lpValueName: PChar;
   var lpcbValueName: DWORD; lpReserved: Pointer; lpType: PDWORD;
   lpData: PByte; lpcbData: PDWORD): Longint; stdcall;
-{$EXTERNALSYM RegEnumValue}
-function RegEnumValue(hKey: HKEY; dwIndex: DWORD; lpValueName: PChar;
-  var lpcbValueName: DWORD; lpReserved: Pointer; lpType: PDWORD;
-  lpData: PByte; lpcbData: PDWORD): Longint; stdcall;
 {$EXTERNALSYM RegFlushKey}
 function RegFlushKey(hKey: HKEY): Longint; stdcall;
 {$EXTERNALSYM RegGetKeySecurity}
 function RegGetKeySecurity(hKey: HKEY; SecurityInformation: SECURITY_INFORMATION;
   pSecurityDescriptor: PSecurityDescriptor; var lpcbSecurityDescriptor: DWORD): Longint; stdcall;
+{$EXTERNALSYM RegLoadKey}
+function RegLoadKey(hKey: HKEY; lpSubKey, lpFile: PChar): Longint; stdcall;
 {$EXTERNALSYM RegLoadKeyA}
 function RegLoadKeyA(hKey: HKEY; lpSubKey, lpFile: PAnsiChar): Longint; stdcall;
 {$EXTERNALSYM RegLoadKeyW}
 function RegLoadKeyW(hKey: HKEY; lpSubKey, lpFile: PWideChar): Longint; stdcall;
-{$EXTERNALSYM RegLoadKey}
-function RegLoadKey(hKey: HKEY; lpSubKey, lpFile: PChar): Longint; stdcall;
 {$EXTERNALSYM RegNotifyChangeKeyValue}
 function RegNotifyChangeKeyValue(hKey: HKEY; bWatchSubtree: BOOL;
   dwNotifyFilter: DWORD; hEvent: THandle; fAsynchronus: BOOL): Longint; stdcall;
+{$EXTERNALSYM RegOpenKey}
+function RegOpenKey(hKey: HKEY; lpSubKey: PChar; var phkResult: HKEY): Longint; stdcall;
 {$EXTERNALSYM RegOpenKeyA}
 function RegOpenKeyA(hKey: HKEY; lpSubKey: PAnsiChar; var phkResult: HKEY): Longint; stdcall;
 {$EXTERNALSYM RegOpenKeyW}
 function RegOpenKeyW(hKey: HKEY; lpSubKey: PWideChar; var phkResult: HKEY): Longint; stdcall;
-{$EXTERNALSYM RegOpenKey}
-function RegOpenKey(hKey: HKEY; lpSubKey: PChar; var phkResult: HKEY): Longint; stdcall;
+{$EXTERNALSYM RegOpenKeyEx}
+function RegOpenKeyEx(hKey: HKEY; lpSubKey: PChar;
+  ulOptions: DWORD; samDesired: REGSAM; var phkResult: HKEY): Longint; stdcall;
 {$EXTERNALSYM RegOpenKeyExA}
 function RegOpenKeyExA(hKey: HKEY; lpSubKey: PAnsiChar;
   ulOptions: DWORD; samDesired: REGSAM; var phkResult: HKEY): Longint; stdcall;
 {$EXTERNALSYM RegOpenKeyExW}
 function RegOpenKeyExW(hKey: HKEY; lpSubKey: PWideChar;
   ulOptions: DWORD; samDesired: REGSAM; var phkResult: HKEY): Longint; stdcall;
-{$EXTERNALSYM RegOpenKeyEx}
-function RegOpenKeyEx(hKey: HKEY; lpSubKey: PChar;
-  ulOptions: DWORD; samDesired: REGSAM; var phkResult: HKEY): Longint; stdcall;
+{$EXTERNALSYM RegQueryInfoKey}
+function RegQueryInfoKey(hKey: HKEY; lpClass: PChar;
+  lpcbClass: PDWORD; lpReserved: Pointer;
+  lpcSubKeys, lpcbMaxSubKeyLen, lpcbMaxClassLen, lpcValues,
+  lpcbMaxValueNameLen, lpcbMaxValueLen, lpcbSecurityDescriptor: PDWORD;
+  lpftLastWriteTime: PFileTime): Longint; stdcall;
 {$EXTERNALSYM RegQueryInfoKeyA}
 function RegQueryInfoKeyA(hKey: HKEY; lpClass: PChar;
   lpcbClass: PDWORD; lpReserved: Pointer;
@@ -26837,108 +27186,102 @@ function RegQueryInfoKeyW(hKey: HKEY; lpClass: PChar;
   lpcSubKeys, lpcbMaxSubKeyLen, lpcbMaxClassLen, lpcValues,
   lpcbMaxValueNameLen, lpcbMaxValueLen, lpcbSecurityDescriptor: PDWORD;
   lpftLastWriteTime: PFileTime): Longint; stdcall;
-{$EXTERNALSYM RegQueryInfoKey}
-function RegQueryInfoKey(hKey: HKEY; lpClass: PChar;
-  lpcbClass: PDWORD; lpReserved: Pointer;
-  lpcSubKeys, lpcbMaxSubKeyLen, lpcbMaxClassLen, lpcValues,
-  lpcbMaxValueNameLen, lpcbMaxValueLen, lpcbSecurityDescriptor: PDWORD;
-  lpftLastWriteTime: PFileTime): Longint; stdcall;
+{$EXTERNALSYM RegQueryValue}
+function RegQueryValue(hKey: HKEY; lpSubKey: PChar;
+  lpValue: PChar; var lpcbValue: Longint): Longint; stdcall;
 {$EXTERNALSYM RegQueryValueA}
 function RegQueryValueA(hKey: HKEY; lpSubKey: PAnsiChar;
   lpValue: PAnsiChar; var lpcbValue: Longint): Longint; stdcall;
 {$EXTERNALSYM RegQueryValueW}
 function RegQueryValueW(hKey: HKEY; lpSubKey: PWideChar;
   lpValue: PWideChar; var lpcbValue: Longint): Longint; stdcall;
-{$EXTERNALSYM RegQueryValue}
-function RegQueryValue(hKey: HKEY; lpSubKey: PChar;
-  lpValue: PChar; var lpcbValue: Longint): Longint; stdcall;
+{$EXTERNALSYM RegQueryMultipleValues}
+function RegQueryMultipleValues(hKey: HKEY; var ValList;
+  NumVals: DWORD; lpValueBuf: PChar; var ldwTotsize: DWORD): Longint; stdcall;
 {$EXTERNALSYM RegQueryMultipleValuesA}
 function RegQueryMultipleValuesA(hKey: HKEY; var ValList;
   NumVals: DWORD; lpValueBuf: PAnsiChar; var ldwTotsize: DWORD): Longint; stdcall;
 {$EXTERNALSYM RegQueryMultipleValuesW}
 function RegQueryMultipleValuesW(hKey: HKEY; var ValList;
   NumVals: DWORD; lpValueBuf: PWideChar; var ldwTotsize: DWORD): Longint; stdcall;
-{$EXTERNALSYM RegQueryMultipleValues}
-function RegQueryMultipleValues(hKey: HKEY; var ValList;
-  NumVals: DWORD; lpValueBuf: PChar; var ldwTotsize: DWORD): Longint; stdcall;
+{$EXTERNALSYM RegQueryValueEx}
+function RegQueryValueEx(hKey: HKEY; lpValueName: PChar;
+  lpReserved: Pointer; lpType: PDWORD; lpData: PByte; lpcbData: PDWORD): Longint; stdcall;
 {$EXTERNALSYM RegQueryValueExA}
 function RegQueryValueExA(hKey: HKEY; lpValueName: PAnsiChar;
   lpReserved: Pointer; lpType: PDWORD; lpData: PByte; lpcbData: PDWORD): Longint; stdcall;
 {$EXTERNALSYM RegQueryValueExW}
 function RegQueryValueExW(hKey: HKEY; lpValueName: PWideChar;
   lpReserved: Pointer; lpType: PDWORD; lpData: PByte; lpcbData: PDWORD): Longint; stdcall;
-{$EXTERNALSYM RegQueryValueEx}
-function RegQueryValueEx(hKey: HKEY; lpValueName: PChar;
-  lpReserved: Pointer; lpType: PDWORD; lpData: PByte; lpcbData: PDWORD): Longint; stdcall;
+{$EXTERNALSYM RegReplaceKey}
+function RegReplaceKey(hKey: HKEY; lpSubKey: PChar;
+   lpNewFile: PChar; lpOldFile: PChar): Longint; stdcall;
 {$EXTERNALSYM RegReplaceKeyA}
 function RegReplaceKeyA(hKey: HKEY; lpSubKey: PAnsiChar;
    lpNewFile: PAnsiChar; lpOldFile: PAnsiChar): Longint; stdcall;
 {$EXTERNALSYM RegReplaceKeyW}
 function RegReplaceKeyW(hKey: HKEY; lpSubKey: PWideChar;
    lpNewFile: PWideChar; lpOldFile: PWideChar): Longint; stdcall;
-{$EXTERNALSYM RegReplaceKey}
-function RegReplaceKey(hKey: HKEY; lpSubKey: PChar;
-   lpNewFile: PChar; lpOldFile: PChar): Longint; stdcall;
+{$EXTERNALSYM RegRestoreKey}
+function RegRestoreKey(hKey: HKEY; lpFile: PChar; dwFlags: DWORD): Longint; stdcall;
 {$EXTERNALSYM RegRestoreKeyA}
 function RegRestoreKeyA(hKey: HKEY; lpFile: PAnsiChar; dwFlags: DWORD): Longint; stdcall;
 {$EXTERNALSYM RegRestoreKeyW}
 function RegRestoreKeyW(hKey: HKEY; lpFile: PWideChar; dwFlags: DWORD): Longint; stdcall;
-{$EXTERNALSYM RegRestoreKey}
-function RegRestoreKey(hKey: HKEY; lpFile: PChar; dwFlags: DWORD): Longint; stdcall;
+{$EXTERNALSYM RegSaveKey}
+function RegSaveKey(hKey: HKEY; lpFile: PChar;
+  lpSecurityAttributes: PSecurityAttributes): Longint; stdcall;
 {$EXTERNALSYM RegSaveKeyA}
 function RegSaveKeyA(hKey: HKEY; lpFile: PAnsiChar;
   lpSecurityAttributes: PSecurityAttributes): Longint; stdcall;
 {$EXTERNALSYM RegSaveKeyW}
 function RegSaveKeyW(hKey: HKEY; lpFile: PWideChar;
   lpSecurityAttributes: PSecurityAttributes): Longint; stdcall;
-{$EXTERNALSYM RegSaveKey}
-function RegSaveKey(hKey: HKEY; lpFile: PChar;
-  lpSecurityAttributes: PSecurityAttributes): Longint; stdcall;
 {$EXTERNALSYM RegSetKeySecurity}
 function RegSetKeySecurity(hKey: HKEY; SecurityInformation: SECURITY_INFORMATION;
   pSecurityDescriptor: PSECURITY_DESCRIPTOR): Longint; stdcall;
+{$EXTERNALSYM RegSetValue}
+function RegSetValue(hKey: HKEY; lpSubKey: PChar;
+  dwType: DWORD; lpData: PChar; cbData: DWORD): Longint; stdcall;
 {$EXTERNALSYM RegSetValueA}
 function RegSetValueA(hKey: HKEY; lpSubKey: PAnsiChar;
   dwType: DWORD; lpData: PAnsiChar; cbData: DWORD): Longint; stdcall;
 {$EXTERNALSYM RegSetValueW}
 function RegSetValueW(hKey: HKEY; lpSubKey: PWideChar;
   dwType: DWORD; lpData: PWideChar; cbData: DWORD): Longint; stdcall;
-{$EXTERNALSYM RegSetValue}
-function RegSetValue(hKey: HKEY; lpSubKey: PChar;
-  dwType: DWORD; lpData: PChar; cbData: DWORD): Longint; stdcall;
+{$EXTERNALSYM RegSetValueEx}
+function RegSetValueEx(hKey: HKEY; lpValueName: PChar;
+  Reserved: DWORD; dwType: DWORD; lpData: Pointer; cbData: DWORD): Longint; stdcall;
 {$EXTERNALSYM RegSetValueExA}
 function RegSetValueExA(hKey: HKEY; lpValueName: PAnsiChar;
   Reserved: DWORD; dwType: DWORD; lpData: Pointer; cbData: DWORD): Longint; stdcall;
 {$EXTERNALSYM RegSetValueExW}
 function RegSetValueExW(hKey: HKEY; lpValueName: PWideChar;
   Reserved: DWORD; dwType: DWORD; lpData: Pointer; cbData: DWORD): Longint; stdcall;
-{$EXTERNALSYM RegSetValueEx}
-function RegSetValueEx(hKey: HKEY; lpValueName: PChar;
-  Reserved: DWORD; dwType: DWORD; lpData: Pointer; cbData: DWORD): Longint; stdcall;
+{$EXTERNALSYM RegUnLoadKey}
+function RegUnLoadKey(hKey: HKEY; lpSubKey: PChar): Longint; stdcall;
 {$EXTERNALSYM RegUnLoadKeyA}
 function RegUnLoadKeyA(hKey: HKEY; lpSubKey: PAnsiChar): Longint; stdcall;
 {$EXTERNALSYM RegUnLoadKeyW}
 function RegUnLoadKeyW(hKey: HKEY; lpSubKey: PWideChar): Longint; stdcall;
-{$EXTERNALSYM RegUnLoadKey}
-function RegUnLoadKey(hKey: HKEY; lpSubKey: PChar): Longint; stdcall;
 
 { Remoteable System Shutdown APIs }
 
+{$EXTERNALSYM InitiateSystemShutdown}
+function InitiateSystemShutdown(lpMachineName, lpMessage: PChar;
+  dwTimeout: DWORD; bForceAppsClosed, bRebootAfterShutdown: BOOL): BOOL; stdcall;
 {$EXTERNALSYM InitiateSystemShutdownA}
 function InitiateSystemShutdownA(lpMachineName, lpMessage: PAnsiChar;
   dwTimeout: DWORD; bForceAppsClosed, bRebootAfterShutdown: BOOL): BOOL; stdcall;
 {$EXTERNALSYM InitiateSystemShutdownW}
 function InitiateSystemShutdownW(lpMachineName, lpMessage: PWideChar;
   dwTimeout: DWORD; bForceAppsClosed, bRebootAfterShutdown: BOOL): BOOL; stdcall;
-{$EXTERNALSYM InitiateSystemShutdown}
-function InitiateSystemShutdown(lpMachineName, lpMessage: PChar;
-  dwTimeout: DWORD; bForceAppsClosed, bRebootAfterShutdown: BOOL): BOOL; stdcall;
+{$EXTERNALSYM AbortSystemShutdown}
+function AbortSystemShutdown(lpMachineName: PChar): BOOL; stdcall;
 {$EXTERNALSYM AbortSystemShutdownA}
 function AbortSystemShutdownA(lpMachineName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM AbortSystemShutdownW}
 function AbortSystemShutdownW(lpMachineName: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM AbortSystemShutdown}
-function AbortSystemShutdown(lpMachineName: PChar): BOOL; stdcall;
 
 
 { Translated from WINNETWK.H }
@@ -27125,20 +27468,23 @@ const
   {$EXTERNALSYM CONNECT_RESERVED}
   CONNECT_RESERVED                = DWORD($FF000000);
 
+{$EXTERNALSYM WNetAddConnection}
+function WNetAddConnection(lpRemoteName, lpPassword, lpLocalName: PChar): DWORD; stdcall;
 {$EXTERNALSYM WNetAddConnectionA}
 function WNetAddConnectionA(lpRemoteName, lpPassword, lpLocalName: PAnsiChar): DWORD; stdcall;
 {$EXTERNALSYM WNetAddConnectionW}
 function WNetAddConnectionW(lpRemoteName, lpPassword, lpLocalName: PWideChar): DWORD; stdcall;
-{$EXTERNALSYM WNetAddConnection}
-function WNetAddConnection(lpRemoteName, lpPassword, lpLocalName: PChar): DWORD; stdcall;
+{$EXTERNALSYM WNetAddConnection2}
+function WNetAddConnection2(var lpNetResource: TNetResource;
+  lpPassword, lpUserName: PChar; dwFlags: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetAddConnection2A}
 function WNetAddConnection2A(var lpNetResource: TNetResourceA;
   lpPassword, lpUserName: PAnsiChar; dwFlags: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetAddConnection2W}
 function WNetAddConnection2W(var lpNetResource: TNetResourceW;
   lpPassword, lpUserName: PWideChar; dwFlags: DWORD): DWORD; stdcall;
-{$EXTERNALSYM WNetAddConnection2}
-function WNetAddConnection2(var lpNetResource: TNetResource;
+{$EXTERNALSYM WNetAddConnection3}
+function WNetAddConnection3(hwndOwner: HWND; var lpNetResource: TNetResource;
   lpPassword, lpUserName: PChar; dwFlags: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetAddConnection3A}
 function WNetAddConnection3A(hwndOwner: HWND; var lpNetResource: TNetResourceA;
@@ -27146,30 +27492,32 @@ function WNetAddConnection3A(hwndOwner: HWND; var lpNetResource: TNetResourceA;
 {$EXTERNALSYM WNetAddConnection3W}
 function WNetAddConnection3W(hwndOwner: HWND; var lpNetResource: TNetResourceW;
   lpPassword, lpUserName: PWideChar; dwFlags: DWORD): DWORD; stdcall;
-{$EXTERNALSYM WNetAddConnection3}
-function WNetAddConnection3(hwndOwner: HWND; var lpNetResource: TNetResource;
-  lpPassword, lpUserName: PChar; dwFlags: DWORD): DWORD; stdcall;
+{$EXTERNALSYM WNetCancelConnection}
+function WNetCancelConnection(lpName: PChar; fForce: BOOL): DWORD; stdcall;
 {$EXTERNALSYM WNetCancelConnectionA}
 function WNetCancelConnectionA(lpName: PAnsiChar; fForce: BOOL): DWORD; stdcall;
 {$EXTERNALSYM WNetCancelConnectionW}
 function WNetCancelConnectionW(lpName: PWideChar; fForce: BOOL): DWORD; stdcall;
-{$EXTERNALSYM WNetCancelConnection}
-function WNetCancelConnection(lpName: PChar; fForce: BOOL): DWORD; stdcall;
+{$EXTERNALSYM WNetCancelConnection2}
+function WNetCancelConnection2(lpName: PChar; dwFlags: DWORD; fForce: BOOL): DWORD; stdcall;
 {$EXTERNALSYM WNetCancelConnection2A}
 function WNetCancelConnection2A(lpName: PAnsiChar; dwFlags: DWORD; fForce: BOOL): DWORD; stdcall;
 {$EXTERNALSYM WNetCancelConnection2W}
 function WNetCancelConnection2W(lpName: PWideChar; dwFlags: DWORD; fForce: BOOL): DWORD; stdcall;
-{$EXTERNALSYM WNetCancelConnection2}
-function WNetCancelConnection2(lpName: PChar; dwFlags: DWORD; fForce: BOOL): DWORD; stdcall;
+{$EXTERNALSYM WNetGetConnection}
+function WNetGetConnection(lpLocalName: PChar;
+  lpRemoteName: PChar; var lpnLength: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetGetConnectionA}
 function WNetGetConnectionA(lpLocalName: PAnsiChar;
   lpRemoteName: PAnsiChar; var lpnLength: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetGetConnectionW}
 function WNetGetConnectionW(lpLocalName: PWideChar;
   lpRemoteName: PWideChar; var lpnLength: DWORD): DWORD; stdcall;
-{$EXTERNALSYM WNetGetConnection}
-function WNetGetConnection(lpLocalName: PChar;
-  lpRemoteName: PChar; var lpnLength: DWORD): DWORD; stdcall;
+{$EXTERNALSYM WNetUseConnection}
+function WNetUseConnection(hwndOwner: HWND;
+  var lpNetResource: TNetResource; lpUserID: PChar;
+  lpPassword: PChar; dwFlags: DWORD; lpAccessName: PChar;
+  var lpBufferSize: DWORD; var lpResult: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetUseConnectionA}
 function WNetUseConnectionA(hwndOwner: HWND;
   var lpNetResource: TNetResourceA; lpUserID: PAnsiChar;
@@ -27180,17 +27528,12 @@ function WNetUseConnectionW(hwndOwner: HWND;
   var lpNetResource: TNetResourceW; lpUserID: PWideChar;
   lpPassword: PWideChar; dwFlags: DWORD; lpAccessName: PWideChar;
   var lpBufferSize: DWORD; var lpResult: DWORD): DWORD; stdcall;
-{$EXTERNALSYM WNetUseConnection}
-function WNetUseConnection(hwndOwner: HWND;
-  var lpNetResource: TNetResource; lpUserID: PChar;
-  lpPassword: PChar; dwFlags: DWORD; lpAccessName: PChar;
-  var lpBufferSize: DWORD; var lpResult: DWORD): DWORD; stdcall;
+{$EXTERNALSYM WNetSetConnection}
+function WNetSetConnection(lpName: PChar; dwProperties: DWORD; pvValues: Pointer): DWORD; stdcall;
 {$EXTERNALSYM WNetSetConnectionA}
 function WNetSetConnectionA(lpName: PAnsiChar; dwProperties: DWORD; pvValues: Pointer): DWORD; stdcall;
 {$EXTERNALSYM WNetSetConnectionW}
 function WNetSetConnectionW(lpName: PWideChar; dwProperties: DWORD; pvValues: Pointer): DWORD; stdcall;
-{$EXTERNALSYM WNetSetConnection}
-function WNetSetConnection(lpName: PChar; dwProperties: DWORD; pvValues: Pointer): DWORD; stdcall;
 
 { Network Connection Dialogs. }
 
@@ -27232,12 +27575,12 @@ const
   {$EXTERNALSYM CONNDLG_NOT_PERSIST}
   CONNDLG_NOT_PERSIST = $20;   { Force connection NOT persistent  }
 
+{$EXTERNALSYM WNetConnectionDialog1}
+function WNetConnectionDialog1(var lpConnDlgStruct: TConnectDlgStruct): DWORD; stdcall;
 {$EXTERNALSYM WNetConnectionDialog1A}
 function WNetConnectionDialog1A(var lpConnDlgStruct: TConnectDlgStruct): DWORD; stdcall;
 {$EXTERNALSYM WNetConnectionDialog1W}
 function WNetConnectionDialog1W(var lpConnDlgStruct: TConnectDlgStruct): DWORD; stdcall;
-{$EXTERNALSYM WNetConnectionDialog1}
-function WNetConnectionDialog1(var lpConnDlgStruct: TConnectDlgStruct): DWORD; stdcall;
 
 type
   PDiscDlgStructA = ^TDiscDlgStructA;
@@ -27277,43 +27620,43 @@ const
   {$EXTERNALSYM DISC_NO_FORCE}
   DISC_NO_FORCE = $40;
 
+{$EXTERNALSYM WNetDisconnectDialog1}
+function WNetDisconnectDialog1(var lpConnDlgStruct: TDiscDlgStruct): DWORD; stdcall;
 {$EXTERNALSYM WNetDisconnectDialog1A}
 function WNetDisconnectDialog1A(var lpConnDlgStruct: TDiscDlgStructA): DWORD; stdcall;
 {$EXTERNALSYM WNetDisconnectDialog1W}
 function WNetDisconnectDialog1W(var lpConnDlgStruct: TDiscDlgStructW): DWORD; stdcall;
-{$EXTERNALSYM WNetDisconnectDialog1}
-function WNetDisconnectDialog1(var lpConnDlgStruct: TDiscDlgStruct): DWORD; stdcall;
 
 { Network Browsing. }
 
+{$EXTERNALSYM WNetOpenEnum}
+function WNetOpenEnum(dwScope, dwType, dwUsage: DWORD;
+  lpNetResource: PNetResource; var lphEnum: THandle): DWORD; stdcall;
 {$EXTERNALSYM WNetOpenEnumA}
 function WNetOpenEnumA(dwScope, dwType, dwUsage: DWORD;
   lpNetResource: PNetResourceA; var lphEnum: THandle): DWORD; stdcall;
 {$EXTERNALSYM WNetOpenEnumW}
 function WNetOpenEnumW(dwScope, dwType, dwUsage: DWORD;
   lpNetResource: PNetResourceW; var lphEnum: THandle): DWORD; stdcall;
-{$EXTERNALSYM WNetOpenEnum}
-function WNetOpenEnum(dwScope, dwType, dwUsage: DWORD;
-  lpNetResource: PNetResource; var lphEnum: THandle): DWORD; stdcall;
+{$EXTERNALSYM WNetEnumResource}
+function WNetEnumResource(hEnum: THandle; var lpcCount: DWORD;
+  lpBuffer: Pointer; var lpBufferSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetEnumResourceA}
 function WNetEnumResourceA(hEnum: THandle; var lpcCount: DWORD;
   lpBuffer: Pointer; var lpBufferSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetEnumResourceW}
 function WNetEnumResourceW(hEnum: THandle; var lpcCount: DWORD;
   lpBuffer: Pointer; var lpBufferSize: DWORD): DWORD; stdcall;
-{$EXTERNALSYM WNetEnumResource}
-function WNetEnumResource(hEnum: THandle; var lpcCount: DWORD;
-  lpBuffer: Pointer; var lpBufferSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetCloseEnum}
 function WNetCloseEnum(hEnum: THandle): DWORD; stdcall;
+{$EXTERNALSYM WNetGetResourceParent}
+function WNetGetResourceParent(lpNetResource: PNetResource;
+  lpBuffer: Pointer; var cbBuffer: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetGetResourceParentA}
 function WNetGetResourceParentA(lpNetResource: PNetResourceA;
   lpBuffer: Pointer; var cbBuffer: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetGetResourceParentW}
 function WNetGetResourceParentW(lpNetResource: PNetResourceW;
-  lpBuffer: Pointer; var cbBuffer: DWORD): DWORD; stdcall;
-{$EXTERNALSYM WNetGetResourceParent}
-function WNetGetResourceParent(lpNetResource: PNetResource;
   lpBuffer: Pointer; var cbBuffer: DWORD): DWORD; stdcall;
 
 const
@@ -27375,24 +27718,24 @@ type
   {$EXTERNALSYM REMOTE_NAME_INFO}
   REMOTE_NAME_INFO = REMOTE_NAME_INFOA;
 
+{$EXTERNALSYM WNetGetUniversalName}
+function WNetGetUniversalName(lpLocalPath: PChar; dwInfoLevel: DWORD;
+  lpBuffer: Pointer; var lpBufferSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetGetUniversalNameA}
 function WNetGetUniversalNameA(lpLocalPath: PAnsiChar; dwInfoLevel: DWORD;
   lpBuffer: Pointer; var lpBufferSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetGetUniversalNameW}
 function WNetGetUniversalNameW(lpLocalPath: PWideChar; dwInfoLevel: DWORD;
   lpBuffer: Pointer; var lpBufferSize: DWORD): DWORD; stdcall;
-{$EXTERNALSYM WNetGetUniversalName}
-function WNetGetUniversalName(lpLocalPath: PChar; dwInfoLevel: DWORD;
-  lpBuffer: Pointer; var lpBufferSize: DWORD): DWORD; stdcall;
 
 { Authentication and Logon/Logoff }
 
+{$EXTERNALSYM WNetGetUser}
+function WNetGetUser(lpName: PChar; lpUserName: PChar; var lpnLength: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetGetUserA}
 function WNetGetUserA(lpName: PAnsiChar; lpUserName: PAnsiChar; var lpnLength: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetGetUserW}
 function WNetGetUserW(lpName: PWideChar; lpUserName: PWideChar; var lpnLength: DWORD): DWORD; stdcall;
-{$EXTERNALSYM WNetGetUser}
-function WNetGetUser(lpName: PChar; lpUserName: PChar; var lpnLength: DWORD): DWORD; stdcall;
 
 const
   {$EXTERNALSYM WNFMT_MULTILINE}
@@ -27404,14 +27747,14 @@ const
   {$EXTERNALSYM WNFMT_CONNECTION}
   WNFMT_CONNECTION = $20;
 
+{$EXTERNALSYM WNetGetProviderName}
+function WNetGetProviderName(dwNetType: DWORD; lpProviderName: PChar;
+  var lpBufferSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetGetProviderNameA}
 function WNetGetProviderNameA(dwNetType: DWORD; lpProviderName: PAnsiChar;
   var lpBufferSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetGetProviderNameW}
 function WNetGetProviderNameW(dwNetType: DWORD; lpProviderName: PWideChar;
-  var lpBufferSize: DWORD): DWORD; stdcall;
-{$EXTERNALSYM WNetGetProviderName}
-function WNetGetProviderName(dwNetType: DWORD; lpProviderName: PChar;
   var lpBufferSize: DWORD): DWORD; stdcall;
 
 type
@@ -27439,25 +27782,27 @@ const
   {$EXTERNALSYM NETINFO_PRINTERRED}
   NETINFO_PRINTERRED = 8; { Provider requires printer redirections to connect  }
 
+{$EXTERNALSYM WNetGetNetworkInformation}
+function WNetGetNetworkInformation(lpProvider: PChar;
+  var lpNetInfoStruct: TNetInfoStruct): DWORD; stdcall;
 {$EXTERNALSYM WNetGetNetworkInformationA}
 function WNetGetNetworkInformationA(lpProvider: PAnsiChar;
   var lpNetInfoStruct: TNetInfoStruct): DWORD; stdcall;
 {$EXTERNALSYM WNetGetNetworkInformationW}
 function WNetGetNetworkInformationW(lpProvider: PWideChar;
   var lpNetInfoStruct: TNetInfoStruct): DWORD; stdcall;
-{$EXTERNALSYM WNetGetNetworkInformation}
-function WNetGetNetworkInformation(lpProvider: PChar;
-  var lpNetInfoStruct: TNetInfoStruct): DWORD; stdcall;
 
 type
-{ User Profiles }
+{ User Profiles }
+
 
 
 
 
 
   TFNGetProfilePath = TFarProc;
-  TFNReconcileProfile = TFarProc;
+  TFNReconcileProfile = TFarProc;
+
 
 
 const
@@ -27468,11 +27813,13 @@ const
 
 type
 { Policies }
-
 
 
 
-  TFNProcessPolicies = TFarProc;
+
+
+  TFNProcessPolicies = TFarProc;
+
 
 const
   {$EXTERNALSYM PP_DISPLAYERRORS}
@@ -27480,15 +27827,15 @@ const
 
 { Error handling }
 
+{$EXTERNALSYM WNetGetLastError}
+function WNetGetLastError(var lpError: DWORD; lpErrorBuf: PChar;
+  nErrorBufSize: DWORD; lpNameBuf: PChar; nNameBufSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetGetLastErrorA}
 function WNetGetLastErrorA(var lpError: DWORD; lpErrorBuf: PAnsiChar;
   nErrorBufSize: DWORD; lpNameBuf: PAnsiChar; nNameBufSize: DWORD): DWORD; stdcall;
 {$EXTERNALSYM WNetGetLastErrorW}
 function WNetGetLastErrorW(var lpError: DWORD; lpErrorBuf: PWideChar;
   nErrorBufSize: DWORD; lpNameBuf: PWideChar; nNameBufSize: DWORD): DWORD; stdcall;
-{$EXTERNALSYM WNetGetLastError}
-function WNetGetLastError(var lpError: DWORD; lpErrorBuf: PChar;
-  nErrorBufSize: DWORD; lpNameBuf: PChar; nNameBufSize: DWORD): DWORD; stdcall;
 
 
 const
@@ -27610,41 +27957,17 @@ const
   {$EXTERNALSYM WNCON_DYNAMIC}
   WNCON_DYNAMIC = 8;
 
+{$EXTERNALSYM MultinetGetConnectionPerformance}
+function MultinetGetConnectionPerformance(lpNetResource: PNetResource;
+  lpNetConnectInfoStruc: PNetConnectInfoStruct): DWORD; stdcall;
 {$EXTERNALSYM MultinetGetConnectionPerformanceA}
 function MultinetGetConnectionPerformanceA(lpNetResource: PNetResourceA;
   lpNetConnectInfoStruc: PNetConnectInfoStruct): DWORD; stdcall;
 {$EXTERNALSYM MultinetGetConnectionPerformanceW}
 function MultinetGetConnectionPerformanceW(lpNetResource: PNetResourceW;
   lpNetConnectInfoStruc: PNetConnectInfoStruct): DWORD; stdcall;
-{$EXTERNALSYM MultinetGetConnectionPerformance}
-function MultinetGetConnectionPerformance(lpNetResource: PNetResource;
-  lpNetConnectInfoStruc: PNetConnectInfoStruct): DWORD; stdcall;
 
 { Translated from DDE.H }
-
-const
-  {$EXTERNALSYM WM_DDE_FIRST}
-  WM_DDE_FIRST      = $03E0;
-  {$EXTERNALSYM WM_DDE_INITIATE}
-  WM_DDE_INITIATE   = WM_DDE_FIRST;
-  {$EXTERNALSYM WM_DDE_TERMINATE}
-  WM_DDE_TERMINATE  = WM_DDE_FIRST+1;
-  {$EXTERNALSYM WM_DDE_ADVISE}
-  WM_DDE_ADVISE     = WM_DDE_FIRST+2;
-  {$EXTERNALSYM WM_DDE_UNADVISE}
-  WM_DDE_UNADVISE   = WM_DDE_FIRST+3;
-  {$EXTERNALSYM WM_DDE_ACK}
-  WM_DDE_ACK        = WM_DDE_FIRST+4;
-  {$EXTERNALSYM WM_DDE_DATA}
-  WM_DDE_DATA       = WM_DDE_FIRST+5;
-  {$EXTERNALSYM WM_DDE_REQUEST}
-  WM_DDE_REQUEST    = WM_DDE_FIRST+6;
-  {$EXTERNALSYM WM_DDE_POKE}
-  WM_DDE_POKE       = WM_DDE_FIRST+7;
-  {$EXTERNALSYM WM_DDE_EXECUTE}
-  WM_DDE_EXECUTE    = WM_DDE_FIRST+8;
-  {$EXTERNALSYM WM_DDE_LAST}
-  WM_DDE_LAST       = WM_DDE_FIRST+8;
 
 { Constants used for a WM_DDE_ACK message sent in responce to a WM_DDE_DATA
   WM_DDE_REQUEST, WM_DDE_POKE, WM_DDE_ADVISE, or WM_DDE_UNADVISE message.
@@ -27760,8 +28083,8 @@ const
   // Apps need to call RegisterWindowMessage using the constant below to
   // get the message number that is sent to the foreground window
   // when a wheel roll occurs
-  {$EXTERNALSYM MSH_MOUSEWHEEL}
   MSH_MOUSEWHEEL   = 'MSWHEEL_ROLLMSG';
+  {$EXTERNALSYM MSH_MOUSEWHEEL}
    // wParam = wheel rotation expressed in multiples of WHEEL_DELTA
    // lParam is the mouse coordinates
 
@@ -27828,6 +28151,7 @@ function HwndMSWheel(var puiMsh_MsgMouseWheel, puiMsh_Msg3DSupport,
   var piScrollLines: Integer): HWND;
 
 const
+{$IFDEF MSWINDOWS}
   advapi32  = 'advapi32.dll';
   kernel32  = 'kernel32.dll';
   mpr       = 'mpr.dll';
@@ -27839,26 +28163,54 @@ const
   user32    = 'user32.dll';
   wintrust  = 'wintrust.dll';
   msimg32   = 'msimg32.dll';
+{$ENDIF}
+{$IFDEF LINUX}
+{$IFDEF WINE}
+  advapi32  = 'libwine.so';
+  kernel32  = 'libwine.so';
+  mpr       = 'libmpr.so';
+  {$EXTERNALSYM version}
+  version   = 'libversion.so';
+  comctl32  = 'libcomctl32.so';
+  gdi32     = 'libwine.so';
+  opengl32  = 'libopengl32.so';
+  user32    = 'libwine.so';
+  wintrust  = 'libwintrust.so';
+  msimg32   = 'libmsimg32.so';
+{$ELSE}
+  advapi32  = 'libadvapi32.so';
+  kernel32  = 'libtwin32.so';
+  mpr       = 'libmpr.so';
+  {$EXTERNALSYM version}
+  version   = 'libversion.so';
+  comctl32  = 'libcomctl32.so';
+  gdi32     = 'libtwin32.so';
+  opengl32  = 'libopengl32.so';
+  user32    = 'libtwin32.so';
+  wintrust  = 'libwintrust.so';
+  msimg32   = 'libmsimg32.so';
+{$ENDIF}
+{$ENDIF}
 
 implementation
 
 { Externals from advapi32.dll }
 
+function AbortSystemShutdown; external advapi32 name 'AbortSystemShutdownA';
 function AbortSystemShutdownA; external advapi32 name 'AbortSystemShutdownA';
 function AbortSystemShutdownW; external advapi32 name 'AbortSystemShutdownW';
-function AbortSystemShutdown; external advapi32 name 'AbortSystemShutdownA';
 function AccessCheck; external advapi32 name 'AccessCheck';
+function AccessCheckAndAuditAlarm; external advapi32 name 'AccessCheckAndAuditAlarmA';
 function AccessCheckAndAuditAlarmA; external advapi32 name 'AccessCheckAndAuditAlarmA';
 function AccessCheckAndAuditAlarmW; external advapi32 name 'AccessCheckAndAuditAlarmW';
-function AccessCheckAndAuditAlarm; external advapi32 name 'AccessCheckAndAuditAlarmA';
 function AccessCheckByType; external advapi32 name 'AccessCheckByType';
+function AccessCheckByTypeAndAuditAlarm; external advapi32 name 'AccessCheckByTypeAndAuditAlarmA';
 function AccessCheckByTypeAndAuditAlarmA; external advapi32 name 'AccessCheckByTypeAndAuditAlarmA';
 function AccessCheckByTypeAndAuditAlarmW; external advapi32 name 'AccessCheckByTypeAndAuditAlarmW';
-function AccessCheckByTypeAndAuditAlarm; external advapi32 name 'AccessCheckByTypeAndAuditAlarmA';
 function AccessCheckByTypeResultList; external advapi32 name 'AccessCheckByTypeResultList';
+function AccessCheckByTypeResultListAndAuditAlarm; external advapi32 name 'AccessCheckByTypeResultListAndAuditAlarmA';
 function AccessCheckByTypeResultListAndAuditAlarmA; external advapi32 name 'AccessCheckByTypeResultListAndAuditAlarmA';
 function AccessCheckByTypeResultListAndAuditAlarmW; external advapi32 name 'AccessCheckByTypeResultListAndAuditAlarmW';
-function AccessCheckByTypeResultListAndAuditAlarm; external advapi32 name 'AccessCheckByTypeResultListAndAuditAlarmA';
 function AddAccessAllowedAce; external advapi32 name 'AddAccessAllowedAce';
 function AddAccessAllowedAceEx; external advapi32 name 'AddAccessAllowedAceEx';
 function AddAccessAllowedObjectAce; external advapi32 name 'AddAccessAllowedObjectAce';
@@ -27880,20 +28232,20 @@ function AllocateAndInitializeSid; external advapi32 name 'AllocateAndInitialize
 function AllocateLocallyUniqueId; external advapi32 name 'AllocateLocallyUniqueId';
 function AreAllAccessesGranted; external advapi32 name 'AreAllAccessesGranted';
 function AreAnyAccessesGranted; external advapi32 name 'AreAnyAccessesGranted';
+function BackupEventLog; external advapi32 name 'BackupEventLogA';
 function BackupEventLogA; external advapi32 name 'BackupEventLogA';
 function BackupEventLogW; external advapi32 name 'BackupEventLogW';
-function BackupEventLog; external advapi32 name 'BackupEventLogA';
+function ClearEventLog; external advapi32 name 'ClearEventLogA';
 function ClearEventLogA; external advapi32 name 'ClearEventLogA';
 function ClearEventLogW; external advapi32 name 'ClearEventLogW';
-function ClearEventLog; external advapi32 name 'ClearEventLogA';
 function CloseEventLog; external advapi32 name 'CloseEventLog';
 function ConvertToAutoInheritPrivateObjectSecurity; external advapi32 name 'ConvertToAutoInheritPrivateObjectSecurity';
 function CopySid; external advapi32 name 'CopySid';
 function CreatePrivateObjectSecurity; external advapi32 name 'CreatePrivateObjectSecurity';
 function CreatePrivateObjectSecurityEx; external advapi32 name 'CreatePrivateObjectSecurityEx';
+function CreateProcessAsUser; external advapi32 name 'CreateProcessAsUserA';
 function CreateProcessAsUserA; external advapi32 name 'CreateProcessAsUserA';
 function CreateProcessAsUserW; external advapi32 name 'CreateProcessAsUserW';
-function CreateProcessAsUser; external advapi32 name 'CreateProcessAsUserA';
 function DeleteAce; external advapi32 name 'DeleteAce';
 function DeregisterEventSource; external advapi32 name 'DeregisterEventSource';
 function DestroyPrivateObjectSecurity; external advapi32 name 'DestroyPrivateObjectSecurity';
@@ -27905,12 +28257,12 @@ function FindFirstFreeAce; external advapi32 name 'FindFirstFreeAce';
 function FreeSid; external advapi32 name 'FreeSid';
 function GetAce; external advapi32 name 'GetAce';
 function GetAclInformation; external advapi32 name 'GetAclInformation';
+function GetCurrentHwProfile; external advapi32 name 'GetCurrentHwProfileA';
 function GetCurrentHwProfileA; external advapi32 name 'GetCurrentHwProfileA';
 function GetCurrentHwProfileW; external advapi32 name 'GetCurrentHwProfileW';
-function GetCurrentHwProfile; external advapi32 name 'GetCurrentHwProfileA';
+function GetFileSecurity; external advapi32 name 'GetFileSecurityA';
 function GetFileSecurityA; external advapi32 name 'GetFileSecurityA';
 function GetFileSecurityW; external advapi32 name 'GetFileSecurityW';
-function GetFileSecurity; external advapi32 name 'GetFileSecurityA';
 function GetKernelObjectSecurity; external advapi32 name 'GetKernelObjectSecurity';
 function GetLengthSid; external advapi32 name 'GetLengthSid';
 function GetNumberOfEventLogRecords; external advapi32 name 'GetNumberOfEventLogRecords';
@@ -27927,150 +28279,150 @@ function GetSidLengthRequired; external advapi32 name 'GetSidLengthRequired';
 function GetSidSubAuthority; external advapi32 name 'GetSidSubAuthority';
 function GetSidSubAuthorityCount; external advapi32 name 'GetSidSubAuthorityCount';
 function GetTokenInformation; external advapi32 name 'GetTokenInformation';
+function GetUserName; external advapi32 name 'GetUserNameA';
 function GetUserNameA; external advapi32 name 'GetUserNameA';
 function GetUserNameW; external advapi32 name 'GetUserNameW';
-function GetUserName; external advapi32 name 'GetUserNameA';
 function ImpersonateLoggedOnUser; external advapi32 name 'ImpersonateLoggedOnUser';
 function ImpersonateNamedPipeClient; external advapi32 name 'ImpersonateNamedPipeClient';
 function ImpersonateSelf; external advapi32 name 'ImpersonateSelf';
 function InitializeAcl; external advapi32 name 'InitializeAcl';
 function InitializeSecurityDescriptor; external advapi32 name 'InitializeSecurityDescriptor';
 function InitializeSid; external advapi32 name 'InitializeSid';
+function InitiateSystemShutdown; external advapi32 name 'InitiateSystemShutdownA';
 function InitiateSystemShutdownA; external advapi32 name 'InitiateSystemShutdownA';
 function InitiateSystemShutdownW; external advapi32 name 'InitiateSystemShutdownW';
-function InitiateSystemShutdown; external advapi32 name 'InitiateSystemShutdownA';
 function IsTextUnicode; external advapi32 name 'IsTextUnicode';
 function IsValidAcl; external advapi32 name 'IsValidAcl';
 function IsValidSecurityDescriptor; external advapi32 name 'IsValidSecurityDescriptor';
 function IsValidSid; external advapi32 name 'IsValidSid';
+function LogonUser; external advapi32 name 'LogonUserA';
 function LogonUserA; external advapi32 name 'LogonUserA';
 function LogonUserW; external advapi32 name 'LogonUserW';
-function LogonUser; external advapi32 name 'LogonUserA';
+function LookupAccountName; external advapi32 name 'LookupAccountNameA';
 function LookupAccountNameA; external advapi32 name 'LookupAccountNameA';
 function LookupAccountNameW; external advapi32 name 'LookupAccountNameW';
-function LookupAccountName; external advapi32 name 'LookupAccountNameA';
+function LookupAccountSid; external advapi32 name 'LookupAccountSidA';
 function LookupAccountSidA; external advapi32 name 'LookupAccountSidA';
 function LookupAccountSidW; external advapi32 name 'LookupAccountSidW';
-function LookupAccountSid; external advapi32 name 'LookupAccountSidA';
+function LookupPrivilegeDisplayName; external advapi32 name 'LookupPrivilegeDisplayNameA';
 function LookupPrivilegeDisplayNameA; external advapi32 name 'LookupPrivilegeDisplayNameA';
 function LookupPrivilegeDisplayNameW; external advapi32 name 'LookupPrivilegeDisplayNameW';
-function LookupPrivilegeDisplayName; external advapi32 name 'LookupPrivilegeDisplayNameA';
+function LookupPrivilegeName; external advapi32 name 'LookupPrivilegeNameA';
 function LookupPrivilegeNameA; external advapi32 name 'LookupPrivilegeNameA';
 function LookupPrivilegeNameW; external advapi32 name 'LookupPrivilegeNameW';
-function LookupPrivilegeName; external advapi32 name 'LookupPrivilegeNameA';
+function LookupPrivilegeValue; external advapi32 name 'LookupPrivilegeValueA';
 function LookupPrivilegeValueA; external advapi32 name 'LookupPrivilegeValueA';
 function LookupPrivilegeValueW; external advapi32 name 'LookupPrivilegeValueW';
-function LookupPrivilegeValue; external advapi32 name 'LookupPrivilegeValueA';
 function MakeAbsoluteSD; external advapi32 name 'MakeAbsoluteSD';
 function MakeSelfRelativeSD; external advapi32 name 'MakeSelfRelativeSD';
 procedure MapGenericMask; external advapi32 name 'MapGenericMask';
 function NotifyChangeEventLog; external advapi32 name 'NotifyChangeEventLog';
+function ObjectCloseAuditAlarm; external advapi32 name 'ObjectCloseAuditAlarmA';
 function ObjectCloseAuditAlarmA; external advapi32 name 'ObjectCloseAuditAlarmA';
 function ObjectCloseAuditAlarmW; external advapi32 name 'ObjectCloseAuditAlarmW';
-function ObjectCloseAuditAlarm; external advapi32 name 'ObjectCloseAuditAlarmA';
+function ObjectDeleteAuditAlarm; external advapi32 name 'ObjectDeleteAuditAlarmA';
 function ObjectDeleteAuditAlarmA; external advapi32 name 'ObjectDeleteAuditAlarmA';
 function ObjectDeleteAuditAlarmW; external advapi32 name 'ObjectDeleteAuditAlarmW';
-function ObjectDeleteAuditAlarm; external advapi32 name 'ObjectDeleteAuditAlarmA';
+function ObjectOpenAuditAlarm; external advapi32 name 'ObjectOpenAuditAlarmA';
 function ObjectOpenAuditAlarmA; external advapi32 name 'ObjectOpenAuditAlarmA';
 function ObjectOpenAuditAlarmW; external advapi32 name 'ObjectOpenAuditAlarmW';
-function ObjectOpenAuditAlarm; external advapi32 name 'ObjectOpenAuditAlarmA';
+function ObjectPrivilegeAuditAlarm; external advapi32 name 'ObjectPrivilegeAuditAlarmA';
 function ObjectPrivilegeAuditAlarmA; external advapi32 name 'ObjectPrivilegeAuditAlarmA';
 function ObjectPrivilegeAuditAlarmW; external advapi32 name 'ObjectPrivilegeAuditAlarmW';
-function ObjectPrivilegeAuditAlarm; external advapi32 name 'ObjectPrivilegeAuditAlarmA';
+function OpenBackupEventLog; external advapi32 name 'OpenBackupEventLogA';
 function OpenBackupEventLogA; external advapi32 name 'OpenBackupEventLogA';
 function OpenBackupEventLogW; external advapi32 name 'OpenBackupEventLogW';
-function OpenBackupEventLog; external advapi32 name 'OpenBackupEventLogA';
+function OpenEventLog; external advapi32 name 'OpenEventLogA';
 function OpenEventLogA; external advapi32 name 'OpenEventLogA';
 function OpenEventLogW; external advapi32 name 'OpenEventLogW';
-function OpenEventLog; external advapi32 name 'OpenEventLogA';
 function OpenProcessToken; external advapi32 name 'OpenProcessToken';
 function OpenThreadToken; external advapi32 name 'OpenThreadToken';
 function PrivilegeCheck; external advapi32 name 'PrivilegeCheck';
+function PrivilegedServiceAuditAlarm; external advapi32 name 'PrivilegedServiceAuditAlarmA';
 function PrivilegedServiceAuditAlarmA; external advapi32 name 'PrivilegedServiceAuditAlarmA';
 function PrivilegedServiceAuditAlarmW; external advapi32 name 'PrivilegedServiceAuditAlarmW';
-function PrivilegedServiceAuditAlarm; external advapi32 name 'PrivilegedServiceAuditAlarmA';
+function ReadEventLog; external advapi32 name 'ReadEventLogA';
 function ReadEventLogA; external advapi32 name 'ReadEventLogA';
 function ReadEventLogW; external advapi32 name 'ReadEventLogW';
-function ReadEventLog; external advapi32 name 'ReadEventLogA';
 function RegCloseKey; external advapi32 name 'RegCloseKey';
+function RegConnectRegistry; external advapi32 name 'RegConnectRegistryA';
 function RegConnectRegistryA; external advapi32 name 'RegConnectRegistryA';
 function RegConnectRegistryW; external advapi32 name 'RegConnectRegistryW';
-function RegConnectRegistry; external advapi32 name 'RegConnectRegistryA';
+function RegCreateKey; external advapi32 name 'RegCreateKeyA';
 function RegCreateKeyA; external advapi32 name 'RegCreateKeyA';
 function RegCreateKeyW; external advapi32 name 'RegCreateKeyW';
-function RegCreateKey; external advapi32 name 'RegCreateKeyA';
+function RegCreateKeyEx; external advapi32 name 'RegCreateKeyExA';
 function RegCreateKeyExA; external advapi32 name 'RegCreateKeyExA';
 function RegCreateKeyExW; external advapi32 name 'RegCreateKeyExW';
-function RegCreateKeyEx; external advapi32 name 'RegCreateKeyExA';
+function RegDeleteKey; external advapi32 name 'RegDeleteKeyA';
 function RegDeleteKeyA; external advapi32 name 'RegDeleteKeyA';
 function RegDeleteKeyW; external advapi32 name 'RegDeleteKeyW';
-function RegDeleteKey; external advapi32 name 'RegDeleteKeyA';
+function RegDeleteValue; external advapi32 name 'RegDeleteValueA';
 function RegDeleteValueA; external advapi32 name 'RegDeleteValueA';
 function RegDeleteValueW; external advapi32 name 'RegDeleteValueW';
-function RegDeleteValue; external advapi32 name 'RegDeleteValueA';
+function RegEnumKeyEx; external advapi32 name 'RegEnumKeyExA';
 function RegEnumKeyExA; external advapi32 name 'RegEnumKeyExA';
 function RegEnumKeyExW; external advapi32 name 'RegEnumKeyExW';
-function RegEnumKeyEx; external advapi32 name 'RegEnumKeyExA';
+function RegEnumKey; external advapi32 name 'RegEnumKeyA';
 function RegEnumKeyA; external advapi32 name 'RegEnumKeyA';
 function RegEnumKeyW; external advapi32 name 'RegEnumKeyW';
-function RegEnumKey; external advapi32 name 'RegEnumKeyA';
+function RegEnumValue; external advapi32 name 'RegEnumValueA';
 function RegEnumValueA; external advapi32 name 'RegEnumValueA';
 function RegEnumValueW; external advapi32 name 'RegEnumValueW';
-function RegEnumValue; external advapi32 name 'RegEnumValueA';
 function RegFlushKey; external advapi32 name 'RegFlushKey';
 function RegGetKeySecurity; external advapi32 name 'RegGetKeySecurity';
+function RegLoadKey; external advapi32 name 'RegLoadKeyA';
 function RegLoadKeyA; external advapi32 name 'RegLoadKeyA';
 function RegLoadKeyW; external advapi32 name 'RegLoadKeyW';
-function RegLoadKey; external advapi32 name 'RegLoadKeyA';
 function RegNotifyChangeKeyValue; external advapi32 name 'RegNotifyChangeKeyValue';
+function RegOpenKey; external advapi32 name 'RegOpenKeyA';
 function RegOpenKeyA; external advapi32 name 'RegOpenKeyA';
 function RegOpenKeyW; external advapi32 name 'RegOpenKeyW';
-function RegOpenKey; external advapi32 name 'RegOpenKeyA';
+function RegOpenKeyEx; external advapi32 name 'RegOpenKeyExA';
 function RegOpenKeyExA; external advapi32 name 'RegOpenKeyExA';
 function RegOpenKeyExW; external advapi32 name 'RegOpenKeyExW';
-function RegOpenKeyEx; external advapi32 name 'RegOpenKeyExA';
+function RegQueryInfoKey; external advapi32 name 'RegQueryInfoKeyA';
 function RegQueryInfoKeyA; external advapi32 name 'RegQueryInfoKeyA';
 function RegQueryInfoKeyW; external advapi32 name 'RegQueryInfoKeyW';
-function RegQueryInfoKey; external advapi32 name 'RegQueryInfoKeyA';
+function RegQueryMultipleValues; external advapi32 name 'RegQueryMultipleValuesA';
 function RegQueryMultipleValuesA; external advapi32 name 'RegQueryMultipleValuesA';
 function RegQueryMultipleValuesW; external advapi32 name 'RegQueryMultipleValuesW';
-function RegQueryMultipleValues; external advapi32 name 'RegQueryMultipleValuesA';
+function RegQueryValue; external advapi32 name 'RegQueryValueA';
 function RegQueryValueA; external advapi32 name 'RegQueryValueA';
 function RegQueryValueW; external advapi32 name 'RegQueryValueW';
-function RegQueryValue; external advapi32 name 'RegQueryValueA';
+function RegQueryValueEx; external advapi32 name 'RegQueryValueExA';
 function RegQueryValueExA; external advapi32 name 'RegQueryValueExA';
 function RegQueryValueExW; external advapi32 name 'RegQueryValueExW';
-function RegQueryValueEx; external advapi32 name 'RegQueryValueExA';
+function RegReplaceKey; external advapi32 name 'RegReplaceKeyA';
 function RegReplaceKeyA; external advapi32 name 'RegReplaceKeyA';
 function RegReplaceKeyW; external advapi32 name 'RegReplaceKeyW';
-function RegReplaceKey; external advapi32 name 'RegReplaceKeyA';
+function RegRestoreKey; external advapi32 name 'RegRestoreKeyA';
 function RegRestoreKeyA; external advapi32 name 'RegRestoreKeyA';
 function RegRestoreKeyW; external advapi32 name 'RegRestoreKeyW';
-function RegRestoreKey; external advapi32 name 'RegRestoreKeyA';
+function RegSaveKey; external advapi32 name 'RegSaveKeyA';
 function RegSaveKeyA; external advapi32 name 'RegSaveKeyA';
 function RegSaveKeyW; external advapi32 name 'RegSaveKeyW';
-function RegSaveKey; external advapi32 name 'RegSaveKeyA';
 function RegSetKeySecurity; external advapi32 name 'RegSetKeySecurity';
+function RegSetValue; external advapi32 name 'RegSetValueA';
 function RegSetValueA; external advapi32 name 'RegSetValueA';
 function RegSetValueW; external advapi32 name 'RegSetValueW';
-function RegSetValue; external advapi32 name 'RegSetValueA';
+function RegSetValueEx; external advapi32 name 'RegSetValueExA';
 function RegSetValueExA; external advapi32 name 'RegSetValueExA';
 function RegSetValueExW; external advapi32 name 'RegSetValueExW';
-function RegSetValueEx; external advapi32 name 'RegSetValueExA';
+function RegUnLoadKey; external advapi32 name 'RegUnLoadKeyA';
 function RegUnLoadKeyA; external advapi32 name 'RegUnLoadKeyA';
 function RegUnLoadKeyW; external advapi32 name 'RegUnLoadKeyW';
-function RegUnLoadKey; external advapi32 name 'RegUnLoadKeyA';
+function RegisterEventSource; external advapi32 name 'RegisterEventSourceA';
 function RegisterEventSourceA; external advapi32 name 'RegisterEventSourceA';
 function RegisterEventSourceW; external advapi32 name 'RegisterEventSourceW';
-function RegisterEventSource; external advapi32 name 'RegisterEventSourceA';
+function ReportEvent; external advapi32 name 'ReportEventA';
 function ReportEventA; external advapi32 name 'ReportEventA';
 function ReportEventW; external advapi32 name 'ReportEventW';
-function ReportEvent; external advapi32 name 'ReportEventA';
 function RevertToSelf; external advapi32 name 'RevertToSelf';
 function SetAclInformation; external advapi32 name 'SetAclInformation';
+function SetFileSecurity; external advapi32 name 'SetFileSecurityA';
 function SetFileSecurityA; external advapi32 name 'SetFileSecurityA';
 function SetFileSecurityW; external advapi32 name 'SetFileSecurityW';
-function SetFileSecurity; external advapi32 name 'SetFileSecurityA';
 function SetKernelObjectSecurity; external advapi32 name 'SetKernelObjectSecurity';
 function SetPrivateObjectSecurity; external advapi32 name 'SetPrivateObjectSecurity';
 function SetPrivateObjectSecurityEx; external advapi32 name 'SetPrivateObjectSecurityEx';
@@ -28090,327 +28442,372 @@ function WinVerifyTrust; external imaghlp name 'WinVerifyTrust'; }
 
 { Externals from kernel32.dll }
 
+function AddAtom; external kernel32 name 'AddAtomA';
 function AddAtomA; external kernel32 name 'AddAtomA';
 function AddAtomW; external kernel32 name 'AddAtomW';
-function AddAtom; external kernel32 name 'AddAtomA';
 function AllocConsole; external kernel32 name 'AllocConsole';
 function AreFileApisANSI; external kernel32 name 'AreFileApisANSI';
 function BackupRead; external kernel32 name 'BackupRead';
 function BackupSeek; external kernel32 name 'BackupSeek';
 function BackupWrite; external kernel32 name 'BackupWrite';
 function Beep; external kernel32 name 'Beep';
+function BeginUpdateResource; external kernel32 name 'BeginUpdateResourceA';
 function BeginUpdateResourceA; external kernel32 name 'BeginUpdateResourceA';
 function BeginUpdateResourceW; external kernel32 name 'BeginUpdateResourceW';
-function BeginUpdateResource; external kernel32 name 'BeginUpdateResourceA';
+function BuildCommDCB; external kernel32 name 'BuildCommDCBA';
 function BuildCommDCBA; external kernel32 name 'BuildCommDCBA';
 function BuildCommDCBW; external kernel32 name 'BuildCommDCBW';
-function BuildCommDCB; external kernel32 name 'BuildCommDCBA';
+function BuildCommDCBAndTimeouts; external kernel32 name 'BuildCommDCBAndTimeoutsA';
 function BuildCommDCBAndTimeoutsA; external kernel32 name 'BuildCommDCBAndTimeoutsA';
 function BuildCommDCBAndTimeoutsW; external kernel32 name 'BuildCommDCBAndTimeoutsW';
-function BuildCommDCBAndTimeouts; external kernel32 name 'BuildCommDCBAndTimeoutsA';
+function CallNamedPipe; external kernel32 name 'CallNamedPipeA';
 function CallNamedPipeA; external kernel32 name 'CallNamedPipeA';
 function CallNamedPipeW; external kernel32 name 'CallNamedPipeW';
-function CallNamedPipe; external kernel32 name 'CallNamedPipeA';
 function CancelIo; external kernel32 name 'CancelIo';
 function CancelWaitableTimer; external kernel32 name 'CancelWaitableTimer';
 function ClearCommBreak; external kernel32 name 'ClearCommBreak';
 function ClearCommError; external kernel32 name 'ClearCommError';
 function CloseHandle; external kernel32 name 'CloseHandle';
 procedure CloseRaw; external kernel32 name 'CloseRaw';
+function CommConfigDialog; external kernel32 name 'CommConfigDialogA';
 function CommConfigDialogA; external kernel32 name 'CommConfigDialogA';
 function CommConfigDialogW; external kernel32 name 'CommConfigDialogW';
-function CommConfigDialog; external kernel32 name 'CommConfigDialogA';
 function CompareFileTime; external kernel32 name 'CompareFileTime';
+function CompareString; external kernel32 name 'CompareStringA';
 function CompareStringA; external kernel32 name 'CompareStringA';
 function CompareStringW; external kernel32 name 'CompareStringW';
-function CompareString; external kernel32 name 'CompareStringA';
 function ConnectNamedPipe; external kernel32 name 'ConnectNamedPipe';
 function ContinueDebugEvent; external kernel32 name 'ContinueDebugEvent';
 function ConvertThreadToFiber; external kernel32 name 'ConvertThreadToFiber';
 function ConvertDefaultLocale; external kernel32 name 'ConvertDefaultLocale';
+function CopyFile; external kernel32 name 'CopyFileA';
+function CopyFileEx; external kernel32 name 'CopyFileExA';
 function CopyFileA; external kernel32 name 'CopyFileA';
 function CopyFileExA; external kernel32 name 'CopyFileExA';
 function CopyFileW; external kernel32 name 'CopyFileW';
 function CopyFileExW; external kernel32 name 'CopyFileExW';
-function CopyFile; external kernel32 name 'CopyFileA';
-function CopyFileEx; external kernel32 name 'CopyFileExA';
 function CreateConsoleScreenBuffer; external kernel32 name 'CreateConsoleScreenBuffer';
+function CreateDirectory; external kernel32 name 'CreateDirectoryA';
 function CreateDirectoryA; external kernel32 name 'CreateDirectoryA';
 function CreateDirectoryW; external kernel32 name 'CreateDirectoryW';
-function CreateDirectory; external kernel32 name 'CreateDirectoryA';
+function CreateDirectoryEx; external kernel32 name 'CreateDirectoryExA';
 function CreateDirectoryExA; external kernel32 name 'CreateDirectoryExA';
 function CreateDirectoryExW; external kernel32 name 'CreateDirectoryExW';
-function CreateDirectoryEx; external kernel32 name 'CreateDirectoryExA';
+function CreateEvent; external kernel32 name 'CreateEventA';
 function CreateEventA; external kernel32 name 'CreateEventA';
 function CreateEventW; external kernel32 name 'CreateEventW';
-function CreateEvent; external kernel32 name 'CreateEventA';
 function CreateFiber; external kernel32 name 'CreateFiber';
+function CreateFile; external kernel32 name 'CreateFileA';
 function CreateFileA; external kernel32 name 'CreateFileA';
 function CreateFileW; external kernel32 name 'CreateFileW';
-function CreateFile; external kernel32 name 'CreateFileA';
+function CreateFileMapping; external kernel32 name 'CreateFileMappingA';
 function CreateFileMappingA; external kernel32 name 'CreateFileMappingA';
 function CreateFileMappingW; external kernel32 name 'CreateFileMappingW';
-function CreateFileMapping; external kernel32 name 'CreateFileMappingA';
+function CreateHardLink; external kernel32 name 'CreateHardLinkA';
 function CreateHardLinkA; external kernel32 name 'CreateHardLinkA';
 function CreateHardLinkW; external kernel32 name 'CreateHardLinkW';
-function CreateHardLink; external kernel32 name 'CreateHardLinkA';
 function CreateIoCompletionPort; external kernel32 name 'CreateIoCompletionPort';
+function CreateMailslot; external kernel32 name 'CreateMailslotA';
 function CreateMailslotA; external kernel32 name 'CreateMailslotA';
 function CreateMailslotW; external kernel32 name 'CreateMailslotW';
-function CreateMailslot; external kernel32 name 'CreateMailslotA';
-function CreateMutexA; external kernel32 name 'CreateMutexA';
-function CreateMutexW; external kernel32 name 'CreateMutexW';
-function CreateMutex; external kernel32 name 'CreateMutexA';
+
+// NT 4.0 bug workaround - NT 4.0 doesn't test bInitialOwner for zero/nonzero, it tests for 1
+function _CreateMutex(lpMutexAttributes: PSecurityAttributes;
+  bInitialOwner: Integer; lpName: PChar): THandle; stdcall; external kernel32 name 'CreateMutexA';
+
+function CreateMutex(lpMutexAttributes: PSecurityAttributes; bInitialOwner: BOOL; lpName: PChar): THandle;
+begin
+  Result := _CreateMutex(lpMutexAttributes, Integer(Boolean(bInitialOwner)), lpName);
+end;
+
+function _CreateMutexA(lpMutexAttributes: PSecurityAttributes;
+  bInitialOwner: Integer; lpName: PAnsiChar): THandle; stdcall; external kernel32 name 'CreateMutexA';
+
+function CreateMutexA(lpMutexAttributes: PSecurityAttributes; bInitialOwner: BOOL; lpName: PAnsiChar): THandle;
+begin
+  Result := _CreateMutexA(lpMutexAttributes, Integer(Boolean(bInitialOwner)), lpName);
+end;
+
+function _CreateMutexW(lpMutexAttributes: PSecurityAttributes;
+  bInitialOwner: Integer; lpName: PWideChar): THandle; stdcall; external kernel32 name 'CreateMutexW';
+
+function CreateMutexW(lpMutexAttributes: PSecurityAttributes; bInitialOwner: BOOL; lpName: PWideChar): THandle;
+begin
+  Result := _CreateMutexW(lpMutexAttributes, Integer(Boolean(bInitialOwner)), lpName);
+end;
+
+function CreateNamedPipe; external kernel32 name 'CreateNamedPipeA';
 function CreateNamedPipeA; external kernel32 name 'CreateNamedPipeA';
 function CreateNamedPipeW; external kernel32 name 'CreateNamedPipeW';
-function CreateNamedPipe; external kernel32 name 'CreateNamedPipeA';
 function CreatePipe; external kernel32 name 'CreatePipe';
+function CreateProcess; external kernel32 name 'CreateProcessA';
 function CreateProcessA; external kernel32 name 'CreateProcessA';
 function CreateProcessW; external kernel32 name 'CreateProcessW';
-function CreateProcess; external kernel32 name 'CreateProcessA';
 function CreateRemoteThread; external kernel32 name 'CreateRemoteThread';
+function CreateSemaphore; external kernel32 name 'CreateSemaphoreA';
 function CreateSemaphoreA; external kernel32 name 'CreateSemaphoreA';
 function CreateSemaphoreW; external kernel32 name 'CreateSemaphoreW';
-function CreateSemaphore; external kernel32 name 'CreateSemaphoreA';
 function CreateTapePartition; external kernel32 name 'CreateTapePartition';
 function CreateThread; external kernel32 name 'CreateThread';
+function CreateWaitableTimer; external kernel32 name 'CreateWaitableTimerA';
 function CreateWaitableTimerA; external kernel32 name 'CreateWaitableTimerA';
 function CreateWaitableTimerW; external kernel32 name 'CreateWaitableTimerW';
-function CreateWaitableTimer; external kernel32 name 'CreateWaitableTimerA';
+function DecryptFile; external kernel32 name 'DecryptFile';
 function DecryptFileA; external kernel32 name 'DecryptFileA';
 function DecryptFileW; external kernel32 name 'DecryptFileW';
-function DecryptFile; external kernel32 name 'DecryptFile';
 function DebugActiveProcess; external kernel32 name 'DebugActiveProcess';
 procedure DebugBreak; external kernel32 name 'DebugBreak';
+function DefineDosDevice; external kernel32 name 'DefineDosDeviceA';
 function DefineDosDeviceA; external kernel32 name 'DefineDosDeviceA';
 function DefineDosDeviceW; external kernel32 name 'DefineDosDeviceW';
-function DefineDosDevice; external kernel32 name 'DefineDosDeviceA';
 function DeleteAtom; external kernel32 name 'DeleteAtom';
+
 procedure DeleteCriticalSection; external kernel32 name 'DeleteCriticalSection';
+
+
+
+
+
+
 function DeleteFiber; external kernel32 name 'DeleteFiber';
+function DeleteFile; external kernel32 name 'DeleteFileA';
 function DeleteFileA; external kernel32 name 'DeleteFileA';
 function DeleteFileW; external kernel32 name 'DeleteFileW';
-function DeleteFile; external kernel32 name 'DeleteFileA';
 function DeviceIoControl; external kernel32 name 'DeviceIoControl';
 function DisableThreadLibraryCalls; external kernel32 name 'DisableThreadLibraryCalls';
 function DisconnectNamedPipe; external kernel32 name 'DisconnectNamedPipe';
 function DosDateTimeToFileTime; external kernel32 name 'DosDateTimeToFileTime';
 function DuplicateHandle; external kernel32 name 'DuplicateHandle';
+function EncryptFile; external kernel32 name 'EncryptFile';
 function EncryptFileA; external kernel32 name 'EncryptFileA';
 function EncryptFileW; external kernel32 name 'EncryptFileW';
-function EncryptFile; external kernel32 name 'EncryptFile';
+function EndUpdateResource; external kernel32 name 'EndUpdateResourceA';
 function EndUpdateResourceA; external kernel32 name 'EndUpdateResourceA';
 function EndUpdateResourceW; external kernel32 name 'EndUpdateResourceW';
-function EndUpdateResource; external kernel32 name 'EndUpdateResourceA';
+
 procedure EnterCriticalSection; external kernel32 name 'EnterCriticalSection';
+
+
+
+
+
+
+function EnumCalendarInfo; external kernel32 name 'EnumCalendarInfoA';
 function EnumCalendarInfoA; external kernel32 name 'EnumCalendarInfoA';
 function EnumCalendarInfoW; external kernel32 name 'EnumCalendarInfoW';
-function EnumCalendarInfo; external kernel32 name 'EnumCalendarInfoA';
+function EnumDateFormats; external kernel32 name 'EnumDateFormatsA';
 function EnumDateFormatsA; external kernel32 name 'EnumDateFormatsA';
 function EnumDateFormatsW; external kernel32 name 'EnumDateFormatsW';
-function EnumDateFormats; external kernel32 name 'EnumDateFormatsA';
+function EnumResourceLanguages; external kernel32 name 'EnumResourceLanguagesA';
 function EnumResourceLanguagesA; external kernel32 name 'EnumResourceLanguagesA';
 function EnumResourceLanguagesW; external kernel32 name 'EnumResourceLanguagesW';
-function EnumResourceLanguages; external kernel32 name 'EnumResourceLanguagesA';
+function EnumResourceNames; external kernel32 name 'EnumResourceNamesA';
 function EnumResourceNamesA; external kernel32 name 'EnumResourceNamesA';
 function EnumResourceNamesW; external kernel32 name 'EnumResourceNamesW';
-function EnumResourceNames; external kernel32 name 'EnumResourceNamesA';
+function EnumResourceTypes; external kernel32 name 'EnumResourceTypesA';
 function EnumResourceTypesA; external kernel32 name 'EnumResourceTypesA';
 function EnumResourceTypesW; external kernel32 name 'EnumResourceTypesW';
-function EnumResourceTypes; external kernel32 name 'EnumResourceTypesA';
+function EnumSystemCodePages; external kernel32 name 'EnumSystemCodePagesA';
 function EnumSystemCodePagesA; external kernel32 name 'EnumSystemCodePagesA';
 function EnumSystemCodePagesW; external kernel32 name 'EnumSystemCodePagesW';
-function EnumSystemCodePages; external kernel32 name 'EnumSystemCodePagesA';
+function EnumSystemLocales; external kernel32 name 'EnumSystemLocalesA';
 function EnumSystemLocalesA; external kernel32 name 'EnumSystemLocalesA';
 function EnumSystemLocalesW; external kernel32 name 'EnumSystemLocalesW';
-function EnumSystemLocales; external kernel32 name 'EnumSystemLocalesA';
+function EnumTimeFormats; external kernel32 name 'EnumTimeFormatsA';
 function EnumTimeFormatsA; external kernel32 name 'EnumTimeFormatsA';
 function EnumTimeFormatsW; external kernel32 name 'EnumTimeFormatsW';
-function EnumTimeFormats; external kernel32 name 'EnumTimeFormatsA';
 function EraseTape; external kernel32 name 'EraseTape';
 function EscapeCommFunction; external kernel32 name 'EscapeCommFunction';
 procedure ExitProcess; external kernel32 name 'ExitProcess';
 procedure ExitThread; external kernel32 name 'ExitThread';
+function ExpandEnvironmentStrings; external kernel32 name 'ExpandEnvironmentStringsA';
 function ExpandEnvironmentStringsA; external kernel32 name 'ExpandEnvironmentStringsA';
 function ExpandEnvironmentStringsW; external kernel32 name 'ExpandEnvironmentStringsW';
-function ExpandEnvironmentStrings; external kernel32 name 'ExpandEnvironmentStringsA';
+procedure FatalAppExit; external kernel32 name 'FatalAppExitA';
 procedure FatalAppExitA; external kernel32 name 'FatalAppExitA';
 procedure FatalAppExitW; external kernel32 name 'FatalAppExitW';
-procedure FatalAppExit; external kernel32 name 'FatalAppExitA';
 procedure FatalExit; external kernel32 name 'FatalExit';
 function FileTimeToDosDateTime; external kernel32 name 'FileTimeToDosDateTime';
 function FileTimeToLocalFileTime; external kernel32 name 'FileTimeToLocalFileTime';
 function FileTimeToSystemTime; external kernel32 name 'FileTimeToSystemTime';
 function FillConsoleOutputAttribute; external kernel32 name 'FillConsoleOutputAttribute';
+function FillConsoleOutputCharacter; external kernel32 name 'FillConsoleOutputCharacterA';
 function FillConsoleOutputCharacterA; external kernel32 name 'FillConsoleOutputCharacterA';
 function FillConsoleOutputCharacterW; external kernel32 name 'FillConsoleOutputCharacterW';
-function FillConsoleOutputCharacter; external kernel32 name 'FillConsoleOutputCharacterA';
+function FindAtom; external kernel32 name 'FindAtomA';
 function FindAtomA; external kernel32 name 'FindAtomA';
 function FindAtomW; external kernel32 name 'FindAtomW';
-function FindAtom; external kernel32 name 'FindAtomA';
 function FindClose; external kernel32 name 'FindClose';
 function FindCloseChangeNotification; external kernel32 name 'FindCloseChangeNotification';
+function FindFirstChangeNotification; external kernel32 name 'FindFirstChangeNotificationA';
 function FindFirstChangeNotificationA; external kernel32 name 'FindFirstChangeNotificationA';
 function FindFirstChangeNotificationW; external kernel32 name 'FindFirstChangeNotificationW';
-function FindFirstChangeNotification; external kernel32 name 'FindFirstChangeNotificationA';
+function FindFirstFile; external kernel32 name 'FindFirstFileA';
+function FindFirstFileEx; external kernel32 name 'FindFirstFileExA';
 function FindFirstFileA; external kernel32 name 'FindFirstFileA';
 function FindFirstFileExA; external kernel32 name 'FindFirstFileExA';
 function FindFirstFileW; external kernel32 name 'FindFirstFileW';
 function FindFirstFileExW; external kernel32 name 'FindFirstFileExW';
-function FindFirstFile; external kernel32 name 'FindFirstFileA';
-function FindFirstFileEx; external kernel32 name 'FindFirstFileExA';
 function FindNextChangeNotification; external kernel32 name 'FindNextChangeNotification';
+function FindNextFile; external kernel32 name 'FindNextFileA';
 function FindNextFileA; external kernel32 name 'FindNextFileA';
 function FindNextFileW; external kernel32 name 'FindNextFileW';
-function FindNextFile; external kernel32 name 'FindNextFileA';
+{$IFDEF MSWINDOWS}
+function FindResource; external kernel32 name 'FindResourceA';
 function FindResourceA; external kernel32 name 'FindResourceA';
 function FindResourceW; external kernel32 name 'FindResourceW';
-function FindResource; external kernel32 name 'FindResourceA';
+{$ENDIF}
+function FindResourceEx; external kernel32 name 'FindResourceExA';
 function FindResourceExA; external kernel32 name 'FindResourceExA';
 function FindResourceExW; external kernel32 name 'FindResourceExW';
-function FindResourceEx; external kernel32 name 'FindResourceExA';
 function FlushConsoleInputBuffer; external kernel32 name 'FlushConsoleInputBuffer';
 function FlushFileBuffers; external kernel32 name 'FlushFileBuffers';
 function FlushInstructionCache; external kernel32 name 'FlushInstructionCache';
 function FlushViewOfFile; external kernel32 name 'FlushViewOfFile';
+function FoldString; external kernel32 name 'FoldStringA';
 function FoldStringA; external kernel32 name 'FoldStringA';
 function FoldStringW; external kernel32 name 'FoldStringW';
-function FoldString; external kernel32 name 'FoldStringA';
+function FormatMessage; external kernel32 name 'FormatMessageA';
 function FormatMessageA; external kernel32 name 'FormatMessageA';
 function FormatMessageW; external kernel32 name 'FormatMessageW';
-function FormatMessage; external kernel32 name 'FormatMessageA';
 function FreeConsole; external kernel32 name 'FreeConsole';
+function FreeEnvironmentStrings; external kernel32 name 'FreeEnvironmentStringsA';
 function FreeEnvironmentStringsA; external kernel32 name 'FreeEnvironmentStringsA';
 function FreeEnvironmentStringsW; external kernel32 name 'FreeEnvironmentStringsW';
-function FreeEnvironmentStrings; external kernel32 name 'FreeEnvironmentStringsA';
 function FreeLibrary; external kernel32 name 'FreeLibrary';
 procedure FreeLibraryAndExitThread; external kernel32 name 'FreeLibraryAndExitThread';
 function InterlockedCompareExchange; external kernel32 name 'InterlockedCompareExchange';
 function InterlockedDecrement; external kernel32 name 'InterlockedDecrement';
 function InterlockedExchange; external kernel32 name 'InterlockedExchange';
-function InterlockedExchangeAdd; external kernel32 name 'InterlockedExchangeAdd';
+function InterlockedExchangeAdd(Addend: PLongint; Value: Longint): Longint; external kernel32 name 'InterlockedExchangeAdd';
+function InterlockedExchangeAdd(var Addend: Longint; Value: Longint): Longint; external kernel32 name 'InterlockedExchangeAdd';
 function InterlockedIncrement; external kernel32 name 'InterlockedIncrement';
+{$IFDEF MSWINDOWS}
 function FreeResource; external kernel32 name 'FreeResource';
+{$ENDIF}
 function GenerateConsoleCtrlEvent; external kernel32 name 'GenerateConsoleCtrlEvent';
 function GetACP; external kernel32 name 'GetACP';
+function GetAtomName; external kernel32 name 'GetAtomNameA';
 function GetAtomNameA; external kernel32 name 'GetAtomNameA';
 function GetAtomNameW; external kernel32 name 'GetAtomNameW';
-function GetAtomName; external kernel32 name 'GetAtomNameA';
+function GetBinaryType; external kernel32 name 'GetBinaryTypeA';
 function GetBinaryTypeA; external kernel32 name 'GetBinaryTypeA';
 function GetBinaryTypeW; external kernel32 name 'GetBinaryTypeW';
-function GetBinaryType; external kernel32 name 'GetBinaryTypeA';
 function GetCPInfo; external kernel32 name 'GetCPInfo';
+function GetCommandLine; external kernel32 name 'GetCommandLineA';
 function GetCommandLineA; external kernel32 name 'GetCommandLineA';
 function GetCommandLineW; external kernel32 name 'GetCommandLineW';
-function GetCommandLine; external kernel32 name 'GetCommandLineA';
 function GetCommConfig; external kernel32 name 'GetCommConfig';
 function GetCommMask; external kernel32 name 'GetCommMask';
 function GetCommModemStatus; external kernel32 name 'GetCommModemStatus';
 function GetCommProperties; external kernel32 name 'GetCommProperties';
 function GetCommState; external kernel32 name 'GetCommState';
 function GetCommTimeouts; external kernel32 name 'GetCommTimeouts';
+function GetCompressedFileSize; external kernel32 name 'GetCompressedFileSizeA';
 function GetCompressedFileSizeA; external kernel32 name 'GetCompressedFileSizeA';
 function GetCompressedFileSizeW; external kernel32 name 'GetCompressedFileSizeW';
-function GetCompressedFileSize; external kernel32 name 'GetCompressedFileSizeA';
+function GetComputerName; external kernel32 name 'GetComputerNameA';
 function GetComputerNameA; external kernel32 name 'GetComputerNameA';
 function GetComputerNameW; external kernel32 name 'GetComputerNameW';
-function GetComputerName; external kernel32 name 'GetComputerNameA';
 function GetConsoleCP; external kernel32 name 'GetConsoleCP';
 function GetConsoleCursorInfo; external kernel32 name 'GetConsoleCursorInfo';
 function GetConsoleMode; external kernel32 name 'GetConsoleMode';
 function GetConsoleOutputCP; external kernel32 name 'GetConsoleOutputCP';
 function GetConsoleScreenBufferInfo; external kernel32 name 'GetConsoleScreenBufferInfo';
+function GetConsoleTitle; external kernel32 name 'GetConsoleTitleA';
 function GetConsoleTitleA; external kernel32 name 'GetConsoleTitleA';
 function GetConsoleTitleW; external kernel32 name 'GetConsoleTitleW';
-function GetConsoleTitle; external kernel32 name 'GetConsoleTitleA';
+function GetCurrencyFormat; external kernel32 name 'GetCurrencyFormatA';
 function GetCurrencyFormatA; external kernel32 name 'GetCurrencyFormatA';
 function GetCurrencyFormatW; external kernel32 name 'GetCurrencyFormatW';
-function GetCurrencyFormat; external kernel32 name 'GetCurrencyFormatA';
+function GetCurrentDirectory; external kernel32 name 'GetCurrentDirectoryA';
 function GetCurrentDirectoryA; external kernel32 name 'GetCurrentDirectoryA';
 function GetCurrentDirectoryW; external kernel32 name 'GetCurrentDirectoryW';
-function GetCurrentDirectory; external kernel32 name 'GetCurrentDirectoryA';
 function GetCurrentProcess; external kernel32 name 'GetCurrentProcess';
 function GetCurrentProcessId; external kernel32 name 'GetCurrentProcessId';
 function GetCurrentThread; external kernel32 name 'GetCurrentThread';
 function GetCurrentThreadId; external kernel32 name 'GetCurrentThreadId';
+function GetDateFormat; external kernel32 name 'GetDateFormatA';
 function GetDateFormatA; external kernel32 name 'GetDateFormatA';
 function GetDateFormatW; external kernel32 name 'GetDateFormatW';
-function GetDateFormat; external kernel32 name 'GetDateFormatA';
+function GetDefaultCommConfig; external kernel32 name 'GetDefaultCommConfigA';
 function GetDefaultCommConfigA; external kernel32 name 'GetDefaultCommConfigA';
 function GetDefaultCommConfigW; external kernel32 name 'GetDefaultCommConfigW';
-function GetDefaultCommConfig; external kernel32 name 'GetDefaultCommConfigA';
+function GetDiskFreeSpace; external kernel32 name 'GetDiskFreeSpaceA';
 function GetDiskFreeSpaceA; external kernel32 name 'GetDiskFreeSpaceA';
 function GetDiskFreeSpaceW; external kernel32 name 'GetDiskFreeSpaceW';
-function GetDiskFreeSpace; external kernel32 name 'GetDiskFreeSpaceA';
+function GetDiskFreeSpaceEx; external kernel32 name 'GetDiskFreeSpaceExA';
 function GetDiskFreeSpaceExA; external kernel32 name 'GetDiskFreeSpaceExA';
 function GetDiskFreeSpaceExW; external kernel32 name 'GetDiskFreeSpaceExW';
-function GetDiskFreeSpaceEx; external kernel32 name 'GetDiskFreeSpaceExA';
+function GetDriveType; external kernel32 name 'GetDriveTypeA';
 function GetDriveTypeA; external kernel32 name 'GetDriveTypeA';
 function GetDriveTypeW; external kernel32 name 'GetDriveTypeW';
-function GetDriveType; external kernel32 name 'GetDriveTypeA';
+function GetEnvironmentStrings; external kernel32 name 'GetEnvironmentStringsA';
 function GetEnvironmentStringsA; external kernel32 name 'GetEnvironmentStringsA';
 function GetEnvironmentStringsW; external kernel32 name 'GetEnvironmentStringsW';
-function GetEnvironmentStrings; external kernel32 name 'GetEnvironmentStringsA';
-function GetEnvironmentVariableA; external kernel32 name 'GetEnvironmentVariableA';
-function GetEnvironmentVariableW; external kernel32 name 'GetEnvironmentVariableW';
-function GetEnvironmentVariable; external kernel32 name 'GetEnvironmentVariableA';
+function GetEnvironmentVariable(lpName: PChar; lpBuffer: PChar;
+nSize: DWORD): DWORD; external kernel32 name 'GetEnvironmentVariableA';
+function GetEnvironmentVariableA(lpName: PAnsiChar; lpBuffer: PAnsiChar;
+nSize: DWORD): DWORD; external kernel32 name 'GetEnvironmentVariableA';
+function GetEnvironmentVariableW(lpName: PWideChar; lpBuffer: PWideChar;
+nSize: DWORD): DWORD; external kernel32 name 'GetEnvironmentVariableW';
 function GetExitCodeProcess; external kernel32 name 'GetExitCodeProcess';
 function GetExitCodeThread; external kernel32 name 'GetExitCodeThread';
+function GetFileAttributes; external kernel32 name 'GetFileAttributesA';
 function GetFileAttributesA; external kernel32 name 'GetFileAttributesA';
 function GetFileAttributesW; external kernel32 name 'GetFileAttributesW';
-function GetFileAttributes; external kernel32 name 'GetFileAttributesA';
+function GetFileAttributesEx; external kernel32 name 'GetFileAttributesExA';
 function GetFileAttributesExA; external kernel32 name 'GetFileAttributesExA';
 function GetFileAttributesExW; external kernel32 name 'GetFileAttributesExW';
-function GetFileAttributesEx; external kernel32 name 'GetFileAttributesExA';
 function GetFileInformationByHandle; external kernel32 name 'GetFileInformationByHandle';
 function GetFileSize; external kernel32 name 'GetFileSize';
 function GetFileTime; external kernel32 name 'GetFileTime';
 function GetFileType; external kernel32 name 'GetFileType';
+function GetFullPathName; external kernel32 name 'GetFullPathNameA';
 function GetFullPathNameA; external kernel32 name 'GetFullPathNameA';
 function GetFullPathNameW; external kernel32 name 'GetFullPathNameW';
-function GetFullPathName; external kernel32 name 'GetFullPathNameA';
 function GetHandleInformation; external kernel32 name 'GetHandleInformation';
 function GetLargestConsoleWindowSize; external kernel32 name 'GetLargestConsoleWindowSize';
 function GetLastError; external kernel32 name 'GetLastError';
 procedure GetLocalTime; external kernel32 name 'GetLocalTime';
+function GetLocaleInfo; external kernel32 name 'GetLocaleInfoA';
 function GetLocaleInfoA; external kernel32 name 'GetLocaleInfoA';
 function GetLocaleInfoW; external kernel32 name 'GetLocaleInfoW';
-function GetLocaleInfo; external kernel32 name 'GetLocaleInfoA';
+function GetLogicalDriveStrings; external kernel32 name 'GetLogicalDriveStringsA';
 function GetLogicalDriveStringsA; external kernel32 name 'GetLogicalDriveStringsA';
 function GetLogicalDriveStringsW; external kernel32 name 'GetLogicalDriveStringsW';
-function GetLogicalDriveStrings; external kernel32 name 'GetLogicalDriveStringsA';
 function GetLogicalDrives; external kernel32 name 'GetLogicalDrives';
 function GetMailslotInfo; external kernel32 name 'GetMailslotInfo';
+function GetModuleFileName; external kernel32 name 'GetModuleFileNameA';
 function GetModuleFileNameA; external kernel32 name 'GetModuleFileNameA';
 function GetModuleFileNameW; external kernel32 name 'GetModuleFileNameW';
-function GetModuleFileName; external kernel32 name 'GetModuleFileNameA';
+function GetModuleHandle; external kernel32 name 'GetModuleHandleA';
 function GetModuleHandleA; external kernel32 name 'GetModuleHandleA';
 function GetModuleHandleW; external kernel32 name 'GetModuleHandleW';
-function GetModuleHandle; external kernel32 name 'GetModuleHandleA';
+function GetNamedPipeHandleState; external kernel32 name 'GetNamedPipeHandleStateA';
 function GetNamedPipeHandleStateA; external kernel32 name 'GetNamedPipeHandleStateA';
 function GetNamedPipeHandleStateW; external kernel32 name 'GetNamedPipeHandleStateW';
-function GetNamedPipeHandleState; external kernel32 name 'GetNamedPipeHandleStateA';
 function GetNamedPipeInfo; external kernel32 name 'GetNamedPipeInfo';
+function GetNumberFormat; external kernel32 name 'GetNumberFormatA';
 function GetNumberFormatA; external kernel32 name 'GetNumberFormatA';
 function GetNumberFormatW; external kernel32 name 'GetNumberFormatW';
-function GetNumberFormat; external kernel32 name 'GetNumberFormatA';
 function GetNumberOfConsoleInputEvents; external kernel32 name 'GetNumberOfConsoleInputEvents';
 function GetNumberOfConsoleMouseButtons; external kernel32 name 'GetNumberOfConsoleMouseButtons';
 function GetOEMCP; external kernel32 name 'GetOEMCP';
 function GetOverlappedResult; external kernel32 name 'GetOverlappedResult';
 function GetPriorityClass; external kernel32 name 'GetPriorityClass';
+function GetPrivateProfileInt; external kernel32 name 'GetPrivateProfileIntA';
 function GetPrivateProfileIntA; external kernel32 name 'GetPrivateProfileIntA';
 function GetPrivateProfileIntW; external kernel32 name 'GetPrivateProfileIntW';
-function GetPrivateProfileInt; external kernel32 name 'GetPrivateProfileIntA';
+function GetPrivateProfileSection; external kernel32 name 'GetPrivateProfileSectionA';
 function GetPrivateProfileSectionA; external kernel32 name 'GetPrivateProfileSectionA';
 function GetPrivateProfileSectionW; external kernel32 name 'GetPrivateProfileSectionW';
-function GetPrivateProfileSection; external kernel32 name 'GetPrivateProfileSectionA';
+function GetPrivateProfileSectionNames; external kernel32 name 'GetPrivateProfileSectionNamesA';
 function GetPrivateProfileSectionNamesA; external kernel32 name 'GetPrivateProfileSectionNamesA';
 function GetPrivateProfileSectionNamesW; external kernel32 name 'GetPrivateProfileSectionNamesW';
-function GetPrivateProfileSectionNames; external kernel32 name 'GetPrivateProfileSectionNamesA';
+function GetPrivateProfileString; external kernel32 name 'GetPrivateProfileStringA';
 function GetPrivateProfileStringA; external kernel32 name 'GetPrivateProfileStringA';
 function GetPrivateProfileStringW; external kernel32 name 'GetPrivateProfileStringW';
-function GetPrivateProfileString; external kernel32 name 'GetPrivateProfileStringA';
 function GetProcAddress; external kernel32 name 'GetProcAddress';
 function GetProcessAffinityMask; external kernel32 name 'GetProcessAffinityMask';
 function GetProcessHeap; external kernel32 name 'GetProcessHeap';
@@ -28420,33 +28817,33 @@ function GetProcessShutdownParameters; external kernel32 name 'GetProcessShutdow
 function GetProcessTimes; external kernel32 name 'GetProcessTimes';
 function GetProcessVersion; external kernel32 name 'GetProcessVersion';
 function GetProcessWorkingSetSize; external kernel32 name 'GetProcessWorkingSetSize';
+function GetProfileInt; external kernel32 name 'GetProfileIntA';
 function GetProfileIntA; external kernel32 name 'GetProfileIntA';
 function GetProfileIntW; external kernel32 name 'GetProfileIntW';
-function GetProfileInt; external kernel32 name 'GetProfileIntA';
+function GetProfileSection; external kernel32 name 'GetProfileSectionA';
 function GetProfileSectionA; external kernel32 name 'GetProfileSectionA';
 function GetProfileSectionW; external kernel32 name 'GetProfileSectionW';
-function GetProfileSection; external kernel32 name 'GetProfileSectionA';
+function GetProfileString; external kernel32 name 'GetProfileStringA';
 function GetProfileStringA; external kernel32 name 'GetProfileStringA';
 function GetProfileStringW; external kernel32 name 'GetProfileStringW';
-function GetProfileString; external kernel32 name 'GetProfileStringA';
 function GetQueuedCompletionStatus; external kernel32 name 'GetQueuedCompletionStatus';
+function GetShortPathName; external kernel32 name 'GetShortPathNameA';
 function GetShortPathNameA; external kernel32 name 'GetShortPathNameA';
 function GetShortPathNameW; external kernel32 name 'GetShortPathNameW';
-function GetShortPathName; external kernel32 name 'GetShortPathNameA';
+procedure GetStartupInfo; external kernel32 name 'GetStartupInfoA';
 procedure GetStartupInfoA; external kernel32 name 'GetStartupInfoA';
 procedure GetStartupInfoW; external kernel32 name 'GetStartupInfoW';
-procedure GetStartupInfo; external kernel32 name 'GetStartupInfoA';
 function GetStdHandle; external kernel32 name 'GetStdHandle';
+function GetStringTypeEx; external kernel32 name 'GetStringTypeExA';
 function GetStringTypeExA; external kernel32 name 'GetStringTypeExA';
 function GetStringTypeExW; external kernel32 name 'GetStringTypeExW';
-function GetStringTypeEx; external kernel32 name 'GetStringTypeExA';
 function GetStringTypeA; external kernel32 name 'GetStringTypeA';
 function GetStringTypeW; external kernel32 name 'GetStringTypeW';
 function GetSystemDefaultLCID; external kernel32 name 'GetSystemDefaultLCID';
 function GetSystemDefaultLangID; external kernel32 name 'GetSystemDefaultLangID';
+function GetSystemDirectory; external kernel32 name 'GetSystemDirectoryA';
 function GetSystemDirectoryA; external kernel32 name 'GetSystemDirectoryA';
 function GetSystemDirectoryW; external kernel32 name 'GetSystemDirectoryW';
-function GetSystemDirectory; external kernel32 name 'GetSystemDirectoryA';
 procedure GetSystemInfo; external kernel32 name 'GetSystemInfo';
 function GetSystemPowerStatus; external kernel32 name 'GetSystemPowerStatus';
 procedure GetSystemTime; external kernel32 name 'GetSystemTime';
@@ -28455,12 +28852,12 @@ function GetSystemTimeAdjustment; external kernel32 name 'GetSystemTimeAdjustmen
 function GetTapeParameters; external kernel32 name 'GetTapeParameters';
 function GetTapePosition; external kernel32 name 'GetTapePosition';
 function GetTapeStatus; external kernel32 name 'GetTapeStatus';
+function GetTempFileName; external kernel32 name 'GetTempFileNameA';
 function GetTempFileNameA; external kernel32 name 'GetTempFileNameA';
 function GetTempFileNameW; external kernel32 name 'GetTempFileNameW';
-function GetTempFileName; external kernel32 name 'GetTempFileNameA';
+function GetTempPath; external kernel32 name 'GetTempPathA';
 function GetTempPathA; external kernel32 name 'GetTempPathA';
 function GetTempPathW; external kernel32 name 'GetTempPathW';
-function GetTempPath; external kernel32 name 'GetTempPathA';
 function GetThreadContext; external kernel32 name 'GetThreadContext';
 function GetThreadLocale; external kernel32 name 'GetThreadLocale';
 function GetThreadPriority; external kernel32 name 'GetThreadPriority';
@@ -28468,37 +28865,37 @@ function GetThreadPriorityBoost; external kernel32 name 'GetThreadPriorityBoost'
 function GetThreadSelectorEntry; external kernel32 name 'GetThreadSelectorEntry';
 function GetThreadTimes; external kernel32 name 'GetThreadTimes';
 function GetTickCount; external kernel32 name 'GetTickCount';
+function GetTimeFormat; external kernel32 name 'GetTimeFormatA';
 function GetTimeFormatA; external kernel32 name 'GetTimeFormatA';
 function GetTimeFormatW; external kernel32 name 'GetTimeFormatW';
-function GetTimeFormat; external kernel32 name 'GetTimeFormatA';
 function GetTimeZoneInformation; external kernel32 name 'GetTimeZoneInformation';
 function GetUserDefaultLCID; external kernel32 name 'GetUserDefaultLCID';
 function GetUserDefaultLangID; external kernel32 name 'GetUserDefaultLangID';
 function GetVersion; external kernel32 name 'GetVersion';
+function GetVersionEx; external kernel32 name 'GetVersionExA';
 function GetVersionExA; external kernel32 name 'GetVersionExA';
 function GetVersionExW; external kernel32 name 'GetVersionExW';
-function GetVersionEx; external kernel32 name 'GetVersionExA';
+function GetVolumeInformation; external kernel32 name 'GetVolumeInformationA';
 function GetVolumeInformationA; external kernel32 name 'GetVolumeInformationA';
 function GetVolumeInformationW; external kernel32 name 'GetVolumeInformationW';
-function GetVolumeInformation; external kernel32 name 'GetVolumeInformationA';
+function GetWindowsDirectory; external kernel32 name 'GetWindowsDirectoryA';
 function GetWindowsDirectoryA; external kernel32 name 'GetWindowsDirectoryA';
 function GetWindowsDirectoryW; external kernel32 name 'GetWindowsDirectoryW';
-function GetWindowsDirectory; external kernel32 name 'GetWindowsDirectoryA';
+function GlobalAddAtom; external kernel32 name 'GlobalAddAtomA';
 function GlobalAddAtomA; external kernel32 name 'GlobalAddAtomA';
 function GlobalAddAtomW; external kernel32 name 'GlobalAddAtomW';
-function GlobalAddAtom; external kernel32 name 'GlobalAddAtomA';
 function GlobalAlloc; external kernel32 name 'GlobalAlloc';
 function GlobalCompact; external kernel32 name 'GlobalCompact';
 function GlobalDeleteAtom; external kernel32 name 'GlobalDeleteAtom';
+function GlobalFindAtom; external kernel32 name 'GlobalFindAtomA';
 function GlobalFindAtomA; external kernel32 name 'GlobalFindAtomA';
 function GlobalFindAtomW; external kernel32 name 'GlobalFindAtomW';
-function GlobalFindAtom; external kernel32 name 'GlobalFindAtomA';
 procedure GlobalFix; external kernel32 name 'GlobalFix';
 function GlobalFlags; external kernel32 name 'GlobalFlags';
 function GlobalFree; external kernel32 name 'GlobalFree';
+function GlobalGetAtomName; external kernel32 name 'GlobalGetAtomNameA';
 function GlobalGetAtomNameA; external kernel32 name 'GlobalGetAtomNameA';
 function GlobalGetAtomNameW; external kernel32 name 'GlobalGetAtomNameW';
-function GlobalGetAtomName; external kernel32 name 'GlobalGetAtomNameA';
 function GlobalLock; external kernel32 name 'GlobalLock';
 function GlobalHandle; external kernel32 name 'GlobalHandle';
 procedure GlobalMemoryStatus; external kernel32 name 'GlobalMemoryStatus';
@@ -28520,33 +28917,49 @@ function HeapUnlock; external kernel32 name 'HeapUnlock';
 function HeapValidate; external kernel32 name 'HeapValidate';
 function HeapWalk; external kernel32 name 'HeapWalk';
 function InitAtomTable; external kernel32 name 'InitAtomTable';
+
 procedure InitializeCriticalSection; external kernel32 name 'InitializeCriticalSection';
+
+
+
+
+
+
 function InitializeCriticalSectionAndSpinCount; external kernel32 name 'InitializeCriticalSectionAndSpinCount';
 function IsBadCodePtr; external kernel32 name 'IsBadCodePtr';
 function IsBadHugeReadPtr; external kernel32 name 'IsBadHugeReadPtr';
 function IsBadHugeWritePtr; external kernel32 name 'IsBadHugeWritePtr';
 function IsBadReadPtr; external kernel32 name 'IsBadReadPtr';
+function IsBadStringPtr; external kernel32 name 'IsBadStringPtrA';
 function IsBadStringPtrA; external kernel32 name 'IsBadStringPtrA';
 function IsBadStringPtrW; external kernel32 name 'IsBadStringPtrW';
-function IsBadStringPtr; external kernel32 name 'IsBadStringPtrA';
 function IsBadWritePtr; external kernel32 name 'IsBadWritePtr';
 function IsDBCSLeadByte; external kernel32 name 'IsDBCSLeadByte';
 function IsDBCSLeadByteEx; external kernel32 name 'IsDBCSLeadByteEx';
 function IsProcessorFeaturePresent; external kernel32 name 'IsProcessorFeaturePresent';
 function IsValidCodePage; external kernel32 name 'IsValidCodePage';
 function IsValidLocale; external kernel32 name 'IsValidLocale';
+function LCMapString; external kernel32 name 'LCMapStringA';
 function LCMapStringA; external kernel32 name 'LCMapStringA';
 function LCMapStringW; external kernel32 name 'LCMapStringW';
-function LCMapString; external kernel32 name 'LCMapStringA';
+
 procedure LeaveCriticalSection; external kernel32 name 'LeaveCriticalSection';
+
+
+
+
+
+
+function LoadLibrary; external kernel32 name 'LoadLibraryA';
 function LoadLibraryA; external kernel32 name 'LoadLibraryA';
 function LoadLibraryW; external kernel32 name 'LoadLibraryW';
-function LoadLibrary; external kernel32 name 'LoadLibraryA';
+function LoadLibraryEx; external kernel32 name 'LoadLibraryExA';
 function LoadLibraryExA; external kernel32 name 'LoadLibraryExA';
 function LoadLibraryExW; external kernel32 name 'LoadLibraryExW';
-function LoadLibraryEx; external kernel32 name 'LoadLibraryExA';
 function LoadModule; external kernel32 name 'LoadModule';
+{$IFDEF MSWINDOWS}
 function LoadResource; external kernel32 name 'LoadResource';
+{$ENDIF}
 function LocalAlloc; external kernel32 name 'LocalAlloc';
 function LocalCompact; external kernel32 name 'LocalCompact';
 function LocalFileTimeToFileTime; external kernel32 name 'LocalFileTimeToFileTime';
@@ -28559,74 +28972,76 @@ function LocalSize; external kernel32 name 'LocalSize';
 function LocalUnlock; external kernel32 name 'LocalUnlock';
 function LockFile; external kernel32 name 'LockFile';
 function LockFileEx; external kernel32 name 'LockFileEx';
+{$IFDEF MSWINDOWS}
 function LockResource; external kernel32 name 'LockResource';
+{$ENDIF}
 function MapViewOfFile; external kernel32 name 'MapViewOfFile';
 function MapViewOfFileEx; external kernel32 name 'MapViewOfFileEx';
+function MoveFile; external kernel32 name 'MoveFileA';
 function MoveFileA; external kernel32 name 'MoveFileA';
 function MoveFileW; external kernel32 name 'MoveFileW';
-function MoveFile; external kernel32 name 'MoveFileA';
+function MoveFileEx; external kernel32 name 'MoveFileExA';
 function MoveFileExA; external kernel32 name 'MoveFileExA';
 function MoveFileExW; external kernel32 name 'MoveFileExW';
-function MoveFileEx; external kernel32 name 'MoveFileExA';
+function MoveFileWithProgress; external kernel32 name 'MoveFileWithProgressA';
 function MoveFileWithProgressA; external kernel32 name 'MoveFileWithProgressA';
 function MoveFileWithProgressW; external kernel32 name 'MoveFileWithProgressW';
-function MoveFileWithProgress; external kernel32 name 'MoveFileWithProgressA';
 function MulDiv; external kernel32 name 'MulDiv';
 function MultiByteToWideChar; external kernel32 name 'MultiByteToWideChar';
+function OpenEvent; external kernel32 name 'OpenEventA';
 function OpenEventA; external kernel32 name 'OpenEventA';
 function OpenEventW; external kernel32 name 'OpenEventW';
-function OpenEvent; external kernel32 name 'OpenEventA';
 function OpenFile; external kernel32 name 'OpenFile';
+function OpenFileMapping; external kernel32 name 'OpenFileMappingA';
 function OpenFileMappingA; external kernel32 name 'OpenFileMappingA';
 function OpenFileMappingW; external kernel32 name 'OpenFileMappingW';
-function OpenFileMapping; external kernel32 name 'OpenFileMappingA';
+function OpenMutex; external kernel32 name 'OpenMutexA';
 function OpenMutexA; external kernel32 name 'OpenMutexA';
 function OpenMutexW; external kernel32 name 'OpenMutexW';
-function OpenMutex; external kernel32 name 'OpenMutexA';
 function OpenProcess; external kernel32 name 'OpenProcess';
+function OpenRaw; external kernel32 name 'OpenRaw';
 function OpenRawA; external kernel32 name 'OpenRawA';
 function OpenRawW; external kernel32 name 'OpenRawW';
-function OpenRaw; external kernel32 name 'OpenRaw';
+function OpenSemaphore; external kernel32 name 'OpenSemaphoreA';
+function OpenWaitableTimer; external kernel32 name 'OpenWaitableTimerA';
 function OpenSemaphoreA; external kernel32 name 'OpenSemaphoreA';
 function OpenWaitableTimerA; external kernel32 name 'OpenWaitableTimerA';
 function OpenSemaphoreW; external kernel32 name 'OpenSemaphoreW';
 function OpenWaitableTimerW; external kernel32 name 'OpenWaitableTimerW';
-function OpenSemaphore; external kernel32 name 'OpenSemaphoreA';
-function OpenWaitableTimer; external kernel32 name 'OpenWaitableTimerA';
+procedure OutputDebugString; external kernel32 name 'OutputDebugStringA';
 procedure OutputDebugStringA; external kernel32 name 'OutputDebugStringA';
 procedure OutputDebugStringW; external kernel32 name 'OutputDebugStringW';
-procedure OutputDebugString; external kernel32 name 'OutputDebugStringA';
+function PeekConsoleInput; external kernel32 name 'PeekConsoleInputA';
 function PeekConsoleInputA; external kernel32 name 'PeekConsoleInputA';
 function PeekConsoleInputW; external kernel32 name 'PeekConsoleInputW';
-function PeekConsoleInput; external kernel32 name 'PeekConsoleInputA';
 function PeekNamedPipe; external kernel32 name 'PeekNamedPipe';
 function PostQueuedCompletionStatus; external kernel32 name 'PostQueuedCompletionStatus';
 function PrepareTape; external kernel32 name 'PrepareTape';
 function PulseEvent; external kernel32 name 'PulseEvent';
 function PurgeComm; external kernel32 name 'PurgeComm';
+function QueryDosDevice; external kernel32 name 'QueryDosDeviceA';
 function QueryDosDeviceA; external kernel32 name 'QueryDosDeviceA';
 function QueryDosDeviceW; external kernel32 name 'QueryDosDeviceW';
-function QueryDosDevice; external kernel32 name 'QueryDosDeviceA';
 function QueryPerformanceCounter; external kernel32 name 'QueryPerformanceCounter';
 function QueryPerformanceFrequency; external kernel32 name 'QueryPerformanceFrequency';
+function QueryRecoveryAgents; external kernel32 name 'QueryRecoveryAgentsA';
 function QueryRecoveryAgentsA; external kernel32 name 'QueryRecoveryAgentsA';
 function QueryRecoveryAgentsW; external kernel32 name 'QueryRecoveryAgentsW';
-function QueryRecoveryAgents; external kernel32 name 'QueryRecoveryAgentsA';
 function QueueUserAPC; external kernel32 name 'QueueUserAPC';
 procedure RaiseException; external kernel32 name 'RaiseException';
+function ReadConsole; external kernel32 name 'ReadConsoleA';
 function ReadConsoleA; external kernel32 name 'ReadConsoleA';
 function ReadConsoleW; external kernel32 name 'ReadConsoleW';
-function ReadConsole; external kernel32 name 'ReadConsoleA';
+function ReadConsoleInput; external kernel32 name 'ReadConsoleInputA';
 function ReadConsoleInputA; external kernel32 name 'ReadConsoleInputA';
 function ReadConsoleInputW; external kernel32 name 'ReadConsoleInputW';
-function ReadConsoleInput; external kernel32 name 'ReadConsoleInputA';
+function ReadConsoleOutput; external kernel32 name 'ReadConsoleOutputA';
 function ReadConsoleOutputA; external kernel32 name 'ReadConsoleOutputA';
 function ReadConsoleOutputW; external kernel32 name 'ReadConsoleOutputW';
-function ReadConsoleOutput; external kernel32 name 'ReadConsoleOutputA';
 function ReadConsoleOutputAttribute; external kernel32 name 'ReadConsoleOutputAttribute';
+function ReadConsoleOutputCharacter; external kernel32 name 'ReadConsoleOutputCharacterA';
 function ReadConsoleOutputCharacterA; external kernel32 name 'ReadConsoleOutputCharacterA';
 function ReadConsoleOutputCharacterW; external kernel32 name 'ReadConsoleOutputCharacterW';
-function ReadConsoleOutputCharacter; external kernel32 name 'ReadConsoleOutputCharacterA';
 function ReadDirectoryChanges; external kernel32 name 'ReadDirectoryChangesW';
 function ReadDirectoryChangesW; external kernel32 name 'ReadDirectoryChangesW';
 function ReadFile; external kernel32 name 'ReadFile';
@@ -28635,25 +29050,25 @@ function ReadProcessMemory; external kernel32 name 'ReadProcessMemory';
 function ReadRaw; external kernel32 name 'ReadRaw';
 function ReleaseMutex; external kernel32 name 'ReleaseMutex';
 function ReleaseSemaphore; external kernel32 name 'ReleaseSemaphore';
+function RemoveDirectory; external kernel32 name 'RemoveDirectoryA';
 function RemoveDirectoryA; external kernel32 name 'RemoveDirectoryA';
 function RemoveDirectoryW; external kernel32 name 'RemoveDirectoryW';
-function RemoveDirectory; external kernel32 name 'RemoveDirectoryA';
 function ResetEvent; external kernel32 name 'ResetEvent';
 function ResumeThread; external kernel32 name 'ResumeThread';
+function ScrollConsoleScreenBuffer; external kernel32 name 'ScrollConsoleScreenBufferA';
 function ScrollConsoleScreenBufferA; external kernel32 name 'ScrollConsoleScreenBufferA';
 function ScrollConsoleScreenBufferW; external kernel32 name 'ScrollConsoleScreenBufferW';
-function ScrollConsoleScreenBuffer; external kernel32 name 'ScrollConsoleScreenBufferA';
+function SearchPath; external kernel32 name 'SearchPathA';
 function SearchPathA; external kernel32 name 'SearchPathA';
 function SearchPathW; external kernel32 name 'SearchPathW';
-function SearchPath; external kernel32 name 'SearchPathA';
 function SetCommBreak; external kernel32 name 'SetCommBreak';
 function SetCommConfig; external kernel32 name 'SetCommConfig';
 function SetCommMask; external kernel32 name 'SetCommMask';
 function SetCommState; external kernel32 name 'SetCommState';
 function SetCommTimeouts; external kernel32 name 'SetCommTimeouts';
+function SetComputerName; external kernel32 name 'SetComputerNameA';
 function SetComputerNameA; external kernel32 name 'SetComputerNameA';
 function SetComputerNameW; external kernel32 name 'SetComputerNameW';
-function SetComputerName; external kernel32 name 'SetComputerNameA';
 function SetConsoleActiveScreenBuffer; external kernel32 name 'SetConsoleActiveScreenBuffer';
 function SetConsoleCP; external kernel32 name 'SetConsoleCP';
 function SetConsoleCtrlHandler; external kernel32 name 'SetConsoleCtrlHandler';
@@ -28663,37 +29078,37 @@ function SetConsoleMode; external kernel32 name 'SetConsoleMode';
 function SetConsoleOutputCP; external kernel32 name 'SetConsoleOutputCP';
 function SetConsoleScreenBufferSize; external kernel32 name 'SetConsoleScreenBufferSize';
 function SetConsoleTextAttribute; external kernel32 name 'SetConsoleTextAttribute';
+function SetConsoleTitle; external kernel32 name 'SetConsoleTitleA';
 function SetConsoleTitleA; external kernel32 name 'SetConsoleTitleA';
 function SetConsoleTitleW; external kernel32 name 'SetConsoleTitleW';
-function SetConsoleTitle; external kernel32 name 'SetConsoleTitleA';
 function SetConsoleWindowInfo; external kernel32 name 'SetConsoleWindowInfo';
 function SetCriticalSectionSpinCount; external kernel32 name 'SetCriticalSectionSpinCount';
+function SetCurrentDirectory; external kernel32 name 'SetCurrentDirectoryA';
 function SetCurrentDirectoryA; external kernel32 name 'SetCurrentDirectoryA';
 function SetCurrentDirectoryW; external kernel32 name 'SetCurrentDirectoryW';
-function SetCurrentDirectory; external kernel32 name 'SetCurrentDirectoryA';
+function SetDefaultCommConfig; external kernel32 name 'SetDefaultCommConfigA';
 function SetDefaultCommConfigA; external kernel32 name 'SetDefaultCommConfigA';
 function SetDefaultCommConfigW; external kernel32 name 'SetDefaultCommConfigW';
-function SetDefaultCommConfig; external kernel32 name 'SetDefaultCommConfigA';
 function SetEndOfFile; external kernel32 name 'SetEndOfFile';
+function SetEnvironmentVariable; external kernel32 name 'SetEnvironmentVariableA';
 function SetEnvironmentVariableA; external kernel32 name 'SetEnvironmentVariableA';
 function SetEnvironmentVariableW; external kernel32 name 'SetEnvironmentVariableW';
-function SetEnvironmentVariable; external kernel32 name 'SetEnvironmentVariableA';
 function SetErrorMode; external kernel32 name 'SetErrorMode';
 function SetEvent; external kernel32 name 'SetEvent';
 procedure SetFileApisToANSI; external kernel32 name 'SetFileApisToANSI';
 procedure SetFileApisToOEM; external kernel32 name 'SetFileApisToOEM';
+function SetFileAttributes; external kernel32 name 'SetFileAttributesA';
 function SetFileAttributesA; external kernel32 name 'SetFileAttributesA';
 function SetFileAttributesW; external kernel32 name 'SetFileAttributesW';
-function SetFileAttributes; external kernel32 name 'SetFileAttributesA';
 function SetFilePointer; external kernel32 name 'SetFilePointer';
 function SetFileTime; external kernel32 name 'SetFileTime';
 function SetHandleCount; external kernel32 name 'SetHandleCount';
 function SetHandleInformation; external kernel32 name 'SetHandleInformation';
 procedure SetLastError; external kernel32 name 'SetLastError';
 function SetLocalTime; external kernel32 name 'SetLocalTime';
+function SetLocaleInfo; external kernel32 name 'SetLocaleInfoA';
 function SetLocaleInfoA; external kernel32 name 'SetLocaleInfoA';
 function SetLocaleInfoW; external kernel32 name 'SetLocaleInfoW';
-function SetLocaleInfo; external kernel32 name 'SetLocaleInfoA';
 function SetMailslotInfo; external kernel32 name 'SetMailslotInfo';
 function SetNamedPipeHandleState; external kernel32 name 'SetNamedPipeHandleState';
 function SetPriorityClass; external kernel32 name 'SetPriorityClass';
@@ -28715,13 +29130,15 @@ function SetThreadPriority; external kernel32 name 'SetThreadPriority';
 function SetThreadPriorityBoost; external kernel32 name 'SetThreadPriorityBoost';
 function SetTimeZoneInformation; external kernel32 name 'SetTimeZoneInformation';
 function SetUnhandledExceptionFilter; external kernel32 name 'SetUnhandledExceptionFilter';
+function SetVolumeLabel; external kernel32 name 'SetVolumeLabelA';
 function SetVolumeLabelA; external kernel32 name 'SetVolumeLabelA';
 function SetVolumeLabelW; external kernel32 name 'SetVolumeLabelW';
-function SetVolumeLabel; external kernel32 name 'SetVolumeLabelA';
 function SetWaitableTimer; external kernel32 name 'SetWaitableTimer';
 function SetupComm; external kernel32 name 'SetupComm';
 function SignalObjectAndWait; external kernel32 name 'SignalObjectAndWait';
+{$IFDEF MSWINDOWS}
 function SizeofResource; external kernel32 name 'SizeofResource';
+{$ENDIF}
 procedure Sleep; external kernel32 name 'Sleep';
 function SleepEx; external kernel32 name 'SleepEx';
 function SuspendThread; external kernel32 name 'SuspendThread';
@@ -28737,17 +29154,24 @@ function TlsGetValue; external kernel32 name 'TlsGetValue';
 function TlsSetValue; external kernel32 name 'TlsSetValue';
 function TransactNamedPipe; external kernel32 name 'TransactNamedPipe';
 function TransmitCommChar; external kernel32 name 'TransmitCommChar';
+
 function TryEnterCriticalSection; external kernel32 name 'TryEnterCriticalSection';
+
+
+
+
+
+
 function UnhandledExceptionFilter; external kernel32 name 'UnhandledExceptionFilter';
 function UnlockFile; external kernel32 name 'UnlockFile';
 function UnlockFileEx; external kernel32 name 'UnlockFileEx';
 function UnmapViewOfFile; external kernel32 name 'UnmapViewOfFile';
+function UpdateResource; external kernel32 name 'UpdateResourceA';
 function UpdateResourceA; external kernel32 name 'UpdateResourceA';
 function UpdateResourceW; external kernel32 name 'UpdateResourceW';
-function UpdateResource; external kernel32 name 'UpdateResourceA';
+function VerLanguageName; external kernel32 name 'VerLanguageNameA';
 function VerLanguageNameA; external kernel32 name 'VerLanguageNameA';
 function VerLanguageNameW; external kernel32 name 'VerLanguageNameW';
-function VerLanguageName; external kernel32 name 'VerLanguageNameA';
 function VirtualAlloc; external kernel32 name 'VirtualAlloc';
 function VirtualAllocEx; external kernel32 name 'VirtualAllocEx';
 function VirtualFree; external kernel32 name 'VirtualFree';
@@ -28772,39 +29196,39 @@ function WaitForMultipleObjects; external kernel32 name 'WaitForMultipleObjects'
 function WaitForMultipleObjectsEx; external kernel32 name 'WaitForMultipleObjectsEx';
 function WaitForSingleObject; external kernel32 name 'WaitForSingleObject';
 function WaitForSingleObjectEx; external kernel32 name 'WaitForSingleObjectEx';
+function WaitNamedPipe; external kernel32 name 'WaitNamedPipeA';
 function WaitNamedPipeA; external kernel32 name 'WaitNamedPipeA';
 function WaitNamedPipeW; external kernel32 name 'WaitNamedPipeW';
-function WaitNamedPipe; external kernel32 name 'WaitNamedPipeA';
 function WideCharToMultiByte; external kernel32 name 'WideCharToMultiByte';
 function WinExec; external kernel32 name 'WinExec';
+function WriteConsole; external kernel32 name 'WriteConsoleA';
 function WriteConsoleA; external kernel32 name 'WriteConsoleA';
 function WriteConsoleW; external kernel32 name 'WriteConsoleW';
-function WriteConsole; external kernel32 name 'WriteConsoleA';
+function WriteConsoleInput; external kernel32 name 'WriteConsoleInputA';
 function WriteConsoleInputA; external kernel32 name 'WriteConsoleInputA';
 function WriteConsoleInputW; external kernel32 name 'WriteConsoleInputW';
-function WriteConsoleInput; external kernel32 name 'WriteConsoleInputA';
+function WriteConsoleOutput; external kernel32 name 'WriteConsoleOutputA';
 function WriteConsoleOutputA; external kernel32 name 'WriteConsoleOutputA';
 function WriteConsoleOutputW; external kernel32 name 'WriteConsoleOutputW';
-function WriteConsoleOutput; external kernel32 name 'WriteConsoleOutputA';
 function WriteConsoleOutputAttribute; external kernel32 name 'WriteConsoleOutputAttribute';
+function WriteConsoleOutputCharacter; external kernel32 name 'WriteConsoleOutputCharacterA';
 function WriteConsoleOutputCharacterA; external kernel32 name 'WriteConsoleOutputCharacterA';
 function WriteConsoleOutputCharacterW; external kernel32 name 'WriteConsoleOutputCharacterW';
-function WriteConsoleOutputCharacter; external kernel32 name 'WriteConsoleOutputCharacterA';
 function WriteFile; external kernel32 name 'WriteFile';
 function WriteFileEx; external kernel32 name 'WriteFileEx';
+function WritePrivateProfileSection; external kernel32 name 'WritePrivateProfileSectionA';
 function WritePrivateProfileSectionA; external kernel32 name 'WritePrivateProfileSectionA';
 function WritePrivateProfileSectionW; external kernel32 name 'WritePrivateProfileSectionW';
-function WritePrivateProfileSection; external kernel32 name 'WritePrivateProfileSectionA';
+function WritePrivateProfileString; external kernel32 name 'WritePrivateProfileStringA';
 function WritePrivateProfileStringA; external kernel32 name 'WritePrivateProfileStringA';
 function WritePrivateProfileStringW; external kernel32 name 'WritePrivateProfileStringW';
-function WritePrivateProfileString; external kernel32 name 'WritePrivateProfileStringA';
 function WriteProcessMemory; external kernel32 name 'WriteProcessMemory';
+function WriteProfileSection; external kernel32 name 'WriteProfileSectionA';
 function WriteProfileSectionA; external kernel32 name 'WriteProfileSectionA';
 function WriteProfileSectionW; external kernel32 name 'WriteProfileSectionW';
-function WriteProfileSection; external kernel32 name 'WriteProfileSectionA';
+function WriteProfileString; external kernel32 name 'WriteProfileStringA';
 function WriteProfileStringA; external kernel32 name 'WriteProfileStringA';
 function WriteProfileStringW; external kernel32 name 'WriteProfileStringW';
-function WriteProfileString; external kernel32 name 'WriteProfileStringA';
 function WriteRaw; external kernel32 name 'WriteRaw';
 function WriteTapemark; external kernel32 name 'WriteTapemark';
 function _hread; external kernel32 name '_hread';
@@ -28815,125 +29239,125 @@ function _llseek; external kernel32 name '_llseek';
 function _lopen; external kernel32 name '_lopen';
 function _lread; external kernel32 name '_lread';
 function _lwrite; external kernel32 name '_lwrite';
+function lstrcat; external kernel32 name 'lstrcatA';
 function lstrcatA; external kernel32 name 'lstrcatA';
 function lstrcatW; external kernel32 name 'lstrcatW';
-function lstrcat; external kernel32 name 'lstrcatA';
+function lstrcmp; external kernel32 name 'lstrcmpA';
 function lstrcmpA; external kernel32 name 'lstrcmpA';
 function lstrcmpW; external kernel32 name 'lstrcmpW';
-function lstrcmp; external kernel32 name 'lstrcmpA';
+function lstrcmpi; external kernel32 name 'lstrcmpiA';
 function lstrcmpiA; external kernel32 name 'lstrcmpiA';
 function lstrcmpiW; external kernel32 name 'lstrcmpiW';
-function lstrcmpi; external kernel32 name 'lstrcmpiA';
+function lstrcpy; external kernel32 name 'lstrcpyA';
 function lstrcpyA; external kernel32 name 'lstrcpyA';
 function lstrcpyW; external kernel32 name 'lstrcpyW';
-function lstrcpy; external kernel32 name 'lstrcpyA';
+function lstrcpyn; external kernel32 name 'lstrcpynA';
 function lstrcpynA; external kernel32 name 'lstrcpynA';
 function lstrcpynW; external kernel32 name 'lstrcpynW';
-function lstrcpyn; external kernel32 name 'lstrcpynA';
+function lstrlen; external kernel32 name 'lstrlenA';
 function lstrlenA; external kernel32 name 'lstrlenA';
 function lstrlenW; external kernel32 name 'lstrlenW';
-function lstrlen; external kernel32 name 'lstrlenA';
 
 
 { Externals from mpr.dll }
 
+function MultinetGetConnectionPerformance; external mpr name 'MultinetGetConnectionPerformanceA';
 function MultinetGetConnectionPerformanceA; external mpr name 'MultinetGetConnectionPerformanceA';
 function MultinetGetConnectionPerformanceW; external mpr name 'MultinetGetConnectionPerformanceW';
-function MultinetGetConnectionPerformance; external mpr name 'MultinetGetConnectionPerformanceA';
+function WNetAddConnection2; external mpr name 'WNetAddConnection2A';
 function WNetAddConnection2A; external mpr name 'WNetAddConnection2A';
 function WNetAddConnection2W; external mpr name 'WNetAddConnection2W';
-function WNetAddConnection2; external mpr name 'WNetAddConnection2A';
+function WNetAddConnection3; external mpr name 'WNetAddConnection3A';
 function WNetAddConnection3A; external mpr name 'WNetAddConnection3A';
 function WNetAddConnection3W; external mpr name 'WNetAddConnection3W';
-function WNetAddConnection3; external mpr name 'WNetAddConnection3A';
+function WNetAddConnection; external mpr name 'WNetAddConnectionA';
 function WNetAddConnectionA; external mpr name 'WNetAddConnectionA';
 function WNetAddConnectionW; external mpr name 'WNetAddConnectionW';
-function WNetAddConnection; external mpr name 'WNetAddConnectionA';
+function WNetCancelConnection2; external mpr name 'WNetCancelConnection2A';
 function WNetCancelConnection2A; external mpr name 'WNetCancelConnection2A';
 function WNetCancelConnection2W; external mpr name 'WNetCancelConnection2W';
-function WNetCancelConnection2; external mpr name 'WNetCancelConnection2A';
+function WNetCancelConnection; external mpr name 'WNetCancelConnectionA';
 function WNetCancelConnectionA; external mpr name 'WNetCancelConnectionA';
 function WNetCancelConnectionW; external mpr name 'WNetCancelConnectionW';
-function WNetCancelConnection; external mpr name 'WNetCancelConnectionA';
 function WNetCloseEnum; external mpr name 'WNetCloseEnum';
+function WNetConnectionDialog1; external mpr name 'WNetConnectionDialog1A';
 function WNetConnectionDialog1A; external mpr name 'WNetConnectionDialog1A';
 function WNetConnectionDialog1W; external mpr name 'WNetConnectionDialog1W';
-function WNetConnectionDialog1; external mpr name 'WNetConnectionDialog1A';
 function WNetConnectionDialog; external mpr name 'WNetConnectionDialog';
+function WNetDisconnectDialog1; external mpr name 'WNetDisconnectDialog1A';
 function WNetDisconnectDialog1A; external mpr name 'WNetDisconnectDialog1A';
 function WNetDisconnectDialog1W; external mpr name 'WNetDisconnectDialog1W';
-function WNetDisconnectDialog1; external mpr name 'WNetDisconnectDialog1A';
 function WNetDisconnectDialog; external mpr name 'WNetDisconnectDialog';
+function WNetEnumResource; external mpr name 'WNetEnumResourceA';
 function WNetEnumResourceA; external mpr name 'WNetEnumResourceA';
 function WNetEnumResourceW; external mpr name 'WNetEnumResourceW';
-function WNetEnumResource; external mpr name 'WNetEnumResourceA';
+function WNetGetConnection; external mpr name 'WNetGetConnectionA';
 function WNetGetConnectionA; external mpr name 'WNetGetConnectionA';
 function WNetGetConnectionW; external mpr name 'WNetGetConnectionW';
-function WNetGetConnection; external mpr name 'WNetGetConnectionA';
+function WNetGetLastError; external mpr name 'WNetGetLastErrorA';
 function WNetGetLastErrorA; external mpr name 'WNetGetLastErrorA';
 function WNetGetLastErrorW; external mpr name 'WNetGetLastErrorW';
-function WNetGetLastError; external mpr name 'WNetGetLastErrorA';
+function WNetGetNetworkInformation; external mpr name 'WNetGetNetworkInformationA';
 function WNetGetNetworkInformationA; external mpr name 'WNetGetNetworkInformationA';
 function WNetGetNetworkInformationW; external mpr name 'WNetGetNetworkInformationW';
-function WNetGetNetworkInformation; external mpr name 'WNetGetNetworkInformationA';
+function WNetGetProviderName; external mpr name 'WNetGetProviderNameA';
 function WNetGetProviderNameA; external mpr name 'WNetGetProviderNameA';
 function WNetGetProviderNameW; external mpr name 'WNetGetProviderNameW';
-function WNetGetProviderName; external mpr name 'WNetGetProviderNameA';
+function WNetGetResourceParent; external mpr name 'WNetGetResourceParentA';
 function WNetGetResourceParentA; external mpr name 'WNetGetResourceParentA';
 function WNetGetResourceParentW; external mpr name 'WNetGetResourceParentW';
-function WNetGetResourceParent; external mpr name 'WNetGetResourceParentA';
+function WNetGetUniversalName; external mpr name 'WNetGetUniversalNameA';
 function WNetGetUniversalNameA; external mpr name 'WNetGetUniversalNameA';
 function WNetGetUniversalNameW; external mpr name 'WNetGetUniversalNameW';
-function WNetGetUniversalName; external mpr name 'WNetGetUniversalNameA';
+function WNetGetUser; external mpr name 'WNetGetUserA';
 function WNetGetUserA; external mpr name 'WNetGetUserA';
 function WNetGetUserW; external mpr name 'WNetGetUserW';
-function WNetGetUser; external mpr name 'WNetGetUserA';
+function WNetOpenEnum; external mpr name 'WNetOpenEnumA';
 function WNetOpenEnumA; external mpr name 'WNetOpenEnumA';
 function WNetOpenEnumW; external mpr name 'WNetOpenEnumW';
-function WNetOpenEnum; external mpr name 'WNetOpenEnumA';
+function WNetSetConnection; external mpr name 'WNetSetConnectionA';
 function WNetSetConnectionA; external mpr name 'WNetSetConnectionA';
 function WNetSetConnectionW; external mpr name 'WNetSetConnectionW';
-function WNetSetConnection; external mpr name 'WNetSetConnectionA';
+function WNetUseConnection; external mpr name 'WNetUseConnectionA';
 function WNetUseConnectionA; external mpr name 'WNetUseConnectionA';
 function WNetUseConnectionW; external mpr name 'WNetUseConnectionW';
-function WNetUseConnection; external mpr name 'WNetUseConnectionA';
 
 
 { Externals from version.dll }
 
+function GetFileVersionInfo; external version name 'GetFileVersionInfoA';
 function GetFileVersionInfoA; external version name 'GetFileVersionInfoA';
 function GetFileVersionInfoW; external version name 'GetFileVersionInfoW';
-function GetFileVersionInfo; external version name 'GetFileVersionInfoA';
+function GetFileVersionInfoSize; external version name 'GetFileVersionInfoSizeA';
 function GetFileVersionInfoSizeA; external version name 'GetFileVersionInfoSizeA';
 function GetFileVersionInfoSizeW; external version name 'GetFileVersionInfoSizeW';
-function GetFileVersionInfoSize; external version name 'GetFileVersionInfoSizeA';
+function VerFindFile; external version name 'VerFindFileA';
 function VerFindFileA; external version name 'VerFindFileA';
 function VerFindFileW; external version name 'VerFindFileW';
-function VerFindFile; external version name 'VerFindFileA';
+function VerInstallFile; external version name 'VerInstallFileA';
 function VerInstallFileA; external version name 'VerInstallFileA';
 function VerInstallFileW; external version name 'VerInstallFileW';
-function VerInstallFile; external version name 'VerInstallFileA';
+function VerQueryValue; external version name 'VerQueryValueA';
 function VerQueryValueA; external version name 'VerQueryValueA';
 function VerQueryValueW; external version name 'VerQueryValueW';
-function VerQueryValue; external version name 'VerQueryValueA';
+function GetPrivateProfileStruct; external kernel32 name 'GetPrivateProfileStructA';
 function GetPrivateProfileStructA; external kernel32 name 'GetPrivateProfileStructA';
 function GetPrivateProfileStructW; external kernel32 name 'GetPrivateProfileStructW';
-function GetPrivateProfileStruct; external kernel32 name 'GetPrivateProfileStructA';
+function WritePrivateProfileStruct; external kernel32 name 'WritePrivateProfileStructA';
 function WritePrivateProfileStructA; external kernel32 name 'WritePrivateProfileStructA';
 function WritePrivateProfileStructW; external kernel32 name 'WritePrivateProfileStructW';
-function WritePrivateProfileStruct; external kernel32 name 'WritePrivateProfileStructA';
 
 { Externals from gdi32.dll }
 
 function AbortDoc; external gdi32 name 'AbortDoc';
 function AbortPath; external gdi32 name 'AbortPath';
 function AddFontMemResourceEx; external gdi32 name 'AddFontMemResourceEx';
+function AddFontResource; external gdi32 name 'AddFontResourceA';
 function AddFontResourceA; external gdi32 name 'AddFontResourceA';
 function AddFontResourceW; external gdi32 name 'AddFontResourceW';
-function AddFontResource; external gdi32 name 'AddFontResourceA';
+function AddFontResourceEx; external gdi32 name 'AddFontResourceExA';
 function AddFontResourceExA; external gdi32 name 'AddFontResourceExA';
 function AddFontResourceExW; external gdi32 name 'AddFontResourceExW';
-function AddFontResourceEx; external gdi32 name 'AddFontResourceExA';
 function AlphaBlend; external msimg32 name 'AlphaBlend';
 function AlphaDIBBlend; external msimg32 name 'AlphaDIBBlend';
 function AngleArc; external gdi32 name 'AngleArc';
@@ -28953,23 +29377,23 @@ function ColorCorrectPalette; external gdi32 name 'ColorCorrectPalette';
 function ColorMatchToTarget; external gdi32 name 'ColorMatchToTarget';
 function CombineRgn; external gdi32 name 'CombineRgn';
 function CombineTransform; external gdi32 name 'CombineTransform';
+function CopyEnhMetaFile; external gdi32 name 'CopyEnhMetaFileA';
 function CopyEnhMetaFileA; external gdi32 name 'CopyEnhMetaFileA';
 function CopyEnhMetaFileW; external gdi32 name 'CopyEnhMetaFileW';
-function CopyEnhMetaFile; external gdi32 name 'CopyEnhMetaFileA';
+function CopyMetaFile; external gdi32 name 'CopyMetaFileA';
 function CopyMetaFileA; external gdi32 name 'CopyMetaFileA';
 function CopyMetaFileW; external gdi32 name 'CopyMetaFileW';
-function CopyMetaFile; external gdi32 name 'CopyMetaFileA';
 function CreateBitmap; external gdi32 name 'CreateBitmap';
 function CreateBitmapIndirect; external gdi32 name 'CreateBitmapIndirect';
 function CreateBrushIndirect; external gdi32 name 'CreateBrushIndirect';
+function CreateColorSpace; external gdi32 name 'CreateColorSpaceA';
 function CreateColorSpaceA; external gdi32 name 'CreateColorSpaceA';
 function CreateColorSpaceW; external gdi32 name 'CreateColorSpaceW';
-function CreateColorSpace; external gdi32 name 'CreateColorSpaceA';
 function CreateCompatibleBitmap; external gdi32 name 'CreateCompatibleBitmap';
 function CreateCompatibleDC; external gdi32 name 'CreateCompatibleDC';
+function CreateDC; external gdi32 name 'CreateDCA';
 function CreateDCA; external gdi32 name 'CreateDCA';
 function CreateDCW; external gdi32 name 'CreateDCW';
-function CreateDC; external gdi32 name 'CreateDCA';
 function CreateDIBPatternBrush; external gdi32 name 'CreateDIBPatternBrush';
 function CreateDIBPatternBrushPt; external gdi32 name 'CreateDIBPatternBrushPt';
 function CreateDIBSection; external gdi32 name 'CreateDIBSection';
@@ -28977,26 +29401,26 @@ function CreateDIBitmap; external gdi32 name 'CreateDIBitmap';
 function CreateDiscardableBitmap; external gdi32 name 'CreateDiscardableBitmap';
 function CreateEllipticRgn; external gdi32 name 'CreateEllipticRgn';
 function CreateEllipticRgnIndirect; external gdi32 name 'CreateEllipticRgnIndirect';
+function CreateEnhMetaFile; external gdi32 name 'CreateEnhMetaFileA';
 function CreateEnhMetaFileA; external gdi32 name 'CreateEnhMetaFileA';
 function CreateEnhMetaFileW; external gdi32 name 'CreateEnhMetaFileW';
-function CreateEnhMetaFile; external gdi32 name 'CreateEnhMetaFileA';
+function CreateFont; external gdi32 name 'CreateFontA';
 function CreateFontA; external gdi32 name 'CreateFontA';
 function CreateFontW; external gdi32 name 'CreateFontW';
-function CreateFont; external gdi32 name 'CreateFontA';
+function CreateFontIndirect; external gdi32 name 'CreateFontIndirectA';
 function CreateFontIndirectA; external gdi32 name 'CreateFontIndirectA';
 function CreateFontIndirectW; external gdi32 name 'CreateFontIndirectW';
-function CreateFontIndirect; external gdi32 name 'CreateFontIndirectA';
+function CreateFontIndirectEx; external gdi32 name 'CreateFontIndirectExA';
 function CreateFontIndirectExA; external gdi32 name 'CreateFontIndirectExA';
 function CreateFontIndirectExW; external gdi32 name 'CreateFontIndirectExW';
-function CreateFontIndirectEx; external gdi32 name 'CreateFontIndirectExA';
 function CreateHalftonePalette; external gdi32 name 'CreateHalftonePalette';
 function CreateHatchBrush; external gdi32 name 'CreateHatchBrush';
+function CreateIC; external gdi32 name 'CreateICA';
 function CreateICA; external gdi32 name 'CreateICA';
 function CreateICW; external gdi32 name 'CreateICW';
-function CreateIC; external gdi32 name 'CreateICA';
+function CreateMetaFile; external gdi32 name 'CreateMetaFileA';
 function CreateMetaFileA; external gdi32 name 'CreateMetaFileA';
 function CreateMetaFileW; external gdi32 name 'CreateMetaFileW';
-function CreateMetaFile; external gdi32 name 'CreateMetaFileA';
 function CreatePalette; external gdi32 name 'CreatePalette';
 function CreatePatternBrush; external gdi32 name 'CreatePatternBrush';
 function CreatePen; external gdi32 name 'CreatePen';
@@ -29006,9 +29430,9 @@ function CreatePolygonRgn; external gdi32 name 'CreatePolygonRgn';
 function CreateRectRgn; external gdi32 name 'CreateRectRgn';
 function CreateRectRgnIndirect; external gdi32 name 'CreateRectRgnIndirect';
 function CreateRoundRectRgn; external gdi32 name 'CreateRoundRectRgn';
+function CreateScalableFontResource; external gdi32 name 'CreateScalableFontResourceA';
 function CreateScalableFontResourceA; external gdi32 name 'CreateScalableFontResourceA';
 function CreateScalableFontResourceW; external gdi32 name 'CreateScalableFontResourceW';
-function CreateScalableFontResource; external gdi32 name 'CreateScalableFontResourceA';
 function CreateSolidBrush; external gdi32 name 'CreateSolidBrush';
 function DPtoLP; external gdi32 name 'DPtoLP';
 function DeleteColorSpace; external gdi32 name 'DeleteColorSpace';
@@ -29017,9 +29441,9 @@ function DeleteEnhMetaFile; external gdi32 name 'DeleteEnhMetaFile';
 function DeleteMetaFile; external gdi32 name 'DeleteMetaFile';
 function DeleteObject; external gdi32 name 'DeleteObject';
 function DescribePixelFormat; external gdi32 name 'DescribePixelFormat';
+function DeviceCapabilities; external gdi32 name 'DeviceCapabilitiesA';
 function DeviceCapabilitiesA; external gdi32 name 'DeviceCapabilitiesA';
 function DeviceCapabilitiesW; external gdi32 name 'DeviceCapabilitiesW';
-function DeviceCapabilities; external gdi32 name 'DeviceCapabilitiesA';
 {function DeviceCapabilitiesEx; external gdi32 name 'DeviceCapabilities';}
 function DrawEscape; external gdi32 name 'DrawEscape';
 function Ellipse; external gdi32 name 'Ellipse';
@@ -29027,18 +29451,18 @@ function EndDoc; external gdi32 name 'EndDoc';
 function EndPage; external gdi32 name 'EndPage';
 function EndPath; external gdi32 name 'EndPath';
 function EnumEnhMetaFile; external gdi32 name 'EnumEnhMetaFile';
+function EnumFontFamilies; external gdi32 name 'EnumFontFamiliesA';
 function EnumFontFamiliesA; external gdi32 name 'EnumFontFamiliesA';
 function EnumFontFamiliesW; external gdi32 name 'EnumFontFamiliesW';
-function EnumFontFamilies; external gdi32 name 'EnumFontFamiliesA';
+function EnumFontFamiliesEx; external gdi32 name 'EnumFontFamiliesExA';
 function EnumFontFamiliesExA; external gdi32 name 'EnumFontFamiliesExA';
 function EnumFontFamiliesExW; external gdi32 name 'EnumFontFamiliesExW';
-function EnumFontFamiliesEx; external gdi32 name 'EnumFontFamiliesExA';
+function EnumFonts; external gdi32 name 'EnumFontsA';
 function EnumFontsA; external gdi32 name 'EnumFontsA';
 function EnumFontsW; external gdi32 name 'EnumFontsW';
-function EnumFonts; external gdi32 name 'EnumFontsA';
+function EnumICMProfiles; external gdi32 name 'EnumICMProfilesA';
 function EnumICMProfilesA; external gdi32 name 'EnumICMProfilesA';
 function EnumICMProfilesW; external gdi32 name 'EnumICMProfilesW';
-function EnumICMProfiles; external gdi32 name 'EnumICMProfilesA';
 function EnumMetaFile; external gdi32 name 'EnumMetaFile';
 function EnumObjects; external gdi32 name 'EnumObjects';
 function EqualRgn; external gdi32 name 'EqualRgn';
@@ -29049,9 +29473,9 @@ function ExtCreateRegion; external gdi32 name 'ExtCreateRegion';
 function ExtEscape; external gdi32 name 'ExtEscape';
 function ExtFloodFill; external gdi32 name 'ExtFloodFill';
 function ExtSelectClipRgn; external gdi32 name 'ExtSelectClipRgn';
+function ExtTextOut; external gdi32 name 'ExtTextOutA';
 function ExtTextOutA; external gdi32 name 'ExtTextOutA';
 function ExtTextOutW; external gdi32 name 'ExtTextOutW';
-function ExtTextOut; external gdi32 name 'ExtTextOutA';
 function FillPath; external gdi32 name 'FillPath';
 function FillRgn; external gdi32 name 'FillRgn';
 function FlattenPath; external gdi32 name 'FlattenPath';
@@ -29069,26 +29493,26 @@ function GetBkColor; external gdi32 name 'GetBkColor';
 function GetBkMode; external gdi32 name 'GetBkMode';
 function GetBoundsRect; external gdi32 name 'GetBoundsRect';
 function GetBrushOrgEx; external gdi32 name 'GetBrushOrgEx';
+function GetCharABCWidths; external gdi32 name 'GetCharABCWidthsA';
 function GetCharABCWidthsA; external gdi32 name 'GetCharABCWidthsA';
 function GetCharABCWidthsW; external gdi32 name 'GetCharABCWidthsW';
-function GetCharABCWidths; external gdi32 name 'GetCharABCWidthsA';
 function GetCharABCWidthsI; external gdi32 name 'GetCharABCWidthsI';
+function GetCharABCWidthsFloat; external gdi32 name 'GetCharABCWidthsFloatA';
 function GetCharABCWidthsFloatA; external gdi32 name 'GetCharABCWidthsFloatA';
 function GetCharABCWidthsFloatW; external gdi32 name 'GetCharABCWidthsFloatW';
-function GetCharABCWidthsFloat; external gdi32 name 'GetCharABCWidthsFloatA';
+function GetCharWidth32; external gdi32 name 'GetCharWidth32A';
 function GetCharWidth32A; external gdi32 name 'GetCharWidth32A';
 function GetCharWidth32W; external gdi32 name 'GetCharWidth32W';
-function GetCharWidth32; external gdi32 name 'GetCharWidth32A';
+function GetCharWidth; external gdi32 name 'GetCharWidthA';
 function GetCharWidthA; external gdi32 name 'GetCharWidthA';
 function GetCharWidthW; external gdi32 name 'GetCharWidthW';
-function GetCharWidth; external gdi32 name 'GetCharWidthA';
+function GetCharWidthFloat; external gdi32 name 'GetCharWidthFloatA';
 function GetCharWidthFloatA; external gdi32 name 'GetCharWidthFloatA';
 function GetCharWidthFloatW; external gdi32 name 'GetCharWidthFloatW';
-function GetCharWidthFloat; external gdi32 name 'GetCharWidthFloatA';
 function GetCharWidthI; external gdi32 name 'GetCharWidthI';
+function GetCharacterPlacement; external gdi32 name 'GetCharacterPlacementA';
 function GetCharacterPlacementA; external gdi32 name 'GetCharacterPlacementA';
 function GetCharacterPlacementW; external gdi32 name 'GetCharacterPlacementW';
-function GetCharacterPlacement; external gdi32 name 'GetCharacterPlacementA';
 function GetClipBox; external gdi32 name 'GetClipBox';
 function GetClipRgn; external gdi32 name 'GetClipRgn';
 function GetColorAdjustment; external gdi32 name 'GetColorAdjustment';
@@ -29102,49 +29526,49 @@ function GetDIBColorTable; external gdi32 name 'GetDIBColorTable';
 function GetDIBits; external gdi32 name 'GetDIBits';
 function GetDeviceCaps; external gdi32 name 'GetDeviceCaps';
 function GetDeviceGammaRamp; external gdi32 name 'GetDeviceGammaRamp';
+function GetEnhMetaFile; external gdi32 name 'GetEnhMetaFileA';
 function GetEnhMetaFileA; external gdi32 name 'GetEnhMetaFileA';
 function GetEnhMetaFileW; external gdi32 name 'GetEnhMetaFileW';
-function GetEnhMetaFile; external gdi32 name 'GetEnhMetaFileA';
 function GetEnhMetaFileBits; external gdi32 name 'GetEnhMetaFileBits';
+function GetEnhMetaFileDescription; external gdi32 name 'GetEnhMetaFileDescriptionA';
 function GetEnhMetaFileDescriptionA; external gdi32 name 'GetEnhMetaFileDescriptionA';
 function GetEnhMetaFileDescriptionW; external gdi32 name 'GetEnhMetaFileDescriptionW';
-function GetEnhMetaFileDescription; external gdi32 name 'GetEnhMetaFileDescriptionA';
 function GetEnhMetaFileHeader; external gdi32 name 'GetEnhMetaFileHeader';
 function GetEnhMetaFilePaletteEntries; external gdi32 name 'GetEnhMetaFilePaletteEntries';
 function GetEnhMetaFilePixelFormat; external gdi32 name 'GetEnhMetaFilePixelFormat';
 function GetFontData; external gdi32 name 'GetFontData';
 function GetFontLanguageInfo; external gdi32 name 'GetFontLanguageInfo';
 function GetFontUnicodeRanges; external gdi32 name 'GetFontUnicodeRanges';
+function GetGlyphIndices; external gdi32 name 'GetGlyphIndicesA';
 function GetGlyphIndicesA; external gdi32 name 'GetGlyphIndicesA';
 function GetGlyphIndicesW; external gdi32 name 'GetGlyphIndicesW';
-function GetGlyphIndices; external gdi32 name 'GetGlyphIndicesA';
+function GetGlyphOutline; external gdi32 name 'GetGlyphOutlineA';
 function GetGlyphOutlineA; external gdi32 name 'GetGlyphOutlineA';
 function GetGlyphOutlineW; external gdi32 name 'GetGlyphOutlineW';
-function GetGlyphOutline; external gdi32 name 'GetGlyphOutlineA';
 function GetGraphicsMode; external gdi32 name 'GetGraphicsMode';
+function GetICMProfile; external gdi32 name 'GetICMProfileA';
 function GetICMProfileA; external gdi32 name 'GetICMProfileA';
 function GetICMProfileW; external gdi32 name 'GetICMProfileW';
-function GetICMProfile; external gdi32 name 'GetICMProfileA';
 function GetKerningPairs; external gdi32 name 'GetKerningPairs';
+function GetLogColorSpace; external gdi32 name 'GetLogColorSpaceA';
 function GetLogColorSpaceA; external gdi32 name 'GetLogColorSpaceA';
 function GetLogColorSpaceW; external gdi32 name 'GetLogColorSpaceW';
-function GetLogColorSpace; external gdi32 name 'GetLogColorSpaceA';
 function GetMapMode; external gdi32 name 'GetMapMode';
+function GetMetaFile; external gdi32 name 'GetMetaFileA';
 function GetMetaFileA; external gdi32 name 'GetMetaFileA';
 function GetMetaFileW; external gdi32 name 'GetMetaFileW';
-function GetMetaFile; external gdi32 name 'GetMetaFileA';
 function GetMetaFileBitsEx; external gdi32 name 'GetMetaFileBitsEx';
 function GetMetaRgn; external gdi32 name 'GetMetaRgn';
 function GetMiterLimit; external gdi32 name 'GetMiterLimit';
 function GetNearestColor; external gdi32 name 'GetNearestColor';
 function GetNearestPaletteIndex; external gdi32 name 'GetNearestPaletteIndex';
+function GetObject; external gdi32 name 'GetObjectA';
 function GetObjectA; external gdi32 name 'GetObjectA';
 function GetObjectW; external gdi32 name 'GetObjectW';
-function GetObject; external gdi32 name 'GetObjectA';
 function GetObjectType; external gdi32 name 'GetObjectType';
+function GetOutlineTextMetrics; external gdi32 name 'GetOutlineTextMetricsA';
 function GetOutlineTextMetricsA; external gdi32 name 'GetOutlineTextMetricsA';
 function GetOutlineTextMetricsW; external gdi32 name 'GetOutlineTextMetricsW';
-function GetOutlineTextMetrics; external gdi32 name 'GetOutlineTextMetricsA';
 function GetPaletteEntries; external gdi32 name 'GetPaletteEntries';
 function GetPath; external gdi32 name 'GetPath';
 function GetPixel; external gdi32 name 'GetPixel';
@@ -29163,23 +29587,23 @@ function GetTextCharacterExtra; external gdi32 name 'GetTextCharacterExtra';
 function GetTextCharset; external gdi32 name 'GetTextCharset';
 function GetTextCharsetInfo; external gdi32 name 'GetTextCharsetInfo';
 function GetTextColor; external gdi32 name 'GetTextColor';
+function GetTextExtentExPoint; external gdi32 name 'GetTextExtentExPointA';
 function GetTextExtentExPointA; external gdi32 name 'GetTextExtentExPointA';
 function GetTextExtentExPointW; external gdi32 name 'GetTextExtentExPointW';
-function GetTextExtentExPoint; external gdi32 name 'GetTextExtentExPointA';
 function GetTextExtentExPointI; external gdi32 name 'GetTextExtentExPointI';
+function GetTextExtentPoint32; external gdi32 name 'GetTextExtentPoint32A';
 function GetTextExtentPoint32A; external gdi32 name 'GetTextExtentPoint32A';
 function GetTextExtentPoint32W; external gdi32 name 'GetTextExtentPoint32W';
-function GetTextExtentPoint32; external gdi32 name 'GetTextExtentPoint32A';
+function GetTextExtentPoint; external gdi32 name 'GetTextExtentPointA';
 function GetTextExtentPointA; external gdi32 name 'GetTextExtentPointA';
 function GetTextExtentPointW; external gdi32 name 'GetTextExtentPointW';
-function GetTextExtentPoint; external gdi32 name 'GetTextExtentPointA';
 function GetTextExtentPointI; external gdi32 name 'GetTextExtentPointI';
+function GetTextFace; external gdi32 name 'GetTextFaceA';
 function GetTextFaceA; external gdi32 name 'GetTextFaceA';
 function GetTextFaceW; external gdi32 name 'GetTextFaceW';
-function GetTextFace; external gdi32 name 'GetTextFaceA';
+function GetTextMetrics; external gdi32 name 'GetTextMetricsA';
 function GetTextMetricsA; external gdi32 name 'GetTextMetricsA';
 function GetTextMetricsW; external gdi32 name 'GetTextMetricsW';
-function GetTextMetrics; external gdi32 name 'GetTextMetricsA';
 function GetViewportExtEx; external gdi32 name 'GetViewportExtEx';
 function GetViewportOrgEx; external gdi32 name 'GetViewportOrgEx';
 function GetWinMetaFileBits; external gdi32 name 'GetWinMetaFileBits';
@@ -29215,9 +29639,9 @@ function PolyBezierTo; external gdi32 name 'PolyBezierTo';
 function PolyDraw; external gdi32 name 'PolyDraw';
 function PolyPolygon; external gdi32 name 'PolyPolygon';
 function PolyPolyline; external gdi32 name 'PolyPolyline';
+function PolyTextOut; external gdi32 name 'PolyTextOutA';
 function PolyTextOutA; external gdi32 name 'PolyTextOutA';
 function PolyTextOutW; external gdi32 name 'PolyTextOutW';
-function PolyTextOut; external gdi32 name 'PolyTextOutA';
 function Polygon; external gdi32 name 'Polygon';
 function Polyline; external gdi32 name 'Polyline';
 function PolylineTo; external gdi32 name 'PolylineTo';
@@ -29228,15 +29652,15 @@ function RectInRegion; external gdi32 name 'RectInRegion';
 function RectVisible; external gdi32 name 'RectVisible';
 function Rectangle; external gdi32 name 'Rectangle';
 function RemoveFontMemResourceEx; external gdi32 name 'RemoveFontMemResourceEx';
+function RemoveFontResource; external gdi32 name 'RemoveFontResourceA';
 function RemoveFontResourceA; external gdi32 name 'RemoveFontResourceA';
 function RemoveFontResourceW; external gdi32 name 'RemoveFontResourceW';
-function RemoveFontResource; external gdi32 name 'RemoveFontResourceA';
+function RemoveFontResourceEx; external gdi32 name 'RemoveFontResourceExA';
 function RemoveFontResourceExA; external gdi32 name 'RemoveFontResourceExA';
 function RemoveFontResourceExW; external gdi32 name 'RemoveFontResourceExW';
-function RemoveFontResourceEx; external gdi32 name 'RemoveFontResourceExA';
+function ResetDC; external gdi32 name 'ResetDCA';
 function ResetDCA; external gdi32 name 'ResetDCA';
 function ResetDCW; external gdi32 name 'ResetDCW';
-function ResetDC; external gdi32 name 'ResetDCA';
 function ResizePalette; external gdi32 name 'ResizePalette';
 function RestoreDC; external gdi32 name 'RestoreDC';
 function RoundRect; external gdi32 name 'RoundRect';
@@ -29266,9 +29690,9 @@ function SetDeviceGammaRamp; external gdi32 name 'SetDeviceGammaRamp';
 function SetEnhMetaFileBits; external gdi32 name 'SetEnhMetaFileBits';
 function SetGraphicsMode; external gdi32 name 'SetGraphicsMode';
 function SetICMMode; external gdi32 name 'SetICMMode';
+function SetICMProfile; external gdi32 name 'SetICMProfileA';
 function SetICMProfileA; external gdi32 name 'SetICMProfileA';
 function SetICMProfileW; external gdi32 name 'SetICMProfileW';
-function SetICMProfile; external gdi32 name 'SetICMProfileA';
 function SetMapMode; external gdi32 name 'SetMapMode';
 function SetMapperFlags; external gdi32 name 'SetMapperFlags';
 function SetMetaFileBitsEx; external gdi32 name 'SetMetaFileBitsEx';
@@ -29293,26 +29717,26 @@ function SetWinMetaFileBits; external gdi32 name 'SetWinMetaFileBits';
 function SetWindowExtEx; external gdi32 name 'SetWindowExtEx';
 function SetWindowOrgEx; external gdi32 name 'SetWindowOrgEx';
 function SetWorldTransform; external gdi32 name 'SetWorldTransform';
+function StartDoc; external gdi32 name 'StartDocA';
 function StartDocA; external gdi32 name 'StartDocA';
 function StartDocW; external gdi32 name 'StartDocW';
-function StartDoc; external gdi32 name 'StartDocA';
 function StartPage; external gdi32 name 'StartPage';
 function StretchBlt; external gdi32 name 'StretchBlt';
 function StretchDIBits; external gdi32 name 'StretchDIBits';
 function StrokeAndFillPath; external gdi32 name 'StrokeAndFillPath';
 function StrokePath; external gdi32 name 'StrokePath';
 function SwapBuffers; external gdi32 name 'SwapBuffers';
+function TextOut; external gdi32 name 'TextOutA';
 function TextOutA; external gdi32 name 'TextOutA';
 function TextOutW; external gdi32 name 'TextOutW';
-function TextOut; external gdi32 name 'TextOutA';
 function TranslateCharsetInfo; external gdi32 name 'TranslateCharsetInfo';
 function TransparentBlt; external msimg32 name 'TransparentBlt';
 function TransparentDIBits; external gdi32 name 'TransparentDIBits';
 function UnrealizeObject; external gdi32 name 'UnrealizeObject';
 function UpdateColors; external gdi32 name 'UpdateColors';
+function UpdateICMRegKey; external gdi32 name 'UpdateICMRegKeyA';
 function UpdateICMRegKeyA; external gdi32 name 'UpdateICMRegKeyA';
 function UpdateICMRegKeyW; external gdi32 name 'UpdateICMRegKeyW';
-function UpdateICMRegKey; external gdi32 name 'UpdateICMRegKeyA';
 function WidenPath; external gdi32 name 'WidenPath';
 
 { Externals from opengl32.dll }
@@ -29331,12 +29755,12 @@ function wglSetLayerPaletteEntries; external opengl32 name 'wglSetLayerPaletteEn
 function wglShareLists; external opengl32 name 'wglShareLists';
 function wglSwapLayerBuffers; external opengl32 name 'wglSwapLayerBuffers';
 function wglSwapMultipleBuffers; external opengl32 name 'wglSwapMultipleBuffers';
+function wglUseFontBitmaps; external opengl32 name 'wglUseFontBitmapsA';
+function wglUseFontOutlines; external opengl32 name 'wglUseFontOutlinesA';
 function wglUseFontBitmapsA; external opengl32 name 'wglUseFontBitmapsA';
 function wglUseFontOutlinesA; external opengl32 name 'wglUseFontOutlinesA';
 function wglUseFontBitmapsW; external opengl32 name 'wglUseFontBitmapsW';
 function wglUseFontOutlinesW; external opengl32 name 'wglUseFontOutlinesW';
-function wglUseFontBitmaps; external opengl32 name 'wglUseFontBitmapsA';
-function wglUseFontOutlines; external opengl32 name 'wglUseFontOutlinesA';
 
 
 { Externals from user32.dll }
@@ -29344,6 +29768,7 @@ function wglUseFontOutlines; external opengl32 name 'wglUseFontOutlinesA';
 function ActivateKeyboardLayout; external user32 name 'ActivateKeyboardLayout';
 function AdjustWindowRect; external user32 name 'AdjustWindowRect';
 function AdjustWindowRectEx; external user32 name 'AdjustWindowRectEx';
+{$IF DEFINED(WIN32) or DEFINED(WINE)}
 function AnsiToOem; external user32 name 'CharToOemA';
 function AnsiToOemBuff; external user32 name 'CharToOemBuffA';
 function AnsiUpper; external user32 name 'CharUpperA';
@@ -29352,64 +29777,75 @@ function AnsiLower; external user32 name 'CharLowerA';
 function AnsiLowerBuff; external user32 name 'CharLowerBuffA';
 function AnsiNext; external user32 name 'CharNextA';
 function AnsiPrev; external user32 name 'CharPrevA';
+{$IFEND}
+{$IF DEFINED(LINUX) and not DEFINED(WINE)}
+function AnsiToOem; external user32 name 'CharToOem';
+function AnsiToOemBuff; external user32 name 'CharToOemBuff';
+function AnsiUpper; external user32 name 'CharUpper';
+function AnsiUpperBuff; external user32 name 'CharUpperBuff';
+function AnsiLower; external user32 name 'CharLower';
+function AnsiLowerBuff; external user32 name 'CharLowerBuff';
+function AnsiNext; external user32 name 'CharNext';
+function AnsiPrev; external user32 name 'CharPrev';
+{$IFEND}
 function AnyPopup; external user32 name 'AnyPopup';
+function AppendMenu; external user32 name 'AppendMenuA';
 function AppendMenuA; external user32 name 'AppendMenuA';
 function AppendMenuW; external user32 name 'AppendMenuW';
-function AppendMenu; external user32 name 'AppendMenuA';
 function ArrangeIconicWindows; external user32 name 'ArrangeIconicWindows';
 function AttachThreadInput; external user32 name 'AttachThreadInput';
 function BeginDeferWindowPos; external user32 name 'BeginDeferWindowPos';
 function BeginPaint; external user32 name 'BeginPaint';
 function BringWindowToTop; external user32 name 'BringWindowToTop';
+function BroadcastSystemMessage; external user32 name 'BroadcastSystemMessageA';
 function BroadcastSystemMessageA; external user32 name 'BroadcastSystemMessageA';
 function BroadcastSystemMessageW; external user32 name 'BroadcastSystemMessageA';
-function BroadcastSystemMessage; external user32 name 'BroadcastSystemMessageA';
+function CallMsgFilter; external user32 name 'CallMsgFilterA';
 function CallMsgFilterA; external user32 name 'CallMsgFilterA';
 function CallMsgFilterW; external user32 name 'CallMsgFilterW';
-function CallMsgFilter; external user32 name 'CallMsgFilterA';
 function CallNextHookEx; external user32 name 'CallNextHookEx';
+function CallWindowProc; external user32 name 'CallWindowProcA';
 function CallWindowProcA; external user32 name 'CallWindowProcA';
 function CallWindowProcW; external user32 name 'CallWindowProcW';
-function CallWindowProc; external user32 name 'CallWindowProcA';
 function CascadeWindows; external user32 name 'CascadeWindows';
 function ChangeClipboardChain; external user32 name 'ChangeClipboardChain';
+function ChangeDisplaySettings; external user32 name 'ChangeDisplaySettingsA';
 function ChangeDisplaySettingsA; external user32 name 'ChangeDisplaySettingsA';
 function ChangeDisplaySettingsW; external user32 name 'ChangeDisplaySettingsW';
-function ChangeDisplaySettings; external user32 name 'ChangeDisplaySettingsA';
+function ChangeDisplaySettingsEx; external user32 name 'ChangeDisplaySettingsExA';
 function ChangeDisplaySettingsExA; external user32 name 'ChangeDisplaySettingsExA';
 function ChangeDisplaySettingsExW; external user32 name 'ChangeDisplaySettingsExW';
-function ChangeDisplaySettingsEx; external user32 name 'ChangeDisplaySettingsExA';
+function ChangeMenu; external user32 name 'ChangeMenuA';
 function ChangeMenuA; external user32 name 'ChangeMenuA';
 function ChangeMenuW; external user32 name 'ChangeMenuW';
-function ChangeMenu; external user32 name 'ChangeMenuA';
+function CharLower; external user32 name 'CharLowerA';
 function CharLowerA; external user32 name 'CharLowerA';
 function CharLowerW; external user32 name 'CharLowerW';
-function CharLower; external user32 name 'CharLowerA';
+function CharLowerBuff; external user32 name 'CharLowerBuffA';
 function CharLowerBuffA; external user32 name 'CharLowerBuffA';
 function CharLowerBuffW; external user32 name 'CharLowerBuffW';
-function CharLowerBuff; external user32 name 'CharLowerBuffA';
+function CharNext; external user32 name 'CharNextA';
 function CharNextA; external user32 name 'CharNextA';
 function CharNextW; external user32 name 'CharNextW';
-function CharNext; external user32 name 'CharNextA';
 function CharNextEx; external user32 name 'CharNextExA';
 function CharNextExA; external user32 name 'CharNextExA';
+function CharPrev; external user32 name 'CharPrevA';
 function CharPrevA; external user32 name 'CharPrevA';
 function CharPrevW; external user32 name 'CharPrevW';
-function CharPrev; external user32 name 'CharPrevA';
 function CharPrevEx; external user32 name 'CharPrevExA';
 function CharPrevExA; external user32 name 'CharPrevExA';
+function CharToOem; external user32 name 'CharToOemA';
 function CharToOemA; external user32 name 'CharToOemA';
 function CharToOemW; external user32 name 'CharToOemW';
-function CharToOem; external user32 name 'CharToOemA';
+function CharToOemBuff; external user32 name 'CharToOemBuffA';
 function CharToOemBuffA; external user32 name 'CharToOemBuffA';
 function CharToOemBuffW; external user32 name 'CharToOemBuffW';
-function CharToOemBuff; external user32 name 'CharToOemBuffA';
+function CharUpper; external user32 name 'CharUpperA';
 function CharUpperA; external user32 name 'CharUpperA';
 function CharUpperW; external user32 name 'CharUpperW';
-function CharUpper; external user32 name 'CharUpperA';
+function CharUpperBuff; external user32 name 'CharUpperBuffA';
 function CharUpperBuffA; external user32 name 'CharUpperBuffA';
 function CharUpperBuffW; external user32 name 'CharUpperBuffW';
-function CharUpperBuff; external user32 name 'CharUpperBuffA';
 function CheckDlgButton; external user32 name 'CheckDlgButton';
 function CheckMenuItem; external user32 name 'CheckMenuItem';
 function CheckMenuRadioItem; external user32 name 'CheckMenuRadioItem';
@@ -29422,55 +29858,55 @@ function CloseClipboard; external user32 name 'CloseClipboard';
 function CloseDesktop; external user32 name 'CloseDesktop';
 function CloseWindow; external user32 name 'CloseWindow';
 function CloseWindowStation; external user32 name 'CloseWindowStation';
+function CopyAcceleratorTable; external user32 name 'CopyAcceleratorTableA';
 function CopyAcceleratorTableA; external user32 name 'CopyAcceleratorTableA';
 function CopyAcceleratorTableW; external user32 name 'CopyAcceleratorTableW';
-function CopyAcceleratorTable; external user32 name 'CopyAcceleratorTableA';
 function CopyIcon; external user32 name 'CopyIcon';
 function CopyImage; external user32 name 'CopyImage';
 function CopyRect; external user32 name 'CopyRect';
 function CountClipboardFormats; external user32 name 'CountClipboardFormats';
+function CreateAcceleratorTable; external user32 name 'CreateAcceleratorTableA';
 function CreateAcceleratorTableA; external user32 name 'CreateAcceleratorTableA';
 function CreateAcceleratorTableW; external user32 name 'CreateAcceleratorTableW';
-function CreateAcceleratorTable; external user32 name 'CreateAcceleratorTableA';
 function CreateCaret; external user32 name 'CreateCaret';
 function CreateCursor; external user32 name 'CreateCursor';
+function CreateDesktop; external user32 name 'CreateDesktopA';
 function CreateDesktopA; external user32 name 'CreateDesktopA';
 function CreateDesktopW; external user32 name 'CreateDesktopW';
-function CreateDesktop; external user32 name 'CreateDesktopA';
+function CreateDialogIndirectParam; external user32 name 'CreateDialogIndirectParamA';
 function CreateDialogIndirectParamA; external user32 name 'CreateDialogIndirectParamA';
 function CreateDialogIndirectParamW; external user32 name 'CreateDialogIndirectParamW';
-function CreateDialogIndirectParam; external user32 name 'CreateDialogIndirectParamA';
+function CreateDialogParam; external user32 name 'CreateDialogParamA';
 function CreateDialogParamA; external user32 name 'CreateDialogParamA';
 function CreateDialogParamW; external user32 name 'CreateDialogParamW';
-function CreateDialogParam; external user32 name 'CreateDialogParamA';
 function CreateIcon; external user32 name 'CreateIcon';
 function CreateIconFromResource; external user32 name 'CreateIconFromResource';
 function CreateIconFromResourceEx; external user32 name 'CreateIconFromResourceEx';
 function CreateIconIndirect; external user32 name 'CreateIconIndirect';
+function CreateMDIWindow; external user32 name 'CreateMDIWindowA';
 function CreateMDIWindowA; external user32 name 'CreateMDIWindowA';
 function CreateMDIWindowW; external user32 name 'CreateMDIWindowW';
-function CreateMDIWindow; external user32 name 'CreateMDIWindowA';
 function CreateMenu; external user32 name 'CreateMenu';
 function CreatePopupMenu; external user32 name 'CreatePopupMenu';
+function CreateWindowEx; external user32 name 'CreateWindowExA';
 function CreateWindowExA; external user32 name 'CreateWindowExA';
 function CreateWindowExW; external user32 name 'CreateWindowExW';
-function CreateWindowEx; external user32 name 'CreateWindowExA';
+function CreateWindowStation; external user32 name 'CreateWindowStationA';
 function CreateWindowStationA; external user32 name 'CreateWindowStationA';
 function CreateWindowStationW; external user32 name 'CreateWindowStationW';
-function CreateWindowStation; external user32 name 'CreateWindowStationA';
 function DdeSetQualityOfService; external user32 name 'DdeSetQualityOfService';
+function DefDlgProc; external user32 name 'DefDlgProcA';
 function DefDlgProcA; external user32 name 'DefDlgProcA';
 function DefDlgProcW; external user32 name 'DefDlgProcW';
-function DefDlgProc; external user32 name 'DefDlgProcA';
+function DefFrameProc; external user32 name 'DefFrameProcA';
 function DefFrameProcA; external user32 name 'DefFrameProcA';
 function DefFrameProcW; external user32 name 'DefFrameProcW';
-function DefFrameProc; external user32 name 'DefFrameProcA';
+function DefMDIChildProc; external user32 name 'DefMDIChildProcA';
 function DefMDIChildProcA; external user32 name 'DefMDIChildProcA';
 function DefMDIChildProcW; external user32 name 'DefMDIChildProcW';
-function DefMDIChildProc; external user32 name 'DefMDIChildProcA';
+function DefWindowProc; external user32 name 'DefWindowProcA';
 function DefWindowProcA; external user32 name 'DefWindowProcA';
 function DefWindowProcW; external user32 name 'DefWindowProcW';
-function DefWindowProc; external user32 name 'DefWindowProcA';
 function DeferWindowPos; external user32 name 'DeferWindowPos';
 function DeleteMenu; external user32 name 'DeleteMenu';
 function DestroyAcceleratorTable; external user32 name 'DestroyAcceleratorTable';
@@ -29479,27 +29915,27 @@ function DestroyCursor; external user32 name 'DestroyCursor';
 function DestroyIcon; external user32 name 'DestroyIcon';
 function DestroyMenu; external user32 name 'DestroyMenu';
 function DestroyWindow; external user32 name 'DestroyWindow';
+function DialogBoxIndirectParam; external user32 name 'DialogBoxIndirectParamA';
 function DialogBoxIndirectParamA; external user32 name 'DialogBoxIndirectParamA';
 function DialogBoxIndirectParamW; external user32 name 'DialogBoxIndirectParamW';
-function DialogBoxIndirectParam; external user32 name 'DialogBoxIndirectParamA';
+function DialogBoxParam; external user32 name 'DialogBoxParamA';
 function DialogBoxParamA; external user32 name 'DialogBoxParamA';
 function DialogBoxParamW; external user32 name 'DialogBoxParamW';
-function DialogBoxParam; external user32 name 'DialogBoxParamA';
+function DispatchMessage; external user32 name 'DispatchMessageA';
 function DispatchMessageA; external user32 name 'DispatchMessageA';
 function DispatchMessageW; external user32 name 'DispatchMessageW';
-function DispatchMessage; external user32 name 'DispatchMessageA';
+function DlgDirList; external user32 name 'DlgDirListA';
 function DlgDirListA; external user32 name 'DlgDirListA';
 function DlgDirListW; external user32 name 'DlgDirListW';
-function DlgDirList; external user32 name 'DlgDirListA';
+function DlgDirListComboBox; external user32 name 'DlgDirListComboBoxA';
 function DlgDirListComboBoxA; external user32 name 'DlgDirListComboBoxA';
 function DlgDirListComboBoxW; external user32 name 'DlgDirListComboBoxW';
-function DlgDirListComboBox; external user32 name 'DlgDirListComboBoxA';
+function DlgDirSelectComboBoxEx; external user32 name 'DlgDirSelectComboBoxExA';
 function DlgDirSelectComboBoxExA; external user32 name 'DlgDirSelectComboBoxExA';
 function DlgDirSelectComboBoxExW; external user32 name 'DlgDirSelectComboBoxExW';
-function DlgDirSelectComboBoxEx; external user32 name 'DlgDirSelectComboBoxExA';
+function DlgDirSelectEx; external user32 name 'DlgDirSelectExA';
 function DlgDirSelectExA; external user32 name 'DlgDirSelectExA';
 function DlgDirSelectExW; external user32 name 'DlgDirSelectExW';
-function DlgDirSelectEx; external user32 name 'DlgDirSelectExA';
 function DragDetect; external user32 name 'DragDetect';
 function DragObject; external user32 name 'DragObject';
 function DrawAnimatedRects; external user32 name 'DrawAnimatedRects';
@@ -29510,15 +29946,15 @@ function DrawFrameControl; external user32 name 'DrawFrameControl';
 function DrawIcon; external user32 name 'DrawIcon';
 function DrawIconEx; external user32 name 'DrawIconEx';
 function DrawMenuBar; external user32 name 'DrawMenuBar';
+function DrawState; external user32 name 'DrawStateA';
 function DrawStateA; external user32 name 'DrawStateA';
 function DrawStateW; external user32 name 'DrawStateW';
-function DrawState; external user32 name 'DrawStateA';
+function DrawText; external user32 name 'DrawTextA';
 function DrawTextA; external user32 name 'DrawTextA';
 function DrawTextW; external user32 name 'DrawTextW';
-function DrawText; external user32 name 'DrawTextA';
+function DrawTextEx; external user32 name 'DrawTextExA';
 function DrawTextExA; external user32 name 'DrawTextExA';
 function DrawTextExW; external user32 name 'DrawTextExW';
-function DrawTextEx; external user32 name 'DrawTextExA';
 function EmptyClipboard; external user32 name 'EmptyClipboard';
 function EnableMenuItem; external user32 name 'EnableMenuItem';
 function EnableScrollBar; external user32 name 'EnableScrollBar';
@@ -29529,69 +29965,69 @@ function EndMenu; external user32 name 'EndMenu';
 function EndPaint; external user32 name 'EndPaint';
 function EnumChildWindows; external user32 name 'EnumChildWindows';
 function EnumClipboardFormats; external user32 name 'EnumClipboardFormats';
+function EnumDesktops; external user32 name 'EnumDesktopsA';
 function EnumDesktopsA; external user32 name 'EnumDesktopsA';
 function EnumDesktopsW; external user32 name 'EnumDesktopsW';
-function EnumDesktops; external user32 name 'EnumDesktopsA';
 function EnumDesktopWindows; external user32 name 'EnumDesktopWindows';
+function EnumDisplaySettings; external user32 name 'EnumDisplaySettingsA';
 function EnumDisplaySettingsA; external user32 name 'EnumDisplaySettingsA';
 function EnumDisplaySettingsW; external user32 name 'EnumDisplaySettingsW';
-function EnumDisplaySettings; external user32 name 'EnumDisplaySettingsA';
+function EnumDisplayDevices; external user32 name 'EnumDisplayDevicesA';
 function EnumDisplayDevicesA; external user32 name 'EnumDisplayDevicesA';
 function EnumDisplayDevicesW; external user32 name 'EnumDisplayDevicesW';
-function EnumDisplayDevices; external user32 name 'EnumDisplayDevicesA';
+function EnumProps; external user32 name 'EnumPropsA';
 function EnumPropsA; external user32 name 'EnumPropsA';
 function EnumPropsW; external user32 name 'EnumPropsW';
-function EnumProps; external user32 name 'EnumPropsA';
+function EnumPropsEx; external user32 name 'EnumPropsExA';
 function EnumPropsExA; external user32 name 'EnumPropsExA';
 function EnumPropsExW; external user32 name 'EnumPropsExW';
-function EnumPropsEx; external user32 name 'EnumPropsExA';
 function EnumThreadWindows; external user32 name 'EnumThreadWindows';
+function EnumWindowStations; external user32 name 'EnumWindowStationsA';
 function EnumWindowStationsA; external user32 name 'EnumWindowStationsA';
 function EnumWindowStationsW; external user32 name 'EnumWindowStationsW';
-function EnumWindowStations; external user32 name 'EnumWindowStationsA';
 function EnumWindows; external user32 name 'EnumWindows';
 function EqualRect; external user32 name 'EqualRect';
 function ExcludeUpdateRgn; external user32 name 'ExcludeUpdateRgn';
 function ExitWindowsEx; external user32 name 'ExitWindowsEx';
 function FillRect; external user32 name 'FillRect';
+function FindWindow; external user32 name 'FindWindowA';
 function FindWindowA; external user32 name 'FindWindowA';
 function FindWindowW; external user32 name 'FindWindowW';
-function FindWindow; external user32 name 'FindWindowA';
+function FindWindowEx; external user32 name 'FindWindowExA';
 function FindWindowExA; external user32 name 'FindWindowExA';
 function FindWindowExW; external user32 name 'FindWindowExW';
-function FindWindowEx; external user32 name 'FindWindowExA';
 function FlashWindow; external user32 name 'FlashWindow';
 function FlashWindowEx; external user32 name 'FlashWindowEx';
 function FrameRect; external user32 name 'FrameRect';
 function FreeDDElParam; external user32 name 'FreeDDElParam';
 function GetActiveWindow; external user32 name 'GetActiveWindow';
+function GetAltTabInfo; external user32 name 'GetAltTabInfoA';
 function GetAltTabInfoA; external user32 name 'GetAltTabInfoA';
 function GetAltTabInfoW; external user32 name 'GetAltTabInfoW';
-function GetAltTabInfo; external user32 name 'GetAltTabInfoA';
 function GetAncestor; external user32 name 'GetAncestor';
 function GetAsyncKeyState; external user32 name 'GetAsyncKeyState';
 function GetCapture; external user32 name 'GetCapture';
 function GetCaretBlinkTime; external user32 name 'GetCaretBlinkTime';
 function GetCaretPos; external user32 name 'GetCaretPos';
+function GetClassInfo; external user32 name 'GetClassInfoA';
 function GetClassInfoA; external user32 name 'GetClassInfoA';
 function GetClassInfoW; external user32 name 'GetClassInfoW';
-function GetClassInfo; external user32 name 'GetClassInfoA';
+function GetClassInfoEx; external user32 name 'GetClassInfoExA';
 function GetClassInfoExA; external user32 name 'GetClassInfoExA';
 function GetClassInfoExW; external user32 name 'GetClassInfoExW';
-function GetClassInfoEx; external user32 name 'GetClassInfoExA';
+function GetClassLong; external user32 name 'GetClassLongA';
 function GetClassLongA; external user32 name 'GetClassLongA';
 function GetClassLongW; external user32 name 'GetClassLongW';
-function GetClassLong; external user32 name 'GetClassLongA';
+function GetClassName; external user32 name 'GetClassNameA';
 function GetClassNameA; external user32 name 'GetClassNameA';
 function GetClassNameW; external user32 name 'GetClassNameW';
-function GetClassName; external user32 name 'GetClassNameA';
 function GetClassWord; external user32 name 'GetClassWord';
 function GetClientRect; external user32 name 'GetClientRect';
 function GetClipCursor; external user32 name 'GetClipCursor';
 function GetClipboardData; external user32 name 'GetClipboardData';
+function GetClipboardFormatName; external user32 name 'GetClipboardFormatNameA';
 function GetClipboardFormatNameA; external user32 name 'GetClipboardFormatNameA';
 function GetClipboardFormatNameW; external user32 name 'GetClipboardFormatNameW';
-function GetClipboardFormatName; external user32 name 'GetClipboardFormatNameA';
 function GetClipboardSequenceNumber; external user32 name 'GetClipboardSequenceNumber';
 function GetClipboardOwner; external user32 name 'GetClipboardOwner';
 function GetClipboardViewer; external user32 name 'GetClipboardViewer';
@@ -29606,9 +30042,9 @@ function GetDialogBaseUnits; external user32 name 'GetDialogBaseUnits';
 function GetDlgCtrlID; external user32 name 'GetDlgCtrlID';
 function GetDlgItem; external user32 name 'GetDlgItem';
 function GetDlgItemInt; external user32 name 'GetDlgItemInt';
+function GetDlgItemText; external user32 name 'GetDlgItemTextA';
 function GetDlgItemTextA; external user32 name 'GetDlgItemTextA';
 function GetDlgItemTextW; external user32 name 'GetDlgItemTextW';
-function GetDlgItemText; external user32 name 'GetDlgItemTextA';
 function GetDoubleClickTime; external user32 name 'GetDoubleClickTime';
 function GetFocus; external user32 name 'GetFocus';
 function GetForegroundWindow; external user32 name 'GetForegroundWindow';
@@ -29617,15 +30053,15 @@ function GetGUIThreadInfo; external user32 name 'GetGUIThreadInfo';
 function GetIconInfo; external user32 name 'GetIconInfo';
 function GetInputState; external user32 name 'GetInputState';
 function GetKBCodePage; external user32 name 'GetKBCodePage';
+function GetKeyNameText; external user32 name 'GetKeyNameTextA';
 function GetKeyNameTextA; external user32 name 'GetKeyNameTextA';
 function GetKeyNameTextW; external user32 name 'GetKeyNameTextW';
-function GetKeyNameText; external user32 name 'GetKeyNameTextA';
 function GetKeyState; external user32 name 'GetKeyState';
 function GetKeyboardLayout; external user32 name 'GetKeyboardLayout';
 function GetKeyboardLayoutList; external user32 name 'GetKeyboardLayoutList';
+function GetKeyboardLayoutName; external user32 name 'GetKeyboardLayoutNameA';
 function GetKeyboardLayoutNameA; external user32 name 'GetKeyboardLayoutNameA';
 function GetKeyboardLayoutNameW; external user32 name 'GetKeyboardLayoutNameW';
-function GetKeyboardLayoutName; external user32 name 'GetKeyboardLayoutNameA';
 function GetMouseMovePoints; external user32 name 'GetMouseMovePoints';
 function GetKeyboardState; external user32 name 'GetKeyboardState';
 function GetKeyboardType; external user32 name 'GetKeyboardType';
@@ -29640,17 +30076,17 @@ function GetMenuDefaultItem; external user32 name 'GetMenuDefaultItem';
 function GetMenuInfo; external user32 name 'GetMenuInfo';
 function GetMenuItemCount; external user32 name 'GetMenuItemCount';
 function GetMenuItemID; external user32 name 'GetMenuItemID';
+function GetMenuItemInfo; external user32 name 'GetMenuItemInfoA';
 function GetMenuItemInfoA; external user32 name 'GetMenuItemInfoA';
 function GetMenuItemInfoW; external user32 name 'GetMenuItemInfoW';
-function GetMenuItemInfo; external user32 name 'GetMenuItemInfoA';
 function GetMenuItemRect; external user32 name 'GetMenuItemRect';
 function GetMenuState; external user32 name 'GetMenuState';
+function GetMenuString; external user32 name 'GetMenuStringA';
 function GetMenuStringA; external user32 name 'GetMenuStringA';
 function GetMenuStringW; external user32 name 'GetMenuStringW';
-function GetMenuString; external user32 name 'GetMenuStringA';
+function GetMessage; external user32 name 'GetMessageA';
 function GetMessageA; external user32 name 'GetMessageA';
 function GetMessageW; external user32 name 'GetMessageW';
-function GetMessage; external user32 name 'GetMessageA';
 function GetMessageExtraInfo; external user32 name 'GetMessageExtraInfo';
 function GetMessagePos; external user32 name 'GetMessagePos';
 function GetMessageTime; external user32 name 'GetMessageTime';
@@ -29661,9 +30097,9 @@ function GetOpenClipboardWindow; external user32 name 'GetOpenClipboardWindow';
 function GetParent; external user32 name 'GetParent';
 function GetPriorityClipboardFormat; external user32 name 'GetPriorityClipboardFormat';
 function GetProcessWindowStation; external user32 name 'GetProcessWindowStation';
+function GetProp; external user32 name 'GetPropA';
 function GetPropA; external user32 name 'GetPropA';
 function GetPropW; external user32 name 'GetPropW';
-function GetProp; external user32 name 'GetPropA';
 function GetQueueStatus; external user32 name 'GetQueueStatus';
 function GetScrollBarInfo; external user32 name 'GetScrollBarInfo';
 function GetScrollInfo; external user32 name 'GetScrollInfo';
@@ -29674,75 +30110,76 @@ function GetSysColor; external user32 name 'GetSysColor';
 function GetSysColorBrush; external user32 name 'GetSysColorBrush';
 function GetSystemMenu; external user32 name 'GetSystemMenu';
 function GetSystemMetrics; external user32 name 'GetSystemMetrics';
+function GetTabbedTextExtent; external user32 name 'GetTabbedTextExtentA';
 function GetTabbedTextExtentA; external user32 name 'GetTabbedTextExtentA';
 function GetTabbedTextExtentW; external user32 name 'GetTabbedTextExtentW';
-function GetTabbedTextExtent; external user32 name 'GetTabbedTextExtentA';
 function GetThreadDesktop; external user32 name 'GetThreadDesktop';
 function GetTitleBarInfo; external user32 name 'GetTitleInfo';
 function GetTopWindow; external user32 name 'GetTopWindow';
 function GetUpdateRect; external user32 name 'GetUpdateRect';
 function GetUpdateRgn; external user32 name 'GetUpdateRgn';
+function GetUserObjectInformation; external user32 name 'GetUserObjectInformationA';
 function GetUserObjectInformationA; external user32 name 'GetUserObjectInformationA';
 function GetUserObjectInformationW; external user32 name 'GetUserObjectInformationW';
-function GetUserObjectInformation; external user32 name 'GetUserObjectInformationA';
 function GetUserObjectSecurity; external user32 name 'GetUserObjectSecurity';
 function GetWindow; external user32 name 'GetWindow';
 function GetWindowContextHelpId; external user32 name 'GetWindowContextHelpId';
 function GetWindowDC; external user32 name 'GetWindowDC';
 function GetWindowInfo; external user32 name 'GetWindowInfo';
+function GetWindowLong; external user32 name 'GetWindowLongA';
 function GetWindowLongA; external user32 name 'GetWindowLongA';
 function GetWindowLongW; external user32 name 'GetWindowLongW';
-function GetWindowLong; external user32 name 'GetWindowLongA';
+function GetWindowModuleFileName; external user32 name 'GetWindowModuleFileNameA';
 function GetWindowModuleFileNameA; external user32 name 'GetWindowModuleFileNameA';
 function GetWindowModuleFileNameW; external user32 name 'GetWindowModuleFileNameW';
-function GetWindowModuleFileName; external user32 name 'GetWindowModuleFileNameA';
 function GetWindowPlacement; external user32 name 'GetWindowPlacement';
 function GetWindowRect; external user32 name 'GetWindowRect';
 function GetWindowRgn; external user32 name 'GetWindowRgn';
+function GetWindowText; external user32 name 'GetWindowTextA';
 function GetWindowTextA; external user32 name 'GetWindowTextA';
 function GetWindowTextW; external user32 name 'GetWindowTextW';
-function GetWindowText; external user32 name 'GetWindowTextA';
+function GetWindowTextLength; external user32 name 'GetWindowTextLengthA';
 function GetWindowTextLengthA; external user32 name 'GetWindowTextLengthA';
 function GetWindowTextLengthW; external user32 name 'GetWindowTextLengthW';
-function GetWindowTextLength; external user32 name 'GetWindowTextLengthA';
-function GetWindowThreadProcessId; external user32 name 'GetWindowThreadProcessId';
+function GetWindowThreadProcessId(hWnd: HWND; lpdwProcessId: Pointer): DWORD; external user32 name 'GetWindowThreadProcessId';
+function GetWindowThreadProcessId(hWnd: HWND; var dwProcessId: DWORD): DWORD; external user32 name 'GetWindowThreadProcessId';
 function GetWindowWord; external user32 name 'GetWindowWord';
+function GrayString; external user32 name 'GrayStringA';
 function GrayStringA; external user32 name 'GrayStringA';
 function GrayStringW; external user32 name 'GrayStringW';
-function GrayString; external user32 name 'GrayStringA';
 function HideCaret; external user32 name 'HideCaret';
 function HiliteMenuItem; external user32 name 'HiliteMenuItem';
 function ImpersonateDdeClientWindow; external user32 name 'ImpersonateDdeClientWindow';
 function InSendMessage; external user32 name 'InSendMessage';
 function InSendMessageeX; external user32 name 'InSendMessageeX';
 function InflateRect; external user32 name 'InflateRect';
+function InsertMenu; external user32 name 'InsertMenuA';
 function InsertMenuA; external user32 name 'InsertMenuA';
 function InsertMenuW; external user32 name 'InsertMenuW';
-function InsertMenu; external user32 name 'InsertMenuA';
+function InsertMenuItem; external user32 name 'InsertMenuItemA';
 function InsertMenuItemA; external user32 name 'InsertMenuItemA';
 function InsertMenuItemW; external user32 name 'InsertMenuItemW';
-function InsertMenuItem; external user32 name 'InsertMenuItemA';
 function IntersectRect; external user32 name 'IntersectRect';
 function InvalidateRect; external user32 name 'InvalidateRect';
 function InvalidateRgn; external user32 name 'InvalidateRgn';
 function InvertRect; external user32 name 'InvertRect';
+function IsCharAlpha; external user32 name 'IsCharAlphaA';
 function IsCharAlphaA; external user32 name 'IsCharAlphaA';
 function IsCharAlphaW; external user32 name 'IsCharAlphaW';
-function IsCharAlpha; external user32 name 'IsCharAlphaA';
+function IsCharAlphaNumeric; external user32 name 'IsCharAlphaNumericA';
 function IsCharAlphaNumericA; external user32 name 'IsCharAlphaNumericA';
 function IsCharAlphaNumericW; external user32 name 'IsCharAlphaNumericW';
-function IsCharAlphaNumeric; external user32 name 'IsCharAlphaNumericA';
+function IsCharLower; external user32 name 'IsCharLowerA';
 function IsCharLowerA; external user32 name 'IsCharLowerA';
 function IsCharLowerW; external user32 name 'IsCharLowerW';
-function IsCharLower; external user32 name 'IsCharLowerA';
+function IsCharUpper; external user32 name 'IsCharUpperA';
 function IsCharUpperA; external user32 name 'IsCharUpperA';
 function IsCharUpperW; external user32 name 'IsCharUpperW';
-function IsCharUpper; external user32 name 'IsCharUpperA';
 function IsChild; external user32 name 'IsChild';
 function IsClipboardFormatAvailable; external user32 name 'IsClipboardFormatAvailable';
+function IsDialogMessage; external user32 name 'IsDialogMessageA';
 function IsDialogMessageA; external user32 name 'IsDialogMessageA';
 function IsDialogMessageW; external user32 name 'IsDialogMessageW';
-function IsDialogMessage; external user32 name 'IsDialogMessageA';
 function IsDlgButtonChecked; external user32 name 'IsDlgButtonChecked';
 function IsIconic; external user32 name 'IsIconic';
 function IsMenu; external user32 name 'IsMenu';
@@ -29753,62 +30190,62 @@ function IsWindowUnicode; external user32 name 'IsWindowUnicode';
 function IsWindowVisible; external user32 name 'IsWindowVisible';
 function IsZoomed; external user32 name 'IsZoomed';
 function KillTimer; external user32 name 'KillTimer';
+function LoadAccelerators; external user32 name 'LoadAcceleratorsA';
 function LoadAcceleratorsA; external user32 name 'LoadAcceleratorsA';
 function LoadAcceleratorsW; external user32 name 'LoadAcceleratorsW';
-function LoadAccelerators; external user32 name 'LoadAcceleratorsA';
+function LoadBitmap; external user32 name 'LoadBitmapA';
 function LoadBitmapA; external user32 name 'LoadBitmapA';
 function LoadBitmapW; external user32 name 'LoadBitmapW';
-function LoadBitmap; external user32 name 'LoadBitmapA';
+function LoadCursor; external user32 name 'LoadCursorA';
 function LoadCursorA; external user32 name 'LoadCursorA';
 function LoadCursorW; external user32 name 'LoadCursorW';
-function LoadCursor; external user32 name 'LoadCursorA';
+function LoadCursorFromFile; external user32 name 'LoadCursorFromFileA';
 function LoadCursorFromFileA; external user32 name 'LoadCursorFromFileA';
 function LoadCursorFromFileW; external user32 name 'LoadCursorFromFileW';
-function LoadCursorFromFile; external user32 name 'LoadCursorFromFileA';
+function LoadIcon; external user32 name 'LoadIconA';
 function LoadIconA; external user32 name 'LoadIconA';
 function LoadIconW; external user32 name 'LoadIconW';
-function LoadIcon; external user32 name 'LoadIconA';
+function LoadImage; external user32 name 'LoadImageA';
 function LoadImageA; external user32 name 'LoadImageA';
 function LoadImageW; external user32 name 'LoadImageW';
-function LoadImage; external user32 name 'LoadImageA';
+function LoadKeyboardLayout; external user32 name 'LoadKeyboardLayoutA';
 function LoadKeyboardLayoutA; external user32 name 'LoadKeyboardLayoutA';
 function LoadKeyboardLayoutW; external user32 name 'LoadKeyboardLayoutW';
-function LoadKeyboardLayout; external user32 name 'LoadKeyboardLayoutA';
+function LoadMenu; external user32 name 'LoadMenuA';
 function LoadMenuA; external user32 name 'LoadMenuA';
 function LoadMenuW; external user32 name 'LoadMenuW';
-function LoadMenu; external user32 name 'LoadMenuA';
+function LoadMenuIndirect; external user32 name 'LoadMenuIndirectA';
 function LoadMenuIndirectA; external user32 name 'LoadMenuIndirectA';
 function LoadMenuIndirectW; external user32 name 'LoadMenuIndirectW';
-function LoadMenuIndirect; external user32 name 'LoadMenuIndirectA';
+function LoadString; external user32 name 'LoadStringA';
 function LoadStringA; external user32 name 'LoadStringA';
 function LoadStringW; external user32 name 'LoadStringW';
-function LoadString; external user32 name 'LoadStringA';
 function LockWindowUpdate; external user32 name 'LockWindowUpdate';
 function LockWorkStation; external user32 name 'LockWorkStation';
 function LookupIconIdFromDirectory; external user32 name 'LookupIconIdFromDirectory';
 function LookupIconIdFromDirectoryEx; external user32 name 'LookupIconIdFromDirectoryEx';
 function MapDialogRect; external user32 name 'MapDialogRect';
+function MapVirtualKey; external user32 name 'MapVirtualKeyA';
 function MapVirtualKeyA; external user32 name 'MapVirtualKeyA';
 function MapVirtualKeyW; external user32 name 'MapVirtualKeyW';
-function MapVirtualKey; external user32 name 'MapVirtualKeyA';
+function MapVirtualKeyEx; external user32 name 'MapVirtualKeyExA';
 function MapVirtualKeyExA; external user32 name 'MapVirtualKeyExA';
 function MapVirtualKeyExW; external user32 name 'MapVirtualKeyExW';
-function MapVirtualKeyEx; external user32 name 'MapVirtualKeyExA';
 function MapWindowPoints; external user32 name 'MapWindowPoints';
 function MenuItemFromPoint; external user32 name 'MenuItemFromPoint';
 function MessageBeep; external user32 name 'MessageBeep';
+function MessageBox; external user32 name 'MessageBoxA';
 function MessageBoxA; external user32 name 'MessageBoxA';
 function MessageBoxW; external user32 name 'MessageBoxW';
-function MessageBox; external user32 name 'MessageBoxA';
+function MessageBoxEx; external user32 name 'MessageBoxExA';
 function MessageBoxExA; external user32 name 'MessageBoxExA';
 function MessageBoxExW; external user32 name 'MessageBoxExW';
-function MessageBoxEx; external user32 name 'MessageBoxExA';
+function MessageBoxIndirect; external user32 name 'MessageBoxIndirectA';
 function MessageBoxIndirectA; external user32 name 'MessageBoxIndirectA';
 function MessageBoxIndirectW; external user32 name 'MessageBoxIndirectW';
-function MessageBoxIndirect; external user32 name 'MessageBoxIndirectA';
+function ModifyMenu; external user32 name 'ModifyMenuA';
 function ModifyMenuA; external user32 name 'ModifyMenuA';
 function ModifyMenuW; external user32 name 'ModifyMenuW';
-function ModifyMenu; external user32 name 'ModifyMenuA';
 function MoveWindow; external user32 name 'MoveWindow';
 function MsgWaitForMultipleObjects; external user32 name 'MsgWaitForMultipleObjects';
 function MsgWaitForMultipleObjectsEx; external user32 name 'MsgWaitForMultipleObjectsEx';
@@ -29816,91 +30253,91 @@ procedure NotifyWinEvent; external user32 name 'NotifyWinEvent';
 function OemKeyScan; external user32 name 'OemKeyScan';
 function OemToAnsi; external user32 name 'OemToCharA';
 function OemToAnsiBuff; external user32 name 'OemToCharBuffA';
+function OemToChar; external user32 name 'OemToCharA';
 function OemToCharA; external user32 name 'OemToCharA';
 function OemToCharW; external user32 name 'OemToCharW';
-function OemToChar; external user32 name 'OemToCharA';
+function OemToCharBuff; external user32 name 'OemToCharBuffA';
 function OemToCharBuffA; external user32 name 'OemToCharBuffA';
 function OemToCharBuffW; external user32 name 'OemToCharBuffW';
-function OemToCharBuff; external user32 name 'OemToCharBuffA';
 function OffsetRect; external user32 name 'OffsetRect';
 function OpenClipboard; external user32 name 'OpenClipboard';
+function OpenDesktop; external user32 name 'OpenDesktopA';
 function OpenDesktopA; external user32 name 'OpenDesktopA';
 function OpenDesktopW; external user32 name 'OpenDesktopW';
-function OpenDesktop; external user32 name 'OpenDesktopA';
 function OpenIcon; external user32 name 'OpenIcon';
 function OpenInputDesktop; external user32 name 'OpenInputDesktop';
+function OpenWindowStation; external user32 name 'OpenWindowStationA';
 function OpenWindowStationA; external user32 name 'OpenWindowStationA';
 function OpenWindowStationW; external user32 name 'OpenWindowStationW';
-function OpenWindowStation; external user32 name 'OpenWindowStationA';
 function PackDDElParam; external user32 name 'PackDDElParam';
 function PaintDesktop; external user32 name 'PaintDesktop';
+function PeekMessage; external user32 name 'PeekMessageA';
 function PeekMessageA; external user32 name 'PeekMessageA';
 function PeekMessageW; external user32 name 'PeekMessageW';
-function PeekMessage; external user32 name 'PeekMessageA';
+function PostMessage; external user32 name 'PostMessageA';
 function PostMessageA; external user32 name 'PostMessageA';
 function PostMessageW; external user32 name 'PostMessageW';
-function PostMessage; external user32 name 'PostMessageA';
 procedure PostQuitMessage; external user32 name 'PostQuitMessage';
+function PostThreadMessage; external user32 name 'PostThreadMessageA';
 function PostThreadMessageA; external user32 name 'PostThreadMessageA';
 function PostThreadMessageW; external user32 name 'PostThreadMessageW';
-function PostThreadMessage; external user32 name 'PostThreadMessageA';
 function PtInRect; external user32 name 'PtInRect';
 function RealChildWindowFromPoint; external user32 name 'RealChildWindowFromPoint';
+function RealGetWindowClass; external user32 name 'RealGetWindowClassA';
 function RealGetWindowClassA; external user32 name 'RealGetWindowClassA';
 function RealGetWindowClassW; external user32 name 'RealGetWindowClassW';
-function RealGetWindowClass; external user32 name 'RealGetWindowClassA';
 function RedrawWindow; external user32 name 'RedrawWindow';
+function RegisterClass; external user32 name 'RegisterClassA';
 function RegisterClassA; external user32 name 'RegisterClassA';
 function RegisterClassW; external user32 name 'RegisterClassW';
-function RegisterClass; external user32 name 'RegisterClassA';
+function RegisterClassEx; external user32 name 'RegisterClassExA';
 function RegisterClassExA; external user32 name 'RegisterClassExA';
 function RegisterClassExW; external user32 name 'RegisterClassExW';
-function RegisterClassEx; external user32 name 'RegisterClassExA';
+function RegisterClipboardFormat; external user32 name 'RegisterClipboardFormatA';
 function RegisterClipboardFormatA; external user32 name 'RegisterClipboardFormatA';
 function RegisterClipboardFormatW; external user32 name 'RegisterClipboardFormatW';
-function RegisterClipboardFormat; external user32 name 'RegisterClipboardFormatA';
+function RegisterDeviceNotification; external user32 name 'RegisterDeviceNotificationA';
 function RegisterDeviceNotificationA; external user32 name 'RegisterDeviceNotificationA';
 function RegisterDeviceNotificationW; external user32 name 'RegisterDeviceNotificationW';
-function RegisterDeviceNotification; external user32 name 'RegisterDeviceNotificationA';
 function RegisterHotKey; external user32 name 'RegisterHotKey';
+function RegisterWindowMessage; external user32 name 'RegisterWindowMessageA';
 function RegisterWindowMessageA; external user32 name 'RegisterWindowMessageA';
 function RegisterWindowMessageW; external user32 name 'RegisterWindowMessageW';
-function RegisterWindowMessage; external user32 name 'RegisterWindowMessageA';
 function ReleaseCapture; external user32 name 'ReleaseCapture';
 function ReleaseDC; external user32 name 'ReleaseDC';
 function RemoveMenu; external user32 name 'RemoveMenu';
+function RemoveProp; external user32 name 'RemovePropA';
 function RemovePropA; external user32 name 'RemovePropA';
 function RemovePropW; external user32 name 'RemovePropW';
-function RemoveProp; external user32 name 'RemovePropA';
 function ReplyMessage; external user32 name 'ReplyMessage';
 function ReuseDDElParam; external user32 name 'ReuseDDElParam';
 function ScreenToClient; external user32 name 'ScreenToClient';
 function ScrollDC; external user32 name 'ScrollDC';
 function ScrollWindow; external user32 name 'ScrollWindow';
 function ScrollWindowEx; external user32 name 'ScrollWindowEx';
+function SendDlgItemMessage; external user32 name 'SendDlgItemMessageA';
 function SendDlgItemMessageA; external user32 name 'SendDlgItemMessageA';
 function SendDlgItemMessageW; external user32 name 'SendDlgItemMessageW';
-function SendDlgItemMessage; external user32 name 'SendDlgItemMessageA';
 function SendInput; external user32 name 'SendInput';
+function SendMessage; external user32 name 'SendMessageA';
 function SendMessageA; external user32 name 'SendMessageA';
 function SendMessageW; external user32 name 'SendMessageW';
-function SendMessage; external user32 name 'SendMessageA';
+function SendMessageCallback; external user32 name 'SendMessageCallbackA';
 function SendMessageCallbackA; external user32 name 'SendMessageCallbackA';
 function SendMessageCallbackW; external user32 name 'SendMessageCallbackW';
-function SendMessageCallback; external user32 name 'SendMessageCallbackA';
+function SendMessageTimeout; external user32 name 'SendMessageTimeoutA';
 function SendMessageTimeoutA; external user32 name 'SendMessageTimeoutA';
 function SendMessageTimeoutW; external user32 name 'SendMessageTimeoutW';
-function SendMessageTimeout; external user32 name 'SendMessageTimeoutA';
+function SendNotifyMessage; external user32 name 'SendNotifyMessageA';
 function SendNotifyMessageA; external user32 name 'SendNotifyMessageA';
 function SendNotifyMessageW; external user32 name 'SendNotifyMessageW';
-function SendNotifyMessage; external user32 name 'SendNotifyMessageA';
 function SetActiveWindow; external user32 name 'SetActiveWindow';
 function SetCapture; external user32 name 'SetCapture';
 function SetCaretBlinkTime; external user32 name 'SetCaretBlinkTime';
 function SetCaretPos; external user32 name 'SetCaretPos';
+function SetClassLong; external user32 name 'SetClassLongA';
 function SetClassLongA; external user32 name 'SetClassLongA';
 function SetClassLongW; external user32 name 'SetClassLongW';
-function SetClassLong; external user32 name 'SetClassLongA';
 function SetClassWord; external user32 name 'SetClassWord';
 function SetClipboardData; external user32 name 'SetClipboardData';
 function SetClipboardViewer; external user32 name 'SetClipboardViewer';
@@ -29908,29 +30345,30 @@ function SetCursor; external user32 name 'SetCursor';
 function SetCursorPos; external user32 name 'SetCursorPos';
 procedure SetDebugErrorLevel; external user32 name 'SetDebugErrorLevel';
 function SetDlgItemInt; external user32 name 'SetDlgItemInt';
+function SetDlgItemText; external user32 name 'SetDlgItemTextA';
 function SetDlgItemTextA; external user32 name 'SetDlgItemTextA';
 function SetDlgItemTextW; external user32 name 'SetDlgItemTextW';
-function SetDlgItemText; external user32 name 'SetDlgItemTextA';
 function SetDoubleClickTime; external user32 name 'SetDoubleClickTime';
 function SetFocus; external user32 name 'SetFocus';
 function SetForegroundWindow; external user32 name 'SetForegroundWindow';
 function SetKeyboardState; external user32 name 'SetKeyboardState';
 procedure SetLastErrorEx; external user32 name 'SetLastErrorEx';
+function SetLayeredWindowAttributes; external user32 name 'SetLayeredWindowAttributes';
 function SetMenu; external user32 name 'SetMenu';
 function SetMenuContextHelpId; external user32 name 'SetMenuContextHelpId';
 function SetMenuDefaultItem; external user32 name 'SetMenuDefaultItem';
 function SetMenuInfo; external user32 name 'SetMenuInfo';
 function SetMenuItemBitmaps; external user32 name 'SetMenuItemBitmaps';
+function SetMenuItemInfo; external user32 name 'SetMenuItemInfoA';
 function SetMenuItemInfoA; external user32 name 'SetMenuItemInfoA';
 function SetMenuItemInfoW; external user32 name 'SetMenuItemInfoW';
-function SetMenuItemInfo; external user32 name 'SetMenuItemInfoA';
 function SetMessageExtraInfo; external user32 name 'SetMessageExtraInfo';
 function SetMessageQueue; external user32 name 'SetMessageQueue';
 function SetParent; external user32 name 'SetParent';
 function SetProcessWindowStation; external user32 name 'SetProcessWindowStation';
+function SetProp; external user32 name 'SetPropA';
 function SetPropA; external user32 name 'SetPropA';
 function SetPropW; external user32 name 'SetPropW';
-function SetProp; external user32 name 'SetPropA';
 function SetRect; external user32 name 'SetRect';
 function SetRectEmpty; external user32 name 'SetRectEmpty';
 function SetScrollInfo; external user32 name 'SetScrollInfo';
@@ -29940,26 +30378,26 @@ function SetSysColors; external user32 name 'SetSysColors';
 function SetSystemCursor; external user32 name 'SetSystemCursor';
 function SetThreadDesktop; external user32 name 'SetThreadDesktop';
 function SetTimer; external user32 name 'SetTimer';
+function SetUserObjectInformation; external user32 name 'SetUserObjectInformationA';
 function SetUserObjectInformationA; external user32 name 'SetUserObjectInformationA';
 function SetUserObjectInformationW; external user32 name 'SetUserObjectInformationW';
-function SetUserObjectInformation; external user32 name 'SetUserObjectInformationA';
 function SetUserObjectSecurity; external user32 name 'SetUserObjectSecurity';
 function SetWindowContextHelpId; external user32 name 'SetWindowContextHelpId';
+function SetWindowLong; external user32 name 'SetWindowLongA';
 function SetWindowLongA; external user32 name 'SetWindowLongA';
 function SetWindowLongW; external user32 name 'SetWindowLongW';
-function SetWindowLong; external user32 name 'SetWindowLongA';
 function SetWindowPlacement; external user32 name 'SetWindowPlacement';
 function SetWindowPos; external user32 name 'SetWindowPos';
+function SetWindowText; external user32 name 'SetWindowTextA';
 function SetWindowTextA; external user32 name 'SetWindowTextA';
 function SetWindowTextW; external user32 name 'SetWindowTextW';
-function SetWindowText; external user32 name 'SetWindowTextA';
 function SetWindowWord; external user32 name 'SetWindowWord';
+function SetWindowsHook; external user32 name 'SetWindowsHookA';
 function SetWindowsHookA; external user32 name 'SetWindowsHookA';
 function SetWindowsHookW; external user32 name 'SetWindowsHookW';
-function SetWindowsHook; external user32 name 'SetWindowsHookA';
+function SetWindowsHookEx; external user32 name 'SetWindowsHookExA';
 function SetWindowsHookExA; external user32 name 'SetWindowsHookExA';
 function SetWindowsHookExW; external user32 name 'SetWindowsHookExW';
-function SetWindowsHookEx; external user32 name 'SetWindowsHookExA';
 function SetWindowRgn; external user32 name 'SetWindowRgn';
 function SetWinEventHook; external user32 name 'SetWinEventHook';
 function ShowCaret; external user32 name 'ShowCaret';
@@ -29972,12 +30410,12 @@ function ShowWindowAsync; external user32 name 'ShowWindowAsync';
 function SubtractRect; external user32 name 'SubtractRect';
 function SwapMouseButton; external user32 name 'SwapMouseButton';
 function SwitchDesktop; external user32 name 'SwitchDesktop';
+function SystemParametersInfo; external user32 name 'SystemParametersInfoA';
 function SystemParametersInfoA; external user32 name 'SystemParametersInfoA';
 function SystemParametersInfoW; external user32 name 'SystemParametersInfoW';
-function SystemParametersInfo; external user32 name 'SystemParametersInfoA';
+function TabbedTextOut; external user32 name 'TabbedTextOutA';
 function TabbedTextOutA; external user32 name 'TabbedTextOutA';
 function TabbedTextOutW; external user32 name 'TabbedTextOutW';
-function TabbedTextOut; external user32 name 'TabbedTextOutA';
 function TileWindows; external user32 name 'TileWindows';
 function ToAscii; external user32 name 'ToAscii';
 function ToAsciiEx; external user32 name 'ToAsciiEx';
@@ -29986,9 +30424,9 @@ function ToUnicodeEx; external user32 name 'ToUnicodeEx';
 function TrackMouseEvent; external user32 name 'TrackMouseEvent';
 function TrackPopupMenu; external user32 name 'TrackPopupMenu';
 function TrackPopupMenuEx; external user32 name 'TrackPopupMenuEx';
+function TranslateAccelerator; external user32 name 'TranslateAcceleratorA';
 function TranslateAcceleratorA; external user32 name 'TranslateAcceleratorA';
 function TranslateAcceleratorW; external user32 name 'TranslateAcceleratorW';
-function TranslateAccelerator; external user32 name 'TranslateAcceleratorA';
 function TranslateMDISysAccel; external user32 name 'TranslateMDISysAccel';
 function TranslateMessage; external user32 name 'TranslateMessage';
 function UnhookWindowsHook; external user32 name 'UnhookWindowsHook';
@@ -29997,36 +30435,37 @@ function UnhookWinEvent; external user32 name 'UnhookWinEvent';
 function UnionRect; external user32 name 'UnionRect';
 function UnloadKeyboardLayout; external user32 name 'UnloadKeyboardLayout';
 function UnpackDDElParam; external user32 name 'UnpackDDElParam';
+function UnregisterClass; external user32 name 'UnregisterClassA';
 function UnregisterClassA; external user32 name 'UnregisterClassA';
 function UnregisterClassW; external user32 name 'UnregisterClassW';
-function UnregisterClass; external user32 name 'UnregisterClassA';
 function UnregisterDeviceNotification; external user32 name 'UnregisterDeviceNotification';
 function UnregisterHotKey; external user32 name 'UnregisterHotKey';
 function UpdateWindow; external user32 name 'UpdateWindow';
+function UpdateLayeredWindow; external user32 name 'UpdateLayeredWindow'; 
 function UserHandleGrantAccess; external user32 name 'UserHandleGrantAccess';
 function ValidateRect; external user32 name 'ValidateRect';
 function ValidateRgn; external user32 name 'ValidateRgn';
+function VkKeyScan; external user32 name 'VkKeyScanA';
 function VkKeyScanA; external user32 name 'VkKeyScanA';
 function VkKeyScanW; external user32 name 'VkKeyScanW';
-function VkKeyScan; external user32 name 'VkKeyScanA';
+function VkKeyScanEx; external user32 name 'VkKeyScanExA';
 function VkKeyScanExA; external user32 name 'VkKeyScanExA';
 function VkKeyScanExW; external user32 name 'VkKeyScanExW';
-function VkKeyScanEx; external user32 name 'VkKeyScanExA';
 function WaitForInputIdle; external user32 name 'WaitForInputIdle';
 function WaitMessage; external user32 name 'WaitMessage';
+function WinHelp; external user32 name 'WinHelpA';
 function WinHelpA; external user32 name 'WinHelpA';
 function WinHelpW; external user32 name 'WinHelpW';
-function WinHelp; external user32 name 'WinHelpA';
 function WindowFromDC; external user32 name 'WindowFromDC';
 function WindowFromPoint; external user32 name 'WindowFromPoint';
 procedure keybd_event; external user32 name 'keybd_event';
 procedure mouse_event; external user32 name 'mouse_event';
+function wsprintf; external user32 name 'wsprintfA';
 function wsprintfA; external user32 name 'wsprintfA';
 function wsprintfW; external user32 name 'wsprintfW';
-function wsprintf; external user32 name 'wsprintfA';
+function wvsprintf; external user32 name 'wvsprintfA';
 function wvsprintfA; external user32 name 'wvsprintfA';
 function wvsprintfW; external user32 name 'wvsprintfW';
-function wvsprintf; external user32 name 'wvsprintfA';
 
 { Externals from wintrust.dll }
 
@@ -30152,10 +30591,12 @@ begin
   Result := $100000;
 end;
 
+{$IFDEF MSWINDOWS}
 function UnlockResource(hResData: THandle): BOOL;
 begin
   Result := False;
 end;
+{$ENDIF}
 
 function GlobalAllocPtr(Flags: Integer; Bytes: Longint): Pointer; assembler;
 asm
@@ -30340,6 +30781,10 @@ begin
   Result := ExitWindowsEx(EWX_LOGOFF, 0);
 end;
 
+function PostAppMessage(idThread: DWORD; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL;
+begin
+  Result := PostThreadMessage(idThread, Msg, wParam, lParam)
+end;
 function PostAppMessageA(idThread: DWORD; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL;
 begin
   Result := PostThreadMessageA(idThread, Msg, wParam, lParam)
@@ -30348,11 +30793,14 @@ function PostAppMessageW(idThread: DWORD; Msg: UINT; wParam: WPARAM; lParam: LPA
 begin
   Result := PostThreadMessageW(idThread, Msg, wParam, lParam)
 end;
-function PostAppMessage(idThread: DWORD; Msg: UINT; wParam: WPARAM; lParam: LPARAM): BOOL;
-begin
-  Result := PostThreadMessage(idThread, Msg, wParam, lParam)
-end;
 
+function CreateWindow(lpClassName: PChar; lpWindowName: PChar;
+  dwStyle: DWORD; X, Y, nWidth, nHeight: Integer; hWndParent: HWND;
+  hMenu: HMENU; hInstance: HINST; lpParam: Pointer): HWND;
+begin
+  Result := CreateWindowEx(0, lpClassName, lpWindowName, dwStyle, X, Y,
+    nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
+end;
 function CreateWindowA(lpClassName: PAnsiChar; lpWindowName: PAnsiChar;
   dwStyle: DWORD; X, Y, nWidth, nHeight: Integer; hWndParent: HWND;
   hMenu: HMENU; hInstance: HINST; lpParam: Pointer): HWND;
@@ -30367,14 +30815,13 @@ begin
   Result := CreateWindowExW(0, lpClassName, lpWindowName, dwStyle, X, Y,
     nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
 end;
-function CreateWindow(lpClassName: PChar; lpWindowName: PChar;
-  dwStyle: DWORD; X, Y, nWidth, nHeight: Integer; hWndParent: HWND;
-  hMenu: HMENU; hInstance: HINST; lpParam: Pointer): HWND;
-begin
-  Result := CreateWindowEx(0, lpClassName, lpWindowName, dwStyle, X, Y,
-    nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
-end;
 
+function CreateDialog(hInstance: HINST; lpTemplateName: PChar;
+  hWndParent: HWND; lpDialogFunc: TFNDlgProc): HWND;
+begin
+  Result := CreateDialogParam(hInstance, lpTemplateName, hWndParent,
+    lpDialogFunc, 0);
+end;
 function CreateDialogA(hInstance: HINST; lpTemplateName: PAnsiChar;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): HWND;
 begin
@@ -30387,13 +30834,13 @@ begin
   Result := CreateDialogParamW(hInstance, lpTemplateName, hWndParent,
     lpDialogFunc, 0);
 end;
-function CreateDialog(hInstance: HINST; lpTemplateName: PChar;
+
+function CreateDialogIndirect(hInstance: HINST; const lpTemplate: TDlgTemplate;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): HWND;
 begin
-  Result := CreateDialogParam(hInstance, lpTemplateName, hWndParent,
+  Result := CreateDialogIndirectParam(hInstance, lpTemplate, hWndParent,
     lpDialogFunc, 0);
 end;
-
 function CreateDialogIndirectA(hInstance: HINST; const lpTemplate: TDlgTemplate;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): HWND;
 begin
@@ -30406,13 +30853,13 @@ begin
   Result := CreateDialogIndirectParamW(hInstance, lpTemplate, hWndParent,
     lpDialogFunc, 0);
 end;
-function CreateDialogIndirect(hInstance: HINST; const lpTemplate: TDlgTemplate;
-  hWndParent: HWND; lpDialogFunc: TFNDlgProc): HWND;
+
+function DialogBox(hInstance: HINST; lpTemplate: PChar;
+  hWndParent: HWND; lpDialogFunc: TFNDlgProc): Integer;
 begin
-  Result := CreateDialogIndirectParam(hInstance, lpTemplate, hWndParent,
+  Result := DialogBoxParam(hInstance, lpTemplate, hWndParent,
     lpDialogFunc, 0);
 end;
-
 function DialogBoxA(hInstance: HINST; lpTemplate: PAnsiChar;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): Integer;
 begin
@@ -30425,13 +30872,13 @@ begin
   Result := DialogBoxParamW(hInstance, lpTemplate, hWndParent,
     lpDialogFunc, 0);
 end;
-function DialogBox(hInstance: HINST; lpTemplate: PChar;
+
+function DialogBoxIndirect(hInstance: HINST; const lpDialogTemplate: TDlgTemplate;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): Integer;
 begin
-  Result := DialogBoxParam(hInstance, lpTemplate, hWndParent,
+  Result := DialogBoxIndirectParam(hInstance, lpDialogTemplate, hWndParent,
     lpDialogFunc, 0);
 end;
-
 function DialogBoxIndirectA(hInstance: HINST; const lpDialogTemplate: TDlgTemplate;
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): Integer;
 begin
@@ -30442,12 +30889,6 @@ function DialogBoxIndirectW(hInstance: HINST; const lpDialogTemplate: TDlgTempla
   hWndParent: HWND; lpDialogFunc: TFNDlgProc): Integer;
 begin
   Result := DialogBoxIndirectParamW(hInstance, lpDialogTemplate, hWndParent,
-    lpDialogFunc, 0);
-end;
-function DialogBoxIndirect(hInstance: HINST; const lpDialogTemplate: TDlgTemplate;
-  hWndParent: HWND; lpDialogFunc: TFNDlgProc): Integer;
-begin
-  Result := DialogBoxIndirectParam(hInstance, lpDialogTemplate, hWndParent,
     lpDialogFunc, 0);
 end;
 

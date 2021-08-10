@@ -3,7 +3,7 @@
 //                                                  
 //
 //
-//  Copyright (c)1998-99 Microsoft Corporation, All Rights Reserved
+//  Copyright (c)1998 - 1999 Microsoft Corporation, All Rights Reserved
 //-----------------------------------------------------------------------------
 
 /************************************************************************************************\
@@ -32,7 +32,6 @@
 //   7- 0: Reason   (8 bits)
 
 #if !defined(__ssperrcode_H)
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define      __ssperrcode_H
 #pragma once
 
@@ -304,5 +303,4 @@ namespace SspEC
 
 
 
-#pragma option pop /*P_O_Pop*/
 #endif

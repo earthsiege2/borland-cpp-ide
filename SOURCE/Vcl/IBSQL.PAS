@@ -1,43 +1,63 @@
-{********************************************************}
-{                                                        }
-{       Borland Delphi Visual Component Library          }
-{       InterBase Express core components                }
-{                                                        }
-{       Copyright (c) 1998-1999 Inprise Corporation      }
-{                                                        }
-{    InterBase Express is based in part on the product   }
-{    Free IB Components, written by Gregory H. Deatz for }
-{    Hoagland, Longo, Moran, Dunst & Doukas Company.     }
-{    Free IB Components is used under license.           }
-{                                                        }
-{********************************************************}
+{************************************************************************}
+{                                                                        }
+{       Borland Delphi Visual Component Library                          }
+{       InterBase Express core components                                }
+{                                                                        }
+{       Copyright (c) 1998-2001 Borland Software Corporation             }
+{                                                                        }
+{    InterBase Express is based in part on the product                   }
+{    Free IB Components, written by Gregory H. Deatz for                 }
+{    Hoagland, Longo, Moran, Dunst & Doukas Company.                     }
+{    Free IB Components is used under license.                           }
+{                                                                        }
+{    The contents of this file are subject to the InterBase              }
+{    Public License Version 1.0 (the "License"); you may not             }
+{    use this file except in compliance with the License. You may obtain }
+{    a copy of the License at http://www.borland.com/interbase/IPL.html  }
+{    Software distributed under the License is distributed on            }
+{    an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either              }
+{    express or implied. See the License for the specific language       }
+{    governing rights and limitations under the License.                 }
+{    The Original Code was created by InterBase Software Corporation     }
+{       and its successors.                                              }
+{    Portions created by Borland Software Corporation are Copyright      }
+{       (C) Borland Software Corporation. All Rights Reserved.           }
+{    Contributor(s): Jeff Overcash                                       }
+{                                                                        }
+{************************************************************************}
 
 unit IBSQL;
 
 interface
 
 uses
-  Windows, SysUtils, Classes, Forms, Controls, IBHeader,
-  IBErrorCodes, IBExternals, DB, IB, IBDatabase, IBUtils;
+  SysUtils, Variants,
+  {$IFDEF MSWINDOWS}
+  Windows,
+  {$ENDIF}
+  {$IFDEF LINUX}
+  Libc,
+  {$ENDIF}
+  Classes, IBHeader, IBErrorCodes, IBExternals, DB, IB, IBDatabase,
+  IBUtils, IBXConst;
 
-resourcestring
-  SEOFInComment = 'EOF in comment detected';
-  SEOFInString = 'EOF in string detected';
-  SParamNameExpected = 'Parameter name expected';
-  
 type
   TIBSQL = class;
-
+  TIBXSQLDA = class;
+  
   { TIBXSQLVAR }
   TIBXSQLVAR = class(TObject)
   private
+    FParent: TIBXSQLDA;
     FSQL: TIBSQL;
     FIndex: Integer;
     FModified: Boolean;
     FName: String;
     FXSQLVAR: PXSQLVAR;       { Point to the PXSQLVAR in the owner object }
+    FMaxLen : Short;     (** length of data area **)
 
     function AdjustScale(Value: Int64; Scale: Integer): Double;
+    function AdjustScaleToInt64(Value: Int64; Scale: Integer): Int64;
     function AdjustScaleToCurrency(Value: Int64; Scale: Integer): Currency;
     function GetAsCurrency: Currency;
     function GetAsInt64: Int64;
@@ -71,13 +91,16 @@ type
     procedure SetAsXSQLVAR(Value: PXSQLVAR);
     procedure SetIsNull(Value: Boolean);
     procedure SetIsNullable(Value: Boolean);
+    procedure SetAsTrimString(const Value: String);
+    function GetAsTrimString: String;
   public
-    constructor Create(Query: TIBSQL);
+    constructor Create(Parent: TIBXSQLDA; Query: TIBSQL);
     procedure Assign(Source: TIBXSQLVAR);
     procedure LoadFromFile(const FileName: String);
     procedure LoadFromStream(Stream: TStream);
     procedure SaveToFile(const FileName: String);
     procedure SaveToStream(Stream: TStream);
+    procedure Clear;
     property AsDate: TDateTime read GetAsDateTime write SetAsDate;
     property AsTime: TDateTime read GetAsDateTime write SetAsTime;
     property AsDateTime: TDateTime read GetAsDateTime write SetAsDateTime;
@@ -91,6 +114,7 @@ type
     property AsQuad: TISC_QUAD read GetAsQuad write SetAsQuad;
     property AsShort: Short read GetAsShort write SetAsShort;
     property AsString: String read GetAsString write SetAsString;
+    property AsTrimString : String read GetAsTrimString write SetAsTrimString;
     property AsVariant: Variant read GetAsVariant write SetAsVariant;
     property AsXSQLVAR: PXSQLVAR read GetAsXSQLVAR write SetAsXSQLVAR;
     property Data: PXSQLVAR read FXSQLVAR write FXSQLVAR;
@@ -103,8 +127,8 @@ type
     property SQLType: Integer read GetSQLType;
     property Value: Variant read GetAsVariant write SetAsVariant;
   end;
-  TIBXSQLVARArray = array[0..0] of TIBXSQLVAR;
-  PIBXSQLVARArray = ^TIBXSQLVARArray;
+
+  TIBXSQLVARArray = Array of TIBXSQLVAR;
 
   { TIBXSQLVAR }
   TIBXSQLDA = class(TObject)
@@ -114,7 +138,7 @@ type
     FNames: TStrings;
     FSize: Integer;
     FXSQLDA: PXSQLDA;
-    FXSQLVARs: PIBXSQLVARArray; { array of IBXQLVARs }
+    FXSQLVARs: TIBXSQLVARArray; { array of IBXQLVARs }
     FUniqueRelationName: String;
     function GetModified: Boolean;
     function GetNames: String;
@@ -147,9 +171,9 @@ type
     FParams: TIBXSQLDA;
   public
     procedure ReadyFile; virtual; abstract;
-    property Columns: TIBXSQLDA read FColumns;
+    property Columns: TIBXSQLDA read FColumns write FColumns;
     property Filename: String read FFilename write FFilename;
-    property Params: TIBXSQLDA read FParams;
+    property Params: TIBXSQLDA read FParams write FParams;
   end;
 
   TIBBatchInput = class(TIBBatch)
@@ -162,11 +186,10 @@ type
     function WriteColumns: Boolean; virtual; abstract;
   end;
 
-
   { TIBOutputDelimitedFile }
   TIBOutputDelimitedFile = class(TIBBatchOutput)
   protected
-    FHandle: THandle;
+    FFile : TFileStream;
     FOutputTitles: Boolean;
     FColDelimiter,
     FRowDelimiter: string;
@@ -205,7 +228,7 @@ type
   { TIBOutputRawFile }
   TIBOutputRawFile = class(TIBBatchOutput)
   protected
-    FHandle: THandle;
+    FFile : TFileStream;
   public
     destructor Destroy; override;
     procedure ReadyFile; override;
@@ -215,14 +238,14 @@ type
   { TIBInputRawFile }
   TIBInputRawFile = class(TIBBatchInput)
   protected
-    FHandle: THandle;
+    FFile : TFileStream;
   public
     destructor Destroy; override;
     function ReadParameters: Boolean; override;
     procedure ReadyFile; override;
   end;
 
-     { TIBSQL }
+  { TIBSQL }
   TIBSQLTypes = (SQLUnknown, SQLSelect, SQLInsert,
                   SQLUpdate, SQLDelete, SQLDDL,
                   SQLGetSegment, SQLPutSegment,
@@ -286,9 +309,10 @@ type
     function Next: TIBXSQLDA;
     procedure Prepare;
     function GetUniqueRelationName: String;
-    property BOF: Boolean read FBOF;
+    function ParamByName(Idx: String): TIBXSQLVAR;
+    property Bof: Boolean read FBOF;
     property DBHandle: PISC_DB_HANDLE read GetDBHandle;
-    property EOF: Boolean read GetEOF;
+    property Eof: Boolean read GetEOF;
     property Fields[const Idx: Integer]: TIBXSQLVAR read GetFields;
     property FieldIndex[FieldName: String]: Integer read GetFieldIndex;
     property Open: Boolean read FOpen;
@@ -316,12 +340,16 @@ type
 implementation
 
 uses
+  {$IFDEF LINUX}
+  Types,
+  {$ENDIF}
   IBIntf, IBBlob, IBSQLMonitor;
 
 { TIBXSQLVAR }
-constructor TIBXSQLVAR.Create(Query: TIBSQL);
+constructor TIBXSQLVAR.Create(Parent: TIBXSQLDA; Query: TIBSQL);
 begin
   inherited Create;
+  FParent := Parent;
   FSQL := Query;
 end;
 
@@ -339,26 +367,36 @@ begin
   s_bhandle := nil;
   d_bhandle := nil;
   try
-    if (Source.IsNull) then begin
+    if (Source.IsNull) then
+    begin
       IsNull := True;
       exit;
-    end else if (FXSQLVAR^.sqltype and (not 1) = SQL_ARRAY) or
-       (Source.FXSQLVAR^.sqltype and (not 1) = SQL_ARRAY) then
-      exit; { arrays not supported }
+    end
+    else
+      if (FXSQLVAR^.sqltype and (not 1) = SQL_ARRAY) or
+         (Source.FXSQLVAR^.sqltype and (not 1) = SQL_ARRAY) then
+        exit; { arrays not supported }
     if (FXSQLVAR^.sqltype and (not 1) <> SQL_BLOB) and
-       (Source.FXSQLVAR^.sqltype and (not 1) <> SQL_BLOB) then begin
+       (Source.FXSQLVAR^.sqltype and (not 1) <> SQL_BLOB) then
+    begin
       AsXSQLVAR := Source.AsXSQLVAR;
       exit;
-    end else if (Source.FXSQLVAR^.sqltype and (not 1) <> SQL_BLOB) then begin
-      szBuff := nil;
-      IBAlloc(szBuff, 0, Source.FXSQLVAR^.sqllen);
-      Move(Source.FXSQLVAR^.sqldata[0], szBuff[0], Source.FXSQLVAR^.sqllen);
-      bSourceBlob := False;
-      iSize := Source.FXSQLVAR^.sqllen;
-    end else if (FXSQLVAR^.sqltype and (not 1) <> SQL_BLOB) then
-      bDestBlob := False;
+    end
+    else
+      if (Source.FXSQLVAR^.sqltype and (not 1) <> SQL_BLOB) then
+      begin
+        szBuff := nil;
+        IBAlloc(szBuff, 0, Source.FXSQLVAR^.sqllen);
+        Move(Source.FXSQLVAR^.sqldata[0], szBuff[0], Source.FXSQLVAR^.sqllen);
+        bSourceBlob := False;
+        iSize := Source.FXSQLVAR^.sqllen;
+      end
+      else
+        if (FXSQLVAR^.sqltype and (not 1) <> SQL_BLOB) then
+          bDestBlob := False;
 
-    if bSourceBlob then begin
+    if bSourceBlob then
+    begin
       { read the blob }
       Source.FSQL.Call(isc_open_blob2(StatusVector, Source.FSQL.DBHandle,
         Source.FSQL.TRHandle, @s_bhandle, PISC_QUAD(Source.FXSQLVAR.sqldata),
@@ -374,17 +412,21 @@ begin
       end;
     end;
 
-    if bDestBlob then begin
+    if bDestBlob then
+    begin
       { write the blob }
       FSQL.Call(isc_create_blob2(StatusVector, FSQL.DBHandle,
         FSQL.TRHandle, @d_bhandle, PISC_QUAD(FXSQLVAR.sqldata),
         0, nil), True);
       try
         IBBlob.WriteBlob(@d_bhandle, szBuff, iSize);
+        IsNull := false;
       finally
         FSQL.Call(isc_close_blob(StatusVector, @d_bhandle), True);
       end;
-    end else begin
+    end
+    else
+    begin
       { just copy the buffer }
       FXSQLVAR.sqltype := SQL_TEXT;
       FXSQLVAR.sqllen := iSize;
@@ -392,14 +434,39 @@ begin
       Move(szBuff[0], FXSQLVAR^.sqldata[0], iSize);
     end;
   finally
-    IBAlloc(szBuff, 0, 0);
+    FreeMem(szBuff);
   end;
 end;
 
 function TIBXSQLVAR.AdjustScale(Value: Int64; Scale: Integer): Double;
 var
-  Scaling, i: Integer;
+  Scaling : Int64;
+  i: Integer;
   Val: Double;
+begin
+  Scaling := 1; Val := Value;
+  if Scale > 0 then
+  begin
+    for i := 1 to Scale do
+      Scaling := Scaling * 10;
+    result := Val * Scaling;
+  end
+  else
+    if Scale < 0 then
+    begin
+      for i := -1 downto Scale do
+        Scaling := Scaling * 10;
+      result := Val / Scaling;
+    end
+    else
+      result := Val;
+end;
+
+function TIBXSQLVAR.AdjustScaleToInt64(Value: Int64; Scale: Integer): Int64;
+var
+  Scaling : Int64;
+  i: Integer;
+  Val: Int64;
 begin
   Scaling := 1; Val := Value;
   if Scale > 0 then begin
@@ -407,62 +474,77 @@ begin
     result := Val * Scaling;
   end else if Scale < 0 then begin
     for i := -1 downto Scale do Scaling := Scaling * 10;
-    result := Val / Scaling;
+    result := Val div Scaling;
   end else
     result := Val;
 end;
 
 function TIBXSQLVAR.AdjustScaleToCurrency(Value: Int64; Scale: Integer): Currency;
 var
-  Scaling, i, Fraction: Integer;
-  Val: Currency;
+  Scaling : Int64;
+  i : Integer;
+  FractionText, PadText, CurrText: string;
 begin
-  Val := 0;
-  Fraction := 0;
-  result := Val;
+  Result := 0;
   Scaling := 1;
-  if Scale > 0 then begin
-    for i := 1 to Scale do Scaling := Scaling * 10;
+  if Scale > 0 then
+  begin
+    for i := 1 to Scale do
+      Scaling := Scaling * 10;
     result := Value * Scaling;
-  end else if Scale < 0 then begin
-    for i := -1 downto Scale do Scaling := Scaling * 10;
-    Fraction := Value mod Scaling;
-    Value := Value div Scaling;
-  end;
-  if Fraction <> 0 then
-    Val := Fraction/Scaling;
-  try
-    result := Val + Value;
-  except
-    on E: Exception do IBError(ibxeInvalidDataConversion, [nil]);
-  end;
+  end
+  else
+    if Scale < 0 then
+    begin
+      for i := -1 downto Scale do
+        Scaling := Scaling * 10;
+      FractionText := IntToStr(abs(Value mod Scaling));
+      for i := Length(FractionText) to -Scale -1 do
+        PadText := '0' + PadText;
+      if Value < 0 then
+        CurrText := '-' + IntToStr(Abs(Value div Scaling)) + DecimalSeparator + PadText + FractionText
+      else
+        CurrText := IntToStr(Abs(Value div Scaling)) + DecimalSeparator + PadText + FractionText;
+      try
+        result := StrToCurr(CurrText);
+      except
+        on E: Exception do
+          IBError(ibxeInvalidDataConversion, [nil]);
+      end;
+    end
+    else
+      result := Value;
 end;
 
 function TIBXSQLVAR.GetAsCurrency: Currency;
 begin
   result := 0;
-  if not IsNull then
-    case FXSQLVAR^.sqltype and (not 1) of
-      SQL_TEXT: begin
-        try
-          result := StrtoCurr(AsString);
-        except
-          on E: Exception do IBError(ibxeInvalidDataConversion, [nil]);
+  if FSQL.Database.SQLDialect < 3 then
+    result := GetAsDouble
+  else begin
+    if not IsNull then
+      case FXSQLVAR^.sqltype and (not 1) of
+        SQL_TEXT, SQL_VARYING: begin
+          try
+            result := StrtoCurr(AsString);
+          except
+            on E: Exception do IBError(ibxeInvalidDataConversion, [nil]);
+          end;
         end;
+        SQL_SHORT:
+          result := AdjustScaleToCurrency(Int64(PShort(FXSQLVAR^.sqldata)^),
+                                      FXSQLVAR^.sqlscale);
+        SQL_LONG:
+          result := AdjustScaleToCurrency(Int64(PLong(FXSQLVAR^.sqldata)^),
+                                      FXSQLVAR^.sqlscale);
+        SQL_INT64:
+          result := AdjustScaleToCurrency(PInt64(FXSQLVAR^.sqldata)^,
+                                      FXSQLVAR^.sqlscale);
+        SQL_DOUBLE, SQL_FLOAT, SQL_D_FLOAT:
+          result := GetAsDouble;
+        else
+          IBError(ibxeInvalidDataConversion, [nil]);
       end;
-      SQL_SHORT:
-        result := AdjustScaleToCurrency(Int64(PShort(FXSQLVAR^.sqldata)^),
-                                    FXSQLVAR^.sqlscale);
-      SQL_LONG:
-        result := AdjustScaleToCurrency(Int64(PLong(FXSQLVAR^.sqldata)^),
-                                    FXSQLVAR^.sqlscale);
-      SQL_INT64:
-        result := AdjustScaleToCurrency(PInt64(FXSQLVAR^.sqldata)^,
-                                    FXSQLVAR^.sqlscale);
-      SQL_DOUBLE, SQL_FLOAT, SQL_D_FLOAT:
-        result := Trunc(AsDouble);
-      else
-        IBError(ibxeInvalidDataConversion, [nil]);
     end;
 end;
 
@@ -479,14 +561,14 @@ begin
         end;
       end;
       SQL_SHORT:
-        result := Trunc(AdjustScale(Int64(PShort(FXSQLVAR^.sqldata)^),
-                                    FXSQLVAR^.sqlscale));
+        result := AdjustScaleToInt64(Int64(PShort(FXSQLVAR^.sqldata)^),
+                                    FXSQLVAR^.sqlscale);
       SQL_LONG:
-        result := Trunc(AdjustScale(Int64(PLong(FXSQLVAR^.sqldata)^),
-                                    FXSQLVAR^.sqlscale));
+        result := AdjustScaleToInt64(Int64(PLong(FXSQLVAR^.sqldata)^),
+                                    FXSQLVAR^.sqlscale);
       SQL_INT64:
-        result := Trunc(AdjustScale(PInt64(FXSQLVAR^.sqldata)^,
-                                    FXSQLVAR^.sqlscale));
+        result := AdjustScaleToInt64(PInt64(FXSQLVAR^.sqldata)^,
+                                    FXSQLVAR^.sqlscale);
       SQL_DOUBLE, SQL_FLOAT, SQL_D_FLOAT:
         result := Trunc(AsDouble);
       else
@@ -592,7 +674,7 @@ begin
   try
     result := AsDouble;
   except
-    on E: EOverflow do
+    on E: SysUtils.EOverflow do
       IBError(ibxeInvalidDataConversion, [nil]);
   end;
 end;
@@ -655,7 +737,6 @@ begin
   end;
 end;
 
-
 function TIBXSQLVAR.GetAsString: String;
 var
   sz: PChar;
@@ -670,22 +751,33 @@ begin
         result := '(Array)'; {do not localize}
       SQL_BLOB: begin
         ss := TStringStream.Create('');
-        SaveToStream(ss);
-        result := ss.DataString;
-        ss.Free;
+        try
+          SaveToStream(ss);
+          result := ss.DataString;
+        finally
+          ss.Free;
+        end;
       end;
       SQL_TEXT, SQL_VARYING: begin
         sz := FXSQLVAR^.sqldata;
         if (FXSQLVar^.sqltype and (not 1) = SQL_TEXT) then
           str_len := FXSQLVar^.sqllen
-        else begin
+        else
+        begin
           str_len := isc_vax_integer(FXSQLVar^.sqldata, 2);
           Inc(sz, 2);
         end;
         SetString(result, sz, str_len);
       end;
-      SQL_TYPE_DATE, SQL_TYPE_TIME, SQL_TIMESTAMP:
-        result := DateToStr(AsDateTime);
+      SQL_TYPE_DATE:
+        case FSQL.Database.SQLDialect of
+          1 : result := DateTimeToStr(AsDateTime);
+          3 : result := DateToStr(AsDateTime);
+        end;
+      SQL_TYPE_TIME :
+        result := TimeToStr(AsDateTime);
+      SQL_TIMESTAMP:
+        result := DateTimeToStr(AsDateTime);
       SQL_SHORT, SQL_LONG:
         if FXSQLVAR^.sqlscale = 0 then
           result := IntToStr(AsLong)
@@ -826,224 +918,338 @@ begin
 end;
 
 procedure TIBXSQLVAR.SetAsCurrency(Value: Currency);
+var
+  xvar: TIBXSQLVAR;
+  i: Integer;
 begin
-  if IsNullable then
-    IsNull := False;
-  FXSQLVAR^.sqltype := SQL_INT64 or (FXSQLVAR^.sqltype and 1);
-  FXSQLVAR^.sqlscale := -4;
-  FXSQLVAR^.sqllen := SizeOf(Int64);
-  IBAlloc(FXSQLVAR^.sqldata, 0, FXSQLVAR^.sqllen);
-  PCurrency(FXSQLVAR^.sqldata)^ := Value;
-  FModified := True;
+  if FSQL.Database.SQLDialect < 3 then
+    AsDouble := Value
+  else
+  begin
+    if IsNullable then
+      IsNull := False;
+    for i := 0 to FParent.FCount - 1 do
+      if FParent.FNames[i] = FName then
+      begin
+        xvar := FParent[i];
+        xvar.FXSQLVAR^.sqltype := SQL_INT64 or (xvar.FXSQLVAR^.sqltype and 1);
+        xvar.FXSQLVAR^.sqlscale := -4;
+        xvar.FXSQLVAR^.sqllen := SizeOf(Int64);
+        IBAlloc(xvar.FXSQLVAR^.sqldata, 0, xvar.FXSQLVAR^.sqllen);
+        PCurrency(xvar.FXSQLVAR^.sqldata)^ := Value;
+        xvar.FModified := True;
+      end;
+  end;
 end;
 
 procedure TIBXSQLVAR.SetAsInt64(Value: Int64);
+var
+  i: Integer;
+  xvar: TIBXSQLVAR;
 begin
   if IsNullable then
     IsNull := False;
-  FXSQLVAR^.sqltype := SQL_INT64 or (FXSQLVAR^.sqltype and 1);
-  FXSQLVAR^.sqlscale := 0;
-  FXSQLVAR^.sqllen := SizeOf(Long);
-  IBAlloc(FXSQLVAR^.sqldata, 0, FXSQLVAR^.sqllen);
-  PInt64(FXSQLVAR^.sqldata)^ := Value;
-  FModified := True;
+  for i := 0 to FParent.FCount - 1 do
+    if FParent.FNames[i] = FName then
+    begin
+      xvar := FParent[i];
+      xvar.FXSQLVAR^.sqltype := SQL_INT64 or (xvar.FXSQLVAR^.sqltype and 1);
+      xvar.FXSQLVAR^.sqlscale := 0;
+      xvar.FXSQLVAR^.sqllen := SizeOf(Int64);
+      IBAlloc(xvar.FXSQLVAR^.sqldata, 0, xvar.FXSQLVAR^.sqllen);
+      PInt64(xvar.FXSQLVAR^.sqldata)^ := Value;
+      xvar.FModified := True;
+    end;
 end;
 
 procedure TIBXSQLVAR.SetAsDate(Value: TDateTime);
 var
+  i: Integer;
   tm_date: TCTimeStructure;
   Yr, Mn, Dy: Word;
+  xvar: TIBXSQLVAR;
 begin
-  if FSQL.Database.SQLDialect >= 3 then
+  if FSQL.Database.SQLDialect < 3 then
   begin
     AsDateTime := Value;
     exit;
   end;
   if IsNullable then
     IsNull := False;
-  FXSQLVAR^.sqltype := SQL_TYPE_DATE or (FXSQLVAR^.sqltype and 1);
-  DecodeDate(Value, Yr, Mn, Dy);
-  with tm_date do begin
-    tm_sec := 0;
-    tm_min := 0;
-    tm_hour := 0;
-    tm_mday := Dy;
-    tm_mon := Mn - 1;
-    tm_year := Yr - 1900;
-  end;
-  FXSQLVAR^.sqllen := SizeOf(ISC_DATE);
-  IBAlloc(FXSQLVAR^.sqldata, 0, FXSQLVAR^.sqllen);
-  isc_encode_sql_date(@tm_date, PISC_DATE(FXSQLVAR^.sqldata));
-  FModified := True;
+  for i := 0 to FParent.FCount - 1 do
+    if FParent.FNames[i] = FName then
+    begin
+      xvar := FParent[i];
+      xvar.FXSQLVAR^.sqltype := SQL_TYPE_DATE or (xvar.FXSQLVAR^.sqltype and 1);
+      DecodeDate(Value, Yr, Mn, Dy);
+      with tm_date do begin
+        tm_sec := 0;
+        tm_min := 0;
+        tm_hour := 0;
+        tm_mday := Dy;
+        tm_mon := Mn - 1;
+        tm_year := Yr - 1900;
+      end;
+      xvar.FXSQLVAR^.sqllen := SizeOf(ISC_DATE);
+      IBAlloc(xvar.FXSQLVAR^.sqldata, 0, xvar.FXSQLVAR^.sqllen);
+      isc_encode_sql_date(@tm_date, PISC_DATE(xvar.FXSQLVAR^.sqldata));
+      xvar.FModified := True;
+    end;
 end;
 
 procedure TIBXSQLVAR.SetAsTime(Value: TDateTime);
 var
+  i: Integer;
   tm_date: TCTimeStructure;
   Hr, Mt, S, Ms: Word;
+  xvar: TIBXSQLVAR;
 begin
-  if FSQL.Database.SQLDialect >= 3 then
+  if FSQL.Database.SQLDialect < 3 then
   begin
     AsDateTime := Value;
     exit;
   end;
   if IsNullable then
     IsNull := False;
-  FXSQLVAR^.sqltype := SQL_TYPE_TIME or (FXSQLVAR^.sqltype and 1);
-  DecodeTime(Value, Hr, Mt, S, Ms);
-  with tm_date do begin
-    tm_sec := S;
-    tm_min := Mt;
-    tm_hour := Hr;
-    tm_mday := 0;
-    tm_mon := 0;
-    tm_year := 0;
-  end;
-  FXSQLVAR^.sqllen := SizeOf(ISC_TIME);
-  IBAlloc(FXSQLVAR^.sqldata, 0, FXSQLVAR^.sqllen);
-  isc_encode_sql_time(@tm_date, PISC_TIME(FXSQLVAR^.sqldata));
-  FModified := True;
+  for i := 0 to FParent.FCount - 1 do
+    if FParent.FNames[i] = FName then
+    begin
+      xvar := FParent[i];
+      xvar.FXSQLVAR^.sqltype := SQL_TYPE_TIME or (xvar.FXSQLVAR^.sqltype and 1);
+      DecodeTime(Value, Hr, Mt, S, Ms);
+      with tm_date do begin
+        tm_sec := S;
+        tm_min := Mt;
+        tm_hour := Hr;
+        tm_mday := 0;
+        tm_mon := 0;
+        tm_year := 0;
+      end;
+      xvar.FXSQLVAR^.sqllen := SizeOf(ISC_TIME);
+      IBAlloc(xvar.FXSQLVAR^.sqldata, 0, xvar.FXSQLVAR^.sqllen);
+      isc_encode_sql_time(@tm_date, PISC_TIME(xvar.FXSQLVAR^.sqldata));
+      xvar.FModified := True;
+    end;
 end;
 
 procedure TIBXSQLVAR.SetAsDateTime(Value: TDateTime);
 var
+  i: Integer;
   tm_date: TCTimeStructure;
   Yr, Mn, Dy, Hr, Mt, S, Ms: Word;
+  xvar: TIBXSQLVAR;
 begin
   if IsNullable then
     IsNull := False;
-  FXSQLVAR^.sqltype := SQL_TIMESTAMP or (FXSQLVAR^.sqltype and 1);
-  DecodeDate(Value, Yr, Mn, Dy);
-  DecodeTime(Value, Hr, Mt, S, Ms);
-  with tm_date do begin
-    tm_sec := S;
-    tm_min := Mt;
-    tm_hour := Hr;
-    tm_mday := Dy;
-    tm_mon := Mn - 1;
-    tm_year := Yr - 1900;
-  end;
-  FXSQLVAR^.sqllen := SizeOf(TISC_QUAD);
-  IBAlloc(FXSQLVAR^.sqldata, 0, FXSQLVAR^.sqllen);
-  isc_encode_date(@tm_date, PISC_QUAD(FXSQLVAR^.sqldata));
-  FModified := True;
+  for i := 0 to FParent.FCount - 1 do
+    if FParent.FNames[i] = FName then
+    begin
+      xvar := FParent[i];
+      xvar.FXSQLVAR^.sqltype := SQL_TIMESTAMP or (xvar.FXSQLVAR^.sqltype and 1);
+      DecodeDate(Value, Yr, Mn, Dy);
+      DecodeTime(Value, Hr, Mt, S, Ms);
+      with tm_date do begin
+        tm_sec := S;
+        tm_min := Mt;
+        tm_hour := Hr;
+        tm_mday := Dy;
+        tm_mon := Mn - 1;
+        tm_year := Yr - 1900;
+      end;
+      xvar.FXSQLVAR^.sqllen := SizeOf(TISC_QUAD);
+      IBAlloc(xvar.FXSQLVAR^.sqldata, 0, xvar.FXSQLVAR^.sqllen);
+      isc_encode_date(@tm_date, PISC_QUAD(xvar.FXSQLVAR^.sqldata));
+      xvar.FModified := True;
+    end;
 end;
 
 procedure TIBXSQLVAR.SetAsDouble(Value: Double);
+var
+  i: Integer;
+  xvar: TIBXSQLVAR;
 begin
   if IsNullable then
     IsNull := False;
-  FXSQLVAR^.sqltype := SQL_DOUBLE or (FXSQLVAR^.sqltype and 1);
-  FXSQLVAR^.sqllen := SizeOf(Double);
-  FXSQLVAR^.sqlscale := 0;
-  IBAlloc(FXSQLVAR^.sqldata, 0, FXSQLVAR^.sqllen);
-  PDouble(FXSQLVAR^.sqldata)^ := Value;
-  FModified := True;
+  for i := 0 to FParent.FCount - 1 do
+    if FParent.FNames[i] = FName then
+    begin
+      xvar := FParent[i];
+      xvar.FXSQLVAR^.sqltype := SQL_DOUBLE or (xvar.FXSQLVAR^.sqltype and 1);
+      xvar.FXSQLVAR^.sqllen := SizeOf(Double);
+      xvar.FXSQLVAR^.sqlscale := 0;
+      IBAlloc(xvar.FXSQLVAR^.sqldata, 0, xvar.FXSQLVAR^.sqllen);
+      PDouble(xvar.FXSQLVAR^.sqldata)^ := Value;
+      xvar.FModified := True;
+    end;
 end;
 
 procedure TIBXSQLVAR.SetAsFloat(Value: Float);
+var
+  i: Integer;
+  xvar: TIBXSQLVAR;
 begin
   if IsNullable then
     IsNull := False;
-  FXSQLVAR^.sqltype := SQL_FLOAT or (FXSQLVAR^.sqltype and 1);
-  FXSQLVAR^.sqllen := SizeOf(Float);
-  FXSQLVAR^.sqlscale := 0;
-  IBAlloc(FXSQLVAR^.sqldata, 0, FXSQLVAR^.sqllen);
-  PSingle(FXSQLVAR^.sqldata)^ := Value;
-  FModified := True;
+  for i := 0 to FParent.FCount - 1 do
+    if FParent.FNames[i] = FName then
+    begin
+      xvar := FParent[i];
+      xvar.FXSQLVAR^.sqltype := SQL_FLOAT or (xvar.FXSQLVAR^.sqltype and 1);
+      xvar.FXSQLVAR^.sqllen := SizeOf(Float);
+      xvar.FXSQLVAR^.sqlscale := 0;
+      IBAlloc(xvar.FXSQLVAR^.sqldata, 0, xvar.FXSQLVAR^.sqllen);
+      PSingle(xvar.FXSQLVAR^.sqldata)^ := Value;
+      xvar.FModified := True;
+    end;
 end;
 
 procedure TIBXSQLVAR.SetAsLong(Value: Long);
+var
+  i: Integer;
+  xvar: TIBXSQLVAR;
 begin
   if IsNullable then
     IsNull := False;
-  FXSQLVAR^.sqltype := SQL_LONG or (FXSQLVAR^.sqltype and 1);
-  FXSQLVAR^.sqllen := SizeOf(Long);
-  FXSQLVAR^.sqlscale := 0;
-  IBAlloc(FXSQLVAR^.sqldata, 0, FXSQLVAR^.sqllen);
-  PLong(FXSQLVAR^.sqldata)^ := Value;
-  FModified := True;
+  for i := 0 to FParent.FCount - 1 do
+    if FParent.FNames[i] = FName then
+    begin
+      xvar := FParent[i];
+      xvar.FXSQLVAR^.sqltype := SQL_LONG or (xvar.FXSQLVAR^.sqltype and 1);
+      xvar.FXSQLVAR^.sqllen := SizeOf(Long);
+      xvar.FXSQLVAR^.sqlscale := 0;
+      IBAlloc(xvar.FXSQLVAR^.sqldata, 0, xvar.FXSQLVAR^.sqllen);
+      PLong(xvar.FXSQLVAR^.sqldata)^ := Value;
+      xvar.FModified := True;
+    end;
 end;
 
 procedure TIBXSQLVAR.SetAsPointer(Value: Pointer);
+var
+  i: Integer;
+  xvar: TIBXSQLVAR;
 begin
   if IsNullable and (Value = nil) then
     IsNull := True
   else begin
     IsNull := False;
-    Move(Value^, FXSQLVAR^.sqldata, FXSQLVAR^.sqllen);
+    for i := 0 to FParent.FCount - 1 do
+      if FParent.FNames[i] = FName then
+      begin
+        xvar := FParent[i];
+        xvar.FXSQLVAR^.sqltype := SQL_TEXT or (FXSQLVAR^.sqltype and 1);
+        Move(Value^, xvar.FXSQLVAR^.sqldata^, xvar.FXSQLVAR^.sqllen);
+        xvar.FModified := True;
+      end;
   end;
-  FModified := True;
 end;
 
 procedure TIBXSQLVAR.SetAsQuad(Value: TISC_QUAD);
+var
+  i: Integer;
+  xvar: TIBXSQLVAR;
 begin
   if IsNullable then
     IsNull := False;
-  if (FXSQLVAR^.sqltype and (not 1) <> SQL_BLOB) and
-     (FXSQLVAR^.sqltype and (not 1) <> SQL_ARRAY) then
-    IBError(ibxeInvalidDataConversion, [nil]);
-  FXSQLVAR^.sqllen := SizeOf(TISC_QUAD);
-  IBAlloc(FXSQLVAR^.sqldata, 0, FXSQLVAR^.sqllen);
-  PISC_QUAD(FXSQLVAR^.sqldata)^ := Value;
-  FModified := True;
+  for i := 0 to FParent.FCount - 1 do
+    if FParent.FNames[i] = FName then
+    begin
+      xvar := FParent[i];
+      if (xvar.FXSQLVAR^.sqltype and (not 1) <> SQL_BLOB) and
+         (xvar.FXSQLVAR^.sqltype and (not 1) <> SQL_ARRAY) then
+        IBError(ibxeInvalidDataConversion, [nil]);
+      xvar.FXSQLVAR^.sqllen := SizeOf(TISC_QUAD);
+      IBAlloc(xvar.FXSQLVAR^.sqldata, 0, xvar.FXSQLVAR^.sqllen);
+      PISC_QUAD(xvar.FXSQLVAR^.sqldata)^ := Value;
+      xvar.FModified := True;
+    end;
 end;
 
 procedure TIBXSQLVAR.SetAsShort(Value: Short);
+var
+  i: Integer;
+  xvar: TIBXSQLVAR;
 begin
   if IsNullable then
     IsNull := False;
-  FXSQLVAR^.sqltype := SQL_SHORT or (FXSQLVAR^.sqltype and 1);
-  FXSQLVAR^.sqllen := SizeOf(Short);
-  FXSQLVAR^.sqlscale := 0;
-  IBAlloc(FXSQLVAR^.sqldata, 0, FXSQLVAR^.sqllen);
-  PShort(FXSQLVAR^.sqldata)^ := Value;
-  FModified := True;
+  for i := 0 to FParent.FCount - 1 do
+    if FParent.FNames[i] = FName then
+    begin
+      xvar := FParent[i];
+      xvar.FXSQLVAR^.sqltype := SQL_SHORT or (xvar.FXSQLVAR^.sqltype and 1);
+      xvar.FXSQLVAR^.sqllen := SizeOf(Short);
+      xvar.FXSQLVAR^.sqlscale := 0;
+      IBAlloc(xvar.FXSQLVAR^.sqldata, 0, xvar.FXSQLVAR^.sqllen);
+      PShort(xvar.FXSQLVAR^.sqldata)^ := Value;
+      xvar.FModified := True;
+    end;
 end;
 
 procedure TIBXSQLVAR.SetAsString(Value: String);
-  procedure SetSQLVAR;
+var
+  stype: Integer;
+  ss: TStringStream;
+
+  procedure SetStringValue;
+  var
+    i: Integer;
+    xvar: TIBXSQLVAR;
   begin
-    FXSQLVAR^.sqltype := SQL_TEXT or (FXSQLVAR^.sqltype and 1);
-    FXSQLVAR^.sqllen := Length(Value);
-    IBAlloc(FXSQLVAR^.sqldata, 0, FXSQLVAR^.sqllen + 1);
-    if (Length(Value) > 0) then
-      Move(Value[1], FXSQLVAR^.sqldata^, FXSQLVAR^.sqllen);
+    for i := 0 to FParent.FCount - 1 do
+      if FParent.FNames[i] = FName then
+      begin
+        xvar := FParent[i];
+        if (xvar.FXSQLVAR^.sqlname = 'DB_KEY') or {do not localize}
+           (xvar.FXSQLVAR^.sqlname = 'RDB$DB_KEY') then {do not localize}
+          Move(Value[1], xvar.FXSQLVAR^.sqldata^, xvar.FXSQLVAR^.sqllen)
+        else
+        begin
+          xvar.FXSQLVAR^.sqltype := SQL_TEXT or (FXSQLVAR^.sqltype and 1);
+          if (FMaxLen > 0) and (Length(Value) > FMaxLen) then
+            IBError(ibxeStringTooLarge, [Length(Value), FMaxLen]);
+          xvar.FXSQLVAR^.sqllen := Length(Value);
+          IBAlloc(xvar.FXSQLVAR^.sqldata, 0, xvar.FXSQLVAR^.sqllen + 1);
+          if (Length(Value) > 0) then
+            Move(Value[1], xvar.FXSQLVAR^.sqldata^, xvar.FXSQLVAR^.sqllen);
+        end;
+        xvar.FModified := True;
+      end;
   end;
+
 begin
   if IsNullable then
     IsNull := False;
-  if (FXSQLVAR^.sqlname = 'DB_KEY') or {do not localize}
-     (FXSQLVAR^.sqlname = 'RDB$DB_KEY') then {do not localize}
-    Move(Value[1], FXSQLVAR^.sqldata^, FXSQLVAR^.sqllen)
-  else begin
-    if ((FXSQLVAR^.sqltype and (not 1) <> SQL_BLOB) and
-       (FXSQLVAR^.sqltype and (not 1) <> SQL_TEXT) and
-       (FXSQLVAR^.sqltype and (not 1) <> SQL_VARYING)) then
-      begin
-         if (Value = '') then
-           IsNull := True
-         else if (FXSQLVAR^.sqltype and (not 1) = SQL_TIMESTAMP) then
-           SetAsDateTime(StrToDateTime(Value))
-         else
-           SetSQLVAR;
-      end
-    else begin
-      if (FXSQLVAR^.sqltype and (not 1) = SQL_BLOB) then
-        LoadFromStream(TStringStream.Create(Value))
-      else begin
-        SetSQLVAR;
+  stype := FXSQLVAR^.sqltype and (not 1);
+  if (stype = SQL_TEXT) or (stype = SQL_VARYING) then
+    SetStringValue
+  else
+  begin
+    if (stype = SQL_BLOB) then
+    begin
+      ss := TStringStream.Create(Value);
+      try
+        LoadFromStream(ss);
+      finally
+        ss.Free;
       end;
-    end;
+    end
+    else
+      if Value = '' then
+        IsNull := True
+      else
+        if (stype = SQL_TIMESTAMP) or (stype = SQL_TYPE_DATE) or
+          (stype = SQL_TYPE_TIME) then
+          SetAsDateTime(StrToDateTime(Value))
+        else
+          SetStringValue;
   end;
-  FModified := True;
 end;
 
 procedure TIBXSQLVAR.SetAsVariant(Value: Variant);
 begin
   if VarIsNull(Value) then
     IsNull := True
-  else case VarType(Value) of
+  else
+  case VarType(Value) of
     varEmpty, varNull:
       IsNull := True;
     varSmallint, varInteger, varByte:
@@ -1070,53 +1276,111 @@ end;
 
 procedure TIBXSQLVAR.SetAsXSQLVAR(Value: PXSQLVAR);
 var
+  i: Integer;
+  xvar: TIBXSQLVAR;
   sqlind: PShort;
   sqldata: PChar;
   local_sqllen: Integer;
 begin
-  sqlind := FXSQLVAR^.sqlind;
-  sqldata := FXSQLVAR^.sqldata;
-  Move(Value^, FXSQLVAR^, SizeOf(TXSQLVAR));
-  FXSQLVAR^.sqlind := sqlind;
-  FXSQLVAR^.sqldata := sqldata;
-  if (Value^.sqltype and 1 = 1) then begin
-    if (FXSQLVAR^.sqlind = nil) then
-      IBAlloc(FXSQLVAR^.sqlind, 0, SizeOf(Short));
-    FXSQLVAR^.sqlind^ := Value^.sqlind^;
-  end else if (FXSQLVAR^.sqlind <> nil) then
-    IBAlloc(FXSQLVAR^.sqlind, 0, 0);
-  if ((FXSQLVAR^.sqltype and (not 1)) = SQL_VARYING) then
-    local_sqllen := FXSQLVAR^.sqllen + 2
-  else
-    local_sqllen := FXSQLVAR^.sqllen;
-  FXSQLVAR^.sqlscale := Value^.sqlscale;
-  IBAlloc(FXSQLVAR^.sqldata, 0, local_sqllen);
-  Move(Value^.sqldata[0], FXSQLVAR^.sqldata[0], local_sqllen);
-  FModified := True;
+  for i := 0 to FParent.FCount - 1 do
+    if FParent.FNames[i] = FName then
+    begin
+      xvar := FParent[i];
+      sqlind := xvar.FXSQLVAR^.sqlind;
+      sqldata := xvar.FXSQLVAR^.sqldata;
+      Move(Value^, xvar.FXSQLVAR^, SizeOf(TXSQLVAR));
+      xvar.FXSQLVAR^.sqlind := sqlind;
+      xvar.FXSQLVAR^.sqldata := sqldata;
+      if (Value^.sqltype and 1 = 1) then
+      begin
+        if (xvar.FXSQLVAR^.sqlind = nil) then
+          IBAlloc(xvar.FXSQLVAR^.sqlind, 0, SizeOf(Short));
+        xvar.FXSQLVAR^.sqlind^ := Value^.sqlind^;
+      end
+      else
+        if (xvar.FXSQLVAR^.sqlind <> nil) then
+          ReallocMem(xvar.FXSQLVAR^.sqlind, 0);
+      if ((xvar.FXSQLVAR^.sqltype and (not 1)) = SQL_VARYING) then
+        local_sqllen := xvar.FXSQLVAR^.sqllen + 2
+      else
+        local_sqllen := xvar.FXSQLVAR^.sqllen;
+      FXSQLVAR^.sqlscale := Value^.sqlscale;
+      IBAlloc(xvar.FXSQLVAR^.sqldata, 0, local_sqllen);
+      Move(Value^.sqldata[0], xvar.FXSQLVAR^.sqldata[0], local_sqllen);
+      xvar.FModified := True;
+    end;
 end;
 
 procedure TIBXSQLVAR.SetIsNull(Value: Boolean);
+var
+  i: Integer;
+  xvar: TIBXSQLVAR;
 begin
-  if Value then begin
+  if Value then
+  begin
     if not IsNullable then
       IsNullable := True;
-    FXSQLVAR^.sqlind^ := -1;
-  end else if ((not Value) and IsNullable) then
-    FXSQLVAR^.sqlind^ := 0;
-  FModified := True;
+    for i := 0 to FParent.FCount - 1 do
+      if FParent.FNames[i] = FName then
+      begin
+        xvar := FParent[i];
+        if Assigned(xvar.FXSQLVAR^.sqlind) then
+          xvar.FXSQLVAR^.sqlind^ := -1;
+        xvar.FModified := True;
+      end;
+  end
+  else
+    if ((not Value) and IsNullable) then
+    begin
+      for i := 0 to FParent.FCount - 1 do
+        if FParent.FNames[i] = FName then
+        begin
+          xvar := FParent[i];
+          if Assigned(xvar.FXSQLVAR^.sqlind) then
+            xvar.FXSQLVAR^.sqlind^ := 0;
+          xvar.FModified := True;
+        end;
+    end;
 end;
 
 procedure TIBXSQLVAR.SetIsNullable(Value: Boolean);
+var
+  i: Integer;
+  xvar: TIBXSQLVAR;
 begin
-  if (Value <> IsNullable) then begin
-    if Value then begin
-      FXSQLVAR^.sqltype := FXSQLVAR^.sqltype or 1;
-      IBAlloc(FXSQLVAR^.sqlind, 0, SizeOf(Short));
-    end else begin
-      FXSQLVAR^.sqltype := FXSQLVAR^.sqltype and (not 1);
-      IBAlloc(FXSQLVAR^.sqlind, 0, 0);
+  for i := 0 to FParent.FCount - 1 do
+    if FParent.FNames[i] = FName then
+    begin
+      xvar := FParent[i];
+      if (Value <> IsNullable) then
+      begin
+        if Value then
+        begin
+          xvar.FXSQLVAR^.sqltype := xvar.FXSQLVAR^.sqltype or 1;
+          IBAlloc(xvar.FXSQLVAR^.sqlind, 0, SizeOf(Short));
+        end
+        else
+        begin
+          xvar.FXSQLVAR^.sqltype := xvar.FXSQLVAR^.sqltype and (not 1);
+          ReallocMem(xvar.FXSQLVAR^.sqlind, 0);
+        end;
+      end;
     end;
-  end;
+end;
+
+procedure TIBXSQLVAR.Clear;
+begin
+  IsNull := true;
+end;
+
+procedure TIBXSQLVAR.SetAsTrimString(const Value: String);
+begin
+  SetAsString(TrimRight(Value));
+end;
+
+function TIBXSQLVAR.GetAsTrimString: String;
+begin
+  Result := TrimRight(GetAsString);
 end;
 
 { TIBXSQLDA }
@@ -1134,17 +1398,19 @@ var
   i: Integer;
 begin
   FNames.Free;
-  if FXSQLDA <> nil then begin
-    for i := 0 to FSize - 1 do with FXSQLDA^.sqlvar[i] do begin
-      IBAlloc(sqldata, 0, 0);
-      IBAlloc(sqlind, 0, 0);
-      FXSQLVARs^[i].Free;
+  if FXSQLDA <> nil then
+  begin
+    for i := 0 to FSize - 1 do
+    begin
+      FreeMem(FXSQLVARs[i].FXSQLVAR^.sqldata);
+      FreeMem(FXSQLVARs[i].FXSQLVAR^.sqlind);
+      FXSQLVARs[i].Free ;
     end;
-    IBAlloc(FXSQLDA, 0, 0);
-    IBAlloc(FXSQLVARs, 0, 0);
+    FreeMem(FXSQLDA);
     FXSQLDA := nil;
+    FXSQLVARs := nil;
   end;
-  inherited;
+  inherited Destroy;
 end;
 
 procedure TIBXSQLDA.AddName(FieldName: String; Idx: Integer);
@@ -1155,8 +1421,8 @@ begin
   while FNames.Count <= Idx do
     FNames.Add('');
   FNames[Idx] := fn;
-  FXSQLVARs^[Idx].FName := fn;
-  FXSQLVARs^[Idx].FIndex := Idx;
+  FXSQLVARs[Idx].FName := fn;
+  FXSQLVARs[Idx].FIndex := Idx;
 end;
 
 function TIBXSQLDA.GetModified: Boolean;
@@ -1164,10 +1430,12 @@ var
   i: Integer;
 begin
   result := False;
-  for i := 0 to FCount - 1 do if FXSQLVARs^[i].Modified then begin
-    result := True;
-    exit;
-  end;
+  for i := 0 to FCount - 1 do
+    if FXSQLVARs[i].Modified then
+    begin
+      result := True;
+      exit;
+    end;
 end;
 
 function TIBXSQLDA.GetNames: String;
@@ -1189,7 +1457,7 @@ function TIBXSQLDA.GetXSQLVAR(Idx: Integer): TIBXSQLVAR;
 begin
   if (Idx < 0) or (Idx >= FCount) then
     IBError(ibxeXSQLDAIndexOutOfRange, [nil]);
-  result := FXSQLVARs^[Idx]
+  result := FXSQLVARs[Idx]
 end;
 
 function TIBXSQLDA.ByName(Idx: String): TIBXSQLVAR;
@@ -1223,31 +1491,40 @@ var
 begin
   bUnique := True;
   NamesWereEmpty := (FNames.Count = 0);
-  if FXSQLDA <> nil then begin
-    for i := 0 to FCount - 1 do begin
-      with FXSQLVARs^[i].Data^ do begin
+  if FXSQLDA <> nil then
+  begin
+    for i := 0 to FCount - 1 do
+    begin
+      with FXSQLVARs[i].Data^ do
+      begin
         if bUnique and (String(relname) <> '') then
         begin
           if FUniqueRelationName = '' then
             FUniqueRelationName := String(relname)
-          else if String(relname) <> FUniqueRelationName then
-          begin
-            FUniqueRelationName := '';
-            bUnique := False;
-          end;
+          else
+            if String(relname) <> FUniqueRelationName then
+            begin
+              FUniqueRelationName := '';
+              bUnique := False;
+            end;
         end;
-        if NamesWereEmpty then begin
+        if NamesWereEmpty then
+        begin
           st := String(aliasname);
-          if st = '' then begin
+          if st = '' then
+          begin
             st := 'F_'; {do not localize}
             aliasname_length := 2;
             j := 1; j_len := 1;
             StrPCopy(aliasname, st + IntToStr(j));
-          end else begin
+          end
+          else
+          begin
             StrPCopy(aliasname, st);
             j := 0; j_len := 0;
           end;
-          while GetXSQLVARByName(String(aliasname)) <> nil do begin
+          while GetXSQLVARByName(String(aliasname)) <> nil do
+          begin
             Inc(j); j_len := Length(IntToStr(j));
             if j_len + aliasname_length > 31 then
               StrPCopy(aliasname,
@@ -1259,10 +1536,16 @@ begin
           Inc(aliasname_length, j_len);
           AddName(String(aliasname), i);
         end;
+        if (sqltype and (not 1) = SQL_TEXT) or
+           (sqltype and (not 1) = SQL_VARYING) then
+          FXSQLVARs[i].FMaxLen := sqllen
+        else
+          FXSQLVARs[i].FMaxLen := 0;
         case sqltype and (not 1) of
           SQL_TEXT, SQL_TYPE_DATE, SQL_TYPE_TIME, SQL_TIMESTAMP,
           SQL_BLOB, SQL_ARRAY, SQL_QUAD, SQL_SHORT,
-          SQL_LONG, SQL_INT64, SQL_DOUBLE, SQL_FLOAT, SQL_D_FLOAT: begin
+          SQL_LONG, SQL_INT64, SQL_DOUBLE, SQL_FLOAT, SQL_D_FLOAT:
+          begin
             if (sqllen = 0) then
               { Make sure you get a valid pointer anyway
                select '' from foo }
@@ -1270,7 +1553,8 @@ begin
             else
               IBAlloc(sqldata, 0, sqllen)
           end;
-          SQL_VARYING: begin
+          SQL_VARYING:
+          begin
             IBAlloc(sqldata, 0, sqllen + 2);
           end;
           else
@@ -1278,8 +1562,9 @@ begin
         end;
         if (sqltype and 1 = 1) then
           IBAlloc(sqlind, 0, SizeOf(Short))
-        else if (sqlind <> nil) then
-          IBAlloc(sqlind, 0, 0);
+        else
+          if (sqlind <> nil) then
+            ReallocMem(sqlind, 0);
       end;
     end;
   end;
@@ -1288,28 +1573,35 @@ end;
 procedure TIBXSQLDA.SetCount(Value: Integer);
 var
   i, OldSize: Integer;
+  p : PXSQLVAR;
 begin
   FNames.Clear;
   FCount := Value;
   if FCount = 0 then
     FUniqueRelationName := ''
-  else begin
+  else
+  begin
     if FSize > 0 then
       OldSize := XSQLDA_LENGTH(FSize)
     else
       OldSize := 0;
-    if FCount > FSize then begin
+    if FCount > FSize then
+    begin
       IBAlloc(FXSQLDA, OldSize, XSQLDA_LENGTH(FCount));
-      IBAlloc(FXSQLVARs, FSize * SizeOf(TIBXSQLVAR), FCount * SizeOf(TIBXSQLVAR));
+      SetLength(FXSQLVARs, FCount);
       FXSQLDA^.version := SQLDA_VERSION1;
-      for i := 0 to FCount - 1 do begin
+      p := @FXSQLDA^.sqlvar[0];
+      for i := 0 to FCount - 1 do
+      begin
         if i >= FSize then
-          FXSQLVARs^[i] := TIBXSQLVAR.Create(FSQL);
-        FXSQLVARs^[i].FXSQLVAR := @FXSQLDA^.sqlvar[i]
+          FXSQLVARs[i] := TIBXSQLVAR.Create(self, FSQL);
+        FXSQLVARs[i].FXSQLVAR := p;
+        p := Pointer(PChar(p) + sizeof(FXSQLDA^.sqlvar));
       end;
       FSize := FCount;
     end;
-    if FSize > 0 then begin
+    if FSize > 0 then
+    begin
       FXSQLDA^.sqln := Value;
       FXSQLDA^.sqld := Value;
     end;
@@ -1320,28 +1612,20 @@ end;
 
 destructor TIBOutputDelimitedFile.Destroy;
 begin
-  if FHandle <> 0 then
-  begin
-    FlushFileBuffers(FHandle);
-    CloseHandle(FHandle);
-  end;
+  FFile.Free;
   inherited Destroy;
 end;
 
 procedure TIBOutputDelimitedFile.ReadyFile;
 var
   i: Integer;
-  BytesWritten: DWORD;
   st: string;
 begin
   if FColDelimiter = '' then
     FColDelimiter := TAB;
   if FRowDelimiter = '' then
     FRowDelimiter := CRLF;
-  FHandle := CreateFile(PChar(Filename), GENERIC_WRITE, 0, nil, CREATE_ALWAYS,
-                        FILE_ATTRIBUTE_NORMAL, 0);
-  if FHandle = INVALID_HANDLE_VALUE then
-    FHandle := 0;
+  FFile := TFileStream.Create(FFilename, fmCreate or fmShareDenyWrite);
   if FOutputTitles then
   begin
     for i := 0 to Columns.Count - 1 do
@@ -1350,7 +1634,7 @@ begin
       else
         st := st + FColDelimiter + string(Columns[i].Data^.aliasname);
     st := st + FRowDelimiter;
-    WriteFile(FHandle, st[1], Length(st), BytesWritten, nil);
+    FFile.Write(st[1], Length(st));
   end;
 end;
 
@@ -1361,7 +1645,7 @@ var
   st: string;
 begin
   result := False;
-  if FHandle <> 0 then
+  if Assigned(FFile) then
   begin
     st := '';
     for i := 0 to Columns.Count - 1 do
@@ -1371,7 +1655,7 @@ begin
       st := st + StripString(Columns[i].AsString, FColDelimiter + FRowDelimiter);
     end;
     st := st + FRowDelimiter;
-    WriteFile(FHandle, st[1], Length(st), BytesWritten, nil);
+    BytesWritten := FFile.Write(st[1], Length(st));
     if BytesWritten = DWORD(Length(st)) then
       result := True;
   end
@@ -1438,7 +1722,8 @@ var
   Col: string;
 begin
   result := False;
-  if not FEOF then begin
+  if not FEOF then
+  begin
     curcol := 0;
     repeat
       i := GetColumn(Col);
@@ -1454,7 +1739,8 @@ begin
             Params[curcol].AsString := Col;
           Inc(curcol);
         except
-          on E: Exception do begin
+          on E: Exception do
+          begin
             if not (FEOF and (curcol = Params.Count)) then
               raise;
           end;
@@ -1467,6 +1753,9 @@ begin
 end;
 
 procedure TIBInputDelimitedFile.ReadyFile;
+var
+  col : String;
+  curcol : Integer;
 begin
   if FColDelimiter = '' then
     FColDelimiter := TAB;
@@ -1478,42 +1767,77 @@ begin
     FFile.Free;
   FFile := TFileStream.Create(FFilename, fmOpenRead or fmShareDenyWrite);
   if FSkipTitles then
-    ReadParameters;
+  begin
+    curcol := 0;
+    while curcol < Params.Count do
+    begin
+      GetColumn(Col);
+      Inc(CurCol)
+    end;
+  end;
 end;
 
 { TIBOutputRawFile }
 destructor TIBOutputRawFile.Destroy;
 begin
-  if FHandle <> 0 then
-  begin
-    FlushFileBuffers(FHandle);
-    CloseHandle(FHandle);
-  end;
+  FFile.Free;
   inherited Destroy;
 end;
 
 procedure TIBOutputRawFile.ReadyFile;
 begin
-  FHandle := CreateFile(PChar(Filename), GENERIC_WRITE, 0, nil, CREATE_ALWAYS,
-                        FILE_ATTRIBUTE_NORMAL, 0);
-  if FHandle = INVALID_HANDLE_VALUE then
-    FHandle := 0;
+  if Assigned(FFile) then
+    FreeAndNil(FFile);
+  FFile := TFileStream.Create(Filename, fmCreate);
 end;
 
 function TIBOutputRawFile.WriteColumns: Boolean;
 var
   i: Integer;
-  BytesWritten: DWord;
+  BytesWritten, BytesToWrite : LongInt;
+  SQLVar : PXSQLVAR;
+  bs : TMemoryStream;
 begin
   result := False;
-  if FHandle <> 0 then
+  if Assigned(FFile) then
   begin
     for i := 0 to Columns.Count - 1 do
     begin
-      WriteFile(FHandle, Columns[i].Data^.sqldata^, Columns[i].Data^.sqllen,
-                BytesWritten, nil);
-      if BytesWritten <> DWORD(Columns[i].Data^.sqllen) then
-        exit;
+      SQLVar := Columns[i].Data;
+      case SQLVar^.sqltype and (not 1) of
+        SQL_VARYING:
+        begin
+          BytesToWrite := SQLVar^.sqllen + 2;
+          BytesWritten := FFile.Write(SQLVar^.sqldata^, BytesToWrite);
+          if (BytesWritten <> BytesToWrite) then
+            exit;
+        end;
+        SQL_BLOB:
+        begin
+          bs := TMemoryStream.Create;
+          try
+            Columns[i].SaveToStream(bs);
+            BytesToWrite := bs.Size;
+            FFile.Write(BytesToWrite, sizeof(BytesToWrite));
+            BytesWritten := FFile.CopyFrom(bs, 0);
+            if BytesWritten <> BytesToWrite then
+            begin
+              FreeAndNil(bs);
+              exit;
+            end;
+          finally
+            bs.Free;
+          end;
+        end;
+        else
+        begin
+          BytesWritten := FFile.Write(SQLVar^.sqldata^, SQLVar^.sqllen);
+          if BytesWritten <> SQLVar^.sqllen then
+            exit;
+        end;
+      end;
+      // Have to write out the nil indicator
+      FFile.Write(SQLVar^.sqlind^, sizeof(SQLVar^.sqlind));
     end;
     result := True;
   end;
@@ -1522,25 +1846,63 @@ end;
 { TIBInputRawFile }
 destructor TIBInputRawFile.Destroy;
 begin
-  if FHandle <> 0 then
-    CloseHandle(FHandle);
-  inherited;
+  FFile.Free;
+  inherited Destroy;
 end;
 
 function TIBInputRawFile.ReadParameters: Boolean;
 var
   i: Integer;
-  BytesRead: DWord;
+  BytesRead, BytesToRead : LongInt;
+  SQLVar : PXSQLVAR;
+  bs: TMemoryStream;
 begin
   result := False;
-  if FHandle <> 0 then
+  if Assigned(FFile) then
   begin
     for i := 0 to Params.Count - 1 do
     begin
-      ReadFile(FHandle, Params[i].Data^.sqldata^, Params[i].Data^.sqllen,
-               BytesRead, nil);
-      if BytesRead <> DWORD(Params[i].Data^.sqllen) then
-        exit;
+      SQLVar := Params[i].Data;
+
+      case SQLVar^.sqltype and (not 1) of
+        SQL_VARYING:
+        begin
+          BytesToRead := SQLVar^.sqllen + 2;
+          BytesRead := FFile.Read(SQLVar^.sqldata^, BytesToRead);
+          if BytesRead <> BytesToRead then
+            Exit;
+        end;
+        SQL_BLOB:
+        begin
+          bs := TMemoryStream.Create;
+          try
+            FFile.Read(BytesToRead, sizeof(BytesToRead));
+            if BytesToRead = 0 then
+              SQLVar^.sqlind^ := -1
+            else
+            begin
+              BytesRead := bs.CopyFrom(FFile, BytesToRead);
+              if BytesRead <> BytesToRead then
+              begin
+                FreeAndNil(bs);
+                Exit;
+              end;
+              bs.Position := 0;
+              Params[i].LoadFromStream(bs);
+            end;
+          finally
+            bs.Free;
+          end;
+        end;
+        else
+        begin
+          BytesRead := FFile.Read(SQLVar^.sqldata^, SQLVar^.sqllen);
+          if BytesRead <> SQLVar^.sqllen then
+            exit;
+        end;
+      end;
+      // Have to read in the nil indicator
+      FFile.Read(SQLVar^.sqlind^, sizeof(SQLVar^.sqlind));
     end;
     result := True;
   end;
@@ -1548,12 +1910,9 @@ end;
 
 procedure TIBInputRawFile.ReadyFile;
 begin
-  if FHandle <> 0 then
-    CloseHandle(FHandle);
-  FHandle := CreateFile(PChar(Filename), GENERIC_READ, 0, nil, OPEN_EXISTING,
-                        FILE_FLAG_SEQUENTIAL_SCAN, 0);
-  if FHandle = INVALID_HANDLE_VALUE then
-    FHandle := 0;
+  if Assigned(FFile)  then
+    FreeAndNil(FFile);
+  FFile := TFileStream.Create(FileName, fmOpenRead);
 end;
 
 { TIBSQL }
@@ -1581,6 +1940,11 @@ begin
   FSQLType := SQLUnknown;
   FParamCheck := True;
   FCursor := Name + RandomString(8);
+  if AOwner is TIBDatabase then
+    Database := TIBDatabase(AOwner)
+  else
+    if AOwner is TIBTransaction then
+      Transaction := TIBTransaction(AOwner);
 end;
 
 destructor TIBSQL.Destroy;
@@ -1597,14 +1961,14 @@ begin
     FSQLParams.Free;
     FSQLRecord.Free;
   end;
-  inherited;
+  inherited Destroy;
 end;
 
 procedure TIBSQL.BatchInput(InputObject: TIBBatchInput);
 begin
   if not Prepared then
     Prepare;
-  InputObject.FParams := Self.FSQLParams;
+  InputObject.Params := Self.FSQLParams;
   InputObject.ReadyFile;
   if FSQLType in [SQLInsert, SQLUpdate, SQLDelete, SQLExecProcedure] then
     while InputObject.ReadParameters do
@@ -1619,7 +1983,7 @@ begin
   if FSQLType = SQLSelect then begin
     try
       ExecQuery;
-      OutputObject.FColumns := Self.FSQLRecord;
+      OutputObject.Columns := Self.FSQLRecord;
       OutputObject.ReadyFile;
       if not FGoToFirstRecordOnExecute then
         Next;
@@ -1653,7 +2017,8 @@ var
   isc_res: ISC_STATUS;
 begin
   try
-    if (FHandle <> nil) and (SQLType = SQLSelect) and FOpen then begin
+    if (FHandle <> nil) and (SQLType = SQLSelect) and FOpen then
+    begin
       isc_res := Call(
                    isc_dsql_free_statement(StatusVector, @FHandle, DSQL_close),
                    False);
@@ -1687,7 +2052,8 @@ end;
 
 procedure TIBSQL.DoBeforeDatabaseDisconnect(Sender: TObject);
 begin
-  if (FHandle <> nil) then begin
+  if (FHandle <> nil) then
+  begin
     Close;
     FreeHandle;
   end;
@@ -1698,10 +2064,12 @@ var
   fetch_res: ISC_STATUS;
 begin
   CheckClosed;
-  if not Prepared then Prepare;
+  if not Prepared then
+    Prepare;
   CheckValidStatement;
   case FSQLType of
-    SQLSelect: begin
+    SQLSelect:
+    begin
       Call(isc_dsql_execute2(StatusVector,
                             TRHandle,
                             @FHandle,
@@ -1718,28 +2086,34 @@ begin
       if FGoToFirstRecordOnExecute then
         Next;
     end;
-    SQLExecProcedure: begin
+    SQLExecProcedure:
+    begin
       fetch_res := Call(isc_dsql_execute2(StatusVector,
                             TRHandle,
                             @FHandle,
                             Database.SQLDialect,
                             FSQLParams.AsXSQLDA,
                             FSQLRecord.AsXSQLDA), False);
-      if (fetch_res <> 0) and (fetch_res <> isc_deadlock) then
+      if (fetch_res <> 0) then
       begin
-         { Sometimes a prepared stored procedure appears to get
-           off sync on the server ....This code is meant to try
-           to work around the problem simply by "retrying". This
-           need to be reproduced and fixed.
-         }
-        isc_dsql_prepare(StatusVector, TRHandle, @FHandle, 0,
-                         PChar(FProcessedSQL.Text), 1, nil);
-        Call(isc_dsql_execute2(StatusVector,
-                            TRHandle,
-                            @FHandle,
-                            Database.SQLDialect,
-                            FSQLParams.AsXSQLDA,
-                            FSQLRecord.AsXSQLDA), True);
+        if (fetch_res <> isc_lock_conflict) then
+        begin
+           { Sometimes a prepared stored procedure appears to get
+             off sync on the server ....This code is meant to try
+             to work around the problem simply by "retrying". This
+             need to be reproduced and fixed.
+           }
+          isc_dsql_prepare(StatusVector, TRHandle, @FHandle, 0,
+             PChar(FProcessedSQL.Text), Database.SQLDialect, nil);
+          Call(isc_dsql_execute2(StatusVector,
+                              TRHandle,
+                              @FHandle,
+                              Database.SQLDialect,
+                              FSQLParams.AsXSQLDA,
+                              FSQLRecord.AsXSQLDA), True);
+        end
+        else
+          IBDataBaseError;  // go ahead and raise the lock conflict
       end;
     end
     else
@@ -1749,7 +2123,8 @@ begin
                            Database.SQLDialect,
                            FSQLParams.AsXSQLDA), True)
   end;
-  MonitorHook.SQLExecute(Self);
+  if not (csDesigning in ComponentState) then
+    MonitorHook.SQLExecute(Self);
 end;
 
 function TIBSQL.GetEOF: Boolean;
@@ -1787,26 +2162,34 @@ var
   fetch_res: ISC_STATUS;
 begin
   result := nil;
-  if not FEOF then begin
+  if not FEOF then
+  begin
     CheckOpen;
     { Go to the next record... }
     fetch_res :=
       Call(isc_dsql_fetch(StatusVector, @FHandle, Database.SQLDialect, FSQLRecord.AsXSQLDA), False);
-    if (fetch_res = 100) or (CheckStatusVector([isc_dsql_cursor_err])) then begin
+    if (fetch_res = 100) or (CheckStatusVector([isc_dsql_cursor_err])) then
+    begin
       FEOF := True;
-    end else if (fetch_res > 0) then begin
-      try
-        IBDataBaseError;
-      except
-        Close;
-        raise;
+    end
+    else
+      if (fetch_res > 0) then
+      begin
+        try
+          IBDataBaseError;
+        except
+          Close;
+          raise;
+        end;
+      end
+      else
+      begin
+        Inc(FRecordCount);
+        FBOF := False;
+        result := FSQLRecord;
       end;
-    end else begin
-      Inc(FRecordCount);
-      FBOF := False;
-      result := FSQLRecord;
-    end;
-    MonitorHook.SQLFetch(Self);
+    if not (csDesigning in ComponentState) then
+      MonitorHook.SQLFetch(Self);
   end;
 end;
 
@@ -1850,15 +2233,17 @@ var
   info_request: Char;
 begin
   if (not Prepared) or
-     (not (FSQLType in [SQLSelect, SQLSelectForUpdate, SQLExecProcedure,
-                        SQLUpdate, SQLDelete])) then
+     (not (FSQLType in [SQLSelect, SQLSelectForUpdate,
+       {TODO: SQLExecProcedure, }
+       SQLUpdate, SQLDelete])) then
     result := ''
-  else begin
+  else
+  begin
     info_request := Char(isc_info_sql_get_plan);
     Call(isc_dsql_sql_info(StatusVector, @FHandle, 2, @info_request,
                            SizeOf(result_buffer), result_buffer), True);
     if (result_buffer[0] <> Char(isc_info_sql_get_plan)) then
-      IBError(ibxeUnknownError, [nil]);
+      IBError(ibxeUnknownPlan, [nil]);
     result_length := isc_vax_integer(@result_buffer[1], 2);
     SetString(result, nil, result_length);
     for i := 1 to result_length do
@@ -1888,10 +2273,11 @@ begin
       result := -1
     else
     case SQLType of
-    SQLUpdate:   Result := isc_vax_integer(@result_buffer[6], 4);
-    SQLDelete:   Result := isc_vax_integer(@result_buffer[13], 4);
-    SQLInsert:   Result := isc_vax_integer(@result_buffer[27], 4);
-    else         Result := -1 ;
+      SQLUpdate:   Result := isc_vax_integer(@result_buffer[6], 4);
+      SQLDelete:   Result := isc_vax_integer(@result_buffer[13], 4);
+      SQLInsert:   Result := isc_vax_integer(@result_buffer[27], 4);
+    else
+      Result := -1;
     end ;
   end;
 end;
@@ -1949,7 +2335,7 @@ begin
     cQuoteChar := '''';
     sSQL := FSQL.Text;
     iLenSQL := Length(sSQL);
-    SetString(sProcessedSQL, nil, iLenSQL);
+    SetString(sProcessedSQL, nil, iLenSQL + 1);
     i := 1;
     iSQLPos := 1;
     iCurState := DefaultState;
@@ -2055,8 +2441,7 @@ begin
     AddToProcessedSQL(#0);
     FSQLParams.Count := slNames.Count;
     for i := 0 to slNames.Count - 1 do
-      if FSQLParams.GetXSQLVARByName(slNames[i]) = nil then
-        FSQLParams.AddName(slNames[i], i);
+      FSQLParams.AddName(slNames[i], i);
     FProcessedSQL.Text := sProcessedSQL;
   finally
     slNames.Free;
@@ -2065,7 +2450,8 @@ end;
 
 procedure TIBSQL.SetDatabase(Value: TIBDatabase);
 begin
-  FBase.Database := Value;
+  if FBase.Database <> Value then
+    FBase.Database := Value;
 end;
 
 procedure TIBSQL.Prepare;
@@ -2106,7 +2492,8 @@ begin
     case FSQLType of
       SQLGetSegment,
       SQLPutSegment,
-      SQLStartTransaction: begin
+      SQLStartTransaction:
+      begin
         FreeHandle;
         IBError(ibxeNotPermitted, [nil]);
       end;
@@ -2114,7 +2501,8 @@ begin
       SQLRollback,
       SQLDDL, SQLSetGenerator,
       SQLInsert, SQLUpdate, SQLDelete, SQLSelect, SQLSelectForUpdate,
-      SQLExecProcedure: begin
+      SQLExecProcedure:
+      begin
         { We already know how many inputs there are, so... }
         if (FSQLParams.FXSQLDA <> nil) and
            (Call(isc_dsql_describe_bind(StatusVector, @FHandle, Database.SQLDialect,
@@ -2122,24 +2510,30 @@ begin
           IBDataBaseError;
         FSQLParams.Initialize;
         if FSQLType in [SQLSelect, SQLSelectForUpdate,
-                        SQLExecProcedure] then begin
+                        SQLExecProcedure] then
+        begin
           { Allocate an initial output descriptor (with one column) }
           FSQLRecord.Count := 1;
           { Using isc_dsql_describe, get the right size for the columns... }
           Call(isc_dsql_describe(StatusVector, @FHandle, Database.SQLDialect, FSQLRecord.FXSQLDA), True);
-          if FSQLRecord.FXSQLDA^.sqld > FSQLRecord.FXSQLDA^.sqln then begin
+          if FSQLRecord.FXSQLDA^.sqld > FSQLRecord.FXSQLDA^.sqln then
+          begin
             FSQLRecord.Count := FSQLRecord.FXSQLDA^.sqld;
             Call(isc_dsql_describe(StatusVector, @FHandle, Database.SQLDialect, FSQLRecord.FXSQLDA), True);
-          end else if FSQLRecord.FXSQLDA^.sqld = 0 then
-            FSQLRecord.Count := 0;
+          end
+          else
+            if FSQLRecord.FXSQLDA^.sqld = 0 then
+              FSQLRecord.Count := 0;
           FSQLRecord.Initialize;
         end;
       end;
     end;
     FPrepared := True;
-    MonitorHook.SQLPrepare(Self);
+    if not (csDesigning in ComponentState) then
+      MonitorHook.SQLPrepare(Self);
   except
-    on E: Exception do begin
+    on E: Exception do
+    begin
       if (FHandle <> nil) then
         FreeHandle;
       raise;
@@ -2157,17 +2551,25 @@ end;
 
 procedure TIBSQL.SetSQL(Value: TStrings);
 begin
-  FSQL.Assign(Value);
+  if FSQL.Text <> Value.Text then
+  begin
+    FSQL.BeginUpdate;
+    try
+      FSQL.Assign(Value);
+    finally
+      FSQL.EndUpdate;
+    end;
+  end;
 end;
 
 procedure TIBSQL.SetTransaction(Value: TIBTransaction);
 begin
-  FBase.Transaction := Value;
+  if FBase.Transaction <> Value then
+    FBase.Transaction := Value;
 end;
 
 procedure TIBSQL.SQLChanging(Sender: TObject);
 begin
-  CheckClosed;
   if Assigned(OnSQLChanging) then
     OnSQLChanging(Self);
   if FHandle <> nil then FreeHandle;
@@ -2177,6 +2579,13 @@ procedure TIBSQL.BeforeTransactionEnd(Sender: TObject);
 begin
   if (FOpen) then
     Close;
+end;
+
+function TIBSQL.ParamByName(Idx: String): TIBXSQLVAR;
+begin
+  if not Prepared then
+    Prepare;
+  result := FSQLParams.ByName(Idx);
 end;
 
 end.

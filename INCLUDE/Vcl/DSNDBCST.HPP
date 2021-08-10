@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DsnDBCst.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DsnDBCst.pas' rev: 6.00
 
 #ifndef DsnDBCstHPP
 #define DsnDBCstHPP
@@ -51,6 +51,8 @@ extern PACKAGE System::ResourceString _SDSConfirmDeleteAll;
 #define Dsndbcst_SDSConfirmDeleteAll System::LoadResourceString(&Dsndbcst::_SDSConfirmDeleteAll)
 extern PACKAGE System::ResourceString _SDSMustBeSpecified;
 #define Dsndbcst_SDSMustBeSpecified System::LoadResourceString(&Dsndbcst::_SDSMustBeSpecified)
+extern PACKAGE System::ResourceString _SDSDataFieldOnOpenTable;
+#define Dsndbcst_SDSDataFieldOnOpenTable System::LoadResourceString(&Dsndbcst::_SDSDataFieldOnOpenTable)
 extern PACKAGE System::ResourceString _SDSLinkForms;
 #define Dsndbcst_SDSLinkForms System::LoadResourceString(&Dsndbcst::_SDSLinkForms)
 extern PACKAGE System::ResourceString _SDSNoAttrs;
@@ -87,22 +89,28 @@ extern PACKAGE System::ResourceString _SPublic;
 #define Dsndbcst_SPublic System::LoadResourceString(&Dsndbcst::_SPublic)
 extern PACKAGE System::ResourceString _SDeleteColumnsQuestion;
 #define Dsndbcst_SDeleteColumnsQuestion System::LoadResourceString(&Dsndbcst::_SDeleteColumnsQuestion)
-	
 extern PACKAGE System::ResourceString _SColEditCaption;
 #define Dsndbcst_SColEditCaption System::LoadResourceString(&Dsndbcst::_SColEditCaption)
 extern PACKAGE System::ResourceString _SSelectRemoteServer;
 #define Dsndbcst_SSelectRemoteServer System::LoadResourceString(&Dsndbcst::_SSelectRemoteServer)
 extern PACKAGE System::ResourceString _SComputerNameDialogNotSupported;
 #define Dsndbcst_SComputerNameDialogNotSupported System::LoadResourceString(&Dsndbcst::_SComputerNameDialogNotSupported)
-	
 extern PACKAGE System::ResourceString _SExportProvider;
 #define Dsndbcst_SExportProvider System::LoadResourceString(&Dsndbcst::_SExportProvider)
 extern PACKAGE System::ResourceString _SClientDSAssignData;
 #define Dsndbcst_SClientDSAssignData System::LoadResourceString(&Dsndbcst::_SClientDSAssignData)
 extern PACKAGE System::ResourceString _SLoadFromFile;
 #define Dsndbcst_SLoadFromFile System::LoadResourceString(&Dsndbcst::_SLoadFromFile)
+extern PACKAGE System::ResourceString _SLoadFromBinaryFile;
+#define Dsndbcst_SLoadFromBinaryFile System::LoadResourceString(&Dsndbcst::_SLoadFromBinaryFile)
 extern PACKAGE System::ResourceString _SSaveToFile;
 #define Dsndbcst_SSaveToFile System::LoadResourceString(&Dsndbcst::_SSaveToFile)
+extern PACKAGE System::ResourceString _SSaveToBinaryFile;
+#define Dsndbcst_SSaveToBinaryFile System::LoadResourceString(&Dsndbcst::_SSaveToBinaryFile)
+extern PACKAGE System::ResourceString _SSaveToXmlFile;
+#define Dsndbcst_SSaveToXmlFile System::LoadResourceString(&Dsndbcst::_SSaveToXmlFile)
+extern PACKAGE System::ResourceString _SSaveToXmlUTF8File;
+#define Dsndbcst_SSaveToXmlUTF8File System::LoadResourceString(&Dsndbcst::_SSaveToXmlUTF8File)
 extern PACKAGE System::ResourceString _SClientDSClearData;
 #define Dsndbcst_SClientDSClearData System::LoadResourceString(&Dsndbcst::_SClientDSClearData)
 extern PACKAGE System::ResourceString _SCreateDataSet;
@@ -111,13 +119,22 @@ extern PACKAGE System::ResourceString _SClientDataSetEditor;
 #define Dsndbcst_SClientDataSetEditor System::LoadResourceString(&Dsndbcst::_SClientDataSetEditor)
 extern PACKAGE System::ResourceString _SClientDataFilter;
 #define Dsndbcst_SClientDataFilter System::LoadResourceString(&Dsndbcst::_SClientDataFilter)
+extern PACKAGE System::ResourceString _SXMLClientDataFilter;
+#define Dsndbcst_SXMLClientDataFilter System::LoadResourceString(&Dsndbcst::_SXMLClientDataFilter)
+extern PACKAGE System::ResourceString _SAllClientDataFilter;
+#define Dsndbcst_SAllClientDataFilter System::LoadResourceString(&Dsndbcst::_SAllClientDataFilter)
+extern PACKAGE System::ResourceString _SQTClientDataFilter;
+#define Dsndbcst_SQTClientDataFilter System::LoadResourceString(&Dsndbcst::_SQTClientDataFilter)
+extern PACKAGE System::ResourceString _SQTXMLClientDataFilter;
+#define Dsndbcst_SQTXMLClientDataFilter System::LoadResourceString(&Dsndbcst::_SQTXMLClientDataFilter)
+extern PACKAGE System::ResourceString _SQTAllClientDataFilter;
+#define Dsndbcst_SQTAllClientDataFilter System::LoadResourceString(&Dsndbcst::_SQTAllClientDataFilter)
 extern PACKAGE System::ResourceString _SFetchParams;
 #define Dsndbcst_SFetchParams System::LoadResourceString(&Dsndbcst::_SFetchParams)
 extern PACKAGE System::ResourceString _SExecute;
 #define Dsndbcst_SExecute System::LoadResourceString(&Dsndbcst::_SExecute)
 extern PACKAGE System::ResourceString _SControlInRemoteDataModule;
 #define Dsndbcst_SControlInRemoteDataModule System::LoadResourceString(&Dsndbcst::_SControlInRemoteDataModule)
-	
 extern PACKAGE System::ResourceString _SMissingDataSource;
 #define Dsndbcst_SMissingDataSource System::LoadResourceString(&Dsndbcst::_SMissingDataSource)
 extern PACKAGE System::ResourceString _SLinkDesigner;
@@ -148,9 +165,12 @@ extern PACKAGE System::ResourceString _SAssociateAttributes;
 #define Dsndbcst_SAssociateAttributes System::LoadResourceString(&Dsndbcst::_SAssociateAttributes)
 extern PACKAGE System::ResourceString _SUnassociateAttributes;
 #define Dsndbcst_SUnassociateAttributes System::LoadResourceString(&Dsndbcst::_SUnassociateAttributes)
-	
+extern PACKAGE System::ResourceString _srBDE;
+#define Dsndbcst_srBDE System::LoadResourceString(&Dsndbcst::_srBDE)
 extern PACKAGE System::ResourceString _srADO;
 #define Dsndbcst_srADO System::LoadResourceString(&Dsndbcst::_srADO)
+extern PACKAGE System::ResourceString _srSQL;
+#define Dsndbcst_srSQL System::LoadResourceString(&Dsndbcst::_srSQL)
 extern PACKAGE System::ResourceString _SADOConnectionEditor;
 #define Dsndbcst_SADOConnectionEditor System::LoadResourceString(&Dsndbcst::_SADOConnectionEditor)
 extern PACKAGE System::ResourceString _SCommandExecute;
@@ -159,9 +179,7 @@ extern PACKAGE System::ResourceString _SADODataFilter;
 #define Dsndbcst_SADODataFilter System::LoadResourceString(&Dsndbcst::_SADODataFilter)
 
 }	/* namespace Dsndbcst */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dsndbcst;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

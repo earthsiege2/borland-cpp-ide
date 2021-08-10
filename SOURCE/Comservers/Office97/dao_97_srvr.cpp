@@ -9,24 +9,27 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.1.2.1  $
-// File generated on 1/24/2000 9:44:47 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/28/2002 7:55:54 AM from Type Library described below.
 
-// ************************************************************************ //
+// ************************************************************************  //
 // Type Lib: C:\Program Files\Common Files\Microsoft Shared\DAO\DAO350.DLL (1)
-// IID\LCID: {00025E01-0000-0000-C000-000000000046}\0
+// LIBID: {00025E01-0000-0000-C000-000000000046}
+// LCID: 0
 // Helpfile: C:\Program Files\Common Files\Microsoft Shared\DAO\dao35.hlp
+// HelpString: Microsoft DAO 3.5 Object Library
 // DepndLst: 
 //   (1) v2.0 stdole, (C:\WINNT\System32\stdole2.tlb)
 // Parent TypeLibrary:
-//   (0) v8.0 Access, (g:\rampage\typelib\TypeLibraries\MSACC8.olb)
+//   (0) v8.0 Access, (c:\program files\microsoft office\office\msacc8.olb)
 // Errors:
-//   Hint: Symbol 'Update' renamed to '_Update'
+//   Hint: Symbol 'EOF' renamed to 'EOF_'
 // ************************************************************************ //
 
 #include <vcl.h>
 #pragma hdrstop
 
+#include <oleserver.hpp>
 #if defined(USING_ATL)
 #include <atl\atlvcl.h>
 #endif

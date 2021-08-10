@@ -14,7 +14,6 @@ Abstract:
 --*/
 
 #ifndef __gl_h_
-#pragma option push -b -a8 -pc -A- /*P_O_Push_S*/
 #ifndef __GL_H__
 
 #define __gl_h_
@@ -1524,5 +1523,4 @@ typedef void (APIENTRY * PFNGLGETCOLORTABLEPARAMETERFVEXTPROC)
 #endif
 
 #endif /* __GL_H__ */
-#pragma option pop /*P_O_Pop*/
 #endif /* __gl_h_ */

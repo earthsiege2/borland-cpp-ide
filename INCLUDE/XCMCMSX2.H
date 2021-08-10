@@ -8,7 +8,6 @@
  */
 
 #ifndef _XCMCMSX2_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _XCMCMSX2_H
 
 #ifndef XCMCMSXT_H
@@ -48,6 +47,5 @@ typedef struct {
 }      /* extern "C" */
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif /* _XCMCMSX2_H */
 

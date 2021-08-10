@@ -1,6 +1,6 @@
 
 //=============================================================================
-//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1993.
+//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1999.
 //
 //  MODULE: list.h
 //
@@ -313,5 +313,6 @@ INLINE LPLINK WINAPI DeleteFromEndOfList(LPLIST List)
 #endif
 
 #pragma pack()
+
 #pragma option pop /*P_O_Pop*/
 #endif

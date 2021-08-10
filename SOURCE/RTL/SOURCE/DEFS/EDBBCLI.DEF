@@ -1,29 +1,29 @@
 LIBRARY EDBBCLI
 EXPORTS
 
-    BackupFree                               = 'EDBBCLI.DLL'.*
-;    DllEntryPoint                            = 'EDBBCLI.DLL'.*
-    HrBackupClose                            = 'EDBBCLI.DLL'.*
-    HrBackupEnd                              = 'EDBBCLI.DLL'.*
-    HrBackupGetBackupLogsA                   = 'EDBBCLI.DLL'.*
-    HrBackupGetBackupLogsW                   = 'EDBBCLI.DLL'.*
-    HrBackupGetDatabaseNamesA                = 'EDBBCLI.DLL'.*
-    HrBackupGetDatabaseNamesW                = 'EDBBCLI.DLL'.*
-    HrBackupOpenFileA                        = 'EDBBCLI.DLL'.*
-    HrBackupOpenFileW                        = 'EDBBCLI.DLL'.*
-    HrBackupPrepareA                         = 'EDBBCLI.DLL'.*
-    HrBackupPrepareW                         = 'EDBBCLI.DLL'.*
-    HrBackupRead                             = 'EDBBCLI.DLL'.*
-    HrBackupTruncateLogs                     = 'EDBBCLI.DLL'.*
-    HrRestoreEnd                             = 'EDBBCLI.DLL'.*
-    HrRestoreGetDatabaseLocationsA           = 'EDBBCLI.DLL'.*
-    HrRestoreGetDatabaseLocationsW           = 'EDBBCLI.DLL'.*
-    HrRestorePrepareA                        = 'EDBBCLI.DLL'.*
-    HrRestorePrepareW                        = 'EDBBCLI.DLL'.*
-    HrRestoreRegisterA                       = 'EDBBCLI.DLL'.*
-    HrRestoreRegisterComplete                = 'EDBBCLI.DLL'.*
-    HrRestoreRegisterW                       = 'EDBBCLI.DLL'.*
-    HrSetCurrentBackupLogA                   = 'EDBBCLI.DLL'.*
-    HrSetCurrentBackupLogW                   = 'EDBBCLI.DLL'.*
-    I_HrCheckBackupLogs                      = 'EDBBCLI.DLL'.*
-    I_HrRestoreW                             = 'EDBBCLI.DLL'.*
+    BackupFree                               
+;    DllEntryPoint                            
+    HrBackupClose                            
+    HrBackupEnd                              
+    HrBackupGetBackupLogsA                   
+    HrBackupGetBackupLogsW                   
+    HrBackupGetDatabaseNamesA                
+    HrBackupGetDatabaseNamesW                
+    HrBackupOpenFileA                        
+    HrBackupOpenFileW                        
+    HrBackupPrepareA                         
+    HrBackupPrepareW                         
+    HrBackupRead                             
+    HrBackupTruncateLogs                     
+    HrRestoreEnd                             
+    HrRestoreGetDatabaseLocationsA           
+    HrRestoreGetDatabaseLocationsW           
+    HrRestorePrepareA                        
+    HrRestorePrepareW                        
+    HrRestoreRegisterA                       
+    HrRestoreRegisterComplete                
+    HrRestoreRegisterW                       
+    HrSetCurrentBackupLogA                   
+    HrSetCurrentBackupLogW                   
+    I_HrCheckBackupLogs                      
+    I_HrRestoreW                             

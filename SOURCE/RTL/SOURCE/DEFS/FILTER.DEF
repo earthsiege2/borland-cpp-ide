@@ -1,15 +1,15 @@
-LIBRARY FILTER
+LIBRARY Filter
 EXPORTS
 
-    CreateFilter                             = 'FILTER.DLL'.*
-    DestroyFilter                            = 'FILTER.DLL'.*
-    DisableParserFilter                      = 'FILTER.DLL'.*
-    EnableParserFilter                       = 'FILTER.DLL'.*
-    FilterAddObject                          = 'FILTER.DLL'.*
-    FilterDuplicate                          = 'FILTER.DLL'.*
-    FilterFindFrame                          = 'FILTER.DLL'.*
-    _FilterFindPropertyInstance              = 'FILTER.DLL'.FilterFindPropertyInstance
-    FilterFlushBits                          = 'FILTER.DLL'.*
-    FilterFrame                              = 'FILTER.DLL'.*
-    GetCurrentFilter                         = 'FILTER.DLL'.*
-    SetCurrentFilter                         = 'FILTER.DLL'.*
+    CreateFilter
+    DestroyFilter
+    DisableParserFilter
+    EnableParserFilter
+    FilterAddObject
+    FilterDuplicate
+    FilterFindFrame
+    _FilterFindPropertyInstance        = FilterFindPropertyInstance
+    FilterFlushBits
+    FilterFrame
+    GetCurrentFilter
+    SetCurrentFilter

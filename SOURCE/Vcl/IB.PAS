@@ -1,26 +1,51 @@
-{********************************************************}
-{                                                        }
-{       Borland Delphi Visual Component Library          }
-{       InterBase Express core components                }
-{                                                        }
-{       Copyright (c) 1998-1999 Inprise Corporation      }
-{                                                        }
-{    InterBase Express is based in part on the product   }
-{    Free IB Components, written by Gregory H. Deatz for }
-{    Hoagland, Longo, Moran, Dunst & Doukas Company.     }
-{    Free IB Components is used under license.           }
-{                                                        }
-{********************************************************}
+{************************************************************************}
+{                                                                        }
+{       Borland Delphi Visual Component Library                          }
+{       InterBase Express core components                                }
+{                                                                        }
+{       Copyright (c) 1998-2001 Borland Software Corporation             }
+{                                                                        }
+{    InterBase Express is based in part on the product                   }
+{    Free IB Components, written by Gregory H. Deatz for                 }
+{    Hoagland, Longo, Moran, Dunst & Doukas Company.                     }
+{    Free IB Components is used under license.                           }
+{                                                                        }
+{    The contents of this file are subject to the InterBase              }
+{    Public License Version 1.0 (the "License"); you may not             }
+{    use this file except in compliance with the License. You may obtain }
+{    a copy of the License at http://www.borland.com/interbase/IPL.html  }
+{    Software distributed under the License is distributed on            }
+{    an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either              }
+{    express or implied. See the License for the specific language       }
+{    governing rights and limitations under the License.                 }
+{    The Original Code was created by InterBase Software Corporation     }
+{       and its successors.                                              }
+{    Portions created by Borland Software Corporation are Copyright      }
+{       (C) Borland Software Corporation. All Rights Reserved.           }
+{    Contributor(s): Jeff Overcash                                       }
+{                                                                        }
+{************************************************************************}
 
 unit IB;
 
 interface
 
 uses
-  Windows, SysUtils, Classes, IBHeader, IBExternals, IBUtils, DB;
+  {$IFDEF MSWINDOWS}
+    Windows,
+  {$ENDIF}
+  {$IFDEF LINUX}
+   Libc,
+  {$ENDIF}
+  SysUtils, Classes, IBHeader,
+  IBExternals, IBUtils, DB, IBXConst;
 
 type
-    EIBError                  = class(EDatabaseError)
+  TTraceFlag = (tfQPrepare, tfQExecute, tfQFetch, tfError, tfStmt, tfConnect,
+     tfTransact, tfBlob, tfService, tfMisc);
+  TTraceFlags = set of TTraceFlag;
+
+  EIBError                  = class(EDatabaseError)
   private
     FSQLCode: Long;
     FIBErrorCode: Long;
@@ -32,6 +57,7 @@ type
   end;
 
   EIBInterBaseError         = class(EIBError);
+  EIBInterBaseRoleError     = class(EIBError);
   EIBClientError            = class(EIBError);
 
   TIBDataBaseErrorMessage    = (ShowSQLCode,
@@ -136,134 +162,34 @@ type
     ibxeStartParamsError,
     ibxeOutputParsingError,
     ibxeUseSpecificProcedures,
-    ibxeSQLMonitorAlreadyPresent
+    ibxeSQLMonitorAlreadyPresent,
+    ibxeCantPrintValue,
+    ibxeEOFReached,
+    ibxeEOFInComment,
+    ibxeEOFInString,
+    ibxeParamNameExpected,
+    ibxeSuccess,
+    ibxeDelphiException,
+    ibxeNoOptionsSet,
+    ibxeNoDestinationDirectory,
+    ibxeNosourceDirectory,
+    ibxeNoUninstallFile,
+    ibxeOptionNeedsClient,
+    ibxeOptionNeedsServer,
+    ibxeInvalidOption,
+    ibxeInvalidOnErrorResult,
+    ibxeInvalidOnStatusResult,
+    ibxeDPBConstantUnknownEx,
+    ibxeTPBConstantUnknownEx,
+    ibxeUnknownPlan,
+    ibxeFieldSizeMismatch,
+    ibxeEventAlreadyRegistered,
+    ibxeStringTooLarge
     );
 
   TStatusVector              = array[0..19] of ISC_STATUS;
   PStatusVector              = ^TStatusVector;
 
-  { TIBTLGlobals }
-
-  { A single structure will be used to maintain all thread-local "globals" }
-  TIBTLGlobals              = record
-    FStatusVector: TStatusVector;
-  end;
-  PIBTLGlobals              = ^TIBTLGlobals;
-
-resourcestring
-{ generic strings used in code }
-  SIBDatabaseEditor = 'Da&tabase Editor...';
-  SIBTransactionEditor = '&Transaction Editor...';
-  SDatabaseFilter = 'Database Files (*.gdb)|*.gdb|All files (*.*)|*.*';
-  SDisconnectDatabase = 'Database is currently connected. Disconnect and continue?';
-  SCommitTransaction = 'Transaction is currently Active. Rollback and continue?';
-  SExecute = 'E&xecute';
-  SNoDataSet = 'No dataset association';
-  SSQLGenSelect = 'Must select at least one key field and one update field';
-  SSQLNotGenerated = 'Update SQL statements not generated, exit anyway?';
-  SIBUpdateSQLEditor = '&UpdateSQL Editor...';
-  SSQLDataSetOpen = 'Unable to determine field names for %s';
-
-{ strings used in error messages}
-  SUnknownError = 'Unknown error';
-  SInterBaseMissing = 'InterBase library gds32.dll not found in the path. Please install InterBase to use this functionality';
-  SInterBaseInstallMissing = 'InterBase Install DLL ibinstall.dll not found in the path. Please install InterBase 6 to use this functionality';
-  SIB60feature = '%s is an InterBase6 function. Please upgrade to InterBase6 to use this functonality';
-  SNotSupported = 'Unsupported feature';
-  SNotPermitted = 'Not permitted';
-  SFileAccessError = 'Temporary file access error';
-  SConnectionTimeout = 'Database connection timed out';
-  SCannotSetDatabase = 'Cannot set database';
-  SCannotSetTransaction = 'Cannot set transaction';
-  SOperationCancelled = 'Operation cancelled at user''s request';
-  SDPBConstantNotSupported = 'DPB Constant (isc_dpb_%s) is unsupported';
-  SDPBConstantUnknown = 'DPB Constant (%d) is unknown';
-  STPBConstantNotSupported = 'TPB Constant (isc_tpb_%s) is unsupported';
-  STPBConstantUnknown = 'TPB Constant (%d) is unknown';
-  SDatabaseClosed = 'Cannot perform operation -- DB is not open';
-  SDatabaseOpen = 'Cannot perform operation -- DB is currently open';
-  SDatabaseNameMissing = 'Database name is missing';
-  SNotInTransaction = 'Transaction is not active';
-  SInTransaction = 'Transaction is active';
-  STimeoutNegative = 'Timeout values cannot be negative';
-  SNoDatabasesInTransaction = 'No databases are listed in transaction component';
-  SUpdateWrongDB = 'Updating wrong database';
-  SUpdateWrongTR = 'Updating wrong transaction. Unique transaction expected in set';
-  SDatabaseNotAssigned = 'Database not assigned';
-  STransactionNotAssigned = 'Transaction not assigned';
-  SXSQLDAIndexOutOfRange = 'XSQLDA index out of range';
-  SXSQLDANameDoesNotExist = 'XSQLDA name does not exist (%s)';
-  SEOF = 'End of file';
-  SBOF = 'Beginning of file';
-  SInvalidStatementHandle = 'Invalid statement handle';
-  SSQLOpen = 'IBSQL Open';
-  SSQLClosed = 'IBSQL Closed';
-  SDatasetOpen = 'Dataset open';
-  SDatasetClosed = 'Dataset closed';
-  SUnknownSQLDataType = 'Unknown SQL Data type (%d)';
-  SInvalidColumnIndex = 'Invalid column index (index exceeds permitted range)';
-  SInvalidParamColumnIndex = 'Invalid parameter index (index exceeds permitted range)';
-  SInvalidDataConversion = 'Invalid data conversion';
-  SColumnIsNotNullable = 'Column cannot be set to null (%s)';
-  SBlobCannotBeRead = 'Blob stream cannot be read';
-  SBlobCannotBeWritten = 'Blob stream cannot be written';
-  SEmptyQuery = 'Empty query';
-  SCannotOpenNonSQLSelect = 'Cannot "open" a non-select statement. Use ExecQuery';
-  SNoFieldAccess = 'No access to field "%s"';
-  SFieldReadOnly = 'Field "%s" is read-only';
-  SFieldNotFound = 'Field "%s" not found';
-  SNotEditing = 'Not editing';
-  SCannotInsert = 'Cannot insert into dataset. (No insert query)';
-  SCannotPost = 'Cannot post. (No update/insert query)';
-  SCannotUpdate = 'Cannot update. (No update query)';
-  SCannotDelete = 'Cannot delete from dataset. (No delete query)';
-  SCannotRefresh = 'Cannot refresh row. (No refresh query)';
-  SBufferNotSet = 'Buffer not set';
-  SCircularReference = 'Circular references not permitted';
-  SSQLParseError = 'SQL Parse Error:' + CRLF + CRLF + '%s';
-  SUserAbort = 'User abort';
-  SDataSetUniDirectional = 'Data set is uni-directional';
-  SCannotCreateSharedResource = 'Cannot create shared resource. (Windows error %d)';
-  SWindowsAPIError = 'Windows API error. (Windows error %d [$%.8x])';
-  SColumnListsDontMatch = 'Column lists do not match';
-  SColumnTypesDontMatch = 'Column types don''t match. (From index: %d; To index: %d)';
-  SCantEndSharedTransaction = 'Can''t end a shared transaction unless it is forced and equal ' +
-                             'to the transaction''s TimeoutAction';
-  SFieldUnsupportedType = 'Unsupported Field Type';
-  SCircularDataLink = 'Circular DataLink Reference';
-  SEmptySQLStatement = 'Empty SQL Statement';
-  SIsASelectStatement = 'use Open for a Select Statement';
-  SRequiredParamNotSet = 'Required Param value not set';
-  SNoStoredProcName = 'No Stored Procedure Name assigned';
-  SIsAExecuteProcedure = 'use ExecProc for Procedure; use TQuery for Select procedures';
-  SUpdateFailed = 'Update Failed';
-  SNotCachedUpdates = 'CachedUpdates not enabled';
-  SNotLiveRequest = 'Request is not live - cannot modify';
-  SNoProvider = 'No Provider';
-  SNoRecordsAffected = 'No Records Affected';
-  SNoTableName = 'No Table Name assigned';
-  SCannotCreatePrimaryIndex = 'Cannot Create Primary Index; are created automatically';
-  SCannotDropSystemIndex = 'Cannot Drop System Index';
-  STableNameMismatch = 'Table Name Mismatch';
-  SIndexFieldMissing = 'Index Field Missing';
-  SInvalidCancellation = 'Cannot Cancel events while processing';
-  SInvalidEvent = 'Invalid Event';
-  SMaximumEvents = 'Exceded Maximum Event limits';
-  SNoEventsRegistered = 'No Events Registered';
-  SInvalidQueueing = 'Invalid Queueing';
-  SInvalidRegistration = 'Invalid Registration';
-  SInvalidBatchMove = 'Invalid Batch Move';
-  SSQLDialectInvalid = 'SQL Dialect Invalid';
-  SSPBConstantNotSupported = 'SPB Constant Not supported';
-  SSPBConstantUnknown = 'SPB Constant Unknown';
-  SServiceActive = 'Cannot perform operation -- service is not attached';
-  SServiceInActive = 'Cannot perform operation -- service is attached';
-  SServerNameMissing = 'Server Name Missing';
-  SQueryParamsError = 'Query Parameters missing or incorrect';
-  SStartParamsError = 'start Parameters missing or incorrect';
-  SOutputParsingError = 'Unexpected Output buffer value';
-  SUseSpecificProcedures = 'Generic ServiceStart not applicable: Use Specific Procedures to set configuration params';
-  SSQLMonitorAlreadyPresent = 'SQL Monitor Instance is already present';
 
 const
   IBPalette1 = 'InterBase'; {do not localize}
@@ -371,20 +297,38 @@ const
     SStartParamsError,
     SOutputParsingError,
     SUseSpecificProcedures,
-    SSQLMonitorAlreadyPresent
+    SSQLMonitorAlreadyPresent,
+    SCantPrintValue,
+    SEOFReached,
+    SEOFInComment,
+    SEOFInString,
+    SParamNameExpected,
+    SSuccess,
+    SDelphiException,
+    SNoOptionsSet,
+    SNoDestinationDirectory,
+    SNosourceDirectory,
+    SNoUninstallFile,
+    SOptionNeedsClient,
+    SOptionNeedsServer,
+    SInvalidOption,
+    SInvalidOnErrorResult,
+    SInvalidOnStatusResult,
+    SDPBConstantUnknownEx,
+    STPBConstantUnknownEx,
+    SUnknownPlan,
+    SFieldSizeMismatch,
+    SEventAlreadyRegistered,
+    SStringTooLarge
   );
 
 var
   IBCS: TRTLCriticalSection;
-  hIBTLGlobals: DWord;
 
 procedure IBAlloc(var P; OldSize, NewSize: Integer);
 
 procedure IBError(ErrMess: TIBClientError; const Args: array of const);
 procedure IBDataBaseError;
-
-procedure InitializeIBTLGlobals;
-procedure FreeIBTLGlobals;
 
 function StatusVector: PISC_STATUS;
 function StatusVectorArray: PStatusVector;
@@ -401,20 +345,22 @@ uses
 
 var
   IBDataBaseErrorMessages: TIBDataBaseErrorMessages;
-
+threadvar
+  FStatusVector : TStatusVector;
 
 procedure IBAlloc(var P; OldSize, NewSize: Integer);
 var
   i: Integer;
 begin
   ReallocMem(Pointer(P), NewSize);
-  for i := OldSize to NewSize - 1 do PChar(P)[i] := #0;
+  for i := OldSize to NewSize - 1 do
+    PChar(P)[i] := #0;
 end;
 
 procedure IBError(ErrMess: TIBClientError; const Args: array of const);
 begin
   raise EIBClientError.Create(Ord(ErrMess),
-                              Format(IBErrorMessages[ErrMess], Args));
+          Format(IBErrorMessages[ErrMess], Args));
 end;
 
 procedure IBDataBaseError;
@@ -461,56 +407,21 @@ begin
   end;
   if (usr_msg <> '') and (usr_msg[Length(usr_msg)] = '.') then
     Delete(usr_msg, Length(usr_msg), 1);
-  raise EIBInterBaseError.Create(sqlcode, IBErrorCode, usr_msg);
-end;
-
-procedure InitializeIBTLGlobals;
-var
-  TLGlobals: PIBTLGlobals;
-begin
-  TLGlobals := nil;
-  if TlsGetValue(hIBTLGlobals) <> nil then exit;
-  IBAlloc(TLGlobals, 0, SizeOf(TIBTLGlobals));
-  TlsSetValue(hIBTLGlobals, Pointer(TLGlobals));
-end;
-
-procedure FreeIBTLGlobals;
-var
-  TLGlobals: PIBTLGlobals;
-begin
-  TLGlobals := PIBTLGlobals(TlsGetValue(hIBTLGlobals));
-  if TLGlobals <> nil then
-  begin
-    IBAlloc(TLGlobals, 0, 0);
-    TlsSetValue(hIBTLGlobals, nil);
-  end;
+  if sqlcode <> -551 then
+    raise EIBInterBaseError.Create(sqlcode, IBErrorCode, usr_msg)
+  else
+    raise EIBInterBaseRoleError.Create(sqlcode, IBErrorCode, usr_msg)
 end;
 
 { Return the status vector for the current thread }
 function StatusVector: PISC_STATUS;
-var
-  TLGlobals: PIBTLGlobals;
 begin
-  TLGlobals := PIBTLGlobals(TlsGetValue(hIBTLGlobals));
-  if TLGlobals = nil then
-  begin
-    InitializeIBTLGlobals;
-    TLGlobals := PIBTLGlobals(TlsGetValue(hIBTLGlobals));
-  end;
-  result := @(TLGlobals^.FStatusVector);
+  result := @FStatusVector;
 end;
 
 function StatusVectorArray: PStatusVector;
-var
-  TLGlobals: PIBTLGlobals;
 begin
-  TLGlobals := PIBTLGlobals(TlsGetValue(hIBTLGlobals));
-  if TLGlobals = nil then
-  begin
-    InitializeIBTLGlobals;
-    TLGlobals := PIBTLGlobals(TlsGetValue(hIBTLGlobals));
-  end;
-  result := @(TLGlobals^.FStatusVector);
+  result := @FStatusVector;
 end;
 
 function CheckStatusVector(ErrorCodes: array of ISC_STATUS): Boolean;
@@ -522,7 +433,7 @@ var
     p := PISC_STATUS(PChar(p) + (i * SizeOf(ISC_STATUS)));
   end;
 begin
-  p := StatusVector;
+  p := @FStatusVector;
   result := False;
   while (p^ <> 0) and (not result) do
     case p^ of
@@ -552,7 +463,7 @@ var
     result := p;
   end;
 begin
-  p := StatusVector;
+  p := @FStatusVector;
   result := '';
   while (p^ <> 0) do
     if (p^ = 3) then
@@ -566,7 +477,6 @@ begin
     end;
 end;
 
-
 { EIBError }
 constructor EIBError.Create(ASQLCode: Long; Msg: string);
 begin
@@ -576,9 +486,9 @@ end;
 
 constructor EIBError.Create(ASQLCode: Long; AIBErrorCode: Long; Msg: string);
 begin
-     inherited Create(Msg);
-     FSQLCode :=  ASQLCode;
-     FIBErrorCode := AIBErrorCode;
+  inherited Create(Msg);
+  FSQLCode :=  ASQLCode;
+  FIBErrorCode := AIBErrorCode;
 end;
 
 procedure SetIBDataBaseErrorMessages(Value: TIBDataBaseErrorMessages);
@@ -604,13 +514,9 @@ end;
 initialization
   IsMultiThread := True;
   InitializeCriticalSection(IBCS);
-  hIBTLGlobals := TlsAlloc;
   IBDataBaseErrorMessages := [ShowSQLMessage, ShowIBMessage];
 
 finalization
-
-  FreeIBTLGlobals;
-  TlsFree(hIBTLGlobals);
   DeleteCriticalSection(IBCS);
 
 end.

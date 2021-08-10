@@ -1,11 +1,13 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1999-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
 {       ADO Interface Unit                              }
-{                                                       }
-{       Copyright (c) 1999 Inprise Corporation          }
-{                                                       }
 {*******************************************************}
 
 unit ADOInt;
@@ -13,7 +15,7 @@ unit ADOInt;
 // ********************************************************************* //
 // Type Lib: C:\PROGRAM FILES\COMMON FILES\SYSTEM\ADO\MSADO15.DLL        //
 // IID\LCID: {00000200-0000-0010-8000-00AA006D2EA4}\0                    //
-// PASTLWTR : $Revision:   1.3.1.1  $                                        //
+// PASTLWTR : $Revision:   1.6  $                                        //
 // HelpString: Microsoft ActiveX Data Objects 2.1 Library                //
 // Version:    2.1                                                       //
 // ********************************************************************* //
@@ -86,7 +88,7 @@ type
   CursorTypeEnum = TOleEnum;
   {$EXTERNALSYM CursorTypeEnum}
 const
-  adOpenUnspecified = -1;
+  adOpenUnspecified = $FFFFFFFF;
   {$EXTERNALSYM adOpenUnspecified}
   adOpenForwardOnly = $00000000;
   {$EXTERNALSYM adOpenForwardOnly}
@@ -134,7 +136,7 @@ type
   LockTypeEnum = TOleEnum;
   {$EXTERNALSYM LockTypeEnum}
 const
-  adLockUnspecified = -1;
+  adLockUnspecified = $FFFFFFFF;
   {$EXTERNALSYM adLockUnspecified}
   adLockReadOnly = $00000001;
   {$EXTERNALSYM adLockReadOnly}
@@ -150,7 +152,7 @@ type
   ExecuteOptionEnum = TOleEnum;
   {$EXTERNALSYM ExecuteOptionEnum}
 const
-  adOptionUnspecified = -1;
+  adOptionUnspecified = $FFFFFFFF;
   {$EXTERNALSYM adOptionUnspecified}
   adAsyncExecute = $00000010;
   {$EXTERNALSYM adAsyncExecute}
@@ -166,7 +168,7 @@ type
   ConnectOptionEnum = TOleEnum;
   {$EXTERNALSYM ConnectOptionEnum}
 const
-  adConnectUnspecified = -1;
+  adConnectUnspecified = $FFFFFFFF;
   {$EXTERNALSYM adConnectUnspecified}
   adAsyncConnect = $00000010;
   {$EXTERNALSYM adAsyncConnect}
@@ -292,7 +294,7 @@ type
   FieldAttributeEnum = TOleEnum;
   {$EXTERNALSYM FieldAttributeEnum}
 const
-  adFldUnspecified = -1;
+  adFldUnspecified = $FFFFFFFF;
   {$EXTERNALSYM adFldUnspecified}
   adFldMayDefer = $00000002;
   {$EXTERNALSYM adFldMayDefer}
@@ -380,7 +382,7 @@ type
   GetRowsOptionEnum = TOleEnum;
   {$EXTERNALSYM GetRowsOptionEnum}
 const
-  adGetRowsRest = -1;
+  adGetRowsRest = $FFFFFFFF;
   {$EXTERNALSYM adGetRowsRest}
 
 // PositionEnum constants
@@ -388,7 +390,7 @@ type
   PositionEnum = TOleEnum;
   {$EXTERNALSYM PositionEnum}
 const
-  adPosUnknown = -1;
+  adPosUnknown = $FFFFFFFF;
   {$EXTERNALSYM adPosUnknown}
   adPosBOF = $FFFFFFFE;
   {$EXTERNALSYM adPosBOF}
@@ -482,7 +484,7 @@ type
 const
   adSearchForward = $00000001;
   {$EXTERNALSYM adSearchForward}
-  adSearchBackward = -1;
+  adSearchBackward = $FFFFFFFF;
   {$EXTERNALSYM adSearchBackward}
 
 // PersistFormatEnum constants
@@ -544,7 +546,7 @@ type
   IsolationLevelEnum = TOleEnum;
   {$EXTERNALSYM IsolationLevelEnum}
 const
-  adXactUnspecified = -1;
+  adXactUnspecified = $FFFFFFFF;
   {$EXTERNALSYM adXactUnspecified}
   adXactChaos = $00000010;
   {$EXTERNALSYM adXactChaos}
@@ -674,7 +676,7 @@ type
   CommandTypeEnum = TOleEnum;
   {$EXTERNALSYM CommandTypeEnum}
 const
-  adCmdUnspecified = -1;
+  adCmdUnspecified = $FFFFFFFF;
   {$EXTERNALSYM adCmdUnspecified}
   adCmdUnknown = $00000008;
   {$EXTERNALSYM adCmdUnknown}
@@ -746,7 +748,7 @@ type
   SchemaEnum = TOleEnum;
   {$EXTERNALSYM SchemaEnum}
 const
-  adSchemaProviderSpecific = -1;
+  adSchemaProviderSpecific = $FFFFFFFF;
   {$EXTERNALSYM adSchemaProviderSpecific}
   adSchemaAsserts = $00000000;
   {$EXTERNALSYM adSchemaAsserts}
@@ -985,6 +987,18 @@ type
 
   IDataspace = interface;
   IDataspaceDisp = dispinterface;
+
+// *********************************************************************//
+// Declaration of CoClasses defined in Type Library                     //
+// (NOTE: Here we map each CoClass to its Default Interface)            //
+// *********************************************************************//
+
+  Connection = _Connection;
+  Command = _Command;
+  Recordset = _Recordset;
+  Parameter = _Parameter;
+  DataSpace = IDataspace;
+
 
 // *********************************************************************//
 // Declaration of structures, unions and aliases.                       //
@@ -1604,6 +1618,88 @@ type
   end;
 
 // *********************************************************************//
+// Interface: _Recordset
+// Flags:     (4544) Dual NonExtensible OleAutomation Dispatchable
+// GUID:      {00000555-0000-0010-8000-00AA006D2EA4}
+// *********************************************************************//
+  _Recordset = interface(Recordset20)
+    ['{00000555-0000-0010-8000-00AA006D2EA4}']
+    procedure Seek(KeyValues: OleVariant; SeekOption: SeekEnum); safecall;
+    procedure Set_Index(const pbstrIndex: WideString); safecall;
+    function Get_Index: WideString; safecall;
+    property Index: WideString read Get_Index write Set_Index;
+  end;
+
+// *********************************************************************//
+// DispIntf:  _RecordsetDisp
+// Flags:     (4544) Dual NonExtensible OleAutomation Dispatchable
+// GUID:      {00000555-0000-0010-8000-00AA006D2EA4}
+// *********************************************************************//
+  _RecordsetDisp = dispinterface
+    ['{00000555-0000-0010-8000-00AA006D2EA4}']
+    procedure Seek(KeyValues: OleVariant; SeekOption: SeekEnum); dispid 1066;
+    property Index: WideString dispid 1067;
+    procedure Cancel; dispid 1055;
+    property DataSource: IUnknown dispid 1056;
+    procedure Save(const FileName: WideString; PersistFormat: PersistFormatEnum); dispid 1057;
+    property ActiveCommand: IDispatch readonly dispid 1061;
+    property StayInSync: WordBool dispid 1063;
+    function GetString(StringFormat: StringFormatEnum; NumRows: Integer; 
+      const ColumnDelimeter: WideString; const RowDelimeter: WideString;
+      const NullExpr: WideString): WideString; dispid 1062;
+    property DataMember: WideString dispid 1064;
+    function CompareBookmarks(Bookmark1: OleVariant; Bookmark2: OleVariant): CompareEnum; dispid 1065;
+    function Clone(LockType: LockTypeEnum): _Recordset; dispid 1034;
+    procedure Resync(AffectRecords: AffectEnum; ResyncValues: ResyncEnum); dispid 1024;
+    property AbsolutePosition: PositionEnum dispid 1000;
+    function ActiveConnection: IDispatch; dispid 1001;
+    property BOF: WordBool readonly dispid 1002;
+    property Bookmark: OleVariant dispid 1003;
+    property CacheSize: Integer dispid 1004;
+    property CursorType: CursorTypeEnum dispid 1005;
+    property EOF: WordBool readonly dispid 1006;
+    property Fields: Fields readonly dispid 0;
+    property LockType: LockTypeEnum dispid 1008;
+    property MaxRecords: Integer dispid 1009;
+    property RecordCount: Integer readonly dispid 1010;
+    function Source: IDispatch; dispid 1011;
+    procedure AddNew(FieldList: OleVariant; Values: OleVariant); dispid 1012;
+    procedure CancelUpdate; dispid 1013;
+    procedure Close; dispid 1014;
+    procedure Delete(AffectRecords: AffectEnum); dispid 1015;
+    function GetRows(Rows: Integer; Start: OleVariant; Fields: OleVariant): OleVariant; dispid 1016;
+    procedure Move(NumRecords: Integer; Start: OleVariant); dispid 1017;
+    procedure MoveNext; dispid 1018;
+    procedure MovePrevious; dispid 1019;
+    procedure MoveFirst; dispid 1020;
+    procedure MoveLast; dispid 1021;
+    procedure Open(Source: OleVariant; ActiveConnection: OleVariant; CursorType: CursorTypeEnum;
+      LockType: LockTypeEnum; Options: Integer); dispid 1022;
+    procedure Requery(Options: Integer); dispid 1023;
+    procedure _xResync(AffectRecords: AffectEnum); dispid 1610809378;
+    procedure Update(Fields: OleVariant; Values: OleVariant); dispid 1025;
+    property AbsolutePage: PositionEnum dispid 1047;
+    property EditMode: EditModeEnum readonly dispid 1026;
+    property Filter: OleVariant dispid 1030;
+    property PageCount: Integer readonly dispid 1050;
+    property PageSize: Integer dispid 1048;
+    property Sort: WideString dispid 1031;
+    property Status: Integer readonly dispid 1029;
+    property State: Integer readonly dispid 1054;
+    function _xClone: _Recordset; dispid 1610809392;
+    procedure UpdateBatch(AffectRecords: AffectEnum); dispid 1035;
+    procedure CancelBatch(AffectRecords: AffectEnum); dispid 1049;
+    property CursorLocation: CursorLocationEnum dispid 1051;
+    function NextRecordset(out RecordsAffected: OleVariant): _Recordset; dispid 1052;
+    function Supports(CursorOptions: CursorOptionEnum): WordBool; dispid 1036;
+    property Collect[Index: OleVariant]: OleVariant dispid -8;
+    property MarshalOptions: MarshalOptionsEnum dispid 1053;
+    procedure Find(const Criteria: WideString; SkipRecords: Integer;
+      SearchDirection: SearchDirectionEnum; Start: OleVariant); dispid 1058;
+    property Properties: Properties readonly dispid 500;
+  end;
+
+// *********************************************************************//
 // Interface: Fields15
 // Flags:     (4560) Hidden Dual NonExtensible OleAutomation Dispatchable
 // GUID:      {00000506-0000-0010-8000-00AA006D2EA4}
@@ -2088,99 +2184,6 @@ type
       const bstrConnection: WideString): OleVariant; dispid 1;
     property InternetTimeout: Integer dispid 222;
   end;
-
-// *********************************************************************//
-// Interface: _Recordset
-// Flags:     (4544) Dual NonExtensible OleAutomation Dispatchable
-// GUID:      {00000555-0000-0010-8000-00AA006D2EA4}
-// *********************************************************************//
-  _Recordset = interface(Recordset20)
-    ['{00000555-0000-0010-8000-00AA006D2EA4}']
-    procedure Seek(KeyValues: OleVariant; SeekOption: SeekEnum); safecall;
-    procedure Set_Index(const pbstrIndex: WideString); safecall;
-    function Get_Index: WideString; safecall;
-    property Index: WideString read Get_Index write Set_Index;
-  end;
-
-// *********************************************************************//
-// DispIntf:  _RecordsetDisp
-// Flags:     (4544) Dual NonExtensible OleAutomation Dispatchable
-// GUID:      {00000555-0000-0010-8000-00AA006D2EA4}
-// *********************************************************************//
-  _RecordsetDisp = dispinterface
-    ['{00000555-0000-0010-8000-00AA006D2EA4}']
-    procedure Seek(KeyValues: OleVariant; SeekOption: SeekEnum); dispid 1066;
-    property Index: WideString dispid 1067;
-    procedure Cancel; dispid 1055;
-    property DataSource: IUnknown dispid 1056;
-    procedure Save(const FileName: WideString; PersistFormat: PersistFormatEnum); dispid 1057;
-    property ActiveCommand: IDispatch readonly dispid 1061;
-    property StayInSync: WordBool dispid 1063;
-    function GetString(StringFormat: StringFormatEnum; NumRows: Integer; 
-      const ColumnDelimeter: WideString; const RowDelimeter: WideString;
-      const NullExpr: WideString): WideString; dispid 1062;
-    property DataMember: WideString dispid 1064;
-    function CompareBookmarks(Bookmark1: OleVariant; Bookmark2: OleVariant): CompareEnum; dispid 1065;
-    function Clone(LockType: LockTypeEnum): _Recordset; dispid 1034;
-    procedure Resync(AffectRecords: AffectEnum; ResyncValues: ResyncEnum); dispid 1024;
-    property AbsolutePosition: PositionEnum dispid 1000;
-    function ActiveConnection: IDispatch; dispid 1001;
-    property BOF: WordBool readonly dispid 1002;
-    property Bookmark: OleVariant dispid 1003;
-    property CacheSize: Integer dispid 1004;
-    property CursorType: CursorTypeEnum dispid 1005;
-    property EOF: WordBool readonly dispid 1006;
-    property Fields: Fields readonly dispid 0;
-    property LockType: LockTypeEnum dispid 1008;
-    property MaxRecords: Integer dispid 1009;
-    property RecordCount: Integer readonly dispid 1010;
-    function Source: IDispatch; dispid 1011;
-    procedure AddNew(FieldList: OleVariant; Values: OleVariant); dispid 1012;
-    procedure CancelUpdate; dispid 1013;
-    procedure Close; dispid 1014;
-    procedure Delete(AffectRecords: AffectEnum); dispid 1015;
-    function GetRows(Rows: Integer; Start: OleVariant; Fields: OleVariant): OleVariant; dispid 1016;
-    procedure Move(NumRecords: Integer; Start: OleVariant); dispid 1017;
-    procedure MoveNext; dispid 1018;
-    procedure MovePrevious; dispid 1019;
-    procedure MoveFirst; dispid 1020;
-    procedure MoveLast; dispid 1021;
-    procedure Open(Source: OleVariant; ActiveConnection: OleVariant; CursorType: CursorTypeEnum;
-      LockType: LockTypeEnum; Options: Integer); dispid 1022;
-    procedure Requery(Options: Integer); dispid 1023;
-    procedure _xResync(AffectRecords: AffectEnum); dispid 1610809378;
-    procedure Update(Fields: OleVariant; Values: OleVariant); dispid 1025;
-    property AbsolutePage: PositionEnum dispid 1047;
-    property EditMode: EditModeEnum readonly dispid 1026;
-    property Filter: OleVariant dispid 1030;
-    property PageCount: Integer readonly dispid 1050;
-    property PageSize: Integer dispid 1048;
-    property Sort: WideString dispid 1031;
-    property Status: Integer readonly dispid 1029;
-    property State: Integer readonly dispid 1054;
-    function _xClone: _Recordset; dispid 1610809392;
-    procedure UpdateBatch(AffectRecords: AffectEnum); dispid 1035;
-    procedure CancelBatch(AffectRecords: AffectEnum); dispid 1049;
-    property CursorLocation: CursorLocationEnum dispid 1051;
-    function NextRecordset(out RecordsAffected: OleVariant): _Recordset; dispid 1052;
-    function Supports(CursorOptions: CursorOptionEnum): WordBool; dispid 1036;
-    property Collect[Index: OleVariant]: OleVariant dispid -8;
-    property MarshalOptions: MarshalOptionsEnum dispid 1053;
-    procedure Find(const Criteria: WideString; SkipRecords: Integer;
-      SearchDirection: SearchDirectionEnum; Start: OleVariant); dispid 1058;
-    property Properties: Properties readonly dispid 500;
-  end;
-
-// *********************************************************************//
-// Declaration of CoClasses defined in Type Library                     //
-// (NOTE: Here we map each CoClass to its Default Interface)            //
-// *********************************************************************//
-
-  Connection = _Connection;
-  Command = _Command;
-  Recordset = _Recordset;
-  Parameter = _Parameter;
-  DataSpace = IDataspace;
 
 { CoClass Creators }
 

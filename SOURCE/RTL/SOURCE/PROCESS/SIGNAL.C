@@ -16,14 +16,14 @@
  *----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1991, 2000 by Inprise Corporation
+ *      Copyright (c) 1991, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.1  $        */
+/* $Revision: 9.5.2.1 $        */
 
 #define INCL_CON
 #include <ntbc.h>

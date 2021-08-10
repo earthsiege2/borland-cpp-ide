@@ -22,7 +22,6 @@ Notes:
 --*/
 
 #ifndef _LMDFS_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMDFS_
 
 #if _MSC_VER > 1000
@@ -41,6 +40,32 @@ extern "C" {
 #define DFS_VOLUME_STATE_INCONSISTENT  2
 #define DFS_VOLUME_STATE_OFFLINE       3
 #define DFS_VOLUME_STATE_ONLINE        4
+
+//
+// These are valid for setting the volume state on the root
+// These are available to force a resynchronize on the root
+// volume or to put it in a standby mode.
+//
+#define DFS_VOLUME_STATE_RESYNCHRONIZE 0x10
+#define DFS_VOLUME_STATE_STANDBY       0x20
+
+//
+// These are valid on getting the volume state on the root
+// These are available to determine the flavor of DFS
+// A few bits are reserved to determine the flavor of the DFS root.
+// To get the flavor, and the state with DFS_VOLUME_FLAVORS.
+//
+// (_state & DFS_VOLUME_FLAVORS) will tell you the flavor of the dfs root.
+//
+//
+
+#define DFS_VOLUME_FLAVORS           0x0300
+
+
+#define DFS_VOLUME_FLAVOR_UNUSED1    0x0000
+#define DFS_VOLUME_FLAVOR_STANDALONE 0x0100
+#define DFS_VOLUME_FLAVOR_AD_BLOB    0x0200
+#define DFS_STORAGE_FLAVOR_UNUSED2   0x0300
 
 //
 // DFS Storage State
@@ -135,6 +160,15 @@ typedef struct _DFS_INFO_200 {
     LPWSTR  FtDfsName;              // FtDfs name
 } DFS_INFO_200, *PDFS_INFO_200, *LPDFS_INFO_200;
 
+
+//
+// Level 300:
+//
+typedef struct _DFS_INFO_300 {
+    DWORD   Flags;
+    LPWSTR  DfsName;              // Dfs name
+} DFS_INFO_300, *PDFS_INFO_300, *LPDFS_INFO_300;
+
 //
 // Add a new volume or additional storage for an existing volume at
 // DfsEntryPath.
@@ -225,13 +259,6 @@ NetDfsGetDcAddress(
     IN  OUT ULONG *Timeout          // Time, in sec, that we stay with this DC
 );
 
-NET_API_STATUS NET_API_FUNCTION
-NetDfsSetDcAddress(
-    IN  LPWSTR ServerName,          // Server to remote to
-    IN  LPWSTR DcIpAddress,         // The IP address of the DC to use
-    IN  ULONG Timeout,              // Time, in sec, to stay with this DC
-    IN  DWORD Flags                 // See below
-);
 
 //
 // Flags for NetDfsSetDcAddress()
@@ -383,5 +410,4 @@ NetDfsRename(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _LMDFS_

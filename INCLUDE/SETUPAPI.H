@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1995-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Module Name:
 
@@ -13,7 +13,6 @@ Abstract:
 --*/
 
 #ifndef _INC_SETUPAPI
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_SETUPAPI
 
 #if _MSC_VER > 1000
@@ -29,6 +28,29 @@ Abstract:
 #define WINSETUPAPI
 #endif
 
+//
+// determine version of setupapi based on _WIN32_WINDOWS and _WIN32_WINNT
+//
+// NT4 version of setupapi   (0x0400) is earliest, and installed onto Win95 by IE.
+// Win2k version of setupapi (0x0500) also shipped in WinME
+// we'll use "0x0410" to indicate version of setupapi shipped with Win98
+//
+#ifndef _SETUPAPI_VER
+#if defined(_WIN32_WINNT) && (!defined(_WIN32_WINDOWS) || (_WIN32_WINNT < _WIN32_WINDOWS))
+#define _SETUPAPI_VER _WIN32_WINNT  // SetupAPI version follows Windows NT version
+#elif defined(_WIN32_WINDOWS)
+#if _WIN32_WINDOWS >= 0x0490
+#define _SETUPAPI_VER 0x0500        // WinME uses same version of SetupAPI as Win2k
+#elif _WIN32_WINDOWS >= 0x0410
+#define _SETUPAPI_VER 0x0410        // Indicates version of SetupAPI shipped with Win98
+#else
+#define _SETUPAPI_VER 0x0400        // Earliest SetupAPI version
+#endif // _WIN32_WINDOWS
+#else // _WIN32_WINNT/_WIN32_WINDOWS
+#define _SETUPAPI_VER 0x0501
+#endif // _WIN32_WINNT/_WIN32_WINDOWS
+#endif // !_SETUPAPI_VER
+
 #ifndef __LPGUID_DEFINED__
 #define __LPGUID_DEFINED__
 typedef GUID *LPGUID;
@@ -39,8 +61,11 @@ typedef GUID *LPGUID;
 //
 #include <commctrl.h>
 
-
-#include <pshpack1.h>   // Assume byte packing throughout
+#ifdef _WIN64
+#include <pshpack8.h>   // Assume 8-byte (64-bit) packing throughout
+#else
+#include <pshpack1.h>   // Assume byte packing throughout (32-bit processor)
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,7 +89,7 @@ extern "C" {
 // Define maximum length of a machine name in the format expected by ConfigMgr32
 // CM_Connect_Machine (i.e., "\\\\MachineName\0").
 //
-#define SP_MAX_MACHINENAME_LENGTH   (MAX_COMPUTERNAME_LENGTH + 3)
+#define SP_MAX_MACHINENAME_LENGTH   (MAX_PATH + 3)
 
 //
 // Define type for reference to loaded inf file
@@ -95,7 +120,50 @@ typedef struct _SP_INF_INFORMATION {
 // Define structure for passing alternate platform info into
 // SetupSetFileQueueAlternatePlatform and SetupQueryInfOriginalFileInformation.
 //
-typedef struct _SP_ALTPLATFORM_INFO {
+typedef struct _SP_ALTPLATFORM_INFO_V2 {
+    DWORD cbSize;
+    //
+    // platform to use (VER_PLATFORM_WIN32_WINDOWS or VER_PLATFORM_WIN32_NT)
+    //
+    DWORD Platform;
+    //
+    // major and minor version numbers to use
+    //
+    DWORD MajorVersion;
+    DWORD MinorVersion;
+    //
+    // processor architecture to use (PROCESSOR_ARCHITECTURE_INTEL,
+    // PROCESSOR_ARCHITECTURE_ALPHA, PROCESSOR_ARCHITECTURE_IA64, or
+    // PROCESSOR_ARCHITECTURE_ALPHA64)
+    //
+    WORD  ProcessorArchitecture;
+
+    union {
+        WORD  Reserved; // for compatibility with V1 structure
+        WORD  Flags;    // indicates validity of non V1 fields
+    };
+
+    //
+    // specify SP_ALTPLATFORM_FLAGS_VERSION_RANGE in Flags
+    // to use FirstValidatedMajorVersion and FirstValidatedMinorVersion
+    //
+    // Major and minor versions of the oldest previous OS for which this
+    // package's digital signature may be considered valid.  For example, say
+    // the alternate platform is VER_PLATFORM_WIN32_NT, version 5.1.  However,
+    // it is wished that driver packages signed with a 5.0 osattr also be
+    // considered valid.  In this case, you'd have a  MajorVersion/MinorVersion
+    // of 5.1, and a FirstValidatedMajorVersion/FirstValidatedMinorVersion of
+    // 5.0.  To validate packages signed for any previous OS release, specify
+    // 0 for these fields.  To only validate against the target alternate
+    // platform, specify the same values as those in the MajorVersion and
+    // MinorVersion fields.
+    //
+    DWORD FirstValidatedMajorVersion;
+    DWORD FirstValidatedMinorVersion;
+
+} SP_ALTPLATFORM_INFO_V2, *PSP_ALTPLATFORM_INFO_V2;
+
+typedef struct _SP_ALTPLATFORM_INFO_V1 {
     DWORD cbSize;
     //
     // platform to use (VER_PLATFORM_WIN32_WINDOWS or VER_PLATFORM_WIN32_NT)
@@ -114,7 +182,25 @@ typedef struct _SP_ALTPLATFORM_INFO {
     WORD  ProcessorArchitecture;
 
     WORD  Reserved; // must be zero.
-} SP_ALTPLATFORM_INFO, *PSP_ALTPLATFORM_INFO;
+} SP_ALTPLATFORM_INFO_V1, *PSP_ALTPLATFORM_INFO_V1;
+
+#if USE_SP_ALTPLATFORM_INFO_V1 || (_SETUPAPI_VER < 0x0501) // use version 1 altplatform info data structure
+
+typedef SP_ALTPLATFORM_INFO_V1 SP_ALTPLATFORM_INFO;
+typedef PSP_ALTPLATFORM_INFO_V1 PSP_ALTPLATFORM_INFO;
+
+#else                          // use version 2 altplatform info data structure
+
+typedef SP_ALTPLATFORM_INFO_V2 SP_ALTPLATFORM_INFO;
+typedef PSP_ALTPLATFORM_INFO_V2 PSP_ALTPLATFORM_INFO;
+
+//
+// the following flags are available to SP_ALTPLATFORM_INFO_V2
+//
+#define SP_ALTPLATFORM_FLAGS_VERSION_RANGE (0x0001)     // FirstValidatedMajor/MinorVersion
+
+#endif  // use current version of altplatform info data structure
+
 
 //
 // Define structure that is filled in by SetupQueryInfOriginalFileInformation
@@ -204,6 +290,8 @@ typedef PSP_ORIGINAL_FILE_INFO_A PSP_ORIGINAL_FILE_INFO;
 #define DIRID_COMMON_APPDATA          16419  // All Users\Application Data
 
 #define DIRID_PROGRAM_FILES           16422  // Program Files
+#define DIRID_SYSTEM_X86              16425  // system32 on RISC
+#define DIRID_PROGRAM_FILES_X86       16426  // Program Files on RISC
 #define DIRID_PROGRAM_FILES_COMMON    16427  // Program Files\Common
 #define DIRID_PROGRAM_FILES_COMMONX86 16428  // x86 Program Files\Common on RISC
 
@@ -277,6 +365,19 @@ typedef UINT (CALLBACK* PSP_FILE_CALLBACK_W)(
 // Extended notification for SetupScanFileQueue(Flags=SPQ_SCAN_USE_CALLBACKEX)
 //
 #define SPFILENOTIFY_QUEUESCAN_EX       0x00000018
+
+#define SPFILENOTIFY_STARTREGISTRATION  0x00000019
+#define SPFILENOTIFY_ENDREGISTRATION    0x00000020
+
+#if _SETUPAPI_VER >= 0x0501
+
+//
+// Extended notification for SetupScanFileQueue(Flags=SPQ_SCAN_USE_CALLBACK_SIGNERINFO)
+//
+#define SPFILENOTIFY_QUEUESCAN_SIGNERINFO 0x00000040
+
+#endif
+
 //
 // Copy notification. These are bit flags that may be combined.
 //
@@ -347,6 +448,37 @@ typedef FILEPATHS_A FILEPATHS;
 typedef PFILEPATHS_A PFILEPATHS;
 #endif
 
+#if _SETUPAPI_VER >= 0x0501
+
+typedef struct _FILEPATHS_SIGNERINFO_A {
+    PCSTR  Target;
+    PCSTR  Source;  // not used for delete operations
+    UINT   Win32Error;
+    DWORD  Flags;   // such as SP_COPY_NOSKIP for copy errors
+    PCSTR  DigitalSigner;
+    PCSTR  Version;
+    PCSTR  CatalogFile;
+} FILEPATHS_SIGNERINFO_A, *PFILEPATHS_SIGNERINFO_A;
+
+typedef struct _FILEPATHS_SIGNERINFO_W {
+    PCWSTR Target;
+    PCWSTR Source;  // not used for delete operations
+    UINT   Win32Error;
+    DWORD  Flags;   // such as SP_COPY_NOSKIP for copy errors
+    PCWSTR DigitalSigner;
+    PCWSTR Version;
+    PCWSTR CatalogFile;
+} FILEPATHS_SIGNERINFO_W, *PFILEPATHS_SIGNERINFO_W;
+
+#ifdef UNICODE
+typedef FILEPATHS_SIGNERINFO_W FILEPATHS_SIGNERINFO;
+typedef PFILEPATHS_SIGNERINFO_W PFILEPATHS_SIGNERINFO;
+#else
+typedef FILEPATHS_SIGNERINFO_A FILEPATHS_SIGNERINFO;
+typedef PFILEPATHS_SIGNERINFO_A PFILEPATHS_SIGNERINFO;
+#endif
+
+#endif // _SETUPAPI_VER >= 0x0501
 
 //
 // Structure used with SPFILENOTIFY_NEEDMEDIA
@@ -444,6 +576,45 @@ typedef FILE_IN_CABINET_INFO_A FILE_IN_CABINET_INFO;
 typedef PFILE_IN_CABINET_INFO_A PFILE_IN_CABINET_INFO;
 #endif
 
+//
+// Structure used for SPFILENOTIFY_***REGISTRATION
+// callback
+//
+
+typedef struct _SP_REGISTER_CONTROL_STATUSA {
+    DWORD    cbSize;
+    PCSTR    FileName;
+    DWORD    Win32Error;
+    DWORD    FailureCode;
+} SP_REGISTER_CONTROL_STATUSA, *PSP_REGISTER_CONTROL_STATUSA;
+
+typedef struct _SP_REGISTER_CONTROL_STATUSW {
+    DWORD    cbSize;
+    PCWSTR   FileName;
+    DWORD    Win32Error;
+    DWORD    FailureCode;
+} SP_REGISTER_CONTROL_STATUSW, *PSP_REGISTER_CONTROL_STATUSW;
+
+#ifdef UNICODE
+typedef SP_REGISTER_CONTROL_STATUSW SP_REGISTER_CONTROL_STATUS;
+typedef PSP_REGISTER_CONTROL_STATUSW PSP_REGISTER_CONTROL_STATUS;
+#else
+typedef SP_REGISTER_CONTROL_STATUSA SP_REGISTER_CONTROL_STATUS;
+typedef PSP_REGISTER_CONTROL_STATUSA PSP_REGISTER_CONTROL_STATUS;
+#endif
+
+
+//
+// valid values for SP_REGISTER_CONTROL_STATUS.FailureCode field
+//
+
+#define SPREG_SUCCESS   0x00000000
+#define SPREG_LOADLIBRARY   0x00000001
+#define SPREG_GETPROCADDR   0x00000002
+#define SPREG_REGSVR        0x00000003
+#define SPREG_DLLINSTALL    0x00000004
+#define SPREG_TIMEOUT   0x00000005
+#define SPREG_UNKNOWN   0xFFFFFFFF
 
 //
 // Define type for setup file queue
@@ -645,6 +816,10 @@ typedef PSP_DEVINFO_LIST_DETAIL_DATA_A PSP_DEVINFO_LIST_DETAIL_DATA;
 #define DIF_ADDPROPERTYPAGE_BASIC           0x00000024
 #define DIF_RESERVED1                       0x00000025
 #define DIF_TROUBLESHOOTER                  0x00000026
+#define DIF_POWERMESSAGEWAKE                0x00000027
+#define DIF_ADDREMOTEPROPERTYPAGE_ADVANCED  0x00000028
+#define DIF_UPDATEDRIVER_UI                 0x00000029
+#define DIF_RESERVED2                       0x00000030
 
 typedef UINT        DI_FUNCTION;    // Function type for device installer
 
@@ -803,8 +978,20 @@ typedef PSP_DEVINSTALL_PARAMS_A PSP_DEVINSTALL_PARAMS;
 #define DI_FLAGSEX_RESERVED1                0x00400000L
 #define DI_FLAGSEX_EXCLUDE_OLD_INET_DRIVERS 0x00800000L  // Don't include old Internet drivers when building
                                                          // a driver list.
-#define DI_FLAGSEX_RESERVED1            0x00400000L
-#define DI_FLAGSEX_POWERPAGE_ADDED      0x00800000L      // class installer added their own power page
+#define DI_FLAGSEX_POWERPAGE_ADDED          0x01000000L  // class installer added their own power page
+
+#if _SETUPAPI_VER >= 0x0501
+
+#define DI_FLAGSEX_FILTERSIMILARDRIVERS     0x02000000L  // only include similar drivers in class list
+#define DI_FLAGSEX_INSTALLEDDRIVER          0x04000000L  // only add the installed driver to the class or compat
+                                                         // driver list.  Used in calls to SetupDiBuildDriverInfoList
+#define DI_FLAGSEX_NO_CLASSLIST_NODE_MERGE  0x08000000L  // Don't remove identical driver nodes from the class list
+#define DI_FLAGSEX_ALTPLATFORM_DRVSEARCH    0x10000000L  // Build driver list based on alternate platform information
+                                                         // specified in associated file queue
+#define DI_FLAGSEX_RESTART_DEVICE_ONLY      0x20000000L  // only restart the device drivers are being installed on as
+                                                         // opposed to restarting all devices using those drivers.
+
+#endif // _SETUPAPI_VER >= 0x0501
 
 //
 // Class installation parameters header.  This must be the first field of any
@@ -1153,6 +1340,27 @@ typedef PSP_TROUBLESHOOTER_PARAMS_A PSP_TROUBLESHOOTER_PARAMS;
 
 
 //
+// Structure corresponding to the DIF_POWERMESSAGEWAKE install function
+//
+typedef struct _SP_POWERMESSAGEWAKE_PARAMS_A {
+    SP_CLASSINSTALL_HEADER ClassInstallHeader;
+    CHAR                   PowerMessageWake[LINE_LEN*2];
+} SP_POWERMESSAGEWAKE_PARAMS_A, *PSP_POWERMESSAGEWAKE_PARAMS_A;
+
+typedef struct _SP_POWERMESSAGEWAKE_PARAMS_W {
+    SP_CLASSINSTALL_HEADER ClassInstallHeader;
+    WCHAR                  PowerMessageWake[LINE_LEN*2];
+} SP_POWERMESSAGEWAKE_PARAMS_W, *PSP_POWERMESSAGEWAKE_PARAMS_W;
+
+#ifdef UNICODE
+typedef SP_POWERMESSAGEWAKE_PARAMS_W SP_POWERMESSAGEWAKE_PARAMS;
+typedef PSP_POWERMESSAGEWAKE_PARAMS_W PSP_POWERMESSAGEWAKE_PARAMS;
+#else
+typedef SP_POWERMESSAGEWAKE_PARAMS_A SP_POWERMESSAGEWAKE_PARAMS;
+typedef PSP_POWERMESSAGEWAKE_PARAMS_A PSP_POWERMESSAGEWAKE_PARAMS;
+#endif
+
+//
 // Driver information structure (member of a driver info list that may be associated
 // with a particular device instance, or (globally) with a device information set)
 //
@@ -1212,7 +1420,7 @@ typedef SP_DRVINFO_DATA_V2_A SP_DRVINFO_DATA_V2;
 typedef PSP_DRVINFO_DATA_V2_A PSP_DRVINFO_DATA_V2;
 #endif
 
-#if USE_SP_DRVINFO_DATA_V1  // use version 1 driver info data structure
+#if USE_SP_DRVINFO_DATA_V1 || (_SETUPAPI_VER < 0x0500)  // use version 1 driver info data structure
 
 typedef SP_DRVINFO_DATA_V1_A SP_DRVINFO_DATA_A;
 typedef PSP_DRVINFO_DATA_V1_A PSP_DRVINFO_DATA_A;
@@ -1300,12 +1508,63 @@ typedef struct _SP_DRVINSTALL_PARAMS {
                                             // have access to it's source files.  Never attempt to
                                             // install a driver with this flag!
 #define DNF_BAD_DRIVER          0x00000800  // Driver node should not be used at all
+#define DNF_DUPPROVIDER         0x00001000  // Multiple drivers have the same provider and desc
+
+#if _SETUPAPI_VER >= 0x0501
+#define DNF_INF_IS_SIGNED       0x00002000  // If file is digitally signed
+#define DNF_OEM_F6_INF          0x00004000  // INF specified from F6 during textmode setup.
+#define DNF_DUPDRIVERVER        0x00008000  // Multipe drivers have the same desc, provider, and DriverVer values
+#define DNF_BASIC_DRIVER        0x00010000  // Driver provides basic functionality, but should
+                                            // not be chosen if other signed drivers exist.
+#endif // _SETUPAPI_VER >= 0x0501
 
 //
-//Rank values (the lower the Rank number, the better the Rank)
+// Rank values (the lower the Rank number, the better the Rank)
 //
 #define DRIVER_HARDWAREID_RANK  0x00000FFF  // Any rank less than or equal to
-                                            // this value is a HardwareID match
+                                            // this value is a trusted
+                                            // HardwareID match
+
+#define DRIVER_COMPATID_RANK    0x00003FFF  // Any rank less than or equal to
+                                            // this (and greater than
+                                            // DRIVER_HARDWAREID_RANK) is a
+                                            // trusted CompatibleID match
+
+#define DRIVER_UNTRUSTED_RANK   0x00008000  // Any rank with this bit set is an
+                                            // "untrusted" rank, meaning that
+                                            // the INF was unsigned.
+
+#define DRIVER_UNTRUSTED_HARDWAREID_RANK  0x00008FFF  // Any rank less than or equal to
+                                                      // this value (and greater than
+                                                      // or equal to DRIVER_UNTRUSTED_RANK)
+                                                      // is an untrusted HardwareID match
+
+#define DRIVER_UNTRUSTED_COMPATID_RANK    0x0000BFFF  // Any rank less than or equal to
+                                                      // this value (and greater than
+                                                      // DRIVER_UNTRUSTED_HARDWAREID_RANK)
+                                                      // is an untrusted CompatibleID match
+
+#define DRIVER_W9X_SUSPECT_RANK            0x0000C000 // Any rank that is greater than
+                                                      // or equal to this value, and lesser
+                                                      // than or equal to 0xFFFF is suspected
+                                                      // to be a Win9x-only driver, because
+                                                      // (a) it isn't signed, and (b) there
+                                                      // is no NT-specific decoration to
+                                                      // explicitly indicate that the INF
+                                                      // supports Windows NT/200x
+
+#define DRIVER_W9X_SUSPECT_HARDWAREID_RANK 0x0000CFFF // Any rank less than or equal to this
+                                                      // (and greater than or equal to
+                                                      // DRIVER_W9X_SUSPECT_RANK) is a
+                                                      // hardware ID match suspected of being
+                                                      // only for Windows 9x platforms.
+
+#define DRIVER_W9X_SUSPECT_COMPATID_RANK   0x0000FFFF // Any rank less than or equal to
+                                                      // this (and greater than
+                                                      // DRIVER_W9X_SUSPECT_HARDWAREID_RANK)
+                                                      // is a compatible ID match suspected
+                                                      // of being only for Windows 9x
+                                                      // platforms.
 
 //
 // Setup callback routine for comparing detection signatures
@@ -1360,27 +1619,77 @@ typedef struct _SP_PROPSHEETPAGE_REQUEST {
 
 
 //
-// Structure used with SetupGetBackupQueue
+// Structure used with SetupGetBackupInformation/SetupSetBackupInformation
 //
-typedef struct _SP_BACKUP_QUEUE_PARAMS_A {
-    DWORD    cbSize;
+typedef struct _SP_BACKUP_QUEUE_PARAMS_V2_A {
+    DWORD    cbSize;                            // size of structure
     CHAR     FullInfPath[MAX_PATH];             // buffer to hold ANSI pathname of INF file
     INT      FilenameOffset;                    // offset in CHAR's of filename part (after '\')
-} SP_BACKUP_QUEUE_PARAMS_A, *PSP_BACKUP_QUEUE_PARAMS_A;
+    CHAR     ReinstallInstance[MAX_PATH];       // Instance ID (if present)
+} SP_BACKUP_QUEUE_PARAMS_V2_A, *PSP_BACKUP_QUEUE_PARAMS_V2_A;
 
-typedef struct _SP_BACKUP_QUEUE_PARAMS_W {
-    DWORD    cbSize;
+typedef struct _SP_BACKUP_QUEUE_PARAMS_V2_W {
+    DWORD    cbSize;                            // size of structure
     WCHAR    FullInfPath[MAX_PATH];             // buffer to hold UNICODE pathname of INF file
     INT      FilenameOffset;                    // offset in WCHAR's of filename part (after '\')
-} SP_BACKUP_QUEUE_PARAMS_W, *PSP_BACKUP_QUEUE_PARAMS_W;
+    WCHAR    ReinstallInstance[MAX_PATH];       // Instance ID (if present)
+} SP_BACKUP_QUEUE_PARAMS_V2_W, *PSP_BACKUP_QUEUE_PARAMS_V2_W;
+
+//
+// Version 1 of the SP_BACKUP_QUEUE_PARAMS structures, used only for compatibility
+// with Windows 2000/Windows 95/98/ME SETUPAPI.DLL
+//
+typedef struct _SP_BACKUP_QUEUE_PARAMS_V1_A {
+    DWORD    cbSize;                            // size of structure
+    CHAR     FullInfPath[MAX_PATH];             // buffer to hold ANSI pathname of INF file
+    INT      FilenameOffset;                    // offset in CHAR's of filename part (after '\')
+} SP_BACKUP_QUEUE_PARAMS_V1_A, *PSP_BACKUP_QUEUE_PARAMS_V1_A;
+
+typedef struct _SP_BACKUP_QUEUE_PARAMS_V1_W {
+    DWORD    cbSize;                            // size of structure
+    WCHAR    FullInfPath[MAX_PATH];             // buffer to hold UNICODE pathname of INF file
+    INT      FilenameOffset;                    // offset in WCHAR's of filename part (after '\')
+} SP_BACKUP_QUEUE_PARAMS_V1_W, *PSP_BACKUP_QUEUE_PARAMS_V1_W;
 
 #ifdef UNICODE
-typedef SP_BACKUP_QUEUE_PARAMS_W SP_BACKUP_QUEUE_PARAMS;
-typedef PSP_BACKUP_QUEUE_PARAMS_W PSP_BACKUP_QUEUE_PARAMS;
+typedef SP_BACKUP_QUEUE_PARAMS_V1_W SP_BACKUP_QUEUE_PARAMS_V1;
+typedef PSP_BACKUP_QUEUE_PARAMS_V1_W PSP_BACKUP_QUEUE_PARAMS_V1;
+typedef SP_BACKUP_QUEUE_PARAMS_V2_W SP_BACKUP_QUEUE_PARAMS_V2;
+typedef PSP_BACKUP_QUEUE_PARAMS_V2_W PSP_BACKUP_QUEUE_PARAMS_V2;
 #else
-typedef SP_BACKUP_QUEUE_PARAMS_A SP_BACKUP_QUEUE_PARAMS;
-typedef PSP_BACKUP_QUEUE_PARAMS_A PSP_BACKUP_QUEUE_PARAMS;
+typedef SP_BACKUP_QUEUE_PARAMS_V1_A SP_BACKUP_QUEUE_PARAMS_V1;
+typedef PSP_BACKUP_QUEUE_PARAMS_V1_A PSP_BACKUP_QUEUE_PARAMS_V1;
+typedef SP_BACKUP_QUEUE_PARAMS_V2_A SP_BACKUP_QUEUE_PARAMS_V2;
+typedef PSP_BACKUP_QUEUE_PARAMS_V2_A PSP_BACKUP_QUEUE_PARAMS_V2;
 #endif
+
+
+#if USE_SP_BACKUP_QUEUE_PARAMS_V1 || (_SETUPAPI_VER < 0x0501)  // use version 1 driver info data structure
+
+typedef SP_BACKUP_QUEUE_PARAMS_V1_A SP_BACKUP_QUEUE_PARAMS_A;
+typedef PSP_BACKUP_QUEUE_PARAMS_V1_A PSP_BACKUP_QUEUE_PARAMS_A;
+typedef SP_BACKUP_QUEUE_PARAMS_V1_W SP_BACKUP_QUEUE_PARAMS_W;
+typedef PSP_BACKUP_QUEUE_PARAMS_V1_W PSP_BACKUP_QUEUE_PARAMS_W;
+typedef SP_BACKUP_QUEUE_PARAMS_V1 SP_BACKUP_QUEUE_PARAMS;
+typedef PSP_BACKUP_QUEUE_PARAMS_V1 PSP_BACKUP_QUEUE_PARAMS;
+
+#else                       // use version 2 driver info data structure
+
+typedef SP_BACKUP_QUEUE_PARAMS_V2_A SP_BACKUP_QUEUE_PARAMS_A;
+typedef PSP_BACKUP_QUEUE_PARAMS_V2_A PSP_BACKUP_QUEUE_PARAMS_A;
+typedef SP_BACKUP_QUEUE_PARAMS_V2_W SP_BACKUP_QUEUE_PARAMS_W;
+typedef PSP_BACKUP_QUEUE_PARAMS_V2_W PSP_BACKUP_QUEUE_PARAMS_W;
+typedef SP_BACKUP_QUEUE_PARAMS_V2 SP_BACKUP_QUEUE_PARAMS;
+typedef PSP_BACKUP_QUEUE_PARAMS_V2 PSP_BACKUP_QUEUE_PARAMS;
+
+#endif  // use current version of driver info data structure
+
+
+
+
+
+
+
 
 //
 // Setupapi-specific error codes
@@ -1452,6 +1761,13 @@ typedef PSP_BACKUP_QUEUE_PARAMS_A PSP_BACKUP_QUEUE_PARAMS;
 #define ERROR_DEVINSTALL_QUEUE_NONNATIVE  (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x230)
 #define ERROR_NOT_DISABLEABLE             (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x231)
 #define ERROR_CANT_REMOVE_DEVINST         (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x232)
+#define ERROR_INVALID_TARGET              (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x233)
+#define ERROR_DRIVER_NONNATIVE            (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x234)
+#define ERROR_IN_WOW64                    (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x235)
+#define ERROR_SET_SYSTEM_RESTORE_POINT    (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x236)
+#define ERROR_INCORRECTLY_COPIED_INF      (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x237)
+#define ERROR_SCE_DISABLED                (APPLICATION_ERROR_MASK|ERROR_SEVERITY_ERROR|0x238)
+
 
 //
 // Backward compatibility--do not use.
@@ -1921,7 +2237,14 @@ SetupGetBinaryField(
     OUT LPDWORD     RequiredSize      OPTIONAL
     );
 
-
+//
+// SetupGetFileCompressionInfo is depreciated
+// use SetupGetFileCompressionInfoEx instead
+//
+// ActualSourceFileName returned by SetupGetFileCompressionInfo
+// must be freed by the export setupapi!MyFree (NT4+ Win95+)
+// or LocalFree (Win2k+)
+//
 WINSETUPAPI
 DWORD
 WINAPI
@@ -1950,6 +2273,48 @@ SetupGetFileCompressionInfoW(
 #define SetupGetFileCompressionInfo SetupGetFileCompressionInfoA
 #endif
 
+#if _SETUPAPI_VER >= 0x0501
+
+//
+// SetupGetFileCompressionInfoEx is the preferred API over
+// SetupGetFileCompressionInfo. It follows the normal
+// conventions of returning BOOL and writing to user-supplied
+// buffer.
+//
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupGetFileCompressionInfoExA(
+    IN  PCSTR   SourceFileName,
+    IN  PSTR    ActualSourceFileNameBuffer,
+    IN  DWORD   ActualSourceFileNameBufferLen,
+    OUT PDWORD  RequiredBufferLen,              OPTIONAL
+    OUT PDWORD  SourceFileSize,
+    OUT PDWORD  TargetFileSize,
+    OUT PUINT   CompressionType
+    );
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupGetFileCompressionInfoExW(
+    IN  PCWSTR  SourceFileName,
+    IN  PWSTR   ActualSourceFileNameBuffer,
+    IN  DWORD   ActualSourceFileNameBufferLen,
+    OUT PDWORD  RequiredBufferLen,              OPTIONAL
+    OUT PDWORD  SourceFileSize,
+    OUT PDWORD  TargetFileSize,
+    OUT PUINT   CompressionType
+    );
+
+#ifdef UNICODE
+#define SetupGetFileCompressionInfoEx SetupGetFileCompressionInfoExW
+#else
+#define SetupGetFileCompressionInfoEx SetupGetFileCompressionInfoExA
+#endif
+
+#endif // _SETUPAPI_VER >= 0x0501
 
 //
 // Compression types
@@ -2365,8 +2730,8 @@ WINAPI
 SetupBackupErrorA(
     IN  HWND   hwndParent,
     IN  PCSTR  DialogTitle,     OPTIONAL
-    IN  PCSTR  BackupFile,
-    IN  PCSTR  TargetFile,
+    IN  PCSTR  SourceFile,
+    IN  PCSTR  TargetFile,      OPTIONAL
     IN  UINT   Win32ErrorCode,
     IN  DWORD  Style
     );
@@ -2377,8 +2742,8 @@ WINAPI
 SetupBackupErrorW(
     IN  HWND   hwndParent,
     IN  PCWSTR DialogTitle,     OPTIONAL
-    IN  PCWSTR BackupFile,
-    IN  PCWSTR TargetFile,
+    IN  PCWSTR SourceFile,
+    IN  PCWSTR TargetFile,      OPTIONAL
     IN  UINT   Win32ErrorCode,
     IN  DWORD  Style
     );
@@ -2394,15 +2759,22 @@ SetupBackupErrorW(
 // Styles for SetupPromptForDisk, SetupCopyError,
 // SetupRenameError, SetupDeleteError
 //
-#define IDF_NOBROWSE        0x00000001
-#define IDF_NOSKIP          0x00000002
-#define IDF_NODETAILS       0x00000004
-#define IDF_NOCOMPRESSED    0x00000008
-#define IDF_CHECKFIRST      0x00000100
-#define IDF_NOBEEP          0x00000200
-#define IDF_NOFOREGROUND    0x00000400
-#define IDF_WARNIFSKIP      0x00000800
-#define IDF_OEMDISK         0x80000000
+#define IDF_NOBROWSE                    0x00000001
+#define IDF_NOSKIP                      0x00000002
+#define IDF_NODETAILS                   0x00000004
+#define IDF_NOCOMPRESSED                0x00000008
+#define IDF_CHECKFIRST                  0x00000100
+#define IDF_NOBEEP                      0x00000200
+#define IDF_NOFOREGROUND                0x00000400
+#define IDF_WARNIFSKIP                  0x00000800
+
+#if _SETUPAPI_VER >= 0x0501
+
+#define IDF_NOREMOVABLEMEDIAPROMPT      0x00001000
+#define IDF_USEDISKNAMEASPROMPT         0x00002000
+#define IDF_OEMDISK                     0x80000000
+
+#endif // _SETUPAPI_VER >= 0x0501
 
 //
 // Return values for SetupPromptForDisk, SetupCopyError,
@@ -2515,6 +2887,17 @@ SetupGetSourceInfoW(
 #define SRCINFO_DESCRIPTION     3
 #define SRCINFO_FLAGS           4
 
+#if _SETUPAPI_VER >= 0x0501
+//
+// SRC_FLAGS allow special treatment of source
+// lower 4 bits are reserved for OS use
+// the flags may determine what other parameters exist
+//
+#define SRCINFO_TAGFILE2        5  // alternate tagfile, when SRCINFO_TAGFILE is a cabfile
+
+#define SRC_FLAGS_CABFILE       (0x0010) // if set, treat SRCINFO_TAGFILE as a cabfile and specify alternate tagfile
+
+#endif // _SETUPAPI_VER >= 0x0501
 
 WINSETUPAPI
 BOOL
@@ -2612,6 +2995,25 @@ SetupInstallFileExW(
 #define SP_COPY_REPLACE_BOOT_FILE   0x0080000   // file must be present upon reboot (i.e., it's
                                                 // needed by the loader); this flag implies a reboot
 #define SP_COPY_NOPRUNE             0x0100000   // never prune this file
+
+#if _SETUPAPI_VER >= 0x0501
+
+#define SP_COPY_OEM_F6_INF          0x0200000   // Used when calling SetupCopyOemInf
+
+#endif //_SETUPAPI_VER >= 0x0501
+
+#if _SETUPAPI_VER >= 0x0501
+
+//
+// Flags passed to Backup notification
+//
+#define SP_BACKUP_BACKUPPASS        0x00000001  // file backed up during backup pass
+#define SP_BACKUP_DEMANDPASS        0x00000002  // file backed up on demand
+#define SP_BACKUP_SPECIAL           0x00000004  // if set, special type of backup
+#define SP_BACKUP_BOOTFILE          0x00000008  // file marked with COPYFLG_REPLACE_BOOT_FILE
+
+
+#endif //_SETUPAPI_VER >= 0x0501
 
 
 WINSETUPAPI
@@ -2962,18 +3364,72 @@ SetupScanFileQueueW(
 //
 // Define flags for SetupScanFileQueue.
 //
-#define SPQ_SCAN_FILE_PRESENCE    0x00000001
-#define SPQ_SCAN_FILE_VALIDITY    0x00000002
-#define SPQ_SCAN_USE_CALLBACK     0x00000004
-#define SPQ_SCAN_USE_CALLBACKEX   0x00000008
-#define SPQ_SCAN_INFORM_USER      0x00000010
-#define SPQ_SCAN_PRUNE_COPY_QUEUE 0x00000020
+#define SPQ_SCAN_FILE_PRESENCE                  0x00000001
+#define SPQ_SCAN_FILE_VALIDITY                  0x00000002
+#define SPQ_SCAN_USE_CALLBACK                   0x00000004
+#define SPQ_SCAN_USE_CALLBACKEX                 0x00000008
+#define SPQ_SCAN_INFORM_USER                    0x00000010
+#define SPQ_SCAN_PRUNE_COPY_QUEUE               0x00000020
+
+#if _SETUPAPI_VER >= 0x0501
+
+#define SPQ_SCAN_USE_CALLBACK_SIGNERINFO        0x00000040
+#define SPQ_SCAN_PRUNE_DELREN                   0x00000080 // remote Delete/Rename queue
+
+#endif // _SETUPAPI_VER >= 0x0501
 
 //
 // Define flags used with Param2 for SPFILENOTIFY_QUEUESCAN
 //
-#define SPQ_DELAYED_COPY        0x00000001  // file was in use; registered for delayed copy
+#define SPQ_DELAYED_COPY                        0x00000001  // file was in use; registered for delayed copy
 
+#if _SETUPAPI_VER >= 0x0501
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupGetFileQueueCount(
+    IN  HSPFILEQ            FileQueue,
+    IN  UINT                SubQueueFileOp,
+    OUT PUINT               NumOperations
+    );
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupGetFileQueueFlags(
+    IN  HSPFILEQ            FileQueue,
+    OUT PDWORD              Flags
+    );
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupSetFileQueueFlags(
+    IN  HSPFILEQ            FileQueue,
+    IN  DWORD               FlagMask,
+    IN  DWORD               Flags
+    );
+
+//
+// Flags/FlagMask for use with SetupSetFileQueueFlags and returned by SetupGetFileQueueFlags
+//
+#define SPQ_FLAG_BACKUP_AWARE      0x00000001  // If set, SetupCommitFileQueue will
+                                               // issue backup notifications.
+
+#define SPQ_FLAG_ABORT_IF_UNSIGNED 0x00000002  // If set, SetupCommitFileQueue will
+                                               // fail with ERROR_SET_SYSTEM_RESTORE_POINT
+                                               // if the user elects to proceed with an
+                                               // unsigned queue committal.  This allows
+                                               // the caller to set a system restore point,
+                                               // then re-commit the file queue.
+
+#define SPQ_FLAG_FILES_MODIFIED    0x00000004  // If set, at least one file was
+                                               // replaced by a different version
+
+#define SPQ_FLAG_VALID             0x00000007  // mask of valid flags (can be passed as FlagMask)
+
+#endif  // _SETUPAPI_VER >= 0x0501
 
 //
 // Define OEM Source Type values for use in SetupCopyOEMInf.
@@ -3016,6 +3472,50 @@ SetupCopyOEMInfW(
 #else
 #define SetupCopyOEMInf SetupCopyOEMInfA
 #endif
+
+#if _SETUPAPI_VER >= 0x0501
+
+//
+// Flags used by SetupUninstallOEMInf
+//
+#define SUOI_FORCEDELETE   0x00000001
+
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupUninstallOEMInfA(
+    IN PCSTR InfFileName,
+    IN DWORD Flags,
+    IN PVOID Reserved
+    );
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupUninstallOEMInfW(
+    IN PCWSTR InfFileName,
+    IN DWORD  Flags,
+    IN PVOID  Reserved
+    );
+
+#ifdef UNICODE
+#define SetupUninstallOEMInf SetupUninstallOEMInfW
+#else
+#define SetupUninstallOEMInf SetupUninstallOEMInfA
+#endif
+
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupUninstallNewlyCopiedInfs(
+    IN HSPFILEQ FileQueue,
+    IN DWORD Flags,
+    IN PVOID Reserved
+    );
+
+#endif // _SETUPAPI_VER >= 0x0501
 
 
 //
@@ -3471,6 +3971,16 @@ SetupDefaultQueueCallbackW(
 // identify the data type of the registry value.  The high word is ignored
 // by the 16-bit Windows 95 SETUPX APIs.
 //
+// If <ValueType> has FLG_ADDREG_DELREG_BIT set, it will be ignored by AddReg
+// (not supported by SetupX).
+//
+
+#if _SETUPAPI_VER >= 0x0501
+
+#define FLG_ADDREG_DELREG_BIT       ( 0x00008000 ) // if set, interpret as DELREG, see below
+
+#endif // _SETUPAPI_VER >= 0x0501
+
 #define FLG_ADDREG_BINVALUETYPE     ( 0x00000001 )
 #define FLG_ADDREG_NOCLOBBER        ( 0x00000002 )
 #define FLG_ADDREG_DELVAL           ( 0x00000004 )
@@ -3479,6 +3989,20 @@ SetupDefaultQueueCallbackW(
 #define FLG_ADDREG_KEYONLY          ( 0x00000010 ) // Just create the key, ignore value
 #define FLG_ADDREG_OVERWRITEONLY    ( 0x00000020 ) // Set only if value already exists
 
+#if _SETUPAPI_VER >= 0x0501
+
+#define FLG_ADDREG_64BITKEY         ( 0x00001000 ) // make this change in the 64 bit registry.
+#define FLG_ADDREG_KEYONLY_COMMON   ( 0x00002000 ) // same as FLG_ADDREG_KEYONLY but also works for DELREG
+#define FLG_ADDREG_32BITKEY         ( 0x00004000 ) // make this change in the 32 bit registry.
+
+#endif // _SETUPAPI_VER >= 0x0501
+
+//
+// The INF may supply any arbitrary data type ordinal in the highword except
+// for the following: REG_NONE, REG_SZ, REG_EXPAND_SZ, REG_MULTI_SZ.  If this
+// technique is used, then the data is given in binary format, one byte per
+// field.
+//
 #define FLG_ADDREG_TYPE_MASK        ( 0xFFFF0000 | FLG_ADDREG_BINVALUETYPE )
 #define FLG_ADDREG_TYPE_SZ          ( 0x00000000                           )
 #define FLG_ADDREG_TYPE_MULTI_SZ    ( 0x00010000                           )
@@ -3488,10 +4012,70 @@ SetupDefaultQueueCallbackW(
 #define FLG_ADDREG_TYPE_NONE        ( 0x00020000 | FLG_ADDREG_BINVALUETYPE )
 
 //
+// Flags for DelReg section lines in INF.  The corresponding value
+// is <Operation> in the extended DelReg line format given below:
+//
+// <RegRootString>,<SubKey>,<ValueName>,<Operation>[,...]
+//
+// In SetupX and some versions of SetupAPI, <Operation> will be ignored and <ValueName> will
+// be deleted. Use with care.
+//
+// The bits determined by mask FLG_DELREG_TYPE_MASK indicates type of data expected.
+// <Operation> must have FLG_ADDREG_DELREG_BIT set, otherwise it is ignored and specified
+// value will be deleted (allowing an AddReg section to also be used as a DelReg section)
+// if <Operation> is not specified, <ValueName> will be deleted (if specified) otherwise
+// <SubKey> will be deleted.
+//
+// the compatability flag
+//
+#define FLG_DELREG_VALUE            (0x00000000)
+
+#if _SETUPAPI_VER >= 0x0501
+
+#define FLG_DELREG_TYPE_MASK        FLG_ADDREG_TYPE_MASK        // 0xFFFF0001
+#define FLG_DELREG_TYPE_SZ          FLG_ADDREG_TYPE_SZ          // 0x00000000
+#define FLG_DELREG_TYPE_MULTI_SZ    FLG_ADDREG_TYPE_MULTI_SZ    // 0x00010000
+#define FLG_DELREG_TYPE_EXPAND_SZ   FLG_ADDREG_TYPE_EXPAND_SZ   // 0x00020000
+#define FLG_DELREG_TYPE_BINARY      FLG_ADDREG_TYPE_BINARY      // 0x00000001
+#define FLG_DELREG_TYPE_DWORD       FLG_ADDREG_TYPE_DWORD       // 0x00010001
+#define FLG_DELREG_TYPE_NONE        FLG_ADDREG_TYPE_NONE        // 0x00020001
+#define FLG_DELREG_64BITKEY         FLG_ADDREG_64BITKEY         // 0x00001000
+#define FLG_DELREG_KEYONLY_COMMON   FLG_ADDREG_KEYONLY_COMMON   // 0x00002000
+#define FLG_DELREG_32BITKEY         FLG_ADDREG_32BITKEY         // 0x00004000
+
+//
+// <Operation> = FLG_DELREG_MULTI_SZ_DELSTRING
+//               <RegRootString>,<SubKey>,<ValueName>,0x00018002,<String>
+//               removes all entries matching <String> (case ignored) from multi-sz registry value
+//
+
+#define FLG_DELREG_OPERATION_MASK   (0x000000FE)
+#define FLG_DELREG_MULTI_SZ_DELSTRING ( FLG_DELREG_TYPE_MULTI_SZ | FLG_ADDREG_DELREG_BIT | 0x00000002 ) // 0x00018002
+
+#endif // _SETUPAPI_VER >= 0x0501
+
+//
 // Flags for BitReg section lines in INF.
 //
 #define FLG_BITREG_CLEARBITS        ( 0x00000000 )
 #define FLG_BITREG_SETBITS          ( 0x00000001 )
+
+#if _SETUPAPI_VER >= 0x0501
+
+#define FLG_BITREG_64BITKEY         ( 0x00001000 )
+#define FLG_BITREG_32BITKEY         ( 0x00004000 )
+
+#endif // _SETUPAPI_VER >= 0x0501
+
+//
+// Flags for Ini2Reg section lines in INF.
+//
+#if _SETUPAPI_VER >= 0x0501
+
+#define FLG_INI2REG_64BITKEY        ( 0x00001000 )
+#define FLG_INI2REG_32BITKEY        ( 0x00004000 )
+
+#endif // _SETUPAPI_VER >= 0x0501
 
 //
 // Flags for RegSvr section lines in INF
@@ -3505,17 +4089,7 @@ SetupDefaultQueueCallbackW(
 #define FLG_PROFITEM_CURRENTUSER    ( 0x00000001 )
 #define FLG_PROFITEM_DELETE         ( 0x00000002 )
 #define FLG_PROFITEM_GROUP          ( 0x00000004 )
-
-
-
-
-//
-// The INF may supply any arbitrary data type ordinal in the highword except
-// for the following: REG_NONE, REG_SZ, REG_EXPAND_SZ, REG_MULTI_SZ.  If this
-// technique is used, then the data is given in binary format, one byte per
-// field.
-//
-
+#define FLG_PROFITEM_CSIDL          ( 0x00000008 )
 
 WINSETUPAPI
 BOOL
@@ -3527,9 +4101,9 @@ SetupInstallFromInfSectionA(
     IN UINT                Flags,
     IN HKEY                RelativeKeyRoot,   OPTIONAL
     IN PCSTR               SourceRootPath,    OPTIONAL
-    IN UINT                CopyFlags,
-    IN PSP_FILE_CALLBACK_A MsgHandler,
-    IN PVOID               Context,
+    IN UINT                CopyFlags,         OPTIONAL
+    IN PSP_FILE_CALLBACK_A MsgHandler,        OPTIONAL
+    IN PVOID               Context,           OPTIONAL
     IN HDEVINFO            DeviceInfoSet,     OPTIONAL
     IN PSP_DEVINFO_DATA    DeviceInfoData     OPTIONAL
     );
@@ -3544,9 +4118,9 @@ SetupInstallFromInfSectionW(
     IN UINT                Flags,
     IN HKEY                RelativeKeyRoot,   OPTIONAL
     IN PCWSTR              SourceRootPath,    OPTIONAL
-    IN UINT                CopyFlags,
-    IN PSP_FILE_CALLBACK_W MsgHandler,
-    IN PVOID               Context,
+    IN UINT                CopyFlags,         OPTIONAL
+    IN PSP_FILE_CALLBACK_W MsgHandler,        OPTIONAL
+    IN PVOID               Context,           OPTIONAL
     IN HDEVINFO            DeviceInfoSet,     OPTIONAL
     IN PSP_DEVINFO_DATA    DeviceInfoData     OPTIONAL
     );
@@ -3569,10 +4143,27 @@ SetupInstallFromInfSectionW(
 #define SPINST_REGSVR                   0x00000040
 #define SPINST_UNREGSVR                 0x00000080
 #define SPINST_PROFILEITEMS             0x00000100
+
+#if _SETUPAPI_VER >= 0x0501
+
+#define SPINST_COPYINF                  0x00000200
+#define SPINST_ALL                      0x000003ff
+
+#else
+
 #define SPINST_ALL                      0x000001ff
+
+#endif // _SETUPAPI_VER >= 0x0501
+
 #define SPINST_SINGLESECTION            0x00010000
 #define SPINST_LOGCONFIG_IS_FORCED      0x00020000
 #define SPINST_LOGCONFIGS_ARE_OVERRIDES 0x00040000
+
+#if _SETUPAPI_VER >= 0x0501
+
+#define SPINST_REGISTERCALLBACKAWARE    0x00080000
+
+#endif // _SETUPAPI_VER >= 0x0501
 
 
 WINSETUPAPI
@@ -3659,6 +4250,19 @@ SetupInstallFilesFromInfSectionW(
 // (AddService) don't overwrite description if it already exists
 //
 #define SPSVCINST_NOCLOBBER_DESCRIPTION    (0x00000100)
+//
+// (DelService) stop the associated service specified in
+// a DelService entry before deleting the service
+//
+#define SPSVCINST_STOPSERVICE              (0x00000200)
+
+#if _SETUPAPI_VER >= 0x0501
+//
+// (AddService) force overwrite of security settings
+//
+#define SPSVCINST_CLOBBER_SECURITY         (0x00000400)
+
+#endif // _SETUPAPI_VER >= 0x0501
 
 
 
@@ -3718,6 +4322,43 @@ SetupInstallServicesFromInfSectionExW(
 #else
 #define SetupInstallServicesFromInfSectionEx SetupInstallServicesFromInfSectionExA
 #endif
+
+
+
+//
+// High level routine, usually used via rundll32.dll
+// to perform right-click install action on INFs
+// May be called directly:
+//
+// wsprintf(CmdLineBuffer,TEXT("DefaultInstall 132 %s"),InfPath);
+// InstallHinfSection(NULL,NULL,CmdLineBuffer,0);
+//
+VOID
+WINAPI
+InstallHinfSectionA(
+    IN HWND      Window,
+    IN HINSTANCE ModuleHandle,
+    IN PCSTR     CommandLine,
+    IN INT       ShowCommand
+    );
+
+VOID
+WINAPI
+InstallHinfSectionW(
+    IN HWND      Window,
+    IN HINSTANCE ModuleHandle,
+    IN PCWSTR    CommandLine,
+    IN INT       ShowCommand
+    );
+
+#ifdef UNICODE
+#define InstallHinfSection InstallHinfSectionW
+#else
+#define InstallHinfSection InstallHinfSectionA
+#endif
+
+
+
 
 
 //
@@ -3922,7 +4563,7 @@ SetupCloseLog (
 
 
 //
-// Backup Information API
+// Backup Information API's
 //
 
 WINSETUPAPI
@@ -3947,6 +4588,56 @@ SetupGetBackupInformationW(
 #define SetupGetBackupInformation SetupGetBackupInformationA
 #endif
 
+#if _SETUPAPI_VER >= 0x0501
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupPrepareQueueForRestoreA(
+    IN     HSPFILEQ                     QueueHandle,
+    IN     PCSTR                        BackupPath,
+    IN     DWORD                        RestoreFlags
+    );
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupPrepareQueueForRestoreW(
+    IN     HSPFILEQ                     QueueHandle,
+    IN     PCWSTR                       BackupPath,
+    IN     DWORD                        RestoreFlags
+    );
+
+#ifdef UNICODE
+#define SetupPrepareQueueForRestore SetupPrepareQueueForRestoreW
+#else
+#define SetupPrepareQueueForRestore SetupPrepareQueueForRestoreA
+#endif
+
+#endif // _SETUPAPI_VER >= 0x0501
+
+#if _SETUPAPI_VER >= 0x0501
+
+//
+// Control forcing of Non-Interactive Mode
+// Overriden if SetupAPI is run in non-interactive window session
+//
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupSetNonInteractiveMode(
+    IN BOOL NonInteractiveFlag
+    );
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupGetNonInteractiveMode(
+    VOID
+    );
+
+#endif // _SETUPAPI_VER >= 0x0501
 
 //
 // Device Installer APIs
@@ -4352,6 +5043,21 @@ SetupDiInstallDeviceInterfaces(
 // Backward compatibility--do not use.
 //
 #define SetupDiInstallInterfaceDevices SetupDiInstallDeviceInterfaces
+
+
+#if _SETUPAPI_VER >= 0x0501
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupDiSetDeviceInterfaceDefault(
+    IN HDEVINFO DeviceInfoSet,
+    IN OUT PSP_DEVICE_INTERFACE_DATA DeviceInterfaceData,
+    IN DWORD Flags,
+    IN PVOID Reserved
+    );
+
+#endif // _SETUPAPI_VER >= 0x0501
 
 
 //
@@ -5146,6 +5852,8 @@ SetupDiGetHwProfileListExW(
 // These values should cover the same set of registry properties
 // as defined by the CM_DRP codes in cfgmgr32.h.
 //
+// Note that SPDRP codes are zero based while CM_DRP codes are one based!
+//
 #define SPDRP_DEVICEDESC                  (0x00000000)  // DeviceDesc (R/W)
 #define SPDRP_HARDWAREID                  (0x00000001)  // HardwareID (R/W)
 #define SPDRP_COMPATIBLEIDS               (0x00000002)  // CompatibleIDs (R/W)
@@ -5174,8 +5882,16 @@ SetupDiGetHwProfileListExW(
 #define SPDRP_DEVTYPE                     (0x00000019)  // Device Type (R/W)
 #define SPDRP_EXCLUSIVE                   (0x0000001A)  // Device is exclusive-access (R/W)
 #define SPDRP_CHARACTERISTICS             (0x0000001B)  // Device Characteristics (R/W)
-#define SPDRP_ADDRESS                     (0x0000001C)  // Device Address
-#define SPDRP_MAXIMUM_PROPERTY            (0x0000001D)  // Upper bound on ordinals
+#define SPDRP_ADDRESS                     (0x0000001C)  // Device Address (R)
+#define SPDRP_UI_NUMBER_DESC_FORMAT       (0X0000001D)  // UiNumberDescFormat (R/W)
+#define SPDRP_DEVICE_POWER_DATA           (0x0000001E)  // Device Power Data (R)
+#define SPDRP_REMOVAL_POLICY              (0x0000001F)  // Removal Policy (R)
+#define SPDRP_REMOVAL_POLICY_HW_DEFAULT   (0x00000020)  // Hardware Removal Policy (R)
+#define SPDRP_REMOVAL_POLICY_OVERRIDE     (0x00000021)  // Removal Policy Override (RW)
+#define SPDRP_INSTALL_STATE               (0x00000022)  // Device Install State (R)
+
+#define SPDRP_MAXIMUM_PROPERTY            (0x00000023)  // Upper bound on ordinals
+
 //
 // Class registry property codes
 // (Codes marked as read-only (R) may only be used for
@@ -5231,7 +5947,7 @@ WINSETUPAPI
 BOOL
 WINAPI
 SetupDiGetClassRegistryPropertyA(
-    IN  LPGUID           ClassGuid,
+    IN  CONST GUID      *ClassGuid,
     IN  DWORD            Property,
     OUT PDWORD           PropertyRegDataType, OPTIONAL
     OUT PBYTE            PropertyBuffer,
@@ -5245,7 +5961,7 @@ WINSETUPAPI
 BOOL
 WINAPI
 SetupDiGetClassRegistryPropertyW(
-    IN  LPGUID           ClassGuid,
+    IN  CONST GUID      *ClassGuid,
     IN  DWORD            Property,
     OUT PDWORD           PropertyRegDataType, OPTIONAL
     OUT PBYTE            PropertyBuffer,
@@ -5294,7 +6010,7 @@ WINSETUPAPI
 BOOL
 WINAPI
 SetupDiSetClassRegistryPropertyA(
-    IN     LPGUID           ClassGuid,
+    IN     CONST GUID      *ClassGuid,
     IN     DWORD            Property,
     IN     CONST BYTE*      PropertyBuffer,    OPTIONAL
     IN     DWORD            PropertyBufferSize,
@@ -5306,7 +6022,7 @@ WINSETUPAPI
 BOOL
 WINAPI
 SetupDiSetClassRegistryPropertyW(
-    IN     LPGUID           ClassGuid,
+    IN     CONST GUID      *ClassGuid,
     IN     DWORD            Property,
     IN     CONST BYTE*      PropertyBuffer,    OPTIONAL
     IN     DWORD            PropertyBufferSize,
@@ -5574,6 +6290,13 @@ SetupDiDestroyClassImageList(
 //
 #define DIGCDP_FLAG_BASIC           0x00000001
 #define DIGCDP_FLAG_ADVANCED        0x00000002
+
+#if _SETUPAPI_VER >= 0x0501
+
+#define DIGCDP_FLAG_REMOTE_BASIC    0x00000003
+#define DIGCDP_FLAG_REMOTE_ADVANCED 0x00000004
+
+#endif // _SETUPAPI_VER >= 0x0501
 
 WINSETUPAPI
 BOOL
@@ -5855,7 +6578,6 @@ SetupDiSetSelectedDevice(
     IN PSP_DEVINFO_DATA DeviceInfoData
     );
 
-
 WINSETUPAPI
 BOOL
 WINAPI
@@ -5887,12 +6609,179 @@ SetupDiGetActualSectionToInstallW(
 #endif
 
 
+#if _SETUPAPI_VER >= 0x0501
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupDiGetActualSectionToInstallExA(
+    IN  HINF                  InfHandle,
+    IN  PCSTR                 InfSectionName,
+    IN  PSP_ALTPLATFORM_INFO  AlternatePlatformInfo, OPTIONAL
+    OUT PSTR                  InfSectionWithExt,     OPTIONAL
+    IN  DWORD                 InfSectionWithExtSize,
+    OUT PDWORD                RequiredSize,          OPTIONAL
+    OUT PSTR                 *Extension,             OPTIONAL
+    IN  PVOID                 Reserved
+    );
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupDiGetActualSectionToInstallExW(
+    IN  HINF                  InfHandle,
+    IN  PCWSTR                InfSectionName,
+    IN  PSP_ALTPLATFORM_INFO  AlternatePlatformInfo, OPTIONAL
+    OUT PWSTR                 InfSectionWithExt,     OPTIONAL
+    IN  DWORD                 InfSectionWithExtSize,
+    OUT PDWORD                RequiredSize,          OPTIONAL
+    OUT PWSTR                *Extension,             OPTIONAL
+    IN  PVOID                 Reserved
+    );
+
+#ifdef UNICODE
+#define SetupDiGetActualSectionToInstallEx SetupDiGetActualSectionToInstallExW
+#else
+#define SetupDiGetActualSectionToInstallEx SetupDiGetActualSectionToInstallExA
+#endif
+
+#endif // _SETUPAPI_VER >= 0x0501
+
+
+#if _SETUPAPI_VER >= 0x0501
+
+//
+// SetupEnumInfSections is for low-level parsing of an INF
+//
+WINSETUPAPI
+BOOL
+WINAPI
+SetupEnumInfSectionsA (
+    IN  HINF        InfHandle,
+    IN  UINT        Index,
+    OUT PSTR        Buffer,         OPTIONAL
+    IN  UINT        Size,           OPTIONAL
+    OUT UINT        *SizeNeeded     OPTIONAL
+    );
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupEnumInfSectionsW (
+    IN  HINF        InfHandle,
+    IN  UINT        Index,
+    OUT PWSTR       Buffer,         OPTIONAL
+    IN  UINT        Size,           OPTIONAL
+    OUT UINT        *SizeNeeded     OPTIONAL
+    );
+
+#ifdef UNICODE
+#define SetupEnumInfSections SetupEnumInfSectionsW
+#else
+#define SetupEnumInfSections SetupEnumInfSectionsA
+#endif
+
+#endif // _SETUPAPI_VER >= 0x0501
+
+#if _SETUPAPI_VER >= 0x0501
+
+typedef struct _SP_INF_SIGNER_INFO_A {
+    DWORD  cbSize;
+    CHAR   CatalogFile[MAX_PATH];
+    CHAR   DigitalSigner[MAX_PATH];
+    CHAR   DigitalSignerVersion[MAX_PATH];
+} SP_INF_SIGNER_INFO_A, *PSP_INF_SIGNER_INFO_A;
+
+typedef struct _SP_INF_SIGNER_INFO_W {
+    DWORD  cbSize;
+    WCHAR  CatalogFile[MAX_PATH];
+    WCHAR  DigitalSigner[MAX_PATH];
+    WCHAR  DigitalSignerVersion[MAX_PATH];
+} SP_INF_SIGNER_INFO_W, *PSP_INF_SIGNER_INFO_W;
+
+#ifdef UNICODE
+typedef SP_INF_SIGNER_INFO_W SP_INF_SIGNER_INFO;
+typedef PSP_INF_SIGNER_INFO_W PSP_INF_SIGNER_INFO;
+#else
+typedef SP_INF_SIGNER_INFO_A SP_INF_SIGNER_INFO;
+typedef PSP_INF_SIGNER_INFO_A PSP_INF_SIGNER_INFO;
+#endif
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupVerifyInfFileA(
+    IN  PCSTR                   InfName,
+    IN  PSP_ALTPLATFORM_INFO    AltPlatformInfo,                OPTIONAL
+    OUT PSP_INF_SIGNER_INFO_A   InfSignerInfo
+    );
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupVerifyInfFileW(
+    IN  PCWSTR                  InfName,
+    IN  PSP_ALTPLATFORM_INFO    AltPlatformInfo,                OPTIONAL
+    OUT PSP_INF_SIGNER_INFO_W   InfSignerInfo
+    );
+
+#ifdef UNICODE
+#define SetupVerifyInfFile SetupVerifyInfFileW
+#else
+#define SetupVerifyInfFile SetupVerifyInfFileA
+#endif
+
+#endif // _SETUPAPI_VER >= 0x0501
+
+#if _SETUPAPI_VER >= 0x0501
+
+//
+// Flags for use by SetupDiGetCustomDeviceProperty
+//
+#define DICUSTOMDEVPROP_MERGE_MULTISZ    0x00000001
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupDiGetCustomDevicePropertyA(
+    IN  HDEVINFO         DeviceInfoSet,
+    IN  PSP_DEVINFO_DATA DeviceInfoData,
+    IN  PCSTR            CustomPropertyName,
+    IN  DWORD            Flags,
+    OUT PDWORD           PropertyRegDataType, OPTIONAL
+    OUT PBYTE            PropertyBuffer,
+    IN  DWORD            PropertyBufferSize,
+    OUT PDWORD           RequiredSize         OPTIONAL
+    );
+
+WINSETUPAPI
+BOOL
+WINAPI
+SetupDiGetCustomDevicePropertyW(
+    IN  HDEVINFO         DeviceInfoSet,
+    IN  PSP_DEVINFO_DATA DeviceInfoData,
+    IN  PCWSTR           CustomPropertyName,
+    IN  DWORD            Flags,
+    OUT PDWORD           PropertyRegDataType, OPTIONAL
+    OUT PBYTE            PropertyBuffer,
+    IN  DWORD            PropertyBufferSize,
+    OUT PDWORD           RequiredSize         OPTIONAL
+    );
+
+#ifdef UNICODE
+#define SetupDiGetCustomDeviceProperty SetupDiGetCustomDevicePropertyW
+#else
+#define SetupDiGetCustomDeviceProperty SetupDiGetCustomDevicePropertyA
+#endif
+
+#endif // _SETUPAPI_VER >= 0x0501
+
+
 #ifdef __cplusplus
 }
 #endif
 
 #include <poppack.h>
 
-#pragma option pop /*P_O_Pop*/
 #endif // _INC_SETUPAPI
 

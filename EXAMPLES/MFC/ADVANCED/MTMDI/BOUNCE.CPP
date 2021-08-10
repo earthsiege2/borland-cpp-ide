@@ -14,6 +14,7 @@
 #include "mdi.h"
 #include "bounce.h"
 #include "mtbounce.h"
+#include <algorithm>
 
 #define ABS(x) ((x) < 0? -(x) : (x) > 0? (x) : 0)
 
@@ -297,12 +298,12 @@ void CBounceWnd::OnSize(UINT nType, int cx, int cy)
 	m_ptCenter.y = cy >> 1;
 	m_ptCenter.x += cx >> 3; // make the ball a little off-center
 
-	lScale = min((LONG)cx * m_ptPixel.x,
+	lScale = std::min((LONG)cx * m_ptPixel.x,
 		(LONG)cy * m_ptPixel.y) >> 4;
 	m_sizeRadius.cx = (int)(lScale / m_ptPixel.x);
 	m_sizeRadius.cy = (int)(lScale / m_ptPixel.y);
-	m_sizeMove.cx = max(1, m_sizeRadius.cy >> 2);
-	m_sizeMove.cy = max(1, m_sizeRadius.cy >> 2);
+	m_sizeMove.cx = std::max(1, m_sizeRadius.cy >> 2);
+	m_sizeMove.cy = std::max(1, m_sizeRadius.cy >> 2);
 
 	MakeNewBall();
 
@@ -447,10 +448,10 @@ void CBounceWnd::OnLButtonDown(UINT, CPoint point)
 	CRect rcClient;
 	GetClientRect(rcClient);
 
-	point.x = min(point.x, rcClient.right - 2*m_sizeRadius.cx);
-	point.x = max(point.x, 2*m_sizeRadius.cx);
-	point.y = min(point.y, rcClient.bottom - 2*m_sizeRadius.cx);
-	point.y = max(point.y, 2*m_sizeRadius.cy);
+	point.x = std::min(point.x, rcClient.right - 2*m_sizeRadius.cx);
+	point.x = std::max(point.x, 2*m_sizeRadius.cx);
+	point.y = std::min(point.y, rcClient.bottom - 2*m_sizeRadius.cx);
+	point.y = std::max(point.y, 2*m_sizeRadius.cy);
 
 	m_ptCenter = point;
 }

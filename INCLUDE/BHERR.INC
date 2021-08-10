@@ -1,6 +1,6 @@
 
 ;==============================================================================
-;  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1992.
+;  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1999.
 ;
 ;  MODULE: bherr.inc
 ;

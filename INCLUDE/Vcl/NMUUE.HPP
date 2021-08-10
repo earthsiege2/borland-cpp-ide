@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NMUUE.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NMUUE.pas' rev: 6.00
 
 #ifndef NMUUEHPP
 #define NMUUEHPP
@@ -79,9 +79,7 @@ extern PACKAGE char MimeTable[64];
 extern PACKAGE Byte base64Table[80];
 
 }	/* namespace Nmuue */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nmuue;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

@@ -1,0 +1,89 @@
+<!-- #include file="..\include\StdDemoHeader.html" -->
+
+<STYLE TYPE="text/css">
+  TH, TD { text-align: left; vertical-align: top}
+</STYLE>
+
+<p>
+Click on an order number to view/edit.
+<p>
+<table cellpadding="3">
+<tr>
+<th>CustNo</th><th>Company</th><th>OrderNo</th>
+<th>SaleDate</th><th>ShipDate</th><th>EmpNo</th>
+<th>ItemsTotal</th><th>AmountPaid</th>
+</tr>
+<%   var OuterAdapter = Modules.MasterDataModule.QueryAdapter
+
+     i = 0;
+     ex = new Enumerator(OuterAdapter.Records)
+     for (; !ex.atEnd(); ex.moveNext())
+     {
+%>
+    <% if ((i % 2) == 0) bgcolor = '#ffffff'; else bgcolor = '#ffffd0'; %>
+    <% tdstyle = 'style="background: ' + bgcolor + '"' %>
+<tr>
+     <td <%= tdstyle %>><%= OuterAdapter.CustNo.DisplayText %></td>
+     <td <%= tdstyle %>><%= OuterAdapter.Company.DisplayText %></td>
+     <td <%= tdstyle %>>
+      <a href="<%=OuterAdapter.BrowseOrder.LinkToPage("OrderPage", Page.Name).AsHREF%>"><%= OuterAdapter.OrderNo.DisplayText %></a></td>
+     <td <%= tdstyle %>><%= OuterAdapter.SaleDate.DisplayText %></td>
+     <td <%= tdstyle %>><%= OuterAdapter.ShipDate.DisplayText %></td>
+     <td <%= tdstyle %>><%= OuterAdapter.EmpNo.DisplayText %></td>
+     <td <%= tdstyle %>><%= OuterAdapter.ItemsTotal.DisplayText %></td>
+     <td <%= tdstyle %>><%= OuterAdapter.AmountPaid.DisplayText %></td>
+<%
+     i++
+     }
+%>
+<table cellpadding="5">
+<tr>
+<td>
+<% if (OuterAdapter.PrevPage.Enabled)
+   { %>
+     <a href="<%=OuterAdapter.PrevPage.LinkToPage(Page.Name, Page.Name).AsHREF%>">&lt;&lt;</a>
+<%
+   }
+   else
+   {%>
+     <a>&lt;&lt;</a>
+ <%} %>
+<%
+   if (OuterAdapter.GotoPage.Array != null)
+   {
+     var e = new Enumerator(OuterAdapter.GotoPage.Array)
+     for (; !e.atEnd(); e.moveNext())
+     {
+%>
+       <td>
+<%     if (OuterAdapter.GotoPage.Enabled)
+       { %>
+          <a href="<%=OuterAdapter.GotoPage.LinkToPage(Page.Name, Page.Name).AsHREF%>"><%=OuterAdapter.GotoPage.DisplayLabel%></a>
+<%     }
+       else
+       { %>
+          <a><%=OuterAdapter.GotoPage.DisplayLabel%></a>
+<%     }
+%>
+       </td>
+<%
+     }
+   }
+%>
+<td>
+<% if (OuterAdapter.NextPage.Enabled)
+   { %>
+     <a href="<%=OuterAdapter.NextPage.LinkToPage(Page.Name, Page.Name).AsHREF%>">&gt;&gt;</a>
+<%
+   }
+   else
+   {%>
+     <a>&gt;&gt;</a>
+ <%} %>
+</td>
+</table>
+
+
+<!-- #include file="..\include\StdDemoFooter.html" -->
+
+

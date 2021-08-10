@@ -5,7 +5,7 @@
 //     data structures for adding, removing, enumerating, prioritizing,
 //     and enabling/disabling codecs independently for send/receive.
 //
-//  Copyright (c) Microsoft Corporation 1997, All rights reserved
+//  Copyright (c) Microsoft Corporation 1999, All rights reserved
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
@@ -142,6 +142,7 @@ typedef struct _vidcapinfolist
 } VIDCAP_INFO_LIST, *PVIDCAP_INFO_LIST;
 
 #include <poppack.h> /* End byte packing */
+
 
 
 #pragma option pop /*P_O_Pop*/

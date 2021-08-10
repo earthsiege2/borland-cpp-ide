@@ -1,5 +1,4 @@
 #ifndef _MTXATTR_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _MTXATTR_H_
 
 // -----------------------------------------------------------------------
@@ -33,5 +32,4 @@
 #define TRANSACTION_REQUIRES_NEW        custom(TLBATTR_TRANS_REQNEW,0)
 #define QUEUEABLE                       custom(TLBATTR_QUEUEABLE, 0)
 
-#pragma option pop /*P_O_Pop*/
 #endif _MTXATTR_H_

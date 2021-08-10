@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="ibsmp60.bpl"/>
+    <OBJFILES value="ibsmp.obj ibreg.obj ibevnts.obj ibctrls.obj"/>
+    <RESFILES value="ibsmp.res samp.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES)"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="rtl.lib vcl.lib"/>
+    <PACKAGES value="vcl.bpi vcldb.bpi bdertl.bpi rtl.bpi designide.bpi"/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value=""/>
+    <RELEASELIBPATH value=""/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value=""/>
+    <SYSDEFINES value="NO_STRICT;USEPACKAGES"/>
+    <MAINSOURCE value="ibsmp.cpp"/>
+    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;"/>
+    <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\release;"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\include -I$(BCB)\include\vcl -I$(BCB)\vcllib 
+      -I$(BCB)\emuvcl -I$(BCB)\units -I$(BCB)\db -I$(BCB)\vcl"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a4 -b- -k -y -v -vi- -g0 
+      -c -tWM"/>
+    <PFLAGS value="-$YD -$W -$O- -v -JPHNV -M -JPHNE"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-D&quot;Borland C++ InterBase Alerter Component&quot; -aa -Tpp -x -Gn -Gl -Gi -v 
+      -GB&quot;ibsmp&quot; -b:0x50640000"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0pkg32.obj $(PACKAGES) $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) vcl.lib vcldb.lib bdertl.bpi dbrtl.bpi import32.lib cp32mt.lib"/>
+  </LINKER>
+  <FILELIST>
+      <FILE FILENAME="ibsmp.cpp" FORMNAME="" UNITNAME="ibsmp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ibsmp.res" FORMNAME="" UNITNAME="ibsmp" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ibreg.cpp" FORMNAME="" UNITNAME="ibreg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ibevnts.cpp" FORMNAME="" UNITNAME="ibreg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ibctrls.cpp" FORMNAME="" UNITNAME="ibreg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="vcl.bpi" FORMNAME="" UNITNAME="vcl" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="vcldb.bpi" FORMNAME="" UNITNAME="vcl" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="bdertl.bpi" FORMNAME="" UNITNAME="vclbde" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="rtl.bpi" FORMNAME="" UNITNAME="rtl" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="designide.bpi" FORMNAME="" UNITNAME="designide" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="samp.rc" FORMNAME="" UNITNAME="samp.rc" CONTAINERID="RCCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="samp.dcr" FORMNAME="" UNITNAME="" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=1
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1033
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+
+[Excluded Packages]
+
+[HistoryLists\hlIncludePath]
+Count=0
+
+[HistoryLists\hlLibraryPath]
+Count=0
+
+[HistoryLists\hlConditionals]
+Count=0
+
+[Debugging]
+DebugSourceDirs=
+
+[Parameters]
+RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteLauncher=
+RemoteCWD=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=1
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
+
+[Linker]
+LibPrefix=
+LibSuffix=60
+LibVersion=
+  </IDEOPTIONS>
+</PROJECT>

@@ -1,26 +1,26 @@
 LIBRARY DAPI
 EXPORTS
 
-    BatchExportA                             = 'DAPI.DLL'.*
-    BatchExportW                             = 'DAPI.DLL'.*
-    BatchImportA                             = 'DAPI.DLL'.*
-    BatchImportW                             = 'DAPI.DLL'.*
-    DAPIAllocBuffer                          = 'DAPI.DLL'.*
-    DAPIEnd                                  = 'DAPI.DLL'.*
-    DAPIFreeMemory                           = 'DAPI.DLL'.*
-    DAPIGetSiteInfoA                         = 'DAPI.DLL'.*
-    DAPIGetSiteInfoW                         = 'DAPI.DLL'.*
-    DAPIReadA                                = 'DAPI.DLL'.*
-    DAPIReadW                                = 'DAPI.DLL'.*
-    DAPIStartA                               = 'DAPI.DLL'.*
-    DAPIStartW                               = 'DAPI.DLL'.*
-    DAPIUninitialize                         = 'DAPI.DLL'.*
-    DAPIWriteA                               = 'DAPI.DLL'.*
-    DAPIWriteW                               = 'DAPI.DLL'.*
-    DapiLibMain                              = 'DAPI.DLL'.*
-    NTExportA                                = 'DAPI.DLL'.*
-    NTExportW                                = 'DAPI.DLL'.*
-    NWExportA                                = 'DAPI.DLL'.*
-    NWExportW                                = 'DAPI.DLL'.*
-    SchemaPreloadA                           = 'DAPI.DLL'.*
-    SchemaPreloadW                           = 'DAPI.DLL'.*
+    BatchExportA                             
+    BatchExportW                             
+    BatchImportA                             
+    BatchImportW                             
+    DAPIAllocBuffer                          
+    DAPIEnd                                  
+    DAPIFreeMemory                           
+    DAPIGetSiteInfoA                         
+    DAPIGetSiteInfoW                         
+    DAPIReadA                                
+    DAPIReadW                                
+    DAPIStartA                               
+    DAPIStartW                               
+    DAPIUninitialize                         
+    DAPIWriteA                               
+    DAPIWriteW                               
+    DapiLibMain                              
+    NTExportA                                
+    NTExportW                                
+    NWExportA                                
+    NWExportW                                
+    SchemaPreloadA                           
+    SchemaPreloadW                           

@@ -546,7 +546,6 @@ EXPORTS
     '@$xt$a0$11CDocManager'                                                                    ; dllinit.obj
     '@$xt$a0$11CHeaderCtrl'                                                                    ; dllinit.obj
     '@$xt$a0$11CHotKeyCtrl'                                                                    ; dllinit.obj
-    '@$xt$a0$11CLongBinary'                                                                    ; dllinit.obj
     '@$xt$a0$11CMetaFileDC'                                                                    ; dllinit.obj
     '@$xt$a0$11CMirrorFile'                                                                    ; dllinit.obj
     '@$xt$a0$11COleVariant'                                                                    ; dllinit.obj
@@ -622,7 +621,6 @@ EXPORTS
     '@$xt$a0$8CTabCtrl'                                                                        ; dllinit.obj
     '@$xt$a0$8CToolBar'                                                                        ; dllinit.obj
     '@$xt$a0$9CComboBox'                                                                       ; dllinit.obj
-    '@$xt$a0$9CDatabase'                                                                       ; dllinit.obj
     '@$xt$a0$9CFileFind'                                                                       ; dllinit.obj
     '@$xt$a0$9CFrameWnd'                                                                       ; dllinit.obj
     '@$xt$a0$9CListCtrl'                                                                       ; dllinit.obj
@@ -996,7 +994,6 @@ EXPORTS
     '@$xt$pa0$11CDocManager'                                                                   ; dllinit.obj
     '@$xt$pa0$11CHeaderCtrl'                                                                   ; dllinit.obj
     '@$xt$pa0$11CHotKeyCtrl'                                                                   ; dllinit.obj
-    '@$xt$pa0$11CLongBinary'                                                                   ; dllinit.obj
     '@$xt$pa0$11CMetaFileDC'                                                                   ; dllinit.obj
     '@$xt$pa0$11CMirrorFile'                                                                   ; dllinit.obj
     '@$xt$pa0$11COleVariant'                                                                   ; dllinit.obj
@@ -1072,7 +1069,6 @@ EXPORTS
     '@$xt$pa0$8CTabCtrl'                                                                       ; dllinit.obj
     '@$xt$pa0$8CToolBar'                                                                       ; dllinit.obj
     '@$xt$pa0$9CComboBox'                                                                      ; dllinit.obj
-    '@$xt$pa0$9CDatabase'                                                                      ; dllinit.obj
     '@$xt$pa0$9CFileFind'                                                                      ; dllinit.obj
     '@$xt$pa0$9CFrameWnd'                                                                      ; dllinit.obj
     '@$xt$pa0$9CListCtrl'                                                                      ; dllinit.obj

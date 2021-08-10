@@ -3,11 +3,10 @@
  *
  *  MAPI OID definition header file
  *
- *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1999 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef _MAPIOID_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _MAPIOID_
 
 /*
@@ -104,5 +103,4 @@ DEFINE_OID_1(OID_MIMETAG, OID_TAG, 0x04);
 #define CB_OID_MIMETAG CB_OID_1
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif

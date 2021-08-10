@@ -1,0 +1,91 @@
+<!--#include file="..\include\StdDemoHeader.html"-->
+<!--#include file="MyStyles.html"-->
+<%
+  // Display server-side errors that may have occured.
+  e = new Enumerator(UploadAdapter.Errors)
+  if (!e.atEnd())
+   Response.Write('<p>The following error(s) happened:');
+  for (; !e.atEnd(); e.moveNext())
+    Response.Write("<li>" + e.item().Message)
+    
+  // Show uploaded files (if any)
+  files = new Enumerator(UploadedFiles.Records);
+  if (!files.atEnd())
+    Response.Write('<P>You have uploaded the following files:<br>');
+  for (; !files.atEnd(); files.moveNext())
+  {
+    Response.Write('<li>"' + UploadedFiles.ValueName + '" (' +
+      UploadedFiles.Value + ' bytes)<br>');
+  }
+%>
+
+<P>
+<center>
+<form method="POST" enctype="multipart/form-data"
+  action="<%=Request.ScriptName%>/<%=Page.Name%>">
+<table width="60%" border=1 cellspacing=0 cellpadding=3 bordercolor="#666666">
+<tr>
+	<td colspan=2 align="middle"><font face="Arial" size="2"><b>Upload your pictures</b></font></td>
+</tr>
+<tr>
+  <td align="right">
+    <font face="Arial" size="2">Select a picture:</font>
+  </td>
+  <td>
+    <input type=file name="<%=UploadAdapter.UploadFile.InputName%>" >
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    <font face="Arial" size="2">Title:</font>
+  </td>
+  <td>
+  <input type="text" name="<%=UploadAdapter.Title.InputName%>" size="45" maxlength=255>
+  </td>
+</tr>
+<tr>
+  <td align="right">
+    <font face="Arial" size="2">Category:</font>
+  </td>
+  <td>
+  <select name="<%=UploadAdapter.Category.InputName%>">  
+  <%
+   var CategoriesAdapter = Modules.PhotoData.Categories;
+   e = new Enumerator(CategoriesAdapter.Records)
+   for (; !e.atEnd(); e.moveNext())
+   {
+    Response.Write('<option value="' + CategoriesAdapter.CAT_ID.DisplayText + '"' + '>' +
+      CategoriesAdapter.CAT_NAME.DisplayText + '\n');
+   }
+   %></select>
+  </td>
+</tr>
+
+<tr>
+  <td align="right" valign="top">
+    <font face="Arial" size="2"><br>
+    <br>
+    Description (optional):
+    </font>
+  </td>
+  <td>
+  <textarea cols="35" rows="6"
+    name="<%=UploadAdapter.Description.InputName%>"></textarea>
+  </td>
+</tr>
+
+<tr>
+  <td colspan="2" align="middle">
+  	<input type="submit" value="Upload" class="submitButton">
+  	<input
+      type="hidden"
+      name="__act"
+      value="<%=UploadAdapter.Upload.AsFieldValue%>">
+  </td>
+</tr>
+</table>
+</form>
+</center>
+
+
+<!--#include file="..\include\StdDemoFooter.html"-->

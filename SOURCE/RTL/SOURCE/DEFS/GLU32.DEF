@@ -1,55 +1,55 @@
-LIBRARY GLU32
+LIBRARY GlU32
 EXPORTS
 
-    gluBeginCurve                            = 'GLU32.DLL'.*
-    gluBeginPolygon                          = 'GLU32.DLL'.*
-    gluBeginSurface                          = 'GLU32.DLL'.*
-    gluBeginTrim                             = 'GLU32.DLL'.*
-    gluBuild1DMipmaps                        = 'GLU32.DLL'.*
-    gluBuild2DMipmaps                        = 'GLU32.DLL'.*
-    gluCylinder                              = 'GLU32.DLL'.*
-    gluDeleteNurbsRenderer                   = 'GLU32.DLL'.*
-    gluDeleteQuadric                         = 'GLU32.DLL'.*
-    gluDeleteTess                            = 'GLU32.DLL'.*
-    gluDisk                                  = 'GLU32.DLL'.*
-    gluEndCurve                              = 'GLU32.DLL'.*
-    gluEndPolygon                            = 'GLU32.DLL'.*
-    gluEndSurface                            = 'GLU32.DLL'.*
-    gluEndTrim                               = 'GLU32.DLL'.*
-    gluErrorString                           = 'GLU32.DLL'.*
-    gluErrorUnicodeStringEXT                 = 'GLU32.DLL'.*
-    gluGetNurbsProperty                      = 'GLU32.DLL'.*
-    gluGetString                             = 'GLU32.DLL'.*
-    gluGetTessProperty                       = 'GLU32.DLL'.*
-    gluLoadSamplingMatrices                  = 'GLU32.DLL'.*
-    gluLookAt                                = 'GLU32.DLL'.*
-    gluNewNurbsRenderer                      = 'GLU32.DLL'.*
-    gluNewQuadric                            = 'GLU32.DLL'.*
-    gluNewTess                               = 'GLU32.DLL'.*
-    gluNextContour                           = 'GLU32.DLL'.*
-    gluNurbsCallback                         = 'GLU32.DLL'.*
-    gluNurbsCurve                            = 'GLU32.DLL'.*
-    gluNurbsProperty                         = 'GLU32.DLL'.*
-    gluNurbsSurface                          = 'GLU32.DLL'.*
-    gluOrtho2D                               = 'GLU32.DLL'.*
-    gluPartialDisk                           = 'GLU32.DLL'.*
-    gluPerspective                           = 'GLU32.DLL'.*
-    gluPickMatrix                            = 'GLU32.DLL'.*
-    gluProject                               = 'GLU32.DLL'.*
-    gluPwlCurve                              = 'GLU32.DLL'.*
-    gluQuadricCallback                       = 'GLU32.DLL'.*
-    gluQuadricDrawStyle                      = 'GLU32.DLL'.*
-    gluQuadricNormals                        = 'GLU32.DLL'.*
-    gluQuadricOrientation                    = 'GLU32.DLL'.*
-    gluQuadricTexture                        = 'GLU32.DLL'.*
-    gluScaleImage                            = 'GLU32.DLL'.*
-    gluSphere                                = 'GLU32.DLL'.*
-    gluTessBeginContour                      = 'GLU32.DLL'.*
-    gluTessBeginPolygon                      = 'GLU32.DLL'.*
-    gluTessCallback                          = 'GLU32.DLL'.*
-    gluTessEndContour                        = 'GLU32.DLL'.*
-    gluTessEndPolygon                        = 'GLU32.DLL'.*
-    gluTessNormal                            = 'GLU32.DLL'.*
-    gluTessProperty                          = 'GLU32.DLL'.*
-    gluTessVertex                            = 'GLU32.DLL'.*
-    gluUnProject                             = 'GLU32.DLL'.*
+    gluBeginCurve
+    gluBeginPolygon
+    gluBeginSurface
+    gluBeginTrim
+    gluBuild1DMipmaps
+    gluBuild2DMipmaps
+    gluCylinder
+    gluDeleteNurbsRenderer
+    gluDeleteQuadric
+    gluDeleteTess
+    gluDisk
+    gluEndCurve
+    gluEndPolygon
+    gluEndSurface
+    gluEndTrim
+    gluErrorString
+    gluErrorUnicodeStringEXT
+    gluGetNurbsProperty
+    gluGetString
+    gluGetTessProperty
+    gluLoadSamplingMatrices
+    gluLookAt
+    gluNewNurbsRenderer
+    gluNewQuadric
+    gluNewTess
+    gluNextContour
+    gluNurbsCallback
+    gluNurbsCurve
+    gluNurbsProperty
+    gluNurbsSurface
+    gluOrtho2D
+    gluPartialDisk
+    gluPerspective
+    gluPickMatrix
+    gluProject
+    gluPwlCurve
+    gluQuadricCallback
+    gluQuadricDrawStyle
+    gluQuadricNormals
+    gluQuadricOrientation
+    gluQuadricTexture
+    gluScaleImage
+    gluSphere
+    gluTessBeginContour
+    gluTessBeginPolygon
+    gluTessCallback
+    gluTessEndContour
+    gluTessEndPolygon
+    gluTessNormal
+    gluTessProperty
+    gluTessVertex
+    gluUnProject

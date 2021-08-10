@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NMNNTP.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NMNNTP.pas' rev: 6.00
 
 #ifndef NMNNTPHPP
 #define NMNNTPHPP
@@ -85,38 +85,28 @@ class PASCALIMPLEMENTATION NNTPError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall NNTPError(const AnsiString Msg) : Sysutils::Exception(Msg)
-		 { }
+	/* Exception.Create */ inline __fastcall NNTPError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall NNTPError(const AnsiString Msg, const System::TVarRec * 
-		Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall NNTPError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall NNTPError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall NNTPError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall NNTPError(int Ident, const System::TVarRec * Args, const 
-		int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall NNTPError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall NNTPError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(
-		Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall NNTPError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall NNTPError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall NNTPError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall NNTPError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall NNTPError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall NNTPError(System::PResStringRec ResStringRec, const 
-		System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall NNTPError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -127,17 +117,13 @@ public:
 };
 
 
-typedef void __fastcall (__closure *TGroupRetrievedEvent)(AnsiString name, int FirstArticle, int LastArticle
-	, bool Posting);
+typedef void __fastcall (__closure *TGroupRetrievedEvent)(AnsiString name, int FirstArticle, int LastArticle, bool Posting);
 
-typedef void __fastcall (__closure *TGroupRetrievedCacheEvent)(bool &Handled, AnsiString name, int FirstArticle
-	, int LastArticle, bool Posting);
+typedef void __fastcall (__closure *TGroupRetrievedCacheEvent)(bool &Handled, AnsiString name, int FirstArticle, int LastArticle, bool Posting);
 
-typedef void __fastcall (__closure *THeaderEvent)(int IdNo, AnsiString From, AnsiString Subject, AnsiString 
-	MsgId, AnsiString Date, int NumberLines);
+typedef void __fastcall (__closure *THeaderEvent)(int IdNo, AnsiString From, AnsiString Subject, AnsiString MsgId, AnsiString Date, int NumberLines);
 
-typedef void __fastcall (__closure *THeaderCacheEvent)(bool &Handled, int IdNo, AnsiString From, AnsiString 
-	Subject, AnsiString MsgId, AnsiString Date, int ArticleNo);
+typedef void __fastcall (__closure *THeaderCacheEvent)(bool &Handled, int IdNo, AnsiString From, AnsiString Subject, AnsiString MsgId, AnsiString Date, int ArticleNo);
 
 typedef void __fastcall (__closure *TVarFileNameEvent)(AnsiString &FileName);
 
@@ -245,39 +231,28 @@ __published:
 	__property AnsiString NewsDir = {read=FNewsDir, write=SetNewsDir};
 	__property Nmextstr::TExStringList* PostHeader = {read=FPostHeader, write=SetPostHeader};
 	__property Nmextstr::TExStringList* PostBody = {read=FPostBody, write=SetPostBody};
-	__property Classes::TStringList* PostAttachments = {read=FPostAttachments, write=SetPostAttachments
-		};
+	__property Classes::TStringList* PostAttachments = {read=FPostAttachments, write=SetPostAttachments};
 	__property TPostRecordType* PostRecord = {read=FPostRecord, write=FPostRecord};
 	__property OnConnectionRequired ;
 	__property Classes::TNotifyEvent OnConnect = {read=FOnConnect, write=FOnConnect};
 	__property Classes::TNotifyEvent OnGroupSelect = {read=FOnGroupSelect, write=FOnGroupSelect};
-	__property TGroupRetrievedEvent OnGroupListUpdate = {read=FOnGroupListUpdate, write=FOnGroupListUpdate
-		};
-	__property TGroupRetrievedCacheEvent OnGroupListCacheUpdate = {read=FOnGroupListCacheUpdate, write=
-		FOnGroupListCacheUpdate};
-	__property Psock::THandlerEvent OnGroupSelectRequired = {read=FOnGroupSelectRequired, write=FOnGroupSelectRequired
-		};
+	__property TGroupRetrievedEvent OnGroupListUpdate = {read=FOnGroupListUpdate, write=FOnGroupListUpdate};
+	__property TGroupRetrievedCacheEvent OnGroupListCacheUpdate = {read=FOnGroupListCacheUpdate, write=FOnGroupListCacheUpdate};
+	__property Psock::THandlerEvent OnGroupSelectRequired = {read=FOnGroupSelectRequired, write=FOnGroupSelectRequired};
 	__property Classes::TNotifyEvent OnHeaderList = {read=FOnHeaderList, write=FOnHeaderList};
-	__property Psock::THandlerEvent OnHeaderListCacheUpdate = {read=FOnHeaderListCacheUpdate, write=FOnHeaderListCacheUpdate
-		};
+	__property Psock::THandlerEvent OnHeaderListCacheUpdate = {read=FOnHeaderListCacheUpdate, write=FOnHeaderListCacheUpdate};
 	__property Classes::TNotifyEvent OnHeader = {read=FOnHeader, write=FOnHeader};
-	__property THeaderCacheEvent OnHeaderCacheUpdate = {read=FOnHeaderCacheUpdate, write=FOnHeaderCacheUpdate
-		};
+	__property THeaderCacheEvent OnHeaderCacheUpdate = {read=FOnHeaderCacheUpdate, write=FOnHeaderCacheUpdate};
 	__property Classes::TNotifyEvent OnArticle = {read=FOnArticle, write=FOnArticle};
-	__property THeaderCacheEvent OnArticleCacheUpdate = {read=FOnArticleCacheUpdate, write=FOnArticleCacheUpdate
-		};
+	__property THeaderCacheEvent OnArticleCacheUpdate = {read=FOnArticleCacheUpdate, write=FOnArticleCacheUpdate};
 	__property Classes::TNotifyEvent OnBody = {read=FOnBody, write=FOnBody};
-	__property Psock::THandlerEvent OnBodyCacheUpdate = {read=FOnBodyCacheUpdate, write=FOnBodyCacheUpdate
-		};
-	__property Psock::THandlerEvent OnAuthenticationNeeded = {read=FOnAuthenticationNeeded, write=FOnAuthenticationNeeded
-		};
-	__property Classes::TNotifyEvent OnAuthenticationFailed = {read=FOnAuthenticationFailed, write=FOnAuthenticationFailed
-		};
+	__property Psock::THandlerEvent OnBodyCacheUpdate = {read=FOnBodyCacheUpdate, write=FOnBodyCacheUpdate};
+	__property Psock::THandlerEvent OnAuthenticationNeeded = {read=FOnAuthenticationNeeded, write=FOnAuthenticationNeeded};
+	__property Classes::TNotifyEvent OnAuthenticationFailed = {read=FOnAuthenticationFailed, write=FOnAuthenticationFailed};
 	__property Classes::TNotifyEvent OnAbort = {read=FOnAbort, write=FOnAbort};
 	__property Classes::TNotifyEvent OnPosted = {read=FOnPosted, write=FOnPosted};
 	__property Psock::TOnErrorEvent OnPostFailed = {read=FOnPostFailed, write=FOnPostFailed};
-	__property Classes::TNotifyEvent OnInvalidArticle = {read=FOnInvalidArticle, write=FOnInvalidArticle
-		};
+	__property Classes::TNotifyEvent OnInvalidArticle = {read=FOnInvalidArticle, write=FOnInvalidArticle};
 	__property TVarFileNameEvent OnDecodeStart = {read=FOnDecodeStart, write=FOnDecodeStart};
 	__property Classes::TNotifyEvent OnDecodeEnd = {read=FOnDecodeEnd, write=FOnDecodeEnd};
 };
@@ -318,9 +293,7 @@ static const Shortint Trans_List = 0x1;
 extern PACKAGE AnsiString Stable[9];
 
 }	/* namespace Nmnntp */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nmnntp;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

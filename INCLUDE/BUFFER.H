@@ -1,6 +1,6 @@
 
 //=============================================================================
-//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1992.
+//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1999.
 //
 //  MODULE: buffer.h
 //
@@ -113,6 +113,7 @@ typedef BUFFER *HBUFFER;
 #define GetBteIndex(hBuffer, lpBte)       ((DWORD) ((lpBte) - (hBuffer)->bte))
 
 #pragma pack()
+
 
 #pragma option pop /*P_O_Pop*/
 #endif

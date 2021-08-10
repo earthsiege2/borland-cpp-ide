@@ -2,12 +2,11 @@
 *                                                                         *
 * AgtErr.h - Error code definitions for Microsoft Agent                   *
 *                                                                         *
-* Copyright (c) 1996-1998, Microsoft Corp. All rights reserved.           *
+* Copyright (c) 1996-1999, Microsoft Corp. All rights reserved.           *
 *                                                                         *
 **************************************************************************/
 
 #ifndef _AgentError_h_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _AgentError_h_
 
 
@@ -135,5 +134,4 @@
 #define AGENTEXTERROR_INVALIDCLIENT						AGENTEXTERROR(2)
 
 
-#pragma option pop /*P_O_Pop*/
 #endif

@@ -1,16 +1,16 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'QRExpbld.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QRExpBld.pas' rev: 6.00
 
-#ifndef QRExpbldHPP
-#define QRExpbldHPP
+#ifndef QRExpBldHPP
+#define QRExpBldHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <qr3const.hpp>	// Pascal unit
+#include <QR3Const.hpp>	// Pascal unit
 #include <QRExpr.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
@@ -144,16 +144,13 @@ private:
 	
 public:
 	__property Forms::TCustomForm* DatasetForm = {read=FDatasetForm, write=FDatasetForm};
-	__property Qrexpr::TQREvEnvironment* LocalEnvironment = {read=FLocalEnvironment, write=FLocalEnvironment
-		};
+	__property Qrexpr::TQREvEnvironment* LocalEnvironment = {read=FLocalEnvironment, write=FLocalEnvironment};
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TQRExpressionBuilder(Classes::TComponent* AOwner
-		) : Forms::TForm(AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TQRExpressionBuilder(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TQRExpressionBuilder(Classes::TComponent* AOwner
-		, int Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TQRExpressionBuilder(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TQRExpressionBuilder(void) { }
@@ -161,24 +158,20 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRExpressionBuilder(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRExpressionBuilder(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE bool __fastcall GetExpression(AnsiString ACaption, AnsiString &Value, Forms::TCustomForm* 
-	ADataSetForm, Controls::TWinControl* AParentControl, Qrexpr::TQREvEnvironment* ALocalEnvironment);
+extern PACKAGE bool __fastcall GetExpression(AnsiString ACaption, AnsiString &Value, Forms::TCustomForm* ADataSetForm, Controls::TWinControl* AParentControl, Qrexpr::TQREvEnvironment* ALocalEnvironment);
 
 }	/* namespace Qrexpbld */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qrexpbld;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// QRExpbld
+#endif	// QRExpBld

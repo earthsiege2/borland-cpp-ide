@@ -1,11 +1,10 @@
-
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1995-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 unit Registry;
 
@@ -13,7 +12,7 @@ unit Registry;
 
 interface
 
-uses Windows, Classes, SysUtils, IniFiles;
+uses {$IFDEF LINUX} WinUtils, {$ENDIF} Windows, Classes, SysUtils, IniFiles;
 
 type
   ERegistryException = class(Exception);
@@ -138,12 +137,15 @@ type
     function ReadFloat(const Section, Name: string; Default: Double): Double; override;
     function ReadString(const Section, Ident, Default: string): string; override;
     function ReadTime(const Section, Name: string; Default: TDateTime): TDateTime; override;
+    function ReadBinaryStream(const Section, Name: string; Value: TStream): Integer; override;
+//    procedure ReadKeys(const Section: string; Sections: TStrings);
     procedure WriteDate(const Section, Name: string; Value: TDateTime); override;
     procedure WriteDateTime(const Section, Name: string; Value: TDateTime); override;
     procedure WriteFloat(const Section, Name: string; Value: Double); override;
     procedure WriteInteger(const Section, Ident: string; Value: Longint); override;
     procedure WriteString(const Section, Ident, Value: String); override;
     procedure WriteTime(const Section, Name: string; Value: TDateTime); override;
+    procedure WriteBinaryStream(const Section, Name: string; Value: TStream); override;
     procedure ReadSection(const Section: string; Strings: TStrings); override;
     procedure ReadSections(Strings: TStrings); override;
     procedure ReadSectionValues(const Section: string; Strings: TStrings); override;
@@ -156,7 +158,7 @@ type
 
 implementation
 
-uses Consts;
+uses RTLConsts;
 
 procedure ReadError(const Name: string);
 begin
@@ -314,6 +316,29 @@ begin
     FAccess := KEY_READ;
     if (CurrentKey <> 0) and Relative then S := CurrentPath + '\' + S;
     ChangeKey(TempKey, S);
+  end
+  else
+  begin
+    Result := RegOpenKeyEx(GetBaseKey(Relative), PChar(S), 0,
+        STANDARD_RIGHTS_READ or KEY_QUERY_VALUE or KEY_ENUMERATE_SUB_KEYS,
+        TempKey) = ERROR_SUCCESS;
+    if Result then
+    begin
+      FAccess := STANDARD_RIGHTS_READ or KEY_QUERY_VALUE or KEY_ENUMERATE_SUB_KEYS;
+      if (CurrentKey <> 0) and Relative then S := CurrentPath + '\' + S;
+      ChangeKey(TempKey, S);
+    end
+    else
+    begin
+      Result := RegOpenKeyEx(GetBaseKey(Relative), PChar(S), 0,
+          KEY_QUERY_VALUE, TempKey) = ERROR_SUCCESS;
+      if Result then
+      begin
+        FAccess := KEY_QUERY_VALUE;
+        if (CurrentKey <> 0) and Relative then S := CurrentPath + '\' + S;
+        ChangeKey(TempKey, S);
+      end
+    end;
   end;
 end;
 
@@ -698,10 +723,17 @@ end;
 function TRegistry.KeyExists(const Key: string): Boolean;
 var
   TempKey: HKEY;
+  OldAccess: Longword;
 begin
-  TempKey := GetKey(Key);
-  if TempKey <> 0 then RegCloseKey(TempKey);
-  Result := TempKey <> 0;
+  OldAccess := FAccess;
+  try
+    FAccess := STANDARD_RIGHTS_READ or KEY_QUERY_VALUE or KEY_ENUMERATE_SUB_KEYS;
+    TempKey := GetKey(Key);
+    if TempKey <> 0 then RegCloseKey(TempKey);
+    Result := TempKey <> 0;
+  finally
+    FAccess := OldAccess;
+  end;
 end;
 
 procedure TRegistry.RenameValue(const OldName, NewName: string);
@@ -1203,6 +1235,53 @@ begin
   end;
 end;
 
+function TRegistryIniFile.ReadBinaryStream(const Section, Name: string; Value: TStream): Integer;
+var
+  RegData: TRegDataType;
+  Info: TRegDataInfo;
+  Key, OldKey: HKEY;
+  Stream: TMemoryStream;
+begin
+  Result := 0;
+  with RegIniFile do
+  begin
+    Key := TRegistry(FRegIniFile).GetKey(Section);
+    if Key <> 0 then
+    try
+      OldKey := CurrentKey;
+      TRegistry(FRegIniFile).SetCurrentKey(Key);
+      try
+        if ValueExists(Name) then
+        begin
+          if GetDataInfo(Name, Info) then
+          begin
+            Result := Info.DataSize;
+            RegData := Info.RegData;
+            if Value is TMemoryStream then
+              Stream := TMemoryStream(Value)
+            else Stream := TMemoryStream.Create;
+            try
+              if (RegData = rdBinary) or (RegData = rdUnknown) then
+              begin
+                Stream.Size := Stream.Position + Info.DataSize;
+                Result := ReadBinaryData(Name,
+                  Pointer(Integer(Stream.Memory) + Stream.Position)^, Stream.Size);
+                if Stream <> Value then Value.CopyFrom(Stream, Stream.Size - Stream.Position);
+              end;
+            finally
+              if Stream <> Value then Stream.Free;
+            end;
+          end;
+        end;
+      finally
+        TRegistry(FRegIniFile).SetCurrentKey(OldKey);
+      end;
+    finally
+      RegCloseKey(Key);
+    end;
+  end;
+end;
+
 procedure TRegistryIniFile.WriteDate(const Section, Name: string; Value: TDateTime);
 var
   Key, OldKey: HKEY;
@@ -1313,6 +1392,44 @@ begin
         WriteTime(Name, Value);
       finally
         SetCurrentKey(OldKey);
+      end;
+    finally
+      RegCloseKey(Key);
+    end;
+  end;
+end;
+
+procedure TRegistryIniFile.WriteBinaryStream(const Section, Name: string;
+  Value: TStream);
+var
+  Key, OldKey: HKEY;
+  Stream: TMemoryStream;
+begin
+  with RegIniFile do
+  begin
+    CreateKey(Section);
+    Key := TRegistry(FRegIniFile).GetKey(Section);
+    if Key <> 0 then
+    try
+      OldKey := CurrentKey;
+      if Value is TMemoryStream then
+        Stream := TMemoryStream(Value)
+      else Stream := TMemoryStream.Create;
+      try
+        if Stream <> Value then
+        begin
+          Stream.CopyFrom(Value, Value.Size - Value.Position);
+          Stream.Position := 0;
+        end;
+        TRegistry(FRegIniFile).SetCurrentKey(Key);
+        try
+          WriteBinaryData(Name, Pointer(Integer(Stream.Memory) + Stream.Position)^,
+            Stream.Size - Stream.Position);
+        finally
+          TRegistry(FRegIniFile).SetCurrentKey(OldKey);
+        end;
+      finally
+        if Value <> Stream then Stream.Free;
       end;
     finally
       RegCloseKey(Key);

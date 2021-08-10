@@ -168,6 +168,32 @@ AdsFreeAdsValues(
     DWORD dwNumValues
     );
 
+//
+// Helper routines to convert IADsSecurityDescriptor to a binary
+// security descriptor and also to convert a binary SD to 
+// IADsSecurityDescriptor.
+//
+HRESULT WINAPI
+BinarySDToSecurityDescriptor(
+    PSECURITY_DESCRIPTOR  pSecurityDescriptor,
+    VARIANT *pVarsec, 
+    LPCWSTR pszServerName,
+    LPCWSTR userName,
+    LPCWSTR passWord,
+    DWORD dwFlags
+    );
+
+HRESULT WINAPI
+SecurityDescriptorToBinarySD(
+    VARIANT vVarSecDes,
+    PSECURITY_DESCRIPTOR * ppSecurityDescriptor,
+    PDWORD pdwSDLength,
+    LPCWSTR pszServerName,
+    LPCWSTR userName,
+    LPCWSTR passWord,
+    DWORD dwFlags
+    );
+
 #if DBG
 
 extern LIST_ENTRY ADsMemList ;
@@ -202,6 +228,7 @@ DumpMemoryTracker();
 #ifdef __cplusplus
 }
 #endif
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // _ADSHLP_

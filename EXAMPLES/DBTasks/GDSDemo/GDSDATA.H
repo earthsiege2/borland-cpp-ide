@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //Borland C++Builder
-//Copyright (c) 1987, 1998 Borland International Inc. All Rights Reserved.
+//Copyright (c) 1987, 1998-2002 Borland International Inc. All Rights Reserved.
 //----------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 #ifndef GdsDataH
@@ -16,6 +16,7 @@
 #include "Gdsstd.h"
 #include <Db.hpp>
 #include <Graphics.hpp>
+#include "gdsstd.h"
 //---------------------------------------------------------------------------
 class TStdDataForm : public TGDSStdForm
 {

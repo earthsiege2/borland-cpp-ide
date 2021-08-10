@@ -1,39 +1,39 @@
 LIBRARY EXCHSDK
 EXPORTS
 
-    HrFolderACLsOpen                         = 'ACLCLS.DLL'.*
-    HrStringToRestriction                    = 'RULECLS.DLL'.*
-    HrStringToAction                         = 'RULECLS.DLL'.*
-    HrRestrictionToString                    = 'RULECLS.DLL'.*
-    HrFolderRulesOpen                        = 'RULECLS.DLL'.*
-    HrFolderRulesGetProviders                = 'RULECLS.DLL'.*
-    HrCopyRestriction                        = 'RULECLS.DLL'.*
-    HrCopyActions                            = 'RULECLS.DLL'.*
-    HrActionToString                         = 'RULECLS.DLL'.*
-    OpenGatewayPerformanceData               = 'GWPERF.DLL'.*
-;    DllEntryPoint                            = 'GWPERF.DLL'.*
-    CollectGatewayPerformanceData            = 'GWPERF.DLL'.*
-    CloseGatewayPerformanceData              = 'GWPERF.DLL'.*
-    SchemaPreloadW                           = 'DAPI.DLL'.*
-    SchemaPreloadA                           = 'DAPI.DLL'.*
-    NWExportW                                = 'DAPI.DLL'.*
-    NWExportA                                = 'DAPI.DLL'.*
-    NTExportW                                = 'DAPI.DLL'.*
-    NTExportA                                = 'DAPI.DLL'.*
-    DapiLibMain                              = 'DAPI.DLL'.*
-    DAPIWriteW                               = 'DAPI.DLL'.*
-    DAPIWriteA                               = 'DAPI.DLL'.*
-    DAPIUninitialize                         = 'DAPI.DLL'.*
-    DAPIStartW                               = 'DAPI.DLL'.*
-    DAPIStartA                               = 'DAPI.DLL'.*
-    DAPIReadW                                = 'DAPI.DLL'.*
-    DAPIReadA                                = 'DAPI.DLL'.*
-    DAPIGetSiteInfoW                         = 'DAPI.DLL'.*
-    DAPIGetSiteInfoA                         = 'DAPI.DLL'.*
-    DAPIFreeMemory                           = 'DAPI.DLL'.*
-    DAPIEnd                                  = 'DAPI.DLL'.*
-    DAPIAllocBuffer                          = 'DAPI.DLL'.*
-    BatchImportW                             = 'DAPI.DLL'.*
-    BatchImportA                             = 'DAPI.DLL'.*
-    BatchExportW                             = 'DAPI.DLL'.*
-    BatchExportA                             = 'DAPI.DLL'.*
+    HrFolderACLsOpen                         
+    HrStringToRestriction                    
+    HrStringToAction                         
+    HrRestrictionToString                    
+    HrFolderRulesOpen                        
+    HrFolderRulesGetProviders                
+    HrCopyRestriction                        
+    HrCopyActions                            
+    HrActionToString                         
+    OpenGatewayPerformanceData               
+;    DllEntryPoint                            
+    CollectGatewayPerformanceData            
+    CloseGatewayPerformanceData              
+    SchemaPreloadW                           
+    SchemaPreloadA                           
+    NWExportW                                
+    NWExportA                                
+    NTExportW                                
+    NTExportA                                
+    DapiLibMain                              
+    DAPIWriteW                               
+    DAPIWriteA                               
+    DAPIUninitialize                         
+    DAPIStartW                               
+    DAPIStartA                               
+    DAPIReadW                                
+    DAPIReadA                                
+    DAPIGetSiteInfoW                         
+    DAPIGetSiteInfoA                         
+    DAPIFreeMemory                           
+    DAPIEnd                                  
+    DAPIAllocBuffer                          
+    BatchImportW                             
+    BatchImportA                             
+    BatchExportW                             
+    BatchExportA                             

@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0002    Increment this if a change has global effects
 
-Copyright (c) 1993-1999, Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -24,7 +24,6 @@ Abstract:
 --*/
 
 #ifndef _OLEDLG_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _OLEDLG_H_
 
 #if _MSC_VER > 1000
@@ -1595,8 +1594,8 @@ STDAPI_(UINT) OleUIObjectPropertiesA(LPOLEUIOBJECTPROPSA);
 /////////////////////////////////////////////////////////////////////////////
 // PROMPT USER DIALOGS
 
-int CDECL OleUIPromptUserW(int nTemplate, HWND hwndParent, ...);
-int CDECL OleUIPromptUserA(int nTemplate, HWND hwndParent, ...);
+int __cdecl OleUIPromptUserW(int nTemplate, HWND hwndParent, ...);
+int __cdecl OleUIPromptUserA(int nTemplate, HWND hwndParent, ...);
 
 #ifdef UNICODE
 #define OleUIPromptUser OleUIPromptUserW
@@ -1625,7 +1624,6 @@ STDAPI_(BOOL) OleUIUpdateLinksA(LPOLEUILINKCONTAINERA lpOleUILinkCntr,
 
 #endif // RC_INVOKED
 
-#pragma option pop /*P_O_Pop*/
 #endif  //_OLEDLG_H_
 
 /////////////////////////////////////////////////////////////////////////////

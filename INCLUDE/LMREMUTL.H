@@ -20,7 +20,6 @@ Environment:
 --*/
 
 #ifndef _LMREMUTL_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMREMUTL_
 
 #if _MSC_VER > 1000
@@ -67,6 +66,7 @@ NetRemoteComputerSupports(
     );
 
 NET_API_STATUS
+__cdecl
 RxRemoteApi(
     IN DWORD ApiNumber,
     IN LPCWSTR UncServerName,                    // Required, with \\name.
@@ -129,5 +129,4 @@ typedef struct _TIME_OF_DAY_INFO {
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif //_LMREMUTL_

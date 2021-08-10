@@ -24,7 +24,6 @@ Revision History:
 --*/
 
 #ifndef _LMUSEFLG_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMUSEFLG_
 
 #if _MSC_VER > 1000
@@ -40,5 +39,4 @@ Revision History:
 #define USE_LOTS_OF_FORCE       2
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // _LMUSEFLG_

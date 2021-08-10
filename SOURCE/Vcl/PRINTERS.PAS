@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -833,7 +833,7 @@ procedure TPrinter.SetToDefaultPrinter;
 var
   I: Integer;
   ByteCnt, StructCnt: DWORD;
-  DefaultPrinter: array[0..79] of Char;
+  DefaultPrinter: array[0..1023] of Char;
   Cur, Device: PChar;
   PrinterInfo: PPrinterInfo5;
 begin
@@ -847,7 +847,7 @@ begin
     if GetLastError = ERROR_INVALID_NAME then
       RaiseError(SNoDefaultPrinter)
     else
-      RaiseLastWin32Error;
+      RaiseLastOSError;
   end;
   PrinterInfo := AllocMem(ByteCnt);
   try
@@ -864,7 +864,7 @@ begin
     with Printers do
       for I := 0 to Count-1 do
       begin
-        if TPrinterDevice(Objects[I]).Device = Device then
+        if AnsiSameText(TPrinterDevice(Objects[I]).Device, Device) then
         begin
           with TPrinterDevice(Objects[I]) do
             SetPrinter(PChar(Device), PChar(Driver), PChar(Port), 0);

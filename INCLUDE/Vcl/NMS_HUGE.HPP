@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NMS_Huge.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NMS_Huge.pas' rev: 6.00
 
 #ifndef NMS_HugeHPP
 #define NMS_HugeHPP
@@ -25,9 +25,7 @@ extern PACKAGE void * __fastcall HugeOffset(void * HugePtr, int Amount);
 extern PACKAGE void __fastcall HMemCpy(void * DstPtr, void * SrcPtr, int Amount);
 
 }	/* namespace Nms_huge */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nms_huge;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

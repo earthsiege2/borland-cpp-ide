@@ -1,17 +1,19 @@
-/********************************************************************/
-/**               Copyright(c) 1989-1999 Microsoft Corporation.    **/
-/********************************************************************/
+/*++
 
-//***
-//
-// Filename:    raseapif.h
-//
-// Description: Defines interface between a third party authentication module
-//              and the Remote Access Service PPP engine.
-//
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+Module Name:
+
+    raseapif.h
+
+Abstract:
+
+    Defines interface between a third party authentication module
+    and the Remote Access Service PPP engine.
+
+--*/
 
 #ifndef _RASEAPIF_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _RASEAPIF_
 
 #if _MSC_VER > 1000
@@ -133,6 +135,7 @@ typedef enum _RAS_AUTH_ATTRIBUTE_TYPE_
     raatARAPChallengeResponse = 84, // Value field is a Pointer
     raatAcctInterimInterval = 85,   // Value field is a 32 bit integral value
     raatARAPGuestLogon = 8096,      // Value field is a 32 bit integral value
+    raatCertificateEKU,             // Value field is a Pointer
     raatReserved = 0xFFFFFFFF       // Undefined
 
 }RAS_AUTH_ATTRIBUTE_TYPE;
@@ -185,6 +188,10 @@ typedef struct _RAS_AUTH_ATTRIBUTE
                                                     // "Prompt for information
                                                     // before dialing"
 #define RAS_EAP_FLAG_FIRST_LINK         0x00000010  // This is the first link
+#define RAS_EAP_FLAG_MACHINE_AUTH       0x00000020  // Use the default machine cert
+                                                    // or user cert based on the
+                                                    // application logon context
+
 
 typedef struct _PPP_EAP_PACKET
 {
@@ -616,6 +623,5 @@ RasEapGetIdentity(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _RASEAPIF_
 

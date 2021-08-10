@@ -31,6 +31,34 @@ namespace ATL
 #define CComProvideClassInfo2Impl IProvideClassInfoImpl
 #define CComDualImpl IDispatchImpl
 
+#ifdef __BORLANDC__
+
+#ifndef __NO_ALGORITHM_REPLACE
+ /* The ANSI/ISO C++ Specification indicates that the function min()
+    should be defined in the standard template library header algorithm.h.
+    Previously, it was defined in the header stdlib.h. Because atlcom
+    uses this function, and to avoid pulling in the new STL, that
+    function is redefined here with a different name. If you wish to
+    use the definition in algorithm.h, then define _NO_ALGORITHM_REPLACE
+    prior to this block. Alternately, if you are for some reason 
+    not compiling this with bcc32, you *may* need to include
+    algorithm.h in order for the file to compile. */
+
+#undef min
+template <class _T> inline const _T _FAR &min_( const _T _FAR &__t1, const _T _FAR &__t2 )
+{
+    if  (__t1 < __t2)
+        return __t1;
+    else
+        return __t2;
+}
+inline unsigned long min_ (unsigned long __a, unsigned long __b)
+{
+    return min_<unsigned long> (__a, __b);
+}
+#endif
+#endif
+
 #ifdef _ATL_DEBUG_QI
 #ifndef _ATL_DEBUG
 #define _ATL_DEBUG
@@ -4391,7 +4419,13 @@ STDMETHODIMP CComEnumImpl<Base, piid, T, Copy>::Next(ULONG celt, T* rgelt,
 	HRESULT hRes = S_OK;
 	if (nRem < celt)
 		hRes = S_FALSE;
+#ifdef __BORLANDC__
+#ifndef __NO_ALGORITHM_REPLACE
+        ULONG nMin = min_(celt, nRem);
+#endif
+#else
 	ULONG nMin = min(celt, nRem);
+#endif
 	if (pceltFetched != NULL)
 		*pceltFetched = nMin;
 	T* pelt = rgelt;

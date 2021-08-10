@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'TeeFunci.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'TeeFunci.pas' rev: 6.00
 
 #ifndef TeeFunciHPP
 #define TeeFunciHPP
@@ -27,8 +27,7 @@ class PASCALIMPLEMENTATION TBasicTeeFunction : public Teengine::TTeeFunction
 	
 public:
 	#pragma option push -w-inl
-	/* TTeeFunction.Create */ inline __fastcall virtual TBasicTeeFunction(Classes::TComponent* AOwner) : 
-		Teengine::TTeeFunction(AOwner) { }
+	/* TTeeFunction.Create */ inline __fastcall virtual TBasicTeeFunction(Classes::TComponent* AOwner) : Teengine::TTeeFunction(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -45,13 +44,11 @@ class PASCALIMPLEMENTATION TAddTeeFunction : public Teengine::TTeeFunction
 	typedef Teengine::TTeeFunction inherited;
 	
 public:
-	virtual double __fastcall Calculate(Teengine::TChartSeries* SourceSeries, int FirstIndex, int LastIndex
-		);
+	virtual double __fastcall Calculate(Teengine::TChartSeries* SourceSeries, int FirstIndex, int LastIndex);
 	virtual double __fastcall CalculateMany(Classes::TList* SourceSeriesList, int ValueIndex);
 public:
 	#pragma option push -w-inl
-	/* TTeeFunction.Create */ inline __fastcall virtual TAddTeeFunction(Classes::TComponent* AOwner) : 
-		Teengine::TTeeFunction(AOwner) { }
+	/* TTeeFunction.Create */ inline __fastcall virtual TAddTeeFunction(Classes::TComponent* AOwner) : Teengine::TTeeFunction(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -74,8 +71,7 @@ public:
 	virtual double __fastcall CalculateMany(Classes::TList* SourceSeriesList, int ValueIndex);
 public:
 	#pragma option push -w-inl
-	/* TTeeFunction.Create */ inline __fastcall virtual TManySeriesTeeFunction(Classes::TComponent* AOwner
-		) : Teengine::TTeeFunction(AOwner) { }
+	/* TTeeFunction.Create */ inline __fastcall virtual TManySeriesTeeFunction(Classes::TComponent* AOwner) : Teengine::TTeeFunction(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -95,8 +91,7 @@ protected:
 	virtual double __fastcall CalculateValue(const double AResult, const double AValue);
 public:
 	#pragma option push -w-inl
-	/* TTeeFunction.Create */ inline __fastcall virtual TSubtractTeeFunction(Classes::TComponent* AOwner
-		) : TManySeriesTeeFunction(AOwner) { }
+	/* TTeeFunction.Create */ inline __fastcall virtual TSubtractTeeFunction(Classes::TComponent* AOwner) : TManySeriesTeeFunction(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -116,8 +111,7 @@ protected:
 	virtual double __fastcall CalculateValue(const double AResult, const double AValue);
 public:
 	#pragma option push -w-inl
-	/* TTeeFunction.Create */ inline __fastcall virtual TMultiplyTeeFunction(Classes::TComponent* AOwner
-		) : TManySeriesTeeFunction(AOwner) { }
+	/* TTeeFunction.Create */ inline __fastcall virtual TMultiplyTeeFunction(Classes::TComponent* AOwner) : TManySeriesTeeFunction(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -137,8 +131,7 @@ protected:
 	virtual double __fastcall CalculateValue(const double AResult, const double AValue);
 public:
 	#pragma option push -w-inl
-	/* TTeeFunction.Create */ inline __fastcall virtual TDivideTeeFunction(Classes::TComponent* AOwner)
-		 : TManySeriesTeeFunction(AOwner) { }
+	/* TTeeFunction.Create */ inline __fastcall virtual TDivideTeeFunction(Classes::TComponent* AOwner) : TManySeriesTeeFunction(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -155,13 +148,11 @@ class PASCALIMPLEMENTATION THighTeeFunction : public Teengine::TTeeFunction
 	typedef Teengine::TTeeFunction inherited;
 	
 public:
-	virtual double __fastcall Calculate(Teengine::TChartSeries* SourceSeries, int FirstIndex, int LastIndex
-		);
+	virtual double __fastcall Calculate(Teengine::TChartSeries* SourceSeries, int FirstIndex, int LastIndex);
 	virtual double __fastcall CalculateMany(Classes::TList* SourceSeriesList, int ValueIndex);
 public:
 	#pragma option push -w-inl
-	/* TTeeFunction.Create */ inline __fastcall virtual THighTeeFunction(Classes::TComponent* AOwner) : 
-		Teengine::TTeeFunction(AOwner) { }
+	/* TTeeFunction.Create */ inline __fastcall virtual THighTeeFunction(Classes::TComponent* AOwner) : Teengine::TTeeFunction(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -178,13 +169,11 @@ class PASCALIMPLEMENTATION TLowTeeFunction : public Teengine::TTeeFunction
 	typedef Teengine::TTeeFunction inherited;
 	
 public:
-	virtual double __fastcall Calculate(Teengine::TChartSeries* SourceSeries, int FirstIndex, int LastIndex
-		);
+	virtual double __fastcall Calculate(Teengine::TChartSeries* SourceSeries, int FirstIndex, int LastIndex);
 	virtual double __fastcall CalculateMany(Classes::TList* SourceSeriesList, int ValueIndex);
 public:
 	#pragma option push -w-inl
-	/* TTeeFunction.Create */ inline __fastcall virtual TLowTeeFunction(Classes::TComponent* AOwner) : 
-		Teengine::TTeeFunction(AOwner) { }
+	/* TTeeFunction.Create */ inline __fastcall virtual TLowTeeFunction(Classes::TComponent* AOwner) : Teengine::TTeeFunction(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -201,13 +190,11 @@ class PASCALIMPLEMENTATION TAverageTeeFunction : public Teengine::TTeeFunction
 	typedef Teengine::TTeeFunction inherited;
 	
 public:
-	virtual double __fastcall Calculate(Teengine::TChartSeries* SourceSeries, int FirstIndex, int LastIndex
-		);
+	virtual double __fastcall Calculate(Teengine::TChartSeries* SourceSeries, int FirstIndex, int LastIndex);
 	virtual double __fastcall CalculateMany(Classes::TList* SourceSeriesList, int ValueIndex);
 public:
 	#pragma option push -w-inl
-	/* TTeeFunction.Create */ inline __fastcall virtual TAverageTeeFunction(Classes::TComponent* AOwner
-		) : Teengine::TTeeFunction(AOwner) { }
+	/* TTeeFunction.Create */ inline __fastcall virtual TAverageTeeFunction(Classes::TComponent* AOwner) : Teengine::TTeeFunction(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -221,9 +208,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Teefunci */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Teefunci;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

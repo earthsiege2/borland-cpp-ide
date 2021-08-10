@@ -1,0 +1,7 @@
+USEUNIT(".\Guidgdlg.cpp");
+USEUNIT(".\Guidgen.cpp");
+USEUNIT(".\Stdafx.cpp");
+USERC(".\Guidgen.rc");
+USEFILE("vctobpr.log");
+
+#define WinMain

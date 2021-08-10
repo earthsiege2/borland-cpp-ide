@@ -2,12 +2,11 @@
 *                                                                             *
 * ole2ver.h -   OLE 2 Version Number Info                                     *
 *                                                                             *
-*               Copyright (c) 1992-1999, Microsoft Corp. All rights reserved. *
+*               Copyright (c) Microsoft Corporation. All rights reserved.     *
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef _OLE2VER_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _OLE2VER_H_
 #if _MSC_VER > 1000
 #pragma once
@@ -60,7 +59,7 @@
   #define OLE_BUILDER	" Built by: " _username
 #endif // _NODOC_OFFICIAL_BUILD
 
-#define OLE_VERLONGSTR	OLE_VERSTRING OLE_DEBUGSTR OLE_BUILDER ", Copyright (c) 1992-98 Microsoft Corporation"
+#define OLE_VERLONGSTR	OLE_VERSTRING OLE_DEBUGSTR OLE_BUILDER ", Copyright (c) Microsoft Corporation. All rights reserved."
 
 #define majorRev		2
 #define minorRev		0x20
@@ -84,5 +83,4 @@ resource 'vers' (2) {
 #endif /* _REZ */
 
 #endif //_MAC
-#pragma option pop /*P_O_Pop*/
 #endif

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'SConnect.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'SConnect.pas' rev: 6.00
 
 #ifndef SConnectHPP
 #define SConnectHPP
@@ -10,7 +10,9 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
+#include <DBClient.hpp>	// Pascal unit
+#include <ComObj.hpp>	// Pascal unit
 #include <WinInet.hpp>	// Pascal unit
 #include <WinSock.hpp>	// Pascal unit
 #include <ScktComp.hpp>	// Pascal unit
@@ -19,18 +21,19 @@
 #include <Classes.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
 //-- user supplied -----------------------------------------------------------
-#pragma comment(lib, "wininet.lib")
+#pragma link "wininet.lib"
 
 namespace Sconnect
 {
 //-- type declarations -------------------------------------------------------
 __interface IDataBlock;
 typedef System::DelphiInterface<IDataBlock> _di_IDataBlock;
-__interface INTERFACE_UUID("{CA6564C2-4683-11D1-88D4-00A0248E5091}") IDataBlock  : public IUnknown 
+__interface INTERFACE_UUID("{CA6564C2-4683-11D1-88D4-00A0248E5091}") IDataBlock  : public IInterface 
 {
 	
 public:
@@ -55,8 +58,7 @@ public:
 
 __interface ISendDataBlock;
 typedef System::DelphiInterface<ISendDataBlock> _di_ISendDataBlock;
-__interface INTERFACE_UUID("{87AD1043-470E-11D1-88D5-00A0248E5091}") ISendDataBlock  : public IUnknown 
-	
+__interface INTERFACE_UUID("{87AD1043-470E-11D1-88D5-00A0248E5091}") ISendDataBlock  : public IInterface 
 {
 	
 public:
@@ -65,7 +67,7 @@ public:
 
 __interface ITransport;
 typedef System::DelphiInterface<ITransport> _di_ITransport;
-__interface INTERFACE_UUID("{CA6564C1-4683-11D1-88D4-00A0248E5091}") ITransport  : public IUnknown 
+__interface INTERFACE_UUID("{CA6564C1-4683-11D1-88D4-00A0248E5091}") ITransport  : public IInterface 
 {
 	
 public:
@@ -79,8 +81,7 @@ public:
 
 __interface IDataIntercept;
 typedef System::DelphiInterface<IDataIntercept> _di_IDataIntercept;
-__interface INTERFACE_UUID("{B249776B-E429-11D1-AAA4-00C04FA35CFA}") IDataIntercept  : public IUnknown 
-	
+__interface INTERFACE_UUID("{B249776B-E429-11D1-AAA4-00C04FA35CFA}") IDataIntercept  : public IInterface 
 {
 	
 public:
@@ -151,38 +152,28 @@ class PASCALIMPLEMENTATION EInterpreterError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EInterpreterError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EInterpreterError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EInterpreterError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EInterpreterError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EInterpreterError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EInterpreterError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EInterpreterError(int Ident, const System::TVarRec * 
-		Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EInterpreterError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EInterpreterError(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EInterpreterError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EInterpreterError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EInterpreterError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EInterpreterError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EInterpreterError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EInterpreterError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EInterpreterError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -193,11 +184,45 @@ public:
 };
 
 
-class DELPHICLASS TDataBlockInterpreter;
+class DELPHICLASS TCustomDataBlockInterpreter;
 class DELPHICLASS TDataDispatch;
-class PASCALIMPLEMENTATION TDataBlockInterpreter : public System::TObject 
+class PASCALIMPLEMENTATION TCustomDataBlockInterpreter : public System::TObject 
 {
 	typedef System::TObject inherited;
+	
+protected:
+	virtual void __fastcall AddDispatch(TDataDispatch* Value) = 0 ;
+	virtual void __fastcall RemoveDispatch(TDataDispatch* Value) = 0 ;
+	virtual void __fastcall CallFreeObject(int DispatchIndex) = 0 ;
+	virtual HRESULT __stdcall CallGetIDsOfNames(int DispatchIndex, const GUID &IID, void * Names, int NameCount, int LocaleID, void * DispIDs) = 0 ;
+	virtual HRESULT __stdcall CallInvoke(int DispatchIndex, int DispID, const GUID &IID, int LocaleID, Word Flags, void *Params, void * VarResult, void * ExcepInfo, void * ArgErr) = 0 ;
+	virtual OleVariant __fastcall CallGetServerList(void) = 0 ;
+	virtual OleVariant __fastcall InternalCreateObject(const GUID &ClassID) = 0 ;
+	virtual OleVariant __fastcall CreateObject(const AnsiString Name) = 0 ;
+	virtual int __fastcall StoreObject(const OleVariant &Value) = 0 ;
+	virtual _di_IDispatch __fastcall LockObject(int ID) = 0 ;
+	virtual void __fastcall UnlockObject(int ID, const _di_IDispatch Disp) = 0 ;
+	virtual void __fastcall ReleaseObject(int ID) = 0 ;
+	virtual bool __fastcall CanCreateObject(const GUID &ClassID) = 0 ;
+	virtual OleVariant __fastcall CallCreateObject(AnsiString Name) = 0 ;
+	
+public:
+	virtual void __fastcall InterpretData(const _di_IDataBlock Data) = 0 ;
+public:
+	#pragma option push -w-inl
+	/* TObject.Create */ inline __fastcall TCustomDataBlockInterpreter(void) : System::TObject() { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TObject.Destroy */ inline __fastcall virtual ~TCustomDataBlockInterpreter(void) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TDataBlockInterpreter;
+class PASCALIMPLEMENTATION TDataBlockInterpreter : public TCustomDataBlockInterpreter 
+{
+	typedef TCustomDataBlockInterpreter inherited;
 	
 private:
 	Classes::TList* FDispatchList;
@@ -205,14 +230,16 @@ private:
 	_di_ISendDataBlock FSendDataBlock;
 	AnsiString FCheckRegValue;
 	void * __fastcall GetVariantPointer(const OleVariant &Value);
-	void __fastcall CopyDataByRef(const System::TVarData &Source, System::TVarData &Dest);
+	void __fastcall CopyDataByRef(const TVarData &Source, TVarData &Dest);
 	OleVariant __fastcall ReadArray(int VType, const _di_IDataBlock Data);
 	void __fastcall WriteArray(const OleVariant &Value, const _di_IDataBlock Data);
+	OleVariant __fastcall ReadVariant(/* out */ TVarFlags &Flags, const _di_IDataBlock Data);
+	void __fastcall WriteVariant(const OleVariant &Value, const _di_IDataBlock Data);
 	void __fastcall DoException(const _di_IDataBlock Data);
 	
 protected:
-	void __fastcall AddDispatch(TDataDispatch* Value);
-	void __fastcall RemoveDispatch(TDataDispatch* Value);
+	virtual void __fastcall AddDispatch(TDataDispatch* Value);
+	virtual void __fastcall RemoveDispatch(TDataDispatch* Value);
 	virtual OleVariant __fastcall InternalCreateObject(const GUID &ClassID);
 	virtual OleVariant __fastcall CreateObject(const AnsiString Name);
 	virtual int __fastcall StoreObject(const OleVariant &Value);
@@ -220,12 +247,10 @@ protected:
 	virtual void __fastcall UnlockObject(int ID, const _di_IDispatch Disp);
 	virtual void __fastcall ReleaseObject(int ID);
 	virtual bool __fastcall CanCreateObject(const GUID &ClassID);
-	void __fastcall CallFreeObject(int DispatchIndex);
-	HRESULT __stdcall CallGetIDsOfNames(int DispatchIndex, const GUID &IID, void * Names, int NameCount
-		, int LocaleID, void * DispIDs);
-	HRESULT __stdcall CallInvoke(int DispatchIndex, int DispID, const GUID &IID, int LocaleID, Word Flags
-		, void *Params, void * VarResult, void * ExcepInfo, void * ArgErr);
-	OleVariant __fastcall CallGetServerList();
+	virtual void __fastcall CallFreeObject(int DispatchIndex);
+	virtual HRESULT __stdcall CallGetIDsOfNames(int DispatchIndex, const GUID &IID, void * Names, int NameCount, int LocaleID, void * DispIDs);
+	virtual HRESULT __stdcall CallInvoke(int DispatchIndex, int DispID, const GUID &IID, int LocaleID, Word Flags, void *Params, void * VarResult, void * ExcepInfo, void * ArgErr);
+	virtual OleVariant __fastcall CallGetServerList();
 	void __fastcall DoCreateObject(const _di_IDataBlock Data);
 	void __fastcall DoFreeObject(const _di_IDataBlock Data);
 	void __fastcall DoGetIDsOfNames(const _di_IDataBlock Data);
@@ -237,10 +262,8 @@ protected:
 public:
 	__fastcall TDataBlockInterpreter(_di_ISendDataBlock SendDataBlock, AnsiString CheckRegValue);
 	__fastcall virtual ~TDataBlockInterpreter(void);
-	OleVariant __fastcall CallCreateObject(AnsiString Name);
-	void __fastcall InterpretData(const _di_IDataBlock Data);
-	OleVariant __fastcall ReadVariant(/* out */ TVarFlags &Flags, const _di_IDataBlock Data);
-	void __fastcall WriteVariant(const OleVariant &Value, const _di_IDataBlock Data);
+	virtual OleVariant __fastcall CallCreateObject(AnsiString Name);
+	virtual void __fastcall InterpretData(const _di_IDataBlock Data);
 };
 
 
@@ -250,19 +273,17 @@ class PASCALIMPLEMENTATION TDataDispatch : public System::TInterfacedObject
 	
 private:
 	int FDispatchIndex;
-	TDataBlockInterpreter* FInterpreter;
+	TCustomDataBlockInterpreter* FInterpreter;
 	
 protected:
 	__property int DispatchIndex = {read=FDispatchIndex, nodefault};
 	HRESULT __stdcall GetTypeInfoCount(/* out */ int &Count);
 	HRESULT __stdcall GetTypeInfo(int Index, int LocaleID, /* out */ void *TypeInfo);
-	HRESULT __stdcall GetIDsOfNames(const GUID &IID, void * Names, int NameCount, int LocaleID, void * 
-		DispIDs);
-	HRESULT __stdcall Invoke(int DispID, const GUID &IID, int LocaleID, Word Flags, void *Params, void * 
-		VarResult, void * ExcepInfo, void * ArgErr);
+	HRESULT __stdcall GetIDsOfNames(const GUID &IID, void * Names, int NameCount, int LocaleID, void * DispIDs);
+	HRESULT __stdcall Invoke(int DispID, const GUID &IID, int LocaleID, Word Flags, void *Params, void * VarResult, void * ExcepInfo, void * ArgErr);
 	
 public:
-	__fastcall TDataDispatch(TDataBlockInterpreter* Interpreter, int DispatchIndex);
+	__fastcall TDataDispatch(TCustomDataBlockInterpreter* Interpreter, int DispatchIndex);
 	__fastcall virtual ~TDataDispatch(void);
 private:
 	void *__IDispatch;	/* IDispatch */
@@ -301,11 +322,19 @@ private:
 	unsigned FHandle;
 	TTransportThread* FTransport;
 	_di_ITransport FTransIntf;
-	TDataBlockInterpreter* FInterpreter;
+	TCustomDataBlockInterpreter* FInterpreter;
 	bool FSupportCallbacks;
+	#pragma pack(push, 1)
+	GUID FInterceptGUID;
+	#pragma pack(pop)
+	
+	AnsiString FInterceptName;
 	unsigned __fastcall GetHandle(void);
 	void __fastcall TransportTerminated(System::TObject* Sender);
 	void __fastcall SetSupportCallbacks(bool Value);
+	void __fastcall SetInterceptName(const AnsiString Value);
+	AnsiString __fastcall GetInterceptGUID();
+	void __fastcall SetInterceptGUID(const AnsiString Value);
 	
 protected:
 	HIDESBASE HRESULT __stdcall QueryInterface(const GUID &IID, /* out */ void *Obj);
@@ -321,12 +350,16 @@ protected:
 	virtual void __fastcall DoConnect(void);
 	virtual void __fastcall DoDisconnect(void);
 	virtual void __fastcall DoError(Sysutils::Exception* E);
-	virtual OleVariant __fastcall GetServerList();
-	__property TDataBlockInterpreter* Interpreter = {read=FInterpreter};
+	virtual TCustomDataBlockInterpreter* __fastcall GetInterpreter(void);
+	__property TCustomDataBlockInterpreter* Interpreter = {read=GetInterpreter};
 	__property unsigned Handle = {read=GetHandle, nodefault};
 	__property bool SupportCallbacks = {read=FSupportCallbacks, write=SetSupportCallbacks, default=1};
+	__property AnsiString InterceptGUID = {read=GetInterceptGUID, write=SetInterceptGUID};
+	__property AnsiString InterceptName = {read=FInterceptName, write=SetInterceptName};
 	
 public:
+	virtual OleVariant __fastcall GetInterceptorList();
+	virtual OleVariant __fastcall GetServerList();
 	__fastcall virtual TStreamedConnection(Classes::TComponent* AOwner);
 	__fastcall virtual ~TStreamedConnection(void);
 private:
@@ -345,38 +378,28 @@ class PASCALIMPLEMENTATION ESocketConnectionError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall ESocketConnectionError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall ESocketConnectionError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall ESocketConnectionError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall ESocketConnectionError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall ESocketConnectionError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall ESocketConnectionError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall ESocketConnectionError(int Ident, const System::TVarRec 
-		* Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall ESocketConnectionError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall ESocketConnectionError(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall ESocketConnectionError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall ESocketConnectionError(const AnsiString Msg, const 
-		System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size
-		, AHelpContext) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ESocketConnectionError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall ESocketConnectionError(int Ident, int AHelpContext)
-		/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ESocketConnectionError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall ESocketConnectionError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ESocketConnectionError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -439,7 +462,6 @@ private:
 	AnsiString FAddress;
 	AnsiString FHost;
 	int FPort;
-	AnsiString FInterceptGUID;
 	void __fastcall SetAddress(AnsiString Value);
 	void __fastcall SetHost(AnsiString Value);
 	bool __fastcall IsHostStored(void);
@@ -455,9 +477,10 @@ public:
 __published:
 	__property AnsiString Address = {read=FAddress, write=SetAddress, stored=IsAddressStored};
 	__property AnsiString Host = {read=FHost, write=SetHost, stored=IsHostStored};
-	__property AnsiString InterceptGUID = {read=FInterceptGUID, write=FInterceptGUID};
+	__property InterceptGUID ;
+	__property InterceptName ;
 	__property int Port = {read=FPort, write=FPort, default=211};
-	__property SupportCallbacks ;
+	__property SupportCallbacks  = {default=1};
 	__property ObjectBroker ;
 public:
 	#pragma option push -w-inl
@@ -485,12 +508,13 @@ private:
 	AnsiString FProxyByPass;
 	void *FInetRoot;
 	void *FInetConnect;
-	TDataBlockInterpreter* FInterpreter;
+	TCustomDataBlockInterpreter* FInterpreter;
 	void __fastcall Check(bool Error);
 	bool __fastcall IsURLStored(void);
 	void __fastcall SetURL(const AnsiString Value);
 	
 protected:
+	virtual TCustomDataBlockInterpreter* __fastcall GetInterpreter(void);
 	unsigned __stdcall GetWaitEvent(void);
 	bool __stdcall Transport_GetConnected(void);
 	void __stdcall Transport_SetConnected(bool Value);
@@ -498,7 +522,7 @@ protected:
 	HIDESBASE int __stdcall Send(const _di_IDataBlock Data);
 	virtual _di_ITransport __fastcall CreateTransport();
 	virtual void __fastcall DoConnect(void);
-	__property SupportCallbacks ;
+	__property SupportCallbacks  = {default=0};
 	
 public:
 	__fastcall virtual TWebConnection(Classes::TComponent* AOwner);
@@ -513,8 +537,7 @@ __published:
 	__property AnsiString ProxyByPass = {read=FProxyByPass, write=FProxyByPass};
 	__property ObjectBroker ;
 private:
-	void *__ITransport;	/* Sconnect::ITransport [SetConnected=Transport_SetConnected, GetConnected=Transport_GetConnected
-		] */
+	void *__ITransport;	/* Sconnect::ITransport [SetConnected=Transport_SetConnected, GetConnected=Transport_GetConnected] */
 	
 public:
 	operator ITransport*(void) { return (ITransport*)&__ITransport; }
@@ -533,6 +556,7 @@ static const Shortint asFreeObject = 0x5;
 static const Shortint asGetServers = 0x10;
 static const Shortint asGetGUID = 0x11;
 static const Shortint asGetAppServers = 0x12;
+static const Shortint asSoapCommand = 0x14;
 static const Byte asMask = 0xff;
 static const Word THREAD_SENDSTREAM = 0x401;
 static const Word THREAD_RECEIVEDSTREAM = 0x402;
@@ -544,11 +568,10 @@ extern PACKAGE bool __stdcall (*WSAResetEvent)(unsigned hEvent);
 extern PACKAGE bool __stdcall (*WSACloseEvent)(unsigned hEvent);
 extern PACKAGE int __stdcall (*WSAEventSelect)(int s, unsigned hEventObject, int lNetworkEvents);
 extern PACKAGE bool __fastcall LoadWinSock2(void);
+extern PACKAGE void __fastcall GetPacketInterceptorList(Classes::TStringList* List);
 
 }	/* namespace Sconnect */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Sconnect;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

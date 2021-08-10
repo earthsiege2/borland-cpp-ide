@@ -1,0 +1,54 @@
+object EmployeeDM: TEmployeeDM
+  OldCreateOrder = False
+  Left = 239
+  Top = 180
+  Height = 504
+  Width = 425
+  object employeesource: TDataSource
+    DataSet = employeecds
+    Left = 64
+    Top = 16
+  end
+  object employeeconnection: TSQLConnection
+    ConnectionName = 'IBLocal'
+    DriverName = 'Interbase'
+    GetDriverFunc = 'getSQLDriverINTERBASE'
+    LibraryName = 'libsqlib.so.1'
+    LoadParamsOnConnect = True
+    Params.Strings = (
+      'BlobSize=32'
+      'CommitRetain=True'
+      'Database=/usr/interbase/examples/employee.gdb'
+      'DriverName=Interbase'
+      'Password=masterkey'
+      'RoleName=RoleName'
+      'TransIsolation=ReadCommited'
+      'User_Name=sysdba'
+      'WaitOnLocks=True')
+    VendorLib = 'libgds.so.0'
+    Left = 64
+    Top = 72
+  end
+  object Employeequery: TSQLQuery
+    SQLConnection = employeeconnection
+    MaxBlobSize = 32
+    Params = <>
+    SQL.Strings = (
+      'Select * from employee')
+    Left = 64
+    Top = 136
+  end
+  object employeecds: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'employeeprov'
+    Left = 64
+    Top = 192
+  end
+  object employeeprov: TDataSetProvider
+    DataSet = Employeequery
+    Constraints = True
+    Left = 64
+    Top = 248
+  end
+end

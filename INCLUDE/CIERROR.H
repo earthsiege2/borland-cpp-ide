@@ -1,5 +1,4 @@
 #ifndef _CIERROR_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _CIERROR_H_
 #ifndef FACILITY_WINDOWS
 //
@@ -1278,5 +1277,4 @@
 //
 #define CI_E_CONFIG_DISK_FULL            ((HRESULT)0x80041828L)
 
-#pragma option pop /*P_O_Pop*/
 #endif // _CIERROR_H_

@@ -28,7 +28,6 @@ Abstract:
 
 /*NOINC*/
 #ifndef NETCONS_INCLUDED
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #define NETCONS_INCLUDED
 #if _MSC_VER > 1000
@@ -249,13 +248,12 @@ Abstract:
 //      ncberr.h:       5300 - 5499     NRCERR_BASE
 //      alertmsg.h:     5500 - 5599     ALERT2_BASE
 //      lmsvc.h:        5600 - 5699     SERVICE2_BASE
-//      lmerrlog.h      5700 - 5799     ERRLOG2_BASE
+//      lmerrlog.h      5700 - 5899     ERRLOG2_BASE
 //
 
 #define MIN_LANMAN_MESSAGE_ID  NERR_BASE
-#define MAX_LANMAN_MESSAGE_ID  5799
+#define MAX_LANMAN_MESSAGE_ID  5899
 
 /*NOINC*/
-#pragma option pop /*P_O_Pop*/
 #endif // NETCONS_INCLUDED
 /*INC*/

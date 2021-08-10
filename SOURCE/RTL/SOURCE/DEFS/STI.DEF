@@ -1,7 +1,8 @@
-LIBRARY STI
+LIBRARY Sti
 EXPORTS
 
-    StiCreateInstance                        = 'STI.DLL'.*
-    StiCreateInstanceA                       = 'STI.DLL'.*
-    StiCreateInstanceW                       = 'STI.DLL'.*
-    StiPrivateGetDeviceInfoW                 = 'STI.DLL'.*
+    MigrateRegisteredSTIAppsForWIAEvents
+    RegSTIforWia
+    StiCreateInstance
+    StiCreateInstanceA
+    StiCreateInstanceW

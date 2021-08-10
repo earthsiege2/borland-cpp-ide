@@ -1,8 +1,7 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 /*****************************************************************************
  *
- *   (C) Copyright MICROSOFT Corp., 1988-1990
+ *   (C) Copyright MICROSOFT Corp., 1988 - 1999
  *
  *   Title:     PERF.H - Include file for perf monitor
  *
@@ -301,4 +300,3 @@ HKEY_LOCAL_MACHINE\STATS\VFAT
 /* This is complicated to explain, but very easy to do.                   */
 /* See dos\dos386\vxd\perf\example\example.asm for an example of how to   */
 /* register a complex stat.                                               */
-#pragma option pop /*P_O_Pop*/

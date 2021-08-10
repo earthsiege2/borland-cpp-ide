@@ -107,6 +107,25 @@ extern const GUID IID_IDirectoryObject;
 extern const GUID IID_IDirectoryAttrMgmt;
 
 
+//
+// Connection object GUIDs.
+//
+extern const GUID CLSID_LDAPConnectionObject;
+
+//
+// CLSID for owning LDAP objects interfaces
+//
+extern const GUID CLSID_LDAPObject;
+
+//
+// Query object for the LDAP Provider.
+//
+extern const GUID CLSID_UmiLDAPQueryObject;
+
+extern const GUID CLSID_WinNTConnectionObject;
+
+// Custom interface handling
+extern const GUID CLSID_WinNTObject;
 
 //
 // OLE DB Provider Guids
@@ -124,6 +143,7 @@ extern const GUID DBPROPSET_ADSIBIND;
 #ifdef __cplusplus
 }
 #endif
+
 
 #pragma option pop /*P_O_Pop*/
 #endif

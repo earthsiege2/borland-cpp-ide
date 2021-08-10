@@ -6,10 +6,10 @@
 // (b) Can be used to easily access COM Objects
 // (c) Ease COM related tasks such as Initializing OLE, VARIANT wrappers etc.
 //
-// $Revision:   1.53.1.28  $
-// $Date:   28 Jan 2000 19:34:54  $
+// $Revision:   1.61.1.0.1.12  $
+// $Date:   25 Jan 2002 12:54:28  $
 //
-// Copyright (c) 1998, 2000 Borland International
+// Copyright (c) 1998, 2002 Borland Software Corporation
 /////////////////////////////////////////////////////////////////////////////
 #ifndef __UTILCLS_H
 #define __UTILCLS_H
@@ -24,9 +24,11 @@
 // NOTE: Version 0x0101: Shipping C++Builder v4.0
 //       Version 0x0102: Update to C++Builder v4.0
 //       Version 0x0500: Shipping version of C++Builder v5.0
+//       Version 0X0504: C++ Builder 5.0 patch 1.
+//       Version 0x0600: C++ Builder v.6
 ///////////////////////////////////////////////////////////////////////////////
 
-#define __UTILCLS_H_VERSION 0x0500
+#define __UTILCLS_H_VERSION 0x0600
 
 #include <objbase.h>
 #include <oleauto.h>
@@ -45,8 +47,6 @@ typedef unsigned char    unsigned_char;
 typedef unsigned short   unsigned_short;
 typedef unsigned long    unsigned_long;
 typedef unsigned __int64 unsigned_int64;
-
-
 
 ////////////////////////////////////////////////////////////////////////////////
 // Forward references
@@ -71,6 +71,30 @@ HRESULT COMHlpr_DisconnectEvents(REFIID eventsIID, IUnknown* server, DWORD &cook
 #if !defined(DECLSPEC_UUID)
 #if (__BORLANDC__ >= 0x550)
 #define DECLSPEC_UUID(guid) __declspec(uuid(guid))
+
+// DECLSEPEC_UUID redeclarations for interfaces defined in oaidl.h
+//
+interface DECLSPEC_UUID("00000000-0000-0000-C000-000000000046") IUnknown;
+interface DECLSPEC_UUID("00020400-0000-0000-C000-000000000046") IDispatch;
+interface DECLSPEC_UUID("00020405-0000-0000-C000-000000000046") ICreateTypeInfo;
+interface DECLSPEC_UUID("0002040E-0000-0000-C000-000000000046") ICreateTypeInfo2;
+interface DECLSPEC_UUID("00020406-0000-0000-C000-000000000046") ICreateTypeLib;
+interface DECLSPEC_UUID("0002040F-0000-0000-C000-000000000046") ICreateTypeLib2;
+interface DECLSPEC_UUID("00020404-0000-0000-C000-000000000046") IEnumVARIANT;
+interface DECLSPEC_UUID("00020403-0000-0000-C000-000000000046") ITypeComp;
+interface DECLSPEC_UUID("00020401-0000-0000-C000-000000000046") ITypeInfo;
+interface DECLSPEC_UUID("00020412-0000-0000-C000-000000000046") ITypeInfo2;
+interface DECLSPEC_UUID("00020402-0000-0000-C000-000000000046") ITypeLib;
+interface DECLSPEC_UUID("00020411-0000-0000-C000-000000000046") ITypeLib2;
+interface DECLSPEC_UUID("00020410-0000-0000-C000-000000000046") ITypeChangeEvents;
+interface DECLSPEC_UUID("1CF2B120-547D-101B-8E65-08002B2BD119") IErrorInfo;
+interface DECLSPEC_UUID("22F03340-547D-101B-8E65-08002B2BD119") ICreateErrorInfo;
+interface DECLSPEC_UUID("DF0B3D60-548F-101B-8E65-08002B2BD119")	ISupportErrorInfo;
+interface DECLSPEC_UUID("0000002E-0000-0000-C000-000000000046")	ITypeFactory;
+interface DECLSPEC_UUID("0000002D-0000-0000-C000-000000000046")	ITypeMarshal;
+interface DECLSPEC_UUID("0000002F-0000-0000-C000-000000000046")	IRecordInfo;
+interface DECLSPEC_UUID("3127CA40-446E-11CE-8135-00AA004BB851") IErrorLog;
+interface DECLSPEC_UUID("55272A00-42CB-11CE-8135-00AA004BB851") IPropertyBag;
 #else
 #define DECLSPEC_UUID(guid)
 #endif
@@ -889,6 +913,11 @@ protected:
 template <class T>
 class TBaseVariantT : public T
 {
+/* APH 13.6.01 
+protected:
+  Clear()
+  {
+  } */
 public:
   TBaseVariantT()
   {
@@ -928,7 +957,9 @@ public:
   {
     TBaseVariantT v(*this);
     v.ChangeType(VT_BOOL);
-    return V_BOOL(&v) != VARIANT_FALSE;
+    bool retval = V_BOOL(&v) != VARIANT_FALSE;
+    /* v.Clear(); */
+    return retval;
   }
   operator TOLEBOOL() const
   {
@@ -1112,6 +1143,19 @@ public:
       return (unsigned int*)&(V_UI4(this));
     return NULL;
   }
+
+  operator long*()
+  {
+    _ASSERTE(vt!= VT_UNKNOWN);
+    _ASSERTE(vt!= VT_DISPATCH);
+    _ASSERTE(vt!= (VT_UNKNOWN|VT_BYREF));
+    _ASSERTE(vt!= (VT_DISPATCH|VT_BYREF));
+     
+    if (vt == (VT_UI4|VT_BYREF)) return (long*)V_UI4REF(this);
+    else if (vt == VT_UI4) return (long*)&(V_UI4(this));
+    return NULL;
+  }
+
   operator float*()
   {
     if (vt == (VT_R4|VT_BYREF))
@@ -1614,8 +1658,9 @@ class TVariantInParamT : public TBaseVariantT<T>
     vt = VT_ARRAY|_vt;
     V_ARRAY(this) = psa;
     */
-    SafeArray* psatmp;
-    ::SafeArrayCopy(psa, &psatmp)
+    /* does this leak? aph 13.6.01 */
+    SAFEARRAY* psatmp;
+    ::SafeArrayCopy(psa, &psatmp);
     VARTYPE _vt;
     ::SafeArrayGetVartype(psatmp, &_vt);
     vt = VT_ARRAY|_vt;
@@ -1629,7 +1674,7 @@ class TVariantInParamT : public TBaseVariantT<T>
     vt = VT_ARRAY|VT_BYREF|_vt;
     V_ARRAYREF(this) = ppsa;       */
 
-    SafeArray* psatmp;
+    SAFEARRAY* psatmp;
     ::SafeArrayCopy(*ppsa, &psatmp);
     VARTYPE _vt;
     ::SafeArrayGetVartype(psatmp, &_vt);
@@ -1647,7 +1692,7 @@ class TVariantInParamT : public TBaseVariantT<T>
       // assigned to more than once, we start leaking.
       
       ::VariantClear(this);
-      ::VariantCopy(this, &(const_cast<TVariantInParamT&>(rhs)));
+      ::VariantCopy(this, const_cast<TBaseVariantT<T>*>(&rhs));
     }
     return *this;
   }
@@ -2118,6 +2163,12 @@ class TVariantT : public TBaseVariantT<T>
     ::VariantInit(this);
     SetSAFEARRAY(src);
   }
+  TVariantT(const TVariantT& src)
+  {
+    /* always copies the other variant. */
+    ::VariantInit(this);
+    ::VariantCopy(this, const_cast<TVariant*>(&src));
+  }
   TVariantT(const VARIANT& src)
   {
     /* always copies the other variant. */
@@ -2200,9 +2251,9 @@ class TVariantT : public TBaseVariantT<T>
 
   // Ctr - OLE ptrs
 
-  // By default does not call SysAllocString. Set isSysString = true to
+  // By default calls SysAllocString. Set isSysString = true to
   // override.
-  TVariantT(wchar_t* src, bool isSysString = true)                // BSTR support
+  TVariantT(wchar_t* src, bool isSysString = false)                // BSTR support
   {
     ::VariantInit(this);
     SET_VTYPE_AND_VAR(BSTR, isSysString ? src : ::SysAllocString(src));
@@ -2331,11 +2382,20 @@ class TVariantT : public TBaseVariantT<T>
     if (&rhs != this)
     {
       ::VariantClear(this);
-      ::VariantCopy(this, &(const_cast<TVariantT&>(rhs)));
+      ::VariantCopy(this, const_cast<TBaseVariantT<T>*>(&rhs));
     }
     return *this;
   }
+  TVariantT& operator =(const TVariantT &rhs)
+  {
+    if (&rhs != this)
+    {
+      ::VariantClear(this);
+      ::VariantCopy(this, const_cast<TVariant*>(&rhs));
+    }
 
+    return *this;
+  }
   TVariantT& operator =(bool src)
   {
     ::VariantClear(this);
@@ -2438,6 +2498,13 @@ class TVariantT : public TBaseVariantT<T>
     ::VariantCopy(this, &rhs);
     return *this;
   }
+
+  TVariantT& operator =(TVariantT rhs)
+  {
+    ::VariantClear(this);
+    ::VariantCopy(this, &rhs);
+    return *this;
+  }
   TVariantT& operator =(VARIANT* rhs)
   {
     ::VariantClear(this);
@@ -2453,6 +2520,7 @@ class TVariantT : public TBaseVariantT<T>
     }
     return *this;
   }
+
 #if defined(SYSVARI_H)
   TVariantT& operator =(const System::Variant& rhs)
   {
@@ -3103,16 +3171,62 @@ extern "C"  const IID IID_IFontDisp;
 extern "C"  const IID IID_IPictureDisp;
 extern "C"  const IID CLSID_StdFont;
 extern "C"  const IID CLSID_StdPicture;
-_DEF_SMARTPTR_IID(IUnknown, IID_IUnknown);
-_DEF_SMARTPTR_IID(IDispatch, IID_IDispatch);
-_DEF_SMARTPTR_IID(IFont, IID_IFont);
-_DEF_SMARTPTR_IID(IPicture, IID_IPicture);
-_DEF_SMARTPTR_IID(IFontDisp, IID_IFontDisp);
+
+#if defined(_INC_COMDEF) || defined(USING_COM_SMARTPTR)
+
+  /*
+    If someone wants to use definitions from COMDEF.H and UTILCLS.H, the following
+    makes sure that the common typenames do not conflict.
+    Define USING_COM_SMARTPTR if you have to include COMDEF.H after UTILCLS.H
+
+    WARNING
+    =======
+    In order to avoid name clashes (unfortunately none of these types are
+    namespaced), we'll rename the types in UTILCLS.H to contain an '_' suffix.
+
+    EXAMPLE
+    =======
+    The following allows you to use both IDispatchPtr from COMDEF.H and
+    IDispatchPtr from UTILCLS.H.
+
+    IDispatchPtr  msDispatch;  _com_ptr version defined in COMDEF.H
+    IDispatchPtr_ bDispatch;   TCOMInterface version in UTILCLS.H
+  */
+
+  #pragma message "Typenames collision with COMDEF.H (WARNING) "
+
+  #define IDispatchPtr 	  IDispatchPtr_
+  #define IUnknownPtr 	  IUnknownPtr_
+  #define IFontPtr 	  IFontPtr_
+  #define IFontDispPtr 	  IFontDispPtr_
+  #define IPicturePtr 	  IPicturePtr_
+  #define IPictureDispPtr IPictureDispPtr_
+  #define IEnumVARIANTPtr IEnumVARIANTPtr_
+
+#endif
+
+_DEF_SMARTPTR_IID(IUnknown,     IID_IUnknown);
+_DEF_SMARTPTR_IID(IDispatch,    IID_IDispatch);
+_DEF_SMARTPTR_IID(IFont,        IID_IFont);
+_DEF_SMARTPTR_IID(IPicture,     IID_IPicture);
+_DEF_SMARTPTR_IID(IFontDisp,    IID_IFontDisp);
 _DEF_SMARTPTR_IID(IPictureDisp, IID_IPictureDisp);
 _DEF_SMARTPTR_IID(IEnumVARIANT, IID_IEnumVARIANT);
 
 typedef IUnknownPtr  TCOMIUnknown;    /* Backwards compatibility */
 typedef IDispatchPtr TCOMIDispatch;   /* Backwards compatibility */
+
+#if defined(_INC_COMDEF) || defined(USING_COM_SMARTPTR)
+
+  #undef IDispatchPtr
+  #undef IUnknownPtr
+  #undef IFontPtr
+  #undef IFontDispPtr
+  #undef IPicturePtr
+  #undef IPictureDispPtr
+  #undef IEnumVARIANTPtr
+
+#endif
 
 // Template used to expose 'factory-like' Create/CreateRemote routines for Clients
 //
@@ -3206,7 +3320,8 @@ protected:
   LCID  m_Lcid;
 };
 
-
+#if !defined(__AUTOARGS_DEFINED)
+#define __AUTOARGS_DEFINED
 // Base class that exposes basic behaviour of our array of Variants
 //
 class TAutoArgsBase
@@ -3264,8 +3379,8 @@ template <int Count>
 class TAutoArgs : public TAutoArgsBase
 {
 public:
-  TAutoArgs();
- ~TAutoArgs();
+  TAutoArgs() : TAutoArgsBase(m_Array, Count) {};
+ ~TAutoArgs() {};
  TAutoArgs(TAutoArgs& src);
 
 private:
@@ -3274,20 +3389,7 @@ private:
   //
   VARIANTOBJ m_Array[Count+1];
 };
-
-
-// Build an array of Count (actualy Count+1, extra one for return value)
-// of VARIANTs.
-//
-template <int Count>
-TAutoArgs<Count>::TAutoArgs() : TAutoArgsBase(m_Array, Count)
-{}
-
-// Cleanup array of Variants
-//
-template <int Count>
-TAutoArgs<Count>::~TAutoArgs()
-{}
+#endif
 
 // Enumeration describing DISPATCH type
 //
@@ -3723,6 +3825,7 @@ class TAutoDriver : public TAutoDriverBase<IDispatch>
 public:
   TAutoDriver(LCID lcid = LOCALE_SYSTEM_DEFAULT);
   TAutoDriver(const TAutoDriver<DISPINTF>  &src);
+  TAutoDriver(const DISPINTF* src);
  ~TAutoDriver();
 
   TAutoDriver<DISPINTF>& operator =(const TAutoDriver<DISPINTF>& src)
@@ -3799,6 +3902,12 @@ public:
     return m_Dispatch;
   }
 
+  DISPINTF* operator-> () const
+  {
+    _ASSERTE_(m_Dispatch != 0 /* Must be bound to interface before using -> operator */);
+    return m_Dispatch;
+  }
+
   // Return address of interface
   //
   DISPINTF** operator & ()
@@ -3822,7 +3931,7 @@ public:
 
   // Access to EXCEPINFO
   //
-  EXCEPINFO& get_excepinfo() const { return m_ExcepInfo; }
+  EXCEPINFO const & get_excepinfo() const { return m_ExcepInfo; }
 
   // Properties
   //
@@ -3939,13 +4048,18 @@ protected:
 //
 template <class DISPINTF>
 TAutoDriver<DISPINTF>::TAutoDriver(LCID lcid) : m_Dispatch(0), m_lcid(lcid)
-{}
+{
+  // Clear out ErrArg and ExcepInfo.
+  m_ErrArg=0;
+  ::ZeroMemory(&m_ExcepInfo, sizeof(m_ExcepInfo));
+}
 
 //
+
 template <class DISPINTF>
 TAutoDriver<DISPINTF>::TAutoDriver(const TAutoDriver<DISPINTF>  &src)
 {
-  // NOTE: We do not copy the Exception, ErrArg or InitOle object
+  // NOTE: We do not copy the Exception or ErrArg objects
   //       We simply clear them out
   m_ErrArg = 0;
   ::ZeroMemory(&m_ExcepInfo, sizeof(m_ExcepInfo));
@@ -3957,6 +4071,22 @@ TAutoDriver<DISPINTF>::TAutoDriver(const TAutoDriver<DISPINTF>  &src)
 
   // Copy Locale
   m_lcid = src.m_lcid;
+}
+
+template <class DISPINTF>
+TAutoDriver<DISPINTF>::TAutoDriver(const DISPINTF* src)
+{
+  // NOTE: We do not copy the Exception or ErrArg objects
+  //       We simply clear them out
+  m_ErrArg = 0;
+  ::ZeroMemory(&m_ExcepInfo, sizeof(m_ExcepInfo));
+
+  // Copy Interface and AddRefCount
+  m_Dispatch = src;
+  if (m_Dispatch)
+    m_Dispatch->AddRef();
+
+  m_lcid = LOCALE_SYSTEM_DEFAULT;
 }
 
 template <class DISPINTF>
@@ -3985,7 +4115,7 @@ TAutoDriver<DISPINTF>::Bind(LPUNKNOWN punk)
   _ASSERTE(punk /* Must bind to non-NULL interface pointer */);
   HRESULT hr = E_POINTER;
   if (punk)
-  {
+  { 
     DISPINTF *disp;
     hr = punk->QueryInterface(__uuidof(DISPINTF), (LPVOID*)&disp);
     if (SUCCEEDED(hr))
@@ -4126,7 +4256,7 @@ template <class DISPINTF> HRESULT
 TAutoDriver<DISPINTF>::Invoke(DispatchFlag dFlags, LPCWSTR name, TAutoArgsBase* args, bool hasRetVal)
 {
   DISPID dispid;
-  HRESULT hr = GetIDsOfNames(name, dispId);
+  HRESULT hr = GetIDsOfNames(name, dispid);
   if (SUCCEEDED(hr))
     hr = Invoke(dFlags, dispid, args);
   return hr;
@@ -4152,7 +4282,7 @@ TAutoDriver<DISPINTF>::Invoke(DispatchFlag dFlags, DISPID dispid, TAutoArgsBase*
   // NOTE: PROPERTYPUTs do not return a result
   //
   if (!(dFlags & (dfPropPut|dfPropPutRef)) && hasRetVal)
-    retVal = args->GetRetVal();
+    retVal = (VARIANT*)(args->GetRetVal());
 
   // Special DispId for Property Puts
   //
@@ -4167,7 +4297,7 @@ TAutoDriver<DISPINTF>::Invoke(DispatchFlag dFlags, DISPID dispid, TAutoArgsBase*
   if (args && args->GetCount())
   {
     params.cArgs = args->GetCount();
-    params.rgvarg= args->GetArgs();
+    params.rgvarg= (VARIANT*)(args->GetArgs());
 
     // Handle PROPERTYPUT
     // NOTE: Assumes no named-arguments params have been setup
@@ -4258,7 +4388,7 @@ TDispWrapper<T>::OleFunction(DISPID dispid)
 {
   TAutoDriver<T> driver;
   driver.Bind(this, true);
-  return driver.OleFUnction(dispid);
+  return driver.OleFunction(dispid);
 }
 template <class T> HRESULT __fastcall
 TDispWrapper<T>::OlePropertyPut(DISPID dispid, TAutoArgsBase& args)
@@ -4275,6 +4405,5 @@ TDispWrapper<T>::OlePropertyGet(DISPID dispid, TAutoArgsBase& args)
   return driver.OlePropertyGet(dispid, args);
 }
 
-
-
+#pragma obsolete TVariantInParam
 #endif  __UTILCLS_H

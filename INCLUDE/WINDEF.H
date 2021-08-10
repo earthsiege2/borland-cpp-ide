@@ -2,13 +2,12 @@
 *                                                                           *
 * windef.h -- Basic Windows Type Definitions                                *
 *                                                                           *
-* Copyright (c) 1985-1998, Microsoft Corp. All rights reserved.             *
+* Copyright (c) Microsoft Corporation. All rights reserved.                 *
 *                                                                           *
 ****************************************************************************/
 
 
 #ifndef _WINDEF_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINDEF_
 
 #ifndef NO_STRICT
@@ -277,6 +276,7 @@ DECLARE_HANDLE(HKL);
 DECLARE_HANDLE(HMONITOR);
 DECLARE_HANDLE(HWINEVENTHOOK);
 #endif
+DECLARE_HANDLE(HUMPD);
 #endif /* WINVER >= 0x0500 */
 
 #ifndef _MAC
@@ -379,6 +379,5 @@ typedef struct tagPOINTS
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif /* _WINDEF_ */
 

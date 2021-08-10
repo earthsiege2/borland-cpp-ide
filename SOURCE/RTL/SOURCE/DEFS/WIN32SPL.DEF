@@ -1,6 +1,6 @@
 LIBRARY WIN32SPL
 EXPORTS
 
-    InitializePrintMonitor                   = 'WIN32SPL.DLL'.*
-    InitializePrintProvidor                  = 'WIN32SPL.DLL'.*
-    LibMain                                  = 'WIN32SPL.DLL'.*
+    InitializePrintMonitor                   
+    InitializePrintProvidor                  
+    LibMain                                  

@@ -1,3 +1,11 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1996,2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
+
 // Three layers:
 // - Address space administration
 // - Committed space administration
@@ -751,7 +759,9 @@ var
   b: TBlock;
   bd: PBlockDesc;
 begin
+  Result := False;
   bd := FindCommitted(a);
+  if bd = nil then Exit;
   if bd.addr + bd.size - (a + size) <= sizeof(TFree) then
     size := bd.addr + bd.size - a;
 
@@ -760,9 +770,8 @@ begin
   else
     b := FreeCommitted(a + sizeof(TUsed), size - sizeof(TUsed));
 
-  if b.addr = nil then
-    result := False
-  else begin
+  if b.addr <> nil then
+  begin
     FillBeforeGap(a, b.addr - a);
     if bd.addr + bd.size > b.addr + b.size then
       FillAfterGap(b.addr + b.size, a + size - (b.addr + b.size));
@@ -969,10 +978,13 @@ var
   u: PUsed;
 begin
 
-  if not initialized and not InitAllocator then begin
+  if (not initialized and not InitAllocator) or
+    (size > (High(size) - (sizeof(TUsed) + (cAlign-1)))) then
+  begin
     result := nil;
     exit;
   end;
+
 
   try
     if IsMultiThread then EnterCriticalSection(heapLock);
@@ -1283,8 +1295,6 @@ var
   b: PBlockDesc;
   prevFree: Boolean;
 begin
-
-  heapErrorCode := cHeapOk;
 
   result.TotalAddrSpace   := 0;
   result.TotalUncommitted := 0;

@@ -1,5 +1,5 @@
 LIBRARY DPLAY
 EXPORTS
 
-    DirectPlayCreate                         = 'DPLAY.DLL'.* @1 @0
-    DirectPlayEnumerate                      = 'DPLAY.DLL'.* @2 @1
+    DirectPlayCreate                          @1 @0
+    DirectPlayEnumerate                       @2 @1

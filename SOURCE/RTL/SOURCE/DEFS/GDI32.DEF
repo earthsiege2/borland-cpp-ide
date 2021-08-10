@@ -1,376 +1,376 @@
-LIBRARY GDI32
+LIBRARY Gdi32
 EXPORTS
 
-    AbortDoc                                 = 'GDI32.DLL'.*
-    AbortPath                                = 'GDI32.DLL'.*
-    AddFontMemResourceEx                     = 'GDI32.DLL'.*
-    AddFontResourceA                         = 'GDI32.DLL'.*
-    AddFontResourceExA                       = 'GDI32.DLL'.*
-    AddFontResourceExW                       = 'GDI32.DLL'.*
-    AddFontResourceW                         = 'GDI32.DLL'.*
-    AngleArc                                 = 'GDI32.DLL'.*
-    AnimatePalette                           = 'GDI32.DLL'.*
-    Arc                                      = 'GDI32.DLL'.*
-    ArcTo                                    = 'GDI32.DLL'.*
-    BeginPath                                = 'GDI32.DLL'.*
-    BitBlt                                   = 'GDI32.DLL'.*
-    CancelDC                                 = 'GDI32.DLL'.*
-    CheckColorsInGamut                       = 'GDI32.DLL'.*
-    ChoosePixelFormat                        = 'GDI32.DLL'.*
-    Chord                                    = 'GDI32.DLL'.*
-    CloseEnhMetaFile                         = 'GDI32.DLL'.*
-    CloseFigure                              = 'GDI32.DLL'.*
-    CloseMetaFile                            = 'GDI32.DLL'.*
-    ColorCorrectPalette                      = 'GDI32.DLL'.*
-    ColorMatchToTarget                       = 'GDI32.DLL'.*
-    CombineRgn                               = 'GDI32.DLL'.*
-    CombineTransform                         = 'GDI32.DLL'.*
-    CopyEnhMetaFileA                         = 'GDI32.DLL'.*
-    CopyEnhMetaFileW                         = 'GDI32.DLL'.*
-    CopyMetaFileA                            = 'GDI32.DLL'.*
-    CopyMetaFileW                            = 'GDI32.DLL'.*
-    CreateBitmap                             = 'GDI32.DLL'.*
-    CreateBitmapIndirect                     = 'GDI32.DLL'.*
-    CreateBrushIndirect                      = 'GDI32.DLL'.*
-    CreateColorSpaceA                        = 'GDI32.DLL'.*
-    CreateColorSpaceW                        = 'GDI32.DLL'.*
-    CreateCompatibleBitmap                   = 'GDI32.DLL'.*
-    CreateCompatibleDC                       = 'GDI32.DLL'.*
-    CreateDCA                                = 'GDI32.DLL'.*
-    CreateDCW                                = 'GDI32.DLL'.*
-    CreateDIBPatternBrush                    = 'GDI32.DLL'.*
-    CreateDIBPatternBrushPt                  = 'GDI32.DLL'.*
-    CreateDIBSection                         = 'GDI32.DLL'.*
-    CreateDIBitmap                           = 'GDI32.DLL'.*
-    CreateDiscardableBitmap                  = 'GDI32.DLL'.*
-    CreateEllipticRgn                        = 'GDI32.DLL'.*
-    CreateEllipticRgnIndirect                = 'GDI32.DLL'.*
-    CreateEnhMetaFileA                       = 'GDI32.DLL'.*
-    CreateEnhMetaFileW                       = 'GDI32.DLL'.*
-    CreateFontA                              = 'GDI32.DLL'.*
-    CreateFontIndirectA                      = 'GDI32.DLL'.*
-    CreateFontIndirectExA                    = 'GDI32.DLL'.*
-    CreateFontIndirectExW                    = 'GDI32.DLL'.*
-    CreateFontIndirectW                      = 'GDI32.DLL'.*
-    CreateFontW                              = 'GDI32.DLL'.*
-    CreateHalftonePalette                    = 'GDI32.DLL'.*
-    CreateHatchBrush                         = 'GDI32.DLL'.*
-    CreateICA                                = 'GDI32.DLL'.*
-    CreateICW                                = 'GDI32.DLL'.*
-    CreateMetaFileA                          = 'GDI32.DLL'.*
-    CreateMetaFileW                          = 'GDI32.DLL'.*
-    CreatePalette                            = 'GDI32.DLL'.*
-    CreatePatternBrush                       = 'GDI32.DLL'.*
-    CreatePen                                = 'GDI32.DLL'.*
-    CreatePenIndirect                        = 'GDI32.DLL'.*
-    CreatePolyPolygonRgn                     = 'GDI32.DLL'.*
-    CreatePolygonRgn                         = 'GDI32.DLL'.*
-    CreateRectRgn                            = 'GDI32.DLL'.*
-    CreateRectRgnIndirect                    = 'GDI32.DLL'.*
-    CreateRoundRectRgn                       = 'GDI32.DLL'.*
-    CreateScalableFontResourceA              = 'GDI32.DLL'.*
-    CreateScalableFontResourceW              = 'GDI32.DLL'.*
-    CreateSolidBrush                         = 'GDI32.DLL'.*
-    DPtoLP                                   = 'GDI32.DLL'.*
-    DeleteColorSpace                         = 'GDI32.DLL'.*
-    DeleteDC                                 = 'GDI32.DLL'.*
-    DeleteEnhMetaFile                        = 'GDI32.DLL'.*
-    DeleteMetaFile                           = 'GDI32.DLL'.*
-    DeleteObject                             = 'GDI32.DLL'.*
-    DescribePixelFormat                      = 'GDI32.DLL'.*
-    DeviceCapabilitiesExA                    = 'GDI32.DLL'.*
-    DeviceCapabilitiesExW                    = 'GDI32.DLL'.*
-    DrawEscape                               = 'GDI32.DLL'.*
-    Ellipse                                  = 'GDI32.DLL'.*
-    EnableEUDC                               = 'GDI32.DLL'.*
-    EndDoc                                   = 'GDI32.DLL'.*
-    EndFormPage                              = 'GDI32.DLL'.*
-    EndPage                                  = 'GDI32.DLL'.*
-    EndPath                                  = 'GDI32.DLL'.*
-    EnumEnhMetaFile                          = 'GDI32.DLL'.*
-    EnumFontFamiliesA                        = 'GDI32.DLL'.*
-    EnumFontFamiliesExA                      = 'GDI32.DLL'.*
-    EnumFontFamiliesExW                      = 'GDI32.DLL'.*
-    EnumFontFamiliesW                        = 'GDI32.DLL'.*
-    EnumFontsA                               = 'GDI32.DLL'.*
-    EnumFontsW                               = 'GDI32.DLL'.*
-    EnumICMProfilesA                         = 'GDI32.DLL'.*
-    EnumICMProfilesW                         = 'GDI32.DLL'.*
-    EnumMetaFile                             = 'GDI32.DLL'.*
-    EnumObjects                              = 'GDI32.DLL'.*
-    EqualRgn                                 = 'GDI32.DLL'.*
-    Escape                                   = 'GDI32.DLL'.*
-    EudcLoadLinkW                            = 'GDI32.DLL'.*
-    EudcUnloadLinkW                          = 'GDI32.DLL'.*
-    ExcludeClipRect                          = 'GDI32.DLL'.*
-    ExtCreatePen                             = 'GDI32.DLL'.*
-    ExtCreateRegion                          = 'GDI32.DLL'.*
-    ExtEscape                                = 'GDI32.DLL'.*
-    ExtFloodFill                             = 'GDI32.DLL'.*
-    ExtSelectClipRgn                         = 'GDI32.DLL'.*
-    ExtTextOutA                              = 'GDI32.DLL'.*
-    ExtTextOutW                              = 'GDI32.DLL'.*
-    FillPath                                 = 'GDI32.DLL'.*
-    FillRgn                                  = 'GDI32.DLL'.*
-    FixBrushOrgEx                            = 'GDI32.DLL'.*
-    FlattenPath                              = 'GDI32.DLL'.*
-    FloodFill                                = 'GDI32.DLL'.*
-    FrameRgn                                 = 'GDI32.DLL'.*
-    GdiArtificialDecrementDriver             = 'GDI32.DLL'.*
-    GdiComment                               = 'GDI32.DLL'.*
-    GdiDeleteSpoolFileHandle                 = 'GDI32.DLL'.*
-    GdiEndDocEMF                             = 'GDI32.DLL'.*
-    GdiEndPageEMF                            = 'GDI32.DLL'.*
-    GdiFlush                                 = 'GDI32.DLL'.*
-    GdiGetBatchLimit                         = 'GDI32.DLL'.*
-    GdiGetDC                                 = 'GDI32.DLL'.*
-    GdiGetDevmodeForPage                     = 'GDI32.DLL'.*
-    GdiGetPageCount                          = 'GDI32.DLL'.*
-    GdiGetPageHandle                         = 'GDI32.DLL'.*
-    GdiGetSpoolFileHandle                    = 'GDI32.DLL'.*
-    GdiPlayDCScript                          = 'GDI32.DLL'.*
-    GdiPlayEMF                               = 'GDI32.DLL'.*
-    GdiPlayJournal                           = 'GDI32.DLL'.*
-    GdiPlayPageEMF                           = 'GDI32.DLL'.*
-    GdiPlayPrivatePageEMF                    = 'GDI32.DLL'.*
-    GdiPlayScript                            = 'GDI32.DLL'.*
-    GdiResetDCEMF                            = 'GDI32.DLL'.*
-    GdiSetBatchLimit                         = 'GDI32.DLL'.*
-    GdiStartDocEMF                           = 'GDI32.DLL'.*
-    GdiStartPageEMF                          = 'GDI32.DLL'.*
-    GetArcDirection                          = 'GDI32.DLL'.*
-    GetAspectRatioFilterEx                   = 'GDI32.DLL'.*
-    GetBitmapBits                            = 'GDI32.DLL'.*
-    GetBitmapDimensionEx                     = 'GDI32.DLL'.*
-    GetBkColor                               = 'GDI32.DLL'.*
-    GetBkMode                                = 'GDI32.DLL'.*
-    GetBoundsRect                            = 'GDI32.DLL'.*
-    GetBrushOrgEx                            = 'GDI32.DLL'.*
-    GetCharABCWidthsA                        = 'GDI32.DLL'.*
-    GetCharABCWidthsFloatA                   = 'GDI32.DLL'.*
-    GetCharABCWidthsFloatW                   = 'GDI32.DLL'.*
-    GetCharABCWidthsI                        = 'GDI32.DLL'.*
-    GetCharABCWidthsW                        = 'GDI32.DLL'.*
-    GetCharWidth32A                          = 'GDI32.DLL'.*
-    GetCharWidth32W                          = 'GDI32.DLL'.*
-    GetCharWidthA                            = 'GDI32.DLL'.*
-    GetCharWidthFloatA                       = 'GDI32.DLL'.*
-    GetCharWidthFloatW                       = 'GDI32.DLL'.*
-    GetCharWidthI                            = 'GDI32.DLL'.*
-    GetCharWidthW                            = 'GDI32.DLL'.*
-    GetCharacterPlacementA                   = 'GDI32.DLL'.*
-    GetCharacterPlacementW                   = 'GDI32.DLL'.*
-    GetClipBox                               = 'GDI32.DLL'.*
-    GetClipRgn                               = 'GDI32.DLL'.*
-    GetColorAdjustment                       = 'GDI32.DLL'.*
-    GetColorSpace                            = 'GDI32.DLL'.*
-    GetCurrentObject                         = 'GDI32.DLL'.*
-    GetCurrentPositionEx                     = 'GDI32.DLL'.*
-    GetDCBrushColor                          = 'GDI32.DLL'.*
-    GetDCOrgEx                               = 'GDI32.DLL'.*
-    GetDCPenColor                            = 'GDI32.DLL'.*
-    GetDIBColorTable                         = 'GDI32.DLL'.*
-    GetDIBits                                = 'GDI32.DLL'.*
-    GetDeviceCaps                            = 'GDI32.DLL'.*
-    GetDeviceGammaRamp                       = 'GDI32.DLL'.*
-    GetEnhMetaFileA                          = 'GDI32.DLL'.*
-    GetEnhMetaFileBits                       = 'GDI32.DLL'.*
-    GetEnhMetaFileDescriptionA               = 'GDI32.DLL'.*
-    GetEnhMetaFileDescriptionW               = 'GDI32.DLL'.*
-    GetEnhMetaFileHeader                     = 'GDI32.DLL'.*
-    GetEnhMetaFilePaletteEntries             = 'GDI32.DLL'.*
-    GetEnhMetaFilePixelFormat                = 'GDI32.DLL'.*
-    GetEnhMetaFileW                          = 'GDI32.DLL'.*
-    GetFontAssocStatus                       = 'GDI32.DLL'.*
-    GetFontData                              = 'GDI32.DLL'.*
-    GetFontLanguageInfo                      = 'GDI32.DLL'.*
-    GetFontResourceInfoW                     = 'GDI32.DLL'.*
-    GetFontUnicodeRanges                     = 'GDI32.DLL'.*
-    GetGlyphIndicesA                         = 'GDI32.DLL'.*
-    GetGlyphIndicesW                         = 'GDI32.DLL'.*
-    GetGlyphOutline                          = 'GDI32.DLL'.*
-    GetGlyphOutlineA                         = 'GDI32.DLL'.*
-    GetGlyphOutlineW                         = 'GDI32.DLL'.*
-    GetGraphicsMode                          = 'GDI32.DLL'.*
-    GetICMProfileA                           = 'GDI32.DLL'.*
-    GetICMProfileW                           = 'GDI32.DLL'.*
-    GetKerningPairs                          = 'GDI32.DLL'.*
-    GetKerningPairsA                         = 'GDI32.DLL'.*
-    GetKerningPairsW                         = 'GDI32.DLL'.*
-    GetLayout                                = 'GDI32.DLL'.*
-    GetLogColorSpaceA                        = 'GDI32.DLL'.*
-    GetLogColorSpaceW                        = 'GDI32.DLL'.*
-    GetMapMode                               = 'GDI32.DLL'.*
-    GetMetaFileA                             = 'GDI32.DLL'.*
-    GetMetaFileBitsEx                        = 'GDI32.DLL'.*
-    GetMetaFileW                             = 'GDI32.DLL'.*
-    GetMetaRgn                               = 'GDI32.DLL'.*
-    GetMiterLimit                            = 'GDI32.DLL'.*
-    GetNearestColor                          = 'GDI32.DLL'.*
-    GetNearestPaletteIndex                   = 'GDI32.DLL'.*
-    GetObjectA                               = 'GDI32.DLL'.*
-    GetObjectType                            = 'GDI32.DLL'.*
-    GetObjectW                               = 'GDI32.DLL'.*
-    GetOutlineTextMetricsA                   = 'GDI32.DLL'.*
-    GetOutlineTextMetricsW                   = 'GDI32.DLL'.*
-    GetPaletteEntries                        = 'GDI32.DLL'.*
-    GetPath                                  = 'GDI32.DLL'.*
-    GetPixel                                 = 'GDI32.DLL'.*
-    GetPixelFormat                           = 'GDI32.DLL'.*
-    GetPolyFillMode                          = 'GDI32.DLL'.*
-    GetROP2                                  = 'GDI32.DLL'.*
-    GetRandomRgn                             = 'GDI32.DLL'.*
-    GetRasterizerCaps                        = 'GDI32.DLL'.*
-    GetRegionData                            = 'GDI32.DLL'.*
-    GetRelAbs                                = 'GDI32.DLL'.*
-    GetRgnBox                                = 'GDI32.DLL'.*
-    GetStockObject                           = 'GDI32.DLL'.*
-    GetStretchBltMode                        = 'GDI32.DLL'.*
-    GetSystemPaletteEntries                  = 'GDI32.DLL'.*
-    GetSystemPaletteUse                      = 'GDI32.DLL'.*
-    GetTextAlign                             = 'GDI32.DLL'.*
-    GetTextCharacterExtra                    = 'GDI32.DLL'.*
-    GetTextCharset                           = 'GDI32.DLL'.*
-    GetTextCharsetInfo                       = 'GDI32.DLL'.*
-    GetTextColor                             = 'GDI32.DLL'.*
-    GetTextExtentExPointA                    = 'GDI32.DLL'.*
-    GetTextExtentExPointI                    = 'GDI32.DLL'.*
-    GetTextExtentExPointW                    = 'GDI32.DLL'.*
-    GetTextExtentPoint32A                    = 'GDI32.DLL'.*
-    GetTextExtentPoint32W                    = 'GDI32.DLL'.*
-    GetTextExtentPointA                      = 'GDI32.DLL'.*
-    GetTextExtentPointI                      = 'GDI32.DLL'.*
-    GetTextExtentPointW                      = 'GDI32.DLL'.*
-    GetTextFaceA                             = 'GDI32.DLL'.*
-    GetTextFaceW                             = 'GDI32.DLL'.*
-    GetTextMetricsA                          = 'GDI32.DLL'.*
-    GetTextMetricsW                          = 'GDI32.DLL'.*
-    GetViewportExtEx                         = 'GDI32.DLL'.*
-    GetViewportOrgEx                         = 'GDI32.DLL'.*
-    GetWinMetaFileBits                       = 'GDI32.DLL'.*
-    GetWindowExtEx                           = 'GDI32.DLL'.*
-    GetWindowOrgEx                           = 'GDI32.DLL'.*
-    GetWorldTransform                        = 'GDI32.DLL'.*
-    IntersectClipRect                        = 'GDI32.DLL'.*
-    InvertRgn                                = 'GDI32.DLL'.*
-    LPtoDP                                   = 'GDI32.DLL'.*
-    LineDDA                                  = 'GDI32.DLL'.*
-    LineTo                                   = 'GDI32.DLL'.*
-    MaskBlt                                  = 'GDI32.DLL'.*
-    ModifyWorldTransform                     = 'GDI32.DLL'.*
-    MoveToEx                                 = 'GDI32.DLL'.*
-    OffsetClipRgn                            = 'GDI32.DLL'.*
-    OffsetRgn                                = 'GDI32.DLL'.*
-    OffsetViewportOrgEx                      = 'GDI32.DLL'.*
-    OffsetWindowOrgEx                        = 'GDI32.DLL'.*
-    PaintRgn                                 = 'GDI32.DLL'.*
-    PatBlt                                   = 'GDI32.DLL'.*
-    PathToRegion                             = 'GDI32.DLL'.*
-    Pie                                      = 'GDI32.DLL'.*
-    PlayEnhMetaFile                          = 'GDI32.DLL'.*
-    PlayEnhMetaFileRecord                    = 'GDI32.DLL'.*
-    PlayMetaFile                             = 'GDI32.DLL'.*
-    PlayMetaFileRecord                       = 'GDI32.DLL'.*
-    PlgBlt                                   = 'GDI32.DLL'.*
-    PolyBezier                               = 'GDI32.DLL'.*
-    PolyBezierTo                             = 'GDI32.DLL'.*
-    PolyDraw                                 = 'GDI32.DLL'.*
-    PolyPolygon                              = 'GDI32.DLL'.*
-    PolyPolyline                             = 'GDI32.DLL'.*
-    PolyTextOutA                             = 'GDI32.DLL'.*
-    PolyTextOutW                             = 'GDI32.DLL'.*
-    Polygon                                  = 'GDI32.DLL'.*
-    Polyline                                 = 'GDI32.DLL'.*
-    PolylineTo                               = 'GDI32.DLL'.*
-    PtInRegion                               = 'GDI32.DLL'.*
-    PtVisible                                = 'GDI32.DLL'.*
-    RealizePalette                           = 'GDI32.DLL'.*
-    RectInRegion                             = 'GDI32.DLL'.*
-    RectVisible                              = 'GDI32.DLL'.*
-    Rectangle                                = 'GDI32.DLL'.*
-    RemoveFontMemResourceEx                  = 'GDI32.DLL'.*
-    RemoveFontResourceA                      = 'GDI32.DLL'.*
-    RemoveFontResourceExA                    = 'GDI32.DLL'.*
-    RemoveFontResourceExW                    = 'GDI32.DLL'.*
-    RemoveFontResourceW                      = 'GDI32.DLL'.*
-    ResetDCA                                 = 'GDI32.DLL'.*
-    ResetDCW                                 = 'GDI32.DLL'.*
-    ResizePalette                            = 'GDI32.DLL'.*
-    RestoreDC                                = 'GDI32.DLL'.*
-    RoundRect                                = 'GDI32.DLL'.*
-    SaveDC                                   = 'GDI32.DLL'.*
-    ScaleViewportExtEx                       = 'GDI32.DLL'.*
-    ScaleWindowExtEx                         = 'GDI32.DLL'.*
-    SelectBrushLocal                         = 'GDI32.DLL'.*
-    SelectClipPath                           = 'GDI32.DLL'.*
-    SelectClipRgn                            = 'GDI32.DLL'.*
-    SelectFontLocal                          = 'GDI32.DLL'.*
-    SelectObject                             = 'GDI32.DLL'.*
-    SelectPalette                            = 'GDI32.DLL'.*
-    SetAbortProc                             = 'GDI32.DLL'.*
-    SetArcDirection                          = 'GDI32.DLL'.*
-    SetBitmapBits                            = 'GDI32.DLL'.*
-    SetBitmapDimensionEx                     = 'GDI32.DLL'.*
-    SetBkColor                               = 'GDI32.DLL'.*
-    SetBkMode                                = 'GDI32.DLL'.*
-    SetBoundsRect                            = 'GDI32.DLL'.*
-    SetBrushOrgEx                            = 'GDI32.DLL'.*
-    SetColorAdjustment                       = 'GDI32.DLL'.*
-    SetColorSpace                            = 'GDI32.DLL'.*
-    SetDCBrushColor                          = 'GDI32.DLL'.*
-    SetDCPenColor                            = 'GDI32.DLL'.*
-    SetDIBColorTable                         = 'GDI32.DLL'.*
-    SetDIBits                                = 'GDI32.DLL'.*
-    SetDIBitsToDevice                        = 'GDI32.DLL'.*
-    SetDeviceGammaRamp                       = 'GDI32.DLL'.*
-    SetEnhMetaFileBits                       = 'GDI32.DLL'.*
-    SetFontEnumeration                       = 'GDI32.DLL'.*
-    SetGraphicsMode                          = 'GDI32.DLL'.*
-    SetICMMode                               = 'GDI32.DLL'.*
-    SetICMProfileA                           = 'GDI32.DLL'.*
-    SetICMProfileW                           = 'GDI32.DLL'.*
-    SetLayout                                = 'GDI32.DLL'.*
-    SetMagicColors                           = 'GDI32.DLL'.*
-    SetMapMode                               = 'GDI32.DLL'.*
-    SetMapperFlags                           = 'GDI32.DLL'.*
-    SetMetaFileBitsEx                        = 'GDI32.DLL'.*
-    SetMetaRgn                               = 'GDI32.DLL'.*
-    SetMiterLimit                            = 'GDI32.DLL'.*
-    SetPaletteEntries                        = 'GDI32.DLL'.*
-    SetPixel                                 = 'GDI32.DLL'.*
-    SetPixelFormat                           = 'GDI32.DLL'.*
-    SetPixelV                                = 'GDI32.DLL'.*
-    SetPolyFillMode                          = 'GDI32.DLL'.*
-    SetROP2                                  = 'GDI32.DLL'.*
-    SetRectRgn                               = 'GDI32.DLL'.*
-    SetRelAbs                                = 'GDI32.DLL'.*
-    SetStretchBltMode                        = 'GDI32.DLL'.*
-    SetSystemPaletteUse                      = 'GDI32.DLL'.*
-    SetTextAlign                             = 'GDI32.DLL'.*
-    SetTextCharacterExtra                    = 'GDI32.DLL'.*
-    SetTextColor                             = 'GDI32.DLL'.*
-    SetTextJustification                     = 'GDI32.DLL'.*
-    SetViewportExtEx                         = 'GDI32.DLL'.*
-    SetViewportOrgEx                         = 'GDI32.DLL'.*
-    SetWinMetaFileBits                       = 'GDI32.DLL'.*
-    SetWindowExtEx                           = 'GDI32.DLL'.*
-    SetWindowOrgEx                           = 'GDI32.DLL'.*
-    SetWorldTransform                        = 'GDI32.DLL'.*
-    StartDocA                                = 'GDI32.DLL'.*
-    StartDocW                                = 'GDI32.DLL'.*
-    StartFormPage                            = 'GDI32.DLL'.*
-    StartPage                                = 'GDI32.DLL'.*
-    StretchBlt                               = 'GDI32.DLL'.*
-    StretchDIBits                            = 'GDI32.DLL'.*
-    StrokeAndFillPath                        = 'GDI32.DLL'.*
-    StrokePath                               = 'GDI32.DLL'.*
-    SwapBuffers                              = 'GDI32.DLL'.*
-    TextOutA                                 = 'GDI32.DLL'.*
-    TextOutW                                 = 'GDI32.DLL'.*
-    TranslateCharsetInfo                     = 'GDI32.DLL'.*
-    UnrealizeObject                          = 'GDI32.DLL'.*
-    UpdateColors                             = 'GDI32.DLL'.*
-    UpdateICMRegKeyA                         = 'GDI32.DLL'.*
-    UpdateICMRegKeyW                         = 'GDI32.DLL'.*
-    WidenPath                                = 'GDI32.DLL'.*
-    gdiPlaySpoolStream                       = 'GDI32.DLL'.*
+    AbortDoc
+    AbortPath
+    AddFontMemResourceEx
+    AddFontResourceA
+    AddFontResourceExA
+    AddFontResourceExW
+    AddFontResourceW
+    AngleArc
+    AnimatePalette
+    Arc
+    ArcTo
+    BeginPath
+    BitBlt
+    CancelDC
+    CheckColorsInGamut
+    ChoosePixelFormat
+    Chord
+    CloseEnhMetaFile
+    CloseFigure
+    CloseMetaFile
+    ColorCorrectPalette
+    ColorMatchToTarget
+    CombineRgn
+    CombineTransform
+    CopyEnhMetaFileA
+    CopyEnhMetaFileW
+    CopyMetaFileA
+    CopyMetaFileW
+    CreateBitmap
+    CreateBitmapIndirect
+    CreateBrushIndirect
+    CreateColorSpaceA
+    CreateColorSpaceW
+    CreateCompatibleBitmap
+    CreateCompatibleDC
+    CreateDCA
+    CreateDCW
+    CreateDIBPatternBrush
+    CreateDIBPatternBrushPt
+    CreateDIBSection
+    CreateDIBitmap
+    CreateDiscardableBitmap
+    CreateEllipticRgn
+    CreateEllipticRgnIndirect
+    CreateEnhMetaFileA
+    CreateEnhMetaFileW
+    CreateFontA
+    CreateFontIndirectA
+    CreateFontIndirectExA
+    CreateFontIndirectExW
+    CreateFontIndirectW
+    CreateFontW
+    CreateHalftonePalette
+    CreateHatchBrush
+    CreateICA
+    CreateICW
+    CreateMetaFileA
+    CreateMetaFileW
+    CreatePalette
+    CreatePatternBrush
+    CreatePen
+    CreatePenIndirect
+    CreatePolyPolygonRgn
+    CreatePolygonRgn
+    CreateRectRgn
+    CreateRectRgnIndirect
+    CreateRoundRectRgn
+    CreateScalableFontResourceA
+    CreateScalableFontResourceW
+    CreateSolidBrush
+    DPtoLP
+    DeleteColorSpace
+    DeleteDC
+    DeleteEnhMetaFile
+    DeleteMetaFile
+    DeleteObject
+    DescribePixelFormat
+    DeviceCapabilitiesExA
+    DeviceCapabilitiesExW
+    DrawEscape
+    Ellipse
+    EnableEUDC
+    EndDoc
+    EndFormPage
+    EndPage
+    EndPath
+    EnumEnhMetaFile
+    EnumFontFamiliesA
+    EnumFontFamiliesExA
+    EnumFontFamiliesExW
+    EnumFontFamiliesW
+    EnumFontsA
+    EnumFontsW
+    EnumICMProfilesA
+    EnumICMProfilesW
+    EnumMetaFile
+    EnumObjects
+    EqualRgn
+    Escape
+    EudcLoadLinkW
+    EudcUnloadLinkW
+    ExcludeClipRect
+    ExtCreatePen
+    ExtCreateRegion
+    ExtEscape
+    ExtFloodFill
+    ExtSelectClipRgn
+    ExtTextOutA
+    ExtTextOutW
+    FillPath
+    FillRgn
+    FixBrushOrgEx
+    FlattenPath
+    FloodFill
+    FrameRgn
+    GdiArtificialDecrementDriver
+    GdiComment
+    GdiDeleteSpoolFileHandle
+    GdiEndDocEMF
+    GdiEndPageEMF
+    GdiFlush
+    GdiGetBatchLimit
+    GdiGetDC
+    GdiGetDevmodeForPage
+    GdiGetPageCount
+    GdiGetPageHandle
+    GdiGetSpoolFileHandle
+    GdiPlayDCScript
+    GdiPlayEMF
+    GdiPlayJournal
+    GdiPlayPageEMF
+    GdiPlayPrivatePageEMF
+    GdiPlayScript
+    GdiResetDCEMF
+    GdiSetBatchLimit
+    GdiStartDocEMF
+    GdiStartPageEMF
+    GetArcDirection
+    GetAspectRatioFilterEx
+    GetBitmapBits
+    GetBitmapDimensionEx
+    GetBkColor
+    GetBkMode
+    GetBoundsRect
+    GetBrushOrgEx
+    GetCharABCWidthsA
+    GetCharABCWidthsFloatA
+    GetCharABCWidthsFloatW
+    GetCharABCWidthsI
+    GetCharABCWidthsW
+    GetCharWidth32A
+    GetCharWidth32W
+    GetCharWidthA
+    GetCharWidthFloatA
+    GetCharWidthFloatW
+    GetCharWidthI
+    GetCharWidthW
+    GetCharacterPlacementA
+    GetCharacterPlacementW
+    GetClipBox
+    GetClipRgn
+    GetColorAdjustment
+    GetColorSpace
+    GetCurrentObject
+    GetCurrentPositionEx
+    GetDCBrushColor
+    GetDCOrgEx
+    GetDCPenColor
+    GetDIBColorTable
+    GetDIBits
+    GetDeviceCaps
+    GetDeviceGammaRamp
+    GetEnhMetaFileA
+    GetEnhMetaFileBits
+    GetEnhMetaFileDescriptionA
+    GetEnhMetaFileDescriptionW
+    GetEnhMetaFileHeader
+    GetEnhMetaFilePaletteEntries
+    GetEnhMetaFilePixelFormat
+    GetEnhMetaFileW
+    GetFontAssocStatus
+    GetFontData
+    GetFontLanguageInfo
+    GetFontResourceInfoW
+    GetFontUnicodeRanges
+    GetGlyphIndicesA
+    GetGlyphIndicesW
+    GetGlyphOutline
+    GetGlyphOutlineA
+    GetGlyphOutlineW
+    GetGraphicsMode
+    GetICMProfileA
+    GetICMProfileW
+    GetKerningPairs
+    GetKerningPairsA
+    GetKerningPairsW
+    GetLayout
+    GetLogColorSpaceA
+    GetLogColorSpaceW
+    GetMapMode
+    GetMetaFileA
+    GetMetaFileBitsEx
+    GetMetaFileW
+    GetMetaRgn
+    GetMiterLimit
+    GetNearestColor
+    GetNearestPaletteIndex
+    GetObjectA
+    GetObjectType
+    GetObjectW
+    GetOutlineTextMetricsA
+    GetOutlineTextMetricsW
+    GetPaletteEntries
+    GetPath
+    GetPixel
+    GetPixelFormat
+    GetPolyFillMode
+    GetROP2
+    GetRandomRgn
+    GetRasterizerCaps
+    GetRegionData
+    GetRelAbs
+    GetRgnBox
+    GetStockObject
+    GetStretchBltMode
+    GetSystemPaletteEntries
+    GetSystemPaletteUse
+    GetTextAlign
+    GetTextCharacterExtra
+    GetTextCharset
+    GetTextCharsetInfo
+    GetTextColor
+    GetTextExtentExPointA
+    GetTextExtentExPointI
+    GetTextExtentExPointW
+    GetTextExtentPoint32A
+    GetTextExtentPoint32W
+    GetTextExtentPointA
+    GetTextExtentPointI
+    GetTextExtentPointW
+    GetTextFaceA
+    GetTextFaceW
+    GetTextMetricsA
+    GetTextMetricsW
+    GetViewportExtEx
+    GetViewportOrgEx
+    GetWinMetaFileBits
+    GetWindowExtEx
+    GetWindowOrgEx
+    GetWorldTransform
+    IntersectClipRect
+    InvertRgn
+    LPtoDP
+    LineDDA
+    LineTo
+    MaskBlt
+    ModifyWorldTransform
+    MoveToEx
+    OffsetClipRgn
+    OffsetRgn
+    OffsetViewportOrgEx
+    OffsetWindowOrgEx
+    PaintRgn
+    PatBlt
+    PathToRegion
+    Pie
+    PlayEnhMetaFile
+    PlayEnhMetaFileRecord
+    PlayMetaFile
+    PlayMetaFileRecord
+    PlgBlt
+    PolyBezier
+    PolyBezierTo
+    PolyDraw
+    PolyPolygon
+    PolyPolyline
+    PolyTextOutA
+    PolyTextOutW
+    Polygon
+    Polyline
+    PolylineTo
+    PtInRegion
+    PtVisible
+    RealizePalette
+    RectInRegion
+    RectVisible
+    Rectangle
+    RemoveFontMemResourceEx
+    RemoveFontResourceA
+    RemoveFontResourceExA
+    RemoveFontResourceExW
+    RemoveFontResourceW
+    ResetDCA
+    ResetDCW
+    ResizePalette
+    RestoreDC
+    RoundRect
+    SaveDC
+    ScaleViewportExtEx
+    ScaleWindowExtEx
+    SelectBrushLocal
+    SelectClipPath
+    SelectClipRgn
+    SelectFontLocal
+    SelectObject
+    SelectPalette
+    SetAbortProc
+    SetArcDirection
+    SetBitmapBits
+    SetBitmapDimensionEx
+    SetBkColor
+    SetBkMode
+    SetBoundsRect
+    SetBrushOrgEx
+    SetColorAdjustment
+    SetColorSpace
+    SetDCBrushColor
+    SetDCPenColor
+    SetDIBColorTable
+    SetDIBits
+    SetDIBitsToDevice
+    SetDeviceGammaRamp
+    SetEnhMetaFileBits
+    SetFontEnumeration
+    SetGraphicsMode
+    SetICMMode
+    SetICMProfileA
+    SetICMProfileW
+    SetLayout
+    SetMagicColors
+    SetMapMode
+    SetMapperFlags
+    SetMetaFileBitsEx
+    SetMetaRgn
+    SetMiterLimit
+    SetPaletteEntries
+    SetPixel
+    SetPixelFormat
+    SetPixelV
+    SetPolyFillMode
+    SetROP2
+    SetRectRgn
+    SetRelAbs
+    SetStretchBltMode
+    SetSystemPaletteUse
+    SetTextAlign
+    SetTextCharacterExtra
+    SetTextColor
+    SetTextJustification
+    SetViewportExtEx
+    SetViewportOrgEx
+    SetWinMetaFileBits
+    SetWindowExtEx
+    SetWindowOrgEx
+    SetWorldTransform
+    StartDocA
+    StartDocW
+    StartFormPage
+    StartPage
+    StretchBlt
+    StretchDIBits
+    StrokeAndFillPath
+    StrokePath
+    SwapBuffers
+    TextOutA
+    TextOutW
+    TranslateCharsetInfo
+    UnrealizeObject
+    UpdateColors
+    UpdateICMRegKeyA
+    UpdateICMRegKeyW
+    WidenPath
+    gdiPlaySpoolStream

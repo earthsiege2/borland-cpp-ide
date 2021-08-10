@@ -1,8 +1,8 @@
 LIBRARY SNANLS
 EXPORTS
 
-    CloseNlsRegistry                         = 'SNANLS.DLL'.*
-    IsInstalledCodePage                      = 'SNANLS.DLL'.*
-    OpenNlsRegistry                          = 'SNANLS.DLL'.*
-    SnaNlsInit                               = 'SNANLS.DLL'.*
-    SnaNlsMapString                          = 'SNANLS.DLL'.*
+    CloseNlsRegistry                         
+    IsInstalledCodePage                      
+    OpenNlsRegistry                          
+    SnaNlsInit                               
+    SnaNlsMapString                          

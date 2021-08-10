@@ -81,7 +81,7 @@ Revision History:
 //
 // MessageText:
 //
-//  An invalid Active Directory pathname was passed
+//  An invalid directory pathname was passed
 //
 #define E_ADS_BAD_PATHNAME               _HRESULT_TYPEDEF_(0x80005000L)
 
@@ -90,7 +90,7 @@ Revision History:
 //
 // MessageText:
 //
-//  An unknown Active Directory domain object was requested
+//  An unknown directory domain object was requested
 //
 #define E_ADS_INVALID_DOMAIN_OBJECT      _HRESULT_TYPEDEF_(0x80005001L)
 
@@ -99,7 +99,7 @@ Revision History:
 //
 // MessageText:
 //
-//  An unknown Active Directory user object was requested
+//  An unknown directory user object was requested
 //
 #define E_ADS_INVALID_USER_OBJECT        _HRESULT_TYPEDEF_(0x80005002L)
 
@@ -108,7 +108,7 @@ Revision History:
 //
 // MessageText:
 //
-//  An unknown Active Directory computer object was requested
+//  An unknown directory computer object was requested
 //
 #define E_ADS_INVALID_COMPUTER_OBJECT    _HRESULT_TYPEDEF_(0x80005003L)
 
@@ -117,7 +117,7 @@ Revision History:
 //
 // MessageText:
 //
-//  An unknown Active Directory object was requested
+//  An unknown directory object was requested
 //
 #define E_ADS_UNKNOWN_OBJECT             _HRESULT_TYPEDEF_(0x80005004L)
 
@@ -126,7 +126,7 @@ Revision History:
 //
 // MessageText:
 //
-//  The specified Active Directory property was not set
+//  The specified directory property was not set
 //
 #define E_ADS_PROPERTY_NOT_SET           _HRESULT_TYPEDEF_(0x80005005L)
 
@@ -135,7 +135,7 @@ Revision History:
 //
 // MessageText:
 //
-//  The specified Active Directory property is not supported
+//  The specified directory property is not supported
 //
 #define E_ADS_PROPERTY_NOT_SUPPORTED     _HRESULT_TYPEDEF_(0x80005006L)
 
@@ -144,7 +144,7 @@ Revision History:
 //
 // MessageText:
 //
-//  The specified Active Directory property is invalid
+//  The specified directory property is invalid
 //
 #define E_ADS_PROPERTY_INVALID           _HRESULT_TYPEDEF_(0x80005007L)
 
@@ -162,7 +162,7 @@ Revision History:
 //
 // MessageText:
 //
-//  The specified Active Directory object is not bound to a remote resource
+//  The specified directory object is not bound to a remote resource
 //
 #define E_ADS_OBJECT_UNBOUND             _HRESULT_TYPEDEF_(0x80005009L)
 
@@ -171,7 +171,7 @@ Revision History:
 //
 // MessageText:
 //
-//  The specified Active Directory object has not been modified
+//  The specified directory object has not been modified
 //
 #define E_ADS_PROPERTY_NOT_MODIFIED      _HRESULT_TYPEDEF_(0x8000500AL)
 
@@ -180,7 +180,7 @@ Revision History:
 //
 // MessageText:
 //
-//  The specified Active Directory object has not been modified
+//  The specified directory object has been modified
 //
 #define E_ADS_PROPERTY_MODIFIED          _HRESULT_TYPEDEF_(0x8000500BL)
 
@@ -189,7 +189,7 @@ Revision History:
 //
 // MessageText:
 //
-//  The Active Directory datatype cannot be converted to/from a native DS datatype
+//  The directory datatype cannot be converted to/from a native DS datatype
 //
 #define E_ADS_CANT_CONVERT_DATATYPE      _HRESULT_TYPEDEF_(0x8000500CL)
 
@@ -198,7 +198,7 @@ Revision History:
 //
 // MessageText:
 //
-//  The Active Directory property cannot be found in the cache.
+//  The directory property cannot be found in the cache.
 //
 #define E_ADS_PROPERTY_NOT_FOUND         _HRESULT_TYPEDEF_(0x8000500DL)
 
@@ -207,7 +207,7 @@ Revision History:
 //
 // MessageText:
 //
-//  The Active Directory object exists.
+//  The directory object exists.
 //
 #define E_ADS_OBJECT_EXISTS              _HRESULT_TYPEDEF_(0x8000500EL)
 
@@ -225,7 +225,7 @@ Revision History:
 //
 // MessageText:
 //
-//  The specified column in the Active Directory was not set.
+//  The specified column in the directory was not set.
 //
 #define E_ADS_COLUMN_NOT_SET             _HRESULT_TYPEDEF_(0x80005010L)
 
@@ -264,5 +264,6 @@ Revision History:
 //  The search filter specified is invalid
 //
 #define E_ADS_INVALID_FILTER             _HRESULT_TYPEDEF_(0x80005014L)
+
 
 #pragma option pop /*P_O_Pop*/

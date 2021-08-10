@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // ATLMOD.H - Helper classes (based on ATL) used by CBuilder ActiveX Servers
 //
-// $Revision:   1.25.1.11  $
-// $Date:   21 Jan 2000 15:56:52  $
+// $Revision:   1.28.1.0.1.0  $
+// $Date:   22 Jan 2002 11:37:50  $
 //
 // Copyright (c) 1999, 2000 Borland International
 /////////////////////////////////////////////////////////////////////////////
@@ -116,9 +116,8 @@ public:
 
  ~TATLModule();
 
-#if defined(USING_VCL)
   LONG        Unlock();
-#endif
+
   // Data members of TATLModule<T>
   //
   DWORD       m_ThreadID;             // Thread identifier of module
@@ -239,7 +238,6 @@ void TATLModule<T>::DoFileAndObjectRegistration()
 #endif  // USING_VCL
 
 
-#if defined(USING_VCL)
 // Override's CComModule's Unlock to post a WM_QUIT message for out-of-proc servers
 //
 template <class T>
@@ -257,7 +255,7 @@ LONG TATLModule<T>::Unlock()
   }
   return result;
 }
-#endif
+
 
 // _Module is assumed to be a reference to a TComModule
 // User may define _Module to be a ref. to an instance of a class derived
@@ -372,7 +370,7 @@ HRESULT TRegistrarBaseT<T>::CreateRegKey(LPCTSTR keyStr, LPCTSTR ValueName, LPCT
   CRegKey key;
   HRESULT status = key.Create(HKEY_CLASSES_ROOT, keyStr);
 
-  if (status == ERROR_SUCCESS)
+  if ((status == ERROR_SUCCESS) && (Value != NULL))
   {
     status = key.SetValue(Value, ValueName);
 
@@ -697,7 +695,7 @@ HRESULT TTypedComServerRegistrarT<T>::UpdateRegistry(bool Register)
     BSTR description;
     hres = pTypeInfo->GetDocumentation(MEMBERID_NIL, NULL,
                                        &description, NULL, NULL);
-    if (SUCCEEDED(hres))
+    if (SUCCEEDED(hres) && description!=NULL)
     {
 #if !defined(UNICODE) && !defined(_UNICODE)
       m_Description = WideToAnsi(description);

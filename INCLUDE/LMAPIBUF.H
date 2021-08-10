@@ -22,7 +22,6 @@ Notes:
 --*/
 
 #ifndef _LMAPIBUF_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMAPIBUF_
 
 #if _MSC_VER > 1000
@@ -76,5 +75,4 @@ NetapipBufferAllocate (                 // Internal Function
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _LMAPIBUF_

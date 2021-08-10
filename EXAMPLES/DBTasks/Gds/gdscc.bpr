@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="gdscc.exe"/>
+    <OBJFILES value="gdscc.obj DataMod.obj ..\OBJRepos\basemod.obj CustMod.obj homemod.obj 
+      TermMod.obj $(BCB)\ObjRepos\customdm.obj"/>
+    <RESFILES value="Gdscc.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) DataMod.dfm ..\OBJRepos\basemod.dfm CustMod.dfm homemod.dfm 
+      TermMod.dfm $(BCB)\ObjRepos\customdm.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="rtl.lib vcl.lib bdertl.lib dbrtl.lib vcldb.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi bdertl.bpi dbrtl.bpi vcldb.bpi"/>
+    <PATHCPP value=".;..\OBJRepos;$(BCB)\ObjRepos"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value=""/>
+    <SYSDEFINES value="NO_STRICT;_ATL_SINGLE_THREADED;USEPACKAGES"/>
+    <MAINSOURCE value="GDSCC.cpp"/>
+    <INCLUDEPATH value="$(BCB)\ObjRepos;$(BCB)\include;$(BCB)\include\vcl;..\OBJRepos"/>
+    <LIBPATH value="$(BCB)\ObjRepos;$(BCB)\lib;$(BCB)\lib\obj;..\OBJRepos"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
+    <OTHERFILES value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\objrepos -I$(BCB)\examples\dbtasks\jump\objrepos 
+      -I..\OBJREPOS -I$(BCB)\include -I$(BCB)\include\vcl"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c -tW"/>
+    <PFLAGS value="-$YD -$A8 -v -JPHNV -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -v"/>
+    <OTHERFILES value=""/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+    <OTHERFILES value=""/>
+  </LINKER>
+  <FILELIST>
+      <FILE FILENAME="gdscc.cpp" FORMNAME="" UNITNAME="GDSCC" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="DataMod.cpp" FORMNAME="Data" UNITNAME="DataMod" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="readme.txt" FORMNAME="" UNITNAME="readme" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\OBJRepos\basemod.cpp" FORMNAME="Base" UNITNAME="BaseMod" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="CustMod.cpp" FORMNAME="Cust" UNITNAME="CustMod" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="homemod.cpp" FORMNAME="Home" UNITNAME="HomeMod" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="TermMod.cpp" FORMNAME="Term" UNITNAME="TermMod" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Gdscc.res" FORMNAME="" UNITNAME="Gdscc" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="$(BCB)\ObjRepos\customdm.cpp" FORMNAME="CustomerData" UNITNAME="customdm" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1033
+CodePage=1252
+
+[HistoryLists\hlIncludePath]
+Count=0
+
+[HistoryLists\hlLibraryPath]
+Count=0
+
+[Debugging]
+DebugSourceDirs=
+
+[Parameters]
+RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteLauncher=
+RemoteCWD=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=1
+LinkCGLIB=0
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
+  </IDEOPTIONS>
+</PROJECT>

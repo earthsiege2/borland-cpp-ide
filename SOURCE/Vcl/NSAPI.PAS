@@ -1,15 +1,17 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1997-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
 {       Structure definitions and prototypes for the    }
 {       Netscape Internet Server API (NSAPI)            }
-{                                                       }
-{       Copyright (C) 1997,99 Inprise Corporation       }
-{                                                       }
 {*******************************************************}
 
-unit NSApi;
+unit Nsapi;
 
 {$WEAKPACKAGEUNIT}
 
@@ -338,7 +340,7 @@ type
   SYS_FILE = ^TFile;
   TFile = record
     fh: THandle;
-	fname: PChar;
+    fname: PChar;
     flsem: Semaphore;
   end;
   file_s = TFile;
@@ -1429,11 +1431,11 @@ const
 type
   PMultipleDomains = ^TMultipleDomains;
   TMultipleDomains = record
-	address: PChar;
-	docroot: PChar;
-	sd: SYS_NETFD;
-	threads: Integer;
-	AddressNumber: Integer;
+    address: PChar;
+    docroot: PChar;
+    sd: SYS_NETFD;
+    threads: Integer;
+    AddressNumber: Integer;
   end;
   multiple_domains = TMultipleDomains;
 
@@ -1455,16 +1457,16 @@ type
     proclife: Integer;
     maxthreads: Integer;
     minthreads: Integer;
-{$ifdef NET_SSL}
-    char *secure_keyfn;
-    char *secure_certfn;
-    int secure_auth;
-    int secure_session_timeout;
-    long ssl3_secure_session_timeout;
-    int security;
-    int ssl3;
-    int ssl2;
-{$endif}
+
+
+
+
+
+
+
+
+
+
   end;
   daemon_s = TDaemon;
 
@@ -1503,10 +1505,10 @@ procedure daemon_atrestart(fn: TDaemonAtRestart; data: Pointer); cdecl;
 function child_fork: pid_t;
 
 {* servssl_init is in base/servssl.c *}
-{$ifdef NET_SSL}
-procedure servssl_init(keyfn, certfn: PChar; stimeout: Integer; ssl3timeout: Longint;
-  servid: PChar); cdecl;
-{$endif NET_SSL}
+
+
+
+
 
 {*****************************************************************************}
 {* From util.h                                                                }
@@ -1974,7 +1976,7 @@ function ntpblock_str2pblock(ParameterIndex: Integer; name, value: PChar;
 
 {* Get name value pair from a pblock entry *}
 function ntpblock_pblock2str(p: PPbEntry; var ParameterName,
-	ParameterValue: PChar): Integer; cdecl;
+  ParameterValue: PChar): Integer; cdecl;
 
 {* Given a key and its parent, delete the key recursively *}
 function ClearConfigurationParameters(hParentKey: HKEY; CompleteKeyName,
@@ -2045,16 +2047,16 @@ type
     Vpool_maxthreads: Integer;
     {* For multiprocess UNIX servers, the minimum threads per process *}
     Vpool_minthreads: Integer;
-{$ifdef NET_SSL}
-    Vsecure_keyfn: PChar;
-    Vsecure_certfn: PChar;
-    Vsecurity_active: Integer;
-    Vssl3_active: Integer;
-    Vssl2_active: Integer;
-    Vsecure_auth: Integer;
-    Vsecurity_session_timeout: Integer;
-    Vssl3_session_timeout: Longint;
-{$endif} {* NET_SSL *}
+
+
+
+
+
+
+
+
+
+ {* NET_SSL *}
     {* The server's hostname as should be reported in self-ref URLs *}
     Vserver_hostname: PChar;
     {* The main object from which all are derived *}
@@ -2077,7 +2079,8 @@ function pool_max: Integer;
 function pool_min: Integer;
 function pool_life: Integer;
 function pool_maxthreads: Integer;
-function pool_minthreads: Integer;
+function pool_minthreads: Integer;
+
 
 
 
@@ -2174,9 +2177,9 @@ type
     staterr: PChar;
     finfo: PStat;
     {* access control state *}
-    aclstate: Integer;	{* ACL decision state *}
-    acldirno: Integer;	{* deciding ACL directive number *}
-    aclname: PChar;		{* name of deciding ACL *}
+    aclstate: Integer;  {* ACL decision state *}
+    acldirno: Integer;  {* deciding ACL directive number *}
+    aclname: PChar;     {* name of deciding ACL *}
     aclpb: PPblock;     {* parameter block for ACL PathCheck *}
     request_is_cacheable: BOOL;   {* default TRUE *}
     directive_is_cacheable: BOOL; {* default FALSE *}
@@ -2298,10 +2301,10 @@ const
   PROTOCOL_SERVER_ERROR = 500;
   PROTOCOL_NOT_IMPLEMENTED = 501;
 
-{$ifdef NET_SSL}
-  HTTPS_PORT = 443;
-  HTTPS_URL = 'https';
-{$endif}
+
+
+
+
   HTTP_PORT = 80;
   HTTP_URL = 'http';
 
@@ -2680,7 +2683,8 @@ function pool_minthreads: Integer;
 begin
   Result := conf_getglobals.Vpool_minthreads;
 end;
-
+
+
 
 
 
@@ -2904,9 +2908,9 @@ procedure systhread_setdata; external nshttp name 'systhread_setdata';
 procedure _ntdaemon_run; external nshttp name '_ntdaemon_run';
 procedure daemon_atrestart; external nshttp name 'daemon_atrestart';
 function child_fork; external nshttp name 'child_fork';
-{$ifdef NET_SSL}
-procedure servssl_init; external nshttp name 'servssl_init';
-{$endif NET_SSL}
+
+
+
 function util_getline; external nshttp name 'util_getline';
 function util_env_create; external nshttp name 'util_env_create';
 function util_env_str; external nshttp name 'util_env_str';

@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 #include "cspin.h"
 #include "samp.h"
@@ -10,18 +10,6 @@
 
 //!BB Hack until RTL/Lib fixes GetSystemMetrics being remapped to something that's not resolved by Linker
 #define xGetSystemMetrics GetSystemMetrics
-
-//---------------------------------------------------------------------------
-namespace Cspin {
-void __fastcall PACKAGE Register()
-{
-  TComponentClass classes[2] = {__classid(TCSpinButton),
-                                __classid(TCSpinEdit)};
-  RegisterComponents(LoadStr(Tab_101),
-                     classes,
-                     (sizeof(classes)/sizeof(classes[0])) - 1);
-}
-} //end namespace
 
 //---------------------------------------------------------------------------
 // TCSpinButton

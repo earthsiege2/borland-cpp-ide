@@ -1,8 +1,9 @@
+
 {*******************************************************}
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1996,99 Inprise Corporation       }
+{  Copyright (c) 1996-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -12,8 +13,8 @@ unit ComCtrls;
 
 interface
 
-uses Messages, Windows, SysUtils, CommCtrl, Classes, Controls, Forms,
-  Menus, Graphics, StdCtrls, RichEdit, ToolWin, ImgList, ExtCtrls;
+uses Messages, Windows, SysUtils, CommCtrl, Controls, Forms, Classes,
+  Menus, Graphics, StdCtrls, RichEdit, ToolWin, ImgList, ExtCtrls, ListActns;
 
 type
   THitTest = (htAbove, htBelow, htNowhere, htOnItem, htOnButton, htOnIcon,
@@ -52,6 +53,7 @@ type
     FTabs: TStrings;
     FTabSize: TSmallPoint;
     FUpdating: Boolean;
+    FSavedAdjustRect: TRect;
     FOnChange: TNotifyEvent;
     FOnChanging: TTabChangingEvent;
     FOnDrawTab: TDrawTabEvent;
@@ -81,6 +83,7 @@ type
     procedure CNNotify(var Message: TWMNotify); message CN_NOTIFY;
     procedure CMDialogChar(var Message: TCMDialogChar); message CM_DIALOGCHAR;
     procedure CNDrawItem(var Message: TWMDrawItem); message CN_DRAWITEM;
+    procedure TCMAdjustRect(var Message: TMessage); message TCM_ADJUSTRECT;
     procedure WMDestroy(var Message: TWMDestroy); message WM_DESTROY;
     procedure WMNotifyFormat(var Message: TMessage); message WM_NOTIFYFORMAT;
     procedure WMSize(var Message: TMessage); message WM_SIZE;
@@ -301,7 +304,7 @@ type
     destructor Destroy; override;
     function FindNextPage(CurPage: TTabSheet;
       GoForward, CheckTabVisible: Boolean): TTabSheet;
-    procedure SelectNextPage(GoForward: Boolean);
+    procedure SelectNextPage(GoForward: Boolean; CheckTabVisible: Boolean = True);
     property ActivePageIndex: Integer read GetActivePageIndex
       write SetActivePageIndex;
     property PageCount: Integer read GetPageCount;
@@ -331,6 +334,7 @@ type
     property ShowHint;
     property Style;
     property TabHeight;
+    property TabIndex;
     property TabOrder;
     property TabPosition;
     property TabStop;
@@ -359,12 +363,13 @@ type
     property OnUnDock;
   end;
 
-{ TStatusBar }
+{ TCustomStatusBar }
 
-  TStatusBar = class;
-
+  TCustomStatusBar = class;
+  TStatusPanels = class;
   TStatusPanelStyle = (psText, psOwnerDraw);
   TStatusPanelBevel = (pbNone, pbLowered, pbRaised);
+  TStatusPanelClass = class of TStatusPanel;
 
   TStatusPanel = class(TCollectionItem)
   private
@@ -404,35 +409,39 @@ type
 
   TStatusPanels = class(TCollection)
   private
-    FStatusBar: TStatusBar;
+    FStatusBar: TCustomStatusBar;
     function GetItem(Index: Integer): TStatusPanel;
     procedure SetItem(Index: Integer; Value: TStatusPanel);
   protected
     function GetOwner: TPersistent; override;
     procedure Update(Item: TCollectionItem); override;
   public
-    constructor Create(StatusBar: TStatusBar);
+    constructor Create(StatusBar: TCustomStatusBar);
     function Add: TStatusPanel;
+    function AddItem(Item: TStatusPanel; Index: Integer): TStatusPanel;
+    function Insert(Index: Integer): TStatusPanel;
     property Items[Index: Integer]: TStatusPanel read GetItem write SetItem; default;
   end;
 
-  TDrawPanelEvent = procedure(StatusBar: TStatusBar; Panel: TStatusPanel;
+  TCustomDrawPanelEvent = procedure(StatusBar: TCustomStatusBar; Panel: TStatusPanel;
     const Rect: TRect) of object;
+  TSBCreatePanelClassEvent = procedure(Sender: TCustomStatusBar;
+    var PanelClass: TStatusPanelClass) of object;
 
-  TStatusBar = class(TWinControl)
+  TCustomStatusBar = class(TWinControl)
   private
     FPanels: TStatusPanels;
     FCanvas: TCanvas;
     FSimpleText: string;
     FSimplePanel: Boolean;
-    FSizeGrip: Boolean;
+    FSizeGrip, FSizeGripValid: Boolean;
     FUseSystemFont: Boolean;
     FAutoHint: Boolean;
-    FOnDrawPanel: TDrawPanelEvent;
+    FOnDrawPanel: TCustomDrawPanelEvent;
     FOnHint: TNotifyEvent;
+    FOnCreatePanelClass: TSBCreatePanelClassEvent;
     procedure DoRightToLeftAlignment(var Str: string; AAlignment: TAlignment;
       ARTLAlignment: Boolean);
-    function IsFontStored: Boolean;
     procedure SetPanels(Value: TStatusPanels);
     procedure SetSimplePanel(Value: Boolean);
     procedure UpdateSimpleText;
@@ -452,21 +461,51 @@ type
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
     procedure WMSize(var Message: TWMSize); message WM_SIZE;
     procedure SetUseSystemFont(const Value: Boolean);
+    procedure ValidateSizeGrip(ARecreate: Boolean);
   protected
     procedure ChangeScale(M, D: Integer); override;
+    function CreatePanel: TStatusPanel; virtual;
+    function CreatePanels: TStatusPanels; virtual;
     procedure CreateParams(var Params: TCreateParams); override;
     procedure CreateWnd; override;
     function DoHint: Boolean; virtual;
     procedure DrawPanel(Panel: TStatusPanel; const Rect: TRect); dynamic;
+    function GetPanelClass: TStatusPanelClass; virtual;
+    function IsFontStored: Boolean;
+    procedure SetParent(AParent: TWinControl); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function ExecuteAction(Action: TBasicAction): Boolean; override;
     procedure FlipChildren(AllLevels: Boolean); override;
+    procedure SetBounds(ALeft, ATop, AWidth, AHeight: Integer); override;
     property Canvas: TCanvas read FCanvas;
+    property AutoHint: Boolean read FAutoHint write FAutoHint;
+    property Panels: TStatusPanels read FPanels write SetPanels;
+    property SimplePanel: Boolean read FSimplePanel write SetSimplePanel;
+    property SimpleText: string read FSimpleText write SetSimpleText;
+    property SizeGrip: Boolean read FSizeGrip write SetSizeGrip;
+    property UseSystemFont: Boolean read FUseSystemFont write SetUseSystemFont;
+    property OnCreatePanelClass: TSBCreatePanelClassEvent read FOnCreatePanelClass
+      write FOnCreatePanelClass;
+    property OnHint: TNotifyEvent read FOnHint write FOnHint;
+    property OnDrawPanel: TCustomDrawPanelEvent read FOnDrawPanel write FOnDrawPanel;
+  end;
+
+{ TStatusBar }
+
+  TStatusBar = class;
+
+  TDrawPanelEvent = procedure(StatusBar: TStatusBar; Panel: TStatusPanel;
+    const Rect: TRect) of object;
+
+  TStatusBar = class(TCustomStatusBar)
+  private
+    function GetOnDrawPanel: TDrawPanelEvent;
+    procedure SetOnDrawPanel(const Value: TDrawPanelEvent);
   published
     property Action;
-    property AutoHint: Boolean read FAutoHint write FAutoHint default False;
+    property AutoHint default False;
     property Align default alBottom;
     property Anchors;
     property BiDiMode;
@@ -478,30 +517,32 @@ type
     property Enabled;
     property Font stored IsFontStored;
     property Constraints;
-    property Panels: TStatusPanels read FPanels write SetPanels;
+    property Panels;
     property ParentBiDiMode;
     property ParentColor default False;
     property ParentFont default False;
     property ParentShowHint;
     property PopupMenu;
     property ShowHint;
-    property SimplePanel: Boolean read FSimplePanel write SetSimplePanel;
-    property SimpleText: string read FSimpleText write SetSimpleText;
-    property SizeGrip: Boolean read FSizeGrip write SetSizeGrip default True;
-    property UseSystemFont: Boolean read FUseSystemFont write SetUseSystemFont default True;
+    property SimplePanel;
+    property SimpleText;
+    property SizeGrip default True;
+    property UseSystemFont default True;
     property Visible;
     property OnClick;
     property OnContextPopup;
+    property OnCreatePanelClass;    
     property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
     property OnEndDock;
     property OnEndDrag;
-    property OnHint: TNotifyEvent read FOnHint write FOnHint;
+    property OnHint;
     property OnMouseDown;
     property OnMouseMove;
     property OnMouseUp;
-    property OnDrawPanel: TDrawPanelEvent read FOnDrawPanel write FOnDrawPanel;
+    // Required for backwards compatibility with the old event signature
+    property OnDrawPanel: TDrawPanelEvent read GetOnDrawPanel write SetOnDrawPanel;
     property OnResize;
     property OnStartDock;
     property OnStartDrag;
@@ -514,11 +555,16 @@ type
   TCustomDrawState = set of (cdsSelected, cdsGrayed, cdsDisabled, cdsChecked,
     cdsFocused, cdsDefault, cdsHot, cdsMarked, cdsIndeterminate);
 
+{ TCustomHeaderControl }
+
+  TCustomHeaderControl = class;
+  
 { THeaderControl }
 
   THeaderControl = class;
 
   THeaderSectionStyle = (hsText, hsOwnerDraw);
+  THeaderSectionClass = class of THeaderSection;
 
   THeaderSection = class(TCollectionItem)
   private
@@ -572,33 +618,37 @@ type
 
   THeaderSections = class(TCollection)
   private
-    FHeaderControl: THeaderControl;
+    FHeaderControl: TCustomHeaderControl;
     function GetItem(Index: Integer): THeaderSection;
     procedure SetItem(Index: Integer; Value: THeaderSection);
   protected
     function GetOwner: TPersistent; override;
     procedure Update(Item: TCollectionItem); override;
   public
-    constructor Create(HeaderControl: THeaderControl);
+    constructor Create(HeaderControl: TCustomHeaderControl);
     function Add: THeaderSection;
+    function AddItem(Item: THeaderSection; Index: Integer): THeaderSection;
+    function Insert(Index: Integer): THeaderSection;
     property Items[Index: Integer]: THeaderSection read GetItem write SetItem; default;
   end;
 
   TSectionTrackState = (tsTrackBegin, tsTrackMove, tsTrackEnd);
 
-  TDrawSectionEvent = procedure(HeaderControl: THeaderControl;
+  TCustomDrawSectionEvent = procedure(HeaderControl: TCustomHeaderControl;
     Section: THeaderSection; const Rect: TRect; Pressed: Boolean) of object;
-  TSectionNotifyEvent = procedure(HeaderControl: THeaderControl;
+  TCustomSectionNotifyEvent = procedure(HeaderControl: TCustomHeaderControl;
     Section: THeaderSection) of object;
-  TSectionTrackEvent = procedure(HeaderControl: THeaderControl;
+  TCustomSectionTrackEvent = procedure(HeaderControl: TCustomHeaderControl;
     Section: THeaderSection; Width: Integer;
     State: TSectionTrackState) of object;
   TSectionDragEvent = procedure (Sender: TObject; FromSection, ToSection: THeaderSection;
     var AllowDrag: Boolean) of object;
+  TCustomHCCreateSectionClassEvent = procedure(Sender: TCustomHeaderControl;
+    var SectionClass: THeaderSectionClass) of object;
 
   THeaderStyle = (hsButtons, hsFlat);
 
-  THeaderControl = class(TWinControl)
+  TCustomHeaderControl = class(TWinControl)
   private
     FSections: THeaderSections;
     FSectionStream: TMemoryStream;
@@ -616,12 +666,13 @@ type
     FTrackSection: THeaderSection;
     FTrackWidth: Integer;
     FTrackPos: TPoint;
-    FOnDrawSection: TDrawSectionEvent;
-    FOnSectionClick: TSectionNotifyEvent;
-    FOnSectionResize: TSectionNotifyEvent;
-    FOnSectionTrack: TSectionTrackEvent;
+    FOnDrawSection: TCustomDrawSectionEvent;
+    FOnSectionClick: TCustomSectionNotifyEvent;
+    FOnSectionResize: TCustomSectionNotifyEvent;
+    FOnSectionTrack: TCustomSectionTrackEvent;
     FOnSectionDrag: TSectionDragEvent;
     FOnSectionEndDrag: TNotifyEvent;
+    FOnCreateSectionClass: TCustomHCCreateSectionClassEvent;
     function  DoSectionDrag(FromSection, ToSection: THeaderSection): Boolean;
     procedure DoSectionEndDrag;
     procedure ImageListChange(Sender: TObject);
@@ -640,6 +691,8 @@ type
     procedure WMSize(var Message: TWMSize); message WM_SIZE;
     procedure WMWindowPosChanged(var Message: TWMWindowPosChanged); message WM_WINDOWPOSCHANGED;
   protected
+    function CreateSection: THeaderSection; virtual;
+    function CreateSections: THeaderSections; virtual;
     procedure CreateParams(var Params: TCreateParams); override;
     procedure CreateWnd; override;
     procedure DestroyWnd; override;
@@ -668,21 +721,76 @@ type
     property DragKind;
     property DragMode;
     property DragReorder: Boolean read FDragReorder write SetDragReorder;
+    property FullDrag: Boolean read FFullDrag write SetFullDrag;
+    property HotTrack: Boolean read FHotTrack write SetHotTrack;
     property Enabled;
     property Font;
-    property FullDrag: Boolean read FFullDrag write SetFullDrag default True;
-    property HotTrack: Boolean read FHotTrack write SetHotTrack default False;
     property Images: TCustomImageList read FImages write SetImages;
     property Constraints;
     property Sections: THeaderSections read FSections write SetSections;
+    property Style: THeaderStyle read FStyle write SetStyle;
+    property OnCreateSectionClass: TCustomHCCreateSectionClassEvent read FOnCreateSectionClass
+      write FOnCreateSectionClass;
+    property OnDrawSection: TCustomDrawSectionEvent read FOnDrawSection write FOnDrawSection;
+    property OnSectionClick: TCustomSectionNotifyEvent read FOnSectionClick
+      write FOnSectionClick;
+    property OnSectionDrag: TSectionDragEvent read FOnSectionDrag
+      write FOnSectionDrag;
+    property OnSectionEndDrag: TNotifyEvent read FOnSectionEndDrag
+      write FOnSectionEndDrag;
+    property OnSectionResize: TCustomSectionNotifyEvent read FOnSectionResize
+      write FOnSectionResize;
+    property OnSectionTrack: TCustomSectionTrackEvent read FOnSectionTrack
+      write FOnSectionTrack;
+  end;
+
+{ THeaderControl }
+
+  TDrawSectionEvent = procedure(HeaderControl: THeaderControl;
+    Section: THeaderSection; const Rect: TRect; Pressed: Boolean) of object;
+  TSectionNotifyEvent = procedure(HeaderControl: THeaderControl;
+    Section: THeaderSection) of object;
+  TSectionTrackEvent = procedure(HeaderControl: THeaderControl;
+    Section: THeaderSection; Width: Integer;
+    State: TSectionTrackState) of object;
+  THCCreateSectionClassEvent = procedure(Sender: THeaderControl;
+    var SectionClass: THeaderSectionClass) of object;
+
+  THeaderControl = class(TCustomHeaderControl)
+  private
+    function GetOnDrawSection: TDrawSectionEvent;
+    function GetOnSectionClick: TSectionNotifyEvent;
+    function GetOnSectionResize: TSectionNotifyEvent;
+    function GetOnSectionTrack: TSectionTrackEvent;
+    procedure SetOnDrawSection(const Value: TDrawSectionEvent);
+    procedure SetOnSectionClick(const Value: TSectionNotifyEvent);
+    procedure SetOnSectionResize(const Value: TSectionNotifyEvent);
+    procedure SetOnSectionTrack(const Value: TSectionTrackEvent);
+  published
+    property Align default alTop;
+    property Anchors;
+    property BiDiMode;
+    property BorderWidth;
+    property DragCursor;
+    property DragKind;
+    property DragMode;
+    property DragReorder;
+    property Enabled;
+    property Font;
+    property FullDrag default True;
+    property HotTrack default False;
+    property Images;
+    property Constraints;
+    property Sections;
     property ShowHint;
-    property Style: THeaderStyle read FStyle write SetStyle default hsButtons;
+    property Style default hsButtons;
     property ParentBiDiMode;
     property ParentFont;
     property ParentShowHint;
     property PopupMenu;
     property Visible;
     property OnContextPopup;
+    property OnCreateSectionClass;
     property OnDragDrop;
     property OnDragOver;
     property OnEndDock;
@@ -690,18 +798,17 @@ type
     property OnMouseDown;
     property OnMouseMove;
     property OnMouseUp;
-    property OnDrawSection: TDrawSectionEvent read FOnDrawSection write FOnDrawSection;
     property OnResize;
-    property OnSectionClick: TSectionNotifyEvent read FOnSectionClick
-      write FOnSectionClick;
-    property OnSectionDrag: TSectionDragEvent read FOnSectionDrag
-      write FOnSectionDrag;
-    property OnSectionEndDrag: TNotifyEvent read FOnSectionEndDrag
-      write FOnSectionEndDrag;
-    property OnSectionResize: TSectionNotifyEvent read FOnSectionResize
-      write FOnSectionResize;
-    property OnSectionTrack: TSectionTrackEvent read FOnSectionTrack
-      write FOnSectionTrack;
+    // Required for backwards compatibility with the old events
+    property OnDrawSection: TDrawSectionEvent read GetOnDrawSection write SetOnDrawSection;
+    property OnSectionClick: TSectionNotifyEvent read GetOnSectionClick
+      write SetOnSectionClick;
+    property OnSectionResize: TSectionNotifyEvent read GetOnSectionResize
+      write SetOnSectionResize;
+    property OnSectionTrack: TSectionTrackEvent read GetOnSectionTrack
+      write SetOnSectionTrack;
+    property OnSectionDrag;
+    property OnSectionEndDrag;
     property OnStartDock;
     property OnStartDrag;
   end;
@@ -726,6 +833,7 @@ type
     Text: string[255];
   end;
 
+  TTreeNodeClass = class of TTreeNode;
   TTreeNode = class(TPersistent)
   private
     FOwner: TTreeNodes;
@@ -753,7 +861,6 @@ type
     function GetIndex: Integer;
     function GetItem(Index: Integer): TTreeNode;
     function GetSelected: Boolean;
-    function GetState(NodeState: TNodeState): Boolean;
     function GetCount: Integer;
     function GetTreeView: TCustomTreeView;
     procedure InternalMove(ParentNode, Node: TTreeNode; HItem: HTreeItem;
@@ -775,13 +882,17 @@ type
     procedure SetStateIndex(Value: Integer);
     procedure SetText(const S: string);
     procedure WriteData(Stream: TStream; Info: PNodeInfo);
+  protected
+    function GetState(NodeState: TNodeState): Boolean;
+    procedure SetState(NodeState: TNodeState; Value: Boolean);
+    procedure SetSelectedBit(Value: Boolean);
   public
     constructor Create(AOwner: TTreeNodes);
     destructor Destroy; override;
-    function AlphaSort: Boolean;
+    function AlphaSort(ARecurse: Boolean = False): Boolean;
     procedure Assign(Source: TPersistent); override;
     procedure Collapse(Recurse: Boolean);
-    function CustomSort(SortProc: TTVCompare; Data: Longint): Boolean;
+    function CustomSort(SortProc: TTVCompare; Data: Longint; ARecurse: Boolean = False): Boolean;
     procedure Delete;
     procedure DeleteChildren;
     function DisplayRect(TextOnly: Boolean): TRect;
@@ -804,6 +915,7 @@ type
     procedure MakeVisible;
     procedure MoveTo(Destination: TTreeNode; Mode: TNodeAttachMode); virtual;
     property AbsoluteIndex: Integer read GetAbsoluteIndex;
+    function IsFirstNode: Boolean;
     property Count: Integer read GetCount;
     property Cut: Boolean read GetCut write SetCut;
     property Data: Pointer read FData write SetData;
@@ -842,6 +954,7 @@ type
     FOwner: TCustomTreeView;
     FUpdateCount: Integer;
     FNodeCache: TNodeCache;
+    FReading: Boolean;
     procedure AddedNode(Value: TTreeNode);
     function GetHandle: HWND;
     function GetNodeFromIndex(Index: Integer): TTreeNode;
@@ -854,37 +967,42 @@ type
   protected
     function AddItem(Parent, Target: HTreeItem; const Item: TTVItem;
       AddMode: TAddMode): HTreeItem;
-    function InternalAddObject(Node: TTreeNode; const S: string;
-      Ptr: Pointer; AddMode: TAddMode): TTreeNode;
     procedure DefineProperties(Filer: TFiler); override;
     function CreateItem(Node: TTreeNode): TTVItem;
     function GetCount: Integer;
     procedure SetItem(Index: Integer; Value: TTreeNode);
     procedure SetUpdateState(Updating: Boolean);
+    property Reading: Boolean read FReading;
   public
     constructor Create(AOwner: TCustomTreeView);
     destructor Destroy; override;
-    function AddChildFirst(Node: TTreeNode; const S: string): TTreeNode;
-    function AddChild(Node: TTreeNode; const S: string): TTreeNode;
-    function AddChildObjectFirst(Node: TTreeNode; const S: string;
+    function AddChildFirst(Parent: TTreeNode; const S: string): TTreeNode;
+    function AddChild(Parent: TTreeNode; const S: string): TTreeNode;
+    function AddChildObjectFirst(Parent: TTreeNode; const S: string;
       Ptr: Pointer): TTreeNode;
-    function AddChildObject(Node: TTreeNode; const S: string;
+    function AddChildObject(Parent: TTreeNode; const S: string;
       Ptr: Pointer): TTreeNode;
-    function AddFirst(Node: TTreeNode; const S: string): TTreeNode;
-    function Add(Node: TTreeNode; const S: string): TTreeNode;
-    function AddObjectFirst(Node: TTreeNode; const S: string;
+    function AddFirst(Sibling: TTreeNode; const S: string): TTreeNode;
+    function Add(Sibling: TTreeNode; const S: string): TTreeNode;
+    function AddObjectFirst(Sibling: TTreeNode; const S: string;
       Ptr: Pointer): TTreeNode;
-    function AddObject(Node: TTreeNode; const S: string;
+    function AddObject(Sibling: TTreeNode; const S: string;
       Ptr: Pointer): TTreeNode;
+    function AddNode(Node, Relative: TTreeNode; const S: string;
+      Ptr: Pointer; Method: TNodeAttachMode): TTreeNode;
+    function AlphaSort(ARecurse: Boolean = False): Boolean;
     procedure Assign(Source: TPersistent); override;
     procedure BeginUpdate;
     procedure Clear;
+    function CustomSort(SortProc: TTVCompare; Data: Longint; ARecurse: Boolean = False): Boolean;
     procedure Delete(Node: TTreeNode);
     procedure EndUpdate;
     function GetFirstNode: TTreeNode;
     function GetNode(ItemId: HTreeItem): TTreeNode;
-    function Insert(Node: TTreeNode; const S: string): TTreeNode;
-    function InsertObject(Node: TTreeNode; const S: string;
+    function Insert(Sibling: TTreeNode; const S: string): TTreeNode;
+    function InsertObject(Sibling: TTreeNode; const S: string;
+      Ptr: Pointer): TTreeNode;
+    function InsertNode(Node, Sibling: TTreeNode; const S: string;
       Ptr: Pointer): TTreeNode;
     property Count: Integer read GetCount;
     property Handle: HWND read GetHandle;
@@ -895,6 +1013,9 @@ type
 { TCustomTreeView }
 
   TSortType = (stNone, stData, stText, stBoth);
+  TMultiSelectStyles = (msControlSelect, msShiftSelect,
+                        msVisibleOnly, msSiblingOnly);
+  TMultiSelectStyle = set of TMultiSelectStyles;
   ETreeViewError = class(Exception);
 
   TTVChangingEvent = procedure(Sender: TObject; Node: TTreeNode;
@@ -917,7 +1038,10 @@ type
   TTVAdvancedCustomDrawEvent = procedure(Sender: TCustomTreeView; const ARect: TRect;
     Stage: TCustomDrawStage; var DefaultDraw: Boolean) of object;
   TTVAdvancedCustomDrawItemEvent = procedure(Sender: TCustomTreeView; Node: TTreeNode;
-    State: TCustomDrawState; Stage: TCustomDrawStage; var PaintImages, DefaultDraw: Boolean) of object;
+    State: TCustomDrawState; Stage: TCustomDrawStage; var PaintImages,
+    DefaultDraw: Boolean) of object;
+  TTVCreateNodeClassEvent = procedure(Sender: TCustomTreeView;
+    var NodeClass: TTreeNodeClass) of object;
 
   TCustomTreeView = class(TWinControl)
   private
@@ -956,8 +1080,18 @@ type
     FToolTips: Boolean;
     FTreeNodes: TTreeNodes;
     FWideText: WideString;
+    FMultiSelect: Boolean;
+    FMultiSelectStyle: TMultiSelectStyle;
+    FSelections: TList;
+    FSaveIndexes: TList;
+    FShiftAnchor: TTreeNode;
+    FSelecting, FSelectChanged: Boolean;
+    FOurFont: Integer;
+    FStockFont: Integer;
+    FCreateWndRestores: Boolean;
     FOnAdvancedCustomDraw: TTVAdvancedCustomDrawEvent;
     FOnAdvancedCustomDrawItem: TTVAdvancedCustomDrawItemEvent;
+    FOnCancelEdit: TTVChangedEvent;
     FOnChange: TTVChangedEvent;
     FOnChanging: TTVChangingEvent;
     FOnCollapsed: TTVExpandedEvent;
@@ -966,12 +1100,14 @@ type
     FOnCustomDraw: TTVCustomDrawEvent;
     FOnCustomDrawItem: TTVCustomDrawItemEvent;
     FOnDeletion: TTVExpandedEvent;
+    FOnAddition: TTVExpandedEvent;
     FOnEditing: TTVEditingEvent;
     FOnEdited: TTVEditedEvent;
     FOnExpanded: TTVExpandedEvent;
     FOnExpanding: TTVExpandingEvent;
     FOnGetImageIndex: TTVExpandedEvent;
     FOnGetSelectedIndex: TTVExpandedEvent;
+    FOnCreateNodeClass: TTVCreateNodeClassEvent;
     procedure CanvasChanged(Sender: TObject);
     procedure CMColorChanged(var Message: TMessage); message CM_COLORCHANGED;
     procedure CMCtl3DChanged(var Message: TMessage); message CM_CTL3DCHANGED;
@@ -980,11 +1116,20 @@ type
     procedure CNNotify(var Message: TWMNotify); message CN_NOTIFY;
     procedure EditWndProc(var Message: TMessage);
     procedure DoDragOver(Source: TDragObject; X, Y: Integer; CanDrop: Boolean);
+    procedure NodeDeselect(Index: Integer);
+    procedure NodeSelect(Node: TTreeNode; At: Integer = 0);
+    procedure FinishSelection(Node: TTreeNode; ShiftState: TShiftState);
+    procedure ControlSelectNode(Node: TTreeNode);
+    procedure ShiftSelectNode(Node: TTreeNode; Backward: Boolean; Deselect: Boolean = True);
+    procedure ControlShiftSelectNode(Node: TTreeNode; Backward: Boolean);
+    procedure SelectNode(Node: TTreeNode);
     function GetChangeDelay: Integer;
     function GetDropTarget: TTreeNode;
     function GetIndent: Integer;
     function GetNodeFromItem(const Item: TTVItem): TTreeNode;
-    function GetSelection: TTreeNode;
+    function GetSelected: TTreeNode;
+    function GetSelectionCount: Cardinal;
+    function GetSelection(Index: Integer): TTreeNode;
     function GetTopItem: TTreeNode;
     procedure ImageListChange(Sender: TObject);
     procedure SetAutoExpand(Value: Boolean);
@@ -998,10 +1143,12 @@ type
     procedure SetIndent(Value: Integer);
     procedure SetImages(Value: TCustomImageList);
     procedure SetLineStyle(Value: Boolean);
+    procedure SetMultiSelect(const Value: Boolean);
+    procedure SetMultiSelectStyle(const Value: TMultiSelectStyle);
     procedure SetReadOnly(Value: Boolean);
     procedure SetRootStyle(Value: Boolean);
     procedure SetRowSelect(Value: Boolean);
-    procedure SetSelection(Value: TTreeNode);
+    procedure SetSelected(Value: TTreeNode);
     procedure SetSortType(Value: TSortType);
     procedure SetStateImages(Value: TCustomImageList);
     procedure SetToolTips(Value: Boolean);
@@ -1021,12 +1168,14 @@ type
     procedure Change(Node: TTreeNode); dynamic;
     procedure Collapse(Node: TTreeNode); dynamic;
     function CreateNode: TTreeNode; virtual;
+    function CreateNodes: TTreeNodes; virtual;
     procedure CreateParams(var Params: TCreateParams); override;
     procedure CreateWnd; override;
     function CustomDraw(const ARect: TRect; Stage: TCustomDrawStage): Boolean; virtual;
     function CustomDrawItem(Node: TTreeNode; State: TCustomDrawState;
       Stage: TCustomDrawStage; var PaintImages: Boolean): Boolean; virtual;
     procedure Delete(Node: TTreeNode); dynamic;
+    procedure Added(Node: TTreeNode); dynamic;
     procedure DestroyWnd; override;
     procedure DoEndDrag(Target: TObject; X, Y: Integer); override;
     procedure DoStartDrag(var DragObject: TDragObject); override;
@@ -1035,20 +1184,28 @@ type
     function GetDragImages: TDragImageList; override;
     procedure GetImageIndex(Node: TTreeNode); virtual;
     procedure GetSelectedIndex(Node: TTreeNode); virtual;
-    function IsCustomDrawn(Target: TCustomDrawTarget; Stage: TCustomDrawStage): Boolean;
+    function IsCustomDrawn(Target: TCustomDrawTarget; Stage: TCustomDrawStage): Boolean; virtual;
     procedure Loaded; override;
     procedure Notification(AComponent: TComponent;
       Operation: TOperation); override;
     procedure SetDragMode(Value: TDragMode); override;
     procedure WndProc(var Message: TMessage); override;
+    procedure ValidateSelection;
+    procedure InvalidateSelectionsRects;
+    procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
+    procedure DoEnter; override;
+    procedure DoExit; override;
     property AutoExpand: Boolean read FAutoExpand write SetAutoExpand default False;
     property BorderStyle: TBorderStyle read FBorderStyle write SetBorderStyle default bsSingle;
     property ChangeDelay: Integer read GetChangeDelay write SetChangeDelay default 0;
+    property CreateWndRestores: Boolean read FCreateWndRestores write FCreateWndRestores default True;
     property HideSelection: Boolean read FHideSelection write SetHideSelection default True;
     property HotTrack: Boolean read FHotTrack write SetHotTrack default False;
     property Images: TCustomImageList read FImages write SetImages;
     property Indent: Integer read GetIndent write SetIndent;
     property Items: TTreeNodes read FTreeNodes write SetTreeNodes;
+    property MultiSelect: Boolean read FMultiSelect write SetMultiSelect default False;
+    property MultiSelectStyle: TMultiSelectStyle read FMultiSelectStyle write SetMultiSelectStyle default [msControlSelect];
     property ReadOnly: Boolean read FReadOnly write SetReadOnly default False;
     property RightClickSelect: Boolean read FRightClickSelect write FRightClickSelect default False;
     property RowSelect: Boolean read FRowSelect write SetRowSelect default False;
@@ -1058,8 +1215,10 @@ type
     property SortType: TSortType read FSortType write SetSortType default stNone;
     property StateImages: TCustomImageList read FStateImages write SetStateImages;
     property ToolTips: Boolean read FToolTips write SetToolTips default True;
+    property OnAddition: TTVExpandedEvent read FOnAddition write FOnAddition;
     property OnAdvancedCustomDraw: TTVAdvancedCustomDrawEvent read FOnAdvancedCustomDraw write FOnAdvancedCustomDraw;
     property OnAdvancedCustomDrawItem: TTVAdvancedCustomDrawItemEvent read FOnAdvancedCustomDrawItem write FOnAdvancedCustomDrawItem;
+    property OnCancelEdit: TTVChangedEvent read FOnCancelEdit write FOnCancelEdit;
     property OnChange: TTVChangedEvent read FOnChange write FOnChange;
     property OnChanging: TTVChangingEvent read FOnChanging write FOnChanging;
     property OnCollapsed: TTVExpandedEvent read FOnCollapsed write FOnCollapsed;
@@ -1074,11 +1233,12 @@ type
     property OnExpanded: TTVExpandedEvent read FOnExpanded write FOnExpanded;
     property OnGetImageIndex: TTVExpandedEvent read FOnGetImageIndex write FOnGetImageIndex;
     property OnGetSelectedIndex: TTVExpandedEvent read FOnGetSelectedIndex write FOnGetSelectedIndex;
+    property OnCreateNodeClass: TTVCreateNodeClassEvent read FOnCreateNodeClass write FOnCreateNodeClass;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    function AlphaSort: Boolean;
-    function CustomSort(SortProc: TTVCompare; Data: Longint): Boolean;
+    function AlphaSort(ARecurse: Boolean = True): Boolean;
+    function CustomSort(SortProc: TTVCompare; Data: Longint; ARecurse: Boolean = True): Boolean;
     procedure FullCollapse;
     procedure FullExpand;
     function GetHitTestInfoAt(X, Y: Integer): THitTests;
@@ -1090,8 +1250,19 @@ type
     procedure SaveToStream(Stream: TStream);
     property Canvas: TCanvas read FCanvas;
     property DropTarget: TTreeNode read GetDropTarget write SetDropTarget;
-    property Selected: TTreeNode read GetSelection write SetSelection;
+    property Selected: TTreeNode read GetSelected write SetSelected;
     property TopItem: TTreeNode read GetTopItem write SetTopItem;
+
+    procedure Select(Node: TTreeNode; ShiftState: TShiftState = []); overload; virtual;
+    procedure Select(const Nodes: array of TTreeNode); overload; virtual;
+    procedure Select(Nodes: TList); overload; virtual;
+    procedure Deselect(Node: TTreeNode); virtual;
+    procedure Subselect(Node: TTreeNode; Validate: Boolean = False); virtual;
+    property SelectionCount: Cardinal read GetSelectionCount;
+    property Selections[Index: Integer]: TTreeNode read GetSelection;
+    procedure ClearSelection(KeepPrimary: Boolean = False); virtual;
+    function GetSelections(AList: TList): TTreeNode;
+    function FindNextToSelect: TTreeNode; virtual;
   end;
 
   TTreeView = class(TCustomTreeView)
@@ -1099,6 +1270,11 @@ type
     property Align;
     property Anchors;
     property AutoExpand;
+    property BevelEdges;
+    property BevelInner;
+    property BevelOuter;
+    property BevelKind default bkNone;
+    property BevelWidth;
     property BiDiMode;
     property BorderStyle;
     property BorderWidth;
@@ -1115,6 +1291,8 @@ type
     property HotTrack;
     property Images;
     property Indent;
+    property MultiSelect;
+    property MultiSelectStyle;
     property ParentBiDiMode;
     property ParentColor default False;
     property ParentCtl3D;
@@ -1134,6 +1312,7 @@ type
     property TabStop default True;
     property ToolTips;
     property Visible;
+    property OnAddition;
     property OnAdvancedCustomDraw;
     property OnAdvancedCustomDrawItem;
     property OnChange;
@@ -1143,6 +1322,7 @@ type
     property OnCollapsing;
     property OnCompare;
     property OnContextPopup;
+    property OnCreateNodeClass;
     property OnCustomDraw;
     property OnCustomDrawItem;
     property OnDblClick;
@@ -1494,6 +1674,7 @@ type
     procedure SelectionChange; dynamic;
     procedure DoSetMaxLength(Value: Integer); override;
     function GetCaretPos: TPoint; override;
+    procedure SetCaretPos(const Value: TPoint); override;    
     function GetSelLength: Integer; override;
     function GetSelStart: Integer; override;
     function GetSelText: string; override;
@@ -1534,6 +1715,11 @@ type
     property Align;
     property Alignment;
     property Anchors;
+    property BevelEdges;
+    property BevelInner;
+    property BevelOuter;
+    property BevelKind default bkNone;
+    property BevelWidth;
     property BiDiMode;
     property BorderStyle;
     property BorderWidth;
@@ -1707,8 +1893,8 @@ type
     FModifiers: THKModifiers;
     FInvalidKeys: THKInvalidKeys;
     FHotKey: Word;
+    FOnChange: TNotifyEvent;
     procedure AdjustHeight;
-    procedure SetAutoSize(Value: Boolean);
     procedure SetInvalidKeys(Value: THKInvalidKeys);
     procedure SetModifiers(Value: THKModifiers);
     procedure UpdateHeight;
@@ -1719,11 +1905,14 @@ type
   protected
     procedure CreateParams(var Params: TCreateParams); override;
     procedure CreateWnd; override;
+    procedure CNCommand(var Message: TWMCommand); message CN_COMMAND;
+    procedure SetAutoSize(Value: Boolean); override;    
     property AutoSize: Boolean read FAutoSize write SetAutoSize default True;
     property InvalidKeys: THKInvalidKeys read FInvalidKeys write SetInvalidKeys;
     property Modifiers: THKModifiers read FModifiers write SetModifiers;
     property HotKey: TShortCut read GetHotKey write SetHotKey;
     property TabStop default True;
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
   public
     constructor Create(AOwner: TComponent); override;
   end;
@@ -1746,6 +1935,7 @@ type
     property TabOrder;
     property TabStop;
     property Visible;
+    property OnChange;
     property OnContextPopup;
     property OnEnter;
     property OnExit;
@@ -1820,7 +2010,7 @@ type
   public
     constructor Create(AOwner: TCustomListView);
     function Add: TListColumn;
-    property Owner: TCustomListView read FOwner;
+    function Owner: TCustomListView;
     property Items[Index: Integer]: TListColumn read GetItem write SetItem; default;
   end;
 
@@ -1828,6 +2018,7 @@ type
 
   { TListItem }
 
+  TListItemClass = class of TListItem;
   TListItem = class(TPersistent)
   private
     FOwner: TListItems;
@@ -1878,6 +2069,7 @@ type
     property Checked: Boolean read GetChecked write SetChecked;
     property Cut: Boolean index 0 read GetState write SetState;
     property Data: Pointer read FData write SetData;
+    property Deleting: Boolean read FDeleting;
     property DropTarget: Boolean index 1 read GetState write SetState;
     property Focused: Boolean index 2 read GetState write SetState;
     property Handle: HWND read GetHandle;
@@ -1892,7 +2084,7 @@ type
     property Selected: Boolean index 3 read GetState write SetState;
     property StateIndex: TImageIndex index 2 read FStateIndex write SetImage;
     property SubItems: TStrings read FSubItems write SetSubItems;
-    property SubItemImages[Index: Integer]: Integer read GetSubItemImage write SetSubItemImage; 
+    property SubItemImages[Index: Integer]: Integer read GetSubItemImage write SetSubItemImage;
     property Top: Integer read GetTop write SetTop;
   end;
 
@@ -1918,6 +2110,7 @@ type
     constructor Create(AOwner: TCustomListView);
     destructor Destroy; override;
     function Add: TListItem;
+    function AddItem(Item: TListItem; Index: Integer = -1): TListItem;
     procedure Assign(Source: TPersistent); override;
     procedure BeginUpdate;
     procedure Clear;
@@ -1987,7 +2180,7 @@ type
 
   TOwnerDrawState = Windows.TOwnerDrawState;
 
-	(*$NODEFINE TOwnerDrawState*)
+  (*$NODEFINE TOwnerDrawState*)
 
   TListArrangement = (arAlignBottom, arAlignLeft, arAlignRight,
     arAlignTop, arDefault, arSnapToGrid);
@@ -2044,10 +2237,11 @@ type
   TLVSubItemImageEvent = procedure(Sender: TObject; Item: TListItem; SubItem: Integer;
     var ImageIndex: Integer) of object;
   TLVInfoTipEvent = procedure(Sender: TObject; Item: TListItem; var InfoTip: string) of object;
+  TLVCreateItemClassEvent = procedure(Sender: TCustomListView; var ItemClass: TListItemClass) of object;
 
 { TCustomListView }
 
-  TCustomListView = class(TWinControl)
+  TCustomListView = class(TCustomMultiSelectListControl)
   private
     FCanvas: TCanvas;
     FBorderStyle: TBorderStyle;
@@ -2098,6 +2292,8 @@ type
     FWorkAreas: TWorkAreas;
     FShowWorkAreas: Boolean;
     FUpdatingColumnOrder: Boolean;
+    FOurFont: Integer;
+    FStockFont: Integer;
     FOwnerDataCount: Integer;
     FOnAdvancedCustomDraw: TLVAdvancedCustomDrawEvent;
     FOnAdvancedCustomDrawItem: TLVAdvancedCustomDrawItemEvent;
@@ -2124,6 +2320,7 @@ type
     FOnInfoTip: TLVInfoTipEvent;
     FOnInsert: TLVDeletedEvent;
     FOnSelectItem: TLVSelectItemEvent;
+    FOnCreateItemClass: TLVCreateItemClassEvent;
     function AreItemsStored: Boolean;
     procedure CanvasChanged(Sender: TObject);
     procedure CMColorChanged(var Message: TMessage); message CM_COLORCHANGED;
@@ -2143,8 +2340,7 @@ type
     procedure GetImageIndex(Item: TListItem);
     procedure GetSubItemImage(Item: TListItem; SubItem: Integer; var ImageIndex: Integer);
     function GetItem(Value: TLVItem): TListItem;
-    function GetSelCount: Integer;
-    function GetSelection: TListItem;
+    function GetSelected: TListItem;
     function GetTopItem: TListItem;
     function GetViewOrigin: TPoint;
     function GetVisibleRowCount: Integer;
@@ -2165,18 +2361,16 @@ type
     procedure SetAllocBy(Value: Integer);
     procedure SetItems(Value: TListItems);
     procedure SetListColumns(Value: TListColumns);
-    procedure SetMultiSelect(Value: Boolean);
     procedure SetOwnerData(Value: Boolean);
     procedure SetOwnerDraw(Value: Boolean);
     procedure SetReadOnly(Value: Boolean);
     procedure SetShowWorkAreas(const Value: Boolean);
     procedure SetSmallImages(Value: TCustomImageList);
     procedure SetSortType(Value: TSortType);
-    procedure SetSelection(Value: TListItem);
+    procedure SetSelected(Value: TListItem);
     procedure SetStateImages(Value: TCustomImageList);
     procedure SetTextBkColor(Value: TColor);
     procedure SetTextColor(Value: TColor);
-    procedure SetViewStyle(Value: TViewStyle);
     procedure SetCheckboxes(Value: Boolean);
     procedure SetFlatScrollBars(Value: Boolean);
     procedure SetFullDrag(Value: Boolean);
@@ -2196,6 +2390,7 @@ type
     procedure CMHintShow(var Message: TMessage); message CM_HINTSHOW;
     procedure WMContextMenu(var Message: TWMContextMenu); message WM_CONTEXTMENU;
   protected
+    procedure ActionChange(Sender: TObject; CheckDefaults: Boolean); override;
     function CanChange(Item: TListItem; Change: Integer): Boolean; dynamic;
     function CanEdit(Item: TListItem): Boolean; dynamic;
     procedure Change(Item: TListItem; Change: Integer); dynamic;
@@ -2204,6 +2399,7 @@ type
     procedure ColRightClick(Column: TListColumn; Point: TPoint); dynamic;
     function ColumnsShowing: Boolean;
     function CreateListItem: TListItem; virtual;
+    function CreateListItems: TListItems; virtual;
     procedure CreateParams(var Params: TCreateParams); override;
     procedure CreateWnd; override;
     function CustomDraw(const ARect: TRect; Stage: TCustomDrawStage): Boolean; virtual;
@@ -2226,11 +2422,18 @@ type
     function OwnerDataHint(StartIndex, EndIndex: Integer): Boolean; virtual;
     function OwnerDataStateChange(StartIndex, EndIndex: Integer; OldState,
       NewState: TItemStates): Boolean; virtual;
+    function GetActionLinkClass: TControlActionLinkClass; override;
+    function GetCount: Integer; override;
     function GetDragImages: TDragImageList; override;
-    function GetItemIndex(Value: TListItem): Integer;
+    function GetItemIndex(Value: TListItem): Integer; reintroduce; overload;
+    function GetItemIndex: Integer; reintroduce; overload; override;
+    function GetSelCount: Integer; override;
     procedure InsertItem(Item: TListItem); dynamic;
-    function IsCustomDrawn(Target: TCustomDrawTarget; Stage: TCustomDrawStage): Boolean;
+    function IsCustomDrawn(Target: TCustomDrawTarget; Stage: TCustomDrawStage): Boolean; virtual;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+    procedure SetItemIndex(const Value: Integer); override;
+    procedure SetMultiSelect(Value: Boolean); override;
+    procedure SetViewStyle(Value: TViewStyle); virtual;
     procedure UpdateColumn(AnIndex: Integer);
     procedure UpdateColumns;
     procedure WndProc(var Message: TMessage); override;
@@ -2281,11 +2484,17 @@ type
     property SortType: TSortType read FSortType write SetSortType default stNone;
     property StateImages: TCustomImageList read FStateImages write SetStateImages;
     property ViewStyle: TViewStyle read FViewStyle write SetViewStyle default vsIcon;
+    property OnCreateItemClass: TLVCreateItemClassEvent read FOnCreateItemClass write FOnCreateItemClass;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    procedure AddItem(Item: String; AObject: TObject); override;
     function AlphaSort: Boolean;
     procedure Arrange(Code: TListArrangement);
+    procedure Clear; override;
+    procedure ClearSelection; override;
+    procedure CopySelection(Destination: TCustomListControl); override;
+    procedure DeleteSelected; override;
     function FindCaption(StartIndex: Integer; Value: string;
       Partial, Inclusive, Wrap: Boolean): TListItem;
     function FindData(StartIndex: Integer; Value: Pointer;
@@ -2298,6 +2507,7 @@ type
       Direction: TSearchDirection; States: TItemStates): TListItem;
     function GetSearchString: string;
     function IsEditing: Boolean;
+    procedure SelectAll; override;
     procedure Scroll(DX, DY: Integer);
     property Canvas: TCanvas read FCanvas;
     property Checkboxes: Boolean read FCheckboxes write SetCheckboxes default False;
@@ -2311,7 +2521,7 @@ type
     property ItemFocused: TListItem read GetFocused write SetFocused;
     property RowSelect: Boolean read FRowSelect write SetRowSelect default False;
     property SelCount: Integer read GetSelCount;
-    property Selected: TListItem read GetSelection write SetSelection;
+    property Selected: TListItem read GetSelected write SetSelected;
     function CustomSort(SortProc: TLVCompare; lParam: Longint): Boolean;
     function StringWidth(S: string): Integer;
     procedure UpdateItems(FirstIndex, LastIndex: Integer);
@@ -2326,9 +2536,15 @@ type
 
   TListView = class(TCustomListView)
   published
+    property Action;
     property Align;
     property AllocBy;
     property Anchors;
+    property BevelEdges;
+    property BevelInner;
+    property BevelOuter;
+    property BevelKind default bkNone;
+    property BevelWidth;
     property BiDiMode;
     property BorderStyle;
     property BorderWidth;
@@ -2416,6 +2632,16 @@ type
     property OnSelectItem;
     property OnStartDock;
     property OnStartDrag;
+  end;
+
+{ TListViewActionLink }
+
+  TListViewActionLink = class(TListActionLink)
+  protected
+    procedure AddItem(AnItem: TListControlItem); override;
+    procedure AddItem(ACaption: String; AImageIndex: Integer;
+      DataPtr: Pointer); override;
+    procedure SetImages(Value: TCustomImageList); override;
   end;
 
 { TAnimate }
@@ -2573,7 +2799,6 @@ type
     function IsCheckedStored: Boolean;
     function IsImageIndexStored: Boolean;
     function IsWidthStored: Boolean;
-    procedure SetAutoSize(Value: Boolean);
     procedure SetButtonState(State: Byte);
     procedure SetDown(Value: Boolean);
     procedure SetDropdownMenu(Value: TPopupMenu);
@@ -2602,6 +2827,7 @@ type
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     procedure Paint; override;
     procedure RefreshControl; virtual;
+    procedure SetAutoSize(Value: Boolean); override;   
     procedure SetToolBar(AToolBar: TToolBar);
     procedure UpdateControl; virtual;
     procedure ValidateContainer(AComponent: TComponent); override;
@@ -2660,6 +2886,11 @@ type
   TTBAdvancedCustomDrawBtnEvent = procedure(Sender: TToolBar; Button: TToolButton;
     State: TCustomDrawState; Stage: TCustomDrawStage;
     var Flags: TTBCustomDrawFlags; var DefaultDraw: Boolean) of object;
+  TTBCustomizeQueryEvent = procedure(Sender: TToolbar; Index: Integer;
+    var Allow: Boolean) of object;
+  TTBNewButtonEvent = procedure(Sender: TToolbar; Index: Integer;
+    var Button: TToolButton) of object;
+  TTBButtonEvent = procedure(Sender: TToolbar; Button: TToolButton) of object;
 
   TToolBar = class(TToolWindow)
   private
@@ -2669,6 +2900,8 @@ type
     FCaption: string;
     FCanvas: TCanvas;
     FCanvasChanged: Boolean;
+    FCustomizable: Boolean;
+    FCustomizing: Boolean;
     FShowCaptions: Boolean;
     FList: Boolean;
     FFlat: Boolean;
@@ -2684,12 +2917,22 @@ type
     FNewStyle: Boolean;
     FNullBitmap: TBitmap;
     FOldHandle: HBitmap;
+    FRestoring: Boolean;
     FUpdateCount: Integer;
     FHeightMargin: Integer;
+    FSeparators: Integer;
     FOnAdvancedCustomDraw: TTBAdvancedCustomDrawEvent;
     FOnAdvancedCustomDrawButton: TTBAdvancedCustomDrawBtnEvent;
     FOnCustomDraw: TTBCustomDrawEvent;
     FOnCustomDrawButton: TTBCustomDrawBtnEvent;
+    FOnCustomizeCanDelete: TTBCustomizeQueryEvent;
+    FOnCustomizeCanInsert: TTBCustomizeQueryEvent;
+    FOnCustomizeNewButton: TTBNewButtonEvent;
+    FOnCustomized: TNotifyEvent;
+    FOnCustomizeDelete: TTBButtonEvent;
+    FOnCustomizeAdded: TTBButtonEvent;
+    FOnCustomizing: TNotifyEvent;
+    FOnCustomizeReset: TNotifyEvent;
     { Toolbar menu support }
     FCaptureChangeCancels: Boolean;
     FInMenuLoop: Boolean;
@@ -2698,8 +2941,14 @@ type
     FMenuButton: TToolButton;
     FMenuResult: Boolean;
     FMenuDropped: Boolean;
+    FMenu: TMainMenu;
+    FCustomizeKeyName: string;
+    FCustomizeValueName: string;
+    FOurFont: Integer;
+    FStockFont: Integer;
     function ButtonIndex(OldIndex, ALeft, ATop: Integer): Integer;
     procedure CanvasChanged(Sender: TObject);
+    function DoGetButton(NMToolbar: PNMToolbar): Boolean;
     procedure LoadImages(AImages: TCustomImageList);
     function GetButton(Index: Integer): TToolButton;
     function GetButtonCount: Integer;
@@ -2734,11 +2983,14 @@ type
     procedure SetHotImageList(Value: HImageList);
     procedure SetHotImages(Value: TCustomImageList);
     procedure SetIndent(Value: Integer);
+    procedure SetMenu(const Value: TMainMenu);
     procedure AdjustControl(Control: TControl);
     procedure RecreateButtons;
+    procedure RecreateButtonsFromToolbar;
     procedure BeginUpdate;
     procedure EndUpdate;
     procedure ResizeButtons;
+    procedure SaveButtons(Save: Boolean);
     function InternalButtonCount: Integer;
     function ReorderButton(OldIndex, ALeft, ATop: Integer): Integer;
     procedure WMCaptureChanged(var Message: TMessage); message WM_CAPTURECHANGED;
@@ -2765,6 +3017,7 @@ type
     procedure CMSysFontChanged(var Message: TMessage); message CM_SYSFONTCHANGED;
     procedure CNDropDownClosed(var Message: TMessage); message CN_DROPDOWNCLOSED;
     procedure CNNotify(var Message: TWMNotify); message CN_NOTIFY;
+    procedure SetCustomizable(const Value: Boolean);
   protected
     procedure AlignControls(AControl: TControl; var Rect: TRect); override;
     function CanAutoSize(var NewWidth, NewHeight: Integer): Boolean; override;
@@ -2777,10 +3030,12 @@ type
     function  CustomDraw(const ARect: TRect; Stage: TCustomDrawStage): Boolean; virtual;
     function CustomDrawButton(Button: TToolButton; State: TCustomDrawState;
       Stage: TCustomDrawStage; var Flags: TTBCustomDrawFlags): Boolean; virtual;
+    function DoQueryInsert(Index: Integer): Boolean; virtual;
+    function DoQueryDelete(Index: Integer): Boolean; virtual;
     function FindButtonFromAccel(Accel: Word): TToolButton;
     procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
     procedure InitMenu(Button: TToolButton); dynamic;
-    function IsCustomDrawn(Target: TCustomDrawTarget; Stage: TCustomDrawStage): Boolean;
+    function IsCustomDrawn(Target: TCustomDrawTarget; Stage: TCustomDrawStage): Boolean; virtual;
     procedure Loaded; override;
     procedure Notification(AComponent: TComponent;
       Operation: TOperation); override;
@@ -2796,6 +3051,8 @@ type
     property ButtonCount: Integer read GetButtonCount;
     property Buttons[Index: Integer]: TToolButton read GetButton;
     property Canvas: TCanvas read FCanvas;
+    property CustomizeKeyName: string read FCustomizeKeyName write FCustomizeKeyName;
+    property CustomizeValueName: string read FCustomizeValueName write FCustomizeValueName;
     property RowCount: Integer read GetRowCount;
   published
     property Align default alTop;
@@ -2808,6 +3065,7 @@ type
     property Color;
     property Constraints;
     property Ctl3D;
+    property Customizable: Boolean read FCustomizable write SetCustomizable default False;
     property DisabledImages: TCustomImageList read FDisabledImages write SetDisabledImages;
     property DockSite;
     property DragCursor;
@@ -2824,6 +3082,7 @@ type
     property Images: TCustomImageList read FImages write SetImages;
     property Indent: Integer read FIndent write SetIndent default 0;
     property List: Boolean read FList write SetList default False;
+    property Menu: TMainMenu read FMenu write SetMenu;
     property ParentColor;
     property ParentFont;
     property ParentShowHint;
@@ -2844,6 +3103,17 @@ type
     property OnCustomDraw: TTBCustomDrawEvent read FOnCustomDraw write FOnCustomDraw;
     property OnCustomDrawButton: TTBCustomDrawBtnEvent read FOnCustomDrawButton
       write FOnCustomDrawButton;
+    property OnCustomizeAdded: TTBButtonEvent read FOnCustomizeAdded write FOnCustomizeAdded;
+    property OnCustomizeCanInsert: TTBCustomizeQueryEvent read FOnCustomizeCanInsert
+      write FOnCustomizeCanInsert;
+    property OnCustomizeCanDelete: TTBCustomizeQueryEvent read FOnCustomizeCanDelete
+      write FOnCustomizeCanDelete;
+    property OnCustomized: TNotifyEvent read FOnCustomized write FOnCustomized;
+    property OnCustomizeDelete: TTBButtonEvent read FOnCustomizeDelete write FOnCustomizeDelete;
+    property OnCustomizing: TNotifyEvent read FOnCustomizing write FOnCustomizing;
+    property OnCustomizeNewButton: TTBNewButtonEvent read FOnCustomizeNewButton
+      write FOnCustomizeNewButton;
+    property OnCustomizeReset: TNotifyEvent read FOnCustomizeReset write FOnCustomizeReset;
     property OnDblClick;
     property OnDockDrop;
     property OnDockOver;
@@ -3305,6 +3575,7 @@ type
     FOnCloseUp: TNotifyEvent;
     FOnChange: TNotifyEvent;
     FOnDropDown: TNotifyEvent;
+    FFormat: String;
     procedure AdjustHeight;
     function GetTime: TTime;
     procedure SetCalAlignment(Value: TDTCalAlignment);
@@ -3318,6 +3589,7 @@ type
     procedure CMColorChanged(var Message: TMessage); message CM_COLORCHANGED;
     procedure CMFontChanged(var Message: TMessage); message CM_FONTCHANGED;
     procedure CNNotify(var Message: TWMNotify); message CN_NOTIFY;
+    procedure SetFormat(const Value: String);
   protected
     procedure CheckEmptyDate; override;
     procedure CreateParams(var Params: TCreateParams); override;
@@ -3333,12 +3605,18 @@ type
     property DroppedDown: Boolean read FDroppedDown;
   published
     property Anchors;
+    property BevelEdges;
+    property BevelInner;
+    property BevelOuter;
+    property BevelKind default bkNone;
+    property BevelWidth;
     property BiDiMode;
     property CalAlignment: TDTCalAlignment read FCalAlignment write SetCalAlignment;
     property CalColors;
     property Constraints;
     // The Date, Time, ShowCheckbox, and Checked properties must be in this order:
     property Date;
+    property Format: String read FFormat write SetFormat;
     property Time: TTime read GetTime write SetTime;
     property ShowCheckbox: Boolean read FShowCheckbox write SetShowCheckbox default False;
     property Checked: Boolean read FChecked write SetChecked default True;
@@ -3474,6 +3752,213 @@ type
     property OnStartDrag;
   end;
 
+{ TCustomComboBoxEx }
+
+  TComboExItem = class(TListControlItem)
+  private
+    FSelectedImageIndex: TImageIndex;
+    FOverlayImageIndex: TImageIndex;
+    FIndent: Integer;
+  protected
+    procedure SetOverlayImageIndex(const Value: TImageIndex); virtual;
+    procedure SetSelectedImageIndex(const Value: TImageIndex); virtual;
+    procedure SetCaption(const Value: String); override;
+    procedure SetData(const Value: Pointer); override;
+    procedure SetDisplayName(const Value: String); override;
+    procedure SetImageIndex(const Value: TImageIndex); override;
+    procedure SetIndex(Value: Integer); override;
+  public
+    procedure Assign(Source: TPersistent); override;
+  published
+    property Indent: Integer read FIndent write FIndent default -1;
+    property OverlayImageIndex: TImageIndex read FOverlayImageIndex
+      write SetOverlayImageIndex default -1;
+    property SelectedImageIndex: TImageIndex read FSelectedImageIndex
+      write SetSelectedImageIndex default -1;
+  end;
+
+  TComboExItems = class(TListControlItems)
+  private
+    function GetComboItem(const Index: Integer): TComboExItem;
+  protected
+    procedure Notify(Item: TCollectionItem;
+      Action: TCollectionNotification); override;
+    procedure SetItem(const Index: Integer); virtual;
+  public
+    function Add: TComboExItem;
+    function AddItem(const Caption: String; const ImageIndex, SelectedImageIndex,
+      OverlayImageIndex, Indent: Integer; Data: Pointer): TComboExItem;
+    function Insert(Index: Integer): TComboExItem;
+    property ComboItems[const Index: Integer]: TComboExItem read GetComboItem;
+  end;
+
+  TComboExItemsClass = class of TComboExItems;
+  TComboExItemClass = class of TComboExItem;
+
+  TCustomComboBoxEx = class;
+
+  TComboBoxExStrings = class(TCustomComboBoxStrings)
+  private
+    FItems: TComboExItems;
+    function GetSortType: TListItemsSortType;
+    procedure SetItems(const Value: TComboExItems);
+    procedure SetSortType(const Value: TListItemsSortType);
+  protected
+    function GetItemsClass: TComboExItemsClass; virtual;
+    function GetItemClass: TComboExItemClass; virtual;
+    procedure Put(Index: Integer; const S: String); override;
+    procedure PutObject(Index: Integer; AObject: TObject); override;
+    procedure SetUpdateState(Updating: Boolean); override;
+  public
+    constructor Create(Owner: TCustomComboBoxEx);
+    destructor Destroy; override;
+    function Add(const S: String): Integer; override;
+    function AddItem(const Caption: String; const ImageIndex, SelectedImageIndex,
+      OverlayImageIndex, Indent: Integer; Data: Pointer): TComboExItem;
+    function AddObject(const S: String; AObject: TObject): Integer; override;
+    procedure Clear; override;
+    procedure Delete(Index: Integer); override;
+    procedure Exchange(Index1: Integer; Index2: Integer); override;
+    function Get(Index: Integer): String; override;
+    function GetCapacity: Integer; override;
+    function GetCount: Integer; override;
+    function GetObject(Index: Integer): TObject; override;
+    function IndexOf(const S: String): Integer; override;
+    function IndexOfName(const Name: String): Integer; override;
+    procedure Insert(Index: Integer; const S: String); override;
+    procedure Move(CurIndex: Integer; NewIndex: Integer); override;
+    property SortType: TListItemsSortType read GetSortType write SetSortType;
+    property ItemsEx: TComboExItems read FItems write SetItems;
+  end;
+
+{ TCustomComboBoxEx }
+
+  TComboBoxExStyle = (csExDropDown, csExSimple, csExDropDownList);
+  TComboBoxExStyleEx = (csExCaseSensitive, csExNoEditImage, csExNoEditImageIndent,
+                        csExNoSizeLimit, csExPathWordBreak);
+  TComboBoxExStyles = set of TComboBoxExStyleEx;
+
+  TCustomComboBoxEx = class(TCustomCombo)
+  private
+    FComboBoxExHandle: HWND;
+    FComboBoxExDefProc: Pointer;
+    FComboBoxExInstance: Pointer;
+    FImageChangeLink: TChangeLink;
+    FImages: TCustomImageList;
+    FMemStream: TCollection;
+    FReading: Boolean;
+    FStyle: TComboBoxExStyle;
+    FStyleEx: TComboBoxExStyles;
+    FItemsEx: TComboExItems;
+    FOnBeginEdit: TNotifyEvent;
+    FOnEndEdit: TNotifyEvent;
+    function GetSelText: String;
+    procedure ImageListChange(Sender: TObject);
+    procedure SetImages(const Value: TCustomImageList);
+    procedure SetSelText(const Value: String);
+    procedure SetStyle(Value: TComboBoxExStyle);
+    procedure SetItemsEx(const Value: TComboExItems);
+    procedure SetStyleEx(const Value: TComboBoxExStyles);
+    function IsItemsExStored: Boolean;
+    function GetDropDownCount: Integer;
+  protected
+    procedure ActionChange(Sender: TObject; CheckDefaults: Boolean); override;
+    procedure CMColorChanged(var Message: TMessage); message CM_COLORCHANGED;
+    procedure CMParentColorChanged(var Message: TMessage); message CM_PARENTCOLORCHANGED;
+    procedure CNNotify(var Message: TWMNotify); message CN_NOTIFY;
+    procedure ComboExWndProc(var Message: TMessage);
+    procedure CreateParams(var Params: TCreateParams); override;
+    procedure CreateWnd; override;
+    procedure DestroyWnd; override;
+    function GetActionLinkClass: TControlActionLinkClass; override;
+    function GetItemsClass: TCustomComboBoxStringsClass; override;
+    function GetItemCount: Integer; override;
+    function GetItemHt: Integer; override;
+    procedure Notification(AComponent: TComponent;
+      Operation: TOperation); override;
+    procedure SetDropDownCount(const Value: Integer); override;
+    procedure WMLButtonDown(var Message: TWMLButtonDown); message WM_LBUTTONDOWN;
+    procedure WndProc(var Message: TMessage); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function Focused: Boolean; override;
+    property DropDownCount: Integer read GetDropDownCount write SetDropDownCount;
+    property Images: TCustomImageList read FImages write SetImages;
+    property ItemsEx: TComboExItems read FItemsEx write SetItemsEx stored IsItemsExStored;
+    property SelText: string read GetSelText write SetSelText;
+    property Style: TComboBoxExStyle read FStyle write SetStyle default csExDropDown;
+    property StyleEx: TComboBoxExStyles read FStyleEx write SetStyleEx;
+    property OnBeginEdit: TNotifyEvent read FOnBeginEdit write FOnBeginEdit;
+    property OnEndEdit: TNotifyEvent read FOnEndEdit write FOnEndEdit;
+  end;
+
+{ TComboBoxEx }
+
+  TComboBoxEx = class(TCustomComboBoxEx)
+  published
+    property ItemsEx;
+    property Style; {Must be published before Items}
+    property StyleEx;
+    property Action;
+    property Anchors;
+    property BiDiMode;
+    property Color;
+    property Constraints;
+    property Ctl3D;
+    property DragCursor;
+    property DragKind;
+    property DragMode;
+    property Enabled;
+    property Font;
+    property ImeMode;
+    property ImeName;
+    property ItemHeight;
+    property MaxLength;
+    property ParentBiDiMode;
+    property ParentColor;
+    property ParentCtl3D;
+    property ParentFont;
+    property ParentShowHint;
+    property PopupMenu;
+    property ShowHint;
+    property TabOrder;
+    property TabStop;
+    property Text;
+    property Visible;
+    property OnBeginEdit;
+    property OnChange;
+    property OnClick;
+    property OnContextPopup;
+    property OnDblClick;
+    property OnDragDrop;
+    property OnDragOver;
+    property OnDropDown;
+    property OnEndEdit;
+    property OnEndDock;
+    property OnEndDrag;
+    property OnEnter;
+    property OnExit;
+    property OnKeyDown;
+    property OnKeyPress;
+    property OnKeyUp;
+    property OnSelect;
+    property OnStartDock;
+    property OnStartDrag;
+//    property Items;
+    property Images;
+    property DropDownCount;
+  end;
+
+{ TComboBoxExActionLink }
+
+  TComboBoxExActionLink = class(TListActionLink)
+  protected
+    procedure AddItem(AnItem: TListControlItem); override;
+    procedure AddItem(ACaption: String; AImageIndex: Integer;
+      DataPtr: Pointer); override;
+  end;
+
 function InitCommonControl(CC: Integer): Boolean;
 procedure CheckCommonControl(CC: Integer);
 
@@ -3488,14 +3973,7 @@ procedure CheckToolMenuDropdown(ToolButton: TToolButton);
 
 implementation
 
-uses Printers, Consts, ComStrs, ActnList, StdActns;
-
-type
-  PFontHandles = ^TFontHandles;
-  TFontHandles = record
-    OurFont,
-    StockFont: Integer;
-  end;
+uses Printers, Consts, RTLConsts, ComStrs, ActnList, StdActns, ExtActns, Types;
 
 const
   SectionSizeArea = 8;
@@ -3806,7 +4284,8 @@ procedure TCustomTabControl.DrawTab(TabIndex: Integer; const Rect: TRect;
   Active: Boolean);
 begin
   if Assigned(FOnDrawTab) then
-    FOnDrawTab(Self, TabIndex, Rect, Active) else
+    FOnDrawTab(Self, TabIndex, Rect, Active)
+  else
     FCanvas.FillRect(Rect);
 end;
 
@@ -3814,7 +4293,8 @@ function TCustomTabControl.GetDisplayRect: TRect;
 begin
   Result := ClientRect;
   SendMessage(Handle, TCM_ADJUSTRECT, 0, Integer(@Result));
-  Inc(Result.Top, 2);
+  if TabPosition = tpTop then
+    Inc(Result.Top, 2);
 end;
 
 function TCustomTabControl.GetImageIndex(TabIndex: Integer): Integer;
@@ -4207,6 +4687,25 @@ begin
   end;
 end;
 
+procedure TCustomTabControl.TCMAdjustRect(var Message: TMessage);
+begin
+  { Major hack around a problem in the Windows tab control. Don't try this
+    at home. The tab control (4.71) will AV when in a TCM_ADJUSTRECT message
+    when the height of the control is the same as the height of the tab (or the
+    width of the control for tpBottom). This hack will return the last value
+    successfully returned if an exception is encountered. This allows the
+    control to function but the AV is till generated and and reported by the
+    debugger. }
+  try
+    inherited;
+    if (TabPosition <> tpTop) and (Message.WParam = 0) then
+      FSavedAdjustRect := PRect(Message.LParam)^;
+  except
+    PRect(Message.LParam)^ := FSavedAdjustRect;
+  end;
+end;
+
+
 { TTabSheet }
 
 constructor TTabSheet.Create(AOwner: TComponent);
@@ -4412,7 +4911,8 @@ procedure TPageControl.Change;
 var
   Form: TCustomForm;
 begin
-  UpdateActivePage;
+  if TabIndex >= 0 then
+    UpdateActivePage;
   if csDesigning in ComponentState then
   begin
     Form := GetParentForm(Self);
@@ -4616,14 +5116,14 @@ begin
   SetActivePage(NextSheet);
 end;
 
-procedure TPageControl.SelectNextPage(GoForward: Boolean);
+procedure TPageControl.SelectNextPage(GoForward: Boolean; CheckTabVisible: Boolean = True);
 var
   Page: TTabSheet;
 begin
-  Page := FindNextPage(ActivePage, GoForward, True);
+  Page := FindNextPage(ActivePage, GoForward, CheckTabVisible);
   if (Page <> nil) and (Page <> ActivePage) and CanChange then
   begin
-    TabIndex := Page.TabIndex;
+    SetActivePage(Page);
     Change;
   end;
 end;
@@ -4933,9 +5433,12 @@ end;
 
 { TStatusPanels }
 
-constructor TStatusPanels.Create(StatusBar: TStatusBar);
+constructor TStatusPanels.Create(StatusBar: TCustomStatusBar);
 begin
-  inherited Create(TStatusPanel);
+  if StatusBar <> nil then
+    inherited Create(StatusBar.GetPanelClass)
+  else
+    inherited Create(TStatusPanel);
   FStatusBar := StatusBar;
 end;
 
@@ -4966,16 +5469,39 @@ begin
     FStatusBar.UpdatePanels(True, False);
 end;
 
-{ TStatusBar }
+function TStatusPanels.AddItem(Item: TStatusPanel;
+  Index: Integer): TStatusPanel;
+begin
+  if Item = nil then
+    Result := FStatusBar.CreatePanel
+  else
+  begin
+    Result := Item;
+    if Assigned(Item) then
+    begin
+      Result.Collection := Self;
+      if Index < 0 then
+        Index := Count - 1;
+      Result.Index := Index;
+    end;
+  end;
+end;
 
-constructor TStatusBar.Create(AOwner: TComponent);
+function TStatusPanels.Insert(Index: Integer): TStatusPanel;
+begin
+  Result := AddItem(nil, Index);
+end;
+
+{ TCustomStatusBar }
+
+constructor TCustomStatusBar.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   ControlStyle := [csCaptureMouse, csClickEvents, csDoubleClicks, csOpaque];
   Color := clBtnFace;
   Height := 19;
   Align := alBottom;
-  FPanels := TStatusPanels.Create(Self);
+  FPanels := CreatePanels;
   FCanvas := TControlCanvas.Create;
   TControlCanvas(FCanvas).Control := Self;
   FSizeGrip := True;
@@ -4984,14 +5510,14 @@ begin
   SyncToSystemFont;
 end;
 
-destructor TStatusBar.Destroy;
+destructor TCustomStatusBar.Destroy;
 begin
   FCanvas.Free;
   FPanels.Free;
   inherited Destroy;
 end;
 
-procedure TStatusBar.CreateParams(var Params: TCreateParams);
+procedure TCustomStatusBar.CreateParams(var Params: TCreateParams);
 const
   GripStyles: array[Boolean] of DWORD = (CCS_TOP, SBARS_SIZEGRIP);
 begin
@@ -5000,14 +5526,16 @@ begin
   CreateSubClass(Params, STATUSCLASSNAME);
   with Params do
   begin
-    Style := Style or GripStyles[FSizeGrip and (Parent is TCustomForm) and
-      (TCustomForm(Parent).BorderStyle in [bsSizeable, bsSizeToolWin])];
+    Style := Style or GripStyles[FSizeGrip and FSizeGripValid];
+    //Style := Style or GripStyles[FSizeGrip and (Parent is TCustomForm) and
+    //  (TCustomForm(Parent).BorderStyle in [bsSizeable, bsSizeToolWin])];
     WindowClass.style := WindowClass.style and not CS_HREDRAW;
   end;
 end;
 
-procedure TStatusBar.CreateWnd;
+procedure TCustomStatusBar.CreateWnd;
 begin
+  ValidateSizeGrip(False);
   inherited CreateWnd;
   SendMessage(Handle, SB_SETBKCOLOR, 0, ColorToRGB(Color));
   UpdatePanels(True, False);
@@ -5017,7 +5545,7 @@ begin
     SendMessage(Handle, SB_SIMPLE, 1, 0);
 end;
 
-function TStatusBar.DoHint: Boolean;
+function TCustomStatusBar.DoHint: Boolean;
 begin
   if Assigned(FOnHint) then
   begin
@@ -5027,19 +5555,20 @@ begin
   else Result := False;
 end;
 
-procedure TStatusBar.DrawPanel(Panel: TStatusPanel; const Rect: TRect);
+procedure TCustomStatusBar.DrawPanel(Panel: TStatusPanel; const Rect: TRect);
 begin
   if Assigned(FOnDrawPanel) then
-    FOnDrawPanel(Self, Panel, Rect) else
+    FOnDrawPanel(Self, Panel, Rect)
+  else
     FCanvas.FillRect(Rect);
 end;
 
-procedure TStatusBar.SetPanels(Value: TStatusPanels);
+procedure TCustomStatusBar.SetPanels(Value: TStatusPanels);
 begin
   FPanels.Assign(Value);
 end;
 
-procedure TStatusBar.SetSimplePanel(Value: Boolean);
+procedure TCustomStatusBar.SetSimplePanel(Value: Boolean);
 begin
   if FSimplePanel <> Value then
   begin
@@ -5049,7 +5578,7 @@ begin
   end;
 end;
 
-procedure TStatusBar.DoRightToLeftAlignment(var Str: string;
+procedure TCustomStatusBar.DoRightToLeftAlignment(var Str: string;
   AAlignment: TAlignment; ARTLAlignment: Boolean);
 begin
   if ARTLAlignment then ChangeBiDiModeAlignment(AAlignment);
@@ -5060,7 +5589,7 @@ begin
   end;
 end;
 
-procedure TStatusBar.UpdateSimpleText;
+procedure TCustomStatusBar.UpdateSimpleText;
 const
   RTLReading: array[Boolean] of Longint = (0, SBT_RTLREADING);
 begin
@@ -5070,7 +5599,7 @@ begin
       Integer(PChar(FSimpleText)));
 end;
 
-procedure TStatusBar.SetSimpleText(const Value: string);
+procedure TCustomStatusBar.SetSimpleText(const Value: string);
 begin
   if FSimpleText <> Value then
   begin
@@ -5079,7 +5608,7 @@ begin
   end;
 end;
 
-procedure TStatusBar.CMBiDiModeChanged(var Message: TMessage);
+procedure TCustomStatusBar.CMBiDiModeChanged(var Message: TMessage);
 var
   Loop: Integer;
 begin
@@ -5096,7 +5625,7 @@ begin
       UpdateSimpleText;
 end;
 
-procedure TStatusBar.FlipChildren(AllLevels: Boolean);
+procedure TCustomStatusBar.FlipChildren(AllLevels: Boolean);
 var
   Loop, FirstWidth, LastWidth: Integer;
   APanels: TStatusPanels;
@@ -5128,22 +5657,25 @@ begin
   end;
 end;
 
-procedure TStatusBar.SetSizeGrip(Value: Boolean);
+procedure TCustomStatusBar.SetSizeGrip(Value: Boolean);
 begin
   if FSizeGrip <> Value then
   begin
     FSizeGrip := Value;
-    RecreateWnd;
+    ValidateSizeGrip(True);
   end;
 end;
 
-procedure TStatusBar.SyncToSystemFont;
+procedure TCustomStatusBar.SyncToSystemFont;
 begin
   if FUseSystemFont then
+  begin
     Font := Screen.HintFont;
+    Font.Color := clBtnText;
+  end;
 end;
 
-procedure TStatusBar.UpdatePanel(Index: Integer; Repaint: Boolean);
+procedure TCustomStatusBar.UpdatePanel(Index: Integer; Repaint: Boolean);
 var
   Flags: Integer;
   S: string;
@@ -5180,7 +5712,7 @@ begin
     end;
 end;
 
-procedure TStatusBar.UpdatePanels(UpdateRects, UpdateText: Boolean);
+procedure TCustomStatusBar.UpdatePanels(UpdateRects, UpdateText: Boolean);
 const
   MaxPanelCount = 128;
 var
@@ -5215,14 +5747,14 @@ begin
   end;
 end;
 
-procedure TStatusBar.CMWinIniChange(var Message: TMessage);
+procedure TCustomStatusBar.CMWinIniChange(var Message: TMessage);
 begin
   inherited;
   if (Message.WParam = 0) or (Message.WParam = SPI_SETNONCLIENTMETRICS) then
     SyncToSystemFont;
 end;
 
-procedure TStatusBar.CNDrawItem(var Message: TWMDrawItem);
+procedure TCustomStatusBar.CNDrawItem(var Message: TWMDrawItem);
 var
   SaveIndex: Integer;
 begin
@@ -5245,30 +5777,30 @@ begin
   Message.Result := 1;
 end;
 
-procedure TStatusBar.WMGetTextLength(var Message: TWMGetTextLength);
+procedure TCustomStatusBar.WMGetTextLength(var Message: TWMGetTextLength);
 begin
   Message.Result := Length(FSimpleText);
 end;
 
-procedure TStatusBar.WMPaint(var Message: TWMPaint);
+procedure TCustomStatusBar.WMPaint(var Message: TWMPaint);
 begin
   UpdatePanels(False, True);
   inherited;
 end;
 
-procedure TStatusBar.WMSize(var Message: TWMSize);
+procedure TCustomStatusBar.WMSize(var Message: TWMSize);
 begin
   { Eat WM_SIZE message to prevent control from doing alignment }
   if not (csLoading in ComponentState) then Resize;
   Repaint;
 end;
 
-function TStatusBar.IsFontStored: Boolean;
+function TCustomStatusBar.IsFontStored: Boolean;
 begin
   Result := not FUseSystemFont and not ParentFont and not DesktopFont;
 end;
 
-procedure TStatusBar.SetUseSystemFont(const Value: Boolean);
+procedure TCustomStatusBar.SetUseSystemFont(const Value: Boolean);
 begin
   if FUseSystemFont <> Value then
   begin
@@ -5281,19 +5813,19 @@ begin
   end;
 end;
 
-procedure TStatusBar.CMColorChanged(var Message: TMessage);
+procedure TCustomStatusBar.CMColorChanged(var Message: TMessage);
 begin
   inherited;
   RecreateWnd;
 end;
 
-procedure TStatusBar.CMParentFontChanged(var Message: TMessage);
+procedure TCustomStatusBar.CMParentFontChanged(var Message: TMessage);
 begin
   inherited;
   if FUseSystemFont and ParentFont then FUseSystemFont := False;
 end;
 
-function TStatusBar.ExecuteAction(Action: TBasicAction): Boolean;
+function TCustomStatusBar.ExecuteAction(Action: TBasicAction): Boolean;
 begin
   if AutoHint and (Action is THintAction) and not DoHint then
   begin
@@ -5305,23 +5837,77 @@ begin
   else Result := inherited ExecuteAction(Action);
 end;
 
-procedure TStatusBar.CMSysColorChange(var Message: TMessage);
+procedure TCustomStatusBar.CMSysColorChange(var Message: TMessage);
 begin
   inherited;
   RecreateWnd;
 end;
 
-procedure TStatusBar.CMSysFontChanged(var Message: TMessage);
+procedure TCustomStatusBar.CMSysFontChanged(var Message: TMessage);
 begin
   inherited;
   SyncToSystemFont;
 end;
 
-procedure TStatusBar.ChangeScale(M, D: Integer);
+procedure TCustomStatusBar.ChangeScale(M, D: Integer);
 begin
   if UseSystemFont then  // status bar size based on system font size
     ScalingFlags := [sfTop];
   inherited;
+end;
+
+procedure TCustomStatusBar.SetBounds(ALeft, ATop, AWidth, AHeight: Integer);
+begin
+  inherited;
+  ValidateSizeGrip(True);
+end;
+
+procedure TCustomStatusBar.SetParent(AParent: TWinControl);
+begin
+  inherited;
+  //ValidateSizeGrip(False);
+end;
+
+procedure TCustomStatusBar.ValidateSizeGrip(ARecreate: Boolean);
+var
+  LForm: TCustomForm;
+  LPoint: TPoint;
+  LSizeGripValid: Boolean;
+begin
+  inherited;
+  LSizeGripValid := False;
+  LForm := GetParentForm(Self);
+  if (LForm <> nil) and (LForm.BorderStyle in [bsSizeable, bsSizeToolWin]) then
+  begin
+    LPoint := ClientToParent(Point(Width, Height), LForm);
+    LSizeGripValid := (LPoint.X = LForm.ClientWidth) and (LPoint.Y = LForm.ClientHeight);
+  end;
+  if LSizeGripValid <> FSizeGripValid then
+  begin
+    FSizeGripValid := LSizeGripValid;
+    if ARecreate then
+      RecreateWnd;
+  end;
+end;
+
+function TCustomStatusBar.CreatePanel: TStatusPanel;
+var
+  LClass: TStatusPanelClass;
+begin
+  LClass := GetPanelClass;
+  if Assigned(FOnCreatePanelClass) then
+    FOnCreatePanelClass(Self, LClass);
+  Result := LClass.Create(Panels);
+end;
+
+function TCustomStatusBar.CreatePanels: TStatusPanels;
+begin
+  Result := TStatusPanels.Create(Self);
+end;
+
+function TCustomStatusBar.GetPanelClass: TStatusPanelClass;
+begin
+  Result := TStatusPanel;
 end;
 
 { THeaderSection }
@@ -5495,7 +6081,7 @@ end;
 
 { THeaderSections }
 
-constructor THeaderSections.Create(HeaderControl: THeaderControl);
+constructor THeaderSections.Create(HeaderControl: TCustomHeaderControl);
 begin
   inherited Create(THeaderSection);
   FHeaderControl := HeaderControl;
@@ -5503,7 +6089,7 @@ end;
 
 function THeaderSections.Add: THeaderSection;
 begin
-  Result := THeaderSection(inherited Add);
+  Result := AddItem(nil, -1);
 end;
 
 function THeaderSections.GetItem(Index: Integer): THeaderSection;
@@ -5528,15 +6114,38 @@ begin
     FHeaderControl.UpdateSections;
 end;
 
-{ THeaderControl }
+function THeaderSections.AddItem(Item: THeaderSection;
+  Index: Integer): THeaderSection;
+begin
+  if Item = nil then
+    Result := FHeaderControl.CreateSection
+  else
+  begin
+    Result := Item;
+    if Assigned(Item) then
+    begin
+      Result.Collection := Self;
+      if Index < Count then
+        Index := Count - 1;
+      Result.Index := Index;
+    end;
+  end;
+end;
 
-constructor THeaderControl.Create(AOwner: TComponent);
+function THeaderSections.Insert(Index: Integer): THeaderSection;
+begin
+  Result := AddItem(nil, Index);
+end;
+
+{ TCustomHeaderControl }
+
+constructor TCustomHeaderControl.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   ControlStyle := [];
   Align := alTop;
   Height := 17;
-  FSections := THeaderSections.Create(Self);
+  FSections := CreateSections;
   FCanvas := TControlCanvas.Create;
   TControlCanvas(FCanvas).Control := Self;
   FImageChangeLink := TChangeLink.Create;
@@ -5548,15 +6157,16 @@ begin
   FSectionStream := nil;
 end;
 
-destructor THeaderControl.Destroy;
+destructor TCustomHeaderControl.Destroy;
 begin
   FCanvas.Free;
   FSections.Free;
+  FImageChangeLink.Free;
   if Assigned(FSectionStream) then FSectionStream.Free;
   inherited Destroy;
 end;
 
-procedure THeaderControl.CreateParams(var Params: TCreateParams);
+procedure TCustomHeaderControl.CreateParams(var Params: TCreateParams);
 const
   HeaderStyles: array[THeaderStyle] of DWORD = (HDS_BUTTONS, 0);
 begin
@@ -5573,7 +6183,7 @@ begin
   end;
 end;
 
-procedure THeaderControl.CreateWnd;
+procedure TCustomHeaderControl.CreateWnd;
 
   procedure ReadSections;
   var
@@ -5602,7 +6212,7 @@ begin
     UpdateSections;
 end;
 
-procedure THeaderControl.DestroyWnd;
+procedure TCustomHeaderControl.DestroyWnd;
 var
   Writer: TWriter;
 begin
@@ -5618,7 +6228,7 @@ begin
   inherited DestroyWnd;
 end;
 
-procedure THeaderControl.CMBiDiModeChanged(var Message: TMessage);
+procedure TCustomHeaderControl.CMBiDiModeChanged(var Message: TMessage);
 var
   Loop: Integer;
 begin
@@ -5629,7 +6239,7 @@ begin
         Sections[Loop].ParentBiDiModeChanged;
 end;
 
-procedure THeaderControl.FlipChildren(AllLevels: Boolean);
+procedure TCustomHeaderControl.FlipChildren(AllLevels: Boolean);
 var
   Loop, FirstWidth, LastWidth: Integer;
   ASectionsList: THeaderSections;
@@ -5661,7 +6271,7 @@ begin
   end;
 end;
 
-procedure THeaderControl.DrawSection(Section: THeaderSection;
+procedure TCustomHeaderControl.DrawSection(Section: THeaderSection;
   const Rect: TRect; Pressed: Boolean);
 begin
   if Assigned(FOnDrawSection) then
@@ -5669,23 +6279,23 @@ begin
     FCanvas.FillRect(Rect);
 end;
 
-procedure THeaderControl.SectionClick(Section: THeaderSection);
+procedure TCustomHeaderControl.SectionClick(Section: THeaderSection);
 begin
   if Assigned(FOnSectionClick) then FOnSectionClick(Self, Section);
 end;
 
-procedure THeaderControl.SectionResize(Section: THeaderSection);
+procedure TCustomHeaderControl.SectionResize(Section: THeaderSection);
 begin
   if Assigned(FOnSectionResize) then FOnSectionResize(Self, Section);
 end;
 
-procedure THeaderControl.SectionTrack(Section: THeaderSection;
+procedure TCustomHeaderControl.SectionTrack(Section: THeaderSection;
   Width: Integer; State: TSectionTrackState);
 begin
   if Assigned(FOnSectionTrack) then FOnSectionTrack(Self, Section, Width, State);
 end;
 
-procedure THeaderControl.SetFullDrag(Value: Boolean);
+procedure TCustomHeaderControl.SetFullDrag(Value: Boolean);
 begin
   if FFullDrag <> Value then
   begin
@@ -5694,7 +6304,7 @@ begin
   end;
 end;
 
-procedure THeaderControl.SetHotTrack(Value: Boolean);
+procedure TCustomHeaderControl.SetHotTrack(Value: Boolean);
 begin
   if FHotTrack <> Value then
   begin
@@ -5703,7 +6313,7 @@ begin
   end;
 end;
 
-procedure THeaderControl.SetStyle(Value: THeaderStyle);
+procedure TCustomHeaderControl.SetStyle(Value: THeaderStyle);
 begin
   if FStyle <> Value then
   begin
@@ -5712,7 +6322,7 @@ begin
   end;
 end;
 
-procedure THeaderControl.SetDragReorder(const Value: Boolean);
+procedure TCustomHeaderControl.SetDragReorder(const Value: Boolean);
 begin
   if FDragReorder <> Value then
   begin
@@ -5721,12 +6331,12 @@ begin
   end;
 end;
 
-procedure THeaderControl.SetSections(Value: THeaderSections);
+procedure TCustomHeaderControl.SetSections(Value: THeaderSections);
 begin
   FSections.Assign(Value);
 end;
 
-procedure THeaderControl.UpdateItem(Message, Index: Integer);
+procedure TCustomHeaderControl.UpdateItem(Message, Index: Integer);
 var
   Item: THDItem;
   AAlignment: TAlignment;
@@ -5760,12 +6370,12 @@ begin
   end;
 end;
 
-procedure THeaderControl.UpdateSection(Index: Integer);
+procedure TCustomHeaderControl.UpdateSection(Index: Integer);
 begin
   if HandleAllocated then UpdateItem(HDM_SETITEM, Index);
 end;
 
-procedure THeaderControl.UpdateSections;
+procedure TCustomHeaderControl.UpdateSections;
 var
   I: Integer;
 begin
@@ -5777,7 +6387,7 @@ begin
   end;
 end;
 
-procedure THeaderControl.CNDrawItem(var Message: TWMDrawItem);
+procedure TCustomHeaderControl.CNDrawItem(var Message: TWMDrawItem);
 var
   SaveIndex: Integer;
 begin
@@ -5800,7 +6410,7 @@ begin
   Message.Result := 1;
 end;
 
-procedure THeaderControl.CNNotify(var Message: TWMNotify);
+procedure TCustomHeaderControl.CNNotify(var Message: TWMNotify);
 var
   Section: THeaderSection;
   TrackState: TSectionTrackState;
@@ -5881,7 +6491,7 @@ begin
     end;
 end;
 
-procedure THeaderControl.WndProc(var Message: TMessage);
+procedure TCustomHeaderControl.WndProc(var Message: TMessage);
 var
   cxy: Integer;
   ShortCircuit: Boolean;
@@ -5917,7 +6527,7 @@ begin
   inherited WndProc(Message);
 end;
 
-procedure THeaderControl.WMLButtonDown(var Message: TWMLButtonDown);
+procedure TCustomHeaderControl.WMLButtonDown(var Message: TWMLButtonDown);
 var
   Index: Integer;
   Info: THDHitTestInfo;
@@ -5929,7 +6539,7 @@ begin
     Sections[Index].AllowClick then inherited;
 end;
 
-procedure THeaderControl.WMSize(var Message: TWMSize);
+procedure TCustomHeaderControl.WMSize(var Message: TWMSize);
 var
   I, Count, WorkWidth, TmpWidth, Remain: Integer;
   List: TList;
@@ -5992,19 +6602,19 @@ begin
   end;
 end;
 
-procedure THeaderControl.WMWindowPosChanged(var Message: TWMWindowPosChanged);
+procedure TCustomHeaderControl.WMWindowPosChanged(var Message: TWMWindowPosChanged);
 begin
   inherited;
   Invalidate;
 end;
 
-function THeaderControl.DoSectionDrag(FromSection, ToSection: THeaderSection): Boolean;
+function TCustomHeaderControl.DoSectionDrag(FromSection, ToSection: THeaderSection): Boolean;
 begin
   Result := True;
   SectionDrag(FromSection, ToSection, Result);
 end;
 
-procedure THeaderControl.Notification(AComponent: TComponent;
+procedure TCustomHeaderControl.Notification(AComponent: TComponent;
   Operation: TOperation);
 begin
   inherited Notification(AComponent, Operation);
@@ -6012,7 +6622,7 @@ begin
     Images := nil;
 end;
 
-procedure THeaderControl.SetImages(Value: TCustomImageList);
+procedure TCustomHeaderControl.SetImages(Value: TCustomImageList);
 begin
   if Images <> nil then
     Images.UnRegisterChanges(FImageChangeLink);
@@ -6027,20 +6637,20 @@ begin
   UpdateSections;
 end;
 
-procedure THeaderControl.ImageListChange(Sender: TObject);
+procedure TCustomHeaderControl.ImageListChange(Sender: TObject);
 begin
   Header_SetImageList(Handle, TCustomImageList(Sender).Handle);
   UpdateSections;
 end;
 
-procedure THeaderControl.SectionDrag(FromSection, ToSection: THeaderSection;
+procedure TCustomHeaderControl.SectionDrag(FromSection, ToSection: THeaderSection;
   var AllowDrag: Boolean);
 begin
   if Assigned(FOnSectionDrag) then FOnSectionDrag(Self, FromSection, ToSection,
     AllowDrag);
 end;
 
-procedure THeaderControl.DoSectionEndDrag;
+procedure TCustomHeaderControl.DoSectionEndDrag;
 
   procedure UpdateSectionOrder(FromSection, ToSection: THeaderSection);
   var
@@ -6064,9 +6674,24 @@ begin
   SectionEndDrag;
 end;
 
-procedure THeaderControl.SectionEndDrag;
+procedure TCustomHeaderControl.SectionEndDrag;
 begin
   if Assigned(FOnSectionEndDrag) then FOnSectionEndDrag(Self);
+end;
+
+function TCustomHeaderControl.CreateSection: THeaderSection;
+var
+  LClass: THeaderSectionClass;
+begin
+  LClass := THeaderSection;
+  if Assigned(FOnCreateSectionClass) then
+    FOnCreateSectionClass(Self, LClass);
+  Result := LClass.Create(Sections);
+end;
+
+function TCustomHeaderControl.CreateSections: THeaderSections;
+begin
+  Result := THeaderSections.Create(Self);
 end;
 
 { TTreeNode }
@@ -6104,20 +6729,27 @@ var
 begin
   Owner.ClearCache;
   FDeleting := True;
+  if Owner.Owner <> nil then
+    Owner.Owner.FSelections.Remove(Self);
   if Owner.Owner.FLastDropTarget = Self then
     Owner.Owner.FLastDropTarget := nil;
   Node := Parent;
   if (Node <> nil) and (not Node.Deleting) then
   begin
-    if Node.IndexOf(Self) <> -1 then CheckValue := 1
-    else CheckValue := 0;
+    if Node.IndexOf(Self) <> -1 then
+      CheckValue := 1
+    else
+      CheckValue := 0;
     if Node.CompareCount(CheckValue) then
     begin
       Expanded := False;
       Node.HasChildren := False;
     end;
   end;
-  if ItemId <> nil then TreeView_DeleteItem(Handle, ItemId);
+  if Owner.Owner <> nil then
+    Owner.Owner.Delete(Self);
+  if ItemId <> nil then
+    TreeView_DeleteItem(Handle, ItemId);
   Data := nil;
   inherited Destroy;
 end;
@@ -6147,29 +6779,39 @@ procedure TTreeNode.SetText(const S: string);
 var
   Item: TTVItem;
 begin
-  FText := S;
-  with Item do
+  if not Deleting and (S <> Text) then
   begin
-    mask := TVIF_TEXT;
-    hItem := ItemId;
-    pszText := LPSTR_TEXTCALLBACK;
-  end;
-  TreeView_SetItem(Handle, Item);
-  if (TreeView.SortType in [stText, stBoth]) and FInTree then
-  begin
-    if (Parent <> nil) then Parent.AlphaSort
-    else TreeView.AlphaSort;
+    FText := S;
+    with Item do
+    begin
+      mask := TVIF_TEXT;
+      hItem := ItemId;
+      pszText := LPSTR_TEXTCALLBACK;
+    end;
+    TreeView_SetItem(Handle, Item);
+    if (TreeView.SortType in [stText, stBoth]) and FInTree then
+    begin
+      if (Parent <> nil) then
+        Parent.AlphaSort
+      else
+        TreeView.AlphaSort(False);
+    end;
   end;
 end;
 
 procedure TTreeNode.SetData(Value: Pointer);
 begin
-  FData := Value;
-  if (TreeView.SortType in [stData, stBoth]) and Assigned(TreeView.OnCompare)
-    and (not Deleting) and FInTree then
+  if not Deleting and (Value <> Data) then
   begin
-    if Parent <> nil then Parent.AlphaSort
-    else TreeView.AlphaSort;
+    FData := Value;
+    if (TreeView.SortType in [stData, stBoth]) and Assigned(TreeView.OnCompare)
+      and (not Deleting) and FInTree then
+    begin
+      if Parent <> nil then
+        Parent.AlphaSort
+      else
+        TreeView.AlphaSort(False);
+    end;
   end;
 end;
 
@@ -6178,18 +6820,45 @@ var
   Item: TTVItem;
 begin
   Result := False;
-  with Item do
+  if not Deleting then
+    with Item do
+    begin
+      mask := TVIF_STATE;
+      hItem := ItemId;
+      if TreeView_GetItem(Handle, Item) then
+        case NodeState of
+          nsCut: Result := (state and TVIS_CUT) <> 0;
+          nsFocused: Result := (state and TVIS_FOCUSED) <> 0;
+          nsSelected: Result := (state and TVIS_SELECTED) <> 0;
+          nsExpanded: Result := (state and TVIS_EXPANDED) <> 0;
+          nsDropHilited: Result := (state and TVIS_DROPHILITED) <> 0;
+        end;
+    end;
+end;
+
+procedure TTreeNode.SetState(NodeState: TNodeState; Value: Boolean);
+var
+  Item: TTVItem;
+begin
+  if not Deleting then
   begin
-    mask := TVIF_STATE;
-    hItem := ItemId;
-    if TreeView_GetItem(Handle, Item) then
+    with Item do
+    begin
+      mask := TVIF_STATE;
+      hItem := ItemId;
       case NodeState of
-        nsCut: Result := (state and TVIS_CUT) <> 0;
-        nsFocused: Result := (state and TVIS_FOCUSED) <> 0;
-        nsSelected: Result := (state and TVIS_SELECTED) <> 0;
-        nsExpanded: Result := (state and TVIS_EXPANDED) <> 0;
-        nsDropHilited: Result := (state and TVIS_DROPHILITED) <> 0;
+        nsCut: stateMask := TVIS_CUT;
+        nsFocused: stateMask := TVIS_FOCUSED;
+        nsSelected: stateMask := TVIS_SELECTED;
+        nsExpanded: stateMask := TVIS_EXPANDED;
+        nsDropHilited: stateMask := TVIS_DROPHILITED;
       end;
+      if Value then
+        state := stateMask and DWORD(-1)
+      else
+        state := DWORD(0);
+    end;
+    TreeView_SetItem(Handle, Item);
   end;
 end;
 
@@ -6197,65 +6866,77 @@ procedure TTreeNode.SetImageIndex(Value: TImageIndex);
 var
   Item: TTVItem;
 begin
-  FImageIndex := Value;
-  with Item do
+  if not Deleting and (Value <> ImageIndex) then
   begin
-    mask := TVIF_IMAGE or TVIF_HANDLE;
-    hItem := ItemId;
-    if Assigned(TCustomTreeView(Owner.Owner).OnGetImageIndex) then
-      iImage := I_IMAGECALLBACK
-    else
-      iImage := FImageIndex;
+    FImageIndex := Value;
+    with Item do
+    begin
+      mask := TVIF_IMAGE or TVIF_HANDLE;
+      hItem := ItemId;
+      if Assigned(TCustomTreeView(Owner.Owner).OnGetImageIndex) then
+        iImage := I_IMAGECALLBACK
+      else
+        iImage := FImageIndex;
+    end;
+    TreeView_SetItem(Handle, Item);
   end;
-  TreeView_SetItem(Handle, Item);
 end;
 
 procedure TTreeNode.SetSelectedIndex(Value: Integer);
 var
   Item: TTVItem;
 begin
-  FSelectedIndex := Value;
-  with Item do
+  if not Deleting and (Value <> SelectedIndex) then
   begin
-    mask := TVIF_SELECTEDIMAGE or TVIF_HANDLE;
-    hItem := ItemId;
-    if Assigned(TCustomTreeView(Owner.Owner).OnGetSelectedIndex) then
-      iSelectedImage := I_IMAGECALLBACK
-    else
-      iSelectedImage := FSelectedIndex;
+    FSelectedIndex := Value;
+    with Item do
+    begin
+      mask := TVIF_SELECTEDIMAGE or TVIF_HANDLE;
+      hItem := ItemId;
+      if Assigned(TCustomTreeView(Owner.Owner).OnGetSelectedIndex) then
+        iSelectedImage := I_IMAGECALLBACK
+      else
+        iSelectedImage := FSelectedIndex;
+    end;
+    TreeView_SetItem(Handle, Item);
   end;
-  TreeView_SetItem(Handle, Item);
 end;
 
 procedure TTreeNode.SetOverlayIndex(Value: Integer);
 var
   Item: TTVItem;
 begin
-  FOverlayIndex := Value;
-  with Item do
+  if not Deleting and (Value <> OverlayIndex) then
   begin
-    mask := TVIF_STATE or TVIF_HANDLE;
-    stateMask := TVIS_OVERLAYMASK;
-    hItem := ItemId;
-    state := IndexToOverlayMask(FOverlayIndex + 1);
+    FOverlayIndex := Value;
+    with Item do
+    begin
+      mask := TVIF_STATE or TVIF_HANDLE;
+      stateMask := TVIS_OVERLAYMASK;
+      hItem := ItemId;
+      state := IndexToOverlayMask(FOverlayIndex + 1);
+    end;
+    TreeView_SetItem(Handle, Item);
   end;
-  TreeView_SetItem(Handle, Item);
 end;
 
 procedure TTreeNode.SetStateIndex(Value: Integer);
 var
   Item: TTVItem;
 begin
-  FStateIndex := Value;
-  if Value >= 0 then Dec(Value);
-  with Item do
+  if not Deleting and (Value <> StateIndex) then
   begin
-    mask := TVIF_STATE or TVIF_HANDLE;
-    stateMask := TVIS_STATEIMAGEMASK;
-    hItem := ItemId;
-    state := IndexToStateImageMask(Value + 1);
+    FStateIndex := Value;
+    if Value >= 0 then Dec(Value);
+    with Item do
+    begin
+      mask := TVIF_STATE or TVIF_HANDLE;
+      stateMask := TVIS_STATEIMAGEMASK;
+      hItem := ItemId;
+      state := IndexToStateImageMask(Value + 1);
+    end;
+    TreeView_SetItem(Handle, Item);
   end;
-  TreeView_SetItem(Handle, Item);
 end;
 
 function TTreeNode.CompareCount(CompareMe: Integer): Boolean;
@@ -6270,27 +6951,34 @@ Begin
   begin
     Inc(Count);
     Node := Node.GetNextChild(Node);
-    if Count > CompareMe then Exit;
+    if Count > CompareMe then
+      Exit;
   end;
-  if Count = CompareMe then Result := True;
+  if Count = CompareMe then
+    Result := True;
 end;
 
 function TTreeNode.DoCanExpand(Expand: Boolean): Boolean;
 begin
   Result := False;
-  if HasChildren then
-  begin
-    if Expand then Result := TreeView.CanExpand(Self)
-    else Result := TreeView.CanCollapse(Self);
-  end;
+  if not Deleting then
+    if HasChildren then
+    begin
+      if Expand then
+        Result := TreeView.CanExpand(Self)
+      else
+        Result := TreeView.CanCollapse(Self);
+    end;
 end;
 
 procedure TTreeNode.DoExpand(Expand: Boolean);
 begin
-  if HasChildren then
+  if not Deleting and HasChildren then
   begin
-    if Expand then TreeView.Expand(Self)
-    else TreeView.Collapse(Self);
+    if Expand then
+      TreeView.Expand(Self)
+    else
+      TreeView.Collapse(Self);
   end;
 end;
 
@@ -6299,38 +6987,39 @@ var
   Flag: Integer;
   Node: TTreeNode;
 begin
-  if Recurse then
-  begin
-    Node := Self;
-    repeat
-      Node.ExpandItem(Expand, False);
-      Node := Node.GetNext;
-    until (Node = nil) or (not Node.HasAsParent(Self));
-  end
-  else begin
-    TreeView.FManualNotify := True;
-    try
-      Flag := 0;
-      if Expand then
-      begin
-        if DoCanExpand(True) then
+  if not Deleting then
+    if Recurse then
+    begin
+      Node := Self;
+      repeat
+        Node.ExpandItem(Expand, False);
+        Node := Node.GetNext;
+      until (Node = nil) or (not Node.HasAsParent(Self));
+    end
+    else begin
+      TreeView.FManualNotify := True;
+      try
+        Flag := 0;
+        if Expand then
         begin
-          Flag := TVE_EXPAND;
-          DoExpand(True);
+          if DoCanExpand(True) then
+          begin
+            Flag := TVE_EXPAND;
+            DoExpand(True);
+          end;
+        end
+        else begin
+          if DoCanExpand(False) then
+          begin
+            Flag := TVE_COLLAPSE;
+            DoExpand(False);
+          end;
         end;
-      end
-      else begin
-        if DoCanExpand(False) then
-        begin
-          Flag := TVE_COLLAPSE;
-          DoExpand(False);
-        end;
+        if Flag <> 0 then TreeView_Expand(Handle, ItemId, Flag);
+      finally
+        TreeView.FManualNotify := False;
       end;
-      if Flag <> 0 then TreeView_Expand(Handle, ItemId, Flag);
-    finally
-      TreeView.FManualNotify := False;
     end;
-  end;
 end;
 
 procedure TTreeNode.Expand(Recurse: Boolean);
@@ -6350,8 +7039,13 @@ end;
 
 procedure TTreeNode.SetExpanded(Value: Boolean);
 begin
-  if Value then Expand(False)
-  else Collapse(False);
+  if Value <> Expanded then
+  begin
+    if Value then
+      Expand(False)
+    else
+      Collapse(False);
+  end;
 end;
 
 function TTreeNode.GetSelected: Boolean;
@@ -6361,8 +7055,19 @@ end;
 
 procedure TTreeNode.SetSelected(Value: Boolean);
 begin
-  if Value then TreeView_SelectItem(Handle, ItemId)
-  else if Selected then TreeView_SelectItem(Handle, nil);
+  if not Deleting and (Handle <> 0) and (ItemId <> nil) then
+    if Value <> Selected then
+    begin
+      if Value then TreeView_SelectItem(Handle, ItemId)
+      else if Selected then TreeView_SelectItem(Handle, nil);
+    end
+    else if (TreeView.MultiSelect) and (TreeView.FSelections.Count > 1) then
+      TreeView.Select(Self, []);
+end;
+
+procedure TTreeNode.SetSelectedBit(Value: Boolean);
+begin
+  SetState(nsSelected, Value);
 end;
 
 function TTreeNode.GetCut: Boolean;
@@ -6371,20 +7076,9 @@ begin
 end;
 
 procedure TTreeNode.SetCut(Value: Boolean);
-var
-  Item: TTVItem;
-  Template: DWORD;
 begin
-  if Value then Template := DWORD(-1)
-  else Template := 0;
-  with Item do
-  begin
-    mask := TVIF_STATE;
-    hItem := ItemId;
-    stateMask := TVIS_CUT;
-    state := stateMask and Template;
-  end;
-  TreeView_SetItem(Handle, Item);
+  if Value <> Cut then
+    SetState(nsCut, Value);
 end;
 
 function TTreeNode.GetDropTarget: Boolean;
@@ -6394,35 +7088,31 @@ end;
 
 procedure TTreeNode.SetDropTarget(Value: Boolean);
 begin
-  if Value then TreeView_SelectDropTarget(Handle, ItemId)
-  else if DropTarget then TreeView_SelectDropTarget(Handle, nil);
+  if (Handle <> 0) and (ItemId <> nil) then
+    if Value then
+      TreeView_SelectDropTarget(Handle, ItemId)
+    else if DropTarget then
+      TreeView_SelectDropTarget(Handle, nil);
 end;
 
 function TTreeNode.GetChildren: Boolean;
 var
   Item: TTVItem;
 begin
-  Item.mask := TVIF_CHILDREN;
-  Item.hItem := ItemId;
-  if TreeView_GetItem(Handle, Item) then Result := Item.cChildren > 0
-  else Result := False;
+  Result := False;
+  if not Deleting then
+  begin
+    Item.mask := TVIF_CHILDREN;
+    Item.hItem := ItemId;
+    if TreeView_GetItem(Handle, Item) then
+      Result := Item.cChildren > 0;
+  end;
 end;
 
 procedure TTreeNode.SetFocused(Value: Boolean);
-var
-  Item: TTVItem;
-  Template: DWORD;
 begin
-  if Value then Template := DWORD(-1)
-  else Template := 0;
-  with Item do
-  begin
-    mask := TVIF_STATE;
-    hItem := ItemId;
-    stateMask := TVIS_FOCUSED;
-    state := stateMask and Template;
-  end;
-  TreeView_SetItem(Handle, Item);
+  if Value <> Focused then
+    SetState(nsFocused, Value);
 end;
 
 function TTreeNode.GetFocused: Boolean;
@@ -6434,45 +7124,56 @@ procedure TTreeNode.SetChildren(Value: Boolean);
 var
   Item: TTVItem;
 begin
-  with Item do
+  if not Deleting then
   begin
-    mask := TVIF_CHILDREN;
-    hItem := ItemId;
-    cChildren := Ord(Value);
+    with Item do
+    begin
+      mask := TVIF_CHILDREN;
+      hItem := ItemId;
+      cChildren := Ord(Value);
+    end;
+    TreeView_SetItem(Handle, Item);
   end;
-  TreeView_SetItem(Handle, Item);
 end;
 
 function TTreeNode.GetParent: TTreeNode;
 begin
-  with FOwner do
-    Result := GetNode(TreeView_GetParent(Handle, ItemId));
+  Result := nil;
+  if (Handle <> 0) and (ItemId <> nil) then
+    with FOwner do
+      Result := GetNode(TreeView_GetParent(Handle, ItemId));
 end;
 
 function TTreeNode.GetNextSibling: TTreeNode;
 begin
-  with FOwner do
-    Result := GetNode(TreeView_GetNextSibling(Handle, ItemId));
+  Result := nil;
+  if (Handle <> 0) and (ItemId <> nil) then
+    with FOwner do
+      Result := GetNode(TreeView_GetNextSibling(Handle, ItemId));
 end;
 
 function TTreeNode.GetPrevSibling: TTreeNode;
 begin
-  with FOwner do
-    Result := GetNode(TreeView_GetPrevSibling(Handle, ItemId));
+  Result := nil;
+  if (Handle <> 0) and (ItemId <> nil) then
+    with FOwner do
+      Result := GetNode(TreeView_GetPrevSibling(Handle, ItemId));
 end;
 
 function TTreeNode.GetNextVisible: TTreeNode;
 begin
-  if IsVisible then
+  Result := nil;
+  if (Handle <> 0) and (ItemId <> nil) and IsVisible then
     with FOwner do
-      Result := GetNode(TreeView_GetNextVisible(Handle, ItemId))
-  else Result := nil;
+      Result := GetNode(TreeView_GetNextVisible(Handle, ItemId));
 end;
 
 function TTreeNode.GetPrevVisible: TTreeNode;
 begin
-  with FOwner do
-    Result := GetNode(TreeView_GetPrevVisible(Handle, ItemId));
+  Result := nil;
+  if (Handle <> 0) and (ItemId <> nil) and IsVisible then
+    with FOwner do
+      Result := GetNode(TreeView_GetPrevVisible(Handle, ItemId));
 end;
 
 function TTreeNode.GetNextChild(Value: TTreeNode): TTreeNode;
@@ -6489,8 +7190,10 @@ end;
 
 function TTreeNode.GetFirstChild: TTreeNode;
 begin
-  with FOwner do
-    Result := GetNode(TreeView_GetChild(Handle, ItemId));
+  Result := nil;
+  if (Handle <> 0) and (ItemId <> nil) then
+    with FOwner do
+      Result := GetNode(TreeView_GetChild(Handle, ItemId));
 end;
 
 function TTreeNode.GetLastChild: TTreeNode;
@@ -6511,18 +7214,21 @@ end;
 function TTreeNode.GetNext: TTreeNode;
 var
   NodeID, ParentID: HTreeItem;
-  Handle: HWND;
 begin
-  Handle := FOwner.Handle;
-  NodeID := TreeView_GetChild(Handle, ItemId);
-  if NodeID = nil then NodeID := TreeView_GetNextSibling(Handle, ItemId);
-  ParentID := ItemId;
-  while (NodeID = nil) and (ParentID <> nil) do
+  Result := nil;
+  if (Handle <> 0) and (ItemId <> nil) then
   begin
-    ParentID := TreeView_GetParent(Handle, ParentID);
-    NodeID := TreeView_GetNextSibling(Handle, ParentID);
+    NodeID := TreeView_GetChild(Handle, ItemId);
+    if NodeID = nil then
+      NodeID := TreeView_GetNextSibling(Handle, ItemId);
+    ParentID := ItemId;
+    while (NodeID = nil) and (ParentID <> nil) do
+    begin
+      ParentID := TreeView_GetParent(Handle, ParentID);
+      NodeID := TreeView_GetNextSibling(Handle, ParentID);
+    end;
+    Result := FOwner.GetNode(NodeID);
   end;
-  Result := FOwner.GetNode(NodeID);
 end;
 
 function TTreeNode.GetPrev: TTreeNode;
@@ -6547,13 +7253,19 @@ var
 begin
   if Owner.FNodeCache.CacheNode = Self then
     Result := Owner.FNodeCache.CacheIndex
-  else begin
-    Result := -1;
-    Node := Self;
-    while Node <> nil do
+  else
+  begin
+    if IsFirstNode then
+      Result := 0
+    else
     begin
-      Inc(Result);
-      Node := Node.GetPrev;
+      Result := -1;
+      Node := Self;
+      while Node <> nil do
+      begin
+        Inc(Result);
+        Node := Node.GetPrev;
+      end;
     end;
   end;
 end;
@@ -6579,7 +7291,7 @@ begin
     Result := GetNextChild(Result);
     Dec(Index);
   end;
-  if Result = nil then TreeViewError(SListIndexError);
+  if Result = nil then TreeViewError(Format(SListIndexError, [Index]));
 end;
 
 procedure TTreeNode.SetItem(Index: Integer; Value: TTreeNode);
@@ -6617,7 +7329,8 @@ end;
 
 procedure TTreeNode.EndEdit(Cancel: Boolean);
 begin
-  TreeView_EndEditLabelNow(Handle, Cancel);
+  if not Deleting then
+    TreeView_EndEditLabelNow(Handle, Cancel);
 end;
 
 procedure TTreeNode.InternalMove(ParentNode, Node: TTreeNode;
@@ -6668,50 +7381,59 @@ var
   OldOnChanging: TTVChangingEvent;
   OldOnChange: TTVChangedEvent;
 begin
-  OldOnChanging := TreeView.OnChanging;
-  OldOnChange := TreeView.OnChange;
-  TreeView.OnChanging := nil;
-  TreeView.OnChange := nil;
-  try
-    if (Destination = nil) or not Destination.HasAsParent(Self) then
-    begin
-      AddMode := taAdd;
-      if (Destination <> nil) and not (Mode in [naAddChild, naAddChildFirst]) then
-        Node := Destination.Parent else
-        Node := Destination;
-      case Mode of
-        naAdd,
-        naAddChild: AddMode := taAdd;
-        naAddFirst,
-        naAddChildFirst: AddMode := taAddFirst;
-        naInsert:
-          begin
-            Destination := Destination.GetPrevSibling;
-            if Destination = nil then AddMode := taAddFirst
-            else AddMode := taInsert;
-          end;
-      end;
-      if Node <> nil then
-        HItem := Node.ItemId else
-        HItem := nil;
-      if (Destination <> Self) then
-        InternalMove(Node, Destination, HItem, AddMode);
-      Node := Parent;
-      if Node <> nil then
+  if not Deleting then
+  begin
+    OldOnChanging := TreeView.OnChanging;
+    OldOnChange := TreeView.OnChange;
+    TreeView.OnChanging := nil;
+    TreeView.OnChange := nil;
+    try
+      if (Destination = nil) or not Destination.HasAsParent(Self) then
       begin
-        Node.HasChildren := True;
-        Node.Expanded := True;
+        AddMode := taAdd;
+        if (Destination <> nil) and not (Mode in [naAddChild, naAddChildFirst]) then
+          Node := Destination.Parent else
+          Node := Destination;
+        case Mode of
+          naAdd,
+          naAddChild: AddMode := taAdd;
+          naAddFirst,
+          naAddChildFirst: AddMode := taAddFirst;
+          naInsert:
+            begin
+              Destination := Destination.GetPrevSibling;
+              if Destination = nil then AddMode := taAddFirst
+              else AddMode := taInsert;
+            end;
+        end;
+        if Node <> nil then
+          HItem := Node.ItemId else
+          HItem := nil;
+        if (Destination <> Self) then
+          InternalMove(Node, Destination, HItem, AddMode);
+        Node := Parent;
+        if Node <> nil then
+        begin
+          Node.HasChildren := True;
+          Node.Expanded := True;
+        end;
       end;
+    finally
+      TreeView.OnChanging := OldOnChanging;
+      TreeView.OnChange := OldOnChange;
     end;
-  finally
-    TreeView.OnChanging := OldOnChanging;
-    TreeView.OnChange := OldOnChange;
   end;
+end;
+
+function TTreeNode.IsFirstNode: Boolean;
+begin
+  Result := not Deleting and (Parent = nil) and (GetPrevSibling = nil);
 end;
 
 procedure TTreeNode.MakeVisible;
 begin
-  TreeView_EnsureVisible(Handle, ItemId);
+  if (Handle <> 0) and (ItemId <> nil) then
+    TreeView_EnsureVisible(Handle, ItemId);
 end;
 
 function TTreeNode.GetLevel: Integer;
@@ -6731,49 +7453,67 @@ function TTreeNode.IsNodeVisible: Boolean;
 var
   Rect: TRect;
 begin
-  Result := TreeView_GetItemRect(Handle, ItemId, Rect, True);
+  Result := not Deleting and TreeView_GetItemRect(Handle, ItemId, Rect, True);
 end;
 
 function TTreeNode.EditText: Boolean;
 begin
-  Result := TreeView_EditLabel(Handle, ItemId) <> 0;
+  Result := (Handle <> 0) and (ItemId <> nil) and (TreeView_EditLabel(Handle, ItemId) <> 0);
 end;
 
 function TTreeNode.DisplayRect(TextOnly: Boolean): TRect;
 begin
   FillChar(Result, SizeOf(Result), 0);
-  TreeView_GetItemRect(Handle, ItemId, Result, TextOnly);
+  if not Deleting then
+    TreeView_GetItemRect(Handle, ItemId, Result, TextOnly);
 end;
 
-function TTreeNode.AlphaSort: Boolean;
+function TTreeNode.AlphaSort(ARecurse: Boolean): Boolean;
 begin
-  Result := CustomSort(nil, 0);
+  Result := CustomSort(nil, 0, ARecurse);
 end;
 
-function TTreeNode.CustomSort(SortProc: TTVCompare; Data: Longint): Boolean;
+function TTreeNode.CustomSort(SortProc: TTVCompare; Data: Longint; ARecurse: Boolean): Boolean;
 var
   SortCB: TTVSortCB;
+  LNode: TTreeNode;
 begin
-  Owner.ClearCache;
-  with SortCB do
+  Result := False;
+  if not Deleting then
   begin
-    if not Assigned(SortProc) then lpfnCompare := @DefaultTreeViewSort
-    else lpfnCompare := SortProc;
-    hParent := ItemId;
-    lParam := Data;
+    Owner.ClearCache;
+    with SortCB do
+    begin
+      if not Assigned(SortProc) then lpfnCompare := @DefaultTreeViewSort
+      else lpfnCompare := SortProc;
+      hParent := ItemId;
+      lParam := Data;
+    end;
+    Result := TreeView_SortChildrenCB(Handle, SortCB, 0);
+    if ARecurse then
+    begin
+      LNode := GetFirstChild;
+      while LNode <> nil do
+      begin
+        if LNode.HasChildren then
+          LNode.CustomSort(SortProc, Data, True);
+        LNode := LNode.GetNextSibling;
+      end;
+    end;
   end;
-  Result := TreeView_SortChildrenCB(Handle, SortCB, 0);
 end;
 
 procedure TTreeNode.Delete;
 begin
-  if not Deleting then Free;
+  if not Deleting then
+    Free;
 end;
 
 procedure TTreeNode.DeleteChildren;
 begin
   Owner.ClearCache;
-  TreeView_Expand(TreeView.Handle, ItemID, TVE_COLLAPSE or TVE_COLLAPSERESET);
+  if not Deleting then
+    TreeView_Expand(TreeView.Handle, ItemID, TVE_COLLAPSE or TVE_COLLAPSERESET);
   HasChildren := False;
 end;
 
@@ -6782,7 +7522,7 @@ var
   Node: TTreeNode;
 begin
   Owner.ClearCache;
-  if Source is TTreeNode then
+  if not Deleting and (Source is TTreeNode) then
   begin
     Node := TTreeNode(Source);
     Text := Node.Text;
@@ -6796,7 +7536,8 @@ begin
     Cut := Node.Cut;
     HasChildren := Node.HasChildren;
   end
-  else inherited Assign(Source);
+  else
+    inherited Assign(Source);
 end;
 
 function TTreeNode.IsEqual(Node: TTreeNode): Boolean;
@@ -6807,6 +7548,7 @@ end;
 procedure TTreeNode.ReadData(Stream: TStream; Info: PNodeInfo);
 var
   I, Size, ItemCount: Integer;
+  LNode: TTreeNode;
 begin
   Owner.ClearCache;
   Stream.ReadBuffer(Size, SizeOf(Size));
@@ -6819,7 +7561,11 @@ begin
   Data := Info^.Data;
   ItemCount := Info^.Count;
   for I := 0 to ItemCount - 1 do
-    Owner.AddChild(Self, '').ReadData(Stream, Info);
+  begin
+    LNode := Owner.AddChild(Self, '');
+    LNode.ReadData(Stream, Info);
+    Owner.Owner.Added(LNode);
+  end;
 end;
 
 procedure TTreeNode.WriteData(Stream: TStream; Info: PNodeInfo);
@@ -6839,7 +7585,8 @@ begin
   Info^.Count := ItemCount;
   Stream.WriteBuffer(Size, SizeOf(Size));
   Stream.WriteBuffer(Info^, Size);
-  for I := 0 to ItemCount - 1 do Item[I].WriteData(Stream, Info);
+  for I := 0 to ItemCount - 1 do
+    Item[I].WriteData(Stream, Info);
 end;
 
 { TTreeNodes }
@@ -6858,8 +7605,10 @@ end;
 
 function TTreeNodes.GetCount: Integer;
 begin
-  if Owner.HandleAllocated then Result := TreeView_GetCount(Handle)
-  else Result := 0;
+  if Owner.HandleAllocated then
+    Result := TreeView_GetCount(Handle)
+  else
+    Result := 0;
 end;
 
 function TTreeNodes.GetHandle: HWND;
@@ -6869,55 +7618,149 @@ end;
 
 procedure TTreeNodes.Delete(Node: TTreeNode);
 begin
-  if (Node.ItemId = nil) then
-    Owner.Delete(Node);
   Node.Delete;
 end;
 
 procedure TTreeNodes.Clear;
+var
+  LHandleAllocated: Boolean;
 begin
-  ClearCache;
-  if not (csDestroying in Owner.ComponentState) and Owner.HandleAllocated then
-    TreeView_DeleteAllItems(Owner.Handle);
+  LHandleAllocated := Owner.HandleAllocated;
+  if LHandleAllocated then
+    BeginUpdate;
+  try
+    ClearCache;
+    if Owner.HandleAllocated then
+      TreeView_DeleteAllItems(Owner.Handle);
+  finally
+    if LHandleAllocated then
+      EndUpdate;
+  end;
 end;
 
-function TTreeNodes.AddChildFirst(Node: TTreeNode; const S: string): TTreeNode;
+function TTreeNodes.AddChildFirst(Parent: TTreeNode; const S: string): TTreeNode;
 begin
-  Result := AddChildObjectFirst(Node, S, nil);
+  Result := AddNode(nil, Parent, S, nil, naAddChildFirst);
 end;
 
-function TTreeNodes.AddChildObjectFirst(Node: TTreeNode; const S: string;
+function TTreeNodes.AddChildObjectFirst(Parent: TTreeNode; const S: string;
   Ptr: Pointer): TTreeNode;
 begin
-  Result := InternalAddObject(Node, S, Ptr, taAddFirst);
+  Result := AddNode(nil, Parent, S, Ptr, naAddChildFirst);
 end;
 
-function TTreeNodes.AddChild(Node: TTreeNode; const S: string): TTreeNode;
+function TTreeNodes.AddChild(Parent: TTreeNode; const S: string): TTreeNode;
 begin
-  Result := AddChildObject(Node, S, nil);
+  Result := AddNode(nil, Parent, S, nil, naAddChild);
 end;
 
-function TTreeNodes.AddChildObject(Node: TTreeNode; const S: string;
+function TTreeNodes.AddChildObject(Parent: TTreeNode; const S: string;
   Ptr: Pointer): TTreeNode;
 begin
-  Result := InternalAddObject(Node, S, Ptr, taAdd);
+  Result := AddNode(nil, Parent, S, Ptr, naAddChild);
 end;
 
-function TTreeNodes.AddFirst(Node: TTreeNode; const S: string): TTreeNode;
+function TTreeNodes.AddFirst(Sibling: TTreeNode; const S: string): TTreeNode;
 begin
-  Result := AddObjectFirst(Node, S, nil);
+  Result := AddNode(nil, Sibling, S, nil, naAddFirst);
 end;
 
-function TTreeNodes.AddObjectFirst(Node: TTreeNode; const S: string;
+function TTreeNodes.AddObjectFirst(Sibling: TTreeNode; const S: string;
   Ptr: Pointer): TTreeNode;
 begin
-  if Node <> nil then Node := Node.Parent;
-  Result := InternalAddObject(Node, S, Ptr, taAddFirst);
+  Result := AddNode(nil, Sibling, S, Ptr, naAddFirst);
 end;
 
-function TTreeNodes.Add(Node: TTreeNode; const S: string): TTreeNode;
+function TTreeNodes.Add(Sibling: TTreeNode; const S: string): TTreeNode;
 begin
-  Result := AddObject(Node, S, nil);
+  Result := AddNode(nil, Sibling, S, nil, naAdd);
+end;
+
+function TTreeNodes.AddObject(Sibling: TTreeNode; const S: string;
+  Ptr: Pointer): TTreeNode;
+begin
+  Result := AddNode(nil, Sibling, S, Ptr, naAdd);
+end;
+
+function TTreeNodes.Insert(Sibling: TTreeNode; const S: string): TTreeNode;
+begin
+  Result := AddNode(nil, Sibling, S, nil, naInsert);
+end;
+
+function TTreeNodes.InsertObject(Sibling: TTreeNode; const S: string;
+  Ptr: Pointer): TTreeNode;
+begin
+  Result := AddNode(nil, Sibling, S, Ptr, naInsert);
+end;
+
+function TTreeNodes.InsertNode(Node, Sibling: TTreeNode; const S: string;
+  Ptr: Pointer): TTreeNode;
+begin
+  Result := AddNode(Node, Sibling, S, Ptr, naInsert);
+end;
+
+function TTreeNodes.AddNode(Node, Relative: TTreeNode; const S: string;
+  Ptr: Pointer; Method: TNodeAttachMode): TTreeNode;
+const
+  cAddMode: array [TNodeAttachMode] of TAddMode =
+    (taAdd, taAddFirst, taAdd, taAddFirst, taInsert);
+var
+  Item, ItemId: HTreeItem;
+  Parent: TTreeNode;
+  AddMode: TAddMode;
+begin
+  // what are we trying to add?
+  if Node = nil then
+    Result := Owner.CreateNode
+  else
+    Result := Node;
+
+  // ok lets try to actually add it
+  try
+    Item := nil;
+    ItemId := nil;
+    Parent := nil;
+    AddMode := cAddMode[Method];
+    if Relative <> nil then
+      case Method of
+        naAdd, naAddFirst:
+          begin
+            Parent := Relative.Parent;
+            if Parent <> nil then
+              Item := Parent.ItemId;
+          end;
+        naAddChild, naAddChildFirst:
+          begin
+            Parent := Relative;
+            Item := Parent.ItemId;
+          end;
+        naInsert:
+          begin
+            Parent := Relative.Parent;
+            if Parent <> nil then
+              Item := Parent.ItemId;
+            Relative := Relative.GetPrevSibling;
+            if Relative <> nil then
+              ItemId := Relative.ItemId
+            else
+              AddMode := taAddFirst;
+          end;
+      end;
+    Result.Data := Ptr;
+    Result.Text := S;
+    Item := AddItem(Item, ItemId, CreateItem(Result), AddMode);
+    if Item = nil then
+      raise EOutOfResources.Create(sInsertError);
+    Result.FItemId := Item;
+    if (FUpdateCount = 0) and Result.IsFirstNode then
+      SendMessage(Handle, WM_SETREDRAW, 1, 0);
+    AddedNode(Parent);
+    if not Reading then
+      Owner.Added(Result);
+  except
+    Result.Free;
+    raise;
+  end;
 end;
 
 procedure TTreeNodes.Repaint(Node: TTreeNode);
@@ -6926,7 +7769,8 @@ var
 begin
   if FUpdateCount < 1 then
   begin
-    while (Node <> nil) and not Node.IsVisible do Node := Node.Parent;
+    while (Node <> nil) and not Node.IsVisible do
+      Node := Node.Parent;
     if Node <> nil then
     begin
       R := Node.DisplayRect(False);
@@ -6935,82 +7779,12 @@ begin
   end;
 end;
 
-function TTreeNodes.AddObject(Node: TTreeNode; const S: string;
-  Ptr: Pointer): TTreeNode;
-begin
-  if Node <> nil then Node := Node.Parent;
-  Result := InternalAddObject(Node, S, Ptr, taAdd);
-end;
-
-function TTreeNodes.Insert(Node: TTreeNode; const S: string): TTreeNode;
-begin
-  Result := InsertObject(Node, S, nil);
-end;
-
 procedure TTreeNodes.AddedNode(Value: TTreeNode);
 begin
   if Value <> nil then
   begin
     Value.HasChildren := True;
     Repaint(Value);
-  end;
-end;
-
-function TTreeNodes.InsertObject(Node: TTreeNode; const S: string;
-  Ptr: Pointer): TTreeNode;
-var
-  Item, ItemId: HTreeItem;
-  Parent: TTreeNode;
-  AddMode: TAddMode;
-begin
-  Result := Owner.CreateNode;
-  try
-    Item := nil;
-    ItemId := nil;
-    Parent := nil;
-    AddMode := taInsert;
-    if Node <> nil then
-    begin
-      Parent := Node.Parent;
-      if Parent <> nil then Item := Parent.ItemId;
-      Node := Node.GetPrevSibling;
-      if Node <> nil then ItemId := Node.ItemId
-      else AddMode := taAddFirst;
-    end;
-    Result.Data := Ptr;
-    Result.Text := S;
-    Item := AddItem(Item, ItemId, CreateItem(Result), AddMode);
-    if Item = nil then
-      raise EOutOfResources.Create(sInsertError);
-    Result.FItemId := Item;
-    AddedNode(Parent);
-  except
-    Result.Free;
-    raise;
-  end;
-end;
-
-function TTreeNodes.InternalAddObject(Node: TTreeNode; const S: string;
-  Ptr: Pointer; AddMode: TAddMode): TTreeNode;
-var
-  Item: HTreeItem;
-begin
-  Result := Owner.CreateNode;
-  try
-    if Node <> nil then Item := Node.ItemId
-    else Item := nil;
-    Result.Data := Ptr;
-    Result.Text := S;
-    Item := AddItem(Item, nil, CreateItem(Result), AddMode);
-    if Item = nil then
-      raise EOutOfResources.Create(sInsertError);
-    Result.FItemId := Item;
-    if (FUpdateCount = 0) and (Result = GetFirstNode) then
-      SendMessage(Handle, WM_SETREDRAW, 1, 0);
-    AddedNode(Node);
-  except
-    Result.Free;
-    raise;
   end;
 end;
 
@@ -7064,9 +7838,12 @@ begin
   begin
     with FNodeCache do
     begin
-      if Index = CacheIndex then Result := CacheNode
-      else if Index < CacheIndex then Result := CacheNode.GetPrev
-      else Result := CacheNode.GetNext;
+      if Index = CacheIndex then
+        Result := CacheNode
+      else if Index < CacheIndex then
+        Result := CacheNode.GetPrev
+      else
+        Result := CacheNode.GetNext;
     end;
   end
   else begin
@@ -7078,7 +7855,8 @@ begin
       Dec(I);
     end;
   end;
-  if Result = nil then TreeViewError(sInvalidIndex);
+  if Result = nil then
+    TreeViewError(sInvalidIndex);
   FNodeCache.CacheNode := Result;
   FNodeCache.CacheIndex := Index;
 end;
@@ -7092,8 +7870,10 @@ begin
     hItem := ItemId;
     mask := TVIF_PARAM;
   end;
-  if TreeView_GetItem(Handle, Item) then Result := TTreeNode(Item.lParam)
-  else Result := nil;
+  if TreeView_GetItem(Handle, Item) then
+    Result := TTreeNode(Item.lParam)
+  else
+    Result := nil;
 end;
 
 procedure TTreeNodes.SetItem(Index: Integer; Value: TTreeNode);
@@ -7103,20 +7883,23 @@ end;
 
 procedure TTreeNodes.BeginUpdate;
 begin
-  if FUpdateCount = 0 then SetUpdateState(True);
+  if FUpdateCount = 0 then
+    SetUpdateState(True);
   Inc(FUpdateCount);
-end;          
+end;
 
 procedure TTreeNodes.SetUpdateState(Updating: Boolean);
 begin
   SendMessage(Handle, WM_SETREDRAW, Ord(not Updating), 0);
-  if not Updating then Owner.Refresh;
+  if not Updating then
+    Owner.Refresh;
 end;
 
 procedure TTreeNodes.EndUpdate;
 begin
   Dec(FUpdateCount);
-  if FUpdateCount = 0 then SetUpdateState(False);
+  if FUpdateCount = 0 then
+    SetUpdateState(False);
 end;
 
 procedure TTreeNodes.Assign(Source: TPersistent);
@@ -7159,7 +7942,8 @@ procedure TTreeNodes.DefineProperties(Filer: TFiler);
       for I := 0 to Count - 1 do
       begin
         Result := not Item[I].IsEqual(Nodes[I]);
-        if Result then Break;
+        if Result then
+          Break;
       end
     end;
   end;
@@ -7173,15 +7957,26 @@ procedure TTreeNodes.ReadData(Stream: TStream);
 var
   I, Count: Integer;
   NodeInfo: TNodeInfo;
+  LNode: TTreeNode;
+  LHandleAllocated: Boolean;
 begin
-  if Owner.HandleAllocated then BeginUpdate;
+  LHandleAllocated := Owner.HandleAllocated;
+  if LHandleAllocated then
+    BeginUpdate;
+  FReading := True;
   try
     Clear;
     Stream.ReadBuffer(Count, SizeOf(Count));
     for I := 0 to Count - 1 do
-      Add(nil, '').ReadData(Stream, @NodeInfo);
+    begin
+      LNode := Add(nil, '');
+      LNode.ReadData(Stream, @NodeInfo);
+      Owner.Added(LNode);
+    end;
   finally
-    if Owner.HandleAllocated then EndUpdate;
+    FReading := False;
+    if LHandleAllocated then
+      EndUpdate;
   end;
 end;
 
@@ -7436,6 +8231,16 @@ begin
   end;
 end;
 
+function TTreeNodes.AlphaSort(ARecurse: Boolean): Boolean;
+begin
+  Result := FOwner.AlphaSort(ARecurse);
+end;
+
+function TTreeNodes.CustomSort(SortProc: TTVCompare; Data: Integer; ARecurse: Boolean): Boolean;
+begin
+  Result := FOwner.CustomSort(SortProc, Data, ARecurse);
+end;
+
 { TCustomTreeView }
 
 constructor TCustomTreeView.Create(AOwner: TComponent);
@@ -7448,7 +8253,7 @@ begin
   ParentColor := False;
   FCanvas := TControlCanvas.Create;
   TControlCanvas(FCanvas).Control := Self;
-  FTreeNodes := TTreeNodes.Create(Self);
+  FTreeNodes := CreateNodes;
   FBorderStyle := bsSingle;
   FShowButtons := True;
   FShowRoot := True;
@@ -7456,27 +8261,30 @@ begin
   FHideSelection := True;
   FDragImage := TDragImageList.CreateSize(32, 32);
   FSaveIndent := -1;
+  FSelections := TList.Create;
+  FMultiSelect := False;
+  FMultiSelectStyle := [msControlSelect];
   FChangeTimer := TTimer.Create(Self);
   FChangeTimer.Enabled := False;
   FChangeTimer.Interval := 0;
   FChangeTimer.OnTimer := OnChangeTimer;
+  FCreateWndRestores := True;
   FToolTips := True;
   FEditInstance := MakeObjectInstance(EditWndProc);
   FImageChangeLink := TChangeLink.Create;
   FImageChangeLink.OnChange := ImageListChange;
   FStateChangeLink := TChangeLink.Create;
   FStateChangeLink.OnChange := ImageListChange;
-  { Version 5.01: DesignInfo is used here to store information necessary for
-    deleting font handles allocated in CustomDraw routines. Fields can't be
-    added now since class signatures must not be modified in a minor version.
-    This will be removed in the next major version }
-  if not (csDesigning in ComponentState) then
-    DesignInfo := Integer(New(PFontHandles));
 end;
 
 destructor TCustomTreeView.Destroy;
 begin
-  FreeAndNil(FTreeNodes);
+  // the following should not be reduced to a FreeAndNil
+  FTreeNodes.Free;
+  FTreeNodes := nil;
+
+  FSaveIndexes.Free;
+  FSelections.Free;
   FChangeTimer.Free;
   FSaveItems.Free;
   FDragImage.Free;
@@ -7485,8 +8293,7 @@ begin
   FImageChangeLink.Free;
   FStateChangeLink.Free;
   FCanvas.Free;
-  if not (csDesigning in ComponentState) then
-    Dispose(PFontHandles(DesignInfo));
+  FCanvas := nil;
   inherited Destroy;
 end;
 
@@ -7526,6 +8333,8 @@ begin
 end;
 
 procedure TCustomTreeView.CreateWnd;
+var
+  I: Integer;
 begin
   FStateChanging := False;
   inherited CreateWnd;
@@ -7533,16 +8342,30 @@ begin
   TreeView_SetTextColor(Handle, ColorToRGB(Font.Color));
   if FMemStream <> nil then
   begin
-    Items.ReadData(FMemStream);
-    Items.ReadExpandedState(FMemStream);
-    FMemStream.Destroy;
-    FMemStream := nil;
-    SetTopItem(Items.GetNodeFromIndex(FSaveTopIndex));
-    FSaveTopIndex := 0;
-    SetSelection(Items.GetNodeFromIndex(FSaveIndex));
-    FSaveIndex := 0;
+    Items.BeginUpdate;
+    try
+      Items.ReadData(FMemStream);
+      Items.ReadExpandedState(FMemStream);
+      FreeAndNil(FMemStream);
+      SetTopItem(Items.GetNodeFromIndex(FSaveTopIndex));
+      FSaveTopIndex := 0;
+      if FSaveIndexes <> nil then
+      begin
+        for I := 0 to FSaveIndexes.Count - 1 do
+          FSelections.Add(Items.GetNodeFromIndex(Integer(FSaveIndexes[I])));
+        FreeAndNil(FSaveIndexes);
+        ValidateSelection;
+        SetSelected(Selections[0]);
+      end
+      else
+        SetSelected(Items.GetNodeFromIndex(FSaveIndex));
+      FSaveIndex := 0;
+    finally
+      Items.EndUpdate;
+    end;
   end;
-  if FSaveIndent <> -1 then Indent := FSaveIndent;
+  if FSaveIndent <> -1 then
+    Indent := FSaveIndent;
   if (Images <> nil) and Images.HandleAllocated then
     SetImageList(Images.Handle, TVSIL_NORMAL);
   if (StateImages <> nil) and StateImages.HandleAllocated then
@@ -7552,20 +8375,35 @@ end;
 procedure TCustomTreeView.DestroyWnd;
 var
   Node: TTreeNode;
+  I: Integer;
 begin
   FStateChanging := True;
-  if Items.Count > 0 then
+  if FCreateWndRestores and (Items.Count > 0) then
   begin
     FMemStream := TMemoryStream.Create;
     Items.WriteData(FMemStream);
     Items.WriteExpandedState(FMemStream);
     FMemStream.Position := 0;
+    FSaveTopIndex := 0;
+    FSaveIndex := 0;
     Node := GetTopItem;
-    if Node <> nil then FSaveTopIndex := Node.AbsoluteIndex;
-    Node := Selected;
-    if Node <> nil then FSaveIndex := Node.AbsoluteIndex;
+    if Node <> nil then
+      FSaveTopIndex := Node.AbsoluteIndex;
     Items.BeginUpdate;
     try
+      if MultiSelect and (FSelections.Count > 1) then
+      begin
+        FSaveIndexes := TList.Create;
+        for I := 0 to FSelections.Count - 1 do
+          FSaveIndexes.Add(Pointer(TTreeNode(FSelections[I]).AbsoluteIndex));
+        FSelections.Clear;
+      end
+      else
+      begin
+        Node := Selected;
+        if Node <> nil then
+          FSaveIndex := Node.AbsoluteIndex;
+      end;
       Items.Clear;
     finally
       Items.EndUpdate;
@@ -7604,7 +8442,7 @@ end;
 procedure TCustomTreeView.CMColorChanged(var Message: TMessage);
 begin
   inherited;
-  RecreateWnd;
+  TreeView_SetBkColor(Handle, ColorToRGB(Color));
 end;
 
 procedure TCustomTreeView.CMCtl3DChanged(var Message: TMessage);
@@ -7629,25 +8467,12 @@ begin
   end;
 end;
 
-function TCustomTreeView.AlphaSort: Boolean;
-var
-  Node: TTreeNode;
+function TCustomTreeView.AlphaSort(ARecurse: Boolean): Boolean;
 begin
-  if HandleAllocated then
-  begin
-    Result := CustomSort(nil, 0);
-    Node := FTreeNodes.GetFirstNode;
-    while Node <> nil do
-    begin
-      if Node.HasChildren then Node.AlphaSort;
-      Node := Node.GetNext;
-    end;
-  end
-  else
-    Result := False;
+  Result := CustomSort(nil, 0, ARecurse);
 end;
 
-function TCustomTreeView.CustomSort(SortProc: TTVCompare; Data: Longint): Boolean;
+function TCustomTreeView.CustomSort(SortProc: TTVCompare; Data: Longint; ARecurse: Boolean = True): Boolean;
 var
   SortCB: TTVSortCB;
   Node: TTreeNode;
@@ -7657,17 +8482,23 @@ begin
   begin
     with SortCB do
     begin
-      if not Assigned(SortProc) then lpfnCompare := @DefaultTreeViewSort
-      else lpfnCompare := SortProc;
+      if not Assigned(SortProc) then
+        lpfnCompare := @DefaultTreeViewSort
+      else
+        lpfnCompare := SortProc;
       hParent := TVI_ROOT;
       lParam := Data;
       Result := TreeView_SortChildrenCB(Handle, SortCB, 0);
     end;
-    Node := FTreeNodes.GetFirstNode;
-    while Node <> nil do
+    if ARecurse then
     begin
-      if Node.HasChildren then Node.CustomSort(SortProc, Data);
-      Node := Node.GetNext;
+      Node := FTreeNodes.GetFirstNode;
+      while Node <> nil do
+      begin
+        if Node.HasChildren then
+          Node.CustomSort(SortProc, Data, True);
+        Node := Node.GetNextSibling;
+      end;
     end;
     Items.ClearCache;
   end;
@@ -7890,7 +8721,7 @@ begin
   Change(TTreeNode(FChangeTimer.Tag));
 end;
 
-function TCustomTreeView.GetSelection: TTreeNode;
+function TCustomTreeView.GetSelected: TTreeNode;
 begin
   if HandleAllocated then
   begin
@@ -7902,10 +8733,12 @@ begin
   else Result := nil;
 end;
 
-procedure TCustomTreeView.SetSelection(Value: TTreeNode);
+procedure TCustomTreeView.SetSelected(Value: TTreeNode);
 begin
-  if Value <> nil then Value.Selected := True
-  else TreeView_SelectItem(Handle, nil);
+  if Value <> nil then
+    Value.Selected := True
+  else
+    TreeView_SelectItem(Handle, nil);
 end;
 
 procedure TCustomTreeView.SetChangeDelay(Value: Integer);
@@ -7940,8 +8773,10 @@ begin
   Result := nil;
   if Items <> nil then
     with Item do
-      if (state and TVIF_PARAM) <> 0 then Result := Pointer(lParam)
-      else Result := Items.GetNode(hItem);
+      if (state and TVIF_PARAM) <> 0 then
+        Result := Pointer(lParam)
+      else
+        Result := Items.GetNode(hItem);
 end;
 
 function TCustomTreeView.IsEditing: Boolean;
@@ -7964,130 +8799,130 @@ begin
   with Message do
     case NMHdr^.code of
       NM_CUSTOMDRAW:
-        with PNMCustomDraw(NMHdr)^ do
-        begin
-          FCanvas.Lock;
-          try
-            Result := CDRF_DODEFAULT;
-            if (dwDrawStage and CDDS_ITEM) = 0 then
-            begin
-              R := ClientRect;
-              case dwDrawStage of
-                CDDS_PREPAINT:
-                begin
-                  if IsCustomDrawn(dtControl, cdPrePaint) then
+        if Assigned(FCanvas) then
+          with PNMCustomDraw(NMHdr)^ do
+          begin
+            FCanvas.Lock;
+            try
+              Result := CDRF_DODEFAULT;
+              if (dwDrawStage and CDDS_ITEM) = 0 then
+              begin
+                R := ClientRect;
+                case dwDrawStage of
+                  CDDS_PREPAINT:
                   begin
-                    try
-                      FCanvas.Handle := hdc;
-                      FCanvas.Font := Font;
-                      FCanvas.Brush := Brush;
-                      DefaultDraw := CustomDraw(R, cdPrePaint);
-                    finally
-                      FCanvas.Handle := 0;
-                    end;
-                    if not DefaultDraw then
+                    if IsCustomDrawn(dtControl, cdPrePaint) then
                     begin
-                      Result := CDRF_SKIPDEFAULT;
-                      Exit;
-                    end;
-                  end;
-                  if IsCustomDrawn(dtItem, cdPrePaint) or IsCustomDrawn(dtItem, cdPreErase) then
-                    Result := Result or CDRF_NOTIFYITEMDRAW;
-                  if IsCustomDrawn(dtItem, cdPostPaint) then
-                    Result := Result or CDRF_NOTIFYPOSTPAINT;
-                  if IsCustomDrawn(dtItem, cdPostErase) then
-                    Result := Result or CDRF_NOTIFYPOSTERASE;
-                end;
-                CDDS_POSTPAINT:
-                  if IsCustomDrawn(dtControl, cdPostPaint) then
-                    CustomDraw(R, cdPostPaint);
-                CDDS_PREERASE:
-                  if IsCustomDrawn(dtControl, cdPreErase) then
-                    CustomDraw(R, cdPreErase);
-                CDDS_POSTERASE:
-                  if IsCustomDrawn(dtControl, cdPostErase) then
-                    CustomDraw(R, cdPostErase);
-              end;
-            end else
-            begin
-              FillChar(TmpItem, SizeOf(TmpItem), 0);
-              TmpItem.hItem := HTREEITEM(dwItemSpec);
-              Node := GetNodeFromItem(TmpItem);
-              if Node = nil then Exit;
-              case dwDrawStage of
-                CDDS_ITEMPREPAINT:
-                  begin
-                    //release the font we may have loaned during item drawing.
-                    if (dwDrawStage and CDDS_ITEMPOSTPAINT <> 0)
-                    and (PFontHandles(DesignInfo).OurFont + PFontHandles(DesignInfo).StockFont <> 0) then
-                    begin
-                      SelectObject(hdc, PFontHandles(DesignInfo).StockFont);
-                      DeleteObject(PFontHandles(DesignInfo).OurFont);
-                      PFontHandles(DesignInfo).OurFont := 0;
-                      PFontHandles(DesignInfo).StockFont := 0;
-                    end;
-
-                    try
-                      FCanvas.Handle := hdc;
-                      FCanvas.Font := Font;
-                      FCanvas.Brush := Brush;
-                      { Unlike the list view, the tree view doesn't override the text
-                        foreground and background colors of selected items. }
-                      if uItemState and CDIS_SELECTED <> 0 then
-                      begin
-                        FCanvas.Font.Color := clHighlightText;
-                        FCanvas.Brush.Color := clHighlight;
+                      try
+                        FCanvas.Handle := hdc;
+                        FCanvas.Font := Font;
+                        FCanvas.Brush := Brush;
+                        DefaultDraw := CustomDraw(R, cdPrePaint);
+                      finally
+                        FCanvas.Handle := 0;
                       end;
-                      FCanvas.Font.OnChange := CanvasChanged;
-                      FCanvas.Brush.OnChange := CanvasChanged;
-                      FCanvasChanged := False;
-                      DefaultDraw := CustomDrawItem(Node,
-                        TCustomDrawState(Word(uItemState)), cdPrePaint, PaintImages);
-                      if not PaintImages then
-                        Result := Result or TVCDRF_NOIMAGES;
                       if not DefaultDraw then
-                        Result := Result or CDRF_SKIPDEFAULT
-                      else if FCanvasChanged then
                       begin
-                        FCanvasChanged := False;
-                        FCanvas.Font.OnChange := nil;
-                        FCanvas.Brush.OnChange := nil;
-                        with PNMTVCustomDraw(NMHdr)^ do
+                        Result := CDRF_SKIPDEFAULT;
+                        Exit;
+                      end;
+                    end;
+                    if IsCustomDrawn(dtItem, cdPrePaint) or IsCustomDrawn(dtItem, cdPreErase) then
+                      Result := Result or CDRF_NOTIFYITEMDRAW;
+                    if IsCustomDrawn(dtItem, cdPostPaint) then
+                      Result := Result or CDRF_NOTIFYPOSTPAINT;
+                    if IsCustomDrawn(dtItem, cdPostErase) then
+                      Result := Result or CDRF_NOTIFYPOSTERASE;
+                  end;
+                  CDDS_POSTPAINT:
+                    if IsCustomDrawn(dtControl, cdPostPaint) then
+                      CustomDraw(R, cdPostPaint);
+                  CDDS_PREERASE:
+                    if IsCustomDrawn(dtControl, cdPreErase) then
+                      CustomDraw(R, cdPreErase);
+                  CDDS_POSTERASE:
+                    if IsCustomDrawn(dtControl, cdPostErase) then
+                      CustomDraw(R, cdPostErase);
+                end;
+              end else
+              begin
+                FillChar(TmpItem, SizeOf(TmpItem), 0);
+                TmpItem.hItem := HTREEITEM(dwItemSpec);
+                Node := GetNodeFromItem(TmpItem);
+                if Node = nil then Exit;
+                case dwDrawStage of
+                  CDDS_ITEMPREPAINT:
+                    begin
+                      // release the font we may have loaned during item drawing.
+                      if (dwDrawStage and CDDS_ITEMPOSTPAINT <> 0) and
+                         (FOurFont <> 0) and (FStockFont <> 0) then
+                      begin
+                        SelectObject(hdc, FStockFont);
+                        DeleteObject(FOurFont);
+                        FOurFont := 0;
+                        FStockFont := 0;
+                      end;
+
+                      try
+                        FCanvas.Handle := hdc;
+                        FCanvas.Font := Font;
+                        FCanvas.Brush := Brush;
+                        // Unlike the list view, the tree view doesn't override the text
+                        //  foreground and background colors of selected items.
+                        if uItemState and CDIS_SELECTED <> 0 then
                         begin
-                          clrText := ColorToRGB(FCanvas.Font.Color);
-                          clrTextBk := ColorToRGB(FCanvas.Brush.Color);
-                          if GetObject(FCanvas.Font.Handle, SizeOf(LogFont), @LogFont) <> 0 then
+                          FCanvas.Font.Color := clHighlightText;
+                          FCanvas.Brush.Color := clHighlight;
+                        end;
+                        FCanvas.Font.OnChange := CanvasChanged;
+                        FCanvas.Brush.OnChange := CanvasChanged;
+                        FCanvasChanged := False;
+                        DefaultDraw := CustomDrawItem(Node,
+                          TCustomDrawState(Word(uItemState)), cdPrePaint, PaintImages);
+                        if not PaintImages then
+                          Result := Result or TVCDRF_NOIMAGES;
+                        if not DefaultDraw then
+                          Result := Result or CDRF_SKIPDEFAULT
+                        else if FCanvasChanged then
+                        begin
+                          FCanvasChanged := False;
+                          FCanvas.Font.OnChange := nil;
+                          FCanvas.Brush.OnChange := nil;
+                          with PNMTVCustomDraw(NMHdr)^ do
                           begin
-                            FCanvas.Handle := 0;  // disconnect from hdc
-                            // don't delete the stock font
-                            PFontHandles(DesignInfo).OurFont := CreateFontIndirect(LogFont);
-                            PFontHandles(DesignInfo).StockFont :=
-                              SelectObject(hdc, PFontHandles(DesignInfo).OurFont);
-                            Result := Result or CDRF_NEWFONT;
+                            clrText := ColorToRGB(FCanvas.Font.Color);
+                            clrTextBk := ColorToRGB(FCanvas.Brush.Color);
+                            if GetObject(FCanvas.Font.Handle, SizeOf(LogFont), @LogFont) <> 0 then
+                            begin
+                              FCanvas.Handle := 0;  // disconnect from hdc
+                              // don't delete the stock font
+                              FOurFont := CreateFontIndirect(LogFont);
+                              FStockFont := SelectObject(hdc, FOurFont);
+                              Result := Result or CDRF_NEWFONT;
+                            end;
                           end;
                         end;
+                        if IsCustomDrawn(dtItem, cdPostPaint) then
+                          Result := Result or CDRF_NOTIFYPOSTPAINT;
+                      finally
+                        FCanvas.Handle := 0;
                       end;
-                      if IsCustomDrawn(dtItem, cdPostPaint) then
-                        Result := Result or CDRF_NOTIFYPOSTPAINT;
-                    finally
-                      FCanvas.Handle := 0;
                     end;
-                  end;
-                CDDS_ITEMPOSTPAINT:
-                    if IsCustomDrawn(dtItem, cdPostPaint) then
-                      CustomDrawItem(Node, TCustomDrawState(Word(uItemState)), cdPostPaint, PaintImages);
-                CDDS_ITEMPREERASE:
-                    if IsCustomDrawn(dtItem, cdPreErase) then
-                      CustomDrawItem(Node, TCustomDrawState(Word(uItemState)), cdPreErase, PaintImages);
-                CDDS_ITEMPOSTERASE:
-                    if IsCustomDrawn(dtItem, cdPostErase) then
-                      CustomDrawItem(Node, TCustomDrawState(Word(uItemState)), cdPostErase, PaintImages);
+                  CDDS_ITEMPOSTPAINT:
+                      if IsCustomDrawn(dtItem, cdPostPaint) then
+                        CustomDrawItem(Node, TCustomDrawState(Word(uItemState)), cdPostPaint, PaintImages);
+                  CDDS_ITEMPREERASE:
+                      if IsCustomDrawn(dtItem, cdPreErase) then
+                        CustomDrawItem(Node, TCustomDrawState(Word(uItemState)), cdPreErase, PaintImages);
+                  CDDS_ITEMPOSTERASE:
+                      if IsCustomDrawn(dtItem, cdPostErase) then
+                        CustomDrawItem(Node, TCustomDrawState(Word(uItemState)), cdPostErase, PaintImages);
+                end;
               end;
+            finally
+              FCanvas.Unlock;
             end;
-          finally
-            FCanvas.Unlock;
           end;
-        end;
       TVN_BEGINDRAG:
         begin
           FDragged := True;
@@ -8150,8 +8985,10 @@ begin
           begin
             Node.FItemId := nil;
             FChangeTimer.Enabled := False;
-            if FStateChanging then Node.Delete
-            else Items.Delete(Node);
+            if FStateChanging then
+              Node.Delete
+            else
+              Items.Delete(Node);
           end;
         end;
       TVN_SETDISPINFO:
@@ -8168,7 +9005,7 @@ begin
           if Node <> nil then
           begin
             if (item.mask and TVIF_TEXT) <> 0 then
-              StrLCopy(item.pszText, PChar(Node.Text), item.cchTextMax);
+              StrLCopy(item.pszText, PChar(Node.Text), item.cchTextMax - 1);
             if (item.mask and TVIF_IMAGE) <> 0 then
             begin
               GetImageIndex(Node);
@@ -8309,7 +9146,14 @@ end;
 
 procedure TCustomTreeView.Change(Node: TTreeNode);
 begin
+  FSelectChanged := True;
+  FinishSelection(Selected, KeyDataToShiftState(0) + [ssLeft]);
   if Assigned(FOnChange) then FOnChange(Self, Node);
+end;
+
+procedure TCustomTreeView.Added(Node: TTreeNode);
+begin
+  if Assigned(FOnAddition) then FOnAddition(Self, Node);
 end;
 
 procedure TCustomTreeView.Delete(Node: TTreeNode);
@@ -8351,18 +9195,32 @@ var
   Node: TTreeNode;
 begin
   with Item do
+  begin
+    Node := GetNodeFromItem(Item);
     if pszText <> nil then
     begin
       S := pszText;
       Node := GetNodeFromItem(Item);
       if Assigned(FOnEdited) then FOnEdited(Self, Node, S);
       if Node <> nil then Node.Text := S;
-    end;
+    end
+    else if Assigned(FOnCancelEdit) then FOnCancelEdit(Self, Node);
+  end;
 end;
 
 function TCustomTreeView.CreateNode: TTreeNode;
+var
+  LClass: TTreeNodeClass;
 begin
-  Result := TTreeNode.Create(Items);
+  LClass := TTreeNode;
+  if Assigned(FOnCreateNodeClass) then
+    FOnCreateNodeClass(Self, LClass);
+  Result := LClass.Create(Items);
+end;
+
+function TCustomTreeView.CreateNodes: TTreeNodes;
+begin
+  Result := TTreeNodes.Create(Self);
 end;
 
 procedure TCustomTreeView.SetImageList(Value: HImageList; Flags: Integer);
@@ -8474,12 +9332,14 @@ procedure TCustomTreeView.WMContextMenu(var Message: TWMContextMenu);
 var
   R: TRect;
 begin
-  if (Message.XPos < 0) and (Selected <> nil) then
+  SetFocus;
+  if InvalidPoint(Message.Pos) and (Selected <> nil) then
   begin
     R := Selected.DisplayRect(True);
-    Message.Pos := PointToSmallPoint(ClientToScreen(Point(R.Left, R.Bottom)));
+    Message.Pos := PointToSmallPoint(ClientToScreen(CenterPoint(R)));
   end;
   inherited;
+  MouseUp(mbRight, KeyboardStateToShiftState, Message.Pos.X, Message.Pos.Y);
 end;
 
 procedure TCustomTreeView.WMLButtonDown(var Message: TWMLButtonDown);
@@ -8596,6 +9456,455 @@ begin
   PaintImages := True;
   if (Stage = cdPrePaint) and Assigned(FOnCustomDrawItem) then FOnCustomDrawItem(Self, Node, State, Result);
   if Assigned(FOnAdvancedCustomDrawItem) then FOnAdvancedCustomDrawItem(Self, Node, State, Stage, PaintImages, Result);
+end;
+
+procedure TCustomTreeView.ClearSelection(KeepPrimary: Boolean);
+var
+  I: Integer;
+begin
+  for I := FSelections.Count - 1 downto 1 do
+    NodeDeselect(I);
+  if not KeepPrimary then
+    Selected := nil;
+end;
+
+procedure TCustomTreeView.ControlSelectNode(Node: TTreeNode);
+var
+  I: Integer;
+begin
+  if msControlSelect in MultiSelectStyle then
+  begin
+    if (Node <> Selected) and ((Node = nil) or (not Node.Deleting)) then
+      Selected := Node;
+    I := FSelections.IndexOf(Node);
+    if I <> -1 then
+      NodeDeselect(I)
+    else 
+      NodeSelect(Node);
+  end
+  else
+    SelectNode(Node);
+end;
+
+procedure TCustomTreeView.ControlShiftSelectNode(Node: TTreeNode;
+  Backward: Boolean);
+begin
+  ShiftSelectNode(Node, Backward, not (msControlSelect in MultiSelectStyle));
+end;
+
+procedure TCustomTreeView.DoEnter;
+begin
+  InvalidateSelectionsRects;
+  inherited;
+end;
+
+procedure TCustomTreeView.DoExit;
+begin
+  inherited;
+  InvalidateSelectionsRects;
+end;
+
+procedure TCustomTreeView.FinishSelection(Node: TTreeNode;
+  ShiftState: TShiftState);
+var
+  LNode: TTreeNode;
+  LBackward: Boolean;
+begin
+  if not FSelecting and (ssLeft in ShiftState) then
+  try
+    FSelecting := True;
+    if not (ssShift in ShiftState) then
+      FShiftAnchor := nil;
+
+    // what to do?
+    if MultiSelect and (Node <> nil) then
+      if ssShift in ShiftState then
+      begin
+
+        // figure out the shift anchor
+        if (FShiftAnchor = nil) and
+           (FSelections.Count > 0) then
+          FShiftAnchor := Selections[0];
+        if FShiftAnchor = nil then
+        begin
+          LNode := Items.GetFirstNode;
+          if not LNode.IsVisible then
+            LNode := LNode.GetNextVisible;
+          while LNode <> nil do
+          begin
+            if LNode.Focused then
+            begin
+              FShiftAnchor := LNode;
+              Break;
+            end;
+            LNode := LNode.GetNextVisible;
+          end;
+        end;
+        LBackward := (FShiftAnchor <> nil) and
+                     (Node.AbsoluteIndex < FShiftAnchor.AbsoluteIndex);
+
+        // which way do we go?
+        if ssCtrl in ShiftState then
+          ControlShiftSelectNode(Node, LBackward)
+        else
+          ShiftSelectNode(Node, LBackward);
+      end
+      else
+
+      // no shift, no problem
+      begin
+        if ssCtrl in ShiftState then
+          ControlSelectNode(Node)
+        else if FSelections.IndexOf(Node) <> -1 then
+        begin
+          if FSelections[0] <> Node then
+          begin
+            FSelections.Remove(Node);
+            NodeSelect(Node, 0);
+          end;
+        end
+        else
+          SelectNode(Node);
+      end
+    else
+      SelectNode(Node);
+
+    // all is swell?
+    ValidateSelection;
+  finally
+    FSelecting := False;
+  end;
+end;
+
+function TCustomTreeView.GetSelectionCount: Cardinal;
+begin
+  Result := FSelections.Count
+end;
+
+function TCustomTreeView.GetSelection(Index: Integer): TTreeNode;
+begin
+  Result := TTreeNode(FSelections[Index])
+end;
+
+procedure TCustomTreeView.InvalidateSelectionsRects;
+var
+  I: Integer;
+  LRect: TRect;
+begin
+  for I := 0 to FSelections.Count - 1 do
+  begin
+    LRect := Selections[I].DisplayRect(False);
+    InvalidateRect(Handle, @LRect, False);
+  end;
+end;
+
+procedure TCustomTreeView.MouseDown(Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if Button = mbLeft then
+    if FSelectChanged then
+      FSelectChanged := False
+    else if htOnItem in GetHitTestInfoAt(X, Y) then
+      FinishSelection(Selected, Shift)
+    else
+      ValidateSelection;
+  inherited;
+end;
+
+procedure TCustomTreeView.NodeDeselect(Index: Integer);
+begin
+  Selections[Index].SetSelectedBit(False);
+  FSelections.Delete(Index);
+end;
+
+procedure TCustomTreeView.NodeSelect(Node: TTreeNode; At: Integer);
+begin
+  if (Node <> nil) and not Node.Deleting then
+  begin
+    FSelections.Insert(At, Node);
+    Node.SetSelectedBit(True);
+  end;
+end;
+
+procedure TCustomTreeView.Select(Node: TTreeNode; ShiftState: TShiftState);
+begin
+  FinishSelection(Node, ShiftState + [ssLeft]);
+end;
+
+procedure TCustomTreeView.SelectNode(Node: TTreeNode);
+var
+  I: Integer;
+begin
+  for I := FSelections.Count - 1 downto 0 do
+    if Selections[I] <> Node then
+      NodeDeselect(I);
+  if (Node <> Selected) and ((Node = nil) or (not Node.Deleting))then
+    Selected := Node;
+  if (Node <> nil) and (not Node.Deleting) and
+     (FSelections.Count = 0) then
+    NodeSelect(Node);
+end;
+
+procedure TCustomTreeView.SetMultiSelect(const Value: Boolean);
+begin
+  if Value <> MultiSelect then
+  begin
+    if not Value then
+      SelectNode(Selected);
+    FMultiSelect := Value;
+    ValidateSelection;
+  end;
+end;
+
+procedure TCustomTreeView.SetMultiSelectStyle(const Value: TMultiSelectStyle);
+begin
+  if Value <> MultiSelectStyle then
+  begin
+    FMultiSelectStyle := Value;
+    ValidateSelection;
+  end;
+end;
+
+procedure TCustomTreeView.ShiftSelectNode(Node: TTreeNode; Backward,
+  Deselect: Boolean);
+var
+  LNode: TTreeNode;
+  LSelect, LDeselect: TList;
+  I: Integer;
+begin
+  if (Node <> nil) and (not Node.Deleting) and (msShiftSelect in MultiSelectStyle) then
+  begin
+    LSelect := TList.Create;
+    LDeselect := TList.Create;
+    try
+      LNode := FShiftAnchor;
+      if LNode <> Node then
+        while LNode <> nil do
+        begin
+          LSelect.Add(LNode);
+          if Backward then
+            if msVisibleOnly in MultiSelectStyle then
+              LNode := LNode.GetPrevVisible
+            else
+              LNode := LNode.GetPrev
+          else
+            if msVisibleOnly in MultiSelectStyle then
+              LNode := LNode.GetNextVisible
+            else
+              LNode := LNode.GetNext;
+          if LNode = Node then
+          begin
+            LSelect.Add(LNode);
+            Break;
+          end;
+        end;
+
+      if Deselect then
+      begin
+        LDeselect.Assign(FSelections, laSrcUnique, LSelect);
+        if LDeselect.Count > 0 then
+          for I := FSelections.Count - 1 downto 0 do
+            if LDeselect.IndexOf(FSelections[I]) <> -1 then
+              NodeDeselect(I);
+      end;
+
+      LSelect.Assign(FSelections, laSrcUnique);
+      for I := 0 to LSelect.Count - 1 do
+        NodeSelect(TTreeNode(LSelect[I]));
+
+      I := FSelections.IndexOf(Node);
+      if I > 0 then
+      begin
+        FSelections.Delete(I);
+        FSelections.Insert(0, Node);
+      end
+      else
+        if I = -1 then
+          NodeSelect(Node);
+    finally
+      LDeselect.Free;
+      LSelect.Free;
+    end;
+  end
+  else
+    SelectNode(Node);
+end;
+
+procedure TCustomTreeView.Subselect(Node: TTreeNode; Validate: Boolean);
+begin
+  if not MultiSelect then
+    raise ETreeViewError.Create(SMultiSelectRequired);
+  if (Node <> nil) and (not Node.Deleting) then
+  begin
+    if FSelections.IndexOf(Node) = -1 then
+      NodeSelect(Node, 1);
+    if Validate then
+      ValidateSelection;
+  end;
+end;
+
+procedure TCustomTreeView.ValidateSelection;
+var
+  I: Integer;
+  LPrimary, LNode: TTreeNode;
+begin
+  if FSelections.Count > 0 then
+  begin
+    LPrimary := Selections[0];
+    for I := FSelections.Count - 1 downto 0 do
+    begin
+      LNode := Selections[I];
+      if (LNode.Deleting) or
+         ((I <> 0) and
+          (not MultiSelect) or
+          ((msVisibleOnly in MultiSelectStyle) and (not LNode.IsVisible)) or
+          ((msSiblingOnly in MultiSelectStyle) and (LNode.Parent <> LPrimary.Parent))) then
+        NodeDeselect(I)
+      else if not LNode.Selected then
+        LNode.SetSelectedBit(True);
+    end;
+  end;
+end;
+
+procedure TCustomTreeView.Select(const Nodes: array of TTreeNode);
+var
+  LList: TList;
+  I: Integer;
+begin
+  LList := TList.Create;
+  try
+    for I := Low(Nodes) to High(Nodes) do
+      if not Nodes[I].Deleting then
+        LList.Add(Nodes[I]);
+    Select(LList);
+  finally
+    LList.Free;
+  end;
+end;
+
+procedure TCustomTreeView.Select(Nodes: TList);
+var
+  LSelect, LDeselect: TList;
+  I: Integer;
+begin
+  if Nodes.Count = 0 then
+    ClearSelection
+  else
+  begin
+    LSelect := TList.Create;
+    LDeselect := TList.Create;
+    try
+      // remove any nodes that are about to not be
+      for I := Nodes.Count - 1 downto 0 do
+        if TTreeNode(Nodes[I]).Deleting then
+          Nodes.Delete(I);
+
+      // make sure the Selected item is the first item
+      if Nodes.Count > 0 then
+        if Selected <> TTreeNode(Nodes[0]) then
+          Selected := TTreeNode(Nodes[0]);
+
+      // what needs to be deselected?
+      LDeselect.Assign(FSelections, laSrcUnique, Nodes);
+      if LDeselect.Count > 0 then
+        for I := FSelections.Count - 1 downto 0 do
+          if LDeselect.IndexOf(FSelections[I]) <> -1 then
+            NodeDeselect(I);
+
+      // what needs to be selected?
+      LSelect.Assign(Nodes, laSrcUnique, FSelections);
+      for I := 0 to LSelect.Count - 1 do
+        NodeSelect(TTreeNode(LSelect[I]));
+
+      // ok lets get the order right!
+      FSelections.Assign(Nodes);
+    finally
+      LDeselect.Free;
+      LSelect.Free;
+    end;
+  end;
+
+  // show the world what we just did
+  ValidateSelection;
+end;
+
+procedure TCustomTreeView.Deselect(Node: TTreeNode);
+begin
+  if FSelections.IndexOf(Node) <> -1 then
+    ControlSelectNode(Node);
+end;
+
+function TCustomTreeView.FindNextToSelect: TTreeNode;
+var
+  LNodes: TList;
+
+  function NodeInList(ANode: TTreeNode): Boolean;
+  begin
+    // return true only if node (or one of its parents) is not in the list
+    while Assigned(ANode) do
+      if LNodes.IndexOf(ANode) = -1 then
+        ANode := ANode.Parent
+      else
+        Break;
+    Result := Assigned(ANode);
+  end;
+
+  function SiblingNotInList(ANode: TTreeNode): TTreeNode;
+  begin
+    // if a succeeding sibling of the primary is not selected then select it
+    Result := ANode.GetNextSibling;
+    while Assigned(Result) do
+      if NodeInList(Result) then
+        Result := Result.GetNextSibling
+      else
+        Break;
+
+    // next didn't work, try previous instead
+    if Result = nil then
+    begin
+      Result := ANode.GetPrevSibling;
+      while Assigned(Result) do
+        if NodeInList(Result) then
+          Result := Result.GetPrevSibling
+        else
+          Break;
+    end;
+  end;
+var
+  LSelected: TTreeNode;
+begin
+  LNodes := TList.Create;
+  try
+    // what is selected?
+    LSelected := GetSelections(LNodes);
+    Result := LSelected;
+
+    // if the selected one is really selected then continue, otherwise return it
+    while Assigned(LSelected) and LSelected.Selected do
+    begin
+      Result := SiblingNotInList(LSelected);
+      if Result = nil then
+        LSelected := LSelected.Parent
+      else
+        Break;
+      Result := LSelected;
+    end;
+  finally
+    LNodes.Free;
+  end;
+end;
+
+function TCustomTreeView.GetSelections(AList: TList): TTreeNode;
+var
+  I: Integer;
+begin
+  with AList do
+  begin
+    Clear;
+    for I := 0 to SelectionCount - 1 do
+      Add(Selections[I]);
+    Result := Selected;
+  end;
 end;
 
 { TTrackBar }
@@ -9145,7 +10454,7 @@ begin
   with Format do
   begin
     dwMask := CFM_FACE;
-    StrPLCopy(szFaceName, Value, SizeOf(szFaceName));
+    StrPLCopy(szFaceName, Value, SizeOf(szFaceName) - 1);
   end;
   SetAttributes(Format);
 end;
@@ -9261,6 +10570,7 @@ begin
     Charset := TTextAttributes(Source).Charset;
     Style := TTextAttributes(Source).Style;
     Pitch := TTextAttributes(Source).Pitch;
+    Size := TTextAttributes(Source).Size;
   end
   else inherited Assign(Source);
 end;
@@ -10025,6 +11335,15 @@ begin
   Result.X := Result.X - SendMessage(Handle, EM_LINEINDEX, -1, 0);
 end;
 
+procedure TCustomRichEdit.SetCaretPos(const Value: TPoint);
+var
+  CharRange: TCharRange;
+begin
+  CharRange.cpMin := SendMessage(Handle, EM_LINEINDEX, Value.y, 0) + Value.x;
+  CharRange.cpMax := CharRange.cpMin;
+  SendMessage(Handle, EM_EXSETSEL, 0, Longint(@CharRange));
+end;
+
 function TCustomRichEdit.GetSelLength: Integer;
 var
   CharRange: TCharRange;
@@ -10047,7 +11366,7 @@ var
 begin
   S := GetSelText;
   Result := Length(S);
-  if BufSize < Length(S) then Result := BufSize;
+  if BufSize <= Length(S) then Result := BufSize - 1;
   StrPLCopy(Buffer, S, Result);
 end;
 
@@ -10644,7 +11963,7 @@ begin
   end;
 end;
 
-{ THotKey }
+{ TCustomHotKey }
 
 constructor TCustomHotKey.Create(AOwner: TComponent);
 begin
@@ -10772,6 +12091,13 @@ begin
   if hkShift in FModifiers then Inc(Result, scShift);
   if hkCtrl in FModifiers then Inc(Result, scCtrl);
   if hkAlt in FModifiers then Inc(Result, scAlt);
+end;
+
+procedure TCustomHotKey.CNCommand(var Message: TWMCommand);
+begin
+  inherited;
+  if (Message.NotifyCode = EN_CHANGE) and Assigned(FOnChange) then
+    FOnChange(Self);
 end;
 
 { TListColumn }
@@ -11005,6 +12331,11 @@ begin
   UpdateCols;
 end;
 
+function TListColumns.Owner: TCustomListView;
+begin
+  Result := FOwner;
+end;
+
 function TListColumns.GetOwner: TPersistent;
 begin
   Result := FOwner;
@@ -11139,6 +12470,8 @@ type
   protected
     function GetHandle: HWND;
     function Add(const S: string): Integer; override;
+    function AddObject(const S: string; AObject: TObject): Integer; override;
+    procedure Clear; override;
     procedure Delete(Index: Integer); override;
     procedure Put(Index: Integer; const S: string); override;
     procedure SetUpdateState(Updating: Boolean); override;
@@ -11169,6 +12502,19 @@ begin
   Result := inherited Add(S);
   FImageIndices.Add(Pointer(-1));
   RefreshItem(Result + 1);
+end;
+
+function TSubItems.AddObject(const S: string; AObject: TObject): Integer;
+begin
+  Result := inherited AddObject(S, AObject);
+  FImageIndices.Add(Pointer(-1));
+  RefreshItem(Result + 1);
+end;
+
+procedure TSubItems.Clear;
+begin
+  inherited;
+  FImageIndices.Clear;
 end;
 
 procedure TSubItems.Delete(Index: Integer);
@@ -11283,10 +12629,13 @@ procedure TListItem.SetChecked(Value: Boolean);
 var
   LV: TCustomListView;
 begin
-  FChecked := Value;
-  LV := Owner.Owner;
-  if not LV.OwnerData and LV.HandleAllocated then
-    ListView_SetCheckState(LV.Handle, Index, Value);
+  if Value <> Checked then
+  begin
+    FChecked := Value;
+    LV := Owner.Owner;
+    if not LV.OwnerData and LV.HandleAllocated then
+      ListView_SetCheckState(LV.Handle, Index, Value);
+  end;
 end;
 
 function TListItem.GetLeft: Integer;
@@ -11316,20 +12665,27 @@ end;
 
 procedure TListItem.SetCaption(const Value: string);
 begin
-  FCaption := Value;
-  if not Owner.Owner.OwnerData then
-    ListView_SetItemText(Handle, Index, 0, LPSTR_TEXTCALLBACK);
-  if ListView.ColumnsShowing and
-    (ListView.Columns.Count > 0) and
-    (ListView.Column[0].WidthType <= ColumnTextWidth) then
-    ListView.UpdateColumns;
-  if ListView.SortType in [stBoth, stText] then ListView.AlphaSort;
+  if Value <> Caption then
+  begin
+    FCaption := Value;
+    if not Owner.Owner.OwnerData then
+      ListView_SetItemText(Handle, Index, 0, LPSTR_TEXTCALLBACK);
+    if ListView.ColumnsShowing and
+      (ListView.Columns.Count > 0) and
+      (ListView.Column[0].WidthType <= ColumnTextWidth) then
+      ListView.UpdateColumns;
+    if ListView.SortType in [stBoth, stText] then ListView.AlphaSort;
+  end;
 end;
 
 procedure TListItem.SetData(Value: Pointer);
 begin
-  FData := Value;
-  if ListView.SortType in [stBoth, stData] then ListView.AlphaSort;
+  if Value <> Data then
+  begin
+    FData := Value;
+    if ListView.SortType in [stBoth, stData] then
+      ListView.AlphaSort;
+  end;
 end;
 
 function TListItem.EditCaption: Boolean;
@@ -11381,10 +12737,13 @@ end;
 procedure TListItem.SetImage(Index: Integer; Value: TImageIndex);
 var
   Item: TLVItem;
+  LChanged: Boolean;
 begin
+  LChanged := False;
   case Index of
     0:  if Value <> FImageIndex then
         begin
+          LChanged := True;
           FImageIndex := Value;
           if not Owner.Owner.OwnerData then
           begin
@@ -11400,6 +12759,7 @@ begin
         end;
     1:  if Value <> FOverlayIndex then
         begin
+          LChanged := True;
           FOverlayIndex := Value;
           if not Owner.Owner.OwnerData then
             ListView_SetItemState(Handle, Self.Index,
@@ -11407,6 +12767,7 @@ begin
         end;
     2:  if Value <> FStateIndex then
         begin
+          LChanged := True;
           FStateIndex := Value;
           if Owner.Owner.CheckBoxes and (Value = -1) then
             Value := 0;
@@ -11415,7 +12776,7 @@ begin
               IndexToStateImageMask(Value + 1), LVIS_STATEIMAGEMASK);
         end;
   end;
-  if not Owner.Owner.OwnerData then
+  if LChanged and not Owner.Owner.OwnerData then
     ListView.UpdateItems(Self.Index, Self.Index);
 end;
 
@@ -11465,7 +12826,8 @@ end;
 
 procedure TListItem.SetSubItems(Value: TStrings);
 begin
-  if Value <> nil then FSubItems.Assign(Value);
+  if Value <> nil then
+    FSubItems.Assign(Value);
 end;
 
 function TListItem.GetIndex: Integer;
@@ -11481,9 +12843,13 @@ begin
 end;
 
 procedure TListItem.SetPosition(const Value: TPoint);
+var
+  LAt: TPoint;
 begin
-  if ListView.ViewStyle in [vsSmallIcon, vsIcon] then
-    ListView_SetItemPosition32(Handle, Index, Value.X, Value.Y);
+  LAt := Position;
+  if (LAt.X <> Value.X) or (LAt.Y <> Value.Y) then
+    if ListView.ViewStyle in [vsSmallIcon, vsIcon] then
+      ListView_SetItemPosition32(Handle, Index, Value.X, Value.Y);
 end;
 
 function TListItem.DisplayRect(Code: TDisplayCode): TRect;
@@ -11505,17 +12871,20 @@ var
 begin
   {Storage of sub-item image indices cannot be provided by the control because
    all display-related content requires a callback}
-  TSubItems(FSubItems).ImageIndex[Index] := Value;
-  if not Owner.Owner.OwnerData then
+  if TSubItems(FSubItems).ImageIndex[Index] <> Value then
   begin
-    with item do
+    TSubItems(FSubItems).ImageIndex[Index] := Value;
+    if not Owner.Owner.OwnerData then
     begin
-      mask := LVIF_IMAGE;
-      iImage := I_IMAGECALLBACK;
-      iItem := Self.Index;
-      iSubItem := Index+1;
+      with item do
+      begin
+        mask := LVIF_IMAGE;
+        iImage := I_IMAGECALLBACK;
+        iItem := Self.Index;
+        iSubItem := Index+1;
+      end;
+      ListView_SetItem(Handle, item);
     end;
-    ListView_SetItem(Handle, item);
   end;
 end;
 
@@ -11563,13 +12932,22 @@ end;
 
 function TListItems.Add: TListItem;
 begin
-  Result := Owner.CreateListItem;
-  ListView_InsertItem(Handle, CreateItem(Count, Result));
+  Result := AddItem(nil, -1);
 end;
 
 function TListItems.Insert(Index: Integer): TListItem;
 begin
-  Result := Owner.CreateListItem;
+  Result := AddItem(nil, Index);
+end;
+
+function TListItems.AddItem(Item: TListItem; Index: Integer): TListItem;
+begin
+  if Item = nil then
+    Result := Owner.CreateListItem
+  else
+    Result := Item;
+  if Index < 0 then
+    Index := Count;
   ListView_InsertItem(Handle, CreateItem(Index, Result));
 end;
 
@@ -11744,8 +13122,6 @@ begin
   inherited DefineProperties(Filer);
   Filer.DefineBinaryProperty('Data', ReadData, WriteData, WriteItems);
 end;
-
-const SubItemImageTag: SmallInt = $7FFF;
 
 procedure TListItems.ReadData(Stream: TStream);
 var
@@ -11960,7 +13336,7 @@ begin
   TControlCanvas(FCanvas).Control := Self;
   FDragIndex := -1;
   FListColumns := TListColumns.Create(Self);
-  FListItems := TListItems.Create(Self);
+  FListItems := CreateListItems;
   FTempItem := CreateListItem;
   FIconOptions := TIconOptions.Create(Self);
   FWorkAreas := TWorkAreas.Create(Self, TWorkArea);
@@ -11976,12 +13352,6 @@ begin
   FSmallChangeLink.OnChange := ImageListChange;
   FStateChangeLink := TChangeLink.Create;
   FStateChangeLink.OnChange := ImageListChange;
-  { Version 5.01: DesignInfo is used here to store information necessary for
-    deleting font handles allocated in CustomDraw routines. Fields can't be
-    added now since class signatures must not be modified in a minor version.
-    This will be removed in the next major version }
-  if not (csDesigning in ComponentState) then
-    DesignInfo := Integer(New(PFontHandles));
 end;
 
 destructor TCustomListView.Destroy;
@@ -12004,8 +13374,7 @@ begin
   FSmallChangeLink.Free;
   FStateChangeLink.Free;
   FCanvas.Free;
-  if not (csDesigning in ComponentState) then
-    Dispose(PFontHandles(DesignInfo));
+  FCanvas := nil;
   inherited Destroy;
 end;
 
@@ -12104,12 +13473,15 @@ end;
 
 procedure TCustomListView.DestroyWnd;
 begin
-  if FMemStream = nil then FMemStream := TMemoryStream.Create
-  else FMemStream.Size := 0;
+  if FMemStream = nil then
+    FMemStream := TMemoryStream.Create
+  else
+    FMemStream.Size := 0;
   if OwnerData then FOwnerDataCount := Items.Count;
   FMemStream.WriteComponent(Self);
   FMemStream.Position := 0;
-  if FCheckboxes then SaveChecks;
+  if FCheckboxes then
+    SaveChecks;
   inherited DestroyWnd;
 end;
 
@@ -12402,6 +13774,17 @@ begin
   end;
 end;
 
+procedure TCustomListView.SetItemIndex(const Value: Integer);
+begin
+  if Value < 0 then
+  begin
+    if Selected <> nil then
+      Selected.Selected := False
+  end
+  else
+    Items[Value].Selected := True;
+end;
+
 procedure TCustomListView.SetMultiSelect(Value: Boolean);
 begin
   if Value <> MultiSelect then
@@ -12601,6 +13984,13 @@ begin
   if I < Items.Count then Result := I;
 end;
 
+function TCustomListView.GetItemIndex: Integer;
+begin
+  Result := -1;
+  if Selected <> nil then
+    Result := Selected.Index;
+end;
+
 function TCustomListView.OwnerDataFetch(Item: TListItem; Request: TItemRequest): Boolean;
 begin
   if Assigned(FOnData) then
@@ -12642,8 +14032,18 @@ begin
 end;
 
 function TCustomListView.CreateListItem: TListItem;
+var
+  LClass: TListItemClass;
 begin
-  Result := TListItem.Create(Items);
+  LClass := TListItem;
+  if Assigned(FOnCreateItemClass) then
+    FOnCreateItemClass(Self, LClass);
+  Result := LClass.Create(Items);
+end;
+
+function TCustomListView.CreateListItems: TListItems;
+begin
+  Result := TListItems.Create(Self);
 end;
 
 function TCustomListView.GetItem(Value: TLVItem): TListItem;
@@ -12765,170 +14165,172 @@ begin
           end;
 
       NM_CUSTOMDRAW:
-        with PNMCustomDraw(NMHdr)^ do
-        try
-          FCanvas.Lock;
-          Result := CDRF_DODEFAULT;
+        if Assigned(FCanvas) then
+          with PNMCustomDraw(NMHdr)^ do
+          try
+            FCanvas.Lock;
+            Result := CDRF_DODEFAULT;
 
-          if (dwDrawStage and CDDS_ITEM) = 0 then
-          begin
-            R := ClientRect;
-            case dwDrawStage of
-              CDDS_PREPAINT:
-              begin
-                if IsCustomDrawn(dtControl, cdPrePaint) then
-                begin
-                  try
-                    FCanvas.Handle := hdc;
-                    FCanvas.Font := Font;
-                    FCanvas.Brush := Brush;
-                    DefaultDraw := CustomDraw(R, cdPrePaint);
-                  finally
-                    FCanvas.Handle := 0;
-                  end;
-                  if not DefaultDraw then
-                  begin
-                    Result := CDRF_SKIPDEFAULT;
-                    Exit;
-                  end;
-                end;
-                if IsCustomDrawn(dtItem, cdPrePaint) or IsCustomDrawn(dtItem, cdPreErase) then
-                  Result := CDRF_NOTIFYITEMDRAW;
-                if IsCustomDrawn(dtItem, cdPostPaint) then
-                  Result := Result or CDRF_NOTIFYPOSTPAINT;
-                if IsCustomDrawn(dtItem, cdPostErase) then
-                  Result := Result or CDRF_NOTIFYPOSTERASE;
-                if IsCustomDrawn(dtSubItem, cdPrePaint) then
-                  Result := Result or CDRF_NOTIFYSUBITEMDRAW;
-              end;
-              CDDS_POSTPAINT:
-                if IsCustomDrawn(dtControl, cdPostPaint) then
-                  CustomDraw(R, cdPostPaint);
-              CDDS_PREERASE:
-                if IsCustomDrawn(dtControl, cdPreErase) then
-                  CustomDraw(R, cdPreErase);
-              CDDS_POSTERASE:
-                if IsCustomDrawn(dtControl, cdPostErase) then
-                  CustomDraw(R, cdPostErase);
-            end;
-          end else
-          begin
-            SubItem := dwDrawStage and CDDS_SUBITEM <> 0;
-            { Don't call CustomDrawSubItem for the 0th subitem since
-              CustomDrawItem draws that item. }
-            if SubItem and (PNMLVCustomDraw(NMHdr)^.iSubItem = 0) then Exit;
-            FillChar(TmpItem, SizeOf(TmpItem), 0);
-            TmpItem.iItem := dwItemSpec;
-
-            //release the font we may have loaned during item drawing.
-            if (dwDrawStage and CDDS_ITEMPOSTPAINT <> 0)
-            and (PFontHandles(DesignInfo).OurFont + PFontHandles(DesignInfo).StockFont <> 0) then
+            if (dwDrawStage and CDDS_ITEM) = 0 then
             begin
-              SelectObject(hdc, PFontHandles(DesignInfo).StockFont);
-              DeleteObject(PFontHandles(DesignInfo).OurFont);
-              PFontHandles(DesignInfo).OurFont := 0;
-              PFontHandles(DesignInfo).StockFont := 0;
-            end;
-
-            if dwDrawStage and CDDS_ITEMPREPAINT <> 0 then
-            begin
-              try
-                FCanvas.Handle := hdc;
-                FCanvas.Font := Font;
-                FCanvas.Brush := Brush;
-                FCanvas.Font.OnChange := CanvasChanged;
-                FCanvas.Brush.OnChange := CanvasChanged;
-                FCanvasChanged := False;
-                if SubItem then
-                  DefaultDraw := CustomDrawSubItem(GetItem(TmpItem),
-                    PNMLVCustomDraw(NMHdr)^.iSubItem,
-                    TCustomDrawState(Word(uItemState)), cdPrePaint)
-                else
-                  DefaultDraw := CustomDrawItem(GetItem(TmpItem),
-                    TCustomDrawState(Word(uItemState)), cdPrePaint);
-                if not DefaultDraw then
+              R := ClientRect;
+              case dwDrawStage of
+                CDDS_PREPAINT:
                 begin
-                  Result := Result or CDRF_SKIPDEFAULT;
-                  Exit;
-                end
-                else if FCanvasChanged then
-                begin
-                  FCanvasChanged := False;
-                  FCanvas.Font.OnChange := nil;
-                  FCanvas.Brush.OnChange := nil;
-                  with PNMLVCustomDraw(NMHdr)^ do
+                  if IsCustomDrawn(dtControl, cdPrePaint) then
                   begin
-                    clrText := ColorToRGB(FCanvas.Font.Color);
-                    clrTextBk := ColorToRGB(FCanvas.Brush.Color);
-                    if GetObject(FCanvas.Font.Handle, SizeOf(LogFont), @LogFont) <> 0 then
+                    try
+                      FCanvas.Handle := hdc;
+                      FCanvas.Font := Font;
+                      FCanvas.Brush := Brush;
+                      DefaultDraw := CustomDraw(R, cdPrePaint);
+                    finally
+                      FCanvas.Handle := 0;
+                    end;
+                    if not DefaultDraw then
                     begin
-                      FCanvas.Handle := 0;  // disconnect from hdc
-                      // don't delete the stock font
-                      PFontHandles(DesignInfo).OurFont := CreateFontIndirect(LogFont);
-                      PFontHandles(DesignInfo).StockFont :=
-                        SelectObject(hdc, PFontHandles(DesignInfo).OurFont);
-                      Result := Result or CDRF_NEWFONT;
+                      Result := CDRF_SKIPDEFAULT;
+                      Exit;
                     end;
                   end;
+                  if IsCustomDrawn(dtItem, cdPrePaint) or IsCustomDrawn(dtItem, cdPreErase) then
+                    Result := CDRF_NOTIFYITEMDRAW;
+                  if IsCustomDrawn(dtItem, cdPostPaint) then
+                    Result := Result or CDRF_NOTIFYPOSTPAINT;
+                  if IsCustomDrawn(dtItem, cdPostErase) then
+                    Result := Result or CDRF_NOTIFYPOSTERASE;
+                  if IsCustomDrawn(dtSubItem, cdPrePaint) then
+                    Result := Result or CDRF_NOTIFYSUBITEMDRAW;
                 end;
-              finally
-                FCanvas.Handle := 0;
+                CDDS_POSTPAINT:
+                  if IsCustomDrawn(dtControl, cdPostPaint) then
+                    CustomDraw(R, cdPostPaint);
+                CDDS_PREERASE:
+                  if IsCustomDrawn(dtControl, cdPreErase) then
+                    CustomDraw(R, cdPreErase);
+                CDDS_POSTERASE:
+                  if IsCustomDrawn(dtControl, cdPostErase) then
+                    CustomDraw(R, cdPostErase);
               end;
-              if not SubItem then
-              begin
-                if IsCustomDrawn(dtSubItem, cdPrePaint) then
-                  Result := Result or CDRF_NOTIFYSUBITEMDRAW;
-                if IsCustomDrawn(dtItem, cdPostPaint) then
-                  Result := Result or CDRF_NOTIFYPOSTPAINT;
-                if IsCustomDrawn(dtItem, cdPostErase) then
-                  Result := Result or CDRF_NOTIFYPOSTERASE;
-              end else
-              begin
-                if IsCustomDrawn(dtSubItem, cdPostPaint) then
-                  Result := Result or CDRF_NOTIFYPOSTPAINT;
-                if IsCustomDrawn(dtSubItem, cdPostErase) then
-                  Result := Result or CDRF_NOTIFYPOSTERASE;
-              end;
-            end
-            else if dwDrawStage and CDDS_ITEMPOSTPAINT <> 0 then
+            end else
             begin
-              if SubItem then
-                CustomDrawSubItem(GetItem(TmpItem),
-                  PNMLVCustomDraw(NMHdr)^.iSubItem,
-                  TCustomDrawState(Word(uItemState)), cdPostPaint)
-              else
-                CustomDrawItem(GetItem(TmpItem),
-                  TCustomDrawState(Word(uItemState)), cdPostPaint);
-            end
-            else if dwDrawStage and CDDS_ITEMPREERASE <> 0 then
-            begin
-              if SubItem then
-                CustomDrawSubItem(GetItem(TmpItem),
-                  PNMLVCustomDraw(NMHdr)^.iSubItem,
-                  TCustomDrawState(Word(uItemState)), cdPreErase)
-              else
-                CustomDrawItem(GetItem(TmpItem),
-                  TCustomDrawState(Word(uItemState)), cdPreErase);
-            end
-            else if dwDrawStage and CDDS_ITEMPOSTERASE <> 0 then
-            begin
-              if SubItem then
-                CustomDrawSubItem(GetItem(TmpItem),
-                  PNMLVCustomDraw(NMHdr)^.iSubItem,
-                  TCustomDrawState(Word(uItemState)), cdPostErase)
-              else
-                CustomDrawItem(GetItem(TmpItem),
-                  TCustomDrawState(Word(uItemState)), cdPostErase);
-            end;
-          end;
-        finally
-          FCanvas.Unlock;
-        end;
+              SubItem := dwDrawStage and CDDS_SUBITEM <> 0;
+              { Don't call CustomDrawSubItem for the 0th subitem since
+                CustomDrawItem draws that item. }
+              if SubItem and (PNMLVCustomDraw(NMHdr)^.iSubItem = 0) then Exit;
+              FillChar(TmpItem, SizeOf(TmpItem), 0);
+              TmpItem.iItem := dwItemSpec;
 
-      LVN_BEGINDRAG: FDragIndex := PNMListView(NMHdr)^.iItem;
-      LVN_DELETEITEM: Delete(TListItem(PNMListView(NMHdr)^.lParam));
+              //release the font we may have loaned during item drawing.
+              if (dwDrawStage and CDDS_ITEMPOSTPAINT <> 0) and
+                 (FOurFont <> 0) and (FStockFont <> 0) then
+              begin
+                SelectObject(hdc, FStockFont);
+                DeleteObject(FOurFont);
+                FOurFont := 0;
+                FStockFont := 0;
+              end;
+
+              if dwDrawStage and CDDS_ITEMPREPAINT <> 0 then
+              begin
+                try
+                  FCanvas.Handle := hdc;
+                  FCanvas.Font := Font;
+                  FCanvas.Brush := Brush;
+                  FCanvas.Font.OnChange := CanvasChanged;
+                  FCanvas.Brush.OnChange := CanvasChanged;
+                  FCanvasChanged := False;
+                  if SubItem then
+                    DefaultDraw := CustomDrawSubItem(GetItem(TmpItem),
+                      PNMLVCustomDraw(NMHdr)^.iSubItem,
+                      TCustomDrawState(Word(uItemState)), cdPrePaint)
+                  else
+                    DefaultDraw := CustomDrawItem(GetItem(TmpItem),
+                      TCustomDrawState(Word(uItemState)), cdPrePaint);
+                  if not DefaultDraw then
+                  begin
+                    Result := Result or CDRF_SKIPDEFAULT;
+                    Exit;
+                  end
+                  else if FCanvasChanged then
+                  begin
+                    FCanvasChanged := False;
+                    FCanvas.Font.OnChange := nil;
+                    FCanvas.Brush.OnChange := nil;
+                    with PNMLVCustomDraw(NMHdr)^ do
+                    begin
+                      clrText := ColorToRGB(FCanvas.Font.Color);
+                      clrTextBk := ColorToRGB(FCanvas.Brush.Color);
+                      if GetObject(FCanvas.Font.Handle, SizeOf(LogFont), @LogFont) <> 0 then
+                      begin
+                        FCanvas.Handle := 0;  // disconnect from hdc
+                        // don't delete the stock font
+                        FOurFont := CreateFontIndirect(LogFont);
+                        FStockFont := SelectObject(hdc, FOurFont);
+                        Result := Result or CDRF_NEWFONT;
+                      end;
+                    end;
+                  end;
+                finally
+                  FCanvas.Handle := 0;
+                end;
+                if not SubItem then
+                begin
+                  if IsCustomDrawn(dtSubItem, cdPrePaint) then
+                    Result := Result or CDRF_NOTIFYSUBITEMDRAW;
+                  if IsCustomDrawn(dtItem, cdPostPaint) then
+                    Result := Result or CDRF_NOTIFYPOSTPAINT;
+                  if IsCustomDrawn(dtItem, cdPostErase) then
+                    Result := Result or CDRF_NOTIFYPOSTERASE;
+                end else
+                begin
+                  if IsCustomDrawn(dtSubItem, cdPostPaint) then
+                    Result := Result or CDRF_NOTIFYPOSTPAINT;
+                  if IsCustomDrawn(dtSubItem, cdPostErase) then
+                    Result := Result or CDRF_NOTIFYPOSTERASE;
+                end;
+              end
+              else if dwDrawStage and CDDS_ITEMPOSTPAINT <> 0 then
+              begin
+                if SubItem then
+                  CustomDrawSubItem(GetItem(TmpItem),
+                    PNMLVCustomDraw(NMHdr)^.iSubItem,
+                    TCustomDrawState(Word(uItemState)), cdPostPaint)
+                else
+                  CustomDrawItem(GetItem(TmpItem),
+                    TCustomDrawState(Word(uItemState)), cdPostPaint);
+              end
+              else if dwDrawStage and CDDS_ITEMPREERASE <> 0 then
+              begin
+                if SubItem then
+                  CustomDrawSubItem(GetItem(TmpItem),
+                    PNMLVCustomDraw(NMHdr)^.iSubItem,
+                    TCustomDrawState(Word(uItemState)), cdPreErase)
+                else
+                  CustomDrawItem(GetItem(TmpItem),
+                    TCustomDrawState(Word(uItemState)), cdPreErase);
+              end
+              else if dwDrawStage and CDDS_ITEMPOSTERASE <> 0 then
+              begin
+                if SubItem then
+                  CustomDrawSubItem(GetItem(TmpItem),
+                    PNMLVCustomDraw(NMHdr)^.iSubItem,
+                    TCustomDrawState(Word(uItemState)), cdPostErase)
+                else
+                  CustomDrawItem(GetItem(TmpItem),
+                    TCustomDrawState(Word(uItemState)), cdPostErase);
+              end;
+            end;
+          finally
+            FCanvas.Unlock;
+          end;
+      LVN_BEGINDRAG:
+        FDragIndex := PNMListView(NMHdr)^.iItem;
+      LVN_DELETEITEM:
+        Delete(TListItem(PNMListView(NMHdr)^.lParam));
       LVN_DELETEALLITEMS:
-        for I := Items.Count - 1 downto 0 do Delete(Items[I]);
+        for I := Items.Count - 1 downto 0 do
+          Delete(Items[I]);
       LVN_GETDISPINFO:
         begin
           Item := GetItem(PLVDispInfo(NMHdr)^.item);
@@ -12936,11 +14338,11 @@ begin
           begin
             if (mask and LVIF_TEXT) <> 0 then
               if iSubItem = 0 then
-                StrPLCopy(pszText, Item.Caption, cchTextMax)
+                StrPLCopy(pszText, Item.Caption, cchTextMax - 1)
               else
                 with Item.SubItems do
                   if iSubItem <= Count then
-                    StrPLCopy(pszText, Strings[iSubItem - 1], cchTextMax)
+                    StrPLCopy(pszText, Strings[iSubItem - 1], cchTextMax - 1)
                   else pszText[0] := #0;
             if (mask and LVIF_IMAGE) <> 0 then
             begin
@@ -13021,7 +14423,8 @@ begin
             Edit(item);
       LVN_COLUMNCLICK:
         ColClick(Column[PNMListView(NMHdr)^.iSubItem]);
-      LVN_INSERTITEM: InsertItem(Items[PNMListView(NMHdr)^.iItem]);
+      LVN_INSERTITEM:
+        InsertItem(Items[PNMListView(NMHdr)^.iItem]);
       LVN_ITEMCHANGING:
         with PNMListView(NMHdr)^ do
           if not CanChange(Items[iItem], uChanged) then Result := 1;
@@ -13039,12 +14442,17 @@ begin
               (uNewState and LVIS_SELECTED <> 0) then
               FOnSelectItem(Self, Item, True);
           end;
+          if (Action <> nil) and not (csDesigning in ComponentState) and
+             (ActionLink <> nil) then
+            ActionLink.Execute(Self);
         end;
       LVN_GETINFOTIP:
         if Assigned(FOnInfoTip) then
           Application.ActivateHint(Mouse.CursorPos);
-      NM_CLICK: FClicked := True;
-      NM_RCLICK: FRClicked := True;
+      NM_CLICK:
+        FClicked := True;
+      NM_RCLICK:
+        FRClicked := True;
     end;
 end;
 
@@ -13073,6 +14481,15 @@ begin
   if Assigned(FOnInsert) then FOnInsert(Self, Item);
 end;
 
+procedure TCustomListView.AddItem(Item: String; AObject: TObject);
+begin
+  with Items.Add do
+  begin
+    Caption := Item;
+    Data := AObject;
+  end;
+end;
+
 function TCustomListView.CanChange(Item: TListItem; Change: Integer): Boolean;
 var
   ItemChange: TItemChange;
@@ -13085,7 +14502,8 @@ begin
   else
     Exit;
   end;
-  if Assigned(FOnChanging) then FOnChanging(Self, Item, ItemChange, Result);
+  if Assigned(FOnChanging) then
+    FOnChanging(Self, Item, ItemChange, Result);
 end;
 
 procedure TCustomListView.Change(Item: TListItem; Change: Integer);
@@ -13099,14 +14517,16 @@ begin
   else
     Exit;
   end;
-  if Assigned(FOnChange) then FOnChange(Self, Item, ItemChange);
+  if Assigned(FOnChange) then
+    FOnChange(Self, Item, ItemChange);
 end;
 
 procedure TCustomListView.Delete(Item: TListItem);
 begin
   if (Item <> nil) and not Item.FProcessedDeleting then
   begin
-    if Assigned(FOnDeletion) then FOnDeletion(Self, Item);
+    if Assigned(FOnDeletion) then
+      FOnDeletion(Self, Item);
     Item.FProcessedDeleting := True;
     Item.Delete;
   end;
@@ -13196,6 +14616,7 @@ procedure TCustomListView.DoEndDrag(Target: TObject; X, Y: Integer);
 
 begin
   inherited DoEndDrag(Target, X, Y);
+  FDragImage.EndDrag;
   FLastDropTarget := nil;
 end;
 
@@ -13488,12 +14909,12 @@ begin
   end;
 end;
 
-function TCustomListView.GetSelection: TListItem;
+function TCustomListView.GetSelected: TListItem;
 begin
   Result := GetNextItem(nil, sdAll, [isSelected]);
 end;
 
-procedure TCustomListView.SetSelection(Value: TListItem);
+procedure TCustomListView.SetSelected(Value: TListItem);
 var
   I: Integer;
 begin
@@ -13505,7 +14926,7 @@ begin
       begin
         Value.Selected := False;
         Value := GetNextItem(Value, sdAll, [isSelected]);
-      end;
+      end;                                            
   end;
 end;
 
@@ -13648,7 +15069,9 @@ begin
         fmt := IAlignment[UseRightToLeftAlignment, AAlignment]
       else fmt := LVCFMT_LEFT;
       if FImageIndex <> -1 then
-        fmt := fmt or LVCFMT_IMAGE or LVCFMT_COL_HAS_IMAGES;
+        fmt := fmt or LVCFMT_IMAGE or LVCFMT_COL_HAS_IMAGES
+      else
+        mask := mask and not LVCF_IMAGE;
       if WidthType > ColumnTextWidth then
       begin
         mask := mask or LVCF_WIDTH;
@@ -13792,24 +15215,27 @@ var
   State: TOwnerDrawState;
   SaveIndex: Integer;
 begin
-  with Message.DrawItemStruct^ do
+  if Assigned(FCanvas) then
   begin
-    State := TOwnerDrawState(LongRec(itemState).Lo);
-    SaveIndex := SaveDC(hDC);
-    FCanvas.Lock;
-    try
-      FCanvas.Handle := hDC;
-      FCanvas.Font := Font;
-      FCanvas.Brush := Brush;
-      if itemID = DWORD(-1) then FCanvas.FillRect(rcItem)
-      else DrawItem(Items[itemID], rcItem, State);
-    finally
-      FCanvas.Handle := 0;
-      FCanvas.Unlock;
-      RestoreDC(hDC, SaveIndex);
+    with Message.DrawItemStruct^ do
+    begin
+      State := TOwnerDrawState(LongRec(itemState).Lo);
+      SaveIndex := SaveDC(hDC);
+      FCanvas.Lock;
+      try
+        FCanvas.Handle := hDC;
+        FCanvas.Font := Font;
+        FCanvas.Brush := Brush;
+        if itemID = DWORD(-1) then FCanvas.FillRect(rcItem)
+        else DrawItem(Items[itemID], rcItem, State);
+      finally
+        FCanvas.Handle := 0;
+        FCanvas.Unlock;
+        RestoreDC(hDC, SaveIndex);
+      end;
     end;
+    Message.Result := 1;
   end;
-  Message.Result := 1;
 end;
 
 { CustomDraw support }
@@ -13983,7 +15409,15 @@ end;
 
 function TCustomListView.AreItemsStored: Boolean;
 begin
-  Result := not OwnerData;
+  if Assigned(Action) then
+  begin
+    if Action is TCustomListAction then
+      Result := False
+    else
+      Result := True;
+  end
+  else
+    Result := not OwnerData;
 end;
 
 procedure TCustomListView.MouseUp(Button: TMouseButton; Shift: TShiftState;
@@ -14009,12 +15443,87 @@ procedure TCustomListView.WMContextMenu(var Message: TWMContextMenu);
 var
   R: TRect;
 begin
-  if (Message.XPos < 0) and (Selected <> nil) then
+  if not (csDesigning in ComponentState) then
+    SetFocus;
+  if InvalidPoint(Message.Pos) and (Selected <> nil) then
   begin
     R := Selected.DisplayRect(drSelectBounds);
-    Message.Pos := PointToSmallPoint(ClientToScreen(Point(R.Left, R.Bottom)));
+    Message.Pos := PointToSmallPoint(ClientToScreen(CenterPoint(R)));
   end;
   inherited;
+end;
+
+procedure TCustomListView.ClearSelection;
+var
+  I: Integer;
+begin
+  for I := 0 to Items.Count - 1 do
+    Items[I].Selected := False;
+end;
+
+procedure TCustomListView.CopySelection(Destination: TCustomListControl);
+var
+  I: Integer;
+begin
+  for I := 0 to Items.Count - 1 do
+    if Items[I].Selected then
+      Destination.AddItem(Items[I].Caption, Items[I].Data);
+end;
+
+procedure TCustomListView.DeleteSelected;
+var
+  I: Integer;
+begin
+  Items.BeginUpdate;
+  try
+    for I := Items.Count - 1 downto 0 do
+      if Items[I].Selected then
+        Delete(Items[I]);
+  finally
+    Items.EndUpdate;
+  end;
+end;
+
+function TCustomListView.GetCount: Integer;
+begin
+  Result := Items.Count;
+end;
+
+procedure TCustomListView.SelectAll;
+var
+  I: Integer;
+begin
+  for I := 0 to Items.Count - 1 do
+    Items[I].Selected := True;
+end;
+
+procedure TCustomListView.Clear;
+begin
+  FListItems.BeginUpdate;
+  try
+    FListItems.Clear;
+  finally
+    FListItems.EndUpdate;
+  end;
+end;
+
+function TCustomListView.GetActionLinkClass: TControlActionLinkClass;
+begin
+  Result := TListViewActionLink;
+end;
+
+procedure TCustomListView.ActionChange(Sender: TObject;
+  CheckDefaults: Boolean);
+begin
+  inherited ActionChange(Sender, CheckDefaults);
+  if Sender is TStaticListAction then
+    with TStaticListAction(Sender) do
+    begin
+      if not CheckDefaults or (Self.SmallImages = nil) then
+        Self.SmallImages := Images;
+      if not CheckDefaults or (Self.ItemIndex <> -1) then
+        Self.ItemIndex := ItemIndex;
+    end;
 end;
 
 { TAnimate }
@@ -14772,13 +16281,16 @@ begin
 end;
 
 procedure TToolButton.CMVisibleChanged(var Message: TMessage);
+var
+  Button: TTBButton;
 begin
   if not (csDesigning in ComponentState) and (FToolBar <> nil) then
   begin
     if FToolBar <> nil then
       with FToolBar do
       begin
-        Perform(TB_HIDEBUTTON, Index, Longint(Ord(not Self.Visible)));
+        if Perform(TB_GETBUTTON, Index, Longint(@Button)) <> 0 then
+          Perform(TB_HIDEBUTTON, Button.idCommand, MakeLong(Ord(not Self.Visible), 0));
         { Force a resize to occur }
         if AutoSize then AdjustSize;
       end;
@@ -15041,6 +16553,8 @@ begin
   EdgeBorders := [ebTop];
   FButtonWidth := 23;
   FButtonHeight := 22;
+  FCustomizable := False;
+  FCustomizing := False;
   FNewStyle := True;
   FWrapable := True;
   FButtons := TList.Create;
@@ -15061,12 +16575,6 @@ begin
     Canvas.FillRect(Rect(0,0,1,1));
   end;
   FloatingDockSiteClass := TToolDockForm;
-  { Version 5.01: DesignInfo is used here to store information necessary for
-    deleting font handles allocated in CustomDraw routines. Fields can't be
-    added now since class signatures must not be modified in a minor version.
-    This will be removed in the next major version }
-  if not (csDesigning in ComponentState) then
-    DesignInfo := Integer(New(PFontHandles));
 end;
 
 destructor TToolBar.Destroy;
@@ -15082,8 +16590,6 @@ begin
       TToolButton(FButtons[I]).FToolBar := nil;
   FButtons.Free;
   FCanvas.Free;
-  if not (csDesigning in ComponentState) then
-    Dispose(PFontHandles(DesignInfo));
   inherited Destroy;
 end;
 
@@ -15094,6 +16600,7 @@ const
   ListStyles: array[Boolean] of DWORD = (0, TBSTYLE_LIST);
   FlatStyles: array[Boolean] of DWORD = (0, TBSTYLE_FLAT);
   TransparentStyles: array[Boolean] of DWORD = (0, TBSTYLE_TRANSPARENT);
+  CustomizeStyles: array[Boolean] of DWORD = (0, CCS_ADJUSTABLE);
 begin
   FNewStyle := InitCommonControl(ICC_BAR_CLASSES);
   inherited CreateParams(Params);
@@ -15101,8 +16608,8 @@ begin
   with Params do
   begin
     Style := Style or DefaultStyles or FlatStyles[FFlat] or ListStyles[FList] or
-      TransparentStyles[FTransparent];
-    //! WINBUG: Without this style the toolbar is has a two pixel margin above
+      TransparentStyles[FTransparent] or CustomizeStyles[FCustomizable];
+    //! WINBUG: Without this style the toolbar has a two pixel margin above
     //! the buttons when ShowCaptions = True.
     if ShowCaptions then
       Style := Style or TBSTYLE_TRANSPARENT;//!
@@ -15199,7 +16706,7 @@ begin
     Perform(TB_SETBITMAPSIZE, 0, MakeLParam(ImageWidth, ImageHeight));
     { Adjust the working height if there is a visible TToolButton whose caption
       height is automatically added by the common control. }
-    if ShowCaptions and ToolButtonVisible then Dec(NewHeight, FHeightMargin);
+//    if ShowCaptions and ToolButtonVisible then Dec(NewHeight, FHeightMargin);
     { Prevent toolbar from setting default button size }
     if NewWidth <= 0 then NewWidth := 1;
     if NewHeight <= 0 then NewHeight := 1;
@@ -15357,6 +16864,7 @@ begin
   begin
     if Control is TToolButton then TToolButton(Control).FToolBar := nil;
     Pos := FButtons.Remove(Control);
+    if FCustomizing and not FRestoring then Exit;
     Perform(TB_DELETEBUTTON, Pos, 0);
     ResizeButtons;
     if Wrapable then
@@ -15382,7 +16890,7 @@ begin
       if Style in [tbsSeparator, tbsDivider] then
       begin
         Button.iBitmap := Width;
-        Button.idCommand := -1;
+        Button.idCommand := FromIndex;
       end
       else
       begin
@@ -15448,7 +16956,7 @@ begin
         or TBIF_SIZE;
       if Style in [tbsSeparator, tbsDivider] then
       begin
-        Button.idCommand := -1;
+        Button.idCommand := FromIndex;
       end
       else
       begin
@@ -15489,17 +16997,18 @@ begin
         Button.pszText := nil;
         Button.cchText := 0;
       end;
-
-if Style in [tbsSeparator, tbsDivider] then
-begin
-  with Button do
-  begin
-    dwMask := TBIF_STYLE or TBIF_STATE or TBIF_LPARAM;
-    fsState := TBSTATE_ENABLED or TBSTATE_WRAP;
-    fsStyle := TBSTYLE_BUTTON;
-  end;
-end;
-
+ {      if Style in [tbsSeparator, tbsDivider] then
+      begin
+        with Button do
+        begin
+          if Visible then
+          begin
+            dwMask := TBIF_STYLE or TBIF_STATE or TBIF_LPARAM;
+            fsState := TBSTATE_ENABLED or TBSTATE_WRAP;
+            fsStyle := TBSTYLE_BUTTON;
+          end;
+        end;
+      end;}
     end
   else
   begin
@@ -15686,7 +17195,8 @@ begin
   begin
     if AComponent = FImages then Images := nil;
     if AComponent = FHotImages then HotImages := nil;
-    if AComponent = FDisabledImages then DisabledImages := nil;
+	if AComponent = FDisabledImages then DisabledImages := nil;
+	if AComponent = FMenu then Menu := nil;
   end;
 end;
 
@@ -15850,6 +17360,46 @@ begin
   end;
 end;
 
+procedure TToolBar.SetMenu(const Value: TMainMenu);
+var
+  I: Integer;
+begin
+  if FMenu = Value then exit;
+  if csAcceptsControls in ControlStyle then
+  begin
+    ControlStyle := [csCaptureMouse, csClickEvents,
+      csDoubleClicks, csMenuEvents, csSetCaption];
+    RecreateWnd;
+  end;
+  ShowCaptions := True;
+  if Assigned(FMenu) then
+    for I := ButtonCount - 1 downto 0 do
+      Buttons[I].Free;
+       
+  if Assigned(FMenu) then
+    FMenu.RemoveFreeNotification(Self);
+  FMenu := Value;
+  if not Assigned(FMenu) then exit;
+  FMenu.FreeNotification(Self);
+
+  for I := ButtonCount to FMenu.Items.Count - 1 do
+  begin
+    with TToolButton.Create(Self) do
+    try
+      AutoSize := True;
+      Grouped := True;
+      Parent := Self;
+      Buttons[I].MenuItem := FMenu.Items[I];
+    except
+      Free;
+      raise;
+    end;
+  end;
+  { Copy attributes from each menu item }
+  for I := 0 to FMenu.Items.Count - 1 do
+    Buttons[i].MenuItem := FMenu.Items[I];
+end;
+
 procedure TToolBar.RecreateButtons;
 begin
   if ([csLoading, csDestroying] * ComponentState = []) or HandleAllocated then
@@ -15897,6 +17447,7 @@ var
   I: Integer;
   Control: TControl;
 begin
+  if Assigned(Menu) then exit;
   for I := 0 to FButtons.Count - 1 do Proc(TComponent(FButtons[I]));
   for I := 0 to ControlCount - 1 do
   begin
@@ -16609,13 +18160,13 @@ begin
               CDDS_ITEMPREPAINT:
                 begin
                   //release the font we may have loaned during item drawing.
-                  if (nmcd.dwDrawStage and CDDS_ITEMPOSTPAINT <> 0)
-                  and (PFontHandles(DesignInfo).OurFont + PFontHandles(DesignInfo).StockFont <> 0) then
+                  if (nmcd.dwDrawStage and CDDS_ITEMPOSTPAINT <> 0) and
+                     (FOurFont <> 0) and (FStockFont <> 0) then
                   begin
-                    SelectObject(nmcd.hdc, PFontHandles(DesignInfo).StockFont);
-                    DeleteObject(PFontHandles(DesignInfo).OurFont);
-                    PFontHandles(DesignInfo).OurFont := 0;
-                    PFontHandles(DesignInfo).StockFont := 0;
+                    SelectObject(nmcd.hdc, FStockFont);
+                    DeleteObject(FOurFont);
+                    FOurFont := 0;
+                    FStockFont := 0;
                   end;
 
                   try
@@ -16653,9 +18204,8 @@ begin
                       begin
                         FCanvas.Handle := 0;  // disconnect from hdc
                         // don't delete the stock font
-                        PFontHandles(DesignInfo).OurFont := CreateFontIndirect(LogFont);
-                        PFontHandles(DesignInfo).StockFont :=
-                          SelectObject(nmcd.hdc, PFontHandles(DesignInfo).OurFont);
+                        FOurFont := CreateFontIndirect(LogFont);
+                        FStockFont := SelectObject(nmcd.hdc, FOurFont);
                         Result := Result or CDRF_NEWFONT;
                       end;
                       if IsCustomDrawn(dtItem, cdPostPaint) then
@@ -16682,7 +18232,99 @@ begin
         finally
           FCanvas.Unlock;
         end;
+      TBN_QUERYINSERT:
+        with PNMToolbar(NMHdr)^ do
+        begin
+          Result := Integer(DoQueryInsert(iItem));
+          if (FButtons.IndexOf(Pointer(tbButton.dwData)) < 0)
+          and (TControl(tbButton.dwData) is TToolButton) then
+          begin
+          {  FButtons.Insert(iItem, Pointer(tbButton.dwData));
+            TToolButton(tbButton.dwData).FToolbar := Self;
+            if Assigned(FOnCustomizeAdded) then
+              FOnCustomizeAdded(Self, TToolButton(tbButton.dwData));}
+          end else
+            if (tbButton.dwData = 0) and (tbButton.fsStyle = ButtonStyles[tbsSeparator]) then
+            begin
+              Button := TToolButton.Create(Owner);
+              Button.Style := tbsSeparator;
+              FButtons.Insert(iItem, Button);
+              Inc(FSeparators);
+            end;
+        end;
+      TBN_QUERYDELETE:
+        Result := Integer(DoQueryDelete(PNMToolbar(NMHdr)^.iItem));
+      TBN_GETBUTTONINFO:
+        with PNMToolBar(NMHdr)^ do
+        begin
+          if FCustomizing then
+            Result := Integer(DoGetButton(PNMToolbar(NMHdr)));
+        end;
+      TBN_DELETINGBUTTON:
+        if FCustomizing and not FRestoring and Assigned(FOnCustomizeDelete) then
+        begin
+          Button := TToolButton(FButtons[PNMToolbar(NMHdr)^.iItem]);
+          FOnCustomizeDelete(Self, Button);
+        end;
+      TBN_BEGINADJUST:
+        begin
+          FCustomizing := True;
+          FSeparators := 0;
+          if Assigned(FOnCustomizing) then FOnCustomizing(Self);
+          if not FRestoring then
+            SaveButtons(True);
+        end;
+      TBN_ENDADJUST:
+        begin
+          if not FRestoring then
+          begin
+            RecreateButtonsFromToolbar;
+            FCustomizing := False;
+          end
+          else if Assigned(FOnCustomizeReset) then
+            FOnCustomizeReset(Self);
+          FRestoring := False;
+        end;
+      TBN_TOOLBARCHANGE:
+        begin
+          if not FCustomizing then //Buttons were dragged holding SHIFT key down.
+            RecreateButtonsFromToolbar;
+          if Assigned(FOnCustomized) then FOnCustomized(Self);
+        end;
+      TBN_RESET:
+        begin
+          FRestoring := True;
+          SaveButtons(False);
+          RecreateButtonsFromToolbar;
+          FRestoring := False;
+        end;
     end;
+end;
+
+procedure TToolBar.RecreateButtonsFromToolbar;
+var
+  I: Integer;
+  ButtonInfo: TTBBUTTON;
+  Button: TToolButton;
+  TBButtonCount: Integer;
+begin
+  TBButtonCount := SendMessage(Handle, TB_BUTTONCOUNT, 0, 0);
+  FButtons.Clear;
+  for I := 0 to TBButtonCount - 1 do
+  begin
+    SendMessage(Handle, TB_GETBUTTON, I, Longint(@ButtonInfo));
+    if ButtonInfo.dwData = 0 then
+    begin
+      Button := TToolButton.Create(Owner);
+      Button.Style := tbsSeparator;
+      ButtonInfo.dwData := Integer(Button);
+      Button.FToolbar := Self;
+      SendMessage(Handle, TB_DELETEBUTTON, I, 0);
+      SendMessage(Handle, TB_INSERTBUTTON, I, Longint(@ButtonInfo));
+    end;
+    FButtons.Add(Pointer(ButtonInfo.dwData));
+  end;
+  RecreateButtons;
 end;
 
 type
@@ -17030,12 +18672,16 @@ end;
 var
   ToolMenuKeyHook: HHOOK;
 
+procedure ReleaseToolMenuKeyHooks; forward;
+
 function ToolMenuKeyMsgHook(Code: Integer; WParam: Longint; var Msg: TMsg): Longint; stdcall;
 begin
   if (Code = HC_ACTION) then
   begin
     if Msg.Message = CM_DEACTIVATE then
       MenuToolBar2.CancelMenu
+    else if Msg.message = WM_COMMAND then
+      ReleaseToolMenuKeyHooks
     else if (ToolMenuHook = 0) and ((Msg.Message = WM_CHAR) or
       (Msg.Message = WM_KEYDOWN) or (Msg.Message = WM_KEYUP) or
       (Msg.Message = WM_SYSKEYDOWN) or (Msg.Message = WM_SYSKEYUP)) then
@@ -17131,6 +18777,9 @@ begin
       APoint := Button.ClientToScreen(Point(0, Button.ClientHeight));
       if FTempMenu.IsRightToLeft then Inc(APoint.X, Button.Width);
       FMenuDropped := True;
+      if (GetSystemMetrics(SM_CYMENU) * FTempMenu.Items.Count) + APoint.Y >
+         Screen.MonitorFromPoint(APoint).Height then
+        Dec(APoint.Y, Button.Height);
       if GetComCtlVersion = ComCtlVersionIE5 then
         Button.Invalidate;
       FTempMenu.Popup(APoint.X, APoint.Y);
@@ -17256,8 +18905,95 @@ end;
 
 procedure TToolBar.CMFontChanged(var Message);
 begin
-  if HandleAllocated and FShowCaptions then Perform(WM_SETFONT, Font.Handle, 0);
+  if HandleAllocated and FShowCaptions then
+  begin
+    Perform(WM_SETFONT, Font.Handle, 0);
+    if not (csLoading in ComponentState) then
+      RecreateWnd;
+  end;
   NotifyControls(CM_PARENTFONTCHANGED);
+end;
+
+procedure TToolBar.SetCustomizable(const Value: Boolean);
+begin
+  if Value <> FCustomizable then
+  begin
+    FCustomizable := Value;
+    RecreateWnd;
+  end;
+end;
+
+function TToolBar.DoGetButton(NMToolbar: PNMToolbar): Boolean;
+const
+  MaxLen = 128;
+var
+  NewButton: TControl;
+  Title: string;
+  Buffer: array[0..MaxLen] of Char;
+begin
+  if (NMToolbar^.iItem >= FButtons.Count) then
+  begin
+    Result := Assigned(FOnCustomizeNewButton);
+    if Result then
+    begin
+      NewButton := nil;
+      FOnCustomizeNewButton(Self,
+        NMToolbar^.iItem - FButtons.Count + FSeparators, TToolButton(NewButton));
+      Result := NewButton <> nil;
+      if Result then TToolButton(NewButton).FToolbar := Self;
+    end;
+  end
+  else begin
+    NewButton := FButtons[NMToolbar^.iItem];
+    Result := NewButton is TToolButton;
+  end;
+
+  if Result then
+    with NMToolbar^, NewButton as TToolButton do
+    begin
+      if Style in [tbsSeparator, tbsDivider] then
+        Title := SSeparator
+      else
+        Title := Caption;
+      StrLCopy(pszText, PChar(Title), MaxLen);
+      cchText := StrLen(pszText);
+      StrLCopy(Buffer, PChar(Title), MaxLen);
+      Buffer[Length(Title) + 1] := #0;
+      if ShowCaptions then
+        tbButton.iString := Self.Perform(TB_ADDSTRING, 0, Longint(@Buffer))
+      else
+        tbButton.iString := -1;
+      tbButton.idCommand := Index;
+      tbButton.iBitmap := ImageIndex;
+      tbButton.fsStyle := ButtonStyles[Style];
+      tbButton.fsState := GetButtonState;
+      tbButton.dwData := Integer(NewButton);
+   end;
+
+end;
+
+function TToolBar.DoQueryDelete(Index: Integer): Boolean;
+begin
+  Result := True;
+  if Assigned(FOnCustomizeCanDelete) then
+    FOnCustomizeCanDelete(Self, Index, Result);
+end;
+
+function TToolBar.DoQueryInsert(Index: Integer): Boolean;
+begin
+  Result := True;
+  if Assigned(FOnCustomizeCanInsert) then
+    FOnCustomizeCanInsert(Self, Index, Result);
+end;
+
+procedure TToolBar.SaveButtons(Save: Boolean);
+var
+  SP: TTBSaveParams;
+begin
+  SP.hkr := HKEY_CURRENT_USER;
+  SP.pszSubKey := PChar(FCustomizeKeyName);
+  SP.pszValueName := PChar(FCustomizeValueName);
+  SendMessage(Handle, TB_SAVERESTORE, Integer(Save), Longint(@SP));
 end;
 
 { TCoolBand }
@@ -19417,9 +21153,11 @@ begin
   CreateSubClass(Params, DATETIMEPICK_CLASS);
   with Params do
   begin
-    Style := Style or Formats[FDateFormat];
     if FDateMode = dmUpDown then Style := Style or DTS_UPDOWN;
-    if FKind = dtkTime then Style := Style or DTS_TIMEFORMAT;
+    if FKind = dtkTime then
+      Style := Style or DTS_TIMEFORMAT
+    else
+      Style := Style or Formats[FDateFormat];
     ACalAlignment := FCalAlignment;
     if UseRightToLeftAlignment then
       if ACalAlignment = dtaLeft then
@@ -19442,6 +21180,8 @@ procedure TDateTimePicker.CreateWnd;
 begin
   inherited CreateWnd;
   SetChecked(FChecked);
+  if Length(FFormat) > 0 then
+    SendMessage(Handle, DTM_SETFORMAT, 0 , Integer(PChar(FFormat)));
 end;
 
 procedure TDateTimePicker.CMColorChanged(var Message: TMessage);
@@ -19504,16 +21244,18 @@ begin
         end;
       DTN_USERSTRING:
         begin
-          AllowChange := Assigned(FOnUserInput);
           with PNMDateTimeString(NMHdr)^ do
           begin
-            if AllowChange then
+            DT := StrToDateTime(pszUserString);
+            if Assigned(FOnUserInput) then
             begin
-              DT := 0.0;
+              AllowChange := True;
               FOnUserInput(Self, pszUserString, DT, AllowChange);
-              DateTimeToSystemTime(DT, st);
-            end;
-            dwFlags := Ord(not AllowChange);
+              dwFlags := Ord(not AllowChange);
+            end
+            else
+              dwFlags := Ord(False);
+            DateTimeToSystemTime(DT, st);
           end;
         end;
     else
@@ -19645,6 +21387,15 @@ begin
     end
     else
       SetDateTime(Value);
+  end;
+end;
+
+procedure TDateTimePicker.SetFormat(const Value: String);
+begin
+  if FFormat <> Value then
+  begin
+    FFormat := Value;
+    SendMessage(Handle, DTM_SETFORMAT, 0 , Integer(PChar(FFormat)));
   end;
 end;
 
@@ -19915,6 +21666,768 @@ begin
     if Message.Inserting then
       DoSetControl(TWinControl(Message.Control));
   end;
+end;
+
+{ TComboExItem }
+
+procedure TComboExItem.Assign(Source: TPersistent);
+begin
+  if Source is TComboExItem then
+  begin
+    FSelectedImageIndex := TComboExItem(Source).SelectedImageIndex;
+    FIndent := TComboExItem(Source).Indent;
+    FOverlayImageIndex := TComboExItem(Source).OverlayImageIndex;
+    FImageIndex := TComboExItem(Source).ImageIndex;
+    FCaption := TComboExItem(Source).Caption;
+  end
+  else
+    inherited Assign(Source);
+end;
+
+procedure TComboExItem.SetCaption(const Value: String);
+begin
+  inherited SetCaption(Value);
+  TComboExItems(Collection).SetItem(Index);
+  if (TComboExItems(Collection).SortType = ListActns.stText) or
+  (TComboExItems(Collection).SortType = ListActns.stBoth) then
+    TComboExItems(Collection).Sort;
+end;
+
+procedure TComboExItem.SetData(const Value: Pointer);
+begin
+  inherited SetData(Value);
+  TComboExItems(Collection).SetItem(Index);
+  if (TComboExItems(Collection).SortType = ListActns.stData) or
+  (TComboExItems(Collection).SortType = ListActns.stBoth) then
+    TComboExItems(Collection).Sort;
+end;
+
+procedure TComboExItem.SetDisplayName(const Value: String);
+begin
+  inherited SetDisplayName(Value);
+  TComboExItems(Collection).SetItem(Index);
+end;
+
+procedure TComboExItem.SetImageIndex(const Value: TImageIndex);
+begin
+  if (FSelectedImageIndex = -1) or (FSelectedImageIndex = ImageIndex) then
+    FSelectedImageIndex := Value;
+  inherited SetImageIndex(Value);
+  TComboExItems(Collection).SetItem(Index);
+end;
+
+procedure TComboExItem.SetIndex(Value: Integer);
+begin
+  inherited SetIndex(Value);
+  TComboExItems(Collection).SetItem(Value);
+end;
+
+procedure TComboExItem.SetOverlayImageIndex(const Value: TImageIndex);
+begin
+  FOverlayImageIndex := Value;
+  TComboExItems(Collection).SetItem(Index);
+end;
+
+procedure TComboExItem.SetSelectedImageIndex(const Value: TImageIndex);
+begin
+  FSelectedImageIndex := Value;
+  TComboExItems(Collection).SetItem(Index);
+end;
+
+{ TComboExItems }
+
+function TComboExItems.Add: TComboExItem;
+begin
+  Result := TComboExItem(inherited Add);
+end;
+
+function TComboExItems.AddItem(const Caption: String; const ImageIndex,
+  SelectedImageIndex, OverlayImageIndex, Indent: Integer;
+  Data: Pointer): TComboExItem;
+begin
+  Result := Add;
+  Result.Caption := Caption;
+  Result.ImageIndex := ImageIndex;
+  Result.SelectedImageIndex := SelectedImageIndex;
+  Result.OverlayImageIndex := OverlayImageIndex;
+  Result.Indent := Indent;
+  Result.Data := Data;
+  SetItem(Result.Index);
+end;
+
+function TComboExItems.GetComboItem(const Index: Integer): TComboExItem;
+begin
+  Result := TComboExItem(Items[Index]);
+end;
+
+function TComboExItems.Insert(Index: Integer): TComboExItem;
+begin
+  Result := TComboExItem(inherited Insert(Index));
+end;
+
+procedure TComboExItems.Notify(Item: TCollectionItem;
+  Action: TCollectionNotification);
+begin
+  case Action of
+    cnAdded:
+      with TComboExItem(Item) do
+      begin
+        FImageIndex := -1;
+        FSelectedImageIndex := -1;
+        FIndent := -1;
+        FOverlayImageIndex := -1;
+        FData := nil;
+        FCaption := '';
+      end;
+    cnDeleting:
+      if not (csDestroying in TWinControl(Owner).ComponentState) then
+        SendMessage(TWinControl(Owner).Handle, CBEM_DELETEITEM, Item.Index, 0);
+  end;
+end;
+
+procedure TComboExItems.SetItem(const Index: Integer);
+var
+  AnItem: TComboBoxExItem;
+  Insert: BOOL;
+begin
+  FillChar(AnItem, SizeOf(TComboBoxExItem), 0);
+  AnItem.iItem := Index;
+  AnItem.cchTextMax := 0;
+  Insert := SendMessage(TWinControl(Owner).Handle, CBEM_GETITEM, 0, Integer(@AnItem)) = 0;
+  with AnItem, ComboItems[Index] do
+  begin
+    mask := CBEIF_TEXT or CBEIF_IMAGE or CBEIF_SELECTEDIMAGE or
+      CBEIF_INDENT or CBEIF_LPARAM;
+    pszText := PChar(Caption);
+    iItem := Index;
+    cchTextMax := Length(Caption);
+    iImage := ImageIndex;
+    iSelectedImage := SelectedImageIndex;
+    iOverlay := OverlayImageIndex;
+    iIndent := Indent;
+    lParam :=  Integer(Data);
+  end;
+  if Insert then
+    SendMessage(TWinControl(Owner).Handle, CBEM_INSERTITEM, Index, Integer(@AnItem))
+  else
+    SendMessage(TWinControl(Owner).Handle, CBEM_SETITEM, Index, Integer(@AnItem));
+end;
+
+{ TCustomComboBoxEx }
+
+constructor TCustomComboBoxEx.Create(AOwner: TComponent);
+begin
+  CheckCommonControl(ICC_USEREX_CLASSES);
+  inherited Create(AOwner);
+  FComboBoxExInstance := MakeObjectInstance(ComboExWndProc);
+  Items := TComboBoxExStrings.Create(Self);
+  TComboBoxExStrings(Items).ComboBox := Self;
+  FItemsEx := TComboBoxExStrings(Items).FItems;
+  FImageChangeLink := TChangeLink.Create;
+  FImageChangeLink.OnChange := ImageListChange;
+  FStyle := csExDropDown;
+end;
+
+destructor TCustomComboBoxEx.Destroy;
+begin
+  Items.Free;
+  FreeAndNil(FImageChangeLink);
+  if HandleAllocated then
+    DestroyWindowHandle;
+  FreeObjectInstance(FComboBoxExInstance);
+  FreeAndNil(FMemStream);
+  inherited Destroy;
+end;
+
+procedure TCustomComboBoxEx.CNNotify(var Message: TWMNotify);
+begin
+  with Message do
+    case NMHdr.code of
+      CBEN_BEGINEDIT: if Assigned(FOnBeginEdit) then FOnBeginEdit(Self);
+      CBEN_ENDEDIT  : if Assigned(FOnEndEdit) then FOnEndEdit(Self);
+    else
+      inherited;
+    end;
+end;
+
+procedure TCustomComboBoxEx.CreateParams(var Params: TCreateParams);
+const
+  ComboBoxExStyles: array[TComboBoxExStyle] of DWORD = (
+    CBS_DROPDOWN, CBS_SIMPLE, CBS_DROPDOWNLIST);
+begin
+  InitCommonControl(ICC_USEREX_CLASSES);
+  inherited CreateParams(Params);
+  CreateSubClass(Params, WC_COMBOBOXEX);
+  with Params do
+  begin
+    Style := Style or WS_TABSTOP or WS_VSCROLL or WS_CLIPCHILDREN or
+      CCS_NORESIZE or CBS_AUTOHSCROLL or ComboBoxExStyles[Self.Style];
+    ExStyle := ExStyle and not WS_EX_CLIENTEDGE;
+    WindowClass.style := (WindowClass.style or CS_DBLCLKS) and not (CS_HREDRAW or CS_VREDRAW);
+  end;
+end;
+
+procedure TCustomComboBoxEx.SetImages(const Value: TCustomImageList);
+begin
+  if Images <> nil then
+    Images.UnRegisterChanges(FImageChangeLink);
+  FImages := Value;
+  if Images <> nil then
+  begin
+    Images.RegisterChanges(FImageChangeLink);
+    Images.FreeNotification(Self);
+    if HandleAllocated then
+      PostMessage(Handle, CBEM_SETIMAGELIST, 0, Images.Handle);
+  end
+  else
+  begin
+    if HandleAllocated then
+    begin
+      Perform(CBEM_SETIMAGELIST, 0, 0);
+      RecreateWnd;
+    end;
+  end;
+end;
+
+procedure TCustomComboBoxEx.ImageListChange(Sender: TObject);
+begin
+  if HandleAllocated then
+    Perform(CBEM_SETIMAGELIST, 0, TCustomImageList(Sender).Handle);
+end;
+
+procedure TCustomComboBoxEx.WndProc(var Message: TMessage);
+begin
+  case Message.Msg of
+    CN_CTLCOLORMSGBOX..CN_CTLCOLORSTATIC:
+      if not NewStyleControls and (Style < csExDropDownList) then
+        Message.Result := Parent.Brush.Handle;
+    else
+      inherited WndProc(Message);
+  end;
+end;
+
+procedure TCustomComboBoxEx.Notification(AComponent: TComponent;
+  Operation: TOperation);
+begin
+  inherited Notification(AComponent, Operation);
+  if (Operation = opRemove) and (AComponent = FImages) then
+    Images := nil; // must go through the setter
+end;
+
+procedure TCustomComboBoxEx.SetStyle(Value: TComboBoxExStyle);
+begin
+  if FStyle <> Value then
+  begin
+    FStyle := Value;
+    if Value = csExSimple then
+      ControlStyle := ControlStyle - [csFixedHeight]
+    else
+      ControlStyle := ControlStyle + [csFixedHeight];
+    if HandleAllocated then
+      RecreateWnd;
+  end;
+end;
+
+procedure TCustomComboBoxEx.CMParentColorChanged(var Message: TMessage);
+begin
+  inherited;
+  if not NewStyleControls and (Style < csExDropDownList) then
+    Invalidate;
+end;
+
+procedure TCustomComboBoxEx.CMColorChanged(var Message: TMessage);
+var
+  R: TRect;
+begin
+  inherited;
+  if HandleAllocated and NewStyleControls then
+  begin
+    R := ClientRect;
+    if FComboBoxExHandle <> 0 then
+      InvalidateRect(FComboBoxExHandle, @R, False);
+    if FEditHandle <> 0 then
+      InvalidateRect(FEditHandle, @R, False);
+  end;
+end;
+
+procedure TCustomComboBoxEx.WMLButtonDown(var Message: TWMLButtonDown);
+var
+  Form: TCustomForm;
+begin
+  if (DragMode = dmAutomatic) and (Style = csExDropDownList) and
+      (Message.XPos < (Width - GetSystemMetrics(SM_CXHSCROLL))) then
+  begin
+    SetFocus;
+    BeginDrag(False);
+    Exit;
+  end;
+  inherited;
+  if MouseCapture then
+  begin
+    Form := GetParentForm(Self);
+    if (Form <> nil) and (Form.ActiveControl <> Self) then
+      MouseCapture := False;
+  end;
+end;
+
+procedure TCustomComboBoxEx.ComboExWndProc(var Message: TMessage);
+begin
+  ComboWndProc(Message, FComboBoxExHandle, FComboBoxExDefProc);
+end;
+
+procedure TCustomComboBoxEx.CreateWnd;
+var
+  ChildHandle: THandle;
+  I: Integer;
+begin
+  inherited CreateWnd;
+  FDropHandle := GetWindow(Handle, GW_CHILD);
+  FComboBoxExHandle := FDropHandle;
+  FComboBoxExDefProc := Pointer(GetWindowLong(FComboBoxExHandle, GWL_WNDPROC));
+  SetWindowLong(FComboBoxExHandle, GWL_WNDPROC, Integer(FComboBoxExInstance));
+  if FStyle in [csExDropDown, csExSimple] then
+  begin
+    ChildHandle := GetWindow(GetWindow(Handle, GW_CHILD), GW_CHILD);
+    if ChildHandle <> 0 then
+    begin
+      if FStyle = csExSimple then
+      begin
+        FListHandle := ChildHandle;
+        FDefListProc := Pointer(GetWindowLong(FListHandle, GWL_WNDPROC));
+        SetWindowLong(FListHandle, GWL_WNDPROC, Longint(FListInstance));
+        ChildHandle := GetWindow(ChildHandle, GW_HWNDNEXT);
+      end;
+      FEditHandle := ChildHandle;
+      FDefEditProc := Pointer(GetWindowLong(FEditHandle, GWL_WNDPROC));
+      SetWindowLong(FEditHandle, GWL_WNDPROC, Longint(FEditInstance));
+    end;
+  end;
+  if NewStyleControls and (FEditHandle <> 0) then
+    SendMessage(FEditHandle, EM_SETMARGINS, EC_LEFTMARGIN or EC_RIGHTMARGIN, 0);
+  if FMemStream <> nil then
+  begin
+    ItemsEx.BeginUpdate;
+    FReading := True;
+    try
+      ItemsEx.Assign(FMemStream);
+      for I := 0 to ItemsEx.Count - 1 do
+        ItemsEx.SetItem(I);
+      FreeAndNil(FMemStream);
+      Font := Font;
+    finally
+      ItemsEx.EndUpdate;
+      FReading := False;
+    end;
+  end;
+  if Assigned(Images) then
+    PostMessage(Handle, CBEM_SETIMAGELIST, 0, Images.Handle);
+  SetStyleEx(StyleEx);
+end;
+
+function TCustomComboBoxEx.GetItemCount: Integer;
+begin
+  Result := Items.Count;
+end;
+
+function TCustomComboBoxEx.GetItemsClass: TCustomComboBoxStringsClass;
+begin
+  Result := TComboBoxExStrings;
+end;
+
+function TCustomComboBoxEx.GetSelText: String;
+begin
+  Result := '';
+  if FStyle < csExDropDownList then
+    Result := Copy(Text, GetSelStart + 1, GetSelLength);
+end;
+
+procedure TCustomComboBoxEx.SetItemsEx(const Value: TComboExItems);
+begin
+  FItemsEx.Assign(Value);
+end;
+
+function TCustomComboBoxEx.GetActionLinkClass: TControlActionLinkClass;
+begin
+  Result := TComboBoxExActionLink;
+end;
+
+procedure TCustomComboBoxEx.SetStyleEx(const Value: TComboBoxExStyles);
+const
+  ComboExStyles: array[TComboBoxExStyleEx] of DWORD = (CBES_EX_CASESENSITIVE,
+    CBES_EX_NOEDITIMAGE, CBES_EX_NOEDITIMAGEINDENT, CBES_EX_NOSIZELIMIT,
+    CBES_EX_PATHWORDBREAKPROC);
+var
+  AStyle: DWORD;
+  I: TComboBoxExStyleEx;
+begin
+  AStyle := 0;
+  FStyleEx := Value;
+  if HandleAllocated then
+  begin
+    for I := Low(TComboBoxExStyleEx) to High(TComboBoxExStyleEx) do
+      if I in FStyleEx then
+        AStyle := AStyle or ComboExStyles[I];
+    SendMessage(Handle, CBEM_SETEXTENDEDSTYLE, 0, AStyle);
+  end;
+end;
+
+function TCustomComboBoxEx.IsItemsExStored: Boolean;
+begin
+  Result := (Action = nil) or Assigned(Action) and not (Action is TCustomListAction);
+end;
+
+procedure TCustomComboBoxEx.ActionChange(Sender: TObject;
+  CheckDefaults: Boolean);
+begin
+  inherited ActionChange(Sender, CheckDefaults);
+  if Sender is TStaticListAction then
+    with TStaticListAction(Sender) do
+    begin
+      if not CheckDefaults or (Self.Images = nil) then
+        Self.Images := Images;
+      if not CheckDefaults or (Self.ItemIndex <> -1) then
+        Self.ItemIndex := ItemIndex;
+    end;
+end;
+
+procedure TCustomComboBoxEx.SetDropDownCount(const Value: Integer);
+begin
+  inherited SetDropDownCount(Value);
+  if ((ComponentState * [csLoading, csDesigning]) = []) and HandleAllocated then
+    RecreateWnd;
+end;
+
+procedure TCustomComboBoxEx.SetSelText(const Value: String);
+begin
+  if FStyle in [csExSimple, csExDropDown] then
+  begin
+    HandleNeeded;
+    SendMessage(FEditHandle, EM_REPLACESEL, 0, Longint(PChar(Value)));
+  end;
+end;
+
+function TCustomComboBoxEx.GetDropDownCount: Integer;
+begin
+  Result := inherited DropDownCount;
+end;
+
+function TCustomComboBoxEx.GetItemHt: Integer;
+begin
+  Result := 16;
+end;
+
+procedure TCustomComboBoxEx.DestroyWnd;
+begin
+  if (ItemsEx.Count > 0) and (FMemStream = nil) then
+  begin
+    FMemStream := TCollection.Create(TComboExItem);
+    FMemStream.Assign(ItemsEx);
+  end;
+  inherited DestroyWnd;
+end;
+
+function TCustomComboBoxEx.Focused: Boolean;
+var
+  FocusedWnd: HWND;
+begin
+  Result := False;
+  if HandleAllocated then
+  begin
+    FocusedWnd := GetFocus;
+    Result := (FocusedWnd = FEditHandle) or (FocusedWnd = FListHandle) or
+              (FocusedWnd = FComboBoxExHandle);
+  end;
+end;
+
+{ TStatusBar }
+
+function TStatusBar.GetOnDrawPanel: TDrawPanelEvent;
+begin
+  Result := TDrawPanelEvent(inherited OnDrawPanel);
+end;
+
+procedure TStatusBar.SetOnDrawPanel(const Value: TDrawPanelEvent);
+begin
+  inherited OnDrawPanel := TCustomDrawPanelEvent(Value);
+end;
+
+{ TComboBoxExStrings }
+
+function TComboBoxExStrings.Add(const S: String): Integer;
+begin
+  with FItems.Add do
+  begin
+    Caption := S;
+    Result := Index;
+  end;
+end;
+
+function TComboBoxExStrings.AddObject(const S: String;
+  AObject: TObject): Integer;
+begin
+  with FItems.Add do
+  begin
+    Caption := S;
+    Data := AObject;
+    Result := Index;
+  end;
+end;
+
+type
+  TComboBoxExClass = class(TCustomComboBoxEx);
+
+procedure TComboBoxExStrings.Clear;
+begin
+  FItems.BeginUpdate;
+  try
+    FItems.Clear;
+    if TComboBoxExClass(ComboBox).HandleAllocated then
+      TComboBoxExClass(ComboBox).RecreateWnd;
+  finally
+    FItems.EndUpdate;
+  end;
+end;
+
+constructor TComboBoxExStrings.Create(Owner: TCustomComboboxEx);
+begin
+  inherited Create;
+  FItems := GetItemsClass.Create(Owner, GetItemClass);
+end;
+
+destructor TComboBoxExStrings.Destroy;
+begin
+  FreeAndNil(FItems);
+  inherited Destroy;
+end;
+
+procedure TComboBoxExStrings.Delete(Index: Integer);
+begin
+  FItems.Delete(Index);
+end;
+
+procedure TComboBoxExStrings.Exchange(Index1, Index2: Integer);
+var
+  Text: string;
+  Image: Integer;
+begin
+  Text := ItemsEx[Index2].Caption;
+  ItemsEx[Index2].Caption := ItemsEx[Index1].Caption;
+  ItemsEx[Index1].Caption := Text;
+
+  Image := ItemsEx[Index2].ImageIndex;
+  ItemsEx[Index2].ImageIndex := ItemsEx[Index1].ImageIndex;
+  ItemsEx[Index1].ImageIndex := Image;
+
+  Image := TComboExItem(ItemsEx[Index2]).SelectedImageIndex;
+  TComboExItem(ItemsEx[Index2]).SelectedImageIndex :=
+    TComboExItem(ItemsEx[Index1]).SelectedImageIndex;
+  TComboExItem(ItemsEx[Index1]).SelectedImageIndex := Image;
+
+  Image := TComboExItem(ItemsEx[Index2]).OverlayImageIndex;
+  TComboExItem(ItemsEx[Index2]).OverlayImageIndex :=
+    TComboExItem(ItemsEx[Index1]).OverlayImageIndex;
+  TComboExItem(ItemsEx[Index1]).OverlayImageIndex := Image;
+end;
+
+function TComboBoxExStrings.Get(Index: Integer): String;
+begin
+  Result := FItems[Index].Caption;
+end;
+
+function TComboBoxExStrings.GetCapacity: Integer;
+begin
+  Result := FItems.Count;
+end;
+
+function TComboBoxExStrings.GetCount: Integer;
+begin
+  Result := FItems.Count;
+end;
+
+function TComboBoxExStrings.GetObject(Index: Integer): TObject;
+begin
+  Result := TObject(FItems[Index].Data);
+end;
+
+function TComboBoxExStrings.IndexOf(const S: String): Integer;
+var
+  I: Integer;
+begin
+  Result := -1;
+  for I := 0 to FItems.Count - 1 do
+    if CompareText(FItems[I].Caption, S) = 0 then
+    begin
+      Result := I;
+      break;
+    end;
+end;
+
+function TComboBoxExStrings.IndexOfName(const Name: String): Integer;
+begin
+  Result := IndexOf(Name);  // Simply forward this on to IndexOf
+end;
+
+procedure TComboBoxExStrings.Insert(Index: Integer; const S: String);
+var
+  AnItem: TComboExItem;
+begin
+  AnItem := FItems.Insert(Index);
+  AnItem.Caption := S;
+end;
+
+procedure TComboBoxExStrings.Move(CurIndex, NewIndex: Integer);
+begin
+  FItems[CurIndex].Index := NewIndex;
+end;
+
+procedure TComboBoxExStrings.Put(Index: Integer; const S: String);
+begin
+  Insert(Index, S);
+end;
+
+procedure TComboBoxExStrings.PutObject(Index: Integer; AObject: TObject);
+var
+  AnItem: TComboExItem;
+begin
+  AnItem := FItems.Insert(Index);
+  AnItem.Data := AObject;
+end;
+
+procedure TComboBoxExStrings.SetItems(const Value: TComboExItems);
+begin
+  FItems.Assign(Value);
+end;
+
+procedure TComboBoxExStrings.SetUpdateState(Updating: Boolean);
+begin
+  if ComboBox.HandleAllocated then
+  begin
+    SendMessage(ComboBox.Handle, WM_SETREDRAW, Ord(not Updating), 0);
+    if not Updating then
+      ComboBox.Refresh;
+  end;
+end;
+
+function TComboBoxExStrings.AddItem(const Caption: String;
+  const ImageIndex, SelectedImageIndex, OverlayImageIndex, Indent: Integer;
+  Data: Pointer): TComboExItem;
+begin
+  Result := FItems.AddItem(Caption, ImageIndex, SelectedImageIndex,
+    OverlayImageIndex, Indent, Data);
+end;
+
+function TComboBoxExStrings.GetSortType: TListItemsSortType;
+begin
+  Result := FItems.SortType;
+end;
+
+procedure TComboBoxExStrings.SetSortType(const Value: TListItemsSortType);
+begin
+  FItems.SortType := Value;
+end;
+
+function TComboBoxExStrings.GetItemsClass: TComboExItemsClass;
+begin
+  Result := TComboExItems;
+end;
+
+function TComboBoxExStrings.GetItemClass: TComboExItemClass;
+begin
+  Result := TComboExItem;
+end;
+
+{ THeaderControl }
+
+function THeaderControl.GetOnDrawSection: TDrawSectionEvent;
+begin
+  Result := TDrawSectionEvent(inherited OnDrawSection);
+end;
+
+function THeaderControl.GetOnSectionClick: TSectionNotifyEvent;
+begin
+  Result := TSectionNotifyEvent(inherited OnSectionClick);
+end;
+
+function THeaderControl.GetOnSectionResize: TSectionNotifyEvent;
+begin
+  Result := TSectionNotifyEvent(inherited OnSectionResize);
+end;
+
+function THeaderControl.GetOnSectionTrack: TSectionTrackEvent;
+begin
+  Result := TSectionTrackEvent(inherited OnSectionTrack);
+end;
+
+procedure THeaderControl.SetOnDrawSection(const Value: TDrawSectionEvent);
+begin
+  inherited OnDrawSection := TCustomDrawSectionEvent(Value);
+end;
+
+procedure THeaderControl.SetOnSectionClick(
+  const Value: TSectionNotifyEvent);
+begin
+  inherited OnSectionClick := TCustomSectionNotifyEvent(Value);
+end;
+
+procedure THeaderControl.SetOnSectionResize(
+  const Value: TSectionNotifyEvent);
+begin
+  inherited OnSectionResize := TCustomSectionNotifyEvent(Value);
+end;
+
+procedure THeaderControl.SetOnSectionTrack(
+  const Value: TSectionTrackEvent);
+begin
+  inherited OnSectionTrack := TCustomSectionTrackEvent(Value);
+end;
+
+{ TListViewActionLink }
+
+type
+  TCustomListViewClass = class(TCustomListView);
+
+procedure TListViewActionLink.AddItem(ACaption: String; AImageIndex: Integer;
+  DataPtr: Pointer);
+begin
+  with TCustomListViewClass(FClient).Items.Add do
+  begin
+    ImageIndex := AImageIndex;
+    Caption := ACaption;
+    Data := DataPtr;
+  end;
+end;
+
+procedure TListViewActionLink.AddItem(AnItem: TListControlItem);
+begin
+  with TCustomListViewClass(FClient).Items.Add do
+  begin
+    ImageIndex := AnItem.ImageIndex;
+    Caption := AnItem.Caption;
+    Data := AnItem.Data;
+  end;
+end;
+
+procedure TListViewActionLink.SetImages(Value: TCustomImageList);
+begin
+  if IsImagesLinked then
+    with FClient as TCustomListView do
+      TCustomListViewClass(FClient).SmallImages := Value
+end;
+
+{ TComboBoxExActionLink }
+
+procedure TComboBoxExActionLink.AddItem(ACaption: String;
+  AImageIndex: Integer; DataPtr: Pointer);
+begin
+  with FClient as TCustomComboBoxEx do
+    ItemsEx.AddItem(ACaption, AImageIndex, AImageIndex, -1, -1, DataPtr);
+end;
+
+procedure TComboBoxExActionLink.AddItem(AnItem: TListControlItem);
+begin
+  with FClient as TCustomComboBoxEx do
+    ItemsEx.AddItem(AnItem.Caption, AnItem.ImageIndex, AnItem.ImageIndex, -1,
+      -1, AnItem.Data);
 end;
 
 initialization

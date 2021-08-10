@@ -1,12 +1,11 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Kylix and Delphi Cross-Platform Visual Component Library                    }
+{                                                                             }
+{ Copyright (c) 1997, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{       DBClient Interface                              }
-{                                                       }
-{       Copyright (c) 1997,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
 unit DSIntf;
 
@@ -15,7 +14,12 @@ unit DSIntf;
 
 interface
 
-uses Windows, ActiveX, DB, DBCommon;
+{$IFDEF MSWINDOWS}
+uses Windows, Variants, ActiveX, DB, DBCommon;
+{$ENDIF}
+{$IFDEF LINUX}
+uses Libc, Variants, VarUtils, DB, DBCommon;
+{$ENDIF}
 
 const
 
@@ -51,6 +55,9 @@ const
   mdALLOWLINKCHANGE  = $0010;  { Allow detail linkfields to be changed (fly-away) }
 
 type
+
+  PLongBool = ^LongBool;
+
   DBResult          = Word;         { Function result }
 
   DBSearchCond = (                     { Search condition for keys }
@@ -64,8 +71,11 @@ type
 
 { Native Types }
 
-  TDataPacket = PSafeArray;
+{$IFDEF LINUX}
+  PSafeArray = PVarArray;
+{$ENDIF}
 
+  TDataPacket = PSafeArray;
   pDSAttr = ^DSAttr;
   DSAttr = type Byte;
 
@@ -108,24 +118,24 @@ type
   SAVEPOINT = type Integer;
 
   DSKEY = packed array[0..MAXKEYFIELDS-1] of Integer;
-  DSKEYBOOL = packed array[0..MAXKEYFIELDS-1] of Bool;
+  DSKEYBOOL = packed array[0..MAXKEYFIELDS-1] of LongBool;
 
 { Dataset and Cursor Properties }
 
   DSProp = (
-    dspropLOGCHANGES,               { rw BOOL,   Log changes for undo/delta }
-    dspropREADONLY,                 { rw BOOL,   Disable dataset updates }
+    dspropLOGCHANGES,               { rw LongBool,   Log changes for undo/delta }
+    dspropREADONLY,                 { rw LongBool,   Disable dataset updates }
     dspropNOOFCHANGES,              { r  UINT32, Number of changes }
-    dspropCONSTRAINTS_DISABLED,     { rw BOOL,   Disable constraints }
-    dspropDSISPARTIAL,              { rw BOOL,   Dataset is parital }
+    dspropCONSTRAINTS_DISABLED,     { rw LongBool,   Disable constraints }
+    dspropDSISPARTIAL,              { rw LongBool,   Dataset is parital }
     dspropRECORDSINDS,              { r  UINT32, Records in dataset }
-    dspropAUTOINC_DISABLED,         { rw BOOL,   Autoinc disabled }
-    dspropISDELTA,                  { r  BOOL,   Dataset is a delta }
-    dspropDONTINCLMETADATA,         { rw BOOL,   Exclude metadata in StreamDS }
+    dspropAUTOINC_DISABLED,         { rw LongBool,   Autoinc disabled }
+    dspropISDELTA,                  { r  LongBool,   Dataset is a delta }
+    dspropDONTINCLMETADATA,         { rw LongBool,   Exclude metadata in StreamDS }
     dspropINCLBLOBSINDELTA,         { rw UINT32, include blobs with lengths <= than }
                                     { this value in delta for 'original' record }
     dspropGETSAVEPOINT,             { r  SAVEPOINT, return savepoint for current update state. }
-    dspropCOMPRESSARRAYS,           { rw BOOL(TRUE), if true expands fielddescriptors for arrays }
+    dspropCOMPRESSARRAYS,           { rw LongBool(TRUE), if true expands fielddescriptors for arrays }
     dspropMD_SEMANTICS,             { rw UINT32(0), Master/detail semantics }
     dspropFIELD_FULLNAME,           { r  in: UINT32 (FieldID), out: zstring (full name) }
     dspropFIELDID_FORNAME,          { r  in: zstring(full name), out:UINT32 (fieldid) }
@@ -133,7 +143,12 @@ type
     dspropCHANGEINDEX_VIEW,         { rw DSAttr (UINT32) (update attributes), any combination, 0->show all }
     dspropGETUNIQUEINDEX,           { r  DSIDX, internal use, returns first unique index, if any }
     dspropREMOTE_UPDATEMODE,        { rw UINT32, 0: where key, 1: where all, 3: where ch }
-    dspropXML_STREAMMODE
+    dspropXML_STREAMMODE,
+    dspropDISABLEDELETES,       { unused }
+    dspropDISABLEINSERTS,       { unused }
+    dspropDISABLEEDITS,         { unused }
+    dspropDISABLESTRINGTRIM,     { rw LongBool: disable automatic trimming of strings }
+    dspropDATAHASCHANGED
   );
 
   CURProp = (
@@ -144,24 +159,41 @@ type
   );
 
   pDSProps = ^DSProps;
-  DSProps = packed record
+{$IFDEF MSWINDOWS}
+  DSProps = packed  record
     szName           : MIDASPATH;      { Name, if any }
     iFields          : Integer;      { Number of columns }
     iRecBufSize      : Integer;      { Size of record buffer }
     iBookMarkSize    : Integer;      { Size of bookmark }
-    bReadOnly        : Bool;         { Dataset is not updateable }
+    bReadOnly        : LongBool;         { Dataset is not updateable }
     iIndexes         : Integer;      { Number of indexes on dataset }
     iOptParams       : Integer;      { Number of optional parameters }
-    bDelta           : Bool;         { This is a delta dataset }
+    bDelta           : LongBool;         { This is a delta dataset }
     iLCID            : Integer;      { Language used }
     iUnused          : packed array[0..7] of Integer; { Reserved }
   end;
+{$ENDIF}
+{$IFDEF LINUX}
+  DSProps = packed  record
+    iFields          : Integer;      { Number of columns }
+    iRecBufSize      : Integer;      { Size of record buffer }
+    iBookMarkSize    : Integer;      { Size of bookmark }
+    iIndexes         : Integer;      { Number of indexes on dataset }
+    iOptParams       : Integer;      { Number of optional parameters }
+    iLCID            : Integer;      { Language used }
+    iUnused          : packed array[0..7] of Integer; { Reserved }
+    bDelta           : LongBool;         { This is a delta dataset }
+    bReadOnly        : LongBool;         { Dataset is not updateable }
+    szName           : MIDASPATH;
+    szMorePad        : packed array[0..2] of Char;  { GCC pads this struct to 4 byte boundary }
+  end;
+{$ENDIF}
 
 { Field Descriptor }
 
   pDSFLDDesc = ^DSFLDDesc;
   DSFLDDesc = packed record
-    szName          : MIDASNAME;      { Field name }
+    szName          : MIDASNAME;    { Field name }
     iFldType        : Integer;      { Field type }
     iFldSubType     : Integer;      { Field subtype (if applicable) }
     iUnits1         : Integer;      { Number of Chars, precision etc }
@@ -171,7 +203,7 @@ type
     iNullOffsInRec  : Integer;      { Offset to null flag (1byte) in record buffer }
     iFieldID        : Word;         { FieldID of this field }
     iFieldIDParent  : Word;         { FieldID of parent, if any (part of ADT or ARRAY) }
-    bCalculated     : Bool;         { Field is Calculated }
+    bCalculated     : LongBool;         { Field is Calculated }
     iFldAttr        : Integer;      { Field attributes }
     iOptParameters  : Integer;      { Number of optional parameters for field }
   end;
@@ -184,7 +216,7 @@ type
     iFields   : Integer;            { Number of fields in order (0 -> base order) }
     iKeyFields: DSKEY;              { FieldNumbers }
     iKeyLen   : Integer;            { Total length of key (computed) }
-    bUnique   : Bool;
+    bUnique   : LongBool;
     bDescending  : DSKEYBOOL;       { TRUE ->Descending }
     bCaseInsensitive : DSKEYBOOL;
   end;
@@ -198,7 +230,7 @@ type
   pfDSFilter = function(            { Filter callback }
     iClientData  : Integer;         { Client data }
     pRecBuf      : Pointer            { Record buffer }
-  ): Bool; stdcall;
+  ): LongBool; stdcall;
 
   pfDSCalcField = function(         { Calculated field callback }
     iClientData  : Integer;         { Client data }
@@ -265,9 +297,11 @@ const
   xmlUNTYPED         =  1;  { Forces XML Data }
   xmlXMLDATATYPED    =  2;  { Not used }
   xmlXMLSCHEMA       =  4;  { Get XML Meta Data }
+  xmlXMLUTF8         =  8;  { Encode data using UTF8 }
 
   xmlON              = xmlXMLSCHEMA or xmlUNTYPED;
-  xmlOFF             =  0;      
+  xmlUTF8            = xmlON or xmlXMLUTF8;
+  xmlOFF             =  0;
 
 
 { Packet Creation }
@@ -358,6 +392,8 @@ const
   dsfldARRAY         = 13;          { Array type (not attribute) }
   dsfldEMBEDDEDTBL   = 14;          { Embedded (nested table type) }
   dsfldREF           = 15;          { Reference }
+  dsfldDATETIME      = 17;          { Datetime struct for DB Express }
+  dsfldFMTBCD        = 18;          { BCD Variant type }
 
   dsSizeBitsLen      = 16;          { no. bits indicating fld size }
   dsSizeBitsMask     = $0000FFFF;   { mask to retrieve fld size }
@@ -377,6 +413,7 @@ const
 
   PACKETVERSION_1     = 1;
   PACKETVERSION_2     = 2;
+  PACKETVERSION_3     = 3;
 
   dsCASCADEDELETES   = 1;
   dsCASCADEUPDATES   = 2;
@@ -407,8 +444,10 @@ const
   fldARRAY           = 21;              { Array field type }
   fldREF             = 22;              { Reference to ADT }
   fldTABLE           = 23;              { Nested table (reference) }
+  fldDATETIME        = 24;              { Datetime structure for DBExpress }
+  fldFMTBCD          = 25;              { BCD Variant type: required by Midas, same as BCD for DBExpress}
 
-  MAXLOGFLDTYPES     = 24;              { Number of logical fieldtypes }
+  MAXLOGFLDTYPES     = 26;              { Number of logical fieldtypes }
 
 { Additional (non-BDE fieldtypes }
   fldUNICODE          = $1007;          { Unicode }
@@ -451,19 +490,21 @@ const
     fldVARBYTES, fldINT32, fldBLOB, fldBLOB, fldBLOB, fldBLOB, fldBLOB,
     fldBLOB, fldBLOB, fldCURSOR, fldZSTRING, fldZSTRING, fldINT64, fldADT,
     fldArray, fldREF, fldTABLE, fldBLOB, fldBLOB, fldUNKNOWN, fldUNKNOWN,
-    fldUNKNOWN, fldZSTRING);
+    fldUNKNOWN, fldZSTRING, fldDATETIME, fldFMTBCD);
 
   FldSubTypeMap: array[TFieldType] of Word = (
     0, 0, 0, 0, 0, 0, 0, fldstMONEY, 0, 0, 0, 0, 0, 0, fldstAUTOINC,
     fldstBINARY, fldstMEMO, fldstGRAPHIC, fldstFMTMEMO, fldstOLEOBJ,
     fldstDBSOLEOBJ, fldstTYPEDBINARY, 0, fldstFIXED, fldstUNICODE,
-    0, 0, 0, 0, 0, fldstHBINARY, fldstHMEMO, 0, 0, 0, fldstGUID);
+    0, 0, 0, 0, 0, fldstHBINARY, fldstHMEMO, 0, 0, 0, fldstGUID,
+    fldDATETIME, 0);
 
   DataTypeMap: array[0..MAXLOGFLDTYPES - 1] of TFieldType = (
     ftUnknown, ftString, ftDate, ftBlob, ftBoolean, ftSmallint,
     ftInteger, ftFloat, ftBCD, ftBytes, ftTime, ftDateTime,
     ftWord, ftInteger, ftUnknown, ftVarBytes, ftUnknown, ftUnknown,
-    ftLargeInt, ftLargeInt, ftADT, ftArray, ftReference, ftDataSet);
+    ftLargeInt, ftLargeInt, ftADT, ftArray, ftReference, ftDataSet,
+    ftTimeStamp, ftFMTBcd);
 
   BlobTypeMap: array[fldstMEMO..fldstBFILE] of TFieldType = (
     ftMemo, ftBlob, ftFmtMemo, ftParadoxOle, ftGraphic, ftDBaseOle,
@@ -520,7 +561,7 @@ type
     ['{9E8D2FA2-591C-11D0-BF52-0020AF32BD64}']
 
     function Create(                { Create empty dataset }
-        iFields  : DWord;           { Number of fields }
+        iFields  : LongWord;           { Number of fields }
         pFldDes  : pDSFLDDesc;      { Array of field descriptors }
         pszName  : PChar            { Name (optional) }
     ): DBResult; stdcall;
@@ -531,23 +572,23 @@ type
 
     function AppendData(            { Appends data packet to dataset. }
         Packet   : PSafeArray;      { Data packet }
-        bEof     : Bool             { If True, this is last packet }
+        bEof     : LongBool             { If True, this is last packet }
     ): DBResult; stdcall;
 
     function GetOptParameter(       { Returns optional parameter (unknown to dataset) }
-        iNo      : DWord;           { Number 1..iOptAttr }
-        iFldNo   : DWord;           { 0 if not field attribute }
+        iNo      : LongWord;           { Number 1..iOptAttr }
+        iFldNo   : LongWord;           { 0 if not field attribute }
     var ppName   : Pointer;         { returns ptr to name }
-    var piType   : DWord;           { returns type }
-    var piLen    : DWord;           { returns length }
+    var piType   : LongWord;           { returns type }
+    var piLen    : LongWord;           { returns length }
     var ppValue  : Pointer          { returns ptr to value }
     ): DBResult; stdcall;
 
     function AddOptParameter(       { Adds optional parameter to dataset }
-        iFldNo   : DWord;           { 0 if not field attribute }
+        iFldNo   : LongWord;           { 0 if not field attribute }
         pszAttr  : PChar;           { ptr to name }
-        iType    : DWord;           { type }
-        iLen     : DWord;           { length }
+        iType    : LongWord;           { type }
+        iLen     : LongWord;           { length }
         pValue   : Pointer          { ptr to value }
     ): DBResult; stdcall;
 
@@ -575,9 +616,9 @@ type
 
     function PutBlank(              { Put blank value }
         pRecBuf      : Pointer;     { RecBuf OR }
-        iRecNo       : DWord;       { iRecNo }
-        iFldNo       : DWord;
-        iBlankValue  : DWord
+        iRecNo       : LongWord;       { iRecNo }
+        iFldNo       : LongWord;
+        iBlankValue  : LongWord
     ): DBResult; stdcall;
 
     function CreateIndex(           { Create, and add an index }
@@ -594,11 +635,11 @@ type
     ): DBResult; stdcall;
 
     function FldCmp(                { Compare field values returns 0 if equal }
-        iFldType  : DWord;          { Fieldtype }
+        iFldType  : LongWord;          { Fieldtype }
         pFld1     : Pointer;        { NULL if blank }
         pFld2     : Pointer;        { NULL if blank }
-        iUnits1   : DWord;
-        iUnits2   : DWord
+        iUnits1   : LongWord;
+        iUnits2   : LongWord
     ): Integer; stdcall;
 
     function GetProp(               { Get property }
@@ -608,18 +649,18 @@ type
 
     function SetProp(               { Set property }
         eProp      : DSProp;
-        iPropValue : DWord
+        iPropValue : LongWord
     ): DBResult; stdcall;
 
     function SetFieldCalculation(   { Register fieldcalculation on this field }
-        iClientData  : DWord;       { Client data }
+        iClientData  : LongWord;       { Client data }
         pfCalc       : pfDSCalcField { Callback function, NULL to remove }
     ): DBResult; stdcall;
 
     function Reconcile(             { Reconcile update errors }
         DeltaPacket   : PSafeArray; { Delta data packet }
         ErrorPacket   : PSafeArray; { NULL if all changes accepted }
-        iClientData   : DWord;
+        iClientData   : LongWord;
         pfReconcile   : pfDSReconcile { Callback-fn (called for each error) }
     ): DBResult; stdcall;
 
@@ -630,7 +671,7 @@ type
 
     function Refresh(               { Refresh dataset }
         NewPacket    : PSafeArray;  { New updated packet }
-        iClientData  : DWord;       { Client data }
+        iClientData  : LongWord;       { Client data }
         pfReconcile  : pfDSReconcile { Callback for resolving conflicts }
     ): DBResult; stdcall;
 
@@ -641,34 +682,34 @@ type
     ): DBResult; stdcall;
 
     function GetEmbeddedDS(
-        iFieldID  : DWord;          { FieldID of embedded table (0 : get the first one) }
+        iFieldID  : LongWord;          { FieldID of embedded table (0 : get the first one) }
     out DsDet     : IDSBase         { Returns the ds of the embedded table }
     ): DBResult; stdcall;
 
     function MakeEmbedded(
         DsDet             : IDSBase;  { Embed this dataset }
-        iFieldsLink       : DWord;
-        piFieldsM         : PDWord;   { Fields in Master }
-        piFieldsD         : PDWord;   { Fields in Detail }
+        iFieldsLink       : LongWord;
+        piFieldsM         : PLongWord;   { Fields in Master }
+        piFieldsD         : PLongWord;   { Fields in Detail }
         pMasterFieldName  : PChar;    { Name of new link field in master, NULL if using default name }
         pDetailFieldName  : PChar     { Name of new link field in detail, NULL if using defaultname }
     ): DBResult; stdcall;
 
     function RefreshRecords(            { Refresh specific records }
         NewDataPacket   : PSafeArray;   { Datapacket containing refreshed records }
-        iRecNo          : DWord;        { Refresh this specific record (0 if more than one.Unique key req.) }
-        iClientData     : DWord;
+        iRecNo          : LongWord;        { Refresh this specific record (0 if more than one.Unique key req.) }
+        iClientData     : LongWord;
         pfReconcile     : pfDSReconcile { (NULL) Callback for resolving conflicts }
     ): DBResult; stdcall;
 
     function ReleaseBlobs(          { Release all uncommitted blobs }
-        iBlobId  : DWord            { 0: all uncommitted blobs, otherwise : specific blob }
+        iBlobId  : LongWord            { 0: all uncommitted blobs, otherwise : specific blob }
     ): DBResult; stdcall;
 
     function Clone(                 { Clones the structure of the dsbase, including details if any }
-         iPType : DWord;            { 0:normal-ds, 1:delta-ds, 2:error-ds }
-         bRecurse : Bool;           { TRUE:create complete tree-structure }
-         bCloneOptParams: Bool;     { TRUE:clone all optional parameters (normal only) }
+         iPType : LongWord;            { 0:normal-ds, 1:delta-ds, 2:error-ds }
+         bRecurse : LongBool;           { TRUE:create complete tree-structure }
+         bCloneOptParams: LongBool;     { TRUE:clone all optional parameters (normal only) }
          var DataSet: IDSBase       { Returned dsbase }
     ): DBResult; stdcall;
 
@@ -676,12 +717,12 @@ type
         pDsRec          : IDSBase;           { Ds for info }
         pDeltaPacket    : PSafeArray;        { Delta pickle }
         pErrorPacket    : PSafeArray;        { NULL if all changes accepted }
-        iClientData     : DWord;
+        iClientData     : LongWord;
         pfReconcile_MD  : pfDSReconcile_MD   { Callback-fn (called for each error) }
     ): DBResult; stdcall;
 
    function DropOptParameter(
-           iFldNo: DWord;    { 0 if not field attribute }
+           iFldNo: LongWord;    { 0 if not field attribute }
            pName: PChar      { Name of attribute to delete }
         ): DBResult; stdcall;
   end;
@@ -704,7 +745,7 @@ type
     ): DBResult; stdcall;
 
     function GetIndexDescs(         { Get index descriptors }
-        bCurrentOnly  : Bool;       { Only return 'current' indexdesc, otherwise all }
+        bCurrentOnly  : LongBool;       { Only return 'current' indexdesc, otherwise all }
     var IdxDesc       : DSIDXDesc
     ): DBResult; stdcall;
 
@@ -717,7 +758,7 @@ type
     ): DBResult; stdcall;
 
     function GetRecordBlock(        { Return block of records }
-        piRecs   : PDWord;
+        piRecs   : PLongWord;
         pRecBuf  : Pointer
     ): DBResult; stdcall;
 
@@ -726,7 +767,7 @@ type
     ): DBResult; stdcall;
 
     function GetSequenceNumber(     { Get Sequence number of current position }
-    var iSeq  : DWord
+    var iSeq  : LongWord
     ): DBResult; stdcall;
 
     function GetRecordAttribute(    { Get record attribute of current position }
@@ -743,7 +784,7 @@ type
 
     function MoveRelative(i: Integer): DBResult; stdcall;
 
-    function MoveToSeqNo(i: DWord): DBResult; stdcall;
+    function MoveToSeqNo(i: LongWord): DBResult; stdcall;
 
     function MoveToBookMark(        { Goto bookmark }
       pBookMark: Pointer
@@ -751,8 +792,8 @@ type
 
     function MoveToKey(             { Goto key }
         SearchCond  : DBSearchCond;
-        iFields     : DWord;
-        iPartLen    : DWord;
+        iFields     : LongWord;
+        iPartLen    : LongWord;
         pRecBuf     : Pointer
     ): DBResult; stdcall;
 
@@ -769,22 +810,22 @@ type
     ): DBResult; stdcall;
 
     function GetRecordForKey(       { Return (first) record with given key }
-        iFields   : DWord;
-        iPartLen  : DWord;
+        iFields   : LongWord;
+        iPartLen  : LongWord;
         pKey      : Pointer;
         pRecBuf   : Pointer
     ): DBResult; stdcall;
 
     function GetField(              { Extract field value from record buffer }
         pRecBuf   : Pointer;
-        iFieldNo  : DWord;
+        iFieldNo  : LongWord;
         pFldBuf   : Pointer;
-    var bBlank    : Bool            { Returns TRUE/FALSE if blank }
+    var bBlank    : LongBool            { Returns TRUE/FALSE if blank }
     ): DBResult; stdcall;
 
     function PutField(              { Put field value into record buffer }
         pRecBuf   : Pointer;
-        iFieldNo  : DWord;
+        iFieldNo  : LongWord;
         pFldBuf   : Pointer         { If NULL, adds a blank value }
     ): DBResult; stdcall;
 
@@ -792,24 +833,24 @@ type
 
     function GetBlobLen(            { Return length of blob }
         pRecBuf   : Pointer;
-        iFieldNo  : DWord;
-    var iLength   : DWord
+        iFieldNo  : LongWord;
+    var iLength   : LongWord
     ): DBResult; stdcall;
 
     function GetBlob(               { Return blob }
         pRecBuf   : Pointer;
-        iFieldNo  : DWord;
-        iOffSet   : DWord;          { Starting position }
+        iFieldNo  : LongWord;
+        iOffSet   : LongWord;          { Starting position }
         pBuf      : Pointer;
-    var iLength   : DWord          { No of bytes to be read/ returns number read }
+    var iLength   : LongWord          { No of bytes to be read/ returns number read }
     ): DBResult; stdcall;
 
     function PutBlob(               { Write blob data }
         pRecBuf   : Pointer;
-        iFieldNo  : DWord;
-        iOffSet   : DWord;          { Starting position }
+        iFieldNo  : LongWord;
+        iOffSet   : LongWord;          { Starting position }
         pBuf      : Pointer;
-        iLength   : DWord
+        iLength   : LongWord
     ): DBResult; stdcall;
 
     function InitRecord(            { Initialize record buffer (for insertion) }
@@ -827,12 +868,12 @@ type
     ): DBResult; stdcall;
 
     function UndoLastChange(        { Undo last update }
-        bFollowChange  : Bool
+        bFollowChange  : LongBool
     ): DBResult; stdcall;
 
     function AddFilter(             { Add a canexpr-filter to this cursor }
         pcanExpr  : Pointer;        { Can expr }
-        iLen      : DWord;          { Length of canexpr }
+        iLen      : LongWord;          { Length of canexpr }
     var hFilter   : hDSFilter
     ): DBResult; stdcall;
 
@@ -841,20 +882,20 @@ type
     ): DBResult; stdcall;
 
     function SetRange(              { Set a range on a cursor }
-        iFields    : DWord;
+        iFields    : LongWord;
         pKey1      : Pointer;
-        bKey1Incl  : Bool;
+        bKey1Incl  : LongBool;
         pKey2      : Pointer;
-        bKey2Incl  : Bool
+        bKey2Incl  : LongBool
     ): DBResult; stdcall;
 
     function DropRange: DBResult; stdcall; { Remove current range }
 
     function SortOnFields(          { Sort on fields }
-        iFields    : DWord;
-        piFields   : PDWord;        { NULL -> all fields }
-        pDescending: PBool;         { NULL -> all ascending }
-        pCaseInsensitive: PBool     { NULL -> all case-sensitive }
+        iFields    : LongWord;
+        piFields   : PLongWord;        { NULL -> all fields }
+        pDescending: PLongBool;         { NULL -> all ascending }
+        pCaseInsensitive: PLongBool     { NULL -> all case-sensitive }
     ): DBResult; stdcall;
 
     function UseIndexOrder(         { Switch to index order }
@@ -862,18 +903,18 @@ type
     ): DBResult; stdcall;
 
     function SetNotifyCallBack(     { Called when posting changes to dataset }
-        iClientData  : DWord;
+        iClientData  : LongWord;
         pfCallBack   : pfCHANGECallBack   { Call back fn being registered }
     ): DBResult; stdcall;
 
     function AddFilterCallBack(     { Add a canexpr-filter to this cursor }
-        iClientData  : DWord;     { Client supplied data }
+        iClientData  : LongWord;     { Client supplied data }
         pfFilter     : pfDSFilter;  { ptr to filter function }
     var hFilter      : hDSFilter
     ): DBResult; stdcall;
 
     function VerifyField(           { Verify if field value is valid }
-        iFieldNo  : DWord;
+        iFieldNo  : LongWord;
         pFldBuf   : Pointer
     ): DBResult; stdcall;
 
@@ -886,12 +927,12 @@ type
 
     function LocateWithFilter(
         pCanExpr  : Pointer;        { NULL -> use previous }
-        iLen      : DWord           { Length of canexpr }
+        iLen      : LongWord           { Length of canexpr }
     ): DBResult; stdcall;
 
     function AddAggregate(
-        iFlds     : DWord;          { Defines grouping  (0 if global) }
-        iCanLen   : DWord;          { Length of canexpr (0 if grouping only) }
+        iFlds     : LongWord;          { Defines grouping  (0 if global) }
+        iCanLen   : LongWord;          { Length of canexpr (0 if grouping only) }
         pCanExpr  : Pointer;        { Canexpression for aggregate }
     var hAgg      : hDSAggregate    { returns aggregate handle }
     ): DBResult; stdcall;
@@ -903,7 +944,7 @@ type
     function GetAggregateValue(
         hAgg     : hDSAggregate;
         pValue   : Pointer;
-    var bBlank   : Bool
+    var bBlank   : LongBool
     ): DBResult; stdcall;
 
     function GetAggregateDesc(
@@ -912,18 +953,18 @@ type
     ): DBResult; stdcall;
 
     function MoveToNextSubGroup(
-        iFields  : DWord
+        iFields  : LongWord
     ): DBResult; stdcall;
 
     function GetSubGroupState(
-        iFields        : DWord;
+        iFields        : LongWord;
     var iSubGroupState : GROUPSTATE
     ): DBResult; stdcall;
 
     function LinkCursors(
-        iFieldsM   : DWord;
-        piFieldsM  : PDWord;         { Fields in Master }
-        piFieldsD  : PDWord;         { Fields in Detail }
+        iFieldsM   : LongWord;
+        piFieldsM  : PLongWord;         { Fields in Master }
+        piFieldsD  : PLongWord;         { Fields in Detail }
         hCurDet    : IDSCursor       { Detail cursor to link }
     ): DBResult; stdcall;
 
@@ -931,20 +972,20 @@ type
 
     function SetProp(               { Set property }
         eProp       : CURProp;      { Property to set }
-        iPropValue  : DWord         { Property value (or pointer to value) }
+        iPropValue  : LongWord         { Property value (or pointer to value) }
     ): DBResult; stdcall;
 
    function GetRecordNumber(  { Return record number of current record, if any }
-        var iRecNo: DWord
+        var iRecNo: LongWord
     ): DBResult; stdcall;
 
 
     function GetRowRequestPacket(   { Get packet describing the curent 'path',
                                       for delayed fetching/refreshing }
-        bKeysOnly       : Bool;     { Only include unique keys in packet }
-        bFetchAllBlobs  : Bool;     { fetch all blobs for 'current'record }
-        bFetchAllDetails: Bool;     { fetch all details for 'current' record }
-        bInclMetaData   : Bool;     { Include metadata in packet }
+        bKeysOnly       : LongBool;     { Only include unique keys in packet }
+        bFetchAllBlobs  : LongBool;     { fetch all blobs for 'current'record }
+        bFetchAllDetails: LongBool;     { fetch all details for 'current' record }
+        bInclMetaData   : LongBool;     { Include metadata in packet }
         out Packet      : PSafeArray{ returns datapacket with row description }
     ): DBResult; stdcall;
 
@@ -961,12 +1002,12 @@ type
     ['{9E8D2FA6-591C-11D0-BF52-0020AF32BD64}']
 
     function Init_Sequential(   { Initialze by sequentially adding columns }
-        Version: DWord;
+        Version: LongWord;
         Columns: Word
     ): DBResult; stdcall;
 
     function Init(
-        Version: DWord;
+        Version: LongWord;
         Columns: Word;
         FieldDesc: PDSDataPacketFldDesc
     ): DBResult; stdcall;
@@ -974,8 +1015,8 @@ type
     function AddAttribute(      { Add an optional parameter }
         AttrArea: TPcktAttrArea;
         Attr: PChar;
-        AttrType: DWord;
-        Len: DWord;
+        AttrType: LongWord;
+        Len: LongWord;
         Value: Pointer
     ): DBResult; stdcall;
 
@@ -985,13 +1026,13 @@ type
 
 
     function GetSize(           { Get the size of the safearray. }
-    var DataPacketSize: DWord
+    var DataPacketSize: LongWord
     ): DBResult; stdcall;
 
 
     function PutField(          { Add this field to the data stream. }
         FldStatus: TPcktFldStatus;
-        Len: DWord;
+        Len: LongWord;
         Src: Pointer
     ): DBResult; stdcall;
 
@@ -1005,7 +1046,7 @@ type
 
     { Return number of fielddescriptors, including embedded tables etc. }
 
-    function GetColumnCount(var Count: DWord): DBResult; stdcall;
+    function GetColumnCount(var Count: LongWord): DBResult; stdcall;
 
 
     function GetColumnDescs(    { Return all fielddescriptors }
@@ -1023,7 +1064,7 @@ type
 
    function SetXMLMode(iMode: Integer): DBResult; stdcall;
 
-   function GetXMLMode: DWord; stdcall;
+   function GetXMLMode: LongWord; stdcall;
 
   end;
 
@@ -1033,7 +1074,6 @@ const
   CLSID_DSWriter: TGUID = '{9E8D2FA5-591C-11D0-BF52-0020AF32BD64}';
 
 { Utility Routines }
-
 procedure FreeDataPacket(var DataPacket: TDataPacket);
 function VarToDataPacket(const V: OleVariant): TDataPacket;
 function DataPacketSize(const DataPacket: TDataPacket): Integer;
@@ -1042,17 +1082,25 @@ procedure CreateDbClientObject(const CLSID, IID: TGUID; out Obj);
 function VariantArrayToString(const V: OleVariant): string;
 function StringToVariantArray(const S: string): OleVariant;
 
+procedure RegisterMidasLib(GetClassProc: Pointer);
+
 implementation
 
+{$IFDEF MSWINDOWS}
 uses ComObj, MidConst, SysUtils;
+{$ENDIF}
+{$IFDEF LINUX}
+uses MidConst, SysUtils, Types;
+{$ENDIF}
 
 { Utility Routines }
 
 var
-  DbClientHandle: THandle = 0;
-  DllGetClassObject: function(const CLSID, IID: TGUID; var Obj): HResult; stdcall;
   Loading: TRTLCriticalSection;
+  DbClientHandle: THandle = THandle(0);
+  DllGetClassObject: function(const CLSID, IID: TGUID; var Obj): HResult; stdcall;
 
+{$IFDEF MSWINDOWS}
 procedure CheckDbClient(const CLSID: TGUID);
 var
   Size: Integer;
@@ -1079,6 +1127,7 @@ begin
         DbClientHandle := LoadLibrary(PChar(FileName));
         if DbClientHandle = 0 then
           raise Exception.CreateRes(@SErrorLoadingMidas);
+
         DllGetClassObject := GetProcAddress(DbClientHandle, 'DllGetClassObject');
       end;
     finally
@@ -1086,14 +1135,23 @@ begin
     end;
   end;
 end;
+{$ENDIF}
+{$IFDEF LINUX}
+procedure CheckDbClient(const CLSID: TGUID);
+begin
+   DbClientHandle := THandle(dlopen('libmidas.so.1', 0));
+   if DbClientHandle <> 0 then
+     DllGetClassObject := dlsym(Pointer(DbClientHandle), 'DllGetClassObject');
+end;
+{$ENDIF}
 
 procedure CreateDbClientObject(const CLSID, IID: TGUID; out Obj);
 var
   Factory: IClassFactory;
 begin
   CheckDbClient(CLSID);
-  OleCheck(DllGetClassObject(CLSID, IClassFactory, Factory));
-  OleCheck(Factory.CreateInstance(nil, IID, Obj));
+  DllGetClassObject(CLSID, IClassFactory, Factory);
+  Factory.CreateInstance(nil, IID, Obj);
 end;
 
 procedure FreeDataPacket(var DataPacket: TDataPacket);
@@ -1111,13 +1169,23 @@ begin
   begin
     if not (VarIsArray(V) and (VarArrayHighBound(V, 1) > 20)) then
       DatabaseError(SInvalidDataPacket);
+{$IFDEF MSWINDOWS}
     Result := tagVARIANT(V).PArray;
+{$ENDIF}
+{$IFDEF LINUX}
+    Result := (TVarData(V)).VArray;
+{$ENDIF}
   end;
 end;
 
 function DataPacketSize(const DataPacket: TDataPacket): Integer;
 begin
+{$IFDEF MSWINDOWS}
   OleCheck(SafeArrayGetUBound(DataPacket, 1, Result));
+{$ENDIF}
+{$IFDEF LINUX}
+  SafeArrayGetUBound(DataPacket, 1, Result);
+{$ENDIF}
   Inc(Result);
 end;
 
@@ -1126,8 +1194,14 @@ begin
   if Assigned(DataPacket) then
   begin
     VarClear(V);
+{$IFDEF MSWINDOWS}
     tagVariant(V).vt := varByte or varArray;
     tagVariant(V).PArray := DataPacket;
+{$ENDIF}
+{$IFDEF LINUX}
+    TVarData(V).VType := varByte or varArray;
+    TVarData(V).VArray := DataPacket;
+{$ENDIF}
   end else
     V := NULL;
 end;
@@ -1171,9 +1245,33 @@ begin
   end;
 end;
 
+procedure RegisterMidasLib(GetClassProc: Pointer);
+begin
+  DllGetClassObject := GetClassProc;
+  DbClientHandle := THandle(1);
+end;
+
+
+
+{$IFDEF LINUX}
+
+function HandleSafeCallException(ExceptObject: TObject;
+  ExceptAddr: Pointer; const ErrorIID: TGUID; const ProgID,
+  HelpFileName: WideString): HResult;
+begin
+  Result := 0;
+end;
+
+{$ENDIF}
+
 initialization
   InitializeCriticalSection(Loading);
 finalization
+{$IFDEF MSWINDOWS}
   if DbClientHandle > 32 then FreeLibrary(DbClientHandle);
+{$ENDIF}
+{$IFDEF LINUX}
+  if DbClientHandle > 0 then dlclose(Pointer(DbClientHandle));
+{$ENDIF}
   DeleteCriticalSection(Loading);
 end.

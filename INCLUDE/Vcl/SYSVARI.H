@@ -1,9 +1,11 @@
 // SYSVARI.H: Pascal Variant & Olevariant classes
 //
-// $Revision:   1.20.1.1  $
-// $Date:   08 Dec 1999 16:10:38  $
+// $Revision:   1.20.2.0.1.9  $
+// $Date:   25 Jan 2002 12:54:26  $
 //
-// Copyright (c) 1997, 1999 Borland International
+// Copyright (c) 1997, 2002 Borland Software Corporation
+
+#define TVARIANT_ON
 
 #if !defined(SYSVARI_H)
 #define SYSVARI_H
@@ -18,6 +20,10 @@
 
 // The following bring in basic windows types + IUnknown
 //
+
+// are these available under linux? almost certainly not. Is there a linux
+// available definition of IUnknown and IDispatch? if so, where? --aph
+
 #include <wtypes.h>
 #include <unknwn.h>
 
@@ -45,8 +51,11 @@ typedef struct    tagVARIANT  VARIANT;
 struct    tagSTATSTG;
 class     TAutoArgsBase;
 template <int count> class  TAutoArgs;
+
+#ifdef TVARIANT_ON
 template  <class T> class     TVariantT;
 typedef   TVariantT<VARIANT>  TVariant;
+#endif
 
 
 #if !defined(SYSTVAR_H)
@@ -149,14 +158,19 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
     __fastcall Variant(const float src);
     __fastcall Variant(const double src);
     __fastcall Variant(const long double src);
+    __fastcall Variant(const __int64 src);
 
     // Ctr - From OLE structures
     __fastcall Variant(const CURRENCY& src);
     __fastcall Variant(SAFEARRAY& src);
     __fastcall Variant(SAFEARRAY* src);
+#ifdef WIN32
     __fastcall Variant(const VARIANT& src);
-    __fastcall Variant(const TVariant& src);
     __fastcall Variant(VARIANT*   src);
+#endif
+#ifdef TVARIANT_ON
+    __fastcall Variant(const TVariant& src);
+#endif
 
     // Ctr - From utility classes
     __fastcall Variant(const AnsiString& src);
@@ -171,6 +185,7 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
     // Ctr - OLE ptrs
     __fastcall Variant(wchar_t* src);               // BSTR support
     __fastcall Variant(IUnknown* src);
+    __fastcall Variant(IInterface* src);
     __fastcall Variant(IDispatch* src);
 
     // Ref-counted Dispatch interface object
@@ -191,6 +206,8 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
 
     __fastcall Variant(float* src);
     __fastcall Variant(double* src);
+
+    __fastcall Variant(__int64* src);
 
     __fastcall Variant(CURRENCY* src);
     __fastcall Variant(SAFEARRAY** src);
@@ -230,14 +247,19 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
 
     Variant& __fastcall operator =(const float src);
     Variant& __fastcall operator =(const double src);
+    Variant& __fastcall operator =(const __int64 src);
 
     Variant& __fastcall operator =(const CURRENCY& src);
     Variant& __fastcall operator =(SAFEARRAY* src);
     Variant& __fastcall operator =(SAFEARRAY& src);
+#ifdef WIN32
     Variant& __fastcall operator =(const VARIANT& rhs);
+    Variant& __fastcall operator =(VARIANT* rhs);
+#endif
+#ifdef TVARIANT_ON
     Variant& __fastcall operator =(const TVariant& rhs);
     Variant& __fastcall operator =(TVariant* rhs);
-    Variant& __fastcall operator =(VARIANT* rhs);
+#endif
 
     Variant& __fastcall operator =(const AnsiString& src);
     Variant& __fastcall operator =(const Currency& src);
@@ -249,6 +271,7 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
 
     Variant& __fastcall operator =(wchar_t* src);             // BSTR support
     Variant& __fastcall operator =(IUnknown* src);
+    Variant& __fastcall operator =(IInterface* src);
     Variant& __fastcall operator =(IDispatch* src);
 
     // By ref Assignment
@@ -267,12 +290,14 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
 
     Variant& __fastcall operator =(float* src);
     Variant& __fastcall operator =(double* src);
+    Variant& __fastcall operator =(__int64* src);
 
     Variant& __fastcall operator =(CURRENCY* src);
     Variant& __fastcall operator =(SAFEARRAY** src);
 
     Variant& __fastcall operator =(wchar_t** src);            // VT_BSTR|VT_BYREF
     Variant& __fastcall operator =(IUnknown** src);
+    Variant& __fastcall operator =(IInterface**src);
     Variant& __fastcall operator =(IDispatch** src);
 
     Variant& __fastcall operator =(Currency* src);
@@ -429,6 +454,7 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
 
     __fastcall operator float()           const;
     __fastcall operator double()          const;
+    __fastcall operator __int64()         const;
 
     __fastcall operator AnsiString()      const;
     __fastcall operator Currency()        const;
@@ -436,12 +462,17 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
     __fastcall operator WideString()      const;
 
     __fastcall operator CURRENCY()        const;
+#ifdef WIN32
     __fastcall operator VARIANT();
+#endif
+#ifdef TVARIANT_ON
     __fastcall operator TVariant();
+#endif
 
     __fastcall operator wchar_t*()        const;
     __fastcall operator IDispatch*();
     __fastcall operator IUnknown*();
+    __fastcall operator IInterface*();
 
     // by ref conversion operators
     /*__fastcall operator char*();*/  // Dangerous - easily used as string instead of VT_I1|VT_BYREF
@@ -463,8 +494,12 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
 
     /*__fastcall operator CURRENCY*()       const;*/
     /*__fastcall operator SAFEARRAY**()     const;*/
+#ifdef WIN32
     __fastcall operator VARIANT*();
+#endif
+#ifdef TVARIANT_ON
     __fastcall operator TVariant*();
+#endif
 
     __fastcall operator Currency*();
     __fastcall operator TDateTime*();
@@ -1220,10 +1255,83 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
     // AutoCmd::GetParm & GetNamedParm uses operator [] (AutoCmd is a friend)
     // operator[] can only be used for arrays of type Variant
     Variant& __fastcall operator [](const int idx);
-  };
+};
+}
+#if !defined(__AUTOARGS_DEFINED)
+#define __AUTOARGS_DEFINED
+class TAutoArgsBase
+{
+protected:
+  TAutoArgsBase(Variant *pVariant, int count) : m_Variant(pVariant), m_Count(count)
+  {}
+
+public:
+  Variant& operator[](int index) const
+  {
+    // NOTE: It's OK to use Count - there's an extra Variant for return result
+    //       Zero'th entry's reserved for return value.
+    //
+   /* _ASSERTE_(index <= m_Count);
+    _ASSERTE_(index >= 0);         */
+
+    // Make up for C++ vs. Basic reverse indexing
+    //
+    return m_Variant[index ? (m_Count+1-index) : 0];
+  }
+
+  Variant* GetRetVal() const
+  {
+    return &m_Variant[0];
+  }
+
+  Variant& GetRetVariant()
+  {
+    return *m_Variant;
+  }
+
+  Variant* GetArgs() const
+  {
+    return (Variant*)(m_Variant+1);
+  }
+
+  int GetCount() const
+  {
+    return m_Count;
+  }
+
+private:
+  TAutoArgsBase(const TAutoArgsBase&);
+  TAutoArgsBase& operator=(const TAutoArgsBase&);
+
+  Variant   *m_Variant;
+  int         m_Count;
+};
 
 
+// TAutoArgs - Encapsulates array of Variants. Use for Invoke calls
 
+// note: this class is logically identical to the TAutoArgs class in
+// Utilcls.h. It is included here because utilcls is windows only so
+// this file should not depend on it.
+
+template <int Count>
+class TAutoArgs : public TAutoArgsBase
+{
+public:
+ TAutoArgs() : TAutoArgsBase(m_Array, Count) {};
+ ~TAutoArgs() {};
+ TAutoArgs(TAutoArgs& src);
+
+private:
+  // Allocate an extra Variant. It's the first entry  and
+  // it is reserved for return result. The rest are for parameters
+  //
+  Variant m_Array[Count+1];
+};
+#endif
+
+namespace System
+{
   template <class P1>
   void Variant::OleProcedure(const String& name, P1 p1)
   {
@@ -2676,32 +2784,52 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
     }
 
     //By value constructors
-    __fastcall OleVariant(const short src)      : Variant(src)  {}
-    __fastcall OleVariant(const int src)        : Variant(src)  {}
-    __fastcall OleVariant(const float src)      : Variant(src)  {}
-    __fastcall OleVariant(const double src)     : Variant(src)  {}
-    __fastcall OleVariant(const Currency src)   : Variant(src)  {}
-    __fastcall OleVariant(const TDateTime src)  : Variant(src)  {}
-    __fastcall OleVariant(const WideString& src): Variant(src)  {}
-    __fastcall OleVariant(const bool src)       : Variant(src)  {}
-    __fastcall OleVariant(const Byte src)       : Variant(src)  {}
-    __fastcall OleVariant(const AnsiString& src): Variant(WideString(src).Detach()) {}
+    __fastcall OleVariant(const char src)           : Variant(src)  {}
+    __fastcall OleVariant(const unsigned char src)  : Variant(src)  {}
+    __fastcall OleVariant(const short src)          : Variant(src)  {}
+    __fastcall OleVariant(const unsigned short src) : Variant(src)  {}
+    __fastcall OleVariant(const int src)            : Variant(src)  {}
+    __fastcall OleVariant(const unsigned int src)   : Variant(src)  {}
+    __fastcall OleVariant(const float src)          : Variant(src)  {}
+    __fastcall OleVariant(const double src)         : Variant(src)  {}
+    __fastcall OleVariant(const __int64 src)        : Variant(src)  {}
+    __fastcall OleVariant(const Currency src)       : Variant(src)  {}
+    __fastcall OleVariant(const TDateTime src)      : Variant(src)  {}
+    __fastcall OleVariant(const WideString& src)    : Variant(src)  {}
+    __fastcall OleVariant(const bool src)           : Variant(src)  {}
+    __fastcall OleVariant(const AnsiString& src)    : Variant(WideString(src).Detach()) {}
 
 
+    // By ref constructors
     __fastcall OleVariant(wchar_t* const src)   : Variant(src)  {}
     __fastcall OleVariant(IDispatch* const src) : Variant(src)  {}
     __fastcall OleVariant(IUnknown* const src)  : Variant(src)  {}
+    __fastcall OleVariant(IInterface* const src) : Variant(src) {}
+#ifdef WIN32
     __fastcall OleVariant(VARIANT* src)         : Variant(src)  {}
+#endif
+#ifdef TVARIANT_ON
+    __fastcall OleVariant(const TVariant& src)     : Variant(src)  {}
+#endif
 
-    //By ref constructors
+    __fastcall OleVariant(signed char* src)     : Variant(src)  {}
+    __fastcall OleVariant(unsigned char* src)   : Variant(src)  {}
+
     __fastcall OleVariant(short* src)           : Variant(src)  {}
+    __fastcall OleVariant(unsigned short* src)  : Variant(src)  {}
+
     __fastcall OleVariant(int* src)             : Variant(src)  {}
+    __fastcall OleVariant(unsigned int* src)    : Variant(src)  {}
+
+    __fastcall OleVariant(long* src)            : Variant(src)  {}
+    __fastcall OleVariant(unsigned long* src)   : Variant(src)  {}
+
     __fastcall OleVariant(float* src)           : Variant(src)  {}
     __fastcall OleVariant(double* src)          : Variant(src)  {}
+    __fastcall OleVariant(__int64* src)         : Variant(src)  {}
+
     __fastcall OleVariant(Currency* src)        : Variant(src)  {}
     __fastcall OleVariant(TDateTime* src)       : Variant(src)  {}
-    __fastcall OleVariant(WordBool* src)        : Variant(src)  {}
-    __fastcall OleVariant(Byte* src)            : Variant(src)  {}
     __fastcall OleVariant(wchar_t** src)        : Variant(src)  {}
 
     // constructor for array of variants of type varType
@@ -2725,15 +2853,107 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
       PVariant(this)->operator=(rhs.Sanitized());
       return *this;
     }
+#ifdef WIN32
     OleVariant& __fastcall operator =(VARIANT& rhs)
     {
       PVariant(this)->operator=(rhs);
       return *this;
     }
+#endif
 
     OleVariant& __fastcall operator =(const AnsiString& rhs)
     {
       PVariant(this)->operator=(WideString(rhs).Detach());
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const char rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const signed char rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const unsigned char rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const short rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const unsigned short rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const int rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const unsigned int rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const long rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const unsigned long rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const float rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const double rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const __int64 rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const CURRENCY& rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const TDateTime rhs)
+    {
+      PVariant(this)->operator=(rhs);
+      return *this;
+    }
+
+    OleVariant& __fastcall operator =(const bool rhs)
+    {
+      PVariant(this)->operator=(rhs);
       return *this;
     }
 
@@ -2787,19 +3007,33 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
     Variant::operator !;
 
     // conversion operators
+    Variant::operator char;
+    Variant::operator signed char;
+    Variant::operator unsigned char;
     Variant::operator short;
+    Variant::operator unsigned short;
     Variant::operator int;
+    Variant::operator unsigned int;
+    Variant::operator long;
+    Variant::operator unsigned long;
     Variant::operator float;
     Variant::operator double;
+    Variant::operator __int64;
     Variant::operator Currency;
     Variant::operator TDateTime;
     Variant::operator bool;
+    Variant::operator AnsiString;
     Variant::operator WideString;
     Variant::operator unsigned short;
     Variant::operator IDispatch*;
     Variant::operator IUnknown*;
+    Variant::operator IInterface*;
+#ifdef WIN32
     Variant::operator VARIANT;
+#endif
+#ifdef TVARIANT_ON
     Variant::operator TVariant;
+#endif
 
 
     // by ref conversion operators
@@ -2812,8 +3046,12 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
     Variant::operator unsigned short*;
     Variant::operator Byte*;
     Variant::operator wchar_t**;
+#ifdef WIN32
     Variant::operator VARIANT*;
+#endif
+#ifdef TVARIANT_ON
     Variant::operator TVariant*;
+#endif
 
 
     // HRESULT methods
@@ -2986,6 +3224,7 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
     AutoCmd& operator <<(wchar_t* arg);
     AutoCmd& operator <<(IDispatch* arg);
     AutoCmd& operator <<(IUnknown* arg);
+    AutoCmd& operator <<(IInterface* arg);
 
     //By ref args
     AutoCmd& operator <<(Variant* arg);
@@ -3048,6 +3287,7 @@ static const short int MaxDispArgs = 0x20; // (BCB-42024)
     NamedParm(const String& name, wchar_t* /*BSTR*/ arg): Name(name), Type(varOleStr), Parm(arg) {}
     NamedParm(const String& name, IDispatch* const arg):  Name(name), Type(varDispatch), Parm(arg) {}
     NamedParm(const String& name, IUnknown* const arg):   Name(name), Type(varUnknown), Parm(arg) {}
+    NamedParm(const String& name, IInterface* const arg): Name(name), Type(varUnknown), Parm(arg) {}
 
     //By ref ctors
     NamedParm(const String& name, Variant* arg):   Name(name), Type(varVariant | varByRef), Parm(arg) {}

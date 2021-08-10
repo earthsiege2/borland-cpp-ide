@@ -80,4 +80,4 @@ and then run IMPLIB on the module definition file. The result will be an import 
 contains import information for only those export functions listed in the EXPORTS section of
 the module definition file.
 
-Copyright   1998 Borland International.
+Copyright   1998-2002 Borland International.

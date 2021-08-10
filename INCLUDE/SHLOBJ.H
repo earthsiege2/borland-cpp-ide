@@ -1,13 +1,12 @@
 //===========================================================================
 //
-// Copyright (c) Microsoft Corporation 1991-1998
+// Copyright (c) Microsoft Corporation. All rights reserved.
 //
 // File: shlobj.h
 //
 //===========================================================================
 
 #ifndef _SHLOBJ_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _SHLOBJ_H_
 
 #ifndef _WINRESRC_
@@ -103,70 +102,17 @@
 #include <shlguid.h>
 #endif /* !INITGUID */
 
-#ifndef RC_INVOKED
+
 #include <pshpack1.h>   /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
 #endif /* __cplusplus */
 
+#include <shtypes.h>
 
-//===========================================================================
-//
-// Object identifiers in the explorer's name space (ItemID and IDList)
-//
-//  All the items that the user can browse with the explorer (such as files,
-// directories, servers, work-groups, etc.) has an identifier which is unique
-// among items within the parent folder. Those identifiers are called item
-// IDs (SHITEMID). Since all its parent folders have their own item IDs,
-// any items can be uniquely identified by a list of item IDs, which is called
-// an ID list (ITEMIDLIST).
-//
-//  ID lists are almost always allocated by the task allocator (see some
-// description below as well as OLE 2.0 SDK) and may be passed across
-// some of shell interfaces (such as IShellFolder). Each item ID in an ID list
-// is only meaningful to its parent folder (which has generated it), and all
-// the clients must treat it as an opaque binary data except the first two
-// bytes, which indicates the size of the item ID.
-//
-//  When a shell extension -- which implements the IShellFolder interace --
-// generates an item ID, it may put any information in it, not only the data
-// with that it needs to identifies the item, but also some additional
-// information, which would help implementing some other functions efficiently.
-// For example, the shell's IShellFolder implementation of file system items
-// stores the primary (long) name of a file or a directory as the item
-// identifier, but it also stores its alternative (short) name, size and date
-// etc.
-//
-//  When an ID list is passed to one of shell APIs (such as SHGetPathFromIDList),
-// it is always an absolute path -- relative from the root of the name space,
-// which is the desktop folder. When an ID list is passed to one of IShellFolder
-// member function, it is always a relative path from the folder (unless it
-// is explicitly specified).
-//
-//===========================================================================
 
-//
-// SHITEMID -- Item ID
-//
-typedef struct _SHITEMID        // mkid
-{
-    USHORT      cb;             // Size of the ID (including cb itself)
-    BYTE        abID[1];        // The item ID (variable length)
-} SHITEMID;
-typedef UNALIGNED SHITEMID *LPSHITEMID;
-typedef const UNALIGNED SHITEMID *LPCSHITEMID;
-
-//
-// ITEMIDLIST -- List if item IDs (combined with 0-terminator)
-//
-typedef struct _ITEMIDLIST      // idl
-{
-    SHITEMID    mkid;
-} ITEMIDLIST;
-typedef UNALIGNED ITEMIDLIST * LPITEMIDLIST;
-typedef const UNALIGNED ITEMIDLIST * LPCITEMIDLIST;
+#include <shobjidl.h>
 
 //===========================================================================
 //
@@ -316,9 +262,9 @@ SHSTDAPI SHGetMalloc(LPMALLOC * ppMalloc);
 #define CMF_CANRENAME           0x00000010
 #define CMF_NODEFAULT           0x00000020
 #define CMF_INCLUDESTATIC       0x00000040
-#define CMF_FINDHACK            0x00000080
 #define CMF_EXTENDEDVERBS       0x00000100      // rarely used verbs
 #define CMF_RESERVED            0xffff0000      // View specific
+
 
 // GetCommandString uFlags
 #define GCS_VERBA        0x00000000     // canonical verb
@@ -369,12 +315,17 @@ SHSTDAPI SHGetMalloc(LPMALLOC * ppMalloc);
 #define CMIC_MASK_SHIFT_DOWN    0x10000000
 #define CMIC_MASK_CONTROL_DOWN  0x20000000
 #endif // (_WIN32_IE >= 0x501)
+#if (_WIN32_IE >= 0x0560)
+#define CMIC_MASK_FLAG_LOG_USAGE SEE_MASK_FLAG_LOG_USAGE
+#endif // (_WIN32_IE >= 0x560)
 
 
 #if (_WIN32_IE >= 0x0400)
 #define CMIC_MASK_PTINVOKE      0x20000000
 #endif
 
+
+#include <pshpack8.h>
 
 //NOTE: When SEE_MASK_HMONITOR is set, hIcon is treated as hMonitor
 typedef struct _CMINVOKECOMMANDINFO {
@@ -412,6 +363,9 @@ typedef struct _CMInvokeCommandInfoEx {
 #endif
 } CMINVOKECOMMANDINFOEX,  *LPCMINVOKECOMMANDINFOEX;
 
+#include <poppack.h>        /* Return to byte packing */
+
+
 #undef  INTERFACE
 #define INTERFACE   IContextMenu
 
@@ -441,6 +395,7 @@ DECLARE_INTERFACE_(IContextMenu, IUnknown)
 };
 
 typedef IContextMenu *  LPCONTEXTMENU;
+
 
 //
 // IContextMenu2 (IContextMenu with one new member)
@@ -551,178 +506,6 @@ DECLARE_INTERFACE_(IContextMenu3, IContextMenu2)
 typedef IContextMenu3 * LPCONTEXTMENU3;
 
 
-//===========================================================================
-//
-// Interface: IShellExtInit
-//
-//  The IShellExtInit interface is used by the explorer to initialize shell
-// extension objects. The explorer (1) calls CoCreateInstance (or equivalent)
-// with the registered CLSID and IID_IShellExtInit, (2) calls its Initialize
-// member, then (3) calls its QueryInterface to a particular interface (such
-// as IContextMenu or IPropSheetExt and (4) performs the rest of operation.
-//
-//
-// [Member functions]
-//
-// IShellExtInit::Initialize
-//
-//  This member function is called when the explorer is initializing either
-// context menu extension, property sheet extension or non-default drag-drop
-// extension.
-//
-//  Parameters: (context menu or property sheet extension)
-//   pidlFolder -- Specifies the parent folder
-//   lpdobj -- Spefifies the set of items selected in that folder.
-//   hkeyProgID -- Specifies the type of the focused item in the selection.
-//
-//  Parameters: (non-default drag-and-drop extension)
-//   pidlFolder -- Specifies the target (destination) folder
-//   lpdobj -- Specifies the items that are dropped (see the description
-//    about shell's clipboard below for clipboard formats).
-//   hkeyProgID -- Specifies the folder type.
-//
-//===========================================================================
-
-#undef  INTERFACE
-#define INTERFACE   IShellExtInit
-
-DECLARE_INTERFACE_(IShellExtInit, IUnknown)
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-    STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-    // *** IShellExtInit methods ***
-    STDMETHOD(Initialize)(THIS_ LPCITEMIDLIST pidlFolder,
-                          IDataObject *lpdobj, HKEY hkeyProgID) PURE;
-};
-
-typedef IShellExtInit * LPSHELLEXTINIT;
-
-
-//===========================================================================
-//
-// Interface: IShellPropSheetExt
-//
-//  The explorer uses the IShellPropSheetExt to allow property sheet
-// extensions or control panel extensions to add additional property
-// sheet pages.
-//
-//
-// [Member functions]
-//
-// IShellPropSheetExt::AddPages
-//
-//  The explorer calls this member function when it finds a registered
-// property sheet extension for a particular type of object. For each
-// additional page, the extension creates a page object by calling
-// CreatePropertySheetPage API and calls lpfnAddPage.
-//
-//  Parameters:
-//   lpfnAddPage -- Specifies the callback function.
-//   lParam -- Specifies the opaque handle to be passed to the callback function.
-//
-//
-// IShellPropSheetExt::ReplacePage
-//
-//  The explorer never calls this member of property sheet extensions. The
-// explorer calls this member of control panel extensions, so that they
-// can replace some of default control panel pages (such as a page of
-// mouse control panel).
-//
-//  Parameters:
-//   uPageID -- Specifies the page to be replaced.
-//   lpfnReplace Specifies the callback function.
-//   lParam -- Specifies the opaque handle to be passed to the callback function.
-//
-//===========================================================================
-
-#undef  INTERFACE
-#define INTERFACE   IShellPropSheetExt
-
-DECLARE_INTERFACE_(IShellPropSheetExt, IUnknown)
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-    STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-    // *** IShellPropSheetExt methods ***
-    STDMETHOD(AddPages)(THIS_ LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam) PURE;
-    STDMETHOD(ReplacePage)(THIS_ UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam) PURE;
-};
-
-typedef IShellPropSheetExt * LPSHELLPROPSHEETEXT;
-
-
-//===========================================================================
-//
-// IPersistFolder Interface
-//
-//  The IPersistFolder interface is used by the file system implementation of
-// IShellFolder::BindToObject when it is initializing a shell folder object.
-//
-//
-// [Member functions]
-//
-// IPersistFolder::Initialize
-//
-//  This member function is called when the explorer is initializing a
-// shell folder object.
-//
-//  Parameters:
-//   pidl -- Specifies the absolute location of the folder.
-//
-//===========================================================================
-
-#undef  INTERFACE
-#define INTERFACE   IPersistFolder
-
-DECLARE_INTERFACE_(IPersistFolder, IPersist)    // fld
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef)(THIS)  PURE;
-    STDMETHOD_(ULONG,Release)(THIS) PURE;
-
-    // *** IPersist methods ***
-    STDMETHOD(GetClassID)(THIS_ LPCLSID lpClassID) PURE;
-
-    // *** IPersistFolder methods ***
-    STDMETHOD(Initialize)(THIS_ LPCITEMIDLIST pidl) PURE;
-};
-
-typedef IPersistFolder *LPPERSISTFOLDER;
-
-#if (_WIN32_IE >= 0x0400)
-
-#undef  INTERFACE
-#define INTERFACE   IPersistFolder2
-
-DECLARE_INTERFACE_(IPersistFolder2, IPersistFolder)
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef)(THIS)  PURE;
-    STDMETHOD_(ULONG,Release)(THIS) PURE;
-
-    // *** IPersist methods ***
-    STDMETHOD(GetClassID)(THIS_ LPCLSID lpClassID) PURE;
-
-    // *** IPersistFolder methods ***
-    STDMETHOD(Initialize)(THIS_ LPCITEMIDLIST pidl) PURE;
-
-    // *** IPersistFolder2 methods ***
-    STDMETHOD(GetCurFolder)(THIS_ LPITEMIDLIST *ppidl) PURE;
-};
-
-#if (_WIN32_IE >= 0x0401)
-typedef IPersistFolder2 *LPPERSISTFOLDER2;
-#endif
-
-#endif
-
 #if (_WIN32_IE >= 0x0500)
 #undef  INTERFACE
 #define INTERFACE   IPersistFolder3
@@ -739,7 +522,7 @@ typedef IPersistFolder2 *LPPERSISTFOLDER2;
 //                   call but not in the GetFolderTargetInfo() return structure.
 // szTargetParsingName: Empty string if not specified. Ortherwise, it is the parsible name
 //                       to the target.  This name can be parsed by IShellFolder::
-//                       ParseDisplayName() from the desktop.
+//                       ParsedName() from the desktop.
 // szNetworkProvider: Can be an empty string.  If not empty, it specifies the type of network
 //                    provider that will be used when binding to the target.  This is used
 //                    for performance optimizations for the WNet APIs.
@@ -750,6 +533,9 @@ typedef IPersistFolder2 *LPPERSISTFOLDER2;
 //        should change if the user changes the target of the underlying CSIDL value.
 //        You can also pass CSIDL_FLAG_CREATE to indicate that the target folder
 //        should be created if it does not exist.  No other CSIDL_FLAG_* values are supported.
+
+#include <pshpack8.h>
+
 typedef struct
 {
     LPITEMIDLIST  pidlTargetFolder;               // pidl for the folder we want to intiailize
@@ -758,6 +544,8 @@ typedef struct
     DWORD         dwAttributes;                   // optional FILE_ATTRIBUTES_ flags (-1 if not used)
     int           csidl;                          // optional folder index (SHGetFolderPath()) -1 if not used
 } PERSIST_FOLDER_TARGET_INFO;
+
+#include <poppack.h>        /* Return to byte packing */
 
 
 // DESCRIPTION: IPersistFolder3
@@ -774,14 +562,13 @@ typedef struct
 //      pidlRoot: This is the same parameter as IPersistFolder::Initialize(). Caller allocates
 //                and frees this parameter.
 //      ppfti: May be NULL, in which case this is the same as a call to IPersistFolder::Initialize().
-//             Otherwise this is a Folder Shortcut and this struction specifies the target
+//             Otherwise this is a Folder Shortcut and this structure specifies the target
 //             folder and it's attributes.
 // GetFolderTargetInfo: This is used by the caller to find information about
 //             the folder shortcut.  This structure may not be initialized by the caller,
 //             so the callee needs to initialize every member.  The callee allocates
 //             pidlTargetFolder and the caller will free it.  Filling in pidlTargetFolder is
 //             ALWAYS required.
-
 DECLARE_INTERFACE_(IPersistFolder3, IPersistFolder2)
 {
     // *** IUnknown methods ***
@@ -803,52 +590,10 @@ DECLARE_INTERFACE_(IPersistFolder3, IPersistFolder2)
     STDMETHOD(GetFolderTargetInfo)(THIS_ PERSIST_FOLDER_TARGET_INFO *ppfti) PURE;
 };
 
-//
-//  this interface is just the IID.  return back
-//  a pointer to the IPersist interface if the object
-//  implementation is free threaded.  this is used
-//  for performance on free threaded objects.
-//
-#define IPersistFreeThreadedObject IPersist
 
 #endif
 
 //
-
-//===========================================================================
-//
-// IRemoteComputer Interface
-//
-//  The IRemoteComputer interface is used to initialize a name space
-// extension invoked on a remote computer object.
-//
-// [Member functions]
-//
-// IRemoteComputer::Initialize
-//
-//  This member function is called when the explorer is initializing or
-// enumerating the name space extension. If failure is returned during
-// enumeration, the extension won't appear for this computer. Otherwise,
-// the extension will appear, and should target the given machine.
-//
-//  Parameters:
-//   pszMachine -- Specifies the name of the machine to target.
-//
-//===========================================================================
-
-#undef  INTERFACE
-#define INTERFACE   IRemoteComputer
-
-DECLARE_INTERFACE_(IRemoteComputer, IUnknown)    // remc
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-    STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-    // *** IRemoteComputer methods ***
-    STDMETHOD(Initialize) (THIS_ const WCHAR *pszMachine, BOOL bEnumerating) PURE;
-};
 
 //===========================================================================
 //
@@ -959,7 +704,9 @@ DECLARE_INTERFACE_(IRemoteComputer, IUnknown)    // remc
 
 #define GIL_OPENICON     0x0001      // allows containers to specify an "open" look
 #define GIL_FORSHELL     0x0002      // icon is to be displayed in a ShellFolder
-#define GIL_ASYNC        0x0020      // this is an async extract, return E_ASYNC
+#define GIL_ASYNC        0x0020      // this is an async extract, return E_PENDING
+#define GIL_DEFAULTICON  0x0040      // get the default icon location if the final one takes too long to get
+#define GIL_FORSHORTCUT  0x0080      // the icon is for a shortcut to the object
 
 // GetIconLocation() return flags
 
@@ -1209,121 +956,6 @@ SHSTDAPI_(int) SHGetIconOverlayIndexW(LPCWSTR pszIconPath, int iIconIndex);
 #endif // !UNICODE
 
 
-//===========================================================================
-//
-// IShellLink Interface
-//
-//===========================================================================
-
-#ifdef UNICODE
-#define IShellLink      IShellLinkW
-#define IShellLinkVtbl  IShellLinkWVtbl
-#else
-#define IShellLink      IShellLinkA
-#define IShellLinkVtbl  IShellLinkAVtbl
-#endif
-
-// IShellLink::Resolve fFlags
-typedef enum {
-    SLR_NO_UI           = 0x0001,   // don't post any UI durring the resolve operation
-    SLR_ANY_MATCH       = 0x0002,   // no longer used
-    SLR_UPDATE          = 0x0004,   // save the link back to it's file if the track made it dirty
-    SLR_NOUPDATE        = 0x0008,
-    SLR_NOSEARCH        = 0x0010,   // don't execute the search heuristics
-    SLR_NOTRACK         = 0x0020,   // don't use NT5 object ID to track the link
-    SLR_NOLINKINFO      = 0x0040,   // don't use the net and volume relative info
-    SLR_INVOKE_MSI      = 0x0080,   // if we have a darwin link, then call msi to fault in the applicaion
-} SLR_FLAGS;
-
-// IShellLink::GetPath fFlags
-typedef enum {
-    SLGP_SHORTPATH      = 0x0001,
-    SLGP_UNCPRIORITY    = 0x0002,
-    SLGP_RAWPATH        = 0x0004,
-} SLGP_FLAGS;
-
-#undef  INTERFACE
-#define INTERFACE   IShellLinkA
-
-DECLARE_INTERFACE_(IShellLinkA, IUnknown)       // sl
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-    STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-    // *** IShellLink methods ***
-    STDMETHOD(GetPath)(THIS_ LPSTR pszFile, int cchMaxPath, WIN32_FIND_DATAA *pfd, DWORD fFlags) PURE;
-
-    STDMETHOD(GetIDList)(THIS_ LPITEMIDLIST * ppidl) PURE;
-    STDMETHOD(SetIDList)(THIS_ LPCITEMIDLIST pidl) PURE;
-
-    STDMETHOD(GetDescription)(THIS_ LPSTR pszName, int cchMaxName) PURE;
-    STDMETHOD(SetDescription)(THIS_ LPCSTR pszName) PURE;
-
-    STDMETHOD(GetWorkingDirectory)(THIS_ LPSTR pszDir, int cchMaxPath) PURE;
-    STDMETHOD(SetWorkingDirectory)(THIS_ LPCSTR pszDir) PURE;
-
-    STDMETHOD(GetArguments)(THIS_ LPSTR pszArgs, int cchMaxPath) PURE;
-    STDMETHOD(SetArguments)(THIS_ LPCSTR pszArgs) PURE;
-
-    STDMETHOD(GetHotkey)(THIS_ WORD *pwHotkey) PURE;
-    STDMETHOD(SetHotkey)(THIS_ WORD wHotkey) PURE;
-
-    STDMETHOD(GetShowCmd)(THIS_ int *piShowCmd) PURE;
-    STDMETHOD(SetShowCmd)(THIS_ int iShowCmd) PURE;
-
-    STDMETHOD(GetIconLocation)(THIS_ LPSTR pszIconPath, int cchIconPath, int *piIcon) PURE;
-    STDMETHOD(SetIconLocation)(THIS_ LPCSTR pszIconPath, int iIcon) PURE;
-
-    STDMETHOD(SetRelativePath)(THIS_ LPCSTR pszPathRel, DWORD dwReserved) PURE;
-
-    STDMETHOD(Resolve)(THIS_ HWND hwnd, DWORD fFlags) PURE;
-
-    STDMETHOD(SetPath)(THIS_ LPCSTR pszFile) PURE;
-};
-
-#undef  INTERFACE
-#define INTERFACE   IShellLinkW
-
-DECLARE_INTERFACE_(IShellLinkW, IUnknown)       // sl
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-    STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-    // *** IShellLink methods ***
-    STDMETHOD(GetPath)(THIS_ LPWSTR pszFile, int cchMaxPath, WIN32_FIND_DATAW *pfd, DWORD fFlags) PURE;
-
-    STDMETHOD(GetIDList)(THIS_ LPITEMIDLIST * ppidl) PURE;
-    STDMETHOD(SetIDList)(THIS_ LPCITEMIDLIST pidl) PURE;
-
-    STDMETHOD(GetDescription)(THIS_ LPWSTR pszName, int cchMaxName) PURE;
-    STDMETHOD(SetDescription)(THIS_ LPCWSTR pszName) PURE;
-
-    STDMETHOD(GetWorkingDirectory)(THIS_ LPWSTR pszDir, int cchMaxPath) PURE;
-    STDMETHOD(SetWorkingDirectory)(THIS_ LPCWSTR pszDir) PURE;
-
-    STDMETHOD(GetArguments)(THIS_ LPWSTR pszArgs, int cchMaxPath) PURE;
-    STDMETHOD(SetArguments)(THIS_ LPCWSTR pszArgs) PURE;
-
-    STDMETHOD(GetHotkey)(THIS_ WORD *pwHotkey) PURE;
-    STDMETHOD(SetHotkey)(THIS_ WORD wHotkey) PURE;
-
-    STDMETHOD(GetShowCmd)(THIS_ int *piShowCmd) PURE;
-    STDMETHOD(SetShowCmd)(THIS_ int iShowCmd) PURE;
-
-    STDMETHOD(GetIconLocation)(THIS_ LPWSTR pszIconPath, int cchIconPath, int *piIcon) PURE;
-    STDMETHOD(SetIconLocation)(THIS_ LPCWSTR pszIconPath, int iIcon) PURE;
-
-    STDMETHOD(SetRelativePath)(THIS_ LPCWSTR pszPathRel, DWORD dwReserved) PURE;
-
-    STDMETHOD(Resolve)(THIS_ HWND hwnd, DWORD fFlags) PURE;
-
-    STDMETHOD(SetPath)(THIS_ LPCWSTR pszFile) PURE;
-};
-
 #if (_WIN32_IE >= 0x0400)
 
 // IShellLinkDataList::GetFlags()/SetFlags()
@@ -1342,21 +974,18 @@ typedef enum {
    SLDF_HAS_LOGO3ID         = 0x00000800,   // this link is a special Logo3/MSICD link
    SLDF_HAS_DARWINID        = 0x00001000,   // this link is a special Darwin link
    SLDF_RUNAS_USER          = 0x00002000,   // Run this link as a different user
-   SLDF_HAS_EXP_ICON_SZ     = 0x00004000    // contains expandable env string for icon path
+   SLDF_HAS_EXP_ICON_SZ     = 0x00004000,   // contains expandable env string for icon path
+   SLDF_NO_PIDL_ALIAS       = 0x00008000,   // don't ever resolve to a logical location
+   SLDF_FORCE_UNCNAME       = 0x00010000,   // make GetPath() prefer the UNC name to the local name
+   SLDF_RUN_WITH_SHIMLAYER  = 0x00020000,   // Launch the target of this link w/ shim layer active
+   SLDF_RESERVED            = 0x80000000,   // Reserved-- so we can use the low word as an index value in the future
 } SHELL_LINK_DATA_FLAGS;
 
-//
-// We conditionally define it here to break the circular dependency between
-// shlobj and shlwapi.
-//
-#ifndef __DATABLOCKHEADER_DEFINED
-#define __DATABLOCKHEADER_DEFINED
 typedef struct tagDATABLOCKHEADER
 {
     DWORD   cbSize;             // Size of this extra data block
     DWORD   dwSignature;        // signature of this extra data block
 } DATABLOCK_HEADER, *LPDATABLOCK_HEADER, *LPDBLIST;
-#endif
 
 typedef struct {
 #ifdef __cplusplus
@@ -1409,6 +1038,7 @@ typedef struct {
     WCHAR       szwDarwinID[MAX_PATH]; // UNICODE darwin ID associated with link
 } EXP_DARWIN_LINK, *LPEXP_DARWIN_LINK;
 #define EXP_DARWIN_ID_SIG       0xA0000006
+// BUGBUG (reinerf) - this has the same value as EXP_SZ_ICON_SIG?!?!?!
 #define EXP_LOGO3_ID_SIG        0xA0000007
 #endif
 
@@ -1536,6 +1166,31 @@ DECLARE_INTERFACE_(IURLSearchHook, IUnknown)
     STDMETHOD(Translate)(THIS_ LPWSTR lpwszSearchURL, DWORD cchBufferSize) PURE;
 };
 
+#undef  INTERFACE
+#define INTERFACE   ISearchContext
+
+DECLARE_INTERFACE_(ISearchContext, IUnknown)
+{
+    // *** IUnknown methods ***
+    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
+    STDMETHOD_(ULONG, AddRef) (THIS)  PURE;
+    STDMETHOD_(ULONG, Release) (THIS) PURE;
+
+    // *** ISearchContext methods ***
+    STDMETHOD(GetSearchUrl)(THIS_ BSTR * pbstrSearchUrl) PURE;
+    STDMETHOD(GetSearchText)(THIS_ BSTR * pbstrSearchText) PURE;
+    STDMETHOD(GetSearchStyle)(THIS_ DWORD * pdwSearchStyle) PURE;
+};
+
+#undef  INTERFACE
+#define INTERFACE   IURLSearchHook2
+
+DECLARE_INTERFACE_(IURLSearchHook2, IURLSearchHook)
+{
+    // *** IURLSearchHook2 methods ***
+    STDMETHOD(TranslateWithSearchContext)(THIS_ LPWSTR lpwszSearchURL, DWORD cchBufferSize, ISearchContext * pSearchContext) PURE;
+};
+
 //===========================================================================
 //
 // INewShortcutHook Interface
@@ -1645,6 +1300,9 @@ DECLARE_INTERFACE_(INewShortcutHookW, IUnknown) // nshhk
 #define FOF_NO_CONNECTED_ELEMENTS  0x2000  // don't operate on connected file elements.
 #define FOF_WANTNUKEWARNING        0x4000  // during delete operation, warn if nuking instead of recycling (partially overrides FOF_NOCONFIRMATION)
 #endif // _WIN32_IE >= 0x500
+#if (_WIN32_WINNT >= 0x0501)
+#define FOF_NORECURSEREPARSE       0x8000  // treat reparse points as objects, not containers
+#endif // (_WIN32_WINNT >= 0x501)
 
 typedef WORD FILEOP_FLAGS;
 
@@ -1744,6 +1402,8 @@ typedef IFileViewerSite * LPFILEVIEWERSITE;
 //
 //===========================================================================
 
+#include <pshpack8.h>
+
 typedef struct
 {
     // Stuff passed into viewer (in)
@@ -1760,6 +1420,8 @@ typedef struct
     OLECHAR strNewFile[MAX_PATH];   // New File to view.
 
 } FVSHOWINFO, *LPFVSHOWINFO;
+
+#include <poppack.h>        /* Return to byte packing */
 
     // Define File View Show Info Flags.
 #define FVSIF_RECT      0x00000001      // The rect variable has valid data.
@@ -1884,320 +1546,6 @@ typedef IFileViewerW * LPFILEVIEWERW;
 //--------------------------------------------------------------------------
 #endif
 
-//--------------------------------------------------------------------------
-//
-// FOLDERSETTINGS
-//
-//  FOLDERSETTINGS is a data structure that explorer passes from one folder
-// view to another, when the user is browsing. It calls ISV::GetCurrentInfo
-// member to get the current settings and pass it to ISV::CreateViewWindow
-// to allow the next folder view "inherit" it. These settings assumes a
-// particular UI (which the shell's folder view has), and shell extensions
-// may or may not use those settings.
-//
-//--------------------------------------------------------------------------
-
-typedef LPBYTE LPVIEWSETTINGS;
-
-// NB Bitfields.
-// FWF_DESKTOP implies FWF_TRANSPARENT/NOCLIENTEDGE/NOSCROLL
-typedef enum
-    {
-    FWF_AUTOARRANGE =       0x0001,
-    FWF_ABBREVIATEDNAMES =  0x0002,
-    FWF_SNAPTOGRID =        0x0004,
-    FWF_OWNERDATA =         0x0008,
-    FWF_BESTFITWINDOW =     0x0010,
-    FWF_DESKTOP =           0x0020,
-    FWF_SINGLESEL =         0x0040,
-    FWF_NOSUBFOLDERS =      0x0080,
-    FWF_TRANSPARENT  =      0x0100,
-    FWF_NOCLIENTEDGE =      0x0200,
-    FWF_NOSCROLL     =      0x0400,
-    FWF_ALIGNLEFT    =      0x0800,
-    FWF_NOICONS      =      0x1000,
-    FWF_SHOWSELALWAYS =     0x2000,
-    FWF_NOVISIBLE    =      0X4000,
-    FWF_SINGLECLICKACTIVATE=0x8000  // TEMPORARY -- NO UI FOR THIS
-    } FOLDERFLAGS;
-
-typedef enum
-    {
-    FVM_ICON =              1,
-    FVM_SMALLICON =         2,
-    FVM_LIST =              3,
-    FVM_DETAILS =           4,
-    } FOLDERVIEWMODE;
-
-typedef struct
-    {
-    UINT ViewMode;       // View mode (FOLDERVIEWMODE values)
-    UINT fFlags;         // View options (FOLDERFLAGS bits)
-    } FOLDERSETTINGS, *LPFOLDERSETTINGS;
-
-typedef const FOLDERSETTINGS * LPCFOLDERSETTINGS;
-
-//--------------------------------------------------------------------------
-//
-// Interface:   IShellBrowser
-//
-//  IShellBrowser interface is the interface that is provided by the shell
-// explorer/folder frame window. When it creates the "contents pane" of
-// a shell folder (which provides IShellFolder interface), it calls its
-// CreateViewObject member function to create an IShellView object. Then,
-// it calls its CreateViewWindow member to create the "contents pane"
-// window. The pointer to the IShellBrowser interface is passed to
-// the IShellView object as a parameter to this CreateViewWindow member
-// function call.
-//
-//    +--------------------------+  <-- Explorer window
-//    | [] Explorer              |
-//    |--------------------------+       IShellBrowser
-//    | File Edit View ..        |
-//    |--------------------------|
-//    |        |                 |
-//    |        |              <-------- Content pane
-//    |        |                 |
-//    |        |                 |       IShellView
-//    |        |                 |
-//    |        |                 |
-//    +--------------------------+
-//
-//
-//
-// [Member functions]
-//
-//
-// IShellBrowser::GetWindow(phwnd)
-//
-//   Inherited from IOleWindow::GetWindow.
-//
-//
-// IShellBrowser::ContextSensitiveHelp(fEnterMode)
-//
-//   Inherited from IOleWindow::ContextSensitiveHelp.
-//
-//
-// IShellBrowser::InsertMenusSB(hmenuShared, lpMenuWidths)
-//
-//   Similar to the IOleInPlaceFrame::InsertMenus. The explorer will put
-//  "File" and "Edit" pulldown in the File menu group, "View" and "Tools"
-//  in the Container menu group and "Help" in the Window menu group. Each
-//  pulldown menu will have a uniqu ID, FCIDM_MENU_FILE/EDIT/VIEW/TOOLS/HELP.
-//  The view is allowed to insert menuitems into those sub-menus by those
-//  IDs must be between FCIDM_SHVIEWFIRST and FCIDM_SHVIEWLAST.
-//
-//
-// IShellBrowser::SetMenuSB(hmenuShared, holemenu, hwndActiveObject)
-//
-//   Similar to the IOleInPlaceFrame::SetMenu. The explorer ignores the
-//  holemenu parameter (reserved for future enhancement)  and performs
-//  menu-dispatch based on the menuitem IDs (see the description above).
-//  It is important to note that the explorer will add different
-//  set of menuitems depending on whether the view has a focus or not.
-//  Therefore, it is very important to call ISB::OnViewWindowActivate
-//  whenever the view window (or its children) gets the focus.
-//
-//
-// IShellBrowser::RemoveMenusSB(hmenuShared)
-//
-//   Same as the IOleInPlaceFrame::RemoveMenus.
-//
-//
-// IShellBrowser::SetStatusTextSB(pszStatusText)
-//
-//   Same as the IOleInPlaceFrame::SetStatusText. It is also possible to
-//  send messages directly to the status window via SendControlMsg.
-//
-//
-// IShellBrowser::EnableModelessSB(fEnable)
-//
-//   Same as the IOleInPlaceFrame::EnableModeless.
-//
-//
-// IShellBrowser::TranslateAcceleratorSB(lpmsg, wID)
-//
-//   Same as the IOleInPlaceFrame::TranslateAccelerator, but will be
-//  never called because we don't support EXEs (i.e., the explorer has
-//  the message loop). This member function is defined here for possible
-//  future enhancement.
-//
-//
-// IShellBrowser::BrowseObject(pidl, wFlags)
-//
-//   The view calls this member to let shell explorer browse to another
-//  folder. The pidl and wFlags specifies the folder to be browsed.
-//
-//  Following three flags specifies whether it creates another window or not.
-//   SBSP_SAMEBROWSER  -- Browse to another folder with the same window.
-//   SBSP_NEWBROWSER   -- Creates another window for the specified folder.
-//   SBSP_DEFBROWSER   -- Default behavior (respects the view option).
-//
-//  Following three flags specifies open, explore, or default mode. These   .
-//  are ignored if SBSP_SAMEBROWSER or (SBSP_DEFBROWSER && (single window   .
-//  browser || explorer)).                                                  .
-//   SBSP_OPENMODE     -- Use a normal folder window
-//   SBSP_EXPLOREMODE  -- Use an explorer window
-//   SBSP_DEFMODE      -- Use the same as the current window
-//
-//  Following three flags specifies the pidl.
-//   SBSP_ABSOLUTE -- pidl is an absolute pidl (relative from desktop)
-//   SBSP_RELATIVE -- pidl is relative from the current folder.
-//   SBSP_PARENT   -- Browse the parent folder (ignores the pidl)
-//   SBSP_NAVIGATEBACK    -- Navigate back (ignores the pidl)
-//   SBSP_NAVIGATEFORWARD -- Navigate forward (ignores the pidl)
-//
-//  Following two flags control history manipulation as result of navigate
-//   SBSP_WRITENOHISTORY -- write no history (shell folder) entry
-//   SBSP_NOAUTOSELECT -- suppress selection in history pane
-//
-// IShellBrowser::GetViewStateStream(grfMode, ppstm)
-//
-//   The browser returns an IStream interface as the storage for view
-//  specific state information.
-//
-//   grfMode -- Specifies the read/write access (STGM_READ/WRITE/READWRITE)
-//   ppstm   -- Specifies the IStream *variable to be filled.
-//
-//
-// IShellBrowser::GetControlWindow(id, phwnd)
-//
-//   The shell view may call this member function to get the window handle
-//  of Explorer controls (toolbar or status winodw -- FCW_TOOLBAR or
-//  FCW_STATUS).
-//
-//
-// IShellBrowser::SendControlMsg(id, uMsg, wParam, lParam, pret)
-//
-//   The shell view calls this member function to send control messages to
-//  one of Explorer controls (toolbar or status window -- FCW_TOOLBAR or
-//  FCW_STATUS).
-//
-//
-// IShellBrowser::QueryActiveShellView(IShellView * ppshv)
-//
-//   This member returns currently activated (displayed) shellview object.
-//  A shellview never need to call this member function.
-//
-//
-// IShellBrowser::OnViewWindowActive(pshv)
-//
-//   The shell view window calls this member function when the view window
-//  (or one of its children) got the focus. It MUST call this member before
-//  calling IShellBrowser::InsertMenus, because it will insert different
-//  set of menu items depending on whether the view has the focus or not.
-//
-//
-// IShellBrowser::SetToolbarItems(lpButtons, nButtons, uFlags)
-//
-//   The view calls this function to add toolbar items to the exporer's
-//  toolbar. "lpButtons" and "nButtons" specifies the array of toolbar
-//  items. "uFlags" must be one of FCT_MERGE, FCT_CONFIGABLE, FCT_ADDTOEND.
-//
-//-------------------------------------------------------------------------
-
-//
-// Values for wFlags parameter of ISB::BrowseObject() member.
-//
-#define SBSP_DEFBROWSER         0x0000
-#define SBSP_SAMEBROWSER        0x0001
-#define SBSP_NEWBROWSER         0x0002
-
-#define SBSP_DEFMODE            0x0000
-#define SBSP_OPENMODE           0x0010
-#define SBSP_EXPLOREMODE        0x0020
-#define SBSP_HELPMODE           0x0040 // IEUNIX : Help window uses this.
-#define SBSP_NOTRANSFERHIST     0x0080 // IEUNIX only mode.
-
-#define SBSP_ABSOLUTE           0x0000
-#define SBSP_RELATIVE           0x1000
-#define SBSP_PARENT             0x2000
-#define SBSP_NAVIGATEBACK       0x4000
-#define SBSP_NAVIGATEFORWARD    0x8000
-
-#define SBSP_ALLOW_AUTONAVIGATE 0x10000
-
-#define SBSP_INITIATEDBYHLINKFRAME        0x80000000
-#define SBSP_REDIRECT                     0x40000000
-
-#define SBSP_WRITENOHISTORY     0x08000000
-#define SBSP_NOAUTOSELECT       0x04000000
-
-
-//
-// Values for id parameter of ISB::GetWindow/SendControlMsg members.
-//
-// WARNING:
-//  Any shell extensions which sends messages to those control windows
-// might not work in the future version of windows. If you really need
-// to send messages to them, (1) don't assume that those control window
-// always exist (i.e. GetControlWindow may fail) and (2) verify the window
-// class of the window before sending any messages.
-//
-#define FCW_STATUS      0x0001
-#define FCW_TOOLBAR     0x0002
-#define FCW_TREE        0x0003
-#define FCW_INTERNETBAR 0x0006
-#define FCW_PROGRESS    0x0008
-
-#if (_WIN32_IE >= 0x0400)
-#endif
-
-//
-// Values for uFlags paremeter of ISB::SetToolbarItems member.
-//
-#define FCT_MERGE       0x0001
-#define FCT_CONFIGABLE  0x0002
-#define FCT_ADDTOEND    0x0004
-
-
-#undef  INTERFACE
-#define INTERFACE   IShellBrowser
-
-DECLARE_INTERFACE_(IShellBrowser, IOleWindow)
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-    STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-    // *** IOleWindow methods ***
-    STDMETHOD(GetWindow) (THIS_ HWND * lphwnd) PURE;
-    STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
-
-    // *** IShellBrowser methods *** (same as IOleInPlaceFrame)
-    STDMETHOD(InsertMenusSB)(THIS_ HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths) PURE;
-    STDMETHOD(SetMenuSB)(THIS_ HMENU hmenuShared, HOLEMENU holemenuRes, HWND hwndActiveObject) PURE;
-    STDMETHOD(RemoveMenusSB) (THIS_ HMENU hmenuShared) PURE;
-    STDMETHOD(SetStatusTextSB) (THIS_ LPCOLESTR pszStatusText) PURE;
-    STDMETHOD(EnableModelessSB) (THIS_ BOOL fEnable) PURE;
-    STDMETHOD(TranslateAcceleratorSB) (THIS_ MSG *pmsg, WORD wID) PURE;
-
-    // *** IShellBrowser methods ***
-    STDMETHOD(BrowseObject)(THIS_ LPCITEMIDLIST pidl, UINT wFlags) PURE;
-    STDMETHOD(GetViewStateStream)(THIS_ DWORD grfMode, IStream **ppStrm) PURE;
-    STDMETHOD(GetControlWindow)(THIS_ UINT id, HWND * lphwnd) PURE;
-    STDMETHOD(SendControlMsg)(THIS_ UINT id, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *pret) PURE;
-    STDMETHOD(QueryActiveShellView)(THIS_ struct IShellView **ppshv) PURE;
-    STDMETHOD(OnViewWindowActive)(THIS_ struct IShellView *ppshv) PURE;
-    STDMETHOD(SetToolbarItems)(THIS_ LPTBBUTTON lpButtons, UINT nButtons, UINT uFlags) PURE;
-};
-#define __IShellBrowser_INTERFACE_DEFINED__
-
-typedef IShellBrowser * LPSHELLBROWSER;
-
-enum {
-    SBSC_HIDE = 0,
-    SBSC_SHOW = 1,
-    SBSC_TOGGLE = 2,
-    SBSC_QUERY =  3
-};
-
-enum {
-        SBO_DEFAULT = 0 ,
-        SBO_NOBROWSERPAGES = 1
-};
-
 
 //-------------------------------------------------------------------------
 // ICommDlgBrowser interface
@@ -2231,6 +1579,7 @@ enum {
 #define CDBOSC_KILLFOCUS    0x00000001
 #define CDBOSC_SELCHANGE    0x00000002
 #define CDBOSC_RENAME       0x00000003
+#define CDBOSC_STATECHANGE  0x00000004
 
 #undef  INTERFACE
 #define INTERFACE   ICommDlgBrowser
@@ -2316,293 +1665,10 @@ DECLARE_INTERFACE_(ICommDlgBrowser2, IUnknown)
 typedef ICommDlgBrowser2 * LPCOMMDLGBROWSER2;
 
 
-//==========================================================================
-//
-// Interface:   IShellView
-//
-// IShellView::GetWindow(phwnd)
-//
-//   Inherited from IOleWindow::GetWindow.
-//
-//
-// IShellView::ContextSensitiveHelp(fEnterMode)
-//
-//   Inherited from IOleWindow::ContextSensitiveHelp.
-//
-//
-// IShellView::TranslateAccelerator(lpmsg)
-//
-//   Similar to IOleInPlaceActiveObject::TranlateAccelerator. The explorer
-//  calls this function BEFORE any other translation. Returning S_OK
-//  indicates that the message was translated (eaten) and should not be
-//  translated or dispatched by the explorer.
-//
-//
-// IShellView::EnableModeless(fEnable)
-//   Similar to IOleInPlaceActiveObject::EnableModeless.
-//
-//
-// IShellView::UIActivate(uState)
-//
-//   The explorer calls this member function whenever the activation
-//  state of the view window is changed by a certain event that is
-//  NOT caused by the shell view itself.
-//
-//   SVUIA_DEACTIVATE will be passed when the explorer is about to
-//  destroy the shell view window; the shell view is supposed to remove
-//  all the extended UIs (typically merged menu and modeless popup windows).
-//
-//   SVUIA_ACTIVATE_NOFOCUS will be passsed when the shell view is losing
-//  the input focus or the shell view has been just created without the
-//  input focus; the shell view is supposed to set menuitems appropriate
-//  for non-focused state (no selection specific items should be added).
-//
-//   SVUIA_ACTIVATE_FOCUS will be passed when the explorer has just
-//  created the view window with the input focus; the shell view is
-//  supposed to set menuitems appropriate for focused state.
-//
-//   SVUIA_INPLACEACTIVATE(new) will be passed when the shell view is opened
-//  within an ActiveX control, which is not a UI active. In this case,
-//  the shell view should not merge menus or put toolbas. To be compatible
-//  with Win95 client, we don't pass this value unless the view supports
-//  IShellView2.
-//
-//   The shell view should not change focus within this member function.
-//  The shell view should not hook the WM_KILLFOCUS message to remerge
-//  menuitems. However, the shell view typically hook the WM_SETFOCUS
-//  message, and re-merge the menu after calling IShellBrowser::
-//  OnViewWindowActivated.
-//
-//   One of the ACTIVATE / INPLACEACTIVATE messages will be sent when
-//  the view window becomes the currently displayed view.  On Win95 systems,
-//  this will happen immediately after the CreateViewWindow call.  On IE4, Win98,
-//  and NT5 systems this may happen when the view reports it is ready (if the
-//  IShellView supports async creation).  This can be used as a hint as to when
-//  to make your view window visible.  Note: the Win95/Win98/NT4 common dialogs
-//  do not send either of these on creation.
-//
-//
-// IShellView::Refresh()
-//
-//   The explorer calls this member when the view needs to refresh its
-//  contents (such as when the user hits F5 key).
-//
-//
-// IShellView::CreateViewWindow
-//
-//   This member creates the view window (right-pane of the explorer or the
-//  client window of the folder window).
-//
-//
-// IShellView::DestroyViewWindow
-//
-//   This member destroys the view window.
-//
-//
-// IShellView::GetCurrentInfo
-//
-//   This member returns the folder settings.
-//
-//
-// IShellView::AddPropertySHeetPages
-//
-//   The explorer calls this member when it is opening the option property
-//  sheet. This allows the view to add additional pages to it.
-//
-//
-// IShellView::SaveViewState()
-//
-//   The explorer calls this member when the shell view is supposed to
-//  store its view settings. The shell view is supposed to get a view
-//  stream by calling IShellBrowser::GetViewStateStream and store the
-//  current view state into that stream.
-//
-//
-// IShellView::SelectItem(pidlItem, uFlags)
-//
-//   The explorer calls this member to change the selection state of
-//  item(s) within the shell view window.  If pidlItem is NULL and uFlags
-//  is SVSI_DESELECTOTHERS, all items should be deselected.
-//
-//-------------------------------------------------------------------------
 
 //
-// shellview select item flags
-//
-#define SVSI_DESELECT   0x0000
-#define SVSI_SELECT     0x0001
-#define SVSI_EDIT       0x0003  // includes select
-#define SVSI_DESELECTOTHERS 0x0004
-#define SVSI_ENSUREVISIBLE  0x0008
-#define SVSI_FOCUSED        0x0010
-#define SVSI_TRANSLATEPT    0x0020
-
-//
-// shellview get item object flags
-//
-#define SVGIO_BACKGROUND    0x00000000
-#define SVGIO_SELECTION     0x00000001
-#define SVGIO_ALLVIEW       0x00000002
-
-//
-// uState values for IShellView::UIActivate
-//
-typedef enum {
-    SVUIA_DEACTIVATE       = 0,
-    SVUIA_ACTIVATE_NOFOCUS = 1,
-    SVUIA_ACTIVATE_FOCUS   = 2,
-    SVUIA_INPLACEACTIVATE  = 3          // new flag for IShellView2
-} SVUIA_STATUS;
-
-#undef  INTERFACE
-#define INTERFACE   IShellView
-
-DECLARE_INTERFACE_(IShellView, IOleWindow)
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-    STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-    // *** IOleWindow methods ***
-    STDMETHOD(GetWindow) (THIS_ HWND * lphwnd) PURE;
-    STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
-
-    // *** IShellView methods ***
-    STDMETHOD(TranslateAccelerator) (THIS_ LPMSG lpmsg) PURE;
-#ifdef _FIX_ENABLEMODELESS_CONFLICT
-    STDMETHOD(EnableModelessSV) (THIS_ BOOL fEnable) PURE;
-#else
-    STDMETHOD(EnableModeless) (THIS_ BOOL fEnable) PURE;
-#endif
-    STDMETHOD(UIActivate) (THIS_ UINT uState) PURE;
-    STDMETHOD(Refresh) (THIS) PURE;
-
-    STDMETHOD(CreateViewWindow)(THIS_ IShellView  *lpPrevView,
-                    LPCFOLDERSETTINGS lpfs, IShellBrowser  * psb,
-                    RECT * prcView, HWND  *phWnd) PURE;
-    STDMETHOD(DestroyViewWindow)(THIS) PURE;
-    STDMETHOD(GetCurrentInfo)(THIS_ LPFOLDERSETTINGS lpfs) PURE;
-    STDMETHOD(AddPropertySheetPages)(THIS_ DWORD dwReserved,
-                    LPFNADDPROPSHEETPAGE lpfn, LPARAM lparam) PURE;
-    STDMETHOD(SaveViewState)(THIS) PURE;
-    STDMETHOD(SelectItem)(THIS_ LPCITEMIDLIST pidlItem, UINT uFlags) PURE;
-    STDMETHOD(GetItemObject)(THIS_ UINT uItem, REFIID riid,
-                    void **ppv) PURE;
-};
-
-typedef IShellView *LPSHELLVIEW;
-
-typedef GUID SHELLVIEWID;
-
-#define SV2GV_CURRENTVIEW ((UINT)-1)
-#define SV2GV_DEFAULTVIEW ((UINT)-2)
-
-#ifndef RC_INVOKED
-#include <pshpack8.h>
-#endif /* !RC_INVOKED */
-
-typedef struct _SV2CVW2_PARAMS
-{
-    DWORD cbSize;
-
-    IShellView *psvPrev;
-    FOLDERSETTINGS const *pfs;
-    IShellBrowser *psbOwner;
-    RECT *prcView;
-    SHELLVIEWID const *pvid;
-
-    HWND hwndView;
-} SV2CVW2_PARAMS;
-typedef SV2CVW2_PARAMS *LPSV2CVW2_PARAMS;
-
-#undef  INTERFACE
-#define INTERFACE   IShellView2
-
-DECLARE_INTERFACE_(IShellView2, IShellView)
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-    STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-    // *** IOleWindow methods ***
-    STDMETHOD(GetWindow) (THIS_ HWND * lphwnd) PURE;
-    STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
-
-    // *** IShellView methods ***
-    STDMETHOD(TranslateAccelerator) (THIS_ LPMSG lpmsg) PURE;
-#ifdef _FIX_ENABLEMODELESS_CONFLICT
-    STDMETHOD(EnableModelessSV) (THIS_ BOOL fEnable) PURE;
-#else
-    STDMETHOD(EnableModeless) (THIS_ BOOL fEnable) PURE;
-#endif
-    STDMETHOD(UIActivate) (THIS_ UINT uState) PURE;
-    STDMETHOD(Refresh) (THIS) PURE;
-
-    STDMETHOD(CreateViewWindow)(THIS_ IShellView  *lpPrevView,
-                    LPCFOLDERSETTINGS lpfs, IShellBrowser  * psb,
-                    RECT * prcView, HWND  *phWnd) PURE;
-    STDMETHOD(DestroyViewWindow)(THIS) PURE;
-    STDMETHOD(GetCurrentInfo)(THIS_ LPFOLDERSETTINGS lpfs) PURE;
-    STDMETHOD(AddPropertySheetPages)(THIS_ DWORD dwReserved,
-                    LPFNADDPROPSHEETPAGE lpfn, LPARAM lparam) PURE;
-    STDMETHOD(SaveViewState)(THIS) PURE;
-    STDMETHOD(SelectItem)(THIS_ LPCITEMIDLIST pidlItem, UINT uFlags) PURE;
-    STDMETHOD(GetItemObject)(THIS_ UINT uItem, REFIID riid,
-                    void **ppv) PURE;
-
-    // *** IShellView2 methods ***
-    STDMETHOD(GetView)(THIS_ SHELLVIEWID* pvid, ULONG uView) PURE;
-    STDMETHOD(CreateViewWindow2)(THIS_ LPSV2CVW2_PARAMS lpParams) PURE;
-    STDMETHOD(HandleRename)(THIS_ LPCITEMIDLIST pidlNew) PURE;
-    STDMETHOD(SelectAndPositionItem) (THIS_ LPCITEMIDLIST pidlItem,
-        UINT uFlags,POINT* point) PURE;
-};
-
-//-------------------------------------------------------------------------
-//
-// struct STRRET
-//
-// structure for returning strings from IShellFolder member functions
-//
-//-------------------------------------------------------------------------
-#define STRRET_WSTR     0x0000          // Use STRRET.pOleStr
-#define STRRET_OFFSET   0x0001          // Use STRRET.uOffset to Ansi
-#define STRRET_CSTR     0x0002          // Use STRRET.cStr
-
-#ifdef NONAMELESSUNION
-#define NAMELESS_MEMBER(member) DUMMYUNIONNAME.##member
-#else
-#define NAMELESS_MEMBER(member) member
-#endif
-
-
-typedef struct _STRRET
-{
-    UINT uType; // One of the STRRET_* values
-    union
-    {
-        LPWSTR          pOleStr;        // must be freed by caller of GetDisplayNameOf
-        LPSTR           pStr;           // NOT USED
-        UINT            uOffset;        // Offset into SHITEMID
-        char            cStr[MAX_PATH]; // Buffer to fill in (ANSI)
-    } DUMMYUNIONNAME;
-} STRRET, *LPSTRRET;
-
-#ifndef RC_INVOKED
-#include <poppack.h>   /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
-
-
-//-------------------------------------------------------------------------
-//
-// SHGetPathFromIDList
-//
-//  This function assumes the size of the buffer (MAX_PATH). The pidl
+// function assumes the size of the buffer (MAX_PATH). The pidl
 // should point to a file system object.
-//
-//-------------------------------------------------------------------------
 
 SHSTDAPI_(BOOL) SHGetPathFromIDListA(LPCITEMIDLIST pidl, LPSTR pszPath);
 SHSTDAPI_(BOOL) SHGetPathFromIDListW(LPCITEMIDLIST pidl, LPWSTR pszPath);
@@ -2619,6 +1685,9 @@ SHSTDAPI_(int) SHCreateDirectoryExW(HWND hwnd, LPCWSTR pszPath, SECURITY_ATTRIBU
 #else
 #define SHCreateDirectoryEx  SHCreateDirectoryExA
 #endif // !UNICODE
+
+SHSTDAPI SHOpenFolderAndSelectItems(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST *apidl, DWORD dwFlags);
+
 
 //-------------------------------------------------------------------------
 //
@@ -2645,22 +1714,31 @@ SHSTDAPI_(int) SHCreateDirectoryExW(HWND hwnd, LPCWSTR pszPath, SECURITY_ATTRIBU
 #define CSIDL_SENDTO                    0x0009        // <user name>\SendTo
 #define CSIDL_BITBUCKET                 0x000a        // <desktop>\Recycle Bin
 #define CSIDL_STARTMENU                 0x000b        // <user name>\Start Menu
+#define CSIDL_MYDOCUMENTS               0x000c        // logical "My Documents" desktop icon
+#define CSIDL_MYMUSIC                   0x000d        // "My Music" folder
+#define CSIDL_MYVIDEO                   0x000e        // "My Videos" folder
 #define CSIDL_DESKTOPDIRECTORY          0x0010        // <user name>\Desktop
 #define CSIDL_DRIVES                    0x0011        // My Computer
-#define CSIDL_NETWORK                   0x0012        // Network Neighborhood
+#define CSIDL_NETWORK                   0x0012        // Network Neighborhood (My Network Places)
 #define CSIDL_NETHOOD                   0x0013        // <user name>\nethood
 #define CSIDL_FONTS                     0x0014        // windows\fonts
 #define CSIDL_TEMPLATES                 0x0015
 #define CSIDL_COMMON_STARTMENU          0x0016        // All Users\Start Menu
-#define CSIDL_COMMON_PROGRAMS           0X0017        // All Users\Programs
+#define CSIDL_COMMON_PROGRAMS           0X0017        // All Users\Start Menu\Programs
 #define CSIDL_COMMON_STARTUP            0x0018        // All Users\Startup
 #define CSIDL_COMMON_DESKTOPDIRECTORY   0x0019        // All Users\Desktop
 #define CSIDL_APPDATA                   0x001a        // <user name>\Application Data
 #define CSIDL_PRINTHOOD                 0x001b        // <user name>\PrintHood
+
+#ifndef CSIDL_LOCAL_APPDATA
 #define CSIDL_LOCAL_APPDATA             0x001c        // <user name>\Local Settings\Applicaiton Data (non roaming)
+#endif // CSIDL_LOCAL_APPDATA
+
 #define CSIDL_ALTSTARTUP                0x001d        // non localized startup
 #define CSIDL_COMMON_ALTSTARTUP         0x001e        // non localized common startup
 #define CSIDL_COMMON_FAVORITES          0x001f
+
+#ifndef _SHFOLDER_H_
 #define CSIDL_INTERNET_CACHE            0x0020
 #define CSIDL_COOKIES                   0x0021
 #define CSIDL_HISTORY                   0x0022
@@ -2669,19 +1747,47 @@ SHSTDAPI_(int) SHCreateDirectoryExW(HWND hwnd, LPCWSTR pszPath, SECURITY_ATTRIBU
 #define CSIDL_SYSTEM                    0x0025        // GetSystemDirectory()
 #define CSIDL_PROGRAM_FILES             0x0026        // C:\Program Files
 #define CSIDL_MYPICTURES                0x0027        // C:\Program Files\My Pictures
+#endif // _SHFOLDER_H_
+
 #define CSIDL_PROFILE                   0x0028        // USERPROFILE
 #define CSIDL_SYSTEMX86                 0x0029        // x86 system directory on RISC
 #define CSIDL_PROGRAM_FILESX86          0x002a        // x86 C:\Program Files on RISC
+
+#ifndef _SHFOLDER_H_
 #define CSIDL_PROGRAM_FILES_COMMON      0x002b        // C:\Program Files\Common
+#endif // _SHFOLDER_H_
+
 #define CSIDL_PROGRAM_FILES_COMMONX86   0x002c        // x86 Program Files\Common on RISC
 #define CSIDL_COMMON_TEMPLATES          0x002d        // All Users\Templates
+
+#ifndef _SHFOLDER_H_
 #define CSIDL_COMMON_DOCUMENTS          0x002e        // All Users\Documents
 #define CSIDL_COMMON_ADMINTOOLS         0x002f        // All Users\Start Menu\Programs\Administrative Tools
 #define CSIDL_ADMINTOOLS                0x0030        // <user name>\Start Menu\Programs\Administrative Tools
-#define CSIDL_CONNECTIONS               0x0031        // Network and Dial-up Connections
+#endif // _SHFOLDER_H_
 
+#define CSIDL_CONNECTIONS               0x0031        // Network and Dial-up Connections
+#define CSIDL_COMMON_MUSIC              0x0035        // All Users\My Music
+#define CSIDL_COMMON_PICTURES           0x0036        // All Users\My Pictures
+#define CSIDL_COMMON_VIDEO              0x0037        // All Users\My Video
+#define CSIDL_RESOURCES                 0x0038        // Resource Direcotry
+
+#ifndef _SHFOLDER_H_
+#define CSIDL_RESOURCES_LOCALIZED       0x0039        // Localized Resource Direcotry
+#endif // _SHFOLDER_H_
+
+#define CSIDL_COMMON_OEM_LINKS          0x003a        // Links to All Users OEM specific apps
+#define CSIDL_CDBURN_AREA               0x003b        // USERPROFILE\Local Settings\Application Data\Microsoft\CD Burning
+// unused                               0x003c
+#define CSIDL_COMPUTERSNEARME           0x003d        // Computers Near Me (computered from Workgroup membership)
+
+#ifndef _SHFOLDER_H_
 #define CSIDL_FLAG_CREATE               0x8000        // combine with CSIDL_ value to force folder creation in SHGetFolderPath()
+#endif // _SHFOLDER_H_
+
 #define CSIDL_FLAG_DONT_VERIFY          0x4000        // combine with CSIDL_ value to return an unverified folder path
+#define CSIDL_FLAG_NO_ALIAS             0x1000        // combine with CSIDL_ value to insure non-alias versions of the pidl
+#define CSIDL_FLAG_PER_USER_INIT        0x0800        // combine with CSIDL_ value to indicate per-user init (eg. upgrade)
 #define CSIDL_FLAG_MASK                 0xFF00        // mask for all possible flag values
 
 
@@ -2713,6 +1819,13 @@ SHFOLDERAPI SHGetFolderPathW(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags,
 #endif // !UNICODE
 SHSTDAPI SHGetFolderLocation(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags, LPITEMIDLIST *ppidl);
 
+SHFOLDERAPI SHGetFolderPathAndSubDirA(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags, LPCSTR pszSubDir, LPSTR pszPath);
+SHFOLDERAPI SHGetFolderPathAndSubDirW(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags, LPCWSTR pszSubDir, LPWSTR pszPath);
+#ifdef UNICODE
+#define SHGetFolderPathAndSubDir  SHGetFolderPathAndSubDirW
+#else
+#define SHGetFolderPathAndSubDir  SHGetFolderPathAndSubDirA
+#endif // !UNICODE
 
 #endif      // _WIN32_IE >= 0x0500
 
@@ -2729,27 +1842,31 @@ SHSTDAPI SHGetFolderLocation(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags,
 
 typedef int (CALLBACK* BFFCALLBACK)(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData);
 
+#include <pshpack8.h>
+
 typedef struct _browseinfoA {
     HWND        hwndOwner;
     LPCITEMIDLIST pidlRoot;
-    LPSTR        pszDisplayName;	// Return display name of item selected.
-    LPCSTR       lpszTitle;			// text to go in the banner over the tree.
-    UINT         ulFlags;			// Flags that control the return stuff
+    LPSTR        pszDisplayName;        // Return display name of item selected.
+    LPCSTR       lpszTitle;                     // text to go in the banner over the tree.
+    UINT         ulFlags;                       // Flags that control the return stuff
     BFFCALLBACK  lpfn;
-    LPARAM       lParam;			// extra info that's passed back in callbacks
-    int          iImage;			// output var: where to return the Image index.
+    LPARAM       lParam;                        // extra info that's passed back in callbacks
+    int          iImage;                        // output var: where to return the Image index.
 } BROWSEINFOA, *PBROWSEINFOA, *LPBROWSEINFOA;
 
 typedef struct _browseinfoW {
     HWND        hwndOwner;
     LPCITEMIDLIST pidlRoot;
-    LPWSTR       pszDisplayName;	// Return display name of item selected.
-    LPCWSTR      lpszTitle;			// text to go in the banner over the tree.
-    UINT         ulFlags;			// Flags that control the return stuff
+    LPWSTR       pszDisplayName;        // Return display name of item selected.
+    LPCWSTR      lpszTitle;                     // text to go in the banner over the tree.
+    UINT         ulFlags;                       // Flags that control the return stuff
     BFFCALLBACK  lpfn;
-    LPARAM       lParam;			// extra info that's passed back in callbacks
-    int          iImage;			// output var: where to return the Image index.
+    LPARAM       lParam;                        // extra info that's passed back in callbacks
+    int          iImage;                        // output var: where to return the Image index.
 } BROWSEINFOW, *PBROWSEINFOW, *LPBROWSEINFOW;
+
+#include <poppack.h>        /* Return to byte packing */
 
 #ifdef UNICODE
 #define BROWSEINFO      BROWSEINFOW
@@ -2778,6 +1895,9 @@ typedef struct _browseinfoW {
 #define BIF_USENEWUI           (BIF_NEWDIALOGSTYLE | BIF_EDITBOX)
 
 #define BIF_BROWSEINCLUDEURLS  0x0080   // Allow URLs to be displayed or entered. (Requires BIF_USENEWUI)
+#define BIF_UAHINT             0x0100   // Add a UA hint to the dialog, in place of the edit box. May not be combined with BIF_EDITBOX
+#define BIF_NONEWFOLDERBUTTON  0x0200   // Do not add the "New Folder" button to the dialog.  Only applicable with BIF_NEWDIALOGSTYLE.
+#define BIF_NOTRANSLATETARGETS 0x0400   // don't traverse target as shortcut
 
 #define BIF_BROWSEFORCOMPUTER  0x1000  // Browsing for Computers.
 #define BIF_BROWSEFORPRINTER   0x2000  // Browsing for Printers
@@ -2789,6 +1909,7 @@ typedef struct _browseinfoW {
 #define BFFM_SELCHANGED         2
 #define BFFM_VALIDATEFAILEDA    3   // lParam:szPath ret:1(cont),0(EndDialog)
 #define BFFM_VALIDATEFAILEDW    4   // lParam:wzPath ret:1(cont),0(EndDialog)
+#define BFFM_IUNKNOWN           5   // provides IUnknown to client. lParam: IUnknown*
 
 // messages to browser
 #define BFFM_SETSTATUSTEXTA     (WM_USER + 100)
@@ -2796,6 +1917,8 @@ typedef struct _browseinfoW {
 #define BFFM_SETSELECTIONA      (WM_USER + 102)
 #define BFFM_SETSELECTIONW      (WM_USER + 103)
 #define BFFM_SETSTATUSTEXTW     (WM_USER + 104)
+#define BFFM_SETOKTEXT          (WM_USER + 105) // Unicode only
+#define BFFM_SETEXPANDED        (WM_USER + 106) // Unicode only
 
 SHSTDAPI_(LPITEMIDLIST) SHBrowseForFolderA(LPBROWSEINFOA lpbi);
 SHSTDAPI_(LPITEMIDLIST) SHBrowseForFolderW(LPBROWSEINFOW lpbi);
@@ -2827,196 +1950,37 @@ SHSTDAPI_(LPITEMIDLIST) SHBrowseForFolderW(LPBROWSEINFOW lpbi);
 SHSTDAPI SHLoadInProc(REFCLSID rclsid);
 
 
+#if _WIN32_IE >= 0x0600
+
 //-------------------------------------------------------------------------
 //
-// IEnumIDList interface
+// SHEnableServiceObject
 //
-//  IShellFolder::EnumObjects member returns an IEnumIDList object.
+//   Like SHLoadInProc, but gives control over the object's lifetime
+//  via fEnable parameter.  TRUE tells the shell to create the object
+//  and hold onto it, FALSE tells the shell to look for the previously
+//  created instance of the object and release it.
 //
 //-------------------------------------------------------------------------
 
-typedef struct IEnumIDList      *LPENUMIDLIST;
+SHSTDAPI SHEnableServiceObject(REFCLSID rclsid, BOOL fEnable);
 
-#undef  INTERFACE
-#define INTERFACE       IEnumIDList
+#endif
 
-DECLARE_INTERFACE_(IEnumIDList, IUnknown)
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-    STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IEnumIDList methods ***
-    STDMETHOD(Next)  (THIS_ ULONG celt,
-                      LPITEMIDLIST *rgelt,
-                      ULONG *pceltFetched) PURE;
-    STDMETHOD(Skip)  (THIS_ ULONG celt) PURE;
-    STDMETHOD(Reset) (THIS) PURE;
-    STDMETHOD(Clone) (THIS_ IEnumIDList **ppenum) PURE;
+//-------------------------------------------------------------------------
+//
+// Internet Shortcut Object
+//
+//-------------------------------------------------------------------------
+// Cmds for CGID_ShortCut
+enum {
+    ISHCUTCMDID_DOWNLOADICON  = 0,
+    ISHCUTCMDID_INTSHORTCUTCREATE = 1,
 };
+#define CMDID_INTSHORTCUTCREATE ISHCUTCMDID_INTSHORTCUTCREATE
 
 
-//-------------------------------------------------------------------------
-//
-// IShellFolder interface
-//
-//
-// [Member functions]
-//
-// IShellFolder::BindToObject(pidl, pbc, riid, ppv)
-//   This function returns an instance of a sub-folder which is specified
-//  by the IDList (pidl).
-//
-// IShellFolder::BindToStorage(pidl, pbc, riid, ppv)
-//   This function returns a storage instance of a sub-folder which is
-//  specified by the IDList (pidl). The shell never calls this member
-//  function in the first release of Win95.
-//
-// IShellFolder::CompareIDs(lParam, pidl1, pidl2)
-//   This function compares two IDLists and returns the result. The shell
-//  explorer always passes 0 as lParam, which indicates "sort by name".
-//  It should return 0 (as CODE of the scode), if two id indicates the
-//  same object; negative value if pidl1 should be placed before pidl2;
-//  positive value if pidl2 should be placed before pidl1.
-//
-// IShellFolder::CreateViewObject(hwndOwner, riid, ppv)
-//   This function creates a view object of the folder itself. The view
-//  object is a difference instance from the shell folder object.
-//   "hwndOwner" can be used  as the owner window of its dialog box or
-//  menu during the lifetime of the view object.
-//  instance which has only one reference count. The explorer may create
-//  more than one instances of view object from one shell folder object
-//  and treat them as separate instances.
-//
-// IShellFolder::GetAttributesOf(cidl, apidl, prgfInOut)
-//   This function returns the attributes of specified objects in that
-//  folder. "cidl" and "apidl" specifies objects. "apidl" contains only
-//  simple IDLists. The explorer initializes *prgfInOut with a set of
-//  flags to be evaluated. The shell folder may optimize the operation
-//  by not returning unspecified flags.
-//
-// IShellFolder::GetUIObjectOf(hwndOwner, cidl, apidl, riid, prgfInOut, ppv)
-//   This function creates a UI object to be used for specified objects.
-//  The shell explorer passes either IID_IDataObject (for transfer operation)
-//  or IID_IContextMenu (for context menu operation) as riid.
-//
-// IShellFolder::GetDisplayNameOf
-//   This function returns the display name of the specified object.
-//  If the ID contains the display name (in the locale character set),
-//  it returns the offset to the name. Otherwise, it returns a pointer
-//  to the display name string (UNICODE), which is allocated by the
-//  task allocator, or fills in a buffer.
-//
-// IShellFolder::SetNameOf
-//   This function sets the display name of the specified object.
-//  If it changes the ID as well, it returns the new ID which is
-//  alocated by the task allocator.
-//
-//-------------------------------------------------------------------------
-
-// IShellFolder::GetDisplayNameOf/SetNameOf uFlags
-typedef enum tagSHGDN
-{
-    SHGDN_NORMAL             = 0x0000,  // default (display purpose)
-    SHGDN_INFOLDER           = 0x0001,  // displayed under a folder (relative)
-    SHGDN_FOREDITING         = 0x1000,  // for in-place editing
-    SHGDN_FORADDRESSBAR      = 0x4000,  // UI friendly parsing name (remove ugly stuff)
-    SHGDN_FORPARSING         = 0x8000,  // parsing name for ParseDisplayName()
-} SHGNO;
-
-// IShellFolder::EnumObjects grfFlags bits
-typedef enum tagSHCONTF
-{
-    SHCONTF_FOLDERS             = 0x0020,   // only want folders enumerated (SHGAO_FOLDER)
-    SHCONTF_NONFOLDERS          = 0x0040,   // include non folders
-    SHCONTF_INCLUDEHIDDEN       = 0x0080,   // show items normally hidden
-    SHCONTF_INIT_ON_FIRST_NEXT  = 0x0100,   // allow EnumObject() to return before validating enum
-    SHCONTF_NETPRINTERSRCH      = 0x0200,   // hint that client is looking for printers
-    SHCONTF_SHAREABLE           = 0x0400,   // hint that client is looking sharable resources (remote shares)
-} SHCONTF;
-
-// IShellFolder::CompareIDs lParam flags
-
-#define SHCIDS_ALLFIELDS        0x80000000L
-#define SHCIDS_COLUMNMASK       0x0000FFFFL
-
-// IShellFolder::GetAttributesOf flags
-// DESCRIPTION:
-// 	 SFGAO_CANLINK: If this bit is set on an item in the shell folder, a
-//            "Create Shortcut" menu item will be added to the File
-//            menu and context menus for the item.  If the user selects
-//            that command, your IContextMenu::InvokeCommand() will be called
-//            with 'link'.
-//            	 That flag will also be used to determine if "Create Shortcut"
-//            should be added when the item in your folder is dragged to another
-//            folder.
-#define SFGAO_CANCOPY           DROPEFFECT_COPY // Objects can be copied    (0x1)
-#define SFGAO_CANMOVE           DROPEFFECT_MOVE // Objects can be moved     (0x2)
-#define SFGAO_CANLINK           DROPEFFECT_LINK // Objects can be linked    (0x4)
-#define SFGAO_CANRENAME         0x00000010L     // Objects can be renamed
-#define SFGAO_CANDELETE         0x00000020L     // Objects can be deleted
-#define SFGAO_HASPROPSHEET      0x00000040L     // Objects have property sheets
-#define SFGAO_DROPTARGET        0x00000100L     // Objects are drop target
-#define SFGAO_CAPABILITYMASK    0x00000177L
-#define SFGAO_LINK              0x00010000L     // Shortcut (link)
-#define SFGAO_SHARE             0x00020000L     // shared
-#define SFGAO_READONLY          0x00040000L     // read-only
-#define SFGAO_GHOSTED           0x00080000L     // ghosted icon
-#define SFGAO_HIDDEN            0x00080000L     // hidden object
-#define SFGAO_DISPLAYATTRMASK   0x000F0000L
-#define SFGAO_FILESYSANCESTOR   0x10000000L     // It contains file system folder
-#define SFGAO_FOLDER            0x20000000L     // It's a folder.
-#define SFGAO_FILESYSTEM        0x40000000L     // is a file system thing (file/folder/root)
-#define SFGAO_HASSUBFOLDER      0x80000000L     // Expandable in the map pane
-#define SFGAO_CONTENTSMASK      0x80000000L
-#define SFGAO_VALIDATE          0x01000000L     // invalidate cached information
-#define SFGAO_REMOVABLE         0x02000000L     // is this removeable media?
-#define SFGAO_COMPRESSED        0x04000000L     // Object is compressed (use alt color)
-#define SFGAO_BROWSABLE         0x08000000L     // is in-place browsable
-#define SFGAO_NONENUMERATED     0x00100000L     // is a non-enumerated object
-#define SFGAO_NEWCONTENT        0x00200000L     // should show bold in explorer tree
-#define SFGAO_CANMONIKER        0x00400000L     // can create monikers for its objects
-
-
-// IShellFolder IBindCtx* parameters. the IUnknown for these are
-// accessed through IBindCtx::RegisterObjectParam/GetObjectParam
-
-// this object will support IPersist to query a CLSID that should be skipped
-// in the binding process. this is to avoid loops or to allow delegation to
-// base name space functionality. see SHSkipJunction()
-
-#define STR_SKIP_BINDING_CLSID      L"Skip Binding CLSID"
-
-#undef  INTERFACE
-#define INTERFACE       IShellFolder
-
-DECLARE_INTERFACE_(IShellFolder, IUnknown)
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-    STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-    // *** IShellFolder methods ***
-    STDMETHOD(ParseDisplayName)(THIS_ HWND hwnd, LPBC pbc, LPOLESTR pszDisplayName,
-                                ULONG *pchEaten, LPITEMIDLIST *ppidl, ULONG *pdwAttributes) PURE;
-
-    STDMETHOD(EnumObjects)(THIS_ HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList) PURE;
-
-    STDMETHOD(BindToObject)(THIS_ LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv) PURE;
-    STDMETHOD(BindToStorage)(THIS_ LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv) PURE;
-    STDMETHOD(CompareIDs)(THIS_ LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2) PURE;
-    STDMETHOD(CreateViewObject)(THIS_ HWND hwndOwner, REFIID riid, void **ppv) PURE;
-    STDMETHOD(GetAttributesOf)(THIS_ UINT cidl, LPCITEMIDLIST * apidl, ULONG * rgfInOut) PURE;
-    STDMETHOD(GetUIObjectOf)(THIS_ HWND hwndOwner, UINT cidl, LPCITEMIDLIST * apidl,
-                             REFIID riid, UINT * prgfInOut, void **ppv) PURE;
-    STDMETHOD(GetDisplayNameOf)(THIS_ LPCITEMIDLIST pidl, DWORD uFlags, LPSTRRET lpName) PURE;
-    STDMETHOD(SetNameOf)(THIS_ HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName,
-                         DWORD uFlags, LPITEMIDLIST *ppidlOut) PURE;
-};
-
-typedef IShellFolder * LPSHELLFOLDER;
 
 //
 //  Helper function which returns a IShellFolder interface to the desktop
@@ -3052,14 +2016,6 @@ DECLARE_INTERFACE_(IFileSystemBindData, IUnknown)
     STDMETHOD(GetFindData)(THIS_ WIN32_FIND_DATAW *pfd) PURE;
 };
 
-
-typedef struct _SHELLDETAILS
-{
-    int     fmt;            // LVCFMT_* value (header only)
-    int     cxChar;         // Number of "average" characters (header only)
-    STRRET  str;            // String information
-} SHELLDETAILS, *LPSHELLDETAILS;
-
 #undef  INTERFACE
 #define INTERFACE   IShellDetails
 
@@ -3076,154 +2032,6 @@ DECLARE_INTERFACE_(IShellDetails, IUnknown)
 };
 
 
-#if (_WIN32_IE >= 0x0500)
-
-//-------------------------------------------------------------------------
-//
-// IEnumExtraSearch interface
-//
-//  IShellFolder2::EnumSearches member returns an IEnumExtraSearch object.
-//
-//-------------------------------------------------------------------------
-
-typedef struct tagEXTRASEARCH
-{
-    GUID    guidSearch;
-    WCHAR   wszFriendlyName[80];
-    WCHAR   wszUrl[2084];
-}EXTRASEARCH, *LPEXTRASEARCH;
-
-typedef struct IEnumExtraSearch *LPENUMEXTRASEARCH;
-
-#undef  INTERFACE
-#define INTERFACE       IEnumExtraSearch
-
-DECLARE_INTERFACE_(IEnumExtraSearch, IUnknown)
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-    STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-    // *** IEnumExtraSearch methods ***
-    STDMETHOD(Next)  (THIS_ ULONG celt, EXTRASEARCH *rgelt, ULONG *pceltFetched) PURE;
-    STDMETHOD(Skip)  (THIS_ ULONG celt) PURE;
-    STDMETHOD(Reset) (THIS) PURE;
-    STDMETHOD(Clone) (THIS_ IEnumExtraSearch **ppenum) PURE;
-};
-
-//--------------------------------------------------------------------------
-// IShellFolder2
-//
-// [member functions]
-//
-// IShellFolder2::GetDefaultSearchGUID(LPGUID pGuid)
-//   Returns the guid of the search that is to be invoked when user clicks
-//   on the search toolbar button
-//
-// IShellFolder2::EnumSearches(IEnumExtraSearch **ppenum)
-//   gives an enumerator of the searches to be added to the search menu
-//--------------------------------------------------------------------------
-
-// IShellFolder2::GetDefaultColumnState values
-typedef enum {
-    SHCOLSTATE_TYPE_STR     = 0x00000001,
-    SHCOLSTATE_TYPE_INT     = 0x00000002,
-    SHCOLSTATE_TYPE_DATE    = 0x00000003,
-    SHCOLSTATE_TYPEMASK     = 0x0000000F,
-    SHCOLSTATE_ONBYDEFAULT  = 0x00000010,   // should on by default in details view
-    SHCOLSTATE_SLOW         = 0x00000020,   // will be slow to compute, do on a background thread
-    SHCOLSTATE_EXTENDED     = 0x00000040,   // provided by a handler, not the folder
-    SHCOLSTATE_SECONDARYUI  = 0x00000080,   // not displayed in context menu, but listed in the "More..." dialog
-    SHCOLSTATE_HIDDEN       = 0x00000100,   // not displayed in the UI
-} SHCOLSTATE;
-
-typedef struct {
-    GUID fmtid;
-    DWORD pid;
-} SHCOLUMNID, *LPSHCOLUMNID;
-typedef const SHCOLUMNID* LPCSHCOLUMNID;
-
-#undef  INTERFACE
-#define INTERFACE       IShellFolder2
-
-DECLARE_INTERFACE_(IShellFolder2, IShellFolder)
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef)(THIS)  PURE;
-    STDMETHOD_(ULONG,Release)(THIS) PURE;
-
-    // *** IShellFolder methods ***
-    STDMETHOD(ParseDisplayName)(THIS_ HWND hwnd, LPBC pbc, LPOLESTR pszDisplayName,
-                                ULONG *pchEaten, LPITEMIDLIST *ppidl, ULONG *pdwAttributes) PURE;
-    STDMETHOD(EnumObjects)(THIS_ HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList) PURE;
-    STDMETHOD(BindToObject)(THIS_ LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv) PURE;
-    STDMETHOD(BindToStorage)(THIS_ LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv) PURE;
-    STDMETHOD(CompareIDs)(THIS_ LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2) PURE;
-    STDMETHOD(CreateViewObject)(THIS_ HWND hwnd, REFIID riid, void **ppv) PURE;
-    STDMETHOD(GetAttributesOf)(THIS_ UINT cidl, LPCITEMIDLIST * apidl, ULONG * drgfInOut) PURE;
-    STDMETHOD(GetUIObjectOf)(THIS_ HWND hwnd, UINT cidl, LPCITEMIDLIST * apidl,
-                             REFIID riid, UINT * prgfInOut, void **ppv) PURE;
-    STDMETHOD(GetDisplayNameOf)(THIS_ LPCITEMIDLIST pidl, DWORD uFlags, STRRET *psr) PURE;
-    STDMETHOD(SetNameOf)(THIS_ HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName,
-                         DWORD uFlags, LPITEMIDLIST *ppidl) PURE;
-
-    // *** IShellFolder2 methods ***
-    STDMETHOD(GetDefaultSearchGUID)(THIS_ GUID *pguid) PURE;
-    STDMETHOD(EnumSearches)(THIS_ IEnumExtraSearch **ppenum) PURE;
-    STDMETHOD(GetDefaultColumn) (THIS_ DWORD dwRes, ULONG *pSort, ULONG *pDisplay) PURE;
-    STDMETHOD(GetDefaultColumnState)(THIS_ UINT iColumn, DWORD *pcsFlags) PURE;
-    STDMETHOD(GetDetailsEx)(THIS_ LPCITEMIDLIST pidl, const SHCOLUMNID *pscid, VARIANT *pv) PURE;
-    STDMETHOD(GetDetailsOf)(THIS_ LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *psd) PURE;
-    STDMETHOD(MapColumnToSCID)(THIS_ UINT iColumn, SHCOLUMNID *pscid) PURE;
-};
-
-#endif
-
-
-
-//-------------------------------------------------------------------------
-//
-// ITaskbarList interface
-//
-//
-// [Member functions]
-//
-// ITaskbarList::HrInit()
-//   This function must be called first to validate use of other members.
-//
-// ITaskbarList::AddTab(hwnd)
-//   This function adds a tab for hwnd to the taskbar.
-//
-// ITaskbarList::DeleteTab(hwnd)
-//   This function deletes a tab for hwnd from the taskbar.
-//
-// ITaskbarList::ActivateTab(hwnd)
-//   This function activates the tab associated with hwnd on the taskbar.
-//
-// ITaskbarList::SetActivateAlt(hwnd)
-//   This function marks hwnd in the taskbar as the active tab
-//
-//-------------------------------------------------------------------------
-
-#undef INTERFACE
-#define INTERFACE ITaskbarList
-
-DECLARE_INTERFACE_(ITaskbarList, IUnknown)
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG, AddRef) (THIS) PURE;
-    STDMETHOD_(ULONG, Release) (THIS) PURE;
-
-    // *** ITaskbarList specific methods ***
-    STDMETHOD(HrInit) (THIS) PURE;
-    STDMETHOD(AddTab) (THIS_ HWND hwnd) PURE;
-    STDMETHOD(DeleteTab) (THIS_ HWND hwnd) PURE;
-    STDMETHOD(ActivateTab) (THIS_ HWND hwnd) PURE;
-    STDMETHOD(SetActiveAlt) (THIS_ HWND hwnd) PURE;
-};
 
 //-------------------------------------------------------------------------
 //
@@ -3341,7 +2149,7 @@ DECLARE_INTERFACE_(IACList, IUnknown)
 // IACList2 interface
 //
 // [Description]
-//		This interface exists to allow the caller to set filter criteria
+//              This interface exists to allow the caller to set filter criteria
 // for an AutoComplete List.  AutoComplete Lists generates the list of
 // possible AutoComplete completions.  CLSID_ACListISF is one AutoComplete
 // List COM object that implements this interface.
@@ -3358,6 +2166,7 @@ typedef enum _tagAUTOCOMPLETELISTOPTIONS
     ACLO_DESKTOP         = 4,    // enumerate Desktop Folder
     ACLO_FAVORITES       = 8,    // enumerate Favorites Folder
     ACLO_FILESYSONLY     = 16,   // enumerate only the file system
+    ACLO_FILESYSDIRS     = 32,   // enumerate only the file system dirs, UNC shares, and UNC servers.
 } AUTOCOMPLETELISTOPTIONS;
 
 DECLARE_INTERFACE_(IACList2, IACList)
@@ -3633,138 +2442,6 @@ DECLARE_INTERFACE_(IDockingWindowFrame, IOleWindow)
 
 
 
-//-------------------------------------------------------------------------
-//
-// IDockingWindow interface
-//
-//   An object (docking window) implements this interface so the site can
-// communicate with it.  An example of a docking window is a toolbar.
-//
-// [Member functions]
-//
-// IDockingWindow::ShowDW(fShow)
-//   Shows or hides the docking window.
-//
-// IDockingWindow::CloseDW(dwReserved)
-//   Closes the docking window.  dwReserved must be 0.
-//
-// IDockingWindow::ResizeBorderDW(prcBorder, punkToolbarSite, fReserved)
-//   Resizes the docking window's border to *prcBorder.  fReserved must
-//   be 0.
-// IObjectWithSite::SetSite(punkSite)
-//   IDockingWindow usually paired with IObjectWithSite.
-//   Provides the IUnknown pointer of the site to the docking window.
-//
-//
-//-------------------------------------------------------------------------
-
-
-#undef  INTERFACE
-#define INTERFACE   IDockingWindow
-
-DECLARE_INTERFACE_(IDockingWindow, IOleWindow)
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-    STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-    // *** IOleWindow methods ***
-    STDMETHOD(GetWindow) (THIS_ HWND * lphwnd) PURE;
-    STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
-
-    // *** IDockingWindow methods ***
-    STDMETHOD(ShowDW)         (THIS_ BOOL fShow) PURE;
-    STDMETHOD(CloseDW)        (THIS_ DWORD dwReserved) PURE;
-    STDMETHOD(ResizeBorderDW) (THIS_ LPCRECT   prcBorder,
-                                     IUnknown* punkToolbarSite,
-                                     BOOL      fReserved) PURE;
-};
-
-
-//-------------------------------------------------------------------------
-//
-// IDeskBand interface
-//
-//
-// [Member functions]
-//
-// IDeskBand::GetBandInfo(dwBandID, dwViewMode, pdbi)
-//   Returns info on the given band in *pdbi, according to the mask
-//   field in the DESKBANDINFO structure and the given viewmode.
-//
-//-------------------------------------------------------------------------
-
-
-// Mask values for DESKBANDINFO
-#define DBIM_MINSIZE    0x0001
-#define DBIM_MAXSIZE    0x0002
-#define DBIM_INTEGRAL   0x0004
-#define DBIM_ACTUAL     0x0008
-#define DBIM_TITLE      0x0010
-#define DBIM_MODEFLAGS  0x0020
-#define DBIM_BKCOLOR    0x0040
-
-typedef struct {
-    DWORD       dwMask;
-    POINTL      ptMinSize;
-    POINTL      ptMaxSize;
-    POINTL      ptIntegral;
-    POINTL      ptActual;
-    WCHAR       wszTitle[256];
-    DWORD       dwModeFlags;
-    COLORREF    crBkgnd;
-} DESKBANDINFO;
-
-// DESKBANDINFO dwModeFlags values
-#define DBIMF_NORMAL            0x0000
-#define DBIMF_VARIABLEHEIGHT    0x0008
-#define DBIMF_DEBOSSED          0x0020
-#define DBIMF_BKCOLOR           0x0040
-
-// GetBandInfo view mode values
-#define DBIF_VIEWMODE_NORMAL         0x0000
-#define DBIF_VIEWMODE_VERTICAL       0x0001
-#define DBIF_VIEWMODE_FLOATING       0x0002
-#define DBIF_VIEWMODE_TRANSPARENT    0x0004
-
-#undef  INTERFACE
-#define INTERFACE   IDeskBand
-
-DECLARE_INTERFACE_(IDeskBand, IDockingWindow)
-{
-    // *** IUnknown methods ***
-    STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-    STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-    // *** IOleWindow methods ***
-    STDMETHOD(GetWindow) (THIS_ HWND * lphwnd) PURE;
-    STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
-
-    // *** IDockingWindow methods ***
-    STDMETHOD(ShowDW)         (THIS_ BOOL fShow) PURE;
-    STDMETHOD(CloseDW)        (THIS_ DWORD dwReserved) PURE;
-    STDMETHOD(ResizeBorderDW) (THIS_ LPCRECT   prcBorder,
-                                     IUnknown* punkToolbarSite,
-                                     BOOL      fReserved) PURE;
-    // *** IDeskBand methods ***
-    STDMETHOD(GetBandInfo)    (THIS_ DWORD dwBandID, DWORD dwViewMode,
-                                DESKBANDINFO* pdbi) PURE;
-
-};
-
-// Command Target IDs
-enum {
-    DBID_BANDINFOCHANGED    = 0,
-    DBID_SHOWONLY           = 1,
-    DBID_MAXIMIZEBAND       = 2,      // Maximize the specified band (VT_UI4 == dwID)
-    DBID_PUSHCHEVRON        = 3,
-    DBID_DELAYINIT          = 4,      // Note: _bandsite_ calls _band_ with this code
-    DBID_FINISHINIT         = 5,      // Note: _bandsite_ calls _band_ with this code
-};
-
-
 #if (_WIN32_IE >= 0x0400)
 
 //-------------------------------------------------------------------------
@@ -3824,89 +2501,22 @@ typedef IRunnableTask * LPRUNNABLETASK;
 
 #if (_WIN32_IE >= 0x0400)
 
-// --- IExtractImage
-// this interface is provided for objects to provide a thumbnail image.
-// IExtractImage::GetLocation()
-//      Gets a path description of the image that is to be extracted. This is used to
-//      identify the image in the view so that multiple instances of the same image can reuse the
-//      original image. If *pdwFlags == IEIFLAG_ASYNC and the result is E_PENDING, then *pdwPriority
-//      is used to return the priority of the item, this is usually a measure of how long it will take
-//      to perform the extraction. *pdwFlags can return IEIFLAG_CACHE if the view should cache a copy
-//      of the image for future reference and faster access. This flag is use dto tell the difference
-//      between file formats that cache a thumbnail image  such as Flashpix or Office documents, and those
-//      that don't cache one.
-// IExtractImage::Extract()
-//      Extract the thumbnail of the specified size. If GetLocation() returned the values indicating
-//      it is free-threaded and can be placed on a background thread. If the object
-//      supports IRunnableTask as well, then long extractions can be started and paused as appropriate.
-//      At this point it is asssumed the object is free-threaded.
-//      If dwRecClrDepth contains a recommended Colour depth
-//      If *phBmpthumbnail is non NULL, then it contains the destination bitmap that should be used.
-
-#define IEI_PRIORITY_MAX        ITSAT_MAX_PRIORITY
-#define IEI_PRIORITY_MIN        ITSAT_MIN_PRIORITY
-#define IEIT_PRIORITY_NORMAL     ITSAT_DEFAULT_PRIORITY
-
-#define IEIFLAG_ASYNC       0x0001      // ask the extractor if it supports ASYNC extract (free threaded)
-#define IEIFLAG_CACHE       0x0002      // returned from the extractor if it does NOT cache the thumbnail
-#define IEIFLAG_ASPECT      0x0004      // passed to the extractor to beg it to render to the aspect ratio of the supplied rect
-#define IEIFLAG_OFFLINE     0x0008      // if the extractor shouldn't hit the net to get any content neede for the rendering
-#define IEIFLAG_GLEAM       0x0010      // does the image have a gleam ? this will be returned if it does
-#define IEIFLAG_SCREEN      0x0020      // render as if for the screen  (this is exlusive with IEIFLAG_ASPECT )
-#define IEIFLAG_ORIGSIZE    0x0040      // render to the approx size passed, but crop if neccessary
-
-#undef  INTERFACE
-#define INTERFACE   IExtractImage
-
-DECLARE_INTERFACE_ ( IExtractImage, IUnknown )
-{
-    // IUnknown methods
-    STDMETHOD (QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG, AddRef) ( THIS ) PURE;
-    STDMETHOD_(ULONG, Release) ( THIS ) PURE;
-
-    // *** IExtractImage methods ***
-    STDMETHOD (GetLocation) ( THIS_ LPWSTR pszPathBuffer,
-                              DWORD cch,
-                              DWORD * pdwPriority,
-                              const SIZE * prgSize,
-                              DWORD dwRecClrDepth,
-                              DWORD *pdwFlags ) PURE;
-
-    STDMETHOD (Extract)( THIS_ HBITMAP * phBmpThumbnail) PURE;
-};
-typedef IExtractImage * LPEXTRACTIMAGE;
-
-
-/* ***************** IExtractImage2
- * GetDateStamp : returns the date stamp associated with the image. If this image is already cached,
- *                then it is easy to find out if the image is out of date.
+/* ***************** IThumbnailCapture
+ * CaptureThumbnail : takes an IHTMLDocument2 and returns a thumbnail of specified
+ *                    size as an hbitmap
  */
 
 #undef  INTERFACE
-#define INTERFACE   IExtractImage
+#define INTERFACE   IThumbnailCapture
 
-DECLARE_INTERFACE_ ( IExtractImage2, IExtractImage )
+DECLARE_INTERFACE_ ( IThumbnailCapture, IUnknown )
 {
-    // IUnknown methods
-    STDMETHOD (QueryInterface)(THIS_ REFIID riid, void **ppv) PURE;
-    STDMETHOD_(ULONG, AddRef) ( THIS ) PURE;
-    STDMETHOD_(ULONG, Release) ( THIS ) PURE;
-
-    // *** IExtractImage methods ***
-    STDMETHOD (GetLocation) ( THIS_ LPWSTR pszPathBuffer,
-                              DWORD cch,
-                              DWORD * pdwPriority,
-                              const SIZE * prgSize,
-                              DWORD dwRecClrDepth,
-                              DWORD *pdwFlags ) PURE;
-
-    STDMETHOD (Extract)( THIS_ HBITMAP * phBmpThumbnail) PURE;
-
-    // *** IExtractImage2 methods ***
-    STDMETHOD (GetDateStamp)( FILETIME * pDateStamp ) PURE;
+    // *** IThumbnailCapture methods ***
+    STDMETHOD (CaptureThumbnail)    ( THIS_ const SIZE * pMaxSize,
+                                      IUnknown * pHTMLDoc2,
+                                      HBITMAP * phbmThumbnail ) PURE;
 };
-typedef IExtractImage2 * LPEXTRACTIMAGE2;
+typedef IThumbnailCapture * LPTHUMBNAILCAPTURE;
 
 #endif
 
@@ -4162,12 +2772,7 @@ typedef IActiveDesktop * LPACTIVEDESKTOP;
 #define MAX_COLUMN_NAME_LEN 80
 #define MAX_COLUMN_DESC_LEN 128
 
-typedef struct {
-    ULONG   dwFlags ;             // initialization flags
-    ULONG   dwReserved ;          // reserved for future use.
-    WCHAR   wszFolder[MAX_PATH];  // fully qualified folder path (or empty if multiple folders)
-} SHCOLUMNINIT, *LPSHCOLUMNINIT;
-typedef const SHCOLUMNINIT* LPCSHCOLUMNINIT;
+#include <pshpack1.h>
 
 typedef struct {
     SHCOLUMNID  scid;                           // OUT the unique identifier of this column
@@ -4177,19 +2782,32 @@ typedef struct {
     DWORD       csFlags;                        // OUT SHCOLSTATE flags
     WCHAR wszTitle[MAX_COLUMN_NAME_LEN];        // OUT the title of the column
     WCHAR wszDescription[MAX_COLUMN_DESC_LEN];  // OUT full description of this column
-} SHCOLUMNINFO, *LPSHCOLUMNINFO ;
-typedef const SHCOLUMNINFO* LPCSHCOLUMNINFO ;
+} SHCOLUMNINFO, *LPSHCOLUMNINFO;
+typedef const SHCOLUMNINFO* LPCSHCOLUMNINFO;
+
+#include <poppack.h>        /* Return to default */
+
+#include <pshpack8.h>
+
+typedef struct {
+    ULONG   dwFlags;              // initialization flags
+    ULONG   dwReserved;           // reserved for future use.
+    WCHAR   wszFolder[MAX_PATH];  // fully qualified folder path (or empty if multiple folders)
+} SHCOLUMNINIT, *LPSHCOLUMNINIT;
+typedef const SHCOLUMNINIT* LPCSHCOLUMNINIT;
 
 #define SHCDF_UPDATEITEM        0x00000001      // this flag is a hint that the file has changed since the last call to GetItemData
 
 typedef struct {
-    ULONG   dwFlags ;            // combination of SHCDF_ flags.
-    DWORD   dwFileAttributes ;   // file attributes.
-    ULONG   dwReserved ;         // reserved for future use.
-    WCHAR*  pwszExt ;            // address of file name extension
-    WCHAR   wszFile[MAX_PATH] ;  // Absolute path of file.
-} SHCOLUMNDATA, *LPSHCOLUMNDATA ;
-typedef const SHCOLUMNDATA* LPCSHCOLUMNDATA ;
+    ULONG   dwFlags;             // combination of SHCDF_ flags.
+    DWORD   dwFileAttributes;    // file attributes.
+    ULONG   dwReserved;          // reserved for future use.
+    WCHAR*  pwszExt;             // address of file name extension
+    WCHAR   wszFile[MAX_PATH];   // Absolute path of file.
+} SHCOLUMNDATA, *LPSHCOLUMNDATA;
+typedef const SHCOLUMNDATA* LPCSHCOLUMNDATA;
+
+#include <poppack.h>        /* Return to byte packing */
 
 #undef INTERFACE
 #define INTERFACE IColumnProvider
@@ -4269,7 +2887,8 @@ DECLARE_INTERFACE_(IColumnProvider, IUnknown)
 //     method passing FALSE. After the window is done painting, Show the image
 //     again by passing TRUE.
 
-// This is sent to a window to get the rendered images to a bitmap
+#include <pshpack8.h>
+
 typedef struct
 {
     SIZE        sizeDragImage;      // OUT - The length and Width of the
@@ -4282,6 +2901,9 @@ typedef struct
                                     //        to the background of the images
 } SHDRAGIMAGE, *LPSHDRAGIMAGE;
 
+#include <poppack.h>        /* Return to byte packing */
+
+// This is sent to a window to get the rendered images to a bitmap
 // Call RegisterWindowMessage to get the ID
 #define DI_GETDRAGIMAGE     TEXT("ShellGetDragImage")
 
@@ -4330,42 +2952,48 @@ DECLARE_INTERFACE_( IDragSourceHelper, IUnknown )
 // defined shell folders (such as directories, network, ...).
 //==========================================================================
 
-#define CFSTR_SHELLIDLIST       TEXT("Shell IDList Array")      // CF_IDLIST
-#define CFSTR_SHELLIDLISTOFFSET TEXT("Shell Object Offsets")    // CF_OBJECTPOSITIONS
-#define CFSTR_NETRESOURCES      TEXT("Net Resource")            // CF_NETRESOURCE
-#define CFSTR_FILEDESCRIPTORA   TEXT("FileGroupDescriptor")     // CF_FILEGROUPDESCRIPTORA
-#define CFSTR_FILEDESCRIPTORW   TEXT("FileGroupDescriptorW")    // CF_FILEGROUPDESCRIPTORW
-#define CFSTR_FILECONTENTS      TEXT("FileContents")            // CF_FILECONTENTS
-#define CFSTR_FILENAMEA         TEXT("FileName")                // CF_FILENAMEA
-#define CFSTR_FILENAMEW         TEXT("FileNameW")               // CF_FILENAMEW
-#define CFSTR_PRINTERGROUP      TEXT("PrinterFriendlyName")     // CF_PRINTERS
-#define CFSTR_FILENAMEMAPA      TEXT("FileNameMap")             // CF_FILENAMEMAPA
-#define CFSTR_FILENAMEMAPW      TEXT("FileNameMapW")            // CF_FILENAMEMAPW
-#define CFSTR_SHELLURL          TEXT("UniformResourceLocator")
-#define CFSTR_PREFERREDDROPEFFECT TEXT("Preferred DropEffect")
-#define CFSTR_PERFORMEDDROPEFFECT TEXT("Performed DropEffect")
-#define CFSTR_PASTESUCCEEDED    TEXT("Paste Succeeded")
-#define CFSTR_INDRAGLOOP        TEXT("InShellDragLoop")
-#define CFSTR_DRAGCONTEXT       TEXT("DragContext")
-#define CFSTR_MOUNTEDVOLUME     TEXT("MountedVolume")
-#define CFSTR_PERSISTEDDATAOBJECT     TEXT("PersistedDataObject")
-#define CFSTR_TARGETCLSID		TEXT("TargetCLSID")				// HGLOBAL with a CLSID of the drop target
-#define CFSTR_LOGICALPERFORMEDDROPEFFECT  TEXT("Logical Performed DropEffect")
+#define CFSTR_SHELLIDLIST                   TEXT("Shell IDList Array")      // CF_IDLIST
+#define CFSTR_SHELLIDLISTOFFSET             TEXT("Shell Object Offsets")    // CF_OBJECTPOSITIONS
+#define CFSTR_NETRESOURCES                  TEXT("Net Resource")            // CF_NETRESOURCE
+#define CFSTR_FILEDESCRIPTORA               TEXT("FileGroupDescriptor")     // CF_FILEGROUPDESCRIPTORA
+#define CFSTR_FILEDESCRIPTORW               TEXT("FileGroupDescriptorW")    // CF_FILEGROUPDESCRIPTORW
+#define CFSTR_FILECONTENTS                  TEXT("FileContents")            // CF_FILECONTENTS
+#define CFSTR_FILENAMEA                     TEXT("FileName")                // CF_FILENAMEA
+#define CFSTR_FILENAMEW                     TEXT("FileNameW")               // CF_FILENAMEW
+#define CFSTR_PRINTERGROUP                  TEXT("PrinterFriendlyName")     // CF_PRINTERS
+#define CFSTR_FILENAMEMAPA                  TEXT("FileNameMap")             // CF_FILENAMEMAPA
+#define CFSTR_FILENAMEMAPW                  TEXT("FileNameMapW")            // CF_FILENAMEMAPW
+#define CFSTR_SHELLURL                      TEXT("UniformResourceLocator")
+#define CFSTR_INETURLA                      CFSTR_SHELLURL
+#define CFSTR_INETURLW                      TEXT("UniformResourceLocatorW")
+#define CFSTR_PREFERREDDROPEFFECT           TEXT("Preferred DropEffect")
+#define CFSTR_PERFORMEDDROPEFFECT           TEXT("Performed DropEffect")
+#define CFSTR_PASTESUCCEEDED                TEXT("Paste Succeeded")
+#define CFSTR_INDRAGLOOP                    TEXT("InShellDragLoop")
+#define CFSTR_DRAGCONTEXT                   TEXT("DragContext")
+#define CFSTR_MOUNTEDVOLUME                 TEXT("MountedVolume")
+#define CFSTR_PERSISTEDDATAOBJECT           TEXT("PersistedDataObject")
+#define CFSTR_TARGETCLSID                           TEXT("TargetCLSID")                         // HGLOBAL with a CLSID of the drop target
+#define CFSTR_LOGICALPERFORMEDDROPEFFECT    TEXT("Logical Performed DropEffect")
+#define CFSTR_AUTOPLAY_SHELLIDLISTS         TEXT("Autoplay Enumerated IDList Array")  //  (HGLOBAL with LPIDA)
 
 #ifdef UNICODE
 #define CFSTR_FILEDESCRIPTOR    CFSTR_FILEDESCRIPTORW
 #define CFSTR_FILENAME          CFSTR_FILENAMEW
 #define CFSTR_FILENAMEMAP       CFSTR_FILENAMEMAPW
+#define CFSTR_INETURL           CFSTR_INETURLW
 #else
 #define CFSTR_FILEDESCRIPTOR    CFSTR_FILEDESCRIPTORA
 #define CFSTR_FILENAME          CFSTR_FILENAMEA
 #define CFSTR_FILENAMEMAP       CFSTR_FILENAMEMAPA
+#define CFSTR_INETURL           CFSTR_INETURLA
 #endif
 
 #define DVASPECT_SHORTNAME      2 // use for CF_HDROP to get short name version of file paths
 #define DVASPECT_COPY           3 // use to indicate format is a "Copy" of the data (FILECONTENTS, FILEDESCRIPTOR, etc)
 #define DVASPECT_LINK           4 // use to indicate format is a "Shortcut" to the data (FILECONTENTS, FILEDESCRIPTOR, etc)
 
+#include <pshpack8.h>
 //
 // format of CF_NETRESOURCE
 //
@@ -4373,6 +3001,7 @@ typedef struct _NRESARRAY {     // anr
     UINT cItems;
     NETRESOURCE nr[1];
 } NRESARRAY, * LPNRESARRAY;
+#include <poppack.h>        /* Return to byte packing */
 
 //
 // format of CF_IDLIST
@@ -4581,6 +3210,14 @@ DECLARE_INTERFACE_(IShellChangeNotify, IUnknown)
 //
 // IQueryInfo
 //
+//-------------------------------------------------------------------------
+//
+// IQueryInfo interface
+//
+// [Methods]
+//              ::GetInfoTip()
+//-------------------------------------------------------------------------
+
 #undef  INTERFACE
 #define INTERFACE  IQueryInfo
 
@@ -4600,7 +3237,7 @@ DECLARE_INTERFACE_(IQueryInfo, IUnknown)
 #define QITIPF_USENAME          0x00000001
 #define QITIPF_LINKNOTARGET     0x00000002
 #define QITIPF_LINKUSETARGET    0x00000004
-
+#define QITIPF_USESLOWTIP       0x00000008  // Flag says it's OK to take a long time generating tip
 
 #define QIF_CACHED           0x00000001
 #define QIF_DONTEXPANDFOLDER 0x00000002
@@ -4620,12 +3257,17 @@ DECLARE_INTERFACE_(IQueryInfo, IUnknown)
 #endif
 
 SHSTDAPI_(void) SHAddToRecentDocs(UINT uFlags, LPCVOID pv);
+
+
 #if (_WIN32_IE >= 0x0400)
+
+
 typedef struct _SHChangeProductKeyAsIDList {
     USHORT cb;
     WCHAR wszProductKey[39];
     USHORT cbZero;
 } SHChangeProductKeyAsIDList, *LPSHChangeProductKeyAsIDList;
+
 
 SHSTDAPI_(void) SHUpdateImageA(LPCSTR pszHashItem, int iIndex, UINT uFlags, int iImageIndex);
 SHSTDAPI_(void) SHUpdateImageW(LPCWSTR pszHashItem, int iIndex, UINT uFlags, int iImageIndex);
@@ -4664,11 +3306,18 @@ SHSTDAPI SHGetInstanceExplorer(IUnknown **ppunk);
 #define SHDID_NET_SHARE             15
 #define SHDID_NET_RESTOFNET         16
 #define SHDID_NET_OTHER             17
+#define SHDID_COMPUTER_IMAGING      18
+#define SHDID_COMPUTER_AUDIO        19
+#define SHDID_COMPUTER_SHAREDDOCS   20
+
+#include <pshpack8.h>
 
 typedef struct _SHDESCRIPTIONID {
     DWORD   dwDescriptionId;
     CLSID   clsid;
 } SHDESCRIPTIONID, *LPSHDESCRIPTIONID;
+
+#include <poppack.h>        /* Return to byte packing */
 
 // these delegate to IShellFolder2::GetItemData()
 
@@ -4805,7 +3454,7 @@ typedef struct {
     BOOL fShowInfoTip : 1;
     BOOL fHideIcons : 1;
     UINT fRestFlags : 3;
-} SHELLFLAGSTATE, * LPSHELLFLAGSTATE;
+} SHELLFLAGSTATE, *LPSHELLFLAGSTATE;
 
 #define SSF_SHOWALLOBJECTS          0x00000001
 #define SSF_SHOWEXTENSIONS          0x00000002
@@ -4836,8 +3485,16 @@ SHSTDAPI_(void) SHGetSettings(LPSHELLFLAGSTATE lpsfs, DWORD dwMask);
 // Given a pidl, you can get an interface pointer (as specified by riid) of the pidl's parent folder (in ppv)
 // If ppidlLast is non-NULL, you can also get the pidl of the last item.
 //
-STDAPI SHBindToParent(LPCITEMIDLIST pidl, REFIID riid, void **ppv, LPCITEMIDLIST *ppidlLast);
+SHSTDAPI SHBindToParent(LPCITEMIDLIST pidl, REFIID riid, void **ppv, LPCITEMIDLIST *ppidlLast);
 
+// SHSTDAPI SHParseDisplayName(PCWSTR pszName, IBindCtx *pbc, LPITEMIDLIST *ppidl, SFGAOF sfgaoIn, SFGAOF *psfgaoOut)
+//
+//  given a string it will call psfDesktop->ParseDisplayName() to try and create a pidl
+//  if no pbc specified, it uses the preferred options for parsing.
+//  this includes mapping file system paths to their appropriate aliased location (RegisterObjectParam(STR_PARSE_TRANSLATE_ALIASES))
+//  psfgaoOut is optional for SFGAO attributes
+//
+SHSTDAPI SHParseDisplayName(PCWSTR pszName, IBindCtx *pbc, LPITEMIDLIST *ppidl, SFGAOF sfgaoIn, SFGAOF *psfgaoOut);
 
 
 // SHPathPrepareForWrite(HWND hwnd, IUnknown *punkEnableModless, LPCTSTR pszPath, DWORD dwFlags)
@@ -4865,9 +3522,10 @@ STDAPI SHBindToParent(LPCITEMIDLIST pidl, REFIID riid, void **ppv, LPCITEMIDLIST
 #define SHPPFW_ASKDIRCREATE     0x00000002              // Create the directory if it doesn't exist after asking the user.
 #define SHPPFW_IGNOREFILENAME   0x00000004              // Ignore the last item in pszPath because it's a file.  Example: pszPath="C:\DirA\DirB", only use "C:\DirA".
 #define SHPPFW_NOWRITECHECK     0x00000008              // Caller only needs to read from the drive, so don't check if it's READ ONLY.
+#define SHPPFW_MEDIACHECKONLY   0x00000010              // do the retrys on the media (or net path), return errors if the file can't be found
 
-STDAPI SHPathPrepareForWriteA(HWND hwnd, IUnknown *punkEnableModless, LPCSTR pszPath, DWORD dwFlags);
-STDAPI SHPathPrepareForWriteW(HWND hwnd, IUnknown *punkEnableModless, LPCWSTR pszPath, DWORD dwFlags);
+SHSTDAPI SHPathPrepareForWriteA(HWND hwnd, IUnknown *punkEnableModless, LPCSTR pszPath, DWORD dwFlags);
+SHSTDAPI SHPathPrepareForWriteW(HWND hwnd, IUnknown *punkEnableModless, LPCWSTR pszPath, DWORD dwFlags);
 #ifdef UNICODE
 #define SHPathPrepareForWrite  SHPathPrepareForWriteW
 #else
@@ -4875,6 +3533,35 @@ STDAPI SHPathPrepareForWriteW(HWND hwnd, IUnknown *punkEnableModless, LPCWSTR ps
 #endif // !UNICODE
 
 
+
+
+
+//--------------------------------------------------------------------------
+//
+// Interface used for exposing the INI file methods on a shortcut file
+//
+//
+//--------------------------------------------------------------------------
+#undef  INTERFACE
+#define INTERFACE  INamedPropertyBag
+DECLARE_INTERFACE_(INamedPropertyBag, IUnknown)
+{
+    // *** IUnknown methods ***
+    STDMETHOD(QueryInterface)   (THIS_ REFIID riid, void **ppv) PURE;
+    STDMETHOD_(ULONG,AddRef)    (THIS) PURE;
+    STDMETHOD_(ULONG,Release)   (THIS) PURE;
+    // *** INamedPropertyBag methods ***
+    STDMETHOD(ReadPropertyNPB) (THIS_  /* [in] */ LPCOLESTR pszBagname,
+                            /* [in] */ LPCOLESTR pszPropName,
+                            /* [out][in] */ PROPVARIANT *pVar) PURE;
+
+    STDMETHOD(WritePropertyNPB)(THIS_ /* [in] */ LPCOLESTR pszBagname,
+                           /* [in] */ LPCOLESTR pszPropName,
+                           /* [in] */ PROPVARIANT  *pVar) PURE;
+
+    STDMETHOD(RemovePropertyNPB)(THIS_ /* [in] */ LPCOLESTR pszBagname,
+                          /* [in] */ LPCOLESTR pszPropName) PURE;
+};
 
 #ifdef __urlmon_h__
 //    NOTE: urlmon.h must be included before shlobj.h to access this function.
@@ -4928,9 +3615,13 @@ SHDOCAPI_(DWORD) SoftwareUpdateMessageBox( HWND hWnd,
 
 #endif  /* __cplusplus */
 
-#ifndef RC_INVOKED
 #include <poppack.h>
-#endif  /* !RC_INVOKED */
 
-#pragma option pop /*P_O_Pop*/
+SHDOCAPI_(BOOL) ImportPrivacySettings( LPCWSTR szFilename,
+                            IN OUT BOOL* pfParsePrivacyPreferences, IN OUT BOOL* pfParsePerSiteRules);
+#ifndef IEnumPrivacyRecords
+typedef interface IEnumPrivacyRecords IEnumPrivacyRecords;
+#endif
+SHDOCAPI DoPrivacyDlg( HWND hwndParent, LPOLESTR pszUrl, IEnumPrivacyRecords *pPrivacyEnum, BOOL fReportAllSites);
+
 #endif // _SHLOBJ_H_

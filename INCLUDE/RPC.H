@@ -1,7 +1,7 @@
 #pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*++
 
-Copyright (c) 1991-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -45,7 +45,7 @@ extern "C" {
 
 #include <basetsd.h>
 
-#if defined(_M_IA64) || defined(_M_AXP64)
+#if defined(_M_IA64) || defined(_M_AMD64)
 #define __RPC_WIN64__
 #else
 #define __RPC_WIN32__
@@ -70,7 +70,7 @@ typedef long RPC_STATUS;
 #define RPC_UNICODE_SUPPORTED
 #endif
 
-#if !defined(__RPC_MAC__) && ( (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) )
+#if !defined(_M_AMD64) && !defined(__RPC_MAC__) && ( (_MSC_VER >= 800) || defined(_STDCALL_SUPPORTED) )
 #	define __RPC_API  __stdcall
 #	define __RPC_USER __stdcall
 #	define __RPC_STUB __stdcall
@@ -86,7 +86,7 @@ typedef long RPC_STATUS;
 
 // Some RPC platforms don't define DECLSPEC_IMPORT
 #if !defined(DECLSPEC_IMPORT)
-#if (defined(_M_MRX000) || defined(_M_IX86) || defined(_M_ALPHA) || defined(_M_PPC) || defined(_M_IA64)) && !defined(MIDL_PASS)
+#if (defined(_M_MRX000) || defined(_M_IX86) || defined(_M_IA64) || defined(_M_AMD64)) && !defined(MIDL_PASS)
 #define DECLSPEC_IMPORT __declspec(dllimport)
 #else
 #define DECLSPEC_IMPORT
@@ -197,5 +197,6 @@ RpcMacSetYieldInfo(
 #endif
 
 #endif // __RPC_H__
+
 
 #pragma option pop /*P_O_Pop*/

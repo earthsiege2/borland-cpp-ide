@@ -1,8 +1,9 @@
-USEUNIT("mainfrm.cpp");
-USEUNIT("cube.cpp");
-USEUNIT("cubedoc.cpp");
-USEUNIT("cubeview.cpp");
-USEUNIT("stdafx.cpp");
-USERC("cube.rc");
+USEUNIT(".\Cube.cpp");
+USEUNIT(".\Cubedoc.cpp");
+USEUNIT(".\Cubeview.cpp");
+USEUNIT(".\Mainfrm.cpp");
+USEUNIT(".\Stdafx.cpp");
+USERC(".\Cube.rc");
+USEFILE("vctobpr.log");
 
 #define WinMain

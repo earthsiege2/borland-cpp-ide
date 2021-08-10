@@ -310,6 +310,7 @@ return str.substring(iBeg,iEnd);
 
 function isWhChar(ch){if(ch==' '||ch=='\t'||ch=='\r'||ch=='\n')return 1;return 0;}
 
+      
 function ToText(str)
 {
 if(str.indexOf("&")==-1) return str;
@@ -337,6 +338,13 @@ s=str.split("&#013;");
 str=s.join("\r");
 s=str.split("&#092;");
 str=s.join("\\");
+
+while((iBeg=str.indexOf("&#"))!=-1){
+if((iEnd=str.indexOf(";"))!=-1){
+s1=str.substring(0,iBeg);s2=str.substring(iEnd+1,str.length+1);
+val=parseInt(str.substring(iBeg+2,iEnd));
+if(!isNaN(val)){s=String.fromCharCode(val);str=s1+s+s2;}}
+}
 return str.substring(0,str.length-1);
 }
  

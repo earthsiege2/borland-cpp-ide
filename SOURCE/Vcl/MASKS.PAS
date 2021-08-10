@@ -1,16 +1,21 @@
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
+{ *************************************************************************** }
+{                                                                             }
+{ Kylix and Delphi Cross-Platform Visual Component Library                    }
+{                                                                             }
+{ Copyright (c) 1995, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ *************************************************************************** }
+
 
 unit Masks;
 
 interface
 
+uses SysUtils;
+
 type
+  EMaskException = class(Exception);
+
   TMask = class
   private
     FMask: Pointer;
@@ -21,11 +26,12 @@ type
     function Matches(const Filename: string): Boolean;
   end;
 
+
 function MatchesMask(const Filename, Mask: string): Boolean;
 
 implementation
 
-uses SysUtils, Consts;
+uses RTLConsts;
 
 const
   MaxCards = 30;
@@ -61,7 +67,7 @@ var
 
   procedure InvalidMask;
   begin
-    raise Exception.CreateResFmt(@SInvalidMask, [Mask,
+    raise EMaskException.CreateResFmt(@SInvalidMask, [Mask,
       P - PChar(Mask) + 1]);
   end;
 
@@ -171,7 +177,7 @@ begin
 end;
 
 function MatchesMaskStates(const Filename: string;
-  MaskStates: array of TMaskState): Boolean;
+  const MaskStates: array of TMaskState): Boolean;
 type
   TStackRec = record
     sP: PChar;

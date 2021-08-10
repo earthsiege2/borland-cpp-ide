@@ -1,11 +1,13 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1996-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
 {       Win32 sockets API Interface Unit                }
-{                                                       }
-{       Copyright (C) 1996,99 Inprise Corporation       }
-{                                                       }
 {*******************************************************}
 
 unit WinSock;
@@ -36,6 +38,14 @@ type
 const
   {$EXTERNALSYM FD_SETSIZE}
   FD_SETSIZE     =   64;
+
+// WinSock 2 extension -- manifest constants for shutdown()
+  {$EXTERNALSYM SD_RECEIVE}
+  SD_RECEIVE     = 0;
+  {$EXTERNALSYM SD_SEND}
+  SD_SEND        = 1;
+  {$EXTERNALSYM SD_BOTH}
+  SD_BOTH        = 2;
 
 type
 // the following emits are a workaround to the name conflict with
@@ -274,9 +284,9 @@ const
   {$EXTERNALSYM INADDR_LOOPBACK}
   INADDR_LOOPBACK  = $7F000001;
   {$EXTERNALSYM INADDR_BROADCAST}
-  INADDR_BROADCAST = $FFFFFFFF;
+  INADDR_BROADCAST = -1;
   {$EXTERNALSYM INADDR_NONE}
-  INADDR_NONE      = $FFFFFFFF;
+  INADDR_NONE      = -1;
 
   {$EXTERNALSYM WSADESCRIPTION_LEN}
   WSADESCRIPTION_LEN     =   256;
@@ -353,9 +363,9 @@ const
   TSocket type is unsigned.}
 
   {$EXTERNALSYM INVALID_SOCKET    =}
-  INVALID_SOCKET		= TSocket(NOT(0));
+  INVALID_SOCKET    = TSocket(NOT(0));
   {$EXTERNALSYM SOCKET_ERROR      =}
-  SOCKET_ERROR			= -1;
+  SOCKET_ERROR      = -1;
 
 { Types }
 

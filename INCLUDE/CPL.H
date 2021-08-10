@@ -5,7 +5,7 @@
 *                                                                             *
 *               Version 3.10                                                  *
 *                                                                             *
-*               Copyright (c) 1992-1998, Microsoft Corp.  All rights reserved *
+*               Copyright (c) Microsoft Corporation.  All rights reserved.    *
 *                                                                             *
 ******************************************************************************/
 /*
@@ -28,8 +28,7 @@
 *
 */
 #ifndef _INC_CPL
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
-#define _INC_CPL
+#define _INC_CPL 
 
 
 #include <pshpack1.h>   /* Assume byte packing throughout */
@@ -209,6 +208,5 @@ typedef LPNEWCPLINFOA LPNEWCPLINFO;
 
 #include <poppack.h>
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* _INC_CPL */
 

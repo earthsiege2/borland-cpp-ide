@@ -1,7 +1,7 @@
 //+---------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  File: oaidl.idl
 //
@@ -10,7 +10,7 @@
 cpp_quote("//+-------------------------------------------------------------------------")
 cpp_quote("//")
 cpp_quote("//  Microsoft Windows")
-cpp_quote("//  Copyright (C) Microsoft Corporation, 1992-1999.")
+cpp_quote("//  Copyright (c) Microsoft Corporation. All rights reserved.")
 cpp_quote("//")
 cpp_quote("//--------------------------------------------------------------------------")
 cpp_quote("#if ( _MSC_VER >= 800 )")
@@ -178,7 +178,6 @@ cpp_quote(" *  WORD wReserved1;")
 cpp_quote(" *  WORD wReserved2;")
 cpp_quote(" *  WORD wReserved3;")
 cpp_quote(" *  union {")
-cpp_quote(" *    ULONGLONG      VT_UI8")
 cpp_quote(" *    LONGLONG       VT_I8")
 cpp_quote(" *    LONG           VT_I4")
 cpp_quote(" *    BYTE           VT_UI1")
@@ -212,6 +211,7 @@ cpp_quote(" *    PVOID          VT_BYREF (Generic ByRef)")
 cpp_quote(" *    CHAR           VT_I1")
 cpp_quote(" *    USHORT         VT_UI2")
 cpp_quote(" *    ULONG          VT_UI4")
+cpp_quote(" *    ULONGLONG      VT_UI8")
 cpp_quote(" *    INT            VT_INT")
 cpp_quote(" *    UINT           VT_UINT")
 cpp_quote(" *    DECIMAL *      VT_BYREF|VT_DECIMAL")
@@ -248,7 +248,6 @@ struct tagVARIANT {
             WORD    wReserved2;
             WORD    wReserved3;
             union {
-                ULONGLONG     ullVal;       /* VT_UI8               */
                 LONGLONG      llVal;        /* VT_I8                */
                 LONG          lVal;         /* VT_I4                */
                 BYTE          bVal;         /* VT_UI1               */
@@ -284,6 +283,7 @@ struct tagVARIANT {
                 CHAR          cVal;         /* VT_I1                */
                 USHORT        uiVal;        /* VT_UI2               */
                 ULONG         ulVal;        /* VT_UI4               */
+                ULONGLONG     ullVal;       /* VT_UI8               */
                 INT           intVal;       /* VT_INT               */
                 UINT          uintVal;      /* VT_UINT              */
                 DECIMAL *     pdecVal;      /* VT_BYREF|VT_DECIMAL  */
@@ -325,6 +325,7 @@ struct _wireVARIANT {
     USHORT wReserved2;
     USHORT wReserved3;
     [switch_type(ULONG), switch_is(vt)] union {
+    [case(VT_I8)]       LONGLONG      llVal;        /* VT_I8                */
     [case(VT_I4)]       LONG          lVal;         /* VT_I4                */
     [case(VT_UI1)]      BYTE          bVal;         /* VT_UI1               */
     [case(VT_I2)]       SHORT         iVal;         /* VT_I2                */
@@ -337,7 +338,7 @@ struct _wireVARIANT {
     [case(VT_BSTR)]     wireBSTR      bstrVal;      /* VT_BSTR              */
     [case(VT_UNKNOWN)]  IUnknown *    punkVal;      /* VT_UNKNOWN           */
     [case(VT_DISPATCH)] IDispatch *   pdispVal;     /* VT_DISPATCH          */
-    [case(VT_ARRAY)]    wirePSAFEARRAY parray;       /* VT_ARRAY             */
+    [case(VT_ARRAY)]    wirePSAFEARRAY parray;       /* VT_ARRAY            */
 
     [case(VT_RECORD, VT_RECORD|VT_BYREF)]
                         wireBRECORD   brecVal;      /* VT_RECORD            */
@@ -348,6 +349,8 @@ struct _wireVARIANT {
                         SHORT *       piVal;        /* VT_BYREF|VT_I2       */
     [case(VT_I4|VT_BYREF)]
                         LONG *        plVal;        /* VT_BYREF|VT_I4       */
+    [case(VT_I8|VT_BYREF)]
+                        LONGLONG *    pllVal;       /* VT_BYREF|VT_I8       */
     [case(VT_R4|VT_BYREF)]
                         FLOAT *       pfltVal;      /* VT_BYREF|VT_R4       */
     [case(VT_R8|VT_BYREF)]
@@ -367,13 +370,14 @@ struct _wireVARIANT {
     [case(VT_DISPATCH|VT_BYREF)]
                         IDispatch **  ppdispVal;    /* VT_BYREF|VT_DISPATCH */
     [case(VT_ARRAY|VT_BYREF)]
-                        wirePSAFEARRAY *pparray;     /* VT_BYREF|VT_ARRAY    */
+                        wirePSAFEARRAY *pparray;     /* VT_BYREF|VT_ARRAY   */
     [case(VT_VARIANT|VT_BYREF)]
                         wireVARIANT * pvarVal;      /* VT_BYREF|VT_VARIANT  */
 
     [case(VT_I1)]       CHAR          cVal;         /* VT_I1                */
     [case(VT_UI2)]      USHORT        uiVal;        /* VT_UI2               */
     [case(VT_UI4)]      ULONG         ulVal;        /* VT_UI4               */
+    [case(VT_UI8)]      ULONGLONG     ullVal;       /* VT_UI8               */
     [case(VT_INT)]      INT           intVal;       /* VT_INT               */
     [case(VT_UINT)]     UINT          uintVal;      /* VT_UINT              */
     [case(VT_DECIMAL)]  DECIMAL       decVal;       /* VT_DECIMAL           */
@@ -386,6 +390,8 @@ struct _wireVARIANT {
                         USHORT *      puiVal;       /* VT_BYREF|VT_UI2      */
     [case(VT_BYREF|VT_UI4)]
                         ULONG *       pulVal;       /* VT_BYREF|VT_UI4      */
+    [case(VT_BYREF|VT_UI8)]
+                        ULONGLONG *   pullVal;      /* VT_BYREF|VT_UI8      */
     [case(VT_BYREF|VT_INT)]
                         INT *         pintVal;      /* VT_BYREF|VT_INT      */
     [case(VT_BYREF|VT_UINT)]
@@ -528,6 +534,8 @@ cpp_quote("//;begin_internal")
 cpp_quote("#if 0")
 cpp_quote("/* the following is what MIDL knows how to remote */")
 
+midl_pragma warning( disable: 2395) // polymorphic types not supported in the TLB
+
 typedef struct tagEXCEPINFO {
     WORD  wCode;            /* An error code describing the error. */
     WORD  wReserved;
@@ -535,8 +543,10 @@ typedef struct tagEXCEPINFO {
     BSTR  bstrDescription;  /* A description of the error */
     BSTR  bstrHelpFile;     /* Fully qualified drive, path, and file name */
     DWORD dwHelpContext;    /* help context of topic within the help file */
-    ULONG pvReserved;
-    ULONG pfnDeferredFillIn;
+    // We can use ULONG_PTR here, because EXCEPINFO is marshalled by RPC
+    // RPC will marshal pfnDeferredFillIn.
+    ULONG_PTR pvReserved;
+    ULONG_PTR pfnDeferredFillIn;
     SCODE scode;
 } EXCEPINFO;
 
@@ -858,28 +868,28 @@ interface ICreateTypeInfo2: ICreateTypeInfo
                 [in] VARIANT * pVarVal
             );
 
-    HRESULT SetFuncCustData(
-                [in] UINT index,
-                [in] REFGUID guid,
+    HRESULT SetFuncCustData( 
+                [in] UINT index, 
+                [in] REFGUID guid, 
+                [in] VARIANT * pVarVal
+            );
+    
+    HRESULT SetParamCustData( 
+                [in] UINT indexFunc, 
+                [in] UINT indexParam, 
+                [in] REFGUID guid, 
                 [in] VARIANT * pVarVal
             );
 
-    HRESULT SetParamCustData(
-                [in] UINT indexFunc,
-                [in] UINT indexParam,
-                [in] REFGUID guid,
+    HRESULT SetVarCustData( 
+                [in] UINT index, 
+                [in] REFGUID guid, 
                 [in] VARIANT * pVarVal
             );
 
-    HRESULT SetVarCustData(
-                [in] UINT index,
-                [in] REFGUID guid,
-                [in] VARIANT * pVarVal
-            );
-
-    HRESULT SetImplTypeCustData(
-                [in] UINT index,
-                [in] REFGUID guid,
+    HRESULT SetImplTypeCustData( 
+                [in] UINT index, 
+                [in] REFGUID guid, 
                 [in] VARIANT * pVarVal
             );
 
@@ -1045,7 +1055,7 @@ interface IDispatch : IUnknown
                 [out] EXCEPINFO * pExcepInfo,
                 [out] UINT * pArgErr,
                 [in] UINT cVarRef,
-                [in, size_is(cVarRef)] UINT * rgVarRefIdx,
+                [in, size_is(cVarRef)] UINT * rgVarRefIdx, 
                 [in, out, size_is(cVarRef)] VARIANTARG * rgVarRef
             );
 
@@ -1428,13 +1438,13 @@ interface ITypeInfo2 : ITypeInfo
             );
 
     HRESULT GetFuncIndexOfMemId(
-                [in] MEMBERID memid,
-                [in] INVOKEKIND invKind,
+                [in] MEMBERID memid, 
+                [in] INVOKEKIND invKind, 
                 [out] UINT * pFuncIndex
             );
 
     HRESULT GetVarIndexOfMemId(
-                [in] MEMBERID memid,
+                [in] MEMBERID memid, 
                 [out] UINT * pVarIndex
             );
 
@@ -1442,29 +1452,29 @@ interface ITypeInfo2 : ITypeInfo
                 [in] REFGUID guid,
                 [out] VARIANT * pVarVal
             );
-
+    
     HRESULT GetFuncCustData(
-                [in] UINT index,
-                [in] REFGUID guid,
+                [in] UINT index, 
+                [in] REFGUID guid, 
                 [out] VARIANT * pVarVal
             );
-
+    
     HRESULT GetParamCustData(
-                [in] UINT indexFunc,
-                [in] UINT indexParam,
-                [in] REFGUID guid,
+                [in] UINT indexFunc, 
+                [in] UINT indexParam, 
+                [in] REFGUID guid, 
                 [out] VARIANT * pVarVal
             );
 
     HRESULT GetVarCustData(
-                [in] UINT index,
-                [in] REFGUID guid,
+                [in] UINT index, 
+                [in] REFGUID guid, 
                 [out] VARIANT * pVarVal
             );
 
     HRESULT GetImplTypeCustData(
-                [in] UINT index,
-                [in] REFGUID guid,
+                [in] UINT index, 
+                [in] REFGUID guid, 
                 [out] VARIANT * pVarVal
             );
 
@@ -1490,25 +1500,25 @@ interface ITypeInfo2 : ITypeInfo
     HRESULT GetAllCustData(
                 [out] CUSTDATA * pCustData
             );
-
+    
     HRESULT GetAllFuncCustData(
-                [in] UINT index,
+                [in] UINT index, 
                 [out] CUSTDATA * pCustData
             );
-
+    
     HRESULT GetAllParamCustData(
-                [in] UINT indexFunc,
-                [in] UINT indexParam,
+                [in] UINT indexFunc, 
+                [in] UINT indexParam, 
                 [out] CUSTDATA * pCustData
             );
 
     HRESULT GetAllVarCustData(
-                [in] UINT index,
+                [in] UINT index, 
                 [out] CUSTDATA * pCustData
             );
 
     HRESULT GetAllImplTypeCustData(
-                [in] UINT index,
+                [in] UINT index, 
                 [out] CUSTDATA * pCustData
             );
 }
@@ -1526,14 +1536,8 @@ interface ITypeLib : IUnknown
         SYS_WIN16 = 0,
         SYS_WIN32,
         SYS_MAC,
-
-    /* Temporary mapping for SYS_WIN64 - needed for midl.
-       Talk to the midl team before changing it */
-
-        SYS_WIN64 = SYS_WIN32
+                SYS_WIN64
     } SYSKIND;
-
-
 
     typedef [v1_enum] enum tagLIBFLAGS {
         LIBFLAG_FRESTRICTED = 0x01,
@@ -1740,7 +1744,7 @@ interface ITypeChangeEvents: IUnknown
                 [in] LPOLESTR pStrName,
                 [out] INT * pfCancel
             );
-
+    
     HRESULT AfterTypeChange(
                 [in] CHANGEKIND changeKind,
                 [in] ITypeInfo * pTInfoAfter,
@@ -1971,7 +1975,6 @@ interface IRecordInfo: IUnknown
 }
 
 
-
 [
     object,
     uuid(3127CA40-446E-11CE-8135-00AA004BB851),
@@ -1987,7 +1990,6 @@ interface IErrorLog : IUnknown
                 [in] EXCEPINFO * pExcepInfo
             );
 }
-
 
 
 [
@@ -2021,6 +2023,7 @@ interface IPropertyBag : IUnknown
                 [in] VARIANT * pVar
             );
 }
+
 
 cpp_quote("#if ( _MSC_VER >= 800 )")
 cpp_quote("#if _MSC_VER >= 1200")

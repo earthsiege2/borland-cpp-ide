@@ -6,14 +6,14 @@
 {                                                       }
 {*******************************************************}
 
-unit mxgraph;
+unit MXGRAPH;
 
 interface
 
 uses
   SysUtils, Windows, Controls, StdCtrls, Graphics, DB, Classes, Grids,
-  Dialogs, mxstore, mxbutton, mxConsts, MXDB, forms, extctrls, chart,
-  series, teengine, TeeProcs, MXGrid;
+  Dialogs, Mxstore, MXBUTTON, Mxconsts, MXDB, Forms, ExtCtrls, CHART,
+  SERIES, TEENGINE, TEEPROCS, MXGRID;
 
 type
   TDimEvent = procedure (Sender: TObject; iDim: Integer) of object;
@@ -532,6 +532,10 @@ destructor TDecisionGraphDataLink.Destroy;
 begin
   inherited Destroy;
 end;
+
+initialization
+  StartClassGroup(TControl);
+  GroupDescendentsWith(TDecisionGraph, TControl);
 
 end.
 

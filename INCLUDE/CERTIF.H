@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Wed Aug 25 16:06:03 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for certif.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -38,6 +37,10 @@
 #ifndef __certif_h__
 #define __certif_h__
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
 /* Forward Declarations */ 
 
 #ifndef __ICertServerPolicy_FWD_DEFINED__
@@ -60,8 +63,8 @@ typedef interface ICertServerExit ICertServerExit;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_certif_0000 */
 /* [local] */ 
@@ -94,41 +97,41 @@ EXTERN_C const IID IID_ICertServerPolicy;
         virtual HRESULT STDMETHODCALLTYPE GetRequestProperty( 
             /* [in] */ const BSTR strPropertyName,
             /* [in] */ LONG PropertyType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue) = 0;
+            /* [retval][out] */ VARIANT *pvarPropertyValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRequestAttribute( 
             /* [in] */ const BSTR strAttributeName,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrAttributeValue) = 0;
+            /* [retval][out] */ BSTR *pstrAttributeValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCertificateProperty( 
             /* [in] */ const BSTR strPropertyName,
             /* [in] */ LONG PropertyType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue) = 0;
+            /* [retval][out] */ VARIANT *pvarPropertyValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCertificateProperty( 
             /* [in] */ const BSTR strPropertyName,
             /* [in] */ LONG PropertyType,
-            /* [in] */ const VARIANT __RPC_FAR *pvarPropertyValue) = 0;
+            /* [in] */ const VARIANT *pvarPropertyValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCertificateExtension( 
             /* [in] */ const BSTR strExtensionName,
             /* [in] */ LONG Type,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarValue) = 0;
+            /* [retval][out] */ VARIANT *pvarValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCertificateExtensionFlags( 
-            /* [retval][out] */ LONG __RPC_FAR *pExtFlags) = 0;
+            /* [retval][out] */ LONG *pExtFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCertificateExtension( 
             /* [in] */ const BSTR strExtensionName,
             /* [in] */ LONG Type,
             /* [in] */ LONG ExtFlags,
-            /* [in] */ const VARIANT __RPC_FAR *pvarValue) = 0;
+            /* [in] */ const VARIANT *pvarValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateExtensionsSetup( 
             /* [in] */ LONG Flags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateExtensions( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstrExtensionName) = 0;
+            /* [retval][out] */ BSTR *pstrExtensionName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateExtensionsClose( void) = 0;
         
@@ -136,7 +139,7 @@ EXTERN_C const IID IID_ICertServerPolicy;
             /* [in] */ LONG Flags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateAttributes( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstrAttributeName) = 0;
+            /* [retval][out] */ BSTR *pstrAttributeName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateAttributesClose( void) = 0;
         
@@ -148,118 +151,118 @@ EXTERN_C const IID IID_ICertServerPolicy;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICertServerPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICertServerPolicy * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICertServerPolicy __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICertServerPolicy * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICertServerPolicy __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICertServerPolicy * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ICertServerPolicy __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ICertServerPolicy * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ICertServerPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ICertServerPolicy * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ICertServerPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ICertServerPolicy * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ICertServerPolicy __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ICertServerPolicy * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetContext )( 
-            ICertServerPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetContext )( 
+            ICertServerPolicy * This,
             /* [in] */ LONG Context);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRequestProperty )( 
-            ICertServerPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetRequestProperty )( 
+            ICertServerPolicy * This,
             /* [in] */ const BSTR strPropertyName,
             /* [in] */ LONG PropertyType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue);
+            /* [retval][out] */ VARIANT *pvarPropertyValue);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRequestAttribute )( 
-            ICertServerPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetRequestAttribute )( 
+            ICertServerPolicy * This,
             /* [in] */ const BSTR strAttributeName,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrAttributeValue);
+            /* [retval][out] */ BSTR *pstrAttributeValue);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCertificateProperty )( 
-            ICertServerPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetCertificateProperty )( 
+            ICertServerPolicy * This,
             /* [in] */ const BSTR strPropertyName,
             /* [in] */ LONG PropertyType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue);
+            /* [retval][out] */ VARIANT *pvarPropertyValue);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCertificateProperty )( 
-            ICertServerPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetCertificateProperty )( 
+            ICertServerPolicy * This,
             /* [in] */ const BSTR strPropertyName,
             /* [in] */ LONG PropertyType,
-            /* [in] */ const VARIANT __RPC_FAR *pvarPropertyValue);
+            /* [in] */ const VARIANT *pvarPropertyValue);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCertificateExtension )( 
-            ICertServerPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetCertificateExtension )( 
+            ICertServerPolicy * This,
             /* [in] */ const BSTR strExtensionName,
             /* [in] */ LONG Type,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarValue);
+            /* [retval][out] */ VARIANT *pvarValue);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCertificateExtensionFlags )( 
-            ICertServerPolicy __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pExtFlags);
+        HRESULT ( STDMETHODCALLTYPE *GetCertificateExtensionFlags )( 
+            ICertServerPolicy * This,
+            /* [retval][out] */ LONG *pExtFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCertificateExtension )( 
-            ICertServerPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetCertificateExtension )( 
+            ICertServerPolicy * This,
             /* [in] */ const BSTR strExtensionName,
             /* [in] */ LONG Type,
             /* [in] */ LONG ExtFlags,
-            /* [in] */ const VARIANT __RPC_FAR *pvarValue);
+            /* [in] */ const VARIANT *pvarValue);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateExtensionsSetup )( 
-            ICertServerPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnumerateExtensionsSetup )( 
+            ICertServerPolicy * This,
             /* [in] */ LONG Flags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateExtensions )( 
-            ICertServerPolicy __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrExtensionName);
+        HRESULT ( STDMETHODCALLTYPE *EnumerateExtensions )( 
+            ICertServerPolicy * This,
+            /* [retval][out] */ BSTR *pstrExtensionName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateExtensionsClose )( 
-            ICertServerPolicy __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *EnumerateExtensionsClose )( 
+            ICertServerPolicy * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateAttributesSetup )( 
-            ICertServerPolicy __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnumerateAttributesSetup )( 
+            ICertServerPolicy * This,
             /* [in] */ LONG Flags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateAttributes )( 
-            ICertServerPolicy __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrAttributeName);
+        HRESULT ( STDMETHODCALLTYPE *EnumerateAttributes )( 
+            ICertServerPolicy * This,
+            /* [retval][out] */ BSTR *pstrAttributeName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateAttributesClose )( 
-            ICertServerPolicy __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *EnumerateAttributesClose )( 
+            ICertServerPolicy * This);
         
         END_INTERFACE
     } ICertServerPolicyVtbl;
 
     interface ICertServerPolicy
     {
-        CONST_VTBL struct ICertServerPolicyVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICertServerPolicyVtbl *lpVtbl;
     };
 
     
@@ -340,7 +343,7 @@ EXTERN_C const IID IID_ICertServerPolicy;
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_SetContext_Proxy( 
-    ICertServerPolicy __RPC_FAR * This,
+    ICertServerPolicy * This,
     /* [in] */ LONG Context);
 
 
@@ -352,10 +355,10 @@ void __RPC_STUB ICertServerPolicy_SetContext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_GetRequestProperty_Proxy( 
-    ICertServerPolicy __RPC_FAR * This,
+    ICertServerPolicy * This,
     /* [in] */ const BSTR strPropertyName,
     /* [in] */ LONG PropertyType,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue);
+    /* [retval][out] */ VARIANT *pvarPropertyValue);
 
 
 void __RPC_STUB ICertServerPolicy_GetRequestProperty_Stub(
@@ -366,9 +369,9 @@ void __RPC_STUB ICertServerPolicy_GetRequestProperty_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_GetRequestAttribute_Proxy( 
-    ICertServerPolicy __RPC_FAR * This,
+    ICertServerPolicy * This,
     /* [in] */ const BSTR strAttributeName,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrAttributeValue);
+    /* [retval][out] */ BSTR *pstrAttributeValue);
 
 
 void __RPC_STUB ICertServerPolicy_GetRequestAttribute_Stub(
@@ -379,10 +382,10 @@ void __RPC_STUB ICertServerPolicy_GetRequestAttribute_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_GetCertificateProperty_Proxy( 
-    ICertServerPolicy __RPC_FAR * This,
+    ICertServerPolicy * This,
     /* [in] */ const BSTR strPropertyName,
     /* [in] */ LONG PropertyType,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue);
+    /* [retval][out] */ VARIANT *pvarPropertyValue);
 
 
 void __RPC_STUB ICertServerPolicy_GetCertificateProperty_Stub(
@@ -393,10 +396,10 @@ void __RPC_STUB ICertServerPolicy_GetCertificateProperty_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_SetCertificateProperty_Proxy( 
-    ICertServerPolicy __RPC_FAR * This,
+    ICertServerPolicy * This,
     /* [in] */ const BSTR strPropertyName,
     /* [in] */ LONG PropertyType,
-    /* [in] */ const VARIANT __RPC_FAR *pvarPropertyValue);
+    /* [in] */ const VARIANT *pvarPropertyValue);
 
 
 void __RPC_STUB ICertServerPolicy_SetCertificateProperty_Stub(
@@ -407,10 +410,10 @@ void __RPC_STUB ICertServerPolicy_SetCertificateProperty_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_GetCertificateExtension_Proxy( 
-    ICertServerPolicy __RPC_FAR * This,
+    ICertServerPolicy * This,
     /* [in] */ const BSTR strExtensionName,
     /* [in] */ LONG Type,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarValue);
+    /* [retval][out] */ VARIANT *pvarValue);
 
 
 void __RPC_STUB ICertServerPolicy_GetCertificateExtension_Stub(
@@ -421,8 +424,8 @@ void __RPC_STUB ICertServerPolicy_GetCertificateExtension_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_GetCertificateExtensionFlags_Proxy( 
-    ICertServerPolicy __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *pExtFlags);
+    ICertServerPolicy * This,
+    /* [retval][out] */ LONG *pExtFlags);
 
 
 void __RPC_STUB ICertServerPolicy_GetCertificateExtensionFlags_Stub(
@@ -433,11 +436,11 @@ void __RPC_STUB ICertServerPolicy_GetCertificateExtensionFlags_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_SetCertificateExtension_Proxy( 
-    ICertServerPolicy __RPC_FAR * This,
+    ICertServerPolicy * This,
     /* [in] */ const BSTR strExtensionName,
     /* [in] */ LONG Type,
     /* [in] */ LONG ExtFlags,
-    /* [in] */ const VARIANT __RPC_FAR *pvarValue);
+    /* [in] */ const VARIANT *pvarValue);
 
 
 void __RPC_STUB ICertServerPolicy_SetCertificateExtension_Stub(
@@ -448,7 +451,7 @@ void __RPC_STUB ICertServerPolicy_SetCertificateExtension_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_EnumerateExtensionsSetup_Proxy( 
-    ICertServerPolicy __RPC_FAR * This,
+    ICertServerPolicy * This,
     /* [in] */ LONG Flags);
 
 
@@ -460,8 +463,8 @@ void __RPC_STUB ICertServerPolicy_EnumerateExtensionsSetup_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_EnumerateExtensions_Proxy( 
-    ICertServerPolicy __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrExtensionName);
+    ICertServerPolicy * This,
+    /* [retval][out] */ BSTR *pstrExtensionName);
 
 
 void __RPC_STUB ICertServerPolicy_EnumerateExtensions_Stub(
@@ -472,7 +475,7 @@ void __RPC_STUB ICertServerPolicy_EnumerateExtensions_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_EnumerateExtensionsClose_Proxy( 
-    ICertServerPolicy __RPC_FAR * This);
+    ICertServerPolicy * This);
 
 
 void __RPC_STUB ICertServerPolicy_EnumerateExtensionsClose_Stub(
@@ -483,7 +486,7 @@ void __RPC_STUB ICertServerPolicy_EnumerateExtensionsClose_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_EnumerateAttributesSetup_Proxy( 
-    ICertServerPolicy __RPC_FAR * This,
+    ICertServerPolicy * This,
     /* [in] */ LONG Flags);
 
 
@@ -495,8 +498,8 @@ void __RPC_STUB ICertServerPolicy_EnumerateAttributesSetup_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_EnumerateAttributes_Proxy( 
-    ICertServerPolicy __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrAttributeName);
+    ICertServerPolicy * This,
+    /* [retval][out] */ BSTR *pstrAttributeName);
 
 
 void __RPC_STUB ICertServerPolicy_EnumerateAttributes_Stub(
@@ -507,7 +510,7 @@ void __RPC_STUB ICertServerPolicy_EnumerateAttributes_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerPolicy_EnumerateAttributesClose_Proxy( 
-    ICertServerPolicy __RPC_FAR * This);
+    ICertServerPolicy * This);
 
 
 void __RPC_STUB ICertServerPolicy_EnumerateAttributesClose_Stub(
@@ -542,30 +545,30 @@ EXTERN_C const IID IID_ICertServerExit;
         virtual HRESULT STDMETHODCALLTYPE GetRequestProperty( 
             /* [in] */ const BSTR strPropertyName,
             /* [in] */ LONG PropertyType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue) = 0;
+            /* [retval][out] */ VARIANT *pvarPropertyValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRequestAttribute( 
             /* [in] */ const BSTR strAttributeName,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrAttributeValue) = 0;
+            /* [retval][out] */ BSTR *pstrAttributeValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCertificateProperty( 
             /* [in] */ const BSTR strPropertyName,
             /* [in] */ LONG PropertyType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue) = 0;
+            /* [retval][out] */ VARIANT *pvarPropertyValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCertificateExtension( 
             /* [in] */ const BSTR strExtensionName,
             /* [in] */ LONG Type,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarValue) = 0;
+            /* [retval][out] */ VARIANT *pvarValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCertificateExtensionFlags( 
-            /* [retval][out] */ LONG __RPC_FAR *pExtFlags) = 0;
+            /* [retval][out] */ LONG *pExtFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateExtensionsSetup( 
             /* [in] */ LONG Flags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateExtensions( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstrExtensionName) = 0;
+            /* [retval][out] */ BSTR *pstrExtensionName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateExtensionsClose( void) = 0;
         
@@ -573,7 +576,7 @@ EXTERN_C const IID IID_ICertServerExit;
             /* [in] */ LONG Flags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateAttributes( 
-            /* [retval][out] */ BSTR __RPC_FAR *pstrAttributeName) = 0;
+            /* [retval][out] */ BSTR *pstrAttributeName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumerateAttributesClose( void) = 0;
         
@@ -585,105 +588,105 @@ EXTERN_C const IID IID_ICertServerExit;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICertServerExit __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICertServerExit * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICertServerExit __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICertServerExit * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICertServerExit __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICertServerExit * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ICertServerExit __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ICertServerExit * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ICertServerExit __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ICertServerExit * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ICertServerExit __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ICertServerExit * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ICertServerExit __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ICertServerExit * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetContext )( 
-            ICertServerExit __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetContext )( 
+            ICertServerExit * This,
             /* [in] */ LONG Context);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRequestProperty )( 
-            ICertServerExit __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetRequestProperty )( 
+            ICertServerExit * This,
             /* [in] */ const BSTR strPropertyName,
             /* [in] */ LONG PropertyType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue);
+            /* [retval][out] */ VARIANT *pvarPropertyValue);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRequestAttribute )( 
-            ICertServerExit __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetRequestAttribute )( 
+            ICertServerExit * This,
             /* [in] */ const BSTR strAttributeName,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrAttributeValue);
+            /* [retval][out] */ BSTR *pstrAttributeValue);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCertificateProperty )( 
-            ICertServerExit __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetCertificateProperty )( 
+            ICertServerExit * This,
             /* [in] */ const BSTR strPropertyName,
             /* [in] */ LONG PropertyType,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue);
+            /* [retval][out] */ VARIANT *pvarPropertyValue);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCertificateExtension )( 
-            ICertServerExit __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetCertificateExtension )( 
+            ICertServerExit * This,
             /* [in] */ const BSTR strExtensionName,
             /* [in] */ LONG Type,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarValue);
+            /* [retval][out] */ VARIANT *pvarValue);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCertificateExtensionFlags )( 
-            ICertServerExit __RPC_FAR * This,
-            /* [retval][out] */ LONG __RPC_FAR *pExtFlags);
+        HRESULT ( STDMETHODCALLTYPE *GetCertificateExtensionFlags )( 
+            ICertServerExit * This,
+            /* [retval][out] */ LONG *pExtFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateExtensionsSetup )( 
-            ICertServerExit __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnumerateExtensionsSetup )( 
+            ICertServerExit * This,
             /* [in] */ LONG Flags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateExtensions )( 
-            ICertServerExit __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrExtensionName);
+        HRESULT ( STDMETHODCALLTYPE *EnumerateExtensions )( 
+            ICertServerExit * This,
+            /* [retval][out] */ BSTR *pstrExtensionName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateExtensionsClose )( 
-            ICertServerExit __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *EnumerateExtensionsClose )( 
+            ICertServerExit * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateAttributesSetup )( 
-            ICertServerExit __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnumerateAttributesSetup )( 
+            ICertServerExit * This,
             /* [in] */ LONG Flags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateAttributes )( 
-            ICertServerExit __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pstrAttributeName);
+        HRESULT ( STDMETHODCALLTYPE *EnumerateAttributes )( 
+            ICertServerExit * This,
+            /* [retval][out] */ BSTR *pstrAttributeName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumerateAttributesClose )( 
-            ICertServerExit __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *EnumerateAttributesClose )( 
+            ICertServerExit * This);
         
         END_INTERFACE
     } ICertServerExitVtbl;
 
     interface ICertServerExit
     {
-        CONST_VTBL struct ICertServerExitVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICertServerExitVtbl *lpVtbl;
     };
 
     
@@ -758,7 +761,7 @@ EXTERN_C const IID IID_ICertServerExit;
 
 
 HRESULT STDMETHODCALLTYPE ICertServerExit_SetContext_Proxy( 
-    ICertServerExit __RPC_FAR * This,
+    ICertServerExit * This,
     /* [in] */ LONG Context);
 
 
@@ -770,10 +773,10 @@ void __RPC_STUB ICertServerExit_SetContext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerExit_GetRequestProperty_Proxy( 
-    ICertServerExit __RPC_FAR * This,
+    ICertServerExit * This,
     /* [in] */ const BSTR strPropertyName,
     /* [in] */ LONG PropertyType,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue);
+    /* [retval][out] */ VARIANT *pvarPropertyValue);
 
 
 void __RPC_STUB ICertServerExit_GetRequestProperty_Stub(
@@ -784,9 +787,9 @@ void __RPC_STUB ICertServerExit_GetRequestProperty_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerExit_GetRequestAttribute_Proxy( 
-    ICertServerExit __RPC_FAR * This,
+    ICertServerExit * This,
     /* [in] */ const BSTR strAttributeName,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrAttributeValue);
+    /* [retval][out] */ BSTR *pstrAttributeValue);
 
 
 void __RPC_STUB ICertServerExit_GetRequestAttribute_Stub(
@@ -797,10 +800,10 @@ void __RPC_STUB ICertServerExit_GetRequestAttribute_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerExit_GetCertificateProperty_Proxy( 
-    ICertServerExit __RPC_FAR * This,
+    ICertServerExit * This,
     /* [in] */ const BSTR strPropertyName,
     /* [in] */ LONG PropertyType,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarPropertyValue);
+    /* [retval][out] */ VARIANT *pvarPropertyValue);
 
 
 void __RPC_STUB ICertServerExit_GetCertificateProperty_Stub(
@@ -811,10 +814,10 @@ void __RPC_STUB ICertServerExit_GetCertificateProperty_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerExit_GetCertificateExtension_Proxy( 
-    ICertServerExit __RPC_FAR * This,
+    ICertServerExit * This,
     /* [in] */ const BSTR strExtensionName,
     /* [in] */ LONG Type,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarValue);
+    /* [retval][out] */ VARIANT *pvarValue);
 
 
 void __RPC_STUB ICertServerExit_GetCertificateExtension_Stub(
@@ -825,8 +828,8 @@ void __RPC_STUB ICertServerExit_GetCertificateExtension_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerExit_GetCertificateExtensionFlags_Proxy( 
-    ICertServerExit __RPC_FAR * This,
-    /* [retval][out] */ LONG __RPC_FAR *pExtFlags);
+    ICertServerExit * This,
+    /* [retval][out] */ LONG *pExtFlags);
 
 
 void __RPC_STUB ICertServerExit_GetCertificateExtensionFlags_Stub(
@@ -837,7 +840,7 @@ void __RPC_STUB ICertServerExit_GetCertificateExtensionFlags_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerExit_EnumerateExtensionsSetup_Proxy( 
-    ICertServerExit __RPC_FAR * This,
+    ICertServerExit * This,
     /* [in] */ LONG Flags);
 
 
@@ -849,8 +852,8 @@ void __RPC_STUB ICertServerExit_EnumerateExtensionsSetup_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerExit_EnumerateExtensions_Proxy( 
-    ICertServerExit __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrExtensionName);
+    ICertServerExit * This,
+    /* [retval][out] */ BSTR *pstrExtensionName);
 
 
 void __RPC_STUB ICertServerExit_EnumerateExtensions_Stub(
@@ -861,7 +864,7 @@ void __RPC_STUB ICertServerExit_EnumerateExtensions_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerExit_EnumerateExtensionsClose_Proxy( 
-    ICertServerExit __RPC_FAR * This);
+    ICertServerExit * This);
 
 
 void __RPC_STUB ICertServerExit_EnumerateExtensionsClose_Stub(
@@ -872,7 +875,7 @@ void __RPC_STUB ICertServerExit_EnumerateExtensionsClose_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerExit_EnumerateAttributesSetup_Proxy( 
-    ICertServerExit __RPC_FAR * This,
+    ICertServerExit * This,
     /* [in] */ LONG Flags);
 
 
@@ -884,8 +887,8 @@ void __RPC_STUB ICertServerExit_EnumerateAttributesSetup_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerExit_EnumerateAttributes_Proxy( 
-    ICertServerExit __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrAttributeName);
+    ICertServerExit * This,
+    /* [retval][out] */ BSTR *pstrAttributeName);
 
 
 void __RPC_STUB ICertServerExit_EnumerateAttributes_Stub(
@@ -896,7 +899,7 @@ void __RPC_STUB ICertServerExit_EnumerateAttributes_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertServerExit_EnumerateAttributesClose_Proxy( 
-    ICertServerExit __RPC_FAR * This);
+    ICertServerExit * This);
 
 
 void __RPC_STUB ICertServerExit_EnumerateAttributesClose_Stub(
@@ -912,15 +915,15 @@ void __RPC_STUB ICertServerExit_EnumerateAttributesClose_Stub(
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
+unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
+void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
 /* end of Additional Prototypes */
 
@@ -929,6 +932,7 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

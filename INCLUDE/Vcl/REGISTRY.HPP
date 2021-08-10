@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Registry.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Registry.pas' rev: 6.00
 
 #ifndef RegistryHPP
 #define RegistryHPP
@@ -29,38 +29,28 @@ class PASCALIMPLEMENTATION ERegistryException : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall ERegistryException(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall ERegistryException(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall ERegistryException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall ERegistryException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall ERegistryException(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall ERegistryException(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall ERegistryException(int Ident, const System::TVarRec 
-		* Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall ERegistryException(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall ERegistryException(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall ERegistryException(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall ERegistryException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ERegistryException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall ERegistryException(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ERegistryException(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall ERegistryException(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ERegistryException(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -71,6 +61,7 @@ public:
 };
 
 
+#pragma pack(push, 4)
 struct TRegKeyInfo
 {
 	int NumSubKeys;
@@ -80,16 +71,19 @@ struct TRegKeyInfo
 	int MaxDataLen;
 	_FILETIME FileTime;
 } ;
+#pragma pack(pop)
 
 #pragma option push -b-
 enum TRegDataType { rdUnknown, rdString, rdExpandString, rdInteger, rdBinary };
 #pragma option pop
 
+#pragma pack(push, 4)
 struct TRegDataInfo
 {
 	TRegDataType RegData;
 	int DataSize;
 } ;
+#pragma pack(pop)
 
 class DELPHICLASS TRegistry;
 class PASCALIMPLEMENTATION TRegistry : public System::TObject 
@@ -144,8 +138,7 @@ public:
 	System::TDateTime __fastcall ReadTime(const AnsiString Name);
 	bool __fastcall RegistryConnect(const AnsiString UNCName);
 	void __fastcall RenameValue(const AnsiString OldName, const AnsiString NewName);
-	bool __fastcall ReplaceKey(const AnsiString Key, const AnsiString FileName, const AnsiString BackUpFileName
-		);
+	bool __fastcall ReplaceKey(const AnsiString Key, const AnsiString FileName, const AnsiString BackUpFileName);
 	bool __fastcall RestoreKey(const AnsiString Key, const AnsiString FileName);
 	bool __fastcall SaveKey(const AnsiString Key, const AnsiString FileName);
 	bool __fastcall UnLoadKey(const AnsiString Key);
@@ -179,16 +172,11 @@ private:
 public:
 	__fastcall TRegIniFile(const AnsiString FileName)/* overload */;
 	__fastcall TRegIniFile(const AnsiString FileName, unsigned AAccess)/* overload */;
-	HIDESBASE AnsiString __fastcall ReadString(const AnsiString Section, const AnsiString Ident, const 
-		AnsiString Default);
-	HIDESBASE int __fastcall ReadInteger(const AnsiString Section, const AnsiString Ident, int Default)
-		;
-	HIDESBASE void __fastcall WriteInteger(const AnsiString Section, const AnsiString Ident, int Value)
-		;
-	HIDESBASE void __fastcall WriteString(const AnsiString Section, const AnsiString Ident, const AnsiString 
-		Value);
+	HIDESBASE AnsiString __fastcall ReadString(const AnsiString Section, const AnsiString Ident, const AnsiString Default);
+	HIDESBASE int __fastcall ReadInteger(const AnsiString Section, const AnsiString Ident, int Default);
+	HIDESBASE void __fastcall WriteInteger(const AnsiString Section, const AnsiString Ident, int Value);
+	HIDESBASE void __fastcall WriteString(const AnsiString Section, const AnsiString Ident, const AnsiString Value);
 	HIDESBASE bool __fastcall ReadBool(const AnsiString Section, const AnsiString Ident, bool Default);
-		
 	HIDESBASE void __fastcall WriteBool(const AnsiString Section, const AnsiString Ident, bool Value);
 	void __fastcall ReadSection(const AnsiString Section, Classes::TStrings* Strings);
 	void __fastcall ReadSections(Classes::TStrings* Strings);
@@ -216,27 +204,20 @@ public:
 	__fastcall TRegistryIniFile(const AnsiString FileName)/* overload */;
 	__fastcall TRegistryIniFile(const AnsiString FileName, unsigned AAccess)/* overload */;
 	__fastcall virtual ~TRegistryIniFile(void);
-	virtual System::TDateTime __fastcall ReadDate(const AnsiString Section, const AnsiString Name, System::TDateTime 
-		Default);
-	virtual System::TDateTime __fastcall ReadDateTime(const AnsiString Section, const AnsiString Name, 
-		System::TDateTime Default);
+	virtual System::TDateTime __fastcall ReadDate(const AnsiString Section, const AnsiString Name, System::TDateTime Default);
+	virtual System::TDateTime __fastcall ReadDateTime(const AnsiString Section, const AnsiString Name, System::TDateTime Default);
 	virtual int __fastcall ReadInteger(const AnsiString Section, const AnsiString Ident, int Default);
-	virtual double __fastcall ReadFloat(const AnsiString Section, const AnsiString Name, double Default
-		);
-	virtual AnsiString __fastcall ReadString(const AnsiString Section, const AnsiString Ident, const AnsiString 
-		Default);
-	virtual System::TDateTime __fastcall ReadTime(const AnsiString Section, const AnsiString Name, System::TDateTime 
-		Default);
-	virtual void __fastcall WriteDate(const AnsiString Section, const AnsiString Name, System::TDateTime 
-		Value);
-	virtual void __fastcall WriteDateTime(const AnsiString Section, const AnsiString Name, System::TDateTime 
-		Value);
+	virtual double __fastcall ReadFloat(const AnsiString Section, const AnsiString Name, double Default);
+	virtual AnsiString __fastcall ReadString(const AnsiString Section, const AnsiString Ident, const AnsiString Default);
+	virtual System::TDateTime __fastcall ReadTime(const AnsiString Section, const AnsiString Name, System::TDateTime Default);
+	virtual int __fastcall ReadBinaryStream(const AnsiString Section, const AnsiString Name, Classes::TStream* Value);
+	virtual void __fastcall WriteDate(const AnsiString Section, const AnsiString Name, System::TDateTime Value);
+	virtual void __fastcall WriteDateTime(const AnsiString Section, const AnsiString Name, System::TDateTime Value);
 	virtual void __fastcall WriteFloat(const AnsiString Section, const AnsiString Name, double Value);
 	virtual void __fastcall WriteInteger(const AnsiString Section, const AnsiString Ident, int Value);
-	virtual void __fastcall WriteString(const AnsiString Section, const AnsiString Ident, const AnsiString 
-		Value);
-	virtual void __fastcall WriteTime(const AnsiString Section, const AnsiString Name, System::TDateTime 
-		Value);
+	virtual void __fastcall WriteString(const AnsiString Section, const AnsiString Ident, const AnsiString Value);
+	virtual void __fastcall WriteTime(const AnsiString Section, const AnsiString Name, System::TDateTime Value);
+	virtual void __fastcall WriteBinaryStream(const AnsiString Section, const AnsiString Name, Classes::TStream* Value);
 	virtual void __fastcall ReadSection(const AnsiString Section, Classes::TStrings* Strings);
 	virtual void __fastcall ReadSections(Classes::TStrings* Strings);
 	virtual void __fastcall ReadSectionValues(const AnsiString Section, Classes::TStrings* Strings);
@@ -250,9 +231,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Registry */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Registry;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

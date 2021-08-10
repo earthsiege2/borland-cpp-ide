@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Inprise Corporation.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland Corporation.  All Rights Reserved.
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------
 // App.h - dcc32 generated hdr (DO NOT EDIT) rev: 0

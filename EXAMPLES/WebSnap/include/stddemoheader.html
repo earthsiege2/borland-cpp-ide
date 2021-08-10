@@ -1,0 +1,77 @@
+<!-- Note that this html template contains an IMG tag referencing a jpg.
+     At design time, the jpg is expected to be in a directory called images
+     located as a sibling directory of the directory containing the page module.
+
+     At runtime, the jpg is expected to be in a virtual directory called images.
+     If you are running the application under webappdbg.exe then you'll need to include the
+     directory of the jpg file in Web App Debugger's search path.
+-->
+<%
+   function PathInfoToRelativePath(S)
+   {
+     var R = '';
+     var L = S.length
+     I = 0
+     while (I < L)
+     {
+       if (S.charAt(I) == '/')
+         R = R + '../'
+       I++
+     }
+     return R
+   }
+
+   function QualifyImage(S)
+   {
+     if (Application.Designing)
+       return Application.QualifyFileName("..\\images\\" + S);   // relative directory
+     else
+       return PathInfoToRelativePath(Request.PathInfo) + '../images/' + S;  // virtual directory
+   }
+%>
+
+<HTML>
+<HEAD>
+<TITLE>
+<%= Page.Title %>
+</TITLE>
+</HEAD>
+<BODY bgcolor="white">
+<img src="<%=QualifyImage("globe.jpg") %>">
+<H2><%= Application.Title %></H2>
+
+<% if (EndUser.Logout != null) { %>
+<%   if (EndUser.DisplayName != '') { %>
+  <H1>Welcome <%=EndUser.DisplayName %></H1>
+<%   } %>
+<%   if (EndUser.Logout.Enabled) { %>
+  <A HREF="<%=EndUser.Logout.AsHREF%>">Logout</A>
+<%   } %>
+<%   if (EndUser.LoginForm.Enabled) { %>
+  <A HREF=<%=EndUser.LoginForm.AsHREF%>>Login</A>
+<%   } %>
+<% } %>
+
+<p>
+<TABLE CELLSPACING=0 CELLPADDING=0>
+<TD>
+<%  e = new Enumerator(Pages)
+     s = ''
+     c = 0
+     for (; !e.atEnd(); e.moveNext())
+     {
+       if (e.item().Published)
+       {
+         if (c>0) s += '&nbsp;|&nbsp;'
+         if (Page.Name != e.item().Name)
+           s += '<A HREF="' + e.item().HREF + '">' + e.item().Title + '</A>'
+         else
+           s += e.item().Title
+         c++
+       }
+     }
+     if (c>1) Response.Write(s)
+%>
+</TD>
+</TABLE>
+

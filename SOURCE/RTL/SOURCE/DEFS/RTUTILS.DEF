@@ -1,59 +1,59 @@
-LIBRARY RTUTILS
+LIBRARY Rtutils
 EXPORTS
 
-    CreateWaitEvent                          = 'RTUTILS.DLL'.*
-    CreateWaitEventBinding                   = 'RTUTILS.DLL'.*
-    CreateWaitTimer                          = 'RTUTILS.DLL'.*
-    DeRegisterWaitEventBinding               = 'RTUTILS.DLL'.*
-    DeRegisterWaitEventBindingSelf           = 'RTUTILS.DLL'.*
-    DeRegisterWaitEventsTimers               = 'RTUTILS.DLL'.*
-    DeRegisterWaitEventsTimersSelf           = 'RTUTILS.DLL'.*
-    DebugPrintWaitWorkerThreads              = 'RTUTILS.DLL'.*
-    LogErrorA                                = 'RTUTILS.DLL'.*
-    LogErrorW                                = 'RTUTILS.DLL'.*
-    LogEventA                                = 'RTUTILS.DLL'.*
-    LogEventW                                = 'RTUTILS.DLL'.*
-    MprSetupProtocolEnum                     = 'RTUTILS.DLL'.*
-    MprSetupProtocolFree                     = 'RTUTILS.DLL'.*
-    QueueWorkItem                            = 'RTUTILS.DLL'.*
-    RegisterWaitEventBinding                 = 'RTUTILS.DLL'.*
-    RegisterWaitEventsTimers                 = 'RTUTILS.DLL'.*
-    RouterAssert                             = 'RTUTILS.DLL'.*
-    RouterGetErrorStringA                    = 'RTUTILS.DLL'.*
-    RouterGetErrorStringW                    = 'RTUTILS.DLL'.*
-    RouterLogDeregisterA                     = 'RTUTILS.DLL'.*
-    RouterLogDeregisterW                     = 'RTUTILS.DLL'.*
-    RouterLogEventA                          = 'RTUTILS.DLL'.*
-    RouterLogEventDataA                      = 'RTUTILS.DLL'.*
-    RouterLogEventDataW                      = 'RTUTILS.DLL'.*
-    _RouterLogEventExA                       = 'RTUTILS.DLL'.RouterLogEventExA
-    _RouterLogEventExW                       = 'RTUTILS.DLL'.RouterLogEventExW
-    RouterLogEventStringA                    = 'RTUTILS.DLL'.*
-    RouterLogEventStringW                    = 'RTUTILS.DLL'.*
-    RouterLogEventValistExA                  = 'RTUTILS.DLL'.*
-    RouterLogEventValistExW                  = 'RTUTILS.DLL'.*
-    RouterLogEventW                          = 'RTUTILS.DLL'.*
-    RouterLogRegisterA                       = 'RTUTILS.DLL'.*
-    RouterLogRegisterW                       = 'RTUTILS.DLL'.*
-    SetIoCompletionProc                      = 'RTUTILS.DLL'.*
-    TraceDeregisterA                         = 'RTUTILS.DLL'.*
-    TraceDeregisterExA                       = 'RTUTILS.DLL'.*
-    TraceDeregisterExW                       = 'RTUTILS.DLL'.*
-    TraceDeregisterW                         = 'RTUTILS.DLL'.*
-    TraceDumpExA                             = 'RTUTILS.DLL'.*
-    TraceDumpExW                             = 'RTUTILS.DLL'.*
-    TraceGetConsoleA                         = 'RTUTILS.DLL'.*
-    TraceGetConsoleW                         = 'RTUTILS.DLL'.*
-    _TracePrintfA                            = 'RTUTILS.DLL'.TracePrintfA
-    _TracePrintfExA                          = 'RTUTILS.DLL'.TracePrintfExA
-    _TracePrintfExW                          = 'RTUTILS.DLL'.TracePrintfExW
-    _TracePrintfW                            = 'RTUTILS.DLL'.TracePrintfW
-    TracePutsExA                             = 'RTUTILS.DLL'.*
-    TracePutsExW                             = 'RTUTILS.DLL'.*
-    TraceRegisterExA                         = 'RTUTILS.DLL'.*
-    TraceRegisterExW                         = 'RTUTILS.DLL'.*
-    TraceVprintfExA                          = 'RTUTILS.DLL'.*
-    TraceVprintfExW                          = 'RTUTILS.DLL'.*
-    UpdateWaitTimer                          = 'RTUTILS.DLL'.*
-    WTFreeEvent                              = 'RTUTILS.DLL'.*
-    WTFreeTimer                              = 'RTUTILS.DLL'.*
+    CreateWaitEvent
+    CreateWaitEventBinding
+    CreateWaitTimer
+    DeRegisterWaitEventBinding
+    DeRegisterWaitEventBindingSelf
+    DeRegisterWaitEventsTimers
+    DeRegisterWaitEventsTimersSelf
+    DebugPrintWaitWorkerThreads
+    LogErrorA
+    LogErrorW
+    LogEventA
+    LogEventW
+    MprSetupProtocolEnum
+    MprSetupProtocolFree
+    QueueWorkItem
+    RegisterWaitEventBinding
+    RegisterWaitEventsTimers
+    RouterAssert
+    RouterGetErrorStringA
+    RouterGetErrorStringW
+    RouterLogDeregisterA
+    RouterLogDeregisterW
+    RouterLogEventA
+    RouterLogEventDataA
+    RouterLogEventDataW
+    _RouterLogEventExA        = RouterLogEventExA
+    _RouterLogEventExW        = RouterLogEventExW
+    RouterLogEventStringA
+    RouterLogEventStringW
+    RouterLogEventValistExA
+    RouterLogEventValistExW
+    RouterLogEventW
+    RouterLogRegisterA
+    RouterLogRegisterW
+    SetIoCompletionProc
+    TraceDeregisterA
+    TraceDeregisterExA
+    TraceDeregisterExW
+    TraceDeregisterW
+    TraceDumpExA
+    TraceDumpExW
+    TraceGetConsoleA
+    TraceGetConsoleW
+    _TracePrintfA        = TracePrintfA
+    _TracePrintfExA        = TracePrintfExA
+    _TracePrintfExW        = TracePrintfExW
+    _TracePrintfW        = TracePrintfW
+    TracePutsExA
+    TracePutsExW
+    TraceRegisterExA
+    TraceRegisterExW
+    TraceVprintfExA
+    TraceVprintfExW
+    UpdateWaitTimer
+    WTFreeEvent
+    WTFreeTimer

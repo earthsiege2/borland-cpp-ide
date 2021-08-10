@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Forms.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Forms.pas' rev: 6.00
 
 #ifndef FormsHPP
 #define FormsHPP
@@ -10,6 +10,7 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
+#include <HelpIntfs.hpp>	// Pascal unit
 #include <MultiMon.hpp>	// Pascal unit
 #include <ActnList.hpp>	// Pascal unit
 #include <Imm.hpp>	// Pascal unit
@@ -66,8 +67,8 @@ private:
 	HIDESBASE MESSAGE void __fastcall CMBiDiModeChanged(Messages::TMessage &Message);
 	
 protected:
-	virtual void __fastcall AdjustClientRect(Windows::TRect &Rect);
-	virtual void __fastcall AlignControls(Controls::TControl* AControl, Windows::TRect &ARect);
+	virtual void __fastcall AdjustClientRect(Types::TRect &Rect);
+	virtual void __fastcall AlignControls(Controls::TControl* AControl, Types::TRect &ARect);
 	virtual bool __fastcall AutoScrollEnabled(void);
 	virtual void __fastcall AutoScrollInView(Controls::TControl* AControl);
 	DYNAMIC void __fastcall ChangeScale(int M, int D);
@@ -88,10 +89,8 @@ __published:
 	__property TControlScrollBar* HorzScrollBar = {read=FHorzScrollBar, write=SetHorzScrollBar};
 	__property TControlScrollBar* VertScrollBar = {read=FVertScrollBar, write=SetVertScrollBar};
 public:
-		
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TScrollingWinControl(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TScrollingWinControl(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -154,8 +153,7 @@ public:
 __published:
 	__property int ButtonSize = {read=FButtonSize, write=SetButtonSize, default=0};
 	__property Graphics::TColor Color = {read=FColor, write=SetColor, default=-2147483628};
-	__property TScrollBarInc Increment = {read=FIncrement, write=FIncrement, stored=IsIncrementStored, 
-		default=8};
+	__property TScrollBarInc Increment = {read=FIncrement, write=FIncrement, stored=IsIncrementStored, default=8};
 	__property Word Margin = {read=FMargin, write=FMargin, default=0};
 	__property bool ParentColor = {read=FParentColor, write=SetParentColor, default=1};
 	__property int Position = {read=FPosition, write=SetPosition, default=0};
@@ -203,31 +201,36 @@ public:
 	__fastcall virtual TScrollBox(Classes::TComponent* AOwner);
 	
 __published:
-	__property Align ;
-	__property Anchors ;
-	__property AutoScroll ;
-	__property AutoSize ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property AutoScroll  = {default=1};
+	__property AutoSize  = {default=0};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelOuter  = {index=1, default=1};
+	__property BevelKind  = {default=0};
+	__property BevelWidth  = {default=1};
 	__property BiDiMode ;
 	__property TBorderStyle BorderStyle = {read=FBorderStyle, write=SetBorderStyle, default=1};
 	__property Constraints ;
-	__property DockSite ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DockSite  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Color ;
 	__property Ctl3D ;
 	__property Font ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=1};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
+	__property Visible  = {default=1};
 	__property OnCanResize ;
 	__property OnClick ;
 	__property OnConstrainedResize ;
@@ -259,8 +262,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TScrollBox(HWND ParentWindow) : TScrollingWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TScrollBox(HWND ParentWindow) : TScrollingWinControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -278,8 +280,7 @@ private:
 protected:
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	DYNAMIC void __fastcall GetChildren(Classes::TGetChildProc Proc, Classes::TComponent* Root);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall SetParent(Controls::TWinControl* AParent);
 	
 public:
@@ -291,8 +292,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomFrame(HWND ParentWindow) : TScrollingWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomFrame(HWND ParentWindow) : TScrollingWinControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -306,30 +306,30 @@ class PASCALIMPLEMENTATION TFrame : public TCustomFrame
 	typedef TCustomFrame inherited;
 	
 __published:
-	__property Align ;
-	__property Anchors ;
-	__property AutoScroll ;
-	__property AutoSize ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property AutoScroll  = {default=1};
+	__property AutoSize  = {default=0};
 	__property BiDiMode ;
 	__property Constraints ;
-	__property DockSite ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DockSite  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Color ;
 	__property Ctl3D ;
 	__property Font ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=1};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
+	__property Visible  = {default=1};
 	__property OnCanResize ;
 	__property OnClick ;
 	__property OnConstrainedResize ;
@@ -356,8 +356,7 @@ __published:
 	__property OnUnDock ;
 public:
 	#pragma option push -w-inl
-	/* TCustomFrame.Create */ inline __fastcall virtual TFrame(Classes::TComponent* AOwner) : TCustomFrame(
-		AOwner) { }
+	/* TCustomFrame.Create */ inline __fastcall virtual TFrame(Classes::TComponent* AOwner) : TCustomFrame(AOwner) { }
 	#pragma option pop
 	
 public:
@@ -367,18 +366,16 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TFrame(HWND ParentWindow) : TCustomFrame(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TFrame(HWND ParentWindow) : TCustomFrame(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
-__interface IDesigner;
-typedef System::DelphiInterface<IDesigner> _di_IDesigner;
+__interface IDesignerHook;
+typedef System::DelphiInterface<IDesignerHook> _di_IDesignerHook;
 class DELPHICLASS TCustomForm;
-__interface INTERFACE_UUID("{ABBE7256-5495-11D1-9FB5-0020AF3D82DA}") IDesigner  : public IDesignerNotify 
-	
+__interface INTERFACE_UUID("{1E431DA5-2BEA-4DE7-A330-CC45FD2FB1EC}") IDesignerHook  : public IDesignerNotify 
 {
 	
 public:
@@ -388,8 +385,7 @@ public:
 	virtual void __fastcall SetIsControl(bool Value) = 0 ;
 	virtual bool __fastcall IsDesignMsg(Controls::TControl* Sender, Messages::TMessage &Message) = 0 ;
 	virtual void __fastcall PaintGrid(void) = 0 ;
-	virtual void __fastcall ValidateRename(Classes::TComponent* AComponent, const AnsiString CurName, const 
-		AnsiString NewName) = 0 ;
+	virtual void __fastcall ValidateRename(Classes::TComponent* AComponent, const AnsiString CurName, const AnsiString NewName) = 0 ;
 	virtual AnsiString __fastcall UniqueName(const AnsiString BaseName) = 0 ;
 	virtual Classes::TComponent* __fastcall GetRoot(void) = 0 ;
 	__property bool IsControl = {read=GetIsControl, write=SetIsControl};
@@ -398,7 +394,7 @@ public:
 
 __interface IOleForm;
 typedef System::DelphiInterface<IOleForm> _di_IOleForm;
-__interface INTERFACE_UUID("{CD02E1C1-52DA-11D0-9EA6-0020AF3D82DA}") IOleForm  : public IUnknown 
+__interface INTERFACE_UUID("{CD02E1C1-52DA-11D0-9EA6-0020AF3D82DA}") IOleForm  : public IInterface 
 {
 	
 public:
@@ -417,8 +413,7 @@ enum TBorderIcon { biSystemMenu, biMinimize, biMaximize, biHelp };
 typedef Set<TBorderIcon, biSystemMenu, biHelp>  TBorderIcons;
 
 #pragma option push -b-
-enum TPosition { poDesigned, poDefault, poDefaultPosOnly, poDefaultSizeOnly, poScreenCenter, poDesktopCenter, 
-	poMainFormCenter, poOwnerFormCenter };
+enum TPosition { poDesigned, poDefault, poDefaultPosOnly, poDefaultSizeOnly, poScreenCenter, poDesktopCenter, poMainFormCenter, poOwnerFormCenter };
 #pragma option pop
 
 #pragma option push -b-
@@ -437,8 +432,6 @@ enum TShowAction { saIgnore, saRestore, saMinimize, saMaximize };
 enum TTileMode { tbHorizontal, tbVertical };
 #pragma option pop
 
-typedef int TModalResult;
-
 #pragma option push -b-
 enum TCloseAction { caNone, caHide, caFree, caMinimize };
 #pragma option pop
@@ -454,6 +447,8 @@ enum Forms__6 { fsCreating, fsVisible, fsShowing, fsModal, fsCreatedMDIChild, fs
 typedef Set<Forms__6, fsCreating, fsActivated>  TFormState;
 
 typedef void __fastcall (__closure *TShortCutEvent)(Messages::TWMKey &Msg, bool &Handled);
+
+typedef bool __fastcall (__closure *THelpEvent)(Word Command, int Data, bool &CallHelp);
 
 class DELPHICLASS TForm;
 class DELPHICLASS TMonitor;
@@ -483,8 +478,8 @@ private:
 	Graphics::TIcon* FIcon;
 	bool FInCMParentBiDiModeChanged;
 	Menus::TMainMenu* FMenu;
-	TModalResult FModalResult;
-	_di_IDesigner FDesigner;
+	Controls::TModalResult FModalResult;
+	_di_IDesignerHook FDesigner;
 	HWND FClientHandle;
 	Menus::TMenuItem* FWindowMenu;
 	int FPixelsPerInch;
@@ -501,13 +496,17 @@ private:
 	TCloseEvent FOnClose;
 	TCloseQueryEvent FOnCloseQuery;
 	Classes::TNotifyEvent FOnDeactivate;
-	Classes::THelpEvent FOnHelp;
+	THelpEvent FOnHelp;
 	Classes::TNotifyEvent FOnHide;
 	Classes::TNotifyEvent FOnPaint;
 	TShortCutEvent FOnShortCut;
 	Classes::TNotifyEvent FOnShow;
 	Classes::TNotifyEvent FOnCreate;
 	Classes::TNotifyEvent FOnDestroy;
+	bool FAlphaBlend;
+	Byte FAlphaBlendValue;
+	bool FTransparentColor;
+	Graphics::TColor FTransparentColorValue;
 	void __fastcall RefreshMDIMenu(void);
 	void __fastcall ClientWndProc(Messages::TMessage &Message);
 	void __fastcall CloseModal(void);
@@ -535,7 +534,7 @@ private:
 	void __fastcall SetBorderStyle(TFormBorderStyle Value);
 	HIDESBASE void __fastcall SetClientHeight(int Value);
 	HIDESBASE void __fastcall SetClientWidth(int Value);
-	void __fastcall SetDesigner(_di_IDesigner ADesigner);
+	void __fastcall SetDesigner(_di_IDesignerHook ADesigner);
 	void __fastcall SetFormStyle(TFormStyle Value);
 	void __fastcall SetIcon(Graphics::TIcon* Value);
 	void __fastcall SetMenu(Menus::TMainMenu* Value);
@@ -592,13 +591,20 @@ private:
 	MESSAGE void __fastcall CMUIActivate(void *Message);
 	HIDESBASE MESSAGE void __fastcall CMParentBiDiModeChanged(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMParentFontChanged(Messages::TMessage &Message);
+	MESSAGE void __fastcall CMIsShortCut(Messages::TWMKey &Message);
+	void __fastcall SetLayeredAttribs(void);
+	void __fastcall SetAlphaBlend(const bool Value);
+	void __fastcall SetAlphaBlendValue(const Byte Value);
+	void __fastcall SetTransparentColor(const bool Value);
+	void __fastcall SetTransparentColorValue(const Graphics::TColor Value);
+	void __fastcall InitAlphaBlending(Controls::TCreateParams &Params);
 	
 protected:
 	Classes::TList* FActionLists;
 	TFormState FFormState;
 	DYNAMIC void __fastcall Activate(void);
 	DYNAMIC void __fastcall ActiveChanged(void);
-	virtual void __fastcall AlignControls(Controls::TControl* AControl, Windows::TRect &Rect);
+	virtual void __fastcall AlignControls(Controls::TControl* AControl, Types::TRect &Rect);
 	DYNAMIC void __fastcall BeginAutoDrag(void);
 	DYNAMIC void __fastcall ChangeScale(int M, int D);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
@@ -612,12 +618,12 @@ protected:
 	virtual void __fastcall DoDestroy(void);
 	DYNAMIC void __fastcall DoHide(void);
 	DYNAMIC void __fastcall DoShow(void);
-	virtual Windows::TRect __fastcall GetClientRect();
+	virtual Types::TRect __fastcall GetClientRect();
 	DYNAMIC void __fastcall GetChildren(Classes::TGetChildProc Proc, Classes::TComponent* Root);
 	virtual bool __fastcall GetFloating(void);
+	DYNAMIC bool __fastcall HandleCreateException(void);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	DYNAMIC void __fastcall Paint(void);
 	virtual void __fastcall PaintWindow(HDC DC);
 	DYNAMIC bool __fastcall PaletteChanged(bool Foreground);
@@ -626,25 +632,26 @@ protected:
 	DYNAMIC void __fastcall RequestAlign(void);
 	DYNAMIC void __fastcall SetChildOrder(Classes::TComponent* Child, int Order);
 	virtual void __fastcall SetParentBiDiMode(bool Value);
-	DYNAMIC void __fastcall DoDock(Controls::TWinControl* NewDockSite, Windows::TRect &ARect);
+	DYNAMIC void __fastcall DoDock(Controls::TWinControl* NewDockSite, Types::TRect &ARect);
 	virtual void __fastcall SetParent(Controls::TWinControl* AParent);
 	virtual void __fastcall UpdateActions(void);
 	void __fastcall UpdateWindowState(void);
-	virtual void __fastcall ValidateRename(Classes::TComponent* AComponent, const AnsiString CurName, const 
-		AnsiString NewName);
+	virtual void __fastcall ValidateRename(Classes::TComponent* AComponent, const AnsiString CurName, const AnsiString NewName);
 	DYNAMIC void __fastcall VisibleChanging(void);
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
 	virtual void __fastcall Resizing(TWindowState State);
 	__property TForm* ActiveMDIChild = {read=GetActiveMDIChild};
-	__property TBorderIcons BorderIcons = {read=FBorderIcons, write=SetBorderIcons, stored=IsForm, default=7
-		};
+	__property bool AlphaBlend = {read=FAlphaBlend, write=SetAlphaBlend, nodefault};
+	__property Byte AlphaBlendValue = {read=FAlphaBlendValue, write=SetAlphaBlendValue, nodefault};
+	__property TBorderIcons BorderIcons = {read=FBorderIcons, write=SetBorderIcons, stored=IsForm, default=7};
 	__property AutoScroll  = {stored=IsAutoScrollStored, default=1};
 	__property HWND ClientHandle = {read=FClientHandle, nodefault};
 	__property ClientHeight  = {write=SetClientHeight, stored=IsClientSizeStored};
 	__property ClientWidth  = {write=SetClientWidth, stored=IsClientSizeStored};
-	__property Ctl3D ;
-	__property TDefaultMonitor DefaultMonitor = {read=FDefaultMonitor, write=FDefaultMonitor, stored=IsForm
-		, default=3};
+	__property bool TransparentColor = {read=FTransparentColor, write=SetTransparentColor, nodefault};
+	__property Graphics::TColor TransparentColorValue = {read=FTransparentColorValue, write=SetTransparentColorValue, nodefault};
+	__property Ctl3D  = {default=1};
+	__property TDefaultMonitor DefaultMonitor = {read=FDefaultMonitor, write=FDefaultMonitor, stored=IsForm, default=3};
 	__property TFormStyle FormStyle = {read=FFormStyle, write=SetFormStyle, stored=IsForm, default=0};
 	__property Height  = {stored=IsFormSizeStored};
 	__property HorzScrollBar  = {stored=IsForm};
@@ -652,15 +659,12 @@ protected:
 	__property int MDIChildCount = {read=GetMDIChildCount, nodefault};
 	__property TForm* MDIChildren[int I] = {read=GetMDIChildren};
 	__property bool OldCreateOrder = {read=FOldCreateOrder, write=FOldCreateOrder, nodefault};
-	__property Menus::TMenuItem* ObjectMenuItem = {read=FObjectMenuItem, write=SetObjectMenuItem, stored=
-		IsForm};
-	__property int PixelsPerInch = {read=GetPixelsPerInch, write=SetPixelsPerInch, stored=false, nodefault
-		};
-	__property ParentFont ;
+	__property Menus::TMenuItem* ObjectMenuItem = {read=FObjectMenuItem, write=SetObjectMenuItem, stored=IsForm};
+	__property int PixelsPerInch = {read=GetPixelsPerInch, write=SetPixelsPerInch, stored=false, nodefault};
+	__property ParentFont  = {default=0};
 	__property PopupMenu  = {stored=IsForm};
 	__property TPosition Position = {read=FPosition, write=SetPosition, stored=IsForm, default=0};
-	__property TPrintScale PrintScale = {read=FPrintScale, write=FPrintScale, stored=IsForm, default=1}
-		;
+	__property TPrintScale PrintScale = {read=FPrintScale, write=FPrintScale, stored=IsForm, default=1};
 	__property bool Scaled = {read=GetScaled, write=SetScaled, stored=IsForm, default=1};
 	__property TTileMode TileMode = {read=FTileMode, write=FTileMode, default=0};
 	__property VertScrollBar  = {stored=IsForm};
@@ -668,20 +672,17 @@ protected:
 	__property Width  = {stored=IsFormSizeStored};
 	__property Menus::TMenuItem* WindowMenu = {read=FWindowMenu, write=SetWindowMenu, stored=IsForm};
 	__property Classes::TNotifyEvent OnActivate = {read=FOnActivate, write=FOnActivate, stored=IsForm};
-		
 	__property OnCanResize  = {stored=IsForm};
 	__property OnClick  = {stored=IsForm};
 	__property TCloseEvent OnClose = {read=FOnClose, write=FOnClose, stored=IsForm};
-	__property TCloseQueryEvent OnCloseQuery = {read=FOnCloseQuery, write=FOnCloseQuery, stored=IsForm}
-		;
+	__property TCloseQueryEvent OnCloseQuery = {read=FOnCloseQuery, write=FOnCloseQuery, stored=IsForm};
 	__property Classes::TNotifyEvent OnCreate = {read=FOnCreate, write=FOnCreate, stored=IsForm};
 	__property OnDblClick  = {stored=IsForm};
 	__property Classes::TNotifyEvent OnDestroy = {read=FOnDestroy, write=FOnDestroy, stored=IsForm};
-	__property Classes::TNotifyEvent OnDeactivate = {read=FOnDeactivate, write=FOnDeactivate, stored=IsForm
-		};
+	__property Classes::TNotifyEvent OnDeactivate = {read=FOnDeactivate, write=FOnDeactivate, stored=IsForm};
 	__property OnDragDrop  = {stored=IsForm};
 	__property OnDragOver  = {stored=IsForm};
-	__property Classes::THelpEvent OnHelp = {read=FOnHelp, write=FOnHelp};
+	__property THelpEvent OnHelp = {read=FOnHelp, write=FOnHelp};
 	__property Classes::TNotifyEvent OnHide = {read=FOnHide, write=FOnHide, stored=IsForm};
 	__property OnKeyDown  = {stored=IsForm};
 	__property OnKeyPress  = {stored=IsForm};
@@ -704,11 +705,12 @@ public:
 	virtual bool __fastcall CloseQuery(void);
 	virtual void __fastcall DefaultHandler(void *Message);
 	void __fastcall DefocusControl(Controls::TWinControl* Control, bool Removing);
-	DYNAMIC void __fastcall Dock(Controls::TWinControl* NewDockSite, const Windows::TRect &ARect);
+	DYNAMIC void __fastcall Dock(Controls::TWinControl* NewDockSite, const Types::TRect &ARect);
 	void __fastcall FocusControl(Controls::TWinControl* Control);
 	Graphics::TBitmap* __fastcall GetFormImage(void);
 	HIDESBASE void __fastcall Hide(void);
 	DYNAMIC bool __fastcall IsShortCut(Messages::TWMKey &Message);
+	void __fastcall MakeFullyVisible(TMonitor* AMonitor = (TMonitor*)(0x0));
 	DYNAMIC void __fastcall MouseWheelHandler(Messages::TMessage &Message);
 	void __fastcall Print(void);
 	void __fastcall Release(void);
@@ -719,32 +721,27 @@ public:
 	virtual int __fastcall ShowModal(void);
 	virtual bool __fastcall WantChildKey(Controls::TControl* Child, Messages::TMessage &Message);
 	__property bool Active = {read=FActive, nodefault};
-	__property Controls::TWinControl* ActiveControl = {read=FActiveControl, write=SetActiveControl, stored=
-		IsForm};
+	__property Controls::TWinControl* ActiveControl = {read=FActiveControl, write=SetActiveControl, stored=IsForm};
 	__property Action ;
-	__property Controls::TWinControl* ActiveOleControl = {read=FActiveOleControl, write=FActiveOleControl
-		};
-	__property TFormBorderStyle BorderStyle = {read=FBorderStyle, write=SetBorderStyle, stored=IsForm, 
-		default=2};
+	__property Controls::TWinControl* ActiveOleControl = {read=FActiveOleControl, write=FActiveOleControl};
+	__property TFormBorderStyle BorderStyle = {read=FBorderStyle, write=SetBorderStyle, stored=IsForm, default=2};
 	__property Graphics::TCanvas* Canvas = {read=GetCanvas};
 	__property Caption  = {stored=IsForm};
 	__property Color ;
-	__property _di_IDesigner Designer = {read=FDesigner, write=SetDesigner};
+	__property _di_IDesignerHook Designer = {read=FDesigner, write=SetDesigner};
 	__property bool DropTarget = {read=FDropTarget, write=FDropTarget, nodefault};
 	__property Font ;
 	__property TFormState FormState = {read=FFormState, nodefault};
 	__property AnsiString HelpFile = {read=FHelpFile, write=FHelpFile};
 	__property bool KeyPreview = {read=FKeyPreview, write=FKeyPreview, stored=IsForm, default=0};
 	__property Menus::TMainMenu* Menu = {read=FMenu, write=SetMenu, stored=IsForm};
-	__property TModalResult ModalResult = {read=FModalResult, write=FModalResult, nodefault};
+	__property Controls::TModalResult ModalResult = {read=FModalResult, write=FModalResult, nodefault};
 	__property TMonitor* Monitor = {read=GetMonitor};
 	__property _di_IOleForm OleFormObject = {read=FOleForm, write=FOleForm};
-	__property TWindowState WindowState = {read=FWindowState, write=SetWindowState, stored=IsForm, default=0
-		};
+	__property TWindowState WindowState = {read=FWindowState, write=SetWindowState, stored=IsForm, default=0};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomForm(HWND ParentWindow) : TScrollingWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomForm(HWND ParentWindow) : TScrollingWinControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -771,28 +768,27 @@ protected:
 public:
 	__fastcall virtual TCustomActiveForm(Classes::TComponent* AOwner);
 	virtual bool __fastcall WantChildKey(Controls::TControl* Child, Messages::TMessage &Message);
-	__property Visible ;
+	__property Visible  = {default=0};
 	
 __published:
 	__property ActiveControl ;
-	__property Anchors ;
-	__property AutoScroll ;
-	__property AutoSize ;
-	__property TActiveFormBorderStyle AxBorderStyle = {read=FAxBorderStyle, write=SetAxBorderStyle, default=1
-		};
-	__property BorderWidth ;
+	__property Anchors  = {default=3};
+	__property AutoScroll  = {default=1};
+	__property AutoSize  = {default=0};
+	__property TActiveFormBorderStyle AxBorderStyle = {read=FAxBorderStyle, write=SetAxBorderStyle, default=1};
+	__property BorderWidth  = {default=0};
 	__property Caption  = {stored=true};
 	__property Color ;
 	__property Constraints ;
 	__property Font ;
 	__property Height  = {stored=true};
 	__property HorzScrollBar ;
-	__property KeyPreview ;
+	__property KeyPreview  = {default=0};
 	__property OldCreateOrder ;
 	__property PixelsPerInch ;
 	__property PopupMenu ;
-	__property PrintScale ;
-	__property Scaled ;
+	__property PrintScale  = {default=1};
+	__property Scaled  = {default=1};
 	__property ShowHint ;
 	__property VertScrollBar ;
 	__property Width  = {stored=true};
@@ -814,8 +810,7 @@ __published:
 	__property OnPaint ;
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TCustomActiveForm(Classes::TComponent* AOwner
-		, int Dummy) : TCustomForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TCustomActiveForm(Classes::TComponent* AOwner, int Dummy) : TCustomForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TCustomActiveForm(void) { }
@@ -823,8 +818,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomActiveForm(HWND ParentWindow) : TCustomForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomActiveForm(HWND ParentWindow) : TCustomForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -845,53 +839,57 @@ public:
 	__property DockManager ;
 	__property MDIChildCount ;
 	__property MDIChildren ;
-	__property TileMode ;
+	__property TileMode  = {default=0};
 	
 __published:
 	__property Action ;
 	__property ActiveControl ;
-	__property Align ;
-	__property Anchors ;
-	__property AutoScroll ;
-	__property AutoSize ;
+	__property Align  = {default=0};
+	__property AlphaBlend  = {default=0};
+	__property AlphaBlendValue  = {default=255};
+	__property Anchors  = {default=3};
+	__property AutoScroll  = {default=1};
+	__property AutoSize  = {default=0};
 	__property BiDiMode ;
-	__property BorderIcons ;
-	__property BorderStyle ;
-	__property BorderWidth ;
+	__property BorderIcons  = {default=7};
+	__property BorderStyle  = {default=2};
+	__property BorderWidth  = {default=0};
 	__property Caption ;
 	__property ClientHeight ;
 	__property ClientWidth ;
 	__property Color ;
+	__property TransparentColor  = {default=0};
+	__property TransparentColorValue  = {default=0};
 	__property Constraints ;
-	__property Ctl3D ;
-	__property UseDockManager ;
-	__property DefaultMonitor ;
-	__property DockSite ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
-	__property ParentFont ;
+	__property Ctl3D  = {default=1};
+	__property UseDockManager  = {default=0};
+	__property DefaultMonitor  = {default=3};
+	__property DockSite  = {default=0};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
+	__property ParentFont  = {default=0};
 	__property Font ;
-	__property FormStyle ;
+	__property FormStyle  = {default=0};
 	__property Height ;
 	__property HelpFile ;
 	__property HorzScrollBar ;
 	__property Icon ;
-	__property KeyPreview ;
+	__property KeyPreview  = {default=0};
 	__property Menu ;
 	__property OldCreateOrder ;
 	__property ObjectMenuItem ;
-	__property ParentBiDiMode ;
+	__property ParentBiDiMode  = {default=1};
 	__property PixelsPerInch ;
 	__property PopupMenu ;
-	__property Position ;
-	__property PrintScale ;
-	__property Scaled ;
+	__property Position  = {default=0};
+	__property PrintScale  = {default=1};
+	__property Scaled  = {default=1};
 	__property ShowHint ;
 	__property VertScrollBar ;
-	__property Visible ;
+	__property Visible  = {default=0};
 	__property Width ;
-	__property WindowState ;
+	__property WindowState  = {default=0};
 	__property WindowMenu ;
 	__property OnActivate ;
 	__property OnCanResize ;
@@ -929,12 +927,10 @@ __published:
 	__property OnUnDock ;
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TForm(Classes::TComponent* AOwner) : TCustomForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TForm(Classes::TComponent* AOwner) : TCustomForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TForm(Classes::TComponent* AOwner, int Dummy)
-		 : TCustomForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TForm(Classes::TComponent* AOwner, int Dummy) : TCustomForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TForm(void) { }
@@ -942,8 +938,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TForm(HWND ParentWindow) : TCustomForm(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TForm(HWND ParentWindow) : TCustomForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -965,24 +960,22 @@ private:
 	HIDESBASE MESSAGE void __fastcall CMVisibleChanged(Messages::TMessage &Message);
 	
 protected:
-	DYNAMIC void __fastcall DoAddDockClient(Controls::TControl* Client, const Windows::TRect &ARect);
+	DYNAMIC void __fastcall DoAddDockClient(Controls::TControl* Client, const Types::TRect &ARect);
 	DYNAMIC void __fastcall DoRemoveDockClient(Controls::TControl* Client);
-	DYNAMIC void __fastcall GetSiteInfo(Controls::TControl* Client, Windows::TRect &InfluenceRect, const 
-		Windows::TPoint &MousePos, bool &CanDock);
+	DYNAMIC void __fastcall GetSiteInfo(Controls::TControl* Client, Types::TRect &InfluenceRect, const Types::TPoint &MousePos, bool &CanDock);
 	virtual void __fastcall Loaded(void);
 	
 public:
 	__fastcall virtual TCustomDockForm(Classes::TComponent* AOwner);
-	__property AutoScroll ;
-	__property BorderStyle ;
-	__property FormStyle ;
+	__property AutoScroll  = {default=0};
+	__property BorderStyle  = {default=5};
+	__property FormStyle  = {default=3};
 	
 __published:
 	__property PixelsPerInch ;
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TCustomDockForm(Classes::TComponent* AOwner, 
-		int Dummy) : TCustomForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TCustomDockForm(Classes::TComponent* AOwner, int Dummy) : TCustomForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TCustomDockForm(void) { }
@@ -990,53 +983,9 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomDockForm(HWND ParentWindow) : TCustomForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomDockForm(HWND ParentWindow) : TCustomForm(ParentWindow) { }
 	#pragma option pop
 	
-};
-
-
-class DELPHICLASS TDataModule;
-class PASCALIMPLEMENTATION TDataModule : public Classes::TComponent 
-{
-	typedef Classes::TComponent inherited;
-	
-private:
-	Windows::TPoint FDesignSize;
-	Windows::TPoint FDesignOffset;
-	Classes::TNotifyEvent FOnCreate;
-	Classes::TNotifyEvent FOnDestroy;
-	bool FOldCreateOrder;
-	void __fastcall ReadHeight(Classes::TReader* Reader);
-	void __fastcall ReadHorizontalOffset(Classes::TReader* Reader);
-	void __fastcall ReadVerticalOffset(Classes::TReader* Reader);
-	void __fastcall ReadWidth(Classes::TReader* Reader);
-	void __fastcall WriteWidth(Classes::TWriter* Writer);
-	void __fastcall WriteHorizontalOffset(Classes::TWriter* Writer);
-	void __fastcall WriteVerticalOffset(Classes::TWriter* Writer);
-	void __fastcall WriteHeight(Classes::TWriter* Writer);
-	
-protected:
-	virtual void __fastcall DoCreate(void);
-	virtual void __fastcall DoDestroy(void);
-	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
-	DYNAMIC void __fastcall GetChildren(Classes::TGetChildProc Proc, Classes::TComponent* Root);
-	virtual void __fastcall ReadState(Classes::TReader* Reader);
-	
-public:
-	__fastcall virtual TDataModule(Classes::TComponent* AOwner);
-	__fastcall virtual TDataModule(Classes::TComponent* AOwner, int Dummy);
-	__fastcall virtual ~TDataModule(void);
-	virtual void __fastcall AfterConstruction(void);
-	virtual void __fastcall BeforeDestruction(void);
-	__property Windows::TPoint DesignOffset = {read=FDesignOffset, write=FDesignOffset};
-	__property Windows::TPoint DesignSize = {read=FDesignSize, write=FDesignSize};
-	
-__published:
-	__property bool OldCreateOrder = {read=FOldCreateOrder, write=FOldCreateOrder, nodefault};
-	__property Classes::TNotifyEvent OnCreate = {read=FOnCreate, write=FOnCreate};
-	__property Classes::TNotifyEvent OnDestroy = {read=FOnDestroy, write=FOnDestroy};
 };
 
 
@@ -1051,6 +1000,9 @@ private:
 	int __fastcall GetHeight(void);
 	int __fastcall GetTop(void);
 	int __fastcall GetWidth(void);
+	Types::TRect __fastcall GetBoundsRect();
+	Types::TRect __fastcall GetWorkareaRect();
+	bool __fastcall GetPrimary(void);
 	
 public:
 	__property HMONITOR Handle = {read=FHandle, nodefault};
@@ -1059,6 +1011,9 @@ public:
 	__property int Height = {read=GetHeight, nodefault};
 	__property int Top = {read=GetTop, nodefault};
 	__property int Width = {read=GetWidth, nodefault};
+	__property Types::TRect BoundsRect = {read=GetBoundsRect};
+	__property Types::TRect WorkareaRect = {read=GetWorkareaRect};
+	__property bool Primary = {read=GetPrimary, nodefault};
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall TMonitor(void) : System::TObject() { }
@@ -1073,12 +1028,18 @@ public:
 struct TCursorRec;
 typedef TCursorRec *PCursorRec;
 
+#pragma pack(push, 4)
 struct TCursorRec
 {
 	TCursorRec *Next;
 	int Index;
 	HICON Handle;
 } ;
+#pragma pack(pop)
+
+#pragma option push -b-
+enum TMonitorDefaultTo { mdNearest, mdNull, mdPrimary };
+#pragma option pop
 
 class DELPHICLASS TScreen;
 class PASCALIMPLEMENTATION TScreen : public Classes::TComponent 
@@ -1114,23 +1075,30 @@ private:
 	Classes::TNotifyEvent FOnActiveControlChange;
 	Classes::TNotifyEvent FOnActiveFormChange;
 	void __fastcall AlignForm(TCustomForm* AForm);
-	void __fastcall AlignForms(TCustomForm* AForm, Windows::TRect &Rect);
-	void __fastcall AddDataModule(TDataModule* DataModule);
+	void __fastcall AlignForms(TCustomForm* AForm, Types::TRect &Rect);
+	void __fastcall AddDataModule(Classes::TDataModule* DataModule);
 	void __fastcall AddForm(TCustomForm* AForm);
 	void __fastcall CreateCursors(void);
 	void __fastcall DeleteCursor(int Index);
 	void __fastcall DestroyCursors(void);
+	TMonitor* __fastcall FindMonitor(HMONITOR Handle);
 	void __fastcall IconFontChanged(System::TObject* Sender);
 	int __fastcall GetCustomFormCount(void);
 	TCustomForm* __fastcall GetCustomForms(int Index);
 	HICON __fastcall GetCursors(int Index);
-	TDataModule* __fastcall GetDataModule(int Index);
+	Classes::TDataModule* __fastcall GetDataModule(int Index);
 	int __fastcall GetDataModuleCount(void);
 	AnsiString __fastcall GetDefaultIME();
 	int __fastcall GetDesktopTop(void);
 	int __fastcall GetDesktopLeft(void);
 	int __fastcall GetDesktopHeight(void);
 	int __fastcall GetDesktopWidth(void);
+	Types::TRect __fastcall GetDesktopRect();
+	Types::TRect __fastcall GetWorkAreaRect();
+	int __fastcall GetWorkAreaHeight(void);
+	int __fastcall GetWorkAreaLeft(void);
+	int __fastcall GetWorkAreaTop(void);
+	int __fastcall GetWorkAreaWidth(void);
 	Classes::TStrings* __fastcall GetImes(void);
 	int __fastcall GetHeight(void);
 	TMonitor* __fastcall GetMonitor(int Index);
@@ -1141,7 +1109,7 @@ private:
 	void __fastcall GetMetricSettings(void);
 	int __fastcall GetWidth(void);
 	void __fastcall InsertCursor(int Index, HICON Handle);
-	void __fastcall RemoveDataModule(TDataModule* DataModule);
+	void __fastcall RemoveDataModule(Classes::TDataModule* DataModule);
 	void __fastcall RemoveForm(TCustomForm* AForm);
 	void __fastcall SetCursors(int Index, HICON Handle);
 	void __fastcall SetCursor(Controls::TCursor Value);
@@ -1155,6 +1123,9 @@ public:
 	__fastcall virtual ~TScreen(void);
 	void __fastcall DisableAlign(void);
 	void __fastcall EnableAlign(void);
+	TMonitor* __fastcall MonitorFromPoint(const Types::TPoint &Point, TMonitorDefaultTo MonitorDefault = (TMonitorDefaultTo)(0x0));
+	TMonitor* __fastcall MonitorFromRect(const Types::TRect &Rect, TMonitorDefaultTo MonitorDefault = (TMonitorDefaultTo)(0x0));
+	TMonitor* __fastcall MonitorFromWindow(const unsigned Handle, TMonitorDefaultTo MonitorDefault = (TMonitorDefaultTo)(0x0));
 	void __fastcall Realign(void);
 	void __fastcall ResetFonts(void);
 	__property Controls::TWinControl* ActiveControl = {read=FActiveControl};
@@ -1164,14 +1135,20 @@ public:
 	__property TCustomForm* CustomForms[int Index] = {read=GetCustomForms};
 	__property Controls::TCursor Cursor = {read=FCursor, write=SetCursor, nodefault};
 	__property HICON Cursors[int Index] = {read=GetCursors, write=SetCursors};
-	__property TDataModule* DataModules[int Index] = {read=GetDataModule};
+	__property Classes::TDataModule* DataModules[int Index] = {read=GetDataModule};
 	__property int DataModuleCount = {read=GetDataModuleCount, nodefault};
 	__property int MonitorCount = {read=GetMonitorCount, nodefault};
 	__property TMonitor* Monitors[int Index] = {read=GetMonitor};
+	__property Types::TRect DesktopRect = {read=GetDesktopRect};
 	__property int DesktopHeight = {read=GetDesktopHeight, nodefault};
 	__property int DesktopLeft = {read=GetDesktopLeft, nodefault};
 	__property int DesktopTop = {read=GetDesktopTop, nodefault};
 	__property int DesktopWidth = {read=GetDesktopWidth, nodefault};
+	__property Types::TRect WorkAreaRect = {read=GetWorkAreaRect};
+	__property int WorkAreaHeight = {read=GetWorkAreaHeight, nodefault};
+	__property int WorkAreaLeft = {read=GetWorkAreaLeft, nodefault};
+	__property int WorkAreaTop = {read=GetWorkAreaTop, nodefault};
+	__property int WorkAreaWidth = {read=GetWorkAreaWidth, nodefault};
 	__property Graphics::TFont* HintFont = {read=FHintFont, write=SetHintFont};
 	__property Graphics::TFont* IconFont = {read=FIconFont, write=SetIconFont};
 	__property Graphics::TFont* MenuFont = {read=FMenuFont, write=SetMenuFont};
@@ -1184,10 +1161,8 @@ public:
 	__property int Height = {read=GetHeight, nodefault};
 	__property int PixelsPerInch = {read=FPixelsPerInch, nodefault};
 	__property int Width = {read=GetWidth, nodefault};
-	__property Classes::TNotifyEvent OnActiveControlChange = {read=FOnActiveControlChange, write=FOnActiveControlChange
-		};
-	__property Classes::TNotifyEvent OnActiveFormChange = {read=FOnActiveFormChange, write=FOnActiveFormChange
-		};
+	__property Classes::TNotifyEvent OnActiveControlChange = {read=FOnActiveControlChange, write=FOnActiveControlChange};
+	__property Classes::TNotifyEvent OnActiveFormChange = {read=FOnActiveFormChange, write=FOnActiveFormChange};
 };
 
 
@@ -1198,21 +1173,24 @@ enum TTimerMode { tmShow, tmHide };
 struct THintInfo;
 typedef THintInfo *PHintInfo;
 
+#pragma pack(push, 4)
 struct THintInfo
 {
 	Controls::TControl* HintControl;
 	TMetaClass*HintWindowClass;
-	Windows::TPoint HintPos;
+	Types::TPoint HintPos;
 	int HintMaxWidth;
 	Graphics::TColor HintColor;
-	Windows::TRect CursorRect;
-	Windows::TPoint CursorPos;
+	Types::TRect CursorRect;
+	Types::TPoint CursorPos;
 	int ReshowTimeout;
 	int HideTimeout;
 	AnsiString HintStr;
 	void *HintData;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TCMHintShow
 {
 	unsigned Msg;
@@ -1220,7 +1198,9 @@ struct TCMHintShow
 	THintInfo *HintInfo;
 	int Result;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TCMHintShowPause
 {
 	unsigned Msg;
@@ -1228,18 +1208,19 @@ struct TCMHintShowPause
 	int *Pause;
 	int Result;
 } ;
+#pragma pack(pop)
 
 typedef void __fastcall (__closure *TMessageEvent)(tagMSG &Msg, bool &Handled);
 
-typedef void __fastcall (__closure *TExceptionEvent)(System::TObject* Sender, Sysutils::Exception* E
-	);
+typedef void __fastcall (__closure *TExceptionEvent)(System::TObject* Sender, Sysutils::Exception* E);
 
 typedef void __fastcall (__closure *TIdleEvent)(System::TObject* Sender, bool &Done);
 
-typedef void __fastcall (__closure *TShowHintEvent)(AnsiString &HintStr, bool &CanShow, THintInfo &HintInfo
-	);
+typedef void __fastcall (__closure *TShowHintEvent)(AnsiString &HintStr, bool &CanShow, THintInfo &HintInfo);
 
 typedef bool __fastcall (__closure *TWindowHook)(Messages::TMessage &Message);
+
+typedef void __fastcall (__closure *TSettingChangeEvent)(System::TObject* Sender, int Flag, const AnsiString Section, int &Result);
 
 class DELPHICLASS TApplication;
 class PASCALIMPLEMENTATION TApplication : public Classes::TComponent 
@@ -1254,6 +1235,7 @@ private:
 	void *FObjectInstance;
 	TForm* FMainForm;
 	Controls::TControl* FMouseControl;
+	Helpintfs::_di_IHelpSystem FHelpSystem;
 	AnsiString FHelpFile;
 	AnsiString FHint;
 	bool FHintActive;
@@ -1262,7 +1244,10 @@ private:
 	bool FShowMainForm;
 	Graphics::TColor FHintColor;
 	Controls::TControl* FHintControl;
-	Windows::TRect FHintCursorRect;
+	#pragma pack(push, 1)
+	Types::TRect FHintCursorRect;
+	#pragma pack(pop)
+	
 	int FHintHidePause;
 	int FHintPause;
 	bool FHintShortCuts;
@@ -1284,11 +1269,12 @@ private:
 	Classes::TList* FWindowHooks;
 	void *FWindowList;
 	HWND FDialogHandle;
+	bool FAutoDragDocking;
 	Actnlist::TActionEvent FOnActionExecute;
 	Actnlist::TActionEvent FOnActionUpdate;
 	TExceptionEvent FOnException;
 	TMessageEvent FOnMessage;
-	Classes::THelpEvent FOnHelp;
+	THelpEvent FOnHelp;
 	Classes::TNotifyEvent FOnHint;
 	TIdleEvent FOnIdle;
 	Classes::TNotifyEvent FOnDeactivate;
@@ -1297,6 +1283,7 @@ private:
 	Classes::TNotifyEvent FOnRestore;
 	TShortCutEvent FOnShortCut;
 	TShowHintEvent FOnShowHint;
+	TSettingChangeEvent FOnSettingChange;
 	bool __fastcall CheckIniChange(Messages::TMessage &Message);
 	bool __fastcall DispatchAction(int Msg, Classes::TBasicAction* Action);
 	void __fastcall DoActionIdle(void);
@@ -1309,13 +1296,7 @@ private:
 	AnsiString __fastcall GetTitle();
 	void __fastcall HintTimerExpired(void);
 	void __fastcall IconChanged(System::TObject* Sender);
-	void __fastcall Idle(const tagMSG &Msg);
 	bool __fastcall InvokeHelp(Word Command, int Data);
-	bool __fastcall IsDlgMsg(tagMSG &Msg);
-	bool __fastcall IsHintMsg(tagMSG &Msg);
-	bool __fastcall IsKeyMsg(tagMSG &Msg);
-	bool __fastcall IsMDIMsg(tagMSG &Msg);
-	bool __fastcall IsShortCut(Messages::TWMKey &Message);
 	void __fastcall NotifyForms(Word Msg);
 	bool __fastcall ProcessMessage(tagMSG &Msg);
 	void __fastcall SetBiDiMode(Classes::TBiDiMode Value);
@@ -1326,15 +1307,26 @@ private:
 	void __fastcall SetIcon(Graphics::TIcon* Value);
 	void __fastcall SetShowHint(bool Value);
 	void __fastcall SetTitle(const AnsiString Value);
+	void __fastcall SettingChange(Messages::TWMSettingChange &Message);
 	void __fastcall StartHintTimer(int Value, TTimerMode TimerMode);
 	void __fastcall StopHintTimer(void);
 	void __fastcall WndProc(Messages::TMessage &Message);
 	void __fastcall UpdateVisible(void);
+	bool __fastcall ValidateHelpSystem(void);
+	void __fastcall WakeMainThread(System::TObject* Sender);
+	
+protected:
+	void __fastcall Idle(const tagMSG &Msg);
+	bool __fastcall IsDlgMsg(tagMSG &Msg);
+	bool __fastcall IsHintMsg(tagMSG &Msg);
+	bool __fastcall IsKeyMsg(tagMSG &Msg);
+	bool __fastcall IsMDIMsg(tagMSG &Msg);
+	bool __fastcall IsShortCut(Messages::TWMKey &Message);
 	
 public:
 	__fastcall virtual TApplication(Classes::TComponent* AOwner);
 	__fastcall virtual ~TApplication(void);
-	void __fastcall ActivateHint(const Windows::TPoint &CursorPos);
+	void __fastcall ActivateHint(const Types::TPoint &CursorPos);
 	void __fastcall BringToFront(void);
 	void __fastcall ControlDestroyed(Controls::TControl* Control);
 	void __fastcall CancelHint(void);
@@ -1346,12 +1338,14 @@ public:
 	bool __fastcall HelpCommand(int Command, int Data);
 	bool __fastcall HelpContext(Classes::THelpContext Context);
 	bool __fastcall HelpJump(const AnsiString JumpID);
+	bool __fastcall HelpKeyword(const AnsiString Keyword);
 	void __fastcall HideHint(void);
 	void __fastcall HintMouseMessage(Controls::TControl* Control, Messages::TMessage &Message);
 	void __fastcall HookMainWindow(TWindowHook Hook);
+	void __fastcall HookSynchronizeWakeup(void);
 	void __fastcall Initialize(void);
 	bool __fastcall IsRightToLeft(void);
-	int __fastcall MessageBox(const char * Text, const char * Caption, int Flags);
+	int __fastcall MessageBox(const char * Text, const char * Caption, int Flags = 0x0);
 	void __fastcall Minimize(void);
 	void __fastcall NormalizeAllTopMosts(void);
 	void __fastcall NormalizeTopMosts(void);
@@ -1362,12 +1356,15 @@ public:
 	void __fastcall ShowException(Sysutils::Exception* E);
 	void __fastcall Terminate(void);
 	void __fastcall UnhookMainWindow(TWindowHook Hook);
+	void __fastcall UnhookSynchronizeWakeup(void);
 	HIDESBASE bool __fastcall UpdateAction(Classes::TBasicAction* Action);
 	bool __fastcall UseRightToLeftAlignment(void);
 	bool __fastcall UseRightToLeftReading(void);
 	bool __fastcall UseRightToLeftScrollBar(void);
 	__property bool Active = {read=FActive, nodefault};
 	__property bool AllowTesting = {read=FAllowTesting, write=FAllowTesting, nodefault};
+	__property bool AutoDragDocking = {read=FAutoDragDocking, write=FAutoDragDocking, default=1};
+	__property Helpintfs::_di_IHelpSystem HelpSystem = {read=FHelpSystem};
 	__property AnsiString CurrentHelpFile = {read=GetCurrentHelpFile};
 	__property HWND DialogHandle = {read=GetDialogHandle, write=SetDialogHandle, nodefault};
 	__property AnsiString ExeName = {read=GetExeName};
@@ -1388,26 +1385,26 @@ public:
 	__property bool ShowMainForm = {read=FShowMainForm, write=FShowMainForm, nodefault};
 	__property bool Terminated = {read=FTerminate, nodefault};
 	__property AnsiString Title = {read=GetTitle, write=SetTitle};
-	__property bool UpdateFormatSettings = {read=FUpdateFormatSettings, write=FUpdateFormatSettings, nodefault
-		};
-	__property bool UpdateMetricSettings = {read=FUpdateMetricSettings, write=FUpdateMetricSettings, nodefault
-		};
-	__property Actnlist::TActionEvent OnActionExecute = {read=FOnActionExecute, write=FOnActionExecute}
-		;
+	__property bool UpdateFormatSettings = {read=FUpdateFormatSettings, write=FUpdateFormatSettings, nodefault};
+	__property bool UpdateMetricSettings = {read=FUpdateMetricSettings, write=FUpdateMetricSettings, nodefault};
+	__property Actnlist::TActionEvent OnActionExecute = {read=FOnActionExecute, write=FOnActionExecute};
 	__property Actnlist::TActionEvent OnActionUpdate = {read=FOnActionUpdate, write=FOnActionUpdate};
 	__property Classes::TNotifyEvent OnActivate = {read=FOnActivate, write=FOnActivate};
 	__property Classes::TNotifyEvent OnDeactivate = {read=FOnDeactivate, write=FOnDeactivate};
 	__property TExceptionEvent OnException = {read=FOnException, write=FOnException};
 	__property TIdleEvent OnIdle = {read=FOnIdle, write=FOnIdle};
-	__property Classes::THelpEvent OnHelp = {read=FOnHelp, write=FOnHelp};
+	__property THelpEvent OnHelp = {read=FOnHelp, write=FOnHelp};
 	__property Classes::TNotifyEvent OnHint = {read=FOnHint, write=FOnHint};
 	__property TMessageEvent OnMessage = {read=FOnMessage, write=FOnMessage};
 	__property Classes::TNotifyEvent OnMinimize = {read=FOnMinimize, write=FOnMinimize};
 	__property Classes::TNotifyEvent OnRestore = {read=FOnRestore, write=FOnRestore};
 	__property TShowHintEvent OnShowHint = {read=FOnShowHint, write=FOnShowHint};
 	__property TShortCutEvent OnShortCut = {read=FOnShortCut, write=FOnShortCut};
+	__property TSettingChangeEvent OnSettingChange = {read=FOnSettingChange, write=FOnSettingChange};
 };
 
+
+typedef void *TFocusState;
 
 //-- var, const, procedure ---------------------------------------------------
 extern PACKAGE TApplication* Application;
@@ -1416,6 +1413,8 @@ extern PACKAGE void *Ctl3DBtnWndProc;
 extern PACKAGE int __stdcall (*Ctl3DDlgFramePaint)(HWND Window, int Msg, int wParam, int lParam);
 extern PACKAGE int __stdcall (*Ctl3DCtlColorEx)(HWND Window, int Msg, int wParam, int lParam);
 extern PACKAGE TMetaClass*HintWindowClass;
+extern PACKAGE TFocusState __fastcall SaveFocusState(void);
+extern PACKAGE void __fastcall RestoreFocusState(TFocusState FocusState);
 extern PACKAGE void * __fastcall DisableTaskWindows(HWND ActiveWindow);
 extern PACKAGE void __fastcall EnableTaskWindows(void * WindowList);
 extern PACKAGE bool __fastcall ForegroundTask(void);
@@ -1424,22 +1423,16 @@ extern PACKAGE void __fastcall DoneCtl3D(void);
 extern PACKAGE bool __fastcall Subclass3DWnd(HWND Wnd);
 extern PACKAGE void __fastcall Subclass3DDlg(HWND Wnd, Word Flags);
 extern PACKAGE void __fastcall SetAutoSubClass(bool Enable);
-extern PACKAGE void * __fastcall MakeObjectInstance(Controls::TWndMethod Method);
-extern PACKAGE void __fastcall FreeObjectInstance(void * ObjectInstance);
-extern PACKAGE HWND __fastcall AllocateHWnd(Controls::TWndMethod Method);
-extern PACKAGE void __fastcall DeallocateHWnd(HWND Wnd);
 extern PACKAGE Classes::TShiftState __fastcall KeysToShiftState(Word Keys);
 extern PACKAGE Classes::TShiftState __fastcall KeyDataToShiftState(int KeyData);
-extern PACKAGE Classes::TShiftState __fastcall KeyboardStateToShiftState(const Byte * KeyboardState)
-	;
+extern PACKAGE Classes::TShiftState __fastcall KeyboardStateToShiftState(const Byte * KeyboardState)/* overload */;
+extern PACKAGE Classes::TShiftState __fastcall KeyboardStateToShiftState(void)/* overload */;
 extern PACKAGE bool __fastcall IsAccel(Word VK, const AnsiString Str);
 extern PACKAGE TCustomForm* __fastcall GetParentForm(Controls::TControl* Control);
 extern PACKAGE TCustomForm* __fastcall ValidParentForm(Controls::TControl* Control);
 
 }	/* namespace Forms */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Forms;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

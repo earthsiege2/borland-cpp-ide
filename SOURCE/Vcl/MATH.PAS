@@ -1,120 +1,156 @@
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
-{       Math Unit                                       }
-{                                                       }
-{       Copyright (C) 1996,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi / Kylix Cross-Platform Runtime Library                           }
+{                                                                         }
+{ Copyright (c) 1996, 2001 Borland Software Corporation                   }
+{                                                                         }
+{ *********************************************************************** }
 
 unit Math;
 
 { This unit contains high-performance arithmetic, trigonometric, logorithmic,
-  statistical and financial calculation routines which supplement the math
-  routines that are part of the Delphi language or System unit. }
+  statistical, financial calculation and FPU routines which supplement the math
+  routines that are part of the Delphi language or System unit.
+
+  References:
+  1) P.J. Plauger, "The Standard C Library", Prentice-Hall, 1992, Ch. 7.
+  2) W.J. Cody, Jr., and W. Waite, "Software Manual For the Elementary
+     Functions", Prentice-Hall, 1980.
+  3) Namir Shammas, "C/C++ Mathematical Algorithms for Scientists and Engineers",
+     McGraw-Hill, 1995, Ch 8.
+  4) H.T. Lau, "A Numerical Library in C for Scientists and Engineers",
+     CRC Press, 1994, Ch. 6.
+  5) "Pentium(tm) Processor User's Manual, Volume 3: Architecture
+     and Programming Manual", Intel, 1994
+
+  Some of the functions, concepts or constants in this unit were provided by
+  Earl F. Glynn (www.efg2.com) and Ray Lischner (www.tempest-sw.com)
+
+  All angle parameters and results of trig functions are in radians.
+
+  Most of the following trig and log routines map directly to Intel 80387 FPU
+  floating point machine instructions.  Input domains, output ranges, and
+  error handling are determined largely by the FPU hardware.
+
+  Routines coded in assembler favor the Pentium FPU pipeline architecture.
+}
 
 {$N+,S-}
 
 interface
 
-uses SysUtils;
+uses SysUtils, Types;
 
 const   { Ranges of the IEEE floating point types, including denormals }
-  MinSingle        =     1.5e-45;
-  MaxSingle        =     3.4e+38;
-  MinDouble        =     5.0e-324;
-  MaxDouble        =     1.7e+308;
-  MinExtended      =     3.4e-4932;
-  MaxExtended      =     1.1e+4932;
-  MinComp          =     -9.223372036854775807e+18;
-  MaxComp          =     9.223372036854775807e+18;
+  MinSingle   =  1.5e-45;
+  MaxSingle   =  3.4e+38;
+  MinDouble   =  5.0e-324;
+  MaxDouble   =  1.7e+308;
+  MinExtended =  3.4e-4932;
+  MaxExtended =  1.1e+4932;
+  MinComp     = -9.223372036854775807e+18;
+  MaxComp     =  9.223372036854775807e+18;
 
-{-----------------------------------------------------------------------
-References:
-
-1) P.J. Plauger, "The Standard C Library", Prentice-Hall, 1992, Ch. 7.
-2) W.J. Cody, Jr., and W. Waite, "Software Manual For the Elementary
-   Functions", Prentice-Hall, 1980.
-3) Namir Shammas, "C/C++ Mathematical Algorithms for Scientists and Engineers",
-   McGraw-Hill, 1995, Ch 8.
-4) H.T. Lau, "A Numerical Library in C for Scientists and Engineers",
-   CRC Press, 1994, Ch. 6.
-5) "Pentium(tm) Processor User's Manual, Volume 3: Architecture
-   and Programming Manual", Intel, 1994
-
-All angle parameters and results of trig functions are in radians.
-
-Most of the following trig and log routines map directly to Intel 80387 FPU
-floating point machine instructions.  Input domains, output ranges, and
-error handling are determined largely by the FPU hardware.
-Routines coded in assembler favor the Pentium FPU pipeline architecture.
------------------------------------------------------------------------}
+  { The following constants should not be used for comparison, only
+    assignments. For comparison please use the IsNan and IsInfinity functions
+    provided below. }
+  NaN         =  0.0 / 0.0;
+  (*$EXTERNALSYM NaN*)
+  (*$HPPEMIT 'static const Extended NaN = 0.0 / 0.0;'*)
+  Infinity    =  1.0 / 0.0;
+  (*$EXTERNALSYM Infinity*)
+  (*$HPPEMIT 'static const Extended Infinity = 1.0 / 0.0;'*)
+  NegInfinity = -1.0 / 0.0;
+  (*$EXTERNALSYM NegInfinity*)
+  (*$HPPEMIT 'static const Extended NegInfinity = -1.0 / 0.0;'*)
 
 { Trigonometric functions }
-function ArcCos(X: Extended): Extended;  { IN: |X| <= 1  OUT: [0..PI] radians }
-function ArcSin(X: Extended): Extended;  { IN: |X| <= 1  OUT: [-PI/2..PI/2] radians }
+function ArcCos(const X: Extended): Extended;  { IN: |X| <= 1  OUT: [0..PI] radians }
+function ArcSin(const X: Extended): Extended;  { IN: |X| <= 1  OUT: [-PI/2..PI/2] radians }
 
 { ArcTan2 calculates ArcTan(Y/X), and returns an angle in the correct quadrant.
   IN: |Y| < 2^64, |X| < 2^64, X <> 0   OUT: [-PI..PI] radians }
-function ArcTan2(Y, X: Extended): Extended;
+function ArcTan2(const Y, X: Extended): Extended;
 
 { SinCos is 2x faster than calling Sin and Cos separately for the same angle }
-procedure SinCos(Theta: Extended; var Sin, Cos: Extended) register;
-function Tan(X: Extended): Extended;
-function Cotan(X: Extended): Extended;           { 1 / tan(X), X <> 0 }
-function Hypot(X, Y: Extended): Extended;        { Sqrt(X**2 + Y**2) }
+procedure SinCos(const Theta: Extended; var Sin, Cos: Extended) register;
+function Tan(const X: Extended): Extended;
+function Cotan(const X: Extended): Extended;           { 1 / tan(X), X <> 0 }
+function Secant(const X: Extended): Extended;          { 1 / cos(X) }
+function Cosecant(const X: Extended): Extended;        { 1 / sin(X) }
+function Hypot(const X, Y: Extended): Extended;        { Sqrt(X**2 + Y**2) }
 
 { Angle unit conversion routines }
-function DegToRad(Degrees: Extended): Extended;  { Radians := Degrees * PI / 180}
-function RadToDeg(Radians: Extended): Extended;  { Degrees := Radians * 180 / PI }
-function GradToRad(Grads: Extended): Extended;   { Radians := Grads * PI / 200 }
-function RadToGrad(Radians: Extended): Extended; { Grads := Radians * 200 / PI }
-function CycleToRad(Cycles: Extended): Extended; { Radians := Cycles * 2PI }
-function RadToCycle(Radians: Extended): Extended;{ Cycles := Radians / 2PI }
+function RadToDeg(const Radians: Extended): Extended;  { Degrees := Radians * 180 / PI }
+function RadToGrad(const Radians: Extended): Extended; { Grads := Radians * 200 / PI }
+function RadToCycle(const Radians: Extended): Extended;{ Cycles := Radians / 2PI }
+
+function DegToRad(const Degrees: Extended): Extended;  { Radians := Degrees * PI / 180}
+function DegToGrad(const Degrees: Extended): Extended;
+function DegToCycle(const Degrees: Extended): Extended;
+
+function GradToRad(const Grads: Extended): Extended;   { Radians := Grads * PI / 200 }
+function GradToDeg(const Grads: Extended): Extended;
+function GradToCycle(const Grads: Extended): Extended;
+
+function CycleToRad(const Cycles: Extended): Extended; { Radians := Cycles * 2PI }
+function CycleToDeg(const Cycles: Extended): Extended;
+function CycleToGrad(const Cycles: Extended): Extended;
 
 { Hyperbolic functions and inverses }
-function Cosh(X: Extended): Extended;
-function Sinh(X: Extended): Extended;
-function Tanh(X: Extended): Extended;
-function ArcCosh(X: Extended): Extended;   { IN: X >= 1 }
-function ArcSinh(X: Extended): Extended;
-function ArcTanh(X: Extended): Extended;   { IN: |X| <= 1 }
+function Cot(const X: Extended): Extended;             { simply calls Cotan }
+function Sec(const X: Extended): Extended;             { simply calls Secant }
+function Csc(const X: Extended): Extended;             { simply calls Cosecant }
+function Cosh(const X: Extended): Extended;
+function Sinh(const X: Extended): Extended;
+function Tanh(const X: Extended): Extended;
+function CotH(const X: Extended): Extended;
+function SecH(const X: Extended): Extended;
+function CscH(const X: Extended): Extended;
+function ArcCot(const X: Extended): Extended;
+function ArcSec(const X: Extended): Extended;
+function ArcCsc(const X: Extended): Extended;
+function ArcCosh(const X: Extended): Extended;         { IN: X >= 1 }
+function ArcSinh(const X: Extended): Extended;
+function ArcTanh(const X: Extended): Extended;         { IN: |X| <= 1 }
+function ArcCotH(const X: Extended): Extended;
+function ArcSecH(const X: Extended): Extended;
+function ArcCscH(const X: Extended): Extended;
 
 { Logorithmic functions }
-function LnXP1(X: Extended): Extended;   { Ln(X + 1), accurate for X near zero }
-function Log10(X: Extended): Extended;                     { Log base 10 of X}
-function Log2(X: Extended): Extended;                      { Log base 2 of X }
-function LogN(Base, X: Extended): Extended;                { Log base N of X }
+function LnXP1(const X: Extended): Extended; { Ln(X + 1), accurate for X near zero }
+function Log10(const X: Extended): Extended;                    { Log base 10 of X }
+function Log2(const X: Extended): Extended;                      { Log base 2 of X }
+function LogN(const Base, X: Extended): Extended;                { Log base N of X }
 
 { Exponential functions }
 
 { IntPower: Raise base to an integral power.  Fast. }
-function IntPower(Base: Extended; Exponent: Integer): Extended register;
+function IntPower(const Base: Extended; const Exponent: Integer): Extended register;
 
 { Power: Raise base to any power.
   For fractional exponents, or |exponents| > MaxInt, base must be > 0. }
-function Power(Base, Exponent: Extended): Extended;
-
+function Power(const Base, Exponent: Extended): Extended;
 
 { Miscellaneous Routines }
 
 { Frexp:  Separates the mantissa and exponent of X. }
-procedure Frexp(X: Extended; var Mantissa: Extended; var Exponent: Integer) register;
+procedure Frexp(const X: Extended; var Mantissa: Extended; var Exponent: Integer) register;
 
 { Ldexp: returns X*2**P }
-function Ldexp(X: Extended; P: Integer): Extended register;
+function Ldexp(const X: Extended; const P: Integer): Extended register;
 
 { Ceil: Smallest integer >= X, |X| < MaxInt }
-function Ceil(X: Extended):Integer;
+function Ceil(const X: Extended):Integer;
 
 { Floor: Largest integer <= X,  |X| < MaxInt }
-function Floor(X: Extended): Integer;
+function Floor(const X: Extended): Integer;
 
 { Poly: Evaluates a uniform polynomial of one variable at value X.
     The coefficients are ordered in increasing powers of X:
     Coefficients[0] + Coefficients[1]*X + ... + Coefficients[N]*(X**N) }
-function Poly(X: Extended; const Coefficients: array of Double): Extended;
+function Poly(const X: Extended; const Coefficients: array of Double): Extended;
 
 {-----------------------------------------------------------------------
 Statistical functions.
@@ -137,21 +173,21 @@ procedure SumsAndSquares(const Data: array of Double;
 function MinValue(const Data: array of Double): Double;
 function MinIntValue(const Data: array of Integer): Integer;
 
-function Min(A,B: Integer): Integer; overload;
-function Min(A,B: Int64): Int64; overload;
-function Min(A,B: Single): Single; overload;
-function Min(A,B: Double): Double; overload;
-function Min(A,B: Extended): Extended; overload;
+function Min(const A, B: Integer): Integer; overload;
+function Min(const A, B: Int64): Int64; overload;
+function Min(const A, B: Single): Single; overload;
+function Min(const A, B: Double): Double; overload;
+function Min(const A, B: Extended): Extended; overload;
 
 { MaxValue: Returns the largest signed value in the data array (MAX) }
 function MaxValue(const Data: array of Double): Double;
 function MaxIntValue(const Data: array of Integer): Integer;
 
-function Max(A,B: Integer): Integer; overload;
-function Max(A,B: Int64): Int64; overload;
-function Max(A,B: Single): Single; overload;
-function Max(A,B: Double): Double; overload;
-function Max(A,B: Extended): Extended; overload;
+function Max(const A, B: Integer): Integer; overload;
+function Max(const A, B: Int64): Int64; overload;
+function Max(const A, B: Single): Single; overload;
+function Max(const A, B: Double): Double; overload;
+function Max(const A, B: Extended): Extended; overload;
 
 { Standard Deviation (STD): Sqrt(Variance). aka Sample Standard Deviation }
 function StdDev(const Data: array of Double): Extended;
@@ -188,6 +224,108 @@ procedure MomentSkewKurtosis(const Data: array of Double;
 function RandG(Mean, StdDev: Extended): Extended;
 
 {-----------------------------------------------------------------------
+General/Misc use functions
+-----------------------------------------------------------------------}
+
+{ Extreme testing }
+
+// Like a infinity, a NaN double value has an exponent of 7FF, but the NaN
+// values have a fraction field that is not 0.
+function IsNan(const AValue: Double): Boolean;
+
+// Like a NaN, an infinity double value has an exponent of 7FF, but the
+// infinity values have a fraction field of 0. Infinity values can be positive
+// or negative, which is specified in the high-order, sign bit.
+function IsInfinite(const AValue: Double): Boolean;
+
+{ Simple sign testing }
+
+type
+  TValueSign = -1..1;
+
+const
+  NegativeValue = Low(TValueSign);
+  ZeroValue = 0;
+  PositiveValue = High(TValueSign);
+
+function Sign(const AValue: Integer): TValueSign; overload;
+function Sign(const AValue: Int64): TValueSign; overload;
+function Sign(const AValue: Double): TValueSign; overload;
+
+{ CompareFloat & SameFloat: If epsilon is not given (or is zero) we will
+  attempt to compute a reasonable one based on the precision of the floating
+  point type used. }
+
+function CompareValue(const A, B: Extended; Epsilon: Extended = 0): TValueRelationship; overload;
+function CompareValue(const A, B: Double; Epsilon: Double = 0): TValueRelationship; overload;
+function CompareValue(const A, B: Single; Epsilon: Single = 0): TValueRelationship; overload;
+function CompareValue(const A, B: Integer): TValueRelationship; overload;
+function CompareValue(const A, B: Int64): TValueRelationship; overload;
+
+function SameValue(const A, B: Extended; Epsilon: Extended = 0): Boolean; overload;
+function SameValue(const A, B: Double; Epsilon: Double = 0): Boolean; overload;
+function SameValue(const A, B: Single; Epsilon: Single = 0): Boolean; overload;
+
+{ IsZero: These will return true if the given value is zero (or very very very
+  close to it). }
+
+function IsZero(const A: Extended; Epsilon: Extended = 0): Boolean; overload;
+function IsZero(const A: Double; Epsilon: Double = 0): Boolean; overload;
+function IsZero(const A: Single; Epsilon: Single = 0): Boolean; overload;
+
+{ Easy to use conditional functions }
+
+function IfThen(AValue: Boolean; const ATrue: Integer; const AFalse: Integer = 0): Integer; overload;
+function IfThen(AValue: Boolean; const ATrue: Int64; const AFalse: Int64 = 0): Int64; overload;
+function IfThen(AValue: Boolean; const ATrue: Double; const AFalse: Double = 0.0): Double; overload;
+
+{ Various random functions }
+
+function RandomRange(const AFrom, ATo: Integer): Integer;
+function RandomFrom(const AValues: array of Integer): Integer; overload;
+function RandomFrom(const AValues: array of Int64): Int64; overload;
+function RandomFrom(const AValues: array of Double): Double; overload;
+
+{ Range testing functions }
+
+function InRange(const AValue, AMin, AMax: Integer): Boolean; overload;
+function InRange(const AValue, AMin, AMax: Int64): Boolean; overload;
+function InRange(const AValue, AMin, AMax: Double): Boolean; overload;
+
+{ Range truncation functions }
+
+function EnsureRange(const AValue, AMin, AMax: Integer): Integer; overload;
+function EnsureRange(const AValue, AMin, AMax: Int64): Int64; overload;
+function EnsureRange(const AValue, AMin, AMax: Double): Double; overload;
+
+{ 16 bit integer division and remainder in one operation }
+
+procedure DivMod(Dividend: Integer; Divisor: Word;
+  var Result, Remainder: Word);
+
+
+{ Round to a specific digit or power of ten }
+{ ADigit has a valid range of 37 to -37.  Here are some valid examples
+  of ADigit values...
+   3 = 10^3  = 1000   = thousand's place
+   2 = 10^2  =  100   = hundred's place
+   1 = 10^1  =   10   = ten's place
+  -1 = 10^-1 = 1/10   = tenth's place
+  -2 = 10^-2 = 1/100  = hundredth's place
+  -3 = 10^-3 = 1/1000 = thousandth's place }
+
+type
+  TRoundToRange = -37..37;
+
+function RoundTo(const AValue: Double; const ADigit: TRoundToRange): Double;
+
+{ This variation of the RoundTo function follows the asymmetric arithmetic
+  rounding algorithm (if Frac(X) < .5 then return X else return X + 1).  This
+  function defaults to rounding to the hundredth's place (cents). }
+
+function SimpleRoundTo(const AValue: Double; const ADigit: TRoundToRange = -2): Double;
+
+{-----------------------------------------------------------------------
 Financial functions.  Standard set from Quattro Pro.
 
 Parameter conventions:
@@ -205,63 +343,136 @@ type
   TPaymentTime = (ptEndOfPeriod, ptStartOfPeriod);
 
 { Double Declining Balance (DDB) }
-function DoubleDecliningBalance(Cost, Salvage: Extended;
+function DoubleDecliningBalance(const Cost, Salvage: Extended;
   Life, Period: Integer): Extended;
 
 { Future Value (FVAL) }
-function FutureValue(Rate: Extended; NPeriods: Integer; Payment, PresentValue:
-  Extended; PaymentTime: TPaymentTime): Extended;
+function FutureValue(const Rate: Extended; NPeriods: Integer; const Payment,
+  PresentValue: Extended; PaymentTime: TPaymentTime): Extended;
 
 { Interest Payment (IPAYMT)  }
-function InterestPayment(Rate: Extended; Period, NPeriods: Integer; PresentValue,
-  FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
+function InterestPayment(const Rate: Extended; Period, NPeriods: Integer;
+  const PresentValue, FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
 
 { Interest Rate (IRATE) }
-function InterestRate(NPeriods: Integer;
-  Payment, PresentValue, FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
+function InterestRate(NPeriods: Integer; const Payment, PresentValue,
+  FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
 
 { Internal Rate of Return. (IRR) Needs array of cash flows. }
-function InternalRateOfReturn(Guess: Extended;
+function InternalRateOfReturn(const Guess: Extended;
   const CashFlows: array of Double): Extended;
 
 { Number of Periods (NPER) }
-function NumberOfPeriods(Rate, Payment, PresentValue, FutureValue: Extended;
-  PaymentTime: TPaymentTime): Extended;
+function NumberOfPeriods(const Rate: Extended; Payment: Extended;
+  const PresentValue, FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
 
 { Net Present Value. (NPV) Needs array of cash flows. }
-function NetPresentValue(Rate: Extended; const CashFlows: array of Double;
+function NetPresentValue(const Rate: Extended; const CashFlows: array of Double;
   PaymentTime: TPaymentTime): Extended;
 
 { Payment (PAYMT) }
-function Payment(Rate: Extended; NPeriods: Integer;
-  PresentValue, FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
+function Payment(Rate: Extended; NPeriods: Integer; const PresentValue,
+  FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
 
 { Period Payment (PPAYMT) }
-function PeriodPayment(Rate: Extended; Period, NPeriods: Integer;
-  PresentValue, FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
+function PeriodPayment(const Rate: Extended; Period, NPeriods: Integer;
+  const PresentValue, FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
 
 { Present Value (PVAL) }
-function PresentValue(Rate: Extended; NPeriods: Integer;
-  Payment, FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
+function PresentValue(const Rate: Extended; NPeriods: Integer;
+  const Payment, FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
 
 { Straight Line depreciation (SLN) }
-function SLNDepreciation(Cost, Salvage: Extended; Life: Integer): Extended;
+function SLNDepreciation(const Cost, Salvage: Extended; Life: Integer): Extended;
 
 { Sum-of-Years-Digits depreciation (SYD) }
-function SYDDepreciation(Cost, Salvage: Extended; Life, Period: Integer): Extended;
+function SYDDepreciation(const Cost, Salvage: Extended; Life, Period: Integer): Extended;
 
 type
   EInvalidArgument = class(EMathError) end;
+
+{-----------------------------------------------------------------------
+FPU exception/precision/rounding management
+
+The following functions allow you to control the behavior of the FPU.  With
+them you can control what constutes an FPU exception, what the default
+precision is used and finally how rounding is handled by the FPU.
+
+-----------------------------------------------------------------------}
+
+type
+  TFPURoundingMode = (rmNearest, rmDown, rmUp, rmTruncate);
+
+{ Return the current rounding mode }
+function GetRoundMode: TFPURoundingMode;
+
+{ Set the rounding mode and return the old mode }
+function SetRoundMode(const RoundMode: TFPURoundingMode): TFPURoundingMode;
+
+type
+  TFPUPrecisionMode = (pmSingle, pmReserved, pmDouble, pmExtended);
+
+{ Return the current precision control mode }
+function GetPrecisionMode: TFPUPrecisionMode;
+
+{ Set the precision control mode and return the old one }
+function SetPrecisionMode(const Precision: TFPUPrecisionMode): TFPUPrecisionMode;
+
+type
+  TFPUException = (exInvalidOp, exDenormalized, exZeroDivide,
+                   exOverflow, exUnderflow, exPrecision);
+  TFPUExceptionMask = set of TFPUException;
+
+{ Return the exception mask from the control word.
+  Any element set in the mask prevents the FPU from raising that kind of
+  exception.  Instead, it returns its best attempt at a value, often NaN or an
+  infinity. The value depends on the operation and the current rounding mode. }
+function GetExceptionMask: TFPUExceptionMask;
+
+{ Set a new exception mask and return the old one }
+function SetExceptionMask(const Mask: TFPUExceptionMask): TFPUExceptionMask;
+
+{ Clear any pending exception bits in the status word }
+procedure ClearExceptions;
 
 implementation
 
 uses SysConst;
 
-function Annuity2(R: Extended; N: Integer; PaymentTime: TPaymentTime;
+procedure DivMod(Dividend: Integer; Divisor: Word;
+  var Result, Remainder: Word);
+asm
+        PUSH    EBX
+        MOV     EBX,EDX
+        MOV     EDX,EAX
+        SHR     EDX,16
+        DIV     BX
+        MOV     EBX,Remainder
+        MOV     [ECX],AX
+        MOV     [EBX],DX
+        POP     EBX
+end;
+
+function RoundTo(const AValue: Double; const ADigit: TRoundToRange): Double;
+var
+  LFactor: Double;
+begin
+  LFactor := IntPower(10, ADigit);
+  Result := Round(AValue / LFactor) * LFactor;
+end;
+
+function SimpleRoundTo(const AValue: Double; const ADigit: TRoundToRange = -2): Double;
+var
+  LFactor: Double;
+begin
+  LFactor := IntPower(10, ADigit);
+  Result := Trunc((AValue / LFactor) + 0.5) * LFactor;
+end;
+
+function Annuity2(const R: Extended; N: Integer; PaymentTime: TPaymentTime;
   var CompoundRN: Extended): Extended; Forward;
-//function AnnuityF(R:Extended; N: Integer): Extended; Forward;
-function Compound(R: Extended; N: Integer): Extended; Forward;
-function RelSmall(X, Y: Extended): Boolean; Forward;
+function Compound(const R: Extended; N: Integer): Extended; Forward;
+function RelSmall(const X, Y: Extended): Boolean; Forward;
 
 type
   TPoly = record
@@ -276,37 +487,67 @@ begin
   raise EInvalidArgument.Create(Msg);
 end;
 
-function DegToRad(Degrees: Extended): Extended;  { Radians := Degrees * PI / 180 }
+function DegToRad(const Degrees: Extended): Extended;  { Radians := Degrees * PI / 180 }
 begin
   Result := Degrees * (PI / 180);
 end;
 
-function RadToDeg(Radians: Extended): Extended;  { Degrees := Radians * 180 / PI }
+function RadToDeg(const Radians: Extended): Extended;  { Degrees := Radians * 180 / PI }
 begin
   Result := Radians * (180 / PI);
 end;
 
-function GradToRad(Grads: Extended): Extended;   { Radians := Grads * PI / 200 }
+function GradToRad(const Grads: Extended): Extended;   { Radians := Grads * PI / 200 }
 begin
   Result := Grads * (PI / 200);
 end;
 
-function RadToGrad(Radians: Extended): Extended; { Grads := Radians * 200 / PI}
+function RadToGrad(const Radians: Extended): Extended; { Grads := Radians * 200 / PI}
 begin
   Result := Radians * (200 / PI);
 end;
 
-function CycleToRad(Cycles: Extended): Extended; { Radians := Cycles * 2PI }
+function CycleToRad(const Cycles: Extended): Extended; { Radians := Cycles * 2PI }
 begin
   Result := Cycles * (2 * PI);
 end;
 
-function RadToCycle(Radians: Extended): Extended;{ Cycles := Radians / 2PI }
+function RadToCycle(const Radians: Extended): Extended;{ Cycles := Radians / 2PI }
 begin
   Result := Radians / (2 * PI);
 end;
 
-function LnXP1(X: Extended): Extended;
+function DegToGrad(const Degrees: Extended): Extended;
+begin
+  Result := RadToGrad(DegToRad(Degrees));
+end;
+
+function DegToCycle(const Degrees: Extended): Extended;
+begin
+  Result := RadToCycle(DegToRad(Degrees));
+end;
+
+function GradToDeg(const Grads: Extended): Extended;
+begin
+  Result := RadToDeg(GradToRad(Grads));
+end;
+
+function GradToCycle(const Grads: Extended): Extended;
+begin
+  Result := RadToCycle(GradToRad(Grads));
+end;
+
+function CycleToDeg(const Cycles: Extended): Extended;
+begin
+  Result := RadToDeg(CycleToRad(Cycles));
+end;
+
+function CycleToGrad(const Cycles: Extended): Extended;
+begin
+  Result := RadToGrad(CycleToRad(Cycles));
+end;
+
+function LnXP1(const X: Extended): Extended;
 { Return ln(1 + X).  Accurate for X near 0. }
 asm
         FLDLN2
@@ -343,7 +584,7 @@ begin
   if I < 0 then Result := 1.0 / Result
 end;
 }
-function IntPower(Base: Extended; Exponent: Integer): Extended;
+function IntPower(const Base: Extended; const Exponent: Integer): Extended;
 asm
         mov     ecx, eax
         cdq
@@ -367,28 +608,16 @@ asm
         fwait
 end;
 
-function Compound(R: Extended; N: Integer): Extended;
+function Compound(const R: Extended; N: Integer): Extended;
 { Return (1 + R)**N. }
 begin
   Result := IntPower(1.0 + R, N)
 end;
 
-(*
-function AnnuityF(R:Extended; N: Integer): Extended;
-{Return (((1+R)**N)-1)/R, the annuity growth factor}
-begin
-  { 6.1E-5 approx= 2**-14 }
-	if ( ABS(R)<6.1E-5 ) then
-		AnnuityF := N*(1+(N-1)*R/2) {linear approximation for small R}
-	else
-	  AnnuityF := (Exp(N*LNXP1(R))-1)/R;
-end; {AnnuityF}
-*)
-
-function Annuity2(R: Extended; N: Integer; PaymentTime: TPaymentTime;
+function Annuity2(const R: Extended; N: Integer; PaymentTime: TPaymentTime;
   var CompoundRN: Extended): Extended;
 { Set CompoundRN to Compound(R, N),
-	return (1+Rate*PaymentTime)*(Compound(R,N)-1)/R;
+  return (1+Rate*PaymentTime)*(Compound(R,N)-1)/R;
 }
 begin
   if R = 0.0 then
@@ -426,7 +655,7 @@ begin
   Pos := 0.0;
   DNeg := 0.0;
   DPos := 0.0;
-	for I := High(A) downto  Low(A) do
+  for I := High(A) downto Low(A) do
   begin
     DNeg := X * DNeg + Neg;
     Neg := Neg * X;
@@ -444,7 +673,7 @@ begin
 end; {PolyX}
 
 
-function RelSmall(X, Y: Extended): Boolean;
+function RelSmall(const X, Y: Extended): Boolean;
 { Returns True if X is small relative to Y }
 const
   C1: Double = 1E-15;
@@ -455,17 +684,17 @@ end;
 
 { Math functions. }
 
-function ArcCos(X: Extended): Extended;
+function ArcCos(const X: Extended): Extended;
 begin
-  Result := ArcTan2(Sqrt(1 - X*X), X);
+  Result := ArcTan2(Sqrt(1 - X * X), X);
 end;
 
-function ArcSin(X: Extended): Extended;
+function ArcSin(const X: Extended): Extended;
 begin
-  Result := ArcTan2(X, Sqrt(1 - X*X))
+  Result := ArcTan2(X, Sqrt(1 - X * X))
 end;
 
-function ArcTan2(Y, X: Extended): Extended;
+function ArcTan2(const Y, X: Extended): Extended;
 asm
         FLD     Y
         FLD     X
@@ -473,7 +702,7 @@ asm
         FWAIT
 end;
 
-function Tan(X: Extended): Extended;
+function Tan(const X: Extended): Extended;
 {  Tan := Sin(X) / Cos(X) }
 asm
         FLD    X
@@ -482,7 +711,7 @@ asm
         FWAIT
 end;
 
-function CoTan(X: Extended): Extended;
+function CoTan(const X: Extended): Extended;
 { CoTan := Cos(X) / Sin(X) = 1 / Tan(X) }
 asm
         FLD   X
@@ -491,7 +720,27 @@ asm
         FWAIT
 end;
 
-function Hypot(X, Y: Extended): Extended;
+function Secant(const X: Extended): Extended;
+{ Secant := 1 / Cos(X) }
+asm
+        FLD   X
+        FCOS
+        FLD1
+        FDIVRP
+        FWAIT
+end;
+
+function Cosecant(const X: Extended): Extended;
+{ Cosecant := 1 / Sin(X) }
+asm
+        FLD   X
+        FSIN
+        FLD1
+        FDIVRP
+        FWAIT
+end;
+
+function Hypot(const X, Y: Extended): Extended;
 { formula: Sqrt(X*X + Y*Y)
   implemented as:  |Y|*Sqrt(1+Sqr(X/Y)), |X| < |Y| for greater precision
 var
@@ -538,7 +787,7 @@ asm
 end;
 
 
-procedure SinCos(Theta: Extended; var Sin, Cos: Extended);
+procedure SinCos(const Theta: Extended; var Sin, Cos: Extended);
 asm
         FLD     Theta
         FSINCOS
@@ -548,7 +797,7 @@ asm
 end;
 
 { Extract exponent and mantissa from X }
-procedure Frexp(X: Extended; var Mantissa: Extended; var Exponent: Integer);
+procedure Frexp(const X: Extended; var Mantissa: Extended; var Exponent: Integer);
 { Mantissa ptr in EAX, Exponent ptr in EDX }
 asm
         FLD     X
@@ -582,7 +831,7 @@ asm
         FWAIT
 end;
 
-function Ldexp(X: Extended; P: Integer): Extended;
+function Ldexp(const X: Extended; const P: Integer): Extended;
   { Result := X * (2^P) }
 asm
         PUSH    EAX
@@ -594,14 +843,14 @@ asm
         FWAIT
 end;
 
-function Ceil(X: Extended): Integer;
+function Ceil(const X: Extended): Integer;
 begin
   Result := Integer(Trunc(X));
   if Frac(X) > 0 then
     Inc(Result);
 end;
 
-function Floor(X: Extended): Integer;
+function Floor(const X: Extended): Integer;
 begin
   Result := Integer(Trunc(X));
   if Frac(X) < 0 then
@@ -610,7 +859,7 @@ end;
 
 { Conversion of bases:  Log.b(X) = Log.a(X) / Log.a(b)  }
 
-function Log10(X: Extended): Extended;
+function Log10(const X: Extended): Extended;
   { Log.10(X) := Log.2(X) * Log.10(2) }
 asm
         FLDLG2     { Log base ten of 2 }
@@ -619,7 +868,7 @@ asm
         FWAIT
 end;
 
-function Log2(X: Extended): Extended;
+function Log2(const X: Extended): Extended;
 asm
         FLD1
         FLD     X
@@ -627,7 +876,7 @@ asm
         FWAIT
 end;
 
-function LogN(Base, X: Extended): Extended;
+function LogN(const Base, X: Extended): Extended;
 { Log.N(X) := Log.2(X) / Log.2(N) }
 asm
         FLD1
@@ -640,7 +889,7 @@ asm
         FWAIT
 end;
 
-function Poly(X: Extended; const Coefficients: array of Double): Extended;
+function Poly(const X: Extended; const Coefficients: array of Double): Extended;
 { Horner's method }
 var
   I: Integer;
@@ -650,7 +899,7 @@ begin
     Result := Result * X + Coefficients[I];
 end;
 
-function Power(Base, Exponent: Extended): Extended;
+function Power(const Base, Exponent: Extended): Extended;
 begin
   if Exponent = 0.0 then
     Result := 1.0               { n**0 = 1 }
@@ -664,18 +913,18 @@ end;
 
 { Hyperbolic functions }
 
-function CoshSinh(X: Extended; Factor: Double): Extended;
+function CoshSinh(const X: Extended; const Factor: Double): Extended;
 begin
   Result := Exp(X) / 2;
   Result := Result + Factor / Result;
 end;
 
-function Cosh(X: Extended): Extended;
+function Cosh(const X: Extended): Extended;
 begin
   Result := CoshSinh(X, 0.25)
 end;
 
-function Sinh(X: Extended): Extended;
+function Sinh(const X: Extended): Extended;
 begin
   Result := CoshSinh(X, -0.25)
 end;
@@ -683,7 +932,7 @@ end;
 const
   MaxTanhDomain = 5678.22249441322; // Ln(MaxExtended)/2
 
-function Tanh(X: Extended): Extended;
+function Tanh(const X: Extended): Extended;
 begin
   if X > MaxTanhDomain then
     Result := 1.0
@@ -697,7 +946,7 @@ begin
   end;
 end;
 
-function ArcCosh(X: Extended): Extended;
+function ArcCosh(const X: Extended): Extended;
 begin
   if X <= 1.0 then
     Result := 0.0
@@ -707,43 +956,119 @@ begin
     Result := Ln(X + Sqrt((X - 1.0) * (X + 1.0)));
 end;
 
-function ArcSinh(X: Extended): Extended;
+function ArcSinh(const X: Extended): Extended;
 var
   Neg: Boolean;
+  LX: Extended;
 begin
   if X = 0 then
     Result := 0
   else
   begin
     Neg := (X < 0);
-    X := Abs(X);
-    if X > 1.0e10 then
-      Result := Ln(2) + Ln(X)
+    LX := Abs(X);
+    if LX > 1.0e10 then
+      Result := Ln(2) + Ln(LX)
     else
     begin
-      Result := X*X;
-      Result := LnXP1(X + Result / (1 + Sqrt(1 + Result)));
+      Result := LX * LX;
+      Result := LnXP1(LX + Result / (1 + Sqrt(1 + Result)));
     end;
-    if Neg then Result := -Result;
+    if Neg then
+      Result := -Result;
   end;
 end;
 
-function ArcTanh(X: Extended): Extended;
+function ArcTanh(const X: Extended): Extended;
 var
   Neg: Boolean;
+  LX: Extended;
 begin
   if X = 0 then
     Result := 0
   else
   begin
     Neg := (X < 0);
-    X := Abs(X);
-    if X >= 1 then
+    LX := Abs(X);
+    if LX >= 1 then
       Result := MaxExtended
     else
-      Result := 0.5 * LnXP1((2.0 * X) / (1.0 - X));
-    if Neg then Result := -Result;
+      Result := 0.5 * LnXP1((2.0 * LX) / (1.0 - LX));
+    if Neg then
+      Result := -Result;
   end;
+end;
+
+function Cot(const X: Extended): Extended;
+begin
+  Result := CoTan(X);
+end;
+
+function Sec(const X: Extended): Extended;
+begin
+  Result := Secant(X);
+end;
+
+function Csc(const X: Extended): Extended;
+begin
+  Result := Cosecant(X);
+end;
+
+function CotH(const X: Extended): Extended;
+begin
+  Result := 1 / TanH(X);
+end;
+
+function SecH(const X: Extended): Extended;
+begin
+  Result := 1 / CosH(X);
+end;
+
+function CscH(const X: Extended): Extended;
+begin
+  Result := 1 / SinH(X);
+end;
+
+function ArcCot(const X: Extended): Extended;
+begin
+  Result := Tan(1 / X);
+end;
+
+function ArcSec(const X: Extended): Extended;
+begin
+  Result := Cos(1 / X);
+end;
+
+function ArcCsc(const X: Extended): Extended;
+begin
+  Result := Sin(1 / X);
+end;
+
+function ArcCotH(const X: Extended): Extended;
+begin
+  Result := 1 / ArcCot(X);
+end;
+
+function ArcSecH(const X: Extended): Extended;
+begin
+  Result := 1 / ArcSec(X);
+end;
+
+function ArcCscH(const X: Extended): Extended;
+begin
+  Result := 1 / ArcCsc(X);
+end;
+
+function IsNan(const AValue: Double): Boolean;
+begin
+  Result := ((PInt64(@AValue)^ and $7FF0000000000000)  = $7FF0000000000000) and
+            ((PInt64(@AValue)^ and $000FFFFFFFFFFFFF) <> $0000000000000000)
+end;
+
+function IsInfinite(const AValue: Double): Boolean;
+begin
+  Result := ((PInt64(@AValue)^ and $7FF0000000000000) = $7FF0000000000000) and
+            ((PInt64(@AValue)^ and $000FFFFFFFFFFFFF) = $0000000000000000)
 end;
 
 { Statistical functions }
@@ -773,7 +1098,7 @@ begin
       Result := Data[I];
 end;
 
-function Min(A,B: Integer): Integer;
+function Min(const A, B: Integer): Integer;
 begin
   if A < B then
     Result := A
@@ -781,7 +1106,7 @@ begin
     Result := B;
 end;
 
-function Min(A,B: Int64): Int64;
+function Min(const A, B: Int64): Int64;
 begin
   if A < B then
     Result := A
@@ -789,7 +1114,7 @@ begin
     Result := B;
 end;
 
-function Min(A,B: Single): Single;
+function Min(const A, B: Single): Single;
 begin
   if A < B then
     Result := A
@@ -797,7 +1122,7 @@ begin
     Result := B;
 end;
 
-function Min(A,B: Double): Double;
+function Min(const A, B: Double): Double;
 begin
   if A < B then
     Result := A
@@ -805,7 +1130,7 @@ begin
     Result := B;
 end;
 
-function Min(A,B: Extended): Extended;
+function Min(const A, B: Extended): Extended;
 begin
   if A < B then
     Result := A
@@ -833,7 +1158,7 @@ begin
       Result := Data[I];
 end;
 
-function Max(A,B: Integer): Integer;
+function Max(const A, B: Integer): Integer;
 begin
   if A > B then
     Result := A
@@ -841,7 +1166,7 @@ begin
     Result := B;
 end;
 
-function Max(A,B: Int64): Int64;
+function Max(const A, B: Int64): Int64;
 begin
   if A > B then
     Result := A
@@ -849,7 +1174,7 @@ begin
     Result := B;
 end;
 
-function Max(A,B: Single): Single;
+function Max(const A, B: Single): Single;
 begin
   if A > B then
     Result := A
@@ -857,7 +1182,7 @@ begin
     Result := B;
 end;
 
-function Max(A,B: Double): Double;
+function Max(const A, B: Double): Double;
 begin
   if A > B then
     Result := A
@@ -865,12 +1190,234 @@ begin
     Result := B;
 end;
 
-function Max(A,B: Extended): Extended;
+function Max(const A, B: Extended): Extended;
 begin
   if A > B then
     Result := A
   else
     Result := B;
+end;
+
+function Sign(const AValue: Integer): TValueSign;
+begin
+  Result := ZeroValue;
+  if AValue < 0 then
+    Result := NegativeValue
+  else if AValue > 0 then
+    Result := PositiveValue;
+end;
+
+function Sign(const AValue: Int64): TValueSign;
+begin
+  Result := ZeroValue;
+  if AValue < 0 then
+    Result := NegativeValue
+  else if AValue > 0 then
+    Result := PositiveValue;
+end;
+
+function Sign(const AValue: Double): TValueSign;
+begin
+  if ((PInt64(@AValue)^ and $7FFFFFFFFFFFFFFF) = $0000000000000000) then
+    Result := ZeroValue
+  else if ((PInt64(@AValue)^ and $8000000000000000) = $8000000000000000) then
+    Result := NegativeValue
+  else
+    Result := PositiveValue;
+end;
+
+const
+  FuzzFactor = 1000;
+  ExtendedResolution = 1E-19 * FuzzFactor;
+  DoubleResolution   = 1E-15 * FuzzFactor;
+  SingleResolution   = 1E-7 * FuzzFactor;
+
+function CompareValue(const A, B: Extended; Epsilon: Extended): TValueRelationship;
+begin
+  if SameValue(A, B, Epsilon) then
+    Result := EqualsValue
+  else if A < B then
+    Result := LessThanValue
+  else
+    Result := GreaterThanValue;
+end;
+
+function CompareValue(const A, B: Double; Epsilon: Double): TValueRelationship;
+begin
+  if SameValue(A, B, Epsilon) then
+    Result := EqualsValue
+  else if A < B then
+    Result := LessThanValue
+  else
+    Result := GreaterThanValue;
+end;
+
+function CompareValue(const A, B: Single; Epsilon: Single): TValueRelationship;
+begin
+  if SameValue(A, B, Epsilon) then
+    Result := EqualsValue
+  else if A < B then
+    Result := LessThanValue
+  else
+    Result := GreaterThanValue;
+end;
+
+function CompareValue(const A, B: Integer): TValueRelationship;
+begin
+  if A = B then
+    Result := EqualsValue
+  else if A < B then
+    Result := LessThanValue
+  else
+    Result := GreaterThanValue;
+end;
+
+function CompareValue(const A, B: Int64): TValueRelationship;
+begin
+  if A = B then
+    Result := EqualsValue
+  else if A < B then
+    Result := LessThanValue
+  else
+    Result := GreaterThanValue;
+end;
+
+function SameValue(const A, B: Extended; Epsilon: Extended): Boolean;
+begin
+  if Epsilon = 0 then
+    Epsilon := Min(Abs(A), Abs(B)) * ExtendedResolution;
+  Result := Abs(A - B) <= Epsilon;
+end;
+
+function SameValue(const A, B: Double; Epsilon: Double): Boolean;
+begin
+  if Epsilon = 0 then
+    Epsilon := Min(Abs(A), Abs(B)) * DoubleResolution;
+  Result := Abs(A - B) <= Epsilon;
+end;
+
+function SameValue(const A, B: Single; Epsilon: Single): Boolean;
+begin
+  if Epsilon = 0 then
+    Epsilon := Min(Abs(A), Abs(B)) * SingleResolution;
+  Result := Abs(A - B) <= Epsilon;
+end;
+
+function IsZero(const A: Extended; Epsilon: Extended): Boolean;
+begin
+  if Epsilon = 0 then
+    Epsilon := ExtendedResolution;
+  Result := Abs(A) <= Epsilon;
+end;
+
+function IsZero(const A: Double; Epsilon: Double): Boolean;
+begin
+  if Epsilon = 0 then
+    Epsilon := DoubleResolution;
+  Result := Abs(A) <= Epsilon;
+end;
+
+function IsZero(const A: Single; Epsilon: Single): Boolean;
+begin
+  if Epsilon = 0 then
+    Epsilon := SingleResolution;
+  Result := Abs(A) <= Epsilon;
+end;
+
+function IfThen(AValue: Boolean; const ATrue: Integer; const AFalse: Integer): Integer;
+begin
+  if AValue then
+    Result := ATrue
+  else
+    Result := AFalse;
+end;
+
+function IfThen(AValue: Boolean; const ATrue: Int64; const AFalse: Int64): Int64;
+begin
+  if AValue then
+    Result := ATrue
+  else
+    Result := AFalse;
+end;
+
+function IfThen(AValue: Boolean; const ATrue: Double; const AFalse: Double): Double;
+begin
+  if AValue then
+    Result := ATrue
+  else
+    Result := AFalse;
+end;
+
+function RandomRange(const AFrom, ATo: Integer): Integer;
+begin
+  if AFrom > ATo then
+    Result := Random(AFrom - ATo) + ATo
+  else
+    Result := Random(ATo - AFrom) + AFrom;
+end;
+
+function RandomFrom(const AValues: array of Integer): Integer;
+begin
+  Result := AValues[Random(High(AValues) + 1)];
+end;
+
+function RandomFrom(const AValues: array of Int64): Int64;
+begin
+  Result := AValues[Random(High(AValues) + 1)];
+end;
+
+function RandomFrom(const AValues: array of Double): Double;
+begin
+  Result := AValues[Random(High(AValues) + 1)];
+end;
+
+{ Range testing functions }
+
+function InRange(const AValue, AMin, AMax: Integer): Boolean;
+begin
+  Result := (AValue >= AMin) and (AValue <= AMax);
+end;
+
+function InRange(const AValue, AMin, AMax: Int64): Boolean;
+begin
+  Result := (AValue >= AMin) and (AValue <= AMax);
+end;
+
+function InRange(const AValue, AMin, AMax: Double): Boolean;
+begin
+  Result := (AValue >= AMin) and (AValue <= AMax);
+end;
+
+{ Range truncation functions }
+
+function EnsureRange(const AValue, AMin, AMax: Integer): Integer;
+begin
+  Result := AValue;
+  assert(AMin <= AMax);
+  if Result < AMin then
+    Result := AMin;
+  if Result > AMax then
+    Result := AMax;
+end;
+
+function EnsureRange(const AValue, AMin, AMax: Int64): Int64;
+begin
+  Result := AValue;
+  assert(AMin <= AMax);
+  if Result < AMin then
+    Result := AMin;
+  if Result > AMax then
+    Result := AMax;
+end;
+
+function EnsureRange(const AValue, AMin, AMax: Double): Double;
+begin
+  Result := AValue;
+  assert(AMin <= AMax);
+  if Result < AMin then
+    Result := AMin;
+  if Result > AMax then
+    Result := AMax;
 end;
 
 procedure MeanAndStdDev(const Data: array of Double; var Mean, StdDev: Extended);
@@ -958,13 +1505,15 @@ end;
 procedure RaiseOverflowError; forward;
 
 function SumInt(const Data: array of Integer): Integer;
-{var
+{$IFDEF PIC}
+var
   I: Integer;
 begin
   Result := 0;
   for I := Low(Data) to High(Data) do
     Result := Result + Data[I]
-end; }
+end;
+{$ELSE}
 asm  // IN: EAX = ptr to Data, EDX = High(Data) = Count - 1
      // loop unrolled 4 times, 5 clocks per loop, 1.2 clocks per datum
       PUSH EBX
@@ -996,6 +1545,7 @@ asm  // IN: EAX = ptr to Data, EDX = High(Data) = Count - 1
       JNS  @@4
       POP  EBX
 end;
+{$ENDIF}
 
 procedure RaiseOverflowError;
 begin
@@ -1003,13 +1553,15 @@ begin
 end;
 
 function SUM(const Data: array of Double): Extended;
-{var
+{$IFDEF PIC}
+var
   I: Integer;
 begin
   Result := 0.0;
   for I := Low(Data) to High(Data) do
     Result := Result + Data[I]
-end; }
+end;
+{$ELSE}
 asm  // IN: EAX = ptr to Data, EDX = High(Data) = Count - 1
      // Uses 4 accumulators to minimize read-after-write delays and loop overhead
      // 5 clocks per loop, 4 items per loop = 1.2 clocks per item
@@ -1042,6 +1594,7 @@ asm  // IN: EAX = ptr to Data, EDX = High(Data) = Count - 1
        FADD                               // ST(1) := ST + ST(1); Pop ST
        FWAIT
 end;
+{$ENDIF}
 
 function SumOfSquares(const Data: array of Double): Extended;
 var
@@ -1053,7 +1606,8 @@ begin
 end;
 
 procedure SumsAndSquares(const Data: array of Double; var Sum, SumOfSquares: Extended);
-{var
+{$IFDEF PIC}
+var
   I: Integer;
 begin
   Sum := 0;
@@ -1063,7 +1617,8 @@ begin
     Sum := Sum + Data[I];
     SumOfSquares := SumOfSquares + Data[I]*Data[I];
   end;
-end;  }
+end;
+{$ELSE}
 asm  // IN:  EAX = ptr to Data
      //      EDX = High(Data) = Count - 1
      //      ECX = ptr to Sum
@@ -1113,6 +1668,7 @@ asm  // IN:  EAX = ptr to Data
        FSTP    tbyte ptr [EAX]      // SumOfSquares := Sum1; Pop Sum1
        FWAIT
 end;
+{$ENDIF}
 
 function TotalVariance(const Data: array of Double): Extended;
 var
@@ -1130,7 +1686,7 @@ end;
 
 { Depreciation functions. }
 
-function DoubleDecliningBalance(Cost, Salvage: Extended; Life, Period: Integer): Extended;
+function DoubleDecliningBalance(const Cost, Salvage: Extended; Life, Period: Integer): Extended;
 { dv := cost * (1 - 2/life)**(period - 1)
   DDB = (2/life) * dv
   if DDB > dv - salvage then DDB := dv - salvage
@@ -1140,55 +1696,55 @@ var
   DepreciatedVal, Factor: Extended;
 begin
   Result := 0;
-	if (Period < 1) or (Life < Period) or (Life < 1) or (Cost <= Salvage) then
+  if (Period < 1) or (Life < Period) or (Life < 1) or (Cost <= Salvage) then
     Exit;
 
-	{depreciate everything in period 1 if life is only one or two periods}
-	if ( Life <= 2 ) then
+  {depreciate everything in period 1 if life is only one or two periods}
+  if ( Life <= 2 ) then
   begin
-		if ( Period = 1 ) then
+    if ( Period = 1 ) then
       DoubleDecliningBalance:=Cost-Salvage
-		else
-			DoubleDecliningBalance:=0; {all depreciation occurred in first period}
-		exit;
+    else
+      DoubleDecliningBalance:=0; {all depreciation occurred in first period}
+    exit;
   end;
   Factor := 2.0 / Life;
 
   DepreciatedVal := Cost * IntPower((1.0 - Factor), Period - 1);
-	   {DepreciatedVal is Cost-(sum of previous depreciation results)}
+  {DepreciatedVal is Cost-(sum of previous depreciation results)}
 
   Result := Factor * DepreciatedVal;
-	   {Nominal computed depreciation for this period.  The rest of the
-			function applies limits to this nominal value. }
+  {Nominal computed depreciation for this period.  The rest of the
+   function applies limits to this nominal value. }
 
-	{Only depreciate until total depreciation equals cost-salvage.}
+  {Only depreciate until total depreciation equals cost-salvage.}
   if Result > DepreciatedVal - Salvage then
     Result := DepreciatedVal - Salvage;
 
-	{No more depreciation after salvage value is reached.  This is mostly a nit.
-	 If Result is negative at this point, it's very close to zero.}
+  {No more depreciation after salvage value is reached.  This is mostly a nit.
+   If Result is negative at this point, it's very close to zero.}
   if Result < 0.0 then
     Result := 0.0;
 end;
 
-function SLNDepreciation(Cost, Salvage: Extended; Life: Integer): Extended;
+function SLNDepreciation(const Cost, Salvage: Extended; Life: Integer): Extended;
 { Spreads depreciation linearly over life. }
 begin
   if Life < 1 then ArgError('SLNDepreciation');
   Result := (Cost - Salvage) / Life
 end;
 
-function SYDDepreciation(Cost, Salvage: Extended; Life, Period: Integer): Extended;
+function SYDDepreciation(const Cost, Salvage: Extended; Life, Period: Integer): Extended;
 { SYD = (cost - salvage) * (life - period + 1) / (life*(life + 1)/2) }
 { Note: life*(life+1)/2 = 1+2+3+...+life "sum of years"
-				The depreciation factor varies from life/sum_of_years in first period = 1
-																			 downto  1/sum_of_years in last period = life.
-				Total depreciation over life is cost-salvage.}
+        The depreciation factor varies from life/sum_of_years in first period = 1
+                                       downto  1/sum_of_years in last period = life.
+        Total depreciation over life is cost-salvage.}
 var
   X1, X2: Extended;
 begin
   Result := 0;
-	if (Period < 1) or (Life < Period) or (Cost <= Salvage) then Exit;
+  if (Period < 1) or (Life < Period) or (Cost <= Salvage) then Exit;
   X1 := 2 * (Life - Period + 1);
   X2 := Life * (Life + 1);
   Result := (Cost - Salvage) * X1 / X2
@@ -1196,7 +1752,7 @@ end;
 
 { Discounted cash flow functions. }
 
-function InternalRateOfReturn(Guess: Extended; const CashFlows: array of Double): Extended;
+function InternalRateOfReturn(const Guess: Extended; const CashFlows: array of Double): Extended;
 {
 Use Newton's method to solve NPV = 0, where NPV is a polynomial in
 x = 1/(1+rate).  Split the coefficients into negative and postive sets:
@@ -1230,14 +1786,15 @@ var
     begin
       X := 0.0;
       I := 0;
-      while I < K do begin
-	      X := X + CashFlows[I];
+      while I < K do
+      begin
+        X := X + CashFlows[I];
         if X >= 0.0 then
         begin
-     	    K := 0;
-      	  Break
-    	  end;
-      	Inc(I)
+          K := 0;
+          Break;
+        end;
+        Inc(I)
       end
     end;
     ConditionP := K
@@ -1274,7 +1831,7 @@ begin
   ArgError('InternalRateOfReturn');
 end;
 
-function NetPresentValue(Rate: Extended; const CashFlows: array of Double;
+function NetPresentValue(const Rate: Extended; const CashFlows: array of Double;
   PaymentTime: TPaymentTime): Extended;
 { Caution: The sign of NPV is reversed from what would be expected for standard
    cash flows!}
@@ -1326,9 +1883,9 @@ function PaymentParts(Period, NPeriods: Integer; Rate, PresentValue,
   FutureValue: Extended; PaymentTime: TPaymentTime; var IntPmt: Extended):
   Extended;
 var
-		Crn:extended; { =Compound(Rate,NPeriods) }
-		Crp:extended; { =Compound(Rate,Period-1) }
-		Arn:extended; { =AnnuityF(Rate,NPeriods) }
+  Crn:extended; { =Compound(Rate,NPeriods) }
+  Crp:extended; { =Compound(Rate,Period-1) }
+  Arn:extended; { =Annuity2(...) }
 
 begin
   if Rate <= -1.0 then ArgError('PaymentParts');
@@ -1338,8 +1895,8 @@ begin
   PaymentParts:=(-FutureValue-PresentValue)*Crp/Arn;
 end;
 
-function FutureValue(Rate: Extended; NPeriods: Integer; Payment, PresentValue:
-  Extended; PaymentTime: TPaymentTime): Extended;
+function FutureValue(const Rate: Extended; NPeriods: Integer; const Payment,
+  PresentValue: Extended; PaymentTime: TPaymentTime): Extended;
 var
   Annuity, CompoundRN: Extended;
 begin
@@ -1349,8 +1906,8 @@ begin
   FutureValue := -Payment * Annuity - PresentValue * CompoundRN
 end;
 
-function InterestPayment(Rate: Extended; Period, NPeriods: Integer; PresentValue,
-  FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
+function InterestPayment(const Rate: Extended; Period, NPeriods: Integer;
+  const PresentValue, FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
 var
   Crp:extended; { compound(rate,period-1)}
   Crn:extended; { compound(rate,nperiods)}
@@ -1358,13 +1915,13 @@ var
 begin
   if (Rate <= -1.0)
     or (Period < 1) or (Period > NPeriods) then ArgError('InterestPayment');
-	Crp:=Compound(Rate,Period-1);
-	Arn:=Annuity2(Rate,Nperiods,PaymentTime,Crn);
-	InterestPayment:=(FutureValue*(Crp-1)-PresentValue*(Crn-Crp))/Arn;
+  Crp:=Compound(Rate,Period-1);
+  Arn:=Annuity2(Rate,Nperiods,PaymentTime,Crn);
+  InterestPayment:=(FutureValue*(Crp-1)-PresentValue*(Crn-Crp))/Arn;
 end;
 
-function InterestRate(NPeriods: Integer;
-  Payment, PresentValue, FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
+function InterestRate(NPeriods: Integer; const Payment, PresentValue,
+  FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
 {
 Given:
   First and last payments are non-zero and of opposite signs.
@@ -1463,8 +2020,8 @@ begin
   ArgError('InterestRate');
 end;
 
-function NumberOfPeriods(Rate, Payment, PresentValue, FutureValue: Extended;
-  PaymentTime: TPaymentTime): Extended;
+function NumberOfPeriods(const Rate: Extended; Payment: Extended;
+  const PresentValue, FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
 
 { If Rate = 0 then nper := -(pv + fv) / pmt
   else cf := pv + pmt * (1 + rate*pmtTime) / rate
@@ -1513,8 +2070,8 @@ begin
   NumberOfPeriods:=Result;
 end;
 
-function Payment(Rate: Extended; NPeriods: Integer; PresentValue, FutureValue:
-  Extended; PaymentTime: TPaymentTime): Extended;
+function Payment(Rate: Extended; NPeriods: Integer; const PresentValue,
+  FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
 var
   Annuity, CompoundRN: Extended;
 begin
@@ -1526,8 +2083,8 @@ begin
     Payment := (-PresentValue * CompoundRN - FutureValue) / Annuity
 end;
 
-function PeriodPayment(Rate: Extended; Period, NPeriods: Integer;
-  PresentValue, FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
+function PeriodPayment(const Rate: Extended; Period, NPeriods: Integer;
+  const PresentValue, FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
 var
   Junk: Extended;
 begin
@@ -1536,8 +2093,8 @@ begin
        FutureValue, PaymentTime, Junk);
 end;
 
-function PresentValue(Rate: Extended; NPeriods: Integer; Payment, FutureValue:
-  Extended; PaymentTime: TPaymentTime): Extended;
+function PresentValue(const Rate: Extended; NPeriods: Integer; const Payment,
+  FutureValue: Extended; PaymentTime: TPaymentTime): Extended;
 var
   Annuity, CompoundRN: Extended;
 begin
@@ -1547,6 +2104,53 @@ begin
     PresentValue := -(Payment / Rate * Integer(PaymentTime) * Payment)
   else
     PresentValue := (-Payment * Annuity - FutureValue) / CompoundRN
+end;
+
+function GetRoundMode: TFPURoundingMode;
+begin
+  Result := TFPURoundingMode((Get8087CW shr 10) and 3);
+end;
+
+function SetRoundMode(const RoundMode: TFPURoundingMode): TFPURoundingMode;
+var
+  CtlWord: Word;
+begin
+  CtlWord := Get8087CW;
+  Set8087CW((CtlWord and $F3FF) or (Ord(RoundMode) shl 10));
+  Result := TFPURoundingMode((CtlWord shr 10) and 3);
+end;
+
+function GetPrecisionMode: TFPUPrecisionMode;
+begin
+  Result := TFPUPrecisionMode((Get8087CW shr 8) and 3);
+end;
+
+function SetPrecisionMode(const Precision: TFPUPrecisionMode): TFPUPrecisionMode;
+var
+  CtlWord: Word;
+begin
+  CtlWord := Get8087CW;
+  Set8087CW((CtlWord and $FCFF) or (Ord(Precision) shl 8));
+  Result := TFPUPrecisionMode((CtlWord shr 8) and 3);
+end;
+
+function GetExceptionMask: TFPUExceptionMask;
+begin
+  Byte(Result) := Get8087CW and $3F;
+end;
+
+function SetExceptionMask(const Mask: TFPUExceptionMask): TFPUExceptionMask;
+var
+  CtlWord: Word;
+begin
+  CtlWord := Get8087CW;
+  Set8087CW( (CtlWord and $FFC0) or Byte(Mask) );
+  Byte(Result) := CtlWord and $3F;
+end;
+
+procedure ClearExceptions;
+asm
+  fclex
 end;
 
 end.

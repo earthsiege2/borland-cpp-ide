@@ -1,19 +1,23 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
-
 //=============================================================================
-//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1994.
+//  Microsoft (R) Network Monitor (tm). 
+//  Copyright (C) 1991-1999. All rights reserved.
 //
-//  MODULE: parser.h
+//  MODULE: nmparser.h
 //
-//  This header file defines helper functions for use by Bloodhound parser DLL's.
+//  This header file defines helper functions for use by Network Monitor 
+//  parser DLL's.
 //=============================================================================
 
 #include "bhtypes.h"
 #include "frame.h"
 
-#if !defined(_PARSER_)
+// OK, we should make everyone convert to NMerr... 
+// but not right this particular moment
+#include "bherr.h"
 
-#define _PARSER_
+#if !defined(_NMPARSER_)
+
+#define _NMPARSER_
 
 #pragma pack(1)
 
@@ -30,7 +34,7 @@ typedef VOID (WINAPIV *FORMAT)(LPPROPERTYINST, ...);
 //  PROTOCOL_STATUS_RECOGNIZED:
 //
 //  The protocol recognized the frame and moved the pointer to end of its
-//  protocol header. Bloodhound uses the protocols follow set to continue
+//  protocol header. Network Monitor uses the protocols follow set to continue
 //  parsing.
 //=============================================================================
 
@@ -40,7 +44,7 @@ typedef VOID (WINAPIV *FORMAT)(LPPROPERTYINST, ...);
 //  PROTOCOL_STATUS_NOT_RECOGNIZED:
 //
 //  The protocol did not recognized the frame and did not move the pointer
-//  (i.e. the start data pointer which was passed in). Bloodhound uses the
+//  (i.e. the start data pointer which was passed in). Network Monitor uses the
 //  protocols follow set to continue parsing.
 //=============================================================================
 
@@ -59,10 +63,10 @@ typedef VOID (WINAPIV *FORMAT)(LPPROPERTYINST, ...);
 //  PROTOCOL_STATUS_NEXT_PROTOCOL:
 //
 //  The protocol recognized the frame and moved the pointer to end of its
-//  protocol header. The current protocol requests that Bloodhound continue
-//  parsing at a known next protocol by returning the next protocols handle back
-//  to Bloodhound. In this case, the follow of the current protocol, if any,
-//  is not used.
+//  protocol header. The current protocol requests that Network Monitor 
+//  continue parsing at a known next protocol by returning the next protocols
+//  handle back to Network Monitor. In this case, the follow of the current 
+//  protocol, if any, is not used.
 //=============================================================================
 
 #define PROTOCOL_STATUS_NEXT_PROTOCOL                     3
@@ -253,23 +257,108 @@ extern VOID         WINAPI SetCCInstPtr(LPVOID lpCurCaptureInst);
 extern LPVOID       WINAPI CCHeapAlloc(DWORD dwBytes, BOOL bZeroInit);
 extern LPVOID       WINAPI CCHeapReAlloc(LPVOID lpMem, DWORD dwBytes, BOOL bZeroInit);
 extern BOOL         WINAPI CCHeapFree(LPVOID lpMem);
-extern DWORD        WINAPI CCHeapSize(LPVOID lpMem);
+extern SIZE_T       WINAPI CCHeapSize(LPVOID lpMem);
 
-extern BOOL BERGetInteger( LPBYTE  pCurrentPointer,
-                           LPBYTE *ppValuePointer,
-                           LPDWORD pHeaderLength,
-                           LPDWORD pDataLength,
-                           LPBYTE *ppNext);
-extern BOOL BERGetString( LPBYTE  pCurrentPointer,
-                          LPBYTE *ppValuePointer,
-                          LPDWORD pHeaderLength,
-                          LPDWORD pDataLength,
-                          LPBYTE *ppNext);
-extern BOOL BERGetHeader( LPBYTE  pCurrentPointer,
-                          LPBYTE  pTag,
-                          LPDWORD pHeaderLength,
-                          LPDWORD pDataLength,
-                          LPBYTE *ppNext);
+extern BOOL _cdecl BERGetInteger( LPBYTE  pCurrentPointer,
+                                  LPBYTE *ppValuePointer,
+                                  LPDWORD pHeaderLength,
+                                  LPDWORD pDataLength,
+                                  LPBYTE *ppNext);
+extern BOOL _cdecl BERGetString( LPBYTE  pCurrentPointer,
+                                 LPBYTE *ppValuePointer,
+                                 LPDWORD pHeaderLength,
+                                 LPDWORD pDataLength,
+                                 LPBYTE *ppNext);
+extern BOOL _cdecl BERGetHeader( LPBYTE  pCurrentPointer,
+                                 LPBYTE  pTag,
+                                 LPDWORD pHeaderLength,
+                                 LPDWORD pDataLength,
+                                 LPBYTE *ppNext);
+
+//=============================================================================
+//  Parser Finder Structures.
+//=============================================================================
+
+#pragma warning(disable:4200)
+
+#define MAX_PROTOCOL_NAME_LEN       16
+#define MAX_PROTOCOL_COMMENT_LEN    256
+
+// Handoff Value Format Base
+typedef enum
+{
+    HANDOFF_VALUE_FORMAT_BASE_UNKNOWN = 0,
+    HANDOFF_VALUE_FORMAT_BASE_DECIMAL = 10,
+    HANDOFF_VALUE_FORMAT_BASE_HEX     = 16
+
+} PF_HANDOFFVALUEFORMATBASE;
+
+// PF_HANDOFFENTRY
+typedef struct _PF_HANDOFFENTRY
+{
+    char  szIniFile[MAX_PATH];
+    char  szIniSection[MAX_PATH];
+    char  szProtocol[MAX_PROTOCOL_NAME_LEN];
+    DWORD dwHandOffValue;
+    PF_HANDOFFVALUEFORMATBASE ValueFormatBase;
+
+} PF_HANDOFFENTRY;
+typedef PF_HANDOFFENTRY* PPF_HANDOFFENTRY;
+
+// PF_HANDOFFSET
+typedef struct _PF_HANDOFFSET
+{
+    DWORD           nEntries;
+    PF_HANDOFFENTRY Entry[0];
+
+} PF_HANDOFFSET;
+typedef PF_HANDOFFSET* PPF_HANDOFFSET;
+
+// FOLLOWENTRY
+typedef struct _PF_FOLLOWENTRY
+{
+    char szProtocol[MAX_PROTOCOL_NAME_LEN];
+
+} PF_FOLLOWENTRY;
+typedef PF_FOLLOWENTRY* PPF_FOLLOWENTRY;
+
+// PF_FOLLOWSET
+typedef struct _PF_FOLLOWSET
+{
+    DWORD           nEntries;
+    PF_FOLLOWENTRY  Entry[0];
+
+} PF_FOLLOWSET;
+typedef PF_FOLLOWSET* PPF_FOLLOWSET;
+
+
+// PARSERINFO - contains information about a single parser
+typedef struct _PF_PARSERINFO
+{
+    char szProtocolName[MAX_PROTOCOL_NAME_LEN];
+    char szComment[MAX_PROTOCOL_COMMENT_LEN];
+    char szHelpFile[MAX_PATH];
+
+    PPF_FOLLOWSET pWhoCanPrecedeMe;
+    PPF_FOLLOWSET pWhoCanFollowMe;
+
+    PPF_HANDOFFSET pWhoHandsOffToMe;
+    PPF_HANDOFFSET pWhoDoIHandOffTo;
+
+} PF_PARSERINFO;
+typedef PF_PARSERINFO* PPF_PARSERINFO;
+
+// PF_PARSERDLLINFO - contains information about a single parser DLL
+typedef struct _PF_PARSERDLLINFO
+{             
+//    char          szDLLName[MAX_PATH];
+    DWORD         nParsers;
+    PF_PARSERINFO ParserInfo[0];
+
+} PF_PARSERDLLINFO;
+typedef PF_PARSERDLLINFO* PPF_PARSERDLLINFO;
+
+#pragma warning(default:4200)
+
 #pragma pack()
 #endif
-#pragma option pop /*P_O_Pop*/

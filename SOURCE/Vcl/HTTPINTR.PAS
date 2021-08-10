@@ -11,7 +11,7 @@ unit HTTPIntr;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, HTTPApp, SConnect;
+  Windows, Messages, Variants, SysUtils, Classes, HTTPApp, SConnect;
 
 type
 
@@ -27,15 +27,17 @@ type
     function Send(const Data: IDataBlock; WaitForResult: Boolean): IDataBlock; stdcall;
   end;
 
+  function TerminateExtension(dwFlags: DWORD): BOOL; stdcall;
+
 var
   HTTPServer: THTTPServer;
 
 implementation
 
 uses
-  ComObj, ActiveX, MidConst, IsapiApp;
+  ComObj, ActiveX, MidConst, IsapiHTTP, ISAPIApp;
 
-{$R *.DFM}
+{$R *.dfm}
 
 type
 
@@ -139,31 +141,36 @@ var
   BytesRead, ChunkSize: Integer;
   DataPacket: array of Byte;
 begin
-  FData := nil;
-  if not Assigned(FInterpreter) then
-    FInterpreter := TPooledDataInterpreter.Create(Self, SWeb);
-  S := Request.Content;
-  BytesRead := Length(S);
-  DataBlock := TDataBlock.Create;
-  if BytesRead < Request.ContentLength then
-  begin
-    SetLength(DataPacket, Request.ContentLength);
-    Move(S[1], DataPacket[0], BytesRead);
-    repeat
-      ChunkSize := TISAPIRequest(Request).ReadClient(Pointer(@Datapacket[BytesRead])^, Request.ContentLength - BytesRead);
-      if ChunkSize > 0 then
-      begin
-        Inc(BytesRead, ChunkSize);
-      end;
-    until ChunkSize = -1;
-    DataBlock.InitData(@DataPacket[0], Request.ContentLength, True);
-  end else
-    DataBlock.InitData(@S[1], Request.ContentLength, True);
-  FInterpreter.InterpretData(DataBlock);
-  if Assigned(FData) then
-  begin
-    Response.ContentStream := FData.Stream;
-    FData.IgnoreStream;
+  try
+    FData := nil;
+    if not Assigned(FInterpreter) then
+      FInterpreter := TPooledDataInterpreter.Create(Self, SWeb);
+    S := Request.Content;
+    BytesRead := Length(S);
+    if BytesRead = 0 then EXIT;
+    DataBlock := TDataBlock.Create;
+    if BytesRead < Request.ContentLength then
+    begin
+      SetLength(DataPacket, Request.ContentLength);
+      Move(S[1], DataPacket[0], BytesRead);
+      repeat
+        ChunkSize := TISAPIRequest(Request).ReadClient(Pointer(@Datapacket[BytesRead])^, Request.ContentLength - BytesRead);
+        if ChunkSize > 0 then
+        begin
+          Inc(BytesRead, ChunkSize);
+        end;
+      until ChunkSize = -1;
+      DataBlock.InitData(@DataPacket[0], Request.ContentLength, True);
+    end else
+      DataBlock.InitData(@S[1], Request.ContentLength, True);
+    FInterpreter.InterpretData(DataBlock);
+    if Assigned(FData) then
+    begin
+      Response.ContentStream := FData.Stream;
+      FData.IgnoreStream;
+    end;
+  except
+    {An exception here would take down IIS}
   end;
 end;
 
@@ -389,7 +396,7 @@ procedure TGarbageCollector.Execute;
       begin
         Lock;
         try
-          for i := 0 to FList.Count - 1 do
+          for i := FList.Count - 1 downto 0 do
             if CheckObject(PObjectInfo(FList[i]), Timeout) then
             begin
               Dispose(PObjectInfo(FList[i]));
@@ -516,7 +523,7 @@ begin
     Result := FNextID;
     if Result > VarArrayHighBound(FStateObjects, 1) then
       VarArrayRedim(FStateObjects, Result + 10);
-    if VarIsEmpty(FStateObjects[Result]) then
+    if VarIsClear(FStateObjects[Result]) then
       FNextID := Result + 1 else
       FNextID := FStateObjects[Result];
     FStateObjects[Result] := Value;
@@ -562,10 +569,16 @@ begin
   end;
 end;
 
+function TerminateExtension(dwFlags: DWORD): BOOL; stdcall;
+begin
+  Result := ISAPIApp.TerminateExtension(dwFlags);
+  if Result then
+    FreeAndNil(ObjectManager);
+end;
+
 initialization
   CoInitializeEx(nil, COINIT_MULTITHREADED);
   ObjectManager := TObjectManager.Create;
 finalization
-  ObjectManager.Free;
   CoUninitialize;
 end.

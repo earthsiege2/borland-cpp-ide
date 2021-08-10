@@ -1,11 +1,11 @@
-LIBRARY RICHED20
+LIBRARY RichEd20
 EXPORTS
 
-    CreateTextServices                       = 'RICHED20.DLL'.* @4 @3
-    _IID_IRichEditOle                        = 'RICHED20.DLL'.* @2 @1
-    _IID_IRichEditOleCallback                = 'RICHED20.DLL'.* @3 @2
-    _IID_ITextHost                           = 'RICHED20.DLL'.* @6 @5
-    _IID_ITextHost2                          = 'RICHED20.DLL'.* @7 @6
-    _IID_ITextServices                       = 'RICHED20.DLL'.* @5 @4
-    RichEdit10ANSIWndProc                    = 'RICHED20.DLL'.*
-    RichEditANSIWndProc                      = 'RICHED20.DLL'.*
+    CreateTextServices        @4
+    _IID_IRichEditOle        = IID_IRichEditOle        @2
+    _IID_IRichEditOleCallback        = IID_IRichEditOleCallback        @3
+    _IID_ITextHost        = IID_ITextHost        @6
+    _IID_ITextHost2        = IID_ITextHost2        @7
+    _IID_ITextServices        = IID_ITextServices        @5
+    RichEdit10ANSIWndProc
+    RichEditANSIWndProc

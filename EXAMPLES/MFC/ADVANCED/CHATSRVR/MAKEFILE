@@ -12,4 +12,14 @@ PROJ=CHATSRVR
 OBJS=chatsrvr.obj clntsock.obj dialogs.obj lstnsock.obj \
 	mainfrm.obj msg.obj srvrdoc.obj srvrvw.obj
 
-!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+#!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+!include <..\..\mfcrules.mak>
+
+default: integration
+	$(MAKE) -f $(PROJ).mak
+
+clean:
+	$(CLEAN_MFC)
+                                
+integration: $(PROJ).bpr $(PROJ).mak
+    $(NOP)

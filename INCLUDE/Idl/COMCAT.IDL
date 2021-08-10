@@ -1,6 +1,6 @@
 //+---------------------------------------------------------------------------
 //
-//  Copyright 1995-1998 Microsoft Corporation. All Rights Reserved.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  Contents:   Component Categories Interfaces
 //
@@ -9,7 +9,7 @@
 cpp_quote("//=--------------------------------------------------------------------------=")
 cpp_quote("// ComCat.h")
 cpp_quote("//=--------------------------------------------------------------------------=")
-cpp_quote("// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.")
+cpp_quote("// Copyright (c) Microsoft Corporation. All rights reserved.")
 cpp_quote("//")
 cpp_quote("// THIS CODE AND INFORMATION IS PROVIDED \"AS IS\" WITHOUT WARRANTY OF")
 cpp_quote("// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO")
@@ -23,9 +23,6 @@ cpp_quote("//=------------------------------------------------------------------
 cpp_quote("// OLE Componet Categories Interfaces.")
 cpp_quote("//=--------------------------------------------------------------------------=")
 cpp_quote("//")
-
-cpp_quote("#pragma warning(disable:4047)")
-cpp_quote("#pragma warning(disable:4024)")
 
 #ifndef DO_NO_IMPORTS
 import "unknwn.idl";
@@ -79,7 +76,7 @@ cpp_quote("//  Interface Definitions")
 
 //+---------------------------------------------------------------------------
 //
-//  Copyright (C) Microsoft Corporation, 1995-1998.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  Contents:    IEnumGUID interface definition
 //
@@ -113,7 +110,7 @@ cpp_quote("#endif")
 
 //+---------------------------------------------------------------------------
 //
-//  Copyright (C) Microsoft Corporation, 1995-1998.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  Contents:    IEnumCATEGORYINFO definition
 //
@@ -155,7 +152,7 @@ cpp_quote("#endif")
 
 //+---------------------------------------------------------------------------
 //
-//  Copyright (C) Microsoft Corporation, 1995-1998.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  Contents:    ICatRegister definition
 //
@@ -204,7 +201,7 @@ cpp_quote("#endif")
 
 //+---------------------------------------------------------------------------
 //
-//  Copyright (C) Microsoft Corporation, 1995-1998.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  Contents:    ICatInformation definition
 //

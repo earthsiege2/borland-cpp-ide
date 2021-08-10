@@ -1,16 +1,16 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DBCGrids.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'dbcgrids.pas' rev: 6.00
 
-#ifndef DBCGridsHPP
-#define DBCGridsHPP
+#ifndef dbcgridsHPP
+#define dbcgridsHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Menus.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
@@ -49,12 +49,10 @@ public:
 	__fastcall TDBCtrlPanel(TDBCtrlGrid* DBCtrlGrid);
 public:
 	#pragma option push -w-inl
-	/* TWinControl.Create */ inline __fastcall virtual TDBCtrlPanel(Classes::TComponent* AOwner) : Controls::TWinControl(
-		AOwner) { }
+	/* TWinControl.Create */ inline __fastcall virtual TDBCtrlPanel(Classes::TComponent* AOwner) : Controls::TWinControl(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBCtrlPanel(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBCtrlPanel(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TDBCtrlPanel(void) { }
@@ -74,8 +72,7 @@ enum TDBCtrlGridBorder { gbNone, gbRaised };
 typedef void __fastcall (__closure *TPaintPanelEvent)(TDBCtrlGrid* DBCtrlGrid, int Index);
 
 #pragma option push -b-
-enum TDBCtrlGridKey { gkNull, gkEditMode, gkPriorTab, gkNextTab, gkLeft, gkRight, gkUp, gkDown, gkScrollUp, 
-	gkScrollDown, gkPageUp, gkPageDown, gkHome, gkEnd, gkInsert, gkAppend, gkDelete, gkCancel };
+enum TDBCtrlGridKey { gkNull, gkEditMode, gkPriorTab, gkNextTab, gkLeft, gkRight, gkUp, gkDown, gkScrollUp, gkScrollDown, gkPageUp, gkPageDown, gkHome, gkEnd, gkInsert, gkAppend, gkDelete, gkCancel };
 #pragma option pop
 
 class PASCALIMPLEMENTATION TDBCtrlGrid : public Controls::TWinControl 
@@ -113,13 +110,12 @@ private:
 	void __fastcall DataSetChanged(bool Reset);
 	void __fastcall DestroyPanelBitmap(void);
 	void __fastcall DrawPanel(HDC DC, int Index);
-	void __fastcall DrawPanelBackground(HDC DC, const Windows::TRect &R, bool Erase, bool Selected);
-	Controls::TWinControl* __fastcall FindNext(Controls::TWinControl* StartControl, bool GoForward, int 
-		&WrapFlag);
+	void __fastcall DrawPanelBackground(HDC DC, const Types::TRect &R, bool Erase, bool Selected);
+	Controls::TWinControl* __fastcall FindNext(Controls::TWinControl* StartControl, bool GoForward, int &WrapFlag);
 	Db::TDataSource* __fastcall GetDataSource(void);
 	bool __fastcall GetEditMode(void);
-	Windows::TRect __fastcall GetPanelBounds(int Index);
-	bool __fastcall PointInPanel(const Windows::TSmallPoint P);
+	Types::TRect __fastcall GetPanelBounds(int Index);
+	bool __fastcall PointInPanel(const Types::TSmallPoint P);
 	void __fastcall Reset(void);
 	void __fastcall Scroll(int Inc, bool ScrollLock);
 	void __fastcall ScrollMessage(Messages::TWMScroll &Message);
@@ -174,35 +170,33 @@ public:
 	__property int PanelIndex = {read=FPanelIndex, write=SetPanelIndex, nodefault};
 	
 __published:
-	__property Align ;
+	__property Align  = {default=0};
 	__property bool AllowDelete = {read=FAllowDelete, write=FAllowDelete, default=1};
 	__property bool AllowInsert = {read=FAllowInsert, write=FAllowInsert, default=1};
-	__property Anchors ;
+	__property Anchors  = {default=3};
 	__property int ColCount = {read=FColCount, write=SetColCount, nodefault};
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
-	__property DragCursor ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property TDBCtrlGridOrientation Orientation = {read=FOrientation, write=SetOrientation, default=0
-		};
+	__property TDBCtrlGridOrientation Orientation = {read=FOrientation, write=SetOrientation, default=0};
 	__property TDBCtrlGridBorder PanelBorder = {read=FPanelBorder, write=SetPanelBorder, default=1};
 	__property int PanelHeight = {read=FPanelHeight, write=SetPanelHeight, nodefault};
 	__property int PanelWidth = {read=FPanelWidth, write=SetPanelWidth, nodefault};
-	__property ParentColor ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentColor  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property TabOrder ;
-	__property TabStop ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
 	__property int RowCount = {read=FRowCount, write=SetRowCount, nodefault};
-	__property Graphics::TColor SelectedColor = {read=FSelectedColor, write=SetSelectedColor, stored=FSelColorChanged
-		, default=-2147483643};
+	__property Graphics::TColor SelectedColor = {read=FSelectedColor, write=SetSelectedColor, stored=FSelColorChanged, default=-2147483643};
 	__property bool ShowFocus = {read=FShowFocus, write=FShowFocus, default=1};
 	__property ShowHint ;
-	__property Visible ;
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnDblClick ;
 	__property OnDragDrop ;
@@ -220,8 +214,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBCtrlGrid(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBCtrlGrid(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -251,12 +244,10 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Dbcgrids */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dbcgrids;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// DBCGrids
+#endif	// dbcgrids

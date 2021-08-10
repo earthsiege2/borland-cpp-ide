@@ -1,7 +1,6 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*++
 
-Copyright (c) 1996-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Module Name:
 
@@ -15,6 +14,7 @@ Abstract:
 --*/
 
 #include <commctrl.h>
+
 
 #ifndef _FAXDEV_
 #define _FAXDEV_
@@ -87,7 +87,6 @@ typedef struct _FAX_DEV_STATUS {
     DWORD   Reserved[3];
 } FAX_DEV_STATUS, *PFAX_DEV_STATUS;
 
-
 typedef BOOL
 (CALLBACK *PFAX_SERVICE_CALLBACK)(
     IN HANDLE FaxHandle,
@@ -108,8 +107,6 @@ typedef void
     IN DWORD_PTR dwParam3
     );
 
-
-
 BOOL WINAPI
 FaxDevInitialize(
     IN  HLINEAPP LineAppHandle,
@@ -117,6 +114,10 @@ FaxDevInitialize(
     OUT PFAX_LINECALLBACK *LineCallbackFunction,
     IN  PFAX_SERVICE_CALLBACK FaxServiceCallback
     );
+
+HRESULT WINAPI FaxDevShutdown(
+    void
+);
 
 BOOL WINAPI
 FaxDevVirtualDeviceCreation(
@@ -195,10 +196,10 @@ typedef BOOL (WINAPI *PFAXDEVRECEIVE)                   (HANDLE,HCALL,PFAX_RECEI
 typedef BOOL (WINAPI *PFAXDEVREPORTSTATUS)              (HANDLE,PFAX_DEV_STATUS,DWORD,LPDWORD);
 typedef BOOL (WINAPI *PFAXDEVABORTOPERATION)            (HANDLE);
 typedef BOOL (WINAPI *PFAXDEVCONFIGURE)                 (HPROPSHEETPAGE*);
+typedef HRESULT (WINAPI * PFAXDEVSHUTDOWN)              (void);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-#pragma option pop /*P_O_Pop*/

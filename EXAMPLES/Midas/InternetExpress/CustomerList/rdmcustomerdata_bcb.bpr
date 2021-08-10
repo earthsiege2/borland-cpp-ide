@@ -2,7 +2,7 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="rdmCustomerData_bcb.exe"/>
     <OBJFILES value="rdmCustomerData_bcb.obj rdmCustomDataForm.obj 
       rdmCustomerDataTypeLib_bcb_TLB.obj rdmCustomerData_bcbImpl.obj 
@@ -13,42 +13,53 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) rdmCustomDataForm.dfm rdmCustomerData_bcbImpl.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="vclnp50.lib Vclbde50.lib vcldb50.lib Vclmid50.lib Vcl50.lib"/>
-    <SPARELIBS value="Vcl50.lib Vclmid50.lib vcldb50.lib Vclbde50.lib"/>
-    <PACKAGES value="Vcl50.bpi Vclx50.bpi bcbsmp50.bpi Vcldb50.bpi vclado50.bpi Vclbde50.bpi 
-      vcldbx50.bpi Qrpt50.bpi TeeUI50.bpi TeeDB50.bpi Tee50.bpi Dss50.bpi 
-      TeeQR50.bpi VCLIB50.bpi Vclmid50.bpi vclie50.bpi Inetdb50.bpi Inet50.bpi 
-      NMFast50.bpi webmid50.bpi bcbie50.bpi dclocx50.bpi bcb2kaxserver50.bpi 
-      ibsmp50.bpi INETXCUSTOM_BCB.bpi"/>
+    <LIBRARIES value="vclnp.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi dsnap.bpi bdertl.bpi INETXCUSTOM_BCB.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
-    <LINKER value="tlink32"/>
+    <LINKER value="ilink32"/>
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="NO_STRICT;_ATL_APARTMENT_THREADED;USING_ATLVCL;_ATL_NO_SECURITY;INC_ATL_HEADERS"/>
     <MAINSOURCE value="rdmCustomerData_bcb.cpp"/>
-    <INCLUDEPATH value="&quot;z:\Program Files\Borland\Rampage\Projects\&quot;;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\include\atl"/>
-    <LIBPATH value="&quot;z:\Program Files\Borland\Rampage\Projects\&quot;;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\inetxcustom;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\include\atl"/>
+    <LIBPATH value="..\inetxcustom;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
+    <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I&quot;z:\Program Files\Borland\Rampage\Projects\.&quot; -I$(BCB)\include 
-      -I$(BCB)\include\vcl -I$(BCB)\include\atl -src_suffix cpp -D_DEBUG -boa"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
+    <IDLCFLAGS value="-src_suffix cpp -D_DEBUG -I$(BCB)\include -I$(BCB)\include\vcl 
+      -I$(BCB)\include\atl -boa"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
       -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
     <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
+    <OTHERFILES value=""/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+    <OTHERFILES value=""/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="rdmCustomerData_bcb.cpp" FORMNAME="" UNITNAME="rdmCustomerData_bcb" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="rdmCustomerData_bcb.res" FORMNAME="" UNITNAME="rdmCustomerData_bcb" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="rdmCustomDataForm.cpp" FORMNAME="Form1" UNITNAME="rdmCustomDataForm" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="rdmCustomerData_bcb.tlb" FORMNAME="" UNITNAME="rdmCustomerData_bcb" CONTAINERID="TypeLibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="rdmCustomerDataTypeLib_bcb_TLB.cpp" FORMNAME="" UNITNAME="rdmCustomerDataTypeLib_bcb_TLB" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="rdmCustomerData_bcbImpl.cpp" FORMNAME="rdmCustomerData_bcb" UNITNAME="rdmCustomerData_bcbImpl" COCLASSES="rdmCustomerData_bcb" CONTAINERID="CCompiler" DESIGNCLASS="TCRemoteDataModule" LOCALCOMMAND=""/>
+      <FILE FILENAME="rdmCustomerData_bcb_ATL.cpp" FORMNAME="" UNITNAME="rdmCustomerData_bcb_ATL" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -95,17 +106,19 @@ CryptoType=0
 Timestamping=0
 TimestampServer=
 
-[Excluded Packages]
-e:\bcb\bin\dclinetxcustom.bpl=InternetExpress sample components
-
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]

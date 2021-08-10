@@ -13,6 +13,7 @@
 #include "stdafx.h"
 #include "chkbook.h"
 #include <stdlib.h>
+#include <algorithm.h> // for min/max
 #include <limits.h> // for INT_MAX
 
 #ifdef _DEBUG

@@ -2,7 +2,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{       Copyright (c) 1995-2001 Borland Software Corp.  }
 {                                                       }
 {*******************************************************}
 
@@ -10,10 +10,10 @@ unit CompProd;
 
 interface
 
-uses Classes, HTTPApp, WebComp;
+uses Classes, HTTPApp, HTTPProd, WebComp;
 
 type
-  TComponentsPageProducer = class(TPageProducer)
+  TComponentsPageProducer = class(TBasePageProducer)
   protected
     function FindComponent(TagParams: TStrings): TComponent; virtual;
     function FindComponentName(TagParams: TStrings): string;
@@ -21,6 +21,8 @@ type
     procedure DoTagEvent(Tag: TTag; const TagString: string; TagParams: TStrings;
       var ReplaceText: string); override;
     function GetContentOptions(var Owned: Boolean): TWebContentOptions; virtual;
+    function HandleTag(const TagString: string;
+      TagParams: TStrings): string; override;
   published
     property OnHTMLTag;
   end;
@@ -71,7 +73,7 @@ var
 begin
   Component := FindComponent(TagParams);
   if Assigned(Component) then
-    if Component.GetInterface(IWebContent, ContentIntf) then
+    if Supports(Component, IWebContent, ContentIntf) then
     begin
       Options := GetContentOptions(Owned);
       try
@@ -87,6 +89,12 @@ function TComponentsPageProducer.GetContentOptions(var Owned: Boolean): TWebCont
 begin
   Owned := True;
   Result := TWebContentOptions.Create([]);
+end;
+
+function TComponentsPageProducer.HandleTag(const TagString: string;
+  TagParams: TStrings): string;
+begin
+  Result := ImplHandleTag(TagString, TagParams);
 end;
 
 end.

@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- C++Builder XML Project --><PROJECT>
+<!-- C++Builder XML Project -->
+<PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="autosrvr.exe"/>
     <OBJFILES value="autosrvr.obj main.obj autosrvr_TLB.obj MyAutoImpl.obj autosrvr_ATL.obj"/>
     <RESFILES value="autosrvr.res autosrvr.tlb"/>
@@ -10,18 +11,18 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) main.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value=""/>
-    <SPARELIBS value="Vcl50.lib"/>
-    <PACKAGES value="Vcl50.bpi Vclx50.bpi"/>
+    <LIBRARIES value="vclnp.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
-    <LINKER value="tlink32"/>
+    <LINKER value="ilink32"/>
     <USERDEFINES value=""/>
-    <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES;_ATL_APARTMENT_THREADED;USING_ATLVCL;_ATL_NO_SECURITY"/>
+    <SYSDEFINES value="_RTLDLL;NO_STRICT;_ATL_APARTMENT_THREADED;USING_ATLVCL;_ATL_NO_SECURITY;USEPACKAGES"/>
     <MAINSOURCE value="autosrvr.cpp"/>
     <INCLUDEPATH value="$(BCB)\Bin;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\include\atl"/>
     <LIBPATH value="$(BCB)\Bin;$(BCB)\lib\obj;$(BCB)\lib"/>
@@ -30,18 +31,28 @@
   <OPTIONS>
     <IDLCFLAGS value="-I$(BCB)\Bin -I$(BCB)\include -I$(BCB)\include\vcl -I$(BCB)\include\atl 
       -src_suffixcpp"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a8 -k -y -v -vi- -c -b- -tW 
-      -tWM"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -Gn -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0w32.obj Memmgr.Lib $(PACKAGES) sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="autosrvr.cpp" FORMNAME="" UNITNAME="autosrvr" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="autosrvr.res" FORMNAME="" UNITNAME="autosrvr" CONTAINERID="ResTool" DESIGNCLASS=""/>
+      <FILE FILENAME="main.cpp" FORMNAME="FormMain" UNITNAME="main" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="autosrvr.tlb" FORMNAME="" UNITNAME="autosrvr" CONTAINERID="" DESIGNCLASS=""/>
+      <FILE FILENAME="autosrvr_TLB.cpp" FORMNAME="" UNITNAME="autosrvr_TLB" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="MyAutoImpl.cpp" FORMNAME="" UNITNAME="MyAutoImpl" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="autosrvr_ATL.cpp" FORMNAME="" UNITNAME="autosrvr_ATL" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -93,20 +104,24 @@ DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
-InMemoryExe=0
 ShowInfoMsgs=0
 LinkDebugVcl=0
 LinkCGLIB=0
 
-[CORBA]
-AddServerUnit=1
-AddClientUnit=1
-PrecompiledHeaders=1
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
   </IDEOPTIONS>
 </PROJECT>

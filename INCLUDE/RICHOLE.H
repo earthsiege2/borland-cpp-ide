@@ -1,5 +1,4 @@
 #ifndef _RICHOLE_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _RICHOLE_
 
 #if _MSC_VER > 1000
@@ -162,5 +161,4 @@ DEFINE_GUID(IID_IRichEditOle,         0x00020D00, 0, 0, 0xC0,0,0,0,0,0,0,0x46);
 DEFINE_GUID(IID_IRichEditOleCallback, 0x00020D03, 0, 0, 0xC0,0,0,0,0,0,0,0x46);
 #endif // !MAC
 
-#pragma option pop /*P_O_Pop*/
 #endif // _RICHOLE_

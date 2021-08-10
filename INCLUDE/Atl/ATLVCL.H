@@ -2,8 +2,8 @@
 // ATLVCL.H - Provides the connective tissue between
 //            the ATL framework and VCL components.
 //
-// $Revision:   1.71.1.15  $
-// $Date:   25 Jan 2000 12:05:34  $
+// $Revision:   1.75.1.0.1.0  $
+// $Date:   28 Jun 2001 09:12:00  $
 //
 // Copyright (c) 1998,2000 Borland International
 /////////////////////////////////////////////////////////////////////////////
@@ -207,11 +207,10 @@ SetVclCtlProp(TStrings* str, IStringsPtr* ppIString)
   SetVclCtlProp(str, *ppIString);
 }
 
-#ifndef __NO_MIDAS__   
 /* IAppServer support */
 /* IAppServerImpl is essentially Delphi's TRemoteDataModule; it implements
    the IAppServer interface, and is used to publish datasets residing
-   in a TDataModule. Method calls on the IAppServer interface are
+   in a TDataModule. Method calls on the IAppServer interface are 
    reflected to renamed methods of the style IAppServer_MethodName
    in order to avoid ambiguity problems in multiply derived classes.  */
 
@@ -509,8 +508,6 @@ public:
     return hres;
   }
 };
-
-#endif /* __NO_MIDAS__ */
 
 // ISimpleFrameSite support
 //

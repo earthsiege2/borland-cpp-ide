@@ -1,6 +1,6 @@
 /*	@doc EXTERNAL
  *
- *  Copyright (c) 1996-1999 Microsoft Corporation
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
  *
  *	@module TEXTSRV.H  Text Service Interface |
  *	
@@ -14,7 +14,6 @@
  */
 
 #ifndef _TEXTSERV_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _TEXTSERV_H
 
 #if _MSC_VER > 1000
@@ -418,5 +417,4 @@ typedef HRESULT (STDAPICALLTYPE * PCreateTextServices)(
 	ITextHost *pITextHost,
 	IUnknown **ppUnk);
 
-#pragma option pop /*P_O_Pop*/
 #endif // _TEXTSERV_H

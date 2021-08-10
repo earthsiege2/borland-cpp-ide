@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'QREnvEd.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QREnvEd.pas' rev: 6.00
 
 #ifndef QREnvEdHPP
 #define QREnvEdHPP
@@ -10,7 +10,7 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <qr3const.hpp>	// Pascal unit
+#include <QR3Const.hpp>	// Pascal unit
 #include <Buttons.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Grids.hpp>	// Pascal unit
@@ -54,8 +54,7 @@ __published:
 	Stdctrls::TButton* NewOKBtn;
 	Stdctrls::TButton* NewCancelBtn;
 	void __fastcall FormCreate(System::TObject* Sender);
-	void __fastcall UDFGridSetEditText(System::TObject* Sender, int ACol, int ARow, const AnsiString Value
-		);
+	void __fastcall UDFGridSetEditText(System::TObject* Sender, int ACol, int ARow, const AnsiString Value);
 	void __fastcall EditBtnClick(System::TObject* Sender);
 	void __fastcall LocalCBClick(System::TObject* Sender);
 	void __fastcall VariableOKBtnClick(System::TObject* Sender);
@@ -77,12 +76,10 @@ public:
 	__property Qrexpr::TQREvEnvironment* Environment = {read=FEnvironment, write=FEnvironment};
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TQREnvironmentEditor(Classes::TComponent* AOwner
-		) : Forms::TForm(AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TQREnvironmentEditor(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TQREnvironmentEditor(Classes::TComponent* AOwner
-		, int Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TQREnvironmentEditor(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TQREnvironmentEditor(void) { }
@@ -90,21 +87,17 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQREnvironmentEditor(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQREnvironmentEditor(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE void __fastcall EditEnvironment(Qrexpr::TQREvEnvironment* AEnvironment, bool AllowGlobalEnv
-	, Controls::TWinControl* ParentControl);
+extern PACKAGE void __fastcall EditEnvironment(Qrexpr::TQREvEnvironment* AEnvironment, bool AllowGlobalEnv, Controls::TWinControl* ParentControl);
 
 }	/* namespace Qrenved */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qrenved;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

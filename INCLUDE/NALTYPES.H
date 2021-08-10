@@ -1,7 +1,6 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 //=============================================================================
-//  Microsoft (R) Bloodhound. Copyright (C) 1991-1994.
+//  Microsoft (R) Bloodhound. Copyright (C) 1991-1999.
 //
 //  MODULE: naltypes.h
 //
@@ -18,7 +17,7 @@
 #include "wqueue.h"                             //... Queuing functions.
 #else
 #include "queue.h"                              //... Queuing functions.
-#endif
+#endif                            //... Queuing functions.
 
 #if !defined(_NALTYPES_)
 
@@ -978,7 +977,7 @@ typedef RECONNECTINFO *LPRECONNECTINFO;
 #define RECONNECTINFO_SIZE  sizeof(RECONNECTINFO)
 
 //=============================================================================
-//  BUGBUG: TEMP SetupNetworkID() data struct
+//  TEMP SetupNetworkID() data struct
 //=============================================================================
 
 typedef struct _SETUPNETWORKPARMS
@@ -1008,4 +1007,3 @@ typedef SETUPNETWORKPARMS *LPSETUPNETWORKPARMS;
 
 #pragma pack()
 #endif
-#pragma option pop /*P_O_Pop*/

@@ -1,0 +1,28 @@
+object MDIChild: TMDIChild
+  HelpType = htKeyword
+  Left = 668
+  Top = 249
+  Width = 314
+  Height = 291
+  ActiveControl = Memo1
+  Caption = 'MDI Child'
+  Color = clButton
+  FormStyle = fsMDIChild
+  Position = poDefault
+  Visible = True
+  OnClose = FormClose
+  PixelsPerInch = 75
+  TextHeight = 15
+  TextWidth = 7
+  object Memo1: TMemo
+    HelpType = htKeyword
+    Left = 0
+    Top = 0
+    Width = 306
+    Height = 263
+    Align = alClient
+    MaxLength = -1
+    TabOrder = 0
+    WordWrap = False
+  end
+end

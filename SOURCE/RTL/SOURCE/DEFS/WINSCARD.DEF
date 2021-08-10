@@ -1,58 +1,62 @@
-LIBRARY WINSCARD
+LIBRARY WinSCard
 EXPORTS
 
-    SCardAddReaderToGroupA                   = 'WINSCARD.DLL'.*
-    SCardAddReaderToGroupW                   = 'WINSCARD.DLL'.*
-    SCardBeginTransaction                    = 'WINSCARD.DLL'.*
-    SCardCancel                              = 'WINSCARD.DLL'.*
-    SCardConnectA                            = 'WINSCARD.DLL'.*
-    SCardConnectW                            = 'WINSCARD.DLL'.*
-    SCardControl                             = 'WINSCARD.DLL'.*
-    SCardDisconnect                          = 'WINSCARD.DLL'.*
-    SCardEndTransaction                      = 'WINSCARD.DLL'.*
-    SCardEstablishContext                    = 'WINSCARD.DLL'.*
-    SCardForgetCardTypeA                     = 'WINSCARD.DLL'.*
-    SCardForgetCardTypeW                     = 'WINSCARD.DLL'.*
-    SCardForgetReaderA                       = 'WINSCARD.DLL'.*
-    SCardForgetReaderGroupA                  = 'WINSCARD.DLL'.*
-    SCardForgetReaderGroupW                  = 'WINSCARD.DLL'.*
-    SCardForgetReaderW                       = 'WINSCARD.DLL'.*
-    SCardFreeMemory                          = 'WINSCARD.DLL'.*
-    SCardGetAttrib                           = 'WINSCARD.DLL'.*
-    SCardGetCardTypeProviderNameA            = 'WINSCARD.DLL'.*
-    SCardGetCardTypeProviderNameW            = 'WINSCARD.DLL'.*
-    SCardGetProviderIdA                      = 'WINSCARD.DLL'.*
-    SCardGetProviderIdW                      = 'WINSCARD.DLL'.*
-    SCardGetStatusChangeA                    = 'WINSCARD.DLL'.*
-    SCardGetStatusChangeW                    = 'WINSCARD.DLL'.*
-    SCardIntroduceCardTypeA                  = 'WINSCARD.DLL'.*
-    SCardIntroduceCardTypeW                  = 'WINSCARD.DLL'.*
-    SCardIntroduceReaderA                    = 'WINSCARD.DLL'.*
-    SCardIntroduceReaderGroupA               = 'WINSCARD.DLL'.*
-    SCardIntroduceReaderGroupW               = 'WINSCARD.DLL'.*
-    SCardIntroduceReaderW                    = 'WINSCARD.DLL'.*
-    SCardIsValidContext                      = 'WINSCARD.DLL'.*
-    SCardListCardsA                          = 'WINSCARD.DLL'.*
-    SCardListCardsW                          = 'WINSCARD.DLL'.*
-    SCardListInterfacesA                     = 'WINSCARD.DLL'.*
-    SCardListInterfacesW                     = 'WINSCARD.DLL'.*
-    SCardListReaderGroupsA                   = 'WINSCARD.DLL'.*
-    SCardListReaderGroupsW                   = 'WINSCARD.DLL'.*
-    SCardListReadersA                        = 'WINSCARD.DLL'.*
-    SCardListReadersW                        = 'WINSCARD.DLL'.*
-    SCardLocateCardsA                        = 'WINSCARD.DLL'.*
-    SCardLocateCardsW                        = 'WINSCARD.DLL'.*
-    SCardReconnect                           = 'WINSCARD.DLL'.*
-    SCardReleaseContext                      = 'WINSCARD.DLL'.*
-    SCardRemoveReaderFromGroupA              = 'WINSCARD.DLL'.*
-    SCardRemoveReaderFromGroupW              = 'WINSCARD.DLL'.*
-    SCardSetAttrib                           = 'WINSCARD.DLL'.*
-    SCardSetCardTypeProviderNameA            = 'WINSCARD.DLL'.*
-    SCardSetCardTypeProviderNameW            = 'WINSCARD.DLL'.*
-    SCardState                               = 'WINSCARD.DLL'.*
-    SCardStatusA                             = 'WINSCARD.DLL'.*
-    SCardStatusW                             = 'WINSCARD.DLL'.*
-    SCardTransmit                            = 'WINSCARD.DLL'.*
-    _g_rgSCardRawPci                         = 'WINSCARD.DLL'.g_rgSCardRawPci
-    _g_rgSCardT0Pci                          = 'WINSCARD.DLL'.g_rgSCardT0Pci
-    _g_rgSCardT1Pci                          = 'WINSCARD.DLL'.g_rgSCardT1Pci
+    SCardAccessStartedEvent
+    SCardAddReaderToGroupA
+    SCardAddReaderToGroupW
+    SCardBeginTransaction
+    SCardCancel
+    SCardConnectA
+    SCardConnectW
+    SCardControl
+    SCardDisconnect
+    SCardEndTransaction
+    SCardEstablishContext
+    SCardForgetCardTypeA
+    SCardForgetCardTypeW
+    SCardForgetReaderA
+    SCardForgetReaderGroupA
+    SCardForgetReaderGroupW
+    SCardForgetReaderW
+    SCardFreeMemory
+    SCardGetAttrib
+    SCardGetCardTypeProviderNameA
+    SCardGetCardTypeProviderNameW
+    SCardGetProviderIdA
+    SCardGetProviderIdW
+    SCardGetStatusChangeA
+    SCardGetStatusChangeW
+    SCardIntroduceCardTypeA
+    SCardIntroduceCardTypeW
+    SCardIntroduceReaderA
+    SCardIntroduceReaderGroupA
+    SCardIntroduceReaderGroupW
+    SCardIntroduceReaderW
+    SCardIsValidContext
+    SCardListCardsA
+    SCardListCardsW
+    SCardListInterfacesA
+    SCardListInterfacesW
+    SCardListReaderGroupsA
+    SCardListReaderGroupsW
+    SCardListReadersA
+    SCardListReadersW
+    SCardLocateCardsA
+    SCardLocateCardsByATRA
+    SCardLocateCardsByATRW
+    SCardLocateCardsW
+    SCardReconnect
+    SCardReleaseContext
+    SCardReleaseStartedEvent
+    SCardRemoveReaderFromGroupA
+    SCardRemoveReaderFromGroupW
+    SCardSetAttrib
+    SCardSetCardTypeProviderNameA
+    SCardSetCardTypeProviderNameW
+    SCardState
+    SCardStatusA
+    SCardStatusW
+    SCardTransmit
+    _g_rgSCardRawPci        = g_rgSCardRawPci
+    _g_rgSCardT0Pci        = g_rgSCardT0Pci
+    _g_rgSCardT1Pci        = g_rgSCardT1Pci

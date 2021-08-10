@@ -1,624 +1,640 @@
-LIBRARY USER32
+LIBRARY User32
 EXPORTS
 
-    ActivateKeyboardLayout                   = 'USER32.DLL'.*
-    AdjustWindowRect                         = 'USER32.DLL'.*
-    AdjustWindowRectEx                       = 'USER32.DLL'.*
-    AllowSetForegroundWindow                 = 'USER32.DLL'.*
-    AnimateWindow                            = 'USER32.DLL'.*
-    AnyPopup                                 = 'USER32.DLL'.*
-    AppendMenuA                              = 'USER32.DLL'.*
-    AppendMenuW                              = 'USER32.DLL'.*
-    ArrangeIconicWindows                     = 'USER32.DLL'.*
-    AttachThreadInput                        = 'USER32.DLL'.*
-    BeginDeferWindowPos                      = 'USER32.DLL'.*
-    BeginPaint                               = 'USER32.DLL'.*
-    BlockInput                               = 'USER32.DLL'.*
-    BringWindowToTop                         = 'USER32.DLL'.*
-    BroadcastSystemMessage                   = 'USER32.DLL'.*
-    BroadcastSystemMessageA                  = 'USER32.DLL'.*
-    BroadcastSystemMessageW                  = 'USER32.DLL'.*
-    CallMsgFilter                            = 'USER32.DLL'.*
-    CallMsgFilterA                           = 'USER32.DLL'.*
-    CallMsgFilterW                           = 'USER32.DLL'.*
-    CallNextHookEx                           = 'USER32.DLL'.*
-    CallWindowProcA                          = 'USER32.DLL'.*
-    CallWindowProcW                          = 'USER32.DLL'.*
-    CascadeChildWindows                      = 'USER32.DLL'.*
-    CascadeWindows                           = 'USER32.DLL'.*
-    ChangeClipboardChain                     = 'USER32.DLL'.*
-    ChangeDisplaySettingsA                   = 'USER32.DLL'.*
-    ChangeDisplaySettingsExA                 = 'USER32.DLL'.*
-    ChangeDisplaySettingsExW                 = 'USER32.DLL'.*
-    ChangeDisplaySettingsW                   = 'USER32.DLL'.*
-    ChangeMenuA                              = 'USER32.DLL'.*
-    ChangeMenuW                              = 'USER32.DLL'.*
-    CharLowerA                               = 'USER32.DLL'.*
-    CharLowerBuffA                           = 'USER32.DLL'.*
-    CharLowerBuffW                           = 'USER32.DLL'.*
-    CharLowerW                               = 'USER32.DLL'.*
-    CharNextA                                = 'USER32.DLL'.*
-    CharNextExA                              = 'USER32.DLL'.*
-    CharNextW                                = 'USER32.DLL'.*
-    CharPrevA                                = 'USER32.DLL'.*
-    CharPrevExA                              = 'USER32.DLL'.*
-    CharPrevW                                = 'USER32.DLL'.*
-    CharToOemA                               = 'USER32.DLL'.*
-    CharToOemBuffA                           = 'USER32.DLL'.*
-    CharToOemBuffW                           = 'USER32.DLL'.*
-    CharToOemW                               = 'USER32.DLL'.*
-    CharUpperA                               = 'USER32.DLL'.*
-    CharUpperBuffA                           = 'USER32.DLL'.*
-    CharUpperBuffW                           = 'USER32.DLL'.*
-    CharUpperW                               = 'USER32.DLL'.*
-    CheckDlgButton                           = 'USER32.DLL'.*
-    CheckMenuItem                            = 'USER32.DLL'.*
-    CheckMenuRadioItem                       = 'USER32.DLL'.*
-    CheckRadioButton                         = 'USER32.DLL'.*
-    ChildWindowFromPoint                     = 'USER32.DLL'.*
-    ChildWindowFromPointEx                   = 'USER32.DLL'.*
-    ClientToScreen                           = 'USER32.DLL'.*
-    ClipCursor                               = 'USER32.DLL'.*
-    CloseClipboard                           = 'USER32.DLL'.*
-    CloseDesktop                             = 'USER32.DLL'.*
-    CloseWindow                              = 'USER32.DLL'.*
-    CloseWindowStation                       = 'USER32.DLL'.*
-    CopyAcceleratorTableA                    = 'USER32.DLL'.*
-    CopyAcceleratorTableW                    = 'USER32.DLL'.*
-    CopyIcon                                 = 'USER32.DLL'.*
-    CopyImage                                = 'USER32.DLL'.*
-    CopyRect                                 = 'USER32.DLL'.*
-    CountClipboardFormats                    = 'USER32.DLL'.*
-    CreateAcceleratorTableA                  = 'USER32.DLL'.*
-    CreateAcceleratorTableW                  = 'USER32.DLL'.*
-    CreateCaret                              = 'USER32.DLL'.*
-    CreateCursor                             = 'USER32.DLL'.*
-    CreateDesktopA                           = 'USER32.DLL'.*
-    CreateDesktopW                           = 'USER32.DLL'.*
-    CreateDialogIndirectParamA               = 'USER32.DLL'.*
-    CreateDialogIndirectParamW               = 'USER32.DLL'.*
-    CreateDialogParamA                       = 'USER32.DLL'.*
-    CreateDialogParamW                       = 'USER32.DLL'.*
-    CreateIcon                               = 'USER32.DLL'.*
-    CreateIconFromResource                   = 'USER32.DLL'.*
-    CreateIconFromResourceEx                 = 'USER32.DLL'.*
-    CreateIconIndirect                       = 'USER32.DLL'.*
-    CreateMDIWindowA                         = 'USER32.DLL'.*
-    CreateMDIWindowW                         = 'USER32.DLL'.*
-    CreateMenu                               = 'USER32.DLL'.*
-    CreatePopupMenu                          = 'USER32.DLL'.*
-    CreateWindowExA                          = 'USER32.DLL'.*
-    CreateWindowExW                          = 'USER32.DLL'.*
-    CreateWindowStationA                     = 'USER32.DLL'.*
-    CreateWindowStationW                     = 'USER32.DLL'.*
-    DdeAbandonTransaction                    = 'USER32.DLL'.*
-    DdeAccessData                            = 'USER32.DLL'.*
-    DdeAddData                               = 'USER32.DLL'.*
-    DdeClientTransaction                     = 'USER32.DLL'.*
-    DdeCmpStringHandles                      = 'USER32.DLL'.*
-    DdeConnect                               = 'USER32.DLL'.*
-    DdeConnectList                           = 'USER32.DLL'.*
-    DdeCreateDataHandle                      = 'USER32.DLL'.*
-    DdeCreateStringHandleA                   = 'USER32.DLL'.*
-    DdeCreateStringHandleW                   = 'USER32.DLL'.*
-    DdeDisconnect                            = 'USER32.DLL'.*
-    DdeDisconnectList                        = 'USER32.DLL'.*
-    DdeEnableCallback                        = 'USER32.DLL'.*
-    DdeFreeDataHandle                        = 'USER32.DLL'.*
-    DdeFreeStringHandle                      = 'USER32.DLL'.*
-    DdeGetData                               = 'USER32.DLL'.*
-    DdeGetLastError                          = 'USER32.DLL'.*
-    DdeImpersonateClient                     = 'USER32.DLL'.*
-    DdeInitializeA                           = 'USER32.DLL'.*
-    DdeInitializeW                           = 'USER32.DLL'.*
-    DdeKeepStringHandle                      = 'USER32.DLL'.*
-    DdeNameService                           = 'USER32.DLL'.*
-    DdePostAdvise                            = 'USER32.DLL'.*
-    DdeQueryConvInfo                         = 'USER32.DLL'.*
-    DdeQueryNextServer                       = 'USER32.DLL'.*
-    DdeQueryStringA                          = 'USER32.DLL'.*
-    DdeQueryStringW                          = 'USER32.DLL'.*
-    DdeReconnect                             = 'USER32.DLL'.*
-    DdeSetQualityOfService                   = 'USER32.DLL'.*
-    DdeSetUserHandle                         = 'USER32.DLL'.*
-    DdeUnaccessData                          = 'USER32.DLL'.*
-    DdeUninitialize                          = 'USER32.DLL'.*
-    DefDlgProcA                              = 'USER32.DLL'.*
-    DefDlgProcW                              = 'USER32.DLL'.*
-    DefFrameProcA                            = 'USER32.DLL'.*
-    DefFrameProcW                            = 'USER32.DLL'.*
-    DefMDIChildProcA                         = 'USER32.DLL'.*
-    DefMDIChildProcW                         = 'USER32.DLL'.*
-    DefWindowProcA                           = 'USER32.DLL'.*
-    DefWindowProcW                           = 'USER32.DLL'.*
-    DeferWindowPos                           = 'USER32.DLL'.*
-    DeleteMenu                               = 'USER32.DLL'.*
-    DestroyAcceleratorTable                  = 'USER32.DLL'.*
-    DestroyCaret                             = 'USER32.DLL'.*
-    DestroyCursor                            = 'USER32.DLL'.*
-    DestroyIcon                              = 'USER32.DLL'.*
-    DestroyMenu                              = 'USER32.DLL'.*
-    DestroyWindow                            = 'USER32.DLL'.*
-    DialogBoxIndirectParamA                  = 'USER32.DLL'.*
-    DialogBoxIndirectParamW                  = 'USER32.DLL'.*
-    DialogBoxParamA                          = 'USER32.DLL'.*
-    DialogBoxParamW                          = 'USER32.DLL'.*
-    DispatchMessageA                         = 'USER32.DLL'.*
-    DispatchMessageW                         = 'USER32.DLL'.*
-    DlgDirListA                              = 'USER32.DLL'.*
-    DlgDirListComboBoxA                      = 'USER32.DLL'.*
-    DlgDirListComboBoxW                      = 'USER32.DLL'.*
-    DlgDirListW                              = 'USER32.DLL'.*
-    DlgDirSelectComboBoxExA                  = 'USER32.DLL'.*
-    DlgDirSelectComboBoxExW                  = 'USER32.DLL'.*
-    DlgDirSelectExA                          = 'USER32.DLL'.*
-    DlgDirSelectExW                          = 'USER32.DLL'.*
-    DragDetect                               = 'USER32.DLL'.*
-    DragObject                               = 'USER32.DLL'.*
-    DrawAnimatedRects                        = 'USER32.DLL'.*
-    DrawCaption                              = 'USER32.DLL'.*
-    DrawEdge                                 = 'USER32.DLL'.*
-    DrawFocusRect                            = 'USER32.DLL'.*
-    DrawFrame                                = 'USER32.DLL'.*
-    DrawFrameControl                         = 'USER32.DLL'.*
-    DrawIcon                                 = 'USER32.DLL'.*
-    DrawIconEx                               = 'USER32.DLL'.*
-    DrawMenuBar                              = 'USER32.DLL'.*
-    DrawStateA                               = 'USER32.DLL'.*
-    DrawStateW                               = 'USER32.DLL'.*
-    DrawTextA                                = 'USER32.DLL'.*
-    DrawTextExA                              = 'USER32.DLL'.*
-    DrawTextExW                              = 'USER32.DLL'.*
-    DrawTextW                                = 'USER32.DLL'.*
-    EditWndProc                              = 'USER32.DLL'.*
-    EmptyClipboard                           = 'USER32.DLL'.*
-    EnableMenuItem                           = 'USER32.DLL'.*
-    EnableScrollBar                          = 'USER32.DLL'.*
-    EnableWindow                             = 'USER32.DLL'.*
-    EndDeferWindowPos                        = 'USER32.DLL'.*
-    EndDialog                                = 'USER32.DLL'.*
-    EndMenu                                  = 'USER32.DLL'.*
-    EndPaint                                 = 'USER32.DLL'.*
-    EnumChildWindows                         = 'USER32.DLL'.*
-    EnumClipboardFormats                     = 'USER32.DLL'.*
-    EnumDesktopWindows                       = 'USER32.DLL'.*
-    EnumDesktopsA                            = 'USER32.DLL'.*
-    EnumDesktopsW                            = 'USER32.DLL'.*
-    EnumDisplayDevicesA                      = 'USER32.DLL'.*
-    EnumDisplayDevicesW                      = 'USER32.DLL'.*
-    EnumDisplayMonitors                      = 'USER32.DLL'.*
-    EnumDisplaySettingsA                     = 'USER32.DLL'.*
-    EnumDisplaySettingsExA                   = 'USER32.DLL'.*
-    EnumDisplaySettingsExW                   = 'USER32.DLL'.*
-    EnumDisplaySettingsW                     = 'USER32.DLL'.*
-    EnumPropsA                               = 'USER32.DLL'.*
-    EnumPropsExA                             = 'USER32.DLL'.*
-    EnumPropsExW                             = 'USER32.DLL'.*
-    EnumPropsW                               = 'USER32.DLL'.*
-    EnumThreadWindows                        = 'USER32.DLL'.*
-    EnumWindowStationsA                      = 'USER32.DLL'.*
-    EnumWindowStationsW                      = 'USER32.DLL'.*
-    EnumWindows                              = 'USER32.DLL'.*
-    EqualRect                                = 'USER32.DLL'.*
-    ExcludeUpdateRgn                         = 'USER32.DLL'.*
-    ExitWindowsEx                            = 'USER32.DLL'.*
-    FillRect                                 = 'USER32.DLL'.*
-    FindWindowA                              = 'USER32.DLL'.*
-    FindWindowExA                            = 'USER32.DLL'.*
-    FindWindowExW                            = 'USER32.DLL'.*
-    FindWindowW                              = 'USER32.DLL'.*
-    FlashWindow                              = 'USER32.DLL'.*
-    FlashWindowEx                            = 'USER32.DLL'.*
-    FrameRect                                = 'USER32.DLL'.*
-    FreeDDElParam                            = 'USER32.DLL'.*
-    GetActiveWindow                          = 'USER32.DLL'.*
-    GetAltTabInfo                            = 'USER32.DLL'.*
-    GetAltTabInfoA                           = 'USER32.DLL'.*
-    GetAltTabInfoW                           = 'USER32.DLL'.*
-    GetAncestor                              = 'USER32.DLL'.*
-    GetAsyncKeyState                         = 'USER32.DLL'.*
-    GetCapture                               = 'USER32.DLL'.*
-    GetCaretBlinkTime                        = 'USER32.DLL'.*
-    GetCaretPos                              = 'USER32.DLL'.*
-    GetClassInfoA                            = 'USER32.DLL'.*
-    GetClassInfoExA                          = 'USER32.DLL'.*
-    GetClassInfoExW                          = 'USER32.DLL'.*
-    GetClassInfoW                            = 'USER32.DLL'.*
-    GetClassLongA                            = 'USER32.DLL'.*
-    GetClassLongW                            = 'USER32.DLL'.*
-    GetClassNameA                            = 'USER32.DLL'.*
-    GetClassNameW                            = 'USER32.DLL'.*
-    GetClassWord                             = 'USER32.DLL'.*
-    GetClientRect                            = 'USER32.DLL'.*
-    GetClipCursor                            = 'USER32.DLL'.*
-    GetClipboardData                         = 'USER32.DLL'.*
-    GetClipboardFormatNameA                  = 'USER32.DLL'.*
-    GetClipboardFormatNameW                  = 'USER32.DLL'.*
-    GetClipboardOwner                        = 'USER32.DLL'.*
-    GetClipboardSequenceNumber               = 'USER32.DLL'.*
-    GetClipboardViewer                       = 'USER32.DLL'.*
-    GetComboBoxInfo                          = 'USER32.DLL'.*
-    GetCursor                                = 'USER32.DLL'.*
-    GetCursorInfo                            = 'USER32.DLL'.*
-    GetCursorPos                             = 'USER32.DLL'.*
-    GetDC                                    = 'USER32.DLL'.*
-    GetDCEx                                  = 'USER32.DLL'.*
-    GetDesktopWindow                         = 'USER32.DLL'.*
-    GetDialogBaseUnits                       = 'USER32.DLL'.*
-    GetDlgCtrlID                             = 'USER32.DLL'.*
-    GetDlgItem                               = 'USER32.DLL'.*
-    GetDlgItemInt                            = 'USER32.DLL'.*
-    GetDlgItemTextA                          = 'USER32.DLL'.*
-    GetDlgItemTextW                          = 'USER32.DLL'.*
-    GetDoubleClickTime                       = 'USER32.DLL'.*
-    GetFocus                                 = 'USER32.DLL'.*
-    GetForegroundWindow                      = 'USER32.DLL'.*
-    GetGUIThreadInfo                         = 'USER32.DLL'.*
-    GetGuiResources                          = 'USER32.DLL'.*
-    GetIconInfo                              = 'USER32.DLL'.*
-    GetInputDesktop                          = 'USER32.DLL'.*
-    GetInputState                            = 'USER32.DLL'.*
-    GetKBCodePage                            = 'USER32.DLL'.*
-    GetKeyNameTextA                          = 'USER32.DLL'.*
-    GetKeyNameTextW                          = 'USER32.DLL'.*
-    GetKeyState                              = 'USER32.DLL'.*
-    GetKeyboardLayout                        = 'USER32.DLL'.*
-    GetKeyboardLayoutList                    = 'USER32.DLL'.*
-    GetKeyboardLayoutNameA                   = 'USER32.DLL'.*
-    GetKeyboardLayoutNameW                   = 'USER32.DLL'.*
-    GetKeyboardState                         = 'USER32.DLL'.*
-    GetKeyboardType                          = 'USER32.DLL'.*
-    GetLastActivePopup                       = 'USER32.DLL'.*
-    GetLastInputInfo                         = 'USER32.DLL'.*
-    GetListBoxInfo                           = 'USER32.DLL'.*
-    GetMenu                                  = 'USER32.DLL'.*
-    GetMenuBarInfo                           = 'USER32.DLL'.*
-    GetMenuCheckMarkDimensions               = 'USER32.DLL'.*
-    GetMenuContextHelpId                     = 'USER32.DLL'.*
-    GetMenuDefaultItem                       = 'USER32.DLL'.*
-    GetMenuInfo                              = 'USER32.DLL'.*
-    GetMenuItemCount                         = 'USER32.DLL'.*
-    GetMenuItemID                            = 'USER32.DLL'.*
-    GetMenuItemInfoA                         = 'USER32.DLL'.*
-    GetMenuItemInfoW                         = 'USER32.DLL'.*
-    GetMenuItemRect                          = 'USER32.DLL'.*
-    GetMenuState                             = 'USER32.DLL'.*
-    GetMenuStringA                           = 'USER32.DLL'.*
-    GetMenuStringW                           = 'USER32.DLL'.*
-    GetMessageA                              = 'USER32.DLL'.*
-    GetMessageExtraInfo                      = 'USER32.DLL'.*
-    GetMessagePos                            = 'USER32.DLL'.*
-    GetMessageTime                           = 'USER32.DLL'.*
-    GetMessageW                              = 'USER32.DLL'.*
-    GetMonitorInfoA                          = 'USER32.DLL'.*
-    GetMonitorInfoW                          = 'USER32.DLL'.*
-    GetMouseMovePointsEx                     = 'USER32.DLL'.*
-    GetNextDlgGroupItem                      = 'USER32.DLL'.*
-    GetNextDlgTabItem                        = 'USER32.DLL'.*
-    GetOpenClipboardWindow                   = 'USER32.DLL'.*
-    GetParent                                = 'USER32.DLL'.*
-    GetPriorityClipboardFormat               = 'USER32.DLL'.*
-    GetProcessDefaultLayout                  = 'USER32.DLL'.*
-    GetProcessWindowStation                  = 'USER32.DLL'.*
-    GetPropA                                 = 'USER32.DLL'.*
-    GetPropW                                 = 'USER32.DLL'.*
-    GetQueueStatus                           = 'USER32.DLL'.*
-    GetScrollBarInfo                         = 'USER32.DLL'.*
-    GetScrollInfo                            = 'USER32.DLL'.*
-    GetScrollPos                             = 'USER32.DLL'.*
-    GetScrollRange                           = 'USER32.DLL'.*
-    GetShellWindow                           = 'USER32.DLL'.*
-    GetSubMenu                               = 'USER32.DLL'.*
-    GetSysColor                              = 'USER32.DLL'.*
-    GetSysColorBrush                         = 'USER32.DLL'.*
-    GetSystemMenu                            = 'USER32.DLL'.*
-    GetSystemMetrics                         = 'USER32.DLL'.*
-    GetTabbedTextExtentA                     = 'USER32.DLL'.*
-    GetTabbedTextExtentW                     = 'USER32.DLL'.*
-    GetThreadDesktop                         = 'USER32.DLL'.*
-    GetTitleBarInfo                          = 'USER32.DLL'.*
-    GetTopWindow                             = 'USER32.DLL'.*
-    GetUpdateRect                            = 'USER32.DLL'.*
-    GetUpdateRgn                             = 'USER32.DLL'.*
-    GetUserObjectInformationA                = 'USER32.DLL'.*
-    GetUserObjectInformationW                = 'USER32.DLL'.*
-    GetUserObjectSecurity                    = 'USER32.DLL'.*
-    GetWindow                                = 'USER32.DLL'.*
-    GetWindowContextHelpId                   = 'USER32.DLL'.*
-    GetWindowDC                              = 'USER32.DLL'.*
-    GetWindowInfo                            = 'USER32.DLL'.*
-    GetWindowLongA                           = 'USER32.DLL'.*
-    GetWindowLongW                           = 'USER32.DLL'.*
-    GetWindowModuleFileName                  = 'USER32.DLL'.*
-    GetWindowModuleFileNameA                 = 'USER32.DLL'.*
-    GetWindowModuleFileNameW                 = 'USER32.DLL'.*
-    GetWindowPlacement                       = 'USER32.DLL'.*
-    GetWindowRect                            = 'USER32.DLL'.*
-    GetWindowRgn                             = 'USER32.DLL'.*
-    GetWindowTextA                           = 'USER32.DLL'.*
-    GetWindowTextLengthA                     = 'USER32.DLL'.*
-    GetWindowTextLengthW                     = 'USER32.DLL'.*
-    GetWindowTextW                           = 'USER32.DLL'.*
-    GetWindowThreadProcessId                 = 'USER32.DLL'.*
-    GetWindowWord                            = 'USER32.DLL'.*
-    GrayStringA                              = 'USER32.DLL'.*
-    GrayStringW                              = 'USER32.DLL'.*
-    HideCaret                                = 'USER32.DLL'.*
-    HiliteMenuItem                           = 'USER32.DLL'.*
-    IMPGetIMEA                               = 'USER32.DLL'.*
-    IMPGetIMEW                               = 'USER32.DLL'.*
-    IMPQueryIMEA                             = 'USER32.DLL'.*
-    IMPQueryIMEW                             = 'USER32.DLL'.*
-    IMPSetIMEA                               = 'USER32.DLL'.*
-    IMPSetIMEW                               = 'USER32.DLL'.*
-    ImpersonateDdeClientWindow               = 'USER32.DLL'.*
-    InSendMessage                            = 'USER32.DLL'.*
-    InSendMessageEx                          = 'USER32.DLL'.*
-    InflateRect                              = 'USER32.DLL'.*
-    InsertMenuA                              = 'USER32.DLL'.*
-    InsertMenuItemA                          = 'USER32.DLL'.*
-    InsertMenuItemW                          = 'USER32.DLL'.*
-    InsertMenuW                              = 'USER32.DLL'.*
-    IntersectRect                            = 'USER32.DLL'.*
-    InvalidateRect                           = 'USER32.DLL'.*
-    InvalidateRgn                            = 'USER32.DLL'.*
-    InvertRect                               = 'USER32.DLL'.*
-    IsCharAlphaA                             = 'USER32.DLL'.*
-    IsCharAlphaNumericA                      = 'USER32.DLL'.*
-    IsCharAlphaNumericW                      = 'USER32.DLL'.*
-    IsCharAlphaW                             = 'USER32.DLL'.*
-    IsCharLowerA                             = 'USER32.DLL'.*
-    IsCharLowerW                             = 'USER32.DLL'.*
-    IsCharUpperA                             = 'USER32.DLL'.*
-    IsCharUpperW                             = 'USER32.DLL'.*
-    IsChild                                  = 'USER32.DLL'.*
-    IsClipboardFormatAvailable               = 'USER32.DLL'.*
-    IsDialogMessage                          = 'USER32.DLL'.*
-    IsDialogMessageA                         = 'USER32.DLL'.*
-    IsDialogMessageW                         = 'USER32.DLL'.*
-    IsDlgButtonChecked                       = 'USER32.DLL'.*
-    IsIconic                                 = 'USER32.DLL'.*
-    IsMenu                                   = 'USER32.DLL'.*
-    IsRectEmpty                              = 'USER32.DLL'.*
-    IsWindow                                 = 'USER32.DLL'.*
-    IsWindowEnabled                          = 'USER32.DLL'.*
-    IsWindowUnicode                          = 'USER32.DLL'.*
-    IsWindowVisible                          = 'USER32.DLL'.*
-    IsZoomed                                 = 'USER32.DLL'.*
-    KillTimer                                = 'USER32.DLL'.*
-    LoadAcceleratorsA                        = 'USER32.DLL'.*
-    LoadAcceleratorsW                        = 'USER32.DLL'.*
-    LoadBitmapA                              = 'USER32.DLL'.*
-    LoadBitmapW                              = 'USER32.DLL'.*
-    LoadCursorA                              = 'USER32.DLL'.*
-    LoadCursorFromFileA                      = 'USER32.DLL'.*
-    LoadCursorFromFileW                      = 'USER32.DLL'.*
-    LoadCursorW                              = 'USER32.DLL'.*
-    LoadIconA                                = 'USER32.DLL'.*
-    LoadIconW                                = 'USER32.DLL'.*
-    LoadImageA                               = 'USER32.DLL'.*
-    LoadImageW                               = 'USER32.DLL'.*
-    LoadKeyboardLayoutA                      = 'USER32.DLL'.*
-    LoadKeyboardLayoutW                      = 'USER32.DLL'.*
-    LoadMenuA                                = 'USER32.DLL'.*
-    LoadMenuIndirectA                        = 'USER32.DLL'.*
-    LoadMenuIndirectW                        = 'USER32.DLL'.*
-    LoadMenuW                                = 'USER32.DLL'.*
-    LoadStringA                              = 'USER32.DLL'.*
-    LoadStringW                              = 'USER32.DLL'.*
-    LockSetForegroundWindow                  = 'USER32.DLL'.*
-    LockWindowUpdate                         = 'USER32.DLL'.*
-    LockWorkStation                          = 'USER32.DLL'.*
-    LookupIconIdFromDirectory                = 'USER32.DLL'.*
-    LookupIconIdFromDirectoryEx              = 'USER32.DLL'.*
-    MapDialogRect                            = 'USER32.DLL'.*
-    MapVirtualKeyA                           = 'USER32.DLL'.*
-    MapVirtualKeyExA                         = 'USER32.DLL'.*
-    MapVirtualKeyExW                         = 'USER32.DLL'.*
-    MapVirtualKeyW                           = 'USER32.DLL'.*
-    MapWindowPoints                          = 'USER32.DLL'.*
-    MenuItemFromPoint                        = 'USER32.DLL'.*
-    MessageBeep                              = 'USER32.DLL'.*
-    MessageBoxA                              = 'USER32.DLL'.*
-    MessageBoxExA                            = 'USER32.DLL'.*
-    MessageBoxExW                            = 'USER32.DLL'.*
-    MessageBoxIndirectA                      = 'USER32.DLL'.*
-    MessageBoxIndirectW                      = 'USER32.DLL'.*
-    MessageBoxW                              = 'USER32.DLL'.*
-    ModifyMenuA                              = 'USER32.DLL'.*
-    ModifyMenuW                              = 'USER32.DLL'.*
-    MonitorFromPoint                         = 'USER32.DLL'.*
-    MonitorFromRect                          = 'USER32.DLL'.*
-    MonitorFromWindow                        = 'USER32.DLL'.*
-    MoveWindow                               = 'USER32.DLL'.*
-    MsgWaitForMultipleObjects                = 'USER32.DLL'.*
-    MsgWaitForMultipleObjectsEx              = 'USER32.DLL'.*
-    NotifyWinEvent                           = 'USER32.DLL'.*
-    OemKeyScan                               = 'USER32.DLL'.*
-    OemToCharA                               = 'USER32.DLL'.*
-    OemToCharBuffA                           = 'USER32.DLL'.*
-    OemToCharBuffW                           = 'USER32.DLL'.*
-    OemToCharW                               = 'USER32.DLL'.*
-    OffsetRect                               = 'USER32.DLL'.*
-    OpenClipboard                            = 'USER32.DLL'.*
-    OpenDesktopA                             = 'USER32.DLL'.*
-    OpenDesktopW                             = 'USER32.DLL'.*
-    OpenIcon                                 = 'USER32.DLL'.*
-    OpenInputDesktop                         = 'USER32.DLL'.*
-    OpenWindowStationA                       = 'USER32.DLL'.*
-    OpenWindowStationW                       = 'USER32.DLL'.*
-    PackDDElParam                            = 'USER32.DLL'.*
-    PaintDesktop                             = 'USER32.DLL'.*
-    PeekMessageA                             = 'USER32.DLL'.*
-    PeekMessageW                             = 'USER32.DLL'.*
-    PostMessageA                             = 'USER32.DLL'.*
-    PostMessageW                             = 'USER32.DLL'.*
-    PostQuitMessage                          = 'USER32.DLL'.*
-    PostThreadMessageA                       = 'USER32.DLL'.*
-    PostThreadMessageW                       = 'USER32.DLL'.*
-    PtInRect                                 = 'USER32.DLL'.*
-    RealChildWindowFromPoint                 = 'USER32.DLL'.*
-    RealGetWindowClass                       = 'USER32.DLL'.*
-    RealGetWindowClassA                      = 'USER32.DLL'.*
-    RealGetWindowClassW                      = 'USER32.DLL'.*
-    RedrawWindow                             = 'USER32.DLL'.*
-    RegisterClassA                           = 'USER32.DLL'.*
-    RegisterClassExA                         = 'USER32.DLL'.*
-    RegisterClassExW                         = 'USER32.DLL'.*
-    RegisterClassW                           = 'USER32.DLL'.*
-    RegisterClipboardFormatA                 = 'USER32.DLL'.*
-    RegisterClipboardFormatW                 = 'USER32.DLL'.*
-    RegisterDeviceNotificationA              = 'USER32.DLL'.*
-    RegisterDeviceNotificationW              = 'USER32.DLL'.*
-    RegisterHotKey                           = 'USER32.DLL'.*
-    RegisterWindowMessageA                   = 'USER32.DLL'.*
-    RegisterWindowMessageW                   = 'USER32.DLL'.*
-    ReleaseCapture                           = 'USER32.DLL'.*
-    ReleaseDC                                = 'USER32.DLL'.*
-    RemoveMenu                               = 'USER32.DLL'.*
-    RemovePropA                              = 'USER32.DLL'.*
-    RemovePropW                              = 'USER32.DLL'.*
-    ReplyMessage                             = 'USER32.DLL'.*
-    ReuseDDElParam                           = 'USER32.DLL'.*
-    ScreenToClient                           = 'USER32.DLL'.*
-    ScrollDC                                 = 'USER32.DLL'.*
-    ScrollWindow                             = 'USER32.DLL'.*
-    ScrollWindowEx                           = 'USER32.DLL'.*
-    SendDlgItemMessageA                      = 'USER32.DLL'.*
-    SendDlgItemMessageW                      = 'USER32.DLL'.*
-    SendIMEMessageExA                        = 'USER32.DLL'.*
-    SendIMEMessageExW                        = 'USER32.DLL'.*
-    SendInput                                = 'USER32.DLL'.*
-    SendMessageA                             = 'USER32.DLL'.*
-    SendMessageCallbackA                     = 'USER32.DLL'.*
-    SendMessageCallbackW                     = 'USER32.DLL'.*
-    SendMessageTimeoutA                      = 'USER32.DLL'.*
-    SendMessageTimeoutW                      = 'USER32.DLL'.*
-    SendMessageW                             = 'USER32.DLL'.*
-    SendNotifyMessageA                       = 'USER32.DLL'.*
-    SendNotifyMessageW                       = 'USER32.DLL'.*
-    SetActiveWindow                          = 'USER32.DLL'.*
-    SetCapture                               = 'USER32.DLL'.*
-    SetCaretBlinkTime                        = 'USER32.DLL'.*
-    SetCaretPos                              = 'USER32.DLL'.*
-    SetClassLongA                            = 'USER32.DLL'.*
-    SetClassLongW                            = 'USER32.DLL'.*
-    SetClassWord                             = 'USER32.DLL'.*
-    SetClipboardData                         = 'USER32.DLL'.*
-    SetClipboardViewer                       = 'USER32.DLL'.*
-    SetCursor                                = 'USER32.DLL'.*
-    SetCursorPos                             = 'USER32.DLL'.*
-    SetDebugErrorLevel                       = 'USER32.DLL'.*
-    SetDeskWallpaper                         = 'USER32.DLL'.*
-    SetDlgItemInt                            = 'USER32.DLL'.*
-    SetDlgItemTextA                          = 'USER32.DLL'.*
-    SetDlgItemTextW                          = 'USER32.DLL'.*
-    SetDoubleClickTime                       = 'USER32.DLL'.*
-    SetFocus                                 = 'USER32.DLL'.*
-    SetForegroundWindow                      = 'USER32.DLL'.*
-    SetKeyboardState                         = 'USER32.DLL'.*
-    SetLastErrorEx                           = 'USER32.DLL'.*
-    SetLayeredWindowAttributes               = 'USER32.DLL'.*
-    SetMenu                                  = 'USER32.DLL'.*
-    SetMenuContextHelpId                     = 'USER32.DLL'.*
-    SetMenuDefaultItem                       = 'USER32.DLL'.*
-    SetMenuInfo                              = 'USER32.DLL'.*
-    SetMenuItemBitmaps                       = 'USER32.DLL'.*
-    SetMenuItemInfoA                         = 'USER32.DLL'.*
-    SetMenuItemInfoW                         = 'USER32.DLL'.*
-    SetMessageExtraInfo                      = 'USER32.DLL'.*
-    SetMessageQueue                          = 'USER32.DLL'.*
-    SetParent                                = 'USER32.DLL'.*
-    SetProcessDefaultLayout                  = 'USER32.DLL'.*
-    SetProcessWindowStation                  = 'USER32.DLL'.*
-    SetPropA                                 = 'USER32.DLL'.*
-    SetPropW                                 = 'USER32.DLL'.*
-    SetRect                                  = 'USER32.DLL'.*
-    SetRectEmpty                             = 'USER32.DLL'.*
-    SetScrollInfo                            = 'USER32.DLL'.*
-    SetScrollPos                             = 'USER32.DLL'.*
-    SetScrollRange                           = 'USER32.DLL'.*
-    SetShellWindow                           = 'USER32.DLL'.*
-    SetSysColors                             = 'USER32.DLL'.*
-    SetSystemCursor                          = 'USER32.DLL'.*
-    SetThreadDesktop                         = 'USER32.DLL'.*
-    SetTimer                                 = 'USER32.DLL'.*
-    SetUserObjectInformationA                = 'USER32.DLL'.*
-    SetUserObjectInformationW                = 'USER32.DLL'.*
-    SetUserObjectSecurity                    = 'USER32.DLL'.*
-    SetWinEventHook                          = 'USER32.DLL'.*
-    SetWindowContextHelpId                   = 'USER32.DLL'.*
-    SetWindowLongA                           = 'USER32.DLL'.*
-    SetWindowLongW                           = 'USER32.DLL'.*
-    SetWindowPlacement                       = 'USER32.DLL'.*
-    SetWindowPos                             = 'USER32.DLL'.*
-    SetWindowRgn                             = 'USER32.DLL'.*
-    SetWindowTextA                           = 'USER32.DLL'.*
-    SetWindowTextW                           = 'USER32.DLL'.*
-    SetWindowWord                            = 'USER32.DLL'.*
-    SetWindowsHookA                          = 'USER32.DLL'.*
-    SetWindowsHookExA                        = 'USER32.DLL'.*
-    SetWindowsHookExW                        = 'USER32.DLL'.*
-    SetWindowsHookW                          = 'USER32.DLL'.*
-    ShowCaret                                = 'USER32.DLL'.*
-    ShowCursor                               = 'USER32.DLL'.*
-    ShowOwnedPopups                          = 'USER32.DLL'.*
-    ShowScrollBar                            = 'USER32.DLL'.*
-    ShowWindow                               = 'USER32.DLL'.*
-    ShowWindowAsync                          = 'USER32.DLL'.*
-    SubtractRect                             = 'USER32.DLL'.*
-    SwapMouseButton                          = 'USER32.DLL'.*
-    SwitchDesktop                            = 'USER32.DLL'.*
-    SystemParametersInfoA                    = 'USER32.DLL'.*
-    SystemParametersInfoW                    = 'USER32.DLL'.*
-    TabbedTextOutA                           = 'USER32.DLL'.*
-    TabbedTextOutW                           = 'USER32.DLL'.*
-    TileChildWindows                         = 'USER32.DLL'.*
-    TileWindows                              = 'USER32.DLL'.*
-    ToAscii                                  = 'USER32.DLL'.*
-    ToAsciiEx                                = 'USER32.DLL'.*
-    ToUnicode                                = 'USER32.DLL'.*
-    ToUnicodeEx                              = 'USER32.DLL'.*
-    TrackMouseEvent                          = 'USER32.DLL'.*
-    TrackPopupMenu                           = 'USER32.DLL'.*
-    TrackPopupMenuEx                         = 'USER32.DLL'.*
-    TranslateAccelerator                     = 'USER32.DLL'.*
-    TranslateAcceleratorA                    = 'USER32.DLL'.*
-    TranslateAcceleratorW                    = 'USER32.DLL'.*
-    TranslateMDISysAccel                     = 'USER32.DLL'.*
-    TranslateMessage                         = 'USER32.DLL'.*
-    UnhookWinEvent                           = 'USER32.DLL'.*
-    UnhookWindowsHook                        = 'USER32.DLL'.*
-    UnhookWindowsHookEx                      = 'USER32.DLL'.*
-    UnionRect                                = 'USER32.DLL'.*
-    UnloadKeyboardLayout                     = 'USER32.DLL'.*
-    UnpackDDElParam                          = 'USER32.DLL'.*
-    UnregisterClassA                         = 'USER32.DLL'.*
-    UnregisterClassW                         = 'USER32.DLL'.*
-    UnregisterDeviceNotification             = 'USER32.DLL'.*
-    UnregisterHotKey                         = 'USER32.DLL'.*
-    UpdateLayeredWindow                      = 'USER32.DLL'.*
-    UpdateWindow                             = 'USER32.DLL'.*
-    UserHandleGrantAccess                    = 'USER32.DLL'.*
-    ValidateRect                             = 'USER32.DLL'.*
-    ValidateRgn                              = 'USER32.DLL'.*
-    VkKeyScanA                               = 'USER32.DLL'.*
-    VkKeyScanExA                             = 'USER32.DLL'.*
-    VkKeyScanExW                             = 'USER32.DLL'.*
-    VkKeyScanW                               = 'USER32.DLL'.*
-    WINNLSEnableIME                          = 'USER32.DLL'.*
-    WINNLSGetEnableStatus                    = 'USER32.DLL'.*
-    WINNLSGetIMEHotkey                       = 'USER32.DLL'.*
-    WaitForInputIdle                         = 'USER32.DLL'.*
-    WaitMessage                              = 'USER32.DLL'.*
-    Win32PoolAllocationStats                 = 'USER32.DLL'.*
-    WinHelpA                                 = 'USER32.DLL'.*
-    WinHelpW                                 = 'USER32.DLL'.*
-    WindowFromDC                             = 'USER32.DLL'.*
-    WindowFromPoint                          = 'USER32.DLL'.*
-    keybd_event                              = 'USER32.DLL'.*
-    mouse_event                              = 'USER32.DLL'.*
-    _wsprintfA                               = 'USER32.DLL'.wsprintfA
-    _wsprintfW                               = 'USER32.DLL'.wsprintfW
-    wvsprintfA                               = 'USER32.DLL'.*
-    wvsprintfW                               = 'USER32.DLL'.*
+    ActivateKeyboardLayout
+    AdjustWindowRect
+    AdjustWindowRectEx
+    AllowSetForegroundWindow
+    AnimateWindow
+    AnyPopup
+    AppendMenuA
+    AppendMenuW
+    ArrangeIconicWindows
+    AttachThreadInput
+    BeginDeferWindowPos
+    BeginPaint
+    BlockInput
+    BringWindowToTop
+    BroadcastSystemMessage
+    BroadcastSystemMessageA
+    BroadcastSystemMessageExA
+    BroadcastSystemMessageExW
+    BroadcastSystemMessageW
+    CallMsgFilter
+    CallMsgFilterA
+    CallMsgFilterW
+    CallNextHookEx
+    CallWindowProcA
+    CallWindowProcW
+    CascadeChildWindows
+    CascadeWindows
+    ChangeClipboardChain
+    ChangeDisplaySettingsA
+    ChangeDisplaySettingsExA
+    ChangeDisplaySettingsExW
+    ChangeDisplaySettingsW
+    ChangeMenuA
+    ChangeMenuW
+    CharLowerA
+    CharLowerBuffA
+    CharLowerBuffW
+    CharLowerW
+    CharNextA
+    CharNextExA
+    CharNextW
+    CharPrevA
+    CharPrevExA
+    CharPrevW
+    CharToOemA
+    CharToOemBuffA
+    CharToOemBuffW
+    CharToOemW
+    CharUpperA
+    CharUpperBuffA
+    CharUpperBuffW
+    CharUpperW
+    CheckDlgButton
+    CheckMenuItem
+    CheckMenuRadioItem
+    CheckRadioButton
+    ChildWindowFromPoint
+    ChildWindowFromPointEx
+    ClientToScreen
+    ClipCursor
+    CloseClipboard
+    CloseDesktop
+    CloseWindow
+    CloseWindowStation
+    CopyAcceleratorTableA
+    CopyAcceleratorTableW
+    CopyIcon
+    CopyImage
+    CopyRect
+    CountClipboardFormats
+    CreateAcceleratorTableA
+    CreateAcceleratorTableW
+    CreateCaret
+    CreateCursor
+    CreateDesktopA
+    CreateDesktopW
+    CreateDialogIndirectParamA
+    CreateDialogIndirectParamW
+    CreateDialogParamA
+    CreateDialogParamW
+    CreateIcon
+    CreateIconFromResource
+    CreateIconFromResourceEx
+    CreateIconIndirect
+    CreateMDIWindowA
+    CreateMDIWindowW
+    CreateMenu
+    CreatePopupMenu
+    CreateWindowExA
+    CreateWindowExW
+    CreateWindowStationA
+    CreateWindowStationW
+    DdeAbandonTransaction
+    DdeAccessData
+    DdeAddData
+    DdeClientTransaction
+    DdeCmpStringHandles
+    DdeConnect
+    DdeConnectList
+    DdeCreateDataHandle
+    DdeCreateStringHandleA
+    DdeCreateStringHandleW
+    DdeDisconnect
+    DdeDisconnectList
+    DdeEnableCallback
+    DdeFreeDataHandle
+    DdeFreeStringHandle
+    DdeGetData
+    DdeGetLastError
+    DdeImpersonateClient
+    DdeInitializeA
+    DdeInitializeW
+    DdeKeepStringHandle
+    DdeNameService
+    DdePostAdvise
+    DdeQueryConvInfo
+    DdeQueryNextServer
+    DdeQueryStringA
+    DdeQueryStringW
+    DdeReconnect
+    DdeSetQualityOfService
+    DdeSetUserHandle
+    DdeUnaccessData
+    DdeUninitialize
+    DefDlgProcA
+    DefDlgProcW
+    DefFrameProcA
+    DefFrameProcW
+    DefMDIChildProcA
+    DefMDIChildProcW
+    DefRawInputProc
+    DefWindowProcA
+    DefWindowProcW
+    DeferWindowPos
+    DeleteMenu
+    DestroyAcceleratorTable
+    DestroyCaret
+    DestroyCursor
+    DestroyIcon
+    DestroyMenu
+    DestroyWindow
+    DialogBoxIndirectParamA
+    DialogBoxIndirectParamW
+    DialogBoxParamA
+    DialogBoxParamW
+    DispatchMessageA
+    DispatchMessageW
+    DlgDirListA
+    DlgDirListComboBoxA
+    DlgDirListComboBoxW
+    DlgDirListW
+    DlgDirSelectComboBoxExA
+    DlgDirSelectComboBoxExW
+    DlgDirSelectExA
+    DlgDirSelectExW
+    DragDetect
+    DragObject
+    DrawAnimatedRects
+    DrawCaption
+    DrawEdge
+    DrawFocusRect
+    DrawFrame
+    DrawFrameControl
+    DrawIcon
+    DrawIconEx
+    DrawMenuBar
+    DrawStateA
+    DrawStateW
+    DrawTextA
+    DrawTextExA
+    DrawTextExW
+    DrawTextW
+    EditWndProc
+    EmptyClipboard
+    EnableMenuItem
+    EnableScrollBar
+    EnableWindow
+    EndDeferWindowPos
+    EndDialog
+    EndMenu
+    EndPaint
+    EnumChildWindows
+    EnumClipboardFormats
+    EnumDesktopWindows
+    EnumDesktopsA
+    EnumDesktopsW
+    EnumDisplayDevicesA
+    EnumDisplayDevicesW
+    EnumDisplayMonitors
+    EnumDisplaySettingsA
+    EnumDisplaySettingsExA
+    EnumDisplaySettingsExW
+    EnumDisplaySettingsW
+    EnumPropsA
+    EnumPropsExA
+    EnumPropsExW
+    EnumPropsW
+    EnumThreadWindows
+    EnumWindowStationsA
+    EnumWindowStationsW
+    EnumWindows
+    EqualRect
+    ExcludeUpdateRgn
+    ExitWindowsEx
+    FillRect
+    FindWindowA
+    FindWindowExA
+    FindWindowExW
+    FindWindowW
+    FlashWindow
+    FlashWindowEx
+    FrameRect
+    FreeDDElParam
+    GetActiveWindow
+    GetAltTabInfo
+    GetAltTabInfoA
+    GetAltTabInfoW
+    GetAncestor
+    GetAsyncKeyState
+    GetCapture
+    GetCaretBlinkTime
+    GetCaretPos
+    GetClassInfoA
+    GetClassInfoExA
+    GetClassInfoExW
+    GetClassInfoW
+    GetClassLongA
+    GetClassLongW
+    GetClassNameA
+    GetClassNameW
+    GetClassWord
+    GetClientRect
+    GetClipCursor
+    GetClipboardData
+    GetClipboardFormatNameA
+    GetClipboardFormatNameW
+    GetClipboardOwner
+    GetClipboardSequenceNumber
+    GetClipboardViewer
+    GetComboBoxInfo
+    GetCursor
+    GetCursorInfo
+    GetCursorPos
+    GetDC
+    GetDCEx
+    GetDesktopWindow
+    GetDialogBaseUnits
+    GetDlgCtrlID
+    GetDlgItem
+    GetDlgItemInt
+    GetDlgItemTextA
+    GetDlgItemTextW
+    GetDoubleClickTime
+    GetFocus
+    GetForegroundWindow
+    GetGUIThreadInfo
+    GetGuiResources
+    GetIconInfo
+    GetInputDesktop
+    GetInputState
+    GetKBCodePage
+    GetKeyNameTextA
+    GetKeyNameTextW
+    GetKeyState
+    GetKeyboardLayout
+    GetKeyboardLayoutList
+    GetKeyboardLayoutNameA
+    GetKeyboardLayoutNameW
+    GetKeyboardState
+    GetKeyboardType
+    GetLastActivePopup
+    GetLastInputInfo
+    GetLayeredWindowAttributes
+    GetListBoxInfo
+    GetMenu
+    GetMenuBarInfo
+    GetMenuCheckMarkDimensions
+    GetMenuContextHelpId
+    GetMenuDefaultItem
+    GetMenuInfo
+    GetMenuItemCount
+    GetMenuItemID
+    GetMenuItemInfoA
+    GetMenuItemInfoW
+    GetMenuItemRect
+    GetMenuState
+    GetMenuStringA
+    GetMenuStringW
+    GetMessageA
+    GetMessageExtraInfo
+    GetMessagePos
+    GetMessageTime
+    GetMessageW
+    GetMonitorInfoA
+    GetMonitorInfoW
+    GetMouseMovePointsEx
+    GetNextDlgGroupItem
+    GetNextDlgTabItem
+    GetOpenClipboardWindow
+    GetParent
+    GetPriorityClipboardFormat
+    GetProcessDefaultLayout
+    GetProcessWindowStation
+    GetPropA
+    GetPropW
+    GetQueueStatus
+    GetRawInputBuffer
+    GetRawInputData
+    GetRawInputDeviceInfoA
+    GetRawInputDeviceInfoW
+    GetRawInputDeviceList
+    GetRegisteredRawInputDevices
+    GetScrollBarInfo
+    GetScrollInfo
+    GetScrollPos
+    GetScrollRange
+    GetShellWindow
+    GetSubMenu
+    GetSysColor
+    GetSysColorBrush
+    GetSystemMenu
+    GetSystemMetrics
+    GetTabbedTextExtentA
+    GetTabbedTextExtentW
+    GetThreadDesktop
+    GetTitleBarInfo
+    GetTopWindow
+    GetUpdateRect
+    GetUpdateRgn
+    GetUserObjectInformationA
+    GetUserObjectInformationW
+    GetUserObjectSecurity
+    GetWindow
+    GetWindowContextHelpId
+    GetWindowDC
+    GetWindowInfo
+    GetWindowLongA
+    GetWindowLongW
+    GetWindowModuleFileName
+    GetWindowModuleFileNameA
+    GetWindowModuleFileNameW
+    GetWindowPlacement
+    GetWindowRect
+    GetWindowRgn
+    GetWindowRgnBox
+    GetWindowTextA
+    GetWindowTextLengthA
+    GetWindowTextLengthW
+    GetWindowTextW
+    GetWindowThreadProcessId
+    GetWindowWord
+    GrayStringA
+    GrayStringW
+    HideCaret
+    HiliteMenuItem
+    IMPGetIMEA
+    IMPGetIMEW
+    IMPQueryIMEA
+    IMPQueryIMEW
+    IMPSetIMEA
+    IMPSetIMEW
+    ImpersonateDdeClientWindow
+    InSendMessage
+    InSendMessageEx
+    InflateRect
+    InsertMenuA
+    InsertMenuItemA
+    InsertMenuItemW
+    InsertMenuW
+    IntersectRect
+    InvalidateRect
+    InvalidateRgn
+    InvertRect
+    IsCharAlphaA
+    IsCharAlphaNumericA
+    IsCharAlphaNumericW
+    IsCharAlphaW
+    IsCharLowerA
+    IsCharLowerW
+    IsCharUpperA
+    IsCharUpperW
+    IsChild
+    IsClipboardFormatAvailable
+    IsDialogMessage
+    IsDialogMessageA
+    IsDialogMessageW
+    IsDlgButtonChecked
+    IsGUIThread
+    IsIconic
+    IsMenu
+    IsRectEmpty
+    IsWinEventHookInstalled
+    IsWindow
+    IsWindowEnabled
+    IsWindowUnicode
+    IsWindowVisible
+    IsZoomed
+    KillTimer
+    LoadAcceleratorsA
+    LoadAcceleratorsW
+    LoadBitmapA
+    LoadBitmapW
+    LoadCursorA
+    LoadCursorFromFileA
+    LoadCursorFromFileW
+    LoadCursorW
+    LoadIconA
+    LoadIconW
+    LoadImageA
+    LoadImageW
+    LoadKeyboardLayoutA
+    LoadKeyboardLayoutW
+    LoadMenuA
+    LoadMenuIndirectA
+    LoadMenuIndirectW
+    LoadMenuW
+    LoadStringA
+    LoadStringW
+    LockSetForegroundWindow
+    LockWindowUpdate
+    LockWorkStation
+    LookupIconIdFromDirectory
+    LookupIconIdFromDirectoryEx
+    MapDialogRect
+    MapVirtualKeyA
+    MapVirtualKeyExA
+    MapVirtualKeyExW
+    MapVirtualKeyW
+    MapWindowPoints
+    MenuItemFromPoint
+    MessageBeep
+    MessageBoxA
+    MessageBoxExA
+    MessageBoxExW
+    MessageBoxIndirectA
+    MessageBoxIndirectW
+    MessageBoxTimeoutA
+    MessageBoxTimeoutW
+    MessageBoxW
+    ModifyMenuA
+    ModifyMenuW
+    MonitorFromPoint
+    MonitorFromRect
+    MonitorFromWindow
+    MoveWindow
+    MsgWaitForMultipleObjects
+    MsgWaitForMultipleObjectsEx
+    NotifyWinEvent
+    OemKeyScan
+    OemToCharA
+    OemToCharBuffA
+    OemToCharBuffW
+    OemToCharW
+    OffsetRect
+    OpenClipboard
+    OpenDesktopA
+    OpenDesktopW
+    OpenIcon
+    OpenInputDesktop
+    OpenWindowStationA
+    OpenWindowStationW
+    PackDDElParam
+    PaintDesktop
+    PeekMessageA
+    PeekMessageW
+    PostMessageA
+    PostMessageW
+    PostQuitMessage
+    PostThreadMessageA
+    PostThreadMessageW
+    PrintWindow
+    PtInRect
+    RealChildWindowFromPoint
+    RealGetWindowClass
+    RealGetWindowClassA
+    RealGetWindowClassW
+    RedrawWindow
+    RegisterClassA
+    RegisterClassExA
+    RegisterClassExW
+    RegisterClassW
+    RegisterClipboardFormatA
+    RegisterClipboardFormatW
+    RegisterDeviceNotificationA
+    RegisterDeviceNotificationW
+    RegisterHotKey
+    RegisterRawInputDevices
+    RegisterWindowMessageA
+    RegisterWindowMessageW
+    ReleaseCapture
+    ReleaseDC
+    RemoveMenu
+    RemovePropA
+    RemovePropW
+    ReplyMessage
+    ReuseDDElParam
+    ScreenToClient
+    ScrollDC
+    ScrollWindow
+    ScrollWindowEx
+    SendDlgItemMessageA
+    SendDlgItemMessageW
+    SendIMEMessageExA
+    SendIMEMessageExW
+    SendInput
+    SendMessageA
+    SendMessageCallbackA
+    SendMessageCallbackW
+    SendMessageTimeoutA
+    SendMessageTimeoutW
+    SendMessageW
+    SendNotifyMessageA
+    SendNotifyMessageW
+    SetActiveWindow
+    SetCapture
+    SetCaretBlinkTime
+    SetCaretPos
+    SetClassLongA
+    SetClassLongW
+    SetClassWord
+    SetClipboardData
+    SetClipboardViewer
+    SetCursor
+    SetCursorPos
+    SetDebugErrorLevel
+    SetDeskWallpaper
+    SetDlgItemInt
+    SetDlgItemTextA
+    SetDlgItemTextW
+    SetDoubleClickTime
+    SetFocus
+    SetForegroundWindow
+    SetKeyboardState
+    SetLastErrorEx
+    SetLayeredWindowAttributes
+    SetMenu
+    SetMenuContextHelpId
+    SetMenuDefaultItem
+    SetMenuInfo
+    SetMenuItemBitmaps
+    SetMenuItemInfoA
+    SetMenuItemInfoW
+    SetMessageExtraInfo
+    SetMessageQueue
+    SetParent
+    SetProcessDefaultLayout
+    SetProcessWindowStation
+    SetPropA
+    SetPropW
+    SetRect
+    SetRectEmpty
+    SetScrollInfo
+    SetScrollPos
+    SetScrollRange
+    SetShellWindow
+    SetSysColors
+    SetSystemCursor
+    SetThreadDesktop
+    SetTimer
+    SetUserObjectInformationA
+    SetUserObjectInformationW
+    SetUserObjectSecurity
+    SetWinEventHook
+    SetWindowContextHelpId
+    SetWindowLongA
+    SetWindowLongW
+    SetWindowPlacement
+    SetWindowPos
+    SetWindowRgn
+    SetWindowTextA
+    SetWindowTextW
+    SetWindowWord
+    SetWindowsHookA
+    SetWindowsHookExA
+    SetWindowsHookExW
+    SetWindowsHookW
+    ShowCaret
+    ShowCursor
+    ShowOwnedPopups
+    ShowScrollBar
+    ShowWindow
+    ShowWindowAsync
+    SubtractRect
+    SwapMouseButton
+    SwitchDesktop
+    SystemParametersInfoA
+    SystemParametersInfoW
+    TabbedTextOutA
+    TabbedTextOutW
+    TileChildWindows
+    TileWindows
+    ToAscii
+    ToAsciiEx
+    ToUnicode
+    ToUnicodeEx
+    TrackMouseEvent
+    TrackPopupMenu
+    TrackPopupMenuEx
+    TranslateAccelerator
+    TranslateAcceleratorA
+    TranslateAcceleratorW
+    TranslateMDISysAccel
+    TranslateMessage
+    UnhookWinEvent
+    UnhookWindowsHook
+    UnhookWindowsHookEx
+    UnionRect
+    UnloadKeyboardLayout
+    UnpackDDElParam
+    UnregisterClassA
+    UnregisterClassW
+    UnregisterDeviceNotification
+    UnregisterHotKey
+    UpdateLayeredWindow
+    UpdateWindow
+    UserHandleGrantAccess
+    ValidateRect
+    ValidateRgn
+    VkKeyScanA
+    VkKeyScanExA
+    VkKeyScanExW
+    VkKeyScanW
+    WINNLSEnableIME
+    WINNLSGetEnableStatus
+    WINNLSGetIMEHotkey
+    WaitForInputIdle
+    WaitMessage
+    WinHelpA
+    WinHelpW
+    WindowFromDC
+    WindowFromPoint
+    keybd_event
+    mouse_event
+    _wsprintfA        = wsprintfA
+    _wsprintfW        = wsprintfW
+    wvsprintfA
+    wvsprintfW

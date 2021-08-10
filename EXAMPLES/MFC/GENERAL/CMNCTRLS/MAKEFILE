@@ -8,13 +8,23 @@
 # See these sources for detailed information regarding the
 # Microsoft Foundation Classes product.
 
-PROJ=CMNCTRLS
-ROOT=..\..
-OBJS=animctrl.obj   ctrldemo.obj   listcpg.obj    mlistctl.obj   mtreectl.obj   \
-     notifwdw.obj   progctrl.obj   propsht.obj    slidctrl.obj   spinctrl.obj   \
-     toolbar1.obj   toolbar2.obj   toolpage.obj   treecpg.obj
-USES_DB=1
+PROJ=CMNCTRL
 
-EXTRA_LIBS=/V4.0
+#!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+!include <..\..\mfcrules.mak>
 
-!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+default: integration
+	$(MAKE) -f $(PROJ)1.mak
+	$(MAKE) -f $(PROJ)2.mak
+
+clean:
+	$(CLEAN_MFC)
+                                
+integration: $(PROJ)1.bpr $(PROJ)1.mak $(PROJ)2.bpr $(PROJ)2.mak
+    $(NOP)
+
+cmnctrl1.bpr: cmnctrl1.dsp
+	$(VCTOBPR) -I"$(BCB)\include;$(BCB)\include\idl" -2 $?
+
+cmnctrl2.bpr: cmnctrl2.dsp
+	$(VCTOBPR) -I"$(BCB)\include;$(BCB)\include\idl" -2 $?

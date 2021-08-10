@@ -3,14 +3,14 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
 unit Controls;
 
 {$P+,S-,W-,R-,T-,H+,X+}
-{$C PRELOAD}
+{$WARN SYMBOL_PLATFORM OFF}
 
 interface
 
@@ -18,8 +18,8 @@ interface
 
 { CommCtrl.hpp is not required in Controls.hpp }
 (*$NOINCLUDE CommCtrl *)
-uses Messages, Windows, MultiMon, Classes, Sysutils, Graphics, Menus, CommCtrl, Imm,
-  ImgList, ActnList;
+uses Messages, Windows, MultiMon, Classes, SysUtils, Graphics, Menus, CommCtrl,
+  Imm, ImgList, ActnList;
 
 { VCL control message IDs }
 
@@ -93,6 +93,7 @@ const
   CM_HINTSHOWPAUSE          = CM_BASE + 65;
   CM_DOCKNOTIFICATION       = CM_BASE + 66;
   CM_MOUSEWHEEL             = CM_BASE + 67;
+  CM_ISSHORTCUT             = CM_BASE + 68;
 
 { VCL control notification IDs }
 
@@ -136,6 +137,15 @@ const
   mrAll      = mrNo + 1;
   mrNoToAll  = mrAll + 1;
   mrYesToAll = mrNoToAll + 1;
+
+type
+  TModalResult = Low(Integer)..High(Integer);
+
+function IsPositiveResult(const AModalResult: TModalResult): Boolean;
+function IsNegativeResult(const AModalResult: TModalResult): Boolean;
+function IsAbortResult(const AModalResult: TModalResult): Boolean;
+function IsAnAllResult(const AModalResult: TModalResult): Boolean;
+function StripAllFromResult(const AModalResult: TModalResult): TModalResult;
 
 { Cursor identifiers }
 
@@ -314,7 +324,7 @@ type
     Result: Integer;
   end;
 
-  TAlign = (alNone, alTop, alBottom, alLeft, alRight, alClient);
+  TAlign = (alNone, alTop, alBottom, alLeft, alRight, alClient, alCustom);
 
   TAlignSet = set of TAlign;
 
@@ -326,18 +336,22 @@ type
     FDragHandle: HWND;
     FDragPos: TPoint;
     FDragTargetPos: TPoint;
+    FDropped: Boolean;
     FMouseDeltaX: Double;
     FMouseDeltaY: Double;
     FCancelling: Boolean;
     function Capture: HWND;
-    procedure MouseMsg(var Msg: TMessage);
     procedure ReleaseCapture(Handle: HWND);
   protected
     procedure Finished(Target: TObject; X, Y: Integer; Accepted: Boolean); virtual;
     function GetDragCursor(Accepted: Boolean; X, Y: Integer): TCursor; virtual;
     function GetDragImages: TDragImageList; virtual;
+    procedure WndProc(var Msg: TMessage); virtual;
+    procedure MainWndProc(var Message: TMessage);
   public
+    procedure AfterConstruction; override;  
     procedure Assign(Source: TDragObject); virtual;
+    procedure BeforeDestruction; override;
     function GetName: string; virtual;
     procedure HideDragImage; virtual;
     function Instance: THandle; virtual;
@@ -347,8 +361,16 @@ type
     property DragPos: TPoint read FDragPos write FDragPos;
     property DragTargetPos: TPoint read FDragTargetPos write FDragTargetPos;
     property DragTarget: Pointer read FDragTarget write FDragTarget;
+    property Dropped: Boolean read FDropped;
     property MouseDeltaX: Double read FMouseDeltaX;
-    property MouseDeltaY: Double read FMouseDeltaX;
+    property MouseDeltaY: Double read FMouseDeltaY;
+  end;
+
+  TDragObjectClass = class of TDragObject;
+  
+  TDragObjectEx = class(TDragObject)
+  public
+    procedure BeforeDestruction; override;
   end;
 
   TBaseDragControlObject = class(TDragObject)
@@ -370,6 +392,11 @@ type
   public
     procedure HideDragImage; override;
     procedure ShowDragImage; override;
+  end;
+
+  TDragControlObjectEx = class(TDragControlObject)
+  public
+    procedure BeforeDestruction; override;
   end;
 
   TDragDockObject = class(TBaseDragControlObject)
@@ -400,6 +427,11 @@ type
     property FrameWidth: Integer read GetFrameWidth;
   end;
 
+  TDragDockObjectEx = class(TDragDockObject)
+  public
+    procedure BeforeDestruction; override;
+  end;
+
 { Controls }
 
   TControlCanvas = class(TCanvas)
@@ -425,6 +457,7 @@ type
     procedure AssignClient(AClient: TObject); override;
     function IsCaptionLinked: Boolean; override;
     function IsEnabledLinked: Boolean; override;
+    function IsHelpLinked: Boolean;  override;
     function IsHintLinked: Boolean; override;
     function IsVisibleLinked: Boolean; override;
     function IsOnExecuteLinked: Boolean; override;
@@ -432,6 +465,9 @@ type
     procedure SetCaption(const Value: string); override;
     procedure SetEnabled(Value: Boolean); override;
     procedure SetHint(const Value: string); override;
+    procedure SetHelpContext(Value: THelpContext); override;
+    procedure SetHelpKeyword(const Value: string); override;
+    procedure SetHelpType(Value: THelpType); override;
     procedure SetVisible(Value: Boolean); override;
     procedure SetOnExecute(Value: TNotifyEvent); override;
   end;
@@ -474,7 +510,8 @@ type
   (*$HPPEMIT '}'*)
 
 
-  TScalingFlags = set of (sfLeft, sfTop, sfWidth, sfHeight, sfFont);
+  TScalingFlags = set of (sfLeft, sfTop, sfWidth, sfHeight, sfFont,
+    sfDesignSize);
 
   TAnchorKind = (akLeft, akTop, akRight, akBottom);
   TAnchors = set of TAnchorKind;
@@ -491,7 +528,7 @@ type
     FOnChange: TNotifyEvent;
     procedure SetConstraints(Index: Integer; Value: TConstraintSize);
   protected
-    procedure Change; dynamic;
+    procedure Change; virtual;
     procedure AssignTo(Dest: TPersistent); override;
     property Control: TControl read FControl;
   public
@@ -539,7 +576,8 @@ type
     MousePos: TPoint; var Handled: Boolean) of object;
   TContextPopupEvent = procedure(Sender: TObject; MousePos: TPoint; var Handled: Boolean) of object;
 
-  TWndMethod = procedure(var Message: TMessage) of object;
+  TWndMethod = Classes.TWndMethod;
+  {$EXTERNALSYM TWndMethod}
 
   // TDockOrientation indicates how a zone's child zones are arranged.
   // doNoOrient means a zone contains a TControl and not child zones.
@@ -588,6 +626,7 @@ type
     FDragKind: TDragKind;
     FDockOrientation: TDockOrientation;
     FHostDockSite: TWinControl;
+    FWheelAccumulator: Integer;
     FUndockWidth: Integer;
     FUndockHeight: Integer;
     FLRDockWidth: Integer;
@@ -608,6 +647,12 @@ type
     FOnClick: TNotifyEvent;
     FOnDblClick: TNotifyEvent;
     FOnContextPopup: TContextPopupEvent;
+    FOnMouseWheel: TMouseWheelEvent;
+    FOnMouseWheelDown: TMouseWheelUpDownEvent;
+    FOnMouseWheelUp: TMouseWheelUpDownEvent;
+    FHelpType: THelpType;
+    FHelpKeyword: String;
+    FHelpContext: THelpContext;
     procedure CalcDockSizes;
     function CheckNewSize(var NewWidth, NewHeight: Integer): Boolean;
     function CreateFloatingDockSite(Bounds: TRect): TWinControl;
@@ -621,7 +666,6 @@ type
       Shift: TShiftState);
     procedure DoMouseUp(var Message: TWMMouse; Button: TMouseButton);
     procedure FontChanged(Sender: TObject);
-    function GetAction: TBasicAction;
     function GetBoundsRect: TRect;
     function GetClientHeight: Integer;
     function GetClientWidth: Integer;
@@ -639,6 +683,7 @@ type
     function IsEnabledStored: Boolean;
     function IsFontStored: Boolean;
     function IsHintStored: Boolean;
+    function IsHelpContextStored: Boolean;
     function IsOnClickStored: Boolean;
     function IsShowHintStored: Boolean;
     function IsVisibleStored: Boolean;
@@ -646,7 +691,6 @@ type
     procedure SetAnchors(Value: TAnchors);
     procedure SetAction(Value: TBasicAction);
     procedure SetAlign(Value: TAlign);
-    procedure SetAutoSize(Value: Boolean);
     procedure SetBoundsRect(const Rect: TRect);
     procedure SetClientHeight(Value: Integer);
     procedure SetClientSize(Value: TPoint);
@@ -656,6 +700,8 @@ type
     procedure SetDesktopFont(Value: Boolean);
     procedure SetFont(Value: TFont);
     procedure SetHeight(Value: Integer);
+    procedure SetHelpContext(const Value: THelpContext); 
+    procedure SetHelpKeyword(const Value: String);
     procedure SetHostDockSite(Value: TWinControl);
     procedure SetLeft(Value: Integer);
     procedure SetMouseCapture(Value: Boolean);
@@ -682,6 +728,7 @@ type
     procedure WMLButtonUp(var Message: TWMLButtonUp); message WM_LBUTTONUP;
     procedure WMRButtonUp(var Message: TWMRButtonUp); message WM_RBUTTONUP;
     procedure WMMButtonUp(var Message: TWMMButtonUp); message WM_MBUTTONUP;
+    procedure WMMouseWheel(var Message: TWMMouseWheel); message WM_MOUSEWHEEL;
     procedure WMCancelMode(var Message: TWMCancelMode); message WM_CANCELMODE;
     procedure WMWindowPosChanged(var Message: TWMWindowPosChanged); message WM_WINDOWPOSCHANGED;
     procedure CMVisibleChanged(var Message: TMessage); message CM_VISIBLECHANGED;
@@ -700,7 +747,9 @@ type
     procedure CMFloat(var Message: TCMFloat); message CM_FLOAT;
     procedure CMBiDiModeChanged(var Message: TMessage); message CM_BIDIMODECHANGED;
     procedure CMParentBiDiModeChanged(var Message: TMessage); message CM_PARENTBIDIMODECHANGED;
+    procedure CMMouseWheel(var Message: TCMMouseWheel); message CM_MOUSEWHEEL;
     procedure WMContextMenu(var Message: TWMContextMenu); message WM_CONTEXTMENU;
+    procedure SetConstraints(const Value: TSizeConstraints);
   protected
     procedure ActionChange(Sender: TObject; CheckDefaults: Boolean); dynamic;
     procedure AdjustSize; dynamic;
@@ -712,6 +761,8 @@ type
     procedure ChangeScale(M, D: Integer); dynamic;
     procedure Click; dynamic;
     procedure ConstrainedResize(var MinWidth, MinHeight, MaxWidth, MaxHeight: Integer); virtual;
+    function CalcCursorPos: TPoint;
+    function DesignWndProc(var Message: TMessage): Boolean; dynamic;
     procedure DblClick; dynamic;
     procedure DefaultDockImage(DragDockObject: TDragDockObject; Erase: Boolean); dynamic;
     procedure DefineProperties(Filer: TFiler); override;
@@ -720,6 +771,10 @@ type
     procedure DoEndDock(Target: TObject; X, Y: Integer); dynamic;
     procedure DoDock(NewDockSite: TWinControl; var ARect: TRect); dynamic;
     procedure DoStartDock(var DragObject: TDragObject); dynamic;
+    function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;
+      MousePos: TPoint): Boolean; dynamic;
+    function DoMouseWheelDown(Shift: TShiftState; MousePos: TPoint): Boolean; dynamic;
+    function DoMouseWheelUp(Shift: TShiftState; MousePos: TPoint): Boolean; dynamic;
     procedure DragCanceled; dynamic;
     procedure DragOver(Source: TObject; X, Y: Integer; State: TDragState;
       var Accept: Boolean); dynamic;
@@ -727,6 +782,7 @@ type
     procedure DoStartDrag(var DragObject: TDragObject); dynamic;
     procedure DrawDragDockImage(DragDockObject: TDragDockObject); dynamic;
     procedure EraseDragDockImage(DragDockObject: TDragDockObject); dynamic;
+    function GetAction: TBasicAction; virtual;    
     function GetActionLinkClass: TControlActionLinkClass; dynamic;
     function GetClientOrigin: TPoint; virtual;
     function GetClientRect: TRect; virtual;
@@ -753,6 +809,7 @@ type
     procedure Resize; dynamic;
     procedure SendCancelMode(Sender: TControl);
     procedure SendDockNotification(Msg: Cardinal; WParam, LParam: Integer);
+    procedure SetAutoSize(Value: Boolean); virtual;    
     procedure SetDragMode(Value: TDragMode); virtual;
     procedure SetEnabled(Value: Boolean); virtual;
     procedure SetName(const Value: TComponentName); override;
@@ -782,6 +839,7 @@ type
     property PopupMenu: TPopupMenu read FPopupMenu write SetPopupMenu;
     property ScalingFlags: TScalingFlags read FScalingFlags write FScalingFlags;
     property Text: TCaption read GetText write SetText;
+    property WheelAccumulator: Integer read FWheelAccumulator write FWheelAccumulator;
     property WindowText: PChar read FText write FText;
     property OnCanResize: TCanResizeEvent read FOnCanResize write FOnCanResize;
     property OnClick: TNotifyEvent read FOnClick write FOnClick stored IsOnClickStored;
@@ -795,6 +853,11 @@ type
     property OnMouseDown: TMouseEvent read FOnMouseDown write FOnMouseDown;
     property OnMouseMove: TMouseMoveEvent read FOnMouseMove write FOnMouseMove;
     property OnMouseUp: TMouseEvent read FOnMouseUp write FOnMouseUp;
+    property OnMouseWheel: TMouseWheelEvent read FOnMouseWheel write FOnMouseWheel;
+    property OnMouseWheelDown: TMouseWheelUpDownEvent read FOnMouseWheelDown
+      write FOnMouseWheelDown;
+    property OnMouseWheelUp: TMouseWheelUpDownEvent read FOnMouseWheelUp write
+      FOnMouseWheelUp;
     property OnResize: TNotifyEvent read FOnResize write FOnResize;
     property OnStartDock: TStartDockEvent read FOnStartDock write FOnStartDock;
     property OnStartDrag: TStartDragEvent read FOnStartDrag write FOnStartDrag;
@@ -804,6 +867,7 @@ type
     procedure BeginDrag(Immediate: Boolean; Threshold: Integer = -1);
     procedure BringToFront;
     function ClientToScreen(const Point: TPoint): TPoint;
+    function ClientToParent(const Point: TPoint; AParent: TWinControl = nil): TPoint;
     procedure Dock(NewDockSite: TWinControl; ARect: TRect); dynamic;
     procedure DefaultHandler(var Message); override;
     function Dragging: Boolean;
@@ -820,6 +884,7 @@ type
     procedure Hide;
     procedure InitiateAction; virtual;
     procedure Invalidate; virtual;
+    procedure MouseWheelHandler(var Message: TMessage); dynamic;
     function IsRightToLeft: Boolean;
     function ManualDock(NewDockSite: TWinControl; DropControl: TControl = nil;
       ControlSide: TAlign = alNone): Boolean;
@@ -830,6 +895,7 @@ type
     function ReplaceDockedControl(Control: TControl; NewDockSite: TWinControl;
       DropControl: TControl; ControlSide: TAlign): Boolean;
     function ScreenToClient(const Point: TPoint): TPoint;
+    function ParentToClient(const Point: TPoint; AParent: TWinControl = nil): TPoint;
     procedure SendToBack;
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: Integer); virtual;
     procedure SetTextBuf(Buffer: PChar);
@@ -847,7 +913,7 @@ type
     property ClientOrigin: TPoint read GetClientOrigin;
     property ClientRect: TRect read GetClientRect;
     property ClientWidth: Integer read GetClientWidth write SetClientWidth stored False;
-    property Constraints: TSizeConstraints read FConstraints write FConstraints;
+    property Constraints: TSizeConstraints read FConstraints write SetConstraints;
     property ControlState: TControlState read FControlState write FControlState;
     property ControlStyle: TControlStyle read FControlStyle write FControlStyle;
     property DockOrientation: TDockOrientation read FDockOrientation write FDockOrientation;
@@ -869,7 +935,10 @@ type
     property Height: Integer read FHeight write SetHeight;
     property Cursor: TCursor read FCursor write SetCursor default crDefault;
     property Hint: string read FHint write FHint stored IsHintStored;
-  end;
+    property HelpType: THelpType read FHelpType write FHelpType default htContext;
+    property HelpKeyword: String read FHelpKeyword write SetHelpKeyword stored IsHelpContextStored;
+    property HelpContext: THelpContext read FHelpContext write SetHelpContext stored IsHelpContextStored default 0;
+end;
 
   TControlClass = class of TControl;
 
@@ -903,6 +972,13 @@ type
               imSAlpha, imAlpha, imHira, imSKata, imKata,
               imChinese, imSHanguel, imHanguel);
   TImeName = type string;
+
+  TAlignInfo = record
+    AlignList: TList;
+    ControlIndex: Integer;
+    Align: TAlign;
+    Scratch: Integer;
+  end;
 
   TBorderWidth = 0..MaxInt;
 
@@ -941,26 +1017,24 @@ type
     FBevelWidth: TBevelWidth;
     FBorderWidth: TBorderWidth;
     FBrush: TBrush;
-    FControls: TList;
-    FCtl3D: Boolean;
     FDefWndProc: Pointer;
     FDockClients: TList;
-    FDockSite: Boolean;
     FDockManager: IDockManager;
     FHandle: HWnd;
-    FHelpContext: THelpContext;
     FImeMode: TImeMode;
     FImeName: TImeName;
     FObjectInstance: Pointer;
-    FParentCtl3D: Boolean;
     FParentWindow: HWnd;
-    FShowing: Boolean;
     FTabList: TList;
+    FControls: TList;
+    FWinControls: TList;
     FTabOrder: Integer;
     FTabStop: Boolean;
-    FWheelAccumulator: Integer;
+    FCtl3D: Boolean;
+    FShowing: Boolean;
     FUseDockManager: Boolean;
-    FWinControls: TList;
+    FDockSite: Boolean;
+    FParentCtl3D: Boolean;
     FOnDockDrop: TDockDropEvent;
     FOnDockOver: TDockOverEvent;
     FOnEnter: TNotifyEvent;
@@ -969,13 +1043,11 @@ type
     FOnKeyDown: TKeyEvent;
     FOnKeyPress: TKeyPressEvent;
     FOnKeyUp: TKeyEvent;
-    FOnMouseWheel: TMouseWheelEvent;
-    FOnMouseWheelDown: TMouseWheelUpDownEvent;
-    FOnMouseWheelUp: TMouseWheelUpDownEvent;
     FOnUnDock: TUnDockEvent;
     procedure AlignControl(AControl: TControl);
     procedure CalcConstraints(var MinWidth, MinHeight, MaxWidth,
       MaxHeight: Integer);
+    function GetAlignDisabled: Boolean;
     function GetControl(Index: Integer): TControl;
     function GetControlCount: Integer;
     function GetDockClientCount: Integer;
@@ -985,9 +1057,10 @@ type
     function GetVisibleDockClientCount: Integer;
     procedure Insert(AControl: TControl);
     procedure InvalidateFrame;
+    procedure InvokeHelp;
     function IsCtl3DStored: Boolean;
-    function IsHelpContextStored: Boolean;
     function PrecedingWindow(Control: TWinControl): HWnd;
+    procedure ReadDesignSize(Reader: TReader);
     procedure Remove(AControl: TControl);
     procedure RemoveFocus(Removing: Boolean);
     procedure SetBevelCut(Index: Integer; const Value: TBevelCut);
@@ -1006,6 +1079,7 @@ type
     procedure UpdateTabOrder(Value: TTabOrder);
     procedure UpdateBounds;
     procedure UpdateShowing;
+    procedure WriteDesignSize(Writer: TWriter);
     function IsMenuKey(var Message: TWMKey): Boolean;
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
     procedure WMCommand(var Message: TWMCommand); message WM_COMMAND;
@@ -1046,7 +1120,6 @@ type
     procedure WMKillFocus(var Message: TWMSetFocus); message WM_KILLFOCUS;
     procedure WMIMEStartComp(var Message: TMessage); message WM_IME_STARTCOMPOSITION;
     procedure WMIMEEndComp(var Message: TMessage); message WM_IME_ENDCOMPOSITION;
-    procedure WMMouseWheel(var Message: TWMMouseWheel); message WM_MOUSEWHEEL;
     procedure WMContextMenu(var Message: TWMContextMenu); message WM_CONTEXTMENU;
     procedure CMChanged(var Message: TMessage); message CM_CHANGED;
     procedure CMChildKey(var Message: TMessage); message CM_CHILDKEY;
@@ -1084,10 +1157,10 @@ type
     procedure CMUnDockClient(var Message: TCMUnDockClient); message CM_UNDOCKCLIENT;
     procedure CMFloat(var Message: TCMFloat); message CM_FLOAT;
     procedure CMBiDiModeChanged(var Message: TMessage); message CM_BIDIMODECHANGED;
-    procedure CMMouseWheel(var Message: TCMMouseWheel); message CM_MOUSEWHEEL;
   protected
     FDoubleBuffered: Boolean;
     FInImeComposition: Boolean;
+    FDesignSize: TPoint;
     procedure ActionChange(Sender: TObject; CheckDefaults: Boolean); override;
     procedure AddBiDiModeExStyle(var ExStyle: DWORD);
     procedure AssignTo(Dest: TPersistent); override;
@@ -1099,6 +1172,7 @@ type
     procedure ChangeScale(M, D: Integer); override;
     procedure ConstrainedResize(var MinWidth, MinHeight, MaxWidth,
       MaxHeight: Integer); override;
+    procedure ControlsAligned; dynamic;
     function CreateDockManager: IDockManager; dynamic;
     procedure CreateHandle; virtual;
     procedure CreateParams(var Params: TCreateParams); virtual;
@@ -1106,6 +1180,10 @@ type
       ControlClassName: PChar);
     procedure CreateWindowHandle(const Params: TCreateParams); virtual;
     procedure CreateWnd; virtual;
+    function CustomAlignInsertBefore(C1, C2: TControl): Boolean; virtual;
+    procedure CustomAlignPosition(Control: TControl; var NewLeft, NewTop, NewWidth,
+      NewHeight: Integer; var AlignRect: TRect; AlignInfo: TAlignInfo); virtual;
+    procedure DefineProperties(Filer: TFiler); override;
     procedure DestroyHandle;
     procedure DestroyWindowHandle; virtual;
     procedure DestroyWnd; virtual;
@@ -1120,10 +1198,6 @@ type
     function DoKeyDown(var Message: TWMKey): Boolean;
     function DoKeyPress(var Message: TWMKey): Boolean;
     function DoKeyUp(var Message: TWMKey): Boolean;
-    function DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;
-      MousePos: TPoint): Boolean; dynamic;
-    function DoMouseWheelDown(Shift: TShiftState; MousePos: TPoint): Boolean; dynamic;
-    function DoMouseWheelUp(Shift: TShiftState; MousePos: TPoint): Boolean; dynamic;
     procedure DoRemoveDockClient(Client: TControl); dynamic;
     function DoUnDock(NewTarget: TWinControl; Client: TControl): Boolean; dynamic;
     function FindNextControl(CurControl: TWinControl;
@@ -1180,7 +1254,6 @@ type
     property ParentCtl3D: Boolean read FParentCtl3D write SetParentCtl3D default True;
     property UseDockManager: Boolean read FUseDockManager write SetUseDockManager
       default False;
-    property WheelAccumulator: Integer read FWheelAccumulator write FWheelAccumulator;
     property WindowHandle: HWnd read FHandle write FHandle;
     property OnDockDrop: TDockDropEvent read FOnDockDrop write FOnDockDrop;
     property OnDockOver: TDockOverEvent read FOnDockOver write FOnDockOver;
@@ -1190,11 +1263,6 @@ type
     property OnKeyDown: TKeyEvent read FOnKeyDown write FOnKeyDown;
     property OnKeyPress: TKeyPressEvent read FOnKeyPress write FOnKeyPress;
     property OnKeyUp: TKeyEvent read FOnKeyUp write FOnKeyUp;
-    property OnMouseWheel: TMouseWheelEvent read FOnMouseWheel write FOnMouseWheel;
-    property OnMouseWheelDown: TMouseWheelUpDownEvent read FOnMouseWheelDown
-      write FOnMouseWheelDown;
-    property OnMouseWheelUp: TMouseWheelUpDownEvent read FOnMouseWheelUp write
-      FOnMouseWheelUp;
     property OnUnDock: TUnDockEvent read FOnUnDock write FOnUnDock;
   public
     constructor Create(AOwner: TComponent); override;
@@ -1221,8 +1289,8 @@ type
     procedure HandleNeeded;
     procedure InsertControl(AControl: TControl);
     procedure Invalidate; override;
-    procedure MouseWheelHandler(var Message: TMessage); dynamic;
-    procedure PaintTo(DC: HDC; X, Y: Integer);
+    procedure PaintTo(DC: HDC; X, Y: Integer); overload;
+    procedure PaintTo(Canvas: TCanvas; X, Y: Integer); overload;
     procedure RemoveControl(AControl: TControl);
     procedure Realign;
     procedure Repaint; override;
@@ -1232,6 +1300,7 @@ type
     procedure SetFocus; virtual;
     procedure Update; override;
     procedure UpdateControlState;
+    property AlignDisabled: Boolean read GetAlignDisabled;
     property VisibleDockClientCount: Integer read GetVisibleDockClientCount;
     property Brush: TBrush read FBrush;
     property Controls[Index: Integer]: TControl read GetControl;
@@ -1242,7 +1311,6 @@ type
     property TabOrder: TTabOrder read GetTabOrder write SetTabOrder default -1;
     property TabStop: Boolean read FTabStop write SetTabStop default False;
   published
-    property HelpContext: THelpContext read FHelpContext write FHelpContext stored IsHelpContextStored default 0;
   end;
 
   TGraphicControl = class(TControl)
@@ -1273,12 +1341,15 @@ type
   THintWindow = class(TCustomControl)
   private
     FActivating: Boolean;
+    FLastActive: Cardinal;
     procedure WMNCHitTest(var Message: TWMNCHitTest); message WM_NCHITTEST;
     procedure WMNCPaint(var Message: TMessage); message WM_NCPAINT;
     procedure CMTextChanged(var Message: TMessage); message CM_TEXTCHANGED;
   protected
     procedure CreateParams(var Params: TCreateParams); override;
+    procedure NCPaint(DC: HDC); virtual;
     procedure Paint; override;
+    procedure WMPrint(var Message: TMessage); message WM_PRINT;
   public
     constructor Create(AOwner: TComponent); override;
     procedure ActivateHint(Rect: TRect; const AHint: string); virtual;
@@ -1353,6 +1424,7 @@ type
   // doubly-linked list tree.  The FZoneLimit field of TDockZone represents
   // the coordinate of either the left or bottom of the zone, depending on
   // whether its parent zone's orientation is doVertical or doHorizontal.
+
   TDockZone = class
   private
     FChildControl: TControl;
@@ -1363,16 +1435,26 @@ type
     FPrevSibling: TDockZone;
     FTree: TDockTree;
     FZoneLimit: Integer;
+    FOldSize: Integer;
     function GetChildCount: Integer;
+    function GetControlName: string;
     function GetLimitBegin: Integer;
     function GetLimitSize: Integer;
     function GetTopLeft(Orient: Integer{TDockOrientation}): Integer;
     function GetHeightWidth(Orient: Integer{TDockOrientation}): Integer;
-    function GetControlName: string;
+    function GetVisible: Boolean;
+    function GetVisibleChildCount: Integer;
+    function GetZoneLimit: Integer;
     function SetControlName(const Value: string): Boolean;
+    procedure SetZoneLimit(const Value: Integer);
   public
     constructor Create(Tree: TDockTree);
+    procedure ExpandZoneLimit(NewLimit: Integer);
+    function FirstVisibleChild: TDockZone;
+    function NextVisible: TDockZone;
+    function PrevVisible: TDockZone;
     procedure ResetChildren;
+    procedure ResetZoneLimits;
     procedure Update;
     property ChildCount: Integer read GetChildCount;
     property Height: Integer index Ord(doHorizontal) read GetHeightWidth;
@@ -1380,7 +1462,10 @@ type
     property LimitBegin: Integer read GetLimitBegin;
     property LimitSize: Integer read GetLimitSize;
     property Top: Integer index Ord(doHorizontal) read GetTopLeft;
+    property Visible: Boolean read GetVisible;
+    property VisibleChildCount: Integer read GetVisibleChildCount;
     property Width: Integer index Ord(doVertical) read GetHeightWidth;
+    property ZoneLimit: Integer read GetZoneLimit write SetZoneLimit;
   end;
 
 { TDockTree }
@@ -1478,6 +1563,7 @@ type
     procedure SetCursorPos(const Value: TPoint);
     function GetCapture: HWND;
     procedure SetCapture(const Value: HWND);
+    function GetIsDragging: Boolean;
   public
     constructor Create;
     destructor Destroy; override;
@@ -1487,13 +1573,43 @@ type
     property DragImmediate: Boolean read FDragImmediate write FDragImmediate default True;
     property DragThreshold: Integer read FDragThreshold write FDragThreshold default 5;
     property MousePresent: Boolean read FMousePresent;
+    property IsDragging: Boolean read GetIsDragging;
     property RegWheelMessage: UINT read FWheelMessage;
     property WheelPresent: Boolean read FWheelPresent;
     property WheelScrollLines: Integer read FScrollLines;
   end;
 
+  TCustomListControl = class(TWinControl)
+  protected
+    function GetCount: Integer; virtual; abstract;
+    function GetItemIndex: Integer; virtual; abstract;
+    procedure SetItemIndex(const Value: Integer); overload; virtual; abstract;
+  public
+    procedure AddItem(Item: String; AObject: TObject); virtual; abstract;  
+    procedure Clear; virtual; abstract;
+    procedure ClearSelection; virtual; abstract;
+    procedure CopySelection(Destination: TCustomListControl); virtual; abstract;
+    procedure DeleteSelected; virtual; abstract;
+    procedure MoveSelection(Destination: TCustomListControl); virtual;
+    procedure SelectAll; virtual; abstract;
+    property ItemIndex: Integer read GetItemIndex write SetItemIndex;
+  end;
+
+  TCustomMultiSelectListControl = class(TCustomListControl)
+  protected
+    FMultiSelect: Boolean;
+    function GetSelCount: Integer; virtual; abstract;
+    procedure SetMultiSelect(Value: Boolean); virtual; abstract;
+  public
+    property MultiSelect: Boolean read FMultiSelect write SetMultiSelect default False;
+    property SelCount: Integer read GetSelCount;
+  end;
+
+  TAnimateWindowProc = function(hWnd: HWND; dwTime: DWORD; dwFlags: DWORD): BOOL; stdcall;
+
 var
   Mouse: TMouse;
+  AnimateWindowProc: TAnimateWindowProc = nil;  
 
 { Drag stuff }
 
@@ -1519,7 +1635,7 @@ function GetLongHint(const Hint: string): string;
 var
   CreationControl: TWinControl = nil;
   DefaultDockTreeClass: TDockTreeClass = TDockTree;
-  
+
 function InitWndProc(HWindow: HWnd; Message, WParam: Longint;
   LParam: Longint): Longint; stdcall;
 
@@ -1538,7 +1654,10 @@ const
     { alRight }
     [akRight, akTop, akBottom],
     { alClient }
-    [akLeft, akTop, akRight, akBottom]);
+    [akLeft, akTop, akRight, akBottom],
+    { alCustom }
+    [akLeft, akTop]
+    );
 
 var
   NewStyleControls: Boolean;
@@ -1561,14 +1680,18 @@ function Imm32SetCompositionFont(hImc: HIMC; lpLogfont: PLOGFONTA): Boolean;
 function Imm32GetCompositionString(hImc: HIMC; dWord1: DWORD; lpBuf: pointer; dwBufLen: DWORD): Longint;
 function Imm32IsIME(hKl: HKL): Boolean;
 function Imm32NotifyIME(hImc: HIMC; dwAction, dwIndex, dwValue: DWORD): Boolean;
+procedure DragDone(Drop: Boolean);
 
 implementation
 
-uses Consts, Forms, ActiveX;
+uses Consts, Forms, ActiveX, Math;
 
 var
   WindowAtom: TAtom;
   ControlAtom: TAtom;
+  WindowAtomString: string;
+  ControlAtomString: string;
+  RM_GetObjectInstance: DWORD;  // registered window message
 
 { BiDiMode support routines }
 
@@ -1605,14 +1728,29 @@ begin
   end;
 end;
 
-{ Find a TWinControl given a window handle }
+function ObjectFromHWnd(Handle: HWnd): TWinControl;
+var
+  OwningProcess: DWORD;
+begin
+  GetWindowThreadProcessID(Handle, OwningProcess);
+  if OwningProcess = GetCurrentProcessID then
+    Result := Pointer(SendMessage(Handle, RM_GetObjectInstance, 0, 0))
+  else
+    Result := nil;
+end;
 
+{ Find a TWinControl given a window handle }
+{ The global atom table is trashed when the user logs off.  The extra test
+  below protects UI interactive services after the user logs off.  }
 function FindControl(Handle: HWnd): TWinControl;
 begin
   Result := nil;
-  if Handle <> 0 then
+  if (Handle <> 0) then
   begin
-    Result := Pointer(GetProp(Handle, MakeIntAtom(ControlAtom)));
+    if GlobalFindAtom(PChar(ControlAtomString)) = ControlAtom then
+      Result := Pointer(GetProp(Handle, MakeIntAtom(ControlAtom)))
+    else
+      Result := ObjectFromHWnd(Handle);
   end;
 end;
 
@@ -1829,7 +1967,7 @@ end;
 var
   DragControl: TControl;
   DragObject: TDragObject;
-  DragFreeObject: Boolean;
+  DragInternalObject: Boolean;
   DragCapture: HWND;
   DragStartPos: TPoint;
   DragSaveCursor: HCURSOR;
@@ -1840,7 +1978,6 @@ var
   QualifyingSites: TSiteList;
 
 procedure DragTo(const Pos: TPoint); forward;
-procedure DragDone(Drop: Boolean); forward;
 
 function IsDragObject(Sender: TObject): Boolean;
 var
@@ -1868,7 +2005,7 @@ end;
 
 function TDragObject.Capture: HWND;
 begin
-  Result := AllocateHWND(MouseMsg);
+  Result := Classes.AllocateHWND(MainWndProc);
   SetCapture(Result);
 end;
 
@@ -1884,10 +2021,10 @@ end;
 procedure TDragObject.ReleaseCapture(Handle: HWND);
 begin
   Windows.ReleaseCapture;
-  DeallocateHWND(Handle);
+  Classes.DeallocateHWND(Handle);
 end;
 
-procedure TDragObject.MouseMsg(var Msg: TMessage);
+procedure TDragObject.WndProc(var Msg: TMessage);
 var
   P: TPoint;
 begin
@@ -1923,7 +2060,7 @@ begin
     end;
   except
     if DragControl <> nil then DragDone(False);
-    raise;
+    Application.HandleException(Self);
   end;
 end;
 
@@ -1951,6 +2088,38 @@ end;
 procedure TDragObject.ShowDragImage;
 begin
   // do nothing
+end;
+
+procedure TDragObject.MainWndProc(var Message: TMessage);
+begin
+  try
+    WndProc(Message);
+  except
+    Application.HandleException(Self);
+  end;
+end;
+
+var
+  DragSave: TDragObject;
+
+procedure TDragObject.BeforeDestruction;
+begin
+  inherited BeforeDestruction;
+  DragSave := nil;
+end;
+
+procedure TDragObject.AfterConstruction;
+begin
+  inherited AfterConstruction;
+  DragSave := nil;
+end;
+
+{ TDragObjectEx }
+
+procedure TDragObjectEx.BeforeDestruction;
+begin
+  // Do not call inherited here otherwise DragSave will be cleared and thus
+  // we will be unable to automatically free the dragobject.
 end;
 
 { TBaseDragControlObject }
@@ -2005,6 +2174,14 @@ procedure TDragControlObject.ShowDragImage;
 begin
   if Control.GetDragImages <> nil then
     Control.GetDragImages.ShowDragImage;
+end;
+
+{ TDragControlObjectEx }
+
+procedure TDragControlObjectEx.BeforeDestruction;
+begin
+  // Do not call inherited here otherwise DragSave will be cleared and thus
+  // we will be unable to automatically free the dragobject.
 end;
 
 { TDragDockObject }
@@ -2088,6 +2265,14 @@ begin
   Result := 4;
 end;
 
+{ TDragDockObjectEx }
+
+procedure TDragDockObjectEx.BeforeDestruction;
+begin
+  // Do not call inherited here otherwise DragSave will be cleared and thus
+  // we will be unable to automatically free the dragobject.
+end;
+
 { Drag dock functions }
 
 type
@@ -2135,7 +2320,7 @@ var
   I: Integer;
   R: TRect;
   Site: TWinControl;
-  CanDock, ControlKeyDown: Boolean;
+  CanDock: Boolean;
 
   function ValidDockTarget(Target: TWinControl): Boolean;
   var
@@ -2201,8 +2386,9 @@ var
 
 begin
   Result := nil;
-  ControlKeyDown := (GetKeyState(VK_CONTROL) and not $7FFF) <> 0;
-  if (DockSiteList = nil) or ControlKeyDown then Exit;
+  if (DockSiteList = nil) or
+     not (Application.AutoDragDocking xor ((GetKeyState(VK_CONTROL) and not $7FFF) <> 0)) then
+    Exit;
   QualifyingSites.Clear;
   for I := 0 to DockSiteList.Count - 1 do
   begin
@@ -2259,10 +2445,18 @@ begin
   end;
 end;
 
+// See comments for FindControl about global atom stability in service apps.
+
 function IsDelphiHandle(Handle: HWND): Boolean;
 begin
-  Result := (Handle <> 0) and
-    (GetProp(Handle, MakeIntAtom(WindowAtom)) <> 0);
+  Result := False;
+  if Handle <> 0 then
+  begin
+    if GlobalFindAtom(PChar(WindowAtomString)) = WindowAtom then
+      Result := GetProp(Handle, MakeIntAtom(WindowAtom)) <> 0
+    else
+      Result := ObjectFromHWnd(Handle) <> nil;
+  end;
 end;
 
 function DragFindWindow(const Pos: TPoint): HWND;
@@ -2449,24 +2643,24 @@ begin
   DragControl := Control;
   try
     DragObject := nil;
-    DragFreeObject := False;
+    DragInternalObject := False;    
     if Control.FDragKind = dkDrag then
     begin
       Control.DoStartDrag(DragObject);
       if DragControl = nil then Exit;
       if DragObject = nil then
       begin
-        DragObject := TDragControlObject.Create(Control);
-        DragFreeObject := True;
-      end;
+        DragObject := TDragControlObjectEx.Create(Control);
+        DragInternalObject := True;
+      end
     end
     else begin
       Control.DoStartDock(DragObject);
       if DragControl = nil then Exit;
       if DragObject = nil then
       begin
-        DragObject := TDragDockObject.Create(Control);
-        DragFreeObject := True;
+        DragObject := TDragDockObjectEx.Create(Control);
+        DragInternalObject := True;        
       end;
       with TDragDockObject(DragObject) do
       begin
@@ -2507,7 +2701,6 @@ procedure DragDone(Drop: Boolean);
   end;
 
 var
-  DragSave: TDragObject;
   DockObject: TDragDockObject;
   Accepted: Boolean;
   DragMsg: TDragMessage;
@@ -2515,13 +2708,13 @@ var
   ParentForm: TCustomForm;
 begin
   DockObject := nil;
-  DragSave := nil;
   Accepted := False;
   if (DragObject = nil) or DragObject.Cancelling then Exit;  // recursion control
   try
     DragSave := DragObject;
     try
       DragObject.Cancelling := True;
+      DragObject.FDropped := Drop;
       DragObject.ReleaseCapture(DragCapture);
       if ActiveDrag = dopDock then
       begin
@@ -2555,7 +2748,7 @@ begin
       end;
       DragControl := nil;
       DragObject := nil;
-      if DragSave.DragTarget <> nil then
+      if Assigned(DragSave) and (DragSave.DragTarget <> nil) then
       begin
         DragMsg := dmDragDrop;
         if not Accepted then
@@ -2572,13 +2765,19 @@ begin
     finally
       QualifyingSites.Free;
       QualifyingSites := nil;
-      DragSave.Cancelling := False;
-      DragSave.Finished(DragSave.DragTarget, TargetPos.X, TargetPos.Y, Accepted);
+      if Assigned(DragSave) then
+      begin
+        DragSave.Cancelling := False;
+        DragSave.Finished(DragSave.DragTarget, TargetPos.X, TargetPos.Y, Accepted);
+      end;
       DragObject := nil;
     end;
   finally
     DragControl := nil;
-    if DragFreeObject then DragSave.Free;
+    if Assigned(DragSave) and ((DragSave is TDragControlObjectEx) or (DragSave is TDragObjectEx) or
+       (DragSave is TDragDockObjectEx)) then
+      DragSave.Free;
+    ActiveDrag := dopNone;      
   end;
 end;
 
@@ -2763,10 +2962,10 @@ begin
   if Dest is TSizeConstraints then
     with TSizeConstraints(Dest) do
     begin
-      FMaxHeight := Self.FMaxHeight;
-      FMaxWidth := Self.FMaxWidth;
       FMinHeight := Self.FMinHeight;
       FMaxHeight := Self.FMaxHeight;
+      FMinWidth := Self.FMinWidth;
+      FMaxWidth := Self.FMaxWidth;
       Change;
     end
   else inherited AssignTo(Dest);
@@ -2892,6 +3091,29 @@ begin
   if IsOnExecuteLinked then FClient.OnClick := Value;
 end;
 
+function TControlActionLink.IsHelpLinked: Boolean;
+begin
+  Result :=
+    (FClient.HelpContext = (Action as TCustomAction).HelpContext) and
+    (FClient.HelpKeyword = (Action as TCustomAction).HelpKeyword) and
+    (FClient.HelpType = (Action as TCustomAction).HelpType);
+end;
+
+procedure TControlActionLink.SetHelpKeyword(const Value: String);
+begin
+  if IsHelpLinked then FClient.HelpKeyword := Value;
+end;
+
+procedure TControlActionLink.SetHelpContext(Value: THelpContext);
+begin
+  if IsHelpLinked then FClient.HelpContext := Value;
+end;
+
+procedure TControlActionLink.SetHelpType(Value: THelpType);
+begin
+  if IsHelpLinked then FClient.HelpType := Value;
+end;
+
 { TControl }
 
 constructor TControl.Create(AOwner: TComponent);
@@ -2914,6 +3136,7 @@ begin
   FIsControl := False;
   FDragCursor := crDrag;
   FFloatingDockSiteClass := TCustomDockForm;
+  FHelpType := htContext;
 end;
 
 destructor TControl.Destroy;
@@ -3078,7 +3301,7 @@ begin
     FAlign := Value;
     Anchors := AnchorAlign[Value];
     if not (csLoading in ComponentState) and (not (csDesigning in ComponentState) or
-      (Parent <> nil)) then
+      (Parent <> nil)) and (Value <> alCustom) and (OldAlign <> alCustom) then
       if ((OldAlign in [alTop, alBottom]) = (Value in [alRight, alLeft])) and
         not (OldAlign in [alNone, alClient]) and not (Value in [alNone, alClient]) then
         SetBounds(Left, Top, Height, Width)
@@ -3114,7 +3337,12 @@ begin
   if not FAnchorMove and not (csLoading in ComponentState) then
   begin
     Anchors := FAnchors;
-    if Anchors = [akLeft, akTop] then Exit;
+    if Anchors = [akLeft, akTop] then
+    begin
+      FOriginalParentSize.X := 0;
+      FOriginalParentSize.Y := 0;
+      Exit;
+    end;
     if akRight in Anchors then
       if akLeft in Anchors then
         FAnchorRules.X := Width else
@@ -3127,8 +3355,13 @@ begin
         FAnchorRules.Y := Top
     else
       FAnchorRules.Y := Top + Height div 2;
-    if (Parent <> nil) and not (csReading in Parent.ComponentState) then
-      if Parent.HandleAllocated then
+    if Parent <> nil then
+      if csReading in Parent.ComponentState then
+      begin
+        if not (csDesigning in ComponentState) then
+          FOriginalParentSize := Parent.FDesignSize
+      end
+      else if Parent.HandleAllocated then
         FOriginalParentSize := Parent.ClientRect.BottomRight
       else
       begin
@@ -3203,6 +3436,18 @@ begin
     UpdateBoundsRect(ARect) else
     BoundsRect := ARect;
   if (NewDockSite = nil) or (NewDockSite = NullDockSite) then Parent := nil;
+end;
+
+procedure TControl.SetHelpContext(const Value: THelpContext);
+begin
+  if not (csLoading in ComponentState) then FHelpType := htContext;
+  FHelpContext := Value;
+end;
+
+procedure TControl.SetHelpKeyword(const Value: String);
+begin
+  if not (csLoading in ComponentState) then FHelpType := htKeyword;
+  FHelpKeyword := Value;
 end;
 
 procedure TControl.SetHostDockSite(Value: TWinControl);
@@ -3337,9 +3582,13 @@ begin
     if (sfHeight in Flags) and not (csFixedHeight in ControlStyle) then
       if sfHeight in Flags then
         H := MulDiv(FTop + FHeight, M, D) - Y else
-        H := MulDiv(FTop, M, D )
+        H := MulDiv(FTop, M, D)
     else H := FHeight;
     SetBounds(X, Y, W, H);
+    if [sfLeft, sfWidth] * Flags <> [] then
+      FOriginalParentSize.X := MulDiv(FOriginalParentSize.X, M, D);
+    if [sfTop, sfHeight] * Flags <> [] then
+      FOriginalParentSize.Y := MulDiv(FOriginalParentSize.Y, M, D);
     if not ParentFont and (sfFont in Flags) then
       Font.Size := MulDiv(Font.Size, M, D);
   end;
@@ -3523,7 +3772,8 @@ begin
   if FParentFont <> Value then
   begin
     FParentFont := Value;
-    if FParent <> nil then Perform(CM_PARENTFONTCHANGED, 0, 0);
+    if (FParent <> nil) and not (csReading in ComponentState) then
+      Perform(CM_PARENTFONTCHANGED, 0, 0);
   end;
 end;
 
@@ -3551,7 +3801,8 @@ begin
   if FParentShowHint <> Value then
   begin
     FParentShowHint := Value;
-    if FParent <> nil then Perform(CM_PARENTSHOWHINTCHANGED, 0, 0);
+    if (FParent <> nil) and not (csReading in ComponentState) then
+      Perform(CM_PARENTSHOWHINTCHANGED, 0, 0);
   end;
 end;
 
@@ -3575,7 +3826,8 @@ begin
   if FParentColor <> Value then
   begin
     FParentColor := Value;
-    if FParent <> nil then Perform(CM_PARENTCOLORCHANGED, 0, 0);
+    if (FParent <> nil) and not (csReading in ComponentState) then
+      Perform(CM_PARENTCOLORCHANGED, 0, 0);
   end;
 end;
 
@@ -3584,7 +3836,8 @@ begin
   if FParentBiDiMode <> Value then
   begin
     FParentBiDiMode := Value;
-    if FParent <> nil then Perform(CM_PARENTBIDIMODECHANGED, 0, 0);
+    if (FParent <> nil) and not (csReading in ComponentState) then
+      Perform(CM_PARENTBIDIMODECHANGED, 0, 0);
   end;
 end;
 
@@ -3703,6 +3956,16 @@ end;
 procedure TControl.Invalidate;
 begin
   InvalidateControl(Visible, csOpaque in ControlStyle);
+end;
+
+procedure TControl.MouseWheelHandler(var Message: TMessage);
+var
+  Form: TCustomForm;
+begin
+  Form := GetParentForm(Self);
+  if (Form <> nil) and (Form <> Self) then Form.MouseWheelHandler(TMessage(Message))
+  else with TMessage(Message) do
+    Result := Perform(CM_MOUSEWHEEL, WParam, LParam);
 end;
 
 procedure TControl.Hide;
@@ -3897,6 +4160,46 @@ begin
   if Assigned(FOnStartDock) then FOnStartDock(Self, TDragDockObject(DragObject));
 end;
 
+function TControl.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;
+  MousePos: TPoint): Boolean;
+var
+  IsNeg: Boolean;
+begin
+  Result := False;
+  if Assigned(FOnMouseWheel) then
+    FOnMouseWheel(Self, Shift, WheelDelta, MousePos, Result);
+  if not Result then
+  begin
+    Inc(FWheelAccumulator, WheelDelta);
+    while Abs(FWheelAccumulator) >= WHEEL_DELTA do
+    begin
+      IsNeg := FWheelAccumulator < 0;
+      FWheelAccumulator := Abs(FWheelAccumulator) - WHEEL_DELTA;
+      if IsNeg then
+      begin
+        if FWheelAccumulator <> 0 then FWheelAccumulator := -FWheelAccumulator;
+        Result := DoMouseWheelDown(Shift, MousePos);
+      end
+      else
+        Result := DoMouseWheelUp(Shift, MousePos);
+    end;
+  end;
+end;
+
+function TControl.DoMouseWheelDown(Shift: TShiftState; MousePos: TPoint): Boolean;
+begin
+  Result := False;
+  if Assigned(FOnMouseWheelDown) then
+    FOnMouseWheelDown(Self, Shift, MousePos, Result);
+end;
+
+function TControl.DoMouseWheelUp(Shift: TShiftState; MousePos: TPoint): Boolean;
+begin
+  Result := False;
+  if Assigned(FOnMouseWheelUp) then
+    FOnMouseWheelUp(Self, Shift, MousePos, Result);
+end;
+
 procedure TControl.DefaultDockImage(DragDockObject: TDragDockObject;
   Erase: Boolean);
 var
@@ -3948,7 +4251,7 @@ begin
   begin
     S := Source;
     IsDockOp := S is TDragDockObject;
-    if DragFreeObject and not IsDockOp then
+    if DragInternalObject and not IsDockOp then
       S := (S as TDragControlObject).Control;
     with ScreenToClient(Pos) do
       case DragMessage of
@@ -4109,6 +4412,19 @@ begin
     MinHeight, MaxWidth, MaxHeight);
 end;
 
+function TControl.CalcCursorPos: TPoint;
+begin
+  GetCursorPos(Result);
+  Result := ScreenToClient(Result);
+end;
+
+function TControl.DesignWndProc(var Message: TMessage): Boolean;
+begin
+  Result := (csDesignInteractive in ControlStyle) and ((Message.Msg = WM_RBUTTONDOWN) or
+    (Message.Msg = WM_RBUTTONUP) or (Message.Msg = WM_MOUSEMOVE) or
+    (Message.Msg = WM_RBUTTONDBLCLK));
+end;
+
 procedure TControl.DoConstrainedResize(var NewWidth, NewHeight: Integer);
 var
   MinWidth, MinHeight, MaxWidth, MaxHeight: Integer;
@@ -4187,14 +4503,16 @@ end;
 procedure TControl.WndProc(var Message: TMessage);
 var
   Form: TCustomForm;
+  KeyState: TKeyboardState;  
+  WheelMsg: TCMMouseWheel;
 begin
   if (csDesigning in ComponentState) then
   begin
     Form := GetParentForm(Self);
     if (Form <> nil) and (Form.Designer <> nil) and
-      Form.Designer.IsDesignMsg(Self, Message) then Exit;
-  end
-  else if (Message.Msg >= WM_KEYFIRST) and (Message.Msg <= WM_KEYLAST) then
+      Form.Designer.IsDesignMsg(Self, Message) then Exit
+  end;
+  if (Message.Msg >= WM_KEYFIRST) and (Message.Msg <= WM_KEYLAST) then
   begin
     Form := GetParentForm(Self);
     if (Form <> nil) and Form.WantChildKey(Self, Message) then Exit;
@@ -4219,6 +4537,22 @@ begin
         end;
       WM_LBUTTONUP:
         Exclude(FControlState, csLButtonDown);
+    else
+      with Mouse do
+        if WheelPresent and (RegWheelMessage <> 0) and
+          (Message.Msg = RegWheelMessage) then
+        begin
+          GetKeyboardState(KeyState);
+          with WheelMsg do
+          begin
+            Msg := Message.Msg;
+            ShiftState := KeyboardStateToShiftState(KeyState);
+            WheelDelta := Message.WParam;
+            Pos := TSmallPoint(Message.LParam);
+          end;
+          MouseWheelHandler(TMessage(WheelMsg));
+          Exit;
+        end;
     end;
   end
   else if Message.Msg = CM_VISIBLECHANGED then
@@ -4262,17 +4596,16 @@ end;
 
 procedure TControl.DefineProperties(Filer: TFiler);
 
-  function DoWrite: Boolean;
+  function DoWriteIsControl: Boolean;
   begin
     if Filer.Ancestor <> nil then
       Result := TControl(Filer.Ancestor).IsControl <> IsControl else
       Result := IsControl;
   end;
-
 begin
   { The call to inherited DefinedProperties is omitted since the Left and
     Top special properties are redefined with real properties }
-  Filer.DefineProperty('IsControl', ReadIsControl, WriteIsControl, DoWrite);
+  Filer.DefineProperty('IsControl', ReadIsControl, WriteIsControl, DoWriteIsControl);
 end;
 
 procedure TControl.Click;
@@ -4283,7 +4616,7 @@ begin
   if Assigned(FOnClick) and (Action <> nil) and (@FOnClick <> @Action.OnExecute) then
     FOnClick(Self)
   else if not (csDesigning in ComponentState) and (ActionLink <> nil) then
-    ActionLink.Execute
+    ActionLink.Execute(Self)
   else if Assigned(FOnClick) then
     FOnClick(Self);
 end;
@@ -4304,7 +4637,11 @@ procedure TControl.DoMouseDown(var Message: TWMMouse; Button: TMouseButton;
 begin
   if not (csNoStdEvents in ControlStyle) then
     with Message do
-      MouseDown(Button, KeysToShiftState(Keys) + Shift, XPos, YPos);
+      if (Width > 32768) or (Height > 32768) then
+        with CalcCursorPos do
+          MouseDown(Button, KeysToShiftState(Keys) + Shift, X, Y)
+      else
+        MouseDown(Button, KeysToShiftState(Keys) + Shift, Message.XPos, Message.YPos);
 end;
 
 procedure TControl.WMLButtonDown(var Message: TWMLButtonDown);
@@ -4390,7 +4727,12 @@ procedure TControl.WMMouseMove(var Message: TWMMouseMove);
 begin
   inherited;
   if not (csNoStdEvents in ControlStyle) then
-    with Message do MouseMove(KeysToShiftState(Keys), XPos, YPos);
+    with Message do
+      if (Width > 32768) or (Height > 32768) then
+        with CalcCursorPos do
+          MouseMove(KeysToShiftState(Keys), X, Y)
+      else
+        MouseMove(KeysToShiftState(Keys), Message.XPos, Message.YPos);
 end;
 
 procedure TControl.MouseUp(Button: TMouseButton;
@@ -4427,6 +4769,18 @@ procedure TControl.WMMButtonUp(var Message: TWMMButtonUp);
 begin
   inherited;
   DoMouseUp(Message, mbMiddle);
+end;
+
+procedure TControl.WMMouseWheel(var Message: TWMMouseWheel);
+begin
+  if not Mouse.WheelPresent then
+  begin
+    Mouse.FWheelPresent := True;
+    Mouse.SettingChanged(SPI_GETWHEELSCROLLLINES);
+  end;
+  TCMMouseWheel(Message).ShiftState := KeysToShiftState(Message.Keys);
+  MouseWheelHandler(TMessage(Message));
+  if Message.Result = 0 then inherited;
 end;
 
 procedure TControl.WMCancelMode(var Message: TWMCancelMode);
@@ -4506,6 +4860,19 @@ begin
   begin
     if FParent <> nil then BiDiMode := FParent.BiDiMode;
     FParentBiDiMode := True;
+  end;
+end;
+
+procedure TControl.CMMouseWheel(var Message: TCMMouseWheel);
+begin
+  with Message do
+  begin
+    Result := 0;
+    if DoMouseWheel(ShiftState, WheelDelta, SmallPointToPoint(Pos)) then
+      Message.Result := 1
+    else if Parent <> nil then
+      with TMessage(Message) do
+        Result := Parent.Perform(CM_MOUSEWHEEL, WParam, LParam);
   end;
 end;
 
@@ -4655,6 +5022,11 @@ begin
   Result := (ActionLink = nil) or not ActionLink.IsHintLinked;
 end;
 
+function TControl.IsHelpContextStored: Boolean;
+begin
+  Result := (ActionLink = nil) or not ActionLink.IsHelpContextLinked;
+end;
+
 function TControl.IsVisibleStored: Boolean;
 begin
   Result := (ActionLink = nil) or not ActionLink.IsVisibleLinked;
@@ -4778,10 +5150,14 @@ var
   PopupMenu: TPopupMenu;
 begin
   if Message.Result <> 0 then Exit;
-  if csDesigning in ComponentState then Exit;
+  if csDesigning in ComponentState then
+  begin
+    inherited;
+    Exit;
+  end;
 
   Pt := SmallPointToPoint(Message.Pos);
-  if Pt.X < 0 then
+  if InvalidPoint(Pt) then
     Temp := Pt
   else
   begin
@@ -4803,8 +5179,8 @@ begin
   begin
     SendCancelMode(nil);
     PopupMenu.PopupComponent := Self;
-    if Pt.X < 0 then
-      Pt := ClientToScreen(Point(0,0));
+    if InvalidPoint(Pt) then
+      Pt := ClientToScreen(Point(0, 0));
     PopupMenu.Popup(Pt.X, Pt.Y);
     Message.Result := 1;
   end;
@@ -4818,6 +5194,67 @@ begin
   if Assigned(FOnContextPopup) then FOnContextPopup(Self, MousePos, Handled);
 end;
 
+procedure TControl.SetConstraints(const Value: TSizeConstraints);
+begin
+  FConstraints.Assign(Value);
+end;
+
+function TControl.ClientToParent(const Point: TPoint; AParent: TWinControl): TPoint;
+var
+  LParent: TWinControl;
+begin
+  if AParent = nil then
+    AParent := Parent;
+  if AParent = nil then
+    raise EInvalidOperation.CreateFmt(SParentRequired, [Name]);
+  Result := Point;
+  Inc(Result.X, Left);
+  Inc(Result.Y, Top);
+  LParent := Parent;
+  while LParent <> nil do
+  begin
+    if LParent.Parent <> nil then
+    begin
+      Inc(Result.X, LParent.Left);
+      Inc(Result.Y, LParent.Top);
+    end;
+    if LParent = AParent then
+      Break
+    else
+      LParent := LParent.Parent;
+  end;
+  if LParent = nil then
+    raise EInvalidOperation.CreateFmt(SParentGivenNotAParent, [Name]);
+end;
+
+function TControl.ParentToClient(const Point: TPoint; AParent: TWinControl): TPoint;
+var
+  LParent: TWinControl;
+begin
+  if AParent = nil then
+    AParent := Parent;
+  if AParent = nil then
+    raise EInvalidOperation.CreateFmt(SParentRequired, [Name]);
+  Result := Point;
+  Dec(Result.X, Left);
+  Dec(Result.Y, Top);
+  LParent := Parent;
+  while LParent <> nil do
+  begin
+    if LParent.Parent <> nil then
+    begin
+      Dec(Result.X, LParent.Left);
+      Dec(Result.Y, LParent.Top);
+    end;
+    if LParent = AParent then
+      Break
+    else
+      LParent := LParent.Parent;
+  end;
+  if LParent = nil then
+    raise EInvalidOperation.CreateFmt(SParentGivenNotAParent, [Name]);
+end;
+
 { TWinControlActionLink }
 
 procedure TWinControlActionLink.AssignClient(AClient: TObject);
@@ -4828,21 +5265,23 @@ end;
 
 function TWinControlActionLink.IsHelpContextLinked: Boolean;
 begin
-  Result := inherited IsHelpContextLinked and
-    (FClient.HelpContext = (Action as TCustomAction).HelpContext);
+  { maintained for backwards compatability}
+  Result := IsHelpLinked;
 end;
 
 procedure TWinControlActionLink.SetHelpContext(Value: THelpContext);
 begin
-  if IsHelpContextLinked then FClient.HelpContext := Value
+  inherited SetHelpContext(Value);
 end;
+
+
 
 { TWinControl }
 
 constructor TWinControl.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FObjectInstance := MakeObjectInstance(MainWndProc);
+  FObjectInstance := Classes.MakeObjectInstance(MainWndProc);
   FBrush := TBrush.Create;
   FBrush.Color := FColor;
   FParentCtl3D := True;
@@ -4857,12 +5296,18 @@ begin
   FBevelInner := bvRaised;
   FBevelOuter := bvLowered;
   FBevelWidth := 1;
+  FHelpType := htContext;
 end;
 
 constructor TWinControl.CreateParented(ParentWindow: HWnd);
 begin
   FParentWindow := ParentWindow;
   Create(nil);
+end;
+
+function TWinControl.GetAlignDisabled: Boolean;
+begin
+  Result := FAlignLevel > 0;
 end;
 
 class function TWinControl.CreateParentedControl(ParentWindow: HWnd): TWinControl;
@@ -4896,7 +5341,7 @@ begin
     I := ControlCount;
   end;
   FBrush.Free;
-  if FObjectInstance <> nil then FreeObjectInstance(FObjectInstance);
+  if FObjectInstance <> nil then Classes.FreeObjectInstance(FObjectInstance);
   inherited Destroy;
 end;
 
@@ -4959,10 +5404,11 @@ var
       alBottom: Result := (C1.Top + C1.Height) >= (C2.Top + C2.Height);
       alLeft: Result := C1.Left < C2.Left;
       alRight: Result := (C1.Left + C1.Width) >= (C2.Left + C2.Width);
+      alCustom: Result := CustomAlignInsertBefore(C1, C2);
     end;
   end;
 
-  procedure DoPosition(Control: TControl; AAlign: TAlign);
+  procedure DoPosition(Control: TControl; AAlign: TAlign; AlignInfo: TAlignInfo);
   var
     NewLeft, NewTop, NewWidth, NewHeight: Integer;
     ParentSize: TPoint;
@@ -5015,10 +5461,10 @@ var
       end;
 
       NewWidth := Right - Left;
-      if (NewWidth < 0) or (AAlign in [alLeft, alRight]) then
+      if (NewWidth < 0) or (AAlign in [alLeft, alRight, alCustom]) then
         NewWidth := Control.Width;
       NewHeight := Bottom - Top;
-      if (NewHeight < 0) or (AAlign in [alTop, alBottom]) then
+      if (NewHeight < 0) or (AAlign in [alTop, alBottom, alCustom]) then
         NewHeight := Control.Height;
       NewLeft := Left;
       NewTop := Top;
@@ -5036,6 +5482,13 @@ var
           begin
             Dec(Right, NewWidth);
             NewLeft := Right;
+          end;
+        alCustom:
+          begin
+            NewLeft := Control.Left;
+            NewTop := Control.Top;
+            CustomAlignPosition(Control, NewLeft, NewTop, NewWidth,
+              NewHeight, Rect, AlignInfo);
           end;
       end;
     end;
@@ -5078,6 +5531,7 @@ var
   var
     I, J: Integer;
     Control: TControl;
+    AlignInfo: TAlignInfo;
   begin
     AlignList.Clear;
     if (AControl <> nil) and ((AAlign = alNone) or AControl.Visible or
@@ -5102,7 +5556,12 @@ var
       end;
     end;
     for I := 0 to AlignList.Count - 1 do
-      DoPosition(TControl(AlignList[I]), AAlign);
+    begin
+      AlignInfo.AlignList := AlignList;
+      AlignInfo.ControlIndex := I;
+      AlignInfo.Align := AAlign;
+      DoPosition(TControl(AlignList[I]), AAlign, AlignInfo);
+    end;
   end;
 
   function AlignWork: Boolean;
@@ -5131,7 +5590,9 @@ begin
       DoAlign(alLeft);
       DoAlign(alRight);
       DoAlign(alClient);
+      DoAlign(alCustom);
       DoAlign(alNone);// Move anchored controls
+      ControlsAligned;
     finally
       AlignList.Free;
     end;
@@ -5280,7 +5741,7 @@ begin
   AControl.ValidateContainer(Self);
   Perform(CM_CONTROLLISTCHANGE, Integer(AControl), Integer(True));
   Insert(AControl);
-  if not (csReadingState in AControl.ControlState) then
+  if not (csReading in AControl.ComponentState) then
   begin
     AControl.Perform(CM_PARENTCOLORCHANGED, 0, 0);
     AControl.Perform(CM_PARENTFONTCHANGED, 0, 0);
@@ -5442,11 +5903,11 @@ begin
         WindowClass.hInstance);
       WindowClass.lpfnWndProc := @InitWndProc;
       WindowClass.lpszClassName := WinClassName;
-      if Windows.RegisterClass(WindowClass) = 0 then RaiseLastWin32Error;
+      if Windows.RegisterClass(WindowClass) = 0 then RaiseLastOSError;
     end;
     CreationControl := Self;
     CreateWindowHandle(Params);
-    if FHandle = 0 then RaiseLastWin32Error;
+    if FHandle = 0 then RaiseLastOSError;
   end;
   StrDispose(FText);
   FText := nil;
@@ -5460,6 +5921,59 @@ begin
   with Params do
     FHandle := CreateWindowEx(ExStyle, WinClassName, Caption, Style,
       X, Y, Width, Height, WndParent, 0, WindowClass.hInstance, Param);
+end;
+
+procedure TWinControl.ReadDesignSize(Reader: TReader);
+begin
+  Reader.ReadListBegin;
+  FDesignSize.X := Reader.ReadInteger;
+  FDesignSize.Y := Reader.ReadInteger;
+  Include(FScalingFlags, sfDesignSize);
+  Reader.ReadListEnd;
+end;
+
+procedure TWinControl.WriteDesignSize(Writer: TWriter);
+begin
+  FDesignSize := ClientRect.BottomRight;
+  Writer.WriteListBegin;
+  Writer.WriteInteger(FDesignSize.X);
+  Writer.WriteInteger(FDesignSize.Y);
+  Writer.WriteListEnd;
+end;
+
+procedure TWinControl.DefineProperties(Filer: TFiler);
+
+  function PointsEqual(const P1, P2: TPoint): Boolean;
+  begin
+    Result := ((P1.X = P2.X) and (P1.Y = P2.Y));
+  end;
+
+  function DoWriteDesignSize: Boolean;
+  var
+    I: Integer;
+  begin
+    Result := True;
+    if (Filer.Ancestor = nil) or not PointsEqual(FDesignSize,
+      TWinControl(Filer.Ancestor).FDesignSize) then
+    begin
+      if FControls <> nil then
+        for I := 0 to FControls.Count - 1 do
+          with TControl(FControls[I]) do
+            if (Align = alNone) and (Anchors <> [akLeft, akTop]) then
+              Exit;
+      if FWinControls <> nil then
+        for I := 0 to FWinControls.Count - 1 do
+          with TControl(FWinControls[I]) do
+            if (Align = alNone) and (Anchors <> [akLeft, akTop]) then
+              Exit;
+    end;
+    Result := False;
+  end;
+
+begin
+  inherited;
+  Filer.DefineProperty('DesignSize', ReadDesignSize, WriteDesignSize,
+    DoWriteDesignSize);
 end;
 
 procedure TWinControl.DestroyWnd;
@@ -5481,7 +5995,7 @@ begin
   Include(FControlState, csDestroyingHandle);
   try
     if not Windows.DestroyWindow(FHandle) then
-      RaiseLastWin32Error;
+      RaiseLastOSError;
   finally
     Exclude(FControlState, csDestroyingHandle);
   end;
@@ -5515,6 +6029,19 @@ begin
     for I := 0 to ControlCount - 1 do
       Controls[I].UpdateAnchorRules;
   end;
+end;
+
+function TWinControl.CustomAlignInsertBefore(C1, C2: TControl): Boolean;
+begin
+  { Notification }
+  Result := False;
+end;
+
+procedure TWinControl.CustomAlignPosition(Control: TControl; var NewLeft,
+  NewTop, NewWidth, NewHeight: Integer; var AlignRect: TRect;
+  AlignInfo: TAlignInfo);
+begin
+  { Notification }
 end;
 
 procedure TWinControl.DestroyHandle;
@@ -5624,7 +6151,7 @@ function TWinControl.ControlAtPos(const Pos: TPoint; AllowDisabled,
 var
   I: Integer;
   P: TPoint;
-  vControl: TControl;
+  LControl: TControl;
   function GetControlAtPos(AControl: TControl): Boolean;
   begin
     with AControl do
@@ -5636,22 +6163,22 @@ var
                 (Visible and (Enabled or AllowDisabled) and
                 (Perform(CM_HITTEST, 0, Longint(PointToSmallPoint(P))) <> 0)));
       if Result then
-        vControl := AControl;
+        LControl := AControl;
     end;
   end;
 begin
-  vControl := nil;
+  LControl := nil;
   if AllowWinControls and
      (FWinControls <> nil) then
     for I := FWinControls.Count - 1 downto 0 do
       if GetControlAtPos(FWinControls[I]) then
         Break;
   if (FControls <> nil) and
-     (vControl = nil) then
+     (LControl = nil) then
     for I := FControls.Count - 1 downto 0 do
       if GetControlAtPos(FControls[I]) then
         Break;
-  Result := vControl;
+  Result := LControl;
 end;
 
 function TWinControl.IsControlMouseMsg(var Message: TWMMouse): Boolean;
@@ -5679,8 +6206,6 @@ end;
 procedure TWinControl.WndProc(var Message: TMessage);
 var
   Form: TCustomForm;
-  KeyState: TKeyboardState;
-  WheelMsg: TCMMouseWheel;
 begin
   case Message.Msg of
     WM_SETFOCUS:
@@ -5701,7 +6226,9 @@ begin
     WM_MOUSEFIRST..WM_MOUSELAST:
       if IsControlMouseMsg(TWMMouse(Message)) then
       begin
-        if Message.Result = 0 then
+        { Check HandleAllocated because IsControlMouseMsg might have freed the
+          window if user code executed something like Parent := nil. }
+        if (Message.Result = 0) and HandleAllocated then
           DefWindowProc(Handle, Message.Msg, Message.wParam, Message.lParam);
         Exit;
       end;
@@ -5711,22 +6238,6 @@ begin
       if (GetCapture = Handle) and (CaptureControl <> nil) and
         (CaptureControl.Parent = Self) then
         CaptureControl.Perform(WM_CANCELMODE, 0, 0);
-  else
-    with Mouse do
-      if WheelPresent and (RegWheelMessage <> 0) and
-        (Message.Msg = RegWheelMessage) then
-      begin
-        GetKeyboardState(KeyState);
-        with WheelMsg do
-        begin
-          Msg := Message.Msg;
-          ShiftState := KeyboardStateToShiftState(KeyState);
-          WheelDelta := Message.WParam;
-          Pos := TSmallPoint(Message.LParam);
-        end;
-        MouseWheelHandler(TMessage(WheelMsg));
-        Exit;
-      end;
   end;
   inherited WndProc(Message);
 end;
@@ -5752,7 +6263,10 @@ begin
             Result := FBrush.Handle;
           end;
       else
-        Result := CallWindowProc(FDefWndProc, FHandle, Msg, WParam, LParam);
+        if Msg = RM_GetObjectInstance then
+          Result := Integer(Self)
+        else
+          Result := CallWindowProc(FDefWndProc, FHandle, Msg, WParam, LParam);
       end;
       if Msg = WM_SETTEXT then
         SendDockNotification(Msg, WParam, LParam);
@@ -5871,6 +6385,16 @@ begin
         end;
 end;
 
+procedure TWinControl.PaintTo(Canvas: TCanvas; X, Y: Integer);
+begin
+  Canvas.Lock;
+  try
+    PaintTo(Canvas.Handle, X, Y);
+  finally
+    Canvas.Unlock;
+  end;
+end;
+
 procedure TWinControl.PaintTo(DC: HDC; X, Y: Integer);
 var
   I, EdgeFlags, BorderFlags, SaveIndex: Integer;
@@ -5915,7 +6439,7 @@ var
   MemBitmap, OldBitmap: HBITMAP;
   PS: TPaintStruct;
 begin
-  if not FDoubleBuffered or (Message. DC <> 0) then
+  if not FDoubleBuffered or (Message.DC <> 0) then
   begin
     if not (csCustomPaint in ControlState) and (ControlCount = 0) then
       inherited
@@ -6010,7 +6534,7 @@ procedure TWinControl.WMEraseBkgnd(var Message: TWMEraseBkgnd);
 begin
   { Only erase background if we're not doublebuffering or painting to memory. }
   if not FDoubleBuffered or
-    (TMessage(Message).wParam = TMessage(Message).lParam) then
+     (TMessage(Message).wParam = TMessage(Message).lParam) then
     FillRect(Message.DC, ClientRect, FBrush.Handle);
   Message.Result := 1;
 end;
@@ -6292,6 +6816,11 @@ begin
       if not TControl(FDockClients[I]).Visible then Dec(Result);
 end;
 
+procedure TWinControl.ControlsAligned;
+begin
+  { Notification }
+end;
+
 function TWinControl.CreateDockManager: IDockManager;
 begin
   if (FDockManager = nil) and DockSite and UseDockManager then
@@ -6475,81 +7004,6 @@ end;
 procedure TWinControl.WMChar(var Message: TWMChar);
 begin
   if not DoKeyPress(Message) then inherited;
-end;
-
-procedure TWinControl.CMMouseWheel(var Message: TCMMouseWheel);
-begin
-  with Message do
-  begin
-    Result := 0;
-    if DoMouseWheel(ShiftState, WheelDelta, SmallPointToPoint(Pos)) then
-      Message.Result := 1
-    else if Parent <> nil then
-      with TMessage(Message) do
-        Result := Parent.Perform(CM_MOUSEWHEEL, WParam, LParam);
-  end;
-end;
-
-procedure TWinControl.WMMouseWheel(var Message: TWMMouseWheel);
-begin
-  if not Mouse.WheelPresent then
-  begin
-    Mouse.FWheelPresent := True;
-    Mouse.SettingChanged(SPI_GETWHEELSCROLLLINES);
-  end;
-  TCMMouseWheel(Message).ShiftState := KeysToShiftState(Message.Keys);
-  MouseWheelHandler(TMessage(Message));
-  if Message.Result = 0 then inherited;
-end;
-
-procedure TWinControl.MouseWheelHandler(var Message: TMessage);
-var
-  Form: TCustomForm;
-begin
-  Form := GetParentForm(Self);
-  if (Form <> nil) and (Form <> Self) then Form.MouseWheelHandler(TMessage(Message))
-  else with TMessage(Message) do
-    Result := Perform(CM_MOUSEWHEEL, WParam, LParam);
-end;
-
-function TWinControl.DoMouseWheel(Shift: TShiftState; WheelDelta: Integer;
-  MousePos: TPoint): Boolean;
-var
-  IsNeg: Boolean;
-begin
-  Result := False;
-  if Assigned(FOnMouseWheel) then
-    FOnMouseWheel(Self, Shift, WheelDelta, MousePos, Result);
-  if not Result then
-  begin
-    Inc(FWheelAccumulator, WheelDelta);
-    while Abs(FWheelAccumulator) >= WHEEL_DELTA do
-    begin
-      IsNeg := FWheelAccumulator < 0;
-      FWheelAccumulator := Abs(FWheelAccumulator) - WHEEL_DELTA;
-      if IsNeg then
-      begin
-        if FWheelAccumulator <> 0 then FWheelAccumulator := -FWheelAccumulator;
-        Result := DoMouseWheelDown(Shift, MousePos);
-      end
-      else
-        Result := DoMouseWheelUp(Shift, MousePos);
-    end;
-  end;
-end;
-
-function TWinControl.DoMouseWheelDown(Shift: TShiftState; MousePos: TPoint): Boolean;
-begin
-  Result := False;
-  if Assigned(FOnMouseWheelDown) then
-    FOnMouseWheelDown(Self, Shift, MousePos, Result);
-end;
-
-function TWinControl.DoMouseWheelUp(Shift: TShiftState; MousePos: TPoint): Boolean;
-begin
-  Result := False;
-  if Assigned(FOnMouseWheelUp) then
-    FOnMouseWheelUp(Self, Shift, MousePos, Result);
 end;
 
 procedure TWinControl.WMSysCommand(var Message: TWMSysCommand);
@@ -6777,8 +7231,13 @@ end;
 procedure TWinControl.CMBorderChanged(var Message: TMessage);
 begin
   inherited;
-  if HandleAllocated then SetWindowPos(Handle, 0, 0,0,0,0, SWP_NOACTIVATE or
+  if HandleAllocated then
+  begin
+    SetWindowPos(Handle, 0, 0,0,0,0, SWP_NOACTIVATE or
     SWP_NOZORDER or SWP_NOMOVE or SWP_NOSIZE or SWP_FRAMECHANGED);
+    if Visible then
+      Invalidate;
+  end;
 end;
 
 procedure TWinControl.CMCtl3DChanged(var Message: TMessage);
@@ -6989,6 +7448,12 @@ begin
   DisableAlign;
   try
     ScaleControls(M, D);
+    if (M <> D) and (csReading in ComponentState) and
+      (sfDesignSize in ScalingFlags) then
+    begin
+      FDesignSize.X := MulDiv(FDesignSize.X, M, D);
+      FDesignSize.Y := MulDiv(FDesignSize.Y, M, D);
+    end;
     inherited ChangeScale(M, D);
   finally
     EnableAlign;
@@ -7267,6 +7732,25 @@ begin
   end;
 end;
 
+procedure TWinControl.InvokeHelp;
+begin
+  case HelpType of
+    htKeyword:
+      if HelpKeyword <> '' then
+      begin
+        Application.HelpKeyword(HelpKeyword);
+        Exit;
+      end;
+    htContext:
+      if HelpContext <> 0 then
+      begin
+        Application.HelpContext(HelpContext);
+        Exit;
+      end;
+  end;
+  if (Parent <> nil) then Parent.InvokeHelp;
+end;
+
 function TWinControl.IsCtl3DStored: Boolean;
 begin
   Result := not ParentCtl3D;
@@ -7277,7 +7761,8 @@ begin
   if FParentCtl3D <> Value then
   begin
     FParentCtl3D := Value;
-    if FParent <> nil then Perform(CM_PARENTCTL3DCHANGED, 0, 0);
+    if (FParent <> nil) and not (csReading in ComponentState) then
+      Perform(CM_PARENTCTL3DCHANGED, 0, 0);
   end;
 end;
 
@@ -7675,10 +8160,6 @@ begin
   Result := TWinControlActionLink;
 end;
 
-function TWinControl.IsHelpContextStored: Boolean;
-begin
-  Result := (ActionLink = nil) or not ActionLink.IsHelpContextLinked;
-end;
 
 procedure TWinControl.AssignTo(Dest: TPersistent);
 begin
@@ -7958,12 +8439,10 @@ end;
 procedure THintWindow.WMNCPaint(var Message: TMessage);
 var
   DC: HDC;
-  R: TRect;
 begin
   DC := GetWindowDC(Handle);
   try
-    R := Rect(0, 0, Width, Height);
-    DrawEdge(DC, R, BDR_RAISEDOUTER, BF_RECT);
+    NCPaint(DC);
   finally
     ReleaseDC(Handle, DC);
   end;
@@ -7976,7 +8455,7 @@ begin
   R := ClientRect;
   Inc(R.Left, 2);
   Inc(R.Top, 2);
-  Canvas.Font.Color := clInfoText;
+  Canvas.Font.Color := Screen.HintFont.Color;
   DrawText(Canvas.Handle, PChar(Caption), -1, R, DT_LEFT or DT_NOPREFIX or
     DT_WORDBREAK or DrawTextBiDiModeFlagsReadingOnly);
 end;
@@ -8006,6 +8485,14 @@ begin
 end;
 
 procedure THintWindow.ActivateHint(Rect: TRect; const AHint: string);
+type
+  TAnimationStyle = (atSlideNeg, atSlidePos, atBlend);
+const
+  AnimationStyle: array[TAnimationStyle] of Integer = (AW_VER_NEGATIVE,
+    AW_VER_POSITIVE, AW_BLEND);
+var
+  Animate: BOOL;
+  Style: TAnimationStyle;
 begin
   FActivating := True;
   try
@@ -8019,9 +8506,28 @@ begin
     if Rect.Left < Screen.DesktopLeft then Rect.Left := Screen.DesktopLeft;
     if Rect.Bottom < Screen.DesktopTop then Rect.Bottom := Screen.DesktopTop;
     SetWindowPos(Handle, HWND_TOPMOST, Rect.Left, Rect.Top, Width, Height,
-      SWP_SHOWWINDOW or SWP_NOACTIVATE);
+      SWP_NOACTIVATE);
+    if (GetTickCount - FLastActive > 250) and (Length(AHint) < 100) and
+       Assigned(AnimateWindowProc) then
+    begin
+      SystemParametersInfo(SPI_GETTOOLTIPANIMATION, 0, @Animate, 0);
+      if Animate then
+      begin
+        SystemParametersInfo(SPI_GETTOOLTIPFADE, 0, @Animate, 0);
+        if Animate then
+          Style := atBlend
+        else
+          if Mouse.GetCursorPos.Y > Rect.Top then
+            Style := atSlideNeg
+          else
+            Style := atSlidePos;
+        AnimateWindowProc(Handle, 100, AnimationStyle[Style] or AW_SLIDE);
+      end;
+    end;
+    ShowWindow(Handle, SW_SHOWNOACTIVATE);
     Invalidate;
   finally
+    FLastActive := GetTickCount;
     FActivating := False;
   end;
 end;
@@ -8038,6 +8544,20 @@ begin
     DT_WORDBREAK or DT_NOPREFIX or DrawTextBiDiModeFlagsReadingOnly);
   Inc(Result.Right, 6);
   Inc(Result.Bottom, 2);
+end;
+
+procedure THintWindow.NCPaint(DC: HDC);
+var
+  R: TRect;
+begin
+  R := Rect(0, 0, Width, Height);
+  Windows.DrawEdge(DC, R, BDR_RAISEDOUTER, BF_RECT);
+end;
+
+procedure THintWindow.WMPrint(var Message: TMessage);
+begin
+  PaintTo(Message.WParam, 0, 0);
+  NCPaint(Message.WParam);
 end;
 
 { TDragImageList }
@@ -8221,6 +8741,20 @@ end;
 
 { TDockZone }
 
+function NextVisibleZone(StartZone: TDockZone): TDockZone;
+begin
+  Result := StartZone;
+  while Assigned(Result) and not Result.Visible do
+    Result := Result.FNextSibling;
+end;
+
+function IsOrientationSet(Zone: TDockZone): Boolean;
+begin
+  Result := (Assigned(Zone.FParentZone) and
+             (Zone.FParentZone.FOrientation <> doNoOrient)) or
+            ((Zone.FTree.FTopZone = Zone) and (Zone.FOrientation <> doNoOrient));
+end;
+
 constructor TDockZone.Create(Tree: TDockTree);
 begin
   FTree := Tree;
@@ -8236,6 +8770,38 @@ begin
   begin
     Zone := Zone.FNextSibling;
     Inc(Result);
+  end;
+end;
+
+function TDockZone.GetVisibleChildCount: Integer;
+var
+  Zone: TDockZone;
+begin
+  Result := 0;
+  Zone := FirstVisibleChild;
+  while Zone <> nil do
+  begin
+    Zone := Zone.NextVisible;
+    Inc(Result);
+  end;
+end;
+
+function TDockZone.GetVisible: Boolean;
+var
+  NextChild: TDockZone;
+begin
+  if Assigned(FChildControl) then
+    Result := FChildControl.Visible
+  else
+  begin
+    Result := True;
+    NextChild := FirstVisibleChild;
+    while Assigned(NextChild) do
+    begin
+      if NextChild.Visible then Exit;
+      NextChild := NextChild.FNextSibling;
+    end;
+    Result := False;
   end;
 end;
 
@@ -8272,7 +8838,7 @@ begin
     if (Zone.FParentZone.FOrientation = TDockOrientation(Orient)) and
       (Zone.FPrevSibling <> nil) then
     begin
-      Result := Zone.FPrevSibling.FZoneLimit;
+      Result := Zone.FPrevSibling.ZoneLimit;
       Exit;
     end
     else
@@ -8294,7 +8860,7 @@ var
   R: TRect;
 begin
   if (Self = FTree.FTopZone) or ((FParentZone = FTree.FTopZone) and
-    (FChildControl <> nil) and (FTree.FTopZone.ChildCount = 1)) then
+    (FChildControl <> nil) and (FTree.FTopZone.VisibleChildCount = 1)) then
   begin
     R := FTree.FDockSite.ClientRect;
     FTree.FDockSite.AdjustClientRect(R);
@@ -8309,7 +8875,7 @@ begin
     begin
       if Zone.FParentZone.FOrientation = TDockOrientation(Orient) then
       begin
-        Result := Zone.FZoneLimit - Zone.LimitBegin;
+        Result := Zone.ZoneLimit - Zone.LimitBegin;
         Exit;
       end
       else
@@ -8318,35 +8884,33 @@ begin
     if FTree.FTopZone.FOrientation = TDockOrientation(Orient) then
       Result := FTree.FTopXYLimit
     else
-      Result := FTree.FTopZone.FZoneLimit;
+      Result := FTree.FTopZone.ZoneLimit;
   end;
 end;
 
 procedure TDockZone.ResetChildren;
 var
-  OldLimit: Integer;
+  MaxLimit: Integer;
   NewLimit: Integer;
   ChildNode: TDockZone;
 begin
+  if (VisibleChildCount = 0) or (FOrientation = doNoOrient) then Exit;
+  ChildNode := FirstVisibleChild;
   case FOrientation of
-    doHorizontal: NewLimit := Height;
-    doVertical: NewLimit := Width;
+    doHorizontal: MaxLimit := Height;
+    doVertical: MaxLimit := Width;
   else
-    Exit;
+    MaxLimit := 0;
   end;
-  ChildNode := FChildZones;
-  OldLimit := NewLimit;
-  NewLimit := NewLimit div ChildCount;
-  ChildNode.FZoneLimit := ChildNode.LimitBegin + NewLimit;
-  ChildNode.Update;
-  ChildNode := ChildNode.FNextSibling;
+  NewLimit := MaxLimit div VisibleChildCount;
   while ChildNode <> nil do
   begin
-    ChildNode.FZoneLimit := ChildNode.FPrevSibling.FZoneLimit + NewLimit;
     if ChildNode.FNextSibling = nil then
-      ChildNode.FZoneLimit := ChildNode.FZoneLimit + (OldLimit mod NewLimit);
+      ChildNode.ZoneLimit := MaxLimit
+    else
+      ChildNode.ZoneLimit := ChildNode.LimitBegin + NewLimit;
     ChildNode.Update;
-    ChildNode := ChildNode.FNextSibling;
+    ChildNode := ChildNode.NextVisible;
   end;
 end;
 
@@ -8392,7 +8956,7 @@ procedure TDockZone.Update;
     Parent := FParentZone;
     while Parent <> nil do
     begin
-      if Parent.FNextSibling <> nil then
+      if Parent.NextVisible <> nil then
       begin
         Result := True;
         Exit;
@@ -8405,7 +8969,7 @@ var
   NewWidth, NewHeight: Integer;
   R: TRect;
 begin
-  if (FChildControl <> nil) and (FTree.FUpdateCount = 0) then
+  if (FChildControl <> nil) and FChildControl.Visible and (FTree.FUpdateCount = 0) then
   begin
     FChildControl.DockOrientation := FParentZone.FOrientation;
     NewWidth := Width;
@@ -8417,11 +8981,11 @@ begin
       else
         Dec(NewHeight, FTree.FBorderWidth);
     end;
-    if (FNextSibling <> nil) or ((FParentZone <> FTree.FTopZone) and
+    if (NextVisible <> nil) or ((FParentZone <> FTree.FTopZone) and
       ((FParentZone.FOrientation = FTree.FTopZone.FOrientation) and
-      (FZoneLimit < FTree.FTopXYLimit)) or
+      (ZoneLimit < FTree.FTopXYLimit)) or
       ((FParentZone.FOrientation <> FTree.FTopZone.FOrientation) and
-      (FZoneLimit < FTree.FTopZone.FZoneLimit))) then
+      (ZoneLimit < FTree.FTopZone.ZoneLimit))) then
     begin
       if FParentZone.FOrientation = doHorizontal then
         Dec(NewHeight, FTree.FBorderWidth)
@@ -8432,6 +8996,82 @@ begin
     FTree.AdjustDockRect(FChildControl, R);
     FChildControl.BoundsRect := R;
   end;
+end;
+
+function TDockZone.GetZoneLimit: Integer;
+begin
+  if not Visible and IsOrientationSet(Self) then
+    // LimitSize will be zero and zone will take up no space
+    Result := GetLimitBegin
+  else
+    Result := FZoneLimit;
+end;
+
+procedure TDockZone.SetZoneLimit(const Value: Integer);
+begin
+  FZoneLimit := Value;
+end;
+
+procedure TDockZone.ExpandZoneLimit(NewLimit: Integer);
+
+  function GetLastChildZone(Zone: TDockZone): TDockZone;
+  begin
+    { Assumes Zone has at least one child }
+    Result := Zone.FChildZones;
+    while Result.FNextSibling <> nil do
+      Result := Result.FNextSibling;
+  end;
+
+var
+  LastChild, ChildZone: TDockZone;
+begin
+  ZoneLimit := NewLimit;
+  ChildZone := FChildZones;
+  while Assigned(ChildZone) do
+  begin
+    if ChildZone.ChildCount > 0 then
+    begin
+      LastChild := GetLastChildZone(ChildZone);
+      LastChild.ExpandZoneLimit(NewLimit);
+    end;
+    ChildZone := ChildZone.FNextSibling;
+  end;
+end;
+
+procedure TDockZone.ResetZoneLimits;
+var
+  ChildZone: TDockZone;
+begin
+  ChildZone := FChildZones;
+  while Assigned(ChildZone) do
+  begin
+    { If the ZoneLimit is too big or too small then just reset all child zones }
+    if (ChildZone.ZoneLimit < ChildZone.LimitBegin) or
+       (ChildZone.ZoneLimit > LimitSize) then
+    begin
+      ResetChildren;
+      FTree.ForEachAt(Self, FTree.UpdateZone);
+    end;
+    ChildZone.ResetZoneLimits;
+    ChildZone := ChildZone.FNextSibling;
+  end;
+end;
+
+function TDockZone.NextVisible: TDockZone;
+begin
+  Result := NextVisibleZone(FNextSibling);
+end;
+
+function TDockZone.PrevVisible: TDockZone;
+begin
+  Result := FPrevSibling;
+  while Assigned(Result) and not Result.Visible do
+    Result := Result.FPrevSibling;
+end;
+
+function TDockZone.FirstVisibleChild: TDockZone;
+begin
+  Result := NextVisibleZone(FChildZones)
 end;
 
 { TDockTree }
@@ -8471,7 +9111,10 @@ end;
 destructor TDockTree.Destroy;
 begin
   if @FOldWndProc <> nil then
+  begin
     FDockSite.WindowProc := FOldWndProc;
+    FOldWndProc := nil;
+  end;
   PruneZone(FTopZone);
   FBrush.Free;
   inherited Destroy;
@@ -8566,8 +9209,8 @@ procedure TDockTree.InsertControl(Control: TControl; InsertAt: TAlign;
   DropCtl: TControl);
 const
   OrientArray: array[TAlign] of TDockOrientation = (doNoOrient, doHorizontal,
-    doHorizontal, doVertical, doVertical, doNoOrient);
-  MakeLast: array[TAlign] of Boolean = (False, False, True, False, True, False);
+    doHorizontal, doVertical, doVertical, doNoOrient, doNoOrient); { alCustom }
+  MakeLast: array[TAlign] of Boolean = (False, False, True, False, True, False, False);  { alCustom }
 var
   Sibling, Me: TDockZone;
   InsertOrientation, CurrentOrientation: TDockOrientation;
@@ -8615,12 +9258,12 @@ begin
       case InsertOrientation of
         doHorizontal:
           begin
-            FTopZone.FZoneLimit := FTopZone.FChildZones.Width;
+            FTopZone.ZoneLimit := FTopZone.FChildZones.Width;
             FTopXYLimit := FTopZone.FChildZones.Height;
           end;
         doVertical:
           begin
-            FTopZone.FZoneLimit := FTopZone.FChildZones.Height;
+            FTopZone.ZoneLimit := FTopZone.FChildZones.Height;
             FTopXYLimit := FTopZone.FChildZones.Width;
           end;
       end;
@@ -8653,8 +9296,8 @@ begin
   if SiblingZone = nil then
   begin
     // if SiblingZone is nil, then we need to insert zone as a child of the top
-    NewParent.FZoneLimit := FTopXYLimit;
-    FTopXYLimit := FTopZone.FZoneLimit;
+    NewParent.ZoneLimit := FTopXYLimit;
+    FTopXYLimit := FTopZone.ZoneLimit;
     FShiftScaleOrient := ParentOrientation;
     FScaleBy := 0.5;
     if InsertLast then
@@ -8675,16 +9318,16 @@ begin
       NewZone.FParentZone := NewParent;
       FTopZone := NewParent;
       ForEachAt(NewParent.FChildZones, ScaleZone);
-      FShiftBy := FTopZone.FZoneLimit div 2;
+      FShiftBy := FTopZone.ZoneLimit div 2;
       ForEachAt(NewParent.FChildZones, ShiftZone);
-      NewZone.FZoneLimit := FTopZone.FZoneLimit div 2;
+      NewZone.ZoneLimit := FTopZone.ZoneLimit div 2;
     end;
     ForEachAt(nil, UpdateZone);
   end
   else begin
     // if SiblingZone is not nil, we need to insert a new parent zone for me
     // and my SiblingZone
-    NewParent.FZoneLimit := SiblingZone.FZoneLimit;
+    NewParent.ZoneLimit := SiblingZone.ZoneLimit;
     NewParent.FParentZone := SiblingZone.FParentZone;
     NewParent.FPrevSibling := SiblingZone.FPrevSibling;
     if NewParent.FPrevSibling <> nil then
@@ -8714,6 +9357,7 @@ begin
     // Set bounds of new children
   end;
   NewParent.ResetChildren;
+  NewParent.ResetZoneLimits;
   ForEachAt(nil, UpdateZone);
 end;
 
@@ -8751,6 +9395,7 @@ begin
   end;
   // Set up zone limits for all siblings
   SiblingZone.FParentZone.ResetChildren;
+  SiblingZone.FParentZone.ResetZoneLimits;
 end;
 
 function TDockTree.InternalHitTest(const MousePos: TPoint; out HTFlag: Integer): TDockZone;
@@ -8763,16 +9408,16 @@ var
   begin
     // Check for hit on bottom splitter...
     if (Zone.FParentZone.FOrientation = doHorizontal) and
-      ((MousePos.Y <= Zone.FZoneLimit) and
-      (MousePos.Y >= Zone.FZoneLimit - FBorderWidth)) then
+      ((MousePos.Y <= Zone.ZoneLimit) and
+      (MousePos.Y >= Zone.ZoneLimit - FBorderWidth)) then
     begin
       HTFlag := HTBORDER;
       ResultZone := Zone;
     end
     // Check for hit on left splitter...
     else if (Zone.FParentZone.FOrientation = doVertical) and
-      ((MousePos.X <= Zone.FZoneLimit) and
-      (MousePos.X >= Zone.FZoneLimit - FBorderWidth)) then
+      ((MousePos.X <= Zone.ZoneLimit) and
+      (MousePos.X >= Zone.ZoneLimit - FBorderWidth)) then
     begin
       HTFlag := HTBORDER;
       ResultZone := Zone;
@@ -8804,10 +9449,10 @@ var
       end;
     end;
     // Recurse to next zone...
-    if (ResultZone = nil) and (Zone.FNextSibling <> nil) then
-      DoFindZone(Zone.FNextSibling);
-    if (ResultZone = nil) and (Zone.FChildZones <> nil) then
-      DoFindZone(Zone.FChildZones);
+    if (ResultZone = nil) and (Zone.NextVisible <> nil) then
+      DoFindZone(Zone.NextVisible);
+    if (ResultZone = nil) and (Zone.FirstVisibleChild <> nil) then
+      DoFindZone(Zone.FirstVisibleChild);
   end;
 
   function FindControlAtPos(const Pos: TPoint): TControl;
@@ -8841,9 +9486,8 @@ begin
     ResultZone := FindControlZone(CtlAtPos);
     if ResultZone <> nil then HTFlag := HTCLIENT;
   end
-  else if (FTopZone.FChildZones <> nil) and (FTopZone.ChildCount >= 1) and
-    (CtlAtPos = nil) then
-    DoFindZone(FTopZone.FChildZones);
+  else if (FTopZone.FirstVisibleChild <> nil) and (CtlAtPos = nil) then
+    DoFindZone(FTopZone.FirstVisibleChild);
   Result := ResultZone;
 end;
 
@@ -8904,7 +9548,7 @@ begin
         if Level = TreeStreamEndFlag then Break;
         Zone := TDockZone.Create(Self);
         Read(Zone.FOrientation, SizeOf(Zone.FOrientation));
-        Read(Zone.FZoneLimit, SizeOf(Zone.FZoneLimit));
+        Read(Zone.FZoneLimit, SizeOf(Zone.FZoneLimit)); 
         ReadControlName(CompName);
         if CompName <> '' then
           if not Zone.SetControlName(CompName) then
@@ -8940,7 +9584,6 @@ begin
   finally
     EndUpdate;
   end;
-//  ResetBounds(True);
 end;
 
 procedure TDockTree.PaintDockFrame(Canvas: TCanvas; Control: TControl;
@@ -9140,7 +9783,7 @@ begin
         FTopZone.FChildZones := Sibling;
         Sibling.FPrevSibling := nil;
         Sibling.FNextSibling := nil;
-        Sibling.FZoneLimit := FTopZone.LimitSize;
+        Sibling.ZoneLimit := FTopZone.LimitSize;
         Sibling.Update;
       end
       else begin
@@ -9158,8 +9801,8 @@ begin
       if Zone.FParentZone = FTopZone then
       begin
         // Zone is a child of topmost zone, so sibling becomes topmost
-        Sibling.FZoneLimit := FTopXYLimit;
-        FTopXYLimit := FTopZone.FZoneLimit;
+        Sibling.ExpandZoneLimit(FTopXYLimit);
+        FTopXYLimit := FTopZone.ZoneLimit;
         FTopZone.Free;
         FTopZone := Sibling;
         Sibling.FNextSibling := nil;
@@ -9206,7 +9849,7 @@ begin
       Zone.FPrevSibling.FNextSibling := Zone.FNextSibling;
       if Zone.FNextSibling <> nil then
         Zone.FNextSibling.FPrevSibling := Zone.FPrevSibling;
-      Zone.FPrevSibling.FZoneLimit := Zone.FZoneLimit;
+      Zone.FPrevSibling.ExpandZoneLimit(Zone.ZoneLimit);
       Zone.FPrevSibling.Update;
     end;
     ForEachAt(Zone.FParentZone, UpdateZone);
@@ -9219,7 +9862,7 @@ var
   R: TRect;
 begin
   if not (csLoading in FDockSite.ComponentState) and
-    (FTopZone <> nil) and (FDockSite.DockClientCount > 0) then
+    (FTopZone <> nil) and (FDockSite.VisibleDockClientCount > 0) then
   begin
     R := FDockSite.ClientRect;
     FDockSite.AdjustClientRect(R);
@@ -9229,12 +9872,12 @@ begin
       case FTopZone.FOrientation of
         doHorizontal:
           begin
-            FTopZone.FZoneLimit := R.Right - R.Left;
+            FTopZone.ZoneLimit := R.Right - R.Left;
             FTopXYLimit := R.Bottom - R.Top;
           end;
         doVertical:
           begin
-            FTopZone.FZoneLimit := R.Bottom - R.Top;
+            FTopZone.ZoneLimit := R.Bottom - R.Top;
             FTopXYLimit := R.Right - R.Left;
           end;
       end;
@@ -9252,7 +9895,7 @@ begin
   if Zone = nil then Exit;
   if (Zone <> nil) and (Zone.FParentZone.FOrientation = FShiftScaleOrient) then
     with Zone do
-      FZoneLimit := Integer(Round(FZoneLimit * FScaleBy));
+      ZoneLimit := Integer(Round(ZoneLimit * FScaleBy));
 end;
 
 procedure TDockTree.SaveToStream(Stream: TStream);
@@ -9319,13 +9962,15 @@ procedure TDockTree.SetNewBounds(Zone: TDockZone);
   begin
     if Zone <> nil then
     begin
-      if (Zone.FNextSibling = nil) and (Zone <> FTopZone) then
+      if (Zone.NextVisible = nil) and (Zone <> FTopZone) and (Zone.Visible) then
       begin
-        if Zone.FParentZone = FTopZone then Zone.FZoneLimit := FTopXYLimit
-        else Zone.FZoneLimit := Zone.FParentZone.FParentZone.FZoneLimit;
+        if Zone.FParentZone = FTopZone then
+          Zone.ZoneLimit := FTopXYLimit
+        else
+          Zone.ZoneLimit := Zone.FParentZone.FParentZone.ZoneLimit;
       end;
-      if Zone.FChildZones <> nil then DoSetNewBounds(Zone.FChildZones);
-      if Zone.FNextSibling <> nil then DoSetNewBounds(Zone.FNextSibling);
+      DoSetNewBounds(Zone.FirstVisibleChild);
+      DoSetNewBounds(Zone.NextVisible);
     end;
   end;
 
@@ -9344,8 +9989,8 @@ end;
 procedure TDockTree.ShiftZone(Zone: TDockZone);
 begin
   if (Zone <> nil) and (Zone <> FTopZone) and
-    (Zone.FParentZone.FOrientation = FShiftScaleOrient) then
-    Inc(Zone.FZoneLimit, FShiftBy);
+     (Zone.FParentZone.FOrientation = FShiftScaleOrient) then
+    Zone.ZoneLimit := Zone.ZoneLimit + FShiftBy;
 end;
 
 procedure TDockTree.SplitterMouseDown(OnZone: TDockZone; MousePos: TPoint);
@@ -9365,8 +10010,8 @@ begin
   DrawSizeSplitter;
   ReleaseDC(FSizingWnd, FSizingDC);
   if FSizingZone.FParentZone.FOrientation = doHorizontal then
-    FSizingZone.FZoneLimit := FSizePos.y + (FBorderWidth div 2) else
-    FSizingZone.FZoneLimit := FSizePos.x + (FBorderWidth div 2);
+    FSizingZone.ZoneLimit := FSizePos.y + (FBorderWidth div 2) else
+    FSizingZone.ZoneLimit := FSizePos.x + (FBorderWidth div 2);
   SetNewBounds(FSizingZone.FParentZone);
   ForEachAt(FSizingZone.FParentZone, UpdateZone);
   FSizingZone := nil;
@@ -9417,28 +10062,22 @@ function TDockTree.GetNextLimit(AZone: TDockZone): Integer;
 var
   LimitResult: Integer;
 
-  function Min(I1, I2: Integer): Integer;
-  begin
-    if I1 > I2 then Result := I2
-    else Result := I1;
-  end;
-
   procedure DoGetNextLimit(Zone: TDockZone);
   begin
     if (Zone <> AZone) and
       (Zone.FParentZone.FOrientation = AZone.FParentZone.FOrientation) and
-      (Zone.FZoneLimit > AZone.FZoneLimit) and ((Zone.FChildControl = nil) or
+      (Zone.ZoneLimit > AZone.ZoneLimit) and ((Zone.FChildControl = nil) or
       ((Zone.FChildControl <> nil) and (Zone.FChildControl.Visible))) then
-      LimitResult := Min(LimitResult, Zone.FZoneLimit);
+      LimitResult := Min(LimitResult, Zone.ZoneLimit);
     if Zone.FNextSibling <> nil then DoGetNextLimit(Zone.FNextSibling);
     if Zone.FChildZones <> nil then DoGetNextLimit(Zone.FChildZones);
   end;
 
 begin
   if AZone.FNextSibling <> nil then
-    LimitResult := AZone.FNextSibling.FZoneLimit
+    LimitResult := AZone.FNextSibling.ZoneLimit
   else
-    LimitResult := AZone.FZoneLimit + AZone.LimitSize;
+    LimitResult := AZone.ZoneLimit + AZone.LimitSize;
   DoGetNextLimit(FTopZone.FChildZones);
   Result := LimitResult;
 end;
@@ -9466,23 +10105,92 @@ procedure TDockTree.ControlVisibilityChanged(Control: TControl;
     end;
   end;
 
+  procedure HideZone(const Zone: TDockZone);
+  begin
+    if IsOrientationSet(Zone) then
+      Zone.FOldSize := Zone.FZoneLimit - Zone.LimitBegin
+    else
+      Zone.FOldSize := 0;
+
+    if Assigned(Zone.FParentZone) and not (Zone.FParentZone.Visible) then
+      HideZone(Zone.FParentZone);
+    { When hiding, increase ZoneLimit for the zone before us }
+    if Zone.PrevVisible <> nil then
+      Zone.PrevVisible.ExpandZoneLimit(Zone.FZoneLimit);
+    ForEachAt(Zone.FParentZone, UpdateZone);
+  end;
+
+  procedure ShowZone(const Zone: TDockZone);
+  var
+    ResetAll: Boolean;
+    MinSibSize: Integer;
+  begin
+    if Assigned(Zone.FParentZone) and (Zone.FParentZone <> FTopZone) and
+       (Zone.FParentZone.VisibleChildCount = 1) then
+      ShowZone(Zone.FParentZone);
+    if (Zone.FParentZone.VisibleChildCount = 1) or (Zone.FOldSize = 0) then
+      ResetAll := True
+    else
+    begin
+      ResetAll := False;
+      MinSibSize := FGrabberSize + FBorderWidth + 14;
+      if (Zone.PrevVisible <> nil) then
+        with Zone.PrevVisible do
+        begin
+          if ((ZoneLimit - LimitBegin) - Zone.FOldSize) < MinSibSize then
+            { Resizing the previous sibling will make it too small, resize all }
+            ResetAll := True
+          else
+          begin
+            { Make room before us as needed }
+            ZoneLimit := ZoneLimit - Zone.FOldSize;
+            { and adjust our own zone limit to reflect the previous size }
+            Zone.ZoneLimit := ZoneLimit + Zone.FOldSize;
+            Zone.PrevVisible.ResetZoneLimits;
+          end;
+        end
+      else if (Zone.NextVisible <> nil) then
+      begin
+        if (Zone.NextVisible.ZoneLimit - Zone.FOldSize) < MinSibSize then
+          { Resizing the next sibling will make it too small, resize all }
+          ResetAll := True
+        else
+        begin
+          { Adjust zone limit to make room for controls following this one }
+          Zone.ZoneLimit := Zone.LimitBegin + Zone.FOldSize;
+          Zone.NextVisible.ResetZoneLimits;
+        end;
+      end;
+    end;
+    if ResetAll then
+      Zone.FParentZone.ResetChildren;
+    ForEachAt(Zone.FParentZone, UpdateZone);
+  end;
+
 var
   HitTest: Integer;
-  DropCtlZone: TDockZone;
+  CtlZone, DropCtlZone: TDockZone;
   DropCtl: TControl;
 begin
-  if Visible then
+  CtlZone := FindControlZone(Control);
+  if Assigned(CtlZone) then
   begin
-    if FindControlZone(Control) = nil then
-    begin
-      DropCtlZone := InternalHitTest(Point(Control.Left, Control.Top), HitTest);
-      if DropCtlZone <> nil then DropCtl := DropCtlZone.FChildControl
-      else DropCtl := nil;
-      InsertControl(Control, GetDockAlign(Control, DropCtl), DropCtl);
-    end;
+    if Visible then
+      ShowZone(CtlZone)
+    else
+      HideZone(CtlZone);
+    FDockSite.Invalidate;
   end
-  else
-    RemoveControl(Control)
+  { Existing control that was never docked, create a new dock zone for it }
+  else if Visible then
+  begin
+    DropCtlZone := InternalHitTest(Point(Control.Left, Control.Top), HitTest);
+    if DropCtlZone <> nil then
+      DropCtl := DropCtlZone.FChildControl
+    else
+      DropCtl := nil;
+    InsertControl(Control, GetDockAlign(Control, DropCtl), DropCtl);
+  end;
 end;
 
 procedure TDockTree.WindowProc(var Message: TMessage);
@@ -9554,13 +10262,13 @@ begin
           else if HitTestValue = HTCAPTION then
           begin
             if (not PeekMessage(Msg, FDockSite.Handle, WM_LBUTTONDBLCLK,
-              WM_LBUTTONDBLCLK, PM_NOREMOVE)) and
-              (TempZone.FChildControl is TWinControl) then
+               WM_LBUTTONDBLCLK, PM_NOREMOVE)) and
+               (TempZone.FChildControl is TWinControl) then
               TWinControl(TempZone.FChildControl).SetFocus;
-	    if (TempZone.FChildControl.DragKind = dkDock) and
-              (TempZone.FChildControl.DragMode = dmAutomatic)then
-                TempZone.FChildControl.BeginDrag(False);
-	    Exit;
+            if (TempZone.FChildControl.DragKind = dkDock) and
+               (TempZone.FChildControl.DragMode = dmAutomatic)then
+              TempZone.FChildControl.BeginDrag(False);
+            Exit;
           end;
         end;
       end;
@@ -9620,7 +10328,8 @@ begin
         Exit;
       end;
   end;
-  FOldWndProc(Message);
+  if Assigned(FOldWndProc) then
+    FOldWndProc(Message);
 end;
 
 { TMouse }
@@ -9654,6 +10363,11 @@ end;
 function TMouse.GetCursorPos: TPoint;
 begin
   Win32Check(Windows.GetCursorPos(Result));
+end;
+
+function TMouse.GetIsDragging: Boolean;
+begin
+  Result := ActiveDrag <> dopNone;
 end;
 
 procedure TMouse.GetMouseData;
@@ -9911,6 +10625,55 @@ begin
     Result := False;
 end;
 
+{ Modal result testers }
+
+function IsPositiveResult(const AModalResult: TModalResult): Boolean;
+begin
+  case AModalResult of
+    mrOk, mrYes, mrAll, mrYesToAll: Result := True;
+  else
+    Result := False;
+  end;
+end;
+
+function IsNegativeResult(const AModalResult: TModalResult): Boolean;
+begin
+  case AModalResult of
+    mrNo, mrNoToAll: Result := True;
+  else
+    Result := False;
+  end;
+end;
+
+function IsAbortResult(const AModalResult: TModalResult): Boolean;
+begin
+  case AModalResult of
+    mrCancel, mrAbort: Result := True;
+  else
+    Result := False;
+  end;
+end;
+
+function IsAnAllResult(const AModalResult: TModalResult): Boolean;
+begin
+  case AModalResult of
+    mrAll, mrNoToAll, mrYesToAll: Result := True;
+  else
+    Result := False;
+  end;
+end;
+
+function StripAllFromResult(const AModalResult: TModalResult): TModalResult;
+begin
+  case AModalResult of
+    mrAll:      Result := mrOk;
+    mrNoToAll:  Result := mrNo;
+    mrYesToAll: Result := mrYes;
+  else
+    Result := AModalResult;
+  end;
+end;
+
 { Initialization and cleanup }
 
 procedure DoneControls;
@@ -9923,34 +10686,53 @@ begin
   Mouse := nil;
   CanvasList.Free;
   GlobalDeleteAtom(ControlAtom);
+  ControlAtomString := '';
   GlobalDeleteAtom(WindowAtom);
+  WindowAtomString := '';
   if IMM32DLL <> 0 then FreeLibrary(IMM32DLL);
 end;
 
 procedure InitControls;
 var
-  AtomText: array[0..31] of Char;
+  UserHandle: HMODULE;
 begin
-  WindowAtom := GlobalAddAtom(StrFmt(AtomText, 'Delphi%.8X',
-    [GetCurrentProcessID]));
-  ControlAtom := GlobalAddAtom(
-    StrFmt(AtomText, 'ControlOfs%.8X%.8X', [HInstance, GetCurrentThreadID]));
+  WindowAtomString := Format('Delphi%.8X',[GetCurrentProcessID]);
+  WindowAtom := GlobalAddAtom(PChar(WindowAtomString));
+  ControlAtomString := Format('ControlOfs%.8X%.8X', [HInstance, GetCurrentThreadID]);
+  ControlAtom := GlobalAddAtom(PChar(ControlAtomString));
+  RM_GetObjectInstance := RegisterWindowMessage(PChar(ControlAtomString));
   CanvasList := TThreadList.Create;
   InitIMM32;
   Mouse := TMouse.Create;
   Screen := TScreen.Create(nil);
   Application := TApplication.Create(nil);
-  InitCtl3D;
   Application.ShowHint := True;
   RegisterIntegerConsts(TypeInfo(TCursor), IdentToCursor, CursorToIdent);
+  UserHandle := GetModuleHandle('USER32');
+  if UserHandle <> 0 then
+    @AnimateWindowProc := GetProcAddress(UserHandle, 'AnimateWindow');
+end;
+
+{ TCustomListControl }
+
+procedure TCustomListControl.MoveSelection(
+  Destination: TCustomListControl);
+begin
+  CopySelection(Destination);
+  DeleteSelected;
 end;
 
 initialization
   NewStyleControls := Lo(GetVersion) >= 4;
   InitControls;
+  StartClassGroup(TControl);
+  ActivateClassGroup(TControl);
+  GroupDescendentsWith(TCustomImageList, TControl);
+  GroupDescendentsWith(TContainedAction, TControl);
+  GroupDescendentsWith(TCustomActionList, TControl);
 
 finalization
-  DockSiteList.Free;
+  FreeAndNil(DockSiteList);
   DoneControls;
 
 end.

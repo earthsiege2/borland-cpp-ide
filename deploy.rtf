@@ -1,0 +1,599 @@
+{\rtf1\ansi \deff4\deflang1033{\fonttbl{\f1\froman\fcharset2\fprq2 Symbol;}{\f4\froman\fcharset0\fprq2 Times New Roman;}{\f5\fswiss\fcharset0\fprq2 Arial;}{\f11\fmodern\fcharset0\fprq1 Courier New;}}
+{\colortbl;\red0\green0\blue0;\red0\green0\blue255;\red0\green255\blue255;\red0\green255\blue0;\red255\green0\blue255;\red255\green0\blue0;\red255\green255\blue0;\red255\green255\blue255;\red0\green0\blue128;\red0\green128\blue128;\red0\green128\blue0;
+\red128\green0\blue128;\red128\green0\blue0;\red128\green128\blue0;\red128\green128\blue128;\red192\green192\blue192;}{\stylesheet{\widctlpar\tx270 \f4\fs20 \snext0 Normal;}{\*\cs10 \additive Default Paragraph Font;}{\s15\widctlpar\tx270 \f11\fs20 
+\sbasedon0\snext15 code;}{\s16\fi-270\li270\widctlpar\tx270 \f4\fs20 \sbasedon0\snext16 note;}{\s17\fi-450\li450\widctlpar\tx450 \f4\fs20 \sbasedon0\snext17 numList;}{\s18\widctlpar\tx270 \i\f4\fs20 \sbasedon0\snext18 italic;}{\s19\sb80\widctlpar\tx270 
+\b\f5\fs22 \sbasedon0\snext0 headingSection;}{\s20\widctlpar\tx270 \b\i\f4\fs20 \sbasedon0\snext20 howto;}{\s21\fi-360\li360\sa80\widctlpar\tx270{\*\pn \pnlvl11\pnf1\pnstart1\pnindent360\pnhang{\pntxtb \'b7}}\f4\fs20 \sbasedon0\snext21 listContents;}{
+\s22\qc\widctlpar\tx270 \f4\fs20 \sbasedon0\snext22 important;}{\s23\qc\sb80\sa80\widctlpar\tx270 \f4\fs20\ul\cf2 \sbasedon0\snext23 divider;}{\s24\widctlpar\tx270 \b\f5\fs36\cf10 \sbasedon0\snext24 headingProduct;}{\s25\widctlpar\tx270 \b\i\f5\fs22 
+\sbasedon0\snext25 headingFileDescription;}{\s26\fi-173\li173\widctlpar\tx180\tx270{\*\pn \pnlvl11\pnf1\pnstart1\pnindent173\pnhang{\pntxtb \'b7}}\f4\fs20 \sbasedon0\snext26 bulletList;}{\s27\sb120\widctlpar\tx270 \b\f5\fs18 \sbasedon0\snext27 
+headingSubsection;}{\s28\fi-360\li360\widctlpar\tx270{\*\pn \pnlvl10\pndec\pnstart1\pnindent360\pnhang{\pntxta .}}\f4\fs20 \sbasedon0\snext28 numlist;}{\s29\sb80\sa80\widctlpar\tx270 \f4\fs20 \sbasedon0\snext29 paraNormal;}{\*\cs30 \additive\f11 
+\sbasedon10 charCode;}{\s31\fi-360\li360\widctlpar\tx270 \f4\fs20 \sbasedon0\snext31 bulletText;}{\s32\fi-173\li173\widctlpar\tx180 \f4\fs20 \sbasedon26\snext32 bullet2;}{\s33\fi-360\li360\widctlpar\tx270 \f4\fs20 \sbasedon31\snext33 bulletText2;}{\*
+\cs34 \additive\ul\cf2  Hyperlink;}{\*\cs35 \additive\super \sbasedon10 footnote reference;}}{\info{\author Garry Forbes}{\operator Garry Forbes}{\creatim\yr2000\mo8\dy16\hr22\min36}{\revtim\yr2002\mo1\dy31\hr10\min9}{\version3}{\edmins1}{\nofpages1}
+{\nofwords2823}{\nofchars16094}{\*\company Inprise Corporation}{\vern57431}}\margl720\margr720 \widowctrl\ftnbj\aenddoc\linkstyles\hyphcaps0\formshade \fet0{\*\template I:\\BUILDS\\_READMES\\BCB\\readme.dot}\sectd \linex0\endnhere {\*\pnseclvl1
+\pnucrm\pnstart1\pnindent720\pnhang{\pntxta .}}{\*\pnseclvl2\pnucltr\pnstart1\pnindent720\pnhang{\pntxta .}}{\*\pnseclvl3\pndec\pnstart1\pnindent720\pnhang{\pntxta .}}{\*\pnseclvl4\pnlcltr\pnstart1\pnindent720\pnhang{\pntxta )}}{\*\pnseclvl5
+\pndec\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}{\*\pnseclvl6\pnlcltr\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}{\*\pnseclvl7\pnlcrm\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}{\*\pnseclvl8\pnlcltr\pnstart1\pnindent720\pnhang
+{\pntxtb (}{\pntxta )}}{\*\pnseclvl9\pnlcrm\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}\pard\plain \ri-1350\widctlpar\tx270\tx9360 \f4\fs20 {\b\f5\fs32\ul\cf10 ________________________}
+\par \pard\plain \s19\ri-1350\sb80\widctlpar\tx270\tx9360 \b\f5\fs22 Deploying C++Builder Applications
+\par \pard\plain \ri-1350\widctlpar\tx270\tx9360 \f4\fs20 {\b\f5\fs32\ul\cf10 ________________________}
+\par {\b\f5\fs32\ul\cf10 
+\par }Please read this entire file before deploying C++Builder 6 app-
+\par lications, components, or libraries. This file is provided
+\par pursuant to the Borland License Statement and
+\par provides information on deploying C++Builder 6 applications.
+\par 
+\par Table of Contents
+\par ===========================================================
+\par 
+\par   1.  General Application Deployment
+\par   2.  Components and Packages
+\par       2.1 Distributing Custom Packages
+\par       2.2 Borland Runtime Packages
+\par       2.3 Runtime Packages: Enterprise Edition
+\par       2.4 Runtime Packages: Professional Edition
+\par       2.5 Runtime Packages: Personal Edition
+\par       2.6 Restrictions on CLXDisplay API (Qt.pas) Usage
+\par   3.  The Borland Database Engine (BDE)
+\par   4.  ActiveX Controls (OCXs)
+\par   5.  Sample Images
+\par   6.  InterBase Deployment
+\par       6.1 Applications that Use the 32-bit Local InterBase
+\par       6.2 The 32-bit Five-user InterBase Server
+\par   7.  DataSnap Applications (formerly MIDAS)
+\par   8.  WebSnap Applications and InterBase
+\par   9.  VisiBroker
+\par   10. SQL Links Deployment (Enterprise edition only)
+\par   11. JPEG Compression Software
+\par   12. Data Compression Library (zlib)
+\par   13. Windows Common Controls
+\par   14. C++Builder Utilities
+\par   15. Translation Manager Distribution
+\par   16. Removed or Modified "Redistributable" Files
+\par 
+\par 1. General Application Deployment
+\par ===========================================================
+\par C++Builder 6 applications do not require a runtime interpreter
+\par DLL. All you have to provide is your .EXE file and any DLLs
+\par or BPLs that it calls. For simple applications you can
+\par distribute a standalone .EXE file. If you have used runtime
+\par packages with your application, be sure to include all
+\par required BPLs with the distribution. If you build using the dynamic
+\par Run-Time Library, you will also have to distribute one or more of the
+\par Run-Time Library DLLs CC3260.DLL or CC3260MT.DLL and the memory
+\par manager Dlls BORLNDMM.DLL, BCBMM.DLL or DELPHIMM.DLL. Applications
+\par that use MFC may also need BFC42.DLL or BFC42D.DLL.  Those using
+\par STLPort will require redistribution of STLP45.DLL and/or STLPMT45.DLL.
+\par 
+\par For applications that use the Borland Database Engine (BDE),
+\par you must use a Borland-certified installation/deployment utility,
+\par such as InstallShield Express.
+\par 
+\par If you use InstallShield, treat .BPL (package) files just
+\par like other DLLs. From the Setup Checklist, open Groups and
+\par Files, then click Add Group. You can create a group called
+\par "Packages" for BPLs; to install packages in the
+\par Windows\\System directory, choose <WINSYSDIR> as the desti-
+\par nation directory. (We recommend installing .DLL and .BPL
+\par files in the <Operating System>\\System or \\System 32directory.)
+\par Then click Launch Explorer to select the .BPL files you want to deploy.
+\par 
+\par If the license for C++Builder that accompanied this file was acquired
+\par as an educational or for scholarly purpose, distribution of any files for any
+\par commercial or institutional use is prohibited.  Performing research in
+\par an educational setting or producing coursework required in pursuit of
+\par a degree or certificate of credential at an educational institution is
+\par permitted.
+\par 
+\par 2. Components and Packages
+\par ===========================================================
+\par 2.1 Distributing Custom Packages
+\par --------------------------------
+\par If you distribute C++Builder 6 packages to other developers, be
+\par sure to supply both .BPI and any .LIB files to which your packages
+\par link.
+\par 
+\par You will probably
+\par also want to include .OBJ and .DCU files as well as documentation.
+\par Package Collection (.DPC) files, created with the Package
+\par Collection Editor, offer a convenient way to distribute all
+\par the files associated with a package or group of packages.
+\par 
+\par 2.2 Borland Runtime Packages
+\par ----------------------------
+\par In accordance with the General Terms That Apply to Compiled
+\par Programs and Redistributables, you may redistribute
+\par Borland-supplied runtime packages only for the purpose of
+\par executing application programs created with C++Builder. You may
+\par not modify these packages in any way. By default the
+\par redistributable runtime packages are installed in the
+\par system-files directory of the computer (commonly this is
+\par the \\windows\\system on Windows9x, \\WINNT\\System32 on
+\par Windows NT, 2000 or XP computers).
+\par 
+\par Although this software may include packages other than
+\par those listed below, only the packages identified below
+\par as redistributable may be redistributed by you.  The package
+\par filenames identified below should be considered to be
+\par case-insensitive.
+\par 
+\par You may NOT redeploy Borland-supplied design-time-only
+\par packages. You may not recompile or redistribute any
+\par Borland-supplied components or libraries for use by other
+\par developers.
+\par 
+\par Packages that you develop may not have the same names as
+\par Borland-supplied packages. If you distribute component
+\par libraries or other packages, it is recommended that you
+\par avoid using the default DCLUSR60 package name, since this
+\par will cause naming conflicts with other developers.
+\par 
+\par 2.3 Runtime Packages: Enterprise Edition
+\par -----------------------------------------------------------
+\par If you are a licensed user of C++Builder 6 Enterprise,
+\par redistributable runtime packages include the
+\par following:
+\par 
+\par adortl60.bpl
+\par bdecds60.bpl
+\par bdertl60.bpl
+\par cds60.bpl
+\par dbexpress60.bpl
+\par 
+\par dbrtl60.bpl
+\par dbxcds60.bpl
+\par bcb2kaxserver60.bpl
+\par bcb97axserver60.bpl
+\par dsnap60.bpl
+\par 
+\par dsnapcon60.bpl
+\par dsnapcrba60.bpl
+\par dsnapent60.bpl
+\par dss60.bpl
+\par ibevnt60.bpl
+\par 
+\par ibxpress60.bpl
+\par indy60.bpl
+\par inet60.bpl
+\par inetdb60.bpl
+\par inetdbbde60.bpl
+\par 
+\par inetdbxpress60.bpl
+\par nmfast60.bpl
+\par midas.dll
+\par qrpt60.bpl
+\par qtintf.dll
+\par 
+\par rtl60.bpl
+\par soaprtl60.bpl
+\par stdvcl40.dll
+\par tee60.bpl
+\par teedb60.bpl
+\par 
+\par teeqr60.bpl
+\par teeui60.bpl
+\par vcl60.bpl
+\par vcldb60.bpl
+\par vcldbx60.bpl
+\par 
+\par vclie60.bpl
+\par vcljpg60.bpl
+\par vclshlctrls60.bpl
+\par vclsmp60.bpl
+\par vclx60.bpl
+\par 
+\par visualclx60.bpl
+\par visualdbclx60.bpl
+\par webdsnap60.bpl
+\par websnap61.bpl
+\par xmlrtl60.bpl
+\par 
+\par cc3260.dll
+\par cc3260mt.dll
+\par borlndmm.dll
+\par bcbmm.dll
+\par delphimm.dll
+\par 
+\par bfc42.dll
+\par bfc42d.dll
+\par 
+\par The runtime packages dsnap60.bpl, dsnapcon60.bpl,
+\par dsnapcrba60.bpl, dsnapent60.bpl, and webdsnap60.bpl
+\par are associated with DataSnap. As such, distribution
+\par of these packages is subject to the same requirements as
+\par distribution of DataSnap. See the file LICENSE.TXT
+\par for specific rights and limitations regarding
+\par DataSnap and redistribution.
+\par 
+\par 2.4 Runtime Packages: Professional Edition
+\par ------------------------------------------
+\par If you are a licensed user of C++Builder 6 Professional,
+\par redistributable runtime packages include the following:
+\par 
+\par adortl60.bpl
+\par bdecds60.bpl
+\par bdertl60.bpl
+\par cds60.bpl
+\par bcb2kaxserver60.bpl
+\par 
+\par bcb97axserver60.bpl
+\par dbexpress60.bpl
+\par dbrtl60.bpl
+\par dbxcds60.bpl
+\par ibevnt60.bpl
+\par 
+\par ibxpress60.bpl
+\par indy60.bpl
+\par inet60.bpl
+\par inetdb60.bpl
+\par inetdbbde60.bpl
+\par 
+\par inetdbxpress60.bpl
+\par midas.dll
+\par nmfast60.bpl
+\par qrpt60.bpl
+\par qtintf.dll
+\par 
+\par rtl60.bpl
+\par soaprtl60.bpl
+\par stdvcl40.dll
+\par tee60.bpl
+\par teedb60.bpl
+\par 
+\par teeqr60.bpl
+\par teeui60.bpl
+\par vcl60.bpl
+\par vcldb60.bpl
+\par vcldbx60.bpl
+\par 
+\par vclie60.bpl
+\par vcljpg60.bpl
+\par vclshlctrls60.bpl
+\par vclsmp60.bpl
+\par vclx60.bpl
+\par 
+\par visualclx60.bpl
+\par visualdbclx60.bpl
+\par xmlrtl60.bpl
+\par cc3260.dll
+\par cc3260mt.dll
+\par 
+\par borlndmm.dll
+\par bcbmm.dll
+\par delphimm.dll
+\par bfc42.dll
+\par bfc42d.dll
+\par 
+\par 2.5 Runtime Packages: Personal Edition
+\par --------------------------------------
+\par If you are a licensed user of C++Builder 6 Personal,
+\par redistributable runtime packages include the following:
+\par 
+\par rtl60.bpl
+\par vcl60.bpl
+\par vcljpg60.bpl
+\par vclshlctrls60.bpl
+\par vclsmp60.bpl
+\par 
+\par vclx60.bpl
+\par cc3260.dll
+\par cc3260mt.dll
+\par borlndmm.dll
+\par bcbmm.dll
+\par 
+\par delphimm.dll
+\par bfc42.dll
+\par bfc42d.dll
+\par 
+\par 2.6 Restrictions on CLXDisplay API (Qt.pas) Usage
+\par ---------------------------------------------------
+\par CLXDisplay API, the Qt.pas interface to the Qt runtime, is
+\par only licensed for use in VisualCLX applications or a
+\par component that derives from TControl in the QControls
+\par unit. A VisualCLX application is an application that
+\par uses the TApplication object and uses at least one
+\par component derived from TControl. You are not licensed
+\par to use Qt.pas to create applications or components that
+\par exclusively call the Qt.pas interfaces. A separate commercial
+\par development license from Trolltech
+\par is required for use of Qt.pas in any manner other than
+\par authorized above.
+\par 
+\par 3. The Borland Database Engine (BDE)
+\par ===========================================================
+\par C++Builder 6 applications that use the Borland Database Engine
+\par (BDE) to effect database access require that you distribute
+\par the BDE with the application.
+\par 
+\par In accordance with the Additional License Terms for BDE,
+\par you may distribute the BDE files with your application
+\par using an Borland-certified Redistributable Install program
+\par such as InstallShield Express or another compliant install
+\par program. You may redistribute only those BDE files selected
+\par by the Borland-certified installation program.
+\par 
+\par Additionally, Borland supplies a BDE merge module that is an
+\par approved mechanism for deploying BDE.  This module may be used
+\par with any Windows Installer (MSI) development tool (such as
+\par InstallShield for Windows Installer, Wise for Windows
+\par Installer and others).  The merge module includes the base
+\par BDE and SQL Links appropriate to the version of C++Builder
+\par purchased.
+\par 
+\par See the BDE Links deployment notes in the file
+\par BDEDEPLOY.TXT (found in the BDE directory) for specific
+\par information regarding deploying the BDE with database
+\par applications created in C++Builder.
+\par 
+\par 
+\par 4. ActiveX Controls (OCXs)
+\par ===========================================================
+\par C++Builder includes ActiveX Controls (OCXs) for use in your
+\par applications:
+\par 
+\par   o Chart FX, copyright SoftwareFX Inc.
+\par   o VisualSpeller Control, copyright Visual Components,
+\par     Inc.
+\par   o Formula One (spreadsheet), copyright Visual Components,
+\par     Inc.
+\par   o First Impression (VtChart), copyright Visual
+\par     Components, Inc.
+\par 
+\par The version of each of these OCXs shipped with C++Builder may
+\par be redistributed in custom C++Builder applications. Such
+\par redistribution is subject to the General Terms That Apply
+\par to Compiled Programs and Redistributables.
+\par 
+\par 
+\par 5. Sample Images
+\par ===========================================================
+\par C++Builder includes a library of redistributable bitmap images
+\par normally installed in the subdirectory:
+\par 
+\par   \\Program Files\\Common Files\\Borland Shared\\Images
+\par 
+\par C++Builder also includes a database EVENTS.DB with licensed
+\par images from PhotoDisc. The images in this database are
+\par copyright PhotoDisc, Inc. 1995 and may not be
+\par redistributed.
+\par 
+\par 
+\par 6. InterBase Deployment
+\par ===========================================================
+\par 6.1 Applications that Use the 32-bit Local InterBase
+\par ----------------------------------------------------
+\par C++Builder Enterprise and Professional editions include a
+\par development license for Local InterBase. They do not,
+\par however, include rights for deployment or redistribution of
+\par any InterBase component. To deploy InterBase applications,
+\par you must purchase Deployment Kits, available separately
+\par from Borland. For more information on InterBase, see
+\par Borland's World Wide Web site at http://www.borland.com,
+\par or contact your local Borland sales office.
+\par 
+\par 6.2 The 32-bit Five-user InterBase Server
+\par -----------------------------------------
+\par C++Builder Enterprise contains a development license for the
+\par 32-bit five-user InterBase Server for Windows.  Purchase of
+\par C++Builder, however, does not include deployment or
+\par redistribution rights for any InterBase Server files. Customers
+\par who wish to deploy InterBase Server applications must separately
+\par purchase individual copies of the InterBase Server, available
+\par separately from Borland. For more information on InterBase,
+\par see Borland's World Wide Web site at http://www.borland.com,
+\par or contact your local Borland sales office.
+\par 
+\par 
+\par 7. DataSnap Applications (formerly MIDAS)
+\par ===========================================================
+\par The C++Builder 6 Enterprise edition includes a development
+\par license for the DataSnap. DataSnap comprises the Business
+\par ObjectBroker, the Remote DataBroker, and the
+\par ConstraintBroker Manager (SQL Explorer). Purchase of C++Builder
+\par Enterprise edition, however, does not include deployment
+\par rights for this software. Customers who wish to deploy
+\par applications that use DataSnap must purchase a separate
+\par license for each server on which DataSnap is installed.
+\par 
+\par Handle the installation of the executable and related files
+\par for a multi-tier application the same as for general
+\par applications. Some DataSnap files may need to be installed on
+\par the client computer and others on the server computer.
+\par 
+\par For the Remote DataBroker and ConstraintBroker portions of
+\par DataSnap, the file MIDAS.DLL must be installed onto the
+\par client computer and registered with Windows. On the server
+\par computer, the files MIDAS.DLL and STDVCL40.DLL must be
+\par installed and registered for the Remote DataBroker and
+\par DBEXPLOR.EXE for the ConstraintBroker. Installation
+\par programs such as InstallShield Express automate the process
+\par of registering these DLLs. To manually register the DLLs,
+\par use the TRegSvr demo application or the Microsoft utility
+\par REGSERV32.EXE (not included with all Windows versions).
+\par 
+\par A server deployment license is not required for deploying
+\par MIDAS.DLL and STDVCL40.DLL in an application in which
+\par the client and server reside on the same machine. These two
+\par files are the Client Dataset Redistributables referred to
+\par in the License Statement.
+\par 
+\par For more information on DataSnap, see Borland's World Wide Web
+\par site at the URL below, or contact your local Borland sales
+\par office.
+\par 
+\par   http://www.borland.com/datasnap/
+\par 
+\par 8. WebSnap Application Deployment
+\par ===========================================================
+\par If you created your application as a Web App Debugger
+\par executable, you will first have to convert it to an
+\par ISAPI DLL, CGI executable, or Apache Shared Module. To
+\par deploy your DLL or EXE to a web server, you will have to
+\par place your application in a directory that has executable
+\par rights. With Internet Information Services (IIS), this is
+\par typically C:\\Inetpub\\Scripts. For each WebModule in your
+\par application, you must copy the associated HTML file to the
+\par same directory as your EXE/DLL. By default, the associated
+\par HTML file is simply the WebModule unit's name with .html
+\par as the extension.
+\par 
+\par Additionally, you must register both WebBrokerScript.tlb
+\par and stdvcl40.dll on the web server. TLB files cannot be
+\par registerd with the Microsoft regsvr32 program, but must
+\par be registerd with tregsvr, located in the C++Builder bin
+\par directory. You can copy tregsvr to the web server, and
+\par register the files with:
+\par 
+\par tregsvr WebBrokerScript.tlb
+\par 
+\par and
+\par 
+\par tregsvr stdvcl40.dll
+\par 
+\par Finally, WebSnap applications require the Microsoft Active
+\par Scripting Engine in order to work. It is included with
+\par Internet Explorer 5 and later, and is installed by default on Windows
+\par 2000 or later machines. To download the Scripting Engine, visit:
+\par http://msdn.microsoft.com/scripting/
+\par 
+\par 9.  VisiBroker
+\par ===========================================================
+\par This product does not include deployment rights for the
+\par VisiBroker CORBA ORB.  When deploying an application
+\par requiring CORBA services, you must first obtain VisiBroker
+\par Deployment licenses, available separately from Borland.
+\par 
+\par For more information on VisiBroker, see Borland's World
+\par Wide Web site at the URL below, or contact your local
+\par Borland sales office.
+\par 
+\par    http://www.borland.com/visibroker/
+\par 
+\par 
+\par 10. SQL Links Deployment (Enterprise edition only)
+\par ===========================================================
+\par See the BDE/SQL Links deployment notes in the file
+\par BDEDEPLOY.TXT (found in the BDE directory) for specific
+\par information regarding redeploying the SQL Links software.
+\par (SQL Links is available only with the C++Builder 6 Enterprise
+\par edition.)
+\par 
+\par 
+\par 11. JPEG Compression Software
+\par ===========================================================
+\par The C++Builder CD includes software for JPEG image compression
+\par and decompression. This software and its source code are
+\par distributed by the Independent JPEG Group and copyrighted
+\par by Thomas G. Lane. For conditions of distribution and use,
+\par see the README file that accompanies the software.
+\par 
+\par 
+\par 12. Data Compression Library (zlib)
+\par ===========================================================
+\par The C++Builder media includes zlib data compression software. This
+\par software and its source code are copyrighted by Mark Adler
+\par and others and may be used and distributed subject to the
+\par conditions specified in the file zlib.h.
+\par 
+\par 
+\par 13. Windows Common Controls
+\par ===========================================================
+\par The Windows common controls are provided in a Microsoft-approved
+\par installation file, 50comupd.exe.  This file contains the
+\par common controls library, comctl32.dll.  The only approved
+\par method for updating end-user computers is by the use of
+\par 50comupd.exe.  This file can be redistributed with applications
+\par built using C++Builder.  No other method is permitted.
+\par 
+\par 14. C++Builder Utilities
+\par ===========================================================
+\par The utility programs included with C++Builder 6 may NOT be
+\par redistributed with deployed applications. These utility
+\par programs include, but are not limited to:
+\par 
+\par   SQL Explorer (Enterprise only)
+\par   SQL Monitor (Enterprise only)
+\par   Database Explorer (Professional and Enterprise only)
+\par   Database Desktop (Professional and Enterprise only)
+\par   Openhelp (Professional and Enterprise only)
+\par   Package Collection Editor (Professional and Enterprise only)
+\par   WinSight (Professional and Enterprise only)
+\par   DCC32
+\par   GREP
+\par   TDump
+\par   TLibImp
+\par   Image Editor
+\par 
+\par Please contact Borland sales for information regarding distribution of the
+\par Translation Manager in excess of the quantity granted in the C++Builder
+\par license.
+\par 
+\par 15.  Translation Manager Distribution
+\par ===========================================================
+\par Subject to the restrictions below, and additional restrictions that may appear
+\par in the license.txt file accompanying your licensed version of C++Builder, the
+\par Translation Manager (Enterprise edition only) included with C++Builder is
+\par redistributable solely for purposes of localization of applications developed
+\par using C++Builder.  See license.txt for distribution limits, and additional
+\par restrictions.
+\par 
+\par The files that may be distributed as part of the Translation Manager are:
+\par 
+\par etm60.exe
+\par itecore60.bpl
+\par rc60.bpl
+\par dfm60.bpl
+\par clxdesigner60.bpl
+\par designdgm60.bpl
+\par designide60.bpl
+\par dbx60.bpl
+\par dbx.dbi
+\par indy60.bpl
+\par vclide60.bpl
+\par vclhie60.bpl
+\par dclact60.bpl
+\par dclado60.bpl
+\par dclbdecds60.bpl
+\par dclcds60.bpl
+\par dclclxdb60.bpl
+\par dclclxstd60.bpl
+\par dcldb60.bpl
+\par dcldbx60.bpl
+\par dcldbxcds60.bpl
+\par dcldss60.bpl
+\par dclib60.bpl
+\par dclindy60.bpl
+\par dclisp60.bpl
+\par dclmid60.bpl
+\par dclmlwiz60.bpl
+\par dclnet60.bpl
+\par dclnmf60.bpl
+\par dclocx60.bpl
+\par dclqrt60.bpl
+\par dclstd60.bpl
+\par dcltee60.bpl
+\par dcltqr60.bpl
+\par dclwbm60.bpl
+\par 
+\par The files listed above may be distributed solely as part of the Translation
+\par Manager, except where they occur in the lists of Redistributables
+\par (section 2 of this file) relative to the particular edition of C++Builder you have
+\par licensed.  Except for those which are listed in the Redistributables (section 2),
+\par these files may not be used for any purpose other than for use by the Translation
+\par Manager when distributed in this way.
+\par 
+\par 16. Removed or Modified "Redistributable" Files
+\par ===========================================================
+\par Borland RESERVES THE RIGHT TO REMOVE OR MODIFY INDIVIDUAL
+\par REDISTRIBUTABLE FILES FROM THIS BORLAND SOFTWARE PRODUCT,
+\par AT ANY TIME PRIOR TO RELEASE OF THE PRODUCT, REGARDLESS OF
+\par WHETHER SUCH FILES CONTINUE TO BE LISTED AS
+\par "REDISTRIBUTABLE" UPON RELEASE OF THE PRODUCT. BORLAND
+\par SHALL HAVE NO OBLIGATION WHATSOEVER IN CONNECTION WITH ANY
+\par FILE WHICH IS LISTED AS "REDISTRIBUTABLE" BUT HAS BEEN
+\par REMOVED FROM THE PRODUCT PRIOR TO THE PRODUCT'S RELEASE.
+\par 
+\par ===========================================================
+\par Unless otherwise noted, all materials provided in this
+\par release are Copyright 1983 - 2002 by Borland Software
+\par Corporation.
+\par ========================= END =============================
+\par 
+\par }

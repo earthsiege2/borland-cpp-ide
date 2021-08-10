@@ -3,11 +3,10 @@
  *
  *  Defines the SpoolerMsgHook provider interface.
  *
- *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1999 Microsoft Corporation. All Rights Reserved.
  */
 
 #ifndef MAPIHOOK_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define MAPIHOOK_H
 
 #ifndef MAPIDEFS_H
@@ -81,5 +80,4 @@ HPPROVIDERINIT HPProviderInit;
 }      /* extern "C"  */
 #endif /* __cplusplus */
 
-#pragma option pop /*P_O_Pop*/
 #endif /* MAPIHOOK_H  */

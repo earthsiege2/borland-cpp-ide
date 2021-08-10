@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1997-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -26,7 +26,6 @@ Revision History:
 
 
 #ifndef __SENSAPI_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __SENSAPI_H__
 
 #if _MSC_VER > 1000
@@ -86,5 +85,4 @@ IsNetworkAlive(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // __SENSAPI_H__

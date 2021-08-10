@@ -19,7 +19,6 @@ Revision History:
 --*/
 
 #ifndef _STIERR_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _STIERR_
 
 
@@ -205,7 +204,6 @@ Revision History:
 //#define STIERR_
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // _STIERR_
 
 

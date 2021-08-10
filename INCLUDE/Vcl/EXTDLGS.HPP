@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ExtDlgs.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ExtDlgs.pas' rev: 6.00
 
 #ifndef ExtDlgsHPP
 #define ExtDlgsHPP
@@ -34,29 +34,34 @@ class PASCALIMPLEMENTATION TOpenPictureDialog : public Dialogs::TOpenDialog
 	typedef Dialogs::TOpenDialog inherited;
 	
 private:
-	Graphics::TPicture* FPicture;
 	Extctrls::TPanel* FPicturePanel;
 	Stdctrls::TLabel* FPictureLabel;
 	Buttons::TSpeedButton* FPreviewButton;
 	Extctrls::TPanel* FPaintPanel;
-	Extctrls::TPaintBox* FPaintBox;
+	Extctrls::TImage* FImageCtrl;
+	AnsiString FSavedFilename;
 	bool __fastcall IsFilterStored(void);
-	void __fastcall PaintBoxPaint(System::TObject* Sender);
-	void __fastcall PreviewClick(System::TObject* Sender);
 	void __fastcall PreviewKeyPress(System::TObject* Sender, char &Key);
 	
 protected:
+	virtual void __fastcall PreviewClick(System::TObject* Sender);
 	DYNAMIC void __fastcall DoClose(void);
 	DYNAMIC void __fastcall DoSelectionChange(void);
 	DYNAMIC void __fastcall DoShow(void);
+	__property Extctrls::TImage* ImageCtrl = {read=FImageCtrl};
+	__property Stdctrls::TLabel* PictureLabel = {read=FPictureLabel};
 	
 __published:
 	__property Filter  = {stored=IsFilterStored};
 	
 public:
 	__fastcall virtual TOpenPictureDialog(Classes::TComponent* AOwner);
-	__fastcall virtual ~TOpenPictureDialog(void);
 	virtual bool __fastcall Execute(void);
+public:
+	#pragma option push -w-inl
+	/* TOpenDialog.Destroy */ inline __fastcall virtual ~TOpenPictureDialog(void) { }
+	#pragma option pop
+	
 };
 
 
@@ -69,11 +74,12 @@ public:
 	virtual bool __fastcall Execute(void);
 public:
 	#pragma option push -w-inl
-	/* TOpenPictureDialog.Create */ inline __fastcall virtual TSavePictureDialog(Classes::TComponent* AOwner
-		) : TOpenPictureDialog(AOwner) { }
+	/* TOpenPictureDialog.Create */ inline __fastcall virtual TSavePictureDialog(Classes::TComponent* AOwner) : TOpenPictureDialog(AOwner) { }
 	#pragma option pop
+	
+public:
 	#pragma option push -w-inl
-	/* TOpenPictureDialog.Destroy */ inline __fastcall virtual ~TSavePictureDialog(void) { }
+	/* TOpenDialog.Destroy */ inline __fastcall virtual ~TSavePictureDialog(void) { }
 	#pragma option pop
 	
 };
@@ -82,9 +88,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Extdlgs */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Extdlgs;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

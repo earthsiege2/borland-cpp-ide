@@ -9,7 +9,6 @@
 /****************************************************************************/
 
 #ifndef _H_PCHANNEL
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _H_PCHANNEL
 
 /****************************************************************************/
@@ -142,5 +141,4 @@ typedef struct tagCHANNEL_PDU_HEADER
 } CHANNEL_PDU_HEADER, FAR * PCHANNEL_PDU_HEADER;
 /****************************************************************************/
 
-#pragma option pop /*P_O_Pop*/
 #endif /* _H_PCHANNEL */

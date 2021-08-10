@@ -1,25 +1,25 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxpivsrc.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MXPIVSRC.pas' rev: 6.00
 
-#ifndef mxpivsrcHPP
-#define mxpivsrcHPP
+#ifndef MXPIVSRCHPP
+#define MXPIVSRCHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <mxcommon.hpp>	// Pascal unit
-#include <mxstore.hpp>	// Pascal unit
-#include <mxbutton.hpp>	// Pascal unit
-#include <mxDB.hpp>	// Pascal unit
-#include <mxConsts.hpp>	// Pascal unit
+#include <MXCOMMON.hpp>	// Pascal unit
+#include <Mxstore.hpp>	// Pascal unit
+#include <MXBUTTON.hpp>	// Pascal unit
+#include <MXDB.hpp>	// Pascal unit
+#include <Mxconsts.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
 #include <Menus.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
-#include <Bde.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
+#include <BDE.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
@@ -87,13 +87,12 @@ private:
 	void __fastcall SeTDecisionSource(Mxdb::TDecisionSource* aSource);
 	
 protected:
-	virtual void __fastcall AdjustClientRect(Windows::TRect &Rect);
+	virtual void __fastcall AdjustClientRect(Types::TRect &Rect);
 	HIDESBASE void __fastcall SetBorderWidth(Controls::TBorderWidth Value);
 	Controls::TBorderWidth __fastcall GetBorderWidth(void);
 	HIDESBASE void __fastcall SetBorderStyle(Forms::TBorderStyle Value);
 	Forms::TBorderStyle __fastcall GetBorderStyle(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	void __fastcall NewPanelSetup(void);
 	void __fastcall NewDimLayout(void);
 	void __fastcall DimStateChange(int iDim);
@@ -116,30 +115,28 @@ __published:
 	__property int ButtonWidth = {read=FControlWidth, write=SetControlWidth, nodefault};
 	__property int ButtonHeight = {read=FControlHeight, write=SetControlHeight, nodefault};
 	__property int GroupSpacing = {read=FGroupSpacing, write=SetGroupSpacing, nodefault};
-	__property Controls::TBorderWidth BorderWidth = {read=GetBorderWidth, write=SetBorderWidth, nodefault
-		};
-	__property Forms::TBorderStyle BorderStyle = {read=GetBorderStyle, write=SetBorderStyle, nodefault}
-		;
-	__property Align ;
-	__property Alignment ;
-	__property BevelInner ;
-	__property BevelOuter ;
-	__property BevelWidth ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property Enabled ;
+	__property Controls::TBorderWidth BorderWidth = {read=GetBorderWidth, write=SetBorderWidth, nodefault};
+	__property Forms::TBorderStyle BorderStyle = {read=GetBorderStyle, write=SetBorderStyle, nodefault};
+	__property Align  = {default=0};
+	__property Alignment  = {default=2};
+	__property BevelInner  = {default=0};
+	__property BevelOuter  = {default=2};
+	__property BevelWidth  = {default=1};
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property Color ;
+	__property Color  = {default=-2147483633};
 	__property Ctl3D ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnDblClick ;
 	__property OnDragDrop ;
@@ -151,8 +148,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDecisionPivot(HWND ParentWindow) : Extctrls::TCustomPanel(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDecisionPivot(HWND ParentWindow) : Extctrls::TCustomPanel(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -177,12 +173,10 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Mxpivsrc */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxpivsrc;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxpivsrc
+#endif	// MXPIVSRC

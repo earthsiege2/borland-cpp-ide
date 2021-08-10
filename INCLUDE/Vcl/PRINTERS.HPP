@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Printers.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Printers.pas' rev: 6.00
 
 #ifndef PrintersHPP
 #define PrintersHPP
@@ -32,37 +32,27 @@ class PASCALIMPLEMENTATION EPrinter : public Sysutils::Exception
 public:
 	#pragma option push -w-inl
 	/* Exception.Create */ inline __fastcall EPrinter(const AnsiString Msg) : Sysutils::Exception(Msg) { }
-		
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EPrinter(const AnsiString Msg, const System::TVarRec * 
-		Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EPrinter(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EPrinter(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EPrinter(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EPrinter(int Ident, const System::TVarRec * Args, const 
-		int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EPrinter(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EPrinter(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(
-		Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EPrinter(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EPrinter(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EPrinter(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EPrinter(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EPrinter(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EPrinter(System::PResStringRec ResStringRec, const 
-		System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EPrinter(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -142,8 +132,7 @@ public:
 	__property int Copies = {read=GetNumCopies, write=SetNumCopies, nodefault};
 	__property Classes::TStrings* Fonts = {read=GetFonts};
 	__property HDC Handle = {read=GetHandle, nodefault};
-	__property TPrinterOrientation Orientation = {read=GetOrientation, write=SetOrientation, nodefault}
-		;
+	__property TPrinterOrientation Orientation = {read=GetOrientation, write=SetOrientation, nodefault};
 	__property int PageHeight = {read=GetPageHeight, nodefault};
 	__property int PageWidth = {read=GetPageWidth, nodefault};
 	__property int PageNumber = {read=FPageNumber, nodefault};
@@ -160,9 +149,7 @@ extern PACKAGE TPrinter* __fastcall Printer(void);
 extern PACKAGE TPrinter* __fastcall SetPrinter(TPrinter* NewPrinter);
 
 }	/* namespace Printers */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Printers;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

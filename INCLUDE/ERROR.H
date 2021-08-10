@@ -1,8 +1,7 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /***
 *error.h - DOS error codes
 *
-*   Copyright (c) 1987-1992, Microsoft Corporation.  All rights reserved.
+*   Copyright (c) 1987-1999, Microsoft Corporation.  All rights reserved.
 *
 *Purpose:
 *   DOS calls all return error codes through AX.  If an error occurred then
@@ -344,4 +343,3 @@
 #define TC_HARDERR  1
 #define TC_GP_TRAP  2
 #define TC_SIGNAL   3
-#pragma option pop /*P_O_Pop*/

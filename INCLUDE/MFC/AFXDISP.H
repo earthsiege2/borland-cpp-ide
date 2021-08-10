@@ -111,22 +111,22 @@ class COleSafeArray;        // Based on OLE VARIANT
 	theClass* pThis = \
 		((theClass*)((BYTE*)this - offsetof(theClass, m_x##localClass))); \
 	AFX_MANAGE_STATE(pThis->m_pModuleState) \
-	pThis; /* avoid warning from compiler */ \
+	pThis; // avoid warning from compiler \
 
 #define METHOD_PROLOGUE_(theClass, localClass) \
 	theClass* pThis = \
 		((theClass*)((BYTE*)this - offsetof(theClass, m_x##localClass))); \
-	pThis; /* avoid warning from compiler */ \
+	pThis; // avoid warning from compiler \
 
 #ifndef _AFX_NO_NESTED_DERIVATION
 #define METHOD_PROLOGUE_EX(theClass, localClass) \
 	theClass* pThis = ((theClass*)((BYTE*)this - m_nOffset)); \
 	AFX_MANAGE_STATE(pThis->m_pModuleState) \
-	pThis; /* avoid warning from compiler */ \
+	pThis; // avoid warning from compiler \
 
 #define METHOD_PROLOGUE_EX_(theClass, localClass) \
 	theClass* pThis = ((theClass*)((BYTE*)this - m_nOffset)); \
-	pThis; /* avoid warning from compiler */ \
+	pThis; // avoid warning from compiler \
 
 #else
 #define METHOD_PROLOGUE_EX(theClass, localClass) \

@@ -1,0 +1,183 @@
+<STYLE TYPE="text/css">
+  TH, TD { text-align: left; vertical-align: top}
+  .symbol { color: green }
+  .container { color: blue }
+  .property { color: red }
+  .value { color: gray }
+  TABLE { width: 100%}
+</STYLE>
+
+<% function DumpImage(I)
+   {
+   if (I==null) return;
+%>
+   <TR><TH>Image
+   <TD>
+   <TABLE BORDER=1>
+   <TR><TH>Name<TH>Value
+   <TR>
+   <TH><span class="property">AsHREF:</span><TD>
+   <span class="value"><%= I.AsHREF %></span>
+   </TABLE>
+<%
+   }
+%>
+
+<% function DumpValueListItem(V)
+   {
+%>
+     <TR><TD><span class="value"><%= V.ValueName %></span>
+     <TD><span class="value"><%= V.Value %></span>
+<%
+  }
+%>
+
+<% function DumpValuesList(L)
+   {
+     if (L==null) return;
+%>
+   <TR><TH><span class="property">Values:</span>
+   <TD>
+   <TABLE BORDER=1>
+   <TR><TH><span class="property">Name</span>
+   <TH><span class="property">Value</span>
+<%
+     var e = new Enumerator(L.Records)
+     for (; !e.atEnd(); e.moveNext())
+     {
+       DumpValueListItem(e.item())
+     }
+%>
+   </TABLE>
+<%
+   }
+%>
+
+
+<% function DumpField(F)
+   {
+%>
+      <TABLE BORDER=1><TR><TH COLSPAN=2>
+      <span class="symbol"><%=F.Name%></span>
+      <TR><TD><TD>
+      <TABLE BORDER=1>
+        <TR><TH><span class="property">Value:</span> <TD><span class="value"><%= F.Value + ' '%></span>
+        <TR><TH><span class="property">DisplayText:</span> <TD><span class="value"><%= F.DisplayText%></span>
+        <TR><TH><span class="property">EditText:</span> <TD><span class="value"><%= F.EditText%></span>
+        <TR><TH><span class="property">DisplayWidth:</span> <TD><span class="value"><%= F.DisplayWidth%></span>
+        <TR><TH><span class="property">DisplayLabel:</span> <TD><span class="value"><%= F.DisplayLabel%></span>
+        <TR><TH><span class="property">InputName:</span> <TD><span class="value"><%= F.InputName%></span>
+        <TR><TH><span class="property">InputStyle:</span> <TD><span class="value"><%= F.InputStyle%></span>
+        <TR><TH><span class="property">DisplayStyle:</span> <TD><span class="value"><%= F.DisplayStyle%></span>
+        <TR><TH><span class="property">CanModify:</span> <TD><span class="value"><%= F.CanModify%></span>
+        <TR><TH><span class="property">CanView:</span> <TD><span class="value"><%= F.CanView%></span>
+<%
+       DumpValuesList(F.ValuesList)
+       DumpImage(F.Image);
+%>
+       </TABLE>
+       </TABLE>
+<%
+  }
+%>
+
+<% function DumpAction(A)
+   {
+%>
+      <TABLE BORDER=1><TR><TH COLSPAN=2>
+      <span class="symbol"><%=A.Name%></span>
+      <TR><TD><TD>
+       <TABLE BORDER=1>
+         <TR><TH><span class="property">AsFieldValue:</span> <TD><span class="value"><%= A.AsFieldValue %></span>
+         <TR><TH><span class="property">AsHREF:</span> <TD><span class="value"><%= A.AsHREF %></span>
+         <TR><TH><span class="property">DisplayLabel:</span> <TD><span class="value"><%= A.DisplayLabel %></span>
+         <TR><TH><span class="property">Enabled:</span> <TD><span class="value"><%= A.Enabled %></span>
+         <TR><TH><span class="property">CanExecute:</span> <TD><span class="value"><%= A.CanExecute %></span>
+       </TABLE>
+     </TABLE>
+<%
+  }
+%>
+
+<% function DumpActions(A)
+   {
+     if (A==null) return;
+%>
+<%
+     var e = new Enumerator(A)
+     for (; !e.atEnd(); e.moveNext())
+     {
+       DumpAction(e.item())
+     }
+%>
+<%
+   }
+%>
+
+<% function DumpFields(F)
+   {
+     if (F==null) return;
+%>
+<%
+     var e = new Enumerator(F)
+     for (; !e.atEnd(); e.moveNext())
+     {
+       DumpField(e.item())
+     }
+%>
+<%
+   }
+%>
+
+<% function DumpObject(O)
+   {
+%>
+   <TABLE BORDER=1>
+   <TR><TH COLSPAN=2>
+   <span class="symbol"><%=O.Name_%></span>
+   <TR><TD><TD>
+     <TABLE BORDER=1>
+     <TR><TH COLSPAN=2><span class="container">Fields</span>
+     <TR><TD><TD>
+<%   DumpFields(O.Fields) %>
+     </TABLE>
+   <TR><TD><TD>
+     <TABLE BORDER=1>
+     <TR><TH COLSPAN=2><span class="container">Actions</span>
+     <TR><TD><TD>
+<%   DumpActions(O.Actions) %>
+     </TABLE>
+   </TABLE>
+<%   } %>
+
+
+<% function DumpModules()
+   {
+   var e = new Enumerator(Modules)
+%>
+  <TABLE BORDER=1>
+  <TR><TH COLSPAN=2><span class="container">Modules<span>
+<%
+   for (; !e.atEnd(); e.moveNext())
+   {
+%>
+     <TR><TH COLSPAN=2>
+      <span class="symbol"><%=e.item().Name_%></span>
+<%
+     var e2 = new Enumerator(e.item().Objects);
+     for (; !e2.atEnd(); e2.moveNext())
+     {
+%>
+     <TR><TD><TD>
+<%
+       DumpObject(e2.item());
+     }
+   }
+%>
+  </TABLE>
+<%
+  }
+%>
+
+<% DumpModules() %>
+

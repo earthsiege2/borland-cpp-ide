@@ -9,30 +9,30 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.3.3  $
-// File generated on 1/24/2000 9:49:56 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/28/2002 7:56:10 AM from Type Library described below.
 
-// ************************************************************************ //
+// ************************************************************************  //
 // Type Lib: C:\Program Files\Common Files\Microsoft Shared\VBA\VBEEXT1.OLB (1)
-// IID\LCID: {0002E157-0000-0000-C000-000000000046}\0
+// LIBID: {0002E157-0000-0000-C000-000000000046}
+// LCID: 0
 // Helpfile: C:\Program Files\Common Files\Microsoft Shared\VBA\VEENOB3.HLP
+// HelpString: Microsoft Visual Basic for Applications Extensibility
 // DepndLst: 
 //   (1) v2.0 stdole, (C:\WINNT\System32\stdole2.tlb)
-//   (2) v2.0 Office, (D:\Program Files\Microsoft Office\Office\MSO97.DLL)
+//   (2) v2.0 Office, (C:\Program Files\Microsoft Office\office97\Office\MSO97.DLL)
 // Parent TypeLibrary:
-//   (0) v2.5 PowerPoint, (g:\rampage\typelib\TypeLibraries\MSPPT8.olb)
+//   (0) v1.2 Excel, (c:\program files\microsoft office\office\excel8.olb)
 // Errors:
 //   Hint: Symbol 'Application' renamed to 'App'
 //   Hint: Symbol 'Window' renamed to 'WINDOW'
 //   Hint: Symbol '_Windows' renamed to '_Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Click' renamed to '_Click'
 // ************************************************************************ //
 
 #include <vcl.h>
 #pragma hdrstop
 
+#include <oleserver.hpp>
 #if defined(USING_ATL)
 #include <atl\atlvcl.h>
 #endif

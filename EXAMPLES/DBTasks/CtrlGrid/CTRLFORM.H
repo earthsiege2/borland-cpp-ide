@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //Borland C++Builder
-//Copyright (c) 1987, 1998 Borland International Inc. All Rights Reserved.
+//Copyright (c) 1987, 1998-2002 Borland International Inc. All Rights Reserved.
 //----------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 #ifndef CtrlFormH
@@ -17,6 +17,7 @@
 #include <DBGrids.hpp>
 #include <Grids.hpp>
 #include <Menus.hpp>
+#include <dbcgrids.hpp>
 //---------------------------------------------------------------------------
 class TFmCtrlGrid : public TForm
 {

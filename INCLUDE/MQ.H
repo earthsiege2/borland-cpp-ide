@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1996-1999 Microsoft Corporation
+Copyright (c) 1996-2001, Microsoft Corporation
 
 Module Name:
 
@@ -8,118 +8,23 @@ Module Name:
 
 Abstract:
 
-    Master include file for Message Queue applications
+    Master include file for Message Queuing applications
 
 --*/
 
 #ifndef __MQ_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __MQ_H__
 
-#if _MSC_VER > 1000
+#if defined (_MSC_VER) && (_MSC_VER >= 1020)
 #pragma once
 #endif
 
 
-//
-//  Clients that need transactions should include transact.h before mq.h
-//  For the clients not needing transactions - ITransaction is  opaque
-//
-#ifndef __transact_h__
-typedef void ITransaction;
-#endif
+#ifndef __ITransaction_FWD_DEFINED__
+#define __ITransaction_FWD_DEFINED__
+typedef interface ITransaction ITransaction;
+#endif  // __ITransaction_FWD_DEFINED__
 
-//
-//	Support version older than VC4.2
-//
-#if defined(_MSC_VER) && (_MSC_VER < 1020)
-
-typedef struct tagMQPROPVARIANT MQPROPVARIANT;
-
-#define TYPEDEF_CA(type, name) \
-    typedef struct tag##name {\
-        ULONG cElems;\
-        type * pElems;\
-    } name
-
-#ifndef _tagCAUB_DEFINED
-#define _tagCAUB_DEFINED
-TYPEDEF_CA(unsigned char, CAUB);
-#endif
-
-#ifndef _tagCAI_DEFINED
-#define _tagCAI_DEFINED
-TYPEDEF_CA(short, CAI);
-#endif
-
-#ifndef _tagCAUI_DEFINED
-#define _tagCAUI_DEFINED
-TYPEDEF_CA(USHORT, CAUI);
-#endif
-
-#ifndef _tagCAL_DEFINED
-#define _tagCAL_DEFINED
-TYPEDEF_CA(long, CAL);
-#endif
-
-#ifndef _tagCAUL_DEFINED
-#define _tagCAUL_DEFINED
-TYPEDEF_CA(ULONG, CAUL);
-#endif
-
-#ifndef _tagCACLSID_DEFINED
-#define _tagCACLSID_DEFINED
-TYPEDEF_CA(CLSID, CACLSID);
-#endif
-
-#ifndef _tagCABSTR_DEFINED
-#define _tagCABSTR_DEFINED
-TYPEDEF_CA(LPOLESTR, CABSTR);
-#endif
-
-#ifndef _tagCALPWSTR_DEFINED
-#define _tagCALPWSTR_DEFINED
-TYPEDEF_CA(LPWSTR, CALPWSTR);
-#endif
-
-#ifndef _tagCAMQPROPVARIANT_DEFINED
-#define _tagCAMQPROPVARIANT_DEFINED
-TYPEDEF_CA(MQPROPVARIANT, CAMQPROPVARIANT);
-#endif
-
-struct tagMQPROPVARIANT {
-    VARTYPE vt;
-    WORD wReserved1;
-    WORD wReserved2;
-    WORD wReserved3;
-    /*[switch_is((unsigned short)vt)]*/ union {
-      /*[case(VT_EMPTY, VT_NULL)];*/
-      /*[case(VT_UI1)]*/               UCHAR bVal;
-      /*[case(VT_I2)]*/                short iVal;
-      /*[case(VT_UI2)]*/               USHORT uiVal;
-      /*[case(VT_BOOL)]*/              VARIANT_BOOL boolVal;
-      /*[case(VT_I4)]*/                long lVal;
-      /*[case(VT_UI4)]*/               ULONG ulVal;
-      /*[case(VT_HRESULT)]*/           SCODE scode;
-      /*[case(VT_DATE)]*/              DATE date;
-      /*[case(VT_CLSID)]*/             CLSID  *puuid;
-      /*[case(VT_BLOB)]*/              BLOB blob;
-      /*[case(VT_BSTR)]*/              LPOLESTR bstrVal;
-      /*[case(VT_LPSTR)]*/             LPSTR pszVal;
-      /*[case(VT_LPWSTR)]*/            LPWSTR pwszVal;
-      /*[case(VT_VECTOR | VT_UI1)]*/   CAUB caub;
-      /*[case(VT_VECTOR | VT_I2)]*/    CAI cai;
-      /*[case(VT_VECTOR | VT_UI2)]*/   CAUI caui;
-      /*[case(VT_VECTOR | VT_I4)]*/    CAL cal;
-      /*[case(VT_VECTOR | VT_UI4)]*/   CAUL caul;
-      /*[case(VT_VECTOR | VT_CLSID)]*/ CACLSID cauuid;
-      /*[case(VT_VECTOR | VT_BSTR)]*/  CABSTR cabstr;
-      /*[case(VT_VECTOR | VT_LPWSTR)]*/CALPWSTR calpwstr;
-      /*[case(VT_VARIANT)]*/           CAMQPROPVARIANT capropvar;
-    };
-};
-
-#else // defined(_MSC_VER) && (_MSC_VER < 1020)
 
 #ifdef __midl
 // This is the PROPVARIANT definition for marshaling.
@@ -131,7 +36,6 @@ typedef struct tagPROPVARIANT tagMQPROPVARIANT;
 #endif
 typedef tagMQPROPVARIANT MQPROPVARIANT;
 
-#endif // defined(_MSC_VER) && (_MSC_VER < 1020)
 
 #define	PRLT	( 0 )
 
@@ -150,19 +54,19 @@ typedef struct tagMQPROPERTYRESTRICTION
     ULONG rel;
     PROPID prop;
     MQPROPVARIANT prval;
-    }	MQPROPERTYRESTRICTION;
+    } 	MQPROPERTYRESTRICTION;
 
 typedef struct tagMQRESTRICTION
     {
     ULONG cRes;
-    /* [size_is] */ MQPROPERTYRESTRICTION __RPC_FAR *paPropRes;
-    }	MQRESTRICTION;
+    /* [size_is] */ MQPROPERTYRESTRICTION *paPropRes;
+    } 	MQRESTRICTION;
 
 typedef struct tagMQCOLUMNSET
     {
     ULONG cCol;
-    /* [size_is] */ PROPID __RPC_FAR *aCol;
-    }	MQCOLUMNSET;
+    /* [size_is] */ PROPID *aCol;
+    } 	MQCOLUMNSET;
 
 #define	QUERY_SORTASCEND	( 0 )
 
@@ -172,13 +76,13 @@ typedef struct tagMQSORTKEY
     {
     PROPID propColumn;
     ULONG dwOrder;
-    }	MQSORTKEY;
+    } 	MQSORTKEY;
 
 typedef struct tagMQSORTSET
     {
     ULONG cCol;
-    /* [size_is] */ MQSORTKEY __RPC_FAR *aCol;
-    }	MQSORTSET;
+    /* [size_is] */ MQSORTKEY *aCol;
+    } 	MQSORTSET;
 
 
 #define MQ_MAX_Q_NAME_LEN      124   // Maximal WCHAR length of a queue name.
@@ -187,11 +91,7 @@ typedef struct tagMQSORTSET
 
 typedef HANDLE QUEUEHANDLE;
 
-
-typedef PROPID          MSGPROPID;
-typedef PROPID          QUEUEPROPID;
-typedef PROPID          QMPROPID;
-
+typedef PROPID MSGPROPID;
 typedef struct tagMQMSGPROPS
 {
     DWORD           cProp;
@@ -200,6 +100,8 @@ typedef struct tagMQMSGPROPS
     HRESULT*        aStatus;
 } MQMSGPROPS;
 
+
+typedef PROPID QUEUEPROPID;
 typedef struct tagMQQUEUEPROPS
 {
     DWORD           cProp;
@@ -208,6 +110,8 @@ typedef struct tagMQQUEUEPROPS
     HRESULT*        aStatus;
 } MQQUEUEPROPS;
 
+
+typedef PROPID QMPROPID;
 typedef struct tagMQQMPROPS
 {
     DWORD           cProp;
@@ -216,6 +120,7 @@ typedef struct tagMQQMPROPS
     HRESULT*        aStatus;
 } MQQMPROPS;
 
+
 typedef struct tagMQPRIVATEPROPS
 {
     DWORD           cProp;
@@ -223,6 +128,25 @@ typedef struct tagMQPRIVATEPROPS
     MQPROPVARIANT*  aPropVar;
     HRESULT*        aStatus;
 } MQPRIVATEPROPS;
+
+
+typedef PROPID MGMTPROPID;
+typedef struct tagMQMGMTPROPS
+{
+    DWORD cProp;
+    MGMTPROPID* aPropID;
+    MQPROPVARIANT* aPropVar;
+    HRESULT* aStatus;
+} MQMGMTPROPS;
+
+typedef struct tagSEQUENCE_INFO
+{
+    LONGLONG SeqID;
+    ULONG SeqNo; 
+    ULONG PrevNo;
+} SEQUENCE_INFO;
+
+    
 
 
 
@@ -236,6 +160,7 @@ typedef struct tagMQPRIVATEPROPS
 #define MQ_RECEIVE_ACCESS       0x00000001
 #define MQ_SEND_ACCESS          0x00000002
 #define MQ_PEEK_ACCESS          0x00000020
+#define MQ_ADMIN_ACCESS         0x00000080
 
 //
 //  MQOpenQueue - Share values
@@ -249,6 +174,21 @@ typedef struct tagMQPRIVATEPROPS
 #define MQ_ACTION_RECEIVE       0x00000000
 #define MQ_ACTION_PEEK_CURRENT  0x80000000
 #define MQ_ACTION_PEEK_NEXT     0x80000001
+
+//
+//  MQReceiveMessageByLookupId - Action values
+//
+#define MQ_LOOKUP_PEEK_CURRENT    0x40000010
+#define MQ_LOOKUP_PEEK_NEXT       0x40000011
+#define MQ_LOOKUP_PEEK_PREV       0x40000012
+#define MQ_LOOKUP_PEEK_FIRST      0x40000014
+#define MQ_LOOKUP_PEEK_LAST       0x40000018
+
+#define MQ_LOOKUP_RECEIVE_CURRENT 0x40000020
+#define MQ_LOOKUP_RECEIVE_NEXT    0x40000021
+#define MQ_LOOKUP_RECEIVE_PREV    0x40000022
+#define MQ_LOOKUP_RECEIVE_FIRST   0x40000024
+#define MQ_LOOKUP_RECEIVE_LAST    0x40000028
 
 //
 // MQSendMessage,  MQReceiveMessage:  special cases for the transaction parameter
@@ -272,60 +212,71 @@ typedef struct tagMQPRIVATEPROPS
 //********************************************************************
 //  MESSAGE PROPERTIES
 //********************************************************************
-#define PROPID_M_BASE                0
-#define PROPID_M_CLASS               (PROPID_M_BASE + 1)     /* VT_UI2           */
-#define PROPID_M_MSGID               (PROPID_M_BASE + 2)     /* VT_UI1|VT_VECTOR */
-#define PROPID_M_CORRELATIONID       (PROPID_M_BASE + 3)     /* VT_UI1|VT_VECTOR */
-#define PROPID_M_PRIORITY            (PROPID_M_BASE + 4)     /* VT_UI1           */
-#define PROPID_M_DELIVERY            (PROPID_M_BASE + 5)     /* VT_UI1           */
-#define PROPID_M_ACKNOWLEDGE         (PROPID_M_BASE + 6)     /* VT_UI1           */
-#define PROPID_M_JOURNAL             (PROPID_M_BASE + 7)     /* VT_UI1           */
-#define PROPID_M_APPSPECIFIC         (PROPID_M_BASE + 8)     /* VT_UI4           */
-#define PROPID_M_BODY                (PROPID_M_BASE + 9)     /* VT_UI1|VT_VECTOR */
-#define PROPID_M_BODY_SIZE           (PROPID_M_BASE + 10)    /* VT_UI4           */
-#define PROPID_M_LABEL               (PROPID_M_BASE + 11)    /* VT_LPWSTR        */
-#define PROPID_M_LABEL_LEN           (PROPID_M_BASE + 12)    /* VT_UI4           */
-#define PROPID_M_TIME_TO_REACH_QUEUE (PROPID_M_BASE + 13)    /* VT_UI4           */
-#define PROPID_M_TIME_TO_BE_RECEIVED (PROPID_M_BASE + 14)    /* VT_UI4           */
-#define PROPID_M_RESP_QUEUE          (PROPID_M_BASE + 15)    /* VT_LPWSTR        */
-#define PROPID_M_RESP_QUEUE_LEN      (PROPID_M_BASE + 16)    /* VT_UI4           */
-#define PROPID_M_ADMIN_QUEUE         (PROPID_M_BASE + 17)    /* VT_LPWSTR        */
-#define PROPID_M_ADMIN_QUEUE_LEN     (PROPID_M_BASE + 18)    /* VT_UI4           */
-#define PROPID_M_VERSION             (PROPID_M_BASE + 19)    /* VT_UI4           */
-#define PROPID_M_SENDERID            (PROPID_M_BASE + 20)    /* VT_UI1|VT_VECTOR */
-#define PROPID_M_SENDERID_LEN        (PROPID_M_BASE + 21)    /* VT_UI4           */
-#define PROPID_M_SENDERID_TYPE       (PROPID_M_BASE + 22)    /* VT_UI4           */
-#define PROPID_M_PRIV_LEVEL          (PROPID_M_BASE + 23)    /* VT_UI4           */
-#define PROPID_M_AUTH_LEVEL          (PROPID_M_BASE + 24)    /* VT_UI4           */
-#define PROPID_M_AUTHENTICATED       (PROPID_M_BASE + 25)    /* VT_UI1           */
-#define PROPID_M_HASH_ALG            (PROPID_M_BASE + 26)    /* VT_UI4           */
-#define PROPID_M_ENCRYPTION_ALG      (PROPID_M_BASE + 27)    /* VT_UI4           */
-#define PROPID_M_SENDER_CERT         (PROPID_M_BASE + 28)    /* VT_UI1|VT_VECTOR */
-#define PROPID_M_SENDER_CERT_LEN     (PROPID_M_BASE + 29)    /* VT_UI4           */
-#define PROPID_M_SRC_MACHINE_ID      (PROPID_M_BASE + 30)    /* VT_CLSID         */
-#define PROPID_M_SENTTIME            (PROPID_M_BASE + 31)    /* VT_UI4           */
-#define PROPID_M_ARRIVEDTIME         (PROPID_M_BASE + 32)    /* VT_UI4           */
-#define PROPID_M_DEST_QUEUE          (PROPID_M_BASE + 33)    /* VT_LPWSTR        */
-#define PROPID_M_DEST_QUEUE_LEN      (PROPID_M_BASE + 34)    /* VT_UI4           */
-#define PROPID_M_EXTENSION           (PROPID_M_BASE + 35)    /* VT_UI1|VT_VECTOR */
-#define PROPID_M_EXTENSION_LEN       (PROPID_M_BASE + 36)    /* VT_UI4           */
-#define PROPID_M_SECURITY_CONTEXT    (PROPID_M_BASE + 37)    /* VT_UI4           */
-#define PROPID_M_CONNECTOR_TYPE      (PROPID_M_BASE + 38)    /* VT_CLSID         */
-#define PROPID_M_XACT_STATUS_QUEUE   (PROPID_M_BASE + 39)    /* VT_LPWSTR        */
-#define PROPID_M_XACT_STATUS_QUEUE_LEN (PROPID_M_BASE + 40)  /* VT_UI4           */
-#define PROPID_M_TRACE               (PROPID_M_BASE + 41)    /* VT_UI1           */
-#define PROPID_M_BODY_TYPE           (PROPID_M_BASE + 42)    /* VT_UI4           */
-#define PROPID_M_DEST_SYMM_KEY       (PROPID_M_BASE + 43)    /* VT_UI1|VT_VECTOR */
-#define PROPID_M_DEST_SYMM_KEY_LEN   (PROPID_M_BASE + 44)    /* VT_UI4           */
-#define PROPID_M_SIGNATURE           (PROPID_M_BASE + 45)    /* VT_UI1|VT_VECTOR */
-#define PROPID_M_SIGNATURE_LEN       (PROPID_M_BASE + 46)    /* VT_UI4           */
-#define PROPID_M_PROV_TYPE           (PROPID_M_BASE + 47)    /* VT_UI4           */
-#define PROPID_M_PROV_NAME           (PROPID_M_BASE + 48)    /* VT_LPWSTR        */
-#define PROPID_M_PROV_NAME_LEN       (PROPID_M_BASE + 49)    /* VT_UI4           */
-#define PROPID_M_FIRST_IN_XACT       (PROPID_M_BASE + 50)    /* VT_UI1           */
-#define PROPID_M_LAST_IN_XACT        (PROPID_M_BASE + 51)    /* VT_UI1           */
-#define PROPID_M_XACTID              (PROPID_M_BASE + 52)    /* VT_UI1|VT_VECTOR */
-
+#define PROPID_M_BASE					 0
+#define PROPID_M_CLASS                   (PROPID_M_BASE + 1)     /* VT_UI2           */
+#define PROPID_M_MSGID                   (PROPID_M_BASE + 2)     /* VT_UI1|VT_VECTOR */
+#define PROPID_M_CORRELATIONID           (PROPID_M_BASE + 3)     /* VT_UI1|VT_VECTOR */
+#define PROPID_M_PRIORITY                (PROPID_M_BASE + 4)     /* VT_UI1           */
+#define PROPID_M_DELIVERY                (PROPID_M_BASE + 5)     /* VT_UI1           */
+#define PROPID_M_ACKNOWLEDGE             (PROPID_M_BASE + 6)     /* VT_UI1           */
+#define PROPID_M_JOURNAL                 (PROPID_M_BASE + 7)     /* VT_UI1           */
+#define PROPID_M_APPSPECIFIC             (PROPID_M_BASE + 8)     /* VT_UI4           */
+#define PROPID_M_BODY                    (PROPID_M_BASE + 9)     /* VT_UI1|VT_VECTOR */
+#define PROPID_M_BODY_SIZE               (PROPID_M_BASE + 10)    /* VT_UI4           */
+#define PROPID_M_LABEL                   (PROPID_M_BASE + 11)    /* VT_LPWSTR        */
+#define PROPID_M_LABEL_LEN               (PROPID_M_BASE + 12)    /* VT_UI4           */
+#define PROPID_M_TIME_TO_REACH_QUEUE     (PROPID_M_BASE + 13)    /* VT_UI4           */
+#define PROPID_M_TIME_TO_BE_RECEIVED     (PROPID_M_BASE + 14)    /* VT_UI4           */
+#define PROPID_M_RESP_QUEUE              (PROPID_M_BASE + 15)    /* VT_LPWSTR        */
+#define PROPID_M_RESP_QUEUE_LEN          (PROPID_M_BASE + 16)    /* VT_UI4           */
+#define PROPID_M_ADMIN_QUEUE             (PROPID_M_BASE + 17)    /* VT_LPWSTR        */
+#define PROPID_M_ADMIN_QUEUE_LEN         (PROPID_M_BASE + 18)    /* VT_UI4           */
+#define PROPID_M_VERSION                 (PROPID_M_BASE + 19)    /* VT_UI4           */
+#define PROPID_M_SENDERID                (PROPID_M_BASE + 20)    /* VT_UI1|VT_VECTOR */
+#define PROPID_M_SENDERID_LEN            (PROPID_M_BASE + 21)    /* VT_UI4           */
+#define PROPID_M_SENDERID_TYPE           (PROPID_M_BASE + 22)    /* VT_UI4           */
+#define PROPID_M_PRIV_LEVEL              (PROPID_M_BASE + 23)    /* VT_UI4           */
+#define PROPID_M_AUTH_LEVEL              (PROPID_M_BASE + 24)    /* VT_UI4           */
+#define PROPID_M_AUTHENTICATED           (PROPID_M_BASE + 25)    /* VT_UI1           */
+#define PROPID_M_HASH_ALG                (PROPID_M_BASE + 26)    /* VT_UI4           */
+#define PROPID_M_ENCRYPTION_ALG          (PROPID_M_BASE + 27)    /* VT_UI4           */
+#define PROPID_M_SENDER_CERT             (PROPID_M_BASE + 28)    /* VT_UI1|VT_VECTOR */
+#define PROPID_M_SENDER_CERT_LEN         (PROPID_M_BASE + 29)    /* VT_UI4           */
+#define PROPID_M_SRC_MACHINE_ID          (PROPID_M_BASE + 30)    /* VT_CLSID         */
+#define PROPID_M_SENTTIME                (PROPID_M_BASE + 31)    /* VT_UI4           */
+#define PROPID_M_ARRIVEDTIME             (PROPID_M_BASE + 32)    /* VT_UI4           */
+#define PROPID_M_DEST_QUEUE              (PROPID_M_BASE + 33)    /* VT_LPWSTR        */
+#define PROPID_M_DEST_QUEUE_LEN          (PROPID_M_BASE + 34)    /* VT_UI4           */
+#define PROPID_M_EXTENSION               (PROPID_M_BASE + 35)    /* VT_UI1|VT_VECTOR */
+#define PROPID_M_EXTENSION_LEN           (PROPID_M_BASE + 36)    /* VT_UI4           */
+#define PROPID_M_SECURITY_CONTEXT        (PROPID_M_BASE + 37)    /* VT_UI4           */
+#define PROPID_M_CONNECTOR_TYPE          (PROPID_M_BASE + 38)    /* VT_CLSID         */
+#define PROPID_M_XACT_STATUS_QUEUE       (PROPID_M_BASE + 39)    /* VT_LPWSTR        */
+#define PROPID_M_XACT_STATUS_QUEUE_LEN   (PROPID_M_BASE + 40)    /* VT_UI4           */
+#define PROPID_M_TRACE                   (PROPID_M_BASE + 41)    /* VT_UI1           */
+#define PROPID_M_BODY_TYPE               (PROPID_M_BASE + 42)    /* VT_UI4           */
+#define PROPID_M_DEST_SYMM_KEY           (PROPID_M_BASE + 43)    /* VT_UI1|VT_VECTOR */
+#define PROPID_M_DEST_SYMM_KEY_LEN       (PROPID_M_BASE + 44)    /* VT_UI4           */
+#define PROPID_M_SIGNATURE               (PROPID_M_BASE + 45)    /* VT_UI1|VT_VECTOR */
+#define PROPID_M_SIGNATURE_LEN           (PROPID_M_BASE + 46)    /* VT_UI4           */
+#define PROPID_M_PROV_TYPE               (PROPID_M_BASE + 47)    /* VT_UI4           */
+#define PROPID_M_PROV_NAME               (PROPID_M_BASE + 48)    /* VT_LPWSTR        */
+#define PROPID_M_PROV_NAME_LEN           (PROPID_M_BASE + 49)    /* VT_UI4           */
+#define PROPID_M_FIRST_IN_XACT           (PROPID_M_BASE + 50)    /* VT_UI1           */
+#define PROPID_M_LAST_IN_XACT            (PROPID_M_BASE + 51)    /* VT_UI1           */
+#define PROPID_M_XACTID                  (PROPID_M_BASE + 52)    /* VT_UI1|VT_VECTOR */
+#define PROPID_M_AUTHENTICATED_EX        (PROPID_M_BASE + 53)    /* VT_UI1           */
+#define PROPID_M_RESP_FORMAT_NAME        (PROPID_M_BASE + 54)    /* VT_LPWSTR        */
+#define PROPID_M_RESP_FORMAT_NAME_LEN    (PROPID_M_BASE + 55)    /* VT_UI4           */
+#define PROPID_M_DEST_FORMAT_NAME        (PROPID_M_BASE + 58)    /* VT_LPWSTR        */
+#define PROPID_M_DEST_FORMAT_NAME_LEN    (PROPID_M_BASE + 59)    /* VT_UI4           */
+#define PROPID_M_LOOKUPID                (PROPID_M_BASE + 60)    /* VT_UI8           */
+#define PROPID_M_SOAP_ENVELOPE			 (PROPID_M_BASE + 61)    /* VT_LPWSTR        */
+#define PROPID_M_SOAP_ENVELOPE_LEN		 (PROPID_M_BASE + 62)    /* VT_UI4           */
+#define PROPID_M_COMPOUND_MESSAGE		 (PROPID_M_BASE + 63)    /* VT_UI1|VT_VECTOR */
+#define PROPID_M_COMPOUND_MESSAGE_SIZE	 (PROPID_M_BASE + 64)    /* VT_UI4           */
+#define PROPID_M_SOAP_HEADER             (PROPID_M_BASE + 65)    /* VT_LPWSTR        */
+#define PROPID_M_SOAP_BODY               (PROPID_M_BASE + 66)    /* VT_LPWSTR        */
 
 //
 // Message Property Size
@@ -339,13 +290,13 @@ typedef struct tagMQPRIVATEPROPS
 //  MESSAGE CLASS VALUES
 //********************************************************************
 //
-//  Message Class Values are 16 bits layed out as follows:
+//  Message class values are 16 bits laid out as follows:
 //
 //   1 1 1 1 1 1
 //   5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-//  +-+-+-----------+---------------+
-//  |S|R| Reserved  |  Class code   |
-//  +-+-+-----------+---------------+
+//  +-+-+-+-------+-----------------+
+//  |S|R|H|Reserve|   Class code    |
+//  +-+-+-+-------+-----------------+
 //
 //  where
 //
@@ -357,9 +308,17 @@ typedef struct tagMQPRIVATEPROPS
 //          0 - Arrival ACK/NACK
 //          1 - Receive ACK/NACK
 //
+//      H - is http flag
+//          0 - no http
+//          1 - http 
+
 #define MQCLASS_CODE(s, r, code) ((USHORT)(((s) << 15) | ((r) << 14) | (code)))
 #define MQCLASS_NACK(c)     ((c) & 0x8000)
 #define MQCLASS_RECEIVE(c)  ((c) & 0x4000)
+
+#define MQCLASS_NACK_HTTP(c) (((c) & 0xA000) == 0xA000)
+
+
 
 //
 //  Normal message
@@ -372,12 +331,12 @@ typedef struct tagMQPRIVATEPROPS
 #define MQMSG_CLASS_REPORT                      MQCLASS_CODE(0, 0, 0x01)
 
 //
-//  Arrival acknowledgment. The message has reached the destination queue
+//  Arrival acknowledgment. The message has reached its destination queue
 //
 #define MQMSG_CLASS_ACK_REACH_QUEUE             MQCLASS_CODE(0, 0, 0x02)
 
 //
-//  Receive acknowledgment. The message has been received by the application
+//  Receive acknowledgment. The message has been received by an application
 //
 #define MQMSG_CLASS_ACK_RECEIVE                 MQCLASS_CODE(0, 1, 0x00)
 
@@ -388,12 +347,12 @@ typedef struct tagMQPRIVATEPROPS
 //
 
 //
-//  Destination queue can not be reached, the queue may have been deleted
+//  Destination queue cannot be reached, the queue may have been deleted
 //
 #define MQMSG_CLASS_NACK_BAD_DST_Q              MQCLASS_CODE(1, 0, 0x00)
 
 //
-//  The message was purged before reaching the destination queue
+//  The message was purged before reaching its destination queue
 //
 #define MQMSG_CLASS_NACK_PURGED                 MQCLASS_CODE(1, 0, 0x01)
 
@@ -408,12 +367,12 @@ typedef struct tagMQPRIVATEPROPS
 #define MQMSG_CLASS_NACK_Q_EXCEED_QUOTA         MQCLASS_CODE(1, 0, 0x03)
 
 //
-//  The sender does not have send access rights on the queue.
+//  The sender does not have send access rights to the queue.
 //
 #define MQMSG_CLASS_NACK_ACCESS_DENIED          MQCLASS_CODE(1, 0, 0x04)
 
 //
-//  The message hop count exceeded
+//  The message hop count was exceeded
 //
 #define MQMSG_CLASS_NACK_HOP_COUNT_EXCEEDED     MQCLASS_CODE(1, 0, 0x05)
 
@@ -443,7 +402,7 @@ typedef struct tagMQPRIVATEPROPS
 #define MQMSG_CLASS_NACK_NOT_TRANSACTIONAL_MSG  MQCLASS_CODE(1, 0, 0x0A)
 
 //
-//  The requested crypto provider for encryption is not supported by destination.
+//  The requested crypto provider for encryption is not supported by the destination.
 //
 #define MQMSG_CLASS_NACK_UNSUPPORTED_CRYPTO_PROVIDER  MQCLASS_CODE(1, 0, 0x0B)
 
@@ -454,7 +413,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 
 //
-//  The queue was deleted, after the message has arrived
+//  The queue was deleted, after the message arrived
 //
 #define MQMSG_CLASS_NACK_Q_DELETED              MQCLASS_CODE(1, 1, 0x00)
 
@@ -464,12 +423,14 @@ typedef struct tagMQPRIVATEPROPS
 #define MQMSG_CLASS_NACK_Q_PURGED               MQCLASS_CODE(1, 1, 0x01)
 
 //
-//  Time to receive has expired, while the message is in the queue (info from the destination)
+//  Time to receive has expired while the message was still in its destination queue
+//  (generated by destination)
 //
 #define MQMSG_CLASS_NACK_RECEIVE_TIMEOUT        MQCLASS_CODE(1, 1, 0x02)
 
 //
-//  Time to receive has expired, while the message is in the queue (generated by sender locally)
+//  Time to receive has expired while the message was still in its local outgoing queue
+//  (generated locally by sender)
 //
 #define MQMSG_CLASS_NACK_RECEIVE_TIMEOUT_AT_SENDER  MQCLASS_CODE(1, 1, 0x03)
 
@@ -522,12 +483,38 @@ typedef struct tagMQPRIVATEPROPS
 #define MQMSG_PRIV_LEVEL_BODY_ENHANCED      0x03
 
 //----- PROPID_M_AUTH_LEVEL -----------------
-#define MQMSG_AUTH_LEVEL_NONE               0
-#define MQMSG_AUTH_LEVEL_ALWAYS             1
+#define MQMSG_AUTH_LEVEL_NONE				0
+#define MQMSG_AUTH_LEVEL_ALWAYS				1
 
-//----- PROPID_M_AUTHENTICATED --------------
+//
+// MQMSG_AUTH_LEVEL_MSMQxx are obsolete 
+// you should use MQMSG_AUTH_LEVEL_SIGxx
+//
+#define MQMSG_AUTH_LEVEL_MSMQ10				2
+#define MQMSG_AUTH_LEVEL_MSMQ20				4
+
+#define MQMSG_AUTH_LEVEL_SIG10 				2
+#define MQMSG_AUTH_LEVEL_SIG20 				4
+#define MQMSG_AUTH_LEVEL_SIG30 				8
+
+
+//----- PROPID_M_AUTHENTICATED -----------------
+//----- PROPID_M_AUTHENTICATED_EX --------------
 #define MQMSG_AUTHENTICATION_NOT_REQUESTED  0
 #define MQMSG_AUTHENTICATION_REQUESTED      1
+
+//
+// MQMSG_AUTHENTICATION_REQUESTED_EX is obsolete 
+// use the values MQMSG_AUTHENTICATED_SIGxx
+// for PROPID_M_AUTHENTICATED_EX
+//
+#define MQMSG_AUTHENTICATION_REQUESTED_EX   3
+
+#define MQMSG_AUTHENTICATED_SIG10			1
+#define MQMSG_AUTHENTICATED_SIG20			3
+#define MQMSG_AUTHENTICATED_SIG30			5
+#define MQMSG_AUTHENTICATED_SIGXML			9
+
 
 //----- PROPID_M_FIRST_IN_XACT --------------
 #define MQMSG_NOT_FIRST_IN_XACT             0
@@ -557,6 +544,8 @@ typedef struct tagMQPRIVATEPROPS
 #define PROPID_Q_PRIV_LEVEL     (PROPID_Q_BASE + 12)  /* VT_UI4       */
 #define PROPID_Q_TRANSACTION    (PROPID_Q_BASE + 13)  /* VT_UI1       */
 #define PROPID_Q_PATHNAME_DNS  (PROPID_Q_BASE + 24)  /* VT_LPWSTR    */
+#define PROPID_Q_MULTICAST_ADDRESS (PROPID_Q_BASE + 25)  /* VT_LPWSTR */
+#define PROPID_Q_ADS_PATH      (PROPID_Q_BASE + 26)  /* VT_LPWSTR    */
 
 
 //----- PROPID_Q_JOURNAL ------------------
@@ -595,17 +584,10 @@ typedef struct tagMQPRIVATEPROPS
 #define PROPID_QM_MACHINE_ID                (PROPID_QM_BASE +  2) /* VT_CLSID            */
 #define PROPID_QM_PATHNAME                  (PROPID_QM_BASE +  3) /* VT_LPWSTR           */
 #define PROPID_QM_CONNECTION                (PROPID_QM_BASE +  4) /* VT_LPWSTR|VT_VECTOR */
-#define PROPID_QM_ENCRYPTION_PK             (PROPID_QM_BASE +  5) /* VT_BLOB             */
+#define PROPID_QM_ENCRYPTION_PK             (PROPID_QM_BASE +  5) /* VT_UI1|VT_VECTOR	 */
 #define PROPID_QM_ENCRYPTION_PK_BASE        (PROPID_QM_BASE + 31)  /* VT_UI1|VT_VECTOR  */
 #define PROPID_QM_ENCRYPTION_PK_ENHANCED    (PROPID_QM_BASE + 32)  /* VT_UI1|VT_VECTOR  */
 #define PROPID_QM_PATHNAME_DNS              (PROPID_QM_BASE + 33)  /* VT_LPWSTR         */
-
-//
-// LONG_LIVED is the default for PROPID_M_TIME_TO_REACH_QUEUE. If call
-// to MQSendMessage() specify this value, or not give this property at
-// all, then the actual timeout is taken from MQIS database.
-//
-#define LONG_LIVED    0xfffffffe
 
 //********************************************************************
 //  PRIVATE COMPUTER PROPERTIES
@@ -614,6 +596,141 @@ typedef struct tagMQPRIVATEPROPS
 
 #define PROPID_PC_VERSION             (PROPID_PC_BASE + 1) /* VT_UI4            */
 #define PROPID_PC_DS_ENABLED          (PROPID_PC_BASE + 2) /* VT_BOOL           */
+
+//********************************************************************
+//  LOCAL ADMIN MSMQ MACHINE PROPERTIES
+//********************************************************************
+#define PROPID_MGMT_MSMQ_BASE           0
+#define PROPID_MGMT_MSMQ_ACTIVEQUEUES   (PROPID_MGMT_MSMQ_BASE + 1) /* VT_LPWSTR | VT_VECTOR  */
+#define PROPID_MGMT_MSMQ_PRIVATEQ       (PROPID_MGMT_MSMQ_BASE + 2) /* VT_LPWSTR | VT_VECTOR  */
+#define PROPID_MGMT_MSMQ_DSSERVER       (PROPID_MGMT_MSMQ_BASE + 3) /* VT_LPWSTR */
+#define PROPID_MGMT_MSMQ_CONNECTED      (PROPID_MGMT_MSMQ_BASE + 4) /* VT_LPWSTR */
+#define PROPID_MGMT_MSMQ_TYPE           (PROPID_MGMT_MSMQ_BASE + 5) /* VT_LPWSTR */
+#define PROPID_MGMT_MSMQ_BYTES_IN_ALL_QUEUES (PROPID_MGMT_QUEUE_BASE + 6)    /* VT_UI8    */
+
+
+//
+// Returned Value for PROPID_MGMT_MSMQ_CONNECTED property
+//
+#define MSMQ_CONNECTED      L"CONNECTED"
+#define MSMQ_DISCONNECTED   L"DISCONNECTED"
+
+
+//********************************************************************
+//  LOCAL ADMIN MSMQ QUEUE PROPERTIES
+//********************************************************************
+#define PROPID_MGMT_QUEUE_BASE                  0
+#define PROPID_MGMT_QUEUE_PATHNAME              (PROPID_MGMT_QUEUE_BASE + 1)    /* VT_LPWSTR */
+#define PROPID_MGMT_QUEUE_FORMATNAME            (PROPID_MGMT_QUEUE_BASE + 2)    /* VT_LPWSTR */
+#define PROPID_MGMT_QUEUE_TYPE                  (PROPID_MGMT_QUEUE_BASE + 3)    /* VT_LPWSTR */
+#define PROPID_MGMT_QUEUE_LOCATION              (PROPID_MGMT_QUEUE_BASE + 4)    /* VT_LPWSTR */
+#define PROPID_MGMT_QUEUE_XACT                  (PROPID_MGMT_QUEUE_BASE + 5)    /* VT_LPWSTR */
+#define PROPID_MGMT_QUEUE_FOREIGN               (PROPID_MGMT_QUEUE_BASE + 6)    /* VT_LPWSTR */
+#define PROPID_MGMT_QUEUE_MESSAGE_COUNT         (PROPID_MGMT_QUEUE_BASE + 7)    /* VT_UI4    */
+#define PROPID_MGMT_QUEUE_BYTES_IN_QUEUE        (PROPID_MGMT_QUEUE_BASE + 8)    /* VT_UI4    */
+#define PROPID_MGMT_QUEUE_JOURNAL_MESSAGE_COUNT (PROPID_MGMT_QUEUE_BASE + 9)    /* VT_UI4    */
+#define PROPID_MGMT_QUEUE_BYTES_IN_JOURNAL      (PROPID_MGMT_QUEUE_BASE + 10)   /* VT_UI4    */
+#define PROPID_MGMT_QUEUE_STATE                 (PROPID_MGMT_QUEUE_BASE + 11)   /* VT_LPWSTR */
+#define PROPID_MGMT_QUEUE_NEXTHOPS              (PROPID_MGMT_QUEUE_BASE + 12)   /* VT_LPWSTR|VT_VECTOR  */
+#define PROPID_MGMT_QUEUE_EOD_LAST_ACK          (PROPID_MGMT_QUEUE_BASE + 13)   /* VT_BLOB   */
+#define PROPID_MGMT_QUEUE_EOD_LAST_ACK_TIME     (PROPID_MGMT_QUEUE_BASE + 14)   /* VT_I4     */
+#define PROPID_MGMT_QUEUE_EOD_LAST_ACK_COUNT    (PROPID_MGMT_QUEUE_BASE + 15)   /* VT_UI4    */
+#define PROPID_MGMT_QUEUE_EOD_FIRST_NON_ACK     (PROPID_MGMT_QUEUE_BASE + 16)   /* VT_BLOB   */
+#define PROPID_MGMT_QUEUE_EOD_LAST_NON_ACK      (PROPID_MGMT_QUEUE_BASE + 17)   /* VT_BLOB   */
+#define PROPID_MGMT_QUEUE_EOD_NEXT_SEQ          (PROPID_MGMT_QUEUE_BASE + 18)   /* VT_BLOB   */
+#define PROPID_MGMT_QUEUE_EOD_NO_READ_COUNT     (PROPID_MGMT_QUEUE_BASE + 19)   /* VT_UI4    */
+#define PROPID_MGMT_QUEUE_EOD_NO_ACK_COUNT      (PROPID_MGMT_QUEUE_BASE + 20)   /* VT_UI4    */
+#define PROPID_MGMT_QUEUE_EOD_RESEND_TIME       (PROPID_MGMT_QUEUE_BASE + 21)   /* VT_I4     */
+#define PROPID_MGMT_QUEUE_EOD_RESEND_INTERVAL   (PROPID_MGMT_QUEUE_BASE + 22)   /* VT_UI4    */
+#define PROPID_MGMT_QUEUE_EOD_RESEND_COUNT      (PROPID_MGMT_QUEUE_BASE + 23)   /* VT_UI4    */
+#define PROPID_MGMT_QUEUE_EOD_SOURCE_INFO       (PROPID_MGMT_QUEUE_BASE + 24)   /* VT_VARIANT|VT_VECTOR */
+
+
+//
+// Olbselete alternative names for "Bytes in ..."
+//
+#define PROPID_MGMT_QUEUE_USED_QUOTA            PROPID_MGMT_QUEUE_BYTES_IN_QUEUE          
+#define PROPID_MGMT_QUEUE_JOURNAL_USED_QUOTA    PROPID_MGMT_QUEUE_BYTES_IN_JOURNAL        
+
+//
+// Returned value for PROPID_MGMT_QUEUE_TYPE
+//
+#define MGMT_QUEUE_TYPE_PUBLIC      L"PUBLIC"
+#define MGMT_QUEUE_TYPE_PRIVATE     L"PRIVATE"
+#define MGMT_QUEUE_TYPE_MACHINE     L"MACHINE"
+#define MGMT_QUEUE_TYPE_CONNECTOR   L"CONNECTOR"
+#define MGMT_QUEUE_TYPE_MULTICAST   L"MULTICAST"
+
+//
+// Returned value for PROPID_MGMT_QUEUE_STATE
+//
+#define MGMT_QUEUE_STATE_LOCAL          L"LOCAL CONNECTION"
+#define MGMT_QUEUE_STATE_NONACTIVE      L"INACTIVE"
+#define MGMT_QUEUE_STATE_WAITING        L"WAITING"
+#define MGMT_QUEUE_STATE_NEED_VALIDATE  L"NEED VALIDATION"
+#define MGMT_QUEUE_STATE_ONHOLD         L"ONHOLD"
+#define MGMT_QUEUE_STATE_CONNECTED      L"CONNECTED"
+#define MGMT_QUEUE_STATE_DISCONNECTING  L"DISCONNECTING"
+#define MGMT_QUEUE_STATE_DISCONNECTED   L"DISCONNECTED"
+
+//
+// Returned value for PROPID_MGMT_QUEUE_LOCATION
+//
+#define MGMT_QUEUE_LOCAL_LOCATION   L"LOCAL"
+#define MGMT_QUEUE_REMOTE_LOCATION  L"REMOTE"
+
+// 
+// Returned Value for PROPID_MGMT_QUEUE_XACT and PROPID_MGMT_QUEUE_FOREIGN
+//
+
+#define MGMT_QUEUE_UNKNOWN_TYPE     L"UNKNOWN"
+
+//
+// Obselete names left for backword compatibility.
+//
+
+#define MGMT_QUEUE_CORRECT_TYPE     L"YES"
+#define MGMT_QUEUE_INCORRECT_TYPE   L"NO"
+
+//
+// Names for Returned Value for PROPID_MGMT_QUEUE_XACT 
+//
+
+//#define MGMT_QUEUE_UNKNOWN_TYPE     	L"UNKNOWN"
+#define MGMT_QUEUE_TRANSACTIONAL_TYPE  	L"YES"
+#define MGMT_QUEUE_NOT_TRANSACTIONAL_TYPE   L"NO"
+
+//
+// Names for Returned Value for PROPID_MGMT_QUEUE_FOREIGN
+//
+
+//#define MGMT_QUEUE_UNKNOWN_TYPE     	L"UNKNOWN"
+#define MGMT_QUEUE_FOREIGN_TYPE         L"YES"
+#define MGMT_QUEUE_NOT_FOREIGN_TYPE     L"NO"
+
+//
+// Object parameter values for MQMgmtAction API
+//
+#define MO_MACHINE_TOKEN    L"MACHINE"
+#define MO_QUEUE_TOKEN      L"QUEUE"
+
+//
+// Action parameter values for MQMgmtAction API
+//
+#define MACHINE_ACTION_CONNECT      L"CONNECT"
+#define MACHINE_ACTION_DISCONNECT   L"DISCONNECT"
+#define MACHINE_ACTION_TIDY         L"TIDY"
+
+#define QUEUE_ACTION_PAUSE      L"PAUSE"
+#define QUEUE_ACTION_RESUME     L"RESUME"
+#define QUEUE_ACTION_EOD_RESEND L"EOD_RESEND"
+
+//
+// LONG_LIVED is the default for PROPID_M_TIME_TO_REACH_QUEUE. If calls
+// to MQSendMessage() specify this value, or not specify this property at
+// all, then the actual timeout is obtained from Active Directory.
+//
+#define LONG_LIVED    0xfffffffe
 
 //
 // Success
@@ -671,7 +788,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  GenericError
+//  Generic error code.
 //
 #define MQ_ERROR                         0xC00E0001L
 
@@ -680,7 +797,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  One or more of the passed properties are invalid.
+//  One or more of the properties passed are invalid.
 //
 #define MQ_ERROR_PROPERTY                0xC00E0002L
 
@@ -698,7 +815,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  A queue with the same pathname already exists.
+//  A queue with the same path name already exists.
 //
 #define MQ_ERROR_QUEUE_EXISTS            0xC00E0005L
 
@@ -725,7 +842,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The operation was cancelled before it could be completed.
+//  The operation was canceled before it could be completed.
 //
 #define MQ_ERROR_OPERATION_CANCELLED     0xC00E0008L
 
@@ -734,7 +851,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  There is a sharing violation. The queue is already open for an exclusive receive.
+//  There is a sharing violation. The queue is already open for exclusive retrieval.
 //
 #define MQ_ERROR_SHARING_VIOLATION       0xC00E0009L
 
@@ -752,7 +869,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The specified computer could not be found.
+//  The computer specified cannot be found.
 //
 #define MQ_ERROR_MACHINE_NOT_FOUND       0xC00E000DL
 
@@ -761,7 +878,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The sort operation specified in MQLocateBegin is invalid  (for example: duplicate columns).
+//  The sort operation specified in MQLocateBegin is invalid (for example, there are duplicate columns).
 //
 #define MQ_ERROR_ILLEGAL_SORT            0xC00E0010L
 
@@ -770,7 +887,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The user specified is not a valid  user.
+//  The user specified is not a valid user.
 //
 #define MQ_ERROR_ILLEGAL_USER            0xC00E0011L
 
@@ -779,7 +896,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  Unable to establish a connection with Active Directory. Verify there are sufficient permissions to perform this operation.
+//  A connection with Active Directory cannot be established. Verify that there are sufficient permissions to perform this operation.
 //
 #define MQ_ERROR_NO_DS                   0xC00E0013L
 
@@ -788,7 +905,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The  queue pathname specified is invalid.
+//  The queue path name specified is invalid.
 //
 #define MQ_ERROR_ILLEGAL_QUEUE_PATHNAME  0xC00E0014L
 
@@ -815,9 +932,9 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The buffer supplied to MQReceiveMessage for message body retrieval
-//  was too small. The message was not removed from the queue and part
-//  of the message body that is  in the buffer was copied.
+//  The buffer supplied to MQReceiveMessage for message property retrieval
+//  is too small. The message was not removed from the queue, but the part
+//  of the message property that was in the buffer was copied.
 //
 #define MQ_ERROR_BUFFER_OVERFLOW         0xC00E001AL
 
@@ -826,7 +943,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The MQReceiveMessage timeout has expired
+//  The time specified for MQReceiveMessage to wait for the message elapsed.
 //
 #define MQ_ERROR_IO_TIMEOUT              0xC00E001BL
 
@@ -845,7 +962,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  A message that is currently pointed at by the cursor has been removed from
+//  The message at which the cursor is currently pointing was removed from
 //  the queue by another process or by another call to MQReceiveMessage
 //  without the use of this cursor.
 //
@@ -856,7 +973,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The specified format name is invalid.
+//  The format name specified is invalid.
 //
 #define MQ_ERROR_ILLEGAL_FORMATNAME      0xC00E001EL
 
@@ -875,8 +992,8 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The requested operation for the specified format name is not
-//  supported (for example:: delete a direct queue format name).
+//  Operations of the type requested (for example, deleting a queue using a direct format name)
+//  are not supported for the format name specified.
 //
 #define MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION 0xC00E0020L
 
@@ -912,8 +1029,8 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The RPC server can not impersonate the client application, so the security
-//  credentials could not be verified.
+//  The security credentials cannot be verified because the RPC server
+//  cannot impersonate the client application.
 //
 #define MQ_ERROR_CANNOT_IMPERSONATE_CLIENT 0xC00E0024L
 
@@ -940,7 +1057,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  There are insufficient resources to perform the operation.
+//  There are insufficient resources to perform this operation.
 //
 #define MQ_ERROR_INSUFFICIENT_RESOURCES  0xC00E0027L
 
@@ -949,7 +1066,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The request failed because the user buffer is too small to hold the returned information.
+//  The request failed because the user buffer is too small to hold the information returned.
 //
 #define MQ_ERROR_USER_BUFFER_TOO_SMALL   0xC00E0028L
 
@@ -958,7 +1075,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  Unable to store a recoverable or a journal message. The message was not sent.
+//  A recoverable or journal message could not be stored. The message was not sent.
 //
 #define MQ_ERROR_MESSAGE_STORAGE_FAILED  0xC00E002AL
 
@@ -995,7 +1112,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The internal Message Queuing certificate for the user does not exist.
+//  No internal Message Queuing certificate exists for the user.
 //
 #define MQ_ERROR_NO_INTERNAL_USER_CERT   0xC00E002FL
 
@@ -1004,7 +1121,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  A cryptographic function has failed.
+//  A cryptographic function failed.
 //
 #define MQ_ERROR_CORRUPTED_SECURITY_DATA 0xC00E0030L
 
@@ -1040,7 +1157,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  Unable to obtain  SID information from the thread token.
+//  The SID cannot be obtained from the thread token.
 //
 #define MQ_ERROR_COULD_NOT_GET_USER_SID  0xC00E0036L
 
@@ -1049,7 +1166,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  Unable to obtain  account information for the user.
+//  The account information for the user cannot be obtained.
 //
 #define MQ_ERROR_COULD_NOT_GET_ACCOUNT_INFO 0xC00E0037L
 
@@ -1067,7 +1184,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The PROPID value is invalid.
+//  A property identifier is invalid.
 //
 #define MQ_ERROR_ILLEGAL_PROPID          0xC00E0039L
 
@@ -1076,7 +1193,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The RELATION value is invalid.
+//  A relationship parameter is invalid.
 //
 #define MQ_ERROR_ILLEGAL_RELATION        0xC00E003AL
 
@@ -1085,7 +1202,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  A buffer size property is invalid.
+//  The size of the buffer for the message identifier or correlation identifier is invalid.
 //
 #define MQ_ERROR_ILLEGAL_PROPERTY_SIZE   0xC00E003BL
 
@@ -1094,7 +1211,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The PROPID value for the  MQRESTRICTION parameter is invalid.
+//  A property identifier specified in MQRESTRICTION is invalid.
 //
 #define MQ_ERROR_ILLEGAL_RESTRICTION_PROPID 0xC00E003CL
 
@@ -1103,7 +1220,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The  MQQUEUEPROPS parameter  is invalid. This may be because it has a  null value or has zero properties specified.
+//  Either the pointer to the MQQUEUEPROPS structure has a null value, or no properties are specified in it.
 //
 #define MQ_ERROR_ILLEGAL_MQQUEUEPROPS    0xC00E003DL
 
@@ -1112,8 +1229,8 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The PROPID value for the requested operation  is invalid. (for example: PROPID_Q_INSTANCE 
-//  in MQSetQueueProperties)
+//  The property identifier specified (for example, PROPID_Q_INSTANCE in MQSetQueueProperties)
+//  is invalid for the operation requested.
 //
 #define MQ_ERROR_PROPERTY_NOTALLOWED     0xC00E003EL
 
@@ -1122,7 +1239,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  Not all the required properties for the operation were specified
+//  Not all the properties required for the operation were specified
 //  for the input parameters.
 //
 #define MQ_ERROR_INSUFFICIENT_PROPERTIES 0xC00E003FL
@@ -1133,8 +1250,8 @@ typedef struct tagMQPRIVATEPROPS
 // MessageText:
 //
 //  A computer with the same name already exists in the site. Either the computer object already exists
-//  (for a  Windows NT enterprise), or the MSMQ configuration object already exists for the applicable computer 
-//  object in Active directory (for a Windows 2000 enterprise).
+//  (for a Windows NT enterprise), or the MSMQ Configuration (msmq) object already exists for the applicable computer
+//  object in Active directory (for a Windows 2000 or Windows Whistler forest).
 //
 #define MQ_ERROR_MACHINE_EXISTS          0xC00E0040L
 
@@ -1143,7 +1260,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The  MQQMPROPS parameter value is invalid. This may be because it has a  null value or has zero properties specified.
+//  Either the pointer to the MQQMROPS structure has a null value, or no properties are specified in it.
 //
 #define MQ_ERROR_ILLEGAL_MQQMPROPS       0xC00E0041L
 
@@ -1152,7 +1269,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  This error message is obsolete.
+//  Obsolete, kept for backward compatibility
 //
 #define MQ_ERROR_DS_IS_FULL              0xC00E0042L
 
@@ -1170,8 +1287,8 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The object owner is invalid. For example: MQCreateQueue failed because the QM
-//  object is invalid.
+//  The object owner is invalid (for example, MQCreateQueue failed because the QM
+//  object is invalid).
 //
 #define MQ_ERROR_INVALID_OWNER           0xC00E0044L
 
@@ -1180,7 +1297,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The specified access mode is unsupported.
+//  The access mode specified is unsupported.
 //
 #define MQ_ERROR_UNSUPPORTED_ACCESS_MODE 0xC00E0045L
 
@@ -1189,7 +1306,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The specified result buffer is too small.
+//  The result buffer specified is too small.
 //
 #define MQ_ERROR_RESULT_BUFFER_TOO_SMALL 0xC00E0046L
 
@@ -1198,7 +1315,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The Connected Network cannot be deleted as it is currently in use.
+//  Obsolete, kept for backward compatibility
 //
 #define MQ_ERROR_DELETE_CN_IN_USE        0xC00E0048L
 
@@ -1234,7 +1351,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  Cannot connect to the Distributed Transaction Coordinator.
+//  A connection cannot be established with the Distributed Transaction Coordinator.
 //
 #define MQ_ERROR_DTC_CONNECT             0xC00E004CL
 
@@ -1243,7 +1360,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  Cannot import the transaction.
+//  The transaction specified cannot be imported.
 //
 #define MQ_ERROR_TRANSACTION_IMPORT      0xC00E004EL
 
@@ -1252,7 +1369,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  Transaction usage is invalid.
+//  An attempted action cannot be performed within a transaction.
 //
 #define MQ_ERROR_TRANSACTION_USAGE       0xC00E0050L
 
@@ -1261,7 +1378,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The transaction operations sequence is incorrect.
+//  The transaction's operation sequence is incorrect.
 //
 #define MQ_ERROR_TRANSACTION_SEQUENCE    0xC00E0051L
 
@@ -1270,7 +1387,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The Connector Type value is missing and is required  when sending an acknowledgment message or a secure message.
+//  The connector type message property is not specified. This property is required for sending an acknowledgment message or a secure message.
 //
 #define MQ_ERROR_MISSING_CONNECTOR_TYPE  0xC00E0055L
 
@@ -1279,7 +1396,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The Queue Manager service has been restarted. The queue handle should be closed.
+//  The Message Queuing service was restarted. Any open queue handles should be closed.
 //
 #define MQ_ERROR_STALE_HANDLE            0xC00E0056L
 
@@ -1288,7 +1405,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  Cannot enlist the specified transaction.
+//  The transaction specified cannot be enlisted.
 //
 #define MQ_ERROR_TRANSACTION_ENLIST      0xC00E0058L
 
@@ -1316,7 +1433,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  ThePROPID value in MQSORTSET is invalid.
+//  An invalid property identifier is specified in MQSORTSET.
 //
 #define MQ_ERROR_ILLEGAL_SORT_PROPID     0xC00E005CL
 
@@ -1325,7 +1442,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The label is too long. It should be less or equal to MQ_MAX_MSG_LABEL_LEN in length.
+//  The message label is too long. Its length should be less than or equal to MQ_MAX_MSG_LABEL_LEN.
 //
 #define MQ_ERROR_LABEL_TOO_LONG          0xC00E005DL
 
@@ -1334,7 +1451,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The label buffer supplied to the API was too small.
+//  The label buffer supplied to the API is too small.
 //
 #define MQ_ERROR_LABEL_BUFFER_TOO_SMALL  0xC00E005EL
 
@@ -1343,7 +1460,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The list (in the registry) of domain controllers that are running Message Queuing is empty.
+//  Obsolete, kept for backward compatibility
 //
 #define MQ_ERROR_MQIS_SERVER_EMPTY       0xC00E005FL
 
@@ -1352,7 +1469,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  MQIS database is in read-only mode.
+//  Obsolete, kept for backward compatibility
 //
 #define MQ_ERROR_MQIS_READONLY_MODE      0xC00E0060L
 
@@ -1361,7 +1478,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The passed buffer for the Symmetric key property is too small.
+//  The buffer passed for the symmetric key is too small.
 //
 #define MQ_ERROR_SYMM_KEY_BUFFER_TOO_SMALL 0xC00E0061L
 
@@ -1370,7 +1487,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The passed buffer for the Signature property is too small.
+//  The buffer passed for the signature property is too small.
 //
 #define MQ_ERROR_SIGNATURE_BUFFER_TOO_SMALL 0xC00E0062L
 
@@ -1379,7 +1496,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The passed buffer for the Provider Name property is too small.
+//  The buffer passed for the provider name property is too small.
 //
 #define MQ_ERROR_PROV_NAME_BUFFER_TOO_SMALL 0xC00E0063L
 
@@ -1397,8 +1514,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  Another MQIS server is being installed, write operations to the
-//  database are not allowed at this stage.
+//  Obsolete; another MQIS server is being installed. Write operations to the database are not allowed at this stage.
 //
 #define MQ_ERROR_WRITE_NOT_ALLOWED       0xC00E0065L
 
@@ -1412,28 +1528,23 @@ typedef struct tagMQPRIVATEPROPS
 #define MQ_ERROR_WKS_CANT_SERVE_CLIENT   0xC00E0066L
 
 //
-//
 // MessageId: MQ_ERROR_DEPEND_WKS_LICENSE_OVERFLOW
 //
 // MessageText:
 //
-//  The number of dependent clients served by the Message Queuing server reached
-//  its upper limit.
-//  
+//  The number of dependent clients served by the Message Queuing server reached its upper limit.
 //
 #define MQ_ERROR_DEPEND_WKS_LICENSE_OVERFLOW 0xC00E0067L
 
-//
 //
 // MessageId: MQ_CORRUPTED_QUEUE_WAS_DELETED
 //
 // MessageText:
 //
-//  The file %1 for queue %2 in the LQS folder has been deleted because it was corrupted.
+//  The file %1 for the queue %2 in the Lqs folder was deleted because it was corrupted.
 //
 #define MQ_CORRUPTED_QUEUE_WAS_DELETED   0xC00E0068L
 
-//
 //
 // MessageId: MQ_ERROR_REMOTE_MACHINE_NOT_AVAILABLE
 //
@@ -1444,153 +1555,137 @@ typedef struct tagMQPRIVATEPROPS
 #define MQ_ERROR_REMOTE_MACHINE_NOT_AVAILABLE 0xC00E0069L
 
 //
-//
 // MessageId: MQ_ERROR_UNSUPPORTED_OPERATION
 //
 // MessageText:
 //
-//  The operation is not supported for a WORKGROUP installation computer.
+//  This operation is not supported for Message Queuing installed in workgroup mode.
 //
 #define MQ_ERROR_UNSUPPORTED_OPERATION   0xC00E006AL
 
-//
 //
 // MessageId: MQ_ERROR_ENCRYPTION_PROVIDER_NOT_SUPPORTED
 //
 // MessageText:
 //
-//  The Cryptographic Service Provider  %1 is not supported by Message Queuing.
+//  The cryptographic service provider %1 is not supported by Message Queuing.
 //
 #define MQ_ERROR_ENCRYPTION_PROVIDER_NOT_SUPPORTED 0xC00E006BL
 
-//
 //
 // MessageId: MQ_ERROR_CANNOT_SET_CRYPTO_SEC_DESCR
 //
 // MessageText:
 //
-//  Unable to set the security descriptor for the cryptographic keys.
+//  The security descriptors for the cryptographic keys cannot be set.
 //
 #define MQ_ERROR_CANNOT_SET_CRYPTO_SEC_DESCR 0xC00E006CL
 
-//
 //
 // MessageId: MQ_ERROR_CERTIFICATE_NOT_PROVIDED
 //
 // MessageText:
 //
-//  A user attempted  to send an authenticated message without a certificate.
+//  A user attempted to send an authenticated message without a certificate.
 //
 #define MQ_ERROR_CERTIFICATE_NOT_PROVIDED 0xC00E006DL
 
-//
 //
 // MessageId: MQ_ERROR_Q_DNS_PROPERTY_NOT_SUPPORTED
 //
 // MessageText:
 //
-//  The column PROPID_Q_PATHNAME_DNS is not supported  for the 
-//  MQLocateBegin API.
+//  The column PROPID_Q_PATHNAME_DNS is not supported for the MQLocateBegin API.
 //
 #define MQ_ERROR_Q_DNS_PROPERTY_NOT_SUPPORTED 0xC00E006EL
 
-//
 //
 // MessageId: MQ_ERROR_CANNOT_CREATE_CERT_STORE
 //
 // MessageText:
 //
-//  Unable to create a certificate store for the internal certificate.
+//  A certificate store cannot be created for the internal certificate.
 //
 #define MQ_ERROR_CANNOT_CREATE_CERT_STORE 0xC00E006FL
 
-//
 //
 // MessageId: MQ_ERROR_CANNOT_OPEN_CERT_STORE
 //
 // MessageText:
 //
-//  Unable to  open the certificates store for the internal certificate.
+//  The certificate store for the internal certificate cannot be opened.
 //
 #define MQ_ERROR_CANNOT_OPEN_CERT_STORE  0xC00E0070L
 
-//
 //
 // MessageId: MQ_ERROR_ILLEGAL_ENTERPRISE_OPERATION
 //
 // MessageText:
 //
-//  The operation is invalid for a msmqServices object.
+//  This operation is invalid for an MsmqServices object.
 //
 #define MQ_ERROR_ILLEGAL_ENTERPRISE_OPERATION 0xC00E0071L
 
-//
 //
 // MessageId: MQ_ERROR_CANNOT_GRANT_ADD_GUID
 //
 // MessageText:
 //
-//  Failed to grant the "Add Guid" permission to current user.
+//  The Add GUID permission cannot be granted to the current user.
 //
 #define MQ_ERROR_CANNOT_GRANT_ADD_GUID   0xC00E0072L
 
-//
 //
 // MessageId: MQ_ERROR_CANNOT_LOAD_MSMQOCM
 //
 // MessageText:
 //
-//  Can't load the MSMQOCM.DLL library.
+//  Obsolete: The dynamic-link library Msmqocm.dll cannot be loaded.
 //
 #define MQ_ERROR_CANNOT_LOAD_MSMQOCM     0xC00E0073L
 
-//
 //
 // MessageId: MQ_ERROR_NO_ENTRY_POINT_MSMQOCM
 //
 // MessageText:
 //
-//  Cannot locate an entry point in the MSMQOCM.DLL library.
+//  An entry point cannot be located in Msmqocm.dll.
 //
 #define MQ_ERROR_NO_ENTRY_POINT_MSMQOCM  0xC00E0074L
 
-//
 //
 // MessageId: MQ_ERROR_NO_MSMQ_SERVERS_ON_DC
 //
 // MessageText:
 //
-//  Failed to find Message Queuing servers on domain controllers.
+//  Message Queuing servers cannot be found on domain controllers.
 //
 #define MQ_ERROR_NO_MSMQ_SERVERS_ON_DC   0xC00E0075L
 
-//
 //
 // MessageId: MQ_ERROR_CANNOT_JOIN_DOMAIN
 //
 // MessageText:
 //
-//  Failed to join MSMQ enterprise on Windows 2000 domain.
+//  The computer joined the domain, but Message Queuing will continue to run in workgroup mode because it failed to register itself in Active Directory.
 //
 #define MQ_ERROR_CANNOT_JOIN_DOMAIN      0xC00E0076L
 
-//
 //
 // MessageId: MQ_ERROR_CANNOT_CREATE_ON_GC
 //
 // MessageText:
 //
-//  Failed to create an object on a specified GC server.
+//  The object was not created on the Global Catalog server specified.
 //
 #define MQ_ERROR_CANNOT_CREATE_ON_GC     0xC00E0077L
 
-//
 //
 // MessageId: MQ_ERROR_GUID_NOT_MATCHING
 //
 // MessageText:
 //
-//  Failed to create msmqConfiguration object with GUID that match machine installation. You must uninstall MSMQ and then reinstall it.
+//  Obsolete, kept for backward compatibility 
 //
 #define MQ_ERROR_GUID_NOT_MATCHING       0xC00E0078L
 
@@ -1599,7 +1694,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  Unable to find the public key for computer %1
+//  The public key for the computer %1 cannot be found.
 //
 #define MQ_ERROR_PUBLIC_KEY_NOT_FOUND    0xC00E0079L
 
@@ -1608,49 +1703,244 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The public key for computer %1 does not exist
+//  The public key for the computer %1 does not exist.
 //
 #define MQ_ERROR_PUBLIC_KEY_DOES_NOT_EXIST 0xC00E007AL
 
-//
 //
 // MessageId: MQ_ERROR_ILLEGAL_MQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The  MQPRIVATEPROPS parameter value is invalid. This may be because it has a  null value or has zero properties specified.
+//  The parameters in MQPRIVATEPROPS are invalid. Either the pointer to the MQPRIVATEPROPS structure has a null value, or no properties are specified in it.
 //
 #define MQ_ERROR_ILLEGAL_MQPRIVATEPROPS  0xC00E007BL
 
-//
 //
 // MessageId: MQ_ERROR_NO_GC_IN_DOMAIN
 //
 // MessageText:
 //
-//  Unable to find Global Catalog servers in the specified domain.
+//  Global Catalog servers cannot be found in the domain specified.
 //
 #define MQ_ERROR_NO_GC_IN_DOMAIN         0xC00E007CL
 
-//
 //
 // MessageId: MQ_ERROR_NO_MSMQ_SERVERS_ON_GC
 //
 // MessageText:
 //
-//  Failed to find Message Queuing servers on Global Catalog domain controllers.
+//  No Message Queuing servers were found on Global Catalog servers.
 //
 #define MQ_ERROR_NO_MSMQ_SERVERS_ON_GC   0xC00E007DL
 
-//
 //
 // MessageId: MQ_ERROR_CANNOT_GET_DN
 //
 // MessageText:
 //
-//  Failed to retrieve the distinguished name of local computer.
+//  Obsolete, kept for backward compatibility 
 //
 #define MQ_ERROR_CANNOT_GET_DN           0xC00E007EL
+
+//
+// MessageId: MQ_ERROR_CANNOT_HASH_DATA_EX
+//
+// MessageText:
+//
+//  Data for an authenticated message cannot be hashed.
+//
+#define MQ_ERROR_CANNOT_HASH_DATA_EX     0xC00E007FL
+
+//
+// MessageId: MQ_ERROR_CANNOT_SIGN_DATA_EX
+//
+// MessageText:
+//
+//  Data cannot be signed before sending an authenticated message.
+//
+#define MQ_ERROR_CANNOT_SIGN_DATA_EX     0xC00E0080L
+
+//
+// MessageId: MQ_ERROR_CANNOT_CREATE_HASH_EX
+//
+// MessageText:
+//
+//  A hash object cannot be created for an authenticated message.
+//
+#define MQ_ERROR_CANNOT_CREATE_HASH_EX   0xC00E0081L
+
+//
+// MessageId: MQ_ERROR_FAIL_VERIFY_SIGNATURE_EX
+//
+// MessageText:
+//
+//  The signature of the message received is not valid.
+//
+#define MQ_ERROR_FAIL_VERIFY_SIGNATURE_EX 0xC00E0082L
+
+//
+// MessageId: MQ_ERROR_CANNOT_DELETE_PSC_OBJECTS
+//
+// MessageText:
+//
+//  The object that will be deleted is owned by a primary site controller. The operation cannot be performed.
+//
+#define MQ_ERROR_CANNOT_DELETE_PSC_OBJECTS 0xC00E0083L
+
+//
+// MessageId: MQ_ERROR_NO_MQUSER_OU
+//
+// MessageText:
+//
+//  There is no MSMQ Users organizational unit object in Active Directory for the domain. Please create one manually.
+//
+#define MQ_ERROR_NO_MQUSER_OU            0xC00E0084L
+
+//
+// MessageId: MQ_ERROR_CANNOT_LOAD_MQAD
+//
+// MessageText:
+//
+//  The dynamic-link library Mqad.dll cannot be loaded.
+//
+#define MQ_ERROR_CANNOT_LOAD_MQAD        0xC00E0085L
+
+//
+// MessageId: MQ_ERROR_CANNOT_LOAD_MQDSSRV
+//
+// MessageText:
+//
+//  Obsolete, kept for backward compatibility 
+//
+#define MQ_ERROR_CANNOT_LOAD_MQDSSRV     0xC00E0086L
+
+//
+// MessageId: MQ_ERROR_PROPERTIES_CONFLICT
+//
+// MessageText:
+//
+//  Two or more of the properties passed cannot co-exist.
+//  For example, you cannot set both PROPID_M_RESP_QUEUE and PROPID_M_RESP_FORMAT_NAME when sending a message.
+//
+#define MQ_ERROR_PROPERTIES_CONFLICT     0xC00E0087L
+
+//
+// MessageId: MQ_ERROR_MESSAGE_NOT_FOUND
+//
+// MessageText:
+//
+//  The message does not exist or was removed from the queue.
+//
+#define MQ_ERROR_MESSAGE_NOT_FOUND       0xC00E0088L
+
+//
+// MessageId: MQ_ERROR_CANT_RESOLVE_SITES
+//
+// MessageText:
+//
+//  The sites where the computer resides cannot be resolved. Check that the subnets in your network are configured correctly in Active Directory and that each site is configured with the appropriate subnet.
+//
+#define MQ_ERROR_CANT_RESOLVE_SITES      0xC00E0089L
+
+//
+// MessageId: MQ_ERROR_NOT_SUPPORTED_BY_DEPENDENT_CLIENTS
+//
+// MessageText:
+//
+//  This operation is not supported by dependent clients.
+//
+#define MQ_ERROR_NOT_SUPPORTED_BY_DEPENDENT_CLIENTS 0xC00E008AL
+
+//
+// MessageId: MQ_ERROR_OPERATION_NOT_SUPPORTED_BY_REMOTE_COMPUTER
+//
+// MessageText:
+//
+//  This operation is not supported by the remote Message Queuing service. For example, MQReceiveMessageByLookupId is not supported by MSMQ 1.0/2.0.
+//
+#define MQ_ERROR_OPERATION_NOT_SUPPORTED_BY_REMOTE_COMPUTER 0xC00E008BL
+
+//
+// MessageId: MQ_ERROR_NOT_A_CORRECT_OBJECT_CLASS
+//
+// MessageText:
+//
+//  The object whose properties are being retrieved from Active Directory does not belong to the class requested.
+//
+#define MQ_ERROR_NOT_A_CORRECT_OBJECT_CLASS 0xC00E008CL
+
+//
+// MessageId: MQ_ERROR_MULTI_SORT_KEYS
+//
+// MessageText:
+//
+//  The value of cCol in MQSORTSET cannot be greater than 1. Active Directory supports only a single sort key.
+//
+#define MQ_ERROR_MULTI_SORT_KEYS         0xC00E008DL
+
+//
+// MessageId: MQ_ERROR_GC_NEEDED
+//
+// MessageText:
+//
+//  An MSMQ Configuration (msmq) object with the GUID supplied cannot be created. In order to support the creation of an MSMQ Configuration object with a given GUID, Message Queuing Downlevel Client Support must be installed on a domain controller that is configured as a Global Catalog (GC) server.
+//
+#define MQ_ERROR_GC_NEEDED               0xC00E008EL
+
+//
+// MessageId: MQ_ERROR_DS_BIND_ROOT_FOREST
+//
+// MessageText:
+//
+//  Binding to the forest root failed. This error usually indicates a problem in the DNS configuration.
+//
+#define MQ_ERROR_DS_BIND_ROOT_FOREST     0xC00E008FL
+
+//
+// MessageId: MQ_ERROR_DS_LOCAL_USER
+//
+// MessageText:
+//
+//  A local user is authenticated as an anonymous user and cannot access Active Directory. You need to log on as a domain user to access Active Directory.
+//
+#define MQ_ERROR_DS_LOCAL_USER           0xC00E0090L
+
+//
+// MessageId: MQ_ERROR_Q_ADS_PROPERTY_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  The column PROPID_Q_ADS_PATH is not supported for the MQLocateBegin API.
+//
+#define MQ_ERROR_Q_ADS_PROPERTY_NOT_SUPPORTED 0xC00E0091L
+
+//
+// MessageId: MQ_ERROR_BAD_XML_FORMAT
+//
+// MessageText:
+//
+//  The given property is not a valid XML document.
+//
+#define MQ_ERROR_BAD_XML_FORMAT          0xC00E0092L
+
+//
+// MessageId: MQ_ERROR_UNSUPPORTED_CLASS
+//
+// MessageText:
+//
+//  The Active Directory object specified is not an instance of a supported class.
+//
+#define MQ_ERROR_UNSUPPORTED_CLASS       0xC00E0093L
+
+//
+// MessageId: MQ_ERROR_UNINITIALIZED_OBJECT
+//
+// MessageText:
+//
+//  The MSMQQueueState object must be initialized before it is used. 
+//
+#define MQ_ERROR_UNINITIALIZED_OBJECT    0xC00E0094L
 
 //
 // Informational
@@ -1660,8 +1950,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  One or more of the passed properties resulted in a warning but the
-//  function completed.
+//  One or more of the properties passed resulted in a warning, but the function completed.
 //
 #define MQ_INFORMATION_PROPERTY          0x400E0001L
 
@@ -1670,7 +1959,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  Invalid property ID.
+//  The property ID is invalid.
 //
 #define MQ_INFORMATION_ILLEGAL_PROPERTY  0x400E0002L
 
@@ -1679,8 +1968,8 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The specified property has been  ignored for this operation
-//  (for example:, PROPID_M_SENDERID in SendMessage()).
+//  The property specified was ignored for this operation (this occurs,
+//  for example, when PROPID_M_SENDERID is passed to SendMessage()).
 //
 #define MQ_INFORMATION_PROPERTY_IGNORED  0x400E0003L
 
@@ -1689,7 +1978,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The specified property is not supported and has been ignored for this operation.
+//  The property specified is not supported and was ignored for this operation.
 //
 #define MQ_INFORMATION_UNSUPPORTED_PROPERTY 0x400E0004L
 
@@ -1698,8 +1987,8 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  The specified property is already in the PROPID array, and has been
-//  ignored for this operation.
+//  The property specified is already in the property identifier array.
+//  The duplicate was ignored for this operation.
 //
 #define MQ_INFORMATION_DUPLICATE_PROPERTY 0x400E0005L
 
@@ -1736,7 +2025,7 @@ typedef struct tagMQPRIVATEPROPS
 //
 // MessageText:
 //
-//  Owner of queue was not set while processing this call to MQSetQueueSecurity().
+//  The queue owner was not set during the processing of this call to MQSetQueueSecurity().
 //
 #define MQ_INFORMATION_OWNER_IGNORED     0x400E000BL
 
@@ -1890,6 +2179,18 @@ MQReceiveMessage(
 
 HRESULT
 APIENTRY
+MQReceiveMessageByLookupId(
+    IN QUEUEHANDLE hSource,
+    IN ULONGLONG ullLookupId,
+    IN DWORD dwLookupAction,
+    IN OUT MQMSGPROPS* pMessageProps,
+    IN OUT LPOVERLAPPED lpOverlapped,
+    IN PMQRECEIVECALLBACK fnReceiveCallback,
+    IN ITransaction *pTransaction
+    );
+
+HRESULT
+APIENTRY
 MQCreateCursor(
     IN QUEUEHANDLE hQueue,
     OUT PHANDLE phCursor
@@ -1904,7 +2205,7 @@ MQCloseCursor(
 HRESULT
 APIENTRY
 MQCloseQueue(
-    IN HANDLE hQueue
+    IN QUEUEHANDLE hQueue
     );
 
 HRESULT
@@ -1963,11 +2264,20 @@ MQInstanceToFormatName(
     IN OUT LPDWORD lpdwFormatNameLength
     );
 
-void
+HRESULT
+APIENTRY
+MQADsPathToFormatName(
+    IN LPCWSTR lpwcsADsPath,
+    OUT LPWSTR lpwcsFormatName,
+    IN OUT LPDWORD lpdwFormatNameLength
+    );
+
+VOID
 APIENTRY
 MQFreeMemory(
     IN PVOID pvMemory
     );
+
 
 HRESULT
 APIENTRY
@@ -1982,10 +2292,18 @@ APIENTRY
 MQGetSecurityContext(
     IN PVOID lpCertBuffer,
     IN DWORD dwCertBufferLength,
-    OUT HANDLE* hSecurityContext
+    OUT HANDLE* phSecurityContext
     );
 
-void
+HRESULT
+APIENTRY
+MQGetSecurityContextEx(
+    IN PVOID lpCertBuffer,
+    IN DWORD dwCertBufferLength,
+    OUT HANDLE* phSecurityContext
+    );
+
+VOID
 APIENTRY
 MQFreeSecurityContext(
     IN HANDLE hSecurityContext
@@ -1994,13 +2312,10 @@ MQFreeSecurityContext(
 HRESULT
 APIENTRY
 MQRegisterCertificate(
-    IN DWORD   dwFlags,
-    IN PVOID   lpCertBuffer,
-    IN DWORD   dwCertBufferLength
+    IN DWORD dwFlags,
+    IN PVOID lpCertBuffer,
+    IN DWORD dwCertBufferLength
     );
-
-typedef HRESULT (APIENTRY *MQRegisterCertificate_ROUTINE) (DWORD, PVOID, DWORD);
-
 
 HRESULT
 APIENTRY
@@ -2021,12 +2336,31 @@ MQGetPrivateComputerInformation(
     IN OUT MQPRIVATEPROPS* pPrivateProps
     );
 
+HRESULT
+APIENTRY
+MQPurgeQueue(
+    IN QUEUEHANDLE hQueue
+    );
 
+HRESULT
+APIENTRY
+MQMgmtGetInfo(
+    IN LPCWSTR pComputerName,
+    IN LPCWSTR pObjectName,
+    IN OUT MQMGMTPROPS* pMgmtProps
+    );
+
+HRESULT
+APIENTRY
+MQMgmtAction(
+    IN LPCWSTR pComputerName,
+    IN LPCWSTR pObjectName,
+    IN LPCWSTR pAction
+    );
 
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // __MQ_H__
 

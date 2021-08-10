@@ -65,6 +65,7 @@ void AFX_CDECL _AfxTermAppState()
 }
 #endif
 
+
 #ifdef __BORLANDC__
 char _afxInitAppState = (char)(AfxInitialize(FALSE, _MFC_VER));
 

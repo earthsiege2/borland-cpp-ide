@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'EditIntf.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'EditIntf.pas' rev: 6.00
 
 #ifndef EditIntfHPP
 #define EditIntfHPP
@@ -11,6 +11,7 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <VirtIntf.hpp>	// Pascal unit
+#include <Classes.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
@@ -131,8 +132,7 @@ public:
 	virtual int __stdcall LinesInBuffer(void) = 0 ;
 	virtual bool __stdcall BufferModified(void) = 0 ;
 	virtual bool __stdcall MarkModified(void) = 0 ;
-	virtual TSyntaxHighlighter __stdcall SetSyntaxHighlighter(TSyntaxHighlighter SyntaxHighlighter) = 0 
-		;
+	virtual TSyntaxHighlighter __stdcall SetSyntaxHighlighter(TSyntaxHighlighter SyntaxHighlighter) = 0 ;
 	virtual int __stdcall GetViewCount(void) = 0 ;
 	virtual TIEditView* __stdcall GetView(int Index) = 0 ;
 	virtual TIEditWriter* __stdcall CreateUndoableWriter(void) = 0 ;
@@ -162,13 +162,11 @@ public:
 
 
 #pragma option push -b-
-enum TPropertyType { ptUnknown, ptInteger, ptChar, ptEnumeration, ptFloat, ptString, ptSet, ptClass, 
-	ptMethod, ptWChar, ptLString, ptLWString, ptVariant };
+enum TPropertyType { ptUnknown, ptInteger, ptChar, ptEnumeration, ptFloat, ptString, ptSet, ptClass, ptMethod, ptWChar, ptLString, ptLWString, ptVariant };
 #pragma option pop
 
 class DELPHICLASS TIComponentInterface;
 typedef bool __stdcall (*TGetChildCallback)(void * Param, TIComponentInterface* ComponentInterface);
-	
 
 class PASCALIMPLEMENTATION TIComponentInterface : public Virtintf::TInterface 
 {
@@ -223,8 +221,7 @@ public:
 	virtual int __stdcall GetSelCount(void) = 0 ;
 	virtual TIComponentInterface* __stdcall GetSelComponent(int Index) = 0 ;
 	virtual TIComponentInterface* __stdcall GetCreateParent(void) = 0 ;
-	virtual TIComponentInterface* __stdcall CreateComponent(TIComponentInterface* Container, const AnsiString 
-		TypeName, int X, int Y, int W, int H) = 0 ;
+	virtual TIComponentInterface* __stdcall CreateComponent(TIComponentInterface* Container, const AnsiString TypeName, int X, int Y, int W, int H) = 0 ;
 public:
 	#pragma option push -w-inl
 	/* TInterface.Create */ inline __fastcall TIFormInterface(void) : Virtintf::TInterface() { }
@@ -282,8 +279,7 @@ public:
 	virtual TIResourceEntry* __stdcall GetEntryFromHandle(void * EntryHandle) = 0 ;
 	virtual TIResourceEntry* __stdcall FindEntry(char * ResType, char * Name) = 0 ;
 	virtual bool __stdcall DeleteEntry(void * EntryHandle) = 0 ;
-	virtual TIResourceEntry* __stdcall CreateEntry(char * ResType, char * Name, Word Flags, Word LanguageId
-		, int DataVersion, int Version, int Characteristics) = 0 ;
+	virtual TIResourceEntry* __stdcall CreateEntry(char * ResType, char * Name, Word Flags, Word LanguageId, int DataVersion, int Version, int Characteristics) = 0 ;
 public:
 	#pragma option push -w-inl
 	/* TInterface.Create */ inline __fastcall TIResourceFile(void) : Virtintf::TInterface() { }
@@ -298,8 +294,7 @@ public:
 
 
 #pragma option push -b-
-enum TNotifyCode { ncModuleDeleted, ncModuleRenamed, ncEditorModified, ncFormModified, ncEditorSelected, 
-	ncFormSelected, ncBeforeSave, ncAfterSave, ncFormSaving, ncProjResModified };
+enum TNotifyCode { ncModuleDeleted, ncModuleRenamed, ncEditorModified, ncFormModified, ncEditorSelected, ncFormSelected, ncBeforeSave, ncAfterSave, ncFormSaving, ncProjResModified };
 #pragma option pop
 
 class DELPHICLASS TIModuleNotifier;
@@ -309,8 +304,7 @@ class PASCALIMPLEMENTATION TIModuleNotifier : public Virtintf::TInterface
 	
 public:
 	virtual void __stdcall Notify(TNotifyCode NotifyCode) = 0 ;
-	virtual void __stdcall ComponentRenamed(void * ComponentHandle, const AnsiString OldName, const AnsiString 
-		NewName) = 0 ;
+	virtual void __stdcall ComponentRenamed(const Classes::TComponent* AComponent, const AnsiString OldName, const AnsiString NewName) = 0 ;
 public:
 	#pragma option push -w-inl
 	/* TInterface.Create */ inline __fastcall TIModuleNotifier(void) : Virtintf::TInterface() { }
@@ -415,8 +409,7 @@ public:
 	virtual AnsiString __stdcall GetFileName(void) = 0 ;
 	virtual AnsiString __stdcall GetFileSystem(void) = 0 ;
 	virtual AnsiString __stdcall GetFormName(void) = 0 ;
-	virtual AnsiString __stdcall NewModuleSource(const AnsiString UnitIdent, const AnsiString FormIdent
-		, const AnsiString AncestorIdent) = 0 ;
+	virtual AnsiString __stdcall NewModuleSource(const AnsiString UnitIdent, const AnsiString FormIdent, const AnsiString AncestorIdent) = 0 ;
 	virtual void __stdcall FormCreated(TIFormInterface* Form) = 0 ;
 public:
 	#pragma option push -w-inl
@@ -438,8 +431,7 @@ class PASCALIMPLEMENTATION TIModuleCreatorEx : public TIModuleCreator
 	
 public:
 	virtual AnsiString __stdcall GetIntfName(void) = 0 ;
-	virtual AnsiString __stdcall NewIntfSource(const AnsiString UnitIdent, const AnsiString FormIdent, 
-		const AnsiString AncestorIdent) = 0 ;
+	virtual AnsiString __stdcall NewIntfSource(const AnsiString UnitIdent, const AnsiString FormIdent, const AnsiString AncestorIdent) = 0 ;
 public:
 	#pragma option push -w-inl
 	/* TInterface.Create */ inline __fastcall TIModuleCreatorEx(void) : TIModuleCreator() { }
@@ -481,9 +473,7 @@ static const Shortint lfErrorLine = 0x10;
 static const Shortint lfBreakpointVerified = 0x20;
 
 }	/* namespace Editintf */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Editintf;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

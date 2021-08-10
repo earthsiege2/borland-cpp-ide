@@ -1,35 +1,35 @@
 LIBRARY GTRTST32
 EXPORTS
 
-    AbortRun                                 = 'GTRTST32.DLL'.*
-    _AddAutoTest                             = 'GTRTST32.DLL'.AddAutoTest
-    CElapsed                                 = 'GTRTST32.DLL'.*
-    CenterDialog                             = 'GTRTST32.DLL'.*
-    CreateTestList                           = 'GTRTST32.DLL'.*
-    _DeleteAutoTestList                      = 'GTRTST32.DLL'.DeleteAutoTestList
-    _DeleteAutoTestNode                      = 'GTRTST32.DLL'.DeleteAutoTestNode
-    DrawBitmap                               = 'GTRTST32.DLL'.*
-    FAbortCheck                              = 'GTRTST32.DLL'.*
-    _FindAutoTestNode                        = 'GTRTST32.DLL'.FindAutoTestNode
-    FindFileDir                              = 'GTRTST32.DLL'.*
-    GetAutoTests                             = 'GTRTST32.DLL'.*
-    GetIniNameUsage                          = 'GTRTST32.DLL'.*
-    GetLogFile                               = 'GTRTST32.DLL'.*
-    GetRCString                              = 'GTRTST32.DLL'.*
-    GetSetLastRunInfo                        = 'GTRTST32.DLL'.*
-    GetTestCases                             = 'GTRTST32.DLL'.*
-    GetTestGroups                            = 'GTRTST32.DLL'.*
-    IsChicago                                = 'GTRTST32.DLL'.*
-    _LoadAutoTestDLL                         = 'GTRTST32.DLL'.LoadAutoTestDLL
-    ManageGroups                             = 'GTRTST32.DLL'.*
-    ManageSources                            = 'GTRTST32.DLL'.*
-    ManageTests                              = 'GTRTST32.DLL'.*
-    RefreshInstalledTestList                 = 'GTRTST32.DLL'.*
-    ResetForRunList                          = 'GTRTST32.DLL'.*
-    RunAutoTest                              = 'GTRTST32.DLL'.*
-    SetGatorIniPath                          = 'GTRTST32.DLL'.*
-    SetupFileInfo                            = 'GTRTST32.DLL'.*
-    _UnLoadAutoTestDLL                       = 'GTRTST32.DLL'.UnLoadAutoTestDLL
-    VerifyTestCaseCount                      = 'GTRTST32.DLL'.*
-    _szLogPrintf                             = 'GTRTST32.DLL'.szLogPrintf
-    _szMessageBox                            = 'GTRTST32.DLL'.szMessageBox
+    AbortRun                                 
+    _AddAutoTest                             = AddAutoTest
+    CElapsed                                 
+    CenterDialog                             
+    CreateTestList                           
+    _DeleteAutoTestList                      = DeleteAutoTestList
+    _DeleteAutoTestNode                      = DeleteAutoTestNode
+    DrawBitmap                               
+    FAbortCheck                              
+    _FindAutoTestNode                        = FindAutoTestNode
+    FindFileDir                              
+    GetAutoTests                             
+    GetIniNameUsage                          
+    GetLogFile                               
+    GetRCString                              
+    GetSetLastRunInfo                        
+    GetTestCases                             
+    GetTestGroups                            
+    IsChicago                                
+    _LoadAutoTestDLL                         = LoadAutoTestDLL
+    ManageGroups                             
+    ManageSources                            
+    ManageTests                              
+    RefreshInstalledTestList                 
+    ResetForRunList                          
+    RunAutoTest                              
+    SetGatorIniPath                          
+    SetupFileInfo                            
+    _UnLoadAutoTestDLL                       = UnLoadAutoTestDLL
+    VerifyTestCaseCount                      
+    _szLogPrintf                             = szLogPrintf
+    _szMessageBox                            = szMessageBox

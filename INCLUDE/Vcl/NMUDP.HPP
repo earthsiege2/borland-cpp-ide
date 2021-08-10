@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NMUDP.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NMUDP.pas' rev: 6.00
 
 #ifndef NMUDPHPP
 #define NMUDPHPP
@@ -10,6 +10,7 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
+#include <NMConst.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
@@ -31,38 +32,28 @@ class PASCALIMPLEMENTATION UDPSockError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall UDPSockError(const AnsiString Msg) : Sysutils::Exception(Msg
-		) { }
+	/* Exception.Create */ inline __fastcall UDPSockError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall UDPSockError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall UDPSockError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall UDPSockError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall UDPSockError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall UDPSockError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall UDPSockError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall UDPSockError(const AnsiString Msg, int AHelpContext) : 
-		Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall UDPSockError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall UDPSockError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall UDPSockError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall UDPSockError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall UDPSockError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall UDPSockError(System::PResStringRec ResStringRec, 
-		const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall UDPSockError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -73,18 +64,15 @@ public:
 };
 
 
-typedef void __fastcall (__closure *TOnErrorEvent)(Classes::TComponent* Sender, Word errno, AnsiString 
-	Errmsg);
+typedef void __fastcall (__closure *TOnErrorEvent)(Classes::TComponent* Sender, Word errno, AnsiString Errmsg);
 
 typedef void __fastcall (__closure *TOnStatus)(Classes::TComponent* Sender, AnsiString status);
 
-typedef void __fastcall (__closure *TOnReceive)(Classes::TComponent* Sender, int NumberBytes, AnsiString 
-	FromIP, int Port);
+typedef void __fastcall (__closure *TOnReceive)(Classes::TComponent* Sender, int NumberBytes, AnsiString FromIP, int Port);
 
 typedef void __fastcall (__closure *THandlerEvent)(bool &handled);
 
-typedef void __fastcall (__closure *TBuffInvalid)(bool &handled, char * Buff, const int Buff_Size, int 
-	&length);
+typedef void __fastcall (__closure *TBuffInvalid)(bool &handled, char * Buff, const int Buff_Size, int &length);
 
 typedef void __fastcall (__closure *TStreamInvalid)(bool &handled, Classes::TStream* Stream);
 
@@ -161,31 +149,9 @@ static const Shortint Status_Debug = 0x8;
 static const Shortint Status_Trace = 0x10;
 static const Word WM_ASYNCHRONOUSPROCESS = 0x465;
 #define Const_cmd_true "TRUE"
-extern PACKAGE System::ResourceString _Cons_Palette_Inet;
-#define Nmudp_Cons_Palette_Inet System::LoadResourceString(&Nmudp::_Cons_Palette_Inet)
-extern PACKAGE System::ResourceString _Cons_Msg_Wsk;
-#define Nmudp_Cons_Msg_Wsk System::LoadResourceString(&Nmudp::_Cons_Msg_Wsk)
-extern PACKAGE System::ResourceString _Cons_Msg_Lkp;
-#define Nmudp_Cons_Msg_Lkp System::LoadResourceString(&Nmudp::_Cons_Msg_Lkp)
-extern PACKAGE System::ResourceString _Cons_Msg_Data;
-#define Nmudp_Cons_Msg_Data System::LoadResourceString(&Nmudp::_Cons_Msg_Data)
-extern PACKAGE System::ResourceString _Cons_Msg_InvStrm;
-#define Nmudp_Cons_Msg_InvStrm System::LoadResourceString(&Nmudp::_Cons_Msg_InvStrm)
-extern PACKAGE System::ResourceString _Cons_Msg_Echk;
-#define Nmudp_Cons_Msg_Echk System::LoadResourceString(&Nmudp::_Cons_Msg_Echk)
-extern PACKAGE System::ResourceString _Cons_Msg_Eno;
-#define Nmudp_Cons_Msg_Eno System::LoadResourceString(&Nmudp::_Cons_Msg_Eno)
-extern PACKAGE System::ResourceString _Cons_Msg_ELkp;
-#define Nmudp_Cons_Msg_ELkp System::LoadResourceString(&Nmudp::_Cons_Msg_ELkp)
-extern PACKAGE System::ResourceString _Cons_Err_Addr;
-#define Nmudp_Cons_Err_Addr System::LoadResourceString(&Nmudp::_Cons_Err_Addr)
-extern PACKAGE System::ResourceString _Cons_Err_Buffer;
-#define Nmudp_Cons_Err_Buffer System::LoadResourceString(&Nmudp::_Cons_Err_Buffer)
 
 }	/* namespace Nmudp */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nmudp;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

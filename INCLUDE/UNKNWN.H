@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:37:29 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for unknwn.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -38,6 +37,10 @@
 #ifndef __unknwn_h__
 #define __unknwn_h__
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
 /* Forward Declarations */ 
 
 #ifndef __IUnknown_FWD_DEFINED__
@@ -65,8 +68,8 @@ typedef interface IClassFactory IClassFactory;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_unknwn_0000 */
 /* [local] */ 
@@ -74,7 +77,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //--------------------------------------------------------------------------
 #if ( _MSC_VER >= 1020 )
@@ -91,14 +94,14 @@ extern RPC_IF_HANDLE __MIDL_itf_unknwn_0000_v0_0_s_ifspec;
 /* interface IUnknown */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ IUnknown __RPC_FAR *LPUNKNOWN;
+typedef /* [unique] */ IUnknown *LPUNKNOWN;
 
 //////////////////////////////////////////////////////////////////
 // IID_IUnknown and all other system IIDs are provided in UUID.LIB
 // Link that library in with your proxies, clients and servers
 //////////////////////////////////////////////////////////////////
 
-#if (_MSC_VER >= 1100) && defined(__cplusplus) && !defined(CINTERFACE)
+#if ((_MSC_VER >= 1100) || defined(__BORLANDC__)) && defined(__cplusplus) && !defined(CINTERFACE)
     EXTERN_C const IID IID_IUnknown;
     extern "C++"
     {
@@ -152,7 +155,7 @@ typedef /* [unique] */ IUnknown __RPC_FAR *LPUNKNOWN;
         IRpcChannelBuffer *_pRpcChannelBuffer,
         PRPC_MESSAGE _pRpcMessage,
         DWORD *_pdwStubPhase);
-#else // VC6 hack
+#else
 
 EXTERN_C const IID IID_IUnknown;
 
@@ -165,7 +168,7 @@ EXTERN_C const IID IID_IUnknown;
         BEGIN_INTERFACE
         virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+            /* [iid_is][out] */ void **ppvObject) = 0;
         
         virtual ULONG STDMETHODCALLTYPE AddRef( void) = 0;
         
@@ -180,23 +183,23 @@ EXTERN_C const IID IID_IUnknown;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IUnknown __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IUnknown * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IUnknown __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IUnknown * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IUnknown __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IUnknown * This);
         
         END_INTERFACE
     } IUnknownVtbl;
 
     interface IUnknown
     {
-        CONST_VTBL struct IUnknownVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IUnknownVtbl *lpVtbl;
     };
 
     
@@ -221,9 +224,9 @@ EXTERN_C const IID IID_IUnknown;
 
 
 HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy( 
-    IUnknown __RPC_FAR * This,
+    IUnknown * This,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+    /* [iid_is][out] */ void **ppvObject);
 
 
 void __RPC_STUB IUnknown_QueryInterface_Stub(
@@ -234,7 +237,7 @@ void __RPC_STUB IUnknown_QueryInterface_Stub(
 
 
 ULONG STDMETHODCALLTYPE IUnknown_AddRef_Proxy( 
-    IUnknown __RPC_FAR * This);
+    IUnknown * This);
 
 
 void __RPC_STUB IUnknown_AddRef_Stub(
@@ -245,7 +248,7 @@ void __RPC_STUB IUnknown_AddRef_Stub(
 
 
 ULONG STDMETHODCALLTYPE IUnknown_Release_Proxy( 
-    IUnknown __RPC_FAR * This);
+    IUnknown * This);
 
 
 void __RPC_STUB IUnknown_Release_Stub(
@@ -262,7 +265,7 @@ void __RPC_STUB IUnknown_Release_Stub(
 /* interface __MIDL_itf_unknwn_0005 */
 /* [local] */ 
 
-#endif // VC6 hack
+#endif
 
 
 extern RPC_IF_HANDLE __MIDL_itf_unknwn_0005_v0_0_c_ifspec;
@@ -287,7 +290,7 @@ EXTERN_C const IID IID_AsyncIUnknown;
             /* [in] */ REFIID riid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_QueryInterface( 
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+            /* [out] */ void **ppvObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_AddRef( void) = 0;
         
@@ -305,43 +308,43 @@ EXTERN_C const IID IID_AsyncIUnknown;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            AsyncIUnknown __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            AsyncIUnknown * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            AsyncIUnknown __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            AsyncIUnknown * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            AsyncIUnknown __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            AsyncIUnknown * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Begin_QueryInterface )( 
-            AsyncIUnknown __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Begin_QueryInterface )( 
+            AsyncIUnknown * This,
             /* [in] */ REFIID riid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Finish_QueryInterface )( 
-            AsyncIUnknown __RPC_FAR * This,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        HRESULT ( STDMETHODCALLTYPE *Finish_QueryInterface )( 
+            AsyncIUnknown * This,
+            /* [out] */ void **ppvObject);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Begin_AddRef )( 
-            AsyncIUnknown __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Begin_AddRef )( 
+            AsyncIUnknown * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Finish_AddRef )( 
-            AsyncIUnknown __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Finish_AddRef )( 
+            AsyncIUnknown * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Begin_Release )( 
-            AsyncIUnknown __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Begin_Release )( 
+            AsyncIUnknown * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Finish_Release )( 
-            AsyncIUnknown __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Finish_Release )( 
+            AsyncIUnknown * This);
         
         END_INTERFACE
     } AsyncIUnknownVtbl;
 
     interface AsyncIUnknown
     {
-        CONST_VTBL struct AsyncIUnknownVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct AsyncIUnknownVtbl *lpVtbl;
     };
 
     
@@ -385,7 +388,7 @@ EXTERN_C const IID IID_AsyncIUnknown;
 
 
 HRESULT STDMETHODCALLTYPE AsyncIUnknown_Begin_QueryInterface_Proxy( 
-    AsyncIUnknown __RPC_FAR * This,
+    AsyncIUnknown * This,
     /* [in] */ REFIID riid);
 
 
@@ -397,8 +400,8 @@ void __RPC_STUB AsyncIUnknown_Begin_QueryInterface_Stub(
 
 
 HRESULT STDMETHODCALLTYPE AsyncIUnknown_Finish_QueryInterface_Proxy( 
-    AsyncIUnknown __RPC_FAR * This,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+    AsyncIUnknown * This,
+    /* [out] */ void **ppvObject);
 
 
 void __RPC_STUB AsyncIUnknown_Finish_QueryInterface_Stub(
@@ -409,7 +412,7 @@ void __RPC_STUB AsyncIUnknown_Finish_QueryInterface_Stub(
 
 
 HRESULT STDMETHODCALLTYPE AsyncIUnknown_Begin_AddRef_Proxy( 
-    AsyncIUnknown __RPC_FAR * This);
+    AsyncIUnknown * This);
 
 
 void __RPC_STUB AsyncIUnknown_Begin_AddRef_Stub(
@@ -420,7 +423,7 @@ void __RPC_STUB AsyncIUnknown_Begin_AddRef_Stub(
 
 
 ULONG STDMETHODCALLTYPE AsyncIUnknown_Finish_AddRef_Proxy( 
-    AsyncIUnknown __RPC_FAR * This);
+    AsyncIUnknown * This);
 
 
 void __RPC_STUB AsyncIUnknown_Finish_AddRef_Stub(
@@ -431,7 +434,7 @@ void __RPC_STUB AsyncIUnknown_Finish_AddRef_Stub(
 
 
 HRESULT STDMETHODCALLTYPE AsyncIUnknown_Begin_Release_Proxy( 
-    AsyncIUnknown __RPC_FAR * This);
+    AsyncIUnknown * This);
 
 
 void __RPC_STUB AsyncIUnknown_Begin_Release_Stub(
@@ -442,7 +445,7 @@ void __RPC_STUB AsyncIUnknown_Begin_Release_Stub(
 
 
 ULONG STDMETHODCALLTYPE AsyncIUnknown_Finish_Release_Proxy( 
-    AsyncIUnknown __RPC_FAR * This);
+    AsyncIUnknown * This);
 
 
 void __RPC_STUB AsyncIUnknown_Finish_Release_Stub(
@@ -462,7 +465,7 @@ void __RPC_STUB AsyncIUnknown_Finish_Release_Stub(
 /* interface IClassFactory */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IClassFactory __RPC_FAR *LPCLASSFACTORY;
+typedef /* [unique] */ IClassFactory *LPCLASSFACTORY;
 
 
 EXTERN_C const IID IID_IClassFactory;
@@ -474,9 +477,9 @@ EXTERN_C const IID IID_IClassFactory;
     {
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateInstance( 
-            /* [unique][in] */ IUnknown __RPC_FAR *pUnkOuter,
+            /* [unique][in] */ IUnknown *pUnkOuter,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+            /* [iid_is][out] */ void **ppvObject) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE LockServer( 
             /* [in] */ BOOL fLock) = 0;
@@ -489,25 +492,25 @@ EXTERN_C const IID IID_IClassFactory;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IClassFactory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IClassFactory * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IClassFactory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IClassFactory * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IClassFactory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IClassFactory * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateInstance )( 
-            IClassFactory __RPC_FAR * This,
-            /* [unique][in] */ IUnknown __RPC_FAR *pUnkOuter,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateInstance )( 
+            IClassFactory * This,
+            /* [unique][in] */ IUnknown *pUnkOuter,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockServer )( 
-            IClassFactory __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *LockServer )( 
+            IClassFactory * This,
             /* [in] */ BOOL fLock);
         
         END_INTERFACE
@@ -515,7 +518,7 @@ EXTERN_C const IID IID_IClassFactory;
 
     interface IClassFactory
     {
-        CONST_VTBL struct IClassFactoryVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IClassFactoryVtbl *lpVtbl;
     };
 
     
@@ -547,9 +550,9 @@ EXTERN_C const IID IID_IClassFactory;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IClassFactory_RemoteCreateInstance_Proxy( 
-    IClassFactory __RPC_FAR * This,
+    IClassFactory * This,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+    /* [iid_is][out] */ IUnknown **ppvObject);
 
 
 void __RPC_STUB IClassFactory_RemoteCreateInstance_Stub(
@@ -560,7 +563,7 @@ void __RPC_STUB IClassFactory_RemoteCreateInstance_Stub(
 
 
 /* [call_as] */ HRESULT __stdcall IClassFactory_RemoteLockServer_Proxy( 
-    IClassFactory __RPC_FAR * This,
+    IClassFactory * This,
     /* [in] */ BOOL fLock);
 
 
@@ -578,24 +581,24 @@ void __RPC_STUB IClassFactory_RemoteLockServer_Stub(
 /* Additional Prototypes for ALL interfaces */
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IClassFactory_CreateInstance_Proxy( 
-    IClassFactory __RPC_FAR * This,
-    /* [unique][in] */ IUnknown __RPC_FAR *pUnkOuter,
+    IClassFactory * This,
+    /* [unique][in] */ IUnknown *pUnkOuter,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+    /* [iid_is][out] */ void **ppvObject);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IClassFactory_CreateInstance_Stub( 
-    IClassFactory __RPC_FAR * This,
+    IClassFactory * This,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+    /* [iid_is][out] */ IUnknown **ppvObject);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IClassFactory_LockServer_Proxy( 
-    IClassFactory __RPC_FAR * This,
+    IClassFactory * This,
     /* [in] */ BOOL fLock);
 
 
 /* [call_as] */ HRESULT __stdcall IClassFactory_LockServer_Stub( 
-    IClassFactory __RPC_FAR * This,
+    IClassFactory * This,
     /* [in] */ BOOL fLock);
 
 
@@ -607,6 +610,7 @@ void __RPC_STUB IClassFactory_RemoteLockServer_Stub(
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

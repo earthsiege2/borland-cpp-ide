@@ -1,5 +1,6 @@
-USEUNIT("speakn.cpp");
-USEUNIT("stdafx.cpp");
-USERC("speakn.rc");
+USEUNIT(".\Speakn.cpp");
+USEUNIT(".\Stdafx.cpp");
+USERC(".\Speakn.rc");
+USEFILE("vctobpr.log");
 
 #define WinMain

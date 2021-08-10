@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Consts.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Consts.pas' rev: 6.00
 
 #ifndef ConstsHPP
 #define ConstsHPP
@@ -21,76 +21,18 @@ namespace Consts
 //-- var, const, procedure ---------------------------------------------------
 extern PACKAGE System::ResourceString _SOpenFileTitle;
 #define Consts_SOpenFileTitle System::LoadResourceString(&Consts::_SOpenFileTitle)
-extern PACKAGE System::ResourceString _SAssignError;
-#define Consts_SAssignError System::LoadResourceString(&Consts::_SAssignError)
-extern PACKAGE System::ResourceString _SFCreateError;
-#define Consts_SFCreateError System::LoadResourceString(&Consts::_SFCreateError)
-extern PACKAGE System::ResourceString _SFOpenError;
-#define Consts_SFOpenError System::LoadResourceString(&Consts::_SFOpenError)
-extern PACKAGE System::ResourceString _SReadError;
-#define Consts_SReadError System::LoadResourceString(&Consts::_SReadError)
-extern PACKAGE System::ResourceString _SWriteError;
-#define Consts_SWriteError System::LoadResourceString(&Consts::_SWriteError)
-extern PACKAGE System::ResourceString _SMemoryStreamError;
-#define Consts_SMemoryStreamError System::LoadResourceString(&Consts::_SMemoryStreamError)
 extern PACKAGE System::ResourceString _SCantWriteResourceStreamError;
 #define Consts_SCantWriteResourceStreamError System::LoadResourceString(&Consts::_SCantWriteResourceStreamError)
-	
 extern PACKAGE System::ResourceString _SDuplicateReference;
 #define Consts_SDuplicateReference System::LoadResourceString(&Consts::_SDuplicateReference)
-extern PACKAGE System::ResourceString _SClassNotFound;
-#define Consts_SClassNotFound System::LoadResourceString(&Consts::_SClassNotFound)
-extern PACKAGE System::ResourceString _SInvalidImage;
-#define Consts_SInvalidImage System::LoadResourceString(&Consts::_SInvalidImage)
-extern PACKAGE System::ResourceString _SResNotFound;
-#define Consts_SResNotFound System::LoadResourceString(&Consts::_SResNotFound)
 extern PACKAGE System::ResourceString _SClassMismatch;
 #define Consts_SClassMismatch System::LoadResourceString(&Consts::_SClassMismatch)
-extern PACKAGE System::ResourceString _SListIndexError;
-#define Consts_SListIndexError System::LoadResourceString(&Consts::_SListIndexError)
-extern PACKAGE System::ResourceString _SListCapacityError;
-#define Consts_SListCapacityError System::LoadResourceString(&Consts::_SListCapacityError)
-extern PACKAGE System::ResourceString _SListCountError;
-#define Consts_SListCountError System::LoadResourceString(&Consts::_SListCountError)
-extern PACKAGE System::ResourceString _SSortedListError;
-#define Consts_SSortedListError System::LoadResourceString(&Consts::_SSortedListError)
-extern PACKAGE System::ResourceString _SDuplicateString;
-#define Consts_SDuplicateString System::LoadResourceString(&Consts::_SDuplicateString)
 extern PACKAGE System::ResourceString _SInvalidTabIndex;
 #define Consts_SInvalidTabIndex System::LoadResourceString(&Consts::_SInvalidTabIndex)
 extern PACKAGE System::ResourceString _SInvalidTabPosition;
 #define Consts_SInvalidTabPosition System::LoadResourceString(&Consts::_SInvalidTabPosition)
 extern PACKAGE System::ResourceString _SInvalidTabStyle;
 #define Consts_SInvalidTabStyle System::LoadResourceString(&Consts::_SInvalidTabStyle)
-extern PACKAGE System::ResourceString _SDuplicateName;
-#define Consts_SDuplicateName System::LoadResourceString(&Consts::_SDuplicateName)
-extern PACKAGE System::ResourceString _SInvalidName;
-#define Consts_SInvalidName System::LoadResourceString(&Consts::_SInvalidName)
-extern PACKAGE System::ResourceString _SDuplicateClass;
-#define Consts_SDuplicateClass System::LoadResourceString(&Consts::_SDuplicateClass)
-extern PACKAGE System::ResourceString _SNoComSupport;
-#define Consts_SNoComSupport System::LoadResourceString(&Consts::_SNoComSupport)
-extern PACKAGE System::ResourceString _SInvalidInteger;
-#define Consts_SInvalidInteger System::LoadResourceString(&Consts::_SInvalidInteger)
-extern PACKAGE System::ResourceString _SLineTooLong;
-#define Consts_SLineTooLong System::LoadResourceString(&Consts::_SLineTooLong)
-extern PACKAGE System::ResourceString _SInvalidPropertyValue;
-#define Consts_SInvalidPropertyValue System::LoadResourceString(&Consts::_SInvalidPropertyValue)
-extern PACKAGE System::ResourceString _SInvalidPropertyPath;
-#define Consts_SInvalidPropertyPath System::LoadResourceString(&Consts::_SInvalidPropertyPath)
-extern PACKAGE System::ResourceString _SInvalidPropertyType;
-#define Consts_SInvalidPropertyType System::LoadResourceString(&Consts::_SInvalidPropertyType)
-extern PACKAGE System::ResourceString _SInvalidPropertyElement;
-#define Consts_SInvalidPropertyElement System::LoadResourceString(&Consts::_SInvalidPropertyElement)
-	
-extern PACKAGE System::ResourceString _SUnknownProperty;
-#define Consts_SUnknownProperty System::LoadResourceString(&Consts::_SUnknownProperty)
-extern PACKAGE System::ResourceString _SReadOnlyProperty;
-#define Consts_SReadOnlyProperty System::LoadResourceString(&Consts::_SReadOnlyProperty)
-extern PACKAGE System::ResourceString _SPropertyException;
-#define Consts_SPropertyException System::LoadResourceString(&Consts::_SPropertyException)
-extern PACKAGE System::ResourceString _SAncestorNotFound;
-#define Consts_SAncestorNotFound System::LoadResourceString(&Consts::_SAncestorNotFound)
 extern PACKAGE System::ResourceString _SInvalidBitmap;
 #define Consts_SInvalidBitmap System::LoadResourceString(&Consts::_SInvalidBitmap)
 extern PACKAGE System::ResourceString _SInvalidIcon;
@@ -99,6 +41,8 @@ extern PACKAGE System::ResourceString _SInvalidMetafile;
 #define Consts_SInvalidMetafile System::LoadResourceString(&Consts::_SInvalidMetafile)
 extern PACKAGE System::ResourceString _SInvalidPixelFormat;
 #define Consts_SInvalidPixelFormat System::LoadResourceString(&Consts::_SInvalidPixelFormat)
+extern PACKAGE System::ResourceString _SInvalidImage;
+#define Consts_SInvalidImage System::LoadResourceString(&Consts::_SInvalidImage)
 extern PACKAGE System::ResourceString _SBitmapEmpty;
 #define Consts_SBitmapEmpty System::LoadResourceString(&Consts::_SBitmapEmpty)
 extern PACKAGE System::ResourceString _SScanLine;
@@ -111,7 +55,6 @@ extern PACKAGE System::ResourceString _SUnknownExtension;
 #define Consts_SUnknownExtension System::LoadResourceString(&Consts::_SUnknownExtension)
 extern PACKAGE System::ResourceString _SUnknownClipboardFormat;
 #define Consts_SUnknownClipboardFormat System::LoadResourceString(&Consts::_SUnknownClipboardFormat)
-	
 extern PACKAGE System::ResourceString _SOutOfResources;
 #define Consts_SOutOfResources System::LoadResourceString(&Consts::_SOutOfResources)
 extern PACKAGE System::ResourceString _SNoCanvasHandle;
@@ -144,6 +87,8 @@ extern PACKAGE System::ResourceString _SCannotFocus;
 #define Consts_SCannotFocus System::LoadResourceString(&Consts::_SCannotFocus)
 extern PACKAGE System::ResourceString _SParentRequired;
 #define Consts_SParentRequired System::LoadResourceString(&Consts::_SParentRequired)
+extern PACKAGE System::ResourceString _SParentGivenNotAParent;
+#define Consts_SParentGivenNotAParent System::LoadResourceString(&Consts::_SParentGivenNotAParent)
 extern PACKAGE System::ResourceString _SMDIChildNotVisible;
 #define Consts_SMDIChildNotVisible System::LoadResourceString(&Consts::_SMDIChildNotVisible)
 extern PACKAGE System::ResourceString _SVisibleChanged;
@@ -178,14 +123,10 @@ extern PACKAGE System::ResourceString _STwoMDIForms;
 #define Consts_STwoMDIForms System::LoadResourceString(&Consts::_STwoMDIForms)
 extern PACKAGE System::ResourceString _SNoMDIForm;
 #define Consts_SNoMDIForm System::LoadResourceString(&Consts::_SNoMDIForm)
-extern PACKAGE System::ResourceString _SRegisterError;
-#define Consts_SRegisterError System::LoadResourceString(&Consts::_SRegisterError)
 extern PACKAGE System::ResourceString _SImageCanvasNeedsBitmap;
 #define Consts_SImageCanvasNeedsBitmap System::LoadResourceString(&Consts::_SImageCanvasNeedsBitmap)
-	
 extern PACKAGE System::ResourceString _SControlParentSetToSelf;
 #define Consts_SControlParentSetToSelf System::LoadResourceString(&Consts::_SControlParentSetToSelf)
-	
 extern PACKAGE System::ResourceString _SOKButton;
 #define Consts_SOKButton System::LoadResourceString(&Consts::_SOKButton)
 extern PACKAGE System::ResourceString _SCancelButton;
@@ -250,26 +191,10 @@ extern PACKAGE System::ResourceString _SFixedRowTooBig;
 #define Consts_SFixedRowTooBig System::LoadResourceString(&Consts::_SFixedRowTooBig)
 extern PACKAGE System::ResourceString _SInvalidStringGridOp;
 #define Consts_SInvalidStringGridOp System::LoadResourceString(&Consts::_SInvalidStringGridOp)
-extern PACKAGE System::ResourceString _SParseError;
-#define Consts_SParseError System::LoadResourceString(&Consts::_SParseError)
-extern PACKAGE System::ResourceString _SIdentifierExpected;
-#define Consts_SIdentifierExpected System::LoadResourceString(&Consts::_SIdentifierExpected)
-extern PACKAGE System::ResourceString _SStringExpected;
-#define Consts_SStringExpected System::LoadResourceString(&Consts::_SStringExpected)
-extern PACKAGE System::ResourceString _SNumberExpected;
-#define Consts_SNumberExpected System::LoadResourceString(&Consts::_SNumberExpected)
-extern PACKAGE System::ResourceString _SCharExpected;
-#define Consts_SCharExpected System::LoadResourceString(&Consts::_SCharExpected)
-extern PACKAGE System::ResourceString _SSymbolExpected;
-#define Consts_SSymbolExpected System::LoadResourceString(&Consts::_SSymbolExpected)
+extern PACKAGE System::ResourceString _SInvalidEnumValue;
+#define Consts_SInvalidEnumValue System::LoadResourceString(&Consts::_SInvalidEnumValue)
 extern PACKAGE System::ResourceString _SInvalidNumber;
 #define Consts_SInvalidNumber System::LoadResourceString(&Consts::_SInvalidNumber)
-extern PACKAGE System::ResourceString _SInvalidString;
-#define Consts_SInvalidString System::LoadResourceString(&Consts::_SInvalidString)
-extern PACKAGE System::ResourceString _SInvalidProperty;
-#define Consts_SInvalidProperty System::LoadResourceString(&Consts::_SInvalidProperty)
-extern PACKAGE System::ResourceString _SInvalidBinary;
-#define Consts_SInvalidBinary System::LoadResourceString(&Consts::_SInvalidBinary)
 extern PACKAGE System::ResourceString _SOutlineIndexError;
 #define Consts_SOutlineIndexError System::LoadResourceString(&Consts::_SOutlineIndexError)
 extern PACKAGE System::ResourceString _SOutlineExpandError;
@@ -368,20 +293,8 @@ extern PACKAGE System::ResourceString _srNone;
 #define Consts_srNone System::LoadResourceString(&Consts::_srNone)
 extern PACKAGE System::ResourceString _SOutOfRange;
 #define Consts_SOutOfRange System::LoadResourceString(&Consts::_SOutOfRange)
-extern PACKAGE System::ResourceString _SCannotCreateName;
-#define Consts_SCannotCreateName System::LoadResourceString(&Consts::_SCannotCreateName)
 extern PACKAGE System::ResourceString _SDateEncodeError;
 #define Consts_SDateEncodeError System::LoadResourceString(&Consts::_SDateEncodeError)
-extern PACKAGE System::ResourceString _STimeEncodeError;
-#define Consts_STimeEncodeError System::LoadResourceString(&Consts::_STimeEncodeError)
-extern PACKAGE System::ResourceString _SInvalidDate;
-#define Consts_SInvalidDate System::LoadResourceString(&Consts::_SInvalidDate)
-extern PACKAGE System::ResourceString _SInvalidTime;
-#define Consts_SInvalidTime System::LoadResourceString(&Consts::_SInvalidTime)
-extern PACKAGE System::ResourceString _SInvalidDateTime;
-#define Consts_SInvalidDateTime System::LoadResourceString(&Consts::_SInvalidDateTime)
-extern PACKAGE System::ResourceString _SInvalidFileName;
-#define Consts_SInvalidFileName System::LoadResourceString(&Consts::_SInvalidFileName)
 extern PACKAGE System::ResourceString _SDefaultFilter;
 #define Consts_SDefaultFilter System::LoadResourceString(&Consts::_SDefaultFilter)
 extern PACKAGE System::ResourceString _sAllFilter;
@@ -394,8 +307,6 @@ extern PACKAGE System::ResourceString _SConfirmCreateDir;
 #define Consts_SConfirmCreateDir System::LoadResourceString(&Consts::_SConfirmCreateDir)
 extern PACKAGE System::ResourceString _SSelectDirCap;
 #define Consts_SSelectDirCap System::LoadResourceString(&Consts::_SSelectDirCap)
-extern PACKAGE System::ResourceString _SCannotCreateDir;
-#define Consts_SCannotCreateDir System::LoadResourceString(&Consts::_SCannotCreateDir)
 extern PACKAGE System::ResourceString _SDirNameCap;
 #define Consts_SDirNameCap System::LoadResourceString(&Consts::_SDirNameCap)
 extern PACKAGE System::ResourceString _SDrivesCap;
@@ -434,12 +345,6 @@ extern PACKAGE System::ResourceString _SUntitled;
 #define Consts_SUntitled System::LoadResourceString(&Consts::_SUntitled)
 extern PACKAGE System::ResourceString _SInvalidRegType;
 #define Consts_SInvalidRegType System::LoadResourceString(&Consts::_SInvalidRegType)
-extern PACKAGE System::ResourceString _SRegCreateFailed;
-#define Consts_SRegCreateFailed System::LoadResourceString(&Consts::_SRegCreateFailed)
-extern PACKAGE System::ResourceString _SRegSetDataFailed;
-#define Consts_SRegSetDataFailed System::LoadResourceString(&Consts::_SRegSetDataFailed)
-extern PACKAGE System::ResourceString _SRegGetDataFailed;
-#define Consts_SRegGetDataFailed System::LoadResourceString(&Consts::_SRegGetDataFailed)
 extern PACKAGE System::ResourceString _SUnknownConversion;
 #define Consts_SUnknownConversion System::LoadResourceString(&Consts::_SUnknownConversion)
 extern PACKAGE System::ResourceString _SDuplicateMenus;
@@ -494,28 +399,6 @@ extern PACKAGE System::ResourceString _SRegularFont;
 #define Consts_SRegularFont System::LoadResourceString(&Consts::_SRegularFont)
 extern PACKAGE System::ResourceString _SPropertiesVerb;
 #define Consts_SPropertiesVerb System::LoadResourceString(&Consts::_SPropertiesVerb)
-extern PACKAGE System::ResourceString _sWindowsSocketError;
-#define Consts_sWindowsSocketError System::LoadResourceString(&Consts::_sWindowsSocketError)
-extern PACKAGE System::ResourceString _sAsyncSocketError;
-#define Consts_sAsyncSocketError System::LoadResourceString(&Consts::_sAsyncSocketError)
-extern PACKAGE System::ResourceString _sNoAddress;
-#define Consts_sNoAddress System::LoadResourceString(&Consts::_sNoAddress)
-extern PACKAGE System::ResourceString _sCannotListenOnOpen;
-#define Consts_sCannotListenOnOpen System::LoadResourceString(&Consts::_sCannotListenOnOpen)
-extern PACKAGE System::ResourceString _sCannotCreateSocket;
-#define Consts_sCannotCreateSocket System::LoadResourceString(&Consts::_sCannotCreateSocket)
-extern PACKAGE System::ResourceString _sSocketAlreadyOpen;
-#define Consts_sSocketAlreadyOpen System::LoadResourceString(&Consts::_sSocketAlreadyOpen)
-extern PACKAGE System::ResourceString _sCantChangeWhileActive;
-#define Consts_sCantChangeWhileActive System::LoadResourceString(&Consts::_sCantChangeWhileActive)
-extern PACKAGE System::ResourceString _sSocketMustBeBlocking;
-#define Consts_sSocketMustBeBlocking System::LoadResourceString(&Consts::_sSocketMustBeBlocking)
-extern PACKAGE System::ResourceString _sSocketIOError;
-#define Consts_sSocketIOError System::LoadResourceString(&Consts::_sSocketIOError)
-extern PACKAGE System::ResourceString _sSocketRead;
-#define Consts_sSocketRead System::LoadResourceString(&Consts::_sSocketRead)
-extern PACKAGE System::ResourceString _sSocketWrite;
-#define Consts_sSocketWrite System::LoadResourceString(&Consts::_sSocketWrite)
 extern PACKAGE System::ResourceString _SServiceFailed;
 #define Consts_SServiceFailed System::LoadResourceString(&Consts::_SServiceFailed)
 extern PACKAGE System::ResourceString _SExecute;
@@ -542,16 +425,12 @@ extern PACKAGE System::ResourceString _SServiceUninstallOK;
 #define Consts_SServiceUninstallOK System::LoadResourceString(&Consts::_SServiceUninstallOK)
 extern PACKAGE System::ResourceString _SServiceUninstallFailed;
 #define Consts_SServiceUninstallFailed System::LoadResourceString(&Consts::_SServiceUninstallFailed)
-	
 extern PACKAGE System::ResourceString _SInvalidActionRegistration;
 #define Consts_SInvalidActionRegistration System::LoadResourceString(&Consts::_SInvalidActionRegistration)
-	
 extern PACKAGE System::ResourceString _SInvalidActionUnregistration;
 #define Consts_SInvalidActionUnregistration System::LoadResourceString(&Consts::_SInvalidActionUnregistration)
-	
 extern PACKAGE System::ResourceString _SInvalidActionEnumeration;
 #define Consts_SInvalidActionEnumeration System::LoadResourceString(&Consts::_SInvalidActionEnumeration)
-	
 extern PACKAGE System::ResourceString _SInvalidActionCreation;
 #define Consts_SInvalidActionCreation System::LoadResourceString(&Consts::_SInvalidActionCreation)
 extern PACKAGE System::ResourceString _SDockedCtlNeedsName;
@@ -566,81 +445,81 @@ extern PACKAGE System::ResourceString _SAllCommands;
 #define Consts_SAllCommands System::LoadResourceString(&Consts::_SAllCommands)
 extern PACKAGE System::ResourceString _SDuplicateItem;
 #define Consts_SDuplicateItem System::LoadResourceString(&Consts::_SDuplicateItem)
-extern PACKAGE System::ResourceString _SDuplicatePropertyCategory;
-#define Consts_SDuplicatePropertyCategory System::LoadResourceString(&Consts::_SDuplicatePropertyCategory)
-	
-extern PACKAGE System::ResourceString _SUnknownPropertyCategory;
-#define Consts_SUnknownPropertyCategory System::LoadResourceString(&Consts::_SUnknownPropertyCategory)
-	
-extern PACKAGE System::ResourceString _SActionCategoryName;
-#define Consts_SActionCategoryName System::LoadResourceString(&Consts::_SActionCategoryName)
-extern PACKAGE System::ResourceString _SActionCategoryDesc;
-#define Consts_SActionCategoryDesc System::LoadResourceString(&Consts::_SActionCategoryDesc)
-extern PACKAGE System::ResourceString _SDataCategoryName;
-#define Consts_SDataCategoryName System::LoadResourceString(&Consts::_SDataCategoryName)
-extern PACKAGE System::ResourceString _SDataCategoryDesc;
-#define Consts_SDataCategoryDesc System::LoadResourceString(&Consts::_SDataCategoryDesc)
-extern PACKAGE System::ResourceString _SDatabaseCategoryName;
-#define Consts_SDatabaseCategoryName System::LoadResourceString(&Consts::_SDatabaseCategoryName)
-extern PACKAGE System::ResourceString _SDatabaseCategoryDesc;
-#define Consts_SDatabaseCategoryDesc System::LoadResourceString(&Consts::_SDatabaseCategoryDesc)
-extern PACKAGE System::ResourceString _SDragNDropCategoryName;
-#define Consts_SDragNDropCategoryName System::LoadResourceString(&Consts::_SDragNDropCategoryName)
-extern PACKAGE System::ResourceString _SDragNDropCategoryDesc;
-#define Consts_SDragNDropCategoryDesc System::LoadResourceString(&Consts::_SDragNDropCategoryDesc)
-extern PACKAGE System::ResourceString _SHelpCategoryName;
-#define Consts_SHelpCategoryName System::LoadResourceString(&Consts::_SHelpCategoryName)
-extern PACKAGE System::ResourceString _SHelpCategoryDesc;
-#define Consts_SHelpCategoryDesc System::LoadResourceString(&Consts::_SHelpCategoryDesc)
-extern PACKAGE System::ResourceString _SLayoutCategoryName;
-#define Consts_SLayoutCategoryName System::LoadResourceString(&Consts::_SLayoutCategoryName)
-extern PACKAGE System::ResourceString _SLayoutCategoryDesc;
-#define Consts_SLayoutCategoryDesc System::LoadResourceString(&Consts::_SLayoutCategoryDesc)
-extern PACKAGE System::ResourceString _SLegacyCategoryName;
-#define Consts_SLegacyCategoryName System::LoadResourceString(&Consts::_SLegacyCategoryName)
-extern PACKAGE System::ResourceString _SLegacyCategoryDesc;
-#define Consts_SLegacyCategoryDesc System::LoadResourceString(&Consts::_SLegacyCategoryDesc)
-extern PACKAGE System::ResourceString _SLinkageCategoryName;
-#define Consts_SLinkageCategoryName System::LoadResourceString(&Consts::_SLinkageCategoryName)
-extern PACKAGE System::ResourceString _SLinkageCategoryDesc;
-#define Consts_SLinkageCategoryDesc System::LoadResourceString(&Consts::_SLinkageCategoryDesc)
-extern PACKAGE System::ResourceString _SLocaleCategoryName;
-#define Consts_SLocaleCategoryName System::LoadResourceString(&Consts::_SLocaleCategoryName)
-extern PACKAGE System::ResourceString _SLocaleCategoryDesc;
-#define Consts_SLocaleCategoryDesc System::LoadResourceString(&Consts::_SLocaleCategoryDesc)
-extern PACKAGE System::ResourceString _SLocalizableCategoryName;
-#define Consts_SLocalizableCategoryName System::LoadResourceString(&Consts::_SLocalizableCategoryName)
-	
-extern PACKAGE System::ResourceString _SLocalizableCategoryDesc;
-#define Consts_SLocalizableCategoryDesc System::LoadResourceString(&Consts::_SLocalizableCategoryDesc)
-	
-extern PACKAGE System::ResourceString _SMiscellaneousCategoryName;
-#define Consts_SMiscellaneousCategoryName System::LoadResourceString(&Consts::_SMiscellaneousCategoryName)
-	
-extern PACKAGE System::ResourceString _SMiscellaneousCategoryDesc;
-#define Consts_SMiscellaneousCategoryDesc System::LoadResourceString(&Consts::_SMiscellaneousCategoryDesc)
-	
-extern PACKAGE System::ResourceString _SVisualCategoryName;
-#define Consts_SVisualCategoryName System::LoadResourceString(&Consts::_SVisualCategoryName)
-extern PACKAGE System::ResourceString _SVisualCategoryDesc;
-#define Consts_SVisualCategoryDesc System::LoadResourceString(&Consts::_SVisualCategoryDesc)
-extern PACKAGE System::ResourceString _SInputCategoryName;
-#define Consts_SInputCategoryName System::LoadResourceString(&Consts::_SInputCategoryName)
-extern PACKAGE System::ResourceString _SInputCategoryDesc;
-#define Consts_SInputCategoryDesc System::LoadResourceString(&Consts::_SInputCategoryDesc)
-extern PACKAGE System::ResourceString _SInvalidMask;
-#define Consts_SInvalidMask System::LoadResourceString(&Consts::_SInvalidMask)
-extern PACKAGE System::ResourceString _SInvalidFilter;
-#define Consts_SInvalidFilter System::LoadResourceString(&Consts::_SInvalidFilter)
-extern PACKAGE System::ResourceString _SInvalidCategory;
-#define Consts_SInvalidCategory System::LoadResourceString(&Consts::_SInvalidCategory)
-extern PACKAGE System::ResourceString _sOperationNotAllowed;
-#define Consts_sOperationNotAllowed System::LoadResourceString(&Consts::_sOperationNotAllowed)
+extern PACKAGE System::ResourceString _STextNotFound;
+#define Consts_STextNotFound System::LoadResourceString(&Consts::_STextNotFound)
+extern PACKAGE System::ResourceString _SBrowserExecError;
+#define Consts_SBrowserExecError System::LoadResourceString(&Consts::_SBrowserExecError)
+extern PACKAGE System::ResourceString _SColorBoxCustomCaption;
+#define Consts_SColorBoxCustomCaption System::LoadResourceString(&Consts::_SColorBoxCustomCaption)
+extern PACKAGE System::ResourceString _SMultiSelectRequired;
+#define Consts_SMultiSelectRequired System::LoadResourceString(&Consts::_SMultiSelectRequired)
+extern PACKAGE System::ResourceString _SKeyCaption;
+#define Consts_SKeyCaption System::LoadResourceString(&Consts::_SKeyCaption)
+extern PACKAGE System::ResourceString _SValueCaption;
+#define Consts_SValueCaption System::LoadResourceString(&Consts::_SValueCaption)
+extern PACKAGE System::ResourceString _SKeyConflict;
+#define Consts_SKeyConflict System::LoadResourceString(&Consts::_SKeyConflict)
+extern PACKAGE System::ResourceString _SKeyNotFound;
+#define Consts_SKeyNotFound System::LoadResourceString(&Consts::_SKeyNotFound)
+extern PACKAGE System::ResourceString _SNoColumnMoving;
+#define Consts_SNoColumnMoving System::LoadResourceString(&Consts::_SNoColumnMoving)
+extern PACKAGE System::ResourceString _SNoEqualsInKey;
+#define Consts_SNoEqualsInKey System::LoadResourceString(&Consts::_SNoEqualsInKey)
+extern PACKAGE System::ResourceString _SSendError;
+#define Consts_SSendError System::LoadResourceString(&Consts::_SSendError)
+extern PACKAGE System::ResourceString _SAssignSubItemError;
+#define Consts_SAssignSubItemError System::LoadResourceString(&Consts::_SAssignSubItemError)
+extern PACKAGE System::ResourceString _SDeleteItemWithSubItems;
+#define Consts_SDeleteItemWithSubItems System::LoadResourceString(&Consts::_SDeleteItemWithSubItems)
+extern PACKAGE System::ResourceString _SMoreButtons;
+#define Consts_SMoreButtons System::LoadResourceString(&Consts::_SMoreButtons)
+extern PACKAGE System::ResourceString _SErrorDownloadingURL;
+#define Consts_SErrorDownloadingURL System::LoadResourceString(&Consts::_SErrorDownloadingURL)
+extern PACKAGE System::ResourceString _SUrlMonDllMissing;
+#define Consts_SUrlMonDllMissing System::LoadResourceString(&Consts::_SUrlMonDllMissing)
+extern PACKAGE System::ResourceString _SAllActions;
+#define Consts_SAllActions System::LoadResourceString(&Consts::_SAllActions)
+extern PACKAGE System::ResourceString _SNoCategory;
+#define Consts_SNoCategory System::LoadResourceString(&Consts::_SNoCategory)
+extern PACKAGE System::ResourceString _SExpand;
+#define Consts_SExpand System::LoadResourceString(&Consts::_SExpand)
+extern PACKAGE System::ResourceString _SErrorSettingPath;
+#define Consts_SErrorSettingPath System::LoadResourceString(&Consts::_SErrorSettingPath)
+extern PACKAGE System::ResourceString _SLBPutError;
+#define Consts_SLBPutError System::LoadResourceString(&Consts::_SLBPutError)
+extern PACKAGE System::ResourceString _SErrorLoadingFile;
+#define Consts_SErrorLoadingFile System::LoadResourceString(&Consts::_SErrorLoadingFile)
+extern PACKAGE System::ResourceString _SResetUsageData;
+#define Consts_SResetUsageData System::LoadResourceString(&Consts::_SResetUsageData)
+extern PACKAGE System::ResourceString _SFileRunDialogTitle;
+#define Consts_SFileRunDialogTitle System::LoadResourceString(&Consts::_SFileRunDialogTitle)
+extern PACKAGE System::ResourceString _SNoName;
+#define Consts_SNoName System::LoadResourceString(&Consts::_SNoName)
+extern PACKAGE System::ResourceString _SErrorActionManagerNotAssigned;
+#define Consts_SErrorActionManagerNotAssigned System::LoadResourceString(&Consts::_SErrorActionManagerNotAssigned)
+extern PACKAGE System::ResourceString _SAddRemoveButtons;
+#define Consts_SAddRemoveButtons System::LoadResourceString(&Consts::_SAddRemoveButtons)
+extern PACKAGE System::ResourceString _SResetActionToolBar;
+#define Consts_SResetActionToolBar System::LoadResourceString(&Consts::_SResetActionToolBar)
+extern PACKAGE System::ResourceString _SCustomize;
+#define Consts_SCustomize System::LoadResourceString(&Consts::_SCustomize)
+extern PACKAGE System::ResourceString _SSeparator;
+#define Consts_SSeparator System::LoadResourceString(&Consts::_SSeparator)
+extern PACKAGE System::ResourceString _SCirularReferencesNotAllowed;
+#define Consts_SCirularReferencesNotAllowed System::LoadResourceString(&Consts::_SCirularReferencesNotAllowed)
+extern PACKAGE System::ResourceString _SCannotHideActionBand;
+#define Consts_SCannotHideActionBand System::LoadResourceString(&Consts::_SCannotHideActionBand)
+extern PACKAGE System::ResourceString _SErrorSettingCount;
+#define Consts_SErrorSettingCount System::LoadResourceString(&Consts::_SErrorSettingCount)
+extern PACKAGE System::ResourceString _SListBoxMustBeVirtual;
+#define Consts_SListBoxMustBeVirtual System::LoadResourceString(&Consts::_SListBoxMustBeVirtual)
+extern PACKAGE System::ResourceString _SUnableToSaveSettings;
+#define Consts_SUnableToSaveSettings System::LoadResourceString(&Consts::_SUnableToSaveSettings)
+extern PACKAGE System::ResourceString _SRestoreDefaultSchedule;
+#define Consts_SRestoreDefaultSchedule System::LoadResourceString(&Consts::_SRestoreDefaultSchedule)
 
 }	/* namespace Consts */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Consts;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

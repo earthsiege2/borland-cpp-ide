@@ -1,14 +1,17 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /***************************************************************************
  *
  *  msacmdlg.h
  *
- *  Copyright (c) 1991-1995 Microsoft Corporation.  All Rights Reserved.
+ *  Copyright (c) 1991-1999 Microsoft Corporation.  All Rights Reserved.
  *
  *  Description:
  *      Audio Compression Manager Common Dialogs Identifiers
  *
  ***************************************************************************/
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 #define DLG_ACMFORMATCHOOSE_ID              70
 #define IDD_ACMFORMATCHOOSE_BTN_HELP        9
@@ -18,6 +21,7 @@
 #define IDD_ACMFORMATCHOOSE_BTN_SETNAME     103
 #define IDD_ACMFORMATCHOOSE_BTN_DELNAME     104
 
+
 #define DLG_ACMFILTERCHOOSE_ID              71
 #define IDD_ACMFILTERCHOOSE_BTN_HELP        9
 #define IDD_ACMFILTERCHOOSE_CMB_CUSTOM      100
@@ -26,4 +30,6 @@
 #define IDD_ACMFILTERCHOOSE_BTN_SETNAME     103
 #define IDD_ACMFILTERCHOOSE_BTN_DELNAME     104
 
-#pragma option pop /*P_O_Pop*/
+
+
+

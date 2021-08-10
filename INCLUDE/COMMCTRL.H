@@ -5,13 +5,14 @@
 *                                                                             *
 * Version 1.2                                                                 *
 *                                                                             *
-* Copyright (c) 1991-1998, Microsoft Corp.      All rights reserved.          *
+* Copyright (c) Microsoft Corporation. All rights reserved.                   *
 *                                                                             *
 \*****************************************************************************/
 
 
+
+
 #ifndef _INC_COMMCTRL
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_COMMCTRL
 
 #ifndef _WINRESRC_
@@ -84,6 +85,12 @@ extern "C" {
 //    NOTREEVIEW   TreeView control.
 //    NOTABCONTROL Tab control.
 //    NOANIMATE    Animate control.
+//    NOBUTTON     Button control.
+//    NOSTATIC     Static control.
+//    NOEDIT       Edit control.
+//    NOLISTBOX    Listbox control.
+//    NOCOMBOBOX   Combobox control.
+//    NOSCROLLBAR  Scrollbar control.
 //
 //=============================================================================
 
@@ -135,23 +142,29 @@ typedef struct tagINITCOMMONCONTROLSEX {
     DWORD dwSize;             // size of this structure
     DWORD dwICC;              // flags indicating which classes to be initialized
 } INITCOMMONCONTROLSEX, *LPINITCOMMONCONTROLSEX;
-#define ICC_LISTVIEW_CLASSES 0x00000001 // listview, header
-#define ICC_TREEVIEW_CLASSES 0x00000002 // treeview, tooltips
-#define ICC_BAR_CLASSES      0x00000004 // toolbar, statusbar, trackbar, tooltips
-#define ICC_TAB_CLASSES      0x00000008 // tab, tooltips
-#define ICC_UPDOWN_CLASS     0x00000010 // updown
-#define ICC_PROGRESS_CLASS   0x00000020 // progress
-#define ICC_HOTKEY_CLASS     0x00000040 // hotkey
-#define ICC_ANIMATE_CLASS    0x00000080 // animate
-#define ICC_WIN95_CLASSES    0x000000FF
-#define ICC_DATE_CLASSES     0x00000100 // month picker, date picker, time picker, updown
-#define ICC_USEREX_CLASSES   0x00000200 // comboex
-#define ICC_COOL_CLASSES     0x00000400 // rebar (coolbar) control
+#define ICC_LISTVIEW_CLASSES   0x00000001 // listview, header
+#define ICC_TREEVIEW_CLASSES   0x00000002 // treeview, tooltips
+#define ICC_BAR_CLASSES        0x00000004 // toolbar, statusbar, trackbar, tooltips
+#define ICC_TAB_CLASSES        0x00000008 // tab, tooltips
+#define ICC_UPDOWN_CLASS       0x00000010 // updown
+#define ICC_PROGRESS_CLASS     0x00000020 // progress
+#define ICC_HOTKEY_CLASS       0x00000040 // hotkey
+#define ICC_ANIMATE_CLASS      0x00000080 // animate
+#define ICC_WIN95_CLASSES      0x000000FF
+#define ICC_DATE_CLASSES       0x00000100 // month picker, date picker, time picker, updown
+#define ICC_USEREX_CLASSES     0x00000200 // comboex
+#define ICC_COOL_CLASSES       0x00000400 // rebar (coolbar) control
 #if (_WIN32_IE >= 0x0400)
-#define ICC_INTERNET_CLASSES 0x00000800
+#define ICC_INTERNET_CLASSES   0x00000800
 #define ICC_PAGESCROLLER_CLASS 0x00001000   // page scroller
 #define ICC_NATIVEFNTCTL_CLASS 0x00002000   // native font control
 #endif
+#if (_WIN32_WINNT >= 0x501)
+#define ICC_STANDARD_CLASSES   0x00004000
+#define ICC_LINK_CLASS         0x00008000
+#endif
+
+
 WINCOMMCTRLAPI BOOL WINAPI InitCommonControlsEx(LPINITCOMMONCONTROLSEX);
 #endif      // _WIN32_IE >= 0x0300
 
@@ -169,6 +182,11 @@ WINCOMMCTRLAPI BOOL WINAPI InitCommonControlsEx(LPINITCOMMONCONTROLSEX);
 
 #if (_WIN32_IE >= 0x0400)
 #define PGM_FIRST               0x1400      // Pager control messages
+#if (_WIN32_WINNT >= 0x501)
+#define ECM_FIRST               0x1500      // Edit control messages
+#define BCM_FIRST               0x1600      // Button control messages
+#define CBM_FIRST               0x1700      // Combobox control messages
+#endif
 #define CCM_FIRST               0x2000      // Common control shared messages
 #define CCM_LAST                (CCM_FIRST + 0x200)
 
@@ -188,10 +206,19 @@ typedef struct tagCOLORSCHEME {
 #define CCM_GETUNICODEFORMAT    (CCM_FIRST + 6)
 
 #if (_WIN32_IE >= 0x0500)
+#if (_WIN32_WINNT >= 0x501)
+#define COMCTL32_VERSION  6
+#else
 #define COMCTL32_VERSION  5
+#endif
+
 #define CCM_SETVERSION          (CCM_FIRST + 0x7)
 #define CCM_GETVERSION          (CCM_FIRST + 0x8)
 #define CCM_SETNOTIFYWINDOW     (CCM_FIRST + 0x9) // wParam == hwndParent.
+#if (_WIN32_WINNT >= 0x501)
+#define CCM_SETWINDOWTHEME      (CCM_FIRST + 0xb)
+#define CCM_DPISCALE            (CCM_FIRST + 0xc) // wParam == Awareness
+#endif 
 #endif // (_WIN32_IE >= 0x0500)
 
 #endif // (_WIN32_IE >= 0x0400)
@@ -204,9 +231,9 @@ typedef struct tagCOLORSCHEME {
 //====== WM_NOTIFY Macros =====================================================
 
 #define HANDLE_WM_NOTIFY(hwnd, wParam, lParam, fn) \
-    (fn)((hwnd), (int)(wParam), (NMHDR FAR*)(lParam))
+    (fn)((hwnd), (int)(wParam), (NMHDR *)(lParam))
 #define FORWARD_WM_NOTIFY(hwnd, idFrom, pnmhdr, fn) \
-    (LRESULT)(fn)((hwnd), WM_NOTIFY, (WPARAM)(int)(idFrom), (LPARAM)(NMHDR FAR*)(pnmhdr))
+    (LRESULT)(fn)((hwnd), WM_NOTIFY, (WPARAM)(int)(idFrom), (LPARAM)(NMHDR *)(pnmhdr))
 
 
 //====== Generic WM_NOTIFY notification codes =================================
@@ -236,6 +263,7 @@ typedef struct tagCOLORSCHEME {
 #if (_WIN32_IE >= 0x0500)
 #define NM_LDOWN                (NM_FIRST-20)
 #define NM_RDOWN                (NM_FIRST-21)
+#define NM_THEMECHANGED         (NM_FIRST-22)
 #endif
 
 #ifndef CCSIZEOF_STRUCT
@@ -258,7 +286,7 @@ typedef struct tagNMMOUSE {
     DWORD_PTR dwItemData;
     POINT   pt;
     LPARAM  dwHitInfo; // any specifics about where on the item or control the mouse is
-} NMMOUSE, FAR* LPNMMOUSE;
+} NMMOUSE, *LPNMMOUSE;
 
 typedef NMMOUSE NMCLICK;
 typedef LPNMMOUSE LPNMCLICK;
@@ -285,7 +313,7 @@ typedef struct tagNMKEY
     NMHDR hdr;
     UINT  nVKey;
     UINT  uFlags;
-} NMKEY, FAR *LPNMKEY;
+} NMKEY, *LPNMKEY;
 
 // Generic structure for a character
 
@@ -294,7 +322,7 @@ typedef struct tagNMCHAR {
     UINT    ch;
     DWORD   dwItemPrev;     // Item previously selected
     DWORD   dwItemNext;     // Item to be selected
-} NMCHAR, FAR* LPNMCHAR;
+} NMCHAR, *LPNMCHAR;
 
 #endif           // _WIN32_IE >= 0x0400
 
@@ -363,6 +391,11 @@ typedef struct tagNMCHAR {
 #endif
 #endif
 
+#if (_WIN32_WINNT >= 0x0501)
+#define BCN_FIRST               (0U-1250U)
+#define BCN_LAST                (0U-1350U)
+#endif
+
 #define MSGF_COMMCTRL_BEGINDRAG     0x4200
 #define MSGF_COMMCTRL_SIZEHEADER    0x4201
 #define MSGF_COMMCTRL_DRAGSELECT    0x4202
@@ -404,7 +437,6 @@ typedef struct tagNMCHAR {
 #define CDDS_SUBITEM            0x00020000
 #endif
 
-
 // itemState flags
 #define CDIS_SELECTED       0x0001
 #define CDIS_GRAYED         0x0002
@@ -415,6 +447,9 @@ typedef struct tagNMCHAR {
 #define CDIS_HOT            0x0040
 #define CDIS_MARKED         0x0080
 #define CDIS_INDETERMINATE  0x0100
+#if (_WIN32_WINNT >= 0x501)
+#define CDIS_SHOWKEYBOARDCUES   0x0200
+#endif
 
 typedef struct tagNMCUSTOMDRAWINFO
 {
@@ -425,15 +460,13 @@ typedef struct tagNMCUSTOMDRAWINFO
     DWORD_PTR dwItemSpec;  // this is control specific, but it's how to specify an item.  valid only with CDDS_ITEM bit set
     UINT  uItemState;
     LPARAM lItemlParam;
-} NMCUSTOMDRAW, FAR * LPNMCUSTOMDRAW;
-
-
+} NMCUSTOMDRAW, *LPNMCUSTOMDRAW;
 
 typedef struct tagNMTTCUSTOMDRAW
 {
     NMCUSTOMDRAW nmcd;
     UINT uDrawFlags;
-} NMTTCUSTOMDRAW, FAR * LPNMTTCUSTOMDRAW;
+} NMTTCUSTOMDRAW, *LPNMTTCUSTOMDRAW;
 
 #endif      // _WIN32_IE >= 0x0300
 
@@ -445,11 +478,16 @@ typedef struct tagNMTTCUSTOMDRAW
 #define CLR_NONE                0xFFFFFFFFL
 #define CLR_DEFAULT             0xFF000000L
 
-struct _IMAGELIST;
-typedef struct _IMAGELIST NEAR* HIMAGELIST;
 
+#ifndef HIMAGELIST
+struct _IMAGELIST;
+typedef struct _IMAGELIST* HIMAGELIST;
+#endif
+
+#ifndef IMAGELISTDRAWPARAMS
 #if (_WIN32_IE >= 0x0300)
-typedef struct _IMAGELISTDRAWPARAMS {
+typedef struct _IMAGELISTDRAWPARAMS 
+{
     DWORD       cbSize;
     HIMAGELIST  himl;
     int         i;
@@ -464,26 +502,41 @@ typedef struct _IMAGELISTDRAWPARAMS {
     COLORREF    rgbFg;
     UINT        fStyle;
     DWORD       dwRop;
-} IMAGELISTDRAWPARAMS, FAR * LPIMAGELISTDRAWPARAMS;
+#if (_WIN32_WINNT >= 0x501)
+    DWORD       fState;
+    DWORD       Frame;
+    COLORREF    crEffect;
+#endif
+} IMAGELISTDRAWPARAMS, *LPIMAGELISTDRAWPARAMS;
+
+#define IMAGELISTDRAWPARAMS_V3_SIZE CCSIZEOF_STRUCT(IMAGELISTDRAWPARAMS, dwRop)
+
 #endif      // _WIN32_IE >= 0x0300
+#endif
 
-#define ILC_MASK                0x0001
-#define ILC_COLOR               0x0000
-#define ILC_COLORDDB            0x00FE
-#define ILC_COLOR4              0x0004
-#define ILC_COLOR8              0x0008
-#define ILC_COLOR16             0x0010
-#define ILC_COLOR24             0x0018
-#define ILC_COLOR32             0x0020
-#define ILC_PALETTE             0x0800      // (not implemented)
-
+#define ILC_MASK                0x00000001
+#define ILC_COLOR               0x00000000
+#define ILC_COLORDDB            0x000000FE
+#define ILC_COLOR4              0x00000004
+#define ILC_COLOR8              0x00000008
+#define ILC_COLOR16             0x00000010
+#define ILC_COLOR24             0x00000018
+#define ILC_COLOR32             0x00000020
+#define ILC_PALETTE             0x00000800      // (not implemented)
+#if (_WIN32_WINNT >= 0x501)
+#define ILC_MIRROR              0x00002000      // Mirror the icons contained, if the process is mirrored
+#define ILC_PERITEMMIRROR       0x00008000      // Causes the mirroring code to mirror each item when inserting a set of images, verses the whole strip
+#endif	
 WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_Create(int cx, int cy, UINT flags, int cInitial, int cGrow);
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_Destroy(HIMAGELIST himl);
+
 WINCOMMCTRLAPI int         WINAPI ImageList_GetImageCount(HIMAGELIST himl);
 #if (_WIN32_IE >= 0x0300)
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_SetImageCount(HIMAGELIST himl, UINT uNewCount);
 #endif
+
 WINCOMMCTRLAPI int         WINAPI ImageList_Add(HIMAGELIST himl, HBITMAP hbmImage, HBITMAP hbmMask);
+
 WINCOMMCTRLAPI int         WINAPI ImageList_ReplaceIcon(HIMAGELIST himl, int i, HICON hicon);
 WINCOMMCTRLAPI COLORREF    WINAPI ImageList_SetBkColor(HIMAGELIST himl, COLORREF clrBk);
 WINCOMMCTRLAPI COLORREF    WINAPI ImageList_GetBkColor(HIMAGELIST himl);
@@ -491,22 +544,31 @@ WINCOMMCTRLAPI BOOL        WINAPI ImageList_SetOverlayImage(HIMAGELIST himl, int
 
 #define     ImageList_AddIcon(himl, hicon) ImageList_ReplaceIcon(himl, -1, hicon)
 
-#define ILD_NORMAL              0x0000
-#define ILD_TRANSPARENT         0x0001
-#define ILD_MASK                0x0010
-#define ILD_IMAGE               0x0020
+#define ILD_NORMAL              0x00000000
+#define ILD_TRANSPARENT         0x00000001
+#define ILD_MASK                0x00000010
+#define ILD_IMAGE               0x00000020
 #if (_WIN32_IE >= 0x0300)
-#define ILD_ROP                 0x0040
+#define ILD_ROP                 0x00000040
 #endif
-#define ILD_BLEND25             0x0002
-#define ILD_BLEND50             0x0004
-#define ILD_OVERLAYMASK         0x0F00
+#define ILD_BLEND25             0x00000002
+#define ILD_BLEND50             0x00000004
+#define ILD_OVERLAYMASK         0x00000F00
 #define INDEXTOOVERLAYMASK(i)   ((i) << 8)
+#define ILD_PRESERVEALPHA       0x00001000  // This preserves the alpha channel in dest
+#define ILD_SCALE               0x00002000  // Causes the image to be scaled to cx, cy instead of clipped
+#define ILD_DPISCALE            0x00004000
 
 #define ILD_SELECTED            ILD_BLEND50
 #define ILD_FOCUS               ILD_BLEND25
 #define ILD_BLEND               ILD_BLEND50
 #define CLR_HILIGHT             CLR_DEFAULT
+
+#define ILS_NORMAL              0x00000000 
+#define ILS_GLOW                0x00000001
+#define ILS_SHADOW              0x00000002
+#define ILS_SATURATE            0x00000004
+#define ILS_ALPHA               0x00000008
 
 WINCOMMCTRLAPI BOOL WINAPI ImageList_Draw(HIMAGELIST himl, int i, HDC hdcDst, int x, int y, UINT fStyle);
 
@@ -514,6 +576,7 @@ WINCOMMCTRLAPI BOOL WINAPI ImageList_Draw(HIMAGELIST himl, int i, HDC hdcDst, in
 #ifdef _WIN32
 
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_Replace(HIMAGELIST himl, int i, HBITMAP hbmImage, HBITMAP hbmMask);
+
 WINCOMMCTRLAPI int         WINAPI ImageList_AddMasked(HIMAGELIST himl, HBITMAP hbmImage, COLORREF crMask);
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_DrawEx(HIMAGELIST himl, int i, HDC hdcDst, int x, int y, int dx, int dy, COLORREF rgbBk, COLORREF rgbFg, UINT fStyle);
 #if (_WIN32_IE >= 0x0300)
@@ -544,17 +607,29 @@ WINCOMMCTRLAPI BOOL        WINAPI ImageList_DragMove(int x, int y);
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_SetDragCursorImage(HIMAGELIST himlDrag, int iDrag, int dxHotspot, int dyHotspot);
 
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_DragShowNolock(BOOL fShow);
-WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_GetDragImage(POINT FAR* ppt,POINT FAR* pptHotspot);
+WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_GetDragImage(POINT *ppt,POINT *pptHotspot);
 
 #define     ImageList_RemoveAll(himl) ImageList_Remove(himl, -1)
 #define     ImageList_ExtractIcon(hi, himl, i) ImageList_GetIcon(himl, i, 0)
 #define     ImageList_LoadBitmap(hi, lpbmp, cx, cGrow, crMask) ImageList_LoadImage(hi, lpbmp, cx, cGrow, crMask, IMAGE_BITMAP, 0)
 
 #ifdef __IStream_INTERFACE_DEFINED__
+
 WINCOMMCTRLAPI HIMAGELIST WINAPI ImageList_Read(LPSTREAM pstm);
 WINCOMMCTRLAPI BOOL       WINAPI ImageList_Write(HIMAGELIST himl, LPSTREAM pstm);
+
+#if (_WIN32_WINNT >= 0x0501)
+#define ILP_NORMAL          0           // Writes or reads the stream using new sematics for this version of comctl32
+#define ILP_DOWNLEVEL       1           // Write or reads the stream using downlevel sematics.
+
+
+WINCOMMCTRLAPI HRESULT WINAPI ImageList_ReadEx(DWORD dwFlags, LPSTREAM pstm, REFIID riid, PVOID* ppv);
+WINCOMMCTRLAPI HRESULT WINAPI ImageList_WriteEx(HIMAGELIST himl, DWORD dwFlags, LPSTREAM pstm);
 #endif
 
+#endif
+
+#ifndef IMAGEINFO
 typedef struct _IMAGEINFO
 {
     HBITMAP hbmImage;
@@ -562,11 +637,12 @@ typedef struct _IMAGEINFO
     int     Unused1;
     int     Unused2;
     RECT    rcImage;
-} IMAGEINFO, FAR *LPIMAGEINFO;
+} IMAGEINFO, *LPIMAGEINFO;
+#endif
 
-WINCOMMCTRLAPI BOOL        WINAPI ImageList_GetIconSize(HIMAGELIST himl, int FAR *cx, int FAR *cy);
+WINCOMMCTRLAPI BOOL        WINAPI ImageList_GetIconSize(HIMAGELIST himl, int *cx, int *cy);
 WINCOMMCTRLAPI BOOL        WINAPI ImageList_SetIconSize(HIMAGELIST himl, int cx, int cy);
-WINCOMMCTRLAPI BOOL        WINAPI ImageList_GetImageInfo(HIMAGELIST himl, int i, IMAGEINFO FAR* pImageInfo);
+WINCOMMCTRLAPI BOOL        WINAPI ImageList_GetImageInfo(HIMAGELIST himl, int i, IMAGEINFO *pImageInfo);
 WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_Merge(HIMAGELIST himl1, int i1, HIMAGELIST himl2, int i2, int dx, int dy);
 #if (_WIN32_IE >= 0x0400)
 WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_Duplicate(HIMAGELIST himl);
@@ -574,6 +650,7 @@ WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_Duplicate(HIMAGELIST himl);
 
 
 #endif
+
 
 #endif
 
@@ -613,6 +690,9 @@ WINCOMMCTRLAPI HIMAGELIST  WINAPI ImageList_Duplicate(HIMAGELIST himl);
 #define HDS_FILTERBAR           0x0100
 #endif
 
+#if (_WIN32_WINNT >= 0x501)
+#define HDS_FLAT                0x0200
+#endif
 // end_r_commctrl
 
 #if (_WIN32_IE >= 0x0500)
@@ -638,13 +718,13 @@ typedef struct _HD_TEXTFILTERA
 {
     LPSTR pszText;                      // [in] pointer to the buffer containing the filter (ANSI)
     INT cchTextMax;                     // [in] max size of buffer/edit control buffer
-} HD_TEXTFILTERA, FAR * LPHD_TEXTFILTERA;
+} HD_TEXTFILTERA, *LPHD_TEXTFILTERA;
 
 typedef struct _HD_TEXTFILTERW
 {
     LPWSTR pszText;                     // [in] pointer to the buffer contiaining the filter (UNICODE)
     INT cchTextMax;                     // [in] max size of buffer/edit control buffer
-} HD_TEXTFILTERW, FAR * LPHD_TEXTFILTERW;
+} HD_TEXTFILTERW, *LPHD_TEXTFILTERW;
 
 #endif  // _WIN32_IE >= 0x0500
 
@@ -672,9 +752,9 @@ typedef struct _HD_ITEMA
 #endif
 #if (_WIN32_IE >= 0x0500)
     UINT    type;           // [in] filter type (defined what pvFilter is a pointer to)
-    LPVOID  pvFilter;       // [in] fillter data see above
+    void *  pvFilter;       // [in] fillter data see above
 #endif
-} HDITEMA, FAR * LPHDITEMA;
+} HDITEMA, *LPHDITEMA;
 
 #define HDITEMA_V1_SIZE CCSIZEOF_STRUCT(HDITEMA, lParam)
 #define HDITEMW_V1_SIZE CCSIZEOF_STRUCT(HDITEMW, lParam)
@@ -695,9 +775,9 @@ typedef struct _HD_ITEMW
 #endif
 #if (_WIN32_IE >= 0x0500)
     UINT    type;           // [in] filter type (defined what pvFilter is a pointer to)
-    LPVOID  pvFilter;       // [in] fillter data see above
+    void *  pvFilter;       // [in] fillter data see above
 #endif
-} HDITEMW, FAR * LPHDITEMW;
+} HDITEMW, *LPHDITEMW;
 
 #ifdef UNICODE
 #define HDITEM HDITEMW
@@ -725,11 +805,11 @@ typedef struct _HD_ITEMW
 #define HDI_FILTER              0x0100
 #endif
 
-#define HDF_LEFT                0
-#define HDF_RIGHT               1
-#define HDF_CENTER              2
+#define HDF_LEFT                0x0000
+#define HDF_RIGHT               0x0001
+#define HDF_CENTER              0x0002
 #define HDF_JUSTIFYMASK         0x0003
-#define HDF_RTLREADING          4
+#define HDF_RTLREADING          0x0004
 
 #define HDF_OWNERDRAW           0x8000
 #define HDF_STRING              0x4000
@@ -737,6 +817,11 @@ typedef struct _HD_ITEMW
 #if (_WIN32_IE >= 0x0300)
 #define HDF_BITMAP_ON_RIGHT     0x1000
 #define HDF_IMAGE               0x0800
+#endif
+
+#if (_WIN32_WINNT >= 0x501)
+#define HDF_SORTUP              0x0400
+#define HDF_SORTDOWN            0x0200
 #endif
 
 #define HDM_GETITEMCOUNT        (HDM_FIRST + 0)
@@ -754,7 +839,7 @@ typedef struct _HD_ITEMW
 #endif
 
 #define Header_InsertItem(hwndHD, i, phdi) \
-    (int)SNDMSG((hwndHD), HDM_INSERTITEM, (WPARAM)(int)(i), (LPARAM)(const HD_ITEM FAR*)(phdi))
+    (int)SNDMSG((hwndHD), HDM_INSERTITEM, (WPARAM)(int)(i), (LPARAM)(const HD_ITEM *)(phdi))
 
 
 #define HDM_DELETEITEM          (HDM_FIRST + 2)
@@ -772,7 +857,7 @@ typedef struct _HD_ITEMW
 #endif
 
 #define Header_GetItem(hwndHD, i, phdi) \
-    (BOOL)SNDMSG((hwndHD), HDM_GETITEM, (WPARAM)(int)(i), (LPARAM)(HD_ITEM FAR*)(phdi))
+    (BOOL)SNDMSG((hwndHD), HDM_GETITEM, (WPARAM)(int)(i), (LPARAM)(HD_ITEM *)(phdi))
 
 
 #define HDM_SETITEMA            (HDM_FIRST + 4)
@@ -785,7 +870,7 @@ typedef struct _HD_ITEMW
 #endif
 
 #define Header_SetItem(hwndHD, i, phdi) \
-    (BOOL)SNDMSG((hwndHD), HDM_SETITEM, (WPARAM)(int)(i), (LPARAM)(const HD_ITEM FAR*)(phdi))
+    (BOOL)SNDMSG((hwndHD), HDM_SETITEM, (WPARAM)(int)(i), (LPARAM)(const HD_ITEM *)(phdi))
 
 #if (_WIN32_IE >= 0x0300)
 #define HD_LAYOUT  HDLAYOUT
@@ -795,14 +880,14 @@ typedef struct _HD_ITEMW
 
 typedef struct _HD_LAYOUT
 {
-    RECT FAR* prc;
-    WINDOWPOS FAR* pwpos;
-} HDLAYOUT, FAR *LPHDLAYOUT;
+    RECT *prc;
+    WINDOWPOS *pwpos;
+} HDLAYOUT, *LPHDLAYOUT;
 
 
 #define HDM_LAYOUT              (HDM_FIRST + 5)
 #define Header_Layout(hwndHD, playout) \
-    (BOOL)SNDMSG((hwndHD), HDM_LAYOUT, 0, (LPARAM)(HD_LAYOUT FAR*)(playout))
+    (BOOL)SNDMSG((hwndHD), HDM_LAYOUT, 0, (LPARAM)(HD_LAYOUT *)(playout))
 
 
 #define HHT_NOWHERE             0x0001
@@ -829,7 +914,7 @@ typedef struct _HD_HITTESTINFO
     POINT pt;
     UINT flags;
     int iItem;
-} HDHITTESTINFO, FAR *LPHDHITTESTINFO;
+} HDHITTESTINFO, *LPHDHITTESTINFO;
 
 
 #define HDM_HITTEST             (HDM_FIRST + 6)
@@ -994,8 +1079,8 @@ typedef struct tagNMHEADERA
     NMHDR   hdr;
     int     iItem;
     int     iButton;
-    HDITEMA FAR* pitem;
-}  NMHEADERA, FAR* LPNMHEADERA;
+    HDITEMA *pitem;
+}  NMHEADERA, *LPNMHEADERA;
 
 
 typedef struct tagNMHEADERW
@@ -1003,8 +1088,8 @@ typedef struct tagNMHEADERW
     NMHDR   hdr;
     int     iItem;
     int     iButton;
-    HDITEMW FAR* pitem;
-} NMHEADERW, FAR* LPNMHEADERW;
+    HDITEMW *pitem;
+} NMHEADERW, *LPNMHEADERW;
 
 #ifdef UNICODE
 #define NMHEADER                NMHEADERW
@@ -1023,7 +1108,7 @@ typedef struct tagNMHDDISPINFOW
     int     cchTextMax;
     int     iImage;
     LPARAM  lParam;
-} NMHDDISPINFOW, FAR* LPNMHDDISPINFOW;
+} NMHDDISPINFOW, *LPNMHDDISPINFOW;
 
 typedef struct tagNMHDDISPINFOA
 {
@@ -1034,7 +1119,7 @@ typedef struct tagNMHDDISPINFOA
     int     cchTextMax;
     int     iImage;
     LPARAM  lParam;
-} NMHDDISPINFOA, FAR* LPNMHDDISPINFOA;
+} NMHDDISPINFOA, *LPNMHDDISPINFOA;
 
 
 #ifdef UNICODE
@@ -1051,7 +1136,7 @@ typedef struct tagNMHDFILTERBTNCLICK
     NMHDR hdr;
     INT iItem;
     RECT rc;
-} NMHDFILTERBTNCLICK, FAR* LPNMHDFILTERBTNCLICK;
+} NMHDFILTERBTNCLICK, *LPNMHDFILTERBTNCLICK;
 #endif
 
 #endif      // NOHEADER
@@ -1087,14 +1172,14 @@ typedef struct _TBBUTTON {
 #endif
     DWORD_PTR dwData;
     INT_PTR iString;
-} TBBUTTON, NEAR* PTBBUTTON, FAR* LPTBBUTTON;
-typedef const TBBUTTON FAR* LPCTBBUTTON;
+} TBBUTTON, NEAR* PTBBUTTON, *LPTBBUTTON;
+typedef const TBBUTTON *LPCTBBUTTON;
 
 
 typedef struct _COLORMAP {
     COLORREF from;
     COLORREF to;
-} COLORMAP, FAR* LPCOLORMAP;
+} COLORMAP, *LPCOLORMAP;
 
 WINCOMMCTRLAPI HWND WINAPI CreateToolbarEx(HWND hwnd, DWORD ws, UINT wID, int nBitmaps,
                         HINSTANCE hBMInst, UINT_PTR wBMID, LPCTBBUTTON lpButtons,
@@ -1162,10 +1247,14 @@ WINCOMMCTRLAPI HBITMAP WINAPI CreateMappedBitmap(HINSTANCE hInstance, INT_PTR id
 #endif
 
 #if (_WIN32_IE >= 0x0501)
-#define TBSTYLE_EX_MIXEDBUTTONS     0x00000008
-#define TBSTYLE_EX_HIDECLIPPEDBUTTONS   0x00000010  // don't show partially obscured buttons
+#define TBSTYLE_EX_MIXEDBUTTONS             0x00000008
+#define TBSTYLE_EX_HIDECLIPPEDBUTTONS       0x00000010  // don't show partially obscured buttons
 #endif  // 0x0501
 
+
+#if (_WIN32_WINNT >= 0x501)
+#define TBSTYLE_EX_DOUBLEBUFFER             0x00000080 // Double Buffer the toolbar
+#endif
 
 #if (_WIN32_IE >= 0x0400)
 // Custom Draw Structure
@@ -1186,6 +1275,9 @@ typedef struct _NMTBCUSTOMDRAW {
 
     int nStringBkMode;
     int nHLStringBkMode;
+#if (_WIN32_WINNT >= 0x501)
+    int iListGap;
+#endif
 } NMTBCUSTOMDRAW, * LPNMTBCUSTOMDRAW;
 
 // Toolbar custom draw return flags
@@ -1198,6 +1290,7 @@ typedef struct _NMTBCUSTOMDRAW {
 
 #if (_WIN32_IE >= 0x0500)
 #define TBCDRF_BLENDICON            0x00200000  // Use ILD_BLEND50 on the icon image
+#define TBCDRF_NOBACKGROUND         0x00400000  // Use ILD_BLEND50 on the icon image
 #endif
 
 
@@ -1302,13 +1395,13 @@ typedef struct tagTBSAVEPARAMSA {
     HKEY hkr;
     LPCSTR pszSubKey;
     LPCSTR pszValueName;
-} TBSAVEPARAMSA, FAR* LPTBSAVEPARAMSA;
+} TBSAVEPARAMSA, *LPTBSAVEPARAMSA;
 
 typedef struct tagTBSAVEPARAMSW {
     HKEY hkr;
     LPCWSTR pszSubKey;
     LPCWSTR pszValueName;
-} TBSAVEPARAMSW, FAR *LPTBSAVEPARAMW;
+} TBSAVEPARAMSW, *LPTBSAVEPARAMW;
 
 #ifdef UNICODE
 #define TBSAVEPARAMS            TBSAVEPARAMSW
@@ -1520,6 +1613,31 @@ typedef struct {
 
 #endif  // _WIN32_IE >= 0x0500
 
+#if (_WIN32_WINNT >= 0x501)
+#define TBMF_PAD                0x00000001
+#define TBMF_BARPAD             0x00000002
+#define TBMF_BUTTONSPACING      0x00000004
+
+typedef struct {
+    UINT cbSize;
+    DWORD dwMask;
+
+    int cxPad;        // PAD
+    int cyPad;
+    int cxBarPad;     // BARPAD
+    int cyBarPad;
+    int cxButtonSpacing;   // BUTTONSPACING
+    int cyButtonSpacing;
+} TBMETRICS, * LPTBMETRICS;
+
+#define TB_GETMETRICS           (WM_USER + 101)
+#define TB_SETMETRICS           (WM_USER + 102)
+#endif
+
+
+#if (_WIN32_WINNT >= 0x501)
+#define TB_SETWINDOWTHEME       CCM_SETWINDOWTHEME
+#endif
 
 #define TBN_GETBUTTONINFOA      (TBN_FIRST-0)
 #define TBN_BEGINDRAG           (TBN_FIRST-1)
@@ -1708,7 +1826,7 @@ typedef struct tagNMTOOLBARA {
 #if (_WIN32_IE >= 0x500)
     RECT    rcButton;
 #endif
-} NMTOOLBARA, FAR* LPNMTOOLBARA;
+} NMTOOLBARA, *LPNMTOOLBARA;
 #endif
 
 
@@ -1722,7 +1840,7 @@ typedef struct tagNMTOOLBARW {
 #if (_WIN32_IE >= 0x500)
     RECT    rcButton;
 #endif
-} NMTOOLBARW, FAR* LPNMTOOLBARW;
+} NMTOOLBARW, *LPNMTOOLBARW;
 #endif
 
 
@@ -1790,7 +1908,7 @@ typedef struct tagREBARINFO
 #else
     HANDLE      himl;
 #endif
-}   REBARINFO, FAR *LPREBARINFO;
+}   REBARINFO, *LPREBARINFO;
 
 #define RBBS_BREAK          0x00000001  // break to new line
 #define RBBS_FIXEDSIZE      0x00000002  // band can't be sized
@@ -1806,6 +1924,7 @@ typedef struct tagREBARINFO
 #define RBBS_USECHEVRON     0x00000200  // display drop-down button for this band if it's sized smaller than ideal width
 #if (_WIN32_IE >= 0x0501)               //
 #define RBBS_HIDETITLE      0x00000400  // keep band title hidden
+#define RBBS_TOPALIGN       0x00000800  // keep band title hidden
 #endif // 0x0501                        //
 #endif // 0x0500                        //
 #endif // 0x0400                        //
@@ -1849,8 +1968,8 @@ typedef struct tagREBARBANDINFOA
     LPARAM      lParam;
     UINT        cxHeader;
 #endif
-}   REBARBANDINFOA, FAR *LPREBARBANDINFOA;
-typedef REBARBANDINFOA CONST FAR *LPCREBARBANDINFOA;
+}   REBARBANDINFOA, *LPREBARBANDINFOA;
+typedef REBARBANDINFOA CONST *LPCREBARBANDINFOA;
 
 #define REBARBANDINFOA_V3_SIZE CCSIZEOF_STRUCT(REBARBANDINFOA, wID)
 #define REBARBANDINFOW_V3_SIZE CCSIZEOF_STRUCT(REBARBANDINFOW, wID)
@@ -1879,8 +1998,8 @@ typedef struct tagREBARBANDINFOW
     LPARAM      lParam;
     UINT        cxHeader;
 #endif
-}   REBARBANDINFOW, FAR *LPREBARBANDINFOW;
-typedef REBARBANDINFOW CONST FAR *LPCREBARBANDINFOW;
+}   REBARBANDINFOW, *LPREBARBANDINFOW;
+typedef REBARBANDINFOW CONST *LPCREBARBANDINFOW;
 
 #ifdef UNICODE
 #define REBARBANDINFO       REBARBANDINFOW
@@ -1920,6 +2039,11 @@ typedef REBARBANDINFOW CONST FAR *LPCREBARBANDINFOW;
 #define RB_GETBKCOLOR   (WM_USER +  20) // defaults to CLR_NONE
 #define RB_SETTEXTCOLOR (WM_USER +  21)
 #define RB_GETTEXTCOLOR (WM_USER +  22) // defaults to 0x00000000
+
+#if (_WIN32_WINNT >= 0x0501)
+#define RBSTR_CHANGERECT            0x0001   // flags for RB_SIZETORECT
+#endif
+
 #define RB_SIZETORECT   (WM_USER +  23) // resize the rebar/break bands and such to this rect (lparam)
 #endif      // _WIN32_IE >= 0x0400
 
@@ -1969,6 +2093,11 @@ typedef REBARBANDINFOW CONST FAR *LPCREBARBANDINFOW;
 
 #endif      // _WIN32_IE >= 0x0400
 
+#if (_WIN32_WINNT >= 0x501)
+#define RB_GETBANDMARGINS   (WM_USER + 40)
+#define RB_SETWINDOWTHEME       CCM_SETWINDOWTHEME
+#endif
+
 #if (_WIN32_IE >= 0x0500)
 #define RB_PUSHCHEVRON  (WM_USER + 43)
 #endif      // _WIN32_IE >= 0x0500
@@ -1992,6 +2121,10 @@ typedef REBARBANDINFOW CONST FAR *LPCREBARBANDINFOW;
 
 #if (_WIN32_IE >= 0x0500)
 #define RBN_MINMAX          (RBN_FIRST - 21)
+#endif
+
+#if (_WIN32_WINNT >= 0x0501)
+#define RBN_AUTOBREAK       (RBN_FIRST - 22)
 #endif
 
 typedef struct tagNMREBARCHILDSIZE
@@ -2039,6 +2172,22 @@ typedef struct tagNMREBARCHEVRON
 } NMREBARCHEVRON, *LPNMREBARCHEVRON;
 #endif
 
+#if (_WIN32_WINNT >= 0x0501)
+#define RBAB_AUTOSIZE   0x0001   // These are not flags and are all mutually exclusive
+#define RBAB_ADDBAND    0x0002
+
+typedef struct tagNMREBARAUTOBREAK
+{
+    NMHDR hdr;
+    UINT uBand;
+    UINT wID;
+    LPARAM lParam;
+    UINT uMsg;
+    UINT fStyleCurrent;
+    BOOL fAutoBreak;
+} NMREBARAUTOBREAK, *LPNMREBARAUTOBREAK;
+#endif
+
 #define RBHT_NOWHERE    0x0001
 #define RBHT_CAPTION    0x0002
 #define RBHT_CLIENT     0x0003
@@ -2052,7 +2201,7 @@ typedef struct _RB_HITTESTINFO
     POINT pt;
     UINT flags;
     int iBand;
-} RBHITTESTINFO, FAR *LPRBHITTESTINFO;
+} RBHITTESTINFO, *LPRBHITTESTINFO;
 
 #endif      // _WIN32_IE >= 0x0400
 
@@ -2096,6 +2245,11 @@ typedef struct _RB_HITTESTINFO
 
 #define TTTOOLINFOA_V1_SIZE CCSIZEOF_STRUCT(TTTOOLINFOA, lpszText)
 #define TTTOOLINFOW_V1_SIZE CCSIZEOF_STRUCT(TTTOOLINFOW, lpszText)
+#define TTTOOLINFOA_V2_SIZE CCSIZEOF_STRUCT(TTTOOLINFOA, lParam)
+#define TTTOOLINFOW_V2_SIZE CCSIZEOF_STRUCT(TTTOOLINFOW, lParam)
+#define TTTOOLINFOA_V3_SIZE CCSIZEOF_STRUCT(TTTOOLINFOA, lpReserved)
+#define TTTOOLINFOW_V3_SIZE CCSIZEOF_STRUCT(TTTOOLINFOW, lpReserved)
+
 
 typedef struct tagTOOLINFOA {
     UINT cbSize;
@@ -2108,7 +2262,10 @@ typedef struct tagTOOLINFOA {
 #if (_WIN32_IE >= 0x0300)
     LPARAM lParam;
 #endif
-} TTTOOLINFOA, NEAR *PTOOLINFOA, FAR *LPTTTOOLINFOA;
+#if (_WIN32_WINNT >= 0x0501)
+    void *lpReserved;
+#endif
+} TTTOOLINFOA, NEAR *PTOOLINFOA, *LPTTTOOLINFOA;
 
 typedef struct tagTOOLINFOW {
     UINT cbSize;
@@ -2121,7 +2278,10 @@ typedef struct tagTOOLINFOW {
 #if (_WIN32_IE >= 0x0300)
     LPARAM lParam;
 #endif
-} TTTOOLINFOW, NEAR *PTOOLINFOW, FAR* LPTTTOOLINFOW;
+#if (_WIN32_WINNT >= 0x0501)
+    void *lpReserved;
+#endif
+} TTTOOLINFOW, NEAR *PTOOLINFOW, *LPTTTOOLINFOW;
 
 #ifdef UNICODE
 #define TTTOOLINFO              TTTOOLINFOW
@@ -2143,6 +2303,7 @@ typedef struct tagTOOLINFOW {
 #define TTS_NOANIMATE           0x10
 #define TTS_NOFADE              0x20
 #define TTS_BALLOON             0x40
+#define TTS_CLOSE               0x80
 #endif
 
 // end_r_commctrl
@@ -2162,8 +2323,12 @@ typedef struct tagTOOLINFOW {
 #define TTF_TRACK               0x0020
 #define TTF_ABSOLUTE            0x0080
 #define TTF_TRANSPARENT         0x0100
+#if (_WIN32_IE >= 0x0501)
+#define TTF_PARSELINKS          0x1000
+#endif // _WIN32_IE >= 0x0501
 #define TTF_DI_SETITEM          0x8000       // valid only on the TTN_NEEDTEXT callback
 #endif      // _WIN32_IE >= 0x0300
+
 
 #define TTDT_AUTOMATIC          0
 #define TTDT_RESHOW             1
@@ -2229,6 +2394,18 @@ typedef struct tagTOOLINFOW {
 #define TTM_SETTITLEW           (WM_USER + 33)  // wParam = TTI_*, lParam = wchar* szTitle
 #endif
 
+#if (_WIN32_WINNT >= 0x0501)
+#define TTM_POPUP               (WM_USER + 34)
+#define TTM_GETTITLE            (WM_USER + 35) // wParam = 0, lParam = TTGETTITLE*
+
+typedef struct _TTGETTITLE
+{
+    DWORD dwSize;
+    UINT uTitleBitmap;
+    UINT cch;
+    WCHAR* pszTitle;
+} TTGETTITLE, *PTTGETTITLE;
+#endif
 
 #ifdef UNICODE
 #define TTM_ADDTOOL             TTM_ADDTOOLW
@@ -2260,6 +2437,10 @@ typedef struct tagTOOLINFOW {
 #endif
 #endif
 
+#if (_WIN32_WINNT >= 0x501)
+#define TTM_SETWINDOWTHEME      CCM_SETWINDOWTHEME
+#endif
+
 
 #if (_WIN32_IE >= 0x0300)
 #define LPHITTESTINFOW    LPTTHITTESTINFOW
@@ -2275,13 +2456,13 @@ typedef struct _TT_HITTESTINFOA {
     HWND hwnd;
     POINT pt;
     TTTOOLINFOA ti;
-} TTHITTESTINFOA, FAR * LPTTHITTESTINFOA;
+} TTHITTESTINFOA, *LPTTHITTESTINFOA;
 
 typedef struct _TT_HITTESTINFOW {
     HWND hwnd;
     POINT pt;
     TTTOOLINFOW ti;
-} TTHITTESTINFOW, FAR * LPTTHITTESTINFOW;
+} TTHITTESTINFOW, *LPTTHITTESTINFOW;
 
 #ifdef UNICODE
 #define TTHITTESTINFO           TTHITTESTINFOW
@@ -2295,6 +2476,7 @@ typedef struct _TT_HITTESTINFOW {
 #define TTN_GETDISPINFOW        (TTN_FIRST - 10)
 #define TTN_SHOW                (TTN_FIRST - 1)
 #define TTN_POP                 (TTN_FIRST - 2)
+#define TTN_LINKCLICK           (TTN_FIRST - 3)
 
 #ifdef UNICODE
 #define TTN_GETDISPINFO         TTN_GETDISPINFOW
@@ -2335,7 +2517,7 @@ typedef struct tagNMTTDISPINFOA {
 #if (_WIN32_IE >= 0x0300)
     LPARAM lParam;
 #endif
-} NMTTDISPINFOA, FAR *LPNMTTDISPINFOA;
+} NMTTDISPINFOA, *LPNMTTDISPINFOA;
 
 typedef struct tagNMTTDISPINFOW {
     NMHDR hdr;
@@ -2346,7 +2528,7 @@ typedef struct tagNMTTDISPINFOW {
 #if (_WIN32_IE >= 0x0300)
     LPARAM lParam;
 #endif
-} NMTTDISPINFOW, FAR *LPNMTTDISPINFOW;
+} NMTTDISPINFOW, *LPNMTTDISPINFOW;
 
 #ifdef UNICODE
 #define NMTTDISPINFO            NMTTDISPINFOW
@@ -2479,7 +2661,7 @@ WINCOMMCTRLAPI HWND WINAPI CreateStatusWindowW(LONG style, LPCWSTR lpszText, HWN
 
 #ifndef NOMENUHELP
 
-WINCOMMCTRLAPI void WINAPI MenuHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, HMENU hMainMenu, HINSTANCE hInst, HWND hwndStatus, UINT FAR *lpwIDs);
+WINCOMMCTRLAPI void WINAPI MenuHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, HMENU hMainMenu, HINSTANCE hInst, HWND hwndStatus, UINT *lpwIDs);
 WINCOMMCTRLAPI BOOL WINAPI ShowHideMenuCtl(HWND hWnd, UINT_PTR uFlags, LPINT lpInfo);
 WINCOMMCTRLAPI void WINAPI GetEffectiveClientRect(HWND hWnd, LPRECT lprc, LPINT lpInfo);
 
@@ -2527,6 +2709,10 @@ WINCOMMCTRLAPI void WINAPI GetEffectiveClientRect(HWND hWnd, LPRECT lprc, LPINT 
 #endif
 #if (_WIN32_IE >= 0x0500)
 #define TBS_REVERSED            0x0200  // Accessibility hint: the smaller number (usually the min value) means "high" and the larger number (usually the max value) means "low"
+#endif
+
+#if (_WIN32_IE >= 0x0501)
+#define TBS_DOWNISLEFT          0x0400  // Down=Left and Up=Right (default is Down=Right and Up=Left)
 #endif
 
 // end_r_commctrl
@@ -2606,7 +2792,7 @@ typedef struct tagDRAGLISTINFO {
     UINT uNotification;
     HWND hWnd;
     POINT ptCursor;
-} DRAGLISTINFO, FAR *LPDRAGLISTINFO;
+} DRAGLISTINFO, *LPDRAGLISTINFO;
 
 #define DL_BEGINDRAG            (WM_USER+133)
 #define DL_DRAGGING             (WM_USER+134)
@@ -2622,6 +2808,7 @@ typedef struct tagDRAGLISTINFO {
 
 WINCOMMCTRLAPI BOOL WINAPI MakeDragList(HWND hLB);
 WINCOMMCTRLAPI void WINAPI DrawInsert(HWND handParent, HWND hLB, int nItem);
+
 WINCOMMCTRLAPI int WINAPI LBItemFromPt(HWND hLB, POINT pt, BOOL bAutoScroll);
 
 #endif
@@ -2650,7 +2837,7 @@ WINCOMMCTRLAPI int WINAPI LBItemFromPt(HWND hLB, POINT pt, BOOL bAutoScroll);
 typedef struct _UDACCEL {
     UINT nSec;
     UINT nInc;
-} UDACCEL, FAR *LPUDACCEL;
+} UDACCEL, *LPUDACCEL;
 
 #define UD_MAXVAL               0x7fff
 #define UD_MINVAL               (-UD_MAXVAL)
@@ -2710,7 +2897,7 @@ typedef struct _NM_UPDOWN
     NMHDR hdr;
     int iPos;
     int iDelta;
-} NMUPDOWN, FAR *LPNMUPDOWN;
+} NMUPDOWN, *LPNMUPDOWN;
 
 #define UDN_DELTAPOS            (UDN_FIRST - 1)
 
@@ -2764,6 +2951,7 @@ typedef struct
 #endif      // _WIN32_IE >= 0x0400
 #define PBM_SETBKCOLOR          CCM_SETBKCOLOR  // lParam = bkColor
 #endif      // _WIN32_IE >= 0x0300
+
 
 #endif  // NOPROGRESS
 
@@ -2926,11 +3114,16 @@ typedef struct
 #define LVIF_INDENT             0x0010
 #define LVIF_NORECOMPUTE        0x0800
 #endif
+#if (_WIN32_WINNT >= 0x501)
+#define LVIF_GROUPID            0x0100
+#define LVIF_COLUMNS            0x0200
+#endif
 
 #define LVIS_FOCUSED            0x0001
 #define LVIS_SELECTED           0x0002
 #define LVIS_CUT                0x0004
 #define LVIS_DROPHILITED        0x0008
+#define LVIS_GLOW               0x0010
 #define LVIS_ACTIVATING         0x0020
 
 #define LVIS_OVERLAYMASK        0x0F00
@@ -2949,6 +3142,10 @@ typedef struct
 #define LVITEMW       LV_ITEMW
 #endif
 
+#if (_WIN32_WINNT >= 0x501)
+#define I_GROUPIDCALLBACK   (-1)
+#define I_GROUPIDNONE       (-2)
+#endif
 #define LV_ITEM LVITEM
 
 #define LVITEMA_V1_SIZE CCSIZEOF_STRUCT(LVITEMA, lParam)
@@ -2968,7 +3165,12 @@ typedef struct tagLVITEMA
 #if (_WIN32_IE >= 0x0300)
     int iIndent;
 #endif
-} LVITEMA, FAR* LPLVITEMA;
+#if (_WIN32_WINNT >= 0x501)
+    int iGroupId;
+    UINT cColumns; // tile view columns
+    PUINT puColumns;
+#endif
+} LVITEMA, *LPLVITEMA;
 
 typedef struct tagLVITEMW
 {
@@ -2984,7 +3186,12 @@ typedef struct tagLVITEMW
 #if (_WIN32_IE >= 0x0300)
     int iIndent;
 #endif
-} LVITEMW, FAR* LPLVITEMW;
+#if (_WIN32_WINNT >= 0x501)
+    int iGroupId;
+    UINT cColumns; // tile view columns
+    PUINT puColumns;
+#endif
+} LVITEMW, *LPLVITEMW;
 
 
 #ifdef UNICODE
@@ -3011,6 +3218,11 @@ typedef struct tagLVITEMW
 #define I_IMAGENONE             (-2)
 #endif  // 0x0501
 
+#if (_WIN32_WINNT >= 0x501)
+// For tileview
+#define I_COLUMNSCALLBACK       ((UINT)-1)
+#endif
+
 #define LVM_GETITEMA            (LVM_FIRST + 5)
 #define LVM_GETITEMW            (LVM_FIRST + 75)
 #ifdef UNICODE
@@ -3020,7 +3232,7 @@ typedef struct tagLVITEMW
 #endif
 
 #define ListView_GetItem(hwnd, pitem) \
-    (BOOL)SNDMSG((hwnd), LVM_GETITEM, 0, (LPARAM)(LV_ITEM FAR*)(pitem))
+    (BOOL)SNDMSG((hwnd), LVM_GETITEM, 0, (LPARAM)(LV_ITEM *)(pitem))
 
 
 #define LVM_SETITEMA            (LVM_FIRST + 6)
@@ -3032,7 +3244,7 @@ typedef struct tagLVITEMW
 #endif
 
 #define ListView_SetItem(hwnd, pitem) \
-    (BOOL)SNDMSG((hwnd), LVM_SETITEM, 0, (LPARAM)(const LV_ITEM FAR*)(pitem))
+    (BOOL)SNDMSG((hwnd), LVM_SETITEM, 0, (LPARAM)(const LV_ITEM *)(pitem))
 
 
 #define LVM_INSERTITEMA         (LVM_FIRST + 7)
@@ -3043,7 +3255,7 @@ typedef struct tagLVITEMW
 #define LVM_INSERTITEM          LVM_INSERTITEMA
 #endif
 #define ListView_InsertItem(hwnd, pitem)   \
-    (int)SNDMSG((hwnd), LVM_INSERTITEM, 0, (LPARAM)(const LV_ITEM FAR*)(pitem))
+    (int)SNDMSG((hwnd), LVM_INSERTITEM, 0, (LPARAM)(const LV_ITEM *)(pitem))
 
 
 #define LVM_DELETEITEM          (LVM_FIRST + 8)
@@ -3108,7 +3320,7 @@ typedef struct tagLVFINDINFOA
     LPARAM lParam;
     POINT pt;
     UINT vkDirection;
-} LVFINDINFOA, FAR* LPFINDINFOA;
+} LVFINDINFOA, *LPFINDINFOA;
 
 typedef struct tagLVFINDINFOW
 {
@@ -3117,7 +3329,7 @@ typedef struct tagLVFINDINFOW
     LPARAM lParam;
     POINT pt;
     UINT vkDirection;
-} LVFINDINFOW, FAR* LPFINDINFOW;
+} LVFINDINFOW, *LPFINDINFOW;
 
 #ifdef UNICODE
 #define  LVFINDINFO            LVFINDINFOW
@@ -3134,7 +3346,7 @@ typedef struct tagLVFINDINFOW
 #endif
 
 #define ListView_FindItem(hwnd, iStart, plvfi) \
-    (int)SNDMSG((hwnd), LVM_FINDITEM, (WPARAM)(int)(iStart), (LPARAM)(const LV_FINDINFO FAR*)(plvfi))
+    (int)SNDMSG((hwnd), LVM_FINDITEM, (WPARAM)(int)(iStart), (LPARAM)(const LV_FINDINFO *)(plvfi))
 
 #define LVIR_BOUNDS             0
 #define LVIR_ICON               1
@@ -3145,7 +3357,7 @@ typedef struct tagLVFINDINFOW
 #define LVM_GETITEMRECT         (LVM_FIRST + 14)
 #define ListView_GetItemRect(hwnd, i, prc, code) \
      (BOOL)SNDMSG((hwnd), LVM_GETITEMRECT, (WPARAM)(int)(i), \
-           ((prc) ? (((RECT FAR *)(prc))->left = (code),(LPARAM)(RECT FAR*)(prc)) : (LPARAM)(RECT FAR*)NULL))
+           ((prc) ? (((RECT *)(prc))->left = (code),(LPARAM)(RECT *)(prc)) : (LPARAM)(RECT *)NULL))
 
 
 #define LVM_SETITEMPOSITION     (LVM_FIRST + 15)
@@ -3155,7 +3367,7 @@ typedef struct tagLVFINDINFOW
 
 #define LVM_GETITEMPOSITION     (LVM_FIRST + 16)
 #define ListView_GetItemPosition(hwndLV, i, ppt) \
-    (BOOL)SNDMSG((hwndLV), LVM_GETITEMPOSITION, (WPARAM)(int)(i), (LPARAM)(POINT FAR*)(ppt))
+    (BOOL)SNDMSG((hwndLV), LVM_GETITEMPOSITION, (WPARAM)(int)(i), (LPARAM)(POINT *)(ppt))
 
 
 #define LVM_GETSTRINGWIDTHA     (LVM_FIRST + 17)
@@ -3181,6 +3393,7 @@ typedef struct tagLVFINDINFOW
 #define LVHT_TORIGHT            0x0020
 #define LVHT_TOLEFT             0x0040
 
+
 #if (_WIN32_IE >= 0x0300)
 #define LV_HITTESTINFO LVHITTESTINFO
 #else
@@ -3198,11 +3411,11 @@ typedef struct tagLVHITTESTINFO
 #if (_WIN32_IE >= 0x0300)
     int iSubItem;    // this is was NOT in win95.  valid only for LVM_SUBITEMHITTEST
 #endif
-} LVHITTESTINFO, FAR* LPLVHITTESTINFO;
+} LVHITTESTINFO, *LPLVHITTESTINFO;
 
 #define LVM_HITTEST             (LVM_FIRST + 18)
 #define ListView_HitTest(hwndLV, pinfo) \
-    (int)SNDMSG((hwndLV), LVM_HITTEST, 0, (LPARAM)(LV_HITTESTINFO FAR*)(pinfo))
+    (int)SNDMSG((hwndLV), LVM_HITTEST, 0, (LPARAM)(LV_HITTESTINFO *)(pinfo))
 
 
 #define LVM_ENSUREVISIBLE       (LVM_FIRST + 19)
@@ -3224,6 +3437,7 @@ typedef struct tagLVHITTESTINFO
 #define LVA_ALIGNLEFT           0x0001
 #define LVA_ALIGNTOP            0x0002
 #define LVA_SNAPTOGRID          0x0005
+
 
 #define LVM_ARRANGE             (LVM_FIRST + 22)
 #define ListView_Arrange(hwndLV, code) \
@@ -3274,7 +3488,7 @@ typedef struct tagLVCOLUMNA
     int iImage;
     int iOrder;
 #endif
-} LVCOLUMNA, FAR* LPLVCOLUMNA;
+} LVCOLUMNA, *LPLVCOLUMNA;
 
 typedef struct tagLVCOLUMNW
 {
@@ -3288,7 +3502,7 @@ typedef struct tagLVCOLUMNW
     int iImage;
     int iOrder;
 #endif
-} LVCOLUMNW, FAR* LPLVCOLUMNW;
+} LVCOLUMNW, *LPLVCOLUMNW;
 
 #ifdef UNICODE
 #define  LVCOLUMN               LVCOLUMNW
@@ -3330,7 +3544,7 @@ typedef struct tagLVCOLUMNW
 #endif
 
 #define ListView_GetColumn(hwnd, iCol, pcol) \
-    (BOOL)SNDMSG((hwnd), LVM_GETCOLUMN, (WPARAM)(int)(iCol), (LPARAM)(LV_COLUMN FAR*)(pcol))
+    (BOOL)SNDMSG((hwnd), LVM_GETCOLUMN, (WPARAM)(int)(iCol), (LPARAM)(LV_COLUMN *)(pcol))
 
 
 #define LVM_SETCOLUMNA          (LVM_FIRST + 26)
@@ -3342,7 +3556,7 @@ typedef struct tagLVCOLUMNW
 #endif
 
 #define ListView_SetColumn(hwnd, iCol, pcol) \
-    (BOOL)SNDMSG((hwnd), LVM_SETCOLUMN, (WPARAM)(int)(iCol), (LPARAM)(const LV_COLUMN FAR*)(pcol))
+    (BOOL)SNDMSG((hwnd), LVM_SETCOLUMN, (WPARAM)(int)(iCol), (LPARAM)(const LV_COLUMN *)(pcol))
 
 
 #define LVM_INSERTCOLUMNA       (LVM_FIRST + 27)
@@ -3354,7 +3568,7 @@ typedef struct tagLVCOLUMNW
 #endif
 
 #define ListView_InsertColumn(hwnd, iCol, pcol) \
-    (int)SNDMSG((hwnd), LVM_INSERTCOLUMN, (WPARAM)(int)(iCol), (LPARAM)(const LV_COLUMN FAR*)(pcol))
+    (int)SNDMSG((hwnd), LVM_INSERTCOLUMN, (WPARAM)(int)(iCol), (LPARAM)(const LV_COLUMN *)(pcol))
 
 
 #define LVM_DELETECOLUMN        (LVM_FIRST + 28)
@@ -3387,7 +3601,7 @@ typedef struct tagLVCOLUMNW
 
 #define LVM_GETVIEWRECT         (LVM_FIRST + 34)
 #define ListView_GetViewRect(hwnd, prc) \
-    (BOOL)SNDMSG((hwnd), LVM_GETVIEWRECT, 0, (LPARAM)(RECT FAR*)(prc))
+    (BOOL)SNDMSG((hwnd), LVM_GETVIEWRECT, 0, (LPARAM)(RECT *)(prc))
 
 
 #define LVM_GETTEXTCOLOR        (LVM_FIRST + 35)
@@ -3422,7 +3636,7 @@ typedef struct tagLVCOLUMNW
 
 #define LVM_GETORIGIN           (LVM_FIRST + 41)
 #define ListView_GetOrigin(hwndLV, ppt) \
-    (BOOL)SNDMSG((hwndLV), LVM_GETORIGIN, (WPARAM)0, (LPARAM)(POINT FAR*)(ppt))
+    (BOOL)SNDMSG((hwndLV), LVM_GETORIGIN, (WPARAM)0, (LPARAM)(POINT *)(ppt))
 
 
 #define LVM_UPDATE              (LVM_FIRST + 42)
@@ -3435,7 +3649,7 @@ typedef struct tagLVCOLUMNW
 { LV_ITEM _ms_lvi;\
   _ms_lvi.stateMask = mask;\
   _ms_lvi.state = data;\
-  SNDMSG((hwndLV), LVM_SETITEMSTATE, (WPARAM)(i), (LPARAM)(LV_ITEM FAR *)&_ms_lvi);\
+  SNDMSG((hwndLV), LVM_SETITEMSTATE, (WPARAM)(i), (LPARAM)(LV_ITEM *)&_ms_lvi);\
 }
 
 #if (_WIN32_IE >= 0x0300)
@@ -3466,7 +3680,7 @@ typedef struct tagLVCOLUMNW
   _ms_lvi.iSubItem = iSubItem_;\
   _ms_lvi.cchTextMax = cchTextMax_;\
   _ms_lvi.pszText = pszText_;\
-  SNDMSG((hwndLV), LVM_GETITEMTEXT, (WPARAM)(i), (LPARAM)(LV_ITEM FAR *)&_ms_lvi);\
+  SNDMSG((hwndLV), LVM_GETITEMTEXT, (WPARAM)(i), (LPARAM)(LV_ITEM *)&_ms_lvi);\
 }
 
 
@@ -3483,7 +3697,7 @@ typedef struct tagLVCOLUMNW
 { LV_ITEM _ms_lvi;\
   _ms_lvi.iSubItem = iSubItem_;\
   _ms_lvi.pszText = pszText_;\
-  SNDMSG((hwndLV), LVM_SETITEMTEXT, (WPARAM)(i), (LPARAM)(LV_ITEM FAR *)&_ms_lvi);\
+  SNDMSG((hwndLV), LVM_SETITEMTEXT, (WPARAM)(i), (LPARAM)(LV_ITEM *)&_ms_lvi);\
 }
 
 #if (_WIN32_IE >= 0x0300)
@@ -3521,7 +3735,6 @@ typedef int (CALLBACK *PFNLVCOMPARE)(LPARAM, LPARAM, LPARAM);
 #define LVM_GETSELECTEDCOUNT    (LVM_FIRST + 50)
 #define ListView_GetSelectedCount(hwndLV) \
     (UINT)SNDMSG((hwndLV), LVM_GETSELECTEDCOUNT, 0, 0L)
-
 
 #define LVM_GETITEMSPACING      (LVM_FIRST + 51)
 #define ListView_GetItemSpacing(hwndLV, fSmall) \
@@ -3576,10 +3789,17 @@ typedef int (CALLBACK *PFNLVCOMPARE)(LPARAM, LPARAM, LPARAM);
 #define LVS_EX_UNDERLINECOLD    0x00001000
 #define LVS_EX_MULTIWORKAREAS   0x00002000
 #endif
-
 #if (_WIN32_IE >= 0x0500)
 #define LVS_EX_LABELTIP         0x00004000 // listview unfolds partly hidden labels if it does not have infotip text
+#define LVS_EX_BORDERSELECT     0x00008000 // border selection style instead of highlight
 #endif  // End (_WIN32_IE >= 0x0500)
+#if (_WIN32_WINNT >= 0x501)
+#define LVS_EX_DOUBLEBUFFER     0x00010000
+#define LVS_EX_HIDELABELS       0x00020000
+#define LVS_EX_SINGLEROW        0x00040000
+#define LVS_EX_SNAPTOGRID       0x00080000  // Icons automatically snap to grid.
+#define LVS_EX_SIMPLESELECT     0x00100000  // Also changes overlay rendering to top right for icon mode.
+#endif
 
 #define LVM_GETSUBITEMRECT      (LVM_FIRST + 56)
 #define ListView_GetSubItemRect(hwnd, iItem, iSubItem, code, prc) \
@@ -3624,11 +3844,11 @@ typedef int (CALLBACK *PFNLVCOMPARE)(LPARAM, LPARAM, LPARAM);
 #define LV_MAX_WORKAREAS         16
 #define LVM_SETWORKAREAS         (LVM_FIRST + 65)
 #define ListView_SetWorkAreas(hwnd, nWorkAreas, prc) \
-    (BOOL)SNDMSG((hwnd), LVM_SETWORKAREAS, (WPARAM)(int)(nWorkAreas), (LPARAM)(RECT FAR*)(prc))
+    (BOOL)SNDMSG((hwnd), LVM_SETWORKAREAS, (WPARAM)(int)(nWorkAreas), (LPARAM)(RECT *)(prc))
 
 #define LVM_GETWORKAREAS        (LVM_FIRST + 70)
 #define ListView_GetWorkAreas(hwnd, nWorkAreas, prc) \
-    (BOOL)SNDMSG((hwnd), LVM_GETWORKAREAS, (WPARAM)(int)(nWorkAreas), (LPARAM)(RECT FAR*)(prc))
+    (BOOL)SNDMSG((hwnd), LVM_GETWORKAREAS, (WPARAM)(int)(nWorkAreas), (LPARAM)(RECT *)(prc))
 
 
 #define LVM_GETNUMBEROFWORKAREAS  (LVM_FIRST + 73)
@@ -3673,7 +3893,7 @@ typedef struct tagLVBKIMAGEA
     UINT cchImageMax;
     int xOffsetPercent;
     int yOffsetPercent;
-} LVBKIMAGEA, FAR *LPLVBKIMAGEA;
+} LVBKIMAGEA, *LPLVBKIMAGEA;
 typedef struct tagLVBKIMAGEW
 {
     ULONG ulFlags;              // LVBKIF_*
@@ -3682,7 +3902,7 @@ typedef struct tagLVBKIMAGEW
     UINT cchImageMax;
     int xOffsetPercent;
     int yOffsetPercent;
-} LVBKIMAGEW, FAR *LPLVBKIMAGEW;
+} LVBKIMAGEW, *LPLVBKIMAGEW;
 
 #define LVBKIF_SOURCE_NONE      0x00000000
 #define LVBKIF_SOURCE_HBITMAP   0x00000001
@@ -3691,11 +3911,292 @@ typedef struct tagLVBKIMAGEW
 #define LVBKIF_STYLE_NORMAL     0x00000000
 #define LVBKIF_STYLE_TILE       0x00000010
 #define LVBKIF_STYLE_MASK       0x00000010
+#if (_WIN32_WINNT >= 0x501)
+#define LVBKIF_FLAG_TILEOFFSET  0x00000100
+#define LVBKIF_TYPE_WATERMARK   0x10000000
+#endif
 
 #define LVM_SETBKIMAGEA         (LVM_FIRST + 68)
 #define LVM_SETBKIMAGEW         (LVM_FIRST + 138)
 #define LVM_GETBKIMAGEA         (LVM_FIRST + 69)
 #define LVM_GETBKIMAGEW         (LVM_FIRST + 139)
+
+#if (_WIN32_WINNT >= 0x501)
+#define LVM_SETSELECTEDCOLUMN         (LVM_FIRST + 140)
+#define ListView_SetSelectedColumn(hwnd, iCol) \
+    SNDMSG((hwnd), LVM_SETSELECTEDCOLUMN, (WPARAM)iCol, 0)
+
+#define LVM_SETTILEWIDTH         (LVM_FIRST + 141)
+#define ListView_SetTileWidth(hwnd, cpWidth) \
+    SNDMSG((hwnd), LVM_SETTILEWIDTH, (WPARAM)cpWidth, 0)
+
+#define LV_VIEW_ICON        0x0000
+#define LV_VIEW_DETAILS     0x0001
+#define LV_VIEW_SMALLICON   0x0002
+#define LV_VIEW_LIST        0x0003
+#define LV_VIEW_TILE        0x0004
+#define LV_VIEW_MAX         0x0004
+
+#define LVM_SETVIEW         (LVM_FIRST + 142)
+#define ListView_SetView(hwnd, iView) \
+    (DWORD)SNDMSG((hwnd), LVM_SETVIEW, (WPARAM)(DWORD)iView, 0)
+
+#define LVM_GETVIEW         (LVM_FIRST + 143)
+#define ListView_GetView(hwnd) \
+    (DWORD)SNDMSG((hwnd), LVM_GETVIEW, 0, 0)
+
+
+#define LVGF_NONE           0x00000000
+#define LVGF_HEADER         0x00000001
+#define LVGF_FOOTER         0x00000002
+#define LVGF_STATE          0x00000004
+#define LVGF_ALIGN          0x00000008
+#define LVGF_GROUPID        0x00000010
+
+#define LVGS_NORMAL         0x00000000
+#define LVGS_COLLAPSED      0x00000001
+#define LVGS_HIDDEN         0x00000002
+
+#define LVGA_HEADER_LEFT    0x00000001
+#define LVGA_HEADER_CENTER  0x00000002
+#define LVGA_HEADER_RIGHT   0x00000004  // Don't forget to validate exclusivity
+#define LVGA_FOOTER_LEFT    0x00000008
+#define LVGA_FOOTER_CENTER  0x00000010
+#define LVGA_FOOTER_RIGHT   0x00000020  // Don't forget to validate exclusivity
+
+typedef struct tagLVGROUP
+{
+    UINT    cbSize;
+    UINT    mask;
+    LPWSTR  pszHeader;
+    int     cchHeader;
+
+    LPWSTR  pszFooter;
+    int     cchFooter;
+
+    int     iGroupId;
+
+    UINT    stateMask;
+    UINT    state;
+    UINT    uAlign;
+} LVGROUP, *PLVGROUP;
+
+
+#define LVM_INSERTGROUP         (LVM_FIRST + 145)
+#define ListView_InsertGroup(hwnd, index, pgrp) \
+    SNDMSG((hwnd), LVM_INSERTGROUP, (WPARAM)index, (LPARAM)pgrp)
+
+
+#define LVM_SETGROUPINFO         (LVM_FIRST + 147)
+#define ListView_SetGroupInfo(hwnd, iGroupId, pgrp) \
+    SNDMSG((hwnd), LVM_SETGROUPINFO, (WPARAM)iGroupId, (LPARAM)pgrp)
+
+
+#define LVM_GETGROUPINFO         (LVM_FIRST + 149)
+#define ListView_GetGroupInfo(hwnd, iGroupId, pgrp) \
+    SNDMSG((hwnd), LVM_GETGROUPINFO, (WPARAM)iGroupId, (LPARAM)pgrp)
+
+
+#define LVM_REMOVEGROUP         (LVM_FIRST + 150)
+#define ListView_RemoveGroup(hwnd, iGroupId) \
+    SNDMSG((hwnd), LVM_REMOVEGROUP, (WPARAM)iGroupId, 0)
+
+#define LVM_MOVEGROUP         (LVM_FIRST + 151)
+#define ListView_MoveGroup(hwnd, iGroupId, toIndex) \
+    SNDMSG((hwnd), LVM_MOVEGROUP, (WPARAM)iGroupId, (LPARAM)toIndex)
+
+#define LVM_MOVEITEMTOGROUP            (LVM_FIRST + 154)
+#define ListView_MoveItemToGroup(hwnd, idItemFrom, idGroupTo) \
+    SNDMSG((hwnd), LVM_MOVEITEMTOGROUP, (WPARAM)idItemFrom, (LPARAM)idGroupTo)
+
+
+#define LVGMF_NONE          0x00000000
+#define LVGMF_BORDERSIZE    0x00000001
+#define LVGMF_BORDERCOLOR   0x00000002
+#define LVGMF_TEXTCOLOR     0x00000004
+
+typedef struct tagLVGROUPMETRICS
+{
+    UINT cbSize;
+    UINT mask;
+    UINT Left;
+    UINT Top;
+    UINT Right;
+    UINT Bottom;
+    COLORREF crLeft;
+    COLORREF crTop;
+    COLORREF crRight;
+    COLORREF crBottom;
+    COLORREF crHeader;
+    COLORREF crFooter;
+} LVGROUPMETRICS, *PLVGROUPMETRICS;
+
+#define LVM_SETGROUPMETRICS         (LVM_FIRST + 155)
+#define ListView_SetGroupMetrics(hwnd, pGroupMetrics) \
+    SNDMSG((hwnd), LVM_SETGROUPMETRICS, 0, (LPARAM)pGroupMetrics)
+
+#define LVM_GETGROUPMETRICS         (LVM_FIRST + 156)
+#define ListView_GetGroupMetrics(hwnd, pGroupMetrics) \
+    SNDMSG((hwnd), LVM_GETGROUPMETRICS, 0, (LPARAM)pGroupMetrics)
+
+#define LVM_ENABLEGROUPVIEW         (LVM_FIRST + 157)
+#define ListView_EnableGroupView(hwnd, fEnable) \
+    SNDMSG((hwnd), LVM_ENABLEGROUPVIEW, (WPARAM)fEnable, 0)
+
+typedef int (CALLBACK *PFNLVGROUPCOMPARE)(int, int, void *);
+
+#define LVM_SORTGROUPS         (LVM_FIRST + 158)
+#define ListView_SortGroups(hwnd, _pfnGroupCompate, _plv) \
+    SNDMSG((hwnd), LVM_SORTGROUPS, (WPARAM)_pfnGroupCompate, (LPARAM)_plv)
+
+typedef struct tagLVINSERTGROUPSORTED
+{
+    PFNLVGROUPCOMPARE pfnGroupCompare;
+    void *pvData;
+    LVGROUP lvGroup;
+}LVINSERTGROUPSORTED, *PLVINSERTGROUPSORTED;
+
+#define LVM_INSERTGROUPSORTED           (LVM_FIRST + 159)
+#define ListView_InsertGroupSorted(hwnd, structInsert) \
+    SNDMSG((hwnd), LVM_INSERTGROUPSORTED, (WPARAM)structInsert, 0)
+
+#define LVM_REMOVEALLGROUPS             (LVM_FIRST + 160)
+#define ListView_RemoveAllGroups(hwnd) \
+    SNDMSG((hwnd), LVM_REMOVEALLGROUPS, 0, 0)
+
+#define LVM_HASGROUP                    (LVM_FIRST + 161)
+#define ListView_HasGroup(hwnd, dwGroupId) \
+    SNDMSG((hwnd), LVM_HASGROUP, dwGroupId, 0)
+
+#define LVTVIF_AUTOSIZE       0x00000000
+#define LVTVIF_FIXEDWIDTH     0x00000001
+#define LVTVIF_FIXEDHEIGHT    0x00000002
+#define LVTVIF_FIXEDSIZE      0x00000003
+
+#define LVTVIM_TILESIZE       0x00000001
+#define LVTVIM_COLUMNS        0x00000002
+#define LVTVIM_LABELMARGIN    0x00000004
+
+typedef struct tagLVTILEVIEWINFO
+{
+    UINT cbSize;
+    DWORD dwMask;     //LVTVIM_*
+    DWORD dwFlags;    //LVTVIF_*
+    SIZE sizeTile;
+    int cLines;
+    RECT rcLabelMargin;
+} LVTILEVIEWINFO, *PLVTILEVIEWINFO;
+
+typedef struct tagLVTILEINFO
+{
+    UINT cbSize;
+    int iItem;
+    UINT cColumns;
+    PUINT puColumns;
+} LVTILEINFO, *PLVTILEINFO;
+
+#define LVM_SETTILEVIEWINFO                 (LVM_FIRST + 162)
+#define ListView_SetTileViewInfo(hwnd, ptvi) \
+    SNDMSG((hwnd), LVM_SETTILEVIEWINFO, 0, (LPARAM)ptvi)
+
+#define LVM_GETTILEVIEWINFO                 (LVM_FIRST + 163)
+#define ListView_GetTileViewInfo(hwnd, ptvi) \
+    SNDMSG((hwnd), LVM_GETTILEVIEWINFO, 0, (LPARAM)ptvi)
+
+#define LVM_SETTILEINFO                     (LVM_FIRST + 164)
+#define ListView_SetTileInfo(hwnd, pti) \
+    SNDMSG((hwnd), LVM_SETTILEINFO, 0, (LPARAM)pti)
+
+#define LVM_GETTILEINFO                     (LVM_FIRST + 165)
+#define ListView_GetTileInfo(hwnd, pti) \
+    SNDMSG((hwnd), LVM_GETTILEINFO, 0, (LPARAM)pti)
+
+typedef struct 
+{
+    UINT cbSize;
+    DWORD dwFlags;
+    int iItem;
+    DWORD dwReserved;
+} LVINSERTMARK, * LPLVINSERTMARK;
+
+#define LVIM_AFTER      0x00000001 // TRUE = insert After iItem, otherwise before
+
+#define LVM_SETINSERTMARK                   (LVM_FIRST + 166)
+#define ListView_SetInsertMark(hwnd, lvim) \
+    (BOOL)SNDMSG((hwnd), LVM_SETINSERTMARK, (WPARAM) 0, (LPARAM) (lvim))
+
+#define LVM_GETINSERTMARK                   (LVM_FIRST + 167)
+#define ListView_GetInsertMark(hwnd, lvim) \
+    (BOOL)SNDMSG((hwnd), LVM_GETINSERTMARK, (WPARAM) 0, (LPARAM) (lvim))
+
+#define LVM_INSERTMARKHITTEST               (LVM_FIRST + 168)
+#define ListView_InsertMarkHitTest(hwnd, point, lvim) \
+    (int)SNDMSG((hwnd), LVM_INSERTMARKHITTEST, (WPARAM)(LPPOINT)(point), (LPARAM)(LPLVINSERTMARK)(lvim))
+
+#define LVM_GETINSERTMARKRECT               (LVM_FIRST + 169)
+#define ListView_GetInsertMarkRect(hwnd, rc) \
+    (int)SNDMSG((hwnd), LVM_GETINSERTMARKRECT, (WPARAM)0, (LPARAM)(LPRECT)(rc))
+
+#define LVM_SETINSERTMARKCOLOR                 (LVM_FIRST + 170)
+#define ListView_SetInsertMarkColor(hwnd, color) \
+    (COLORREF)SNDMSG((hwnd), LVM_SETINSERTMARKCOLOR, (WPARAM)0, (LPARAM)(COLORREF)(color))
+
+#define LVM_GETINSERTMARKCOLOR                 (LVM_FIRST + 171)
+#define ListView_GetInsertMarkColor(hwnd) \
+    (COLORREF)SNDMSG((hwnd), LVM_GETINSERTMARKCOLOR, (WPARAM)0, (LPARAM)0)
+
+typedef struct tagLVSETINFOTIP
+{
+    UINT cbSize;
+    DWORD dwFlags;
+    LPWSTR pszText;
+    int iItem;
+    int iSubItem;
+} LVSETINFOTIP, *PLVSETINFOTIP;
+
+#define  LVM_SETINFOTIP         (LVM_FIRST + 173)
+
+#define ListView_SetInfoTip(hwndLV, plvInfoTip)\
+        (BOOL)SNDMSG((hwndLV), LVM_SETINFOTIP, (WPARAM)0, (LPARAM)plvInfoTip)
+
+#define LVM_GETSELECTEDCOLUMN   (LVM_FIRST + 174)
+#define ListView_GetSelectedColumn(hwnd) \
+    (UINT)SNDMSG((hwnd), LVM_GETSELECTEDCOLUMN, 0, 0)
+
+
+#define LVM_ISGROUPVIEWENABLED  (LVM_FIRST + 175)
+#define ListView_IsGroupViewEnabled(hwnd) \
+    (BOOL)SNDMSG((hwnd), LVM_ISGROUPVIEWENABLED, 0, 0)
+
+#define LVM_GETOUTLINECOLOR     (LVM_FIRST + 176)
+#define ListView_GetOutlineColor(hwnd) \
+    (COLORREF)SNDMSG((hwnd), LVM_GETOUTLINECOLOR, 0, 0)
+
+#define LVM_SETOUTLINECOLOR     (LVM_FIRST + 177)
+#define ListView_SetOutlineColor(hwnd, color) \
+    (COLORREF)SNDMSG((hwnd), LVM_SETOUTLINECOLOR, (WPARAM)0, (LPARAM)(COLORREF)(color))
+
+
+#define LVM_CANCELEDITLABEL     (LVM_FIRST + 179)
+#define ListView_CancelEditLabel(hwnd) \
+    (VOID)SNDMSG((hwnd), LVM_CANCELEDITLABEL, (WPARAM)0, (LPARAM)0)
+
+
+// These next to methods make it easy to identify an item that can be repositioned
+// within listview. For example: Many developers use the lParam to store an identifier that is
+// unique. Unfortunatly, in order to find this item, they have to iterate through all of the items
+// in the listview. Listview will maintain a unique identifier.  The upper bound is the size of a DWORD.
+#define LVM_MAPINDEXTOID     (LVM_FIRST + 180)
+#define ListView_MapIndexToID(hwnd, index) \
+    (UINT)SNDMSG((hwnd), LVM_MAPINDEXTOID, (WPARAM)index, (LPARAM)0)
+
+#define LVM_MAPIDTOINDEX     (LVM_FIRST + 181)
+#define ListView_MapIDToIndex(hwnd, id) \
+    (UINT)SNDMSG((hwnd), LVM_MAPIDTOINDEX, (WPARAM)id, (LPARAM)0)
+
+
+
+#endif
 
 #ifdef UNICODE
 #define LVBKIMAGE               LVBKIMAGEW
@@ -3715,7 +4216,6 @@ typedef struct tagLVBKIMAGEW
 
 #define ListView_GetBkImage(hwnd, plvbki) \
     (BOOL)SNDMSG((hwnd), LVM_GETBKIMAGE, 0, (LPARAM)(plvbki))
-
 
 #endif      // _WIN32_IE >= 0x0400
 
@@ -3738,7 +4238,7 @@ typedef struct tagNMLISTVIEW
     UINT    uChanged;
     POINT   ptAction;
     LPARAM  lParam;
-} NMLISTVIEW, FAR *LPNMLISTVIEW;
+} NMLISTVIEW, *LPNMLISTVIEW;
 
 
 #if (_WIN32_IE >= 0x400)
@@ -3758,7 +4258,7 @@ typedef struct tagNMITEMACTIVATE
     POINT   ptAction;
     LPARAM  lParam;
     UINT    uKeyFlags;
-} NMITEMACTIVATE, FAR *LPNMITEMACTIVATE;
+} NMITEMACTIVATE, *LPNMITEMACTIVATE;
 
 // key flags stored in uKeyFlags
 #define LVKF_ALT       0x0001
@@ -3778,14 +4278,37 @@ typedef struct tagNMLVCUSTOMDRAW
 #if (_WIN32_IE >= 0x0400)
     int iSubItem;
 #endif
+#if (_WIN32_WINNT >= 0x501)
+    DWORD dwItemType;
+
+    // Item custom draw
+    COLORREF clrFace;
+    int iIconEffect;
+    int iIconPhase;
+    int iPartId;
+    int iStateId;
+
+    // Group Custom Draw
+    RECT rcText;
+    UINT uAlign;      // Alignment. Use LVGA_HEADER_CENTER, LVGA_HEADER_RIGHT, LVGA_HEADER_LEFT
+#endif
 } NMLVCUSTOMDRAW, *LPNMLVCUSTOMDRAW;
+
+// dwItemType
+#define LVCDI_ITEM      0x00000000
+#define LVCDI_GROUP     0x00000001
+
+// ListView custom draw return values
+#define LVCDRF_NOSELECT             0x00010000
+#define LVCDRF_NOGROUPFRAME         0x00020000  
+
 
 typedef struct tagNMLVCACHEHINT
 {
     NMHDR   hdr;
     int     iFrom;
     int     iTo;
-} NMLVCACHEHINT, FAR *LPNMLVCACHEHINT;
+} NMLVCACHEHINT, *LPNMLVCACHEHINT;
 
 #define LPNM_CACHEHINT  LPNMLVCACHEHINT
 #define PNM_CACHEHINT   LPNMLVCACHEHINT
@@ -3796,14 +4319,14 @@ typedef struct tagNMLVFINDITEMA
     NMHDR   hdr;
     int     iStart;
     LVFINDINFOA lvfi;
-} NMLVFINDITEMA, FAR *LPNMLVFINDITEMA;
+} NMLVFINDITEMA, *LPNMLVFINDITEMA;
 
 typedef struct tagNMLVFINDITEMW
 {
     NMHDR   hdr;
     int     iStart;
     LVFINDINFOW lvfi;
-} NMLVFINDITEMW, FAR *LPNMLVFINDITEMW;
+} NMLVFINDITEMW, *LPNMLVFINDITEMW;
 
 #define PNM_FINDITEMA   LPNMLVFINDITEMA
 #define LPNM_FINDITEMA  LPNMLVFINDITEMA
@@ -3834,7 +4357,7 @@ typedef struct tagNMLVODSTATECHANGE
     int iTo;
     UINT uNewState;
     UINT uOldState;
-} NMLVODSTATECHANGE, FAR *LPNMLVODSTATECHANGE;
+} NMLVODSTATECHANGE, *LPNMLVODSTATECHANGE;
 
 #define PNM_ODSTATECHANGE   LPNMLVODSTATECHANGE
 #define LPNM_ODSTATECHANGE  LPNMLVODSTATECHANGE
@@ -3910,12 +4433,12 @@ typedef struct tagNMLVODSTATECHANGE
 typedef struct tagLVDISPINFO {
     NMHDR hdr;
     LVITEMA item;
-} NMLVDISPINFOA, FAR *LPNMLVDISPINFOA;
+} NMLVDISPINFOA, *LPNMLVDISPINFOA;
 
 typedef struct tagLVDISPINFOW {
     NMHDR hdr;
     LVITEMW item;
-} NMLVDISPINFOW, FAR * LPNMLVDISPINFOW;
+} NMLVDISPINFOW, *LPNMLVDISPINFOW;
 
 #ifdef UNICODE
 #define  NMLVDISPINFO           NMLVDISPINFOW
@@ -3941,7 +4464,7 @@ typedef struct tagLVKEYDOWN
     NMHDR hdr;
     WORD wVKey;
     UINT flags;
-} NMLVKEYDOWN, FAR *LPNMLVKEYDOWN;
+} NMLVKEYDOWN, *LPNMLVKEYDOWN;
 
 #ifdef _WIN32
 #include <poppack.h>
@@ -3995,6 +4518,18 @@ typedef struct tagNMLVGETINFOTIPW
 #endif      // _WIN32_IE >= 0x0400
 
 
+#if (_WIN32_WINNT >= 0x501)
+typedef struct tagNMLVSCROLL
+{
+    NMHDR   hdr;
+    int     dx;
+    int     dy;
+} NMLVSCROLL, *LPNMLVSCROLL;
+
+#define LVN_BEGINSCROLL          (LVN_FIRST-80)          
+#define LVN_ENDSCROLL            (LVN_FIRST-81)
+#endif
+
 #endif // NOLISTVIEW
 
 //====== TREEVIEW CONTROL =====================================================
@@ -4039,12 +4574,12 @@ typedef struct tagNMLVGETINFOTIPW
 #if (_WIN32_IE >= 0x500)
 #define TVS_NOHSCROLL           0x8000  // TVS_NOSCROLL overrides this
 #endif
-
 #endif
+
 
 // end_r_commctrl
 
-typedef struct _TREEITEM FAR* HTREEITEM;
+typedef struct _TREEITEM *HTREEITEM;
 
 #define TVIF_TEXT               0x0001
 #define TVIF_IMAGE              0x0002
@@ -4100,7 +4635,7 @@ typedef struct tagTVITEMA {
     int       iSelectedImage;
     int       cChildren;
     LPARAM    lParam;
-} TVITEMA, FAR *LPTVITEMA;
+} TVITEMA, *LPTVITEMA;
 
 typedef struct tagTVITEMW {
     UINT      mask;
@@ -4113,7 +4648,7 @@ typedef struct tagTVITEMW {
     int       iSelectedImage;
     int       cChildren;
     LPARAM    lParam;
-} TVITEMW, FAR *LPTVITEMW;
+} TVITEMW, *LPTVITEMW;
 
 #if (_WIN32_IE >= 0x0400)
 // only used for Get and Set messages.  no notifies
@@ -4129,7 +4664,7 @@ typedef struct tagTVITEMEXA {
     int       cChildren;
     LPARAM    lParam;
     int       iIntegral;
-} TVITEMEXA, FAR *LPTVITEMEXA;
+} TVITEMEXA, *LPTVITEMEXA;
 // only used for Get and Set messages.  no notifies
 typedef struct tagTVITEMEXW {
     UINT      mask;
@@ -4143,7 +4678,7 @@ typedef struct tagTVITEMEXW {
     int       cChildren;
     LPARAM    lParam;
     int       iIntegral;
-} TVITEMEXW, FAR *LPTVITEMEXW;
+} TVITEMEXW, *LPTVITEMEXW;
 #ifdef UNICODE
 typedef TVITEMEXW TVITEMEX;
 typedef LPTVITEMEXW LPTVITEMEX;
@@ -4201,7 +4736,7 @@ typedef struct tagTVINSERTSTRUCTA {
 #else
     TV_ITEMA item;
 #endif
-} TVINSERTSTRUCTA, FAR *LPTVINSERTSTRUCTA;
+} TVINSERTSTRUCTA, *LPTVINSERTSTRUCTA;
 
 typedef struct tagTVINSERTSTRUCTW {
     HTREEITEM hParent;
@@ -4215,7 +4750,7 @@ typedef struct tagTVINSERTSTRUCTW {
 #else
     TV_ITEMW item;
 #endif
-} TVINSERTSTRUCTW, FAR *LPTVINSERTSTRUCTW;
+} TVINSERTSTRUCTW, *LPTVINSERTSTRUCTW;
 
 #ifdef UNICODE
 #define  TVINSERTSTRUCT         TVINSERTSTRUCTW
@@ -4264,7 +4799,7 @@ typedef struct tagTVINSERTSTRUCTW {
 
 #define TVM_GETITEMRECT         (TV_FIRST + 4)
 #define TreeView_GetItemRect(hwnd, hitem, prc, code) \
-    (*(HTREEITEM FAR *)prc = (hitem), (BOOL)SNDMSG((hwnd), TVM_GETITEMRECT, (WPARAM)(code), (LPARAM)(RECT FAR*)(prc)))
+    (*(HTREEITEM *)prc = (hitem), (BOOL)SNDMSG((hwnd), TVM_GETITEMRECT, (WPARAM)(code), (LPARAM)(RECT *)(prc)))
 
 
 #define TVM_GETCOUNT            (TV_FIRST + 5)
@@ -4315,6 +4850,10 @@ typedef struct tagTVINSERTSTRUCTW {
 #define TVGN_LASTVISIBLE        0x000A
 #endif      // _WIN32_IE >= 0x0400
 
+#if (_WIN32_WINNT >= 0x501)
+#define TVSI_NOSINGLEEXPAND    0x8000 // Should not conflict with TVGN flags.
+#endif
+
 #define TreeView_GetChild(hwnd, hitem)          TreeView_GetNextItem(hwnd, hitem, TVGN_CHILD)
 #define TreeView_GetNextSibling(hwnd, hitem)    TreeView_GetNextItem(hwnd, hitem, TVGN_NEXT)
 #define TreeView_GetPrevSibling(hwnd, hitem)    TreeView_GetNextItem(hwnd, hitem, TVGN_PREVIOUS)
@@ -4349,7 +4888,7 @@ typedef struct tagTVINSERTSTRUCTW {
 #endif
 
 #define TreeView_GetItem(hwnd, pitem) \
-    (BOOL)SNDMSG((hwnd), TVM_GETITEM, 0, (LPARAM)(TV_ITEM FAR*)(pitem))
+    (BOOL)SNDMSG((hwnd), TVM_GETITEM, 0, (LPARAM)(TV_ITEM *)(pitem))
 
 
 #define TVM_SETITEMA            (TV_FIRST + 13)
@@ -4362,7 +4901,7 @@ typedef struct tagTVINSERTSTRUCTW {
 #endif
 
 #define TreeView_SetItem(hwnd, pitem) \
-    (BOOL)SNDMSG((hwnd), TVM_SETITEM, 0, (LPARAM)(const TV_ITEM FAR*)(pitem))
+    (BOOL)SNDMSG((hwnd), TVM_SETITEM, 0, (LPARAM)(const TV_ITEM *)(pitem))
 
 
 #define TVM_EDITLABELA          (TV_FIRST + 14)
@@ -4405,7 +4944,7 @@ typedef struct tagTVHITTESTINFO {
     POINT       pt;
     UINT        flags;
     HTREEITEM   hItem;
-} TVHITTESTINFO, FAR *LPTVHITTESTINFO;
+} TVHITTESTINFO, *LPTVHITTESTINFO;
 
 #define TVHT_NOWHERE            0x0001
 #define TVHT_ONITEMICON         0x0002
@@ -4535,7 +5074,7 @@ typedef struct tagTVHITTESTINFO {
   _ms_TVi.hItem = hti; \
   _ms_TVi.stateMask = _mask;\
   _ms_TVi.state = data;\
-  SNDMSG((hwndTV), TVM_SETITEM, 0, (LPARAM)(TV_ITEM FAR *)&_ms_TVi);\
+  SNDMSG((hwndTV), TVM_SETITEM, 0, (LPARAM)(TV_ITEM *)&_ms_TVi);\
 }
 
 #define TreeView_SetCheckState(hwndTV, hti, fCheck) \
@@ -4559,6 +5098,18 @@ typedef struct tagTVHITTESTINFO {
 
 #endif
 
+#if (_WIN32_WINNT >= 0x0501)
+#define TVM_MAPACCIDTOHTREEITEM     (TV_FIRST + 42)
+#define TreeView_MapAccIDToHTREEITEM(hwnd, id) \
+    (HTREEITEM)SNDMSG((hwnd), TVM_MAPACCIDTOHTREEITEM, id, 0)
+    
+#define TVM_MAPHTREEITEMTOACCID     (TV_FIRST + 43)
+#define TreeView_MapHTREEITEMToAccID(hwnd, htreeitem) \
+    (UINT)SNDMSG((hwnd), TVM_MAPHTREEITEMTOACCID, (WPARAM)htreeitem, 0)
+
+
+#endif
+
 typedef int (CALLBACK *PFNTVCOMPARE)(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 
 #if (_WIN32_IE >= 0x0300)
@@ -4575,7 +5126,7 @@ typedef struct tagTVSORTCB
         HTREEITEM       hParent;
         PFNTVCOMPARE    lpfnCompare;
         LPARAM          lParam;
-} TVSORTCB, FAR *LPTVSORTCB;
+} TVSORTCB, *LPTVSORTCB;
 
 
 #if (_WIN32_IE >= 0x0300)
@@ -4601,7 +5152,7 @@ typedef struct tagNMTREEVIEWA {
     TVITEMA    itemOld;
     TVITEMA    itemNew;
     POINT       ptDrag;
-} NMTREEVIEWA, FAR *LPNMTREEVIEWA;
+} NMTREEVIEWA, *LPNMTREEVIEWA;
 
 
 typedef struct tagNMTREEVIEWW {
@@ -4610,7 +5161,7 @@ typedef struct tagNMTREEVIEWW {
     TVITEMW    itemOld;
     TVITEMW    itemNew;
     POINT       ptDrag;
-} NMTREEVIEWW, FAR *LPNMTREEVIEWW;
+} NMTREEVIEWW, *LPNMTREEVIEWW;
 
 
 #ifdef UNICODE
@@ -4653,12 +5204,12 @@ typedef struct tagNMTREEVIEWW {
 typedef struct tagTVDISPINFOA {
     NMHDR hdr;
     TVITEMA item;
-} NMTVDISPINFOA, FAR *LPNMTVDISPINFOA;
+} NMTVDISPINFOA, *LPNMTVDISPINFOA;
 
 typedef struct tagTVDISPINFOW {
     NMHDR hdr;
     TVITEMW item;
-} NMTVDISPINFOW, FAR *LPNMTVDISPINFOW;
+} NMTVDISPINFOW, *LPNMTVDISPINFOW;
 
 
 #ifdef UNICODE
@@ -4712,7 +5263,7 @@ typedef struct tagTVKEYDOWN {
     NMHDR hdr;
     WORD wVKey;
     UINT flags;
-} NMTVKEYDOWN, FAR *LPNMTVKEYDOWN;
+} NMTVKEYDOWN, *LPNMTVKEYDOWN;
 
 #ifdef _WIN32
 #include <poppack.h>
@@ -4811,7 +5362,6 @@ typedef struct tagNMTVGETINFOTIPW
 
 ////////////////////  ComboBoxEx ////////////////////////////////
 
-
 #define WC_COMBOBOXEXW         L"ComboBoxEx32"
 #define WC_COMBOBOXEXA         "ComboBoxEx32"
 
@@ -4902,6 +5452,10 @@ typedef COMBOBOXEXITEMW CONST *PCCOMBOEXITEMW;
 #define CBEM_INSERTITEM         CBEM_INSERTITEMA
 #define CBEM_SETITEM            CBEM_SETITEMA
 #define CBEM_GETITEM            CBEM_GETITEMA
+#endif
+
+#if (_WIN32_WINNT >= 0x501)
+#define CBEM_SETWINDOWTHEME     CCM_SETWINDOWTHEME
 #endif
 
 #define CBES_EX_NOEDITIMAGE          0x00000001
@@ -5042,6 +5596,7 @@ typedef struct {
 #endif      // _WIN32_IE >= 0x0300
 
 
+
 //====== TAB CONTROL ==========================================================
 
 #ifndef NOTABCONTROL
@@ -5147,7 +5702,7 @@ typedef struct tagTCITEMHEADERA
     LPSTR pszText;
     int cchTextMax;
     int iImage;
-} TCITEMHEADERA, FAR *LPTCITEMHEADERA;
+} TCITEMHEADERA, *LPTCITEMHEADERA;
 
 typedef struct tagTCITEMHEADERW
 {
@@ -5157,7 +5712,7 @@ typedef struct tagTCITEMHEADERW
     LPWSTR pszText;
     int cchTextMax;
     int iImage;
-} TCITEMHEADERW, FAR *LPTCITEMHEADERW;
+} TCITEMHEADERW, *LPTCITEMHEADERW;
 
 #ifdef UNICODE
 #define  TCITEMHEADER          TCITEMHEADERW
@@ -5194,7 +5749,7 @@ typedef struct tagTCITEMA
     int iImage;
 
     LPARAM lParam;
-} TCITEMA, FAR *LPTCITEMA;
+} TCITEMA, *LPTCITEMA;
 
 typedef struct tagTCITEMW
 {
@@ -5211,7 +5766,7 @@ typedef struct tagTCITEMW
     int iImage;
 
     LPARAM lParam;
-} TCITEMW, FAR *LPTCITEMW;
+} TCITEMW, *LPTCITEMW;
 
 #ifdef UNICODE
 #define  TCITEM                 TCITEMW
@@ -5232,7 +5787,7 @@ typedef struct tagTCITEMW
 #endif
 
 #define TabCtrl_GetItem(hwnd, iItem, pitem) \
-    (BOOL)SNDMSG((hwnd), TCM_GETITEM, (WPARAM)(int)(iItem), (LPARAM)(TC_ITEM FAR*)(pitem))
+    (BOOL)SNDMSG((hwnd), TCM_GETITEM, (WPARAM)(int)(iItem), (LPARAM)(TC_ITEM *)(pitem))
 
 
 #define TCM_SETITEMA            (TCM_FIRST + 6)
@@ -5245,7 +5800,7 @@ typedef struct tagTCITEMW
 #endif
 
 #define TabCtrl_SetItem(hwnd, iItem, pitem) \
-    (BOOL)SNDMSG((hwnd), TCM_SETITEM, (WPARAM)(int)(iItem), (LPARAM)(TC_ITEM FAR*)(pitem))
+    (BOOL)SNDMSG((hwnd), TCM_SETITEM, (WPARAM)(int)(iItem), (LPARAM)(TC_ITEM *)(pitem))
 
 
 #define TCM_INSERTITEMA         (TCM_FIRST + 7)
@@ -5258,7 +5813,7 @@ typedef struct tagTCITEMW
 #endif
 
 #define TabCtrl_InsertItem(hwnd, iItem, pitem)   \
-    (int)SNDMSG((hwnd), TCM_INSERTITEM, (WPARAM)(int)(iItem), (LPARAM)(const TC_ITEM FAR*)(pitem))
+    (int)SNDMSG((hwnd), TCM_INSERTITEM, (WPARAM)(int)(iItem), (LPARAM)(const TC_ITEM *)(pitem))
 
 
 #define TCM_DELETEITEM          (TCM_FIRST + 8)
@@ -5273,7 +5828,7 @@ typedef struct tagTCITEMW
 
 #define TCM_GETITEMRECT         (TCM_FIRST + 10)
 #define TabCtrl_GetItemRect(hwnd, i, prc) \
-    (BOOL)SNDMSG((hwnd), TCM_GETITEMRECT, (WPARAM)(int)(i), (LPARAM)(RECT FAR*)(prc))
+    (BOOL)SNDMSG((hwnd), TCM_GETITEMRECT, (WPARAM)(int)(i), (LPARAM)(RECT *)(prc))
 
 
 #define TCM_GETCURSEL           (TCM_FIRST + 11)
@@ -5304,11 +5859,11 @@ typedef struct tagTCHITTESTINFO
 {
     POINT pt;
     UINT flags;
-} TCHITTESTINFO, FAR * LPTCHITTESTINFO;
+} TCHITTESTINFO, *LPTCHITTESTINFO;
 
 #define TCM_HITTEST             (TCM_FIRST + 13)
 #define TabCtrl_HitTest(hwndTC, pinfo) \
-    (int)SNDMSG((hwndTC), TCM_HITTEST, 0, (LPARAM)(TC_HITTESTINFO FAR*)(pinfo))
+    (int)SNDMSG((hwndTC), TCM_HITTEST, 0, (LPARAM)(TC_HITTESTINFO *)(pinfo))
 
 
 #define TCM_SETITEMEXTRA        (TCM_FIRST + 14)
@@ -5318,7 +5873,7 @@ typedef struct tagTCHITTESTINFO
 
 #define TCM_ADJUSTRECT          (TCM_FIRST + 40)
 #define TabCtrl_AdjustRect(hwnd, bLarger, prc) \
-    (int)SNDMSG(hwnd, TCM_ADJUSTRECT, (WPARAM)(BOOL)(bLarger), (LPARAM)(RECT FAR *)prc)
+    (int)SNDMSG(hwnd, TCM_ADJUSTRECT, (WPARAM)(BOOL)(bLarger), (LPARAM)(RECT *)prc)
 
 
 #define TCM_SETITEMSIZE         (TCM_FIRST + 41)
@@ -5505,7 +6060,7 @@ typedef struct tagTCKEYDOWN
 
 // bit-packed array of "bold" info for a month
 // if a bit is on, that day is drawn bold
-typedef DWORD MONTHDAYSTATE, FAR * LPMONTHDAYSTATE;
+typedef DWORD MONTHDAYSTATE, *LPMONTHDAYSTATE;
 
 
 #define MCM_FIRST           0x1000
@@ -5698,7 +6253,7 @@ typedef struct tagNMSELCHANGE
 
     SYSTEMTIME      stSelStart;
     SYSTEMTIME      stSelEnd;
-} NMSELCHANGE, FAR * LPNMSELCHANGE;
+} NMSELCHANGE, *LPNMSELCHANGE;
 
 #define MCN_SELCHANGE       (MCN_FIRST + 1)
 
@@ -5717,13 +6272,13 @@ typedef struct tagNMDAYSTATE
     int             cDayState;
 
     LPMONTHDAYSTATE prgDayState; // points to cDayState MONTHDAYSTATEs
-} NMDAYSTATE, FAR * LPNMDAYSTATE;
+} NMDAYSTATE, *LPNMDAYSTATE;
 
 #define MCN_GETDAYSTATE     (MCN_FIRST + 3)
 
 // MCN_SELECT is sent whenever a selection has occured (via mouse or keyboard)
 //
-typedef NMSELCHANGE NMSELECT, FAR * LPNMSELECT;
+typedef NMSELCHANGE NMSELECT, *LPNMSELECT;
 
 
 #define MCN_SELECT          (MCN_FIRST + 4)
@@ -5856,7 +6411,7 @@ typedef struct tagNMDATETIMECHANGE
     NMHDR       nmhdr;
     DWORD       dwFlags;    // GDT_VALID or GDT_NONE
     SYSTEMTIME  st;         // valid iff dwFlags==GDT_VALID
-} NMDATETIMECHANGE, FAR * LPNMDATETIMECHANGE;
+} NMDATETIMECHANGE, *LPNMDATETIMECHANGE;
 
 #define DTN_USERSTRINGA  (DTN_FIRST + 2) // the user has entered a string
 #define DTN_USERSTRINGW  (DTN_FIRST + 15)
@@ -5866,7 +6421,7 @@ typedef struct tagNMDATETIMESTRINGA
     LPCSTR     pszUserString;  // string user entered
     SYSTEMTIME st;             // app fills this in
     DWORD      dwFlags;        // GDT_VALID or GDT_NONE
-} NMDATETIMESTRINGA, FAR * LPNMDATETIMESTRINGA;
+} NMDATETIMESTRINGA, *LPNMDATETIMESTRINGA;
 
 typedef struct tagNMDATETIMESTRINGW
 {
@@ -5874,7 +6429,7 @@ typedef struct tagNMDATETIMESTRINGW
     LPCWSTR    pszUserString;  // string user entered
     SYSTEMTIME st;             // app fills this in
     DWORD      dwFlags;        // GDT_VALID or GDT_NONE
-} NMDATETIMESTRINGW, FAR * LPNMDATETIMESTRINGW;
+} NMDATETIMESTRINGW, *LPNMDATETIMESTRINGW;
 
 #ifdef UNICODE
 #define DTN_USERSTRING          DTN_USERSTRINGW
@@ -5895,7 +6450,7 @@ typedef struct tagNMDATETIMEWMKEYDOWNA
     int        nVirtKey;  // virtual key code of WM_KEYDOWN which MODIFIES an X field
     LPCSTR     pszFormat; // format substring
     SYSTEMTIME st;        // current systemtime, app should modify based on key
-} NMDATETIMEWMKEYDOWNA, FAR * LPNMDATETIMEWMKEYDOWNA;
+} NMDATETIMEWMKEYDOWNA, *LPNMDATETIMEWMKEYDOWNA;
 
 typedef struct tagNMDATETIMEWMKEYDOWNW
 {
@@ -5903,7 +6458,7 @@ typedef struct tagNMDATETIMEWMKEYDOWNW
     int        nVirtKey;  // virtual key code of WM_KEYDOWN which MODIFIES an X field
     LPCWSTR    pszFormat; // format substring
     SYSTEMTIME st;        // current systemtime, app should modify based on key
-} NMDATETIMEWMKEYDOWNW, FAR * LPNMDATETIMEWMKEYDOWNW;
+} NMDATETIMEWMKEYDOWNW, *LPNMDATETIMEWMKEYDOWNW;
 
 #ifdef UNICODE
 #define DTN_WMKEYDOWN           DTN_WMKEYDOWNW
@@ -5925,7 +6480,7 @@ typedef struct tagNMDATETIMEFORMATA
     SYSTEMTIME st;       // current systemtime
     LPCSTR pszDisplay;   // string to display
     CHAR szDisplay[64];  // buffer pszDisplay originally points at
-} NMDATETIMEFORMATA, FAR * LPNMDATETIMEFORMATA;
+} NMDATETIMEFORMATA, *LPNMDATETIMEFORMATA;
 
 typedef struct tagNMDATETIMEFORMATW
 {
@@ -5934,7 +6489,7 @@ typedef struct tagNMDATETIMEFORMATW
     SYSTEMTIME st;       // current systemtime
     LPCWSTR pszDisplay;  // string to display
     WCHAR szDisplay[64]; // buffer pszDisplay originally points at
-} NMDATETIMEFORMATW, FAR * LPNMDATETIMEFORMATW;
+} NMDATETIMEFORMATW, *LPNMDATETIMEFORMATW;
 
 #ifdef UNICODE
 #define DTN_FORMAT             DTN_FORMATW
@@ -5954,14 +6509,14 @@ typedef struct tagNMDATETIMEFORMATQUERYA
     NMHDR nmhdr;
     LPCSTR pszFormat;  // format substring
     SIZE szMax;        // max bounding rectangle app will use for this format string
-} NMDATETIMEFORMATQUERYA, FAR * LPNMDATETIMEFORMATQUERYA;
+} NMDATETIMEFORMATQUERYA, *LPNMDATETIMEFORMATQUERYA;
 
 typedef struct tagNMDATETIMEFORMATQUERYW
 {
     NMHDR nmhdr;
     LPCWSTR pszFormat; // format substring
     SIZE szMax;        // max bounding rectangle app will use for this format string
-} NMDATETIMEFORMATQUERYW, FAR * LPNMDATETIMEFORMATQUERYW;
+} NMDATETIMEFORMATQUERYW, *LPNMDATETIMEFORMATQUERYW;
 
 #ifdef UNICODE
 #define DTN_FORMATQUERY         DTN_FORMATQUERYW
@@ -6198,6 +6753,29 @@ typedef struct {
     int     iHeight;
 }NMPGCALCSIZE, *LPNMPGCALCSIZE;
 
+
+// PGN_HOTITEMCHANGE Notification Message
+
+#define PGN_HOTITEMCHANGE   (PGN_FIRST-3)
+
+/* 
+The PGN_HOTITEMCHANGE notification uses these notification
+flags defined in TOOLBAR:
+
+#define HICF_ENTERING       0x00000010          // idOld is invalid
+#define HICF_LEAVING        0x00000020          // idNew is invalid
+*/
+
+// Structure for PGN_HOTITEMCHANGE notification
+//
+typedef struct tagNMPGHOTITEM
+{
+    NMHDR   hdr;
+    int     idOld;
+    int     idNew;
+    DWORD   dwFlags;           // HICF_*
+} NMPGHOTITEM, * LPNMPGHOTITEM;
+
 #endif // NOPAGESCROLLER
 
 ////======================  End Pager Control ==========================================
@@ -6231,11 +6809,302 @@ typedef struct {
 #endif // NONATIVEFONTCTL
 // === End Native Font Control ===
 
+/// ====================== Button Control =============================
+
+#ifndef NOBUTTON
+
+#ifdef _WIN32
+
+// Button Class Name
+#define WC_BUTTONA              "Button"
+#define WC_BUTTONW              L"Button"
+
+#ifdef UNICODE
+#define WC_BUTTON               WC_BUTTONW
+#else
+#define WC_BUTTON               WC_BUTTONA
+#endif
+
+#else
+#define WC_BUTTON               "Button"
+#endif
+
+#if (_WIN32_WINNT >= 0x501)
+#define BUTTON_IMAGELIST_ALIGN_LEFT     0
+#define BUTTON_IMAGELIST_ALIGN_RIGHT    1
+#define BUTTON_IMAGELIST_ALIGN_TOP      2
+#define BUTTON_IMAGELIST_ALIGN_BOTTOM   3
+#define BUTTON_IMAGELIST_ALIGN_CENTER   4       // Doesn't draw text
+
+typedef struct
+{
+    HIMAGELIST  himl;   // Index: Normal, hot pushed, disabled. If count is less than 4, we use index 1
+    RECT        margin; // Margin around icon.
+    UINT        uAlign;
+} BUTTON_IMAGELIST, *PBUTTON_IMAGELIST;
+
+#define BCM_GETIDEALSIZE        (BCM_FIRST + 0x0001)
+#define Button_GetIdealSize(hwnd, psize)\
+    (BOOL)SNDMSG((hwnd), BCM_GETIDEALSIZE, 0, (LPARAM)(psize))
+
+#define BCM_SETIMAGELIST        (BCM_FIRST + 0x0002)
+#define Button_SetImageList(hwnd, pbuttonImagelist)\
+    (BOOL)SNDMSG((hwnd), BCM_SETIMAGELIST, 0, (LPARAM)(pbuttonImagelist))
+
+#define BCM_GETIMAGELIST        (BCM_FIRST + 0x0003)
+#define Button_GetImageList(hwnd, pbuttonImagelist)\
+    (BOOL)SNDMSG((hwnd), BCM_GETIMAGELIST, 0, (LPARAM)(pbuttonImagelist))
+
+#define BCM_SETTEXTMARGIN       (BCM_FIRST + 0x0004)
+#define Button_SetTextMargin(hwnd, pmargin)\
+    (BOOL)SNDMSG((hwnd), BCM_SETTEXTMARGIN, 0, (LPARAM)(pmargin))
+#define BCM_GETTEXTMARGIN       (BCM_FIRST + 0x0005)
+#define Button_GetTextMargin(hwnd, pmargin)\
+    (BOOL)SNDMSG((hwnd), BCM_GETTEXTMARGIN, 0, (LPARAM)(pmargin))
+
+typedef struct tagNMBCHOTITEM
+{
+    NMHDR   hdr;
+    DWORD   dwFlags;           // HICF_*
+} NMBCHOTITEM, * LPNMBCHOTITEM;
+
+#define BCN_HOTITEMCHANGE       (BCN_FIRST + 0x0001)
+
+#define BST_HOT            0x0200
+
+#endif
+
+
+#endif // NOBUTTON
+
+/// =====================  End Button Control =========================
+
+/// ====================== Static Control =============================
+
+#ifndef NOSTATIC
+
+#ifdef _WIN32
+
+// Static Class Name
+#define WC_STATICA              "Static"
+#define WC_STATICW              L"Static"
+
+#ifdef UNICODE
+#define WC_STATIC               WC_STATICW
+#else
+#define WC_STATIC               WC_STATICA
+#endif
+
+#else
+#define WC_STATIC               "Static"
+#endif
+
+#endif // NOSTATIC
+
+/// =====================  End Static Control =========================
+
+/// ====================== Edit Control =============================
+
+#ifndef NOEDIT
+
+#ifdef _WIN32
+
+// Edit Class Name
+#define WC_EDITA                "Edit"
+#define WC_EDITW                L"Edit"
+
+#ifdef UNICODE
+#define WC_EDIT                 WC_EDITW
+#else
+#define WC_EDIT                 WC_EDITA
+#endif
+
+#else
+#define WC_EDIT                 "Edit"
+#endif
+
+#if (_WIN32_WINNT >= 0x501)
+#define	EM_SETCUEBANNER	    (ECM_FIRST + 1)		// Set the cue banner with the lParm = LPCWSTR
+#define Edit_SetCueBannerText(hwnd, lpcwText) \
+        (BOOL)SNDMSG((hwnd), EM_SETCUEBANNER, 0, (LPARAM)(lpcwText))
+#define	EM_GETCUEBANNER	    (ECM_FIRST + 2)		// Set the cue banner with the lParm = LPCWSTR
+#define Edit_GetCueBannerText(hwnd, lpwText, cchText) \
+        (BOOL)SNDMSG((hwnd), EM_GETCUEBANNER, (WPARAM)(lpwText), (LPARAM)(cchText))
+
+typedef struct _tagEDITBALLOONTIP
+{
+    DWORD   cbStruct;
+    LPCWSTR pszTitle;
+    LPCWSTR pszText;
+    INT     ttiIcon; // From TTI_*
+} EDITBALLOONTIP, *PEDITBALLOONTIP;
+#define	EM_SHOWBALLOONTIP   (ECM_FIRST + 3)		// Show a balloon tip associated to the edit control
+#define Edit_ShowBalloonTip(hwnd, peditballoontip) \
+        (BOOL)SNDMSG((hwnd), EM_SHOWBALLOONTIP, 0, (LPARAM)(peditballoontip))
+#define EM_HIDEBALLOONTIP   (ECM_FIRST + 4)     // Hide any balloon tip associated with the edit control
+#define Edit_HideBalloonTip(hwnd) \
+        (BOOL)SNDMSG((hwnd), EM_HIDEBALLOONTIP, 0, 0)
+#endif
+
+#endif // NOEDIT
+
+/// =====================  End Edit Control =========================
+
+/// ====================== Listbox Control =============================
+
+#ifndef NOLISTBOX
+
+#ifdef _WIN32
+
+// Listbox Class Name
+#define WC_LISTBOXA             "ListBox"
+#define WC_LISTBOXW             L"ListBox"
+
+#ifdef UNICODE
+#define WC_LISTBOX              WC_LISTBOXW
+#else
+#define WC_LISTBOX              WC_LISTBOXA
+#endif
+
+#else
+#define WC_LISTBOX              "ListBox"
+#endif
+
+#endif // NOLISTBOX
+
+
+/// =====================  End Listbox Control =========================
+
+/// ====================== Combobox Control =============================
+
+#ifndef NOCOMBOBOX
+
+#ifdef _WIN32
+
+// Combobox Class Name
+#define WC_COMBOBOXA            "ComboBox"
+#define WC_COMBOBOXW            L"ComboBox"
+
+#ifdef UNICODE
+#define WC_COMBOBOX             WC_COMBOBOXW
+#else
+#define WC_COMBOBOX             WC_COMBOBOXA
+#endif
+
+#else
+#define WC_COMBOBOX             "ComboBox"
+#endif
+
+#endif // NOCOMBOBOX
+
+
+#if (_WIN32_WINNT >= 0x501)
+
+// custom combobox control messages
+#define	CB_SETMINVISIBLE        (CBM_FIRST + 1)
+#define CB_GETMINVISIBLE        (CBM_FIRST + 2)
+
+#define ComboBox_SetMinVisible(hwnd, iMinVisible) \
+            (BOOL)SNDMSG((hwnd), CB_SETMINVISIBLE, (WPARAM)iMinVisible, 0)
+
+#define ComboBox_GetMinVisible(hwnd) \
+            (int)SNDMSG((hwnd), CB_GETMINVISIBLE, 0, 0)
+
+#endif
+
+/// =====================  End Combobox Control =========================
+
+/// ====================== Scrollbar Control ============================
+
+#ifndef NOSCROLLBAR
+
+#ifdef _WIN32
+
+// Scrollbar Class Name
+#define WC_SCROLLBARA            "ScrollBar"
+#define WC_SCROLLBARW            L"ScrollBar"
+
+#ifdef UNICODE
+#define WC_SCROLLBAR             WC_SCROLLBARW
+#else
+#define WC_SCROLLBAR             WC_SCROLLBARA
+#endif
+
+#else
+#define WC_SCROLLBAR             "ScrollBar"
+#endif
+
+#endif // NOSCROLLBAR
+
+
+/// ===================== End Scrollbar Control =========================
+
+
+//====== SysLink control =========================================
+
+#ifdef _WIN32
+#if (_WIN32_WINNT >= 0x501)
+
+#define INVALID_LINK_INDEX  (-1)
+#define MAX_LINKID_TEXT     48
+#define L_MAX_URL_LENGTH    (2048 + 32 + sizeof("://"))
+
+#define WC_LINK         L"SysLink"
+
+#define LWS_TRANSPARENT    0x0001
+#define LWS_IGNORERETURN   0x0002
+
+#define LIF_ITEMINDEX    0x00000001
+#define LIF_STATE        0x00000002
+#define LIF_ITEMID       0x00000004
+#define LIF_URL          0x00000008
+
+#define LIS_FOCUSED      0x00000001
+#define LIS_ENABLED      0x00000002
+#define LIS_VISITED      0x00000004
+
+typedef struct tagLITEM
+{
+    UINT        mask ;
+    int         iLink ;
+    UINT        state ;
+    UINT        stateMask ;
+    WCHAR       szID[MAX_LINKID_TEXT] ;
+    WCHAR       szUrl[L_MAX_URL_LENGTH] ;
+} LITEM, * PLITEM ;
+
+typedef struct tagLHITTESTINFO
+{
+    POINT       pt ;
+    LITEM     item ;
+} LHITTESTINFO, *PLHITTESTINFO ;
+
+typedef struct tagNMLINK
+{
+    NMHDR       hdr;
+    LITEM     item ;
+} NMLINK,  *PNMLINK;
+
+//  SysLink notifications
+//  NM_CLICK   // wParam: control ID, lParam: PNMLINK, ret: ignored.   
+
+//  LinkWindow messages
+#define LM_HITTEST         (WM_USER+0x300)  // wParam: n/a, lparam: PLHITTESTINFO, ret: BOOL
+#define LM_GETIDEALHEIGHT  (WM_USER+0x301)  // wParam: n/a, lparam: n/a, ret: cy
+#define LM_SETITEM         (WM_USER+0x302)  // wParam: n/a, lparam: LITEM*, ret: BOOL
+#define LM_GETITEM         (WM_USER+0x303)  // wParam: n/a, lparam: LITEM*, ret: BOOL
+
+#endif
+#endif // _WIN32
+//====== End SysLink control =========================================
+
+
 //
 // === MUI APIs ===
 //
 #ifndef NOMUI
 void WINAPI InitMUILanguage(LANGID uiLang);
+
 
 LANGID WINAPI GetMUILanguage(void);
 #endif  // NOMUI
@@ -6283,6 +7152,8 @@ typedef struct tagTRACKMOUSEEVENT {
 
 #endif // !TME_HOVER
 
+
+
 //
 // Declare _TrackMouseEvent.  This API tries to use the window manager's
 // implementation of TrackMouseEvent if it is present, otherwise it emulates.
@@ -6323,7 +7194,10 @@ WINCOMMCTRLAPI BOOL WINAPI FlatSB_ShowScrollBar(HWND, int code, BOOL);
 
 WINCOMMCTRLAPI BOOL WINAPI FlatSB_GetScrollRange(HWND, int code, LPINT, LPINT);
 WINCOMMCTRLAPI BOOL WINAPI FlatSB_GetScrollInfo(HWND, int code, LPSCROLLINFO);
+
 WINCOMMCTRLAPI int WINAPI FlatSB_GetScrollPos(HWND, int code);
+
+
 WINCOMMCTRLAPI BOOL WINAPI FlatSB_GetScrollProp(HWND, int propIndex, LPINT);
 #ifdef _WIN64
 WINCOMMCTRLAPI BOOL WINAPI FlatSB_GetScrollPropPtr(HWND, int propIndex, PINT_PTR);
@@ -6331,8 +7205,11 @@ WINCOMMCTRLAPI BOOL WINAPI FlatSB_GetScrollPropPtr(HWND, int propIndex, PINT_PTR
 #define FlatSB_GetScrollPropPtr  FlatSB_GetScrollProp
 #endif
 
+
 WINCOMMCTRLAPI int WINAPI FlatSB_SetScrollPos(HWND, int code, int pos, BOOL fRedraw);
+
 WINCOMMCTRLAPI int WINAPI FlatSB_SetScrollInfo(HWND, int code, LPSCROLLINFO, BOOL fRedraw);
+
 
 WINCOMMCTRLAPI int WINAPI FlatSB_SetScrollRange(HWND, int code, int min, int max, BOOL fRedraw);
 WINCOMMCTRLAPI BOOL WINAPI FlatSB_SetScrollProp(HWND, UINT index, INT_PTR newValue, BOOL);
@@ -6349,6 +7226,2637 @@ WINCOMMCTRLAPI HRESULT WINAPI UninitializeFlatSB(HWND);
 
 #endif      // _WIN32_IE >= 0x0300
 
+#if (_WIN32_WINNT >= 0x501)
+//
+// subclassing stuff
+//
+typedef LRESULT (CALLBACK *SUBCLASSPROC)(HWND hWnd, UINT uMsg, WPARAM wParam,
+    LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData);
+
+
+BOOL WINAPI SetWindowSubclass(HWND hWnd, SUBCLASSPROC pfnSubclass, UINT_PTR uIdSubclass,
+    DWORD_PTR dwRefData);
+BOOL WINAPI GetWindowSubclass(HWND hWnd, SUBCLASSPROC pfnSubclass, UINT_PTR uIdSubclass,
+    DWORD_PTR *pdwRefData);
+BOOL WINAPI RemoveWindowSubclass(HWND hWnd, SUBCLASSPROC pfnSubclass,
+    UINT_PTR uIdSubclass);
+
+LRESULT WINAPI DefSubclassProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+#endif
+
+
+#if (_WIN32_WINNT >= 0x501)
+
+int WINAPI DrawShadowText(HDC hdc, LPCWSTR pszText, UINT cch, RECT* prc, DWORD dwFlags, COLORREF crText, COLORREF crShadow,
+    int ixOffset, int iyOffset);
+#endif
+
+
+
+
+
+#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+#if ISOLATION_AWARE_ENABLED
+
+
+#if !defined(ISOLATION_AWARE_INLINE)
+#if defined(__cplusplus)
+#define ISOLATION_AWARE_INLINE inline
+#else
+#define ISOLATION_AWARE_INLINE __inline
+#endif
+#endif
+
+FARPROC WINAPI CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL(LPCSTR pszProcName);
+
+void WINAPI IsolationAwareInitCommonControls(void);
+BOOL WINAPI IsolationAwareInitCommonControlsEx(LPINITCOMMONCONTROLSEX unnamed1);
+HIMAGELIST WINAPI IsolationAwareImageList_Create(int cx,int cy,UINT flags,int cInitial,int cGrow);
+BOOL WINAPI IsolationAwareImageList_Destroy(HIMAGELIST himl);
+int WINAPI IsolationAwareImageList_GetImageCount(HIMAGELIST himl);
+BOOL WINAPI IsolationAwareImageList_SetImageCount(HIMAGELIST himl,UINT uNewCount);
+int WINAPI IsolationAwareImageList_Add(HIMAGELIST himl,HBITMAP hbmImage,HBITMAP hbmMask);
+int WINAPI IsolationAwareImageList_ReplaceIcon(HIMAGELIST himl,int i,HICON hicon);
+COLORREF WINAPI IsolationAwareImageList_SetBkColor(HIMAGELIST himl,COLORREF clrBk);
+COLORREF WINAPI IsolationAwareImageList_GetBkColor(HIMAGELIST himl);
+BOOL WINAPI IsolationAwareImageList_SetOverlayImage(HIMAGELIST himl,int iImage,int iOverlay);
+BOOL WINAPI IsolationAwareImageList_Draw(HIMAGELIST himl,int i,HDC hdcDst,int x,int y,UINT fStyle);
+BOOL WINAPI IsolationAwareImageList_Replace(HIMAGELIST himl,int i,HBITMAP hbmImage,HBITMAP hbmMask);
+int WINAPI IsolationAwareImageList_AddMasked(HIMAGELIST himl,HBITMAP hbmImage,COLORREF crMask);
+BOOL WINAPI IsolationAwareImageList_DrawEx(HIMAGELIST himl,int i,HDC hdcDst,int x,int y,int dx,int dy,COLORREF rgbBk,COLORREF rgbFg,UINT fStyle);
+BOOL WINAPI IsolationAwareImageList_DrawIndirect(IMAGELISTDRAWPARAMS*pimldp);
+BOOL WINAPI IsolationAwareImageList_Remove(HIMAGELIST himl,int i);
+HICON WINAPI IsolationAwareImageList_GetIcon(HIMAGELIST himl,int i,UINT flags);
+HIMAGELIST WINAPI IsolationAwareImageList_LoadImageA(HINSTANCE hi,LPCSTR lpbmp,int cx,int cGrow,COLORREF crMask,UINT uType,UINT uFlags);
+HIMAGELIST WINAPI IsolationAwareImageList_LoadImageW(HINSTANCE hi,LPCWSTR lpbmp,int cx,int cGrow,COLORREF crMask,UINT uType,UINT uFlags);
+BOOL WINAPI IsolationAwareImageList_Copy(HIMAGELIST himlDst,int iDst,HIMAGELIST himlSrc,int iSrc,UINT uFlags);
+BOOL WINAPI IsolationAwareImageList_BeginDrag(HIMAGELIST himlTrack,int iTrack,int dxHotspot,int dyHotspot);
+void WINAPI IsolationAwareImageList_EndDrag(void);
+BOOL WINAPI IsolationAwareImageList_DragEnter(HWND hwndLock,int x,int y);
+BOOL WINAPI IsolationAwareImageList_DragLeave(HWND hwndLock);
+BOOL WINAPI IsolationAwareImageList_DragMove(int x,int y);
+BOOL WINAPI IsolationAwareImageList_SetDragCursorImage(HIMAGELIST himlDrag,int iDrag,int dxHotspot,int dyHotspot);
+BOOL WINAPI IsolationAwareImageList_DragShowNolock(BOOL fShow);
+HIMAGELIST WINAPI IsolationAwareImageList_GetDragImage(POINT*ppt,POINT*pptHotspot);
+#if defined(__IStream_INTERFACE_DEFINED__)
+HIMAGELIST WINAPI IsolationAwareImageList_Read(LPSTREAM pstm);
+BOOL WINAPI IsolationAwareImageList_Write(HIMAGELIST himl,LPSTREAM pstm);
+#if defined(__IStream_INTERFACE_DEFINED__) &&  (_WIN32_WINNT >= 0x0501)
+HRESULT WINAPI IsolationAwareImageList_ReadEx(DWORD dwFlags,LPSTREAM pstm,REFIID riid,PVOID*ppv);
+HRESULT WINAPI IsolationAwareImageList_WriteEx(HIMAGELIST himl,DWORD dwFlags,LPSTREAM pstm);
+#endif /* defined(__IStream_INTERFACE_DEFINED__) &&  (_WIN32_WINNT >= 0x0501) */
+#endif /* defined(__IStream_INTERFACE_DEFINED__) */
+BOOL WINAPI IsolationAwareImageList_GetIconSize(HIMAGELIST himl,int*cx,int*cy);
+BOOL WINAPI IsolationAwareImageList_SetIconSize(HIMAGELIST himl,int cx,int cy);
+BOOL WINAPI IsolationAwareImageList_GetImageInfo(HIMAGELIST himl,int i,IMAGEINFO*pImageInfo);
+HIMAGELIST WINAPI IsolationAwareImageList_Merge(HIMAGELIST himl1,int i1,HIMAGELIST himl2,int i2,int dx,int dy);
+HIMAGELIST WINAPI IsolationAwareImageList_Duplicate(HIMAGELIST himl);
+HWND WINAPI IsolationAwareCreateToolbarEx(HWND hwnd,DWORD ws,UINT wID,int nBitmaps,HINSTANCE hBMInst,UINT_PTR wBMID,LPCTBBUTTON lpButtons,int iNumButtons,int dxButton,int dyButton,int dxBitmap,int dyBitmap,UINT uStructSize);
+HBITMAP WINAPI IsolationAwareCreateMappedBitmap(HINSTANCE hInstance,INT_PTR idBitmap,UINT wFlags,LPCOLORMAP lpColorMap,int iNumMaps);
+void WINAPI IsolationAwareDrawStatusTextA(HDC hDC,LPRECT lprc,LPCSTR pszText,UINT uFlags);
+void WINAPI IsolationAwareDrawStatusTextW(HDC hDC,LPRECT lprc,LPCWSTR pszText,UINT uFlags);
+HWND WINAPI IsolationAwareCreateStatusWindowA(long style,LPCSTR lpszText,HWND hwndParent,UINT wID);
+HWND WINAPI IsolationAwareCreateStatusWindowW(long style,LPCWSTR lpszText,HWND hwndParent,UINT wID);
+void WINAPI IsolationAwareMenuHelp(UINT uMsg,WPARAM wParam,LPARAM lParam,HMENU hMainMenu,HINSTANCE hInst,HWND hwndStatus,UINT*lpwIDs);
+BOOL WINAPI IsolationAwareShowHideMenuCtl(HWND hWnd,UINT_PTR uFlags,LPINT lpInfo);
+void WINAPI IsolationAwareGetEffectiveClientRect(HWND hWnd,LPRECT lprc,LPINT lpInfo);
+BOOL WINAPI IsolationAwareMakeDragList(HWND hLB);
+void WINAPI IsolationAwareDrawInsert(HWND handParent,HWND hLB,int nItem);
+int WINAPI IsolationAwareLBItemFromPt(HWND hLB,POINT pt,BOOL bAutoScroll);
+HWND WINAPI IsolationAwareCreateUpDownControl(DWORD dwStyle,int x,int y,int cx,int cy,HWND hParent,int nID,HINSTANCE hInst,HWND hBuddy,int nUpper,int nLower,int nPos);
+void WINAPI IsolationAwareInitMUILanguage(LANGID uiLang);
+LANGID WINAPI IsolationAwareGetMUILanguage(void);
+#if !defined(NOTRACKMOUSEEVENT)
+BOOL WINAPI IsolationAware_TrackMouseEvent(LPTRACKMOUSEEVENT lpEventTrack);
+#endif /* !defined(NOTRACKMOUSEEVENT) */
+BOOL WINAPI IsolationAwareFlatSB_EnableScrollBar(HWND unnamed1,int unnamed2,UINT unnamed3);
+BOOL WINAPI IsolationAwareFlatSB_ShowScrollBar(HWND unnamed1,int code,BOOL unnamed2);
+BOOL WINAPI IsolationAwareFlatSB_GetScrollRange(HWND unnamed1,int code,LPINT unnamed2,LPINT unnamed3);
+BOOL WINAPI IsolationAwareFlatSB_GetScrollInfo(HWND unnamed1,int code,LPSCROLLINFO unnamed2);
+int WINAPI IsolationAwareFlatSB_GetScrollPos(HWND unnamed1,int code);
+BOOL WINAPI IsolationAwareFlatSB_GetScrollProp(HWND unnamed1,int propIndex,LPINT unnamed2);
+BOOL WINAPI IsolationAwareFlatSB_GetScrollPropPtr(HWND unnamed1,int propIndex,PINT_PTR unnamed2);
+int WINAPI IsolationAwareFlatSB_SetScrollPos(HWND unnamed1,int code,int pos,BOOL fRedraw);
+int WINAPI IsolationAwareFlatSB_SetScrollInfo(HWND unnamed1,int code,LPSCROLLINFO unnamed2,BOOL fRedraw);
+int WINAPI IsolationAwareFlatSB_SetScrollRange(HWND unnamed1,int code,int min,int max,BOOL fRedraw);
+BOOL WINAPI IsolationAwareFlatSB_SetScrollProp(HWND unnamed1,UINT index,INT_PTR newValue,BOOL unnamed2);
+BOOL WINAPI IsolationAwareInitializeFlatSB(HWND unnamed1);
+HRESULT WINAPI IsolationAwareUninitializeFlatSB(HWND unnamed1);
+#if (_WIN32_IE >= 0x560)
+BOOL WINAPI IsolationAwareSetWindowSubclass(HWND hWnd,SUBCLASSPROC pfnSubclass,UINT_PTR uIdSubclass,DWORD_PTR dwRefData);
+BOOL WINAPI IsolationAwareGetWindowSubclass(HWND hWnd,SUBCLASSPROC pfnSubclass,UINT_PTR uIdSubclass,DWORD_PTR*pdwRefData);
+BOOL WINAPI IsolationAwareRemoveWindowSubclass(HWND hWnd,SUBCLASSPROC pfnSubclass,UINT_PTR uIdSubclass);
+#endif /* (_WIN32_IE >= 0x560) */
+LRESULT WINAPI IsolationAwareDefSubclassProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
+int WINAPI IsolationAwareDrawShadowText(HDC hdc,LPCWSTR pszText,UINT cch,RECT*prc,DWORD dwFlags,COLORREF crText,COLORREF crShadow,int ixOffset,int iyOffset);
+
+#if defined(UNICODE)
+
+#define IsolationAwareCreateStatusWindow IsolationAwareCreateStatusWindowW
+#define IsolationAwareDrawStatusText IsolationAwareDrawStatusTextW
+#define IsolationAwareImageList_LoadImage IsolationAwareImageList_LoadImageW
+
+#else /* UNICODE */
+
+#define IsolationAwareCreateStatusWindow IsolationAwareCreateStatusWindowA
+#define IsolationAwareDrawStatusText IsolationAwareDrawStatusTextA
+#define IsolationAwareImageList_LoadImage IsolationAwareImageList_LoadImageA
+
+#endif /* UNICODE */
+
+ISOLATION_AWARE_INLINE void WINAPI IsolationAwareInitCommonControls(void)
+{
+    typedef void (WINAPI* PFN)(void);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("InitCommonControls");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        s_pfn();
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+        }
+    }
+    return;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareInitCommonControlsEx(LPINITCOMMONCONTROLSEX unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPINITCOMMONCONTROLSEX unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("InitCommonControlsEx");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE HIMAGELIST WINAPI IsolationAwareImageList_Create(int cx,int cy,UINT flags,int cInitial,int cGrow)
+{
+    HIMAGELIST imagelistResult = NULL;
+    typedef HIMAGELIST (WINAPI* PFN)(int cx,int cy,UINT flags,int cInitial,int cGrow);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return imagelistResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_Create");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        imagelistResult = s_pfn(cx,cy,flags,cInitial,cGrow);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (imagelistResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return imagelistResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_Destroy(HIMAGELIST himl)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himl);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_Destroy");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himl);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE int WINAPI IsolationAwareImageList_GetImageCount(HIMAGELIST himl)
+{
+    int nResult = 0 ;
+    typedef int (WINAPI* PFN)(HIMAGELIST himl);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_GetImageCount");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(himl);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == 0 );
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_SetImageCount(HIMAGELIST himl,UINT uNewCount)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himl,UINT uNewCount);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_SetImageCount");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himl,uNewCount);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE int WINAPI IsolationAwareImageList_Add(HIMAGELIST himl,HBITMAP hbmImage,HBITMAP hbmMask)
+{
+    int nResult = -1;
+    typedef int (WINAPI* PFN)(HIMAGELIST himl,HBITMAP hbmImage,HBITMAP hbmMask);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_Add");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(himl,hbmImage,hbmMask);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == -1);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE int WINAPI IsolationAwareImageList_ReplaceIcon(HIMAGELIST himl,int i,HICON hicon)
+{
+    int nResult = -1;
+    typedef int (WINAPI* PFN)(HIMAGELIST himl,int i,HICON hicon);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_ReplaceIcon");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(himl,i,hicon);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == -1);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE COLORREF WINAPI IsolationAwareImageList_SetBkColor(HIMAGELIST himl,COLORREF clrBk)
+{
+    COLORREF colorResult = RGB(0,0,0);
+    typedef COLORREF (WINAPI* PFN)(HIMAGELIST himl,COLORREF clrBk);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return colorResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_SetBkColor");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        colorResult = s_pfn(himl,clrBk);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (colorResult == RGB(0,0,0));
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return colorResult;
+}
+
+ISOLATION_AWARE_INLINE COLORREF WINAPI IsolationAwareImageList_GetBkColor(HIMAGELIST himl)
+{
+    COLORREF colorResult = RGB(0,0,0);
+    typedef COLORREF (WINAPI* PFN)(HIMAGELIST himl);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return colorResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_GetBkColor");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        colorResult = s_pfn(himl);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (colorResult == RGB(0,0,0));
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return colorResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_SetOverlayImage(HIMAGELIST himl,int iImage,int iOverlay)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himl,int iImage,int iOverlay);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_SetOverlayImage");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himl,iImage,iOverlay);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_Draw(HIMAGELIST himl,int i,HDC hdcDst,int x,int y,UINT fStyle)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himl,int i,HDC hdcDst,int x,int y,UINT fStyle);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_Draw");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himl,i,hdcDst,x,y,fStyle);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_Replace(HIMAGELIST himl,int i,HBITMAP hbmImage,HBITMAP hbmMask)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himl,int i,HBITMAP hbmImage,HBITMAP hbmMask);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_Replace");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himl,i,hbmImage,hbmMask);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE int WINAPI IsolationAwareImageList_AddMasked(HIMAGELIST himl,HBITMAP hbmImage,COLORREF crMask)
+{
+    int nResult = -1;
+    typedef int (WINAPI* PFN)(HIMAGELIST himl,HBITMAP hbmImage,COLORREF crMask);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_AddMasked");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(himl,hbmImage,crMask);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == -1);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_DrawEx(HIMAGELIST himl,int i,HDC hdcDst,int x,int y,int dx,int dy,COLORREF rgbBk,COLORREF rgbFg,UINT fStyle)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himl,int i,HDC hdcDst,int x,int y,int dx,int dy,COLORREF rgbBk,COLORREF rgbFg,UINT fStyle);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_DrawEx");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himl,i,hdcDst,x,y,dx,dy,rgbBk,rgbFg,fStyle);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_DrawIndirect(IMAGELISTDRAWPARAMS*pimldp)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(IMAGELISTDRAWPARAMS*pimldp);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_DrawIndirect");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(pimldp);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_Remove(HIMAGELIST himl,int i)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himl,int i);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_Remove");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himl,i);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE HICON WINAPI IsolationAwareImageList_GetIcon(HIMAGELIST himl,int i,UINT flags)
+{
+    HICON iconResult = NULL;
+    typedef HICON (WINAPI* PFN)(HIMAGELIST himl,int i,UINT flags);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return iconResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_GetIcon");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        iconResult = s_pfn(himl,i,flags);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (iconResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return iconResult;
+}
+
+ISOLATION_AWARE_INLINE HIMAGELIST WINAPI IsolationAwareImageList_LoadImageA(HINSTANCE hi,LPCSTR lpbmp,int cx,int cGrow,COLORREF crMask,UINT uType,UINT uFlags)
+{
+    HIMAGELIST imagelistResult = NULL;
+    typedef HIMAGELIST (WINAPI* PFN)(HINSTANCE hi,LPCSTR lpbmp,int cx,int cGrow,COLORREF crMask,UINT uType,UINT uFlags);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return imagelistResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_LoadImageA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        imagelistResult = s_pfn(hi,lpbmp,cx,cGrow,crMask,uType,uFlags);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (imagelistResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return imagelistResult;
+}
+
+ISOLATION_AWARE_INLINE HIMAGELIST WINAPI IsolationAwareImageList_LoadImageW(HINSTANCE hi,LPCWSTR lpbmp,int cx,int cGrow,COLORREF crMask,UINT uType,UINT uFlags)
+{
+    HIMAGELIST imagelistResult = NULL;
+    typedef HIMAGELIST (WINAPI* PFN)(HINSTANCE hi,LPCWSTR lpbmp,int cx,int cGrow,COLORREF crMask,UINT uType,UINT uFlags);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return imagelistResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_LoadImageW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        imagelistResult = s_pfn(hi,lpbmp,cx,cGrow,crMask,uType,uFlags);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (imagelistResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return imagelistResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_Copy(HIMAGELIST himlDst,int iDst,HIMAGELIST himlSrc,int iSrc,UINT uFlags)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himlDst,int iDst,HIMAGELIST himlSrc,int iSrc,UINT uFlags);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_Copy");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himlDst,iDst,himlSrc,iSrc,uFlags);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_BeginDrag(HIMAGELIST himlTrack,int iTrack,int dxHotspot,int dyHotspot)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himlTrack,int iTrack,int dxHotspot,int dyHotspot);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_BeginDrag");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himlTrack,iTrack,dxHotspot,dyHotspot);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE void WINAPI IsolationAwareImageList_EndDrag(void)
+{
+    typedef void (WINAPI* PFN)(void);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_EndDrag");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        s_pfn();
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+        }
+    }
+    return;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_DragEnter(HWND hwndLock,int x,int y)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND hwndLock,int x,int y);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_DragEnter");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(hwndLock,x,y);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_DragLeave(HWND hwndLock)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND hwndLock);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_DragLeave");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(hwndLock);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_DragMove(int x,int y)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(int x,int y);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_DragMove");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(x,y);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_SetDragCursorImage(HIMAGELIST himlDrag,int iDrag,int dxHotspot,int dyHotspot)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himlDrag,int iDrag,int dxHotspot,int dyHotspot);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_SetDragCursorImage");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himlDrag,iDrag,dxHotspot,dyHotspot);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_DragShowNolock(BOOL fShow)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(BOOL fShow);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_DragShowNolock");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(fShow);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE HIMAGELIST WINAPI IsolationAwareImageList_GetDragImage(POINT*ppt,POINT*pptHotspot)
+{
+    HIMAGELIST imagelistResult = NULL;
+    typedef HIMAGELIST (WINAPI* PFN)(POINT*ppt,POINT*pptHotspot);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return imagelistResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_GetDragImage");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        imagelistResult = s_pfn(ppt,pptHotspot);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (imagelistResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return imagelistResult;
+}
+
+#if defined(__IStream_INTERFACE_DEFINED__)
+
+ISOLATION_AWARE_INLINE HIMAGELIST WINAPI IsolationAwareImageList_Read(LPSTREAM pstm)
+{
+    HIMAGELIST imagelistResult = NULL;
+    typedef HIMAGELIST (WINAPI* PFN)(LPSTREAM pstm);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return imagelistResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_Read");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        imagelistResult = s_pfn(pstm);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (imagelistResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return imagelistResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_Write(HIMAGELIST himl,LPSTREAM pstm)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himl,LPSTREAM pstm);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_Write");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himl,pstm);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+#if defined(__IStream_INTERFACE_DEFINED__) &&  (_WIN32_WINNT >= 0x0501)
+
+ISOLATION_AWARE_INLINE HRESULT WINAPI IsolationAwareImageList_ReadEx(DWORD dwFlags,LPSTREAM pstm,REFIID riid,PVOID*ppv)
+{
+    HRESULT result = S_OK;
+    typedef HRESULT (WINAPI* PFN)(DWORD dwFlags,LPSTREAM pstm,REFIID riid,PVOID*ppv);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        goto ExitWin32ToHresult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_ReadEx");
+            if (s_pfn == NULL)
+                goto ExitWin32ToHresult;
+        }
+        result = s_pfn(dwFlags,pstm,riid,ppv);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+        }
+    }
+    return result;
+
+ExitWin32ToHresult:
+    {
+        DWORD dwLastError = GetLastError();
+        if (dwLastError == NO_ERROR)
+            dwLastError = ERROR_INTERNAL_ERROR;
+        result = HRESULT_FROM_WIN32(dwLastError);
+        return result;
+    }
+}
+
+ISOLATION_AWARE_INLINE HRESULT WINAPI IsolationAwareImageList_WriteEx(HIMAGELIST himl,DWORD dwFlags,LPSTREAM pstm)
+{
+    HRESULT result = S_OK;
+    typedef HRESULT (WINAPI* PFN)(HIMAGELIST himl,DWORD dwFlags,LPSTREAM pstm);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        goto ExitWin32ToHresult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_WriteEx");
+            if (s_pfn == NULL)
+                goto ExitWin32ToHresult;
+        }
+        result = s_pfn(himl,dwFlags,pstm);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+        }
+    }
+    return result;
+
+ExitWin32ToHresult:
+    {
+        DWORD dwLastError = GetLastError();
+        if (dwLastError == NO_ERROR)
+            dwLastError = ERROR_INTERNAL_ERROR;
+        result = HRESULT_FROM_WIN32(dwLastError);
+        return result;
+    }
+}
+
+#endif /* defined(__IStream_INTERFACE_DEFINED__) &&  (_WIN32_WINNT >= 0x0501) */
+#endif /* defined(__IStream_INTERFACE_DEFINED__) */
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_GetIconSize(HIMAGELIST himl,int*cx,int*cy)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himl,int*cx,int*cy);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_GetIconSize");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himl,cx,cy);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_SetIconSize(HIMAGELIST himl,int cx,int cy)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himl,int cx,int cy);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_SetIconSize");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himl,cx,cy);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareImageList_GetImageInfo(HIMAGELIST himl,int i,IMAGEINFO*pImageInfo)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HIMAGELIST himl,int i,IMAGEINFO*pImageInfo);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_GetImageInfo");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(himl,i,pImageInfo);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE HIMAGELIST WINAPI IsolationAwareImageList_Merge(HIMAGELIST himl1,int i1,HIMAGELIST himl2,int i2,int dx,int dy)
+{
+    HIMAGELIST imagelistResult = NULL;
+    typedef HIMAGELIST (WINAPI* PFN)(HIMAGELIST himl1,int i1,HIMAGELIST himl2,int i2,int dx,int dy);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return imagelistResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_Merge");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        imagelistResult = s_pfn(himl1,i1,himl2,i2,dx,dy);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (imagelistResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return imagelistResult;
+}
+
+ISOLATION_AWARE_INLINE HIMAGELIST WINAPI IsolationAwareImageList_Duplicate(HIMAGELIST himl)
+{
+    HIMAGELIST imagelistResult = NULL;
+    typedef HIMAGELIST (WINAPI* PFN)(HIMAGELIST himl);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return imagelistResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ImageList_Duplicate");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        imagelistResult = s_pfn(himl);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (imagelistResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return imagelistResult;
+}
+
+ISOLATION_AWARE_INLINE HWND WINAPI IsolationAwareCreateToolbarEx(HWND hwnd,DWORD ws,UINT wID,int nBitmaps,HINSTANCE hBMInst,UINT_PTR wBMID,LPCTBBUTTON lpButtons,int iNumButtons,int dxButton,int dyButton,int dxBitmap,int dyBitmap,UINT uStructSize)
+{
+    HWND windowResult = NULL;
+    typedef HWND (WINAPI* PFN)(HWND hwnd,DWORD ws,UINT wID,int nBitmaps,HINSTANCE hBMInst,UINT_PTR wBMID,LPCTBBUTTON lpButtons,int iNumButtons,int dxButton,int dyButton,int dxBitmap,int dyBitmap,UINT uStructSize);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return windowResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("CreateToolbarEx");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        windowResult = s_pfn(hwnd,ws,wID,nBitmaps,hBMInst,wBMID,lpButtons,iNumButtons,dxButton,dyButton,dxBitmap,dyBitmap,uStructSize);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (windowResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return windowResult;
+}
+
+ISOLATION_AWARE_INLINE HBITMAP WINAPI IsolationAwareCreateMappedBitmap(HINSTANCE hInstance,INT_PTR idBitmap,UINT wFlags,LPCOLORMAP lpColorMap,int iNumMaps)
+{
+    HBITMAP bitmapResult = NULL;
+    typedef HBITMAP (WINAPI* PFN)(HINSTANCE hInstance,INT_PTR idBitmap,UINT wFlags,LPCOLORMAP lpColorMap,int iNumMaps);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return bitmapResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("CreateMappedBitmap");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        bitmapResult = s_pfn(hInstance,idBitmap,wFlags,lpColorMap,iNumMaps);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (bitmapResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return bitmapResult;
+}
+
+ISOLATION_AWARE_INLINE void WINAPI IsolationAwareDrawStatusTextA(HDC hDC,LPRECT lprc,LPCSTR pszText,UINT uFlags)
+{
+    typedef void (WINAPI* PFN)(HDC hDC,LPRECT lprc,LPCSTR pszText,UINT uFlags);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("DrawStatusTextA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        s_pfn(hDC,lprc,pszText,uFlags);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+        }
+    }
+    return;
+}
+
+ISOLATION_AWARE_INLINE void WINAPI IsolationAwareDrawStatusTextW(HDC hDC,LPRECT lprc,LPCWSTR pszText,UINT uFlags)
+{
+    typedef void (WINAPI* PFN)(HDC hDC,LPRECT lprc,LPCWSTR pszText,UINT uFlags);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("DrawStatusTextW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        s_pfn(hDC,lprc,pszText,uFlags);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+        }
+    }
+    return;
+}
+
+ISOLATION_AWARE_INLINE HWND WINAPI IsolationAwareCreateStatusWindowA(long style,LPCSTR lpszText,HWND hwndParent,UINT wID)
+{
+    HWND windowResult = NULL;
+    typedef HWND (WINAPI* PFN)(long style,LPCSTR lpszText,HWND hwndParent,UINT wID);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return windowResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("CreateStatusWindowA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        windowResult = s_pfn(style,lpszText,hwndParent,wID);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (windowResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return windowResult;
+}
+
+ISOLATION_AWARE_INLINE HWND WINAPI IsolationAwareCreateStatusWindowW(long style,LPCWSTR lpszText,HWND hwndParent,UINT wID)
+{
+    HWND windowResult = NULL;
+    typedef HWND (WINAPI* PFN)(long style,LPCWSTR lpszText,HWND hwndParent,UINT wID);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return windowResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("CreateStatusWindowW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        windowResult = s_pfn(style,lpszText,hwndParent,wID);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (windowResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return windowResult;
+}
+
+ISOLATION_AWARE_INLINE void WINAPI IsolationAwareMenuHelp(UINT uMsg,WPARAM wParam,LPARAM lParam,HMENU hMainMenu,HINSTANCE hInst,HWND hwndStatus,UINT*lpwIDs)
+{
+    typedef void (WINAPI* PFN)(UINT uMsg,WPARAM wParam,LPARAM lParam,HMENU hMainMenu,HINSTANCE hInst,HWND hwndStatus,UINT*lpwIDs);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("MenuHelp");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        s_pfn(uMsg,wParam,lParam,hMainMenu,hInst,hwndStatus,lpwIDs);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+        }
+    }
+    return;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareShowHideMenuCtl(HWND hWnd,UINT_PTR uFlags,LPINT lpInfo)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND hWnd,UINT_PTR uFlags,LPINT lpInfo);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("ShowHideMenuCtl");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(hWnd,uFlags,lpInfo);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE void WINAPI IsolationAwareGetEffectiveClientRect(HWND hWnd,LPRECT lprc,LPINT lpInfo)
+{
+    typedef void (WINAPI* PFN)(HWND hWnd,LPRECT lprc,LPINT lpInfo);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("GetEffectiveClientRect");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        s_pfn(hWnd,lprc,lpInfo);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+        }
+    }
+    return;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareMakeDragList(HWND hLB)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND hLB);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("MakeDragList");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(hLB);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE void WINAPI IsolationAwareDrawInsert(HWND handParent,HWND hLB,int nItem)
+{
+    typedef void (WINAPI* PFN)(HWND handParent,HWND hLB,int nItem);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("DrawInsert");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        s_pfn(handParent,hLB,nItem);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+        }
+    }
+    return;
+}
+
+ISOLATION_AWARE_INLINE int WINAPI IsolationAwareLBItemFromPt(HWND hLB,POINT pt,BOOL bAutoScroll)
+{
+    int nResult = -1;
+    typedef int (WINAPI* PFN)(HWND hLB,POINT pt,BOOL bAutoScroll);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("LBItemFromPt");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(hLB,pt,bAutoScroll);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == -1);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE HWND WINAPI IsolationAwareCreateUpDownControl(DWORD dwStyle,int x,int y,int cx,int cy,HWND hParent,int nID,HINSTANCE hInst,HWND hBuddy,int nUpper,int nLower,int nPos)
+{
+    HWND windowResult = NULL;
+    typedef HWND (WINAPI* PFN)(DWORD dwStyle,int x,int y,int cx,int cy,HWND hParent,int nID,HINSTANCE hInst,HWND hBuddy,int nUpper,int nLower,int nPos);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return windowResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("CreateUpDownControl");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        windowResult = s_pfn(dwStyle,x,y,cx,cy,hParent,nID,hInst,hBuddy,nUpper,nLower,nPos);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (windowResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return windowResult;
+}
+
+ISOLATION_AWARE_INLINE void WINAPI IsolationAwareInitMUILanguage(LANGID uiLang)
+{
+    typedef void (WINAPI* PFN)(LANGID uiLang);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("InitMUILanguage");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        s_pfn(uiLang);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+        }
+    }
+    return;
+}
+
+ISOLATION_AWARE_INLINE LANGID WINAPI IsolationAwareGetMUILanguage(void)
+{
+    LANGID languageIdResult = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL);
+    typedef LANGID (WINAPI* PFN)(void);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return languageIdResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("GetMUILanguage");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        languageIdResult = s_pfn();
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (languageIdResult == MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL));
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return languageIdResult;
+}
+
+#if !defined(NOTRACKMOUSEEVENT)
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAware_TrackMouseEvent(LPTRACKMOUSEEVENT lpEventTrack)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPTRACKMOUSEEVENT lpEventTrack);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("_TrackMouseEvent");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(lpEventTrack);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+#endif /* !defined(NOTRACKMOUSEEVENT) */
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareFlatSB_EnableScrollBar(HWND unnamed1,int unnamed2,UINT unnamed3)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND unnamed1,int unnamed2,UINT unnamed3);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("FlatSB_EnableScrollBar");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1,unnamed2,unnamed3);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareFlatSB_ShowScrollBar(HWND unnamed1,int code,BOOL unnamed2)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND unnamed1,int code,BOOL unnamed2);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("FlatSB_ShowScrollBar");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1,code,unnamed2);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareFlatSB_GetScrollRange(HWND unnamed1,int code,LPINT unnamed2,LPINT unnamed3)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND unnamed1,int code,LPINT unnamed2,LPINT unnamed3);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("FlatSB_GetScrollRange");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1,code,unnamed2,unnamed3);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareFlatSB_GetScrollInfo(HWND unnamed1,int code,LPSCROLLINFO unnamed2)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND unnamed1,int code,LPSCROLLINFO unnamed2);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("FlatSB_GetScrollInfo");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1,code,unnamed2);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE int WINAPI IsolationAwareFlatSB_GetScrollPos(HWND unnamed1,int code)
+{
+    int nResult = 0 ;
+    typedef int (WINAPI* PFN)(HWND unnamed1,int code);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("FlatSB_GetScrollPos");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(unnamed1,code);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == 0 );
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareFlatSB_GetScrollProp(HWND unnamed1,int propIndex,LPINT unnamed2)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND unnamed1,int propIndex,LPINT unnamed2);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("FlatSB_GetScrollProp");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1,propIndex,unnamed2);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareFlatSB_GetScrollPropPtr(HWND unnamed1,int propIndex,PINT_PTR unnamed2)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND unnamed1,int propIndex,PINT_PTR unnamed2);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL(
+#if defined(_WIN64)
+            "FlatSB_GetScrollPropPtr"
+#else
+            "FlatSB_GetScrollProp"
+#endif
+            );
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1,propIndex,unnamed2);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE int WINAPI IsolationAwareFlatSB_SetScrollPos(HWND unnamed1,int code,int pos,BOOL fRedraw)
+{
+    int nResult = 0 ;
+    typedef int (WINAPI* PFN)(HWND unnamed1,int code,int pos,BOOL fRedraw);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("FlatSB_SetScrollPos");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(unnamed1,code,pos,fRedraw);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == 0 );
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE int WINAPI IsolationAwareFlatSB_SetScrollInfo(HWND unnamed1,int code,LPSCROLLINFO unnamed2,BOOL fRedraw)
+{
+    int nResult = 0 ;
+    typedef int (WINAPI* PFN)(HWND unnamed1,int code,LPSCROLLINFO unnamed2,BOOL fRedraw);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("FlatSB_SetScrollInfo");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(unnamed1,code,unnamed2,fRedraw);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == 0 );
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE int WINAPI IsolationAwareFlatSB_SetScrollRange(HWND unnamed1,int code,int min,int max,BOOL fRedraw)
+{
+    int nResult = 0 ;
+    typedef int (WINAPI* PFN)(HWND unnamed1,int code,int min,int max,BOOL fRedraw);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("FlatSB_SetScrollRange");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(unnamed1,code,min,max,fRedraw);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == 0 );
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareFlatSB_SetScrollProp(HWND unnamed1,UINT index,INT_PTR newValue,BOOL unnamed2)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND unnamed1,UINT index,INT_PTR newValue,BOOL unnamed2);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("FlatSB_SetScrollProp");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1,index,newValue,unnamed2);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareInitializeFlatSB(HWND unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("InitializeFlatSB");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE HRESULT WINAPI IsolationAwareUninitializeFlatSB(HWND unnamed1)
+{
+    HRESULT result = S_OK;
+    typedef HRESULT (WINAPI* PFN)(HWND unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        goto ExitWin32ToHresult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("UninitializeFlatSB");
+            if (s_pfn == NULL)
+                goto ExitWin32ToHresult;
+        }
+        result = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+        }
+    }
+    return result;
+
+ExitWin32ToHresult:
+    {
+        DWORD dwLastError = GetLastError();
+        if (dwLastError == NO_ERROR)
+            dwLastError = ERROR_INTERNAL_ERROR;
+        result = HRESULT_FROM_WIN32(dwLastError);
+        return result;
+    }
+}
+
+#if (_WIN32_IE >= 0x560)
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareSetWindowSubclass(HWND hWnd,SUBCLASSPROC pfnSubclass,UINT_PTR uIdSubclass,DWORD_PTR dwRefData)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND hWnd,SUBCLASSPROC pfnSubclass,UINT_PTR uIdSubclass,DWORD_PTR dwRefData);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("SetWindowSubclass");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(hWnd,pfnSubclass,uIdSubclass,dwRefData);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareGetWindowSubclass(HWND hWnd,SUBCLASSPROC pfnSubclass,UINT_PTR uIdSubclass,DWORD_PTR*pdwRefData)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND hWnd,SUBCLASSPROC pfnSubclass,UINT_PTR uIdSubclass,DWORD_PTR*pdwRefData);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("GetWindowSubclass");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(hWnd,pfnSubclass,uIdSubclass,pdwRefData);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareRemoveWindowSubclass(HWND hWnd,SUBCLASSPROC pfnSubclass,UINT_PTR uIdSubclass)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HWND hWnd,SUBCLASSPROC pfnSubclass,UINT_PTR uIdSubclass);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("RemoveWindowSubclass");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(hWnd,pfnSubclass,uIdSubclass);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+#endif /* (_WIN32_IE >= 0x560) */
+
+ISOLATION_AWARE_INLINE LRESULT WINAPI IsolationAwareDefSubclassProc(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
+{
+    LRESULT result = 0 ;
+    typedef LRESULT (WINAPI* PFN)(HWND hWnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return result;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("DefSubclassProc");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        result = s_pfn(hWnd,uMsg,wParam,lParam);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (result == 0 );
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return result;
+}
+
+ISOLATION_AWARE_INLINE int WINAPI IsolationAwareDrawShadowText(HDC hdc,LPCWSTR pszText,UINT cch,RECT*prc,DWORD dwFlags,COLORREF crText,COLORREF crShadow,int ixOffset,int iyOffset)
+{
+    int nResult = -1;
+    typedef int (WINAPI* PFN)(HDC hdc,LPCWSTR pszText,UINT cch,RECT*prc,DWORD dwFlags,COLORREF crText,COLORREF crShadow,int ixOffset,int iyOffset);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("DrawShadowText");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(hdc,pszText,cch,prc,dwFlags,crText,crShadow,ixOffset,iyOffset);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == -1);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE FARPROC WINAPI CommctrlIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL(LPCSTR pszProcName)
+/* This function is shared by the other stubs in this header. */
+{
+    FARPROC proc = NULL;
+    static HMODULE s_module;
+    BOOL fActivateActCtxSuccess = FALSE;
+    ULONG_PTR ulpCookie = 0;
+    __try
+    {
+        if (s_module == NULL)
+        {
+            if (!IsolationAwarePrivateG_FqbjaLEiEL)
+            {
+                fActivateActCtxSuccess = IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+                if (!fActivateActCtxSuccess)
+                    __leave;
+            }
+            s_module = LoadLibraryW(L"Comctl32.dll");
+            if (s_module == NULL)
+            {
+                if (GetLastError() != ERROR_CALL_NOT_IMPLEMENTED)
+                    __leave;
+                s_module = LoadLibraryA("Comctl32.dll");
+                if (s_module == NULL)
+                    __leave;
+            }
+        }
+        proc = GetProcAddress(s_module, pszProcName);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL && fActivateActCtxSuccess)
+        {
+            const DWORD dwLastError = (proc == NULL) ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (proc == NULL)
+                SetLastError(dwLastError);
+        }
+    }
+    return proc;
+}
+
+#define CreateMappedBitmap IsolationAwareCreateMappedBitmap
+#define CreateStatusWindowA IsolationAwareCreateStatusWindowA
+#define CreateStatusWindowW IsolationAwareCreateStatusWindowW
+#define CreateToolbarEx IsolationAwareCreateToolbarEx
+#define CreateUpDownControl IsolationAwareCreateUpDownControl
+#define DefSubclassProc IsolationAwareDefSubclassProc
+#define DrawInsert IsolationAwareDrawInsert
+#define DrawShadowText IsolationAwareDrawShadowText
+#define DrawStatusTextA IsolationAwareDrawStatusTextA
+#define DrawStatusTextW IsolationAwareDrawStatusTextW
+#define FlatSB_EnableScrollBar IsolationAwareFlatSB_EnableScrollBar
+#define FlatSB_GetScrollInfo IsolationAwareFlatSB_GetScrollInfo
+#define FlatSB_GetScrollPos IsolationAwareFlatSB_GetScrollPos
+#define FlatSB_GetScrollProp IsolationAwareFlatSB_GetScrollProp
+#if defined(FlatSB_GetScrollPropPtr)
+#undef FlatSB_GetScrollPropPtr
+#endif
+#define FlatSB_GetScrollPropPtr IsolationAwareFlatSB_GetScrollPropPtr
+#define FlatSB_GetScrollRange IsolationAwareFlatSB_GetScrollRange
+#define FlatSB_SetScrollInfo IsolationAwareFlatSB_SetScrollInfo
+#define FlatSB_SetScrollPos IsolationAwareFlatSB_SetScrollPos
+#define FlatSB_SetScrollProp IsolationAwareFlatSB_SetScrollProp
+#define FlatSB_SetScrollRange IsolationAwareFlatSB_SetScrollRange
+#define FlatSB_ShowScrollBar IsolationAwareFlatSB_ShowScrollBar
+#define GetEffectiveClientRect IsolationAwareGetEffectiveClientRect
+#define GetMUILanguage IsolationAwareGetMUILanguage
+#define GetWindowSubclass IsolationAwareGetWindowSubclass
+#define ImageList_Add IsolationAwareImageList_Add
+#define ImageList_AddMasked IsolationAwareImageList_AddMasked
+#define ImageList_BeginDrag IsolationAwareImageList_BeginDrag
+#define ImageList_Copy IsolationAwareImageList_Copy
+#define ImageList_Create IsolationAwareImageList_Create
+#define ImageList_Destroy IsolationAwareImageList_Destroy
+#define ImageList_DragEnter IsolationAwareImageList_DragEnter
+#define ImageList_DragLeave IsolationAwareImageList_DragLeave
+#define ImageList_DragMove IsolationAwareImageList_DragMove
+#define ImageList_DragShowNolock IsolationAwareImageList_DragShowNolock
+#define ImageList_Draw IsolationAwareImageList_Draw
+#define ImageList_DrawEx IsolationAwareImageList_DrawEx
+#define ImageList_DrawIndirect IsolationAwareImageList_DrawIndirect
+#define ImageList_Duplicate IsolationAwareImageList_Duplicate
+#define ImageList_EndDrag IsolationAwareImageList_EndDrag
+#define ImageList_GetBkColor IsolationAwareImageList_GetBkColor
+#define ImageList_GetDragImage IsolationAwareImageList_GetDragImage
+#define ImageList_GetIcon IsolationAwareImageList_GetIcon
+#define ImageList_GetIconSize IsolationAwareImageList_GetIconSize
+#define ImageList_GetImageCount IsolationAwareImageList_GetImageCount
+#define ImageList_GetImageInfo IsolationAwareImageList_GetImageInfo
+#define ImageList_LoadImageA IsolationAwareImageList_LoadImageA
+#define ImageList_LoadImageW IsolationAwareImageList_LoadImageW
+#define ImageList_Merge IsolationAwareImageList_Merge
+#define ImageList_Read IsolationAwareImageList_Read
+#define ImageList_ReadEx IsolationAwareImageList_ReadEx
+#define ImageList_Remove IsolationAwareImageList_Remove
+#define ImageList_Replace IsolationAwareImageList_Replace
+#define ImageList_ReplaceIcon IsolationAwareImageList_ReplaceIcon
+#define ImageList_SetBkColor IsolationAwareImageList_SetBkColor
+#define ImageList_SetDragCursorImage IsolationAwareImageList_SetDragCursorImage
+#define ImageList_SetIconSize IsolationAwareImageList_SetIconSize
+#define ImageList_SetImageCount IsolationAwareImageList_SetImageCount
+#define ImageList_SetOverlayImage IsolationAwareImageList_SetOverlayImage
+#define ImageList_Write IsolationAwareImageList_Write
+#define ImageList_WriteEx IsolationAwareImageList_WriteEx
+#define InitCommonControls IsolationAwareInitCommonControls
+#define InitCommonControlsEx IsolationAwareInitCommonControlsEx
+#define InitMUILanguage IsolationAwareInitMUILanguage
+#define InitializeFlatSB IsolationAwareInitializeFlatSB
+#define LBItemFromPt IsolationAwareLBItemFromPt
+#define MakeDragList IsolationAwareMakeDragList
+#define MenuHelp IsolationAwareMenuHelp
+#define RemoveWindowSubclass IsolationAwareRemoveWindowSubclass
+#define SetWindowSubclass IsolationAwareSetWindowSubclass
+#define ShowHideMenuCtl IsolationAwareShowHideMenuCtl
+#define UninitializeFlatSB IsolationAwareUninitializeFlatSB
+#define _TrackMouseEvent IsolationAware_TrackMouseEvent
+
+#endif /* ISOLATION_AWARE_ENABLED */
+#endif /* RC */
+
 
 
 #ifdef __cplusplus
@@ -6358,6 +9866,5 @@ WINCOMMCTRLAPI HRESULT WINAPI UninitializeFlatSB(HWND);
 #endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif  // _INC_COMMCTRL
 

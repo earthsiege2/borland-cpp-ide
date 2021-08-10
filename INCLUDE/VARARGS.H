@@ -7,14 +7,14 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1991, 2000 by Inprise Corporation
+ *      Copyright (c) 1991, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.1  $ */
+/* $Revision: 9.5.2.2 $ */
 
 #ifndef __VARARGS_H
 #define __VARARGS_H
@@ -23,9 +23,7 @@
 #error Can't include both STDARG.H and VARARGS.H
 #endif
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 typedef void _FAR *va_list;
 

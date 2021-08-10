@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1995-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -14,11 +14,14 @@ Abstract:
 --*/
 
 #ifndef __ROUTING_IPINFOID_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __ROUTING_IPINFOID_H__
 
 #if _MSC_VER > 1000
 #pragma once
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 #define IP_ROUTER_MANAGER_VERSION 1
@@ -75,5 +78,8 @@ Abstract:
 //                                                                          //
 //////////////////////////////////////////////////////////////////////////////
 
-#pragma option pop /*P_O_Pop*/
+#ifdef __cplusplus
+}
+#endif
+
 #endif //__ROUTING_IPINFOID_H__

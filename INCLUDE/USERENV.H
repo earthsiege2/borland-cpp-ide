@@ -10,8 +10,10 @@
 
 
 #ifndef _INC_USERENV
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_USERENV
+
+#include <wbemcli.h>
+#include <profinfo.h>
 
 //
 // Define API decoration for direct importing of DLL references.
@@ -62,36 +64,6 @@ extern "C" {
 
 #define PI_NOUI         0x00000001      // Prevents displaying of messages
 #define PI_APPLYPOLICY  0x00000002      // Apply NT4 style policy
-
-typedef struct _PROFILEINFOA {
-    DWORD       dwSize;                 // Set to sizeof(PROFILEINFO) before calling
-    DWORD       dwFlags;                // See flags above
-    LPSTR       lpUserName;             // User name (required)
-    LPSTR       lpProfilePath;          // Roaming profile path (optional, can be NULL)
-    LPSTR       lpDefaultPath;          // Default user profile path (optional, can be NULL)
-    LPSTR       lpServerName;           // Validating domain controller name in netbios format (optional, can be NULL but group NT4 style policy won't be applied)
-    LPSTR       lpPolicyPath;           // Path to the NT4 style policy file (optional, can be NULL)
-    HANDLE      hProfile;               // Filled in by the function.  Registry key handle open to the root.
-} PROFILEINFOA, FAR * LPPROFILEINFOA;
-typedef struct _PROFILEINFOW {
-    DWORD       dwSize;                 // Set to sizeof(PROFILEINFO) before calling
-    DWORD       dwFlags;                // See flags above
-    LPWSTR      lpUserName;             // User name (required)
-    LPWSTR      lpProfilePath;          // Roaming profile path (optional, can be NULL)
-    LPWSTR      lpDefaultPath;          // Default user profile path (optional, can be NULL)
-    LPWSTR      lpServerName;           // Validating domain controller name in netbios format (optional, can be NULL but group NT4 style policy won't be applied)
-    LPWSTR      lpPolicyPath;           // Path to the NT4 style policy file (optional, can be NULL)
-    HANDLE      hProfile;               // Filled in by the function.  Registry key handle open to the root.
-} PROFILEINFOW, FAR * LPPROFILEINFOW;
-#ifdef UNICODE
-typedef PROFILEINFOW PROFILEINFO;
-typedef LPPROFILEINFOW LPPROFILEINFO;
-#else
-typedef PROFILEINFOA PROFILEINFO;
-typedef LPPROFILEINFOA LPPROFILEINFO;
-#endif // UNICODE
-
-
 
 USERENVAPI
 BOOL
@@ -233,14 +205,14 @@ WINAPI
 DeleteProfileA (
         IN LPCSTR lpSidString,
         IN LPCSTR lpProfilePath,
-	IN LPCSTR lpComputerName);
+        IN LPCSTR lpComputerName);
 USERENVAPI
 BOOL
 WINAPI
 DeleteProfileW (
         IN LPCWSTR lpSidString,
         IN LPCWSTR lpProfilePath,
-	IN LPCWSTR lpComputerName);
+        IN LPCWSTR lpComputerName);
 #ifdef UNICODE
 #define DeleteProfile  DeleteProfileW
 #else
@@ -492,6 +464,34 @@ BOOL
 WINAPI
 RefreshPolicy(
     IN BOOL bMachine);
+
+#endif /* WINVER >= 0x0500 */
+
+//=============================================================================
+//
+// RefreshPolicyEx()
+//
+// Causes group policy to be applied immediately on the client machine. 
+//
+// bMachine  -  Refresh machine or user policy
+// dwOptions -  Option specifying the kind of refresh that needs to be done.
+//
+// Returns:  TRUE if successful
+//           FALSE if not.  Call GetLastError() for more details
+//
+//=============================================================================
+
+#if(WINVER >= 0x0500)
+
+#define RP_FORCE            1      // Refresh policies without any optimisations.
+
+
+
+USERENVAPI
+BOOL
+WINAPI
+RefreshPolicyEx(
+    IN BOOL bMachine, IN DWORD dwOptions);
 
 #endif /* WINVER >= 0x0500 */
 
@@ -760,6 +760,8 @@ typedef struct _GROUP_POLICY_OBJECTA {
     struct _GROUP_POLICY_OBJECTA * pPrev;   // Previous GPO in the list
     LPSTR       lpExtensions;               // Extensions that are relevant for this GPO
     LPARAM      lParam2;                    // Free space for the caller to store GPO specific information
+    LPSTR       lpLink;                     // Path to the Active Directory site, domain, or organizational unit this GPO is linked to
+                                            // If this is the local GPO, this points to the word "Local"
 } GROUP_POLICY_OBJECTA, *PGROUP_POLICY_OBJECTA;
 typedef struct _GROUP_POLICY_OBJECTW {
     DWORD       dwOptions;                  // See GPLink option flags above
@@ -774,6 +776,8 @@ typedef struct _GROUP_POLICY_OBJECTW {
     struct _GROUP_POLICY_OBJECTW * pPrev;   // Previous GPO in the list
     LPWSTR      lpExtensions;               // Extensions that are relevant for this GPO
     LPARAM      lParam2;                    // Free space for the caller to store GPO specific information
+    LPWSTR      lpLink;                     // Path to the Active Directory site, domain, or organizational unit this GPO is linked to
+                                            // If this is the local GPO, this points to the word "Local"
 } GROUP_POLICY_OBJECTW, *PGROUP_POLICY_OBJECTW;
 #ifdef UNICODE
 typedef GROUP_POLICY_OBJECTW GROUP_POLICY_OBJECT;
@@ -923,7 +927,11 @@ GetAppliedGPOListW (
 // can be the friendly name of the extension. Then add these values:
 //
 //     DllName                      REG_EXPAND_SZ  Path to your DLL
-//     ProcessGroupPolicy           REG_SZ       Function name (see PFNPROCESSGROUPPOLICY prototype)
+//     ProcessGroupPolicy           REG_SZ       Function name (see PFNPROCESSGROUPPOLICY prototype). This
+//                                                 is obsolete, it has been superseded by ProcessGroupPolicyEx.
+//                                                 It's here for backwards compatibility only.
+//     ProcessGroupPolicyEx         REG_SZ       Function name (see PFNPROCESSGROUPPOLICYEX prototype)
+//     GenerateGroupPolicy          REG_SZ       Function name for Rsop (see PFNGENERATEGROUPPOLICY prototype)
 //     NoMachinePolicy              REG_DWORD    True, if extension does not have to be called when
 //                                                 machine policies are being processed.
 //     NoUserPolicy                 REG_DWORD    True, if extension does not have to be called when
@@ -947,19 +955,37 @@ GetAppliedGPOListW (
 // function completed successfully. If return value is ERROR_OVERRIDE_NOCHANGES then it
 // means that the extension will be called the next time even if NoGPOListChanges is set
 // and there are no changes to the GPO list. Any other return value indicates that the
-// ProcessGroupPolicy function failed.
+// ProcessGroupPolicy or ProcessGroupPolicyEx function failed.
 //
 //=============================================================================
 
 #if(WINVER >= 0x0500)
 
-#define GPO_INFO_FLAG_MACHINE          0x00000001  // Apply machine policy rather than user policy
-#define GPO_INFO_FLAG_BACKGROUND       0x00000010  // Background refresh of policy (ok to do slow stuff)
-#define GPO_INFO_FLAG_SLOWLINK         0x00000020  // Policy is being applied across a slow link
-#define GPO_INFO_FLAG_VERBOSE          0x00000040  // Verbose output to the eventlog
-#define GPO_INFO_FLAG_NOCHANGES        0x00000080  // No changes were detected to the Group Policy Objects
-#define GPO_INFO_FLAG_LINKTRANSITION   0x00000100  // A change in link speed was detected between previous policy
-                                                   // application and current policy application
+#define GP_DLLNAME                         TEXT("DllName")
+#define GP_ENABLEASYNCHRONOUSPROCESSING    TEXT("EnableAsynchronousProcessing")
+#define GP_MAXNOGPOLISTCHANGESINTERVAL     TEXT("MaxNoGPOListChangesInterval")
+#define GP_NOBACKGROUNDPOLICY              TEXT("NoBackgroundPolicy")
+#define GP_NOGPOLISTCHANGES                TEXT("NoGPOListChanges")
+#define GP_NOMACHINEPOLICY                 TEXT("NoMachinePolicy")
+#define GP_NOSLOWLINK                      TEXT("NoSlowLink")
+#define GP_NOTIFYLINKTRANSITION            TEXT("NotifyLinkTransition")
+#define GP_NOUSERPOLICY                    TEXT("NoUserPolicy")
+#define GP_PERUSERLOCALSETTINGS            TEXT("PerUserLocalSettings")
+#define GP_PROCESSGROUPPOLICY              TEXT("ProcessGroupPolicy")
+#define GP_REQUIRESSUCCESSFULREGISTRY      TEXT("RequiresSuccessfulRegistry")
+
+#define GPO_INFO_FLAG_MACHINE              0x00000001  // Apply machine policy rather than user policy
+#define GPO_INFO_FLAG_BACKGROUND           0x00000010  // Background refresh of policy (ok to do slow stuff)
+#define GPO_INFO_FLAG_SLOWLINK             0x00000020  // Policy is being applied across a slow link
+#define GPO_INFO_FLAG_VERBOSE              0x00000040  // Verbose output to the eventlog
+#define GPO_INFO_FLAG_NOCHANGES            0x00000080  // No changes were detected to the Group Policy Objects
+#define GPO_INFO_FLAG_LINKTRANSITION       0x00000100  // A change in link speed was detected between previous policy
+                                                       // application and current policy application
+#define GPO_INFO_FLAG_LOGRSOP_TRANSITION   0x00000200  // A Change in Rsop Logging was detected between previous policy
+                                                       // application and current policy application, (new intf only)
+#define GPO_INFO_FLAG_FORCED_REFRESH       0x00000400  // Forced Refresh is being applied. redo policies.
+#define GPO_INFO_FLAG_SAFEMODE_BOOT        0x00000800  // windows safe mode boot flag
+#define GPO_INFO_FLAG_ASYNC_FOREGROUND     0x00001000  // Asynchronous foreground refresh of policy
 
 typedef UINT_PTR ASYNCCOMPLETIONHANDLE;
 typedef DWORD (*PFNSTATUSMESSAGECALLBACK)(BOOL bVerbose, LPWSTR lpMessage);
@@ -974,6 +1000,38 @@ typedef DWORD(*PFNPROCESSGROUPPOLICY)(
     IN BOOL *pbAbort,                              // If true, then abort GPO processing
     IN PFNSTATUSMESSAGECALLBACK pStatusCallback);  // Callback function for displaying status messages
                                                    // Note, this can be NULL
+
+typedef DWORD(*PFNPROCESSGROUPPOLICYEX)(
+    IN DWORD dwFlags,                              // GPO_INFO_FLAGS
+    IN HANDLE hToken,                              // User or machine token
+    IN HKEY hKeyRoot,                              // Root of registry
+    IN PGROUP_POLICY_OBJECT  pDeletedGPOList,      // Linked list of deleted GPOs
+    IN PGROUP_POLICY_OBJECT  pChangedGPOList,      // Linked list of changed GPOs
+    IN ASYNCCOMPLETIONHANDLE pHandle,              // For asynchronous completion
+    IN BOOL *pbAbort,                              // If true, then abort GPO processing
+    IN PFNSTATUSMESSAGECALLBACK pStatusCallback,   // Callback function for displaying status messages
+                                                   // Note, this can be NULL
+    IN IWbemServices *pWbemServices,               // Pointer to namespace to log diagnostic mode data
+                                                   // Note, this will be NULL when Rsop logging is disabled
+    OUT HRESULT      *pRsopStatus);                // RSOP Logging succeeded or not.
+
+typedef PVOID PRSOPTOKEN;
+
+typedef struct _RSOP_TARGET {
+    WCHAR *     pwszAccountName;                   // Account name
+    WCHAR *     pwszNewSOM;                        // New domain or OU location for account
+    SAFEARRAY * psaSecurityGroups;                 // New security groups
+    PRSOPTOKEN  pRsopToken;                        // Rsop token for use with Rsop security Api's
+    PGROUP_POLICY_OBJECT pGPOList;                 // Linked list of GPOs
+    IWbemServices *      pWbemServices;            // Pointer to namespace to log planning mode data
+} RSOP_TARGET, *PRSOP_TARGET;
+
+typedef DWORD(*PFNGENERATEGROUPPOLICY)(
+    IN DWORD dwFlags,                              // GPO_INFO_FLAGS
+    IN BOOL  *pbAbort,                             // If true, then abort GPO processing
+    IN WCHAR *pwszSite,                            // Site the target computer is in
+    IN PRSOP_TARGET pComputerTarget,               // Computer target info, can be null
+    IN PRSOP_TARGET pUserTarget );                 // User target info, can be null
 
 //
 // GUID that identifies the registry extension
@@ -1011,11 +1069,247 @@ ProcessGroupPolicyCompleted(
 
 #endif /* WINVER >= 0x0500 */
 
+//=============================================================================
+//
+// Group Policy Object client side asynchronous extension processing
+//
+// extensionId    - Unique guid identifying the extension
+// pAsyncHandle   - Asynchronous completion handle that was passed to extension in
+//                  ProcessGroupPolicy call
+// dwStatus       - Completion status of asynchronous processing
+// RsopStatus     - RSoP Logging status
+//
+// The return value is a Win32 error code. ERROR_SUCCESS means the ProcessGroupPolicyCompleted
+// function completed successfully. Otherwise it indicates that the function failed.
+//
+//=============================================================================
+
+#if(WINVER >= 0x0500)
+
+USERENVAPI
+DWORD
+WINAPI
+ProcessGroupPolicyCompletedEx(
+    IN REFGPEXTENSIONID extensionId,
+    IN ASYNCCOMPLETIONHANDLE pAsyncHandle,
+    IN DWORD dwStatus,
+    IN HRESULT RsopStatus);
+
+#endif /* WINVER >= 0x0500 */
+
+//=============================================================================
+//
+// Function:    RsopAccessCheckByType
+//
+// Description: Determines whether the security descriptor pointed to by pSecurityDescriptor
+//                              grants the set of access rights specified in dwDesiredAccessMask
+//                              to the client identified by the RSOPTOKEN pointed to by pRsopToken.
+//
+// pSecurityDescriptor  - Security Descriptor on the object
+// pPrincipalSelfSid    - Principal Sid
+// pRsopToken           - Pointer to a valid RSOPTOKEN against which access needs to be checked
+// dwDesiredAccessMask  - Mask of requested generic and/or standard and or specific access rights
+// pObjectTypeList      - Object Type List
+// ObjectTypeListLength - Object Type List Length
+// pGenericMapping      - Generic Mapping
+// pPrivilegeSet        - privilege set
+// pdwPrivilegeSetLength- privilege set length
+// pdwGrantedAccessMask	- On success, if pbAccessStatus is true, it contains
+//                                         the mask of standard and specific rights granted.
+//                                         If pbAccessStatus is false, it is set to 0.
+//                                         On failure, it is not modified.
+// pbAccessStatus       - On success, indicates wether the requested set
+//                                    of access rights was granted.
+//                                    On failure, it is not modified
+//
+// Returns S_OK on success or appropriate error code.
+// For additional details, look at the documentation of AccessCheckByType
+//=============================================================================
+
+#if(WINVER >= 0x0500)
+
+USERENVAPI
+HRESULT 
+WINAPI
+RsopAccessCheckByType(  
+    IN  PSECURITY_DESCRIPTOR pSecurityDescriptor,
+    IN  PSID pPrincipalSelfSid,
+    IN  PRSOPTOKEN pRsopToken,
+    IN  DWORD dwDesiredAccessMask,
+    IN  POBJECT_TYPE_LIST pObjectTypeList,
+    IN  DWORD ObjectTypeListLength,
+    IN  PGENERIC_MAPPING pGenericMapping,
+    IN  PPRIVILEGE_SET pPrivilegeSet,
+    IN  LPDWORD pdwPrivilegeSetLength,
+    OUT LPDWORD pdwGrantedAccessMask,
+    OUT LPBOOL pbAccessStatus);
+
+#endif /* WINVER >= 0x0500 */
+
+//=============================================================================
+//
+// Function:    RsopFileAccessCheck
+//
+// Description: Determines whether the security descriptor on the file grants the set of file access 
+//                              rights specified in dwDesiredAccessMask
+//                              to the client identified by the RSOPTOKEN pointed to by pRsopToken.
+//
+// pszFileName          - Name of an existing filename
+// pRsopToken           - Pointer to a valid RSOPTOKEN against which access needs to be checked
+// dwDesiredAccessMask  - Mask of requested generic and/or standard and or specific access rights
+// pdwGrantedAccessMask	- On success, if pbAccessStatus is true, it contains
+//                                         the mask of standard and specific rights granted.
+//                                         If pbAccessStatus is false, it is set to 0.
+//                                         On failure, it is not modified.
+// pbAccessStatus       - On success, indicates wether the requested set
+//                                    of access rights was granted.
+//                                    On failure, it is not modified
+//
+// Returns S_OK on success or appropriate error code
+//=============================================================================
+
+#if(WINVER >= 0x0500)
+
+USERENVAPI
+HRESULT 
+WINAPI
+RsopFileAccessCheck(
+    IN  LPTSTR pszFileName,
+    IN  PRSOPTOKEN pRsopToken,
+    IN  DWORD dwDesiredAccessMask,
+    OUT LPDWORD pdwGrantedAccessMask,
+    OUT LPBOOL pbAccessStatus);
+
+#endif /* WINVER >= 0x0500 */
+
+typedef enum _SETTINGSTATUS
+{
+	RSOPUnspecified	= 0,
+	RSOPApplied,
+	RSOPIgnored,
+	RSOPFailed,
+	RSOPSubsettingFailed
+} SETTINGSTATUS;
+
+//=============================================================================
+//
+//  POLICYSETTINGSTATUSINFO
+//
+//  Describes the instance of RSOP_PolicySettingStatus
+//
+//  szKey               - OPTIONAL, if NULL, the key is generated on the fly
+//  szEventSource       - name of the source generation event log messages
+//  szEventLogName      - name of the event log database where the messages are logged
+//  dwEventID           - event log message ID
+//  status              - status of the policy setting
+//  timeLogged          - time at which the event log message was logged
+//
+//=============================================================================
+
+typedef struct _POLICYSETTINGSTATUSINFO
+{
+	LPWSTR			szKey;
+	LPWSTR			szEventSource;
+	LPWSTR			szEventLogName;
+	DWORD			dwEventID;
+	DWORD			dwErrorCode;
+	SETTINGSTATUS   status;
+	SYSTEMTIME		timeLogged;
+} POLICYSETTINGSTATUSINFO, *LPPOLICYSETTINGSTATUSINFO;
+
+//=============================================================================
+//
+//  RsopSetPolicySettingStatus
+//
+//  Creates an instance of RSOP_PolicySettingStatus and RSOP_PolicySettingLink
+//  and links RSOP_PolicySettingStatus to RSOP_PolicySetting
+//
+//  dwFlags             - flags
+//  pServices           - RSOP namespace
+//  pSettingInstance    - instance of RSOP_PolicySetting or its children
+//  nInfo               - number of PolicySettingStatusInfo
+//  pStatus             - array of PolicySettingStatusInfo
+//
+//  Return:     S_OK if successful, HRESULT otherwise
+//
+//=============================================================================
+
+USERENVAPI
+HRESULT
+WINAPI
+RsopSetPolicySettingStatus( DWORD                       dwFlags,
+                            IWbemServices*              pServices,
+                            IWbemClassObject*           pSettingInstance,
+                            DWORD 				        nInfo,
+                            POLICYSETTINGSTATUSINFO*    pStatus );
+
+//=============================================================================
+//
+//  RsopResetPolicySettingStatus
+//
+//  Unlinks RSOP_PolicySettingStatus from RSOP_PolicySetting,
+//  deletes the instance of RSOP_PolicySettingStatus and RSOP_PolicySettingLink
+//  and optionally deletes the instance of RSOP_PolicySetting
+//
+//  dwFlags             - flags
+//  pServices           - RSOP namespace
+//  pSettingInstance    - instance of RSOP_PolicySetting or its children
+//
+//  Return:     S_OK if successful, HRESULT otherwise
+//
+//=============================================================================
+
+USERENVAPI
+HRESULT
+WINAPI
+RsopResetPolicySettingStatus(   DWORD               dwFlags,
+                                IWbemServices*      pServices,
+                                IWbemClassObject*   pSettingInstance );
+
+//=============================================================================
+//
+// Flags for RSoP WMI providers
+//
+//=============================================================================
+
+// planning mode provider flags
+#define FLAG_NO_GPO_FILTER      0x80000000  // GPOs are not filtered, implies FLAG_NO_CSE_INVOKE
+#define FLAG_NO_CSE_INVOKE      0x40000000  // only GP processing done for planning mode
+#define FLAG_ASSUME_SLOW_LINK   0x20000000  // planning mode RSoP assumes slow link
+#define FLAG_LOOPBACK_MERGE     0x10000000  // planning mode RSoP assumes merge loop back
+#define FLAG_LOOPBACK_REPLACE   0x08000000  // planning mode RSoP assumes replace loop back
+
+#define FLAG_ASSUME_USER_WQLFILTER_TRUE   0x04000000  // planning mode RSoP assumes all comp filters to be true
+#define FLAG_ASSUME_COMP_WQLFILTER_TRUE   0x02000000  // planning mode RSoP assumes all user filters to be true
+#define FLAG_INTERNAL_MASK      0x01FFFFFF
+
+// diagnostic mode provider flags
+#define FLAG_NO_USER                      0x00000001  // Don't get any user data
+#define FLAG_NO_COMPUTER                  0x00000002  // Don't get any machine data
+#define FLAG_FORCE_CREATENAMESPACE        0x00000004  
+                   // Delete and recreate the namespace for this snapshot.
+
+//=============================================================================
+//
+// Extended Errors returned by RSoP WMI Providers
+//
+//=============================================================================
+
+// User accessing the rsop provider doesn't have access to user data.
+#define RSOP_USER_ACCESS_DENIED 	0x00000001  
+
+// User accessing the rsop provider doesn't have access to computer data.
+#define RSOP_COMPUTER_ACCESS_DENIED 	0x00000002  
+
+// This user is an interactive non admin user, the temp snapshot namespace already exists
+// and the FLAG_FORCE_CREATENAMESPACE was not passed in
+#define RSOP_TEMPNAMESPACE_EXISTS        0x00000004
+
+
 
 #ifdef __cplusplus
 }
 #endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // _INC_USERENV

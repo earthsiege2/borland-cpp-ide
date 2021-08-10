@@ -3,18 +3,18 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
 unit Graphics;
 
-{$P+,S-,W-,R-,T-,X+,H+}
+{$P+,S-,W-,R-,T-,X+,H+,B-}
 {$C PRELOAD}
 
 interface
 
-uses Windows, SysUtils, Classes;
+uses Windows, Types, SysUtils, Classes;
 
 { Graphics Objects }
 
@@ -53,8 +53,16 @@ const
   clBtnHighlight = TColor(COLOR_BTNHIGHLIGHT or $80000000);
   cl3DDkShadow = TColor(COLOR_3DDKSHADOW or $80000000);
   cl3DLight = TColor(COLOR_3DLIGHT or $80000000);
+
   clInfoText = TColor(COLOR_INFOTEXT or $80000000);
   clInfoBk = TColor(COLOR_INFOBK or $80000000);
+  clHotLight = TColor(COLOR_HOTLIGHT or $80000000);
+
+  clGradientActiveCaption = TColor(COLOR_GRADIENTACTIVECAPTION or $80000000);
+  clGradientInactiveCaption = TColor(COLOR_GRADIENTINACTIVECAPTION or $80000000);
+
+  clMenuHighlight = TColor(COLOR_MENUHILIGHT or $80000000);
+  clMenuBar = TColor(COLOR_MENUBAR or $80000000);
 
   clBlack = TColor($000000);
   clMaroon = TColor($000080);
@@ -74,6 +82,14 @@ const
   clLtGray = TColor($C0C0C0);
   clDkGray = TColor($808080);
   clWhite = TColor($FFFFFF);
+  StandardColorsCount = 16;
+
+  clMoneyGreen = TColor($C0DCC0);
+  clSkyBlue = TColor($F0CAA6);
+  clCream = TColor($F0FBFF);
+  clMedGray = TColor($A4A0A0);
+  ExtendedColorsCount = 4;
+
   clNone = TColor($1FFFFFFF);
   clDefault = TColor($20000000);
 
@@ -188,6 +204,7 @@ type
     procedure Lock;
     procedure Unlock;
   public
+    function HandleAllocated: Boolean;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
     property OwnerCriticalSection: PRTLCriticalSection read FOwnerLock write FOwnerLock;
   end;
@@ -289,6 +306,21 @@ type
     property Style: TBrushStyle read GetStyle write SetStyle default bsSolid;
   end;
 
+  TFontRecall = class(TRecall)
+  public
+    constructor Create(AFont: TFont);
+  end;
+
+  TPenRecall = class(TRecall)
+  public
+    constructor Create(APen: TPen);
+  end;
+
+  TBrushRecall = class(TRecall)
+  public
+    constructor Create(ABrush: TBrush);
+  end;
+
   TFillStyle = (fsSurface, fsBorder);
   TFillMode = (fmAlternate, fmWinding);
 
@@ -351,6 +383,7 @@ type
     procedure FillRect(const Rect: TRect);
     procedure FloodFill(X, Y: Integer; Color: TColor; FillStyle: TFillStyle);
     procedure FrameRect(const Rect: TRect);
+    function HandleAllocated: Boolean;
     procedure LineTo(X, Y: Integer);
     procedure Lock;
     procedure MoveTo(X, Y: Integer);
@@ -453,7 +486,7 @@ type
       OnProgress - Generic progress indicator event. Propagates out to TPicture
         and TImage OnProgress events.}
 
-  TGraphic = class(TPersistent)
+  TGraphic = class(TInterfacedPersistent, IStreamPersist)
   private
     FOnChange: TNotifyEvent;
     FOnProgress: TProgressEvent;
@@ -462,7 +495,6 @@ type
     FPaletteModified: Boolean;
     procedure SetModified(Value: Boolean);
   protected
-    constructor Create; virtual;
     procedure Changed(Sender: TObject); virtual;
     procedure DefineProperties(Filer: TFiler); override;
     procedure Draw(ACanvas: TCanvas; const Rect: TRect); virtual; abstract;
@@ -481,6 +513,7 @@ type
     procedure SetWidth(Value: Integer); virtual; abstract;
     procedure WriteData(Stream: TStream); virtual;
   public
+    constructor Create; virtual;
     procedure LoadFromFile(const Filename: string); virtual;
     procedure SaveToFile(const Filename: string); virtual;
     procedure LoadFromStream(Stream: TStream); virtual; abstract;
@@ -541,7 +574,8 @@ type
         contents are thrown away and a blank icon is returned.
       Metafile - Returns a metafile.  If the contents is not already a metafile,
         the contents are thrown away and a blank metafile is returned. }
-  TPicture = class(TPersistent)
+
+  TPicture = class(TInterfacedPersistent, IStreamPersist)
   private
     FGraphic: TGraphic;
     FOnChange: TNotifyEvent;
@@ -562,9 +596,11 @@ type
   protected
     procedure AssignTo(Dest: TPersistent); override;
     procedure Changed(Sender: TObject); dynamic;
+    procedure DefineProperties(Filer: TFiler); override;
     procedure Progress(Sender: TObject; Stage: TProgressStage;
       PercentDone: Byte;  RedrawNow: Boolean; const R: TRect; const Msg: string); dynamic;
-    procedure DefineProperties(Filer: TFiler); override;
+    procedure LoadFromStream(Stream: TStream);
+    procedure SaveToStream(Stream: TStream); 
   public
     constructor Create;
     destructor Destroy; override;
@@ -727,6 +763,7 @@ type
     constructor Create; override;
     destructor Destroy; override;
     procedure Clear;
+    function HandleAllocated: Boolean;
     procedure LoadFromStream(Stream: TStream); override;
     procedure SaveToFile(const Filename: String); override;
     procedure SaveToStream(Stream: TStream); override;
@@ -805,7 +842,7 @@ type
     procedure NewImage(NewHandle: HBITMAP; NewPalette: HPALETTE;
       const NewDIB: TDIBSection; OS2Format: Boolean; RLEStream: TStream = nil);
     procedure ReadStream(Stream: TStream; Size: Longint);
-    procedure ReadDIB(Stream: TStream; ImageSize: LongWord);
+    procedure ReadDIB(Stream: TStream; ImageSize: LongWord; bmf: PBitmapFileHeader = nil);
     procedure SetHandle(Value: HBITMAP);
     procedure SetHandleType(Value: TBitmapHandleType); virtual;
     procedure SetMaskHandle(Value: HBITMAP);
@@ -836,6 +873,7 @@ type
     procedure Assign(Source: TPersistent); override;
     procedure Dormant;
     procedure FreeImage;
+    function HandleAllocated: Boolean;
     procedure LoadFromClipboardFormat(AFormat: Word; AData: THandle;
       APalette: HPALETTE); override;
     procedure LoadFromStream(Stream: TStream); override;
@@ -899,6 +937,7 @@ type
     constructor Create; override;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
+    function HandleAllocated: Boolean;
     procedure LoadFromClipboardFormat(AFormat: Word; AData: THandle;
       APalette: HPALETTE); override;
     procedure LoadFromStream(Stream: TStream); override;
@@ -917,7 +956,6 @@ var    // New TFont instances are intialized with the values in this structure:
     Style: [];
     Charset : DEFAULT_CHARSET;
     Name: 'MS Sans Serif');
-
 
 var
   SystemPalette16: HPalette; // 16 color palette that maps to the system palette
@@ -1212,7 +1250,7 @@ end;
 { Color mapping routines }
 
 const
-  Colors: array[0..41] of TIdentMapEntry = (
+  Colors: array[0..51] of TIdentMapEntry = (
     (Value: clBlack; Name: 'clBlack'),
     (Value: clMaroon; Name: 'clMaroon'),
     (Value: clGreen; Name: 'clGreen'),
@@ -1229,32 +1267,45 @@ const
     (Value: clFuchsia; Name: 'clFuchsia'),
     (Value: clAqua; Name: 'clAqua'),
     (Value: clWhite; Name: 'clWhite'),
-    (Value: clScrollBar; Name: 'clScrollBar'),
-    (Value: clBackground; Name: 'clBackground'),
-    (Value: clActiveCaption; Name: 'clActiveCaption'),
-    (Value: clInactiveCaption; Name: 'clInactiveCaption'),
-    (Value: clMenu; Name: 'clMenu'),
-    (Value: clWindow; Name: 'clWindow'),
-    (Value: clWindowFrame; Name: 'clWindowFrame'),
-    (Value: clMenuText; Name: 'clMenuText'),
-    (Value: clWindowText; Name: 'clWindowText'),
-    (Value: clCaptionText; Name: 'clCaptionText'),
+
+    (Value: clMoneyGreen; Name: 'clMoneyGreen'),
+    (Value: clSkyBlue; Name: 'clSkyBlue'),
+    (Value: clCream; Name: 'clCream'),
+    (Value: clMedGray; Name: 'clMedGray'),
+
     (Value: clActiveBorder; Name: 'clActiveBorder'),
-    (Value: clInactiveBorder; Name: 'clInactiveBorder'),
+    (Value: clActiveCaption; Name: 'clActiveCaption'),
     (Value: clAppWorkSpace; Name: 'clAppWorkSpace'),
+    (Value: clBackground; Name: 'clBackground'),
+    (Value: clBtnFace; Name: 'clBtnFace'),
+    (Value: clBtnHighlight; Name: 'clBtnHighlight'),
+    (Value: clBtnShadow; Name: 'clBtnShadow'),
+    (Value: clBtnText; Name: 'clBtnText'),
+    (Value: clCaptionText; Name: 'clCaptionText'),
+    (Value: clDefault; Name: 'clDefault'),
+    (Value: clGradientActiveCaption; Name: 'clGradientActiveCaption'),
+    (Value: clGradientInactiveCaption; Name: 'clGradientInactiveCaption'),
+    (Value: clGrayText; Name: 'clGrayText'),
     (Value: clHighlight; Name: 'clHighlight'),
     (Value: clHighlightText; Name: 'clHighlightText'),
-    (Value: clBtnFace; Name: 'clBtnFace'),
-    (Value: clBtnShadow; Name: 'clBtnShadow'),
-    (Value: clGrayText; Name: 'clGrayText'),
-    (Value: clBtnText; Name: 'clBtnText'),
+    (Value: clHotLight; Name: 'clHotLight'),
+    (Value: clInactiveBorder; Name: 'clInactiveBorder'),
+    (Value: clInactiveCaption; Name: 'clInactiveCaption'),
     (Value: clInactiveCaptionText; Name: 'clInactiveCaptionText'),
-    (Value: clBtnHighlight; Name: 'clBtnHighlight'),
+    (Value: clInfoBk; Name: 'clInfoBk'),
+    (Value: clInfoText; Name: 'clInfoText'),
+    (Value: clMenu; Name: 'clMenu'),
+    (Value: clMenuBar; Name: 'clMenuBar'),
+    (Value: clMenuHighlight; Name: 'clMenuHighlight'),
+    (Value: clMenuText; Name: 'clMenuText'),
+    (Value: clNone; Name: 'clNone'),
+    (Value: clScrollBar; Name: 'clScrollBar'),
     (Value: cl3DDkShadow; Name: 'cl3DDkShadow'),
     (Value: cl3DLight; Name: 'cl3DLight'),
-    (Value: clInfoText; Name: 'clInfoText'),
-    (Value: clInfoBk; Name: 'clInfoBk'),
-    (Value: clNone; Name: 'clNone'));
+    (Value: clWindow; Name: 'clWindow'),
+    (Value: clWindowFrame; Name: 'clWindowFrame'),
+    (Value: clWindowText; Name: 'clWindowText'));
+
 
 function ColorToRGB(Color: TColor): Longint;
 begin
@@ -1307,6 +1358,11 @@ end;
 procedure TGraphicsObject.Unlock;
 begin
   if Assigned(FOwnerLock) then LeaveCriticalSection(FOwnerLock^);
+end;
+
+function TGraphicsObject.HandleAllocated: Boolean;
+begin
+  Result := (FResource <> nil) and (FResource^.Handle <> 0);
 end;
 
 { TFont }
@@ -1887,6 +1943,27 @@ begin
   SetData(BrushData);
 end;
 
+{ TFontRecall }
+
+constructor TFontRecall.Create(AFont: TFont);
+begin
+  inherited Create(TFont.Create, AFont);
+end;
+
+{ TPenRecall }
+
+constructor TPenRecall.Create(APen: TPen);
+begin
+  inherited Create(TPen.Create, APen);
+end;
+
+{ TBrushRecall }
+
+constructor TBrushRecall.Create(ABrush: TBrush);
+begin
+  inherited Create(TBrush.Create, ABrush);
+end;
+
 { TCanvas }
 
 constructor TCanvas.Create;
@@ -2086,6 +2163,11 @@ begin
   Changed;
 end;
 
+function TCanvas.HandleAllocated: Boolean;
+begin
+  Result := FHandle <> 0;
+end;
+
 procedure TCanvas.LineTo(X, Y: Integer);
 begin
   Changing;
@@ -2219,7 +2301,8 @@ begin
   Changing;
   RequiredState([csHandleValid, csFontValid, csBrushValid]);
   Options := ETO_CLIPPED or FTextFlags;
-  if Brush.Style <> bsClear then Inc(Options, ETO_OPAQUE);
+  if Brush.Style <> bsClear then
+    Options := Options or ETO_OPAQUE;
   if ((FTextFlags and ETO_RTLREADING) <> 0) and
      (CanvasOrientation = coRightToLeft) then Inc(X, TextWidth(Text) + 1);
   Windows.ExtTextOut(FHandle, X, Y, Options, @Rect, PChar(Text),
@@ -3240,8 +3323,8 @@ end;
 { TGraphic }
 
 constructor TGraphic.Create;
-begin
-  inherited Create;
+begin                 // This stub is required for C++ compatibility.
+  inherited Create;   // C++ doesn't support abstract virtual constructors.
 end;
 
 procedure TGraphic.Changed(Sender: TObject);
@@ -3737,6 +3820,16 @@ begin
   Result := GetClipboardFormats.FindFormat(AFormat) <> nil;
 end;
 
+procedure TPicture.LoadFromStream(Stream: TStream);
+begin
+  Bitmap.LoadFromStream(Stream);
+end;
+
+procedure TPicture.SaveToStream(Stream: TStream);
+begin
+  Bitmap.SaveToStream(Stream);
+end;
+
 procedure TPicture.Assign(Source: TPersistent);
 begin
   if Source = nil then
@@ -4046,6 +4139,11 @@ begin
     Result := FImage.FHandle
   else
     Result := 0;
+end;
+
+function TMetaFile.HandleAllocated: Boolean;
+begin
+  Result := Assigned(FImage) and (FImage.FHandle <> 0);
 end;
 
 const
@@ -4981,7 +5079,7 @@ begin
 
         if (biBitCount <= 8) then
         begin
-          if (biBitCount = 1) and (SrcDIB.dsbm.bmBits = nil) then
+          if (biBitCount = 1) and ((Handle = 0) or (SrcDIB.dsbm.bmBits = nil)) then
           begin  // set mono DIB to white/black when converting from DDB.
             Integer(BI^.bmiColors[0]) := 0;
             PInteger(Integer(@BI^.bmiColors) + sizeof(Integer))^ := $FFFFFF;
@@ -5259,10 +5357,18 @@ begin
 end;
 
 procedure TBitmap.Dormant;
+var
+  s: TMemoryStream;
+  DIB: TDIBSection;
 begin
-  FreeContext; // !! InternalDeletePalette fails without this
-  DIBNeeded;
-  FImage.FreeHandle;
+  s := TMemoryStream.Create;
+  SaveToStream(s);
+  S.Size := S.Size;  // compact to minimum buffer
+  DIB := FImage.FDIB;
+  DIB.dsbm.bmBits := nil;
+  FreeContext; // InternalDeletePalette requires this
+  FreeAndNil(FCanvas);
+  NewImage(0, 0, DIB, FImage.FOS2Format, s);
 end;
 
 procedure TBitmap.Draw(ACanvas: TCanvas; const Rect: TRect);
@@ -5361,7 +5467,7 @@ end;
 function TBitmap.GetEmpty;
 begin
   with FImage do
-    Result := (FHandle = 0) and (FDIBHandle = 0);
+    Result := (FHandle = 0) and (FDIBHandle = 0) and (FSaveStream = nil);
 end;
 
 function TBitmap.GetCanvas: TCanvas;
@@ -5369,9 +5475,12 @@ begin
   if FCanvas = nil then
   begin
     HandleNeeded;
-    FCanvas := TBitmapCanvas.Create(Self);
-    FCanvas.OnChange := Changed;
-    FCanvas.OnChanging := Changing;
+    if FCanvas = nil then    // possible recursion
+    begin
+      FCanvas := TBitmapCanvas.Create(Self);
+      FCanvas.OnChange := Changed;
+      FCanvas.OnChanging := Changing;
+    end;
   end;
   Result := FCanvas;
 end;
@@ -5385,6 +5494,11 @@ begin
   HandleNeeded;
   Changing(Self);
   Result := FImage.FHandle;
+end;
+
+function TBitmap.HandleAllocated: Boolean;
+begin
+  Result := Assigned(FImage) and (FImage.FHandle <> 0);
 end;
 
 function TBitmap.GetHandleType: TBitmapHandleType;
@@ -5452,7 +5566,7 @@ begin
   Changing(Self);
   with FImage.FDIB, dsbm, dsbmih do
   begin
-    if (Row < 0) or (Row > bmHeight) then
+    if (Row < 0) or (Row >= bmHeight) then
       InvalidOperation(@SScanLine);
     DIBNeeded;
     GDIFlush;
@@ -5509,7 +5623,21 @@ begin
 end;
 
 procedure TBitmap.HandleNeeded;
+var
+  vChange: TNotifyEvent;
 begin
+  if (FImage.FHandle = 0) and (FImage.FDIBHandle = 0) and (FImage.FSaveStream <> nil) then
+  begin
+    FImage.FSaveStream.Position := 0;
+    vChange := OnChange;
+    try
+      OnChange := nil;
+      LoadFromStream(FImage.FSaveStream);  // Current FImage may be destroyed here
+    finally
+      OnChange := vChange;
+    end;
+  end;
+
   with FImage do
     if FHandle = 0 then
       FHandle := FDIBHandle;
@@ -5666,7 +5794,7 @@ begin
   ReadStream(Stream, Size);
 end;
 
-procedure TBitmap.ReadDIB(Stream: TStream; ImageSize: LongWord);
+procedure TBitmap.ReadDIB(Stream: TStream; ImageSize: LongWord; bmf: PBitmapFileHeader);
 const
   DIBPalSizes: array [Boolean] of Byte = (sizeof(TRGBQuad), sizeof(TRGBTriple));
 var
@@ -5681,6 +5809,7 @@ var
   DIB: TDIBSection;
   Pal, OldPal: HPalette;
   RLEStream: TStream;
+  vbmf: TBitmapFileHeader;
 begin
   Pal := 0;
   BMHandle := 0;
@@ -5717,6 +5846,14 @@ begin
         begin // Preserve funky non-DIB data (like RLE) until modified
           RLEStream := TMemoryStream.Create;
           // source stream could be unidirectional.  don't reverse seek
+          if bmf = nil then
+          begin
+            FillChar(vbmf, sizeof(vbmf), 0);
+            vbmf.bfType := $4D42;
+            vbmf.bfSize := ImageSize + Cardinal(HeaderSize);
+            bmf := @vbmf;
+          end;
+          RLEStream.Write(bmf^, sizeof(bmf^));
           RLEStream.Write(HeaderSize, sizeof(HeaderSize));
           RLEStream.Write(Pointer(Longint(BitmapInfo) + sizeof(HeaderSize))^,
             HeaderSize - sizeof(HeaderSize));
@@ -5784,7 +5921,7 @@ begin
               BMHandle := CreateDIBitmap(MemDC, BitmapInfo^.bmiHeader, CBM_INIT, BitsMem,
                 BitmapInfo^, DIB_RGB_COLORS);
               if (BMHandle = 0) then
-                if GetLastError = 0 then InvalidBitmap else RaiseLastWin32Error;
+                if GetLastError = 0 then InvalidBitmap else RaiseLastOSError;
             finally
               if OldPal <> 0 then
                 SelectPalette(MemDC, OldPal, True);
@@ -5799,7 +5936,7 @@ begin
         begin
           BMHandle := CreateDIBSection(DC, BitmapInfo^, DIB_RGB_COLORS, BitsMem, 0, 0);
           if (BMHandle = 0) or (BitsMem = nil) then
-            if GetLastError = 0 then InvalidBitmap else RaiseLastWin32Error;
+            if GetLastError = 0 then InvalidBitmap else RaiseLastOSError;
 
           try
             Stream.ReadBuffer(BitsMem^, ImageSize);
@@ -5849,7 +5986,7 @@ begin
   begin
     Stream.ReadBuffer(Bmf, sizeof(Bmf));
     if Bmf.bfType <> $4D42 then InvalidBitmap;
-    ReadDIB(Stream, Size - sizeof(Bmf));
+    ReadDIB(Stream, Size - sizeof(Bmf), @Bmf);
   end;
 end;
 
@@ -6145,11 +6282,9 @@ begin
   BMF.bfType := $4D42;
   if FImage.FSaveStream <> nil then
   begin
-    Size := FImage.FSaveStream.Size + sizeof(BMF);
-    BMF.bfSize := Size;
+    Size := FImage.FSaveStream.Size;
     if WriteSize then
       Stream.WriteBuffer(Size, sizeof(Size));
-    Stream.Write(BMF, sizeof(BMF));
     Stream.Write(FImage.FSaveStream.Memory^, FImage.FSaveStream.Size);
     Exit;
   end;
@@ -6359,6 +6494,11 @@ function TIcon.GetHandle: HICON;
 begin
   HandleNeeded;
   Result := FImage.FHandle;
+end;
+
+function TIcon.HandleAllocated: Boolean;
+begin
+  Result := Assigned(FImage) and (FImage.FHandle <> 0);
 end;
 
 function TIcon.GetHeight: Integer;

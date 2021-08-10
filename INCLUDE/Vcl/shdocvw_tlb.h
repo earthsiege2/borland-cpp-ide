@@ -9,19 +9,20 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.1.2  $
-// File generated on 1/24/2000 10:19:59 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/24/2002 7:03:48 PM from Type Library described below.
 
-// ************************************************************************ //
-// Type Lib: \winnt\system32\shdocvw.dll (1)
-// IID\LCID: {EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}\0
+// ************************************************************************  //
+// Type Lib: ..\typelibraries\shdocvw.dll (1)
+// LIBID: {EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}
+// LCID: 0
 // Helpfile: 
+// HelpString: Microsoft Internet Controls
 // DepndLst: 
-//   (1) v2.0 stdole, (D:\WINNT\System32\stdole2.tlb)
-//   (2) v4.0 StdVCL, (D:\tlbgen\rampage\typelib\typelibraries\testing\stdvcl40.tlb)
+//   (1) v2.0 stdole, (C:\WINNT\System32\stdole2.tlb)
 // ************************************************************************ //
-#ifndef   __SHDocVw_TLB_h__
-#define   __SHDocVw_TLB_h__
+#ifndef   SHDocVw_TLBH
+#define   SHDocVw_TLBH
 
 #pragma option push -b -w-inl
 
@@ -38,6 +39,11 @@
 #endif
 #include <olectl.h>
 #include <ocidl.h>
+#if defined(USING_ATLVCL) || defined(USING_ATL)
+#if !defined(__TLB_NO_EVENT_WRAPPERS)
+#include <atl/atlmod.h>
+#endif
+#endif
 
 
 // *********************************************************************//
@@ -56,6 +62,29 @@ namespace Shdocvw_tlb
 // Version:    1.1
 // *********************************************************************//
 
+/*   **********************************************************
+
+  Type Library Options: 
+  Generate C++ Import file
+  Expose namespace with 'using'.
+  Generate files for dependant type libraries
+  Map HRESULT to safecall on dual interfaces
+  Place warnings in imported files
+  Generate IDE registration for component wrappers
+  Generate dispinterfaces
+  Generate CoClassCreator wrappers
+  Generate VCL component wrappers for controls
+  Generate C++Builder 4.0 event wrappers for servers
+  Generate VCL component wrappers for servers
+  Use declspec(__selectany) for GUIDs
+  Ignore [Hidden] flag
+  Ignore [PreDefined] flag
+  Ignore [Restricted] flag
+  Ignore [UnCreatable] flag
+  Ignore Standard Type Libraries
+  Show Debug Output
+  Place comments in imported files
+   ******************************************************** */
 
 // *********************************************************************//
 // GUIDS declared in the TypeLibrary. Following prefixes are used:        
@@ -64,39 +93,42 @@ namespace Shdocvw_tlb
 //   DISPInterfaces     : DIID_xxxx                                       
 //   Non-DISP interfaces: IID_xxxx                                        
 // *********************************************************************//
-extern __declspec (package) const GUID LIBID_SHDocVw;
-extern __declspec (package) const GUID IID_IWebBrowser;
-extern __declspec (package) const GUID DIID_DWebBrowserEvents;
-extern __declspec (package) const GUID GUID_CommandStateChangeConstants;
-extern __declspec (package) const GUID IID_IWebBrowserApp;
-extern __declspec (package) const GUID IID_IWebBrowser2;
-extern __declspec (package) const GUID GUID_OLECMDID;
-extern __declspec (package) const GUID GUID_OLECMDF;
-extern __declspec (package) const GUID GUID_OLECMDEXECOPT;
-extern __declspec (package) const GUID GUID_tagREADYSTATE;
-extern __declspec (package) const GUID DIID_DWebBrowserEvents2;
-extern __declspec (package) const GUID CLSID_CppWebBrowser_V1;
-extern __declspec (package) const GUID CLSID_CppWebBrowser;
-extern __declspec (package) const GUID CLSID_CppInternetExplorer;
-extern __declspec (package) const GUID CLSID_CppShellBrowserWindow;
-extern __declspec (package) const GUID GUID_ShellWindowTypeConstants;
-extern __declspec (package) const GUID GUID_ShellWindowFindWindowOptions;
-extern __declspec (package) const GUID DIID_DShellWindowsEvents;
-extern __declspec (package) const GUID IID_IShellWindows;
-extern __declspec (package) const GUID CLSID_CppShellWindows;
-extern __declspec (package) const GUID IID_IShellUIHelper;
-extern __declspec (package) const GUID CLSID_CppShellUIHelper;
-extern __declspec (package) const GUID DIID__ShellFavoritesNameSpaceEvents;
-extern __declspec (package) const GUID IID_IShellFavoritesNameSpace;
-extern __declspec (package) const GUID CLSID_ShellFavoritesNameSpace;
-extern __declspec (package) const GUID IID_IScriptErrorList;
-extern __declspec (package) const GUID CLSID_CScriptErrorList;
-extern __declspec (package) const GUID IID_ISearch;
-extern __declspec (package) const GUID IID_ISearches;
-extern __declspec (package) const GUID IID_ISearchAssistantOC;
-extern __declspec (package) const GUID IID_ISearchAssistantOC2;
-extern __declspec (package) const GUID DIID__SearchAssistantEvents;
-extern __declspec (package) const GUID CLSID_CppSearchAssistantOC;
+extern "C" const __declspec(selectany) GUID LIBID_SHDocVw = {0xEAB22AC0, 0x30C1, 0x11CF,{ 0xA7, 0xEB, 0x00,0x00, 0xC0, 0x5B,0xAE, 0x0B} };
+extern "C" const __declspec(selectany) GUID IID_IWebBrowser = {0xEAB22AC1, 0x30C1, 0x11CF,{ 0xA7, 0xEB, 0x00,0x00, 0xC0, 0x5B,0xAE, 0x0B} };
+extern "C" const __declspec(selectany) GUID DIID_DWebBrowserEvents = {0xEAB22AC2, 0x30C1, 0x11CF,{ 0xA7, 0xEB, 0x00,0x00, 0xC0, 0x5B,0xAE, 0x0B} };
+extern "C" const __declspec(selectany) GUID GUID_CommandStateChangeConstants = {0x34A226E0, 0xDF30, 0x11CF,{ 0x89, 0xA9, 0x00,0xA0, 0xC9, 0x05,0x41, 0x29} };
+extern "C" const __declspec(selectany) GUID IID_IWebBrowserApp = {0x0002DF05, 0x0000, 0x0000,{ 0xC0, 0x00, 0x00,0x00, 0x00, 0x00,0x00, 0x46} };
+extern "C" const __declspec(selectany) GUID IID_IWebBrowser2 = {0xD30C1661, 0xCDAF, 0x11D0,{ 0x8A, 0x3E, 0x00,0xC0, 0x4F, 0xC9,0xE2, 0x6E} };
+extern "C" const __declspec(selectany) GUID GUID_OLECMDID = {0x00000000, 0x0000, 0x0000,{ 0x00, 0x00, 0x00,0x00, 0x00, 0x00,0x00, 0x00} };
+extern "C" const __declspec(selectany) GUID GUID_OLECMDF = {0x00000000, 0x0000, 0x0000,{ 0x00, 0x00, 0x00,0x00, 0x00, 0x00,0x00, 0x00} };
+extern "C" const __declspec(selectany) GUID GUID_OLECMDEXECOPT = {0x00000000, 0x0000, 0x0000,{ 0x00, 0x00, 0x00,0x00, 0x00, 0x00,0x00, 0x00} };
+extern "C" const __declspec(selectany) GUID GUID_tagREADYSTATE = {0x00000000, 0x0000, 0x0000,{ 0x00, 0x00, 0x00,0x00, 0x00, 0x00,0x00, 0x00} };
+extern "C" const __declspec(selectany) GUID GUID_SecureLockIconConstants = {0x65507BE0, 0x91A8, 0x11D3,{ 0xA8, 0x45, 0x00,0x90, 0x27, 0x22,0x0E, 0x6D} };
+extern "C" const __declspec(selectany) GUID DIID_DWebBrowserEvents2 = {0x34A715A0, 0x6587, 0x11D0,{ 0x92, 0x4A, 0x00,0x20, 0xAF, 0xC7,0xAC, 0x4D} };
+extern "C" const __declspec(selectany) GUID CLSID_CppWebBrowser_V1 = {0xEAB22AC3, 0x30C1, 0x11CF,{ 0xA7, 0xEB, 0x00,0x00, 0xC0, 0x5B,0xAE, 0x0B} };
+extern "C" const __declspec(selectany) GUID CLSID_CppWebBrowser = {0x8856F961, 0x340A, 0x11D0,{ 0xA9, 0x6B, 0x00,0xC0, 0x4F, 0xD7,0x05, 0xA2} };
+extern "C" const __declspec(selectany) GUID CLSID_CppInternetExplorer = {0x0002DF01, 0x0000, 0x0000,{ 0xC0, 0x00, 0x00,0x00, 0x00, 0x00,0x00, 0x46} };
+extern "C" const __declspec(selectany) GUID CLSID_CppShellBrowserWindow = {0xC08AFD90, 0xF2A1, 0x11D1,{ 0x84, 0x55, 0x00,0xA0, 0xC9, 0x1F,0x38, 0x80} };
+extern "C" const __declspec(selectany) GUID GUID_ShellWindowTypeConstants = {0xF41E6981, 0x28E5, 0x11D0,{ 0x82, 0xB4, 0x00,0xA0, 0xC9, 0x0C,0x29, 0xC5} };
+extern "C" const __declspec(selectany) GUID GUID_ShellWindowFindWindowOptions = {0x7716A370, 0x38CA, 0x11D0,{ 0xA4, 0x8B, 0x00,0xA0, 0xC9, 0x0A,0x8F, 0x39} };
+extern "C" const __declspec(selectany) GUID DIID_DShellWindowsEvents = {0xFE4106E0, 0x399A, 0x11D0,{ 0xA4, 0x8C, 0x00,0xA0, 0xC9, 0x0A,0x8F, 0x39} };
+extern "C" const __declspec(selectany) GUID IID_IShellWindows = {0x85CB6900, 0x4D95, 0x11CF,{ 0x96, 0x0C, 0x00,0x80, 0xC7, 0xF4,0xEE, 0x85} };
+extern "C" const __declspec(selectany) GUID CLSID_CppShellWindows = {0x9BA05972, 0xF6A8, 0x11CF,{ 0xA4, 0x42, 0x00,0xA0, 0xC9, 0x0A,0x8F, 0x39} };
+extern "C" const __declspec(selectany) GUID IID_IShellUIHelper = {0x729FE2F8, 0x1EA8, 0x11D1,{ 0x8F, 0x85, 0x00,0xC0, 0x4F, 0xC2,0xFB, 0xE1} };
+extern "C" const __declspec(selectany) GUID CLSID_CppShellUIHelper = {0x64AB4BB7, 0x111E, 0x11D1,{ 0x8F, 0x79, 0x00,0xC0, 0x4F, 0xC2,0xFB, 0xE1} };
+extern "C" const __declspec(selectany) GUID DIID_DShellNameSpaceEvents = {0x55136806, 0xB2DE, 0x11D1,{ 0xB9, 0xF2, 0x00,0xA0, 0xC9, 0x8B,0xC5, 0x47} };
+extern "C" const __declspec(selectany) GUID IID_IShellFavoritesNameSpace = {0x55136804, 0xB2DE, 0x11D1,{ 0xB9, 0xF2, 0x00,0xA0, 0xC9, 0x8B,0xC5, 0x47} };
+extern "C" const __declspec(selectany) GUID IID_IShellNameSpace = {0xE572D3C9, 0x37BE, 0x4AE2,{ 0x82, 0x5D, 0xD5,0x21, 0x76, 0x3E,0x31, 0x08} };
+extern "C" const __declspec(selectany) GUID CLSID_ShellFavoritesNameSpace = {0x55136805, 0xB2DE, 0x11D1,{ 0xB9, 0xF2, 0x00,0xA0, 0xC9, 0x8B,0xC5, 0x47} };
+extern "C" const __declspec(selectany) GUID IID_IScriptErrorList = {0xF3470F24, 0x15FD, 0x11D2,{ 0xBB, 0x2E, 0x00,0x80, 0x5F, 0xF7,0xEF, 0xCA} };
+extern "C" const __declspec(selectany) GUID CLSID_CppCScriptErrorList = {0xEFD01300, 0x160F, 0x11D2,{ 0xBB, 0x2E, 0x00,0x80, 0x5F, 0xF7,0xEF, 0xCA} };
+extern "C" const __declspec(selectany) GUID IID_ISearch = {0xBA9239A4, 0x3DD5, 0x11D2,{ 0xBF, 0x8B, 0x00,0xC0, 0x4F, 0xB9,0x36, 0x61} };
+extern "C" const __declspec(selectany) GUID IID_ISearches = {0x47C922A2, 0x3DD5, 0x11D2,{ 0xBF, 0x8B, 0x00,0xC0, 0x4F, 0xB9,0x36, 0x61} };
+extern "C" const __declspec(selectany) GUID IID_ISearchAssistantOC = {0x72423E8F, 0x8011, 0x11D2,{ 0xBE, 0x79, 0x00,0xA0, 0xC9, 0xA8,0x3D, 0xA1} };
+extern "C" const __declspec(selectany) GUID IID_ISearchAssistantOC2 = {0x72423E8F, 0x8011, 0x11D2,{ 0xBE, 0x79, 0x00,0xA0, 0xC9, 0xA8,0x3D, 0xA2} };
+extern "C" const __declspec(selectany) GUID IID_ISearchAssistantOC3 = {0x72423E8F, 0x8011, 0x11D2,{ 0xBE, 0x79, 0x00,0xA0, 0xC9, 0xA8,0x3D, 0xA3} };
+extern "C" const __declspec(selectany) GUID DIID__SearchAssistantEvents = {0x1611FDDA, 0x445B, 0x11D2,{ 0x85, 0xDE, 0x00,0xC0, 0x4F, 0xA3,0x5C, 0x89} };
+extern "C" const __declspec(selectany) GUID CLSID_CppSearchAssistantOC = {0xB45FF030, 0x4447, 0x11D2,{ 0x85, 0xDE, 0x00,0xC0, 0x4F, 0xA3,0x5C, 0x89} };
 
 // *********************************************************************//
 // Forward declaration of types defined in TypeLibrary                    
@@ -106,40 +138,63 @@ enum      OLECMDID;
 enum      OLECMDF;
 enum      OLECMDEXECOPT;
 enum      tagREADYSTATE;
+enum      SecureLockIconConstants;
 enum      ShellWindowTypeConstants;
 enum      ShellWindowFindWindowOptions;
 interface DECLSPEC_UUID("{EAB22AC1-30C1-11CF-A7EB-0000C05BAE0B}") IWebBrowser;
 typedef TComInterface<IWebBrowser, &IID_IWebBrowser> IWebBrowserPtr;
+
 interface DECLSPEC_UUID("{EAB22AC2-30C1-11CF-A7EB-0000C05BAE0B}") DWebBrowserEvents;
 typedef TComInterface<DWebBrowserEvents, &DIID_DWebBrowserEvents> DWebBrowserEventsPtr;
+
 interface DECLSPEC_UUID("{0002DF05-0000-0000-C000-000000000046}") IWebBrowserApp;
 typedef TComInterface<IWebBrowserApp, &IID_IWebBrowserApp> IWebBrowserAppPtr;
+
 interface DECLSPEC_UUID("{D30C1661-CDAF-11D0-8A3E-00C04FC9E26E}") IWebBrowser2;
 typedef TComInterface<IWebBrowser2, &IID_IWebBrowser2> IWebBrowser2Ptr;
+
 interface DECLSPEC_UUID("{34A715A0-6587-11D0-924A-0020AFC7AC4D}") DWebBrowserEvents2;
 typedef TComInterface<DWebBrowserEvents2, &DIID_DWebBrowserEvents2> DWebBrowserEvents2Ptr;
+
 interface DECLSPEC_UUID("{FE4106E0-399A-11D0-A48C-00A0C90A8F39}") DShellWindowsEvents;
 typedef TComInterface<DShellWindowsEvents, &DIID_DShellWindowsEvents> DShellWindowsEventsPtr;
+
 interface DECLSPEC_UUID("{85CB6900-4D95-11CF-960C-0080C7F4EE85}") IShellWindows;
 typedef TComInterface<IShellWindows, &IID_IShellWindows> IShellWindowsPtr;
+
 interface DECLSPEC_UUID("{729FE2F8-1EA8-11D1-8F85-00C04FC2FBE1}") IShellUIHelper;
 typedef TComInterface<IShellUIHelper, &IID_IShellUIHelper> IShellUIHelperPtr;
-interface DECLSPEC_UUID("{55136806-B2DE-11D1-B9F2-00A0C98BC547}") _ShellFavoritesNameSpaceEvents;
-typedef TComInterface<_ShellFavoritesNameSpaceEvents, &DIID__ShellFavoritesNameSpaceEvents> _ShellFavoritesNameSpaceEventsPtr;
+
+interface DECLSPEC_UUID("{55136806-B2DE-11D1-B9F2-00A0C98BC547}") DShellNameSpaceEvents;
+typedef TComInterface<DShellNameSpaceEvents, &DIID_DShellNameSpaceEvents> DShellNameSpaceEventsPtr;
+
 interface DECLSPEC_UUID("{55136804-B2DE-11D1-B9F2-00A0C98BC547}") IShellFavoritesNameSpace;
 typedef TComInterface<IShellFavoritesNameSpace, &IID_IShellFavoritesNameSpace> IShellFavoritesNameSpacePtr;
+
+interface DECLSPEC_UUID("{E572D3C9-37BE-4AE2-825D-D521763E3108}") IShellNameSpace;
+typedef TComInterface<IShellNameSpace, &IID_IShellNameSpace> IShellNameSpacePtr;
+
 interface DECLSPEC_UUID("{F3470F24-15FD-11D2-BB2E-00805FF7EFCA}") IScriptErrorList;
 typedef TComInterface<IScriptErrorList, &IID_IScriptErrorList> IScriptErrorListPtr;
+
 interface DECLSPEC_UUID("{BA9239A4-3DD5-11D2-BF8B-00C04FB93661}") ISearch;
 typedef TComInterface<ISearch, &IID_ISearch> ISearchPtr;
+
 interface DECLSPEC_UUID("{47C922A2-3DD5-11D2-BF8B-00C04FB93661}") ISearches;
 typedef TComInterface<ISearches, &IID_ISearches> ISearchesPtr;
+
 interface DECLSPEC_UUID("{72423E8F-8011-11D2-BE79-00A0C9A83DA1}") ISearchAssistantOC;
 typedef TComInterface<ISearchAssistantOC, &IID_ISearchAssistantOC> ISearchAssistantOCPtr;
+
 interface DECLSPEC_UUID("{72423E8F-8011-11D2-BE79-00A0C9A83DA2}") ISearchAssistantOC2;
 typedef TComInterface<ISearchAssistantOC2, &IID_ISearchAssistantOC2> ISearchAssistantOC2Ptr;
+
+interface DECLSPEC_UUID("{72423E8F-8011-11D2-BE79-00A0C9A83DA3}") ISearchAssistantOC3;
+typedef TComInterface<ISearchAssistantOC3, &IID_ISearchAssistantOC3> ISearchAssistantOC3Ptr;
+
 interface DECLSPEC_UUID("{1611FDDA-445B-11D2-85DE-00C04FA35C89}") _SearchAssistantEvents;
 typedef TComInterface<_SearchAssistantEvents, &DIID__SearchAssistantEvents> _SearchAssistantEventsPtr;
+
 
 // *********************************************************************//
 // Declaration of CoClasses defined in Type Library                       
@@ -161,12 +216,12 @@ typedef IShellWindows CppShellWindows;
 typedef IShellWindowsPtr CppShellWindowsPtr;
 typedef IShellUIHelper CppShellUIHelper;
 typedef IShellUIHelperPtr CppShellUIHelperPtr;
-typedef IShellFavoritesNameSpace ShellFavoritesNameSpace;
-typedef IShellFavoritesNameSpacePtr ShellFavoritesNameSpacePtr;
-typedef IScriptErrorList CScriptErrorList;
-typedef IScriptErrorListPtr CScriptErrorListPtr;
-typedef ISearchAssistantOC2 CppSearchAssistantOC;
-typedef ISearchAssistantOC2Ptr CppSearchAssistantOCPtr;
+typedef IShellNameSpace ShellFavoritesNameSpace;
+typedef IShellNameSpacePtr ShellFavoritesNameSpacePtr;
+typedef IScriptErrorList CppCScriptErrorList;
+typedef IScriptErrorListPtr CppCScriptErrorListPtr;
+typedef ISearchAssistantOC3 CppSearchAssistantOC;
+typedef ISearchAssistantOC3Ptr CppSearchAssistantOCPtr;
 
 #define LIBID_OF_CppWebBrowser_V1 (&LIBID_SHDocVw)
 #define LIBID_OF_CppWebBrowser (&LIBID_SHDocVw)
@@ -175,7 +230,7 @@ typedef ISearchAssistantOC2Ptr CppSearchAssistantOCPtr;
 #define LIBID_OF_CppShellWindows (&LIBID_SHDocVw)
 #define LIBID_OF_CppShellUIHelper (&LIBID_SHDocVw)
 #define LIBID_OF_ShellFavoritesNameSpace (&LIBID_SHDocVw)
-#define LIBID_OF_CScriptErrorList (&LIBID_SHDocVw)
+#define LIBID_OF_CppCScriptErrorList (&LIBID_SHDocVw)
 #define LIBID_OF_CppSearchAssistantOC (&LIBID_SHDocVw)
 
 // *********************************************************************//
@@ -236,7 +291,12 @@ typedef enum OLECMDID
   OLECMDID_SHOWPRINT = 44, 
   OLECMDID_CLOSE = 45, 
   OLECMDID_ALLOWUILESSSAVEAS = 46, 
-  OLECMDID_DONTDOWNLOADCSS = 47
+  OLECMDID_DONTDOWNLOADCSS = 47, 
+  OLECMDID_UPDATEPAGESTATUS = 48, 
+  OLECMDID_PRINT2 = 49, 
+  OLECMDID_PRINTPREVIEW2 = 50, 
+  OLECMDID_SETPRINTTEMPLATE = 51, 
+  OLECMDID_GETPRINTTEMPLATE = 52
 } OLECMDID;
 
 typedef enum OLECMDF
@@ -265,6 +325,17 @@ typedef enum tagREADYSTATE
   READYSTATE_INTERACTIVE = 3, 
   READYSTATE_COMPLETE = 4
 } tagREADYSTATE;
+
+typedef enum SecureLockIconConstants
+{
+  secureLockIconUnsecure = 0, 
+  secureLockIconMixed = 1, 
+  secureLockIconSecureUnknownBits = 2, 
+  secureLockIconSecure40Bit = 3, 
+  secureLockIconSecure56Bit = 4, 
+  secureLockIconSecureFortezza = 5, 
+  secureLockIconSecure128Bit = 6
+} SecureLockIconConstants;
 
 typedef enum ShellWindowTypeConstants
 {
@@ -299,14 +370,14 @@ public:
   virtual HRESULT STDMETHODCALLTYPE GoSearch(void) = 0;
   // [104] Navigates to a URL or file.
   virtual HRESULT STDMETHODCALLTYPE Navigate(BSTR URL/*[in]*/, 
-                                             TVariant* Flags/*[in,opt]*/= TNoParam(), 
-                                             TVariant* TargetFrameName/*[in,opt]*/= TNoParam(), 
-                                             TVariant* PostData/*[in,opt]*/= TNoParam(), 
-                                             TVariant* Headers/*[in,opt]*/= TNoParam()) = 0;
+                                             VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                                             VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                                             VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                                             VARIANT* Headers/*[in,opt]*/= TNoParam()) = 0;
   // [-550] Refresh the currently viewed page.
   virtual HRESULT STDMETHODCALLTYPE Refresh(void) = 0;
   // [105] Refresh the currently viewed page.
-  virtual HRESULT STDMETHODCALLTYPE Refresh2(TVariant* Level/*[in,opt]*/= TNoParam()) = 0;
+  virtual HRESULT STDMETHODCALLTYPE Refresh2(VARIANT* Level/*[in,opt]*/= TNoParam()) = 0;
   // [106] Stops opening a file.
   virtual HRESULT STDMETHODCALLTYPE Stop(void) = 0;
   // [200] Returns the application automation object if accessible, this automation object otherwise..
@@ -318,7 +389,7 @@ public:
   // [203] Returns the active Document automation object, if any.
   virtual HRESULT STDMETHODCALLTYPE get_Document(LPDISPATCH* ppDisp/*[out,retval]*/) = 0;
   // [204] Returns True if this is the top level object.
-  virtual HRESULT STDMETHODCALLTYPE get_TopLevelContainer(TOLEBOOL* pBool/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_TopLevelContainer(VARIANT_BOOL* pBool/*[out,retval]*/) = 0;
   // [205] Returns the type of the contained document object.
   virtual HRESULT STDMETHODCALLTYPE get_Type(BSTR* Type/*[out,retval]*/) = 0;
   // [206] The horizontal position (pixels) of the frame window relative to the screen/container.
@@ -342,7 +413,7 @@ public:
   // [211] Gets the full URL/path currently viewed.
   virtual HRESULT STDMETHODCALLTYPE get_LocationURL(BSTR* LocationURL/*[out,retval]*/) = 0;
   // [212] Query to see if something is still in progress.
-  virtual HRESULT STDMETHODCALLTYPE get_Busy(TOLEBOOL* pBool/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_Busy(VARIANT_BOOL* pBool/*[out,retval]*/) = 0;
 
 #if !defined(__TLB_NO_INTERFACE_WRAPPERS)
 
@@ -374,10 +445,10 @@ public:
     return ppDisp;
   }
 
-  TOLEBOOL __fastcall get_TopLevelContainer(void)
+  VARIANT_BOOL __fastcall get_TopLevelContainer(void)
   {
-    TOLEBOOL pBool;
-    OLECHECK(this->get_TopLevelContainer((TOLEBOOL*)&pBool));
+    VARIANT_BOOL pBool;
+    OLECHECK(this->get_TopLevelContainer((VARIANT_BOOL*)&pBool));
     return pBool;
   }
 
@@ -430,10 +501,10 @@ public:
     return LocationURL;
   }
 
-  TOLEBOOL __fastcall get_Busy(void)
+  VARIANT_BOOL __fastcall get_Busy(void)
   {
-    TOLEBOOL pBool;
-    OLECHECK(this->get_Busy((TOLEBOOL*)&pBool));
+    VARIANT_BOOL pBool;
+    OLECHECK(this->get_Busy((VARIANT_BOOL*)&pBool));
     return pBool;
   }
 
@@ -442,7 +513,7 @@ public:
   __property   LPDISPATCH      Parent = {read = get_Parent};
   __property   LPDISPATCH      Container = {read = get_Container};
   __property   LPDISPATCH      Document = {read = get_Document};
-  __property   TOLEBOOL        TopLevelContainer = {read = get_TopLevelContainer};
+  __property   VARIANT_BOOL    TopLevelContainer = {read = get_TopLevelContainer};
   __property   BSTR            Type = {read = get_Type};
   __property   long            Left = {read = get_Left, write = set_Left};
   __property   long            Top = {read = get_Top, write = set_Top};
@@ -450,7 +521,7 @@ public:
   __property   long            Height = {read = get_Height, write = set_Height};
   __property   BSTR            LocationName = {read = get_LocationName};
   __property   BSTR            LocationURL = {read = get_LocationURL};
-  __property   TOLEBOOL        Busy = {read = get_Busy};
+  __property   VARIANT_BOOL    Busy = {read = get_Busy};
 
 #endif //   __TLB_NO_INTERFACE_WRAPPERS
 
@@ -464,8 +535,8 @@ public:
 interface DWebBrowserEvents : public TDispWrapper<IDispatch>
 {
   void /*[VT_VOID:0]*/ __fastcall BeforeNavigate(BSTR URL/*[in]*/, long Flags, BSTR TargetFrameName
-                                                 , TVariant* PostData, BSTR Headers, 
-                                                 TOLEBOOL* Cancel/*[in,out]*/)
+                                                 , VARIANT* PostData, BSTR Headers, 
+                                                 VARIANT_BOOL* Cancel/*[in,out]*/)
   {
     _TDispID _dispid(/* BeforeNavigate */ DISPID(100));
     TAutoArgs<6> _args;
@@ -509,7 +580,8 @@ interface DWebBrowserEvents : public TDispWrapper<IDispatch>
     OleProcedure(_dispid);
   }
 
-  void /*[VT_VOID:0]*/ __fastcall CommandStateChange(long Command/*[in]*/, TOLEBOOL Enable/*[in]*/)
+  void /*[VT_VOID:0]*/ __fastcall CommandStateChange(long Command/*[in]*/, 
+                                                     VARIANT_BOOL Enable/*[in]*/)
   {
     _TDispID _dispid(/* CommandStateChange */ DISPID(105));
     TAutoArgs<2> _args;
@@ -525,8 +597,9 @@ interface DWebBrowserEvents : public TDispWrapper<IDispatch>
   }
 
   void /*[VT_VOID:0]*/ __fastcall NewWindow(BSTR URL/*[in]*/, long Flags/*[in]*/, 
-                                            BSTR TargetFrameName/*[in]*/, TVariant* PostData/*[in]*/
-                                            , BSTR Headers/*[in]*/, TOLEBOOL* Processed/*[in,out]*/)
+                                            BSTR TargetFrameName/*[in]*/, VARIANT* PostData/*[in]*/
+                                            , BSTR Headers/*[in]*/, 
+                                            VARIANT_BOOL* Processed/*[in,out]*/)
   {
     _TDispID _dispid(/* NewWindow */ DISPID(107));
     TAutoArgs<6> _args;
@@ -548,8 +621,8 @@ interface DWebBrowserEvents : public TDispWrapper<IDispatch>
   }
 
   void /*[VT_VOID:0]*/ __fastcall FrameBeforeNavigate(BSTR URL/*[in]*/, long Flags, 
-                                                      BSTR TargetFrameName, TVariant* PostData, 
-                                                      BSTR Headers, TOLEBOOL* Cancel/*[in,out]*/)
+                                                      BSTR TargetFrameName, VARIANT* PostData, 
+                                                      BSTR Headers, VARIANT_BOOL* Cancel/*[in,out]*/)
   {
     _TDispID _dispid(/* FrameBeforeNavigate */ DISPID(200));
     TAutoArgs<6> _args;
@@ -572,8 +645,8 @@ interface DWebBrowserEvents : public TDispWrapper<IDispatch>
 
   void /*[VT_VOID:0]*/ __fastcall FrameNewWindow(BSTR URL/*[in]*/, long Flags/*[in]*/, 
                                                  BSTR TargetFrameName/*[in]*/, 
-                                                 TVariant* PostData/*[in]*/, BSTR Headers/*[in]*/, 
-                                                 TOLEBOOL* Processed/*[in,out]*/)
+                                                 VARIANT* PostData/*[in]*/, BSTR Headers/*[in]*/, 
+                                                 VARIANT_BOOL* Processed/*[in,out]*/)
   {
     _TDispID _dispid(/* FrameNewWindow */ DISPID(204));
     TAutoArgs<6> _args;
@@ -586,7 +659,7 @@ interface DWebBrowserEvents : public TDispWrapper<IDispatch>
     OleProcedure(_dispid, _args);
   }
 
-  void /*[VT_VOID:0]*/ __fastcall Quit(TOLEBOOL* Cancel/*[in,out]*/)
+  void /*[VT_VOID:0]*/ __fastcall Quit(VARIANT_BOOL* Cancel/*[in,out]*/)
   {
     _TDispID _dispid(/* Quit */ DISPID(103));
     TAutoArgs<1> _args;
@@ -635,11 +708,10 @@ public:
   // [301] Converts client sizes into window sizes.
   virtual HRESULT STDMETHODCALLTYPE ClientToWindow(int* pcx/*[in,out]*/, int* pcy/*[in,out]*/) = 0;
   // [302] Associates vtValue with the name szProperty in the context of the object.
-  virtual HRESULT STDMETHODCALLTYPE PutProperty(BSTR Property/*[in]*/, 
-                                                TVariantInParam vtValue/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE PutProperty(BSTR Property/*[in]*/, VARIANT vtValue/*[in]*/) = 0;
   // [303] Retrieve the Associated value for the property vtValue in the context of the object.
   virtual HRESULT STDMETHODCALLTYPE GetProperty(BSTR Property/*[in]*/, 
-                                                TVariant* pvtValue/*[out,retval]*/) = 0;
+                                                VARIANT* pvtValue/*[out,retval]*/) = 0;
   // [0] Returns name of the application.
   virtual HRESULT STDMETHODCALLTYPE get_Name(BSTR* Name/*[out,retval]*/) = 0;
   // [-515] Returns the HWND of the current IE window.
@@ -649,13 +721,13 @@ public:
   // [401] Returns the path to the application.
   virtual HRESULT STDMETHODCALLTYPE get_Path(BSTR* Path/*[out,retval]*/) = 0;
   // [402] Determines whether the application is visible or hidden.
-  virtual HRESULT STDMETHODCALLTYPE get_Visible(TOLEBOOL* pBool/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_Visible(VARIANT_BOOL* pBool/*[out,retval]*/) = 0;
   // [402] Determines whether the application is visible or hidden.
-  virtual HRESULT STDMETHODCALLTYPE set_Visible(TOLEBOOL pBool/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE set_Visible(VARIANT_BOOL pBool/*[in]*/) = 0;
   // [403] Turn on or off the statusbar.
-  virtual HRESULT STDMETHODCALLTYPE get_StatusBar(TOLEBOOL* pBool/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_StatusBar(VARIANT_BOOL* pBool/*[out,retval]*/) = 0;
   // [403] Turn on or off the statusbar.
-  virtual HRESULT STDMETHODCALLTYPE set_StatusBar(TOLEBOOL pBool/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE set_StatusBar(VARIANT_BOOL pBool/*[in]*/) = 0;
   // [404] Text of Status window.
   virtual HRESULT STDMETHODCALLTYPE get_StatusText(BSTR* StatusText/*[out,retval]*/) = 0;
   // [404] Text of Status window.
@@ -665,20 +737,20 @@ public:
   // [405] Controls which toolbar is shown.
   virtual HRESULT STDMETHODCALLTYPE set_ToolBar(int Value/*[in]*/) = 0;
   // [406] Controls whether menubar is shown.
-  virtual HRESULT STDMETHODCALLTYPE get_MenuBar(TOLEBOOL* Value/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_MenuBar(VARIANT_BOOL* Value/*[out,retval]*/) = 0;
   // [406] Controls whether menubar is shown.
-  virtual HRESULT STDMETHODCALLTYPE set_MenuBar(TOLEBOOL Value/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE set_MenuBar(VARIANT_BOOL Value/*[in]*/) = 0;
   // [407] Maximizes window and turns off statusbar, toolbar, menubar, and titlebar.
-  virtual HRESULT STDMETHODCALLTYPE get_FullScreen(TOLEBOOL* pbFullScreen/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_FullScreen(VARIANT_BOOL* pbFullScreen/*[out,retval]*/) = 0;
   // [407] Maximizes window and turns off statusbar, toolbar, menubar, and titlebar.
-  virtual HRESULT STDMETHODCALLTYPE set_FullScreen(TOLEBOOL pbFullScreen/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE set_FullScreen(VARIANT_BOOL pbFullScreen/*[in]*/) = 0;
 
 #if !defined(__TLB_NO_INTERFACE_WRAPPERS)
 
-  TVariant __fastcall GetProperty(BSTR Property/*[in]*/)
+  VARIANT __fastcall GetProperty(BSTR Property/*[in]*/)
   {
-    TVariant pvtValue;
-    OLECHECK(this->GetProperty(Property, (TVariant*)&pvtValue));
+    VARIANT pvtValue;
+    OLECHECK(this->GetProperty(Property, (VARIANT*)&pvtValue));
     return pvtValue;
   }
 
@@ -710,17 +782,17 @@ public:
     return Path;
   }
 
-  TOLEBOOL __fastcall get_Visible(void)
+  VARIANT_BOOL __fastcall get_Visible(void)
   {
-    TOLEBOOL pBool;
-    OLECHECK(this->get_Visible((TOLEBOOL*)&pBool));
+    VARIANT_BOOL pBool;
+    OLECHECK(this->get_Visible((VARIANT_BOOL*)&pBool));
     return pBool;
   }
 
-  TOLEBOOL __fastcall get_StatusBar(void)
+  VARIANT_BOOL __fastcall get_StatusBar(void)
   {
-    TOLEBOOL pBool;
-    OLECHECK(this->get_StatusBar((TOLEBOOL*)&pBool));
+    VARIANT_BOOL pBool;
+    OLECHECK(this->get_StatusBar((VARIANT_BOOL*)&pBool));
     return pBool;
   }
 
@@ -738,17 +810,17 @@ public:
     return Value;
   }
 
-  TOLEBOOL __fastcall get_MenuBar(void)
+  VARIANT_BOOL __fastcall get_MenuBar(void)
   {
-    TOLEBOOL Value;
-    OLECHECK(this->get_MenuBar((TOLEBOOL*)&Value));
+    VARIANT_BOOL Value;
+    OLECHECK(this->get_MenuBar((VARIANT_BOOL*)&Value));
     return Value;
   }
 
-  TOLEBOOL __fastcall get_FullScreen(void)
+  VARIANT_BOOL __fastcall get_FullScreen(void)
   {
-    TOLEBOOL pbFullScreen;
-    OLECHECK(this->get_FullScreen((TOLEBOOL*)&pbFullScreen));
+    VARIANT_BOOL pbFullScreen;
+    OLECHECK(this->get_FullScreen((VARIANT_BOOL*)&pbFullScreen));
     return pbFullScreen;
   }
 
@@ -757,12 +829,12 @@ public:
   __property   long            HWND = {read = get_HWND};
   __property   BSTR            FullName = {read = get_FullName};
   __property   BSTR            Path = {read = get_Path};
-  __property   TOLEBOOL        Visible = {read = get_Visible, write = set_Visible};
-  __property   TOLEBOOL        StatusBar = {read = get_StatusBar, write = set_StatusBar};
-  __property   BSTR            StatusText = {read = get_StatusText, write = set_StatusText};
+  __property   VARIANT_BOOL    Visible = {read = get_Visible, write = set_Visible};
+  __property   VARIANT_BOOL    StatusBar = {read = get_StatusBar, write = set_StatusBar};
+  __property   BSTR            StatusText = {read = get_StatusText};
   __property   int             ToolBar = {read = get_ToolBar, write = set_ToolBar};
-  __property   TOLEBOOL        MenuBar = {read = get_MenuBar, write = set_MenuBar};
-  __property   TOLEBOOL        FullScreen = {read = get_FullScreen, write = set_FullScreen};
+  __property   VARIANT_BOOL    MenuBar = {read = get_MenuBar, write = set_MenuBar};
+  __property   VARIANT_BOOL    FullScreen = {read = get_FullScreen, write = set_FullScreen};
 
 #endif //   __TLB_NO_INTERFACE_WRAPPERS
 
@@ -777,52 +849,52 @@ interface IWebBrowser2  : public Shdocvw_tlb::IWebBrowserApp
 {
 public:
   // [500] Navigates to a URL or file or pidl.
-  virtual HRESULT STDMETHODCALLTYPE Navigate2(TVariant* URL/*[in]*/, 
-                                              TVariant* Flags/*[in,opt]*/= TNoParam(), 
-                                              TVariant* TargetFrameName/*[in,opt]*/= TNoParam(), 
-                                              TVariant* PostData/*[in,opt]*/= TNoParam(), 
-                                              TVariant* Headers/*[in,opt]*/= TNoParam()) = 0;
+  virtual HRESULT STDMETHODCALLTYPE Navigate2(VARIANT* URL/*[in]*/, 
+                                              VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                                              VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                                              VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                                              VARIANT* Headers/*[in,opt]*/= TNoParam()) = 0;
   // [501] IOleCommandTarget::QueryStatus
   virtual HRESULT STDMETHODCALLTYPE QueryStatusWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/, 
                                                   Shdocvw_tlb::OLECMDF* pcmdf/*[out,retval]*/) = 0;
   // [502] IOleCommandTarget::Exec
   virtual HRESULT STDMETHODCALLTYPE ExecWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/, 
                                            Shdocvw_tlb::OLECMDEXECOPT cmdexecopt/*[in]*/, 
-                                           TVariant* pvaIn/*[in,opt]*/= TNoParam(), 
-                                           TVariant* pvaOut/*[in,out,opt]*/= TNoParam()) = 0;
+                                           VARIANT* pvaIn/*[in,opt]*/= TNoParam(), 
+                                           VARIANT* pvaOut/*[in,out,opt]*/= TNoParam()) = 0;
   // [503] Set BrowserBar to Clsid
-  virtual HRESULT STDMETHODCALLTYPE ShowBrowserBar(TVariant* pvaClsid/*[in]*/, 
-                                                   TVariant* pvarShow/*[in,opt]*/= TNoParam(), 
-                                                   TVariant* pvarSize/*[in,opt]*/= TNoParam()) = 0;
+  virtual HRESULT STDMETHODCALLTYPE ShowBrowserBar(VARIANT* pvaClsid/*[in]*/, 
+                                                   VARIANT* pvarShow/*[in,opt]*/= TNoParam(), 
+                                                   VARIANT* pvarSize/*[in,opt]*/= TNoParam()) = 0;
   virtual HRESULT STDMETHODCALLTYPE get_ReadyState(Shdocvw_tlb::tagREADYSTATE* plReadyState/*[out,retval]*/) = 0; // [-525]
   // [550] Controls if the frame is offline (read from cache)
-  virtual HRESULT STDMETHODCALLTYPE get_Offline(TOLEBOOL* pbOffline/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_Offline(VARIANT_BOOL* pbOffline/*[out,retval]*/) = 0;
   // [550] Controls if the frame is offline (read from cache)
-  virtual HRESULT STDMETHODCALLTYPE set_Offline(TOLEBOOL pbOffline/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE set_Offline(VARIANT_BOOL pbOffline/*[in]*/) = 0;
   // [551] Controls if any dialog boxes can be shown
-  virtual HRESULT STDMETHODCALLTYPE get_Silent(TOLEBOOL* pbSilent/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_Silent(VARIANT_BOOL* pbSilent/*[out,retval]*/) = 0;
   // [551] Controls if any dialog boxes can be shown
-  virtual HRESULT STDMETHODCALLTYPE set_Silent(TOLEBOOL pbSilent/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE set_Silent(VARIANT_BOOL pbSilent/*[in]*/) = 0;
   // [552] Registers OC as a top-level browser (for target name resolution)
-  virtual HRESULT STDMETHODCALLTYPE get_RegisterAsBrowser(TOLEBOOL* pbRegister/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_RegisterAsBrowser(VARIANT_BOOL* pbRegister/*[out,retval]*/) = 0;
   // [552] Registers OC as a top-level browser (for target name resolution)
-  virtual HRESULT STDMETHODCALLTYPE set_RegisterAsBrowser(TOLEBOOL pbRegister/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE set_RegisterAsBrowser(VARIANT_BOOL pbRegister/*[in]*/) = 0;
   // [553] Registers OC as a drop target for navigation
-  virtual HRESULT STDMETHODCALLTYPE get_RegisterAsDropTarget(TOLEBOOL* pbRegister/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_RegisterAsDropTarget(VARIANT_BOOL* pbRegister/*[out,retval]*/) = 0;
   // [553] Registers OC as a drop target for navigation
-  virtual HRESULT STDMETHODCALLTYPE set_RegisterAsDropTarget(TOLEBOOL pbRegister/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE set_RegisterAsDropTarget(VARIANT_BOOL pbRegister/*[in]*/) = 0;
   // [554] Controls if the browser is in theater mode
-  virtual HRESULT STDMETHODCALLTYPE get_TheaterMode(TOLEBOOL* pbRegister/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_TheaterMode(VARIANT_BOOL* pbRegister/*[out,retval]*/) = 0;
   // [554] Controls if the browser is in theater mode
-  virtual HRESULT STDMETHODCALLTYPE set_TheaterMode(TOLEBOOL pbRegister/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE set_TheaterMode(VARIANT_BOOL pbRegister/*[in]*/) = 0;
   // [555] Controls whether address bar is shown
-  virtual HRESULT STDMETHODCALLTYPE get_AddressBar(TOLEBOOL* Value/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_AddressBar(VARIANT_BOOL* Value/*[out,retval]*/) = 0;
   // [555] Controls whether address bar is shown
-  virtual HRESULT STDMETHODCALLTYPE set_AddressBar(TOLEBOOL Value/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE set_AddressBar(VARIANT_BOOL Value/*[in]*/) = 0;
   // [556] Controls whether the window is resizable
-  virtual HRESULT STDMETHODCALLTYPE get_Resizable(TOLEBOOL* Value/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_Resizable(VARIANT_BOOL* Value/*[out,retval]*/) = 0;
   // [556] Controls whether the window is resizable
-  virtual HRESULT STDMETHODCALLTYPE set_Resizable(TOLEBOOL Value/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE set_Resizable(VARIANT_BOOL Value/*[in]*/) = 0;
 
 #if !defined(__TLB_NO_INTERFACE_WRAPPERS)
 
@@ -840,64 +912,64 @@ public:
     return plReadyState;
   }
 
-  TOLEBOOL __fastcall get_Offline(void)
+  VARIANT_BOOL __fastcall get_Offline(void)
   {
-    TOLEBOOL pbOffline;
-    OLECHECK(this->get_Offline((TOLEBOOL*)&pbOffline));
+    VARIANT_BOOL pbOffline;
+    OLECHECK(this->get_Offline((VARIANT_BOOL*)&pbOffline));
     return pbOffline;
   }
 
-  TOLEBOOL __fastcall get_Silent(void)
+  VARIANT_BOOL __fastcall get_Silent(void)
   {
-    TOLEBOOL pbSilent;
-    OLECHECK(this->get_Silent((TOLEBOOL*)&pbSilent));
+    VARIANT_BOOL pbSilent;
+    OLECHECK(this->get_Silent((VARIANT_BOOL*)&pbSilent));
     return pbSilent;
   }
 
-  TOLEBOOL __fastcall get_RegisterAsBrowser(void)
+  VARIANT_BOOL __fastcall get_RegisterAsBrowser(void)
   {
-    TOLEBOOL pbRegister;
-    OLECHECK(this->get_RegisterAsBrowser((TOLEBOOL*)&pbRegister));
+    VARIANT_BOOL pbRegister;
+    OLECHECK(this->get_RegisterAsBrowser((VARIANT_BOOL*)&pbRegister));
     return pbRegister;
   }
 
-  TOLEBOOL __fastcall get_RegisterAsDropTarget(void)
+  VARIANT_BOOL __fastcall get_RegisterAsDropTarget(void)
   {
-    TOLEBOOL pbRegister;
-    OLECHECK(this->get_RegisterAsDropTarget((TOLEBOOL*)&pbRegister));
+    VARIANT_BOOL pbRegister;
+    OLECHECK(this->get_RegisterAsDropTarget((VARIANT_BOOL*)&pbRegister));
     return pbRegister;
   }
 
-  TOLEBOOL __fastcall get_TheaterMode(void)
+  VARIANT_BOOL __fastcall get_TheaterMode(void)
   {
-    TOLEBOOL pbRegister;
-    OLECHECK(this->get_TheaterMode((TOLEBOOL*)&pbRegister));
+    VARIANT_BOOL pbRegister;
+    OLECHECK(this->get_TheaterMode((VARIANT_BOOL*)&pbRegister));
     return pbRegister;
   }
 
-  TOLEBOOL __fastcall get_AddressBar(void)
+  VARIANT_BOOL __fastcall get_AddressBar(void)
   {
-    TOLEBOOL Value;
-    OLECHECK(this->get_AddressBar((TOLEBOOL*)&Value));
+    VARIANT_BOOL Value;
+    OLECHECK(this->get_AddressBar((VARIANT_BOOL*)&Value));
     return Value;
   }
 
-  TOLEBOOL __fastcall get_Resizable(void)
+  VARIANT_BOOL __fastcall get_Resizable(void)
   {
-    TOLEBOOL Value;
-    OLECHECK(this->get_Resizable((TOLEBOOL*)&Value));
+    VARIANT_BOOL Value;
+    OLECHECK(this->get_Resizable((VARIANT_BOOL*)&Value));
     return Value;
   }
 
 
   __property   Shdocvw_tlb::tagREADYSTATE ReadyState = {read = get_ReadyState};
-  __property   TOLEBOOL        Offline = {read = get_Offline, write = set_Offline};
-  __property   TOLEBOOL        Silent = {read = get_Silent, write = set_Silent};
-  __property   TOLEBOOL        RegisterAsBrowser = {read = get_RegisterAsBrowser, write = set_RegisterAsBrowser};
-  __property   TOLEBOOL        RegisterAsDropTarget = {read = get_RegisterAsDropTarget, write = set_RegisterAsDropTarget};
-  __property   TOLEBOOL        TheaterMode = {read = get_TheaterMode, write = set_TheaterMode};
-  __property   TOLEBOOL        AddressBar = {read = get_AddressBar, write = set_AddressBar};
-  __property   TOLEBOOL        Resizable = {read = get_Resizable, write = set_Resizable};
+  __property   VARIANT_BOOL    Offline = {read = get_Offline, write = set_Offline};
+  __property   VARIANT_BOOL    Silent = {read = get_Silent, write = set_Silent};
+  __property   VARIANT_BOOL    RegisterAsBrowser = {read = get_RegisterAsBrowser, write = set_RegisterAsBrowser};
+  __property   VARIANT_BOOL    RegisterAsDropTarget = {read = get_RegisterAsDropTarget, write = set_RegisterAsDropTarget};
+  __property   VARIANT_BOOL    TheaterMode = {read = get_TheaterMode, write = set_TheaterMode};
+  __property   VARIANT_BOOL    AddressBar = {read = get_AddressBar, write = set_AddressBar};
+  __property   VARIANT_BOOL    Resizable = {read = get_Resizable, write = set_Resizable};
 
 #endif //   __TLB_NO_INTERFACE_WRAPPERS
 
@@ -927,7 +999,8 @@ interface DWebBrowserEvents2 : public TDispWrapper<IDispatch>
     OleProcedure(_dispid, _args);
   }
 
-  void /*[VT_VOID:0]*/ __fastcall CommandStateChange(long Command/*[in]*/, TOLEBOOL Enable/*[in]*/)
+  void /*[VT_VOID:0]*/ __fastcall CommandStateChange(long Command/*[in]*/, 
+                                                     VARIANT_BOOL Enable/*[in]*/)
   {
     _TDispID _dispid(/* CommandStateChange */ DISPID(105));
     TAutoArgs<2> _args;
@@ -964,12 +1037,12 @@ interface DWebBrowserEvents2 : public TDispWrapper<IDispatch>
     OleProcedure(_dispid, _args);
   }
 
-  void /*[VT_VOID:0]*/ __fastcall BeforeNavigate2(LPDISPATCH pDisp/*[in]*/, TVariant* URL/*[in]*/, 
-                                                  TVariant* Flags/*[in]*/, 
-                                                  TVariant* TargetFrameName/*[in]*/, 
-                                                  TVariant* PostData/*[in]*/, 
-                                                  TVariant* Headers/*[in]*/, 
-                                                  TOLEBOOL* Cancel/*[in,out]*/)
+  void /*[VT_VOID:0]*/ __fastcall BeforeNavigate2(LPDISPATCH pDisp/*[in]*/, VARIANT* URL/*[in]*/, 
+                                                  VARIANT* Flags/*[in]*/, 
+                                                  VARIANT* TargetFrameName/*[in]*/, 
+                                                  VARIANT* PostData/*[in]*/, 
+                                                  VARIANT* Headers/*[in]*/, 
+                                                  VARIANT_BOOL* Cancel/*[in,out]*/)
   {
     _TDispID _dispid(/* BeforeNavigate2 */ DISPID(250));
     TAutoArgs<7> _args;
@@ -984,7 +1057,7 @@ interface DWebBrowserEvents2 : public TDispWrapper<IDispatch>
   }
 
   void /*[VT_VOID:0]*/ __fastcall NewWindow2(LPDISPATCH* ppDisp/*[in,out]*/, 
-                                             TOLEBOOL* Cancel/*[in,out]*/)
+                                             VARIANT_BOOL* Cancel/*[in,out]*/)
   {
     _TDispID _dispid(/* NewWindow2 */ DISPID(251));
     TAutoArgs<2> _args;
@@ -993,7 +1066,7 @@ interface DWebBrowserEvents2 : public TDispWrapper<IDispatch>
     OleProcedure(_dispid, _args);
   }
 
-  void /*[VT_VOID:0]*/ __fastcall NavigateComplete2(LPDISPATCH pDisp/*[in]*/, TVariant* URL/*[in]*/)
+  void /*[VT_VOID:0]*/ __fastcall NavigateComplete2(LPDISPATCH pDisp/*[in]*/, VARIANT* URL/*[in]*/)
   {
     _TDispID _dispid(/* NavigateComplete2 */ DISPID(252));
     TAutoArgs<2> _args;
@@ -1002,7 +1075,7 @@ interface DWebBrowserEvents2 : public TDispWrapper<IDispatch>
     OleProcedure(_dispid, _args);
   }
 
-  void /*[VT_VOID:0]*/ __fastcall DocumentComplete(LPDISPATCH pDisp/*[in]*/, TVariant* URL/*[in]*/)
+  void /*[VT_VOID:0]*/ __fastcall DocumentComplete(LPDISPATCH pDisp/*[in]*/, VARIANT* URL/*[in]*/)
   {
     _TDispID _dispid(/* DocumentComplete */ DISPID(259));
     TAutoArgs<2> _args;
@@ -1017,7 +1090,7 @@ interface DWebBrowserEvents2 : public TDispWrapper<IDispatch>
     OleProcedure(_dispid);
   }
 
-  void /*[VT_VOID:0]*/ __fastcall OnVisible(TOLEBOOL Visible/*[in]*/)
+  void /*[VT_VOID:0]*/ __fastcall OnVisible(VARIANT_BOOL Visible/*[in]*/)
   {
     _TDispID _dispid(/* OnVisible */ DISPID(254));
     TAutoArgs<1> _args;
@@ -1025,7 +1098,7 @@ interface DWebBrowserEvents2 : public TDispWrapper<IDispatch>
     OleProcedure(_dispid, _args);
   }
 
-  void /*[VT_VOID:0]*/ __fastcall OnToolBar(TOLEBOOL ToolBar/*[in]*/)
+  void /*[VT_VOID:0]*/ __fastcall OnToolBar(VARIANT_BOOL ToolBar/*[in]*/)
   {
     _TDispID _dispid(/* OnToolBar */ DISPID(255));
     TAutoArgs<1> _args;
@@ -1033,7 +1106,7 @@ interface DWebBrowserEvents2 : public TDispWrapper<IDispatch>
     OleProcedure(_dispid, _args);
   }
 
-  void /*[VT_VOID:0]*/ __fastcall OnMenuBar(TOLEBOOL MenuBar/*[in]*/)
+  void /*[VT_VOID:0]*/ __fastcall OnMenuBar(VARIANT_BOOL MenuBar/*[in]*/)
   {
     _TDispID _dispid(/* OnMenuBar */ DISPID(256));
     TAutoArgs<1> _args;
@@ -1041,7 +1114,7 @@ interface DWebBrowserEvents2 : public TDispWrapper<IDispatch>
     OleProcedure(_dispid, _args);
   }
 
-  void /*[VT_VOID:0]*/ __fastcall OnStatusBar(TOLEBOOL StatusBar/*[in]*/)
+  void /*[VT_VOID:0]*/ __fastcall OnStatusBar(VARIANT_BOOL StatusBar/*[in]*/)
   {
     _TDispID _dispid(/* OnStatusBar */ DISPID(257));
     TAutoArgs<1> _args;
@@ -1049,7 +1122,7 @@ interface DWebBrowserEvents2 : public TDispWrapper<IDispatch>
     OleProcedure(_dispid, _args);
   }
 
-  void /*[VT_VOID:0]*/ __fastcall OnFullScreen(TOLEBOOL FullScreen/*[in]*/)
+  void /*[VT_VOID:0]*/ __fastcall OnFullScreen(VARIANT_BOOL FullScreen/*[in]*/)
   {
     _TDispID _dispid(/* OnFullScreen */ DISPID(258));
     TAutoArgs<1> _args;
@@ -1057,11 +1130,135 @@ interface DWebBrowserEvents2 : public TDispWrapper<IDispatch>
     OleProcedure(_dispid, _args);
   }
 
-  void /*[VT_VOID:0]*/ __fastcall OnTheaterMode(TOLEBOOL TheaterMode/*[in]*/)
+  void /*[VT_VOID:0]*/ __fastcall OnTheaterMode(VARIANT_BOOL TheaterMode/*[in]*/)
   {
     _TDispID _dispid(/* OnTheaterMode */ DISPID(260));
     TAutoArgs<1> _args;
     _args[1] = TheaterMode /*[VT_BOOL:0]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall WindowSetResizable(VARIANT_BOOL Resizable/*[in]*/)
+  {
+    _TDispID _dispid(/* WindowSetResizable */ DISPID(262));
+    TAutoArgs<1> _args;
+    _args[1] = Resizable /*[VT_BOOL:0]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall WindowSetLeft(long Left/*[in]*/)
+  {
+    _TDispID _dispid(/* WindowSetLeft */ DISPID(264));
+    TAutoArgs<1> _args;
+    _args[1] = Left /*[VT_I4:0]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall WindowSetTop(long Top/*[in]*/)
+  {
+    _TDispID _dispid(/* WindowSetTop */ DISPID(265));
+    TAutoArgs<1> _args;
+    _args[1] = Top /*[VT_I4:0]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall WindowSetWidth(long Width/*[in]*/)
+  {
+    _TDispID _dispid(/* WindowSetWidth */ DISPID(266));
+    TAutoArgs<1> _args;
+    _args[1] = Width /*[VT_I4:0]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall WindowSetHeight(long Height/*[in]*/)
+  {
+    _TDispID _dispid(/* WindowSetHeight */ DISPID(267));
+    TAutoArgs<1> _args;
+    _args[1] = Height /*[VT_I4:0]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall WindowClosing(VARIANT_BOOL IsChildWindow/*[in]*/, 
+                                                VARIANT_BOOL* Cancel/*[in,out]*/)
+  {
+    _TDispID _dispid(/* WindowClosing */ DISPID(263));
+    TAutoArgs<2> _args;
+    _args[1] = IsChildWindow /*[VT_BOOL:0]*/;
+    _args[2] = Cancel /*[VT_BOOL:1]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall ClientToHostWindow(long* CX/*[in,out]*/, long* CY/*[in,out]*/)
+  {
+    _TDispID _dispid(/* ClientToHostWindow */ DISPID(268));
+    TAutoArgs<2> _args;
+    _args[1] = CX /*[VT_I4:1]*/;
+    _args[2] = CY /*[VT_I4:1]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall SetSecureLockIcon(long SecureLockIcon/*[in]*/)
+  {
+    _TDispID _dispid(/* SetSecureLockIcon */ DISPID(269));
+    TAutoArgs<1> _args;
+    _args[1] = SecureLockIcon /*[VT_I4:0]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall FileDownload(VARIANT_BOOL* Cancel/*[in,out]*/)
+  {
+    _TDispID _dispid(/* FileDownload */ DISPID(270));
+    TAutoArgs<1> _args;
+    _args[1] = Cancel /*[VT_BOOL:1]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall NavigateError(LPDISPATCH pDisp/*[in]*/, VARIANT* URL/*[in]*/, 
+                                                VARIANT* Frame/*[in]*/, VARIANT* StatusCode/*[in]*/
+                                                , VARIANT_BOOL* Cancel/*[in,out]*/)
+  {
+    _TDispID _dispid(/* NavigateError */ DISPID(271));
+    TAutoArgs<5> _args;
+    _args[1] = pDisp /*[VT_DISPATCH:0]*/;
+    _args[2] = URL /*[VT_VARIANT:1]*/;
+    _args[3] = Frame /*[VT_VARIANT:1]*/;
+    _args[4] = StatusCode /*[VT_VARIANT:1]*/;
+    _args[5] = Cancel /*[VT_BOOL:1]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall PrintTemplateInstantiation(LPDISPATCH pDisp/*[in]*/)
+  {
+    _TDispID _dispid(/* PrintTemplateInstantiation */ DISPID(225));
+    TAutoArgs<1> _args;
+    _args[1] = pDisp /*[VT_DISPATCH:0]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall PrintTemplateTeardown(LPDISPATCH pDisp/*[in]*/)
+  {
+    _TDispID _dispid(/* PrintTemplateTeardown */ DISPID(226));
+    TAutoArgs<1> _args;
+    _args[1] = pDisp /*[VT_DISPATCH:0]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall UpdatePageStatus(LPDISPATCH pDisp/*[in]*/, VARIANT* nPage/*[in]*/
+                                                   , VARIANT* fDone/*[in]*/)
+  {
+    _TDispID _dispid(/* UpdatePageStatus */ DISPID(227));
+    TAutoArgs<3> _args;
+    _args[1] = pDisp /*[VT_DISPATCH:0]*/;
+    _args[2] = nPage /*[VT_VARIANT:1]*/;
+    _args[3] = fDone /*[VT_VARIANT:1]*/;
+    OleProcedure(_dispid, _args);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall PrivacyImpactedStateChange(VARIANT_BOOL bImpacted/*[in]*/)
+  {
+    _TDispID _dispid(/* PrivacyImpactedStateChange */ DISPID(272));
+    TAutoArgs<1> _args;
+    _args[1] = bImpacted /*[VT_BOOL:0]*/;
     OleProcedure(_dispid, _args);
   }
 
@@ -1103,7 +1300,7 @@ public:
   // [-1] Get count of open Shell windows
   virtual HRESULT STDMETHODCALLTYPE get_Count(long* Count/*[out,retval]*/) = 0;
   // [0] Return the shell window for the given index
-  virtual HRESULT STDMETHODCALLTYPE Item(TVariantInParam index/*[in,opt]*/, 
+  virtual HRESULT STDMETHODCALLTYPE Item(VARIANT index/*[in,opt]*/, 
                                          LPDISPATCH* Folder/*[out,retval]*/) = 0;
   // [-4] Enumerates the figures
   virtual HRESULT STDMETHODCALLTYPE _NewEnum(LPUNKNOWN* ppunk/*[out,retval]*/) = 0;
@@ -1111,25 +1308,24 @@ public:
   virtual HRESULT STDMETHODCALLTYPE Register(LPDISPATCH pid/*[in]*/, long HWND/*[in]*/, 
                                              int swClass/*[in]*/, long* plCookie/*[out]*/) = 0;
   // [-1] Register a pending open with the list
-  virtual HRESULT STDMETHODCALLTYPE RegisterPending(long lThreadId/*[in]*/, 
-                                                    TVariant* pvarloc/*[in]*/, 
-                                                    TVariant* pvarlocRoot/*[in]*/, 
+  virtual HRESULT STDMETHODCALLTYPE RegisterPending(long lThreadId/*[in]*/, VARIANT* pvarloc/*[in]*/, 
+                                                    VARIANT* pvarlocRoot/*[in]*/, 
                                                     int swClass/*[in]*/, long* plCookie/*[out]*/) = 0;
   // [-1] Remove a window from the list
   virtual HRESULT STDMETHODCALLTYPE Revoke(long lCookie/*[in]*/) = 0;
   // [-1] Notifies the new location
-  virtual HRESULT STDMETHODCALLTYPE OnNavigate(long lCookie/*[in]*/, TVariant* pvarloc/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE OnNavigate(long lCookie/*[in]*/, VARIANT* pvarloc/*[in]*/) = 0;
   // [-1] Notifies the activation
-  virtual HRESULT STDMETHODCALLTYPE OnActivated(long lCookie/*[in]*/, TOLEBOOL fActive/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE OnActivated(long lCookie/*[in]*/, VARIANT_BOOL fActive/*[in]*/) = 0;
   // [-1] Find the window based on the location
-  virtual HRESULT STDMETHODCALLTYPE FindWindow(TVariant* pvarloc/*[in]*/, 
-                                               TVariant* pvarlocRoot/*[in]*/, int swClass/*[in]*/, 
-                                               long* pHWND/*[out]*/, int swfwOptions/*[in]*/, 
-                                               LPDISPATCH* ppdispOut/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE FindWindowSW(VARIANT* pvarloc/*[in]*/, 
+                                                 VARIANT* pvarlocRoot/*[in]*/, int swClass/*[in]*/, 
+                                                 long* pHWND/*[out]*/, int swfwOptions/*[in]*/, 
+                                                 LPDISPATCH* ppdispOut/*[out,retval]*/) = 0;
   // [-1] Notifies on creation and frame name set
   virtual HRESULT STDMETHODCALLTYPE OnCreated(long lCookie/*[in]*/, LPUNKNOWN punk/*[in]*/) = 0;
   // [-1] Used by IExplore to register different processes
-  virtual HRESULT STDMETHODCALLTYPE ProcessAttachDetach(TOLEBOOL fAttach/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE ProcessAttachDetach(VARIANT_BOOL fAttach/*[in]*/) = 0;
 
 #if !defined(__TLB_NO_INTERFACE_WRAPPERS)
 
@@ -1140,7 +1336,7 @@ public:
     return Count;
   }
 
-  LPDISPATCH __fastcall Item(TVariantInParam index/*[in,opt]*/= TNoParam())
+  LPDISPATCH __fastcall Item(VARIANT index/*[in,opt]*/= TNoParam())
   {
     LPDISPATCH Folder;
     OLECHECK(this->Item(index, (LPDISPATCH*)&Folder));
@@ -1154,12 +1350,12 @@ public:
     return ppunk;
   }
 
-  LPDISPATCH __fastcall FindWindow(TVariant* pvarloc/*[in]*/, TVariant* pvarlocRoot/*[in]*/, 
-                                   int swClass/*[in]*/, long* pHWND/*[out]*/, 
-                                   int swfwOptions/*[in]*/)
+  LPDISPATCH __fastcall FindWindowSW(VARIANT* pvarloc/*[in]*/, VARIANT* pvarlocRoot/*[in]*/, 
+                                     int swClass/*[in]*/, long* pHWND/*[out]*/, 
+                                     int swfwOptions/*[in]*/)
   {
     LPDISPATCH ppdispOut;
-    OLECHECK(this->FindWindow(pvarloc, pvarlocRoot, swClass, pHWND, swfwOptions, (LPDISPATCH*)&ppdispOut));
+    OLECHECK(this->FindWindowSW(pvarloc, pvarlocRoot, swClass, pHWND, swfwOptions, (LPDISPATCH*)&ppdispOut));
     return ppdispOut;
   }
 
@@ -1182,38 +1378,39 @@ public:
   virtual HRESULT STDMETHODCALLTYPE ResetSafeMode(void) = 0; // [2]
   virtual HRESULT STDMETHODCALLTYPE RefreshOfflineDesktop(void) = 0; // [3]
   virtual HRESULT STDMETHODCALLTYPE AddFavorite(BSTR URL/*[in]*/, 
-                                                TVariant* Title/*[in,opt]*/= TNoParam()) = 0; // [4]
+                                                VARIANT* Title/*[in,opt]*/= TNoParam()) = 0; // [4]
   virtual HRESULT STDMETHODCALLTYPE AddChannel(BSTR URL/*[in]*/) = 0; // [5]
   virtual HRESULT STDMETHODCALLTYPE AddDesktopComponent(BSTR URL/*[in]*/, BSTR Type/*[in]*/, 
-                                                        TVariant* Left/*[in,opt]*/= TNoParam(), 
-                                                        TVariant* Top/*[in,opt]*/= TNoParam(), 
-                                                        TVariant* Width/*[in,opt]*/= TNoParam(), 
-                                                        TVariant* Height/*[in,opt]*/= TNoParam()) = 0; // [6]
-  virtual HRESULT STDMETHODCALLTYPE IsSubscribed(BSTR URL/*[in]*/, TOLEBOOL* pBool/*[out,retval]*/) = 0; // [7]
+                                                        VARIANT* Left/*[in,opt]*/= TNoParam(), 
+                                                        VARIANT* Top/*[in,opt]*/= TNoParam(), 
+                                                        VARIANT* Width/*[in,opt]*/= TNoParam(), 
+                                                        VARIANT* Height/*[in,opt]*/= TNoParam()) = 0; // [6]
+  virtual HRESULT STDMETHODCALLTYPE IsSubscribed(BSTR URL/*[in]*/, 
+                                                 VARIANT_BOOL* pBool/*[out,retval]*/) = 0; // [7]
   virtual HRESULT STDMETHODCALLTYPE NavigateAndFind(BSTR URL/*[in]*/, BSTR strQuery/*[in]*/, 
-                                                    TVariant* varTargetFrame/*[in]*/) = 0; // [8]
-  virtual HRESULT STDMETHODCALLTYPE ImportExportFavorites(TOLEBOOL fImport/*[in]*/, 
+                                                    VARIANT* varTargetFrame/*[in]*/) = 0; // [8]
+  virtual HRESULT STDMETHODCALLTYPE ImportExportFavorites(VARIANT_BOOL fImport/*[in]*/, 
                                                           BSTR strImpExpPath/*[in]*/) = 0; // [9]
-  virtual HRESULT STDMETHODCALLTYPE AutoCompleteSaveForm(TVariant* Form/*[in,opt]*/= TNoParam()) = 0; // [10]
+  virtual HRESULT STDMETHODCALLTYPE AutoCompleteSaveForm(VARIANT* Form/*[in,opt]*/= TNoParam()) = 0; // [10]
   virtual HRESULT STDMETHODCALLTYPE AutoScan(BSTR strSearch/*[in]*/, BSTR strFailureUrl/*[in]*/, 
-                                             TVariant* pvarTargetFrame/*[in,opt]*/= TNoParam()) = 0; // [11]
-  virtual HRESULT STDMETHODCALLTYPE AutoCompleteAttach(TVariant* Reserved/*[in,opt]*/= TNoParam()) = 0; // [12]
-  virtual HRESULT STDMETHODCALLTYPE ShowBrowserUI(BSTR bstrName/*[in]*/, TVariant* pvarIn/*[in]*/, 
-                                                  TVariant* pvarOut/*[out,retval]*/) = 0; // [13]
+                                             VARIANT* pvarTargetFrame/*[in,opt]*/= TNoParam()) = 0; // [11]
+  virtual HRESULT STDMETHODCALLTYPE AutoCompleteAttach(VARIANT* Reserved/*[in,opt]*/= TNoParam()) = 0; // [12]
+  virtual HRESULT STDMETHODCALLTYPE ShowBrowserUI(BSTR bstrName/*[in]*/, VARIANT* pvarIn/*[in]*/, 
+                                                  VARIANT* pvarOut/*[out,retval]*/) = 0; // [13]
 
 #if !defined(__TLB_NO_INTERFACE_WRAPPERS)
 
-  TOLEBOOL __fastcall IsSubscribed(BSTR URL/*[in]*/)
+  VARIANT_BOOL __fastcall IsSubscribed(BSTR URL/*[in]*/)
   {
-    TOLEBOOL pBool;
-    OLECHECK(this->IsSubscribed(URL, (TOLEBOOL*)&pBool));
+    VARIANT_BOOL pBool;
+    OLECHECK(this->IsSubscribed(URL, (VARIANT_BOOL*)&pBool));
     return pBool;
   }
 
-  TVariant __fastcall ShowBrowserUI(BSTR bstrName/*[in]*/, TVariant* pvarIn/*[in]*/)
+  VARIANT __fastcall ShowBrowserUI(BSTR bstrName/*[in]*/, VARIANT* pvarIn/*[in]*/)
   {
-    TVariant pvarOut;
-    OLECHECK(this->ShowBrowserUI(bstrName, pvarIn, (TVariant*)&pvarOut));
+    VARIANT pvarOut;
+    OLECHECK(this->ShowBrowserUI(bstrName, pvarIn, (VARIANT*)&pvarOut));
     return pvarOut;
   }
 
@@ -1224,11 +1421,11 @@ public:
 };
 
 // *********************************************************************//
-// Interface: _ShellFavoritesNameSpaceEvents
+// Interface: DShellNameSpaceEvents
 // Flags:     (4096) Dispatchable
 // GUID:      {55136806-B2DE-11D1-B9F2-00A0C98BC547}
 // *********************************************************************//
-interface _ShellFavoritesNameSpaceEvents : public TDispWrapper<IDispatch>
+interface DShellNameSpaceEvents : public TDispWrapper<IDispatch>
 {
   void /*[VT_VOID:0]*/ __fastcall FavoritesSelectionChange(long cItems/*[in]*/, long hItem/*[in]*/, 
                                                            BSTR strName/*[in]*/, BSTR strUrl/*[in]*/
@@ -1248,11 +1445,29 @@ interface _ShellFavoritesNameSpaceEvents : public TDispWrapper<IDispatch>
     OleProcedure(_dispid, _args);
   }
 
+  void /*[VT_VOID:0]*/ __fastcall SelectionChange()
+  {
+    _TDispID _dispid(/* SelectionChange */ DISPID(2));
+    OleProcedure(_dispid);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall DoubleClick()
+  {
+    _TDispID _dispid(/* DoubleClick */ DISPID(3));
+    OleProcedure(_dispid);
+  }
+
+  void /*[VT_VOID:0]*/ __fastcall Initialized()
+  {
+    _TDispID _dispid(/* Initialized */ DISPID(4));
+    OleProcedure(_dispid);
+  }
+
 
 };
 // *********************************************************************//
 // Interface: IShellFavoritesNameSpace
-// Flags:     (4416) Dual OleAutomation Dispatchable
+// Flags:     (4432) Hidden Dual OleAutomation Dispatchable
 // GUID:      {55136804-B2DE-11D1-B9F2-00A0C98BC547}
 // *********************************************************************//
 interface IShellFavoritesNameSpace  : public IDispatch
@@ -1276,40 +1491,167 @@ public:
   virtual HRESULT STDMETHODCALLTYPE InvokeContextMenuCommand(BSTR strCommand/*[in]*/) = 0;
   // [9] method MoveSelectionTo
   virtual HRESULT STDMETHODCALLTYPE MoveSelectionTo(void) = 0;
-  // [10] Query to see if offline pack is installed
-  virtual HRESULT STDMETHODCALLTYPE get_FOfflinePackInstalled(TOLEBOOL* pBool/*[out,retval]*/) = 0;
+  // [10] Query to see if subscriptions are enabled
+  virtual HRESULT STDMETHODCALLTYPE get_SubscriptionsEnabled(VARIANT_BOOL* pBool/*[out,retval]*/) = 0;
   // [11] method CreateSubscriptionForSelection
-  virtual HRESULT STDMETHODCALLTYPE CreateSubscriptionForSelection(TOLEBOOL* pBool/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE CreateSubscriptionForSelection(VARIANT_BOOL* pBool/*[out,retval]*/) = 0;
   // [12] method DeleteSubscriptionForSelection
-  virtual HRESULT STDMETHODCALLTYPE DeleteSubscriptionForSelection(TOLEBOOL* pBool/*[out,retval]*/) = 0;
-  // [13] method SetRoot
+  virtual HRESULT STDMETHODCALLTYPE DeleteSubscriptionForSelection(VARIANT_BOOL* pBool/*[out,retval]*/) = 0;
+  // [13] old, use put_Root() instead
   virtual HRESULT STDMETHODCALLTYPE SetRoot(BSTR bstrFullPath/*[in]*/) = 0;
 
 #if !defined(__TLB_NO_INTERFACE_WRAPPERS)
 
-  TOLEBOOL __fastcall get_FOfflinePackInstalled(void)
+  VARIANT_BOOL __fastcall get_SubscriptionsEnabled(void)
   {
-    TOLEBOOL pBool;
-    OLECHECK(this->get_FOfflinePackInstalled((TOLEBOOL*)&pBool));
+    VARIANT_BOOL pBool;
+    OLECHECK(this->get_SubscriptionsEnabled((VARIANT_BOOL*)&pBool));
     return pBool;
   }
 
-  TOLEBOOL __fastcall CreateSubscriptionForSelection(void)
+  VARIANT_BOOL __fastcall CreateSubscriptionForSelection(void)
   {
-    TOLEBOOL pBool;
-    OLECHECK(this->CreateSubscriptionForSelection((TOLEBOOL*)&pBool));
+    VARIANT_BOOL pBool;
+    OLECHECK(this->CreateSubscriptionForSelection((VARIANT_BOOL*)&pBool));
     return pBool;
   }
 
-  TOLEBOOL __fastcall DeleteSubscriptionForSelection(void)
+  VARIANT_BOOL __fastcall DeleteSubscriptionForSelection(void)
   {
-    TOLEBOOL pBool;
-    OLECHECK(this->DeleteSubscriptionForSelection((TOLEBOOL*)&pBool));
+    VARIANT_BOOL pBool;
+    OLECHECK(this->DeleteSubscriptionForSelection((VARIANT_BOOL*)&pBool));
     return pBool;
   }
 
 
-  __property   TOLEBOOL        FOfflinePackInstalled = {read = get_FOfflinePackInstalled};
+  __property   VARIANT_BOOL    SubscriptionsEnabled = {read = get_SubscriptionsEnabled};
+
+#endif //   __TLB_NO_INTERFACE_WRAPPERS
+
+};
+
+// *********************************************************************//
+// Interface: IShellNameSpace
+// Flags:     (4432) Hidden Dual OleAutomation Dispatchable
+// GUID:      {E572D3C9-37BE-4AE2-825D-D521763E3108}
+// *********************************************************************//
+interface IShellNameSpace  : public Shdocvw_tlb::IShellFavoritesNameSpace
+{
+public:
+  // [14] options 
+  virtual HRESULT STDMETHODCALLTYPE get_EnumOptions(long* pgrfEnumFlags/*[out,retval]*/) = 0;
+  // [14] options 
+  virtual HRESULT STDMETHODCALLTYPE set_EnumOptions(long pgrfEnumFlags/*[in]*/) = 0;
+  // [15] get the selected item
+  virtual HRESULT STDMETHODCALLTYPE get_SelectedItem(LPDISPATCH* pItem/*[out,retval]*/) = 0;
+  // [15] get the selected item
+  virtual HRESULT STDMETHODCALLTYPE set_SelectedItem(LPDISPATCH pItem/*[in]*/) = 0;
+  // [16] get the root item
+  virtual HRESULT STDMETHODCALLTYPE get_Root(VARIANT* pvar/*[out,retval]*/) = 0;
+  // [16] get the root item
+  virtual HRESULT STDMETHODCALLTYPE set_Root(VARIANT pvar/*[in]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_Depth(int* piDepth/*[out,retval]*/) = 0; // [17]
+  virtual HRESULT STDMETHODCALLTYPE set_Depth(int piDepth/*[in]*/) = 0; // [17]
+  virtual HRESULT STDMETHODCALLTYPE get_Mode(unsigned* puMode/*[out,retval]*/) = 0; // [18]
+  virtual HRESULT STDMETHODCALLTYPE set_Mode(unsigned puMode/*[in]*/) = 0; // [18]
+  virtual HRESULT STDMETHODCALLTYPE get_Flags(unsigned_long* pdwFlags/*[out,retval]*/) = 0; // [19]
+  virtual HRESULT STDMETHODCALLTYPE set_Flags(unsigned_long pdwFlags/*[in]*/) = 0; // [19]
+  virtual HRESULT STDMETHODCALLTYPE set_TVFlags(unsigned_long dwFlags/*[in]*/) = 0; // [20]
+  virtual HRESULT STDMETHODCALLTYPE get_TVFlags(unsigned_long* dwFlags/*[out,retval]*/) = 0; // [20]
+  virtual HRESULT STDMETHODCALLTYPE get_Columns(BSTR* bstrColumns/*[out,retval]*/) = 0; // [21]
+  virtual HRESULT STDMETHODCALLTYPE set_Columns(BSTR bstrColumns/*[in]*/) = 0; // [21]
+  // [22] number of view types
+  virtual HRESULT STDMETHODCALLTYPE get_CountViewTypes(int* piTypes/*[out,retval]*/) = 0;
+  // [23] set view type
+  virtual HRESULT STDMETHODCALLTYPE SetViewType(int iType/*[in]*/) = 0;
+  // [24] collection of selected items
+  virtual HRESULT STDMETHODCALLTYPE SelectedItems(LPDISPATCH* ppid/*[out,retval]*/) = 0;
+  // [25] expands item specified depth
+  virtual HRESULT STDMETHODCALLTYPE Expand(VARIANT var/*[in]*/, int iDepth) = 0;
+  // [26] unselects all items
+  virtual HRESULT STDMETHODCALLTYPE UnselectAll(void) = 0;
+
+#if !defined(__TLB_NO_INTERFACE_WRAPPERS)
+
+  long __fastcall get_EnumOptions(void)
+  {
+    long pgrfEnumFlags;
+    OLECHECK(this->get_EnumOptions((long*)&pgrfEnumFlags));
+    return pgrfEnumFlags;
+  }
+
+  LPDISPATCH __fastcall get_SelectedItem(void)
+  {
+    LPDISPATCH pItem;
+    OLECHECK(this->get_SelectedItem((LPDISPATCH*)&pItem));
+    return pItem;
+  }
+
+  VARIANT __fastcall get_Root(void)
+  {
+    VARIANT pvar;
+    OLECHECK(this->get_Root((VARIANT*)&pvar));
+    return pvar;
+  }
+
+  int __fastcall get_Depth(void)
+  {
+    int piDepth;
+    OLECHECK(this->get_Depth((int*)&piDepth));
+    return piDepth;
+  }
+
+  unsigned __fastcall get_Mode(void)
+  {
+    unsigned puMode;
+    OLECHECK(this->get_Mode((unsigned*)&puMode));
+    return puMode;
+  }
+
+  unsigned_long __fastcall get_Flags(void)
+  {
+    unsigned_long pdwFlags;
+    OLECHECK(this->get_Flags((unsigned_long*)&pdwFlags));
+    return pdwFlags;
+  }
+
+  unsigned_long __fastcall get_TVFlags(void)
+  {
+    unsigned_long dwFlags;
+    OLECHECK(this->get_TVFlags((unsigned_long*)&dwFlags));
+    return dwFlags;
+  }
+
+  BSTR __fastcall get_Columns(void)
+  {
+    BSTR bstrColumns = 0;
+    OLECHECK(this->get_Columns((BSTR*)&bstrColumns));
+    return bstrColumns;
+  }
+
+  int __fastcall get_CountViewTypes(void)
+  {
+    int piTypes;
+    OLECHECK(this->get_CountViewTypes((int*)&piTypes));
+    return piTypes;
+  }
+
+  LPDISPATCH __fastcall SelectedItems(void)
+  {
+    LPDISPATCH ppid;
+    OLECHECK(this->SelectedItems((LPDISPATCH*)&ppid));
+    return ppid;
+  }
+
+
+  __property   long            EnumOptions = {read = get_EnumOptions, write = set_EnumOptions};
+  __property   LPDISPATCH      SelectedItem = {read = get_SelectedItem, write = set_SelectedItem};
+  __property   int             Depth = {read = get_Depth, write = set_Depth};
+  __property   unsigned        Mode = {read = get_Mode, write = set_Mode};
+  __property   unsigned_long   Flags = {read = get_Flags, write = set_Flags};
+  __property   unsigned_long   TVFlags = {read = get_TVFlags, write = set_TVFlags};
+  __property   BSTR            Columns = {read = get_Columns};
+  __property   int             CountViewTypes = {read = get_CountViewTypes};
 
 #endif //   __TLB_NO_INTERFACE_WRAPPERS
 
@@ -1476,8 +1818,8 @@ public:
   // [-1] Get the default search name
   virtual HRESULT STDMETHODCALLTYPE get_Default(BSTR* pbstrDefault/*[out,retval]*/) = 0;
   // [-1] Return the specified search
-  virtual HRESULT STDMETHODCALLTYPE Item(TVariantInParam index/*[in,opt]*/, 
-                                         Shdocvw_tlb::ISearchPtr* ppid/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE Item(VARIANT index/*[in,opt]*/, 
+                                         Shdocvw_tlb::ISearch** ppid/*[out,retval]*/) = 0;
   // [-4] Enumerates the searches
   virtual HRESULT STDMETHODCALLTYPE _NewEnum(LPUNKNOWN* ppunk/*[out,retval]*/) = 0;
 
@@ -1497,10 +1839,10 @@ public:
     return pbstrDefault;
   }
 
-  Shdocvw_tlb::ISearchPtr __fastcall Item(TVariantInParam index/*[in,opt]*/= TNoParam())
+  Shdocvw_tlb::ISearch* __fastcall Item(VARIANT index/*[in,opt]*/= TNoParam())
   {
-    Shdocvw_tlb::ISearchPtr ppid;
-    OLECHECK(this->Item(index, (Shdocvw_tlb::ISearchPtr*)&ppid));
+    Shdocvw_tlb::ISearch* ppid;
+    OLECHECK(this->Item(index, (Shdocvw_tlb::ISearch**)&ppid));
     return ppid;
   }
 
@@ -1531,28 +1873,29 @@ public:
   virtual HRESULT STDMETHODCALLTYPE SetDefaultSearchUrl(BSTR bstrUrl/*[in]*/) = 0; // [2]
   virtual HRESULT STDMETHODCALLTYPE NavigateToDefaultSearch(void) = 0; // [3]
   virtual HRESULT STDMETHODCALLTYPE IsRestricted(BSTR bstrGuid/*[in]*/, 
-                                                 TOLEBOOL* pVal/*[out,retval]*/) = 0; // [4]
+                                                 VARIANT_BOOL* pVal/*[out,retval]*/) = 0; // [4]
   // [5] property ShellFeaturesEnabled
-  virtual HRESULT STDMETHODCALLTYPE get_ShellFeaturesEnabled(TOLEBOOL* pVal/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_ShellFeaturesEnabled(VARIANT_BOOL* pVal/*[out,retval]*/) = 0;
   // [6] property SearchAssistantDefault
-  virtual HRESULT STDMETHODCALLTYPE get_SearchAssistantDefault(TOLEBOOL* pVal/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_SearchAssistantDefault(VARIANT_BOOL* pVal/*[out,retval]*/) = 0;
   // [7] Get searches
-  virtual HRESULT STDMETHODCALLTYPE get_Searches(Shdocvw_tlb::ISearchesPtr* ppid/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE get_Searches(Shdocvw_tlb::ISearches** ppid/*[out,retval]*/) = 0;
   // [8] Returns true if the current folder is web folder
-  virtual HRESULT STDMETHODCALLTYPE get_InWebFolder(TOLEBOOL* pVal/*[out,retval]*/) = 0;
-  virtual HRESULT STDMETHODCALLTYPE PutProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/, 
-                                                BSTR bstrValue/*[in]*/) = 0; // [9]
-  virtual HRESULT STDMETHODCALLTYPE GetProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/, 
+  virtual HRESULT STDMETHODCALLTYPE get_InWebFolder(VARIANT_BOOL* pVal/*[out,retval]*/) = 0;
+  virtual HRESULT STDMETHODCALLTYPE PutProperty(VARIANT_BOOL bPerLocale/*[in]*/, 
+                                                BSTR bstrName/*[in]*/, BSTR bstrValue/*[in]*/) = 0; // [9]
+  virtual HRESULT STDMETHODCALLTYPE GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, 
+                                                BSTR bstrName/*[in]*/, 
                                                 BSTR* pbstrValue/*[out,retval]*/) = 0; // [10]
-  virtual HRESULT STDMETHODCALLTYPE set_EventHandled(TOLEBOOL Param1/*[in]*/) = 0; // [11]
+  virtual HRESULT STDMETHODCALLTYPE set_EventHandled(VARIANT_BOOL Param1/*[in]*/) = 0; // [11]
   virtual HRESULT STDMETHODCALLTYPE ResetNextMenu(void) = 0; // [12]
   virtual HRESULT STDMETHODCALLTYPE FindOnWeb(void) = 0; // [13]
   virtual HRESULT STDMETHODCALLTYPE FindFilesOrFolders(void) = 0; // [14]
   virtual HRESULT STDMETHODCALLTYPE FindComputer(void) = 0; // [15]
   virtual HRESULT STDMETHODCALLTYPE FindPrinter(void) = 0; // [16]
   virtual HRESULT STDMETHODCALLTYPE FindPeople(void) = 0; // [17]
-  virtual HRESULT STDMETHODCALLTYPE GetSearchAssistantURL(TOLEBOOL bSubstitute/*[in]*/, 
-                                                          TOLEBOOL bCustomize/*[in]*/, 
+  virtual HRESULT STDMETHODCALLTYPE GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                                          VARIANT_BOOL bCustomize/*[in]*/, 
                                                           BSTR* pbstrValue/*[out,retval]*/) = 0; // [18]
   virtual HRESULT STDMETHODCALLTYPE NotifySearchSettingsChanged(void) = 0; // [19]
   virtual HRESULT STDMETHODCALLTYPE set_ASProvider(BSTR pProvider/*[in]*/) = 0; // [20]
@@ -1563,54 +1906,55 @@ public:
   virtual HRESULT STDMETHODCALLTYPE PutFindText(BSTR FindText/*[in]*/) = 0; // [23]
   virtual HRESULT STDMETHODCALLTYPE get_Version(int* pVersion/*[out,retval]*/) = 0; // [24]
   virtual HRESULT STDMETHODCALLTYPE EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharSet/*[in]*/, 
-                                                 TOLEBOOL bUseUTF8/*[in]*/, 
+                                                 VARIANT_BOOL bUseUTF8/*[in]*/, 
                                                  BSTR* pbstrResult/*[out,retval]*/) = 0; // [25]
 
 #if !defined(__TLB_NO_INTERFACE_WRAPPERS)
 
-  TOLEBOOL __fastcall IsRestricted(BSTR bstrGuid/*[in]*/)
+  VARIANT_BOOL __fastcall IsRestricted(BSTR bstrGuid/*[in]*/)
   {
-    TOLEBOOL pVal;
-    OLECHECK(this->IsRestricted(bstrGuid, (TOLEBOOL*)&pVal));
+    VARIANT_BOOL pVal;
+    OLECHECK(this->IsRestricted(bstrGuid, (VARIANT_BOOL*)&pVal));
     return pVal;
   }
 
-  TOLEBOOL __fastcall get_ShellFeaturesEnabled(void)
+  VARIANT_BOOL __fastcall get_ShellFeaturesEnabled(void)
   {
-    TOLEBOOL pVal;
-    OLECHECK(this->get_ShellFeaturesEnabled((TOLEBOOL*)&pVal));
+    VARIANT_BOOL pVal;
+    OLECHECK(this->get_ShellFeaturesEnabled((VARIANT_BOOL*)&pVal));
     return pVal;
   }
 
-  TOLEBOOL __fastcall get_SearchAssistantDefault(void)
+  VARIANT_BOOL __fastcall get_SearchAssistantDefault(void)
   {
-    TOLEBOOL pVal;
-    OLECHECK(this->get_SearchAssistantDefault((TOLEBOOL*)&pVal));
+    VARIANT_BOOL pVal;
+    OLECHECK(this->get_SearchAssistantDefault((VARIANT_BOOL*)&pVal));
     return pVal;
   }
 
-  Shdocvw_tlb::ISearchesPtr __fastcall get_Searches(void)
+  Shdocvw_tlb::ISearches* __fastcall get_Searches(void)
   {
-    Shdocvw_tlb::ISearchesPtr ppid;
-    OLECHECK(this->get_Searches((Shdocvw_tlb::ISearchesPtr*)&ppid));
+    Shdocvw_tlb::ISearches* ppid;
+    OLECHECK(this->get_Searches((Shdocvw_tlb::ISearches**)&ppid));
     return ppid;
   }
 
-  TOLEBOOL __fastcall get_InWebFolder(void)
+  VARIANT_BOOL __fastcall get_InWebFolder(void)
   {
-    TOLEBOOL pVal;
-    OLECHECK(this->get_InWebFolder((TOLEBOOL*)&pVal));
+    VARIANT_BOOL pVal;
+    OLECHECK(this->get_InWebFolder((VARIANT_BOOL*)&pVal));
     return pVal;
   }
 
-  BSTR __fastcall GetProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/)
+  BSTR __fastcall GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/)
   {
     BSTR pbstrValue = 0;
     OLECHECK(this->GetProperty(bPerLocale, bstrName, (BSTR*)&pbstrValue));
     return pbstrValue;
   }
 
-  BSTR __fastcall GetSearchAssistantURL(TOLEBOOL bSubstitute/*[in]*/, TOLEBOOL bCustomize/*[in]*/)
+  BSTR __fastcall GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                        VARIANT_BOOL bCustomize/*[in]*/)
   {
     BSTR pbstrValue = 0;
     OLECHECK(this->GetSearchAssistantURL(bSubstitute, bCustomize, (BSTR*)&pbstrValue));
@@ -1639,7 +1983,7 @@ public:
   }
 
   BSTR __fastcall EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharSet/*[in]*/, 
-                               TOLEBOOL bUseUTF8/*[in]*/)
+                               VARIANT_BOOL bUseUTF8/*[in]*/)
   {
     BSTR pbstrResult = 0;
     OLECHECK(this->EncodeString(bstrValue, bstrCharSet, bUseUTF8, (BSTR*)&pbstrResult));
@@ -1647,11 +1991,11 @@ public:
   }
 
 
-  __property   TOLEBOOL        ShellFeaturesEnabled = {read = get_ShellFeaturesEnabled};
-  __property   TOLEBOOL        SearchAssistantDefault = {read = get_SearchAssistantDefault};
-  __property   Shdocvw_tlb::ISearchesPtr Searches = {read = get_Searches};
-  __property   TOLEBOOL        InWebFolder = {read = get_InWebFolder};
-  __property   TOLEBOOL        EventHandled = {write = set_EventHandled};
+  __property   VARIANT_BOOL    ShellFeaturesEnabled = {read = get_ShellFeaturesEnabled};
+  __property   VARIANT_BOOL    SearchAssistantDefault = {read = get_SearchAssistantDefault};
+  __property   Shdocvw_tlb::ISearches* Searches = {read = get_Searches};
+  __property   VARIANT_BOOL    InWebFolder = {read = get_InWebFolder};
+  __property   VARIANT_BOOL    EventHandled = {write = set_EventHandled};
   __property   BSTR            ASProvider = {read = get_ASProvider, write = set_ASProvider};
   __property   int             ASSetting = {read = get_ASSetting, write = set_ASSetting};
   __property   int             Version = {read = get_Version};
@@ -1668,19 +2012,55 @@ public:
 interface ISearchAssistantOC2  : public Shdocvw_tlb::ISearchAssistantOC
 {
 public:
-  virtual HRESULT STDMETHODCALLTYPE get_ShowFindPrinter(TOLEBOOL* pbShowFindPrinter/*[out,retval]*/) = 0; // [26]
+  virtual HRESULT STDMETHODCALLTYPE get_ShowFindPrinter(VARIANT_BOOL* pbShowFindPrinter/*[out,retval]*/) = 0; // [26]
 
 #if !defined(__TLB_NO_INTERFACE_WRAPPERS)
 
-  TOLEBOOL __fastcall get_ShowFindPrinter(void)
+  VARIANT_BOOL __fastcall get_ShowFindPrinter(void)
   {
-    TOLEBOOL pbShowFindPrinter;
-    OLECHECK(this->get_ShowFindPrinter((TOLEBOOL*)&pbShowFindPrinter));
+    VARIANT_BOOL pbShowFindPrinter;
+    OLECHECK(this->get_ShowFindPrinter((VARIANT_BOOL*)&pbShowFindPrinter));
     return pbShowFindPrinter;
   }
 
 
-  __property   TOLEBOOL        ShowFindPrinter = {read = get_ShowFindPrinter};
+  __property   VARIANT_BOOL    ShowFindPrinter = {read = get_ShowFindPrinter};
+
+#endif //   __TLB_NO_INTERFACE_WRAPPERS
+
+};
+
+// *********************************************************************//
+// Interface: ISearchAssistantOC3
+// Flags:     (4432) Hidden Dual OleAutomation Dispatchable
+// GUID:      {72423E8F-8011-11D2-BE79-00A0C9A83DA3}
+// *********************************************************************//
+interface ISearchAssistantOC3  : public Shdocvw_tlb::ISearchAssistantOC2
+{
+public:
+  virtual HRESULT STDMETHODCALLTYPE get_SearchCompanionAvailable(VARIANT_BOOL* pbAvailable/*[out,retval]*/) = 0; // [27]
+  virtual HRESULT STDMETHODCALLTYPE set_UseSearchCompanion(VARIANT_BOOL pbUseSC/*[in]*/) = 0; // [28]
+  virtual HRESULT STDMETHODCALLTYPE get_UseSearchCompanion(VARIANT_BOOL* pbUseSC/*[out,retval]*/) = 0; // [28]
+
+#if !defined(__TLB_NO_INTERFACE_WRAPPERS)
+
+  VARIANT_BOOL __fastcall get_SearchCompanionAvailable(void)
+  {
+    VARIANT_BOOL pbAvailable;
+    OLECHECK(this->get_SearchCompanionAvailable((VARIANT_BOOL*)&pbAvailable));
+    return pbAvailable;
+  }
+
+  VARIANT_BOOL __fastcall get_UseSearchCompanion(void)
+  {
+    VARIANT_BOOL pbUseSC;
+    OLECHECK(this->get_UseSearchCompanion((VARIANT_BOOL*)&pbUseSC));
+    return pbUseSC;
+  }
+
+
+  __property   VARIANT_BOOL    SearchCompanionAvailable = {read = get_SearchCompanionAvailable};
+  __property   VARIANT_BOOL    UseSearchCompanion = {read = get_UseSearchCompanion, write = set_UseSearchCompanion};
 
 #endif //   __TLB_NO_INTERFACE_WRAPPERS
 
@@ -1727,12 +2107,12 @@ public:
   HRESULT         __fastcall GoForward(void);
   HRESULT         __fastcall GoHome(void);
   HRESULT         __fastcall GoSearch(void);
-  HRESULT         __fastcall Navigate(BSTR URL/*[in]*/, TVariant* Flags/*[in,opt]*/= TNoParam(), 
-                                      TVariant* TargetFrameName/*[in,opt]*/= TNoParam(), 
-                                      TVariant* PostData/*[in,opt]*/= TNoParam(), 
-                                      TVariant* Headers/*[in,opt]*/= TNoParam());
+  HRESULT         __fastcall Navigate(BSTR URL/*[in]*/, VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                                      VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                                      VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                                      VARIANT* Headers/*[in,opt]*/= TNoParam());
   HRESULT         __fastcall Refresh(void);
-  HRESULT         __fastcall Refresh2(TVariant* Level/*[in,opt]*/= TNoParam());
+  HRESULT         __fastcall Refresh2(VARIANT* Level/*[in,opt]*/= TNoParam());
   HRESULT         __fastcall Stop(void);
   HRESULT         __fastcall get_Application(LPDISPATCH* ppDisp/*[out,retval]*/);
   LPDISPATCH      __fastcall get_Application(void);
@@ -1742,6 +2122,7 @@ public:
   LPDISPATCH      __fastcall get_Container(void);
   HRESULT         __fastcall get_Document(LPDISPATCH* ppDisp/*[out,retval]*/);
   LPDISPATCH      __fastcall get_Document(void);
+  HRESULT         __fastcall get_TopLevelContainer(VARIANT_BOOL* pBool/*[out,retval]*/);
   HRESULT         __fastcall get_TopLevelContainer(TOLEBOOL* pBool/*[out,retval]*/);
   TOLEBOOL        __fastcall get_TopLevelContainer(void);
   HRESULT         __fastcall get_Type(BSTR* Type/*[out,retval]*/);
@@ -1762,6 +2143,7 @@ public:
   BSTR            __fastcall get_LocationName(void);
   HRESULT         __fastcall get_LocationURL(BSTR* LocationURL/*[out,retval]*/);
   BSTR            __fastcall get_LocationURL(void);
+  HRESULT         __fastcall get_Busy(VARIANT_BOOL* pBool/*[out,retval]*/);
   HRESULT         __fastcall get_Busy(TOLEBOOL* pBool/*[out,retval]*/);
   TOLEBOOL        __fastcall get_Busy(void);
 
@@ -1829,12 +2211,12 @@ public:
   HRESULT /*[VT_HRESULT:0]*/ __fastcall GoHome();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall GoSearch();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Navigate(BSTR URL/*[in]*/, 
-                                                 TVariant* Flags/*[in,opt]*/= TNoParam(), 
-                                                 TVariant* TargetFrameName/*[in,opt]*/= TNoParam(), 
-                                                 TVariant* PostData/*[in,opt]*/= TNoParam(), 
-                                                 TVariant* Headers/*[in,opt]*/= TNoParam());
+                                                 VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                                                 VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                                                 VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                                                 VARIANT* Headers/*[in,opt]*/= TNoParam());
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Refresh();
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall Refresh2(TVariant* Level/*[in,opt]*/= TNoParam());
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall Refresh2(VARIANT* Level/*[in,opt]*/= TNoParam());
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Stop();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Application(LPDISPATCH* ppDisp/*[out,retval]*/);
   LPDISPATCH      __fastcall get_Application(void);
@@ -1844,8 +2226,8 @@ public:
   LPDISPATCH      __fastcall get_Container(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Document(LPDISPATCH* ppDisp/*[out,retval]*/);
   LPDISPATCH      __fastcall get_Document(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_TopLevelContainer(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_TopLevelContainer(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_TopLevelContainer(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_TopLevelContainer(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Type(BSTR* Type/*[out,retval]*/);
   BSTR            __fastcall get_Type(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Left(long* pl/*[out,retval]*/);
@@ -1864,14 +2246,14 @@ public:
   BSTR            __fastcall get_LocationName(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_LocationURL(BSTR* LocationURL/*[out,retval]*/);
   BSTR            __fastcall get_LocationURL(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Busy(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_Busy(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Busy(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_Busy(void);
 
   __property   LPDISPATCH      Application = {read = get_Application};
   __property   LPDISPATCH      Parent = {read = get_Parent};
   __property   LPDISPATCH      Container = {read = get_Container};
   __property   LPDISPATCH      Document = {read = get_Document};
-  __property   TOLEBOOL        TopLevelContainer = {read = get_TopLevelContainer};
+  __property   VARIANT_BOOL    TopLevelContainer = {read = get_TopLevelContainer};
   __property   BSTR            Type = {read = get_Type};
   __property   long            Left = {read = get_Left, write = set_Left};
   __property   long            Top = {read = get_Top, write = set_Top};
@@ -1879,7 +2261,7 @@ public:
   __property   long            Height = {read = get_Height, write = set_Height};
   __property   BSTR            LocationName = {read = get_LocationName};
   __property   BSTR            LocationURL = {read = get_LocationURL};
-  __property   TOLEBOOL        Busy = {read = get_Busy};
+  __property   VARIANT_BOOL    Busy = {read = get_Busy};
 };
 typedef IWebBrowserDispT<IWebBrowser> IWebBrowserDisp;
 
@@ -1898,27 +2280,29 @@ public:
   { m_Dispatch = static_cast<T*>(punk); }
 
   void /*[VT_VOID:0]*/ __fastcall BeforeNavigate(BSTR URL/*[in]*/, long Flags, BSTR TargetFrameName
-                                                 , TVariant* PostData, BSTR Headers, 
-                                                 TOLEBOOL* Cancel/*[in,out]*/);
+                                                 , VARIANT* PostData, BSTR Headers, 
+                                                 VARIANT_BOOL* Cancel/*[in,out]*/);
   void /*[VT_VOID:0]*/ __fastcall NavigateComplete(BSTR URL/*[in]*/);
   void /*[VT_VOID:0]*/ __fastcall StatusTextChange(BSTR Text/*[in]*/);
   void /*[VT_VOID:0]*/ __fastcall ProgressChange(long Progress/*[in]*/, long ProgressMax/*[in]*/);
   void /*[VT_VOID:0]*/ __fastcall DownloadComplete();
-  void /*[VT_VOID:0]*/ __fastcall CommandStateChange(long Command/*[in]*/, TOLEBOOL Enable/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall CommandStateChange(long Command/*[in]*/, 
+                                                     VARIANT_BOOL Enable/*[in]*/);
   void /*[VT_VOID:0]*/ __fastcall DownloadBegin();
   void /*[VT_VOID:0]*/ __fastcall NewWindow(BSTR URL/*[in]*/, long Flags/*[in]*/, 
-                                            BSTR TargetFrameName/*[in]*/, TVariant* PostData/*[in]*/
-                                            , BSTR Headers/*[in]*/, TOLEBOOL* Processed/*[in,out]*/);
+                                            BSTR TargetFrameName/*[in]*/, VARIANT* PostData/*[in]*/
+                                            , BSTR Headers/*[in]*/, 
+                                            VARIANT_BOOL* Processed/*[in,out]*/);
   void /*[VT_VOID:0]*/ __fastcall TitleChange(BSTR Text/*[in]*/);
   void /*[VT_VOID:0]*/ __fastcall FrameBeforeNavigate(BSTR URL/*[in]*/, long Flags, 
-                                                      BSTR TargetFrameName, TVariant* PostData, 
-                                                      BSTR Headers, TOLEBOOL* Cancel/*[in,out]*/);
+                                                      BSTR TargetFrameName, VARIANT* PostData, 
+                                                      BSTR Headers, VARIANT_BOOL* Cancel/*[in,out]*/);
   void /*[VT_VOID:0]*/ __fastcall FrameNavigateComplete(BSTR URL/*[in]*/);
   void /*[VT_VOID:0]*/ __fastcall FrameNewWindow(BSTR URL/*[in]*/, long Flags/*[in]*/, 
                                                  BSTR TargetFrameName/*[in]*/, 
-                                                 TVariant* PostData/*[in]*/, BSTR Headers/*[in]*/, 
-                                                 TOLEBOOL* Processed/*[in,out]*/);
-  void /*[VT_VOID:0]*/ __fastcall Quit(TOLEBOOL* Cancel/*[in,out]*/);
+                                                 VARIANT* PostData/*[in]*/, BSTR Headers/*[in]*/, 
+                                                 VARIANT_BOOL* Processed/*[in,out]*/);
+  void /*[VT_VOID:0]*/ __fastcall Quit(VARIANT_BOOL* Cancel/*[in,out]*/);
   void /*[VT_VOID:0]*/ __fastcall WindowMove();
   void /*[VT_VOID:0]*/ __fastcall WindowResize();
   void /*[VT_VOID:0]*/ __fastcall WindowActivate();
@@ -1964,11 +2348,10 @@ public:
 
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Quit();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall ClientToWindow(int* pcx/*[in,out]*/, int* pcy/*[in,out]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall PutProperty(BSTR Property/*[in]*/, 
-                                                    TVariantInParam vtValue/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall PutProperty(BSTR Property/*[in]*/, VARIANT vtValue/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall GetProperty(BSTR Property/*[in]*/, 
-                                                    TVariant* pvtValue/*[out,retval]*/);
-  TVariant        __fastcall GetProperty(BSTR Property/*[in]*/);
+                                                    VARIANT* pvtValue/*[out,retval]*/);
+  VARIANT         __fastcall GetProperty(BSTR Property/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Name(BSTR* Name/*[out,retval]*/);
   BSTR            __fastcall get_Name(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_HWND(long* pHWND/*[out,retval]*/);
@@ -1977,35 +2360,35 @@ public:
   BSTR            __fastcall get_FullName(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Path(BSTR* Path/*[out,retval]*/);
   BSTR            __fastcall get_Path(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Visible(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_Visible(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Visible(TOLEBOOL pBool/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_StatusBar(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_StatusBar(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_StatusBar(TOLEBOOL pBool/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Visible(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_Visible(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Visible(VARIANT_BOOL pBool/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_StatusBar(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_StatusBar(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_StatusBar(VARIANT_BOOL pBool/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_StatusText(BSTR* StatusText/*[out,retval]*/);
   BSTR            __fastcall get_StatusText(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall set_StatusText(BSTR StatusText/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ToolBar(int* Value/*[out,retval]*/);
   int             __fastcall get_ToolBar(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall set_ToolBar(int Value/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_MenuBar(TOLEBOOL* Value/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_MenuBar(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_MenuBar(TOLEBOOL Value/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_FullScreen(TOLEBOOL* pbFullScreen/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_FullScreen(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_FullScreen(TOLEBOOL pbFullScreen/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_MenuBar(VARIANT_BOOL* Value/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_MenuBar(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_MenuBar(VARIANT_BOOL Value/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_FullScreen(VARIANT_BOOL* pbFullScreen/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_FullScreen(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_FullScreen(VARIANT_BOOL pbFullScreen/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall GoBack();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall GoForward();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall GoHome();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall GoSearch();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Navigate(BSTR URL/*[in]*/, 
-                                                 TVariant* Flags/*[in,opt]*/= TNoParam(), 
-                                                 TVariant* TargetFrameName/*[in,opt]*/= TNoParam(), 
-                                                 TVariant* PostData/*[in,opt]*/= TNoParam(), 
-                                                 TVariant* Headers/*[in,opt]*/= TNoParam());
+                                                 VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                                                 VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                                                 VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                                                 VARIANT* Headers/*[in,opt]*/= TNoParam());
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Refresh();
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall Refresh2(TVariant* Level/*[in,opt]*/= TNoParam());
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall Refresh2(VARIANT* Level/*[in,opt]*/= TNoParam());
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Stop();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Application(LPDISPATCH* ppDisp/*[out,retval]*/);
   LPDISPATCH      __fastcall get_Application(void);
@@ -2015,8 +2398,8 @@ public:
   LPDISPATCH      __fastcall get_Container(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Document(LPDISPATCH* ppDisp/*[out,retval]*/);
   LPDISPATCH      __fastcall get_Document(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_TopLevelContainer(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_TopLevelContainer(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_TopLevelContainer(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_TopLevelContainer(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Type(BSTR* Type/*[out,retval]*/);
   BSTR            __fastcall get_Type(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Left(long* pl/*[out,retval]*/);
@@ -2035,25 +2418,25 @@ public:
   BSTR            __fastcall get_LocationName(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_LocationURL(BSTR* LocationURL/*[out,retval]*/);
   BSTR            __fastcall get_LocationURL(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Busy(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_Busy(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Busy(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_Busy(void);
 
   __property   BSTR            Name = {read = get_Name};
   __property   long            HWND = {read = get_HWND};
   __property   BSTR            FullName = {read = get_FullName};
   __property   BSTR            Path = {read = get_Path};
-  __property   TOLEBOOL        Visible = {read = get_Visible, write = set_Visible};
-  __property   TOLEBOOL        StatusBar = {read = get_StatusBar, write = set_StatusBar};
-  __property   BSTR            StatusText = {read = get_StatusText, write = set_StatusText};
+  __property   VARIANT_BOOL    Visible = {read = get_Visible, write = set_Visible};
+  __property   VARIANT_BOOL    StatusBar = {read = get_StatusBar, write = set_StatusBar};
+  __property   BSTR            StatusText = {read = get_StatusText};
   __property   int             ToolBar = {read = get_ToolBar, write = set_ToolBar};
-  __property   TOLEBOOL        MenuBar = {read = get_MenuBar, write = set_MenuBar};
-  __property   TOLEBOOL        FullScreen = {read = get_FullScreen, write = set_FullScreen};
+  __property   VARIANT_BOOL    MenuBar = {read = get_MenuBar, write = set_MenuBar};
+  __property   VARIANT_BOOL    FullScreen = {read = get_FullScreen, write = set_FullScreen};
 
   __property   LPDISPATCH      Application = {read = get_Application};
   __property   LPDISPATCH      Parent = {read = get_Parent};
   __property   LPDISPATCH      Container = {read = get_Container};
   __property   LPDISPATCH      Document = {read = get_Document};
-  __property   TOLEBOOL        TopLevelContainer = {read = get_TopLevelContainer};
+  __property   VARIANT_BOOL    TopLevelContainer = {read = get_TopLevelContainer};
   __property   BSTR            Type = {read = get_Type};
   __property   long            Left = {read = get_Left, write = set_Left};
   __property   long            Top = {read = get_Top, write = set_Top};
@@ -2061,7 +2444,7 @@ public:
   __property   long            Height = {read = get_Height, write = set_Height};
   __property   BSTR            LocationName = {read = get_LocationName};
   __property   BSTR            LocationURL = {read = get_LocationURL};
-  __property   TOLEBOOL        Busy = {read = get_Busy};
+  __property   VARIANT_BOOL    Busy = {read = get_Busy};
 };
 typedef IWebBrowserAppDispT<IWebBrowserApp> IWebBrowserAppDisp;
 
@@ -2078,43 +2461,56 @@ public:
   TCOMIWebBrowser2T(const TCOMIWebBrowser2T& src) : TComInterface<IWebBrowser2>(src) {}
   TCOMIWebBrowser2T& operator=(const TCOMIWebBrowser2T& src) { Bind(src, true); return *this;}
 
-  HRESULT         __fastcall Navigate2(TVariant* URL/*[in]*/, 
-                                       TVariant* Flags/*[in,opt]*/= TNoParam(), 
-                                       TVariant* TargetFrameName/*[in,opt]*/= TNoParam(), 
-                                       TVariant* PostData/*[in,opt]*/= TNoParam(), 
-                                       TVariant* Headers/*[in,opt]*/= TNoParam());
+  HRESULT         __fastcall Navigate2(VARIANT* URL/*[in]*/, VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                                       VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                                       VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                                       VARIANT* Headers/*[in,opt]*/= TNoParam());
   HRESULT         __fastcall QueryStatusWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/, 
                                            Shdocvw_tlb::OLECMDF* pcmdf/*[out,retval]*/);
   Shdocvw_tlb::OLECMDF __fastcall QueryStatusWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/);
   HRESULT         __fastcall ExecWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/, 
                                     Shdocvw_tlb::OLECMDEXECOPT cmdexecopt/*[in]*/, 
-                                    TVariant* pvaIn/*[in,opt]*/= TNoParam(), 
-                                    TVariant* pvaOut/*[in,out,opt]*/= TNoParam());
-  HRESULT         __fastcall ShowBrowserBar(TVariant* pvaClsid/*[in]*/, 
-                                            TVariant* pvarShow/*[in,opt]*/= TNoParam(), 
-                                            TVariant* pvarSize/*[in,opt]*/= TNoParam());
+                                    VARIANT* pvaIn/*[in,opt]*/= TNoParam(), 
+                                    VARIANT* pvaOut/*[in,out,opt]*/= TNoParam());
+  HRESULT         __fastcall ShowBrowserBar(VARIANT* pvaClsid/*[in]*/, 
+                                            VARIANT* pvarShow/*[in,opt]*/= TNoParam(), 
+                                            VARIANT* pvarSize/*[in,opt]*/= TNoParam());
   HRESULT         __fastcall get_ReadyState(Shdocvw_tlb::tagREADYSTATE* plReadyState/*[out,retval]*/);
   Shdocvw_tlb::tagREADYSTATE __fastcall get_ReadyState(void);
+  HRESULT         __fastcall get_Offline(VARIANT_BOOL* pbOffline/*[out,retval]*/);
   HRESULT         __fastcall get_Offline(TOLEBOOL* pbOffline/*[out,retval]*/);
   TOLEBOOL        __fastcall get_Offline(void);
+  HRESULT         __fastcall set_Offline(VARIANT_BOOL pbOffline/*[in]*/);
   HRESULT         __fastcall set_Offline(TOLEBOOL pbOffline/*[in]*/);
+  HRESULT         __fastcall get_Silent(VARIANT_BOOL* pbSilent/*[out,retval]*/);
   HRESULT         __fastcall get_Silent(TOLEBOOL* pbSilent/*[out,retval]*/);
   TOLEBOOL        __fastcall get_Silent(void);
+  HRESULT         __fastcall set_Silent(VARIANT_BOOL pbSilent/*[in]*/);
   HRESULT         __fastcall set_Silent(TOLEBOOL pbSilent/*[in]*/);
+  HRESULT         __fastcall get_RegisterAsBrowser(VARIANT_BOOL* pbRegister/*[out,retval]*/);
   HRESULT         __fastcall get_RegisterAsBrowser(TOLEBOOL* pbRegister/*[out,retval]*/);
   TOLEBOOL        __fastcall get_RegisterAsBrowser(void);
+  HRESULT         __fastcall set_RegisterAsBrowser(VARIANT_BOOL pbRegister/*[in]*/);
   HRESULT         __fastcall set_RegisterAsBrowser(TOLEBOOL pbRegister/*[in]*/);
+  HRESULT         __fastcall get_RegisterAsDropTarget(VARIANT_BOOL* pbRegister/*[out,retval]*/);
   HRESULT         __fastcall get_RegisterAsDropTarget(TOLEBOOL* pbRegister/*[out,retval]*/);
   TOLEBOOL        __fastcall get_RegisterAsDropTarget(void);
+  HRESULT         __fastcall set_RegisterAsDropTarget(VARIANT_BOOL pbRegister/*[in]*/);
   HRESULT         __fastcall set_RegisterAsDropTarget(TOLEBOOL pbRegister/*[in]*/);
+  HRESULT         __fastcall get_TheaterMode(VARIANT_BOOL* pbRegister/*[out,retval]*/);
   HRESULT         __fastcall get_TheaterMode(TOLEBOOL* pbRegister/*[out,retval]*/);
   TOLEBOOL        __fastcall get_TheaterMode(void);
+  HRESULT         __fastcall set_TheaterMode(VARIANT_BOOL pbRegister/*[in]*/);
   HRESULT         __fastcall set_TheaterMode(TOLEBOOL pbRegister/*[in]*/);
+  HRESULT         __fastcall get_AddressBar(VARIANT_BOOL* Value/*[out,retval]*/);
   HRESULT         __fastcall get_AddressBar(TOLEBOOL* Value/*[out,retval]*/);
   TOLEBOOL        __fastcall get_AddressBar(void);
+  HRESULT         __fastcall set_AddressBar(VARIANT_BOOL Value/*[in]*/);
   HRESULT         __fastcall set_AddressBar(TOLEBOOL Value/*[in]*/);
+  HRESULT         __fastcall get_Resizable(VARIANT_BOOL* Value/*[out,retval]*/);
   HRESULT         __fastcall get_Resizable(TOLEBOOL* Value/*[out,retval]*/);
   TOLEBOOL        __fastcall get_Resizable(void);
+  HRESULT         __fastcall set_Resizable(VARIANT_BOOL Value/*[in]*/);
   HRESULT         __fastcall set_Resizable(TOLEBOOL Value/*[in]*/);
 
   __property   Shdocvw_tlb::tagREADYSTATE ReadyState = {read = get_ReadyState};
@@ -2171,51 +2567,50 @@ public:
     return BindToActive(CLSID_CppWebBrowser);
   }
 
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall Navigate2(TVariant* URL/*[in]*/, 
-                                                  TVariant* Flags/*[in,opt]*/= TNoParam(), 
-                                                  TVariant* TargetFrameName/*[in,opt]*/= TNoParam()
-                                                  , TVariant* PostData/*[in,opt]*/= TNoParam(), 
-                                                  TVariant* Headers/*[in,opt]*/= TNoParam());
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall Navigate2(VARIANT* URL/*[in]*/, 
+                                                  VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                                                  VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                                                  VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                                                  VARIANT* Headers/*[in,opt]*/= TNoParam());
   HRESULT /*[VT_HRESULT:0]*/ __fastcall QueryStatusWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/, 
                                                       Shdocvw_tlb::OLECMDF* pcmdf/*[out,retval]*/);
   Shdocvw_tlb::OLECMDF __fastcall QueryStatusWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall ExecWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/, 
                                                Shdocvw_tlb::OLECMDEXECOPT cmdexecopt/*[in]*/, 
-                                               TVariant* pvaIn/*[in,opt]*/= TNoParam(), 
-                                               TVariant* pvaOut/*[in,out,opt]*/= TNoParam());
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall ShowBrowserBar(TVariant* pvaClsid/*[in]*/, 
-                                                       TVariant* pvarShow/*[in,opt]*/= TNoParam(), 
-                                                       TVariant* pvarSize/*[in,opt]*/= TNoParam());
+                                               VARIANT* pvaIn/*[in,opt]*/= TNoParam(), 
+                                               VARIANT* pvaOut/*[in,out,opt]*/= TNoParam());
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall ShowBrowserBar(VARIANT* pvaClsid/*[in]*/, 
+                                                       VARIANT* pvarShow/*[in,opt]*/= TNoParam(), 
+                                                       VARIANT* pvarSize/*[in,opt]*/= TNoParam());
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ReadyState(Shdocvw_tlb::tagREADYSTATE* plReadyState/*[out,retval]*/);
   Shdocvw_tlb::tagREADYSTATE __fastcall get_ReadyState(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Offline(TOLEBOOL* pbOffline/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_Offline(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Offline(TOLEBOOL pbOffline/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Silent(TOLEBOOL* pbSilent/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_Silent(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Silent(TOLEBOOL pbSilent/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_RegisterAsBrowser(TOLEBOOL* pbRegister/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_RegisterAsBrowser(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_RegisterAsBrowser(TOLEBOOL pbRegister/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_RegisterAsDropTarget(TOLEBOOL* pbRegister/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_RegisterAsDropTarget(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_RegisterAsDropTarget(TOLEBOOL pbRegister/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_TheaterMode(TOLEBOOL* pbRegister/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_TheaterMode(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_TheaterMode(TOLEBOOL pbRegister/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_AddressBar(TOLEBOOL* Value/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_AddressBar(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_AddressBar(TOLEBOOL Value/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Resizable(TOLEBOOL* Value/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_Resizable(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Resizable(TOLEBOOL Value/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Offline(VARIANT_BOOL* pbOffline/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_Offline(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Offline(VARIANT_BOOL pbOffline/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Silent(VARIANT_BOOL* pbSilent/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_Silent(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Silent(VARIANT_BOOL pbSilent/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_RegisterAsBrowser(VARIANT_BOOL* pbRegister/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_RegisterAsBrowser(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_RegisterAsBrowser(VARIANT_BOOL pbRegister/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_RegisterAsDropTarget(VARIANT_BOOL* pbRegister/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_RegisterAsDropTarget(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_RegisterAsDropTarget(VARIANT_BOOL pbRegister/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_TheaterMode(VARIANT_BOOL* pbRegister/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_TheaterMode(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_TheaterMode(VARIANT_BOOL pbRegister/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_AddressBar(VARIANT_BOOL* Value/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_AddressBar(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_AddressBar(VARIANT_BOOL Value/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Resizable(VARIANT_BOOL* Value/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_Resizable(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Resizable(VARIANT_BOOL Value/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Quit();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall ClientToWindow(int* pcx/*[in,out]*/, int* pcy/*[in,out]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall PutProperty(BSTR Property/*[in]*/, 
-                                                    TVariantInParam vtValue/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall PutProperty(BSTR Property/*[in]*/, VARIANT vtValue/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall GetProperty(BSTR Property/*[in]*/, 
-                                                    TVariant* pvtValue/*[out,retval]*/);
-  TVariant        __fastcall GetProperty(BSTR Property/*[in]*/);
+                                                    VARIANT* pvtValue/*[out,retval]*/);
+  VARIANT         __fastcall GetProperty(BSTR Property/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Name(BSTR* Name/*[out,retval]*/);
   BSTR            __fastcall get_Name(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_HWND(long* pHWND/*[out,retval]*/);
@@ -2224,35 +2619,35 @@ public:
   BSTR            __fastcall get_FullName(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Path(BSTR* Path/*[out,retval]*/);
   BSTR            __fastcall get_Path(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Visible(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_Visible(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Visible(TOLEBOOL pBool/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_StatusBar(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_StatusBar(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_StatusBar(TOLEBOOL pBool/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Visible(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_Visible(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Visible(VARIANT_BOOL pBool/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_StatusBar(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_StatusBar(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_StatusBar(VARIANT_BOOL pBool/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_StatusText(BSTR* StatusText/*[out,retval]*/);
   BSTR            __fastcall get_StatusText(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall set_StatusText(BSTR StatusText/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ToolBar(int* Value/*[out,retval]*/);
   int             __fastcall get_ToolBar(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall set_ToolBar(int Value/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_MenuBar(TOLEBOOL* Value/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_MenuBar(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_MenuBar(TOLEBOOL Value/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_FullScreen(TOLEBOOL* pbFullScreen/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_FullScreen(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_FullScreen(TOLEBOOL pbFullScreen/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_MenuBar(VARIANT_BOOL* Value/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_MenuBar(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_MenuBar(VARIANT_BOOL Value/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_FullScreen(VARIANT_BOOL* pbFullScreen/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_FullScreen(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_FullScreen(VARIANT_BOOL pbFullScreen/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall GoBack();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall GoForward();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall GoHome();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall GoSearch();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Navigate(BSTR URL/*[in]*/, 
-                                                 TVariant* Flags/*[in,opt]*/= TNoParam(), 
-                                                 TVariant* TargetFrameName/*[in,opt]*/= TNoParam(), 
-                                                 TVariant* PostData/*[in,opt]*/= TNoParam(), 
-                                                 TVariant* Headers/*[in,opt]*/= TNoParam());
+                                                 VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                                                 VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                                                 VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                                                 VARIANT* Headers/*[in,opt]*/= TNoParam());
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Refresh();
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall Refresh2(TVariant* Level/*[in,opt]*/= TNoParam());
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall Refresh2(VARIANT* Level/*[in,opt]*/= TNoParam());
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Stop();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Application(LPDISPATCH* ppDisp/*[out,retval]*/);
   LPDISPATCH      __fastcall get_Application(void);
@@ -2262,8 +2657,8 @@ public:
   LPDISPATCH      __fastcall get_Container(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Document(LPDISPATCH* ppDisp/*[out,retval]*/);
   LPDISPATCH      __fastcall get_Document(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_TopLevelContainer(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_TopLevelContainer(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_TopLevelContainer(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_TopLevelContainer(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Type(BSTR* Type/*[out,retval]*/);
   BSTR            __fastcall get_Type(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Left(long* pl/*[out,retval]*/);
@@ -2282,34 +2677,34 @@ public:
   BSTR            __fastcall get_LocationName(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_LocationURL(BSTR* LocationURL/*[out,retval]*/);
   BSTR            __fastcall get_LocationURL(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Busy(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_Busy(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Busy(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_Busy(void);
 
   __property   Shdocvw_tlb::tagREADYSTATE ReadyState = {read = get_ReadyState};
-  __property   TOLEBOOL        Offline = {read = get_Offline, write = set_Offline};
-  __property   TOLEBOOL        Silent = {read = get_Silent, write = set_Silent};
-  __property   TOLEBOOL        RegisterAsBrowser = {read = get_RegisterAsBrowser, write = set_RegisterAsBrowser};
-  __property   TOLEBOOL        RegisterAsDropTarget = {read = get_RegisterAsDropTarget, write = set_RegisterAsDropTarget};
-  __property   TOLEBOOL        TheaterMode = {read = get_TheaterMode, write = set_TheaterMode};
-  __property   TOLEBOOL        AddressBar = {read = get_AddressBar, write = set_AddressBar};
-  __property   TOLEBOOL        Resizable = {read = get_Resizable, write = set_Resizable};
+  __property   VARIANT_BOOL    Offline = {read = get_Offline, write = set_Offline};
+  __property   VARIANT_BOOL    Silent = {read = get_Silent, write = set_Silent};
+  __property   VARIANT_BOOL    RegisterAsBrowser = {read = get_RegisterAsBrowser, write = set_RegisterAsBrowser};
+  __property   VARIANT_BOOL    RegisterAsDropTarget = {read = get_RegisterAsDropTarget, write = set_RegisterAsDropTarget};
+  __property   VARIANT_BOOL    TheaterMode = {read = get_TheaterMode, write = set_TheaterMode};
+  __property   VARIANT_BOOL    AddressBar = {read = get_AddressBar, write = set_AddressBar};
+  __property   VARIANT_BOOL    Resizable = {read = get_Resizable, write = set_Resizable};
 
   __property   BSTR            Name = {read = get_Name};
   __property   long            HWND = {read = get_HWND};
   __property   BSTR            FullName = {read = get_FullName};
   __property   BSTR            Path = {read = get_Path};
-  __property   TOLEBOOL        Visible = {read = get_Visible, write = set_Visible};
-  __property   TOLEBOOL        StatusBar = {read = get_StatusBar, write = set_StatusBar};
-  __property   BSTR            StatusText = {read = get_StatusText, write = set_StatusText};
+  __property   VARIANT_BOOL    Visible = {read = get_Visible, write = set_Visible};
+  __property   VARIANT_BOOL    StatusBar = {read = get_StatusBar, write = set_StatusBar};
+  __property   BSTR            StatusText = {read = get_StatusText};
   __property   int             ToolBar = {read = get_ToolBar, write = set_ToolBar};
-  __property   TOLEBOOL        MenuBar = {read = get_MenuBar, write = set_MenuBar};
-  __property   TOLEBOOL        FullScreen = {read = get_FullScreen, write = set_FullScreen};
+  __property   VARIANT_BOOL    MenuBar = {read = get_MenuBar, write = set_MenuBar};
+  __property   VARIANT_BOOL    FullScreen = {read = get_FullScreen, write = set_FullScreen};
 
   __property   LPDISPATCH      Application = {read = get_Application};
   __property   LPDISPATCH      Parent = {read = get_Parent};
   __property   LPDISPATCH      Container = {read = get_Container};
   __property   LPDISPATCH      Document = {read = get_Document};
-  __property   TOLEBOOL        TopLevelContainer = {read = get_TopLevelContainer};
+  __property   VARIANT_BOOL    TopLevelContainer = {read = get_TopLevelContainer};
   __property   BSTR            Type = {read = get_Type};
   __property   long            Left = {read = get_Left, write = set_Left};
   __property   long            Top = {read = get_Top, write = set_Top};
@@ -2317,7 +2712,7 @@ public:
   __property   long            Height = {read = get_Height, write = set_Height};
   __property   BSTR            LocationName = {read = get_LocationName};
   __property   BSTR            LocationURL = {read = get_LocationURL};
-  __property   TOLEBOOL        Busy = {read = get_Busy};
+  __property   VARIANT_BOOL    Busy = {read = get_Busy};
 };
 typedef IWebBrowser2DispT<IWebBrowser2> IWebBrowser2Disp;
 
@@ -2337,28 +2732,47 @@ public:
 
   void /*[VT_VOID:0]*/ __fastcall StatusTextChange(BSTR Text/*[in]*/);
   void /*[VT_VOID:0]*/ __fastcall ProgressChange(long Progress/*[in]*/, long ProgressMax/*[in]*/);
-  void /*[VT_VOID:0]*/ __fastcall CommandStateChange(long Command/*[in]*/, TOLEBOOL Enable/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall CommandStateChange(long Command/*[in]*/, 
+                                                     VARIANT_BOOL Enable/*[in]*/);
   void /*[VT_VOID:0]*/ __fastcall DownloadBegin();
   void /*[VT_VOID:0]*/ __fastcall DownloadComplete();
   void /*[VT_VOID:0]*/ __fastcall TitleChange(BSTR Text/*[in]*/);
   void /*[VT_VOID:0]*/ __fastcall PropertyChange(BSTR szProperty/*[in]*/);
-  void /*[VT_VOID:0]*/ __fastcall BeforeNavigate2(LPDISPATCH pDisp/*[in]*/, TVariant* URL/*[in]*/, 
-                                                  TVariant* Flags/*[in]*/, 
-                                                  TVariant* TargetFrameName/*[in]*/, 
-                                                  TVariant* PostData/*[in]*/, 
-                                                  TVariant* Headers/*[in]*/, 
-                                                  TOLEBOOL* Cancel/*[in,out]*/);
+  void /*[VT_VOID:0]*/ __fastcall BeforeNavigate2(LPDISPATCH pDisp/*[in]*/, VARIANT* URL/*[in]*/, 
+                                                  VARIANT* Flags/*[in]*/, 
+                                                  VARIANT* TargetFrameName/*[in]*/, 
+                                                  VARIANT* PostData/*[in]*/, 
+                                                  VARIANT* Headers/*[in]*/, 
+                                                  VARIANT_BOOL* Cancel/*[in,out]*/);
   void /*[VT_VOID:0]*/ __fastcall NewWindow2(LPDISPATCH* ppDisp/*[in,out]*/, 
-                                             TOLEBOOL* Cancel/*[in,out]*/);
-  void /*[VT_VOID:0]*/ __fastcall NavigateComplete2(LPDISPATCH pDisp/*[in]*/, TVariant* URL/*[in]*/);
-  void /*[VT_VOID:0]*/ __fastcall DocumentComplete(LPDISPATCH pDisp/*[in]*/, TVariant* URL/*[in]*/);
+                                             VARIANT_BOOL* Cancel/*[in,out]*/);
+  void /*[VT_VOID:0]*/ __fastcall NavigateComplete2(LPDISPATCH pDisp/*[in]*/, VARIANT* URL/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall DocumentComplete(LPDISPATCH pDisp/*[in]*/, VARIANT* URL/*[in]*/);
   void /*[VT_VOID:0]*/ __fastcall OnQuit();
-  void /*[VT_VOID:0]*/ __fastcall OnVisible(TOLEBOOL Visible/*[in]*/);
-  void /*[VT_VOID:0]*/ __fastcall OnToolBar(TOLEBOOL ToolBar/*[in]*/);
-  void /*[VT_VOID:0]*/ __fastcall OnMenuBar(TOLEBOOL MenuBar/*[in]*/);
-  void /*[VT_VOID:0]*/ __fastcall OnStatusBar(TOLEBOOL StatusBar/*[in]*/);
-  void /*[VT_VOID:0]*/ __fastcall OnFullScreen(TOLEBOOL FullScreen/*[in]*/);
-  void /*[VT_VOID:0]*/ __fastcall OnTheaterMode(TOLEBOOL TheaterMode/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall OnVisible(VARIANT_BOOL Visible/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall OnToolBar(VARIANT_BOOL ToolBar/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall OnMenuBar(VARIANT_BOOL MenuBar/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall OnStatusBar(VARIANT_BOOL StatusBar/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall OnFullScreen(VARIANT_BOOL FullScreen/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall OnTheaterMode(VARIANT_BOOL TheaterMode/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall WindowSetResizable(VARIANT_BOOL Resizable/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall WindowSetLeft(long Left/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall WindowSetTop(long Top/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall WindowSetWidth(long Width/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall WindowSetHeight(long Height/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall WindowClosing(VARIANT_BOOL IsChildWindow/*[in]*/, 
+                                                VARIANT_BOOL* Cancel/*[in,out]*/);
+  void /*[VT_VOID:0]*/ __fastcall ClientToHostWindow(long* CX/*[in,out]*/, long* CY/*[in,out]*/);
+  void /*[VT_VOID:0]*/ __fastcall SetSecureLockIcon(long SecureLockIcon/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall FileDownload(VARIANT_BOOL* Cancel/*[in,out]*/);
+  void /*[VT_VOID:0]*/ __fastcall NavigateError(LPDISPATCH pDisp/*[in]*/, VARIANT* URL/*[in]*/, 
+                                                VARIANT* Frame/*[in]*/, VARIANT* StatusCode/*[in]*/
+                                                , VARIANT_BOOL* Cancel/*[in,out]*/);
+  void /*[VT_VOID:0]*/ __fastcall PrintTemplateInstantiation(LPDISPATCH pDisp/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall PrintTemplateTeardown(LPDISPATCH pDisp/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall UpdatePageStatus(LPDISPATCH pDisp/*[in]*/, VARIANT* nPage/*[in]*/
+                                                   , VARIANT* fDone/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall PrivacyImpactedStateChange(VARIANT_BOOL bImpacted/*[in]*/);
 
 };
 typedef DWebBrowserEvents2DispT<DWebBrowserEvents2> DWebBrowserEvents2Disp;
@@ -2398,28 +2812,27 @@ public:
 
   HRESULT         __fastcall get_Count(long* Count/*[out,retval]*/);
   long            __fastcall get_Count(void);
-  HRESULT         __fastcall Item(TVariantInParam index/*[in,opt]*/, 
-                                  LPDISPATCH* Folder/*[out,retval]*/);
-  LPDISPATCH      __fastcall Item(TVariantInParam index/*[in,opt]*/= TNoParam());
+  HRESULT         __fastcall Item(VARIANT index/*[in,opt]*/, LPDISPATCH* Folder/*[out,retval]*/);
+  LPDISPATCH      __fastcall Item(VARIANT index/*[in,opt]*/= TNoParam());
   HRESULT         __fastcall _NewEnum(LPUNKNOWN* ppunk/*[out,retval]*/);
   LPUNKNOWN       __fastcall _NewEnum(void);
   HRESULT         __fastcall Register(LPDISPATCH pid/*[in]*/, long HWND/*[in]*/, int swClass/*[in]*/, 
                                       long* plCookie/*[out]*/);
-  HRESULT         __fastcall RegisterPending(long lThreadId/*[in]*/, TVariant* pvarloc/*[in]*/, 
-                                             TVariant* pvarlocRoot/*[in]*/, int swClass/*[in]*/, 
+  HRESULT         __fastcall RegisterPending(long lThreadId/*[in]*/, VARIANT* pvarloc/*[in]*/, 
+                                             VARIANT* pvarlocRoot/*[in]*/, int swClass/*[in]*/, 
                                              long* plCookie/*[out]*/);
   HRESULT         __fastcall Revoke(long lCookie/*[in]*/);
-  HRESULT         __fastcall OnNavigate(long lCookie/*[in]*/, TVariant* pvarloc/*[in]*/);
-  HRESULT         __fastcall OnActivated(long lCookie/*[in]*/, TOLEBOOL fActive/*[in]*/);
-  HRESULT         __fastcall FindWindow(TVariant* pvarloc/*[in]*/, TVariant* pvarlocRoot/*[in]*/, 
-                                        int swClass/*[in]*/, long* pHWND/*[out]*/, 
-                                        int swfwOptions/*[in]*/, 
-                                        LPDISPATCH* ppdispOut/*[out,retval]*/);
-  LPDISPATCH      __fastcall FindWindow(TVariant* pvarloc/*[in]*/, TVariant* pvarlocRoot/*[in]*/, 
-                                        int swClass/*[in]*/, long* pHWND/*[out]*/, 
-                                        int swfwOptions/*[in]*/);
+  HRESULT         __fastcall OnNavigate(long lCookie/*[in]*/, VARIANT* pvarloc/*[in]*/);
+  HRESULT         __fastcall OnActivated(long lCookie/*[in]*/, VARIANT_BOOL fActive/*[in]*/);
+  HRESULT         __fastcall FindWindowSW(VARIANT* pvarloc/*[in]*/, VARIANT* pvarlocRoot/*[in]*/, 
+                                          int swClass/*[in]*/, long* pHWND/*[out]*/, 
+                                          int swfwOptions/*[in]*/, 
+                                          LPDISPATCH* ppdispOut/*[out,retval]*/);
+  LPDISPATCH      __fastcall FindWindowSW(VARIANT* pvarloc/*[in]*/, VARIANT* pvarlocRoot/*[in]*/, 
+                                          int swClass/*[in]*/, long* pHWND/*[out]*/, 
+                                          int swfwOptions/*[in]*/);
   HRESULT         __fastcall OnCreated(long lCookie/*[in]*/, LPUNKNOWN punk/*[in]*/);
-  HRESULT         __fastcall ProcessAttachDetach(TOLEBOOL fAttach/*[in]*/);
+  HRESULT         __fastcall ProcessAttachDetach(VARIANT_BOOL fAttach/*[in]*/);
 
   __property   long            Count = {read = get_Count};
 };
@@ -2470,30 +2883,31 @@ public:
 
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Count(long* Count/*[out,retval]*/);
   long            __fastcall get_Count(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall Item(TVariantInParam index/*[in,opt]*/, 
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall Item(VARIANT index/*[in,opt]*/, 
                                              LPDISPATCH* Folder/*[out,retval]*/);
-  LPDISPATCH      __fastcall Item(TVariantInParam index/*[in,opt]*/= TNoParam());
+  LPDISPATCH      __fastcall Item(VARIANT index/*[in,opt]*/= TNoParam());
   HRESULT /*[VT_HRESULT:0]*/ __fastcall _NewEnum(LPUNKNOWN* ppunk/*[out,retval]*/);
   LPUNKNOWN       __fastcall _NewEnum(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Register(LPDISPATCH pid/*[in]*/, long HWND/*[in]*/, 
                                                  int swClass/*[in]*/, long* plCookie/*[out]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall RegisterPending(long lThreadId/*[in]*/, 
-                                                        TVariant* pvarloc/*[in]*/, 
-                                                        TVariant* pvarlocRoot/*[in]*/, 
+                                                        VARIANT* pvarloc/*[in]*/, 
+                                                        VARIANT* pvarlocRoot/*[in]*/, 
                                                         int swClass/*[in]*/, long* plCookie/*[out]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Revoke(long lCookie/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall OnNavigate(long lCookie/*[in]*/, TVariant* pvarloc/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall OnActivated(long lCookie/*[in]*/, TOLEBOOL fActive/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall FindWindow(TVariant* pvarloc/*[in]*/, 
-                                                   TVariant* pvarlocRoot/*[in]*/, 
-                                                   int swClass/*[in]*/, long* pHWND/*[out]*/, 
-                                                   int swfwOptions/*[in]*/, 
-                                                   LPDISPATCH* ppdispOut/*[out,retval]*/);
-  LPDISPATCH      __fastcall FindWindow(TVariant* pvarloc/*[in]*/, TVariant* pvarlocRoot/*[in]*/, 
-                                        int swClass/*[in]*/, long* pHWND/*[out]*/, 
-                                        int swfwOptions/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall OnNavigate(long lCookie/*[in]*/, VARIANT* pvarloc/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall OnActivated(long lCookie/*[in]*/, 
+                                                    VARIANT_BOOL fActive/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall FindWindowSW(VARIANT* pvarloc/*[in]*/, 
+                                                     VARIANT* pvarlocRoot/*[in]*/, 
+                                                     int swClass/*[in]*/, long* pHWND/*[out]*/, 
+                                                     int swfwOptions/*[in]*/, 
+                                                     LPDISPATCH* ppdispOut/*[out,retval]*/);
+  LPDISPATCH      __fastcall FindWindowSW(VARIANT* pvarloc/*[in]*/, VARIANT* pvarlocRoot/*[in]*/, 
+                                          int swClass/*[in]*/, long* pHWND/*[out]*/, 
+                                          int swfwOptions/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall OnCreated(long lCookie/*[in]*/, LPUNKNOWN punk/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall ProcessAttachDetach(TOLEBOOL fAttach/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall ProcessAttachDetach(VARIANT_BOOL fAttach/*[in]*/);
 
   __property   long            Count = {read = get_Count};
 };
@@ -2515,26 +2929,26 @@ public:
   HRESULT         __fastcall ResetFirstBootMode(void);
   HRESULT         __fastcall ResetSafeMode(void);
   HRESULT         __fastcall RefreshOfflineDesktop(void);
-  HRESULT         __fastcall AddFavorite(BSTR URL/*[in]*/, TVariant* Title/*[in,opt]*/= TNoParam());
+  HRESULT         __fastcall AddFavorite(BSTR URL/*[in]*/, VARIANT* Title/*[in,opt]*/= TNoParam());
   HRESULT         __fastcall AddChannel(BSTR URL/*[in]*/);
   HRESULT         __fastcall AddDesktopComponent(BSTR URL/*[in]*/, BSTR Type/*[in]*/, 
-                                                 TVariant* Left/*[in,opt]*/= TNoParam(), 
-                                                 TVariant* Top/*[in,opt]*/= TNoParam(), 
-                                                 TVariant* Width/*[in,opt]*/= TNoParam(), 
-                                                 TVariant* Height/*[in,opt]*/= TNoParam());
-  HRESULT         __fastcall IsSubscribed(BSTR URL/*[in]*/, TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall IsSubscribed(BSTR URL/*[in]*/);
+                                                 VARIANT* Left/*[in,opt]*/= TNoParam(), 
+                                                 VARIANT* Top/*[in,opt]*/= TNoParam(), 
+                                                 VARIANT* Width/*[in,opt]*/= TNoParam(), 
+                                                 VARIANT* Height/*[in,opt]*/= TNoParam());
+  HRESULT         __fastcall IsSubscribed(BSTR URL/*[in]*/, VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall IsSubscribed(BSTR URL/*[in]*/);
   HRESULT         __fastcall NavigateAndFind(BSTR URL/*[in]*/, BSTR strQuery/*[in]*/, 
-                                             TVariant* varTargetFrame/*[in]*/);
-  HRESULT         __fastcall ImportExportFavorites(TOLEBOOL fImport/*[in]*/, 
+                                             VARIANT* varTargetFrame/*[in]*/);
+  HRESULT         __fastcall ImportExportFavorites(VARIANT_BOOL fImport/*[in]*/, 
                                                    BSTR strImpExpPath/*[in]*/);
-  HRESULT         __fastcall AutoCompleteSaveForm(TVariant* Form/*[in,opt]*/= TNoParam());
+  HRESULT         __fastcall AutoCompleteSaveForm(VARIANT* Form/*[in,opt]*/= TNoParam());
   HRESULT         __fastcall AutoScan(BSTR strSearch/*[in]*/, BSTR strFailureUrl/*[in]*/, 
-                                      TVariant* pvarTargetFrame/*[in,opt]*/= TNoParam());
-  HRESULT         __fastcall AutoCompleteAttach(TVariant* Reserved/*[in,opt]*/= TNoParam());
-  HRESULT         __fastcall ShowBrowserUI(BSTR bstrName/*[in]*/, TVariant* pvarIn/*[in]*/, 
-                                           TVariant* pvarOut/*[out,retval]*/);
-  TVariant        __fastcall ShowBrowserUI(BSTR bstrName/*[in]*/, TVariant* pvarIn/*[in]*/);
+                                      VARIANT* pvarTargetFrame/*[in,opt]*/= TNoParam());
+  HRESULT         __fastcall AutoCompleteAttach(VARIANT* Reserved/*[in,opt]*/= TNoParam());
+  HRESULT         __fastcall ShowBrowserUI(BSTR bstrName/*[in]*/, VARIANT* pvarIn/*[in]*/, 
+                                           VARIANT* pvarOut/*[out,retval]*/);
+  VARIANT         __fastcall ShowBrowserUI(BSTR bstrName/*[in]*/, VARIANT* pvarIn/*[in]*/);
 
 };
 typedef TCOMIShellUIHelperT<IShellUIHelper> TCOMIShellUIHelper;
@@ -2586,43 +3000,41 @@ public:
   HRESULT /*[VT_HRESULT:0]*/ __fastcall ResetSafeMode();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall RefreshOfflineDesktop();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall AddFavorite(BSTR URL/*[in]*/, 
-                                                    TVariant* Title/*[in,opt]*/= TNoParam());
+                                                    VARIANT* Title/*[in,opt]*/= TNoParam());
   HRESULT /*[VT_HRESULT:0]*/ __fastcall AddChannel(BSTR URL/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall AddDesktopComponent(BSTR URL/*[in]*/, BSTR Type/*[in]*/, 
-                                                            TVariant* Left/*[in,opt]*/= TNoParam(), 
-                                                            TVariant* Top/*[in,opt]*/= TNoParam(), 
-                                                            TVariant* Width/*[in,opt]*/= TNoParam()
-                                                            , 
-                                                            TVariant* Height/*[in,opt]*/= TNoParam());
+                                                            VARIANT* Left/*[in,opt]*/= TNoParam(), 
+                                                            VARIANT* Top/*[in,opt]*/= TNoParam(), 
+                                                            VARIANT* Width/*[in,opt]*/= TNoParam(), 
+                                                            VARIANT* Height/*[in,opt]*/= TNoParam());
   HRESULT /*[VT_HRESULT:0]*/ __fastcall IsSubscribed(BSTR URL/*[in]*/, 
-                                                     TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall IsSubscribed(BSTR URL/*[in]*/);
+                                                     VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall IsSubscribed(BSTR URL/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall NavigateAndFind(BSTR URL/*[in]*/, BSTR strQuery/*[in]*/, 
-                                                        TVariant* varTargetFrame/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall ImportExportFavorites(TOLEBOOL fImport/*[in]*/, 
+                                                        VARIANT* varTargetFrame/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall ImportExportFavorites(VARIANT_BOOL fImport/*[in]*/, 
                                                               BSTR strImpExpPath/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall AutoCompleteSaveForm(TVariant* Form/*[in,opt]*/= TNoParam());
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall AutoCompleteSaveForm(VARIANT* Form/*[in,opt]*/= TNoParam());
   HRESULT /*[VT_HRESULT:0]*/ __fastcall AutoScan(BSTR strSearch/*[in]*/, BSTR strFailureUrl/*[in]*/
-                                                 , TVariant* pvarTargetFrame/*[in,opt]*/= TNoParam());
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall AutoCompleteAttach(TVariant* Reserved/*[in,opt]*/= TNoParam());
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall ShowBrowserUI(BSTR bstrName/*[in]*/, 
-                                                      TVariant* pvarIn/*[in]*/, 
-                                                      TVariant* pvarOut/*[out,retval]*/);
-  TVariant        __fastcall ShowBrowserUI(BSTR bstrName/*[in]*/, TVariant* pvarIn/*[in]*/);
+                                                 , VARIANT* pvarTargetFrame/*[in,opt]*/= TNoParam());
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall AutoCompleteAttach(VARIANT* Reserved/*[in,opt]*/= TNoParam());
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall ShowBrowserUI(BSTR bstrName/*[in]*/, VARIANT* pvarIn/*[in]*/
+                                                      , VARIANT* pvarOut/*[out,retval]*/);
+  VARIANT         __fastcall ShowBrowserUI(BSTR bstrName/*[in]*/, VARIANT* pvarIn/*[in]*/);
 
 };
 typedef IShellUIHelperDispT<IShellUIHelper> IShellUIHelperDisp;
 
 // *********************************************************************//
-// DispIntf:  _ShellFavoritesNameSpaceEvents
+// DispIntf:  DShellNameSpaceEvents
 // Flags:     (4096) Dispatchable
 // GUID:      {55136806-B2DE-11D1-B9F2-00A0C98BC547}
 // *********************************************************************//
 template <class T>
-class _ShellFavoritesNameSpaceEventsDispT : public TAutoDriver<_ShellFavoritesNameSpaceEvents>
+class DShellNameSpaceEventsDispT : public TAutoDriver<DShellNameSpaceEvents>
 {
 public:
-  _ShellFavoritesNameSpaceEventsDispT(){}
+  DShellNameSpaceEventsDispT(){}
 
   void Attach(LPUNKNOWN punk)
   { m_Dispatch = static_cast<T*>(punk); }
@@ -2632,47 +3044,18 @@ public:
                                                            , long cVisits/*[in]*/, 
                                                            BSTR strDate/*[in]*/, 
                                                            long fAvailableOffline/*[in]*/);
+  void /*[VT_VOID:0]*/ __fastcall SelectionChange();
+  void /*[VT_VOID:0]*/ __fastcall DoubleClick();
+  void /*[VT_VOID:0]*/ __fastcall Initialized();
 
 };
-typedef _ShellFavoritesNameSpaceEventsDispT<_ShellFavoritesNameSpaceEvents> _ShellFavoritesNameSpaceEventsDisp;
+typedef DShellNameSpaceEventsDispT<DShellNameSpaceEvents> DShellNameSpaceEventsDisp;
 
-// *********************************************************************//
-// SmartIntf: TCOMIShellFavoritesNameSpace
-// Interface: IShellFavoritesNameSpace
-// *********************************************************************//
-template <class T /* IShellFavoritesNameSpace */ >
-class TCOMIShellFavoritesNameSpaceT : public TComInterface<IShellFavoritesNameSpace>, public TComInterfaceBase<IUnknown>
-{
-public:
-  TCOMIShellFavoritesNameSpaceT() {}
-  TCOMIShellFavoritesNameSpaceT(IShellFavoritesNameSpace *intf, bool addRef = false) : TComInterface<IShellFavoritesNameSpace>(intf, addRef) {}
-  TCOMIShellFavoritesNameSpaceT(const TCOMIShellFavoritesNameSpaceT& src) : TComInterface<IShellFavoritesNameSpace>(src) {}
-  TCOMIShellFavoritesNameSpaceT& operator=(const TCOMIShellFavoritesNameSpaceT& src) { Bind(src, true); return *this;}
-
-  HRESULT         __fastcall MoveSelectionUp(void);
-  HRESULT         __fastcall MoveSelectionDown(void);
-  HRESULT         __fastcall ResetSort(void);
-  HRESULT         __fastcall NewFolder(void);
-  HRESULT         __fastcall Synchronize(void);
-  HRESULT         __fastcall Import(void);
-  HRESULT         __fastcall Export(void);
-  HRESULT         __fastcall InvokeContextMenuCommand(BSTR strCommand/*[in]*/);
-  HRESULT         __fastcall MoveSelectionTo(void);
-  HRESULT         __fastcall get_FOfflinePackInstalled(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_FOfflinePackInstalled(void);
-  HRESULT         __fastcall CreateSubscriptionForSelection(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall CreateSubscriptionForSelection(void);
-  HRESULT         __fastcall DeleteSubscriptionForSelection(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall DeleteSubscriptionForSelection(void);
-  HRESULT         __fastcall SetRoot(BSTR bstrFullPath/*[in]*/);
-
-  __property   TOLEBOOL        FOfflinePackInstalled = {read = get_FOfflinePackInstalled};
-};
-typedef TCOMIShellFavoritesNameSpaceT<IShellFavoritesNameSpace> TCOMIShellFavoritesNameSpace;
+typedef TComInterface<IShellFavoritesNameSpace>  TCOMIShellFavoritesNameSpace;
 
 // *********************************************************************//
 // DispIntf:  IShellFavoritesNameSpace
-// Flags:     (4416) Dual OleAutomation Dispatchable
+// Flags:     (4432) Hidden Dual OleAutomation Dispatchable
 // GUID:      {55136804-B2DE-11D1-B9F2-00A0C98BC547}
 // *********************************************************************//
 template<class T>
@@ -2703,6 +3086,116 @@ public:
     return *this;
   }
 
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall MoveSelectionUp();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall MoveSelectionDown();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall ResetSort();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall NewFolder();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall Synchronize();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall Import();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall Export();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall InvokeContextMenuCommand(BSTR strCommand/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall MoveSelectionTo();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_SubscriptionsEnabled(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_SubscriptionsEnabled(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall CreateSubscriptionForSelection(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall CreateSubscriptionForSelection(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall DeleteSubscriptionForSelection(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall DeleteSubscriptionForSelection(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall SetRoot(BSTR bstrFullPath/*[in]*/);
+
+  __property   VARIANT_BOOL    SubscriptionsEnabled = {read = get_SubscriptionsEnabled};
+};
+typedef IShellFavoritesNameSpaceDispT<IShellFavoritesNameSpace> IShellFavoritesNameSpaceDisp;
+
+// *********************************************************************//
+// SmartIntf: TCOMIShellNameSpace
+// Interface: IShellNameSpace
+// *********************************************************************//
+template <class T /* IShellNameSpace */ >
+class TCOMIShellNameSpaceT : public TComInterface<IShellNameSpace>, public TComInterfaceBase<IUnknown>
+{
+public:
+  TCOMIShellNameSpaceT() {}
+  TCOMIShellNameSpaceT(IShellNameSpace *intf, bool addRef = false) : TComInterface<IShellNameSpace>(intf, addRef) {}
+  TCOMIShellNameSpaceT(const TCOMIShellNameSpaceT& src) : TComInterface<IShellNameSpace>(src) {}
+  TCOMIShellNameSpaceT& operator=(const TCOMIShellNameSpaceT& src) { Bind(src, true); return *this;}
+
+  HRESULT         __fastcall get_EnumOptions(long* pgrfEnumFlags/*[out,retval]*/);
+  long            __fastcall get_EnumOptions(void);
+  HRESULT         __fastcall set_EnumOptions(long pgrfEnumFlags/*[in]*/);
+  HRESULT         __fastcall get_SelectedItem(LPDISPATCH* pItem/*[out,retval]*/);
+  LPDISPATCH      __fastcall get_SelectedItem(void);
+  HRESULT         __fastcall set_SelectedItem(LPDISPATCH pItem/*[in]*/);
+  HRESULT         __fastcall get_Root(VARIANT* pvar/*[out,retval]*/);
+  VARIANT         __fastcall get_Root(void);
+  HRESULT         __fastcall set_Root(VARIANT pvar/*[in]*/);
+  HRESULT         __fastcall get_Depth(int* piDepth/*[out,retval]*/);
+  int             __fastcall get_Depth(void);
+  HRESULT         __fastcall set_Depth(int piDepth/*[in]*/);
+  HRESULT         __fastcall get_Mode(unsigned* puMode/*[out,retval]*/);
+  unsigned        __fastcall get_Mode(void);
+  HRESULT         __fastcall set_Mode(unsigned puMode/*[in]*/);
+  HRESULT         __fastcall get_Flags(unsigned_long* pdwFlags/*[out,retval]*/);
+  unsigned_long   __fastcall get_Flags(void);
+  HRESULT         __fastcall set_Flags(unsigned_long pdwFlags/*[in]*/);
+  HRESULT         __fastcall set_TVFlags(unsigned_long dwFlags/*[in]*/);
+  HRESULT         __fastcall get_TVFlags(unsigned_long* dwFlags/*[out,retval]*/);
+  unsigned_long   __fastcall get_TVFlags(void);
+  HRESULT         __fastcall get_Columns(BSTR* bstrColumns/*[out,retval]*/);
+  BSTR            __fastcall get_Columns(void);
+  HRESULT         __fastcall set_Columns(BSTR bstrColumns/*[in]*/);
+  HRESULT         __fastcall get_CountViewTypes(int* piTypes/*[out,retval]*/);
+  int             __fastcall get_CountViewTypes(void);
+  HRESULT         __fastcall SetViewType(int iType/*[in]*/);
+  HRESULT         __fastcall SelectedItems(LPDISPATCH* ppid/*[out,retval]*/);
+  LPDISPATCH      __fastcall SelectedItems(void);
+  HRESULT         __fastcall Expand(VARIANT var/*[in]*/, int iDepth);
+  HRESULT         __fastcall UnselectAll(void);
+
+  __property   long            EnumOptions = {read = get_EnumOptions, write = set_EnumOptions};
+  __property   LPDISPATCH      SelectedItem = {read = get_SelectedItem, write = set_SelectedItem};
+  __property   int             Depth = {read = get_Depth, write = set_Depth};
+  __property   unsigned        Mode = {read = get_Mode, write = set_Mode};
+  __property   unsigned_long   Flags = {read = get_Flags, write = set_Flags};
+  __property   unsigned_long   TVFlags = {read = get_TVFlags, write = set_TVFlags};
+  __property   BSTR            Columns = {read = get_Columns};
+  __property   int             CountViewTypes = {read = get_CountViewTypes};
+};
+typedef TCOMIShellNameSpaceT<IShellNameSpace> TCOMIShellNameSpace;
+
+// *********************************************************************//
+// DispIntf:  IShellNameSpace
+// Flags:     (4432) Hidden Dual OleAutomation Dispatchable
+// GUID:      {E572D3C9-37BE-4AE2-825D-D521763E3108}
+// *********************************************************************//
+template<class T>
+class IShellNameSpaceDispT : public TAutoDriver<IShellNameSpace>
+{
+public:
+  IShellNameSpaceDispT(){}
+
+  IShellNameSpaceDispT(IShellNameSpace *pintf)
+  {
+    TAutoDriver<IShellNameSpace>::Bind(pintf, false);
+  }
+
+  IShellNameSpaceDispT(IShellNameSpacePtr pintf)
+  {
+    TAutoDriver<IShellNameSpace>::Bind(pintf, true);
+  }
+
+  IShellNameSpaceDispT& operator=(IShellNameSpace *pintf)
+  {
+    TAutoDriver<IShellNameSpace>::Bind(pintf, false);
+    return *this;
+  }
+
+  IShellNameSpaceDispT& operator=(IShellNameSpacePtr pintf)
+  {
+    TAutoDriver<IShellNameSpace>::Bind(pintf, true);
+    return *this;
+  }
+
   HRESULT BindDefault()
   {
     return OLECHECK(Bind(CLSID_ShellFavoritesNameSpace));
@@ -2713,6 +3206,37 @@ public:
     return BindToActive(CLSID_ShellFavoritesNameSpace);
   }
 
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_EnumOptions(long* pgrfEnumFlags/*[out,retval]*/);
+  long            __fastcall get_EnumOptions(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_EnumOptions(long pgrfEnumFlags/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_SelectedItem(LPDISPATCH* pItem/*[out,retval]*/);
+  LPDISPATCH      __fastcall get_SelectedItem(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_SelectedItem(LPDISPATCH pItem/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Root(VARIANT* pvar/*[out,retval]*/);
+  VARIANT         __fastcall get_Root(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Root(VARIANT pvar/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Depth(int* piDepth/*[out,retval]*/);
+  int             __fastcall get_Depth(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Depth(int piDepth/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Mode(unsigned* puMode/*[out,retval]*/);
+  unsigned        __fastcall get_Mode(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Mode(unsigned puMode/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Flags(unsigned_long* pdwFlags/*[out,retval]*/);
+  unsigned_long   __fastcall get_Flags(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Flags(unsigned_long pdwFlags/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_TVFlags(unsigned_long dwFlags/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_TVFlags(unsigned_long* dwFlags/*[out,retval]*/);
+  unsigned_long   __fastcall get_TVFlags(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Columns(BSTR* bstrColumns/*[out,retval]*/);
+  BSTR            __fastcall get_Columns(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_Columns(BSTR bstrColumns/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_CountViewTypes(int* piTypes/*[out,retval]*/);
+  int             __fastcall get_CountViewTypes(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall SetViewType(int iType/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall SelectedItems(LPDISPATCH* ppid/*[out,retval]*/);
+  LPDISPATCH      __fastcall SelectedItems(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall Expand(VARIANT var/*[in]*/, int iDepth);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall UnselectAll();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall MoveSelectionUp();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall MoveSelectionDown();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall ResetSort();
@@ -2722,17 +3246,26 @@ public:
   HRESULT /*[VT_HRESULT:0]*/ __fastcall Export();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall InvokeContextMenuCommand(BSTR strCommand/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall MoveSelectionTo();
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_FOfflinePackInstalled(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_FOfflinePackInstalled(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall CreateSubscriptionForSelection(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall CreateSubscriptionForSelection(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall DeleteSubscriptionForSelection(TOLEBOOL* pBool/*[out,retval]*/);
-  TOLEBOOL        __fastcall DeleteSubscriptionForSelection(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_SubscriptionsEnabled(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_SubscriptionsEnabled(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall CreateSubscriptionForSelection(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall CreateSubscriptionForSelection(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall DeleteSubscriptionForSelection(VARIANT_BOOL* pBool/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall DeleteSubscriptionForSelection(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall SetRoot(BSTR bstrFullPath/*[in]*/);
 
-  __property   TOLEBOOL        FOfflinePackInstalled = {read = get_FOfflinePackInstalled};
+  __property   long            EnumOptions = {read = get_EnumOptions, write = set_EnumOptions};
+  __property   LPDISPATCH      SelectedItem = {read = get_SelectedItem, write = set_SelectedItem};
+  __property   int             Depth = {read = get_Depth, write = set_Depth};
+  __property   unsigned        Mode = {read = get_Mode, write = set_Mode};
+  __property   unsigned_long   Flags = {read = get_Flags, write = set_Flags};
+  __property   unsigned_long   TVFlags = {read = get_TVFlags, write = set_TVFlags};
+  __property   BSTR            Columns = {read = get_Columns};
+  __property   int             CountViewTypes = {read = get_CountViewTypes};
+
+  __property   VARIANT_BOOL    SubscriptionsEnabled = {read = get_SubscriptionsEnabled};
 };
-typedef IShellFavoritesNameSpaceDispT<IShellFavoritesNameSpace> IShellFavoritesNameSpaceDisp;
+typedef IShellNameSpaceDispT<IShellNameSpace> IShellNameSpaceDisp;
 
 // *********************************************************************//
 // SmartIntf: TCOMIScriptErrorList
@@ -2810,12 +3343,12 @@ public:
 
   HRESULT BindDefault()
   {
-    return OLECHECK(Bind(CLSID_CScriptErrorList));
+    return OLECHECK(Bind(CLSID_CppCScriptErrorList));
   }
 
   HRESULT BindRunning()
   {
-    return BindToActive(CLSID_CScriptErrorList);
+    return BindToActive(CLSID_CppCScriptErrorList);
   }
 
   HRESULT /*[VT_HRESULT:0]*/ __fastcall advanceError();
@@ -2933,9 +3466,9 @@ public:
   long            __fastcall get_Count(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Default(BSTR* pbstrDefault/*[out,retval]*/);
   BSTR            __fastcall get_Default(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall Item(TVariantInParam index/*[in,opt]*/, 
-                                             Shdocvw_tlb::ISearchPtr* ppid/*[out,retval]*/);
-  Shdocvw_tlb::ISearchPtr __fastcall Item(TVariantInParam index/*[in,opt]*/= TNoParam());
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall Item(VARIANT index/*[in,opt]*/, 
+                                             Shdocvw_tlb::ISearch** ppid/*[out,retval]*/);
+  Shdocvw_tlb::ISearch* __fastcall Item(VARIANT index/*[in,opt]*/= TNoParam());
   HRESULT /*[VT_HRESULT:0]*/ __fastcall _NewEnum(LPUNKNOWN* ppunk/*[out,retval]*/);
   LPUNKNOWN       __fastcall _NewEnum(void);
 
@@ -2983,34 +3516,34 @@ public:
   HRESULT /*[VT_HRESULT:0]*/ __fastcall SetDefaultSearchUrl(BSTR bstrUrl/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall NavigateToDefaultSearch();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall IsRestricted(BSTR bstrGuid/*[in]*/, 
-                                                     TOLEBOOL* pVal/*[out,retval]*/);
-  TOLEBOOL        __fastcall IsRestricted(BSTR bstrGuid/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ShellFeaturesEnabled(TOLEBOOL* pVal/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_ShellFeaturesEnabled(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_SearchAssistantDefault(TOLEBOOL* pVal/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_SearchAssistantDefault(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Searches(Shdocvw_tlb::ISearchesPtr* ppid/*[out,retval]*/);
-  Shdocvw_tlb::ISearchesPtr __fastcall get_Searches(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_InWebFolder(TOLEBOOL* pVal/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_InWebFolder(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall PutProperty(TOLEBOOL bPerLocale/*[in]*/, 
+                                                     VARIANT_BOOL* pVal/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall IsRestricted(BSTR bstrGuid/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ShellFeaturesEnabled(VARIANT_BOOL* pVal/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_ShellFeaturesEnabled(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_SearchAssistantDefault(VARIANT_BOOL* pVal/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_SearchAssistantDefault(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Searches(Shdocvw_tlb::ISearches** ppid/*[out,retval]*/);
+  Shdocvw_tlb::ISearches* __fastcall get_Searches(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_InWebFolder(VARIANT_BOOL* pVal/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_InWebFolder(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall PutProperty(VARIANT_BOOL bPerLocale/*[in]*/, 
                                                     BSTR bstrName/*[in]*/, BSTR bstrValue/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall GetProperty(TOLEBOOL bPerLocale/*[in]*/, 
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, 
                                                     BSTR bstrName/*[in]*/, 
                                                     BSTR* pbstrValue/*[out,retval]*/);
-  BSTR            __fastcall GetProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_EventHandled(TOLEBOOL Param1/*[in]*/);
+  BSTR            __fastcall GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_EventHandled(VARIANT_BOOL Param1/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall ResetNextMenu();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall FindOnWeb();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall FindFilesOrFolders();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall FindComputer();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall FindPrinter();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall FindPeople();
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall GetSearchAssistantURL(TOLEBOOL bSubstitute/*[in]*/, 
-                                                              TOLEBOOL bCustomize/*[in]*/, 
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                                              VARIANT_BOOL bCustomize/*[in]*/, 
                                                               BSTR* pbstrValue/*[out,retval]*/);
-  BSTR            __fastcall GetSearchAssistantURL(TOLEBOOL bSubstitute/*[in]*/, 
-                                                   TOLEBOOL bCustomize/*[in]*/);
+  BSTR            __fastcall GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                                   VARIANT_BOOL bCustomize/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall NotifySearchSettingsChanged();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall set_ASProvider(BSTR pProvider/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ASProvider(BSTR* pProvider/*[out,retval]*/);
@@ -3024,41 +3557,23 @@ public:
   int             __fastcall get_Version(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall EncodeString(BSTR bstrValue/*[in]*/, 
                                                      BSTR bstrCharSet/*[in]*/, 
-                                                     TOLEBOOL bUseUTF8/*[in]*/, 
+                                                     VARIANT_BOOL bUseUTF8/*[in]*/, 
                                                      BSTR* pbstrResult/*[out,retval]*/);
   BSTR            __fastcall EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharSet/*[in]*/, 
-                                          TOLEBOOL bUseUTF8/*[in]*/);
+                                          VARIANT_BOOL bUseUTF8/*[in]*/);
 
-  __property   TOLEBOOL        ShellFeaturesEnabled = {read = get_ShellFeaturesEnabled};
-  __property   TOLEBOOL        SearchAssistantDefault = {read = get_SearchAssistantDefault};
-  __property   Shdocvw_tlb::ISearchesPtr Searches = {read = get_Searches};
-  __property   TOLEBOOL        InWebFolder = {read = get_InWebFolder};
-  __property   TOLEBOOL        EventHandled = {write = set_EventHandled};
+  __property   VARIANT_BOOL    ShellFeaturesEnabled = {read = get_ShellFeaturesEnabled};
+  __property   VARIANT_BOOL    SearchAssistantDefault = {read = get_SearchAssistantDefault};
+  __property   Shdocvw_tlb::ISearches* Searches = {read = get_Searches};
+  __property   VARIANT_BOOL    InWebFolder = {read = get_InWebFolder};
+  __property   VARIANT_BOOL    EventHandled = {write = set_EventHandled};
   __property   BSTR            ASProvider = {read = get_ASProvider, write = set_ASProvider};
   __property   int             ASSetting = {read = get_ASSetting, write = set_ASSetting};
   __property   int             Version = {read = get_Version};
 };
 typedef ISearchAssistantOCDispT<ISearchAssistantOC> ISearchAssistantOCDisp;
 
-// *********************************************************************//
-// SmartIntf: TCOMISearchAssistantOC2
-// Interface: ISearchAssistantOC2
-// *********************************************************************//
-template <class T /* ISearchAssistantOC2 */ >
-class TCOMISearchAssistantOC2T : public TComInterface<ISearchAssistantOC2>, public TComInterfaceBase<IUnknown>
-{
-public:
-  TCOMISearchAssistantOC2T() {}
-  TCOMISearchAssistantOC2T(ISearchAssistantOC2 *intf, bool addRef = false) : TComInterface<ISearchAssistantOC2>(intf, addRef) {}
-  TCOMISearchAssistantOC2T(const TCOMISearchAssistantOC2T& src) : TComInterface<ISearchAssistantOC2>(src) {}
-  TCOMISearchAssistantOC2T& operator=(const TCOMISearchAssistantOC2T& src) { Bind(src, true); return *this;}
-
-  HRESULT         __fastcall get_ShowFindPrinter(TOLEBOOL* pbShowFindPrinter/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_ShowFindPrinter(void);
-
-  __property   TOLEBOOL        ShowFindPrinter = {read = get_ShowFindPrinter};
-};
-typedef TCOMISearchAssistantOC2T<ISearchAssistantOC2> TCOMISearchAssistantOC2;
+typedef TComInterface<ISearchAssistantOC2>  TCOMISearchAssistantOC2;
 
 // *********************************************************************//
 // DispIntf:  ISearchAssistantOC2
@@ -3093,50 +3608,40 @@ public:
     return *this;
   }
 
-  HRESULT BindDefault()
-  {
-    return OLECHECK(Bind(CLSID_CppSearchAssistantOC));
-  }
-
-  HRESULT BindRunning()
-  {
-    return BindToActive(CLSID_CppSearchAssistantOC);
-  }
-
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ShowFindPrinter(TOLEBOOL* pbShowFindPrinter/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_ShowFindPrinter(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ShowFindPrinter(VARIANT_BOOL* pbShowFindPrinter/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_ShowFindPrinter(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall AddNextMenuItem(BSTR bstrText/*[in]*/, long idItem/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall SetDefaultSearchUrl(BSTR bstrUrl/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall NavigateToDefaultSearch();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall IsRestricted(BSTR bstrGuid/*[in]*/, 
-                                                     TOLEBOOL* pVal/*[out,retval]*/);
-  TOLEBOOL        __fastcall IsRestricted(BSTR bstrGuid/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ShellFeaturesEnabled(TOLEBOOL* pVal/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_ShellFeaturesEnabled(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_SearchAssistantDefault(TOLEBOOL* pVal/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_SearchAssistantDefault(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Searches(Shdocvw_tlb::ISearchesPtr* ppid/*[out,retval]*/);
-  Shdocvw_tlb::ISearchesPtr __fastcall get_Searches(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_InWebFolder(TOLEBOOL* pVal/*[out,retval]*/);
-  TOLEBOOL        __fastcall get_InWebFolder(void);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall PutProperty(TOLEBOOL bPerLocale/*[in]*/, 
+                                                     VARIANT_BOOL* pVal/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall IsRestricted(BSTR bstrGuid/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ShellFeaturesEnabled(VARIANT_BOOL* pVal/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_ShellFeaturesEnabled(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_SearchAssistantDefault(VARIANT_BOOL* pVal/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_SearchAssistantDefault(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Searches(Shdocvw_tlb::ISearches** ppid/*[out,retval]*/);
+  Shdocvw_tlb::ISearches* __fastcall get_Searches(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_InWebFolder(VARIANT_BOOL* pVal/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_InWebFolder(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall PutProperty(VARIANT_BOOL bPerLocale/*[in]*/, 
                                                     BSTR bstrName/*[in]*/, BSTR bstrValue/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall GetProperty(TOLEBOOL bPerLocale/*[in]*/, 
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, 
                                                     BSTR bstrName/*[in]*/, 
                                                     BSTR* pbstrValue/*[out,retval]*/);
-  BSTR            __fastcall GetProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/);
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_EventHandled(TOLEBOOL Param1/*[in]*/);
+  BSTR            __fastcall GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_EventHandled(VARIANT_BOOL Param1/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall ResetNextMenu();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall FindOnWeb();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall FindFilesOrFolders();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall FindComputer();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall FindPrinter();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall FindPeople();
-  HRESULT /*[VT_HRESULT:0]*/ __fastcall GetSearchAssistantURL(TOLEBOOL bSubstitute/*[in]*/, 
-                                                              TOLEBOOL bCustomize/*[in]*/, 
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                                              VARIANT_BOOL bCustomize/*[in]*/, 
                                                               BSTR* pbstrValue/*[out,retval]*/);
-  BSTR            __fastcall GetSearchAssistantURL(TOLEBOOL bSubstitute/*[in]*/, 
-                                                   TOLEBOOL bCustomize/*[in]*/);
+  BSTR            __fastcall GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                                   VARIANT_BOOL bCustomize/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall NotifySearchSettingsChanged();
   HRESULT /*[VT_HRESULT:0]*/ __fastcall set_ASProvider(BSTR pProvider/*[in]*/);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ASProvider(BSTR* pProvider/*[out,retval]*/);
@@ -3150,23 +3655,166 @@ public:
   int             __fastcall get_Version(void);
   HRESULT /*[VT_HRESULT:0]*/ __fastcall EncodeString(BSTR bstrValue/*[in]*/, 
                                                      BSTR bstrCharSet/*[in]*/, 
-                                                     TOLEBOOL bUseUTF8/*[in]*/, 
+                                                     VARIANT_BOOL bUseUTF8/*[in]*/, 
                                                      BSTR* pbstrResult/*[out,retval]*/);
   BSTR            __fastcall EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharSet/*[in]*/, 
-                                          TOLEBOOL bUseUTF8/*[in]*/);
+                                          VARIANT_BOOL bUseUTF8/*[in]*/);
 
-  __property   TOLEBOOL        ShowFindPrinter = {read = get_ShowFindPrinter};
+  __property   VARIANT_BOOL    ShowFindPrinter = {read = get_ShowFindPrinter};
 
-  __property   TOLEBOOL        ShellFeaturesEnabled = {read = get_ShellFeaturesEnabled};
-  __property   TOLEBOOL        SearchAssistantDefault = {read = get_SearchAssistantDefault};
-  __property   Shdocvw_tlb::ISearchesPtr Searches = {read = get_Searches};
-  __property   TOLEBOOL        InWebFolder = {read = get_InWebFolder};
-  __property   TOLEBOOL        EventHandled = {write = set_EventHandled};
+  __property   VARIANT_BOOL    ShellFeaturesEnabled = {read = get_ShellFeaturesEnabled};
+  __property   VARIANT_BOOL    SearchAssistantDefault = {read = get_SearchAssistantDefault};
+  __property   Shdocvw_tlb::ISearches* Searches = {read = get_Searches};
+  __property   VARIANT_BOOL    InWebFolder = {read = get_InWebFolder};
+  __property   VARIANT_BOOL    EventHandled = {write = set_EventHandled};
   __property   BSTR            ASProvider = {read = get_ASProvider, write = set_ASProvider};
   __property   int             ASSetting = {read = get_ASSetting, write = set_ASSetting};
   __property   int             Version = {read = get_Version};
 };
 typedef ISearchAssistantOC2DispT<ISearchAssistantOC2> ISearchAssistantOC2Disp;
+
+// *********************************************************************//
+// SmartIntf: TCOMISearchAssistantOC3
+// Interface: ISearchAssistantOC3
+// *********************************************************************//
+template <class T /* ISearchAssistantOC3 */ >
+class TCOMISearchAssistantOC3T : public TComInterface<ISearchAssistantOC3>, public TComInterfaceBase<IUnknown>
+{
+public:
+  TCOMISearchAssistantOC3T() {}
+  TCOMISearchAssistantOC3T(ISearchAssistantOC3 *intf, bool addRef = false) : TComInterface<ISearchAssistantOC3>(intf, addRef) {}
+  TCOMISearchAssistantOC3T(const TCOMISearchAssistantOC3T& src) : TComInterface<ISearchAssistantOC3>(src) {}
+  TCOMISearchAssistantOC3T& operator=(const TCOMISearchAssistantOC3T& src) { Bind(src, true); return *this;}
+
+  HRESULT         __fastcall get_SearchCompanionAvailable(VARIANT_BOOL* pbAvailable/*[out,retval]*/);
+  HRESULT         __fastcall get_SearchCompanionAvailable(TOLEBOOL* pbAvailable/*[out,retval]*/);
+  TOLEBOOL        __fastcall get_SearchCompanionAvailable(void);
+  HRESULT         __fastcall set_UseSearchCompanion(VARIANT_BOOL pbUseSC/*[in]*/);
+  HRESULT         __fastcall set_UseSearchCompanion(TOLEBOOL pbUseSC/*[in]*/);
+  HRESULT         __fastcall get_UseSearchCompanion(VARIANT_BOOL* pbUseSC/*[out,retval]*/);
+  HRESULT         __fastcall get_UseSearchCompanion(TOLEBOOL* pbUseSC/*[out,retval]*/);
+  TOLEBOOL        __fastcall get_UseSearchCompanion(void);
+
+  __property   TOLEBOOL        SearchCompanionAvailable = {read = get_SearchCompanionAvailable};
+  __property   TOLEBOOL        UseSearchCompanion = {write = set_UseSearchCompanion};
+};
+typedef TCOMISearchAssistantOC3T<ISearchAssistantOC3> TCOMISearchAssistantOC3;
+
+// *********************************************************************//
+// DispIntf:  ISearchAssistantOC3
+// Flags:     (4432) Hidden Dual OleAutomation Dispatchable
+// GUID:      {72423E8F-8011-11D2-BE79-00A0C9A83DA3}
+// *********************************************************************//
+template<class T>
+class ISearchAssistantOC3DispT : public TAutoDriver<ISearchAssistantOC3>
+{
+public:
+  ISearchAssistantOC3DispT(){}
+
+  ISearchAssistantOC3DispT(ISearchAssistantOC3 *pintf)
+  {
+    TAutoDriver<ISearchAssistantOC3>::Bind(pintf, false);
+  }
+
+  ISearchAssistantOC3DispT(ISearchAssistantOC3Ptr pintf)
+  {
+    TAutoDriver<ISearchAssistantOC3>::Bind(pintf, true);
+  }
+
+  ISearchAssistantOC3DispT& operator=(ISearchAssistantOC3 *pintf)
+  {
+    TAutoDriver<ISearchAssistantOC3>::Bind(pintf, false);
+    return *this;
+  }
+
+  ISearchAssistantOC3DispT& operator=(ISearchAssistantOC3Ptr pintf)
+  {
+    TAutoDriver<ISearchAssistantOC3>::Bind(pintf, true);
+    return *this;
+  }
+
+  HRESULT BindDefault()
+  {
+    return OLECHECK(Bind(CLSID_CppSearchAssistantOC));
+  }
+
+  HRESULT BindRunning()
+  {
+    return BindToActive(CLSID_CppSearchAssistantOC);
+  }
+
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_SearchCompanionAvailable(VARIANT_BOOL* pbAvailable/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_SearchCompanionAvailable(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_UseSearchCompanion(VARIANT_BOOL pbUseSC/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_UseSearchCompanion(VARIANT_BOOL* pbUseSC/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_UseSearchCompanion(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ShowFindPrinter(VARIANT_BOOL* pbShowFindPrinter/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_ShowFindPrinter(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall AddNextMenuItem(BSTR bstrText/*[in]*/, long idItem/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall SetDefaultSearchUrl(BSTR bstrUrl/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall NavigateToDefaultSearch();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall IsRestricted(BSTR bstrGuid/*[in]*/, 
+                                                     VARIANT_BOOL* pVal/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall IsRestricted(BSTR bstrGuid/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ShellFeaturesEnabled(VARIANT_BOOL* pVal/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_ShellFeaturesEnabled(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_SearchAssistantDefault(VARIANT_BOOL* pVal/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_SearchAssistantDefault(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Searches(Shdocvw_tlb::ISearches** ppid/*[out,retval]*/);
+  Shdocvw_tlb::ISearches* __fastcall get_Searches(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_InWebFolder(VARIANT_BOOL* pVal/*[out,retval]*/);
+  VARIANT_BOOL    __fastcall get_InWebFolder(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall PutProperty(VARIANT_BOOL bPerLocale/*[in]*/, 
+                                                    BSTR bstrName/*[in]*/, BSTR bstrValue/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, 
+                                                    BSTR bstrName/*[in]*/, 
+                                                    BSTR* pbstrValue/*[out,retval]*/);
+  BSTR            __fastcall GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_EventHandled(VARIANT_BOOL Param1/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall ResetNextMenu();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall FindOnWeb();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall FindFilesOrFolders();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall FindComputer();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall FindPrinter();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall FindPeople();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                                              VARIANT_BOOL bCustomize/*[in]*/, 
+                                                              BSTR* pbstrValue/*[out,retval]*/);
+  BSTR            __fastcall GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                                   VARIANT_BOOL bCustomize/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall NotifySearchSettingsChanged();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_ASProvider(BSTR pProvider/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ASProvider(BSTR* pProvider/*[out,retval]*/);
+  BSTR            __fastcall get_ASProvider(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall set_ASSetting(int pSetting/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_ASSetting(int* pSetting/*[out,retval]*/);
+  int             __fastcall get_ASSetting(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall NETDetectNextNavigate();
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall PutFindText(BSTR FindText/*[in]*/);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall get_Version(int* pVersion/*[out,retval]*/);
+  int             __fastcall get_Version(void);
+  HRESULT /*[VT_HRESULT:0]*/ __fastcall EncodeString(BSTR bstrValue/*[in]*/, 
+                                                     BSTR bstrCharSet/*[in]*/, 
+                                                     VARIANT_BOOL bUseUTF8/*[in]*/, 
+                                                     BSTR* pbstrResult/*[out,retval]*/);
+  BSTR            __fastcall EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharSet/*[in]*/, 
+                                          VARIANT_BOOL bUseUTF8/*[in]*/);
+
+  __property   VARIANT_BOOL    SearchCompanionAvailable = {read = get_SearchCompanionAvailable};
+  __property   VARIANT_BOOL    UseSearchCompanion = {read = get_UseSearchCompanion, write = set_UseSearchCompanion};
+
+  __property   VARIANT_BOOL    ShowFindPrinter = {read = get_ShowFindPrinter};
+
+  __property   VARIANT_BOOL    ShellFeaturesEnabled = {read = get_ShellFeaturesEnabled};
+  __property   VARIANT_BOOL    SearchAssistantDefault = {read = get_SearchAssistantDefault};
+  __property   Shdocvw_tlb::ISearches* Searches = {read = get_Searches};
+  __property   VARIANT_BOOL    InWebFolder = {read = get_InWebFolder};
+  __property   VARIANT_BOOL    EventHandled = {write = set_EventHandled};
+  __property   BSTR            ASProvider = {read = get_ASProvider, write = set_ASProvider};
+  __property   int             ASSetting = {read = get_ASSetting, write = set_ASSetting};
+  __property   int             Version = {read = get_Version};
+};
+typedef ISearchAssistantOC3DispT<ISearchAssistantOC3> ISearchAssistantOC3Disp;
 
 // *********************************************************************//
 // DispIntf:  _SearchAssistantEvents
@@ -3217,9 +3865,9 @@ TCOMIWebBrowserT<T>::GoSearch(void)
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowserT<T>::Navigate(BSTR URL/*[in]*/, TVariant* Flags/*[in,opt]*/, 
-                              TVariant* TargetFrameName/*[in,opt]*/, TVariant* PostData/*[in,opt]*/, 
-                              TVariant* Headers/*[in,opt]*/)
+TCOMIWebBrowserT<T>::Navigate(BSTR URL/*[in]*/, VARIANT* Flags/*[in,opt]*/, 
+                              VARIANT* TargetFrameName/*[in,opt]*/, VARIANT* PostData/*[in,opt]*/, 
+                              VARIANT* Headers/*[in,opt]*/)
 {
   return (*this)->Navigate(URL, Flags, TargetFrameName, PostData, Headers);
 }
@@ -3231,7 +3879,7 @@ TCOMIWebBrowserT<T>::Refresh(void)
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowserT<T>::Refresh2(TVariant* Level/*[in,opt]*/)
+TCOMIWebBrowserT<T>::Refresh2(VARIANT* Level/*[in,opt]*/)
 {
   return (*this)->Refresh2(Level);
 }
@@ -3299,17 +3947,23 @@ TCOMIWebBrowserT<T>::get_Document(void)
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowserT<T>::get_TopLevelContainer(TOLEBOOL* pBool/*[out,retval]*/)
+TCOMIWebBrowserT<T>::get_TopLevelContainer(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   return (*this)->get_TopLevelContainer(pBool);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowserT<T>::get_TopLevelContainer(TOLEBOOL* pBool/*[out,retval]*/)
+{
+  return (*this)->get_TopLevelContainer(VARIANT_BOOL*)pBool);
 }
 
 template <class T> TOLEBOOL __fastcall
 TCOMIWebBrowserT<T>::get_TopLevelContainer(void)
 {
-  TOLEBOOL pBool;
-  OLECHECK(this->get_TopLevelContainer((TOLEBOOL*)&pBool));
-  return pBool;
+  VARIANT_BOOL pBool;
+  OLECHECK(this->get_TopLevelContainer((VARIANT_BOOL*)&pBool));
+  return (TOLEBOOL)pBool;
 }
 
 template <class T> HRESULT __fastcall
@@ -3435,17 +4089,23 @@ TCOMIWebBrowserT<T>::get_LocationURL(void)
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowserT<T>::get_Busy(TOLEBOOL* pBool/*[out,retval]*/)
+TCOMIWebBrowserT<T>::get_Busy(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   return (*this)->get_Busy(pBool);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowserT<T>::get_Busy(TOLEBOOL* pBool/*[out,retval]*/)
+{
+  return (*this)->get_Busy(VARIANT_BOOL*)pBool);
 }
 
 template <class T> TOLEBOOL __fastcall
 TCOMIWebBrowserT<T>::get_Busy(void)
 {
-  TOLEBOOL pBool;
-  OLECHECK(this->get_Busy((TOLEBOOL*)&pBool));
-  return pBool;
+  VARIANT_BOOL pBool;
+  OLECHECK(this->get_Busy((VARIANT_BOOL*)&pBool));
+  return (TOLEBOOL)pBool;
 }
 
 // *********************************************************************//
@@ -3482,9 +4142,9 @@ IWebBrowserDispT<T>::GoSearch()
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserDispT<T>::Navigate(BSTR URL/*[in]*/, TVariant* Flags/*[in,opt]*/, 
-                              TVariant* TargetFrameName/*[in,opt]*/, TVariant* PostData/*[in,opt]*/
-                              , TVariant* Headers/*[in,opt]*/)
+IWebBrowserDispT<T>::Navigate(BSTR URL/*[in]*/, VARIANT* Flags/*[in,opt]*/, 
+                              VARIANT* TargetFrameName/*[in,opt]*/, VARIANT* PostData/*[in,opt]*/, 
+                              VARIANT* Headers/*[in,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Navigate"), DISPID(104));
   TAutoArgs<5> _args;
@@ -3504,7 +4164,7 @@ IWebBrowserDispT<T>::Refresh()
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserDispT<T>::Refresh2(TVariant* Level/*[in,opt]*/)
+IWebBrowserDispT<T>::Refresh2(VARIANT* Level/*[in,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Refresh2"), DISPID(105));
   TAutoArgs<1> _args;
@@ -3584,18 +4244,18 @@ IWebBrowserDispT<T>::get_Document(void)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserDispT<T>::get_TopLevelContainer(TOLEBOOL* pBool/*[out,retval]*/)
+IWebBrowserDispT<T>::get_TopLevelContainer(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("TopLevelContainer"), DISPID(204));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowserDispT<T>::get_TopLevelContainer(void)
 {
-  TOLEBOOL pBool;
-  this->get_TopLevelContainer((TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->get_TopLevelContainer((VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
@@ -3748,18 +4408,18 @@ IWebBrowserDispT<T>::get_LocationURL(void)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserDispT<T>::get_Busy(TOLEBOOL* pBool/*[out,retval]*/)
+IWebBrowserDispT<T>::get_Busy(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Busy"), DISPID(212));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowserDispT<T>::get_Busy(void)
 {
-  TOLEBOOL pBool;
-  this->get_Busy((TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->get_Busy((VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
@@ -3770,8 +4430,8 @@ IWebBrowserDispT<T>::get_Busy(void)
 // *********************************************************************//
 template <class T> void /*[VT_VOID:0]*/ __fastcall
 DWebBrowserEventsDispT<T>::BeforeNavigate(BSTR URL/*[in]*/, long Flags, BSTR TargetFrameName, 
-                                          TVariant* PostData, BSTR Headers, 
-                                          TOLEBOOL* Cancel/*[in,out]*/)
+                                          VARIANT* PostData, BSTR Headers, 
+                                          VARIANT_BOOL* Cancel/*[in,out]*/)
 {
   _TDispID _dispid(/* BeforeNavigate */ DISPID(100));
   TAutoArgs<6> _args;
@@ -3820,7 +4480,7 @@ DWebBrowserEventsDispT<T>::DownloadComplete()
 }
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-DWebBrowserEventsDispT<T>::CommandStateChange(long Command/*[in]*/, TOLEBOOL Enable/*[in]*/)
+DWebBrowserEventsDispT<T>::CommandStateChange(long Command/*[in]*/, VARIANT_BOOL Enable/*[in]*/)
 {
   _TDispID _dispid(/* CommandStateChange */ DISPID(105));
   TAutoArgs<2> _args;
@@ -3838,8 +4498,8 @@ DWebBrowserEventsDispT<T>::DownloadBegin()
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
 DWebBrowserEventsDispT<T>::NewWindow(BSTR URL/*[in]*/, long Flags/*[in]*/, 
-                                     BSTR TargetFrameName/*[in]*/, TVariant* PostData/*[in]*/, 
-                                     BSTR Headers/*[in]*/, TOLEBOOL* Processed/*[in,out]*/)
+                                     BSTR TargetFrameName/*[in]*/, VARIANT* PostData/*[in]*/, 
+                                     BSTR Headers/*[in]*/, VARIANT_BOOL* Processed/*[in,out]*/)
 {
   _TDispID _dispid(/* NewWindow */ DISPID(107));
   TAutoArgs<6> _args;
@@ -3863,8 +4523,8 @@ DWebBrowserEventsDispT<T>::TitleChange(BSTR Text/*[in]*/)
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
 DWebBrowserEventsDispT<T>::FrameBeforeNavigate(BSTR URL/*[in]*/, long Flags, BSTR TargetFrameName, 
-                                               TVariant* PostData, BSTR Headers, 
-                                               TOLEBOOL* Cancel/*[in,out]*/)
+                                               VARIANT* PostData, BSTR Headers, 
+                                               VARIANT_BOOL* Cancel/*[in,out]*/)
 {
   _TDispID _dispid(/* FrameBeforeNavigate */ DISPID(200));
   TAutoArgs<6> _args;
@@ -3888,8 +4548,8 @@ DWebBrowserEventsDispT<T>::FrameNavigateComplete(BSTR URL/*[in]*/)
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
 DWebBrowserEventsDispT<T>::FrameNewWindow(BSTR URL/*[in]*/, long Flags/*[in]*/, 
-                                          BSTR TargetFrameName/*[in]*/, TVariant* PostData/*[in]*/, 
-                                          BSTR Headers/*[in]*/, TOLEBOOL* Processed/*[in,out]*/)
+                                          BSTR TargetFrameName/*[in]*/, VARIANT* PostData/*[in]*/, 
+                                          BSTR Headers/*[in]*/, VARIANT_BOOL* Processed/*[in,out]*/)
 {
   _TDispID _dispid(/* FrameNewWindow */ DISPID(204));
   TAutoArgs<6> _args;
@@ -3903,7 +4563,7 @@ DWebBrowserEventsDispT<T>::FrameNewWindow(BSTR URL/*[in]*/, long Flags/*[in]*/,
 }
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-DWebBrowserEventsDispT<T>::Quit(TOLEBOOL* Cancel/*[in,out]*/)
+DWebBrowserEventsDispT<T>::Quit(VARIANT_BOOL* Cancel/*[in,out]*/)
 {
   _TDispID _dispid(/* Quit */ DISPID(103));
   TAutoArgs<1> _args;
@@ -3964,7 +4624,7 @@ IWebBrowserAppDispT<T>::ClientToWindow(int* pcx/*[in,out]*/, int* pcy/*[in,out]*
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::PutProperty(BSTR Property/*[in]*/, TVariantInParam vtValue/*[in]*/)
+IWebBrowserAppDispT<T>::PutProperty(BSTR Property/*[in]*/, VARIANT vtValue/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("PutProperty"), DISPID(302));
   TAutoArgs<2> _args;
@@ -3974,7 +4634,7 @@ IWebBrowserAppDispT<T>::PutProperty(BSTR Property/*[in]*/, TVariantInParam vtVal
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::GetProperty(BSTR Property/*[in]*/, TVariant* pvtValue/*[out,retval]*/)
+IWebBrowserAppDispT<T>::GetProperty(BSTR Property/*[in]*/, VARIANT* pvtValue/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("GetProperty"), DISPID(303));
   TAutoArgs<1> _args;
@@ -3982,11 +4642,11 @@ IWebBrowserAppDispT<T>::GetProperty(BSTR Property/*[in]*/, TVariant* pvtValue/*[
   return OutRetValSetterPtr(pvtValue /*[VT_VARIANT:1]*/, _args, OleFunction(_dispid, _args));
 }
 
-template <class T> TVariant __fastcall
+template <class T> VARIANT __fastcall
 IWebBrowserAppDispT<T>::GetProperty(BSTR Property/*[in]*/)
 {
-  TVariant pvtValue;
-  this->GetProperty(Property, (TVariant*)&pvtValue);
+  VARIANT pvtValue;
+  this->GetProperty(Property, (VARIANT*)&pvtValue);
   return pvtValue;
 }
 
@@ -4055,23 +4715,23 @@ IWebBrowserAppDispT<T>::get_Path(void)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::get_Visible(TOLEBOOL* pBool/*[out,retval]*/)
+IWebBrowserAppDispT<T>::get_Visible(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Visible"), DISPID(402));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowserAppDispT<T>::get_Visible(void)
 {
-  TOLEBOOL pBool;
-  this->get_Visible((TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->get_Visible((VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::set_Visible(TOLEBOOL pBool/*[in]*/)
+IWebBrowserAppDispT<T>::set_Visible(VARIANT_BOOL pBool/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Visible"), DISPID(402));
   TAutoArgs<1> _args;
@@ -4080,23 +4740,23 @@ IWebBrowserAppDispT<T>::set_Visible(TOLEBOOL pBool/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::get_StatusBar(TOLEBOOL* pBool/*[out,retval]*/)
+IWebBrowserAppDispT<T>::get_StatusBar(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("StatusBar"), DISPID(403));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowserAppDispT<T>::get_StatusBar(void)
 {
-  TOLEBOOL pBool;
-  this->get_StatusBar((TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->get_StatusBar((VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::set_StatusBar(TOLEBOOL pBool/*[in]*/)
+IWebBrowserAppDispT<T>::set_StatusBar(VARIANT_BOOL pBool/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("StatusBar"), DISPID(403));
   TAutoArgs<1> _args;
@@ -4155,23 +4815,23 @@ IWebBrowserAppDispT<T>::set_ToolBar(int Value/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::get_MenuBar(TOLEBOOL* Value/*[out,retval]*/)
+IWebBrowserAppDispT<T>::get_MenuBar(VARIANT_BOOL* Value/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("MenuBar"), DISPID(406));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(Value /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowserAppDispT<T>::get_MenuBar(void)
 {
-  TOLEBOOL Value;
-  this->get_MenuBar((TOLEBOOL*)&Value);
+  VARIANT_BOOL Value;
+  this->get_MenuBar((VARIANT_BOOL*)&Value);
   return Value;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::set_MenuBar(TOLEBOOL Value/*[in]*/)
+IWebBrowserAppDispT<T>::set_MenuBar(VARIANT_BOOL Value/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("MenuBar"), DISPID(406));
   TAutoArgs<1> _args;
@@ -4180,23 +4840,23 @@ IWebBrowserAppDispT<T>::set_MenuBar(TOLEBOOL Value/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::get_FullScreen(TOLEBOOL* pbFullScreen/*[out,retval]*/)
+IWebBrowserAppDispT<T>::get_FullScreen(VARIANT_BOOL* pbFullScreen/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("FullScreen"), DISPID(407));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pbFullScreen /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowserAppDispT<T>::get_FullScreen(void)
 {
-  TOLEBOOL pbFullScreen;
-  this->get_FullScreen((TOLEBOOL*)&pbFullScreen);
+  VARIANT_BOOL pbFullScreen;
+  this->get_FullScreen((VARIANT_BOOL*)&pbFullScreen);
   return pbFullScreen;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::set_FullScreen(TOLEBOOL pbFullScreen/*[in]*/)
+IWebBrowserAppDispT<T>::set_FullScreen(VARIANT_BOOL pbFullScreen/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("FullScreen"), DISPID(407));
   TAutoArgs<1> _args;
@@ -4233,9 +4893,9 @@ IWebBrowserAppDispT<T>::GoSearch()
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::Navigate(BSTR URL/*[in]*/, TVariant* Flags/*[in,opt]*/, 
-                                 TVariant* TargetFrameName/*[in,opt]*/, 
-                                 TVariant* PostData/*[in,opt]*/, TVariant* Headers/*[in,opt]*/)
+IWebBrowserAppDispT<T>::Navigate(BSTR URL/*[in]*/, VARIANT* Flags/*[in,opt]*/, 
+                                 VARIANT* TargetFrameName/*[in,opt]*/, VARIANT* PostData/*[in,opt]*/
+                                 , VARIANT* Headers/*[in,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Navigate"), DISPID(104));
   TAutoArgs<5> _args;
@@ -4255,7 +4915,7 @@ IWebBrowserAppDispT<T>::Refresh()
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::Refresh2(TVariant* Level/*[in,opt]*/)
+IWebBrowserAppDispT<T>::Refresh2(VARIANT* Level/*[in,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Refresh2"), DISPID(105));
   TAutoArgs<1> _args;
@@ -4335,18 +4995,18 @@ IWebBrowserAppDispT<T>::get_Document(void)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::get_TopLevelContainer(TOLEBOOL* pBool/*[out,retval]*/)
+IWebBrowserAppDispT<T>::get_TopLevelContainer(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("TopLevelContainer"), DISPID(204));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowserAppDispT<T>::get_TopLevelContainer(void)
 {
-  TOLEBOOL pBool;
-  this->get_TopLevelContainer((TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->get_TopLevelContainer((VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
@@ -4499,18 +5159,18 @@ IWebBrowserAppDispT<T>::get_LocationURL(void)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowserAppDispT<T>::get_Busy(TOLEBOOL* pBool/*[out,retval]*/)
+IWebBrowserAppDispT<T>::get_Busy(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Busy"), DISPID(212));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowserAppDispT<T>::get_Busy(void)
 {
-  TOLEBOOL pBool;
-  this->get_Busy((TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->get_Busy((VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
@@ -4519,9 +5179,9 @@ IWebBrowserAppDispT<T>::get_Busy(void)
 // Interface: IWebBrowser2
 // *********************************************************************//
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::Navigate2(TVariant* URL/*[in]*/, TVariant* Flags/*[in,opt]*/, 
-                                TVariant* TargetFrameName/*[in,opt]*/, 
-                                TVariant* PostData/*[in,opt]*/, TVariant* Headers/*[in,opt]*/)
+TCOMIWebBrowser2T<T>::Navigate2(VARIANT* URL/*[in]*/, VARIANT* Flags/*[in,opt]*/, 
+                                VARIANT* TargetFrameName/*[in,opt]*/, VARIANT* PostData/*[in,opt]*/, 
+                                VARIANT* Headers/*[in,opt]*/)
 {
   return (*this)->Navigate2(URL, Flags, TargetFrameName, PostData, Headers);
 }
@@ -4537,21 +5197,21 @@ template <class T> Shdocvw_tlb::OLECMDF __fastcall
 TCOMIWebBrowser2T<T>::QueryStatusWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/)
 {
   Shdocvw_tlb::OLECMDF pcmdf;
-  OLECHECK(this->QueryStatusWB(cmdID, (Shdocvw_tlb::OLECMDF*)&pcmdf));
+  OLECHECK(this->QueryStatusWB(, (Shdocvw_tlb::OLECMDF*)&pcmdf));
   return pcmdf;
 }
 
 template <class T> HRESULT __fastcall
 TCOMIWebBrowser2T<T>::ExecWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/, 
                              Shdocvw_tlb::OLECMDEXECOPT cmdexecopt/*[in]*/, 
-                             TVariant* pvaIn/*[in,opt]*/, TVariant* pvaOut/*[in,out,opt]*/)
+                             VARIANT* pvaIn/*[in,opt]*/, VARIANT* pvaOut/*[in,out,opt]*/)
 {
   return (*this)->ExecWB(cmdID, cmdexecopt, pvaIn, pvaOut);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::ShowBrowserBar(TVariant* pvaClsid/*[in]*/, TVariant* pvarShow/*[in,opt]*/, 
-                                     TVariant* pvarSize/*[in,opt]*/)
+TCOMIWebBrowser2T<T>::ShowBrowserBar(VARIANT* pvaClsid/*[in]*/, VARIANT* pvarShow/*[in,opt]*/, 
+                                     VARIANT* pvarSize/*[in,opt]*/)
 {
   return (*this)->ShowBrowserBar(pvaClsid, pvarShow, pvarSize);
 }
@@ -4571,143 +5231,227 @@ TCOMIWebBrowser2T<T>::get_ReadyState(void)
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::get_Offline(TOLEBOOL* pbOffline/*[out,retval]*/)
+TCOMIWebBrowser2T<T>::get_Offline(VARIANT_BOOL* pbOffline/*[out,retval]*/)
 {
   return (*this)->get_Offline(pbOffline);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::get_Offline(TOLEBOOL* pbOffline/*[out,retval]*/)
+{
+  return (*this)->get_Offline(VARIANT_BOOL*)pbOffline);
 }
 
 template <class T> TOLEBOOL __fastcall
 TCOMIWebBrowser2T<T>::get_Offline(void)
 {
-  TOLEBOOL pbOffline;
-  OLECHECK(this->get_Offline((TOLEBOOL*)&pbOffline));
-  return pbOffline;
+  VARIANT_BOOL pbOffline;
+  OLECHECK(this->get_Offline((VARIANT_BOOL*)&pbOffline));
+  return (TOLEBOOL)pbOffline;
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::set_Offline(TOLEBOOL pbOffline/*[in]*/)
+TCOMIWebBrowser2T<T>::set_Offline(VARIANT_BOOL pbOffline/*[in]*/)
 {
   return (*this)->set_Offline(pbOffline);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::get_Silent(TOLEBOOL* pbSilent/*[out,retval]*/)
+TCOMIWebBrowser2T<T>::set_Offline(TOLEBOOL pbOffline/*[in]*/)
+{
+  return (*this)->set_Offline(VARIANT_BOOL)pbOffline);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::get_Silent(VARIANT_BOOL* pbSilent/*[out,retval]*/)
 {
   return (*this)->get_Silent(pbSilent);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::get_Silent(TOLEBOOL* pbSilent/*[out,retval]*/)
+{
+  return (*this)->get_Silent(VARIANT_BOOL*)pbSilent);
 }
 
 template <class T> TOLEBOOL __fastcall
 TCOMIWebBrowser2T<T>::get_Silent(void)
 {
-  TOLEBOOL pbSilent;
-  OLECHECK(this->get_Silent((TOLEBOOL*)&pbSilent));
-  return pbSilent;
+  VARIANT_BOOL pbSilent;
+  OLECHECK(this->get_Silent((VARIANT_BOOL*)&pbSilent));
+  return (TOLEBOOL)pbSilent;
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::set_Silent(TOLEBOOL pbSilent/*[in]*/)
+TCOMIWebBrowser2T<T>::set_Silent(VARIANT_BOOL pbSilent/*[in]*/)
 {
   return (*this)->set_Silent(pbSilent);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::get_RegisterAsBrowser(TOLEBOOL* pbRegister/*[out,retval]*/)
+TCOMIWebBrowser2T<T>::set_Silent(TOLEBOOL pbSilent/*[in]*/)
+{
+  return (*this)->set_Silent(VARIANT_BOOL)pbSilent);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::get_RegisterAsBrowser(VARIANT_BOOL* pbRegister/*[out,retval]*/)
 {
   return (*this)->get_RegisterAsBrowser(pbRegister);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::get_RegisterAsBrowser(TOLEBOOL* pbRegister/*[out,retval]*/)
+{
+  return (*this)->get_RegisterAsBrowser(VARIANT_BOOL*)pbRegister);
 }
 
 template <class T> TOLEBOOL __fastcall
 TCOMIWebBrowser2T<T>::get_RegisterAsBrowser(void)
 {
-  TOLEBOOL pbRegister;
-  OLECHECK(this->get_RegisterAsBrowser((TOLEBOOL*)&pbRegister));
-  return pbRegister;
+  VARIANT_BOOL pbRegister;
+  OLECHECK(this->get_RegisterAsBrowser((VARIANT_BOOL*)&pbRegister));
+  return (TOLEBOOL)pbRegister;
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::set_RegisterAsBrowser(TOLEBOOL pbRegister/*[in]*/)
+TCOMIWebBrowser2T<T>::set_RegisterAsBrowser(VARIANT_BOOL pbRegister/*[in]*/)
 {
   return (*this)->set_RegisterAsBrowser(pbRegister);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::get_RegisterAsDropTarget(TOLEBOOL* pbRegister/*[out,retval]*/)
+TCOMIWebBrowser2T<T>::set_RegisterAsBrowser(TOLEBOOL pbRegister/*[in]*/)
+{
+  return (*this)->set_RegisterAsBrowser(VARIANT_BOOL)pbRegister);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::get_RegisterAsDropTarget(VARIANT_BOOL* pbRegister/*[out,retval]*/)
 {
   return (*this)->get_RegisterAsDropTarget(pbRegister);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::get_RegisterAsDropTarget(TOLEBOOL* pbRegister/*[out,retval]*/)
+{
+  return (*this)->get_RegisterAsDropTarget(VARIANT_BOOL*)pbRegister);
 }
 
 template <class T> TOLEBOOL __fastcall
 TCOMIWebBrowser2T<T>::get_RegisterAsDropTarget(void)
 {
-  TOLEBOOL pbRegister;
-  OLECHECK(this->get_RegisterAsDropTarget((TOLEBOOL*)&pbRegister));
-  return pbRegister;
+  VARIANT_BOOL pbRegister;
+  OLECHECK(this->get_RegisterAsDropTarget((VARIANT_BOOL*)&pbRegister));
+  return (TOLEBOOL)pbRegister;
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::set_RegisterAsDropTarget(TOLEBOOL pbRegister/*[in]*/)
+TCOMIWebBrowser2T<T>::set_RegisterAsDropTarget(VARIANT_BOOL pbRegister/*[in]*/)
 {
   return (*this)->set_RegisterAsDropTarget(pbRegister);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::get_TheaterMode(TOLEBOOL* pbRegister/*[out,retval]*/)
+TCOMIWebBrowser2T<T>::set_RegisterAsDropTarget(TOLEBOOL pbRegister/*[in]*/)
+{
+  return (*this)->set_RegisterAsDropTarget(VARIANT_BOOL)pbRegister);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::get_TheaterMode(VARIANT_BOOL* pbRegister/*[out,retval]*/)
 {
   return (*this)->get_TheaterMode(pbRegister);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::get_TheaterMode(TOLEBOOL* pbRegister/*[out,retval]*/)
+{
+  return (*this)->get_TheaterMode(VARIANT_BOOL*)pbRegister);
 }
 
 template <class T> TOLEBOOL __fastcall
 TCOMIWebBrowser2T<T>::get_TheaterMode(void)
 {
-  TOLEBOOL pbRegister;
-  OLECHECK(this->get_TheaterMode((TOLEBOOL*)&pbRegister));
-  return pbRegister;
+  VARIANT_BOOL pbRegister;
+  OLECHECK(this->get_TheaterMode((VARIANT_BOOL*)&pbRegister));
+  return (TOLEBOOL)pbRegister;
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::set_TheaterMode(TOLEBOOL pbRegister/*[in]*/)
+TCOMIWebBrowser2T<T>::set_TheaterMode(VARIANT_BOOL pbRegister/*[in]*/)
 {
   return (*this)->set_TheaterMode(pbRegister);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::get_AddressBar(TOLEBOOL* Value/*[out,retval]*/)
+TCOMIWebBrowser2T<T>::set_TheaterMode(TOLEBOOL pbRegister/*[in]*/)
+{
+  return (*this)->set_TheaterMode(VARIANT_BOOL)pbRegister);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::get_AddressBar(VARIANT_BOOL* Value/*[out,retval]*/)
 {
   return (*this)->get_AddressBar(Value);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::get_AddressBar(TOLEBOOL* Value/*[out,retval]*/)
+{
+  return (*this)->get_AddressBar(VARIANT_BOOL*)Value);
 }
 
 template <class T> TOLEBOOL __fastcall
 TCOMIWebBrowser2T<T>::get_AddressBar(void)
 {
-  TOLEBOOL Value;
-  OLECHECK(this->get_AddressBar((TOLEBOOL*)&Value));
-  return Value;
+  VARIANT_BOOL Value;
+  OLECHECK(this->get_AddressBar((VARIANT_BOOL*)&Value));
+  return (TOLEBOOL)Value;
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::set_AddressBar(TOLEBOOL Value/*[in]*/)
+TCOMIWebBrowser2T<T>::set_AddressBar(VARIANT_BOOL Value/*[in]*/)
 {
   return (*this)->set_AddressBar(Value);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIWebBrowser2T<T>::get_Resizable(TOLEBOOL* Value/*[out,retval]*/)
+TCOMIWebBrowser2T<T>::set_AddressBar(TOLEBOOL Value/*[in]*/)
+{
+  return (*this)->set_AddressBar(VARIANT_BOOL)Value);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::get_Resizable(VARIANT_BOOL* Value/*[out,retval]*/)
 {
   return (*this)->get_Resizable(Value);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::get_Resizable(TOLEBOOL* Value/*[out,retval]*/)
+{
+  return (*this)->get_Resizable(VARIANT_BOOL*)Value);
 }
 
 template <class T> TOLEBOOL __fastcall
 TCOMIWebBrowser2T<T>::get_Resizable(void)
 {
-  TOLEBOOL Value;
-  OLECHECK(this->get_Resizable((TOLEBOOL*)&Value));
-  return Value;
+  VARIANT_BOOL Value;
+  OLECHECK(this->get_Resizable((VARIANT_BOOL*)&Value));
+  return (TOLEBOOL)Value;
+}
+
+template <class T> HRESULT __fastcall
+TCOMIWebBrowser2T<T>::set_Resizable(VARIANT_BOOL Value/*[in]*/)
+{
+  return (*this)->set_Resizable(Value);
 }
 
 template <class T> HRESULT __fastcall
 TCOMIWebBrowser2T<T>::set_Resizable(TOLEBOOL Value/*[in]*/)
 {
-  return (*this)->set_Resizable(Value);
+  return (*this)->set_Resizable(VARIANT_BOOL)Value);
 }
 
 // *********************************************************************//
@@ -4716,9 +5460,9 @@ TCOMIWebBrowser2T<T>::set_Resizable(TOLEBOOL Value/*[in]*/)
 // GUID:      {D30C1661-CDAF-11D0-8A3E-00C04FC9E26E}
 // *********************************************************************//
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::Navigate2(TVariant* URL/*[in]*/, TVariant* Flags/*[in,opt]*/, 
-                                TVariant* TargetFrameName/*[in,opt]*/, 
-                                TVariant* PostData/*[in,opt]*/, TVariant* Headers/*[in,opt]*/)
+IWebBrowser2DispT<T>::Navigate2(VARIANT* URL/*[in]*/, VARIANT* Flags/*[in,opt]*/, 
+                                VARIANT* TargetFrameName/*[in,opt]*/, VARIANT* PostData/*[in,opt]*/
+                                , VARIANT* Headers/*[in,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Navigate2"), DISPID(500));
   TAutoArgs<5> _args;
@@ -4751,7 +5495,7 @@ IWebBrowser2DispT<T>::QueryStatusWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/)
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
 IWebBrowser2DispT<T>::ExecWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/, 
                              Shdocvw_tlb::OLECMDEXECOPT cmdexecopt/*[in]*/, 
-                             TVariant* pvaIn/*[in,opt]*/, TVariant* pvaOut/*[in,out,opt]*/)
+                             VARIANT* pvaIn/*[in,opt]*/, VARIANT* pvaOut/*[in,out,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("ExecWB"), DISPID(502));
   TAutoArgs<4> _args;
@@ -4763,8 +5507,8 @@ IWebBrowser2DispT<T>::ExecWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/,
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::ShowBrowserBar(TVariant* pvaClsid/*[in]*/, TVariant* pvarShow/*[in,opt]*/, 
-                                     TVariant* pvarSize/*[in,opt]*/)
+IWebBrowser2DispT<T>::ShowBrowserBar(VARIANT* pvaClsid/*[in]*/, VARIANT* pvarShow/*[in,opt]*/, 
+                                     VARIANT* pvarSize/*[in,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("ShowBrowserBar"), DISPID(503));
   TAutoArgs<3> _args;
@@ -4791,23 +5535,23 @@ IWebBrowser2DispT<T>::get_ReadyState(void)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::get_Offline(TOLEBOOL* pbOffline/*[out,retval]*/)
+IWebBrowser2DispT<T>::get_Offline(VARIANT_BOOL* pbOffline/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Offline"), DISPID(550));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pbOffline /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowser2DispT<T>::get_Offline(void)
 {
-  TOLEBOOL pbOffline;
-  this->get_Offline((TOLEBOOL*)&pbOffline);
+  VARIANT_BOOL pbOffline;
+  this->get_Offline((VARIANT_BOOL*)&pbOffline);
   return pbOffline;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::set_Offline(TOLEBOOL pbOffline/*[in]*/)
+IWebBrowser2DispT<T>::set_Offline(VARIANT_BOOL pbOffline/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Offline"), DISPID(550));
   TAutoArgs<1> _args;
@@ -4816,23 +5560,23 @@ IWebBrowser2DispT<T>::set_Offline(TOLEBOOL pbOffline/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::get_Silent(TOLEBOOL* pbSilent/*[out,retval]*/)
+IWebBrowser2DispT<T>::get_Silent(VARIANT_BOOL* pbSilent/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Silent"), DISPID(551));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pbSilent /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowser2DispT<T>::get_Silent(void)
 {
-  TOLEBOOL pbSilent;
-  this->get_Silent((TOLEBOOL*)&pbSilent);
+  VARIANT_BOOL pbSilent;
+  this->get_Silent((VARIANT_BOOL*)&pbSilent);
   return pbSilent;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::set_Silent(TOLEBOOL pbSilent/*[in]*/)
+IWebBrowser2DispT<T>::set_Silent(VARIANT_BOOL pbSilent/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Silent"), DISPID(551));
   TAutoArgs<1> _args;
@@ -4841,23 +5585,23 @@ IWebBrowser2DispT<T>::set_Silent(TOLEBOOL pbSilent/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::get_RegisterAsBrowser(TOLEBOOL* pbRegister/*[out,retval]*/)
+IWebBrowser2DispT<T>::get_RegisterAsBrowser(VARIANT_BOOL* pbRegister/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("RegisterAsBrowser"), DISPID(552));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pbRegister /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowser2DispT<T>::get_RegisterAsBrowser(void)
 {
-  TOLEBOOL pbRegister;
-  this->get_RegisterAsBrowser((TOLEBOOL*)&pbRegister);
+  VARIANT_BOOL pbRegister;
+  this->get_RegisterAsBrowser((VARIANT_BOOL*)&pbRegister);
   return pbRegister;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::set_RegisterAsBrowser(TOLEBOOL pbRegister/*[in]*/)
+IWebBrowser2DispT<T>::set_RegisterAsBrowser(VARIANT_BOOL pbRegister/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("RegisterAsBrowser"), DISPID(552));
   TAutoArgs<1> _args;
@@ -4866,23 +5610,23 @@ IWebBrowser2DispT<T>::set_RegisterAsBrowser(TOLEBOOL pbRegister/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::get_RegisterAsDropTarget(TOLEBOOL* pbRegister/*[out,retval]*/)
+IWebBrowser2DispT<T>::get_RegisterAsDropTarget(VARIANT_BOOL* pbRegister/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("RegisterAsDropTarget"), DISPID(553));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pbRegister /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowser2DispT<T>::get_RegisterAsDropTarget(void)
 {
-  TOLEBOOL pbRegister;
-  this->get_RegisterAsDropTarget((TOLEBOOL*)&pbRegister);
+  VARIANT_BOOL pbRegister;
+  this->get_RegisterAsDropTarget((VARIANT_BOOL*)&pbRegister);
   return pbRegister;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::set_RegisterAsDropTarget(TOLEBOOL pbRegister/*[in]*/)
+IWebBrowser2DispT<T>::set_RegisterAsDropTarget(VARIANT_BOOL pbRegister/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("RegisterAsDropTarget"), DISPID(553));
   TAutoArgs<1> _args;
@@ -4891,23 +5635,23 @@ IWebBrowser2DispT<T>::set_RegisterAsDropTarget(TOLEBOOL pbRegister/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::get_TheaterMode(TOLEBOOL* pbRegister/*[out,retval]*/)
+IWebBrowser2DispT<T>::get_TheaterMode(VARIANT_BOOL* pbRegister/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("TheaterMode"), DISPID(554));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pbRegister /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowser2DispT<T>::get_TheaterMode(void)
 {
-  TOLEBOOL pbRegister;
-  this->get_TheaterMode((TOLEBOOL*)&pbRegister);
+  VARIANT_BOOL pbRegister;
+  this->get_TheaterMode((VARIANT_BOOL*)&pbRegister);
   return pbRegister;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::set_TheaterMode(TOLEBOOL pbRegister/*[in]*/)
+IWebBrowser2DispT<T>::set_TheaterMode(VARIANT_BOOL pbRegister/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("TheaterMode"), DISPID(554));
   TAutoArgs<1> _args;
@@ -4916,23 +5660,23 @@ IWebBrowser2DispT<T>::set_TheaterMode(TOLEBOOL pbRegister/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::get_AddressBar(TOLEBOOL* Value/*[out,retval]*/)
+IWebBrowser2DispT<T>::get_AddressBar(VARIANT_BOOL* Value/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("AddressBar"), DISPID(555));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(Value /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowser2DispT<T>::get_AddressBar(void)
 {
-  TOLEBOOL Value;
-  this->get_AddressBar((TOLEBOOL*)&Value);
+  VARIANT_BOOL Value;
+  this->get_AddressBar((VARIANT_BOOL*)&Value);
   return Value;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::set_AddressBar(TOLEBOOL Value/*[in]*/)
+IWebBrowser2DispT<T>::set_AddressBar(VARIANT_BOOL Value/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("AddressBar"), DISPID(555));
   TAutoArgs<1> _args;
@@ -4941,23 +5685,23 @@ IWebBrowser2DispT<T>::set_AddressBar(TOLEBOOL Value/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::get_Resizable(TOLEBOOL* Value/*[out,retval]*/)
+IWebBrowser2DispT<T>::get_Resizable(VARIANT_BOOL* Value/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Resizable"), DISPID(556));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(Value /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowser2DispT<T>::get_Resizable(void)
 {
-  TOLEBOOL Value;
-  this->get_Resizable((TOLEBOOL*)&Value);
+  VARIANT_BOOL Value;
+  this->get_Resizable((VARIANT_BOOL*)&Value);
   return Value;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::set_Resizable(TOLEBOOL Value/*[in]*/)
+IWebBrowser2DispT<T>::set_Resizable(VARIANT_BOOL Value/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Resizable"), DISPID(556));
   TAutoArgs<1> _args;
@@ -4983,7 +5727,7 @@ IWebBrowser2DispT<T>::ClientToWindow(int* pcx/*[in,out]*/, int* pcy/*[in,out]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::PutProperty(BSTR Property/*[in]*/, TVariantInParam vtValue/*[in]*/)
+IWebBrowser2DispT<T>::PutProperty(BSTR Property/*[in]*/, VARIANT vtValue/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("PutProperty"), DISPID(302));
   TAutoArgs<2> _args;
@@ -4993,7 +5737,7 @@ IWebBrowser2DispT<T>::PutProperty(BSTR Property/*[in]*/, TVariantInParam vtValue
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::GetProperty(BSTR Property/*[in]*/, TVariant* pvtValue/*[out,retval]*/)
+IWebBrowser2DispT<T>::GetProperty(BSTR Property/*[in]*/, VARIANT* pvtValue/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("GetProperty"), DISPID(303));
   TAutoArgs<1> _args;
@@ -5001,11 +5745,11 @@ IWebBrowser2DispT<T>::GetProperty(BSTR Property/*[in]*/, TVariant* pvtValue/*[ou
   return OutRetValSetterPtr(pvtValue /*[VT_VARIANT:1]*/, _args, OleFunction(_dispid, _args));
 }
 
-template <class T> TVariant __fastcall
+template <class T> VARIANT __fastcall
 IWebBrowser2DispT<T>::GetProperty(BSTR Property/*[in]*/)
 {
-  TVariant pvtValue;
-  this->GetProperty(Property, (TVariant*)&pvtValue);
+  VARIANT pvtValue;
+  this->GetProperty(Property, (VARIANT*)&pvtValue);
   return pvtValue;
 }
 
@@ -5074,23 +5818,23 @@ IWebBrowser2DispT<T>::get_Path(void)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::get_Visible(TOLEBOOL* pBool/*[out,retval]*/)
+IWebBrowser2DispT<T>::get_Visible(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Visible"), DISPID(402));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowser2DispT<T>::get_Visible(void)
 {
-  TOLEBOOL pBool;
-  this->get_Visible((TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->get_Visible((VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::set_Visible(TOLEBOOL pBool/*[in]*/)
+IWebBrowser2DispT<T>::set_Visible(VARIANT_BOOL pBool/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Visible"), DISPID(402));
   TAutoArgs<1> _args;
@@ -5099,23 +5843,23 @@ IWebBrowser2DispT<T>::set_Visible(TOLEBOOL pBool/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::get_StatusBar(TOLEBOOL* pBool/*[out,retval]*/)
+IWebBrowser2DispT<T>::get_StatusBar(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("StatusBar"), DISPID(403));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowser2DispT<T>::get_StatusBar(void)
 {
-  TOLEBOOL pBool;
-  this->get_StatusBar((TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->get_StatusBar((VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::set_StatusBar(TOLEBOOL pBool/*[in]*/)
+IWebBrowser2DispT<T>::set_StatusBar(VARIANT_BOOL pBool/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("StatusBar"), DISPID(403));
   TAutoArgs<1> _args;
@@ -5174,23 +5918,23 @@ IWebBrowser2DispT<T>::set_ToolBar(int Value/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::get_MenuBar(TOLEBOOL* Value/*[out,retval]*/)
+IWebBrowser2DispT<T>::get_MenuBar(VARIANT_BOOL* Value/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("MenuBar"), DISPID(406));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(Value /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowser2DispT<T>::get_MenuBar(void)
 {
-  TOLEBOOL Value;
-  this->get_MenuBar((TOLEBOOL*)&Value);
+  VARIANT_BOOL Value;
+  this->get_MenuBar((VARIANT_BOOL*)&Value);
   return Value;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::set_MenuBar(TOLEBOOL Value/*[in]*/)
+IWebBrowser2DispT<T>::set_MenuBar(VARIANT_BOOL Value/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("MenuBar"), DISPID(406));
   TAutoArgs<1> _args;
@@ -5199,23 +5943,23 @@ IWebBrowser2DispT<T>::set_MenuBar(TOLEBOOL Value/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::get_FullScreen(TOLEBOOL* pbFullScreen/*[out,retval]*/)
+IWebBrowser2DispT<T>::get_FullScreen(VARIANT_BOOL* pbFullScreen/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("FullScreen"), DISPID(407));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pbFullScreen /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowser2DispT<T>::get_FullScreen(void)
 {
-  TOLEBOOL pbFullScreen;
-  this->get_FullScreen((TOLEBOOL*)&pbFullScreen);
+  VARIANT_BOOL pbFullScreen;
+  this->get_FullScreen((VARIANT_BOOL*)&pbFullScreen);
   return pbFullScreen;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::set_FullScreen(TOLEBOOL pbFullScreen/*[in]*/)
+IWebBrowser2DispT<T>::set_FullScreen(VARIANT_BOOL pbFullScreen/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("FullScreen"), DISPID(407));
   TAutoArgs<1> _args;
@@ -5252,9 +5996,9 @@ IWebBrowser2DispT<T>::GoSearch()
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::Navigate(BSTR URL/*[in]*/, TVariant* Flags/*[in,opt]*/, 
-                               TVariant* TargetFrameName/*[in,opt]*/, TVariant* PostData/*[in,opt]*/
-                               , TVariant* Headers/*[in,opt]*/)
+IWebBrowser2DispT<T>::Navigate(BSTR URL/*[in]*/, VARIANT* Flags/*[in,opt]*/, 
+                               VARIANT* TargetFrameName/*[in,opt]*/, VARIANT* PostData/*[in,opt]*/, 
+                               VARIANT* Headers/*[in,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Navigate"), DISPID(104));
   TAutoArgs<5> _args;
@@ -5274,7 +6018,7 @@ IWebBrowser2DispT<T>::Refresh()
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::Refresh2(TVariant* Level/*[in,opt]*/)
+IWebBrowser2DispT<T>::Refresh2(VARIANT* Level/*[in,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Refresh2"), DISPID(105));
   TAutoArgs<1> _args;
@@ -5354,18 +6098,18 @@ IWebBrowser2DispT<T>::get_Document(void)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::get_TopLevelContainer(TOLEBOOL* pBool/*[out,retval]*/)
+IWebBrowser2DispT<T>::get_TopLevelContainer(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("TopLevelContainer"), DISPID(204));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowser2DispT<T>::get_TopLevelContainer(void)
 {
-  TOLEBOOL pBool;
-  this->get_TopLevelContainer((TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->get_TopLevelContainer((VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
@@ -5518,18 +6262,18 @@ IWebBrowser2DispT<T>::get_LocationURL(void)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IWebBrowser2DispT<T>::get_Busy(TOLEBOOL* pBool/*[out,retval]*/)
+IWebBrowser2DispT<T>::get_Busy(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Busy"), DISPID(212));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IWebBrowser2DispT<T>::get_Busy(void)
 {
-  TOLEBOOL pBool;
-  this->get_Busy((TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->get_Busy((VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
@@ -5558,7 +6302,7 @@ DWebBrowserEvents2DispT<T>::ProgressChange(long Progress/*[in]*/, long ProgressM
 }
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-DWebBrowserEvents2DispT<T>::CommandStateChange(long Command/*[in]*/, TOLEBOOL Enable/*[in]*/)
+DWebBrowserEvents2DispT<T>::CommandStateChange(long Command/*[in]*/, VARIANT_BOOL Enable/*[in]*/)
 {
   _TDispID _dispid(/* CommandStateChange */ DISPID(105));
   TAutoArgs<2> _args;
@@ -5600,11 +6344,10 @@ DWebBrowserEvents2DispT<T>::PropertyChange(BSTR szProperty/*[in]*/)
 }
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-DWebBrowserEvents2DispT<T>::BeforeNavigate2(LPDISPATCH pDisp/*[in]*/, TVariant* URL/*[in]*/, 
-                                            TVariant* Flags/*[in]*/, 
-                                            TVariant* TargetFrameName/*[in]*/, 
-                                            TVariant* PostData/*[in]*/, TVariant* Headers/*[in]*/, 
-                                            TOLEBOOL* Cancel/*[in,out]*/)
+DWebBrowserEvents2DispT<T>::BeforeNavigate2(LPDISPATCH pDisp/*[in]*/, VARIANT* URL/*[in]*/, 
+                                            VARIANT* Flags/*[in]*/, VARIANT* TargetFrameName/*[in]*/
+                                            , VARIANT* PostData/*[in]*/, VARIANT* Headers/*[in]*/, 
+                                            VARIANT_BOOL* Cancel/*[in,out]*/)
 {
   _TDispID _dispid(/* BeforeNavigate2 */ DISPID(250));
   TAutoArgs<7> _args;
@@ -5619,7 +6362,8 @@ DWebBrowserEvents2DispT<T>::BeforeNavigate2(LPDISPATCH pDisp/*[in]*/, TVariant* 
 }
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-DWebBrowserEvents2DispT<T>::NewWindow2(LPDISPATCH* ppDisp/*[in,out]*/, TOLEBOOL* Cancel/*[in,out]*/)
+DWebBrowserEvents2DispT<T>::NewWindow2(LPDISPATCH* ppDisp/*[in,out]*/, 
+                                       VARIANT_BOOL* Cancel/*[in,out]*/)
 {
   _TDispID _dispid(/* NewWindow2 */ DISPID(251));
   TAutoArgs<2> _args;
@@ -5629,7 +6373,7 @@ DWebBrowserEvents2DispT<T>::NewWindow2(LPDISPATCH* ppDisp/*[in,out]*/, TOLEBOOL*
 }
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-DWebBrowserEvents2DispT<T>::NavigateComplete2(LPDISPATCH pDisp/*[in]*/, TVariant* URL/*[in]*/)
+DWebBrowserEvents2DispT<T>::NavigateComplete2(LPDISPATCH pDisp/*[in]*/, VARIANT* URL/*[in]*/)
 {
   _TDispID _dispid(/* NavigateComplete2 */ DISPID(252));
   TAutoArgs<2> _args;
@@ -5639,7 +6383,7 @@ DWebBrowserEvents2DispT<T>::NavigateComplete2(LPDISPATCH pDisp/*[in]*/, TVariant
 }
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-DWebBrowserEvents2DispT<T>::DocumentComplete(LPDISPATCH pDisp/*[in]*/, TVariant* URL/*[in]*/)
+DWebBrowserEvents2DispT<T>::DocumentComplete(LPDISPATCH pDisp/*[in]*/, VARIANT* URL/*[in]*/)
 {
   _TDispID _dispid(/* DocumentComplete */ DISPID(259));
   TAutoArgs<2> _args;
@@ -5656,7 +6400,7 @@ DWebBrowserEvents2DispT<T>::OnQuit()
 }
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-DWebBrowserEvents2DispT<T>::OnVisible(TOLEBOOL Visible/*[in]*/)
+DWebBrowserEvents2DispT<T>::OnVisible(VARIANT_BOOL Visible/*[in]*/)
 {
   _TDispID _dispid(/* OnVisible */ DISPID(254));
   TAutoArgs<1> _args;
@@ -5665,7 +6409,7 @@ DWebBrowserEvents2DispT<T>::OnVisible(TOLEBOOL Visible/*[in]*/)
 }
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-DWebBrowserEvents2DispT<T>::OnToolBar(TOLEBOOL ToolBar/*[in]*/)
+DWebBrowserEvents2DispT<T>::OnToolBar(VARIANT_BOOL ToolBar/*[in]*/)
 {
   _TDispID _dispid(/* OnToolBar */ DISPID(255));
   TAutoArgs<1> _args;
@@ -5674,7 +6418,7 @@ DWebBrowserEvents2DispT<T>::OnToolBar(TOLEBOOL ToolBar/*[in]*/)
 }
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-DWebBrowserEvents2DispT<T>::OnMenuBar(TOLEBOOL MenuBar/*[in]*/)
+DWebBrowserEvents2DispT<T>::OnMenuBar(VARIANT_BOOL MenuBar/*[in]*/)
 {
   _TDispID _dispid(/* OnMenuBar */ DISPID(256));
   TAutoArgs<1> _args;
@@ -5683,7 +6427,7 @@ DWebBrowserEvents2DispT<T>::OnMenuBar(TOLEBOOL MenuBar/*[in]*/)
 }
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-DWebBrowserEvents2DispT<T>::OnStatusBar(TOLEBOOL StatusBar/*[in]*/)
+DWebBrowserEvents2DispT<T>::OnStatusBar(VARIANT_BOOL StatusBar/*[in]*/)
 {
   _TDispID _dispid(/* OnStatusBar */ DISPID(257));
   TAutoArgs<1> _args;
@@ -5692,7 +6436,7 @@ DWebBrowserEvents2DispT<T>::OnStatusBar(TOLEBOOL StatusBar/*[in]*/)
 }
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-DWebBrowserEvents2DispT<T>::OnFullScreen(TOLEBOOL FullScreen/*[in]*/)
+DWebBrowserEvents2DispT<T>::OnFullScreen(VARIANT_BOOL FullScreen/*[in]*/)
 {
   _TDispID _dispid(/* OnFullScreen */ DISPID(258));
   TAutoArgs<1> _args;
@@ -5701,11 +6445,149 @@ DWebBrowserEvents2DispT<T>::OnFullScreen(TOLEBOOL FullScreen/*[in]*/)
 }
 
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-DWebBrowserEvents2DispT<T>::OnTheaterMode(TOLEBOOL TheaterMode/*[in]*/)
+DWebBrowserEvents2DispT<T>::OnTheaterMode(VARIANT_BOOL TheaterMode/*[in]*/)
 {
   _TDispID _dispid(/* OnTheaterMode */ DISPID(260));
   TAutoArgs<1> _args;
   _args[1] = TheaterMode /*[VT_BOOL:0]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::WindowSetResizable(VARIANT_BOOL Resizable/*[in]*/)
+{
+  _TDispID _dispid(/* WindowSetResizable */ DISPID(262));
+  TAutoArgs<1> _args;
+  _args[1] = Resizable /*[VT_BOOL:0]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::WindowSetLeft(long Left/*[in]*/)
+{
+  _TDispID _dispid(/* WindowSetLeft */ DISPID(264));
+  TAutoArgs<1> _args;
+  _args[1] = Left /*[VT_I4:0]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::WindowSetTop(long Top/*[in]*/)
+{
+  _TDispID _dispid(/* WindowSetTop */ DISPID(265));
+  TAutoArgs<1> _args;
+  _args[1] = Top /*[VT_I4:0]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::WindowSetWidth(long Width/*[in]*/)
+{
+  _TDispID _dispid(/* WindowSetWidth */ DISPID(266));
+  TAutoArgs<1> _args;
+  _args[1] = Width /*[VT_I4:0]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::WindowSetHeight(long Height/*[in]*/)
+{
+  _TDispID _dispid(/* WindowSetHeight */ DISPID(267));
+  TAutoArgs<1> _args;
+  _args[1] = Height /*[VT_I4:0]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::WindowClosing(VARIANT_BOOL IsChildWindow/*[in]*/, 
+                                          VARIANT_BOOL* Cancel/*[in,out]*/)
+{
+  _TDispID _dispid(/* WindowClosing */ DISPID(263));
+  TAutoArgs<2> _args;
+  _args[1] = IsChildWindow /*[VT_BOOL:0]*/;
+  _args[2] = Cancel /*[VT_BOOL:1]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::ClientToHostWindow(long* CX/*[in,out]*/, long* CY/*[in,out]*/)
+{
+  _TDispID _dispid(/* ClientToHostWindow */ DISPID(268));
+  TAutoArgs<2> _args;
+  _args[1] = CX /*[VT_I4:1]*/;
+  _args[2] = CY /*[VT_I4:1]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::SetSecureLockIcon(long SecureLockIcon/*[in]*/)
+{
+  _TDispID _dispid(/* SetSecureLockIcon */ DISPID(269));
+  TAutoArgs<1> _args;
+  _args[1] = SecureLockIcon /*[VT_I4:0]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::FileDownload(VARIANT_BOOL* Cancel/*[in,out]*/)
+{
+  _TDispID _dispid(/* FileDownload */ DISPID(270));
+  TAutoArgs<1> _args;
+  _args[1] = Cancel /*[VT_BOOL:1]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::NavigateError(LPDISPATCH pDisp/*[in]*/, VARIANT* URL/*[in]*/, 
+                                          VARIANT* Frame/*[in]*/, VARIANT* StatusCode/*[in]*/, 
+                                          VARIANT_BOOL* Cancel/*[in,out]*/)
+{
+  _TDispID _dispid(/* NavigateError */ DISPID(271));
+  TAutoArgs<5> _args;
+  _args[1] = pDisp /*[VT_DISPATCH:0]*/;
+  _args[2] = URL /*[VT_VARIANT:1]*/;
+  _args[3] = Frame /*[VT_VARIANT:1]*/;
+  _args[4] = StatusCode /*[VT_VARIANT:1]*/;
+  _args[5] = Cancel /*[VT_BOOL:1]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::PrintTemplateInstantiation(LPDISPATCH pDisp/*[in]*/)
+{
+  _TDispID _dispid(/* PrintTemplateInstantiation */ DISPID(225));
+  TAutoArgs<1> _args;
+  _args[1] = pDisp /*[VT_DISPATCH:0]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::PrintTemplateTeardown(LPDISPATCH pDisp/*[in]*/)
+{
+  _TDispID _dispid(/* PrintTemplateTeardown */ DISPID(226));
+  TAutoArgs<1> _args;
+  _args[1] = pDisp /*[VT_DISPATCH:0]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::UpdatePageStatus(LPDISPATCH pDisp/*[in]*/, VARIANT* nPage/*[in]*/, 
+                                             VARIANT* fDone/*[in]*/)
+{
+  _TDispID _dispid(/* UpdatePageStatus */ DISPID(227));
+  TAutoArgs<3> _args;
+  _args[1] = pDisp /*[VT_DISPATCH:0]*/;
+  _args[2] = nPage /*[VT_VARIANT:1]*/;
+  _args[3] = fDone /*[VT_VARIANT:1]*/;
+  OleProcedure(_dispid, _args);
+}
+
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DWebBrowserEvents2DispT<T>::PrivacyImpactedStateChange(VARIANT_BOOL bImpacted/*[in]*/)
+{
+  _TDispID _dispid(/* PrivacyImpactedStateChange */ DISPID(272));
+  TAutoArgs<1> _args;
+  _args[1] = bImpacted /*[VT_BOOL:0]*/;
   OleProcedure(_dispid, _args);
 }
 
@@ -5751,16 +6633,16 @@ TCOMIShellWindowsT<T>::get_Count(void)
 }
 
 template <class T> HRESULT __fastcall
-TCOMIShellWindowsT<T>::Item(TVariantInParam index/*[in,opt]*/, LPDISPATCH* Folder/*[out,retval]*/)
+TCOMIShellWindowsT<T>::Item(VARIANT index/*[in,opt]*/, LPDISPATCH* Folder/*[out,retval]*/)
 {
   return (*this)->Item(index, Folder);
 }
 
 template <class T> LPDISPATCH __fastcall
-TCOMIShellWindowsT<T>::Item(TVariantInParam index/*[in,opt]*/)
+TCOMIShellWindowsT<T>::Item(VARIANT index/*[in,opt]*/)
 {
   LPDISPATCH Folder;
-  OLECHECK(this->Item(index, (LPDISPATCH*)&Folder));
+  OLECHECK(this->Item(, (LPDISPATCH*)&Folder));
   return Folder;
 }
 
@@ -5786,8 +6668,8 @@ TCOMIShellWindowsT<T>::Register(LPDISPATCH pid/*[in]*/, long HWND/*[in]*/, int s
 }
 
 template <class T> HRESULT __fastcall
-TCOMIShellWindowsT<T>::RegisterPending(long lThreadId/*[in]*/, TVariant* pvarloc/*[in]*/, 
-                                       TVariant* pvarlocRoot/*[in]*/, int swClass/*[in]*/, 
+TCOMIShellWindowsT<T>::RegisterPending(long lThreadId/*[in]*/, VARIANT* pvarloc/*[in]*/, 
+                                       VARIANT* pvarlocRoot/*[in]*/, int swClass/*[in]*/, 
                                        long* plCookie/*[out]*/)
 {
   return (*this)->RegisterPending(lThreadId, pvarloc, pvarlocRoot, swClass, plCookie);
@@ -5800,31 +6682,32 @@ TCOMIShellWindowsT<T>::Revoke(long lCookie/*[in]*/)
 }
 
 template <class T> HRESULT __fastcall
-TCOMIShellWindowsT<T>::OnNavigate(long lCookie/*[in]*/, TVariant* pvarloc/*[in]*/)
+TCOMIShellWindowsT<T>::OnNavigate(long lCookie/*[in]*/, VARIANT* pvarloc/*[in]*/)
 {
   return (*this)->OnNavigate(lCookie, pvarloc);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIShellWindowsT<T>::OnActivated(long lCookie/*[in]*/, TOLEBOOL fActive/*[in]*/)
+TCOMIShellWindowsT<T>::OnActivated(long lCookie/*[in]*/, VARIANT_BOOL fActive/*[in]*/)
 {
   return (*this)->OnActivated(lCookie, fActive);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIShellWindowsT<T>::FindWindow(TVariant* pvarloc/*[in]*/, TVariant* pvarlocRoot/*[in]*/, 
-                                  int swClass/*[in]*/, long* pHWND/*[out]*/, int swfwOptions/*[in]*/, 
-                                  LPDISPATCH* ppdispOut/*[out,retval]*/)
+TCOMIShellWindowsT<T>::FindWindowSW(VARIANT* pvarloc/*[in]*/, VARIANT* pvarlocRoot/*[in]*/, 
+                                    int swClass/*[in]*/, long* pHWND/*[out]*/, 
+                                    int swfwOptions/*[in]*/, LPDISPATCH* ppdispOut/*[out,retval]*/)
 {
-  return (*this)->FindWindow(pvarloc, pvarlocRoot, swClass, pHWND, swfwOptions, ppdispOut);
+  return (*this)->FindWindowSW(pvarloc, pvarlocRoot, swClass, pHWND, swfwOptions, ppdispOut);
 }
 
 template <class T> LPDISPATCH __fastcall
-TCOMIShellWindowsT<T>::FindWindow(TVariant* pvarloc/*[in]*/, TVariant* pvarlocRoot/*[in]*/, 
-                                  int swClass/*[in]*/, long* pHWND/*[out]*/, int swfwOptions/*[in]*/)
+TCOMIShellWindowsT<T>::FindWindowSW(VARIANT* pvarloc/*[in]*/, VARIANT* pvarlocRoot/*[in]*/, 
+                                    int swClass/*[in]*/, long* pHWND/*[out]*/, 
+                                    int swfwOptions/*[in]*/)
 {
   LPDISPATCH ppdispOut;
-  OLECHECK(this->FindWindow(pvarloc, pvarlocRoot, swClass, pHWND, swfwOptions, (LPDISPATCH*)&ppdispOut));
+  OLECHECK(this->FindWindowSW(, (LPDISPATCH*)&ppdispOut));
   return ppdispOut;
 }
 
@@ -5835,7 +6718,7 @@ TCOMIShellWindowsT<T>::OnCreated(long lCookie/*[in]*/, LPUNKNOWN punk/*[in]*/)
 }
 
 template <class T> HRESULT __fastcall
-TCOMIShellWindowsT<T>::ProcessAttachDetach(TOLEBOOL fAttach/*[in]*/)
+TCOMIShellWindowsT<T>::ProcessAttachDetach(VARIANT_BOOL fAttach/*[in]*/)
 {
   return (*this)->ProcessAttachDetach(fAttach);
 }
@@ -5862,7 +6745,7 @@ IShellWindowsDispT<T>::get_Count(void)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellWindowsDispT<T>::Item(TVariantInParam index/*[in,opt]*/, LPDISPATCH* Folder/*[out,retval]*/)
+IShellWindowsDispT<T>::Item(VARIANT index/*[in,opt]*/, LPDISPATCH* Folder/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Item"), DISPID(0));
   TAutoArgs<1> _args;
@@ -5871,7 +6754,7 @@ IShellWindowsDispT<T>::Item(TVariantInParam index/*[in,opt]*/, LPDISPATCH* Folde
 }
 
 template <class T> LPDISPATCH __fastcall
-IShellWindowsDispT<T>::Item(TVariantInParam index/*[in,opt]*/)
+IShellWindowsDispT<T>::Item(VARIANT index/*[in,opt]*/)
 {
   LPDISPATCH Folder;
   this->Item(index, (LPDISPATCH*)&Folder);
@@ -5908,8 +6791,8 @@ IShellWindowsDispT<T>::Register(LPDISPATCH pid/*[in]*/, long HWND/*[in]*/, int s
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellWindowsDispT<T>::RegisterPending(long lThreadId/*[in]*/, TVariant* pvarloc/*[in]*/, 
-                                       TVariant* pvarlocRoot/*[in]*/, int swClass/*[in]*/, 
+IShellWindowsDispT<T>::RegisterPending(long lThreadId/*[in]*/, VARIANT* pvarloc/*[in]*/, 
+                                       VARIANT* pvarlocRoot/*[in]*/, int swClass/*[in]*/, 
                                        long* plCookie/*[out]*/)
 {
   _TDispID _dispid(*this, OLETEXT("RegisterPending"), DISPID(DISPID_UNKNOWN/*[1610743812]*/));
@@ -5932,7 +6815,7 @@ IShellWindowsDispT<T>::Revoke(long lCookie/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellWindowsDispT<T>::OnNavigate(long lCookie/*[in]*/, TVariant* pvarloc/*[in]*/)
+IShellWindowsDispT<T>::OnNavigate(long lCookie/*[in]*/, VARIANT* pvarloc/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("OnNavigate"), DISPID(DISPID_UNKNOWN/*[1610743814]*/));
   TAutoArgs<2> _args;
@@ -5942,7 +6825,7 @@ IShellWindowsDispT<T>::OnNavigate(long lCookie/*[in]*/, TVariant* pvarloc/*[in]*
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellWindowsDispT<T>::OnActivated(long lCookie/*[in]*/, TOLEBOOL fActive/*[in]*/)
+IShellWindowsDispT<T>::OnActivated(long lCookie/*[in]*/, VARIANT_BOOL fActive/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("OnActivated"), DISPID(DISPID_UNKNOWN/*[1610743815]*/));
   TAutoArgs<2> _args;
@@ -5952,11 +6835,11 @@ IShellWindowsDispT<T>::OnActivated(long lCookie/*[in]*/, TOLEBOOL fActive/*[in]*
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellWindowsDispT<T>::FindWindow(TVariant* pvarloc/*[in]*/, TVariant* pvarlocRoot/*[in]*/, 
-                                  int swClass/*[in]*/, long* pHWND/*[out]*/, int swfwOptions/*[in]*/
-                                  , LPDISPATCH* ppdispOut/*[out,retval]*/)
+IShellWindowsDispT<T>::FindWindowSW(VARIANT* pvarloc/*[in]*/, VARIANT* pvarlocRoot/*[in]*/, 
+                                    int swClass/*[in]*/, long* pHWND/*[out]*/, 
+                                    int swfwOptions/*[in]*/, LPDISPATCH* ppdispOut/*[out,retval]*/)
 {
-  _TDispID _dispid(*this, OLETEXT("FindWindow"), DISPID(DISPID_UNKNOWN/*[1610743816]*/));
+  _TDispID _dispid(*this, OLETEXT("FindWindowSW"), DISPID(DISPID_UNKNOWN/*[1610743816]*/));
   TAutoArgs<5> _args;
   _args[1] = pvarloc /*[VT_VARIANT:1]*/;
   _args[2] = pvarlocRoot /*[VT_VARIANT:1]*/;
@@ -5967,11 +6850,12 @@ IShellWindowsDispT<T>::FindWindow(TVariant* pvarloc/*[in]*/, TVariant* pvarlocRo
 }
 
 template <class T> LPDISPATCH __fastcall
-IShellWindowsDispT<T>::FindWindow(TVariant* pvarloc/*[in]*/, TVariant* pvarlocRoot/*[in]*/, 
-                                  int swClass/*[in]*/, long* pHWND/*[out]*/, int swfwOptions/*[in]*/)
+IShellWindowsDispT<T>::FindWindowSW(VARIANT* pvarloc/*[in]*/, VARIANT* pvarlocRoot/*[in]*/, 
+                                    int swClass/*[in]*/, long* pHWND/*[out]*/, 
+                                    int swfwOptions/*[in]*/)
 {
   LPDISPATCH ppdispOut;
-  this->FindWindow(pvarloc, pvarlocRoot, swClass, pHWND, swfwOptions, (LPDISPATCH*)&ppdispOut);
+  this->FindWindowSW(pvarloc, pvarlocRoot, swClass, pHWND, swfwOptions, (LPDISPATCH*)&ppdispOut);
   return ppdispOut;
 }
 
@@ -5986,7 +6870,7 @@ IShellWindowsDispT<T>::OnCreated(long lCookie/*[in]*/, LPUNKNOWN punk/*[in]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellWindowsDispT<T>::ProcessAttachDetach(TOLEBOOL fAttach/*[in]*/)
+IShellWindowsDispT<T>::ProcessAttachDetach(VARIANT_BOOL fAttach/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("ProcessAttachDetach"), DISPID(DISPID_UNKNOWN/*[1610743818]*/));
   TAutoArgs<1> _args;
@@ -6017,7 +6901,7 @@ TCOMIShellUIHelperT<T>::RefreshOfflineDesktop(void)
 }
 
 template <class T> HRESULT __fastcall
-TCOMIShellUIHelperT<T>::AddFavorite(BSTR URL/*[in]*/, TVariant* Title/*[in,opt]*/)
+TCOMIShellUIHelperT<T>::AddFavorite(BSTR URL/*[in]*/, VARIANT* Title/*[in,opt]*/)
 {
   return (*this)->AddFavorite(URL, Title);
 }
@@ -6030,71 +6914,71 @@ TCOMIShellUIHelperT<T>::AddChannel(BSTR URL/*[in]*/)
 
 template <class T> HRESULT __fastcall
 TCOMIShellUIHelperT<T>::AddDesktopComponent(BSTR URL/*[in]*/, BSTR Type/*[in]*/, 
-                                            TVariant* Left/*[in,opt]*/, TVariant* Top/*[in,opt]*/, 
-                                            TVariant* Width/*[in,opt]*/, 
-                                            TVariant* Height/*[in,opt]*/)
+                                            VARIANT* Left/*[in,opt]*/, VARIANT* Top/*[in,opt]*/, 
+                                            VARIANT* Width/*[in,opt]*/, VARIANT* Height/*[in,opt]*/)
 {
   return (*this)->AddDesktopComponent(URL, Type, Left, Top, Width, Height);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIShellUIHelperT<T>::IsSubscribed(BSTR URL/*[in]*/, TOLEBOOL* pBool/*[out,retval]*/)
+TCOMIShellUIHelperT<T>::IsSubscribed(BSTR URL/*[in]*/, VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   return (*this)->IsSubscribed(URL, pBool);
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 TCOMIShellUIHelperT<T>::IsSubscribed(BSTR URL/*[in]*/)
 {
-  TOLEBOOL pBool;
-  OLECHECK(this->IsSubscribed(URL, (TOLEBOOL*)&pBool));
+  VARIANT_BOOL pBool;
+  OLECHECK(this->IsSubscribed(, (VARIANT_BOOL*)&pBool));
   return pBool;
 }
 
 template <class T> HRESULT __fastcall
 TCOMIShellUIHelperT<T>::NavigateAndFind(BSTR URL/*[in]*/, BSTR strQuery/*[in]*/, 
-                                        TVariant* varTargetFrame/*[in]*/)
+                                        VARIANT* varTargetFrame/*[in]*/)
 {
   return (*this)->NavigateAndFind(URL, strQuery, varTargetFrame);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIShellUIHelperT<T>::ImportExportFavorites(TOLEBOOL fImport/*[in]*/, BSTR strImpExpPath/*[in]*/)
+TCOMIShellUIHelperT<T>::ImportExportFavorites(VARIANT_BOOL fImport/*[in]*/, 
+                                              BSTR strImpExpPath/*[in]*/)
 {
   return (*this)->ImportExportFavorites(fImport, strImpExpPath);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIShellUIHelperT<T>::AutoCompleteSaveForm(TVariant* Form/*[in,opt]*/)
+TCOMIShellUIHelperT<T>::AutoCompleteSaveForm(VARIANT* Form/*[in,opt]*/)
 {
   return (*this)->AutoCompleteSaveForm(Form);
 }
 
 template <class T> HRESULT __fastcall
 TCOMIShellUIHelperT<T>::AutoScan(BSTR strSearch/*[in]*/, BSTR strFailureUrl/*[in]*/, 
-                                 TVariant* pvarTargetFrame/*[in,opt]*/)
+                                 VARIANT* pvarTargetFrame/*[in,opt]*/)
 {
   return (*this)->AutoScan(strSearch, strFailureUrl, pvarTargetFrame);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIShellUIHelperT<T>::AutoCompleteAttach(TVariant* Reserved/*[in,opt]*/)
+TCOMIShellUIHelperT<T>::AutoCompleteAttach(VARIANT* Reserved/*[in,opt]*/)
 {
   return (*this)->AutoCompleteAttach(Reserved);
 }
 
 template <class T> HRESULT __fastcall
-TCOMIShellUIHelperT<T>::ShowBrowserUI(BSTR bstrName/*[in]*/, TVariant* pvarIn/*[in]*/, 
-                                      TVariant* pvarOut/*[out,retval]*/)
+TCOMIShellUIHelperT<T>::ShowBrowserUI(BSTR bstrName/*[in]*/, VARIANT* pvarIn/*[in]*/, 
+                                      VARIANT* pvarOut/*[out,retval]*/)
 {
   return (*this)->ShowBrowserUI(bstrName, pvarIn, pvarOut);
 }
 
-template <class T> TVariant __fastcall
-TCOMIShellUIHelperT<T>::ShowBrowserUI(BSTR bstrName/*[in]*/, TVariant* pvarIn/*[in]*/)
+template <class T> VARIANT __fastcall
+TCOMIShellUIHelperT<T>::ShowBrowserUI(BSTR bstrName/*[in]*/, VARIANT* pvarIn/*[in]*/)
 {
-  TVariant pvarOut;
-  OLECHECK(this->ShowBrowserUI(bstrName, pvarIn, (TVariant*)&pvarOut));
+  VARIANT pvarOut;
+  OLECHECK(this->ShowBrowserUI(, (VARIANT*)&pvarOut));
   return pvarOut;
 }
 
@@ -6125,7 +7009,7 @@ IShellUIHelperDispT<T>::RefreshOfflineDesktop()
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellUIHelperDispT<T>::AddFavorite(BSTR URL/*[in]*/, TVariant* Title/*[in,opt]*/)
+IShellUIHelperDispT<T>::AddFavorite(BSTR URL/*[in]*/, VARIANT* Title/*[in,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("AddFavorite"), DISPID(4));
   TAutoArgs<2> _args;
@@ -6145,9 +7029,8 @@ IShellUIHelperDispT<T>::AddChannel(BSTR URL/*[in]*/)
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
 IShellUIHelperDispT<T>::AddDesktopComponent(BSTR URL/*[in]*/, BSTR Type/*[in]*/, 
-                                            TVariant* Left/*[in,opt]*/, TVariant* Top/*[in,opt]*/, 
-                                            TVariant* Width/*[in,opt]*/, 
-                                            TVariant* Height/*[in,opt]*/)
+                                            VARIANT* Left/*[in,opt]*/, VARIANT* Top/*[in,opt]*/, 
+                                            VARIANT* Width/*[in,opt]*/, VARIANT* Height/*[in,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("AddDesktopComponent"), DISPID(6));
   TAutoArgs<6> _args;
@@ -6161,7 +7044,7 @@ IShellUIHelperDispT<T>::AddDesktopComponent(BSTR URL/*[in]*/, BSTR Type/*[in]*/,
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellUIHelperDispT<T>::IsSubscribed(BSTR URL/*[in]*/, TOLEBOOL* pBool/*[out,retval]*/)
+IShellUIHelperDispT<T>::IsSubscribed(BSTR URL/*[in]*/, VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("IsSubscribed"), DISPID(7));
   TAutoArgs<1> _args;
@@ -6169,17 +7052,17 @@ IShellUIHelperDispT<T>::IsSubscribed(BSTR URL/*[in]*/, TOLEBOOL* pBool/*[out,ret
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OleFunction(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IShellUIHelperDispT<T>::IsSubscribed(BSTR URL/*[in]*/)
 {
-  TOLEBOOL pBool;
-  this->IsSubscribed(URL, (TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->IsSubscribed(URL, (VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
 IShellUIHelperDispT<T>::NavigateAndFind(BSTR URL/*[in]*/, BSTR strQuery/*[in]*/, 
-                                        TVariant* varTargetFrame/*[in]*/)
+                                        VARIANT* varTargetFrame/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("NavigateAndFind"), DISPID(8));
   TAutoArgs<3> _args;
@@ -6190,7 +7073,8 @@ IShellUIHelperDispT<T>::NavigateAndFind(BSTR URL/*[in]*/, BSTR strQuery/*[in]*/,
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellUIHelperDispT<T>::ImportExportFavorites(TOLEBOOL fImport/*[in]*/, BSTR strImpExpPath/*[in]*/)
+IShellUIHelperDispT<T>::ImportExportFavorites(VARIANT_BOOL fImport/*[in]*/, 
+                                              BSTR strImpExpPath/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("ImportExportFavorites"), DISPID(9));
   TAutoArgs<2> _args;
@@ -6200,7 +7084,7 @@ IShellUIHelperDispT<T>::ImportExportFavorites(TOLEBOOL fImport/*[in]*/, BSTR str
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellUIHelperDispT<T>::AutoCompleteSaveForm(TVariant* Form/*[in,opt]*/)
+IShellUIHelperDispT<T>::AutoCompleteSaveForm(VARIANT* Form/*[in,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("AutoCompleteSaveForm"), DISPID(10));
   TAutoArgs<1> _args;
@@ -6210,7 +7094,7 @@ IShellUIHelperDispT<T>::AutoCompleteSaveForm(TVariant* Form/*[in,opt]*/)
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
 IShellUIHelperDispT<T>::AutoScan(BSTR strSearch/*[in]*/, BSTR strFailureUrl/*[in]*/, 
-                                 TVariant* pvarTargetFrame/*[in,opt]*/)
+                                 VARIANT* pvarTargetFrame/*[in,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("AutoScan"), DISPID(11));
   TAutoArgs<3> _args;
@@ -6221,7 +7105,7 @@ IShellUIHelperDispT<T>::AutoScan(BSTR strSearch/*[in]*/, BSTR strFailureUrl/*[in
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellUIHelperDispT<T>::AutoCompleteAttach(TVariant* Reserved/*[in,opt]*/)
+IShellUIHelperDispT<T>::AutoCompleteAttach(VARIANT* Reserved/*[in,opt]*/)
 {
   _TDispID _dispid(*this, OLETEXT("AutoCompleteAttach"), DISPID(12));
   TAutoArgs<1> _args;
@@ -6230,8 +7114,8 @@ IShellUIHelperDispT<T>::AutoCompleteAttach(TVariant* Reserved/*[in,opt]*/)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellUIHelperDispT<T>::ShowBrowserUI(BSTR bstrName/*[in]*/, TVariant* pvarIn/*[in]*/, 
-                                      TVariant* pvarOut/*[out,retval]*/)
+IShellUIHelperDispT<T>::ShowBrowserUI(BSTR bstrName/*[in]*/, VARIANT* pvarIn/*[in]*/, 
+                                      VARIANT* pvarOut/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("ShowBrowserUI"), DISPID(13));
   TAutoArgs<2> _args;
@@ -6240,27 +7124,24 @@ IShellUIHelperDispT<T>::ShowBrowserUI(BSTR bstrName/*[in]*/, TVariant* pvarIn/*[
   return OutRetValSetterPtr(pvarOut /*[VT_VARIANT:1]*/, _args, OleFunction(_dispid, _args));
 }
 
-template <class T> TVariant __fastcall
-IShellUIHelperDispT<T>::ShowBrowserUI(BSTR bstrName/*[in]*/, TVariant* pvarIn/*[in]*/)
+template <class T> VARIANT __fastcall
+IShellUIHelperDispT<T>::ShowBrowserUI(BSTR bstrName/*[in]*/, VARIANT* pvarIn/*[in]*/)
 {
-  TVariant pvarOut;
-  this->ShowBrowserUI(bstrName, pvarIn, (TVariant*)&pvarOut);
+  VARIANT pvarOut;
+  this->ShowBrowserUI(bstrName, pvarIn, (VARIANT*)&pvarOut);
   return pvarOut;
 }
 
 // *********************************************************************//
-// DispIntf:  _ShellFavoritesNameSpaceEvents
+// DispIntf:  DShellNameSpaceEvents
 // Flags:     (4096) Dispatchable
 // GUID:      {55136806-B2DE-11D1-B9F2-00A0C98BC547}
 // *********************************************************************//
 template <class T> void /*[VT_VOID:0]*/ __fastcall
-_ShellFavoritesNameSpaceEventsDispT<T>::FavoritesSelectionChange(long cItems/*[in]*/, 
-                                                                 long hItem/*[in]*/, 
-                                                                 BSTR strName/*[in]*/, 
-                                                                 BSTR strUrl/*[in]*/, 
-                                                                 long cVisits/*[in]*/, 
-                                                                 BSTR strDate/*[in]*/, 
-                                                                 long fAvailableOffline/*[in]*/)
+DShellNameSpaceEventsDispT<T>::FavoritesSelectionChange(long cItems/*[in]*/, long hItem/*[in]*/, 
+                                                        BSTR strName/*[in]*/, BSTR strUrl/*[in]*/, 
+                                                        long cVisits/*[in]*/, BSTR strDate/*[in]*/, 
+                                                        long fAvailableOffline/*[in]*/)
 {
   _TDispID _dispid(/* FavoritesSelectionChange */ DISPID(1));
   TAutoArgs<7> _args;
@@ -6274,115 +7155,30 @@ _ShellFavoritesNameSpaceEventsDispT<T>::FavoritesSelectionChange(long cItems/*[i
   OleProcedure(_dispid, _args);
 }
 
-// *********************************************************************//
-// SmartIntf: TCOMIShellFavoritesNameSpace
-// Interface: IShellFavoritesNameSpace
-// *********************************************************************//
-template <class T> HRESULT __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::MoveSelectionUp(void)
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DShellNameSpaceEventsDispT<T>::SelectionChange()
 {
-  return (*this)->MoveSelectionUp();
+  _TDispID _dispid(/* SelectionChange */ DISPID(2));
+  OleProcedure(_dispid);
 }
 
-template <class T> HRESULT __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::MoveSelectionDown(void)
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DShellNameSpaceEventsDispT<T>::DoubleClick()
 {
-  return (*this)->MoveSelectionDown();
+  _TDispID _dispid(/* DoubleClick */ DISPID(3));
+  OleProcedure(_dispid);
 }
 
-template <class T> HRESULT __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::ResetSort(void)
+template <class T> void /*[VT_VOID:0]*/ __fastcall
+DShellNameSpaceEventsDispT<T>::Initialized()
 {
-  return (*this)->ResetSort();
-}
-
-template <class T> HRESULT __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::NewFolder(void)
-{
-  return (*this)->NewFolder();
-}
-
-template <class T> HRESULT __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::Synchronize(void)
-{
-  return (*this)->Synchronize();
-}
-
-template <class T> HRESULT __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::Import(void)
-{
-  return (*this)->Import();
-}
-
-template <class T> HRESULT __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::Export(void)
-{
-  return (*this)->Export();
-}
-
-template <class T> HRESULT __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::InvokeContextMenuCommand(BSTR strCommand/*[in]*/)
-{
-  return (*this)->InvokeContextMenuCommand(strCommand);
-}
-
-template <class T> HRESULT __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::MoveSelectionTo(void)
-{
-  return (*this)->MoveSelectionTo();
-}
-
-template <class T> HRESULT __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::get_FOfflinePackInstalled(TOLEBOOL* pBool/*[out,retval]*/)
-{
-  return (*this)->get_FOfflinePackInstalled(pBool);
-}
-
-template <class T> TOLEBOOL __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::get_FOfflinePackInstalled(void)
-{
-  TOLEBOOL pBool;
-  OLECHECK(this->get_FOfflinePackInstalled((TOLEBOOL*)&pBool));
-  return pBool;
-}
-
-template <class T> HRESULT __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::CreateSubscriptionForSelection(TOLEBOOL* pBool/*[out,retval]*/)
-{
-  return (*this)->CreateSubscriptionForSelection(pBool);
-}
-
-template <class T> TOLEBOOL __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::CreateSubscriptionForSelection(void)
-{
-  TOLEBOOL pBool;
-  OLECHECK(this->CreateSubscriptionForSelection((TOLEBOOL*)&pBool));
-  return pBool;
-}
-
-template <class T> HRESULT __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::DeleteSubscriptionForSelection(TOLEBOOL* pBool/*[out,retval]*/)
-{
-  return (*this)->DeleteSubscriptionForSelection(pBool);
-}
-
-template <class T> TOLEBOOL __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::DeleteSubscriptionForSelection(void)
-{
-  TOLEBOOL pBool;
-  OLECHECK(this->DeleteSubscriptionForSelection((TOLEBOOL*)&pBool));
-  return pBool;
-}
-
-template <class T> HRESULT __fastcall
-TCOMIShellFavoritesNameSpaceT<T>::SetRoot(BSTR bstrFullPath/*[in]*/)
-{
-  return (*this)->SetRoot(bstrFullPath);
+  _TDispID _dispid(/* Initialized */ DISPID(4));
+  OleProcedure(_dispid);
 }
 
 // *********************************************************************//
 // DispIntf:  IShellFavoritesNameSpace
-// Flags:     (4416) Dual OleAutomation Dispatchable
+// Flags:     (4432) Hidden Dual OleAutomation Dispatchable
 // GUID:      {55136804-B2DE-11D1-B9F2-00A0C98BC547}
 // *********************************************************************//
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
@@ -6451,55 +7247,650 @@ IShellFavoritesNameSpaceDispT<T>::MoveSelectionTo()
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellFavoritesNameSpaceDispT<T>::get_FOfflinePackInstalled(TOLEBOOL* pBool/*[out,retval]*/)
+IShellFavoritesNameSpaceDispT<T>::get_SubscriptionsEnabled(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
-  _TDispID _dispid(*this, OLETEXT("FOfflinePackInstalled"), DISPID(10));
+  _TDispID _dispid(*this, OLETEXT("SubscriptionsEnabled"), DISPID(10));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
-IShellFavoritesNameSpaceDispT<T>::get_FOfflinePackInstalled(void)
+template <class T> VARIANT_BOOL __fastcall
+IShellFavoritesNameSpaceDispT<T>::get_SubscriptionsEnabled(void)
 {
-  TOLEBOOL pBool;
-  this->get_FOfflinePackInstalled((TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->get_SubscriptionsEnabled((VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellFavoritesNameSpaceDispT<T>::CreateSubscriptionForSelection(TOLEBOOL* pBool/*[out,retval]*/)
+IShellFavoritesNameSpaceDispT<T>::CreateSubscriptionForSelection(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("CreateSubscriptionForSelection"), DISPID(11));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OleFunction(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IShellFavoritesNameSpaceDispT<T>::CreateSubscriptionForSelection(void)
 {
-  TOLEBOOL pBool;
-  this->CreateSubscriptionForSelection((TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->CreateSubscriptionForSelection((VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-IShellFavoritesNameSpaceDispT<T>::DeleteSubscriptionForSelection(TOLEBOOL* pBool/*[out,retval]*/)
+IShellFavoritesNameSpaceDispT<T>::DeleteSubscriptionForSelection(VARIANT_BOOL* pBool/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("DeleteSubscriptionForSelection"), DISPID(12));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OleFunction(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 IShellFavoritesNameSpaceDispT<T>::DeleteSubscriptionForSelection(void)
 {
-  TOLEBOOL pBool;
-  this->DeleteSubscriptionForSelection((TOLEBOOL*)&pBool);
+  VARIANT_BOOL pBool;
+  this->DeleteSubscriptionForSelection((VARIANT_BOOL*)&pBool);
   return pBool;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
 IShellFavoritesNameSpaceDispT<T>::SetRoot(BSTR bstrFullPath/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("SetRoot"), DISPID(13));
+  TAutoArgs<1> _args;
+  _args[1] = bstrFullPath /*[VT_BSTR:0]*/;
+  return OleFunction(_dispid, _args);
+}
+
+// *********************************************************************//
+// SmartIntf: TCOMIShellNameSpace
+// Interface: IShellNameSpace
+// *********************************************************************//
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::get_EnumOptions(long* pgrfEnumFlags/*[out,retval]*/)
+{
+  return (*this)->get_EnumOptions(pgrfEnumFlags);
+}
+
+template <class T> long __fastcall
+TCOMIShellNameSpaceT<T>::get_EnumOptions(void)
+{
+  long pgrfEnumFlags;
+  OLECHECK(this->get_EnumOptions((long*)&pgrfEnumFlags));
+  return pgrfEnumFlags;
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::set_EnumOptions(long pgrfEnumFlags/*[in]*/)
+{
+  return (*this)->set_EnumOptions(pgrfEnumFlags);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::get_SelectedItem(LPDISPATCH* pItem/*[out,retval]*/)
+{
+  return (*this)->get_SelectedItem(pItem);
+}
+
+template <class T> LPDISPATCH __fastcall
+TCOMIShellNameSpaceT<T>::get_SelectedItem(void)
+{
+  LPDISPATCH pItem;
+  OLECHECK(this->get_SelectedItem((LPDISPATCH*)&pItem));
+  return pItem;
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::set_SelectedItem(LPDISPATCH pItem/*[in]*/)
+{
+  return (*this)->set_SelectedItem(pItem);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::get_Root(VARIANT* pvar/*[out,retval]*/)
+{
+  return (*this)->get_Root(pvar);
+}
+
+template <class T> VARIANT __fastcall
+TCOMIShellNameSpaceT<T>::get_Root(void)
+{
+  VARIANT pvar;
+  OLECHECK(this->get_Root((VARIANT*)&pvar));
+  return pvar;
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::set_Root(VARIANT pvar/*[in]*/)
+{
+  return (*this)->set_Root(pvar);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::get_Depth(int* piDepth/*[out,retval]*/)
+{
+  return (*this)->get_Depth(piDepth);
+}
+
+template <class T> int __fastcall
+TCOMIShellNameSpaceT<T>::get_Depth(void)
+{
+  int piDepth;
+  OLECHECK(this->get_Depth((int*)&piDepth));
+  return piDepth;
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::set_Depth(int piDepth/*[in]*/)
+{
+  return (*this)->set_Depth(piDepth);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::get_Mode(unsigned* puMode/*[out,retval]*/)
+{
+  return (*this)->get_Mode(puMode);
+}
+
+template <class T> unsigned __fastcall
+TCOMIShellNameSpaceT<T>::get_Mode(void)
+{
+  unsigned puMode;
+  OLECHECK(this->get_Mode((unsigned*)&puMode));
+  return puMode;
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::set_Mode(unsigned puMode/*[in]*/)
+{
+  return (*this)->set_Mode(puMode);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::get_Flags(unsigned_long* pdwFlags/*[out,retval]*/)
+{
+  return (*this)->get_Flags(pdwFlags);
+}
+
+template <class T> unsigned_long __fastcall
+TCOMIShellNameSpaceT<T>::get_Flags(void)
+{
+  unsigned_long pdwFlags;
+  OLECHECK(this->get_Flags((unsigned_long*)&pdwFlags));
+  return pdwFlags;
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::set_Flags(unsigned_long pdwFlags/*[in]*/)
+{
+  return (*this)->set_Flags(pdwFlags);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::set_TVFlags(unsigned_long dwFlags/*[in]*/)
+{
+  return (*this)->set_TVFlags(dwFlags);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::get_TVFlags(unsigned_long* dwFlags/*[out,retval]*/)
+{
+  return (*this)->get_TVFlags(dwFlags);
+}
+
+template <class T> unsigned_long __fastcall
+TCOMIShellNameSpaceT<T>::get_TVFlags(void)
+{
+  unsigned_long dwFlags;
+  OLECHECK(this->get_TVFlags((unsigned_long*)&dwFlags));
+  return dwFlags;
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::get_Columns(BSTR* bstrColumns/*[out,retval]*/)
+{
+  return (*this)->get_Columns(bstrColumns);
+}
+
+template <class T> BSTR __fastcall
+TCOMIShellNameSpaceT<T>::get_Columns(void)
+{
+  BSTR bstrColumns = 0;
+  OLECHECK(this->get_Columns((BSTR*)&bstrColumns));
+  return bstrColumns;
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::set_Columns(BSTR bstrColumns/*[in]*/)
+{
+  return (*this)->set_Columns(bstrColumns);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::get_CountViewTypes(int* piTypes/*[out,retval]*/)
+{
+  return (*this)->get_CountViewTypes(piTypes);
+}
+
+template <class T> int __fastcall
+TCOMIShellNameSpaceT<T>::get_CountViewTypes(void)
+{
+  int piTypes;
+  OLECHECK(this->get_CountViewTypes((int*)&piTypes));
+  return piTypes;
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::SetViewType(int iType/*[in]*/)
+{
+  return (*this)->SetViewType(iType);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::SelectedItems(LPDISPATCH* ppid/*[out,retval]*/)
+{
+  return (*this)->SelectedItems(ppid);
+}
+
+template <class T> LPDISPATCH __fastcall
+TCOMIShellNameSpaceT<T>::SelectedItems(void)
+{
+  LPDISPATCH ppid;
+  OLECHECK(this->SelectedItems((LPDISPATCH*)&ppid));
+  return ppid;
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::Expand(VARIANT var/*[in]*/, int iDepth)
+{
+  return (*this)->Expand(var, iDepth);
+}
+
+template <class T> HRESULT __fastcall
+TCOMIShellNameSpaceT<T>::UnselectAll(void)
+{
+  return (*this)->UnselectAll();
+}
+
+// *********************************************************************//
+// DispIntf:  IShellNameSpace
+// Flags:     (4432) Hidden Dual OleAutomation Dispatchable
+// GUID:      {E572D3C9-37BE-4AE2-825D-D521763E3108}
+// *********************************************************************//
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::get_EnumOptions(long* pgrfEnumFlags/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("EnumOptions"), DISPID(14));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pgrfEnumFlags /*[VT_I4:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> long __fastcall
+IShellNameSpaceDispT<T>::get_EnumOptions(void)
+{
+  long pgrfEnumFlags;
+  this->get_EnumOptions((long*)&pgrfEnumFlags);
+  return pgrfEnumFlags;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::set_EnumOptions(long pgrfEnumFlags/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("EnumOptions"), DISPID(14));
+  TAutoArgs<1> _args;
+  _args[1] = pgrfEnumFlags /*[VT_I4:0]*/;
+  return OlePropertyPut(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::get_SelectedItem(LPDISPATCH* pItem/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("SelectedItem"), DISPID(15));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pItem /*[VT_DISPATCH:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> LPDISPATCH __fastcall
+IShellNameSpaceDispT<T>::get_SelectedItem(void)
+{
+  LPDISPATCH pItem;
+  this->get_SelectedItem((LPDISPATCH*)&pItem);
+  return pItem;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::set_SelectedItem(LPDISPATCH pItem/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("SelectedItem"), DISPID(15));
+  TAutoArgs<1> _args;
+  _args[1] = pItem /*[VT_DISPATCH:0]*/;
+  return OlePropertyPut(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::get_Root(VARIANT* pvar/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("Root"), DISPID(16));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pvar /*[VT_VARIANT:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> VARIANT __fastcall
+IShellNameSpaceDispT<T>::get_Root(void)
+{
+  VARIANT pvar;
+  this->get_Root((VARIANT*)&pvar);
+  return pvar;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::set_Root(VARIANT pvar/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("Root"), DISPID(16));
+  TAutoArgs<1> _args;
+  _args[1] = pvar /*[VT_VARIANT:0]*/;
+  return OlePropertyPut(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::get_Depth(int* piDepth/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("Depth"), DISPID(17));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(piDepth /*[VT_INT:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> int __fastcall
+IShellNameSpaceDispT<T>::get_Depth(void)
+{
+  int piDepth;
+  this->get_Depth((int*)&piDepth);
+  return piDepth;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::set_Depth(int piDepth/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("Depth"), DISPID(17));
+  TAutoArgs<1> _args;
+  _args[1] = piDepth /*[VT_INT:0]*/;
+  return OlePropertyPut(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::get_Mode(unsigned* puMode/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("Mode"), DISPID(18));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(puMode /*[VT_UINT:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> unsigned __fastcall
+IShellNameSpaceDispT<T>::get_Mode(void)
+{
+  unsigned puMode;
+  this->get_Mode((unsigned*)&puMode);
+  return puMode;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::set_Mode(unsigned puMode/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("Mode"), DISPID(18));
+  TAutoArgs<1> _args;
+  _args[1] = puMode /*[VT_UINT:0]*/;
+  return OlePropertyPut(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::get_Flags(unsigned_long* pdwFlags/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("Flags"), DISPID(19));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pdwFlags /*[VT_UI4:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> unsigned_long __fastcall
+IShellNameSpaceDispT<T>::get_Flags(void)
+{
+  unsigned_long pdwFlags;
+  this->get_Flags((unsigned_long*)&pdwFlags);
+  return pdwFlags;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::set_Flags(unsigned_long pdwFlags/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("Flags"), DISPID(19));
+  TAutoArgs<1> _args;
+  _args[1] = pdwFlags /*[VT_UI4:0]*/;
+  return OlePropertyPut(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::set_TVFlags(unsigned_long dwFlags/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("TVFlags"), DISPID(20));
+  TAutoArgs<1> _args;
+  _args[1] = dwFlags /*[VT_UI4:0]*/;
+  return OlePropertyPut(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::get_TVFlags(unsigned_long* dwFlags/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("TVFlags"), DISPID(20));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(dwFlags /*[VT_UI4:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> unsigned_long __fastcall
+IShellNameSpaceDispT<T>::get_TVFlags(void)
+{
+  unsigned_long dwFlags;
+  this->get_TVFlags((unsigned_long*)&dwFlags);
+  return dwFlags;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::get_Columns(BSTR* bstrColumns/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("Columns"), DISPID(21));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(bstrColumns /*[VT_BSTR:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> BSTR __fastcall
+IShellNameSpaceDispT<T>::get_Columns(void)
+{
+  BSTR bstrColumns;
+  this->get_Columns((BSTR*)&bstrColumns);
+  return bstrColumns;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::set_Columns(BSTR bstrColumns/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("Columns"), DISPID(21));
+  TAutoArgs<1> _args;
+  _args[1] = bstrColumns /*[VT_BSTR:0]*/;
+  return OlePropertyPut(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::get_CountViewTypes(int* piTypes/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("CountViewTypes"), DISPID(22));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(piTypes /*[VT_INT:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> int __fastcall
+IShellNameSpaceDispT<T>::get_CountViewTypes(void)
+{
+  int piTypes;
+  this->get_CountViewTypes((int*)&piTypes);
+  return piTypes;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::SetViewType(int iType/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("SetViewType"), DISPID(23));
+  TAutoArgs<1> _args;
+  _args[1] = iType /*[VT_INT:0]*/;
+  return OleFunction(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::SelectedItems(LPDISPATCH* ppid/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("SelectedItems"), DISPID(24));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(ppid /*[VT_DISPATCH:1]*/, _args, OleFunction(_dispid, _args));
+}
+
+template <class T> LPDISPATCH __fastcall
+IShellNameSpaceDispT<T>::SelectedItems(void)
+{
+  LPDISPATCH ppid;
+  this->SelectedItems((LPDISPATCH*)&ppid);
+  return ppid;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::Expand(VARIANT var/*[in]*/, int iDepth)
+{
+  _TDispID _dispid(*this, OLETEXT("Expand"), DISPID(25));
+  TAutoArgs<2> _args;
+  _args[1] = var /*[VT_VARIANT:0]*/;
+  _args[2] = iDepth /*[VT_INT:0]*/;
+  return OleFunction(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::UnselectAll()
+{
+  _TDispID _dispid(*this, OLETEXT("UnselectAll"), DISPID(26));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::MoveSelectionUp()
+{
+  _TDispID _dispid(*this, OLETEXT("MoveSelectionUp"), DISPID(1));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::MoveSelectionDown()
+{
+  _TDispID _dispid(*this, OLETEXT("MoveSelectionDown"), DISPID(2));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::ResetSort()
+{
+  _TDispID _dispid(*this, OLETEXT("ResetSort"), DISPID(3));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::NewFolder()
+{
+  _TDispID _dispid(*this, OLETEXT("NewFolder"), DISPID(4));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::Synchronize()
+{
+  _TDispID _dispid(*this, OLETEXT("Synchronize"), DISPID(5));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::Import()
+{
+  _TDispID _dispid(*this, OLETEXT("Import"), DISPID(6));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::Export()
+{
+  _TDispID _dispid(*this, OLETEXT("Export"), DISPID(7));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::InvokeContextMenuCommand(BSTR strCommand/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("InvokeContextMenuCommand"), DISPID(8));
+  TAutoArgs<1> _args;
+  _args[1] = strCommand /*[VT_BSTR:0]*/;
+  return OleFunction(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::MoveSelectionTo()
+{
+  _TDispID _dispid(*this, OLETEXT("MoveSelectionTo"), DISPID(9));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::get_SubscriptionsEnabled(VARIANT_BOOL* pBool/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("SubscriptionsEnabled"), DISPID(10));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> VARIANT_BOOL __fastcall
+IShellNameSpaceDispT<T>::get_SubscriptionsEnabled(void)
+{
+  VARIANT_BOOL pBool;
+  this->get_SubscriptionsEnabled((VARIANT_BOOL*)&pBool);
+  return pBool;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::CreateSubscriptionForSelection(VARIANT_BOOL* pBool/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("CreateSubscriptionForSelection"), DISPID(11));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OleFunction(_dispid, _args));
+}
+
+template <class T> VARIANT_BOOL __fastcall
+IShellNameSpaceDispT<T>::CreateSubscriptionForSelection(void)
+{
+  VARIANT_BOOL pBool;
+  this->CreateSubscriptionForSelection((VARIANT_BOOL*)&pBool);
+  return pBool;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::DeleteSubscriptionForSelection(VARIANT_BOOL* pBool/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("DeleteSubscriptionForSelection"), DISPID(12));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pBool /*[VT_BOOL:1]*/, _args, OleFunction(_dispid, _args));
+}
+
+template <class T> VARIANT_BOOL __fastcall
+IShellNameSpaceDispT<T>::DeleteSubscriptionForSelection(void)
+{
+  VARIANT_BOOL pBool;
+  this->DeleteSubscriptionForSelection((VARIANT_BOOL*)&pBool);
+  return pBool;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+IShellNameSpaceDispT<T>::SetRoot(BSTR bstrFullPath/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("SetRoot"), DISPID(13));
   TAutoArgs<1> _args;
@@ -6963,8 +8354,7 @@ ISearchesDispT<T>::get_Default(void)
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchesDispT<T>::Item(TVariantInParam index/*[in,opt]*/, 
-                        Shdocvw_tlb::ISearchPtr* ppid/*[out,retval]*/)
+ISearchesDispT<T>::Item(VARIANT index/*[in,opt]*/, Shdocvw_tlb::ISearch** ppid/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Item"), DISPID(DISPID_UNKNOWN/*[1610743810]*/));
   TAutoArgs<1> _args;
@@ -6972,11 +8362,11 @@ ISearchesDispT<T>::Item(TVariantInParam index/*[in,opt]*/,
   return OutRetValSetterPtr((LPDISPATCH*)(Shdocvw_tlb::ISearch**)ppid /*[VT_USERDEFINED:2]*/, _args, OleFunction(_dispid, _args));
 }
 
-template <class T> Shdocvw_tlb::ISearchPtr __fastcall
-ISearchesDispT<T>::Item(TVariantInParam index/*[in,opt]*/)
+template <class T> Shdocvw_tlb::ISearch* __fastcall
+ISearchesDispT<T>::Item(VARIANT index/*[in,opt]*/)
 {
-  Shdocvw_tlb::ISearchPtr ppid;
-  this->Item(index, (Shdocvw_tlb::ISearchPtr*)&ppid);
+  Shdocvw_tlb::ISearch* ppid;
+  this->Item(index, (Shdocvw_tlb::ISearch**)&ppid);
   return ppid;
 }
 
@@ -7028,7 +8418,7 @@ ISearchAssistantOCDispT<T>::NavigateToDefaultSearch()
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOCDispT<T>::IsRestricted(BSTR bstrGuid/*[in]*/, TOLEBOOL* pVal/*[out,retval]*/)
+ISearchAssistantOCDispT<T>::IsRestricted(BSTR bstrGuid/*[in]*/, VARIANT_BOOL* pVal/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("IsRestricted"), DISPID(4));
   TAutoArgs<1> _args;
@@ -7036,80 +8426,80 @@ ISearchAssistantOCDispT<T>::IsRestricted(BSTR bstrGuid/*[in]*/, TOLEBOOL* pVal/*
   return OutRetValSetterPtr(pVal /*[VT_BOOL:1]*/, _args, OleFunction(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 ISearchAssistantOCDispT<T>::IsRestricted(BSTR bstrGuid/*[in]*/)
 {
-  TOLEBOOL pVal;
-  this->IsRestricted(bstrGuid, (TOLEBOOL*)&pVal);
+  VARIANT_BOOL pVal;
+  this->IsRestricted(bstrGuid, (VARIANT_BOOL*)&pVal);
   return pVal;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOCDispT<T>::get_ShellFeaturesEnabled(TOLEBOOL* pVal/*[out,retval]*/)
+ISearchAssistantOCDispT<T>::get_ShellFeaturesEnabled(VARIANT_BOOL* pVal/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("ShellFeaturesEnabled"), DISPID(5));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pVal /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 ISearchAssistantOCDispT<T>::get_ShellFeaturesEnabled(void)
 {
-  TOLEBOOL pVal;
-  this->get_ShellFeaturesEnabled((TOLEBOOL*)&pVal);
+  VARIANT_BOOL pVal;
+  this->get_ShellFeaturesEnabled((VARIANT_BOOL*)&pVal);
   return pVal;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOCDispT<T>::get_SearchAssistantDefault(TOLEBOOL* pVal/*[out,retval]*/)
+ISearchAssistantOCDispT<T>::get_SearchAssistantDefault(VARIANT_BOOL* pVal/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("SearchAssistantDefault"), DISPID(6));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pVal /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 ISearchAssistantOCDispT<T>::get_SearchAssistantDefault(void)
 {
-  TOLEBOOL pVal;
-  this->get_SearchAssistantDefault((TOLEBOOL*)&pVal);
+  VARIANT_BOOL pVal;
+  this->get_SearchAssistantDefault((VARIANT_BOOL*)&pVal);
   return pVal;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOCDispT<T>::get_Searches(Shdocvw_tlb::ISearchesPtr* ppid/*[out,retval]*/)
+ISearchAssistantOCDispT<T>::get_Searches(Shdocvw_tlb::ISearches** ppid/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Searches"), DISPID(7));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr((LPDISPATCH*)(Shdocvw_tlb::ISearches**)ppid /*[VT_USERDEFINED:2]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> Shdocvw_tlb::ISearchesPtr __fastcall
+template <class T> Shdocvw_tlb::ISearches* __fastcall
 ISearchAssistantOCDispT<T>::get_Searches(void)
 {
-  Shdocvw_tlb::ISearchesPtr ppid;
-  this->get_Searches((Shdocvw_tlb::ISearchesPtr*)&ppid);
+  Shdocvw_tlb::ISearches* ppid;
+  this->get_Searches((Shdocvw_tlb::ISearches**)&ppid);
   return ppid;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOCDispT<T>::get_InWebFolder(TOLEBOOL* pVal/*[out,retval]*/)
+ISearchAssistantOCDispT<T>::get_InWebFolder(VARIANT_BOOL* pVal/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("InWebFolder"), DISPID(8));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pVal /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 ISearchAssistantOCDispT<T>::get_InWebFolder(void)
 {
-  TOLEBOOL pVal;
-  this->get_InWebFolder((TOLEBOOL*)&pVal);
+  VARIANT_BOOL pVal;
+  this->get_InWebFolder((VARIANT_BOOL*)&pVal);
   return pVal;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOCDispT<T>::PutProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/, 
+ISearchAssistantOCDispT<T>::PutProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/, 
                                         BSTR bstrValue/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("PutProperty"), DISPID(9));
@@ -7121,7 +8511,7 @@ ISearchAssistantOCDispT<T>::PutProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrNa
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOCDispT<T>::GetProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/, 
+ISearchAssistantOCDispT<T>::GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/, 
                                         BSTR* pbstrValue/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("GetProperty"), DISPID(10));
@@ -7132,7 +8522,7 @@ ISearchAssistantOCDispT<T>::GetProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrNa
 }
 
 template <class T> BSTR __fastcall
-ISearchAssistantOCDispT<T>::GetProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/)
+ISearchAssistantOCDispT<T>::GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/)
 {
   BSTR pbstrValue;
   this->GetProperty(bPerLocale, bstrName, (BSTR*)&pbstrValue);
@@ -7140,7 +8530,7 @@ ISearchAssistantOCDispT<T>::GetProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrNa
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOCDispT<T>::set_EventHandled(TOLEBOOL Param1/*[in]*/)
+ISearchAssistantOCDispT<T>::set_EventHandled(VARIANT_BOOL Param1/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("EventHandled"), DISPID(11));
   TAutoArgs<1> _args;
@@ -7191,8 +8581,8 @@ ISearchAssistantOCDispT<T>::FindPeople()
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOCDispT<T>::GetSearchAssistantURL(TOLEBOOL bSubstitute/*[in]*/, 
-                                                  TOLEBOOL bCustomize/*[in]*/, 
+ISearchAssistantOCDispT<T>::GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                                  VARIANT_BOOL bCustomize/*[in]*/, 
                                                   BSTR* pbstrValue/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("GetSearchAssistantURL"), DISPID(18));
@@ -7203,8 +8593,8 @@ ISearchAssistantOCDispT<T>::GetSearchAssistantURL(TOLEBOOL bSubstitute/*[in]*/,
 }
 
 template <class T> BSTR __fastcall
-ISearchAssistantOCDispT<T>::GetSearchAssistantURL(TOLEBOOL bSubstitute/*[in]*/, 
-                                                  TOLEBOOL bCustomize/*[in]*/)
+ISearchAssistantOCDispT<T>::GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                                  VARIANT_BOOL bCustomize/*[in]*/)
 {
   BSTR pbstrValue;
   this->GetSearchAssistantURL(bSubstitute, bCustomize, (BSTR*)&pbstrValue);
@@ -7302,7 +8692,7 @@ ISearchAssistantOCDispT<T>::get_Version(void)
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
 ISearchAssistantOCDispT<T>::EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharSet/*[in]*/, 
-                                         TOLEBOOL bUseUTF8/*[in]*/, 
+                                         VARIANT_BOOL bUseUTF8/*[in]*/, 
                                          BSTR* pbstrResult/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("EncodeString"), DISPID(25));
@@ -7315,29 +8705,11 @@ ISearchAssistantOCDispT<T>::EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharSe
 
 template <class T> BSTR __fastcall
 ISearchAssistantOCDispT<T>::EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharSet/*[in]*/, 
-                                         TOLEBOOL bUseUTF8/*[in]*/)
+                                         VARIANT_BOOL bUseUTF8/*[in]*/)
 {
   BSTR pbstrResult;
   this->EncodeString(bstrValue, bstrCharSet, bUseUTF8, (BSTR*)&pbstrResult);
   return pbstrResult;
-}
-
-// *********************************************************************//
-// SmartIntf: TCOMISearchAssistantOC2
-// Interface: ISearchAssistantOC2
-// *********************************************************************//
-template <class T> HRESULT __fastcall
-TCOMISearchAssistantOC2T<T>::get_ShowFindPrinter(TOLEBOOL* pbShowFindPrinter/*[out,retval]*/)
-{
-  return (*this)->get_ShowFindPrinter(pbShowFindPrinter);
-}
-
-template <class T> TOLEBOOL __fastcall
-TCOMISearchAssistantOC2T<T>::get_ShowFindPrinter(void)
-{
-  TOLEBOOL pbShowFindPrinter;
-  OLECHECK(this->get_ShowFindPrinter((TOLEBOOL*)&pbShowFindPrinter));
-  return pbShowFindPrinter;
 }
 
 // *********************************************************************//
@@ -7346,18 +8718,18 @@ TCOMISearchAssistantOC2T<T>::get_ShowFindPrinter(void)
 // GUID:      {72423E8F-8011-11D2-BE79-00A0C9A83DA2}
 // *********************************************************************//
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOC2DispT<T>::get_ShowFindPrinter(TOLEBOOL* pbShowFindPrinter/*[out,retval]*/)
+ISearchAssistantOC2DispT<T>::get_ShowFindPrinter(VARIANT_BOOL* pbShowFindPrinter/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("ShowFindPrinter"), DISPID(26));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pbShowFindPrinter /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 ISearchAssistantOC2DispT<T>::get_ShowFindPrinter(void)
 {
-  TOLEBOOL pbShowFindPrinter;
-  this->get_ShowFindPrinter((TOLEBOOL*)&pbShowFindPrinter);
+  VARIANT_BOOL pbShowFindPrinter;
+  this->get_ShowFindPrinter((VARIANT_BOOL*)&pbShowFindPrinter);
   return pbShowFindPrinter;
 }
 
@@ -7388,7 +8760,7 @@ ISearchAssistantOC2DispT<T>::NavigateToDefaultSearch()
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOC2DispT<T>::IsRestricted(BSTR bstrGuid/*[in]*/, TOLEBOOL* pVal/*[out,retval]*/)
+ISearchAssistantOC2DispT<T>::IsRestricted(BSTR bstrGuid/*[in]*/, VARIANT_BOOL* pVal/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("IsRestricted"), DISPID(4));
   TAutoArgs<1> _args;
@@ -7396,80 +8768,80 @@ ISearchAssistantOC2DispT<T>::IsRestricted(BSTR bstrGuid/*[in]*/, TOLEBOOL* pVal/
   return OutRetValSetterPtr(pVal /*[VT_BOOL:1]*/, _args, OleFunction(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 ISearchAssistantOC2DispT<T>::IsRestricted(BSTR bstrGuid/*[in]*/)
 {
-  TOLEBOOL pVal;
-  this->IsRestricted(bstrGuid, (TOLEBOOL*)&pVal);
+  VARIANT_BOOL pVal;
+  this->IsRestricted(bstrGuid, (VARIANT_BOOL*)&pVal);
   return pVal;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOC2DispT<T>::get_ShellFeaturesEnabled(TOLEBOOL* pVal/*[out,retval]*/)
+ISearchAssistantOC2DispT<T>::get_ShellFeaturesEnabled(VARIANT_BOOL* pVal/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("ShellFeaturesEnabled"), DISPID(5));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pVal /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 ISearchAssistantOC2DispT<T>::get_ShellFeaturesEnabled(void)
 {
-  TOLEBOOL pVal;
-  this->get_ShellFeaturesEnabled((TOLEBOOL*)&pVal);
+  VARIANT_BOOL pVal;
+  this->get_ShellFeaturesEnabled((VARIANT_BOOL*)&pVal);
   return pVal;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOC2DispT<T>::get_SearchAssistantDefault(TOLEBOOL* pVal/*[out,retval]*/)
+ISearchAssistantOC2DispT<T>::get_SearchAssistantDefault(VARIANT_BOOL* pVal/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("SearchAssistantDefault"), DISPID(6));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pVal /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 ISearchAssistantOC2DispT<T>::get_SearchAssistantDefault(void)
 {
-  TOLEBOOL pVal;
-  this->get_SearchAssistantDefault((TOLEBOOL*)&pVal);
+  VARIANT_BOOL pVal;
+  this->get_SearchAssistantDefault((VARIANT_BOOL*)&pVal);
   return pVal;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOC2DispT<T>::get_Searches(Shdocvw_tlb::ISearchesPtr* ppid/*[out,retval]*/)
+ISearchAssistantOC2DispT<T>::get_Searches(Shdocvw_tlb::ISearches** ppid/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("Searches"), DISPID(7));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr((LPDISPATCH*)(Shdocvw_tlb::ISearches**)ppid /*[VT_USERDEFINED:2]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> Shdocvw_tlb::ISearchesPtr __fastcall
+template <class T> Shdocvw_tlb::ISearches* __fastcall
 ISearchAssistantOC2DispT<T>::get_Searches(void)
 {
-  Shdocvw_tlb::ISearchesPtr ppid;
-  this->get_Searches((Shdocvw_tlb::ISearchesPtr*)&ppid);
+  Shdocvw_tlb::ISearches* ppid;
+  this->get_Searches((Shdocvw_tlb::ISearches**)&ppid);
   return ppid;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOC2DispT<T>::get_InWebFolder(TOLEBOOL* pVal/*[out,retval]*/)
+ISearchAssistantOC2DispT<T>::get_InWebFolder(VARIANT_BOOL* pVal/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("InWebFolder"), DISPID(8));
   TAutoArgs<0> _args;
   return OutRetValSetterPtr(pVal /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
 }
 
-template <class T> TOLEBOOL __fastcall
+template <class T> VARIANT_BOOL __fastcall
 ISearchAssistantOC2DispT<T>::get_InWebFolder(void)
 {
-  TOLEBOOL pVal;
-  this->get_InWebFolder((TOLEBOOL*)&pVal);
+  VARIANT_BOOL pVal;
+  this->get_InWebFolder((VARIANT_BOOL*)&pVal);
   return pVal;
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOC2DispT<T>::PutProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/, 
+ISearchAssistantOC2DispT<T>::PutProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/, 
                                          BSTR bstrValue/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("PutProperty"), DISPID(9));
@@ -7481,7 +8853,7 @@ ISearchAssistantOC2DispT<T>::PutProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrN
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOC2DispT<T>::GetProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/, 
+ISearchAssistantOC2DispT<T>::GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/, 
                                          BSTR* pbstrValue/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("GetProperty"), DISPID(10));
@@ -7492,7 +8864,7 @@ ISearchAssistantOC2DispT<T>::GetProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrN
 }
 
 template <class T> BSTR __fastcall
-ISearchAssistantOC2DispT<T>::GetProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/)
+ISearchAssistantOC2DispT<T>::GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/)
 {
   BSTR pbstrValue;
   this->GetProperty(bPerLocale, bstrName, (BSTR*)&pbstrValue);
@@ -7500,7 +8872,7 @@ ISearchAssistantOC2DispT<T>::GetProperty(TOLEBOOL bPerLocale/*[in]*/, BSTR bstrN
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOC2DispT<T>::set_EventHandled(TOLEBOOL Param1/*[in]*/)
+ISearchAssistantOC2DispT<T>::set_EventHandled(VARIANT_BOOL Param1/*[in]*/)
 {
   _TDispID _dispid(*this, OLETEXT("EventHandled"), DISPID(11));
   TAutoArgs<1> _args;
@@ -7551,8 +8923,8 @@ ISearchAssistantOC2DispT<T>::FindPeople()
 }
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
-ISearchAssistantOC2DispT<T>::GetSearchAssistantURL(TOLEBOOL bSubstitute/*[in]*/, 
-                                                   TOLEBOOL bCustomize/*[in]*/, 
+ISearchAssistantOC2DispT<T>::GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                                   VARIANT_BOOL bCustomize/*[in]*/, 
                                                    BSTR* pbstrValue/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("GetSearchAssistantURL"), DISPID(18));
@@ -7563,8 +8935,8 @@ ISearchAssistantOC2DispT<T>::GetSearchAssistantURL(TOLEBOOL bSubstitute/*[in]*/,
 }
 
 template <class T> BSTR __fastcall
-ISearchAssistantOC2DispT<T>::GetSearchAssistantURL(TOLEBOOL bSubstitute/*[in]*/, 
-                                                   TOLEBOOL bCustomize/*[in]*/)
+ISearchAssistantOC2DispT<T>::GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                                   VARIANT_BOOL bCustomize/*[in]*/)
 {
   BSTR pbstrValue;
   this->GetSearchAssistantURL(bSubstitute, bCustomize, (BSTR*)&pbstrValue);
@@ -7662,7 +9034,7 @@ ISearchAssistantOC2DispT<T>::get_Version(void)
 
 template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
 ISearchAssistantOC2DispT<T>::EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharSet/*[in]*/, 
-                                          TOLEBOOL bUseUTF8/*[in]*/, 
+                                          VARIANT_BOOL bUseUTF8/*[in]*/, 
                                           BSTR* pbstrResult/*[out,retval]*/)
 {
   _TDispID _dispid(*this, OLETEXT("EncodeString"), DISPID(25));
@@ -7675,7 +9047,446 @@ ISearchAssistantOC2DispT<T>::EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharS
 
 template <class T> BSTR __fastcall
 ISearchAssistantOC2DispT<T>::EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharSet/*[in]*/, 
-                                          TOLEBOOL bUseUTF8/*[in]*/)
+                                          VARIANT_BOOL bUseUTF8/*[in]*/)
+{
+  BSTR pbstrResult;
+  this->EncodeString(bstrValue, bstrCharSet, bUseUTF8, (BSTR*)&pbstrResult);
+  return pbstrResult;
+}
+
+// *********************************************************************//
+// SmartIntf: TCOMISearchAssistantOC3
+// Interface: ISearchAssistantOC3
+// *********************************************************************//
+template <class T> HRESULT __fastcall
+TCOMISearchAssistantOC3T<T>::get_SearchCompanionAvailable(VARIANT_BOOL* pbAvailable/*[out,retval]*/)
+{
+  return (*this)->get_SearchCompanionAvailable(pbAvailable);
+}
+
+template <class T> HRESULT __fastcall
+TCOMISearchAssistantOC3T<T>::get_SearchCompanionAvailable(TOLEBOOL* pbAvailable/*[out,retval]*/)
+{
+  return (*this)->get_SearchCompanionAvailable(VARIANT_BOOL*)pbAvailable);
+}
+
+template <class T> TOLEBOOL __fastcall
+TCOMISearchAssistantOC3T<T>::get_SearchCompanionAvailable(void)
+{
+  VARIANT_BOOL pbAvailable;
+  OLECHECK(this->get_SearchCompanionAvailable((VARIANT_BOOL*)&pbAvailable));
+  return (TOLEBOOL)pbAvailable;
+}
+
+template <class T> HRESULT __fastcall
+TCOMISearchAssistantOC3T<T>::set_UseSearchCompanion(VARIANT_BOOL pbUseSC/*[in]*/)
+{
+  return (*this)->set_UseSearchCompanion(pbUseSC);
+}
+
+template <class T> HRESULT __fastcall
+TCOMISearchAssistantOC3T<T>::set_UseSearchCompanion(TOLEBOOL pbUseSC/*[in]*/)
+{
+  return (*this)->set_UseSearchCompanion(VARIANT_BOOL)pbUseSC);
+}
+
+template <class T> HRESULT __fastcall
+TCOMISearchAssistantOC3T<T>::get_UseSearchCompanion(VARIANT_BOOL* pbUseSC/*[out,retval]*/)
+{
+  return (*this)->get_UseSearchCompanion(pbUseSC);
+}
+
+template <class T> HRESULT __fastcall
+TCOMISearchAssistantOC3T<T>::get_UseSearchCompanion(TOLEBOOL* pbUseSC/*[out,retval]*/)
+{
+  return (*this)->get_UseSearchCompanion(VARIANT_BOOL*)pbUseSC);
+}
+
+template <class T> TOLEBOOL __fastcall
+TCOMISearchAssistantOC3T<T>::get_UseSearchCompanion(void)
+{
+  VARIANT_BOOL pbUseSC;
+  OLECHECK(this->get_UseSearchCompanion((VARIANT_BOOL*)&pbUseSC));
+  return (TOLEBOOL)pbUseSC;
+}
+
+// *********************************************************************//
+// DispIntf:  ISearchAssistantOC3
+// Flags:     (4432) Hidden Dual OleAutomation Dispatchable
+// GUID:      {72423E8F-8011-11D2-BE79-00A0C9A83DA3}
+// *********************************************************************//
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::get_SearchCompanionAvailable(VARIANT_BOOL* pbAvailable/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("SearchCompanionAvailable"), DISPID(27));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pbAvailable /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> VARIANT_BOOL __fastcall
+ISearchAssistantOC3DispT<T>::get_SearchCompanionAvailable(void)
+{
+  VARIANT_BOOL pbAvailable;
+  this->get_SearchCompanionAvailable((VARIANT_BOOL*)&pbAvailable);
+  return pbAvailable;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::set_UseSearchCompanion(VARIANT_BOOL pbUseSC/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("UseSearchCompanion"), DISPID(28));
+  TAutoArgs<1> _args;
+  _args[1] = pbUseSC /*[VT_BOOL:0]*/;
+  return OlePropertyPut(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::get_UseSearchCompanion(VARIANT_BOOL* pbUseSC/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("UseSearchCompanion"), DISPID(28));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pbUseSC /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> VARIANT_BOOL __fastcall
+ISearchAssistantOC3DispT<T>::get_UseSearchCompanion(void)
+{
+  VARIANT_BOOL pbUseSC;
+  this->get_UseSearchCompanion((VARIANT_BOOL*)&pbUseSC);
+  return pbUseSC;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::get_ShowFindPrinter(VARIANT_BOOL* pbShowFindPrinter/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("ShowFindPrinter"), DISPID(26));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pbShowFindPrinter /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> VARIANT_BOOL __fastcall
+ISearchAssistantOC3DispT<T>::get_ShowFindPrinter(void)
+{
+  VARIANT_BOOL pbShowFindPrinter;
+  this->get_ShowFindPrinter((VARIANT_BOOL*)&pbShowFindPrinter);
+  return pbShowFindPrinter;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::AddNextMenuItem(BSTR bstrText/*[in]*/, long idItem/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("AddNextMenuItem"), DISPID(1));
+  TAutoArgs<2> _args;
+  _args[1] = bstrText /*[VT_BSTR:0]*/;
+  _args[2] = idItem /*[VT_I4:0]*/;
+  return OleFunction(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::SetDefaultSearchUrl(BSTR bstrUrl/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("SetDefaultSearchUrl"), DISPID(2));
+  TAutoArgs<1> _args;
+  _args[1] = bstrUrl /*[VT_BSTR:0]*/;
+  return OleFunction(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::NavigateToDefaultSearch()
+{
+  _TDispID _dispid(*this, OLETEXT("NavigateToDefaultSearch"), DISPID(3));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::IsRestricted(BSTR bstrGuid/*[in]*/, VARIANT_BOOL* pVal/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("IsRestricted"), DISPID(4));
+  TAutoArgs<1> _args;
+  _args[1] = bstrGuid /*[VT_BSTR:0]*/;
+  return OutRetValSetterPtr(pVal /*[VT_BOOL:1]*/, _args, OleFunction(_dispid, _args));
+}
+
+template <class T> VARIANT_BOOL __fastcall
+ISearchAssistantOC3DispT<T>::IsRestricted(BSTR bstrGuid/*[in]*/)
+{
+  VARIANT_BOOL pVal;
+  this->IsRestricted(bstrGuid, (VARIANT_BOOL*)&pVal);
+  return pVal;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::get_ShellFeaturesEnabled(VARIANT_BOOL* pVal/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("ShellFeaturesEnabled"), DISPID(5));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pVal /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> VARIANT_BOOL __fastcall
+ISearchAssistantOC3DispT<T>::get_ShellFeaturesEnabled(void)
+{
+  VARIANT_BOOL pVal;
+  this->get_ShellFeaturesEnabled((VARIANT_BOOL*)&pVal);
+  return pVal;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::get_SearchAssistantDefault(VARIANT_BOOL* pVal/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("SearchAssistantDefault"), DISPID(6));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pVal /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> VARIANT_BOOL __fastcall
+ISearchAssistantOC3DispT<T>::get_SearchAssistantDefault(void)
+{
+  VARIANT_BOOL pVal;
+  this->get_SearchAssistantDefault((VARIANT_BOOL*)&pVal);
+  return pVal;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::get_Searches(Shdocvw_tlb::ISearches** ppid/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("Searches"), DISPID(7));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr((LPDISPATCH*)(Shdocvw_tlb::ISearches**)ppid /*[VT_USERDEFINED:2]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> Shdocvw_tlb::ISearches* __fastcall
+ISearchAssistantOC3DispT<T>::get_Searches(void)
+{
+  Shdocvw_tlb::ISearches* ppid;
+  this->get_Searches((Shdocvw_tlb::ISearches**)&ppid);
+  return ppid;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::get_InWebFolder(VARIANT_BOOL* pVal/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("InWebFolder"), DISPID(8));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pVal /*[VT_BOOL:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> VARIANT_BOOL __fastcall
+ISearchAssistantOC3DispT<T>::get_InWebFolder(void)
+{
+  VARIANT_BOOL pVal;
+  this->get_InWebFolder((VARIANT_BOOL*)&pVal);
+  return pVal;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::PutProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/, 
+                                         BSTR bstrValue/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("PutProperty"), DISPID(9));
+  TAutoArgs<3> _args;
+  _args[1] = bPerLocale /*[VT_BOOL:0]*/;
+  _args[2] = bstrName /*[VT_BSTR:0]*/;
+  _args[3] = bstrValue /*[VT_BSTR:0]*/;
+  return OleFunction(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/, 
+                                         BSTR* pbstrValue/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("GetProperty"), DISPID(10));
+  TAutoArgs<2> _args;
+  _args[1] = bPerLocale /*[VT_BOOL:0]*/;
+  _args[2] = bstrName /*[VT_BSTR:0]*/;
+  return OutRetValSetterPtr(pbstrValue /*[VT_BSTR:1]*/, _args, OleFunction(_dispid, _args));
+}
+
+template <class T> BSTR __fastcall
+ISearchAssistantOC3DispT<T>::GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/)
+{
+  BSTR pbstrValue;
+  this->GetProperty(bPerLocale, bstrName, (BSTR*)&pbstrValue);
+  return pbstrValue;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::set_EventHandled(VARIANT_BOOL Param1/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("EventHandled"), DISPID(11));
+  TAutoArgs<1> _args;
+  _args[1] = Param1 /*[VT_BOOL:0]*/;
+  return OlePropertyPut(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::ResetNextMenu()
+{
+  _TDispID _dispid(*this, OLETEXT("ResetNextMenu"), DISPID(12));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::FindOnWeb()
+{
+  _TDispID _dispid(*this, OLETEXT("FindOnWeb"), DISPID(13));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::FindFilesOrFolders()
+{
+  _TDispID _dispid(*this, OLETEXT("FindFilesOrFolders"), DISPID(14));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::FindComputer()
+{
+  _TDispID _dispid(*this, OLETEXT("FindComputer"), DISPID(15));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::FindPrinter()
+{
+  _TDispID _dispid(*this, OLETEXT("FindPrinter"), DISPID(16));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::FindPeople()
+{
+  _TDispID _dispid(*this, OLETEXT("FindPeople"), DISPID(17));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                                   VARIANT_BOOL bCustomize/*[in]*/, 
+                                                   BSTR* pbstrValue/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("GetSearchAssistantURL"), DISPID(18));
+  TAutoArgs<2> _args;
+  _args[1] = bSubstitute /*[VT_BOOL:0]*/;
+  _args[2] = bCustomize /*[VT_BOOL:0]*/;
+  return OutRetValSetterPtr(pbstrValue /*[VT_BSTR:1]*/, _args, OleFunction(_dispid, _args));
+}
+
+template <class T> BSTR __fastcall
+ISearchAssistantOC3DispT<T>::GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                                   VARIANT_BOOL bCustomize/*[in]*/)
+{
+  BSTR pbstrValue;
+  this->GetSearchAssistantURL(bSubstitute, bCustomize, (BSTR*)&pbstrValue);
+  return pbstrValue;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::NotifySearchSettingsChanged()
+{
+  _TDispID _dispid(*this, OLETEXT("NotifySearchSettingsChanged"), DISPID(19));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::set_ASProvider(BSTR pProvider/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("ASProvider"), DISPID(20));
+  TAutoArgs<1> _args;
+  _args[1] = pProvider /*[VT_BSTR:0]*/;
+  return OlePropertyPut(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::get_ASProvider(BSTR* pProvider/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("ASProvider"), DISPID(20));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pProvider /*[VT_BSTR:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> BSTR __fastcall
+ISearchAssistantOC3DispT<T>::get_ASProvider(void)
+{
+  BSTR pProvider;
+  this->get_ASProvider((BSTR*)&pProvider);
+  return pProvider;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::set_ASSetting(int pSetting/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("ASSetting"), DISPID(21));
+  TAutoArgs<1> _args;
+  _args[1] = pSetting /*[VT_INT:0]*/;
+  return OlePropertyPut(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::get_ASSetting(int* pSetting/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("ASSetting"), DISPID(21));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pSetting /*[VT_INT:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> int __fastcall
+ISearchAssistantOC3DispT<T>::get_ASSetting(void)
+{
+  int pSetting;
+  this->get_ASSetting((int*)&pSetting);
+  return pSetting;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::NETDetectNextNavigate()
+{
+  _TDispID _dispid(*this, OLETEXT("NETDetectNextNavigate"), DISPID(22));
+  return OleFunction(_dispid);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::PutFindText(BSTR FindText/*[in]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("PutFindText"), DISPID(23));
+  TAutoArgs<1> _args;
+  _args[1] = FindText /*[VT_BSTR:0]*/;
+  return OleFunction(_dispid, _args);
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::get_Version(int* pVersion/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("Version"), DISPID(24));
+  TAutoArgs<0> _args;
+  return OutRetValSetterPtr(pVersion /*[VT_INT:1]*/, _args, OlePropertyGet(_dispid, _args));
+}
+
+template <class T> int __fastcall
+ISearchAssistantOC3DispT<T>::get_Version(void)
+{
+  int pVersion;
+  this->get_Version((int*)&pVersion);
+  return pVersion;
+}
+
+template <class T> HRESULT /*[VT_HRESULT:0]*/ __fastcall
+ISearchAssistantOC3DispT<T>::EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharSet/*[in]*/, 
+                                          VARIANT_BOOL bUseUTF8/*[in]*/, 
+                                          BSTR* pbstrResult/*[out,retval]*/)
+{
+  _TDispID _dispid(*this, OLETEXT("EncodeString"), DISPID(25));
+  TAutoArgs<3> _args;
+  _args[1] = bstrValue /*[VT_BSTR:0]*/;
+  _args[2] = bstrCharSet /*[VT_BSTR:0]*/;
+  _args[3] = bUseUTF8 /*[VT_BOOL:0]*/;
+  return OutRetValSetterPtr(pbstrResult /*[VT_BSTR:1]*/, _args, OleFunction(_dispid, _args));
+}
+
+template <class T> BSTR __fastcall
+ISearchAssistantOC3DispT<T>::EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharSet/*[in]*/, 
+                                          VARIANT_BOOL bUseUTF8/*[in]*/)
 {
   BSTR pbstrResult;
   this->EncodeString(bstrValue, bstrCharSet, bUseUTF8, (BSTR*)&pbstrResult);
@@ -7742,25 +9553,2591 @@ typedef TCoClassCreatorT<TCOMIShellUIHelper, IShellUIHelper, &CLSID_CppShellUIHe
 // *********************************************************************//
 // COCLASS DEFAULT INTERFACE CREATOR
 // CoClass  : ShellFavoritesNameSpace
-// Interface: TCOMIShellFavoritesNameSpace
+// Interface: TCOMIShellNameSpace
 // *********************************************************************//
-typedef TCoClassCreatorT<TCOMIShellFavoritesNameSpace, IShellFavoritesNameSpace, &CLSID_ShellFavoritesNameSpace, &IID_IShellFavoritesNameSpace> CoShellFavoritesNameSpace;
+typedef TCoClassCreatorT<TCOMIShellNameSpace, IShellNameSpace, &CLSID_ShellFavoritesNameSpace, &IID_IShellNameSpace> CoShellFavoritesNameSpace;
 
 // *********************************************************************//
 // COCLASS DEFAULT INTERFACE CREATOR
-// CoClass  : CScriptErrorList
+// CoClass  : CppCScriptErrorList
 // Interface: TCOMIScriptErrorList
 // *********************************************************************//
-typedef TCoClassCreatorT<TCOMIScriptErrorList, IScriptErrorList, &CLSID_CScriptErrorList, &IID_IScriptErrorList> CoCScriptErrorList;
+typedef TCoClassCreatorT<TCOMIScriptErrorList, IScriptErrorList, &CLSID_CppCScriptErrorList, &IID_IScriptErrorList> CoCppCScriptErrorList;
 
 // *********************************************************************//
 // COCLASS DEFAULT INTERFACE CREATOR
 // CoClass  : CppSearchAssistantOC
-// Interface: TCOMISearchAssistantOC2
+// Interface: TCOMISearchAssistantOC3
 // *********************************************************************//
-typedef TCoClassCreatorT<TCOMISearchAssistantOC2, ISearchAssistantOC2, &CLSID_CppSearchAssistantOC, &IID_ISearchAssistantOC2> CoCppSearchAssistantOC;
+typedef TCoClassCreatorT<TCOMISearchAssistantOC3, ISearchAssistantOC3, &CLSID_CppSearchAssistantOC, &IID_ISearchAssistantOC3> CoCppSearchAssistantOC;
 #endif  //   __TLB_NO_INTERFACE_WRAPPERS
 
+
+#if !defined(__TLB_NO_EVENT_WRAPPERS) && defined(USING_ATLVCL)
+// *********************************************************************//
+// CONNECTIONPOINT/EVENT PROXY
+// CoClass         : CppWebBrowser_V1
+// Event Interface : DWebBrowserEvents
+// *********************************************************************//
+template <class T>
+class TEvents_CppWebBrowser_V1 : public IConnectionPointImpl<T,
+                                                 &DIID_DWebBrowserEvents,
+                                                 CComUnkArray<CONNECTIONPOINT_ARRAY_SIZE> >
+{
+public:
+  void            Fire_BeforeNavigate(BSTR URL, long Flags, BSTR TargetFrameName, VARIANT* PostData, 
+                                      BSTR Headers, VARIANT_BOOL* Cancel);
+  void            Fire_NavigateComplete(BSTR URL);
+  void            Fire_StatusTextChange(BSTR Text);
+  void            Fire_ProgressChange(long Progress, long ProgressMax);
+  void            Fire_DownloadComplete(void);
+  void            Fire_CommandStateChange(long Command, VARIANT_BOOL Enable);
+  void            Fire_DownloadBegin(void);
+  void            Fire_NewWindow(BSTR URL, long Flags, BSTR TargetFrameName, VARIANT* PostData, 
+                                 BSTR Headers, VARIANT_BOOL* Processed);
+  void            Fire_TitleChange(BSTR Text);
+  void            Fire_FrameBeforeNavigate(BSTR URL, long Flags, BSTR TargetFrameName, 
+                                           VARIANT* PostData, BSTR Headers, VARIANT_BOOL* Cancel);
+  void            Fire_FrameNavigateComplete(BSTR URL);
+  void            Fire_FrameNewWindow(BSTR URL, long Flags, BSTR TargetFrameName, VARIANT* PostData, 
+                                      BSTR Headers, VARIANT_BOOL* Processed);
+  void            Fire_Quit(VARIANT_BOOL* Cancel);
+  void            Fire_WindowMove(void);
+  void            Fire_WindowResize(void);
+  void            Fire_WindowActivate(void);
+  void            Fire_PropertyChange(BSTR Property);
+protected:
+  DWebBrowserEventsDisp m_EventIntfObj;
+};
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_BeforeNavigate(BSTR URL, long Flags, BSTR TargetFrameName, 
+                                                 VARIANT* PostData, BSTR Headers, 
+                                                 VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.BeforeNavigate(URL, Flags, TargetFrameName, PostData, Headers, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_NavigateComplete(BSTR URL)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.NavigateComplete(URL);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_StatusTextChange(BSTR Text)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.StatusTextChange(Text);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_ProgressChange(long Progress, long ProgressMax)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.ProgressChange(Progress, ProgressMax);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_DownloadComplete(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.DownloadComplete();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_CommandStateChange(long Command, VARIANT_BOOL Enable)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.CommandStateChange(Command, Enable);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_DownloadBegin(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.DownloadBegin();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_NewWindow(BSTR URL, long Flags, BSTR TargetFrameName, 
+                                            VARIANT* PostData, BSTR Headers, VARIANT_BOOL* Processed)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.NewWindow(URL, Flags, TargetFrameName, PostData, Headers, Processed);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_TitleChange(BSTR Text)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.TitleChange(Text);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_FrameBeforeNavigate(BSTR URL, long Flags, BSTR TargetFrameName, 
+                                                      VARIANT* PostData, BSTR Headers, 
+                                                      VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.FrameBeforeNavigate(URL, Flags, TargetFrameName, PostData, Headers, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_FrameNavigateComplete(BSTR URL)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.FrameNavigateComplete(URL);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_FrameNewWindow(BSTR URL, long Flags, BSTR TargetFrameName, 
+                                                 VARIANT* PostData, BSTR Headers, 
+                                                 VARIANT_BOOL* Processed)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.FrameNewWindow(URL, Flags, TargetFrameName, PostData, Headers, Processed);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_Quit(VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.Quit(Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_WindowMove(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowMove();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_WindowResize(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowResize();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_WindowActivate(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowActivate();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser_V1<T>::Fire_PropertyChange(BSTR Property)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.PropertyChange(Property);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+// *********************************************************************//
+// CONNECTIONPOINT/EVENT PROXY
+// CoClass         : CppWebBrowser
+// Event Interface : DWebBrowserEvents2
+// *********************************************************************//
+template <class T>
+class TEvents_CppWebBrowser : public IConnectionPointImpl<T,
+                                                 &DIID_DWebBrowserEvents2,
+                                                 CComUnkArray<CONNECTIONPOINT_ARRAY_SIZE> >
+{
+public:
+  void            Fire_StatusTextChange(BSTR Text);
+  void            Fire_ProgressChange(long Progress, long ProgressMax);
+  void            Fire_CommandStateChange(long Command, VARIANT_BOOL Enable);
+  void            Fire_DownloadBegin(void);
+  void            Fire_DownloadComplete(void);
+  void            Fire_TitleChange(BSTR Text);
+  void            Fire_PropertyChange(BSTR szProperty);
+  void            Fire_BeforeNavigate2(LPDISPATCH pDisp, VARIANT* URL, VARIANT* Flags, 
+                                       VARIANT* TargetFrameName, VARIANT* PostData, VARIANT* Headers, 
+                                       VARIANT_BOOL* Cancel);
+  void            Fire_NewWindow2(LPDISPATCH* ppDisp, VARIANT_BOOL* Cancel);
+  void            Fire_NavigateComplete2(LPDISPATCH pDisp, VARIANT* URL);
+  void            Fire_DocumentComplete(LPDISPATCH pDisp, VARIANT* URL);
+  void            Fire_OnQuit(void);
+  void            Fire_OnVisible(VARIANT_BOOL Visible);
+  void            Fire_OnToolBar(VARIANT_BOOL ToolBar);
+  void            Fire_OnMenuBar(VARIANT_BOOL MenuBar);
+  void            Fire_OnStatusBar(VARIANT_BOOL StatusBar);
+  void            Fire_OnFullScreen(VARIANT_BOOL FullScreen);
+  void            Fire_OnTheaterMode(VARIANT_BOOL TheaterMode);
+  void            Fire_WindowSetResizable(VARIANT_BOOL Resizable);
+  void            Fire_WindowSetLeft(long Left);
+  void            Fire_WindowSetTop(long Top);
+  void            Fire_WindowSetWidth(long Width);
+  void            Fire_WindowSetHeight(long Height);
+  void            Fire_WindowClosing(VARIANT_BOOL IsChildWindow, VARIANT_BOOL* Cancel);
+  void            Fire_ClientToHostWindow(long* CX, long* CY);
+  void            Fire_SetSecureLockIcon(long SecureLockIcon);
+  void            Fire_FileDownload(VARIANT_BOOL* Cancel);
+  void            Fire_NavigateError(LPDISPATCH pDisp, VARIANT* URL, VARIANT* Frame, 
+                                     VARIANT* StatusCode, VARIANT_BOOL* Cancel);
+  void            Fire_PrintTemplateInstantiation(LPDISPATCH pDisp);
+  void            Fire_PrintTemplateTeardown(LPDISPATCH pDisp);
+  void            Fire_UpdatePageStatus(LPDISPATCH pDisp, VARIANT* nPage, VARIANT* fDone);
+  void            Fire_PrivacyImpactedStateChange(VARIANT_BOOL bImpacted);
+protected:
+  DWebBrowserEvents2Disp m_EventIntfObj;
+};
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_StatusTextChange(BSTR Text)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.StatusTextChange(Text);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_ProgressChange(long Progress, long ProgressMax)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.ProgressChange(Progress, ProgressMax);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_CommandStateChange(long Command, VARIANT_BOOL Enable)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.CommandStateChange(Command, Enable);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_DownloadBegin(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.DownloadBegin();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_DownloadComplete(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.DownloadComplete();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_TitleChange(BSTR Text)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.TitleChange(Text);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_PropertyChange(BSTR szProperty)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.PropertyChange(szProperty);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_BeforeNavigate2(LPDISPATCH pDisp, VARIANT* URL, VARIANT* Flags, 
+                                               VARIANT* TargetFrameName, VARIANT* PostData, 
+                                               VARIANT* Headers, VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.BeforeNavigate2(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_NewWindow2(LPDISPATCH* ppDisp, VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.NewWindow2(ppDisp, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_NavigateComplete2(LPDISPATCH pDisp, VARIANT* URL)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.NavigateComplete2(pDisp, URL);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_DocumentComplete(LPDISPATCH pDisp, VARIANT* URL)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.DocumentComplete(pDisp, URL);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_OnQuit(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnQuit();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_OnVisible(VARIANT_BOOL Visible)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnVisible(Visible);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_OnToolBar(VARIANT_BOOL ToolBar)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnToolBar(ToolBar);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_OnMenuBar(VARIANT_BOOL MenuBar)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnMenuBar(MenuBar);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_OnStatusBar(VARIANT_BOOL StatusBar)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnStatusBar(StatusBar);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_OnFullScreen(VARIANT_BOOL FullScreen)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnFullScreen(FullScreen);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_OnTheaterMode(VARIANT_BOOL TheaterMode)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnTheaterMode(TheaterMode);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_WindowSetResizable(VARIANT_BOOL Resizable)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetResizable(Resizable);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_WindowSetLeft(long Left)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetLeft(Left);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_WindowSetTop(long Top)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetTop(Top);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_WindowSetWidth(long Width)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetWidth(Width);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_WindowSetHeight(long Height)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetHeight(Height);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_WindowClosing(VARIANT_BOOL IsChildWindow, VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowClosing(IsChildWindow, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_ClientToHostWindow(long* CX, long* CY)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.ClientToHostWindow(CX, CY);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_SetSecureLockIcon(long SecureLockIcon)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.SetSecureLockIcon(SecureLockIcon);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_FileDownload(VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.FileDownload(Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_NavigateError(LPDISPATCH pDisp, VARIANT* URL, VARIANT* Frame, 
+                                             VARIANT* StatusCode, VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.NavigateError(pDisp, URL, Frame, StatusCode, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_PrintTemplateInstantiation(LPDISPATCH pDisp)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.PrintTemplateInstantiation(pDisp);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_PrintTemplateTeardown(LPDISPATCH pDisp)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.PrintTemplateTeardown(pDisp);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_UpdatePageStatus(LPDISPATCH pDisp, VARIANT* nPage, VARIANT* fDone)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.UpdatePageStatus(pDisp, nPage, fDone);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppWebBrowser<T>::Fire_PrivacyImpactedStateChange(VARIANT_BOOL bImpacted)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.PrivacyImpactedStateChange(bImpacted);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+// *********************************************************************//
+// CONNECTIONPOINT/EVENT PROXY
+// CoClass         : CppInternetExplorer
+// Event Interface : DWebBrowserEvents2
+// *********************************************************************//
+template <class T>
+class TEvents_CppInternetExplorer : public IConnectionPointImpl<T,
+                                                 &DIID_DWebBrowserEvents2,
+                                                 CComUnkArray<CONNECTIONPOINT_ARRAY_SIZE> >
+{
+public:
+  void            Fire_StatusTextChange(BSTR Text);
+  void            Fire_ProgressChange(long Progress, long ProgressMax);
+  void            Fire_CommandStateChange(long Command, VARIANT_BOOL Enable);
+  void            Fire_DownloadBegin(void);
+  void            Fire_DownloadComplete(void);
+  void            Fire_TitleChange(BSTR Text);
+  void            Fire_PropertyChange(BSTR szProperty);
+  void            Fire_BeforeNavigate2(LPDISPATCH pDisp, VARIANT* URL, VARIANT* Flags, 
+                                       VARIANT* TargetFrameName, VARIANT* PostData, VARIANT* Headers, 
+                                       VARIANT_BOOL* Cancel);
+  void            Fire_NewWindow2(LPDISPATCH* ppDisp, VARIANT_BOOL* Cancel);
+  void            Fire_NavigateComplete2(LPDISPATCH pDisp, VARIANT* URL);
+  void            Fire_DocumentComplete(LPDISPATCH pDisp, VARIANT* URL);
+  void            Fire_OnQuit(void);
+  void            Fire_OnVisible(VARIANT_BOOL Visible);
+  void            Fire_OnToolBar(VARIANT_BOOL ToolBar);
+  void            Fire_OnMenuBar(VARIANT_BOOL MenuBar);
+  void            Fire_OnStatusBar(VARIANT_BOOL StatusBar);
+  void            Fire_OnFullScreen(VARIANT_BOOL FullScreen);
+  void            Fire_OnTheaterMode(VARIANT_BOOL TheaterMode);
+  void            Fire_WindowSetResizable(VARIANT_BOOL Resizable);
+  void            Fire_WindowSetLeft(long Left);
+  void            Fire_WindowSetTop(long Top);
+  void            Fire_WindowSetWidth(long Width);
+  void            Fire_WindowSetHeight(long Height);
+  void            Fire_WindowClosing(VARIANT_BOOL IsChildWindow, VARIANT_BOOL* Cancel);
+  void            Fire_ClientToHostWindow(long* CX, long* CY);
+  void            Fire_SetSecureLockIcon(long SecureLockIcon);
+  void            Fire_FileDownload(VARIANT_BOOL* Cancel);
+  void            Fire_NavigateError(LPDISPATCH pDisp, VARIANT* URL, VARIANT* Frame, 
+                                     VARIANT* StatusCode, VARIANT_BOOL* Cancel);
+  void            Fire_PrintTemplateInstantiation(LPDISPATCH pDisp);
+  void            Fire_PrintTemplateTeardown(LPDISPATCH pDisp);
+  void            Fire_UpdatePageStatus(LPDISPATCH pDisp, VARIANT* nPage, VARIANT* fDone);
+  void            Fire_PrivacyImpactedStateChange(VARIANT_BOOL bImpacted);
+protected:
+  DWebBrowserEvents2Disp m_EventIntfObj;
+};
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_StatusTextChange(BSTR Text)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.StatusTextChange(Text);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_ProgressChange(long Progress, long ProgressMax)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.ProgressChange(Progress, ProgressMax);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_CommandStateChange(long Command, VARIANT_BOOL Enable)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.CommandStateChange(Command, Enable);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_DownloadBegin(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.DownloadBegin();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_DownloadComplete(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.DownloadComplete();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_TitleChange(BSTR Text)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.TitleChange(Text);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_PropertyChange(BSTR szProperty)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.PropertyChange(szProperty);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_BeforeNavigate2(LPDISPATCH pDisp, VARIANT* URL, VARIANT* Flags, 
+                                                     VARIANT* TargetFrameName, VARIANT* PostData, 
+                                                     VARIANT* Headers, VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.BeforeNavigate2(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_NewWindow2(LPDISPATCH* ppDisp, VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.NewWindow2(ppDisp, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_NavigateComplete2(LPDISPATCH pDisp, VARIANT* URL)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.NavigateComplete2(pDisp, URL);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_DocumentComplete(LPDISPATCH pDisp, VARIANT* URL)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.DocumentComplete(pDisp, URL);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_OnQuit(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnQuit();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_OnVisible(VARIANT_BOOL Visible)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnVisible(Visible);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_OnToolBar(VARIANT_BOOL ToolBar)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnToolBar(ToolBar);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_OnMenuBar(VARIANT_BOOL MenuBar)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnMenuBar(MenuBar);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_OnStatusBar(VARIANT_BOOL StatusBar)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnStatusBar(StatusBar);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_OnFullScreen(VARIANT_BOOL FullScreen)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnFullScreen(FullScreen);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_OnTheaterMode(VARIANT_BOOL TheaterMode)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnTheaterMode(TheaterMode);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_WindowSetResizable(VARIANT_BOOL Resizable)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetResizable(Resizable);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_WindowSetLeft(long Left)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetLeft(Left);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_WindowSetTop(long Top)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetTop(Top);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_WindowSetWidth(long Width)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetWidth(Width);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_WindowSetHeight(long Height)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetHeight(Height);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_WindowClosing(VARIANT_BOOL IsChildWindow, VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowClosing(IsChildWindow, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_ClientToHostWindow(long* CX, long* CY)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.ClientToHostWindow(CX, CY);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_SetSecureLockIcon(long SecureLockIcon)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.SetSecureLockIcon(SecureLockIcon);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_FileDownload(VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.FileDownload(Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_NavigateError(LPDISPATCH pDisp, VARIANT* URL, VARIANT* Frame, 
+                                                   VARIANT* StatusCode, VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.NavigateError(pDisp, URL, Frame, StatusCode, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_PrintTemplateInstantiation(LPDISPATCH pDisp)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.PrintTemplateInstantiation(pDisp);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_PrintTemplateTeardown(LPDISPATCH pDisp)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.PrintTemplateTeardown(pDisp);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_UpdatePageStatus(LPDISPATCH pDisp, VARIANT* nPage, 
+                                                      VARIANT* fDone)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.UpdatePageStatus(pDisp, nPage, fDone);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppInternetExplorer<T>::Fire_PrivacyImpactedStateChange(VARIANT_BOOL bImpacted)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.PrivacyImpactedStateChange(bImpacted);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+// *********************************************************************//
+// CONNECTIONPOINT/EVENT PROXY
+// CoClass         : CppShellBrowserWindow
+// Event Interface : DWebBrowserEvents2
+// *********************************************************************//
+template <class T>
+class TEvents_CppShellBrowserWindow : public IConnectionPointImpl<T,
+                                                 &DIID_DWebBrowserEvents2,
+                                                 CComUnkArray<CONNECTIONPOINT_ARRAY_SIZE> >
+{
+public:
+  void            Fire_StatusTextChange(BSTR Text);
+  void            Fire_ProgressChange(long Progress, long ProgressMax);
+  void            Fire_CommandStateChange(long Command, VARIANT_BOOL Enable);
+  void            Fire_DownloadBegin(void);
+  void            Fire_DownloadComplete(void);
+  void            Fire_TitleChange(BSTR Text);
+  void            Fire_PropertyChange(BSTR szProperty);
+  void            Fire_BeforeNavigate2(LPDISPATCH pDisp, VARIANT* URL, VARIANT* Flags, 
+                                       VARIANT* TargetFrameName, VARIANT* PostData, VARIANT* Headers, 
+                                       VARIANT_BOOL* Cancel);
+  void            Fire_NewWindow2(LPDISPATCH* ppDisp, VARIANT_BOOL* Cancel);
+  void            Fire_NavigateComplete2(LPDISPATCH pDisp, VARIANT* URL);
+  void            Fire_DocumentComplete(LPDISPATCH pDisp, VARIANT* URL);
+  void            Fire_OnQuit(void);
+  void            Fire_OnVisible(VARIANT_BOOL Visible);
+  void            Fire_OnToolBar(VARIANT_BOOL ToolBar);
+  void            Fire_OnMenuBar(VARIANT_BOOL MenuBar);
+  void            Fire_OnStatusBar(VARIANT_BOOL StatusBar);
+  void            Fire_OnFullScreen(VARIANT_BOOL FullScreen);
+  void            Fire_OnTheaterMode(VARIANT_BOOL TheaterMode);
+  void            Fire_WindowSetResizable(VARIANT_BOOL Resizable);
+  void            Fire_WindowSetLeft(long Left);
+  void            Fire_WindowSetTop(long Top);
+  void            Fire_WindowSetWidth(long Width);
+  void            Fire_WindowSetHeight(long Height);
+  void            Fire_WindowClosing(VARIANT_BOOL IsChildWindow, VARIANT_BOOL* Cancel);
+  void            Fire_ClientToHostWindow(long* CX, long* CY);
+  void            Fire_SetSecureLockIcon(long SecureLockIcon);
+  void            Fire_FileDownload(VARIANT_BOOL* Cancel);
+  void            Fire_NavigateError(LPDISPATCH pDisp, VARIANT* URL, VARIANT* Frame, 
+                                     VARIANT* StatusCode, VARIANT_BOOL* Cancel);
+  void            Fire_PrintTemplateInstantiation(LPDISPATCH pDisp);
+  void            Fire_PrintTemplateTeardown(LPDISPATCH pDisp);
+  void            Fire_UpdatePageStatus(LPDISPATCH pDisp, VARIANT* nPage, VARIANT* fDone);
+  void            Fire_PrivacyImpactedStateChange(VARIANT_BOOL bImpacted);
+protected:
+  DWebBrowserEvents2Disp m_EventIntfObj;
+};
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_StatusTextChange(BSTR Text)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.StatusTextChange(Text);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_ProgressChange(long Progress, long ProgressMax)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.ProgressChange(Progress, ProgressMax);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_CommandStateChange(long Command, VARIANT_BOOL Enable)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.CommandStateChange(Command, Enable);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_DownloadBegin(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.DownloadBegin();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_DownloadComplete(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.DownloadComplete();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_TitleChange(BSTR Text)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.TitleChange(Text);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_PropertyChange(BSTR szProperty)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.PropertyChange(szProperty);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_BeforeNavigate2(LPDISPATCH pDisp, VARIANT* URL, 
+                                                       VARIANT* Flags, VARIANT* TargetFrameName, 
+                                                       VARIANT* PostData, VARIANT* Headers, 
+                                                       VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.BeforeNavigate2(pDisp, URL, Flags, TargetFrameName, PostData, Headers, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_NewWindow2(LPDISPATCH* ppDisp, VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.NewWindow2(ppDisp, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_NavigateComplete2(LPDISPATCH pDisp, VARIANT* URL)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.NavigateComplete2(pDisp, URL);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_DocumentComplete(LPDISPATCH pDisp, VARIANT* URL)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.DocumentComplete(pDisp, URL);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_OnQuit(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnQuit();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_OnVisible(VARIANT_BOOL Visible)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnVisible(Visible);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_OnToolBar(VARIANT_BOOL ToolBar)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnToolBar(ToolBar);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_OnMenuBar(VARIANT_BOOL MenuBar)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnMenuBar(MenuBar);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_OnStatusBar(VARIANT_BOOL StatusBar)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnStatusBar(StatusBar);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_OnFullScreen(VARIANT_BOOL FullScreen)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnFullScreen(FullScreen);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_OnTheaterMode(VARIANT_BOOL TheaterMode)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnTheaterMode(TheaterMode);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_WindowSetResizable(VARIANT_BOOL Resizable)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetResizable(Resizable);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_WindowSetLeft(long Left)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetLeft(Left);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_WindowSetTop(long Top)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetTop(Top);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_WindowSetWidth(long Width)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetWidth(Width);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_WindowSetHeight(long Height)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowSetHeight(Height);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_WindowClosing(VARIANT_BOOL IsChildWindow, 
+                                                     VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowClosing(IsChildWindow, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_ClientToHostWindow(long* CX, long* CY)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.ClientToHostWindow(CX, CY);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_SetSecureLockIcon(long SecureLockIcon)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.SetSecureLockIcon(SecureLockIcon);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_FileDownload(VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.FileDownload(Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_NavigateError(LPDISPATCH pDisp, VARIANT* URL, VARIANT* Frame, 
+                                                     VARIANT* StatusCode, VARIANT_BOOL* Cancel)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.NavigateError(pDisp, URL, Frame, StatusCode, Cancel);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_PrintTemplateInstantiation(LPDISPATCH pDisp)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.PrintTemplateInstantiation(pDisp);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_PrintTemplateTeardown(LPDISPATCH pDisp)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.PrintTemplateTeardown(pDisp);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_UpdatePageStatus(LPDISPATCH pDisp, VARIANT* nPage, 
+                                                        VARIANT* fDone)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.UpdatePageStatus(pDisp, nPage, fDone);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellBrowserWindow<T>::Fire_PrivacyImpactedStateChange(VARIANT_BOOL bImpacted)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.PrivacyImpactedStateChange(bImpacted);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+// *********************************************************************//
+// CONNECTIONPOINT/EVENT PROXY
+// CoClass         : CppShellWindows
+// Event Interface : DShellWindowsEvents
+// *********************************************************************//
+template <class T>
+class TEvents_CppShellWindows : public IConnectionPointImpl<T,
+                                                 &DIID_DShellWindowsEvents,
+                                                 CComUnkArray<CONNECTIONPOINT_ARRAY_SIZE> >
+{
+public:
+  void            Fire_WindowRegistered(long lCookie);
+  void            Fire_WindowRevoked(long lCookie);
+protected:
+  DShellWindowsEventsDisp m_EventIntfObj;
+};
+
+template <class T> void
+TEvents_CppShellWindows<T>::Fire_WindowRegistered(long lCookie)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowRegistered(lCookie);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppShellWindows<T>::Fire_WindowRevoked(long lCookie)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.WindowRevoked(lCookie);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+// *********************************************************************//
+// CONNECTIONPOINT/EVENT PROXY
+// CoClass         : ShellFavoritesNameSpace
+// Event Interface : DShellNameSpaceEvents
+// *********************************************************************//
+template <class T>
+class TEvents_ShellFavoritesNameSpace : public IConnectionPointImpl<T,
+                                                 &DIID_DShellNameSpaceEvents,
+                                                 CComUnkArray<CONNECTIONPOINT_ARRAY_SIZE> >
+{
+public:
+  void            Fire_FavoritesSelectionChange(long cItems, long hItem, BSTR strName, BSTR strUrl, 
+                                                long cVisits, BSTR strDate, long fAvailableOffline);
+  void            Fire_SelectionChange(void);
+  void            Fire_DoubleClick(void);
+  void            Fire_Initialized(void);
+protected:
+  DShellNameSpaceEventsDisp m_EventIntfObj;
+};
+
+template <class T> void
+TEvents_ShellFavoritesNameSpace<T>::Fire_FavoritesSelectionChange(long cItems, long hItem, 
+                                                                  BSTR strName, BSTR strUrl, 
+                                                                  long cVisits, BSTR strDate, 
+                                                                  long fAvailableOffline)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.FavoritesSelectionChange(cItems, hItem, strName, strUrl, cVisits, strDate, 
+                                              fAvailableOffline);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_ShellFavoritesNameSpace<T>::Fire_SelectionChange(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.SelectionChange();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_ShellFavoritesNameSpace<T>::Fire_DoubleClick(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.DoubleClick();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_ShellFavoritesNameSpace<T>::Fire_Initialized(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.Initialized();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+// *********************************************************************//
+// CONNECTIONPOINT/EVENT PROXY
+// CoClass         : CppSearchAssistantOC
+// Event Interface : _SearchAssistantEvents
+// *********************************************************************//
+template <class T>
+class TEvents_CppSearchAssistantOC : public IConnectionPointImpl<T,
+                                                 &DIID__SearchAssistantEvents,
+                                                 CComUnkArray<CONNECTIONPOINT_ARRAY_SIZE> >
+{
+public:
+  void            Fire_OnNextMenuSelect(long idItem);
+  void            Fire_OnNewSearch(void);
+protected:
+  _SearchAssistantEventsDisp m_EventIntfObj;
+};
+
+template <class T> void
+TEvents_CppSearchAssistantOC<T>::Fire_OnNextMenuSelect(long idItem)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnNextMenuSelect(idItem);
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+template <class T> void
+TEvents_CppSearchAssistantOC<T>::Fire_OnNewSearch(void)
+{
+  T * pT = (T*)this;
+  pT->Lock();
+  IUnknown ** pp = m_vec.begin();
+  while (pp < m_vec.end())
+  {
+    if (*pp != NULL)
+    {
+      m_EventIntfObj.Attach(*pp);
+      m_EventIntfObj.OnNewSearch();
+      m_EventIntfObj.Attach(0);
+    }
+    pp++;
+  }
+  pT->Unlock();
+}
+
+#endif  //   __TLB_NO_EVENT_WRAPPERS
 
 };     // namespace Shdocvw_tlb
 
@@ -7770,4 +12147,4 @@ using  namespace Shdocvw_tlb;
 
 #pragma option pop
 
-#endif // __SHDocVw_TLB_h__
+#endif // SHDocVw_TLBH

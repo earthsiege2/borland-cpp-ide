@@ -1,5 +1,4 @@
 #ifndef EXCHFORM_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define EXCHFORM_H
 
 
@@ -9,7 +8,7 @@
  *  Declarations of interfaces and constants for forms that work with
  *  the Microsoft Exchange client.
  *
- *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1999 Microsoft Corporation. All Rights Reserved.
  */
 
 
@@ -72,5 +71,4 @@ DEFINE_EXCHFORMGUID(PS_EXCHFORM, 0x0C);
 #define chOpMapDisable              '2'
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // EXCHFORM_H

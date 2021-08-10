@@ -1,20 +1,24 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Kylix and Delphi Cross-Platform Visual Component Library                    }
+{                                                                             }
+{ Copyright (c) 1995, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{       Core Database                                   }
-{                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
-unit Db;
+unit DB;
 
 {$R-,T-,H+,X+}
 
 interface
 
-uses Windows, SysUtils, Classes, Graphics;
+{$IFDEF MSWINDOWS}
+uses Windows, SysUtils, Classes, Variants, MaskUtils, SqlTimSt, FMTBcd;
+{$ENDIF}
+{$IFDEF LINUX}
+uses Libc, SysUtils, Classes, Variants, SqlTimSt, FMTBcd;
+{$ENDIF}
 
 type
 
@@ -57,7 +61,7 @@ type
     ftBytes, ftVarBytes, ftAutoInc, ftBlob, ftMemo, ftGraphic, ftFmtMemo,
     ftParadoxOle, ftDBaseOle, ftTypedBinary, ftCursor, ftFixedChar, ftWideString,
     ftLargeint, ftADT, ftArray, ftReference, ftDataSet, ftOraBlob, ftOraClob,
-    ftVariant, ftInterface, ftIDispatch, ftGuid);
+    ftVariant, ftInterface, ftIDispatch, ftGuid, ftTimeStamp, ftFMTBcd);
 
   TDataSetState = (dsInactive, dsBrowse, dsEdit, dsInsert, dsSetKey,
     dsCalcFields, dsFilter, dsNewValue, dsOldValue, dsCurValue, dsBlockRead,
@@ -443,7 +447,12 @@ type
     FFieldNo: Integer;
     FDisplayWidth: Integer;
     FDisplayLabel: string;
+{$IFDEF MSWINDOWS}
+    FEditMask: TEditMask;
+{$ENDIF}
+{$IFDEF LINUX}
     FEditMask: string;
+{$ENDIF}
     FValueBuffer: Pointer;
     FLookupDataSet: TDataSet;
     FKeyFields: string;
@@ -488,7 +497,12 @@ type
     procedure SetCalculated(Value: Boolean);
     procedure SetDisplayLabel(Value: string);
     procedure SetDisplayWidth(Value: Integer);
+{$IFDEF MSWINDOWS}
+    procedure SetEditMask(const Value: TEditMask);
+{$ENDIF}
+{$IFDEF LINUX}
     procedure SetEditMask(const Value: string);
+{$ENDIF}
     procedure SetEditText(const Value: string);
     procedure SetFieldName(const Value: string);
     procedure SetIndex(Value: Integer);
@@ -514,12 +528,14 @@ type
     procedure DataChanged;
     procedure DefineProperties(Filer: TFiler); override;
     procedure FreeBuffers; virtual;
+    function GetAsBCD: TBcd; virtual;
     function GetAsBoolean: Boolean; virtual;
     function GetAsByteArray: Variant; virtual;
     function GetAsCurrency: Currency; virtual;
     function GetAsDateTime: TDateTime; virtual;
     function GetAsFloat: Double; virtual;
     function GetAsInteger: Longint; virtual;
+    function GetAsSqlTimeStamp: TSQLTimeStamp; virtual;
     function GetAsString: string; virtual;
     function GetAsVariant: Variant; virtual;
     function GetCanModify: Boolean; virtual;
@@ -536,12 +552,14 @@ type
       Operation: TOperation); override;
     procedure PropertyChanged(LayoutAffected: Boolean);
     procedure ReadState(Reader: TReader); override;
+    procedure SetAsBCD(const Value: TBcd); virtual;
     procedure SetAsBoolean(Value: Boolean); virtual;
     procedure SetAsByteArray(const Value: Variant); virtual;
     procedure SetAsCurrency(Value: Currency); virtual;
     procedure SetAsDateTime(Value: TDateTime); virtual;
     procedure SetAsFloat(Value: Double); virtual;
     procedure SetAsInteger(Value: Longint); virtual;
+    procedure SetAsSQLTimeStamp(const Value: TSQLTimeStamp); virtual;
     procedure SetAsString(const Value: string); virtual;
     procedure SetAsVariant(const Value: Variant); virtual;
     procedure SetDataSet(ADataSet: TDataSet); virtual;
@@ -569,9 +587,11 @@ type
     procedure SetData(Buffer: Pointer; NativeFormat: Boolean = True);
     procedure SetFieldType(Value: TFieldType); virtual;
     procedure Validate(Buffer: Pointer);
+    property AsBCD: TBcd read GetAsBCD write SetAsBCD;
     property AsBoolean: Boolean read GetAsBoolean write SetAsBoolean;
     property AsCurrency: Currency read GetAsCurrency write SetAsCurrency;
     property AsDateTime: TDateTime read GetAsDateTime write SetAsDateTime;
+    property AsSQLTimeStamp: TSQLTimeStamp read GetAsSQLTimeStamp write SetAsSQLTimeStamp;
     property AsFloat: Double read GetAsFloat write SetAsFloat;
     property AsInteger: Longint read GetAsInteger write SetAsInteger;
     property AsString: string read GetAsString write SetAsString;
@@ -585,8 +605,14 @@ type
     property DataType: TFieldType read FDataType;
     property DisplayName: string read GetDisplayName;
     property DisplayText: string read GetDisplayText;
+{$IFDEF MSWINDOWS}
+    property EditMask: TEditMask read FEditMask write SetEditMask;
+    property EditMaskPtr: TEditMask read FEditMask;
+{$ENDIF}
+{$IFDEF LINUX}
     property EditMask: string read FEditMask write SetEditMask;
     property EditMaskPtr: string read FEditMask;
+{$ENDIF}
     property FieldNo: Integer read GetFieldNo;
     property FullName: string read GetFullName;
     property IsIndexField: Boolean read GetIsIndexField;
@@ -613,7 +639,7 @@ type
       stored IsDisplayWidthStored;
     property FieldKind: TFieldKind read FFieldKind write SetFieldKind default fkData;
     property FieldName: string read FFieldName write SetFieldName;
-    property HasConstraints: Boolean read GetHasConstraints;
+    property HasConstraints: Boolean read GetHasConstraints default False;
     property Index: Integer read GetIndex write SetIndex stored False;
     property ImportedConstraint: string read FImportedConstraint write FImportedConstraint;
     property LookupDataSet: TDataSet read FLookupDataSet write SetLookupDataSet;
@@ -640,20 +666,24 @@ type
     FTransliterate: Boolean;
   protected
     class procedure CheckTypeSize(Value: Integer); override;
+    function GetAsBCD: TBcd; override;
     function GetAsBoolean: Boolean; override;
     function GetAsDateTime: TDateTime; override;
     function GetAsFloat: Double; override;
     function GetAsInteger: Longint; override;
+    function GetAsSqlTimeStamp: TSQLTimeStamp; override;
     function GetAsString: string; override;
     function GetAsVariant: Variant; override;
     function GetDataSize: Integer; override;
     function GetDefaultWidth: Integer; override;
     procedure GetText(var Text: string; DisplayText: Boolean); override;
     function GetValue(var Value: string): Boolean;
+    procedure SetAsBCD(const Value: TBcd); override;
     procedure SetAsBoolean(Value: Boolean); override;
     procedure SetAsDateTime(Value: TDateTime); override;
     procedure SetAsFloat(Value: Double); override;
     procedure SetAsInteger(Value: Longint); override;
+    procedure SetAsSQLTimeStamp(const Value: TSQLTimeStamp); override;
     procedure SetAsString(const Value: string); override;
     procedure SetVarValue(const Value: Variant); override;
   public
@@ -671,6 +701,7 @@ type
   TWideStringField = class(TStringField)
   protected
     class procedure CheckTypeSize(Value: Integer); override;
+    procedure CopyData(Source, Dest: Pointer); override;
     function GetAsString: string; override;
     function GetAsVariant: Variant; override;
     function GetAsWideString: WideString;
@@ -887,6 +918,34 @@ type
     property EditMask;
   end;
 
+{ TSQLTimeStampField }
+
+  TSQLTimeStampField = class(TField)
+  private
+    FDisplayFormat: string;
+    function GetValue(var Value: TSQLTimeStamp): Boolean;
+    procedure SetDisplayFormat(const Value: string);
+  protected
+    procedure CopyData(Source, Dest: Pointer); override;
+    function GetAsSQLTimeStamp: TSQLTimeStamp; override;
+    function GetAsDateTime: TDateTime; override;
+    function GetAsString: string; override;
+    function GetAsVariant: Variant; override;
+    function GetDataSize: Integer; override;
+    function GetDefaultWidth: Integer; override;
+    procedure GetText(var Text: string; DisplayText: Boolean); override;
+    procedure SetAsSQLTimeStamp(const Value: TSQLTimeStamp); override;
+    procedure SetAsDateTime(Value: TDateTime); override;
+    procedure SetAsString(const Value: string); override;
+    procedure SetVarValue(const Value: Variant); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    property Value: TSQLTimeStamp read GetAsSQLTimeStamp write SetAsSQLTimeStamp;
+  published
+    property DisplayFormat: string read FDisplayFormat write SetDisplayFormat;
+    property EditMask;
+  end;
+
 { TDateField }
 
   TDateField = class(TDateTimeField)
@@ -944,13 +1003,7 @@ type
 
 { TBCDField }
 
-  PBcd = ^TBcd;
-  TBcd  = packed record
-    Precision: Byte;                        { 1..64 }
-    SignSpecialPlaces: Byte;                { Sign:1, Special:1, Places:6 }
-    Fraction: packed array [0..31] of Byte; { BCD Nibbles, 00..99 per Byte, high Nibble 1st }
-  end;
-
+  {PBcd struct moved to FmtBcd.pas}
 
   TBCDField = class(TNumericField)
   private
@@ -967,6 +1020,7 @@ type
   protected
     class procedure CheckTypeSize(Value: Integer); override;
     procedure CopyData(Source, Dest: Pointer); override;
+    function GetAsBCD: TBcd; override;
     function GetAsCurrency: Currency; override;
     function GetAsFloat: Double; override;
     function GetAsInteger: Longint; override;
@@ -976,6 +1030,7 @@ type
     function GetDefaultWidth: Integer; override;
     procedure GetText(var Text: string; DisplayText: Boolean); override;
     function GetValue(var Value: Currency): Boolean;
+    procedure SetAsBCD(const Value: TBcd); override;
     procedure SetAsCurrency(Value: Currency); override;
     procedure SetAsFloat(Value: Double); override;
     procedure SetAsInteger(Value: Longint); override;
@@ -993,24 +1048,75 @@ type
     property Size default 4;
   end;
 
+{ TFMTBCDField }
+
+  TFMTBCDField = class(TNumericField)
+  private
+    FCurrency: Boolean;
+    FCheckRange: Boolean;
+    FMinValue: String;
+    FMaxValue: String;
+    FPrecision: Integer;
+    procedure BcdRangeError(Value: Variant; Max, Min: String);
+    procedure SetCurrency(Value: Boolean);
+    procedure SetMaxValue(Value: String);
+    procedure SetMinValue(Value: String);
+    procedure SetPrecision(Value: Integer);
+    procedure UpdateCheckRange;
+  protected
+    class procedure CheckTypeSize(Value: Integer); override;
+    procedure CopyData(Source, Dest: Pointer); override;
+    function GetAsCurrency: Currency; override;
+    function GetAsBCD: TBcd; override;
+    function GetAsFloat: Double; override;
+    function GetAsInteger: Longint; override;
+    function GetAsString: string; override;
+    function GetAsVariant: Variant; override;
+    function GetDataSize: Integer; override;
+    function GetDefaultWidth: Integer; override;
+    procedure GetText(var Text: string; DisplayText: Boolean); override;
+    function GetValue(var Value: TBcd): Boolean;
+    procedure SetAsCurrency(Value: Currency); override;
+    procedure SetAsBCD(const Value: TBcd); override;
+    procedure SetAsFloat(Value: Double); override;
+    procedure SetAsInteger(Value: Longint); override;
+    procedure SetAsString(const Value: string); override;
+    procedure SetVarValue(const Value: Variant); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    property Value: TBcd read GetAsBCD write SetAsBCD;
+  published
+    { Lowercase to avoid name clash with C++ Currency type }
+    property currency: Boolean read FCurrency write SetCurrency default False;
+    property MaxValue: String read FMaxValue write SetMaxValue;
+    property MinValue: String read FMinValue write SetMinValue;
+    property Precision: Integer read FPrecision write SetPrecision default 0;
+    property Size default 4;
+  end;
+
+
+
 { TBlobField }
 
   TBlobType = ftBlob..ftOraClob;
 
   TBlobField = class(TField)
   private
-    FModified: Boolean;
     FModifiedRecord: Integer;
+    FModified: Boolean;
+    FGraphicHeader: Boolean;
     FTransliterate: Boolean;
     function GetBlobType: TBlobType;
     function GetModified: Boolean;
     procedure LoadFromBlob(Blob: TBlobField);
-    procedure LoadFromBitmap(Bitmap: TBitmap);
     procedure LoadFromStrings(Strings: TStrings);
-    procedure SaveToBitmap(Bitmap: TBitmap);
+    procedure LoadFromStreamPersist(StreamPersist: IStreamPersist);
     procedure SaveToStrings(Strings: TStrings);
+    procedure SaveToStreamPersist(StreamPersist: IStreamPersist);
     procedure SetBlobType(Value: TBlobType);
     procedure SetModified(Value: Boolean);
+    function SupportsStreamPersist(const Persistent: TPersistent;
+      var StreamPersist: IStreamPersist): Boolean;
   protected
     procedure AssignTo(Dest: TPersistent); override;
     procedure FreeBuffers; override;
@@ -1038,7 +1144,8 @@ type
     property Value: string read GetAsString write SetAsString;
     property Transliterate: Boolean read FTransliterate write FTransliterate;
   published
-    property BlobType: TBlobType read GetBlobType write SetBlobType;
+    property BlobType: TBlobType read GetBlobType write SetBlobType default ftBlob;
+    property GraphicHeader: Boolean read FGraphicHeader write FGraphicHeader default True;
     property Size default 0;
   end;
 
@@ -1142,7 +1249,7 @@ type
     destructor Destroy; override;
     property NestedDataSet: TDataSet read GetNestedDataSet;
   published
-    property IncludeObjectField: Boolean read FIncludeObjectField write SetIncludeObjectField;
+    property IncludeObjectField: Boolean read FIncludeObjectField write SetIncludeObjectField default False;
   end;
 
 { TReferenceField }
@@ -1167,14 +1274,18 @@ type
   TVariantField = class(TField)
   protected
     class procedure CheckTypeSize(Value: Integer); override;
+    function GetAsBCD: TBcd; override;
     function GetAsBoolean: Boolean; override;
     function GetAsDateTime: TDateTime; override;
+    function GetAsSqlTimeStamp: TSqlTimeStamp; override;
     function GetAsFloat: Double; override;
     function GetAsInteger: Longint; override;
     function GetAsString: string; override;
     function GetAsVariant: Variant; override;
     function GetDefaultWidth: Integer; override;
+    procedure SetAsBCD(const Value: TBcd); override;
     procedure SetAsBoolean(Value: Boolean); override;
+    procedure SetAsSqlTimeStamp(const Value: TSqlTimeStamp); override;
     procedure SetAsDateTime(Value: TDateTime); override;
     procedure SetAsFloat(Value: Double); override;
     procedure SetAsInteger(Value: Longint); override;
@@ -1256,6 +1367,7 @@ type
     property ResultType: TFieldType read FResultType write FResultType;
   published
     property Active: Boolean read FActive write SetActive default False;
+    { Lowercase to avoid name clash with C++ Currency type }
     property currency: Boolean read FCurrency write SetCurrency default False;
     property DisplayName: String read FDisplayName write FDisplayName;
     property DisplayFormat: string read FDisplayFormat write SetDisplayFormat;
@@ -1467,11 +1579,18 @@ type
     FParamRef: TParam;
     FNativeStr: string;
     FData: Variant;
+{$IFDEF MSWINDOWS}
+    FPrecision: Integer platform;
+    FNumericScale: Integer platform;
+{$ENDIF}
     FNull: Boolean;
     FName: string;
     FDataType: TFieldType;
     FBound: Boolean;
     FParamType: TParamType;
+{$IFDEF MSWINDOWS}
+    FSize: Integer platform;
+{$ENDIF}
     function ParamRef: TParam;
     function GetDataSet: TDataSet;
     function IsParamStored: Boolean;
@@ -1481,9 +1600,11 @@ type
   protected
     procedure AssignParam(Param: TParam);
     procedure AssignTo(Dest: TPersistent); override;
+    function GetAsFMTBCD: TBcd;
     function GetAsBCD: Currency;
     function GetAsBoolean: Boolean;
     function GetAsDateTime: TDateTime;
+    function GetAsSQLTimeStamp: TSQLTimeStamp;
     function GetAsCurrency: Currency;
     function GetAsFloat: Double;
     function GetAsInteger: Longint;
@@ -1493,11 +1614,13 @@ type
     function GetIsNull: Boolean;
     function IsEqual(Value: TParam): Boolean;
     procedure SetAsBCD(const Value: Currency);
+    procedure SetAsFMTBCD(const Value: TBcd);
     procedure SetAsBlob(const Value: TBlobData);
     procedure SetAsBoolean(Value: Boolean);
     procedure SetAsCurrency(const Value: Currency);
     procedure SetAsDate(const Value: TDateTime);
     procedure SetAsDateTime(const Value: TDateTime);
+    procedure SetAsSQLTimeStamp(const Value: TSQLTimeStamp);
     procedure SetAsFloat(const Value: Double);
     procedure SetAsInteger(Value: Longint);
     procedure SetAsMemo(const Value: string);
@@ -1524,6 +1647,7 @@ type
     procedure SetBlobData(Buffer: Pointer; Size: Integer);
     procedure SetData(Buffer: Pointer);
     property AsBCD: Currency read GetAsBCD write SetAsBCD;
+    property AsFMTBCD: TBcd read GetAsFMTBCD write SetAsFMTBCD;
     property AsBlob: TBlobData read GetAsString write SetAsBlob;
     property AsBoolean: Boolean read GetAsBoolean write SetAsBoolean;
     property AsCurrency: Currency read GetAsCurrency write SetAsCurrency;
@@ -1532,6 +1656,7 @@ type
     property AsFloat: Double read GetAsFloat write SetAsFloat;
     property AsInteger: LongInt read GetAsInteger write SetAsInteger;
     property AsSmallInt: LongInt read GetAsInteger write SetAsSmallInt;
+    property AsSQLTimeStamp: TSQLTimeStamp read GetAsSQLTimeStamp write SetAsSQLTimeStamp;
     property AsMemo: string read GetAsMemo write SetAsMemo;
     property AsString: string read GetAsString write SetAsString;
     property AsTime: TDateTime read GetAsDateTime write SetAsTime;
@@ -1542,8 +1667,15 @@ type
     property Text: string read GetAsString write SetText;
   published
     property DataType: TFieldType read GetDataType write SetDataType;
+{$IFDEF MSWINDOWS}
+    property Precision: Integer read FPrecision write FPrecision default 0;
+    property NumericScale: Integer read FNumericScale write FNumericScale default 0;
+{$ENDIF}
     property Name: string read FName write FName;
     property ParamType: TParamType read GetParamType write SetParamType;
+{$IFDEF MSWINDOWS}
+    property Size: Integer read FSize write FSize default 0;
+{$ENDIF}
     property Value: Variant read GetAsVariant write SetAsVariant stored IsParamStored;
   end;
 
@@ -1678,6 +1810,7 @@ type
     FBlockReadSize: Integer;
     FConstraints: TCheckConstraints;
     FDataSetField: TDataSetField;
+    FIsUniDirectional: Boolean;
     FNestedDataSets: TList;
     FNestedDatasetClass: TClass;
     FReserved: Pointer;
@@ -1775,6 +1908,7 @@ type
     function BookmarkAvailable: Boolean;
     procedure CalculateFields(Buffer: PChar); virtual;
     procedure CheckActive; virtual;
+    procedure CheckBiDirectional;
     procedure CheckFieldCompatibility(Field: TField; FieldDef: TFieldDef); virtual;
     procedure CheckInactive; virtual;
     procedure ClearBuffers; virtual;
@@ -1809,7 +1943,6 @@ type
     procedure DoOnNewRecord; virtual;
     function FieldByNumber(FieldNo: Integer): TField;
     function FindRecord(Restart, GoForward: Boolean): Boolean; virtual;
-    procedure OpenCursorComplete;
     procedure FreeFieldBuffers; virtual;
     function GetAggregateValue(Field: TField): Variant; virtual;
     function GetAggRecordCount(Grp: TGroupPosInd): Integer; virtual;
@@ -1839,6 +1972,7 @@ type
     procedure InternalRefresh; virtual;
     procedure Loaded; override;
     procedure OpenCursor(InfoQuery: Boolean = False); virtual;
+    procedure OpenCursorComplete;
     procedure OpenParentDataSet(ParentDataSet: TDataSet);
     procedure RefreshInternalCalcFields(Buffer: PChar); virtual;
     procedure RestoreState(const Value: TDataSetState);
@@ -1846,7 +1980,7 @@ type
     procedure SetActive(Value: Boolean); virtual;
     procedure SetBookmarkStr(const Value: TBookmarkStr); virtual;
     procedure SetBlockReadSize(Value: Integer); virtual;
-    procedure SetBufListSize(Value: Integer);
+    procedure SetBufListSize(Value: Integer); virtual;
     procedure SetChildOrder(Component: TComponent; Order: Integer); override;
     procedure SetCurrentRecord(Index: Integer); virtual;
     procedure SetDataSetField(const Value: TDataSetField); virtual;
@@ -1863,6 +1997,7 @@ type
     procedure SetState(Value: TDataSetState);
     procedure SetStateFieldValue(State: TDataSetState; Field: TField; const Value: Variant); virtual;
     function SetTempState(const Value: TDataSetState): TDataSetState;
+    procedure SetUniDirectional(const Value: Boolean);
     function TempBuffer: PChar;
     procedure UpdateBufferCount;
     procedure UpdateIndexDefs; virtual;
@@ -1880,30 +2015,31 @@ type
     property NestedDataSets: TList read GetNestedDataSets;
     property NestedDataSetClass: TClass read FNestedDataSetClass write FNestedDataSetClass;
     property Reserved: Pointer read FReserved write FReserved;
-  protected { abstract methods }
-    function AllocRecordBuffer: PChar; virtual; abstract;
-    procedure FreeRecordBuffer(var Buffer: PChar); virtual; abstract;
-    procedure GetBookmarkData(Buffer: PChar; Data: Pointer); virtual; abstract;
-    function GetBookmarkFlag(Buffer: PChar): TBookmarkFlag; virtual; abstract;
+  protected { Method stubs for UniDirectional/Readonly/Unbuffered datasets }
+    function AllocRecordBuffer: PChar; virtual;
+    procedure FreeRecordBuffer(var Buffer: PChar); virtual;
+    procedure GetBookmarkData(Buffer: PChar; Data: Pointer); virtual;
+    function GetBookmarkFlag(Buffer: PChar): TBookmarkFlag; virtual;
+    function GetRecordSize: Word; virtual;
+    procedure InternalAddRecord(Buffer: Pointer; Append: Boolean); virtual;
+    procedure InternalDelete; virtual;
+    procedure InternalFirst; virtual;
+    procedure InternalGotoBookmark(Bookmark: Pointer); virtual;
+    procedure InternalInitRecord(Buffer: PChar); virtual;
+    procedure InternalLast; virtual;
+    procedure InternalPost; virtual;
+    procedure InternalSetToRecord(Buffer: PChar); virtual;
+    procedure SetBookmarkFlag(Buffer: PChar; Value: TBookmarkFlag); virtual;
+    procedure SetBookmarkData(Buffer: PChar; Data: Pointer); virtual;
+    procedure SetFieldData(Field: TField; Buffer: Pointer); overload; virtual;
+    procedure SetFieldData(Field: TField; Buffer: Pointer; NativeFormat: Boolean); overload; virtual;
+  protected { abstract methods required for all datasets }
     function GetRecord(Buffer: PChar; GetMode: TGetMode; DoCheck: Boolean): TGetResult; virtual; abstract;
-    function GetRecordSize: Word; virtual; abstract;
-    procedure InternalAddRecord(Buffer: Pointer; Append: Boolean); virtual; abstract;
     procedure InternalClose; virtual; abstract;
-    procedure InternalDelete; virtual; abstract;
-    procedure InternalFirst; virtual; abstract;
-    procedure InternalGotoBookmark(Bookmark: Pointer); virtual; abstract;
     procedure InternalHandleException; virtual; abstract;
     procedure InternalInitFieldDefs; virtual; abstract;
-    procedure InternalInitRecord(Buffer: PChar); virtual; abstract;
-    procedure InternalLast; virtual; abstract;
     procedure InternalOpen; virtual; abstract;
-    procedure InternalPost; virtual; abstract;
-    procedure InternalSetToRecord(Buffer: PChar); virtual; abstract;
     function IsCursorOpen: Boolean; virtual; abstract;
-    procedure SetBookmarkFlag(Buffer: PChar; Value: TBookmarkFlag); virtual; abstract;
-    procedure SetBookmarkData(Buffer: PChar; Data: Pointer); virtual; abstract;
-    procedure SetFieldData(Field: TField; Buffer: Pointer); overload; virtual; abstract;
-    procedure SetFieldData(Field: TField; Buffer: Pointer; NativeFormat: Boolean); overload; virtual;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -1933,7 +2069,7 @@ type
     procedure FreeBookmark(Bookmark: TBookmark); virtual;
     function GetBookmark: TBookmark; virtual;
     function GetCurrentRecord(Buffer: PChar): Boolean; virtual;
-    procedure GetDetailDataSets(List: TList);
+    procedure GetDetailDataSets(List: TList); virtual;
     procedure GetDetailLinkFields(MasterFields, DetailFields: TList); virtual;
     function GetBlobFieldData(FieldNo: Integer; var Buffer: TBlobByteData): Integer; virtual;
     function GetFieldData(Field: TField; Buffer: Pointer): Boolean; overload; virtual;
@@ -1981,6 +2117,7 @@ type
     property FieldList: TFieldList read FFieldList;
     property FieldValues[const FieldName: string]: Variant read GetFieldValue write SetFieldValue; default;
     property Found: Boolean read GetFound;
+    property IsUniDirectional: Boolean read FIsUniDirectional default False;
     property Modified: Boolean read FModified;
     property ObjectView: Boolean read FObjectView write SetObjectView;
     property RecordCount: Integer read GetRecordCount;
@@ -2045,7 +2182,7 @@ const
 
   { Field types with a fixed size.  TField.Size = 0 for all of these }
   ftFixedSizeTypes = [ftSmallint, ftInteger, ftWord, ftBoolean, ftFloat,
-    ftCurrency, ftDate, ftTime, ftDateTime, ftAutoInc, ftLargeint];
+    ftCurrency, ftDate, ftTime, ftDateTime, ftAutoInc, ftLargeint, ftTimeStamp];
 
   dsEditModes = [dsEdit, dsInsert, dsSetKey];
   dsWriteModes = [dsEdit, dsInsert, dsSetKey, dsCalcFields, dsFilter,
@@ -2086,16 +2223,18 @@ const
     TMemoField,         { ftOraClob }
     TVariantField,      { ftVariant }
     TInterfaceField,    { ftInterface }
-    TIDispatchField,     { ftIDispatch }
-    TGuidField);        { ftGuid }
+    TIDispatchField,    { ftIDispatch }
+    TGuidField,         { ftGuid }
+    TSQLTimeStampField, { ftTimeStamp }
+    TFMTBcdField);      { ftTimeStamp }
 
   FieldTypeNames: array[TFieldType] of string = (
     'Unknown', 'String', 'SmallInt', 'Integer', 'Word', 'Boolean', 'Float',
     'Currency', 'BCD', 'Date', 'Time', 'DateTime', 'Bytes', 'VarBytes',
     'AutoInc', 'Blob', 'Memo', 'Graphic', 'FmtMemo', 'ParadoxOle',
     'dBaseOle', 'TypedBinary', 'Cursor', 'FixedChar', 'WideString',
-    'LargeInt', 'ADT', 'Array', 'Reference', 'DataSet', 'OraBlob', 'OraClob',
-    'Variant', 'Interface', 'Dispatch', 'Guid');
+    'LargeInt', 'ADT', 'Array', 'Reference', 'DataSet', 'HugeBlob', 'HugeClob',
+    'Variant', 'Interface', 'Dispatch', 'Guid', 'SQLTimeStamp', 'FMTBcdField');
 
   FieldTypeVarMap: array[TFieldType] of Word = (
     varEmpty, varString, varInteger, varInteger, varInteger,
@@ -2103,15 +2242,51 @@ const
     varEmpty, varEmpty, varInteger, varEmpty, varString, varEmpty,
     varEmpty, varEmpty, varEmpty, varEmpty, varEmpty, varString, varOleStr,
     varEmpty, varEmpty, varEmpty, varEmpty, varEmpty, varEmpty, varEmpty,
-    varVariant, varUnknown, varDispatch, varString);
+    varVariant, varUnknown, varDispatch, varString, varEmpty, varEmpty);
 
   ObjectFieldTypes = [ftADT, ftArray, ftReference, ftDataSet];
 
   dsMaxStringSize = 8192; { Maximum string field size }
   RegisterFieldsProc: procedure(const FieldClassess: array of TFieldClass) = nil;
 
+type
+  TDBScreenCursor = (dcrDefault, dcrHourGlass, dcrSQLWait, dcrOther);
+
+  IDBScreen = interface
+    ['{29A1C508-6ADC-44CD-88DE-4F51B25D5995}']
+    function GetCursor: TDBScreenCursor;
+    procedure SetCursor(Cursor: TDBScreenCursor);
+
+    property Cursor: TDBScreenCursor read GetCursor write SetCursor;
+  end;
+
+  IDBApplication = interface
+    ['{FAA0DF76-EC6A-48AA-9754-2D36DF815C0D}']
+    function GetTitle: string;
+    procedure ProcessMessages;
+    procedure SetTitle(const Value: string);
+
+    property Title: string read GetTitle write SetTitle;
+  end;
+
+  IDBSession = interface
+    ['{CC2448FB-B672-4BA2-93F7-77CBEDA815FE}']
+    procedure AddPassword(const APassword: string);
+    procedure RemovePassword(const APassword: string);
+    procedure RemoveAllPasswords;
+  end;
+
+var
+  LoginDialogProc: function (const ADatabaseName: string; var AUserName, APassword: string): Boolean;
+  LoginDialogExProc: function (const ADatabaseName: string; var AUserName, APassword: string; NameReadOnly: Boolean): Boolean;
+  RemoteLoginDialogProc: function (var AUserName, APassword: string): Boolean;
+  ScreenCursorProc: procedure (const CurIndex : integer);
+  PasswordDialog: function (const ASession: IDBSession): Boolean;
+  DBScreen: IDBScreen;
+  DBApplication: IDBApplication;
+
 { Global Functions }
-  
+
 function ExtractFieldName(const Fields: string; var Pos: Integer): string;
 procedure RegisterFields(const FieldClasses: array of TFieldClass);
 
@@ -2121,9 +2296,10 @@ procedure DatabaseErrorFmt(const Message: string; const Args: array of const;
 
 procedure DisposeMem(var Buffer; Size: Integer);
 function BuffersEqual(Buf1, Buf2: Pointer; Size: Integer): Boolean;
+{ moved to FmtBcd.pas
 function BCDToCurr(const BCD: TBcd; var Curr: Currency): Boolean;
 function CurrToBCD(Curr: Currency; var BCD: TBcd; Precision: Integer = 32;
-  Decimals: Integer = 4): Boolean;
+  Decimals: Integer = 4): Boolean; }
 
 function GetFieldProperty(DataSet: TDataSet; Control: TComponent;
   const FieldName: string): TField;
@@ -2132,7 +2308,12 @@ function VarTypeToDataType(VarType: Integer): TFieldType;
 
 implementation
 
-uses DBConsts, Mask, Consts, ComObj, ActiveX;
+{$IFDEF MSWINDOWS}
+uses DBConsts, RTLConsts, ComObj, ActiveX;
+{$ENDIF}
+{$IFDEF LINUX}
+uses DBConsts, RTLConsts, MaskUtils, Types;
+{$ENDIF}
 
 { Paradox graphic BLOB header }
 
@@ -2211,137 +2392,6 @@ asm
         POP     EDI
 end;
 
-function CurrToBCD(Curr: Currency; var BCD: TBcd; Precision: Integer = 32;
-  Decimals: Integer = 4): Boolean;
-const
-  Power10: array[0..3] of Single = (10000, 1000, 100, 10);
-var
-  Digits: array[0..63] of Byte;
-asm
-        PUSH    EBX
-        PUSH    ESI
-        PUSH    EDI
-        MOV     ESI,EAX
-        XCHG    ECX,EDX
-        MOV     [ESI].TBcd.Precision,CL
-        MOV     [ESI].TBcd.SignSpecialPlaces,DL
-@@1:    SUB     EDX,4
-        JE      @@3
-        JA      @@2
-        FILD    Curr
-        FDIV    Power10.Single[EDX*4+16]
-        FISTP   Curr
-        JMP     @@3
-@@2:    DEC     ECX
-        MOV     Digits.Byte[ECX],0
-        DEC     EDX
-        JNE     @@2
-@@3:    MOV     EAX,Curr.Integer[0]
-        MOV     EBX,Curr.Integer[4]
-        OR      EBX,EBX
-        JNS     @@4
-        NEG     EBX
-        NEG     EAX
-        SBB     EBX,0
-        OR      [ESI].TBcd.SignSpecialPlaces,80H
-@@4:    MOV     EDI,10
-@@5:    MOV     EDX,EAX
-        OR      EDX,EBX
-        JE      @@7
-        XOR     EDX,EDX
-        OR      EBX,EBX
-        JE      @@6
-        XCHG    EAX,EBX
-        DIV     EDI
-        XCHG    EAX,EBX
-@@6:    DIV     EDI
-@@7:    MOV     Digits.Byte[ECX-1],DL
-        DEC     ECX
-        JNE     @@5
-        OR      EAX,EBX
-        MOV     AL,0
-        JNE     @@9
-        MOV     CL,[ESI].TBcd.Precision
-        INC     ECX
-        SHR     ECX,1
-@@8:    MOV     AX,Digits.Word[ECX*2-2]
-        SHL     AL,4
-        OR      AL,AH
-        MOV     [ESI].TBcd.Fraction.Byte[ECX-1],AL
-        DEC     ECX
-        JNE     @@8
-        MOV     AL,1
-@@9:    POP     EDI
-        POP     ESI
-        POP     EBX
-end;
-
-function BCDToCurr(const BCD: TBcd; var Curr: Currency): Boolean;
-const
-  FConst10: Single = 10;
-  CWNear: Word = $133F;
-var
-  CtrlWord: Word;
-  Temp: Integer;
-  Digits: array[0..63] of Byte;
-asm
-        PUSH    EBX
-        PUSH    ESI
-        MOV     EBX,EAX
-        MOV     ESI,EDX
-        MOV     AL,0
-        MOVZX   EDX,[EBX].TBcd.Precision
-        OR      EDX,EDX
-        JE      @@8
-        LEA     ECX,[EDX+1]
-        SHR     ECX,1
-@@1:    MOV     AL,[EBX].TBcd.Fraction.Byte[ECX-1]
-        MOV     AH,AL
-        SHR     AL,4
-        AND     AH,0FH
-        MOV     Digits.Word[ECX*2-2],AX
-        DEC     ECX
-        JNE     @@1
-        XOR     EAX,EAX
-@@2:    MOV     AL,Digits.Byte[ECX]
-        OR      AL,AL
-        JNE     @@3
-        INC     ECX
-        CMP     ECX,EDX
-        JNE     @@2
-        FLDZ
-        JMP     @@7
-@@3:    MOV     Temp,EAX
-        FILD    Temp
-@@4:    INC     ECX
-        CMP     ECX,EDX
-        JE      @@5
-        FMUL    FConst10
-        MOV     AL,Digits.Byte[ECX]
-        MOV     Temp,EAX
-        FIADD   Temp
-        JMP     @@4
-@@5:    MOV     AL,[EBX].TBcd.SignSpecialPlaces
-        OR      AL,AL
-        JNS     @@6
-        FCHS
-@@6:    AND     EAX,3FH
-        SUB     EAX,4
-        NEG     EAX
-        CALL    FPower10
-@@7:    FSTCW   CtrlWord
-        FLDCW   CWNear
-        FISTP   [ESI].Currency
-        FSTSW   AX
-        NOT     AL
-        AND     AL,1
-        FCLEX
-        FLDCW   CtrlWord
-        FWAIT
-@@8:    POP     ESI
-        POP     EBX
-end;
-
 function ExtractFieldName(const Fields: string; var Pos: Integer): string;
 var
   I: Integer;
@@ -2363,15 +2413,21 @@ end;
 function VarTypeToDataType(VarType: Integer): TFieldType;
 begin
   case VarType of
-    varSmallint, varByte: Result := ftSmallInt;
-    varInteger: Result := ftInteger;
+    varSmallint, varShortInt, varByte: Result := ftSmallInt;
+    varWord, varInteger: Result := ftInteger;
     varCurrency: Result := ftBCD;
-    varSingle, varDouble: Result := ftFloat;
+    varLongWord, varSingle, varDouble: Result := ftFloat;
     varDate: Result := ftDateTime;
     varBoolean: Result := ftBoolean;
     varString, varOleStr: Result := ftString;
+    varInt64: Result := ftLargeInt;
   else
-    Result := ftUnknown;
+    if VarType = varSQLTimeStamp then
+      Result := ftTimeStamp
+    else if VarType = varFMTBcd then
+      Result := ftFMTBcd
+    else 
+      Result := ftUnknown;
   end;
 end;
 
@@ -2400,10 +2456,13 @@ begin
   try
     if FStreamedConnected then SetConnected(True);
   except
-    on E: Exception do
-      if csDesigning in ComponentState then
-        ShowException(E, ExceptAddr) else
-        raise;
+    if csDesigning in ComponentState then
+      if Assigned(Classes.ApplicationHandleException) then
+        Classes.ApplicationHandleException(ExceptObject)
+      else
+        ShowException(ExceptObject, ExceptAddr)
+    else
+      raise;
   end;
 end;
 
@@ -2708,7 +2767,7 @@ const
      0 {ftDBaseOle}, 0 {ftTypedBinary}, 0 {ftCursor}, 20 { ftFixedChar },
      0 {ftWideString}, 0 {ftLargeInt} , 0 {ftADT}, 10 {ftArray}, 0 {ftReference},
      0 {ftDataSet}, 0 {ftOraBlob}, 0 {ftOraClob}, 0 {ftVariant}, 0 {ftInterface},
-     0 {ftIDispatch}, 0 {ftGuid});
+     0 {ftIDispatch}, 0 {ftGuid}, 0 {ftTimeStamp}, 0 {ftFMTBcd});
 begin
   FDataType := Value;
   FPrecision := 0;
@@ -2823,7 +2882,9 @@ begin
     Result.ReadOnly := faReadonly in Attributes;
     Result.SetFieldType(DataType);
     if Result is TBCDField then
-      TBCDField(Result).FPrecision := Precision;
+      TBCDField(Result).FPrecision := Precision
+    else if Result is TFMTBCDField then
+      TFMTBCDField(Result).FPrecision := Precision;
     if Assigned(ParentField) then
       Result.ParentField := ParentField else
       Result.DataSet := TFieldDefs(Collection).DataSet;
@@ -3223,12 +3284,17 @@ begin
   Changed;
 end;
 
+procedure TFieldsGetFieldError(Index: Integer; Dataset: TDataset);
+begin  // Performance:  keep string temps and try..finally blocks out of TFields.GetField.
+  DatabaseError(Format(SListIndexError, [Index]), DataSet);
+end;
+
 function TFields.GetField(Index: Integer): TField;
 begin
   if FSparseFields > 0 then
   begin
     if Index >= FSparseFields then
-      DatabaseError(SListIndexError, DataSet);
+      TFieldsGetFieldError(Index, DataSet);
     Result := FList[0];
     Result.FOffset := Index;
   end else
@@ -3404,7 +3470,9 @@ begin
       vtCurrency:
         AsCurrency := VCurrency^;
       vtVariant:
-        if not VarIsEmpty(VVariant^) then AsVariant := VVariant^;
+        if not VarIsClear(VVariant^) then AsVariant := VVariant^;
+      vtWideString:
+        AsString := WideString(VWideString);
     else
       Error;
     end;
@@ -3511,7 +3579,13 @@ end;
 
 function TField.GetAsByteArray: Variant;
 begin
+  VarClear(Result);
   if not GetData(@Result, False) then Result := Null;
+end;
+
+function TField.GetAsBCD: TBcd;
+begin
+  CurrToBcd(GetAsCurrency, Result);
 end;
 
 function TField.GetAsCurrency: Currency;
@@ -3532,6 +3606,11 @@ end;
 function TField.GetAsInteger: Longint;
 begin
   raise AccessError('Integer'); { Do not localize }
+end;
+
+function TField.GetAsSQLTimeStamp: TSQLTimeStamp;
+begin
+  raise AccessError('SQLTimeStamp'); { Do not localize }
 end;
 
 function TField.GetAsString: string;
@@ -3832,6 +3911,14 @@ begin
     ValidateLookupInfo(False);
 end;
 
+procedure TField.SetAsBCD(const Value: TBcd);
+var
+  Curr: Currency;
+begin
+  BcdToCurr(Value,Curr);
+  SetAsCurrency(Curr);
+end;
+
 procedure TField.SetAsBoolean(Value: Boolean);
 begin
   raise AccessError('Boolean'); { Do not localize }
@@ -3855,6 +3942,11 @@ end;
 procedure TField.SetAsInteger(Value: Longint);
 begin
   raise AccessError('Integer'); { Do not localize }
+end;
+
+procedure TField.SetAsSQLTimeStamp(const Value: TSQLTimeStamp);
+begin
+  raise AccessError('SQLTimeStamp'); { Do not localize }
 end;
 
 procedure TField.SetAsString(const Value: string);
@@ -3990,7 +4082,12 @@ begin
   end;
 end;
 
+{$IFDEF MSWINDOWS}
+procedure TField.SetEditMask(const Value: TEditMask);
+{$ENDIF}
+{$IFDEF LINUX}
 procedure TField.SetEditMask(const Value: string);
+{$ENDIF}
 begin
   FEditMask := Value;
   PropertyChanged(False);
@@ -4198,8 +4295,13 @@ end;
 
 class procedure TStringField.CheckTypeSize(Value: Integer);
 begin
-  if (Value < 0) or (Value > dsMaxStringSize) then
+  if Value < 0 then
     DatabaseError(SInvalidFieldSize);
+end;
+
+function TStringField.GetAsBCD: TBcd;
+begin
+  Result := StrToBcd(GetAsString);
 end;
 
 function TStringField.GetAsBoolean: Boolean;
@@ -4223,6 +4325,11 @@ end;
 function TStringField.GetAsInteger: Longint;
 begin
   Result := StrToInt(GetAsString);
+end;
+
+function TStringField.GetAsSQLTimeStamp: TSQLTimeStamp;
+begin
+  Result := StrToSQLTimeStamp(GetAsString);
 end;
 
 function TStringField.GetAsString: string;
@@ -4256,15 +4363,33 @@ end;
 
 function TStringField.GetValue(var Value: string): Boolean;
 var
+  Temp: String;
+  pBuff: PChar;
   Buffer: array[0..dsMaxStringSize] of Char;
 begin
-  Result := GetData(@Buffer);
+  if DataSize > dsMaxStringSize then
+  begin
+    SetLength(Temp, DataSize);
+    pBuff := pChar(Temp);
+    Result := GetData(pBuff);
+    if Result then
+      SetLength(Temp, strlen(PBuff));
+  end else
+    Result := GetData(@Buffer);
   if Result then
   begin
-    Value := Buffer;
+    if DataSize > dsMaxStringSize then
+      Value := Temp
+    else
+      Value := Buffer;
     if Transliterate and (Value <> '') then
       DataSet.Translate(PChar(Value), PChar(Value), False);
   end;
+end;
+
+procedure TStringField.SetAsBCD(const Value: TBcd);
+begin
+  SetAsString(BcdToStr(Value));
 end;
 
 procedure TStringField.SetAsBoolean(Value: Boolean);
@@ -4289,14 +4414,35 @@ begin
   SetAsString(IntToStr(Value));
 end;
 
+procedure TStringField.SetAsSQLTimeStamp(const Value: TSQLTimeStamp);
+var
+  SSqlTs: String;
+begin
+  SSQLTs := SQLTimeStampToStr('', Value);
+  SetAsString(SSqlTs);
+end;
+
 procedure TStringField.SetAsString(const Value: string);
 var
+  pBuff: PChar;
+  Temp: String;
   Buffer: array[0..dsMaxStringSize] of Char;
 begin
-  StrLCopy(Buffer, PChar(Value), Size);
-  if Transliterate then
-    DataSet.Translate(Buffer, Buffer, True);
-  SetData(@Buffer);
+  if DataSize > dsMaxStringSize then
+  begin
+    SetLength(Temp, strlen(PChar(Value))+1);
+    pBuff := PChar(Temp);
+    StrLCopy(pBuff, PChar(Value), strlen(PChar(Value)));
+    if Transliterate then
+      DataSet.Translate(pBuff, pBuff, True);
+    SetData(pBuff);
+  end else 
+  begin
+    StrLCopy(Buffer, PChar(Value), Size);
+    if Transliterate then
+      DataSet.Translate(Buffer, Buffer, True);
+    SetData(@Buffer);
+  end;
 end;
 
 procedure TStringField.SetVarValue(const Value: Variant);
@@ -4316,6 +4462,11 @@ constructor TWideStringField.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   SetDataType(ftWideString);
+end;
+
+procedure TWideStringField.CopyData(Source, Dest: Pointer);
+begin
+  WideString(Dest^) := WideString(Source^);
 end;
 
 function TWideStringField.GetAsString: string;
@@ -4580,8 +4731,7 @@ begin
   if IsNull then
     Result := Null else
   begin
-    TVarData(Result).VType := VT_DECIMAL;
-    Decimal(Result).lo64 := GetAsLargeInt;
+    Result := GetAsLargeInt;
   end;
 end;
 
@@ -5027,6 +5177,117 @@ begin
   SetAsDateTime(VarToDateTime(Value));
 end;
 
+{ TSQLTimeStampField }
+
+constructor TSQLTimeStampField.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  SetDataType(ftTimeStamp);
+end;
+
+procedure TSQLTimeStampField.CopyData(Source, Dest: Pointer);
+begin
+  TSQLTimeStamp(Dest^) := TSQLTimeStamp(Source^);
+end;
+
+function TSQLTimeStampField.GetAsDateTime: TDateTime;
+var
+  ts: TSQLTimeStamp;
+begin
+  if not GetValue(ts) then 
+    Result := 0 
+  else
+    Result := SQLTimeStampToDateTime(ts);
+end;
+
+function TSQLTimeStampField.GetAsSQLTimeStamp: TSQLTimeStamp;
+begin
+  if not GetValue(Result) then Result := NullSQLTimeStamp;
+end;
+
+function TSQLTimeStampField.GetAsString: string;
+begin
+  GetText(Result, False);
+end;
+
+function TSQLTimeStampField.GetAsVariant: Variant;
+var
+  D: TSQLTimeStamp;
+begin
+  if GetValue(D) then
+    Result := VarSQLTimeStampCreate(TSQLTimeStamp(D))
+  else Result := Null;
+end;
+
+function TSQLTimeStampField.GetDataSize: Integer;
+begin
+  Result := SizeOf(TSQLTimeStamp);
+end;
+
+function TSQLTimeStampField.GetDefaultWidth: Integer;
+begin
+  Result := DataSize * 2 + 2;
+end;
+
+procedure TSQLTimeStampField.GetText(var Text: string; DisplayText: Boolean);
+var
+  F: string;
+  D: TSQLTimeStamp;
+begin
+  if GetValue(D) then
+  begin
+    if DisplayText and (FDisplayFormat <> '') then
+      F := FDisplayFormat
+    else
+     F := '';
+    Text := SQLTimeStampToStr(F, D);
+  end else
+    Text := '';
+end;
+
+function TSQLTimeStampField.GetValue(var Value: TSQLTimeStamp): Boolean;
+begin
+  Result := GetData(@Value, False);
+end;
+
+procedure TSQLTimeStampField.SetAsSQLTimeStamp(const Value: TSQLTimeStamp);
+begin
+  SetData(@Value, False);
+end;
+
+procedure TSQLTimeStampField.SetAsDateTime(Value: TDateTime);
+var
+  ts: TSQLTimeStamp;
+begin
+  if Value = 0 then Clear else
+  begin
+    ts := DateTimeToSQLTimeStamp(Value);
+    SetAsSQLTimeStamp(ts);
+  end;
+end;
+
+procedure TSQLTimeStampField.SetAsString(const Value: string);
+begin
+  if Value = '' then Clear else
+  SetAsSQLTimeStamp(StrToSQLTimeStamp(Value));
+end;
+
+procedure TSQLTimeStampField.SetDisplayFormat(const Value: string);
+begin
+  if FDisplayFormat <> Value then
+  begin
+    FDisplayFormat := Value;
+    PropertyChanged(False);
+  end;
+end;
+
+procedure TSQLTimeStampField.SetVarValue(const Value: Variant);
+begin
+  if VarIsClear(Value) then
+    DatabaseError(SUnassignedVar);
+  SetAsSqlTimeStamp(VarToSqlTimeStamp(Value));
+end;
+
 { TDateField }
 
 constructor TDateField.Create(AOwner: TComponent);
@@ -5198,6 +5459,16 @@ begin
   if Value > 32 then DatabaseError(SInvalidFieldSize);
 end;
 
+function TBCDField.GetAsBCD: TBcd;
+var
+  Cur: System.Currency;
+begin
+  if not GetValue(Cur) then
+    Result := NullBcd
+  else
+    CurrToBcd(Cur, Result);
+end;
+
 function TBCDField.GetAsCurrency: Currency;
 begin
   if not GetValue(Result) then Result := 0;
@@ -5279,6 +5550,15 @@ begin
   Result := GetData(@Value, False);
 end;
 
+
+procedure TBCDField.SetAsBCD(const Value: TBcd);
+var
+  C: System.Currency;
+begin
+  BcdToCurr(Value,C);
+  SetAsCurrency(C);
+end;
+
 procedure TBCDField.SetAsCurrency(Value: Currency);
 begin
   if FCheckRange and ((Value < FMinValue) or (Value > FMaxValue)) then
@@ -5357,56 +5637,285 @@ begin
   System.Currency(Dest^) := System.Currency(Source^);
 end;
 
+{ TFMTBCDField }
+
+constructor TFMTBCDField.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  SetDataType(ftFMTBCD);
+  Size := 8;
+  ValidChars := [DecimalSeparator, '+', '-', '0'..'9'];
+  FMinValue := '';
+  FMaxValue := '';
+end;
+
+class procedure TFMTBCDField.CheckTypeSize(Value: Integer);
+begin
+  { For BCD fields, the scale is stored in the size property.
+    We allow values up to 32 here even though the currency data type
+    only supports up to 4 digits of scale.  The developer can check
+    for sizes > 4 to determine if the value from the server may have
+    been rounded }
+  if Value > MAXFMTBcdFractionSize then DatabaseError(SInvalidFieldSize);
+end;
+
+function TFMTBCDField.GetAsBCD: TBcd;
+begin
+  if not GetValue(Result) then
+    Result := NullBcd;
+end;
+
+function TFMTBCDField.GetAsCurrency: Currency;
+begin
+  Result := GetAsFloat;
+end;
+
+function TFMTBCDField.GetAsFloat: Double;
+var
+  bcd: TBcd;
+begin
+  if not GetValue(bcd) then
+    Result := 0
+  else
+    Result := BcdToDouble(bcd);  
+end;
+
+function TFMTBCDField.GetAsInteger: Longint;
+begin
+  Result := Longint(Round(GetAsFloat));
+end;
+
+function TFMTBCDField.GetAsString: string;
+var
+  bcd: TBcd;
+begin
+  if GetValue(bcd) then Result := BcdToStr(bcd) else Result := '';
+end;
+
+function TFMTBCDField.GetAsVariant: Variant;
+var
+  Bcd: TBcd;
+begin
+  if GetValue(Bcd) then Result := VarFMTBcdCreate(Bcd) else Result := Null;
+end;
+
+function TFMTBCDField.GetDataSize: Integer;
+begin
+  Result := SizeOf(TBcd);
+end;
+
+function TFMTBCDField.GetDefaultWidth: Integer;
+begin
+  if FPrecision > 0 then
+    Result := FPrecision + 1 else
+    Result := inherited GetDefaultWidth;
+end;
+
+procedure TFMTBCDField.GetText(var Text: string; DisplayText: Boolean);
+var
+  Format: TFloatFormat;
+  Digits: Integer;
+  FmtStr: string;
+  Bcd: TBcd;
+begin
+  try
+    if GetData(@Bcd, False) then
+    begin
+      if DisplayText or (EditFormat = '') then
+        FmtStr := DisplayFormat else
+        FmtStr := EditFormat;
+      if FmtStr = '' then
+      begin
+        if FCurrency then
+        begin
+          if DisplayText then Format := ffCurrency else Format := ffFixed;
+          Digits := CurrencyDecimals;
+        end
+        else begin
+          Format := ffGeneral;
+          Digits := 0;
+        end;
+        Text := BcdToStrF(Bcd, Format, FPrecision, Digits);
+      end else
+        Text := FormatBcd(FmtStr, Bcd);
+    end else
+      Text := '';
+  except
+    on E: Exception do
+      Text := SBCDOverflow;
+  end;
+end;
+
+function TFMTBCDField.GetValue(var Value: TBcd): Boolean;
+begin
+  Result := GetData(@Value, False);
+end;
+
+
+procedure TFMTBCDField.BcdRangeError(Value: Variant; Max, Min: String);
+begin
+  DataBaseErrorFmt(sBcdFieldRangeError, [Value, Self.FieldName,
+                   Max, Min]);
+end;
+
+procedure TFMTBCDField.SetAsBCD(const Value: TBcd);
+var
+  V, VMax, VMin: Variant;
+begin
+  V := VarFMTBcdCreate(Value);
+  if FCheckRange then
+  begin
+    VMax := VarFMTBcdCreate(FMaxValue, Self.Precision, Self.Size);
+    VMin := VarFMTBcdCreate(FMinValue, Self.Precision, Self.Size);
+    if (V < VMin) or (V > VMax) then
+      BcdRangeError(V, VMin, VMax);
+  end;
+  SetData(@Value,False);
+end;
+
+procedure TFMTBCDField.SetAsCurrency(Value: Currency);
+var
+  VMax, VMin: Variant;
+  FValue: TBcd;
+begin
+  CurrToBcd(Value, FValue, MaxBcdPrecision, MaxBcdScale);
+  if FCheckRange then
+  begin
+    VMax := VarFMTBcdCreate(FMaxValue, Self.Precision, Self.Size);
+    VMin := VarFMTBcdCreate(FMinValue, Self.Precision, Self.Size);
+    if (Value < VMin) or (Value > VMax) then
+      BcdRangeError(Value, VMin, VMax);
+  end;
+  SetData(@FValue, False);
+end;
+
+procedure TFMTBCDField.SetAsFloat(Value: Double);
+begin
+  SetAsCurrency(Value);
+end;
+
+procedure TFMTBCDField.SetAsInteger(Value: Longint);
+begin
+  SetAsCurrency(Value);
+end;
+
+procedure TFMTBCDField.SetAsString(const Value: string);
+var
+  Bcd: TBcd;
+begin
+  if Value = '' then Clear else
+  begin
+    Bcd := StrToBcd(Value);
+    SetAsBCD(Bcd);
+  end;
+end;
+
+procedure TFMTBCDField.SetCurrency(Value: Boolean);
+begin
+  if FCurrency <> Value then
+  begin
+    FCurrency := Value;
+    PropertyChanged(False);
+  end;
+end;
+
+procedure TFMTBCDField.SetMaxValue(Value: String);
+begin
+  FMaxValue := Value;
+  UpdateCheckRange;
+end;
+
+procedure TFMTBCDField.SetMinValue(Value: String);
+begin
+  FMinValue := Value;
+  UpdateCheckRange;
+end;
+
+procedure TFMTBCDField.SetPrecision(Value: Integer);
+begin
+  if (DataSet <> nil) then
+    DataSet.CheckInactive;
+  if Value < 0 then Value := 0;
+  if Value > MaxFMTBcdFractionSize then Value := MaxFMTBcdFractionSize;
+  if FPrecision <> Value then
+  begin
+    FPrecision := Value;
+    PropertyChanged(False);
+  end;
+end;
+
+procedure TFMTBCDField.SetVarValue(const Value: Variant);
+begin
+  SetAsBCD(VarToBcd(Value));
+end;
+
+procedure TFMTBCDField.UpdateCheckRange;
+begin
+  FCheckRange := (FMinValue <> '') or (FMaxValue <> '');
+end;
+
+procedure TFMTBCDField.CopyData(Source, Dest: Pointer);
+begin
+  TBcd(Dest^) := TBcd(Source^);
+end;
+
 { TBlobField }
 
 constructor TBlobField.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   SetDataType(ftBlob);
+  FGraphicHeader := True;
 end;
 
 procedure TBlobField.Assign(Source: TPersistent);
+var
+  StreamPersist: IStreamPersist;
 begin
   if Source is TBlobField then
   begin
     LoadFromBlob(TBlobField(Source));
     Exit;
   end;
+
   if Source is TStrings then
   begin
     LoadFromStrings(TStrings(Source));
     Exit;
   end;
-  if Source is TBitmap then
+
+  if SupportsStreamPersist(Source, StreamPersist) then
   begin
-    LoadFromBitmap(TBitmap(Source));
+    LoadFromStreamPersist(StreamPersist);
     Exit;
   end;
-  if (Source is TPicture) and (TPicture(Source).Graphic is TBitmap) then
-  begin
-    LoadFromBitmap(TBitmap(TPicture(Source).Graphic));
-    Exit;
-  end;
+
   inherited Assign(Source);
 end;
 
+function TBlobField.SupportsStreamPersist(const Persistent: TPersistent;
+  var StreamPersist: IStreamPersist): Boolean;
+begin
+   Result := (Persistent is TInterfacedPersistent) and
+     (TInterfacedPersistent(Persistent).QueryInterface(IStreamPersist, StreamPersist) = S_OK);
+end;
+
 procedure TBlobField.AssignTo(Dest: TPersistent);
+var
+  StreamPersist: IStreamPersist;
 begin
   if Dest is TStrings then
   begin
     SaveToStrings(TStrings(Dest));
     Exit;
   end;
-  if Dest is TBitmap then
+
+  if SupportsStreamPersist(Dest, StreamPersist) then
   begin
-    SaveToBitmap(TBitmap(Dest));
+    SaveToStreamPersist(StreamPersist);
     Exit;
   end;
-  if Dest is TPicture then
-  begin
-    SaveToBitmap(TPicture(Dest).Bitmap);
-    Exit;
-  end;
+
   inherited AssignTo(Dest);
 end;
 
@@ -5493,30 +6002,6 @@ begin
   Result := True;
 end;
 
-procedure TBlobField.LoadFromBitmap(Bitmap: TBitmap);
-var
-  BlobStream: TStream;
-  Header: TGraphicHeader;
-begin
-  BlobStream := DataSet.CreateBlobStream(Self, bmWrite);
-  try
-    if (DataType = ftGraphic) or (DataType = ftTypedBinary) then
-    begin
-      Header.Count := 1;
-      Header.HType := $0100;
-      Header.Size := 0;
-      BlobStream.Write(Header, SizeOf(Header));
-      Bitmap.SaveToStream(BlobStream);
-      Header.Size := BlobStream.Position - SizeOf(Header);
-      BlobStream.Position := 0;
-      BlobStream.Write(Header, SizeOf(Header));
-    end else
-      Bitmap.SaveToStream(BlobStream);
-  finally
-    BlobStream.Free;
-  end;
-end;
-
 procedure TBlobField.LoadFromBlob(Blob: TBlobField);
 var
   BlobStream: TStream;
@@ -5563,23 +6048,25 @@ begin
   end;
 end;
 
-procedure TBlobField.SaveToBitmap(Bitmap: TBitmap);
+procedure TBlobField.LoadFromStreamPersist(StreamPersist: IStreamPersist);
 var
-  BlobStream: TStream;
-  Size: Longint;
   Header: TGraphicHeader;
+  BlobStream: TStream;
 begin
-  BlobStream := DataSet.CreateBlobStream(Self, bmRead);
+  BlobStream := DataSet.CreateBlobStream(Self, bmWrite);
   try
-    Size := BlobStream.Size;
-    if Size >= SizeOf(TGraphicHeader) then
+    if GraphicHeader and (DataType = ftGraphic) or (DataType = ftTypedBinary) then
     begin
-      BlobStream.Read(Header, SizeOf(Header));
-      if (Header.Count <> 1) or (Header.HType <> $0100) or
-        (Header.Size <> Size - SizeOf(Header)) then
-        BlobStream.Position := 0;
-    end;
-    Bitmap.LoadFromStream(BlobStream);
+      Header.Count := 1;
+      Header.HType := $0100;
+      Header.Size := 0;
+      BlobStream.Write(Header, SizeOf(Header));
+      StreamPersist.SaveToStream(BlobStream);
+      Header.Size := BlobStream.Position - SizeOf(Header);
+      BlobStream.Position := 0;
+      BlobStream.Write(Header, SizeOf(Header));
+    end else
+      StreamPersist.SaveToStream(BlobStream);
   finally
     BlobStream.Free;
   end;
@@ -5616,6 +6103,28 @@ begin
   BlobStream := DataSet.CreateBlobStream(Self, bmRead);
   try
     Strings.LoadFromStream(BlobStream);
+  finally
+    BlobStream.Free;
+  end;
+end;
+
+procedure TBlobField.SaveToStreamPersist(StreamPersist: IStreamPersist);
+var
+  BlobStream: TStream;
+  Size: Longint;
+  Header: TGraphicHeader;
+begin
+  BlobStream := DataSet.CreateBlobStream(Self, bmRead);
+  try
+    Size := BlobStream.Size;
+    if Size >= SizeOf(TGraphicHeader) then
+    begin
+      BlobStream.Read(Header, SizeOf(Header));
+      if (Header.Count <> 1) or (Header.HType <> $0100) or
+        (Header.Size <> Size - SizeOf(Header)) then
+        BlobStream.Position := 0;
+    end;
+    StreamPersist.LoadFromStream(BlobStream);
   finally
     BlobStream.Free;
   end;
@@ -6087,6 +6596,11 @@ begin
   { No validation }
 end;
 
+function TVariantField.GetAsBCD: TBcd;
+begin
+  Result := VarToBcd(GetAsVariant);
+end;
+
 function TVariantField.GetAsBoolean: Boolean;
 begin
   Result := GetAsVariant;
@@ -6095,6 +6609,11 @@ end;
 function TVariantField.GetAsDateTime: TDateTime;
 begin
   Result := GetAsVariant;
+end;
+
+function TVariantField.GetAsSqlTimeStamp: TSqlTimeStamp;
+begin
+  Result := VarToSQLTimeStamp(GetAsVariant);
 end;
 
 function TVariantField.GetAsFloat: Double;
@@ -6118,6 +6637,11 @@ begin
     Result := Null;
 end;
 
+procedure TVariantField.SetAsBCD(const Value: TBcd);
+begin
+  SetVarValue(VarFMTBcdCreate(Value));
+end;
+
 procedure TVariantField.SetAsBoolean(Value: Boolean);
 begin
   SetVarValue(Value);
@@ -6126,6 +6650,11 @@ end;
 procedure TVariantField.SetAsDateTime(Value: TDateTime);
 begin
   SetVarValue(Value);
+end;
+
+procedure TVariantField.SetAsSqlTimeStamp(const Value: TSqlTimeStamp);
+begin
+  SetVarValue(VarSqlTimeStampCreate(Value));
 end;
 
 procedure TVariantField.SetAsFloat(Value: Double);
@@ -6643,7 +7172,7 @@ var
 begin
   Min := DataSet.FActiveRecord - FBufferCount + 1;
   if Min < 0 then Min := 0;
-  Max := DataSet.FBufferCount - FBufferCount;
+  Max := DataSet.FRecordCount - FBufferCount;
   if Max < 0 then Max := 0;
   if Max > DataSet.FActiveRecord then Max := DataSet.FActiveRecord;
   if FFirstRecord < Min then FFirstRecord := Min;
@@ -6951,7 +7480,9 @@ begin
   FDataLinks := TList.Create;
   FEnabled := True;
   FAutoEdit := True;
+{$IFDEF MSWINDOWS}
   RPR;
+{$ENDIF}
 end;
 
 destructor TDataSource.Destroy;
@@ -7403,7 +7934,6 @@ var
   begin
     Len := StrLen(Buffer) + 1;
     TempBuf := AllocMem(Len);
-    Result := '';
     try
       StrCopy(TempBuf, Buffer);
       StripChar;
@@ -7466,6 +7996,11 @@ begin
   inherited Create(Collection);
   ParamType := ptUnknown;
   DataType := ftUnknown;
+{$IFDEF MSWINDOWS}
+  FSize := 0;
+  FPrecision := 0;
+  FNumericScale := 0;
+{$ENDIF}
   FData := Unassigned;
   FBound := False;
   FNull := True;
@@ -7474,14 +8009,14 @@ end;
 
 constructor TParam.Create(AParams: TParams; AParamType: TParamType);
 begin
-  Create(AParams);
-  ParamType := ParamType;
+  Create(AParams);  
+  ParamType := AParamType;
 end;
 
 function TParam.IsEqual(Value: TParam): Boolean;
 begin
   Result := (VarType(FData) = VarType(Value.FData)) and
-    (VarIsEmpty(FData) or (FData = Value.FData)) and
+    (VarIsClear(FData) or (FData = Value.FData)) and
     (Name = Value.Name) and (DataType = Value.DataType) and
     (IsNull = Value.IsNull) and(Bound = Value.Bound) and
     (ParamType = Value.ParamType);
@@ -7503,7 +8038,7 @@ end;
 
 function TParam.GetIsNull: Boolean;
 begin
-  Result := FNull or VarIsNull(FData) or VarIsEmpty(FData);
+  Result := FNull or VarIsNull(FData) or VarIsClear(FData);
 end;
 
 function TParam.GetParamType: TParamType;
@@ -7528,7 +8063,7 @@ const
     varDate, varDate, varDate, varOleStr, varOleStr, varInteger, varOleStr,
     varOleStr, varOleStr, varOleStr, varOleStr, varOleStr, varOleStr, varError,
     varOleStr, varOleStr, varError, varError, varError, varError, varError,
-    varOleStr, varOleStr, varVariant, varUnknown, varDispatch, varOleStr);
+    varOleStr, varOleStr, varVariant, varUnknown, varDispatch, varOleStr, varOleStr,varOleStr);
 var
   vType: Integer;
 begin
@@ -7553,9 +8088,10 @@ begin
   Result := 0;
   case DataType of
     ftUnknown: DatabaseErrorFmt(SUnknownFieldType, [Name], DataSet);
-    ftString, ftFixedChar, ftMemo: Result := Length(VarToStr(FData)) + 1;
+    ftString, ftFixedChar, ftMemo, ftADT: Result := Length(VarToStr(FData)) + 1;
     ftBoolean: Result := SizeOf(WordBool);
-    ftBCD: Result := SizeOf(TBcd);
+    ftBCD, ftFMTBcd: Result := SizeOf(TBcd);
+    ftTimeStamp: Result := SizeOf( TSqlTimeStamp );
     ftDateTime,
     ftCurrency,
     ftFloat: Result := SizeOf(Double);
@@ -7570,7 +8106,7 @@ begin
         Result := VarArrayHighBound(FData, 1) + 1 else
         Result := 0;
     ftBlob, ftGraphic..ftTypedBinary,ftOraClob,ftOraBlob: Result := Length(VarToStr(FData));
-    ftADT, ftArray, ftDataSet,
+    ftArray, ftDataSet,
     ftReference, ftCursor: Result := 0;
   else
     DatabaseErrorFmt(SBadFieldType, [Name], DataSet);
@@ -7583,7 +8119,7 @@ var
 begin
   case DataType of
     ftUnknown: DatabaseErrorFmt(SUnknownFieldType, [Name], DataSet);
-    ftString, ftFixedChar, ftMemo:
+    ftString, ftFixedChar, ftMemo, ftAdt:
       StrMove(Buffer, PChar(GetAsString), Length(GetAsString) + 1);
     ftSmallint: SmallInt(Buffer^) := GetAsInteger;
     ftWord: Word(Buffer^) := GetAsInteger;
@@ -7593,8 +8129,10 @@ begin
     ftDate: Integer(Buffer^) := DateTimeToTimeStamp(AsDateTime).Date;
     ftDateTime:  Double(Buffer^) := TimeStampToMSecs(DateTimeToTimeStamp(AsDateTime));
     ftBCD: CurrToBCD(AsBCD, TBcd(Buffer^));
+    ftFMTBCD: TBcd(Buffer^) := AsFMTBcd;
     ftCurrency,
     ftFloat: Double(Buffer^) := GetAsFloat;
+    ftTimeStamp:  TSQLTimeStamp(Buffer^) := AsSQLTimeStamp;
     ftBoolean: Word(Buffer^) := Ord(GetAsBoolean);
     ftBytes, ftVarBytes:
     begin
@@ -7610,7 +8148,7 @@ begin
     end;
     ftBlob, ftGraphic..ftTypedBinary,ftOraBlob,ftOraClob:
       Move(PChar(GetAsString)^, Buffer^, Length(GetAsString));
-    ftADT, ftArray, ftDataSet,
+    ftArray, ftDataSet,
     ftReference, ftCursor: {Nothing};
   else
     DatabaseErrorFmt(SBadFieldType, [Name], DataSet);
@@ -7633,7 +8171,7 @@ var
 begin
   case DataType of
     ftUnknown: DatabaseErrorFmt(SUnknownFieldType, [Name], DataSet);
-    ftString, ftFixedChar: AsString := StrPas(Buffer);
+    ftString, ftFixedChar: Self.Value := StrPas(Buffer);
     ftWord: AsWord := Word(Buffer^);
     ftSmallint: AsSmallInt := Smallint(Buffer^);
     ftInteger, ftAutoInc: AsInteger := Integer(Buffer^);
@@ -7655,15 +8193,21 @@ begin
         TimeStamp.Date := Integer(Buffer^);
         AsDateTime := TimeStampToDateTime(MSecsToTimeStamp(Double(Buffer^)));
       end;
+    ftTimeStamp:
+      AsSqlTimeStamp := TSqlTimeStamp(Buffer^);
     ftBCD:
       if BCDToCurr(TBcd(Buffer^), Value) then
         AsBCD := Value else
         AsBCD := 0;
+    ftFMTBcd:
+      AsFMTBcd := TBcd(Buffer^);
     ftCurrency: AsCurrency := Double(Buffer^);
     ftFloat: AsFloat := Double(Buffer^);
     ftBoolean: AsBoolean := WordBool(Buffer^);
     ftMemo: AsMemo := StrPas(Buffer);
     ftCursor: FData := 0;
+    ftBlob, ftGraphic..ftTypedBinary,ftOraBlob,ftOraClob:
+      SetBlobData(Buffer, StrLen(PChar(Buffer)));
   else
     DatabaseErrorFmt(SBadFieldType, [Name], DataSet);
   end;
@@ -7676,13 +8220,13 @@ end;
 
 procedure TParam.Assign(Source: TPersistent);
 
-  procedure LoadFromBitmap(Bitmap: TBitmap);
+  procedure LoadFromStreamPersist(const StreamPersist: IStreamPersist);
   var
     MS: TMemoryStream;
   begin
     MS := TMemoryStream.Create;
     try
-      Bitmap.SaveToStream(MS);
+      StreamPersist.SaveToStream(MS);
       LoadFromStream(MS, ftGraphic);
     finally
       MS.Free;
@@ -7694,6 +8238,8 @@ procedure TParam.Assign(Source: TPersistent);
     AsMemo := Source.Text;
   end;
 
+var
+  StreamPersist: IStreamPersist;
 begin
   if Source is TParam then
     AssignParam(TParam(Source))
@@ -7701,10 +8247,8 @@ begin
     AssignField(TField(Source))
   else if Source is TStrings then
     LoadFromStrings(TStrings(Source))
-  else if Source is TBitmap then
-    LoadFromBitmap(TBitmap(Source))
-  else if (Source is TPicture) and (TPicture(Source).Graphic is TBitmap) then
-    LoadFromBitmap(TBitmap(TPicture(Source).Graphic))
+  else if Supports(Source, IStreamPersist, StreamPersist) then
+    LoadFromStreamPersist(StreamPersist)
   else
     inherited Assign(Source);
 end;
@@ -7727,6 +8271,11 @@ begin
     FBound := Param.Bound;
     Name := Param.Name;
     if ParamType = ptUnknown then ParamType := Param.ParamType;
+{$IFDEF MSWINDOWS}
+    Size := Param.Size;
+    Precision := Param.Precision;
+    NumericScale := Param.NumericScale;
+{$ENDIF}
   end;
 end;
 
@@ -7743,6 +8292,11 @@ begin
     if VarIsNull(Value) then
       Clear else
       Self.Value := Value;
+{$IFDEF MSWINDOWS}
+    Size := Field.DataSize;
+    if Field.DataType in [ftBcd, ftFMTBcd] then
+      NumericScale := Field.Size;
+{$ENDIF}
     FBound := True;
   end;
 end;
@@ -7828,6 +8382,32 @@ begin
     Result := FData;
 end;
 
+procedure TParam.SetAsFMTBCD(const Value: TBcd);
+begin
+  FDataType := ftFMTBCD;
+  Self.Value := VARFMTBcdCreate(Value);
+end;
+
+function TParam.GetAsFMTBCD: TBcd;
+begin
+  if IsNull then
+    Result := NullBcd else
+    Result := VarToBcd(FData);
+end;
+
+procedure TParam.SetAsSQLTimeStamp(const Value: TSQLTimeStamp);
+begin
+  FDataType := ftTimeStamp;
+  Self.Value := VarSQLTimeStampCreate(Value);
+end;
+
+function TParam.GetAsSQLTimeStamp: TSQLTimeStamp;
+begin
+  if IsNull then
+    Result := NullSqlTimeStamp else
+    Result := VarToSQLTimeStamp(FData);
+end;
+
 procedure TParam.SetAsInteger(Value: Longint);
 begin
   FDataType := ftInteger;
@@ -7855,7 +8435,7 @@ end;
 
 procedure TParam.SetAsString(const Value: string);
 begin
-  FDataType := ftString;
+  if FDataType <> ftFixedChar then FDataType := ftString;
   Self.Value := Value;
 end;
 
@@ -7901,19 +8481,25 @@ procedure TParam.SetAsVariant(const Value: Variant);
 begin
   if ParamRef = Self then
   begin
-    FBound := not VarIsEmpty(Value);
-    FNull := VarIsEmpty(Value) or VarIsNull(Value);
+    FBound := not VarIsClear(Value);
+    FNull := VarIsClear(Value) or VarIsNull(Value);
     if FDataType = ftUnknown then
       case VarType(Value) of
-        varSmallint, varByte: FDataType := ftSmallInt;
-        varInteger: FDataType := ftInteger;
+        varSmallint, varShortInt, varByte: FDataType := ftSmallInt;
+        varWord, varInteger: FDataType := ftInteger;
         varCurrency: FDataType := ftBCD;
-        varSingle, varDouble: FDataType := ftFloat;
+        varLongWord, varSingle, varDouble: FDataType := ftFloat;
         varDate: FDataType := ftDateTime;
         varBoolean: FDataType := ftBoolean;
-        varString, varOleStr: FDataType := ftString;
+        varString, varOleStr: if FDataType <> ftFixedChar then FDataType := ftString;
+        varInt64: FDataType := ftLargeInt;
       else
-        FDataType := ftUnknown;
+        if VarType(Value) = varSQLTimeStamp then
+          FDataType := ftTimeStamp
+        else if VarType(Value) = varFMTBcd then
+          FDataType := ftFMTBcd
+        else 
+          FDataType := ftUnknown;
       end;
     FData := Value;
   end else
@@ -7977,6 +8563,7 @@ end;
 constructor TDataSet.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  FIsUniDirectional := False;
   FFieldDefs := TFieldDefs.Create(Self);
   FFieldDefList := TFieldDefList.Create(Self);
   FFields := TFields.Create(Self);
@@ -7989,7 +8576,9 @@ begin
   FAggFields.ValidFieldKinds := [fkAggregate];
   FFieldNoOfs := 1;
   ClearBuffers;
+{$IFDEF MSWINDOWS}
   RPR;
+{$ENDIF}
 end;
 
 destructor TDataSet.Destroy;
@@ -7997,19 +8586,18 @@ begin
   Destroying;
   Close;
   SetDataSetField(nil);
-  FDesigner.Free;
+  FreeAndNil(FDesigner);
   if FDataSources <> nil then
     while FDataSources.Count > 0 do
       RemoveDataSource(FDataSources.Last);
-  FDataSources.Free;
-  FFields.Free;
-  FAggFields.Free;
-  FAggFields := nil;
-  FFieldList.Free;
-  FFieldDefList.Free;
-  FFieldDefs.Free;
-  FConstraints.Free;
-  FNestedDataSets.Free;
+  FreeAndNil(FDataSources);
+  FreeAndNil(FFields);
+  FreeAndNil(FAggFields);
+  FreeAndNil(FFieldList);
+  FreeAndNil(FFieldDefList);
+  FreeAndNil(FFieldDefs);
+  FreeAndNil(FConstraints);
+  FreeAndNil(FNestedDataSets);
   inherited Destroy;
 end;
 
@@ -8183,6 +8771,11 @@ begin
   FConstraints.Assign(Value);
 end;
 
+procedure TDataSet.SetUniDirectional(const Value: Boolean);
+begin
+  FIsUnidirectional := Value;
+end;
+
 function TDataSet.SetTempState(const Value: TDataSetState): TDataSetState;
 begin
   Result := FState;
@@ -8206,6 +8799,11 @@ end;
 procedure TDataSet.Close;
 begin
   Active := False;
+end;
+
+procedure TDataSet.CheckBiDirectional;
+begin
+  if IsUniDirectional then DatabaseError(SDataSetUniDirectional, Self);
 end;
 
 procedure TDataSet.CheckInactive;
@@ -8379,7 +8977,9 @@ procedure TDataSet.InitFieldDefsFromFields;
         if ReadOnly then
           FieldDef.Attributes := FieldDef.Attributes + [faReadonly];
         if (DataType = ftBCD) and (F is TBCDField) then
-          FieldDef.Precision := TBCDField(F).Precision;
+          FieldDef.Precision := TBCDField(F).Precision
+        else if (DataType = ftFMTBcd) and (F is TFMTBCDField) then
+          FieldDef.Precision := TFMTBCDField(F).Precision;
         if F is TObjectField then
           CreateFieldDefs(TObjectField(F).Fields, FieldDef.ChildDefs);
       end;
@@ -8428,6 +9028,26 @@ end;
 procedure TDataSet.CreateFields;
 var
   I: Integer;
+
+  procedure SetKeyFields;
+  var
+    Pos, j: Integer;
+    KeyFields, FieldName: string;
+  begin
+    KeyFields := PSGetKeyFields;
+    Pos := 1;
+    while Pos <= Length(KeyFields) do
+    begin
+      FieldName := ExtractFieldName(KeyFields, Pos);
+      for j := 0 to FieldCount - 1 do
+        if AnsiCompareText(FieldName, Fields[j].FieldName) = 0 then
+        begin
+          Fields[j].ProviderFlags := Fields[j].ProviderFlags + [pfInKey];
+          break;
+        end;
+    end;
+  end;
+
 begin
   if ObjectView then
   begin
@@ -8444,6 +9064,7 @@ begin
           not ((faHiddenCol in Attributes) and not FIeldDefs.HiddenFields) then
           CreateField(Self, nil, FieldDefList.Strings[I]);
   end;
+  SetKeyFields;
 end;
 
 procedure TDataSet.DestroyFields;
@@ -8460,7 +9081,7 @@ const
     ftFloat, ftBCD, ftDateTime, ftDateTime, ftDateTime, ftBytes, ftVarBytes,
     ftInteger, ftBlob, ftBlob, ftBlob, ftBlob, ftBlob, ftBlob, ftBlob, ftUnknown,
     ftString, ftUnknown, ftLargeInt, ftADT, ftArray, ftReference, ftDataSet,
-    ftBlob, ftBlob, ftVariant, ftInterface, ftInterface, ftString);
+    ftBlob, ftBlob, ftVariant, ftInterface, ftInterface, ftString, ftTimeStamp, ftFMTBcd);
 
   CheckTypeSizes = [ftBytes, ftVarBytes, ftBCD, ftReference];
 
@@ -8479,7 +9100,8 @@ end;
 procedure TDataSet.BindFields(Binding: Boolean);
 const
   CalcFieldTypes = [ftString, ftSmallint, ftInteger, ftWord, ftBoolean,
-    ftFloat, ftCurrency, ftBCD, ftDate, ftTime, ftDateTime, ftVariant, ftLargeInt];
+    ftFloat, ftCurrency, ftBCD, ftFMTBcd, ftDate, ftTime, ftDateTime,
+    ftTimeStamp, ftVariant, ftLargeInt, ftWideString];
 
   procedure DoBindFields(Fields: TFields);
   var
@@ -8582,10 +9204,22 @@ end;
 function TDataSet.GetFieldData(Field: TField; Buffer: Pointer;
   NativeFormat: Boolean): Boolean;
 var
+  Temp: String;
+  pBuff: PChar;
   NativeBuf: array[0..dsMaxStringSize] of Char;
 begin
   if NativeFormat then
     Result := GetFieldData(Field, Buffer) else
+  if Field.DataSize > dsMaxStringSize then
+  begin
+    SetLength(Temp, Field.DataSize);
+    pBuff := pChar(Temp);
+    Result := GetFieldData(Field, pBuff);
+    if Field.DataType = ftString then
+      SetLength(Temp, strlen(PChar(pBuff)));
+    if Result then
+      DataConvert(Field, pBuff, Buffer, False);
+  end else
   begin
     Result := GetFieldData(Field, @NativeBuf);
     if Result then
@@ -8596,16 +9230,29 @@ end;
 procedure TDataSet.SetFieldData(Field: TField; Buffer: Pointer;
   NativeFormat: Boolean);
 var
+  Temp: String;
+  pBuff: PChar;
   NativeBuf: array[0..dsMaxStringSize] of Char;
 begin
   if NativeFormat then
     SetFieldData(Field, Buffer)
-  else
+  else if Field.DataSize > dsMaxStringSize then
+  begin
+    SetLength(Temp,Field.DataSize);
+    pBuff := PChar(Temp);
+    if Buffer <> nil then
+      DataConvert(Field, Buffer, pBuff, True);
+    SetFieldData(Field, pBuff);
+  end else
   begin
     if Buffer <> nil then
       DataConvert(Field, Buffer, @NativeBuf, True);
     SetFieldData(Field, @NativeBuf);
   end;
+end;
+
+procedure TDataSet.SetFieldData(Field: TField; Buffer: Pointer);
+begin
 end;
 
 function TDataSet.GetFieldValue(const FieldName: string): Variant;
@@ -8805,11 +9452,17 @@ begin
       if ToNative then
         TDateTimeRec(Dest^) := DateTimeToNative(Field.DataType, TDateTime(Source^)) else
         TDateTime(Dest^) := NativeToDateTime(Field.DataType, TDateTimeRec(Source^));
+    ftTimeStamp:
+        TSQLTimeStamp(Dest^) := TSQLTimeStamp(Source^);
     ftBCD:
+    begin
       if ToNative then
         CurrToBCD(Currency(Source^), TBcd(Dest^), 32, Field.Size) else
         if not BCDToCurr(TBcd(Source^), Currency(Dest^)) then
           raise EOverFlow.CreateFmt(SFieldOutOfRange, [Field.DisplayName]);
+      end;
+    ftFMTBCD:
+      TBcd(Dest^) := TBcd(Source^);
     ftBytes:
       if ToNative then
         ByteArrayToBuffer(POleVariant(Source)^, Dest, DataSize) else
@@ -8979,6 +9632,15 @@ end;
 
 { Buffer Management }
 
+function TDataSet.AllocRecordBuffer: PChar;
+begin
+  Result := nil;
+end;
+
+procedure TDataSet.FreeRecordBuffer(var Buffer: PChar);
+begin
+end;
+
 procedure TDataSet.SetBufListSize(Value: Integer);
 var
   FBufListSize, I: Integer;
@@ -9103,12 +9765,15 @@ begin
   begin
     if (DataSetField <> nil) and (DataSetField.DataSet.State <> dsInsert) then
       DataSetField.DataSet.UpdateCursorPos;
-    Buffer := FBuffers[Index];
-    case GetBookmarkFlag(Buffer) of
-      bfCurrent,
-      bfInserted: InternalSetToRecord(Buffer);
-      bfBOF: InternalFirst;
-      bfEOF: InternalLast;
+    if not IsUniDirectional then
+    begin
+      Buffer := FBuffers[Index];
+      case GetBookmarkFlag(Buffer) of
+        bfCurrent,
+        bfInserted: InternalSetToRecord(Buffer);
+        bfBOF: InternalFirst;
+        bfEOF: InternalLast;
+      end;
     end;
     FCurrentRecord := Index;
   end;
@@ -9116,7 +9781,10 @@ end;
 
 function TDataSet.GetBuffer(Index: Integer): PChar;
 begin
-  Result := FBuffers[Index];
+  if Index <= High(FBuffers) then
+    Result := FBuffers[Index]
+  else
+    Result := nil;
 end;
 
 function TDataSet.GetNextRecord: Boolean;
@@ -9131,7 +9799,7 @@ begin
       (GetBookmarkFlag(ActiveBuffer) = bfCurrent) then GetMode := gmCurrent;
   end else if (DataSetField <> nil) and (DataSetField.DataSet.State <> dsInsert) then
     DataSetField.DataSet.UpdateCursorPos;
-  Result := (GetRecord(FBuffers[FRecordCount], GetMode, True) = grOK);
+  Result := (GetRecord(GetBuffer(FRecordCount), GetMode, True) = grOK);
   if Result then
   begin
     if FRecordCount = 0 then
@@ -9148,8 +9816,9 @@ end;
 
 function TDataSet.GetPriorRecord: Boolean;
 begin
+  CheckBiDirectional;
   if FRecordCount > 0 then SetCurrentRecord(0);
-  Result := (GetRecord(FBuffers[FRecordCount], gmPrior, True) = grOK);
+  Result := (GetRecord(GetBuffer(FRecordCount), gmPrior, True) = grOK);
   if Result then
   begin
     if FRecordCount = 0 then
@@ -9171,31 +9840,34 @@ procedure TDataSet.Resync(Mode: TResyncMode);
 var
   Count: Integer;
 begin
-  if rmExact in Mode then
+  if not IsUniDirectional then
   begin
-    CursorPosChanged;
-    if GetRecord(FBuffers[FRecordCount], gmCurrent, True) <> grOK then
-      DatabaseError(SRecordNotFound, Self);
-  end else
-    if (GetRecord(FBuffers[FRecordCount], gmCurrent, False) <> grOK) and
-      (GetRecord(FBuffers[FRecordCount], gmNext, False) <> grOK) and
-      (GetRecord(FBuffers[FRecordCount], gmPrior, False) <> grOK) then
+    if rmExact in Mode then
     begin
-      ClearBuffers;
+      CursorPosChanged;
+      if GetRecord(FBuffers[FRecordCount], gmCurrent, True) <> grOK then
+        DatabaseError(SRecordNotFound, Self);
+    end else
+      if (GetRecord(FBuffers[FRecordCount], gmCurrent, False) <> grOK) and
+        (GetRecord(FBuffers[FRecordCount], gmNext, False) <> grOK) and
+        (GetRecord(FBuffers[FRecordCount], gmPrior, False) <> grOK) then
+      begin
+        ClearBuffers;
+        DataEvent(deDataSetChange, 0);
+        Exit;
+      end;
+    if rmCenter in Mode then
+      Count := (FBufferCount - 1) div 2 else
+      Count := FActiveRecord;
+    MoveBuffer(FRecordCount, 0);
+    ActivateBuffers;
+    try
+      while (Count > 0) and GetPriorRecord do Dec(Count);
+      GetNextRecords;
+      GetPriorRecords;
+    finally
       DataEvent(deDataSetChange, 0);
-      Exit;
     end;
-  if rmCenter in Mode then
-    Count := (FBufferCount - 1) div 2 else
-    Count := FActiveRecord;
-  MoveBuffer(FRecordCount, 0);
-  ActivateBuffers;
-  try
-    while (Count > 0) and GetPriorRecord do Dec(Count);
-    GetNextRecords;
-    GetPriorRecords;
-  finally
-    DataEvent(deDataSetChange, 0);
   end;
 end;
 
@@ -9203,7 +9875,7 @@ procedure TDataSet.MoveBuffer(CurIndex, NewIndex: Integer);
 var
   Buffer: PChar;
 begin
-  if CurIndex <> NewIndex then
+  if (not IsUniDirectional) and (CurIndex <> NewIndex) then
   begin
     Buffer := FBuffers[CurIndex];
     if CurIndex < NewIndex then
@@ -9268,7 +9940,8 @@ end;
 function TDataSet.GetPriorRecords: Integer;
 begin
   Result := 0;
-  while (FRecordCount < FBufferCount) and GetPriorRecord do Inc(Result);
+  if not IsUniDirectional then
+    while (FRecordCount < FBufferCount) and GetPriorRecord do Inc(Result);
 end;
 
 procedure TDataSet.InitRecord(Buffer: PChar);
@@ -9304,7 +9977,7 @@ var
   I: Integer;
 begin
   FCalcBuffer := Buffer;
-  if State <> dsInternalCalc then
+  if (State <> dsInternalCalc) and (IsUniDirectional = False) then
   begin
     ClearCalcFields(CalcBuffer);
     for I := 0 to FFields.Count - 1 do
@@ -9330,14 +10003,29 @@ end;
 { Navigation }
 
 procedure TDataSet.First;
+var
+  FReopened: boolean;
 begin
   CheckBrowseMode;
   DoBeforeScroll;
-  ClearBuffers;
+  FReopened := False;
+  if IsUniDirectional then
+  begin
+    if not BOF then
+    begin             // Need to Close and Reopen dataset: (Midas)
+       Active := False;
+       Active := True;
+    end;
+    FReopened := True
+  end else
+    ClearBuffers;
   try
     InternalFirst;
-    GetNextRecord;
-    GetNextRecords;
+    if not FReopened then
+    begin
+      GetNextRecord;
+      GetNextRecords;
+    end;
   finally
     FBOF := True;
     DataEvent(deDataSetChange, 0);
@@ -9345,8 +10033,17 @@ begin
   end;
 end;
 
+procedure TDataSet.InternalFirst;
+begin
+end;
+
+procedure TDataSet.InternalLast;
+begin
+end;
+
 procedure TDataSet.Last;
 begin
+  CheckBiDirectional;
   CheckBrowseMode;
   DoBeforeScroll;
   ClearBuffers;
@@ -9527,7 +10224,6 @@ begin
     dsEdit, dsInsert:
       begin
         DataEvent(deCheckBrowseMode, 0);
-        CheckRequiredFields;
         DoBeforePost;
         CheckOperation(InternalPost, FOnPostError);
         FreeFieldBuffers;
@@ -9716,64 +10412,34 @@ begin
       end;
 end;
 
-{ Bookmarks }
-
-function TDataSet.BookmarkAvailable: Boolean;
+function TDataSet.Translate(Src, Dest: PChar; ToOem: Boolean): Integer;
 begin
-  Result := (State in [dsBrowse, dsEdit, dsInsert]) and not IsEmpty
-    and (GetBookmarkFlag(ActiveBuffer) = bfCurrent);
-end;
-
-function TDataSet.GetBookmark: TBookmark;
-begin
-  if BookmarkAvailable then
+  if (Src <> nil) then
   begin
-    GetMem(Result, FBookmarkSize);
-    GetBookmarkData(ActiveBuffer, Result);
+    if (Src <> Dest) then
+    StrCopy(Dest, Src);
+    Result := StrLen(Dest);
   end else
-    Result := nil;
+    Result := 0;
 end;
 
-function TDataSet.GetBookmarkStr: TBookmarkStr;
+{ Editing Stubs }
+
+procedure TDataSet.InternalInitRecord(Buffer: PChar);
 begin
-  if BookmarkAvailable then
-  begin
-    SetLength(Result, BookmarkSize);
-    GetBookmarkData(ActiveBuffer, Pointer(Result));
-  end else
-    Result := '';
 end;
 
-procedure TDataSet.GotoBookmark(Bookmark: TBookmark);
+procedure TDataSet.InternalAddRecord(Buffer: Pointer; Append: Boolean);
 begin
-  if Bookmark <> nil then
-  begin
-    CheckBrowseMode;
-    DoBeforeScroll;
-    InternalGotoBookmark(Bookmark);
-    Resync([rmExact, rmCenter]);
-    DoAfterScroll;
-  end;
 end;
 
-procedure TDataSet.SetBookmarkStr(const Value: TBookmarkStr);
+procedure TDataSet.InternalDelete;
 begin
-  GotoBookmark(Pointer(Value));
 end;
 
-function TDataSet.BookmarkValid(Bookmark: TBookmark): Boolean;
+procedure TDataSet.InternalPost;
 begin
-  Result := False;
-end;
-
-function TDataSet.CompareBookmarks(Bookmark1, Bookmark2: TBookmark): Integer;
-begin
-  Result := 0;
-end;
-
-procedure TDataSet.FreeBookmark(Bookmark: TBookmark);
-begin
-  FreeMem(Bookmark);
+  CheckRequiredFields;
 end;
 
 procedure TDataSet.InternalCancel;
@@ -9792,15 +10458,92 @@ procedure TDataSet.InternalRefresh;
 begin
 end;
 
-function TDataSet.Translate(Src, Dest: PChar; ToOem: Boolean): Integer;
+{ Bookmarks }
+
+function TDataSet.BookmarkAvailable: Boolean;
 begin
-  if (Src <> nil) then
+  if IsUniDirectional then Result := False
+  else Result := (State in [dsBrowse, dsEdit, dsInsert]) and not IsEmpty
+    and (GetBookmarkFlag(ActiveBuffer) = bfCurrent);
+end;
+
+function TDataSet.GetBookmark: TBookmark;
+begin
+  if BookmarkAvailable then
   begin
-    if (Src <> Dest) then
-    StrCopy(Dest, Src);
-    Result := StrLen(Dest);
+    GetMem(Result, FBookmarkSize);
+    GetBookmarkData(ActiveBuffer, Result);
   end else
-    Result := 0;
+    Result := nil;
+end;
+
+procedure TDataSet.FreeBookmark(Bookmark: TBookmark);
+begin
+  FreeMem(Bookmark);
+end;
+
+function TDataSet.GetBookmarkStr: TBookmarkStr;
+begin
+  if BookmarkAvailable then
+  begin
+    SetLength(Result, BookmarkSize);
+    GetBookmarkData(ActiveBuffer, Pointer(Result));
+  end else
+    Result := '';
+end;
+
+procedure TDataSet.SetBookmarkStr(const Value: TBookmarkStr);
+begin
+  GotoBookmark(Pointer(Value));
+end;
+
+procedure TDataSet.GotoBookmark(Bookmark: TBookmark);
+begin
+  if Bookmark <> nil then
+  begin
+    CheckBrowseMode;
+    DoBeforeScroll;
+    InternalGotoBookmark(Bookmark);
+    Resync([rmExact, rmCenter]);
+    DoAfterScroll;
+  end;
+end;
+
+{ Bookmark Stubs }
+
+procedure TDataSet.GetBookmarkData(Buffer: PChar; Data: Pointer);
+begin
+end;
+
+procedure TDataSet.SetBookmarkData(Buffer: PChar; Data: Pointer);
+begin
+end;
+
+function TDataSet.GetBookmarkFlag(Buffer: PChar): TBookmarkFlag;
+begin
+  result := bfCurrent;
+end;
+
+procedure TDataSet.SetBookmarkFlag(Buffer: PChar; Value: TBookmarkFlag);
+begin
+end;
+
+procedure TDataSet.InternalGotoBookmark(Bookmark: Pointer);
+begin
+end;
+
+procedure TDataSet.InternalSetToRecord(Buffer: PChar);
+begin
+end;
+
+function TDataSet.BookmarkValid(Bookmark: TBookmark): Boolean;
+begin
+  Result := False;
+end;
+
+function TDataSet.CompareBookmarks(Bookmark1, Bookmark2: TBookmark): Integer;
+begin
+  Result := 0;
 end;
 
 { Filter / Locate / Find }
@@ -9832,33 +10575,39 @@ end;
 
 procedure TDataSet.SetFiltered(Value: Boolean);
 begin
+  if Value = True then CheckBiDirectional;
   FFiltered := Value;
 end;
 
 procedure TDataSet.SetFilterOptions(Value: TFilterOptions);
 begin
+  CheckBiDirectional;
   FFilterOptions := Value;
 end;
 
 procedure TDataSet.SetFilterText(const Value: string);
 begin
+  CheckBiDirectional;
   FFilterText := Value;
 end;
 
 procedure TDataSet.SetOnFilterRecord(const Value: TFilterRecordEvent);
 begin
+  CheckBiDirectional;
   FOnFilterRecord := Value;
 end;
 
 function TDataSet.Locate(const KeyFields: string; const KeyValues: Variant;
   Options: TLocateOptions): Boolean;
 begin
+  CheckBiDirectional;
   Result := False;
 end;
 
 function TDataSet.Lookup(const KeyFields: string; const KeyValues: Variant;
   const ResultFields: string): Variant;
 begin
+  CheckBiDirectional;
   Result := False;
 end;
 
@@ -9930,6 +10679,11 @@ end;
 
 procedure TDataSet.SetRecNo(Value: Integer);
 begin
+end;
+
+function TDataSet.GetRecordSize: Word;
+begin
+  Result := 0;
 end;
 
 function TDataSet.IsSequenced: Boolean;
@@ -10181,4 +10935,45 @@ begin
   Result := False;
 end;
 
+type
+  TDefaultDBScreenApplication = class(TInterfacedObject, IDBScreen, IDBApplication)
+    FCursor: TDBSCreenCursor;
+    FTitle: string;
+    function GetCursor: TDBScreenCursor;
+    procedure SetCursor(Cursor: TDBScreenCursor);
+    function GetTitle: string;
+    procedure ProcessMessages;
+    procedure SetTitle(const Value: string);
+  end;
+
+{ TDefaultDBScreen }
+
+function TDefaultDBScreenApplication.GetCursor: TDBScreenCursor;
+begin
+  Result := FCursor;
+end;
+
+function TDefaultDBScreenApplication.GetTitle: string;
+begin
+  Result := FTitle;
+end;
+
+procedure TDefaultDBScreenApplication.ProcessMessages;
+begin
+  { do nothing }
+end;
+
+procedure TDefaultDBScreenApplication.SetCursor(Cursor: TDBScreenCursor);
+begin
+  FCursor := Cursor;
+end;
+
+procedure TDefaultDBScreenApplication.SetTitle(const Value: string);
+begin
+  FTitle := Value;
+end;
+
+initialization
+  DBScreen := TDefaultDBScreenApplication.Create as IDBScreen;
+  DBApplication := DBScreen as IDBApplication;
 end.

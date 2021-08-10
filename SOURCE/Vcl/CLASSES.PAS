@@ -1,23 +1,36 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Delphi and Kylix Cross-Platform Visual Component Library                    }
+{                                                                             }
+{ Copyright (c) 1995, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
 unit Classes;
 
-{$R-,T-,X+,H+}
+{$R-,T-,X+,H+,B-}
 
+{$IFDEF MSWINDOWS}
 { ACTIVEX.HPP is not required by CLASSES.HPP }
 (*$NOINCLUDE ActiveX*)
+{$ENDIF}
+{$IFDEF LINUX}
+{$DEFINE _WIN32}
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+{$DEFINE _WIN32}
+{$ENDIF}
 
 
 interface
 
-uses SysUtils, Windows, ActiveX;
+{$IFDEF MSWINDOWS}
+uses Windows, Messages, SysUtils, Variants, TypInfo, ActiveX;
+{$ENDIF}
+{$IFDEF LINUX}
+uses Libc, SysUtils, Variants, TypInfo, Types;
+{$ENDIF}
 
 const
 
@@ -31,6 +44,11 @@ const
   soFromCurrent = 1;
   soFromEnd = 2;
 
+type
+{ TStream seek origins }
+  TSeekOrigin = (soBeginning, soCurrent, soEnd);
+
+const
 { TFileStream create mode }
 
   fmCreate = $FFFF;
@@ -67,6 +85,7 @@ type
     ssLeft, ssRight, ssMiddle, ssDouble);
 
   THelpContext = -MaxLongint..MaxLongint;
+  THelpType = (htKeyword, htContext);
 
   {!! Moved here from menus.pas !!}
   TShortCut = Low(Word)..High(Word);
@@ -74,8 +93,6 @@ type
 { Standard events }
 
   TNotifyEvent = procedure(Sender: TObject) of object;
-  THelpEvent = function (Command: Word; Data: Longint;
-    var CallHelp: Boolean): Boolean of object;
   TGetStrProc = procedure(const S: string) of object;
 
 { Exception classes }
@@ -117,6 +134,17 @@ type
   TListSortCompare = function (Item1, Item2: Pointer): Integer;
   TListNotification = (lnAdded, lnExtracted, lnDeleted);
 
+  // these operators are used in Assign and go beyond simply copying
+  //   laCopy = dest becomes a copy of the source
+  //   laAnd  = intersection of the two lists
+  //   laOr   = union of the two lists
+  //   laXor  = only those not in both lists
+  // the last two operators can actually be thought of as binary operators but
+  // their implementation has been optimized over their binary equivalent.
+  //   laSrcUnique  = only those unique to source (same as laAnd followed by laXor)
+  //   laDestUnique = only those unique to dest   (same as laOr followed by laXor)
+  TListAssignOp = (laCopy, laAnd, laOr, laXor, laSrcUnique, laDestUnique);
+
   TList = class(TObject)
   private
     FList: PPointerList;
@@ -147,6 +175,7 @@ type
     function Remove(Item: Pointer): Integer;
     procedure Pack;
     procedure Sort(Compare: TListSortCompare);
+    procedure Assign(ListA: TList; AOperator: TListAssignOp = laCopy; ListB: TList = nil);
     property Capacity: Integer read FCapacity write SetCapacity;
     property Count: Integer read FCount write SetCount;
     property Items[Index: Integer]: Pointer read Get write Put; default;
@@ -175,27 +204,27 @@ type
 
   IInterfaceList = interface
   ['{285DEA8A-B865-11D1-AAA7-00C04FB17A72}']
-    function Get(Index: Integer): IUnknown;
+    function Get(Index: Integer): IInterface;
     function GetCapacity: Integer;
     function GetCount: Integer;
-    procedure Put(Index: Integer; Item: IUnknown);
+    procedure Put(Index: Integer; const Item: IInterface);
     procedure SetCapacity(NewCapacity: Integer);
     procedure SetCount(NewCount: Integer);
 
     procedure Clear;
     procedure Delete(Index: Integer);
     procedure Exchange(Index1, Index2: Integer);
-    function First: IUnknown;
-    function IndexOf(Item: IUnknown): Integer;
-    function Add(Item: IUnknown): Integer;
-    procedure Insert(Index: Integer; Item: IUnknown);
-    function Last: IUnknown;
-    function Remove(Item: IUnknown): Integer;
+    function First: IInterface;
+    function IndexOf(const Item: IInterface): Integer;
+    function Add(const Item: IInterface): Integer;
+    procedure Insert(Index: Integer; const Item: IInterface);
+    function Last: IInterface;
+    function Remove(const Item: IInterface): Integer;
     procedure Lock;
     procedure Unlock;
     property Capacity: Integer read GetCapacity write SetCapacity;
     property Count: Integer read GetCount write SetCount;
-    property Items[Index: Integer]: IUnknown read Get write Put; default;
+    property Items[Index: Integer]: IInterface read Get write Put; default;
   end;
 
 { EXTERNALSYM IInterfaceList}
@@ -207,10 +236,10 @@ type
     FList: TThreadList;
   protected
     { IInterfaceList }
-    function Get(Index: Integer): IUnknown;
+    function Get(Index: Integer): IInterface;
     function GetCapacity: Integer;
     function GetCount: Integer;
-    procedure Put(Index: Integer; Item: IUnknown);
+    procedure Put(Index: Integer; const Item: IInterface);
     procedure SetCapacity(NewCapacity: Integer);
     procedure SetCount(NewCount: Integer);
   public
@@ -220,17 +249,17 @@ type
     procedure Delete(Index: Integer);
     procedure Exchange(Index1, Index2: Integer);
     function Expand: TInterfaceList;
-    function First: IUnknown;
-    function IndexOf(Item: IUnknown): Integer;
-    function Add(Item: IUnknown): Integer;
-    procedure Insert(Index: Integer; Item: IUnknown);
-    function Last: IUnknown;
-    function Remove(Item: IUnknown): Integer;
+    function First: IInterface;
+    function IndexOf(const Item: IInterface): Integer;
+    function Add(const Item: IInterface): Integer;
+    procedure Insert(Index: Integer; const Item: IInterface);
+    function Last: IInterface;
+    function Remove(const Item: IInterface): Integer;
     procedure Lock;
     procedure Unlock;
     property Capacity: Integer read GetCapacity write SetCapacity;
     property Count: Integer read GetCount write SetCount;
-    property Items[Index: Integer]: IUnknown read Get write Put; default;
+    property Items[Index: Integer]: IInterface read Get write Put; default;
   end;
 
 { EXTERNALSYM TInterfaceList}
@@ -275,6 +304,33 @@ type
 
   TPersistentClass = class of TPersistent;
 
+{ TInterfaced Persistent }
+
+  TInterfacedPersistent = class(TPersistent, IInterface)
+  private
+    FOwnerInterface: IInterface;
+  protected
+    { IInterface }
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
+  public
+    function QueryInterface(const IID: TGUID; out Obj): HResult; virtual; stdcall;
+    procedure AfterConstruction; override;
+  end;
+
+{ TRecall class }
+
+  TRecall = class(TObject)
+  private
+    FStorage, FReference: TPersistent;
+  public
+    constructor Create(AStorage, AReference: TPersistent);
+    destructor Destroy; override;
+    procedure Store;
+    procedure Forget;
+    property Reference: TPersistent read FReference;
+  end;
+
 { TCollection class }
 
   TCollection = class;
@@ -284,11 +340,11 @@ type
     FCollection: TCollection;
     FID: Integer;
     function GetIndex: Integer;
-    procedure SetCollection(Value: TCollection);
   protected
     procedure Changed(AllItems: Boolean);
     function GetOwner: TPersistent; override;
     function GetDisplayName: string; virtual;
+    procedure SetCollection(Value: TCollection); virtual;
     procedure SetIndex(Value: Integer); virtual;
     procedure SetDisplayName(const Value: string); virtual;
   public
@@ -302,6 +358,7 @@ type
   end;
 
   TCollectionItemClass = class of TCollectionItem;
+  TCollectionNotification = (cnAdded, cnExtracting, cnDeleting);
 
   TCollection = class(TPersistent)
   private
@@ -311,11 +368,14 @@ type
     FNextID: Integer;
     FPropName: string;
     function GetCount: Integer;
-    function GetPropName: string;   
+    function GetPropName: string;
     procedure InsertItem(Item: TCollectionItem);
     procedure RemoveItem(Item: TCollectionItem);
   protected
+    procedure Added(var Item: TCollectionItem); virtual; deprecated;
+    procedure Deleting(Item: TCollectionItem); virtual; deprecated;
     property NextID: Integer read FNextID;
+    procedure Notify(Item: TCollectionItem; Action: TCollectionNotification); virtual;
     { Design-time editor support }
     function GetAttrCount: Integer; dynamic;
     function GetAttr(Index: Integer): string; dynamic;
@@ -330,6 +390,7 @@ type
   public
     constructor Create(ItemClass: TCollectionItemClass);
     destructor Destroy; override;
+    function Owner: TPersistent;
     function Add: TCollectionItem;
     procedure Assign(Source: TPersistent); override;
     procedure BeginUpdate; virtual;
@@ -376,22 +437,34 @@ type
 
 { TStrings class }
 
+  TStringsDefined = set of (sdDelimiter, sdQuoteChar);
+
   TStrings = class(TPersistent)
   private
+    FDefined: TStringsDefined;
+    FDelimiter: Char;
+    FQuoteChar: Char;
     FUpdateCount: Integer;
     FAdapter: IStringsAdapter;
     function GetCommaText: string;
+    function GetDelimitedText: string;
     function GetName(Index: Integer): string;
     function GetValue(const Name: string): string;
     procedure ReadData(Reader: TReader);
     procedure SetCommaText(const Value: string);
+    procedure SetDelimitedText(const Value: string);
     procedure SetStringsAdapter(const Value: IStringsAdapter);
     procedure SetValue(const Name, Value: string);
     procedure WriteData(Writer: TWriter);
+    function GetDelimiter: Char;
+    procedure SetDelimiter(const Value: Char);
+    function GetQuoteChar: Char;
+    procedure SetQuoteChar(const Value: Char);
   protected
     procedure DefineProperties(Filer: TFiler); override;
     procedure Error(const Msg: string; Data: Integer); overload;
     procedure Error(Msg: PResStringRec; Data: Integer); overload;
+    function ExtractName(const S: string): string;
     function Get(Index: Integer): string; virtual; abstract;
     function GetCapacity: Integer; virtual;
     function GetCount: Integer; virtual; abstract;
@@ -402,6 +475,8 @@ type
     procedure SetCapacity(NewCapacity: Integer); virtual;
     procedure SetTextStr(const Value: string); virtual;
     procedure SetUpdateState(Updating: Boolean); virtual;
+    property UpdateCount: Integer read FUpdateCount;
+    function CompareStrings(const S1, S2: string): Integer; virtual;
   public
     destructor Destroy; override;
     function Add(const S: string): Integer; virtual;
@@ -417,11 +492,11 @@ type
     procedure Exchange(Index1, Index2: Integer); virtual;
     function GetText: PChar; virtual;
     function IndexOf(const S: string): Integer; virtual;
-    function IndexOfName(const Name: string): Integer;
-    function IndexOfObject(AObject: TObject): Integer;
+    function IndexOfName(const Name: string): Integer; virtual;
+    function IndexOfObject(AObject: TObject): Integer; virtual;
     procedure Insert(Index: Integer; const S: string); virtual; abstract;
     procedure InsertObject(Index: Integer; const S: string;
-      AObject: TObject);
+      AObject: TObject); virtual;
     procedure LoadFromFile(const FileName: string); virtual;
     procedure LoadFromStream(Stream: TStream); virtual;
     procedure Move(CurIndex, NewIndex: Integer); virtual;
@@ -431,8 +506,11 @@ type
     property Capacity: Integer read GetCapacity write SetCapacity;
     property CommaText: string read GetCommaText write SetCommaText;
     property Count: Integer read GetCount;
+    property Delimiter: Char read GetDelimiter write SetDelimiter;
+    property DelimitedText: string read GetDelimitedText write SetDelimitedText;
     property Names[Index: Integer]: string read GetName;
     property Objects[Index: Integer]: TObject read GetObject write PutObject;
+    property QuoteChar: Char read GetQuoteChar write SetQuoteChar;
     property Values[const Name: string]: string read GetValue write SetValue;
     property Strings[Index: Integer]: string read Get write Put; default;
     property Text: string read GetTextStr write SetTextStr;
@@ -460,13 +538,14 @@ type
     FCapacity: Integer;
     FSorted: Boolean;
     FDuplicates: TDuplicates;
+    FCaseSensitive: Boolean;
     FOnChange: TNotifyEvent;
     FOnChanging: TNotifyEvent;
     procedure ExchangeItems(Index1, Index2: Integer);
     procedure Grow;
     procedure QuickSort(L, R: Integer; SCompare: TStringListSortCompare);
-    procedure InsertItem(Index: Integer; const S: string);
     procedure SetSorted(Value: Boolean);
+    procedure SetCaseSensitive(const Value: Boolean);
   protected
     procedure Changed; virtual;
     procedure Changing; virtual;
@@ -478,19 +557,25 @@ type
     procedure PutObject(Index: Integer; AObject: TObject); override;
     procedure SetCapacity(NewCapacity: Integer); override;
     procedure SetUpdateState(Updating: Boolean); override;
+    function CompareStrings(const S1, S2: string): Integer; override;
+    procedure InsertItem(Index: Integer; const S: string; AObject: TObject); virtual;
   public
     destructor Destroy; override;
     function Add(const S: string): Integer; override;
+    function AddObject(const S: string; AObject: TObject): Integer; override;
     procedure Clear; override;
     procedure Delete(Index: Integer); override;
     procedure Exchange(Index1, Index2: Integer); override;
     function Find(const S: string; var Index: Integer): Boolean; virtual;
     function IndexOf(const S: string): Integer; override;
     procedure Insert(Index: Integer; const S: string); override;
+    procedure InsertObject(Index: Integer; const S: string;
+      AObject: TObject); override;
     procedure Sort; virtual;
     procedure CustomSort(Compare: TStringListSortCompare); virtual;
     property Duplicates: TDuplicates read FDuplicates write FDuplicates;
     property Sorted: Boolean read FSorted write SetSorted;
+    property CaseSensitive: Boolean read FCaseSensitive write SetCaseSensitive;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
     property OnChanging: TNotifyEvent read FOnChanging write FOnChanging;
   end;
@@ -499,43 +584,52 @@ type
 
   TStream = class(TObject)
   private
-    function GetPosition: Longint;
-    procedure SetPosition(Pos: Longint);
-    function GetSize: Longint;
+    function GetPosition: Int64;
+    procedure SetPosition(const Pos: Int64);
+    function GetSize: Int64;
+    procedure SetSize64(const NewSize: Int64);
   protected
-    procedure SetSize(NewSize: Longint); virtual;
+    procedure SetSize(NewSize: Longint); overload; virtual;
+    procedure SetSize(const NewSize: Int64); overload; virtual;
   public
     function Read(var Buffer; Count: Longint): Longint; virtual; abstract;
     function Write(const Buffer; Count: Longint): Longint; virtual; abstract;
-    function Seek(Offset: Longint; Origin: Word): Longint; virtual; abstract;
+    function Seek(Offset: Longint; Origin: Word): Longint; overload; virtual;
+    function Seek(const Offset: Int64; Origin: TSeekOrigin): Int64; overload; virtual;
     procedure ReadBuffer(var Buffer; Count: Longint);
     procedure WriteBuffer(const Buffer; Count: Longint);
-    function CopyFrom(Source: TStream; Count: Longint): Longint;
+    function CopyFrom(Source: TStream; Count: Int64): Int64;
     function ReadComponent(Instance: TComponent): TComponent;
     function ReadComponentRes(Instance: TComponent): TComponent;
     procedure WriteComponent(Instance: TComponent);
     procedure WriteComponentRes(const ResName: string; Instance: TComponent);
-    procedure WriteDescendent(Instance, Ancestor: TComponent);
+    procedure WriteDescendent(Instance, Ancestor: TComponent); virtual;
     procedure WriteDescendentRes(const ResName: string; Instance, Ancestor: TComponent);
     procedure WriteResourceHeader(const ResName: string; out FixupInfo: Integer);
     procedure FixupResourceHeader(FixupInfo: Integer);
     procedure ReadResHeader;
-    property Position: Longint read GetPosition write SetPosition;
-    property Size: Longint read GetSize write SetSize;
+    property Position: Int64 read GetPosition write SetPosition;
+    property Size: Int64 read GetSize write SetSize64;
+  end;
+
+  IStreamPersist = interface
+    ['{B8CD12A3-267A-11D4-83DA-00C04F60B2DD}']
+    procedure LoadFromStream(Stream: TStream);
+    procedure SaveToStream(Stream: TStream);
   end;
 
 { THandleStream class }
 
   THandleStream = class(TStream)
-  private
-    FHandle: Integer;
   protected
+    FHandle: Integer;
     procedure SetSize(NewSize: Longint); override;
+    procedure SetSize(const NewSize: Int64); override;
   public
     constructor Create(AHandle: Integer);
     function Read(var Buffer; Count: Longint): Longint; override;
     function Write(const Buffer; Count: Longint): Longint; override;
-    function Seek(Offset: Longint; Origin: Word): Longint; override;
+    function Seek(const Offset: Int64; Origin: TSeekOrigin): Int64; override;
     property Handle: Integer read FHandle;
   end;
 
@@ -543,7 +637,8 @@ type
 
   TFileStream = class(THandleStream)
   public
-    constructor Create(const FileName: string; Mode: Word);
+    constructor Create(const FileName: string; Mode: Word); overload;
+    constructor Create(const FileName: string; Mode: Word; Rights: Cardinal); overload;
     destructor Destroy; override;
   end;
 
@@ -603,7 +698,7 @@ type
 
   TResourceStream = class(TCustomMemoryStream)
   private
-    HResInfo: HRSRC;
+    HResInfo: THandle;
     HGlobal: THandle;
     procedure Initialize(Instance: THandle; Name, ResType: PChar);
   public
@@ -647,11 +742,27 @@ type
     property StreamOwnership: TStreamOwnership read FOwnership write FOwnership;
   end;
 
+{ TClassFinder }
+
+  TGetClass = procedure (AClass: TPersistentClass) of object;
+
+  TClassFinder = class
+  private
+    FGroups: TList;
+  public
+    constructor Create(AClass: TPersistentClass = nil;
+      AIncludeActiveGroups: Boolean = False);
+    destructor Destroy; override;
+    function GetClass(const AClassName: string): TPersistentClass;
+    procedure GetClasses(Proc: TGetClass);
+  end;
+
 { TFiler }
 
   TValueType = (vaNull, vaList, vaInt8, vaInt16, vaInt32, vaExtended,
     vaString, vaIdent, vaFalse, vaTrue, vaBinary, vaSet, vaLString,
-    vaNil, vaCollection, vaSingle, vaCurrency, vaDate, vaWString, vaInt64);
+    vaNil, vaCollection, vaSingle, vaCurrency, vaDate, vaWString,
+    vaInt64, vaUTF8String);
 
   TFilerFlag = (ffInherited, ffChildPos, ffInline);
   TFilerFlags = set of TFilerFlag;
@@ -659,6 +770,11 @@ type
   TReaderProc = procedure(Reader: TReader) of object;
   TWriterProc = procedure(Writer: TWriter) of object;
   TStreamProc = procedure(Stream: TStream) of object;
+
+  IInterfaceComponentReference = interface
+    ['{E28B1858-EC86-4559-8FCD-6B4F824151ED}']
+    function GetComponent: TComponent;
+  end;
 
   TFiler = class(TObject)
   private
@@ -693,6 +809,14 @@ type
 
   TComponentClass = class of TComponent;
 
+{ Custom variant stream support }
+
+  IVarStreamable = interface
+    ['{D60BA026-5E42-4C2A-BB01-3F1C8F30A28E}']
+    procedure StreamIn(var Dest: TVarData; const Stream: TStream);
+    procedure StreamOut(const Source: TVarData; const Stream: TStream);
+  end;
+
 { TReader }
 
   TFindMethodEvent = procedure(Reader: TReader; const MethodName: string;
@@ -723,9 +847,11 @@ type
     FOnFindComponentClass: TFindComponentClassEvent;
     FOnCreateComponent: TCreateComponentEvent;
     FPropName: string;
+    FFinder: TClassFinder;
     FCanHandleExcepts: Boolean;
     procedure DoFixupReferences;
     procedure FreeFixups;
+    function GetFieldClass(Instance: TObject; const ClassName: string): TPersistentClass;
     function GetPosition: Longint;
     procedure ReadBuffer;
     procedure ReadDataInner(Instance: TComponent);
@@ -739,12 +865,12 @@ type
     procedure ReadProperty(AInstance: TPersistent);
     procedure ReadPropValue(Instance: TPersistent; PropInfo: Pointer);
     procedure ReferenceName(var Name: string); virtual;
-    procedure PropertyError;
+    procedure PropertyError(const Name: string);
     procedure ReadData(Instance: TComponent);
     function ReadSet(SetType: Pointer): Integer;
     procedure SetPosition(Value: Longint);
+    procedure SkipBytes(Count: Integer);
     procedure SkipSetBody;
-    procedure SkipValue;
     procedure SkipProperty;
     procedure SkipComponent(SkipHeader: Boolean);
     property PropName: string read FPropName;
@@ -787,7 +913,9 @@ type
     function ReadString: string;
     function ReadWideString: WideString;
     function ReadValue: TValueType;
+    function ReadVariant: Variant;
     procedure CopyValue(Writer: TWriter);
+    procedure SkipValue;
     property Owner: TComponent read FOwner write FOwner;
     property Parent: TComponent read FParent write FParent;
     property Position: Longint read GetPosition write SetPosition;
@@ -813,16 +941,18 @@ type
     FAncestorPos: Integer;
     FChildPos: Integer;
     FOnFindAncestor: TFindAncestorEvent;
+    FUseQualifiedNames: Boolean;
     procedure AddAncestor(Component: TComponent);
     function GetPosition: Longint;
     procedure SetPosition(Value: Longint);
     procedure WriteBuffer;
     procedure WriteData(Instance: TComponent); virtual; // linker optimization
+    procedure WriteMinStr(const LocaleStr: string; const UTF8Str: UTF8String);
   protected
     procedure SetRoot(Value: TComponent); override;
     procedure WriteBinary(WriteData: TStreamProc);
     procedure WritePrefix(Flags: TFilerFlags; AChildPos: Integer);
-    procedure WriteProperty(Instance: TPersistent; PropInfo: Pointer);
+    procedure WriteProperty(Instance: TPersistent; PropInfo: PPropInfo);
     procedure WriteProperties(Instance: TPersistent);
     procedure WritePropName(const PropName: string);
     procedure WriteValue(Value: TValueType);
@@ -855,9 +985,11 @@ type
     procedure WriteStr(const Value: string);
     procedure WriteString(const Value: string);
     procedure WriteWideString(const Value: WideString);
+    procedure WriteVariant(const Value: Variant);
     property Position: Longint read GetPosition write SetPosition;
     property RootAncestor: TComponent read FRootAncestor write FRootAncestor;
     property OnFindAncestor: TFindAncestorEvent read FOnFindAncestor write FOnFindAncestor;
+    property UseQualifiedNames: Boolean read FUseQualifiedNames write FUseQualifiedNames;
   end;
 
 { TParser }
@@ -907,13 +1039,25 @@ type
   EThread = class(Exception);
 
   TThreadMethod = procedure of object;
+
+{$IFDEF MSWINDOWS}
   TThreadPriority = (tpIdle, tpLowest, tpLower, tpNormal, tpHigher, tpHighest,
     tpTimeCritical);
+{$ENDIF}
 
   TThread = class
   private
     FHandle: THandle;
+{$IFDEF MSWINDOWS}
     FThreadID: THandle;
+{$ENDIF}
+{$IFDEF LINUX}
+    // ** FThreadID is not THandle in Linux **
+    FThreadID: Cardinal;
+    FCreateSuspendedSem: TSemaphore;
+    FInitialSuspendDone: Boolean;
+{$ENDIF}
+    FCreateSuspended: Boolean;
     FTerminated: Boolean;
     FSuspended: Boolean;
     FFreeOnTerminate: Boolean;
@@ -922,10 +1066,23 @@ type
     FOnTerminate: TNotifyEvent;
     FMethod: TThreadMethod;
     FSynchronizeException: TObject;
+    FFatalException: TObject;
+    procedure CheckThreadError(ErrCode: Integer); overload;
+    procedure CheckThreadError(Success: Boolean); overload;
     procedure CallOnTerminate;
+{$IFDEF MSWINDOWS}
     function GetPriority: TThreadPriority;
     procedure SetPriority(Value: TThreadPriority);
     procedure SetSuspended(Value: Boolean);
+{$ENDIF}
+{$IFDEF LINUX}
+    // ** Priority is an Integer value in Linux
+    function GetPriority: Integer;
+    procedure SetPriority(Value: Integer);
+    function GetPolicy: Integer;
+    procedure SetPolicy(Value: Integer);
+    procedure SetSuspended(Value: Boolean);
+{$ENDIF}
   protected
     procedure DoTerminate; virtual;
     procedure Execute; virtual; abstract;
@@ -935,15 +1092,30 @@ type
   public
     constructor Create(CreateSuspended: Boolean);
     destructor Destroy; override;
+    procedure AfterConstruction; override;
     procedure Resume;
     procedure Suspend;
     procedure Terminate;
     function WaitFor: LongWord;
+    property FatalException: TObject read FFatalException;
     property FreeOnTerminate: Boolean read FFreeOnTerminate write FFreeOnTerminate;
     property Handle: THandle read FHandle;
+{$IFDEF MSWINDOWS}
     property Priority: TThreadPriority read GetPriority write SetPriority;
+{$ENDIF}
+{$IFDEF LINUX}
+    // ** Priority is an Integer **
+    property Priority: Integer read GetPriority write SetPriority;
+    property Policy: Integer read GetPolicy write SetPolicy;
+{$ENDIF}
     property Suspended: Boolean read FSuspended write SetSuspended;
+{$IFDEF MSWINDOWS}
     property ThreadID: THandle read FThreadID;
+{$ENDIF}
+{$IFDEF LINUX}
+    // ** ThreadId is Cardinal **
+    property ThreadID: Cardinal read FThreadID;
+{$ENDIF}
     property OnTerminate: TNotifyEvent read FOnTerminate write FOnTerminate;
   end;
 
@@ -953,10 +1125,12 @@ type
   TComponentState = set of (csLoading, csReading, csWriting, csDestroying,
     csDesigning, csAncestor, csUpdating, csFixups, csFreeNotification,
     csInline, csDesignInstance);
-  TComponentStyle = set of (csInheritable, csCheckPropAvail);
+  TComponentStyle = set of (csInheritable, csCheckPropAvail, csSubComponent,
+    csTransient);
   TGetChildProc = procedure (Child: TComponent) of object;
 
   TComponentName = type string;
+
 
   IVCLComObject = interface
     ['{E07892A0-F52F-11CF-BD2F-0020AF0E5B81}']
@@ -971,15 +1145,16 @@ type
     procedure FreeOnRelease;
   end;
 
+
   IDesignerNotify = interface
     ['{B971E807-E3A6-11D1-AAB1-00C04FB16FBC}']
     procedure Modified;
     procedure Notification(AnObject: TPersistent; Operation: TOperation);
-  end;  
+  end;
 
   TBasicAction = class;
 
-  TComponent = class(TPersistent)
+  TComponent = class(TPersistent, IInterface, IInterfaceComponentReference)
   private
     FOwner: TComponent;
     FName: TComponentName;
@@ -987,9 +1162,11 @@ type
     FComponents: TList;
     FFreeNotifies: TList;
     FDesignInfo: Longint;
-    FVCLComObject: Pointer;
     FComponentState: TComponentState;
+
+    FVCLComObject: Pointer;
     function GetComObject: IUnknown;
+
     function GetComponent(AIndex: Integer): TComponent;
     function GetComponentCount: Integer;
     function GetComponentIndex: Integer;
@@ -1002,6 +1179,9 @@ type
     procedure SetReference(Enable: Boolean);
     procedure WriteLeft(Writer: TWriter);
     procedure WriteTop(Writer: TWriter);
+    { IInterfaceComponentReference }
+    function IInterfaceComponentReference.GetComponent = IntfGetComponent;
+    function IntfGetComponent: TComponent;
   protected
     FComponentStyle: TComponentStyle;
     procedure ChangeName(const NewName: TComponentName);
@@ -1013,6 +1193,7 @@ type
     procedure Loaded; virtual;
     procedure Notification(AComponent: TComponent;
       Operation: TOperation); virtual;
+    procedure PaletteCreated; dynamic;
     procedure ReadState(Reader: TReader); virtual;
     procedure SetAncestor(Value: Boolean);
     procedure SetDesigning(Value: Boolean; SetChildren: Boolean = True);
@@ -1029,10 +1210,11 @@ type
     procedure ValidateContainer(AComponent: TComponent); dynamic;
     procedure ValidateInsert(AComponent: TComponent); dynamic;
     procedure WriteState(Writer: TWriter); virtual;
-    { IUnknown }
+    { IInterface }
     function QueryInterface(const IID: TGUID; out Obj): HResult; virtual; stdcall;
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
+
     { IDispatch }
     function GetTypeInfoCount(out Count: Integer): HResult; stdcall;
     function GetTypeInfo(Index, LocaleID: Integer; out TypeInfo): HResult; stdcall;
@@ -1040,6 +1222,7 @@ type
       NameCount, LocaleID: Integer; DispIDs: Pointer): HResult; stdcall;
     function Invoke(DispID: Integer; const IID: TGUID; LocaleID: Integer;
       Flags: Word; var Params; VarResult, ExcepInfo, ArgErr: Pointer): HResult; stdcall;
+
   public
     constructor Create(AOwner: TComponent); virtual;
     destructor Destroy; override;
@@ -1050,16 +1233,23 @@ type
     function FindComponent(const AName: string): TComponent;
     procedure FreeNotification(AComponent: TComponent);
     procedure RemoveFreeNotification(AComponent: TComponent);
+
     procedure FreeOnRelease;
+
     function GetParentComponent: TComponent; dynamic;
     function GetNamePath: string; override;
     function HasParent: Boolean; dynamic;
     procedure InsertComponent(AComponent: TComponent);
     procedure RemoveComponent(AComponent: TComponent);
+    procedure SetSubComponent(IsSubComponent: Boolean);
     function SafeCallException(ExceptObject: TObject;
       ExceptAddr: Pointer): HResult; override;
     function UpdateAction(Action: TBasicAction): Boolean; dynamic;
+    function IsImplementorOf(const I: IInterface): Boolean;
+    function ReferenceInterface(const I: IInterface; Operation: TOperation): Boolean;
+
     property ComObject: IUnknown read GetComObject;
+
     property Components[Index: Integer]: TComponent read GetComponent;
     property ComponentCount: Integer read GetComponentCount;
     property ComponentIndex: Integer read GetComponentIndex write SetComponentIndex;
@@ -1067,7 +1257,9 @@ type
     property ComponentStyle: TComponentStyle read FComponentStyle;
     property DesignInfo: Longint read FDesignInfo write FDesignInfo;
     property Owner: TComponent read FOwner;
+
     property VCLComObject: Pointer read FVCLComObject write FVCLComObject;
+
   published
     property Name: TComponentName read FName write SetName stored False;
     property Tag: Longint read FTag write FTag default 0;
@@ -1088,7 +1280,7 @@ type
   public
     constructor Create(AClient: TObject); virtual;
     destructor Destroy; override;
-    function Execute: Boolean; virtual;
+    function Execute(AComponent: TComponent = nil): Boolean; virtual;
     function Update: Boolean; virtual;
     property Action: TBasicAction read FAction write SetAction;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
@@ -1100,6 +1292,7 @@ type
 
   TBasicAction = class(TComponent)
   private
+    FActionComponent: TComponent;
     FOnChange: TNotifyEvent;
     FOnExecute: TNotifyEvent;
     FOnUpdate: TNotifyEvent;
@@ -1108,6 +1301,7 @@ type
     procedure Change; virtual;
     procedure SetOnExecute(Value: TNotifyEvent); virtual;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -1118,6 +1312,7 @@ type
     procedure RegisterChanges(Value: TBasicActionLink);
     procedure UnRegisterChanges(Value: TBasicActionLink);
     function Update: Boolean; virtual;
+    property ActionComponent: TComponent read FActionComponent write FActionComponent;
     property OnExecute: TNotifyEvent read FOnExecute write SetOnExecute;
     property OnUpdate: TNotifyEvent read FOnUpdate write FOnUpdate;
   end;
@@ -1126,24 +1321,82 @@ type
 
   TBasicActionClass = class of TBasicAction;
 
-{ Component registration handlers }
+{ TDataModule }
 
-  TActiveXRegType = (axrComponentOnly, axrIncludeDescendants);
+  TDataModule = class(TComponent)
+  private
+    FDesignSize: TPoint;
+    FDesignOffset: TPoint;
+    FOnCreate: TNotifyEvent;
+    FOnDestroy: TNotifyEvent;
+    FOldCreateOrder: Boolean;
+    procedure ReadHeight(Reader: TReader);
+    procedure ReadHorizontalOffset(Reader: TReader);
+    procedure ReadVerticalOffset(Reader: TReader);
+    procedure ReadWidth(Reader: TReader);
+    procedure WriteWidth(Writer: TWriter);
+    procedure WriteHorizontalOffset(Writer: TWriter);
+    procedure WriteVerticalOffset(Writer: TWriter);
+    procedure WriteHeight(Writer: TWriter);
+  protected
+    procedure DoCreate; virtual;
+    procedure DoDestroy; virtual;
+    procedure DefineProperties(Filer: TFiler); override;
+    procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
+    function HandleCreateException: Boolean; dynamic;
+    procedure ReadState(Reader: TReader); override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    constructor CreateNew(AOwner: TComponent; Dummy: Integer = 0); virtual;
+    destructor Destroy; override;
+    procedure AfterConstruction; override;
+    procedure BeforeDestruction; override;
+    property DesignOffset: TPoint read FDesignOffset write FDesignOffset;
+    property DesignSize: TPoint read FDesignSize write FDesignSize;
+  published
+    property OldCreateOrder: Boolean read FOldCreateOrder write FOldCreateOrder;
+    property OnCreate: TNotifyEvent read FOnCreate write FOnCreate;
+    property OnDestroy: TNotifyEvent read FOnDestroy write FOnDestroy;
+  end;
 
 var
+  AddDataModule: procedure (DataModule: TDataModule) of object = nil;
+  RemoveDataModule: procedure (DataModule: TDataModule) of object = nil;
+  ApplicationHandleException: procedure (Sender: TObject) of object = nil;
+  ApplicationShowException: procedure (E: Exception) of object = nil;
+
+{ Component registration handlers }
+
   RegisterComponentsProc: procedure(const Page: string;
     ComponentClasses: array of TComponentClass) = nil;
   RegisterNoIconProc: procedure(ComponentClasses: array of TComponentClass) = nil;
+  CurrentGroup: Integer = -1; { Current design group }
+
+{$IFDEF MSWINDOWS}
+type
+  TActiveXRegType = (axrComponentOnly, axrIncludeDescendants);
+
+var
   RegisterNonActiveXProc: procedure(ComponentClasses: array of TComponentClass;
     AxRegType: TActiveXRegType) = nil;
-  CurrentGroup: Integer = -1; { Current design group }
+{$ENDIF}
+
   CreateVCLComObjectProc: procedure(Component: TComponent) = nil;
+
+
 
 { Point and rectangle constructors }
 
 function Point(AX, AY: Integer): TPoint;
 function SmallPoint(AX, AY: SmallInt): TSmallPoint;
-function Rect(ALeft, ATop, ARight, ABottom: Integer): TRect;
+function PointsEqual(const P1, P2: TPoint): Boolean; overload;
+function PointsEqual(const P1, P2: TSmallPoint): Boolean; overload;
+function InvalidPoint(X, Y: Integer): Boolean; overload;
+function InvalidPoint(const At: TPoint): Boolean; overload;
+function InvalidPoint(const At: TSmallPoint): Boolean; overload;
+
+function Rect(ALeft, ATop, ARight, ABottom: Integer): TRect; overload;
+function Rect(const ATopLeft, ABottomRight: TPoint): TRect; overload;
 function Bounds(ALeft, ATop, AWidth, AHeight: Integer): TRect;
 
 { Class registration routines }
@@ -1156,14 +1409,21 @@ procedure UnRegisterClasses(AClasses: array of TPersistentClass);
 procedure UnRegisterModuleClasses(Module: HMODULE);
 function FindClass(const ClassName: string): TPersistentClass;
 function GetClass(const AClassName: string): TPersistentClass;
+procedure StartClassGroup(AClass: TPersistentClass);
+procedure GroupDescendentsWith(AClass, AClassGroup: TPersistentClass);
+function ActivateClassGroup(AClass: TPersistentClass): TPersistentClass;
+function ClassGroupOf(AClass: TPersistentClass): TPersistentClass; overload;
+function ClassGroupOf(Instance: TPersistent): TPersistentClass; overload;
 
 { Component registration routines }
 
 procedure RegisterComponents(const Page: string;
   ComponentClasses: array of TComponentClass);
 procedure RegisterNoIcon(ComponentClasses: array of TComponentClass);
+{$IFDEF MSWINDOWS}
 procedure RegisterNonActiveX(ComponentClasses: array of TComponentClass;
   AxRegType: TActiveXRegType);
+{$ENDIF}
 
 var
   GlobalNameSpace: TMultiReadExclusiveWriteSynchronizer;
@@ -1179,12 +1439,19 @@ type
   TIdentToInt = function(const Ident: string; var Int: Longint): Boolean;
   TIntToIdent = function(Int: Longint; var Ident: string): Boolean;
   TFindGlobalComponent = function(const Name: string): TComponent;
+  TIsUniqueGlobalComponentName = function(const Name: string): Boolean;
 
 var
-  FindGlobalComponent: TFindGlobalComponent;
+  IsUniqueGlobalComponentNameProc: TIsUniqueGlobalComponentName;
 
-procedure RegisterIntegerConsts(IntegerType: Pointer; IdentToInt: TIdentToInt;
-  IntToIdent: TIntToIdent);
+procedure RegisterIntegerConsts(AIntegerType: Pointer; AIdentToInt: TIdentToInt;
+  AIntToIdent: TIntToIdent);
+procedure UnregisterIntegerConsts(AIntegerType: Pointer; AIdentToInt: TIdentToInt;
+  AIntToIdent: TIntToIdent);
+procedure RegisterFindGlobalComponentProc(AFindGlobalComponent: TFindGlobalComponent);
+procedure UnregisterFindGlobalComponentProc(AFindGlobalComponent: TFindGlobalComponent);
+function FindGlobalComponent(const Name: string): TComponent;
+function IsUniqueGlobalComponentName(const Name: string): Boolean;
 function IdentToInt(const Ident: string; var Int: Longint; const Map: array of TIdentMapEntry): Boolean;
 function IntToIdent(Int: Longint; var Ident: string; const Map: array of TIdentMapEntry): Boolean;
 function FindIntToIdent(AIntegerType: Pointer): TIntToIdent;
@@ -1211,7 +1478,12 @@ procedure BeginGlobalLoading;
 procedure NotifyGlobalLoading;
 procedure EndGlobalLoading;
 
-function CollectionsEqual(C1, C2: TCollection): Boolean;
+function CollectionsEqual(C1, C2: TCollection; Owner1, Owner2: TComponent): Boolean;
+
+{ find the ultimate owner of a collection or item (or persistent for that matter) }
+function GetUltimateOwner(ACollectionItem: TCollectionItem): TPersistent; overload;
+function GetUltimateOwner(ACollection: TCollection): TPersistent; overload;
+function GetUltimateOwner(APersistent: TPersistent): TPersistent; overload;
 
 { Object conversion routines }
 
@@ -1245,27 +1517,62 @@ function HexToBin(Text, Buffer: PChar; BufSize: Integer): Integer;
 
 function FindRootDesigner(Obj: TPersistent): IDesignerNotify;
 
+{ CountGenerations:  Use this helper function to calculate the distance
+  between two related classes.  Returns -1 if Descendent is not a descendent of
+  Ancestor. }
+
+function CountGenerations(Ancestor, Descendent: TClass): Integer;
+
+{  Call CheckSynchronize periodically within the main thread in order for
+   background threads to synchronize execution with the main thread.  This
+   is mainly for applications that have an event driven UI such as Windows
+   or XWindows (Qt/CLX).  The best place this can be called is during Idle
+   processing.  This guarantees that the main thread is in a known "good"
+   state so that method calls can be safely made.  Returns True if a method
+   was synchronized.  Returns False if there was nothing done.
+}
+function CheckSynchronize: Boolean;
+
+{ Assign a method to WakeMainThread in order to properly force an event into
+  the GUI thread's queue.  This will make sure that non-GUI threads can quickly
+  synchronize with the GUI thread even if no events are being processed due to
+  an idle state }
+var
+  WakeMainThread: TNotifyEvent = nil;
+
+{$IFDEF MSWINDOWS}
+
+type
+  TWndMethod = procedure(var Message: TMessage) of object;
+
+function MakeObjectInstance(Method: TWndMethod): Pointer;
+procedure FreeObjectInstance(ObjectInstance: Pointer);
+
+function AllocateHWnd(Method: TWndMethod): HWND;
+procedure DeallocateHWnd(Wnd: HWND);
+
+{$ENDIF}
+
 implementation
 
-uses Consts, TypInfo;
+{$IFDEF MSWINDOWS}
+uses RTLConsts, SysConst, Types;
+{$ENDIF}
+{$IFDEF LINUX}
+uses RTLConsts, SysConst;
+{$ENDIF}
 
 const
   FilerSignature: array[1..4] of Char = 'TPF0';
 
 var
-  ClassList: TThreadList;
-  ClassAliasList: TStringList;
   IntConstList: TThreadList;
 
 { Point and rectangle constructors }
 
 function Point(AX, AY: Integer): TPoint;
 begin
-  with Result do
-  begin
-    X := AX;
-    Y := AY;
-  end;
+  Result := Types.Point(AX, AY);
 end;
 
 function SmallPoint(AX, AY: SmallInt): TSmallPoint;
@@ -1277,25 +1584,519 @@ begin
   end;
 end;
 
+function PointsEqual(const P1, P2: TPoint): Boolean;
+begin
+  Result := (P1.X = P2.X) and (P1.Y = P2.Y);
+end;
+
+function PointsEqual(const P1, P2: TSmallPoint): Boolean;
+begin
+  Result := (P1.X = P2.X) and (P1.Y = P2.Y);
+end;
+
 function Rect(ALeft, ATop, ARight, ABottom: Integer): TRect;
 begin
-  with Result do
-  begin
-    Left := ALeft;
-    Top := ATop;
-    Right := ARight;
-    Bottom := ABottom;
-  end;
+  Result := Types.Rect(ALeft, ATop, ARight, ABottom);
+end;
+
+function Rect(const ATopLeft, ABottomRight: TPoint): TRect;
+begin
+  Result := Types.Rect(ATopLeft.X, ATopLeft.Y, ABottomRight.X, ABottomRight.Y);
 end;
 
 function Bounds(ALeft, ATop, AWidth, AHeight: Integer): TRect;
 begin
-  with Result do
+  Result := Types.Bounds(ALeft, ATop, AWidth, AHeight);
+end;
+
+function InvalidPoint(X, Y: Integer): Boolean;
+begin
+  Result := (X = -1) and (Y = -1);
+end;
+
+function InvalidPoint(const At: TPoint): Boolean;
+begin
+  Result := (At.X = -1) and (At.Y = -1);
+end;
+
+function InvalidPoint(const At: TSmallPoint): Boolean;
+begin
+  Result := (At.X = -1) and (At.Y = -1);
+end;
+
+{ Class registration groups }
+
+type
+  TRegGroup = class
+  private
+    FClassList: TList;
+    FAliasList: TStringList;
+    FGroupClasses: TList;
+    FActive: Boolean;
+    function BestClass(AClass: TPersistentClass): TPersistentClass;
+  public
+    constructor Create(AClass: TPersistentClass);
+    destructor Destroy; override;
+    class function BestGroup(Group1, Group2: TRegGroup; AClass: TPersistentClass): TRegGroup;
+    procedure AddClass(AClass: TPersistentClass);
+    function GetClass(const AClassName: string): TPersistentClass;
+    procedure GetClasses(Proc: TGetClass);
+    function InGroup(AClass: TPersistentClass): Boolean;
+    procedure RegisterClass(AClass: TPersistentClass);
+    procedure RegisterClassAlias(AClass: TPersistentClass; const Alias: string);
+    function Registered(AClass: TPersistentClass): Boolean;
+    procedure UnregisterClass(AClass: TPersistentClass);
+    procedure UnregisterModuleClasses(Module: HMODULE);
+    property Active: Boolean read FActive write FActive;
+  end;
+
+  TRegGroups = class
+  private
+    FGroups: TList;
+    FLock: TRTLCriticalSection;
+    FActiveClass: TPersistentClass;
+    function FindGroup(AClass: TPersistentClass): TRegGroup;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure Activate(AClass: TPersistentClass);
+    procedure AddClass(ID: Integer; AClass: TPersistentClass);
+    function GetClass(const AClassName: string): TPersistentClass;
+    function GroupedWith(AClass: TPersistentClass): TPersistentClass;
+    procedure GroupWith(AClass, AGroupClass: TPersistentClass);
+    procedure Lock;
+    procedure RegisterClass(AClass: TPersistentClass);
+    procedure RegisterClassAlias(AClass: TPersistentClass; const Alias: string);
+    function Registered(AClass: TPersistentClass): Boolean;
+    procedure StartGroup(AClass: TPersistentClass);
+    procedure Unlock;
+    procedure UnregisterClass(AClass: TPersistentClass);
+    procedure UnregisterModuleClasses(Module: HMODULE);
+    property ActiveClass: TPersistentClass read FActiveClass;
+  end;
+
+var
+  RegGroups: TRegGroups;
+
+{ TRegGroup }
+
+procedure TRegGroup.AddClass(AClass: TPersistentClass);
+begin
+  FGroupClasses.Add(AClass);
+end;
+
+function TRegGroup.BestClass(AClass: TPersistentClass): TPersistentClass;
+var
+  I: Integer;
+  Current: TPersistentClass;
+begin
+  Result := nil;
+  for I := 0 to FGroupClasses.Count - 1 do
   begin
-    Left := ALeft;
-    Top := ATop;
-    Right := ALeft + AWidth;
-    Bottom :=  ATop + AHeight;
+    Current := FGroupClasses[I];
+    if AClass.InheritsFrom(Current) then
+      if (Result = nil) or Current.InheritsFrom(Result) then
+        Result := Current;
+  end;
+end;
+
+class function TRegGroup.BestGroup(Group1, Group2: TRegGroup;
+  AClass: TPersistentClass): TRegGroup;
+var
+  Group1Class: TPersistentClass;
+  Group2Class: TPersistentClass;
+begin
+  if Group1 <> nil then
+    Group1Class := Group1.BestClass(AClass) else
+    Group1Class := nil;
+  if Group2 <> nil then
+    Group2Class := Group2.BestClass(AClass) else
+    Group2Class := nil;
+  if Group1Class = nil then
+    if Group2Class = nil then
+      // AClass is not in either group, no best group
+      Result := nil
+    else
+      // AClass is in Group2 but not Group1, Group2 is best
+      Result := Group2
+  else
+    if Group2Class = nil then
+      // AClass is in Group1 but not Group2, Group1 is best
+      Result := Group1
+    else
+      // AClass is in both groups, select the group with the closest ancestor
+      if Group1Class.InheritsFrom(Group2Class) then
+        Result := Group1
+      else
+        Result := Group2;
+end;
+
+constructor TRegGroup.Create(AClass: TPersistentClass);
+begin
+  inherited Create;
+  FClassList := TList.Create;
+  FAliasList := TStringList.Create;
+  FGroupClasses := TList.Create;
+  FGroupClasses.Add(AClass);
+end;
+
+destructor TRegGroup.Destroy;
+begin
+  inherited Destroy;
+  FClassList.Free;
+  FAliasList.Free;
+  FGroupClasses.Free;
+end;
+
+function TRegGroup.GetClass(const AClassName: string): TPersistentClass;
+var
+  I: Integer;
+begin
+  for I := 0 to FClassList.Count - 1 do
+  begin
+    Result := FClassList[I];
+    if Result.ClassNameIs(AClassName) then Exit;
+  end;
+  I := FAliasList.IndexOf(AClassName);
+  if I >= 0 then
+  begin
+    Result := TPersistentClass(FAliasList.Objects[I]);
+    Exit;
+  end;
+  Result := nil;
+end;
+
+procedure TRegGroup.GetClasses(Proc: TGetClass);
+var
+  I: Integer;
+begin
+  for I := 0 to FClassList.Count - 1 do
+    Proc(TPersistentClass(FClassList[I]));
+end;
+
+function TRegGroup.InGroup(AClass: TPersistentClass): Boolean;
+var
+  I: Integer;
+begin
+  Result := True;
+  for I := 0 to FGroupClasses.Count - 1 do
+    if AClass.InheritsFrom(TPersistentClass(FGroupClasses[I])) then Exit;
+  Result := False;
+end;
+
+procedure TRegGroup.RegisterClass(AClass: TPersistentClass);
+var
+  LClassName: string;
+begin
+  LClassName := AClass.ClassName;
+  if GetClass(LClassName) <> nil then
+    raise EFilerError.CreateResFmt(@SDuplicateClass, [LClassName]);
+  FClassList.Add(AClass);
+end;
+
+procedure TRegGroup.RegisterClassAlias(AClass: TPersistentClass;
+  const Alias: string);
+begin
+  RegisterClass(AClass);
+  FAliasList.AddObject(Alias, TObject(AClass));
+end;
+
+function TRegGroup.Registered(AClass: TPersistentClass): Boolean;
+begin
+  Result := FClassList.IndexOf(AClass) >= 0;
+end;
+
+procedure TRegGroup.UnregisterClass(AClass: TPersistentClass);
+var
+  I: Integer;
+begin
+  FClassList.Remove(AClass);
+  for I := FAliasList.Count - 1 downto 0 do
+    if FAliasList.Objects[I] = TObject(AClass) then
+      FAliasList.Delete(I);
+end;
+
+function PointerInModule(Ptr: Pointer; Module: HMODULE): Boolean;
+begin
+  Result := (Module = 0) or (FindHInstance(Ptr) = Module);
+end;
+
+procedure TRegGroup.UnregisterModuleClasses(Module: HMODULE);
+var
+  I: Integer;
+begin
+  // Even though the group criterion changes we do not need to recalculate the
+  // groups because the groups are based on ancestry. If an ancestor of a class
+  // is removed because its module was unloaded we can safely assume that all
+  // descendents have also been unloaded or are being unloaded as well. This
+  // means that any classes left in the registry are not descendents of the
+  // classes being removed and, therefore, will not be affected by the change
+  // to the FGroupClasses list.
+  for I := FGroupClasses.Count - 1 downto 0 do
+    if PointerInModule(FGroupClasses[I], Module) then
+      FGroupClasses.Delete(I);
+  for I := FClassList.Count - 1 downto 0 do
+    if PointerInModule(FClassList[I], Module) then
+      FClassList.Delete(I);
+  for I := FAliasList.Count - 1 downto 0 do
+    if PointerInModule(FAliasList.Objects[I], Module) then
+      FAliasList.Delete(I);
+end;
+
+{ TRegGroups }
+
+procedure TRegGroups.Activate(AClass: TPersistentClass);
+var
+  I: Integer;
+begin
+  if FActiveClass <> AClass then
+  begin
+    FActiveClass := AClass;
+    for I := 0 to FGroups.Count - 1 do
+      with TRegGroup(FGroups[I]) do
+        Active := InGroup(AClass);
+  end;
+end;
+
+procedure TRegGroups.AddClass(ID: Integer; AClass: TPersistentClass);
+begin
+  TRegGroup(FGroups[ID]).AddClass(AClass);
+end;
+
+constructor TRegGroups.Create;
+var
+  Group: TRegGroup;
+begin
+  inherited Create;
+  FGroups := TList.Create;
+  InitializeCriticalSection(FLock);
+  // Initialize default group
+  Group := TRegGroup.Create(TPersistent);
+  FGroups.Add(Group);
+  Group.Active := True;
+end;
+
+destructor TRegGroups.Destroy;
+var
+  I: Integer;
+begin
+  DeleteCriticalSection(FLock);
+  for I := 0 to FGroups.Count - 1 do
+    TRegGroup(FGroups[I]).Free;
+  FGroups.Free;
+  inherited;
+end;
+
+function TRegGroups.FindGroup(AClass: TPersistentClass): TRegGroup;
+var
+  I: Integer;
+  Current: TRegGroup;
+begin
+  Result := nil;
+  for I := 0 to FGroups.Count - 1 do
+  begin
+    Current := FGroups[I];
+    Result := TRegGroup.BestGroup(Current, Result, AClass);
+  end;
+end;
+
+function TRegGroups.GetClass(const AClassName: string): TPersistentClass;
+var
+  I: Integer;
+begin
+  Result := nil;
+  for I := 0 to FGroups.Count - 1 do
+    with TRegGroup(FGroups[I]) do
+    begin
+      if Active then Result := GetClass(AClassName);
+      if Result <> nil then Exit;
+    end;
+end;
+
+function TRegGroups.GroupedWith(AClass: TPersistentClass): TPersistentClass;
+var
+  Group: TRegGroup;
+begin
+  Result := nil;
+  Group := FindGroup(AClass);
+  if Group <> nil then
+    Result := TPersistentClass(Group.FClassList[0]);
+end;
+
+procedure TRegGroups.GroupWith(AClass, AGroupClass: TPersistentClass);
+
+  procedure Error;
+  begin
+    raise EFilerError.CreateFmt(SUnknownGroup, [AGroupClass.ClassName]);
+  end;
+
+var
+  Group: TRegGroup;
+  CurrentGroup: TRegGroup;
+  CurrentClass: TPersistentClass;
+  I, J: Integer;
+begin
+  Group := FindGroup(AGroupClass);
+  if Group = nil then Error;
+  Group.AddClass(AClass);
+
+  // The group criterion has changed. We need to recalculate which groups the
+  // classes that have already been registered belong to. We can skip
+  // Group since we would just be moving a class to a group it already belongs
+  // to. We also only need to find the new group of classes that descend from
+  // AClass since that is the only criterion being changed. In other words,
+  // we only need to move classes that descend from AClass to Group if they
+  // are in another group.
+  for I := 0 to FGroups.Count - 1 do
+  begin
+    CurrentGroup := FGroups[I];
+    if CurrentGroup <> Group then
+      for J := CurrentGroup.FClassList.Count - 1 downto 0 do
+      begin
+        CurrentClass := CurrentGroup.FClassList[J];
+        if CurrentClass.InheritsFrom(AClass) then
+          // Check CurrentClass should be put into Group based on the new
+          // criterion. Their might be a descendent of AClass registered that
+          // overrides Group's criterion.
+          if FindGroup(CurrentClass) = Group then
+          begin
+            CurrentGroup.FClassList.Delete(J);
+            Group.FClassList.Add(CurrentClass);
+          end;
+      end;
+  end;
+end;
+
+procedure TRegGroups.Lock;
+begin
+  EnterCriticalSection(FLock);
+end;
+
+procedure TRegGroups.RegisterClass(AClass: TPersistentClass);
+var
+  Group: TRegGroup;
+begin
+  Group := FindGroup(AClass);
+  if Group <> nil then Group.RegisterClass(AClass);
+end;
+
+procedure TRegGroups.RegisterClassAlias(AClass: TPersistentClass;
+  const Alias: string);
+var
+  Group: TRegGroup;
+begin
+  Group := FindGroup(AClass);
+  if Group <> nil then Group.RegisterClassAlias(AClass, Alias);
+end;
+
+function TRegGroups.Registered(AClass: TPersistentClass): Boolean;
+var
+  I: Integer;
+begin
+  Result := True;
+  for I := 0 to FGroups.Count - 1 do
+    if TRegGroup(FGroups[I]).Registered(AClass) then Exit;
+  Result := False;
+end;
+
+procedure TRegGroups.StartGroup(AClass: TPersistentClass);
+var
+  I: Integer;
+begin
+  // Do not start a group that already exists
+  for I := 0 to FGroups.Count - 1 do
+    if TRegGroup(FGroups[I]).FGroupClasses.IndexOf(AClass) >= 0 then
+      Exit;
+  // Create the group
+  FGroups.Add(TRegGroup.Create(AClass));
+end;
+
+procedure TRegGroups.Unlock;
+begin
+  LeaveCriticalSection(FLock);
+end;
+
+procedure TRegGroups.UnregisterClass(AClass: TPersistentClass);
+var
+  I: Integer;
+begin
+  for I := 0 to FGroups.Count - 1 do
+    TRegGroup(FGroups[I]).UnregisterClass(AClass);
+end;
+
+procedure TRegGroups.UnregisterModuleClasses(Module: HMODULE);
+var
+  I: Integer;
+begin
+  for I := FGroups.Count - 1 downto 0 do
+    TRegGroup(FGroups[I]).UnregisterModuleClasses(Module);
+end;
+
+{ TClassFinder }
+
+constructor TClassFinder.Create(AClass: TPersistentClass;
+  AIncludeActiveGroups: Boolean);
+var
+  I: Integer;
+  Group: TRegGroup;
+begin
+  inherited Create;
+  FGroups := TList.Create;
+  RegGroups.Lock;
+  try
+    if AClass = nil then AClass := RegGroups.ActiveClass;
+    for I := 0 to RegGroups.FGroups.Count - 1 do
+    begin
+      Group := RegGroups.FGroups[I];
+      if Group.InGroup(AClass) then
+        FGroups.Add(Group);
+    end;
+    if AIncludeActiveGroups then
+      for I := 0 to RegGroups.FGroups.Count - 1 do
+      begin
+        Group := RegGroups.FGroups[I];
+        if Group.Active then
+          FGroups.Add(Group);
+      end;
+  finally
+    RegGroups.Unlock;
+  end;
+end;
+
+destructor TClassFinder.Destroy;
+begin
+  FGroups.Free;
+  inherited;
+end;
+
+function TClassFinder.GetClass(const AClassName: string): TPersistentClass;
+var
+  I: Integer;
+begin
+  Result := nil;
+  RegGroups.Lock;
+  try
+    for I := 0 to FGroups.Count - 1 do
+      with TRegGroup(FGroups[I]) do
+      begin
+        Result := GetClass(AClassName);
+        if Result <> nil then Exit;
+      end;
+  finally
+    RegGroups.Unlock;
+  end;
+end;
+
+procedure TClassFinder.GetClasses(Proc: TGetClass);
+var
+  I: Integer;
+begin
+  RegGroups.Lock;
+  try
+    for I := 0 to FGroups.Count - 1 do
+      TRegGroup(FGroups[I]).GetClasses(Proc);
+  finally
+    RegGroups.Unlock;
   end;
 end;
 
@@ -1323,25 +2124,12 @@ begin
 end;
 
 function GetClass(const AClassName: string): TPersistentClass;
-var
-  I: Integer;
 begin
-  with ClassList.LockList do
-  try     // ClassAliasList protected by ClassList lock
-    for I := 0 to Count - 1 do
-    begin
-      Result := Items[I];
-      if Result.ClassNameIs(AClassName) then Exit;
-    end;
-    I := ClassAliasList.IndexOf(AClassName);
-    if I >= 0 then
-    begin
-      Result := TPersistentClass(ClassAliasList.Objects[I]);
-      Exit;
-    end;
-    Result := nil;
+  RegGroups.Lock;
+  try
+    Result := RegGroups.GetClass(AClassName);
   finally
-    ClassList.UnlockList;
+    RegGroups.Unlock;
   end;
 end;
 
@@ -1351,45 +2139,18 @@ begin
   if Result = nil then ClassNotFound(ClassName);
 end;
 
-function GetFieldClass(Instance: TObject;
-  const ClassName: string): TPersistentClass;
-var
-  I: Integer;
-  ClassTable: PFieldClassTable;
-  ClassType: TClass;
-begin
-  ClassType := Instance.ClassType;
-  while ClassType <> TPersistent do
-  begin
-    ClassTable := GetFieldClassTable(ClassType);
-    if ClassTable <> nil then
-      for I := 0 to ClassTable^.Count - 1 do
-      begin
-        Result := ClassTable^.Classes[I]^;
-        if SameText(Result.ClassName, ClassName) then Exit;
-      end;
-    ClassType := ClassType.ClassParent;
-  end;
-  Result := GetClass(ClassName);
-end;
-
 procedure RegisterClass(AClass: TPersistentClass);
-var
-  AClassName: string;
 begin
-  with ClassList.LockList do
+  RegGroups.Lock;
   try
-    while IndexOf(AClass) = -1 do
+    while not RegGroups.Registered(AClass) do
     begin
-      AClassName := AClass.ClassName;
-      if GetClass(AClassName) <> nil then
-        raise EFilerError.CreateResFmt(@SDuplicateClass, [AClassName]);
-      Add(AClass);
+      RegGroups.RegisterClass(AClass);
       if AClass = TPersistent then Break;
       AClass := TPersistentClass(AClass.ClassParent);
     end;
   finally
-    ClassList.UnlockList;
+    RegGroups.Unlock;
   end;
 end;
 
@@ -1402,18 +2163,22 @@ end;
 
 procedure RegisterClassAlias(AClass: TPersistentClass; const Alias: string);
 begin
-  ClassList.LockList; // ClassAliasList protected by ClassList lock
+  RegGroups.Lock;
   try
-    RegisterClass(AClass);
-    ClassAliasList.AddObject(Alias, TObject(AClass));
+    RegGroups.RegisterClassAlias(AClass, Alias);
   finally
-    ClassList.UnlockList;
+    RegGroups.Unlock;
   end;
 end;
 
 procedure UnRegisterClass(AClass: TPersistentClass);
 begin
-  ClassList.Remove(AClass);
+  RegGroups.Lock;
+  try
+    RegGroups.UnregisterClass(AClass);
+  finally
+    RegGroups.Unlock;
+  end;
 end;
 
 procedure UnRegisterClasses(AClasses: array of TPersistentClass);
@@ -1424,27 +2189,71 @@ begin
 end;
 
 procedure UnRegisterModuleClasses(Module: HMODULE);
-var
-  I: Integer;
-  M: TMemoryBasicInformation;
 begin
-  with ClassList.LockList do
+  RegGroups.Lock;
   try
-    for I := Count - 1 downto 0 do
+    RegGroups.UnregisterModuleClasses(Module);
+  finally
+    RegGroups.Unlock;
+  end;
+end;
+
+procedure StartClassGroup(AClass: TPersistentClass);
+begin
+  RegGroups.Lock;
+  try
+    RegGroups.StartGroup(AClass);
+  finally
+    RegGroups.Unlock;
+  end;
+end;
+
+procedure GroupDescendentsWith(AClass, AClassGroup: TPersistentClass);
+begin
+  RegGroups.Lock;
+  try
+    RegGroups.GroupWith(AClass, AClassGroup);
+  finally
+    RegGroups.Unlock;
+  end;
+end;
+
+function ActivateClassGroup(AClass: TPersistentClass): TPersistentClass;
+begin
+  RegGroups.Lock;
+  try
+    Result := RegGroups.ActiveClass;
+    RegGroups.Activate(AClass);
+  finally
+    RegGroups.Unlock;
+  end;
+end;
+
+function ClassGroupOf(AClass: TPersistentClass): TPersistentClass;
+begin
+  RegGroups.Lock;
+  try
+    Result := RegGroups.GroupedWith(AClass);
+  finally
+    RegGroups.Unlock;
+  end;
+end;
+
+function ClassGroupOf(Instance: TPersistent): TPersistentClass;
+begin
+  RegGroups.Lock;
+  try
+    Result := nil;
+    while Instance <> nil do
     begin
-      VirtualQuery(Items[I], M, SizeOf(M));
-      if (Module = 0) or (HMODULE(M.AllocationBase) = Module) then
-        Delete(I);
-    end;
-    // ClassAliasList protected by ClassList lock
-    for I := ClassAliasList.Count - 1 downto 0 do
-    begin
-      VirtualQuery(Pointer(ClassAliasList.Objects[I]), M, SizeOf(M));
-      if (Module = 0) or (HMODULE(M.AllocationBase) = Module) then
-        ClassAliasList.Delete(I);
+      Result := RegGroups.GroupedWith(TPersistentClass(Instance.ClassType));
+      if Result <> nil then
+        Exit
+      else
+        Instance := Instance.GetOwner;
     end;
   finally
-    ClassList.UnlockList;
+    RegGroups.Unlock;
   end;
 end;
 
@@ -1467,6 +2276,7 @@ begin
     raise EComponentError.CreateRes(@SRegisterError);
 end;
 
+{$IFDEF MSWINDOWS}
 procedure RegisterNonActiveX(ComponentClasses: array of TComponentClass;
   AxRegType: TActiveXRegType);
 begin
@@ -1474,6 +2284,7 @@ begin
     raise EComponentError.CreateRes(@SRegisterError);
   RegisterNonActiveXProc(ComponentClasses, AxRegType)
 end;
+{$ENDIF}
 
 { Component filing }
 
@@ -1494,10 +2305,28 @@ begin
   IntToIdent := AIntToIdent;
 end;
 
-procedure RegisterIntegerConsts(IntegerType: Pointer; IdentToInt: TIdentToInt;
-  IntToIdent: TIntToIdent);
+procedure RegisterIntegerConsts(AIntegerType: Pointer; AIdentToInt: TIdentToInt;
+  AIntToIdent: TIntToIdent);
 begin
-  IntConstList.Add(TIntConst.Create(IntegerType, IdentToInt, IntToIdent));
+  IntConstList.Add(TIntConst.Create(AIntegerType, AIdentToInt, AIntToIdent));
+end;
+
+procedure UnregisterIntegerConsts(AIntegerType: Pointer; AIdentToInt: TIdentToInt;
+  AIntToIdent: TIntToIdent);
+var
+  I: Integer;
+begin
+  with IntConstList.LockList do
+  try
+    for I := Count-1 downto 0 do
+      with TIntConst(Items[I]) do
+        if (IntegerType = AIntegerType) and
+           (@IntToIdent = @AIntToIdent) and
+           (@IdentToInt = @AIdentToInt) then
+          Delete(I);
+  finally
+    IntConstList.UnlockList;
+  end;
 end;
 
 function FindIntToIdent(AIntegerType: Pointer): TIntToIdent;
@@ -1507,7 +2336,7 @@ begin
   Result := nil;
   with IntConstList.LockList do
   try
-    for I := 0 to Count - 1 do
+    for I := Count - 1 downto 0 do
       with TIntConst(Items[I]) do
         if AIntegerType = IntegerType then
         begin
@@ -1526,7 +2355,7 @@ begin
   Result := nil;
   with IntConstList.LockList do
   try
-    for I := 0 to Count - 1 do
+    for I := Count - 1 downto 0 do
       with TIntConst(Items[I]) do
         if AIntegerType = IntegerType then
         begin
@@ -1566,6 +2395,44 @@ begin
   Result := False;
 end;
 
+var
+  FindGlobalComponentProcs: TList;
+
+procedure RegisterFindGlobalComponentProc(AFindGlobalComponent: TFindGlobalComponent);
+begin
+  if FindGlobalComponentProcs = nil then
+    FindGlobalComponentProcs := TList.Create;
+  if FindGlobalComponentProcs.IndexOf(@AFindGlobalComponent) < 0 then
+    FindGlobalComponentProcs.Add(@AFindGlobalComponent);
+end;
+
+procedure UnregisterFindGlobalComponentProc(AFindGlobalComponent: TFindGlobalComponent);
+begin
+  if FindGlobalComponentProcs <> nil then
+    FindGlobalComponentProcs.Remove(@AFindGlobalComponent);
+end;
+
+function FindGlobalComponent(const Name: string): TComponent;
+var
+  I: Integer;
+begin
+  Result := nil;
+  if FindGlobalComponentProcs <> nil then
+  begin
+    for I := FindGlobalComponentProcs.Count - 1 downto 0 do
+    begin
+      Result := TFindGlobalComponent(FindGlobalComponentProcs[I])(Name);
+      if Result <> nil then Exit;
+    end;
+  end;
+end;
+
+function IsUniqueGlobalComponentName(const Name: string): Boolean;
+begin
+  if Assigned(IsUniqueGlobalComponentNameProc) then
+    Result := IsUniqueGlobalComponentNameProc(Name)
+  else Result := FindGlobalComponent(Name) = nil;
+end;
 
 function InternalReadComponentRes(const ResName: string; HInst: THandle; var Instance: TComponent): Boolean;
 var
@@ -1589,9 +2456,16 @@ threadvar
   GlobalLists: TList;
 
 procedure BeginGlobalLoading;
+var
+  G: TList;
 begin
-  if GlobalLists = nil then GlobalLists := TList.Create;
-  GlobalLists.Add(GlobalLoaded);
+  G := GlobalLists;
+  if G = nil then
+  begin
+    G := TList.Create;
+    GlobalLists := G;
+  end;
+  G.Add(GlobalLoaded);
   GlobalLoaded := TList.Create;
 end;
 
@@ -1606,12 +2480,18 @@ begin
 end;
 
 procedure EndGlobalLoading;
+var
+  G: TList;
 begin
   GlobalLoaded.Free;
-  GlobalLoaded := GlobalLists.Last;
-  GlobalLists.Delete(GlobalLists.Count - 1);
-  if GlobalLists.Count = 0 then
-    FreeAndNil(GlobalLists);
+  G := GlobalLists;
+  GlobalLoaded := G.Last;
+  G.Delete(G.Count - 1);
+  if G.Count = 0 then
+  begin
+    GlobalLists := nil;
+    G.Free;
+  end;
 end;
 
 function InitInheritedComponent(Instance: TComponent; RootAncestor: TClass): Boolean;
@@ -1628,8 +2508,10 @@ function InitInheritedComponent(Instance: TComponent; RootAncestor: TClass): Boo
 var
   LocalizeLoading: Boolean;
 begin
+{$IFDEF MSWINDOWS}
   GlobalNameSpace.BeginWrite;  // hold lock across all ancestor loads (performance)
   try
+{$ENDIF}
     LocalizeLoading := (Instance.ComponentState * [csInline, csLoading]) = [];
     if LocalizeLoading then BeginGlobalLoading;  // push new loadlist onto stack
     try
@@ -1638,9 +2520,11 @@ begin
     finally
       if LocalizeLoading then EndGlobalLoading;  // pop loadlist off stack
     end;
+{$IFDEF MSWINDOWS}
   finally
     GlobalNameSpace.EndWrite;
   end;
+{$ENDIF}
 end;
 
 function InitComponentRes(const ResName: string; Instance: TComponent): Boolean;
@@ -1695,15 +2579,17 @@ begin
   end;
 end;
 
-function CollectionsEqual(C1, C2: TCollection): Boolean;
+function CollectionsEqual(C1, C2: TCollection; Owner1, Owner2: TComponent): Boolean;
 var
   S1, S2: TMemoryStream;
 
-  procedure WriteCollection(Stream: TStream; Collection: TCollection);
+  procedure WriteCollection(Stream: TStream; Collection: TCollection; CollectionOwner: TComponent);
   var
     Writer: TWriter;
   begin
     Writer := TWriter.Create(Stream, 1024);
+    Writer.Root := CollectionOwner;
+    Writer.FLookupRoot := CollectionOwner;
     try
       Writer.WriteCollection(Collection);
     finally
@@ -1717,10 +2603,10 @@ begin
   if C1.Count <> C2.Count then Exit;
   S1 := TMemoryStream.Create;
   try
-    WriteCollection(S1, C1);
+    WriteCollection(S1, C1, Owner1);
     S2 := TMemoryStream.Create;
     try
-      WriteCollection(S2, C2);
+      WriteCollection(S2, C2, Owner2);
       Result := (S1.Size = S2.Size) and CompareMem(S1.Memory, S2.Memory, S1.Size);
     finally
       S2.Free;
@@ -1772,7 +2658,7 @@ begin
       Head := Tail;
       while True do
       begin
-        while (InQuote and not (Tail^ in ['''', '"', #0])) or
+        while (InQuote and not (Tail^ in [QuoteChar, #0])) or
           not (Tail^ in Separators + [#0, #13, #10, '''', '"']) do Inc(Tail);
         if Tail^ in ['''', '"'] then
         begin
@@ -1952,12 +2838,15 @@ var
 begin
   if (Index < 0) or (Index >= FCount) then
     Error(@SListIndexError, Index);
-  Temp := FList^[Index];
-  FList^[Index] := Item;
-  if Temp <> nil then
-    Notify(Temp, lnDeleted);
-  if Item <> nil then
-    Notify(Item, lnAdded);
+  if Item <> FList^[Index] then
+  begin
+    Temp := FList^[Index];
+    FList^[Index] := Item;
+    if Temp <> nil then
+      Notify(Temp, lnDeleted);
+    if Item <> nil then
+      Notify(Item, lnAdded);
+  end;
 end;
 
 function TList.Remove(Item: Pointer): Integer;
@@ -2058,6 +2947,89 @@ procedure TList.Notify(Ptr: Pointer; Action: TListNotification);
 begin
 end;
 
+procedure TList.Assign(ListA: TList; AOperator: TListAssignOp; ListB: TList);
+var
+  I: Integer;
+  LTemp, LSource: TList;
+begin
+  // ListB given?
+  if ListB <> nil then
+  begin
+    LSource := ListB;
+    Assign(ListA);
+  end
+  else
+    LSource := ListA;
+
+  // on with the show
+  case AOperator of
+
+    // 12345, 346 = 346 : only those in the new list
+    laCopy:
+      begin
+        Clear;
+        Capacity := LSource.Capacity;
+        for I := 0 to LSource.Count - 1 do
+          Add(LSource[I]);
+      end;
+
+    // 12345, 346 = 34 : intersection of the two lists
+    laAnd:
+      for I := Count - 1 downto 0 do
+        if LSource.IndexOf(Items[I]) = -1 then
+          Delete(I);
+
+    // 12345, 346 = 123456 : union of the two lists
+    laOr:
+      for I := 0 to LSource.Count - 1 do
+        if IndexOf(LSource[I]) = -1 then
+          Add(LSource[I]);
+
+    // 12345, 346 = 1256 : only those not in both lists
+    laXor:
+      begin
+        LTemp := TList.Create; // Temp holder of 4 byte values
+        try
+          LTemp.Capacity := LSource.Count;
+          for I := 0 to LSource.Count - 1 do
+            if IndexOf(LSource[I]) = -1 then
+              LTemp.Add(LSource[I]);
+          for I := Count - 1 downto 0 do
+            if LSource.IndexOf(Items[I]) <> -1 then
+              Delete(I);
+          I := Count + LTemp.Count;
+          if Capacity < I then
+            Capacity := I;
+          for I := 0 to LTemp.Count - 1 do
+            Add(LTemp[I]);
+        finally
+          LTemp.Free;
+        end;
+      end;
+
+    // 12345, 346 = 125 : only those unique to source
+    laSrcUnique:
+      for I := Count - 1 downto 0 do
+        if LSource.IndexOf(Items[I]) <> -1 then
+          Delete(I);
+
+    // 12345, 346 = 6 : only those unique to dest
+    laDestUnique:
+      begin
+        LTemp := TList.Create;
+        try
+          LTemp.Capacity := LSource.Count;
+          for I := LSource.Count - 1 downto 0 do
+            if IndexOf(LSource[I]) = -1 then
+              LTemp.Add(LSource[I]);
+          Assign(LTemp);
+        finally
+          LTemp.Free;
+        end;
+      end;
+  end;
+end;
+
 { TThreadList }
 
 constructor TThreadList.Create;
@@ -2149,7 +3121,7 @@ begin
     with FList.LockList do
     try
       for I := 0 to Count - 1 do
-        IUnknown(List[I]) := nil;
+        IInterface(List[I]) := nil;
       Clear;
     finally
       Self.FList.UnlockList;
@@ -2179,17 +3151,18 @@ begin
   end;
 end;
 
-function TInterfaceList.First: IUnknown;
+function TInterfaceList.First: IInterface;
 begin
   Result := Get(0);
 end;
 
-function TInterfaceList.Get(Index: Integer): IUnknown;
+function TInterfaceList.Get(Index: Integer): IInterface;
 begin
   with FList.LockList do
   try
-    if (Index < 0) or (Index >= Count) then Error(@SListIndexError, Index);
-    Result := IUnknown(List[Index]);
+    if (Index < 0) or (Index >= Count) then
+      Error(@SListIndexError, Index);
+    Result := IInterface(List[Index]);
   finally
     Self.FList.UnlockList;
   end;
@@ -2215,7 +3188,7 @@ begin
   end;
 end;
 
-function TInterfaceList.IndexOf(Item: IUnknown): Integer;
+function TInterfaceList.IndexOf(const Item: IInterface): Integer;
 begin
   with FList.LockList do
   try
@@ -2225,29 +3198,29 @@ begin
   end;
 end;
 
-function TInterfaceList.Add(Item: IUnknown): Integer;
+function TInterfaceList.Add(const Item: IInterface): Integer;
 begin
   with FList.LockList do
   try
     Result := Add(nil);
-    IUnknown(List[Result]) := Item;
+    IInterface(List[Result]) := Item;
   finally
     Self.FList.UnlockList;
   end;
 end;
 
-procedure TInterfaceList.Insert(Index: Integer; Item: IUnknown);
+procedure TInterfaceList.Insert(Index: Integer; const Item: IInterface);
 begin
   with FList.LockList do
   try
     Insert(Index, nil);
-    IUnknown(List[Index]) := Item;
+    IInterface(List[Index]) := Item;
   finally
     Self.FList.UnlockList;
   end;
 end;
 
-function TInterfaceList.Last: IUnknown;
+function TInterfaceList.Last: IInterface;
 begin
   with FList.LockList do
   try
@@ -2257,25 +3230,25 @@ begin
   end;
 end;
 
-procedure TInterfaceList.Put(Index: Integer; Item: IUnknown);
+procedure TInterfaceList.Put(Index: Integer; const Item: IInterface);
 begin
   with FList.LockList do
   try
     if (Index < 0) or (Index >= Count) then Error(@SListIndexError, Index);
-    IUnknown(List[Index]) := Item;
+    IInterface(List[Index]) := Item;
   finally
     Self.FList.UnlockList;
   end;
 end;
 
-function TInterfaceList.Remove(Item: IUnknown): Integer;
+function TInterfaceList.Remove(const Item: IInterface): Integer;
 begin
   with FList.LockList do
   try
     Result := IndexOf(Pointer(Item));
     if Result > -1 then
     begin
-      IUnknown(List[Result]) := nil;
+      IInterface(List[Result]) := nil;
       Delete(Result);
     end;
   finally
@@ -2495,6 +3468,121 @@ begin
   Result := nil;
 end;
 
+{ TInterfacedPersistent }
+
+procedure TInterfacedPersistent.AfterConstruction;
+begin
+  inherited;
+  if GetOwner <> nil then
+    GetOwner.GetInterface(IInterface, FOwnerInterface);
+end;
+
+function TInterfacedPersistent._AddRef: Integer;
+begin
+  if FOwnerInterface <> nil then
+    Result := FOwnerInterface._AddRef else
+    Result := -1;
+end;
+
+function TInterfacedPersistent._Release: Integer;
+begin
+  if FOwnerInterface <> nil then
+    Result := FOwnerInterface._Release else
+    Result := -1;
+end;
+
+function TInterfacedPersistent.QueryInterface(const IID: TGUID;
+  out Obj): HResult;
+const
+  E_NOINTERFACE = HResult($80004002);
+begin
+  if GetInterface(IID, Obj) then Result := 0 else Result := E_NOINTERFACE;
+end;
+
+// Out param is more code efficient for interfaces than function result
+procedure GetDesigner(Obj: TPersistent; out Result: IDesignerNotify);
+var
+  Temp: TPersistent;
+begin
+  Result := nil;
+  if Obj = nil then Exit;
+  Temp := Obj.GetOwner;
+  if Temp = nil then
+  begin
+    if (Obj is TComponent) and (csDesigning in TComponent(Obj).ComponentState) then
+      TComponent(Obj).QueryInterface(IDesignerNotify, Result);
+  end
+  else
+  begin
+    if (Obj is TComponent) and
+      not (csDesigning in TComponent(Obj).ComponentState) then Exit;
+    GetDesigner(Temp, Result);
+  end;
+end;
+
+function FindRootDesigner(Obj: TPersistent): IDesignerNotify;
+begin
+  GetDesigner(Obj, Result);
+end;
+
+function CountGenerations(Ancestor, Descendent: TClass): Integer;
+var
+  R: Integer;
+begin
+  R := 0;
+  while Ancestor <> Descendent do
+  begin
+    if Descendent = nil then
+    begin
+      // Descendent wasn't a descendent of Ancestor.
+      Result := -1;
+      Exit;
+    end;
+    Descendent := Descendent.ClassParent;
+    Inc(R);
+  end;
+  Result := R;
+end;
+
+procedure NotifyDesigner(Self, Item: TPersistent; Operation: TOperation);
+var
+  Designer: IDesignerNotify;
+begin
+  GetDesigner(Self, Designer);
+  if Designer <> nil then
+    Designer.Notification(Item, Operation);
+end;
+
+{ TRecall }
+
+constructor TRecall.Create(AStorage, AReference: TPersistent);
+begin
+  inherited Create;
+  FStorage := AStorage;
+  FReference := AReference;
+  Store;
+end;
+
+destructor TRecall.Destroy;
+begin
+  if Assigned(FReference) then
+    FReference.Assign(FStorage);
+  Forget;
+  inherited;
+end;
+
+procedure TRecall.Forget;
+begin
+  FReference := nil;
+  FreeAndNil(FStorage);
+end;
+
+procedure TRecall.Store;
+begin
+  if Assigned(FReference) then
+    FStorage.Assign(FReference);
+end;
+
 { TCollectionItem }
 
 constructor TCollectionItem.Create(Collection: TCollection);
@@ -2576,12 +3664,15 @@ constructor TCollection.Create(ItemClass: TCollectionItemClass);
 begin
   FItemClass := ItemClass;
   FItems := TList.Create;
+  NotifyDesigner(Self, Self, opInsert);
 end;
 
 destructor TCollection.Destroy;
 begin
   FUpdateCount := 1;
-  if FItems <> nil then Clear;
+  if FItems <> nil then
+    Clear;
+  NotifyDesigner(Self, Self, opRemove);
   FItems.Free;
   inherited Destroy;
 end;
@@ -2589,6 +3680,7 @@ end;
 function TCollection.Add: TCollectionItem;
 begin
   Result := FItemClass.Create(Self);
+  Added(Result);
 end;
 
 procedure TCollection.Assign(Source: TPersistent);
@@ -2626,7 +3718,8 @@ begin
   begin
     BeginUpdate;
     try
-      while FItems.Count > 0 do TCollectionItem(FItems.Last).Free;
+      while FItems.Count > 0 do
+        TCollectionItem(FItems.Last).Free;
     finally
       EndUpdate;
     end;
@@ -2723,41 +3816,6 @@ begin
   Result.Index := Index;
 end;
 
-// Out param is more code efficient for interfaces than function result
-procedure GetDesigner(Obj: TPersistent; out Result: IDesignerNotify);
-var
-  Temp: TPersistent;
-begin
-  Result := nil;
-  if Obj = nil then Exit;
-  Temp := Obj.GetOwner;
-  if Temp = nil then
-  begin
-    if (Obj is TComponent) and (csDesigning in TComponent(Obj).ComponentState) then
-      TComponent(Obj).QueryInterface(IDesignerNotify, Result);
-  end
-  else
-  begin
-    if (Obj is TComponent) and
-      not (csDesigning in TComponent(Obj).ComponentState) then Exit;
-    GetDesigner(Temp, Result);
-  end;
-end;
-
-function FindRootDesigner(Obj: TPersistent): IDesignerNotify;
-begin
-  GetDesigner(Obj, Result);
-end;
-
-procedure NotifyDesigner(Self, Item: TPersistent; Operation: TOperation);
-var
-  Designer: IDesignerNotify;
-begin
-  GetDesigner(Self, Designer);
-  if Designer <> nil then
-    Designer.Notification(Item, Operation);
-end;
-
 procedure TCollection.InsertItem(Item: TCollectionItem);
 begin
   if not (Item is FItemClass) then TList.Error(@SInvalidProperty, 0);
@@ -2766,15 +3824,20 @@ begin
   Item.FID := FNextID;
   Inc(FNextID);
   SetItemName(Item);
+  Notify(Item, cnAdded);
   Changed;
   NotifyDesigner(Self, Item, opInsert);
 end;
 
 procedure TCollection.RemoveItem(Item: TCollectionItem);
 begin
-  NotifyDesigner(Self, Item, opRemove);
-  FItems.Remove(Item);
+  Notify(Item, cnExtracting);
+  if Item = FItems.Last then
+    FItems.Delete(FItems.Count - 1)
+  else
+    FItems.Remove(Item);
   Item.FCollection := nil;
+  NotifyDesigner(Self, Item, opRemove);
   Changed;
 end;
 
@@ -2793,7 +3856,30 @@ end;
 
 procedure TCollection.Delete(Index: Integer);
 begin
+  Notify(TCollectionItem(FItems[Index]), cnDeleting);
   TCollectionItem(FItems[Index]).Free;
+end;
+
+function TCollection.Owner: TPersistent;
+begin
+  Result := GetOwner;
+end;
+
+procedure TCollection.Added(var Item: TCollectionItem);
+begin
+end;
+
+procedure TCollection.Deleting(Item: TCollectionItem);
+begin
+end;
+
+procedure TCollection.Notify(Item: TCollectionItem;
+  Action: TCollectionNotification);
+begin
+  case Action of
+    cnAdded: Added(Item);
+    cnDeleting: Deleting(Item);
+  end;
 end;
 
 { TOwnedCollection }
@@ -2808,6 +3894,27 @@ end;
 function TOwnedCollection.GetOwner: TPersistent;
 begin
   Result := FOwner;
+end;
+
+{ find the ultimate owner of a collection or item (or persistent for that matter) }
+
+function GetUltimateOwner(ACollectionItem: TCollectionItem): TPersistent;
+begin
+  Result := ACollectionItem.GetOwner;
+  if Result <> nil then
+    Result := GetUltimateOwner(TCollection(Result));
+end;
+
+function GetUltimateOwner(ACollection: TCollection): TPersistent;
+begin
+  Result := ACollection.GetOwner;
+  if Result <> nil then
+    Result := GetUltimateOwner(Result);
+end;
+
+function GetUltimateOwner(APersistent: TPersistent): TPersistent;
+begin
+  Result := APersistent.GetOwner;
 end;
 
 { TStrings }
@@ -2855,6 +3962,9 @@ begin
     BeginUpdate;
     try
       Clear;
+      FDefined := TStrings(Source).FDefined;
+      FQuoteChar := TStrings(Source).FQuoteChar;
+      FDelimiter := TStrings(Source).FDelimiter;
       AddStrings(TStrings(Source));
     finally
       EndUpdate;
@@ -2938,6 +4048,17 @@ begin
   end;
 end;
 
+function TStrings.ExtractName(const S: string): string;
+var
+  P: Integer;
+begin
+  Result := S;
+  P := AnsiPos('=', Result);
+  if P <> 0 then
+    SetLength(Result, P-1) else
+    SetLength(Result, 0);
+end;
+
 function TStrings.GetCapacity: Integer;
 begin  // descendants may optionally override/replace this default implementation
   Result := Count;
@@ -2945,13 +4066,33 @@ end;
 
 function TStrings.GetCommaText: string;
 var
+  LOldDefined: TStringsDefined;
+  LOldDelimiter: Char;
+  LOldQuoteChar: Char;
+begin
+  LOldDefined := FDefined;
+  LOldDelimiter := FDelimiter;
+  LOldQuoteChar := FQuoteChar;
+  Delimiter := ',';
+  QuoteChar := '"';
+  try
+    Result := GetDelimitedText;
+  finally
+    FDelimiter := LOldDelimiter;
+    FQuoteChar := LOldQuoteChar;
+    FDefined := LOldDefined;
+  end;
+end;
+
+function TStrings.GetDelimitedText: string;
+var
   S: string;
   P: PChar;
   I, Count: Integer;
 begin
   Count := GetCount;
   if (Count = 1) and (Get(0) = '') then
-    Result := '""'
+    Result := QuoteChar + QuoteChar
   else
   begin
     Result := '';
@@ -2959,23 +4100,22 @@ begin
     begin
       S := Get(I);
       P := PChar(S);
-      while not (P^ in [#0..' ','"',',']) do P := CharNext(P);
-      if (P^ <> #0) then S := AnsiQuotedStr(S, '"');
-      Result := Result + S + ',';
+      while not (P^ in [#0..' ', QuoteChar, Delimiter]) do
+      {$IFDEF MSWINDOWS}
+        P := CharNext(P);
+      {$ELSE}
+        Inc(P);
+      {$ENDIF}
+      if (P^ <> #0) then S := AnsiQuotedStr(S, QuoteChar);
+      Result := Result + S + Delimiter;
     end;
     System.Delete(Result, Length(Result), 1);
   end;
 end;
 
 function TStrings.GetName(Index: Integer): string;
-var
-  P: Integer;
 begin
-  Result := Get(Index);
-  P := AnsiPos('=', Result);
-  if P <> 0 then
-    SetLength(Result, P-1) else
-    SetLength(Result, 0);
+  Result := ExtractName(Get(Index));
 end;
 
 function TStrings.GetObject(Index: Integer): TObject;
@@ -2992,11 +4132,12 @@ function TStrings.GetTextStr: string;
 var
   I, L, Size, Count: Integer;
   P: PChar;
-  S: string;
+  S, LB: string;
 begin
   Count := GetCount;
   Size := 0;
-  for I := 0 to Count - 1 do Inc(Size, Length(Get(I)) + 2);
+  LB := sLineBreak;
+  for I := 0 to Count - 1 do Inc(Size, Length(Get(I)) + Length(LB));
   SetString(Result, nil, Size);
   P := Pointer(Result);
   for I := 0 to Count - 1 do
@@ -3008,10 +4149,12 @@ begin
       System.Move(Pointer(S)^, P^, L);
       Inc(P, L);
     end;
-    P^ := #13;
-    Inc(P);
-    P^ := #10;
-    Inc(P);
+    L := Length(LB);
+    if L <> 0 then
+    begin
+      System.Move(Pointer(LB)^, P^, L);
+      Inc(P, L);
+    end;
   end;
 end;
 
@@ -3028,7 +4171,7 @@ end;
 function TStrings.IndexOf(const S: string): Integer;
 begin
   for Result := 0 to GetCount - 1 do
-    if AnsiCompareText(Get(Result), S) = 0 then Exit;
+    if CompareStrings(Get(Result), S) = 0 then Exit;
   Result := -1;
 end;
 
@@ -3041,7 +4184,7 @@ begin
   begin
     S := Get(Result);
     P := AnsiPos('=', S);
-    if (P <> 0) and (AnsiCompareText(Copy(S, 1, P - 1), Name) = 0) then Exit;
+    if (P <> 0) and (CompareStrings(Copy(S, 1, P - 1), Name) = 0) then Exit;
   end;
   Result := -1;
 end;
@@ -3159,35 +4302,10 @@ begin
 end;
 
 procedure TStrings.SetCommaText(const Value: string);
-var
-  P, P1: PChar;
-  S: string;
 begin
-  BeginUpdate;
-  try
-    Clear;
-    P := PChar(Value);
-    while P^ in [#1..' '] do P := CharNext(P);
-    while P^ <> #0 do
-    begin
-      if P^ = '"' then
-        S := AnsiExtractQuotedStr(P, '"')
-      else
-      begin
-        P1 := P;
-        while (P^ > ' ') and (P^ <> ',') do P := CharNext(P);
-        SetString(S, P1, P - P1);
-      end;
-      Add(S);
-      while P^ in [#1..' '] do P := CharNext(P);
-      if P^ = ',' then
-        repeat
-          P := CharNext(P);
-        until not (P^ in [#1..' ']);
-    end;
-  finally
-    EndUpdate;
-  end;
+  Delimiter := ',';
+  QuoteChar := '"';
+  SetDelimitedText(Value);
 end;
 
 procedure TStrings.SetStringsAdapter(const Value: IStringsAdapter);
@@ -3254,6 +4372,104 @@ begin
   Writer.WriteListEnd;
 end;
 
+procedure TStrings.SetDelimitedText(const Value: string);
+var
+  P, P1: PChar;
+  S: string;
+begin
+  BeginUpdate;
+  try
+    Clear;
+    P := PChar(Value);
+    while P^ in [#1..' '] do
+    {$IFDEF MSWINDOWS}
+      P := CharNext(P);
+    {$ELSE}
+      Inc(P);
+    {$ENDIF}
+    while P^ <> #0 do
+    begin
+      if P^ = QuoteChar then
+        S := AnsiExtractQuotedStr(P, QuoteChar)
+      else
+      begin
+        P1 := P;
+        while (P^ > ' ') and (P^ <> Delimiter) do
+        {$IFDEF MSWINDOWS}
+          P := CharNext(P);
+        {$ELSE}
+          Inc(P);
+        {$ENDIF}
+        SetString(S, P1, P - P1);
+      end;
+      Add(S);
+      while P^ in [#1..' '] do
+      {$IFDEF MSWINDOWS}
+        P := CharNext(P);
+      {$ELSE}
+        Inc(P);
+      {$ENDIF}
+      if P^ = Delimiter then
+      begin
+        P1 := P;
+        {$IFDEF MSWINDOWS}
+        if CharNext(P1)^ = #0 then
+        {$ELSE}
+        Inc(P1);
+        if P1^ = #0 then
+        {$ENDIF}
+          Add('');
+        repeat
+          {$IFDEF MSWINDOWS}
+          P := CharNext(P);
+          {$ELSE}
+          Inc(P);
+          {$ENDIF}
+        until not (P^ in [#1..' ']);
+      end;
+    end;
+  finally
+    EndUpdate;
+  end;
+end;
+
+function TStrings.GetDelimiter: Char;
+begin
+  if not (sdDelimiter in FDefined) then
+    Delimiter := ',';
+  Result := FDelimiter;
+end;
+
+function TStrings.GetQuoteChar: Char;
+begin
+  if not (sdQuoteChar in FDefined) then
+    QuoteChar := '"';
+  Result := FQuoteChar;
+end;
+
+procedure TStrings.SetDelimiter(const Value: Char);
+begin
+  if (FDelimiter <> Value) or not (sdDelimiter in FDefined) then
+  begin
+    Include(FDefined, sdDelimiter);
+    FDelimiter := Value;
+  end
+end;
+
+procedure TStrings.SetQuoteChar(const Value: Char);
+begin
+  if (FQuoteChar <> Value) or not (sdQuoteChar in FDefined) then
+  begin
+    Include(FDefined, sdQuoteChar);
+    FQuoteChar := Value;
+  end
+end;
+
+function TStrings.CompareStrings(const S1, S2: string): Integer;
+begin
+  Result := AnsiCompareText(S1, S2);
+end;
+
 { TStringList }
 
 destructor TStringList.Destroy;
@@ -3268,6 +4484,11 @@ end;
 
 function TStringList.Add(const S: string): Integer;
 begin
+  Result := AddObject(S, nil);
+end;
+
+function TStringList.AddObject(const S: string; AObject: TObject): Integer;
+begin
   if not Sorted then
     Result := FCount
   else
@@ -3276,17 +4497,19 @@ begin
         dupIgnore: Exit;
         dupError: Error(@SDuplicateString, 0);
       end;
-  InsertItem(Result, S);
+  InsertItem(Result, S, AObject);
 end;
 
 procedure TStringList.Changed;
 begin
-  if (FUpdateCount = 0) and Assigned(FOnChange) then FOnChange(Self);
+  if (FUpdateCount = 0) and Assigned(FOnChange) then
+    FOnChange(Self);
 end;
 
 procedure TStringList.Changing;
 begin
-  if (FUpdateCount = 0) and Assigned(FOnChanging) then FOnChanging(Self);
+  if (FUpdateCount = 0) and Assigned(FOnChanging) then
+    FOnChanging(Self);
 end;
 
 procedure TStringList.Clear;
@@ -3347,7 +4570,7 @@ begin
   while L <= H do
   begin
     I := (L + H) shr 1;
-    C := AnsiCompareText(FList^[I].FString, S);
+    C := CompareStrings(FList^[I].FString, S);
     if C < 0 then L := I + 1 else
     begin
       H := I - 1;
@@ -3401,12 +4624,18 @@ end;
 
 procedure TStringList.Insert(Index: Integer; const S: string);
 begin
-  if Sorted then Error(@SSortedListError, 0);
-  if (Index < 0) or (Index > FCount) then Error(@SListIndexError, Index);
-  InsertItem(Index, S);
+  InsertObject(Index, S, nil);
 end;
 
-procedure TStringList.InsertItem(Index: Integer; const S: string);
+procedure TStringList.InsertObject(Index: Integer; const S: string;
+  AObject: TObject);
+begin
+  if Sorted then Error(@SSortedListError, 0);
+  if (Index < 0) or (Index > FCount) then Error(@SListIndexError, Index);
+  InsertItem(Index, S, AObject);
+end;
+
+procedure TStringList.InsertItem(Index: Integer; const S: string; AObject: TObject);
 begin
   Changing;
   if FCount = FCapacity then Grow;
@@ -3416,7 +4645,7 @@ begin
   with FList^[Index] do
   begin
     Pointer(FString) := nil;
-    FObject := nil;
+    FObject := AObject;
     FString := S;
   end;
   Inc(FCount);
@@ -3487,15 +4716,15 @@ begin
   if Updating then Changing else Changed;
 end;
 
-function StringListAnsiCompare(List: TStringList; Index1, Index2: Integer): Integer;
+function StringListCompareStrings(List: TStringList; Index1, Index2: Integer): Integer;
 begin
-  Result := AnsiCompareText(List.FList^[Index1].FString,
-                            List.FList^[Index2].FString);
+  Result := List.CompareStrings(List.FList^[Index1].FString,
+                                List.FList^[Index2].FString);
 end;
 
 procedure TStringList.Sort;
 begin
-  CustomSort(StringListAnsiCompare);
+  CustomSort(StringListCompareStrings);
 end;
 
 procedure TStringList.CustomSort(Compare: TStringListSortCompare);
@@ -3508,30 +4737,104 @@ begin
   end;
 end;
 
+function TStringList.CompareStrings(const S1, S2: string): Integer;
+begin
+  if CaseSensitive then
+    Result := AnsiCompareStr(S1, S2)
+  else
+    Result := AnsiCompareText(S1, S2);
+end;
+
+procedure TStringList.SetCaseSensitive(const Value: Boolean);
+begin
+  if Value <> FCaseSensitive then
+  begin
+    FCaseSensitive := Value;
+    if Sorted then Sort;
+  end;
+end;
+
 { TStream }
 
-function TStream.GetPosition: Longint;
+function TStream.GetPosition: Int64;
 begin
-  Result := Seek(0, 1);
+  Result := Seek(0, soCurrent);
 end;
 
-procedure TStream.SetPosition(Pos: Longint);
+procedure TStream.SetPosition(const Pos: Int64);
 begin
-  Seek(Pos, 0);
+  Seek(Pos, soBeginning);
 end;
 
-function TStream.GetSize: Longint;
+function TStream.GetSize: Int64;
 var
-  Pos: Longint;
+  Pos: Int64;
 begin
-  Pos := Seek(0, 1);
-  Result := Seek(0, 2);
-  Seek(Pos, 0);
+  Pos := Seek(0, soCurrent);
+  Result := Seek(0, soEnd);
+  Seek(Pos, soBeginning);
 end;
 
 procedure TStream.SetSize(NewSize: Longint);
 begin
   // default = do nothing  (read-only streams, etc)
+  // descendents should implement this method to call the Int64 sibling
+end;
+
+procedure TStream.SetSize64(const NewSize: Int64);
+begin
+  SetSize(NewSize);
+end;
+
+procedure TStream.SetSize(const NewSize: Int64);
+begin
+{ For compatibility with old stream implementations, this new 64 bit SetSize
+  calls the old 32 bit SetSize.  Descendent classes that override this
+  64 bit SetSize MUST NOT call inherited. Descendent classes that implement
+  64 bit SetSize should reimplement their 32 bit SetSize to call their 64 bit
+  version.}
+  if (NewSize < Low(Longint)) or (NewSize > High(Longint)) then
+    raise ERangeError.CreateRes(@SRangeError);
+  SetSize(Longint(NewSize));
+end;
+
+function TStream.Seek(Offset: Longint; Origin: Word): Longint;
+
+  procedure RaiseException;
+  begin
+    raise EStreamError.CreateResFmt(@sSeekNotImplemented, [Classname]);
+  end;
+
+type
+  TSeek64 = function (const Offset: Int64; Origin: TSeekOrigin): Int64 of object;
+var
+  Impl: TSeek64;
+  Base: TSeek64;
+  ClassTStream: TClass;
+begin
+{ Deflect 32 seek requests to the 64 bit seek, if 64 bit is implemented.
+  No existing TStream classes should call this method, since it was originally
+  abstract.  Descendent classes MUST implement at least one of either
+  the 32 bit or the 64 bit version, and must not call the inherited
+  default implementation. }
+  Impl := Seek;
+  ClassTStream := Self.ClassType;
+  while (ClassTStream <> nil) and (ClassTStream <> TStream) do
+    ClassTStream := ClassTStream.ClassParent;
+  if ClassTStream = nil then RaiseException;
+  Base := TStream(@ClassTStream).Seek;
+  if TMethod(Impl).Code = TMethod(Base).Code then
+    RaiseException;
+  Result := Seek(Int64(Offset), TSeekOrigin(Origin));
+end;
+
+function TStream.Seek(const Offset: Int64; Origin: TSeekOrigin): Int64;
+begin
+{ Default implementation of 64 bit seek is to deflect to existing 32 bit seek.
+  Descendents that override 64 bit seek must not call this default implementation. }
+  if (Offset < Low(Longint)) or (Offset > High(Longint)) then
+    raise ERangeError.CreateRes(@SRangeError);
+  Result := Seek(Longint(Offset), Ord(Origin));
 end;
 
 procedure TStream.ReadBuffer(var Buffer; Count: Longint);
@@ -3546,7 +4849,7 @@ begin
     raise EWriteError.CreateRes(@SWriteError);
 end;
 
-function TStream.CopyFrom(Source: TStream; Count: Longint): Longint;
+function TStream.CopyFrom(Source: TStream; Count: Int64): Int64;
 const
   MaxBufSize = $F000;
 var
@@ -3665,6 +4968,7 @@ end;
 
 constructor THandleStream.Create(AHandle: Integer);
 begin
+  inherited Create;
   FHandle := AHandle;
 end;
 
@@ -3680,29 +4984,49 @@ begin
   if Result = -1 then Result := 0;
 end;
 
-function THandleStream.Seek(Offset: Longint; Origin: Word): Longint;
+function THandleStream.Seek(const Offset: Int64; Origin: TSeekOrigin): Int64;
 begin
-  Result := FileSeek(FHandle, Offset, Origin);
+  Result := FileSeek(FHandle, Offset, Ord(Origin));
 end;
 
 procedure THandleStream.SetSize(NewSize: Longint);
 begin
-  Seek(NewSize, soFromBeginning);
+  SetSize(Int64(NewSize));
+end;
+
+procedure THandleStream.SetSize(const NewSize: Int64);
+begin
+  Seek(NewSize, soBeginning);
+{$IFDEF MSWINDOWS}
   Win32Check(SetEndOfFile(FHandle));
+{$ELSE}
+  if ftruncate(FHandle, Position) = -1 then
+    raise EStreamError(sStreamSetSize);
+{$ENDIF}
 end;
 
 { TFileStream }
 
 constructor TFileStream.Create(const FileName: string; Mode: Word);
 begin
+{$IFDEF MSWINDOWS}
+  Create(Filename, Mode, 0);
+{$ELSE}
+  Create(Filename, Mode, FileAccessRights);
+{$ENDIF}
+end;
+
+constructor TFileStream.Create(const FileName: string; Mode: Word; Rights: Cardinal);
+begin
   if Mode = fmCreate then
   begin
-    FHandle := FileCreate(FileName);
+    inherited Create(FileCreate(FileName, Rights));
     if FHandle < 0 then
       raise EFCreateError.CreateResFmt(@SFCreateError, [FileName]);
-  end else
+  end
+  else
   begin
-    FHandle := FileOpen(FileName, Mode);
+    inherited Create(FileOpen(FileName, Mode));
     if FHandle < 0 then
       raise EFOpenError.CreateResFmt(@SFOpenError, [FileName]);
   end;
@@ -3711,6 +5035,7 @@ end;
 destructor TFileStream.Destroy;
 begin
   if FHandle >= 0 then FileClose(FHandle);
+  inherited Destroy;
 end;
 
 
@@ -3823,21 +5148,32 @@ end;
 
 function TMemoryStream.Realloc(var NewCapacity: Longint): Pointer;
 begin
-  if NewCapacity > 0 then
+  if (NewCapacity > 0) and (NewCapacity <> FSize) then
     NewCapacity := (NewCapacity + (MemoryDelta - 1)) and not (MemoryDelta - 1);
   Result := Memory;
   if NewCapacity <> FCapacity then
   begin
     if NewCapacity = 0 then
     begin
+{$IFDEF MSWINDOWS}
       GlobalFreePtr(Memory);
+{$ELSE}
+      FreeMem(Memory);
+{$ENDIF}
       Result := nil;
     end else
     begin
+{$IFDEF MSWINDOWS}
       if Capacity = 0 then
         Result := GlobalAllocPtr(HeapAllocFlags, NewCapacity)
       else
         Result := GlobalReallocPtr(Memory, NewCapacity, HeapAllocFlags);
+{$ELSE}
+      if Capacity = 0 then
+        GetMem(Result, NewCapacity)
+      else
+        ReallocMem(Result, NewCapacity);
+{$ENDIF}
       if Result = nil then raise EStreamError.CreateRes(@SMemoryStreamError);
     end;
   end;
@@ -3999,6 +5335,11 @@ type
     constructor Create(Instance: TPersistent; InstanceRoot: TComponent;
       PropInfo: PPropInfo; const RootName, Name: string);
     function MakeGlobalReference: Boolean;
+    procedure ResolveReference(Reference: Pointer); virtual;
+  end;
+
+  TPropIntfFixup = class(TPropFixup)
+    procedure ResolveReference(Reference: Pointer); override;
   end;
 
 var
@@ -4027,6 +5368,22 @@ begin
   SetString(FRootName, S, P - S);
   Delete(FName, 1, P - S + 1);
   Result := True;
+end;
+
+procedure TPropFixup.ResolveReference(Reference: Pointer);
+begin
+  SetOrdProp(FInstance, FPropInfo, Longint(Reference));
+end;
+
+procedure TPropIntfFixup.ResolveReference(Reference: Pointer);
+var
+  Intf: IInterface;
+begin
+  Intf := nil;
+  if Reference <> nil then
+    if not Supports(TObject(Reference), GetTypeData(FPropInfo^.PropType^)^.Guid, Intf) then
+      Intf := nil;
+  SetInterfaceProp(FInstance, FPropInfo, Intf);
 end;
 
 function FindNestedComponent(Root: TComponent; const NamePath: string): TComponent;
@@ -4084,61 +5441,62 @@ var
   end;
 
 begin
-  if Assigned(FindGlobalComponent) then
-  begin
-    // Fixup resolution requires a stable component / name space
-    // Block construction and destruction of forms / datamodules during fixups
-    GlobalNameSpace.BeginWrite;
+  // Fixup resolution requires a stable component / name space
+  // Block construction and destruction of forms / datamodules during fixups
+{$IFDEF MSWINDOWS}
+  GlobalNameSpace.BeginWrite;
+  try
+{$ENDIF}
+    GlobalList := GlobalFixupList.LockList;
     try
-      GlobalList := GlobalFixupList.LockList;
-      try
-        if GlobalList.Count > 0 then
-        begin
-          FinishedList := TList.Create;
+      if GlobalList.Count > 0 then
+      begin
+         FinishedList := TList.Create;
+        try
+          NotFinishedList := TList.Create;
           try
-            NotFinishedList := TList.Create;
-            try
-              I := 0;
-              while I < GlobalList.Count do
-                with TPropFixup(GlobalList[I]) do
+            I := 0;
+            while I < GlobalList.Count do
+              with TPropFixup(GlobalList[I]) do
+              begin
+                Root := FindGlobalComponent(FRootName);
+                if (Root <> nil) or (GetOrdProp(FInstance, FPropInfo) <> 0) then
                 begin
-                  Root := FindGlobalComponent(FRootName);
-                  if (Root <> nil) or (GetOrdProp(FInstance, FPropInfo) <> 0) then
+                  if Root <> nil then
                   begin
-                    if Root <> nil then
-                    begin
-                      Reference := FindNestedComponent(Root, FName);
-                      SetOrdProp(FInstance, FPropInfo, Longint(Reference));
-                    end;
-                    AddFinished(FInstance);
-                    GlobalList.Delete(I);
-                    Free;
-                  end else
-                  begin
-                    AddNotFinished(FInstance);
-                    Inc(I);
+                    Reference := FindNestedComponent(Root, FName);
+                    ResolveReference(Reference);
                   end;
+                  AddFinished(FInstance);
+                  GlobalList.Delete(I);
+                  Free;
+                end else
+                begin
+                  AddNotFinished(FInstance);
+                  Inc(I);
                 end;
-            finally
-              NotFinishedList.Free;
-            end;
-            for I := 0 to FinishedList.Count - 1 do
-            begin
-              Instance := FinishedList[I];
-              if Instance is TComponent then
-                Exclude(TComponent(Instance).FComponentState, csFixups);
-            end;
+              end;
           finally
-            FinishedList.Free;
+            NotFinishedList.Free;
           end;
+          for I := 0 to FinishedList.Count - 1 do
+          begin
+            Instance := FinishedList[I];
+            if Instance is TComponent then
+              Exclude(TComponent(Instance).FComponentState, csFixups);
+          end;
+        finally
+          FinishedList.Free;
         end;
-      finally
-        GlobalFixupList.UnlockList;
       end;
     finally
-      GlobalNameSpace.EndWrite;
+      GlobalFixupList.UnlockList;
     end;
+{$IFDEF MSWINDOWS}
+  finally
+    GlobalNameSpace.EndWrite;
   end;
+{$ENDIF}
 end;
 
 function NameInStrings(Strings: TStrings; const Name: string): Boolean;
@@ -4269,15 +5627,9 @@ begin
   ReadError(@SInvalidPropertyValue);
 end;
 
-procedure PropertyNotFound;
+procedure PropertyNotFound(const Name: string);
 begin
-  ReadError(@SUnknownProperty);
-end;
-
-function EnumValue(EnumType: PTypeInfo; const EnumName: string): Integer;
-begin
-  Result := GetEnumValue(EnumType, EnumName);
-  if Result = -1 then PropValueError;
+  raise EReadError.CreateResFmt(@SUnknownProperty, [Name]);
 end;
 
 destructor TReader.Destroy;
@@ -4420,7 +5772,7 @@ begin
             FFixups[I] := nil;
           end
           else
-            SetOrdProp(FInstance, FPropInfo, Longint(Reference));
+            ResolveReference(Reference);
         end;
     finally
       FreeFixups;
@@ -4455,6 +5807,30 @@ begin
   end;
 end;
 
+function TReader.GetFieldClass(Instance: TObject; const ClassName: string): TPersistentClass;
+var
+  I: Integer;
+  ClassTable: PFieldClassTable;
+  ClassType: TClass;
+begin
+  ClassType := Instance.ClassType;
+  while ClassType <> TPersistent do
+  begin
+    ClassTable := GetFieldClassTable(ClassType);
+    if ClassTable <> nil then
+      for I := 0 to ClassTable^.Count - 1 do
+      begin
+        Result := ClassTable^.Classes[I]^;
+        if Result.ClassNameIs(ClassName) then Exit;
+      end;
+    ClassType := ClassType.ClassParent;
+  end;
+  if FFinder <> nil then
+    Result := FFinder.GetClass(ClassName)
+  else
+    Result := GetClass(ClassName);
+end;
+
 function TReader.GetPosition: Longint;
 begin
   Result := FStream.Position - (FBufEnd - FBufPos);
@@ -4466,10 +5842,10 @@ begin
   Dec(FBufPos);
 end;
 
-procedure TReader.PropertyError;
+procedure TReader.PropertyError(const Name: string);
 begin
   SkipValue;
-  PropertyNotFound;
+  PropertyNotFound(Name);
 end;
 
 procedure TReader.Read(var Buf; Count: Longint); assembler;
@@ -4524,16 +5900,13 @@ begin
 end;
 
 function TReader.ReadChar: Char;
+var
+  Temp: string;
 begin
-  CheckValue(vaString);
-  Read(Result, 1);
-  if Ord(Result) <> 1 then
-  begin
-    Dec(FBufPos);
-    ReadStr;
+  Temp := ReadString;
+  if Length(Temp) > 1 then
     PropValueError;
-  end;
-  Read(Result, 1);
+  Result := Temp[1];
 end;
 
 procedure TReader.ReadCollection(Collection: TCollection);
@@ -4614,8 +5987,7 @@ var
     try
       Result.SetParentComponent(Parent);
       SetName(Result, CompName);
-      if Assigned(FindGlobalComponent) and
-        (FindGlobalComponent(CompName) = Result) then
+      if (csDesigning in Result.ComponentState) and (FindGlobalComponent(CompName) = Result) then
         Include(Result.FComponentState, csInline);
     except
       if not Recover(Result) then raise;
@@ -4866,7 +6238,8 @@ begin
         FPropName := Copy(PropPath, J, I - J);
         if I > L then Break;
         PropInfo := GetPropInfo(Instance.ClassInfo, FPropName);
-        if PropInfo = nil then PropertyError;
+        if PropInfo = nil then
+          PropertyError(FPropName);
         PropValue := nil;
         if PropInfo^.PropType^.Kind = tkClass then
           PropValue := TObject(GetOrdProp(Instance, PropInfo));
@@ -4881,7 +6254,8 @@ begin
         FCanHandleExcepts := False;
         Instance.DefineProperties(Self);
         FCanHandleExcepts := True;
-        if FPropName <> '' then PropertyError;
+        if FPropName <> '' then
+          PropertyError(FPropName);
       end;
     except
       on E: Exception do HandleException(E);
@@ -4918,57 +6292,49 @@ var
     FFixups.Add(TPropFixup.Create(Instance, Root, PropInfo, '', Ident));
   end;
 
-  procedure ReadVariantProp;
-  const
-    ValTtoVarT: array[TValueType] of Integer = (varNull, varError, varByte,
-      varSmallInt, varInteger, varDouble, varString, varError, varBoolean,
-      varBoolean, varError, varError, varString, varEmpty, varError, varSingle,
-      varCurrency, varDate, varOleStr, varError);
-  var
-    Value: Variant;
-    ValType: TValueType;
+  // This is isolated into a local to help reduce transient VarClears
+  procedure SetVariantReference;
   begin
-    ValType := NextValue;
-    case ValType of
-      vaNil, vaNull:
-      begin
-        if ReadValue = vaNil then
-          VarClear(Value) else
-          Value := NULL;
-      end;
-      vaInt8: TVarData(Value).VByte := Byte(ReadInteger);
-      vaInt16: TVarData(Value).VSmallint := Smallint(ReadInteger);
-      vaInt32: TVarData(Value).VInteger := ReadInteger;
-      vaExtended: TVarData(Value).VDouble := ReadFloat;
-      vaSingle: TVarData(Value).VSingle := ReadSingle;
-      vaCurrency: TVarData(Value).VCurrency := ReadCurrency;
-      vaDate: TVarData(Value).VDate := ReadDate;
-      vaString, vaLString: Value := ReadString;
-      vaWString: Value := ReadWideString;
-      vaFalse, vaTrue: TVarData(Value).VBoolean := ReadValue = vaTrue;
+    SetVariantProp(Instance, PropInfo, ReadVariant);
+  end;
+
+  procedure SetInterfaceReference;
+  var
+    Intf: IInterface;
+  begin
+    if NextValue = vaNil then
+    begin
+      ReadValue;
+      Intf := nil;
+      SetInterfaceProp(Instance, PropInfo, Intf);
+    end
     else
-      raise EReadError.CreateRes(@SReadError);
-    end;
-    TVarData(Value).VType := ValTtoVarT[ValType];
-    SetVariantProp(Instance, PropInfo, Value);
+      FFixups.Add(TPropIntfFixup.Create(Instance, Root, PropInfo, '', ReadIdent));
   end;
 
 begin
-  if PPropInfo(PropInfo)^.SetProc = nil then ReadError(@SReadOnlyProperty);
+  if PPropInfo(PropInfo)^.SetProc = nil then
+    if not ((PPropInfo(PropInfo)^.PropType^.Kind = tkClass) and
+       (TObject(GetOrdProp(Instance, PropInfo)) is TComponent) and
+       (csSubComponent in TComponent(GetOrdProp(Instance, PropInfo)).ComponentStyle)) then
+      ReadError(@SReadOnlyProperty);
   PropType := PPropInfo(PropInfo)^.PropType^;
   case PropType^.Kind of
     tkInteger:
       if NextValue = vaIdent then
-        SetIntIdent(Instance, PropInfo, ReadIdent) else
+        SetIntIdent(Instance, PropInfo, ReadIdent)
+      else
         SetOrdProp(Instance, PropInfo, ReadInteger);
     tkChar:
       SetOrdProp(Instance, PropInfo, Ord(ReadChar));
     tkEnumeration:
-      SetOrdProp(Instance, PropInfo, EnumValue(PropType, ReadIdent));
+      SetOrdProp(Instance, PropInfo, GetEnumValue(PropType, ReadIdent));
     tkFloat:
       SetFloatProp(Instance, PropInfo, ReadFloat);
-    tkString, tkLString, tkWString:
+    tkString, tkLString:
       SetStrProp(Instance, PropInfo, ReadString);
+    tkWString:
+      SetWideStrProp(Instance, PropInfo, ReadWideString);
     tkSet:
       SetOrdProp(Instance, PropInfo, ReadSet(PropType));
     tkClass:
@@ -4999,8 +6365,11 @@ begin
         if Method.Code <> nil then SetMethodProp(Instance, PropInfo, Method);
       end;
     tkVariant:
-      ReadVariantProp;
-    tkInt64: SetInt64Prop(Instance, PropInfo, ReadInt64);
+      SetVariantReference;
+    tkInt64:
+      SetInt64Prop(Instance, PropInfo, ReadInt64);
+    tkInterface:
+      SetInterfaceReference;
   end;
 end;
 
@@ -5011,26 +6380,25 @@ function TReader.ReadRootComponent(Root: TComponent): TComponent;
     I: Integer;
   begin
     I := 0;
-    Result := '';
-    if Assigned(FindGlobalComponent) then
+    Result := Name;
+    while not IsUniqueGlobalComponentName(Result) do
     begin
-      Result := Name;
-      while FindGlobalComponent(Result) <> nil do
-      begin
-        Inc(I);
-        Result := Format('%s_%d', [Name, I]);
-      end;
+      Inc(I);
+      Result := Format('%s_%d', [Name, I]);
     end;
   end;
 
 var
   I: Integer;
   Flags: TFilerFlags;
+  G: TList;
 begin
   ReadSignature;
   Result := nil;
+{$IFDEF MSWINDOWS}
   GlobalNameSpace.BeginWrite;  // Loading from stream adds to name space
   try
+{$ENDIF}
     try
       ReadPrefix(Flags, I);
       if Root = nil then
@@ -5050,33 +6418,50 @@ begin
         end;
       end;
       FRoot := Result;
-      FLookupRoot := Result;
-      if GlobalLoaded <> nil then
-        FLoaded := GlobalLoaded else
-        FLoaded := TList.Create;
+      FFinder := TClassFinder.Create(TPersistentClass(Result.ClassType), True);
       try
-        if FLoaded.IndexOf(FRoot) < 0 then
-          FLoaded.Add(FRoot);
-        FOwner := FRoot;
-        Include(FRoot.FComponentState, csLoading);
-        Include(FRoot.FComponentState, csReading);
-        FRoot.ReadState(Self);
-        Exclude(FRoot.FComponentState, csReading);
-        if GlobalLoaded = nil then
-          for I := 0 to FLoaded.Count - 1 do TComponent(FLoaded[I]).Loaded;
+        FLookupRoot := Result;
+        G := GlobalLoaded;
+        if G <> nil then
+          FLoaded := G else
+          FLoaded := TList.Create;
+        try
+          if FLoaded.IndexOf(FRoot) < 0 then
+            FLoaded.Add(FRoot);
+          FOwner := FRoot;
+          Include(FRoot.FComponentState, csLoading);
+          Include(FRoot.FComponentState, csReading);
+          FRoot.ReadState(Self);
+          Exclude(FRoot.FComponentState, csReading);
+          if G = nil then
+            for I := 0 to FLoaded.Count - 1 do TComponent(FLoaded[I]).Loaded;
+        finally
+          if G = nil then FLoaded.Free;
+          FLoaded := nil;
+        end;
       finally
-        if GlobalLoaded = nil then FLoaded.Free;
-        FLoaded := nil;
+        FFinder.Free;
       end;
-      GlobalFixupReferences;
+      while True do
+      try
+        // Try to fix up all references until no exceptions or the exception
+        // itself terminates the loop. This will loop if the error is ignored
+        // in, for example, the form designer.
+        GlobalFixupReferences;
+        Break;
+      except
+        if not Error(Exception(ExceptObject).Message) then raise;
+      end;
     except
       RemoveFixupReferences(Root, '');
       if Root = nil then Result.Free;
       raise;
     end;
+{$IFDEF MSWINDOWS}
   finally
     GlobalNameSpace.EndWrite;
   end;
+{$ENDIF}
 end;
 
 procedure TReader.ReadComponents(AOwner, AParent: TComponent;
@@ -5089,14 +6474,19 @@ begin
   Parent := AParent;
   BeginReferences;
   try
-    while not EndOfList do
-    begin
-      ReadSignature;
-      Component := ReadComponent(nil);
-      if Assigned(Proc) then Proc(Component);
+    FFinder := TClassFinder.Create(TPersistentClass(AOwner.ClassType), True);
+    try
+      while not EndOfList do
+      begin
+        ReadSignature;
+        Component := ReadComponent(nil);
+        if Assigned(Proc) then Proc(Component);
+      end;
+      ReadListEnd;
+      FixupReferences;
+    finally
+      FFinder.Free;
     end;
-    ReadListEnd;
-    FixupReferences;
   finally
     EndReferences;
   end;
@@ -5115,7 +6505,7 @@ begin
     begin
       EnumName := ReadStr;
       if EnumName = '' then Break;
-      Include(TIntegerSet(Result), EnumValue(EnumType, EnumName));
+      Include(TIntegerSet(Result), GetEnumValue(EnumType, EnumName));
     end;
   except
     SkipSetBody;
@@ -5144,29 +6534,52 @@ function TReader.ReadString: string;
 var
   L: Integer;
 begin
-  L := 0;
-  case ReadValue of
-    vaString:
-      Read(L, SizeOf(Byte));
-    vaLString:
-      Read(L, SizeOf(Integer));
+  if NextValue in [vaWString, vaUTF8String] then
+    Result := ReadWideString
   else
-    PropValueError;
+  begin
+    L := 0;
+    case ReadValue of
+      vaString:
+        Read(L, SizeOf(Byte));
+      vaLString:
+        Read(L, SizeOf(Integer));
+    else
+      PropValueError;
+    end;
+    SetLength(Result, L);
+    Read(Pointer(Result)^, L);
   end;
-  SetString(Result, PChar(nil), L);
-  Read(Pointer(Result)^, L);
 end;
 
 function TReader.ReadWideString: WideString;
 var
   L: Integer;
+  Temp: UTF8String;
 begin
-  L := 0;
-  if ReadValue <> vaWString then
-    PropValueError;
-  Read(L, SizeOf(Integer));
-  SetLength(Result, L);
-  Read(Pointer(Result)^, L * 2);
+  if NextValue in [vaString, vaLString] then
+    Result := ReadString
+  else
+  begin
+    L := 0;
+    case ReadValue of
+      vaWString:
+        begin
+          Read(L, SizeOf(Integer));
+          SetLength(Result, L);
+          Read(Pointer(Result)^, L * 2);
+        end;
+      vaUtf8String:
+        begin
+          Read(L, SizeOf(Integer));
+          SetLength(Temp, L);
+          Read(Pointer(Temp)^, L);
+          Result := Utf8Decode(Temp);
+        end;
+    else
+      PropValueError;
+    end;
+  end;
 end;
 
 function TReader.ReadValue: TValueType;
@@ -5194,29 +6607,12 @@ procedure TReader.SkipValue;
     ReadListEnd;
   end;
 
-  procedure SkipBytes(Count: Longint);
-  var
-    Bytes: array[0..255] of Char;
-  begin
-    while Count > 0 do
-      if Count > SizeOf(Bytes) then
-      begin
-        Read(Bytes, SizeOf(Bytes));
-        Dec(Count, SizeOf(Bytes));
-      end
-      else
-      begin
-        Read(Bytes, Count);
-        Count := 0;
-      end;
-  end;
-
-  procedure SkipBinary;
+  procedure SkipBinary(BytesPerUnit: Integer);
   var
     Count: Longint;
   begin
     Read(Count, SizeOf(Count));
-    SkipBytes(Count);
+    SkipBytes(Count * BytesPerUnit);
   end;
 
   procedure SkipCollection;
@@ -5233,23 +6629,24 @@ procedure TReader.SkipValue;
 
 begin
   case ReadValue of
-    vaNull: begin end;
+    vaNull: { no value field, just an identifier };
     vaList: SkipList;
-    vaInt8: SkipBytes(1);
-    vaInt16: SkipBytes(2);
-    vaInt32: SkipBytes(4);
+    vaInt8: SkipBytes(SizeOf(Byte));
+    vaInt16: SkipBytes(SizeOf(Word));
+    vaInt32: SkipBytes(SizeOf(LongInt));
     vaExtended: SkipBytes(SizeOf(Extended));
     vaString, vaIdent: ReadStr;
-    vaFalse, vaTrue: begin end;
-    vaBinary: SkipBinary;
+    vaFalse, vaTrue: { no value field, just an identifier };
+    vaBinary: SkipBinary(1);
     vaSet: SkipSetBody;
-    vaLString: SkipBinary;
+    vaLString: SkipBinary(1);
     vaCollection: SkipCollection;
     vaSingle: SkipBytes(Sizeof(Single));
     vaCurrency: SkipBytes(SizeOf(Currency));
     vaDate: SkipBytes(Sizeof(TDateTime));
-    vaWString: SkipBinary;
+    vaWString: SkipBinary(Sizeof(WideChar));
     vaInt64: SkipBytes(Sizeof(Int64));
+    vaUTF8String: SkipBinary(1);
   end;
 end;
 
@@ -5292,14 +6689,14 @@ procedure TReader.CopyValue(Writer: TWriter);
     end;
   end;
 
-  procedure CopyBinary;
+  procedure CopyBinary(BytesPerUnit: Integer);
   var
     Count: Longint;
   begin
     Writer.WriteValue(ReadValue);
     Read(Count, SizeOf(Count));
     Writer.Write(Count, SizeOf(Count));
-    CopyBytes(Count);
+    CopyBytes(Count * BytesPerUnit);
   end;
 
 begin
@@ -5308,9 +6705,12 @@ begin
     vaList, vaCollection: CopyList;
     vaInt8, vaInt16, vaInt32: Writer.WriteInteger(ReadInteger);
     vaExtended: Writer.WriteFloat(ReadFloat);
-    vaString: Writer.WriteStr(ReadStr);
+    vaString: Writer.WriteString(ReadString);
     vaIdent: Writer.WriteIdent(ReadIdent);
-    vaBinary, vaLString, vaWString: CopyBinary;
+    vaBinary,
+    vaLString,
+    vaUTF8String: CopyBinary(1);
+    vaWString: CopyBinary(Sizeof(WideChar));
     vaSet: CopySetBody;
     vaSingle: Writer.WriteSingle(ReadSingle);
     vaCurrency: Writer.WriteCurrency(ReadCurrency);
@@ -5380,6 +6780,85 @@ begin
     FOnFindComponentClass(Self, ClassName, Result);
   if (Result = nil) or not Result.InheritsFrom(TComponent) then
     ClassNotFound(ClassName);
+end;
+
+procedure TReader.SkipBytes(Count: Integer);
+var
+  Bytes: array[0..255] of Char;
+begin
+  while Count > 0 do
+    if Count > SizeOf(Bytes) then
+    begin
+      Read(Bytes, SizeOf(Bytes));
+      Dec(Count, SizeOf(Bytes));
+    end
+    else
+    begin
+      Read(Bytes, Count);
+      Count := 0;
+    end;
+end;
+
+function TReader.ReadVariant: Variant;
+  function ReadCustomVariant: Variant;
+  var
+    OuterStream, InnerStream: TMemoryStream;
+    OuterReader: TReader;
+    StreamSize: Integer;
+    CustomType: TCustomVariantType;
+    CustomTypeClassName: string;
+    VarStreamer: IVarStreamable;
+  begin
+    CheckValue(vaBinary);
+    OuterStream := TMemoryStream.Create;
+    InnerStream := TMemoryStream.Create;
+    try
+      Read(StreamSize, SizeOf(StreamSize));
+      OuterStream.Size := StreamSize;
+      Read(OuterStream.Memory^, StreamSize);
+
+      OuterReader := TReader.Create(OuterStream, 1024);
+      try
+        CustomTypeClassName := OuterReader.ReadString;
+        OuterReader.Read(StreamSize, SizeOf(StreamSize));
+        InnerStream.Size := StreamSize;
+        OuterReader.Read(InnerStream.Memory^, StreamSize);
+
+        if not FindCustomVariantType(CustomTypeClassName, CustomType) or
+           not Supports(TObject(CustomType), IVarStreamable, VarStreamer) then
+          raise EReadError.CreateRes(@SReadError);
+        TVarData(Result).VType := CustomType.VarType;
+        VarStreamer.StreamIn(TVarData(Result), InnerStream);
+      finally
+        OuterReader.Free;
+      end;
+    finally
+      InnerStream.Free;
+      OuterStream.Free;
+    end;
+  end;
+
+begin
+  VarClear(Result);
+  case NextValue of
+    vaNil, vaNull:       if ReadValue <> vaNil then
+                           Result := NULL;
+    vaInt8:              Result := Byte(ReadInteger);
+    vaInt16:             Result := Smallint(ReadInteger);
+    vaInt32:             Result := ReadInteger;
+    vaExtended:          Result := ReadFloat;
+    vaSingle:            Result := ReadSingle;
+    vaCurrency:          Result := ReadCurrency;
+    vaDate:              Result := ReadDate;
+    vaString, vaLString: Result := ReadString;
+    vaWString,
+    vaUTF8String:        Result := ReadWideString;
+    vaFalse, vaTrue:     Result := ReadValue = vaTrue;
+    vaBinary:            Result := ReadCustomVariant;
+    vaInt64:             Result := ReadInt64;
+  else
+    raise EReadError.CreateRes(@SReadError);
+  end;
 end;
 
 { TWriter }
@@ -5522,16 +7001,23 @@ end;
 procedure TWriter.WriteCollection(Value: TCollection);
 var
   I: Integer;
+  OldAncestor: TPersistent;
 begin
-  WriteValue(vaCollection);
-  if Value <> nil then
-    for I := 0 to Value.Count - 1 do
-    begin
-      WriteListBegin;
-      WriteProperties(Value.Items[I]);
-      WriteListEnd;
-    end;
-  WriteListEnd;
+  OldAncestor := Ancestor;
+  Ancestor := nil;
+  try
+    WriteValue(vaCollection);
+    if Value <> nil then
+      for I := 0 to Value.Count - 1 do
+      begin
+        WriteListBegin;
+        WriteProperties(Value.Items[I]);
+        WriteListEnd;
+      end;
+    WriteListEnd;
+  finally
+    Ancestor := OldAncestor;
+  end;
 end;
 
 procedure TWriter.WriteComponent(Component: TComponent);
@@ -5601,7 +7087,10 @@ begin
     ((Ancestor = nil) or (FAncestorList[FAncestorPos] <> Ancestor)) then
     Include(Flags, ffChildPos);
   WritePrefix(Flags, FChildPos);
-  WriteStr(Instance.ClassName);
+  if UseQualifiedNames then
+    WriteStr(GetTypeData(PTypeInfo(Instance.ClassType.ClassInfo)).UnitName + '.' + Instance.ClassName)
+  else
+    WriteStr(Instance.ClassName);
   WriteStr(Instance.Name);
   PropertiesPosition := Position;
   if (FAncestorList <> nil) and (FAncestorPos < FAncestorList.Count) then
@@ -5772,14 +7261,14 @@ begin
   Instance.DefineProperties(Self);
 end;
 
-procedure TWriter.WriteProperty(Instance: TPersistent; PropInfo: Pointer);
+procedure TWriter.WriteProperty(Instance: TPersistent; PropInfo: PPropInfo);
 var
   PropType: PTypeInfo;
 
   function AncestorValid: Boolean;
   begin
-    Result := (Ancestor <> nil) and ((Instance.ClassType = Ancestor.ClassType) or
-      (Instance = Root));
+    Result := (Ancestor <> nil) and (RootAncestor <> nil) and
+              Root.InheritsFrom(RootAncestor.ClassType);
   end;
 
   procedure WritePropPath;
@@ -5830,10 +7319,16 @@ var
     Value: Longint;
 
     function IsDefaultValue: Boolean;
+    var
+      Default: LongInt;
     begin
       if AncestorValid then
-        Result := Value = GetOrdProp(Ancestor, PropInfo) else
-        Result := Value = PPropInfo(PropInfo)^.Default;
+        Result := Value = GetOrdProp(Ancestor, PropInfo)
+      else
+      begin
+        Default := PPropInfo(PropInfo)^.Default;
+        Result :=  (Default <> LongInt($80000000)) and (Value = Default);
+      end;
     end;
 
   begin
@@ -5896,22 +7391,57 @@ var
 
   procedure WriteStrProp;
   var
-    Value: string;
+    Value: WideString;
 
     function IsDefault: Boolean;
     begin
       if AncestorValid then
-        Result := Value = GetStrProp(Ancestor, PropInfo) else
+        Result := Value = GetWideStrProp(Ancestor, PropInfo) else
         Result := Value = '';
     end;
 
   begin
-    Value := GetStrProp(Instance, PropInfo);
+    Value := GetWideStrProp(Instance, PropInfo);
     if not IsDefault then
     begin
       WritePropPath;
-      WriteString(Value);
+      WriteWideString(Value);
     end;
+  end;
+
+  function OwnedBy(Component, Owner: TComponent): Boolean;
+  begin
+    Result := True;
+    while Component <> nil do
+      if Component = Owner then
+        Exit
+      else
+        Component := Component.Owner;
+    Result := False;
+  end;
+
+  function GetComponentValue(Component: TComponent): string;
+  begin
+    if Component.Owner = LookupRoot then
+      Result := Component.Name
+    else if Component = LookupRoot then
+      Result := 'Owner'                                                       { Do not translate }
+    else if (Component.Owner <> nil) and (Component.Owner.Name <> '') and
+      (Component.Name <> '') then
+      if OwnedBy(Component.Owner, LookupRoot) then
+        Result := GetComponentValue(Component.Owner) + '.' + Component.Name
+      else
+        Result := Component.Owner.Name + '.' + Component.Name
+    else if Component.Name <> '' then
+      Result := Component.Name + '.Owner'                                     { Do not translate }
+    else Result := '';
+  end;
+
+  function ObjectAncestorMatch(AncestorValue, Value: TComponent): Boolean;
+  begin
+    Result := (AncestorValue <> nil) and (AncestorValue.Owner = FRootAncestor) and
+      (Value <> nil) and (Value.Owner = Root) and
+      SameText(AncestorValue.Name, Value.Name);
   end;
 
   procedure WriteObjectProp;
@@ -5928,26 +7458,10 @@ var
       if AncestorValid then
       begin
         AncestorValue := TObject(GetOrdProp(Ancestor, PropInfo));
-        if (AncestorValue <> nil) and (TComponent(AncestorValue).Owner = FRootAncestor) and
-          (Value <> nil) and (TComponent(Value).Owner = Root) and
-          SameText(TComponent(AncestorValue).Name, TComponent(Value).Name) then
+        if ObjectAncestorMatch(TComponent(AncestorValue), TComponent(Value)) then
           AncestorValue := Value;
       end;
       Result := Value = AncestorValue;
-    end;
-
-    function GetComponentValue(Component: TComponent): string;
-    begin
-      if Component.Owner = LookupRoot then
-        Result := Component.Name
-      else if Component = LookupRoot then
-        Result := 'Owner'                                                       { Do not translate }
-      else if (Component.Owner <> nil) and (Component.Owner.Name <> '') and
-        (Component.Name <> '') then
-        Result := Component.Owner.Name + '.' + Component.Name
-      else if Component.Name <> '' then
-        Result := Component.Name + '.Owner'                                     { Do not translate }
-      else Result := '';
     end;
 
   begin
@@ -5958,7 +7472,8 @@ var
       WriteValue(vaNil);
     end
     else if Value is TPersistent then
-      if Value is TComponent then
+      if (Value is TComponent) and
+        not (csSubComponent in TComponent(Value).ComponentStyle) then
       begin
         if not IsDefault then
         begin
@@ -5969,18 +7484,12 @@ var
             WriteIdent(ComponentValue);
           end
         end
-      end else if Value is TCollection then
-      begin
-        if not AncestorValid or
-          not CollectionsEqual(TCollection(Value),
-            TCollection(GetOrdProp(Ancestor, PropInfo))) then
-            WriteCollectionProp(TCollection(Value));
       end else
       begin
         OldAncestor := Ancestor;
         SavePropPath := FPropPath;
         try
-          FPropPath := FPropPath + PPropInfo(PropInfo)^.Name + '.';
+          FPropPath := FPropPath + PropInfo^.Name + '.';
           if AncestorValid then
             Ancestor := TPersistent(GetOrdProp(Ancestor, PropInfo));
           WriteProperties(TPersistent(Value));
@@ -5988,7 +7497,64 @@ var
           Ancestor := OldAncestor;
           FPropPath := SavePropPath;
         end;
-      end
+        if Value is TCollection then
+        begin
+          if not AncestorValid or
+            not CollectionsEqual(TCollection(Value),
+              TCollection(GetOrdProp(Ancestor, PropInfo)), FLookupRoot, FRootAncestor) then
+              WriteCollectionProp(TCollection(Value));
+        end;
+      end;
+  end;
+
+  procedure WriteInterfaceProp;
+  var
+    Intf: IInterface;
+    Value: TComponent;
+
+    function IsDefaultValue: Boolean;
+    var
+      AncestorIntf: IInterface;
+      ASR: IInterfaceComponentReference;
+    begin
+      Result := Intf = nil;
+      if AncestorValid then
+      begin
+        AncestorIntf := GetInterfaceProp(Ancestor, PropInfo);
+        Result := Intf = AncestorIntf;
+        if not Result then
+        begin
+          if Supports(AncestorIntf, IInterfaceComponentReference, ASR) then
+            Result := ObjectAncestorMatch(ASR.GetComponent, Value);
+        end;
+      end;
+    end;
+
+  var
+    SR: IInterfaceComponentReference;
+    RefStr: String;
+  begin
+    Intf := GetInterfaceProp(Instance, PropInfo);
+    if (Intf = nil) or (not Supports(Intf, IInterfaceComponentReference, SR)) then
+    begin
+      if AncestorValid and (GetInterfaceProp(Ancestor, PropInfo) <> nil) then
+      begin
+        WritePropPath;
+        WriteValue(vaNil);
+      end;
+      Exit;
+    end;
+
+    Value := SR.GetComponent;
+    if not IsDefaultValue then
+    begin
+      RefStr := GetComponentValue(Value);
+      if RefStr <> '' then
+      begin
+        WritePropPath;
+        WriteIdent(RefStr);
+      end;
+    end;
   end;
 
   procedure WriteMethodProp;
@@ -6000,7 +7566,8 @@ var
       DefaultCode: Pointer;
     begin
       DefaultCode := nil;
-      if AncestorValid then DefaultCode := GetMethodProp(Ancestor, PropInfo).Code;
+      if AncestorValid then
+        DefaultCode := GetMethodProp(Ancestor, PropInfo).Code;
       Result := (Value.Code = DefaultCode) or
         ((Value.Code <> nil) and (FLookupRoot.MethodName(Value.Code) = ''));
     end;
@@ -6023,48 +7590,28 @@ var
     function IsDefaultValue: Boolean;
     begin
       if AncestorValid then
-        Result := Value = GetVariantProp(Ancestor, PropInfo) else
-        Result := VarIsEmpty(Value);
+        Result := VarSameValue(Value, GetVariantProp(Ancestor, PropInfo))
+      else
+        Result := VarIsClear(Value);
     end;
 
-  var
-    VType: Integer;
   begin
     Value := GetVariantProp(Instance, PropInfo);
     if not IsDefaultValue then
     begin
-      if VarIsArray(Value) then raise EWriteError.CreateRes(@SWriteError);
       WritePropPath;
-      VType := VarType(Value);
-      case VType and varTypeMask of
-        varEmpty: WriteValue(vaNil);
-        varNull: WriteValue(vaNull);
-        varOleStr: WriteWideString(Value);
-        varString: WriteString(Value);
-        varByte, varSmallInt, varInteger: WriteInteger(Value);
-        varSingle: WriteSingle(Value);
-        varDouble: WriteFloat(Value);
-        varCurrency: WriteCurrency(Value);
-        varDate: WriteDate(Value);
-        varBoolean:
-          if Value then
-            WriteValue(vaTrue) else
-            WriteValue(vaFalse);
-      else
-        try
-          WriteString(Value);
-        except
-          raise EWriteError.CreateRes(@SWriteError);
-        end;
-      end;
+      WriteVariant(Value);
     end;
   end;
 
 begin
-  if (PPropInfo(PropInfo)^.SetProc <> nil) and
-    (PPropInfo(PropInfo)^.GetProc <> nil) then
+  if (PropInfo^.GetProc <> nil) and
+     ((PropInfo^.SetProc <> nil) or
+     ((PropInfo^.PropType^.Kind = tkClass) and
+      (TObject(GetOrdProp(Instance, PropInfo)) is TComponent) and
+      (csSubComponent in TComponent(GetOrdProp(Instance, PropInfo)).ComponentStyle))) then
   begin
-    PropType := PPropInfo(PropInfo)^.PropType^;
+    PropType := PropInfo^.PropType^;
     case PropType^.Kind of
       tkInteger, tkChar, tkEnumeration, tkSet: WriteOrdProp;
       tkFloat: WriteFloatProp;
@@ -6073,6 +7620,74 @@ begin
       tkMethod: WriteMethodProp;
       tkVariant: WriteVariantProp;
       tkInt64: WriteInt64Prop;
+      tkInterface: WriteInterfaceProp;
+    end;
+  end;
+end;
+
+procedure TWriter.WriteVariant(const Value: Variant);
+var
+  CustomType: TCustomVariantType;
+  OuterStream, InnerStream: TMemoryStream;
+  OuterWriter: TWriter;
+  StreamSize: Integer;
+  VarStreamer: IVarStreamable;
+  LInt64: Int64;
+begin
+  if VarIsArray(Value) then
+    raise EWriteError.CreateRes(@SWriteError);
+  case VarType(Value) and varTypeMask of
+    varEmpty: WriteValue(vaNil);
+    varNull: WriteValue(vaNull);
+    varOleStr: WriteWideString(Value);
+    varString: WriteString(Value);
+    varByte, varShortInt, varWord, varSmallInt, varInteger: WriteInteger(Value);
+    varSingle: WriteSingle(Value);
+    varDouble: WriteFloat(Value);
+    varCurrency: WriteCurrency(Value);
+    varDate: WriteDate(Value);
+    varBoolean:
+      if Value then
+        WriteValue(vaTrue)
+      else
+        WriteValue(vaFalse);
+    varLongWord, varInt64:
+      begin
+        LInt64 := Value;
+        WriteInteger(LInt64);
+      end;
+  else
+    try
+      if not FindCustomVariantType(TVarData(Value).VType, CustomType) or
+         not Supports(Value, IVarStreamable, VarStreamer) then
+        WriteString(Value)
+      else
+      begin
+        OuterStream := TMemoryStream.Create;
+        InnerStream := TMemoryStream.Create;
+        try
+          OuterWriter := TWriter.Create(OuterStream, 1024);
+          try
+            VarStreamer.StreamOut(TVarData(Value), InnerStream);
+            StreamSize := InnerStream.Size;
+
+            OuterWriter.WriteString(CustomType.ClassName);
+            OuterWriter.Write(StreamSize, SizeOf(StreamSize));
+            OuterWriter.Write(InnerStream.Memory^, StreamSize);
+          finally
+            OuterWriter.Free;
+          end;
+          StreamSize := OuterStream.Size;
+          WriteValue(vaBinary);
+          Write(StreamSize, SizeOf(StreamSize));
+          Write(OuterStream.Memory^, StreamSize);
+        finally
+          InnerStream.Free;
+          OuterStream.Free;
+        end;
+      end;
+    except
+      raise EWriteError.CreateRes(@SWriteError);
     end;
   end;
 end;
@@ -6102,31 +7717,53 @@ begin
   Write(Value[1], L);
 end;
 
-procedure TWriter.WriteString(const Value: string);
+procedure TWriter.WriteMinStr(const LocaleStr: string; const UTF8Str: UTF8String);
 var
   L: Integer;
 begin
-  L := Length(Value);
-  if L <= 255 then
+  if LocaleStr <> UTF8Str then
   begin
-    WriteValue(vaString);
-    Write(L, SizeOf(Byte));
-  end else
-  begin
-    WriteValue(vaLString);
+    L := Length(UTF8Str);
+    WriteValue(vaUtf8String);
     Write(L, SizeOf(Integer));
+    Write(Pointer(UTF8Str)^, L);
+  end
+  else
+  begin
+    L := Length(LocaleStr);
+    if L <= 255 then
+    begin
+      WriteValue(vaString);
+      Write(L, SizeOf(Byte));
+    end else
+    begin
+      WriteValue(vaLString);
+      Write(L, SizeOf(Integer));
+    end;
+    Write(Pointer(LocaleStr)^, L);
   end;
-  Write(Pointer(Value)^, L);
+end;
+
+procedure TWriter.WriteString(const Value: string);
+begin
+  WriteMinStr(Value, AnsiToUtf8(Value));
 end;
 
 procedure TWriter.WriteWideString(const Value: WideString);
 var
   L: Integer;
+  Utf8Str: UTF8String;
 begin
-  WriteValue(vaWString);
-  L := Length(Value);
-  Write(L, SizeOf(Integer));
-  Write(Pointer(Value)^, L * 2);
+  Utf8Str := Utf8Encode(Value);
+  if Length(Utf8Str) < (Length(Value) * SizeOf(WideChar)) then
+    WriteMinStr(Value, Utf8Str)
+  else
+  begin
+    WriteValue(vaWString);
+    L := Length(Value);
+    Write(L, SizeOf(Integer));
+    Write(Pointer(Value)^, L * 2);
+  end;
 end;
 
 procedure TWriter.WriteValue(Value: TValueType);
@@ -6140,7 +7777,19 @@ const
   ParseBufSize = 4096;
 
 procedure BinToHex(Buffer, Text: PChar; BufSize: Integer); assembler;
-asm
+const
+  Convert: array[0..15] of Char = '0123456789ABCDEF';
+var
+  I: Integer;
+begin
+  for I := 0 to BufSize - 1 do
+  begin
+    Text[0] := Convert[Byte(Buffer[I]) shr 4];
+    Text[1] := Convert[Byte(Buffer[I]) and $F];
+    Inc(Text, 2);
+  end;
+end;
+{asm
         PUSH    ESI
         PUSH    EDI
         MOV     ESI,EAX
@@ -6160,10 +7809,31 @@ asm
         JNE     @@1
         POP     EDI
         POP     ESI
-end;
+end;}
 
 function HexToBin(Text, Buffer: PChar; BufSize: Integer): Integer; assembler;
-asm
+const
+  Convert: array['0'..'f'] of SmallInt =
+    ( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,-1,-1,-1,-1,-1,-1,
+     -1,10,11,12,13,14,15,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+     -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
+     -1,10,11,12,13,14,15);
+var
+  I: Integer;
+begin
+  I := BufSize;
+  while I > 0 do
+  begin
+    if not (Text[0] in ['0'..'f']) or not (Text[1] in ['0'..'f']) then Break;
+    Buffer[0] := Char((Convert[Text[0]] shl 4) + Convert[Text[1]]);
+    Inc(Buffer);
+    Inc(Text, 2);
+    Dec(I);
+  end;
+  Result := BufSize - I;
+end;
+
+{asm
         PUSH    ESI
         PUSH    EDI
         PUSH    EBX
@@ -6203,7 +7873,7 @@ asm
         POP     EBX
         POP     EDI
         POP     ESI
-end;
+end;}
 
 constructor TParser.Create(Stream: TStream);
 begin
@@ -6312,7 +7982,7 @@ begin
                   I := I * 10 + (Ord(P^) - Ord('0'));
                   Inc(P);
                 end;
-                if (i > 255) then IsWideStr := True;
+                if (I > 127) then IsWideStr := True;
                 Inc(J);
               end;
             '''':
@@ -6496,7 +8166,10 @@ end;
 
 function TParser.TokenWideString: WideString;
 begin
-  Result := FWideStr;
+  if FToken = toString then
+    Result := TokenString
+  else
+    Result := FWideStr;
 end;
 
 function TParser.TokenSymbolIs(const S: string): Boolean;
@@ -6531,6 +8204,7 @@ var
   SaveSeparator: Char;
   Reader: TReader;
   Writer: TWriter;
+  ObjectName, PropName: string;
 
   procedure WriteIndent;
   const
@@ -6548,7 +8222,7 @@ var
 
   procedure NewLine;
   begin
-    WriteStr(#13#10);
+    WriteStr(sLineBreak);
     WriteIndent;
   end;
 
@@ -6556,7 +8230,7 @@ var
 
   procedure ConvertHeader;
   var
-    ClassName, ObjectName: string;
+    ClassName: string;
     Flags: TFilerFlags;
     Position: Integer;
   begin
@@ -6582,7 +8256,11 @@ var
       WriteStr(IntToStr(Position));
       WriteStr(']');
     end;
-    WriteStr(#13#10);
+
+    if ObjectName = '' then
+      ObjectName := ClassName;  // save for error reporting
+
+    WriteStr(sLineBreak);
   end;
 
   procedure ConvertBinary;
@@ -6649,7 +8327,7 @@ var
         WriteStr(FloatToStr(Reader.ReadCurrency * 10000) + 'c');
       vaDate:
         WriteStr(FloatToStr(Reader.ReadDate) + 'd');
-      vaWString:
+      vaWString, vaUTF8String:
         begin
           W := Reader.ReadWideString;
           L := Length(W);
@@ -6662,18 +8340,14 @@ var
               K := I;
               repeat
                 LineBreak := False;
-                if (W[I] >= ' ') and (W[I] <> '''') and (Ord(W[i]) <= 255) then
+                if (W[I] >= ' ') and (W[I] <> '''') and (Ord(W[i]) <= 127) then
                 begin
                   J := I;
                   repeat
                     Inc(I)
                   until (I > L) or (W[I] < ' ') or (W[I] = '''') or
-                    ((I - K) >= LineLength) or (Ord(W[i]) > 255);
-                  if ((I - K) >= LineLength) then
-                  begin
-                    LineBreak := True;
-                    if ByteType(W, I) = mbTrailByte then Dec(I);
-                  end;
+                    ((I - K) >= LineLength) or (Ord(W[i]) > 127);
+                  if ((I - K) >= LineLength) then LineBreak := True;
                   WriteStr('''');
                   while J < I do
                   begin
@@ -6781,7 +8455,7 @@ var
               ConvertValue;
               WriteStr(']');
             end;
-            WriteStr(#13#10);
+            WriteStr(sLineBreak);
             Reader.CheckValue(vaList);
             Inc(NestingLevel);
             while not Reader.EndOfList do ConvertProperty;
@@ -6796,16 +8470,20 @@ var
         end;
       vaInt64:
         WriteStr(IntToStr(Reader.ReadInt64));
+    else
+      raise EReadError.CreateResFmt(@sPropertyException,
+        [ObjectName, DotSep, PropName, IntToStr(Ord(Reader.NextValue))]);
     end;
   end;
 
   procedure ConvertProperty;
   begin
     WriteIndent;
-    WriteStr(Reader.ReadStr);
+    PropName := Reader.ReadStr;  // save for error reporting
+    WriteStr(PropName);
     WriteStr(' = ');
     ConvertValue;
-    WriteStr(#13#10);
+    WriteStr(sLineBreak);
   end;
 
   procedure ConvertObject;
@@ -6818,7 +8496,7 @@ var
     Reader.ReadListEnd;
     Dec(NestingLevel);
     WriteIndent;
-    WriteStr('end'#13#10);
+    WriteStr('end' + sLineBreak);
   end;
 
 begin
@@ -6992,32 +8670,20 @@ var
   var
     Order: Integer;
 
-    function CombineString: string;
-    begin
-      Result := Parser.TokenString;
-      while Parser.NextToken = '+' do
-      begin
-        Parser.NextToken;
-        Parser.CheckToken(toString);
-        Result := Result + Parser.TokenString;
-      end;
-    end;
-
     function CombineWideString: WideString;
     begin
       Result := Parser.TokenWideString;
       while Parser.NextToken = '+' do
       begin
         Parser.NextToken;
-        Parser.CheckToken(toWString);
+        if not (Parser.Token in [toString, toWString]) then
+          Parser.CheckToken(toString);
         Result := Result + Parser.TokenWideString;
       end;
     end;
 
   begin
-    if Parser.Token = toString then
-      Writer.WriteString(CombineString)
-    else if Parser.Token = toWString then
+    if Parser.Token in [toString, toWString] then
       Writer.WriteWideString(CombineWideString)
     else
     begin
@@ -7173,6 +8839,16 @@ end;
 { Text to resource conversion }
 
 procedure ObjectTextToResource(Input, Output: TStream);
+
+  procedure NameLengthError(Len: Byte; Stream: TStream);
+  var
+    Temp: string;
+  begin
+    SetLength(Temp, Len);
+    Stream.Read(Temp[1], Len);
+    raise EParserError.CreateResFmt(@sComponentNameTooLong, [Temp]);
+  end;
+
 var
   Len: Byte;
   Tmp: Longint;
@@ -7204,6 +8880,7 @@ begin
       MemoryStream.Read(Len, 1);
     end;
 
+    if Len > High(Header) - 10 then  NameLengthError(Len, MemoryStream);
     MemoryStream.Read(Header[3], Len);
     StrUpper(@Header[3]);
     Byte((@Header[0])^) := $FF;
@@ -7241,108 +8918,30 @@ begin
     Result := sofUnknown;
 end;
 
-{ Thread management routines }
-
-const
-  CM_EXECPROC = $8FFF;
-  CM_DESTROYWINDOW = $8FFE;
-
 type
-  PRaiseFrame = ^TRaiseFrame;
-  TRaiseFrame = record
-    NextRaise: PRaiseFrame;
-    ExceptAddr: Pointer;
-    ExceptObject: TObject;
-    ExceptionRecord: PExceptionRecord;
+  TSyncProc = record
+    Thread: TThread;
+{$IFDEF MSWINDOWS}
+    Signal: THandle;
+{$ENDIF}
+{$IFDEF LINUX}
+    Signal: TCondVar;
+{$ENDIF}
   end;
+  PSyncProc = ^TSyncProc;
 
 var
+  ProcPosted: Boolean;
+  SyncList: TList = nil;
   ThreadLock: TRTLCriticalSection;
-  ThreadWindow: HWND;
   ThreadCount: Integer;
 
-procedure FreeThreadWindow;
-begin
-  if ThreadWindow <> 0 then
-  begin
-    DestroyWindow(ThreadWindow);
-    ThreadWindow := 0;
-  end;
-end;
-
-function ThreadWndProc(Window: HWND; Message, wParam, lParam: Longint): Longint; stdcall;
-begin
-  case Message of
-    CM_EXECPROC:
-      with TThread(lParam) do
-      begin
-        Result := 0;
-        try
-          FSynchronizeException := nil;
-          FMethod;
-        except
-          if RaiseList <> nil then
-          begin
-            FSynchronizeException := PRaiseFrame(RaiseList)^.ExceptObject;
-            PRaiseFrame(RaiseList)^.ExceptObject := nil;
-          end;
-        end;
-      end;
-    CM_DESTROYWINDOW:
-      begin
-        EnterCriticalSection(ThreadLock);
-        try
-          Dec(ThreadCount);
-          if ThreadCount = 0 then
-            FreeThreadWindow;
-        finally
-          LeaveCriticalSection(ThreadLock);
-        end;
-        Result := 0;
-      end;
-  else
-    Result := DefWindowProc(Window, Message, wParam, lParam);
-  end;
-end;
-
-var
-  ThreadWindowClass: TWndClass = (
-    style: 0;
-    lpfnWndProc: @ThreadWndProc;
-    cbClsExtra: 0;
-    cbWndExtra: 0;
-    hInstance: 0;
-    hIcon: 0;
-    hCursor: 0;
-    hbrBackground: 0;
-    lpszMenuName: nil;
-    lpszClassName: 'TThreadWindow');
-
 procedure AddThread;
-
-  function AllocateWindow: HWND;
-  var
-    TempClass: TWndClass;
-    ClassRegistered: Boolean;
-  begin
-    ThreadWindowClass.hInstance := HInstance;
-    ClassRegistered := GetClassInfo(HInstance, ThreadWindowClass.lpszClassName,
-      TempClass);
-    if not ClassRegistered or (TempClass.lpfnWndProc <> @ThreadWndProc) then
-    begin
-      if ClassRegistered then
-        Windows.UnregisterClass(ThreadWindowClass.lpszClassName, HInstance);
-      Windows.RegisterClass(ThreadWindowClass);
-    end;
-    Result := CreateWindow(ThreadWindowClass.lpszClassName, '', 0,
-      0, 0, 0, 0, 0, 0, HInstance, nil);
-  end;
-
 begin
   EnterCriticalSection(ThreadLock);
   try
-    if ThreadCount = 0 then
-      ThreadWindow := AllocateWindow;
+    if (ThreadCount = 0) and (SyncList = nil) then
+      SyncList := TList.Create;
     Inc(ThreadCount);
   finally
     LeaveCriticalSection(ThreadLock);
@@ -7353,53 +8952,146 @@ procedure RemoveThread;
 begin
   EnterCriticalSection(ThreadLock);
   try
-    if ThreadCount = 1 then
-      PostMessage(ThreadWindow, CM_DESTROYWINDOW, 0, 0);
+    Dec(ThreadCount);
   finally
     LeaveCriticalSection(ThreadLock);
   end;
 end;
 
-{ TThread }
+function CheckSynchronize: Boolean;
+var
+  SyncProc: PSyncProc;
+begin
+  if GetCurrentThreadID <> MainThreadID then
+    raise EThread.CreateResFmt(@SCheckSynchronizeError, [GetCurrentThreadID]);
+  if ProcPosted then
+  begin
+    EnterCriticalSection(ThreadLock);
+    try
+      Result := (SyncList <> nil) and (SyncList.Count > 0);
+      if Result then
+      begin
+        while SyncList.Count > 0 do
+        begin
+          SyncProc := SyncList[0];
+          SyncList.Delete(0);
+          try
+            SyncProc.Thread.FMethod;
+          except
+            SyncProc.Thread.FSynchronizeException := AcquireExceptionObject;
+          end;
+{$IFDEF MSWINDOWS}
+          SetEvent(SyncProc.signal);
+{$ENDIF}
+{$IFDEF LINUX}
+          pthread_cond_signal(SyncProc.Signal);
+{$ENDIF}
+        end;
+        ProcPosted := False;
+      end;
+    finally
+      LeaveCriticalSection(ThreadLock);
+    end;
+  end else Result := False;
+end;
 
 function ThreadProc(Thread: TThread): Integer;
 var
   FreeThread: Boolean;
 begin
+{$IFDEF LINUX}
+  if Thread.FSuspended then sem_wait(Thread.FCreateSuspendedSem);
+{$ENDIF}
   try
-    Thread.Execute;
+    if not Thread.Terminated then
+    try
+      Thread.Execute;
+    except
+      Thread.FFatalException := AcquireExceptionObject;
+    end;
   finally
     FreeThread := Thread.FFreeOnTerminate;
     Result := Thread.FReturnValue;
     Thread.FFinished := True;
     Thread.DoTerminate;
     if FreeThread then Thread.Free;
+{$IFDEF MSWINDOWS}
     EndThread(Result);
+{$ENDIF}
+{$IFDEF LINUX}
+    // Directly call pthread_exit since EndThread will detach the thread causing
+    // the pthread_join in TThread.WaitFor to fail.  Also, make sure the EndThreadProc
+    // is called just like EndThread would do. EndThreadProc should not return
+    // and call pthread_exit itself.
+    if Assigned(EndThreadProc) then
+      EndThreadProc(Result);
+    pthread_exit(Pointer(Result));
+{$ENDIF}
   end;
 end;
 
 constructor TThread.Create(CreateSuspended: Boolean);
+{$IFDEF LINUX}
 var
-  Flags: DWORD;
+  ErrCode: Integer;
+{$ENDIF}
 begin
   inherited Create;
   AddThread;
   FSuspended := CreateSuspended;
-  Flags := 0;
-  if CreateSuspended then Flags := CREATE_SUSPENDED;
-  FHandle := BeginThread(nil, 0, @ThreadProc, Pointer(Self), Flags, FThreadID);
+  FCreateSuspended := CreateSuspended;
+{$IFDEF MSWINDOWS}
+  FHandle := BeginThread(nil, 0, @ThreadProc, Pointer(Self), CREATE_SUSPENDED, FThreadID);
+  if FHandle = 0 then
+    raise EThread.CreateResFmt(@SThreadCreateError, [SysErrorMessage(GetLastError)]);
+{$ENDIF}
+{$IFDEF LINUX}
+  sem_init(FCreateSuspendedSem, False, 0);
+  ErrCode := BeginThread(nil, @ThreadProc, Pointer(Self), FThreadID);
+  if ErrCode <> 0 then
+    raise EThread.CreateResFmt(@SThreadCreateError, [SysErrorMessage(ErrCode)]);
+{$ENDIF}
 end;
 
 destructor TThread.Destroy;
 begin
-  if not FFinished and not Suspended then
+  if (FThreadID <> 0) and not FFinished then
   begin
     Terminate;
+    if FCreateSuspended then
+      Resume;
     WaitFor;
   end;
+{$IFDEF MSWINDOWS}
   if FHandle <> 0 then CloseHandle(FHandle);
+{$ENDIF}
+{$IFDEF LINUX}
+  // This final check is to ensure that even if the thread was never waited on
+  // its resources will be freed.
+  if FThreadID <> 0 then pthread_detach(FThreadID);
+  sem_destroy(FCreateSuspendedSem);
+{$ENDIF}
   inherited Destroy;
+  FFatalException.Free;
   RemoveThread;
+end;
+
+procedure TThread.AfterConstruction;
+begin
+  if not FCreateSuspended then
+    Resume;
+end;
+
+procedure TThread.CheckThreadError(ErrCode: Integer);
+begin
+  if ErrCode <> 0 then
+    raise EThread.CreateResFmt(@SThreadError, [SysErrorMessage(ErrCode), ErrCode]);
+end;
+
+procedure TThread.CheckThreadError(Success: Boolean);
+begin
+  if not Success then
+    CheckThreadError(GetLastError);
 end;
 
 procedure TThread.CallOnTerminate;
@@ -7412,6 +9104,7 @@ begin
   if Assigned(FOnTerminate) then Synchronize(CallOnTerminate);
 end;
 
+{$IFDEF MSWINDOWS}
 const
   Priorities: array [TThreadPriority] of Integer =
    (THREAD_PRIORITY_IDLE, THREAD_PRIORITY_LOWEST, THREAD_PRIORITY_BELOW_NORMAL,
@@ -7424,6 +9117,7 @@ var
   I: TThreadPriority;
 begin
   P := GetThreadPriority(FHandle);
+  CheckThreadError(P <> THREAD_PRIORITY_ERROR_RETURN);
   Result := tpNormal;
   for I := Low(TThreadPriority) to High(TThreadPriority) do
     if Priorities[I] = P then Result := I;
@@ -7431,15 +9125,114 @@ end;
 
 procedure TThread.SetPriority(Value: TThreadPriority);
 begin
-  SetThreadPriority(FHandle, Priorities[Value]);
+  CheckThreadError(SetThreadPriority(FHandle, Priorities[Value]));
+end;
+{$ENDIF}
+{$IFDEF LINUX}
+function TThread.GetPriority: Integer;
+var
+  P: Integer;
+  J: TSchedParam;
+begin
+  {
+    Linux Priority is based on the Schedule policy.
+    There are 3 different kinds of policy.  See SetPolicy.
+
+        Policy          Type         Priority
+      ----------      --------       --------
+      SCHED_RR        RealTime         0-99
+      SCHED_FIFO      RealTime         0-99
+      SCHED_OTHER     Regular           0
+
+    SCHED_RR and SCHED_FIFO can only be set by root.
+  }
+  CheckThreadError(pthread_getschedparam(FThreadID, P, J));
+  Result := J.sched_priority;
 end;
 
-procedure TThread.Synchronize(Method: TThreadMethod);
+{
+  Note that to fully utilize Linux Scheduling, see SetPolicy.
+}
+procedure TThread.SetPriority(Value: Integer);
+var
+  P: TSchedParam;
 begin
-  FSynchronizeException := nil;
-  FMethod := Method;
-  SendMessage(ThreadWindow, CM_EXECPROC, 0, Longint(Self));
-  if Assigned(FSynchronizeException) then raise FSynchronizeException;
+  if Value <> Priority then
+  begin
+    P.sched_priority := Value;
+    CheckThreadError(pthread_setschedparam(FThreadID, Policy, @P));
+  end;
+end;
+
+function TThread.GetPolicy: Integer;
+var
+  J: TSchedParam;
+begin
+  CheckThreadError(pthread_getschedparam(FThreadID, Result, J));
+end;
+
+{
+  Note that to fully utilize Linux Scheduling, SetPolicy needs to
+  be used as well.  See SetPriority for the relationship between these
+  methods.
+}
+procedure TThread.SetPolicy(Value: Integer);
+var
+  P: TSchedParam;
+begin
+  if Value <> Policy then
+  begin
+    P.sched_priority := GetPriority;
+    CheckThreadError(pthread_setschedparam(FThreadID, Value, @P));
+  end;
+end;
+{$ENDIF}
+
+procedure TThread.Synchronize(Method: TThreadMethod);
+var
+  SyncProc: TSyncProc;
+begin
+  if GetCurrentThreadID = MainThreadID then
+    Method
+  else
+  begin
+{$IFDEF MSWINDOWS}
+    SyncProc.Signal := CreateEvent(nil, True, False, nil);
+    try
+{$ENDIF}
+{$IFDEF LINUX}
+      FillChar(SyncProc, SizeOf(SyncProc), 0);  // This also initializes the cond_var
+{$ENDIF}
+      EnterCriticalSection(ThreadLock);
+      try
+        FSynchronizeException := nil;
+        FMethod := Method;
+        SyncProc.Thread := Self;
+        SyncList.Add(@SyncProc);
+        ProcPosted := True;
+        if Assigned(WakeMainThread) then
+          WakeMainThread(Self);
+{$IFDEF MSWINDOWS}
+        LeaveCriticalSection(ThreadLock);
+        try
+          WaitForSingleObject(SyncProc.Signal, INFINITE);
+        finally
+          EnterCriticalSection(ThreadLock);
+        end;
+{$ENDIF}
+{$IFDEF LINUX}
+        pthread_cond_wait(SyncProc.Signal, ThreadLock);
+{$ENDIF}
+      finally
+        LeaveCriticalSection(ThreadLock);
+      end;
+{$IFDEF MSWINDOWS}
+    finally
+      CloseHandle(SyncProc.Signal);
+    end;
+{$ENDIF}
+    if Assigned(FSynchronizeException) then raise FSynchronizeException;
+  end;
 end;
 
 procedure TThread.SetSuspended(Value: Boolean);
@@ -7450,16 +9243,52 @@ begin
       Resume;
 end;
 
+{$IFDEF MSWINDOWS}
 procedure TThread.Suspend;
 begin
   FSuspended := True;
-  SuspendThread(FHandle);
+  CheckThreadError(Integer(SuspendThread(FHandle)) >= 0);
+end;
+
+procedure TThread.Resume;
+var
+  SuspendCount: Integer;
+begin
+  SuspendCount := ResumeThread(FHandle);
+  CheckThreadError(SuspendCount >= 0);
+  if SuspendCount = 1 then
+    FSuspended := False;
+end;
+{$ENDIF}
+{$IFDEF LINUX}
+{
+  About Suspend and Resume. POSIX does not support suspending/resuming a thread.
+  Suspending a thread is considerd dangerous since it is not guaranteed where the
+  thread would be suspend. It might be holding a lock, mutex or it might be inside
+  a critical section.  In order to simulate it in Linux we've used signals. To
+  suspend, a thread SIGSTOP is sent and to resume, SIGCONT is sent. Note that this
+  is Linux only i.e. according to POSIX if a thread receives SIGSTOP then the
+  entire process is stopped. However Linux doesn't entirely exhibit the POSIX-mandated
+  behaviour. If and when it fully complies with the POSIX standard then suspend
+  and resume won't work.
+}
+procedure TThread.Suspend;
+begin
+  FSuspended := True;
+  CheckThreadError(pthread_kill(FThreadID, SIGSTOP));
 end;
 
 procedure TThread.Resume;
 begin
-  if ResumeThread(FHandle) = 1 then FSuspended := False;
+  if not FInitialSuspendDone then
+  begin
+    FInitialSuspendDone := True;
+    sem_post(FCreateSuspendedSem);
+  end else
+    CheckThreadError(pthread_kill(FThreadID, SIGCONT));
+  FSuspended := False;
 end;
+{$ENDIF}
 
 procedure TThread.Terminate;
 begin
@@ -7467,17 +9296,47 @@ begin
 end;
 
 function TThread.WaitFor: LongWord;
+{$IFDEF MSWINDOWS}
 var
-  Msg: TMsg;
   H: THandle;
+  WaitResult: Cardinal;
+  Msg: TMsg;
 begin
   H := FHandle;
   if GetCurrentThreadID = MainThreadID then
-    while MsgWaitForMultipleObjects(1, H, False, INFINITE,
-      QS_SENDMESSAGE) = WAIT_OBJECT_0 + 1 do PeekMessage(Msg, 0, 0, 0, PM_NOREMOVE)
-  else WaitForSingleObject(H, INFINITE);
-  GetExitCodeThread(H, Result);
+  begin
+    WaitResult := 0;
+    repeat
+      { This prevents a potential deadlock if the background thread
+        does a SendMessage to the foreground thread }
+      if WaitResult = WAIT_OBJECT_0 + 1 then
+        PeekMessage(Msg, 0, 0, 0, PM_NOREMOVE);
+      Sleep(0);
+      CheckSynchronize;
+      WaitResult := MsgWaitForMultipleObjects(1, H, False, 0, QS_SENDMESSAGE);
+      Win32Check(WaitResult <> WAIT_FAILED);
+    until WaitResult = WAIT_OBJECT_0;
+  end else WaitForSingleObject(H, INFINITE);
+  CheckThreadError(GetExitCodeThread(H, Result));
 end;
+{$ENDIF}
+{$IFDEF LINUX}
+var
+  X: Pointer;
+  ID: Cardinal;
+begin
+  ID := FThreadID;
+  if GetCurrentThreadID = MainThreadID then
+    while not FFinished do
+    begin
+      sleep(0);
+      CheckSynchronize;
+    end;
+  FThreadID := 0;
+  X := @Result;
+  CheckThreadError(pthread_join(ID, @X));
+end;
+{$ENDIF}
 
 { TComponent }
 
@@ -7488,19 +9347,13 @@ begin
 end;
 
 destructor TComponent.Destroy;
-var
-  I: Integer;
 begin
   Destroying;
   if FFreeNotifies <> nil then
   begin
-    for I := FFreeNotifies.Count - 1 downto 0 do
-    begin
-      TComponent(FFreeNotifies[I]).Notification(Self, opRemove);
-      if FFreeNotifies = nil then Break;
-    end;
-    FFreeNotifies.Free;
-    FFreeNotifies := nil;
+    while Assigned(FFreeNotifies) and (FFreeNotifies.Count > 0) do
+      TComponent(FFreeNotifies[FFreeNotifies.Count - 1]).Notification(Self, opRemove);
+    FreeAndNil(FFreeNotifies);
   end;
   DestroyComponents;
   if FOwner <> nil then FOwner.RemoveComponent(Self);
@@ -7517,6 +9370,8 @@ procedure TComponent.FreeNotification(AComponent: TComponent);
 begin
   if (Owner = nil) or (AComponent.Owner <> Owner) then
   begin
+    // Never acquire a reference to a component that is being deleted.
+    assert(not (csDestroying in (ComponentState + AComponent.ComponentState)));
     if not Assigned(FFreeNotifies) then FFreeNotifies := TList.Create;
     if FFreeNotifies.IndexOf(AComponent) < 0 then
     begin
@@ -7640,8 +9495,16 @@ begin
   if (Operation = opRemove) and (AComponent <> nil) then
     RemoveFreeNotification(AComponent);
   if FComponents <> nil then
-    for I := 0 to FComponents.Count - 1 do
+  begin
+    I := FComponents.Count - 1;
+    while I >= 0 do
+    begin
       TComponent(FComponents[I]).Notification(AComponent, Operation);
+      Dec(I);
+      if I >= FComponents.Count then
+        I := FComponents.Count - 1;
+    end;
+  end;
 end;
 
 procedure TComponent.DefineProperties(Filer: TFiler);
@@ -7713,6 +9576,11 @@ end;
 procedure TComponent.Loaded;
 begin
   Exclude(FComponentState, csLoading);
+end;
+
+procedure TComponent.PaletteCreated;
+begin
+  // Notification
 end;
 
 procedure TComponent.ReadState(Reader: TReader);
@@ -7866,25 +9734,28 @@ begin
   end;
 end;
 
-function TComponent.ExecuteAction(Action: TBasicAction): Boolean;//!
+function TComponent.ExecuteAction(Action: TBasicAction): Boolean;
 begin
-  if Action.HandlesTarget(Self) then
-  begin
+  Result := Action.HandlesTarget(Self);
+  if Result then
     Action.ExecuteTarget(Self);
-    Result := True;
-  end
-  else Result := False;
 end;
 
-function TComponent.UpdateAction(Action: TBasicAction): Boolean;//!
+function TComponent.UpdateAction(Action: TBasicAction): Boolean;
 begin
-  if Action.HandlesTarget(Self) then
-  begin
+  Result := Action.HandlesTarget(Self);
+  if Result then
     Action.UpdateTarget(Self);
-    Result := True;
-  end
-  else Result := False;
 end;
+
+procedure TComponent.SetSubComponent(IsSubComponent: Boolean);
+begin
+  if IsSubComponent then
+    Include(FComponentStyle, csSubComponent)
+  else
+    Exclude(FComponentStyle, csSubComponent);
+end;
+
 
 function TComponent.GetComObject: IUnknown;
 begin
@@ -7900,11 +9771,23 @@ end;
 function TComponent.SafeCallException(ExceptObject: TObject;
   ExceptAddr: Pointer): HResult;
 begin
+
   if FVCLComObject <> nil then
     Result := IVCLComObject(FVCLComObject).SafeCallException(
       ExceptObject, ExceptAddr)
   else
     Result := inherited SafeCallException(ExceptObject, ExceptAddr);
+
+{$IFDEF LINUX}
+  if ExceptObject is Exception then
+  begin
+    SetSafeCallExceptionMsg(Exception(ExceptObject).Message);
+    SetSafeCallExceptionAddr(ExceptAddr);
+    Result := HResult($8000FFFF);
+  end
+  else
+    Result := inherited SafeCallException(ExceptObject, ExceptAddr);
+{$ENDIF}
 end;
 
 procedure TComponent.FreeOnRelease;
@@ -7912,38 +9795,52 @@ begin
   if FVCLComObject <> nil then IVCLComObject(FVCLComObject).FreeOnRelease;
 end;
 
+
 class procedure TComponent.UpdateRegistry(Register: Boolean; const ClassID, ProgID: string);
 begin
 end;
 
-{ TComponent.IUnknown }
+{ TComponent.IInterface }
 
 function TComponent.QueryInterface(const IID: TGUID; out Obj): HResult;
 begin
+
   if FVCLComObject = nil then
   begin
+
     if GetInterface(IID, Obj) then Result := S_OK
     else Result := E_NOINTERFACE
+
   end
   else
     Result := IVCLComObject(FVCLComObject).QueryInterface(IID, Obj);
+
 end;
 
 function TComponent._AddRef: Integer;
 begin
+
   if FVCLComObject = nil then
     Result := -1   // -1 indicates no reference counting is taking place
   else
     Result := IVCLComObject(FVCLComObject)._AddRef;
+
+
+
 end;
 
 function TComponent._Release: Integer;
 begin
+
   if FVCLComObject = nil then
     Result := -1   // -1 indicates no reference counting is taking place
   else
     Result := IVCLComObject(FVCLComObject)._Release;
+
+
+
 end;
+
 
 { TComponent.IDispatch }
 
@@ -7984,6 +9881,92 @@ begin
       Flags, Params, VarResult, ExcepInfo, ArgErr);
 end;
 
+
+{ TComponent.IInterfaceComponentReference.GetComponent
+  Return a reference to the component that can be queried at load time to
+  obtain an interface.  The name of the reference component will be written to
+  the stream (same as a normal component reference) so that it can be located
+  again at load time.
+  In the case of aggregation, the reference component for an interface might
+  not be the same as the class that implements the interface itself.
+  Aggregate implementation classes should not implement
+  IInterfaceComponentReference, but should defer requests for that interface
+  to the controlling component.
+}
+
+function TComponent.IntfGetComponent: TComponent;
+begin
+  Result := Self;
+end;
+
+function TComponent.IsImplementorOf(const I: IInterface): Boolean;
+var
+  ICR: IInterfaceComponentReference;
+begin
+  Result := (I <> nil) and Supports(I, IInterfaceComponentReference, ICR)
+    and (ICR.GetComponent = Self);
+end;
+
+{ TComponent.ReferenceInterface
+  Establishes (opInsert) or removes (opRemove) internal links that
+  notify us when the component that implements the given interface is
+  destroyed.  The function result indicates whether the function was able
+  to establish/remove a notification link or not.  A result of False
+  doesn't necessarily indicate an error, but it does mean that the
+  interface's implementor does not participate in the interfaced component
+  reference model.  This could mean that the given interface employs true
+  reference counting, independent of component lifetimes.  That doesn't
+  affect the use of interface properties at runtime, but non-component
+  interfaces cannot be stored by the property streaming system.
+
+  When implementing components with interface-type properties, implement
+  setter methods for the interface-type properties like this:
+
+  procedure TMyComponent.SetMyIntfProp(const Value: IMyInterface);
+  begin
+    ReferenceInterface(FIntfField, opRemove);
+    FIntfField := Value;
+    ReferenceInterface(FIntfField, opInsert);
+  end;
+
+  Also override Notification to do the following for each interface property
+  in your component:
+
+  procedure TMyComponent.Notification(AComponent: TComponent; Operation: TOperation);
+  begin
+    inherited;
+    if Assigned(MyIntfProp) and AComponent.IsImplementorOf(MyIntfProp) then
+      MyIntfProp := nil;
+    ... repeat for other interface properties ...
+  end;
+
+  Note that the Notification code assigns nil to the *property*, not to the
+  private field, so that the property setter will call
+  ReferenceInterface(FIntfField, opRemove to undo any links established by
+  a previous opInsert operation.  All assignments to the interface property
+  *must* be made through the property setter.
+
+  TComponent.ReferenceInterface hides the details of how links are
+  established between the implementor and the holder of an interface.
+  The implementation details may change in the future.  Code that relies
+  on those implementation details (instead of using ReferenceInterface)
+  will not be supported.  In particular, avoid the temptation to use
+  IInterfaceComponentReference in your own code, as this interface may
+  not be available in the future.
+}
+
+function TComponent.ReferenceInterface(const I: IInterface; Operation: TOperation): Boolean;
+var
+  ICR: IInterfaceComponentReference;
+begin
+  Result := (I <> nil) and Supports(I, IInterfaceComponentReference, ICR);
+  if Result then
+    if Operation = opInsert then
+      ICR.GetComponent.FreeNotification(Self)
+    else
+      ICR.GetComponent.RemoveFreeNotification(Self);
+end;
+
 { TBasicActionLink }
 
 constructor TBasicActionLink.Create(AClient: TObject);
@@ -8007,8 +9990,16 @@ begin
   if Assigned(OnChange) then OnChange(FAction);
 end;
 
-function TBasicActionLink.Execute: Boolean;
+function TBasicActionLink.Execute(AComponent: TComponent): Boolean;
 begin
+  if FAction.ActionComponent <> AComponent then
+  begin
+    if Assigned(FAction.ActionComponent) then
+      FAction.ActionComponent.RemoveFreeNotification(FAction);
+    if Assigned(AComponent) then
+      AComponent.FreeNotification(FAction);
+    FAction.ActionComponent := AComponent;
+  end;
   Result := FAction.Execute;
 end;
 
@@ -8047,15 +10038,12 @@ end;
 destructor TBasicAction.Destroy;
 begin
   inherited Destroy;
+  if Assigned(ActionComponent) then
+    ActionComponent.RemoveFreeNotification(Self);
   while FClients.Count > 0 do
     UnRegisterChanges(TBasicActionLink(FClients.Last));
-  FClients.Free;
+  FreeAndNil(FClients);
 end;
-
-{!function TBasicAction.GetActionLinkClass: TBasicActionLinkClass;
-begin
-  Result := TBasicActionLink;
-end;!}
 
 function TBasicAction.HandlesTarget(Target: TObject): Boolean;
 begin
@@ -8064,6 +10052,14 @@ end;
 
 procedure TBasicAction.ExecuteTarget(Target: TObject);
 begin
+end;
+
+procedure TBasicAction.Notification(AComponent: TComponent;
+  Operation: TOperation);
+begin
+  inherited Notification(AComponent, Operation);
+  if (Operation = opRemove) and (AComponent = ActionComponent) then
+    FActionComponent := nil;
 end;
 
 procedure TBasicAction.UpdateTarget(Target: TObject);
@@ -8094,7 +10090,8 @@ procedure TBasicAction.SetOnExecute(Value: TNotifyEvent);
 var
   I: Integer;
 begin
-  if @Value <> @OnExecute then
+  if (TMethod(Value).Code <> TMethod(OnExecute).Code) or
+     (TMethod(Value).Data <> TMethod(OnExecute).Data) then
   begin
     for I := 0 to FClients.Count - 1 do
       TBasicActionLink(FClients[I]).SetOnExecute(Value);
@@ -8104,12 +10101,8 @@ begin
 end;
 
 procedure TBasicAction.Change;
-{var
-  I: Integer;}
 begin
   if Assigned(FOnChange) then FOnChange(Self);
-{!  for I := 0 to FClients.Count - 1 do
-    TBasicActionLink(FClients[I]).Change;!}
 end;
 
 procedure TBasicAction.RegisterChanges(Value: TBasicActionLink);
@@ -8125,7 +10118,7 @@ begin
   for I := 0 to FClients.Count - 1 do
     if FClients[I] = Value then
     begin
-      Value.{!}FAction := nil;
+      Value.FAction := nil;
       FClients.Delete(I);
       Break;
     end;
@@ -8190,7 +10183,7 @@ end;
 function TStreamAdapter.Seek(dlibMove: Largeint; dwOrigin: Longint;
   out libNewPosition: Largeint): HResult;
 var
-  NewPos: Integer;
+  NewPos: LargeInt;
 begin
   try
     if (dwOrigin < STREAM_SEEK_SET) or (dwOrigin > STREAM_SEEK_END) then
@@ -8198,7 +10191,7 @@ begin
       Result := STG_E_INVALIDFUNCTION;
       Exit;
     end;
-    NewPos := FStream.Seek(LongInt(dlibMove), dwOrigin);
+    NewPos := FStream.Seek(dlibMove, dwOrigin);
     if @libNewPosition <> nil then libNewPosition := NewPos;
     Result := S_OK;
   except
@@ -8209,7 +10202,7 @@ end;
 function TStreamAdapter.SetSize(libNewSize: Largeint): HResult;
 begin
   try
-    FStream.Size := LongInt(libNewSize);
+    FStream.Size := libNewSize;
     if libNewSize <> FStream.Size then
       Result := E_FAIL
     else
@@ -8225,7 +10218,7 @@ const
   MaxBufSize = 1024 * 1024;  // 1mb
 var
   Buffer: Pointer;
-  BufSize, N, I: Integer;
+  BufSize, N, I, R: Integer;
   BytesRead, BytesWritten, W: LargeInt;
 begin
   Result := S_OK;
@@ -8247,15 +10240,17 @@ begin
         while I > 0 do
         begin
           if I > BufSize then N := BufSize else N := I;
-          Inc(BytesRead, FStream.Read(Buffer^, N));
+          R := FStream.Read(Buffer^, N);
+          if R = 0 then Exit; // The end of the stream was hit.
+          Inc(BytesRead, R);
           W := 0;
-          Result := stm.Write(Buffer, N, @W);
+          Result := stm.Write(Buffer, R, @W);
           Inc(BytesWritten, W);
-          if (Result = S_OK) and (Integer(W) <> N) then Result := E_FAIL;
+          if (Result = S_OK) and (Integer(W) <> R) then Result := E_FAIL;
           if Result <> S_OK then Exit;
-          Dec(I, N);
+          Dec(I, R);
+          Dec(cb, R);
         end;
-        Dec(cb, I);
       end;
     finally
       FreeMem(Buffer);
@@ -8316,7 +10311,6 @@ begin
   Result := E_NOTIMPL;
 end;
 
-
 procedure FreeIntConstList;
 var
   I: Integer;
@@ -8336,12 +10330,343 @@ begin
   UnregisterModuleClasses(HMODULE(Instance));
 end;
 
+{ TDataModule }
+
+constructor TDataModule.Create(AOwner: TComponent);
+begin
+  GlobalNameSpace.BeginWrite;
+  try
+    CreateNew(AOwner);
+    if (ClassType <> TDataModule) and not (csDesigning in ComponentState) then
+    begin
+      if not InitInheritedComponent(Self, TDataModule) then
+        raise EResNotFound.CreateFmt(SResNotFound, [ClassName]);
+      if OldCreateOrder then DoCreate;
+    end;
+  finally
+    GlobalNameSpace.EndWrite;
+  end;
+end;
+
+procedure TDataModule.AfterConstruction;
+begin
+  if not OldCreateOrder then DoCreate;
+end;
+
+constructor TDataModule.CreateNew(AOwner: TComponent; Dummy: Integer);
+begin
+  inherited Create(AOwner);
+
+  if Assigned(AddDataModule) and (Dummy >= 0) then
+    AddDataModule(Self);
+end;
+
+procedure TDataModule.BeforeDestruction;
+begin
+  GlobalNameSpace.BeginWrite;
+  Destroying;
+  RemoveFixupReferences(Self, '');
+  if not OldCreateOrder then DoDestroy;
+end;
+
+destructor TDataModule.Destroy;
+begin
+  if not (csDestroying in ComponentState) then GlobalNameSpace.BeginWrite;
+  try
+    if OldCreateOrder then DoDestroy;
+    if Assigned(RemoveDataModule) then
+      RemoveDataModule(Self);
+    inherited Destroy;
+  finally
+    GlobalNameSpace.EndWrite;
+  end;
+end;
+
+procedure TDataModule.DoCreate;
+begin
+  if Assigned(FOnCreate) then
+  try
+    FOnCreate(Self);
+  except
+    if not HandleCreateException then
+      raise;
+  end;
+end;
+
+procedure TDataModule.DoDestroy;
+begin
+  if Assigned(FOnDestroy) then
+  try
+    FOnDestroy(Self);
+  except
+    if Assigned(ApplicationHandleException) then
+      ApplicationHandleException(Self);
+  end;
+end;
+
+procedure TDataModule.DefineProperties(Filer: TFiler);
+var
+  Ancestor: TDataModule;
+
+  function DoWriteWidth: Boolean;
+  begin
+    Result := True;
+    if Ancestor <> nil then Result := FDesignSize.X <> Ancestor.FDesignSize.X;
+  end;
+
+  function DoWriteHorizontalOffset: Boolean;
+  begin
+    if Ancestor <> nil then
+      Result := FDesignOffset.X <> Ancestor.FDesignOffset.X else
+      Result := FDesignOffset.X <> 0;
+  end;
+
+  function DoWriteVerticalOffset: Boolean;
+  begin
+    if Ancestor <> nil then
+      Result := FDesignOffset.Y <> Ancestor.FDesignOffset.Y else
+      Result := FDesignOffset.Y <> 0;
+  end;
+
+  function DoWriteHeight: Boolean;
+  begin
+    Result := True;
+    if Ancestor <> nil then Result := FDesignSize.Y <> Ancestor.FDesignSize.Y;
+  end;
+
+begin
+  inherited DefineProperties(Filer);
+  Ancestor := TDataModule(Filer.Ancestor);
+  Filer.DefineProperty('Height', ReadHeight, WriteHeight, DoWriteHeight);
+  Filer.DefineProperty('HorizontalOffset', ReadHorizontalOffset,
+    WriteHorizontalOffset, DoWriteHorizontalOffset);
+  Filer.DefineProperty('VerticalOffset', ReadVerticalOffset,
+    WriteVerticalOffset, DoWriteVerticalOffset);
+  Filer.DefineProperty('Width', ReadWidth, WriteWidth, DoWriteWidth);
+end;
+
+procedure TDataModule.GetChildren(Proc: TGetChildProc; Root: TComponent);
+var
+  I: Integer;
+  OwnedComponent: TComponent;
+begin
+  inherited GetChildren(Proc, Root);
+  if Root = Self then
+    for I := 0 to ComponentCount - 1 do
+    begin
+      OwnedComponent := Components[I];
+      if not OwnedComponent.HasParent then Proc(OwnedComponent);
+    end;
+end;
+
+function TDataModule.HandleCreateException: Boolean;
+begin
+  if Assigned(ApplicationHandleException) then
+  begin
+    ApplicationHandleException(Self);
+    Result := True;
+  end
+  else
+    Result := False;
+end;
+
+procedure TDataModule.ReadState(Reader: TReader);
+begin
+  FOldCreateOrder := not ModuleIsCPP;
+  inherited ReadState(Reader);
+end;
+
+procedure TDataModule.ReadWidth(Reader: TReader);
+begin
+  FDesignSize.X := Reader.ReadInteger;
+end;
+
+procedure TDataModule.ReadHorizontalOffset(Reader: TReader);
+begin
+  FDesignOffset.X := Reader.ReadInteger;
+end;
+
+procedure TDataModule.ReadVerticalOffset(Reader: TReader);
+begin
+  FDesignOffset.Y := Reader.ReadInteger;
+end;
+
+procedure TDataModule.ReadHeight(Reader: TReader);
+begin
+  FDesignSize.Y := Reader.ReadInteger;
+end;
+
+procedure TDataModule.WriteWidth(Writer: TWriter);
+begin
+  Writer.WriteInteger(FDesignSize.X);
+end;
+
+procedure TDataModule.WriteHorizontalOffset(Writer: TWriter);
+begin
+  Writer.WriteInteger(FDesignOffset.X);
+end;
+
+procedure TDataModule.WriteVerticalOffset(Writer: TWriter);
+begin
+  Writer.WriteInteger(FDesignOffset.Y);
+end;
+
+procedure TDataModule.WriteHeight(Writer: TWriter);
+begin
+  Writer.WriteInteger(FDesignSize.Y);
+end;
+
+{$IFDEF MSWINDOWS}
+
+const
+  InstanceCount = 313;
+
+{ Object instance management }
+
+type
+  PObjectInstance = ^TObjectInstance;
+  TObjectInstance = packed record
+    Code: Byte;
+    Offset: Integer;
+    case Integer of
+      0: (Next: PObjectInstance);
+      1: (Method: TWndMethod);
+  end;
+
+type
+  PInstanceBlock = ^TInstanceBlock;
+  TInstanceBlock = packed record
+    Next: PInstanceBlock;
+    Code: array[1..2] of Byte;
+    WndProcPtr: Pointer;
+    Instances: array[0..InstanceCount] of TObjectInstance;
+  end;
+
+var
+  InstBlockList: PInstanceBlock;
+  InstFreeList: PObjectInstance;
+
+{ Standard window procedure }
+{ In    ECX = Address of method pointer }
+{ Out   EAX = Result }
+
+function StdWndProc(Window: HWND; Message, WParam: Longint;
+  LParam: Longint): Longint; stdcall; assembler;
+asm
+        XOR     EAX,EAX
+        PUSH    EAX
+        PUSH    LParam
+        PUSH    WParam
+        PUSH    Message
+        MOV     EDX,ESP
+        MOV     EAX,[ECX].Longint[4]
+        CALL    [ECX].Pointer
+        ADD     ESP,12
+        POP     EAX
+end;
+
+{ Allocate an object instance }
+
+function CalcJmpOffset(Src, Dest: Pointer): Longint;
+begin
+  Result := Longint(Dest) - (Longint(Src) + 5);
+end;
+
+function MakeObjectInstance(Method: TWndMethod): Pointer;
+const
+  BlockCode: array[1..2] of Byte = (
+    $59,       { POP ECX }
+    $E9);      { JMP StdWndProc }
+  PageSize = 4096;
+var
+  Block: PInstanceBlock;
+  Instance: PObjectInstance;
+begin
+  if InstFreeList = nil then
+  begin
+    Block := VirtualAlloc(nil, PageSize, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+    Block^.Next := InstBlockList;
+    Move(BlockCode, Block^.Code, SizeOf(BlockCode));
+    Block^.WndProcPtr := Pointer(CalcJmpOffset(@Block^.Code[2], @StdWndProc));
+    Instance := @Block^.Instances;
+    repeat
+      Instance^.Code := $E8;  { CALL NEAR PTR Offset }
+      Instance^.Offset := CalcJmpOffset(Instance, @Block^.Code);
+      Instance^.Next := InstFreeList;
+      InstFreeList := Instance;
+      Inc(Longint(Instance), SizeOf(TObjectInstance));
+    until Longint(Instance) - Longint(Block) >= SizeOf(TInstanceBlock);
+    InstBlockList := Block;
+  end;
+  Result := InstFreeList;
+  Instance := InstFreeList;
+  InstFreeList := Instance^.Next;
+  Instance^.Method := Method;
+end;
+
+{ Free an object instance }
+
+procedure FreeObjectInstance(ObjectInstance: Pointer);
+begin
+  if ObjectInstance <> nil then
+  begin
+    PObjectInstance(ObjectInstance)^.Next := InstFreeList;
+    InstFreeList := ObjectInstance;
+  end;
+end;
+
+var
+  UtilWindowClass: TWndClass = (
+    style: 0;
+    lpfnWndProc: @DefWindowProc;
+    cbClsExtra: 0;
+    cbWndExtra: 0;
+    hInstance: 0;
+    hIcon: 0;
+    hCursor: 0;
+    hbrBackground: 0;
+    lpszMenuName: nil;
+    lpszClassName: 'TPUtilWindow');
+
+function AllocateHWnd(Method: TWndMethod): HWND;
+var
+  TempClass: TWndClass;
+  ClassRegistered: Boolean;
+begin
+  UtilWindowClass.hInstance := HInstance;
+{$IFDEF PIC}
+  UtilWindowClass.lpfnWndProc := @DefWindowProc;
+{$ENDIF}
+  ClassRegistered := GetClassInfo(HInstance, UtilWindowClass.lpszClassName,
+    TempClass);
+  if not ClassRegistered or (TempClass.lpfnWndProc <> @DefWindowProc) then
+  begin
+    if ClassRegistered then
+      Windows.UnregisterClass(UtilWindowClass.lpszClassName, HInstance);
+    Windows.RegisterClass(UtilWindowClass);
+  end;
+  Result := CreateWindowEx(WS_EX_TOOLWINDOW, UtilWindowClass.lpszClassName,
+    '', WS_POPUP {!0}, 0, 0, 0, 0, 0, 0, HInstance, nil);
+  if Assigned(Method) then
+    SetWindowLong(Result, GWL_WNDPROC, Longint(MakeObjectInstance(Method)));
+end;
+
+procedure DeallocateHWnd(Wnd: HWND);
+var
+  Instance: Pointer;
+begin
+  Instance := Pointer(GetWindowLong(Wnd, GWL_WNDPROC));
+  DestroyWindow(Wnd);
+  if Instance <> @DefWindowProc then FreeObjectInstance(Instance);
+end;
+
+{$ENDIF}
+
 initialization
   InitializeCriticalSection(ThreadLock);
   AddModuleUnloadProc(ModuleUnload);
   GlobalNameSpace := TMultiReadExclusiveWriteSynchronizer.Create;
-  ClassList := TThreadList.Create;
-  ClassAliasList := TStringList.Create;
+  RegGroups := TRegGroups.Create;
   IntConstList := TThreadList.Create;
   GlobalFixupList := TThreadList.Create;
 
@@ -8349,15 +10674,14 @@ finalization
   UnRegisterModuleClasses(HInstance);
   GlobalNameSpace.BeginWrite;
   FreeIntConstList;
-  ClassList.Free;
-  ClassAliasList.Free;
   RemoveFixupReferences(nil, '');
-  GlobalFixupList.Free;
-  GlobalFixupList := nil;
-  GlobalLists.Free;
-  FreeThreadWindow;
-  GlobalNameSpace.Free;
-  GlobalNameSpace := nil;
+  FreeAndNil(GlobalFixupList);
+  FreeAndNil(GlobalLists);
+  FreeAndNil(RegGroups);
+  FreeAndNil(GlobalNameSpace);
   RemoveModuleUnloadProc(ModuleUnload);
+  FreeAndNil(SyncList);
   DeleteCriticalSection(ThreadLock);
+  FreeAndNil(FindGlobalComponentProcs);
+  
 end.

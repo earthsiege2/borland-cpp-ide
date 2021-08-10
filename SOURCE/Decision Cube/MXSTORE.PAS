@@ -6,14 +6,14 @@
 {                                                       }
 {*******************************************************}
 
-unit mxstore;
+unit Mxstore;
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  Bde, DB, DBCommon, DBTables, mxArrays, Menus,
-  mxpbar, mxcommon, mxTables;
+  Windows, Variants, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  BDE, DB, DBCommon, DBTables, Mxarrays, Menus,
+  MXPBAR, MXCOMMON, MXTABLES;
 
 const
   SubTotal  = -1;
@@ -532,7 +532,7 @@ type
 implementation
 
 uses
-  dbConsts, BDEConst, mxconsts;
+  Math, DBConsts, bdeconst, Mxconsts;
 
   { Helper functions for this Unit }
 
@@ -3888,7 +3888,7 @@ begin
       tbl.FieldValues['Sparse'] := Value; { Do not localize }
       { Get the Summary value }
       Value := GetSummaryAsVariant(SumIndex);
-      if not (VarIsEmpty(Value)) or (Value <> 0) then
+      if not (VarIsClear(Value)) or (Value <> 0) then
       begin
         VarCast(Value, Value, varDouble);
         tbl.FieldValues[GetSummaryName(CurrentSummary)] := Value;
@@ -3948,7 +3948,7 @@ begin
   iAggOffset := SparseUnknown;
   if Assigned(BDim) and (BDim.SumCount > 0) and (DimCnt = 1) then
   begin
-    if not VarIsEmpty(Value) then
+    if not VarIsClear(Value) then
       iAggOffset := Summary.AddSubTotal(Value)
     else
       iAggOffset := SparseAgg;
@@ -3983,13 +3983,6 @@ end;
 function TDataCache.GetMemoryUsage: Integer;
 var
   I: Integer;
-
-  function Max(X, Y: Integer): Integer;
-  begin
-    Result := Y;
-    if (X > Y) then Result := X;
-  end;
-
 begin
   Result := 0;
   { Get dimension memory usage }
@@ -4502,7 +4495,7 @@ end;
 function TBuilderDim.MatchLastVal(Value: Variant): Boolean;
 begin
   Result := True;
-  if not VarIsEmpty(LastVal) then Result := (Value = LastVal);
+  if not VarIsClear(LastVal) then Result := (Value = LastVal);
 end;
 
 procedure TBuilderDim.SetLastVal(Value: Variant);
@@ -4554,7 +4547,7 @@ var
   Idx: Integer;
   str: string;
 begin
-  if VarIsEmpty(Value) then
+  if VarIsClear(Value) then
     str := ''
   else
     str := VarToStr(Value);

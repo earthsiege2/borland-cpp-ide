@@ -1,19 +1,19 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Frmexprt.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'FrmExprt.pas' rev: 6.00
 
-#ifndef FrmexprtHPP
-#define FrmexprtHPP
+#ifndef FrmExprtHPP
+#define FrmExprtHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <DBCombo.hpp>	// Pascal unit
+#include <DbCombo.hpp>	// Pascal unit
 #include <FileCtrl.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <Buttons.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
@@ -40,38 +40,28 @@ class PASCALIMPLEMENTATION FormExcept : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall FormExcept(const AnsiString Msg) : Sysutils::Exception(Msg
-		) { }
+	/* Exception.Create */ inline __fastcall FormExcept(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall FormExcept(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall FormExcept(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall FormExcept(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall FormExcept(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall FormExcept(int Ident, const System::TVarRec * Args, 
-		const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall FormExcept(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall FormExcept(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(
-		Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall FormExcept(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall FormExcept(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall FormExcept(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall FormExcept(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall FormExcept(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall FormExcept(System::PResStringRec ResStringRec, const 
-		System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall FormExcept(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -97,6 +87,7 @@ enum TLabelPos { lLeft, lTop };
 struct TExpertChoice;
 typedef TExpertChoice *PExpertChoice;
 
+#pragma pack(push, 4)
 struct TExpertChoice
 {
 	TLayouts Layout;
@@ -110,10 +101,12 @@ struct TExpertChoice
 	AnsiString AliasName;
 	int TypeIndex;
 } ;
+#pragma pack(pop)
 
 struct TFieldInfo;
 typedef TFieldInfo *PFieldInfo;
 
+#pragma pack(push, 4)
 struct TFieldInfo
 {
 	Db::TFieldType DataType;
@@ -121,6 +114,7 @@ struct TFieldInfo
 	TMetaClass*FieldClass;
 	TMetaClass*ControlClass;
 } ;
+#pragma pack(pop)
 
 class DELPHICLASS TFormExpert;
 class PASCALIMPLEMENTATION TFormExpert : public Forms::TForm 
@@ -217,8 +211,7 @@ __published:
 	void __fastcall Button3Click(System::TObject* Sender);
 	void __fastcall Button4Click(System::TObject* Sender);
 	void __fastcall FileEditChange(System::TObject* Sender);
-	void __fastcall ListDragOver(System::TObject* Sender, System::TObject* Source, int X, int Y, Controls::TDragState 
-		State, bool &Accept);
+	void __fastcall ListDragOver(System::TObject* Sender, System::TObject* Source, int X, int Y, Controls::TDragState State, bool &Accept);
 	void __fastcall ListDragDrop(System::TObject* Sender, System::TObject* Source, int X, int Y);
 	void __fastcall UpButtonClick(System::TObject* Sender);
 	void __fastcall DownButtonClick(System::TObject* Sender);
@@ -265,31 +258,22 @@ private:
 	void __fastcall AddToBindList(const AnsiString Str1, const AnsiString Str2);
 	void __fastcall ChangePages(int Value);
 	void __fastcall CheckBind(void);
-	TMetaClass* __fastcall CreateField(Classes::TComponent* AOwner, Db::TDataSet* DataSet, TMetaClass* 
-		FieldClass, const AnsiString DatabaseName, const AnsiString TableName, const AnsiString FieldName)
-		;
-	bool __fastcall DoDragOver(Stdctrls::TListBox* List, const Windows::TPoint &Point, int &Index, Controls::TDragState 
-		State, bool DropOnSelected);
+	TMetaClass* __fastcall CreateField(Classes::TComponent* AOwner, Db::TDataSet* DataSet, TMetaClass* FieldClass, const AnsiString DatabaseName, const AnsiString TableName, const AnsiString FieldName);
+	bool __fastcall DoDragOver(Stdctrls::TListBox* List, const Types::TPoint &Point, int &Index, Controls::TDragState State, bool DropOnSelected);
 	void __fastcall FillFieldList(Classes::TStrings* List, PExpertChoice Choice, bool StoreDesc);
 	AnsiString __fastcall AliasPath(const AnsiString AliasName);
 	void __fastcall FreeChoice(TExpertChoice &Choice);
-	void __fastcall GenSelect(const AnsiString TableName, Classes::TStrings* Fields, Classes::TStrings* 
-		SQLText, const AnsiString AliasName, const AnsiString Delimiter, bool QuoteTableName, const AnsiString 
-		Owner);
-	void __fastcall GenBindVar(const AnsiString TableName, Classes::TStrings* List, Classes::TStrings* 
-		Query, const AnsiString Delimiter);
+	void __fastcall GenSelect(const AnsiString TableName, Classes::TStrings* Fields, Classes::TStrings* SQLText, const AnsiString AliasName, const AnsiString Delimiter, bool QuoteTableName, const AnsiString Owner);
+	void __fastcall GenBindVar(const AnsiString TableName, Classes::TStrings* List, Classes::TStrings* Query, const AnsiString Delimiter);
 	int __fastcall GetFirstSelection(Stdctrls::TCustomListBox* List);
 	void __fastcall SetFileEditText(const AnsiString Value);
 	void __fastcall Init(void);
 	void __fastcall InitChoice(TExpertChoice &Choice);
 	void __fastcall InitFilter(void);
-	void __fastcall InitQuery(Classes::TComponent* AOwner, Dbtables::TQuery* Query, const TExpertChoice 
-		&Choice, bool Bind);
-	void __fastcall InitTable(Classes::TComponent* AOwner, Dbtables::TTable* Table, const TExpertChoice 
-		&Choice, bool Bind);
-	void __fastcall MoveDragList(Stdctrls::TListBox* List1, Stdctrls::TListBox* List2, const Windows::TPoint 
-		&Point, int Index);
-	void __fastcall MoveItems(Stdctrls::TListBox* List, const Windows::TPoint &Point, int Index);
+	void __fastcall InitQuery(Classes::TComponent* AOwner, Dbtables::TQuery* Query, const TExpertChoice &Choice, bool Bind);
+	void __fastcall InitTable(Classes::TComponent* AOwner, Dbtables::TTable* Table, const TExpertChoice &Choice, bool Bind);
+	void __fastcall MoveDragList(Stdctrls::TListBox* List1, Stdctrls::TListBox* List2, const Types::TPoint &Point, int Index);
+	void __fastcall MoveItems(Stdctrls::TListBox* List, const Types::TPoint &Point, int Index);
 	void __fastcall OrderFieldList(Classes::TStrings* OrderedList, Classes::TStrings* List);
 	void __fastcall ProcessPage0(void);
 	void __fastcall ProcessPage1(void);
@@ -299,8 +283,7 @@ private:
 	void __fastcall ProcessPage5(void);
 	void __fastcall RemoveMatch(Classes::TStrings* List1, Classes::TStrings* List2);
 	void __fastcall MoveSelected(Stdctrls::TCustomListBox* List, Classes::TStrings* Items);
-	void __fastcall InsertSelected(Stdctrls::TCustomListBox* List, Classes::TStrings* Items, int Index)
-		;
+	void __fastcall InsertSelected(Stdctrls::TCustomListBox* List, Classes::TStrings* Items, int Index);
 	void __fastcall SetButtons(void);
 	void __fastcall SetFilter(const AnsiString AFilter);
 	void __fastcall SetItem(Stdctrls::TListBox* List, int Index);
@@ -321,8 +304,7 @@ public:
 	bool __fastcall CreateForm(void);
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TFormExpert(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TFormExpert(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TFormExpert(void) { }
@@ -330,8 +312,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TFormExpert(HWND ParentWindow) : Forms::TForm(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TFormExpert(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -340,12 +321,10 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Frmexprt */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Frmexprt;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Frmexprt
+#endif	// FrmExprt

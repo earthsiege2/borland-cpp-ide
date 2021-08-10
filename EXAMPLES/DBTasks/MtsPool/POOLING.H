@@ -9,6 +9,7 @@
 #include <Db.hpp>
 #include <DBTables.hpp>
 #include <registry.hpp>
+#include <DB.hpp>
 //---------------------------------------------------------------------------
 class TFormMain : public TForm
 {

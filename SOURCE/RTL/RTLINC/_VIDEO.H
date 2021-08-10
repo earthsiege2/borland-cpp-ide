@@ -7,14 +7,15 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.0  $ */
+
+/* $Revision: 9.5.2.1 $ */
 
 #if !defined( __DEFS_H )
 #include <_defs.h>
@@ -48,17 +49,17 @@ extern VIDEOREC _video;
 extern "C" {
 #endif
 
-unsigned    __cputn     (const void *__s, unsigned __n, void *__dontCare);
-void        _crtinit    (int __newmode);
-void        __scroll    (uchar __dir, uchar __x1, uchar __y1, uchar __x2,
+unsigned _RTLENTRY _EXPFUNC __cputn (const void *__s, unsigned __n, void *__dontCare);
+void _RTLENTRY _EXPFUNC _crtinit (int __newmode);
+void _RTLENTRY _EXPFUNC __scroll (uchar __dir, uchar __x1, uchar __y1, uchar __x2,
                             uchar __y2, uchar __lines);
-unsigned    _wherex     (void);
-unsigned    _wherey     (void);
-void        __movecursor(int __x, int __y);
-int         __validatexy(int __x1, int __y1, int __x2, int __y2);
-void        __moveline  (int __dx, int __dy, int __sx, int __sy, int __len);
-void        __getline   (void *__buffer, int __sx, int __sy, int __len);
-void        __putline   (int __dx, int __dy, void *__buffer, int __len);
+unsigned _RTLENTRY _EXPFUNC   _wherex     (void);
+unsigned _RTLENTRY _EXPFUNC   _wherey     (void);
+void _RTLENTRY _EXPFUNC __movecursor(int __x, int __y);
+int  _RTLENTRY _EXPFUNC __validatexy(int __x1, int __y1, int __x2, int __y2);
+void _RTLENTRY _EXPFUNC __moveline  (int __dx, int __dy, int __sx, int __sy, int __len);
+void _RTLENTRY _EXPFUNC __getline   (void *__buffer, int __sx, int __sy, int __len);
+void _RTLENTRY _EXPFUNC __putline   (int __dx, int __dy, void *__buffer, int __len);
 
 #ifdef __cplusplus
 }

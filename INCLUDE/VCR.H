@@ -5,7 +5,7 @@
  *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR  *
  *  PURPOSE.                                                               *
  *                                                                         *
- *  Copyright (c) 1993 - 1995 Microsoft Corporation.  All Rights Reserved. *
+ *  Copyright (c) 1993 - 1999 Microsoft Corporation.  All Rights Reserved. *
  *                                                                         *
  * File:  vcr.h                                                            *
  * Title:           VCR-MCI Command Table Include File                     *
@@ -13,7 +13,6 @@
  ***************************************************************************/
 
 #ifndef __VCR_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __VCR_H__
 
 /* string resource base for vcr device type */
@@ -422,5 +421,4 @@ typedef MCI_VCR_CUE_PARMS FAR *LPMCI_VCR_CUE_PARMS;
 #define MCIERR_VCR_CUE_FAILED_FLAGS         (MCIERR_CUSTOM_DRIVER_BASE + 18)
 #define MCIERR_VCR_ISWRITEPROTECTED         (MCIERR_CUSTOM_DRIVER_BASE + 19)
 
-#pragma option pop /*P_O_Pop*/
 #endif 

@@ -1,11 +1,11 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Kylix and Delphi Cross-Platform Visual Component Library                    }
+{                                                                             }
+{ Copyright (c) 1995, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
 unit TypInfo;
 
@@ -13,12 +13,109 @@ unit TypInfo;
 
 interface
 
-uses SysUtils;
+uses Variants, SysUtils;
 
 type
   TTypeKind = (tkUnknown, tkInteger, tkChar, tkEnumeration, tkFloat,
     tkString, tkSet, tkClass, tkMethod, tkWChar, tkLString, tkWString,
     tkVariant, tkArray, tkRecord, tkInterface, tkInt64, tkDynArray);
+
+// Easy access methods
+
+function PropType(Instance: TObject; const PropName: string): TTypeKind; overload;
+function PropType(AClass: TClass; const PropName: string): TTypeKind; overload;
+
+function PropIsType(Instance: TObject; const PropName: string;
+  TypeKind: TTypeKind): Boolean; overload;
+function PropIsType(AClass: TClass; const PropName: string;
+  TypeKind: TTypeKind): Boolean; overload;
+
+function IsStoredProp(Instance: TObject; const PropName: string): Boolean; overload;
+
+function IsPublishedProp(Instance: TObject; const PropName: string): Boolean; overload;
+function IsPublishedProp(AClass: TClass; const PropName: string): Boolean; overload;
+
+function GetOrdProp(Instance: TObject; const PropName: string): Longint; overload;
+procedure SetOrdProp(Instance: TObject; const PropName: string;
+  Value: Longint); overload;
+
+function GetEnumProp(Instance: TObject; const PropName: string): string; overload;
+procedure SetEnumProp(Instance: TObject; const PropName: string;
+  const Value: string); overload;
+
+function GetSetProp(Instance: TObject; const PropName: string;
+  Brackets: Boolean = False): string; overload;
+procedure SetSetProp(Instance: TObject; const PropName: string;
+  const Value: string); overload;
+
+function GetObjectProp(Instance: TObject; const PropName: string;
+  MinClass: TClass = nil): TObject; overload;
+procedure SetObjectProp(Instance: TObject; const PropName: string;
+  Value: TObject); overload;
+function GetObjectPropClass(Instance: TObject; const PropName: string): TClass; overload;
+
+function GetStrProp(Instance: TObject; const PropName: string): string; overload;
+procedure SetStrProp(Instance: TObject; const PropName: string;
+  const Value: string); overload;
+
+function GetWideStrProp(Instance: TObject; const PropName: string): WideString; overload;
+procedure SetWideStrProp(Instance: TObject; const PropName: string;
+  const Value: WideString); overload;
+
+function GetFloatProp(Instance: TObject; const PropName: string): Extended; overload;
+procedure SetFloatProp(Instance: TObject; const PropName: string;
+  const Value: Extended); overload;
+
+function GetVariantProp(Instance: TObject; const PropName: string): Variant; overload;
+procedure SetVariantProp(Instance: TObject; const PropName: string;
+  const Value: Variant); overload;
+
+function GetMethodProp(Instance: TObject; const PropName: string): TMethod; overload;
+procedure SetMethodProp(Instance: TObject; const PropName: string;
+  const Value: TMethod); overload;
+
+function GetInt64Prop(Instance: TObject; const PropName: string): Int64; overload;
+procedure SetInt64Prop(Instance: TObject; const PropName: string;
+  const Value: Int64); overload;
+
+function GetInterfaceProp(Instance: TObject; const PropName: string): IInterface; overload;
+procedure SetInterfaceProp(Instance: TObject; const PropName: string;
+  const Value: IInterface); overload;
+
+function GetPropValue(Instance: TObject; const PropName: string;
+  PreferStrings: Boolean = True): Variant;
+procedure SetPropValue(Instance: TObject; const PropName: string;
+  const Value: Variant);
+
+{ This will take any RTTI enabled object and free and nil out each of its
+  object properties.  Please note that will also clear any objects that this
+  object may have property references to, so make sure to nil those out first.
+  }
+
+procedure FreeAndNilProperties(AObject: TObject);
+
+{ TPublishableVariantType - This class further expands on the TCustomVariantType
+  by adding easy support for accessing published properties implemented by
+  custom decendent variant types.  The decendent variant type simply needs
+  to implement the GetInstance function, publish their properties and this
+  class will take care of the.  For examples on how to do that take a look
+  at VarCmplx and, if you have our database components, SqlTimSt. }
+
+type
+  TPublishableVariantType = class(TInvokeableVariantType, IVarInstanceReference)
+  protected
+    { IVarInstanceReference }
+    function GetInstance(const V: TVarData): TObject; virtual; abstract;
+  public
+    function GetProperty(var Dest: TVarData; const V: TVarData;
+      const Name: string): Boolean; override;
+    function SetProperty(const V: TVarData; const Name: string;
+      const Value: TVarData): Boolean; override;
+  end;
+
+{ Property access types }
+
+type
   TTypeKinds = set of TTypeKind;
 
   TOrdType = (otSByte, otUByte, otSWord, otUWord, otSLong, otULong);
@@ -41,17 +138,20 @@ type
   TIntfFlagsBase = set of TIntfFlag;
   {$EXTERNALSYM TIntfFlagsBase}
 
+const
+  tkAny = [Low(TTypeKind)..High(TTypeKind)];
+  tkMethods = [tkMethod];
+  tkProperties = tkAny - tkMethods - [tkUnknown];
+
   (*$HPPEMIT 'namespace Typinfo'*)
   (*$HPPEMIT '{'*)
   (*$HPPEMIT '  enum TParamFlag {pfVar, pfConst, pfArray, pfAddress, pfReference, pfOut};'*)
   (*$HPPEMIT '  enum TIntfFlag {ifHasGuid, ifDispInterface, ifDispatch};'*)
-  (*$HPPEMIT '  struct  TTypeInfo;'*)
-  (*$HPPEMIT '  typedef TTypeInfo *PTypeInfo;'*)
   (*$HPPEMIT '  typedef SetBase<TParamFlag, pfVar, pfOut> TParamFlagsBase;'*)
   (*$HPPEMIT '  typedef SetBase<TIntfFlag, ifHasGuid, ifDispatch> TIntfFlagsBase;'*)
   (*$HPPEMIT '}'*)
 
-
+type
   ShortStringBase = string[255];
   {$EXTERNALSYM ShortStringBase}
 
@@ -77,7 +177,8 @@ type
               tkInteger, tkChar, tkWChar: ();
               tkEnumeration: (
                 BaseType: PPTypeInfo;
-                NameList: ShortStringBase));
+				NameList: ShortStringBase;
+        EnumUnitName: ShortStringBase));
           tkSet: (
             CompType: PPTypeInfo));
       tkFloat: (
@@ -109,6 +210,12 @@ type
        {PropData: TPropData});
       tkInt64: (
         MinInt64Value, MaxInt64Value: Int64);
+	  tkDynArray: (
+		elSize: Longint;
+		elType: PPTypeInfo;       // nil if type does not require cleanup
+		varType: Integer;         // Ole Automation varType equivalent
+		elType2: PPTypeInfo;      // independent of cleanup
+    DynUnitName: ShortStringBase);
   end;
 
   TPropData = packed record
@@ -137,25 +244,32 @@ type
   EPropertyError = class(Exception);
   EPropertyConvertError = class(Exception);
 
-const
-  tkAny = [Low(TTypeKind)..High(TTypeKind)];
-  tkMethods = [tkMethod];
-  tkProperties = tkAny - tkMethods - [tkUnknown];
-
-{ Property access routines }
+{ Property management/access routines }
 
 function GetTypeData(TypeInfo: PTypeInfo): PTypeData;
 
 function GetEnumName(TypeInfo: PTypeInfo; Value: Integer): string;
 function GetEnumValue(TypeInfo: PTypeInfo; const Name: string): Integer;
 
-function GetPropInfo(TypeInfo: PTypeInfo; const PropName: string): PPropInfo; overload;
-function GetPropInfo(TypeInfo: PTypeInfo; const PropName: string; AKinds: TTypeKinds): PPropInfo; overload;
+function GetPropInfo(Instance: TObject; const PropName: string;
+  AKinds: TTypeKinds = []): PPropInfo; overload;
+function GetPropInfo(AClass: TClass; const PropName: string;
+  AKinds: TTypeKinds = []): PPropInfo; overload;
+function GetPropInfo(TypeInfo: PTypeInfo;
+  const PropName: string): PPropInfo; overload;
+function GetPropInfo(TypeInfo: PTypeInfo; const PropName: string;
+  AKinds: TTypeKinds): PPropInfo; overload;
+
 procedure GetPropInfos(TypeInfo: PTypeInfo; PropList: PPropList);
 function GetPropList(TypeInfo: PTypeInfo; TypeKinds: TTypeKinds;
-  PropList: PPropList): Integer;
+  PropList: PPropList; SortList: Boolean = True): Integer; overload;
+function GetPropList(TypeInfo: PTypeInfo; out PropList: PPropList): Integer; overload;
+function GetPropList(AObject: TObject; out PropList: PPropList): Integer; overload;
+procedure SortPropList(PropList: PPropList; PropCount: Integer);
 
 function IsStoredProp(Instance: TObject; PropInfo: PPropInfo): Boolean; overload;
+
+{ Property access routines }
 
 function GetOrdProp(Instance: TObject; PropInfo: PPropInfo): Longint; overload;
 procedure SetOrdProp(Instance: TObject; PropInfo: PPropInfo;
@@ -173,16 +287,22 @@ procedure SetSetProp(Instance: TObject; PropInfo: PPropInfo;
 function GetObjectProp(Instance: TObject; PropInfo: PPropInfo;
   MinClass: TClass = nil): TObject; overload;
 procedure SetObjectProp(Instance: TObject; PropInfo: PPropInfo;
-  Value: TObject); overload;
+  Value: TObject; ValidateClass: Boolean = True); overload;
+
 function GetObjectPropClass(Instance: TObject; PropInfo: PPropInfo): TClass; overload;
+function GetObjectPropClass(PropInfo: PPropInfo): TClass; overload;
 
 function GetStrProp(Instance: TObject; PropInfo: PPropInfo): string; overload;
 procedure SetStrProp(Instance: TObject; PropInfo: PPropInfo;
   const Value: string); overload;
 
+function GetWideStrProp(Instance: TObject; PropInfo: PPropInfo): WideString; overload;
+procedure SetWideStrProp(Instance: TObject; PropInfo: PPropInfo;
+  const Value: WideString); overload;
+
 function GetFloatProp(Instance: TObject; PropInfo: PPropInfo): Extended; overload;
 procedure SetFloatProp(Instance: TObject; PropInfo: PPropInfo;
-  Value: Extended); overload;
+  const Value: Extended); overload;
 
 function GetVariantProp(Instance: TObject; PropInfo: PPropInfo): Variant; overload;
 procedure SetVariantProp(Instance: TObject; PropInfo: PPropInfo;
@@ -196,72 +316,30 @@ function GetInt64Prop(Instance: TObject; PropInfo: PPropInfo): Int64; overload;
 procedure SetInt64Prop(Instance: TObject; PropInfo: PPropInfo;
   const Value: Int64); overload;
 
-// Easy access methods
-
-function IsPublishedProp(Instance: TObject; const PropName: string): Boolean; overload;
-function IsPublishedProp(AClass: TClass; const PropName: string): Boolean; overload;
-function GetPropInfo(Instance: TObject; const PropName: string; AKinds: TTypeKinds = []): PPropInfo; overload;
-function GetPropInfo(AClass: TClass; const PropName: string; AKinds: TTypeKinds = []): PPropInfo; overload;
-
-function PropIsType(Instance: TObject; const PropName: string; TypeKind: TTypeKind): Boolean; overload;
-function PropIsType(AClass: TClass; const PropName: string; TypeKind: TTypeKind): Boolean; overload;
-function PropType(Instance: TObject; const PropName: string): TTypeKind; overload;
-function PropType(AClass: TClass; const PropName: string): TTypeKind; overload;
-
-function IsStoredProp(Instance: TObject; const PropName: string): Boolean; overload;
-
-function GetOrdProp(Instance: TObject; const PropName: string): Longint; overload;
-procedure SetOrdProp(Instance: TObject; const PropName: string;
-  Value: Longint); overload;
-
-function GetEnumProp(Instance: TObject; const PropName: string): string; overload;
-procedure SetEnumProp(Instance: TObject; const PropName: string;
-  const Value: string); overload;
-
-function GetSetProp(Instance: TObject; const PropName: string;
-  Brackets: Boolean = False): string; overload;
-procedure SetSetProp(Instance: TObject; const PropName: string;
-  const Value: string); overload;
-
-function GetObjectProp(Instance: TObject; const PropName: string;
-  MinClass: TClass = nil): TObject; overload;
-procedure SetObjectProp(Instance: TObject; const PropName: string;
-  Value: TObject); overload;
-function GetObjectPropClass(Instance: TObject; const PropName: string): TClass; overload;
-
-function GetStrProp(Instance: TObject; const PropName: string): string; overload;
-procedure SetStrProp(Instance: TObject; const PropName: string;
-  const Value: string); overload;
-
-function GetFloatProp(Instance: TObject; const PropName: string): Extended; overload;
-procedure SetFloatProp(Instance: TObject; const PropName: string;
-  Value: Extended); overload;
-
-function GetVariantProp(Instance: TObject; const PropName: string): Variant; overload;
-procedure SetVariantProp(Instance: TObject; const PropName: string;
-  const Value: Variant); overload;
-
-function GetMethodProp(Instance: TObject; const PropName: string): TMethod; overload;
-procedure SetMethodProp(Instance: TObject; const PropName: string;
-  const Value: TMethod); overload;
-
-function GetInt64Prop(Instance: TObject; const PropName: string): Int64; overload;
-procedure SetInt64Prop(Instance: TObject; const PropName: string;
-  const Value: Int64); overload;
-
-function GetPropValue(Instance: TObject; const PropName: string;
-  PreferStrings: Boolean = True): Variant;
-procedure SetPropValue(Instance: TObject; const PropName: string;
-  const Value: Variant);
+function GetInterfaceProp(Instance: TObject; PropInfo: PPropInfo): IInterface; overload;
+procedure SetInterfaceProp(Instance: TObject; PropInfo: PPropInfo;
+  const Value: IInterface); overload;
 
 var
   BooleanIdents: array [Boolean] of string = ('False', 'True');
   DotSep: string = '.';
 
+{ Set to String conversion.  Valid only for "register sets" - sets with fewer
+  than Sizeof(Integer) * 8 elements.  You will have to typecast the integer
+  value to/from your set type.
+}
+function SetToString(PropInfo: PPropInfo; Value: Integer; Brackets: Boolean = False): string;
+function StringToSet(PropInfo: PPropInfo; const Value: string): Integer;
+
 implementation
 
 uses
-  Consts;
+  RTLConsts;
+
+procedure PropertyNotFound(const Name: string);
+begin
+  raise EPropertyError.CreateResFmt(@SUnknownProperty, [Name]);
+end;
 
 function IsPublishedProp(Instance: TObject; const PropName: string): Boolean;
 begin
@@ -298,142 +376,161 @@ begin
   Result := PropType(Instance.ClassType, PropName);
 end;
 
-function PropType(AClass: TClass; const PropName: string): TTypeKind;
-var
-  PropInfo: PPropInfo;
+function FindPropInfo(AClass: TClass; const PropName: string): PPropInfo; overload;
 begin
-  PropInfo := GetPropInfo(AClass, PropName);
-  if PropInfo = nil then
-    raise EPropertyError.CreateRes(@SUnknownProperty);
-  Result := PropInfo^.PropType^^.Kind;
+  Result := GetPropInfo(AClass, PropName);
+  if Result = nil then
+    PropertyNotFound(PropName);
+end;
+
+function FindPropInfo(Instance: TObject; const PropName: string): PPropInfo; overload;
+begin
+  Result := GetPropInfo(Instance, PropName);
+  if Result = nil then
+    PropertyNotFound(PropName);
+end;
+
+function PropType(AClass: TClass; const PropName: string): TTypeKind;
+begin
+  Result := FindPropInfo(AClass, PropName)^.PropType^^.Kind;
 end;
 
 function IsStoredProp(Instance: TObject; const PropName: string): Boolean;
 begin
-  Result := IsStoredProp(Instance, GetPropInfo(Instance, PropName));
+  Result := IsStoredProp(Instance, FindPropInfo(Instance, PropName));
 end;
 
 function GetOrdProp(Instance: TObject; const PropName: string): Longint;
 begin
-  Result := GetOrdProp(Instance, GetPropInfo(Instance, PropName));
+  Result := GetOrdProp(Instance, FindPropInfo(Instance, PropName));
 end;
 
 procedure SetOrdProp(Instance: TObject; const PropName: string;
   Value: Longint);
 begin
-  SetOrdProp(Instance, GetPropInfo(Instance, PropName), Value);
+  SetOrdProp(Instance, FindPropInfo(Instance, PropName), Value);
 end;
 
 function GetEnumProp(Instance: TObject; const PropName: string): string;
 begin
-  Result := GetEnumProp(Instance, GetPropInfo(Instance, PropName));
+  Result := GetEnumProp(Instance, FindPropInfo(Instance, PropName));
 end;
 
 procedure SetEnumProp(Instance: TObject; const PropName: string;
   const Value: string);
 begin
-  SetEnumProp(Instance, GetPropInfo(Instance, PropName), Value);
+  SetEnumProp(Instance, FindPropInfo(Instance, PropName), Value);
 end;
 
 function GetSetProp(Instance: TObject; const PropName: string;
   Brackets: Boolean): string;
 begin
-  Result := GetSetProp(Instance, GetPropInfo(Instance, PropName), Brackets);
+  Result := GetSetProp(Instance, FindPropInfo(Instance, PropName), Brackets);
 end;
 
 procedure SetSetProp(Instance: TObject; const PropName: string;
   const Value: string);
 begin
-  SetSetProp(Instance, GetPropInfo(Instance, PropName), Value);
+  SetSetProp(Instance, FindPropInfo(Instance, PropName), Value);
 end;
 
 function GetObjectProp(Instance: TObject; const PropName: string;
   MinClass: TClass): TObject;
 begin
-  Result := GetObjectProp(Instance, GetPropInfo(Instance, PropName), MinClass);
+  Result := GetObjectProp(Instance, FindPropInfo(Instance, PropName), MinClass);
 end;
 
 procedure SetObjectProp(Instance: TObject; const PropName: string;
   Value: TObject);
 begin
-  SetObjectProp(Instance, GetPropInfo(Instance, PropName), Value);
+  SetObjectProp(Instance, FindPropInfo(Instance, PropName), Value);
 end;
 
 function GetObjectPropClass(Instance: TObject; const PropName: string): TClass;
 begin
-  Result := GetObjectPropClass(Instance, GetPropInfo(Instance, PropName));
+  Result := GetObjectPropClass(FindPropInfo(Instance, PropName));
 end;
 
 function GetStrProp(Instance: TObject; const PropName: string): string;
 begin
-  Result := GetStrProp(Instance, GetPropInfo(Instance, PropName));
+  Result := GetStrProp(Instance, FindPropInfo(Instance, PropName));
 end;
 
 procedure SetStrProp(Instance: TObject; const PropName: string;
   const Value: string);
 begin
-  SetStrProp(Instance, GetPropInfo(Instance, PropName), Value);
+  SetStrProp(Instance, FindPropInfo(Instance, PropName), Value);
+end;
+
+function GetWideStrProp(Instance: TObject; const PropName: string): WideString;
+begin
+  Result := GetWideStrProp(Instance, FindPropInfo(Instance, PropName));
+end;
+
+procedure SetWideStrProp(Instance: TObject; const PropName: string;
+  const Value: WideString);
+begin
+  SetStrProp(Instance, FindPropInfo(Instance, PropName), Value);
 end;
 
 function GetFloatProp(Instance: TObject; const PropName: string): Extended;
 begin
-  Result := GetFloatProp(Instance, GetPropInfo(Instance, PropName));
+  Result := GetFloatProp(Instance, FindPropInfo(Instance, PropName));
 end;
 
 procedure SetFloatProp(Instance: TObject; const PropName: string;
-  Value: Extended);
+  const Value: Extended);
 begin
-  SetFloatProp(Instance, GetPropInfo(Instance, PropName), Value);
+  SetFloatProp(Instance, FindPropInfo(Instance, PropName), Value);
 end;
 
 function GetVariantProp(Instance: TObject; const PropName: string): Variant;
 begin
-  Result := GetVariantProp(Instance, GetPropInfo(Instance, PropName));
+  Result := GetVariantProp(Instance, FindPropInfo(Instance, PropName));
 end;
 
 procedure SetVariantProp(Instance: TObject; const PropName: string;
   const Value: Variant);
 begin
-  SetVariantProp(Instance, GetPropInfo(Instance, PropName), Value);
+  SetVariantProp(Instance, FindPropInfo(Instance, PropName), Value);
 end;
 
 function GetMethodProp(Instance: TObject; const PropName: string): TMethod;
 begin
-  Result := GetMethodProp(Instance, GetPropInfo(Instance, PropName));
+  Result := GetMethodProp(Instance, FindPropInfo(Instance, PropName));
 end;
 
 procedure SetMethodProp(Instance: TObject; const PropName: string;
   const Value: TMethod);
 begin
-  SetMethodProp(Instance, GetPropInfo(Instance, PropName), Value);
+  SetMethodProp(Instance, FindPropInfo(Instance, PropName), Value);
 end;
 
 function GetInt64Prop(Instance: TObject; const PropName: string): Int64;
 begin
-  Result := GetInt64Prop(Instance, GetPropInfo(Instance, PropName));
+  Result := GetInt64Prop(Instance, FindPropInfo(Instance, PropName));
 end;
 
 procedure SetInt64Prop(Instance: TObject; const PropName: string;
   const Value: Int64);
 begin
-  SetInt64Prop(Instance, GetPropInfo(Instance, PropName), Value);
+  SetInt64Prop(Instance, FindPropInfo(Instance, PropName), Value);
 end;
 
 function GetPropValue(Instance: TObject; const PropName: string;
   PreferStrings: Boolean): Variant;
 var
   PropInfo: PPropInfo;
-  TypeData: PTypeData;
 begin
   // assume failure
   Result := Null;
 
   // get the prop info
   PropInfo := GetPropInfo(Instance, PropName);
-  if PropInfo <> nil then
-  begin                                        
-    TypeData := GetTypeData(PropInfo^.PropType^);
-
+  if PropInfo = nil then
+    PropertyNotFound(PropName)
+  else
+  begin
     // return the right type
     case PropInfo^.PropType^^.Kind of
       tkInteger, tkChar, tkWChar, tkClass:
@@ -441,7 +538,7 @@ begin
       tkEnumeration:
         if PreferStrings then
           Result := GetEnumProp(Instance, PropInfo)
-        else if TypeData^.BaseType^ = TypeInfo(Boolean) then
+        else if GetTypeData(PropInfo^.PropType^)^.BaseType^ = TypeInfo(Boolean) then
           Result := Boolean(GetOrdProp(Instance, PropInfo))
         else
           Result := GetOrdProp(Instance, PropInfo);
@@ -451,23 +548,22 @@ begin
         else
           Result := GetOrdProp(Instance, PropInfo);
       tkFloat:
-        {begin}
-          Result := GetFloatProp(Instance, PropInfo);
-          {if not SimpleConvert and
-             (TypeData^.BaseType^ = TypeInfo(TDateTime)) then
-            Result := VarAsType(Result, varDate);
-        end;}
+        Result := GetFloatProp(Instance, PropInfo);
       tkMethod:
         Result := PropInfo^.PropType^.Name;
-      tkString, tkLString, tkWString:
+      tkString, tkLString:
         Result := GetStrProp(Instance, PropInfo);
+      tkWString:
+        Result := GetWideStrProp(Instance, PropInfo);
       tkVariant:
         Result := GetVariantProp(Instance, PropInfo);
       tkInt64:
-        Result := GetInt64Prop(Instance, PropInfo) + 0.0;
+		Result := GetInt64Prop(Instance, PropInfo);
+	  tkDynArray:
+		DynArrayToVariant(Result, Pointer(GetOrdProp(Instance, PropInfo)), PropInfo^.PropType^);
     else
       raise EPropertyConvertError.CreateResFmt(@SInvalidPropertyType,
-                                            [PropInfo.PropType^^.Name]);
+                                               [PropInfo.PropType^^.Name]);
     end;
   end;
 end;
@@ -485,24 +581,36 @@ procedure SetPropValue(Instance: TObject; const PropName: string;
 var
   PropInfo: PPropInfo;
   TypeData: PTypeData;
+  DynArray: Pointer;
 begin
   // get the prop info
   PropInfo := GetPropInfo(Instance, PropName);
-  if PropInfo <> nil then
+  if PropInfo = nil then
+    PropertyNotFound(PropName)
+  else
   begin
     TypeData := GetTypeData(PropInfo^.PropType^);
 
     // set the right type
     case PropInfo.PropType^^.Kind of
       tkInteger, tkChar, tkWChar:
-        SetOrdProp(Instance, PropInfo, RangedValue(TypeData^.MinValue,
-                                                   TypeData^.MaxValue));
+        if TypeData^.MinValue < TypeData^.MaxValue then
+          SetOrdProp(Instance, PropInfo, RangedValue(TypeData^.MinValue,
+            TypeData^.MaxValue))
+        else
+          // Unsigned type
+          SetOrdProp(Instance, PropInfo,
+            RangedValue(LongWord(TypeData^.MinValue),
+            LongWord(TypeData^.MaxValue)));
       tkEnumeration:
         if VarType(Value) = varString then
           SetEnumProp(Instance, PropInfo, VarToStr(Value))
+        else if VarType(Value) = varBoolean then
+          // Need to map variant boolean values -1,0 to 1,0
+          SetOrdProp(Instance, PropInfo, Abs(Trunc(Value)))
         else
           SetOrdProp(Instance, PropInfo, RangedValue(TypeData^.MinValue,
-                                                     TypeData^.MaxValue));
+            TypeData^.MaxValue));
       tkSet:
         if VarType(Value) = varInteger then
           SetOrdProp(Instance, PropInfo, Value)
@@ -510,21 +618,74 @@ begin
           SetSetProp(Instance, PropInfo, VarToStr(Value));
       tkFloat:
         SetFloatProp(Instance, PropInfo, Value);
-      tkString, tkLString, tkWString:
+      tkString, tkLString:
         SetStrProp(Instance, PropInfo, VarToStr(Value));
+      tkWString:
+        SetWideStrProp(Instance, PropInfo, VarToWideStr(Value));
       tkVariant:
         SetVariantProp(Instance, PropInfo, Value);
       tkInt64:
         SetInt64Prop(Instance, PropInfo, RangedValue(TypeData^.MinInt64Value,
-                                                     TypeData^.MaxInt64Value));
+          TypeData^.MaxInt64Value));
+	  tkDynArray:
+		begin
+		  DynArrayFromVariant(DynArray, Value, PropInfo^.PropType^);
+		  SetOrdProp(Instance, PropInfo, Integer(DynArray));
+		end;
     else
       raise EPropertyConvertError.CreateResFmt(@SInvalidPropertyType,
-                                            [PropInfo.PropType^^.Name]);
+        [PropInfo.PropType^^.Name]);
     end;
   end;
 end;
 
-function GetTypeData(TypeInfo: PTypeInfo): PTypeData; assembler;
+procedure FreeAndNilProperties(AObject: TObject);
+var
+  I, Count: Integer;
+  PropInfo: PPropInfo;
+  TempList: PPropList;
+  LObject: TObject;
+begin
+  Count := GetPropList(AObject, TempList);
+  if Count > 0 then
+  try
+    for I := 0 to Count - 1 do
+    begin
+      PropInfo := TempList^[I];
+      if (PropInfo^.PropType^.Kind = tkClass) and
+         Assigned(PropInfo^.GetProc) and
+         Assigned(PropInfo^.SetProc) then
+      begin
+        LObject := GetObjectProp(AObject, PropInfo);
+        if LObject <> nil then
+        begin
+          SetObjectProp(AObject, PropInfo, nil);
+          LObject.Free;
+        end;
+      end;
+    end;
+  finally
+    FreeMem(TempList);
+  end;
+end;
+
+{ TPublishableVariantType }
+
+function TPublishableVariantType.GetProperty(var Dest: TVarData;
+  const V: TVarData; const Name: string): Boolean;
+begin
+  Variant(Dest) := GetPropValue(GetInstance(V), Name);
+  Result := True;
+end;
+
+function TPublishableVariantType.SetProperty(const V: TVarData;
+  const Name: string; const Value: TVarData): Boolean;
+begin
+  SetPropValue(GetInstance(V), Name, Variant(Value));
+  Result := True;
+end;
+
+function GetTypeData(TypeInfo: PTypeInfo): PTypeData;
 asm
         { ->    EAX Pointer to type info }
         { <-    EAX Pointer to type data }
@@ -539,31 +700,33 @@ var
   P: ^ShortString;
   T: PTypeData;
 begin
-  if TypeInfo = System.TypeInfo(Boolean) then
-  begin
-    Result := BooleanIdents[Boolean(Value)];
-    if CompareText(HexDisplayPrefix, '0x') = 0 then Result := LowerCase(Result);
-    Exit;
-  end;
   if TypeInfo^.Kind = tkInteger then
   begin
     Result := IntToStr(Value);
     Exit;
   end;
   T := GetTypeData(GetTypeData(TypeInfo)^.BaseType^);
-  if T^.MinValue < 0 then      { must be LongBool/WordBool/ByteBool }
-    Value := Ord(Value <> 0);  { map non-zero to true in this case  }
-  P := @T^.NameList;
-  while Value <> 0 do
+  if (TypeInfo = System.TypeInfo(Boolean)) or (T^.MinValue < 0) then
   begin
-    Inc(Integer(P), Length(P^) + 1);
-    Dec(Value);
+    if TypeInfo = System.TypeInfo(Boolean) then
+      Result := BooleanIdents[Boolean(Value)]
+    else                                         // LongBool/WordBool/ByteBool
+      Result := BooleanIdents[Ord(Value) <> 0];  // map non-zero to true
+    if SameText(HexDisplayPrefix, '0x') then Result := LowerCase(Result);
+  end
+  else
+  begin
+    P := @T^.NameList;
+    while Value <> 0 do
+    begin
+      Inc(Integer(P), Length(P^) + 1);
+      Dec(Value);
+    end;
+    Result := P^;
   end;
-  Result := P^;
 end;
 
 function GetEnumNameValue(TypeInfo: PTypeInfo; const Name: string): Integer;
-  assembler;
 asm
         { ->    EAX Pointer to type info        }
         {       EDX Pointer to string           }
@@ -573,8 +736,8 @@ asm
         PUSH    ESI
         PUSH    EDI
 
-        TEST  EDX,EDX
-        JE  @notFound
+        TEST    EDX,EDX
+        JE      @notFound
 
         {       point ESI to first name of the base type }
         XOR     ECX,ECX
@@ -594,7 +757,7 @@ asm
 
 @outerLoop:
         MOV     CL,[ESI]
-        CMP  ECX,[EDX-4]
+        CMP     ECX,[EDX-4]
         JNE     @lengthMisMatch
 
         {       we know for sure the names won't be zero length }
@@ -624,7 +787,7 @@ asm
 @exit:
         POP     EDI
         POP     ESI
-        POP  EBX
+        POP     EBX
 end;
 
 function GetEnumValue(TypeInfo: PTypeInfo; const Name: string): Integer;
@@ -632,10 +795,23 @@ begin
   if TypeInfo^.Kind = tkInteger then
     Result := StrToInt(Name)
   else
-    Result := GetEnumNameValue(TypeInfo, Name);
+  begin
+    assert(TypeInfo^.Kind = tkEnumeration);
+    if GetTypeData(TypeInfo)^.MinValue < 0 then  // Longbool/wordbool/bytebool
+    begin
+      if SameText(Name, BooleanIdents[False]) then
+        Result := 0
+      else if SameText(Name, BooleanIdents[True]) then
+        Result := -1
+      else
+        Result := StrToInt(Name);
+    end
+    else
+      Result := GetEnumNameValue(TypeInfo, Name);
+  end;
 end;
 
-function GetPropInfo(TypeInfo: PTypeInfo; const PropName: string): PPropInfo; assembler;
+function GetPropInfo(TypeInfo: PTypeInfo; const PropName: string): PPropInfo;
 asm
         { ->    EAX Pointer to type info        }
         {       EDX Pointer to prop name        }
@@ -644,6 +820,9 @@ asm
         PUSH    EBX
         PUSH    ESI
         PUSH    EDI
+
+        TEST    EAX, EAX
+        JZ      @exit
 
         MOV     ECX,EDX
         OR      EDX,EDX
@@ -766,9 +945,6 @@ asm
         POP     EBX
 
 end;
-
-type
-  PShortString = ^ShortString;
 
 procedure SortPropList(PropList: PPropList; PropCount: Integer); assembler;
 asm
@@ -896,38 +1072,49 @@ end;
   TypeKinds in this class or its ancestors in PropList and return the count }
 
 function GetPropList(TypeInfo: PTypeInfo; TypeKinds: TTypeKinds;
-  PropList: PPropList): Integer;
+  PropList: PPropList; SortList: Boolean): Integer;
 var
   I, Count: Integer;
   PropInfo: PPropInfo;
   TempList: PPropList;
 begin
   Result := 0;
-  Count := GetTypeData(TypeInfo)^.PropCount;
+  Count := GetPropList(TypeInfo, TempList);
   if Count > 0 then
-  begin
-    GetMem(TempList, Count * SizeOf(Pointer));
     try
-      GetPropInfos(TypeInfo, TempList);
       for I := 0 to Count - 1 do
       begin
         PropInfo := TempList^[I];
         if PropInfo^.PropType^.Kind in TypeKinds then
         begin
-          if PropList <> nil then PropList^[Result] := PropInfo;
+          if PropList <> nil then
+            PropList^[Result] := PropInfo;
           Inc(Result);
         end;
       end;
-      if (PropList <> nil) and (Result > 1) then
+      if SortList and (PropList <> nil) and (Result > 1) then
         SortPropList(PropList, Result);
     finally
-      FreeMem(TempList, Count * SizeOf(Pointer));
+      FreeMem(TempList);
     end;
+end;
+
+function GetPropList(TypeInfo: PTypeInfo; out PropList: PPropList): Integer;
+begin
+  Result := GetTypeData(TypeInfo)^.PropCount;
+  if Result > 0 then
+  begin
+    GetMem(PropList, Result * SizeOf(Pointer));
+    GetPropInfos(TypeInfo, PropList);
   end;
 end;
 
+function GetPropList(AObject: TObject; out PropList: PPropList): Integer;
+begin
+  Result := GetPropList(PTypeInfo(AObject.ClassInfo), PropList);
+end;
+
 function IsStoredProp(Instance: TObject; PropInfo: PPropInfo): Boolean;
-  assembler;
 asm
         { ->    EAX Pointer to Instance         }
         {       EDX Pointer to prop info        }
@@ -962,7 +1149,6 @@ asm
 end;
 
 function GetOrdProp(Instance: TObject; PropInfo: PPropInfo): Longint;
-  assembler;
 asm
         { ->    EAX Pointer to instance         }
         {       EDX Pointer to property info    }
@@ -1099,12 +1285,18 @@ end;
 
 function GetSetProp(Instance: TObject; PropInfo: PPropInfo;
   Brackets: Boolean): string;
+begin
+  Result := SetToString(PropInfo, GetOrdProp(Instance, PropInfo), Brackets);
+end;
+
+function SetToString(PropInfo: PPropInfo; Value: Integer; Brackets: Boolean): string;
 var
   S: TIntegerSet;
   TypeInfo: PTypeInfo;
   I: Integer;
 begin
-  Integer(S) := GetOrdProp(Instance, PropInfo);
+  Result := '';
+  Integer(S) := Value;
   TypeInfo := GetTypeData(PropInfo^.PropType^)^.CompType^;
   for I := 0 to SizeOf(Integer) * 8 - 1 do
     if I in S then
@@ -1117,79 +1309,89 @@ begin
     Result := '[' + Result + ']';
 end;
 
-procedure SetSetProp(Instance: TObject; PropInfo: PPropInfo;
-  const Value: string);
+function StringToSet(PropInfo: PPropInfo; const Value: string): Integer;
 var
-  Left, EnumName: string;
-  Data, EnumValue: Longint;
+  P: PChar;
+  EnumName: string;
+  EnumValue: Longint;
   EnumInfo: PTypeInfo;
 
   // grab the next enum name
-  function NextWord: string;
+  function NextWord(var P: PChar): string;
+  var
+    i: Integer;
   begin
-    Result := '';
+    i := 0;
 
-    // while we are still dealing with non-whitespace
-    while not (Left[1] in [',', ' ']) do
-    begin
-      Result := Result + Left[1];
-      Delete(Left, 1, 1);
-      if Left = '' then
-        Exit;
-    end;
+    // scan til whitespace
+    while not (P[i] in [',', ' ', #0,']']) do
+      Inc(i);
 
-    // skip any whitespace
-    while Left[1] in [',', ' '] do
-      Delete(Left, 1, 1);
+    SetString(Result, P, i);
+
+    // skip whitespace
+    while P[i] in [',', ' ',']'] do
+      Inc(i);
+
+    Inc(P, i);
   end;
-begin
-  // bracket reduction
-  Left := Value;
-  if Left[1] = '[' then
-    Delete(Left, 1, 1);
-  if Left[Length(Left)] = ']' then
-    Delete(Left, Length(Left), 1);
 
-  // loop it dude!
+begin
+  Result := 0;
+  if Value = '' then Exit;
+  P := PChar(Value);
+
+  // skip leading bracket and whitespace
+  while P^ in ['[',' '] do
+    Inc(P);
+
   EnumInfo := GetTypeData(PropInfo^.PropType^)^.CompType^;
-  Data := 0;
-  while Left <> '' do
+  EnumName := NextWord(P);
+  while EnumName <> '' do
   begin
-    EnumName := NextWord;
-    if EnumName = '' then
-      Break;
     EnumValue := GetEnumValue(EnumInfo, EnumName);
     if EnumValue < 0 then
       raise EPropertyConvertError.CreateResFmt(@SInvalidPropertyElement, [EnumName]);
-    Include(TIntegerSet(Data), EnumValue);
+    Include(TIntegerSet(Result), EnumValue);
+    EnumName := NextWord(P);
   end;
-  SetOrdProp(Instance, PropInfo, Data);
+end;
+
+procedure SetSetProp(Instance: TObject; PropInfo: PPropInfo;
+  const Value: string);
+begin
+  SetOrdProp(Instance, PropInfo, StringToSet(PropInfo, Value));
 end;
 
 function GetObjectProp(Instance: TObject; PropInfo: PPropInfo; MinClass: TClass): TObject;
 begin
   Result := TObject(GetOrdProp(Instance, PropInfo));
-  if (Result <> nil) and
-     (MinClass <> nil) and
-     not (Result is MinClass) then
-    Result := nil; 
+  if (Result <> nil) and (MinClass <> nil) and
+    not (Result is MinClass) then
+    Result := nil;
 end;
 
 procedure SetObjectProp(Instance: TObject; PropInfo: PPropInfo;
-  Value: TObject);
+  Value: TObject; ValidateClass: Boolean);
 begin
-  if (Value is GetObjectPropClass(Instance, PropInfo)) or
-     (Value = nil) then
+  if (Value = nil) or
+     (not ValidateClass) or
+     (Value is GetObjectPropClass(PropInfo)) then
     SetOrdProp(Instance, PropInfo, Integer(Value));
 end;
 
 function GetObjectPropClass(Instance: TObject; PropInfo: PPropInfo): TClass;
+begin
+  Result := GetObjectPropClass(PropInfo);
+end;
+
+function GetObjectPropClass(PropInfo: PPropInfo): TClass;
 var
   TypeData: PTypeData;
 begin
   TypeData := GetTypeData(PropInfo^.PropType^);
   if TypeData = nil then
-    raise EPropertyError.CreateRes(@SUnknownProperty);
+    raise EPropertyError.CreateRes(@SInvalidPropertyValue);
   Result := TypeData^.ClassType;
 end;
 
@@ -1302,7 +1504,7 @@ begin
 end;
 
 procedure SetShortStrPropAsLongStr(Instance: TObject; PropInfo: PPropInfo;
-  const Value: string); assembler;
+  const Value: string);
 var
   Temp: ShortString;
 begin
@@ -1347,10 +1549,10 @@ asm
         JMP     @@exit
 
 @@isField:
-  AND  ESI,$00FFFFFF
-  MOV  EDX,[EAX+ESI]
-  MOV  EAX,ECX
-  CALL  AssignLongStr
+        AND  ESI,$00FFFFFF
+        MOV  EDX,[EAX+ESI]
+        MOV  EAX,ECX
+        CALL  AssignLongStr
 
 @@exit:
         POP     EDI
@@ -1389,99 +1591,10 @@ asm
         JMP     @@exit
 
 @@isField:
-  AND  EDI,$00FFFFFF
-  ADD  EAX,EDI
-  MOV  EDX,ECX
-  CALL  AssignLongStr
-
-@@exit:
-        POP     EDI
-        POP     ESI
-end;
-
-procedure AssignWideStr(var Dest: WideString; const Source: WideString);
-begin
-  Dest := Source;
-end;
-
-procedure GetWideStrProp(Instance: TObject; PropInfo: PPropInfo;
-  var Value: WideString); assembler;
-asm
-        { ->    EAX Pointer to instance         }
-        {       EDX Pointer to property info    }
-        {       ECX Pointer to result string    }
-
-        PUSH    ESI
-        PUSH    EDI
-        MOV     EDI,EDX
-
-        MOV     EDX,[EDI].TPropInfo.Index       { pass index in EDX }
-        CMP     EDX,$80000000
-        JNE     @@hasIndex
-        MOV     EDX,ECX                         { pass value in EDX }
-@@hasIndex:
-        MOV     ESI,[EDI].TPropInfo.GetProc
-        CMP     [EDI].TPropInfo.GetProc.Byte[3],$FE
-        JA      @@isField
-        JB      @@isStaticMethod
-
-@@isVirtualMethod:
-        MOVSX   ESI,SI                          { sign extend slot offset }
-        ADD     ESI,[EAX]                       { vmt + slot offset }
-        CALL    DWORD PTR [ESI]
-        JMP     @@exit
-
-@@isStaticMethod:
-        CALL    ESI
-        JMP     @@exit
-
-@@isField:
-  AND  ESI,$00FFFFFF
-  MOV  EDX,[EAX+ESI]
-  MOV  EAX,ECX
-  CALL  AssignWideStr
-
-@@exit:
-        POP     EDI
-        POP     ESI
-end;
-
-procedure SetWideStrProp(Instance: TObject; PropInfo: PPropInfo;
-  const Value: WideString); assembler;
-asm
-        { ->    EAX Pointer to instance         }
-        {       EDX Pointer to property info    }
-        {       ECX Pointer to string value     }
-
-        PUSH    ESI
-        PUSH    EDI
-        MOV     ESI,EDX
-
-        MOV     EDX,[ESI].TPropInfo.Index       { pass index in EDX }
-        CMP     EDX,$80000000
-        JNE     @@hasIndex
-        MOV     EDX,ECX                         { pass value in EDX }
-@@hasIndex:
-        MOV     EDI,[ESI].TPropInfo.SetProc
-        CMP     [ESI].TPropInfo.SetProc.Byte[3],$FE
-        JA      @@isField
-        JB      @@isStaticMethod
-
-@@isVirtualMethod:
-        MOVSX   EDI,DI
-        ADD     EDI,[EAX]
-        CALL    DWORD PTR [EDI]
-        JMP     @@exit
-
-@@isStaticMethod:
-        CALL    EDI
-        JMP     @@exit
-
-@@isField:
-  AND  EDI,$00FFFFFF
-  ADD  EAX,EDI
-  MOV  EDX,ECX
-  CALL  AssignWideStr
+        AND  EDI,$00FFFFFF
+        ADD  EAX,EDI
+        MOV  EDX,ECX
+        CALL  AssignLongStr
 
 @@exit:
         POP     EDI
@@ -1490,15 +1603,12 @@ end;
 
 procedure GetWideStrPropAsLongStr(Instance: TObject; PropInfo: PPropInfo;
   var Value: string);
-var
-  Temp: WideString;
 begin
-  GetWideStrProp(Instance, PropInfo, Temp);
-  Value := Temp;
+  Value := GetWideStrProp(Instance, PropInfo);
 end;
 
 procedure SetWideStrPropAsLongStr(Instance: TObject; PropInfo: PPropInfo;
-  const Value: string); assembler;
+  const Value: string);
 var
   Temp: WideString;
 begin
@@ -1507,7 +1617,7 @@ begin
 end;
 
 function GetStrProp(Instance: TObject; PropInfo: PPropInfo): string;
-begin
+begin    // helper functions minimize temps in general case
   case PropInfo^.PropType^.Kind of
     tkString: GetShortStrPropAsLongStr(Instance, PropInfo, Result);
     tkLString: GetLongStrProp(Instance, PropInfo, Result);
@@ -1519,7 +1629,7 @@ end;
 
 procedure SetStrProp(Instance: TObject; PropInfo: PPropInfo;
   const Value: string);
-begin
+begin    // helper functions minimize temps in general case
   case PropInfo^.PropType^.Kind of
     tkString: SetShortStrPropAsLongStr(Instance, PropInfo, Value);
     tkLString: SetLongStrProp(Instance, PropInfo, Value);
@@ -1527,156 +1637,200 @@ begin
   end;
 end;
 
-const
-  C10000: Single = 10000;
+function GetWideStrProp(Instance: TObject; PropInfo: PPropInfo): WideString;
+type
+  TWideStringGetProc = function :WideString of object;
+  TWideStringIndexedGetProc = function (Index: Integer): WideString of object;
+var
+  P: PWideString;
+  M: TMethod;
+  Getter: Longint;
+begin
+  case PropInfo^.PropType^.Kind of
+    tkString,
+    tkLString: Result := GetStrProp(Instance, PropInfo);
+    tkWString:
+      begin
+        Getter := Longint(PropInfo^.GetProc);
+        if (Getter and $FF000000) = $FF000000 then
+        begin  // field - Getter is the field's offset in the instance data
+          P := Pointer(Integer(Instance) + (Getter and $00FFFFFF));
+          Result := P^;  // auto ref count
+        end
+        else
+        begin
+          if (Getter and $FF000000) = $FE000000 then
+            // virtual method  - Getter is a signed 2 byte integer VMT offset
+            M.Code := Pointer(PInteger(PInteger(Instance)^ + SmallInt(Getter))^)
+          else
+            // static method - Getter is the actual address
+            M.Code := Pointer(Getter);
+
+          M.Data := Instance;
+          if PropInfo^.Index = Integer($80000000) then  // no index
+            Result := TWideStringGetProc(M)()
+          else
+            Result := TWideStringIndexedGetProc(M)(PropInfo^.Index);
+        end;
+      end;
+  else
+    Result := '';
+  end;
+end;
+
+procedure SetWideStrProp(Instance: TObject; PropInfo: PPropInfo;
+  const Value: WideString); overload;
+type
+  TWideStringSetProc = procedure (const Value: WideString) of object;
+  TWideStringIndexedSetProc = procedure (Index: Integer;
+                                        const Value: WideString) of object;
+var
+  P: PWideString;
+  M: TMethod;
+  Setter: Longint;
+begin
+  case PropInfo^.PropType^.Kind of
+    tkString,
+    tkLString: SetStrProp(Instance, PropInfo, Value);
+    tkWString:
+      begin
+        Setter := Longint(PropInfo^.SetProc);
+        if (Setter and $FF000000) = $FF000000 then
+        begin  // field - Setter is the field's offset in the instance data
+          P := Pointer(Integer(Instance) + (Setter and $00FFFFFF));
+          P^ := Value;   // auto ref count
+        end
+        else
+        begin
+          if (Setter and $FF000000) = $FE000000 then
+            // virtual method  - Setter is a signed 2 byte integer VMT offset
+            M.Code := Pointer(PInteger(PInteger(Instance)^ + SmallInt(Setter))^)
+          else
+            // static method - Setter is the actual address
+            M.Code := Pointer(Setter);
+
+          M.Data := Instance;
+          if PropInfo^.Index = Integer($80000000) then  // no index
+            TWideStringSetProc(M)(Value)
+          else
+            TWideStringIndexedSetProc(M)(PropInfo^.Index, Value);
+        end;
+      end;
+  end;
+end;
 
 function GetFloatProp(Instance: TObject; PropInfo: PPropInfo): Extended;
-  assembler;
-asm
-        { ->    EAX Pointer to instance         }
-        {       EDX Pointer to property info    }
-        { <-    FST(0) Extended result          }
+type
+  TFloatGetProc = function :Extended of object;
+  TFloatIndexedGetProc = function (Index: Integer): Extended of object;
+var
+  P: Pointer;
+  M: TMethod;
+  Getter: Longint;
+begin
+  Getter := Longint(PropInfo^.GetProc);
+  if (Getter and $FF000000) = $FF000000 then
+  begin  // field - Getter is the field's offset in the instance data
+    P := Pointer(Integer(Instance) + (Getter and $00FFFFFF));
+    case GetTypeData(PropInfo^.PropType^).FloatType of
+      ftSingle:    Result := PSingle(P)^;
+      ftDouble:    Result := PDouble(P)^;
+      ftExtended:  Result := PExtended(P)^;
+      ftComp:      Result := PComp(P)^;
+      ftCurr:      Result := PCurrency(P)^;
+    else
+      Result := 0;
+    end;
+  end
+  else
+  begin
+    if (Getter and $FF000000) = $FE000000 then
+      // virtual method  - Getter is a signed 2 byte integer VMT offset
+      M.Code := Pointer(PInteger(PInteger(Instance)^ + SmallInt(Getter))^)
+    else
+      // static method - Getter is the actual address
+      M.Code := Pointer(Getter);
 
-        MOV     ECX,[EDX].TPropInfo.GetProc
-        CMP     [EDX].TPropInfo.GetProc.Byte[3],$FE
-        JA      @@isField
-        PUSH    EDX
-        JE      @@isVirtualMethod
+    M.Data := Instance;
+    if PropInfo^.Index = Integer($80000000) then  // no index
+      Result := TFloatGetProc(M)()
+    else
+      Result := TFloatIndexedGetProc(M)(PropInfo^.Index);
 
-        MOV     EDX,[EDX].TPropInfo.Index       { pass Index in DX      }
-        CALL    ECX
-        JMP     @@checkForCurrency
-
-@@isVirtualMethod:
-        MOVSX   ECX,CX
-        ADD     ECX,[EAX]
-        MOV     EDX,[EDX].TPropInfo.Index       { pass Index in DX      }
-        CALL    dword ptr [ECX]
-
-@@checkForCurrency:
-
-        POP     EDX
-
-        MOV     ECX,[EDX].TPropInfo.PropType
-        MOV     ECX,[ECX]
-        XOR     EDX,EDX
-        MOV     DL,[ECX].TTypeInfo.Name.Byte[0]
-        CMP     [ECX].TTypeInfo.Name[EDX+1].TTypeData.FloatType,ftCurr
-        JE      @@div10000
-        JMP     @@exit
-
-@@jmpTab:
-        DD      @@single,@@double,@@extended,@@comp,@@curr
-
-@@single:
-        FLD     [EAX].Single
-        RET
-
-@@double:
-        FLD     [EAX].Double
-        RET
-
-@@extended:
-        FLD     [EAX].Extended
-        RET
-
-@@comp:
-        FILD    [EAX].Comp
-        RET
-
-@@curr:
-        FILD    [EAX].Currency
-@@div10000:
-        FDIV    C10000
-        RET
-
-@@isField:
-        AND     ECX,$00FFFFFF
-        ADD     EAX,ECX
-        MOV     ECX,[EDX].TPropInfo.PropType
-        MOV     ECX,[ECX]
-        XOR     EDX,EDX
-        MOV     DL,[ECX].TTypeInfo.Name.Byte[0]
-        MOV     DL,[ECX].TTypeInfo.Name[EDX+1].TTypeData.FloatType
-
-        CALL    dword ptr @@jmpTab[EDX*4]
-
-@@exit:
-
+    if GetTypeData(PropInfo^.PropType^).FloatType = ftCurr then
+      Result := Result / 10000;
+  end;
 end;
 
 procedure SetFloatProp(Instance: TObject; PropInfo: PPropInfo;
-  Value: Extended); assembler;
-asm
-        { ->    EAX Pointer to instance         }
-        {       EDX Pointer to property info    }
-        {       Stack: Value                    }
+  const Value: Extended);
+type
+  TSingleSetProc = procedure (const Value: Single) of object;
+  TDoubleSetProc = procedure (const Value: Double) of object;
+  TExtendedSetProc = procedure (const Value: Extended) of object;
+  TCompSetProc = procedure (const Value: Comp) of object;
+  TCurrencySetProc = procedure (const Value: Currency) of object;
+  TSingleIndexedSetProc = procedure (Index: Integer;
+                                        const Value: Single) of object;
+  TDoubleIndexedSetProc = procedure (Index: Integer;
+                                        const Value: Double) of object;
+  TExtendedIndexedSetProc = procedure (Index: Integer;
+                                        const Value: Extended) of object;
+  TCompIndexedSetProc = procedure (Index: Integer;
+                                        const Value: Comp) of object;
+  TCurrencyIndexedSetProc = procedure (Index: Integer;
+                                        const Value: Currency) of object;
+var
+  P: Pointer;
+  M: TMethod;
+  Setter: Longint;
+  FloatType: TFloatType;
+begin
+  Setter := Longint(PropInfo^.SetProc);
+  FloatType := GetTypeData(PropInfo^.PropType^).FloatType;
 
-        PUSH    EBX
-        PUSH    ESI
+  if (Setter and $FF000000) = $FF000000 then
+  begin  // field - Setter is the field's offset in the instance data
+    P := Pointer(Integer(Instance) + (Setter and $00FFFFFF));
+    case FloatType of
+      ftSingle:    PSingle(P)^ := Value;
+      ftDouble:    PDouble(P)^ := Value;
+      ftExtended:  PExtended(P)^ := Value;
+      ftComp:      PComp(P)^ := Value;
+      ftCurr:      PCurrency(P)^ := Value;
+    end;
+  end
+  else
+  begin
+    if (Setter and $FF000000) = $FE000000 then
+      // virtual method  - Setter is a signed 2 byte integer VMT offset
+      M.Code := Pointer(PInteger(PInteger(Instance)^ + SmallInt(Setter))^)
+    else
+      // static method - Setter is the actual address
+      M.Code := Pointer(Setter);
 
-        XOR     EBX,EBX
-        MOV     ECX,[EDX].TPropInfo.PropType
-        MOV     ECX,[ECX]
-        MOV     BL,[ECX].TTypeInfo.Name.Byte[0]
-        MOV     BL,[ECX].TTypeInfo.Name[EBX+1].TTypeData.FloatType
-        SHL     EBX,2
-        FLD     Value
-        MOV     ECX,[EDX].TPropInfo.SetProc
-        CMP     [EDX].TPropInfo.SetProc.Byte[3],$FE
-        JA      @@isField
-        SUB     ESP,dword ptr @@sizTab[EBX]
-        MOV     ESI,ESP
-        CALL    dword ptr @@storeProc[EBX]
-
-        CMP     [EDX].TPropInfo.SetProc.Byte[3],$FE
-        MOV     EDX,[EDX].TPropInfo.Index       { pass Index in DX      }
-        JB      @@isStaticMethod
-
-        MOVSX   ECX,CX
-        ADD     ECX,[EAX]
-        CALL    dword ptr [ECX]
-        JMP     @@exit
-
-@@isStaticMethod:
-        CALL    ECX
-        JMP     @@exit
-
-@@sizTab:
-        DD      4,8,12,8,8
-
-@@storeProc:
-        DD      @@single,@@double,@@extended,@@comp,@@curr
-
-@@single:
-        FSTP    [ESI].Single
-        RET
-
-@@double:
-        FSTP    [ESI].Double
-        RET
-
-@@extended:
-        FSTP    [ESI].Extended
-        RET
-
-@@comp:
-        FISTP   [ESI].Comp
-        RET
-
-@@curr:
-        FMUL    C10000
-        FISTP   [ESI].Currency
-        RET
-
-@@isField:
-        AND     ECX,$00FFFFFF
-        LEA     ESI,[EAX+ECX]
-        CALL    dword ptr @@storeProc[EBX]
-
-@@exit:
-        POP     ESI
-        POP     EBX
+    M.Data := Instance;
+    if PropInfo^.Index = Integer($80000000) then  // no index
+    begin
+      case FloatType of
+        ftSingle  :  TSingleSetProc(M)(Value);
+        ftDouble  :  TDoubleSetProc(M)(Value);
+        ftExtended:  TExtendedSetProc(M)(Value);
+        ftComp    :  TCompSetProc(M)(Value);
+        ftCurr    :  TCurrencySetProc(M)(Value);
+      end;
+    end
+    else  // indexed
+    begin
+      case FloatType of
+        ftSingle  :  TSingleIndexedSetProc(M)(PropInfo^.Index, Value);
+        ftDouble  :  TDoubleIndexedSetProc(M)(PropInfo^.Index, Value);
+        ftExtended:  TExtendedIndexedSetProc(M)(PropInfo^.Index, Value);
+        ftComp    :  TCompIndexedSetProc(M)(PropInfo^.Index, Value);
+        ftCurr    :  TCurrencyIndexedSetProc(M)(PropInfo^.Index, Value);
+      end;
+    end
+  end;
 end;
 
 procedure AssignVariant(var Dest: Variant; const Source: Variant);
@@ -1715,10 +1869,10 @@ asm
         JMP     @@exit
 
 @@isField:
-  AND  ESI,$00FFFFFF
-  LEA  EDX,[EAX+ESI]
-  MOV  EAX,ECX
-  CALL  AssignVariant
+        AND  ESI,$00FFFFFF
+        LEA  EDX,[EAX+ESI]
+        MOV  EAX,ECX
+        CALL  AssignVariant
 
 @@exit:
         POP     EDI
@@ -1757,10 +1911,10 @@ asm
         JMP     @@exit
 
 @@isField:
-  AND  EDI,$00FFFFFF
-  ADD  EAX,EDI
-  MOV  EDX,ECX
-  CALL  AssignVariant
+        AND  EDI,$00FFFFFF
+        ADD  EAX,EDI
+        MOV  EDX,ECX
+        CALL  AssignVariant
 
 @@exit:
         POP     EDI
@@ -1919,5 +2073,81 @@ asm
 end;
 
 
+function GetInterfaceProp(Instance: TObject; const PropName: string): IInterface;
+begin
+  Result := GetInterfaceProp(Instance, FindPropInfo(Instance, PropName));
+end;
+
+procedure SetInterfaceProp(Instance: TObject; const PropName: string;
+  const Value: IInterface);
+begin
+  SetInterfaceProp(Instance, FindPropInfo(Instance, PropName), Value);
+end;
+
+function GetInterfaceProp(Instance: TObject; PropInfo: PPropInfo): IInterface;
+type
+  TInterfaceGetProc = function :IInterface of object;
+  TInterfaceIndexedGetProc = function (Index: Integer): IInterface of object;
+var
+  P: ^IInterface;
+  M: TMethod;
+  Getter: Longint;
+begin
+  Getter := Longint(PropInfo^.GetProc);
+  if (Getter and $FF000000) = $FF000000 then
+  begin  // field - Getter is the field's offset in the instance data
+    P := Pointer(Integer(Instance) + (Getter and $00FFFFFF));
+    Result := P^;   // auto ref count
+  end
+  else
+  begin
+    if (Getter and $FF000000) = $FE000000 then
+      // virtual method  - Getter is a signed 2 byte integer VMT offset
+      M.Code := Pointer(PInteger(PInteger(Instance)^ + SmallInt(Getter))^)
+    else
+      // static method - Getter is the actual address
+      M.Code := Pointer(Getter);
+
+    M.Data := Instance;
+    if PropInfo^.Index = Integer($80000000) then  // no index
+      Result := TInterfaceGetProc(M)()
+    else
+      Result := TInterfaceIndexedGetProc(M)(PropInfo^.Index);
+  end;
+end;
+
+procedure SetInterfaceProp(Instance: TObject; PropInfo: PPropInfo;
+  const Value: IInterface);
+type
+  TInterfaceSetProc = procedure (const Value: IInterface) of object;
+  TInterfaceIndexedSetProc = procedure (Index: Integer;
+                                        const Value: IInterface) of object;
+var
+  P: ^IInterface;
+  M: TMethod;
+  Setter: Longint;
+begin
+  Setter := Longint(PropInfo^.SetProc);
+  if (Setter and $FF000000) = $FF000000 then
+  begin  // field - Setter is the field's offset in the instance data
+    P := Pointer(Integer(Instance) + (Setter and $00FFFFFF));
+    P^ := Value;   // auto ref count
+  end
+  else
+  begin
+    if (Setter and $FF000000) = $FE000000 then
+      // virtual method  - Setter is a signed 2 byte integer VMT offset
+      M.Code := Pointer(PInteger(PInteger(Instance)^ + SmallInt(Setter))^)
+    else
+      // static method - Setter is the actual address
+      M.Code := Pointer(Setter);
+
+    M.Data := Instance;
+    if PropInfo^.Index = Integer($80000000) then  // no index
+      TInterfaceSetProc(M)(Value)
+    else
+      TInterfaceIndexedSetProc(M)(PropInfo^.Index, Value);
+  end;
+end;
 
 end.

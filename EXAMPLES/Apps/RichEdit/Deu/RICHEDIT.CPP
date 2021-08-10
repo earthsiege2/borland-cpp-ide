@@ -7,12 +7,15 @@
 #pragma hdrstop
 int _turboFloat;
 //---------------------------------------------------------------------------
-/*ITE*/ /*DFMFileType*/ /*Richabt.dfm*/
-/*ITE*/ /*DFMFileType*/ /*Romain.dfm*/
-/*ITE*/ /*RCFileType*/ /*RICHEDIT_DRC.rc*/
+/*ITE*/ /*LCID:00000409:00000407*/ /**/
+/*ITE*/ /*DFMFileType*/ /*richabt.dfm*/
+/*ITE*/ /*DFMFileType*/ /*romain.dfm*/
+/*ITE*/ /*RCFileType*/ /*richedit_DRC.rc*/
 //---------------------------------------------------------------------------
-USEFORMRES("Richabt.dfm", Form2, Form); /* TForm: DesignClass */
-USEFORMRES("Romain.dfm", MainForm, Form); /* TForm: DesignClass */
-USERC("RICHEDIT_DRC.rc");
+USEFORMRES("richabt.dfm", Form2, Form); /* TForm: DesignClass */
+#pragma resource "richabt.dfm"
+USEFORMRES("romain.dfm", MainForm, Form); /* TForm: DesignClass */
+#pragma resource "romain.dfm"
+USERC("richedit_DRC.rc");
 //---------------------------------------------------------------------------
 #define DllEntryPoint

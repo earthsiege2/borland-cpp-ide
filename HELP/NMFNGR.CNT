@@ -3,7 +3,7 @@
 
 :BASE nmfngr.hlp
 :TITLE FastNet Finger Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 TNMFinger component
 2 TNMFinger component Reference=Scribble1010
 2 Properties

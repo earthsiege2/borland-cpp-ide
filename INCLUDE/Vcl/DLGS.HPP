@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Dlgs.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Dlgs.pas' rev: 6.00
 
 #ifndef DlgsHPP
 #define DlgsHPP
@@ -22,9 +22,7 @@ namespace Dlgs
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Dlgs */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dlgs;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

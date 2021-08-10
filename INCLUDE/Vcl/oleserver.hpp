@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OleServer.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'OleServer.pas' rev: 6.00
 
 #ifndef OleServerHPP
 #define OleServerHPP
@@ -27,8 +27,7 @@ namespace Oleserver
 typedef DynamicArray<OleVariant >  TVariantArray;
 
 #pragma option push -b-
-enum TConnectKind { ckRunningOrNew, ckNewInstance, ckRunningInstance, ckRemote, ckAttachToInterface 
-	};
+enum TConnectKind { ckRunningOrNew, ckNewInstance, ckRunningInstance, ckRemote, ckAttachToInterface };
 #pragma option pop
 
 class DELPHICLASS TServerEventDispatch;
@@ -55,9 +54,9 @@ protected:
 	HIDESBASE int __stdcall _Release(void);
 	virtual void __fastcall Loaded(void);
 	virtual void __fastcall InitServerData(void) = 0 ;
-	virtual _di_IUnknown __fastcall GetServer();
-	void __fastcall ConnectEvents(const _di_IUnknown Obj);
-	void __fastcall DisconnectEvents(const _di_IUnknown Obj);
+	virtual System::_di_IInterface __fastcall GetServer();
+	void __fastcall ConnectEvents(const System::_di_IInterface Obj);
+	void __fastcall DisconnectEvents(const System::_di_IInterface Obj);
 	virtual void __fastcall InvokeEvent(int DispID, TVariantArray &Params);
 	TConnectKind __fastcall GetConnectKind(void);
 	void __fastcall SetConnectKind(TConnectKind ck);
@@ -77,11 +76,10 @@ __published:
 	__property TConnectKind ConnectKind = {read=GetConnectKind, write=SetConnectKind, nodefault};
 	__property AnsiString RemoteMachineName = {read=FRemoteMachineName, write=FRemoteMachineName};
 private:
-		
-	void *__IUnknown;	/* IUnknown */
+	void *__IInterface;	/* System::IInterface */
 	
 public:
-	operator IUnknown*(void) { return (IUnknown*)&__IUnknown; }
+	operator IInterface*(void) { return (IInterface*)&__IInterface; }
 	
 };
 
@@ -100,10 +98,8 @@ protected:
 	int __stdcall _Release(void);
 	HRESULT __stdcall GetTypeInfoCount(/* out */ int &Count);
 	HRESULT __stdcall GetTypeInfo(int Index, int LocaleID, /* out */ void *TypeInfo);
-	HRESULT __stdcall GetIDsOfNames(const GUID &IID, void * Names, int NameCount, int LocaleID, void * 
-		DispIDs);
-	HRESULT __stdcall Invoke(int DispID, const GUID &IID, int LocaleID, Word Flags, void *Params, void * 
-		VarResult, void * ExcepInfo, void * ArgErr);
+	HRESULT __stdcall GetIDsOfNames(const GUID &IID, void * Names, int NameCount, int LocaleID, void * DispIDs);
+	HRESULT __stdcall Invoke(int DispID, const GUID &IID, int LocaleID, Word Flags, void *Params, void * VarResult, void * ExcepInfo, void * ArgErr);
 	__property TOleServer* Server = {read=FServer};
 	bool __fastcall ServerDisconnect(void);
 	
@@ -119,11 +115,12 @@ private:
 	
 public:
 	operator IDispatch*(void) { return (IDispatch*)&__IDispatch; }
-	operator IUnknown*(void) { return (IUnknown*)&__IDispatch; }
+	operator IInterface*(void) { return (IInterface*)&__IDispatch; }
 	
 };
 
 
+#pragma pack(push, 4)
 struct TServerData
 {
 	GUID ClassID;
@@ -133,13 +130,12 @@ struct TServerData
 	int Version;
 	int InstanceCount;
 } ;
+#pragma pack(pop)
 
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Oleserver */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Oleserver;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

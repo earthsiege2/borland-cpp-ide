@@ -2,7 +2,7 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="MDClnt.exe"/>
     <OBJFILES value="MDClnt.obj ClntMain.obj MDClntDM.obj MDSrvr_TLB.obj ClntAbout.obj 
       RecError.obj"/>
@@ -12,16 +12,16 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) ClntMain.dfm MDClntDM.dfm ClntAbout.dfm RecError.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value=""/>
-    <SPARELIBS value="Vcl50.lib Vclmid50.lib vcldb50.lib VCLBDE50.lib"/>
-    <PACKAGES value="Vcl50.bpi Vclx50.bpi Vcldb50.bpi VCLBDE50.bpi vcldbx50.bpi Vclmid50.bpi"/>
+    <LIBRARIES value="dsnapcon.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib dsnap.lib dbrtl.lib vcldb.lib bdertl.lib dsnapcon.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi dbrtl.bpi vcldb.bpi bdertl.bpi vcldbx.bpi dsnap.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
-    <LINKER value="tlink32"/>
+    <LINKER value="ilink32"/>
     <USERDEFINES value=""/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
     <MAINSOURCE value="MDClnt.cpp"/>
@@ -30,19 +30,29 @@
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I&quot;..\&quot; -I$(BCB)\include -I$(BCB)\include\vcl -src_suffixcpp"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
-      -tW -tWM"/>
+    <IDLCFLAGS value="-src_suffix cpp -I..\. -I$(BCB)\include -I$(BCB)\include\vcl"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -Gn -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="MDClnt.cpp" FORMNAME="" UNITNAME="MDClnt" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="MDClnt.res" FORMNAME="" UNITNAME="MDClnt" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ClntMain.cpp" FORMNAME="FormMain" UNITNAME="ClntMain" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="MDClntDM.cpp" FORMNAME="DataModule1" UNITNAME="MDClntDM" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="MDSrvr_TLB.cpp" FORMNAME="" UNITNAME="MDSrvr_TLB" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ClntAbout.cpp" FORMNAME="AboutBox" UNITNAME="ClntAbout" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="RecError.cpp" FORMNAME="ReconcileErrorForm" UNITNAME="RecError" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -76,9 +86,14 @@ DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]

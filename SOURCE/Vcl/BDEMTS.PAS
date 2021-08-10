@@ -7,7 +7,7 @@
 {                                                       }
 {*******************************************************}
 
-unit BdeMts;
+unit bdemts;
 
 {$H+,X+}
 
@@ -15,7 +15,7 @@ interface
 
 implementation
 
-uses Mtx, DbTables;
+uses Mtx, DBTables;
 
 function GetObjectContext: IUnknown;
 var

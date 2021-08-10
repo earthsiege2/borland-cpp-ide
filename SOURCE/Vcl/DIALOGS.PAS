@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -14,7 +14,7 @@ unit Dialogs;
 interface
 
 uses Windows, Messages, SysUtils, CommDlg, Classes, Graphics, Controls,
-  Forms, StdCtrls;
+  Forms, StdCtrls, Printers;
 
 const
 
@@ -46,11 +46,11 @@ type
     procedure WndProc(var Message: TMessage); virtual;
     function MessageHook(var Msg: TMessage): Boolean; virtual;
     function TaskModalDialog(DialogFunc: Pointer; var DialogData): Bool; virtual;
-    function Execute: Boolean; virtual; abstract;
     property Template: PChar read FTemplate write FTemplate;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    function Execute: Boolean; virtual; abstract;
     procedure DefaultHandler(var Message); override;
     property Handle: HWnd read FHandle;
   published
@@ -67,8 +67,11 @@ type
     ofExtensionDifferent, ofPathMustExist, ofFileMustExist, ofCreatePrompt,
     ofShareAware, ofNoReadOnlyReturn, ofNoTestFileCreate, ofNoNetworkButton,
     ofNoLongNames, ofOldStyleDialog, ofNoDereferenceLinks, ofEnableIncludeNotify,
-    ofEnableSizing);
+    ofEnableSizing, ofDontAddToRecent, ofForceShowHidden);
   TOpenOptions = set of TOpenOption;
+
+  TOpenOptionEx = (ofExNoPlacesBar);
+  TOpenOptionsEx = set of TOpenOptionEx;
 
   TFileEditStyle = (fsEdit, fsComboBox);
   TOFNotifyEx = type CommDlg.TOFNotifyEx;
@@ -93,6 +96,7 @@ type
     FOnTypeChange: TNotifyEvent;
     FOnCanClose: TCloseQueryEvent;
     FOnIncludeItem: TIncludeItemEvent;
+    FOptionsEx: TOpenOptionsEx;
     function GetFileName: TFileName;
     function GetFilterIndex: Integer;
     procedure ReadFileEditStyle(Reader: TReader);
@@ -124,6 +128,7 @@ type
     property FilterIndex: Integer read GetFilterIndex write FFilterIndex default 1;
     property InitialDir: string read FInitialDir write SetInitialDir;
     property Options: TOpenOptions read FOptions write FOptions default [ofHideReadOnly, ofEnableSizing];
+    property OptionsEx: TOpenOptionsEx read FOptionsEx write FOptionsEx default [];
     property Title: string read FTitle write FTitle;
     property OnCanClose: TCloseQueryEvent read FOnCanClose write FOnCanClose;
     property OnFolderChange: TNotifyEvent read FOnFolderChange write FOnFolderChange;
@@ -315,8 +320,10 @@ type
 
 const
   mbYesNoCancel = [mbYes, mbNo, mbCancel];
+  mbYesAllNoAllCancel = [mbYes, mbYesToAll, mbNo, mbNoToAll, mbCancel];
   mbOKCancel = [mbOK, mbCancel];
   mbAbortRetryIgnore = [mbAbort, mbRetry, mbIgnore];
+  mbAbortIgnore = [mbAbort, mbIgnore];
 
 function CreateMessageDialog(const Msg: string; DlgType: TMsgDlgType;
   Buttons: TMsgDlgButtons): TForm;
@@ -339,6 +346,10 @@ function InputBox(const ACaption, APrompt, ADefault: string): string;
 function InputQuery(const ACaption, APrompt: string;
   var Value: string): Boolean;
 
+function PromptForFileName(var AFileName: string; const AFilter: string = '';
+  const ADefaultExt: string = ''; const ATitle: string = '';
+  const AInitialDir: string = ''; SaveDialog: Boolean = False): Boolean;
+
 { Win98 and Win2k will default to the "My Documents" folder if the InitialDir
   property is empty and no files of the filtered type are contained in the
   current directory. Set this flag to True to force TOpenDialog and descendents
@@ -349,7 +360,8 @@ var
 
 implementation
 
-uses ExtCtrls, Consts, Printers, Dlgs;
+uses
+  ExtCtrls, Consts, Dlgs, Math;
 
 { Private globals }
 
@@ -368,7 +380,12 @@ var
 begin
   GetWindowRect(Wnd, Rect);
   if Application.MainForm <> nil then
-    Monitor := Application.MainForm.Monitor
+  begin
+    if Assigned(Screen.ActiveForm) then
+      Monitor := Screen.ActiveForm.Monitor
+      else
+        Monitor := Application.MainForm.Monitor;
+  end
   else
     Monitor := Screen.Monitors[0];
   SetWindowPos(Wnd, 0,
@@ -400,12 +417,12 @@ constructor TCommonDialog.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FCtl3D := True;
-  FObjectInstance := MakeObjectInstance(MainWndProc);
+  FObjectInstance := Classes.MakeObjectInstance(MainWndProc);
 end;
 
 destructor TCommonDialog.Destroy;
 begin
-  if FObjectInstance <> nil then FreeObjectInstance(FObjectInstance);
+  if FObjectInstance <> nil then Classes.FreeObjectInstance(FObjectInstance);
   inherited Destroy;
 end;
 
@@ -468,9 +485,11 @@ var
   ActiveWindow: HWnd;
   WindowList: Pointer;
   FPUControlWord: Word;
+  FocusState: TFocusState;
 begin
   ActiveWindow := GetActiveWindow;
   WindowList := DisableTaskWindows(0);
+  FocusState := SaveFocusState;
   try
     Application.HookMainWindow(MessageHook);
     asm
@@ -490,6 +509,7 @@ begin
   finally
     EnableTaskWindows(WindowList);
     SetActiveWindow(ActiveWindow);
+    RestoreFocusState(FocusState);
   end;
 end;
 
@@ -527,6 +547,7 @@ begin
   inherited Create(AOwner);
   FHistoryList := TStringList.Create;
   FOptions := [ofHideReadOnly, ofEnableSizing];
+  FOptionsEx := [];
   FFiles := TStringList.Create;
   FFilterIndex := 1;
   FFileEditStyle := fsEdit;
@@ -629,9 +650,12 @@ const
     OFN_CREATEPROMPT, OFN_SHAREAWARE, OFN_NOREADONLYRETURN,
     OFN_NOTESTFILECREATE, OFN_NONETWORKBUTTON, OFN_NOLONGNAMES,
     OFN_EXPLORER, OFN_NODEREFERENCELINKS, OFN_ENABLEINCLUDENOTIFY,
-    OFN_ENABLESIZING);
+    OFN_ENABLESIZING, OFN_DONTADDTORECENT, OFN_FORCESHOWHIDDEN);
+
+  OpenOptionsEx: array [TOpenOptionEx] of DWORD = (OFN_EX_NOPLACESBAR);
 var
   Option: TOpenOption;
+  OptionEx: TOpenOptionEx;
   OpenFilename: TOpenFilename;
 
   function AllocFilterStr(const S: string): string;
@@ -659,7 +683,12 @@ begin
   FillChar(OpenFileName, SizeOf(OpenFileName), 0);
   with OpenFilename do
   begin
-    lStructSize := SizeOf(TOpenFilename);
+    if (Win32MajorVersion >= 5) and (Win32Platform = VER_PLATFORM_WIN32_NT) or { Win2k }
+    ((Win32Platform = VER_PLATFORM_WIN32_WINDOWS) and (Win32MajorVersion >= 4) and (Win32MinorVersion >= 90)) then { WinME }
+      lStructSize := SizeOf(TOpenFilename)
+    else
+      lStructSize := SizeOf(TOpenFilename) - (SizeOf(DWORD) shl 1) - SizeOf(Pointer); { subtract size of added fields }
+
     hInstance := SysInit.HInstance;
     TempFilter := AllocFilterStr(FFilter);
     lpstrFilter := PChar(TempFilter);
@@ -678,11 +707,20 @@ begin
       lpstrInitialDir := PChar(FInitialDir);
     lpstrTitle := PChar(FTitle);
     Flags := OFN_ENABLEHOOK;
+    FlagsEx := 0;
+
     for Option := Low(Option) to High(Option) do
       if Option in FOptions then
         Flags := Flags or OpenOptions[Option];
     if NewStyleControls then
-      Flags := Flags xor OFN_EXPLORER
+    begin
+      Flags := Flags xor OFN_EXPLORER;
+      if (Win32MajorVersion >= 5) and (Win32Platform = VER_PLATFORM_WIN32_NT) or { Win2k }
+      ((Win32Platform = VER_PLATFORM_WIN32_WINDOWS) and (Win32MajorVersion >= 4) and (Win32MinorVersion >= 90)) then { WinME }
+        for OptionEx := Low(OptionEx) to High(OptionEx) do
+          if OptionEx in FOptionsEx then
+            FlagsEx := FlagsEx or OpenOptionsEx[OptionEx]; 
+    end
     else
       Flags := Flags and not OFN_EXPLORER;
     TempExt := FDefaultExt;
@@ -695,14 +733,13 @@ begin
     if (ofOldStyleDialog in Options) or not NewStyleControls then
       lpfnHook := DialogHook
     else
-    begin
       lpfnHook := ExplorerHook;
+
+    if Template <> nil then
+    begin
+      Flags := Flags or OFN_ENABLETEMPLATE;
+      lpTemplateName := Template;
     end;
-      if Template <> nil then
-      begin
-        Flags := Flags or OFN_ENABLETEMPLATE;
-        lpTemplateName := Template;
-      end;
     hWndOwner := Application.Handle;
     Result := TaskModalDialog(Func, OpenFileName);
     if Result then
@@ -1001,7 +1038,7 @@ const
     CF_NOFACESEL, CF_NOOEMFONTS, CF_NOSIMULATIONS, CF_NOSIZESEL,
     CF_NOSTYLESEL, CF_NOVECTORFONTS, CF_SHOWHELP,
     CF_WYSIWYG or CF_BOTH or CF_SCALABLEONLY, CF_LIMITSIZE,
-    CF_SCALABLEONLY, CF_APPLY);
+    CF_SCALABLEONLY, CF_APPLY);  
   Devices: array[TFontDialogDevice] of DWORD = (
     CF_SCREENFONTS, CF_PRINTERFONTS, CF_BOTH);
 var
@@ -1083,7 +1120,7 @@ end;
 
 procedure GetPrinter(var DeviceMode, DeviceNames: THandle);
 var
-  Device, Driver, Port: array[0..79] of char;
+  Device, Driver, Port: array[0..1023] of char;
   DevNames: PDevNames;
   Offset: PChar;
 begin
@@ -1270,7 +1307,8 @@ end;
 procedure TRedirectorWindow.WndProc(var Message: TMessage);
 begin
   inherited WndProc(Message);
-  if (Message.Result = 0) and Assigned(FFindReplaceDialog) then
+  if (Message.Result = 0) and (Message.Msg <> CM_RELEASE) and
+    Assigned(FFindReplaceDialog) then
     Message.Result := Integer(FFindReplaceDialog.MessageHook(Message));
 end;
 
@@ -1358,7 +1396,9 @@ end;
 destructor TFindDialog.Destroy;
 begin
   if FFindHandle <> 0 then SendMessage(FFindHandle, WM_CLOSE, 0, 0);
-  FRedirector.Free;
+  if Assigned(FRedirector) then
+    TRedirectorWindow(FRedirector).FFindReplaceDialog := nil;
+  FreeAndNil(FRedirector);
   inherited Destroy;
 end;
 
@@ -1527,11 +1567,6 @@ end;
 
 { Message dialog }
 
-function Max(I, J: Integer): Integer;
-begin
-  if I > J then Result := I else Result := J;
-end;
-
 function GetAveCharSize(Canvas: TCanvas): TPoint;
 var
   I: Integer;
@@ -1547,7 +1582,12 @@ end;
 type
   TMessageForm = class(TForm)
   private
+    Message: TLabel;
     procedure HelpButtonClick(Sender: TObject);
+  protected
+    procedure CustomKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure WriteToClipBoard(Text: String);
+    function GetFormText: String;
   public
     constructor CreateNew(AOwner: TComponent); reintroduce;
   end;
@@ -1565,6 +1605,61 @@ end;
 procedure TMessageForm.HelpButtonClick(Sender: TObject);
 begin
   Application.HelpContext(HelpContext);
+end;
+
+procedure TMessageForm.CustomKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if (Shift = [ssCtrl]) and (Key = Word('C')) then
+  begin
+    Beep;
+    WriteToClipBoard(GetFormText);
+  end;
+end;
+
+procedure TMessageForm.WriteToClipBoard(Text: String);
+var
+  Data: THandle;
+  DataPtr: Pointer;
+begin
+  if OpenClipBoard(0) then
+  begin
+    try
+      Data := GlobalAlloc(GMEM_MOVEABLE+GMEM_DDESHARE, Length(Text) + 1);
+      try
+        DataPtr := GlobalLock(Data);
+        try
+          Move(PChar(Text)^, DataPtr^, Length(Text) + 1);
+          EmptyClipBoard;
+          SetClipboardData(CF_TEXT, Data);
+        finally
+          GlobalUnlock(Data);
+        end;
+      except
+        GlobalFree(Data);
+        raise;
+      end;
+    finally
+      CloseClipBoard;
+    end;
+  end
+  else
+    raise Exception.CreateRes(@SCannotOpenClipboard);
+end;
+
+function TMessageForm.GetFormText: String;
+var
+  DividerLine, ButtonCaptions: string;
+  I: integer;
+begin
+  DividerLine := StringOfChar('-', 27) + sLineBreak;
+  for I := 0 to ComponentCount - 1 do
+    if Components[I] is TButton then
+      ButtonCaptions := ButtonCaptions + TButton(Components[I]).Caption +
+        StringOfChar(' ', 3);
+  ButtonCaptions := StringReplace(ButtonCaptions,'&','', [rfReplaceAll]);
+  Result := Format('%s%s%s%s%s%s%s%s%s%s', [DividerLine, Caption, sLineBreak,
+    DividerLine, Message.Caption, sLineBreak, DividerLine, ButtonCaptions,
+    sLineBreak, DividerLine]);
 end;
 
 var
@@ -1610,6 +1705,8 @@ begin
     BiDiMode := Application.BiDiMode;
     BorderStyle := bsDialog;
     Canvas.Font := Font;
+    KeyPreview := True;
+    OnKeyDown := TMessageForm(Result).CustomKeyDown;
     DialogUnits := GetAveCharSize(Canvas);
     HorzMargin := MulDiv(mcHorzMargin, DialogUnits.X, 4);
     VertMargin := MulDiv(mcVertMargin, DialogUnits.Y, 8);
@@ -1670,7 +1767,8 @@ begin
         Picture.Icon.Handle := LoadIcon(0, IconID);
         SetBounds(HorzMargin, VertMargin, 32, 32);
       end;
-    with TLabel.Create(Result) do
+    TMessageForm(Result).Message := TLabel.Create(Result);
+    with TMessageForm(Result).Message do
     begin
       Name := 'Message';
       Parent := Result;
@@ -1774,29 +1872,29 @@ begin
       BorderStyle := bsDialog;
       Caption := ACaption;
       ClientWidth := MulDiv(180, DialogUnits.X, 4);
-      ClientHeight := MulDiv(63, DialogUnits.Y, 8);
       Position := poScreenCenter;
       Prompt := TLabel.Create(Form);
       with Prompt do
       begin
         Parent := Form;
-        AutoSize := True;
+        Caption := APrompt;
         Left := MulDiv(8, DialogUnits.X, 4);
         Top := MulDiv(8, DialogUnits.Y, 8);
-        Caption := APrompt;
+        Constraints.MaxWidth := MulDiv(164, DialogUnits.X, 4);
+        WordWrap := True;
       end;
       Edit := TEdit.Create(Form);
       with Edit do
       begin
         Parent := Form;
         Left := Prompt.Left;
-        Top := MulDiv(19, DialogUnits.Y, 8);
+        Top := Prompt.Top + Prompt.Height + 5;
         Width := MulDiv(164, DialogUnits.X, 4);
         MaxLength := 255;
         Text := Value;
         SelectAll;
       end;
-      ButtonTop := MulDiv(41, DialogUnits.Y, 8);
+      ButtonTop := Edit.Top + Edit.Height + 15;
       ButtonWidth := MulDiv(50, DialogUnits.X, 4);
       ButtonHeight := MulDiv(14, DialogUnits.Y, 8);
       with TButton.Create(Form) do
@@ -1814,8 +1912,9 @@ begin
         Caption := SMsgDlgCancel;
         ModalResult := mrCancel;
         Cancel := True;
-        SetBounds(MulDiv(92, DialogUnits.X, 4), ButtonTop, ButtonWidth,
-          ButtonHeight);
+        SetBounds(MulDiv(92, DialogUnits.X, 4), Edit.Top + Edit.Height + 15,
+          ButtonWidth, ButtonHeight);
+        Form.ClientHeight := Top + Height + 13;          
       end;
       if ShowModal = mrOk then
       begin
@@ -1833,6 +1932,36 @@ begin
   InputQuery(ACaption, APrompt, Result);
 end;
 
+function PromptForFileName(var AFileName: string; const AFilter: string = '';
+  const ADefaultExt: string = ''; const ATitle: string = '';
+  const AInitialDir: string = ''; SaveDialog: Boolean = False): Boolean;
+var
+  Dialog: TOpenDialog;
+begin
+  if SaveDialog then
+  begin
+    Dialog := TSaveDialog.Create(nil);
+    Dialog.Options := Dialog.Options + [ofOverwritePrompt];
+  end
+  else
+    Dialog := TOpenDialog.Create(nil);
+  with Dialog do
+  try
+    Title := ATitle;
+    DefaultExt := ADefaultExt;
+    if AFilter = '' then
+      Filter := SDefaultFilter else
+      Filter := AFilter;
+    InitialDir := AInitialDir;
+    FileName := AFileName;
+    Result := Execute;
+    if Result then
+      AFileName := FileName;
+  finally
+    Free;
+  end;
+end;
+
 { Initialization and cleanup }
 
 procedure InitGlobals;
@@ -1847,6 +1976,7 @@ end;
 
 initialization
   InitGlobals;
+  GroupDescendentsWith(TCommonDialog, TControl);
 finalization
   if WndProcPtrAtom <> 0 then GlobalDeleteAtom(WndProcPtrAtom);
 end.

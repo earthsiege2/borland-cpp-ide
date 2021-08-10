@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NMSTRM.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NMSTRM.pas' rev: 6.00
 
 #ifndef NMSTRMHPP
 #define NMSTRMHPP
@@ -23,8 +23,7 @@
 namespace Nmstrm
 {
 //-- type declarations -------------------------------------------------------
-typedef void __fastcall (__closure *TStrmEvent)(Classes::TComponent* Sender, const AnsiString sFrom, 
-	Classes::TStream* strm);
+typedef void __fastcall (__closure *TStrmEvent)(Classes::TComponent* Sender, const AnsiString sFrom, Classes::TStream* strm);
 
 class DELPHICLASS TNMStrm;
 class PASCALIMPLEMENTATION TNMStrm : public Psock::TPowersock 
@@ -46,7 +45,6 @@ __published:
 	__property AnsiString FromName = {read=sFromName, write=sFromName};
 	__property Classes::TNotifyEvent OnMessageSent = {read=FOnMessageSent, write=FOnMessageSent};
 public:
-		
 	#pragma option push -w-inl
 	/* TPowersock.Destroy */ inline __fastcall virtual ~TNMStrm(void) { }
 	#pragma option pop
@@ -79,9 +77,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Nmstrm */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nmstrm;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

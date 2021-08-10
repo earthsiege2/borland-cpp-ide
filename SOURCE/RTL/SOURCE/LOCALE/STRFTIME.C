@@ -6,14 +6,14 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.2  $        */
+/* $Revision: 9.7 $        */
 
 
 #include <_io.h>
@@ -188,6 +188,35 @@ the_switch:
                 break;
 
             /* time */
+	    case 'r':
+	        /* set p to current s position */
+	        p = s;
+
+		/* recurse */
+	        strftime( p, maxsize, "%I:%M:%S %p", t);
+
+	        break;
+	      
+	    case 'R':
+	        /*set p to current s position */
+	        p = s;
+	      
+	        /* recurse */
+	        strftime(p, maxsize, "%H:%M", t);
+
+	        break;
+	    
+	    /* POSIX */
+	    case 'T':
+
+	        /* set p to current s position */
+	        p = s;
+
+	        /* recurse */
+	        strftime(p, maxsize, "%H:%M:%S", t);
+
+	        break;
+
             case 'X':
                 /* set p to current s position */
                 p = s;
@@ -206,13 +235,13 @@ the_switch:
 
             /* year (with century) */
             case 'Y':
-                __utoa( 1900 + t->tm_year, buf );
+	        __utoa( 1900 + t->tm_year, buf );
                 break;
 
             /* century */
             case 'C':       /* POSIX */
-                __utoa( 19, buf );
-                break;
+	        __utoa( t->tm_year/100 + 19, buf);
+		break;
 
             case '+' :
                 pad = *++fmt;

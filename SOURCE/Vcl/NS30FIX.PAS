@@ -1,7 +1,12 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1997-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
 {       This module contains only the prototypes for    }
 {       the Netscape 3.0 Internet Server API used in    }
 {       the ISAPITER.DLL                                }
@@ -9,18 +14,15 @@
 {       Note: To recompile ISAPITER.DLL for Netscape    }
 {       3.0 servers you must conditionally define       }
 {       NETSCAPE3.                                      }
-{                                                       }
-{       Copyright (C) 1997,99 Inprise Corporation       }
-{                                                       }
 {*******************************************************}
 
-unit NS30Fix;
+unit Ns30Fix;
 
 {$WEAKPACKAGEUNIT}
 
 interface
 
-uses Windows, NSAPI;
+uses Windows, Nsapi;
 
 const
   nshttp = 'ns-httpd30.dll';

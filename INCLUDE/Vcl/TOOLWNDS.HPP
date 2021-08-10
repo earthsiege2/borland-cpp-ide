@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ToolWnds.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ToolWnds.pas' rev: 6.00
 
 #ifndef ToolWndsHPP
 #define ToolWndsHPP
@@ -16,7 +16,7 @@
 #include <ComCtrls.hpp>	// Pascal unit
 #include <ToolWin.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
-#include <DsgnWnds.hpp>	// Pascal unit
+#include <DesignWindows.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -34,9 +34,9 @@ namespace Toolwnds
 {
 //-- type declarations -------------------------------------------------------
 class DELPHICLASS TToolbarDesignWindow;
-class PASCALIMPLEMENTATION TToolbarDesignWindow : public Dsgnwnds::TDesignWindow 
+class PASCALIMPLEMENTATION TToolbarDesignWindow : public Designwindows::TDesignWindow 
 {
-	typedef Dsgnwnds::TDesignWindow inherited;
+	typedef Designwindows::TDesignWindow inherited;
 	
 __published:
 	Comctrls::TToolBar* ToolBar1;
@@ -68,8 +68,7 @@ public:
 	__property bool LargeButtons = {read=GetLargeButtons, write=SetLargeButtons, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TDesignWindow.Create */ inline __fastcall virtual TToolbarDesignWindow(Classes::TComponent* AOwner
-		) : Dsgnwnds::TDesignWindow(AOwner) { }
+	/* TDesignWindow.Create */ inline __fastcall virtual TToolbarDesignWindow(Classes::TComponent* AOwner) : Designwindows::TDesignWindow(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TDesignWindow.Destroy */ inline __fastcall virtual ~TToolbarDesignWindow(void) { }
@@ -77,14 +76,12 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TToolbarDesignWindow(Classes::TComponent* AOwner
-		, int Dummy) : Dsgnwnds::TDesignWindow(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TToolbarDesignWindow(Classes::TComponent* AOwner, int Dummy) : Designwindows::TDesignWindow(AOwner, Dummy) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TToolbarDesignWindow(HWND ParentWindow) : Dsgnwnds::TDesignWindow(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TToolbarDesignWindow(HWND ParentWindow) : Designwindows::TDesignWindow(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -93,9 +90,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Toolwnds */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Toolwnds;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

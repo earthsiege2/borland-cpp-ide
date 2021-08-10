@@ -1,0 +1,133 @@
+object IdPropEdBindingEntry: TIdPropEdBindingEntry
+  Left = 192
+  Top = 149
+  ActiveControl = btnOk
+  AutoScroll = False
+  Caption = 'Binding Editor'
+  ClientHeight = 257
+  ClientWidth = 418
+  Color = clButton
+  Constraints.MinHeight = 257
+  Constraints.MinWidth = 418
+  Font.CharSet = fcsAnyCharSet
+  Font.Color = clText
+  Font.Height = 13
+  Font.Name = 'MS Sans Serif'
+  Font.Pitch = fpVariable
+  Font.Style = []
+  ParentFont = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 15
+  TextWidth = 7
+  object Label1: TLabel
+    Left = 8
+    Top = 8
+    Width = 48
+    Height = 15
+    Caption = 'Bindings'
+    Layout = tlCenter
+  end
+  object Label2: TLabel
+    Left = 247
+    Top = 8
+    Width = 61
+    Height = 15
+    Caption = 'IP Address'
+    Layout = tlCenter
+  end
+  object Label3: TLabel
+    Left = 247
+    Top = 56
+    Width = 22
+    Height = 15
+    Caption = 'Port'
+    Layout = tlCenter
+  end
+  object btnOk: TButton
+    Left = 249
+    Top = 201
+    Width = 75
+    Height = 25
+    Anchors = [akRight, akBottom]
+    Caption = 'OK'
+    Default = True
+    ModalResult = 1
+    TabOrder = 0
+  end
+  object btnCancel: TButton
+    Left = 331
+    Top = 201
+    Width = 75
+    Height = 25
+    Anchors = [akRight, akBottom]
+    Cancel = True
+    Caption = 'Cancel'
+    ModalResult = 2
+    TabOrder = 1
+  end
+  object lstBindings: TListBox
+    Left = 8
+    Top = 24
+    Width = 149
+    Height = 169
+    Anchors = [akLeft, akTop, akBottom]
+    Columns = 1
+    ItemHeight = 15
+    Rows = 1
+    TabOrder = 2
+    OnClick = lstBindingsClick
+  end
+  object btnAdd: TButton
+    Left = 164
+    Top = 32
+    Width = 71
+    Height = 25
+    Action = actAdd
+    Caption = '&Add'
+    TabOrder = 3
+  end
+  object btnRemove: TButton
+    Left = 164
+    Top = 64
+    Width = 71
+    Height = 25
+    Action = actRemove
+    Caption = '&Remove'
+    TabOrder = 4
+  end
+  object cmbPort: TComboBox
+    Left = 245
+    Top = 72
+    Width = 161
+    Height = 23
+    Anchors = [akLeft, akTop, akRight]
+    ItemHeight = 17
+    TabOrder = 8
+    OnKeyPress = cmbPortKeyPress
+  end
+  object cmbHostname: TComboBox
+    Left = 245
+    Top = 24
+    Width = 161
+    Height = 23
+    Anchors = [akLeft, akTop, akRight]
+    ItemHeight = 17
+    TabOrder = 9
+    OnKeyPress = cmbHostnameKeyPress
+  end
+  object actBndEditor: TActionList
+    Left = 200
+    Top = 112
+    object actAdd: TAction
+      Caption = '&Add'
+      OnExecute = actAddExecute
+      OnUpdate = actAddUpdate
+    end
+    object actRemove: TAction
+      Caption = '&Remove'
+      OnExecute = actRemoveExecute
+      OnUpdate = actRemoveUpdate
+    end
+  end
+end

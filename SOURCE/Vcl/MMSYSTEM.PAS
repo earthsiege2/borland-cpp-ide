@@ -6,7 +6,7 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
@@ -468,12 +468,12 @@ function mmsystemGetVersion: UINT; stdcall;
 
 ***************************************************************************}
 
+{$EXTERNALSYM sndPlaySound}
+function sndPlaySound(lpszSoundName: PChar; uFlags: UINT): BOOL; stdcall;
 {$EXTERNALSYM sndPlaySoundA}
 function sndPlaySoundA(lpszSoundName: PAnsiChar; uFlags: UINT): BOOL; stdcall;
 {$EXTERNALSYM sndPlaySoundW}
 function sndPlaySoundW(lpszSoundName: PWideChar; uFlags: UINT): BOOL; stdcall;
-{$EXTERNALSYM sndPlaySound}
-function sndPlaySound(lpszSoundName: PChar; uFlags: UINT): BOOL; stdcall;
 
 { flag values for wFlags parameter }
 const
@@ -525,12 +525,12 @@ const
   {$EXTERNALSYM SND_ALIAS_SYSTEMDEFAULT}
   SND_ALIAS_SYSTEMDEFAULT        = SND_ALIAS_START + (Longint(Ord('S')) or (Longint(Ord('D')) shl 8));
 
+{$EXTERNALSYM PlaySound}
+function PlaySound(pszSound: PChar; hmod: HMODULE; fdwSound: DWORD): BOOL; stdcall;
 {$EXTERNALSYM PlaySoundA}
 function PlaySoundA(pszSound: PAnsiChar; hmod: HMODULE; fdwSound: DWORD): BOOL; stdcall;
 {$EXTERNALSYM PlaySoundW}
 function PlaySoundW(pszSound: PWideChar; hmod: HMODULE; fdwSound: DWORD): BOOL; stdcall;
-{$EXTERNALSYM PlaySound}
-function PlaySound(pszSound: PChar; hmod: HMODULE; fdwSound: DWORD): BOOL; stdcall;
 
 {***************************************************************************
 
@@ -800,22 +800,22 @@ type
 {$EXTERNALSYM waveOutGetNumDevs}
 function waveOutGetNumDevs: UINT; stdcall;
 
+{$EXTERNALSYM waveOutGetDevCaps}
+function waveOutGetDevCaps(uDeviceID: UINT; lpCaps: PWaveOutCaps; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM waveOutGetDevCapsA}
 function waveOutGetDevCapsA(uDeviceID: UINT; lpCaps: PWaveOutCapsA; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM waveOutGetDevCapsW}
 function waveOutGetDevCapsW(uDeviceID: UINT; lpCaps: PWaveOutCapsW; uSize: UINT): MMRESULT; stdcall;
-{$EXTERNALSYM waveOutGetDevCaps}
-function waveOutGetDevCaps(uDeviceID: UINT; lpCaps: PWaveOutCaps; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM waveOutGetVolume}
 function waveOutGetVolume(hwo: HWAVEOUT; lpdwVolume: PDWORD): MMRESULT; stdcall;
 {$EXTERNALSYM waveOutSetVolume}
 function waveOutSetVolume(hwo: HWAVEOUT; dwVolume: DWORD): MMRESULT; stdcall;
+{$EXTERNALSYM waveOutGetErrorText}
+function waveOutGetErrorText(mmrError: MMRESULT; lpText: PChar; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM waveOutGetErrorTextA}
 function waveOutGetErrorTextA(mmrError: MMRESULT; lpText: PAnsiChar; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM waveOutGetErrorTextW}
 function waveOutGetErrorTextW(mmrError: MMRESULT; lpText: PWideChar; uSize: UINT): MMRESULT; stdcall;
-{$EXTERNALSYM waveOutGetErrorText}
-function waveOutGetErrorText(mmrError: MMRESULT; lpText: PChar; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM waveOutOpen}
 function waveOutOpen(lphWaveOut: PHWaveOut; uDeviceID: UINT;
   lpFormat: PWaveFormatEx; dwCallback, dwInstance, dwFlags: DWORD): MMRESULT; stdcall;
@@ -854,18 +854,18 @@ function waveOutGetID(hWaveOut: HWAVEOUT; lpuDeviceID: PUINT): MMRESULT; stdcall
 function waveOutMessage(hWaveOut: HWAVEOUT; uMessage: UINT; dw1, dw2: DWORD): Longint; stdcall;
 {$EXTERNALSYM waveInGetNumDevs}
 function waveInGetNumDevs: UINT; stdcall;
+{$EXTERNALSYM waveInGetDevCaps}
+function waveInGetDevCaps(hwo: HWAVEOUT; lpCaps: PWaveInCaps; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM waveInGetDevCapsA}
 function waveInGetDevCapsA(hwo: HWAVEOUT; lpCaps: PWaveInCapsA; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM waveInGetDevCapsW}
 function waveInGetDevCapsW(hwo: HWAVEOUT; lpCaps: PWaveInCapsW; uSize: UINT): MMRESULT; stdcall;
-{$EXTERNALSYM waveInGetDevCaps}
-function waveInGetDevCaps(hwo: HWAVEOUT; lpCaps: PWaveInCaps; uSize: UINT): MMRESULT; stdcall;
+{$EXTERNALSYM waveInGetErrorText}
+function waveInGetErrorText(mmrError: MMRESULT; lpText: PChar; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM waveInGetErrorTextA}
 function waveInGetErrorTextA(mmrError: MMRESULT; lpText: PAnsiChar; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM waveInGetErrorTextW}
 function waveInGetErrorTextW(mmrError: MMRESULT; lpText: PWideChar; uSize: UINT): MMRESULT; stdcall;
-{$EXTERNALSYM waveInGetErrorText}
-function waveInGetErrorText(mmrError: MMRESULT; lpText: PChar; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM waveInOpen}
 function waveInOpen(lphWaveIn: PHWAVEIN; uDeviceID: UINT;
   lpFormatEx: PWaveFormatEx; dwCallback, dwInstance, dwFlags: DWORD): MMRESULT; stdcall;
@@ -1249,22 +1249,22 @@ function midiStreamStop(hms: HMIDISTRM): MMRESULT; stdcall;
 function midiConnect(hmi: HMIDI; hmo: HMIDIOUT; pReserved: Pointer): MMRESULT; stdcall;
 {$EXTERNALSYM midiDisconnect}
 function midiDisconnect(hmi: HMIDI; hmo: HMIDIOUT; pReserved: Pointer): MMRESULT; stdcall;
+{$EXTERNALSYM midiOutGetDevCaps}
+function midiOutGetDevCaps(uDeviceID: UINT; lpCaps: PMidiOutCaps; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM midiOutGetDevCapsA}
 function midiOutGetDevCapsA(uDeviceID: UINT; lpCaps: PMidiOutCapsA; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM midiOutGetDevCapsW}
 function midiOutGetDevCapsW(uDeviceID: UINT; lpCaps: PMidiOutCapsW; uSize: UINT): MMRESULT; stdcall;
-{$EXTERNALSYM midiOutGetDevCaps}
-function midiOutGetDevCaps(uDeviceID: UINT; lpCaps: PMidiOutCaps; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM midiOutGetVolume}
 function midiOutGetVolume(hmo: HMIDIOUT; lpdwVolume: PDWORD): MMRESULT; stdcall;
 {$EXTERNALSYM midiOutSetVolume}
 function midiOutSetVolume(hmo: HMIDIOUT; dwVolume: DWORD): MMRESULT; stdcall;
+{$EXTERNALSYM midiOutGetErrorText}
+function midiOutGetErrorText(mmrError: MMRESULT; pszText: PChar; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM midiOutGetErrorTextA}
 function midiOutGetErrorTextA(mmrError: MMRESULT; pszText: PAnsiChar; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM midiOutGetErrorTextW}
 function midiOutGetErrorTextW(mmrError: MMRESULT; pszText: PWideChar; uSize: UINT): MMRESULT; stdcall;
-{$EXTERNALSYM midiOutGetErrorText}
-function midiOutGetErrorText(mmrError: MMRESULT; pszText: PChar; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM midiOutOpen}
 function midiOutOpen(lphMidiOut: PHMIDIOUT; uDeviceID: UINT;
   dwCallback, dwInstance, dwFlags: DWORD): MMRESULT; stdcall;
@@ -1292,18 +1292,18 @@ function midiOutGetID(hMidiOut: HMIDIOUT; lpuDeviceID: PUINT): MMRESULT; stdcall
 function midiOutMessage(hMidiOut: HMIDIOUT; uMessage: UINT; dw1, dw2: DWORD): MMRESULT; stdcall;
 {$EXTERNALSYM midiInGetNumDevs}
 function midiInGetNumDevs: UINT; stdcall;
+{$EXTERNALSYM midiInGetDevCaps}
+function midiInGetDevCaps(DeviceID: UINT; lpCaps: PMidiInCaps; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM midiInGetDevCapsA}
 function midiInGetDevCapsA(DeviceID: UINT; lpCaps: PMidiInCapsA; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM midiInGetDevCapsW}
 function midiInGetDevCapsW(DeviceID: UINT; lpCaps: PMidiInCapsW; uSize: UINT): MMRESULT; stdcall;
-{$EXTERNALSYM midiInGetDevCaps}
-function midiInGetDevCaps(DeviceID: UINT; lpCaps: PMidiInCaps; uSize: UINT): MMRESULT; stdcall;
+{$EXTERNALSYM midiInGetErrorText}
+function midiInGetErrorText(mmrError: MMRESULT; pszText: PChar; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM midiInGetErrorTextA}
 function midiInGetErrorTextA(mmrError: MMRESULT; pszText: PAnsiChar; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM midiInGetErrorTextW}
 function midiInGetErrorTextW(mmrError: MMRESULT; pszText: PWideChar; uSize: UINT): MMRESULT; stdcall;
-{$EXTERNALSYM midiInGetErrorText}
-function midiInGetErrorText(mmrError: MMRESULT; pszText: PChar; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM midiInOpen}
 function midiInOpen(lphMidiIn: PHMIDIIN; uDeviceID: UINT;
   dwCallback, dwInstance, dwFlags: DWORD): MMRESULT; stdcall;
@@ -1390,12 +1390,12 @@ const
 { auxiliary audio function prototypes }
 {$EXTERNALSYM auxGetNumDevs}
 function auxGetNumDevs: UINT; stdcall;
+{$EXTERNALSYM auxGetDevCaps}
+function auxGetDevCaps(uDeviceID: UINT; lpCaps: PAuxCaps; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM auxGetDevCapsA}
 function auxGetDevCapsA(uDeviceID: UINT; lpCaps: PAuxCapsA; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM auxGetDevCapsW}
 function auxGetDevCapsW(uDeviceID: UINT; lpCaps: PAuxCapsW; uSize: UINT): MMRESULT; stdcall;
-{$EXTERNALSYM auxGetDevCaps}
-function auxGetDevCaps(uDeviceID: UINT; lpCaps: PAuxCaps; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM auxSetVolume}
 function auxSetVolume(uDeviceID: UINT; dwVolume: DWORD): MMRESULT; stdcall;
 {$EXTERNALSYM auxGetVolume}
@@ -1498,12 +1498,12 @@ type
   {$EXTERNALSYM MIXERCAPS}
   MIXERCAPS = MIXERCAPSA;
 
+function mixerGetDevCaps(uMxId: UINT; pmxcaps: PMixerCaps; cbmxcaps: UINT): MMRESULT; stdcall;
+{$EXTERNALSYM mixerGetDevCaps}
 function mixerGetDevCapsA(uMxId: UINT; pmxcaps: PMixerCapsA; cbmxcaps: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM mixerGetDevCapsA}
 function mixerGetDevCapsW(uMxId: UINT; pmxcaps: PMixerCapsW; cbmxcaps: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM mixerGetDevCapsW}
-function mixerGetDevCaps(uMxId: UINT; pmxcaps: PMixerCaps; cbmxcaps: UINT): MMRESULT; stdcall;
-{$EXTERNALSYM mixerGetDevCaps}
 function mixerOpen(phmx: PHMIXER; uMxId: UINT; dwCallback, dwInstance, fdwOpen: DWORD): MMRESULT; stdcall;
 {$EXTERNALSYM mixerOpen}
 function mixerClose(hmx: HMIXER): MMRESULT; stdcall;
@@ -1651,14 +1651,14 @@ const
   {$EXTERNALSYM MIXERLINE_TARGETTYPE_AUX}
   MIXERLINE_TARGETTYPE_AUX            = 5;
 
+{$EXTERNALSYM mixerGetLineInfo}
+function mixerGetLineInfo(hmxobj: HMIXEROBJ; pmxl: PMixerLine; 
+  fdwInfo: DWORD): MMRESULT; stdcall;
 {$EXTERNALSYM mixerGetLineInfoA}
 function mixerGetLineInfoA(hmxobj: HMIXEROBJ; pmxl: PMixerLineA; 
   fdwInfo: DWORD): MMRESULT; stdcall;
 {$EXTERNALSYM mixerGetLineInfoW}
 function mixerGetLineInfoW(hmxobj: HMIXEROBJ; pmxl: PMixerLineW; 
-  fdwInfo: DWORD): MMRESULT; stdcall;
-{$EXTERNALSYM mixerGetLineInfo}
-function mixerGetLineInfo(hmxobj: HMIXEROBJ; pmxl: PMixerLine; 
   fdwInfo: DWORD): MMRESULT; stdcall;
 
 const
@@ -1912,12 +1912,12 @@ type
   {$EXTERNALSYM MIXERLINECONTROLS}
   MIXERLINECONTROLS = MIXERLINECONTROLSA;
 
+{$EXTERNALSYM mixerGetLineControls}
+function mixerGetLineControls(hmxobj: HMIXEROBJ; pmxlc: PMixerLineControls; fdwControls: DWORD): MMRESULT; stdcall;
 {$EXTERNALSYM mixerGetLineControlsA}
 function mixerGetLineControlsA(hmxobj: HMIXEROBJ; pmxlc: PMixerLineControlsA; fdwControls: DWORD): MMRESULT; stdcall;
 {$EXTERNALSYM mixerGetLineControlsW}
 function mixerGetLineControlsW(hmxobj: HMIXEROBJ; pmxlc: PMixerLineControlsW; fdwControls: DWORD): MMRESULT; stdcall;
-{$EXTERNALSYM mixerGetLineControls}
-function mixerGetLineControls(hmxobj: HMIXEROBJ; pmxlc: PMixerLineControls; fdwControls: DWORD): MMRESULT; stdcall;
 
 const
   {$EXTERNALSYM MIXER_GETLINECONTROLSF_ALL}
@@ -1998,12 +1998,12 @@ type
   {$EXTERNALSYM MIXERCONTROLDETAILS_UNSIGNED}
   MIXERCONTROLDETAILS_UNSIGNED = tMIXERCONTROLDETAILS_UNSIGNED;
 
+{$EXTERNALSYM mixerGetControlDetails}
+function mixerGetControlDetails(hmxobj: HMIXEROBJ; pmxcd: PMixerControlDetails; fdwDetails: DWORD): MMRESULT; stdcall;
 {$EXTERNALSYM mixerGetControlDetailsA}
 function mixerGetControlDetailsA(hmxobj: HMIXEROBJ; pmxcd: PMixerControlDetails; fdwDetails: DWORD): MMRESULT; stdcall;
 {$EXTERNALSYM mixerGetControlDetailsW}
 function mixerGetControlDetailsW(hmxobj: HMIXEROBJ; pmxcd: PMixerControlDetails; fdwDetails: DWORD): MMRESULT; stdcall;
-{$EXTERNALSYM mixerGetControlDetails}
-function mixerGetControlDetails(hmxobj: HMIXEROBJ; pmxcd: PMixerControlDetails; fdwDetails: DWORD): MMRESULT; stdcall;
 
 const
   {$EXTERNALSYM MIXER_GETCONTROLDETAILSF_VALUE}
@@ -2382,12 +2382,12 @@ type
 { joystick function prototypes }
 {$EXTERNALSYM joyGetNumDevs}
 function joyGetNumDevs: UINT; stdcall;
+{$EXTERNALSYM joyGetDevCaps}
+function joyGetDevCaps(uJoyID: UINT; lpCaps: PJoyCaps; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM joyGetDevCapsA}
 function joyGetDevCapsA(uJoyID: UINT; lpCaps: PJoyCapsA; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM joyGetDevCapsW}
 function joyGetDevCapsW(uJoyID: UINT; lpCaps: PJoyCapsW; uSize: UINT): MMRESULT; stdcall;
-{$EXTERNALSYM joyGetDevCaps}
-function joyGetDevCaps(uJoyID: UINT; lpCaps: PJoyCaps; uSize: UINT): MMRESULT; stdcall;
 {$EXTERNALSYM joyGetPos}
 function joyGetPos(uJoyID: UINT; lpInfo: PJoyInfo): MMRESULT; stdcall;
 {$EXTERNALSYM joyGetPosEx}
@@ -2639,38 +2639,38 @@ const
   MMIO_DEFAULTBUFFER      = 8192;    { default buffer size }
 
 { MMIO function prototypes }
+{$EXTERNALSYM mmioStringToFOURCC}
+function mmioStringToFOURCC(sz: PChar; uFlags: UINT): FOURCC; stdcall;
 {$EXTERNALSYM mmioStringToFOURCCA}
 function mmioStringToFOURCCA(sz: PAnsiChar; uFlags: UINT): FOURCC; stdcall;
 {$EXTERNALSYM mmioStringToFOURCCW}
 function mmioStringToFOURCCW(sz: PWideChar; uFlags: UINT): FOURCC; stdcall;
-{$EXTERNALSYM mmioStringToFOURCC}
-function mmioStringToFOURCC(sz: PChar; uFlags: UINT): FOURCC; stdcall;
+{$EXTERNALSYM mmioInstallIOProc}
+function mmioInstallIOProc(fccIOProc: FOURCC; pIOProc: TFNMMIOProc;
+  dwFlags: DWORD): TFNMMIOProc; stdcall;
 {$EXTERNALSYM mmioInstallIOProcA}
 function mmioInstallIOProcA(fccIOProc: FOURCC; pIOProc: TFNMMIOProc;
   dwFlags: DWORD): TFNMMIOProc; stdcall;
 {$EXTERNALSYM mmioInstallIOProcW}
 function mmioInstallIOProcW(fccIOProc: FOURCC; pIOProc: TFNMMIOProc;
   dwFlags: DWORD): TFNMMIOProc; stdcall;
-{$EXTERNALSYM mmioInstallIOProc}
-function mmioInstallIOProc(fccIOProc: FOURCC; pIOProc: TFNMMIOProc;
-  dwFlags: DWORD): TFNMMIOProc; stdcall;
+{$EXTERNALSYM mmioOpen}
+function mmioOpen(szFileName: PChar; lpmmioinfo: PMMIOInfo;
+  dwOpenFlags: DWORD): HMMIO; stdcall;
 {$EXTERNALSYM mmioOpenA}
 function mmioOpenA(szFileName: PChar; lpmmioinfo: PMMIOInfo;
   dwOpenFlags: DWORD): HMMIO; stdcall;
 {$EXTERNALSYM mmioOpenW}
 function mmioOpenW(szFileName: PChar; lpmmioinfo: PMMIOInfo;
   dwOpenFlags: DWORD): HMMIO; stdcall;
-{$EXTERNALSYM mmioOpen}
-function mmioOpen(szFileName: PChar; lpmmioinfo: PMMIOInfo;
-  dwOpenFlags: DWORD): HMMIO; stdcall;
+{$EXTERNALSYM mmioRename}
+function mmioRename(szFileName, szNewFileName: PChar;
+  lpmmioinfo: PMMIOInfo; dwRenameFlags: DWORD): MMRESULT; stdcall;
 {$EXTERNALSYM mmioRenameA}
 function mmioRenameA(szFileName, szNewFileName: PAnsiChar;
   lpmmioinfo: PMMIOInfo; dwRenameFlags: DWORD): MMRESULT; stdcall;
 {$EXTERNALSYM mmioRenameW}
 function mmioRenameW(szFileName, szNewFileName: PWideChar;
-  lpmmioinfo: PMMIOInfo; dwRenameFlags: DWORD): MMRESULT; stdcall;
-{$EXTERNALSYM mmioRename}
-function mmioRename(szFileName, szNewFileName: PChar;
   lpmmioinfo: PMMIOInfo; dwRenameFlags: DWORD): MMRESULT; stdcall;
 {$EXTERNALSYM mmioClose}
 function mmioClose(hmmio: HMMIO; uFlags: UINT): MMRESULT; stdcall;
@@ -2719,42 +2719,42 @@ type
   TFNYieldProc = function(mciId: MCIDEVICEID; dwYieldData: DWORD): UINT stdcall;
 
 { MCI function prototypes }
+{$EXTERNALSYM mciSendCommand}
+function mciSendCommand(mciId: MCIDEVICEID; uMessage: UINT;
+  dwParam1, dwParam2: DWORD): MCIERROR; stdcall;
 {$EXTERNALSYM mciSendCommandA}
 function mciSendCommandA(mciId: MCIDEVICEID; uMessage: UINT;
   dwParam1, dwParam2: DWORD): MCIERROR; stdcall;
 {$EXTERNALSYM mciSendCommandW}
 function mciSendCommandW(mciId: MCIDEVICEID; uMessage: UINT;
   dwParam1, dwParam2: DWORD): MCIERROR; stdcall;
-{$EXTERNALSYM mciSendCommand}
-function mciSendCommand(mciId: MCIDEVICEID; uMessage: UINT;
-  dwParam1, dwParam2: DWORD): MCIERROR; stdcall;
+{$EXTERNALSYM mciSendString}
+function mciSendString(lpstrCommand, lpstrReturnString: PChar;
+  uReturnLength: UINT; hWndCallback: HWND): MCIERROR; stdcall;
 {$EXTERNALSYM mciSendStringA}
 function mciSendStringA(lpstrCommand, lpstrReturnString: PAnsiChar;
   uReturnLength: UINT; hWndCallback: HWND): MCIERROR; stdcall;
 {$EXTERNALSYM mciSendStringW}
 function mciSendStringW(lpstrCommand, lpstrReturnString: PWideChar;
   uReturnLength: UINT; hWndCallback: HWND): MCIERROR; stdcall;
-{$EXTERNALSYM mciSendString}
-function mciSendString(lpstrCommand, lpstrReturnString: PChar;
-  uReturnLength: UINT; hWndCallback: HWND): MCIERROR; stdcall;
+{$EXTERNALSYM mciGetDeviceID}
+function mciGetDeviceID(pszDevice: PChar): MCIDEVICEID; stdcall;
 {$EXTERNALSYM mciGetDeviceIDA}
 function mciGetDeviceIDA(pszDevice: PAnsiChar): MCIDEVICEID; stdcall;
 {$EXTERNALSYM mciGetDeviceIDW}
 function mciGetDeviceIDW(pszDevice: PWideChar): MCIDEVICEID; stdcall;
-{$EXTERNALSYM mciGetDeviceID}
-function mciGetDeviceID(pszDevice: PChar): MCIDEVICEID; stdcall;
+{$EXTERNALSYM mciGetDeviceIDFromElementID}
+function mciGetDeviceIDFromElementID(dwElementID: DWORD; lpstrType: PChar): MCIDEVICEID; stdcall;
 {$EXTERNALSYM mciGetDeviceIDFromElementIDA}
 function mciGetDeviceIDFromElementIDA(dwElementID: DWORD; lpstrType: PAnsiChar): MCIDEVICEID; stdcall;
 {$EXTERNALSYM mciGetDeviceIDFromElementIDW}
 function mciGetDeviceIDFromElementIDW(dwElementID: DWORD; lpstrType: PWideChar): MCIDEVICEID; stdcall;
-{$EXTERNALSYM mciGetDeviceIDFromElementID}
-function mciGetDeviceIDFromElementID(dwElementID: DWORD; lpstrType: PChar): MCIDEVICEID; stdcall;
+{$EXTERNALSYM mciGetErrorString}
+function mciGetErrorString(mcierr: MCIERROR; pszText: PChar; uLength: UINT): BOOL; stdcall;
 {$EXTERNALSYM mciGetErrorStringA}
 function mciGetErrorStringA(mcierr: MCIERROR; pszText: PAnsiChar; uLength: UINT): BOOL; stdcall;
 {$EXTERNALSYM mciGetErrorStringW}
 function mciGetErrorStringW(mcierr: MCIERROR; pszText: PWideChar; uLength: UINT): BOOL; stdcall;
-{$EXTERNALSYM mciGetErrorString}
-function mciGetErrorString(mcierr: MCIERROR; pszText: PChar; uLength: UINT): BOOL; stdcall;
 {$EXTERNALSYM mciSetYieldProc}
 function mciSetYieldProc(mciId: MCIDEVICEID; fpYieldProc: TFNYieldProc;
   dwYieldData: DWORD): BOOL; stdcall;
@@ -3490,23 +3490,18 @@ type
   PMCI_Save_ParmsA = ^MCI_SAVE_PARMSA;
   PMCI_Save_ParmsW = ^MCI_SAVE_PARMSW;
   PMCI_Save_Parms = PMCI_Save_ParmsA;
-  {$EXTERNALSYM MCI_SAVE_PARMSA}
   MCI_SAVE_PARMSA = record
     dwCallback: DWORD;
     lpfilename: PAnsiChar;
   end;
-  {$EXTERNALSYM MCI_SAVE_PARMSW}
   MCI_SAVE_PARMSW = record
     dwCallback: DWORD;
     lpfilename: PWideChar;
   end;
-  {$EXTERNALSYM MCI_SAVE_PARMS}
   MCI_SAVE_PARMS = MCI_SAVE_PARMSA;
   TMCI_SaveParmsA = MCI_SAVE_PARMSA;
-  {$EXTERNALSYM LPMCI_SAVE_PARMSA}
   LPMCI_SAVE_PARMSA = PMCI_Save_ParmsA;
   TMCI_SaveParmsW = MCI_SAVE_PARMSW;
-  {$EXTERNALSYM LPMCI_SAVE_PARMSW}
   LPMCI_SAVE_PARMSW = PMCI_Save_ParmsW;
   TMCI_SaveParms = TMCI_SaveParmsA;
 
@@ -4410,9 +4405,9 @@ const
 
 implementation
 
+function auxGetDevCaps; external mmsyst name 'auxGetDevCapsA';
 function auxGetDevCapsA; external mmsyst name 'auxGetDevCapsA';
 function auxGetDevCapsW; external mmsyst name 'auxGetDevCapsW';
-function auxGetDevCaps; external mmsyst name 'auxGetDevCapsA';
 function auxGetNumDevs; external mmsyst name 'auxGetNumDevs';
 function auxGetVolume; external mmsyst name 'auxGetVolume';
 function auxOutMessage; external mmsyst name 'auxOutMessage';
@@ -4421,9 +4416,9 @@ function CloseDriver; external mmsyst name 'CloseDriver';
 function DefDriverProc; external mmsyst name 'DefDriverProc';
 function DrvGetModuleHandle; external mmsyst name 'DrvGetModuleHandle';
 function GetDriverModuleHandle; external mmsyst name 'GetDriverModuleHandle';
+function joyGetDevCaps; external mmsyst name 'joyGetDevCapsA';
 function joyGetDevCapsA; external mmsyst name 'joyGetDevCapsA';
 function joyGetDevCapsW; external mmsyst name 'joyGetDevCapsW';
-function joyGetDevCaps; external mmsyst name 'joyGetDevCapsA';
 function joyGetNumDevs; external mmsyst name 'joyGetNumDevs';
 function joyGetPos; external mmsyst name 'joyGetPos';
 function joyGetPosEx; external mmsyst name 'joyGetPosEx';
@@ -4433,33 +4428,33 @@ function joySetCapture; external mmsyst name 'joySetCapture';
 function joySetThreshold; external mmsyst name 'joySetThreshold';
 function mciExecute; external mmsyst name 'mciExecute';
 function mciGetCreatorTask; external mmsyst name 'mciGetCreatorTask';
+function mciGetDeviceID; external mmsyst name 'mciGetDeviceIDA';
 function mciGetDeviceIDA; external mmsyst name 'mciGetDeviceIDA';
 function mciGetDeviceIDW; external mmsyst name 'mciGetDeviceIDW';
-function mciGetDeviceID; external mmsyst name 'mciGetDeviceIDA';
+function mciGetDeviceIDFromElementID; external mmsyst name 'mciGetDeviceIDFromElementIDA';
 function mciGetDeviceIDFromElementIDA; external mmsyst name 'mciGetDeviceIDFromElementIDA';
 function mciGetDeviceIDFromElementIDW; external mmsyst name 'mciGetDeviceIDFromElementIDW';
-function mciGetDeviceIDFromElementID; external mmsyst name 'mciGetDeviceIDFromElementIDA';
+function mciGetErrorString; external mmsyst name 'mciGetErrorStringA';
 function mciGetErrorStringA; external mmsyst name 'mciGetErrorStringA';
 function mciGetErrorStringW; external mmsyst name 'mciGetErrorStringW';
-function mciGetErrorString; external mmsyst name 'mciGetErrorStringA';
 function mciGetYieldProc; external mmsyst name 'mciGetYieldProc';
+function mciSendCommand; external mmsyst name 'mciSendCommandA';
 function mciSendCommandA; external mmsyst name 'mciSendCommandA';
 function mciSendCommandW; external mmsyst name 'mciSendCommandW';
-function mciSendCommand; external mmsyst name 'mciSendCommandA';
+function mciSendString; external mmsyst name 'mciSendStringA';
 function mciSendStringA; external mmsyst name 'mciSendStringA';
 function mciSendStringW; external mmsyst name 'mciSendStringW';
-function mciSendString; external mmsyst name 'mciSendStringA';
 function mciSetYieldProc; external mmsyst name 'mciSetYieldProc';
 function midiConnect; external mmsyst name 'midiConnect';
 function midiDisconnect; external mmsyst name 'midiDisconnect';
 function midiInAddBuffer; external mmsyst name 'midiInAddBuffer';
 function midiInClose; external mmsyst name 'midiInClose';
+function midiInGetDevCaps; external mmsyst name 'midiInGetDevCapsA';
 function midiInGetDevCapsA; external mmsyst name 'midiInGetDevCapsA';
 function midiInGetDevCapsW; external mmsyst name 'midiInGetDevCapsW';
-function midiInGetDevCaps; external mmsyst name 'midiInGetDevCapsA';
+function midiInGetErrorText; external mmsyst name 'midiInGetErrorTextA';
 function midiInGetErrorTextA; external mmsyst name 'midiInGetErrorTextA';
 function midiInGetErrorTextW; external mmsyst name 'midiInGetErrorTextW';
-function midiInGetErrorText; external mmsyst name 'midiInGetErrorTextA';
 function midiInGetID; external mmsyst name 'midiInGetID';
 function midiInGetNumDevs; external mmsyst name 'midiInGetNumDevs';
 function midiInMessage; external mmsyst name 'midiInMessage';
@@ -4472,12 +4467,12 @@ function midiInUnprepareHeader; external mmsyst name 'midiInUnprepareHeader';
 function midiOutCacheDrumPatches; external mmsyst name 'midiOutCacheDrumPatches';
 function midiOutCachePatches; external mmsyst name 'midiOutCachePatches';
 function midiOutClose; external mmsyst name 'midiOutClose';
+function midiOutGetDevCaps; external mmsyst name 'midiOutGetDevCapsA';
 function midiOutGetDevCapsA; external mmsyst name 'midiOutGetDevCapsA';
 function midiOutGetDevCapsW; external mmsyst name 'midiOutGetDevCapsW';
-function midiOutGetDevCaps; external mmsyst name 'midiOutGetDevCapsA';
+function midiOutGetErrorText; external mmsyst name 'midiOutGetErrorTextA';
 function midiOutGetErrorTextA; external mmsyst name 'midiOutGetErrorTextA';
 function midiOutGetErrorTextW; external mmsyst name 'midiOutGetErrorTextW';
-function midiOutGetErrorText; external mmsyst name 'midiOutGetErrorTextA';
 function midiOutGetID; external mmsyst name 'midiOutGetID';
 function midiOutGetNumDevs; external mmsyst name 'midiOutGetNumDevs';
 function midiOutGetVolume; external mmsyst name 'midiOutGetVolume';
@@ -4498,19 +4493,19 @@ function midiStreamProperty; external mmsyst name 'midiStreamProperty';
 function midiStreamRestart; external mmsyst name 'midiStreamRestart';
 function midiStreamStop; external mmsyst name 'midiStreamStop';
 function mixerClose; external mmsyst name 'mixerClose';
+function mixerGetControlDetails; external mmsyst name 'mixerGetControlDetailsA';
 function mixerGetControlDetailsA; external mmsyst name 'mixerGetControlDetailsA';
 function mixerGetControlDetailsW; external mmsyst name 'mixerGetControlDetailsW';
-function mixerGetControlDetails; external mmsyst name 'mixerGetControlDetailsA';
+function mixerGetDevCaps; external mmsyst name 'mixerGetDevCapsA';
 function mixerGetDevCapsA; external mmsyst name 'mixerGetDevCapsA';
 function mixerGetDevCapsW; external mmsyst name 'mixerGetDevCapsW';
-function mixerGetDevCaps; external mmsyst name 'mixerGetDevCapsA';
 function mixerGetID; external mmsyst name 'mixerGetID';
+function mixerGetLineControls; external mmsyst name 'mixerGetLineControlsA';
 function mixerGetLineControlsA; external mmsyst name 'mixerGetLineControlsA';
 function mixerGetLineControlsW; external mmsyst name 'mixerGetLineControlsW';
-function mixerGetLineControls; external mmsyst name 'mixerGetLineControlsA';
+function mixerGetLineInfo; external mmsyst name 'mixerGetLineInfoA';
 function mixerGetLineInfoA; external mmsyst name 'mixerGetLineInfoA';
 function mixerGetLineInfoW; external mmsyst name 'mixerGetLineInfoW';
-function mixerGetLineInfo; external mmsyst name 'mixerGetLineInfoA';
 function mixerGetNumDevs; external mmsyst name 'mixerGetNumDevs';
 function mixerMessage; external mmsyst name 'mixerMessage';
 function mixerOpen; external mmsyst name 'mixerOpen';
@@ -4522,33 +4517,33 @@ function mmioCreateChunk; external mmsyst name 'mmioCreateChunk';
 function mmioDescend; external mmsyst name 'mmioDescend';
 function mmioFlush; external mmsyst name 'mmioFlush';
 function mmioGetInfo; external mmsyst name 'mmioGetInfo';
+function mmioInstallIOProc; external mmsyst name 'mmioInstallIOProcA';
 function mmioInstallIOProcA; external mmsyst name 'mmioInstallIOProcA';
 function mmioInstallIOProcW; external mmsyst name 'mmioInstallIOProcW';
-function mmioInstallIOProc; external mmsyst name 'mmioInstallIOProcA';
+function mmioOpen; external mmsyst name 'mmioOpenA';
 function mmioOpenA; external mmsyst name 'mmioOpenA';
 function mmioOpenW; external mmsyst name 'mmioOpenW';
-function mmioOpen; external mmsyst name 'mmioOpenA';
 function mmioRead; external mmsyst name 'mmioRead';
+function mmioRename; external mmsyst name 'mmioRenameA';
 function mmioRenameA; external mmsyst name 'mmioRenameA';
 function mmioRenameW; external mmsyst name 'mmioRenameW';
-function mmioRename; external mmsyst name 'mmioRenameA';
 function mmioSeek; external mmsyst name 'mmioSeek';
 function mmioSendMessage; external mmsyst name 'mmioSendMessage';
 function mmioSetBuffer; external mmsyst name 'mmioSetBuffer';
 function mmioSetInfo; external mmsyst name 'mmioSetInfo';
+function mmioStringToFOURCC; external mmsyst name 'mmioStringToFOURCCA';
 function mmioStringToFOURCCA; external mmsyst name 'mmioStringToFOURCCA';
 function mmioStringToFOURCCW; external mmsyst name 'mmioStringToFOURCCW';
-function mmioStringToFOURCC; external mmsyst name 'mmioStringToFOURCCA';
 function mmioWrite; external mmsyst name 'mmioWrite';
 function mmsystemGetVersion; external mmsyst name 'mmsystemGetVersion';
 function OpenDriver; external mmsyst name 'OpenDriver';
+function PlaySound; external mmsyst name 'PlaySoundA';
 function PlaySoundA; external mmsyst name 'PlaySoundA';
 function PlaySoundW; external mmsyst name 'PlaySoundW';
-function PlaySound; external mmsyst name 'PlaySoundA';
 function SendDriverMessage; external mmsyst name 'SendDriverMessage';
+function sndPlaySound; external mmsyst name 'sndPlaySoundA';
 function sndPlaySoundA; external mmsyst name 'sndPlaySoundA';
 function sndPlaySoundW; external mmsyst name 'sndPlaySoundW';
-function sndPlaySound; external mmsyst name 'sndPlaySoundA';
 function timeBeginPeriod; external mmsyst name 'timeBeginPeriod';
 function timeEndPeriod; external mmsyst name 'timeEndPeriod';
 function timeGetDevCaps; external mmsyst name 'timeGetDevCaps';
@@ -4558,12 +4553,12 @@ function timeKillEvent; external mmsyst name 'timeKillEvent';
 function timeSetEvent; external mmsyst name 'timeSetEvent';
 function waveInAddBuffer; external mmsyst name 'waveInAddBuffer';
 function waveInClose; external mmsyst name 'waveInClose';
+function waveInGetDevCaps; external mmsyst name 'waveInGetDevCapsA';
 function waveInGetDevCapsA; external mmsyst name 'waveInGetDevCapsA';
 function waveInGetDevCapsW; external mmsyst name 'waveInGetDevCapsW';
-function waveInGetDevCaps; external mmsyst name 'waveInGetDevCapsA';
+function waveInGetErrorText; external mmsyst name 'waveInGetErrorTextA';
 function waveInGetErrorTextA; external mmsyst name 'waveInGetErrorTextA';
 function waveInGetErrorTextW; external mmsyst name 'waveInGetErrorTextW';
-function waveInGetErrorText; external mmsyst name 'waveInGetErrorTextA';
 function waveInGetID; external mmsyst name 'waveInGetID';
 function waveInGetNumDevs; external mmsyst name 'waveInGetNumDevs';
 function waveInGetPosition; external mmsyst name 'waveInGetPosition';
@@ -4576,12 +4571,12 @@ function waveInStop; external mmsyst name 'waveInStop';
 function waveInUnprepareHeader; external mmsyst name 'waveInUnprepareHeader';
 function waveOutBreakLoop; external mmsyst name 'waveOutBreakLoop';
 function waveOutClose; external mmsyst name 'waveOutClose';
+function waveOutGetDevCaps; external mmsyst name 'waveOutGetDevCapsA';
 function waveOutGetDevCapsA; external mmsyst name 'waveOutGetDevCapsA';
 function waveOutGetDevCapsW; external mmsyst name 'waveOutGetDevCapsW';
-function waveOutGetDevCaps; external mmsyst name 'waveOutGetDevCapsA';
+function waveOutGetErrorText; external mmsyst name 'waveOutGetErrorTextA';
 function waveOutGetErrorTextA; external mmsyst name 'waveOutGetErrorTextA';
 function waveOutGetErrorTextW; external mmsyst name 'waveOutGetErrorTextW';
-function waveOutGetErrorText; external mmsyst name 'waveOutGetErrorTextA';
 function waveOutGetID; external mmsyst name 'waveOutGetID';
 function waveOutGetNumDevs; external mmsyst name 'waveOutGetNumDevs';
 function waveOutGetPitch; external mmsyst name 'waveOutGetPitch';

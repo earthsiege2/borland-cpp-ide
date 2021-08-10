@@ -1,17 +1,17 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DBEditCh.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DbEditCh.pas' rev: 6.00
 
-#ifndef DBEditChHPP
-#define DBEditChHPP
+#ifndef DbEditChHPP
+#define DbEditChHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <IEdiSeri.hpp>	// Pascal unit
-#include <IEditCha.hpp>	// Pascal unit
+#include <iEdiSeri.hpp>	// Pascal unit
+#include <iEditCha.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -24,12 +24,10 @@ namespace Dbeditch
 extern PACKAGE Iediseri::TOnGetDesignerNamesEvent InternalOnGetDesignerNames;
 
 }	/* namespace Dbeditch */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dbeditch;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// DBEditCh
+#endif	// DbEditCh

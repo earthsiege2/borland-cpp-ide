@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -38,15 +38,18 @@ type
   protected
     FClient: TMenuItem;
     procedure AssignClient(AClient: TObject); override;
+    function IsAutoCheckLinked: Boolean; virtual;
     function IsCaptionLinked: Boolean; override;
     function IsCheckedLinked: Boolean; override;
     function IsEnabledLinked: Boolean; override;
     function IsHelpContextLinked: Boolean; override;
     function IsHintLinked: Boolean; override;
+    function IsGroupIndexLinked: Boolean; override;
     function IsImageIndexLinked: Boolean; override;
     function IsShortCutLinked: Boolean; override;
     function IsVisibleLinked: Boolean; override;
     function IsOnExecuteLinked: Boolean; override;
+    procedure SetAutoCheck(Value: Boolean); override;
     procedure SetCaption(const Value: string); override;
     procedure SetChecked(Value: Boolean); override;
     procedure SetEnabled(Value: Boolean); override;
@@ -95,6 +98,7 @@ type
     FOnDrawItem: TMenuDrawItemEvent;
     FOnAdvancedDrawItem: TAdvancedMenuDrawItemEvent;
     FOnMeasureItem: TMenuMeasureItemEvent;
+    FAutoCheck: Boolean;
     procedure AppendTo(Menu: HMENU; ARightToLeft: Boolean);
     procedure DoActionChange(Sender: TObject);
     procedure ReadShortCutText(Reader: TReader);
@@ -142,7 +146,7 @@ type
     function GetAutoHotkeys: Boolean;
     function GetAutoLineReduction: Boolean;
     function InsertNewLine(ABefore: Boolean; AItem: TMenuItem): Integer;
-    procedure MeasureItem(ACanvas: TCanvas; var Width, Height: Integer);
+    procedure MeasureItem(ACanvas: TCanvas; var Width, Height: Integer); virtual;
     procedure MenuChanged(Rebuild: Boolean); virtual;
     procedure Loaded; override;
     procedure Notification(AComponent: TComponent;
@@ -194,6 +198,7 @@ type
     property Parent: TMenuItem read FParent;
   published
     property Action: TBasicAction read GetAction write SetAction;
+    property AutoCheck: Boolean read FAutoCheck write FAutoCheck default False;
     property AutoHotkeys: TMenuItemAutoFlag read FAutoHotkeys write SetAutoHotkeys default maParent;
     property AutoLineReduction: TMenuItemAutoFlag read FAutoLineReduction write SetAutoLineReduction default maParent;
     property Bitmap: TBitmap read GetBitmap write SetBitmap;
@@ -292,10 +297,10 @@ type
   public
     procedure Merge(Menu: TMainMenu);
     procedure Unmerge(Menu: TMainMenu);
-    procedure PopulateOle2Menu(SharedMenu: HMenu; Groups: array of Integer;
+    procedure PopulateOle2Menu(SharedMenu: HMenu; const Groups: array of Integer;
       var Widths: array of Longint);
     procedure GetOle2AcceleratorTable(var AccelTable: HAccel;
-      var AccelCount: Integer; Groups: array of Integer);
+      var AccelCount: Integer; const Groups: array of Integer);
     procedure SetOle2MenuHandle(Handle: HMENU);
   published
     property AutoHotkeys;
@@ -328,12 +333,12 @@ type
   protected
     function UseRightToLeftAlignment: Boolean;
     procedure DoPopup(Sender: TObject); virtual;
-    property PopupPoint: TPoint read FPopupPoint;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure Popup(X, Y: Integer); virtual;
     property PopupComponent: TComponent read FPopupComponent write FPopupComponent;
+    property PopupPoint: TPoint read FPopupPoint;
   published
     property Alignment: TPopupAlignment read FAlignment write FAlignment default paLeft;
     property AutoHotkeys;
@@ -377,13 +382,13 @@ procedure ShortCutToKey(ShortCut: TShortCut; var Key: Word; var Shift: TShiftSta
 function ShortCutToText(ShortCut: TShortCut): string;
 function TextToShortCut(Text: string): TShortCut;
 
-function NewMenu(Owner: TComponent; const AName: string; Items: array of TMenuItem): TMainMenu;
+function NewMenu(Owner: TComponent; const AName: string; const Items: array of TMenuItem): TMainMenu;
 function NewPopupMenu(Owner: TComponent; const AName: string;
-  Alignment: TPopupAlignment; AutoPopup: Boolean; Items: array of TMenuitem): TPopupMenu;
-function NewSubMenu(const ACaption: string; hCtx: Word;
-  const AName: string; Items: array of TMenuItem; AEnabled: Boolean = True): TMenuItem;
+  Alignment: TPopupAlignment; AutoPopup: Boolean; const Items: array of TMenuItem): TPopupMenu;
+function NewSubMenu(const ACaption: string; hCtx: THelpContext;
+  const AName: string; const Items: array of TMenuItem; AEnabled: Boolean = True): TMenuItem;
 function NewItem(const ACaption: string; AShortCut: TShortCut;
-  AChecked, AEnabled: Boolean; AOnClick: TNotifyEvent; hCtx: Word;
+  AChecked, AEnabled: Boolean; AOnClick: TNotifyEvent; hCtx: THelpContext;
   const AName: string): TMenuItem;
 function NewLine: TMenuItem;
 
@@ -641,6 +646,11 @@ begin
   FClient := AClient as TMenuItem;
 end;
 
+function TMenuActionLink.IsAutoCheckLinked: Boolean;
+begin
+  Result := FClient.AutoCheck = (Action as TCustomAction).AutoCheck;
+end;
+
 function TMenuActionLink.IsCaptionLinked: Boolean;
 begin
   Result := inherited IsCaptionLinked and
@@ -671,6 +681,12 @@ begin
     (FClient.Hint = (Action as TCustomAction).Hint);
 end;
 
+function TMenuActionLink.IsGroupIndexLinked: Boolean;
+begin
+  Result := FClient.RadioItem and inherited IsGroupIndexLinked and
+    (FClient.GroupIndex = (Action as TCustomAction).GroupIndex);
+end;
+
 function TMenuActionLink.IsImageIndexLinked: Boolean;
 begin
   Result := inherited IsImageIndexLinked and
@@ -693,6 +709,11 @@ function TMenuActionLink.IsOnExecuteLinked: Boolean;
 begin
   Result := inherited IsOnExecuteLinked and
     (@FClient.OnClick = @Action.OnExecute);
+end;
+
+procedure TMenuActionLink.SetAutoCheck(Value: Boolean);
+begin
+  if IsAutoCheckLinked then FClient.AutoCheck := Value;
 end;
 
 procedure TMenuActionLink.SetCaption(const Value: string);
@@ -803,9 +824,10 @@ begin
   if FVisible then
   begin
     Caption := FCaption;
-    if GetCount > 0 then MenuItemInfo.hSubMenu := GetHandle
+    if GetCount > 0 then
+      MenuItemInfo.hSubMenu := GetHandle
     else if (FShortCut <> scNone) and ((Parent = nil) or
-      (Parent.Parent <> nil) or not (Parent.Owner is TMainMenu)) then
+            (Parent.Parent <> nil) or not (Parent.Owner is TMainMenu)) then
       Caption := Caption + #9 + ShortCutToText(FShortCut);
     if Lo(GetVersion) >= 4 then
     begin
@@ -827,7 +849,8 @@ begin
       MenuItemInfo.hbmpChecked := 0;
       MenuItemInfo.hbmpUnchecked := 0;
       MenuItemInfo.dwTypeData := PChar(Caption);
-      if GetCount > 0 then MenuItemInfo.hSubMenu := GetHandle;
+      if GetCount > 0 then
+        MenuItemInfo.hSubMenu := GetHandle;
       InsertMenuItem(Menu, DWORD(-1), True, MenuItemInfo);
     end
     else
@@ -873,11 +896,17 @@ end;
 
 procedure TMenuItem.MergeWith(Menu: TMenuItem);
 begin
+  if Assigned(Menu) and (csDestroying in Menu.ComponentState) then exit;
   if FMerged <> Menu then
   begin
-    if FMerged <> nil then FMerged.FMergedWith := nil;
+    if FMerged <> nil then
+      FMerged.FMergedWith := nil;
     FMerged := Menu;
-    if FMerged <> nil then FMerged.FMergedWith := Self;
+    if FMerged <> nil then
+    begin
+      FMerged.FMergedWith := Self;
+      FMerged.FreeNotification(Self);
+    end;
     RebuildHandle;
   end;
 end;
@@ -890,6 +919,9 @@ begin
 end;
 
 procedure TMenuItem.RebuildHandle;
+var
+  I: Integer;
+  LRepopulate: Boolean;
 begin
   if csDestroying in ComponentState then Exit;
   if csReading in ComponentState then
@@ -900,17 +932,29 @@ begin
       FMergedWith.RebuildHandle
     else
     begin
-      while GetMenuItemCount(Handle) > 0 do
-        RemoveMenu(Handle, 0, MF_BYPOSITION);
-      if (FParent = nil) and (FMenu is TMainMenu) then
-      //if (Owner = nil) or (Owner is TMainMenu) then
+      I := GetMenuItemCount(Handle);
+      LRepopulate := I = 0;
+      while I > 0 do
       begin
-        DestroyMenu(FHandle);
-        FHandle := 0;
-      end
-      else
-        PopulateMenu;
-      MenuChanged(False);
+        if GetMenuState(Handle, I - 1, MF_BYPOSITION) and MF_BITMAP = 0 then
+        begin
+          RemoveMenu(Handle, I - 1, MF_BYPOSITION);
+          LRepopulate := True;
+        end;
+        Dec(I);
+      end;
+      if LRepopulate then
+      begin
+        if (FParent = nil) and (FMenu is TMainMenu) and
+           (GetMenuItemCount(Handle) = 0) then
+        begin
+          DestroyMenu(FHandle);
+          FHandle := 0;
+        end
+        else
+          PopulateMenu;
+        MenuChanged(False);
+      end;
     end;
   end;
 end;
@@ -1416,20 +1460,20 @@ end;
 
 function TMenuItem.GetImageList: TCustomImageList;
 var
-  vItem: TMenuItem;
-  vMenu: TMenu;
+  LItem: TMenuItem;
+  LMenu: TMenu;
 begin
   Result := nil;
-  vItem := Parent;
-  while (vItem <> nil) and (vItem.SubMenuImages = nil) do
-    vItem := vItem.Parent;
-  if vItem <> nil then
-    Result := vItem.SubMenuImages
+  LItem := Parent;
+  while (LItem <> nil) and (LItem.SubMenuImages = nil) do
+    LItem := LItem.Parent;
+  if LItem <> nil then
+    Result := LItem.SubMenuImages
   else
   begin
-    vMenu := GetParentMenu;
-    if vMenu <> nil then
-      Result := vMenu.Images;
+    LMenu := GetParentMenu;
+    if LMenu <> nil then
+      Result := LMenu.Images;
   end;
 end;
 
@@ -1729,13 +1773,16 @@ procedure TMenuItem.Click;
 begin
   if Enabled then
   begin
+    if (not Assigned(ActionLink) and AutoCheck) or (Assigned(ActionLink) and
+        not (ActionLink.IsAutoCheckLinked) and AutoCheck) then
+      Checked := not Checked;
     { Call OnClick if assigned and not equal to associated action's OnExecute.
       If associated action's OnExecute assigned then call it, otherwise, call
       OnClick. }
     if Assigned(FOnClick) and (Action <> nil) and (@FOnClick <> @Action.OnExecute) then
       FOnClick(Self)
     else if not (csDesigning in ComponentState) and (ActionLink <> nil) then
-      FActionLink.Execute
+      FActionLink.Execute(Self)
     else if Assigned(FOnClick) then
       FOnClick(Self);
   end;
@@ -1857,9 +1904,11 @@ end;
 
 procedure TMenuItem.ActionChange(Sender: TObject; CheckDefaults: Boolean);
 begin
-  if Action is TCustomAction then
+  if Sender is TCustomAction then
     with TCustomAction(Sender) do
     begin
+      if not CheckDefaults or (Self.AutoCheck = False) then
+        Self.AutoCheck := AutoCheck;
       if not CheckDefaults or (Self.Caption = '') then
         Self.Caption := Caption;
       if not CheckDefaults or (Self.Checked = False) then
@@ -1870,6 +1919,8 @@ begin
         Self.HelpContext := HelpContext;
       if not CheckDefaults or (Self.Hint = '') then
         Self.Hint := Hint;
+      if RadioItem and (not CheckDefaults or (Self.GroupIndex = 0)) then
+        Self.GroupIndex := GroupIndex;
       if not CheckDefaults or (Self.ImageIndex = -1) then
         Self.ImageIndex := ImageIndex;
       if not CheckDefaults or (Self.ShortCut = scNone) then
@@ -1951,7 +2002,13 @@ procedure TMenuItem.Notification(AComponent: TComponent;
   Operation: TOperation);
 begin
   inherited Notification(AComponent, Operation);
-  if (Operation = opRemove) and (AComponent = Action) then Action := nil;
+  if Operation = opRemove then
+    if AComponent = Action then
+      Action := nil
+    else if AComponent = FSubMenuImages then
+      SubMenuImages := nil
+    else if AComponent = FMerged then
+      MergeWith(nil);
 end;
 
 procedure TMenuItem.SetSubMenuImages(Value: TCustomImageList);
@@ -2002,41 +2059,41 @@ end;
 
 function TMenuItem.InternalRethinkHotkeys(ForceRethink: Boolean): Boolean;
 var
-  vDid, vDoing, vToDo, vBest: TStringList;
-  I, vIteration, vColumn, vAt, vBestCount: Integer;
-  vChar, vCaption, vOrigAvailable, vAvailable, vBestAvailable: string;
+  LDid, LDoing, LToDo, LBest: TStringList;
+  I, LIteration, LColumn, LAt, LBestCount: Integer;
+  LChar, LCaption, LOrigAvailable, LAvailable, LBestAvailable: string;
   function IfHotkeyAvailable(const AHotkey: string): Boolean;
   var
     At: Integer;
   begin
-    At := AnsiPos(AHotkey, vAvailable);
+    At := AnsiPos(AHotkey, LAvailable);
     Result := At <> 0;
     if Result then
-      System.Delete(vAvailable, At, 1);
+      System.Delete(LAvailable, At, 1);
   end;
   procedure CopyToBest;
   var
     I: Integer;
   begin
-    vBest.Assign(vDid);
-    vBestCount := vDid.Count;
-    for I := 0 to vDoing.Count - 1 do
-      vBest.AddObject(TMenuItem(vDoing.Objects[I]).FCaption, vDoing.Objects[I]);
-    vBestAvailable := vAvailable;
+    LBest.Assign(LDid);
+    LBestCount := LDid.Count;
+    for I := 0 to LDoing.Count - 1 do
+      LBest.AddObject(TMenuItem(LDoing.Objects[I]).FCaption, LDoing.Objects[I]);
+    LBestAvailable := LAvailable;
   end;
   procedure InsertHotkeyFarEastFormat(var ACaption: string; const AHotKey: string; AColumn: Integer);
   var
     I: Integer;
-    vMBCSFlag: Boolean;
+    LMBCSFlag: Boolean;
   begin
-    vMBCSFlag := False;
+    LMBCSFlag := False;
     for I := 1 to Length(ACaption) do
       if ACaption[I] in LeadBytes then
       begin
-        vMBCSFlag := True;
+        LMBCSFlag := True;
         System.Break;
       end;
-    if vMBCSFlag then
+    if LMBCSFlag then
     begin
       if Copy(ACaption, (Length(ACaption) - Length(cDialogSuffix)) + 1, Length(cDialogSuffix)) = cDialogSuffix then
         ACaption := Copy(ACaption, 1, Length(ACaption) - Length(cDialogSuffix)) +
@@ -2052,92 +2109,96 @@ begin
   if ForceRethink or
      (not (csDesigning in ComponentState) and GetAutoHotkeys) then
   begin
-    vAvailable := ValidMenuHotkeys;
-    vDid := TStringList.Create;
-    vDoing := TStringList.Create;
-    vToDo := TStringList.Create;
-    vBest := TStringList.Create;
-    vBestCount := 0;
+    LAvailable := ValidMenuHotkeys;
+    LDid := nil;
+    LDoing := nil;
+    LToDo := nil;
+    LBest := nil;
+    LBestCount := 0;
     try
+      LDid := TStringList.Create;
+      LDoing := TStringList.Create;
+      LToDo := TStringList.Create;
+      LBest := TStringList.Create;
       for I := 0 to Count - 1 do
         if Items[I].Visible and
            (Items[I].FCaption <> cLineCaption) and
            (Items[I].FCaption <> '') then
         begin
-          vChar := Uppercase(GetHotkey(Items[I].FCaption));
-          if vChar = '' then
-            vToDo.InsertObject(0, Items[I].FCaption, Items[I])
-          else if (AnsiPos(vChar, ValidMenuHotkeys) <> 0) and
-                  not IfHotkeyAvailable(vChar) then
+          LChar := Uppercase(GetHotkey(Items[I].FCaption));
+          if LChar = '' then
+            LToDo.InsertObject(0, Items[I].FCaption, Items[I])
+          else if (AnsiPos(LChar, ValidMenuHotkeys) <> 0) and
+                  not IfHotkeyAvailable(LChar) then
           begin
             Items[I].FCaption := StripHotkey(Items[I].FCaption);
-            vToDo.InsertObject(0, Items[I].FCaption, Items[I]);
+            LToDo.InsertObject(0, Items[I].FCaption, Items[I]);
           end;
         end;
-      vOrigAvailable := vAvailable;
-      for vIteration := 0 to vToDo.Count - 1 do
+      LOrigAvailable := LAvailable;
+      for LIteration := 0 to LToDo.Count - 1 do
       begin
-        vAvailable := vOrigAvailable;
-        vDoing.Assign(vToDo);
-        vDid.Clear;
-        for I := vDoing.Count - 1 downto 0 do
+        LAvailable := LOrigAvailable;
+        LDoing.Assign(LToDo);
+        LDid.Clear;
+        for I := LDoing.Count - 1 downto 0 do
         begin
-          vCaption := vDoing[I];
-          vColumn := 1;
-          while vColumn <= Length(vCaption) do
+          LCaption := LDoing[I];
+          LColumn := 1;
+          while LColumn <= Length(LCaption) do
           begin
-            if vCaption[vColumn] in LeadBytes then
-              Inc(vColumn)
+            if LCaption[LColumn] in LeadBytes then
+              Inc(LColumn)
             else
             begin
-              vChar := Uppercase(Copy(vCaption, vColumn, 1));
-              if IfHotkeyAvailable(vChar) then
+              LChar := Uppercase(Copy(LCaption, LColumn, 1));
+              if IfHotkeyAvailable(LChar) then
               begin
                 if SysLocale.FarEast then
-                  InsertHotkeyFarEastFormat(vCaption, vChar, vColumn)
+                  InsertHotkeyFarEastFormat(LCaption, LChar, LColumn)
                 else
-                  System.Insert(cHotkeyPrefix, vCaption, vColumn);
-                vDid.AddObject(vCaption, vDoing.Objects[I]);
-                vDoing.Delete(I);
+                  System.Insert(cHotkeyPrefix, LCaption, LColumn);
+                LDid.AddObject(LCaption, LDoing.Objects[I]);
+                LDoing.Delete(I);
                 System.Break;
               end;
             end;
-            Inc(vColumn);
+            Inc(LColumn);
           end;
         end;
-        if vDid.Count > vBestCount then
+        if LDid.Count > LBestCount then
           CopyToBest;
-        if vDoing.Count > 0 then
-          for I := 0 to vDoing.Count - 1 do
+        if LDoing.Count > 0 then
+          for I := 0 to LDoing.Count - 1 do
           begin
-            vAt := vToDo.IndexOfObject(vDoing.Objects[I]);
-            vToDo.Move(vAt, vToDo.Count - 1);
+            LAt := LToDo.IndexOfObject(LDoing.Objects[I]);
+            LToDo.Move(LAt, LToDo.Count - 1);
           end
         else
           System.Break;
       end;
-      if vBestCount = 0 then
+      if LBestCount = 0 then
         CopyToBest;
-      Result := vBest.Count > 0;
-      for I := 0 to vBest.Count - 1 do
+      Result := LBest.Count > 0;
+      for I := 0 to LBest.Count - 1 do
       begin
-        vCaption := vBest[I];
-        if SysLocale.FarEast and (AnsiPos(cHotkeyPrefix, vCaption) = 0)
-          and (vBestAvailable <> '') then
+        LCaption := LBest[I];
+        if SysLocale.FarEast and (AnsiPos(cHotkeyPrefix, LCaption) = 0)
+          and (LBestAvailable <> '') then
         begin
-          if AnsiPos(cHotkeyPrefix, vCaption) = 0 then
+          if AnsiPos(cHotkeyPrefix, LCaption) = 0 then
           begin
-            InsertHotkeyFarEastFormat(vCaption, Copy(vBestAvailable, Length(vBestAvailable), 1), 0);
-            System.Delete(vBestAvailable, length(vBestAvailable), 1);
+            InsertHotkeyFarEastFormat(LCaption, Copy(LBestAvailable, Length(LBestAvailable), 1), 0);
+            System.Delete(LBestAvailable, length(LBestAvailable), 1);
           end;
         end;
-        TMenuItem(vBest.Objects[I]).FCaption := vCaption;
+        TMenuItem(LBest.Objects[I]).FCaption := LCaption;
       end;
     finally
-      vBest.Free;
-      vToDo.Free;
-      vDoing.Free;
-      vDid.Free;
+      LBest.Free;
+      LToDo.Free;
+      LDoing.Free;
+      LDid.Free;
     end;
   end;
 end;
@@ -2241,16 +2302,16 @@ end;
 
 function TMenuItem.InternalRethinkLines(ForceRethink: Boolean): Boolean;
 var
-  I, vLastAt: Integer;
-  vLastBar: TMenuItem;
+  I, LLastAt: Integer;
+  LLastBar: TMenuItem;
 begin
   Result := False;
   if ForceRethink or
      (not (csDesigning in ComponentState) and GetAutoLineReduction) then
   begin
-    vLastAt := 0;
-    vLastBar := nil;
-    for I := vLastAt to Count - 1 do
+    LLastAt := 0;
+    LLastBar := nil;
+    for I := LLastAt to Count - 1 do
       if Items[I].FVisible then
         if Items[I].IsLine then
         begin
@@ -2259,30 +2320,30 @@ begin
         end
         else
         begin
-          vLastAt := I;
+          LLastAt := I;
           System.Break;
         end;
-    for I := vLastAt to Count - 1 do
+    for I := LLastAt to Count - 1 do
       if Items[I].IsLine then
       begin
-        if vLastBar <> nil then
+        if (LLastBar <> nil) and (LLastBar.FVisible) then
         begin
-          vLastBar.FVisible := False;
+          LLastBar.FVisible := False;
           Result := True;
         end;
-        vLastBar := Items[I];
+        LLastBar := Items[I];
       end
       else if Items[I].FVisible then
       begin
-        if vLastBar <> nil then
+        if (LLastBar <> nil) and (not LLastBar.FVisible) then
         begin
-          vLastBar.FVisible := True;
+          LLastBar.FVisible := True;
           Result := True;
         end;
-        vLastBar := nil;
-        vLastAt := I;
+        LLastBar := nil;
+        LLastAt := I;
       end;
-    for I := Count - 1 downto vLastAt do
+    for I := Count - 1 downto LLastAt do
       if Items[I].FVisible then
         if Items[I].IsLine then
         begin
@@ -2312,24 +2373,24 @@ end;
 
 function TMenuItem.GetAutoHotkeys: Boolean;
 var
-  vAuto: TMenuItemAutoFlag;
+  LAuto: TMenuItemAutoFlag;
 begin
-  vAuto := FAutoHotkeys;
-  if (vAuto = maParent) and
+  LAuto := FAutoHotkeys;
+  if (LAuto = maParent) and
      (Parent <> nil) then
-    vAuto := cBooleanToItemAutoFlag[Parent.GetAutoHotkeys];
-  Result := cItemAutoFlagToBoolean[vAuto];
+    LAuto := cBooleanToItemAutoFlag[Parent.GetAutoHotkeys];
+  Result := cItemAutoFlagToBoolean[LAuto];
 end;
 
 function TMenuItem.GetAutoLineReduction: Boolean;
 var
-  vAuto: TMenuItemAutoFlag;
+  LAuto: TMenuItemAutoFlag;
 begin
-  vAuto := FAutoLineReduction;
-  if (vAuto = maParent) and
+  LAuto := FAutoLineReduction;
+  if (LAuto = maParent) and
      (Parent <> nil) then
-    vAuto := cBooleanToItemAutoFlag[Parent.GetAutoLineReduction];
-  Result := cItemAutoFlagToBoolean[vAuto];
+    LAuto := cBooleanToItemAutoFlag[Parent.GetAutoLineReduction];
+  Result := cItemAutoFlagToBoolean[LAuto];
 end;
 
 { TMenu }
@@ -2451,18 +2512,25 @@ end;
 function TMenu.DispatchPopup(AHandle: HMENU): Boolean;
 var
   Item: TMenuItem;
-  vRebuild: Boolean;
+  LRebuild: Boolean;
 begin
   Result := False;
   Item := FindItem(AHandle, fkHandle);
   if Item <> nil then
   begin
-    if not (csDesigning in Item.ComponentState) then Item.InitiateActions;
+    if not (csDesigning in Item.ComponentState) then
+      Item.InitiateActions;
     Item.Click;
-    vRebuild := Item.InternalRethinkHotkeys(False);
-    vRebuild := Item.InternalRethinkLines(False) or vRebuild;
-    if vRebuild then
+    LRebuild := Item.InternalRethinkHotkeys(False);
+    LRebuild := Item.InternalRethinkLines(False) or LRebuild;
+    if LRebuild then
       Item.RebuildHandle;
+    if Assigned(Application.MainForm) then
+      with Application.MainForm do
+        if (FormStyle = fsMDIForm) and
+           (WindowMenu = Item) and
+           (SendMessage(ClientHandle, WM_MDIREFRESHMENU, 0, 0) <> 0) then
+          DrawMenuBar(Handle);
     Result := True;
   end
   else if not (csDesigning in ComponentState) and (Self is TPopupMenu) then
@@ -2482,6 +2550,7 @@ const
 var
   ShortCut: TShortCut;
   ClickResult: TClickResult;
+  MyItems: TMenuItem;
   ShortCutItem: TMenuItem;
 
   function NthParentOf(Item: TMenuItem; N: Integer): TMenuItem;
@@ -2539,27 +2608,34 @@ begin
 //! call this method on menus which aren't necessarily allocated.  More
 //! specifically, we can make toolbar menus much more dynamic. [rbr]
 
-//!  Result := False;
+  Result := False;
 //!  if FWindowHandle <> 0 then
   begin
     ShortCut := Byte(Message.CharCode);
+    if ShortCut = 0 then exit;
     if GetKeyState(VK_SHIFT) < 0 then Inc(ShortCut, scShift);
     if GetKeyState(VK_CONTROL) < 0 then Inc(ShortCut, scCtrl);
     if Message.KeyData and AltMask <> 0 then Inc(ShortCut, scAlt);
-    repeat
-      ClickResult := crDisabled;
-      ShortCutItem := FindItem(ShortCut, fkShortCut);
-      if ShortCutItem <> nil then
-      begin
-        ShortCutItems.Push(@ShortCutItem);
-        try
-          ClickResult := DoClick(ShortCutItem, 0);
-        finally
-          ShortCutItems.Pop;
-        end;  
-      end;
-    until ClickResult <> crShortCutMoved;
-    Result := ShortCutItem <> nil;
+    MyItems := FItems;
+    ShortCutItems.Push(@MyItems);
+    try
+      repeat
+        ClickResult := crDisabled;
+        ShortCutItem := FindItem(ShortCut, fkShortCut);
+        if ShortCutItem <> nil then
+        begin
+          ShortCutItems.Push(@ShortCutItem);
+          try
+            ClickResult := DoClick(ShortCutItem, 0);
+          finally
+            ShortCutItems.Pop;
+          end;
+        end;
+      until (MyItems = nil) or (ClickResult <> crShortCutMoved);
+    finally
+      ShortCutItems.Pop;
+    end;
+    Result := (ShortCutItem <> nil) or (MyItems = nil);
   end;
 end;
 
@@ -2980,8 +3056,10 @@ begin
   if (FWindowHandle <> 0) then
   begin
     NeedUpdate := UpdateImage;  // check for changes before CM_MENUCHANGED does 
-    if Source = nil then SendMessage(FWindowHandle, CM_MENUCHANGED, 0, 0);
-    if NeedUpdate then DrawMenuBar(FWindowHandle);
+    if Source = nil then
+      SendMessage(FWindowHandle, CM_MENUCHANGED, 0, 0);
+    if NeedUpdate then
+      DrawMenuBar(FWindowHandle);
   end;
   inherited MenuChanged(Sender, Source, Rebuild);
 end;
@@ -3014,7 +3092,7 @@ begin
 end;
 
 procedure TMainMenu.GetOle2AcceleratorTable(var AccelTable: HAccel;
-  var AccelCount: Integer; Groups: array of Integer);
+  var AccelCount: Integer; const Groups: array of Integer);
 var
   NumAccels: Integer;
   AccelList, AccelPtr: PAccel;
@@ -3074,7 +3152,7 @@ end;
   the specified groups to the menu handle }
 
 procedure TMainMenu.PopulateOle2Menu(SharedMenu: HMenu;
-  Groups: array of Integer; var Widths: array of Longint);
+  const Groups: array of Integer; var Widths: array of Longint);
 var
   NumGroups: Integer;
   J: Integer;
@@ -3261,14 +3339,14 @@ end;
 
 procedure TPopupList.Add(Popup: TPopupMenu);
 begin
-  if Count = 0 then FWindow := AllocateHWnd(MainWndProc);
+  if Count = 0 then FWindow := Classes.AllocateHWnd(MainWndProc);
   inherited Add(Popup);
 end;
 
 procedure TPopupList.Remove(Popup: TPopupMenu);
 begin
   inherited Remove(Popup);
-  if Count = 0 then DeallocateHWnd(FWindow);
+  if Count = 0 then Classes.DeallocateHWnd(FWindow);
 end;
 
 { TPopupMenu }
@@ -3364,10 +3442,8 @@ begin
   FItems.InternalRethinkLines(False);
   FItems.RebuildHandle;
   AdjustBiDiBehavior;
-  AFlags := Flags[UseRightToLeftAlignment, FAlignment] or Buttons[FTrackButton];
-  if (Win32MajorVersion > 4) or
-    ((Win32MajorVersion = 4) and (Win32MinorVersion > 0)) then
-    AFlags := AFlags or (Byte(FMenuAnimation) shl 10);
+  AFlags := Flags[UseRightToLeftAlignment, FAlignment] or Buttons[FTrackButton] or
+    (Byte(FMenuAnimation) shl 10);
   TrackPopupMenu(FItems.Handle, AFlags, X, Y, 0 { reserved }, PopupList.Window, nil);
 end;
 
@@ -3384,7 +3460,7 @@ end;
 
 { Menu building functions }
 
-procedure InitMenuItems(AMenu: TMenu; Items: array of TMenuItem);
+procedure InitMenuItems(AMenu: TMenu; const Items: array of TMenuItem);
 var
   I: Integer;
 
@@ -3405,7 +3481,7 @@ begin
   end;
 end;
 
-function NewMenu(Owner: TComponent; const AName: string; Items: array of TMenuItem): TMainMenu;
+function NewMenu(Owner: TComponent; const AName: string; const Items: array of TMenuItem): TMainMenu;
 begin
   Result := TMainMenu.Create(Owner);
   Result.Name := AName;
@@ -3413,7 +3489,7 @@ begin
 end;
 
 function NewPopupMenu(Owner: TComponent; const AName: string;
-  Alignment: TPopupAlignment; AutoPopup: Boolean; Items: array of TMenuItem): TPopupMenu;
+  Alignment: TPopupAlignment; AutoPopup: Boolean; const Items: array of TMenuItem): TPopupMenu;
 begin
   Result := TPopupMenu.Create(Owner);
   Result.Name := AName;
@@ -3422,8 +3498,8 @@ begin
   InitMenuItems(Result, Items);
 end;
 
-function NewSubMenu(const ACaption: string; hCtx: Word;
-  const AName: string; Items: array of TMenuItem; AEnabled: Boolean): TMenuItem;
+function NewSubMenu(const ACaption: string; hCtx: THelpContext;
+  const AName: string; const Items: array of TMenuItem; AEnabled: Boolean): TMenuItem;
 var
   I: Integer;
 begin
@@ -3437,7 +3513,7 @@ begin
 end;
 
 function NewItem(const ACaption: string; AShortCut: TShortCut;
-  AChecked, AEnabled: Boolean; AOnClick: TNotifyEvent; hCtx: Word;
+  AChecked, AEnabled: Boolean; AOnClick: TNotifyEvent; hCtx: THelpContext;
   const AName: string): TMenuItem;
 begin
   Result := TMenuItem.Create(nil);
@@ -3538,13 +3614,19 @@ begin
 end;
 
 initialization
-  RegisterClasses([TMenuItem]);
+  StartClassGroup(TControl);
+  ActivateClassGroup(TControl);
+  GroupDescendentsWith(TMenuItem, TControl);
+  GroupDescendentsWith(TMenu, TControl);
+  RegisterClass(TMenuItem);
   CommandPool := TBits.Create;
   PopupList := TPopupList.Create;
   ShortCutItems := TMenuItemStack.Create;
+  
 finalization
   ShortCutItems.Free;
   PopupList.Free;
   CommandPool.Free;
+  
 end.
 

@@ -1,9 +1,8 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /**************************************************************************
 *                                                                         *
 * AgtCtl.h - Microsoft Agent Control                                      *
 *                                                                         *
-* Copyright (c) 1996-1998, Microsoft Corp. All rights reserved.           *
+* Copyright (c) 1996-1999, Microsoft Corp. All rights reserved.           *
 *                                                                         *
 **************************************************************************/
 
@@ -14702,4 +14701,3 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 #endif // _MSC_VER < 1200
-#pragma option pop /*P_O_Pop*/

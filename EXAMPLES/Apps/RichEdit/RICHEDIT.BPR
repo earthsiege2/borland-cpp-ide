@@ -2,18 +2,18 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="richedit.exe"/>
-    <OBJFILES value="reinit.obj ReConst.obj RICHEDIT.obj Richabt.obj Romain.obj"/>
+    <OBJFILES value="reinit.obj ReConst.obj RICHEDIT.obj richabt.obj romain.obj"/>
     <RESFILES value="richedit.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
-    <RESDEPEN value="$(RESFILES) Richabt.dfm Romain.dfm"/>
+    <RESDEPEN value="$(RESFILES) richabt.dfm romain.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="vcl50.lib"/>
-    <SPARELIBS value="vcl50.lib"/>
-    <PACKAGES value="vcl50.bpi vclx50.bpi"/>
+    <LIBRARIES value="vclx.lib vcl.lib rtl.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib vclx.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -27,22 +27,37 @@
     <INCLUDEPATH value="$(BCB)\Examples\Apps\RichEdit;$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="$(BCB)\Examples\Apps\RichEdit;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par -w-8027 -w-8026"/>
+    <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\Examples\Apps\RichEdit -I$(BCB)\include 
       -I$(BCB)\include\vcl"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
       -tW -tWM"/>
-    <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
+    <PFLAGS value="-$YD -$W -$O- -$A8 -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-aa -Tpe -GD -x -Gn -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -GD -x -Gn -v"/>
+    <OTHERFILES value=""/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj Memmgr.Lib sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
+    <OTHERFILES value=""/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="reinit.pas" FORMNAME="" UNITNAME="reinit" CONTAINERID="PascalCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ReConst.pas" FORMNAME="" UNITNAME="ReConst" CONTAINERID="PascalCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="RICHEDIT.cpp" FORMNAME="" UNITNAME="RICHEDIT" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="richedit.res" FORMNAME="" UNITNAME="richedit" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="richabt.cpp" FORMNAME="Form2" UNITNAME="Richabt" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="romain.cpp" FORMNAME="MainForm" UNITNAME="Romain" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="readme.txt" FORMNAME="" UNITNAME="readme" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -71,26 +86,6 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 
-[Excluded Packages]
-$(BCB)\BIN\Vclmid50.bpl=Borland MIDAS Components
-$(BCB)\BIN\Vcldb50.bpl=Borland Database Components
-$(BCB)\BIN\Inet50.bpl=Borland Internet/World Wide Web components
-$(BCB)\BIN\Inetdb50.bpl=Borland Internet/World Wide Web database components
-$(BCB)\BIN\Vclbde50.bpl=Borland BDE Database Components
-$(BCB)\BIN\vcldbx50.bpl=Borland Compatibility Database Components
-$(BCB)\BIN\vclado50.bpl=Borland ADO Database Components
-$(BCB)\BIN\TeeUI50.bpl=TeeChart 5.0 UI Components
-$(BCB)\BIN\TeeDB50.bpl=TeeChart 5.0 Database Components
-$(BCB)\BIN\Tee50.bpl=TeeChart 5.0 Components
-$(BCB)\BIN\Dss50.bpl=Borland Decision Cube Components
-$(BCB)\BIN\Vclent50.bpl=Borland Enterprise Components
-$(BCB)\BIN\VCLIB50.bpl=InterBase Data Access Components
-$(BCB)\BIN\NMFast50.bpl=NetMasters Fastnet Tools Runtime Package
-$(BCB)\BIN\Qrpt50.bpl=QuickReport Runtime Package
-$(BCB)\BIN\VclSmp50.bpl=Borland Sample Components
-$(BCB)\BIN\TeeQR50.bpl=TeeChart 5.0 for QuickReport Components
-$(BCB)\bin\dphcrb50.bpl=Borland Delphi Core IDE CORBA Package
-
 [HistoryLists\hlIncludePath]
 Count=1
 Item0=$(BCB)\Examples\Apps\RichEdit;$(BCB)\include;$(BCB)\include\vcl
@@ -108,29 +103,33 @@ DebugSourceDirs=$(BCB)\Examples\Apps\RichEdit;$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
 ShowInfoMsgs=0
 LinkDebugVcl=0
-LinkCGLIB=0
-
-[CORBA]
-AddServerUnit=1
-AddClientUnit=1
-PrecompiledHeaders=1
 
 [Resource DLL Projects]
 Item0=English (United States)*0x00000409*ENU*ENU
-Item1=German (Germany)*0x00000407*DEU*DEU
-Item2=French (France)*0x0000040C*FRA*FRA
+Item1=French (France)*0x0000040C*FRA*FRA
+Item2=German (Germany)*0x00000407*DEU*DEU
+
+[RDP Source Files]
+Item0=richabt.dfm
+Item1=romain.dfm
+Item2=richedit.drc
 
 [Language]
 ActiveLang=
 ProjectLang=0x00000409
-RootDir=$(BCB)\Examples\Apps\RichEdit\
+RootDir=
   </IDEOPTIONS>
 </PROJECT>

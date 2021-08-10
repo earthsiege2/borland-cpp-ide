@@ -6,10 +6,7 @@
 #include "rdmCustomerData_bcbImpl.h"
 USERES("rdmCustomerData_bcb.res");
 USEFORM("rdmCustomDataForm.cpp", Form1);
-USETLB("rdmCustomerData_bcb.tlb");
-USEUNIT("rdmCustomerDataTypeLib_bcb_TLB.cpp");
 USEFORM("rdmCustomerData_bcbImpl.cpp", rdmCustomerData_bcb); /* TCRemoteDataModule: File Type */ /* rdmCustomerData_bcb: CoClass */
-USEUNIT("rdmCustomerData_bcb_ATL.cpp");
 //---------------------------------------------------------------------------
 TComModule _ProjectModule(0 /*InitATLServer*/);
 TComModule &_Module = _ProjectModule;

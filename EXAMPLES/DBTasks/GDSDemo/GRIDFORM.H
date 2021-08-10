@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //Borland C++Builder
-//Copyright (c) 1987, 1998 Borland International Inc. All Rights Reserved.
+//Copyright (c) 1987, 1998-2002 Borland International Inc. All Rights Reserved.
 //----------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 #ifndef GridFormH
@@ -18,6 +18,7 @@
 #include "GdsData.h"
 #include <Db.hpp>
 #include <Graphics.hpp>
+#include "gdsdata.h"
 //---------------------------------------------------------------------------
 class TGridViewForm : public TStdDataForm
 {

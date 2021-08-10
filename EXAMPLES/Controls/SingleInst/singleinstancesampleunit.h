@@ -6,7 +6,7 @@
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
-#include "SingleAppInstance.h"
+#include "SingleInstance.h"
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {

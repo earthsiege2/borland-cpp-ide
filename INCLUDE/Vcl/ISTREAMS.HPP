@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IStreams.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IStreams.pas' rev: 6.00
 
 #ifndef IStreamsHPP
 #define IStreamsHPP
@@ -34,7 +34,7 @@ protected:
 	
 public:
 	__fastcall TIStreamAdapter(Classes::TStream* Stream, Classes::TStreamOwnership Ownership);
-	virtual HRESULT __stdcall Write(void * pv, int cb, Windows::PLongint pcbWritten);
+	virtual HRESULT __stdcall Write(void * pv, int cb, PLongint pcbWritten);
 	virtual HRESULT __stdcall Stat(/* out */ tagSTATSTG &statstg, int grfStatFlag);
 	virtual int __stdcall GetModifyTime(void);
 	virtual void __stdcall SetModifyTime(int Value);
@@ -126,9 +126,7 @@ typedef void __fastcall (*TExceptionHandler)(void);
 extern PACKAGE TExceptionHandler ExceptionHandler;
 
 }	/* namespace Istreams */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Istreams;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

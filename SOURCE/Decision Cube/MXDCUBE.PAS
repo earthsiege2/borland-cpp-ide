@@ -6,13 +6,13 @@
 {                                                       }
 {*******************************************************}
 
-unit mxdcube;
+unit MXDCUBE;
 
 interface
 
 uses
- Windows, Messages, Classes, SysUtils, Controls, StdCtrls, Graphics, dialogs,
- DB, DBTables, Grids, Forms, mxConsts, mxgrid, mxdb, mxcommon, mxstore,
+ Windows, Messages, Classes, SysUtils, Controls, StdCtrls, Graphics, Dialogs,
+ DB, DBTables, Grids, Forms, Mxconsts, MXGRID, MXDB, MXCOMMON, Mxstore,
  ExtCtrls, Buttons, ComCtrls, Menus, Mask;
 
 type
@@ -114,25 +114,25 @@ type
     procedure UpdateLists;
     procedure InitializePanel;
     procedure InitCapacityPage;
-    function SInitialize(const Designer: IDesigner; AnObject: TComponent): boolean;
+    function SInitialize(AnObject: TComponent): boolean;
     procedure SFinalize;
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   end;
 
-  procedure ShowDSSCubeEditor(const Designer: IDesigner; aCube: TDecisionCube);
+  procedure ShowDSSCubeEditor(aCube: TDecisionCube);
 
 var
   DSSCubeEditor: TDssCubeEditor;
 
 implementation
 
-{$R *.DFM}
+{$R *.dfm}
 
 
   { Query Editor }
 
-procedure ShowDSSCubeEditor(const Designer: IDesigner; aCube: TDecisionCube);
+procedure ShowDSSCubeEditor(aCube: TDecisionCube);
 var
   aWindow: TDssCubeEditor;
   x,y: integer;
@@ -140,7 +140,7 @@ begin
   if not assigned(aCube) then Exit;
   aWindow := TDssCubeEditor.Create(application);
   try
-    if aWindow.SInitialize(Designer, aCube) then
+    if aWindow.SInitialize(aCube) then
     begin
       x := (Screen.Width - aWindow.Width) div 2;
       y := (Screen.Height - aWindow.Height) div 2;
@@ -170,7 +170,7 @@ begin
   inherited Destroy;
 end;
 
-function TDssCubeEditor.SInitialize(const Designer: IDesigner; anObject: TComponent): boolean;
+function TDssCubeEditor.SInitialize(anObject: TComponent): boolean;
 var
   anError: TQueryError;
   aliasname: string;

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'BorlndMM.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'BorlndMM.pas' rev: 6.00
 
 #ifndef BorlndMMHPP
 #define BorlndMMHPP

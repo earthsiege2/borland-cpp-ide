@@ -1,13 +1,12 @@
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1996, 2000 by Inprise Corporation
+ *      Copyright (c) 1996, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-
-/* $Revision:   9.30  $ */
+/* $Revision: 9.35.2.1 $ */
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -2045,7 +2044,7 @@ DONE_ARG:
 
 	/* Get rid of the thrown value if we have an exact copy */
 
-	if      (!keepOldArg)
+	if      (!keepOldArg && (base & (TM_IS_STRUCT | TM_IS_CLASS))) /* Eli's fix */
 	{
 		/* Destroy original thrown value; no longer needed */
 

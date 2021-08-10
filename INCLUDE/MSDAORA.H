@@ -6,7 +6,7 @@
 //
 // @module GUIDS.H | Internal GUIDS
 //
-// $Header:   Y:/admin/bcb/rtl/include/windows/msdaora.h_v   9.1   05 Oct 1999 18:24:42   jpeters  $
+// $Header: /usr/local/cvsroot/winrtl/include/windows/msdaora.h,v 9.4 2001/07/10 17:24:23 nyork Exp $
 //
 
 #ifndef __MSDAORAGUIDS_DEFINED__

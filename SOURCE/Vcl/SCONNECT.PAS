@@ -15,11 +15,12 @@ unit SConnect;
 interface
 
 uses
-  Windows, Messages, Classes, SysUtils, MConnect, ScktComp, WinSock, WinINet;
+  Variants, Windows, Messages, Classes, SysUtils, MConnect, ScktComp, WinSock,
+  WinInet, ComObj;
 
 type
 
-  (*$HPPEMIT '#pragma comment(lib, "wininet.lib")'*)
+  {$HPPEMIT '#pragma link "wininet.lib"'}
 
   { IDataBlock }
 
@@ -119,6 +120,7 @@ const
   asGetServers    = $10;   // Get classname list
   asGetGUID       = $11;   // Get GUID for ClassName
   asGetAppServers = $12;   // Get AppServer classname list
+  asSoapCommand   = $14;   // Soap command
   asMask          = $FF;   // Mask for action
 
 type
@@ -136,34 +138,68 @@ type
 
   TDataDispatch = class;
 
-  TDataBlockInterpreter = class
+
+  TCustomDataBlockInterpreter = class
+  protected
+    procedure AddDispatch(Value: TDataDispatch); virtual; abstract;
+    procedure RemoveDispatch(Value: TDataDispatch); virtual; abstract;
+
+    { Sending Calls }
+    procedure CallFreeObject(DispatchIndex: Integer); virtual; abstract;
+    function CallGetIDsOfNames(DispatchIndex: Integer; const IID: TGUID; Names: Pointer; NameCount, LocaleID: Integer; DispIDs: Pointer): HResult; virtual; stdcall; abstract;
+    function CallInvoke(DispatchIndex, DispID: Integer; const IID: TGUID; LocaleID: Integer;
+      Flags: Word; var Params; VarResult, ExcepInfo, ArgErr: Pointer): HResult; virtual; stdcall; abstract;
+    function CallGetServerList: OleVariant; virtual; abstract;
+
+    { Receiving Calls }
+
+
+    function InternalCreateObject(const ClassID: TGUID): OleVariant; virtual; abstract;
+    function CreateObject(const Name: string): OleVariant; virtual; abstract;
+    function StoreObject(const Value: OleVariant): Integer; virtual; abstract;
+    function LockObject(ID: Integer): IDispatch; virtual; abstract;
+    procedure UnlockObject(ID: Integer; const Disp: IDispatch); virtual; abstract;
+    procedure ReleaseObject(ID: Integer); virtual; abstract;
+    function CanCreateObject(const ClassID: TGUID): Boolean; virtual; abstract;
+    function CallCreateObject(Name: string): OleVariant;  virtual;  abstract;
+  public
+    procedure InterpretData(const Data: IDataBlock); virtual; abstract;
+  end;
+
+
+  { TBinary... }
+  TDataBlockInterpreter = class(TCustomDataBlockInterpreter)
   private
     FDispatchList: TList;
     FDispList: OleVariant;
     FSendDataBlock: ISendDataBlock;
     FCheckRegValue: string;
     function GetVariantPointer(const Value: OleVariant): Pointer;
-    procedure CopyDataByRef(Source: TVarData; var Dest: TVarData);
+    procedure CopyDataByRef(const Source: TVarData; var Dest: TVarData);
     function ReadArray(VType: Integer; const Data: IDataBlock): OleVariant;
     procedure WriteArray(const Value: OleVariant; const Data: IDataBlock);
+    function ReadVariant(out Flags: TVarFlags; const Data: IDataBlock): OleVariant;
+    procedure WriteVariant(const Value: OleVariant; const Data: IDataBlock);
     procedure DoException(const Data: IDataBlock);
   protected
-    procedure AddDispatch(Value: TDataDispatch);
-    procedure RemoveDispatch(Value: TDataDispatch);
-    function InternalCreateObject(const ClassID: TGUID): OleVariant; virtual;
-    function CreateObject(const Name: string): OleVariant; virtual;
-    function StoreObject(const Value: OleVariant): Integer; virtual;
-    function LockObject(ID: Integer): IDispatch; virtual;
-    procedure UnlockObject(ID: Integer; const Disp: IDispatch); virtual;
-    procedure ReleaseObject(ID: Integer); virtual;
-    function CanCreateObject(const ClassID: TGUID): Boolean; virtual;
+    procedure AddDispatch(Value: TDataDispatch); override;
+    procedure RemoveDispatch(Value: TDataDispatch); override;
+    function InternalCreateObject(const ClassID: TGUID): OleVariant; override;
+    function CreateObject(const Name: string): OleVariant; override;
+    function StoreObject(const Value: OleVariant): Integer; override;
+    function LockObject(ID: Integer): IDispatch; override;
+    procedure UnlockObject(ID: Integer; const Disp: IDispatch); override;
+    procedure ReleaseObject(ID: Integer); override;
+    function CanCreateObject(const ClassID: TGUID): Boolean; override;
+
     {Sending Calls}
-    procedure CallFreeObject(DispatchIndex: Integer);
+    procedure CallFreeObject(DispatchIndex: Integer); override;
     function CallGetIDsOfNames(DispatchIndex: Integer; const IID: TGUID; Names: Pointer;
-      NameCount, LocaleID: Integer; DispIDs: Pointer): HResult; stdcall;
+      NameCount, LocaleID: Integer; DispIDs: Pointer): HResult; override;
     function CallInvoke(DispatchIndex, DispID: Integer; const IID: TGUID; LocaleID: Integer;
-      Flags: Word; var Params; VarResult, ExcepInfo, ArgErr: Pointer): HResult; stdcall;
-    function CallGetServerList: OleVariant;
+      Flags: Word; var Params; VarResult, ExcepInfo, ArgErr: Pointer): HResult;  override;
+    function CallGetServerList: OleVariant; override;
+
     {Receiving Calls}
     procedure DoCreateObject(const Data: IDataBlock);
     procedure DoFreeObject(const Data: IDataBlock);
@@ -172,13 +208,12 @@ type
     function DoCustomAction(Action: Integer; const Data: IDataBlock): Boolean; virtual;
     procedure DoGetAppServerList(const Data: IDataBlock);
     procedure DoGetServerList(const Data: IDataBlock);
+
   public
     constructor Create(SendDataBlock: ISendDataBlock; CheckRegValue: string);
     destructor Destroy; override;
-    function CallCreateObject(Name: string): OleVariant;
-    procedure InterpretData(const Data: IDataBlock);
-    function ReadVariant(out Flags: TVarFlags; const Data: IDataBlock): OleVariant;
-    procedure WriteVariant(const Value: OleVariant; const Data: IDataBlock);
+    function CallCreateObject(Name: string): OleVariant;  override;
+    procedure InterpretData(const Data: IDataBlock); override;
   end;
 
 { TDataDispatch }
@@ -186,7 +221,7 @@ type
   TDataDispatch = class(TInterfacedObject, IDispatch)
   private
     FDispatchIndex: Integer;
-    FInterpreter: TDataBlockInterpreter;
+    FInterpreter: TCustomDataBlockInterpreter;
   protected
     property DispatchIndex: Integer read FDispatchIndex;
     { IDispatch }
@@ -197,7 +232,7 @@ type
     function Invoke(DispID: Integer; const IID: TGUID; LocaleID: Integer;
       Flags: Word; var Params; VarResult, ExcepInfo, ArgErr: Pointer): HResult; stdcall;
   public
-    constructor Create(Interpreter: TDataBlockInterpreter; DispatchIndex: Integer);
+    constructor Create(Interpreter: TCustomDataBlockInterpreter; DispatchIndex: Integer);
     destructor Destroy; override;
   end;
 
@@ -232,11 +267,16 @@ type
     FHandle: THandle;
     FTransport: TTransportThread;
     FTransIntf: ITransport;
-    FInterpreter: TDataBlockInterpreter;
+    FInterpreter: TCustomDataBlockInterpreter;
     FSupportCallbacks: Boolean;
+    FInterceptGUID: TGUID;
+    FInterceptName: string;
     function GetHandle: THandle;
     procedure TransportTerminated(Sender: TObject);
     procedure SetSupportCallbacks(Value: Boolean);
+    procedure SetInterceptName(const Value: string);
+    function GetInterceptGUID: string;
+    procedure SetInterceptGUID(const Value: string);
   protected
     { IUnknown }
     function QueryInterface(const IID: TGUID; out Obj): HResult; reintroduce; stdcall;
@@ -255,12 +295,17 @@ type
     procedure DoConnect; override;
     procedure DoDisconnect; override;
     procedure DoError(E: Exception); virtual;
-    function GetServerList: OleVariant; override;
 
-    property Interpreter: TDataBlockInterpreter read FInterpreter;
+    function GetInterpreter: TCustomDataBlockInterpreter; virtual;
+
+    property Interpreter: TCustomDataBlockInterpreter read GetInterpreter;
     property Handle: THandle read GetHandle;
     property SupportCallbacks: Boolean read FSupportCallbacks write SetSupportCallbacks default True;
+    property InterceptGUID: string read GetInterceptGUID write SetInterceptGUID;
+    property InterceptName: string read FInterceptName write SetInterceptName;
   public
+    function GetInterceptorList: OleVariant; virtual;
+    function GetServerList: OleVariant; override;
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   end;
@@ -307,7 +352,6 @@ type
     FAddress: string;
     FHost: string;
     FPort: Integer;
-    FInterceptGUID: string;
     procedure SetAddress(Value: string);
     procedure SetHost(Value: string);
     function IsHostStored: Boolean;
@@ -320,7 +364,8 @@ type
   published
     property Address: string read FAddress write SetAddress stored IsAddressStored;
     property Host: string read FHost write SetHost stored IsHostStored;
-    property InterceptGUID: string read FInterceptGUID write FInterceptGUID;
+    property InterceptGUID;
+    property InterceptName;
     property Port: Integer read FPort write FPort default 211;
     property SupportCallbacks;
     property ObjectBroker;
@@ -342,12 +387,13 @@ type
     FProxyByPass: string;
     FInetRoot: HINTERNET;
     FInetConnect: HINTERNET;
-    FInterpreter: TDataBlockInterpreter;
+    FInterpreter: TCustomDataBlockInterpreter;
     procedure Check(Error: Boolean);
     function IsURLStored: Boolean;
     procedure SetURL(const Value: string);
   protected
     { ITransport }
+    function GetInterpreter: TCustomDataBlockInterpreter; override;
     function GetWaitEvent: THandle; stdcall;
     function Transport_GetConnected: Boolean; stdcall;
     function ITransport.GetConnected = Transport_GetConnected;
@@ -372,9 +418,18 @@ type
     property ObjectBroker;
   end;
 
+  { TPacketInterceptFactory }
+
+  TPacketInterceptFactory = class(TComObjectFactory)
+  public
+    procedure UpdateRegistry(Register: Boolean); override;
+  end;
+  {$EXTERNALSYM TPacketInterceptFactory}
+
 { Utility functions }
 
 function LoadWinSock2: Boolean;
+procedure GetPacketInterceptorList(List: TStringList);
 
 var
   WSACreateEvent: function: THandle stdcall;
@@ -385,21 +440,28 @@ var
 implementation
 
 uses
-  ActiveX, ComObj, MidConst, Forms, Consts;
+  ActiveX, MidConst, RTLConsts;
 
 var
   hWinSock2: THandle;
 
 { Utility functions }
 
+procedure CheckSignature(Sig: Integer);
+begin
+  if (Sig and $FF00 <> CallSig) and
+     (Sig and $FF00 <> ResultSig) then
+    raise Exception.CreateRes(@SInvalidDataPacket);
+end;
+
 function LoadWinSock2: Boolean;
 const
   DLLName = 'ws2_32.dll';
 begin
-  Result := hWinSock2 > HINSTANCE_ERROR;
+  Result := hWinSock2 > 0;
   if Result then Exit;
   hWinSock2 := LoadLibrary(PChar(DLLName));
-  Result := hWinSock2 > HINSTANCE_ERROR;
+  Result := hWinSock2 > 0;
   if Result then
   begin
     WSACreateEvent := GetProcAddress(hWinSock2, 'WSACreateEvent');
@@ -409,9 +471,46 @@ begin
   end;
 end;
 
+procedure GetPacketInterceptorList(List: TStringList);
+var
+  EnumGUID: IEnumGUID;
+  Fetched: Cardinal;
+  Guid: TGUID;
+  Rslt: HResult;
+  CatInfo: ICatInformation;
+  I: Integer;
+  ClassIDKey: HKey;
+  S: string;
+  Buffer: array[0..255] of Char;
+begin
+  List.Clear;
+  Rslt := CoCreateInstance(CLSID_StdComponentCategoryMgr, nil,
+    CLSCTX_INPROC_SERVER, ICatInformation, CatInfo);
+  if Succeeded(Rslt) then
+  begin
+    OleCheck(CatInfo.EnumClassesOfCategories(1, @CATID_MIDASInterceptor, 0, nil, EnumGUID));
+    while EnumGUID.Next(1, Guid, Fetched) = S_OK do
+      List.Add(ClassIDToProgID(Guid));
+  end else
+  begin
+    if RegOpenKey(HKEY_CLASSES_ROOT, 'CLSID', ClassIDKey) <> 0 then
+      try
+        I := 0;
+        while RegEnumKey(ClassIDKey, I, Buffer, SizeOf(Buffer)) = 0 do
+        begin
+          S := Format(SCatImplKey,[Buffer, GUIDToString(CATID_MIDASInterceptor)]);
+          List.Add(ClassIDToProgID(StringToGUID(Buffer)));
+          Inc(I);
+        end;
+      finally
+        RegCloseKey(ClassIDKey);
+      end;
+  end;
+end;
+
 procedure FreeWinSock2;
 begin
-  if hWinSock2 > HINSTANCE_ERROR then
+  if hWinSock2 > 0 then
   begin
     WSACreateEvent := nil;
     WSAResetEvent := nil;
@@ -590,26 +689,24 @@ var
   P: Pointer;
 begin
   P := Data;
-  if DataLen < 8 then
+  if DataLen < MINDATAPACKETSIZE then
     raise Exception.CreateRes(@SInvalidDataPacket);
   Sig := Integer(P^);
   P := Pointer(Integer(Data) + SizeOf(Sig));
-  if (Sig and CallSig <> CallSig) and
-     (Sig and ResultSig <> ResultSig) then
-    raise Exception.CreateRes(@SInvalidDataPacket);
+  CheckSignature(Sig);
   Signature := Sig;
   Result := Integer(P^);
   P := Pointer(Integer(P) + SizeOf(Result));
   if CheckLen then
   begin
-    if (Result <> DataLen - 8) then
+    if (Result <> DataLen - MINDATAPACKETSIZE) then
       raise Exception.CreateRes(@SInvalidDataPacket);
     Size := Result;
     if Result > 0 then
       Write(P^, Result);
   end else
   begin
-    Size := DataLen - 8;
+    Size := DataLen - MINDATAPACKETSIZE;
     if Size > 0 then
       Write(P^, Size);
   end;
@@ -620,11 +717,12 @@ end;
 const
 
   EasyArrayTypes = [varSmallInt, varInteger, varSingle, varDouble, varCurrency,
-                    varDate, varBoolean, varByte];
+                    varDate, varBoolean, varShortInt, varByte, varWord, varLongWord];
 
-  VariantSize: array[0..varByte] of Word  = (0, 0, SizeOf(SmallInt), SizeOf(Integer),
+  VariantSize: array[0..varLongWord] of Word  = (0, 0, SizeOf(SmallInt), SizeOf(Integer),
     SizeOf(Single), SizeOf(Double), SizeOf(Currency), SizeOf(TDateTime), 0, 0,
-    SizeOf(Integer), SizeOf(WordBool), 0, 0, 0, 0, 0, SizeOf(Byte));
+    SizeOf(Integer), SizeOf(WordBool), 0, 0, 0, 0, SizeOf(ShortInt), SizeOf(Byte),
+    SizeOf(Word), SizeOf(LongWord));
 
 constructor TDataBlockInterpreter.Create(SendDataBlock: ISendDataBlock; CheckRegValue: string);
 begin
@@ -670,7 +768,7 @@ begin
   end;
 end;
 
-procedure TDataBlockInterpreter.CopyDataByRef(Source: TVarData; var Dest: TVarData);
+procedure TDataBlockInterpreter.CopyDataByRef(const Source: TVarData; var Dest: TVarData);
 var
   VType: Integer;
 begin
@@ -685,9 +783,10 @@ begin
       varOleStr:
       begin
         if (Dest.VType and varTypeMask) <> varOleStr then
-          Dest.VOleStr := SysAllocString(Source.VOleStr) else
-        if (Dest.VType and varByRef) = varByRef then
-          SysReallocString(PBStr(Dest.VOleStr)^,Source.VOleStr) else
+          Dest.VOleStr := SysAllocString(Source.VOleStr)
+        else if (Dest.VType and varByRef) = varByRef then
+          SysReallocString(PBStr(Dest.VOleStr)^,Source.VOleStr)
+        else
           SysReallocString(Dest.VOleStr,Source.VOleStr);
       end;
       varDispatch: Dest.VDispatch := Source.VDispatch;
@@ -695,12 +794,13 @@ begin
       varUnknown: Dest.VUnknown := Source.VUnknown;
     else
       if Dest.VType = 0 then
-        OleVariant(Dest) := OleVariant(Source) else
-      if Dest.VType and varByRef = varByRef then
+        OleVariant(Dest) := OleVariant(Source)
+      else if Dest.VType and varByRef = varByRef then
       begin
         VType := VType or varByRef;
         Move(Source.VPointer, Dest.VPointer^, VariantSize[Source.VType and varTypeMask]);
-      end else
+      end
+      else
         Move(Source.VPointer, Dest.VPointer, VariantSize[Source.VType and varTypeMask]);
     end;
   Dest.VType := VType;
@@ -712,9 +812,10 @@ var
   Flags: TVarFlags;
   LoDim, HiDim, Indices, Bounds: PIntArray;
   DimCount, VSize, i: Integer;
-  P: Pointer;
+  {P: Pointer;}
   V: OleVariant;
-  VarArrayPtr: PSafeArray;
+  LSafeArray: PSafeArray;
+  P: Pointer;
 begin
   VarClear(Result);
   Data.Read(DimCount, SizeOf(DimCount));
@@ -736,7 +837,6 @@ begin
       finally
         FreeMem(Bounds);
       end;
-      VarArrayPtr := PSafeArray(TVarData(Result).VArray);
       if VType and varTypeMask in EasyArrayTypes then
       begin
         Data.Read(VSize, SizeOf(VSize));
@@ -748,6 +848,7 @@ begin
         end;
       end else
       begin
+        LSafeArray := PSafeArray(TVarData(Result).VArray);
         GetMem(Indices, VSize);
         try
           FillChar(Indices^, VSize, 0);
@@ -757,8 +858,8 @@ begin
           begin
             V := ReadVariant(Flags, Data);
             if VType and varTypeMask = varVariant then
-              OleCheck(SafeArrayPutElement(VarArrayPtr, Indices^, V)) else
-              OleCheck(SafeArrayPutElement(VarArrayPtr, Indices^, TVarData(V).VPointer^));
+              OleCheck(SafeArrayPutElement(LSafeArray, Indices^, V)) else
+              OleCheck(SafeArrayPutElement(LSafeArray, Indices^, TVarData(V).VPointer^));
             Inc(Indices[DimCount - 1]);
             if Indices[DimCount - 1] > HiDim[DimCount - 1] then
               for i := DimCount - 1 downto 0 do
@@ -784,17 +885,21 @@ end;
 procedure TDataBlockInterpreter.WriteArray(const Value: OleVariant;
   const Data: IDataBlock);
 var
-  VType, VSize, i, DimCount, ElemSize: Integer;
-  VarArrayPtr: PSafeArray;
+  LVarData: TVarData;
+  VType: Integer;
+  VSize, i, DimCount, ElemSize: Integer;
+  LSafeArray: PSafeArray;
   LoDim, HiDim, Indices: PIntArray;
   V: OleVariant;
   P: Pointer;
 begin
-  VType := VarType(Value);
+  LVarData := FindVarData(Value)^;
+  VType := LVarData.VType;
+  LSafeArray := PSafeArray(LVarData.VPointer);
+                         
   Data.Write(VType, SizeOf(Integer));
   DimCount := VarArrayDimCount(Value);
   Data.Write(DimCount, SizeOf(DimCount));
-  VarArrayPtr := PSafeArray(TVarData(Value).VArray);
   VSize := SizeOf(Integer) * DimCount;
   GetMem(LoDim, VSize);
   try
@@ -809,7 +914,7 @@ begin
       Data.Write(HiDim^,VSize);
       if VType and varTypeMask in EasyArrayTypes then
       begin
-        ElemSize := SafeArrayGetElemSize(VarArrayPtr);
+        ElemSize := SafeArrayGetElemSize(LSafeArray);
         VSize := 1;
         for i := 0 to DimCount - 1 do
           VSize := (HiDim[i] - LoDim[i] + 1) * VSize;
@@ -831,10 +936,10 @@ begin
           begin
             if VType and varTypeMask <> varVariant then
             begin
-              OleCheck(SafeArrayGetElement(VarArrayPtr, Indices^, TVarData(V).VPointer));
+              OleCheck(SafeArrayGetElement(LSafeArray, Indices^, TVarData(V).VPointer));
               TVarData(V).VType := VType and varTypeMask;
             end else
-              OleCheck(SafeArrayGetElement(VarArrayPtr, Indices^, V));
+              OleCheck(SafeArrayGetElement(LSafeArray, Indices^, V));
             WriteVariant(V, Data);
             Inc(Indices[DimCount - 1]);
             if Indices[DimCount - 1] > HiDim[DimCount - 1] then
@@ -868,14 +973,16 @@ begin
   VarClear(Result);
   Flags := [];
   Data.Read(VType, SizeOf(VType));
-  if VType and varByRef = varByRef then Include(Flags, vfByRef);
+  if VType and varByRef = varByRef then
+    Include(Flags, vfByRef);
   if VType = varByRef then
   begin
     Include(Flags, vfVariant);
     Result := ReadVariant(TmpFlags, Data);
     Exit;
   end;
-  if vfByRef in Flags then VType := VType xor varByRef;
+  if vfByRef in Flags then
+    VType := VType xor varByRef;
   if (VType and varArray) = varArray then
     Result := ReadArray(VType, Data) else
   case VType and varTypeMask of
@@ -934,7 +1041,7 @@ begin
     FDispList := VarArrayCreate([0,10], varVariant);
   Result := 0;
   while Result <= VarArrayHighBound(FDispList, 1) do
-    if VarIsEmpty(FDispList[Result]) then break else Inc(Result);
+    if VarIsClear(FDispList[Result]) then break else Inc(Result);
   if Result > VarArrayHighBound(FDispList, 1) then
     VarArrayRedim(FDispList, Result + 10);
   FDispList[Result] := Value;
@@ -963,42 +1070,45 @@ var
   W: WideString;
 begin
   VType := VarType(Value);
-  if VarIsArray(Value) then
-    WriteArray(Value, Data) else
-  case (VType and varTypeMask) of
-    varEmpty, varNull: Data.Write(VType, SizeOf(Integer));
-    varOleStr:
-    begin
-      W := WideString(Value);
-      I := Length(W);
-      Data.Write(VType, SizeOf(Integer));
-      Data.Write(I,SizeOf(Integer));
-      Data.Write(W[1], I * 2);
-    end;
-    varDispatch:
-    begin
-      if VType and varByRef = varByRef then
-        raise EInterpreterError.CreateResFmt(@SBadVariantType,[IntToHex(VType,4)]);
-      I := StoreObject(Value);
-      Data.Write(VType, SizeOf(Integer));
-      Data.Write(I, SizeOf(Integer));
-    end;
-    varVariant:
-    begin
-      if VType and varByRef <> varByRef then
-        raise EInterpreterError.CreateResFmt(@SBadVariantType,[IntToHex(VType,4)]);
-      I := varByRef;
-      Data.Write(I, SizeOf(Integer));
-      WriteVariant(Variant(TVarData(Value).VPointer^), Data);
-    end;
-    varUnknown:
-      raise EInterpreterError.CreateResFmt(@SBadVariantType,[IntToHex(VType,4)]);
+  if VType and varArray <> 0 then
+    WriteArray(Value, Data)
   else
-    Data.Write(VType, SizeOf(Integer));
-    if VType and varByRef = varByRef then
-      Data.Write(TVarData(Value).VPointer^, VariantSize[VType and varTypeMask]) else
-      Data.Write(TVarData(Value).VPointer, VariantSize[VType and varTypeMask]);
-  end;
+    case (VType and varTypeMask) of
+      varEmpty, varNull:
+        Data.Write(VType, SizeOf(Integer));
+      varOleStr:
+      begin
+        W := WideString(Value);
+        I := Length(W);
+        Data.Write(VType, SizeOf(Integer));
+        Data.Write(I,SizeOf(Integer));
+        Data.Write(W[1], I * 2);
+      end;
+      varDispatch:
+      begin
+        if VType and varByRef = varByRef then
+          raise EInterpreterError.CreateResFmt(@SBadVariantType,[IntToHex(VType,4)]);
+        I := StoreObject(Value);
+        Data.Write(VType, SizeOf(Integer));
+        Data.Write(I, SizeOf(Integer));
+      end;
+      varVariant:
+      begin
+        if VType and varByRef <> varByRef then
+          raise EInterpreterError.CreateResFmt(@SBadVariantType,[IntToHex(VType,4)]);
+        I := varByRef;
+        Data.Write(I, SizeOf(Integer));
+        WriteVariant(Variant(TVarData(Value).VPointer^), Data);
+      end;
+      varUnknown:
+        raise EInterpreterError.CreateResFmt(@SBadVariantType,[IntToHex(VType,4)]);
+    else
+      Data.Write(VType, SizeOf(Integer));
+      if VType and varByRef = varByRef then
+        Data.Write(TVarData(Value).VPointer^, VariantSize[VType and varTypeMask])
+      else
+        Data.Write(TVarData(Value).VPointer, VariantSize[VType and varTypeMask]);
+    end;
 end;
 
 { Sending Calls }
@@ -1089,7 +1199,8 @@ begin
       if rgvarg^[i].vt and varByRef = varByRef then
       begin
         if rgvarg^[i].vt = (varByRef or varVariant) then
-          PDest := @TVarData(TVarData(rgvarg^[i]).VPointer^) else
+          PDest := @TVarData(TVarData(rgvarg^[i]).VPointer^)
+        else
           PDest := @TVarData(rgvarg^[i]);
         CopyDataByRef(TVarData(ReadVariant(VarFlags, Data)), PDest^);
       end;
@@ -1335,7 +1446,7 @@ end;
 
 { TDataDispatch }
 
-constructor TDataDispatch.Create(Interpreter: TDataBlockInterpreter; DispatchIndex: Integer);
+constructor TDataDispatch.Create(Interpreter: TCustomDataBlockInterpreter; DispatchIndex: Integer);
 begin
   inherited Create;
   FDispatchIndex := DispatchIndex;
@@ -1383,15 +1494,6 @@ end;
 
 { TTransportThread }
 
-type
-  PRaiseFrame = ^TRaiseFrame;
-  TRaiseFrame = record
-    NextRaise: PRaiseFrame;
-    ExceptAddr: Pointer;
-    ExceptObject: TObject;
-    ExceptionRecord: PExceptionRecord;
-  end;
-
 constructor TTransportThread.Create(AHandle: THandle; Transport: ITransport);
 begin
   FParentHandle := AHandle;
@@ -1413,14 +1515,10 @@ procedure TTransportThread.Execute;
   var
     SendException: TObject;
   begin
-    if RaiseList <> nil then
-    begin
-      SendException := PRaiseFrame(RaiseList)^.ExceptObject;
-      PRaiseFrame(RaiseList)^.ExceptObject := nil;
-      if Assigned(FTransport) and (SendException is ESocketConnectionError) then
-        FTransport.Connected := False;
-      PostMessage(FParentHandle, THREAD_EXCEPTION, 0, Integer(Pointer(SendException)));
-    end;
+    SendException := AcquireExceptionObject;
+    if Assigned(FTransport) and (SendException is ESocketConnectionError) then
+      FTransport.Connected := False;
+    PostMessage(FParentHandle, THREAD_EXCEPTION, 0, Integer(Pointer(SendException)));
   end;
 
 var
@@ -1508,7 +1606,7 @@ var
 begin
   inherited Create(AOwner);
   GetInterface(ISendDataBlock, Obj);
-  FInterpreter := TDataBlockInterpreter.Create(Self, SSockets);
+//  FInterpreter := TDataBlockInterpreter.Create(Self, SSockets);
   FSupportCallbacks := True;
 end;
 
@@ -1520,6 +1618,46 @@ begin
   if Assigned(FTransport) then FTransport.OnTerminate := nil;
   FTransIntf := nil;
   inherited Destroy;
+end;
+
+function TStreamedConnection.GetInterceptGUID: string;
+begin
+  if (FInterceptGUID.D1 <> 0) or (FInterceptGUID.D2 <> 0) or (FInterceptGUID.D3 <> 0) then
+    Result := GUIDToString(FInterceptGUID) else
+    Result := '';
+end;
+
+procedure TStreamedConnection.SetInterceptGUID(const Value: string);
+var
+  InterceptName: PWideChar;
+begin
+  if not (csLoading in ComponentState) then
+    SetConnected(False);
+  if Value = '' then
+    FillChar(FInterceptGUID, SizeOf(FInterceptGUID), 0)
+  else
+  begin
+    FInterceptGUID := StringToGUID(Value);
+    if ProgIDFromCLSID(FInterceptGUID, InterceptName) = 0 then
+    begin
+      FInterceptName := InterceptName;
+      CoTaskMemFree(InterceptName);
+    end;
+  end;
+end;
+
+procedure TStreamedConnection.SetInterceptName(const Value: string);
+begin
+  if Value <> FInterceptName then
+  begin
+    if not (csLoading in ComponentState) then
+    begin
+      SetConnected(False);
+      if CLSIDFromProgID(PWideChar(WideString(Value)), FInterceptGUID) <> 0 then
+        FillChar(FInterceptGUID, SizeOf(FInterceptGUID), 0);
+    end;
+    FInterceptName := Value;
+  end;
 end;
 
 procedure TStreamedConnection.SetSupportCallbacks(Value: Boolean);
@@ -1549,7 +1687,8 @@ begin
     FTransport.OnTerminate := nil;
     FTransport.Terminate;
     PostThreadMessage(FTransport.ThreadID, WM_USER, 0, 0);
-    WaitForSingleObject(FTransport.Handle, 180000);
+    if Assigned(FTransport.FTransport) then
+      WaitForSingleObject(FTransport.Handle, 180000);
     FTransport := nil;
   end else
   if Assigned(FTransIntf) then
@@ -1572,6 +1711,26 @@ begin
   end;
 end;
 
+function TStreamedConnection.GetInterceptorList: OleVariant;
+var
+  List: TStringList;
+  i: Integer;
+begin
+  Result := NULL;
+  List := TStringList.Create;
+  try
+    GetPacketInterceptorList(List);
+    if List.Count > 0 then
+    begin
+      Result := VarArrayCreate([0, List.Count - 1], varOleStr);
+      for i := 0 to List.Count - 1 do
+        Result[i] := List[i];
+    end;
+  finally
+    List.Free;
+  end;
+end;
+
 function TStreamedConnection.GetHandle: THandle;
 begin
   if FHandle = 0 then
@@ -1584,7 +1743,8 @@ begin
   try
     Dispatch(Message);
   except
-    Application.HandleException(Self);
+    if Assigned(ApplicationHandleException) then
+      ApplicationHandleException(Self);
   end;
 end;
 
@@ -1642,6 +1802,13 @@ begin
   Result := nil;
 end;
 
+function TStreamedConnection.GetInterpreter: TCustomDataBlockInterpreter;
+begin
+  if not Assigned(FInterpreter) then
+    FInterpreter := TDataBlockInterpreter.Create(Self, SSockets);
+  Result := FInterpreter;
+end;
+
 { TStreamedConnection.IUnknown }
 
 function TStreamedConnection.QueryInterface(const IID: TGUID; out Obj): HResult;
@@ -1686,8 +1853,11 @@ begin
             if (Result.Signature and ResultSig) = ResultSig then
               break else
               Interpreter.InterpretData(Result);
-          end else
-            DoError(Exception(Msg.lParam));
+          end
+          else if Msg.Message <> WM_NULL then
+            DoError(Exception(Msg.lParam))
+          else
+            raise Exception.CreateRes(@SReturnError);
         end else
           raise Exception.CreateRes(@SReturnError);
       end
@@ -1781,9 +1951,7 @@ begin
   RetLen := FSocket.ReceiveBuf(Sig, SizeOf(Sig));
   if RetLen <> SizeOf(Sig) then
     raise ESocketConnectionError.CreateRes(@SSocketReadError);
-  if (Sig and CallSig <> CallSig) and
-     (Sig and ResultSig <> ResultSig) then
-    raise Exception.CreateRes(@SInvalidDataPacket);
+  CheckSignature(Sig);
   RetLen := FSocket.ReceiveBuf(StreamLen, SizeOf(StreamLen));
   if RetLen = 0 then
     raise ESocketConnectionError.CreateRes(@SSocketReadError);
@@ -1944,7 +2112,7 @@ begin
   SupportCallbacks := False;
   FInetRoot := nil;
   FInetConnect := nil;
-  FAgent := 'MIDAS 3.0';
+  FAgent := 'DataSnap';
   URL := SDefaultURL;
 end;
 
@@ -1955,6 +2123,12 @@ begin
   inherited Destroy;
 end;
 
+function TWebConnection.GetInterpreter: TCustomDataBlockInterpreter;
+begin
+  if not Assigned(FInterpreter) then
+    FInterpreter := TDataBlockInterpreter.Create(Self, SWeb);
+  Result := FInterpreter;
+end;
 procedure TWebConnection.SetURL(const Value: string);
 var
   URLComp: TURLComponents;
@@ -2059,8 +2233,11 @@ begin
 end;
 
 function TWebConnection.Receive(WaitForInput: Boolean; Context: Integer): IDataBlock;
+const
+  MaxStatusText: Integer = 4096;
 var
-  Size, Downloaded, Status, Len, Index: DWord;
+  Size, Downloaded, Status, Len, Index, Position: DWord;
+  Data: array of byte;
   S: string;
 begin
   Len := SizeOf(Status);
@@ -2069,6 +2246,7 @@ begin
     @Status, Len, Index) and (Status >= 300) then
   begin
     Index := 0;
+    Size := MaxStatusText;
     SetLength(S, Size);
     if HttpQueryInfo(Pointer(Context), HTTP_QUERY_STATUS_TEXT, @S[1], Size, Index) then
     begin
@@ -2077,21 +2255,32 @@ begin
     end;
   end;
   Len := 0;
+  Position := 0;
   repeat
     Check(not InternetQueryDataAvailable(Pointer(Context), Size, 0, 0));
     if Size > 0 then
     begin
-      SetLength(S, Size);
-      Check(not InternetReadFile(Pointer(Context), @S[1], Size, Downloaded));
-      if not Assigned(Result) then
+      SetLength(Data, Position + Size);
+      Check(not InternetReadFile(Pointer(Context), @Data[Position], Size, Downloaded));
+      if Assigned(Result) then
+        Result.Write(Data[0], Downloaded)
+      else
       begin
-        Result := TDataBlock.Create;
-        Len := Result.InitData(@S[1], Downloaded, False);
-      end else
-        Result.Write(S[1], Downloaded);
+        Inc(Position, Downloaded);
+        if (Position >= MINDATAPACKETSIZE) then
+        begin
+          Result := TDataBlock.Create;
+          Len := Result.InitData(@Data[0], Position, False);
+          Position := 0;
+        end
+        else
+          Continue;
+      end;
     end;
   until Size = 0;
-  if Assigned(Result) and (Len <> DWord(Result.Size)) then
+
+  if ((Position > 0) and (Position < MINDATAPACKETSIZE)) or
+     (Assigned(Result) and (Len <> DWord(Result.Size))) then
     raise Exception.CreateRes(@SInvalidDataPacket);
 end;
 
@@ -2146,6 +2335,56 @@ begin
   end else
     inherited DoConnect;
 end;
+
+{ TPacketInterceptFactory }
+
+procedure TPacketInterceptFactory.UpdateRegistry(Register: Boolean);
+var
+  CatReg: ICatRegister;
+  Rslt: HResult;
+  CatInfo: TCATEGORYINFO;
+  Description: string;
+begin
+  inherited UpdateRegistry(Register);
+
+  Rslt := CoCreateInstance(CLSID_StdComponentCategoryMgr, nil,
+    CLSCTX_INPROC_SERVER, ICatRegister, CatReg);
+  if Succeeded(Rslt) then
+  begin
+    if Register then
+    begin
+      CatInfo.catid := CATID_MIDASInterceptor;
+      CatInfo.lcid := $0409;
+      StringToWideChar(MIDASInterceptor_CatDesc, CatInfo.szDescription,
+        Length(MIDASInterceptor_CatDesc) + 1);
+      OleCheck(CatReg.RegisterCategories(1, @CatInfo));
+      OleCheck(CatReg.RegisterClassImplCategories(ClassID, 1, @CATID_MIDASInterceptor));
+    end else
+    begin
+      OleCheck(CatReg.UnRegisterClassImplCategories(ClassID, 1, @CATID_MIDASInterceptor));
+      DeleteRegKey(Format(SClsid + SCatImplBaseKey, [GUIDToString(ClassID)]));
+    end;
+  end else
+  begin
+    if Register then
+    begin
+      CreateRegKey('Component Categories\' + GUIDToString(CATID_MIDASInterceptor), '409', MIDASInterceptor_CatDesc);
+      CreateRegKey(Format(SClsid + SCatImplKey, [GUIDToString(ClassID), GUIDToString(CATID_MIDASInterceptor)]), '', '');
+    end else
+    begin
+      DeleteRegKey(Format(SClsid + SCatImplKey, [GUIDToString(ClassID), GUIDToString(CATID_MIDASAppServer)]));
+      DeleteRegKey(Format(SClsid + SCatImplBaseKey, [GUIDToString(ClassID)]));
+    end;
+  end;
+  if Register then
+  begin
+    Description := GetRegStringValue(SClsid + GUIDToString(ClassID), '');
+    CreateRegKey('AppID\' + GUIDToString(ClassID), '', Description);
+    CreateRegKey(SClsid + GUIDToString(ClassID), 'AppID', GUIDToString(ClassID));
+  end else
+    DeleteRegKey('AppID\' + GUIDToString(ClassID));
+end;
+
 
 initialization
 finalization

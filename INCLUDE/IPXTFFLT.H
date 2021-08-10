@@ -6,7 +6,6 @@ Copyright (c) 1995-1999 Microsoft Corporation
 */
 
 #ifndef __ipxfltdf_h
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __ipxfltdf_h
 
 #if _MSC_VER > 1000
@@ -75,5 +74,4 @@ typedef struct _FLT_PACKET_LOG {
 						// data if any
 } FLT_PACKET_LOG, *PFLT_PACKET_LOG;
 
-#pragma option pop /*P_O_Pop*/
 #endif

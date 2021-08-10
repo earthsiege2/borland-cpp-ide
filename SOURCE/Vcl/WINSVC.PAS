@@ -6,7 +6,7 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
@@ -380,7 +380,8 @@ type
 //
 // Function Prototype for the Service Main Function
 //
-
+
+
 
 
 
@@ -395,7 +396,8 @@ type
   {$EXTERNALSYM LPSERVICE_MAIN_FUNCTIONW}
   LPSERVICE_MAIN_FUNCTIONW = TFarProc;
   {$EXTERNALSYM LPSERVICE_MAIN_FUNCTION}
-  LPSERVICE_MAIN_FUNCTION = LPSERVICE_MAIN_FUNCTIONA;
+  LPSERVICE_MAIN_FUNCTION = LPSERVICE_MAIN_FUNCTIONA;
+
   TServiceMainFunctionA = LPSERVICE_MAIN_FUNCTIONA;
   TServiceMainFunctionW = LPSERVICE_MAIN_FUNCTIONW;
   TServiceMainFunction = TServiceMainFunctionA;
@@ -431,18 +433,25 @@ type
 //
 // Prototype for the Service Control Handler Function
 //
-
+
+
 
 
 
   {$EXTERNALSYM LPHANDLER_FUNCTION}
-  LPHANDLER_FUNCTION = TFarProc;
+  LPHANDLER_FUNCTION = TFarProc;
+
   THandlerFunction = LPHANDLER_FUNCTION;
 
 ///////////////////////////////////////////////////////////////////////////
 // API Function Prototypes
 ///////////////////////////////////////////////////////////////////////////
 
+{$EXTERNALSYM ChangeServiceConfig}
+function ChangeServiceConfig(hService: SC_HANDLE; dwServiceType, dwStartType,
+  dwErrorControl: DWORD; lpBinaryPathName, lpLoadOrderGroup: PChar;
+  lpdwTagId: LPDWORD; lpDependencies, lpServiceStartName, lpPassword,
+  lpDisplayName: PChar): BOOL; stdcall;
 {$EXTERNALSYM ChangeServiceConfigA}
 function ChangeServiceConfigA(hService: SC_HANDLE; dwServiceType, dwStartType,
   dwErrorControl: DWORD; lpBinaryPathName, lpLoadOrderGroup: PAnsiChar;
@@ -453,16 +462,16 @@ function ChangeServiceConfigW(hService: SC_HANDLE; dwServiceType, dwStartType,
   dwErrorControl: DWORD; lpBinaryPathName, lpLoadOrderGroup: PWideChar;
   lpdwTagId: LPDWORD; lpDependencies, lpServiceStartName, lpPassword,
   lpDisplayName: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM ChangeServiceConfig}
-function ChangeServiceConfig(hService: SC_HANDLE; dwServiceType, dwStartType,
-  dwErrorControl: DWORD; lpBinaryPathName, lpLoadOrderGroup: PChar;
-  lpdwTagId: LPDWORD; lpDependencies, lpServiceStartName, lpPassword,
-  lpDisplayName: PChar): BOOL; stdcall;
 {$EXTERNALSYM CloseServiceHandle}
 function CloseServiceHandle(hSCObject: SC_HANDLE): BOOL; stdcall;
 {$EXTERNALSYM ControlService}
 function ControlService(hService: SC_HANDLE; dwControl: DWORD;
   var lpServiceStatus: TServiceStatus): BOOL; stdcall;
+{$EXTERNALSYM CreateService}
+function CreateService(hSCManager: SC_HANDLE; lpServiceName, lpDisplayName: PChar;
+  dwDesiredAccess, dwServiceType, dwStartType, dwErrorControl: DWORD;
+  lpBinaryPathName, lpLoadOrderGroup: PChar; lpdwTagId: LPDWORD; lpDependencies,
+  lpServiceStartName, lpPassword: PChar): SC_HANDLE; stdcall;
 {$EXTERNALSYM CreateServiceA}
 function CreateServiceA(hSCManager: SC_HANDLE; lpServiceName, lpDisplayName: PAnsiChar;
   dwDesiredAccess, dwServiceType, dwStartType, dwErrorControl: DWORD;
@@ -473,13 +482,12 @@ function CreateServiceW(hSCManager: SC_HANDLE; lpServiceName, lpDisplayName: PWi
   dwDesiredAccess, dwServiceType, dwStartType, dwErrorControl: DWORD;
   lpBinaryPathName, lpLoadOrderGroup: PWideChar; lpdwTagId: LPDWORD; lpDependencies,
   lpServiceStartName, lpPassword: PWideChar): SC_HANDLE; stdcall;
-{$EXTERNALSYM CreateService}
-function CreateService(hSCManager: SC_HANDLE; lpServiceName, lpDisplayName: PChar;
-  dwDesiredAccess, dwServiceType, dwStartType, dwErrorControl: DWORD;
-  lpBinaryPathName, lpLoadOrderGroup: PChar; lpdwTagId: LPDWORD; lpDependencies,
-  lpServiceStartName, lpPassword: PChar): SC_HANDLE; stdcall;
 {$EXTERNALSYM DeleteService}
 function DeleteService(hService: SC_HANDLE): BOOL; stdcall;
+{$EXTERNALSYM EnumDependentServices}
+function EnumDependentServices(hService: SC_HANDLE; dwServiceState: DWORD;
+  var lpServices: TEnumServiceStatus; cbBufSize: DWORD; var pcbBytesNeeded,
+  lpServicesReturned : DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumDependentServicesA}
 function EnumDependentServicesA(hService: SC_HANDLE; dwServiceState: DWORD;
   var lpServices: TEnumServiceStatusA; cbBufSize: DWORD; var pcbBytesNeeded,
@@ -488,10 +496,10 @@ function EnumDependentServicesA(hService: SC_HANDLE; dwServiceState: DWORD;
 function EnumDependentServicesW(hService: SC_HANDLE; dwServiceState: DWORD;
   var lpServices: TEnumServiceStatusW; cbBufSize: DWORD; var pcbBytesNeeded,
   lpServicesReturned : DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumDependentServices}
-function EnumDependentServices(hService: SC_HANDLE; dwServiceState: DWORD;
-  var lpServices: TEnumServiceStatus; cbBufSize: DWORD; var pcbBytesNeeded,
-  lpServicesReturned : DWORD): BOOL; stdcall;
+{$EXTERNALSYM EnumServicesStatus}
+function EnumServicesStatus(hSCManager: SC_HANDLE; dwServiceType,
+  dwServiceState: DWORD; var lpServices: TEnumServiceStatus; cbBufSize: DWORD;
+  var pcbBytesNeeded, lpServicesReturned, lpResumeHandle: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumServicesStatusA}
 function EnumServicesStatusA(hSCManager: SC_HANDLE; dwServiceType,
   dwServiceState: DWORD; var lpServices: TEnumServiceStatusA; cbBufSize: DWORD;
@@ -500,40 +508,39 @@ function EnumServicesStatusA(hSCManager: SC_HANDLE; dwServiceType,
 function EnumServicesStatusW(hSCManager: SC_HANDLE; dwServiceType,
   dwServiceState: DWORD; var lpServices: TEnumServiceStatusW; cbBufSize: DWORD;
   var pcbBytesNeeded, lpServicesReturned, lpResumeHandle: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumServicesStatus}
-function EnumServicesStatus(hSCManager: SC_HANDLE; dwServiceType,
-  dwServiceState: DWORD; var lpServices: TEnumServiceStatus; cbBufSize: DWORD;
-  var pcbBytesNeeded, lpServicesReturned, lpResumeHandle: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetServiceKeyName}
+function GetServiceKeyName(hSCManager: SC_HANDLE; lpDisplayName,
+  lpServiceName: PChar; var lpcchBuffer: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetServiceKeyNameA}
 function GetServiceKeyNameA(hSCManager: SC_HANDLE; lpDisplayName,
   lpServiceName: PAnsiChar; var lpcchBuffer: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetServiceKeyNameW}
 function GetServiceKeyNameW(hSCManager: SC_HANDLE; lpDisplayName,
   lpServiceName: PWideChar; var lpcchBuffer: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetServiceKeyName}
-function GetServiceKeyName(hSCManager: SC_HANDLE; lpDisplayName,
-  lpServiceName: PChar; var lpcchBuffer: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetServiceDisplayName}
+function GetServiceDisplayName(hSCManager: SC_HANDLE; lpServiceName,
+  lpDisplayName: PChar; var lpcchBuffer: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetServiceDisplayNameA}
 function GetServiceDisplayNameA(hSCManager: SC_HANDLE; lpServiceName,
   lpDisplayName: PAnsiChar; var lpcchBuffer: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetServiceDisplayNameW}
 function GetServiceDisplayNameW(hSCManager: SC_HANDLE; lpServiceName,
   lpDisplayName: PWideChar; var lpcchBuffer: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetServiceDisplayName}
-function GetServiceDisplayName(hSCManager: SC_HANDLE; lpServiceName,
-  lpDisplayName: PChar; var lpcchBuffer: DWORD): BOOL; stdcall;
 {$EXTERNALSYM LockServiceDatabase}
 function LockServiceDatabase(hSCManager: SC_HANDLE): SC_LOCK; stdcall;
 {$EXTERNALSYM NotifyBootConfigStatus}
 function NotifyBootConfigStatus(BootAcceptable: BOOL): BOOL; stdcall;
+{$EXTERNALSYM OpenSCManager}
+function OpenSCManager(lpMachineName, lpDatabaseName: PChar;
+  dwDesiredAccess: DWORD): SC_HANDLE; stdcall;
 {$EXTERNALSYM OpenSCManagerA}
 function OpenSCManagerA(lpMachineName, lpDatabaseName: PAnsiChar;
   dwDesiredAccess: DWORD): SC_HANDLE; stdcall;
 {$EXTERNALSYM OpenSCManagerW}
 function OpenSCManagerW(lpMachineName, lpDatabaseName: PWideChar;
   dwDesiredAccess: DWORD): SC_HANDLE; stdcall;
-{$EXTERNALSYM OpenSCManager}
-function OpenSCManager(lpMachineName, lpDatabaseName: PChar;
+{$EXTERNALSYM OpenService}
+function OpenService(hSCManager: SC_HANDLE; lpServiceName: PChar;
   dwDesiredAccess: DWORD): SC_HANDLE; stdcall;
 {$EXTERNALSYM OpenServiceA}
 function OpenServiceA(hSCManager: SC_HANDLE; lpServiceName: PAnsiChar;
@@ -541,9 +548,10 @@ function OpenServiceA(hSCManager: SC_HANDLE; lpServiceName: PAnsiChar;
 {$EXTERNALSYM OpenServiceW}
 function OpenServiceW(hSCManager: SC_HANDLE; lpServiceName: PWideChar;
   dwDesiredAccess: DWORD): SC_HANDLE; stdcall;
-{$EXTERNALSYM OpenService}
-function OpenService(hSCManager: SC_HANDLE; lpServiceName: PChar;
-  dwDesiredAccess: DWORD): SC_HANDLE; stdcall;
+{$EXTERNALSYM QueryServiceConfig}
+function QueryServiceConfig(hService: SC_HANDLE;
+  lpServiceConfig: PQueryServiceConfig; cbBufSize: DWORD;
+  var pcbBytesNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM QueryServiceConfigA}
 function QueryServiceConfigA(hService: SC_HANDLE;
   lpServiceConfig: PQueryServiceConfigA; cbBufSize: DWORD;
@@ -552,9 +560,9 @@ function QueryServiceConfigA(hService: SC_HANDLE;
 function QueryServiceConfigW(hService: SC_HANDLE;
   lpServiceConfig: PQueryServiceConfigW; cbBufSize: DWORD;
   var pcbBytesNeeded: DWORD): BOOL; stdcall;
-{$EXTERNALSYM QueryServiceConfig}
-function QueryServiceConfig(hService: SC_HANDLE;
-  lpServiceConfig: PQueryServiceConfig; cbBufSize: DWORD;
+{$EXTERNALSYM QueryServiceLockStatus}
+function QueryServiceLockStatus(hSCManager: SC_HANDLE;
+  var lpLockStatus: TQueryServiceLockStatus; cbBufSize: DWORD;
   var pcbBytesNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM QueryServiceLockStatusA}
 function QueryServiceLockStatusA(hSCManager: SC_HANDLE;
@@ -564,10 +572,6 @@ function QueryServiceLockStatusA(hSCManager: SC_HANDLE;
 function QueryServiceLockStatusW(hSCManager: SC_HANDLE;
   var lpLockStatus: TQueryServiceLockStatusW; cbBufSize: DWORD;
   var pcbBytesNeeded: DWORD): BOOL; stdcall;
-{$EXTERNALSYM QueryServiceLockStatus}
-function QueryServiceLockStatus(hSCManager: SC_HANDLE;
-  var lpLockStatus: TQueryServiceLockStatus; cbBufSize: DWORD;
-  var pcbBytesNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM QueryServiceObjectSecurity}
 function QueryServiceObjectSecurity(hService: SC_HANDLE;
   dwSecurityInformation: SECURITY_INFORMATION;
@@ -576,14 +580,14 @@ function QueryServiceObjectSecurity(hService: SC_HANDLE;
 {$EXTERNALSYM QueryServiceStatus}
 function QueryServiceStatus(hService: SC_HANDLE; var
   lpServiceStatus: TServiceStatus): BOOL; stdcall;
+{$EXTERNALSYM RegisterServiceCtrlHandler}
+function RegisterServiceCtrlHandler(lpServiceName: PChar;
+  lpHandlerProc: ThandlerFunction): SERVICE_STATUS_HANDLE; stdcall;
 {$EXTERNALSYM RegisterServiceCtrlHandlerA}
 function RegisterServiceCtrlHandlerA(lpServiceName: PAnsiChar;
   lpHandlerProc: ThandlerFunction): SERVICE_STATUS_HANDLE; stdcall;
 {$EXTERNALSYM RegisterServiceCtrlHandlerW}
 function RegisterServiceCtrlHandlerW(lpServiceName: PWideChar;
-  lpHandlerProc: ThandlerFunction): SERVICE_STATUS_HANDLE; stdcall;
-{$EXTERNALSYM RegisterServiceCtrlHandler}
-function RegisterServiceCtrlHandler(lpServiceName: PChar;
   lpHandlerProc: ThandlerFunction): SERVICE_STATUS_HANDLE; stdcall;
 {$EXTERNALSYM SetServiceObjectSecurity}
 function SetServiceObjectSecurity(hService: SC_HANDLE;
@@ -592,24 +596,24 @@ function SetServiceObjectSecurity(hService: SC_HANDLE;
 {$EXTERNALSYM SetServiceStatus}
 function SetServiceStatus(hServiceStatus: SERVICE_STATUS_HANDLE;
   var lpServiceStatus: TServiceStatus): BOOL; stdcall;
+{$EXTERNALSYM StartServiceCtrlDispatcher}
+function StartServiceCtrlDispatcher(
+  var lpServiceStartTable: TServiceTableEntry): BOOL; stdcall;
 {$EXTERNALSYM StartServiceCtrlDispatcherA}
 function StartServiceCtrlDispatcherA(
   var lpServiceStartTable: TServiceTableEntryA): BOOL; stdcall;
 {$EXTERNALSYM StartServiceCtrlDispatcherW}
 function StartServiceCtrlDispatcherW(
   var lpServiceStartTable: TServiceTableEntryW): BOOL; stdcall;
-{$EXTERNALSYM StartServiceCtrlDispatcher}
-function StartServiceCtrlDispatcher(
-  var lpServiceStartTable: TServiceTableEntry): BOOL; stdcall;
+{$EXTERNALSYM StartService}
+function StartService(hService: SC_HANDLE; dwNumServiceArgs: DWORD;
+  var lpServiceArgVectors: PChar): BOOL; stdcall;
 {$EXTERNALSYM StartServiceA}
 function StartServiceA(hService: SC_HANDLE; dwNumServiceArgs: DWORD;
   var lpServiceArgVectors: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM StartServiceW}
 function StartServiceW(hService: SC_HANDLE; dwNumServiceArgs: DWORD;
   var lpServiceArgVectors: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM StartService}
-function StartService(hService: SC_HANDLE; dwNumServiceArgs: DWORD;
-  var lpServiceArgVectors: PChar): BOOL; stdcall;
 {$EXTERNALSYM UnlockServiceDatabase}
 function UnlockServiceDatabase(ScLock: SC_LOCK): BOOL; stdcall;
 
@@ -618,54 +622,54 @@ implementation
 const
   advapi32 = 'advapi32.dll';
 
+function ChangeServiceConfig;   external advapi32 name 'ChangeServiceConfigA';
 function ChangeServiceConfigA;   external advapi32 name 'ChangeServiceConfigA';
 function ChangeServiceConfigW;   external advapi32 name 'ChangeServiceConfigW';
-function ChangeServiceConfig;   external advapi32 name 'ChangeServiceConfigA';
 function CloseServiceHandle;       external advapi32 name 'CloseServiceHandle';
 function ControlService;           external advapi32 name 'ControlService';
+function CreateService;         external advapi32 name 'CreateServiceA';
 function CreateServiceA;         external advapi32 name 'CreateServiceA';
 function CreateServiceW;         external advapi32 name 'CreateServiceW';
-function CreateService;         external advapi32 name 'CreateServiceA';
 function DeleteService;            external advapi32 name 'DeleteService';
+function EnumDependentServices; external advapi32 name 'EnumDependentServicesA';
 function EnumDependentServicesA; external advapi32 name 'EnumDependentServicesA';
 function EnumDependentServicesW; external advapi32 name 'EnumDependentServicesW';
-function EnumDependentServices; external advapi32 name 'EnumDependentServicesA';
+function EnumServicesStatus;    external advapi32 name 'EnumServicesStatusA';
 function EnumServicesStatusA;    external advapi32 name 'EnumServicesStatusA';
 function EnumServicesStatusW;    external advapi32 name 'EnumServicesStatusW';
-function EnumServicesStatus;    external advapi32 name 'EnumServicesStatusA';
+function GetServiceKeyName;     external advapi32 name 'GetServiceKeyNameA';
 function GetServiceKeyNameA;     external advapi32 name 'GetServiceKeyNameA';
 function GetServiceKeyNameW;     external advapi32 name 'GetServiceKeyNameW';
-function GetServiceKeyName;     external advapi32 name 'GetServiceKeyNameA';
+function GetServiceDisplayName; external advapi32 name 'GetServiceDisplayNameA';
 function GetServiceDisplayNameA; external advapi32 name 'GetServiceDisplayNameA';
 function GetServiceDisplayNameW; external advapi32 name 'GetServiceDisplayNameW';
-function GetServiceDisplayName; external advapi32 name 'GetServiceDisplayNameA';
 function LockServiceDatabase;      external advapi32 name 'LockServiceDatabase';
 function NotifyBootConfigStatus;   external advapi32 name 'NotifyBootConfigStatus';
+function OpenSCManager;         external advapi32 name 'OpenSCManagerA';
 function OpenSCManagerA;         external advapi32 name 'OpenSCManagerA';
 function OpenSCManagerW;         external advapi32 name 'OpenSCManagerW';
-function OpenSCManager;         external advapi32 name 'OpenSCManagerA';
+function OpenService;           external advapi32 name 'OpenServiceA';
 function OpenServiceA;           external advapi32 name 'OpenServiceA';
 function OpenServiceW;           external advapi32 name 'OpenServiceW';
-function OpenService;           external advapi32 name 'OpenServiceA';
+function QueryServiceConfig;    external advapi32 name 'QueryServiceConfigA';
 function QueryServiceConfigA;    external advapi32 name 'QueryServiceConfigA';
 function QueryServiceConfigW;    external advapi32 name 'QueryServiceConfigW';
-function QueryServiceConfig;    external advapi32 name 'QueryServiceConfigA';
+function QueryServiceLockStatus;external advapi32 name 'QueryServiceLockStatusA';
 function QueryServiceLockStatusA;external advapi32 name 'QueryServiceLockStatusA';
 function QueryServiceLockStatusW;external advapi32 name 'QueryServiceLockStatusW';
-function QueryServiceLockStatus;external advapi32 name 'QueryServiceLockStatusA';
 function QueryServiceObjectSecurity;external advapi32 name 'QueryServiceObjectSecurity';
 function QueryServiceStatus;       external advapi32 name 'QueryServiceStatus';
+function RegisterServiceCtrlHandler;external advapi32 name 'RegisterServiceCtrlHandlerA';
 function RegisterServiceCtrlHandlerA;external advapi32 name 'RegisterServiceCtrlHandlerA';
 function RegisterServiceCtrlHandlerW;external advapi32 name 'RegisterServiceCtrlHandlerW';
-function RegisterServiceCtrlHandler;external advapi32 name 'RegisterServiceCtrlHandlerA';
 function SetServiceObjectSecurity; external advapi32 name 'SetServiceObjectSecurity';
 function SetServiceStatus;         external advapi32 name 'SetServiceStatus';
+function StartServiceCtrlDispatcher;external advapi32 name 'StartServiceCtrlDispatcherA';
 function StartServiceCtrlDispatcherA;external advapi32 name 'StartServiceCtrlDispatcherA';
 function StartServiceCtrlDispatcherW;external advapi32 name 'StartServiceCtrlDispatcherW';
-function StartServiceCtrlDispatcher;external advapi32 name 'StartServiceCtrlDispatcherA';
+function StartService;          external advapi32 name 'StartServiceA';
 function StartServiceA;          external advapi32 name 'StartServiceA';
 function StartServiceW;          external advapi32 name 'StartServiceW';
-function StartService;          external advapi32 name 'StartServiceA';
 function UnlockServiceDatabase;    external advapi32 name 'UnlockServiceDatabase';
 
 end.

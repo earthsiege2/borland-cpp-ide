@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
-Copyright (c) 1991-1998 Microsoft Corporation
+Copyright (c) Microsoft Corporation.  All rights reserved.
 
 Module Name:
 
@@ -14,7 +14,6 @@ Abstract:
 --*/
 
 #ifndef _WINREG_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINREG_
 
 
@@ -45,6 +44,8 @@ typedef ACCESS_MASK REGSAM;
 #define HKEY_LOCAL_MACHINE          (( HKEY ) (ULONG_PTR)((LONG)0x80000002) )
 #define HKEY_USERS                  (( HKEY ) (ULONG_PTR)((LONG)0x80000003) )
 #define HKEY_PERFORMANCE_DATA       (( HKEY ) (ULONG_PTR)((LONG)0x80000004) )
+#define HKEY_PERFORMANCE_TEXT       (( HKEY ) (ULONG_PTR)((LONG)0x80000050) )
+#define HKEY_PERFORMANCE_NLSTEXT    (( HKEY ) (ULONG_PTR)((LONG)0x80000060) )
 #if(WINVER >= 0x0400)
 #define HKEY_CURRENT_CONFIG         (( HKEY ) (ULONG_PTR)((LONG)0x80000005) )
 #define HKEY_DYN_DATA               (( HKEY ) (ULONG_PTR)((LONG)0x80000006) )
@@ -83,7 +84,7 @@ typedef PPVALUEA PPVALUE;
 #endif // UNICODE
 
 typedef
-DWORD __cdecl
+DWORD _cdecl
 QUERYHANDLER (LPVOID keycontext, PVALCONTEXT val_list, DWORD num_vals,
           LPVOID outputbuffer, DWORD FAR *total_outlen, DWORD input_blen);
 
@@ -805,14 +806,18 @@ AbortSystemShutdownW(
 // defines for InitiateSystemShutdownEx reason codes
 //
 
-#define REASON_SWINSTALL    0
-#define REASON_HWINSTALL    1
-#define REASON_SERVICEHANG  2
-#define REASON_UNSTABLE     3
-#define REASON_SWHWRECONF   4
-#define REASON_OTHER        5
-#define REASON_UNKNOWN      255
-#define REASON_PLANNED_FLAG 0x80000000
+#include <reason.h>             // get the public reasons
+//
+// Then for Historical reasons support some old symbols, internal only
+
+#define REASON_SWINSTALL    SHTDN_REASON_MAJOR_SOFTWARE|SHTDN_REASON_MINOR_INSTALLATION
+#define REASON_HWINSTALL    SHTDN_REASON_MAJOR_HARDWARE|SHTDN_REASON_MINOR_INSTALLATION
+#define REASON_SERVICEHANG  SHTDN_REASON_MAJOR_SOFTWARE|SHTDN_REASON_MINOR_HUNG
+#define REASON_UNSTABLE     SHTDN_REASON_MAJOR_SYSTEM|SHTDN_REASON_MINOR_UNSTABLE
+#define REASON_SWHWRECONF   SHTDN_REASON_MAJOR_SOFTWARE|SHTDN_REASON_MINOR_RECONFIG
+#define REASON_OTHER        SHTDN_REASON_MAJOR_OTHER|SHTDN_REASON_MINOR_OTHER
+#define REASON_UNKNOWN      SHTDN_REASON_UNKNOWN
+#define REASON_PLANNED_FLAG SHTDN_REASON_FLAG_PLANNED
 
 WINADVAPI
 BOOL
@@ -842,10 +847,44 @@ InitiateSystemShutdownExW(
 #define InitiateSystemShutdownEx  InitiateSystemShutdownExA
 #endif // !UNICODE
 
+
+WINADVAPI
+LONG
+APIENTRY
+RegSaveKeyExA (
+    IN HKEY hKey,
+    IN LPCSTR lpFile,
+    IN LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+    IN DWORD Flags
+    );
+WINADVAPI
+LONG
+APIENTRY
+RegSaveKeyExW (
+    IN HKEY hKey,
+    IN LPCWSTR lpFile,
+    IN LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+    IN DWORD Flags
+    );
+#ifdef UNICODE
+#define RegSaveKeyEx  RegSaveKeyExW
+#else
+#define RegSaveKeyEx  RegSaveKeyExA
+#endif // !UNICODE
+
+WINADVAPI
+LONG
+APIENTRY
+Wow64Win32ApiEntry (
+    DWORD dwFuncNumber,
+    DWORD dwFlag,
+    DWORD dwRes
+    );
+
 #ifdef __cplusplus
 }
 #endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // _WINREG_
+

@@ -5,7 +5,6 @@ Copyright (c) 1998-1999  Microsoft Corporation
 */
 
 #ifndef __TVOUT__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __TVOUT__
 
 #if _MSC_VER > 1000
@@ -88,5 +87,4 @@ typedef struct _VIDEOPARAMETERS {
 #define VP_CP_CMD_DEACTIVATE    0x0002
 #define VP_CP_CMD_CHANGE        0x0004
 
-#pragma option pop /*P_O_Pop*/
 #endif

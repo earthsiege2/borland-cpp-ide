@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'TeCanvas.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'TeCanvas.pas' rev: 6.00
 
 #ifndef TeCanvasHPP
 #define TeCanvasHPP
@@ -10,9 +10,11 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <SysUtils.hpp>	// Pascal unit
+#include <Types.hpp>	// Pascal unit
+#include <StdCtrls.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
+#include <SysUtils.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
@@ -23,6 +25,8 @@
 namespace Tecanvas
 {
 //-- type declarations -------------------------------------------------------
+typedef HDC TTeeCanvasHandle;
+
 class DELPHICLASS TChartPen;
 class PASCALIMPLEMENTATION TChartPen : public Graphics::TPen 
 {
@@ -58,7 +62,7 @@ public:
 	__fastcall TChartHiddenPen(Classes::TNotifyEvent OnChangeEvent);
 	
 __published:
-	__property Visible ;
+	__property Visible  = {default=0};
 public:
 	#pragma option push -w-inl
 	/* TPen.Destroy */ inline __fastcall virtual ~TChartHiddenPen(void) { }
@@ -76,8 +80,8 @@ public:
 	__fastcall TDottedGrayPen(Classes::TNotifyEvent OnChangeEvent);
 	
 __published:
-	__property Color ;
-	__property Style ;
+	__property Color  = {default=8421504};
+	__property Style  = {default=2};
 public:
 	#pragma option push -w-inl
 	/* TPen.Destroy */ inline __fastcall virtual ~TDottedGrayPen(void) { }
@@ -95,7 +99,7 @@ public:
 	__fastcall TDarkGrayPen(Classes::TNotifyEvent OnChangeEvent);
 	
 __published:
-	__property Color ;
+	__property Color  = {default=8421504};
 public:
 	#pragma option push -w-inl
 	/* TPen.Destroy */ inline __fastcall virtual ~TDarkGrayPen(void) { }
@@ -113,7 +117,7 @@ public:
 	__fastcall TChartArrowPen(Classes::TNotifyEvent OnChangeEvent);
 	
 __published:
-	__property Color ;
+	__property Color  = {default=16777215};
 public:
 	#pragma option push -w-inl
 	/* TPen.Destroy */ inline __fastcall virtual ~TChartArrowPen(void) { }
@@ -131,7 +135,7 @@ public:
 	__fastcall TChartAxisPen(Classes::TNotifyEvent OnChangeEvent);
 	
 __published:
-	__property Width ;
+	__property Width  = {default=2};
 public:
 	#pragma option push -w-inl
 	/* TPen.Destroy */ inline __fastcall virtual ~TChartAxisPen(void) { }
@@ -207,8 +211,7 @@ enum TCanvasBackMode { cbmNone, cbmTransparent, cbmOpaque };
 typedef int TCanvasTextAlign;
 
 #pragma option push -b-
-enum TGradientDirection { gdTopBottom, gdBottomTop, gdLeftRight, gdRightLeft, gdFromCenter, gdFromTopLeft, 
-	gdFromBottomLeft };
+enum TGradientDirection { gdTopBottom, gdBottomTop, gdLeftRight, gdRightLeft, gdFromCenter, gdFromTopLeft, gdFromBottomLeft };
 #pragma option pop
 
 class DELPHICLASS TTeeCanvas;
@@ -244,29 +247,27 @@ public:
 	virtual void __fastcall Arc(int X1, int Y1, int X2, int Y2, int X3, int Y3, int X4, int Y4) = 0 ;
 	virtual void __fastcall Draw(int X, int Y, Graphics::TGraphic* Graphic) = 0 ;
 	virtual void __fastcall Ellipse(int X1, int Y1, int X2, int Y2) = 0 ;
-	virtual void __fastcall FillRect(const Windows::TRect &Rect) = 0 ;
-	virtual void __fastcall Frame3D(const Windows::TRect &Rect, Graphics::TColor TopColor, Graphics::TColor 
-		BottomColor, int Width) = 0 ;
+	virtual void __fastcall FillRect(const Types::TRect &Rect) = 0 ;
+	virtual void __fastcall Frame3D(const Types::TRect &Rect, Graphics::TColor TopColor, Graphics::TColor BottomColor, int Width) = 0 ;
 	virtual void __fastcall LineTo(int X, int Y) = 0 ;
 	virtual void __fastcall MoveTo(int X, int Y) = 0 ;
 	virtual void __fastcall Pie(int X1, int Y1, int X2, int Y2, int X3, int Y3, int X4, int Y4) = 0 ;
 	virtual void __fastcall Rectangle(int X0, int Y0, int X1, int Y1) = 0 ;
 	virtual void __fastcall RoundRect(int X1, int Y1, int X2, int Y2, int X3, int Y3) = 0 ;
-	virtual void __fastcall StretchDraw(const Windows::TRect &Rect, Graphics::TGraphic* Graphic) = 0 ;
+	virtual void __fastcall StretchDraw(const Types::TRect &Rect, Graphics::TGraphic* Graphic) = 0 ;
 	virtual void __fastcall TextOut(int X, int Y, const AnsiString Text) = 0 ;
 	virtual int __fastcall TextWidth(const AnsiString St);
 	virtual int __fastcall TextHeight(const AnsiString St);
 	int __fastcall FontHeight(void);
-	virtual void __fastcall ClipRectangle(const Windows::TRect &Rect) = 0 ;
+	virtual void __fastcall ClipRectangle(const Types::TRect &Rect) = 0 ;
 	virtual void __fastcall DoHorizLine(int X0, int X1, int Y) = 0 ;
-	virtual void __fastcall DoRectangle(const Windows::TRect &Rect) = 0 ;
+	virtual void __fastcall DoRectangle(const Types::TRect &Rect) = 0 ;
 	virtual void __fastcall DoVertLine(int X, int Y0, int Y1) = 0 ;
-	virtual void __fastcall EraseBackground(const Windows::TRect &Rect) = 0 ;
-	virtual void __fastcall GradientFill(const Windows::TRect &Rect, Graphics::TColor StartColor, Graphics::TColor 
-		EndColor, TGradientDirection Direction) = 0 ;
+	virtual void __fastcall EraseBackground(const Types::TRect &Rect) = 0 ;
+	virtual void __fastcall GradientFill(const Types::TRect &Rect, Graphics::TColor StartColor, Graphics::TColor EndColor, TGradientDirection Direction) = 0 ;
 	virtual void __fastcall Invalidate(void) = 0 ;
 	virtual void __fastcall Line(int X0, int Y0, int X1, int Y1) = 0 ;
-	virtual void __fastcall Polygon(const Windows::TPoint * Points, const int Points_Size) = 0 ;
+	virtual void __fastcall Polygon(const Types::TPoint * Points, const int Points_Size) = 0 ;
 	virtual void __fastcall RotateLabel(int x, int y, const AnsiString St, int RotDegree) = 0 ;
 	virtual void __fastcall UnClipRectangle(void) = 0 ;
 	__property Graphics::TColor BackColor = {read=GetBackColor, write=SetBackColor, nodefault};
@@ -301,14 +302,13 @@ struct TPoint3D
 } ;
 #pragma pack(pop)
 
-typedef Windows::TPoint TFourPoints[4];
+typedef Types::TPoint TFourPoints[4];
 
 typedef TPoint3D TTrianglePoints3D[3];
 
 typedef Graphics::TColor TTriangleColors3D[3];
 
-typedef bool __fastcall (__closure *TTeeCanvasCalcPoints)(int x, int z, TPoint3D &P0, TPoint3D &P1, 
-	Graphics::TColor &Color0, Graphics::TColor &Color1);
+typedef bool __fastcall (__closure *TTeeCanvasCalcPoints)(int x, int z, TPoint3D &P0, TPoint3D &P1, Graphics::TColor &Color0, Graphics::TColor &Color1);
 
 #pragma option push -b-
 enum TTeeCanvasSurfaceStyle { tcsSolid, tcsWire, tcsDot };
@@ -330,24 +330,17 @@ protected:
 	
 public:
 	virtual void __fastcall Calculate2DPosition(int &x, int &y, int z) = 0 ;
-	virtual Windows::TPoint __fastcall Calculate3DPosition(int x, int y, int z) = 0 ;
-	virtual Windows::TRect __fastcall InitWindow(Graphics::TCanvas* DestCanvas, TView3DOptions* A3DOptions
-		, Graphics::TColor ABackColor, bool Is3D, const Windows::TRect &UserRect) = 0 ;
+	virtual Types::TPoint __fastcall Calculate3DPosition(int x, int y, int z) = 0 ;
+	virtual Types::TRect __fastcall InitWindow(Graphics::TCanvas* DestCanvas, TView3DOptions* A3DOptions, Graphics::TColor ABackColor, bool Is3D, const Types::TRect &UserRect) = 0 ;
 	virtual void __fastcall Assign(TCanvas3D* Source);
-	virtual void __fastcall Projection(int MaxDepth, const Windows::TRect &Bounds, const Windows::TRect 
-		&Rect) = 0 ;
-	virtual void __fastcall ShowImage(Graphics::TCanvas* DestCanvas, Graphics::TCanvas* DefaultCanvas, 
-		const Windows::TRect &UserRect) = 0 ;
+	virtual void __fastcall Projection(int MaxDepth, const Types::TRect &Bounds, const Types::TRect &Rect) = 0 ;
+	virtual void __fastcall ShowImage(Graphics::TCanvas* DestCanvas, Graphics::TCanvas* DefaultCanvas, const Types::TRect &UserRect) = 0 ;
 	virtual bool __fastcall ReDrawBitmap(void) = 0 ;
-	virtual void __fastcall Arrow(bool Filled, const Windows::TPoint &FromPoint, const Windows::TPoint 
-		&ToPoint, int ArrowWidth, int ArrowHeight, int Z) = 0 ;
-	virtual void __fastcall ClipCube(const Windows::TRect &Rect, int MinZ, int MaxZ) = 0 ;
-	virtual void __fastcall Cone(bool Vertical, int Left, int Top, int Right, int Bottom, int Z0, int Z1
-		, int ConePercent) = 0 ;
-	virtual void __fastcall Cube(int Left, int Right, int Top, int Bottom, int Z0, int Z1, bool DarkSides
-		) = 0 ;
-	virtual void __fastcall Cylinder(bool Vertical, int Left, int Top, int Right, int Bottom, int Z0, int 
-		Z1, bool Dark3D) = 0 ;
+	virtual void __fastcall Arrow(bool Filled, const Types::TPoint &FromPoint, const Types::TPoint &ToPoint, int ArrowWidth, int ArrowHeight, int Z) = 0 ;
+	virtual void __fastcall ClipCube(const Types::TRect &Rect, int MinZ, int MaxZ) = 0 ;
+	virtual void __fastcall Cone(bool Vertical, int Left, int Top, int Right, int Bottom, int Z0, int Z1, int ConePercent) = 0 ;
+	virtual void __fastcall Cube(int Left, int Right, int Top, int Bottom, int Z0, int Z1, bool DarkSides) = 0 ;
+	virtual void __fastcall Cylinder(bool Vertical, int Left, int Top, int Right, int Bottom, int Z0, int Z1, bool Dark3D) = 0 ;
 	virtual void __fastcall HorizLine3D(int Left, int Right, int Y, int Z) = 0 ;
 	virtual void __fastcall VertLine3D(int X, int Top, int Bottom, int Z) = 0 ;
 	virtual void __fastcall ZLine3D(int X, int Y, int Z0, int Z1) = 0 ;
@@ -357,29 +350,21 @@ public:
 	virtual void __fastcall LineWithZ(int X0, int Y0, int X1, int Y1, int Z) = 0 ;
 	virtual void __fastcall MoveTo3D(int X, int Y, int Z) = 0 ;
 	virtual void __fastcall LineTo3D(int X, int Y, int Z) = 0 ;
-	virtual void __fastcall Pie3D(int XCenter, int YCenter, int XRadius, int YRadius, int Z0, int Z1, const 
-		double StartAngle, const double EndAngle, bool DarkSides, bool DrawSides) = 0 ;
-	virtual void __fastcall Plane3D(const Windows::TPoint &A, const Windows::TPoint &B, int Z0, int Z1)
-		 = 0 ;
-	virtual void __fastcall PlaneWithZ(const Windows::TPoint &P1, const Windows::TPoint &P2, const Windows::TPoint 
-		&P3, const Windows::TPoint &P4, int Z) = 0 ;
-	virtual void __fastcall PlaneFour3D(Windows::TPoint * Points, int Z0, int Z1) = 0 ;
-	virtual void __fastcall PolygonWithZ(const Windows::TPoint * Points, const int Points_Size, int Z) = 0 
-		;
-	virtual void __fastcall Pyramid(bool Vertical, int Left, int Top, int Right, int Bottom, int z0, int 
-		z1, bool DarkSides) = 0 ;
-	virtual void __fastcall RectangleWithZ(const Windows::TRect &Rect, int Z) = 0 ;
+	virtual void __fastcall Pie3D(int XCenter, int YCenter, int XRadius, int YRadius, int Z0, int Z1, const double StartAngle, const double EndAngle, bool DarkSides, bool DrawSides) = 0 ;
+	virtual void __fastcall Plane3D(const Types::TPoint &A, const Types::TPoint &B, int Z0, int Z1) = 0 ;
+	virtual void __fastcall PlaneWithZ(const Types::TPoint &P1, const Types::TPoint &P2, const Types::TPoint &P3, const Types::TPoint &P4, int Z) = 0 ;
+	virtual void __fastcall PlaneFour3D(Types::TPoint * Points, int Z0, int Z1) = 0 ;
+	virtual void __fastcall PolygonWithZ(const Types::TPoint * Points, const int Points_Size, int Z) = 0 ;
+	virtual void __fastcall Pyramid(bool Vertical, int Left, int Top, int Right, int Bottom, int z0, int z1, bool DarkSides) = 0 ;
+	virtual void __fastcall RectangleWithZ(const Types::TRect &Rect, int Z) = 0 ;
 	virtual void __fastcall RectangleY(int Left, int Top, int Right, int Z0, int Z1) = 0 ;
 	virtual void __fastcall RectangleZ(int Left, int Top, int Bottom, int Z0, int Z1) = 0 ;
-	virtual void __fastcall RotateLabel3D(int x, int y, int z, const AnsiString St, int RotDegree) = 0 
-		;
+	virtual void __fastcall RotateLabel3D(int x, int y, int z, const AnsiString St, int RotDegree) = 0 ;
 	virtual void __fastcall Sphere(int x, int y, int z, const double Radius) = 0 ;
-	virtual void __fastcall Surface3D(TTeeCanvasSurfaceStyle Style, bool SameBrush, int NumXValues, int 
-		NumZValues, TTeeCanvasCalcPoints CalcPoints) = 0 ;
+	virtual void __fastcall Surface3D(TTeeCanvasSurfaceStyle Style, bool SameBrush, int NumXValues, int NumZValues, TTeeCanvasCalcPoints CalcPoints) = 0 ;
 	virtual void __fastcall TextOut3D(int x, int y, int z, const AnsiString Text) = 0 ;
 	virtual void __fastcall Triangle3D(const TPoint3D * Points, const Graphics::TColor * Colors) = 0 ;
-	virtual void __fastcall TriangleWithZ(const Windows::TPoint &P1, const Windows::TPoint &P2, const Windows::TPoint 
-		&P3, int Z) = 0 ;
+	virtual void __fastcall TriangleWithZ(const Types::TPoint &P1, const Types::TPoint &P2, const Types::TPoint &P3, int Z) = 0 ;
 	__property Graphics::TColor Pixels3D[int X][int Y][int Z] = {write=SetPixel3D};
 	__property bool Supports3DText = {read=GetSupports3DText, nodefault};
 	__property bool SupportsFullRotation = {read=GetSupportsFullRotation, nodefault};
@@ -421,12 +406,17 @@ private:
 	bool FBufferedDisplay;
 	bool FMonochrome;
 	bool FDirty;
-	Windows::TRect FBounds;
+	#pragma pack(push, 1)
+	Types::TRect FBounds;
+	#pragma pack(pop)
+	
 	bool IZoomText;
 	double IZoomFactor;
 	double IPerspec;
-	void __fastcall TransferBitmap(int ALeft, int ATop, Graphics::TCanvas* ACanvas);
+	Types::TPoint IPoints[4];
 	void __fastcall DeleteBitmap(void);
+	void __fastcall PolygonFour(void);
+	void __fastcall TransferBitmap(int ALeft, int ATop, Graphics::TCanvas* ACanvas);
 	
 protected:
 	virtual Graphics::TColor __fastcall GetBackColor(void);
@@ -437,68 +427,60 @@ protected:
 	virtual bool __fastcall GetSupportsFullRotation(void);
 	virtual int __fastcall GetTextAlign(void);
 	virtual bool __fastcall GetUseBuffer(void);
+	void __fastcall InternalCylinder(bool Vertical, int Left, int Top, int Right, int Bottom, int Z0, int Z1, bool Dark3D, int ConePercent);
 	virtual void __fastcall SetBackColor(Graphics::TColor Color);
 	virtual void __fastcall SetBackMode(TCanvasBackMode Mode);
 	virtual void __fastcall SetMonochrome(bool Value);
 	virtual void __fastcall SetPixel(int X, int Y, Graphics::TColor Value);
 	virtual void __fastcall SetTextAlign(int Align);
 	virtual void __fastcall SetUseBuffer(bool Value);
-	void __fastcall Calc3DTPoint(Windows::TPoint &P, int z);
-	Windows::TPoint __fastcall Calc3DTPoint3D(const TPoint3D &P);
-	void __fastcall Calc3DPoint(Windows::TPoint &P, int x, int y, int z);
+	void __fastcall Calc3DTPoint(Types::TPoint &P, int z);
+	Types::TPoint __fastcall Calc3DTPoint3D(const TPoint3D &P);
+	void __fastcall Calc3DPoint(Types::TPoint &P, int x, int y, int z);
 	virtual void __fastcall SetPixel3D(int X, int Y, int Z, Graphics::TColor Value);
 	void __fastcall Calc3DPos(int &x, int &y, int z);
 	__property Graphics::TBitmap* Bitmap = {read=FBitmap};
 	
 public:
 	virtual void __fastcall Calculate2DPosition(int &x, int &y, int z);
-	virtual Windows::TPoint __fastcall Calculate3DPosition(int x, int y, int z);
+	virtual Types::TPoint __fastcall Calculate3DPosition(int x, int y, int z);
 	__fastcall TTeeCanvas3D(void);
 	__fastcall virtual ~TTeeCanvas3D(void);
-	virtual Windows::TRect __fastcall InitWindow(Graphics::TCanvas* DestCanvas, TView3DOptions* A3DOptions
-		, Graphics::TColor ABackColor, bool Is3D, const Windows::TRect &UserRect);
+	virtual Types::TRect __fastcall InitWindow(Graphics::TCanvas* DestCanvas, TView3DOptions* A3DOptions, Graphics::TColor ABackColor, bool Is3D, const Types::TRect &UserRect);
 	virtual bool __fastcall ReDrawBitmap(void);
-	virtual void __fastcall ShowImage(Graphics::TCanvas* DestCanvas, Graphics::TCanvas* DefaultCanvas, 
-		const Windows::TRect &UserRect);
+	virtual void __fastcall ShowImage(Graphics::TCanvas* DestCanvas, Graphics::TCanvas* DefaultCanvas, const Types::TRect &UserRect);
 	virtual void __fastcall Arc(int X1, int Y1, int X2, int Y2, int X3, int Y3, int X4, int Y4);
 	virtual void __fastcall Draw(int X, int Y, Graphics::TGraphic* Graphic);
 	virtual void __fastcall Ellipse(int X1, int Y1, int X2, int Y2);
-	virtual void __fastcall EraseBackground(const Windows::TRect &Rect);
-	virtual void __fastcall FillRect(const Windows::TRect &Rect);
-	virtual void __fastcall Frame3D(const Windows::TRect &Rect, Graphics::TColor TopColor, Graphics::TColor 
-		BottomColor, int Width);
+	virtual void __fastcall EraseBackground(const Types::TRect &Rect);
+	virtual void __fastcall FillRect(const Types::TRect &Rect);
+	virtual void __fastcall Frame3D(const Types::TRect &Rect, Graphics::TColor TopColor, Graphics::TColor BottomColor, int Width);
 	virtual void __fastcall LineTo(int X, int Y);
 	virtual void __fastcall MoveTo(int X, int Y);
 	virtual void __fastcall Pie(int X1, int Y1, int X2, int Y2, int X3, int Y3, int X4, int Y4);
 	virtual void __fastcall Rectangle(int X0, int Y0, int X1, int Y1);
 	virtual void __fastcall RoundRect(int X1, int Y1, int X2, int Y2, int X3, int Y3);
-	virtual void __fastcall StretchDraw(const Windows::TRect &Rect, Graphics::TGraphic* Graphic);
+	virtual void __fastcall StretchDraw(const Types::TRect &Rect, Graphics::TGraphic* Graphic);
 	virtual void __fastcall TextOut(int X, int Y, const AnsiString Text);
-	virtual void __fastcall ClipRectangle(const Windows::TRect &Rect);
-	virtual void __fastcall ClipCube(const Windows::TRect &Rect, int MinZ, int MaxZ);
-	virtual void __fastcall DoRectangle(const Windows::TRect &Rect);
+	virtual void __fastcall ClipRectangle(const Types::TRect &Rect);
+	virtual void __fastcall ClipCube(const Types::TRect &Rect, int MinZ, int MaxZ);
+	virtual void __fastcall DoRectangle(const Types::TRect &Rect);
 	virtual void __fastcall DoHorizLine(int X0, int X1, int Y);
 	virtual void __fastcall DoVertLine(int X, int Y0, int Y1);
-	virtual void __fastcall GradientFill(const Windows::TRect &Rect, Graphics::TColor StartColor, Graphics::TColor 
-		EndColor, TGradientDirection Direction);
+	virtual void __fastcall GradientFill(const Types::TRect &Rect, Graphics::TColor StartColor, Graphics::TColor EndColor, TGradientDirection Direction);
 	virtual void __fastcall Invalidate(void);
 	virtual void __fastcall Line(int X0, int Y0, int X1, int Y1);
-	virtual void __fastcall Polygon(const Windows::TPoint * Points, const int Points_Size);
+	virtual void __fastcall Polygon(const Types::TPoint * Points, const int Points_Size);
 	virtual void __fastcall RotateLabel(int x, int y, const AnsiString St, int RotDegree);
 	virtual void __fastcall RotateLabel3D(int x, int y, int z, const AnsiString St, int RotDegree);
 	virtual void __fastcall UnClipRectangle(void);
 	__property int XCenter = {read=FXCenter, write=FXCenter, nodefault};
 	__property int YCenter = {read=FYCenter, write=FYCenter, nodefault};
-	virtual void __fastcall Projection(int MaxDepth, const Windows::TRect &Bounds, const Windows::TRect 
-		&Rect);
-	virtual void __fastcall Arrow(bool Filled, const Windows::TPoint &FromPoint, const Windows::TPoint 
-		&ToPoint, int ArrowWidth, int ArrowHeight, int Z);
-	virtual void __fastcall Cone(bool Vertical, int Left, int Top, int Right, int Bottom, int Z0, int Z1
-		, int ConePercent);
-	virtual void __fastcall Cube(int Left, int Right, int Top, int Bottom, int Z0, int Z1, bool DarkSides
-		);
-	virtual void __fastcall Cylinder(bool Vertical, int Left, int Top, int Right, int Bottom, int Z0, int 
-		Z1, bool Dark3D);
+	virtual void __fastcall Projection(int MaxDepth, const Types::TRect &Bounds, const Types::TRect &Rect);
+	virtual void __fastcall Arrow(bool Filled, const Types::TPoint &FromPoint, const Types::TPoint &ToPoint, int ArrowWidth, int ArrowHeight, int Z);
+	virtual void __fastcall Cone(bool Vertical, int Left, int Top, int Right, int Bottom, int Z0, int Z1, int ConePercent);
+	virtual void __fastcall Cube(int Left, int Right, int Top, int Bottom, int Z0, int Z1, bool DarkSides);
+	virtual void __fastcall Cylinder(bool Vertical, int Left, int Top, int Right, int Bottom, int Z0, int Z1, bool Dark3D);
 	virtual void __fastcall EllipseWithZ(int X1, int Y1, int X2, int Y2, int Z);
 	virtual void __fastcall RectangleZ(int Left, int Top, int Bottom, int Z0, int Z1);
 	virtual void __fastcall RectangleY(int Left, int Top, int Right, int Z0, int Z1);
@@ -508,43 +490,36 @@ public:
 	virtual void __fastcall LineTo3D(int X, int Y, int Z);
 	virtual void __fastcall LineWithZ(int X0, int Y0, int X1, int Y1, int Z);
 	virtual void __fastcall MoveTo3D(int X, int Y, int Z);
-	virtual void __fastcall Pie3D(int XCenter, int YCenter, int XRadius, int YRadius, int Z0, int Z1, const 
-		double StartAngle, const double EndAngle, bool DarkSides, bool DrawSides);
-	virtual void __fastcall Plane3D(const Windows::TPoint &A, const Windows::TPoint &B, int Z0, int Z1)
-		;
-	virtual void __fastcall PlaneWithZ(const Windows::TPoint &P1, const Windows::TPoint &P2, const Windows::TPoint 
-		&P3, const Windows::TPoint &P4, int Z);
-	virtual void __fastcall PlaneFour3D(Windows::TPoint * Points, int Z0, int Z1);
-	virtual void __fastcall PolygonWithZ(const Windows::TPoint * Points, const int Points_Size, int Z);
-		
-	virtual void __fastcall Pyramid(bool Vertical, int Left, int Top, int Right, int Bottom, int z0, int 
-		z1, bool DarkSides);
-	virtual void __fastcall RectangleWithZ(const Windows::TRect &Rect, int Z);
+	virtual void __fastcall Pie3D(int XCenter, int YCenter, int XRadius, int YRadius, int Z0, int Z1, const double StartAngle, const double EndAngle, bool DarkSides, bool DrawSides);
+	virtual void __fastcall Plane3D(const Types::TPoint &A, const Types::TPoint &B, int Z0, int Z1);
+	virtual void __fastcall PlaneWithZ(const Types::TPoint &P1, const Types::TPoint &P2, const Types::TPoint &P3, const Types::TPoint &P4, int Z);
+	virtual void __fastcall PlaneFour3D(Types::TPoint * Points, int Z0, int Z1);
+	virtual void __fastcall PolygonWithZ(const Types::TPoint * Points, const int Points_Size, int Z);
+	virtual void __fastcall Pyramid(bool Vertical, int Left, int Top, int Right, int Bottom, int z0, int z1, bool DarkSides);
+	virtual void __fastcall RectangleWithZ(const Types::TRect &Rect, int Z);
 	virtual void __fastcall Sphere(int x, int y, int z, const double Radius);
-	virtual void __fastcall Surface3D(TTeeCanvasSurfaceStyle Style, bool SameBrush, int NumXValues, int 
-		NumZValues, TTeeCanvasCalcPoints CalcPoints);
+	virtual void __fastcall Surface3D(TTeeCanvasSurfaceStyle Style, bool SameBrush, int NumXValues, int NumZValues, TTeeCanvasCalcPoints CalcPoints);
 	virtual void __fastcall TextOut3D(int X, int Y, int Z, const AnsiString Text);
 	virtual void __fastcall Triangle3D(const TPoint3D * Points, const Graphics::TColor * Colors);
-	virtual void __fastcall TriangleWithZ(const Windows::TPoint &P1, const Windows::TPoint &P2, const Windows::TPoint 
-		&P3, int Z);
+	virtual void __fastcall TriangleWithZ(const Types::TPoint &P1, const Types::TPoint &P2, const Types::TPoint &P3, int Z);
 	virtual void __fastcall VertLine3D(int X, int Top, int Bottom, int Z);
 	virtual void __fastcall ZLine3D(int X, int Y, int Z0, int Z1);
-	__property Windows::TRect Bounds = {read=FBounds};
+	__property Types::TRect Bounds = {read=FBounds};
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
+extern PACKAGE int TeeDefaultConePercent;
 static const char TeeCharForHeight = '\x57';
 extern PACKAGE Byte DarkerColorQuantity;
 extern PACKAGE Byte DarkColorQuantity;
 extern PACKAGE int TeeGradientPrecision;
-extern PACKAGE void __fastcall SinCos(const Extended Angle, Extended &ResultSin, Extended &ResultCos
-	);
+extern PACKAGE void __fastcall SinCos(const Extended Angle, Extended &ResultSin, Extended &ResultCos);
 extern PACKAGE Extended __fastcall ArcTan2(Extended Y, Extended X);
 extern PACKAGE TPoint3D __fastcall Point3D(int x, int y, int z);
-extern PACKAGE void __fastcall RectSize(const Windows::TRect &R, int &RectWidth, int &RectHeight);
-extern PACKAGE void __fastcall RectCenter(const Windows::TRect &R, int &XCenter, int &YCenter);
-extern PACKAGE void __fastcall ClipCanvas(Graphics::TCanvas* ACanvas, const Windows::TRect &Rect);
+extern PACKAGE void __fastcall RectSize(const Types::TRect &R, int &RectWidth, int &RectHeight);
+extern PACKAGE void __fastcall RectCenter(const Types::TRect &R, int &XCenter, int &YCenter);
+extern PACKAGE void __fastcall ClipCanvas(Graphics::TCanvas* ACanvas, const Types::TRect &Rect);
 extern PACKAGE void __fastcall UnClipCanvas(Graphics::TCanvas* ACanvas);
 extern PACKAGE Graphics::TColor __fastcall ApplyDark(Graphics::TColor Color, Byte HowMuch);
 extern PACKAGE Graphics::TColor __fastcall ApplyBright(Graphics::TColor Color, Byte HowMuch);
@@ -557,9 +532,7 @@ extern PACKAGE void __fastcall SwapDouble(double &a, double &b);
 extern PACKAGE void __fastcall SwapInteger(int &a, int &b);
 
 }	/* namespace Tecanvas */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Tecanvas;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

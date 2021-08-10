@@ -13,7 +13,13 @@ unit DBActns;
 
 interface
 
-uses Classes, ActnList, Db;
+uses Classes, DB,
+{$IFDEF MSWINDOWS}
+ActnList;
+{$ENDIF}
+{$IFDEF LINUX}
+QActnList;
+{$ENDIF}
 
 type
   { DataSet actions }

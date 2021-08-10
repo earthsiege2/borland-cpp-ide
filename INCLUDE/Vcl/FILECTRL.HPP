@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'FileCtrl.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'FileCtrl.pas' rev: 6.00
 
 #ifndef FileCtrlHPP
 #define FileCtrlHPP
@@ -67,12 +67,10 @@ protected:
 	Graphics::TBitmap* CDROMBMP;
 	Graphics::TBitmap* RAMBMP;
 	virtual void __fastcall CreateWnd(void);
-	virtual void __fastcall DrawItem(int Index, const Windows::TRect &Rect, Windows::TOwnerDrawState State
-		);
+	virtual void __fastcall DrawItem(int Index, const Types::TRect &Rect, Windows::TOwnerDrawState State);
 	DYNAMIC void __fastcall Click(void);
 	virtual void __fastcall BuildList(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TDriveComboBox(Classes::TComponent* AOwner);
@@ -81,27 +79,33 @@ public:
 	__property char Drive = {read=FDrive, write=SetDrive, nodefault};
 	
 __published:
-	__property Anchors ;
-	__property Color ;
+	__property Anchors  = {default=3};
+	__property AutoComplete  = {default=1};
+	__property AutoDropDown  = {default=0};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelKind  = {default=0};
+	__property BevelOuter  = {index=1, default=1};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
 	__property TDirectoryListBox* DirList = {read=FDirList, write=SetDirListBox};
-	__property DragMode ;
-	__property DragCursor ;
-	__property Enabled ;
+	__property DragMode  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
 	__property TTextCase TextCase = {read=FTextCase, write=SetTextCase, default=0};
-	__property Visible ;
+	__property Visible  = {default=1};
 	__property OnChange ;
 	__property OnClick ;
 	__property OnContextPopup ;
@@ -118,8 +122,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDriveComboBox(HWND ParentWindow) : Stdctrls::TCustomComboBox(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDriveComboBox(HWND ParentWindow) : Stdctrls::TCustomComboBox(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -157,14 +160,11 @@ protected:
 	DYNAMIC void __fastcall DblClick(void);
 	virtual void __fastcall ReadBitmaps(void);
 	virtual void __fastcall CreateWnd(void);
-	virtual void __fastcall DrawItem(int Index, const Windows::TRect &Rect, Windows::TOwnerDrawState State
-		);
-	int __fastcall ReadDirectoryNames(const AnsiString ParentDirectory, Classes::TStringList* DirectoryList
-		);
+	virtual void __fastcall DrawItem(int Index, const Types::TRect &Rect, Windows::TOwnerDrawState State);
+	int __fastcall ReadDirectoryNames(const AnsiString ParentDirectory, Classes::TStringList* DirectoryList);
 	virtual void __fastcall BuildList(void);
 	DYNAMIC void __fastcall KeyPress(char &Key);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TDirectoryListBox(Classes::TComponent* AOwner);
@@ -180,31 +180,36 @@ public:
 	__property bool CaseSensitive = {read=FCaseSensitive, nodefault};
 	
 __published:
-	__property Align ;
-	__property Anchors ;
-	__property Color ;
-	__property Columns ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property AutoComplete  = {default=1};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelKind  = {default=0};
+	__property BevelOuter  = {index=1, default=1};
+	__property Color  = {default=-2147483643};
+	__property Columns  = {default=0};
 	__property Constraints ;
 	__property Ctl3D ;
 	__property Stdctrls::TLabel* DirLabel = {read=FDirLabel, write=SetDirLabel};
-	__property DragCursor ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property TFileListBox* FileList = {read=FFileList, write=SetFileListBox};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
-	__property IntegralHeight ;
+	__property IntegralHeight  = {default=0};
 	__property ItemHeight ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property OnClick ;
 	__property OnContextPopup ;
@@ -223,8 +228,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDirectoryListBox(HWND ParentWindow) : Stdctrls::TCustomListBox(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDirectoryListBox(HWND ParentWindow) : Stdctrls::TCustomListBox(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -249,8 +253,7 @@ protected:
 	virtual void __fastcall CreateWnd(void);
 	DYNAMIC void __fastcall Click(void);
 	void __fastcall BuildList(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TFilterComboBox(Classes::TComponent* AOwner);
@@ -259,27 +262,33 @@ public:
 	__property Text ;
 	
 __published:
-	__property Anchors ;
-	__property Color ;
+	__property Anchors  = {default=3};
+	__property AutoComplete  = {default=1};
+	__property AutoDropDown  = {default=0};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelKind  = {default=0};
+	__property BevelOuter  = {index=1, default=1};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DragMode ;
-	__property DragCursor ;
-	__property Enabled ;
+	__property DragMode  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property Enabled  = {default=1};
 	__property TFileListBox* FileList = {read=FFileList, write=SetFileListBox};
 	__property AnsiString Filter = {read=FFilter, write=SetFilter, stored=IsFilterStored};
 	__property Font ;
 	__property ImeName ;
-	__property ImeMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ImeMode  = {default=3};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnChange ;
 	__property OnClick ;
 	__property OnContextPopup ;
@@ -296,8 +305,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TFilterComboBox(HWND ParentWindow) : Stdctrls::TCustomComboBox(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TFilterComboBox(HWND ParentWindow) : Stdctrls::TCustomComboBox(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -339,10 +347,8 @@ protected:
 	DYNAMIC void __fastcall Click(void);
 	virtual void __fastcall Change(void);
 	virtual void __fastcall ReadFileNames(void);
-	virtual void __fastcall DrawItem(int Index, const Windows::TRect &Rect, Windows::TOwnerDrawState State
-		);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall DrawItem(int Index, const Types::TRect &Rect, Windows::TOwnerDrawState State);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual AnsiString __fastcall GetFilePath();
 	
 public:
@@ -355,34 +361,39 @@ public:
 	__property AnsiString FileName = {read=GetFilePath, write=ApplyFilePath};
 	
 __published:
-	__property Align ;
-	__property Anchors ;
-	__property Color ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property AutoComplete  = {default=1};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelKind  = {default=0};
+	__property BevelOuter  = {index=1, default=1};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property Enabled ;
-	__property ExtendedSelect ;
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
+	__property ExtendedSelect  = {default=1};
 	__property Stdctrls::TEdit* FileEdit = {read=FFileEdit, write=SetFileEdit};
 	__property TFileType FileType = {read=FFileType, write=SetFileType, default=64};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
-	__property IntegralHeight ;
+	__property IntegralHeight  = {default=0};
 	__property ItemHeight ;
 	__property AnsiString Mask = {read=FMask, write=SetMask, stored=IsMaskStored};
-	__property MultiSelect ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property MultiSelect  = {default=0};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property bool ShowGlyphs = {read=FShowGlyphs, write=SetShowGlyphs, default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property OnClick ;
 	__property OnContextPopup ;
@@ -401,8 +412,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TFileListBox(HWND ParentWindow) : Stdctrls::TCustomListBox(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TFileListBox(HWND ParentWindow) : Stdctrls::TCustomListBox(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -416,21 +426,13 @@ typedef Set<TSelectDirOpt, sdAllowCreate, sdPrompt>  TSelectDirOpts;
 
 //-- var, const, procedure ---------------------------------------------------
 static const Shortint WNTYPE_DRIVE = 0x1;
-extern PACKAGE AnsiString __fastcall MinimizeName(const AnsiString Filename, Graphics::TCanvas* Canvas
-	, int MaxLen);
-extern PACKAGE void __fastcall ProcessPath(const AnsiString EditText, char &Drive, AnsiString &DirPart
-	, AnsiString &FilePart);
-extern PACKAGE bool __fastcall SelectDirectory(AnsiString &Directory, TSelectDirOpts Options, int HelpCtx
-	)/* overload */;
-extern PACKAGE bool __fastcall SelectDirectory(const AnsiString Caption, const WideString Root, /* out */ 
-	AnsiString &Directory)/* overload */;
-extern PACKAGE bool __fastcall DirectoryExists(const AnsiString Name);
-extern PACKAGE bool __fastcall ForceDirectories(AnsiString Dir);
+extern PACKAGE AnsiString __fastcall MinimizeName(const AnsiString Filename, Graphics::TCanvas* Canvas, int MaxLen);
+extern PACKAGE void __fastcall ProcessPath(const AnsiString EditText, char &Drive, AnsiString &DirPart, AnsiString &FilePart);
+extern PACKAGE bool __fastcall SelectDirectory(AnsiString &Directory, TSelectDirOpts Options, int HelpCtx)/* overload */;
+extern PACKAGE bool __fastcall SelectDirectory(const AnsiString Caption, const WideString Root, AnsiString &Directory)/* overload */;
 
 }	/* namespace Filectrl */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Filectrl;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

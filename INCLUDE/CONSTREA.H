@@ -5,13 +5,14 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 8.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1991, 1997 by Borland International
+ *      Copyright (c) 1991, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
-/* $Revision:   9.5  $ */
+
+/* $Revision: 9.8.2.2 $ */
 
 #if !defined(__CONSTREA_H)
 #define __CONSTREA_H
@@ -19,6 +20,7 @@
 #include <iosfwd.h>
 #include <strstrea.h>
 #include <iomanip.h>
+#include <iostream.h>
 
 #if !defined(__CONIO_H)
 #include <conio.h>

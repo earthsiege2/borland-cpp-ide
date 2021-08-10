@@ -1,46 +1,46 @@
-LIBRARY MPR
+LIBRARY Mpr
 EXPORTS
 
-    MultinetGetConnectionPerformanceA        = 'MPR.DLL'.*
-    MultinetGetConnectionPerformanceW        = 'MPR.DLL'.*
-    WNetAddConnection2A                      = 'MPR.DLL'.*
-    WNetAddConnection2W                      = 'MPR.DLL'.*
-    WNetAddConnection3A                      = 'MPR.DLL'.*
-    WNetAddConnection3W                      = 'MPR.DLL'.*
-    WNetAddConnectionA                       = 'MPR.DLL'.*
-    WNetAddConnectionW                       = 'MPR.DLL'.*
-    WNetCancelConnection2A                   = 'MPR.DLL'.*
-    WNetCancelConnection2W                   = 'MPR.DLL'.*
-    WNetCancelConnectionA                    = 'MPR.DLL'.*
-    WNetCancelConnectionW                    = 'MPR.DLL'.*
-    WNetCloseEnum                            = 'MPR.DLL'.*
-    WNetConnectionDialog1A                   = 'MPR.DLL'.*
-    WNetConnectionDialog1W                   = 'MPR.DLL'.*
-    WNetConnectionDialog                     = 'MPR.DLL'.*
-    WNetDisconnectDialog1A                   = 'MPR.DLL'.*
-    WNetDisconnectDialog1W                   = 'MPR.DLL'.*
-    WNetDisconnectDialog                     = 'MPR.DLL'.*
-    WNetEnumResourceA                        = 'MPR.DLL'.*
-    WNetEnumResourceW                        = 'MPR.DLL'.*
-    WNetGetConnectionA                       = 'MPR.DLL'.*
-    WNetGetConnectionW                       = 'MPR.DLL'.*
-    WNetGetLastErrorA                        = 'MPR.DLL'.*
-    WNetGetLastErrorW                        = 'MPR.DLL'.*
-    WNetGetNetworkInformationA               = 'MPR.DLL'.*
-    WNetGetNetworkInformationW               = 'MPR.DLL'.*
-    WNetGetProviderNameA                     = 'MPR.DLL'.*
-    WNetGetProviderNameW                     = 'MPR.DLL'.*
-    WNetGetResourceInformationA              = 'MPR.DLL'.*
-    WNetGetResourceInformationW              = 'MPR.DLL'.*
-    WNetGetResourceParentA                   = 'MPR.DLL'.*
-    WNetGetResourceParentW                   = 'MPR.DLL'.*
-    WNetGetUniversalNameA                    = 'MPR.DLL'.*
-    WNetGetUniversalNameW                    = 'MPR.DLL'.*
-    WNetGetUserA                             = 'MPR.DLL'.*
-    WNetGetUserW                             = 'MPR.DLL'.*
-    WNetOpenEnumA                            = 'MPR.DLL'.*
-    WNetOpenEnumW                            = 'MPR.DLL'.*
-    WNetSetLastErrorA                        = 'MPR.DLL'.*
-    WNetSetLastErrorW                        = 'MPR.DLL'.*
-    WNetUseConnectionA                       = 'MPR.DLL'.*
-    WNetUseConnectionW                       = 'MPR.DLL'.*
+    MultinetGetConnectionPerformanceA
+    MultinetGetConnectionPerformanceW
+    WNetAddConnection2A
+    WNetAddConnection2W
+    WNetAddConnection3A
+    WNetAddConnection3W
+    WNetAddConnectionA
+    WNetAddConnectionW
+    WNetCancelConnection2A
+    WNetCancelConnection2W
+    WNetCancelConnectionA
+    WNetCancelConnectionW
+    WNetCloseEnum
+    WNetConnectionDialog1A
+    WNetConnectionDialog1W
+    WNetConnectionDialog
+    WNetDisconnectDialog1A
+    WNetDisconnectDialog1W
+    WNetDisconnectDialog
+    WNetEnumResourceA
+    WNetEnumResourceW
+    WNetGetConnectionA
+    WNetGetConnectionW
+    WNetGetLastErrorA
+    WNetGetLastErrorW
+    WNetGetNetworkInformationA
+    WNetGetNetworkInformationW
+    WNetGetProviderNameA
+    WNetGetProviderNameW
+    WNetGetResourceInformationA
+    WNetGetResourceInformationW
+    WNetGetResourceParentA
+    WNetGetResourceParentW
+    WNetGetUniversalNameA
+    WNetGetUniversalNameW
+    WNetGetUserA
+    WNetGetUserW
+    WNetOpenEnumA
+    WNetOpenEnumW
+    WNetSetLastErrorA
+    WNetSetLastErrorW
+    WNetUseConnectionA
+    WNetUseConnectionW

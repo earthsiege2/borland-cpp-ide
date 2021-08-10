@@ -6,7 +6,6 @@
 *                                                                         *
 **************************************************************************/
 #ifndef __DSKQUOTA_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __DSKQUOTA_H
 
 #if _MSC_VER > 1000
@@ -379,6 +378,5 @@ typedef IDiskQuotaEvents DISKQUOTA_EVENTS, *PDISKQUOTA_EVENTS;
 
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // __DSKQUOTA_H
 

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ScrptMgr.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ScrptMgr.pas' rev: 6.00
 
 #ifndef ScrptMgrHPP
 #define ScrptMgrHPP
@@ -10,16 +10,16 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
+#include <MidComp.hpp>	// Pascal unit
 #include <Contnrs.hpp>	// Pascal unit
 #include <XMLBrokr.hpp>	// Pascal unit
 #include <PagItems.hpp>	// Pascal unit
 #include <DBClient.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <CompProd.hpp>	// Pascal unit
 #include <WebComp.hpp>	// Pascal unit
 #include <HTTPApp.hpp>	// Pascal unit
-#include <ImgList.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
@@ -50,8 +50,7 @@ public:
 
 __interface INameContent;
 typedef System::DelphiInterface<INameContent> _di_INameContent;
-__interface INTERFACE_UUID("{8AFBBDE8-2A11-11D3-AAAB-00A024C11562}") INameContent  : public IUnknown 
-	
+__interface INTERFACE_UUID("{8AFBBDE8-2A11-11D3-AAAB-00A024C11562}") INameContent  : public IInterface 
 {
 	
 public:
@@ -77,8 +76,7 @@ protected:
 	bool __fastcall MatchName(const AnsiString AName);
 	
 public:
-	__fastcall TNameContentScriptObject(System::TObject* AParent, const AnsiString AName, const AnsiString 
-		AContent);
+	__fastcall TNameContentScriptObject(System::TObject* AParent, const AnsiString AName, const AnsiString AContent);
 	__property AnsiString Name = {read=GetName};
 	__property AnsiString Content = {read=GetContent};
 public:
@@ -95,11 +93,13 @@ public:
 };
 
 
+#pragma pack(push, 4)
 struct TItemHolder
 {
-	_di_IUnknown FIntf;
+	System::_di_IInterface FIntf;
 	TScriptObject* FObject;
 } ;
+#pragma pack(pop)
 
 typedef DynamicArray<TItemHolder >  ScrptMgr__4;
 
@@ -115,7 +115,7 @@ protected:
 	int __fastcall Add(TScriptObject* AObject);
 	int __fastcall GetCount(void);
 	TScriptObject* __fastcall GetAsObject(int I);
-	_di_IUnknown __fastcall GetAsIntf(int I);
+	System::_di_IInterface __fastcall GetAsIntf(int I);
 	
 public:
 	__fastcall virtual ~TScriptObjectContainer(void);
@@ -124,8 +124,7 @@ public:
 	__property TScriptObject* Objects[int I] = {read=GetAsObject};
 public:
 	#pragma option push -w-inl
-	/* TScriptObject.Create */ inline __fastcall TScriptObjectContainer(System::TObject* AParent) : TScriptObject(
-		AParent) { }
+	/* TScriptObject.Create */ inline __fastcall TScriptObjectContainer(System::TObject* AParent) : TScriptObject(AParent) { }
 	#pragma option pop
 	
 };
@@ -142,13 +141,13 @@ private:
 	TXMLDocument* __fastcall GetObject(int I);
 	
 protected:
-	Webcomp::_di_IXMLDocument __fastcall GetItem(int I);
+	Midcomp::_di_IXMLDocument __fastcall GetItem(int I);
 	
 public:
 	TXMLDocument* __fastcall AddXMLBroker(Xmlbrokr::TXMLBroker* XMLBroker);
 	TXMLDocument* __fastcall FindXMLBroker(Xmlbrokr::TXMLBroker* XMLBroker);
 	__property TXMLDocument* Objects[int I] = {read=GetObject};
-	__property Webcomp::_di_IXMLDocument Items[int I] = {read=GetItem};
+	__property Midcomp::_di_IXMLDocument Items[int I] = {read=GetItem};
 public:
 	#pragma option push -w-inl
 	/* TScriptObjectContainer.Destroy */ inline __fastcall virtual ~TXMLDocuments(void) { }
@@ -156,12 +155,11 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TScriptObject.Create */ inline __fastcall TXMLDocuments(System::TObject* AParent) : TScriptObjectContainer(
-		AParent) { }
+	/* TScriptObject.Create */ inline __fastcall TXMLDocuments(System::TObject* AParent) : TScriptObjectContainer(AParent) { }
 	#pragma option pop
 	
 private:
-	void *__IXMLDocuments;	/* Webcomp::IXMLDocuments */
+	void *__IXMLDocuments;	/* Midcomp::IXMLDocuments */
 	
 public:
 	operator IXMLDocuments*(void) { return (IXMLDocuments*)&__IXMLDocuments; }
@@ -179,13 +177,13 @@ private:
 	TIncludeFile* __fastcall GetObject(int I);
 	
 protected:
-	Webcomp::_di_IIncludeFile __fastcall GetItem(int I);
+	Midcomp::_di_IIncludeFile __fastcall GetItem(int I);
 	
 public:
 	TIncludeFile* __fastcall AddFileName(const AnsiString FileName);
 	TIncludeFile* __fastcall FindFileName(const AnsiString FileName);
 	__property TIncludeFile* Objects[int I] = {read=GetObject};
-	__property Webcomp::_di_IIncludeFile Items[int I] = {read=GetItem};
+	__property Midcomp::_di_IIncludeFile Items[int I] = {read=GetItem};
 public:
 	#pragma option push -w-inl
 	/* TScriptObjectContainer.Destroy */ inline __fastcall virtual ~TIncludeFiles(void) { }
@@ -193,12 +191,11 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TScriptObject.Create */ inline __fastcall TIncludeFiles(System::TObject* AParent) : TScriptObjectContainer(
-		AParent) { }
+	/* TScriptObject.Create */ inline __fastcall TIncludeFiles(System::TObject* AParent) : TScriptObjectContainer(AParent) { }
 	#pragma option pop
 	
 private:
-	void *__IIncludeFiles;	/* Webcomp::IIncludeFiles */
+	void *__IIncludeFiles;	/* Midcomp::IIncludeFiles */
 	
 public:
 	operator IIncludeFiles*(void) { return (IIncludeFiles*)&__IIncludeFiles; }
@@ -216,13 +213,13 @@ private:
 	TFunction* __fastcall GetObject(int I);
 	
 protected:
-	Webcomp::_di_IFunction __fastcall GetItem(int I);
+	Midcomp::_di_IFunction __fastcall GetItem(int I);
 	
 public:
 	TFunction* __fastcall AddFunction(const AnsiString Name, const AnsiString Body);
 	TFunction* __fastcall FindFunctionName(const AnsiString Name);
 	__property TFunction* Objects[int I] = {read=GetObject};
-	__property Webcomp::_di_IFunction Items[int I] = {read=GetItem};
+	__property Midcomp::_di_IFunction Items[int I] = {read=GetItem};
 public:
 	#pragma option push -w-inl
 	/* TScriptObjectContainer.Destroy */ inline __fastcall virtual ~TFunctions(void) { }
@@ -230,12 +227,11 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TScriptObject.Create */ inline __fastcall TFunctions(System::TObject* AParent) : TScriptObjectContainer(
-		AParent) { }
+	/* TScriptObject.Create */ inline __fastcall TFunctions(System::TObject* AParent) : TScriptObjectContainer(AParent) { }
 	#pragma option pop
 	
 private:
-	void *__IFunctions;	/* Webcomp::IFunctions */
+	void *__IFunctions;	/* Midcomp::IFunctions */
 	
 public:
 	operator IFunctions*(void) { return (IFunctions*)&__IFunctions; }
@@ -253,13 +249,13 @@ private:
 	TScriptBlock* __fastcall GetObject(int I);
 	
 protected:
-	Webcomp::_di_IScriptBlock __fastcall GetItem(int I);
+	Midcomp::_di_IScriptBlock __fastcall GetItem(int I);
 	
 public:
 	TScriptBlock* __fastcall AddBlock(const AnsiString Name, const AnsiString Script);
 	TScriptBlock* __fastcall FindBlockName(const AnsiString Name);
 	__property TScriptBlock* Objects[int I] = {read=GetObject};
-	__property Webcomp::_di_IScriptBlock Items[int I] = {read=GetItem};
+	__property Midcomp::_di_IScriptBlock Items[int I] = {read=GetItem};
 public:
 	#pragma option push -w-inl
 	/* TScriptObjectContainer.Destroy */ inline __fastcall virtual ~TScriptBlocks(void) { }
@@ -267,12 +263,11 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TScriptObject.Create */ inline __fastcall TScriptBlocks(System::TObject* AParent) : TScriptObjectContainer(
-		AParent) { }
+	/* TScriptObject.Create */ inline __fastcall TScriptBlocks(System::TObject* AParent) : TScriptObjectContainer(AParent) { }
 	#pragma option pop
 	
 private:
-	void *__IScriptBlocks;	/* Webcomp::IScriptBlocks */
+	void *__IScriptBlocks;	/* Midcomp::IScriptBlocks */
 	
 public:
 	operator IScriptBlocks*(void) { return (IScriptBlocks*)&__IScriptBlocks; }
@@ -290,13 +285,13 @@ private:
 	TVar* __fastcall GetObject(int I);
 	
 protected:
-	Webcomp::_di_IVar __fastcall GetItem(int I);
+	Midcomp::_di_IVar __fastcall GetItem(int I);
 	
 public:
 	TVar* __fastcall AddVar(const AnsiString Name, const AnsiString Script);
 	TVar* __fastcall FindVarName(const AnsiString Name);
 	__property TVar* Objects[int I] = {read=GetObject};
-	__property Webcomp::_di_IVar Items[int I] = {read=GetItem};
+	__property Midcomp::_di_IVar Items[int I] = {read=GetItem};
 public:
 	#pragma option push -w-inl
 	/* TScriptObjectContainer.Destroy */ inline __fastcall virtual ~TVars(void) { }
@@ -304,12 +299,11 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TScriptObject.Create */ inline __fastcall TVars(System::TObject* AParent) : TScriptObjectContainer(
-		AParent) { }
+	/* TScriptObject.Create */ inline __fastcall TVars(System::TObject* AParent) : TScriptObjectContainer(AParent) { }
 	#pragma option pop
 	
 private:
-	void *__IVars;	/* Webcomp::IVars */
+	void *__IVars;	/* Midcomp::IVars */
 	
 public:
 	operator IVars*(void) { return (IVars*)&__IVars; }
@@ -327,13 +321,13 @@ private:
 	THTMLBlock* __fastcall GetObject(int I);
 	
 protected:
-	Webcomp::_di_IHTMLBlock __fastcall GetItem(int I);
+	Midcomp::_di_IHTMLBlock __fastcall GetItem(int I);
 	
 public:
 	THTMLBlock* __fastcall AddBlock(const AnsiString Name, const AnsiString HTML);
 	THTMLBlock* __fastcall FindBlockName(const AnsiString Name);
 	__property THTMLBlock* Objects[int I] = {read=GetObject};
-	__property Webcomp::_di_IHTMLBlock Items[int I] = {read=GetItem};
+	__property Midcomp::_di_IHTMLBlock Items[int I] = {read=GetItem};
 public:
 	#pragma option push -w-inl
 	/* TScriptObjectContainer.Destroy */ inline __fastcall virtual ~THTMLBlocks(void) { }
@@ -341,12 +335,11 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TScriptObject.Create */ inline __fastcall THTMLBlocks(System::TObject* AParent) : TScriptObjectContainer(
-		AParent) { }
+	/* TScriptObject.Create */ inline __fastcall THTMLBlocks(System::TObject* AParent) : TScriptObjectContainer(AParent) { }
 	#pragma option pop
 	
 private:
-	void *__IHTMLBlocks;	/* Webcomp::IHTMLBlocks */
+	void *__IHTMLBlocks;	/* Midcomp::IHTMLBlocks */
 	
 public:
 	operator IHTMLBlocks*(void) { return (IHTMLBlocks*)&__IHTMLBlocks; }
@@ -364,12 +357,11 @@ protected:
 	HIDESBASE TPass* __fastcall GetItem(int I);
 	
 public:
-	HIDESBASE void __fastcall Add(Webcomp::TAddScriptElementsEvent Event, void * Data);
+	HIDESBASE void __fastcall Add(Midcomp::TAddScriptElementsEvent Event, void * Data);
 	__property TPass* Items[int Index] = {read=GetItem};
 public:
 	#pragma option push -w-inl
 	/* TObjectList.Create */ inline __fastcall TPassList(void)/* overload */ : Contnrs::TObjectList() { }
-		
 	#pragma option pop
 	
 public:
@@ -397,15 +389,15 @@ protected:
 	bool __fastcall AddFunction(AnsiString Name, AnsiString Body);
 	bool __fastcall AddVar(AnsiString Name, AnsiString Script);
 	void __fastcall AddError(AnsiString Text);
-	void __fastcall AddPass(Webcomp::TAddScriptElementsEvent Event, void * Data);
+	void __fastcall AddPass(Midcomp::TAddScriptElementsEvent Event, void * Data);
 	void __fastcall AddScriptComponents(System::TObject* List);
-	Webcomp::_di_IScriptManager __fastcall GetScriptManager();
+	Midcomp::_di_IScriptManager __fastcall GetScriptManager();
 	
 public:
 	__fastcall TAddScriptElements(TScriptManager* AScriptManager);
 	__fastcall virtual ~TAddScriptElements(void);
 private:
-	void *__IAddScriptElements;	/* Webcomp::IAddScriptElements */
+	void *__IAddScriptElements;	/* Midcomp::IAddScriptElements */
 	
 public:
 	operator IAddScriptElements*(void) { return (IAddScriptElements*)&__IAddScriptElements; }
@@ -420,48 +412,48 @@ class PASCALIMPLEMENTATION TScriptManager : public System::TInterfacedObject
 private:
 	Webcomp::TWebContentOptions* FOptions;
 	Classes::TStrings* FWarnings;
-	Webcomp::_di_IXMLDocuments FXMLDocumentsIntf;
+	Midcomp::_di_IXMLDocuments FXMLDocumentsIntf;
 	TXMLDocuments* FXMLDocuments;
 	TIncludeFiles* FIncludeFiles;
-	Webcomp::_di_IIncludeFiles FIncludeFilesIntf;
+	Midcomp::_di_IIncludeFiles FIncludeFilesIntf;
 	TFunctions* FFunctions;
-	Webcomp::_di_IFunctions FFunctionsIntf;
+	Midcomp::_di_IFunctions FFunctionsIntf;
 	TScriptBlocks* FScriptBlocks;
-	Webcomp::_di_IScriptBlocks FScriptBlocksIntf;
+	Midcomp::_di_IScriptBlocks FScriptBlocksIntf;
 	TVars* FVars;
-	Webcomp::_di_IVars FVarsIntf;
+	Midcomp::_di_IVars FVarsIntf;
 	THTMLBlocks* FHTMLBlocks;
-	Webcomp::_di_IHTMLBlocks FHTMLBlocksIntf;
+	Midcomp::_di_IHTMLBlocks FHTMLBlocksIntf;
 	TPassList* FPassList;
 	TAddScriptElements* FAddElements;
-	Webcomp::_di_IAddScriptElements FAddElementsIntf;
+	Midcomp::_di_IAddScriptElements FAddElementsIntf;
 	void __fastcall AddScriptComponentsInternal(System::TObject* List);
 	
 protected:
-	Webcomp::_di_IXMLDocuments __fastcall GetXMLDocuments();
-	Webcomp::_di_IIncludeFiles __fastcall GetIncludeFiles();
-	Webcomp::_di_IHTMLBlocks __fastcall GetHTMLBlocks();
-	Webcomp::_di_IVars __fastcall GetVars();
-	Webcomp::_di_IScriptBlocks __fastcall GetScriptBlocks();
+	Midcomp::_di_IXMLDocuments __fastcall GetXMLDocuments();
+	Midcomp::_di_IIncludeFiles __fastcall GetIncludeFiles();
+	Midcomp::_di_IHTMLBlocks __fastcall GetHTMLBlocks();
+	Midcomp::_di_IVars __fastcall GetVars();
+	Midcomp::_di_IScriptBlocks __fastcall GetScriptBlocks();
 	void __fastcall AddError(const AnsiString S);
-	Webcomp::_di_IFunctions __fastcall GetFunctions();
+	Midcomp::_di_IFunctions __fastcall GetFunctions();
 	Classes::TStrings* __fastcall GetWarnings(void);
 	Webcomp::TWebContentOptions* __fastcall GetOptions(void);
-	Webcomp::_di_IAddScriptElements __fastcall GetAddElementsIntf();
+	Midcomp::_di_IAddScriptElements __fastcall GetAddElementsIntf();
 	
 public:
 	__fastcall TScriptManager(Webcomp::TWebContentOptions* Options);
 	__fastcall virtual ~TScriptManager(void);
 	void __fastcall AddScriptComponents(System::TObject* List);
-	__property Webcomp::_di_IIncludeFiles IncludeFiles = {read=FIncludeFilesIntf};
-	__property Webcomp::_di_IScriptBlocks ScriptBlocks = {read=FScriptBlocksIntf};
-	__property Webcomp::_di_IVars Vars = {read=FVarsIntf};
-	__property Webcomp::_di_IHTMLBlocks HTMLBlocks = {read=FHTMLBlocksIntf};
+	__property Midcomp::_di_IIncludeFiles IncludeFiles = {read=FIncludeFilesIntf};
+	__property Midcomp::_di_IScriptBlocks ScriptBlocks = {read=FScriptBlocksIntf};
+	__property Midcomp::_di_IVars Vars = {read=FVarsIntf};
+	__property Midcomp::_di_IHTMLBlocks HTMLBlocks = {read=FHTMLBlocksIntf};
 	__property TPassList* PassList = {read=FPassList};
 	__property Webcomp::TWebContentOptions* Options = {read=GetOptions};
-	__property Webcomp::_di_IAddScriptElements AddElementsIntf = {read=GetAddElementsIntf};
+	__property Midcomp::_di_IAddScriptElements AddElementsIntf = {read=GetAddElementsIntf};
 private:
-	void *__IScriptManager;	/* Webcomp::IScriptManager */
+	void *__IScriptManager;	/* Midcomp::IScriptManager */
 	
 public:
 	operator IScriptManager*(void) { return (IScriptManager*)&__IScriptManager; }
@@ -481,8 +473,7 @@ protected:
 	__property AnsiString FileName = {read=GetFileName};
 public:
 	#pragma option push -w-inl
-	/* TScriptObject.Create */ inline __fastcall TIncludeFile(System::TObject* AParent) : TScriptObject(
-		AParent) { }
+	/* TScriptObject.Create */ inline __fastcall TIncludeFile(System::TObject* AParent) : TScriptObject(AParent) { }
 	#pragma option pop
 	
 public:
@@ -491,7 +482,7 @@ public:
 	#pragma option pop
 	
 private:
-	void *__IIncludeFile;	/* Webcomp::IIncludeFile */
+	void *__IIncludeFile;	/* Midcomp::IIncludeFile */
 	
 public:
 	operator IIncludeFile*(void) { return (IIncludeFile*)&__IIncludeFile; }
@@ -510,8 +501,7 @@ protected:
 	__property AnsiString Body = {read=GetBody};
 public:
 	#pragma option push -w-inl
-	/* TNameContentScriptObject.Create */ inline __fastcall TFunction(System::TObject* AParent, const AnsiString 
-		AName, const AnsiString AContent) : TNameContentScriptObject(AParent, AName, AContent) { }
+	/* TNameContentScriptObject.Create */ inline __fastcall TFunction(System::TObject* AParent, const AnsiString AName, const AnsiString AContent) : TNameContentScriptObject(AParent, AName, AContent) { }
 	#pragma option pop
 	
 public:
@@ -520,7 +510,7 @@ public:
 	#pragma option pop
 	
 private:
-	void *__IFunction;	/* Webcomp::IFunction */
+	void *__IFunction;	/* Midcomp::IFunction */
 	
 public:
 	operator IFunction*(void) { return (IFunction*)&__IFunction; }
@@ -539,8 +529,7 @@ protected:
 	__property AnsiString Script = {read=GetScript};
 public:
 	#pragma option push -w-inl
-	/* TNameContentScriptObject.Create */ inline __fastcall TVar(System::TObject* AParent, const AnsiString 
-		AName, const AnsiString AContent) : TNameContentScriptObject(AParent, AName, AContent) { }
+	/* TNameContentScriptObject.Create */ inline __fastcall TVar(System::TObject* AParent, const AnsiString AName, const AnsiString AContent) : TNameContentScriptObject(AParent, AName, AContent) { }
 	#pragma option pop
 	
 public:
@@ -549,7 +538,7 @@ public:
 	#pragma option pop
 	
 private:
-	void *__IVar;	/* Webcomp::IVar */
+	void *__IVar;	/* Midcomp::IVar */
 	
 public:
 	operator IVar*(void) { return (IVar*)&__IVar; }
@@ -568,9 +557,7 @@ protected:
 	__property AnsiString Script = {read=GetScript};
 public:
 	#pragma option push -w-inl
-	/* TNameContentScriptObject.Create */ inline __fastcall TScriptBlock(System::TObject* AParent, const 
-		AnsiString AName, const AnsiString AContent) : TNameContentScriptObject(AParent, AName, AContent) { }
-		
+	/* TNameContentScriptObject.Create */ inline __fastcall TScriptBlock(System::TObject* AParent, const AnsiString AName, const AnsiString AContent) : TNameContentScriptObject(AParent, AName, AContent) { }
 	#pragma option pop
 	
 public:
@@ -579,7 +566,7 @@ public:
 	#pragma option pop
 	
 private:
-	void *__IScriptBlock;	/* Webcomp::IScriptBlock */
+	void *__IScriptBlock;	/* Midcomp::IScriptBlock */
 	
 public:
 	operator IScriptBlock*(void) { return (IScriptBlock*)&__IScriptBlock; }
@@ -598,9 +585,7 @@ protected:
 	__property AnsiString HTML = {read=GetHTML};
 public:
 	#pragma option push -w-inl
-	/* TNameContentScriptObject.Create */ inline __fastcall THTMLBlock(System::TObject* AParent, const 
-		AnsiString AName, const AnsiString AContent) : TNameContentScriptObject(AParent, AName, AContent) { }
-		
+	/* TNameContentScriptObject.Create */ inline __fastcall THTMLBlock(System::TObject* AParent, const AnsiString AName, const AnsiString AContent) : TNameContentScriptObject(AParent, AName, AContent) { }
 	#pragma option pop
 	
 public:
@@ -609,7 +594,7 @@ public:
 	#pragma option pop
 	
 private:
-	void *__IHTMLBlock;	/* Webcomp::IHTMLBlock */
+	void *__IHTMLBlock;	/* Midcomp::IHTMLBlock */
 	
 public:
 	operator IHTMLBlock*(void) { return (IHTMLBlock*)&__IHTMLBlock; }
@@ -629,7 +614,7 @@ private:
 protected:
 	TXMLRowSet* __fastcall FindPath(Classes::TStrings* Path);
 	TXMLRowSet* __fastcall AddPath(Classes::TStrings* Path);
-	Webcomp::_di_IXMLRowSet __fastcall GetItem(int I);
+	Midcomp::_di_IXMLRowSet __fastcall GetItem(int I);
 	TXMLRowSet* __fastcall GetObject(int I);
 	__property TXMLRowSet* Objects[int I] = {read=GetObject};
 	
@@ -637,7 +622,7 @@ public:
 	__fastcall TXMLRowSets(TXMLDocument* AXMLDocument);
 	__fastcall virtual ~TXMLRowSets(void);
 private:
-	void *__IXMLRowSets;	/* Webcomp::IXMLRowSets */
+	void *__IXMLRowSets;	/* Midcomp::IXMLRowSets */
 	
 public:
 	operator IXMLRowSets*(void) { return (IXMLRowSets*)&__IXMLRowSets; }
@@ -651,11 +636,11 @@ class PASCALIMPLEMENTATION TXMLDocument : public TScriptObject
 	
 private:
 	TXMLRowSets* FXMLRowSets;
-	Webcomp::_di_IXMLRowSets FXMLRowSetsIntf;
+	Midcomp::_di_IXMLRowSets FXMLRowSetsIntf;
 	Xmlbrokr::TXMLBroker* FXMLBroker;
 	
 protected:
-	Webcomp::_di_IXMLRowSets __fastcall GetRowSets();
+	Midcomp::_di_IXMLRowSets __fastcall GetRowSets();
 	Classes::TComponent* __fastcall GetComponent(void);
 	AnsiString __fastcall GetDocumentVarName();
 	AnsiString __fastcall GetXMLVarName();
@@ -666,7 +651,7 @@ public:
 	__fastcall TXMLDocument(TXMLDocuments* AXMLDocuments);
 	__fastcall virtual ~TXMLDocument(void);
 private:
-	void *__IXMLDocument;	/* Webcomp::IXMLDocument */
+	void *__IXMLDocument;	/* Midcomp::IXMLDocument */
 	
 public:
 	operator IXMLDocument*(void) { return (IXMLDocument*)&__IXMLDocument; }
@@ -692,7 +677,7 @@ public:
 	__fastcall TXMLRowSet(TXMLRowSets* AXMLRowSets);
 	__fastcall virtual ~TXMLRowSet(void);
 private:
-	void *__IXMLRowSet;	/* Webcomp::IXMLRowSet */
+	void *__IXMLRowSet;	/* Midcomp::IXMLRowSet */
 	
 public:
 	operator IXMLRowSet*(void) { return (IXMLRowSet*)&__IXMLRowSet; }
@@ -705,11 +690,11 @@ class PASCALIMPLEMENTATION TPass : public System::TObject
 	typedef System::TObject inherited;
 	
 private:
-	Webcomp::TAddScriptElementsEvent Event;
+	Midcomp::TAddScriptElementsEvent Event;
 	void *Data;
 	
 public:
-	__fastcall TPass(Webcomp::TAddScriptElementsEvent AEvent, void * AData);
+	__fastcall TPass(Midcomp::TAddScriptElementsEvent AEvent, void * AData);
 public:
 	#pragma option push -w-inl
 	/* TObject.Destroy */ inline __fastcall virtual ~TPass(void) { }
@@ -721,9 +706,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Scrptmgr */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Scrptmgr;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

@@ -7,21 +7,19 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.6  $ */
+/* $Revision: 9.12.2.2 $ */
 
 #ifndef __ERRNO_H
 #define __ERRNO_H
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 #ifdef __cplusplus
 namespace std {

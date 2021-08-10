@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -14,7 +14,7 @@ unit DdeMan;
 interface
 
 uses
-  Windows, Classes, Graphics, Forms, Controls, DDEML, StdCtrls;
+  Windows, Classes, Forms, Controls, DDEml;
 
 type
   TDataMode = (ddeAutomatic, ddeManual);
@@ -470,6 +470,7 @@ begin
   end;
   ResetAppName;
   DdeUnInitialize(FDdeInstId);
+  DdeMgr := nil;
   inherited Destroy;
 end;
 
@@ -1788,7 +1789,13 @@ begin
     FHszItem := DdeCreateStringHandle(ddeMgr.DdeInstId, PChar(FItem), CP_WINANSI);
 end;
 
-begin
+initialization
   ddeMgr := TDdeMgr.Create(Application);
+  GroupDescendentsWith(TDdeClientConv, TControl);
+  GroupDescendentsWith(TDdeClientItem, TControl);
+  GroupDescendentsWith(TDdeServerConv, TControl);
+  GroupDescendentsWith(TDdeServerItem, TControl);
+finalization
+  FreeAndNil(ddeMgr);
 end.
 

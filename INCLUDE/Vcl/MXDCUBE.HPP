@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxdcube.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MXDCUBE.pas' rev: 6.00
 
-#ifndef mxdcubeHPP
-#define mxdcubeHPP
+#ifndef MXDCUBEHPP
+#define MXDCUBEHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -15,15 +15,15 @@
 #include <ComCtrls.hpp>	// Pascal unit
 #include <Buttons.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
-#include <mxstore.hpp>	// Pascal unit
-#include <mxcommon.hpp>	// Pascal unit
-#include <mxDB.hpp>	// Pascal unit
-#include <mxgrid.hpp>	// Pascal unit
-#include <mxConsts.hpp>	// Pascal unit
+#include <Mxstore.hpp>	// Pascal unit
+#include <MXCOMMON.hpp>	// Pascal unit
+#include <MXDB.hpp>	// Pascal unit
+#include <MXGRID.hpp>	// Pascal unit
+#include <Mxconsts.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Grids.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
@@ -47,38 +47,28 @@ class PASCALIMPLEMENTATION ECubeDesignError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall ECubeDesignError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall ECubeDesignError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall ECubeDesignError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall ECubeDesignError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall ECubeDesignError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall ECubeDesignError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall ECubeDesignError(int Ident, const System::TVarRec * 
-		Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall ECubeDesignError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall ECubeDesignError(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall ECubeDesignError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall ECubeDesignError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ECubeDesignError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall ECubeDesignError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ECubeDesignError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall ECubeDesignError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ECubeDesignError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -96,8 +86,7 @@ class PASCALIMPLEMENTATION TEditorDimensionItem : public Mxcommon::TDimensionIte
 	
 public:
 	#pragma option push -w-inl
-	/* TDimensionItem.Create */ inline __fastcall virtual TEditorDimensionItem(Classes::TCollection* Collection
-		) : Mxcommon::TDimensionItem(Collection) { }
+	/* TDimensionItem.Create */ inline __fastcall virtual TEditorDimensionItem(Classes::TCollection* Collection) : Mxcommon::TDimensionItem(Collection) { }
 	#pragma option pop
 	
 public:
@@ -204,20 +193,18 @@ public:
 	void __fastcall UpdateLists(void);
 	void __fastcall InitializePanel(void);
 	void __fastcall InitCapacityPage(void);
-	bool __fastcall SInitialize(const Forms::_di_IDesigner Designer, Classes::TComponent* AnObject);
+	bool __fastcall SInitialize(Classes::TComponent* AnObject);
 	void __fastcall SFinalize(void);
 	__fastcall virtual TDssCubeEditor(Classes::TComponent* AOwner);
 	__fastcall virtual ~TDssCubeEditor(void);
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TDssCubeEditor(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TDssCubeEditor(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDssCubeEditor(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDssCubeEditor(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -225,16 +212,13 @@ public:
 
 //-- var, const, procedure ---------------------------------------------------
 extern PACKAGE TDssCubeEditor* DSSCubeEditor;
-extern PACKAGE void __fastcall ShowDSSCubeEditor(const Forms::_di_IDesigner Designer, Mxdb::TDecisionCube* 
-	aCube);
+extern PACKAGE void __fastcall ShowDSSCubeEditor(Mxdb::TDecisionCube* aCube);
 
 }	/* namespace Mxdcube */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxdcube;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxdcube
+#endif	// MXDCUBE

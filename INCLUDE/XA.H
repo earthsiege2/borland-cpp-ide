@@ -165,6 +165,7 @@ typedef int (__cdecl *XA_FORGET_EPT)(XID *, int, long);	/* xa_forget entry point
 typedef int (__cdecl *XA_COMPLETE_EPT)(int *, int *, int, long);
 														/* xa_complete entry point */
 
+
 #pragma option pop /*P_O_Pop*/
 #endif /* ifndef XA_H */
 /*

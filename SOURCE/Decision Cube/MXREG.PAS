@@ -6,12 +6,12 @@
 {                                                       }
 {*******************************************************}
 
-unit MXReg;
+unit MXREG;
 
 interface
 
 uses
-  DsgnIntf, ChartReg, Chart;
+  DesignIntf, DesignEditors, CHARTREG, CHART;
 
 type
   TDSSChartCompEditor = class(TChartCompEditor)
@@ -24,10 +24,10 @@ type
 implementation
 
 uses
-  SysUtils, Classes, MXGrid, MXPivsrc, MXDB, MXdConst,
-  Forms, Graphics, StdCtrls, Comctrls, mxstore, Controls,
-  DBTables, mxgraph, BDEConst, mxbutton, mxtables, mxdssqry, mxdimedt, mxdcube,
-  EditChar;
+  SysUtils, Classes, MXGRID, MXPIVSRC, MXDB, MXDCONST,
+  Forms, Graphics, StdCtrls, ComCtrls, Mxstore, Controls,
+  DBTables, MXGRAPH, bdeconst, MXBUTTON, MXTABLES, MXDSSQRY, MXDIMEDT, MXDCUBE,
+  EDITCHAR;
 
 { TQueryEditor }
 
@@ -123,7 +123,7 @@ var
 begin
   Cube := Component as TDecisionCube;
   case Index of
-    0: ShowDSSCubeEditor(Designer, Cube);
+    0: ShowDSSCubeEditor(Cube);
     1:
     begin
       if (Cube.DataSet is TQuery) then
@@ -193,7 +193,7 @@ end;
   { TDecisionGridDimsProperty }
 
 type
-  TDecisionGridDimsProperty = class(TComponentProperty)
+  TDecisionGridDimsProperty = class(TPropertyEditor)
   public
     procedure Edit; override;
     function GetAttributes: TPropertyAttributes; override;
@@ -218,7 +218,7 @@ end;
   { TDimensionMapProperty }
 
 type
-  TDimensionMapProperty = class(TComponentProperty)
+  TDimensionMapProperty = class(TPropertyEditor)
   public
     procedure Edit; override;
     function GetAttributes: TPropertyAttributes; override;
@@ -237,13 +237,13 @@ end;
 
 procedure TDimensionMapProperty.Edit;
 begin
-  ShowDSSCubeEditor(Designer, GetComponent(0)as TDecisionCube);
+  ShowDSSCubeEditor(GetComponent(0)as TDecisionCube);
 end;
 
   { TSummaryMapProperty }
 
 type
-  TSummaryMapProperty = class(TComponentProperty)
+  TSummaryMapProperty = class(TPropertyEditor)
   public
     procedure Edit; override;
     function GetAttributes: TPropertyAttributes; override;

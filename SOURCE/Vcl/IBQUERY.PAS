@@ -1,23 +1,36 @@
-{********************************************************}
-{                                                        }
-{       Borland Delphi Visual Component Library          }
-{       InterBase Express core components                }
-{                                                        }
-{       Copyright (c) 1998-1999 Inprise Corporation      }
-{                                                        }
-{    InterBase Express is based in part on the product   }
-{    Free IB Components, written by Gregory H. Deatz for }
-{    Hoagland, Longo, Moran, Dunst & Doukas Company.     }
-{    Free IB Components is used under license.           }
-{                                                        }
-{********************************************************}
+{************************************************************************}
+{                                                                        }
+{       Borland Delphi Visual Component Library                          }
+{       InterBase Express core components                                }
+{                                                                        }
+{       Copyright (c) 1998-2001 Borland Software Corporation             }
+{                                                                        }
+{    InterBase Express is based in part on the product                   }
+{    Free IB Components, written by Gregory H. Deatz for                 }
+{    Hoagland, Longo, Moran, Dunst & Doukas Company.                     }
+{    Free IB Components is used under license.                           }
+{                                                                        }
+{    The contents of this file are subject to the InterBase              }
+{    Public License Version 1.0 (the "License"); you may not             }
+{    use this file except in compliance with the License. You may obtain }
+{    a copy of the License at http://www.borland.com/interbase/IPL.html  }
+{    Software distributed under the License is distributed on            }
+{    an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either              }
+{    express or implied. See the License for the specific language       }
+{    governing rights and limitations under the License.                 }
+{    The Original Code was created by InterBase Software Corporation     }
+{       and its successors.                                              }
+{    Portions created by Borland Software Corporation are Copyright      }
+{       (C) Borland Software Corporation. All Rights Reserved.           }
+{    Contributor(s): Jeff Overcash                                       }
+{                                                                        }
+{************************************************************************}
 
 unit IBQuery;
 
 interface
 
-uses Windows, SysUtils, Graphics, Classes, Controls, Db, StdVCL,
-     IBHeader, IB, IBCustomDataSet, IBSQL;
+uses Classes, DB, IBHeader, IB, IBDatabase, IBCustomDataSet, IBSQL;
 
 type
 
@@ -44,6 +57,7 @@ type
     procedure SetPrepare(Value: Boolean);
     procedure WriteParamData(Writer: TWriter);
     function GetStmtHandle: TISC_STMT_HANDLE;
+
   protected
     { IProviderSupport }
     procedure PSExecute; override;
@@ -70,13 +84,18 @@ type
     function ParamByName(const Value: string): TParam;
     procedure Prepare;
     procedure UnPrepare;
+    property LiveMode;
     property Prepared: Boolean read FPrepared write SetPrepare;
     property ParamCount: Word read GetParamsCount;
     property StmtHandle: TISC_STMT_HANDLE read GetStmtHandle;
+    property StatementType;
     property Text: string read FText;
     property RowsAffected: Integer read GetRowsAffected;
     property GenerateParamNames: Boolean read FGenerateParamNames write FGenerateParamNames;
+    
   published
+    property Active;
+    property BufferChunks;
     property CachedUpdates;
     property DataSource read GetDataSource write SetDataSource;
     property Constraints stored ConstraintsStored;
@@ -85,6 +104,16 @@ type
     property Params: TParams read FParams write SetParamsList stored False;
     property UniDirectional default False;
     property UpdateObject;
+    property Filtered;
+    property GeneratorField;
+
+    property BeforeDatabaseDisconnect;
+    property AfterDatabaseDisconnect;
+    property DatabaseFree;
+    property BeforeTransactionEnd;
+    property AfterTransactionEnd;
+    property TransactionFree;
+    property OnFilterRecord;
 end;
 
 implementation
@@ -113,9 +142,7 @@ end;
 
 procedure TIBQuery.InitFieldDefs;
 begin
-  if not Active then
-    SelectSQL.Assign(SQL);
-  inherited;
+  inherited InitFieldDefs;
 end;
 
 procedure TIBQuery.InternalOpen;
@@ -123,9 +150,9 @@ begin
   ActivateConnection();
   ActivateTransaction;
   QSelect.GenerateParamNames := FGenerateParamNames;
-  SelectSQL.Assign(SQL);
   SetPrepared(True);
-  if DataSource <> nil then SetParamsFromCursor;
+  if DataSource <> nil then
+    SetParamsFromCursor;
   SetParams;
   inherited InternalOpen;
 end;
@@ -138,8 +165,10 @@ end;
 
 procedure TIBQuery.SetPrepare(Value: Boolean);
 begin
-  if Value then Prepare
-  else UnPrepare;
+  if Value then
+    Prepare
+  else
+    UnPrepare;
 end;
 
 procedure TIBQuery.Prepare;
@@ -189,6 +218,7 @@ begin
     DataEvent(dePropertyChange, 0);
   end else
     FText := FParams.ParseSQL(SQL.Text, False);
+  SelectSQL.Assign(SQL);
 end;
 
 procedure TIBQuery.SetParamsList(Value: TParams);
@@ -326,8 +356,11 @@ begin
 end;
 
 procedure TIBQuery.SetParams;
+
 var
 i : integer;
+Buffer: Pointer;
+
 begin
   for I := 0 to FParams.Count - 1 do
   begin
@@ -336,17 +369,27 @@ begin
     else begin
       SQLParams[i].IsNull := False;
       case Params[i].DataType of
-        ftString:
+        ftBytes:
+        begin
+          GetMem(Buffer,Params[i].GetDataSize);
+          try
+            Params[i].GetData(Buffer);
+            SQLParams[i].AsPointer := Buffer;
+          finally
+            FreeMem(Buffer);
+          end;
+        end;
+        ftString, ftFixedChar:
           SQLParams[i].AsString := Params[i].AsString;
         ftBoolean, ftSmallint, ftWord:
           SQLParams[i].AsShort := Params[i].AsSmallInt;
         ftInteger:
           SQLParams[i].AsLong := Params[i].AsInteger;
-{        ftLargeInt:
-          SQLParams[i].AsInt64 := Params[i].AsLargeInt; }
-        ftFloat, ftCurrency:
+        ftLargeInt:
+          SQLParams[i].AsInt64 := Params[i].Value;
+        ftFloat:
          SQLParams[i].AsDouble := Params[i].AsFloat;
-        ftBCD:
+        ftBCD, ftCurrency:
           SQLParams[i].AsCurrency := Params[i].AsCurrency;
         ftDate:
           SQLParams[i].AsDate := Params[i].AsDateTime;
@@ -366,10 +409,8 @@ end;
 procedure TIBQuery.PrepareSQL(Value: PChar);
 begin
   QSelect.GenerateParamNames := FGenerateParamNames;
-  SelectSQL := SQL;
   InternalPrepare;
 end;
-
 
 function TIBQuery.GetRowsAffected: Integer;
 begin
@@ -377,7 +418,6 @@ begin
   if Prepared then
    Result := QSelect.RowsAffected
 end;
-
 
 procedure TIBQuery.GetDetailLinkFields(MasterFields, DetailFields: TList);
 
@@ -415,8 +455,17 @@ end;
 
 procedure TIBQuery.SetFiltered(Value: Boolean);
 begin
-  if Value <> False then
-    IBError(ibxeNotSupported, [nil]);
+  if(Filtered <> Value) then
+  begin
+    inherited SetFiltered(value);
+    if Active then
+    begin
+      Close;
+      Open;
+    end;
+  end
+  else
+    inherited SetFiltered(value);
 end;
 
 { TIBQuery IProviderSupport }
@@ -435,7 +484,7 @@ end;
 
 function TIBQuery.PSGetTableName: string;
 begin
-  Result := QSelect.UniqueRelationName;
+  Result := inherited PSGetTableName;
 end;
 
 procedure TIBQuery.PSExecute;
@@ -450,4 +499,3 @@ begin
 end;
 
 end.
-

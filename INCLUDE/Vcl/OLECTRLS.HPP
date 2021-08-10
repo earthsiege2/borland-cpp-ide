@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'OleCtrls.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'OleCtrls.pas' rev: 6.00
 
 #ifndef OleCtrlsHPP
 #define OleCtrlsHPP
@@ -21,6 +21,7 @@
 #include <ActiveX.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -68,15 +69,13 @@ private:
 	void __fastcall DestroyControl(void);
 	void __fastcall DestroyEnumPropDescs(void);
 	void __fastcall DestroyStorage(void);
-	void __fastcall GetEventMethod(int DispID, Sysutils::TMethod &Method);
+	void __fastcall GetEventMethod(int DispID, System::TMethod &Method);
 	Menus::TMainMenu* __fastcall GetMainMenu(void);
 	Variant __fastcall GetOleObject();
 	_di_IDispatch __fastcall GetDefaultDispatch();
 	void __fastcall HookControlWndProc(void);
-	void __fastcall InvokeEvent(int DispID, tagDISPPARAMS &Params);
 	void __fastcall ReadData(Classes::TStream* Stream);
 	void __fastcall SetUIActive(bool Active);
-	void __fastcall StandardEvent(int DispID, tagDISPPARAMS &Params);
 	void __fastcall WriteData(Classes::TStream* Stream);
 	HIDESBASE MESSAGE void __fastcall WMEraseBkgnd(Messages::TWMEraseBkgnd &Message);
 	HIDESBASE MESSAGE void __fastcall WMPaint(Messages::TWMPaint &Message);
@@ -90,7 +89,8 @@ private:
 	void __fastcall D2InvokeEvent(int DispID, tagDISPPARAMS &Params);
 	
 protected:
-	int FEvents;
+	virtual void __fastcall StandardEvent(int DispID, tagDISPPARAMS &Params);
+	virtual void __fastcall InvokeEvent(int DispID, tagDISPPARAMS &Params);
 	virtual HRESULT __stdcall QueryInterface(const GUID &IID, /* out */ void *Obj);
 	HIDESBASE int __stdcall _AddRef(void);
 	HIDESBASE int __stdcall _Release(void);
@@ -103,8 +103,7 @@ protected:
 	HRESULT __stdcall OnControlInfoChanged(void);
 	HRESULT __stdcall LockInPlaceActive(BOOL fLock);
 	HRESULT __stdcall GetExtendedControl(/* out */ _di_IDispatch &disp);
-	HRESULT __stdcall TransformCoords(Windows::TPoint &ptlHimetric, tagPOINTF &ptfContainer, int flags)
-		;
+	HRESULT __stdcall TransformCoords(Types::TPoint &ptlHimetric, tagPOINTF &ptfContainer, int flags);
 	HRESULT __stdcall OleControlSite_TranslateAccelerator(Windows::PMsg msg, int grfModifiers);
 	HRESULT __stdcall OnFocus(BOOL fGotFocus);
 	HRESULT __stdcall ShowPropertyFrame(void);
@@ -113,20 +112,17 @@ protected:
 	HRESULT __stdcall CanInPlaceActivate(void);
 	HRESULT __stdcall OnInPlaceActivate(void);
 	HRESULT __stdcall OnUIActivate(void);
-	HRESULT __stdcall GetWindowContext(/* out */ _di_IOleInPlaceFrame &frame, /* out */ _di_IOleInPlaceUIWindow 
-		&doc, /* out */ Windows::TRect &rcPosRect, /* out */ Windows::TRect &rcClipRect, /* out */ tagOIFI 
-		&frameInfo);
-	HRESULT __stdcall Scroll(const Windows::TPoint scrollExtent);
+	HRESULT __stdcall GetWindowContext(/* out */ _di_IOleInPlaceFrame &frame, /* out */ _di_IOleInPlaceUIWindow &doc, /* out */ Types::TRect &rcPosRect, /* out */ Types::TRect &rcClipRect, /* out */ tagOIFI &frameInfo);
+	HRESULT __stdcall Scroll(const Types::TPoint scrollExtent);
 	HRESULT __stdcall OnUIDeactivate(BOOL fUndoable);
 	HRESULT __stdcall OnInPlaceDeactivate(void);
 	HRESULT __stdcall DiscardUndoState(void);
 	HRESULT __stdcall DeactivateAndUndo(void);
-	HRESULT __stdcall OnPosRectChange(const Windows::TRect &rcPosRect);
-	HRESULT __stdcall GetBorder(/* out */ Windows::TRect &rectBorder);
-	HRESULT __stdcall RequestBorderSpace(const Windows::TRect &borderwidths);
-	HRESULT __stdcall SetBorderSpace(Windows::PRect pborderwidths);
-	HRESULT __stdcall SetActiveObject(const _di_IOleInPlaceActiveObject activeObject, wchar_t * pszObjName
-		);
+	HRESULT __stdcall OnPosRectChange(const Types::TRect &rcPosRect);
+	HRESULT __stdcall GetBorder(/* out */ Types::TRect &rectBorder);
+	HRESULT __stdcall RequestBorderSpace(const Types::TRect &borderwidths);
+	HRESULT __stdcall SetBorderSpace(Types::PRect pborderwidths);
+	HRESULT __stdcall SetActiveObject(const _di_IOleInPlaceActiveObject activeObject, wchar_t * pszObjName);
 	HRESULT __stdcall OleInPlaceFrame_GetWindow(/* out */ HWND &wnd);
 	HRESULT __stdcall InsertMenus(HMENU hmenuShared, tagOleMenuGroupWidths &menuWidths);
 	HRESULT __stdcall SetMenu(HMENU hmenuShared, HMENU holemenu, HWND hwndActiveObject);
@@ -136,14 +132,10 @@ protected:
 	HRESULT __stdcall OleInPlaceFrame_TranslateAccelerator(tagMSG &msg, Word wID);
 	HIDESBASE HRESULT __stdcall GetTypeInfoCount(/* out */ int &Count);
 	HIDESBASE HRESULT __stdcall GetTypeInfo(int Index, int LocaleID, /* out */ void *TypeInfo);
-	HIDESBASE HRESULT __stdcall GetIDsOfNames(const GUID &IID, void * Names, int NameCount, int LocaleID
-		, void * DispIDs);
-	HIDESBASE HRESULT __stdcall Invoke(int DispID, const GUID &IID, int LocaleID, Word Flags, void *Params
-		, void * VarResult, void * ExcepInfo, void * ArgErr);
-	HRESULT __stdcall PreMessageFilter(HWND wnd, int msg, int wp, int lp, /* out */ int &res, /* out */ 
-		int &Cookie);
-	HRESULT __stdcall PostMessageFilter(HWND wnd, int msg, int wp, int lp, /* out */ int &res, int Cookie
-		);
+	HIDESBASE HRESULT __stdcall GetIDsOfNames(const GUID &IID, void * Names, int NameCount, int LocaleID, void * DispIDs);
+	HIDESBASE HRESULT __stdcall Invoke(int DispID, const GUID &IID, int LocaleID, Word Flags, void *Params, void * VarResult, void * ExcepInfo, void * ArgErr);
+	HRESULT __stdcall PreMessageFilter(HWND wnd, int msg, int wp, int lp, /* out */ int &res, /* out */ int &Cookie);
+	HRESULT __stdcall PostMessageFilter(HWND wnd, int msg, int wp, int lp, /* out */ int &res, int Cookie);
 	virtual void __fastcall CreateWnd(void);
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
 	virtual void __fastcall DestroyWindowHandle(void);
@@ -155,7 +147,7 @@ protected:
 	double __fastcall GetDoubleProp(int Index);
 	_di_IDispatch __fastcall GetIDispatchProp(int Index);
 	int __fastcall GetIntegerProp(int Index);
-	_di_IUnknown __fastcall GetIUnknownProp(int Index);
+	System::_di_IInterface __fastcall GetIUnknownProp(int Index);
 	Word __fastcall GetWordBoolProp(int Index);
 	System::TDateTime __fastcall GetTDateTimeProp(int Index);
 	Graphics::TFont* __fastcall GetTFontProp(int Index);
@@ -165,7 +157,7 @@ protected:
 	Activex::TOleEnum __fastcall GetTOleEnumProp(int Index);
 	OleVariant __fastcall GetOleVariantProp(int Index);
 	Graphics::TPicture* __fastcall GetTPictureProp(int Index);
-	void __fastcall GetProperty(int Index, System::TVarData &Value);
+	void __fastcall GetProperty(int Index, TVarData &Value);
 	Shortint __fastcall GetShortIntProp(int Index);
 	float __fastcall GetSingleProp(int Index);
 	short __fastcall GetSmallintProp(int Index);
@@ -174,7 +166,7 @@ protected:
 	WideString __fastcall GetWideStringProp(int Index);
 	Word __fastcall GetWordProp(int Index);
 	virtual void __fastcall InitControlData(void) = 0 ;
-	virtual void __fastcall InitControlInterface(const _di_IUnknown Obj);
+	virtual void __fastcall InitControlInterface(const System::_di_IInterface Obj);
 	void __fastcall InvokeMethod(const void *DispInfo, void * Result);
 	DYNAMIC bool __fastcall PaletteChanged(bool Foreground);
 	void __fastcall PictureChanged(System::TObject* Sender);
@@ -186,7 +178,7 @@ protected:
 	void __fastcall SetDoubleProp(int Index, const double Value);
 	void __fastcall SetIDispatchProp(int Index, const _di_IDispatch Value);
 	void __fastcall SetIntegerProp(int Index, int Value);
-	void __fastcall SetIUnknownProp(int Index, const _di_IUnknown Value);
+	void __fastcall SetIUnknownProp(int Index, const System::_di_IInterface Value);
 	virtual void __fastcall SetName(const AnsiString Value);
 	void __fastcall SetWordBoolProp(int Index, Word Value);
 	void __fastcall SetTDateTimeProp(int Index, const System::TDateTime Value);
@@ -198,7 +190,7 @@ protected:
 	void __fastcall SetOleVariantProp(int Index, const OleVariant &Value);
 	virtual void __fastcall SetParent(Controls::TWinControl* AParent);
 	void __fastcall SetTPictureProp(int Index, Graphics::TPicture* Value);
-	void __fastcall SetProperty(int Index, const System::TVarData &Value);
+	void __fastcall SetProperty(int Index, const TVarData &Value);
 	void __fastcall SetShortIntProp(int Index, Shortint Value);
 	void __fastcall SetSingleProp(int Index, const float Value);
 	void __fastcall SetSmallintProp(int Index, short Value);
@@ -206,7 +198,13 @@ protected:
 	void __fastcall SetVariantProp(int Index, const Variant &Value);
 	void __fastcall SetWideStringProp(int Index, const WideString Value);
 	void __fastcall SetWordProp(int Index, Word Value);
+	void __fastcall _SetColorProp(int Index, Graphics::TColor Value);
+	void __fastcall _SetTColorProp(int Index, Graphics::TColor Value);
+	void __fastcall _SetTOleEnumProp(int Index, Activex::TOleEnum Value);
+	void __fastcall _SetTFontProp(int Index, Graphics::TFont* Value);
+	void __fastcall _SetTPictureProp(int Index, Graphics::TPicture* Value);
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
+	virtual bool __fastcall SuppressException(Sysutils::Exception* E);
 	__property PControlData ControlData = {read=FControlData, write=FControlData};
 	virtual HRESULT __stdcall OnChanged(int dispid);
 	virtual HRESULT __stdcall OnRequestEdit(int dispid);
@@ -230,20 +228,17 @@ public:
 	__property Variant OleObject = {read=GetOleObject};
 	__property _di_IPerPropertyBrowsing PerPropBrowsing = {read=FPropBrowsing};
 	__property _di_IDispatch DefaultDispatch = {read=GetDefaultDispatch};
-	__property TabStop ;
+	__property TabStop  = {default=1};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TOleControl(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TOleControl(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	
 private:
 	void *__IOleClientSite;	/* IOleClientSite */
-	void *__IOleControlSite;	/* IOleControlSite [TranslateAccelerator=OleControlSite_TranslateAccelerator
-		] */
+	void *__IOleControlSite;	/* IOleControlSite [TranslateAccelerator=OleControlSite_TranslateAccelerator] */
 	void *__IOleInPlaceSite;	/* IOleInPlaceSite [GetWindow=OleInPlaceSite_GetWindow] */
-	void *__IOleInPlaceFrame;	/* IOleInPlaceFrame [TranslateAccelerator=OleInPlaceFrame_TranslateAccelerator, 
-		GetWindow=OleInPlaceFrame_GetWindow] */
+	void *__IOleInPlaceFrame;	/* IOleInPlaceFrame [TranslateAccelerator=OleInPlaceFrame_TranslateAccelerator, GetWindow=OleInPlaceFrame_GetWindow] */
 	void *__IDispatch;	/* IDispatch */
 	void *__IPropertyNotifySink;	/* IPropertyNotifySink */
 	void *__ISimpleFrameSite;	/* ISimpleFrameSite */
@@ -256,7 +251,7 @@ public:
 	operator IOleInPlaceSite*(void) { return (IOleInPlaceSite*)&__IOleInPlaceSite; }
 	operator IOleControlSite*(void) { return (IOleControlSite*)&__IOleControlSite; }
 	operator IOleClientSite*(void) { return (IOleClientSite*)&__IOleClientSite; }
-	operator IUnknown*(void) { return (IUnknown*)&__ISimpleFrameSite; }
+	operator IInterface*(void) { return (IInterface*)&__ISimpleFrameSite; }
 	
 };
 
@@ -274,10 +269,8 @@ protected:
 	int __stdcall _Release(void);
 	HRESULT __stdcall GetTypeInfoCount(/* out */ int &Count);
 	HRESULT __stdcall GetTypeInfo(int Index, int LocaleID, /* out */ void *TypeInfo);
-	HRESULT __stdcall GetIDsOfNames(const GUID &IID, void * Names, int NameCount, int LocaleID, void * 
-		DispIDs);
-	HRESULT __stdcall Invoke(int DispID, const GUID &IID, int LocaleID, Word Flags, void *Params, void * 
-		VarResult, void * ExcepInfo, void * ArgErr);
+	HRESULT __stdcall GetIDsOfNames(const GUID &IID, void * Names, int NameCount, int LocaleID, void * DispIDs);
+	HRESULT __stdcall Invoke(int DispID, const GUID &IID, int LocaleID, Word Flags, void *Params, void * VarResult, void * ExcepInfo, void * ArgErr);
 	__property TOleControl* Control = {read=FControl};
 	
 public:
@@ -292,16 +285,18 @@ private:
 	
 public:
 	operator IDispatch*(void) { return (IDispatch*)&__IDispatch; }
-	operator IUnknown*(void) { return (IUnknown*)&__IDispatch; }
+	operator IInterface*(void) { return (IInterface*)&__IDispatch; }
 	
 };
 
 
+#pragma pack(push, 4)
 struct TEnumValue
 {
 	int Value;
 	AnsiString Ident;
 } ;
+#pragma pack(pop)
 
 typedef TEnumValue TEnumValueList[32768];
 
@@ -325,6 +320,7 @@ public:
 };
 
 
+#pragma pack(push, 4)
 struct TControlData
 {
 	GUID ClassID;
@@ -342,10 +338,12 @@ struct TControlData
 	int InstanceCount;
 	Classes::TList* EnumPropDescs;
 } ;
+#pragma pack(pop)
 
 struct TControlData2;
 typedef TControlData2 *PControlData2;
 
+#pragma pack(push, 4)
 struct TControlData2
 {
 	GUID ClassID;
@@ -364,6 +362,7 @@ struct TControlData2
 	Classes::TList* EnumPropDescs;
 	unsigned FirstEventOfs;
 } ;
+#pragma pack(pop)
 
 class DELPHICLASS EOleCtrlError;
 class PASCALIMPLEMENTATION EOleCtrlError : public Sysutils::Exception 
@@ -372,38 +371,28 @@ class PASCALIMPLEMENTATION EOleCtrlError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EOleCtrlError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EOleCtrlError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EOleCtrlError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EOleCtrlError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EOleCtrlError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EOleCtrlError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EOleCtrlError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EOleCtrlError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EOleCtrlError(const AnsiString Msg, int AHelpContext) : 
-		Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EOleCtrlError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EOleCtrlError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EOleCtrlError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EOleCtrlError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EOleCtrlError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EOleCtrlError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EOleCtrlError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -415,13 +404,12 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
+extern PACKAGE OleVariant EmptyParam;
 extern PACKAGE Variant __fastcall FontToOleFont(Graphics::TFont* Font);
 extern PACKAGE void __fastcall OleFontToFont(const Variant &OleFont, Graphics::TFont* Font);
 
 }	/* namespace Olectrls */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Olectrls;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

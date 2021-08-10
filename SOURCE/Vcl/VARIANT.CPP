@@ -1,32 +1,42 @@
-//    variant.cpp - support for delphi variants in C++
+//    variant.cpp - support for Delphi variants in C++
 //
-//    $Revision:   1.24.1.2  $
-//    $Date:   26 Jan 2000 17:28:36  $
+//    $Revision:   1.30.1.0.1.14  $
+//    $Date:   28 Jan 2002 16:20:10  $
 //
-//    Copyright (c) 1997, 1999 Borland International
+//    Copyright (c) 1997, 2002 Borland Software Corporation
 
+#define LINUX_TEST
+#define TVARIANT_ON
 #include <system.hpp>
 #include <oaidl.h>
 #include <comobj.hpp>
+#include <variant.hpp>
+#include <variants.hpp>
+#include <oleauto.h>
+#ifdef TVARIANT_ON
+#include <utilcls.h>
+#endif
+#ifdef LINUX_TEST
+#include <varutils.hpp>
+#endif
 #ifdef USE_VCLHLPR_PAS
 #include <vclhlpr.hpp>
 #else
 #include <vclhlpr2.h>
 #endif
-#include "variant.hpp"
-#include <oleauto.h>
-#include <utilcls.h>
 
 namespace System
 {
   Variant __fastcall Variant::CreateObject(const String& ProgID)
   {
     return Variant(Comobj::CreateOleObject(const_cast<String&>(ProgID)));
+    // This will not work in linux
   }
 
   Variant __fastcall Variant::GetActiveObject(const String& ProgID)
   {
     return Variant(Comobj::GetActiveOleObject(const_cast<String&>(ProgID)));
+    // This will not work in linux
   }
 
   // Static ref. to be used for non-specified optional parameters
@@ -52,7 +62,7 @@ namespace System
   // Ctr - From Variants
   __fastcall Variant::Variant()
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG *>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
   }
 
   __fastcall Variant::Variant(const Variant& rhs)
@@ -64,123 +74,137 @@ namespace System
     char copy[sizeof(Variant)];
     memcpy(&copy, &rhs, sizeof(copy));
 
-    // Initialize this object
-    ::VariantInit(reinterpret_cast<VARIANTARG *>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
 
     // Use assignment operator
     *this = *(reinterpret_cast<Variant*>(&copy));
   }
 
-  __fastcall Variant::Variant(const VARIANT& rhs)
-  {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
-    ::VariantCopy(reinterpret_cast<VARIANTARG *>(this), &(const_cast<VARIANT&>(rhs)));
-  }
-
+#ifdef WIN32
   __fastcall Variant::Variant(const TVariant& rhs)
   {
     ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
-    ::VariantCopy(reinterpret_cast<VARIANTARG *>(this), &(const_cast<TVariant&>(rhs)));
+    ::VariantCopy(reinterpret_cast<VARIANTARG *>(this), const_cast<TVariant*>(&rhs));
   }
+#endif
 
   // Ctr - From basic C++ types
   __fastcall Variant::Variant(const bool src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(BOOL, (src? VARIANT_TRUE : VARIANT_FALSE));
   }
 
   __fastcall Variant::Variant(const char src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(I1, src);
   }
 
   __fastcall Variant::Variant(const signed char src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(I1, src);
   }
 
   __fastcall Variant::Variant(const unsigned char src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(UI1, src);
   }
 
   __fastcall Variant::Variant(const short src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(I2, src);
   }
 
   __fastcall Variant::Variant(const unsigned short src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(UI2, src);
   }
 
   __fastcall Variant::Variant(const int src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(I4, src);
   }
 
   __fastcall Variant::Variant(const unsigned int src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(UI4, src);
   }
 
   __fastcall Variant::Variant(const long src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(I4, src);
   }
 
   __fastcall Variant::Variant(const unsigned long src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(UI4, src);
   }
 
   __fastcall Variant::Variant(const float src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(R4, src);
   }
 
   __fastcall Variant::Variant(const double src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(R8, src);
   }
 
   __fastcall Variant::Variant(const long double src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(R8, double(src));
+  }
+
+  __fastcall Variant::Variant(const __int64 src)
+  {
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
+    SET_VTYPE_AND_VAR(I8, src);
   }
 
   // Ctr - From OLE Structures
   __fastcall Variant::Variant(const CURRENCY& src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(CY, src);
   }
 
   __fastcall Variant::Variant(SAFEARRAY& src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
-    SET_VTYPE_AND_VAR(ARRAY, &src);
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
+
+    VARTYPE _vt;
+    ::SafeArrayGetVartype(&src, &_vt);
+    vt = VT_ARRAY|_vt;
+
+    V_ARRAY(this) = &src;
   }
 
   __fastcall Variant::Variant(SAFEARRAY* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
-    SET_VTYPE_AND_VAR(ARRAY, src);
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
+
+    VARTYPE _vt;
+    ::SafeArrayGetVartype(src, &_vt);
+    vt = VT_ARRAY|_vt;
+ 
+    V_ARRAY(this) = src;
   }
 
+#ifdef WIN32
   __fastcall Variant::Variant(VARIANT* src)
   {
     ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
@@ -192,6 +216,7 @@ namespace System
     //
     ::VariantCopy(reinterpret_cast<VARIANTARG *>(this), src);
   }
+#endif
 
   // Ctr - From Utility classes
   // NOTE: This is not OLE compatible (i.e. True VARIANT cannot hold on to an
@@ -204,7 +229,7 @@ namespace System
   //
   __fastcall Variant::Variant(const AnsiString& src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG *>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     VType = varString;
     VString = 0;
     (AnsiString&)VString = src;
@@ -212,27 +237,27 @@ namespace System
 
   __fastcall Variant::Variant(const Currency& src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG *>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     VType = varCurrency;
     VCurrency = src;
   }
 
   __fastcall Variant::Variant(const TDateTime& src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG *>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     VType = varDate;
     VDate = src;
   }
 
   __fastcall Variant::Variant(const VariantError& src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG *>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(ERROR, src);
   }
 
   __fastcall Variant::Variant(const WideString& src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG *>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     VType = varOleStr;
     VOleStr = src.Copy();
   }
@@ -243,7 +268,7 @@ namespace System
   // However, it could also be viewed as a character by reference!!!!
   __fastcall Variant::Variant(const char* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG *>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     VType = varString;
     VString = 0;
     (AnsiString&)VString = src;
@@ -253,13 +278,13 @@ namespace System
   // NOTE: We assume the wchar_t* is a BSTR (i.e. a SysAllocString'ed pointer)
   __fastcall Variant::Variant(wchar_t* src)         // BSTR
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VAR(BSTR, src);
   }
 
   __fastcall Variant::Variant(LPDISPATCH src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     if (src)
       src->AddRef();
     SET_VTYPE_AND_VAR(DISPATCH, src);
@@ -267,7 +292,7 @@ namespace System
 
   __fastcall Variant::Variant(LPUNKNOWN src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     if (src)
       src->AddRef();
     SET_VTYPE_AND_VAR(UNKNOWN, src);
@@ -276,101 +301,112 @@ namespace System
 
   __fastcall Variant::Variant(signed char* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VARREF(I1, reinterpret_cast<CHAR*>(src));
   }
 
   __fastcall Variant::Variant(unsigned char* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VARREF(UI1, src);
   }
 
   __fastcall Variant::Variant(short* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VARREF(I2, src);
   }
 
   __fastcall Variant::Variant(unsigned short* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VARREF(UI2, src);
   }
 
   __fastcall Variant::Variant(int* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VARREF(I4, reinterpret_cast<LONG*>(src));
   }
 
   __fastcall Variant::Variant(unsigned int* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VARREF(UI4, reinterpret_cast<ULONG*>(src));
 
   }
 
   __fastcall Variant::Variant(long* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VARREF(I4, src);
   }
 
   __fastcall Variant::Variant(unsigned long* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VARREF(UI4, src);
   }
 
   __fastcall Variant::Variant(float* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VARREF(R4, src);
   }
 
   __fastcall Variant::Variant(double* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VARREF(R8, src);
+  }
+
+  __fastcall Variant::Variant(__int64* src)
+  {
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
+    SET_VTYPE_AND_VARREF(I8, src);
   }
 
   __fastcall Variant::Variant(CURRENCY* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VARREF(CY, src);
   }
 
   __fastcall Variant::Variant(SAFEARRAY** src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
+
+    VARTYPE _vt;
+    ::SafeArrayGetVartype(*src, &_vt);
+    vt = VT_ARRAY|VT_BYREF|_vt;
+    V_ARRAYREF(this) = src;
     SET_VTYPE_AND_VARREF(ARRAY, src);
   }
 
   __fastcall Variant::Variant(wchar_t** src)        // VT_BSTR|VT_BYREF
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VARREF(BSTR, src);
   }
 
   // Ctr - Ref Utility classes
   __fastcall Variant::Variant(Currency* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     VType = varCurrency | varByRef;
     VPointer = src;
   }
 
   __fastcall Variant::Variant(TDateTime* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     VType = varDate | varByRef;
     VPointer = src;
   }
 
   __fastcall Variant::Variant(Variant* src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     SET_VTYPE_AND_VARREF(VARIANT, reinterpret_cast<VARIANTARG*>(src));
   }
 
@@ -381,21 +417,21 @@ namespace System
   //              Varaint ArrayVar(OpenArray<int>(0, 0)), OpenArrayCount<int>(0, 0).GetHigh(), varVariant);
   __fastcall Variant::Variant(const int* bounds, const int boundsSize, Word varType)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG*>(this));
-    *this = System::VarArrayCreate(bounds, boundsSize, varType);
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
+    *this = Variants::VarArrayCreate(bounds, boundsSize, varType);
   }
 
   // Construct a one dimensional Variant array of type varVariant
   // and fill with values
   __fastcall Variant::Variant(const Variant* values, const int valuesSize)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG *>(this));
-    *this = System::VarArrayOf(values, valuesSize);
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
+    *this = Variants::VarArrayOf(values, valuesSize);
   }
 
   __fastcall Variant::Variant(const System::DelphiInterface<IDispatch>& src)
   {
-    ::VariantInit(reinterpret_cast<VARIANTARG *>(this));
+    Varutils::VariantInit(*(dynamic_cast<TVarData*>(this)));
     VType = varDispatch;
     if (!!src)
       src->AddRef();
@@ -506,6 +542,13 @@ namespace System
     return *this;
   }
 
+  Variant& __fastcall Variant::operator =(const __int64 rhs)
+  {
+    Clear();
+    SET_VTYPE_AND_VAR(I8, rhs);
+    return *this;
+  }
+
   Variant& __fastcall Variant::operator =(const CURRENCY& rhs)
   {
     Clear();
@@ -516,30 +559,41 @@ namespace System
   Variant& __fastcall Variant::operator =(SAFEARRAY& rhs)
   {
     Clear();
-    SET_VTYPE_AND_VAR(ARRAY, &rhs);
+
+    VARTYPE _vt;
+    ::SafeArrayGetVartype(&rhs, &_vt);
+    vt = VT_ARRAY|_vt;
+    V_ARRAY(this) = &rhs;
     return *this;
   }
 
   Variant& __fastcall Variant::operator =(SAFEARRAY* rhs)
   {
     Clear();
-    SET_VTYPE_AND_VAR(ARRAY, rhs);
+    VARTYPE _vt;
+    ::SafeArrayGetVartype(rhs, &_vt);
+    vt = VT_ARRAY|_vt;
+    V_ARRAY(this) = rhs;
     return *this;
   }
 
+#ifdef WIN32
   Variant& __fastcall Variant::operator =(const VARIANT& rhs)
   {
     Clear();
     ::VariantCopy(reinterpret_cast<VARIANTARG *>(this), const_cast<VARIANT*>(&rhs));
     return *this;
   }
-
+#endif
+#ifdef TVARIANT_ON
   Variant& __fastcall Variant::operator =(const TVariant& rhs)
   {
     Clear();
     ::VariantCopy(reinterpret_cast<VARIANTARG *>(this), const_cast<TVariant*>(&rhs));
     return *this;
   }
+#endif
+#ifdef WIN32
 
   Variant& __fastcall Variant::operator =(VARIANT *rhs)
   {
@@ -555,11 +609,15 @@ namespace System
       ::VariantCopy(reinterpret_cast<VARIANTARG *>(this), rhs);
     return *this;
   }
+#endif
+#ifdef TVARIANT_ON
 
   Variant& __fastcall Variant::operator =(TVariant *rhs)
   {
     return this->operator=(static_cast<VARIANT*>(rhs));
   }
+
+#endif
 
   // NOTE: We assume the wchar_t* is a BSTR (i.e. a SysAllocString'ed pointer)
   Variant& __fastcall Variant::operator =(wchar_t* rhs)
@@ -627,11 +685,17 @@ namespace System
     return *this;
   }
 
+#ifdef WIN32
+
+/* do we need versions of this for IUnknown and IInterface? ---aph */
+
   Variant& __fastcall Variant::operator =(const System::DelphiInterface<IDispatch>& rhs)
   {
     // NOTE: Relies on fact that operat T*() of DelphiInterface does not AddRef!!
     return this->operator=(LPDISPATCH(rhs));
   }
+
+#endif
 
 
   Variant& __fastcall Variant::operator =(const char* src)            // Treated as pointer Asciiz string
@@ -711,6 +775,13 @@ namespace System
     return *this;
   }
 
+  Variant& __fastcall Variant::operator =(__int64* src)
+  {
+    Clear();
+    SET_VTYPE_AND_VARREF(I8, src);
+    return *this;
+  }
+
   Variant& __fastcall Variant::operator =(CURRENCY* src)
   {
     Clear();
@@ -721,7 +792,10 @@ namespace System
   Variant& __fastcall Variant::operator =(SAFEARRAY** src)
   {
     Clear();
-    SET_VTYPE_AND_VARREF(ARRAY, src);
+    VARTYPE _vt;
+    ::SafeArrayGetVartype(*src, &_vt);
+    vt = VT_ARRAY|VT_BYREF|_vt;
+    V_ARRAYREF(this) = src;
     return *this;
   }
 
@@ -732,6 +806,7 @@ namespace System
     return *this;
   }
 
+#ifdef WIN32
   Variant& __fastcall Variant::operator =(IUnknown** src)
   {
     Clear();
@@ -745,6 +820,15 @@ namespace System
     SET_VTYPE_AND_VARREF(DISPATCH, src);
     return *this;
   }
+
+  Variant& __fastcall Variant::operator =(IInterface** src)
+  {
+    IUnknown* tmp = *src;
+    Clear();
+    SET_VTYPE_AND_VARREF(UNKNOWN, &tmp);
+    return *this;
+  }
+#endif
 
   Variant& __fastcall Variant::operator =(Currency* src)
   {
@@ -873,18 +957,18 @@ namespace System
   bool __fastcall Variant::operator ==(const Variant& src) const
   {
 #ifdef USE_VCLHLPR_PAS
-    return VariantCmp(src, *this);
+    return VariantCmpEQ(src, *this);
 #else
-    return Vclhlpr::VarCmp(*this, src) == 0;
+    return Vclhlpr::VarCmp(*this, src, 0) == 0;
 #endif
   }
 
   bool __fastcall Variant::operator !=(const Variant& src) const
   {
 #ifdef USE_VCLHLPR_PAS
-    return !VariantCmp(src, *this);
+    return !VariantCmpEQ(src, *this);
 #else
-    return Vclhlpr::VarCmp(*this, src) != 0;
+    return Vclhlpr::VarCmp(*this, src, 0) != 0;
 #endif
   }
 
@@ -908,9 +992,9 @@ namespace System
     }
 
 #ifdef USE_VCLHLPR_PAS
-    return Vclhlpr::VariantLT(*this, rhs);
+    return Vclhlpr::VariantCmpLT(*this, rhs);
 #else
-    return Vclhlpr::VarCmp(*this, rhs) < 0;
+    return Vclhlpr::VarCmp(*this, rhs, -1) < 0;
 #endif
   }
 
@@ -934,9 +1018,9 @@ namespace System
     }
 
 #ifdef USE_VCLHLPR_PAS
-    return Vclhlpr::VariantGT(*this, rhs);
+    return Vclhlpr::VariantCmpGT(*this, rhs);
 #else
-    return Vclhlpr::VarCmp(*this, rhs) > 0;
+    return Vclhlpr::VarCmp(*this, rhs, 1) > 0;
 #endif
   }
 
@@ -1068,122 +1152,129 @@ namespace System
   __fastcall Variant::operator bool() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, VT_BOOL);
+    Variants::VarCast(tmp, *this, VT_BOOL);
     return V_BOOL(&tmp) != VARIANT_FALSE;
   }
 
   __fastcall Variant::operator char() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, VT_I1);
+    Variants::VarCast(tmp, *this, VT_I1);
     return V_I1(&tmp);
   }
 
   __fastcall Variant::operator signed char() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, VT_I1);
+    Variants::VarCast(tmp, *this, VT_I1);
     return V_I1(&tmp);
   }
 
   __fastcall Variant::operator unsigned char() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, VT_UI1);
+    Variants::VarCast(tmp, *this, VT_UI1);
     return V_UI1(&tmp);
   }
 
   __fastcall Variant::operator short() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, VT_I2);
+    Variants::VarCast(tmp, *this, VT_I2);
     return V_I2(&tmp);
   }
 
   __fastcall Variant::operator unsigned short() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, VT_UI2);
+    Variants::VarCast(tmp, *this, VT_UI2);
     return V_UI2(&tmp);
   }
 
   __fastcall Variant::operator int() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, VT_I4);
+    Variants::VarCast(tmp, *this, VT_I4);
     return V_I4(&tmp);
   }
 
   __fastcall Variant::operator unsigned int() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, VT_UI4);
+    Variants::VarCast(tmp, *this, VT_UI4);
     return V_UI4(&tmp);
   }
 
   __fastcall Variant::operator long() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, VT_I4);
+    Variants::VarCast(tmp, *this, VT_I4);
     return V_I4(&tmp);
   }
 
   __fastcall Variant::operator unsigned long() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, VT_UI4);
+    Variants::VarCast(tmp, *this, VT_UI4);
     return V_UI4(&tmp);
   }
 
   __fastcall Variant::operator float() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, VT_R4);
+    Variants::VarCast(tmp, *this, VT_R4);
     return V_R4(&tmp);
   }
 
   __fastcall Variant::operator double() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, VT_R8);
+    Variants::VarCast(tmp, *this, VT_R8);
     return V_R8(&tmp);
   }
 
   __fastcall Variant::operator AnsiString() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, varString);
+    Variants::VarCast(tmp, *this, varString);
     return AnsiString((AnsiString&)(tmp.VString));
   }
 
+  __fastcall Variant::operator __int64() const
+  {
+    Variant tmp;
+    Variants::VarCast(tmp, *this, VT_I8);
+    return (__int64) tmp.VInt64;
+  }
   __fastcall Variant::operator Currency() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, varCurrency);
+    Variants::VarCast(tmp, *this, varCurrency);
     return tmp.VCurrency;
   }
 
   __fastcall Variant::operator TDateTime() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, varDate);
+    Variants::VarCast(tmp, *this, varDate);
     return tmp.VDate;
   }
 
   __fastcall Variant::operator WideString() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, varOleStr);
-    return WideString(WideString::Copy(tmp.VOleStr));
+    Variants::VarCast(tmp, *this, varOleStr);
+    return WideString::Copy(tmp.VOleStr);
   }
 
   __fastcall Variant::operator CURRENCY() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, VT_CY);
+    Variants::VarCast(tmp, *this, VT_CY);
     return V_CY(&tmp);
   }
 
+#ifdef WIN32
   __fastcall Variant::operator VARIANT()
   {
     VARIANT tmp;
@@ -1201,19 +1292,23 @@ namespace System
 
     return tmp;
   }
+#endif
+#ifdef TVARIANT_ON
 
   __fastcall Variant::operator TVariant()
   {
     return TVariant(*(reinterpret_cast<VARIANT*>(this)));
   }
+#endif
 
   __fastcall Variant::operator wchar_t*() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, varOleStr);
+    Variants::VarCast(tmp, *this, varOleStr);
     return WideString::Copy(tmp.VOleStr);
   }
 
+#ifdef WIN32
   __fastcall Variant::operator IDispatch*()
   {
     // Handle easy case right away
@@ -1244,7 +1339,7 @@ namespace System
 
       default:
         Variant tmp;
-        System::VarCast(tmp, *pVar, varDispatch);
+        Variants::VarCast(tmp, *pVar, varDispatch);
         if (tmp.VDispatch)
           tmp.VDispatch->AddRef();
         return tmp.VDispatch;
@@ -1283,12 +1378,20 @@ namespace System
       //
       default:
         Variant tmp;
-        System::VarCast(tmp, *pVar, varUnknown);
+        Variants::VarCast(tmp, *pVar, varUnknown);
         if (tmp.VUnknown)
           tmp.VUnknown->AddRef();
         return tmp.VUnknown;
     }
   }
+
+  __fastcall Variant::operator IInterface*() 
+  {
+      IUnknown* retval = *this;
+      return reinterpret_cast<IInterface*>(retval);
+  }
+
+#endif
 
   // By ref conversion operators
 
@@ -1354,6 +1457,26 @@ namespace System
       throw EVariantError(sOpIntPtr);
   }
 
+  __fastcall Variant::operator long*()
+  {
+    if (vt == (VT_I4|VT_BYREF)) 
+      return (long*)V_I4REF(this);
+    else if (vt==VT_I4)
+      return (long*)&(V_I4(this));
+    else
+      throw EVariantError(sOpIntPtr);
+  }
+
+  __fastcall Variant::operator unsigned long*()
+  {  
+    if (vt == (VT_UI4|VT_BYREF)) 
+      return (unsigned long*)V_UI4REF(this);
+    else if (vt==VT_UI4)
+      return (unsigned long*)&(V_UI4(this));
+    else
+      throw EVariantError(sOpIntPtr);
+  }
+
   __fastcall Variant::operator float*()
   {
     if (vt == (VT_R4|VT_BYREF))
@@ -1406,15 +1529,19 @@ namespace System
 
 #pragma option pop // -w-rvl
 
+#ifdef WIN32
   __fastcall Variant::operator VARIANT*()
   {
     return reinterpret_cast<VARIANT*>(GetBaseVariant());
   }
 
+#endif
+#ifdef TVARIANT_ON
   __fastcall Variant::operator TVariant*()
   {
     return reinterpret_cast<TVariant*>((VARIANT*)(*this));
   }
+#endif
 
   void __fastcall Variant::SetError(const HResult err)
   {
@@ -1426,7 +1553,7 @@ namespace System
   HResult __fastcall Variant::GetError() const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, varError);
+    Variants::VarCast(tmp, *this, varError);
     return tmp.VError;
   }
 
@@ -1449,14 +1576,14 @@ namespace System
   Variant& __fastcall Variant::ChangeType(int varType)
   {
     Variant tmp;
-    System::VarCast(tmp, *this, varType);
+    Variants::VarCast(tmp, *this, varType);
     return operator =(tmp);
   }
 
   Variant __fastcall Variant::AsType(int varType) const
   {
     Variant tmp;
-    System::VarCast(tmp, *this, varType);
+    Variants::VarCast(tmp, *this, varType);
     return tmp;
   }
 
@@ -1482,37 +1609,37 @@ namespace System
 
   int __fastcall Variant::Type() const
   {
-    return System::VarType(*this);
+    return Variants::VarType(*this);
   }
 
   bool __fastcall Variant::IsNull() const
   {
-    return System::VarIsNull(*this);
+    return Variants::VarIsNull(*this);
   }
 
   bool __fastcall Variant::IsEmpty() const
   {
-    return System::VarIsEmpty(*this);
+    return Variants::VarIsEmpty(*this);
   }
 
   bool __fastcall Variant::IsArray() const
   {
-    return System::VarIsArray(*this);
+    return Variants::VarIsArray(*this);
   }
 
   int __fastcall Variant::ArrayDimCount() const
   {
-    return System::VarArrayDimCount(*this);
+    return Variants::VarArrayDimCount(*this);
   }
 
   int __fastcall Variant::ArrayLowBound(const int dim) const
   {
-    return System::VarArrayLowBound(*this, dim);
+    return Variants::VarArrayLowBound(*this, dim);
   }
 
   int __fastcall Variant::ArrayHighBound(const int dim) const
   {
-    return System::VarArrayHighBound(*this, dim);
+    return Variants::VarArrayHighBound(*this, dim);
   }
 
   void __fastcall Variant::ArrayRedim(int highBound)
@@ -1522,12 +1649,12 @@ namespace System
 
   Pointer __fastcall Variant::ArrayLock()
   {
-    return System::VarArrayLock(*this);
+    return Variants::VarArrayLock(*this);
   }
 
   void    __fastcall Variant::ArrayUnlock()
   {
-    System::VarArrayUnlock(*this);
+    Variants::VarArrayUnlock(*this);
   }
 
   Variant& __fastcall Variant::operator [](const int idx)
@@ -1784,9 +1911,9 @@ namespace System
     _EDX <<= 2;                           // shl  edx, 2
     _EAX  = (unsigned long)parmsPtr;      // mov  eax, parmsPtr
     _EDX += _EAX;                         // add  edx, eax
-    int cl = cursor;
+    _CL   = cursor;                       // mov  cl, cursor
 
-    while (--cl >= 0)                     // 
+    while (--_CL > 0)                     // dec  cl - while (ecx > 0)
     {
       _EAX = *((unsigned long*)_EDX);     // mov  eax, [edx]
       __emit__(0x50);                     // push eax
@@ -1799,9 +1926,9 @@ namespace System
     _EDX <<= 2;                           // shl  edx, 2
     _EAX  = (unsigned long)namedParmsPtr; // mov  eax, namedParmsPtr
     _EDX += _EAX;                         // add  edx, eax
-    cl   = namedCursor;                  // mov  cl, namedCursor
+    _CL   = namedCursor;                  // mov  cl, namedCursor
 
-    while (--cl >= 0)                     // 
+    while (--_CL > 0)                     // dec  cl - while (ecx > 0)
     {
       _EAX = *((unsigned long*)_EDX);     // mov  eax, [edx]
       __emit__(0x50);                     // push eax
@@ -1809,12 +1936,13 @@ namespace System
     }
 
 #ifdef USE_VCLHLPR_PAS
-    (*Vclhlpr::TVarDispProc(System::VarDispProc))(ptmp, *this, pcallDesc);
+    (*Vclhlpr::TVarDispProc(Variants::VarDispProc))(ptmp, *this, pcallDesc);
 #else
     typedef void __cdecl (*TVarDispProc)(System::PVariant Result,
                                          const Variant &Instance,
-                                         Comobj::PCallDesc CallDesc);
-    (*TVarDispProc(System::VarDispProc))(ptmp, *this, pcallDesc);
+                                         System::PCallDesc CallDesc,
+                                         void* Params);
+    (*TVarDispProc(Variants::VarDispProc))(ptmp, *this, pcallDesc, parms);
 #endif
 
     // NOTE: C++ Compiler cleans up 12 bytes for above 3 parameters.
@@ -1825,6 +1953,7 @@ namespace System
     _CL  += namedCursor;                  // add  cl, namedcursor
     _ECX *= 4;                            // shl  ecx, 2
     _ESP += _ECX;                         // add  esp, ecx
+
 
 /* Original assembly code that required TASM
     asm

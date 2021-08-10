@@ -23,7 +23,6 @@ Abstract:
 --*/
 
 #ifndef _LMMSG_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMMSG_
 
 #if _MSC_VER > 1000
@@ -108,5 +107,4 @@ typedef struct _MSG_INFO_1 {
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif //_LMMSG_

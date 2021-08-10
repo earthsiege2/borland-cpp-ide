@@ -6,11 +6,11 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
-unit Psapi;
+unit PsAPI;
 
 interface
 
@@ -118,24 +118,24 @@ function EnumProcesses(lpidProcess: LPDWORD; cb: DWORD; var cbNeeded: DWORD): BO
 {$EXTERNALSYM EnumProcessModules}
 function EnumProcessModules(hProcess: THandle; lphModule: LPDWORD; cb: DWORD;
   var lpcbNeeded: DWORD): BOOL;
+{$EXTERNALSYM GetModuleBaseName}
+function GetModuleBaseName(hProcess: THandle; hModule: HMODULE;
+  lpBaseName: PChar; nSize: DWORD): DWORD;
 {$EXTERNALSYM GetModuleBaseNameA}
 function GetModuleBaseNameA(hProcess: THandle; hModule: HMODULE;
   lpBaseName: PAnsiChar; nSize: DWORD): DWORD;
 {$EXTERNALSYM GetModuleBaseNameW}
 function GetModuleBaseNameW(hProcess: THandle; hModule: HMODULE;
   lpBaseName: PWideChar; nSize: DWORD): DWORD;
-{$EXTERNALSYM GetModuleBaseName}
-function GetModuleBaseName(hProcess: THandle; hModule: HMODULE;
-  lpBaseName: PChar; nSize: DWORD): DWORD;
+{$EXTERNALSYM GetModuleFileNameEx}
+function GetModuleFileNameEx(hProcess: THandle; hModule: HMODULE;
+  lpFilename: PChar; nSize: DWORD): DWORD;
 {$EXTERNALSYM GetModuleFileNameExA}
 function GetModuleFileNameExA(hProcess: THandle; hModule: HMODULE;
   lpFilename: PAnsiChar; nSize: DWORD): DWORD;
 {$EXTERNALSYM GetModuleFileNameExW}
 function GetModuleFileNameExW(hProcess: THandle; hModule: HMODULE;
   lpFilename: PWideChar; nSize: DWORD): DWORD;
-{$EXTERNALSYM GetModuleFileNameEx}
-function GetModuleFileNameEx(hProcess: THandle; hModule: HMODULE;
-  lpFilename: PChar; nSize: DWORD): DWORD;
 {$EXTERNALSYM GetModuleInformation}
 function GetModuleInformation(hProcess: THandle; hModule: HMODULE;
   lpmodinfo: LPMODULEINFO; cb: DWORD): BOOL;
@@ -145,32 +145,32 @@ function EmptyWorkingSet(hProcess: THandle): BOOL;
 function QueryWorkingSet(hProcess: THandle; pv: Pointer; cb: DWORD): BOOL;
 {$EXTERNALSYM InitializeProcessForWsWatch}
 function InitializeProcessForWsWatch(hProcess: THandle): BOOL;
+{$EXTERNALSYM GetMappedFileName}
+function GetMappedFileName(hProcess: THandle; lpv: Pointer;
+  lpFilename: PChar; nSize: DWORD): DWORD;
 {$EXTERNALSYM GetMappedFileNameA}
 function GetMappedFileNameA(hProcess: THandle; lpv: Pointer;
   lpFilename: PAnsiChar; nSize: DWORD): DWORD;
 {$EXTERNALSYM GetMappedFileNameW}
 function GetMappedFileNameW(hProcess: THandle; lpv: Pointer;
   lpFilename: PWideChar; nSize: DWORD): DWORD;
-{$EXTERNALSYM GetMappedFileName}
-function GetMappedFileName(hProcess: THandle; lpv: Pointer;
-  lpFilename: PChar; nSize: DWORD): DWORD;
+{$EXTERNALSYM GetDeviceDriverBaseName}
+function GetDeviceDriverBaseName(ImageBase: Pointer; lpBaseName: PChar;
+  nSize: DWORD): DWORD;
 {$EXTERNALSYM GetDeviceDriverBaseNameA}
 function GetDeviceDriverBaseNameA(ImageBase: Pointer; lpBaseName: PAnsiChar;
   nSize: DWORD): DWORD;
 {$EXTERNALSYM GetDeviceDriverBaseNameW}
 function GetDeviceDriverBaseNameW(ImageBase: Pointer; lpBaseName: PWideChar;
   nSize: DWORD): DWORD;
-{$EXTERNALSYM GetDeviceDriverBaseName}
-function GetDeviceDriverBaseName(ImageBase: Pointer; lpBaseName: PChar;
+{$EXTERNALSYM GetDeviceDriverFileName}
+function GetDeviceDriverFileName(ImageBase: Pointer; lpFileName: PChar;
   nSize: DWORD): DWORD;
 {$EXTERNALSYM GetDeviceDriverFileNameA}
 function GetDeviceDriverFileNameA(ImageBase: Pointer; lpFileName: PAnsiChar;
   nSize: DWORD): DWORD;
 {$EXTERNALSYM GetDeviceDriverFileNameW}
 function GetDeviceDriverFileNameW(ImageBase: Pointer; lpFileName: PWideChar;
-  nSize: DWORD): DWORD;
-{$EXTERNALSYM GetDeviceDriverFileName}
-function GetDeviceDriverFileName(ImageBase: Pointer; lpFileName: PChar;
   nSize: DWORD): DWORD;
 {$EXTERNALSYM EnumDeviceDrivers}
 function EnumDeviceDrivers(lpImageBase: PPointer; cb: DWORD;
@@ -185,25 +185,25 @@ var
   hPSAPI: THandle;
   _EnumProcesses: TEnumProcesses;
   _EnumProcessModules: TEnumProcessModules;
+  {procedure}_GetModuleBaseName: TGetModuleBaseNameA;
+  {procedure}_GetModuleFileNameEx: TGetModuleFileNameExA;
   {procedure}_GetModuleBaseNameA: TGetModuleBaseNameA;
   {procedure}_GetModuleFileNameExA: TGetModuleFileNameExA;
   {procedure}_GetModuleBaseNameW: TGetModuleBaseNameW;
   {procedure}_GetModuleFileNameExW: TGetModuleFileNameExW;
-  {procedure}_GetModuleBaseName: TGetModuleBaseNameA;
-  {procedure}_GetModuleFileNameEx: TGetModuleFileNameExA;
   _GetModuleInformation: TGetModuleInformation;
   _EmptyWorkingSet: TEmptyWorkingSet;
   _QueryWorkingSet: TQueryWorkingSet;
   _InitializeProcessForWsWatch: TInitializeProcessForWsWatch;
+  {procedure}_GetMappedFileName: TGetMappedFileNameA;
+  {procedure}_GetDeviceDriverBaseName: TGetDeviceDriverBaseNameA;
+  {procedure}_GetDeviceDriverFileName: TGetDeviceDriverFileNameA;
   {procedure}_GetMappedFileNameA: TGetMappedFileNameA;
   {procedure}_GetDeviceDriverBaseNameA: TGetDeviceDriverBaseNameA;
   {procedure}_GetDeviceDriverFileNameA: TGetDeviceDriverFileNameA;
   {procedure}_GetMappedFileNameW: TGetMappedFileNameW;
   {procedure}_GetDeviceDriverBaseNameW: TGetDeviceDriverBaseNameW;
   {procedure}_GetDeviceDriverFileNameW: TGetDeviceDriverFileNameW;
-  {procedure}_GetMappedFileName: TGetMappedFileNameA;
-  {procedure}_GetDeviceDriverBaseName: TGetDeviceDriverBaseNameA;
-  {procedure}_GetDeviceDriverFileName: TGetDeviceDriverFileNameA;
   _EnumDeviceDrivers: TEnumDeviceDrivers;
   _GetProcessMemoryInfo: TGetProcessMemoryInfo;
 
@@ -220,25 +220,25 @@ begin
     end;
     @_EnumProcesses := GetProcAddress(hPSAPI, 'EnumProcesses');
     @_EnumProcessModules := GetProcAddress(hPSAPI, 'EnumProcessModules');
+    {procedure}@_GetModuleBaseName := GetProcAddress(hPSAPI, 'GetModuleBaseNameA');
+    {procedure}@_GetModuleFileNameEx := GetProcAddress(hPSAPI, 'GetModuleFileNameExA');
     {procedure}@_GetModuleBaseNameA := GetProcAddress(hPSAPI, 'GetModuleBaseNameA');
     {procedure}@_GetModuleFileNameExA := GetProcAddress(hPSAPI, 'GetModuleFileNameExA');
     {procedure}@_GetModuleBaseNameW := GetProcAddress(hPSAPI, 'GetModuleBaseNameW');
     {procedure}@_GetModuleFileNameExW := GetProcAddress(hPSAPI, 'GetModuleFileNameExW');
-    {procedure}@_GetModuleBaseName := GetProcAddress(hPSAPI, 'GetModuleBaseNameA');
-    {procedure}@_GetModuleFileNameEx := GetProcAddress(hPSAPI, 'GetModuleFileNameExA');
     @_GetModuleInformation := GetProcAddress(hPSAPI, 'GetModuleInformation');
     @_EmptyWorkingSet := GetProcAddress(hPSAPI, 'EmptyWorkingSet');
     @_QueryWorkingSet := GetProcAddress(hPSAPI, 'QueryWorkingSet');
     @_InitializeProcessForWsWatch := GetProcAddress(hPSAPI, 'InitializeProcessForWsWatch');
+    {procedure}@_GetMappedFileName := GetProcAddress(hPSAPI, 'GetMappedFileNameA');
+    {procedure}@_GetDeviceDriverBaseName := GetProcAddress(hPSAPI, 'GetDeviceDriverBaseNameA');
+    {procedure}@_GetDeviceDriverFileName := GetProcAddress(hPSAPI, 'GetDeviceDriverFileNameA');
     {procedure}@_GetMappedFileNameA := GetProcAddress(hPSAPI, 'GetMappedFileNameA');
     {procedure}@_GetDeviceDriverBaseNameA := GetProcAddress(hPSAPI, 'GetDeviceDriverBaseNameA');
     {procedure}@_GetDeviceDriverFileNameA := GetProcAddress(hPSAPI, 'GetDeviceDriverFileNameA');
     {procedure}@_GetMappedFileNameW := GetProcAddress(hPSAPI, 'GetMappedFileNameW');
     {procedure}@_GetDeviceDriverBaseNameW := GetProcAddress(hPSAPI, 'GetDeviceDriverBaseNameW');
     {procedure}@_GetDeviceDriverFileNameW := GetProcAddress(hPSAPI, 'GetDeviceDriverFileNameW');
-    {procedure}@_GetMappedFileName := GetProcAddress(hPSAPI, 'GetMappedFileNameA');
-    {procedure}@_GetDeviceDriverBaseName := GetProcAddress(hPSAPI, 'GetDeviceDriverBaseNameA');
-    {procedure}@_GetDeviceDriverFileName := GetProcAddress(hPSAPI, 'GetDeviceDriverFileNameA');
     @_EnumDeviceDrivers := GetProcAddress(hPSAPI, 'EnumDeviceDrivers');
     @_GetProcessMemoryInfo := GetProcAddress(hPSAPI, 'GetProcessMemoryInfo');
   end;
@@ -260,6 +260,14 @@ begin
   else Result := False;
 end;
 
+function GetModuleBaseName(hProcess: THandle; hModule: HMODULE;
+  lpBaseName: PChar; nSize: DWORD): DWORD;
+begin
+  if CheckPSAPILoaded then
+    Result := _GetModuleBaseName(hProcess, hModule, lpBaseName, nSize)
+  else Result := 0;
+end;
+
 function GetModuleBaseNameA(hProcess: THandle; hModule: HMODULE;
   lpBaseName: PAnsiChar; nSize: DWORD): DWORD;
 begin
@@ -276,11 +284,11 @@ begin
   else Result := 0;
 end;
 
-function GetModuleBaseName(hProcess: THandle; hModule: HMODULE;
-  lpBaseName: PChar; nSize: DWORD): DWORD;
+function GetModuleFileNameEx(hProcess: THandle; hModule: HMODULE;
+  lpFilename: PChar; nSize: DWORD): DWORD;
 begin
   if CheckPSAPILoaded then
-    Result := _GetModuleBaseName(hProcess, hModule, lpBaseName, nSize)
+    Result := _GetModuleFileNameEx(hProcess, hModule, lpFileName, nSize)
   else Result := 0;
 end;
 
@@ -297,14 +305,6 @@ function GetModuleFileNameExW(hProcess: THandle; hModule: HMODULE;
 begin
   if CheckPSAPILoaded then
     Result := _GetModuleFileNameExW(hProcess, hModule, lpFileName, nSize)
-  else Result := 0;
-end;
-
-function GetModuleFileNameEx(hProcess: THandle; hModule: HMODULE;
-  lpFilename: PChar; nSize: DWORD): DWORD;
-begin
-  if CheckPSAPILoaded then
-    Result := _GetModuleFileNameEx(hProcess, hModule, lpFileName, nSize)
   else Result := 0;
 end;
 
@@ -337,6 +337,14 @@ begin
   else Result := False;
 end;
 
+function GetMappedFileName(hProcess: THandle; lpv: Pointer;
+  lpFilename: PChar; nSize: DWORD): DWORD;
+begin
+  if CheckPSAPILoaded then
+    Result := _GetMappedFileName(hProcess, lpv, lpFileName, nSize)
+  else Result := 0;
+end;
+
 function GetMappedFileNameA(hProcess: THandle; lpv: Pointer;
   lpFilename: PAnsiChar; nSize: DWORD): DWORD;
 begin
@@ -353,11 +361,11 @@ begin
   else Result := 0;
 end;
 
-function GetMappedFileName(hProcess: THandle; lpv: Pointer;
-  lpFilename: PChar; nSize: DWORD): DWORD;
+function GetDeviceDriverBaseName(ImageBase: Pointer; lpBaseName: PChar;
+  nSize: DWORD): DWORD;
 begin
   if CheckPSAPILoaded then
-    Result := _GetMappedFileName(hProcess, lpv, lpFileName, nSize)
+    Result := _GetDeviceDriverBasename(ImageBase, lpBaseName, nSize)
   else Result := 0;
 end;
 
@@ -377,11 +385,11 @@ begin
   else Result := 0;
 end;
 
-function GetDeviceDriverBaseName(ImageBase: Pointer; lpBaseName: PChar;
+function GetDeviceDriverFileName(ImageBase: Pointer; lpFileName: PChar;
   nSize: DWORD): DWORD;
 begin
   if CheckPSAPILoaded then
-    Result := _GetDeviceDriverBasename(ImageBase, lpBaseName, nSize)
+    Result := _GetDeviceDriverFileName(ImageBase, lpFileName, nSize)
   else Result := 0;
 end;
 
@@ -398,14 +406,6 @@ function GetDeviceDriverFileNameW(ImageBase: Pointer; lpFileName: PWideChar;
 begin
   if CheckPSAPILoaded then
     Result := _GetDeviceDriverFileNameW(ImageBase, lpFileName, nSize)
-  else Result := 0;
-end;
-
-function GetDeviceDriverFileName(ImageBase: Pointer; lpFileName: PChar;
-  nSize: DWORD): DWORD;
-begin
-  if CheckPSAPILoaded then
-    Result := _GetDeviceDriverFileName(ImageBase, lpFileName, nSize)
   else Result := 0;
 end;
 

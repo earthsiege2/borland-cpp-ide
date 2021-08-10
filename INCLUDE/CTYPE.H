@@ -5,23 +5,21 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.8  $ */
+/* $Revision: 9.14.2.1 $ */
 
 #ifndef __CTYPE_H
 #define __CTYPE_H
 
 #if !defined(RC_INVOKED)
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 #ifndef __STDC__
 
@@ -169,10 +167,27 @@ wchar_t _RTLENTRY _EXPFUNC _ltowlower(wchar_t __ch);
    info is enabled.
 */
 #pragma option push -vi
-__inline int     _RTLENTRY _EXPFUNC tolower(int __ch)      { return _ltolower(__ch);  }
-__inline int     _RTLENTRY _EXPFUNC toupper(int __ch)      { return _ltoupper(__ch);  }
-__inline _WINT_T _RTLENTRY _EXPFUNC towlower(_WINT_T __ch) { return _ltowlower(__ch); }
-__inline _WINT_T _RTLENTRY _EXPFUNC towupper(_WINT_T __ch) { return _ltowupper(__ch); }
+
+#ifndef __STDC__
+__inline 
+#endif
+int     _RTLENTRY _EXPFUNC tolower(int __ch)      { return _ltolower(__ch);  }
+
+#ifndef __STDC__
+__inline 
+#endif
+int     _RTLENTRY _EXPFUNC toupper(int __ch)      { return _ltoupper(__ch);  }
+
+#ifndef __STDC__
+__inline 
+#endif
+_WINT_T _RTLENTRY _EXPFUNC towlower(_WINT_T __ch) { return _ltowlower(__ch); }
+
+#ifndef __STDC__
+__inline 
+#endif
+_WINT_T _RTLENTRY _EXPFUNC towupper(_WINT_T __ch) { return _ltowupper(__ch); }
+
 #pragma option pop /* -vi */
 
 #define _wcsupr    _lwcsupr

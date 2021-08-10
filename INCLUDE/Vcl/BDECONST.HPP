@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'BdeConst.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'bdeconst.pas' rev: 6.00
 
-#ifndef BdeConstHPP
-#define BdeConstHPP
+#ifndef bdeconstHPP
+#define bdeconstHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -21,17 +21,14 @@ namespace Bdeconst
 //-- var, const, procedure ---------------------------------------------------
 extern PACKAGE System::ResourceString _SAutoSessionExclusive;
 #define Bdeconst_SAutoSessionExclusive System::LoadResourceString(&Bdeconst::_SAutoSessionExclusive)
-	
 extern PACKAGE System::ResourceString _SAutoSessionExists;
 #define Bdeconst_SAutoSessionExists System::LoadResourceString(&Bdeconst::_SAutoSessionExists)
 extern PACKAGE System::ResourceString _SAutoSessionActive;
 #define Bdeconst_SAutoSessionActive System::LoadResourceString(&Bdeconst::_SAutoSessionActive)
 extern PACKAGE System::ResourceString _SDuplicateDatabaseName;
 #define Bdeconst_SDuplicateDatabaseName System::LoadResourceString(&Bdeconst::_SDuplicateDatabaseName)
-	
 extern PACKAGE System::ResourceString _SDuplicateSessionName;
 #define Bdeconst_SDuplicateSessionName System::LoadResourceString(&Bdeconst::_SDuplicateSessionName)
-	
 extern PACKAGE System::ResourceString _SInvalidSessionName;
 #define Bdeconst_SInvalidSessionName System::LoadResourceString(&Bdeconst::_SInvalidSessionName)
 extern PACKAGE System::ResourceString _SDatabaseNameMissing;
@@ -58,7 +55,6 @@ extern PACKAGE System::ResourceString _SFieldAssignError;
 #define Bdeconst_SFieldAssignError System::LoadResourceString(&Bdeconst::_SFieldAssignError)
 extern PACKAGE System::ResourceString _SNoReferenceTableName;
 #define Bdeconst_SNoReferenceTableName System::LoadResourceString(&Bdeconst::_SNoReferenceTableName)
-	
 extern PACKAGE System::ResourceString _SCompositeIndexError;
 #define Bdeconst_SCompositeIndexError System::LoadResourceString(&Bdeconst::_SCompositeIndexError)
 extern PACKAGE System::ResourceString _SInvalidBatchMove;
@@ -103,7 +99,6 @@ extern PACKAGE System::ResourceString _SParameterTypes;
 #define Bdeconst_SParameterTypes System::LoadResourceString(&Bdeconst::_SParameterTypes)
 extern PACKAGE System::ResourceString _SInvalidParamFieldType;
 #define Bdeconst_SInvalidParamFieldType System::LoadResourceString(&Bdeconst::_SInvalidParamFieldType)
-	
 extern PACKAGE System::ResourceString _STruncationError;
 #define Bdeconst_STruncationError System::LoadResourceString(&Bdeconst::_STruncationError)
 extern PACKAGE System::ResourceString _SDataTypes;
@@ -158,12 +153,10 @@ extern PACKAGE System::ResourceString _SNotAQuery;
 #define Bdeconst_SNotAQuery System::LoadResourceString(&Bdeconst::_SNotAQuery)
 
 }	/* namespace Bdeconst */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Bdeconst;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// BdeConst
+#endif	// bdeconst

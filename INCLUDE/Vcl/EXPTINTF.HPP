@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Exptintf.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ExptIntf.pas' rev: 6.00
 
-#ifndef ExptintfHPP
-#define ExptintfHPP
+#ifndef ExptIntfHPP
+#define ExptIntfHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -26,10 +26,10 @@ enum TExpertStyle { esStandard, esForm, esProject, esAddIn };
 #pragma option pop
 
 #pragma option push -b-
-enum Exptintf__1 { esEnabled, esChecked };
+enum ExptIntf__1 { esEnabled, esChecked };
 #pragma option pop
 
-typedef Set<Exptintf__1, esEnabled, esChecked>  TExpertState;
+typedef Set<ExptIntf__1, esEnabled, esChecked>  TExpertState;
 
 class DELPHICLASS TIExpert;
 class PASCALIMPLEMENTATION TIExpert : public Virtintf::TInterface 
@@ -64,8 +64,7 @@ typedef bool __fastcall (*TExpertRegisterProc)(TIExpert* Expert);
 
 typedef void __fastcall (*TExpertTerminateProc)(void);
 
-typedef bool __stdcall (*TExpertInitProc)(Toolintf::TIToolServices* ToolServices, TExpertRegisterProc 
-	RegisterProc, TExpertTerminateProc &Terminate);
+typedef bool __stdcall (*TExpertInitProc)(Toolintf::TIToolServices* ToolServices, TExpertRegisterProc RegisterProc, TExpertTerminateProc &Terminate);
 
 //-- var, const, procedure ---------------------------------------------------
 #define isExperts "Experts"
@@ -76,12 +75,10 @@ extern PACKAGE Toolintf::TIToolServices* ToolServices;
 extern PACKAGE void __fastcall RegisterLibraryExpert(TIExpert* Expert);
 
 }	/* namespace Exptintf */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Exptintf;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Exptintf
+#endif	// ExptIntf

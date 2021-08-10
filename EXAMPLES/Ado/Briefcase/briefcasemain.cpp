@@ -2,7 +2,7 @@
 //      Example Program:  Briefcase
 //      File:  BriefCaseMain.cpp
 //      Description:  Implementation file for the Briefcase example
-//      Copyright (c) 1987, 1999 Borland International Inc. All Rights Reserved.
+//      Copyright (c) 1987, 1999-2002 Borland International Inc. All Rights Reserved.
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
@@ -108,9 +108,8 @@ void __fastcall TfrmMain::FormCloseQuery(TObject *Sender, bool &CanClose)
                 }
                 catch(Exception &E)
                 {
-                        Application->HandleException(Sender);
                         CanClose = MessageDlg("Data not saved/updated, exit anyway?", mtConfirmation,
-                                TMsgDlgButtons() <<mbYes <<mbNo <<mbCancel, 0)== mbYes;
+                                TMsgDlgButtons() <<mbYes <<mbNo <<mbCancel, 0)== mrYes;
                 }
         }
 }

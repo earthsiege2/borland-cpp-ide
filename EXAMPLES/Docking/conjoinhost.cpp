@@ -19,11 +19,11 @@ __fastcall TConjoinDockHost::TConjoinDockHost(TComponent* Owner)
 void TConjoinDockHost::DoFloat(TControl* AControl)
 {
   // Float the control with its original size.
-  Windows::TPoint TopLeft = AControl->ClientToScreen(Point(0, 0));
-  Windows::TPoint BottomRight = AControl->ClientToScreen(Point(AControl->UndockWidth,
+  Types::TPoint TopLeft = AControl->ClientToScreen(Point(0, 0));
+  Types::TPoint BottomRight = AControl->ClientToScreen(Point(AControl->UndockWidth,
                        AControl->UndockHeight));
 
-  AControl->ManualFloat(Windows::TRect(TopLeft, BottomRight));
+  AControl->ManualFloat(Types::TRect(TopLeft, BottomRight));
 }
 //---------------------------------------------------------------------------
 

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'QRExport.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QRExport.pas' rev: 6.00
 
 #ifndef QRExportHPP
 #define QRExportHPP
@@ -12,10 +12,10 @@
 #pragma option push -Vx
 #include <Forms.hpp>	// Pascal unit
 #include <Printers.hpp>	// Pascal unit
-#include <qr3const.hpp>	// Pascal unit
-#include <Qrctrls.hpp>	// Pascal unit
+#include <QR3Const.hpp>	// Pascal unit
+#include <QRCtrls.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <QuickRpt.hpp>	// Pascal unit
 #include <QRPrntr.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -102,12 +102,10 @@ public:
 	virtual void __fastcall EndPage(void);
 	virtual void __fastcall Finish(void);
 	virtual void __fastcall NewPage(void);
-	virtual void __fastcall TextOut(Extended X, Extended Y, Graphics::TFont* Font, Graphics::TColor BGColor
-		, Classes::TAlignment Alignment, AnsiString Text);
+	virtual void __fastcall TextOut(Extended X, Extended Y, Graphics::TFont* Font, Graphics::TColor BGColor, Classes::TAlignment Alignment, AnsiString Text);
 public:
 	#pragma option push -w-inl
-	/* TQRExportFilter.Create */ inline __fastcall TQRAbstractExportFilter(AnsiString Filename) : Qrprntr::TQRExportFilter(
-		Filename) { }
+	/* TQRExportFilter.Create */ inline __fastcall TQRAbstractExportFilter(AnsiString Filename) : Qrprntr::TQRExportFilter(Filename) { }
 	#pragma option pop
 	
 public:
@@ -132,8 +130,7 @@ public:
 	virtual void __fastcall StorePage(void);
 public:
 	#pragma option push -w-inl
-	/* TQRExportFilter.Create */ inline __fastcall TQRCommaSeparatedFilter(AnsiString Filename) : TQRAbstractExportFilter(
-		Filename) { }
+	/* TQRExportFilter.Create */ inline __fastcall TQRCommaSeparatedFilter(AnsiString Filename) : TQRAbstractExportFilter(Filename) { }
 	#pragma option pop
 	
 public:
@@ -184,8 +181,7 @@ public:
 	__property bool FreeStream = {read=FFreeStream, write=FFreeStream, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TQRExportFilter.Create */ inline __fastcall TQRHTMLDocumentFilter(AnsiString Filename) : TQRAbstractExportFilter(
-		Filename) { }
+	/* TQRExportFilter.Create */ inline __fastcall TQRHTMLDocumentFilter(AnsiString Filename) : TQRAbstractExportFilter(Filename) { }
 	#pragma option pop
 	
 public:
@@ -231,12 +227,10 @@ public:
 	virtual void __fastcall EndPage(void);
 	virtual void __fastcall Finish(void);
 	virtual void __fastcall NewPage(void);
-	virtual void __fastcall TextOut(Extended X, Extended Y, Graphics::TFont* Font, Graphics::TColor BGColor
-		, Classes::TAlignment Alignment, AnsiString Text);
+	virtual void __fastcall TextOut(Extended X, Extended Y, Graphics::TFont* Font, Graphics::TColor BGColor, Classes::TAlignment Alignment, AnsiString Text);
 public:
 	#pragma option push -w-inl
-	/* TQRExportFilter.Create */ inline __fastcall TQRAsciiExportFilter(AnsiString Filename) : Qrprntr::TQRExportFilter(
-		Filename) { }
+	/* TQRExportFilter.Create */ inline __fastcall TQRAsciiExportFilter(AnsiString Filename) : Qrprntr::TQRExportFilter(Filename) { }
 	#pragma option pop
 	
 public:
@@ -261,9 +255,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Qrexport */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qrexport;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

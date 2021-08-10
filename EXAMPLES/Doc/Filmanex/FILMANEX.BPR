@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- C++Builder XML Project --><PROJECT>
+<!-- C++Builder XML Project -->
+<PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="filmanex.exe"/>
     <OBJFILES value="FILMANEX.obj FATTRDLG.obj Fchngdlg.obj fmxUtils.obj fmxwin.obj"/>
     <RESFILES value="FILMANEX.res"/>
@@ -9,9 +10,9 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) FATTRDLG.dfm Fchngdlg.dfm fmxwin.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="vclx50.lib vcl50.lib bcbsmp50.lib"/>
-    <SPARELIBS value="bcbsmp50.lib vcl50.lib vclx50.lib"/>
-    <PACKAGES value=""/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="bcbsmp.lib rtl.lib vcl.lib vclx.lib"/>
+    <PACKAGES value="vclx.bpi bcbsmp.bpi vcl.bpi rtl.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -24,21 +25,32 @@
     <MAINSOURCE value="FILMANEX.cpp"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;..\..\controls\source"/>
     <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib;..\..\controls\source"/>
-    <WARNINGS value=" -w-8026 -w-8027 -w-par"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\include -I$(BCB)\include\vcl"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a8 -k -y -v -vi- -c -b- -tWM"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tWM"/>
     <PFLAGS value="-$YD -v -JPHNV -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w0 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -v"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="FILMANEX.cpp" FORMNAME="" UNITNAME="FILMANEX" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="readme.txt" FORMNAME="" UNITNAME="readme" CONTAINERID="File" DESIGNCLASS=""/>
+      <FILE FILENAME="FILMANEX.res" FORMNAME="" UNITNAME="FILMANEX" CONTAINERID="ResTool" DESIGNCLASS=""/>
+      <FILE FILENAME="FATTRDLG.CPP" FORMNAME="FileAttrDlg" UNITNAME="FATTRDLG" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="Fchngdlg.cpp" FORMNAME="ChangeDlg" UNITNAME="Fchngdlg" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="fmxUtils.cpp" FORMNAME="" UNITNAME="fmxUtils" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="fmxwin.cpp" FORMNAME="FormMain" UNITNAME="fmxwin" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -68,14 +80,24 @@ DebugSourceDirs=
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
-InMemoryExe=0
 ShowInfoMsgs=0
 LinkDebugVcl=1
+LinkCGLIB=0
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
   </IDEOPTIONS>
 </PROJECT>

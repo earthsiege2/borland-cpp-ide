@@ -1,4 +1,4 @@
-LIBRARY DFLAYOUT
+LIBRARY DfLayout
 EXPORTS
 
-    StgOpenLayoutDocfile                     = 'DFLAYOUT.DLL'.*
+    StgOpenLayoutDocfile

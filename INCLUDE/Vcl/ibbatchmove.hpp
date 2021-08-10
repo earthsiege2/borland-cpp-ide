@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBBatchMove.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBBatchMove.pas' rev: 6.00
 
 #ifndef IBBatchMoveHPP
 #define IBBatchMoveHPP
@@ -11,16 +11,12 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <IBTable.hpp>	// Pascal unit
-#include <IBDatabase.hpp>	// Pascal unit
 #include <IBCustomDataSet.hpp>	// Pascal unit
+#include <IBDatabase.hpp>	// Pascal unit
 #include <IB.hpp>	// Pascal unit
-#include <StdVCL.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
-#include <Controls.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
-#include <Graphics.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
-#include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -61,8 +57,7 @@ private:
 	void __fastcall InternalExecute(TBatchMode BatchMode, Word FieldCount);
 	
 protected:
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TIBBatchMove(Classes::TComponent* AOwner);
@@ -92,9 +87,7 @@ __published:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Ibbatchmove */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ibbatchmove;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

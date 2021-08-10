@@ -11,4 +11,14 @@
 PROJ=MTMDI
 OBJS=mdi.obj mainfrm.obj hello.obj bounce.obj mtbounce.obj
 
-!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+#!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+!include <..\..\mfcrules.mak>
+
+default: integration
+	$(MAKE) -f $(PROJ).mak
+
+clean:
+	$(CLEAN_MFC)
+                                
+integration: $(PROJ).bpr $(PROJ).mak
+    $(NOP)

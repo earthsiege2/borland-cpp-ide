@@ -1,0 +1,2364 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 00027D94H .text                   CODE
+ 0002:00000000 0000026CH .data                   DATA
+ 0002:0000026C 00000101H .bss                    BSS
+
+
+Detailed map of segments
+
+ 0001:00000000 000002A6 C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:000002A8 000001EC C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:00000494 000000E0 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:00000574 0000000E C=CODE     S=.text    G=(none)   M=Types    ACBP=A9
+ 0001:00000584 00000156 C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:000006DC 0000000E C=CODE     S=.text    G=(none)   M=SysConst ACBP=A9
+ 0001:000006EC 0000012E C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:0000081C 0000000E C=CODE     S=.text    G=(none)   M=ActiveX  ACBP=A9
+ 0001:0000082C 00000038 C=CODE     S=.text    G=(none)   M=Messages ACBP=A9
+ 0001:00000864 0000000E C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:00000874 0000000E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:00000884 0000000E C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:00000894 0000000E C=CODE     S=.text    G=(none)   M=RTLConsts ACBP=A9
+ 0001:000008A4 00000156 C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:000009FC 0000000E C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000A0C 0000000E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:00000A1C 0000000E C=CODE     S=.text    G=(none)   M=Math     ACBP=A9
+ 0001:00000A2C 0000000E C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:00000A3C 0000002E C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:00000A6C 0000001E C=CODE     S=.text    G=(none)   M=ImgList  ACBP=A9
+ 0001:00000A8C 00000038 C=CODE     S=.text    G=(none)   M=CommCtrl ACBP=A9
+ 0001:00000AC4 00000016 C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:00000ADC 0000000E C=CODE     S=.text    G=(none)   M=Consts   ACBP=A9
+ 0001:00000AEC 000001E6 C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00000CD4 00000038 C=CODE     S=.text    G=(none)   M=Imm      ACBP=A9
+ 0001:00000D0C 00000036 C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000D44 0000000E C=CODE     S=.text    G=(none)   M=WinHelpViewer ACBP=A9
+ 0001:00000D54 0000000E C=CODE     S=.text    G=(none)   M=StdActns ACBP=A9
+ 0001:00000D64 0000001E C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:00000D84 00000038 C=CODE     S=.text    G=(none)   M=ShlObj   ACBP=A9
+ 0001:00000DBC 00000038 C=CODE     S=.text    G=(none)   M=UrlMon   ACBP=A9
+ 0001:00000DF4 00000038 C=CODE     S=.text    G=(none)   M=WinInet  ACBP=A9
+ 0001:00000E2C 00000038 C=CODE     S=.text    G=(none)   M=RegStr   ACBP=A9
+ 0001:00000E64 00000038 C=CODE     S=.text    G=(none)   M=ShellAPI ACBP=A9
+ 0001:00000E9C 0000000E C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00000EAC 00000038 C=CODE     S=.text    G=(none)   M=WinSpool ACBP=A9
+ 0001:00000EE4 0000001E C=CODE     S=.text    G=(none)   M=StdCtrls ACBP=A9
+ 0001:00000F04 00000038 C=CODE     S=.text    G=(none)   M=CommDlg  ACBP=A9
+ 0001:00000F3C 00000038 C=CODE     S=.text    G=(none)   M=Dlgs     ACBP=A9
+ 0001:00000F74 0000000E C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00000F84 0000000E C=CODE     S=.text    G=(none)   M=StrUtils ACBP=A9
+ 0001:00000F94 0000000E C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:00000FA4 0000000E C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:00000FB4 0000005E C=CODE     S=.text    G=(none)   M=Gallery  ACBP=A9
+ 0001:00001014 000000CE C=CODE     S=.text    G=(none)   M=Modules  ACBP=A9
+ 0001:000010E4 0000000E C=CODE     S=.text    G=(none)   M=ComponentDesigner ACBP=A9
+ 0001:000010F4 0000000E C=CODE     S=.text    G=(none)   M=EditIntf ACBP=A9
+ 0001:00001104 0000000E C=CODE     S=.text    G=(none)   M=VirtIntf ACBP=A9
+ 0001:00001114 0000002E C=CODE     S=.text    G=(none)   M=Events   ACBP=A9
+ 0001:00001144 0000000E C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00001154 0000000E C=CODE     S=.text    G=(none)   M=ToolUtils ACBP=A9
+ 0001:00001164 0000000E C=CODE     S=.text    G=(none)   M=DesignIntf ACBP=A9
+ 0001:00001174 0000000E C=CODE     S=.text    G=(none)   M=DesignMenus ACBP=A9
+ 0001:00001184 0000000E C=CODE     S=.text    G=(none)   M=ToolsAPI ACBP=A9
+ 0001:00001194 000000F6 C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:0000128C 0000000E C=CODE     S=.text    G=(none)   M=ListActns ACBP=A9
+ 0001:0000129C 0000000E C=CODE     S=.text    G=(none)   M=ToolWin  ACBP=A9
+ 0001:000012AC 00000038 C=CODE     S=.text    G=(none)   M=RichEdit ACBP=A9
+ 0001:000012E4 0000000E C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:000012F4 00000016 C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:0000130C 0000000E C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:0000131C 0000000E C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:0000132C 0000000E C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:0000133C 0000000E C=CODE     S=.text    G=(none)   M=ComStrs  ACBP=A9
+ 0001:0000134C 0000000E C=CODE     S=.text    G=(none)   M=Update   ACBP=A9
+ 0001:0000135C 0000000E C=CODE     S=.text    G=(none)   M=LibConst ACBP=A9
+ 0001:0000136C 0000000E C=CODE     S=.text    G=(none)   M=DesignEditors ACBP=A9
+ 0001:0000137C 0000000E C=CODE     S=.text    G=(none)   M=Proxies  ACBP=A9
+ 0001:0000138C 0000000E C=CODE     S=.text    G=(none)   M=DesignConst ACBP=A9
+ 0001:0000139C 0000000E C=CODE     S=.text    G=(none)   M=Designer ACBP=A9
+ 0001:000013AC 0000000E C=CODE     S=.text    G=(none)   M=TopLevels ACBP=A9
+ 0001:000013BC 0000000E C=CODE     S=.text    G=(none)   M=StFilSys ACBP=A9
+ 0001:000013CC 0000000E C=CODE     S=.text    G=(none)   M=IStreams ACBP=A9
+ 0001:000013DC 0000000E C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:000013EC 0000000E C=CODE     S=.text    G=(none)   M=StdVCL   ACBP=A9
+ 0001:000013FC 0000000E C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:0000140C 0000000E C=CODE     S=.text    G=(none)   M=ComConst ACBP=A9
+ 0001:0000141C 0000000E C=CODE     S=.text    G=(none)   M=TreeIntf ACBP=A9
+ 0001:0000142C 0000000E C=CODE     S=.text    G=(none)   M=EditorViewSupport ACBP=A9
+ 0001:0000143C 0000000E C=CODE     S=.text    G=(none)   M=CompIntf ACBP=A9
+ 0001:0000144C 0000000E C=CODE     S=.text    G=(none)   M=ComTypes ACBP=A9
+ 0001:0000145C 0000000E C=CODE     S=.text    G=(none)   M=DbkHelper ACBP=A9
+ 0001:0000146C 0000000E C=CODE     S=.text    G=(none)   M=dbk_tlb  ACBP=A9
+ 0001:0000147C 0000000E C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:0000148C 0000000E C=CODE     S=.text    G=(none)   M=OleConst ACBP=A9
+ 0001:0000149C 0000016E C=CODE     S=.text    G=(none)   M=CodeMgr  ACBP=A9
+ 0001:0000160C 0000000E C=CODE     S=.text    G=(none)   M=IDEModel ACBP=A9
+ 0001:0000161C 0000000E C=CODE     S=.text    G=(none)   M=IDEEvent ACBP=A9
+ 0001:0000162C 0000000E C=CODE     S=.text    G=(none)   M=IDEUtil  ACBP=A9
+ 0001:0000163C 0000000E C=CODE     S=.text    G=(none)   M=IDEConst ACBP=A9
+ 0001:0000164C 0000000E C=CODE     S=.text    G=(none)   M=ResUtils ACBP=A9
+ 0001:0000165C 0000000E C=CODE     S=.text    G=(none)   M=OptIntf  ACBP=A9
+ 0001:0000166C 00000026 C=CODE     S=.text    G=(none)   M=IDEHistoryManager ACBP=A9
+ 0001:00001694 00000016 C=CODE     S=.text    G=(none)   M=IDERegIniPropSet ACBP=A9
+ 0001:000016AC 0000002E C=CODE     S=.text    G=(none)   M=IDEPropSet ACBP=A9
+ 0001:000016DC 0000000E C=CODE     S=.text    G=(none)   M=Mask     ACBP=A9
+ 0001:000016EC 0000000E C=CODE     S=.text    G=(none)   M=MaskUtils ACBP=A9
+ 0001:000016FC 0000000E C=CODE     S=.text    G=(none)   M=PackageList ACBP=A9
+ 0001:0000170C 0000003E C=CODE     S=.text    G=(none)   M=UIUtils  ACBP=A9
+ 0001:0000174C 0000000E C=CODE     S=.text    G=(none)   M=VerInf   ACBP=A9
+ 0001:0000175C 0000000E C=CODE     S=.text    G=(none)   M=Grids    ACBP=A9
+ 0001:0000176C 0000000E C=CODE     S=.text    G=(none)   M=IDEVersionInfo ACBP=A9
+ 0001:0000177C 0000000E C=CODE     S=.text    G=(none)   M=AppStrs  ACBP=A9
+ 0001:0000178C 0000000E C=CODE     S=.text    G=(none)   M=RegistryEx ACBP=A9
+ 0001:0000179C 0000000E C=CODE     S=.text    G=(none)   M=AppConst ACBP=A9
+ 0001:000017AC 0000000E C=CODE     S=.text    G=(none)   M=FileCtrl ACBP=A9
+ 0001:000017BC 0000000E C=CODE     S=.text    G=(none)   M=EnvVariableFrame ACBP=A9
+ 0001:000017CC 0000000E C=CODE     S=.text    G=(none)   M=EnvVariableEntry ACBP=A9
+ 0001:000017DC 0000000E C=CODE     S=.text    G=(none)   M=Containers ACBP=A9
+ 0001:000017EC 0000001E C=CODE     S=.text    G=(none)   M=MakeObjs ACBP=A9
+ 0001:0000180C 0000000E C=CODE     S=.text    G=(none)   M=ProjectMgr ACBP=A9
+ 0001:0000181C 0000000E C=CODE     S=.text    G=(none)   M=IDEControl ACBP=A9
+ 0001:0000182C 0000000E C=CODE     S=.text    G=(none)   M=IDEPeer  ACBP=A9
+ 0001:0000183C 0000000E C=CODE     S=.text    G=(none)   M=IDEItem  ACBP=A9
+ 0001:0000184C 0000000E C=CODE     S=.text    G=(none)   M=IDEUIEvent ACBP=A9
+ 0001:0000185C 0000000E C=CODE     S=.text    G=(none)   M=IDEFixups ACBP=A9
+ 0001:0000186C 0000000E C=CODE     S=.text    G=(none)   M=IDEMulticast ACBP=A9
+ 0001:0000187C 0000000E C=CODE     S=.text    G=(none)   M=IDEMessages ACBP=A9
+ 0001:0000188C 0000000E C=CODE     S=.text    G=(none)   M=IDEViewImpl ACBP=A9
+ 0001:0000189C 0000000E C=CODE     S=.text    G=(none)   M=IDEUtil2 ACBP=A9
+ 0001:000018AC 0000000E C=CODE     S=.text    G=(none)   M=IDESubfocus ACBP=A9
+ 0001:000018BC 0000000E C=CODE     S=.text    G=(none)   M=IDESelection ACBP=A9
+ 0001:000018CC 0000000E C=CODE     S=.text    G=(none)   M=IDEModelEvent ACBP=A9
+ 0001:000018DC 0000000E C=CODE     S=.text    G=(none)   M=IDEViewManager ACBP=A9
+ 0001:000018EC 0000000E C=CODE     S=.text    G=(none)   M=IDEView  ACBP=A9
+ 0001:000018FC 0000000E C=CODE     S=.text    G=(none)   M=IDEItemEditors ACBP=A9
+ 0001:0000190C 0000000E C=CODE     S=.text    G=(none)   M=IDEItemPainters ACBP=A9
+ 0001:0000191C 0000000E C=CODE     S=.text    G=(none)   M=IDEGraphImpl ACBP=A9
+ 0001:0000192C 0000000E C=CODE     S=.text    G=(none)   M=IDEJgl   ACBP=A9
+ 0001:0000193C 0000000E C=CODE     S=.text    G=(none)   M=IDESelectionImpl ACBP=A9
+ 0001:0000194C 0000000E C=CODE     S=.text    G=(none)   M=IDESubfocusImpl ACBP=A9
+ 0001:0000195C 0000000E C=CODE     S=.text    G=(none)   M=IDEModelImpl ACBP=A9
+ 0001:0000196C 0000000E C=CODE     S=.text    G=(none)   M=IDEVectorImpl ACBP=A9
+ 0001:0000197C 0000000E C=CODE     S=.text    G=(none)   M=IDESingletonImpl ACBP=A9
+ 0001:0000198C 0000000E C=CODE     S=.text    G=(none)   M=IDEViewManagerImpl ACBP=A9
+ 0001:0000199C 0000000E C=CODE     S=.text    G=(none)   M=ExplorerIntf ACBP=A9
+ 0001:000019AC 00000086 C=CODE     S=.text    G=(none)   M=Updaters ACBP=A9
+ 0001:00001A34 0000004E C=CODE     S=.text    G=(none)   M=Symbols  ACBP=A9
+ 0001:00001A84 0000000E C=CODE     S=.text    G=(none)   M=Context  ACBP=A9
+ 0001:00001A94 0000000E C=CODE     S=.text    G=(none)   M=ProjectIntf ACBP=A9
+ 0001:00001AA4 0000001E C=CODE     S=.text    G=(none)   M=ComInOut ACBP=A9
+ 0001:00001AC4 0000000E C=CODE     S=.text    G=(none)   M=SyncObjs ACBP=A9
+ 0001:00001AD4 0000000E C=CODE     S=.text    G=(none)   M=ComMgr   ACBP=A9
+ 0001:00001AE4 0000000E C=CODE     S=.text    G=(none)   M=TypeLib  ACBP=A9
+ 0001:00001AF4 0000000E C=CODE     S=.text    G=(none)   M=tlberror ACBP=A9
+ 0001:00001B04 0000000E C=CODE     S=.text    G=(none)   M=TlbConst ACBP=A9
+ 0001:00001B14 0000000E C=CODE     S=.text    G=(none)   M=regutl   ACBP=A9
+ 0001:00001B24 0000000E C=CODE     S=.text    G=(none)   M=TlbHash  ACBP=A9
+ 0001:00001B34 0000000E C=CODE     S=.text    G=(none)   M=tlbdebug ACBP=A9
+ 0001:00001B44 0000000E C=CODE     S=.text    G=(none)   M=guidutl  ACBP=A9
+ 0001:00001B54 0000000E C=CODE     S=.text    G=(none)   M=ComPlusUtl ACBP=A9
+ 0001:00001B64 0000000E C=CODE     S=.text    G=(none)   M=DTLWrite ACBP=A9
+ 0001:00001B74 0000000E C=CODE     S=.text    G=(none)   M=TlbWrite ACBP=A9
+ 0001:00001B84 0000000E C=CODE     S=.text    G=(none)   M=TlbUtils ACBP=A9
+ 0001:00001B94 0000000E C=CODE     S=.text    G=(none)   M=AgeCache ACBP=A9
+ 0001:00001BA4 0000000E C=CODE     S=.text    G=(none)   M=StatIntf ACBP=A9
+ 0001:00001BB4 00000066 C=CODE     S=.text    G=(none)   M=Creators ACBP=A9
+ 0001:00001C1C 0000000E C=CODE     S=.text    G=(none)   M=Debug    ACBP=A9
+ 0001:00001C2C 0000000E C=CODE     S=.text    G=(none)   M=IDEServices ACBP=A9
+ 0001:00001C3C 0000000E C=CODE     S=.text    G=(none)   M=PakLoad  ACBP=A9
+ 0001:00001C4C 0000000E C=CODE     S=.text    G=(none)   M=VEdOpts  ACBP=A9
+ 0001:00001C5C 0000000E C=CODE     S=.text    G=(none)   M=EK       ACBP=A9
+ 0001:00001C6C 0000001E C=CODE     S=.text    G=(none)   M=EdKrnl   ACBP=A9
+ 0001:00001C8C 0000000E C=CODE     S=.text    G=(none)   M=VEdTypes ACBP=A9
+ 0001:00001C9C 0000000E C=CODE     S=.text    G=(none)   M=IDEKbd   ACBP=A9
+ 0001:00001CAC 0000000E C=CODE     S=.text    G=(none)   M=KbClient ACBP=A9
+ 0001:00001CBC 0000000E C=CODE     S=.text    G=(none)   M=MsgLines ACBP=A9
+ 0001:00001CCC 0000000E C=CODE     S=.text    G=(none)   M=MsgLinesIntf ACBP=A9
+ 0001:00001CDC 0000000E C=CODE     S=.text    G=(none)   M=MsgViewForm ACBP=A9
+ 0001:00001CEC 0000000E C=CODE     S=.text    G=(none)   M=DeskForm ACBP=A9
+ 0001:00001CFC 0000000E C=CODE     S=.text    G=(none)   M=DeskStrs ACBP=A9
+ 0001:00001D0C 0000000E C=CODE     S=.text    G=(none)   M=Tabs     ACBP=A9
+ 0001:00001D1C 0000000E C=CODE     S=.text    G=(none)   M=MsgView  ACBP=A9
+ 0001:00001D2C 0000000E C=CODE     S=.text    G=(none)   M=AppUtils ACBP=A9
+ 0001:00001D3C 0000009E C=CODE     S=.text    G=(none)   M=Editors  ACBP=A9
+ 0001:00001DDC 0000000E C=CODE     S=.text    G=(none)   M=IDEMenuAction ACBP=A9
+ 0001:00001DEC 0000000E C=CODE     S=.text    G=(none)   M=IDEDockPanel ACBP=A9
+ 0001:00001DFC 0000000E C=CODE     S=.text    G=(none)   M=TabDock  ACBP=A9
+ 0001:00001E0C 0000000E C=CODE     S=.text    G=(none)   M=DockForm ACBP=A9
+ 0001:00001E1C 0000000E C=CODE     S=.text    G=(none)   M=DeskUtil ACBP=A9
+ 0001:00001E2C 0000000E C=CODE     S=.text    G=(none)   M=IDEDockCtrls ACBP=A9
+ 0001:00001E3C 0000000E C=CODE     S=.text    G=(none)   M=BaseDock ACBP=A9
+ 0001:00001E4C 0000000E C=CODE     S=.text    G=(none)   M=JoinDock ACBP=A9
+ 0001:00001E5C 0000000E C=CODE     S=.text    G=(none)   M=IDETabControl ACBP=A9
+ 0001:00001E6C 0000000E C=CODE     S=.text    G=(none)   M=BaseEnvironDialog ACBP=A9
+ 0001:00001E7C 0000005E C=CODE     S=.text    G=(none)   M=IDEPropSheet ACBP=A9
+ 0001:00001EDC 0000000E C=CODE     S=.text    G=(none)   M=BaseModExplorerForm ACBP=A9
+ 0001:00001EEC 00000026 C=CODE     S=.text    G=(none)   M=EnvOptions ACBP=A9
+ 0001:00001F14 0000000E C=CODE     S=.text    G=(none)   M=AddInEnvOptions ACBP=A9
+ 0001:00001F24 0000000E C=CODE     S=.text    G=(none)   M=PakUtil  ACBP=A9
+ 0001:00001F34 00000036 C=CODE     S=.text    G=(none)   M=DocModul ACBP=A9
+ 0001:00001F6C 0000000E C=CODE     S=.text    G=(none)   M=ToolIntf ACBP=A9
+ 0001:00001F7C 0000000E C=CODE     S=.text    G=(none)   M=FileIntf ACBP=A9
+ 0001:00001F8C 0000000E C=CODE     S=.text    G=(none)   M=VirtFile ACBP=A9
+ 0001:00001F9C 0000000E C=CODE     S=.text    G=(none)   M=ToolMain ACBP=A9
+ 0001:00001FAC 0000000E C=CODE     S=.text    G=(none)   M=CmdConst ACBP=A9
+ 0001:00001FBC 0000000E C=CODE     S=.text    G=(none)   M=EdTrackr ACBP=A9
+ 0001:00001FCC 0000000E C=CODE     S=.text    G=(none)   M=EdProcs  ACBP=A9
+ 0001:00001FDC 0000000E C=CODE     S=.text    G=(none)   M=EdToken  ACBP=A9
+ 0001:00001FEC 0000000E C=CODE     S=.text    G=(none)   M=MsgWnds  ACBP=A9
+ 0001:00001FFC 0000000E C=CODE     S=.text    G=(none)   M=FileFind ACBP=A9
+ 0001:0000200C 0000000E C=CODE     S=.text    G=(none)   M=DebugOpts ACBP=A9
+ 0001:0000201C 0000000E C=CODE     S=.text    G=(none)   M=ExprDlg  ACBP=A9
+ 0001:0000202C 0000000E C=CODE     S=.text    G=(none)   M=IDEPropCtrls ACBP=A9
+ 0001:0000203C 0000000E C=CODE     S=.text    G=(none)   M=ColorGrd ACBP=A9
+ 0001:0000204C 0000000E C=CODE     S=.text    G=(none)   M=EvalMod  ACBP=A9
+ 0001:0000205C 0000000E C=CODE     S=.text    G=(none)   M=DockToolForm ACBP=A9
+ 0001:0000206C 0000000E C=CODE     S=.text    G=(none)   M=IDECommandButton ACBP=A9
+ 0001:0000207C 0000000E C=CODE     S=.text    G=(none)   M=IDEIntf  ACBP=A9
+ 0001:0000208C 0000000E C=CODE     S=.text    G=(none)   M=ExptIntf ACBP=A9
+ 0001:0000209C 0000000E C=CODE     S=.text    G=(none)   M=DebugFindFile ACBP=A9
+ 0001:000020AC 0000000E C=CODE     S=.text    G=(none)   M=DataBPModify ACBP=A9
+ 0001:000020BC 0000000E C=CODE     S=.text    G=(none)   M=DataBPAdd ACBP=A9
+ 0001:000020CC 0000000E C=CODE     S=.text    G=(none)   M=AdrBPAdd ACBP=A9
+ 0001:000020DC 0000000E C=CODE     S=.text    G=(none)   M=Verify   ACBP=A9
+ 0001:000020EC 0000000E C=CODE     S=.text    G=(none)   M=ComDebug ACBP=A9
+ 0001:000020FC 0000000E C=CODE     S=.text    G=(none)   M=BPModify ACBP=A9
+ 0001:0000210C 0000000E C=CODE     S=.text    G=(none)   M=BPAdd    ACBP=A9
+ 0001:0000211C 0000000E C=CODE     S=.text    G=(none)   M=AdrBPModify ACBP=A9
+ 0001:0000212C 0000000E C=CODE     S=.text    G=(none)   M=GetAddr  ACBP=A9
+ 0001:0000213C 0000000E C=CODE     S=.text    G=(none)   M=DisView  ACBP=A9
+ 0001:0000214C 0000000E C=CODE     S=.text    G=(none)   M=PkgProjects ACBP=A9
+ 0001:0000215C 0000000E C=CODE     S=.text    G=(none)   M=Desktop  ACBP=A9
+ 0001:0000216C 0000000E C=CODE     S=.text    G=(none)   M=ProjectFrm ACBP=A9
+ 0001:0000217C 0000000E C=CODE     S=.text    G=(none)   M=TreeSearch ACBP=A9
+ 0001:0000218C 0000000E C=CODE     S=.text    G=(none)   M=PkgEditors ACBP=A9
+ 0001:0000219C 0000000E C=CODE     S=.text    G=(none)   M=PkgContainers ACBP=A9
+ 0001:000021AC 0000000E C=CODE     S=.text    G=(none)   M=CompHelp ACBP=A9
+ 0001:000021BC 0000000E C=CODE     S=.text    G=(none)   M=WinHelpTester ACBP=A9
+ 0001:000021CC 0000000E C=CODE     S=.text    G=(none)   M=HelpList ACBP=A9
+ 0001:000021DC 0000000E C=CODE     S=.text    G=(none)   M=PrintSel ACBP=A9
+ 0001:000021EC 0000000E C=CODE     S=.text    G=(none)   M=HelpSelector ACBP=A9
+ 0001:000021FC 0000000E C=CODE     S=.text    G=(none)   M=ComPrgrs ACBP=A9
+ 0001:0000220C 00000066 C=CODE     S=.text    G=(none)   M=Compiler ACBP=A9
+ 0001:00002274 0000000E C=CODE     S=.text    G=(none)   M=PackageState ACBP=A9
+ 0001:00002284 0000000E C=CODE     S=.text    G=(none)   M=PakMgr   ACBP=A9
+ 0001:00002294 0000000E C=CODE     S=.text    G=(none)   M=ExpertReg ACBP=A9
+ 0001:000022A4 0000000E C=CODE     S=.text    G=(none)   M=CompList ACBP=A9
+ 0001:000022B4 0000000E C=CODE     S=.text    G=(none)   M=PalMgr   ACBP=A9
+ 0001:000022C4 0000000E C=CODE     S=.text    G=(none)   M=ViewDlg  ACBP=A9
+ 0001:000022D4 0000000E C=CODE     S=.text    G=(none)   M=Palettes ACBP=A9
+ 0001:000022E4 0000000E C=CODE     S=.text    G=(none)   M=PakWarn  ACBP=A9
+ 0001:000022F4 0000000E C=CODE     S=.text    G=(none)   M=AddRequires ACBP=A9
+ 0001:00002304 0000000E C=CODE     S=.text    G=(none)   M=AddContainsRequiresBase ACBP=A9
+ 0001:00002314 0000000E C=CODE     S=.text    G=(none)   M=PackageAddBase ACBP=A9
+ 0001:00002324 0000000E C=CODE     S=.text    G=(none)   M=AddContains ACBP=A9
+ 0001:00002334 0000000E C=CODE     S=.text    G=(none)   M=AddContainsRequires ACBP=A9
+ 0001:00002344 0000000E C=CODE     S=.text    G=(none)   M=PakAnaly ACBP=A9
+ 0001:00002354 0000000E C=CODE     S=.text    G=(none)   M=PakList  ACBP=A9
+ 0001:00002364 0000000E C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:00002374 0000000E C=CODE     S=.text    G=(none)   M=PakRemRu ACBP=A9
+ 0001:00002384 0000000E C=CODE     S=.text    G=(none)   M=InstColl ACBP=A9
+ 0001:00002394 0000000E C=CODE     S=.text    G=(none)   M=Archiver ACBP=A9
+ 0001:000023A4 0000000E C=CODE     S=.text    G=(none)   M=ZLib     ACBP=A9
+ 0001:000023B4 0000000E C=CODE     S=.text    G=(none)   M=ZLibConst ACBP=A9
+ 0001:000023C4 0000000E C=CODE     S=.text    G=(none)   M=PCEGlobs ACBP=A9
+ 0001:000023D4 0000000E C=CODE     S=.text    G=(none)   M=PakCust  ACBP=A9
+ 0001:000023E4 0000000E C=CODE     S=.text    G=(none)   M=PkgDir   ACBP=A9
+ 0001:000023F4 0000000E C=CODE     S=.text    G=(none)   M=PakComp  ACBP=A9
+ 0001:00002404 0000000E C=CODE     S=.text    G=(none)   M=FileHist ACBP=A9
+ 0001:00002414 0000000E C=CODE     S=.text    G=(none)   M=ProjectItem ACBP=A9
+ 0001:00002424 0000000E C=CODE     S=.text    G=(none)   M=PrefOptDlg ACBP=A9
+ 0001:00002434 0000000E C=CODE     S=.text    G=(none)   M=ReposCfg ACBP=A9
+ 0001:00002444 0000000E C=CODE     S=.text    G=(none)   M=EditTpl  ACBP=A9
+ 0001:00002454 0000000E C=CODE     S=.text    G=(none)   M=Template ACBP=A9
+ 0001:00002464 0000000E C=CODE     S=.text    G=(none)   M=PrjTpl   ACBP=A9
+ 0001:00002474 0000000E C=CODE     S=.text    G=(none)   M=FormTpl  ACBP=A9
+ 0001:00002484 0000000E C=CODE     S=.text    G=(none)   M=PalEdit  ACBP=A9
+ 0001:00002494 0000000E C=CODE     S=.text    G=(none)   M=GalBrow  ACBP=A9
+ 0001:000024A4 0000000E C=CODE     S=.text    G=(none)   M=ExptMain ACBP=A9
+ 0001:000024B4 0000000E C=CODE     S=.text    G=(none)   M=ParserThread ACBP=A9
+ 0001:000024C4 0000000E C=CODE     S=.text    G=(none)   M=EditMain ACBP=A9
+ 0001:000024D4 0000000E C=CODE     S=.text    G=(none)   M=VcsMain  ACBP=A9
+ 0001:000024E4 0000000E C=CODE     S=.text    G=(none)   M=VcsIntf  ACBP=A9
+ 0001:000024F4 0000000E C=CODE     S=.text    G=(none)   M=NewFile  ACBP=A9
+ 0001:00002504 0000000E C=CODE     S=.text    G=(none)   M=DisComp  ACBP=A9
+ 0001:00002514 0000000E C=CODE     S=.text    G=(none)   M=SelectTh ACBP=A9
+ 0001:00002524 0000000E C=CODE     S=.text    G=(none)   M=WinMsg   ACBP=A9
+ 0001:00002534 0000000E C=CODE     S=.text    G=(none)   M=EdScript ACBP=A9
+ 0001:00002544 0000000E C=CODE     S=.text    G=(none)   M=GotoLine ACBP=A9
+ 0001:00002554 0000000E C=CODE     S=.text    G=(none)   M=VClient  ACBP=A9
+ 0001:00002564 0000000E C=CODE     S=.text    G=(none)   M=SrchPrgs ACBP=A9
+ 0001:00002574 0000000E C=CODE     S=.text    G=(none)   M=SrchDlg  ACBP=A9
+ 0001:00002584 0000000E C=CODE     S=.text    G=(none)   M=WinList  ACBP=A9
+ 0001:00002594 0000000E C=CODE     S=.text    G=(none)   M=BarFrm   ACBP=A9
+ 0001:000025A4 0000000E C=CODE     S=.text    G=(none)   M=BottomBarFrm ACBP=A9
+ 0001:000025B4 0000000E C=CODE     S=.text    G=(none)   M=RightBarFrm ACBP=A9
+ 0001:000025C4 0000000E C=CODE     S=.text    G=(none)   M=LeftBarFrm ACBP=A9
+ 0001:000025D4 0000000E C=CODE     S=.text    G=(none)   M=MainWorkFrm ACBP=A9
+ 0001:000025E4 0000000E C=CODE     S=.text    G=(none)   M=WorkFrm  ACBP=A9
+ 0001:000025F4 0000000E C=CODE     S=.text    G=(none)   M=PrintSes ACBP=A9
+ 0001:00002604 0000000E C=CODE     S=.text    G=(none)   M=PrintSts ACBP=A9
+ 0001:00002614 0000000E C=CODE     S=.text    G=(none)   M=OptStr   ACBP=A9
+ 0001:00002624 0000000E C=CODE     S=.text    G=(none)   M=RplcDlg  ACBP=A9
+ 0001:00002634 0000000E C=CODE     S=.text    G=(none)   M=FileMain ACBP=A9
+ 0001:00002644 0000000E C=CODE     S=.text    G=(none)   M=WorkspaceCrtrs ACBP=A9
+ 0001:00002654 0000008E C=CODE     S=.text    G=(none)   M=CppProjOpts ACBP=A9
+ 0001:000026E4 0000000E C=CODE     S=.text    G=(none)   M=CppContainers ACBP=A9
+ 0001:000026F4 0000000E C=CODE     S=.text    G=(none)   M=CppCompilerContainer ACBP=A9
+ 0001:00002704 0000000E C=CODE     S=.text    G=(none)   M=InternalToolStream ACBP=A9
+ 0001:00002714 000000A6 C=CODE     S=.text    G=(none)   M=IdlUpdaters ACBP=A9
+ 0001:000027BC 0000000E C=CODE     S=.text    G=(none)   M=ProjOptDlg ACBP=A9
+ 0001:000027CC 0000000E C=CODE     S=.text    G=(none)   M=Deploy   ACBP=A9
+ 0001:000027DC 0000000E C=CODE     S=.text    G=(none)   M=DepFiles ACBP=A9
+ 0001:000027EC 0000000E C=CODE     S=.text    G=(none)   M=ImageHlp ACBP=A9
+ 0001:000027FC 0000000E C=CODE     S=.text    G=(none)   M=DepProg  ACBP=A9
+ 0001:0000280C 0000000E C=CODE     S=.text    G=(none)   M=ApplOpts ACBP=A9
+ 0001:0000281C 000001B6 C=CODE     S=.text    G=(none)   M=CppMgr   ACBP=A9
+ 0001:000029D4 0000001E C=CODE     S=.text    G=(none)   M=XMLProj  ACBP=A9
+ 0001:000029F4 00000016 C=CODE     S=.text    G=(none)   M=MakeFileMgr ACBP=A9
+ 0001:00002A0C 0000001E C=CODE     S=.text    G=(none)   M=IdlModul ACBP=A9
+ 0001:00002A2C 0000000E C=CODE     S=.text    G=(none)   M=ConvertXML ACBP=A9
+ 0001:00002A3C 0000000E C=CODE     S=.text    G=(none)   M=XmlIde   ACBP=A9
+ 0001:00002A4C 0000000E C=CODE     S=.text    G=(none)   M=IDEToDoIntf ACBP=A9
+ 0001:00002A5C 0000000E C=CODE     S=.text    G=(none)   M=ATLWizConst ACBP=A9
+ 0001:00002A6C 0000000E C=CODE     S=.text    G=(none)   M=CppSym   ACBP=A9
+ 0001:00002A7C 0000000E C=CODE     S=.text    G=(none)   M=RemovMod ACBP=A9
+ 0001:00002A8C 00000076 C=CODE     S=.text    G=(none)   M=CppCrtrs ACBP=A9
+ 0001:00002B04 0000000E C=CODE     S=.text    G=(none)   M=FindHdr  ACBP=A9
+ 0001:00002B14 0000000E C=CODE     S=.text    G=(none)   M=FindLib  ACBP=A9
+ 0001:00002B24 0000000E C=CODE     S=.text    G=(none)   M=LocalProjOptDlg ACBP=A9
+ 0001:00002B34 000001D0 C=CODE     S=.text    G=(none)   M=IdlConst ACBP=A9
+ 0001:00002D04 000002A0 C=CODE     S=.text    G=(none)   M=CORBAOptionsPage ACBP=A9
+ 0001:00002FA4 000005C4 C=CODE     S=.text    G=(none)   M=IdlEnvOptions ACBP=A9
+ 0001:00003568 00002B2F C=CODE     S=.text    G=(none)   M=IdlCppImpl ACBP=A9
+ 0001:00006098 000012FC C=CODE     S=.text    G=(none)   M=IdlIntfList ACBP=A9
+ 0001:00007394 00000016 C=CODE     S=.text    G=(none)   M=OrderedListEditDialog ACBP=A9
+ 0001:000073AC 0000000E C=CODE     S=.text    G=(none)   M=CreaEdit ACBP=A9
+ 0001:000073BC 000016E0 C=CODE     S=.text    G=(none)   M=IdlImplObjDlg ACBP=A9
+ 0001:00008A9C 0000161C C=CODE     S=.text    G=(none)   M=IdlUseObjDlg ACBP=A9
+ 0001:0000A0B8 000017C0 C=CODE     S=.text    G=(none)   M=IdlUpdateItems ACBP=A9
+ 0001:0000B878 00000584 C=CODE     S=.text    G=(none)   M=IdlNewProjDlg ACBP=A9
+ 0001:0000BDFC 000001E8 C=CODE     S=.text    G=(none)   M=IdlNewCliDlg ACBP=A9
+ 0001:0000BFE4 000001D4 C=CODE     S=.text    G=(none)   M=IdlNewServDlg ACBP=A9
+ 0001:0000C1B8 00000026 C=CODE     S=.text    G=(none)   M=CppComExpertCodegen ACBP=A9
+ 0001:0000C1E0 0000000E C=CODE     S=.text    G=(none)   M=CppProCrtrs ACBP=A9
+ 0001:0000C1F0 0000000E C=CODE     S=.text    G=(none)   M=AxNew    ACBP=A9
+ 0001:0000C200 0000000E C=CODE     S=.text    G=(none)   M=AxCtlExp ACBP=A9
+ 0001:0000C210 0000000E C=CODE     S=.text    G=(none)   M=AutoExpt ACBP=A9
+ 0001:0000C220 0000000E C=CODE     S=.text    G=(none)   M=BaseComExpt ACBP=A9
+ 0001:0000C230 0000000E C=CODE     S=.text    G=(none)   M=ASPExpt  ACBP=A9
+ 0001:0000C240 0000000E C=CODE     S=.text    G=(none)   M=ComBrows ACBP=A9
+ 0001:0000C250 0000000E C=CODE     S=.text    G=(none)   M=ComExpt  ACBP=A9
+ 0001:0000C260 0000000E C=CODE     S=.text    G=(none)   M=SelIntfWiz ACBP=A9
+ 0001:0000C270 0000000E C=CODE     S=.text    G=(none)   M=TlbModul ACBP=A9
+ 0001:0000C280 0000000E C=CODE     S=.text    G=(none)   M=TlibEdit ACBP=A9
+ 0001:0000C290 0000000E C=CODE     S=.text    G=(none)   M=TlbIface ACBP=A9
+ 0001:0000C2A0 0000000E C=CODE     S=.text    G=(none)   M=ToolForm ACBP=A9
+ 0001:0000C2B0 0000000E C=CODE     S=.text    G=(none)   M=UIWrite  ACBP=A9
+ 0001:0000C2C0 0000000E C=CODE     S=.text    G=(none)   M=TlbParse ACBP=A9
+ 0001:0000C2D0 0000000E C=CODE     S=.text    G=(none)   M=IDEXGrid ACBP=A9
+ 0001:0000C2E0 0000000E C=CODE     S=.text    G=(none)   M=TlbLang  ACBP=A9
+ 0001:0000C2F0 0000000E C=CODE     S=.text    G=(none)   M=IDLParse ACBP=A9
+ 0001:0000C300 0000000E C=CODE     S=.text    G=(none)   M=IDLWrite ACBP=A9
+ 0001:0000C310 0000000E C=CODE     S=.text    G=(none)   M=IDLCreators ACBP=A9
+ 0001:0000C320 0000000E C=CODE     S=.text    G=(none)   M=TlbFlags ACBP=A9
+ 0001:0000C330 0000000E C=CODE     S=.text    G=(none)   M=COMAdmin_TLB ACBP=A9
+ 0001:0000C340 0000000E C=CODE     S=.text    G=(none)   M=OleServer ACBP=A9
+ 0001:0000C350 0000000E C=CODE     S=.text    G=(none)   M=importutl ACBP=A9
+ 0001:0000C360 00000DE4 C=CODE     S=.text    G=(none)   M=CppIdlCrtrs ACBP=A9
+ 0001:0000D144 00001E50 C=CODE     S=.text    G=(none)   M=IdlUpdateObjDlg ACBP=A9
+ 0001:0000EF94 0000001E C=CODE     S=.text    G=(none)   M=CppComIntf ACBP=A9
+ 0001:0000EFB4 00001A18 C=CODE     S=.text    G=(none)   M=IdlCppOpts ACBP=A9
+ 0001:000109CC 00000C53 C=CODE     S=.text    G=(none)   M=IdlDepends ACBP=A9
+ 0001:00011620 00000280 C=CODE     S=.text    G=(none)   M=IdlMakeObjs ACBP=A9
+ 0001:000118A0 00000324 C=CODE     S=.text    G=(none)   M=IdlRenamedIntfDlg ACBP=A9
+ 0001:00011BC4 0000036C C=CODE     S=.text    G=(none)   M=IdlAddIdlIncludesDlg ACBP=A9
+ 0001:00011F30 0000AB7C C=CODE     S=.text    G=(none)   M=IdlImplUpdater ACBP=A9
+ 0001:0001CAAC 00002FD4 C=CODE     S=.text    G=(none)   M=IdlNew   ACBP=A9
+ 0001:0001FA80 000002A0 C=CODE     S=.text    G=(none)   M=IdlRep   ACBP=A9
+ 0001:0001FD20 00000738 C=CODE     S=.text    G=(none)   M=IdlAddIrDlg ACBP=A9
+ 0001:00020458 00000026 C=CODE     S=.text    G=(none)   M=ProcessUtil ACBP=A9
+ 0001:00020480 0000000E C=CODE     S=.text    G=(none)   M=PipeUtil ACBP=A9
+ 0001:00020490 000002D0 C=CODE     S=.text    G=(none)   M=FileUtil ACBP=A9
+ 0001:00020760 00000A64 C=CODE     S=.text    G=(none)   M=GenFile  ACBP=A9
+ 0001:000211C4 000001B8 C=CODE     S=.text    G=(none)   M=ParseUtil ACBP=A9
+ 0001:0002137C 00000B54 C=CODE     S=.text    G=(none)   M=IdlCppGenFile ACBP=A9
+ 0001:00021ED0 00001984 C=CODE     S=.text    G=(none)   M=IdlComIntf ACBP=A9
+ 0001:00023854 0000165C C=CODE     S=.text    G=(none)   M=Idl2IrDlg ACBP=A9
+ 0001:00024EB0 00000016 C=CODE     S=.text    G=(none)   M=IDEDockBar ACBP=A9
+ 0001:00024EC8 0000000E C=CODE     S=.text    G=(none)   M=IDEDockForm ACBP=A9
+ 0001:00024ED8 00001108 C=CODE     S=.text    G=(none)   M=IdlCmds  ACBP=A9
+ 0001:00025FE0 000001DF C=CODE     S=.text    G=(none)   M=IdlOpenFile ACBP=A9
+ 0001:000261C0 000005F7 C=CODE     S=.text    G=(none)   M=IdlCppReg ACBP=A9
+ 0001:000267B8 0000099C C=CODE     S=.text    G=(none)   M=IdlCppOptsPage ACBP=A9
+ 0001:00027154 00000C3D C=CODE     S=.text    G=(none)   M=bcbidl   ACBP=A9
+ 0002:00000000 00000028 C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00000028 00000014 C=DATA     S=.data    G=DGROUP   M=IdlCppImpl ACBP=A9
+ 0002:0000003C 000000C0 C=DATA     S=.data    G=DGROUP   M=IdlCppOpts ACBP=A9
+ 0002:000000FC 00000004 C=DATA     S=.data    G=DGROUP   M=IdlRep   ACBP=A9
+ 0002:00000100 00000004 C=DATA     S=.data    G=DGROUP   M=IdlOpenFile ACBP=A9
+ 0002:00001000 00000018 C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00001018 00000004 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0002:0000101C 00000004 C=BSS      S=.bss     G=DGROUP   M=Messages ACBP=A9
+ 0002:00001020 00000004 C=BSS      S=.bss     G=DGROUP   M=CommCtrl ACBP=A9
+ 0002:00001024 00000004 C=BSS      S=.bss     G=DGROUP   M=Imm      ACBP=A9
+ 0002:00001028 00000004 C=BSS      S=.bss     G=DGROUP   M=ShlObj   ACBP=A9
+ 0002:0000102C 00000004 C=BSS      S=.bss     G=DGROUP   M=UrlMon   ACBP=A9
+ 0002:00001030 00000004 C=BSS      S=.bss     G=DGROUP   M=WinInet  ACBP=A9
+ 0002:00001034 00000004 C=BSS      S=.bss     G=DGROUP   M=RegStr   ACBP=A9
+ 0002:00001038 00000004 C=BSS      S=.bss     G=DGROUP   M=ShellAPI ACBP=A9
+ 0002:0000103C 00000004 C=BSS      S=.bss     G=DGROUP   M=WinSpool ACBP=A9
+ 0002:00001040 00000004 C=BSS      S=.bss     G=DGROUP   M=CommDlg  ACBP=A9
+ 0002:00001044 00000004 C=BSS      S=.bss     G=DGROUP   M=Dlgs     ACBP=A9
+ 0002:00001048 00000004 C=BSS      S=.bss     G=DGROUP   M=RichEdit ACBP=A9
+ 0002:0000104C 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlConst ACBP=A9
+ 0002:00001050 00000008 C=BSS      S=.bss     G=DGROUP   M=CORBAOptionsPage ACBP=A9
+ 0002:00001058 00000008 C=BSS      S=.bss     G=DGROUP   M=IdlEnvOptions ACBP=A9
+ 0002:00001060 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlCppImpl ACBP=A9
+ 0002:00001064 00000008 C=BSS      S=.bss     G=DGROUP   M=IdlIntfList ACBP=A9
+ 0002:0000106C 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlImplObjDlg ACBP=A9
+ 0002:00001070 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlUseObjDlg ACBP=A9
+ 0002:00001074 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlUpdateItems ACBP=A9
+ 0002:00001078 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlNewProjDlg ACBP=A9
+ 0002:0000107C 00000008 C=BSS      S=.bss     G=DGROUP   M=IdlNewCliDlg ACBP=A9
+ 0002:00001084 00000008 C=BSS      S=.bss     G=DGROUP   M=IdlNewServDlg ACBP=A9
+ 0002:0000108C 00000004 C=BSS      S=.bss     G=DGROUP   M=CppIdlCrtrs ACBP=A9
+ 0002:00001090 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlUpdateObjDlg ACBP=A9
+ 0002:00001094 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlCppOpts ACBP=A9
+ 0002:00001098 00000008 C=BSS      S=.bss     G=DGROUP   M=IdlDepends ACBP=A9
+ 0002:000010A0 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlMakeObjs ACBP=A9
+ 0002:000010A4 00000008 C=BSS      S=.bss     G=DGROUP   M=IdlRenamedIntfDlg ACBP=A9
+ 0002:000010AC 00000008 C=BSS      S=.bss     G=DGROUP   M=IdlAddIdlIncludesDlg ACBP=A9
+ 0002:000010B4 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlImplUpdater ACBP=A9
+ 0002:000010B8 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlNew   ACBP=A9
+ 0002:000010BC 0000000C C=BSS      S=.bss     G=DGROUP   M=IdlRep   ACBP=A9
+ 0002:000010C8 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlAddIrDlg ACBP=A9
+ 0002:000010CC 00000004 C=BSS      S=.bss     G=DGROUP   M=FileUtil ACBP=A9
+ 0002:000010D0 00000004 C=BSS      S=.bss     G=DGROUP   M=GenFile  ACBP=A9
+ 0002:000010D4 00000004 C=BSS      S=.bss     G=DGROUP   M=ParseUtil ACBP=A9
+ 0002:000010D8 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlCppGenFile ACBP=A9
+ 0002:000010DC 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlComIntf ACBP=A9
+ 0002:000010E0 00000004 C=BSS      S=.bss     G=DGROUP   M=Idl2IrDlg ACBP=A9
+ 0002:000010E4 00000008 C=BSS      S=.bss     G=DGROUP   M=IdlCmds  ACBP=A9
+ 0002:000010EC 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlOpenFile ACBP=A9
+ 0002:000010F0 0000000C C=BSS      S=.bss     G=DGROUP   M=IdlCppReg ACBP=A9
+ 0002:000010FC 00000004 C=BSS      S=.bss     G=DGROUP   M=IdlCppOptsPage ACBP=A9
+
+
+  Address         Publics by Name
+
+ 0002:000010B4       .02
+ 0002:000010CC       .1
+ 0002:00001040       .1
+ 0002:00001044       .1
+ 0002:000010EC       .1
+ 0002:00001038       .1
+ 0002:00001048       .1
+ 0002:00001034       .1
+ 0002:00001030       .1
+ 0002:0000102C       .1
+ 0002:0000104C       .1
+ 0002:00001028       .1
+ 0002:000010F0       .1
+ 0002:00001024       .1
+ 0002:0000101C       .1
+ 0002:00001010       .1
+ 0002:00001020       .1
+ 0002:000010BC       .1
+ 0002:000010D4       .1
+ 0002:00001088       .2
+ 0002:00001078       .2
+ 0002:000010E0       .2
+ 0002:000010A8       .2
+ 0002:00001070       .2
+ 0002:00001080       .2
+ 0002:000010B0       .2
+ 0002:000010DC       .2
+ 0002:000010C8       .2
+ 0002:0000105C       .2
+ 0002:000010E8       .2
+ 0002:000010A0       .2
+ 0002:00001054       .2
+ 0002:000010FC       .2
+ 0002:000010D8       .3
+ 0002:00001094       .3
+ 0002:00001018       .3
+ 0002:0000103C       .3
+ 0002:00001090       .3
+ 0002:00001060       .31
+ 0002:0000106C       .4
+ 0002:000010D0       .5
+ 0002:0000109C       .5
+ 0002:0000108C       .6
+ 0002:000010B8       .8
+ 0002:00001064       .8
+ 0002:00001074       .91
+ 0001:00027D6C       @GetPackageInfoTable
+ 0001:000003E0       @InitPkg
+ 0001:00027D74       @PackageLoad
+ 0001:00000444       @PackageLoad
+ 0001:00000450       @PackageUnload
+ 0001:00027D80       @PackageUnload
+ 0001:000107C8       Add
+ 0001:00025700       AddAction
+ 0001:00022D40       AddCollectedUnitToProject
+ 0001:000195A4       AddCommand
+ 0001:00025884       AddCORBATool
+ 0001:00025900       AddCORBAToolSeparator
+ 0001:00005358       AddFile
+ 0001:0001C0BC       AddFileToLine
+ 0001:00019A5C       AddFileToLine
+ 0001:00021F64       AddGenFilesToProject
+ 0001:00007010       AddIdlFiles
+ 0001:00006658       AddIdlFilesToProject
+ 0002:000010AC       AddIdlIncludesDlg
+ 0001:000152D0       AddInstanceMethod
+ 0001:0001546C       AddInstanceProperty
+ 0001:000151F4       AddInstanceVariable
+ 0001:0000DE00       AddItem
+ 0001:000257EC       AddMenuItem
+ 0001:0002573C       AddMenuSeparator
+ 0001:00005398       AddMethod
+ 0001:00017020       AddParam
+ 0001:00015134       AddParam
+ 0001:000230F0       AddPchSupport
+ 0001:00025988       AddToolBarAction
+ 0001:000002E0       AllocTlsBuffer
+ 0001:00024104       AnySelected
+ 0001:00027D8C       bcbidl
+ 0002:00000028       bComma
+ 0002:00000030       bSpace
+ 0001:0002472C       BuildCommandLine
+ 0001:0002203C       CheckIdlFileNames
+ 0001:00007E44       CheckImplExists
+ 0001:000143F8       CleanupDeclarations
+ 0001:0000F598       CleanValue
+ 0001:00000494       CloseHandle
+ 0001:0000ADCC       CodeFixSnipet
+ 0001:00000ABC       CommCtrl
+ 0001:00000F34       CommDlg
+ 0001:00015AD4       CompareDeclPos
+ 0001:00015AF0       CompareImplPos
+ 0001:00005280       CompareMethodLineNo
+ 0001:00004FA4       CompareMethodNames
+ 0001:00002F90       CORBAOptionsPage
+ 0002:000000FC       CorbaRepDll
+ 0001:0000D13C       CppIdlCrtrs
+ 0001:000255B4       CreateCORBAToolBar
+ 0001:0000049C       CreateDirectory
+ 0001:0001D164       CreateNewIDLFile
+ 0001:0001D1B4       CreateNewIdlObjectImpl
+ 0001:0001EBB8       CreateObjectBindForm
+ 0001:0001EC50       CreateObjectBindInMain
+ 0001:0001EAB4       CreateObjectBindInstance
+ 0001:0001ECB8       CreateObjectBindUnit
+ 0001:000004A4       CreateProcess
+ 0001:00003EFC       CreateSource
+ 0001:000140B0       CreateTempSymbol
+ 0001:00000F6C       Dlgs
+ 0001:0001409C       ExactSameFlags
+ 0001:0000038C       ExitProcessTLS
+ 0001:00000364       ExitThreadTLS
+ 0001:0000FC30       ExtractMatchingOption
+ 0001:00015B0C       ExtractText
+ 0002:000010F8       FCppIdlUpdaters
+ 0001:00020758       FileUtil
+ 0001:0001CA74       Finalization
+ 0001:0001FA48       Finalization
+ 0001:0001FCE8       Finalization
+ 0001:00020420       Finalization
+ 0001:00020728       Finalization
+ 0001:0002118C       Finalization
+ 0001:00021344       Finalization
+ 0001:00021E98       Finalization
+ 0001:00011EF8       Finalization
+ 0001:00011B8C       Finalization
+ 0001:00003530       Finalization
+ 0001:0002381C       Finalization
+ 0001:00011868       Finalization
+ 0001:00002F54       Finalization
+ 0001:000115C8       Finalization
+ 0001:00024E78       Finalization
+ 0001:00006018       Finalization
+ 0001:00002CCC       Finalization
+ 0001:000012AC       Finalization
+ 0001:00000F3C       Finalization
+ 0001:00000F04       Finalization
+ 0001:00000EAC       Finalization
+ 0001:00000E64       Finalization
+ 0001:00000E2C       Finalization
+ 0001:00000DF4       Finalization
+ 0001:00000DBC       Finalization
+ 0001:00000D84       Finalization
+ 0001:0001097C       Finalization
+ 0001:00000CD4       Finalization
+ 0001:00000A8C       Finalization
+ 0001:0000082C       Finalization
+ 0001:0000053C       Finalization
+ 0001:00025FA8       Finalization
+ 0001:00026160       Finalization
+ 0001:0000EF5C       Finalization
+ 0001:0000D10C       Finalization
+ 0001:0000C180       Finalization
+ 0001:0000045C       Finalization
+ 0001:00007350       Finalization
+ 0001:0000BFAC       Finalization
+ 0001:0000BDC4       Finalization
+ 0001:00026720       Finalization
+ 0001:00027104       Finalization
+ 0001:0000B840       Finalization
+ 0001:0000A080       Finalization
+ 0001:00008A64       Finalization
+ 0001:000004AC       FindClose
+ 0001:00005344       FindFile
+ 0001:000004B4       FindFirstFile
+ 0001:000135F4       FindIdlClassSymbol
+ 0001:000211C4       FindLine
+ 0001:00010D1C       FindNewer
+ 0001:000004BC       FindNextFile
+ 0001:0001C634       FixDirName
+ 0001:000194EC       FixDirName
+ 0001:0000FEB8       FixTrailingBackslash
+ 0002:00001068       FOpenFileDialog
+ 0001:00015164       FormatObjectName
+ 0001:00017050       FormatObjectName
+ 0001:000002A8       FreeLibrary
+ 0001:000211BC       GenFile
+ 0001:00022A94       GetCollectedUnits
+ 0001:0002441C       GetCompilationList
+ 0001:000004C4       GetExitCodeProcess
+ 0001:000111D0       GetFileAge
+ 0001:000004CC       GetFileAttributes
+ 0001:0001FFEC       GetIRCount
+ 0001:0000DC00       GetItemText
+ 0001:0000DCDC       GetItemType
+ 0001:000004D4       GetLastError
+ 0001:00006608       GetOpenIdlFileDialog
+ 0001:000004DC       GetProcAddress
+ 0001:00005424       GetReader
+ 0001:00010E2C       GetReader
+ 0001:0001FBE8       GetRepositories
+ 0002:000010C4       GetRepositoriesProc
+ 0001:00010EB4       GetSource
+ 0001:00005470       GetSource
+ 0001:000004E4       GetTickCount
+ 0001:000002EC       GetTlsSize
+ 0002:0000100C       HInstance
+ 0001:00026554       IDERegister
+ 0002:0000003C       Idl2CppSwitchList
+ 0001:00024EA8       Idl2IrDlg
+ 0001:00011F28       IdlAddIdlIncludesDlg
+ 0001:00020450       IdlAddIrDlg
+ 0001:00025FD8       IdlCmds
+ 0001:0002384C       IdlComIntf
+ 0002:000010E4       IdlCommands
+ 0001:00002CFC       IdlConst
+ 0001:00021EC8       IdlCppGenFile
+ 0001:0000607C       IdlCppImpl
+ 0001:000109C4       IdlCppOpts
+ 0001:00027140       IdlCppOptsPage
+ 0001:00026788       IdlCppReg
+ 0001:00011604       IdlDepends
+ 0002:00001058       IdlEnvironmentOptions
+ 0001:00003560       IdlEnvOptions
+ 0002:00001098       IdlFileDependencies
+ 0002:00000100       IDLFileHandler
+ 0002:00000038       IdlFileSymbolCache
+ 0001:00008A94       IdlImplObjDlg
+ 0001:0001CAA4       IdlImplUpdater
+ 0001:0000738C       IdlIntfList
+ 0001:00011898       IdlMakeObjs
+ 0001:0001FA78       IdlNew
+ 0001:0000BFDC       IdlNewCliDlg
+ 0002:0000107C       IdlNewClientDlg
+ 0001:0000BDF4       IdlNewProjDlg
+ 0001:0000C1B0       IdlNewServDlg
+ 0002:00001084       IdlNewServerDlg
+ 0001:000261A4       IdlOpenFile
+ 0002:000010A4       IdlRenamedInterfaceDlg
+ 0001:00011BBC       IdlRenamedIntfDlg
+ 0001:0001FD18       IdlRep
+ 0001:0000B870       IdlUpdateItems
+ 0001:0000EF8C       IdlUpdateObjDlg
+ 0001:0000A0B0       IdlUseObjDlg
+ 0001:00000D04       Imm
+ 0001:0001E9CC       ImplementClass
+ 0001:0001D508       ImplementClass
+ 0001:000003B0       InitializeModule
+ 0001:00025544       InitIndecies
+ 0001:00000338       InitProcessTLS
+ 0001:000002F4       InitThreadTLS
+ 0001:0001D784       InstantiateCORBAObject
+ 0001:00022A10       IsAddIdlGenUnit
+ 0001:00006CC4       ListInterfaces
+ 0001:00015BD4       ListMethods
+ 0001:000113FC       ListNames
+ 0001:0001D6AC       ListObjectVarNames
+ 0001:0001DD18       ListUsesEntries
+ 0001:0000051C       LoadCursor
+ 0001:0001FAD8       LoadDllProcs
+ 0001:000004EC       LoadLibrary
+ 0001:000002B0       LocalAlloc
+ 0001:000002B8       LocalFree
+ 0001:0001ECF0       MainUnitFileName
+ 0001:00007FD4       MakeUniqueNames
+ 0001:0001D114       MakeVarName
+ 0001:0000085C       Messages
+ 0001:00014200       MethodExists
+ 0002:00000000       Module
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0001:000004F4       MoveFile
+ 0001:000185CC       NextClassToken
+ 0001:00022978       NextCollectedFile
+ 0001:00016A6C       OpenModules
+ 0001:000004FC       OpenProcess
+ 0001:00023164       OpenUnits
+ 0001:00021374       ParseUtil
+ 0001:0000DEA0       PopulateSubItems
+ 0002:000010C0       PrepareRepProc
+ 0001:00024910       ProcessErrors
+ 0002:000010F4       ProductStartup
+ 0001:0001903C       RecordLine
+ 0001:00000524       RedrawWindow
+ 0001:00016C30       RefreshModules
+ 0001:00011204       RefreshOne
+ 0001:00026154       RegisterIDLFileHandler
+ 0001:00000E5C       RegStr
+ 0001:00000504       RemoveDirectory
+ 0001:0000907C       RemoveGenFile
+ 0001:000190C0       RemoveQuotes
+ 0001:00010368       RemoveTrailing
+ 0001:000225D8       RemoveTrailing
+ 0001:00020A24       RemoveTrailing
+ 0001:00013680       RenamedInterface
+ 0001:00005584       ResolveParameters
+ 0001:000054F4       ResolveResultType
+ 0001:00022970       Rewind
+ 0001:000012DC       RichEdit
+ 0001:00022F4C       SaveCollectedFile
+ 0001:00022F8C       SaveCollectedUnits
+ 0001:00022460       SaveDependentFiles
+ 0001:00022338       SaveFile
+ 0001:00024690       SaveIdlFiles
+ 0001:0002256C       SaveIdlFilesToTempDir
+ 0001:00023074       SaveOtherFiles
+ 0001:00010F38       ScanFile
+ 0001:00005614       ScanFile
+ 0001:000204D4       ScanFiles
+ 0001:0000052C       SendMessage
+ 0001:0001EA94       SetBindObject
+ 0001:00000534       SetCursor
+ 0001:0000050C       SetFileAttributes
+ 0001:00000E94       ShellAPI
+ 0001:00000DB4       ShlObj
+ 0001:00019468       SkipSpaces
+ 0001:0001949C       SkipTo
+ 0002:00001050       SKU
+ 0001:00004FB0       SortMethods
+ 0001:000053E0       SortMethods
+ 0001:00011060       StartScanner
+ 0001:000056DC       StartScanner
+ 0001:00005768       StopScanner
+ 0001:000110EC       StopScanner
+ 0001:0001A6E4       StringExists
+ 0001:00003DD4       StripClassPrefix
+ 0001:0000048C       SysInit
+ 0001:0001B064       TAddIdlFilesTransaction.Abort
+ 0001:0001B068       TAddIdlFilesTransaction.Commit
+ 0001:0001B510       TAddIdlFilesTransaction.Create
+ 0001:0001B60C       TAddIdlFilesTransaction.Destroy
+ 0001:00011E10       TAddIdlIncludesDlg.btnHelpClick
+ 0001:00011E34       TAddIdlIncludesDlg.btnOkClick
+ 0001:00011E28       TAddIdlIncludesDlg.FormCreate
+ 0001:00020DD0       TCollectedFile.Create
+ 0001:00020E28       TCollectedFile.Destroy
+ 0001:00020E80       TCollectedFile.GetFileAge
+ 0001:00020E5C       TCollectedFile.GetStream
+ 0001:00020E8C       TCollectedFile.Save
+ 0001:00021080       TCollectedFiles.Add
+ 0001:00020F44       TCollectedFiles.CollectGeneratedFile
+ 0001:00021024       TCollectedFiles.CollectGeneratedFiles
+ 0001:0002108C       TCollectedFiles.Create
+ 0001:0002111C       TCollectedFiles.Destroy
+ 0001:00021170       TCollectedFiles.GetCollectedFile
+ 0001:00021184       TCollectedFiles.GetCollectedFileCount
+ 0001:00002EFC       TCORBAOptions.CORBAOptionsBroadcast
+ 0001:00002F24       TCORBAOptions.CORBAOptionsCreate
+ 0001:00002F3C       TCORBAOptions.PropertySheetDestroy
+ 0001:0000CA84       TCppIdlFileCreator.GetShowSource
+ 0001:0000CA88       TCppIdlFileCreator.GetSource
+ 0001:00017F88       TCppIdlFileManager.Create
+ 0001:0001803C       TCppIdlFileManager.Destroy
+ 0001:00018038       TCppIdlFileManager.ParseSource
+ 0001:00018064       TCppIdlFileUpdater.Create
+ 0001:000180C4       TCppIdlFileUpdater.Destroy
+ 0001:000180F4       TCppIdlFileUpdater.EnsureUnitsUsed
+ 0001:000181D0       TCppIdlFileUpdater.FilterUsedUnits
+ 0001:000181B4       TCppIdlFileUpdater.GetAdditionalFiles
+ 0001:000180F8       TCppIdlFileUpdater.GetAncestorClassName
+ 0001:00018104       TCppIdlFileUpdater.GetCompanionFileName
+ 0001:00018110       TCppIdlFileUpdater.GetIsEditable
+ 0001:00018114       TCppIdlFileUpdater.GetModuleName
+ 0001:00018180       TCppIdlFileUpdater.GetModuleTab
+ 0001:00018198       TCppIdlFileUpdater.GetUsedImplementationUnits
+ 0001:00018194       TCppIdlFileUpdater.GetUsedInterfaceUnits
+ 0001:0001819C       TCppIdlFileUpdater.GetUsedPackages
+ 0001:000181A0       TCppIdlFileUpdater.HasCompanionFile
+ 0001:000181A4       TCppIdlFileUpdater.HasForm
+ 0001:000181B8       TCppIdlFileUpdater.Imports
+ 0001:000181BC       TCppIdlFileUpdater.ImportUnit
+ 0001:000181C0       TCppIdlFileUpdater.Modified
+ 0001:000181CC       TCppIdlFileUpdater.ModuleClosed
+ 0001:000181D4       TCppIdlFileUpdater.SetModuleName
+ 0001:000181D8       TCppIdlFileUpdater.ShowSource
+ 0001:000181DC       TCppIdlFileUpdater.SourceIsValid
+ 0001:000181E8       TCppIdlFileUpdater.Validate
+ 0001:000181F4       TCppIdlFileUpdater.ValidateIdent
+ 0001:0000CA40       TCppIdlImplCreator.Create
+ 0001:0000CA80       TCppIdlImplCreator.GetShowSource
+ 0001:0000CAB4       TCppIdlImplFormCreator.Create
+ 0001:0000CDD0       TCppIdlImplFormCreator.GetInterfaceSource
+ 0001:0000CE1C       TCppIdlImplFormCreator.GetShowForm
+ 0001:0000CE20       TCppIdlImplFormCreator.GetShowSource
+ 0001:0000CD80       TCppIdlImplFormCreator.GetSource
+ 0001:0000533C       TCppIdlImplScanner.ScannerStarted
+ 0001:00026344       TCppIdlUpdaters.CanHandleFile
+ 0001:000262D4       TCppIdlUpdaters.CreateModuleUpdater
+ 0001:0000CE24       TCppIdlUseInFormCreator.Create
+ 0001:0000D068       TCppIdlUseInFormCreator.GetInterfaceSource
+ 0001:0000D0B4       TCppIdlUseInFormCreator.GetShowForm
+ 0001:0000D0B8       TCppIdlUseInFormCreator.GetShowSource
+ 0001:0000D0BC       TCppIdlUseInFormCreator.GetSource
+ 0001:0001C530       TCustomIdlMakeSymbol.Assign
+ 0001:0001C558       TCustomIdlMakeSymbol.Create
+ 0001:0001C5B8       TCustomIdlMakeSymbol.Destroy
+ 0001:0001C5E8       TCustomIdlMakeSymbol.GetOptionsString
+ 0001:0001C600       TCustomIdlMakeSymbol.MakeGenFileName
+ 0001:00003ED4       TempFileName
+ 0001:00000514       TerminateProcess
+ 0001:00017F14       TGenFile.Assign
+ 0001:00017F40       TGenFile.Create
+ 0001:00020B34       TGenFileProcess.Create
+ 0001:00020BB4       TGenFileProcess.DoProcessDone
+ 0001:00020A6C       TGenFileProcess.Run
+ 0001:000215B0       TIdl2CppProcess.Compile
+ 0001:00021798       TIdl2CppProcess.DoProcessDone
+ 0001:000218E8       TIdl2CppProcess.ParseError
+ 0001:00021680       TIdl2CppProcess.ReplaceFileName
+ 0001:000216C8       TIdl2CppProcess.ReportError
+ 0001:00021730       TIdl2CppProcess.ReportWarning
+ 0001:000241C4       TIdl2IrDialog.AddIdlFiles
+ 0001:00023BC8       TIdl2IrDialog.AddIr
+ 0001:00024478       TIdl2IrDialog.Apply
+ 0001:0002409C       TIdl2IrDialog.bpAddIREPClick
+ 0001:00024E40       TIdl2IrDialog.bpApplyClick
+ 0001:00024E68       TIdl2IrDialog.cbReplaceDefinitionsClick
+ 0001:00024E58       TIdl2IrDialog.cbRepositoryNameChange
+ 0001:0002415C       TIdl2IrDialog.EnableButtons
+ 0001:00023BBC       TIdl2IrDialog.FormCreate
+ 0001:00023BA4       TIdl2IrDialog.HelpButtonClick
+ 0001:00024970       TIdl2IrDialog.Idl2Ir
+ 0001:000240F0       TIdl2IrDialog.lvIDLFilesChange
+ 0001:00024E48       TIdl2IrDialog.OKButtonClick
+ 0001:000241B0       TIdl2IrDialog.pbAddIDLFileClick
+ 0001:00024D5C       TIdl2IrDialog.PopulateIdlFileList
+ 0001:00024B5C       TIdl2IrDialog.PopulateIRList
+ 0001:00020350       TIdlAddIrDialog.edRepositoryNameChange
+ 0001:000202F8       TIdlAddIrDialog.EnableButtons
+ 0001:0001FFC4       TIdlAddIrDialog.FormCreate
+ 0001:0001FFAC       TIdlAddIrDialog.HelpButtonClick
+ 0001:00020358       TIdlAddIrDialog.OKButtonClick
+ 0001:0002010C       TIdlAddIrDialog.StartIr
+ 0001:00004A00       TIdlBaseSymbol.Assign
+ 0001:000046D8       TIdlBaseSymbol.Create
+ 0001:00004730       TIdlBaseSymbol.Destroy
+ 0001:00004848       TIdlBaseSymbol.FindQualifiedName
+ 0001:000048AC       TIdlBaseSymbol.FindQualifiedNameInternal
+ 0001:00004784       TIdlBaseSymbol.GetQualifiedName
+ 0001:000047AC       TIdlBaseSymbol.GetQualifiedNameInternal
+ 0001:000042A4       TIdlBaseSymbolList.Assign
+ 0001:000042A8       TIdlBaseSymbolList.Create
+ 0001:000042FC       TIdlBaseSymbolList.Destroy
+ 0001:00004350       TIdlBaseSymbolList.FindName
+ 0001:00004394       TIdlBaseSymbolList.GetCount
+ 0001:00018344       TIdlClassManagerHelper.ParseIdlImplClass
+ 0001:000181F8       TIdlClassManagerHelper.ParseIdlImplComment
+ 0001:0001866C       TIdlClassManagerHelper.ParseIdlImplMembers
+ 0001:00018968       TIdlClassManagerHelper.ParseIdlImplSource
+ 0001:00004F38       TIdlClassSymbol.Assign
+ 0001:00004F40       TIdlClassSymbol.Create
+ 0001:00004FCC       TIdlClassSymbol.Populate
+ 0001:00005790       TIdlClassSymbol.ResolveMethodDeclarations
+ 0001:000059BC       TIdlClassSymbol.SetMethodProperties
+ 0001:00005B84       TIdlClassSymbolEnumerator.AnyClasses
+ 0001:00005B90       TIdlClassSymbolEnumerator.Create
+ 0001:00005C54       TIdlClassSymbolEnumerator.Destroy
+ 0001:00005C78       TIdlClassSymbolEnumerator.Next
+ 0001:00005BE8       TIdlClassSymbolEnumerator.Populate
+ 0001:00004668       TIdlClassSymbolList.Add
+ 0001:00004674       TIdlClassSymbolList.Assign
+ 0001:000046C4       TIdlClassSymbolList.GetItem
+ 0001:00021D90       TIdlCollectedFiles.Create
+ 0001:00021DE8       TIdlCollectedFiles.GetDestDir
+ 0001:00025C1C       TIdlCommands.CORBAIdl2IrExecute
+ 0001:00025F60       TIdlCommands.CORBANewIdlExecute
+ 0001:00025F68       TIdlCommands.CORBANewObjectImplExecute
+ 0001:00025D4C       TIdlCommands.CORBAOsAgentExecute
+ 0001:00025EB0       TIdlCommands.CORBAOsAgentUpdate
+ 0001:000251BC       TIdlCommands.CORBAUpdateObjectsExecute
+ 0001:00025BB0       TIdlCommands.CORBAUpdateObjectsUpdate
+ 0001:00025BA8       TIdlCommands.CORBAUseObjectExecute
+ 0001:00025ECC       TIdlCommands.FindOsAgent
+ 0001:00025EF0       TIdlCommands.FindOsAgentCallback
+ 0001:00025F70       TIdlCommands.GetCORBAToolBar
+ 0001:000254DC       TIdlCommands.IdlCommandsCreate
+ 0001:000251B4       TIdlCommands.IdlCommandsDestroy
+ 0001:000259D0       TIdlCommands.InitUIComponents
+ 0001:00025BB4       TIdlCommands.ViewCORBACommandsExecute
+ 0001:00025BE8       TIdlCommands.ViewCORBACommandsUpdate
+ 0001:0002360C       TIdlCompilerHelper.GetAddIdlGenUnits
+ 0001:000220E0       TIdlCompilerHelper.IdlAll
+ 0001:00022628       TIdlCompilerHelper.IdlCompile
+ 0001:0002338C       TIdlCompilerHelper.IdlRefreshGeneratedFiles
+ 0001:000235C0       TIdlCompilerHelper.OnIdlCompileError
+ 0001:00010698       TIdlCppOptions.CalcHdrDir
+ 0001:00010730       TIdlCppOptions.CalcSrcDir
+ 0001:0000FA4C       TIdlCppOptions.Create
+ 0001:0001021C       TIdlCppOptions.GetAdditonal
+ 0001:00010968       TIdlCppOptions.GetBoa
+ 0001:0000FBA8       TIdlCppOptions.GetBoolValue
+ 0001:0000FA98       TIdlCppOptions.GetClientExt
+ 0001:00010348       TIdlCppOptions.GetDefines
+ 0001:000105E8       TIdlCppOptions.GetExpandedIncludePath
+ 0001:0000FB80       TIdlCppOptions.GetGenIncludeFilesCode
+ 0001:0000FAAC       TIdlCppOptions.GetGenObjectWrapper
+ 0001:0000FAB4       TIdlCppOptions.GetGenStdStream
+ 0001:0000FAC4       TIdlCppOptions.GetGenTie
+ 0001:0000FAD4       TIdlCppOptions.GetGenTypeCodeInfo
+ 0001:0000FADC       TIdlCppOptions.GetGenVirtualImplInh
+ 0001:00010638       TIdlCppOptions.GetHdrDir
+ 0001:0000FB88       TIdlCppOptions.GetHeaderSuffix
+ 0001:00010814       TIdlCppOptions.GetIdl2IrOptions
+ 0001:0000FAE4       TIdlCppOptions.GetIncludePath
+ 0001:0001064C       TIdlCppOptions.GetRootDir
+ 0001:0000FAF8       TIdlCppOptions.GetServerExt
+ 0001:00010328       TIdlCppOptions.GetSourceSuffix
+ 0001:00010660       TIdlCppOptions.GetSrcDir
+ 0001:0000FBC0       TIdlCppOptions.GetStrValue
+ 0001:000103B0       TIdlCppOptions.MakeClientSourceName
+ 0001:000104CC       TIdlCppOptions.MakeServerSourceName
+ 0001:0000FFF0       TIdlCppOptions.SeparateOptions
+ 0001:00010274       TIdlCppOptions.SetAdditional
+ 0001:00010970       TIdlCppOptions.SetBoa
+ 0001:0000FBF0       TIdlCppOptions.SetBoolValue
+ 0001:0000FB0C       TIdlCppOptions.SetClientExt
+ 0001:0001035C       TIdlCppOptions.SetDefines
+ 0001:0000FB9C       TIdlCppOptions.SetGenIncludeFilesCode
+ 0001:0000FB18       TIdlCppOptions.SetGenObjectWrapper
+ 0001:0000FB24       TIdlCppOptions.SetGenStdStream
+ 0001:0000FB34       TIdlCppOptions.SetGenTie
+ 0001:0000FB44       TIdlCppOptions.SetGenTypeCodeInfo
+ 0001:0000FB50       TIdlCppOptions.SetGenVirtualImplInh
+ 0001:00010674       TIdlCppOptions.SetHdrDir
+ 0001:0000FB68       TIdlCppOptions.SetHeaderSuffix
+ 0001:0000FB5C       TIdlCppOptions.SetIncludePath
+ 0001:00010680       TIdlCppOptions.SetRootDir
+ 0001:0000FB74       TIdlCppOptions.SetServerExt
+ 0001:0001033C       TIdlCppOptions.SetSourceSuffix
+ 0001:0001068C       TIdlCppOptions.SetSrcDir
+ 0001:0000FC0C       TIdlCppOptions.SetStrValue
+ 0001:0000FA20       TIdlCppOptionsManager.GetBoolSwitchVal
+ 0001:0000F430       TIdlCppOptionsManager.GetStrSwitchVal
+ 0001:0000FD48       TIdlCppOptionsManager.RemoveOption
+ 0001:0000F96C       TIdlCppOptionsManager.SetBoolSwitchVal
+ 0001:0000F6C8       TIdlCppOptionsManager.SetStrSwitch
+ 0001:0000F404       TIdlCppOptionsManager.SkipOverStringParam
+ 0001:0000348C       TIdlEnvironmentOptions.CORBAOptionsChange
+ 0001:000034B4       TIdlEnvironmentOptions.CustomizeDialog
+ 0001:0000327C       TIdlEnvironmentOptions.EnvironmentOptionsCreate
+ 0001:00003470       TIdlEnvironmentOptions.EnvironmentOptionsDestroy
+ 0001:000033A4       TIdlEnvironmentOptions.GetIsModified
+ 0001:000033AC       TIdlEnvironmentOptions.LoadOptions
+ 0001:00003410       TIdlEnvironmentOptions.SaveOptions
+ 0001:0001AE3C       TIdlExpertFilter.Create
+ 0001:0001AF50       TIdlExpertFilter.SetBoolValue
+ 0001:0001B004       TIdlExpertFilter.SetStringValue
+ 0001:0001AEF4       TIdlExpertFilter.TemplateResult
+ 0001:00010CB8       TIdlFileDependencies.Create
+ 0001:00010CF8       TIdlFileDependencies.Destroy
+ 0001:00010DBC       TIdlFileDependencies.IsNewer
+ 0001:00011490       TIdlFileDependencies.ListDependentFiles
+ 0001:00011364       TIdlFileDependencies.RefreshTree
+ 0001:00011114       TIdlFileDependencies.ScanForIncludes
+ 0001:00010C38       TIdlFileDependencySymbol.Create
+ 0001:00010C88       TIdlFileDependencySymbol.Destroy
+ 0001:00026090       TIDLFileHandler.CanOpen
+ 0001:00026048       TIDLFileHandler.FileOpen
+ 0001:000260F8       TIDLFileHandler.GetFilters
+ 0001:00004C14       TIdlFileSymbol.Assign
+ 0001:00004A9C       TIdlFileSymbol.Create
+ 0001:00004C1C       TIdlFileSymbol.Duplicate
+ 0001:000043BC       TIdlFileSymbol.ExecutePopulate
+ 0001:00004AF8       TIdlFileSymbol.Populate
+ 0001:00004BC8       TIdlFileSymbol.PopulateClasses
+ 0001:00004C40       TIdlFileSymbol.PopulatingClasses
+ 0001:00005F88       TIdlFileSymbolCache.AssignFromCache
+ 0001:00005FC0       TIdlFileSymbolCache.CacheLimit
+ 0001:00005D34       TIdlFileSymbolCache.CopyToCache
+ 0001:00005E38       TIdlFileSymbolCache.Create
+ 0001:00005E14       TIdlFileSymbolCache.Delete
+ 0001:00005E74       TIdlFileSymbolCache.Destroy
+ 0001:00005EBC       TIdlFileSymbolCache.Find
+ 0001:00005F3C       TIdlFileSymbolCache.GetCount
+ 0001:00005FAC       TIdlFileSymbolCache.GetEnabled
+ 0001:00005F58       TIdlFileSymbolCache.GetFileAge
+ 0001:00005F44       TIdlFileSymbolCache.GetItem
+ 0001:00005CA4       TIdlFileSymbolCacheItem.Create
+ 0001:00005CEC       TIdlFileSymbolCacheItem.Destroy
+ 0001:00005D2C       TIdlFileSymbolCacheItem.MatchAge
+ 0001:00005D10       TIdlFileSymbolCacheItem.MatchName
+ 0001:0000439C       TIdlFileSymbolList.Add
+ 0001:000043A8       TIdlFileSymbolList.GetItem
+ 0001:0000E6F0       TIdlImplEdit.Create
+ 0001:0000E744       TIdlImplEdit.CreateEditControl
+ 0001:0000E80C       TIdlImplEdit.CreateEditView
+ 0001:0000E864       TIdlImplEdit.Destroy
+ 0001:0000E7E0       TIdlImplEdit.GetText
+ 0001:0000E7FC       TIdlImplEdit.SetText
+ 0001:00008754       TIdlImplementationItem.Create
+ 0001:00008658       TIdlImplementationList.AddItem
+ 0001:00008664       TIdlImplementationList.Create
+ 0001:000086A0       TIdlImplementationList.Destroy
+ 0001:000086F4       TIdlImplementationList.FindClassName
+ 0001:00008738       TIdlImplementationList.GetItem
+ 0001:0000874C       TIdlImplementationList.GetItemCount
+ 0001:00007D50       TIdlImplementObjDlg.AddIdlFiles
+ 0001:00008974       TIdlImplementObjDlg.cbIdlFileChange
+ 0001:000087BC       TIdlImplementObjDlg.cbInstantiateInMainClick
+ 0001:00008178       TIdlImplementObjDlg.cbInterfaceNameChange
+ 0001:000088B8       TIdlImplementObjDlg.DataModuleActionExecute
+ 0001:00008548       TIdlImplementObjDlg.edObjectNamesChange
+ 0001:000079C0       TIdlImplementObjDlg.EnableButtons
+ 0001:000085A4       TIdlImplementObjDlg.FormCreate
+ 0001:00008908       TIdlImplementObjDlg.FormShow
+ 0001:000079F0       TIdlImplementObjDlg.HelpButtonClick
+ 0001:00007B68       TIdlImplementObjDlg.ListUsesEntries
+ 0001:00008474       TIdlImplementObjDlg.OKButtonClick
+ 0001:00008950       TIdlImplementObjDlg.pbIdlFilesClick
+ 0001:00008380       TIdlImplementObjDlg.pbObjectNamesClick
+ 0001:00007A08       TIdlImplementObjDlg.SetInterfaceList
+ 0001:00007C2C       TIdlImplementObjDlg.SetModuleTarget
+ 0001:000088E0       TIdlImplementObjDlg.TieActionExecute
+ 0001:00007C8C       TIdlImplementObjDlg.WriteItem
+ 0001:00006810       TIdlImplInterfaceItem.Create
+ 0001:00006920       TIdlImplInterfaceItem.Destroy
+ 0001:00006950       TIdlImplInterfaceItem.GetObjectNamesString
+ 0001:00006A88       TIdlImplInterfaceItem.GetTieTemplateName
+ 0001:00006B40       TIdlImplInterfaceItem.SetObjectNamesString
+ 0001:00007248       TIdlImplInterfaceListHelper.GetItemClass
+ 0001:00007250       TIdlImplInterfaceListHelper.GetNeedsInterfacesWarning
+ 0001:0000B538       TIdlImplUpdateBlockItem.Create
+ 0001:0000B590       TIdlImplUpdateBlocksList.Add
+ 0001:0000B598       TIdlImplUpdateBlocksList.GetItem
+ 0001:0000B43C       TIdlImplUpdateClassesList.Add
+ 0001:0000B444       TIdlImplUpdateClassesList.FindClass
+ 0001:0000B458       TIdlImplUpdateClassesList.GetItem
+ 0001:0000B1AC       TIdlImplUpdateClassItem.Create
+ 0001:0000B5AC       TIdlImplUpdateIncludeItem.Create
+ 0001:0000B60C       TIdlImplUpdateIncludeItem.GetPrecompiledHeaders
+ 0001:0000B684       TIdlImplUpdateIncludeItem.GetUncompiledHeaders
+ 0001:0000B728       TIdlImplUpdateIncludesList.Add
+ 0001:0000B730       TIdlImplUpdateIncludesList.FindInclude
+ 0001:0000B744       TIdlImplUpdateIncludesList.GetItem
+ 0001:0000B090       TIdlImplUpdateItem.AddList
+ 0001:0000AF20       TIdlImplUpdateItem.AnyChanges
+ 0001:0000AFA0       TIdlImplUpdateItem.Applied
+ 0001:0000AF64       TIdlImplUpdateItem.ApplyEnableAll
+ 0001:0000B05C       TIdlImplUpdateItem.AssertApplied
+ 0001:0000AFA8       TIdlImplUpdateItem.Create
+ 0001:0000B008       TIdlImplUpdateItem.Destroy
+ 0001:0000B0C4       TIdlImplUpdateItem.GetUnitItemOwner
+ 0001:0000B0F8       TIdlImplUpdateItem.GetUpdateList
+ 0001:0000B10C       TIdlImplUpdateItem.GetUpdateListCount
+ 0001:0000B08C       TIdlImplUpdateItem.IsApplied
+ 0001:0000B09C       TIdlImplUpdateItem.SetApplyEnabled
+ 0001:0000B338       TIdlImplUpdateList.AddItem
+ 0001:0000B3BC       TIdlImplUpdateList.AnyChanges
+ 0001:0000B388       TIdlImplUpdateList.ApplyEnableAll
+ 0001:0000B358       TIdlImplUpdateList.AssertApplied
+ 0001:0000B238       TIdlImplUpdateList.Create
+ 0001:0000B2DC       TIdlImplUpdateList.Destroy
+ 0001:0000B288       TIdlImplUpdateList.FindName
+ 0001:0000B330       TIdlImplUpdateList.GetCount
+ 0001:0000B3F8       TIdlImplUpdateList.GetItem
+ 0001:0000B114       TIdlImplUpdateMethodItem.Create
+ 0001:0000B17C       TIdlImplUpdateMethodItem.Destroy
+ 0001:0000B40C       TIdlImplUpdateMethodsList.Add
+ 0001:0000B414       TIdlImplUpdateMethodsList.FindMethod
+ 0001:0000B428       TIdlImplUpdateMethodsList.GetItem
+ 0001:0000B758       TIdlImplUpdatePropertiesList.Add
+ 0001:0000B760       TIdlImplUpdatePropertiesList.GetItem
+ 0001:0000B774       TIdlImplUpdatePropertyItem.Create
+ 0001:000155E0       TIdlImplUpdater.AddCORBAObjectBind
+ 0001:00014D60       TIdlImplUpdater.AddIdlImplClass
+ 0001:00014FD0       TIdlImplUpdater.AddIdlIncludes
+ 0001:000158FC       TIdlImplUpdater.AddIdlUseInClass
+ 0001:00013358       TIdlImplUpdater.ApplyCORBAUpdates
+ 0001:00013C58       TIdlImplUpdater.ApplyUpdateClassItem
+ 0001:00013C00       TIdlImplUpdater.FindMethodSymbol
+ 0001:00014AA0       TIdlImplUpdater.GetIdlImplClassInfo
+ 0001:00014B48       TIdlImplUpdater.GetIdlUseClassInfo
+ 0001:00015CC0       TIdlImplUpdater.GetModifiedImplMethodText
+ 0001:000132E4       TIdlImplUpdater.InsertCORBAPCH
+ 0001:00014BE4       TIdlImplUpdater.MakeCORBAUnit
+ 0001:000145E4       TIdlImplUpdater.PopulateUpdateClassItem
+ 0001:00013904       TIdlImplUpdater.RefreshImplClass
+ 0001:0000B46C       TIdlImplUpdateUnitItem.Create
+ 0001:0000B508       TIdlImplUpdateUnitsList.Add
+ 0001:0000B510       TIdlImplUpdateUnitsList.FindUnit
+ 0001:0000B524       TIdlImplUpdateUnitsList.GetItem
+ 0001:0000B7CC       TIdlImplUpdateVariableItem.Create
+ 0001:0000B824       TIdlImplUpdateVariablesList.Add
+ 0001:0000B82C       TIdlImplUpdateVariablesList.GetItem
+ 0001:0001158C       TIdlIncludeFile.Create
+ 0001:000114C0       TIdlIncludeFileList.Add
+ 0001:000114CC       TIdlIncludeFileList.Clear
+ 0001:00011500       TIdlIncludeFileList.Create
+ 0001:0001153C       TIdlIncludeFileList.Destroy
+ 0001:00011570       TIdlIncludeFileList.GetCount
+ 0001:00011578       TIdlIncludeFileList.GetItem
+ 0001:00006748       TIdlInterfaceItem.Create
+ 0001:000067A8       TIdlInterfaceItem.GetImplFileName
+ 0001:00006BB0       TIdlInterfaceList.AddItem
+ 0001:00006BBC       TIdlInterfaceList.Create
+ 0001:00006C00       TIdlInterfaceList.Destroy
+ 0001:00006C54       TIdlInterfaceList.Find
+ 0001:00006CA8       TIdlInterfaceList.GetItem
+ 0001:00006CBC       TIdlInterfaceList.GetItemCount
+ 0001:00007158       TIdlInterfaceListHelper.CompileIdlFiles
+ 0001:000071D8       TIdlInterfaceListHelper.Create
+ 0001:00007218       TIdlInterfaceListHelper.Destroy
+ 0001:0000707C       TIdlInterfaceListHelper.GetIdlFiles
+ 0001:00006DD0       TIdlInterfaceListHelper.GetInterfaces
+ 0001:00017B64       TIdlMakeSymbol.AddGenFile
+ 0001:00017CF0       TIdlMakeSymbol.Assign
+ 0001:00017CBC       TIdlMakeSymbol.ClearGenFiles
+ 0001:00017C34       TIdlMakeSymbol.Create
+ 0001:00017C88       TIdlMakeSymbol.Destroy
+ 0001:00017EC8       TIdlMakeSymbol.FindGenFile
+ 0001:00017F0C       TIdlMakeSymbol.GenFileCount
+ 0001:00017B50       TIdlMakeSymbol.GetGenFile
+ 0001:00017DA8       TIdlMakeSymbol.SetOptionsString
+ 0001:00017DD0       TIdlMakeSymbol.UpdateGenFiles
+ 0001:00005A40       TIdlMethodSymbol.Assign
+ 0001:00005A8C       TIdlMethodSymbol.Create
+ 0001:00005AE4       TIdlMethodSymbol.GetAttributeType
+ 0001:00005B24       TIdlMethodSymbol.GetIsAttributeGet
+ 0001:00005B54       TIdlMethodSymbol.GetIsAttributeSet
+ 0001:0000594C       TIdlMethodSymbolList.Add
+ 0001:00005958       TIdlMethodSymbolList.Assign
+ 0001:000059A8       TIdlMethodSymbolList.GetItem
+ 0001:00004C60       TIdlModuleSymbol.Assign
+ 0001:00004C68       TIdlModuleSymbol.Create
+ 0001:00004CDC       TIdlModuleSymbol.Populate
+ 0001:000045EC       TIdlModuleSymbolList.Add
+ 0001:000045F8       TIdlModuleSymbolList.Assign
+ 0001:00004648       TIdlModuleSymbolList.GetItem
+ 0001:0000BC88       TIdlNewProjectDlg.AddActionExecute
+ 0001:0000BC50       TIdlNewProjectDlg.DeleteActionExecute
+ 0001:0000BC68       TIdlNewProjectDlg.DeleteActionUpdate
+ 0001:0000BC2C       TIdlNewProjectDlg.EnableVCLExecute
+ 0001:0000BC30       TIdlNewProjectDlg.EnableVCLUpdate
+ 0001:0000BC1C       TIdlNewProjectDlg.FormCreate
+ 0001:0000BC04       TIdlNewProjectDlg.HelpButtonClick
+ 0001:0000BBF8       TIdlNewProjectDlg.OKButtonClick
+ 0001:00019428       TIdlOptionsManagerHelper.GetIdlCFlags
+ 0001:00019104       TIdlOptionsManagerHelper.ParseIdlSymbols
+ 0001:00026B04       TIdlOptionsPage.IdlOptionsPageBroadcast
+ 0001:00026F70       TIdlOptionsPage.IdlOptionsPageCreate
+ 0001:00026F8C       TIdlOptionsPage.IncludeDSI
+ 0001:00026FF4       TIdlOptionsPage.IncludeIR
+ 0001:0002705C       TIdlOptionsPage.TestDSI
+ 0001:000270B0       TIdlOptionsPage.TestIR
+ 0001:00017494       TIdlOptionsUpdater.Create
+ 0001:00017538       TIdlOptionsUpdater.Destroy
+ 0001:00017A8C       TIdlOptionsUpdater.GetAllGenFiles
+ 0001:00017954       TIdlOptionsUpdater.GetGenFileName
+ 0001:000175F4       TIdlOptionsUpdater.GetIdlFileEntries
+ 0001:00017804       TIdlOptionsUpdater.PrepareRemoveGenModules
+ 0001:0001782C       TIdlOptionsUpdater.RemoveGenModules
+ 0001:000175F8       TIdlOptionsUpdater.RenameModule
+ 0001:00017568       TIdlOptionsUpdater.UpdateIdlFiles
+ 0001:00019B14       TIdlOptionsUpdaterHelper.UpdateIDLRules
+ 0001:0001A78C       TIdlProjectOptions.AddCORBASupport
+ 0001:0001AA30       TIdlProjectOptions.GetOption
+ 0001:0001AAEC       TIdlProjectOptions.IsCORBAProject
+ 0001:0001AB7C       TIdlProjectOptions.RemoveVCL
+ 0001:0001ACE8       TIdlProjectOptions.SetOption
+ 0001:000170E0       TIdlProjectUpdater.AddCORBAObjectBind
+ 0001:0001722C       TIdlProjectUpdater.AddIdlIncludes
+ 0001:00016744       TIdlProjectUpdater.AddIdlReference
+ 0001:0001664C       TIdlProjectUpdater.ApplyCORBAUpdates
+ 0001:00016FC8       TIdlProjectUpdater.CanRefreshIdlImpl
+ 0001:00016EB4       TIdlProjectUpdater.CompileIdlFiles
+ 0001:00016E1C       TIdlProjectUpdater.DoCompileIdlFiles
+ 0001:00017384       TIdlProjectUpdater.GetModifiedImplMethodText
+ 0001:00015EE8       TIdlProjectUpdater.InstantiateCORBAObject
+ 0001:00016964       TIdlProjectUpdater.ListUsesEntries
+ 0001:00016034       TIdlProjectUpdater.MakeCORBAProject
+ 0001:0001746C       TIdlProjectUpdater.PrepareAddIdlFiles
+ 0001:00016DAC       TIdlProjectUpdater.RefreshIdlImpl
+ 0001:00016860       TIdlProjectUpdater.RenameIdlReference
+ 0001:0001A53C       TIdlProjOptsManagerHelper.Create
+ 0001:0001A250       TIdlProjOptsManagerHelper.CreateProjUnit
+ 0001:0001A1A4       TIdlProjOptsManagerHelper.GetIdlOptions
+ 0001:0001A390       TIdlProjOptsManagerHelper.LoadFromIni
+ 0001:0001A46C       TIdlProjOptsManagerHelper.SaveToIni
+ 0001:0001A624       TIdlProjOptsManagerHelper.SetDefines
+ 0001:0001A108       TIdlProjOptsManagerHelper.SetIdlOptions
+ 0001:0001A580       TIdlProjOptsManagerHelper.SetInclPath
+ 0001:00019FFC       TIdlProjOptsManagerHelper.UpdateIdlFilesList
+ 0001:0001A2F0       TIdlProjOptsManagerHelper.UpdateProjUnit
+ 0001:000116C8       TIDLProjUnit.Create
+ 0001:00011728       TIDLProjUnit.Destroy
+ 0001:0001178C       TIDLProjUnit.GetOptions
+ 0001:000117AC       TIDLProjUnit.NeedToCompile
+ 0001:00011758       TIDLProjUnit.Update
+ 0001:00011AFC       TIdlRenamedInterfaceDlg.btnHelpClick
+ 0001:00011B34       TIdlRenamedInterfaceDlg.cbNewNameChange
+ 0001:00011B14       TIdlRenamedInterfaceDlg.FormCreate
+ 0001:0000E894       TIdlUpdateObjectsDlg.CheckItems
+ 0001:0000E5C8       TIdlUpdateObjectsDlg.CreateWindowHandle
+ 0001:0000D7B0       TIdlUpdateObjectsDlg.FormCreate
+ 0001:0000EA84       TIdlUpdateObjectsDlg.FormDestroy
+ 0001:0000DB98       TIdlUpdateObjectsDlg.HelpButtonClick
+ 0001:0000EAFC       TIdlUpdateObjectsDlg.LoadEnvOptions
+ 0001:0000E944       TIdlUpdateObjectsDlg.lvUpdatesChange
+ 0001:0000E9B4       TIdlUpdateObjectsDlg.OKButtonClick
+ 0001:0000DF20       TIdlUpdateObjectsDlg.PopulateUpdateTree
+ 0001:0000DF8C       TIdlUpdateObjectsDlg.ReadUpdateItem
+ 0001:0000E078       TIdlUpdateObjectsDlg.ReadWriteUpdateItem
+ 0001:0000ED04       TIdlUpdateObjectsDlg.SaveEnvOptions
+ 0001:0000DBB0       TIdlUpdateObjectsDlg.SetUpdatesList
+ 0001:0000DF94       TIdlUpdateObjectsDlg.WriteUpdateItem
+ 0001:00007280       TIdlUseInterfaceItem.Create
+ 0001:00007264       TIdlUseInterfaceListHelper.GetItemClass
+ 0001:0000726C       TIdlUseInterfaceListHelper.GetNeedsInterfacesWarning
+ 0001:000094BC       TIdlUseObjectDlg.AddIdlFiles
+ 0001:0000A078       TIdlUseObjectDlg.cbGlobalDeclarationsClick
+ 0001:00009CA4       TIdlUseObjectDlg.cbIdlFileChange
+ 0001:000095B0       TIdlUseObjectDlg.cbInterfaceNameChange
+ 0001:00009DF8       TIdlUseObjectDlg.cbSpecifyBindOptionsClick
+ 0001:00009DF0       TIdlUseObjectDlg.cbSpecifyObjectNameClick
+ 0001:00009DDC       TIdlUseObjectDlg.cbUnitNameChange
+ 0001:00008FA4       TIdlUseObjectDlg.EnableButtons
+ 0001:00009AC4       TIdlUseObjectDlg.FormCreate
+ 0001:00009FFC       TIdlUseObjectDlg.FormDestroy
+ 0001:00009D94       TIdlUseObjectDlg.FormShow
+ 0001:00008FBC       TIdlUseObjectDlg.HelpButtonClick
+ 0001:00009E00       TIdlUseObjectDlg.ListClasses
+ 0001:00009130       TIdlUseObjectDlg.ListUsesEntries
+ 0001:000099DC       TIdlUseObjectDlg.OKButtonClick
+ 0001:00009C80       TIdlUseObjectDlg.pbIdlFilesClick
+ 0001:00008FD4       TIdlUseObjectDlg.SetInterfaceList
+ 0001:00009864       TIdlUseObjectDlg.Validate
+ 0001:0000930C       TIdlUseObjectDlg.WriteItem
+ 0001:000002C0       TlsAlloc
+ 0002:00001014       tlsBuffer
+ 0001:000002C8       TlsFree
+ 0001:000002D0       TlsGetValue
+ 0002:00001004       TlsIndex
+ 0002:FFA17000       TlsLast
+ 0002:00000018       TlsProc
+ 0001:000002D8       TlsSetValue
+ 0001:0001E58C       TNewCORBAClient.CreateExpert
+ 0001:0001E5A0       TNewCORBAClient.CreateNewCORBAClientExpert
+ 0001:0001E5F4       TNewCORBAClient.Destroy
+ 0001:0001E624       TNewCORBAClient.GetInfo
+ 0001:0001E65C       TNewCORBAClient.ReadExpert
+ 0001:0001E510       TNewCORBAProject.Create
+ 0001:0001E55C       TNewCORBAProject.Destroy
+ 0001:0001E3EC       TNewCORBAProject.GetProjectCreator
+ 0001:0001E494       TNewCORBAProject.ReadProjectExpert
+ 0001:0001E0A0       TNewCORBAProject.Selected
+ 0001:0001E730       TNewCORBAServer.CreateExpert
+ 0001:0001E744       TNewCORBAServer.CreateNewCORBAServerExpert
+ 0001:0001E798       TNewCORBAServer.Destroy
+ 0001:0001E6B4       TNewCORBAServer.GetInfo
+ 0001:0001E6EC       TNewCORBAServer.ReadExpert
+ 0001:0001F60C       TNewIdlComponent.ApplyUpdates
+ 0001:0001F2F0       TNewIdlComponent.CleanupUpdates
+ 0001:0001F8F0       TNewIdlComponent.CreateUnitItem
+ 0001:0001F2C0       TNewIdlComponent.Destroy
+ 0001:0001F070       TNewIdlComponent.FindProjectUnitItem
+ 0001:0001F12C       TNewIdlComponent.GetProjectUnitItem
+ 0001:0001F1F4       TNewIdlComponent.Initialize
+ 0001:0001F818       TNewIdlComponent.MakeCORBAProject
+ 0001:0001FA44       TNewIdlComponent.OnCreateNewUnit
+ 0001:0001F590       TNewIdlComponent.Selected
+ 0001:0001F3DC       TNewIdlComponent.UpdateUnits
+ 0001:0001FA40       TNewIdlComponent.ValidateUseExistingUnit
+ 0001:0001D254       TNewIDLFile.Selected
+ 0001:0001DC9C       TNewIdlObjectImpl.Create
+ 0001:0001D3E4       TNewIdlObjectImpl.CreateExpert
+ 0001:0001D364       TNewIdlObjectImpl.CreateIdlImplExpert
+ 0001:0001DFF0       TNewIdlObjectImpl.CreateInterfaceListHelper
+ 0001:0001DCE0       TNewIdlObjectImpl.Destroy
+ 0001:0001DFBC       TNewIdlObjectImpl.GetAddIdlReferences
+ 0001:0001DDDC       TNewIdlObjectImpl.GetImplementations
+ 0001:0001D2DC       TNewIdlObjectImpl.GetInfo
+ 0001:0001D2C8       TNewIdlObjectImpl.GetNilProjError
+ 0001:0001DF88       TNewIdlObjectImpl.GetNoInterfacesError
+ 0001:0001D3F8       TNewIdlObjectImpl.GetUnitCreator
+ 0001:0001DF9C       TNewIdlObjectImpl.Initialize
+ 0001:0001E000       TNewIdlObjectImpl.OnCreateNewUnit
+ 0001:0001DBAC       TNewIdlObjectImpl.QueryUpdates
+ 0001:0001D348       TNewIdlObjectImpl.ReadExpert
+ 0001:0001DFC0       TNewIdlObjectImpl.ValidateUseExistingUnit
+ 0001:0001E7C8       TNewIdlUseObject.CreateExpert
+ 0001:0001F030       TNewIdlUseObject.CreateInterfaceListHelper
+ 0001:0001E7DC       TNewIdlUseObject.CreateUseObjectExpert
+ 0001:0001F040       TNewIdlUseObject.Destroy
+ 0001:0001E840       TNewIdlUseObject.GetAddIdlReferences
+ 0001:0001E844       TNewIdlUseObject.GetInfo
+ 0001:0001E8B0       TNewIdlUseObject.GetNilProjError
+ 0001:0001E8C4       TNewIdlUseObject.GetNoInterfacesError
+ 0001:0001E8D8       TNewIdlUseObject.GetUnitCreator
+ 0001:0001ED50       TNewIdlUseObject.QueryUpdates
+ 0001:0001F014       TNewIdlUseObject.ReadExpert
+ 0001:00026464       TProductStartup.Create
+ 0001:000264F0       TProductStartup.DelphiStartup
+ 0001:000264AC       TProductStartup.Destroy
+ 0001:0001AE2C       TRemoveGenModulesTransaction.Abort
+ 0001:0001AE30       TRemoveGenModulesTransaction.Commit
+ 0001:0001ADA4       TRemoveGenModulesTransaction.Create
+ 0001:0001ADFC       TRemoveGenModulesTransaction.Destroy
+ 0001:0001A754       TrimPath
+ 0001:0000405C       TSkBrowser.Compile
+ 0001:00003EC4       TSkBrowser.EnableBrowser
+ 0001:00004258       TSkBrowser.FindDeclaration
+ 0001:00004234       TSkBrowser.FindSymbol
+ 0001:0000419C       TSkBrowser.GetBaseTypeCode
+ 0001:000041C4       TSkBrowser.GetBaseTypeSymbol
+ 0001:00004118       TSkBrowser.GetFlags
+ 0001:00004104       TSkBrowser.GetMembers
+ 0001:0000422C       TSkBrowser.GetObjectType
+ 0001:000041B4       TSkBrowser.GetResultType
+ 0001:00004120       TSkBrowser.GetText
+ 0001:00004194       TSkBrowser.GetTypeCode
+ 0001:000041BC       TSkBrowser.GetTypeSymbol
+ 0001:00020BD0       TTempDirectory.Create
+ 0001:00020CF8       TTempDirectory.DeleteTemporaryFile
+ 0001:00020D74       TTempDirectory.DeleteTemporaryFiles
+ 0001:00020CBC       TTempDirectory.Destroy
+ 0001:0001C704       TXMLIdlMakeSymbol.AddGenFile
+ 0001:0001C840       TXMLIdlMakeSymbol.Assign
+ 0001:0001C874       TXMLIdlMakeSymbol.ClearGenFiles
+ 0001:0001C8CC       TXMLIdlMakeSymbol.Create
+ 0001:0001C920       TXMLIdlMakeSymbol.DeleteGenFile
+ 0001:0001C948       TXMLIdlMakeSymbol.Destroy
+ 0001:0001C974       TXMLIdlMakeSymbol.FindGenFile
+ 0001:0001C99C       TXMLIdlMakeSymbol.SetOptionsString
+ 0001:0001C9C4       TXMLIdlMakeSymbol.UpdateGenFiles
+ 0001:0001BE6C       TXMLIdlOptionsManagerHelper.ExtractIdlSymbols
+ 0001:0001C07C       TXMLIdlOptionsManagerHelper.GetIdlCFlags
+ 0001:0001B63C       TXMLIdlOptionsUpdater.Create
+ 0001:0001B6E0       TXMLIdlOptionsUpdater.Destroy
+ 0001:0001B710       TXMLIdlOptionsUpdater.GetAllGenFiles
+ 0001:0001B7F0       TXMLIdlOptionsUpdater.GetGenFileName
+ 0001:0001B92C       TXMLIdlOptionsUpdater.GetIdlFileEntries
+ 0001:0001B930       TXMLIdlOptionsUpdater.PrepareRemoveGenModules
+ 0001:0001B958       TXMLIdlOptionsUpdater.RemoveGenModules
+ 0001:0001BB10       TXMLIdlOptionsUpdater.RenameModule
+ 0001:0001BD40       TXMLIdlOptionsUpdater.UpdateIdlFiles
+ 0001:0001C170       TXMLIdlOptionsUpdaterHelper.UpdateIDLRules
+ 0001:0001BDD4       TXMLRemoveGenModulesTransaction.Abort
+ 0001:0001BDD8       TXMLRemoveGenModulesTransaction.Commit
+ 0001:0001BDE4       TXMLRemoveGenModulesTransaction.Create
+ 0001:0001BE3C       TXMLRemoveGenModulesTransaction.Destroy
+ 0001:000003BC       UninitializeModule
+ 0001:000092CC       UnitNameOfForm
+ 0001:00022CF4       UpdateEditState
+ 0001:00016394       UpdateMainUnitItem
+ 0001:00000DEC       UrlMon
+ 0001:0001D204       UseCORBAObject
+ 0001:00009814       ValidateControlIdent
+ 0001:000065A4       VarNameFromIdlIntfName
+ 0001:00020078       WaitForIR
+ 0001:0000056C       Windows
+ 0001:00000E24       WinInet
+ 0001:00000EDC       WinSpool
+ 0001:00014580       WrapParameters
+
+
+  Address         Publics by Value
+
+ 0002:FFA17000       TlsLast
+ 0001:000002A8       FreeLibrary
+ 0001:000002B0       LocalAlloc
+ 0001:000002B8       LocalFree
+ 0001:000002C0       TlsAlloc
+ 0001:000002C8       TlsFree
+ 0001:000002D0       TlsGetValue
+ 0001:000002D8       TlsSetValue
+ 0001:000002E0       AllocTlsBuffer
+ 0001:000002EC       GetTlsSize
+ 0001:000002F4       InitThreadTLS
+ 0001:00000338       InitProcessTLS
+ 0001:00000364       ExitThreadTLS
+ 0001:0000038C       ExitProcessTLS
+ 0001:000003B0       InitializeModule
+ 0001:000003BC       UninitializeModule
+ 0001:000003E0       @InitPkg
+ 0001:00000444       @PackageLoad
+ 0001:00000450       @PackageUnload
+ 0001:0000045C       Finalization
+ 0001:0000048C       SysInit
+ 0001:00000494       CloseHandle
+ 0001:0000049C       CreateDirectory
+ 0001:000004A4       CreateProcess
+ 0001:000004AC       FindClose
+ 0001:000004B4       FindFirstFile
+ 0001:000004BC       FindNextFile
+ 0001:000004C4       GetExitCodeProcess
+ 0001:000004CC       GetFileAttributes
+ 0001:000004D4       GetLastError
+ 0001:000004DC       GetProcAddress
+ 0001:000004E4       GetTickCount
+ 0001:000004EC       LoadLibrary
+ 0001:000004F4       MoveFile
+ 0001:000004FC       OpenProcess
+ 0001:00000504       RemoveDirectory
+ 0001:0000050C       SetFileAttributes
+ 0001:00000514       TerminateProcess
+ 0001:0000051C       LoadCursor
+ 0001:00000524       RedrawWindow
+ 0001:0000052C       SendMessage
+ 0001:00000534       SetCursor
+ 0001:0000053C       Finalization
+ 0001:0000056C       Windows
+ 0001:0000082C       Finalization
+ 0001:0000085C       Messages
+ 0001:00000A8C       Finalization
+ 0001:00000ABC       CommCtrl
+ 0001:00000CD4       Finalization
+ 0001:00000D04       Imm
+ 0001:00000D84       Finalization
+ 0001:00000DB4       ShlObj
+ 0001:00000DBC       Finalization
+ 0001:00000DEC       UrlMon
+ 0001:00000DF4       Finalization
+ 0001:00000E24       WinInet
+ 0001:00000E2C       Finalization
+ 0001:00000E5C       RegStr
+ 0001:00000E64       Finalization
+ 0001:00000E94       ShellAPI
+ 0001:00000EAC       Finalization
+ 0001:00000EDC       WinSpool
+ 0001:00000F04       Finalization
+ 0001:00000F34       CommDlg
+ 0001:00000F3C       Finalization
+ 0001:00000F6C       Dlgs
+ 0001:000012AC       Finalization
+ 0001:000012DC       RichEdit
+ 0001:00002CCC       Finalization
+ 0001:00002CFC       IdlConst
+ 0001:00002EFC       TCORBAOptions.CORBAOptionsBroadcast
+ 0001:00002F24       TCORBAOptions.CORBAOptionsCreate
+ 0001:00002F3C       TCORBAOptions.PropertySheetDestroy
+ 0001:00002F54       Finalization
+ 0001:00002F90       CORBAOptionsPage
+ 0001:0000327C       TIdlEnvironmentOptions.EnvironmentOptionsCreate
+ 0001:000033A4       TIdlEnvironmentOptions.GetIsModified
+ 0001:000033AC       TIdlEnvironmentOptions.LoadOptions
+ 0001:00003410       TIdlEnvironmentOptions.SaveOptions
+ 0001:00003470       TIdlEnvironmentOptions.EnvironmentOptionsDestroy
+ 0001:0000348C       TIdlEnvironmentOptions.CORBAOptionsChange
+ 0001:000034B4       TIdlEnvironmentOptions.CustomizeDialog
+ 0001:00003530       Finalization
+ 0001:00003560       IdlEnvOptions
+ 0001:00003DD4       StripClassPrefix
+ 0001:00003EC4       TSkBrowser.EnableBrowser
+ 0001:00003ED4       TempFileName
+ 0001:00003EFC       CreateSource
+ 0001:0000405C       TSkBrowser.Compile
+ 0001:00004104       TSkBrowser.GetMembers
+ 0001:00004118       TSkBrowser.GetFlags
+ 0001:00004120       TSkBrowser.GetText
+ 0001:00004194       TSkBrowser.GetTypeCode
+ 0001:0000419C       TSkBrowser.GetBaseTypeCode
+ 0001:000041B4       TSkBrowser.GetResultType
+ 0001:000041BC       TSkBrowser.GetTypeSymbol
+ 0001:000041C4       TSkBrowser.GetBaseTypeSymbol
+ 0001:0000422C       TSkBrowser.GetObjectType
+ 0001:00004234       TSkBrowser.FindSymbol
+ 0001:00004258       TSkBrowser.FindDeclaration
+ 0001:000042A4       TIdlBaseSymbolList.Assign
+ 0001:000042A8       TIdlBaseSymbolList.Create
+ 0001:000042FC       TIdlBaseSymbolList.Destroy
+ 0001:00004350       TIdlBaseSymbolList.FindName
+ 0001:00004394       TIdlBaseSymbolList.GetCount
+ 0001:0000439C       TIdlFileSymbolList.Add
+ 0001:000043A8       TIdlFileSymbolList.GetItem
+ 0001:000043BC       TIdlFileSymbol.ExecutePopulate
+ 0001:000045EC       TIdlModuleSymbolList.Add
+ 0001:000045F8       TIdlModuleSymbolList.Assign
+ 0001:00004648       TIdlModuleSymbolList.GetItem
+ 0001:00004668       TIdlClassSymbolList.Add
+ 0001:00004674       TIdlClassSymbolList.Assign
+ 0001:000046C4       TIdlClassSymbolList.GetItem
+ 0001:000046D8       TIdlBaseSymbol.Create
+ 0001:00004730       TIdlBaseSymbol.Destroy
+ 0001:00004784       TIdlBaseSymbol.GetQualifiedName
+ 0001:000047AC       TIdlBaseSymbol.GetQualifiedNameInternal
+ 0001:00004848       TIdlBaseSymbol.FindQualifiedName
+ 0001:000048AC       TIdlBaseSymbol.FindQualifiedNameInternal
+ 0001:00004A00       TIdlBaseSymbol.Assign
+ 0001:00004A9C       TIdlFileSymbol.Create
+ 0001:00004AF8       TIdlFileSymbol.Populate
+ 0001:00004BC8       TIdlFileSymbol.PopulateClasses
+ 0001:00004C14       TIdlFileSymbol.Assign
+ 0001:00004C1C       TIdlFileSymbol.Duplicate
+ 0001:00004C40       TIdlFileSymbol.PopulatingClasses
+ 0001:00004C60       TIdlModuleSymbol.Assign
+ 0001:00004C68       TIdlModuleSymbol.Create
+ 0001:00004CDC       TIdlModuleSymbol.Populate
+ 0001:00004F38       TIdlClassSymbol.Assign
+ 0001:00004F40       TIdlClassSymbol.Create
+ 0001:00004FA4       CompareMethodNames
+ 0001:00004FB0       SortMethods
+ 0001:00004FCC       TIdlClassSymbol.Populate
+ 0001:00005280       CompareMethodLineNo
+ 0001:0000533C       TCppIdlImplScanner.ScannerStarted
+ 0001:00005344       FindFile
+ 0001:00005358       AddFile
+ 0001:00005398       AddMethod
+ 0001:000053E0       SortMethods
+ 0001:00005424       GetReader
+ 0001:00005470       GetSource
+ 0001:000054F4       ResolveResultType
+ 0001:00005584       ResolveParameters
+ 0001:00005614       ScanFile
+ 0001:000056DC       StartScanner
+ 0001:00005768       StopScanner
+ 0001:00005790       TIdlClassSymbol.ResolveMethodDeclarations
+ 0001:0000594C       TIdlMethodSymbolList.Add
+ 0001:00005958       TIdlMethodSymbolList.Assign
+ 0001:000059A8       TIdlMethodSymbolList.GetItem
+ 0001:000059BC       TIdlClassSymbol.SetMethodProperties
+ 0001:00005A40       TIdlMethodSymbol.Assign
+ 0001:00005A8C       TIdlMethodSymbol.Create
+ 0001:00005AE4       TIdlMethodSymbol.GetAttributeType
+ 0001:00005B24       TIdlMethodSymbol.GetIsAttributeGet
+ 0001:00005B54       TIdlMethodSymbol.GetIsAttributeSet
+ 0001:00005B84       TIdlClassSymbolEnumerator.AnyClasses
+ 0001:00005B90       TIdlClassSymbolEnumerator.Create
+ 0001:00005BE8       TIdlClassSymbolEnumerator.Populate
+ 0001:00005C54       TIdlClassSymbolEnumerator.Destroy
+ 0001:00005C78       TIdlClassSymbolEnumerator.Next
+ 0001:00005CA4       TIdlFileSymbolCacheItem.Create
+ 0001:00005CEC       TIdlFileSymbolCacheItem.Destroy
+ 0001:00005D10       TIdlFileSymbolCacheItem.MatchName
+ 0001:00005D2C       TIdlFileSymbolCacheItem.MatchAge
+ 0001:00005D34       TIdlFileSymbolCache.CopyToCache
+ 0001:00005E14       TIdlFileSymbolCache.Delete
+ 0001:00005E38       TIdlFileSymbolCache.Create
+ 0001:00005E74       TIdlFileSymbolCache.Destroy
+ 0001:00005EBC       TIdlFileSymbolCache.Find
+ 0001:00005F3C       TIdlFileSymbolCache.GetCount
+ 0001:00005F44       TIdlFileSymbolCache.GetItem
+ 0001:00005F58       TIdlFileSymbolCache.GetFileAge
+ 0001:00005F88       TIdlFileSymbolCache.AssignFromCache
+ 0001:00005FAC       TIdlFileSymbolCache.GetEnabled
+ 0001:00005FC0       TIdlFileSymbolCache.CacheLimit
+ 0001:00006018       Finalization
+ 0001:0000607C       IdlCppImpl
+ 0001:000065A4       VarNameFromIdlIntfName
+ 0001:00006608       GetOpenIdlFileDialog
+ 0001:00006658       AddIdlFilesToProject
+ 0001:00006748       TIdlInterfaceItem.Create
+ 0001:000067A8       TIdlInterfaceItem.GetImplFileName
+ 0001:00006810       TIdlImplInterfaceItem.Create
+ 0001:00006920       TIdlImplInterfaceItem.Destroy
+ 0001:00006950       TIdlImplInterfaceItem.GetObjectNamesString
+ 0001:00006A88       TIdlImplInterfaceItem.GetTieTemplateName
+ 0001:00006B40       TIdlImplInterfaceItem.SetObjectNamesString
+ 0001:00006BB0       TIdlInterfaceList.AddItem
+ 0001:00006BBC       TIdlInterfaceList.Create
+ 0001:00006C00       TIdlInterfaceList.Destroy
+ 0001:00006C54       TIdlInterfaceList.Find
+ 0001:00006CA8       TIdlInterfaceList.GetItem
+ 0001:00006CBC       TIdlInterfaceList.GetItemCount
+ 0001:00006CC4       ListInterfaces
+ 0001:00006DD0       TIdlInterfaceListHelper.GetInterfaces
+ 0001:00007010       AddIdlFiles
+ 0001:0000707C       TIdlInterfaceListHelper.GetIdlFiles
+ 0001:00007158       TIdlInterfaceListHelper.CompileIdlFiles
+ 0001:000071D8       TIdlInterfaceListHelper.Create
+ 0001:00007218       TIdlInterfaceListHelper.Destroy
+ 0001:00007248       TIdlImplInterfaceListHelper.GetItemClass
+ 0001:00007250       TIdlImplInterfaceListHelper.GetNeedsInterfacesWarning
+ 0001:00007264       TIdlUseInterfaceListHelper.GetItemClass
+ 0001:0000726C       TIdlUseInterfaceListHelper.GetNeedsInterfacesWarning
+ 0001:00007280       TIdlUseInterfaceItem.Create
+ 0001:00007350       Finalization
+ 0001:0000738C       IdlIntfList
+ 0001:000079C0       TIdlImplementObjDlg.EnableButtons
+ 0001:000079F0       TIdlImplementObjDlg.HelpButtonClick
+ 0001:00007A08       TIdlImplementObjDlg.SetInterfaceList
+ 0001:00007B68       TIdlImplementObjDlg.ListUsesEntries
+ 0001:00007C2C       TIdlImplementObjDlg.SetModuleTarget
+ 0001:00007C8C       TIdlImplementObjDlg.WriteItem
+ 0001:00007D50       TIdlImplementObjDlg.AddIdlFiles
+ 0001:00007E44       CheckImplExists
+ 0001:00007FD4       MakeUniqueNames
+ 0001:00008178       TIdlImplementObjDlg.cbInterfaceNameChange
+ 0001:00008380       TIdlImplementObjDlg.pbObjectNamesClick
+ 0001:00008474       TIdlImplementObjDlg.OKButtonClick
+ 0001:00008548       TIdlImplementObjDlg.edObjectNamesChange
+ 0001:000085A4       TIdlImplementObjDlg.FormCreate
+ 0001:00008658       TIdlImplementationList.AddItem
+ 0001:00008664       TIdlImplementationList.Create
+ 0001:000086A0       TIdlImplementationList.Destroy
+ 0001:000086F4       TIdlImplementationList.FindClassName
+ 0001:00008738       TIdlImplementationList.GetItem
+ 0001:0000874C       TIdlImplementationList.GetItemCount
+ 0001:00008754       TIdlImplementationItem.Create
+ 0001:000087BC       TIdlImplementObjDlg.cbInstantiateInMainClick
+ 0001:000088B8       TIdlImplementObjDlg.DataModuleActionExecute
+ 0001:000088E0       TIdlImplementObjDlg.TieActionExecute
+ 0001:00008908       TIdlImplementObjDlg.FormShow
+ 0001:00008950       TIdlImplementObjDlg.pbIdlFilesClick
+ 0001:00008974       TIdlImplementObjDlg.cbIdlFileChange
+ 0001:00008A64       Finalization
+ 0001:00008A94       IdlImplObjDlg
+ 0001:00008FA4       TIdlUseObjectDlg.EnableButtons
+ 0001:00008FBC       TIdlUseObjectDlg.HelpButtonClick
+ 0001:00008FD4       TIdlUseObjectDlg.SetInterfaceList
+ 0001:0000907C       RemoveGenFile
+ 0001:00009130       TIdlUseObjectDlg.ListUsesEntries
+ 0001:000092CC       UnitNameOfForm
+ 0001:0000930C       TIdlUseObjectDlg.WriteItem
+ 0001:000094BC       TIdlUseObjectDlg.AddIdlFiles
+ 0001:000095B0       TIdlUseObjectDlg.cbInterfaceNameChange
+ 0001:00009814       ValidateControlIdent
+ 0001:00009864       TIdlUseObjectDlg.Validate
+ 0001:000099DC       TIdlUseObjectDlg.OKButtonClick
+ 0001:00009AC4       TIdlUseObjectDlg.FormCreate
+ 0001:00009C80       TIdlUseObjectDlg.pbIdlFilesClick
+ 0001:00009CA4       TIdlUseObjectDlg.cbIdlFileChange
+ 0001:00009D94       TIdlUseObjectDlg.FormShow
+ 0001:00009DDC       TIdlUseObjectDlg.cbUnitNameChange
+ 0001:00009DF0       TIdlUseObjectDlg.cbSpecifyObjectNameClick
+ 0001:00009DF8       TIdlUseObjectDlg.cbSpecifyBindOptionsClick
+ 0001:00009E00       TIdlUseObjectDlg.ListClasses
+ 0001:00009FFC       TIdlUseObjectDlg.FormDestroy
+ 0001:0000A078       TIdlUseObjectDlg.cbGlobalDeclarationsClick
+ 0001:0000A080       Finalization
+ 0001:0000A0B0       IdlUseObjDlg
+ 0001:0000ADCC       CodeFixSnipet
+ 0001:0000AF20       TIdlImplUpdateItem.AnyChanges
+ 0001:0000AF64       TIdlImplUpdateItem.ApplyEnableAll
+ 0001:0000AFA0       TIdlImplUpdateItem.Applied
+ 0001:0000AFA8       TIdlImplUpdateItem.Create
+ 0001:0000B008       TIdlImplUpdateItem.Destroy
+ 0001:0000B05C       TIdlImplUpdateItem.AssertApplied
+ 0001:0000B08C       TIdlImplUpdateItem.IsApplied
+ 0001:0000B090       TIdlImplUpdateItem.AddList
+ 0001:0000B09C       TIdlImplUpdateItem.SetApplyEnabled
+ 0001:0000B0C4       TIdlImplUpdateItem.GetUnitItemOwner
+ 0001:0000B0F8       TIdlImplUpdateItem.GetUpdateList
+ 0001:0000B10C       TIdlImplUpdateItem.GetUpdateListCount
+ 0001:0000B114       TIdlImplUpdateMethodItem.Create
+ 0001:0000B17C       TIdlImplUpdateMethodItem.Destroy
+ 0001:0000B1AC       TIdlImplUpdateClassItem.Create
+ 0001:0000B238       TIdlImplUpdateList.Create
+ 0001:0000B288       TIdlImplUpdateList.FindName
+ 0001:0000B2DC       TIdlImplUpdateList.Destroy
+ 0001:0000B330       TIdlImplUpdateList.GetCount
+ 0001:0000B338       TIdlImplUpdateList.AddItem
+ 0001:0000B358       TIdlImplUpdateList.AssertApplied
+ 0001:0000B388       TIdlImplUpdateList.ApplyEnableAll
+ 0001:0000B3BC       TIdlImplUpdateList.AnyChanges
+ 0001:0000B3F8       TIdlImplUpdateList.GetItem
+ 0001:0000B40C       TIdlImplUpdateMethodsList.Add
+ 0001:0000B414       TIdlImplUpdateMethodsList.FindMethod
+ 0001:0000B428       TIdlImplUpdateMethodsList.GetItem
+ 0001:0000B43C       TIdlImplUpdateClassesList.Add
+ 0001:0000B444       TIdlImplUpdateClassesList.FindClass
+ 0001:0000B458       TIdlImplUpdateClassesList.GetItem
+ 0001:0000B46C       TIdlImplUpdateUnitItem.Create
+ 0001:0000B508       TIdlImplUpdateUnitsList.Add
+ 0001:0000B510       TIdlImplUpdateUnitsList.FindUnit
+ 0001:0000B524       TIdlImplUpdateUnitsList.GetItem
+ 0001:0000B538       TIdlImplUpdateBlockItem.Create
+ 0001:0000B590       TIdlImplUpdateBlocksList.Add
+ 0001:0000B598       TIdlImplUpdateBlocksList.GetItem
+ 0001:0000B5AC       TIdlImplUpdateIncludeItem.Create
+ 0001:0000B60C       TIdlImplUpdateIncludeItem.GetPrecompiledHeaders
+ 0001:0000B684       TIdlImplUpdateIncludeItem.GetUncompiledHeaders
+ 0001:0000B728       TIdlImplUpdateIncludesList.Add
+ 0001:0000B730       TIdlImplUpdateIncludesList.FindInclude
+ 0001:0000B744       TIdlImplUpdateIncludesList.GetItem
+ 0001:0000B758       TIdlImplUpdatePropertiesList.Add
+ 0001:0000B760       TIdlImplUpdatePropertiesList.GetItem
+ 0001:0000B774       TIdlImplUpdatePropertyItem.Create
+ 0001:0000B7CC       TIdlImplUpdateVariableItem.Create
+ 0001:0000B824       TIdlImplUpdateVariablesList.Add
+ 0001:0000B82C       TIdlImplUpdateVariablesList.GetItem
+ 0001:0000B840       Finalization
+ 0001:0000B870       IdlUpdateItems
+ 0001:0000BBF8       TIdlNewProjectDlg.OKButtonClick
+ 0001:0000BC04       TIdlNewProjectDlg.HelpButtonClick
+ 0001:0000BC1C       TIdlNewProjectDlg.FormCreate
+ 0001:0000BC2C       TIdlNewProjectDlg.EnableVCLExecute
+ 0001:0000BC30       TIdlNewProjectDlg.EnableVCLUpdate
+ 0001:0000BC50       TIdlNewProjectDlg.DeleteActionExecute
+ 0001:0000BC68       TIdlNewProjectDlg.DeleteActionUpdate
+ 0001:0000BC88       TIdlNewProjectDlg.AddActionExecute
+ 0001:0000BDC4       Finalization
+ 0001:0000BDF4       IdlNewProjDlg
+ 0001:0000BFAC       Finalization
+ 0001:0000BFDC       IdlNewCliDlg
+ 0001:0000C180       Finalization
+ 0001:0000C1B0       IdlNewServDlg
+ 0001:0000CA40       TCppIdlImplCreator.Create
+ 0001:0000CA80       TCppIdlImplCreator.GetShowSource
+ 0001:0000CA84       TCppIdlFileCreator.GetShowSource
+ 0001:0000CA88       TCppIdlFileCreator.GetSource
+ 0001:0000CAB4       TCppIdlImplFormCreator.Create
+ 0001:0000CD80       TCppIdlImplFormCreator.GetSource
+ 0001:0000CDD0       TCppIdlImplFormCreator.GetInterfaceSource
+ 0001:0000CE1C       TCppIdlImplFormCreator.GetShowForm
+ 0001:0000CE20       TCppIdlImplFormCreator.GetShowSource
+ 0001:0000CE24       TCppIdlUseInFormCreator.Create
+ 0001:0000D068       TCppIdlUseInFormCreator.GetInterfaceSource
+ 0001:0000D0B4       TCppIdlUseInFormCreator.GetShowForm
+ 0001:0000D0B8       TCppIdlUseInFormCreator.GetShowSource
+ 0001:0000D0BC       TCppIdlUseInFormCreator.GetSource
+ 0001:0000D10C       Finalization
+ 0001:0000D13C       CppIdlCrtrs
+ 0001:0000D7B0       TIdlUpdateObjectsDlg.FormCreate
+ 0001:0000DB98       TIdlUpdateObjectsDlg.HelpButtonClick
+ 0001:0000DBB0       TIdlUpdateObjectsDlg.SetUpdatesList
+ 0001:0000DC00       GetItemText
+ 0001:0000DCDC       GetItemType
+ 0001:0000DE00       AddItem
+ 0001:0000DEA0       PopulateSubItems
+ 0001:0000DF20       TIdlUpdateObjectsDlg.PopulateUpdateTree
+ 0001:0000DF8C       TIdlUpdateObjectsDlg.ReadUpdateItem
+ 0001:0000DF94       TIdlUpdateObjectsDlg.WriteUpdateItem
+ 0001:0000E078       TIdlUpdateObjectsDlg.ReadWriteUpdateItem
+ 0001:0000E5C8       TIdlUpdateObjectsDlg.CreateWindowHandle
+ 0001:0000E6F0       TIdlImplEdit.Create
+ 0001:0000E744       TIdlImplEdit.CreateEditControl
+ 0001:0000E7E0       TIdlImplEdit.GetText
+ 0001:0000E7FC       TIdlImplEdit.SetText
+ 0001:0000E80C       TIdlImplEdit.CreateEditView
+ 0001:0000E864       TIdlImplEdit.Destroy
+ 0001:0000E894       TIdlUpdateObjectsDlg.CheckItems
+ 0001:0000E944       TIdlUpdateObjectsDlg.lvUpdatesChange
+ 0001:0000E9B4       TIdlUpdateObjectsDlg.OKButtonClick
+ 0001:0000EA84       TIdlUpdateObjectsDlg.FormDestroy
+ 0001:0000EAFC       TIdlUpdateObjectsDlg.LoadEnvOptions
+ 0001:0000ED04       TIdlUpdateObjectsDlg.SaveEnvOptions
+ 0001:0000EF5C       Finalization
+ 0001:0000EF8C       IdlUpdateObjDlg
+ 0001:0000F404       TIdlCppOptionsManager.SkipOverStringParam
+ 0001:0000F430       TIdlCppOptionsManager.GetStrSwitchVal
+ 0001:0000F598       CleanValue
+ 0001:0000F6C8       TIdlCppOptionsManager.SetStrSwitch
+ 0001:0000F96C       TIdlCppOptionsManager.SetBoolSwitchVal
+ 0001:0000FA20       TIdlCppOptionsManager.GetBoolSwitchVal
+ 0001:0000FA4C       TIdlCppOptions.Create
+ 0001:0000FA98       TIdlCppOptions.GetClientExt
+ 0001:0000FAAC       TIdlCppOptions.GetGenObjectWrapper
+ 0001:0000FAB4       TIdlCppOptions.GetGenStdStream
+ 0001:0000FAC4       TIdlCppOptions.GetGenTie
+ 0001:0000FAD4       TIdlCppOptions.GetGenTypeCodeInfo
+ 0001:0000FADC       TIdlCppOptions.GetGenVirtualImplInh
+ 0001:0000FAE4       TIdlCppOptions.GetIncludePath
+ 0001:0000FAF8       TIdlCppOptions.GetServerExt
+ 0001:0000FB0C       TIdlCppOptions.SetClientExt
+ 0001:0000FB18       TIdlCppOptions.SetGenObjectWrapper
+ 0001:0000FB24       TIdlCppOptions.SetGenStdStream
+ 0001:0000FB34       TIdlCppOptions.SetGenTie
+ 0001:0000FB44       TIdlCppOptions.SetGenTypeCodeInfo
+ 0001:0000FB50       TIdlCppOptions.SetGenVirtualImplInh
+ 0001:0000FB5C       TIdlCppOptions.SetIncludePath
+ 0001:0000FB68       TIdlCppOptions.SetHeaderSuffix
+ 0001:0000FB74       TIdlCppOptions.SetServerExt
+ 0001:0000FB80       TIdlCppOptions.GetGenIncludeFilesCode
+ 0001:0000FB88       TIdlCppOptions.GetHeaderSuffix
+ 0001:0000FB9C       TIdlCppOptions.SetGenIncludeFilesCode
+ 0001:0000FBA8       TIdlCppOptions.GetBoolValue
+ 0001:0000FBC0       TIdlCppOptions.GetStrValue
+ 0001:0000FBF0       TIdlCppOptions.SetBoolValue
+ 0001:0000FC0C       TIdlCppOptions.SetStrValue
+ 0001:0000FC30       ExtractMatchingOption
+ 0001:0000FD48       TIdlCppOptionsManager.RemoveOption
+ 0001:0000FEB8       FixTrailingBackslash
+ 0001:0000FFF0       TIdlCppOptions.SeparateOptions
+ 0001:0001021C       TIdlCppOptions.GetAdditonal
+ 0001:00010274       TIdlCppOptions.SetAdditional
+ 0001:00010328       TIdlCppOptions.GetSourceSuffix
+ 0001:0001033C       TIdlCppOptions.SetSourceSuffix
+ 0001:00010348       TIdlCppOptions.GetDefines
+ 0001:0001035C       TIdlCppOptions.SetDefines
+ 0001:00010368       RemoveTrailing
+ 0001:000103B0       TIdlCppOptions.MakeClientSourceName
+ 0001:000104CC       TIdlCppOptions.MakeServerSourceName
+ 0001:000105E8       TIdlCppOptions.GetExpandedIncludePath
+ 0001:00010638       TIdlCppOptions.GetHdrDir
+ 0001:0001064C       TIdlCppOptions.GetRootDir
+ 0001:00010660       TIdlCppOptions.GetSrcDir
+ 0001:00010674       TIdlCppOptions.SetHdrDir
+ 0001:00010680       TIdlCppOptions.SetRootDir
+ 0001:0001068C       TIdlCppOptions.SetSrcDir
+ 0001:00010698       TIdlCppOptions.CalcHdrDir
+ 0001:00010730       TIdlCppOptions.CalcSrcDir
+ 0001:000107C8       Add
+ 0001:00010814       TIdlCppOptions.GetIdl2IrOptions
+ 0001:00010968       TIdlCppOptions.GetBoa
+ 0001:00010970       TIdlCppOptions.SetBoa
+ 0001:0001097C       Finalization
+ 0001:000109C4       IdlCppOpts
+ 0001:00010C38       TIdlFileDependencySymbol.Create
+ 0001:00010C88       TIdlFileDependencySymbol.Destroy
+ 0001:00010CB8       TIdlFileDependencies.Create
+ 0001:00010CF8       TIdlFileDependencies.Destroy
+ 0001:00010D1C       FindNewer
+ 0001:00010DBC       TIdlFileDependencies.IsNewer
+ 0001:00010E2C       GetReader
+ 0001:00010EB4       GetSource
+ 0001:00010F38       ScanFile
+ 0001:00011060       StartScanner
+ 0001:000110EC       StopScanner
+ 0001:00011114       TIdlFileDependencies.ScanForIncludes
+ 0001:000111D0       GetFileAge
+ 0001:00011204       RefreshOne
+ 0001:00011364       TIdlFileDependencies.RefreshTree
+ 0001:000113FC       ListNames
+ 0001:00011490       TIdlFileDependencies.ListDependentFiles
+ 0001:000114C0       TIdlIncludeFileList.Add
+ 0001:000114CC       TIdlIncludeFileList.Clear
+ 0001:00011500       TIdlIncludeFileList.Create
+ 0001:0001153C       TIdlIncludeFileList.Destroy
+ 0001:00011570       TIdlIncludeFileList.GetCount
+ 0001:00011578       TIdlIncludeFileList.GetItem
+ 0001:0001158C       TIdlIncludeFile.Create
+ 0001:000115C8       Finalization
+ 0001:00011604       IdlDepends
+ 0001:000116C8       TIDLProjUnit.Create
+ 0001:00011728       TIDLProjUnit.Destroy
+ 0001:00011758       TIDLProjUnit.Update
+ 0001:0001178C       TIDLProjUnit.GetOptions
+ 0001:000117AC       TIDLProjUnit.NeedToCompile
+ 0001:00011868       Finalization
+ 0001:00011898       IdlMakeObjs
+ 0001:00011AFC       TIdlRenamedInterfaceDlg.btnHelpClick
+ 0001:00011B14       TIdlRenamedInterfaceDlg.FormCreate
+ 0001:00011B34       TIdlRenamedInterfaceDlg.cbNewNameChange
+ 0001:00011B8C       Finalization
+ 0001:00011BBC       IdlRenamedIntfDlg
+ 0001:00011E10       TAddIdlIncludesDlg.btnHelpClick
+ 0001:00011E28       TAddIdlIncludesDlg.FormCreate
+ 0001:00011E34       TAddIdlIncludesDlg.btnOkClick
+ 0001:00011EF8       Finalization
+ 0001:00011F28       IdlAddIdlIncludesDlg
+ 0001:000132E4       TIdlImplUpdater.InsertCORBAPCH
+ 0001:00013358       TIdlImplUpdater.ApplyCORBAUpdates
+ 0001:000135F4       FindIdlClassSymbol
+ 0001:00013680       RenamedInterface
+ 0001:00013904       TIdlImplUpdater.RefreshImplClass
+ 0001:00013C00       TIdlImplUpdater.FindMethodSymbol
+ 0001:00013C58       TIdlImplUpdater.ApplyUpdateClassItem
+ 0001:0001409C       ExactSameFlags
+ 0001:000140B0       CreateTempSymbol
+ 0001:00014200       MethodExists
+ 0001:000143F8       CleanupDeclarations
+ 0001:00014580       WrapParameters
+ 0001:000145E4       TIdlImplUpdater.PopulateUpdateClassItem
+ 0001:00014AA0       TIdlImplUpdater.GetIdlImplClassInfo
+ 0001:00014B48       TIdlImplUpdater.GetIdlUseClassInfo
+ 0001:00014BE4       TIdlImplUpdater.MakeCORBAUnit
+ 0001:00014D60       TIdlImplUpdater.AddIdlImplClass
+ 0001:00014FD0       TIdlImplUpdater.AddIdlIncludes
+ 0001:00015134       AddParam
+ 0001:00015164       FormatObjectName
+ 0001:000151F4       AddInstanceVariable
+ 0001:000152D0       AddInstanceMethod
+ 0001:0001546C       AddInstanceProperty
+ 0001:000155E0       TIdlImplUpdater.AddCORBAObjectBind
+ 0001:000158FC       TIdlImplUpdater.AddIdlUseInClass
+ 0001:00015AD4       CompareDeclPos
+ 0001:00015AF0       CompareImplPos
+ 0001:00015B0C       ExtractText
+ 0001:00015BD4       ListMethods
+ 0001:00015CC0       TIdlImplUpdater.GetModifiedImplMethodText
+ 0001:00015EE8       TIdlProjectUpdater.InstantiateCORBAObject
+ 0001:00016034       TIdlProjectUpdater.MakeCORBAProject
+ 0001:00016394       UpdateMainUnitItem
+ 0001:0001664C       TIdlProjectUpdater.ApplyCORBAUpdates
+ 0001:00016744       TIdlProjectUpdater.AddIdlReference
+ 0001:00016860       TIdlProjectUpdater.RenameIdlReference
+ 0001:00016964       TIdlProjectUpdater.ListUsesEntries
+ 0001:00016A6C       OpenModules
+ 0001:00016C30       RefreshModules
+ 0001:00016DAC       TIdlProjectUpdater.RefreshIdlImpl
+ 0001:00016E1C       TIdlProjectUpdater.DoCompileIdlFiles
+ 0001:00016EB4       TIdlProjectUpdater.CompileIdlFiles
+ 0001:00016FC8       TIdlProjectUpdater.CanRefreshIdlImpl
+ 0001:00017020       AddParam
+ 0001:00017050       FormatObjectName
+ 0001:000170E0       TIdlProjectUpdater.AddCORBAObjectBind
+ 0001:0001722C       TIdlProjectUpdater.AddIdlIncludes
+ 0001:00017384       TIdlProjectUpdater.GetModifiedImplMethodText
+ 0001:0001746C       TIdlProjectUpdater.PrepareAddIdlFiles
+ 0001:00017494       TIdlOptionsUpdater.Create
+ 0001:00017538       TIdlOptionsUpdater.Destroy
+ 0001:00017568       TIdlOptionsUpdater.UpdateIdlFiles
+ 0001:000175F4       TIdlOptionsUpdater.GetIdlFileEntries
+ 0001:000175F8       TIdlOptionsUpdater.RenameModule
+ 0001:00017804       TIdlOptionsUpdater.PrepareRemoveGenModules
+ 0001:0001782C       TIdlOptionsUpdater.RemoveGenModules
+ 0001:00017954       TIdlOptionsUpdater.GetGenFileName
+ 0001:00017A8C       TIdlOptionsUpdater.GetAllGenFiles
+ 0001:00017B50       TIdlMakeSymbol.GetGenFile
+ 0001:00017B64       TIdlMakeSymbol.AddGenFile
+ 0001:00017C34       TIdlMakeSymbol.Create
+ 0001:00017C88       TIdlMakeSymbol.Destroy
+ 0001:00017CBC       TIdlMakeSymbol.ClearGenFiles
+ 0001:00017CF0       TIdlMakeSymbol.Assign
+ 0001:00017DA8       TIdlMakeSymbol.SetOptionsString
+ 0001:00017DD0       TIdlMakeSymbol.UpdateGenFiles
+ 0001:00017EC8       TIdlMakeSymbol.FindGenFile
+ 0001:00017F0C       TIdlMakeSymbol.GenFileCount
+ 0001:00017F14       TGenFile.Assign
+ 0001:00017F40       TGenFile.Create
+ 0001:00017F88       TCppIdlFileManager.Create
+ 0001:00018038       TCppIdlFileManager.ParseSource
+ 0001:0001803C       TCppIdlFileManager.Destroy
+ 0001:00018064       TCppIdlFileUpdater.Create
+ 0001:000180C4       TCppIdlFileUpdater.Destroy
+ 0001:000180F4       TCppIdlFileUpdater.EnsureUnitsUsed
+ 0001:000180F8       TCppIdlFileUpdater.GetAncestorClassName
+ 0001:00018104       TCppIdlFileUpdater.GetCompanionFileName
+ 0001:00018110       TCppIdlFileUpdater.GetIsEditable
+ 0001:00018114       TCppIdlFileUpdater.GetModuleName
+ 0001:00018180       TCppIdlFileUpdater.GetModuleTab
+ 0001:00018194       TCppIdlFileUpdater.GetUsedInterfaceUnits
+ 0001:00018198       TCppIdlFileUpdater.GetUsedImplementationUnits
+ 0001:0001819C       TCppIdlFileUpdater.GetUsedPackages
+ 0001:000181A0       TCppIdlFileUpdater.HasCompanionFile
+ 0001:000181A4       TCppIdlFileUpdater.HasForm
+ 0001:000181B4       TCppIdlFileUpdater.GetAdditionalFiles
+ 0001:000181B8       TCppIdlFileUpdater.Imports
+ 0001:000181BC       TCppIdlFileUpdater.ImportUnit
+ 0001:000181C0       TCppIdlFileUpdater.Modified
+ 0001:000181CC       TCppIdlFileUpdater.ModuleClosed
+ 0001:000181D0       TCppIdlFileUpdater.FilterUsedUnits
+ 0001:000181D4       TCppIdlFileUpdater.SetModuleName
+ 0001:000181D8       TCppIdlFileUpdater.ShowSource
+ 0001:000181DC       TCppIdlFileUpdater.SourceIsValid
+ 0001:000181E8       TCppIdlFileUpdater.Validate
+ 0001:000181F4       TCppIdlFileUpdater.ValidateIdent
+ 0001:000181F8       TIdlClassManagerHelper.ParseIdlImplComment
+ 0001:00018344       TIdlClassManagerHelper.ParseIdlImplClass
+ 0001:000185CC       NextClassToken
+ 0001:0001866C       TIdlClassManagerHelper.ParseIdlImplMembers
+ 0001:00018968       TIdlClassManagerHelper.ParseIdlImplSource
+ 0001:0001903C       RecordLine
+ 0001:000190C0       RemoveQuotes
+ 0001:00019104       TIdlOptionsManagerHelper.ParseIdlSymbols
+ 0001:00019428       TIdlOptionsManagerHelper.GetIdlCFlags
+ 0001:00019468       SkipSpaces
+ 0001:0001949C       SkipTo
+ 0001:000194EC       FixDirName
+ 0001:000195A4       AddCommand
+ 0001:00019A5C       AddFileToLine
+ 0001:00019B14       TIdlOptionsUpdaterHelper.UpdateIDLRules
+ 0001:00019FFC       TIdlProjOptsManagerHelper.UpdateIdlFilesList
+ 0001:0001A108       TIdlProjOptsManagerHelper.SetIdlOptions
+ 0001:0001A1A4       TIdlProjOptsManagerHelper.GetIdlOptions
+ 0001:0001A250       TIdlProjOptsManagerHelper.CreateProjUnit
+ 0001:0001A2F0       TIdlProjOptsManagerHelper.UpdateProjUnit
+ 0001:0001A390       TIdlProjOptsManagerHelper.LoadFromIni
+ 0001:0001A46C       TIdlProjOptsManagerHelper.SaveToIni
+ 0001:0001A53C       TIdlProjOptsManagerHelper.Create
+ 0001:0001A580       TIdlProjOptsManagerHelper.SetInclPath
+ 0001:0001A624       TIdlProjOptsManagerHelper.SetDefines
+ 0001:0001A6E4       StringExists
+ 0001:0001A754       TrimPath
+ 0001:0001A78C       TIdlProjectOptions.AddCORBASupport
+ 0001:0001AA30       TIdlProjectOptions.GetOption
+ 0001:0001AAEC       TIdlProjectOptions.IsCORBAProject
+ 0001:0001AB7C       TIdlProjectOptions.RemoveVCL
+ 0001:0001ACE8       TIdlProjectOptions.SetOption
+ 0001:0001ADA4       TRemoveGenModulesTransaction.Create
+ 0001:0001ADFC       TRemoveGenModulesTransaction.Destroy
+ 0001:0001AE2C       TRemoveGenModulesTransaction.Abort
+ 0001:0001AE30       TRemoveGenModulesTransaction.Commit
+ 0001:0001AE3C       TIdlExpertFilter.Create
+ 0001:0001AEF4       TIdlExpertFilter.TemplateResult
+ 0001:0001AF50       TIdlExpertFilter.SetBoolValue
+ 0001:0001B004       TIdlExpertFilter.SetStringValue
+ 0001:0001B064       TAddIdlFilesTransaction.Abort
+ 0001:0001B068       TAddIdlFilesTransaction.Commit
+ 0001:0001B510       TAddIdlFilesTransaction.Create
+ 0001:0001B60C       TAddIdlFilesTransaction.Destroy
+ 0001:0001B63C       TXMLIdlOptionsUpdater.Create
+ 0001:0001B6E0       TXMLIdlOptionsUpdater.Destroy
+ 0001:0001B710       TXMLIdlOptionsUpdater.GetAllGenFiles
+ 0001:0001B7F0       TXMLIdlOptionsUpdater.GetGenFileName
+ 0001:0001B92C       TXMLIdlOptionsUpdater.GetIdlFileEntries
+ 0001:0001B930       TXMLIdlOptionsUpdater.PrepareRemoveGenModules
+ 0001:0001B958       TXMLIdlOptionsUpdater.RemoveGenModules
+ 0001:0001BB10       TXMLIdlOptionsUpdater.RenameModule
+ 0001:0001BD40       TXMLIdlOptionsUpdater.UpdateIdlFiles
+ 0001:0001BDD4       TXMLRemoveGenModulesTransaction.Abort
+ 0001:0001BDD8       TXMLRemoveGenModulesTransaction.Commit
+ 0001:0001BDE4       TXMLRemoveGenModulesTransaction.Create
+ 0001:0001BE3C       TXMLRemoveGenModulesTransaction.Destroy
+ 0001:0001BE6C       TXMLIdlOptionsManagerHelper.ExtractIdlSymbols
+ 0001:0001C07C       TXMLIdlOptionsManagerHelper.GetIdlCFlags
+ 0001:0001C0BC       AddFileToLine
+ 0001:0001C170       TXMLIdlOptionsUpdaterHelper.UpdateIDLRules
+ 0001:0001C530       TCustomIdlMakeSymbol.Assign
+ 0001:0001C558       TCustomIdlMakeSymbol.Create
+ 0001:0001C5B8       TCustomIdlMakeSymbol.Destroy
+ 0001:0001C5E8       TCustomIdlMakeSymbol.GetOptionsString
+ 0001:0001C600       TCustomIdlMakeSymbol.MakeGenFileName
+ 0001:0001C634       FixDirName
+ 0001:0001C704       TXMLIdlMakeSymbol.AddGenFile
+ 0001:0001C840       TXMLIdlMakeSymbol.Assign
+ 0001:0001C874       TXMLIdlMakeSymbol.ClearGenFiles
+ 0001:0001C8CC       TXMLIdlMakeSymbol.Create
+ 0001:0001C920       TXMLIdlMakeSymbol.DeleteGenFile
+ 0001:0001C948       TXMLIdlMakeSymbol.Destroy
+ 0001:0001C974       TXMLIdlMakeSymbol.FindGenFile
+ 0001:0001C99C       TXMLIdlMakeSymbol.SetOptionsString
+ 0001:0001C9C4       TXMLIdlMakeSymbol.UpdateGenFiles
+ 0001:0001CA74       Finalization
+ 0001:0001CAA4       IdlImplUpdater
+ 0001:0001D114       MakeVarName
+ 0001:0001D164       CreateNewIDLFile
+ 0001:0001D1B4       CreateNewIdlObjectImpl
+ 0001:0001D204       UseCORBAObject
+ 0001:0001D254       TNewIDLFile.Selected
+ 0001:0001D2C8       TNewIdlObjectImpl.GetNilProjError
+ 0001:0001D2DC       TNewIdlObjectImpl.GetInfo
+ 0001:0001D348       TNewIdlObjectImpl.ReadExpert
+ 0001:0001D364       TNewIdlObjectImpl.CreateIdlImplExpert
+ 0001:0001D3E4       TNewIdlObjectImpl.CreateExpert
+ 0001:0001D3F8       TNewIdlObjectImpl.GetUnitCreator
+ 0001:0001D508       ImplementClass
+ 0001:0001D6AC       ListObjectVarNames
+ 0001:0001D784       InstantiateCORBAObject
+ 0001:0001DBAC       TNewIdlObjectImpl.QueryUpdates
+ 0001:0001DC9C       TNewIdlObjectImpl.Create
+ 0001:0001DCE0       TNewIdlObjectImpl.Destroy
+ 0001:0001DD18       ListUsesEntries
+ 0001:0001DDDC       TNewIdlObjectImpl.GetImplementations
+ 0001:0001DF88       TNewIdlObjectImpl.GetNoInterfacesError
+ 0001:0001DF9C       TNewIdlObjectImpl.Initialize
+ 0001:0001DFBC       TNewIdlObjectImpl.GetAddIdlReferences
+ 0001:0001DFC0       TNewIdlObjectImpl.ValidateUseExistingUnit
+ 0001:0001DFF0       TNewIdlObjectImpl.CreateInterfaceListHelper
+ 0001:0001E000       TNewIdlObjectImpl.OnCreateNewUnit
+ 0001:0001E0A0       TNewCORBAProject.Selected
+ 0001:0001E3EC       TNewCORBAProject.GetProjectCreator
+ 0001:0001E494       TNewCORBAProject.ReadProjectExpert
+ 0001:0001E510       TNewCORBAProject.Create
+ 0001:0001E55C       TNewCORBAProject.Destroy
+ 0001:0001E58C       TNewCORBAClient.CreateExpert
+ 0001:0001E5A0       TNewCORBAClient.CreateNewCORBAClientExpert
+ 0001:0001E5F4       TNewCORBAClient.Destroy
+ 0001:0001E624       TNewCORBAClient.GetInfo
+ 0001:0001E65C       TNewCORBAClient.ReadExpert
+ 0001:0001E6B4       TNewCORBAServer.GetInfo
+ 0001:0001E6EC       TNewCORBAServer.ReadExpert
+ 0001:0001E730       TNewCORBAServer.CreateExpert
+ 0001:0001E744       TNewCORBAServer.CreateNewCORBAServerExpert
+ 0001:0001E798       TNewCORBAServer.Destroy
+ 0001:0001E7C8       TNewIdlUseObject.CreateExpert
+ 0001:0001E7DC       TNewIdlUseObject.CreateUseObjectExpert
+ 0001:0001E840       TNewIdlUseObject.GetAddIdlReferences
+ 0001:0001E844       TNewIdlUseObject.GetInfo
+ 0001:0001E8B0       TNewIdlUseObject.GetNilProjError
+ 0001:0001E8C4       TNewIdlUseObject.GetNoInterfacesError
+ 0001:0001E8D8       TNewIdlUseObject.GetUnitCreator
+ 0001:0001E9CC       ImplementClass
+ 0001:0001EA94       SetBindObject
+ 0001:0001EAB4       CreateObjectBindInstance
+ 0001:0001EBB8       CreateObjectBindForm
+ 0001:0001EC50       CreateObjectBindInMain
+ 0001:0001ECB8       CreateObjectBindUnit
+ 0001:0001ECF0       MainUnitFileName
+ 0001:0001ED50       TNewIdlUseObject.QueryUpdates
+ 0001:0001F014       TNewIdlUseObject.ReadExpert
+ 0001:0001F030       TNewIdlUseObject.CreateInterfaceListHelper
+ 0001:0001F040       TNewIdlUseObject.Destroy
+ 0001:0001F070       TNewIdlComponent.FindProjectUnitItem
+ 0001:0001F12C       TNewIdlComponent.GetProjectUnitItem
+ 0001:0001F1F4       TNewIdlComponent.Initialize
+ 0001:0001F2C0       TNewIdlComponent.Destroy
+ 0001:0001F2F0       TNewIdlComponent.CleanupUpdates
+ 0001:0001F3DC       TNewIdlComponent.UpdateUnits
+ 0001:0001F590       TNewIdlComponent.Selected
+ 0001:0001F60C       TNewIdlComponent.ApplyUpdates
+ 0001:0001F818       TNewIdlComponent.MakeCORBAProject
+ 0001:0001F8F0       TNewIdlComponent.CreateUnitItem
+ 0001:0001FA40       TNewIdlComponent.ValidateUseExistingUnit
+ 0001:0001FA44       TNewIdlComponent.OnCreateNewUnit
+ 0001:0001FA48       Finalization
+ 0001:0001FA78       IdlNew
+ 0001:0001FAD8       LoadDllProcs
+ 0001:0001FBE8       GetRepositories
+ 0001:0001FCE8       Finalization
+ 0001:0001FD18       IdlRep
+ 0001:0001FFAC       TIdlAddIrDialog.HelpButtonClick
+ 0001:0001FFC4       TIdlAddIrDialog.FormCreate
+ 0001:0001FFEC       GetIRCount
+ 0001:00020078       WaitForIR
+ 0001:0002010C       TIdlAddIrDialog.StartIr
+ 0001:000202F8       TIdlAddIrDialog.EnableButtons
+ 0001:00020350       TIdlAddIrDialog.edRepositoryNameChange
+ 0001:00020358       TIdlAddIrDialog.OKButtonClick
+ 0001:00020420       Finalization
+ 0001:00020450       IdlAddIrDlg
+ 0001:000204D4       ScanFiles
+ 0001:00020728       Finalization
+ 0001:00020758       FileUtil
+ 0001:00020A24       RemoveTrailing
+ 0001:00020A6C       TGenFileProcess.Run
+ 0001:00020B34       TGenFileProcess.Create
+ 0001:00020BB4       TGenFileProcess.DoProcessDone
+ 0001:00020BD0       TTempDirectory.Create
+ 0001:00020CBC       TTempDirectory.Destroy
+ 0001:00020CF8       TTempDirectory.DeleteTemporaryFile
+ 0001:00020D74       TTempDirectory.DeleteTemporaryFiles
+ 0001:00020DD0       TCollectedFile.Create
+ 0001:00020E28       TCollectedFile.Destroy
+ 0001:00020E5C       TCollectedFile.GetStream
+ 0001:00020E80       TCollectedFile.GetFileAge
+ 0001:00020E8C       TCollectedFile.Save
+ 0001:00020F44       TCollectedFiles.CollectGeneratedFile
+ 0001:00021024       TCollectedFiles.CollectGeneratedFiles
+ 0001:00021080       TCollectedFiles.Add
+ 0001:0002108C       TCollectedFiles.Create
+ 0001:0002111C       TCollectedFiles.Destroy
+ 0001:00021170       TCollectedFiles.GetCollectedFile
+ 0001:00021184       TCollectedFiles.GetCollectedFileCount
+ 0001:0002118C       Finalization
+ 0001:000211BC       GenFile
+ 0001:000211C4       FindLine
+ 0001:00021344       Finalization
+ 0001:00021374       ParseUtil
+ 0001:000215B0       TIdl2CppProcess.Compile
+ 0001:00021680       TIdl2CppProcess.ReplaceFileName
+ 0001:000216C8       TIdl2CppProcess.ReportError
+ 0001:00021730       TIdl2CppProcess.ReportWarning
+ 0001:00021798       TIdl2CppProcess.DoProcessDone
+ 0001:000218E8       TIdl2CppProcess.ParseError
+ 0001:00021D90       TIdlCollectedFiles.Create
+ 0001:00021DE8       TIdlCollectedFiles.GetDestDir
+ 0001:00021E98       Finalization
+ 0001:00021EC8       IdlCppGenFile
+ 0001:00021F64       AddGenFilesToProject
+ 0001:0002203C       CheckIdlFileNames
+ 0001:000220E0       TIdlCompilerHelper.IdlAll
+ 0001:00022338       SaveFile
+ 0001:00022460       SaveDependentFiles
+ 0001:0002256C       SaveIdlFilesToTempDir
+ 0001:000225D8       RemoveTrailing
+ 0001:00022628       TIdlCompilerHelper.IdlCompile
+ 0001:00022970       Rewind
+ 0001:00022978       NextCollectedFile
+ 0001:00022A10       IsAddIdlGenUnit
+ 0001:00022A94       GetCollectedUnits
+ 0001:00022CF4       UpdateEditState
+ 0001:00022D40       AddCollectedUnitToProject
+ 0001:00022F4C       SaveCollectedFile
+ 0001:00022F8C       SaveCollectedUnits
+ 0001:00023074       SaveOtherFiles
+ 0001:000230F0       AddPchSupport
+ 0001:00023164       OpenUnits
+ 0001:0002338C       TIdlCompilerHelper.IdlRefreshGeneratedFiles
+ 0001:000235C0       TIdlCompilerHelper.OnIdlCompileError
+ 0001:0002360C       TIdlCompilerHelper.GetAddIdlGenUnits
+ 0001:0002381C       Finalization
+ 0001:0002384C       IdlComIntf
+ 0001:00023BA4       TIdl2IrDialog.HelpButtonClick
+ 0001:00023BBC       TIdl2IrDialog.FormCreate
+ 0001:00023BC8       TIdl2IrDialog.AddIr
+ 0001:0002409C       TIdl2IrDialog.bpAddIREPClick
+ 0001:000240F0       TIdl2IrDialog.lvIDLFilesChange
+ 0001:00024104       AnySelected
+ 0001:0002415C       TIdl2IrDialog.EnableButtons
+ 0001:000241B0       TIdl2IrDialog.pbAddIDLFileClick
+ 0001:000241C4       TIdl2IrDialog.AddIdlFiles
+ 0001:0002441C       GetCompilationList
+ 0001:00024478       TIdl2IrDialog.Apply
+ 0001:00024690       SaveIdlFiles
+ 0001:0002472C       BuildCommandLine
+ 0001:00024910       ProcessErrors
+ 0001:00024970       TIdl2IrDialog.Idl2Ir
+ 0001:00024B5C       TIdl2IrDialog.PopulateIRList
+ 0001:00024D5C       TIdl2IrDialog.PopulateIdlFileList
+ 0001:00024E40       TIdl2IrDialog.bpApplyClick
+ 0001:00024E48       TIdl2IrDialog.OKButtonClick
+ 0001:00024E58       TIdl2IrDialog.cbRepositoryNameChange
+ 0001:00024E68       TIdl2IrDialog.cbReplaceDefinitionsClick
+ 0001:00024E78       Finalization
+ 0001:00024EA8       Idl2IrDlg
+ 0001:000251B4       TIdlCommands.IdlCommandsDestroy
+ 0001:000251BC       TIdlCommands.CORBAUpdateObjectsExecute
+ 0001:000254DC       TIdlCommands.IdlCommandsCreate
+ 0001:00025544       InitIndecies
+ 0001:000255B4       CreateCORBAToolBar
+ 0001:00025700       AddAction
+ 0001:0002573C       AddMenuSeparator
+ 0001:000257EC       AddMenuItem
+ 0001:00025884       AddCORBATool
+ 0001:00025900       AddCORBAToolSeparator
+ 0001:00025988       AddToolBarAction
+ 0001:000259D0       TIdlCommands.InitUIComponents
+ 0001:00025BA8       TIdlCommands.CORBAUseObjectExecute
+ 0001:00025BB0       TIdlCommands.CORBAUpdateObjectsUpdate
+ 0001:00025BB4       TIdlCommands.ViewCORBACommandsExecute
+ 0001:00025BE8       TIdlCommands.ViewCORBACommandsUpdate
+ 0001:00025C1C       TIdlCommands.CORBAIdl2IrExecute
+ 0001:00025D4C       TIdlCommands.CORBAOsAgentExecute
+ 0001:00025EB0       TIdlCommands.CORBAOsAgentUpdate
+ 0001:00025ECC       TIdlCommands.FindOsAgent
+ 0001:00025EF0       TIdlCommands.FindOsAgentCallback
+ 0001:00025F60       TIdlCommands.CORBANewIdlExecute
+ 0001:00025F68       TIdlCommands.CORBANewObjectImplExecute
+ 0001:00025F70       TIdlCommands.GetCORBAToolBar
+ 0001:00025FA8       Finalization
+ 0001:00025FD8       IdlCmds
+ 0001:00026048       TIDLFileHandler.FileOpen
+ 0001:00026090       TIDLFileHandler.CanOpen
+ 0001:000260F8       TIDLFileHandler.GetFilters
+ 0001:00026154       RegisterIDLFileHandler
+ 0001:00026160       Finalization
+ 0001:000261A4       IdlOpenFile
+ 0001:000262D4       TCppIdlUpdaters.CreateModuleUpdater
+ 0001:00026344       TCppIdlUpdaters.CanHandleFile
+ 0001:00026464       TProductStartup.Create
+ 0001:000264AC       TProductStartup.Destroy
+ 0001:000264F0       TProductStartup.DelphiStartup
+ 0001:00026554       IDERegister
+ 0001:00026720       Finalization
+ 0001:00026788       IdlCppReg
+ 0001:00026B04       TIdlOptionsPage.IdlOptionsPageBroadcast
+ 0001:00026F70       TIdlOptionsPage.IdlOptionsPageCreate
+ 0001:00026F8C       TIdlOptionsPage.IncludeDSI
+ 0001:00026FF4       TIdlOptionsPage.IncludeIR
+ 0001:0002705C       TIdlOptionsPage.TestDSI
+ 0001:000270B0       TIdlOptionsPage.TestIR
+ 0001:00027104       Finalization
+ 0001:00027140       IdlCppOptsPage
+ 0001:00027D6C       @GetPackageInfoTable
+ 0001:00027D74       @PackageLoad
+ 0001:00027D80       @PackageUnload
+ 0001:00027D8C       bcbidl
+ 0002:00000000       Module
+ 0002:00000018       TlsProc
+ 0002:00000028       bComma
+ 0002:00000030       bSpace
+ 0002:00000038       IdlFileSymbolCache
+ 0002:0000003C       Idl2CppSwitchList
+ 0002:000000FC       CorbaRepDll
+ 0002:00000100       IDLFileHandler
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0002:00001004       TlsIndex
+ 0002:0000100C       HInstance
+ 0002:00001010       .1
+ 0002:00001014       tlsBuffer
+ 0002:00001018       .3
+ 0002:0000101C       .1
+ 0002:00001020       .1
+ 0002:00001024       .1
+ 0002:00001028       .1
+ 0002:0000102C       .1
+ 0002:00001030       .1
+ 0002:00001034       .1
+ 0002:00001038       .1
+ 0002:0000103C       .3
+ 0002:00001040       .1
+ 0002:00001044       .1
+ 0002:00001048       .1
+ 0002:0000104C       .1
+ 0002:00001050       SKU
+ 0002:00001054       .2
+ 0002:00001058       IdlEnvironmentOptions
+ 0002:0000105C       .2
+ 0002:00001060       .31
+ 0002:00001064       .8
+ 0002:00001068       FOpenFileDialog
+ 0002:0000106C       .4
+ 0002:00001070       .2
+ 0002:00001074       .91
+ 0002:00001078       .2
+ 0002:0000107C       IdlNewClientDlg
+ 0002:00001080       .2
+ 0002:00001084       IdlNewServerDlg
+ 0002:00001088       .2
+ 0002:0000108C       .6
+ 0002:00001090       .3
+ 0002:00001094       .3
+ 0002:00001098       IdlFileDependencies
+ 0002:0000109C       .5
+ 0002:000010A0       .2
+ 0002:000010A4       IdlRenamedInterfaceDlg
+ 0002:000010A8       .2
+ 0002:000010AC       AddIdlIncludesDlg
+ 0002:000010B0       .2
+ 0002:000010B4       .02
+ 0002:000010B8       .8
+ 0002:000010BC       .1
+ 0002:000010C0       PrepareRepProc
+ 0002:000010C4       GetRepositoriesProc
+ 0002:000010C8       .2
+ 0002:000010CC       .1
+ 0002:000010D0       .5
+ 0002:000010D4       .1
+ 0002:000010D8       .3
+ 0002:000010DC       .2
+ 0002:000010E0       .2
+ 0002:000010E4       IdlCommands
+ 0002:000010E8       .2
+ 0002:000010EC       .1
+ 0002:000010F0       .1
+ 0002:000010F4       ProductStartup
+ 0002:000010F8       FCppIdlUpdaters
+ 0002:000010FC       .2
+
+
+Bound resource files
+
+CORBAOptionsPage.dfm
+IdlEnvOptions.dfm
+IdlImplObjDlg.dfm
+IdlUseObjDlg.dfm
+IdlNewProjDlg.dfm
+IdlNewCliDlg.dfm
+IdlNewServDlg.dfm
+IdlUpdateObjDlg.dfm
+IdlRenamedIntfDlg.dfm
+IdlAddIdlIncludesDlg.dfm
+IdlNew.RES
+IdlAddIrDlg.dfm
+Idl2IrDlg.dfm
+IdlCmds.dfm
+IdlCppOptsPage.dfm
+bcbidl.res
+C:\DOCUME~1\~storm\LOCALS~1\Temp\dtf71AF.tmp
+
+
+Program entry point at 0001:00027D8C

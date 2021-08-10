@@ -32,8 +32,6 @@ _AFX_INLINE void PASCAL CObject::operator delete(void* p)
 _AFX_INLINE void PASCAL CObject::operator delete(void* p, void*)
 	{ ::operator delete(p); }
 #endif
-
-
 _AFX_INLINE void* PASCAL CObject::operator new(size_t nSize)
 	{ return ::operator new(nSize); }
 // _DEBUG versions in objcore.cpp

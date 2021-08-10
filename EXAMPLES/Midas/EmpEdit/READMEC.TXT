@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 2000 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 2000-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 
 TITLE:

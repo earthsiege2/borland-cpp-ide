@@ -1,24 +1,19 @@
-
-//============================================================================
-//  MODULE: Filter.h
+//=============================================================================
+//  Microsoft (R) Network Monitor (tm). 
+//  Copyright (C) 1993-1999. All rights reserved.
 //
-//  Description:
+//  MODULE: BHFilter.h
 //
-//  Bloodhound DLL for Filtering.
-//
-//  Modification History
-//
-//  stevehi         03/22/93            Created.
-//  raypa           10/25/93            Changed HPROPERTYDB to HPROTOCOL.
-//  SteveHi         10/28/93            pull Value out of Object union
-//============================================================================
-
-
+//  Definitions needed for Display Filtering
+//=============================================================================
 
 #if !defined(_FILTER_)
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #define _FILTER_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 //============================================================================
 //  types
@@ -207,12 +202,12 @@ typedef FILTERDESC * LPFILTERDESC;
 //  Helper functions.
 //============================================================================
 
-typedef BOOL (WINAPI *STATUSPROC)(DWORD, HCAPTURE, HFILTER, DWORD);
+typedef BOOL (WINAPI *STATUSPROC)(DWORD, HCAPTURE, HFILTER, LPVOID);
         // callback to show filter status:
         //      DWORD nFrame
         //      HCAPTURE
         //      HFILTER
-        //      DWORD  UI Instance data (hwnd)
+        //      LPVOID  UI Instance data (hwnd)
 
 
 //============================================================================
@@ -244,11 +239,13 @@ extern DWORD    WINAPI FilterFrame(HFRAME hFrame, HFILTER hFilter, HCAPTURE hCap
     //          0 == FALSE
     //          1 == TRUE
 
+extern BOOL     WINAPI FilterAttachesProperties(HFILTER hFilter);
+
 DWORD WINAPI FilterFindFrame (  HFILTER     hFilter,
                                 HCAPTURE    hCapture,
                                 DWORD       nFrame,
                                 STATUSPROC  StatusProc,
-                                DWORD       UIInstance,
+                                LPVOID      UIInstance,
                                 DWORD       TimeDelta,
                                 BOOL        FilterDirection );
 
@@ -258,7 +255,7 @@ HFRAME FilterFindPropertyInstance ( HFRAME          hFrame,
                                     HFILTER         hInstanceFilter,
                                     LPPROPERTYINST	*lpPropRestartKey,
                                     STATUSPROC      StatusProc,
-                                    DWORD           UIInstance,
+                                    LPVOID          UIInstance,
                                     DWORD           TimeDelta,
                                     BOOL            FilterForward );
 
@@ -266,7 +263,9 @@ HFRAME FilterFindPropertyInstance ( HFRAME          hFrame,
 extern VOID WINAPI SetCurrentFilter(HFILTER);
 extern HFILTER  WINAPI GetCurrentFilter(VOID);
 
+#ifdef __cplusplus
+}
+#endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif

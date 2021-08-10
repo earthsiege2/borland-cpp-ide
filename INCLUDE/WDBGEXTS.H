@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1992-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -26,7 +26,6 @@ Revision History:
 --*/
 
 #ifndef _WDBGEXTS_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WDBGEXTS_
 
 #if _MSC_VER > 1000
@@ -84,7 +83,7 @@ typedef
 VOID
 (WDBGAPI*PWINDBG_GET_SYMBOL)(
     PVOID      offset,
-    PUCHAR     pchBuffer,
+    PCHAR      pchBuffer,
     ULONG_PTR *pDisplacement
     );
 
@@ -92,7 +91,7 @@ typedef
 VOID
 (WDBGAPI*PWINDBG_GET_SYMBOL32)(
     ULONG      offset,
-    PUCHAR     pchBuffer,
+    PCHAR      pchBuffer,
     PULONG     pDisplacement
     );
 
@@ -100,7 +99,7 @@ typedef
 VOID
 (WDBGAPI*PWINDBG_GET_SYMBOL64)(
     ULONG64    offset,
-    PUCHAR     pchBuffer,
+    PCHAR      pchBuffer,
     PULONG64   pDisplacement
     );
 
@@ -444,35 +443,43 @@ LPEXT_API_VERSION
     VOID
     );
 
-#define IG_KD_CONTEXT               1
-#define IG_READ_CONTROL_SPACE       2
-#define IG_WRITE_CONTROL_SPACE      3
-#define IG_READ_IO_SPACE            4
-#define IG_WRITE_IO_SPACE           5
-#define IG_READ_PHYSICAL            6
-#define IG_WRITE_PHYSICAL           7
-#define IG_READ_IO_SPACE_EX         8
-#define IG_WRITE_IO_SPACE_EX        9
-#define IG_KSTACK_HELP             10   // obsolete
-#define IG_SET_THREAD              11
-#define IG_READ_MSR                12
-#define IG_WRITE_MSR               13
-#define IG_GET_DEBUGGER_DATA       14
-#define IG_GET_KERNEL_VERSION      15
-#define IG_RELOAD_SYMBOLS          16
-#define IG_GET_SET_SYMPATH         17
-#define IG_GET_EXCEPTION_RECORD    18
-#define IG_IS_PTR64                19
-#define IG_GET_BUS_DATA            20
-#define IG_SET_BUS_DATA            21
-#define IG_DUMP_SYMBOL_INFO        22
-#define IG_LOWMEM_CHECK            23
-#define IG_SEARCH_MEMORY           24
+#define IG_KD_CONTEXT                  1
+#define IG_READ_CONTROL_SPACE          2
+#define IG_WRITE_CONTROL_SPACE         3
+#define IG_READ_IO_SPACE               4
+#define IG_WRITE_IO_SPACE              5
+#define IG_READ_PHYSICAL               6
+#define IG_WRITE_PHYSICAL              7
+#define IG_READ_IO_SPACE_EX            8
+#define IG_WRITE_IO_SPACE_EX           9
+#define IG_KSTACK_HELP                10   // obsolete
+#define IG_SET_THREAD                 11
+#define IG_READ_MSR                   12
+#define IG_WRITE_MSR                  13
+#define IG_GET_DEBUGGER_DATA          14
+#define IG_GET_KERNEL_VERSION         15
+#define IG_RELOAD_SYMBOLS             16
+#define IG_GET_SET_SYMPATH            17
+#define IG_GET_EXCEPTION_RECORD       18
+#define IG_IS_PTR64                   19
+#define IG_GET_BUS_DATA               20
+#define IG_SET_BUS_DATA               21
+#define IG_DUMP_SYMBOL_INFO           22
+#define IG_LOWMEM_CHECK               23
+#define IG_SEARCH_MEMORY              24
+#define IG_GET_CURRENT_THREAD         25
+#define IG_GET_CURRENT_PROCESS        26
+#define IG_GET_TYPE_SIZE              27
+#define IG_GET_CURRENT_PROCESS_HANDLE 28
+#define IG_GET_INPUT_LINE             29
+#define IG_GET_EXPRESSION_EX          30
+#define IG_TRANSLATE_VIRTUAL_TO_PHYSICAL 31
+#define IG_GET_CACHE_SIZE             32
+#define IG_READ_PHYSICAL_WITH_FLAGS   33
+#define IG_WRITE_PHYSICAL_WITH_FLAGS  34
 
-//
-// usermode only ioctls
-//
-#define IG_GET_TEB_ADDRESS         128
+#define IG_GET_TEB_ADDRESS           128
+#define IG_GET_PEB_ADDRESS           129
 
 typedef struct _PROCESSORINFO {
     USHORT      Processor;                // current processor
@@ -568,6 +575,18 @@ typedef struct _PHYSICAL {
     UCHAR                  Buf[1];
 } PHYSICAL, *PPHYSICAL;
 
+#define PHYS_FLAG_DEFAULT        0
+#define PHYS_FLAG_CACHED         1
+#define PHYS_FLAG_UNCACHED       2
+#define PHYS_FLAG_WRITE_COMBINED 3
+
+typedef struct _PHYSICAL_WITH_FLAGS {
+    ULONGLONG              Address;
+    ULONG                  BufLen;
+    ULONG                  Flags;
+    UCHAR                  Buf[1];
+} PHYSICAL_WITH_FLAGS, *PPHYSICAL_WITH_FLAGS;
+
 typedef struct _READ_WRITE_MSR {
     ULONG       Msr;
     LONGLONG    Value;
@@ -583,12 +602,63 @@ typedef struct _GET_TEB_ADDRESS {
     ULONGLONG   Address;
 } GET_TEB_ADDRESS, *PGET_TEB_ADDRESS;
 
+typedef struct _GET_PEB_ADDRESS {
+    ULONG64     CurrentThread;
+    ULONGLONG   Address;
+} GET_PEB_ADDRESS, *PGET_PEB_ADDRESS;
 
-#ifndef DBGKD_GET_VERSION_DEFINED
-#define DBGKD_GET_VERSION_DEFINED
+typedef struct _GET_CURRENT_THREAD_ADDRESS {
+    ULONG       Processor;
+    ULONG64     Address;
+} GET_CURRENT_THREAD_ADDRESS, *PGET_CURRENT_THREAD_ADDRESS;
+
+typedef struct _GET_CURRENT_PROCESS_ADDRESS {
+    ULONG       Processor;
+    ULONG64     CurrentThread;
+    ULONG64     Address;
+} GET_CURRENT_PROCESS_ADDRESS, *PGET_CURRENT_PROCESS_ADDRESS;
+
+typedef struct _GET_INPUT_LINE {
+    PCSTR       Prompt;
+    PSTR        Buffer;
+    ULONG       BufferSize;
+    ULONG       InputSize;
+} GET_INPUT_LINE, *PGET_INPUT_LINE;
+
+typedef struct _GET_EXPRESSION_EX {
+    PCSTR       Expression;
+    PCSTR       Remainder;
+    ULONG64     Value;
+} GET_EXPRESSION_EX, *PGET_EXPRESSION_EX;
+
+typedef struct _TRANSLATE_VIRTUAL_TO_PHYSICAL {
+    ULONG64     Virtual;
+    ULONG64     Physical;
+} TRANSLATE_VIRTUAL_TO_PHYSICAL, *PTRANSLATE_VIRTUAL_TO_PHYSICAL;
+
 //
-// The following structures have changed in more than pointer size.
+// If DBGKD_VERS_FLAG_DATA is set in Flags, info should be retrieved from
+// the KDDEBUGGER_DATA block rather than from the DBGKD_GET_VERSION
+// packet.  The data will remain in the version packet for a while to
+// reduce compatibility problems.
 //
+
+#define DBGKD_VERS_FLAG_MP      0x0001      // kernel is MP built
+#define DBGKD_VERS_FLAG_DATA    0x0002      // DebuggerDataList is valid
+#define DBGKD_VERS_FLAG_PTR64   0x0004      // native pointers are 64 bits
+#define DBGKD_VERS_FLAG_NOMM    0x0008      // No MM - don't decode PTEs
+#define DBGKD_VERS_FLAG_HSS     0x0010      // hardware stepping support
+
+#define KDBG_TAG    'GBDK'
+
+
+// **********************************************************************
+// DO NOT CHANGE THESE 32 BIT STRUCTURES!
+// ONLY MAKE CHAGES TO THE 64 BIT VERSION BELOW!!
+// **********************************************************************
+
+//
+// The following structure has changed in more than pointer size.
 //
 // This is the version packet for pre-NT5 Beta 2 systems.
 // For now, it is also still used on x86
@@ -655,147 +725,31 @@ typedef struct _DBGKD_GET_VERSION32 {
 } DBGKD_GET_VERSION32, *PDBGKD_GET_VERSION32;
 
 
-
-typedef struct _DBGKD_GET_VERSION64 {
-    USHORT  MajorVersion;
-    USHORT  MinorVersion;
-    USHORT  ProtocolVersion;
-    USHORT  Flags;
-    USHORT  MachineType;
-
-    USHORT  Unused[3];
-
-    ULONG64 KernBase;
-    ULONG64 PsLoadedModuleList;
-
-    //
-    // Components may register a debug data block for use by
-    // debugger extensions.  This is the address of the list head.
-    //
-    // There will always be an entry for the debugger.
-    //
-
-    ULONG64 DebuggerDataList;
-
-} DBGKD_GET_VERSION64, *PDBGKD_GET_VERSION64;
-
-
-//
-// If DBGKD_VERS_FLAG_DATA is set in Flags, info should be retrieved from
-// the KDDEBUGGER_DATA block rather than from the DBGKD_GET_VERSION
-// packet.  The data will remain in the version packet for a while to
-// reduce compatibility problems.
-//
-
-#define DBGKD_VERS_FLAG_MP      0x0001      // kernel is MP built
-#define DBGKD_VERS_FLAG_DATA    0x0002      // DebuggerDataList is valid
-#define DBGKD_VERS_FLAG_PTR64   0x0004      // native pointers are 64 bits
-#define DBGKD_VERS_FLAG_NOMM    0x0008      // No MM - don't decode PTEs
-
-#define KDBG_TAG    'GBDK'
-
-typedef struct _DBGKD_DEBUG_DATA_HEADER32 {
-
-    //
-    // Link to other blocks
-    //
-
-    LIST_ENTRY32 List;
-
-    //
-    // This is a unique tag to identify the owner of the block.
-    // If your component only uses one pool tag, use it for this, too.
-    //
-
-    ULONG           OwnerTag;
-
-    //
-    // This must be initialized to the size of the data block,
-    // including this structure.
-    //
-
-    ULONG           Size;
-
-} DBGKD_DEBUG_DATA_HEADER32, *PDBGKD_DEBUG_DATA_HEADER32;
-
-
-
-
-//
-// DO NOT CHANGE THIS STRUCTURE!
-// ONLY MAKE CHAGES TO THE 64 BIT VERSION ABOVE!!
 //
 // This is the debugger data packet for pre NT5 Beta 2 systems.
 // For now, it is still used on x86
 //
+
+typedef struct _DBGKD_DEBUG_DATA_HEADER32 {
+
+    LIST_ENTRY32 List;
+    ULONG           OwnerTag;
+    ULONG           Size;
+
+} DBGKD_DEBUG_DATA_HEADER32, *PDBGKD_DEBUG_DATA_HEADER32;
+
 typedef struct _KDDEBUGGER_DATA32 {
 
     DBGKD_DEBUG_DATA_HEADER32 Header;
-
-    //
-    // Base address of kernel image
-    //
-
     ULONG   KernBase;
-
-    //
-    // DbgBreakPointWithStatus is a function which takes an argument
-    // and hits a breakpoint.  This field contains the address of the
-    // breakpoint instruction.  When the debugger sees a breakpoint
-    // at this address, it may retrieve the argument from the first
-    // argument register, or on x86 the eax register.
-    //
-
     ULONG   BreakpointWithStatus;       // address of breakpoint
-
-    //
-    // Address of the saved context record during a bugcheck
-    //
-    // N.B. This is an automatic in KeBugcheckEx's frame, and
-    // is only valid after a bugcheck.
-    //
-
     ULONG   SavedContext;
-
-    //
-    // help for walking stacks with user callbacks:
-    //
-
-    //
-    // The address of the thread structure is provided in the
-    // WAIT_STATE_CHANGE packet.  This is the offset from the base of
-    // the thread structure to the pointer to the kernel stack frame
-    // for the currently active usermode callback.
-    //
-
     USHORT  ThCallbackStack;            // offset in thread data
-
-    //
-    // these values are offsets into that frame:
-    //
-
     USHORT  NextCallback;               // saved pointer to next callback frame
     USHORT  FramePointer;               // saved frame pointer
-
     USHORT  PaeEnabled:1;
-
-    //
-    // Address of the kernel callout routine.
-    //
-
     ULONG   KiCallUserMode;             // kernel routine
-
-    //
-    // Address of the usermode entry point for callbacks.
-    //
-
     ULONG   KeUserCallbackDispatcher;   // address in ntdll
-
-
-    //
-    // Addresses of various kernel data structures and lists
-    // that are of interest to the kernel debugger.
-    //
 
     ULONG   PsLoadedModuleList;
     ULONG   PsActiveProcessHead;
@@ -836,7 +790,7 @@ typedef struct _KDDEBUGGER_DATA32 {
     ULONG   MmPagedPoolStart;
     ULONG   MmPagedPoolEnd;
     ULONG   MmPagedPoolInformation;
-    ULONG   Unused2;
+    ULONG   MmPageSize;
 
     ULONG   MmSizeOfPagedPoolInBytes;
 
@@ -869,14 +823,64 @@ typedef struct _KDDEBUGGER_DATA32 {
     ULONG   KdPrintRolloverCount;
 
     ULONG   MmLoadedUserImageList;
+
 } KDDEBUGGER_DATA32, *PKDDEBUGGER_DATA32;
 
+// **********************************************************************
 //
 // DO NOT CHANGE KDDEBUGGER_DATA32!!
 // ONLY MAKE CHANGES TO KDDEBUGGER_DATA64!!!
 //
+// **********************************************************************
 
 
+enum
+{
+    DBGKD_SIMULATION_NONE,
+    DBGKD_SIMULATION_EXDI
+};
+
+typedef struct _DBGKD_GET_VERSION64 {
+    USHORT  MajorVersion;
+    USHORT  MinorVersion;
+    USHORT  ProtocolVersion;
+    USHORT  Flags;
+    USHORT  MachineType;
+
+    //
+    // Protocol command support descriptions.
+    // These allow the debugger to automatically
+    // adapt to different levels of command support
+    // in different kernels.
+    //
+
+    // One beyond highest packet type understood, zero based.
+    UCHAR   MaxPacketType;
+    // One beyond highest state change understood, zero based.
+    UCHAR   MaxStateChange;
+    // One beyond highest state manipulate message understood, zero based.
+    UCHAR   MaxManipulate;
+
+    // Kind of execution environment the kernel is running in,
+    // such as a real machine or a simulator.  Written back
+    // by the simulation if one exists.
+    UCHAR   Simulation;
+
+    USHORT  Unused[1];
+
+    ULONG64 KernBase;
+    ULONG64 PsLoadedModuleList;
+
+    //
+    // Components may register a debug data block for use by
+    // debugger extensions.  This is the address of the list head.
+    //
+    // There will always be an entry for the debugger.
+    //
+
+    ULONG64 DebuggerDataList;
+
+} DBGKD_GET_VERSION64, *PDBGKD_GET_VERSION64;
 
 
 //
@@ -1031,7 +1035,7 @@ typedef struct _KDDEBUGGER_DATA64 {
     ULONG64   MmPagedPoolStart;
     ULONG64   MmPagedPoolEnd;
     ULONG64   MmPagedPoolInformation;
-    ULONG64   Unused2;
+    ULONG64   MmPageSize;
 
     ULONG64   MmSizeOfPagedPoolInBytes;
 
@@ -1064,39 +1068,189 @@ typedef struct _KDDEBUGGER_DATA64 {
     ULONG64   KdPrintRolloverCount;
 
     ULONG64   MmLoadedUserImageList;
+
+    // NT 5.1 Addition
+
+    ULONG64   NtBuildLab;
+    ULONG64   KiNormalSystemCall;
+
+    // NT 5.0 QFE addition
+
+    ULONG64   KiProcessorBlock;
+    ULONG64   MmUnloadedDrivers;
+    ULONG64   MmLastUnloadedDriver;
+    ULONG64   MmTriageActionTaken;
+    ULONG64   MmSpecialPoolTag;
+    ULONG64   KernelVerifier;
+    ULONG64   MmVerifierData;
+    ULONG64   MmAllocatedNonPagedPool;
+    ULONG64   MmPeakCommitment;
+    ULONG64   MmTotalCommitLimitMaximum;
+    ULONG64   CmNtCSDVersion;
+
+    // NT 5.1 Addition
+
+    ULONG64   MmPhysicalMemoryBlock;
+    ULONG64   MmSessionBase;
+    ULONG64   MmSessionSize;
+    ULONG64   MmSystemParentTablePage;
+
 } KDDEBUGGER_DATA64, *PKDDEBUGGER_DATA64;
 
-#endif
 
 
+/************************************
+
+   Type Dump Ioctl
+
+*************************************/
+
+
+//
+// Fields are not indented if this is set
+//
 #define DBG_DUMP_NO_INDENT                0x00000001
+//
+// Offsets are not printed if this is set
+//
 #define DBG_DUMP_NO_OFFSET                0x00000002
+//
+// Verbose output
+//
 #define DBG_DUMP_VERBOSE                  0x00000004
+//
+// Callback is done for each of fields
+//
 #define DBG_DUMP_CALL_FOR_EACH            0x00000008
+//
+// A list of type is dumped, listLink should have info about next element pointer
+//
 #define DBG_DUMP_LIST                     0x00000020
-#define DBG_DUMP_NO_PRINT                 0x00000040 
-#define DBG_DUMP_GET_SIZE_ONLY            0x00000080 
+//
+// Nothing is printed if this is set (only callbacks and data copies done)
+//
+#define DBG_DUMP_NO_PRINT                 0x00000040
+//
+// Ioctl returns the size as usual, but will not do field prints/callbacks if this is set
+//
+#define DBG_DUMP_GET_SIZE_ONLY            0x00000080
+//
+// Specifies how much deep into structs we can go
+//
 #define DBG_DUMP_RECUR_LEVEL(l)           ((l & 0xf) << 8)
-#define DBG_DUMP_PRINT_TYPE_NAME          0x00004000
+//
+// No newlines are printed after each field
+//
+#define DBG_DUMP_COMPACT_OUT              0x00002000
+//
+// An array of type is dumped, number of elements can be specified in listLink->size
+//
 #define DBG_DUMP_ARRAY                    0x00008000
-#define DBG_DUMP_COMPACT_OUT              0x00200000
+//
+// The specified addr value is actually the address of field listLink->fName
+//
+#define DBG_DUMP_ADDRESS_OF_FIELD         0x00010000
 
-// Dump and callback optons for fields
+//
+// The specified addr value is actually the adress at the end of type
+//
+#define DBG_DUMP_ADDRESS_AT_END           0x00020000
+
+//
+// This could be used to copy only the primitive types like ULONG, PVOID etc.
+//    - will not work with structures/unions
+//
+#define DBG_DUMP_COPY_TYPE_DATA           0x00040000
+//
+// Flag to allow read directly from physical memory
+//
+#define DBG_DUMP_READ_PHYSICAL            0x00080000
+//
+// This causes a function type to be dumped in format function(arg1, arg2, ...)
+//
+#define DBG_DUMP_FUNCTION_FORMAT          0x00100000
+//
+// This recurses on a struct but doesn't expand pointers
+//
+#define DBG_DUMP_BLOCK_RECURSE            0x00200000
+
+//
+// Obsolete defs
+//
+#define DBG_RETURN_TYPE                   0
+#define DBG_RETURN_SUBTYPES               0
+#define DBG_RETURN_TYPE_VALUES            0
+
+//
+// Dump and callback optons for fields - Options used in FIELD_INFO.fOptions
+//
+
+//
+// Callback is done before printing the field if this is set
+//
 #define DBG_DUMP_FIELD_CALL_BEFORE_PRINT  0x00000001
+//
+// No callback is done
+//
 #define DBG_DUMP_FIELD_NO_CALLBACK_REQ    0x00000002
+//
+// Subfields of the fields are processesed
+//
 #define DBG_DUMP_FIELD_RECUR_ON_THIS      0x00000004
+//
+// fName must match completely for the field to be dumped instead just a prefix
+//  match by default
+//
 #define DBG_DUMP_FIELD_FULL_NAME          0x00000008
+//
+// This causes array elements of an array field to be printed
+//
 #define DBG_DUMP_FIELD_ARRAY              0x00000010
+//
+// The data of the field is copied into fieldCallBack
+//
 #define DBG_DUMP_FIELD_COPY_FIELD_DATA    0x00000020
+//
+// In callback or when Ioctl returns, the FIELD_INFO.address has the address of field.
+//  If no address is supplied for the type, it contains total offset of the field.
+//
 #define DBG_DUMP_FIELD_RETURN_ADDRESS     0x00001000
+//
+// Return the offset and size in bits instead of bytes is case of Bitfield
+//
+#define DBG_DUMP_FIELD_SIZE_IN_BITS       0x00002000
+//
+// Nothing is printed  for field if this is set (only callbacks and data copies done)
+//
+#define DBG_DUMP_FIELD_NO_PRINT           0x00004000
+//
+// If the field is a pointer, it is dumped as a string, ANSI, WCHAR, MULTI or GUID
+// depending on following options
+//
 #define DBG_DUMP_FIELD_DEFAULT_STRING     0x00010000
 #define DBG_DUMP_FIELD_WCHAR_STRING       0x00020000
 #define DBG_DUMP_FIELD_MULTI_STRING       0x00040000
 #define DBG_DUMP_FIELD_GUID_STRING        0x00080000
-#define DBG_DUMP_FIELD_STRING             0x000F0000
-#define DBG_DUMP_FIELD_PRINT_ULONG        0x00400000
 
-typedef 
+
+//
+// Error status returned on TYPE DUMP Ioctl failure
+//
+#define MEMORY_READ_ERROR            0x01
+#define SYMBOL_TYPE_INDEX_NOT_FOUND  0x02
+#define SYMBOL_TYPE_INFO_NOT_FOUND   0x03
+#define FIELDS_DID_NOT_MATCH         0x04
+#define NULL_SYM_DUMP_PARAM          0x05
+#define NULL_FIELD_NAME              0x06
+#define INCORRECT_VERSION_INFO       0x07
+#define EXIT_ON_CONTROLC             0x08
+#define CANNOT_ALLOCATE_MEMORY       0x09
+#define INSUFFICIENT_SPACE_TO_COPY   0x0a
+
+
+//////////////////////////////////////////////////////////////////////////*/
+
+typedef
 ULONG
 (WDBGAPI*PSYM_DUMP_FIELD_CALLBACK)(
     struct _FIELD_INFO *pField,
@@ -1104,25 +1258,25 @@ ULONG
     );
 
 typedef struct _FIELD_INFO {
-   UCHAR fName[256];       // Name of the field
-   UCHAR printName[80];    // Name to be printed at dump
-   ULONG size;             // Size of the field
-   ULONG fOptions;         // Dump Options for the field
+   PUCHAR  fName;          // Name of the field
+   PUCHAR  printName;      // Name to be printed at dump
+   ULONG   size;           // Size of the field
+   ULONG   fOptions;       // Dump Options for the field
    ULONG64 address;        // address of the field
-   PVOID fieldCallBack;    // Return info or callBack routine for the field
+   PVOID   fieldCallBack;  // Return info or callBack routine for the field
 } FIELD_INFO, *PFIELD_INFO;
 
 typedef struct _SYM_DUMP_PARAM {
-   ULONG   size;                      // size of this struct
-   PUCHAR  sName;                     // type name
-   ULONG   Options;                   // Dump options
-   ULONG64 addr;                      // Address to take data for type
-   PFIELD_INFO listLink;              // fName here would be used to do list dump
-   PVOID   Context;                   // Usercontext passed to CallbackRoutine
+   ULONG               size;          // size of this struct
+   PUCHAR              sName;         // type name
+   ULONG               Options;       // Dump options
+   ULONG64             addr;          // Address to take data for type
+   PFIELD_INFO         listLink;      // fName here would be used to do list dump
+   PVOID               Context;       // Usercontext passed to CallbackRoutine
    PSYM_DUMP_FIELD_CALLBACK CallbackRoutine;
                                       // Routine called back
-   ULONG   nFields;                   // # elements in Fields
-   PFIELD_INFO Fields;                // Used to return information about field
+   ULONG               nFields;       // # elements in Fields
+   PFIELD_INFO         Fields;        // Used to return information about field
 } SYM_DUMP_PARAM, *PSYM_DUMP_PARAM;
 
 #ifdef __cplusplus
@@ -1136,9 +1290,11 @@ typedef struct _SYM_DUMP_PARAM {
 
 #if   defined(KDEXT_64BIT)
 #define WINDBG_EXTENSION_APIS WINDBG_EXTENSION_APIS64
+#define PWINDBG_EXTENSION_APIS PWINDBG_EXTENSION_APIS64
 #define DECLARE_API(s) DECLARE_API64(s)
 #elif defined(KDEXT_32BIT)
 #define WINDBG_EXTENSION_APIS WINDBG_EXTENSION_APIS32
+#define PWINDBG_EXTENSION_APIS PWINDBG_EXTENSION_APIS32
 #define DECLARE_API(s) DECLARE_API32(s)
 #else
 #define DECLARE_API(s)                             \
@@ -1192,6 +1348,7 @@ extern WINDBG_EXTENSION_APIS   ExtensionApis;
 #define GetKdContext(ppi) \
     Ioctl( IG_KD_CONTEXT, (PVOID)ppi, sizeof(*ppi) )
 
+
 //
 // BOOL
 // GetDebuggerData(
@@ -1218,14 +1375,17 @@ ReadPhysical(
     )
 {
     PPHYSICAL phy;
+    *sizer = 0;
     phy = (PPHYSICAL)LocalAlloc(LPTR,  sizeof(*phy) + size );
-    ZeroMemory( phy->Buf, size );
-    phy->Address = address;
-    phy->BufLen = size;
-    Ioctl( IG_READ_PHYSICAL, (PVOID)phy, sizeof(*phy) + size );
-    *sizer = phy->BufLen;
-    CopyMemory( buf, phy->Buf, *sizer );
-    LocalFree( phy );
+    if (phy) {
+        ZeroMemory( phy->Buf, size );
+        phy->Address = address;
+        phy->BufLen = size;
+        Ioctl( IG_READ_PHYSICAL, (PVOID)phy, sizeof(*phy) + size );
+        *sizer = phy->BufLen;
+        CopyMemory( buf, phy->Buf, *sizer );
+        LocalFree( phy );
+    }
 }
 
 __inline VOID
@@ -1237,14 +1397,65 @@ WritePhysical(
     )
 {
     PPHYSICAL phy;
+    *sizew = 0;
     phy = (PPHYSICAL)LocalAlloc(LPTR, sizeof(*phy) + size );
-    ZeroMemory( phy->Buf, size );
-    phy->Address = address;
-    phy->BufLen = size;
-    CopyMemory( phy->Buf, buf, size );
-    Ioctl( IG_WRITE_PHYSICAL, (PVOID)phy, sizeof(*phy) + size );
-    *sizew = phy->BufLen;
-    LocalFree( phy );
+    if (phy) {
+        ZeroMemory( phy->Buf, size );
+        phy->Address = address;
+        phy->BufLen = size;
+        CopyMemory( phy->Buf, buf, size );
+        Ioctl( IG_WRITE_PHYSICAL, (PVOID)phy, sizeof(*phy) + size );
+        *sizew = phy->BufLen;
+        LocalFree( phy );
+    }
+}
+
+__inline VOID
+ReadPhysicalWithFlags(
+    ULONG64             address,
+    PVOID               buf,
+    ULONG               size,
+    ULONG               flags,
+    PULONG              sizer
+    )
+{
+    PPHYSICAL_WITH_FLAGS phy;
+    *sizer = 0;
+    phy = (PPHYSICAL_WITH_FLAGS)LocalAlloc(LPTR,  sizeof(*phy) + size );
+    if (phy) {
+        ZeroMemory( phy->Buf, size );
+        phy->Address = address;
+        phy->BufLen = size;
+        phy->Flags = flags;
+        Ioctl( IG_READ_PHYSICAL_WITH_FLAGS, (PVOID)phy, sizeof(*phy) + size );
+        *sizer = phy->BufLen;
+        CopyMemory( buf, phy->Buf, *sizer );
+        LocalFree( phy );
+    }
+}
+
+__inline VOID
+WritePhysicalWithFlags(
+    ULONG64             address,
+    PVOID               buf,
+    ULONG               size,
+    ULONG               flags,
+    PULONG              sizew
+    )
+{
+    PPHYSICAL_WITH_FLAGS phy;
+    *sizew = 0;
+    phy = (PPHYSICAL_WITH_FLAGS)LocalAlloc(LPTR, sizeof(*phy) + size );
+    if (phy) {
+        ZeroMemory( phy->Buf, size );
+        phy->Address = address;
+        phy->BufLen = size;
+        phy->Flags = flags;
+        CopyMemory( phy->Buf, buf, size );
+        Ioctl( IG_WRITE_PHYSICAL_WITH_FLAGS, (PVOID)phy, sizeof(*phy) + size );
+        *sizew = phy->BufLen;
+        LocalFree( phy );
+    }
 }
 
 __inline VOID
@@ -1253,14 +1464,12 @@ ReadMsr(
     ULONGLONG   *MsrValue
     )
 {
-    PREAD_WRITE_MSR msr;
+    READ_WRITE_MSR msr;
 
-    msr = (PREAD_WRITE_MSR)LocalAlloc(LPTR,  sizeof(*msr));
-    msr->Msr = MsrReg;
-    Ioctl( IG_READ_MSR, (PVOID)msr, sizeof(*msr) );
+    msr.Msr = MsrReg;
+    Ioctl( IG_READ_MSR, (PVOID)&msr, sizeof(msr) );
 
-    *MsrValue = msr->Value;
-    LocalFree( msr );
+    *MsrValue = msr.Value;
 }
 
 __inline VOID
@@ -1269,13 +1478,11 @@ WriteMsr(
     ULONGLONG   MsrValue
     )
 {
-    PREAD_WRITE_MSR msr;
+    READ_WRITE_MSR msr;
 
-    msr = (PREAD_WRITE_MSR)LocalAlloc(LPTR,  sizeof(*msr));
-    msr->Msr = MsrReg;
-    msr->Value = MsrValue;
-    Ioctl( IG_WRITE_MSR, (PVOID)msr, sizeof(*msr) );
-    LocalFree( msr );
+    msr.Msr = MsrReg;
+    msr.Value = MsrValue;
+    Ioctl( IG_WRITE_MSR, (PVOID)&msr, sizeof(msr) );
 }
 
 __inline VOID
@@ -1291,7 +1498,7 @@ SetThreadForOperation32(
     ULONG Thread
     )
 {
-    Ioctl(IG_SET_THREAD, (PVOID)LongToPtr(Thread), sizeof(PULONG));
+    Ioctl(IG_SET_THREAD, (PVOID)LongToPtr(Thread), sizeof(ULONG));
 }
 
 __inline VOID
@@ -1299,7 +1506,7 @@ SetThreadForOperation64(
     PULONG64 Thread
     )
 {
-    Ioctl(IG_SET_THREAD, (PVOID)Thread, sizeof(PULONG));
+    Ioctl(IG_SET_THREAD, (PVOID)Thread, sizeof(ULONG64));
 }
 
 
@@ -1313,13 +1520,15 @@ ReadControlSpace(
 {
     PREADCONTROLSPACE prc;
     prc = (PREADCONTROLSPACE)LocalAlloc(LPTR, sizeof(*prc) + size );
-    ZeroMemory( prc->Buf, size );
-    prc->Processor = processor;
-    prc->Address = address;
-    prc->BufLen = size;
-    Ioctl( IG_READ_CONTROL_SPACE, (PVOID)prc, sizeof(*prc) + size );
-    CopyMemory( buf, prc->Buf, size );
-    LocalFree( prc );
+    if (prc) {
+        ZeroMemory( prc->Buf, size );
+        prc->Processor = processor;
+        prc->Address = address;
+        prc->BufLen = size;
+        Ioctl( IG_READ_CONTROL_SPACE, (PVOID)prc, sizeof(*prc) + size );
+        CopyMemory( buf, prc->Buf, size );
+        LocalFree( prc );
+    }
 }
 
 __inline VOID
@@ -1332,14 +1541,19 @@ ReadControlSpace32(
 {
     PREADCONTROLSPACE32 prc;
     prc = (PREADCONTROLSPACE32)LocalAlloc(LPTR, sizeof(*prc) + size );
-    ZeroMemory( prc->Buf, size );
-    prc->Processor = processor;
-    prc->Address = address;
-    prc->BufLen = size;
-    Ioctl( IG_READ_CONTROL_SPACE, (PVOID)prc, sizeof(*prc) + size );
-    CopyMemory( buf, prc->Buf, size );
-    LocalFree( prc );
+    if (prc) {
+        ZeroMemory( prc->Buf, size );
+        prc->Processor = processor;
+        prc->Address = address;
+        prc->BufLen = size;
+        Ioctl( IG_READ_CONTROL_SPACE, (PVOID)prc, sizeof(*prc) + size );
+        CopyMemory( buf, prc->Buf, size );
+        LocalFree( prc );
+    }
 }
+
+#define ReadTypedControlSpace32( _Proc, _Addr, _Buf )  \
+     ReadControlSpace64( (USHORT)(_Proc), (ULONG)(_Addr), (PVOID)&(_Buf), (ULONG)sizeof(_Buf) )
 
 __inline VOID
 ReadControlSpace64(
@@ -1351,13 +1565,39 @@ ReadControlSpace64(
 {
     PREADCONTROLSPACE64 prc;
     prc = (PREADCONTROLSPACE64)LocalAlloc(LPTR, sizeof(*prc) + size );
-    ZeroMemory( prc->Buf, size );
-    prc->Processor = processor;
-    prc->Address = address;
-    prc->BufLen = size;
-    Ioctl( IG_READ_CONTROL_SPACE, (PVOID)prc, sizeof(*prc) + size );
-    CopyMemory( buf, prc->Buf, size );
-    LocalFree( prc );
+    if (prc) {
+        ZeroMemory( prc->Buf, size );
+        prc->Processor = processor;
+        prc->Address = address;
+        prc->BufLen = size;
+        Ioctl( IG_READ_CONTROL_SPACE, (PVOID)prc, sizeof(*prc) + size );
+        CopyMemory( buf, prc->Buf, size );
+        LocalFree( prc );
+    }
+}
+
+#define ReadTypedControlSpace64( _Proc, _Addr, _Buf )  \
+     ReadControlSpace64( (USHORT)(_Proc), (ULONG64)(_Addr), (PVOID)&(_Buf), (ULONG)sizeof(_Buf) )
+
+__inline VOID
+WriteControlSpace(
+    USHORT  processor,
+    ULONG   address,
+    PVOID   buf,
+    ULONG   size
+    )
+{
+    PREADCONTROLSPACE64 prc;
+    prc = (PREADCONTROLSPACE64)LocalAlloc(LPTR, sizeof(*prc) + size );
+    if (prc) {
+        ZeroMemory( prc->Buf, size );
+        prc->Processor = processor;
+        prc->Address = address;
+        prc->BufLen = size;
+        CopyMemory( prc->Buf, buf, size );
+        Ioctl( IG_WRITE_CONTROL_SPACE, (PVOID)prc, sizeof(*prc) + size );
+        LocalFree( prc );
+    }
 }
 
 // #endif //  _WINBASE_
@@ -1608,7 +1848,7 @@ Return Value:
 
 --*/
 {
-    Ioctl(IG_RELOAD_SYMBOLS, (PVOID)Arg, Arg?(strlen(Arg)+1):0);
+    Ioctl(IG_RELOAD_SYMBOLS, (PVOID)Arg, Arg?((ULONG)strlen(Arg)+1):0);
 }
 
 __inline VOID
@@ -1655,9 +1895,9 @@ IsPtr64(
     void
     )
 {
-    static ULONG flag = -1;
+    static ULONG flag = (ULONG)-1;
     ULONG dw;
-    if (flag == -1) {
+    if (flag == (ULONG)-1) {
         if (Ioctl(IG_IS_PTR64, &dw, sizeof(dw))) {
             flag = ((dw != 0) ? 1 : 0);
         } else {
@@ -1739,10 +1979,256 @@ WritePointer(
     }
 }
 
+/**
+   This does Ioctl call for type info and returns size of the type on success.
+
+ **/
+__inline
+ULONG
+GetTypeSize (
+   IN LPCSTR    Type
+   )
+{
+   SYM_DUMP_PARAM Sym = {
+      sizeof (SYM_DUMP_PARAM), (PUCHAR)Type, DBG_DUMP_NO_PRINT | DBG_DUMP_GET_SIZE_ONLY, 0,
+      NULL, NULL, NULL, 0, NULL
+   };
+
+   return Ioctl( IG_GET_TYPE_SIZE, &Sym, Sym.size );
+}
+
+/**
+    GetFieldData
+
+   Copies the value of the specified field into pOutValue assuming TypeAddress
+   points to start of the type in debugee.
+
+   If the Field is NULL and the size of Type is <= 8 Whole type value is read into
+   pOutValue. This is to allow to read in primitive types suchas ULONG, PVOID etc.
+
+   If address is zero this considers Type a global variable.
+
+   It raises an exception if OutSize is less than size to be copied.
+
+   Returns 0 on success, errorvalue (defined with SYM_DUMP_PARAM) otherwise.
+
+ **/
+__inline
+ULONG
+GetFieldData (
+    IN  ULONG64 TypeAddress,
+    IN  LPCSTR  Type,
+    IN  LPCSTR  Field,
+    IN  ULONG   OutSize,
+    OUT PVOID   pOutValue
+   )
+{
+   FIELD_INFO flds = {(PUCHAR)Field, NULL, 0, DBG_DUMP_FIELD_FULL_NAME | DBG_DUMP_FIELD_COPY_FIELD_DATA | DBG_DUMP_FIELD_RETURN_ADDRESS, 0, pOutValue};
+   SYM_DUMP_PARAM Sym = {
+      sizeof (SYM_DUMP_PARAM), (PUCHAR)Type, DBG_DUMP_NO_PRINT, TypeAddress,
+      NULL, NULL, NULL, 1, &flds
+   };
+   ULONG RetVal;
+
+   if (!Field) {
+       Sym.nFields =0; Sym.Options |= DBG_DUMP_COPY_TYPE_DATA;
+       Sym.Context = pOutValue;
+   }
+
+   ZeroMemory(pOutValue, OutSize);
+   RetVal = Ioctl( IG_DUMP_SYMBOL_INFO, &Sym, Sym.size );
+
+   if (OutSize < ((Field == NULL) ? 8 : flds.size)) {
+       // Fail
+       dprintf("Not enough space to read %s-%s\n", Type, Field);
+       RaiseException(EXCEPTION_ACCESS_VIOLATION, 0, 0, NULL);
+       return 0;
+   }
+   return RetVal;
+}
+
+//
+// Typecast the buffer where value is to be read
+//
+#define GetFieldValue(Addr, Type, Field, OutValue)         \
+     GetFieldData(Addr, Type, Field, sizeof(OutValue), (PVOID) &(OutValue))
+
+//
+// Used to read in value of a short (<= 8 bytes) fields
+//
+__inline
+ULONG64
+GetShortField (
+    IN  ULONG64 TypeAddress,
+    IN  LPCSTR  Name,
+    IN  USHORT  StoreAddress
+   )
+{
+    static ULONG64 SavedAddress;
+    static PUCHAR  SavedName;
+    static ULONG   ReadPhysical;
+    FIELD_INFO flds = {(PUCHAR) Name, NULL, 0, DBG_DUMP_FIELD_FULL_NAME, 0, NULL};
+    SYM_DUMP_PARAM Sym = {
+       sizeof (SYM_DUMP_PARAM), SavedName, DBG_DUMP_NO_PRINT | ((StoreAddress & 2) ? DBG_DUMP_READ_PHYSICAL : 0),
+       SavedAddress, NULL, NULL, NULL, 1, &flds
+    };
+      
+
+    if (StoreAddress) {
+        Sym.sName = (PUCHAR) Name;
+        Sym.nFields = 0;
+        SavedName = (PUCHAR) Name;
+        Sym.addr = SavedAddress = TypeAddress;
+        ReadPhysical = (StoreAddress & 2);
+        return SavedAddress ? Ioctl( IG_DUMP_SYMBOL_INFO, &Sym, Sym.size ) : MEMORY_READ_ERROR; // zero on success
+    } else {
+        Sym.Options |= ReadPhysical ? DBG_DUMP_READ_PHYSICAL : 0;
+    }
+
+    if (!Ioctl( IG_DUMP_SYMBOL_INFO, &Sym, Sym.size )) {
+        return flds.address;
+    }
+    return 0;
+}
+
+//
+// Stores the address and type name for future reads
+//
+#define InitTypeRead(Addr, Type)  GetShortField(Addr, #Type, 1)
+
+//
+// Stores the address and type name for future reads
+//
+#define InitTypeReadPhysical(Addr, Type)  GetShortField(Addr, #Type, 3)
+//
+// Returns the field's value as ULONG64 if size of field is <= sizeof (ULONG64)
+//
+#define ReadField(Field)          GetShortField(0, #Field, 0)
+
+//
+// Read in a pointer value
+//
+__inline
+ULONG
+ReadPtr(
+    ULONG64 Addr,
+    PULONG64 pPointer
+    )
+{
+    return GetFieldData(Addr, "PVOID", NULL, sizeof(ULONG64), (PVOID) pPointer);
+}
+
+/*
+ * ListType
+ *
+ *  Routine ListType gives a callback on each element in the list of Type.
+ *
+ *   Type  :  Name of the type to be listed
+ *
+ *   NextPointer : Name of field which gives address of next element in list
+ *
+ *   Context, CallbackRoutine :
+ *            Context and the callback routine. The address field in PFIELD_INFO
+ *            parameter of callback contains the address of next Type element in list.
+ *
+ *   Address, ListByFieldAddress :
+ *      if ListByFieldAddress is 0, Adress is the address of first element of Type List.
+ *
+ *   Lists by LIST_ENTRY are also handled implicitly (by Ioctl). If the NextPointer
+ *   is a pointer to LIST_ENTRY type, the type address is properly calculated by
+ *   subtracting the offsets.
+ *
+ *      If ListByFieldAddress is 1, the Address is considered to be the address of field
+ *   "NextPointer" of the first Type element and first element address is derived
+ *   from it.
+ *
+ */
+
+__inline
+ULONG
+ListType (
+    IN LPCSTR  Type,
+    IN ULONG64 Address,
+    IN USHORT  ListByFieldAddress,
+    IN LPCSTR  NextPointer,
+    IN PVOID   Context,
+    IN PSYM_DUMP_FIELD_CALLBACK CallbackRoutine
+    )
+{
+    FIELD_INFO flds = {(PUCHAR)NextPointer, NULL, 0, 0, 0, NULL};
+    SYM_DUMP_PARAM Sym = {
+       sizeof (SYM_DUMP_PARAM), (PUCHAR) Type, DBG_DUMP_NO_PRINT | DBG_DUMP_LIST, Address,
+       &flds, Context, CallbackRoutine, 0, NULL
+    };
+
+    if (ListByFieldAddress==1) {
+        //
+        // Address is the address of "NextPointer"
+        //
+        Sym.Options |= DBG_DUMP_ADDRESS_OF_FIELD;
+    }
+
+    return Ioctl( IG_DUMP_SYMBOL_INFO, &Sym, Sym.size );
+}
+
+
+/**
+
+   Routine to get offset of a "Field" of "Type" on a debugee machine. This uses
+   Ioctl call for type info.
+   Returns 0 on success, Ioctl error value otherwise.
+
+ **/
+
+__inline
+ULONG
+GetFieldOffset (
+   IN LPCSTR     Type,
+   IN LPCSTR     Field,
+   OUT PULONG   pOffset
+   )
+{
+   FIELD_INFO flds = {
+       (PUCHAR)Field,
+       (PUCHAR)"",
+       0,
+       DBG_DUMP_FIELD_FULL_NAME | DBG_DUMP_FIELD_RETURN_ADDRESS,
+       0,
+       NULL};
+
+   SYM_DUMP_PARAM Sym = {
+      sizeof (SYM_DUMP_PARAM),
+      (PUCHAR)Type,
+      DBG_DUMP_NO_PRINT,
+      0,
+      NULL,
+      NULL,
+      NULL,
+      1,
+      &flds
+   };
+
+   ULONG Err;
+
+   Sym.nFields = 1;
+   Err = Ioctl( IG_DUMP_SYMBOL_INFO, &Sym, Sym.size );
+   *pOffset = (ULONG) (flds.address - Sym.addr);
+   return Err;
+}
+
+
 #endif // defined(KDEXT_64BIT)
 
 __inline VOID
-GetTebAddress(
+ GetCurrentProcessHandle(
+    PHANDLE hp
+    )
+{
+    Ioctl(IG_GET_CURRENT_PROCESS_HANDLE, hp, sizeof(HANDLE));
+}
+
+__inline VOID
+ GetTebAddress(
     PULONGLONG Address
     )
 {
@@ -1750,6 +2236,45 @@ GetTebAddress(
     gpt.Address = 0;
     Ioctl(IG_GET_TEB_ADDRESS, (PVOID)&gpt, sizeof(gpt));
     *Address = gpt.Address;
+}
+
+__inline VOID
+ GetPebAddress(
+    ULONG64 CurrentThread,
+    PULONGLONG Address
+    )
+{
+    GET_PEB_ADDRESS gpt;
+    gpt.CurrentThread = CurrentThread;
+    gpt.Address = 0;
+    Ioctl(IG_GET_PEB_ADDRESS, (PVOID)&gpt, sizeof(gpt));
+    *Address = gpt.Address;
+}
+
+__inline VOID
+ GetCurrentThreadAddr(
+    DWORD    Processor,
+    PULONG64  Address
+    )
+{
+    GET_CURRENT_THREAD_ADDRESS ct;
+    ct.Processor = Processor;
+    Ioctl(IG_GET_CURRENT_THREAD, (PVOID)&ct, sizeof(ct));
+    *Address = ct.Address;
+}
+
+__inline VOID
+ GetCurrentProcessAddr(
+    DWORD    Processor,
+    ULONG64  CurrentThread,
+    PULONG64 Address
+    )
+{
+    GET_CURRENT_PROCESS_ADDRESS cp;
+    cp.Processor = Processor;
+    cp.CurrentThread = CurrentThread;
+    Ioctl(IG_GET_CURRENT_PROCESS, (PVOID)&cp, sizeof(cp));
+    *Address = cp.Address;
 }
 
 __inline VOID
@@ -1771,6 +2296,75 @@ SearchMemory(
     *FoundAddress = sm.FoundAddress;
 }
 
+__inline ULONG
+GetInputLine(
+    PCSTR Prompt,
+    PSTR Buffer,
+    ULONG BufferSize
+    )
+{
+    GET_INPUT_LINE InLine;
+    InLine.Prompt = Prompt;
+    InLine.Buffer = Buffer;
+    InLine.BufferSize = BufferSize;
+    if (Ioctl(IG_GET_INPUT_LINE, (PVOID)&InLine, sizeof(InLine)))
+    {
+        return InLine.InputSize;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+__inline BOOL
+GetExpressionEx(
+    PCSTR Expression,
+    ULONG64* Value,
+    PCSTR* Remainder
+    )
+{
+    GET_EXPRESSION_EX Expr;
+    Expr.Expression = Expression;
+    if (Ioctl(IG_GET_EXPRESSION_EX, (PVOID)&Expr, sizeof(Expr)))
+    {
+        *Value = Expr.Value;
+
+        if (Remainder != NULL)
+        {
+            *Remainder = Expr.Remainder;
+        }
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+__inline BOOL
+TranslateVirtualToPhysical(
+    ULONG64 Virtual,
+    ULONG64* Physical
+    )
+{
+    TRANSLATE_VIRTUAL_TO_PHYSICAL VToP;
+    VToP.Virtual = Virtual;
+    if (Ioctl(IG_TRANSLATE_VIRTUAL_TO_PHYSICAL, (PVOID)&VToP, sizeof(VToP)))
+    {
+        *Physical = VToP.Physical;
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+__inline BOOL
+GetDebuggerCacheSize(
+    OUT PULONG64 CacheSize
+    )
+{
+    return Ioctl(IG_GET_CACHE_SIZE, (PVOID) CacheSize, sizeof(ULONG64));
+}
 
 #endif
 
@@ -1779,5 +2373,4 @@ SearchMemory(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _WDBGEXTS_

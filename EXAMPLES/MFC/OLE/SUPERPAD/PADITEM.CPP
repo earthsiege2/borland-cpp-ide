@@ -14,6 +14,7 @@
 #include "paditem.h"
 #include <limits.h>
 #include <winnls.h>
+#include <algorithm>
 
 IMPLEMENT_DYNAMIC(CEmbeddedItem, COleServerItem)
 
@@ -76,8 +77,8 @@ void CEmbeddedItem::SaveToFile(CFile* pFile)
 
 		// get range (make sure inside of text length)
 		UINT nEnd = pView->GetWindowTextLength();
-		UINT nBeg = min(m_nBeg, nEnd);
-		nEnd = min(m_nEnd, nEnd);
+		UINT nBeg = std::min(m_nBeg, nEnd);
+		nEnd = std::min(m_nEnd, nEnd);
 #ifdef _UNICODE
 		// copy to temp buffer, convert, then write to file
 		int nLen = WideCharToMultiByte(CP_ACP, 0, lpszText+nBeg, nEnd-nBeg,

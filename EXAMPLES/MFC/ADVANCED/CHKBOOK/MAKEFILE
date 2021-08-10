@@ -11,9 +11,14 @@
 PROJ=CHKBOOK
 OBJS=chkbook.obj mainfrm.obj chkbkfrm.obj fxrecdoc.obj checkdoc.obj rowview.obj bookvw.obj checkvw.obj dollcent.obj
 
-!if "$(PLATFORM)" == "M68K" || "$(PLATFORM)" == "MPPC"
-MACPROJ=CheckBook
-MACSIG=CHKB
-!endif
+#!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+!include <..\..\mfcrules.mak>
 
-!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+default: integration
+	$(MAKE) -f $(PROJ).mak
+
+clean:
+	$(CLEAN_MFC)
+                                
+integration: $(PROJ).bpr $(PROJ).mak
+    $(NOP)

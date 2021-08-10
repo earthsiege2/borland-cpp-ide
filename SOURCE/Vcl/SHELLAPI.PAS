@@ -6,7 +6,7 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
@@ -26,60 +26,60 @@ type
   HDROP = Longint;
   PPWideChar = ^PWideChar;
 
+{$EXTERNALSYM DragQueryFile}
+function DragQueryFile(Drop: HDROP; FileIndex: UINT; FileName: PChar; cb: UINT): UINT; stdcall;
 {$EXTERNALSYM DragQueryFileA}
 function DragQueryFileA(Drop: HDROP; FileIndex: UINT; FileName: PAnsiChar; cb: UINT): UINT; stdcall;
 {$EXTERNALSYM DragQueryFileW}
 function DragQueryFileW(Drop: HDROP; FileIndex: UINT; FileName: PWideChar; cb: UINT): UINT; stdcall;
-{$EXTERNALSYM DragQueryFile}
-function DragQueryFile(Drop: HDROP; FileIndex: UINT; FileName: PChar; cb: UINT): UINT; stdcall;
 {$EXTERNALSYM DragQueryPoint}
 function DragQueryPoint(Drop: HDROP; var Point: TPoint): BOOL; stdcall;
 {$EXTERNALSYM DragFinish}
 procedure DragFinish(Drop: HDROP); stdcall;
 {$EXTERNALSYM DragAcceptFiles}
 procedure DragAcceptFiles(Wnd: HWND; Accept: BOOL); stdcall;
+{$EXTERNALSYM ShellExecute}
+function ShellExecute(hWnd: HWND; Operation, FileName, Parameters,
+  Directory: PChar; ShowCmd: Integer): HINST; stdcall;
 {$EXTERNALSYM ShellExecuteA}
 function ShellExecuteA(hWnd: HWND; Operation, FileName, Parameters,
   Directory: PAnsiChar; ShowCmd: Integer): HINST; stdcall;
 {$EXTERNALSYM ShellExecuteW}
 function ShellExecuteW(hWnd: HWND; Operation, FileName, Parameters,
   Directory: PWideChar; ShowCmd: Integer): HINST; stdcall;
-{$EXTERNALSYM ShellExecute}
-function ShellExecute(hWnd: HWND; Operation, FileName, Parameters,
-  Directory: PChar; ShowCmd: Integer): HINST; stdcall;
+{$EXTERNALSYM FindExecutable}
+function FindExecutable(FileName, Directory: PChar; Result: PChar): HINST; stdcall;
 {$EXTERNALSYM FindExecutableA}
 function FindExecutableA(FileName, Directory: PAnsiChar; Result: PAnsiChar): HINST; stdcall;
 {$EXTERNALSYM FindExecutableW}
 function FindExecutableW(FileName, Directory: PWideChar; Result: PWideChar): HINST; stdcall;
-{$EXTERNALSYM FindExecutable}
-function FindExecutable(FileName, Directory: PChar; Result: PChar): HINST; stdcall;
 {$EXTERNALSYM CommandLineToArgvW}
 function CommandLineToArgvW(lpCmdLine: LPCWSTR; var pNumArgs: Integer): PPWideChar; stdcall;
+{$EXTERNALSYM ShellAbout}
+function ShellAbout(Wnd: HWND; szApp, szOtherStuff: PChar; Icon: HICON): Integer; stdcall;
 {$EXTERNALSYM ShellAboutA}
 function ShellAboutA(Wnd: HWND; szApp, szOtherStuff: PAnsiChar; Icon: HICON): Integer; stdcall;
 {$EXTERNALSYM ShellAboutW}
 function ShellAboutW(Wnd: HWND; szApp, szOtherStuff: PWideChar; Icon: HICON): Integer; stdcall;
-{$EXTERNALSYM ShellAbout}
-function ShellAbout(Wnd: HWND; szApp, szOtherStuff: PChar; Icon: HICON): Integer; stdcall;
 {$EXTERNALSYM DuplicateIcon}
 function DuplicateIcon(hInst: HINST; Icon: HICON): HICON; stdcall;
+{$EXTERNALSYM ExtractAssociatedIcon}
+function ExtractAssociatedIcon(hInst: HINST; lpIconPath: PChar;
+  var lpiIcon: Word): HICON; stdcall;
 {$EXTERNALSYM ExtractAssociatedIconA}
 function ExtractAssociatedIconA(hInst: HINST; lpIconPath: PAnsiChar;
   var lpiIcon: Word): HICON; stdcall;
 {$EXTERNALSYM ExtractAssociatedIconW}
 function ExtractAssociatedIconW(hInst: HINST; lpIconPath: PWideChar;
   var lpiIcon: Word): HICON; stdcall;
-{$EXTERNALSYM ExtractAssociatedIcon}
-function ExtractAssociatedIcon(hInst: HINST; lpIconPath: PChar;
-  var lpiIcon: Word): HICON; stdcall;
+{$EXTERNALSYM ExtractIcon}
+function ExtractIcon(hInst: HINST; lpszExeFileName: PChar;
+  nIconIndex: UINT): HICON; stdcall;
 {$EXTERNALSYM ExtractIconA}
 function ExtractIconA(hInst: HINST; lpszExeFileName: PAnsiChar;
   nIconIndex: UINT): HICON; stdcall;
 {$EXTERNALSYM ExtractIconW}
 function ExtractIconW(hInst: HINST; lpszExeFileName: PWideChar;
-  nIconIndex: UINT): HICON; stdcall;
-{$EXTERNALSYM ExtractIcon}
-function ExtractIcon(hInst: HINST; lpszExeFileName: PChar;
   nIconIndex: UINT): HICON; stdcall;
 
 type
@@ -178,20 +178,20 @@ type
 function SHAppBarMessage(dwMessage: DWORD; var pData: TAppBarData): UINT; stdcall;
 
 
+{$EXTERNALSYM DoEnvironmentSubst}
+function DoEnvironmentSubst(szString: PChar; cbString: UINT): DWORD; stdcall;
 {$EXTERNALSYM DoEnvironmentSubstA}
 function DoEnvironmentSubstA(szString: PAnsiChar; cbString: UINT): DWORD; stdcall;
 {$EXTERNALSYM DoEnvironmentSubstW}
 function DoEnvironmentSubstW(szString: PWideChar; cbString: UINT): DWORD; stdcall;
-{$EXTERNALSYM DoEnvironmentSubst}
-function DoEnvironmentSubst(szString: PChar; cbString: UINT): DWORD; stdcall;
+{$EXTERNALSYM ExtractIconEx}
+function ExtractIconEx(lpszFile: PChar; nIconIndex: Integer;
+  var phiconLarge, phiconSmall: HICON; nIcons: UINT): UINT; stdcall;
 {$EXTERNALSYM ExtractIconExA}
 function ExtractIconExA(lpszFile: PAnsiChar; nIconIndex: Integer;
   var phiconLarge, phiconSmall: HICON; nIcons: UINT): UINT; stdcall;
 {$EXTERNALSYM ExtractIconExW}
 function ExtractIconExW(lpszFile: PWideChar; nIconIndex: Integer;
-  var phiconLarge, phiconSmall: HICON; nIcons: UINT): UINT; stdcall;
-{$EXTERNALSYM ExtractIconEx}
-function ExtractIconEx(lpszFile: PChar; nIconIndex: Integer;
   var phiconLarge, phiconSmall: HICON; nIcons: UINT): UINT; stdcall;
 
 
@@ -299,12 +299,12 @@ type
   {$EXTERNALSYM SHFILEOPSTRUCT}
   SHFILEOPSTRUCT = SHFILEOPSTRUCTA;
 
+{$EXTERNALSYM SHFileOperation}
+function SHFileOperation(const lpFileOp: TSHFileOpStruct): Integer; stdcall;
 {$EXTERNALSYM SHFileOperationA}
 function SHFileOperationA(const lpFileOp: TSHFileOpStructA): Integer; stdcall;
 {$EXTERNALSYM SHFileOperationW}
 function SHFileOperationW(const lpFileOp: TSHFileOpStructW): Integer; stdcall;
-{$EXTERNALSYM SHFileOperation}
-function SHFileOperation(const lpFileOp: TSHFileOpStruct): Integer; stdcall;
 {$EXTERNALSYM SHFreeNameMappings}
 procedure SHFreeNameMappings(hNameMappings: THandle); stdcall;
 
@@ -452,12 +452,12 @@ type
   {$EXTERNALSYM SHELLEXECUTEINFO}
   SHELLEXECUTEINFO = SHELLEXECUTEINFOA;
 
+{$EXTERNALSYM ShellExecuteEx}
+function ShellExecuteEx(lpExecInfo: PShellExecuteInfo):BOOL; stdcall;
 {$EXTERNALSYM ShellExecuteExA}
 function ShellExecuteExA(lpExecInfo: PShellExecuteInfoA):BOOL; stdcall;
 {$EXTERNALSYM ShellExecuteExW}
 function ShellExecuteExW(lpExecInfo: PShellExecuteInfoW):BOOL; stdcall;
-{$EXTERNALSYM ShellExecuteEx}
-function ShellExecuteEx(lpExecInfo: PShellExecuteInfo):BOOL; stdcall;
 
 { Tray notification definitions }
 
@@ -512,12 +512,12 @@ const
   {$EXTERNALSYM NIF_TIP}
   NIF_TIP         = $00000004;
 
+{$EXTERNALSYM Shell_NotifyIcon}
+function Shell_NotifyIcon(dwMessage: DWORD; lpData: PNotifyIconData): BOOL; stdcall;
 {$EXTERNALSYM Shell_NotifyIconA}
 function Shell_NotifyIconA(dwMessage: DWORD; lpData: PNotifyIconDataA): BOOL; stdcall;
 {$EXTERNALSYM Shell_NotifyIconW}
 function Shell_NotifyIconW(dwMessage: DWORD; lpData: PNotifyIconDataW): BOOL; stdcall;
-{$EXTERNALSYM Shell_NotifyIcon}
-function Shell_NotifyIcon(dwMessage: DWORD; lpData: PNotifyIconData): BOOL; stdcall;
 
 { Begin SHGetFileInfo }
 
@@ -601,15 +601,15 @@ const
   {$EXTERNALSYM SHGFI_USEFILEATTRIBUTES}
   SHGFI_USEFILEATTRIBUTES = $000000010;     { use passed dwFileAttribute }
 
+{$EXTERNALSYM SHGetFileInfo}
+function SHGetFileInfo(pszPath: PAnsiChar; dwFileAttributes: DWORD;
+  var psfi: TSHFileInfo; cbFileInfo, uFlags: UINT): DWORD; stdcall;
 {$EXTERNALSYM SHGetFileInfoA}
 function SHGetFileInfoA(pszPath: PAnsiChar; dwFileAttributes: DWORD;
   var psfi: TSHFileInfoA; cbFileInfo, uFlags: UINT): DWORD; stdcall;
 {$EXTERNALSYM SHGetFileInfoW}
 function SHGetFileInfoW(pszPath: PAnsiChar; dwFileAttributes: DWORD;
   var psfi: TSHFileInfoW; cbFileInfo, uFlags: UINT): DWORD; stdcall;
-{$EXTERNALSYM SHGetFileInfo}
-function SHGetFileInfo(pszPath: PAnsiChar; dwFileAttributes: DWORD;
-  var psfi: TSHFileInfo; cbFileInfo, uFlags: UINT): DWORD; stdcall;
 
 const
   {$EXTERNALSYM SHGNLI_PIDL}
@@ -624,47 +624,47 @@ const
 implementation
 
 function CommandLineToArgvW; external shell32 name 'CommandLineToArgvW';
+function DoEnvironmentSubst; external shell32 name 'DoEnvironmentSubstA';
 function DoEnvironmentSubstA; external shell32 name 'DoEnvironmentSubstA';
 function DoEnvironmentSubstW; external shell32 name 'DoEnvironmentSubstW';
-function DoEnvironmentSubst; external shell32 name 'DoEnvironmentSubstA';
 procedure DragAcceptFiles; external shell32 name 'DragAcceptFiles';
 procedure DragFinish; external shell32 name 'DragFinish';
+function DragQueryFile; external shell32 name 'DragQueryFileA';
 function DragQueryFileA; external shell32 name 'DragQueryFileA';
 function DragQueryFileW; external shell32 name 'DragQueryFileW';
-function DragQueryFile; external shell32 name 'DragQueryFileA';
 function DragQueryPoint; external shell32 name 'DragQueryPoint';
 function DuplicateIcon; external shell32 name 'DuplicateIcon';
+function ExtractAssociatedIcon; external shell32 name 'ExtractAssociatedIconA';
 function ExtractAssociatedIconA; external shell32 name 'ExtractAssociatedIconA';
 function ExtractAssociatedIconW; external shell32 name 'ExtractAssociatedIconW';
-function ExtractAssociatedIcon; external shell32 name 'ExtractAssociatedIconA';
+function ExtractIcon; external shell32 name 'ExtractIconA';
 function ExtractIconA; external shell32 name 'ExtractIconA';
 function ExtractIconW; external shell32 name 'ExtractIconW';
-function ExtractIcon; external shell32 name 'ExtractIconA';
+function ExtractIconEx; external shell32 name 'ExtractIconExA';
 function ExtractIconExA; external shell32 name 'ExtractIconExA';
 function ExtractIconExW; external shell32 name 'ExtractIconExW';
-function ExtractIconEx; external shell32 name 'ExtractIconExA';
+function FindExecutable; external shell32 name 'FindExecutableA';
 function FindExecutableA; external shell32 name 'FindExecutableA';
 function FindExecutableW; external shell32 name 'FindExecutableW';
-function FindExecutable; external shell32 name 'FindExecutableA';
 function SHAppBarMessage; external shell32 name 'SHAppBarMessage';
+function SHFileOperation; external shell32 name 'SHFileOperationA';
 function SHFileOperationA; external shell32 name 'SHFileOperationA';
 function SHFileOperationW; external shell32 name 'SHFileOperationW';
-function SHFileOperation; external shell32 name 'SHFileOperationA';
 procedure SHFreeNameMappings; external shell32 name 'SHFreeNameMappings';
+function SHGetFileInfo; external shell32 name 'SHGetFileInfoA';
 function SHGetFileInfoA; external shell32 name 'SHGetFileInfoA';
 function SHGetFileInfoW; external shell32 name 'SHGetFileInfoW';
-function SHGetFileInfo; external shell32 name 'SHGetFileInfoA';
+function ShellAbout; external shell32 name 'ShellAboutA';
 function ShellAboutA; external shell32 name 'ShellAboutA';
 function ShellAboutW; external shell32 name 'ShellAboutW';
-function ShellAbout; external shell32 name 'ShellAboutA';
+function ShellExecute; external shell32 name 'ShellExecuteA';
 function ShellExecuteA; external shell32 name 'ShellExecuteA';
 function ShellExecuteW; external shell32 name 'ShellExecuteW';
-function ShellExecute; external shell32 name 'ShellExecuteA';
+function ShellExecuteEx; external shell32 name 'ShellExecuteExA';
 function ShellExecuteExA; external shell32 name 'ShellExecuteExA';
 function ShellExecuteExW; external shell32 name 'ShellExecuteExW';
-function ShellExecuteEx; external shell32 name 'ShellExecuteExA';
+function Shell_NotifyIcon; external shell32 name 'Shell_NotifyIconA';
 function Shell_NotifyIconA; external shell32 name 'Shell_NotifyIconA';
 function Shell_NotifyIconW; external shell32 name 'Shell_NotifyIconW';
-function Shell_NotifyIcon; external shell32 name 'Shell_NotifyIconA';
 
 end.

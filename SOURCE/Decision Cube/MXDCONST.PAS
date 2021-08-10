@@ -6,7 +6,7 @@
 {                                                       }
 {*******************************************************}
 
-unit mxdconst;
+unit MXDCONST;
 
 interface
 

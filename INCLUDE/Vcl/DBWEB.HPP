@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DBWeb.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DBWeb.pas' rev: 6.00
 
 #ifndef DBWebHPP
 #define DBWebHPP
@@ -10,13 +10,11 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <HTTPProd.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <HTTPApp.hpp>	// Pascal unit
-#include <SyncObjs.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
-#include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -83,6 +81,9 @@ class PASCALIMPLEMENTATION THTMLTableColumns : public Classes::TCollection
 {
 	typedef Classes::TCollection inherited;
 	
+public:
+	THTMLTableColumn* operator[](int Index) { return Items[Index]; }
+	
 private:
 	TDSTableProducer* FDSTableProducer;
 	THTMLTableColumn* __fastcall GetColumn(int Index);
@@ -106,7 +107,6 @@ public:
 	__property TDSTableProducer* DSTableProducer = {read=FDSTableProducer};
 	__property THTMLTableColumn* Items[int Index] = {read=GetColumn, write=SetColumn/*, default*/};
 public:
-		
 	#pragma option push -w-inl
 	/* TCollection.Destroy */ inline __fastcall virtual ~THTMLTableColumns(void) { }
 	#pragma option pop
@@ -116,12 +116,9 @@ public:
 
 typedef void __fastcall (__closure *TCreateContentEvent)(System::TObject* Sender, bool &Continue);
 
-typedef void __fastcall (__closure *THTMLFormatCellEvent)(System::TObject* Sender, int CellRow, int 
-	CellColumn, AnsiString &BgColor, Httpapp::THTMLAlign &Align, Httpapp::THTMLVAlign &VAlign, AnsiString 
-	&CustomAttrs, AnsiString &CellData);
+typedef void __fastcall (__closure *THTMLFormatCellEvent)(System::TObject* Sender, int CellRow, int CellColumn, AnsiString &BgColor, Httpprod::THTMLAlign &Align, Httpprod::THTMLVAlign &VAlign, AnsiString &CustomAttrs, AnsiString &CellData);
 
-typedef void __fastcall (__closure *THTMLGetTableCaptionEvent)(System::TObject* Sender, AnsiString &
-	Caption, THTMLCaptionAlignment &Alignment);
+typedef void __fastcall (__closure *THTMLGetTableCaptionEvent)(System::TObject* Sender, AnsiString &Caption, THTMLCaptionAlignment &Alignment);
 
 class PASCALIMPLEMENTATION TDSTableProducer : public Httpapp::TCustomContentProducer 
 {
@@ -140,8 +137,8 @@ private:
 	bool FModified;
 	int FLayoutLock;
 	int FUpdateLock;
-	Httpapp::THTMLTableRowAttributes* FRowAttributes;
-	Httpapp::THTMLTableAttributes* FTableAttributes;
+	Httpprod::THTMLTableRowAttributes* FRowAttributes;
+	Httpprod::THTMLTableAttributes* FTableAttributes;
 	TCreateContentEvent FOnCreateContent;
 	THTMLFormatCellEvent FOnFormatCell;
 	THTMLGetTableCaptionEvent FOnGetTableCaption;
@@ -153,8 +150,8 @@ private:
 	void __fastcall SetFooter(Classes::TStrings* Value);
 	void __fastcall SetHeader(Classes::TStrings* Value);
 	void __fastcall SetMaxRows(int Value);
-	void __fastcall SetRowAttributes(Httpapp::THTMLTableRowAttributes* Value);
-	void __fastcall SetTableAttributes(Httpapp::THTMLTableAttributes* Value);
+	void __fastcall SetRowAttributes(Httpprod::THTMLTableRowAttributes* Value);
+	void __fastcall SetTableAttributes(Httpprod::THTMLTableAttributes* Value);
 	
 protected:
 	bool __fastcall AcquireLayoutLock(void);
@@ -162,18 +159,13 @@ protected:
 	DYNAMIC AnsiString __fastcall ColumnHeader();
 	void __fastcall DefineFieldMap(void);
 	bool __fastcall DoCreateContent(void);
-	DYNAMIC void __fastcall DoFormatCell(int CellRow, int CellColumn, AnsiString &BgColor, Httpapp::THTMLAlign 
-		&Align, Httpapp::THTMLVAlign &VAlign, AnsiString &CustomAttrs, AnsiString &CellData);
-	DYNAMIC void __fastcall DoGetCaption(AnsiString &TableCaption, THTMLCaptionAlignment &CaptionAlign)
-		;
+	DYNAMIC void __fastcall DoFormatCell(int CellRow, int CellColumn, AnsiString &BgColor, Httpprod::THTMLAlign &Align, Httpprod::THTMLVAlign &VAlign, AnsiString &CustomAttrs, AnsiString &CellData);
+	DYNAMIC void __fastcall DoGetCaption(AnsiString &TableCaption, THTMLCaptionAlignment &CaptionAlign);
 	void __fastcall EndLayout(void);
-	DYNAMIC AnsiString __fastcall FormatCell(int CellRow, int CellColumn, AnsiString CellData, const AnsiString 
-		Tag, const AnsiString BgColor, Httpapp::THTMLAlign Align, Httpapp::THTMLVAlign VAlign, const AnsiString 
-		Custom);
+	DYNAMIC AnsiString __fastcall FormatCell(int CellRow, int CellColumn, AnsiString CellData, const AnsiString Tag, const AnsiString BgColor, Httpprod::THTMLAlign Align, Httpprod::THTMLVAlign VAlign, const AnsiString Custom);
 	virtual Db::TDataSet* __fastcall GetDataSet(void) = 0 ;
 	Db::TDataSource* __fastcall GetDataSource(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	void __fastcall LayoutChanged(void);
 	void __fastcall LinkActive(bool Value);
 	DYNAMIC AnsiString __fastcall RowHeader();
@@ -188,8 +180,7 @@ protected:
 	__property Db::TDataSource* InternalDataSource = {read=FInternalDataSource};
 	__property TCreateContentEvent OnCreateContent = {read=FOnCreateContent, write=FOnCreateContent};
 	__property THTMLFormatCellEvent OnFormatCell = {read=FOnFormatCell, write=FOnFormatCell};
-	__property THTMLGetTableCaptionEvent OnGetTableCaption = {read=FOnGetTableCaption, write=FOnGetTableCaption
-		};
+	__property THTMLGetTableCaptionEvent OnGetTableCaption = {read=FOnGetTableCaption, write=FOnGetTableCaption};
 	
 public:
 	__fastcall virtual TDSTableProducer(Classes::TComponent* AOwner);
@@ -197,18 +188,15 @@ public:
 	void __fastcall BeginUpdate(void);
 	void __fastcall EndUpdate(void);
 	__property AnsiString Caption = {read=FCaption, write=SetCaption};
-	__property THTMLCaptionAlignment CaptionAlignment = {read=FCaptionAlignment, write=SetCaptionAlignment
-		, default=0};
+	__property THTMLCaptionAlignment CaptionAlignment = {read=FCaptionAlignment, write=SetCaptionAlignment, default=0};
 	__property THTMLTableColumns* Columns = {read=FColumns, write=SetColumns, stored=StoreColumns};
 	__property Db::TDataSet* DataSet = {read=GetDataSet, write=SetDataSet};
 	__property TDSTableProducerEditor* Editor = {read=FEditor, write=FEditor};
 	__property Classes::TStrings* Footer = {read=FFooter, write=SetFooter};
 	__property Classes::TStrings* Header = {read=FHeader, write=SetHeader};
 	__property int MaxRows = {read=FMaxRows, write=SetMaxRows, default=20};
-	__property Httpapp::THTMLTableRowAttributes* RowAttributes = {read=FRowAttributes, write=SetRowAttributes
-		};
-	__property Httpapp::THTMLTableAttributes* TableAttributes = {read=FTableAttributes, write=SetTableAttributes
-		};
+	__property Httpprod::THTMLTableRowAttributes* RowAttributes = {read=FRowAttributes, write=SetRowAttributes};
+	__property Httpprod::THTMLTableAttributes* TableAttributes = {read=FTableAttributes, write=SetTableAttributes};
 };
 
 
@@ -238,25 +226,26 @@ class PASCALIMPLEMENTATION THTMLTableColumn : public Classes::TCollectionItem
 private:
 	Db::TField* FField;
 	AnsiString FFieldName;
-	Httpapp::THTMLAlign FAlign;
+	Httpprod::THTMLAlign FAlign;
 	AnsiString FBgColor;
 	AnsiString FCustom;
-	Httpapp::THTMLVAlign FVAlign;
-	Httpapp::THTMLTableHeaderAttributes* FTitle;
+	Httpprod::THTMLVAlign FVAlign;
+	Httpprod::THTMLTableHeaderAttributes* FTitle;
 	Db::TField* __fastcall GetField(void);
 	TDSTableProducer* __fastcall GetTableProducer(void);
-	void __fastcall SetAlign(Httpapp::THTMLAlign Value);
+	void __fastcall SetAlign(Httpprod::THTMLAlign Value);
 	void __fastcall SetBgColor(const AnsiString Value);
 	void __fastcall SetCustom(const AnsiString Value);
 	void __fastcall SetField(Db::TField* Value);
 	void __fastcall SetFieldName(const AnsiString Value);
-	void __fastcall SetTitle(Httpapp::THTMLTableHeaderAttributes* Value);
-	void __fastcall SetVAlign(Httpapp::THTMLVAlign Value);
+	void __fastcall SetTitle(Httpprod::THTMLTableHeaderAttributes* Value);
+	void __fastcall SetVAlign(Httpprod::THTMLVAlign Value);
 	void __fastcall TitleChanged(System::TObject* Sender);
 	
 protected:
 	TDSTableProducer* __fastcall GeTDSTableProducer(void);
 	virtual AnsiString __fastcall GetDisplayName();
+	bool __fastcall IsStored(void);
 	
 public:
 	__fastcall virtual THTMLTableColumn(Classes::TCollection* Collection);
@@ -268,59 +257,16 @@ public:
 	__property TDSTableProducer* DSTableProducer = {read=GetTableProducer};
 	
 __published:
-	__property Httpapp::THTMLAlign Align = {read=FAlign, write=SetAlign, default=0};
+	__property Httpprod::THTMLAlign Align = {read=FAlign, write=SetAlign, default=0};
 	__property AnsiString BgColor = {read=FBgColor, write=SetBgColor};
 	__property AnsiString Custom = {read=FCustom, write=SetCustom};
 	__property AnsiString FieldName = {read=FFieldName, write=SetFieldName};
-	__property Httpapp::THTMLTableHeaderAttributes* Title = {read=FTitle, write=SetTitle};
-	__property Httpapp::THTMLVAlign VAlign = {read=FVAlign, write=SetVAlign, default=0};
+	__property Httpprod::THTMLTableHeaderAttributes* Title = {read=FTitle, write=SetTitle};
+	__property Httpprod::THTMLVAlign VAlign = {read=FVAlign, write=SetVAlign, default=0};
 };
 
 
 typedef void __fastcall (__closure *THTMLDataSetEmpty)(System::TObject* Sender, bool &Continue);
-
-class DELPHICLASS TQueryTableProducer;
-class PASCALIMPLEMENTATION TQueryTableProducer : public TDSTableProducer 
-{
-	typedef TDSTableProducer inherited;
-	
-private:
-	Dbtables::TQuery* FQuery;
-	void __fastcall SetQuery(Dbtables::TQuery* AQuery);
-	
-protected:
-	virtual Db::TDataSet* __fastcall GetDataSet(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
-	virtual void __fastcall SetDataSet(Db::TDataSet* ADataSet);
-	
-public:
-	virtual AnsiString __fastcall Content();
-	
-__published:
-	__property Caption ;
-	__property CaptionAlignment ;
-	__property Columns ;
-	__property Footer ;
-	__property Header ;
-	__property MaxRows ;
-	__property Dbtables::TQuery* Query = {read=FQuery, write=SetQuery};
-	__property RowAttributes ;
-	__property TableAttributes ;
-	__property OnCreateContent ;
-	__property OnFormatCell ;
-	__property OnGetTableCaption ;
-public:
-	#pragma option push -w-inl
-	/* TDSTableProducer.Create */ inline __fastcall virtual TQueryTableProducer(Classes::TComponent* AOwner
-		) : TDSTableProducer(AOwner) { }
-	#pragma option pop
-	#pragma option push -w-inl
-	/* TDSTableProducer.Destroy */ inline __fastcall virtual ~TQueryTableProducer(void) { }
-	#pragma option pop
-	
-};
-
 
 class DELPHICLASS TDataSetTableProducer;
 class PASCALIMPLEMENTATION TDataSetTableProducer : public TDSTableProducer 
@@ -332,8 +278,7 @@ private:
 	
 protected:
 	virtual Db::TDataSet* __fastcall GetDataSet(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall SetDataSet(Db::TDataSet* ADataSet);
 	
 public:
@@ -341,11 +286,11 @@ public:
 	
 __published:
 	__property Caption ;
-	__property CaptionAlignment ;
+	__property CaptionAlignment  = {default=0};
 	__property Columns ;
 	__property Footer ;
 	__property Header ;
-	__property MaxRows ;
+	__property MaxRows  = {default=20};
 	__property DataSet ;
 	__property RowAttributes ;
 	__property TableAttributes ;
@@ -354,8 +299,7 @@ __published:
 	__property OnGetTableCaption ;
 public:
 	#pragma option push -w-inl
-	/* TDSTableProducer.Create */ inline __fastcall virtual TDataSetTableProducer(Classes::TComponent* 
-		AOwner) : TDSTableProducer(AOwner) { }
+	/* TDSTableProducer.Create */ inline __fastcall virtual TDataSetTableProducer(Classes::TComponent* AOwner) : TDSTableProducer(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TDSTableProducer.Destroy */ inline __fastcall virtual ~TDataSetTableProducer(void) { }
@@ -365,13 +309,10 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE AnsiString __fastcall HtmlTable(Db::TDataSet* DataSet, TDSTableProducer* DataSetHandler
-	, int MaxRows);
+extern PACKAGE AnsiString __fastcall HtmlTable(Db::TDataSet* DataSet, TDSTableProducer* DataSetHandler, int MaxRows);
 
 }	/* namespace Dbweb */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dbweb;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

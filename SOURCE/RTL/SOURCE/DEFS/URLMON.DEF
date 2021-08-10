@@ -1,65 +1,68 @@
-LIBRARY URLMON
+LIBRARY Urlmon
 EXPORTS
 
-    BindAsyncMoniker                         = 'URLMON.DLL'.*
-    CoGetClassObjectFromURL                  = 'URLMON.DLL'.*
-    CoInternetCombineUrl                     = 'URLMON.DLL'.*
-    CoInternetCompareUrl                     = 'URLMON.DLL'.*
-    CoInternetCreateSecurityManager          = 'URLMON.DLL'.*
-    CoInternetCreateZoneManager              = 'URLMON.DLL'.*
-    CoInternetGetProtocolFlags               = 'URLMON.DLL'.*
-    CoInternetGetSecurityUrl                 = 'URLMON.DLL'.*
-    CoInternetGetSession                     = 'URLMON.DLL'.*
-    CoInternetParseUrl                       = 'URLMON.DLL'.*
-    CoInternetQueryInfo                      = 'URLMON.DLL'.*
-    CopyBindInfo                             = 'URLMON.DLL'.*
-    CopyStgMedium                            = 'URLMON.DLL'.*
-    CreateAsyncBindCtx                       = 'URLMON.DLL'.*
-    CreateAsyncBindCtxEx                     = 'URLMON.DLL'.*
-    CreateFormatEnumerator                   = 'URLMON.DLL'.*
-    CreateURLMoniker                         = 'URLMON.DLL'.*
-    Extract                                  = 'URLMON.DLL'.*
-    FaultInIEFeature                         = 'URLMON.DLL'.*
-    FindMediaType                            = 'URLMON.DLL'.*
-    FindMediaTypeClass                       = 'URLMON.DLL'.*
-    FindMimeFromData                         = 'URLMON.DLL'.*
-    GetClassFileOrMime                       = 'URLMON.DLL'.*
-    GetClassURL                              = 'URLMON.DLL'.*
-    GetComponentIDFromCLSSPEC                = 'URLMON.DLL'.*
-    GetSoftwareUpdateInfo                    = 'URLMON.DLL'.*
-    HlinkGoBack                              = 'URLMON.DLL'.*
-    HlinkGoForward                           = 'URLMON.DLL'.*
-    HlinkNavigateMoniker                     = 'URLMON.DLL'.*
-    HlinkNavigateString                      = 'URLMON.DLL'.*
-    HlinkSimpleNavigateToMoniker             = 'URLMON.DLL'.*
-    HlinkSimpleNavigateToString              = 'URLMON.DLL'.*
-    IsAsyncMoniker                           = 'URLMON.DLL'.*
-    IsLoggingEnabledA                        = 'URLMON.DLL'.*
-    IsLoggingEnabledW                        = 'URLMON.DLL'.*
-    IsValidURL                               = 'URLMON.DLL'.*
-    MkParseDisplayNameEx                     = 'URLMON.DLL'.*
-    ObtainUserAgentString                    = 'URLMON.DLL'.*
-    RegisterBindStatusCallback               = 'URLMON.DLL'.*
-    RegisterFormatEnumerator                 = 'URLMON.DLL'.*
-    RegisterMediaTypeClass                   = 'URLMON.DLL'.*
-    RegisterMediaTypes                       = 'URLMON.DLL'.*
-    ReleaseBindInfo                          = 'URLMON.DLL'.*
-    RevokeBindStatusCallback                 = 'URLMON.DLL'.*
-    RevokeFormatEnumerator                   = 'URLMON.DLL'.*
-    SetSoftwareUpdateAdvertisementState      = 'URLMON.DLL'.*
-    URLDownloadA                             = 'URLMON.DLL'.*
-    URLDownloadToCacheFileA                  = 'URLMON.DLL'.*
-    URLDownloadToCacheFileW                  = 'URLMON.DLL'.*
-    URLDownloadToFileA                       = 'URLMON.DLL'.*
-    URLDownloadToFileW                       = 'URLMON.DLL'.*
-    URLDownloadW                             = 'URLMON.DLL'.*
-    URLOpenBlockingStreamA                   = 'URLMON.DLL'.*
-    URLOpenBlockingStreamW                   = 'URLMON.DLL'.*
-    URLOpenPullStreamA                       = 'URLMON.DLL'.*
-    URLOpenPullStreamW                       = 'URLMON.DLL'.*
-    URLOpenStreamA                           = 'URLMON.DLL'.*
-    URLOpenStreamW                           = 'URLMON.DLL'.*
-    UrlMkBuildVersion                        = 'URLMON.DLL'.*
-    UrlMkGetSessionOption                    = 'URLMON.DLL'.*
-    UrlMkSetSessionOption                    = 'URLMON.DLL'.*
-    WriteHitLogging                          = 'URLMON.DLL'.*
+    BindAsyncMoniker
+    CoGetClassObjectFromURL
+    CoInternetCombineUrl
+    CoInternetCompareUrl
+    CoInternetCreateSecurityManager
+    CoInternetCreateZoneManager
+    CoInternetGetProtocolFlags
+    CoInternetGetSecurityUrl
+    CoInternetGetSession
+    CoInternetParseUrl
+    CoInternetQueryInfo
+    CompareSecurityIds
+    CopyBindInfo
+    CopyStgMedium
+    CreateAsyncBindCtx
+    CreateAsyncBindCtxEx
+    CreateFormatEnumerator
+    CreateURLMoniker
+    CreateURLMonikerEx
+    Extract
+    FaultInIEFeature
+    FindMediaType
+    FindMediaTypeClass
+    FindMimeFromData
+    GetClassFileOrMime
+    GetClassURL
+    GetComponentIDFromCLSSPEC
+    GetSoftwareUpdateInfo
+    HlinkGoBack
+    HlinkGoForward
+    HlinkNavigateMoniker
+    HlinkNavigateString
+    HlinkSimpleNavigateToMoniker
+    HlinkSimpleNavigateToString
+    IsAsyncMoniker
+    IsJITInProgress
+    IsLoggingEnabledA
+    IsLoggingEnabledW
+    IsValidURL
+    MkParseDisplayNameEx
+    ObtainUserAgentString
+    RegisterBindStatusCallback
+    RegisterFormatEnumerator
+    RegisterMediaTypeClass
+    RegisterMediaTypes
+    ReleaseBindInfo
+    RevokeBindStatusCallback
+    RevokeFormatEnumerator
+    SetSoftwareUpdateAdvertisementState
+    URLDownloadA
+    URLDownloadToCacheFileA
+    URLDownloadToCacheFileW
+    URLDownloadToFileA
+    URLDownloadToFileW
+    URLDownloadW
+    URLOpenBlockingStreamA
+    URLOpenBlockingStreamW
+    URLOpenPullStreamA
+    URLOpenPullStreamW
+    URLOpenStreamA
+    URLOpenStreamW
+    UrlMkBuildVersion
+    UrlMkGetSessionOption
+    UrlMkSetSessionOption
+    WriteHitLogging

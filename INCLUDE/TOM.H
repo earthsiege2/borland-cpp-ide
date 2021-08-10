@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
@@ -6644,4 +6643,3 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 #endif
-#pragma option pop /*P_O_Pop*/

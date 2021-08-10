@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*++ BUILD Version: 0002    // Increment this if a change has global effects
 
 Copyright (c) 1991-1999  Microsoft Corporation
@@ -221,6 +220,38 @@ typedef struct _USER_INFO_3 {
     DWORD    usri3_password_expired;
 }USER_INFO_3, *PUSER_INFO_3, *LPUSER_INFO_3;
 
+typedef struct _USER_INFO_4 {
+    LPWSTR   usri4_name;
+    LPWSTR   usri4_password;
+    DWORD    usri4_password_age;
+    DWORD    usri4_priv;
+    LPWSTR   usri4_home_dir;
+    LPWSTR   usri4_comment;
+    DWORD    usri4_flags;
+    LPWSTR   usri4_script_path;
+    DWORD    usri4_auth_flags;
+    LPWSTR   usri4_full_name;
+    LPWSTR   usri4_usr_comment;
+    LPWSTR   usri4_parms;
+    LPWSTR   usri4_workstations;
+    DWORD    usri4_last_logon;
+    DWORD    usri4_last_logoff;
+    DWORD    usri4_acct_expires;
+    DWORD    usri4_max_storage;
+    DWORD    usri4_units_per_week;
+    PBYTE    usri4_logon_hours;
+    DWORD    usri4_bad_pw_count;
+    DWORD    usri4_num_logons;
+    LPWSTR   usri4_logon_server;
+    DWORD    usri4_country_code;
+    DWORD    usri4_code_page;
+    PSID     usri4_user_sid;
+    DWORD    usri4_primary_group_id;
+    LPWSTR   usri4_profile;
+    LPWSTR   usri4_home_dir_drive;
+    DWORD    usri4_password_expired;
+}USER_INFO_4, *PUSER_INFO_4, *LPUSER_INFO_4;
+
 typedef struct _USER_INFO_10 {
     LPWSTR   usri10_name;
     LPWSTR   usri10_comment;
@@ -289,6 +320,14 @@ typedef struct _USER_INFO_22 {
     DWORD    usri22_country_code;
     DWORD    usri22_code_page;
 }USER_INFO_22, *PUSER_INFO_22, *LPUSER_INFO_22;
+
+typedef struct _USER_INFO_23 {
+    LPWSTR   usri23_name;
+    LPWSTR   usri23_full_name;
+    LPWSTR   usri23_comment;
+    DWORD    usri23_flags;
+    PSID     usri23_user_sid;
+}USER_INFO_23, *PUSER_INFO_23, *LPUSER_INFO_23;
 
 typedef struct _USER_INFO_1003 {
      LPWSTR  usri1003_password;
@@ -474,6 +513,8 @@ typedef struct _USER_MODALS_INFO_1007 {
 #define UF_NOT_DELEGATED               0x100000
 #define UF_USE_DES_KEY_ONLY            0x200000
 #define UF_DONT_REQUIRE_PREAUTH        0x400000
+#define UF_PASSWORD_EXPIRED            0x800000
+#define UF_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION 0x1000000
 
 
 
@@ -492,7 +533,8 @@ typedef struct _USER_MODALS_INFO_1007 {
                     UF_TRUSTED_FOR_DELEGATION | \
                     UF_NOT_DELEGATED | \
                     UF_USE_DES_KEY_ONLY  | \
-                    UF_DONT_REQUIRE_PREAUTH \
+                    UF_DONT_REQUIRE_PREAUTH |\
+                    UF_PASSWORD_EXPIRED \
                 )
 
 //
@@ -818,6 +860,13 @@ typedef struct _GROUP_INFO_2 {
     DWORD    grpi2_group_id;
     DWORD    grpi2_attributes;
 }GROUP_INFO_2, *PGROUP_INFO_2;
+
+typedef struct _GROUP_INFO_3 {
+    LPWSTR   grpi3_name;
+    LPWSTR   grpi3_comment;
+    PSID     grpi3_group_sid;
+    DWORD    grpi3_attributes;
+}GROUP_INFO_3, *PGROUP_INFO_3;
 
 typedef struct _GROUP_INFO_1002 {
      LPWSTR  grpi1002_comment;
@@ -1354,6 +1403,9 @@ NetEnumerateTrustedDomains (
 #define NETLOGON_CONTROL_TRANSPORT_NOTIFY 7 // Notify netlogon that a new transport has come online
 #define NETLOGON_CONTROL_FIND_USER     8    // Find named user in a trusted domain
 #define NETLOGON_CONTROL_CHANGE_PASSWORD 9  // Change machine password on a secure channel to a trusted domain
+#define NETLOGON_CONTROL_TC_VERIFY     10   // Verify status of specified trusted channel
+#define NETLOGON_CONTROL_FORCE_DNS_REG 11   // Force DNS re-registration of all registered records
+#define NETLOGON_CONTROL_QUERY_DNS_REG 12   // Query the status of DNS updates
 
 // Debug function codes
 
@@ -1374,6 +1426,15 @@ typedef struct _NETLOGON_INFO_1 {
 
 typedef struct _NETLOGON_INFO_2 {
         DWORD netlog2_flags;
+
+        //
+        // If NETLOGON_VERIFY_STATUS_RETURNED bit is set in
+        //  netlog2_flags, the following field will return
+        //  the status of trust verification. Otherwise,
+        //  the field will return the status of the secure
+        //  channel to the primary domain of the machine
+        //  (useful for BDCs only).
+        //
         NET_API_STATUS netlog2_pdc_connection_status;
 #ifdef MIDL_PASS
         [string] wchar_t * netlog2_trusted_dc_name;
@@ -1413,10 +1474,10 @@ typedef struct _NETLOGON_INFO_4 {
 #define NETLOGON_REDO_NEEDED              0x08  // Redo of previous replication needed
 #define NETLOGON_HAS_IP                   0x10  // The trusted domain DC has an IP address
 #define NETLOGON_HAS_TIMESERV             0x20  // The trusted domain DC runs the Windows Time Service
-
+#define NETLOGON_DNS_UPDATE_FAILURE       0x40  // There was a failure in the last update for one of the DNS records
+#define NETLOGON_VERIFY_STATUS_RETURNED   0x80  // Trust verification status returned in netlog2_pdc_connection_status
 #ifdef __cplusplus
 }
 #endif
 
 #endif // _LMDOMAIN_
-#pragma option pop /*P_O_Pop*/

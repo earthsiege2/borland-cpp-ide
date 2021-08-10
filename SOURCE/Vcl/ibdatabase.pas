@@ -1,24 +1,44 @@
-{********************************************************}
-{                                                        }
-{       Borland Delphi Visual Component Library          }
-{       InterBase Express core components                }
-{                                                        }
-{       Copyright (c) 1998-1999 Inprise Corporation      }
-{                                                        }
-{    InterBase Express is based in part on the product   }
-{    Free IB Components, written by Gregory H. Deatz for }
-{    Hoagland, Longo, Moran, Dunst & Doukas Company.     }
-{    Free IB Components is used under license.           }
-{                                                        }
-{********************************************************}
+{************************************************************************}
+{                                                                        }
+{       Borland Delphi Visual Component Library                          }
+{       InterBase Express core components                                }
+{                                                                        }
+{       Copyright (c) 1998-2001 Borland Software Corporation             }
+{                                                                        }
+{    InterBase Express is based in part on the product                   }
+{    Free IB Components, written by Gregory H. Deatz for                 }
+{    Hoagland, Longo, Moran, Dunst & Doukas Company.                     }
+{    Free IB Components is used under license.                           }
+{                                                                        }
+{    The contents of this file are subject to the InterBase              }
+{    Public License Version 1.0 (the "License"); you may not             }
+{    use this file except in compliance with the License. You may obtain }
+{    a copy of the License at http://www.borland.com/interbase/IPL.html  }
+{    Software distributed under the License is distributed on            }
+{    an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either              }
+{    express or implied. See the License for the specific language       }
+{    governing rights and limitations under the License.                 }
+{    The Original Code was created by InterBase Software Corporation     }
+{       and its successors.                                              }
+{    Portions created by Borland Software Corporation are Copyright      }
+{       (C) Borland Software Corporation. All Rights Reserved.           }
+{    Contributor(s): Jeff Overcash                                       }
+{                                                                        }
+{************************************************************************}
 
 unit IBDatabase;
 
 interface
 
 uses
-  Windows, Dialogs, Controls, StdCtrls, SysUtils, Classes, Forms, ExtCtrls, IBHeader, IBExternals, DB,
-  IB, DBLogDlg;
+  SysUtils, Classes,
+  {$IFDEF MSWINDOWS}
+    Windows, Messages,
+  {$ENDIF}
+  {$IFDEF LINUX}
+    ThreadedTimer,
+  {$ENDIF}
+  IBHeader, IBExternals, DB, IB;
 
 const
   DPBPrefix = 'isc_dpb_';
@@ -85,9 +105,9 @@ const
     'sql_role_name',
     'set_page_buffers',
     'working_directory',
-    'SQL_dialect',
+    'sql_dialect',
     'set_db_readonly',
-    'set_db_SQL_dialect',
+    'set_db_sql_dialect',
     'gfix_attach',
     'gstat_attach'
   );
@@ -122,12 +142,24 @@ type
   TIBTransaction = class;
   TIBBase = class;
 
-  TTraceFlag = (tfQPrepare, tfQExecute, tfQFetch, tfError, tfStmt, tfConnect,
-     tfTransact, tfBlob, tfService, tfMisc);
-  TTraceFlags = set of TTraceFlag;
-
   TIBDatabaseLoginEvent = procedure(Database: TIBDatabase;
     LoginParams: TStrings) of object;
+
+  IIBEventNotifier = interface
+  ['{9427DE09-46F7-4E1D-8B92-C1F88B47BF6D}']
+    procedure RegisterEvents;
+    procedure UnRegisterEvents;
+    function GetAutoRegister: Boolean;
+  end;
+
+  TIBTimer = class;
+
+  TIBSchema = class(TObject)
+  public
+    procedure FreeNodes; virtual; abstract;
+    function Has_DEFAULT_VALUE(Relation, Field : String) : Boolean; virtual; abstract;
+    function Has_COMPUTED_BLR(Relation, Field : String) : Boolean; virtual; abstract;
+  end;
 
   TIBFileName = type string;
   { TIBDatabase }
@@ -153,14 +185,15 @@ type
     FOnIdleTimer: TNotifyEvent;
     FDefaultTransaction: TIBTransaction;
     FInternalTransaction: TIBTransaction;
-    FStreamedConnected: Boolean;
-    FTimer: TTimer;
+    FTimer: TIBTimer;
     FUserNames: TStringList;
+    FEventNotifiers : TList;
+    FAllowStreamedConnected: Boolean;
+    FSchema : TIBSchema;
     procedure EnsureInactive;
     function GetDBSQLDialect: Integer;
     function GetSQLDialect: Integer;
     procedure SetSQLDialect(const Value: Integer);
-    procedure SetTraceFlags(const Value: TTraceFlags);
     procedure ValidateClientSQLDialect;
     procedure DBParamsChange(Sender: TObject);
     procedure DBParamsChanging(Sender: TObject);
@@ -193,6 +226,8 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    procedure AddEventNotifier(Notifier : IIBEventNotifier);
+    procedure RemoveEventNotifier(Notifier : IIBEventNotifier);
     procedure ApplyUpdates(const DataSets: array of TDataSet);
     procedure CloseDataSets;
     procedure CheckActive;
@@ -224,6 +259,11 @@ type
     property Transactions[Index: Integer]: TIBTransaction read GetTransaction;
     property InternalTransaction: TIBTransaction read FInternalTransaction;
 
+    {Schema functions}
+    function Has_DEFAULT_VALUE(Relation, Field : String) : Boolean;
+    function Has_COMPUTED_BLR(Relation, Field : String) : Boolean;
+    procedure FlushSchema;
+
   published
     property Connected;
     property DatabaseName: TIBFileName read FDBName write SetDatabaseName;
@@ -234,7 +274,8 @@ type
     property IdleTimer: Integer read GetIdleTimer write SetIdleTimer;
     property SQLDialect : Integer read GetSQLDialect write SetSQLDialect;
     property DBSQLDialect : Integer read FDBSQLDialect;
-    property TraceFlags: TTraceFlags read FTraceFlags write SetTraceFlags;
+    property TraceFlags: TTraceFlags read FTraceFlags write FTraceFlags;
+    property AllowStreamedConnected : Boolean read FAllowStreamedConnected write FAllowStreamedConnected default true;
     property AfterConnect;
     property AfterDisconnect;
     property BeforeConnect;
@@ -246,7 +287,8 @@ type
 
   { TIBTransaction }
 
-  TTransactionAction         = (TARollback, TACommit, TARollbackRetaining, TACommitRetaining);
+  TTransactionAction = (TARollback, TACommit, TARollbackRetaining, TACommitRetaining);
+  TAutoStopAction = (saNone, saRollback, saCommit, saRollbackRetaining, saCommitRetaining);
 
   TIBTransaction = class(TComponent)
   private
@@ -261,10 +303,11 @@ type
     FStreamedActive     : Boolean;
     FTPB                : PChar;
     FTPBLength          : Short;
-    FTimer              : TTimer;
+    FTimer              : TIBTimer;
     FDefaultAction      : TTransactionAction;
     FTRParams           : TStrings;
     FTRParamsChanged    : Boolean;
+    FAutoStopAction: TAutoStopAction;
     procedure EnsureNotInTransaction;
     procedure EndTransaction(Action: TTransactionAction; Force: Boolean);
     function GetDatabase(Index: Integer): TIBDatabase;
@@ -302,6 +345,7 @@ type
     procedure StartTransaction;
     procedure CheckInTransaction;
     procedure CheckNotInTransaction;
+    procedure CheckAutoStop;
 
     function AddDatabase(db: TIBDatabase): Integer;
     function FindDatabase(db: TIBDatabase): Integer;
@@ -326,6 +370,7 @@ type
     property IdleTimer: Integer read GetIdleTimer write SetIdleTimer default 0;
     property DefaultAction: TTransactionAction read FDefaultAction write SetDefaultAction default taCommit;
     property Params: TStrings read FTRParams write SetTRParams;
+    property AutoStopAction : TAutoStopAction read FAutoStopAction write FAutoStopAction;
     property OnIdleTimer: TNotifyEvent read FOnIdleTimer write FOnIdleTimer;
   end;
 
@@ -381,13 +426,63 @@ type
                                           write SetTransaction;
   end;
 
+{$IFDEF MSWINDOWS}
+  TIBTimer = class(TComponent)
+  private
+    FInterval: Cardinal;
+    FWindowHandle: HWND;
+    FOnTimer: TNotifyEvent;
+    FEnabled: Boolean;
+    procedure UpdateTimer;
+    procedure SetEnabled(Value: Boolean);
+    procedure SetInterval(Value: Cardinal);
+    procedure SetOnTimer(Value: TNotifyEvent);
+    procedure WndProc(var Msg: TMessage);
+  protected
+    procedure Timer; dynamic;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+  published
+    property Enabled: Boolean read FEnabled write SetEnabled default True;
+    property Interval: Cardinal read FInterval write SetInterval default 1000;
+    property OnTimer: TNotifyEvent read FOnTimer write SetOnTimer;
+  end;
+{$ENDIF}
+{$IFDEF LINUX}
+  TIBTimer = class(TTimer);
+{$ENDIF}
+
 procedure GenerateDPB(sl: TStrings; var DPB: string; var DPBLength: Short);
 procedure GenerateTPB(sl: TStrings; var TPB: string; var TPBLength: Short);
 
 
 implementation
 
-uses IBIntf, IBSQLMonitor, IBCustomDataSet, IBDatabaseInfo, IBSQL, IBUtils;
+uses IBIntf, IBSQLMonitor, IBCustomDataSet, IBDatabaseInfo, IBSQL, IBUtils,
+     typInfo, IBXConst, IBErrorCodes;
+
+type
+
+  TFieldNode = class(TObject)
+  public
+    FieldName : String;
+    COMPUTED_BLR : Boolean;
+    DEFAULT_VALUE : boolean;
+  end;
+
+  TSchema = class(TIBSchema)
+  private
+    FRelations : TStringList;
+    FQuery : TIBSQL;
+    function Add_Node(Relation, Field : String) : TFieldNode;
+  public
+    constructor Create(ADatabase : TIBDatabase);
+    destructor Destroy; override;
+    procedure FreeNodes; override;
+    function Has_DEFAULT_VALUE(Relation, Field : String) : Boolean; override;
+    function Has_COMPUTED_BLR(Relation, Field : String) : Boolean; override;
+  end;
 
 { TIBDatabase }
 
@@ -398,25 +493,24 @@ begin
   CheckIBLoaded;
   FIBLoaded := True;
   LoginPrompt := True;
-  FSQLObjects                          := TList.Create;
-  FTransactions                        := TList.Create;
-  FDBName                              := '';
-  FDBParams                            := TStringList.Create;
-  FDBParamsChanged                     := True;
-  TStringList(FDBParams).OnChange      := DBParamsChange;
-  TStringList(FDBParams).OnChanging    := DBParamsChanging;
-  FDPB                                 := nil;
-  FHandle                              := nil;
-  FUserNames                           := nil;
-  FInternalTransaction                 := TIBTransaction.Create(self);
+  FSQLObjects := TList.Create;
+  FTransactions := TList.Create;
+  FDBName := '';
+  FDBParams := TStringList.Create;
+  FDBParamsChanged := True;
+  TStringList(FDBParams).OnChange := DBParamsChange;
+  TStringList(FDBParams).OnChanging := DBParamsChanging;
+  FDPB := nil;
+  FHandle := nil;
+  FUserNames := nil;
+  FInternalTransaction := TIBTransaction.Create(self);
   FInternalTransaction.DefaultDatabase := Self;
-  FTimer                               := TTimer.Create(Self);
-  FTimer.Enabled                       := False;
-  FTimer.Interval                      := 0;
-  FTimer.OnTimer                       := TimeoutConnection;
-  FDBSQLDialect := 1;
-  FSQLDialect := 1;
+  FDBSQLDialect := 3;
+  FSQLDialect := 3;
   FTraceFlags := [];
+  FEventNotifiers := TList.Create;
+  FAllowStreamedConnected := true;
+  FSchema := TSchema.Create(self);
 end;
 
 destructor TIBDatabase.Destroy;
@@ -426,17 +520,22 @@ begin
   if FIBLoaded then
   begin
     IdleTimer := 0;
-    if FHandle <> nil then ForceClose;
-    for i := 0 to FSQLObjects.Count - 1 do if FSQLObjects[i] <> nil then
-      SQLObjects[i].DoDatabaseFree;
+    if FHandle <> nil then
+      ForceClose;
+    for i := 0 to FSQLObjects.Count - 1 do
+      if FSQLObjects[i] <> nil then
+        SQLObjects[i].DoDatabaseFree;
     RemoveSQLObjects;
     RemoveTransactions;
     FInternalTransaction.Free;
-    IBAlloc(FDPB, 0, 0);
+    FreeMem(FDPB);
+    FDPB := nil;
     FDBParams.Free;
     FSQLObjects.Free;
     FUserNames.Free;
     FTransactions.Free;
+    FEventNotifiers.Free;
+    FSchema.Free;
   end;
   inherited Destroy;
 end;
@@ -446,6 +545,10 @@ function TIBDatabase.Call(ErrCode: ISC_STATUS;
 begin
   result := ErrCode;
   FCanTimeout := False;
+  {Handle when the Error is due to a Database disconnect.  Call the
+  OnConnectionLost if it exists.}
+  if CheckStatusVector([isc_lost_db_connection]) then
+    ForceClose;
   if RaiseError and (ErrCode > 0) then
     IBDataBaseError;
 end;
@@ -495,7 +598,8 @@ end;
 function TIBDatabase.AddTransaction(TR: TIBTransaction): Integer;
 begin
   result := FindTransaction(TR);
-  if result <> -1 then begin
+  if result <> -1 then
+  begin
     result := -1;
     exit;
   end;
@@ -509,7 +613,11 @@ begin
 end;
 
 procedure TIBDatabase.DoDisconnect;
+var
+  i : Integer;
 begin
+  for i := 0 to FEventNotifiers.Count - 1 do
+    IIBEventNotifier(FEventNotifiers[i]).UnRegisterEvents;
   if Connected then
     InternalClose(False);
   FDBSQLDialect := 1;
@@ -551,7 +659,8 @@ var
 begin
   result := -1;
   for i := 0 to FTransactions.Count - 1 do
-    if TR = Transactions[i] then begin
+    if TR = Transactions[i] then
+    begin
       result := i;
       break;
     end;
@@ -569,8 +678,8 @@ begin
         (TIBTransaction(Transactions[i]).DefaultDatabase = self) and
         (TIBTransaction(Transactions[i]) <> FInternalTransaction) then
        begin
-       result := TIBTransaction(Transactions[i]);
-       break;
+         result := TIBTransaction(Transactions[i]);
+         break;
        end;
   end;
 end;
@@ -578,7 +687,14 @@ end;
 procedure TIBDatabase.ForceClose;
 begin
   if Connected then
+  begin
+    if Assigned(BeforeDisconnect) then
+      BeforeDisconnect(Self);
+    SendConnectEvent(False);
     InternalClose(True);
+    if Assigned(AfterDisconnect) then
+      AfterDisconnect(Self);
+  end;
 end;
 
 function TIBDatabase.GetConnected: Boolean;
@@ -604,11 +720,13 @@ function TIBDatabase.GetDBParamByDPB(const Idx: Integer): String;
 var
   ConstIdx, EqualsIdx: Integer;
 begin
-  if (Idx > 0) and (Idx <= isc_dpb_last_dpb_constant) then begin
+  if (Idx > 0) and (Idx <= isc_dpb_last_dpb_constant) then
+  begin
     ConstIdx := IndexOfDBConst(DPBConstantNames[Idx]);
     if ConstIdx = -1 then
       result := ''
-    else begin
+    else
+    begin
       result := Params[ConstIdx];
       EqualsIdx := Pos('=', result); {mbcs ok}
       if EqualsIdx = 0 then
@@ -616,13 +734,17 @@ begin
       else
         result := Copy(result, EqualsIdx + 1, Length(result));
     end;
-  end else
+  end
+  else
     result := '';
 end;
 
 function TIBDatabase.GetIdleTimer: Integer;
 begin
-  result := FTimer.Interval;
+  if Assigned(FTimer) then
+    Result := FTimer.Interval
+  else
+    Result := 0;
 end;
 
 function TIBDatabase.GetTransaction(Index: Integer): TIBTransaction;
@@ -635,8 +757,9 @@ var
   i: Integer;
 begin
   result := 0;
-  for i := 0 to FTransactions.Count - 1 do if FTransactions[i] <> nil then
-    Inc(result);
+  for i := 0 to FTransactions.Count - 1 do
+    if FTransactions[i] <> nil then
+      Inc(result);
 end;
 
 function TIBDatabase.IndexOfDBConst(st: String): Integer;
@@ -644,9 +767,11 @@ var
   i, pos_of_str: Integer;
 begin
   result := -1;
-  for i := 0 to Params.Count - 1 do begin
+  for i := 0 to Params.Count - 1 do
+  begin
     pos_of_str := Pos(st, AnsiLowerCase(Params[i])); {mbcs ok}
-    if (pos_of_str = 1) or (pos_of_str = Length(DPBPrefix) + 1) then begin
+    if (pos_of_str = 1) or (pos_of_str = Length(DPBPrefix) + 1) then
+    begin
       result := i;
       break;
     end;
@@ -661,7 +786,8 @@ begin
   { Tell all connected transactions that we're disconnecting.
     This is so transactions can commit/rollback, accordingly
   }
-  for i := 0 to FTransactions.Count - 1 do begin
+  for i := 0 to FTransactions.Count - 1 do
+  begin
     try
       if FTransactions[i] <> nil then
         Transactions[i].BeforeDatabaseDisconnect(Self);
@@ -670,7 +796,8 @@ begin
         raise;
     end;
   end;
-  for i := 0 to FSQLObjects.Count - 1 do begin
+  for i := 0 to FSQLObjects.Count - 1 do
+  begin
     try
       if FSQLObjects[i] <> nil then
         SQLObjects[i].DoBeforeDatabaseDisconnect;
@@ -684,12 +811,14 @@ begin
      (Call(isc_detach_database(StatusVector, @FHandle), False) > 0) and
      (not Force) then
     IBDataBaseError
-  else begin
+  else
+  begin
     FHandle := nil;
     FHandleIsShared := False;
   end;
 
-  MonitorHook.DBDisconnect(Self);
+  if not (csDesigning in ComponentState) then
+    MonitorHook.DBDisconnect(Self);
 
   for i := 0 to FSQLObjects.Count - 1 do
     if FSQLObjects[i] <> nil then
@@ -701,28 +830,39 @@ var
   i: integer;
 begin
   try
-    if StreamedConnected and (not Connected) then begin
+    If (not FAllowStreamedConnected) and
+       (not (csDesigning in ComponentState)) then
+    begin
+      StreamedConnected := false;
+      for i := 0 to FTransactions.Count - 1 do
+        if  FTransactions[i] <> nil then
+          with TIBTransaction(FTransactions[i]) do
+            FStreamedActive := False;
+    end;
+    if StreamedConnected and (not Connected) then
+    begin
       inherited Loaded;
       for i := 0 to FTransactions.Count - 1 do
         if  FTransactions[i] <> nil then
         begin
-        with TIBTransaction(FTransactions[i]) do
-          if not Active then
-            if FStreamedActive and not InTransaction then
-            begin
-              StartTransaction;
-              FStreamedActive := False;
-            end;
+          with TIBTransaction(FTransactions[i]) do
+            if not Active then
+              if FStreamedActive and not InTransaction then
+              begin
+                StartTransaction;
+                FStreamedActive := False;
+              end;
         end;
       if (FDefaultTransaction <> nil) and
          (FDefaultTransaction.FStreamedActive) and
          (not FDefaultTransaction.InTransaction) then
         FDefaultTransaction.StartTransaction;
-      FStreamedConnected := False;
+      StreamedConnected := False;
     end;
   except
     if csDesigning in ComponentState then
-      Application.HandleException(Self)
+      if Assigned(ApplicationHandleException) then
+        ApplicationHandleException(Self)
     else
       raise;
   end;
@@ -746,7 +886,7 @@ end;
 function TIBDatabase.Login: Boolean;
 var
   IndexOfUser, IndexOfPassword: Integer;
-  Username, Password, old_password: String;
+  Username, Password, OldPassword: String;
   LoginParams: TStrings;
 
   procedure HidePassword;
@@ -756,7 +896,7 @@ var
   begin
     IndexAt := 0;
     for I := 0 to Params.Count -1 do
-      if Pos('password', LowerCase(Params.Names[i])) = 0 then {mbcs ok}
+      if Pos('password', LowerCase(Trim(Params.Names[i]))) = 1 then {mbcs ok}
       begin
         FHiddenPassword := Params.Values[Params.Names[i]];
         IndexAt := I;
@@ -767,43 +907,51 @@ var
   end;
 
 begin
-  if Assigned(FOnLogin) then begin
+  if Assigned(FOnLogin) then
+  begin
     result := True;
     LoginParams := TStringList.Create;
     try
       LoginParams.Assign(Params);
       FOnLogin(Self, LoginParams);
-      Params.Assign (LoginParams);
+      Params.Assign(LoginParams);
       HidePassword;
     finally
       LoginParams.Free;
     end;
   end
-  else begin
+  else
+  begin
     IndexOfUser := IndexOfDBConst(DPBConstantNames[isc_dpb_user_name]);
     if IndexOfUser <> -1 then
       Username := Copy(Params[IndexOfUser],
                                          Pos('=', Params[IndexOfUser]) + 1, {mbcs ok}
                                          Length(Params[IndexOfUser]));
     IndexOfPassword := IndexOfDBConst(DPBConstantNames[isc_dpb_password]);
-    if IndexOfPassword <> -1 then begin
+    if IndexOfPassword <> -1 then
+    begin
       Password := Copy(Params[IndexOfPassword],
                                          Pos('=', Params[IndexOfPassword]) + 1, {mbcs ok}
                                          Length(Params[IndexOfPassword]));
-      old_password := password;
+      OldPassword := password;
     end;
-    result := LoginDialogEx(DatabaseName, Username, Password, False);
-    if result then begin
+    if Assigned(LoginDialogExProc) then
+      result := LoginDialogExProc(DatabaseName, Username, Password, False)
+    else
+      raise EIBError.Create(SLoginPromptFailure);
+    if result then
+    begin
       if IndexOfUser = -1 then
         Params.Add(DPBConstantNames[isc_dpb_user_name] + '=' + Username)
       else
         Params[IndexOfUser] := DPBConstantNames[isc_dpb_user_name] +
                                  '=' + Username;
-      if (Password = old_password) then
+      if (Password = OldPassword) then
         FHiddenPassword := ''
-      else begin
+      else
+      begin
         FHiddenPassword := Password;
-        if old_password <> '' then
+        if OldPassword <> '' then
           HidePassword;
       end;
     end;
@@ -814,7 +962,7 @@ procedure TIBDatabase.DoConnect;
 var
   DPB: String;
   TempDBParams: TStrings;
-
+  i : Integer;
 begin
   CheckInactive;
   CheckDatabaseName;
@@ -832,7 +980,8 @@ begin
     FDBParamsChanged := False;
     if (not LoginPrompt) or (FHiddenPassword = '') then
       GenerateDPB(FDBParams, DPB, FDPBLength)
-    else begin
+    else
+    begin
       TempDBParams := TStringList.Create;
       try
        TempDBParams.Assign(FDBParams);
@@ -847,20 +996,26 @@ begin
   end;
   if Call(isc_attach_database(StatusVector, Length(FDBName),
                          PChar(FDBName), @FHandle,
-                         FDPBLength, FDPB), False) > 0 then begin
+                         FDPBLength, FDPB), False) > 0 then
+  begin
     FHandle := nil;
     IBDataBaseError;
   end;
   FDBSQLDialect := GetDBSQLDialect;
   ValidateClientSQLDialect;
-  MonitorHook.DBConnect(Self);
+  if not (csDesigning in ComponentState) then
+    MonitorHook.DBConnect(Self);
+  for i := 0 to FEventNotifiers.Count - 1 do
+    if IIBEventNotifier(FEventNotifiers[i]).GetAutoRegister then
+      IIBEventNotifier(FEventNotifiers[i]).RegisterEvents;
 end;
 
 procedure TIBDatabase.RemoveSQLObject(Idx: Integer);
 var
   ds: TIBBase;
 begin
-  if (Idx >= 0) and (FSQLObjects[Idx] <> nil) then begin
+  if (Idx >= 0) and (FSQLObjects[Idx] <> nil) then
+  begin
     ds := SQLObjects[Idx];
     FSQLObjects[Idx] := nil;
     ds.Database := nil;
@@ -885,7 +1040,8 @@ procedure TIBDatabase.RemoveTransaction(Idx: Integer);
 var
   TR: TIBTransaction;
 begin
-  if ((Idx >= 0) and (FTransactions[Idx] <> nil)) then begin
+  if ((Idx >= 0) and (FTransactions[Idx] <> nil)) then
+  begin
     TR := Transactions[Idx];
     FTransactions[Idx] := nil;
     TR.RemoveDatabase(TR.FindDatabase(Self));
@@ -904,10 +1060,12 @@ end;
 
 procedure TIBDatabase.SetDatabaseName(const Value: TIBFileName);
 begin
-  if FDBName <> Value then begin
+  if FDBName <> Value then
+  begin
     EnsureInactive;
     CheckInactive;
     FDBName := Value;
+    FSchema.FreeNodes;
   end;
 end;
 
@@ -916,10 +1074,13 @@ var
   ConstIdx: Integer;
 begin
   ConstIdx := IndexOfDBConst(DPBConstantNames[Idx]);
-  if (Value = '') then begin
+  if (Value = '') then
+  begin
     if ConstIdx <> -1 then
       Params.Delete(ConstIdx);
-  end else begin
+  end
+  else
+  begin
     if (ConstIdx = -1) then
       Params.Add(DPBConstantNames[Idx] + '=' + Value)
     else
@@ -939,10 +1100,11 @@ begin
   if (FDefaultTransaction <> nil) and (FDefaultTransaction <> Value) then
   begin
     i := FindTransaction(FDefaultTransaction);
-    if (i <> -1) then
+    if (i <> -1) and (FDefaultTransaction.DefaultDatabase <> self) then
       RemoveTransaction(i);
   end;
-  if (Value <> nil) and (FDefaultTransaction <> Value) then begin
+  if (Value <> nil) and (FDefaultTransaction <> Value) then
+  begin
     Value.AddDatabase(Self);
     AddTransaction(Value);
   end;
@@ -963,14 +1125,23 @@ procedure TIBDatabase.SetIdleTimer(Value: Integer);
 begin
   if Value < 0 then
     IBError(ibxeTimeoutNegative, [nil])
-  else if (Value = 0) then begin
-    FTimer.Enabled := False;
-    FTimer.Interval := 0;
-  end else if (Value > 0) then begin
-    FTimer.Interval := Value;
-    if not (csDesigning in ComponentState) then
-      FTimer.Enabled := True;
-  end;
+  else
+    if (Value = 0) then
+      FreeAndNil(FTimer)
+    else
+      if (Value > 0) then
+      begin
+        if not Assigned(FTimer) then
+        begin
+          FTimer := TIBTimer.Create(Self);
+          FTimer.Enabled := False;
+          FTimer.Interval := 0;
+          FTimer.OnTimer := TimeoutConnection;
+        end;
+        FTimer.Interval := Value;
+        if not (csDesigning in ComponentState) then
+          FTimer.Enabled := True;
+      end;
 end;
 
 function TIBDatabase.TestConnected: Boolean;
@@ -978,33 +1149,34 @@ var
   DatabaseInfo: TIBDatabaseInfo;
 begin
   result := Connected;
-  if result then begin
+  if result then
+  begin
     DatabaseInfo := TIBDatabaseInfo.Create(self);
-    try begin
-        DatabaseInfo.Database := self;
-        { poke the server to see if connected }
-        if DatabaseInfo.BaseLevel = 0 then ;
-        DatabaseInfo.Free;
-      end
-    except begin
-        ForceClose;
-        result := False;
-        DatabaseInfo.Free;
-      end;
+    try
+      DatabaseInfo.Database := self;
+      { poke the server to see if connected }
+      if DatabaseInfo.BaseLevel = 0 then ;
+      DatabaseInfo.Free;
+    except
+      ForceClose;
+      result := False;
+      DatabaseInfo.Free;
     end;
   end;
 end;
 
 procedure TIBDatabase.TimeoutConnection(Sender: TObject);
 begin
-  if Connected then begin
-    if FCanTimeout then begin
+  if Connected then
+  begin
+    if FCanTimeout then
+    begin
       ForceClose;
       if Assigned(FOnIdleTimer) then
         FOnIdleTimer(Self);
-    end else begin
+    end
+    else
       FCanTimeout := True;
-    end;
   end;
 end;
 
@@ -1016,7 +1188,8 @@ begin
   DatabaseInfo.Database := self;
   if (DatabaseInfo.ODSMajorVersion < 10) then
     result := false
-  else begin
+  else
+  begin
     if (DatabaseInfo.ReadOnly = 0) then
       result := false
     else
@@ -1059,13 +1232,6 @@ begin
   end;
 end;
 
-procedure TIBDatabase.SetTraceFlags(const Value: TTraceFlags);
-begin
-  if FTraceFlags <> Value then
-    MonitorHook.TraceFlags := Value;
-  FTraceFlags := Value;
-end;
-
 procedure TIBDatabase.ApplyUpdates(const DataSets: array of TDataSet);
 var
   I: Integer;
@@ -1105,9 +1271,12 @@ procedure TIBDatabase.GetFieldNames(const TableName: string; List: TStrings);
 var
   Query: TIBSQL;
 begin
-  if TableName = '' then IBError(ibxeNoTableName, [nil]);
-  if not Connected then Open;
-  if not FInternalTransaction.Active then FInternalTransaction.StartTransaction;
+  if TableName = '' then
+    IBError(ibxeNoTableName, [nil]);
+  if not Connected then
+    Open;
+  if not FInternalTransaction.Active then
+    FInternalTransaction.StartTransaction;
   Query := TIBSQL.Create(self);
   try
     Query.GoToFirstRecordOnExecute := False;
@@ -1119,7 +1288,8 @@ begin
       '''' +
       FormatIdentifierValue(SQLDialect, TableName) +
       ''' ' +
-      'and R.RDB$FIELD_SOURCE = F.RDB$FIELD_NAME '; {do not localize}
+      'and R.RDB$FIELD_SOURCE = F.RDB$FIELD_NAME ' + {do not localize}
+      'ORDER BY R.RDB$FIELD_NAME'; {do not localize}
     Query.Prepare;
     Query.ExecQuery;
     with List do
@@ -1143,20 +1313,25 @@ procedure TIBDatabase.GetTableNames(List: TStrings; SystemTables: Boolean);
 var
   Query : TIBSQL;
 begin
-  if not (csReading in ComponentState) then begin
-  if not Connected then Open;
-  if not FInternalTransaction.Active then FInternalTransaction.StartTransaction;
+  if not (csReading in ComponentState) then
+  begin
+    if not Connected then
+      Open;
+    if not FInternalTransaction.Active then
+      FInternalTransaction.StartTransaction;
     Query := TIBSQL.Create(self);
     try
       Query.GoToFirstRecordOnExecute := False;
       Query.Database := Self;
       Query.Transaction := FInternalTransaction;
       if SystemTables then
-        Query.SQL.Text := 'Select RDB$RELATION_NAME from RDB$RELATIONS' + {do not localize}
-                          ' where RDB$VIEW_BLR is NULL' {do not localize}
+        Query.SQL.Text := 'Select RDB$RELATION_NAME from RDB$RELATIONS ' + {do not localize}
+                          ' where RDB$VIEW_BLR is NULL ' + {do not localize}
+                          'ORDER BY RDB$RELATION_NAME' {do not localize}
       else
-        Query.SQL.Text := 'Select RDB$RELATION_NAME from RDB$RELATIONS' + {do not localize}
-                          ' where RDB$VIEW_BLR is NULL and RDB$SYSTEM_FLAG = 0'; {do not localize}
+        Query.SQL.Text := 'Select RDB$RELATION_NAME from RDB$RELATIONS ' + {do not localize}
+                          ' where RDB$VIEW_BLR is NULL and RDB$SYSTEM_FLAG = 0 ' + {do not localize}
+                          'ORDER BY RDB$RELATION_NAME'; {do not localize}
       Query.Prepare;
       Query.ExecQuery;
       with List do
@@ -1177,6 +1352,20 @@ begin
   end;
 end;
 
+procedure TIBDataBase.AddEventNotifier(Notifier: IIBEventNotifier);
+begin
+  FEventNotifiers.Add(Pointer(Notifier));
+end;
+
+procedure TIBDataBase.RemoveEventNotifier(Notifier: IIBEventNotifier);
+var
+  Index : Integer;
+begin
+  Index := FEventNotifiers.IndexOf(Pointer(Notifier));
+  if Index >= 0 then
+    FEventNotifiers.Delete(Index);
+end;
+
 { TIBTransaction }
 
 constructor TIBTransaction.Create(AOwner: TComponent);
@@ -1186,20 +1375,16 @@ begin
   CheckIBLoaded;
   FIBLoaded := True;
   CheckIBLoaded;
-  FDatabases                           := TList.Create;
-  FSQLObjects                            := TList.Create;
-  FHandle                              := nil;
-  FTPB                                 := nil;
-  FTPBLength                           := 0;
-  FTRParams                            := TStringList.Create;
-  FTRParamsChanged                     := True;
-  TStringList(FTRParams).OnChange      := TRParamsChange;
-  TStringList(FTRParams).OnChanging    := TRParamsChanging;
-  FTimer                               := TTimer.Create(Self);
-  FTimer.Enabled                       := False;
-  FTimer.Interval                      := 0;
-  FTimer.OnTimer                       := TimeoutTransaction;
-  FDefaultAction                       := taCommit;
+  FDatabases := TList.Create;
+  FSQLObjects := TList.Create;
+  FHandle := nil;
+  FTPB := nil;
+  FTPBLength := 0;
+  FTRParams := TStringList.Create;
+  FTRParamsChanged := True;
+  TStringList(FTRParams).OnChange := TRParamsChange;
+  TStringList(FTRParams).OnChanging := TRParamsChanging;
+  FDefaultAction := taCommit;
 end;
 
 destructor TIBTransaction.Destroy;
@@ -1209,12 +1394,19 @@ begin
   if FIBLoaded then
   begin
     if InTransaction then
-      EndTransaction(FDefaultAction, True);
-    for i := 0 to FSQLObjects.Count - 1 do if FSQLObjects[i] <> nil then
-      SQLObjects[i].DoTransactionFree;
+      case FDefaultAction of
+        TACommit, TACommitRetaining :
+          EndTransaction(TACommit, True);
+        TARollback, TARollbackRetaining :
+          EndTransaction(TARollback, True);
+      end;
+    for i := 0 to FSQLObjects.Count - 1 do
+      if FSQLObjects[i] <> nil then
+        SQLObjects[i].DoTransactionFree;
     RemoveSQLObjects;
     RemoveDatabases;
-    IBAlloc(FTPB, 0, 0);
+    FreeMem(FTPB);
+    FTPB := nil;
     FTRParams.Free;
     FSQLObjects.Free;
     FDatabases.Free;
@@ -1231,8 +1423,13 @@ begin
   for i := 0 to FDatabases.Count - 1 do if FDatabases[i] <> nil then
     Databases[i].FCanTimeout := False;
   FCanTimeout := False;
-  if RaiseError and (result > 0) then
-    IBDataBaseError;
+  {Handle when the Error is due to a Database disconnect.  Pass it on to
+   FDatabase so it can handle this}
+  if CheckStatusVector([isc_lost_db_connection]) then
+    FDefaultDatabase.Call(ErrCode, RaiseError)
+  else
+    if RaiseError and (result > 0) then
+      IBDataBaseError;
 end;
 
 procedure TIBTransaction.CheckDatabasesInList;
@@ -1264,26 +1461,59 @@ begin
     IBError(ibxeInTransaction, [nil]);
 end;
 
+procedure TIBTransaction.CheckAutoStop;
+var
+  i: Integer;
+  AllClosed : Boolean;
+begin
+  if (FAutoStopAction = saNone) or (not InTransaction)  then
+    exit;
+  AllClosed := true;
+  i := 0;
+  while AllClosed and (i < FSQLObjects.Count) do
+  begin
+    if FSQLObjects[i] <> nil then
+    begin
+      if (TIBBase(FSQLObjects[i]).owner is TIBCustomDataSet) then
+        AllClosed := not TIBCustomDataSet(TIBBase(FSQLObjects[i]).owner).Active
+    end;
+    Inc(i);
+  end;
+  if AllClosed then
+    case FAutoStopAction of
+      saRollback : EndTransaction(TARollBack, false);
+      saCommit : EndTransaction(TACommit, false);
+      saRollbackRetaining : EndTransaction(TARollbackRetaining, false);
+      saCommitRetaining : EndTransaction(TACommitRetaining, false);
+    end;
+end;
+
 function TIBTransaction.AddDatabase(db: TIBDatabase): Integer;
 var
   i: Integer;
-  nil_found: Boolean;
+  NilFound: Boolean;
 begin
   i := FindDatabase(db);
-  if i <> -1 then begin
+  if i <> -1 then
+  begin
     result := i;
     exit;
   end;
-  nil_found := False;
+  NilFound := False;
   i := 0;
-  while (not nil_found) and (i < FDatabases.Count) do begin
-    nil_found := (FDatabases[i] = nil);
-    if (not nil_found) then Inc(i);
+  while (not NilFound) and (i < FDatabases.Count) do
+  begin
+    NilFound := (FDatabases[i] = nil);
+    if (not NilFound) then
+      Inc(i);
   end;
-  if (nil_found) then begin
+  if (NilFound) then
+  begin
     FDatabases[i] := db;
     result := i;
-  end else begin
+  end
+  else
+  begin
     result := FDatabases.Count;
     FDatabases.Add(db);
   end;
@@ -1318,29 +1548,35 @@ var
 begin
   CheckInTransaction;
   case Action of
-    TARollback, TACommit: begin
+    TARollback, TACommit:
+    begin
       if (HandleIsShared) and
          (Action <> FDefaultAction) and
          (not Force) then
         IBError(ibxeCantEndSharedTransaction, [nil]);
-      for i := 0 to FSQLObjects.Count - 1 do if FSQLObjects[i] <> nil then
-        SQLObjects[i].DoBeforeTransactionEnd;
+      for i := 0 to FSQLObjects.Count - 1 do
+        if FSQLObjects[i] <> nil then
+          SQLObjects[i].DoBeforeTransactionEnd;
       if InTransaction then
       begin
-        if HandleIsShared then begin
+        if HandleIsShared then
+        begin
           FHandle := nil;
           FHandleIsShared := False;
           status := 0;
-        end else if (Action = TARollback) then
-          status := Call(isc_rollback_transaction(StatusVector, @FHandle), False)
+        end
         else
-          status := Call(isc_commit_transaction(StatusVector, @FHandle), False);
+          if (Action = TARollback) then
+            status := Call(isc_rollback_transaction(StatusVector, @FHandle), False)
+          else
+            status := Call(isc_commit_transaction(StatusVector, @FHandle), False);
         if ((Force) and (status > 0)) then
           status := Call(isc_rollback_transaction(StatusVector, @FHandle), False);
         if Force then
           FHandle := nil
-        else if (status > 0) then
-          IBDataBaseError;
+        else
+          if (status > 0) then
+            IBDataBaseError;
         for i := 0 to FSQLObjects.Count - 1 do if FSQLObjects[i] <> nil then
           SQLObjects[i].DoAfterTransactionEnd;
       end;
@@ -1350,15 +1586,18 @@ begin
     TARollbackRetaining:
       Call(isc_rollback_retaining(StatusVector, @FHandle), True);
   end;
-  case Action of
-    TACommit:
-      MonitorHook.TRCommit(Self);
-    TARollback:
-      MonitorHook.TRRollback(Self);
-    TACommitRetaining:
-      MonitorHook.TRCommitRetaining(Self);
-    TARollbackRetaining:
-      MonitorHook.TRRollbackRetaining(Self);
+  if not (csDesigning in ComponentState) then
+  begin
+    case Action of
+      TACommit:
+        MonitorHook.TRCommit(Self);
+      TARollback:
+        MonitorHook.TRRollback(Self);
+      TACommitRetaining:
+        MonitorHook.TRCommitRetaining(Self);
+      TARollbackRetaining:
+        MonitorHook.TRRollbackRetaining(Self);
+    end;
   end;
 end;
 
@@ -1403,7 +1642,8 @@ var
 begin
   result := -1;
   for i := 0 to FDatabases.Count - 1 do
-    if db = TIBDatabase(FDatabases[i]) then begin
+    if db = TIBDatabase(FDatabases[i]) then
+    begin
       result := i;
       break;
     end;
@@ -1418,7 +1658,8 @@ begin
   begin
     for i := 0 to FDatabases.Count - 1 do
       if (TIBDatabase(FDatabases[i]) <> nil) and
-        (TIBDatabase(FDatabases[i]).DefaultTransaction = self) then begin
+        (TIBDatabase(FDatabases[i]).DefaultTransaction = self) then
+      begin
         result := TIBDatabase(FDatabases[i]);
         break;
       end;
@@ -1428,7 +1669,10 @@ end;
 
 function TIBTransaction.GetIdleTimer: Integer;
 begin
-  result := FTimer.Interval;
+  if Assigned(FTimer) then
+    Result := FTimer.Interval
+  else
+    Result := 0;
 end;
 
 procedure TIBTransaction.Loaded;
@@ -1439,14 +1683,20 @@ end;
 procedure TIBTransaction.BeforeDatabaseDisconnect(DB: TIBDatabase);
 begin
   if InTransaction then
-    EndTransaction(FDefaultAction, True);
+    case FDefaultAction of
+      TACommit, TACommitRetaining :
+        EndTransaction(TACommit, True);
+      TARollback, TARollbackRetaining :
+        EndTransaction(TARollback, True);
+    end;
 end;
 
 procedure TIBTransaction.RemoveDatabase(Idx: Integer);
 var
   DB: TIBDatabase;
 begin
-  if ((Idx >= 0) and (FDatabases[Idx] <> nil)) then begin
+  if ((Idx >= 0) and (FDatabases[Idx] <> nil)) then
+  begin
     DB := Databases[Idx];
     FDatabases[Idx] := nil;
     DB.RemoveTransaction(DB.FindTransaction(Self));
@@ -1467,7 +1717,8 @@ procedure TIBTransaction.RemoveSQLObject(Idx: Integer);
 var
   ds: TIBBase;
 begin
-  if ((Idx >= 0) and (FSQLObjects[Idx] <> nil)) then begin
+  if ((Idx >= 0) and (FSQLObjects[Idx] <> nil)) then
+  begin
     ds := SQLObjects[Idx];
     FSQLObjects[Idx] := nil;
     ds.Transaction := nil;
@@ -1496,10 +1747,12 @@ procedure TIBTransaction.SetActive(Value: Boolean);
 begin
   if csReading in ComponentState then
     FStreamedActive := Value
-  else if Value and not InTransaction then
-    StartTransaction
-  else if not Value and InTransaction then
-    Rollback;
+  else
+    if Value and not InTransaction then
+      StartTransaction
+    else
+      if not Value and InTransaction then
+        Rollback;
 end;
 
 procedure TIBTransaction.SetDefaultAction(Value: TTransactionAction);
@@ -1519,9 +1772,14 @@ begin
     if (i <> -1) then
       FDefaultDatabase.RemoveTransaction(i);
   end;
-  if (Value <> nil) and (FDefaultDatabase <> Value) then begin
+  if (Value <> nil) and (FDefaultDatabase <> Value) then
+  begin
     Value.AddTransaction(Self);
     AddDatabase(Value);
+    for i := 0 to FSQLObjects.Count - 1 do
+      if (FSQLObjects[i] <> nil) and
+         (TIBBase(FSQLObjects[i]).Database = nil) then
+        SetOrdProp(TIBBase(FSQLObjects[i]).Owner, 'Database', Integer(Value));
   end;
   FDefaultDatabase := Value;
 end;
@@ -1529,7 +1787,12 @@ end;
 procedure TIBTransaction.SetHandle(Value: TISC_TR_HANDLE);
 begin
   if (HandleIsShared) then
-    EndTransaction(DefaultAction, True)
+    case FDefaultAction of
+      TACommit, TACommitRetaining :
+        EndTransaction(TACommit, True);
+      TARollback, TARollbackRetaining :
+        EndTransaction(TARollback, True);
+    end
   else
     CheckNotInTransaction;
   FHandle := Value;
@@ -1555,14 +1818,23 @@ procedure TIBTransaction.SetIdleTimer(Value: Integer);
 begin
   if Value < 0 then
     IBError(ibxeTimeoutNegative, [nil])
-  else if (Value = 0) then begin
-    FTimer.Enabled := False;
-    FTimer.Interval := 0;
-  end else if (Value > 0) then begin
-    FTimer.Interval := Value;
-    if not (csDesigning in ComponentState) then
-      FTimer.Enabled := True;
-  end;
+  else
+    if (Value = 0) then
+      FreeAndNil(FTimer)
+    else
+      if (Value > 0) then
+      begin
+        if not Assigned(FTimer) then
+        begin
+          FTimer := TIBTimer.Create(Self);
+          FTimer.Enabled := False;
+          FTimer.Interval := 0;
+          FTimer.OnTimer := TimeoutTransaction;
+        end;
+        FTimer.Interval := Value;
+        if not (csDesigning in ComponentState) then
+          FTimer.Enabled := True;
+      end;
 end;
 
 procedure TIBTransaction.SetTRParams(Value: TStrings);
@@ -1583,48 +1855,60 @@ begin
    begin
      with TIBDatabase(FDatabases[i]) do
      if not Connected then
-       if FStreamedConnected then begin
+       if StreamedConnected then
+       begin
          Open;
-         FStreamedConnected := False;
-       end else
+         StreamedConnected := False;
+       end
+       else
          IBError(ibxeDatabaseClosed, [nil]);
    end;
-  if FTRParamsChanged then begin
+  if FTRParamsChanged then
+  begin
     FTRParamsChanged := False;
     GenerateTPB(FTRParams, TPB, FTPBLength);
-    IBAlloc(FTPB, 0, FTPBLength);
-    Move(TPB[1], FTPB[0], FTPBLength);
+    if FTPBLength > 0 then
+    begin
+      IBAlloc(FTPB, 0, FTPBLength);
+      Move(TPB[1], FTPB[0], FTPBLength);
+    end;
   end;
 
   pteb := nil;
   IBAlloc(pteb, 0, DatabaseCount * SizeOf(TISC_TEB));
   try
-    for i := 0 to DatabaseCount - 1 do if Databases[i] <> nil then begin
+    for i := 0 to DatabaseCount - 1 do if Databases[i] <> nil then
+    begin
       pteb^[i].db_handle := @(Databases[i].Handle);
       pteb^[i].tpb_length := FTPBLength;
       pteb^[i].tpb_address := FTPB;
     end;
     if Call(isc_start_multiple(StatusVector, @FHandle,
-                               DatabaseCount, PISC_TEB(pteb)), False) > 0 then begin
+                               DatabaseCount, PISC_TEB(pteb)), False) > 0 then
+    begin
       FHandle := nil;
       IBDataBaseError;
     end;
-    MonitorHook.TRStart(Self);
+    if not (csDesigning in ComponentState) then
+      MonitorHook.TRStart(Self);
   finally
-    IBAlloc(pteb, 0, 0);
+    FreeMem(pteb);
   end;
 end;
 
 procedure TIBTransaction.TimeoutTransaction(Sender: TObject);
 begin
-  if InTransaction then begin
-    if FCanTimeout then begin
+  if InTransaction then
+  begin
+    if FCanTimeout then
+    begin
       EndTransaction(FDefaultAction, True);
+      FCanTimeout := True;
       if Assigned(FOnIdleTimer) then
         FOnIdleTimer(Self);
-    end else begin
+    end
+    else
       FCanTimeout := True;
-    end;
   end;
 end;
 
@@ -1649,18 +1933,20 @@ destructor TIBBase.Destroy;
 begin
   SetDatabase(nil);
   SetTransaction(nil);
-  inherited;
+  inherited Destroy;
 end;
 
 procedure TIBBase.CheckDatabase;
 begin
-  if (FDatabase = nil) then IBError(ibxeDatabaseNotAssigned, [nil]);
+  if (FDatabase = nil) then
+    IBError(ibxeDatabaseNotAssigned, [nil]);
   FDatabase.CheckActive;
 end;
 
 procedure TIBBase.CheckTransaction;
 begin
-  if FTransaction = nil then IBError(ibxeTransactionNotAssigned, [nil]);
+  if FTransaction = nil then
+    IBError(ibxeTransactionNotAssigned, [nil]);
   FTransaction.CheckInTransaction;
 end;
 
@@ -1693,7 +1979,6 @@ begin
   if Assigned(OnDatabaseFree) then
     OnDatabaseFree(Self);
   SetDatabase(nil);
-  SetTransaction(nil);
 end;
 
 procedure TIBBase.DoBeforeTransactionEnd;
@@ -1712,7 +1997,7 @@ procedure TIBBase.DoTransactionFree;
 begin
   if Assigned(OnTransactionFree) then
     OnTransactionFree(Self);
-  FTransaction := nil;
+  SetTransaction(nil);
 end;
 
 procedure TIBBase.SetDatabase(Value: TIBDatabase);
@@ -1720,7 +2005,8 @@ begin
   if (FDatabase <> nil) then
     FDatabase.RemoveSQLObject(FIndexInDatabase);
   FDatabase := Value;
-  if (FDatabase <> nil) then begin
+  if (FDatabase <> nil) then
+  begin
     FIndexInDatabase := FDatabase.AddSQLObject(Self);
     if (FTransaction = nil) then
       Transaction := FDatabase.FindDefaultTransaction;
@@ -1750,7 +2036,7 @@ procedure GenerateDPB(sl: TStrings; var DPB: string; var DPBLength: Short);
 var
   i, j, pval: Integer;
   DPBVal: UShort;
-  param_name, param_value: string;
+  ParamName, ParamValue: string;
 begin
   { The DPB is initially empty, with the exception that
     the DPB version must be the first byte of the string. }
@@ -1765,18 +2051,19 @@ begin
       and make sure that the name is all lowercase with
       no leading 'isc_dpb_' prefix
     }
-    if (Trim(sl.Names[i]) = '') then continue;
-    param_name := LowerCase(sl.Names[i]); {mbcs ok}
-    param_value := Copy(sl[i], Pos('=', sl[i]) + 1, Length(sl[i])); {mbcs ok}
-    if (Pos(DPBPrefix, param_name) = 1) then {mbcs ok}
-      Delete(param_name, 1, Length(DPBPrefix));
+    if (Trim(sl.Names[i]) = '') then
+      continue;
+    ParamName := LowerCase(sl.Names[i]); {mbcs ok}
+    ParamValue := Copy(sl[i], Pos('=', sl[i]) + 1, Length(sl[i])); {mbcs ok}
+    if (Pos(DPBPrefix, ParamName) = 1) then {mbcs ok}
+      Delete(ParamName, 1, Length(DPBPrefix));
      { We want to translate the parameter name to some Integer
        value. We do this by scanning through a list of known
        database parameter names (DPBConstantNames, defined above) }
     DPBVal := 0;
     { Find the parameter }
     for j := 1 to isc_dpb_last_dpb_constant do
-      if (param_name = DPBConstantNames[j]) then
+      if (ParamName = DPBConstantNames[j]) then
       begin
         DPBVal := j;
         break;
@@ -1789,13 +2076,15 @@ begin
       isc_dpb_user_name, isc_dpb_password, isc_dpb_password_enc,
       isc_dpb_sys_user_name, isc_dpb_license, isc_dpb_encrypt_key,
       isc_dpb_lc_messages, isc_dpb_lc_ctype,
-      isc_dpb_sql_role_name:
+      isc_dpb_sql_role_name, isc_dpb_sql_dialect:
       begin
+        if DPBVal = isc_dpb_sql_dialect then
+          ParamValue[1] := Char(Ord(ParamValue[1]) - 48);
         DPB := DPB +
                Char(DPBVal) +
-               Char(Length(param_value)) +
-               param_value;
-        Inc(DPBLength, 2 + Length(param_value));
+               Char(Length(ParamValue)) +
+               ParamValue;
+        Inc(DPBLength, 2 + Length(ParamValue));
       end;
       isc_dpb_num_buffers, isc_dpb_dbkey_scope, isc_dpb_force_write,
       isc_dpb_no_reserve, isc_dpb_damaged, isc_dpb_verify:
@@ -1803,7 +2092,7 @@ begin
         DPB := DPB +
                Char(DPBVal) +
                #1 +
-               Char(StrToInt(param_value));
+               Char(StrToInt(ParamValue));
         Inc(DPBLength, 3);
       end;
       isc_dpb_sweep:
@@ -1816,7 +2105,7 @@ begin
       end;
       isc_dpb_sweep_interval:
       begin
-        pval := StrToInt(param_value);
+        pval := StrToInt(ParamValue);
         DPB := DPB +
                Char(DPBVal) +
                #4 +
@@ -1834,12 +2123,13 @@ begin
                #1 + #0;
         Inc(DPBLength, 3);
       end;
-      else begin
+      else
+      begin
         if (DPBVal > 0) and
            (DPBVal <= isc_dpb_last_dpb_constant) then
           IBError(ibxeDPBConstantNotSupported, [DPBConstantNames[DPBVal]])
         else
-          IBError(ibxeDPBConstantUnknown, [DPBVal]);
+          IBError(ibxeDPBConstantUnknownEx, [sl.Names[i]]);
       end;
     end;
   end;
@@ -1853,12 +2143,13 @@ end;
 procedure GenerateTPB(sl: TStrings; var TPB: string; var TPBLength: Short);
 var
   i, j, TPBVal, ParamLength: Integer;
-  param_name, param_value: string;
+  ParamName, ParamValue: string;
 begin
   TPB := '';
   if (sl.Count = 0) then
     TPBLength := 0
-  else begin
+  else
+  begin
     TPBLength := sl.Count + 1;
     TPB := TPB + Char(isc_tpb_version3);
   end;
@@ -1870,50 +2161,252 @@ begin
       Continue;
     end;
     if (Pos('=', sl[i]) = 0) then {mbcs ok}
-      param_name := LowerCase(sl[i]) {mbcs ok}
-    else begin
-      param_name := LowerCase(sl.Names[i]); {mbcs ok}
-      param_value := Copy(sl[i], Pos('=', sl[i]) + 1, Length(sl[i])); {mbcs ok}
+      ParamName := LowerCase(sl[i]) {mbcs ok}
+    else
+    begin
+      ParamName := LowerCase(sl.Names[i]); {mbcs ok}
+      ParamValue := Copy(sl[i], Pos('=', sl[i]) + 1, Length(sl[i])); {mbcs ok}
     end;
-    if (Pos(TPBPrefix, param_name) = 1) then {mbcs ok}
-      Delete(param_name, 1, Length(TPBPrefix));
+    if (Pos(TPBPrefix, ParamName) = 1) then {mbcs ok}
+      Delete(ParamName, 1, Length(TPBPrefix));
     TPBVal := 0;
     { Find the parameter }
     for j := 1 to isc_tpb_last_tpb_constant do
-      if (param_name = TPBConstantNames[j]) then
+      if (ParamName = TPBConstantNames[j]) then
       begin
         TPBVal := j;
         break;
       end;
     { Now act on it }
     case TPBVal of
-      isc_tpb_consistency, isc_tpb_exclusive, isc_tpb_concurrency,
-      isc_tpb_shared, isc_tpb_wait, isc_tpb_nowait, isc_tpb_read,
-      isc_tpb_write, isc_tpb_ignore_limbo, isc_tpb_read_committed,
-      isc_tpb_rec_version, isc_tpb_no_rec_version:
+      isc_tpb_consistency, isc_tpb_exclusive, isc_tpb_protected,
+      isc_tpb_concurrency, isc_tpb_shared, isc_tpb_wait, isc_tpb_nowait,
+      isc_tpb_read, isc_tpb_write, isc_tpb_ignore_limbo,
+      isc_tpb_read_committed, isc_tpb_rec_version, isc_tpb_no_rec_version:
         TPB := TPB + Char(TPBVal);
       isc_tpb_lock_read, isc_tpb_lock_write:
       begin
         TPB := TPB + Char(TPBVal);
         { Now set the string parameter }
-        ParamLength := Length(param_value);
+        ParamLength := Length(ParamValue);
         Inc(TPBLength, ParamLength + 1);
-        TPB := TPB + Char(ParamLength) + param_value;
+        TPB := TPB + Char(ParamLength) + ParamValue;
       end;
-      else begin
+      else
+      begin
         if (TPBVal > 0) and
            (TPBVal <= isc_tpb_last_tpb_constant) then
           IBError(ibxeTPBConstantNotSupported, [TPBConstantNames[TPBVal]])
         else
-          IBError(ibxeTPBConstantUnknown, [TPBVal]);
+          IBError(ibxeTPBConstantUnknownEx, [sl.Names[i]]);
       end;
     end;
   end;
 end;
 
+{$IFDEF MSWINDOWS}
+{ TTimer }
+
+constructor TIBTimer.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FEnabled := True;
+  FInterval := 1000;
+  FWindowHandle := AllocateHWnd(WndProc);
+end;
+
+destructor TIBTimer.Destroy;
+begin
+  FEnabled := False;
+  UpdateTimer;
+  DeallocateHWnd(FWindowHandle);
+  inherited Destroy;
+end;
+
+procedure TIBTimer.WndProc(var Msg: TMessage);
+begin
+  with Msg do
+    if Msg = WM_TIMER then
+      try
+        Timer;
+      except
+        if Assigned(ApplicationHandleException) then
+          ApplicationHandleException(Self);
+      end
+    else
+      Result := DefWindowProc(FWindowHandle, Msg, wParam, lParam);
+end;
+
+procedure TIBTimer.UpdateTimer;
+begin
+  KillTimer(FWindowHandle, 1);
+  if (FInterval <> 0) and FEnabled and Assigned(FOnTimer) then
+    if SetTimer(FWindowHandle, 1, FInterval, nil) = 0 then
+      raise EOutOfResources.Create(SNoTimers);
+end;
+
+procedure TIBTimer.SetEnabled(Value: Boolean);
+begin
+  if Value <> FEnabled then
+  begin
+    FEnabled := Value;
+    UpdateTimer;
+  end;
+end;
+
+procedure TIBTimer.SetInterval(Value: Cardinal);
+begin
+  if Value <> FInterval then
+  begin
+    FInterval := Value;
+    UpdateTimer;
+  end;
+end;
+
+procedure TIBTimer.SetOnTimer(Value: TNotifyEvent);
+begin
+  FOnTimer := Value;
+  UpdateTimer;
+end;
+
+procedure TIBTimer.Timer;
+begin
+  if Assigned(FOnTimer) then FOnTimer(Self);
+end;
+{$ENDIF}
+
+{ TSchema }
+
+function TSchema.Add_Node(Relation, Field : String) : TFieldNode;
+var
+  FField : TFieldNode;
+  FFieldList : TStringList;
+  DidActivate : Boolean;
+begin
+  FFieldList := TStringList.Create;
+  FRelations.AddObject(Relation, FFieldList);
+  Result := nil;
+
+  DidActivate := not FQuery.Database.InternalTransaction.InTransaction;
+  if DidActivate then
+    FQuery.Database.InternalTransaction.StartTransaction;
+  FQuery.Params[0].AsString := Relation;
+  FQuery.ExecQuery;
+  while not FQuery.Eof do
+  begin
+    FField := TFieldNode.Create;
+    FField.FieldName := FQuery.Fields[2].AsTrimString;
+    FField.DEFAULT_VALUE := not FQuery.Fields[1].IsNull;
+    FField.COMPUTED_BLR := not FQuery.Fields[0].IsNull;
+    FFieldList.AddObject(FField.FieldName, FField);
+    if FField.FieldName = Field then
+      Result := FField;
+    FQuery.Next;
+  end;
+  FQuery.Close;
+  if DidActivate then
+    FQuery.Database.InternalTransaction.Commit;
+end;
+
+constructor TSchema.Create(ADatabase : TIBDatabase);
+const
+  DefaultSQL = 'Select F.RDB$COMPUTED_BLR, ' + {do not localize}
+               'F.RDB$DEFAULT_VALUE, R.RDB$FIELD_NAME ' + {do not localize}
+               'from RDB$RELATION_FIELDS R, RDB$FIELDS F ' + {do not localize}
+               'where R.RDB$RELATION_NAME = :RELATION ' +  {do not localize}
+               'and R.RDB$FIELD_SOURCE = F.RDB$FIELD_NAME '+ {do not localize}
+               'and ((not F.RDB$COMPUTED_BLR is NULL) or ' + {do not localize}
+               '     (not F.RDB$DEFAULT_VALUE is NULL)) '; {do not localize}
+begin
+  FRelations := TStringList.Create;
+  FQuery := TIBSQL.Create(ADatabase);
+  FQuery.Transaction := ADatabase.InternalTransaction;
+  FQuery.SQL.Text := DefaultSQL;
+end;
+
+destructor TSchema.Destroy;
+begin
+  FreeNodes;
+  FRelations.Free;
+  FQuery.Free;
+  inherited;
+end;
+
+procedure TSchema.FreeNodes;
+var
+  FFieldList : TStringList;
+  i, j : Integer;
+begin
+  for i := FRelations.Count - 1 downto 0 do
+  begin
+    FFieldList := TStringList(FRelations.Objects[i]);
+    for j := FFieldList.Count - 1 downto 0 do
+      TFieldNode(FFieldList.Objects[j]).Free;
+    FFieldList.Free;
+    FRelations.Delete(i);
+  end;
+end;
+
+function TSchema.Has_COMPUTED_BLR(Relation, Field: String): Boolean;
+var
+  FRelationList : TStringList;
+  FField : TFieldNode;
+  i : Integer;
+begin
+  i := FRelations.IndexOf(Relation);
+  FField := nil;
+  if i >= 0 then
+  begin
+    FRelationList := TStringList(FRelations.Objects[i]);
+    i := FRelationList.IndexOf(Field);
+    if i >= 0 then
+      FField := TFieldNode(FRelationList.Objects[i]);
+  end
+  else
+    FField := Add_Node(Relation, Field);
+  if Assigned(FField) then
+    Result := Ffield.COMPUTED_BLR
+  else
+    Result := false;
+end;
+
+function TSchema.Has_DEFAULT_VALUE(Relation, Field: String): Boolean;
+var
+  FRelationList : TStringList;
+  FField : TFieldNode;
+  i : Integer;
+begin
+  i := FRelations.IndexOf(Relation);
+  FField := nil;
+  if i >= 0 then
+  begin
+    FRelationList := TStringList(FRelations.Objects[i]);
+    i := FRelationList.IndexOf(Field);
+    if i >= 0 then
+      FField := TFieldNode(FRelationList.Objects[i]);
+  end
+  else
+    FField := Add_Node(Relation, Field);
+  if Assigned(FField) then
+    Result := Ffield.DEFAULT_VALUE
+  else
+    Result := false;
+end;
+
+function TIBDataBase.Has_COMPUTED_BLR(Relation, Field: String): Boolean;
+begin
+  Result := FSchema.Has_COMPUTED_BLR(Relation, Field);
+end;
+
+function TIBDataBase.Has_DEFAULT_VALUE(Relation, Field: String): Boolean;
+begin
+  Result := FSchema.Has_DEFAULT_VALUE(Relation, Field);
+end;
+
+procedure TIBDataBase.FlushSchema;
+begin
+  FSchema.FreeNodes;
+end;
+
 end.
-
-
-
-
 

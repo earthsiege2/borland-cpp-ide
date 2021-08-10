@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*
  *  S M P X P . H
  *
@@ -8,7 +7,7 @@
  *  The following MAPI-defined properties are settable in service
  *  entry calls for the Sample Transport Provider.
  *  
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1993-1999 Microsoft Corporation. All Rights Reserved.
  */
 
 #define BASE_ID 0x6600      /* From MAPITAGS.H comments */
@@ -87,4 +86,3 @@
  *      writer will truncate the logfile to (modulo a line ending).
  */
 
-#pragma option pop /*P_O_Pop*/

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBSQL.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBSQL.pas' rev: 6.00
 
 #ifndef IBSQLHPP
 #define IBSQLHPP
@@ -10,18 +10,18 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
+#include <IBXConst.hpp>	// Pascal unit
 #include <IBUtils.hpp>	// Pascal unit
 #include <IBDatabase.hpp>	// Pascal unit
 #include <IB.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <IBExternals.hpp>	// Pascal unit
 #include <IBErrorCodes.hpp>	// Pascal unit
 #include <IBHeader.hpp>	// Pascal unit
-#include <Controls.hpp>	// Pascal unit
-#include <Forms.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
-#include <SysUtils.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
+#include <SysUtils.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -31,136 +31,10 @@ namespace Ibsql
 {
 //-- type declarations -------------------------------------------------------
 class DELPHICLASS TIBXSQLVAR;
-class DELPHICLASS TIBSQL;
 class DELPHICLASS TIBXSQLDA;
-class PASCALIMPLEMENTATION TIBXSQLVAR : public System::TObject 
-{
-	typedef System::TObject inherited;
-	
-private:
-	TIBSQL* FSQL;
-	int FIndex;
-	bool FModified;
-	AnsiString FName;
-	Ibheader::TXSQLVAR *FXSQLVAR;
-	double __fastcall AdjustScale(__int64 Value, int Scale);
-	System::Currency __fastcall AdjustScaleToCurrency(__int64 Value, int Scale);
-	System::Currency __fastcall GetAsCurrency(void);
-	__int64 __fastcall GetAsInt64(void);
-	System::TDateTime __fastcall GetAsDateTime(void);
-	double __fastcall GetAsDouble(void);
-	float __fastcall GetAsFloat(void);
-	int __fastcall GetAsLong(void);
-	void * __fastcall GetAsPointer(void);
-	Ibheader::TGDS_QUAD __fastcall GetAsQuad();
-	short __fastcall GetAsShort(void);
-	AnsiString __fastcall GetAsString();
-	Variant __fastcall GetAsVariant();
-	Ibheader::PXSQLVAR __fastcall GetAsXSQLVAR(void);
-	bool __fastcall GetIsNull(void);
-	bool __fastcall GetIsNullable(void);
-	int __fastcall GetSize(void);
-	int __fastcall GetSQLType(void);
-	void __fastcall SetAsCurrency(System::Currency Value);
-	void __fastcall SetAsInt64(__int64 Value);
-	void __fastcall SetAsDate(System::TDateTime Value);
-	void __fastcall SetAsTime(System::TDateTime Value);
-	void __fastcall SetAsDateTime(System::TDateTime Value);
-	void __fastcall SetAsDouble(double Value);
-	void __fastcall SetAsFloat(float Value);
-	void __fastcall SetAsLong(int Value);
-	void __fastcall SetAsPointer(void * Value);
-	void __fastcall SetAsQuad(const Ibheader::TGDS_QUAD &Value);
-	void __fastcall SetAsShort(short Value);
-	void __fastcall SetAsString(AnsiString Value);
-	void __fastcall SetAsVariant(const Variant &Value);
-	void __fastcall SetAsXSQLVAR(Ibheader::PXSQLVAR Value);
-	void __fastcall SetIsNull(bool Value);
-	void __fastcall SetIsNullable(bool Value);
-	
-public:
-	__fastcall TIBXSQLVAR(TIBSQL* Query);
-	void __fastcall Assign(TIBXSQLVAR* Source);
-	void __fastcall LoadFromFile(const AnsiString FileName);
-	void __fastcall LoadFromStream(Classes::TStream* Stream);
-	void __fastcall SaveToFile(const AnsiString FileName);
-	void __fastcall SaveToStream(Classes::TStream* Stream);
-	__property System::TDateTime AsDate = {read=GetAsDateTime, write=SetAsDate};
-	__property System::TDateTime AsTime = {read=GetAsDateTime, write=SetAsTime};
-	__property System::TDateTime AsDateTime = {read=GetAsDateTime, write=SetAsDateTime};
-	__property double AsDouble = {read=GetAsDouble, write=SetAsDouble};
-	__property float AsFloat = {read=GetAsFloat, write=SetAsFloat};
-	__property System::Currency AsCurrency = {read=GetAsCurrency, write=SetAsCurrency};
-	__property __int64 AsInt64 = {read=GetAsInt64, write=SetAsInt64};
-	__property int AsInteger = {read=GetAsLong, write=SetAsLong, nodefault};
-	__property int AsLong = {read=GetAsLong, write=SetAsLong, nodefault};
-	__property void * AsPointer = {read=GetAsPointer, write=SetAsPointer};
-	__property Ibheader::TGDS_QUAD AsQuad = {read=GetAsQuad, write=SetAsQuad};
-	__property short AsShort = {read=GetAsShort, write=SetAsShort, nodefault};
-	__property AnsiString AsString = {read=GetAsString, write=SetAsString};
-	__property Variant AsVariant = {read=GetAsVariant, write=SetAsVariant};
-	__property Ibheader::PXSQLVAR AsXSQLVAR = {read=GetAsXSQLVAR, write=SetAsXSQLVAR};
-	__property Ibheader::PXSQLVAR Data = {read=FXSQLVAR, write=FXSQLVAR};
-	__property bool IsNull = {read=GetIsNull, write=SetIsNull, nodefault};
-	__property bool IsNullable = {read=GetIsNullable, write=SetIsNullable, nodefault};
-	__property int Index = {read=FIndex, nodefault};
-	__property bool Modified = {read=FModified, write=FModified, nodefault};
-	__property AnsiString Name = {read=FName};
-	__property int Size = {read=GetSize, nodefault};
-	__property int SQLType = {read=GetSQLType, nodefault};
-	__property Variant Value = {read=GetAsVariant, write=SetAsVariant};
-public:
-	#pragma option push -w-inl
-	/* TObject.Destroy */ inline __fastcall virtual ~TIBXSQLVAR(void) { }
-	#pragma option pop
-	
-};
-
-
-typedef TIBXSQLVAR* TIBXSQLVARArray[1];
-
-typedef TIBXSQLVAR* *PIBXSQLVARArray;
-
-class PASCALIMPLEMENTATION TIBXSQLDA : public System::TObject 
-{
-	typedef System::TObject inherited;
-	
-protected:
-	TIBSQL* FSQL;
-	int FCount;
-	Classes::TStrings* FNames;
-	int FSize;
-	Ibheader::TXSQLDA *FXSQLDA;
-	TIBXSQLVAR* *FXSQLVARs;
-	AnsiString FUniqueRelationName;
-	bool __fastcall GetModified(void);
-	AnsiString __fastcall GetNames();
-	int __fastcall GetRecordSize(void);
-	Ibheader::PXSQLDA __fastcall GetXSQLDA(void);
-	TIBXSQLVAR* __fastcall GetXSQLVAR(int Idx);
-	TIBXSQLVAR* __fastcall GetXSQLVARByName(AnsiString Idx);
-	void __fastcall Initialize(void);
-	void __fastcall SetCount(int Value);
-	
-public:
-	__fastcall TIBXSQLDA(TIBSQL* Query);
-	__fastcall virtual ~TIBXSQLDA(void);
-	void __fastcall AddName(AnsiString FieldName, int Idx);
-	TIBXSQLVAR* __fastcall ByName(AnsiString Idx);
-	__property Ibheader::PXSQLDA AsXSQLDA = {read=GetXSQLDA};
-	__property int Count = {read=FCount, write=SetCount, nodefault};
-	__property bool Modified = {read=GetModified, nodefault};
-	__property AnsiString Names = {read=GetNames};
-	__property int RecordSize = {read=GetRecordSize, nodefault};
-	__property TIBXSQLVAR* Vars[int Idx] = {read=GetXSQLVAR/*, default*/};
-	__property AnsiString UniqueRelationName = {read=FUniqueRelationName};
-};
-
-
+class DELPHICLASS TIBSQL;
 #pragma option push -b-
-enum TIBSQLTypes { SQLUnknown, SQLSelect, SQLInsert, SQLUpdate, SQLDelete, SQLDDL, SQLGetSegment, SQLPutSegment, 
-	SQLExecProcedure, SQLStartTransaction, SQLCommit, SQLRollback, SQLSelectForUpdate, SQLSetGenerator 
-	};
+enum TIBSQLTypes { SQLUnknown, SQLSelect, SQLInsert, SQLUpdate, SQLDelete, SQLDDL, SQLGetSegment, SQLPutSegment, SQLExecProcedure, SQLStartTransaction, SQLCommit, SQLRollback, SQLSelectForUpdate, SQLSetGenerator };
 #pragma option pop
 
 class DELPHICLASS TIBBatchInput;
@@ -226,7 +100,8 @@ public:
 	TIBXSQLDA* __fastcall Next(void);
 	void __fastcall Prepare(void);
 	AnsiString __fastcall GetUniqueRelationName();
-	__property bool BOF = {read=FBOF, nodefault};
+	TIBXSQLVAR* __fastcall ParamByName(AnsiString Idx);
+	__property bool Bof = {read=FBOF, nodefault};
 	__property Ibheader::PISC_DB_HANDLE DBHandle = {read=GetDBHandle};
 	__property bool Eof = {read=GetEOF, nodefault};
 	__property TIBXSQLVAR* Fields[int Idx] = {read=GetFields};
@@ -240,20 +115,149 @@ public:
 	__property TIBSQLTypes SQLType = {read=FSQLType, nodefault};
 	__property Ibheader::PISC_TR_HANDLE TRHandle = {read=GetTRHandle};
 	__property Ibexternals::PVoid Handle = {read=FHandle};
-	__property bool GenerateParamNames = {read=FGenerateParamNames, write=FGenerateParamNames, nodefault
-		};
+	__property bool GenerateParamNames = {read=FGenerateParamNames, write=FGenerateParamNames, nodefault};
 	__property AnsiString UniqueRelationName = {read=GetUniqueRelationName};
 	
 __published:
 	__property Ibdatabase::TIBDatabase* Database = {read=GetDatabase, write=SetDatabase};
-	__property bool GoToFirstRecordOnExecute = {read=FGoToFirstRecordOnExecute, write=FGoToFirstRecordOnExecute
-		, default=1};
+	__property bool GoToFirstRecordOnExecute = {read=FGoToFirstRecordOnExecute, write=FGoToFirstRecordOnExecute, default=1};
 	__property bool ParamCheck = {read=FParamCheck, write=FParamCheck, nodefault};
 	__property Classes::TStrings* SQL = {read=FSQL, write=SetSQL};
 	__property Ibdatabase::TIBTransaction* Transaction = {read=GetTransaction, write=SetTransaction};
 	__property Classes::TNotifyEvent OnSQLChanging = {read=FOnSQLChanging, write=FOnSQLChanging};
 };
 
+
+typedef DynamicArray<TIBXSQLVAR* >  TIBXSQLVARArray;
+
+class PASCALIMPLEMENTATION TIBXSQLDA : public System::TObject 
+{
+	typedef System::TObject inherited;
+	
+public:
+	TIBXSQLVAR* operator[](int Idx) { return Vars[Idx]; }
+	
+protected:
+	TIBSQL* FSQL;
+	int FCount;
+	Classes::TStrings* FNames;
+	int FSize;
+	Ibheader::TXSQLDA *FXSQLDA;
+	DynamicArray<TIBXSQLVAR* >  FXSQLVARs;
+	AnsiString FUniqueRelationName;
+	bool __fastcall GetModified(void);
+	AnsiString __fastcall GetNames();
+	int __fastcall GetRecordSize(void);
+	Ibheader::PXSQLDA __fastcall GetXSQLDA(void);
+	TIBXSQLVAR* __fastcall GetXSQLVAR(int Idx);
+	TIBXSQLVAR* __fastcall GetXSQLVARByName(AnsiString Idx);
+	void __fastcall Initialize(void);
+	void __fastcall SetCount(int Value);
+	
+public:
+	__fastcall TIBXSQLDA(TIBSQL* Query);
+	__fastcall virtual ~TIBXSQLDA(void);
+	void __fastcall AddName(AnsiString FieldName, int Idx);
+	TIBXSQLVAR* __fastcall ByName(AnsiString Idx);
+	__property Ibheader::PXSQLDA AsXSQLDA = {read=GetXSQLDA};
+	__property int Count = {read=FCount, write=SetCount, nodefault};
+	__property bool Modified = {read=GetModified, nodefault};
+	__property AnsiString Names = {read=GetNames};
+	__property int RecordSize = {read=GetRecordSize, nodefault};
+	__property TIBXSQLVAR* Vars[int Idx] = {read=GetXSQLVAR/*, default*/};
+	__property AnsiString UniqueRelationName = {read=FUniqueRelationName};
+};
+
+
+class PASCALIMPLEMENTATION TIBXSQLVAR : public System::TObject 
+{
+	typedef System::TObject inherited;
+	
+private:
+	TIBXSQLDA* FParent;
+	TIBSQL* FSQL;
+	int FIndex;
+	bool FModified;
+	AnsiString FName;
+	Ibheader::TXSQLVAR *FXSQLVAR;
+	short FMaxLen;
+	double __fastcall AdjustScale(__int64 Value, int Scale);
+	__int64 __fastcall AdjustScaleToInt64(__int64 Value, int Scale);
+	System::Currency __fastcall AdjustScaleToCurrency(__int64 Value, int Scale);
+	System::Currency __fastcall GetAsCurrency(void);
+	__int64 __fastcall GetAsInt64(void);
+	System::TDateTime __fastcall GetAsDateTime(void);
+	double __fastcall GetAsDouble(void);
+	float __fastcall GetAsFloat(void);
+	int __fastcall GetAsLong(void);
+	void * __fastcall GetAsPointer(void);
+	Ibheader::TGDS_QUAD __fastcall GetAsQuad();
+	short __fastcall GetAsShort(void);
+	AnsiString __fastcall GetAsString();
+	Variant __fastcall GetAsVariant();
+	Ibheader::PXSQLVAR __fastcall GetAsXSQLVAR(void);
+	bool __fastcall GetIsNull(void);
+	bool __fastcall GetIsNullable(void);
+	int __fastcall GetSize(void);
+	int __fastcall GetSQLType(void);
+	void __fastcall SetAsCurrency(System::Currency Value);
+	void __fastcall SetAsInt64(__int64 Value);
+	void __fastcall SetAsDate(System::TDateTime Value);
+	void __fastcall SetAsTime(System::TDateTime Value);
+	void __fastcall SetAsDateTime(System::TDateTime Value);
+	void __fastcall SetAsDouble(double Value);
+	void __fastcall SetAsFloat(float Value);
+	void __fastcall SetAsLong(int Value);
+	void __fastcall SetAsPointer(void * Value);
+	void __fastcall SetAsQuad(const Ibheader::TGDS_QUAD &Value);
+	void __fastcall SetAsShort(short Value);
+	void __fastcall SetAsString(AnsiString Value);
+	void __fastcall SetAsVariant(const Variant &Value);
+	void __fastcall SetAsXSQLVAR(Ibheader::PXSQLVAR Value);
+	void __fastcall SetIsNull(bool Value);
+	void __fastcall SetIsNullable(bool Value);
+	void __fastcall SetAsTrimString(const AnsiString Value);
+	AnsiString __fastcall GetAsTrimString();
+	
+public:
+	__fastcall TIBXSQLVAR(TIBXSQLDA* Parent, TIBSQL* Query);
+	void __fastcall Assign(TIBXSQLVAR* Source);
+	void __fastcall LoadFromFile(const AnsiString FileName);
+	void __fastcall LoadFromStream(Classes::TStream* Stream);
+	void __fastcall SaveToFile(const AnsiString FileName);
+	void __fastcall SaveToStream(Classes::TStream* Stream);
+	void __fastcall Clear(void);
+	__property System::TDateTime AsDate = {read=GetAsDateTime, write=SetAsDate};
+	__property System::TDateTime AsTime = {read=GetAsDateTime, write=SetAsTime};
+	__property System::TDateTime AsDateTime = {read=GetAsDateTime, write=SetAsDateTime};
+	__property double AsDouble = {read=GetAsDouble, write=SetAsDouble};
+	__property float AsFloat = {read=GetAsFloat, write=SetAsFloat};
+	__property System::Currency AsCurrency = {read=GetAsCurrency, write=SetAsCurrency};
+	__property __int64 AsInt64 = {read=GetAsInt64, write=SetAsInt64};
+	__property int AsInteger = {read=GetAsLong, write=SetAsLong, nodefault};
+	__property int AsLong = {read=GetAsLong, write=SetAsLong, nodefault};
+	__property void * AsPointer = {read=GetAsPointer, write=SetAsPointer};
+	__property Ibheader::TGDS_QUAD AsQuad = {read=GetAsQuad, write=SetAsQuad};
+	__property short AsShort = {read=GetAsShort, write=SetAsShort, nodefault};
+	__property AnsiString AsString = {read=GetAsString, write=SetAsString};
+	__property AnsiString AsTrimString = {read=GetAsTrimString, write=SetAsTrimString};
+	__property Variant AsVariant = {read=GetAsVariant, write=SetAsVariant};
+	__property Ibheader::PXSQLVAR AsXSQLVAR = {read=GetAsXSQLVAR, write=SetAsXSQLVAR};
+	__property Ibheader::PXSQLVAR Data = {read=FXSQLVAR, write=FXSQLVAR};
+	__property bool IsNull = {read=GetIsNull, write=SetIsNull, nodefault};
+	__property bool IsNullable = {read=GetIsNullable, write=SetIsNullable, nodefault};
+	__property int Index = {read=FIndex, nodefault};
+	__property bool Modified = {read=FModified, write=FModified, nodefault};
+	__property AnsiString Name = {read=FName};
+	__property int Size = {read=GetSize, nodefault};
+	__property int SQLType = {read=GetSQLType, nodefault};
+	__property Variant Value = {read=GetAsVariant, write=SetAsVariant};
+public:
+	#pragma option push -w-inl
+	/* TObject.Destroy */ inline __fastcall virtual ~TIBXSQLVAR(void) { }
+	#pragma option pop
+	
+};
 
 
 class DELPHICLASS TIBBatch;
@@ -268,9 +272,9 @@ protected:
 	
 public:
 	virtual void __fastcall ReadyFile(void) = 0 ;
-	__property TIBXSQLDA* Columns = {read=FColumns};
+	__property TIBXSQLDA* Columns = {read=FColumns, write=FColumns};
 	__property AnsiString Filename = {read=FFilename, write=FFilename};
-	__property TIBXSQLDA* Params = {read=FParams};
+	__property TIBXSQLDA* Params = {read=FParams, write=FParams};
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall TIBBatch(void) : System::TObject() { }
@@ -322,7 +326,7 @@ class PASCALIMPLEMENTATION TIBOutputDelimitedFile : public TIBBatchOutput
 	typedef TIBBatchOutput inherited;
 	
 protected:
-	unsigned FHandle;
+	Classes::TFileStream* FFile;
 	bool FOutputTitles;
 	AnsiString FColDelimiter;
 	AnsiString FRowDelimiter;
@@ -379,7 +383,7 @@ class PASCALIMPLEMENTATION TIBOutputRawFile : public TIBBatchOutput
 	typedef TIBBatchOutput inherited;
 	
 protected:
-	unsigned FHandle;
+	Classes::TFileStream* FFile;
 	
 public:
 	__fastcall virtual ~TIBOutputRawFile(void);
@@ -399,7 +403,7 @@ class PASCALIMPLEMENTATION TIBInputRawFile : public TIBBatchInput
 	typedef TIBBatchInput inherited;
 	
 protected:
-	unsigned FHandle;
+	Classes::TFileStream* FFile;
 	
 public:
 	__fastcall virtual ~TIBInputRawFile(void);
@@ -414,17 +418,9 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE System::ResourceString _SEOFInComment;
-#define Ibsql_SEOFInComment System::LoadResourceString(&Ibsql::_SEOFInComment)
-extern PACKAGE System::ResourceString _SEOFInString;
-#define Ibsql_SEOFInString System::LoadResourceString(&Ibsql::_SEOFInString)
-extern PACKAGE System::ResourceString _SParamNameExpected;
-#define Ibsql_SParamNameExpected System::LoadResourceString(&Ibsql::_SParamNameExpected)
 
 }	/* namespace Ibsql */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ibsql;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

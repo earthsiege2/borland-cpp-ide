@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'QuickRpt.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QuickRpt.pas' rev: 6.00
 
 #ifndef QuickRptHPP
 #define QuickRptHPP
@@ -10,13 +10,13 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <QRExpbld.hpp>	// Pascal unit
+#include <QRExpBld.hpp>	// Pascal unit
 #include <QRExpr.hpp>	// Pascal unit
 #include <QRPrgres.hpp>	// Pascal unit
-#include <qr3const.hpp>	// Pascal unit
+#include <QR3Const.hpp>	// Pascal unit
 #include <QRPrntr.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Printers.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
@@ -44,8 +44,7 @@ typedef void __fastcall (__closure *TQROnNeedDataEvent)(System::TObject* Sender,
 enum TQRNotifyOperation { qrMasterDataAdvance, qrBandPrinted, qrBandSizeChange };
 #pragma option pop
 
-typedef void __fastcall (__closure *TQRNotifyOperationEvent)(System::TObject* Sender, TQRNotifyOperation 
-	Operation);
+typedef void __fastcall (__closure *TQRNotifyOperationEvent)(System::TObject* Sender, TQRNotifyOperation Operation);
 
 class DELPHICLASS TQRCustomController;
 class DELPHICLASS TCustomQuickRep;
@@ -71,8 +70,7 @@ private:
 	void __fastcall SetWidth(int Value);
 	
 protected:
-	void __fastcall PaintIt(Graphics::TCanvas* ACanvas, const Windows::TRect &ARect, Extended XFact, Extended 
-		YFact);
+	void __fastcall PaintIt(Graphics::TCanvas* ACanvas, const Types::TRect &ARect, Extended XFact, Extended YFact);
 	void __fastcall SetPen(Graphics::TPen* aPen);
 	
 public:
@@ -129,8 +127,7 @@ __published:
 	__property TQRFrame* Frame = {read=GetFrame, write=SetFrame};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRBasePanel(HWND ParentWindow) : Extctrls::TCustomPanel(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRBasePanel(HWND ParentWindow) : Extctrls::TCustomPanel(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -183,15 +180,11 @@ public:
 	
 __published:
 	__property bool HasTitle = {read=GetHasBand, write=SetHasBand, stored=false, index=1, nodefault};
-	__property bool HasPageHeader = {read=GetHasBand, write=SetHasBand, stored=false, index=2, nodefault
-		};
-	__property bool HasColumnHeader = {read=GetHasBand, write=SetHasBand, stored=false, index=3, nodefault
-		};
+	__property bool HasPageHeader = {read=GetHasBand, write=SetHasBand, stored=false, index=2, nodefault};
+	__property bool HasColumnHeader = {read=GetHasBand, write=SetHasBand, stored=false, index=3, nodefault};
 	__property bool HasDetail = {read=GetHasBand, write=SetHasBand, stored=false, index=4, nodefault};
-	__property bool HasPageFooter = {read=GetHasBand, write=SetHasBand, stored=false, index=6, nodefault
-		};
+	__property bool HasPageFooter = {read=GetHasBand, write=SetHasBand, stored=false, index=6, nodefault};
 	__property bool HasSummary = {read=GetHasBand, write=SetHasBand, stored=false, index=7, nodefault};
-		
 public:
 	#pragma option push -w-inl
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TQuickRepBands(void) { }
@@ -200,8 +193,7 @@ public:
 };
 
 
-typedef void __fastcall (__closure *TQRReportBeforePrintEvent)(TCustomQuickRep* Sender, bool &PrintReport
-	);
+typedef void __fastcall (__closure *TQRReportBeforePrintEvent)(TCustomQuickRep* Sender, bool &PrintReport);
 
 typedef void __fastcall (__closure *TQRNotifyEvent)(TCustomQuickRep* Sender);
 
@@ -302,8 +294,7 @@ __published:
 	__property int Columns = {read=FColumns, write=SetColumns, nodefault};
 	__property Extended LeftMargin = {read=GetValue, write=SetValue, stored=false, index=4};
 	__property Extended Length = {read=GetValue, write=SetValue, stored=false, index=1};
-	__property Printers::TPrinterOrientation Orientation = {read=FOrientation, write=SetOrientation, nodefault
-		};
+	__property Printers::TPrinterOrientation Orientation = {read=FOrientation, write=SetOrientation, nodefault};
 	__property Qrprntr::TQRPaperSize PaperSize = {read=GetPaperSize, write=SetPaperSize, nodefault};
 	__property Extended RightMargin = {read=GetValue, write=SetValue, stored=false, index=5};
 	__property bool Ruler = {read=GetRuler, write=SetRuler, default=1};
@@ -330,8 +321,7 @@ __published:
 	__property OutputBin ;
 public:
 	#pragma option push -w-inl
-	/* TQRPrinterSettings.Create */ inline __fastcall TQuickRepPrinterSettings(void) : Qrprntr::TQRPrinterSettings(
-		) { }
+	/* TQRPrinterSettings.Create */ inline __fastcall TQuickRepPrinterSettings(void) : Qrprntr::TQRPrinterSettings() { }
 	#pragma option pop
 	
 public:
@@ -352,7 +342,7 @@ class PASCALIMPLEMENTATION TCustomQuickRep : public TQRBasePanel
 {
 	typedef TQRBasePanel inherited;
 	
-/*private:*/protected:
+private:
 	TQRCreateReportThread* BGThread;
 	Classes::TList* BandRegList;
 	Classes::TList* FAllDataSets;
@@ -422,8 +412,7 @@ protected:
 	void __fastcall ForceNewPage(void);
 	DYNAMIC void __fastcall GetChildren(Classes::TGetChildProc Proc, Classes::TComponent* root);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall PaintColumns(void);
 	virtual void __fastcall PaintMargins(void);
 	virtual void __fastcall PaintFrame(void);
@@ -484,17 +473,13 @@ public:
 	__property Qrprntr::TQRPrinter* QRPrinter = {read=FQRPrinter, write=FQRPrinter};
 	__property int RotateBands = {read=FRotateBands, write=SetRotateBands, nodefault};
 	__property TQRState State = {read=FState, write=FState, nodefault};
-	__property Qrprntr::TQRAfterPrintEvent AfterPrint = {read=FAfterPrintEvent, write=FAfterPrintEvent}
-		;
-	__property Qrprntr::TQRAfterPreviewEvent AfterPreview = {read=FAfterPreviewEvent, write=FAfterPreviewEvent
-		};
+	__property Qrprntr::TQRAfterPrintEvent AfterPrint = {read=FAfterPrintEvent, write=FAfterPrintEvent};
+	__property Qrprntr::TQRAfterPreviewEvent AfterPreview = {read=FAfterPreviewEvent, write=FAfterPreviewEvent};
 	__property TQuickRepBands* Bands = {read=FBands, write=FBands};
-	__property TQRReportBeforePrintEvent BeforePrint = {read=FBeforePrintEvent, write=FBeforePrintEvent
-		};
+	__property TQRReportBeforePrintEvent BeforePrint = {read=FBeforePrintEvent, write=FBeforePrintEvent};
 	__property Classes::TStrings* Description = {read=FDescription, write=SetDescription};
 	__property Font ;
-	__property Qrexpr::TQREvEnvironment* Functions = {read=FEnvironment, write=FEnvironment, stored=true
-		};
+	__property Qrexpr::TQREvEnvironment* Functions = {read=FEnvironment, write=FEnvironment, stored=true};
 	__property TQRNotifyEvent OnEndPage = {read=FOnEndPageEvent, write=FOnEndPageEvent};
 	__property TQROnNeedDataEvent OnNeedData = {read=FOnNeedDataEvent, write=FOnNeedDataEvent};
 	__property Classes::TNotifyEvent OnPreview = {read=FOnPreviewEvent, write=FOnPreviewEvent};
@@ -502,8 +487,7 @@ public:
 	__property TQuickReportOptions Options = {read=FOptions, write=FOptions, nodefault};
 	__property TQRPage* Page = {read=FPage, write=FPage};
 	__property bool PrintIfEmpty = {read=GetPrintIfEmpty, write=SetPrintIfEmpty, nodefault};
-	__property TQuickRepPrinterSettings* PrinterSettings = {read=FPrinterSettings, write=FPrinterSettings
-		};
+	__property TQuickRepPrinterSettings* PrinterSettings = {read=FPrinterSettings, write=FPrinterSettings};
 	__property AnsiString ReportTitle = {read=FReportTitle, write=FReportTitle};
 	__property bool ShowProgress = {read=FShowProgress, write=FShowProgress, default=1};
 	__property bool SnapToGrid = {read=FSnapToGrid, write=FSnapToGrid, nodefault};
@@ -511,8 +495,7 @@ public:
 	__property Zoom ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomQuickRep(HWND ParentWindow) : TQRBasePanel(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomQuickRep(HWND ParentWindow) : TQRBasePanel(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -586,8 +569,7 @@ private:
 	void __fastcall SetDataSet(Db::TDataSet* Value);
 	
 protected:
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall Prepare(void);
 	virtual void __fastcall PrintEmptyController(void);
 	virtual void __fastcall RegisterBands(void);
@@ -603,8 +585,7 @@ public:
 	__property TQROnNeedDataEvent OnNeedData = {read=FOnNeedDataEvent, write=FOnNeedDataEvent};
 public:
 	#pragma option push -w-inl
-	/* TQRCustomController.Create */ inline __fastcall virtual TQRController(Classes::TComponent* AOwner
-		) : TQRCustomController(AOwner) { }
+	/* TQRCustomController.Create */ inline __fastcall virtual TQRController(Classes::TComponent* AOwner) : TQRCustomController(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TQRCustomController.Destroy */ inline __fastcall virtual ~TQRController(void) { }
@@ -646,11 +627,9 @@ public:
 };
 
 
-typedef void __fastcall (__closure *TQRBandBeforePrintEvent)(TQRCustomBand* Sender, bool &PrintBand)
-	;
+typedef void __fastcall (__closure *TQRBandBeforePrintEvent)(TQRCustomBand* Sender, bool &PrintBand);
 
-typedef void __fastcall (__closure *TQRBandAfterPrintEvent)(TQRCustomBand* Sender, bool BandPrinted)
-	;
+typedef void __fastcall (__closure *TQRBandAfterPrintEvent)(TQRCustomBand* Sender, bool BandPrinted);
 
 class DELPHICLASS TQRChildBand;
 class PASCALIMPLEMENTATION TQRCustomBand : public TQRBasePanel 
@@ -658,7 +637,10 @@ class PASCALIMPLEMENTATION TQRCustomBand : public TQRBasePanel
 	typedef TQRBasePanel inherited;
 	
 private:
-	Windows::TRect BandFrameRect;
+	#pragma pack(push, 1)
+	Types::TRect BandFrameRect;
+	#pragma pack(pop)
+	
 	bool ButtonDown;
 	Extended FExpanded;
 	TQRBandAfterPrintEvent FAfterPrintEvent;
@@ -689,8 +671,7 @@ protected:
 	void __fastcall AdvancePaper(void);
 	virtual void __fastcall Loaded(void);
 	void __fastcall MakeSpace(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall Paint(void);
 	virtual void __fastcall PaintRuler(TQRUnit Units);
 	void __fastcall Print(void);
@@ -702,8 +683,7 @@ protected:
 	void __fastcall SetUnits(TQRUnit Value);
 	virtual void __fastcall SetZoom(int Value);
 	virtual void __fastcall WriteDummy(Classes::TWriter* Writer);
-	__property TQRCustomController* NotifyController = {read=FNotifyController, write=FNotifyController
-		};
+	__property TQRCustomController* NotifyController = {read=FNotifyController, write=FNotifyController};
 	__property bool ParentUpdating = {read=FParentUpdating, write=FParentUpdating, nodefault};
 	__property TQRUnit Units = {read=GetUnits, write=SetUnits, nodefault};
 	
@@ -722,20 +702,18 @@ __published:
 	__property TQRBandAfterPrintEvent AfterPrint = {read=FAfterPrintEvent, write=FAfterPrintEvent};
 	__property bool AlignToBottom = {read=FAlignToBottom, write=FAlignToBottom, nodefault};
 	__property TQRBandBeforePrintEvent BeforePrint = {read=FBeforePrintEvent, write=FBeforePrintEvent};
-		
-	__property Color ;
+	__property Color  = {default=-2147483633};
 	__property bool Enabled = {read=FEnabled, write=SetEnabled, default=1};
 	__property Font ;
 	__property bool ForceNewColumn = {read=FForceNewColumn, write=FForceNewColumn, nodefault};
 	__property bool ForceNewPage = {read=FForceNewPage, write=FForceNewPage, nodefault};
 	__property bool HasChild = {read=GetHasChild, write=SetHasChild, stored=false, nodefault};
 	__property TQRCustomBand* LinkBand = {read=FLinkBand, write=SetLinkBand};
-	__property ParentFont ;
+	__property ParentFont  = {default=1};
 	__property TQRBandSize* Size = {read=GetBandSize, write=SetBandSize};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRCustomBand(HWND ParentWindow) : TQRBasePanel(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRCustomBand(HWND ParentWindow) : TQRBasePanel(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -749,8 +727,7 @@ __published:
 	__property BandType ;
 public:
 	#pragma option push -w-inl
-	/* TQRCustomBand.Create */ inline __fastcall virtual TQRBand(Classes::TComponent* AOwner) : TQRCustomBand(
-		AOwner) { }
+	/* TQRCustomBand.Create */ inline __fastcall virtual TQRBand(Classes::TComponent* AOwner) : TQRCustomBand(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TQRCustomBand.Destroy */ inline __fastcall virtual ~TQRBand(void) { }
@@ -758,8 +735,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRBand(HWND ParentWindow) : TQRCustomBand(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRBand(HWND ParentWindow) : TQRCustomBand(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -772,8 +748,7 @@ class PASCALIMPLEMENTATION TQRChildBand : public TQRCustomBand
 private:
 	TQRCustomBand* FParentBand;
 	void __fastcall SetParentBand(TQRCustomBand* Value);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TQRChildBand(Classes::TComponent* AOwner);
@@ -787,8 +762,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRChildBand(HWND ParentWindow) : TQRCustomBand(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRChildBand(HWND ParentWindow) : TQRCustomBand(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -830,8 +804,7 @@ __published:
 	__property Classes::TComponent* Master = {read=FMaster, write=SetMaster};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRControllerBand(HWND ParentWindow) : TQRCustomBand(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRControllerBand(HWND ParentWindow) : TQRCustomBand(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -855,8 +828,7 @@ private:
 	void __fastcall SetOnNeedData(TQROnNeedDataEvent Value);
 	
 protected:
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall RegisterBands(void);
 	
 public:
@@ -874,8 +846,7 @@ __published:
 	__property PrintIfEmpty ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRSubDetail(HWND ParentWindow) : TQRControllerBand(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRSubDetail(HWND ParentWindow) : TQRControllerBand(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -903,7 +874,6 @@ __published:
 	__property bool HasFooter = {read=GetHasFooter, write=SetHasFooter, stored=false, nodefault};
 	__property bool HasHeader = {read=GetHasHeader, write=SetHasHeader, stored=false, nodefault};
 public:
-		
 	#pragma option push -w-inl
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TQRSubDetailGroupBands(void) { }
 	#pragma option pop
@@ -948,8 +918,7 @@ protected:
 	int __fastcall GetPrintCount(void);
 	void __fastcall SetPrintCount(int Value);
 	virtual void __fastcall CreateController(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual AnsiString __fastcall BandTypeName();
 	virtual AnsiString __fastcall BandComponentName();
 	int __fastcall GetCount(void);
@@ -969,8 +938,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRLoopBand(HWND ParentWindow) : TQRControllerBand(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRLoopBand(HWND ParentWindow) : TQRControllerBand(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1014,8 +982,7 @@ protected:
 	virtual AnsiString __fastcall LocalVarExpression();
 	void __fastcall SetItems(Classes::TStrings* Value);
 	virtual void __fastcall CreateController(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TQRStringsBand(Classes::TComponent* AOwner);
@@ -1032,8 +999,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRStringsBand(HWND ParentWindow) : TQRControllerBand(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRStringsBand(HWND ParentWindow) : TQRControllerBand(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1049,8 +1015,7 @@ __published:
 	__property PaperSize ;
 public:
 	#pragma option push -w-inl
-	/* TQRPrinterSettings.Create */ inline __fastcall TQRCompositePrinterSettings(void) : TQuickRepPrinterSettings(
-		) { }
+	/* TQRPrinterSettings.Create */ inline __fastcall TQRCompositePrinterSettings(void) : TQuickRepPrinterSettings() { }
 	#pragma option pop
 	
 public:
@@ -1074,8 +1039,7 @@ private:
 	
 protected:
 	virtual void __fastcall Execute(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall SetControllerBands(void);
 	
 public:
@@ -1102,20 +1066,18 @@ __published:
 	__property PrinterSettings ;
 	__property PrintIfEmpty ;
 	__property ReportTitle ;
-	__property ShowProgress ;
+	__property ShowProgress  = {default=1};
 	__property SnapToGrid ;
 	__property Units ;
 	__property Zoom ;
 public:
 	#pragma option push -w-inl
-	/* TCustomQuickRep.Create */ inline __fastcall virtual TQuickRep(Classes::TComponent* AOwner) : TCustomQuickRep(
-		AOwner) { }
+	/* TCustomQuickRep.Create */ inline __fastcall virtual TQuickRep(Classes::TComponent* AOwner) : TCustomQuickRep(AOwner) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQuickRep(HWND ParentWindow) : TCustomQuickRep(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQuickRep(HWND ParentWindow) : TCustomQuickRep(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1146,12 +1108,10 @@ __published:
 	__property Zoom ;
 public:
 	#pragma option push -w-inl
-	/* TCustomQuickRep.Create */ inline __fastcall virtual TQuickAbstractRep(Classes::TComponent* AOwner
-		) : TCustomQuickRep(AOwner) { }
+	/* TCustomQuickRep.Create */ inline __fastcall virtual TQuickAbstractRep(Classes::TComponent* AOwner) : TCustomQuickRep(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomQuickRep.CreateNew */ inline __fastcall virtual TQuickAbstractRep(Classes::TComponent* AOwner
-		, int Dummy) : TCustomQuickRep(AOwner, Dummy) { }
+	/* TCustomQuickRep.CreateNew */ inline __fastcall virtual TQuickAbstractRep(Classes::TComponent* AOwner, int Dummy) : TCustomQuickRep(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomQuickRep.Destroy */ inline __fastcall virtual ~TQuickAbstractRep(void) { }
@@ -1159,8 +1119,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQuickAbstractRep(HWND ParentWindow) : TCustomQuickRep(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQuickAbstractRep(HWND ParentWindow) : TCustomQuickRep(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1199,8 +1158,7 @@ __published:
 	__property Extended LabelHeight = {read=GetValue, write=SetValue, stored=false, index=4};
 	__property Extended HorizontalPitch = {read=GetValue, write=SetValue, stored=false, index=5};
 	__property int NumberDown = {read=GetInteger, write=SetInteger, stored=false, index=0, nodefault};
-	__property int NumberAcross = {read=GetInteger, write=SetInteger, stored=false, index=1, nodefault}
-		;
+	__property int NumberAcross = {read=GetInteger, write=SetInteger, stored=false, index=1, nodefault};
 public:
 	#pragma option push -w-inl
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TQRLabelSetup(void) { }
@@ -1225,14 +1183,12 @@ __published:
 	__property TQRLabelSetup* LabelSetup = {read=FLabelSetup, write=FLabelSetup};
 public:
 	#pragma option push -w-inl
-	/* TCustomQuickRep.Create */ inline __fastcall virtual TQuickLabelReport(Classes::TComponent* AOwner
-		) : TCustomQuickRep(AOwner) { }
+	/* TCustomQuickRep.Create */ inline __fastcall virtual TQuickLabelReport(Classes::TComponent* AOwner) : TCustomQuickRep(AOwner) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQuickLabelReport(HWND ParentWindow) : TCustomQuickRep(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQuickLabelReport(HWND ParentWindow) : TCustomQuickRep(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1261,8 +1217,7 @@ protected:
 	__property bool Reprint = {read=FReprint, write=FReprint, nodefault};
 	void __fastcall Check(void);
 	void __fastcall NewPageCheck(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	void __fastcall Prepare(void);
 	void __fastcall PrintGroupHeader(void);
 	void __fastcall PrintGroupFooter(void);
@@ -1280,10 +1235,8 @@ __published:
 	__property Classes::TComponent* Master = {read=FMaster, write=SetMaster};
 	__property bool ReprintOnNewPage = {read=FReprintOnNewPage, write=FReprintOnNewPage, nodefault};
 public:
-		
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRGroup(HWND ParentWindow) : TQRCustomBand(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRGroup(HWND ParentWindow) : TQRCustomBand(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1421,13 +1374,12 @@ public:
 	__property TMetaClass* EditorClass = {read=GetEditorClass};
 	
 __published:
-	__property Enabled ;
+	__property Enabled  = {default=1};
 	__property TQRFrame* Frame = {read=FFrame, write=SetFrame};
 	__property TQRPrintableSize* Size = {read=FSize, write=FSize};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRPrintable(HWND ParentWindow) : Controls::TCustomControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRPrintable(HWND ParentWindow) : Controls::TCustomControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1473,8 +1425,7 @@ __published:
 	__property Classes::TNotifyEvent OnAddReports = {read=FOnAddReports, write=FOnAddReports};
 	__property Classes::TNotifyEvent OnFinished = {read=FOnFinished, write=FOnFinished};
 	__property TQuickReportOptions Options = {read=FOptions, write=FOptions, nodefault};
-	__property TQRCompositePrinterSettings* PrinterSettings = {read=FPrinterSettings, write=FPrinterSettings
-		};
+	__property TQRCompositePrinterSettings* PrinterSettings = {read=FPrinterSettings, write=FPrinterSettings};
 	__property AnsiString ReportTitle = {read=FReportTitle, write=FReportTitle};
 };
 
@@ -1492,12 +1443,10 @@ public:
 	__fastcall virtual ~TQRCompositeWinControl(void);
 public:
 	#pragma option push -w-inl
-	/* TWinControl.Create */ inline __fastcall virtual TQRCompositeWinControl(Classes::TComponent* AOwner
-		) : Controls::TWinControl(AOwner) { }
+	/* TWinControl.Create */ inline __fastcall virtual TQRCompositeWinControl(Classes::TComponent* AOwner) : Controls::TWinControl(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRCompositeWinControl(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRCompositeWinControl(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1505,15 +1454,12 @@ public:
 
 //-- var, const, procedure ---------------------------------------------------
 extern PACKAGE AnsiString __fastcall UniqueName(Classes::TComponent* AComponent, AnsiString Start);
-extern PACKAGE void __fastcall PerformSQLParamsUpdate(Dbtables::TQuery* Query, Qrexpr::TQREvEnvironment* 
-	Environment);
+extern PACKAGE void __fastcall PerformSQLParamsUpdate(Dbtables::TQuery* Query, Qrexpr::TQREvEnvironment* Environment);
 extern PACKAGE void __fastcall SetQRHiColor(void);
 extern PACKAGE void __fastcall SetQRLoColor(void);
 
 }	/* namespace Quickrpt */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Quickrpt;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

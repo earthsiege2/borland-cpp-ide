@@ -1,22 +1,43 @@
-{********************************************************}
-{                                                        }
-{       Borland Delphi Visual Component Library          }
-{       InterBase Express core components                }
-{                                                        }
-{       Copyright (c) 1998-1999 Inprise Corporation      }
-{                                                        }
-{    InterBase Express is based in part on the product   }
-{    Free IB Components, written by Gregory H. Deatz for }
-{    Hoagland, Longo, Moran, Dunst & Doukas Company.     }
-{    Free IB Components is used under license.           }
-{                                                        }
-{********************************************************}
+{************************************************************************}
+{                                                                        }
+{       Borland Delphi Visual Component Library                          }
+{       InterBase Express core components                                }
+{                                                                        }
+{       Copyright (c) 1998-2001 Borland Software Corporation             }
+{                                                                        }
+{    InterBase Express is based in part on the product                   }
+{    Free IB Components, written by Gregory H. Deatz for                 }
+{    Hoagland, Longo, Moran, Dunst & Doukas Company.                     }
+{    Free IB Components is used under license.                           }
+{                                                                        }
+{    The contents of this file are subject to the InterBase              }
+{    Public License Version 1.0 (the "License"); you may not             }
+{    use this file except in compliance with the License. You may obtain }
+{    a copy of the License at http://www.borland.com/interbase/IPL.html  }
+{    Software distributed under the License is distributed on            }
+{    an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either              }
+{    express or implied. See the License for the specific language       }
+{    governing rights and limitations under the License.                 }
+{    The Original Code was created by InterBase Software Corporation     }
+{       and its successors.                                              }
+{    Portions created by Borland Software Corporation are Copyright      }
+{       (C) Borland Software Corporation. All Rights Reserved.           }
+{    Contributor(s): Jeff Overcash                                       }
+{                                                                        }
+{************************************************************************}
 
 unit IBIntf;
 
 interface
 
-uses Windows, IBHeader, IBInstallHeader, IBExternals;
+uses SysUtils, 
+{$IFDEF MSWINDOWS} 
+  Windows, 
+{$ENDIF}
+{$IFDEF LINUX} 
+  Libc, 
+{$ENDIF} 
+  IBHeader, IBInstallHeader, IBExternals;
 
 var
   BLOB_get: TBLOB_get;
@@ -68,6 +89,11 @@ var
   isc_event_counts: Tisc_event_counts;
   isc_event_block: Tisc_event_block;
   isc_free: Tisc_free;
+  isc_add_user   : Tisc_add_user;
+  isc_delete_user: Tisc_delete_user;
+  isc_modify_user: Tisc_modify_user;
+  isc_prepare_transaction : Tisc_prepare_transaction;
+  isc_prepare_transaction2 : Tisc_prepare_transaction2;
 
   isc_install_clear_options: Tisc_install_clear_options;
   isc_install_execute: Tisc_install_execute;
@@ -93,17 +119,17 @@ procedure CheckIBInstallLoaded;
 { Stubs for 6.0 only functions }
 function isc_rollback_retaining_stub(status_vector   : PISC_STATUS;
               tran_handle     : PISC_TR_HANDLE):
-                                     ISC_STATUS; stdcall;
+                                     ISC_STATUS; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 function isc_service_attach_stub(status_vector      : PISC_STATUS;
                                  isc_arg2           : UShort;
                                  isc_arg3           : PChar;
                                  service_handle     : PISC_SVC_HANDLE;
                                  isc_arg5           : UShort;
                                  isc_arg6           : PChar):
-                                 ISC_STATUS; stdcall;
+                                 ISC_STATUS; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 function isc_service_detach_stub(status_vector      : PISC_STATUS;
                                  service_handle     : PISC_SVC_HANDLE):
-                                 ISC_STATUS; stdcall;
+                                 ISC_STATUS; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 function isc_service_query_stub(status_vector        : PISC_STATUS;
                                 service_handle       : PISC_SVC_HANDLE;
                                 recv_handle          : PISC_SVC_HANDLE;
@@ -113,40 +139,40 @@ function isc_service_query_stub(status_vector        : PISC_STATUS;
                                 isc_arg7             : PChar;
                                 isc_arg8             : UShort;
                                 isc_arg9             : PChar):
-                                ISC_STATUS; stdcall;
+                                ISC_STATUS; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 function isc_service_start_stub(status_vector        : PISC_STATUS;
                                 service_handle       : PISC_SVC_HANDLE;
                                 recv_handle          : PISC_SVC_HANDLE;
                                 isc_arg4             : UShort;
                                 isc_arg5             : PChar):
-                                ISC_STATUS; stdcall;
+                                ISC_STATUS; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 
 procedure isc_encode_sql_date_stub(tm_date           : PCTimeStructure;
                  ib_date           : PISC_DATE);
-                                   stdcall;
+                                   {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 
 procedure isc_encode_sql_time_stub(tm_date           : PCTimeStructure;
                    ib_time           : PISC_TIME);
-                                   stdcall;
+                                   {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 
 procedure isc_encode_timestamp_stub(tm_date          : PCTimeStructure;
                   ib_timestamp     : PISC_TIMESTAMP);
-                                    stdcall;
+                                    {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 
 procedure isc_decode_sql_date_stub(ib_date           : PISC_DATE;
                                    tm_date           : PCTimeStructure);
-                                   stdcall;
+                                   {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 
 procedure isc_decode_sql_time_stub(ib_time           : PISC_TIME;
                                    tm_date           : PCTimeStructure);
-                                   stdcall;
+                                   {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 
 procedure isc_decode_timestamp_stub(ib_timestamp     : PISC_TIMESTAMP;
                                     tm_date          : PCTimeStructure);
-                                    stdcall;
+                                    {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 
 { stubs for install functions }
-function isc_install_clear_options_stub(hOption: POPTIONS_HANDLE):MSG_NO; stdcall;
+function isc_install_clear_options_stub(hOption: POPTIONS_HANDLE):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 function isc_install_execute_stub(hOption: OPTIONS_HANDLE;
                              src_dir: TEXT;
                              dest_dir: TEXT;
@@ -154,51 +180,86 @@ function isc_install_execute_stub(hOption: OPTIONS_HANDLE;
                              status_data: pointer;
                              error_func: FP_ERROR;
                              error_data: pointer;
-                             uninstal_file_name: TEXT):MSG_NO; stdcall;
+                             uninstal_file_name: TEXT):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 function isc_install_get_info_stub(info_type :integer;
                               option :OPT;
                               info_buffer : Pointer;
-                              buf_len : Cardinal): MSG_NO; stdcall;
+                              buf_len : Cardinal): MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 function isc_install_get_message_stub(hOption: OPTIONS_HANDLE;
                                  message_no: MSG_NO;
                                  message_txt: Pointer;
-                                 message_len: Cardinal):MSG_NO; stdcall;
-function isc_install_load_external_text_stub(msg_file_name: TEXT):MSG_NO; stdcall;
+                                 message_len: Cardinal):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
+function isc_install_load_external_text_stub(msg_file_name: TEXT):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 function isc_install_precheck_stub(hOption: OPTIONS_HANDLE;
                               src_dir: TEXT;
-                              dest_dir: TEXT):MSG_NO; stdcall;
+                              dest_dir: TEXT):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 function isc_install_set_option_stub(hOption: POPTIONS_HANDLE;
-                                option: OPT):MSG_NO; stdcall;
+                                option: OPT):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 function isc_uninstall_execute_stub(uninstall_file_name: TEXT;
                                status_func: FP_STATUS;
                                status_data: pointer;
                                error_func: FP_ERROR;
-                               error_data: pointer):MSG_NO; stdcall;
-function isc_uninstall_precheck_stub(uninstall_file_name: TEXT):MSG_NO; stdcall;
+                               error_data: pointer):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
+function isc_uninstall_precheck_stub(uninstall_file_name: TEXT):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 function isc_install_unset_option_stub(hOption: POPTIONS_HANDLE;
-                                  option: OPT):MSG_NO; stdcall;
+                                  option: OPT):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 
 implementation
 
-uses Sysutils, IB;
+uses {Sysutils,} IB;
 
 var
+{$IFDEF MSWINDOWS}
   IBLibrary: THandle;
   IBInstallLibrary: THandle;
+{$ENDIF}
+{$IFDEF LINUX}
+  IBCrypt : Pointer;
+  IBLibrary: Pointer;
+  IBInstallLibrary : Pointer;
+{$ENDIF}
   IBClientVersion: Integer;
 
 procedure LoadIBLibrary;
+
+{$IFDEF MSWINDOWS}
+  function TryGetProcAddr(ProcName: PChar): Pointer;
+  begin
+    Result := GetProcAddress(IBLibrary, ProcName);
+  end;
 
   function GetProcAddr(ProcName: PChar): Pointer;
   begin
     Result := GetProcAddress(IBLibrary, ProcName);
     if not Assigned(Result) then
-      RaiseLastWin32Error;
+      RaiseLastOSError;
   end;
 
+{$ENDIF}
+{$IFDEF LINUX}
+  function TryGetProcAddr(ProcName : PChar): Pointer;
+  begin
+    Result := dlsym(IBLibrary, ProcName);
+  end;
+
+  function GetProcAddr(ProcName : PChar) : Pointer;
+  begin
+    Result := dlsym(IBLibrary, ProcName);
+    if not Assigned(Result) then
+      raise EIBClientError.Create(Format('Error loading %s, Error Code = %s', [ProcName, dlerror])); {do not localize}
+  end;
+{$ENDIF}
+
 begin
+{$IFDEF MSWINDOWS}
   IBLibrary := LoadLibrary(PChar(IBASE_DLL));
   if (IBLibrary > HINSTANCE_ERROR) then
+{$ENDIF}
+{$IFDEF LINUX}
+  IBCrypt := dlopen('libcrypt.so', RTLD_GLOBAL);
+  IBLibrary := dlopen(PChar(IBASE_DLL),RTLD_GLOBAL);
+  if (IBLibrary <> nil) then
+{$ENDIF}
   begin
     BLOB_get := GetProcAddr('BLOB_get'); {do not localize}
     BLOB_put := GetProcAddr('BLOB_put'); {do not localize}
@@ -238,11 +299,16 @@ begin
     isc_event_counts := GetProcAddr('isc_event_counts'); {do not localize}
     isc_event_block := GetProcAddr('isc_event_block'); {do not localize}
     isc_free := GetProcAddr('isc_free'); {do not localize}
+    isc_add_user := GetProcAddr('isc_add_user'); {do not localize}
+    isc_delete_user := GetProcAddr('isc_delete_user'); {do not localize}
+    isc_modify_user := GetProcAddr('isc_modify_user'); {do not localize}
+    isc_prepare_transaction := GetProcAddr('isc_prepare_transaction'); {do not localize}
+    isc_prepare_transaction2 := GetProcAddr('isc_prepare_transaction2'); {do not localize}
 
-    IBClientVersion := 6;
-    isc_rollback_retaining := GetProcAddress(IBLibrary, 'isc_rollback_retaining'); {do not localize}
+    isc_rollback_retaining := TryGetProcAddr('isc_rollback_retaining'); {do not localize}
     if Assigned(isc_rollback_retaining) then
     begin
+      IBClientVersion := 6;
       isc_service_attach := GetProcAddr('isc_service_attach'); {do not localize}
       isc_service_detach := GetProcAddr('isc_service_detach'); {do not localize}
       isc_service_query := GetProcAddr('isc_service_query'); {do not localize}
@@ -273,24 +339,52 @@ end;
 
 procedure FreeIBLibrary;
 begin
+{$IFDEF MSWINDOWS}
   if IBLibrary > HINSTANCE_ERROR then
   begin
     FreeLibrary(IBLibrary);
     IBLibrary := 0;
   end;
+{$ENDIF}
+{$IFDEF LINUX}
+  // The Linux loader is freeing the IBLibrary by here.  Freeing agina causes a 
+  //   segmentation fault on closing so let Linux clean up for us.
+  if IBCrypt <> nil then
+  begin
+    dlclose(IBCrypt);
+    IBCrypt := nil;
+  end;
+{$ENDIF}
 end;
 
 procedure LoadIBInstallLibrary;
 
+{$IFDEF MSWINDOWS}
   function GetProcAddr(ProcName: PChar): Pointer;
   begin
     Result := GetProcAddress(IBInstallLibrary, ProcName);
-    if not Assigned(Result) then RaiseLastWin32Error;
+    if not Assigned(Result) then
+      RaiseLastOSError;
   end;
+{$ENDIF}
+{$IFDEF LINUX}
+  function GetProcAddr(ProcName : PChar) : Pointer;
+  begin
+    Result := dlsym(IBInstallLibrary, ProcName);
+    if not Assigned(Result) then
+      raise EIBClientError.Create(Format('Error loading %s, Error Code = %s', [ProcName, dlerror])); {do not localize}
+  end;
+{$ENDIF}
 
 begin
+{$IFDEF MSWINDOWS}
   IBInstallLibrary := LoadLibrary(PChar(IB_INSTALL_DLL));
   if (IBInstallLibrary > HINSTANCE_ERROR) then
+{$ENDIF}
+{$IFDEF LINUX}
+  IBInstallLibrary := dlopen(PChar(IB_INSTALL_DLL), 0);
+  if (IBInstallLibrary <> nil) then
+{$ENDIF}
   begin
     isc_install_clear_options := GetProcAddr('isc_install_clear_options'); {do not localize}
     isc_install_execute := GetProcAddr('isc_install_execute'); {do not localize}
@@ -303,7 +397,8 @@ begin
     isc_uninstall_precheck := GetProcAddr('isc_uninstall_precheck'); {do not localize}
     isc_install_unset_option := GetProcAddr('isc_install_unset_option'); {do not localize}
   end
-  else begin
+  else
+  begin
     isc_install_clear_options := isc_install_clear_options_stub;
     isc_install_execute := isc_install_execute_stub;
     isc_install_get_info := isc_install_get_info_stub;
@@ -319,21 +414,37 @@ end;
 
 procedure FreeIBInstallLibrary;
 begin
+{$IFDEF MSWINDOWS}
   if IBInstallLibrary > HINSTANCE_ERROR then
   begin
     FreeLibrary(IBInstallLibrary);
     IBInstallLibrary := 0;
   end;
+{$ENDIF}
+{$IFDEF LINUX}
+  if IBInstallLibrary <> nil then
+  begin
+    dlclose(IBInstallLibrary);
+    IBInstallLibrary := nil;
+  end;
+{$ENDIF}
 end;
 
 function TryIBLoad: Boolean;
 begin
+{$IFDEF MSWINDOWS}
   if (IBLibrary <= HINSTANCE_ERROR) then
     LoadIBLibrary;
   if (IBLibrary <= HINSTANCE_ERROR) then
     result := False
   else
     result := True;
+{$ENDIF}
+{$IFDEF LINUX}
+  if (IBLibrary = nil) then
+    LoadIBLibrary;
+  Result := IBLibrary <> nil;
+{$ENDIF}
 end;
 
 procedure CheckIBLoaded;
@@ -350,15 +461,23 @@ end;
 
 procedure CheckIBInstallLoaded;
 begin
+{$IFDEF MSWINDOWS}
   if (IBInstallLibrary <= HINSTANCE_ERROR) then
     LoadIBInstallLibrary;
   if (IBInstallLibrary <= HINSTANCE_ERROR) then
     IBError(ibxeInterBaseInstallMissing, [nil]);
+{$ENDIF}
+{$IFDEF LINUX}
+  if (IBInstallLibrary = nil) then
+    LoadIBInstallLibrary;
+  if (IBInstallLibrary = nil) then
+    IBError(ibxeInterBaseInstallMissing, [nil]);
+{$ENDIF}
 end;
 
 function isc_rollback_retaining_stub(status_vector   : PISC_STATUS;
               tran_handle     : PISC_TR_HANDLE):
-                                     ISC_STATUS; stdcall;
+                                     ISC_STATUS; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_rollback_retaining']); {do not localize}
@@ -370,7 +489,7 @@ function isc_service_attach_stub(status_vector      : PISC_STATUS;
                                  service_handle     : PISC_SVC_HANDLE;
                                  isc_arg5           : UShort;
                                  isc_arg6           : PChar):
-                                 ISC_STATUS; stdcall;
+                                 ISC_STATUS; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_service_attach']); {do not localize}
@@ -378,7 +497,7 @@ end;
 
 function isc_service_detach_stub(status_vector      : PISC_STATUS;
                                  service_handle     : PISC_SVC_HANDLE):
-                                 ISC_STATUS; stdcall;
+                                 ISC_STATUS; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_service_detach']); {do not localize}
@@ -393,7 +512,7 @@ function isc_service_query_stub(status_vector        : PISC_STATUS;
                                 isc_arg7             : PChar;
                                 isc_arg8             : UShort;
                                 isc_arg9             : PChar):
-                                ISC_STATUS; stdcall;
+                                ISC_STATUS; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_service_query']); {do not localize}
@@ -404,7 +523,7 @@ function isc_service_start_stub(status_vector        : PISC_STATUS;
                                 recv_handle          : PISC_SVC_HANDLE;
                                 isc_arg4             : UShort;
                                 isc_arg5             : PChar):
-                                ISC_STATUS; stdcall;
+                                ISC_STATUS; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_service_start']); {do not localize}
@@ -412,47 +531,47 @@ end;
 
 procedure isc_encode_sql_date_stub(tm_date           : PCTimeStructure;
                  ib_date           : PISC_DATE);
-                                   stdcall;
+                                   {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   IBError(ibxeIB60feature, ['isc_encode_sql_date']); {do not localize}
 end;
 
 procedure isc_encode_sql_time_stub(tm_date           : PCTimeStructure;
                    ib_time           : PISC_TIME);
-                                   stdcall;
+                                   {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   IBError(ibxeIB60feature, ['isc_encode_sql_time']); {do not localize}
 end;
 
 procedure isc_encode_timestamp_stub(tm_date          : PCTimeStructure;
                   ib_timestamp     : PISC_TIMESTAMP);
-                                    stdcall;
+                                    {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   IBError(ibxeIB60feature, ['isc_encode_sql_timestamp']); {do not localize}
 end;
 
 procedure isc_decode_sql_date_stub(ib_date           : PISC_DATE;
                                    tm_date           : PCTimeStructure);
-                                   stdcall;
+                                   {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   IBError(ibxeIB60feature, ['isc_decode_sql_date']); {do not localize}
 end;
 
 procedure isc_decode_sql_time_stub(ib_time           : PISC_TIME;
                                    tm_date           : PCTimeStructure);
-                                   stdcall;
+                                   {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   IBError(ibxeIB60feature, ['isc_decode_sql_time']); {do not localize}
 end;
 
 procedure isc_decode_timestamp_stub(ib_timestamp     : PISC_TIMESTAMP;
                                     tm_date          : PCTimeStructure);
-                                    stdcall;
+                                    {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   IBError(ibxeIB60feature, ['isc_decode_timestamp']); {do not localize}
 end;
 
-function isc_install_clear_options_stub(hOption: POPTIONS_HANDLE):MSG_NO; stdcall;
+function isc_install_clear_options_stub(hOption: POPTIONS_HANDLE):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_install_xxx ']); {do not localize}
@@ -465,7 +584,7 @@ function isc_install_execute_stub(hOption: OPTIONS_HANDLE;
                              status_data: pointer;
                              error_func: FP_ERROR;
                              error_data: pointer;
-                             uninstal_file_name: TEXT):MSG_NO; stdcall;
+                             uninstal_file_name: TEXT):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_install_xxx ']); {do not localize}
@@ -474,7 +593,7 @@ end;
 function isc_install_get_info_stub(info_type :integer;
                               option :OPT;
                               info_buffer : Pointer;
-                              buf_len : Cardinal): MSG_NO; stdcall;
+                              buf_len : Cardinal): MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_install_xxx ']); {do not localize}
@@ -483,13 +602,13 @@ end;
 function isc_install_get_message_stub(hOption: OPTIONS_HANDLE;
                                  message_no: MSG_NO;
                                  message_txt: Pointer;
-                                 message_len: Cardinal):MSG_NO; stdcall;
+                                 message_len: Cardinal):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_install_xxx ']); {do not localize}
 end;
 
-function isc_install_load_external_text_stub(msg_file_name: TEXT):MSG_NO; stdcall;
+function isc_install_load_external_text_stub(msg_file_name: TEXT):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_install_xxx ']); {do not localize}
@@ -497,14 +616,14 @@ end;
 
 function isc_install_precheck_stub(hOption: OPTIONS_HANDLE;
                               src_dir: TEXT;
-                              dest_dir: TEXT):MSG_NO; stdcall;
+                              dest_dir: TEXT):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_install_xxx ']); {do not localize}
 end;
 
 function isc_install_set_option_stub(hOption: POPTIONS_HANDLE;
-                                option: OPT):MSG_NO; stdcall;
+                                option: OPT):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_install_xxx ']); {do not localize}
@@ -514,20 +633,20 @@ function isc_uninstall_execute_stub(uninstall_file_name: TEXT;
                                status_func: FP_STATUS;
                                status_data: pointer;
                                error_func: FP_ERROR;
-                               error_data: pointer):MSG_NO; stdcall;
+                               error_data: pointer):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_install_xxx ']); {do not localize}
 end;
 
-function isc_uninstall_precheck_stub(uninstall_file_name: TEXT):MSG_NO; stdcall;
+function isc_uninstall_precheck_stub(uninstall_file_name: TEXT):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_install_xxx ']); {do not localize}
 end;
 
 function isc_install_unset_option_stub(hOption: POPTIONS_HANDLE;
-                                  option: OPT):MSG_NO; stdcall;
+                                  option: OPT):MSG_NO; {$IFDEF MSWINDOWS} stdcall; {$ENDIF} {$IFDEF LINUX} cdecl; {$ENDIF}
 begin
   Result := 0;
   IBError(ibxeIB60feature, ['isc_install_xxx ']); {do not localize}

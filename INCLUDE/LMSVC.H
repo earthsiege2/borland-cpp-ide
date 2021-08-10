@@ -23,7 +23,6 @@ Abstract:
 --*/
 
 #ifndef _LMSVC_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMSVC_
 
 #if _MSC_VER > 1000
@@ -442,14 +441,14 @@ NetServiceInstall (
 
 #define SERVICE_UIC_M_UAS_INVALID_ROLE  (SERVICE_BASE + 45)
 /*
- * This Windows NT computer is configured as a member of a workgroup, not as
+ * This computer is configured as a member of a workgroup, not as
  * a member of a domain. The Netlogon service does not need to run in this
  * configuration.
  */
 
 #define SERVICE_UIC_M_NETLOGON_NO_DC    (SERVICE_BASE + 46)
 /*
- * The Windows NT domain controller for this domain could not be located.
+ * The primary Domain Controller for this domain could not be located.
  */
 
 #define SERVICE_UIC_M_NETLOGON_DC_CFLCT (SERVICE_BASE + 47)
@@ -536,5 +535,4 @@ NetServiceInstall (
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _LMSVC_

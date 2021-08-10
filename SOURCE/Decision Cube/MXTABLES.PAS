@@ -6,13 +6,13 @@
 {                                                       }
 {*******************************************************}
 
-unit mxtables;
+unit MXTABLES;
 
 interface
 
 uses
-  Windows, SysUtils, Graphics, Classes, Controls, Db, DBCommon, Bde,
-  dbTables, mxcommon, mxqparse, mxqedcom, mxarrays;
+  Windows, SysUtils, Graphics, Classes, Controls, DB, DBCommon, BDE,
+  DBTables, MXCOMMON, MXQPARSE, MXQEDCOM, Mxarrays;
   
 type
   TQueryDim = class(TDimensionItem)
@@ -44,7 +44,7 @@ type
 implementation
 
 uses
-  mxstore, dbConsts, BDEConst, mxconsts;
+  Mxstore, DBConsts, bdeconst, Mxconsts;
 
 {
   Build Dimension Map builds a correct map for the input Dataset
@@ -194,5 +194,9 @@ function TQueryDims.Add: TQueryDim;
 begin
   Result := TQueryDim(inherited Add);
 end;
+
+initialization
+  StartClassGroup(TControl);
+  GroupDescendentsWith(TDecisionQuery, TControl);
 
 end.

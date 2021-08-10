@@ -5,14 +5,14 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1992, 2000 by Inprise Corporation
+ *      Copyright (c) 1992, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.16  $ */
+/* $Revision: 1.8.2.5 $ */
 
 
 #ifndef __EXCEPT_H
@@ -24,12 +24,38 @@
 #endif
 
 #if !defined(___STDLIB_H)
-#  include <stdlib.h>
+#  include <cstdlib.h>
 #endif
 
 #if !defined(__STD_EXCEPTION)
 #  include <exception>
 #endif
+
+// The following is needed to deal with basic_string and string
+// being defined in both RougeWave and STLport.
+#ifndef _USE_OLD_RW_STL
+
+#include <stl/_string_fwd.h>
+
+// forward declare string
+namespace std {
+
+#ifndef _STLP_STRING_DEFINED
+#define _STLP_STRING_DEFINED
+using _STLP_STD::string;
+#endif
+
+#ifndef _SIZE_T
+# define _SIZE_T std::size_t
+#endif
+
+#ifndef _EXPCLASS
+# define _EXPCLASS _STLP_DECLSPEC
+#endif
+
+}
+
+#else
 
 // forward declare string
 namespace std {
@@ -43,6 +69,8 @@ basic_string;
 typedef basic_string<char, char_traits<char>, allocator<char> > string;
 
 }
+
+#endif /* _USE_OLD_RW_STL */
 
 #if !defined(RC_INVOKED)
 

@@ -14,7 +14,7 @@
 # The building of miscellaneous object modules and libraries is controlled  #
 # by the list of files in the MISC variable.                                #
 #                                                                           #
-# $Revision:   9.1  $                                                                #
+# $Revision: 9.5 $                                                                #
 #                                                                           #
 #############################################################################
 
@@ -31,7 +31,7 @@ OBJS =               \
         timedata.obj \
         wtimedat.obj \
         timefunc.obj \
-	tzdata.obj   \
+        tzdata.obj   \
         tzset.obj    \
         _tzset.obj   \
         wtzset.obj   \
@@ -46,7 +46,8 @@ OBJS =               \
         strdate.obj  \
         systime.obj  \
         wstrdate.obj \
-        time.obj
+        time.obj     \
+        rtltick.obj
 
 #############################################################################
 # Configure the environment appropriately.                                  #

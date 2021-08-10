@@ -3,18 +3,23 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1996,99 Inprise Corporation       }
+{  Copyright (c) 1996-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
 unit OleCtrls;
 
 {$R-,T-,H+,X+}
+{$WARN SYMBOL_PLATFORM OFF}
 
 interface
 
-uses Windows, Messages, ActiveX, SysUtils, Classes, Controls, Forms,
+uses Variants, Windows, Messages, ActiveX, SysUtils, Classes, Controls, Forms,
   Menus, Graphics, ComObj, AxCtrls;
+     
+var
+  { Hack: the compiler does not support default parameters for variant types. }
+  EmptyParam: OleVariant;
 
 type
 
@@ -140,10 +145,8 @@ type
     function GetOleObject: Variant;
     function GetDefaultDispatch: IDispatch;
     procedure HookControlWndProc;
-    procedure InvokeEvent(DispID: TDispID; var Params: TDispParams);
     procedure ReadData(Stream: TStream);
     procedure SetUIActive(Active: Boolean);
-    procedure StandardEvent(DispID: TDispID; var Params: TDispParams);
     procedure WriteData(Stream: TStream);
     procedure WMEraseBkgnd(var Message: TWMEraseBkgnd); message WM_ERASEBKGND;
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
@@ -156,7 +159,8 @@ type
     procedure CMUIDeactivate(var Message: TMessage); message CM_UIDEACTIVATE;
     procedure D2InvokeEvent(DispID: TDispID; var Params: TDispParams);
   protected
-    FEvents: Integer;
+    procedure StandardEvent(DispID: TDispID; var Params: TDispParams); virtual;
+    procedure InvokeEvent(DispID: TDispID; var Params: TDispParams); virtual;
     { IUnknown }
     function QueryInterface(const IID: TGUID; out Obj): HResult; override;
     function _AddRef: Integer; stdcall;
@@ -292,7 +296,13 @@ type
     procedure SetVariantProp(Index: Integer; const Value: Variant);
     procedure SetWideStringProp(Index: Integer; const Value: WideString);
     procedure SetWordProp(Index: Integer; Value: Word);
+    procedure _SetColorProp(Index: Integer; Value: TColor);
+    procedure _SetTColorProp(Index: Integer; Value: TColor);
+    procedure _SetTOleEnumProp(Index: Integer; Value: TOleEnum);
+    procedure _SetTFontProp(Index: Integer; Value: TFont);
+    procedure _SetTPictureProp(Index: Integer; Value: TPicture);
     procedure WndProc(var Message: TMessage); override;
+    function SuppressException(E : Exception): Boolean; virtual;
     property ControlData: PControlData read FControlData write FControlData;
     { IPropertyNotifySink }
     function OnChanged(dispid: TDispID): HResult; virtual; stdcall;
@@ -816,9 +826,10 @@ begin
     OleCheck(CreateStreamOnHGlobal(FObjectData, False, Stream));
     OleCheck(FPersistStream.Save(Stream, True));
   except
-    DestroyStorage;
-    raise;
+     DestroyStorage;
+     raise;
   end;
+  
 end;
 
 procedure TOleControl.CreateWnd;
@@ -853,10 +864,30 @@ begin
   inherited DefaultHandler(Message);
 end;
 
+function TOleControl.SuppressException(E : Exception): boolean;
+{ Unhandled control generated exceptions created when Delphi is streaming a
+  form can cause errant behavior of the IDE.  SuppressException is meant to
+  allow misbehaving hosted ActiveX Controls to fail in some fashion and still not
+  have the Delphi IDE fail along with them.
+  If you need to see all control generated exceptions, override this function
+  in your TOLEControl descendent and return FALSE.
+}
+begin
+  if (E is EOleSysError) then
+    Result := (csDesigning in ComponentState)
+      else Result := False;
+end;
+
 procedure TOleControl.DefineProperties(Filer: TFiler);
 begin
-  inherited DefineProperties(Filer);
-  Filer.DefineBinaryProperty('ControlData', ReadData, WriteData, FOleObject <> nil);
+  try
+    inherited DefineProperties(Filer);
+    Filer.DefineBinaryProperty('ControlData', ReadData, WriteData, FOleObject <> nil);
+  except
+    on E: Exception do
+      if not SuppressException(E) then
+        raise;
+  end;
 end;
 
 procedure TOleControl.DesignModified;
@@ -2062,6 +2093,32 @@ begin
   SetIntegerProp(Index, Value);
 end;
 
+procedure TOleControl._SetColorProp(Index: Integer; Value: TColor);
+begin
+  SetColorProp(Index, Value);
+end;
+
+procedure TOleControl._SetTColorProp(Index: Integer; Value: TColor);
+begin
+  SetTColorProp(Index, Value);
+end;
+
+procedure TOleControl._SetTOleEnumProp(Index: Integer; Value: TOleEnum);
+begin
+  SetTOleEnumProp(Index, Value);
+end;
+
+procedure TOleControl._SetTFontProp(Index: Integer; Value: TFont);
+begin
+  SetTFontProp(Index, Value);
+end;
+
+procedure TOleControl._SetTPictureProp(Index: Integer; Value: TPicture);
+begin
+  SetTPictureProp(Index, Value);
+end;
+
+
 procedure TOleControl.ShowAboutBox;
 const
   DispInfo: array[0..7] of Byte = ($D8,$FD,$FF,$FF,$00,$01,$00,$00);
@@ -2194,16 +2251,22 @@ var
   Buffer: Pointer;
 begin
   StorageExists := FObjectData <> 0;
-  if not StorageExists then CreateStorage;
   try
-    Buffer := GlobalLock(FObjectData);
     try
-      Stream.Write(Buffer^, GlobalSize(FObjectData));
+      if not StorageExists then CreateStorage;
+      Buffer := GlobalLock(FObjectData);
+      try
+        Stream.Write(Buffer^, GlobalSize(FObjectData));
+      finally
+        GlobalUnlock(FObjectData);
+      end;
     finally
-      GlobalUnlock(FObjectData);
+      if not StorageExists then DestroyStorage;
     end;
-  finally
-    if not StorageExists then DestroyStorage;
+  except
+    on E: Exception do
+      if not SuppressException(E)
+       then raise;
   end;
 end;
 
@@ -2762,4 +2825,7 @@ begin
   Result := S_OK;
 end;
 
+initialization
+  GroupDescendentsWith(TOleControl, Controls.TControl);
+  EmptyParam := Variants.EmptyParam;
 end.

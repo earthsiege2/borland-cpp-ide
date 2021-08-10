@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Dialogs.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Dialogs.pas' rev: 6.00
 
 #ifndef DialogsHPP
 #define DialogsHPP
@@ -11,6 +11,7 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <ShlObj.hpp>	// Pascal unit
+#include <Printers.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -53,12 +54,12 @@ protected:
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
 	virtual bool __fastcall MessageHook(Messages::TMessage &Msg);
 	virtual BOOL __fastcall TaskModalDialog(void * DialogFunc, void *DialogData);
-	virtual bool __fastcall Execute(void) = 0 ;
 	__property char * Template = {read=FTemplate, write=FTemplate};
 	
 public:
 	__fastcall virtual TCommonDialog(Classes::TComponent* AOwner);
 	__fastcall virtual ~TCommonDialog(void);
+	virtual bool __fastcall Execute(void) = 0 ;
 	virtual void __fastcall DefaultHandler(void *Message);
 	__property HWND Handle = {read=FHandle, nodefault};
 	
@@ -71,20 +72,22 @@ __published:
 
 
 #pragma option push -b-
-enum TOpenOption { ofReadOnly, ofOverwritePrompt, ofHideReadOnly, ofNoChangeDir, ofShowHelp, ofNoValidate, 
-	ofAllowMultiSelect, ofExtensionDifferent, ofPathMustExist, ofFileMustExist, ofCreatePrompt, ofShareAware, 
-	ofNoReadOnlyReturn, ofNoTestFileCreate, ofNoNetworkButton, ofNoLongNames, ofOldStyleDialog, ofNoDereferenceLinks, 
-	ofEnableIncludeNotify, ofEnableSizing };
+enum TOpenOption { ofReadOnly, ofOverwritePrompt, ofHideReadOnly, ofNoChangeDir, ofShowHelp, ofNoValidate, ofAllowMultiSelect, ofExtensionDifferent, ofPathMustExist, ofFileMustExist, ofCreatePrompt, ofShareAware, ofNoReadOnlyReturn, ofNoTestFileCreate, ofNoNetworkButton, ofNoLongNames, ofOldStyleDialog, ofNoDereferenceLinks, ofEnableIncludeNotify, ofEnableSizing, ofDontAddToRecent, ofForceShowHidden };
 #pragma option pop
 
-typedef Set<TOpenOption, ofReadOnly, ofEnableSizing>  TOpenOptions;
+typedef Set<TOpenOption, ofReadOnly, ofForceShowHidden>  TOpenOptions;
+
+#pragma option push -b-
+enum TOpenOptionEx { ofExNoPlacesBar };
+#pragma option pop
+
+typedef Set<TOpenOptionEx, ofExNoPlacesBar, ofExNoPlacesBar>  TOpenOptionsEx;
 
 #pragma option push -b-
 enum TFileEditStyle { fsEdit, fsComboBox };
 #pragma option pop
 
-typedef void __fastcall (__closure *TIncludeItemEvent)(const Commdlg::TOFNotifyEx &OFN, bool &Include
-	);
+typedef void __fastcall (__closure *TIncludeItemEvent)(const Commdlg::TOFNotifyEx &OFN, bool &Include);
 
 class DELPHICLASS TOpenDialog;
 class PASCALIMPLEMENTATION TOpenDialog : public TCommonDialog 
@@ -108,6 +111,7 @@ private:
 	Classes::TNotifyEvent FOnTypeChange;
 	Forms::TCloseQueryEvent FOnCanClose;
 	TIncludeItemEvent FOnIncludeItem;
+	TOpenOptionsEx FOptionsEx;
 	AnsiString __fastcall GetFileName();
 	int __fastcall GetFilterIndex(void);
 	void __fastcall ReadFileEditStyle(Classes::TReader* Reader);
@@ -124,7 +128,7 @@ protected:
 	DYNAMIC void __fastcall DoIncludeItem(const Commdlg::TOFNotifyEx &OFN, bool &Include);
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
 	void __fastcall GetFileNames(tagOFNA &OpenFileName);
-	virtual Windows::TRect __fastcall GetStaticRect();
+	virtual Types::TRect __fastcall GetStaticRect();
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
 	
 public:
@@ -142,11 +146,11 @@ __published:
 	__property int FilterIndex = {read=GetFilterIndex, write=FFilterIndex, default=1};
 	__property AnsiString InitialDir = {read=FInitialDir, write=SetInitialDir};
 	__property TOpenOptions Options = {read=FOptions, write=FOptions, default=524292};
+	__property TOpenOptionsEx OptionsEx = {read=FOptionsEx, write=FOptionsEx, default=0};
 	__property AnsiString Title = {read=FTitle, write=FTitle};
 	__property Forms::TCloseQueryEvent OnCanClose = {read=FOnCanClose, write=FOnCanClose};
 	__property Classes::TNotifyEvent OnFolderChange = {read=FOnFolderChange, write=FOnFolderChange};
-	__property Classes::TNotifyEvent OnSelectionChange = {read=FOnSelectionChange, write=FOnSelectionChange
-		};
+	__property Classes::TNotifyEvent OnSelectionChange = {read=FOnSelectionChange, write=FOnSelectionChange};
 	__property Classes::TNotifyEvent OnTypeChange = {read=FOnTypeChange, write=FOnTypeChange};
 	__property TIncludeItemEvent OnIncludeItem = {read=FOnIncludeItem, write=FOnIncludeItem};
 };
@@ -161,8 +165,7 @@ __published:
 	virtual bool __fastcall Execute(void);
 public:
 	#pragma option push -w-inl
-	/* TOpenDialog.Create */ inline __fastcall virtual TSaveDialog(Classes::TComponent* AOwner) : TOpenDialog(
-		AOwner) { }
+	/* TOpenDialog.Create */ inline __fastcall virtual TSaveDialog(Classes::TComponent* AOwner) : TOpenDialog(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TOpenDialog.Destroy */ inline __fastcall virtual ~TSaveDialog(void) { }
@@ -197,16 +200,14 @@ public:
 	
 __published:
 	__property Graphics::TColor Color = {read=FColor, write=FColor, default=0};
-	__property Ctl3D ;
+	__property Ctl3D  = {default=0};
 	__property Classes::TStrings* CustomColors = {read=FCustomColors, write=SetCustomColors};
 	__property TColorDialogOptions Options = {read=FOptions, write=FOptions, default=0};
 };
 
 
 #pragma option push -b-
-enum TFontDialogOption { fdAnsiOnly, fdTrueTypeOnly, fdEffects, fdFixedPitchOnly, fdForceFontExist, 
-	fdNoFaceSel, fdNoOEMFonts, fdNoSimulations, fdNoSizeSel, fdNoStyleSel, fdNoVectorFonts, fdShowHelp, 
-	fdWysiwyg, fdLimitSize, fdScalableOnly, fdApplyButton };
+enum TFontDialogOption { fdAnsiOnly, fdTrueTypeOnly, fdEffects, fdFixedPitchOnly, fdForceFontExist, fdNoFaceSel, fdNoOEMFonts, fdNoSimulations, fdNoSizeSel, fdNoStyleSel, fdNoVectorFonts, fdShowHelp, fdWysiwyg, fdLimitSize, fdScalableOnly, fdApplyButton };
 #pragma option pop
 
 typedef Set<TFontDialogOption, fdAnsiOnly, fdApplyButton>  TFontDialogOptions;
@@ -263,8 +264,7 @@ public:
 	virtual bool __fastcall Execute(void);
 public:
 	#pragma option push -w-inl
-	/* TCommonDialog.Create */ inline __fastcall virtual TPrinterSetupDialog(Classes::TComponent* AOwner
-		) : TCommonDialog(AOwner) { }
+	/* TCommonDialog.Create */ inline __fastcall virtual TPrinterSetupDialog(Classes::TComponent* AOwner) : TCommonDialog(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCommonDialog.Destroy */ inline __fastcall virtual ~TPrinterSetupDialog(void) { }
@@ -278,8 +278,7 @@ enum TPrintRange { prAllPages, prSelection, prPageNums };
 #pragma option pop
 
 #pragma option push -b-
-enum TPrintDialogOption { poPrintToFile, poPageNums, poSelection, poWarning, poHelp, poDisablePrintToFile 
-	};
+enum TPrintDialogOption { poPrintToFile, poPageNums, poSelection, poWarning, poHelp, poDisablePrintToFile };
 #pragma option pop
 
 typedef Set<TPrintDialogOption, poPrintToFile, poDisablePrintToFile>  TPrintDialogOptions;
@@ -316,8 +315,7 @@ __published:
 	__property int ToPage = {read=FToPage, write=FToPage, default=0};
 public:
 	#pragma option push -w-inl
-	/* TCommonDialog.Create */ inline __fastcall virtual TPrintDialog(Classes::TComponent* AOwner) : TCommonDialog(
-		AOwner) { }
+	/* TCommonDialog.Create */ inline __fastcall virtual TPrintDialog(Classes::TComponent* AOwner) : TCommonDialog(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCommonDialog.Destroy */ inline __fastcall virtual ~TPrintDialog(void) { }
@@ -327,9 +325,7 @@ public:
 
 
 #pragma option push -b-
-enum TFindOption { frDown, frFindNext, frHideMatchCase, frHideWholeWord, frHideUpDown, frMatchCase, 
-	frDisableMatchCase, frDisableUpDown, frDisableWholeWord, frReplace, frReplaceAll, frWholeWord, frShowHelp 
-	};
+enum TFindOption { frDown, frFindNext, frHideMatchCase, frHideWholeWord, frHideUpDown, frMatchCase, frDisableMatchCase, frDisableUpDown, frDisableWholeWord, frReplace, frReplaceAll, frWholeWord, frShowHelp };
 #pragma option pop
 
 typedef Set<TFindOption, frDown, frShowHelp>  TFindOptions;
@@ -343,7 +339,10 @@ class PASCALIMPLEMENTATION TFindDialog : public TCommonDialog
 	
 private:
 	TFindOptions FOptions;
-	Windows::TPoint FPosition;
+	#pragma pack(push, 1)
+	Types::TPoint FPosition;
+	#pragma pack(pop)
+	
 	TFindReplaceFunc FFindReplaceFunc;
 	Controls::TWinControl* FRedirector;
 	Classes::TNotifyEvent FOnFind;
@@ -357,12 +356,12 @@ private:
 	char FReplaceText[256];
 	AnsiString __fastcall GetFindText();
 	int __fastcall GetLeft(void);
-	Windows::TPoint __fastcall GetPosition();
+	Types::TPoint __fastcall GetPosition();
 	AnsiString __fastcall GetReplaceText();
 	int __fastcall GetTop(void);
 	void __fastcall SetFindText(const AnsiString Value);
 	void __fastcall SetLeft(int Value);
-	void __fastcall SetPosition(const Windows::TPoint &Value);
+	void __fastcall SetPosition(const Types::TPoint &Value);
 	void __fastcall SetReplaceText(const AnsiString Value);
 	void __fastcall SetTop(int Value);
 	__property AnsiString ReplaceText = {read=GetReplaceText, write=SetReplaceText};
@@ -379,7 +378,7 @@ public:
 	void __fastcall CloseDialog(void);
 	virtual bool __fastcall Execute(void);
 	__property int Left = {read=GetLeft, write=SetLeft, nodefault};
-	__property Windows::TPoint Position = {read=GetPosition, write=SetPosition};
+	__property Types::TPoint Position = {read=GetPosition, write=SetPosition};
 	__property int Top = {read=GetTop, write=SetTop, nodefault};
 	
 __published:
@@ -413,39 +412,32 @@ enum TMsgDlgType { mtWarning, mtError, mtInformation, mtConfirmation, mtCustom }
 #pragma option pop
 
 #pragma option push -b-
-enum TMsgDlgBtn { mbYes, mbNo, mbOK, mbCancel, mbAbort, mbRetry, mbIgnore, mbAll, mbNoToAll, mbYesToAll, 
-	mbHelp };
+enum TMsgDlgBtn { mbYes, mbNo, mbOK, mbCancel, mbAbort, mbRetry, mbIgnore, mbAll, mbNoToAll, mbYesToAll, mbHelp };
 #pragma option pop
 
 typedef Set<TMsgDlgBtn, mbYes, mbHelp>  TMsgDlgButtons;
 
 //-- var, const, procedure ---------------------------------------------------
 static const Shortint MaxCustomColors = 0x10;
-#define mbYesNoCancel (System::Set<TMsgDlgBtn, mbYes, mbHelp> () )
-#define mbOKCancel (System::Set<TMsgDlgBtn, mbYes, mbHelp> () )
-#define mbAbortRetryIgnore (System::Set<TMsgDlgBtn, mbYes, mbHelp> () )
+#define mbYesNoCancel (System::Set<TMsgDlgBtn, mbYes, mbHelp> () << TMsgDlgBtn(0) << TMsgDlgBtn(1) << TMsgDlgBtn(3) )
+#define mbYesAllNoAllCancel (System::Set<TMsgDlgBtn, mbYes, mbHelp> () << TMsgDlgBtn(0) << TMsgDlgBtn(1) << TMsgDlgBtn(3) << TMsgDlgBtn(8) << TMsgDlgBtn(9) )
+#define mbOKCancel (System::Set<TMsgDlgBtn, mbYes, mbHelp> () << TMsgDlgBtn(2) << TMsgDlgBtn(3) )
+#define mbAbortRetryIgnore (System::Set<TMsgDlgBtn, mbYes, mbHelp> () << TMsgDlgBtn(4) << TMsgDlgBtn(5) << TMsgDlgBtn(6) )
+#define mbAbortIgnore (System::Set<TMsgDlgBtn, mbYes, mbHelp> () << TMsgDlgBtn(4) << TMsgDlgBtn(6) )
 extern PACKAGE bool ForceCurrentDirectory;
-extern PACKAGE Forms::TForm* __fastcall CreateMessageDialog(const AnsiString Msg, TMsgDlgType DlgType
-	, TMsgDlgButtons Buttons);
-extern PACKAGE int __fastcall MessageDlg(const AnsiString Msg, TMsgDlgType DlgType, TMsgDlgButtons Buttons
-	, int HelpCtx);
-extern PACKAGE int __fastcall MessageDlgPos(const AnsiString Msg, TMsgDlgType DlgType, TMsgDlgButtons 
-	Buttons, int HelpCtx, int X, int Y);
-extern PACKAGE int __fastcall MessageDlgPosHelp(const AnsiString Msg, TMsgDlgType DlgType, TMsgDlgButtons 
-	Buttons, int HelpCtx, int X, int Y, const AnsiString HelpFileName);
+extern PACKAGE Forms::TForm* __fastcall CreateMessageDialog(const AnsiString Msg, TMsgDlgType DlgType, TMsgDlgButtons Buttons);
+extern PACKAGE int __fastcall MessageDlg(const AnsiString Msg, TMsgDlgType DlgType, TMsgDlgButtons Buttons, int HelpCtx);
+extern PACKAGE int __fastcall MessageDlgPos(const AnsiString Msg, TMsgDlgType DlgType, TMsgDlgButtons Buttons, int HelpCtx, int X, int Y);
+extern PACKAGE int __fastcall MessageDlgPosHelp(const AnsiString Msg, TMsgDlgType DlgType, TMsgDlgButtons Buttons, int HelpCtx, int X, int Y, const AnsiString HelpFileName);
 extern PACKAGE void __fastcall ShowMessage(const AnsiString Msg);
-extern PACKAGE void __fastcall ShowMessageFmt(const AnsiString Msg, const System::TVarRec * Params, 
-	const int Params_Size);
+extern PACKAGE void __fastcall ShowMessageFmt(const AnsiString Msg, const System::TVarRec * Params, const int Params_Size);
 extern PACKAGE void __fastcall ShowMessagePos(const AnsiString Msg, int X, int Y);
-extern PACKAGE bool __fastcall InputQuery(const AnsiString ACaption, const AnsiString APrompt, AnsiString 
-	&Value);
-extern PACKAGE AnsiString __fastcall InputBox(const AnsiString ACaption, const AnsiString APrompt, const 
-	AnsiString ADefault);
+extern PACKAGE bool __fastcall InputQuery(const AnsiString ACaption, const AnsiString APrompt, AnsiString &Value);
+extern PACKAGE AnsiString __fastcall InputBox(const AnsiString ACaption, const AnsiString APrompt, const AnsiString ADefault);
+extern PACKAGE bool __fastcall PromptForFileName(AnsiString &AFileName, const AnsiString AFilter = "", const AnsiString ADefaultExt = "", const AnsiString ATitle = "", const AnsiString AInitialDir = "", bool SaveDialog = false);
 
 }	/* namespace Dialogs */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dialogs;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

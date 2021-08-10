@@ -1,319 +1,216 @@
-LIBRARY NETAPI32
+LIBRARY NetAPI32
 EXPORTS
 
-    DsAddressToSiteNamesA                    = 'NETAPI32.DLL'.*
-    DsAddressToSiteNamesExA                  = 'NETAPI32.DLL'.*
-    DsAddressToSiteNamesExW                  = 'NETAPI32.DLL'.*
-    DsAddressToSiteNamesW                    = 'NETAPI32.DLL'.*
-    DsDeregisterDnsHostRecordsA              = 'NETAPI32.DLL'.*
-    DsDeregisterDnsHostRecordsW              = 'NETAPI32.DLL'.*
-    DsEnumerateDomainTrustsA                 = 'NETAPI32.DLL'.*
-    DsEnumerateDomainTrustsW                 = 'NETAPI32.DLL'.*
-    DsGetDcClose                             = 'NETAPI32.DLL'.*
-    DsGetDcNameA                             = 'NETAPI32.DLL'.*
-    DsGetDcNameW                             = 'NETAPI32.DLL'.*
-    DsGetDcNameWithAccountA                  = 'NETAPI32.DLL'.*
-    DsGetDcNameWithAccountW                  = 'NETAPI32.DLL'.*
-    DsGetDcNext                              = 'NETAPI32.DLL'.*
-    DsGetDcOpen                              = 'NETAPI32.DLL'.*
-    DsGetDcSiteCoverageA                     = 'NETAPI32.DLL'.*
-    DsGetDcSiteCoverageW                     = 'NETAPI32.DLL'.*
-    DsGetSiteNameA                           = 'NETAPI32.DLL'.*
-    DsGetSiteNameW                           = 'NETAPI32.DLL'.*
-    DsRoleAbortDownlevelServerUpgrade        = 'NETAPI32.DLL'.*
-    DsRoleCancel                             = 'NETAPI32.DLL'.*
-    DsRoleDcAsDc                             = 'NETAPI32.DLL'.*
-    DsRoleDcAsReplica                        = 'NETAPI32.DLL'.*
-    DsRoleDemoteDc                           = 'NETAPI32.DLL'.*
-    DsRoleDnsNameToFlatName                  = 'NETAPI32.DLL'.*
-    DsRoleFreeMemory                         = 'NETAPI32.DLL'.*
-    DsRoleGetDcOperationProgress             = 'NETAPI32.DLL'.*
-    DsRoleGetDcOperationResults              = 'NETAPI32.DLL'.*
-    DsRoleGetPrimaryDomainInformation        = 'NETAPI32.DLL'.*
-    DsRoleServerSaveStateForUpgrade          = 'NETAPI32.DLL'.*
-    DsRoleUpgradeDownlevelServer             = 'NETAPI32.DLL'.*
-    DsValidateSubnetNameA                    = 'NETAPI32.DLL'.*
-    DsValidateSubnetNameW                    = 'NETAPI32.DLL'.*
-    I_BrowserDebugCall                       = 'NETAPI32.DLL'.*
-    I_BrowserDebugTrace                      = 'NETAPI32.DLL'.*
-    I_BrowserQueryEmulatedDomains            = 'NETAPI32.DLL'.*
-    I_BrowserQueryOtherDomains               = 'NETAPI32.DLL'.*
-    I_BrowserQueryStatistics                 = 'NETAPI32.DLL'.*
-    I_BrowserResetNetlogonState              = 'NETAPI32.DLL'.*
-    I_BrowserResetStatistics                 = 'NETAPI32.DLL'.*
-    I_BrowserServerEnum                      = 'NETAPI32.DLL'.*
-    I_BrowserSetNetlogonState                = 'NETAPI32.DLL'.*
-    I_NetAccountDeltas                       = 'NETAPI32.DLL'.*
-    I_NetAccountSync                         = 'NETAPI32.DLL'.*
-    I_NetDatabaseDeltas                      = 'NETAPI32.DLL'.*
-    I_NetDatabaseRedo                        = 'NETAPI32.DLL'.*
-    I_NetDatabaseSync2                       = 'NETAPI32.DLL'.*
-    I_NetDatabaseSync                        = 'NETAPI32.DLL'.*
-    I_NetDfsCreateExitPoint                  = 'NETAPI32.DLL'.*
-    I_NetDfsCreateLocalPartition             = 'NETAPI32.DLL'.*
-    I_NetDfsDeleteExitPoint                  = 'NETAPI32.DLL'.*
-    I_NetDfsDeleteLocalPartition             = 'NETAPI32.DLL'.*
-    I_NetDfsFixLocalVolume                   = 'NETAPI32.DLL'.*
-    I_NetDfsGetFtServers                     = 'NETAPI32.DLL'.*
-    I_NetDfsGetVersion                       = 'NETAPI32.DLL'.*
-    I_NetDfsIsThisADomainName                = 'NETAPI32.DLL'.*
-    I_NetDfsManagerReportSiteInfo            = 'NETAPI32.DLL'.*
-    I_NetDfsModifyPrefix                     = 'NETAPI32.DLL'.*
-    I_NetDfsSetLocalVolumeState              = 'NETAPI32.DLL'.*
-    I_NetDfsSetServerInfo                    = 'NETAPI32.DLL'.*
-    I_NetGetDCList                           = 'NETAPI32.DLL'.*
-    I_NetListCanonicalize                    = 'NETAPI32.DLL'.*
-    I_NetListTraverse                        = 'NETAPI32.DLL'.*
-    I_NetLogonControl2                       = 'NETAPI32.DLL'.*
-    I_NetLogonControl                        = 'NETAPI32.DLL'.*
-    I_NetLogonGetDomainInfo                  = 'NETAPI32.DLL'.*
-    I_NetLogonSamLogoff                      = 'NETAPI32.DLL'.*
-    I_NetLogonSamLogon                       = 'NETAPI32.DLL'.*
-    I_NetLogonSamLogonEx                     = 'NETAPI32.DLL'.*
-    I_NetLogonSendToSam                      = 'NETAPI32.DLL'.*
-    I_NetLogonUasLogoff                      = 'NETAPI32.DLL'.*
-    I_NetLogonUasLogon                       = 'NETAPI32.DLL'.*
-    I_NetNameCanonicalize                    = 'NETAPI32.DLL'.*
-    I_NetNameCompare                         = 'NETAPI32.DLL'.*
-    I_NetNameValidate                        = 'NETAPI32.DLL'.*
-    I_NetPathCanonicalize                    = 'NETAPI32.DLL'.*
-    I_NetPathCompare                         = 'NETAPI32.DLL'.*
-    I_NetPathType                            = 'NETAPI32.DLL'.*
-    I_NetServerAuthenticate2                 = 'NETAPI32.DLL'.*
-    I_NetServerAuthenticate3                 = 'NETAPI32.DLL'.*
-    I_NetServerAuthenticate                  = 'NETAPI32.DLL'.*
-    I_NetServerPasswordGet                   = 'NETAPI32.DLL'.*
-    I_NetServerPasswordSet2                  = 'NETAPI32.DLL'.*
-    I_NetServerPasswordSet                   = 'NETAPI32.DLL'.*
-    I_NetServerReqChallenge                  = 'NETAPI32.DLL'.*
-    I_NetServerSetServiceBits                = 'NETAPI32.DLL'.*
-    I_NetServerSetServiceBitsEx              = 'NETAPI32.DLL'.*
-    I_NetlogonComputeClientDigest            = 'NETAPI32.DLL'.*
-    I_NetlogonComputeServerDigest            = 'NETAPI32.DLL'.*
-    I_NetlogonGetTrustRid                    = 'NETAPI32.DLL'.*
-    NetAlertRaise                            = 'NETAPI32.DLL'.*
-    NetAlertRaiseEx                          = 'NETAPI32.DLL'.*
-    NetApiBufferAllocate                     = 'NETAPI32.DLL'.*
-    NetApiBufferFree                         = 'NETAPI32.DLL'.*
-    NetApiBufferReallocate                   = 'NETAPI32.DLL'.*
-    NetApiBufferSize                         = 'NETAPI32.DLL'.*
-    NetAuditClear                            = 'NETAPI32.DLL'.*
-    NetAuditRead                             = 'NETAPI32.DLL'.*
-    NetAuditWrite                            = 'NETAPI32.DLL'.*
-    NetBrowserStatisticsGet                  = 'NETAPI32.DLL'.*
-    NetConfigGet                             = 'NETAPI32.DLL'.*
-    NetConfigGetAll                          = 'NETAPI32.DLL'.*
-    NetConfigSet                             = 'NETAPI32.DLL'.*
-    NetConnectionEnum                        = 'NETAPI32.DLL'.*
-    NetDfsAdd                                = 'NETAPI32.DLL'.*
-    NetDfsAddFtRoot                          = 'NETAPI32.DLL'.*
-    NetDfsAddStdRoot                         = 'NETAPI32.DLL'.*
-    NetDfsAddStdRootForced                   = 'NETAPI32.DLL'.*
-    NetDfsEnum                               = 'NETAPI32.DLL'.*
-    NetDfsGetClientInfo                      = 'NETAPI32.DLL'.*
-    NetDfsGetDcAddress                       = 'NETAPI32.DLL'.*
-    NetDfsGetInfo                            = 'NETAPI32.DLL'.*
-    NetDfsManagerGetConfigInfo               = 'NETAPI32.DLL'.*
-    NetDfsManagerInitialize                  = 'NETAPI32.DLL'.*
-    NetDfsManagerSendSiteInfo                = 'NETAPI32.DLL'.*
-    NetDfsMove                               = 'NETAPI32.DLL'.*
-    NetDfsRemove                             = 'NETAPI32.DLL'.*
-    NetDfsRemoveFtRoot                       = 'NETAPI32.DLL'.*
-    NetDfsRemoveFtRootForced                 = 'NETAPI32.DLL'.*
-    NetDfsRemoveStdRoot                      = 'NETAPI32.DLL'.*
-    NetDfsRename                             = 'NETAPI32.DLL'.*
-    NetDfsSetClientInfo                      = 'NETAPI32.DLL'.*
-    NetDfsSetInfo                            = 'NETAPI32.DLL'.*
-    NetEnumerateTrustedDomains               = 'NETAPI32.DLL'.*
-    NetErrorLogClear                         = 'NETAPI32.DLL'.*
-    NetErrorLogRead                          = 'NETAPI32.DLL'.*
-    NetErrorLogWrite                         = 'NETAPI32.DLL'.*
-    NetFileClose                             = 'NETAPI32.DLL'.*
-    NetFileEnum                              = 'NETAPI32.DLL'.*
-    NetFileGetInfo                           = 'NETAPI32.DLL'.*
-    NetGetAnyDCName                          = 'NETAPI32.DLL'.*
-    NetGetDCName                             = 'NETAPI32.DLL'.*
-    NetGetDisplayInformationIndex            = 'NETAPI32.DLL'.*
-    NetGetJoinInformation                    = 'NETAPI32.DLL'.*
-    NetGetJoinableOUs                        = 'NETAPI32.DLL'.*
-    NetGroupAdd                              = 'NETAPI32.DLL'.*
-    NetGroupAddUser                          = 'NETAPI32.DLL'.*
-    NetGroupDel                              = 'NETAPI32.DLL'.*
-    NetGroupDelUser                          = 'NETAPI32.DLL'.*
-    NetGroupEnum                             = 'NETAPI32.DLL'.*
-    NetGroupGetInfo                          = 'NETAPI32.DLL'.*
-    NetGroupGetUsers                         = 'NETAPI32.DLL'.*
-    NetGroupSetInfo                          = 'NETAPI32.DLL'.*
-    NetGroupSetUsers                         = 'NETAPI32.DLL'.*
-    NetJoinDomain                            = 'NETAPI32.DLL'.*
-    NetLocalGroupAdd                         = 'NETAPI32.DLL'.*
-    NetLocalGroupAddMember                   = 'NETAPI32.DLL'.*
-    NetLocalGroupAddMembers                  = 'NETAPI32.DLL'.*
-    NetLocalGroupDel                         = 'NETAPI32.DLL'.*
-    NetLocalGroupDelMember                   = 'NETAPI32.DLL'.*
-    NetLocalGroupDelMembers                  = 'NETAPI32.DLL'.*
-    NetLocalGroupEnum                        = 'NETAPI32.DLL'.*
-    NetLocalGroupGetInfo                     = 'NETAPI32.DLL'.*
-    NetLocalGroupGetMembers                  = 'NETAPI32.DLL'.*
-    NetLocalGroupSetInfo                     = 'NETAPI32.DLL'.*
-    NetLocalGroupSetMembers                  = 'NETAPI32.DLL'.*
-    NetLogonGetTimeServiceParentDomain       = 'NETAPI32.DLL'.*
-    NetLogonSetServiceBits                   = 'NETAPI32.DLL'.*
-    NetMessageBufferSend                     = 'NETAPI32.DLL'.*
-    NetMessageNameAdd                        = 'NETAPI32.DLL'.*
-    NetMessageNameDel                        = 'NETAPI32.DLL'.*
-    NetMessageNameEnum                       = 'NETAPI32.DLL'.*
-    NetMessageNameGetInfo                    = 'NETAPI32.DLL'.*
-    NetQueryDisplayInformation               = 'NETAPI32.DLL'.*
-    NetRegisterDomainNameChangeNotification  = 'NETAPI32.DLL'.*
-    NetRemoteComputerSupports                = 'NETAPI32.DLL'.*
-    NetRemoteTOD                             = 'NETAPI32.DLL'.*
-    NetRenameMachineInDomain                 = 'NETAPI32.DLL'.*
-    NetReplExportDirAdd                      = 'NETAPI32.DLL'.*
-    NetReplExportDirDel                      = 'NETAPI32.DLL'.*
-    NetReplExportDirEnum                     = 'NETAPI32.DLL'.*
-    NetReplExportDirGetInfo                  = 'NETAPI32.DLL'.*
-    NetReplExportDirLock                     = 'NETAPI32.DLL'.*
-    NetReplExportDirSetInfo                  = 'NETAPI32.DLL'.*
-    NetReplExportDirUnlock                   = 'NETAPI32.DLL'.*
-    NetReplGetInfo                           = 'NETAPI32.DLL'.*
-    NetReplImportDirAdd                      = 'NETAPI32.DLL'.*
-    NetReplImportDirDel                      = 'NETAPI32.DLL'.*
-    NetReplImportDirEnum                     = 'NETAPI32.DLL'.*
-    NetReplImportDirGetInfo                  = 'NETAPI32.DLL'.*
-    NetReplImportDirLock                     = 'NETAPI32.DLL'.*
-    NetReplImportDirUnlock                   = 'NETAPI32.DLL'.*
-    NetReplSetInfo                           = 'NETAPI32.DLL'.*
-    NetScheduleJobAdd                        = 'NETAPI32.DLL'.*
-    NetScheduleJobDel                        = 'NETAPI32.DLL'.*
-    NetScheduleJobEnum                       = 'NETAPI32.DLL'.*
-    NetScheduleJobGetInfo                    = 'NETAPI32.DLL'.*
-    NetServerComputerNameAdd                 = 'NETAPI32.DLL'.*
-    NetServerComputerNameDel                 = 'NETAPI32.DLL'.*
-    NetServerDiskEnum                        = 'NETAPI32.DLL'.*
-    NetServerEnum                            = 'NETAPI32.DLL'.*
-    NetServerEnumEx                          = 'NETAPI32.DLL'.*
-    NetServerGetInfo                         = 'NETAPI32.DLL'.*
-    NetServerSetInfo                         = 'NETAPI32.DLL'.*
-    NetServerTransportAdd                    = 'NETAPI32.DLL'.*
-    NetServerTransportAddEx                  = 'NETAPI32.DLL'.*
-    NetServerTransportDel                    = 'NETAPI32.DLL'.*
-    NetServerTransportEnum                   = 'NETAPI32.DLL'.*
-    NetServiceControl                        = 'NETAPI32.DLL'.*
-    NetServiceEnum                           = 'NETAPI32.DLL'.*
-    NetServiceGetInfo                        = 'NETAPI32.DLL'.*
-    NetServiceInstall                        = 'NETAPI32.DLL'.*
-    NetSessionDel                            = 'NETAPI32.DLL'.*
-    NetSessionEnum                           = 'NETAPI32.DLL'.*
-    NetSessionGetInfo                        = 'NETAPI32.DLL'.*
-    NetShareAdd                              = 'NETAPI32.DLL'.*
-    NetShareCheck                            = 'NETAPI32.DLL'.*
-    NetShareDel                              = 'NETAPI32.DLL'.*
-    NetShareDelSticky                        = 'NETAPI32.DLL'.*
-    NetShareEnum                             = 'NETAPI32.DLL'.*
-    NetShareEnumSticky                       = 'NETAPI32.DLL'.*
-    NetShareGetInfo                          = 'NETAPI32.DLL'.*
-    NetShareSetInfo                          = 'NETAPI32.DLL'.*
-    NetStatisticsGet                         = 'NETAPI32.DLL'.*
-    NetUnjoinDomain                          = 'NETAPI32.DLL'.*
-    NetUnregisterDomainNameChangeNotification = 'NETAPI32.DLL'.*
-    NetUseAdd                                = 'NETAPI32.DLL'.*
-    NetUseDel                                = 'NETAPI32.DLL'.*
-    NetUseEnum                               = 'NETAPI32.DLL'.*
-    NetUseGetInfo                            = 'NETAPI32.DLL'.*
-    NetUserAdd                               = 'NETAPI32.DLL'.*
-    NetUserChangePassword                    = 'NETAPI32.DLL'.*
-    NetUserDel                               = 'NETAPI32.DLL'.*
-    NetUserEnum                              = 'NETAPI32.DLL'.*
-    NetUserGetGroups                         = 'NETAPI32.DLL'.*
-    NetUserGetInfo                           = 'NETAPI32.DLL'.*
-    NetUserGetLocalGroups                    = 'NETAPI32.DLL'.*
-    NetUserModalsGet                         = 'NETAPI32.DLL'.*
-    NetUserModalsSet                         = 'NETAPI32.DLL'.*
-    NetUserSetGroups                         = 'NETAPI32.DLL'.*
-    NetUserSetInfo                           = 'NETAPI32.DLL'.*
-    NetValidateName                          = 'NETAPI32.DLL'.*
-    NetWkstaGetInfo                          = 'NETAPI32.DLL'.*
-    NetWkstaSetInfo                          = 'NETAPI32.DLL'.*
-    NetWkstaTransportAdd                     = 'NETAPI32.DLL'.*
-    NetWkstaTransportDel                     = 'NETAPI32.DLL'.*
-    NetWkstaTransportEnum                    = 'NETAPI32.DLL'.*
-    NetWkstaUserEnum                         = 'NETAPI32.DLL'.*
-    NetWkstaUserGetInfo                      = 'NETAPI32.DLL'.*
-    NetWkstaUserSetInfo                      = 'NETAPI32.DLL'.*
-    NetapipBufferAllocate                    = 'NETAPI32.DLL'.*
-    Netbios                                  = 'NETAPI32.DLL'.*
-    NetpAccessCheck                          = 'NETAPI32.DLL'.*
-    NetpAccessCheckAndAudit                  = 'NETAPI32.DLL'.*
-    NetpAllocConfigName                      = 'NETAPI32.DLL'.*
-    NetpAllocStrFromStr                      = 'NETAPI32.DLL'.*
-    NetpAllocStrFromWStr                     = 'NETAPI32.DLL'.*
-    NetpAllocTStrFromString                  = 'NETAPI32.DLL'.*
-    NetpAllocWStrFromStr                     = 'NETAPI32.DLL'.*
-    NetpAllocWStrFromWStr                    = 'NETAPI32.DLL'.*
-    NetpApiStatusToNtStatus                  = 'NETAPI32.DLL'.*
-    NetpAssertFailed                         = 'NETAPI32.DLL'.*
-    NetpCloseConfigData                      = 'NETAPI32.DLL'.*
-    NetpCopyStringToBuffer                   = 'NETAPI32.DLL'.*
-    NetpCreateSecurityObject                 = 'NETAPI32.DLL'.*
-    NetpDbgDisplayServerInfo                 = 'NETAPI32.DLL'.*
-    _NetpDbgPrint                            = 'NETAPI32.DLL'.NetpDbgPrint
-    NetpDeleteSecurityObject                 = 'NETAPI32.DLL'.*
-    NetpGetComputerName                      = 'NETAPI32.DLL'.*
-    NetpGetConfigBool                        = 'NETAPI32.DLL'.*
-    NetpGetConfigDword                       = 'NETAPI32.DLL'.*
-    NetpGetConfigTStrArray                   = 'NETAPI32.DLL'.*
-    NetpGetConfigValue                       = 'NETAPI32.DLL'.*
-    NetpGetDomainName                        = 'NETAPI32.DLL'.*
-    NetpGetFileSecurity                      = 'NETAPI32.DLL'.*
-    NetpGetPrivilege                         = 'NETAPI32.DLL'.*
-    NetpHexDump                              = 'NETAPI32.DLL'.*
-    NetpInitOemString                        = 'NETAPI32.DLL'.*
-    NetpIsRemote                             = 'NETAPI32.DLL'.*
-    NetpIsUncComputerNameValid               = 'NETAPI32.DLL'.*
-    NetpLocalTimeZoneOffset                  = 'NETAPI32.DLL'.*
-    NetpLogonPutUnicodeString                = 'NETAPI32.DLL'.*
-    NetpNetBiosAddName                       = 'NETAPI32.DLL'.*
-    NetpNetBiosCall                          = 'NETAPI32.DLL'.*
-    NetpNetBiosDelName                       = 'NETAPI32.DLL'.*
-    NetpNetBiosGetAdapterNumbers             = 'NETAPI32.DLL'.*
-    NetpNetBiosHangup                        = 'NETAPI32.DLL'.*
-    NetpNetBiosReceive                       = 'NETAPI32.DLL'.*
-    NetpNetBiosReset                         = 'NETAPI32.DLL'.*
-    NetpNetBiosSend                          = 'NETAPI32.DLL'.*
-    NetpNetBiosStatusToApiStatus             = 'NETAPI32.DLL'.*
-    NetpNtStatusToApiStatus                  = 'NETAPI32.DLL'.*
-    NetpOpenConfigData                       = 'NETAPI32.DLL'.*
-    NetpPackString                           = 'NETAPI32.DLL'.*
-    NetpParmsQueryUserProperty               = 'NETAPI32.DLL'.*
-    NetpParmsQueryUserPropertyWithLength     = 'NETAPI32.DLL'.*
-    NetpParmsSetUserProperty                 = 'NETAPI32.DLL'.*
-    NetpParmsSetUserPropertyWithLength       = 'NETAPI32.DLL'.*
-    NetpParmsUserPropertyFree                = 'NETAPI32.DLL'.*
-    NetpReleasePrivilege                     = 'NETAPI32.DLL'.*
-    NetpSetConfigBool                        = 'NETAPI32.DLL'.*
-    NetpSetConfigDword                       = 'NETAPI32.DLL'.*
-    NetpSetConfigTStrArray                   = 'NETAPI32.DLL'.*
-    NetpSetFileSecurity                      = 'NETAPI32.DLL'.*
-    NetpSmbCheck                             = 'NETAPI32.DLL'.*
-    NetpStringToNetBiosName                  = 'NETAPI32.DLL'.*
-    NetpTStrArrayEntryCount                  = 'NETAPI32.DLL'.*
-    NetpUpgradePreNT5JoinInfo                = 'NETAPI32.DLL'.*
-    NetpwNameCanonicalize                    = 'NETAPI32.DLL'.*
-    NetpwNameCompare                         = 'NETAPI32.DLL'.*
-    NetpwNameValidate                        = 'NETAPI32.DLL'.*
-    NetpwPathCanonicalize                    = 'NETAPI32.DLL'.*
-    NetpwPathCompare                         = 'NETAPI32.DLL'.*
-    NetpwPathType                            = 'NETAPI32.DLL'.*
-    NlBindingAddServerToCache                = 'NETAPI32.DLL'.*
-    NlBindingRemoveServerFromCache           = 'NETAPI32.DLL'.*
-    NlBindingSetAuthInfo                     = 'NETAPI32.DLL'.*
-    RxNetAccessAdd                           = 'NETAPI32.DLL'.*
-    RxNetAccessDel                           = 'NETAPI32.DLL'.*
-    RxNetAccessEnum                          = 'NETAPI32.DLL'.*
-    RxNetAccessGetInfo                       = 'NETAPI32.DLL'.*
-    RxNetAccessGetUserPerms                  = 'NETAPI32.DLL'.*
-    RxNetAccessSetInfo                       = 'NETAPI32.DLL'.*
-    RxNetServerEnum                          = 'NETAPI32.DLL'.*
-    RxNetUserPasswordSet                     = 'NETAPI32.DLL'.*
-    _RxRemoteApi                             = 'NETAPI32.DLL'.RxRemoteApi
+    DsAddressToSiteNamesA
+    DsAddressToSiteNamesExA
+    DsAddressToSiteNamesExW
+    DsAddressToSiteNamesW
+    DsDeregisterDnsHostRecordsA
+    DsDeregisterDnsHostRecordsW
+    DsEnumerateDomainTrustsA
+    DsEnumerateDomainTrustsW
+    DsGetDcCloseW
+    DsGetDcNameA
+    DsGetDcNameW
+    DsGetDcNameWithAccountA
+    DsGetDcNameWithAccountW
+    DsGetDcNextA
+    DsGetDcNextW
+    DsGetDcOpenA
+    DsGetDcOpenW
+    DsGetDcSiteCoverageA
+    DsGetDcSiteCoverageW
+    DsGetForestTrustInformationW
+    DsGetSiteNameA
+    DsGetSiteNameW
+    DsMergeForestTrustInformationW
+    DsRoleAbortDownlevelServerUpgrade
+    DsRoleCancel
+    DsRoleDcAsDc
+    DsRoleDcAsReplica
+    DsRoleDemoteDc
+    DsRoleDnsNameToFlatName
+    DsRoleFreeMemory
+    DsRoleGetDatabaseFacts
+    DsRoleGetDcOperationProgress
+    DsRoleGetDcOperationResults
+    DsRoleGetPrimaryDomainInformation
+    DsRoleServerSaveStateForUpgrade
+    DsRoleUpgradeDownlevelServer
+    DsValidateSubnetNameA
+    DsValidateSubnetNameW
+    I_BrowserDebugTrace
+    I_BrowserQueryOtherDomains
+    I_BrowserQueryStatistics
+    I_BrowserResetNetlogonState
+    I_BrowserResetStatistics
+    I_BrowserServerEnum
+    I_NetDfsManagerReportSiteInfo
+    I_NetLogonControl2
+    I_NetLogonControl
+    I_NetServerPasswordGet
+    I_NetServerPasswordSet2
+    NetAddAlternateComputerName
+    NetAlertRaise
+    NetAlertRaiseEx
+    NetApiBufferAllocate
+    NetApiBufferFree
+    NetApiBufferReallocate
+    NetApiBufferSize
+    NetAuditClear
+    NetAuditRead
+    NetAuditWrite
+    NetConfigGet
+    NetConfigGetAll
+    NetConfigSet
+    NetConnectionEnum
+    NetDfsAdd
+    NetDfsAddFtRoot
+    NetDfsAddStdRoot
+    NetDfsAddStdRootForced
+    NetDfsEnum
+    NetDfsGetClientInfo
+    NetDfsGetDcAddress
+    NetDfsGetInfo
+    NetDfsManagerInitialize
+    NetDfsManagerSendSiteInfo
+    NetDfsRemove
+    NetDfsRemoveFtRoot
+    NetDfsRemoveFtRootForced
+    NetDfsRemoveStdRoot
+    NetDfsSetClientInfo
+    NetDfsSetInfo
+    NetEnumerateComputerNames
+    NetErrorLogClear
+    NetErrorLogRead
+    NetErrorLogWrite
+    NetFileClose
+    NetFileEnum
+    NetFileGetInfo
+    NetGetAnyDCName
+    NetGetDCName
+    NetGetDisplayInformationIndex
+    NetGetJoinInformation
+    NetGetJoinableOUs
+    NetGroupAdd
+    NetGroupAddUser
+    NetGroupDel
+    NetGroupDelUser
+    NetGroupEnum
+    NetGroupGetInfo
+    NetGroupGetUsers
+    NetGroupSetInfo
+    NetGroupSetUsers
+    NetJoinDomain
+    NetLocalGroupAdd
+    NetLocalGroupAddMember
+    NetLocalGroupAddMembers
+    NetLocalGroupDel
+    NetLocalGroupDelMember
+    NetLocalGroupDelMembers
+    NetLocalGroupEnum
+    NetLocalGroupGetInfo
+    NetLocalGroupGetMembers
+    NetLocalGroupSetInfo
+    NetLocalGroupSetMembers
+    NetLogonGetTimeServiceParentDomain
+    NetMessageBufferSend
+    NetMessageNameAdd
+    NetMessageNameDel
+    NetMessageNameEnum
+    NetMessageNameGetInfo
+    NetQueryDisplayInformation
+    NetRegisterDomainNameChangeNotification
+    NetRemoteComputerSupports
+    NetRemoteTOD
+    NetRemoveAlternateComputerName
+    NetRenameMachineInDomain
+    NetReplExportDirAdd
+    NetReplExportDirDel
+    NetReplExportDirEnum
+    NetReplExportDirGetInfo
+    NetReplExportDirLock
+    NetReplExportDirSetInfo
+    NetReplExportDirUnlock
+    NetReplGetInfo
+    NetReplImportDirAdd
+    NetReplImportDirDel
+    NetReplImportDirEnum
+    NetReplImportDirGetInfo
+    NetReplImportDirLock
+    NetReplImportDirUnlock
+    NetReplSetInfo
+    NetScheduleJobAdd
+    NetScheduleJobDel
+    NetScheduleJobEnum
+    NetScheduleJobGetInfo
+    NetServerComputerNameAdd
+    NetServerComputerNameDel
+    NetServerDiskEnum
+    NetServerEnum
+    NetServerGetInfo
+    NetServerSetInfo
+    NetServerTransportAdd
+    NetServerTransportAddEx
+    NetServerTransportDel
+    NetServerTransportEnum
+    NetServiceControl
+    NetServiceEnum
+    NetServiceGetInfo
+    NetServiceInstall
+    NetSessionDel
+    NetSessionEnum
+    NetSessionGetInfo
+    NetSetPrimaryComputerName
+    NetShareAdd
+    NetShareCheck
+    NetShareDel
+    NetShareDelSticky
+    NetShareEnum
+    NetShareEnumSticky
+    NetShareGetInfo
+    NetShareSetInfo
+    NetStatisticsGet
+    NetUnjoinDomain
+    NetUnregisterDomainNameChangeNotification
+    NetUseAdd
+    NetUseDel
+    NetUseEnum
+    NetUseGetInfo
+    NetUserAdd
+    NetUserChangePassword
+    NetUserDel
+    NetUserEnum
+    NetUserGetGroups
+    NetUserGetInfo
+    NetUserGetLocalGroups
+    NetUserModalsGet
+    NetUserModalsSet
+    NetUserSetGroups
+    NetUserSetInfo
+    NetValidateName
+    NetWkstaGetInfo
+    NetWkstaSetInfo
+    NetWkstaTransportAdd
+    NetWkstaTransportDel
+    NetWkstaTransportEnum
+    NetWkstaUserEnum
+    NetWkstaUserGetInfo
+    NetWkstaUserSetInfo
+    Netbios
+    _NetpDbgPrint        = NetpDbgPrint
+    NetpNtStatusToApiStatus
+    NetpParmsQueryUserProperty
+    NetpParmsQueryUserPropertyWithLength
+    NetpParmsSetUserProperty
+    NetpParmsSetUserPropertyWithLength
+    NetpParmsUserPropertyFree
+    NetpUpgradePreNT5JoinInfo
+    NlBindingSetAuthInfo
+    RxNetAccessAdd
+    RxNetAccessDel
+    RxNetAccessEnum
+    RxNetAccessGetInfo
+    RxNetAccessGetUserPerms
+    RxNetAccessSetInfo
+    _RxRemoteApi        = RxRemoteApi

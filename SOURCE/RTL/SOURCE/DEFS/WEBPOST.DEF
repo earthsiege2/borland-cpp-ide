@@ -1,19 +1,19 @@
-LIBRARY WEBPOST
+LIBRARY WebPost
 EXPORTS
 
-    WpBindToSiteA                            = 'WEBPOST.DLL'.*
-    WpBindToSiteW                            = 'WEBPOST.DLL'.*
-    WpCreateSiteA                            = 'WEBPOST.DLL'.*
-    WpCreateSiteW                            = 'WEBPOST.DLL'.*
-    WpDeleteSiteA                            = 'WEBPOST.DLL'.*
-    WpDeleteSiteW                            = 'WEBPOST.DLL'.*
-    WpDoesSiteExistA                         = 'WEBPOST.DLL'.*
-    WpDoesSiteExistW                         = 'WEBPOST.DLL'.*
-    WpEnumProvidersA                         = 'WEBPOST.DLL'.*
-    WpEnumProvidersW                         = 'WEBPOST.DLL'.*
-    WpGetErrorStringA                        = 'WEBPOST.DLL'.*
-    WpGetErrorStringW                        = 'WEBPOST.DLL'.*
-    WpListSitesA                             = 'WEBPOST.DLL'.*
-    WpListSitesW                             = 'WEBPOST.DLL'.*
-    WpPostA                                  = 'WEBPOST.DLL'.*
-    WpPostW                                  = 'WEBPOST.DLL'.*
+    WpBindToSiteA
+    WpBindToSiteW
+    WpCreateSiteA
+    WpCreateSiteW
+    WpDeleteSiteA
+    WpDeleteSiteW
+    WpDoesSiteExistA
+    WpDoesSiteExistW
+    WpEnumProvidersA
+    WpEnumProvidersW
+    WpGetErrorStringA
+    WpGetErrorStringW
+    WpListSitesA
+    WpListSitesW
+    WpPostA
+    WpPostW

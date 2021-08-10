@@ -126,7 +126,6 @@
 	#define _AFXDLL
 #endif
 
-
 #ifdef __BORLANDC__
 #  if defined(_AFXDLL) && !defined(_RTLDLL)
 #    error The dynamic MFC library requires the dynamic RTL.

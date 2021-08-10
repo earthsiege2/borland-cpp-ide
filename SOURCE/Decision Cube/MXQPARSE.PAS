@@ -6,13 +6,13 @@
 {                                                       }
 {*******************************************************}
 
-unit mxqparse;
+unit MXQPARSE;
 
 interface
 
 uses
   Windows, SysUtils, Classes, Dialogs, DB, DBTables, DBCommon,
-  BDE, mxqedcom, DBConsts, Activex, ComObj, mxcommon, mxconsts;
+  BDE, MXQEDCOM, DBConsts, ActiveX, ComObj, MXCOMMON, Mxconsts;
 
 type
   EQParseException = class(Exception);

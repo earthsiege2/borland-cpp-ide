@@ -1,8 +1,7 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 //+---------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  File:       objbase.h
 //
@@ -271,7 +270,7 @@
 
 #include <stdlib.h>
 
-#define LISet32(li, v) ((li).HighPart = (v) < 0 ? -1 : 0, (li).LowPart = (v))
+#define LISet32(li, v) ((li).HighPart = ((LONG) (v)) < 0 ? -1 : 0, (li).LowPart = (v))
 
 #define ULISet32(li, v) ((li).HighPart = 0, (li).LowPart = (v))
 
@@ -431,6 +430,7 @@ WINOLEAPI  CoCreateStandardMalloc(IN DWORD memctx, OUT IMalloc FAR* FAR* ppMallo
 
 #if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
 WINOLEAPI  CoInitializeEx(IN LPVOID pvReserved, IN DWORD dwCoInit);
+WINOLEAPI  CoGetCallerTID( LPDWORD lpdwTID );
 #endif // DCOM
 
 #if DBG == 1
@@ -505,7 +505,9 @@ WINOLEAPI_(HINSTANCE) CoLoadLibrary(IN LPOLESTR lpszLibName, IN BOOL bAutoFree);
 WINOLEAPI_(void) CoFreeLibrary(IN HINSTANCE hInst);
 WINOLEAPI_(void) CoFreeAllLibraries(void);
 WINOLEAPI_(void) CoFreeUnusedLibraries(void);
-
+#if  (_WIN32_WINNT >= 0x0501 )
+WINOLEAPI_(void) CoFreeUnusedLibrariesEx(IN DWORD dwUnloadDelay, IN DWORD dwReserved);
+#endif
 
 #if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
 
@@ -610,6 +612,9 @@ WINOLEAPI CoTestCancel();
 WINOLEAPI CoEnableCallCancellation(IN LPVOID pReserved);
 WINOLEAPI CoDisableCallCancellation(IN LPVOID pReserved);
 
+WINOLEAPI CoAllowSetForegroundWindow(IN IUnknown *pUnk, IN LPVOID lpvReserved);
+
+WINOLEAPI DcomChannelSetHResult(IN LPVOID pvReserved, IN ULONG* pulReserved, IN HRESULT appsHR);
 
 #endif
 
@@ -757,13 +762,14 @@ WINOLEAPI StgOpenLayoutDocfile(IN OLECHAR const *pwcsDfName,
              OUT IStorage **ppstgOpen);
 
 // STG initialization options for StgCreateStorageEx and StgOpenStorageEx
-#define STGOPTIONS_VERSION 1
+#define STGOPTIONS_VERSION 2
 
 typedef struct tagSTGOPTIONS
 {
-    USHORT usVersion;            // Version 1
+    USHORT usVersion;            // Versions 1 and 2 supported
     USHORT reserved;             // must be 0 for padding
     ULONG ulSectorSize;          // docfile header sector size (512)
+    const WCHAR *pwcsTemplateFile;  // version 2 or above 
 } STGOPTIONS;
 
 WINOLEAPI StgCreateStorageEx (IN const WCHAR* pwcsName,
@@ -838,4 +844,3 @@ WINOLEAPI CreateStdProgressIndicator(IN HWND hwndParent,
 #endif // RC_INVOKED
 
 #endif     // __OBJBASE_H__
-#pragma option pop /*P_O_Pop*/

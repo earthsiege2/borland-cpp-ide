@@ -1,6 +1,6 @@
 /*
 
-Copyright (c) 1997-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
     sdperr.h
@@ -13,7 +13,6 @@ Author:
 */
 
 #ifndef __SDP_ERROR_CODES__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __SDP_ERROR_CODES__
 
 
@@ -80,5 +79,4 @@ Author:
 #define SDP_OUTPUT_ERROR                    (SDP_INVALID_FORMAT + 28)
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // __SDP_ERROR_CODES__

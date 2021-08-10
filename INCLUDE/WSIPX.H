@@ -31,7 +31,6 @@
  */
 
 #ifndef _WSIPX_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WSIPX_
 
 #if _MSC_VER > 1000
@@ -59,6 +58,5 @@ typedef struct sockaddr_ipx {
 #define NSPROTO_SPX      1256
 #define NSPROTO_SPXII    1257
 
-#pragma option pop /*P_O_Pop*/
 #endif
 

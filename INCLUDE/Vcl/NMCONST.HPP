@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NMConst.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NMConst.pas' rev: 6.00
 
 #ifndef NMConstHPP
 #define NMConstHPP
@@ -27,6 +27,7 @@ namespace Nmconst
 #define sFTP_Msg_Recvd "Received "
 #define sFTP_No_Bytes " Bytes"
 #define sFTP_Cont_Msg_UpldS "226 Upload OK"
+#define sFTP_Cont_Msg_ListP "A list command is already being processed!"
 #define sHTTP_Prog_Name "NetMasters 4.0"
 #define sHTTP_Head_File "Head.txt"
 #define sHTTP_Body_File "Default.htm"
@@ -34,6 +35,7 @@ namespace Nmconst
 #define sHTTP_Msg_Trans "Transaction Completed"
 #define sHTTP_Exp_Parse "HTTP Parsing URL failed"
 #define sHTTP_Cont_Msg_NoURL "Empty URL"
+#define sHTTP_Cont_Msg_NoSSL "HTTP Secure Socket is not supported"
 #define sSMTP_Msg_Incomp_Head "Incomplete Header"
 #define sPOP_Cons_Summ_Retr "Summary Retrieved"
 #define sPOP_Cons_Msg_Retr "Message Retrieved"
@@ -67,6 +69,9 @@ namespace Nmconst
 #define sUDP_Cons_Err_Addr "Null Remote Address"
 #define sUDP_Cons_Err_Buffer "Invalid buffer"
 #define sUUE_Cons_Msg_NoLnEnd " No end line."
+#define sMS_Stream_err_seek_orig "Invalid seek origin = %d"
+#define sMS_Stream_err_seek "Seek error"
+#define sMS_Stream_err_putb_oflw "PutBack overflow"
 #define sPSk_Cons_msg_create "Create"
 #define sPSk_Cons_msg_Dest "Destroy"
 #define sPSk_Cons_msg_Conn "Already connected"
@@ -132,9 +137,7 @@ namespace Nmconst
 #define sPSk_Cons_winfo_Vend "Vendor Information= "
 
 }	/* namespace Nmconst */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nmconst;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

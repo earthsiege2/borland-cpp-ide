@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 2000 Inprise Corporation. All Rights Reserved.
+// Copyright (c) 2000-2002 Borland Corporation. All Rights Reserved.
 //---------------------------------------------------------------------------
 //      Example:        VirtualListView
 //      File:           VListView.h  Declaration Header File

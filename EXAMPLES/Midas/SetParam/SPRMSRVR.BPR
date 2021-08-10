@@ -2,7 +2,7 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="SPrmSrvr.exe"/>
     <OBJFILES value="SPrmSrvr.obj FormMain.obj SPrmSrvr_TLB.obj SetParamSrvrImpl.obj 
       SPrmSrvr_ATL.obj"/>
@@ -12,37 +12,48 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) FormMain.dfm SetParamSrvrImpl.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="vclnp50.lib"/>
-    <SPARELIBS value="Vcl50.lib Vcldb50.lib VCLBDE50.lib Vclmid50.lib"/>
-    <PACKAGES value="Vcl50.bpi Vclx50.bpi Vcldb50.bpi VCLBDE50.bpi vcldbx50.bpi Vclmid50.bpi"/>
+    <LIBRARIES value="vclnp.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib dbrtl.lib vcldb.lib bdertl.lib dsnap.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi dbrtl.bpi vcldb.bpi bdertl.bpi vcldbx.bpi dsnap.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
-    <LINKER value="tlink32"/>
+    <LINKER value="ilink32"/>
     <USERDEFINES value=""/>
-    <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES;_ATL_APARTMENT_THREADED;USING_ATLVCL;_ATL_NO_SECURITY"/>
+    <SYSDEFINES value="_RTLDLL;NO_STRICT;_ATL_APARTMENT_THREADED;USING_ATLVCL;_ATL_NO_SECURITY;USEPACKAGES"/>
     <MAINSOURCE value="SPrmSrvr.cpp"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;$(BCB)\include\atl"/>
     <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -I$(BCB)\include\atl -src_suffixcpp"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
-      -tW -tWM"/>
+    <IDLCFLAGS value="-src_suffix cpp -I$(BCB)\include -I$(BCB)\include\vcl -I$(BCB)\include\atl"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -Gn -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="SPrmSrvr.cpp" FORMNAME="" UNITNAME="SPrmSrvr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SPrmSrvr.res" FORMNAME="" UNITNAME="SPrmSrvr" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="FormMain.cpp" FORMNAME="MainForm" UNITNAME="FormMain" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SPrmSrvr.tlb" FORMNAME="" UNITNAME="SPrmSrvr" CONTAINERID="TypeLibTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SPrmSrvr_TLB.cpp" FORMNAME="" UNITNAME="SPrmSrvr_TLB" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SetParamSrvrImpl.cpp" FORMNAME="SetParamSrvr" UNITNAME="SetParamSrvrImpl" COCLASSES="SetParamSrvr" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SPrmSrvr_ATL.cpp" FORMNAME="" UNITNAME="SPrmSrvr_ATL" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="readmes.txt" FORMNAME="" UNITNAME="readmes" CONTAINERID="File" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -94,9 +105,14 @@ DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]

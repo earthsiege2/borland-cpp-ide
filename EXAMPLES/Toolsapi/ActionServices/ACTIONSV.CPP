@@ -1,9 +1,6 @@
 //---------------------------------------------------------------------------
 #include <vcl.h>
 #pragma hdrstop
-USERES("actionsv.res");
-USEPACKAGE("vcl50.bpi");
-USEUNIT("WizMain.cpp");
 USEFORM("frmmain.cpp", FormMain);
 //---------------------------------------------------------------------------
 #include <toolsapi.hpp>

@@ -5,22 +5,20 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.9  $ */
+/* $Revision: 9.13.2.1 $ */
 
 #ifndef __TIME_H
 #define __TIME_H
 #define _INC_TIME  /* MSC Guard name */
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 #ifdef __cplusplus
 namespace std {
@@ -80,6 +78,8 @@ time_t      _RTLENTRY _EXPFUNC mktime(struct tm *__timeptr);
 clock_t     _RTLENTRY _EXPFUNC clock(void);
 _SIZE_T     _RTLENTRY _EXPFUNC strftime(char *__s, _SIZE_T __maxsize,
                                         const char *__fmt, const struct tm *__t);
+char  *     _RTLENTRY _EXPFUNC strptime(const char *__s,
+                                        const char *__fmt, struct tm *__t);
 _SIZE_T     _RTLENTRY _EXPFUNC _lstrftim(char  *__s, _SIZE_T __maxsize,
                                           const char *__fmt, const struct tm *__t);
 wchar_t   * _RTLENTRY _EXPFUNC _wasctime(const struct tm *__tblock);
@@ -145,6 +145,7 @@ unsigned int _RTLENTRY _EXPFUNC _setsystime(struct tm *__timeptr, unsigned int _
      using std::mktime;
      using std::clock;
      using std::strftime;
+     using std::strptime;
      using std::_lstrftim;
      using std::_wasctime;
      using std::_wctime;

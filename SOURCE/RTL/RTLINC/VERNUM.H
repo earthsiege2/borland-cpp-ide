@@ -1,1 +1,1 @@
-#define VERSION_STRING "5.0.0.55\0"
+#define VERSION_STRING "0.0.0.0 (informal build)\0" // Generated in pull.btm now.

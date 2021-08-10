@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1996-1998 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -13,8 +13,11 @@ Abstract:
 --*/
 
 #ifndef __TRAFFIC_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __TRAFFIC_H
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 #ifdef __cplusplus
 extern  "C" {
@@ -26,15 +29,10 @@ extern  "C" {
 //
 #define CURRENT_TCI_VERSION       	0x0002
 
-//
-// Flow flags
-//
-#define TC_FLAGS_PERSIST			0x00000001
-#define TC_FLAGS_SHUTDOWN			0x00000002
 
 //
 // Definitions of notification events. These may be passed
-// to the client's notification handler, to identify the 
+// to the client's notification handler, to identify the
 // notification type
 //
 
@@ -42,12 +40,12 @@ extern  "C" {
 // A TC interface has come up
 //
 #define TC_NOTIFY_IFC_UP		1
-// 
+//
 // A TC interface has come down
 //
 #define TC_NOTIFY_IFC_CLOSE		2
 //
-// A change on a TC interface, typically a change in the 
+// A change on a TC interface, typically a change in the
 // list of supported network addresses
 //
 #define TC_NOTIFY_IFC_CHANGE	3
@@ -89,7 +87,7 @@ VOID (CALLBACK * TCI_NOTIFY_HANDLER)(
     IN	HANDLE		ClRegCtx,
     IN	HANDLE		ClIfcCtx,
 	IN	ULONG		Event, 		// See list below
-	IN	ULONG		SubCode,
+	IN	HANDLE	    SubCode,
 	IN	ULONG		BufSize,
 	IN	PVOID		Buffer
 	);
@@ -123,52 +121,6 @@ typedef struct _TCI_CLIENT_FUNC_LIST {
 } TCI_CLIENT_FUNC_LIST, *PTCI_CLIENT_FUNC_LIST;
 
 
-#ifndef _NTDDNDIS_
-//
-// The structures below need to be consistent with TRANSPORT_ADDRESS structures in TDI.H
-//
-typedef struct _NETWORK_ADDRESS
-{
-	USHORT		AddressLength;		// length in bytes of Address[] in this
-	USHORT		AddressType;		// type of this address (NDIS_PROTOCOL_ID_XXX above)
-	UCHAR		Address[1];			// actually AddressLength bytes long
-} NETWORK_ADDRESS, *PNETWORK_ADDRESS;
-
-//
-// The following is used with OID_GEN_NETWORK_LAYER_ADDRESSES to set network layer addresses on an interface
-//
-typedef struct _NETWORK_ADDRESS_LIST
-{
-	LONG		AddressCount;		// number of addresses following
-	USHORT		AddressType;		// type of this address (NDIS_PROTOCOL_ID_XXX above)
-	NETWORK_ADDRESS Address[1];		// actually AddressCount elements long
-} NETWORK_ADDRESS_LIST, *PNETWORK_ADDRESS_LIST;
-
-//
-// IP address - This must remain consistent with TDI_ADDRESS_IP in tdi.h
-//
-typedef struct _NETWORK_ADDRESS_IP
-{
-	USHORT		sin_port;
-	ULONG		in_addr;
-	UCHAR		sin_zero[8];
-} NETWORK_ADDRESS_IP, *PNETWORK_ADDRESS_IP;
-
-#define NETWORK_ADDRESS_LENGTH_IP sizeof (NETWORK_ADDRESS_IP)
-
-//
-// IPX address - This must remain consistent with TDI_ADDRESS_IPX in tdi.h.
-//
-typedef struct _NETWORK_ADDRESS_IPX
-{
-	ULONG		NetworkAddress;
-	UCHAR		NodeAddress[6];
-	USHORT		Socket;
-} NETWORK_ADDRESS_IPX, *PNETWORK_ADDRESS_IPX;
-
-#endif
-
-
 //
 // Network address descriptor
 //
@@ -187,9 +139,25 @@ typedef struct _TC_IFC_DESCRIPTOR {
 
     ULONG					Length;
     LPWSTR					pInterfaceName;
+    LPWSTR					pInterfaceID;
 	ADDRESS_LIST_DESCRIPTOR	AddressListDesc;
 
 } TC_IFC_DESCRIPTOR, *PTC_IFC_DESCRIPTOR;
+
+
+//
+// This structure is returned by a QoS data provider in reply to
+// GUID_QOS_SUPPORTED query or with an interface UP notification
+//
+typedef struct _TC_SUPPORTED_INFO_BUFFER {
+
+    USHORT						InstanceIDLength;
+    // device or interface ID
+    WCHAR						InstanceID[MAX_STRING_LENGTH];
+    // address list
+    ADDRESS_LIST_DESCRIPTOR		AddrListDesc;
+
+} TC_SUPPORTED_INFO_BUFFER, *PTC_SUPPORTED_INFO_BUFFER;
 
 
 //
@@ -285,55 +253,105 @@ typedef struct _ENUMERATION_BUFFER {
 	TC_GEN_FILTER	GenericFilter[1]; 	// one for each filter
 
 } ENUMERATION_BUFFER, *PENUMERATION_BUFFER;
+
+//
+// QoS objects supported by traffic
+//
+#define QOS_TRAFFIC_GENERAL_ID_BASE 4000
+
+#define QOS_OBJECT_DS_CLASS                    (0x00000001 + QOS_TRAFFIC_GENERAL_ID_BASE)
+        /* QOS_DS_CLASS structure passed */
+#define QOS_OBJECT_TRAFFIC_CLASS               (0x00000002 + QOS_TRAFFIC_GENERAL_ID_BASE) 
+          /* QOS_Traffic class structure passed */
+#define   QOS_OBJECT_DIFFSERV                  (0x00000003 + QOS_TRAFFIC_GENERAL_ID_BASE)
+          /* QOS_DIFFSERV Structure */
+#define QOS_OBJECT_TCP_TRAFFIC                 (0x00000004 + QOS_TRAFFIC_GENERAL_ID_BASE)
+        /* QOS_TCP_TRAFFIC structure */
+#define QOS_OBJECT_FRIENDLY_NAME               (0x00000005 + QOS_TRAFFIC_GENERAL_ID_BASE)
+        /* QOS_FRIENDLY_NAME structure */
+
+
+//
+// This structure is used to associate a friendly name with the flow
+// 
+
+typedef struct _QOS_FRIENDLY_NAME {
+    QOS_OBJECT_HDR ObjectHdr;
+    WCHAR          FriendlyName[MAX_STRING_LENGTH];
+} QOS_FRIENDLY_NAME, *LPQOS_FRIENDLY_NAME;
+
+//
+// This structure may carry an 802.1 TrafficClass parameter which 
+// has been provided to the host by a layer 2 network, for example, 
+// in an 802.1 extended RSVP RESV message. If this object is obtained
+// from the network, hosts will stamp the MAC headers of corresponding
+// transmitted packets, with the value in the object. Otherwise, hosts
+// may select a value based on the standard Intserv mapping of 
+// ServiceType to 802.1 TrafficClass.
+//
+//
+
+typedef struct _QOS_TRAFFIC_CLASS {
+
+    QOS_OBJECT_HDR   ObjectHdr;
+    ULONG            TrafficClass;
+
+} QOS_TRAFFIC_CLASS, *LPQOS_TRAFFIC_CLASS;
+
+//
+// This structure may carry an DSField parameter which  has been provided to 
+// the host by a layer 3 network, for example, in an extended RSVP RESV message. 
+// If this object is obtained from the network, hosts will stamp the DS Field on the
+// IP header of transmitted packets, with the value in the object. Otherwise, hosts
+// may select a value based on the standard Intserv mapping of ServiceType to DS Field 
+//
+
+typedef struct _QOS_DS_CLASS {
+
+    QOS_OBJECT_HDR ObjectHdr;
+    ULONG          DSField;
+
+} QOS_DS_CLASS, *LPQOS_DS_CLASS;
+
+
+//
+// This structure is used to create DiffServ Flows. This creates flows in the packet scheduler
+// and allows it to classify to packets based on a particular DS field. This structure takes
+// a variable length array of QOS_DIFFSERV_RULE, where each DS field is specified by a 
+// QOS_DIFFSERV_RULE
+//
+typedef struct _QOS_DIFFSERV {
+
+    QOS_OBJECT_HDR ObjectHdr;
+    ULONG          DSFieldCount;
+    UCHAR          DiffservRule[1];
+} QOS_DIFFSERV, *LPQOS_DIFFSERV;
+
+//
+// The rule for a Diffserv DS codepoint. 
+//
+typedef struct _QOS_DIFFSERV_RULE {
+    UCHAR InboundDSField;
+    UCHAR ConformingOutboundDSField;
+    UCHAR NonConformingOutboundDSField;
+    UCHAR ConformingUserPriority;
+    UCHAR NonConformingUserPriority;
+} QOS_DIFFSERV_RULE, *LPQOS_DIFFSERV_RULE;
+
+// 
+// This structure is passed to indicate that the IP Precedence and UserPriority mappings for the flow
+// have to be set to the system defaults for TCP traffic. If this object is passed, 
+// the ServiceType ==> DSField mapping, ServiceType ==> UserPriorityMapping, QOS_OBJECT_DS_CLASS
+// and QOS_OBJECT_TRAFFIC_CLASS will be ignored.
+//
+
+typedef struct _QOS_TCP_TRAFFIC {
+    QOS_OBJECT_HDR ObjectHdr;
+} QOS_TCP_TRAFFIC, *LPQOS_TCP_TRAFFIC;
+
+
+
 	
-
-//
-// A class map structure is used by internal TC component
-// such as the CBQ.
-// This should have been in qos.h but we'll put it here until
-// the time is ready
-//
-
-#define CLSMAP_ID_BASE                5000
-#define CLSMAP_OBJECT_SERVICETYPE     (0x00000000 + CLSMAP_ID_BASE)
-#define CLSMAP_OBJECT_END_OF_LIST     (0x00000001 + CLSMAP_ID_BASE)
-
-//
-// The servicetype object can be used to override the default class for // a given service type
-//
-typedef struct _CLSMAP_SERVICETYPE {
-    QOS_OBJECT_HDR	Header;
-    ULONG			ServiceType;
-    ULONG			ClassId;
-} CLSMAP_SERVICETYPE, *PCLSMAP_SERVICETYPE;
-
-typedef struct _TC_CLASS_MAP_FLOW {
-
-    ULONG       	DefaultClass;			// Default Class Id
-    ULONG       	ObjectsLength;			// Length of Objects
-    QOS_OBJECT_HDR	Objects;				// Offset to Objects
-
-} TC_CLASS_MAP_FLOW, *PTC_CLASS_MAP_FLOW;
-
-
-//
-// class hierarchy definitions
-//
-
-typedef struct _QOS_HIERARCHY_CLASS {
-
-	ULONG ClassId;				// Unique nonzero class identifier
-    ULONG Allocation;			// Share of link bandwidth
-    ULONG BurstLength;			// Maximum burst size
-    ULONG Flags;				// See below
-    ULONG ParentClassId;		// Id of parent class
-    ULONG ObjectsLength;		// For possible future use
-    UCHAR Objects[1];
-
-} QOS_HIERARCHY_CLASS, *PQOS_HIERARCHY_CLASS;
-
-#define HCLASS_FLAG_BOUNDED				1
-
 
 //---------------------------------------------------------------------------
 //
@@ -507,18 +525,6 @@ TcEnumerateFlows(
     OUT		PENUMERATION_BUFFER		Buffer
     );
 
-
-ULONG
-APIENTRY
-TcAddClassMapFlow(
-	IN  	HANDLE	     		IfcHandle,
-    IN		HANDLE				ClFlowCtx,
-    IN		ULONG				Flags,
-    IN		PTC_CLASS_MAP_FLOW	pClassMapFlow,
-    OUT		PHANDLE				pFlowHandle
-);
-
-
 #ifdef UNICODE
 
 #define TcOpenInterface					TcOpenInterfaceW
@@ -541,6 +547,5 @@ TcAddClassMapFlow(
 #endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif
 

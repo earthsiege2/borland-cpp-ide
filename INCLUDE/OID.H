@@ -12,7 +12,6 @@
 //==========================================================================================================================
 
 #ifndef OID_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define OID_H
 
 #include <windows.h>
@@ -100,5 +99,4 @@ BOOL WINAPI ObjectIdentifierContains (LPBYTE SubOID,
 
 
 
-#pragma option pop /*P_O_Pop*/
 #endif

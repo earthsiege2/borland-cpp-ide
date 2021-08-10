@@ -6,14 +6,14 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1991, 2000 by Inprise Corporation
+ *      Copyright (c) 1991, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.0  $        */
+/* $Revision: 9.5.2.1 $        */
 
 #define INCL_CON
 #include <ntbc.h>
@@ -34,7 +34,7 @@ Description     Moves the text cursor to absolute, zero-based location
 
 *------------------------------------------------------------------------*/
 
-void _RTLENTRY __movecursor(int column, int row)
+void _RTLENTRY _EXPFUNC __movecursor(int column, int row)
 {
     COORD c;
 

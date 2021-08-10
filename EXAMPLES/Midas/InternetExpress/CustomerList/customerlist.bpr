@@ -2,7 +2,7 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="CustomerList.exe"/>
     <OBJFILES value="CustomerList.obj CustomerListWebModule.obj"/>
     <RESFILES value=""/>
@@ -11,43 +11,42 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) CustomerListWebModule.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="vclbde50.lib inetdb50.lib webmid50.lib vcldb50.lib Vclmid50.lib Inet50.lib 
-      Vcl50.lib"/>
-    <SPARELIBS value="Vcl50.lib Inet50.lib Vclmid50.lib vcldb50.lib webmid50.lib inetdb50.lib 
-      vclbde50.lib"/>
-    <PACKAGES value="Vcl50.bpi Vclx50.bpi bcbsmp50.bpi Vcldb50.bpi vclado50.bpi Vclbde50.bpi 
-      vcldbx50.bpi Qrpt50.bpi TeeUI50.bpi TeeDB50.bpi Tee50.bpi Dss50.bpi 
-      TeeQR50.bpi VCLIB50.bpi Vclmid50.bpi vclie50.bpi Inetdb50.bpi Inet50.bpi 
-      NMFast50.bpi webmid50.bpi bcbie50.bpi dclocx50.bpi bcb2kaxserver50.bpi 
-      ibsmp50.bpi INETXCUSTOM_BCB.bpi"/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="rtl.lib vcl.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi dsnap.bpi bdertl.bpi inet.bpi webdsnap.bpi INETXCUSTOM_BCB.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
-    <LINKER value="tlink32"/>
+    <LINKER value="ilink32"/>
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="CustomerList.cpp"/>
-    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="..\inetxcustom;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\inetxcustom;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -D_DEBUG -boa"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
-      -tW -tWM"/>
+    <IDLCFLAGS value="-src_suffix cpp -D_DEBUG -I$(BCB)\include -I$(BCB)\include\vcl -boa"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
     <LFLAGS value="-D&quot;&quot; -ap -Tpe -x -Gn -v"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0x32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0x32.obj $(PACKAGES) sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="CustomerList.cpp" FORMNAME="" UNITNAME="CustomerList" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="CustomerListWebModule.cpp" FORMNAME="WebModule1" UNITNAME="CustomerListWebModule" CONTAINERID="CCompiler" DESIGNCLASS="TWebModule" LOCALCOMMAND=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -76,17 +75,19 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 
-[Excluded Packages]
-e:\bcb\bin\dclinetxcustom.bpl=InternetExpress sample components
-
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]

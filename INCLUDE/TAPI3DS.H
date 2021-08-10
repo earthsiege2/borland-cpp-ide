@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Sat Jul 31 00:53:00 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for tapi3ds.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -20,7 +19,7 @@
 
 /* verify that the <rpcndr.h> version is high enough to compile this file*/
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
-#define __REQUIRED_RPCNDR_H_VERSION__ 440
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
 
 #include "rpc.h"
@@ -38,6 +37,10 @@
 #ifndef __tapi3ds_h__
 #define __tapi3ds_h__
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
 /* Forward Declarations */ 
 
 #ifndef __ITAMMediaFormat_FWD_DEFINED__
@@ -52,28 +55,21 @@ typedef interface ITAllocatorProperties ITAllocatorProperties;
 #endif 	/* __ITAllocatorProperties_FWD_DEFINED__ */
 
 
-#ifndef __ITAudioReadMedia_FWD_DEFINED__
-#define __ITAudioReadMedia_FWD_DEFINED__
-typedef interface ITAudioReadMedia ITAudioReadMedia;
-#endif 	/* __ITAudioReadMedia_FWD_DEFINED__ */
-
-
 /* header files for imported files */
 #include "oaidl.h"
 #include "strmif.h"
-#include "amrtpss.h"
 
 #ifdef __cplusplus
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_tapi3ds_0000 */
 /* [local] */ 
 
-/* Copyright (c) 1998-1999  Microsoft Corporation  */
+/* Copyright (c) Microsoft Corporation. All rights reserved. */
 
 
 extern RPC_IF_HANDLE __MIDL_itf_tapi3ds_0000_v0_0_c_ifspec;
@@ -95,10 +91,10 @@ EXTERN_C const IID IID_ITAMMediaFormat;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MediaFormat( 
-            /* [retval][out] */ AM_MEDIA_TYPE __RPC_FAR *__RPC_FAR *ppmt) = 0;
+            /* [retval][out] */ AM_MEDIA_TYPE **ppmt) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_MediaFormat( 
-            /* [in] */ const AM_MEDIA_TYPE __RPC_FAR *pmt) = 0;
+            /* [in] */ const AM_MEDIA_TYPE *pmt) = 0;
         
     };
     
@@ -108,31 +104,31 @@ EXTERN_C const IID IID_ITAMMediaFormat;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITAMMediaFormat __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITAMMediaFormat * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITAMMediaFormat __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITAMMediaFormat * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITAMMediaFormat __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITAMMediaFormat * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MediaFormat )( 
-            ITAMMediaFormat __RPC_FAR * This,
-            /* [retval][out] */ AM_MEDIA_TYPE __RPC_FAR *__RPC_FAR *ppmt);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MediaFormat )( 
+            ITAMMediaFormat * This,
+            /* [retval][out] */ AM_MEDIA_TYPE **ppmt);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MediaFormat )( 
-            ITAMMediaFormat __RPC_FAR * This,
-            /* [in] */ const AM_MEDIA_TYPE __RPC_FAR *pmt);
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MediaFormat )( 
+            ITAMMediaFormat * This,
+            /* [in] */ const AM_MEDIA_TYPE *pmt);
         
         END_INTERFACE
     } ITAMMediaFormatVtbl;
 
     interface ITAMMediaFormat
     {
-        CONST_VTBL struct ITAMMediaFormatVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITAMMediaFormatVtbl *lpVtbl;
     };
 
     
@@ -164,8 +160,8 @@ EXTERN_C const IID IID_ITAMMediaFormat;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITAMMediaFormat_get_MediaFormat_Proxy( 
-    ITAMMediaFormat __RPC_FAR * This,
-    /* [retval][out] */ AM_MEDIA_TYPE __RPC_FAR *__RPC_FAR *ppmt);
+    ITAMMediaFormat * This,
+    /* [retval][out] */ AM_MEDIA_TYPE **ppmt);
 
 
 void __RPC_STUB ITAMMediaFormat_get_MediaFormat_Stub(
@@ -176,8 +172,8 @@ void __RPC_STUB ITAMMediaFormat_get_MediaFormat_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITAMMediaFormat_put_MediaFormat_Proxy( 
-    ITAMMediaFormat __RPC_FAR * This,
-    /* [in] */ const AM_MEDIA_TYPE __RPC_FAR *pmt);
+    ITAMMediaFormat * This,
+    /* [in] */ const AM_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB ITAMMediaFormat_put_MediaFormat_Stub(
@@ -207,22 +203,22 @@ EXTERN_C const IID IID_ITAllocatorProperties;
     {
     public:
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetAllocatorProperties( 
-            /* [in] */ ALLOCATOR_PROPERTIES __RPC_FAR *pAllocProperties) = 0;
+            /* [in] */ ALLOCATOR_PROPERTIES *pAllocProperties) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetAllocatorProperties( 
-            /* [out] */ ALLOCATOR_PROPERTIES __RPC_FAR *pAllocProperties) = 0;
+            /* [out] */ ALLOCATOR_PROPERTIES *pAllocProperties) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetAllocateBuffers( 
             /* [in] */ BOOL bAllocBuffers) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetAllocateBuffers( 
-            /* [out] */ BOOL __RPC_FAR *pbAllocBuffers) = 0;
+            /* [out] */ BOOL *pbAllocBuffers) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetBufferSize( 
             /* [in] */ DWORD BufferSize) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetBufferSize( 
-            /* [out] */ DWORD __RPC_FAR *pBufferSize) = 0;
+            /* [out] */ DWORD *pBufferSize) = 0;
         
     };
     
@@ -232,47 +228,47 @@ EXTERN_C const IID IID_ITAllocatorProperties;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITAllocatorProperties __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITAllocatorProperties * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITAllocatorProperties __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITAllocatorProperties * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITAllocatorProperties __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITAllocatorProperties * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAllocatorProperties )( 
-            ITAllocatorProperties __RPC_FAR * This,
-            /* [in] */ ALLOCATOR_PROPERTIES __RPC_FAR *pAllocProperties);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetAllocatorProperties )( 
+            ITAllocatorProperties * This,
+            /* [in] */ ALLOCATOR_PROPERTIES *pAllocProperties);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllocatorProperties )( 
-            ITAllocatorProperties __RPC_FAR * This,
-            /* [out] */ ALLOCATOR_PROPERTIES __RPC_FAR *pAllocProperties);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetAllocatorProperties )( 
+            ITAllocatorProperties * This,
+            /* [out] */ ALLOCATOR_PROPERTIES *pAllocProperties);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAllocateBuffers )( 
-            ITAllocatorProperties __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetAllocateBuffers )( 
+            ITAllocatorProperties * This,
             /* [in] */ BOOL bAllocBuffers);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAllocateBuffers )( 
-            ITAllocatorProperties __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pbAllocBuffers);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetAllocateBuffers )( 
+            ITAllocatorProperties * This,
+            /* [out] */ BOOL *pbAllocBuffers);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBufferSize )( 
-            ITAllocatorProperties __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetBufferSize )( 
+            ITAllocatorProperties * This,
             /* [in] */ DWORD BufferSize);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBufferSize )( 
-            ITAllocatorProperties __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pBufferSize);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetBufferSize )( 
+            ITAllocatorProperties * This,
+            /* [out] */ DWORD *pBufferSize);
         
         END_INTERFACE
     } ITAllocatorPropertiesVtbl;
 
     interface ITAllocatorProperties
     {
-        CONST_VTBL struct ITAllocatorPropertiesVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITAllocatorPropertiesVtbl *lpVtbl;
     };
 
     
@@ -316,8 +312,8 @@ EXTERN_C const IID IID_ITAllocatorProperties;
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAllocatorProperties_SetAllocatorProperties_Proxy( 
-    ITAllocatorProperties __RPC_FAR * This,
-    /* [in] */ ALLOCATOR_PROPERTIES __RPC_FAR *pAllocProperties);
+    ITAllocatorProperties * This,
+    /* [in] */ ALLOCATOR_PROPERTIES *pAllocProperties);
 
 
 void __RPC_STUB ITAllocatorProperties_SetAllocatorProperties_Stub(
@@ -328,8 +324,8 @@ void __RPC_STUB ITAllocatorProperties_SetAllocatorProperties_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAllocatorProperties_GetAllocatorProperties_Proxy( 
-    ITAllocatorProperties __RPC_FAR * This,
-    /* [out] */ ALLOCATOR_PROPERTIES __RPC_FAR *pAllocProperties);
+    ITAllocatorProperties * This,
+    /* [out] */ ALLOCATOR_PROPERTIES *pAllocProperties);
 
 
 void __RPC_STUB ITAllocatorProperties_GetAllocatorProperties_Stub(
@@ -340,7 +336,7 @@ void __RPC_STUB ITAllocatorProperties_GetAllocatorProperties_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAllocatorProperties_SetAllocateBuffers_Proxy( 
-    ITAllocatorProperties __RPC_FAR * This,
+    ITAllocatorProperties * This,
     /* [in] */ BOOL bAllocBuffers);
 
 
@@ -352,8 +348,8 @@ void __RPC_STUB ITAllocatorProperties_SetAllocateBuffers_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAllocatorProperties_GetAllocateBuffers_Proxy( 
-    ITAllocatorProperties __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pbAllocBuffers);
+    ITAllocatorProperties * This,
+    /* [out] */ BOOL *pbAllocBuffers);
 
 
 void __RPC_STUB ITAllocatorProperties_GetAllocateBuffers_Stub(
@@ -364,7 +360,7 @@ void __RPC_STUB ITAllocatorProperties_GetAllocateBuffers_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAllocatorProperties_SetBufferSize_Proxy( 
-    ITAllocatorProperties __RPC_FAR * This,
+    ITAllocatorProperties * This,
     /* [in] */ DWORD BufferSize);
 
 
@@ -376,8 +372,8 @@ void __RPC_STUB ITAllocatorProperties_SetBufferSize_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ITAllocatorProperties_GetBufferSize_Proxy( 
-    ITAllocatorProperties __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pBufferSize);
+    ITAllocatorProperties * This,
+    /* [out] */ DWORD *pBufferSize);
 
 
 void __RPC_STUB ITAllocatorProperties_GetBufferSize_Stub(
@@ -391,118 +387,6 @@ void __RPC_STUB ITAllocatorProperties_GetBufferSize_Stub(
 #endif 	/* __ITAllocatorProperties_INTERFACE_DEFINED__ */
 
 
-#ifndef __ITAudioReadMedia_INTERFACE_DEFINED__
-#define __ITAudioReadMedia_INTERFACE_DEFINED__
-
-/* interface ITAudioReadMedia */
-/* [object][helpstring][uuid] */ 
-
-
-EXTERN_C const IID IID_ITAudioReadMedia;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("1F0B1BE8-4B6D-11D1-A671-006097C9A2E8")
-    ITAudioReadMedia : public IUnknown
-    {
-    public:
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnableSilenceSuppressor( 
-            /* [in] */ VARIANT_BOOL bEnable) = 0;
-        
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SilenceSuppressor( 
-            /* [retval][out] */ ISilenceSuppressor __RPC_FAR *__RPC_FAR *ppSilenceSuppressor) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct ITAudioReadMediaVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITAudioReadMedia __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITAudioReadMedia __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITAudioReadMedia __RPC_FAR * This);
-        
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_EnableSilenceSuppressor )( 
-            ITAudioReadMedia __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bEnable);
-        
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_SilenceSuppressor )( 
-            ITAudioReadMedia __RPC_FAR * This,
-            /* [retval][out] */ ISilenceSuppressor __RPC_FAR *__RPC_FAR *ppSilenceSuppressor);
-        
-        END_INTERFACE
-    } ITAudioReadMediaVtbl;
-
-    interface ITAudioReadMedia
-    {
-        CONST_VTBL struct ITAudioReadMediaVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define ITAudioReadMedia_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define ITAudioReadMedia_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define ITAudioReadMedia_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define ITAudioReadMedia_put_EnableSilenceSuppressor(This,bEnable)	\
-    (This)->lpVtbl -> put_EnableSilenceSuppressor(This,bEnable)
-
-#define ITAudioReadMedia_get_SilenceSuppressor(This,ppSilenceSuppressor)	\
-    (This)->lpVtbl -> get_SilenceSuppressor(This,ppSilenceSuppressor)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ITAudioReadMedia_put_EnableSilenceSuppressor_Proxy( 
-    ITAudioReadMedia __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bEnable);
-
-
-void __RPC_STUB ITAudioReadMedia_put_EnableSilenceSuppressor_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ITAudioReadMedia_get_SilenceSuppressor_Proxy( 
-    ITAudioReadMedia __RPC_FAR * This,
-    /* [retval][out] */ ISilenceSuppressor __RPC_FAR *__RPC_FAR *ppSilenceSuppressor);
-
-
-void __RPC_STUB ITAudioReadMedia_get_SilenceSuppressor_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __ITAudioReadMedia_INTERFACE_DEFINED__ */
-
-
 /* Additional Prototypes for ALL interfaces */
 
 /* end of Additional Prototypes */
@@ -512,6 +396,7 @@ void __RPC_STUB ITAudioReadMedia_get_SilenceSuppressor_Stub(
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

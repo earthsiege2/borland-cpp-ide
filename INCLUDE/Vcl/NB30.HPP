@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NB30.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Nb30.pas' rev: 6.00
 
-#ifndef NB30HPP
-#define NB30HPP
+#ifndef Nb30HPP
+#define Nb30HPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -259,12 +259,10 @@ static const Byte NRC_PENDING = 0xff;
 extern "C" char __stdcall Netbios(PNCB P);
 
 }	/* namespace Nb30 */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nb30;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// NB30
+#endif	// Nb30

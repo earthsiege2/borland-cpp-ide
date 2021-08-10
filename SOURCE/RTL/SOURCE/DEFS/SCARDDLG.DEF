@@ -1,8 +1,8 @@
-LIBRARY SCARDDLG
+LIBRARY SCardDlg
 EXPORTS
 
-    GetOpenCardNameA                         = 'SCARDDLG.DLL'.* @1 @0
-    GetOpenCardNameW                         = 'SCARDDLG.DLL'.* @2 @1
-    SCardDlgExtendedError                    = 'SCARDDLG.DLL'.* @3 @2
-    SCardUIDlgSelectCardA                    = 'SCARDDLG.DLL'.* @4 @3
-    SCardUIDlgSelectCardW                    = 'SCARDDLG.DLL'.* @5 @4
+    GetOpenCardNameA        @1
+    GetOpenCardNameW        @2
+    SCardDlgExtendedError        @3
+    SCardUIDlgSelectCardA        @4
+    SCardUIDlgSelectCardW        @5

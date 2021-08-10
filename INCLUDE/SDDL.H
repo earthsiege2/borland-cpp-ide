@@ -15,7 +15,6 @@ Revision History:
 --*/
 
 #ifndef __SDDL_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __SDDL_H__
 
 
@@ -98,6 +97,14 @@ extern "C" {
 #define SDDL_KEY_EXECUTE                    TEXT("KX")
 
 //
+// SDDL User alias max size
+//      - currently, upto two supported eg. "DA"
+//      - modify this if more WCHARs need to be there in future e.g. "DAX"
+//
+
+#define SDDL_ALIAS_SIZE                     2
+
+//
 // SDDL User aliases
 //
 #define SDDL_DOMAIN_ADMINISTRATORS          TEXT("DA")      // Domain admins
@@ -127,12 +134,17 @@ extern "C" {
 #define SDDL_NETWORK                        TEXT("NU")      // Nework logon user
 #define SDDL_SERVICE                        TEXT("SU")      // Service logon user
 #define SDDL_RESTRICTED_CODE                TEXT("RC")      // Restricted code
+#define SDDL_ANONYMOUS                      TEXT("AN")      // Anonymous Logon
 #define SDDL_SCHEMA_ADMINISTRATORS          TEXT("SA")      // Schema Administrators
 #define SDDL_CERT_SERV_ADMINISTRATORS       TEXT("CA")      // Certificate Server Administrators
 #define SDDL_RAS_SERVERS                    TEXT("RS")      // RAS servers group
 #define SDDL_ENTERPRISE_ADMINS              TEXT("EA")      // Enterprise administrators
 #define SDDL_GROUP_POLICY_ADMINS            TEXT("PA")      // Group Policy administrators
 #define SDDL_ALIAS_PREW2KCOMPACC            TEXT("RU")      // alias to allow previous windows 2000
+#define SDDL_LOCAL_SERVICE                  TEXT("LS")      // Local service account (for services)
+#define SDDL_NETWORK_SERVICE                TEXT("NS")      // Network service account (for services)
+#define SDDL_REMOTE_DESKTOP                 TEXT("RD")      // Remote desktop users (for terminal server)
+#define SDDL_NETWORK_CONFIGURATION_OPS      TEXT("NO")      // Network configuration operators ( to manage configuration of networking features)
 
 
 //
@@ -244,7 +256,6 @@ ConvertSecurityDescriptorToStringSecurityDescriptorW(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif  // endif __SDDL_H__
 
 

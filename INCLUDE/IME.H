@@ -1,6 +1,6 @@
-/*++ BUILD Version: 0003    // Increment this if a change has global effects
+/*++ BUILD Version: 0004    // Increment this if a change has global effects
 
-Copyright (c) 1985 - 1999, Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -14,7 +14,6 @@ Abstract:
 --*/
 
 #ifndef _IME_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _IME_
 
 #ifdef __cplusplus
@@ -62,6 +61,7 @@ typedef struct tagIMESTRUCT {
 //      Virtual Keys
 //
 
+#if !defined(VK_DBE_ALPHANUMERIC)
 #define VK_DBE_ALPHANUMERIC              0x0f0
 #define VK_DBE_KATAKANA                  0x0f1
 #define VK_DBE_HIRAGANA                  0x0f2
@@ -76,7 +76,7 @@ typedef struct tagIMESTRUCT {
 #define VK_DBE_NOCODEINPUT               0x0fb
 #define VK_DBE_DETERMINESTRING           0x0fc
 #define VK_DBE_ENTERDLGCONVERSIONMODE    0x0fd
-
+#endif
 
 
 //
@@ -235,6 +235,5 @@ typedef struct tagSTRINGEXSTRUCT {
 }
 #endif  /* __cplusplus */
 
-#pragma option pop /*P_O_Pop*/
 #endif // _IME_
 

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ScktComp.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ScktComp.pas' rev: 6.00
 
 #ifndef ScktCompHPP
 #define ScktCompHPP
@@ -31,38 +31,28 @@ class PASCALIMPLEMENTATION ESocketError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall ESocketError(const AnsiString Msg) : Sysutils::Exception(Msg
-		) { }
+	/* Exception.Create */ inline __fastcall ESocketError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall ESocketError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall ESocketError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall ESocketError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall ESocketError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall ESocketError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall ESocketError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall ESocketError(const AnsiString Msg, int AHelpContext) : 
-		Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall ESocketError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall ESocketError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ESocketError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall ESocketError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ESocketError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall ESocketError(System::PResStringRec ResStringRec, 
-		const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ESocketError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -73,6 +63,7 @@ public:
 };
 
 
+#pragma pack(push, 4)
 struct TCMSocketMessage
 {
 	unsigned Msg;
@@ -81,7 +72,9 @@ struct TCMSocketMessage
 	Word SelectError;
 	int Result;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TCMLookupComplete
 {
 	unsigned Msg;
@@ -90,6 +83,7 @@ struct TCMLookupComplete
 	Word AsyncError;
 	int Result;
 } ;
+#pragma pack(pop)
 
 #pragma option push -b-
 enum TServerType { stNonBlocking, stThreadBlocking };
@@ -106,8 +100,7 @@ enum TAsyncStyle { asRead, asWrite, asOOB, asAccept, asConnect, asClose };
 typedef Set<TAsyncStyle, asRead, asClose>  TAsyncStyles;
 
 #pragma option push -b-
-enum TSocketEvent { seLookup, seConnecting, seConnect, seDisconnect, seListen, seAccept, seWrite, seRead 
-	};
+enum TSocketEvent { seLookup, seConnecting, seConnect, seDisconnect, seListen, seAccept, seWrite, seRead };
 #pragma option pop
 
 #pragma option push -b-
@@ -115,26 +108,21 @@ enum TLookupState { lsIdle, lsLookupAddress, lsLookupService };
 #pragma option pop
 
 #pragma option push -b-
-enum TErrorEvent { eeGeneral, eeSend, eeReceive, eeConnect, eeDisconnect, eeAccept };
+enum TErrorEvent { eeGeneral, eeSend, eeReceive, eeConnect, eeDisconnect, eeAccept, eeLookup };
 #pragma option pop
 
 class DELPHICLASS TCustomWinSocket;
-typedef void __fastcall (__closure *TSocketEventEvent)(System::TObject* Sender, TCustomWinSocket* Socket
-	, TSocketEvent SocketEvent);
+typedef void __fastcall (__closure *TSocketEventEvent)(System::TObject* Sender, TCustomWinSocket* Socket, TSocketEvent SocketEvent);
 
-typedef void __fastcall (__closure *TSocketErrorEvent)(System::TObject* Sender, TCustomWinSocket* Socket
-	, TErrorEvent ErrorEvent, int &ErrorCode);
+typedef void __fastcall (__closure *TSocketErrorEvent)(System::TObject* Sender, TCustomWinSocket* Socket, TErrorEvent ErrorEvent, int &ErrorCode);
 
 class DELPHICLASS TServerClientWinSocket;
-typedef void __fastcall (__closure *TGetSocketEvent)(System::TObject* Sender, int Socket, TServerClientWinSocket* 
-	&ClientSocket);
+typedef void __fastcall (__closure *TGetSocketEvent)(System::TObject* Sender, int Socket, TServerClientWinSocket* &ClientSocket);
 
 class DELPHICLASS TServerClientThread;
-typedef void __fastcall (__closure *TGetThreadEvent)(System::TObject* Sender, TServerClientWinSocket* 
-	ClientSocket, TServerClientThread* &SocketThread);
+typedef void __fastcall (__closure *TGetThreadEvent)(System::TObject* Sender, TServerClientWinSocket* ClientSocket, TServerClientThread* &SocketThread);
 
-typedef void __fastcall (__closure *TSocketNotifyEvent)(System::TObject* Sender, TCustomWinSocket* Socket
-	);
+typedef void __fastcall (__closure *TSocketNotifyEvent)(System::TObject* Sender, TCustomWinSocket* Socket);
 
 class PASCALIMPLEMENTATION TCustomWinSocket : public System::TObject 
 {
@@ -176,12 +164,10 @@ private:
 	sockaddr_in __fastcall GetRemoteAddr();
 	
 protected:
-	void __fastcall AsyncInitSocket(const AnsiString Name, const AnsiString Address, const AnsiString Service
-		, Word Port, int QueueSize, bool Client);
+	void __fastcall AsyncInitSocket(const AnsiString Name, const AnsiString Address, const AnsiString Service, Word Port, int QueueSize, bool Client);
 	void __fastcall DoOpen(void);
 	void __fastcall DoListen(int QueueSize);
-	sockaddr_in __fastcall InitSocket(const AnsiString Name, const AnsiString Address, const AnsiString 
-		Service, Word Port, bool Client);
+	sockaddr_in __fastcall InitSocket(const AnsiString Name, const AnsiString Address, const AnsiString Service, Word Port, bool Client);
 	DYNAMIC void __fastcall Event(TCustomWinSocket* Socket, TSocketEvent SocketEvent);
 	DYNAMIC void __fastcall Error(TCustomWinSocket* Socket, TErrorEvent ErrorEvent, int &ErrorCode);
 	void __fastcall SetAsyncStyles(TAsyncStyles Value);
@@ -193,10 +179,8 @@ public:
 	virtual void __fastcall DefaultHandler(void *Message);
 	void __fastcall Lock(void);
 	void __fastcall Unlock(void);
-	void __fastcall Listen(const AnsiString Name, const AnsiString Address, const AnsiString Service, Word 
-		Port, int QueueSize, bool Block);
-	void __fastcall Open(const AnsiString Name, const AnsiString Address, const AnsiString Service, Word 
-		Port, bool Block);
+	void __fastcall Listen(const AnsiString Name, const AnsiString Address, const AnsiString Service, Word Port, int QueueSize, bool Block = true);
+	void __fastcall Open(const AnsiString Name, const AnsiString Address, const AnsiString Service, Word Port, bool Block = true);
 	virtual void __fastcall Accept(int Socket);
 	virtual void __fastcall Connect(int Socket);
 	virtual void __fastcall Disconnect(int Socket);
@@ -246,8 +230,7 @@ public:
 	__property TClientType ClientType = {read=FClientType, write=SetClientType, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TCustomWinSocket.Create */ inline __fastcall TClientWinSocket(int ASocket) : TCustomWinSocket(ASocket
-		) { }
+	/* TCustomWinSocket.Create */ inline __fastcall TClientWinSocket(int ASocket) : TCustomWinSocket(ASocket) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomWinSocket.Destroy */ inline __fastcall virtual ~TClientWinSocket(void) { }
@@ -277,8 +260,7 @@ public:
 };
 
 
-typedef void __fastcall (__closure *TThreadNotifyEvent)(System::TObject* Sender, TServerClientThread* 
-	Thread);
+typedef void __fastcall (__closure *TThreadNotifyEvent)(System::TObject* Sender, TServerClientThread* Thread);
 
 class PASCALIMPLEMENTATION TServerWinSocket : public TCustomWinSocket 
 {
@@ -304,10 +286,8 @@ private:
 	void __fastcall RemoveClient(TServerClientWinSocket* AClient);
 	void __fastcall AddThread(TServerClientThread* AThread);
 	void __fastcall RemoveThread(TServerClientThread* AThread);
-	void __fastcall ClientEvent(System::TObject* Sender, TCustomWinSocket* Socket, TSocketEvent SocketEvent
-		);
-	void __fastcall ClientError(System::TObject* Sender, TCustomWinSocket* Socket, TErrorEvent ErrorEvent
-		, int &ErrorCode);
+	void __fastcall ClientEvent(System::TObject* Sender, TCustomWinSocket* Socket, TSocketEvent SocketEvent);
+	void __fastcall ClientError(System::TObject* Sender, TCustomWinSocket* Socket, TErrorEvent ErrorEvent, int &ErrorCode);
 	int __fastcall GetActiveConnections(void);
 	int __fastcall GetActiveThreads(void);
 	TCustomWinSocket* __fastcall GetConnections(int Index);
@@ -315,8 +295,7 @@ private:
 	
 protected:
 	virtual TServerClientThread* __fastcall DoCreateThread(TServerClientWinSocket* ClientSocket);
-	HIDESBASE void __fastcall Listen(AnsiString &Name, AnsiString &Address, AnsiString &Service, Word Port
-		, int QueueSize);
+	HIDESBASE void __fastcall Listen(AnsiString &Name, AnsiString &Address, AnsiString &Service, Word Port, int QueueSize);
 	void __fastcall SetServerType(TServerType Value);
 	void __fastcall SetThreadCacheSize(int Value);
 	DYNAMIC void __fastcall ThreadEnd(TServerClientThread* AThread);
@@ -327,8 +306,7 @@ protected:
 	DYNAMIC void __fastcall ClientWrite(TCustomWinSocket* Socket);
 	DYNAMIC void __fastcall ClientConnect(TCustomWinSocket* Socket);
 	DYNAMIC void __fastcall ClientDisconnect(TCustomWinSocket* Socket);
-	DYNAMIC void __fastcall ClientErrorEvent(TCustomWinSocket* Socket, TErrorEvent ErrorEvent, int &ErrorCode
-		);
+	DYNAMIC void __fastcall ClientErrorEvent(TCustomWinSocket* Socket, TErrorEvent ErrorEvent, int &ErrorCode);
 	
 public:
 	__fastcall TServerWinSocket(int ASocket);
@@ -347,8 +325,7 @@ public:
 	__property TThreadNotifyEvent OnThreadStart = {read=FOnThreadStart, write=FOnThreadStart};
 	__property TThreadNotifyEvent OnThreadEnd = {read=FOnThreadEnd, write=FOnThreadEnd};
 	__property TSocketNotifyEvent OnClientConnect = {read=FOnClientConnect, write=FOnClientConnect};
-	__property TSocketNotifyEvent OnClientDisconnect = {read=FOnClientDisconnect, write=FOnClientDisconnect
-		};
+	__property TSocketNotifyEvent OnClientDisconnect = {read=FOnClientDisconnect, write=FOnClientDisconnect};
 	__property TSocketNotifyEvent OnClientRead = {read=FOnClientRead, write=FOnClientRead};
 	__property TSocketNotifyEvent OnClientWrite = {read=FOnClientWrite, write=FOnClientWrite};
 	__property TSocketErrorEvent OnClientError = {read=FOnClientError, write=FOnClientError};
@@ -380,10 +357,8 @@ private:
 	Syncobjs::TSimpleEvent* FEvent;
 	bool FKeepInCache;
 	void *FData;
-	void __fastcall HandleEvent(System::TObject* Sender, TCustomWinSocket* Socket, TSocketEvent SocketEvent
-		);
-	void __fastcall HandleError(System::TObject* Sender, TCustomWinSocket* Socket, TErrorEvent ErrorEvent
-		, int &ErrorCode);
+	void __fastcall HandleEvent(System::TObject* Sender, TCustomWinSocket* Socket, TSocketEvent SocketEvent);
+	void __fastcall HandleError(System::TObject* Sender, TCustomWinSocket* Socket, TErrorEvent ErrorEvent, int &ErrorCode);
 	void __fastcall DoHandleException(void);
 	void __fastcall DoRead(void);
 	void __fastcall DoWrite(void);
@@ -420,15 +395,12 @@ private:
 	AnsiString FAddress;
 	AnsiString FHost;
 	AnsiString FService;
-	void __fastcall DoEvent(System::TObject* Sender, TCustomWinSocket* Socket, TSocketEvent SocketEvent
-		);
-	void __fastcall DoError(System::TObject* Sender, TCustomWinSocket* Socket, TErrorEvent ErrorEvent, 
-		int &ErrorCode);
+	void __fastcall DoEvent(System::TObject* Sender, TCustomWinSocket* Socket, TSocketEvent SocketEvent);
+	void __fastcall DoError(System::TObject* Sender, TCustomWinSocket* Socket, TErrorEvent ErrorEvent, int &ErrorCode);
 	
 protected:
 	virtual void __fastcall Event(TCustomWinSocket* Socket, TSocketEvent SocketEvent) = 0 ;
-	virtual void __fastcall Error(TCustomWinSocket* Socket, TErrorEvent ErrorEvent, int &ErrorCode) = 0 
-		;
+	virtual void __fastcall Error(TCustomWinSocket* Socket, TErrorEvent ErrorEvent, int &ErrorCode) = 0 ;
 	virtual void __fastcall DoActivate(bool Value) = 0 ;
 	void __fastcall InitSocket(TCustomWinSocket* Socket);
 	virtual void __fastcall Loaded(void);
@@ -448,8 +420,7 @@ public:
 	void __fastcall Close(void);
 public:
 	#pragma option push -w-inl
-	/* TComponent.Create */ inline __fastcall virtual TAbstractSocket(Classes::TComponent* AOwner) : Classes::TComponent(
-		AOwner) { }
+	/* TComponent.Create */ inline __fastcall virtual TAbstractSocket(Classes::TComponent* AOwner) : Classes::TComponent(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TComponent.Destroy */ inline __fastcall virtual ~TAbstractSocket(void) { }
@@ -488,8 +459,7 @@ protected:
 	__property TSocketErrorEvent OnError = {read=FOnError, write=FOnError};
 public:
 	#pragma option push -w-inl
-	/* TComponent.Create */ inline __fastcall virtual TCustomSocket(Classes::TComponent* AOwner) : TAbstractSocket(
-		AOwner) { }
+	/* TComponent.Create */ inline __fastcall virtual TCustomSocket(Classes::TComponent* AOwner) : TAbstractSocket(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TComponent.Destroy */ inline __fastcall virtual ~TCustomSocket(void) { }
@@ -514,8 +484,14 @@ public:
 	bool __fastcall WaitForData(int Timeout);
 	virtual int __fastcall Read(void *Buffer, int Count);
 	virtual int __fastcall Write(const void *Buffer, int Count);
-	virtual int __fastcall Seek(int Offset, Word Origin);
+	virtual int __fastcall Seek(int Offset, Word Origin)/* overload */;
 	__property int TimeOut = {read=FTimeout, write=FTimeout, nodefault};
+	
+/* Hoisted overloads: */
+	
+public:
+	inline __int64 __fastcall  Seek(const __int64 Offset, Classes::TSeekOrigin Origin){ return TStream::Seek(Offset, Origin); }
+	
 };
 
 
@@ -584,22 +560,17 @@ protected:
 	__property TGetSocketEvent OnGetSocket = {read=GetGetSocketEvent, write=SetGetSocketEvent};
 	__property TThreadNotifyEvent OnThreadStart = {read=GetOnThreadStart, write=SetOnThreadStart};
 	__property TThreadNotifyEvent OnThreadEnd = {read=GetOnThreadEnd, write=SetOnThreadEnd};
-	__property TSocketNotifyEvent OnClientConnect = {read=GetOnClientEvent, write=SetOnClientEvent, index=2
-		};
-	__property TSocketNotifyEvent OnClientDisconnect = {read=GetOnClientEvent, write=SetOnClientEvent, 
-		index=3};
-	__property TSocketNotifyEvent OnClientRead = {read=GetOnClientEvent, write=SetOnClientEvent, index=0
-		};
-	__property TSocketNotifyEvent OnClientWrite = {read=GetOnClientEvent, write=SetOnClientEvent, index=1
-		};
+	__property TSocketNotifyEvent OnClientConnect = {read=GetOnClientEvent, write=SetOnClientEvent, index=2};
+	__property TSocketNotifyEvent OnClientDisconnect = {read=GetOnClientEvent, write=SetOnClientEvent, index=3};
+	__property TSocketNotifyEvent OnClientRead = {read=GetOnClientEvent, write=SetOnClientEvent, index=0};
+	__property TSocketNotifyEvent OnClientWrite = {read=GetOnClientEvent, write=SetOnClientEvent, index=1};
 	__property TSocketErrorEvent OnClientError = {read=GetOnClientError, write=SetOnClientError};
 	
 public:
 	__fastcall virtual ~TCustomServerSocket(void);
 public:
 	#pragma option push -w-inl
-	/* TComponent.Create */ inline __fastcall virtual TCustomServerSocket(Classes::TComponent* AOwner) : 
-		TCustomSocket(AOwner) { }
+	/* TComponent.Create */ inline __fastcall virtual TCustomServerSocket(Classes::TComponent* AOwner) : TCustomSocket(AOwner) { }
 	#pragma option pop
 	
 };
@@ -619,7 +590,7 @@ __published:
 	__property Port ;
 	__property Service ;
 	__property ServerType ;
-	__property ThreadCacheSize ;
+	__property ThreadCacheSize  = {default=10};
 	__property OnListen ;
 	__property OnAccept ;
 	__property OnGetThread ;
@@ -648,9 +619,7 @@ static const Word CM_LOOKUPCOMPLETE = 0x403;
 extern PACKAGE TSocketErrorProc __fastcall SetErrorProc(TSocketErrorProc ErrorProc);
 
 }	/* namespace Scktcomp */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Scktcomp;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

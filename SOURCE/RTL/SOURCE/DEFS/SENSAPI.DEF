@@ -1,6 +1,6 @@
-LIBRARY SENSAPI
+LIBRARY SensAPI
 EXPORTS
 
-    IsDestinationReachableA                  = 'SENSAPI.DLL'.*
-    IsDestinationReachableW                  = 'SENSAPI.DLL'.*
-    IsNetworkAlive                           = 'SENSAPI.DLL'.*
+    IsDestinationReachableA
+    IsDestinationReachableW
+    IsNetworkAlive

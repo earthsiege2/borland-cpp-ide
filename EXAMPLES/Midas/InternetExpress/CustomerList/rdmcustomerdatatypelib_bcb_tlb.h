@@ -9,7 +9,7 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.1.0  $
+// C++ TLBWRTR : $Revision:   1.1  $
 // File generated on 1/27/00 9:44:23 AM from Type Library described below.
 
 // ************************************************************************ //

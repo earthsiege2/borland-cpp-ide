@@ -891,7 +891,7 @@ public:
 	BOOL m_bAutoDelete;
 #ifdef _DEBUG
 	void PASCAL operator delete(void* pbData);
-#if 0 // _MSC_VER >= 1200
+#if 0 // __BORLANDC__ was _MSC_VER >= 1200
 	void PASCAL operator delete(void* pbData, LPCSTR lpszFileName, int nLine);
 #endif
 protected:
@@ -1637,7 +1637,7 @@ BOOL AFXAPI AfxIsValidString(LPCSTR lpsz, int nLength = -1);
 // Memory tracking allocation
 void* AFX_CDECL operator new(size_t nSize, LPCSTR lpszFileName, int nLine);
 #define DEBUG_NEW new(THIS_FILE, __LINE__)
-#if 0 // _MSC_VER >= 1200
+#if _MSC_VER >= 1200
 void AFX_CDECL operator delete(void* p, LPCSTR lpszFileName, int nLine);
 #endif
 

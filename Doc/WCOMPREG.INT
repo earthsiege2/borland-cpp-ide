@@ -2,9 +2,9 @@
 {*******************************************************}
 {                                                       }
 {       Borland Delphi Visual Component Library         }
-{       Registration of MIDAS Web components            }
+{       Registration of InernetExpress components       }
 {                                                       }
-{       Copyright (c) 1999 Inprise Corporation          }
+{  Copyright (c) 1999-2001 Borland Software Corp.       }
 {                                                       }
 {*******************************************************}
 
@@ -12,7 +12,7 @@ unit WCompReg;
 
 interface
 
-uses DsgnIntf, Classes, MidProd;
+uses DesignIntf, DesignEditors, Classes, MidProd, WItemEdt, Xmlxform;
 
 type
   TProviderNameProperty = class(TStringProperty)
@@ -57,13 +57,17 @@ type
 
   TCssClassProperty = class(TStringProperty)
   protected
-    function FindProducer: TCustomMidasPageProducer; virtual;
+    function FindProducer: TComponent; virtual;
   public
     function GetAttributes: TPropertyAttributes; override;
     procedure GetValues(Proc: TGetStrProc); override;
   end;
 
+  TPageItemsEditorClass = class of TPageItemsEditor;
   TWebPageItemsPropertyEditor = class(TClassProperty)
+  protected
+    function GetEditorClass: TPageItemsEditorClass; virtual;
+  public
     procedure Edit; override;
     function GetAttributes: TPropertyAttributes; override;
   end;
@@ -75,6 +79,8 @@ type
   end;
 
   TWebPageEditor = class(TComponentEditor)
+  protected
+    function GetEditorClass: TPageItemsEditorClass; virtual;
   public
     procedure ExecuteVerb(Index: Integer); override;
     function GetVerb(Index: Integer): string; override;

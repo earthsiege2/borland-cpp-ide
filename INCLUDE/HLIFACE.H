@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:32:48 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for hliface.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -29,14 +27,18 @@
 #ifndef __hliface_h__
 #define __hliface_h__
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
 /* Forward Declarations */ 
 
 #ifdef __cplusplus
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_hliface_0000 */
 /* [local] */ 
@@ -44,7 +46,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 //=--------------------------------------------------------------------------=
 // HLIface.h
 //=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -76,4 +78,3 @@ extern RPC_IF_HANDLE __MIDL_itf_hliface_0000_v0_0_s_ifspec;
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

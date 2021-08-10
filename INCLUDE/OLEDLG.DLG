@@ -1,7 +1,7 @@
 //+---------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  File:       oledlg.dlg
 //
@@ -47,7 +47,7 @@ BEGIN
     CONTROL         "",IDC_IO_RESULTIMAGE,"OLE2UIresimage",0x0,10,106,42,
                     34
     LTEXT           "<< result text goes here >>",IDC_IO_RESULTTEXT,56,106,
-                    156,32,SS_NOPREFIX | NOT WS_GROUP
+                    156,32,SS_NOTIFY | SS_NOPREFIX | NOT WS_GROUP
 END
 
 IDD_CHANGEICON DIALOG DISCARDABLE  18, 18, 257, 153
@@ -62,8 +62,8 @@ BEGIN
                     44,46,10
     CONTROL         "&From File:",IDC_CI_FROMFILE,"Button",
                     BS_AUTORADIOBUTTON,10,68,46,10
-    ICON            "",IDC_CI_CURRENTICON,58,15,18,20
-    ICON            "",IDC_CI_DEFAULTICON,58,40,18,20
+    ICON            "",IDC_CI_CURRENTICON,58,15,18,20,SS_NOTIFY
+    ICON            "",IDC_CI_DEFAULTICON,58,40,18,20,SS_NOTIFY
     EDITTEXT        IDC_CI_FROMFILEEDIT,58,68,119,12,ES_AUTOHSCROLL |
                     WS_GROUP
     LISTBOX         IDC_CI_ICONLIST,58,84,119,40,LBS_OWNERDRAWFIXED |
@@ -74,7 +74,7 @@ BEGIN
     DEFPUSHBUTTON   "OK",IDOK,191,6,60,14
     PUSHBUTTON      "Cancel",IDCANCEL,191,23,60,14
     PUSHBUTTON      "&Browse...",IDC_CI_BROWSE,191,40,60,14
-    PUSHBUTTON      "&Help",IDC_OLEUIHELP,191,62,60,14
+    PUSHBUTTON      "&Help",IDC_OLEUIHELP,191,57,60,14
     CONTROL         "",IDC_CI_ICONDISPLAY,"OLE2UIiconbox",0x0,187,84,66,46
 END
 
@@ -304,6 +304,7 @@ BEGIN
                     154,8
     CONTROL         "",IDC_STATIC,"Static",SS_BLACKRECT,6,90,193,1
     PUSHBUTTON      "&Convert...",IDC_GP_CONVERT,149,48,50,14
+    PUSHBUTTON      "&Help",IDC_OLEUIHELP,160,134,50,14
 END
 
 IDD_VIEWPROPS DIALOG DISCARDABLE  0, 0, 204, 154
@@ -324,6 +325,7 @@ BEGIN
     CONTROL         "&Relative to Original Size",IDC_VP_RELATIVE,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,60,125,132,10
     CONTROL         "",IDC_VP_RESULTIMAGE,"OLE2UIresimage",0x0,12,18,66,34
+    PUSHBUTTON      "&Help",IDC_OLEUIHELP,160,134,50,14
 END
 
 IDD_LINKPROPS DIALOG DISCARDABLE  0, 0, 204, 154
@@ -348,6 +350,7 @@ BEGIN
     PUSHBUTTON      "&Open Source",IDC_LP_OPENSOURCE,15,114,50,14
     PUSHBUTTON      "&Update Now",IDC_LP_UPDATENOW,76,114,50,14
     PUSHBUTTON      "&Break Link",IDC_LP_BREAKLINK,135,114,50,14
+    PUSHBUTTON      "&Help",IDC_OLEUIHELP,160,134,50,14
 END
 
 IDD_CONVERTONLY DIALOG DISCARDABLE  60, 26, 243, 95
@@ -503,6 +506,7 @@ BEGIN
                     ES_READONLY | NOT WS_BORDER | NOT WS_TABSTOP
     EDITTEXT        IDC_GP_OBJECTLOCATION,42,75,157,12,ES_AUTOHSCROLL |
                     ES_READONLY | NOT WS_BORDER | NOT WS_TABSTOP
+    PUSHBUTTON      "&Help",IDC_OLEUIHELP,160,134,50,14
 END
 
 IDD_LINKPROPS4 DIALOG DISCARDABLE  0, 0, 204, 154
@@ -529,6 +533,7 @@ BEGIN
                     NOT WS_BORDER
     EDITTEXT        IDC_LP_TIME,123,84,70,12,ES_AUTOHSCROLL | ES_READONLY |
                     NOT WS_BORDER
+    PUSHBUTTON      "&Help",IDC_OLEUIHELP,160,134,50,14
 END
 
 IDD_PASTESPECIAL4 DIALOG DISCARDABLE  3, 15, 293, 140

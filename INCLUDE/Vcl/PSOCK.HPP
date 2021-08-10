@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Psock.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Psock.pas' rev: 6.00
 
 #ifndef PsockHPP
 #define PsockHPP
@@ -29,11 +29,13 @@ namespace Psock
 //-- type declarations -------------------------------------------------------
 typedef Word TSocket;
 
+#pragma pack(push, 4)
 struct TErrorMessage
 {
 	int ErrorCode;
 	System::SmallString<50>  Text;
 } ;
+#pragma pack(pop)
 
 class DELPHICLASS TNMReg;
 class PASCALIMPLEMENTATION TNMReg : public System::TObject 
@@ -51,8 +53,7 @@ public:
 };
 
 
-typedef void __fastcall (__closure *TOnErrorEvent)(Classes::TComponent* Sender, Word Errno, AnsiString 
-	Errmsg);
+typedef void __fastcall (__closure *TOnErrorEvent)(Classes::TComponent* Sender, Word Errno, AnsiString Errmsg);
 
 typedef void __fastcall (__closure *TOnHostResolved)(Classes::TComponent* Sender);
 
@@ -66,8 +67,9 @@ typedef PLongint *PPLongInt;
 
 typedef char * *PPChar;
 
-typedef Windows::PInteger *PINT;
+typedef System::PInteger *PINT;
 
+#pragma pack(push, 4)
 struct THostInfo
 {
 	char *name;
@@ -77,7 +79,9 @@ struct THostInfo
 	PLongint *AddressList;
 	char Reserved[1024];
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TServerInfo
 {
 	char *name;
@@ -86,7 +90,9 @@ struct TServerInfo
 	char *Protocol;
 	char Reserved[1024];
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TProtocolInfo
 {
 	char *name;
@@ -94,7 +100,9 @@ struct TProtocolInfo
 	int ProtocolID;
 	char Reserved[1024];
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TSocketAddress
 {
 	int Family;
@@ -102,18 +110,23 @@ struct TSocketAddress
 	int Address;
 	char Unused[8];
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TSocketList
 {
 	int Count;
 	int DescriptorList[64];
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TTimeValue
 {
 	int Sec;
 	int uSec;
 } ;
+#pragma pack(pop)
 
 typedef WSAData *PWSAData;
 
@@ -136,38 +149,28 @@ class PASCALIMPLEMENTATION ESockError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall ESockError(const AnsiString Msg) : Sysutils::Exception(Msg
-		) { }
+	/* Exception.Create */ inline __fastcall ESockError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall ESockError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall ESockError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall ESockError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall ESockError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall ESockError(int Ident, const System::TVarRec * Args, 
-		const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall ESockError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall ESockError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(
-		Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall ESockError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall ESockError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ESockError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall ESockError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ESockError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall ESockError(System::PResStringRec ResStringRec, const 
-		System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ESockError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -188,34 +191,25 @@ public:
 	/* Exception.Create */ inline __fastcall EAbortError(const AnsiString Msg) : ESockError(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EAbortError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : ESockError(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EAbortError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : ESockError(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EAbortError(int Ident)/* overload */ : ESockError(Ident
-		) { }
+	/* Exception.CreateRes */ inline __fastcall EAbortError(int Ident)/* overload */ : ESockError(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EAbortError(int Ident, const System::TVarRec * Args, 
-		const int Args_Size)/* overload */ : ESockError(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EAbortError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : ESockError(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EAbortError(const AnsiString Msg, int AHelpContext) : 
-		ESockError(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EAbortError(const AnsiString Msg, int AHelpContext) : ESockError(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EAbortError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : ESockError(Msg, Args, Args_Size, AHelpContext) { }
-		
+	/* Exception.CreateFmtHelp */ inline __fastcall EAbortError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : ESockError(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EAbortError(int Ident, int AHelpContext)/* overload */
-		 : ESockError(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EAbortError(int Ident, int AHelpContext)/* overload */ : ESockError(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EAbortError(System::PResStringRec ResStringRec, 
-		const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : ESockError(ResStringRec
-		, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EAbortError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : ESockError(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -320,8 +314,7 @@ protected:
 	AnsiString __fastcall GetLocalIP();
 	__property Classes::TNotifyEvent OnAccept = {read=FOnAcceptEvent, write=FOnAcceptEvent};
 	__property TOnErrorEvent OnError = {read=FOnErrorEvent, write=FOnErrorEvent};
-	__property THandlerEvent OnConnectionRequired = {read=FOnConnectionRequired, write=FOnConnectionRequired
-		};
+	__property THandlerEvent OnConnectionRequired = {read=FOnConnectionRequired, write=FOnConnectionRequired};
 	__property AnsiString Proxy = {read=FProxy, write=FProxy};
 	__property int ProxyPort = {read=FProxyPort, write=FProxyPort, nodefault};
 	
@@ -386,8 +379,7 @@ __published:
 	__property THandlerEvent OnInvalidHost = {read=FInvalidHost, write=FInvalidHost};
 	__property TOnHostResolved OnHostResolved = {read=FOnHostResolved, write=FOnHostResolved};
 	__property TOnStatus OnStatus = {read=FOnStatus, write=FOnStatus};
-	__property Classes::TNotifyEvent OnConnectionFailed = {read=FOnConnectionFailed, write=FOnConnectionFailed
-		};
+	__property Classes::TNotifyEvent OnConnectionFailed = {read=FOnConnectionFailed, write=FOnConnectionFailed};
 	__property TNMReg* About = {read=FAbout, write=FAbout};
 };
 
@@ -418,7 +410,6 @@ public:
 	
 __published:
 	__property Classes::TNotifyEvent OnClientContact = {read=FOnClientContact, write=FOnClientContact};
-		
 };
 
 
@@ -461,9 +452,7 @@ extern PACKAGE HWND __fastcall PsockAllocateHWnd(System::TObject* Obj);
 extern PACKAGE HWND __fastcall TmrAllocateHWnd(System::TObject* Obj);
 
 }	/* namespace Psock */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Psock;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

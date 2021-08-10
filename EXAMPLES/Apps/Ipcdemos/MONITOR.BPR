@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- C++Builder XML Project --><PROJECT>
+<!-- C++Builder XML Project -->
+<PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="monitor.exe"/>
     <OBJFILES value="MONITOR.obj MONFORM.obj TRCVIEW.obj IPCTHRD.obj ABOUT.obj"/>
     <RESFILES value=""/>
@@ -9,8 +10,8 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) MONFORM.dfm TRCVIEW.dfm ABOUT.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="vcl50.lib"/>
-    <SPARELIBS value="vcl50.lib"/>
+    <LIBRARIES value="vcl.lib rtl.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib"/>
     <PACKAGES value=""/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
@@ -24,21 +25,31 @@
     <MAINSOURCE value="MONITOR.cpp"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="$(BCB)\lib\debug;$(BCB)\lib\obj;$(BCB)\lib"/>
-    <WARNINGS value=" -w-8026 -w-8027 -w-par"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\include -I$(BCB)\include\vcl"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a8 -k -y -v -vi- -c -b- -tWM"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tWM"/>
     <PFLAGS value="-$YD -v -JPHNV -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w0 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -v"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="MONITOR.cpp" FORMNAME="" UNITNAME="MONITOR" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="readme.txt" FORMNAME="" UNITNAME="readme" CONTAINERID="File" DESIGNCLASS=""/>
+      <FILE FILENAME="monform.cpp" FORMNAME="MonitorForm" UNITNAME="MONFORM" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="TRCVIEW.cpp" FORMNAME="TraceForm" UNITNAME="TRCVIEW" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="IPCTHRD.cpp" FORMNAME="" UNITNAME="IPCTHRD" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="ABOUT.CPP" FORMNAME="AboutBox" UNITNAME="ABOUT" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -60,14 +71,24 @@ DebugSourceDirs=
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
-InMemoryExe=0
 ShowInfoMsgs=0
 LinkDebugVcl=1
+LinkCGLIB=0
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
   </IDEOPTIONS>
 </PROJECT>

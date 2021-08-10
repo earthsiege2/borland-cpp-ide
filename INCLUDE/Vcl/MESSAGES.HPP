@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Messages.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Messages.pas' rev: 6.00
 
 #ifndef MessagesHPP
 #define MessagesHPP
@@ -79,7 +79,7 @@ struct TWMMouse
 	{
 		struct 
 		{
-			Windows::TSmallPoint Pos;
+			Types::TSmallPoint Pos;
 			int Result;
 			
 		};
@@ -104,7 +104,7 @@ struct TWMMouseWheel
 	{
 		struct 
 		{
-			Windows::TSmallPoint Pos;
+			Types::TSmallPoint Pos;
 			int Result;
 			
 		};
@@ -128,7 +128,7 @@ struct TMSHMouseWheel
 	{
 		struct 
 		{
-			Windows::TSmallPoint Pos;
+			Types::TSmallPoint Pos;
 			int Result;
 			
 		};
@@ -809,7 +809,7 @@ struct TWMMove
 	{
 		struct 
 		{
-			Windows::TSmallPoint Pos;
+			Types::TSmallPoint Pos;
 			int Result;
 			
 		};
@@ -865,7 +865,7 @@ struct TWMNCHitTest
 	{
 		struct 
 		{
-			Windows::TSmallPoint Pos;
+			Types::TSmallPoint Pos;
 			int Result;
 			
 		};
@@ -905,7 +905,15 @@ typedef TWMNCHitMessage  TWMNCMButtonUp;
 
 typedef TWMNCHitMessage  TWMNCMouseMove;
 
-typedef TWMNoParams  TWMNCPaint;
+#pragma pack(push, 1)
+struct TWMNCPaint
+{
+	unsigned Msg;
+	HRGN RGN;
+	int Unused;
+	int Result;
+} ;
+#pragma pack(pop)
 
 typedef TWMNCHitMessage  TWMNCRButtonDblClk;
 
@@ -1361,7 +1369,7 @@ struct TWMContextMenu
 	{
 		struct 
 		{
-			Windows::TSmallPoint Pos;
+			Types::TSmallPoint Pos;
 			int Result;
 			
 		};
@@ -1379,9 +1387,7 @@ struct TWMContextMenu
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Messages */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Messages;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

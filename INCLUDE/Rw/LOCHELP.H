@@ -5,7 +5,7 @@
  *
  * rw/lochelp - Declarations for the Standard Library locale helper classes.
  *
- * $Id: lochelp,v 1.5 1996/10/02 01:48:00 smithey Exp $
+ * $Id: lochelp.h,v 9.9 2001/07/10 17:24:13 nyork Exp $
  *
  * This header defines some classes that are used by some of the source (cpp)
  * files in src/locale, mainly for manipulating the C library locale.  This

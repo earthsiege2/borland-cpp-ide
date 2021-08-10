@@ -3,7 +3,7 @@
 
 :BASE nmnntp.hlp
 :TITLE FastNet NNTP Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 TPostRecordType object
 2 TPostRecordType object Reference=Scribble1010
 2 Properties

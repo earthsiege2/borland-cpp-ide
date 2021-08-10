@@ -6,21 +6,19 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.12  $ */
+/* $Revision: 9.17.2.6 $ */
 
 #ifndef  __MATH_H
 #define  __MATH_H
 
-#if !defined(___STDDEF_H)
 #include <_stddef.h>
-#endif
 
 #if !defined(RC_INVOKED)
 
@@ -234,6 +232,68 @@ long        _RTLENTRY _EXPFUNC   _wtol(const wchar_t * __s);
 long double _RTLENTRY _EXPFUNC   _wtold(const wchar_t * __s);
 
 #endif  /* !__STDC__ */
+
+/* Add overloaded functions from 26.5 here */
+#if defined(__cplusplus) && defined(__USING_CNAME__)
+
+extern "C++" {
+
+inline float abs (float __x) { return fabs((double)__x); } 
+inline float acos (float __x) { return acos((double)__x); }
+inline float asin (float __x) { return asin((double)__x); }
+inline float atan (float __x) { return atan((double)__x); }
+inline float atan2(float __x, float __y) { return atan2((double)__x,(double)__y); }
+inline float ceil (float __x) { return ceil((double)__x); }
+inline float cos (float __x) { return cos((double)__x); }
+inline float cosh (float __x) { return cosh((double)__x); }
+inline float exp (float __x) { return exp((double)__x); }
+inline float fabs (float __x) { return fabs((double)__x); }
+inline float floor(float __x) { return floor((double)__x); }
+inline float fmod (float __x, float __y) { return fmod((double) __x,(double) __y); }
+inline float frexp(float __x, int *__y) { return frexp((double)__x,__y); }
+inline float ldexp(float __x, int __y) { return ldexp((double)__x,__y); }
+inline float log (float __x) { return log((double)__x); } 
+inline float log10(float __x) { return log10((double)__x); }
+inline float modf (float __x, float *__y) { return modf((double)__x,(double*)__y); }
+inline float pow (float __x, float __y) { return pow((double)__x,(double)__y); }
+inline float pow (float __x, int __y) { return pow((double)__x,(double)__y); }
+inline float sin (float __x) { return sin((double)__x); }
+inline float sinh (float __x) { return sinh((double)__x); }
+inline float sqrt (float __x) { return sqrt((double)__x); }
+inline float tan (float __x) { return tan((double)__x); }
+inline float tanh (float __x) { return tanh((double)__x); }
+
+inline double abs(double __x) { return fabs(__x); }
+inline double pow(double __x, int __y) { return pow(__x,(double)__y); }
+
+inline long double abs (long double __x) { return fabsl(__x); }
+inline long double acos (long double __x) { return acosl(__x); }
+inline long double asin (long double __x) { return asinl(__x); } 
+inline long double atan (long double __x) { return atanl(__x); }
+inline long double atan2(long double __x, long double __y) { return atan2l(__x,__y); }
+inline long double ceil (long double __x) { return ceill(__x); }
+inline long double cos (long double __x) { return cosl(__x); }
+inline long double cosh (long double __x) { return coshl(__x); }
+inline long double exp (long double __x) { return expl(__x); }
+inline long double fabs (long double __x) { return fabsl(__x); }
+inline long double floor(long double __x) { return floorl(__x); }
+inline long double fmod (long double __x, long double __y) { return fmodl(__x,__y); }
+inline long double frexp(long double __x, int *__y) { return frexpl(__x,__y); }
+inline long double ldexp(long double __x, int __y) { return ldexpl(__x,__y); } 
+inline long double log (long double __x) { return logl(__x); }
+inline long double log10(long double __x) { return log10l(__x); }
+inline long double modf (long double __x, long double *__y) { return modfl(__x,__y); }
+inline long double pow (long double __x, long double __y) { return powl(__x,__y); }
+inline long double pow (long double __x, int __y) { return powl(__x,(double)__y); }
+inline long double sin (long double __x) { return sinl(__x); }
+inline long double sinh (long double __x) { return sinhl(__x); }
+inline long double sqrt (long double __x) { return sqrtl(__x); }
+inline long double tan (long double __x) { return tanl(__x); }
+inline long double tanh (long double __x) { return tanhl(__x); }
+
+}
+
+#endif /* __cplusplus && __USING_CNAME__ */
 
 #ifdef __cplusplus
 } // extern "C"

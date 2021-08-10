@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Outline.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Outline.pas' rev: 6.00
 
 #ifndef OutlineHPP
 #define OutlineHPP
@@ -51,38 +51,28 @@ class PASCALIMPLEMENTATION EOutlineError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EOutlineError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EOutlineError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EOutlineError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EOutlineError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EOutlineError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EOutlineError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EOutlineError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EOutlineError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EOutlineError(const AnsiString Msg, int AHelpContext) : 
-		Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EOutlineError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EOutlineError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EOutlineError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EOutlineError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EOutlineError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EOutlineError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EOutlineError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -116,8 +106,7 @@ typedef Graphics::TBitmap* TBitmapArray[5];
 typedef void __fastcall (__closure *EOutlineChange)(System::TObject* Sender, int Index);
 
 #pragma option push -b-
-enum TOutlineStyle { osText, osPlusMinusText, osPictureText, osPlusMinusPictureText, osTreeText, osTreePictureText 
-	};
+enum TOutlineStyle { osText, osPlusMinusText, osPictureText, osPlusMinusPictureText, osTreeText, osTreePictureText };
 #pragma option pop
 
 #pragma option push -b-
@@ -133,6 +122,9 @@ typedef Set<TOutlineOption, ooDrawTreeRoot, ooStretchBitmaps>  TOutlineOptions;
 class PASCALIMPLEMENTATION TCustomOutline : public Grids::TCustomGrid 
 {
 	typedef Grids::TCustomGrid inherited;
+	
+public:
+	TOutlineNode* operator[](int Index) { return Items[Index]; }
 	
 private:
 	bool FBlockInsert;
@@ -180,11 +172,10 @@ private:
 	bool __fastcall IsCurItem(int Value);
 	void __fastcall SetPicture(int Index, Graphics::TBitmap* Value);
 	Graphics::TBitmap* __fastcall GetPicture(int Index);
-	void __fastcall DrawPictures(Graphics::TBitmap* const * BitMaps, const int BitMaps_Size, const Windows::TRect 
-		&ARect);
-	void __fastcall DrawText(TOutlineNode* Node, const Windows::TRect &Rect);
+	void __fastcall DrawPictures(const Graphics::TBitmap* const * BitMaps, const int BitMaps_Size, const Types::TRect &ARect);
+	void __fastcall DrawText(TOutlineNode* Node, const Types::TRect &Rect);
 	void __fastcall SetOutlineStyle(TOutlineStyle Value);
-	void __fastcall DrawTree(const Windows::TRect &ARect, TOutlineNode* Node);
+	void __fastcall DrawTree(const Types::TRect &ARect, TOutlineNode* Node);
 	void __fastcall SetItemHeight(int Value);
 	void __fastcall SetStyle(TOutlineType Value);
 	void __fastcall SetOutlineOptions(TOutlineOptions Value);
@@ -201,8 +192,7 @@ protected:
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
 	DYNAMIC void __fastcall KeyPress(char &Key);
 	TOutlineNode* __fastcall SetGoodIndex(TOutlineNode* Value);
-	virtual void __fastcall DrawCell(int ACol, int ARow, const Windows::TRect &ARect, Grids::TGridDrawState 
-		AState);
+	virtual void __fastcall DrawCell(int ACol, int ARow, const Types::TRect &ARect, Grids::TGridDrawState AState);
 	DYNAMIC void __fastcall DblClick(void);
 	void __fastcall SetLevel(TOutlineNode* Node, unsigned CurLevel, unsigned NewLevel);
 	bool __fastcall BadIndex(TOutlineNode* Value);
@@ -210,8 +200,7 @@ protected:
 	DYNAMIC void __fastcall Expand(int Index);
 	DYNAMIC void __fastcall Collapse(int Index);
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	void __fastcall Move(int Destination, int Source, TAttachMode AttachMode);
 	void __fastcall SetDisplayWidth(int Value);
 	__property Classes::TStrings* Lines = {read=GetStrings, write=SetStrings};
@@ -223,16 +212,11 @@ protected:
 	__property int ItemHeight = {read=FItemHeight, write=SetItemHeight, nodefault};
 	__property Stdctrls::TDrawItemEvent OnDrawItem = {read=FOnDrawItem, write=FOnDrawItem};
 	__property AnsiString ItemSeparator = {read=FSeparator, write=FSeparator};
-	__property Graphics::TBitmap* PicturePlus = {read=GetPicture, write=SetPicture, stored=StoreBitmap, 
-		index=0};
-	__property Graphics::TBitmap* PictureMinus = {read=GetPicture, write=SetPicture, stored=StoreBitmap
-		, index=1};
-	__property Graphics::TBitmap* PictureOpen = {read=GetPicture, write=SetPicture, stored=StoreBitmap, 
-		index=2};
-	__property Graphics::TBitmap* PictureClosed = {read=GetPicture, write=SetPicture, stored=StoreBitmap
-		, index=3};
-	__property Graphics::TBitmap* PictureLeaf = {read=GetPicture, write=SetPicture, stored=StoreBitmap, 
-		index=4};
+	__property Graphics::TBitmap* PicturePlus = {read=GetPicture, write=SetPicture, stored=StoreBitmap, index=0};
+	__property Graphics::TBitmap* PictureMinus = {read=GetPicture, write=SetPicture, stored=StoreBitmap, index=1};
+	__property Graphics::TBitmap* PictureOpen = {read=GetPicture, write=SetPicture, stored=StoreBitmap, index=2};
+	__property Graphics::TBitmap* PictureClosed = {read=GetPicture, write=SetPicture, stored=StoreBitmap, index=3};
+	__property Graphics::TBitmap* PictureLeaf = {read=GetPicture, write=SetPicture, stored=StoreBitmap, index=4};
 	
 public:
 	__fastcall virtual TCustomOutline(Classes::TComponent* AOwner);
@@ -266,8 +250,7 @@ public:
 	__property Canvas ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomOutline(HWND ParentWindow) : Grids::TCustomGrid(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomOutline(HWND ParentWindow) : Grids::TCustomGrid(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -276,6 +259,9 @@ public:
 class PASCALIMPLEMENTATION TOutlineNode : public Classes::TPersistent 
 {
 	typedef Classes::TPersistent inherited;
+	
+public:
+	TOutlineNode* operator[](int Index) { return Items[Index]; }
 	
 private:
 	Classes::TList* FList;
@@ -303,8 +289,7 @@ private:
 	bool __fastcall HasChildren(void);
 	bool __fastcall HasVisibleParent(void);
 	bool __fastcall IsEqual(TOutlineNode* Value);
-	void __fastcall ReIndex(TOutlineNode* StartNode, TOutlineNode* EndNode, int NewIndex, bool IncludeStart
-		);
+	void __fastcall ReIndex(TOutlineNode* StartNode, TOutlineNode* EndNode, int NewIndex, bool IncludeStart);
 	void __fastcall Repaint(void);
 	bool __fastcall Resync(int &NewIndex, TOutlineNode* EndNode);
 	void __fastcall SetExpandedState(bool Value);
@@ -365,27 +350,27 @@ class PASCALIMPLEMENTATION TOutline : public TCustomOutline
 	
 __published:
 	__property Lines ;
-	__property OutlineStyle ;
+	__property OutlineStyle  = {default=5};
 	__property OnExpand ;
 	__property OnCollapse ;
-	__property Options ;
-	__property Style ;
+	__property Options  = {default=3};
+	__property Style  = {default=0};
 	__property ItemHeight ;
 	__property OnDrawItem ;
-	__property Align ;
-	__property Enabled ;
+	__property Align  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property Color ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
+	__property Color  = {default=-2147483643};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
 	__property Ctl3D ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnClick ;
-	__property DragMode ;
-	__property DragKind ;
-	__property DragCursor ;
+	__property DragMode  = {default=0};
+	__property DragKind  = {default=0};
+	__property DragCursor  = {default=-12};
 	__property OnDragDrop ;
 	__property OnDragOver ;
 	__property OnEndDock ;
@@ -401,23 +386,22 @@ __published:
 	__property OnKeyDown ;
 	__property OnKeyPress ;
 	__property OnKeyUp ;
-	__property BorderStyle ;
+	__property BorderStyle  = {default=1};
 	__property ItemSeparator ;
 	__property PicturePlus ;
 	__property PictureMinus ;
 	__property PictureOpen ;
 	__property PictureClosed ;
 	__property PictureLeaf ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property ShowHint ;
 	__property PopupMenu ;
-	__property ScrollBars ;
+	__property ScrollBars  = {default=3};
 	__property OnContextPopup ;
 public:
 	#pragma option push -w-inl
-	/* TCustomOutline.Create */ inline __fastcall virtual TOutline(Classes::TComponent* AOwner) : TCustomOutline(
-		AOwner) { }
+	/* TCustomOutline.Create */ inline __fastcall virtual TOutline(Classes::TComponent* AOwner) : TCustomOutline(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomOutline.Destroy */ inline __fastcall virtual ~TOutline(void) { }
@@ -425,8 +409,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TOutline(HWND ParentWindow) : TCustomOutline(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TOutline(HWND ParentWindow) : TCustomOutline(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -435,9 +418,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Outline */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Outline;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

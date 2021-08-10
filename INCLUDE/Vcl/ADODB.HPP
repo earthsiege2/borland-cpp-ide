@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ADODB.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ADODB.pas' rev: 6.00
 
 #ifndef ADODBHPP
 #define ADODBHPP
@@ -11,13 +11,13 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <ADOInt.hpp>	// Pascal unit
-#include <OLEDB.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <OleDB.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <TypInfo.hpp>	// Pascal unit
-#include <Graphics.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <ActiveX.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
@@ -35,37 +35,27 @@ class PASCALIMPLEMENTATION EADOError : public Db::EDatabaseError
 public:
 	#pragma option push -w-inl
 	/* Exception.Create */ inline __fastcall EADOError(const AnsiString Msg) : Db::EDatabaseError(Msg) { }
-		
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EADOError(const AnsiString Msg, const System::TVarRec * 
-		Args, const int Args_Size) : Db::EDatabaseError(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EADOError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Db::EDatabaseError(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EADOError(int Ident)/* overload */ : Db::EDatabaseError(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EADOError(int Ident)/* overload */ : Db::EDatabaseError(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EADOError(int Ident, const System::TVarRec * Args, const 
-		int Args_Size)/* overload */ : Db::EDatabaseError(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EADOError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Db::EDatabaseError(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EADOError(const AnsiString Msg, int AHelpContext) : Db::EDatabaseError(
-		Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EADOError(const AnsiString Msg, int AHelpContext) : Db::EDatabaseError(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EADOError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Db::EDatabaseError(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EADOError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Db::EDatabaseError(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EADOError(int Ident, int AHelpContext)/* overload */
-		 : Db::EDatabaseError(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EADOError(int Ident, int AHelpContext)/* overload */ : Db::EDatabaseError(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EADOError(System::PResStringRec ResStringRec, const 
-		System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Db::EDatabaseError(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EADOError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Db::EDatabaseError(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -77,8 +67,7 @@ public:
 
 
 #pragma option push -b-
-enum TConnectMode { cmUnknown, cmRead, cmWrite, cmReadWrite, cmShareDenyRead, cmShareDenyWrite, cmShareExclusive, 
-	cmShareDenyNone };
+enum TConnectMode { cmUnknown, cmRead, cmWrite, cmReadWrite, cmShareDenyRead, cmShareDenyWrite, cmShareExclusive, cmShareDenyNone };
 #pragma option pop
 
 #pragma option push -b-
@@ -104,8 +93,7 @@ enum TExecuteOption { eoAsyncExecute, eoAsyncFetch, eoAsyncFetchNonBlocking, eoE
 typedef Set<TExecuteOption, eoAsyncExecute, eoExecuteNoRecords>  TExecuteOptions;
 
 #pragma option push -b-
-enum TIsolationLevel { ilUnspecified, ilChaos, ilReadUncommitted, ilBrowse, ilCursorStability, ilReadCommitted, 
-	ilRepeatableRead, ilSerializable, ilIsolated };
+enum TIsolationLevel { ilUnspecified, ilChaos, ilReadUncommitted, ilBrowse, ilCursorStability, ilReadCommitted, ilRepeatableRead, ilSerializable, ilIsolated };
 #pragma option pop
 
 #pragma option push -b-
@@ -119,13 +107,7 @@ enum TObjectState { stClosed, stOpen, stConnecting, stExecuting, stFetching };
 typedef Set<TObjectState, stClosed, stFetching>  TObjectStates;
 
 #pragma option push -b-
-enum TSchemaInfo { siAsserts, siCatalogs, siCharacterSets, siCollations, siColumns, siCheckConstraints, 
-	siConstraintColumnUsage, siConstraintTableUsage, siKeyColumnUsage, siReferentialConstraints, siTableConstraints, 
-	siColumnsDomainUsage, siIndexes, siColumnPrivileges, siTablePrivileges, siUsagePrivileges, siProcedures, 
-	siSchemata, siSQLLanguages, siStatistics, siTables, siTranslations, siProviderTypes, siViews, siViewColumnUsage, 
-	siViewTableUsage, siProcedureParameters, siForeignKeys, siPrimaryKeys, siProcedureColumns, siDBInfoKeywords, 
-	siDBInfoLiterals, siCubes, siDimensions, siHierarchies, siLevels, siMeasures, siProperties, siMembers, 
-	siProviderSpecific };
+enum TSchemaInfo { siAsserts, siCatalogs, siCharacterSets, siCollations, siColumns, siCheckConstraints, siConstraintColumnUsage, siConstraintTableUsage, siKeyColumnUsage, siReferentialConstraints, siTableConstraints, siColumnsDomainUsage, siIndexes, siColumnPrivileges, siTablePrivileges, siUsagePrivileges, siProcedures, siSchemata, siSQLLanguages, siStatistics, siTables, siTranslations, siProviderTypes, siViews, siViewColumnUsage, siViewTableUsage, siProcedureParameters, siForeignKeys, siPrimaryKeys, siProcedureColumns, siDBInfoKeywords, siDBInfoLiterals, siCubes, siDimensions, siHierarchies, siLevels, siMeasures, siProperties, siMembers, siProviderSpecific };
 #pragma option pop
 
 #pragma option push -b-
@@ -135,34 +117,23 @@ enum TXactAttribute { xaCommitRetaining, xaAbortRetaining };
 typedef Set<TXactAttribute, xaCommitRetaining, xaAbortRetaining>  TXactAttributes;
 
 class DELPHICLASS TADOConnection;
-typedef void __fastcall (__closure *TBeginTransCompleteEvent)(TADOConnection* Connection, int TransactionLevel
-	, const Adoint::_di_Error Error, TEventStatus &EventStatus);
+typedef void __fastcall (__closure *TBeginTransCompleteEvent)(TADOConnection* Connection, int TransactionLevel, const Adoint::_di_Error Error, TEventStatus &EventStatus);
 
 #pragma option push -b-
 enum TCommandType { cmdUnknown, cmdText, cmdTable, cmdStoredProc, cmdFile, cmdTableDirect };
 #pragma option pop
 
-typedef void __fastcall (__closure *TConnectErrorEvent)(TADOConnection* Connection, const Adoint::_di_Error 
-	Error, TEventStatus &EventStatus);
+typedef void __fastcall (__closure *TConnectErrorEvent)(TADOConnection* Connection, const Adoint::_di_Error Error, TEventStatus &EventStatus);
 
-typedef void __fastcall (__closure *TDisconnectEvent)(TADOConnection* Connection, TEventStatus &EventStatus
-	);
+typedef void __fastcall (__closure *TDisconnectEvent)(TADOConnection* Connection, TEventStatus &EventStatus);
 
-typedef void __fastcall (__closure *TExecuteCompleteEvent)(TADOConnection* Connection, int RecordsAffected
-	, const Adoint::_di_Error Error, TEventStatus &EventStatus, const Adoint::_di__Command Command, const 
-	Adoint::_di__Recordset Recordset);
+typedef void __fastcall (__closure *TExecuteCompleteEvent)(TADOConnection* Connection, int RecordsAffected, const Adoint::_di_Error Error, TEventStatus &EventStatus, const Adoint::_di__Command Command, const Adoint::_di__Recordset Recordset);
 
-typedef void __fastcall (__closure *TWillConnectEvent)(TADOConnection* Connection, WideString &ConnectionString
-	, WideString &UserID, WideString &Password, TConnectOption &ConnectOptions, TEventStatus &EventStatus
-	);
+typedef void __fastcall (__closure *TWillConnectEvent)(TADOConnection* Connection, WideString &ConnectionString, WideString &UserID, WideString &Password, TConnectOption &ConnectOptions, TEventStatus &EventStatus);
 
-typedef void __fastcall (__closure *TWillExecuteEvent)(TADOConnection* Connection, WideString &CommandText
-	, TCursorType &CursorType, TADOLockType &LockType, TCommandType &CommandType, TExecuteOptions &ExecuteOptions
-	, TEventStatus &EventStatus, const Adoint::_di__Command Command, const Adoint::_di__Recordset Recordset
-	);
+typedef void __fastcall (__closure *TWillExecuteEvent)(TADOConnection* Connection, WideString &CommandText, TCursorType &CursorType, TADOLockType &LockType, TCommandType &CommandType, TExecuteOptions &ExecuteOptions, TEventStatus &EventStatus, const Adoint::_di__Command Command, const Adoint::_di__Recordset Recordset);
 
-typedef void __fastcall (__closure *TInfoMessageEvent)(TADOConnection* Connection, const Adoint::_di_Error 
-	Error, TEventStatus &EventStatus);
+typedef void __fastcall (__closure *TInfoMessageEvent)(TADOConnection* Connection, const Adoint::_di_Error Error, TEventStatus &EventStatus);
 
 class DELPHICLASS TCustomADODataSet;
 class DELPHICLASS TADOCommand;
@@ -175,6 +146,7 @@ private:
 	Classes::TList* FCommands;
 	Adoint::_di__Connection FConnectionObject;
 	int FConnEventsID;
+	WideString FConnectionString;
 	WideString FDefaultDatabase;
 	WideString FUserID;
 	WideString FPassword;
@@ -225,26 +197,15 @@ private:
 	
 protected:
 	_di_IConnectionPoint __fastcall ConnectionPoint();
-	HRESULT __safecall InfoMessage(const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const Adoint::_di__Connection 
-		pConnection);
-	HRESULT __safecall BeginTransComplete(int TransactionLevel, const Adoint::_di_Error pError, Activex::TOleEnum 
-		&adStatus, const Adoint::_di__Connection pConnection);
-	HRESULT __safecall CommitTransComplete(const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, 
-		const Adoint::_di__Connection pConnection);
-	HRESULT __safecall RollbackTransComplete(const Adoint::_di_Error pError, Activex::TOleEnum &adStatus
-		, const Adoint::_di__Connection pConnection);
-	HRESULT __safecall WillExecute(WideString &Source, Activex::TOleEnum &CursorType, Activex::TOleEnum 
-		&LockType, int &Options, Activex::TOleEnum &adStatus, const Adoint::_di__Command pCommand, const Adoint::_di__Recordset 
-		pRecordset, const Adoint::_di__Connection pConnection);
-	HRESULT __safecall ExecuteComplete(int RecordsAffected, const Adoint::_di_Error pError, Activex::TOleEnum 
-		&adStatus, const Adoint::_di__Command pCommand, const Adoint::_di__Recordset pRecordset, const Adoint::_di__Connection 
-		pConnection);
-	HRESULT __safecall WillConnect(WideString &ConnectionString, WideString &UserID, WideString &Password
-		, int &Options, Activex::TOleEnum &adStatus, const Adoint::_di__Connection pConnection);
-	HRESULT __safecall ConnectComplete(const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const 
-		Adoint::_di__Connection pConnection);
-	HRESULT __safecall Disconnect(Activex::TOleEnum &adStatus, const Adoint::_di__Connection pConnection
-		);
+	HRESULT __safecall InfoMessage(const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const Adoint::_di__Connection pConnection);
+	HRESULT __safecall BeginTransComplete(int TransactionLevel, const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const Adoint::_di__Connection pConnection);
+	HRESULT __safecall CommitTransComplete(const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const Adoint::_di__Connection pConnection);
+	HRESULT __safecall RollbackTransComplete(const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const Adoint::_di__Connection pConnection);
+	HRESULT __safecall WillExecute(WideString &Source, Activex::TOleEnum &CursorType, Activex::TOleEnum &LockType, int &Options, Activex::TOleEnum &adStatus, const Adoint::_di__Command pCommand, const Adoint::_di__Recordset pRecordset, const Adoint::_di__Connection pConnection);
+	HRESULT __safecall ExecuteComplete(int RecordsAffected, const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const Adoint::_di__Command pCommand, const Adoint::_di__Recordset pRecordset, const Adoint::_di__Connection pConnection);
+	HRESULT __safecall WillConnect(WideString &ConnectionString, WideString &UserID, WideString &Password, int &Options, Activex::TOleEnum &adStatus, const Adoint::_di__Connection pConnection);
+	HRESULT __safecall ConnectComplete(const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const Adoint::_di__Connection pConnection);
+	HRESULT __safecall Disconnect(Activex::TOleEnum &adStatus, const Adoint::_di__Connection pConnection);
 	void __fastcall CheckActive(void);
 	virtual void __fastcall CheckDisconnect(void);
 	void __fastcall CheckInactive(void);
@@ -253,30 +214,25 @@ protected:
 	virtual bool __fastcall GetConnected(void);
 	Adoint::_di_Errors __fastcall GetErrors();
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall RegisterClient(System::TObject* Client, Db::TConnectChangeEvent Event);
+	virtual void __fastcall RegisterClient(System::TObject* Client, Db::TConnectChangeEvent Event = 0x0);
 	virtual void __fastcall UnRegisterClient(System::TObject* Client);
 	virtual void __fastcall WaitForConnectComplete(void);
 	
 public:
-	inline void __fastcall Open() { inherited::Open(); }
 	__fastcall virtual TADOConnection(Classes::TComponent* AOwner);
 	__fastcall virtual ~TADOConnection(void);
 	int __fastcall BeginTrans(void);
 	void __fastcall Cancel(void);
 	void __fastcall CommitTrans(void);
-	void __fastcall Execute(const WideString CommandText, int &RecordsAffected, const TExecuteOptions ExecuteOptions
-		)/* overload */;
-	Adoint::_di__Recordset __fastcall Execute(const WideString CommandText, const TCommandType CommandType
-		, const TExecuteOptions ExecuteOptions)/* overload */;
+	void __fastcall Execute(const WideString CommandText, int &RecordsAffected, const TExecuteOptions ExecuteOptions = (System::Set<TExecuteOption, eoAsyncExecute, eoExecuteNoRecords> () << TExecuteOption(3) ))/* overload */;
+	Adoint::_di__Recordset __fastcall Execute(const WideString CommandText, const TCommandType CommandType = (TCommandType)(0x1), const TExecuteOptions ExecuteOptions = System::Set<TExecuteOption, eoAsyncExecute, eoExecuteNoRecords> () )/* overload */;
 	void __fastcall GetProcedureNames(Classes::TStrings* List);
 	void __fastcall GetFieldNames(const AnsiString TableName, Classes::TStrings* List);
-	void __fastcall GetTableNames(Classes::TStrings* List, bool SystemTables);
+	void __fastcall GetTableNames(Classes::TStrings* List, bool SystemTables = false);
 	HIDESBASE void __fastcall Open(const WideString UserID, const WideString Password)/* overload */;
-	void __fastcall OpenSchema(const TSchemaInfo Schema, const OleVariant &Restrictions, const OleVariant 
-		&SchemaID, TADODataSet* DataSet);
+	void __fastcall OpenSchema(const TSchemaInfo Schema, const OleVariant &Restrictions, const OleVariant &SchemaID, TADODataSet* DataSet);
 	void __fastcall RollbackTrans(void);
-	__property Adoint::_di__Connection ConnectionObject = {read=FConnectionObject, write=SetConnectionObject
-		};
+	__property Adoint::_di__Connection ConnectionObject = {read=FConnectionObject, write=SetConnectionObject};
 	__property int CommandCount = {read=GetCommandCount, nodefault};
 	__property TADOCommand* Commands[int Index] = {read=GetCommand};
 	__property TCustomADODataSet* DataSets[int Index] = {read=GetADODataSet};
@@ -289,20 +245,15 @@ public:
 __published:
 	__property TXactAttributes Attributes = {read=GetAttributes, write=SetAttributes, default=0};
 	__property int CommandTimeout = {read=GetCommandTimeout, write=SetCommandTimeout, default=30};
-	__property Connected ;
+	__property Connected  = {default=0};
 	__property WideString ConnectionString = {read=GetConnectionString, write=SetConnectionString};
-	__property int ConnectionTimeout = {read=GetConnectionTimeout, write=SetConnectionTimeout, default=15
-		};
-	__property TConnectOption ConnectOptions = {read=FConnectOptions, write=SetConnectOptions, default=0
-		};
-	__property TCursorLocation CursorLocation = {read=GetCursorLocation, write=SetCursorLocation, default=1
-		};
-	__property WideString DefaultDatabase = {read=GetDefaultDatabase, write=SetDefaultDatabase, stored=
-		IsDefaultDatabaseStored};
-	__property TIsolationLevel IsolationLevel = {read=GetIsolationLevel, write=SetIsolationLevel, default=4
-		};
+	__property int ConnectionTimeout = {read=GetConnectionTimeout, write=SetConnectionTimeout, default=15};
+	__property TConnectOption ConnectOptions = {read=FConnectOptions, write=SetConnectOptions, default=0};
+	__property TCursorLocation CursorLocation = {read=GetCursorLocation, write=SetCursorLocation, default=1};
+	__property WideString DefaultDatabase = {read=GetDefaultDatabase, write=SetDefaultDatabase, stored=IsDefaultDatabaseStored};
+	__property TIsolationLevel IsolationLevel = {read=GetIsolationLevel, write=SetIsolationLevel, default=4};
 	__property bool KeepConnection = {read=FKeepConnection, write=SetKeepConnection, default=1};
-	__property LoginPrompt ;
+	__property LoginPrompt  = {default=1};
 	__property TConnectMode Mode = {read=GetMode, write=SetMode, default=0};
 	__property WideString Provider = {read=GetProvider, write=SetProvider, stored=IsProviderStored};
 	__property AfterConnect ;
@@ -311,25 +262,26 @@ __published:
 	__property BeforeDisconnect ;
 	__property TDisconnectEvent OnDisconnect = {read=FOnDisconnect, write=FOnDisconnect};
 	__property TInfoMessageEvent OnInfoMessage = {read=FOnInfoMessage, write=FOnInfoMessage};
-	__property TBeginTransCompleteEvent OnBeginTransComplete = {read=FOnBeginTransComplete, write=FOnBeginTransComplete
-		};
-	__property TConnectErrorEvent OnCommitTransComplete = {read=FOnCommitTransComplete, write=FOnCommitTransComplete
-		};
-	__property TConnectErrorEvent OnRollbackTransComplete = {read=FOnRollbackTransComplete, write=FOnRollbackTransComplete
-		};
-	__property TConnectErrorEvent OnConnectComplete = {read=FOnConnectComplete, write=FOnConnectComplete
-		};
+	__property TBeginTransCompleteEvent OnBeginTransComplete = {read=FOnBeginTransComplete, write=FOnBeginTransComplete};
+	__property TConnectErrorEvent OnCommitTransComplete = {read=FOnCommitTransComplete, write=FOnCommitTransComplete};
+	__property TConnectErrorEvent OnRollbackTransComplete = {read=FOnRollbackTransComplete, write=FOnRollbackTransComplete};
+	__property TConnectErrorEvent OnConnectComplete = {read=FOnConnectComplete, write=FOnConnectComplete};
 	__property TWillConnectEvent OnWillConnect = {read=FOnWillConnect, write=FOnWillConnect};
-	__property TExecuteCompleteEvent OnExecuteComplete = {read=FOnExecuteComplete, write=FOnExecuteComplete
-		};
+	__property TExecuteCompleteEvent OnExecuteComplete = {read=FOnExecuteComplete, write=FOnExecuteComplete};
 	__property TWillExecuteEvent OnWillExecute = {read=FOnWillExecute, write=FOnWillExecute};
 	__property OnLogin ;
+	
+/* Hoisted overloads: */
+	
+public:
+	inline void __fastcall  Open(void){ TCustomConnection::Open(); }
+	
 private:
 	void *__ConnectionEventsVt;	/* Adoint::ConnectionEventsVt */
 	
 public:
 	operator ConnectionEventsVt*(void) { return (ConnectionEventsVt*)&__ConnectionEventsVt; }
-	operator IUnknown*(void) { return (IUnknown*)&__ConnectionEventsVt; }
+	operator IInterface*(void) { return (IInterface*)&__ConnectionEventsVt; }
 	
 };
 
@@ -359,14 +311,13 @@ protected:
 public:
 	__fastcall virtual TRDSConnection(Classes::TComponent* AOwner);
 	__fastcall virtual ~TRDSConnection(void);
-	Adoint::_di__Recordset __fastcall GetRecordset(const WideString CommandText, WideString ConnectionString
-		);
+	Adoint::_di__Recordset __fastcall GetRecordset(const WideString CommandText, WideString ConnectionString = L"");
 	__property OleVariant AppServer = {read=FAppServer};
 	__property Adoint::_di_IDataspace DataSpaceObject = {read=FDataSpace};
 	
 __published:
 	__property WideString ComputerName = {read=FComputerName, write=SetComputerName};
-	__property Connected ;
+	__property Connected  = {default=0};
 	__property int InternetTimeout = {read=FInternetTimeout, write=FInternetTimeout, default=0};
 	__property WideString ServerName = {read=FServerName, write=SetServerName, stored=FIsAppServer};
 	__property AfterConnect ;
@@ -434,16 +385,14 @@ __published:
 	__property WideString Name = {read=GetName, write=SetName};
 	__property TParameterAttributes Attributes = {read=GetAttributes, write=SetAttributes, default=0};
 	__property Db::TFieldType DataType = {read=GetDataType, write=SetDataType, default=0};
-	__property TParameterDirection Direction = {read=GetParameterDirection, write=SetParameterDirection
-		, default=1};
+	__property TParameterDirection Direction = {read=GetParameterDirection, write=SetParameterDirection, default=1};
 	__property Byte NumericScale = {read=GetNumericScale, write=SetNumericScale, default=0};
 	__property Byte Precision = {read=GetPrecision, write=SetPrecision, default=0};
 	__property int Size = {read=GetSize, write=SetSize, default=0};
 	__property Variant Value = {read=GetValue, write=SetValue};
 public:
 	#pragma option push -w-inl
-	/* TCollectionItem.Create */ inline __fastcall virtual TParameter(Classes::TCollection* Collection)
-		 : Classes::TCollectionItem(Collection) { }
+	/* TCollectionItem.Create */ inline __fastcall virtual TParameter(Classes::TCollection* Collection) : Classes::TCollectionItem(Collection) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCollectionItem.Destroy */ inline __fastcall virtual ~TParameter(void) { }
@@ -458,6 +407,9 @@ class PASCALIMPLEMENTATION TParameters : public Classes::TOwnedCollection
 {
 	typedef Classes::TOwnedCollection inherited;
 	
+public:
+	TParameter* operator[](int Index) { return Items[Index]; }
+	
 private:
 	bool FModified;
 	TADOCommand* __fastcall GetCommand(void);
@@ -468,8 +420,7 @@ private:
 	void __fastcall SetParamValue(const WideString ParamName, const Variant &Value);
 	
 protected:
-	Adoint::_di__Parameter __fastcall Create_Parameter(const WideString Name, Db::TFieldType DataType, 
-		TParameterDirection Direction, int Size);
+	Adoint::_di__Parameter __fastcall Create_Parameter(const WideString Name, Db::TFieldType DataType, TParameterDirection Direction = (TParameterDirection)(0x1), int Size = 0x0);
 	DYNAMIC int __fastcall GetAttrCount(void);
 	DYNAMIC AnsiString __fastcall GetAttr(int Index);
 	DYNAMIC AnsiString __fastcall GetItemAttr(int Index, int ItemIndex);
@@ -481,8 +432,7 @@ protected:
 public:
 	TParameter* __fastcall AddParameter(void);
 	void __fastcall AssignValues(TParameters* Value);
-	TParameter* __fastcall CreateParameter(const WideString Name, Db::TFieldType DataType, TParameterDirection 
-		Direction, int Size, const OleVariant &Value);
+	TParameter* __fastcall CreateParameter(const WideString Name, Db::TFieldType DataType, TParameterDirection Direction, int Size, const OleVariant &Value);
 	TParameter* __fastcall FindParam(const WideString Value);
 	void __fastcall GetParamList(Classes::TList* List, const WideString ParamNames);
 	bool __fastcall IsEqual(TParameters* Value);
@@ -495,8 +445,7 @@ public:
 	__property Adoint::_di_Parameters ParameterCollection = {read=GetParamCollection};
 public:
 	#pragma option push -w-inl
-	/* TOwnedCollection.Create */ inline __fastcall TParameters(Classes::TPersistent* AOwner, TMetaClass* 
-		ItemClass) : Classes::TOwnedCollection(AOwner, ItemClass) { }
+	/* TOwnedCollection.Create */ inline __fastcall TParameters(Classes::TPersistent* AOwner, TMetaClass* ItemClass) : Classes::TOwnedCollection(AOwner, ItemClass) { }
 	#pragma option pop
 	
 public:
@@ -536,16 +485,15 @@ private:
 	Adoint::_di__Connection __fastcall GetActiveConnection();
 	
 protected:
-	void __fastcall AssignCommandText(const WideString Value, bool Loading);
+	void __fastcall AssignCommandText(const WideString Value, bool Loading = false);
 	void __fastcall CheckCommandText(void);
 	void __fastcall ClearActiveConnection(void);
 	bool __fastcall ComponentLoading(void);
 	void __fastcall ConnectionStateChange(System::TObject* Sender, bool Connecting);
-	virtual void __fastcall Initialize(bool DoAppend);
+	virtual void __fastcall Initialize(bool DoAppend = true);
 	virtual void __fastcall OpenConnection(void);
 	virtual void __fastcall SetCommandText(const WideString Value);
 	virtual bool __fastcall SetConnectionFlag(int Flag, bool Value);
-	virtual void __fastcall SetName(const AnsiString NewName);
 	__property Adoint::_di__Connection ActiveConnection = {read=GetActiveConnection};
 	__property AnsiString CommandTextAlias = {read=FCommandTextAlias, write=FCommandTextAlias};
 	__property Classes::TComponent* ComponentRef = {read=FComponentRef, write=FComponentRef};
@@ -557,8 +505,7 @@ public:
 	void __fastcall Cancel(void);
 	Adoint::_di__Recordset __fastcall Execute()/* overload */;
 	Adoint::_di__Recordset __fastcall Execute(const OleVariant &Parameters)/* overload */;
-	Adoint::_di__Recordset __fastcall Execute(int &RecordsAffected, const OleVariant &Parameters)/* overload */
-		;
+	Adoint::_di__Recordset __fastcall Execute(int &RecordsAffected, const OleVariant &Parameters)/* overload */;
 	__property Adoint::_di__Command CommandObject = {read=FCommandObject};
 	__property Adoint::_di_Properties Properties = {read=GetProperties};
 	__property TObjectStates States = {read=GetState, nodefault};
@@ -569,8 +516,7 @@ __published:
 	__property TCommandType CommandType = {read=GetCommandType, write=SetComandType, default=1};
 	__property TADOConnection* Connection = {read=FConnection, write=SetConnection};
 	__property WideString ConnectionString = {read=FConnectionString, write=SetConnectionString};
-	__property TExecuteOptions ExecuteOptions = {read=FExecuteOptions, write=FExecuteOptions, default=0
-		};
+	__property TExecuteOptions ExecuteOptions = {read=FExecuteOptions, write=FExecuteOptions, default=0};
 	__property Word Prepared = {read=GetPrepared, write=SetPrepared, default=0};
 	__property TParameters* Parameters = {read=FParameters, write=SetParameters};
 	__property bool ParamCheck = {read=FParamCheck, write=FParamCheck, default=1};
@@ -578,20 +524,17 @@ __published:
 
 
 #pragma option push -b-
-enum TCursorOption { coHoldRecords, coMovePrevious, coAddNew, coDelete, coUpdate, coBookmark, coApproxPosition, 
-	coUpdateBatch, coResync, coNotify, coFind, coSeek, coIndex };
+enum TCursorOption { coHoldRecords, coMovePrevious, coAddNew, coDelete, coUpdate, coBookmark, coApproxPosition, coUpdateBatch, coResync, coNotify, coFind, coSeek, coIndex };
 #pragma option pop
 
 typedef Set<TCursorOption, coHoldRecords, coIndex>  TCursorOptions;
 
 #pragma option push -b-
-enum TEventReason { erAddNew, erDelete, erUpdate, erUndoUpdate, erUndoAddNew, erUndoDelete, erRequery, 
-	erResynch, erClose, erMove, erFirstChange, erMoveFirst, erMoveNext, erMovePrevious, erMoveLast };
+enum TEventReason { erAddNew, erDelete, erUpdate, erUndoUpdate, erUndoAddNew, erUndoDelete, erRequery, erResynch, erClose, erMove, erFirstChange, erMoveFirst, erMoveNext, erMovePrevious, erMoveLast };
 #pragma option pop
 
 #pragma option push -b-
-enum TFilterGroup { fgUnassigned, fgNone, fgPendingRecords, fgAffectedRecords, fgFetchedRecords, fgPredicate, 
-	fgConflictingRecords };
+enum TFilterGroup { fgUnassigned, fgNone, fgPendingRecords, fgAffectedRecords, fgFetchedRecords, fgPredicate, fgConflictingRecords };
 #pragma option pop
 
 #pragma option push -b-
@@ -599,9 +542,7 @@ enum TMarshalOption { moMarshalAll, moMarshalModifiedOnly };
 #pragma option pop
 
 #pragma option push -b-
-enum TRecordStatus { rsOK, rsNew, rsModified, rsDeleted, rsUnmodified, rsInvalid, rsMultipleChanges, 
-	rsPendingChanges, rsCanceled, rsCantRelease, rsConcurrencyViolation, rsIntegrityViolation, rsMaxChangesExceeded, 
-	rsObjectOpen, rsOutOfMemory, rsPermissionDenied, rsSchemaViolation, rsDBDeleted };
+enum TRecordStatus { rsOK, rsNew, rsModified, rsDeleted, rsUnmodified, rsInvalid, rsMultipleChanges, rsPendingChanges, rsCanceled, rsCantRelease, rsConcurrencyViolation, rsIntegrityViolation, rsMaxChangesExceeded, rsObjectOpen, rsOutOfMemory, rsPermissionDenied, rsSchemaViolation, rsDBDeleted };
 #pragma option pop
 
 typedef Set<TRecordStatus, rsOK, rsDBDeleted>  TRecordStatusSet;
@@ -622,41 +563,37 @@ typedef OleVariant TVariantList[1];
 
 typedef OleVariant *PVariantList;
 
-typedef void __fastcall (__closure *TWillChangeFieldEvent)(TCustomADODataSet* DataSet, const int FieldCount
-	, const OleVariant &Fields, TEventStatus &EventStatus);
+typedef void __fastcall (__closure *TWillChangeFieldEvent)(TCustomADODataSet* DataSet, const int FieldCount, const OleVariant &Fields, TEventStatus &EventStatus);
 
-typedef void __fastcall (__closure *TFieldChangeCompleteEvent)(TCustomADODataSet* DataSet, const int 
-	FieldCount, const OleVariant &Fields, const Adoint::_di_Error Error, TEventStatus &EventStatus);
+typedef void __fastcall (__closure *TFieldChangeCompleteEvent)(TCustomADODataSet* DataSet, const int FieldCount, const OleVariant &Fields, const Adoint::_di_Error Error, TEventStatus &EventStatus);
 
-typedef void __fastcall (__closure *TWillChangeRecordEvent)(TCustomADODataSet* DataSet, const TEventReason 
-	Reason, const int RecordCount, TEventStatus &EventStatus);
+typedef void __fastcall (__closure *TWillChangeRecordEvent)(TCustomADODataSet* DataSet, const TEventReason Reason, const int RecordCount, TEventStatus &EventStatus);
 
-typedef void __fastcall (__closure *TRecordChangeCompleteEvent)(TCustomADODataSet* DataSet, const TEventReason 
-	Reason, const int RecordCount, const Adoint::_di_Error Error, TEventStatus &EventStatus);
+typedef void __fastcall (__closure *TRecordChangeCompleteEvent)(TCustomADODataSet* DataSet, const TEventReason Reason, const int RecordCount, const Adoint::_di_Error Error, TEventStatus &EventStatus);
 
-typedef void __fastcall (__closure *TEndOfRecordsetEvent)(TCustomADODataSet* DataSet, Word &MoreData
-	, TEventStatus &EventStatus);
+typedef void __fastcall (__closure *TEndOfRecordsetEvent)(TCustomADODataSet* DataSet, Word &MoreData, TEventStatus &EventStatus);
 
-typedef void __fastcall (__closure *TFetchProgressEvent)(TCustomADODataSet* DataSet, int Progress, int 
-	MaxProgress, TEventStatus &EventStatus);
+typedef void __fastcall (__closure *TFetchProgressEvent)(TCustomADODataSet* DataSet, int Progress, int MaxProgress, TEventStatus &EventStatus);
 
-typedef void __fastcall (__closure *TRecordsetErrorEvent)(TCustomADODataSet* DataSet, const TEventReason 
-	Reason, const Adoint::_di_Error Error, TEventStatus &EventStatus);
+typedef void __fastcall (__closure *TRecordsetErrorEvent)(TCustomADODataSet* DataSet, const TEventReason Reason, const Adoint::_di_Error Error, TEventStatus &EventStatus);
 
-typedef void __fastcall (__closure *TRecordsetReasonEvent)(TCustomADODataSet* DataSet, const TEventReason 
-	Reason, TEventStatus &EventStatus);
+typedef void __fastcall (__closure *TRecordsetReasonEvent)(TCustomADODataSet* DataSet, const TEventReason Reason, TEventStatus &EventStatus);
 
-typedef void __fastcall (__closure *TRecordsetEvent)(TCustomADODataSet* DataSet, const Adoint::_di_Error 
-	Error, TEventStatus &EventStatus);
+typedef void __fastcall (__closure *TRecordsetEvent)(TCustomADODataSet* DataSet, const Adoint::_di_Error Error, TEventStatus &EventStatus);
+
+typedef void __fastcall (__closure *TRecordsetCreate)(TCustomADODataSet* DataSet, const Adoint::_di__Recordset Recordset);
 
 class PASCALIMPLEMENTATION TCustomADODataSet : public Db::TDataSet 
 {
+	friend class TADOTable;
+	friend class TADOStoredProc;
 	typedef Db::TDataSet inherited;
 	
-/*private:*/protected:
+private:
 	Adoint::_di__Recordset FRecordsetObject;
 	Adoint::_di__Recordset FFindCursor;
 	Adoint::_di__Recordset FLookupCursor;
+	Adoint::_di__Recordset FLockCursor;
 	Oledb::_di_IRowset FRowset;
 	Oledb::_di_IAccessor FAccessor;
 	Oledb::_di_IRowsetFind FRowsetFind;
@@ -700,8 +637,8 @@ class PASCALIMPLEMENTATION TCustomADODataSet : public Db::TDataSet
 	TEndOfRecordsetEvent FOnEndOfRecordset;
 	TRecordsetEvent FOnFetchComplete;
 	TFetchProgressEvent FOnFetchProgress;
+	TRecordsetCreate FOnRecordsetCreate;
 	int __fastcall GetCacheSize(void);
-	WideString __fastcall GetCommandText();
 	int __fastcall GetCommandTimeout(void);
 	TCommandType __fastcall GetCommandType(void);
 	TADOConnection* __fastcall GetConnection(void);
@@ -729,7 +666,6 @@ class PASCALIMPLEMENTATION TCustomADODataSet : public Db::TDataSet
 	void __fastcall ReadDesignerData(Classes::TReader* Reader);
 	void __fastcall RefreshIndexFields(void);
 	void __fastcall SetCacheSize(const int Value);
-	void __fastcall SetCommandText(const WideString Value);
 	void __fastcall SetCommandTimeout(const int Value);
 	void __fastcall SetCommandType(const TCommandType Value);
 	void __fastcall SetConnectionString(const WideString Value);
@@ -754,17 +690,15 @@ class PASCALIMPLEMENTATION TCustomADODataSet : public Db::TDataSet
 protected:
 	virtual void __fastcall PSEndTransaction(bool Commit);
 	virtual void __fastcall PSExecute(void);
-	virtual int __fastcall PSExecuteStatement(const AnsiString ASQL, Db::TParams* AParams, void * ResultSet
-		);
+	virtual int __fastcall PSExecuteStatement(const AnsiString ASQL, Db::TParams* AParams, void * ResultSet = (void *)(0x0));
 	virtual void __fastcall PSGetAttributes(Classes::TList* List);
 	virtual Db::TIndexDef* __fastcall PSGetDefaultOrder(void);
 	virtual AnsiString __fastcall PSGetKeyFields();
 	virtual Db::TParams* __fastcall PSGetParams(void);
 	virtual AnsiString __fastcall PSGetQuoteChar();
 	virtual AnsiString __fastcall PSGetTableName();
-	virtual Db::TIndexDefs* __fastcall PSGetIndexDefs(Db::TIndexOptions IndexTypes);
-	virtual Db::EUpdateError* __fastcall PSGetUpdateException(Sysutils::Exception* E, Db::EUpdateError* 
-		Prev);
+	virtual Db::TIndexDefs* __fastcall PSGetIndexDefs(Db::TIndexOptions IndexTypes = (System::Set<Db::TIndexOption, ixPrimary, ixNonMaintained> () << Db::TIndexOption(0) << Db::TIndexOption(1) << Db::TIndexOption(2) << Db::TIndexOption(3) << Db::TIndexOption(4) << Db::TIndexOption(5) ));
+	virtual Db::EUpdateError* __fastcall PSGetUpdateException(Sysutils::Exception* E, Db::EUpdateError* Prev);
 	virtual bool __fastcall PSInTransaction(void);
 	virtual bool __fastcall PSIsSQLBased(void);
 	virtual bool __fastcall PSIsSQLSupported(void);
@@ -791,6 +725,7 @@ protected:
 	virtual void __fastcall GetBookmarkData(char * Buffer, void * Data);
 	virtual Db::TBookmarkFlag __fastcall GetBookmarkFlag(char * Buffer);
 	virtual bool __fastcall GetCanModify(void);
+	WideString __fastcall GetCommandText();
 	virtual Db::TDataSource* __fastcall GetDataSource(void);
 	virtual int __fastcall GetRecNo(void);
 	virtual Db::TGetResult __fastcall GetRecord(char * Buffer, Db::TGetMode GetMode, bool DoCheck);
@@ -814,27 +749,28 @@ protected:
 	virtual void __fastcall InternalOpen(void);
 	virtual void __fastcall InternalPost(void);
 	virtual void __fastcall InternalRefresh(void);
+	void __fastcall InternalRequery(TExecuteOptions Options = System::Set<TExecuteOption, eoAsyncExecute, eoExecuteNoRecords> () );
 	void __fastcall InternalSetSort(WideString Value);
 	virtual void __fastcall InternalSetToRecord(char * Buffer);
 	virtual bool __fastcall IsCursorOpen(void);
 	virtual void __fastcall Loaded(void);
-	bool __fastcall LocateRecord(const AnsiString KeyFields, const OleVariant &KeyValues, Db::TLocateOptions 
-		Options, bool SyncCursor);
+	bool __fastcall LocateRecord(const AnsiString KeyFields, const OleVariant &KeyValues, Db::TLocateOptions Options, bool SyncCursor);
 	virtual void __fastcall MasterChanged(System::TObject* Sender);
 	virtual void __fastcall MasterDisabled(System::TObject* Sender);
 	virtual void __fastcall OpenCursor(bool InfoQuery);
 	virtual void __fastcall PrepareCursor(void);
 	void __fastcall RefreshParams(void);
+	void __fastcall ReleaseLock(void);
 	virtual void __fastcall SetBlockReadSize(int Value);
 	virtual void __fastcall SetBookmarkFlag(char * Buffer, Db::TBookmarkFlag Value);
 	virtual void __fastcall SetBookmarkData(char * Buffer, void * Data);
+	void __fastcall SetCommandText(const WideString Value);
 	virtual void __fastcall SetConnection(const TADOConnection* Value);
 	virtual bool __fastcall SetConnectionFlag(int Flag, bool Value);
 	virtual void __fastcall SetDataSource(const Db::TDataSource* Value);
 	bool __fastcall SetDetailFilter(void);
 	virtual void __fastcall SetFieldData(Db::TField* Field, void * Buffer)/* overload */;
-	virtual void __fastcall SetFieldData(Db::TField* Field, void * Buffer, bool NativeFormat)/* overload */
-		;
+	virtual void __fastcall SetFieldData(Db::TField* Field, void * Buffer, bool NativeFormat)/* overload */;
 	virtual void __fastcall SetFiltered(bool Value);
 	virtual void __fastcall SetFilterOptions(Db::TFilterOptions Value);
 	virtual void __fastcall SetFilterText(const AnsiString Value);
@@ -857,59 +793,45 @@ protected:
 	__property bool Prepared = {read=GetPrepared, write=SetPrepared, default=0};
 	__property bool StoreDefs = {read=FStoreDefs, write=FStoreDefs, default=0};
 	_di_IConnectionPoint __fastcall ConnectionPoint();
-	HRESULT __safecall WillChangeField(int cFields, const OleVariant Fields, Activex::TOleEnum &adStatus
-		, const Adoint::_di__Recordset pRecordset);
-	HRESULT __safecall FieldChangeComplete(int cFields, const OleVariant Fields, const Adoint::_di_Error 
-		pError, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
-	HRESULT __safecall WillChangeRecord(Activex::TOleEnum adReason, int cRecords, Activex::TOleEnum &adStatus
-		, const Adoint::_di__Recordset pRecordset);
-	HRESULT __safecall RecordChangeComplete(Activex::TOleEnum adReason, int cRecords, const Adoint::_di_Error 
-		pError, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
-	HRESULT __safecall WillChangeRecordset(Activex::TOleEnum adReason, Activex::TOleEnum &adStatus, const 
-		Adoint::_di__Recordset pRecordset);
-	HRESULT __safecall RecordsetChangeComplete(Activex::TOleEnum adReason, const Adoint::_di_Error pError
-		, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
-	HRESULT __safecall WillMove(Activex::TOleEnum adReason, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset 
-		pRecordset);
-	HRESULT __safecall MoveComplete(Activex::TOleEnum adReason, const Adoint::_di_Error pError, Activex::TOleEnum 
-		&adStatus, const Adoint::_di__Recordset pRecordset);
-	HRESULT __safecall EndOfRecordset(Word &fMoreData, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset 
-		pRecordset);
-	HRESULT __safecall FetchProgress(int Progress, int MaxProgress, Activex::TOleEnum &adStatus, const 
-		Adoint::_di__Recordset pRecordset);
-	HRESULT __safecall FetchComplete(const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const 
-		Adoint::_di__Recordset pRecordset);
+	HRESULT __safecall WillChangeField(int cFields, const OleVariant Fields, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
+	HRESULT __safecall FieldChangeComplete(int cFields, const OleVariant Fields, const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
+	HRESULT __safecall WillChangeRecord(Activex::TOleEnum adReason, int cRecords, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
+	HRESULT __safecall RecordChangeComplete(Activex::TOleEnum adReason, int cRecords, const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
+	HRESULT __safecall WillChangeRecordset(Activex::TOleEnum adReason, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
+	HRESULT __safecall RecordsetChangeComplete(Activex::TOleEnum adReason, const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
+	HRESULT __safecall WillMove(Activex::TOleEnum adReason, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
+	HRESULT __safecall MoveComplete(Activex::TOleEnum adReason, const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
+	HRESULT __safecall EndOfRecordset(Word &fMoreData, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
+	HRESULT __safecall FetchProgress(int Progress, int MaxProgress, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
+	HRESULT __safecall FetchComplete(const Adoint::_di_Error pError, Activex::TOleEnum &adStatus, const Adoint::_di__Recordset pRecordset);
 	
 public:
 	__fastcall virtual TCustomADODataSet(Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomADODataSet(void);
 	virtual bool __fastcall BookmarkValid(void * Bookmark);
-	void __fastcall CancelBatch(TAffectRecords AffectRecords);
+	void __fastcall CancelBatch(TAffectRecords AffectRecords = (TAffectRecords)(0x2));
 	void __fastcall CancelUpdates(void);
-	void __fastcall Clone(TCustomADODataSet* Source, TADOLockType LockType);
+	void __fastcall Clone(TCustomADODataSet* Source, TADOLockType LockType = (TADOLockType)(0x0));
 	virtual int __fastcall CompareBookmarks(void * Bookmark1, void * Bookmark2);
 	virtual Classes::TStream* __fastcall CreateBlobStream(Db::TField* Field, Db::TBlobStreamMode Mode);
-		
-	void __fastcall DeleteRecords(TAffectRecords AffectRecords);
+	void __fastcall DeleteRecords(TAffectRecords AffectRecords = (TAffectRecords)(0x2));
 	__property bool EnableBCD = {read=FEnableBCD, write=FEnableBCD, default=1};
 	void __fastcall FilterOnBookmarks(const System::TVarRec * Bookmarks, const int Bookmarks_Size);
 	virtual int __fastcall GetBlobFieldData(int FieldNo, Db::TBlobByteData &Buffer);
+	virtual void __fastcall GetDetailLinkFields(Classes::TList* MasterFields, Classes::TList* DetailFields);
 	virtual bool __fastcall GetFieldData(Db::TField* Field, void * Buffer)/* overload */;
-	virtual bool __fastcall GetFieldData(Db::TField* Field, void * Buffer, bool NativeFormat)/* overload */
-		;
+	virtual bool __fastcall GetFieldData(Db::TField* Field, void * Buffer, bool NativeFormat)/* overload */;
 	virtual bool __fastcall GetFieldData(int FieldNo, void * Buffer)/* overload */;
 	virtual bool __fastcall IsSequenced(void);
 	void __fastcall LoadFromFile(const WideString FileName);
-	virtual bool __fastcall Locate(const AnsiString KeyFields, const Variant &KeyValues, Db::TLocateOptions 
-		Options);
-	virtual Variant __fastcall Lookup(const AnsiString KeyFields, const Variant &KeyValues, const AnsiString 
-		ResultFields);
+	virtual bool __fastcall Locate(const AnsiString KeyFields, const Variant &KeyValues, Db::TLocateOptions Options);
+	virtual Variant __fastcall Lookup(const AnsiString KeyFields, const Variant &KeyValues, const AnsiString ResultFields);
 	Adoint::_di__Recordset __fastcall NextRecordset(int &RecordsAffected);
-	void __fastcall Requery(TExecuteOptions Options);
-	void __fastcall SaveToFile(const WideString FileName, TPersistFormat Format);
-	bool __fastcall Seek(const Variant &KeyValues, TSeekOption SeekOption);
+	void __fastcall Requery(TExecuteOptions Options = System::Set<TExecuteOption, eoAsyncExecute, eoExecuteNoRecords> () );
+	void __fastcall SaveToFile(const WideString FileName = L"", TPersistFormat Format = (TPersistFormat)(0x0));
+	bool __fastcall Seek(const Variant &KeyValues, TSeekOption SeekOption = (TSeekOption)(0x0));
 	bool __fastcall Supports(TCursorOptions CursorOptions);
-	void __fastcall UpdateBatch(TAffectRecords AffectRecords);
+	void __fastcall UpdateBatch(TAffectRecords AffectRecords = (TAffectRecords)(0x2));
 	virtual Db::TUpdateStatus __fastcall UpdateStatus(void);
 	__property AnsiString DesignerData = {read=FDesignerData, write=FDesignerData};
 	__property AnsiString IndexName = {read=GetIndexName, write=SetIndexName};
@@ -923,21 +845,18 @@ public:
 	__property WideString Sort = {read=GetSort, write=SetSort};
 	
 __published:
-	__property Active ;
-	__property AutoCalcFields ;
+	__property Active  = {default=0};
+	__property AutoCalcFields  = {default=1};
 	__property int CacheSize = {read=GetCacheSize, write=SetCacheSize, default=1};
 	__property TADOConnection* Connection = {read=GetConnection, write=SetConnection};
 	__property WideString ConnectionString = {read=GetConnectionString, write=SetConnectionString};
-	__property TCursorLocation CursorLocation = {read=GetCursorLocation, write=SetCursorLocation, default=1
-		};
+	__property TCursorLocation CursorLocation = {read=GetCursorLocation, write=SetCursorLocation, default=1};
 	__property TCursorType CursorType = {read=GetCursorType, write=SetCursorType, default=2};
-	__property TExecuteOptions ExecuteOptions = {read=GetExecuteOptions, write=SetExecuteOptions, default=0
-		};
+	__property TExecuteOptions ExecuteOptions = {read=GetExecuteOptions, write=SetExecuteOptions, default=0};
 	__property Filter ;
-	__property Filtered ;
+	__property Filtered  = {default=0};
 	__property TADOLockType LockType = {read=GetLockType, write=SetLockType, default=3};
-	__property TMarshalOption MarshalOptions = {read=GetMarshalOptions, write=SetMarshalOptions, default=0
-		};
+	__property TMarshalOption MarshalOptions = {read=GetMarshalOptions, write=SetMarshalOptions, default=0};
 	__property int MaxRecords = {read=GetMaxRecords, write=SetMaxRecords, default=0};
 	__property BeforeOpen ;
 	__property AfterOpen ;
@@ -963,31 +882,24 @@ __published:
 	__property OnFilterRecord ;
 	__property OnNewRecord ;
 	__property OnPostError ;
-	__property TWillChangeFieldEvent OnWillChangeField = {read=FOnWillChangeField, write=FOnWillChangeField
-		};
-	__property TFieldChangeCompleteEvent OnFieldChangeComplete = {read=FOnFieldChangeComplete, write=FOnFieldChangeComplete
-		};
-	__property TWillChangeRecordEvent OnWillChangeRecord = {read=FOnWillChangeRecord, write=FOnWillChangeRecord
-		};
-	__property TRecordChangeCompleteEvent OnRecordChangeComplete = {read=FOnRecordChangeComplete, write=
-		FOnRecordChangeComplete};
-	__property TRecordsetReasonEvent OnWillChangeRecordset = {read=FOnWillChangeRecordset, write=FOnWillChangeRecordset
-		};
-	__property TRecordsetErrorEvent OnRecordsetChangeComplete = {read=FOnRecordsetChangeComplete, write=
-		FOnRecordsetChangeComplete};
+	__property TWillChangeFieldEvent OnWillChangeField = {read=FOnWillChangeField, write=FOnWillChangeField};
+	__property TFieldChangeCompleteEvent OnFieldChangeComplete = {read=FOnFieldChangeComplete, write=FOnFieldChangeComplete};
+	__property TWillChangeRecordEvent OnWillChangeRecord = {read=FOnWillChangeRecord, write=FOnWillChangeRecord};
+	__property TRecordChangeCompleteEvent OnRecordChangeComplete = {read=FOnRecordChangeComplete, write=FOnRecordChangeComplete};
+	__property TRecordsetReasonEvent OnWillChangeRecordset = {read=FOnWillChangeRecordset, write=FOnWillChangeRecordset};
+	__property TRecordsetErrorEvent OnRecordsetChangeComplete = {read=FOnRecordsetChangeComplete, write=FOnRecordsetChangeComplete};
 	__property TRecordsetReasonEvent OnWillMove = {read=FOnWillMove, write=FOnWillMove};
 	__property TRecordsetErrorEvent OnMoveComplete = {read=FOnMoveComplete, write=FOnMoveComplete};
-	__property TEndOfRecordsetEvent OnEndOfRecordset = {read=FOnEndOfRecordset, write=FOnEndOfRecordset
-		};
+	__property TEndOfRecordsetEvent OnEndOfRecordset = {read=FOnEndOfRecordset, write=FOnEndOfRecordset};
 	__property TRecordsetEvent OnFetchComplete = {read=FOnFetchComplete, write=FOnFetchComplete};
 	__property TFetchProgressEvent OnFetchProgress = {read=FOnFetchProgress, write=FOnFetchProgress};
-/*private:*/protected:
-		
+	__property TRecordsetCreate OnRecordsetCreate = {read=FOnRecordsetCreate, write=FOnRecordsetCreate};
+private:
 	void *__RecordsetEventsVt;	/* Adoint::RecordsetEventsVt */
 	
 public:
 	operator RecordsetEventsVt*(void) { return (RecordsetEventsVt*)&__RecordsetEventsVt; }
-	operator IUnknown*(void) { return (IUnknown*)&__RecordsetEventsVt; }
+	operator IInterface*(void) { return (IInterface*)&__RecordsetEventsVt; }
 	
 };
 
@@ -1013,20 +925,20 @@ public:
 	
 __published:
 	__property CommandText ;
-	__property CommandTimeout ;
-	__property CommandType ;
+	__property CommandTimeout  = {default=30};
+	__property CommandType  = {default=1};
 	__property DataSetField ;
 	__property DataSource ;
-	__property EnableBCD ;
+	__property EnableBCD  = {default=1};
 	__property FieldDefs ;
 	__property IndexName ;
 	__property IndexFieldNames ;
 	__property MasterFields ;
-	__property ParamCheck ;
+	__property ParamCheck  = {default=1};
 	__property Parameters ;
-	__property Prepared ;
+	__property Prepared  = {default=0};
 	__property TRDSConnection* RDSConnection = {read=FRDSConnection, write=SetRDSConnection};
-	__property StoreDefs ;
+	__property StoreDefs  = {default=0};
 	__property BeforeOpen ;
 	__property AfterOpen ;
 	__property BeforeClose ;
@@ -1050,8 +962,7 @@ __published:
 	__property OnPostError ;
 public:
 	#pragma option push -w-inl
-	/* TCustomADODataSet.Create */ inline __fastcall virtual TADODataSet(Classes::TComponent* AOwner) : 
-		TCustomADODataSet(AOwner) { }
+	/* TCustomADODataSet.Create */ inline __fastcall virtual TADODataSet(Classes::TComponent* AOwner) : TCustomADODataSet(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomADODataSet.Destroy */ inline __fastcall virtual ~TADODataSet(void) { }
@@ -1077,7 +988,8 @@ public:
 	__property IndexDefs ;
 	
 __published:
-	__property EnableBCD ;
+	__property CommandTimeout  = {default=30};
+	__property EnableBCD  = {default=1};
 	__property IndexFieldNames ;
 	__property IndexName ;
 	__property MasterFields ;
@@ -1114,11 +1026,12 @@ public:
 	__property int RowsAffected = {read=FRowsAffected, nodefault};
 	
 __published:
+	__property CommandTimeout  = {default=30};
 	__property DataSource ;
-	__property EnableBCD ;
-	__property ParamCheck ;
+	__property EnableBCD  = {default=1};
+	__property ParamCheck  = {default=1};
 	__property Parameters ;
-	__property Prepared ;
+	__property Prepared  = {default=0};
 	__property Classes::TStrings* SQL = {read=GetSQL, write=SetSQL};
 };
 
@@ -1133,11 +1046,12 @@ public:
 	void __fastcall ExecProc(void);
 	
 __published:
+	__property CommandTimeout  = {default=30};
 	__property DataSource ;
-	__property EnableBCD ;
+	__property EnableBCD  = {default=1};
 	__property WideString ProcedureName = {read=GetCommandText, write=SetCommandText};
 	__property Parameters ;
-	__property Prepared ;
+	__property Prepared  = {default=0};
 public:
 	#pragma option push -w-inl
 	/* TCustomADODataSet.Destroy */ inline __fastcall virtual ~TADOStoredProc(void) { }
@@ -1173,20 +1087,15 @@ public:
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE void __fastcall CreateUDLFile(const WideString FileName, const WideString ProviderName
-	, const WideString DataSourceName);
+extern PACKAGE void __fastcall CreateUDLFile(const WideString FileName, const WideString ProviderName, const WideString DataSourceName);
 extern PACKAGE void __fastcall GetProviderNames(Classes::TStrings* Names);
-extern PACKAGE WideString __fastcall PromptDataSource(unsigned ParentHandle, WideString InitialString
-	);
-extern PACKAGE WideString __fastcall PromptDataLinkFile(unsigned ParentHandle, WideString InitialFile
-	);
+extern PACKAGE WideString __fastcall PromptDataSource(unsigned ParentHandle, WideString InitialString);
+extern PACKAGE WideString __fastcall PromptDataLinkFile(unsigned ParentHandle, WideString InitialFile);
 extern PACKAGE AnsiString __fastcall DataLinkDir();
-extern PACKAGE int __fastcall GetDataLinkFiles(Classes::TStrings* FileNames, AnsiString Directory);
+extern PACKAGE int __fastcall GetDataLinkFiles(Classes::TStrings* FileNames, AnsiString Directory = "");
 
 }	/* namespace Adodb */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Adodb;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

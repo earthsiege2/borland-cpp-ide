@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DBPWDlg.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DBPWDlg.pas' rev: 6.00
 
 #ifndef DBPWDlgHPP
 #define DBPWDlgHPP
@@ -10,6 +10,7 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
+#include <DB.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
@@ -45,15 +46,13 @@ __published:
 	
 private:
 	bool PasswordAdded;
-	Classes::TComponent* FSession;
+	Db::_di_IDBSession FSession;
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TPasswordDialog(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TPasswordDialog(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TPasswordDialog(Classes::TComponent* AOwner, 
-		int Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TPasswordDialog(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TPasswordDialog(void) { }
@@ -61,20 +60,17 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TPasswordDialog(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TPasswordDialog(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE bool __fastcall PasswordDialog(Classes::TComponent* ASession);
+extern PACKAGE bool __fastcall PasswordDialog(const Db::_di_IDBSession ASession);
 
 }	/* namespace Dbpwdlg */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dbpwdlg;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

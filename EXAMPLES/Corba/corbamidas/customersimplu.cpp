@@ -1,10 +1,11 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Inprise Corp.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland Corp.  All Rights Reserved.
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // Implement a CORBA object that can provide and resolve a MIDAS data packet.
 // The VCL TProvider component  
+
 #include <vcl.h>
 #pragma hdrstop
 
@@ -38,6 +39,7 @@ CORBA::Any* __fastcall TCustomersImpl::ApplyCustomerUpdates(const CORBA::Any& De
     int Count;
     OleVariant varErrors = p->ApplyUpdates(varDelta, -1, Count);
     CORBA::Any_var anyErrors = SAFEARRAYToAny(varErrors);
+    SAFEARRAYToAny(varErrors);
     ErrorCount = Count;
     delete p;
     return CORBA::Any::_duplicate(anyErrors);

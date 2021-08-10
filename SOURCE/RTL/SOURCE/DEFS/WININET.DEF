@@ -1,215 +1,243 @@
-LIBRARY WININET
+LIBRARY WinInet
 EXPORTS
 
-    CommitUrlCacheEntryA                     = 'WININET.DLL'.*
-    CommitUrlCacheEntryW                     = 'WININET.DLL'.*
-    CreateUrlCacheContainerA                 = 'WININET.DLL'.*
-    CreateUrlCacheContainerW                 = 'WININET.DLL'.*
-    CreateUrlCacheEntryA                     = 'WININET.DLL'.*
-    CreateUrlCacheEntryW                     = 'WININET.DLL'.*
-    CreateUrlCacheGroup                      = 'WININET.DLL'.*
-    DeleteIE3Cache                           = 'WININET.DLL'.*
-    DeleteUrlCacheContainerA                 = 'WININET.DLL'.*
-    DeleteUrlCacheContainerW                 = 'WININET.DLL'.*
-    DeleteUrlCacheEntry                      = 'WININET.DLL'.*
-    DeleteUrlCacheEntryA                     = 'WININET.DLL'.*
-    DeleteUrlCacheEntryW                     = 'WININET.DLL'.*
-    DeleteUrlCacheGroup                      = 'WININET.DLL'.*
-    DoConnectoidsExist                       = 'WININET.DLL'.* @101 @100
-    ExportCookieFileA                        = 'WININET.DLL'.* @109 @108
-    ExportCookieFileW                        = 'WININET.DLL'.* @111 @110
-    FindCloseUrlCache                        = 'WININET.DLL'.*
-    FindFirstUrlCacheContainerA              = 'WININET.DLL'.*
-    FindFirstUrlCacheContainerW              = 'WININET.DLL'.*
-    FindFirstUrlCacheEntryA                  = 'WININET.DLL'.*
-    FindFirstUrlCacheEntryExA                = 'WININET.DLL'.*
-    FindFirstUrlCacheEntryExW                = 'WININET.DLL'.*
-    FindFirstUrlCacheEntryW                  = 'WININET.DLL'.*
-    FindFirstUrlCacheGroup                   = 'WININET.DLL'.*
-    FindNextUrlCacheContainerA               = 'WININET.DLL'.*
-    FindNextUrlCacheContainerW               = 'WININET.DLL'.*
-    FindNextUrlCacheEntryA                   = 'WININET.DLL'.*
-    FindNextUrlCacheEntryExA                 = 'WININET.DLL'.*
-    FindNextUrlCacheEntryExW                 = 'WININET.DLL'.*
-    FindNextUrlCacheEntryW                   = 'WININET.DLL'.*
-    FindNextUrlCacheGroup                    = 'WININET.DLL'.*
-    FreeUrlCacheSpaceA                       = 'WININET.DLL'.*
-    FreeUrlCacheSpaceW                       = 'WININET.DLL'.*
-    FtpCommandA                              = 'WININET.DLL'.*
-    FtpCommandW                              = 'WININET.DLL'.*
-    FtpCreateDirectoryA                      = 'WININET.DLL'.*
-    FtpCreateDirectoryW                      = 'WININET.DLL'.*
-    FtpDeleteFileA                           = 'WININET.DLL'.*
-    FtpDeleteFileW                           = 'WININET.DLL'.*
-    FtpFindFirstFileA                        = 'WININET.DLL'.*
-    FtpFindFirstFileW                        = 'WININET.DLL'.*
-    FtpGetCurrentDirectoryA                  = 'WININET.DLL'.*
-    FtpGetCurrentDirectoryW                  = 'WININET.DLL'.*
-    FtpGetFileA                              = 'WININET.DLL'.*
-    FtpGetFileEx                             = 'WININET.DLL'.*
-    FtpGetFileSize                           = 'WININET.DLL'.*
-    FtpGetFileW                              = 'WININET.DLL'.*
-    FtpOpenFileA                             = 'WININET.DLL'.*
-    FtpOpenFileW                             = 'WININET.DLL'.*
-    FtpPutFileA                              = 'WININET.DLL'.*
-    FtpPutFileEx                             = 'WININET.DLL'.*
-    FtpPutFileW                              = 'WININET.DLL'.*
-    FtpRemoveDirectoryA                      = 'WININET.DLL'.*
-    FtpRemoveDirectoryW                      = 'WININET.DLL'.*
-    FtpRenameFileA                           = 'WININET.DLL'.*
-    FtpRenameFileW                           = 'WININET.DLL'.*
-    FtpSetCurrentDirectoryA                  = 'WININET.DLL'.*
-    FtpSetCurrentDirectoryW                  = 'WININET.DLL'.*
-    GetDiskInfoA                             = 'WININET.DLL'.* @102 @101
-    GetUrlCacheConfigInfoA                   = 'WININET.DLL'.*
-    GetUrlCacheConfigInfoW                   = 'WININET.DLL'.*
-    GetUrlCacheEntryInfoA                    = 'WININET.DLL'.*
-    GetUrlCacheEntryInfoExA                  = 'WININET.DLL'.*
-    GetUrlCacheEntryInfoExW                  = 'WININET.DLL'.*
-    GetUrlCacheEntryInfoW                    = 'WININET.DLL'.*
-    GetUrlCacheGroupAttributeA               = 'WININET.DLL'.*
-    GetUrlCacheGroupAttributeW               = 'WININET.DLL'.*
-    GetUrlCacheHeaderData                    = 'WININET.DLL'.*
-    GopherCreateLocatorA                     = 'WININET.DLL'.*
-    GopherCreateLocatorW                     = 'WININET.DLL'.*
-    GopherFindFirstFileA                     = 'WININET.DLL'.*
-    GopherFindFirstFileW                     = 'WININET.DLL'.*
-    GopherGetAttributeA                      = 'WININET.DLL'.*
-    GopherGetAttributeW                      = 'WININET.DLL'.*
-    GopherGetLocatorTypeA                    = 'WININET.DLL'.*
-    GopherGetLocatorTypeW                    = 'WININET.DLL'.*
-    GopherOpenFileA                          = 'WININET.DLL'.*
-    GopherOpenFileW                          = 'WININET.DLL'.*
-    HttpAddRequestHeadersA                   = 'WININET.DLL'.*
-    HttpAddRequestHeadersW                   = 'WININET.DLL'.*
-    HttpCheckDavCompliance                   = 'WININET.DLL'.*
-    HttpCheckDavComplianceA                  = 'WININET.DLL'.* @104 @103
-    HttpCheckDavComplianceW                  = 'WININET.DLL'.* @105 @104
-    HttpEndRequestA                          = 'WININET.DLL'.*
-    HttpEndRequestW                          = 'WININET.DLL'.*
-    HttpOpenRequestA                         = 'WININET.DLL'.*
-    HttpOpenRequestW                         = 'WININET.DLL'.*
-    HttpQueryInfoA                           = 'WININET.DLL'.*
-    HttpQueryInfoW                           = 'WININET.DLL'.*
-    HttpSendRequestA                         = 'WININET.DLL'.*
-    HttpSendRequestExA                       = 'WININET.DLL'.*
-    HttpSendRequestExW                       = 'WININET.DLL'.*
-    HttpSendRequestW                         = 'WININET.DLL'.*
-    ImportCookieFileA                        = 'WININET.DLL'.* @108 @107
-    ImportCookieFileW                        = 'WININET.DLL'.* @110 @109
-    IncrementUrlCacheHeaderData              = 'WININET.DLL'.*
-    InternetAlgIdToStringA                   = 'WININET.DLL'.*
-    InternetAlgIdToStringW                   = 'WININET.DLL'.*
-    InternetAttemptConnect                   = 'WININET.DLL'.*
-    InternetAutodial                         = 'WININET.DLL'.*
-    InternetAutodialCallback                 = 'WININET.DLL'.*
-    InternetAutodialHangup                   = 'WININET.DLL'.*
-    InternetCanonicalizeUrlA                 = 'WININET.DLL'.*
-    InternetCanonicalizeUrlW                 = 'WININET.DLL'.*
-    InternetCheckConnectionA                 = 'WININET.DLL'.*
-    InternetCheckConnectionW                 = 'WININET.DLL'.*
-    InternetCloseHandle                      = 'WININET.DLL'.*
-    InternetCombineUrlA                      = 'WININET.DLL'.*
-    InternetCombineUrlW                      = 'WININET.DLL'.*
-    InternetConfirmZoneCrossing              = 'WININET.DLL'.*
-    InternetConfirmZoneCrossingA             = 'WININET.DLL'.*
-    InternetConfirmZoneCrossingW             = 'WININET.DLL'.*
-    InternetConnectA                         = 'WININET.DLL'.*
-    InternetConnectW                         = 'WININET.DLL'.*
-    InternetCrackUrlA                        = 'WININET.DLL'.*
-    InternetCrackUrlW                        = 'WININET.DLL'.*
-    InternetCreateUrlA                       = 'WININET.DLL'.*
-    InternetCreateUrlW                       = 'WININET.DLL'.*
-    InternetDial                             = 'WININET.DLL'.*
-    InternetDialA                            = 'WININET.DLL'.*
-    InternetDialW                            = 'WININET.DLL'.*
-    InternetErrorDlg                         = 'WININET.DLL'.*
-    InternetFindNextFileA                    = 'WININET.DLL'.*
-    InternetFindNextFileW                    = 'WININET.DLL'.*
-    InternetFortezzaCommand                  = 'WININET.DLL'.*
-    InternetGetCertByURL                     = 'WININET.DLL'.*
-    InternetGetCertByURLA                    = 'WININET.DLL'.*
-    InternetGetConnectedState                = 'WININET.DLL'.*
-    InternetGetConnectedStateEx              = 'WININET.DLL'.*
-    InternetGetConnectedStateExA             = 'WININET.DLL'.*
-    InternetGetConnectedStateExW             = 'WININET.DLL'.*
-    InternetGetCookieA                       = 'WININET.DLL'.*
-    InternetGetCookieW                       = 'WININET.DLL'.*
-    InternetGetLastResponseInfoA             = 'WININET.DLL'.*
-    InternetGetLastResponseInfoW             = 'WININET.DLL'.*
-    InternetGoOnline                         = 'WININET.DLL'.*
-    InternetGoOnlineA                        = 'WININET.DLL'.*
-    InternetGoOnlineW                        = 'WININET.DLL'.*
-    InternetHangUp                           = 'WININET.DLL'.*
-    InternetLockRequestFile                  = 'WININET.DLL'.*
-    InternetOpenA                            = 'WININET.DLL'.*
-    InternetOpenUrlA                         = 'WININET.DLL'.*
-    InternetOpenUrlW                         = 'WININET.DLL'.*
-    InternetOpenW                            = 'WININET.DLL'.*
-    InternetQueryDataAvailable               = 'WININET.DLL'.*
-    InternetQueryFortezzaStatus              = 'WININET.DLL'.*
-    InternetQueryOptionA                     = 'WININET.DLL'.*
-    InternetQueryOptionW                     = 'WININET.DLL'.*
-    InternetReadFile                         = 'WININET.DLL'.*
-    InternetReadFileExA                      = 'WININET.DLL'.*
-    InternetReadFileExW                      = 'WININET.DLL'.*
-    InternetSecurityProtocolToStringA        = 'WININET.DLL'.*
-    InternetSecurityProtocolToStringW        = 'WININET.DLL'.*
-    InternetSetCookieA                       = 'WININET.DLL'.*
-    InternetSetCookieW                       = 'WININET.DLL'.*
-    InternetSetDialState                     = 'WININET.DLL'.*
-    InternetSetDialStateA                    = 'WININET.DLL'.*
-    InternetSetDialStateW                    = 'WININET.DLL'.*
-    InternetSetFilePointer                   = 'WININET.DLL'.*
-    InternetSetOptionA                       = 'WININET.DLL'.*
-    InternetSetOptionExA                     = 'WININET.DLL'.*
-    InternetSetOptionExW                     = 'WININET.DLL'.*
-    InternetSetOptionW                       = 'WININET.DLL'.*
-    InternetSetStatusCallback                = 'WININET.DLL'.*
-    InternetSetStatusCallbackA               = 'WININET.DLL'.*
-    InternetSetStatusCallbackW               = 'WININET.DLL'.*
-    InternetShowSecurityInfoByURL            = 'WININET.DLL'.*
-    InternetShowSecurityInfoByURLA           = 'WININET.DLL'.*
-    InternetShowSecurityInfoByURLW           = 'WININET.DLL'.*
-    InternetTimeFromSystemTime               = 'WININET.DLL'.*
-    InternetTimeFromSystemTimeA              = 'WININET.DLL'.*
-    InternetTimeFromSystemTimeW              = 'WININET.DLL'.*
-    InternetTimeToSystemTime                 = 'WININET.DLL'.*
-    InternetTimeToSystemTimeA                = 'WININET.DLL'.*
-    InternetTimeToSystemTimeW                = 'WININET.DLL'.*
-    InternetUnlockRequestFile                = 'WININET.DLL'.*
-    InternetWriteFile                        = 'WININET.DLL'.*
-    InternetWriteFileExA                     = 'WININET.DLL'.*
-    InternetWriteFileExW                     = 'WININET.DLL'.*
-    IsHostInProxyBypassList                  = 'WININET.DLL'.*
-    IsUrlCacheEntryExpiredA                  = 'WININET.DLL'.*
-    IsUrlCacheEntryExpiredW                  = 'WININET.DLL'.*
-    LoadUrlCacheContent                      = 'WININET.DLL'.*
-    ParseX509EncodedCertificateForListBoxEntry = 'WININET.DLL'.*
-    PerformOperationOverUrlCacheA            = 'WININET.DLL'.* @103 @102
-    ReadUrlCacheEntryStream                  = 'WININET.DLL'.*
-    RegisterUrlCacheNotification             = 'WININET.DLL'.*
-    ResumeSuspendedDownload                  = 'WININET.DLL'.*
-    RetrieveUrlCacheEntryFileA               = 'WININET.DLL'.*
-    RetrieveUrlCacheEntryFileW               = 'WININET.DLL'.*
-    RetrieveUrlCacheEntryStreamA             = 'WININET.DLL'.*
-    RetrieveUrlCacheEntryStreamW             = 'WININET.DLL'.*
-    RunOnceUrlCache                          = 'WININET.DLL'.*
-    SetUrlCacheConfigInfoA                   = 'WININET.DLL'.*
-    SetUrlCacheConfigInfoW                   = 'WININET.DLL'.*
-    SetUrlCacheEntryGroup                    = 'WININET.DLL'.*
-    SetUrlCacheEntryGroupA                   = 'WININET.DLL'.*
-    SetUrlCacheEntryGroupW                   = 'WININET.DLL'.*
-    SetUrlCacheEntryInfoA                    = 'WININET.DLL'.*
-    SetUrlCacheEntryInfoW                    = 'WININET.DLL'.*
-    SetUrlCacheGroupAttributeA               = 'WININET.DLL'.*
-    SetUrlCacheGroupAttributeW               = 'WININET.DLL'.*
-    SetUrlCacheHeaderData                    = 'WININET.DLL'.*
-    ShowClientAuthCerts                      = 'WININET.DLL'.*
-    ShowSecurityInfo                         = 'WININET.DLL'.*
-    ShowX509EncodedCertificate               = 'WININET.DLL'.*
-    UnlockUrlCacheEntryFile                  = 'WININET.DLL'.*
-    UnlockUrlCacheEntryFileA                 = 'WININET.DLL'.*
-    UnlockUrlCacheEntryFileW                 = 'WININET.DLL'.*
-    UnlockUrlCacheEntryStream                = 'WININET.DLL'.*
-    UpdateUrlCacheContentPath                = 'WININET.DLL'.*
+    CommitUrlCacheEntryA
+    CommitUrlCacheEntryW
+    CreateMD5SSOHash
+    CreateUrlCacheContainerA
+    CreateUrlCacheContainerW
+    CreateUrlCacheEntryA
+    CreateUrlCacheEntryW
+    CreateUrlCacheGroup
+    DeleteIE3Cache
+    DeleteUrlCacheContainerA
+    DeleteUrlCacheContainerW
+    DeleteUrlCacheEntry
+    DeleteUrlCacheEntryA
+    DeleteUrlCacheEntryW
+    DeleteUrlCacheGroup
+    DetectAutoProxyUrl
+    DoConnectoidsExist        @101
+    ExportCookieFileA        @109
+    ExportCookieFileW        @111
+    FindCloseUrlCache
+    FindFirstUrlCacheContainerA
+    FindFirstUrlCacheContainerW
+    FindFirstUrlCacheEntryA
+    FindFirstUrlCacheEntryExA
+    FindFirstUrlCacheEntryExW
+    FindFirstUrlCacheEntryW
+    FindFirstUrlCacheGroup
+    FindNextUrlCacheContainerA
+    FindNextUrlCacheContainerW
+    FindNextUrlCacheEntryA
+    FindNextUrlCacheEntryExA
+    FindNextUrlCacheEntryExW
+    FindNextUrlCacheEntryW
+    FindNextUrlCacheGroup
+    FindP3PPolicySymbol        @118
+    ForceNexusLookup
+    ForceNexusLookupExW
+    FreeP3PObject        @122
+    FreeUrlCacheSpaceA
+    FreeUrlCacheSpaceW
+    FtpCommandA
+    FtpCommandW
+    FtpCreateDirectoryA
+    FtpCreateDirectoryW
+    FtpDeleteFileA
+    FtpDeleteFileW
+    FtpFindFirstFileA
+    FtpFindFirstFileW
+    FtpGetCurrentDirectoryA
+    FtpGetCurrentDirectoryW
+    FtpGetFileA
+    FtpGetFileEx
+    FtpGetFileSize
+    FtpGetFileW
+    FtpOpenFileA
+    FtpOpenFileW
+    FtpPutFileA
+    FtpPutFileEx
+    FtpPutFileW
+    FtpRemoveDirectoryA
+    FtpRemoveDirectoryW
+    FtpRenameFileA
+    FtpRenameFileW
+    FtpSetCurrentDirectoryA
+    FtpSetCurrentDirectoryW
+    GetDiskInfoA        @102
+    GetP3PPolicy        @121
+    GetP3PRequestStatus        @123
+    GetUrlCacheConfigInfoA
+    GetUrlCacheConfigInfoW
+    GetUrlCacheEntryInfoA
+    GetUrlCacheEntryInfoExA
+    GetUrlCacheEntryInfoExW
+    GetUrlCacheEntryInfoW
+    GetUrlCacheGroupAttributeA
+    GetUrlCacheGroupAttributeW
+    GetUrlCacheHeaderData
+    GopherCreateLocatorA
+    GopherCreateLocatorW
+    GopherFindFirstFileA
+    GopherFindFirstFileW
+    GopherGetAttributeA
+    GopherGetAttributeW
+    GopherGetLocatorTypeA
+    GopherGetLocatorTypeW
+    GopherOpenFileA
+    GopherOpenFileW
+    HttpAddRequestHeadersA
+    HttpAddRequestHeadersW
+    HttpCheckDavCompliance
+    HttpCheckDavComplianceA        @104
+    HttpCheckDavComplianceW        @105
+    HttpEndRequestA
+    HttpEndRequestW
+    HttpOpenRequestA
+    HttpOpenRequestW
+    HttpQueryInfoA
+    HttpQueryInfoW
+    HttpSendRequestA
+    HttpSendRequestExA
+    HttpSendRequestExW
+    HttpSendRequestW
+    ImportCookieFileA        @108
+    ImportCookieFileW        @110
+    IncrementUrlCacheHeaderData
+    InternetAlgIdToStringA
+    InternetAlgIdToStringW
+    InternetAttemptConnect
+    InternetAutodial
+    InternetAutodialCallback
+    InternetAutodialHangup
+    InternetCanonicalizeUrlA
+    InternetCanonicalizeUrlW
+    InternetCheckConnectionA
+    InternetCheckConnectionW
+    InternetClearAllPerSiteCookieDecisions
+    InternetCloseHandle
+    InternetCombineUrlA
+    InternetCombineUrlW
+    InternetConfirmZoneCrossing
+    InternetConfirmZoneCrossingA
+    InternetConfirmZoneCrossingW
+    InternetConnectA
+    InternetConnectW
+    InternetCrackUrlA
+    InternetCrackUrlW
+    InternetCreateUrlA
+    InternetCreateUrlW
+    InternetDial
+    InternetDialA
+    InternetDialW
+    InternetEnumPerSiteCookieDecisionA
+    InternetEnumPerSiteCookieDecisionW
+    InternetErrorDlg
+    InternetFindNextFileA
+    InternetFindNextFileW
+    InternetFortezzaCommand
+    InternetGetCertByURL
+    InternetGetCertByURLA
+    InternetGetConnectedState
+    InternetGetConnectedStateEx
+    InternetGetConnectedStateExA
+    InternetGetConnectedStateExW
+    InternetGetCookieA
+    InternetGetCookieExA
+    InternetGetCookieExW
+    InternetGetCookieW
+    InternetGetLastResponseInfoA
+    InternetGetLastResponseInfoW
+    InternetGetPerSiteCookieDecisionA
+    InternetGetPerSiteCookieDecisionW
+    InternetGoOnline
+    InternetGoOnlineA
+    InternetGoOnlineW
+    InternetHangUp
+    InternetInitializeAutoProxyDll
+    InternetLockRequestFile
+    InternetOpenA
+    InternetOpenUrlA
+    InternetOpenUrlW
+    InternetOpenW
+    InternetQueryDataAvailable
+    InternetQueryFortezzaStatus
+    InternetQueryOptionA
+    InternetQueryOptionW
+    InternetReadFile
+    InternetReadFileExA
+    InternetReadFileExW
+    InternetSecurityProtocolToStringA
+    InternetSecurityProtocolToStringW
+    InternetSetCookieA
+    InternetSetCookieExA
+    InternetSetCookieExW
+    InternetSetCookieW
+    InternetSetDialState
+    InternetSetDialStateA
+    InternetSetDialStateW
+    InternetSetFilePointer
+    InternetSetOptionA
+    InternetSetOptionExA
+    InternetSetOptionExW
+    InternetSetOptionW
+    InternetSetPerSiteCookieDecisionA
+    InternetSetPerSiteCookieDecisionW
+    InternetSetStatusCallback
+    InternetSetStatusCallbackA
+    InternetSetStatusCallbackW
+    InternetShowSecurityInfoByURL
+    InternetShowSecurityInfoByURLA
+    InternetShowSecurityInfoByURLW
+    InternetTimeFromSystemTime
+    InternetTimeFromSystemTimeA
+    InternetTimeFromSystemTimeW
+    InternetTimeToSystemTime
+    InternetTimeToSystemTimeA
+    InternetTimeToSystemTimeW
+    InternetUnlockRequestFile
+    InternetWriteFile
+    InternetWriteFileExA
+    InternetWriteFileExW
+    IsDomainLegalCookieDomainA        @116
+    IsDomainLegalCookieDomainW        @117
+    IsHostInProxyBypassList
+    IsProfilesEnabled        @112
+    IsUrlCacheEntryExpiredA
+    IsUrlCacheEntryExpiredW
+    LoadUrlCacheContent
+    MapResourceToPolicy        @120
+    ParseX509EncodedCertificateForListBoxEntry
+    PerformOperationOverUrlCacheA        @103
+    PrivacyGetZonePreferenceW
+    PrivacySetZonePreferenceW
+    ReadUrlCacheEntryStream
+    RegisterUrlCacheNotification
+    ResumeSuspendedDownload
+    RetrieveUrlCacheEntryFileA
+    RetrieveUrlCacheEntryFileW
+    RetrieveUrlCacheEntryStreamA
+    RetrieveUrlCacheEntryStreamW
+    RunOnceUrlCache
+    SetUrlCacheConfigInfoA
+    SetUrlCacheConfigInfoW
+    SetUrlCacheEntryGroup
+    SetUrlCacheEntryGroupA
+    SetUrlCacheEntryGroupW
+    SetUrlCacheEntryInfoA
+    SetUrlCacheEntryInfoW
+    SetUrlCacheGroupAttributeA
+    SetUrlCacheGroupAttributeW
+    SetUrlCacheHeaderData
+    ShowCertificate
+    ShowClientAuthCerts
+    ShowSecurityInfo
+    ShowX509EncodedCertificate
+    UnlockUrlCacheEntryFile
+    UnlockUrlCacheEntryFileA
+    UnlockUrlCacheEntryFileW
+    UnlockUrlCacheEntryStream
+    UpdateUrlCacheContentPath
+    UrlZonesDetach

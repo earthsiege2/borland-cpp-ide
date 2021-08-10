@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'GraphSvr.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'GraphSvr.pas' rev: 6.00
 
 #ifndef GraphSvrHPP
 #define GraphSvrHPP
@@ -17,7 +17,7 @@
 #include <Graphics.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <OleCtl.hpp>	// Pascal unit
-#include <OLE2.hpp>	// Pascal unit
+#include <Ole2.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -77,14 +77,14 @@ public:
 	__property float XPos[short index] = {read=Get_XPos, write=Set_XPos};
 	
 __published:
-	__property TabStop ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property ParentShowHint ;
+	__property TabStop  = {default=1};
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property Visible  = {default=1};
 	__property OnDragDrop ;
 	__property OnDragOver ;
 	__property OnEndDrag ;
@@ -99,108 +99,60 @@ __published:
 	__property OnMouseDown ;
 	__property OnMouseMove ;
 	__property OnMouseUp ;
-	__property Activex::TOleEnum AutoInc = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=1
-		, nodefault};
-	__property Activex::TOleEnum Background = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=2, nodefault};
-	__property AnsiString BottomTitle = {read=GetStringProp, write=SetStringProp, stored=false, index=3
-		};
-	__property Activex::TOleEnum ColorData = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=4, nodefault};
-	__property AnsiString CtlVersion = {read=GetStringProp, write=SetStringProp, stored=false, index=5}
-		;
-	__property Activex::TOleEnum DataReset = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=6, nodefault};
-	__property Activex::TOleEnum DrawMode = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=7
-		, nodefault};
-	__property Activex::TOleEnum DrawStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=8, nodefault};
-	__property short ExtraData = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=9, nodefault
-		};
-	__property Activex::TOleEnum FontFamily = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=10, nodefault};
-	__property short FontSize = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=11, nodefault
-		};
-	__property Activex::TOleEnum FontStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=12, nodefault};
-	__property Activex::TOleEnum FontUse = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=13
-		, nodefault};
-	__property Activex::TOleEnum Foreground = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=14, nodefault};
-	__property AnsiString GraphCaption = {read=GetStringProp, write=SetStringProp, stored=false, index=15
-		};
+	__property Activex::TOleEnum AutoInc = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=1, nodefault};
+	__property Activex::TOleEnum Background = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=2, nodefault};
+	__property AnsiString BottomTitle = {read=GetStringProp, write=SetStringProp, stored=false, index=3};
+	__property Activex::TOleEnum ColorData = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=4, nodefault};
+	__property AnsiString CtlVersion = {read=GetStringProp, write=SetStringProp, stored=false, index=5};
+	__property Activex::TOleEnum DataReset = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=6, nodefault};
+	__property Activex::TOleEnum DrawMode = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=7, nodefault};
+	__property Activex::TOleEnum DrawStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=8, nodefault};
+	__property short ExtraData = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=9, nodefault};
+	__property Activex::TOleEnum FontFamily = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=10, nodefault};
+	__property short FontSize = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=11, nodefault};
+	__property Activex::TOleEnum FontStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=12, nodefault};
+	__property Activex::TOleEnum FontUse = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=13, nodefault};
+	__property Activex::TOleEnum Foreground = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=14, nodefault};
+	__property AnsiString GraphCaption = {read=GetStringProp, write=SetStringProp, stored=false, index=15};
 	__property float GraphData = {read=GetSingleProp, write=SetSingleProp, stored=false, index=16};
-	__property short GraphStyle = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=17, 
-		nodefault};
-	__property AnsiString GraphTitle = {read=GetStringProp, write=SetStringProp, stored=false, index=18
-		};
-	__property Activex::TOleEnum GraphType = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=19, nodefault};
-	__property Activex::TOleEnum GridStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=20, nodefault};
-	__property AnsiString ImageFile = {read=GetStringProp, write=SetStringProp, stored=false, index=21}
-		;
-	__property Activex::TOleEnum IndexStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=22, nodefault};
-	__property short LabelEvery = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=23, 
-		nodefault};
-	__property Activex::TOleEnum Labels = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=24
-		, nodefault};
-	__property AnsiString LabelText = {read=GetStringProp, write=SetStringProp, stored=false, index=25}
-		;
-	__property AnsiString LeftTitle = {read=GetStringProp, write=SetStringProp, stored=false, index=26}
-		;
-	__property Activex::TOleEnum LegendStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false
-		, index=27, nodefault};
-	__property AnsiString LegendText = {read=GetStringProp, write=SetStringProp, stored=false, index=28
-		};
-	__property Activex::TOleEnum LineStats = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=29, nodefault};
-	__property short NumPoints = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=30, 
-		nodefault};
-	__property short NumSets = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=31, nodefault
-		};
-	__property Activex::TOleEnum Palette = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=32
-		, nodefault};
-	__property short PatternData = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=33
-		, nodefault};
-	__property Activex::TOleEnum PatternedLines = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false
-		, index=34, nodefault};
-	__property Activex::TOleEnum PrintStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=36, nodefault};
-	__property Activex::TOleEnum RandomData = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=38, nodefault};
-	__property Activex::TOleEnum SymbolData = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=40, nodefault};
-	__property Activex::TOleEnum ThickLines = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=41, nodefault};
-	__property short ThisPoint = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=42, 
-		nodefault};
-	__property short ThisSet = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=43, nodefault
-		};
-	__property short TickEvery = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=44, 
-		nodefault};
-	__property Activex::TOleEnum Ticks = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=45
-		, nodefault};
+	__property short GraphStyle = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=17, nodefault};
+	__property AnsiString GraphTitle = {read=GetStringProp, write=SetStringProp, stored=false, index=18};
+	__property Activex::TOleEnum GraphType = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=19, nodefault};
+	__property Activex::TOleEnum GridStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=20, nodefault};
+	__property AnsiString ImageFile = {read=GetStringProp, write=SetStringProp, stored=false, index=21};
+	__property Activex::TOleEnum IndexStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=22, nodefault};
+	__property short LabelEvery = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=23, nodefault};
+	__property Activex::TOleEnum Labels = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=24, nodefault};
+	__property AnsiString LabelText = {read=GetStringProp, write=SetStringProp, stored=false, index=25};
+	__property AnsiString LeftTitle = {read=GetStringProp, write=SetStringProp, stored=false, index=26};
+	__property Activex::TOleEnum LegendStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=27, nodefault};
+	__property AnsiString LegendText = {read=GetStringProp, write=SetStringProp, stored=false, index=28};
+	__property Activex::TOleEnum LineStats = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=29, nodefault};
+	__property short NumPoints = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=30, nodefault};
+	__property short NumSets = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=31, nodefault};
+	__property Activex::TOleEnum Palette = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=32, nodefault};
+	__property short PatternData = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=33, nodefault};
+	__property Activex::TOleEnum PatternedLines = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=34, nodefault};
+	__property Activex::TOleEnum PrintStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=36, nodefault};
+	__property Activex::TOleEnum RandomData = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=38, nodefault};
+	__property Activex::TOleEnum SymbolData = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=40, nodefault};
+	__property Activex::TOleEnum ThickLines = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=41, nodefault};
+	__property short ThisPoint = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=42, nodefault};
+	__property short ThisSet = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=43, nodefault};
+	__property short TickEvery = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=44, nodefault};
+	__property Activex::TOleEnum Ticks = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=45, nodefault};
 	__property float XPosData = {read=GetSingleProp, write=SetSingleProp, stored=false, index=46};
 	__property float YAxisMax = {read=GetSingleProp, write=SetSingleProp, stored=false, index=47};
 	__property float YAxisMin = {read=GetSingleProp, write=SetSingleProp, stored=false, index=48};
-	__property Activex::TOleEnum YAxisPos = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=49
-		, nodefault};
-	__property Activex::TOleEnum YAxisStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, 
-		index=50, nodefault};
-	__property short YAxisTicks = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=51, 
-		nodefault};
-	__property Word Enabled = {read=GetOleBoolProp, write=SetOleBoolProp, stored=false, index=-514, nodefault
-		};
-	__property Activex::TOleEnum BorderStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false
-		, index=-504, nodefault};
-	__property int hWnd = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=-515, nodefault
-		};
+	__property Activex::TOleEnum YAxisPos = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=49, nodefault};
+	__property Activex::TOleEnum YAxisStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=50, nodefault};
+	__property short YAxisTicks = {read=GetSmallintProp, write=SetSmallintProp, stored=false, index=51, nodefault};
+	__property Word Enabled = {read=GetOleBoolProp, write=SetOleBoolProp, stored=false, index=-514, nodefault};
+	__property Activex::TOleEnum BorderStyle = {read=GetOleEnumProp, write=SetOleEnumProp, stored=false, index=-504, nodefault};
+	__property int hWnd = {read=GetIntegerProp, write=SetIntegerProp, stored=false, index=-515, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TOleControl.Create */ inline __fastcall virtual TGraphicsServer(Classes::TComponent* AOwner) : Olectrls::TOleControl(
-		AOwner) { }
+	/* TOleControl.Create */ inline __fastcall virtual TGraphicsServer(Classes::TComponent* AOwner) : Olectrls::TOleControl(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TOleControl.Destroy */ inline __fastcall virtual ~TGraphicsServer(void) { }
@@ -208,8 +160,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TGraphicsServer(HWND ParentWindow) : Olectrls::TOleControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TGraphicsServer(HWND ParentWindow) : Olectrls::TOleControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -334,9 +285,7 @@ static const Shortint gphFixedSingle = 0x1;
 extern PACKAGE void __fastcall Register(void);
 
 }	/* namespace Graphsvr */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Graphsvr;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

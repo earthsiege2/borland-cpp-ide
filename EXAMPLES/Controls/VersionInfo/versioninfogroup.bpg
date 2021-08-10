@@ -5,25 +5,26 @@ VERSION = BWS.01
 ROOT = $(MAKEDIR)\..
 !endif
 #------------------------------------------------------------------------------
-MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
-DCC = $(ROOT)\bin\dcc32.exe $**
-BRCC = $(ROOT)\bin\brcc32.exe $**
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$*.mak
+BPR2MAK = $(ROOT)\bin\bpr2mak.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = versioninfo50.bpl dclversioninfo50.bpl VersionInfoSample.exe TestProject.exe
+PROJECTS = versioninfo60.bpl dclversioninfo60.bpl VersionInfoSample.exe TestProject.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
 
-dclversioninfo50.bpl: dclversioninfo50.bpk
-  $(MAKE)
-
-versioninfo50.bpl: versioninfo50.bpk
-  $(MAKE)
-
 VersionInfoSample.exe: VersionInfoSample.bpr
+  $(BPR2MAK)
   $(MAKE)
 
 TestProject.exe: TestProject.bpr
+  $(BPR2MAK)
   $(MAKE)
 
+dclversioninfo60.bpl: dclversioninfo.bpk
+  $(BPR2MAK)
+  $(MAKE)
 
+versioninfo60.bpl: versioninfo.bpk
+  $(BPR2MAK)
+  $(MAKE)

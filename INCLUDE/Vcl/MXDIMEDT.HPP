@@ -1,26 +1,27 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxdimedt.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MXDIMEDT.pas' rev: 6.00
 
-#ifndef mxdimedtHPP
-#define mxdimedtHPP
+#ifndef MXDIMEDTHPP
+#define MXDIMEDTHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <DsgnWnds.hpp>	// Pascal unit
-#include <DsgnIntf.hpp>	// Pascal unit
-#include <mxdconst.hpp>	// Pascal unit
-#include <mxstore.hpp>	// Pascal unit
-#include <mxDB.hpp>	// Pascal unit
-#include <mxgrid.hpp>	// Pascal unit
-#include <mxConsts.hpp>	// Pascal unit
+#include <DesignWindows.hpp>	// Pascal unit
+#include <DesignEditors.hpp>	// Pascal unit
+#include <DesignIntf.hpp>	// Pascal unit
+#include <MXDCONST.hpp>	// Pascal unit
+#include <Mxstore.hpp>	// Pascal unit
+#include <MXDB.hpp>	// Pascal unit
+#include <MXGRID.hpp>	// Pascal unit
+#include <Mxconsts.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Grids.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -37,9 +38,9 @@ namespace Mxdimedt
 {
 //-- type declarations -------------------------------------------------------
 class DELPHICLASS TDimEditor;
-class PASCALIMPLEMENTATION TDimEditor : public Dsgnwnds::TDesignWindow 
+class PASCALIMPLEMENTATION TDimEditor : public Designwindows::TDesignWindow 
 {
-	typedef Dsgnwnds::TDesignWindow inherited;
+	typedef Designwindows::TDesignWindow inherited;
 	
 __published:
 	Stdctrls::TListBox* DimListBox1;
@@ -48,7 +49,7 @@ __published:
 private:
 	Classes::TCollection* myDims;
 	Forms::TCustomForm* myForm;
-	Dsgnintf::_di_IFormDesigner myDesigner;
+	Designintf::_di_IDesigner myDesigner;
 	Classes::TComponent* myObject;
 	void __fastcall UpdateSelection(void);
 	void __fastcall UpdateList(void);
@@ -58,13 +59,12 @@ protected:
 	DYNAMIC void __fastcall Activated(void);
 	
 public:
-	virtual void __fastcall ComponentDeleted(Dsgnintf::_di_IPersistent Component);
-	virtual void __fastcall FormClosed(Forms::TCustomForm* AForm);
-	virtual void __fastcall FormModified(void);
+	virtual void __fastcall ItemDeleted(const Designintf::_di_IDesigner ADesigner, Classes::TPersistent* AItem);
+	virtual void __fastcall DesignerClosed(const Designintf::_di_IDesigner ADesigner, bool AGoingDormant);
+	virtual void __fastcall ItemsModified(const Designintf::_di_IDesigner ADesigner);
 public:
 	#pragma option push -w-inl
-	/* TDesignWindow.Create */ inline __fastcall virtual TDimEditor(Classes::TComponent* AOwner) : Dsgnwnds::TDesignWindow(
-		AOwner) { }
+	/* TDesignWindow.Create */ inline __fastcall virtual TDimEditor(Classes::TComponent* AOwner) : Designwindows::TDesignWindow(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TDesignWindow.Destroy */ inline __fastcall virtual ~TDimEditor(void) { }
@@ -72,30 +72,25 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TDimEditor(Classes::TComponent* AOwner, int Dummy
-		) : Dsgnwnds::TDesignWindow(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TDimEditor(Classes::TComponent* AOwner, int Dummy) : Designwindows::TDesignWindow(AOwner, Dummy) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDimEditor(HWND ParentWindow) : Dsgnwnds::TDesignWindow(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDimEditor(HWND ParentWindow) : Designwindows::TDesignWindow(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE void __fastcall ShowDisplayDimEditor(const Forms::_di_IDesigner Designer, Classes::TComponent* 
-	anObject);
+extern PACKAGE void __fastcall ShowDisplayDimEditor(const Designintf::_di_IDesigner Designer, Classes::TComponent* anObject);
 
 }	/* namespace Mxdimedt */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxdimedt;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxdimedt
+#endif	// MXDIMEDT

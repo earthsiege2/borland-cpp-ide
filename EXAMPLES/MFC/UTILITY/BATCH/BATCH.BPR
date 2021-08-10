@@ -1,44 +1,44 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!-- C++Builder XML Project --><PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
-    <PROJECT value="batch.exe"/>
-    <OBJFILES value="stdafx.obj batch.obj batchdoc.obj batchvw.obj compress.obj destdird.obj interlea.obj mainfrm.obj"/>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="BATCH.exe"/>
+    <OBJFILES value=" batch.obj batchdoc.obj batchvw.obj compress.obj destdird.obj interlea.obj mainfrm.obj stdafx.obj"/>
     <RESFILES value=" batch.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
-    <LIBFILES value=" odbc32.lib"/>
+    <LIBFILES value=""/>
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value=""/>
-    <PATHCPP value=".;;"/>
+    <PATHCPP value=".;.\;"/>
     <PATHPAS value=".;"/>
-    <PATHRC value=".;;"/>
+    <PATHRC value=".;.\;"/>
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="ilink32"/>
-    <USERDEFINES value=""/>
-    <SYSDEFINES value="_NO_VCL;_RTLDLL;_AFXDLL;_DLL;_X86_;_WINDOWS;_AFX_PORTABLE;_AFX_NOFORCE_LIBS;_MT;_CRT_PORTABLE;_AFX_NO_DEBUG_CRT;_MSC_VER=1100;"/>
-    <MAINSOURCE value="batch.bpf"/>
-    <INCLUDEPATH value="$(BCB)\include\atl;$(BCB)\include;$(BCB)\INCLUDE;$(BCB)\INCLUDE\MFC"/>
-    <LIBPATH value="$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\LIB;$(BCB)\lib\psdk;"/>
-    <WARNINGS value="-w-8026 -w-8027 -w-par"/>
+    <USERDEFINES value="WIN32;NDEBUG;_WINDOWS;_MBCS"/>
+    <SYSDEFINES value="_NO_VCL;;_ASSERTE;NO_STRICT;INC_OLE2;_X86_;_WINDOWS;_MSC_VER=1100;_AFX_PORTABLE;__MSC;_AFX_NOFORCE_LIBS;_MT;_CRT_PORTABLE;_AFX_NO_DEBUG_CRT"/>
+    <MAINSOURCE value="BATCH.bpf"/>
+    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\mfc;$(BCB)\include\atl;$(BCB)\include\vcl;"/>
+    <LIBPATH value="$(BCB)\lib;$(RELEASELIBPATH);;$(BCB)\lib\psdk;"/>
+    <WARNINGS value="-w-8026 -w-8027 -w-8022 -w-8084 -w-8010 -w-8013 -w-8058 -w-par -w-aus -w-hid -w-inl"/>
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-I$(BCB)\include"/>
-    <CFLAG1 value="-Od -Hc -w -k -r- -y -v -vi- -c  -g0 -WM -W -VF "/>
-    <PFLAGS value="-$YD -$W -$O- -v -jphnd -M"/>
-    <RFLAGS value=""/>
+    <CFLAG1 value=" -q -tWM -w -x -O2 -c -g0 -VF -w-8026 -w-8027 -w-8022 -w-8084 -w-8010 -w-8013 -w-8058 -w-par -w-aus -w-hid -w-inl"/>
+    <PFLAGS value=""/>
+    <RFLAGS value="/l 0x409 /d &quot;NDEBUG&quot; /i$(BCB)\include;$(BCB)\include\mfc"/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -v -Gn "/>
+    <LFLAGS value=" -q -aa -x -v -Gn"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
-    <ALLLIB value="$(LIBFILES) $(LIBRARIES)  bfcs42.lib bfc42.lib odbc32.lib import32.lib cw32mti.lib"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) nafxcw.lib ole2w32.lib odbccp32.lib odbc32.lib bfc42.lib import32.lib cw32mt.lib"/>
   </LINKER>
   <IDEOPTIONS>
 [Version Info]

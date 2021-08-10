@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1998-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -25,7 +25,7 @@ Class Description:
 
 --*/
 
-class ATL_NO_VTABLE CMSPCallBase : 
+class ATL_NO_VTABLE CMSPCallBase :
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
     public IDispatchImpl<ITStreamControl, &IID_ITStreamControl, &LIBID_TAPI3Lib>
 {
@@ -46,7 +46,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 DECLARE_VQI()
 
     CMSPCallBase();
-    
+
     virtual ~CMSPCallBase();
 
 //
@@ -61,14 +61,14 @@ DECLARE_VQI()
         IN      TERMINAL_DIRECTION  Direction,
         IN OUT  ITStream **         ppStream
         );
-    
+
     STDMETHOD (EnumerateStreams) (
         OUT     IEnumStream **      ppEnumStream
         );
 
     STDMETHOD (RemoveStream) (
         IN      ITStream *          pStream
-        ) = 0;                      
+        ) = 0;
 
     STDMETHOD (get_Streams) (
         OUT     VARIANT *           pStreams
@@ -101,7 +101,7 @@ protected:
         IN      TERMINAL_DIRECTION  Direction,
         IN OUT  ITStream **         ppStream
         ) = 0;
-    
+
     virtual HRESULT CreateStreamObject(
         IN      DWORD               dwMediaType,
         IN      TERMINAL_DIRECTION  Direction,
@@ -111,8 +111,8 @@ protected:
 
 protected:
 
-    // The pointer to the address object. It is used to post events to TAPI3. 
-    // It also carries a refcount so that the address will not go away while 
+    // The pointer to the address object. It is used to post events to TAPI3.
+    // It also carries a refcount so that the address will not go away while
     // the call is still alive.
     CMSPAddress*                m_pMSPAddress;
 
@@ -125,7 +125,7 @@ protected:
     // The list of stream objects in the call.
     CMSPArray <ITStream *>      m_Streams;
 
-    // The lock that protects the stream lists. 
+    // The lock that protects the stream lists.
     CMSPCritSection             m_lock;
 };
 
@@ -140,7 +140,8 @@ Class Description:
 
 class ATL_NO_VTABLE CMSPCallMultiGraph : public CMSPCallBase
 {
-    typedef struct 
+public:
+    typedef struct
     {
         CMSPCallMultiGraph *    pMSPCall;
         ITStream *              pITStream;
@@ -163,14 +164,14 @@ class ATL_NO_VTABLE CMSPCallMultiGraph : public CMSPCallBase
 
 public:
     CMSPCallMultiGraph();
-    
+
     virtual ~CMSPCallMultiGraph();
 
 // ITStreamControl methods (overriden)
-    
+
     STDMETHOD (RemoveStream) (
         IN      ITStream *          ppStream
-        );                      
+        );
 
 // methods called by the MSPAddress object. (overriden)
     HRESULT Init(
@@ -196,12 +197,10 @@ public:
     virtual HRESULT ProcessGraphEvent(
         IN      ITStream *          pITStream,
         IN      long                lEventCode,
-        IN      long                lParam1,
-        IN      long                lParam2
+        IN      LONG_PTR            lParam1,
+        IN      LONG_PTR            lParam2
     );
 
-// methods of the CComObject
-    void FinalRelease();
 
 protected:
 // helper function:
@@ -219,14 +218,14 @@ protected:
         IN      TERMINAL_DIRECTION  Direction,
         IN OUT  ITStream **         ppStream
         );
-    
+
 protected:
 
     // The wait blocks store the information about the wait registered to
-    // the thread pool. It includes the wait handles returned by the 
-    // RegisterWaitForSingleObject() call and a pointer to the context 
-    // structure. Each block in the array is for a graph in one of the 
-    // stream objects. The offset of a block in this array is the same 
+    // the thread pool. It includes the wait handles returned by the
+    // RegisterWaitForSingleObject() call and a pointer to the context
+    // structure. Each block in the array is for a graph in one of the
+    // stream objects. The offset of a block in this array is the same
     // as the offset of the stream that owns the graph.
     CMSPArray <THREADPOOLWAITBLOCK>      m_ThreadPoolWaitBlocks;
 
@@ -236,17 +235,27 @@ protected:
 // Event handling definitions.
 //
 
-typedef struct
+struct MULTI_GRAPH_EVENT_DATA
 {
     CMSPCallMultiGraph * pCall;
     ITStream           * pITStream;
     long                 lEventCode;
-    long                 lParam1;
-    long                 lParam2;
+    LONG_PTR             lParam1;
+    LONG_PTR             lParam2;
+    IMediaEvent        * pIMediaEvent;
 
-} MULTI_GRAPH_EVENT_DATA;
+    MULTI_GRAPH_EVENT_DATA()
+        :pIMediaEvent(NULL),
+        pITStream(NULL),
+        lEventCode(0),
+        lParam1(0),
+        lParam2(0)
+    {}
+
+};
 
 DWORD WINAPI AsyncMultiGraphEvent(LPVOID pVoid);
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // __MSPCALL_H_

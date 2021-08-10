@@ -59,7 +59,7 @@ protected:
 	AnsiString DefaultAlt;
 	AnsiString DefaultSrc;
 	AnsiString XMLMethodName;
-	void __fastcall AddElements(Webcomp::_di_IAddScriptElements AddIntf);
+	void __fastcall AddElements(_di_IAddScriptElements AddIntf);
 	virtual AnsiString __fastcall ImplContent(Webcomp::TWebContentOptions* Options, System::TObject* ParentLayout);
 	void __fastcall SetPathURL(AnsiString APath);
 	AnsiString __fastcall GetAlt();

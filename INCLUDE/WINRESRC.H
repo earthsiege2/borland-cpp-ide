@@ -15,7 +15,6 @@ Revision History:
 --*/
 
 #ifndef _WINRESRC_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINRESRC_
 
 #ifndef WINVER
@@ -41,5 +40,4 @@ Revision History:
 #include <dlgs.h>
 #include <winver.h>
 
-#pragma option pop /*P_O_Pop*/
 #endif /* _WINRESRC_ */

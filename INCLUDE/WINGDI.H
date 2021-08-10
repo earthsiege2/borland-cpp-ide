@@ -2,12 +2,11 @@
 *                                                                         *
 * wingdi.h -- GDI procedure declarations, constant definitions and macros *
 *                                                                         *
-* Copyright (c) 1985-1999, Microsoft Corp. All rights reserved.           *
+* Copyright (c) Microsoft Corp. All rights reserved.                      *
 *                                                                         *
 **************************************************************************/
 
 #ifndef _WINGDI_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINGDI_
 
 
@@ -93,7 +92,7 @@ extern "C" {
 #endif /* NORASTEROPS */
 
 #define GDI_ERROR (0xFFFFFFFFL)
-#define HGDI_ERROR ((HANDLE)(0xFFFFFFFFL))
+#define HGDI_ERROR (LongToHandle(0xFFFFFFFFL))
 
 /* Region Flags */
 #define ERROR               0
@@ -432,13 +431,20 @@ typedef struct _PSINJECTDATA {
  * Parameter for GET_PS_FEATURESETTING escape
  */
 
-#define FEATURESETTING_NUP         0
-#define FEATURESETTING_OUTPUT      1
-#define FEATURESETTING_PSLEVEL     2
-#define FEATURESETTING_CUSTPAPER   3
-#define FEATURESETTING_MIRROR      4
-#define FEATURESETTING_NEGATIVE    5
-#define FEATURESETTING_PROTOCOL    6
+#define FEATURESETTING_NUP                  0
+#define FEATURESETTING_OUTPUT               1
+#define FEATURESETTING_PSLEVEL              2
+#define FEATURESETTING_CUSTPAPER            3
+#define FEATURESETTING_MIRROR               4
+#define FEATURESETTING_NEGATIVE             5
+#define FEATURESETTING_PROTOCOL             6
+
+//
+// The range of selectors between FEATURESETTING_PRIVATE_BEGIN and
+// FEATURESETTING_PRIVATE_END is reserved by Microsoft for private use
+//
+#define FEATURESETTING_PRIVATE_BEGIN 0x1000
+#define FEATURESETTING_PRIVATE_END   0x1FFF
 
 /*
  * Information about output options
@@ -1261,6 +1267,10 @@ typedef LPENUMLOGFONTEXA LPENUMLOGFONTEX;
 #define NONANTIALIASED_QUALITY  3
 #define ANTIALIASED_QUALITY     4
 #endif /* WINVER >= 0x0400 */
+
+#if (_WIN32_WINNT >= 0x0500)
+#define CLEARTYPE_QUALITY       5
+#endif
 
 #define DEFAULT_PITCH           0
 #define FIXED_PITCH             1
@@ -2275,7 +2285,15 @@ typedef LPDISPLAY_DEVICEA LPDISPLAY_DEVICE;
 #define DISPLAY_DEVICE_PRIMARY_DEVICE      0x00000004
 #define DISPLAY_DEVICE_MIRRORING_DRIVER    0x00000008
 #define DISPLAY_DEVICE_VGA_COMPATIBLE      0x00000010
+#define DISPLAY_DEVICE_REMOVABLE           0x00000020
 #define DISPLAY_DEVICE_MODESPRUNED         0x08000000
+#define DISPLAY_DEVICE_REMOTE              0x04000000  
+#define DISPLAY_DEVICE_DISCONNECT          0x02000000  
+
+
+/* Child device state */
+#define DISPLAY_DEVICE_ACTIVE              0x00000001
+#define DISPLAY_DEVICE_ATTACHED            0x00000002
 
 /* GetRegionData/ExtCreateRegion */
 
@@ -2857,6 +2875,8 @@ typedef DWORD  (CALLBACK* LPFNDEVCAPS)(LPSTR, LPSTR, UINT, LPSTR, LPDEVMODE);
 #define DC_PRINTRATEPPM         31
 #define DC_COLORDEVICE          32
 #define DC_NUP                  33
+#define DC_MEDIATYPENAMES       34
+#define DC_MEDIATYPES           35
 #endif /* WINVER >= 0x0500 */
 
 /* bit fields of the return value (DWORD) for DC_TRUETYPE */
@@ -3347,6 +3367,7 @@ WINGDIAPI COLORREF WINAPI SetBkColor(IN HDC, IN COLORREF);
 WINGDIAPI COLORREF WINAPI SetDCBrushColor(IN HDC, IN COLORREF);
 WINGDIAPI COLORREF WINAPI SetDCPenColor(IN HDC, IN COLORREF);
 #endif
+
 
 WINGDIAPI int   WINAPI SetBkMode(IN HDC, IN int);
 WINGDIAPI LONG  WINAPI SetBitmapBits(IN HBITMAP, IN DWORD, IN CONST VOID *);
@@ -3963,6 +3984,7 @@ WINGDIAPI BOOL        WINAPI ColorCorrectPalette( IN HDC, IN HPALETTE, IN DWORD,
 #define EMR_ALPHABLEND                 114
 #define EMR_SETLAYOUT                  115
 #define EMR_TRANSPARENTBLT             116
+#define EMR_RESERVED_117               117
 #define EMR_GRADIENTFILL               118
 #define EMR_RESERVED_119               119
 #define EMR_RESERVED_120               120
@@ -4899,7 +4921,5 @@ WINGDIAPI DWORD WINAPI wglSwapMultipleBuffers(UINT, CONST WGLSWAP *);
 #endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif /* _WINGDI_ */
-
 

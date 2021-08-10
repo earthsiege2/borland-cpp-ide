@@ -14,6 +14,7 @@
 #include "wordpad.h"
 #include "multconv.h"
 #include "mswd6_32.h"
+#include <algorithm>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -425,7 +426,7 @@ UINT CConverter::Read(void FAR* lpBuf, UINT nCount)
 			m_pBuf = (BYTE*)GlobalLock(m_hBuff);
 			ASSERT(m_pBuf != NULL);
 		}
-		int nBytes = min(cch, m_nBytesAvail);
+		int nBytes = std::min(cch, m_nBytesAvail);
 		memcpy(pBuf, m_pBuf, nBytes);
 		pBuf += nBytes;
 		m_pBuf += nBytes;
@@ -447,7 +448,7 @@ void CConverter::Write(const void FAR* lpBuf, UINT nCount)
 		VERIFY(ResetEvent(m_hEventFile));
 		if (m_bConvErr)
 			AfxThrowFileException(CFileException::generic);
-		m_nBytesAvail = min(nCount, BUFFSIZE);
+		m_nBytesAvail = std::min(nCount, BUFFSIZE);
 		nCount -= m_nBytesAvail;
 		BYTE* pBuf = (BYTE*)GlobalLock(m_hBuff);
 		ASSERT(pBuf != NULL);

@@ -1,9 +1,23 @@
-/*
-** lzdos.h - Public interface to LZEXP?.LIB.
-*/
+/*++
+
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Module Name:
+
+    lzdos.h
+
+Abstract:
+
+    Public interface to LZEXP?.LIB.
+
+Author:
+
+
+Revision History:
+
+--*/
 
 #ifndef _LZEXPAND_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LZEXPAND_
 
 #ifdef __cplusplus
@@ -125,5 +139,4 @@ LZClose(
 #endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // _LZEXPAND_

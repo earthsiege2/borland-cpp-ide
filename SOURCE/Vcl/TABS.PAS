@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -139,8 +139,9 @@ type
 
     TabPositions: TList;
     FTabHeight: Integer;
-    Scroller: TScroller;
+    FScroller: TScroller;
     FDoFix: Boolean;
+    FSoftTop: Boolean;
 
     { property access methods }
     procedure SetSelectedColor(Value: TColor);
@@ -177,6 +178,7 @@ type
     procedure ScrollClick(Sender: TObject);
     procedure ReadIntData(Reader: TReader);
     procedure ReadBoolData(Reader: TReader);
+    procedure SetSoftTop(const Value: Boolean);
   protected
     procedure CreateParams(var Params: TCreateParams); override;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
@@ -188,11 +190,16 @@ type
     procedure GetChildren(Proc: TGetChildProc; Root: TComponent); override;
     procedure MeasureTab(Index: Integer; var TabWidth: Integer); virtual;
     procedure DefineProperties(Filer: TFiler); override;
+    property Scroller: TScroller read FScroller;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function ItemAtPos(Pos: TPoint): Integer;
     function ItemRect(Item: Integer): TRect;
+    function ItemWidth(Index: Integer): Integer;
+    function MinClientRect: TRect; overload;
+    function MinClientRect(IncludeScroller: Boolean): TRect; overload;
+    function MinClientRect(TabCount: Integer; IncludeScroller: Boolean = False): TRect; overload;
     procedure SelectNext(Direction: Boolean);
     property Canvas;
     property FirstIndex: Integer read FFirstIndex write SetFirstIndex default 0;
@@ -214,6 +221,7 @@ type
     property ShowHint;
     property StartMargin: Integer read FStartMargin write SetStartMargin default 5;
     property SelectedColor: TColor read FSelectedColor write SetSelectedColor default clBtnFace;
+    property SoftTop: Boolean read FSoftTop write SetSoftTop default False;
     property Style: TTabStyle read FStyle write SetTabStyle default tsStandard;
     property TabHeight: Integer read FOwnerDrawHeight write SetTabHeight default 20;
     property Tabs: TStrings read FTabs write SetTabList;
@@ -510,7 +518,7 @@ end;
 
 procedure TTabSet.CreateScroller;
 begin
-  Scroller := TScroller.Create(Self);
+  FScroller := TScroller.Create(Self);
   with Scroller do
   begin
     Parent := Self;
@@ -555,7 +563,6 @@ function TTabSet.CalcTabPositions(Start, Stop: Integer; Canvas: TCanvas;
 var
   Index: Integer;
   TabPos: TTabPos;
-  W: Integer;
 begin
   TabPositions.Count := 0;  { erase all previously cached data }
   Index := First;
@@ -563,12 +570,7 @@ begin
     with Canvas do
     begin
       TabPos.StartPos := Start;
-      W := TextWidth(Tabs[Index]);
-
-      { Owner }
-      if (FStyle = tsOwnerDraw) then MeasureTab(Index, W);
-
-      TabPos.Size := W;
+      TabPos.Size := ItemWidth(Index);
       Inc(Start, TabPos.Size + EdgeWidth);    { next usable position }
 
       if Start <= Stop then
@@ -677,14 +679,22 @@ begin
     Brush.Bitmap := BrushBitmap;
     FillRect(Rect(0, 0, MemBitmap.Width, MemBitmap.Height));
 
+    // draw top edget
+    // XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    //  \               /--------------/
+    //   \             /\             /
+    //    \___________/  \___________/
     Pen.Width := 1;
     Pen.Color := clBtnShadow;
     MoveTo(0, 0);
     LineTo(MemBitmap.Width + 1, 0);
 
-    Pen.Color := clWindowFrame;
-    MoveTo(0, 1);
-    LineTo(MemBitmap.Width + 1, 1);
+    if not FSoftTop then
+    begin
+      Pen.Color := clWindowFrame;
+      MoveTo(0, 1);
+      LineTo(MemBitmap.Width + 1, 1);
+    end;
   end;
 
   for Tab := 0 to TabPositions.Count - 1 do
@@ -720,6 +730,10 @@ begin
     end;
 
     { draw leading edge }
+    // |XXXX|================================
+    // | X  |             /--------------/
+    // |  X |            /\             /
+    // |   X|___________/  \___________/
     if Leading <> etNone then
       PaintEdge(TabPos.StartPos - EdgeWidth, 0, FTabHeight - 1, Leading);
 
@@ -750,11 +764,23 @@ begin
     end;
 
     { draw trailing edge  }
+    // ===============|XXXX|=================
+    //  \             |  XX|-------------/
+    //   \            | XX |            /
+    //    \___________|X  X|___________/
+    // or
+    // ==============================|XXXX|==
+    //  \               /------------|XXX |
+    //   \             /\            | X  |
+    //    \___________/  \___________|X   |
     if Trailing <> etNone then
       PaintEdge(TabPos.StartPos + TabPos.Size, 0, FTabHeight - 1, Trailing);
 
     { draw connecting lines above and below the text }
-
+    // ====================================
+    //  \               /-XXXXXXXXXXX--/
+    //   \             /\             /
+    //    \XXXXXXXXXXX/  \XXXXXXXXXXX/
     with MemBitmap.Canvas do
     begin
       Pen.Color := clWindowFrame;
@@ -765,11 +791,14 @@ begin
       begin
         Pen.Color := clBtnShadow;
         MoveTo(TabPos.StartPos, FTabHeight - 2);
-        LineTo(TabPos.StartPos + TabPos.Size, FTabHeight - 2);
+        LineTo(TabPos.StartPos + TabPos.Size + 1, FTabHeight - 2);
       end
       else
       begin
-        Pen.Color := clWindowFrame;
+        if SoftTop then
+          Pen.Color := BackgroundColor
+        else
+          Pen.Color := clWindowFrame;
         MoveTo(TabPos.StartPos, 1);
         LineTo(TabPos.StartPos + TabPos.Size, 1);
 
@@ -800,31 +829,29 @@ var
 
       Pen.Color := UnselectedColor;
       Brush.Color := UnselectedColor;
-      Polygon([Point(3,1), Point(EdgeWidth - 1, H), Point(EdgeWidth, H),
+      Polygon([Point(3, 1), Point(EdgeWidth - 1, H), Point(EdgeWidth, H),
         Point(EdgeWidth, 1), Point(3, 1)]);
 
-      Pen.Color := clWindowFrame;
-      PolyLine([Point(0, 1), Point(EdgeWidth + 1, 1), Point(3, 1),
-        Point(EdgeWidth - 1, H), Point(EdgeWidth, H)]);
-    end;
-  end;
-
-  procedure DrawSR(Canvas: TCanvas);
-  begin
-    with Canvas do
-    begin
-      Pen.Color := SelectedColor;
-      Brush.Color := SelectedColor;
-      Polygon([Point(EdgeWidth - 3, 1), Point(2, H), Point(0, H),
-        Point(0, 0), Point(EdgeWidth + 1, 0)]);
-
-      Pen.Color := clBtnShadow;
-      PolyLine([Point(EdgeWidth - 3, 0), Point(EdgeWidth + 1, 0),
-        Point(EdgeWidth - 3, 1), Point(1, H), Point(0, H - 2)]);
-
-      Pen.Color := clWindowFrame;
-      PolyLine([Point(EdgeWidth, 1), Point(EdgeWidth - 2, 1), Point(2, H),
-        Point(-1, H)]);
+      if SoftTop then
+      begin
+        Pen.Color := BackgroundColor;
+        PolyLine([Point(4, 1), Point(EdgeWidth + 1, 1)]);
+        Pen.Color := clWindowFrame;
+        PolyLine([Point(3, 1), Point(EdgeWidth - 1, H), Point(EdgeWidth, H)]);
+      end
+      else
+      begin
+        Pen.Color := clWindowFrame;
+        PolyLine([Point(0, 1), Point(EdgeWidth + 1, 1), Point(3, 1),
+          Point(EdgeWidth - 1, H), Point(EdgeWidth, H)]);
+      end;
+      (*Pen.Color := clWindowFrame;
+      if SoftTop then
+        PolyLine([{Point(0, 1),} Point(EdgeWidth + 1, 1), Point(3, 1),
+          Point(EdgeWidth - 1, H), Point(EdgeWidth, H)])
+      else
+        PolyLine([Point(0, 1), Point(EdgeWidth + 1, 1), Point(3, 1),
+          Point(EdgeWidth - 1, H), Point(EdgeWidth, H)]);*)
     end;
   end;
 
@@ -844,8 +871,12 @@ var
       PolyLine([Point(4, 1), Point(EdgeWidth, H + 1)]);
 
       Pen.Color := clWindowFrame;
-      PolyLine([Point(0, 1), Point(3, 1), Point(EdgeWidth - 1, H),
-        Point(EdgeWidth, H)]);
+      if SoftTop then
+        PolyLine([{Point(0, 1),} Point(3, 1), Point(EdgeWidth - 1, H),
+          Point(EdgeWidth, H)])
+      else
+        PolyLine([Point(0, 1), Point(3, 1), Point(EdgeWidth - 1, H),
+          Point(EdgeWidth, H)]);
     end;
   end;
 
@@ -865,9 +896,51 @@ var
       Pen.Color := clBtnShadow;
       PolyLine([Point(-1, 0), Point(EdgeWidth + 1, 0)]);
 
+      if SoftTop then
+      begin
+        Pen.Color := BackgroundColor;
+        PolyLine([Point(0, 1), Point(EdgeWidth - 1, 1)]);
+        Pen.Color := clWindowFrame;
+        PolyLine([Point(EdgeWidth - 2, 1), Point(2, H), Point(-1, H)]);
+      end
+      else
+      begin
+        Pen.Color := clWindowFrame;
+        PolyLine([Point(0, 1), Point(EdgeWidth + 1, 1), Point(EdgeWidth - 2, 1),
+          Point(2, H), Point(-1, H)]);
+      end;
+      (*Pen.Color := clWindowFrame;
+      if SoftTop then
+        PolyLine([Point(0, 1), {Point(EdgeWidth + 1, 1),} Point(EdgeWidth - 2, 1),
+          Point(2, H), Point(-1, H)])
+      else
+        PolyLine([Point(0, 1), Point(EdgeWidth + 1, 1), Point(EdgeWidth - 2, 1),
+          Point(2, H), Point(-1, H)])*)
+    end;
+  end;
+
+  procedure DrawSR(Canvas: TCanvas);
+  begin
+    with Canvas do
+    begin
+      Pen.Color := SelectedColor;
+      Brush.Color := SelectedColor;
+      Polygon([Point(EdgeWidth - 3, 1), Point(2, H), Point(0, H),
+        Point(0, 0), Point(EdgeWidth + 1, 0)]);
+
+      Pen.Color := clBtnShadow;
+      PolyLine([Point(EdgeWidth + 1, 0), Point(EdgeWidth - 3, 0),
+        Point(EdgeWidth - 3, 1), Point(1, H), Point(-1, H)]);
+      //PolyLine([Point(EdgeWidth - 3, 0), Point(EdgeWidth + 1, 0),   { wrong }
+      //  Point(EdgeWidth - 3, 1), Point(1, H), Point(0, H - 2)]);
+
       Pen.Color := clWindowFrame;
-      PolyLine([Point(0, 1), Point(EdgeWidth + 1, 1), Point(EdgeWidth - 2, 1),
-        Point(2, H), Point(-1, H)]);
+      if SoftTop then
+        PolyLine([{Point(EdgeWidth, 1), }Point(EdgeWidth - 2, 1), Point(2, H),
+          Point(-1, H)])
+      else
+        PolyLine([Point(EdgeWidth, 1), Point(EdgeWidth - 2, 1), Point(2, H),
+          Point(-1, H)]);
     end;
   end;
 
@@ -993,7 +1066,8 @@ var
         with Canvas do
         begin
           W := TextWidth(Tabs[Result]);
-          if (FStyle = tsOwnerDraw) then MeasureTab(Result, W);
+          if (FStyle = tsOwnerDraw) then
+            MeasureTab(Result, W);
           Dec(Start, W + EdgeWidth);    { next usable position }
           if Start >= Stop then Dec(Result);
         end;
@@ -1239,16 +1313,12 @@ var
 
   function CalcNumTabs(Start, Stop: Integer; Canvas: TCanvas;
     First: Integer): Integer;
-  var
-    W: Integer;
   begin
     Result := First;
     while (Start < Stop) and (Result < Tabs.Count) do
       with Canvas do
       begin
-        W := TextWidth(Tabs[Result]);
-        if (FStyle = tsOwnerDraw) then MeasureTab(Result, W);
-        Inc(Start, W + EdgeWidth);    { next usable position }
+        Inc(Start, ItemWidth(Result) + EdgeWidth);    { next usable position }
         if Start <= Stop then Inc(Result);
       end;
   end;
@@ -1321,6 +1391,46 @@ end;
 procedure TTabSet.ReadBoolData(Reader: TReader);
 begin
   Reader.ReadBoolean;
+end;
+
+function TTabSet.MinClientRect: TRect;
+begin
+  Result := MinClientRect(Tabs.Count, False);
+end;
+
+function TTabSet.MinClientRect(IncludeScroller: Boolean): TRect;
+begin
+  Result := MinClientRect(Tabs.Count, IncludeScroller);
+end;
+
+function TTabSet.MinClientRect(TabCount: Integer; IncludeScroller: Boolean): TRect;
+var
+  I: Integer;
+begin
+  Result := Rect(0, 0, StartMargin, FTabHeight + 5);
+  for I := 0 to TabCount - 1 do
+    Inc(Result.Right, ItemWidth(I) + EdgeWidth);
+  Inc(Result.Right, EndMargin);
+  if IncludeScroller then
+    Inc(Result.Right, Scroller.Width + 4);
+end;
+
+function TTabSet.ItemWidth(Index: Integer): Integer;
+begin
+  with Canvas do
+    Result := TextWidth(Tabs[Index]);
+  if (FStyle = tsOwnerDraw) then
+    MeasureTab(Index, Result);
+end;
+
+procedure TTabSet.SetSoftTop(const Value: Boolean);
+begin
+  if Value <> SoftTop then
+  begin
+    FSoftTop := Value;
+    CreateEdgeParts;
+    Invalidate;
+  end;
 end;
 
 end.

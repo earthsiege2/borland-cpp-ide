@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*****************************************************************************\
 *                                                                             *
 * olectlid.h    Master definition of GUIDs for OLE Controls                   *
@@ -15,4 +14,3 @@
 
 #pragma message("WARNING: your code should #include olectl.h instead of olectlid.h")
 #include <olectl.h>
-#pragma option pop /*P_O_Pop*/

@@ -1,12 +1,11 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Kylix and Delphi Cross-Platform Visual Component Library                    }
+{                                                                             }
+{ Copyright (c) 1995, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{       Common Database Code                            }
-{                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
 unit DBCommon;
 
@@ -14,7 +13,12 @@ unit DBCommon;
 
 interface
 
-uses Windows, Classes, DB;
+{$IFDEF MSWINDOWS}
+uses Windows, Variants, Classes, DB, SqlTimSt;
+{$ENDIF}
+{$IFDEF LINUX}
+uses Libc, Variants, Classes, DB, SqlTimSt; 
+{$ENDIF}
 
 type
   TCANOperator = (
@@ -125,9 +129,11 @@ type
     function FieldFromNode(Node: PExprNode): TField;
     function GetExprData(Pos, Size: Integer): PChar;
     function PutConstBCD(const Value: Variant; Decimals: Integer): Integer;
+    function PutConstFMTBCD(const Value: Variant; Decimals: Integer): Integer;
     function PutConstBool(const Value: Variant): Integer;
     function PutConstDate(const Value: Variant): Integer;
     function PutConstDateTime(const Value: Variant): Integer;
+    function PutConstSQLTimeStamp(const Value: Variant): Integer;
     function PutConstFloat(const Value: Variant): Integer;
     function PutConstInt(DataType: TFieldType; const Value: Variant): Integer;
     function PutConstNode(DataType: TFieldType; Data: PChar;
@@ -163,6 +169,7 @@ type
 
   TExprParser = class
   private
+    FDecimalSeparator: Char;
     FFilter: TFilterExpr;
     FFieldMap: TFieldMap;
     FText: string;
@@ -232,10 +239,13 @@ const
 function NextSQLToken(var p: PChar; out Token: string; CurSection: TSQLToken): TSQLToken;
 function GetIndexForOrderBy(const SQL: string; DataSet: TDataSet): TIndexDef;
 function GetTableNameFromSQL(const SQL: string): string;
+function GetTableNameFromQuery(const SQL: string): string;
+function AddParamSQLForDetail(Params: TParams; SQL: string; Native: Boolean): string;
+function IsMultiTableQuery(const SQL: string): Boolean;
 
 implementation
 
-uses SysUtils, DBConsts;
+uses SysUtils, DBConsts, FMTBcd;
 
 { SQL Parser }
 
@@ -380,7 +390,7 @@ begin
           Exit;
         end;
       end;
-      ' ', #10, #13, ',':
+      ' ', #10, #13, ',', '(':
       begin
         if Assigned(TokenStart) then
         begin
@@ -388,7 +398,7 @@ begin
           Result := GetSQLToken(Token);
           Exit;
         end else
-          while (p^ in [' ', #10, #13, ',']) do Inc(p);
+          while (p^ in [' ', #10, #13, ',', '(']) do Inc(p);
       end;
       '.':
       begin
@@ -448,6 +458,64 @@ begin
   end;
 end;
 
+function AddParamSQLForDetail(Params: TParams; SQL: string; Native: Boolean): string;
+const
+  SWhere = ' where ';     { do not localize }
+  SAnd = ' and ';         { do not localize }
+
+  function GenerateParamSQL: string;  
+  var
+    I: Integer;
+  begin
+    for I := 0 to Params.Count -1 do
+    begin
+      if I > 0 then Result := Result + SAnd;
+      if Native then
+        Result := Result + format('%s = ?', [Params[I].Name])
+      else
+        Result := Result + format('%s = :%s', [Params[I].Name, Params[I].Name]);
+    end;
+    if pos(SWhere, LowerCase(Result)) > 0 then
+      Result := SAnd + Result
+    else
+      Result := SWhere + Result;
+  end;
+
+  function AddWhereClause: string;
+  var
+    Start: PChar;
+    Rest, FName: string;
+    SQLToken, CurSection: TSQLToken;
+  begin
+    Start := PChar(SQL);
+    CurSection := stUnknown;
+    repeat
+      SQLToken := NextSQLToken(Start, FName, CurSection);
+    until SQLToken in [stFrom, stEnd];
+    if SQLToken = stFrom then
+      NextSQLToken(Start, FName, CurSection);
+    Rest := string(Start);
+    if Rest = '' then
+      Result := SQL + ' ' + GenerateParamSQL
+    else
+      Result := Copy(SQL, 1, pos(Rest, SQL)) + ' ' + GenerateParamSQL + Rest;
+  end;
+
+begin
+  Result := SQL;
+  if (Params.Count > 0) then
+    Result := AddWhereClause;
+end;
+
+// SQL might be a direct tablename;
+function GetTableNameFromQuery(const SQL: string): string;
+begin
+  if pos( 'select', lowercase(SQL) ) < 1 then
+    Result := SQL
+  else
+    Result := GetTableNameFromSQL(SQL);
+end;
+
 function GetTableNameFromSQL(const SQL: string): string;
 var
   Start: PChar;
@@ -467,9 +535,63 @@ begin
       SQLToken := NextSQLToken(Start, Token, CurSection);
       if SQLToken in SQLSections then
         CurSection := SQLToken else
-      if SQLToken = stTableName then
+      // stValue is returned if TableNames contain quote chars.
+      if (SQLToken = stTableName) or (SQLToken = stValue) then
       begin
         Result := Token;
+        while (Start[0] = '.') and not (SQLToken in [stEnd]) do
+        begin
+          SQLToken := NextSqlToken(Start, Token, CurSection);
+          Result := Result + '.' + Token;
+        end;
+        Exit;
+      end;
+    until (CurSection <> stFrom) or (SQLToken in [stEnd, stTableName]);
+  end;
+end;
+
+function IsMultiTableQuery(const SQL: string): Boolean;
+const
+  SInnerJoin = 'inner join ';       { do not localize }
+  SOuterJoin = 'outer join ';       { do not localize }
+var
+  Start: PChar;
+  SResult, Token: string;
+  SQLToken, CurSection: TSQLToken;
+begin
+  SResult := '';
+  Start := PChar(SQL);
+  CurSection := stUnknown;
+  Result := True;
+  repeat
+    SQLToken := NextSQLToken(Start, Token, CurSection);
+    if SQLToken in SQLSections then CurSection := SQLToken;
+  until SQLToken in [stEnd, stFrom];
+  if SQLToken = stFrom then
+  begin
+    repeat
+      SQLToken := NextSQLToken(Start, Token, CurSection);
+      if SQLToken in SQLSections then
+        CurSection := SQLToken else
+      // stValue is returned if TableNames contain quote chars.
+      if (SQLToken = stTableName) or (SQLToken = stValue) then
+      begin
+        SResult := Token;
+        while (Start[0] = '.') and not (SQLToken in [stEnd]) do
+        begin
+          SQLToken := NextSqlToken(Start, Token, CurSection);
+          SResult := SResult + '.' + Token;
+        end;
+        if (Start[0] = ',') or (Start[1] = ',') then
+          exit;
+        NextSqlToken(Start, Token, CurSection);
+        if Assigned(AnsiStrPos(Start, PChar(SInnerJoin))) or
+           Assigned(AnsiStrPos(Start, PChar(SOuterJoin))) then
+          Exit;
+        SQLToken := NextSqlToken(Start, Token, CurSection);
+        if SQLToken = stTableName then
+          Exit;
+        Result := False;
         Exit;
       end;
     until (CurSection <> stFrom) or (SQLToken in [stEnd, stTableName]);
@@ -488,7 +610,7 @@ function GetIndexForOrderBy(const SQL: string; DataSet: TDataSet): TIndexDef;
 
 var
   Start: PChar;
-  Token, LastField: string;
+  Token, LastField, SaveField: string;
   SQLToken, CurSection: TSQLToken;
   FieldIndex: Integer;
 begin
@@ -514,27 +636,35 @@ begin
             begin
               LastField := Token;
               { Verify that we parsed a valid field name, not something like "UPPER(Foo)" }
-              Dataset.FieldByName(LastField);
+              if not Assigned(Dataset.FindField(LastField)) then continue;
               Result.Fields := AddField(Result.Fields, LastField);
+              SaveField := LastField;
             end;
             stAscending: ;
             stDescending:
-              Result.DescFields := AddField(Result.DescFields, LastField);
+              Result.DescFields := AddField(Result.DescFields, SaveField);
             stNumber:
             begin
               FieldIndex := StrToInt(Token);
               if DataSet.FieldCount >= FieldIndex then
                 LastField := DataSet.Fields[FieldIndex - 1].FieldName else
               if DataSet.FieldDefs.Count >= FieldIndex then
-                LastField := DataSet.FieldDefs[FieldIndex - 1].Name else
-                SysUtils.Abort;
+                LastField := DataSet.FieldDefs[FieldIndex - 1].Name 
+              else
+                { DB2 specific syntax "FETCH FIRST n ROWS ONLY" is blocked here,
+                  so commenting out the following line }
+                //SysUtils.Abort;
+                continue;
               Result.Fields := AddField(Result.Fields, LastField);
             end;
           end;
       until (CurSection <> stOrderBy) or (SQLToken = stEnd);
-    except
-      Result.Free;
-      Result := nil;
+    finally
+      if Result.Fields = '' then
+      begin
+        Result.Free;
+        Result := nil;
+      end;  
     end;
   end;
 end;
@@ -635,12 +765,12 @@ const
 function IsNumeric(DataType: TFieldType): Boolean;
 begin
   Result := DataType in [ftSmallint, ftInteger, ftWord, ftFloat, ftCurrency,
-    ftBCD, ftAutoInc, ftLargeint];
+    ftBCD, ftAutoInc, ftLargeint, ftFMTBcd];
 end;
 
 function IsTemporal(DataType: TFieldType): Boolean;
 begin
-  Result := DataType in [ftDate, ftTime, ftDateTime];
+  Result := DataType in [ftDate, ftTime, ftDateTime, ftTimeStamp];
 end;
 
 { TFilterExpr }
@@ -752,6 +882,17 @@ begin
   Result := PutConstNode(ftBCD, @BCD, 18);
 end;
 
+function TFilterExpr.PutConstFMTBCD(const Value: Variant;
+  Decimals: Integer): Integer;
+var
+  BCD: TBcd;
+begin
+  if VarType(Value) = varString then
+    BCD := StrToBcd(string(TVarData(Value).VString)) else
+    BCD := VarToBcd(Value);
+  Result := PutConstNode(ftBCD, @BCD, 18);
+end;
+
 function TFilterExpr.PutConstBool(const Value: Variant): Integer;
 var
   B: WordBool;
@@ -782,6 +923,16 @@ begin
     DateTime := VarToDateTime(Value);
   DateData := TimeStampToMSecs(DateTimeToTimeStamp(DateTime));
   Result := PutConstNode(ftDateTime, @DateData, 8);
+end;
+
+function TFilterExpr.PutConstSQLTimeStamp(const Value: Variant): Integer;
+var
+  TimeStamp: TSQLTimeStamp;
+begin
+  if VarType(Value) = varString then
+    TimeStamp := StrToSQLTimeStamp(string(TVarData(Value).VString)) else
+    TimeStamp := VarToSQLTimeStamp(Value);
+  Result := PutConstNode(ftTimeStamp, @TimeStamp, 16);
 end;
 
 function TFilterExpr.PutConstFloat(const Value: Variant): Integer;
@@ -870,10 +1021,14 @@ begin
       Result := PutConstTime(Node^.FData);
     ftDateTime:
       Result := PutConstDateTime(Node^.FData);
+    ftTimeStamp:
+      Result := PutConstSQLTimeStamp(Node^.FData);
     ftBoolean:
       Result := PutConstBool(Node^.FData);
     ftBCD:
       Result := PutConstBCD(Node^.FData, Node^.FDataSize);
+    ftFMTBcd:
+      Result := PutConstFMTBCD(Node^.FData, Node^.FDataSize);
     else
       DatabaseErrorFmt(SExprBadConst, [Node^.FData]);
   end;
@@ -1125,6 +1280,7 @@ constructor TExprParser.Create(DataSet: TDataSet; const Text: string;
   Options: TFilterOptions; ParserOptions: TParserOptions; const FieldName: string;
   DepFields: TBits; FieldMap: TFieldMap);
 begin
+  FDecimalSeparator := DecimalSeparator;
   FFieldMap := FieldMap;
   FStrTrue := STextTrue;
   FStrFalse := STextFalse;
@@ -1193,6 +1349,28 @@ begin
   Result := P^ = '(';
 end;
 
+function EndOfLiteral(var P : PChar): Boolean;
+var
+  FName: String;
+  PTemp: PChar;
+begin
+  Inc(P);
+  Result := P^ <> '''';
+  if Result then
+  begin      // now, look for 'John's Horse'
+    if AnsiStrScan(P, '''') <> Nil then     // found another '
+    begin
+      PTemp := P;  // don't advance P
+      while PTemp[0] in [ ' ', ')' ] do Inc(PTemp);
+      if NextSQLToken(PTemp, FName, stValue) in [stFieldName, stUnknown] then
+      begin   // 'John's Horse' case: not really end of literal
+        Result := False;
+        Dec(P);
+      end;
+    end;
+  end;
+end;
+
 procedure TExprParser.NextToken;
 type
   ASet = Set of Char;
@@ -1203,7 +1381,12 @@ var
 
   function IsKatakana(const Chr: Byte): Boolean;
   begin
+{$IFDEF MSWINDOWS}
     Result := (SysLocale.PriLangID = LANG_JAPANESE) and (Chr in [$A1..$DF]);
+{$ENDIF}
+{$IFDEF LINUX}
+    Result := False;
+{$ENDIF}
   end;
 
   procedure Skip(TheSet: ASet);
@@ -1295,10 +1478,8 @@ begin
         begin
           if P^ = #0 then DatabaseError(SExprStringError);
           if P^ = '''' then
-          begin
-            Inc(P);
-            if P^ <> '''' then Break;
-          end;
+            if EndOfLiteral(P) then 
+              Break;
           if L < SizeOf(StrBuf) then
           begin
             StrBuf[L] := P^;
@@ -1317,9 +1498,9 @@ begin
           begin
             TokenStart := P;
             Inc(P);
-            while (P^ in ['0'..'9', DecimalSeparator, 'e', 'E', '+', '-']) do
+            while (P^ in ['0'..'9', FDecimalSeparator, 'e', 'E', '+', '-']) do
               Inc(P);
-            if ((P-1)^ = ',') and (DecimalSeparator = ',') and (P^ = ' ') then
+            if ((P-1)^ = ',') and (FDecimalSeparator = ',') and (P^ = ' ') then
               Dec(P);
             SetString(FTokenString, TokenStart, P - TokenStart);
             FToken := etLiteral;
@@ -1622,7 +1803,7 @@ begin
         end
       else if TokenSymbolIs('NULL') then
         begin
-          Result := FFilter.NewNode(enConst, coNOTDEFINED, System.Null, nil, nil);
+          Result := FFilter.NewNode(enConst, coNOTDEFINED, Variants.Null, nil, nil);
           Result.FScopeKind := skConst;
         end
       else if TokenSymbolIs(FStrTrue) then

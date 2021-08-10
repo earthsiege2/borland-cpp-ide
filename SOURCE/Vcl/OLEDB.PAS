@@ -1,23 +1,22 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1999-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
 {       OLEDB Interface Unit                            }
-{                                                       }
-{       Copyright (c) 1999 Inprise Corporation          }
-{                                                       }
 {*******************************************************}
 
-unit OLEDB;
+unit OleDB;
 
 interface
 
 uses Windows, ActiveX;
-{$HPPEMIT '#include <transact.h>'}
-{$HPPEMIT '#include <oledb.h>'}
-{$HPPEMIT '#include <comsvcs.h>'}
-{$HPPEMIT 'typedef System::DelphiInterface<ITransaction> _di_ITransaction;'}
-
+{$HPPEMIT '#include <transact.h>"}
+{$HPPEMIT '#include <oledb.h>"}
 
 // *********************************************************************//
 // GUID declarations                                                    //
@@ -29,8 +28,7 @@ const
   CLSID_OLEDB_CONVERSIONLIBRARY: TGUID = '{C8B522D1-5CF3-11CE-ADE5-00AA0044773D}'; {MSDADC}
   CLSID_OLEDB_ROWPOSITIONLIBRARY: TGUID = '{2048EEE6-7FA2-11D0-9E6A-00A0C9138C29}'; {RowPosition.RowPosition}
   CLSID_DATALINKS: TGUID = '{2206CDB2-19C1-11D1-89E0-00C04FD7A829}'; {DataLinks}
-  
-  {$NODEFINE IID_ITransaction}
+
   IID_ITransaction: TGUID = '{0FB15084-AF41-11CE-BD2B-204C4F4F5020}';
   IID_ITransactionOptions: TGUID = '{3A6AD9E0-23B9-11CF-AD60-00AA00A74CCD}';
   IID_ITransactionDispenser: TGUID = '{3A6AD9E1-23B9-11CF-AD60-00AA00A74CCD}';
@@ -1072,7 +1070,8 @@ const
 // TX_MISC_CONSTANTS constants
 
 type
-  TOleEnum = Integer;
+  TOldOleEnum = Integer;
+  TOleEnum = LongWord;
   TX_MISC_CONSTANTS = TOleEnum;
   {$EXTERNALSYM TX_MISC_CONSTANTS}
 const
@@ -4140,7 +4139,6 @@ type
 // Interface: ITransaction
 // GUID:      {0FB15084-AF41-11CE-BD2B-204C4F4F5020}
 // *********************************************************************//
-  {$NODEFINE ITransaction}
   ITransaction = interface(IUnknown)
     ['{0FB15084-AF41-11CE-BD2B-204C4F4F5020}']
     function Commit(fRetaining: BOOL; grfTC: UINT; grfRM: UINT): HResult; stdcall;
@@ -4149,7 +4147,6 @@ type
   end;
 
   { Safecall Version }
-  {$NODEFINE ITransactionSC}
   ITransactionSC = interface(IUnknown)
     ['{0FB15084-AF41-11CE-BD2B-204C4F4F5020}']
     procedure Commit(fRetaining: BOOL; grfTC: UINT; grfRM: UINT); safecall;
@@ -4576,7 +4573,7 @@ type
     ['{0C733A27-2A1C-11CE-ADE5-00AA0044773D}']
     function GetCommandText(var pguidDialect: TGUID;
       out ppwszCommand: PWideChar): HResult; stdcall;
-    function SetCommandText(rguidDialect: PGUID;
+    function SetCommandText(const guidDialect: TGUID;
       pwszCommand: PWideChar): HResult; stdcall;
   end;
 
@@ -4585,7 +4582,7 @@ type
     ['{0C733A27-2A1C-11CE-ADE5-00AA0044773D}']
     procedure GetCommandText(var pguidDialect: TGUID;
       out ppwszCommand: PWideChar); safecall;
-    procedure SetCommandText(rguidDialect: PGUID;
+    procedure SetCommandText(const guidDialect: TGUID;
       pwszCommand: PWideChar); safecall;
   end;
 
@@ -5536,12 +5533,12 @@ const
 //
 // Free codes are:
 //
-// 		Error:
-// 			-none-
+// Error:
+//   -none-
 //
-// 		Success:
-// 			0x0eea
-// 			0x0ed7
+// Success:
+//   0x0eea
+//   0x0ed7
 //
 
 
@@ -5894,7 +5891,7 @@ const
 //
 // MessageText:
 //
-//  Provider called a method from IRowsetNotify in the consumer and	the
+//  Provider called a method from IRowsetNotify in the consumer and the
 //  method has not yet returned
 //
   DB_E_NOTREENTRANT                    = HResult($80040E20);

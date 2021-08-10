@@ -1,185 +1,198 @@
-LIBRARY WINSPOOL
+LIBRARY WinSpool.drv
 EXPORTS
 
-    ADVANCEDSETUPDIALOG                      = 'WINSPOOL.DRV'.*
-    AbortPrinter                             = 'WINSPOOL.DRV'.*
-    AddFormA                                 = 'WINSPOOL.DRV'.*
-    AddFormW                                 = 'WINSPOOL.DRV'.*
-    AddJobA                                  = 'WINSPOOL.DRV'.*
-    AddJobW                                  = 'WINSPOOL.DRV'.*
-    AddMonitorA                              = 'WINSPOOL.DRV'.*
-    AddMonitorW                              = 'WINSPOOL.DRV'.*
-    AddPerMachineConnectionA                 = 'WINSPOOL.DRV'.* @206 @205
-    AddPerMachineConnectionW                 = 'WINSPOOL.DRV'.* @207 @206
-    AddPortA                                 = 'WINSPOOL.DRV'.*
-    AddPortExA                               = 'WINSPOOL.DRV'.*
-    AddPortExW                               = 'WINSPOOL.DRV'.*
-    AddPortW                                 = 'WINSPOOL.DRV'.*
-    AddPrintProcessorA                       = 'WINSPOOL.DRV'.*
-    AddPrintProcessorW                       = 'WINSPOOL.DRV'.*
-    AddPrintProvidorA                        = 'WINSPOOL.DRV'.*
-    AddPrintProvidorW                        = 'WINSPOOL.DRV'.*
-    AddPrinterA                              = 'WINSPOOL.DRV'.*
-    AddPrinterConnectionA                    = 'WINSPOOL.DRV'.*
-    AddPrinterConnectionW                    = 'WINSPOOL.DRV'.*
-    AddPrinterDriverA                        = 'WINSPOOL.DRV'.*
-    AddPrinterDriverExA                      = 'WINSPOOL.DRV'.*
-    AddPrinterDriverExW                      = 'WINSPOOL.DRV'.*
-    AddPrinterDriverW                        = 'WINSPOOL.DRV'.*
-    AddPrinterW                              = 'WINSPOOL.DRV'.*
-    AdvancedDocumentPropertiesA              = 'WINSPOOL.DRV'.*
-    AdvancedDocumentPropertiesW              = 'WINSPOOL.DRV'.*
-    AdvancedSetupDialog                      = 'WINSPOOL.DRV'.*
-    ClosePrinter                             = 'WINSPOOL.DRV'.*
-    CloseSpoolFileHandle                     = 'WINSPOOL.DRV'.*
-    ClusterSplClose                          = 'WINSPOOL.DRV'.* @102 @101
-    ClusterSplIsAlive                        = 'WINSPOOL.DRV'.* @103 @102
-    ClusterSplOpen                           = 'WINSPOOL.DRV'.* @101 @100
-    CommitSpoolData                          = 'WINSPOOL.DRV'.*
-    ConfigurePortA                           = 'WINSPOOL.DRV'.*
-    ConfigurePortW                           = 'WINSPOOL.DRV'.*
-    ConnectToPrinterDlg                      = 'WINSPOOL.DRV'.*
-    ConvertAnsiDevModeToUnicodeDevmode       = 'WINSPOOL.DRV'.*
-    ConvertUnicodeDevModeToAnsiDevmode       = 'WINSPOOL.DRV'.*
-    CreatePrinterIC                          = 'WINSPOOL.DRV'.*
-    DEVICECAPABILITIES                       = 'WINSPOOL.DRV'.*
-    DEVICEMODE                               = 'WINSPOOL.DRV'.*
-    DeleteFormA                              = 'WINSPOOL.DRV'.*
-    DeleteFormW                              = 'WINSPOOL.DRV'.*
-    DeleteMonitorA                           = 'WINSPOOL.DRV'.*
-    DeleteMonitorW                           = 'WINSPOOL.DRV'.*
-    DeletePerMachineConnectionA              = 'WINSPOOL.DRV'.* @208 @207
-    DeletePerMachineConnectionW              = 'WINSPOOL.DRV'.* @209 @208
-    DeletePortA                              = 'WINSPOOL.DRV'.*
-    DeletePortW                              = 'WINSPOOL.DRV'.*
-    DeletePrintProcessorA                    = 'WINSPOOL.DRV'.*
-    DeletePrintProcessorW                    = 'WINSPOOL.DRV'.*
-    DeletePrintProvidorA                     = 'WINSPOOL.DRV'.*
-    DeletePrintProvidorW                     = 'WINSPOOL.DRV'.*
-    DeletePrinter                            = 'WINSPOOL.DRV'.*
-    DeletePrinterConnectionA                 = 'WINSPOOL.DRV'.*
-    DeletePrinterConnectionW                 = 'WINSPOOL.DRV'.*
-    DeletePrinterDataA                       = 'WINSPOOL.DRV'.*
-    DeletePrinterDataExA                     = 'WINSPOOL.DRV'.*
-    DeletePrinterDataExW                     = 'WINSPOOL.DRV'.*
-    DeletePrinterDataW                       = 'WINSPOOL.DRV'.*
-    DeletePrinterDriverA                     = 'WINSPOOL.DRV'.*
-    DeletePrinterDriverExA                   = 'WINSPOOL.DRV'.*
-    DeletePrinterDriverExW                   = 'WINSPOOL.DRV'.*
-    DeletePrinterDriverW                     = 'WINSPOOL.DRV'.*
-    DeletePrinterIC                          = 'WINSPOOL.DRV'.*
-    DeletePrinterKeyA                        = 'WINSPOOL.DRV'.*
-    DeletePrinterKeyW                        = 'WINSPOOL.DRV'.*
-    DevQueryPrint                            = 'WINSPOOL.DRV'.*
-    DevQueryPrintEx                          = 'WINSPOOL.DRV'.*
-    DeviceCapabilities                       = 'WINSPOOL.DRV'.*
-    DeviceCapabilitiesA                      = 'WINSPOOL.DRV'.*
-    DeviceCapabilitiesW                      = 'WINSPOOL.DRV'.*
-    DeviceMode                               = 'WINSPOOL.DRV'.*
-    DevicePropertySheets                     = 'WINSPOOL.DRV'.*
-    DocumentEvent                            = 'WINSPOOL.DRV'.*
-    DocumentPropertiesA                      = 'WINSPOOL.DRV'.*
-    DocumentPropertiesW                      = 'WINSPOOL.DRV'.*
-    DocumentPropertySheets                   = 'WINSPOOL.DRV'.*
-    EXTDEVICEMODE                            = 'WINSPOOL.DRV'.*
-    EndDocPrinter                            = 'WINSPOOL.DRV'.*
-    EndPagePrinter                           = 'WINSPOOL.DRV'.*
-    EnumFormsA                               = 'WINSPOOL.DRV'.*
-    EnumFormsW                               = 'WINSPOOL.DRV'.*
-    EnumJobsA                                = 'WINSPOOL.DRV'.*
-    EnumJobsW                                = 'WINSPOOL.DRV'.*
-    EnumMonitorsA                            = 'WINSPOOL.DRV'.*
-    EnumMonitorsW                            = 'WINSPOOL.DRV'.*
-    EnumPerMachineConnectionsA               = 'WINSPOOL.DRV'.* @210 @209
-    EnumPerMachineConnectionsW               = 'WINSPOOL.DRV'.* @211 @210
-    EnumPortsA                               = 'WINSPOOL.DRV'.*
-    EnumPortsW                               = 'WINSPOOL.DRV'.*
-    EnumPrintProcessorDatatypesA             = 'WINSPOOL.DRV'.*
-    EnumPrintProcessorDatatypesW             = 'WINSPOOL.DRV'.*
-    EnumPrintProcessorsA                     = 'WINSPOOL.DRV'.*
-    EnumPrintProcessorsW                     = 'WINSPOOL.DRV'.*
-    EnumPrinterDataA                         = 'WINSPOOL.DRV'.*
-    EnumPrinterDataExA                       = 'WINSPOOL.DRV'.*
-    EnumPrinterDataExW                       = 'WINSPOOL.DRV'.*
-    EnumPrinterDataW                         = 'WINSPOOL.DRV'.*
-    EnumPrinterDriversA                      = 'WINSPOOL.DRV'.*
-    EnumPrinterDriversW                      = 'WINSPOOL.DRV'.*
-    EnumPrinterKeyA                          = 'WINSPOOL.DRV'.*
-    EnumPrinterKeyW                          = 'WINSPOOL.DRV'.*
-    EnumPrinterPropertySheets                = 'WINSPOOL.DRV'.* @100 @99
-    EnumPrintersA                            = 'WINSPOOL.DRV'.*
-    EnumPrintersW                            = 'WINSPOOL.DRV'.*
-    ExtDeviceMode                            = 'WINSPOOL.DRV'.*
-    FindClosePrinterChangeNotification       = 'WINSPOOL.DRV'.*
-    FindFirstPrinterChangeNotification       = 'WINSPOOL.DRV'.*
-    FindNextPrinterChangeNotification        = 'WINSPOOL.DRV'.*
-    FlushPrinter                             = 'WINSPOOL.DRV'.*
-    ForceUnloadDriver                        = 'WINSPOOL.DRV'.* @215 @214
-    FreePrinterNotifyInfo                    = 'WINSPOOL.DRV'.*
-    GetDefaultPrinterA                       = 'WINSPOOL.DRV'.* @201 @200
-    GetDefaultPrinterW                       = 'WINSPOOL.DRV'.* @203 @202
-    GetFormA                                 = 'WINSPOOL.DRV'.*
-    GetFormW                                 = 'WINSPOOL.DRV'.*
-    GetJobA                                  = 'WINSPOOL.DRV'.*
-    GetJobW                                  = 'WINSPOOL.DRV'.*
-    GetPrintProcessorDirectoryA              = 'WINSPOOL.DRV'.*
-    GetPrintProcessorDirectoryW              = 'WINSPOOL.DRV'.*
-    GetPrinterA                              = 'WINSPOOL.DRV'.*
-    GetPrinterDataA                          = 'WINSPOOL.DRV'.*
-    GetPrinterDataExA                        = 'WINSPOOL.DRV'.*
-    GetPrinterDataExW                        = 'WINSPOOL.DRV'.*
-    GetPrinterDataW                          = 'WINSPOOL.DRV'.*
-    GetPrinterDriverA                        = 'WINSPOOL.DRV'.*
-    GetPrinterDriverDirectoryA               = 'WINSPOOL.DRV'.*
-    GetPrinterDriverDirectoryW               = 'WINSPOOL.DRV'.*
-    GetPrinterDriverW                        = 'WINSPOOL.DRV'.*
-    GetPrinterW                              = 'WINSPOOL.DRV'.*
-    GetSpoolFileHandle                       = 'WINSPOOL.DRV'.*
-    InitializeDll                            = 'WINSPOOL.DRV'.*
-    LoadPrinterDriver                        = 'WINSPOOL.DRV'.* @212 @211
-    OpenPrinterA                             = 'WINSPOOL.DRV'.*
-    OpenPrinterW                             = 'WINSPOOL.DRV'.*
-    PlayGdiScriptOnPrinterIC                 = 'WINSPOOL.DRV'.*
-    PrinterMessageBoxA                       = 'WINSPOOL.DRV'.*
-    PrinterMessageBoxW                       = 'WINSPOOL.DRV'.*
-    PrinterProperties                        = 'WINSPOOL.DRV'.*
-    PublishPrinterA                          = 'WINSPOOL.DRV'.* @216 @215
-    PublishPrinterW                          = 'WINSPOOL.DRV'.* @217 @216
-    QueryColorProfile                        = 'WINSPOOL.DRV'.*
-    QueryRemoteFonts                         = 'WINSPOOL.DRV'.*
-    QuerySpoolMode                           = 'WINSPOOL.DRV'.*
-    ReadPrinter                              = 'WINSPOOL.DRV'.*
-    RefCntLoadDriver                         = 'WINSPOOL.DRV'.* @213 @212
-    RefCntUnloadDriver                       = 'WINSPOOL.DRV'.* @214 @213
-    ResetPrinterA                            = 'WINSPOOL.DRV'.*
-    ResetPrinterW                            = 'WINSPOOL.DRV'.*
-    ScheduleJob                              = 'WINSPOOL.DRV'.*
-    SeekPrinter                              = 'WINSPOOL.DRV'.*
-    SetAllocFailCount                        = 'WINSPOOL.DRV'.*
-    SetDefaultPrinterA                       = 'WINSPOOL.DRV'.* @202 @201
-    SetDefaultPrinterW                       = 'WINSPOOL.DRV'.* @204 @203
-    SetFormA                                 = 'WINSPOOL.DRV'.*
-    SetFormW                                 = 'WINSPOOL.DRV'.*
-    SetJobA                                  = 'WINSPOOL.DRV'.*
-    SetJobW                                  = 'WINSPOOL.DRV'.*
-    SetPortA                                 = 'WINSPOOL.DRV'.*
-    SetPortW                                 = 'WINSPOOL.DRV'.*
-    SetPrinterA                              = 'WINSPOOL.DRV'.*
-    SetPrinterDataA                          = 'WINSPOOL.DRV'.*
-    SetPrinterDataExA                        = 'WINSPOOL.DRV'.*
-    SetPrinterDataExW                        = 'WINSPOOL.DRV'.*
-    SetPrinterDataW                          = 'WINSPOOL.DRV'.*
-    SetPrinterW                              = 'WINSPOOL.DRV'.*
-    SplDriverUnloadComplete                  = 'WINSPOOL.DRV'.*
-    SplReadPrinter                           = 'WINSPOOL.DRV'.* @205 @204
-    SpoolerDevQueryPrintW                    = 'WINSPOOL.DRV'.*
-    SpoolerInit                              = 'WINSPOOL.DRV'.*
-    SpoolerPrinterEvent                      = 'WINSPOOL.DRV'.*
-    StartDocDlgA                             = 'WINSPOOL.DRV'.*
-    StartDocDlgW                             = 'WINSPOOL.DRV'.*
-    StartDocPrinterA                         = 'WINSPOOL.DRV'.*
-    StartDocPrinterW                         = 'WINSPOOL.DRV'.*
-    StartPagePrinter                         = 'WINSPOOL.DRV'.*
-    WaitForPrinterChange                     = 'WINSPOOL.DRV'.*
-    WritePrinter                             = 'WINSPOOL.DRV'.*
-    XcvDataW                                 = 'WINSPOOL.DRV'.*
+    ADVANCEDSETUPDIALOG
+    AbortPrinter
+    AddDriverCatalog        @232
+    AddFormA
+    AddFormW
+    AddJobA
+    AddJobW
+    AddMonitorA
+    AddMonitorW
+    AddPerMachineConnectionA        @206
+    AddPerMachineConnectionW        @207
+    AddPortA
+    AddPortExA
+    AddPortExW
+    AddPortW
+    AddPrintProcessorA
+    AddPrintProcessorW
+    AddPrintProvidorA
+    AddPrintProvidorW
+    AddPrinterA
+    AddPrinterConnectionA
+    AddPrinterConnectionW
+    AddPrinterDriverA
+    AddPrinterDriverExA
+    AddPrinterDriverExW
+    AddPrinterDriverW
+    AddPrinterW
+    AdvancedDocumentPropertiesA
+    AdvancedDocumentPropertiesW
+    AdvancedSetupDialog
+    CallCommonPropertySheetUI        @218
+    ClosePrinter
+    CloseSpoolFileHandle
+    ClusterSplClose        @102
+    ClusterSplIsAlive        @103
+    ClusterSplOpen        @101
+    CommitSpoolData
+    ConfigurePortA
+    ConfigurePortW
+    ConnectToLd64In32Server        @224
+    ConnectToPrinterDlg
+    ConvertAnsiDevModeToUnicodeDevmode
+    ConvertUnicodeDevModeToAnsiDevmode
+    CreatePrinterIC
+    DEVICECAPABILITIES
+    DEVICEMODE
+    DeleteFormA
+    DeleteFormW
+    DeleteMonitorA
+    DeleteMonitorW
+    DeletePerMachineConnectionA        @208
+    DeletePerMachineConnectionW        @209
+    DeletePortA
+    DeletePortW
+    DeletePrintProcessorA
+    DeletePrintProcessorW
+    DeletePrintProvidorA
+    DeletePrintProvidorW
+    DeletePrinter
+    DeletePrinterConnectionA
+    DeletePrinterConnectionW
+    DeletePrinterDataA
+    DeletePrinterDataExA
+    DeletePrinterDataExW
+    DeletePrinterDataW
+    DeletePrinterDriverA
+    DeletePrinterDriverExA
+    DeletePrinterDriverExW
+    DeletePrinterDriverW
+    DeletePrinterIC
+    DeletePrinterKeyA
+    DeletePrinterKeyW
+    DevQueryPrint
+    DevQueryPrintEx
+    DeviceCapabilities
+    DeviceCapabilitiesA
+    DeviceCapabilitiesW
+    DeviceMode
+    DevicePropertySheets
+    DocumentEvent
+    DocumentPropertiesA
+    DocumentPropertiesW
+    DocumentPropertySheets
+    EXTDEVICEMODE
+    EndDocPrinter
+    EndPagePrinter
+    EnumFormsA
+    EnumFormsW
+    EnumJobsA
+    EnumJobsW
+    EnumMonitorsA
+    EnumMonitorsW
+    EnumPerMachineConnectionsA        @210
+    EnumPerMachineConnectionsW        @211
+    EnumPortsA
+    EnumPortsW
+    EnumPrintProcessorDatatypesA
+    EnumPrintProcessorDatatypesW
+    EnumPrintProcessorsA
+    EnumPrintProcessorsW
+    EnumPrinterDataA
+    EnumPrinterDataExA
+    EnumPrinterDataExW
+    EnumPrinterDataW
+    EnumPrinterDriversA
+    EnumPrinterDriversW
+    EnumPrinterKeyA
+    EnumPrinterKeyW
+    EnumPrinterPropertySheets        @100
+    EnumPrintersA
+    EnumPrintersW
+    ExtDeviceMode
+    FindClosePrinterChangeNotification
+    FindFirstPrinterChangeNotification
+    FindNextPrinterChangeNotification
+    FlushPrinter
+    ForceUnloadDriver        @215
+    FreePrinterNotifyInfo
+    GetDefaultPrinterA        @201
+    GetDefaultPrinterW        @203
+    GetFormA
+    GetFormW
+    GetJobA
+    GetJobW
+    GetPrintProcessorDirectoryA
+    GetPrintProcessorDirectoryW
+    GetPrinterA
+    GetPrinterDataA
+    GetPrinterDataExA
+    GetPrinterDataExW
+    GetPrinterDataW
+    GetPrinterDriverA
+    GetPrinterDriverDirectoryA
+    GetPrinterDriverDirectoryW
+    GetPrinterDriverW
+    GetPrinterW
+    GetSpoolFileHandle
+    LoadPrinterDriver        @212
+    OpenPrinterA
+    OpenPrinterW
+    PlayGdiScriptOnPrinterIC
+    PrintUICreateInstance        @228
+    PrintUIDocumentDefaults        @221
+    PrintUIDocumentPropertiesWrap        @229
+    PrintUIPrinterPropPages        @220
+    PrintUIPrinterSetup        @230
+    PrintUIQueueCreate        @219
+    PrintUIServerPropPages        @231
+    PrintUIWebPnpEntry        @226
+    PrintUIWebPnpPostEntry        @227
+    PrinterMessageBoxA
+    PrinterMessageBoxW
+    PrinterProperties
+    PublishPrinterA        @216
+    PublishPrinterW        @217
+    QueryColorProfile
+    QueryRemoteFonts
+    QuerySpoolMode
+    ReadPrinter
+    RefCntLoadDriver        @213
+    RefCntUnloadDriver        @214
+    ResetPrinterA
+    ResetPrinterW
+    RouterFreeBidiResponseContainer        @223
+    ScheduleJob
+    SeekPrinter
+    SendRecvBidiData        @222
+    SetAllocFailCount
+    SetDefaultPrinterA        @202
+    SetDefaultPrinterW        @204
+    SetFormA
+    SetFormW
+    SetJobA
+    SetJobW
+    SetPortA
+    SetPortW
+    SetPrinterA
+    SetPrinterDataA
+    SetPrinterDataExA
+    SetPrinterDataExW
+    SetPrinterDataW
+    SetPrinterW
+    SplDriverUnloadComplete
+    SplReadPrinter        @205
+    SpoolerDevQueryPrintW
+    SpoolerInit
+    SpoolerPrinterEvent
+    StartDocDlgA
+    StartDocDlgW
+    StartDocPrinterA
+    StartDocPrinterW
+    StartPagePrinter
+    WaitForPrinterChange
+    WritePrinter
+    XcvDataW

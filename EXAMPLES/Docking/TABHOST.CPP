@@ -53,10 +53,10 @@ void __fastcall TTabDockHost::FormClose(TObject *Sender,
   {
     TControl* DockClient = PageControl1->DockClients[0];
 
-    Windows::TPoint TopLeft = DockClient->ClientToScreen(Point(0, 0));
-    Windows::TPoint BottomRight = DockClient->ClientToScreen(Point(UndockWidth, UndockHeight));
+    Types::TPoint TopLeft = DockClient->ClientToScreen(Point(0, 0));
+    Types::TPoint BottomRight = DockClient->ClientToScreen(Point(UndockWidth, UndockHeight));
 
-    DockClient->ManualFloat(Windows::TRect(TopLeft, BottomRight));
+    DockClient->ManualFloat(Types::TRect(TopLeft, BottomRight));
 
     Action = caFree;
   }

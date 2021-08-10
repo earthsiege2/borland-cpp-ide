@@ -1,11 +1,10 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*
  *  S M P A B . H
  *  
  *  Definitions used by the Microsoft Sample Address Book
  *  provider for service entry calls
  *  
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1993-1999 Microsoft Corporation. All Rights Reserved.
  */
 
 /*
@@ -34,4 +33,3 @@
  */
 #define SAB_PROVIDER_ID {0x34,0xda,0x7e,0x60,0x03,0x1b,0x11,0xce,0x95,0x74,0x00,0xaa,0x00,0x3c,0xd2,0x07}
 
-#pragma option pop /*P_O_Pop*/

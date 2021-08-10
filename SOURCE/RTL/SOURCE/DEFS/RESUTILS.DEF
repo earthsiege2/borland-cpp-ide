@@ -1,69 +1,74 @@
-LIBRARY RESUTILS
+LIBRARY ResUtils
 EXPORTS
 
-    ClusWorkerCheckTerminate                 = 'RESUTILS.DLL'.*
-    ClusWorkerCreate                         = 'RESUTILS.DLL'.*
-    ClusWorkerStart                          = 'RESUTILS.DLL'.*
-    ClusWorkerTerminate                      = 'RESUTILS.DLL'.*
-    ResUtilAddUnknownProperties              = 'RESUTILS.DLL'.*
-    ResUtilCreateDirectoryTree               = 'RESUTILS.DLL'.*
-    ResUtilDupParameterBlock                 = 'RESUTILS.DLL'.*
-    ResUtilDupString                         = 'RESUTILS.DLL'.*
-    ResUtilEnumPrivateProperties             = 'RESUTILS.DLL'.*
-    ResUtilEnumProperties                    = 'RESUTILS.DLL'.*
-    ResUtilEnumResources                     = 'RESUTILS.DLL'.*
-    ResUtilExpandEnvironmentStrings          = 'RESUTILS.DLL'.*
-    ResUtilFindBinaryProperty                = 'RESUTILS.DLL'.*
-    ResUtilFindDependentDiskResourceDriveLetter = 'RESUTILS.DLL'.*
-    ResUtilFindDwordProperty                 = 'RESUTILS.DLL'.*
-    ResUtilFindExpandSzProperty              = 'RESUTILS.DLL'.*
-    ResUtilFindExpandedSzProperty            = 'RESUTILS.DLL'.*
-    ResUtilFindLongProperty                  = 'RESUTILS.DLL'.*
-    ResUtilFindMultiSzProperty               = 'RESUTILS.DLL'.*
-    ResUtilFindSzProperty                    = 'RESUTILS.DLL'.*
-    ResUtilFreeEnvironment                   = 'RESUTILS.DLL'.*
-    ResUtilFreeParameterBlock                = 'RESUTILS.DLL'.*
-    ResUtilGetAllProperties                  = 'RESUTILS.DLL'.*
-    ResUtilGetBinaryProperty                 = 'RESUTILS.DLL'.*
-    ResUtilGetBinaryValue                    = 'RESUTILS.DLL'.*
-    ResUtilGetDwordProperty                  = 'RESUTILS.DLL'.*
-    ResUtilGetDwordValue                     = 'RESUTILS.DLL'.*
-    ResUtilGetEnvironmentWithNetName         = 'RESUTILS.DLL'.*
-    ResUtilGetMultiSzProperty                = 'RESUTILS.DLL'.*
-    ResUtilGetPrivateProperties              = 'RESUTILS.DLL'.*
-    ResUtilGetProperties                     = 'RESUTILS.DLL'.*
-    ResUtilGetPropertiesToParameterBlock     = 'RESUTILS.DLL'.*
-    ResUtilGetProperty                       = 'RESUTILS.DLL'.*
-    ResUtilGetPropertySize                   = 'RESUTILS.DLL'.*
-    ResUtilGetResourceDependency             = 'RESUTILS.DLL'.*
-    ResUtilGetResourceDependencyByClass      = 'RESUTILS.DLL'.*
-    ResUtilGetResourceDependencyByName       = 'RESUTILS.DLL'.*
-    ResUtilGetResourceDependentIPAddressProps = 'RESUTILS.DLL'.*
-    ResUtilGetResourceNameDependency         = 'RESUTILS.DLL'.*
-    ResUtilGetSzProperty                     = 'RESUTILS.DLL'.*
-    ResUtilGetSzValue                        = 'RESUTILS.DLL'.*
-    ResUtilIsPathValid                       = 'RESUTILS.DLL'.*
-    ResUtilIsResourceClassEqual              = 'RESUTILS.DLL'.*
-    ResUtilPropertyListFromParameterBlock    = 'RESUTILS.DLL'.*
-    ResUtilResourceTypesEqual                = 'RESUTILS.DLL'.*
-    ResUtilResourcesEqual                    = 'RESUTILS.DLL'.*
-    ResUtilSetBinaryValue                    = 'RESUTILS.DLL'.*
-    ResUtilSetDwordValue                     = 'RESUTILS.DLL'.*
-    ResUtilSetExpandSzValue                  = 'RESUTILS.DLL'.*
-    ResUtilSetMultiSzValue                   = 'RESUTILS.DLL'.*
-    ResUtilSetPrivatePropertyList            = 'RESUTILS.DLL'.*
-    ResUtilSetPropertyParameterBlock         = 'RESUTILS.DLL'.*
-    ResUtilSetPropertyParameterBlockEx       = 'RESUTILS.DLL'.*
-    ResUtilSetPropertyTable                  = 'RESUTILS.DLL'.*
-    ResUtilSetPropertyTableEx                = 'RESUTILS.DLL'.*
-    ResUtilSetResourceServiceEnvironment     = 'RESUTILS.DLL'.*
-    ResUtilSetResourceServiceStartParameters = 'RESUTILS.DLL'.*
-    ResUtilSetSzValue                        = 'RESUTILS.DLL'.*
-    ResUtilSetUnknownProperties              = 'RESUTILS.DLL'.*
-    ResUtilStartResourceService              = 'RESUTILS.DLL'.*
-    ResUtilStopResourceService               = 'RESUTILS.DLL'.*
-    ResUtilStopService                       = 'RESUTILS.DLL'.*
-    ResUtilVerifyPrivatePropertyList         = 'RESUTILS.DLL'.*
-    ResUtilVerifyPropertyTable               = 'RESUTILS.DLL'.*
-    ResUtilVerifyResourceService             = 'RESUTILS.DLL'.*
-    ResUtilVerifyService                     = 'RESUTILS.DLL'.*
+    ClusWorkerCheckTerminate
+    ClusWorkerCreate
+    ClusWorkerStart
+    ClusWorkerTerminate
+    ResUtilAddUnknownProperties
+    ResUtilCreateDirectoryTree
+    ResUtilDupParameterBlock
+    ResUtilDupString
+    ResUtilEnumPrivateProperties
+    ResUtilEnumProperties
+    ResUtilEnumResources
+    ResUtilEnumResourcesEx
+    ResUtilExpandEnvironmentStrings
+    ResUtilFindBinaryProperty
+    ResUtilFindDependentDiskResourceDriveLetter
+    ResUtilFindDwordProperty
+    ResUtilFindExpandSzProperty
+    ResUtilFindExpandedSzProperty
+    ResUtilFindLongProperty
+    ResUtilFindMultiSzProperty
+    ResUtilFindSzProperty
+    ResUtilFreeEnvironment
+    ResUtilFreeParameterBlock
+    ResUtilGetAllProperties
+    ResUtilGetBinaryProperty
+    ResUtilGetBinaryValue
+    ResUtilGetCoreClusterResources
+    ResUtilGetDwordProperty
+    ResUtilGetDwordValue
+    ResUtilGetEnvironmentWithNetName
+    ResUtilGetMultiSzProperty
+    ResUtilGetPrivateProperties
+    ResUtilGetProperties
+    ResUtilGetPropertiesToParameterBlock
+    ResUtilGetProperty
+    ResUtilGetPropertyFormats
+    ResUtilGetPropertySize
+    ResUtilGetResourceDependency
+    ResUtilGetResourceDependencyByClass
+    ResUtilGetResourceDependencyByName
+    ResUtilGetResourceDependentIPAddressProps
+    ResUtilGetResourceName
+    ResUtilGetResourceNameDependency
+    ResUtilGetSzProperty
+    ResUtilGetSzValue
+    ResUtilIsPathValid
+    ResUtilIsResourceClassEqual
+    ResUtilPropertyListFromParameterBlock
+    ResUtilResourceTypesEqual
+    ResUtilResourcesEqual
+    ResUtilSetBinaryValue
+    ResUtilSetDwordValue
+    ResUtilSetExpandSzValue
+    ResUtilSetMultiSzValue
+    ResUtilSetPrivatePropertyList
+    ResUtilSetPropertyParameterBlock
+    ResUtilSetPropertyParameterBlockEx
+    ResUtilSetPropertyTable
+    ResUtilSetPropertyTableEx
+    ResUtilSetResourceServiceEnvironment
+    ResUtilSetResourceServiceStartParameters
+    ResUtilSetSzValue
+    ResUtilSetUnknownProperties
+    ResUtilStartResourceService
+    ResUtilStopResourceService
+    ResUtilStopService
+    ResUtilTerminateServiceProcessFromResDll
+    ResUtilVerifyPrivatePropertyList
+    ResUtilVerifyPropertyTable
+    ResUtilVerifyResourceService
+    ResUtilVerifyService

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ComCtrls.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ComCtrls.pas' rev: 6.00
 
 #ifndef ComCtrlsHPP
 #define ComCtrlsHPP
@@ -11,6 +11,7 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <ActnList.hpp>	// Pascal unit
+#include <ListActns.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
 #include <ImgList.hpp>	// Pascal unit
 #include <ToolWin.hpp>	// Pascal unit
@@ -18,10 +19,10 @@
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
 #include <Menus.hpp>	// Pascal unit
+#include <Classes.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
-#include <Classes.hpp>	// Pascal unit
-#include <Commctrl.hpp>	// Pascal unit
+#include <CommCtrl.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
@@ -34,8 +35,7 @@ namespace Comctrls
 {
 //-- type declarations -------------------------------------------------------
 #pragma option push -b-
-enum THitTest { htAbove, htBelow, htNowhere, htOnItem, htOnButton, htOnIcon, htOnIndent, htOnLabel, 
-	htOnRight, htOnStateIcon, htToLeft, htToRight };
+enum THitTest { htAbove, htBelow, htNowhere, htOnItem, htOnButton, htOnIcon, htOnIndent, htOnLabel, htOnRight, htOnStateIcon, htToLeft, htToRight };
 #pragma option pop
 
 typedef Set<THitTest, htAbove, htToRight>  THitTests;
@@ -51,11 +51,9 @@ enum TTabStyle { tsTabs, tsButtons, tsFlatButtons };
 #pragma option pop
 
 class DELPHICLASS TCustomTabControl;
-typedef void __fastcall (__closure *TDrawTabEvent)(TCustomTabControl* Control, int TabIndex, const Windows::TRect 
-	&Rect, bool Active);
+typedef void __fastcall (__closure *TDrawTabEvent)(TCustomTabControl* Control, int TabIndex, const Types::TRect &Rect, bool Active);
 
-typedef void __fastcall (__closure *TTabGetImageEvent)(System::TObject* Sender, int TabIndex, int &ImageIndex
-	);
+typedef void __fastcall (__closure *TTabGetImageEvent)(System::TObject* Sender, int TabIndex, int &ImageIndex);
 
 class PASCALIMPLEMENTATION TCustomTabControl : public Controls::TWinControl 
 {
@@ -77,15 +75,19 @@ private:
 	TTabPosition FTabPosition;
 	Classes::TStrings* FTabs;
 	#pragma pack(push, 1)
-	Windows::TSmallPoint FTabSize;
+	Types::TSmallPoint FTabSize;
 	#pragma pack(pop)
 	
 	bool FUpdating;
+	#pragma pack(push, 1)
+	Types::TRect FSavedAdjustRect;
+	#pragma pack(pop)
+	
 	Classes::TNotifyEvent FOnChange;
 	TTabChangingEvent FOnChanging;
 	TDrawTabEvent FOnDrawTab;
 	TTabGetImageEvent FOnGetImageIndex;
-	Windows::TRect __fastcall GetDisplayRect();
+	Types::TRect __fastcall GetDisplayRect();
 	int __fastcall GetTabIndex(void);
 	void __fastcall ImageListChange(System::TObject* Sender);
 	bool __fastcall InternalSetMultiLine(bool Value);
@@ -110,28 +112,28 @@ private:
 	MESSAGE void __fastcall CNNotify(Messages::TWMNotify &Message);
 	HIDESBASE MESSAGE void __fastcall CMDialogChar(Messages::TWMKey &Message);
 	MESSAGE void __fastcall CNDrawItem(Messages::TWMDrawItem &Message);
+	MESSAGE void __fastcall TCMAdjustRect(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall WMDestroy(Messages::TWMNoParams &Message);
 	MESSAGE void __fastcall WMNotifyFormat(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall WMSize(Messages::TMessage &Message);
 	
 protected:
-	virtual void __fastcall AdjustClientRect(Windows::TRect &Rect);
+	virtual void __fastcall AdjustClientRect(Types::TRect &Rect);
 	DYNAMIC bool __fastcall CanChange(void);
 	virtual bool __fastcall CanShowTab(int TabIndex);
 	DYNAMIC void __fastcall Change(void);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
-	virtual void __fastcall DrawTab(int TabIndex, const Windows::TRect &Rect, bool Active);
+	virtual void __fastcall DrawTab(int TabIndex, const Types::TRect &Rect, bool Active);
 	virtual int __fastcall GetImageIndex(int TabIndex);
 	virtual void __fastcall Loaded(void);
 	void __fastcall UpdateTabImages(void);
-	__property Windows::TRect DisplayRect = {read=GetDisplayRect};
+	__property Types::TRect DisplayRect = {read=GetDisplayRect};
 	__property bool HotTrack = {read=FHotTrack, write=SetHotTrack, default=0};
 	__property Imglist::TCustomImageList* Images = {read=FImages, write=SetImages};
 	__property bool MultiLine = {read=FMultiLine, write=SetMultiLine, default=0};
 	__property bool MultiSelect = {read=FMultiSelect, write=SetMultiSelect, default=0};
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	__property bool OwnerDraw = {read=FOwnerDraw, write=SetOwnerDraw, default=0};
 	__property bool RaggedRight = {read=FRaggedRight, write=SetRaggedRight, default=0};
 	__property bool ScrollOpposite = {read=FScrollOpposite, write=SetScrollOpposite, default=0};
@@ -151,15 +153,14 @@ public:
 	__fastcall virtual ~TCustomTabControl(void);
 	int __fastcall IndexOfTabAt(int X, int Y);
 	THitTests __fastcall GetHitTestInfoAt(int X, int Y);
-	Windows::TRect __fastcall TabRect(int Index);
+	Types::TRect __fastcall TabRect(int Index);
 	int __fastcall RowCount(void);
 	void __fastcall ScrollTabs(int Delta);
 	__property Graphics::TCanvas* Canvas = {read=FCanvas};
-	__property TabStop ;
+	__property TabStop  = {default=1};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomTabControl(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomTabControl(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -174,37 +175,37 @@ public:
 	__property DisplayRect ;
 	
 __published:
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
 	__property Constraints ;
-	__property DockSite ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DockSite  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property HotTrack ;
+	__property HotTrack  = {default=0};
 	__property Images ;
-	__property MultiLine ;
-	__property MultiSelect ;
-	__property OwnerDraw ;
-	__property ParentBiDiMode ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property MultiLine  = {default=0};
+	__property MultiSelect  = {default=0};
+	__property OwnerDraw  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property RaggedRight ;
-	__property ScrollOpposite ;
+	__property RaggedRight  = {default=0};
+	__property ScrollOpposite  = {default=0};
 	__property ShowHint ;
-	__property Style ;
-	__property TabHeight ;
-	__property TabOrder ;
-	__property TabPosition ;
+	__property Style  = {default=0};
+	__property TabHeight  = {default=0};
+	__property TabOrder  = {default=-1};
+	__property TabPosition  = {default=0};
 	__property Tabs ;
-	__property TabIndex ;
-	__property TabStop ;
-	__property TabWidth ;
-	__property Visible ;
+	__property TabIndex  = {default=-1};
+	__property TabStop  = {default=1};
+	__property TabWidth  = {default=0};
+	__property Visible  = {default=1};
 	__property OnChange ;
 	__property OnChanging ;
 	__property OnContextPopup ;
@@ -228,8 +229,7 @@ __published:
 	__property OnUnDock ;
 public:
 	#pragma option push -w-inl
-	/* TCustomTabControl.Create */ inline __fastcall virtual TTabControl(Classes::TComponent* AOwner) : 
-		TCustomTabControl(AOwner) { }
+	/* TCustomTabControl.Create */ inline __fastcall virtual TTabControl(Classes::TComponent* AOwner) : TCustomTabControl(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomTabControl.Destroy */ inline __fastcall virtual ~TTabControl(void) { }
@@ -237,8 +237,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TTabControl(HWND ParentWindow) : TCustomTabControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TTabControl(HWND ParentWindow) : TCustomTabControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -258,7 +257,7 @@ private:
 	void __fastcall ChangeActivePage(TTabSheet* Page);
 	void __fastcall DeleteTab(TTabSheet* Page, int Index);
 	int __fastcall GetActivePageIndex(void);
-	Controls::TControl* __fastcall GetDockClientFromMousePos(const Windows::TPoint &MousePos);
+	Controls::TControl* __fastcall GetDockClientFromMousePos(const Types::TPoint &MousePos);
 	TTabSheet* __fastcall GetPage(int Index);
 	int __fastcall GetPageCount(void);
 	void __fastcall InsertPage(TTabSheet* Page);
@@ -280,15 +279,13 @@ private:
 protected:
 	virtual bool __fastcall CanShowTab(int TabIndex);
 	DYNAMIC void __fastcall Change(void);
-	DYNAMIC void __fastcall DoAddDockClient(Controls::TControl* Client, const Windows::TRect &ARect);
-	DYNAMIC void __fastcall DockOver(Controls::TDragDockObject* Source, int X, int Y, Controls::TDragState 
-		State, bool &Accept);
+	DYNAMIC void __fastcall DoAddDockClient(Controls::TControl* Client, const Types::TRect &ARect);
+	DYNAMIC void __fastcall DockOver(Controls::TDragDockObject* Source, int X, int Y, Controls::TDragState State, bool &Accept);
 	DYNAMIC void __fastcall DoRemoveDockClient(Controls::TControl* Client);
 	DYNAMIC void __fastcall GetChildren(Classes::TGetChildProc Proc, Classes::TComponent* Root);
 	virtual int __fastcall GetImageIndex(int TabIndex);
 	TTabSheet* __fastcall GetPageFromDockClient(Controls::TControl* Client);
-	DYNAMIC void __fastcall GetSiteInfo(Controls::TControl* Client, Windows::TRect &InfluenceRect, const 
-		Windows::TPoint &MousePos, bool &CanDock);
+	DYNAMIC void __fastcall GetSiteInfo(Controls::TControl* Client, Types::TRect &InfluenceRect, const Types::TPoint &MousePos, bool &CanDock);
 	virtual void __fastcall Loaded(void);
 	DYNAMIC void __fastcall SetChildOrder(Classes::TComponent* Child, int Order);
 	virtual void __fastcall ShowControl(Controls::TControl* AControl);
@@ -298,41 +295,42 @@ public:
 	__fastcall virtual TPageControl(Classes::TComponent* AOwner);
 	__fastcall virtual ~TPageControl(void);
 	TTabSheet* __fastcall FindNextPage(TTabSheet* CurPage, bool GoForward, bool CheckTabVisible);
-	void __fastcall SelectNextPage(bool GoForward);
+	void __fastcall SelectNextPage(bool GoForward, bool CheckTabVisible = true);
 	__property int ActivePageIndex = {read=GetActivePageIndex, write=SetActivePageIndex, nodefault};
 	__property int PageCount = {read=GetPageCount, nodefault};
 	__property TTabSheet* Pages[int Index] = {read=GetPage};
 	
 __published:
 	__property TTabSheet* ActivePage = {read=FActivePage, write=SetActivePage};
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
 	__property Constraints ;
-	__property DockSite ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DockSite  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property HotTrack ;
+	__property HotTrack  = {default=0};
 	__property Images ;
-	__property MultiLine ;
-	__property OwnerDraw ;
-	__property ParentBiDiMode ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property MultiLine  = {default=0};
+	__property OwnerDraw  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property RaggedRight ;
-	__property ScrollOpposite ;
+	__property RaggedRight  = {default=0};
+	__property ScrollOpposite  = {default=0};
 	__property ShowHint ;
-	__property Style ;
-	__property TabHeight ;
-	__property TabOrder ;
-	__property TabPosition ;
-	__property TabStop ;
-	__property TabWidth ;
-	__property Visible ;
+	__property Style  = {default=0};
+	__property TabHeight  = {default=0};
+	__property TabIndex  = {default=-1};
+	__property TabOrder  = {default=-1};
+	__property TabPosition  = {default=0};
+	__property TabStop  = {default=1};
+	__property TabWidth  = {default=0};
+	__property Visible  = {default=1};
 	__property OnChange ;
 	__property OnChanging ;
 	__property OnContextPopup ;
@@ -356,8 +354,7 @@ __published:
 	__property OnUnDock ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TPageControl(HWND ParentWindow) : TCustomTabControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TPageControl(HWND ParentWindow) : TCustomTabControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -400,10 +397,10 @@ public:
 	__property int TabIndex = {read=GetTabIndex, nodefault};
 	
 __published:
-	__property BorderWidth ;
+	__property BorderWidth  = {default=0};
 	__property Caption ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
 	__property Height  = {stored=false};
 	__property bool Highlighted = {read=FHighlighted, write=SetHighlighted, default=0};
@@ -411,8 +408,8 @@ __published:
 	__property Left  = {stored=false};
 	__property Constraints ;
 	__property int PageIndex = {read=GetPageIndex, write=SetPageIndex, stored=false, nodefault};
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
 	__property bool TabVisible = {read=FTabVisible, write=SetTabVisible, default=1};
@@ -434,8 +431,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TTabSheet(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TTabSheet(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -448,6 +444,8 @@ enum TStatusPanelStyle { psText, psOwnerDraw };
 #pragma option push -b-
 enum TStatusPanelBevel { pbNone, pbLowered, pbRaised };
 #pragma option pop
+
+typedef TMetaClass*TStatusPanelClass;
 
 class DELPHICLASS TStatusPanel;
 class PASCALIMPLEMENTATION TStatusPanel : public Classes::TCollectionItem 
@@ -485,8 +483,7 @@ public:
 __published:
 	__property Classes::TAlignment Alignment = {read=FAlignment, write=SetAlignment, default=0};
 	__property TStatusPanelBevel Bevel = {read=FBevel, write=SetBevel, default=1};
-	__property Classes::TBiDiMode BiDiMode = {read=FBiDiMode, write=SetBiDiMode, stored=IsBiDiModeStored
-		, nodefault};
+	__property Classes::TBiDiMode BiDiMode = {read=FBiDiMode, write=SetBiDiMode, stored=IsBiDiModeStored, nodefault};
 	__property bool ParentBiDiMode = {read=FParentBiDiMode, write=SetParentBiDiMode, default=1};
 	__property TStatusPanelStyle Style = {read=FStyle, write=SetStyle, default=0};
 	__property AnsiString Text = {read=FText, write=SetText};
@@ -500,11 +497,12 @@ public:
 
 
 class DELPHICLASS TStatusPanels;
-class DELPHICLASS TStatusBar;
-typedef void __fastcall (__closure *TDrawPanelEvent)(TStatusBar* StatusBar, TStatusPanel* Panel, const 
-	Windows::TRect &Rect);
+class DELPHICLASS TCustomStatusBar;
+typedef void __fastcall (__closure *TCustomDrawPanelEvent)(TCustomStatusBar* StatusBar, TStatusPanel* Panel, const Types::TRect &Rect);
 
-class PASCALIMPLEMENTATION TStatusBar : public Controls::TWinControl 
+typedef void __fastcall (__closure *TSBCreatePanelClassEvent)(TCustomStatusBar* Sender, TMetaClass* &PanelClass);
+
+class PASCALIMPLEMENTATION TCustomStatusBar : public Controls::TWinControl 
 {
 	typedef Controls::TWinControl inherited;
 	
@@ -514,13 +512,13 @@ private:
 	AnsiString FSimpleText;
 	bool FSimplePanel;
 	bool FSizeGrip;
+	bool FSizeGripValid;
 	bool FUseSystemFont;
 	bool FAutoHint;
-	TDrawPanelEvent FOnDrawPanel;
+	TCustomDrawPanelEvent FOnDrawPanel;
 	Classes::TNotifyEvent FOnHint;
-	void __fastcall DoRightToLeftAlignment(AnsiString &Str, Classes::TAlignment AAlignment, bool ARTLAlignment
-		);
-	HIDESBASE bool __fastcall IsFontStored(void);
+	TSBCreatePanelClassEvent FOnCreatePanelClass;
+	void __fastcall DoRightToLeftAlignment(AnsiString &Str, Classes::TAlignment AAlignment, bool ARTLAlignment);
 	void __fastcall SetPanels(TStatusPanels* Value);
 	void __fastcall SetSimplePanel(bool Value);
 	void __fastcall UpdateSimpleText(void);
@@ -540,66 +538,39 @@ private:
 	HIDESBASE MESSAGE void __fastcall WMPaint(Messages::TWMPaint &Message);
 	HIDESBASE MESSAGE void __fastcall WMSize(Messages::TWMSize &Message);
 	void __fastcall SetUseSystemFont(const bool Value);
+	void __fastcall ValidateSizeGrip(bool ARecreate);
 	
 protected:
 	DYNAMIC void __fastcall ChangeScale(int M, int D);
+	virtual TStatusPanel* __fastcall CreatePanel(void);
+	virtual TStatusPanels* __fastcall CreatePanels(void);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
 	virtual bool __fastcall DoHint(void);
-	DYNAMIC void __fastcall DrawPanel(TStatusPanel* Panel, const Windows::TRect &Rect);
+	DYNAMIC void __fastcall DrawPanel(TStatusPanel* Panel, const Types::TRect &Rect);
+	virtual TMetaClass* __fastcall GetPanelClass(void);
+	HIDESBASE bool __fastcall IsFontStored(void);
+	virtual void __fastcall SetParent(Controls::TWinControl* AParent);
 	
 public:
-	__fastcall virtual TStatusBar(Classes::TComponent* AOwner);
-	__fastcall virtual ~TStatusBar(void);
+	__fastcall virtual TCustomStatusBar(Classes::TComponent* AOwner);
+	__fastcall virtual ~TCustomStatusBar(void);
 	DYNAMIC bool __fastcall ExecuteAction(Classes::TBasicAction* Action);
 	DYNAMIC void __fastcall FlipChildren(bool AllLevels);
+	virtual void __fastcall SetBounds(int ALeft, int ATop, int AWidth, int AHeight);
 	__property Graphics::TCanvas* Canvas = {read=FCanvas};
-	
-__published:
-	__property Action ;
-	__property bool AutoHint = {read=FAutoHint, write=FAutoHint, default=0};
-	__property Align ;
-	__property Anchors ;
-	__property BiDiMode ;
-	__property BorderWidth ;
-	__property Color ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
-	__property Font  = {stored=IsFontStored};
-	__property Constraints ;
+	__property bool AutoHint = {read=FAutoHint, write=FAutoHint, nodefault};
 	__property TStatusPanels* Panels = {read=FPanels, write=SetPanels};
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentFont ;
-	__property ParentShowHint ;
-	__property PopupMenu ;
-	__property ShowHint ;
 	__property bool SimplePanel = {read=FSimplePanel, write=SetSimplePanel, nodefault};
 	__property AnsiString SimpleText = {read=FSimpleText, write=SetSimpleText};
-	__property bool SizeGrip = {read=FSizeGrip, write=SetSizeGrip, default=1};
-	__property bool UseSystemFont = {read=FUseSystemFont, write=SetUseSystemFont, default=1};
-	__property Visible ;
-	__property OnClick ;
-	__property OnContextPopup ;
-	__property OnDblClick ;
-	__property OnDragDrop ;
-	__property OnDragOver ;
-	__property OnEndDock ;
-	__property OnEndDrag ;
+	__property bool SizeGrip = {read=FSizeGrip, write=SetSizeGrip, nodefault};
+	__property bool UseSystemFont = {read=FUseSystemFont, write=SetUseSystemFont, nodefault};
+	__property TSBCreatePanelClassEvent OnCreatePanelClass = {read=FOnCreatePanelClass, write=FOnCreatePanelClass};
 	__property Classes::TNotifyEvent OnHint = {read=FOnHint, write=FOnHint};
-	__property OnMouseDown ;
-	__property OnMouseMove ;
-	__property OnMouseUp ;
-	__property TDrawPanelEvent OnDrawPanel = {read=FOnDrawPanel, write=FOnDrawPanel};
-	__property OnResize ;
-	__property OnStartDock ;
-	__property OnStartDrag ;
+	__property TCustomDrawPanelEvent OnDrawPanel = {read=FOnDrawPanel, write=FOnDrawPanel};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TStatusBar(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomStatusBar(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -609,8 +580,11 @@ class PASCALIMPLEMENTATION TStatusPanels : public Classes::TCollection
 {
 	typedef Classes::TCollection inherited;
 	
+public:
+	TStatusPanel* operator[](int Index) { return Items[Index]; }
+	
 private:
-	TStatusBar* FStatusBar;
+	TCustomStatusBar* FStatusBar;
 	HIDESBASE TStatusPanel* __fastcall GetItem(int Index);
 	HIDESBASE void __fastcall SetItem(int Index, TStatusPanel* Value);
 	
@@ -619,12 +593,83 @@ protected:
 	virtual void __fastcall Update(Classes::TCollectionItem* Item);
 	
 public:
-	__fastcall TStatusPanels(TStatusBar* StatusBar);
+	__fastcall TStatusPanels(TCustomStatusBar* StatusBar);
 	HIDESBASE TStatusPanel* __fastcall Add(void);
+	TStatusPanel* __fastcall AddItem(TStatusPanel* Item, int Index);
+	HIDESBASE TStatusPanel* __fastcall Insert(int Index);
 	__property TStatusPanel* Items[int Index] = {read=GetItem, write=SetItem/*, default*/};
 public:
 	#pragma option push -w-inl
 	/* TCollection.Destroy */ inline __fastcall virtual ~TStatusPanels(void) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TStatusBar;
+typedef void __fastcall (__closure *TDrawPanelEvent)(TStatusBar* StatusBar, TStatusPanel* Panel, const Types::TRect &Rect);
+
+class PASCALIMPLEMENTATION TStatusBar : public TCustomStatusBar 
+{
+	typedef TCustomStatusBar inherited;
+	
+private:
+	TDrawPanelEvent __fastcall GetOnDrawPanel();
+	void __fastcall SetOnDrawPanel(const TDrawPanelEvent Value);
+	
+__published:
+	__property Action ;
+	__property AutoHint  = {default=0};
+	__property Align  = {default=2};
+	__property Anchors  = {default=3};
+	__property BiDiMode ;
+	__property BorderWidth  = {default=0};
+	__property Color  = {default=-2147483633};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
+	__property Font  = {stored=IsFontStored};
+	__property Constraints ;
+	__property Panels ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentFont  = {default=0};
+	__property ParentShowHint  = {default=1};
+	__property PopupMenu ;
+	__property ShowHint ;
+	__property SimplePanel ;
+	__property SimpleText ;
+	__property SizeGrip  = {default=1};
+	__property UseSystemFont  = {default=1};
+	__property Visible  = {default=1};
+	__property OnClick ;
+	__property OnContextPopup ;
+	__property OnCreatePanelClass ;
+	__property OnDblClick ;
+	__property OnDragDrop ;
+	__property OnDragOver ;
+	__property OnEndDock ;
+	__property OnEndDrag ;
+	__property OnHint ;
+	__property OnMouseDown ;
+	__property OnMouseMove ;
+	__property OnMouseUp ;
+	__property TDrawPanelEvent OnDrawPanel = {read=GetOnDrawPanel, write=SetOnDrawPanel};
+	__property OnResize ;
+	__property OnStartDock ;
+	__property OnStartDrag ;
+public:
+	#pragma option push -w-inl
+	/* TCustomStatusBar.Create */ inline __fastcall virtual TStatusBar(Classes::TComponent* AOwner) : TCustomStatusBar(AOwner) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TCustomStatusBar.Destroy */ inline __fastcall virtual ~TStatusBar(void) { }
+	#pragma option pop
+	
+public:
+	#pragma option push -w-inl
+	/* TWinControl.CreateParented */ inline __fastcall TStatusBar(HWND ParentWindow) : TCustomStatusBar(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -639,15 +684,16 @@ enum TCustomDrawStage { cdPrePaint, cdPostPaint, cdPreErase, cdPostErase };
 #pragma option pop
 
 #pragma option push -b-
-enum ComCtrls__8 { cdsSelected, cdsGrayed, cdsDisabled, cdsChecked, cdsFocused, cdsDefault, cdsHot, 
-	cdsMarked, cdsIndeterminate };
+enum ComCtrls__9 { cdsSelected, cdsGrayed, cdsDisabled, cdsChecked, cdsFocused, cdsDefault, cdsHot, cdsMarked, cdsIndeterminate };
 #pragma option pop
 
-typedef Set<ComCtrls__8, cdsSelected, cdsIndeterminate>  TCustomDrawState;
+typedef Set<ComCtrls__9, cdsSelected, cdsIndeterminate>  TCustomDrawState;
 
 #pragma option push -b-
 enum THeaderSectionStyle { hsText, hsOwnerDraw };
 #pragma option pop
+
+typedef TMetaClass*THeaderSectionClass;
 
 class DELPHICLASS THeaderSection;
 class PASCALIMPLEMENTATION THeaderSection : public Classes::TCollectionItem 
@@ -696,8 +742,7 @@ __published:
 	__property Classes::TAlignment Alignment = {read=FAlignment, write=SetAlignment, default=0};
 	__property bool AllowClick = {read=FAllowClick, write=FAllowClick, default=1};
 	__property bool AutoSize = {read=FAutoSize, write=SetAutoSize, default=0};
-	__property Classes::TBiDiMode BiDiMode = {read=FBiDiMode, write=SetBiDiMode, stored=IsBiDiModeStored
-		, nodefault};
+	__property Classes::TBiDiMode BiDiMode = {read=FBiDiMode, write=SetBiDiMode, stored=IsBiDiModeStored, nodefault};
 	__property Imglist::TImageIndex ImageIndex = {read=FImageIndex, write=SetImageIndex, nodefault};
 	__property int MaxWidth = {read=FMaxWidth, write=SetMaxWidth, default=10000};
 	__property int MinWidth = {read=FMinWidth, write=SetMinWidth, default=0};
@@ -714,28 +759,26 @@ public:
 
 
 class DELPHICLASS THeaderSections;
-class DELPHICLASS THeaderControl;
+class DELPHICLASS TCustomHeaderControl;
 #pragma option push -b-
 enum THeaderStyle { hsButtons, hsFlat };
 #pragma option pop
 
-typedef void __fastcall (__closure *TDrawSectionEvent)(THeaderControl* HeaderControl, THeaderSection* 
-	Section, const Windows::TRect &Rect, bool Pressed);
+typedef void __fastcall (__closure *TCustomDrawSectionEvent)(TCustomHeaderControl* HeaderControl, THeaderSection* Section, const Types::TRect &Rect, bool Pressed);
 
-typedef void __fastcall (__closure *TSectionNotifyEvent)(THeaderControl* HeaderControl, THeaderSection* 
-	Section);
+typedef void __fastcall (__closure *TCustomSectionNotifyEvent)(TCustomHeaderControl* HeaderControl, THeaderSection* Section);
 
 #pragma option push -b-
 enum TSectionTrackState { tsTrackBegin, tsTrackMove, tsTrackEnd };
 #pragma option pop
 
-typedef void __fastcall (__closure *TSectionTrackEvent)(THeaderControl* HeaderControl, THeaderSection* 
-	Section, int Width, TSectionTrackState State);
+typedef void __fastcall (__closure *TCustomSectionTrackEvent)(TCustomHeaderControl* HeaderControl, THeaderSection* Section, int Width, TSectionTrackState State);
 
-typedef void __fastcall (__closure *TSectionDragEvent)(System::TObject* Sender, THeaderSection* FromSection
-	, THeaderSection* ToSection, bool &AllowDrag);
+typedef void __fastcall (__closure *TSectionDragEvent)(System::TObject* Sender, THeaderSection* FromSection, THeaderSection* ToSection, bool &AllowDrag);
 
-class PASCALIMPLEMENTATION THeaderControl : public Controls::TWinControl 
+typedef void __fastcall (__closure *TCustomHCCreateSectionClassEvent)(TCustomHeaderControl* Sender, TMetaClass* &SectionClass);
+
+class PASCALIMPLEMENTATION TCustomHeaderControl : public Controls::TWinControl 
 {
 	typedef Controls::TWinControl inherited;
 	
@@ -755,13 +798,17 @@ private:
 	THeaderStyle FStyle;
 	THeaderSection* FTrackSection;
 	int FTrackWidth;
-	Windows::TPoint FTrackPos;
-	TDrawSectionEvent FOnDrawSection;
-	TSectionNotifyEvent FOnSectionClick;
-	TSectionNotifyEvent FOnSectionResize;
-	TSectionTrackEvent FOnSectionTrack;
+	#pragma pack(push, 1)
+	Types::TPoint FTrackPos;
+	#pragma pack(pop)
+	
+	TCustomDrawSectionEvent FOnDrawSection;
+	TCustomSectionNotifyEvent FOnSectionClick;
+	TCustomSectionNotifyEvent FOnSectionResize;
+	TCustomSectionTrackEvent FOnSectionTrack;
 	TSectionDragEvent FOnSectionDrag;
 	Classes::TNotifyEvent FOnSectionEndDrag;
+	TCustomHCCreateSectionClassEvent FOnCreateSectionClass;
 	bool __fastcall DoSectionDrag(THeaderSection* FromSection, THeaderSection* ToSection);
 	void __fastcall DoSectionEndDrag(void);
 	void __fastcall ImageListChange(System::TObject* Sender);
@@ -781,74 +828,54 @@ private:
 	HIDESBASE MESSAGE void __fastcall WMWindowPosChanged(Messages::TWMWindowPosMsg &Message);
 	
 protected:
+	virtual THeaderSection* __fastcall CreateSection(void);
+	virtual THeaderSections* __fastcall CreateSections(void);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
 	virtual void __fastcall DestroyWnd(void);
-	DYNAMIC void __fastcall DrawSection(THeaderSection* Section, const Windows::TRect &Rect, bool Pressed
-		);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	DYNAMIC void __fastcall DrawSection(THeaderSection* Section, const Types::TRect &Rect, bool Pressed);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	DYNAMIC void __fastcall SectionClick(THeaderSection* Section);
-	DYNAMIC void __fastcall SectionDrag(THeaderSection* FromSection, THeaderSection* ToSection, bool &AllowDrag
-		);
+	DYNAMIC void __fastcall SectionDrag(THeaderSection* FromSection, THeaderSection* ToSection, bool &AllowDrag);
 	DYNAMIC void __fastcall SectionEndDrag(void);
 	DYNAMIC void __fastcall SectionResize(THeaderSection* Section);
 	DYNAMIC void __fastcall SectionTrack(THeaderSection* Section, int Width, TSectionTrackState State);
-		
 	virtual void __fastcall SetImages(Imglist::TCustomImageList* Value);
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
 	
 public:
-	__fastcall virtual THeaderControl(Classes::TComponent* AOwner);
-	__fastcall virtual ~THeaderControl(void);
+	__fastcall virtual TCustomHeaderControl(Classes::TComponent* AOwner);
+	__fastcall virtual ~TCustomHeaderControl(void);
 	__property Graphics::TCanvas* Canvas = {read=FCanvas};
 	DYNAMIC void __fastcall FlipChildren(bool AllLevels);
 	
 __published:
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=1};
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
-	__property BorderWidth ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
+	__property BorderWidth  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
 	__property bool DragReorder = {read=FDragReorder, write=SetDragReorder, nodefault};
-	__property Enabled ;
+	__property bool FullDrag = {read=FFullDrag, write=SetFullDrag, nodefault};
+	__property bool HotTrack = {read=FHotTrack, write=SetHotTrack, nodefault};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property bool FullDrag = {read=FFullDrag, write=SetFullDrag, default=1};
-	__property bool HotTrack = {read=FHotTrack, write=SetHotTrack, default=0};
 	__property Imglist::TCustomImageList* Images = {read=FImages, write=SetImages};
 	__property Constraints ;
 	__property THeaderSections* Sections = {read=FSections, write=SetSections};
-	__property ShowHint ;
-	__property THeaderStyle Style = {read=FStyle, write=SetStyle, default=0};
-	__property ParentBiDiMode ;
-	__property ParentFont ;
-	__property ParentShowHint ;
-	__property PopupMenu ;
-	__property Visible ;
-	__property OnContextPopup ;
-	__property OnDragDrop ;
-	__property OnDragOver ;
-	__property OnEndDock ;
-	__property OnEndDrag ;
-	__property OnMouseDown ;
-	__property OnMouseMove ;
-	__property OnMouseUp ;
-	__property TDrawSectionEvent OnDrawSection = {read=FOnDrawSection, write=FOnDrawSection};
-	__property OnResize ;
-	__property TSectionNotifyEvent OnSectionClick = {read=FOnSectionClick, write=FOnSectionClick};
+	__property THeaderStyle Style = {read=FStyle, write=SetStyle, nodefault};
+	__property TCustomHCCreateSectionClassEvent OnCreateSectionClass = {read=FOnCreateSectionClass, write=FOnCreateSectionClass};
+	__property TCustomDrawSectionEvent OnDrawSection = {read=FOnDrawSection, write=FOnDrawSection};
+	__property TCustomSectionNotifyEvent OnSectionClick = {read=FOnSectionClick, write=FOnSectionClick};
 	__property TSectionDragEvent OnSectionDrag = {read=FOnSectionDrag, write=FOnSectionDrag};
-	__property Classes::TNotifyEvent OnSectionEndDrag = {read=FOnSectionEndDrag, write=FOnSectionEndDrag
-		};
-	__property TSectionNotifyEvent OnSectionResize = {read=FOnSectionResize, write=FOnSectionResize};
-	__property TSectionTrackEvent OnSectionTrack = {read=FOnSectionTrack, write=FOnSectionTrack};
-	__property OnStartDock ;
-	__property OnStartDrag ;
+	__property Classes::TNotifyEvent OnSectionEndDrag = {read=FOnSectionEndDrag, write=FOnSectionEndDrag};
+	__property TCustomSectionNotifyEvent OnSectionResize = {read=FOnSectionResize, write=FOnSectionResize};
+	__property TCustomSectionTrackEvent OnSectionTrack = {read=FOnSectionTrack, write=FOnSectionTrack};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall THeaderControl(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomHeaderControl(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -858,8 +885,11 @@ class PASCALIMPLEMENTATION THeaderSections : public Classes::TCollection
 {
 	typedef Classes::TCollection inherited;
 	
+public:
+	THeaderSection* operator[](int Index) { return Items[Index]; }
+	
 private:
-	THeaderControl* FHeaderControl;
+	TCustomHeaderControl* FHeaderControl;
 	HIDESBASE THeaderSection* __fastcall GetItem(int Index);
 	HIDESBASE void __fastcall SetItem(int Index, THeaderSection* Value);
 	
@@ -868,12 +898,94 @@ protected:
 	virtual void __fastcall Update(Classes::TCollectionItem* Item);
 	
 public:
-	__fastcall THeaderSections(THeaderControl* HeaderControl);
+	__fastcall THeaderSections(TCustomHeaderControl* HeaderControl);
 	HIDESBASE THeaderSection* __fastcall Add(void);
+	THeaderSection* __fastcall AddItem(THeaderSection* Item, int Index);
+	HIDESBASE THeaderSection* __fastcall Insert(int Index);
 	__property THeaderSection* Items[int Index] = {read=GetItem, write=SetItem/*, default*/};
 public:
 	#pragma option push -w-inl
 	/* TCollection.Destroy */ inline __fastcall virtual ~THeaderSections(void) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS THeaderControl;
+typedef void __fastcall (__closure *TDrawSectionEvent)(THeaderControl* HeaderControl, THeaderSection* Section, const Types::TRect &Rect, bool Pressed);
+
+typedef void __fastcall (__closure *TSectionNotifyEvent)(THeaderControl* HeaderControl, THeaderSection* Section);
+
+typedef void __fastcall (__closure *TSectionTrackEvent)(THeaderControl* HeaderControl, THeaderSection* Section, int Width, TSectionTrackState State);
+
+typedef void __fastcall (__closure *THCCreateSectionClassEvent)(THeaderControl* Sender, TMetaClass* &SectionClass);
+
+class PASCALIMPLEMENTATION THeaderControl : public TCustomHeaderControl 
+{
+	typedef TCustomHeaderControl inherited;
+	
+private:
+	TDrawSectionEvent __fastcall GetOnDrawSection();
+	TSectionNotifyEvent __fastcall GetOnSectionClick();
+	TSectionNotifyEvent __fastcall GetOnSectionResize();
+	TSectionTrackEvent __fastcall GetOnSectionTrack();
+	void __fastcall SetOnDrawSection(const TDrawSectionEvent Value);
+	void __fastcall SetOnSectionClick(const TSectionNotifyEvent Value);
+	void __fastcall SetOnSectionResize(const TSectionNotifyEvent Value);
+	void __fastcall SetOnSectionTrack(const TSectionTrackEvent Value);
+	
+__published:
+	__property Align  = {default=1};
+	__property Anchors  = {default=3};
+	__property BiDiMode ;
+	__property BorderWidth  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property DragReorder ;
+	__property Enabled  = {default=1};
+	__property Font ;
+	__property FullDrag  = {default=1};
+	__property HotTrack  = {default=0};
+	__property Images ;
+	__property Constraints ;
+	__property Sections ;
+	__property ShowHint ;
+	__property Style  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
+	__property PopupMenu ;
+	__property Visible  = {default=1};
+	__property OnContextPopup ;
+	__property OnCreateSectionClass ;
+	__property OnDragDrop ;
+	__property OnDragOver ;
+	__property OnEndDock ;
+	__property OnEndDrag ;
+	__property OnMouseDown ;
+	__property OnMouseMove ;
+	__property OnMouseUp ;
+	__property OnResize ;
+	__property TDrawSectionEvent OnDrawSection = {read=GetOnDrawSection, write=SetOnDrawSection};
+	__property TSectionNotifyEvent OnSectionClick = {read=GetOnSectionClick, write=SetOnSectionClick};
+	__property TSectionNotifyEvent OnSectionResize = {read=GetOnSectionResize, write=SetOnSectionResize};
+	__property TSectionTrackEvent OnSectionTrack = {read=GetOnSectionTrack, write=SetOnSectionTrack};
+	__property OnSectionDrag ;
+	__property OnSectionEndDrag ;
+	__property OnStartDock ;
+	__property OnStartDrag ;
+public:
+	#pragma option push -w-inl
+	/* TCustomHeaderControl.Create */ inline __fastcall virtual THeaderControl(Classes::TComponent* AOwner) : TCustomHeaderControl(AOwner) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TCustomHeaderControl.Destroy */ inline __fastcall virtual ~THeaderControl(void) { }
+	#pragma option pop
+	
+public:
+	#pragma option push -w-inl
+	/* TWinControl.CreateParented */ inline __fastcall THeaderControl(HWND ParentWindow) : TCustomHeaderControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -907,6 +1019,8 @@ struct TNodeInfo
 } ;
 #pragma pack(pop)
 
+typedef TMetaClass*TTreeNodeClass;
+
 class DELPHICLASS TTreeNode;
 class DELPHICLASS TTreeNodes;
 class DELPHICLASS TCustomTreeView;
@@ -914,39 +1028,37 @@ class DELPHICLASS TCustomTreeView;
 enum TSortType { stNone, stData, stText, stBoth };
 #pragma option pop
 
-typedef void __fastcall (__closure *TTVAdvancedCustomDrawEvent)(TCustomTreeView* Sender, const Windows::TRect 
-	&ARect, TCustomDrawStage Stage, bool &DefaultDraw);
+#pragma option push -b-
+enum TMultiSelectStyles { msControlSelect, msShiftSelect, msVisibleOnly, msSiblingOnly };
+#pragma option pop
 
-typedef void __fastcall (__closure *TTVAdvancedCustomDrawItemEvent)(TCustomTreeView* Sender, TTreeNode* 
-	Node, TCustomDrawState State, TCustomDrawStage Stage, bool &PaintImages, bool &DefaultDraw);
+typedef Set<TMultiSelectStyles, msControlSelect, msSiblingOnly>  TMultiSelectStyle;
+
+typedef void __fastcall (__closure *TTVAdvancedCustomDrawEvent)(TCustomTreeView* Sender, const Types::TRect &ARect, TCustomDrawStage Stage, bool &DefaultDraw);
+
+typedef void __fastcall (__closure *TTVAdvancedCustomDrawItemEvent)(TCustomTreeView* Sender, TTreeNode* Node, TCustomDrawState State, TCustomDrawStage Stage, bool &PaintImages, bool &DefaultDraw);
 
 typedef void __fastcall (__closure *TTVChangedEvent)(System::TObject* Sender, TTreeNode* Node);
 
-typedef void __fastcall (__closure *TTVChangingEvent)(System::TObject* Sender, TTreeNode* Node, bool 
-	&AllowChange);
+typedef void __fastcall (__closure *TTVChangingEvent)(System::TObject* Sender, TTreeNode* Node, bool &AllowChange);
 
 typedef void __fastcall (__closure *TTVExpandedEvent)(System::TObject* Sender, TTreeNode* Node);
 
-typedef void __fastcall (__closure *TTVCollapsingEvent)(System::TObject* Sender, TTreeNode* Node, bool 
-	&AllowCollapse);
+typedef void __fastcall (__closure *TTVCollapsingEvent)(System::TObject* Sender, TTreeNode* Node, bool &AllowCollapse);
 
-typedef void __fastcall (__closure *TTVCompareEvent)(System::TObject* Sender, TTreeNode* Node1, TTreeNode* 
-	Node2, int Data, int &Compare);
+typedef void __fastcall (__closure *TTVCompareEvent)(System::TObject* Sender, TTreeNode* Node1, TTreeNode* Node2, int Data, int &Compare);
 
-typedef void __fastcall (__closure *TTVCustomDrawEvent)(TCustomTreeView* Sender, const Windows::TRect 
-	&ARect, bool &DefaultDraw);
+typedef void __fastcall (__closure *TTVCustomDrawEvent)(TCustomTreeView* Sender, const Types::TRect &ARect, bool &DefaultDraw);
 
-typedef void __fastcall (__closure *TTVCustomDrawItemEvent)(TCustomTreeView* Sender, TTreeNode* Node
-	, TCustomDrawState State, bool &DefaultDraw);
+typedef void __fastcall (__closure *TTVCustomDrawItemEvent)(TCustomTreeView* Sender, TTreeNode* Node, TCustomDrawState State, bool &DefaultDraw);
 
-typedef void __fastcall (__closure *TTVEditingEvent)(System::TObject* Sender, TTreeNode* Node, bool 
-	&AllowEdit);
+typedef void __fastcall (__closure *TTVEditingEvent)(System::TObject* Sender, TTreeNode* Node, bool &AllowEdit);
 
-typedef void __fastcall (__closure *TTVEditedEvent)(System::TObject* Sender, TTreeNode* Node, AnsiString 
-	&S);
+typedef void __fastcall (__closure *TTVEditedEvent)(System::TObject* Sender, TTreeNode* Node, AnsiString &S);
 
-typedef void __fastcall (__closure *TTVExpandingEvent)(System::TObject* Sender, TTreeNode* Node, bool 
-	&AllowExpansion);
+typedef void __fastcall (__closure *TTVExpandingEvent)(System::TObject* Sender, TTreeNode* Node, bool &AllowExpansion);
+
+typedef void __fastcall (__closure *TTVCreateNodeClassEvent)(TCustomTreeView* Sender, TMetaClass* &NodeClass);
 
 class PASCALIMPLEMENTATION TCustomTreeView : public Controls::TWinControl 
 {
@@ -988,8 +1100,19 @@ private:
 	bool FToolTips;
 	TTreeNodes* FTreeNodes;
 	WideString FWideText;
+	bool FMultiSelect;
+	TMultiSelectStyle FMultiSelectStyle;
+	Classes::TList* FSelections;
+	Classes::TList* FSaveIndexes;
+	TTreeNode* FShiftAnchor;
+	bool FSelecting;
+	bool FSelectChanged;
+	int FOurFont;
+	int FStockFont;
+	bool FCreateWndRestores;
 	TTVAdvancedCustomDrawEvent FOnAdvancedCustomDraw;
 	TTVAdvancedCustomDrawItemEvent FOnAdvancedCustomDrawItem;
+	TTVChangedEvent FOnCancelEdit;
 	TTVChangedEvent FOnChange;
 	TTVChangingEvent FOnChanging;
 	TTVExpandedEvent FOnCollapsed;
@@ -998,12 +1121,14 @@ private:
 	TTVCustomDrawEvent FOnCustomDraw;
 	TTVCustomDrawItemEvent FOnCustomDrawItem;
 	TTVExpandedEvent FOnDeletion;
+	TTVExpandedEvent FOnAddition;
 	TTVEditingEvent FOnEditing;
 	TTVEditedEvent FOnEdited;
 	TTVExpandedEvent FOnExpanded;
 	TTVExpandingEvent FOnExpanding;
 	TTVExpandedEvent FOnGetImageIndex;
 	TTVExpandedEvent FOnGetSelectedIndex;
+	TTVCreateNodeClassEvent FOnCreateNodeClass;
 	void __fastcall CanvasChanged(System::TObject* Sender);
 	HIDESBASE MESSAGE void __fastcall CMColorChanged(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMCtl3DChanged(Messages::TMessage &Message);
@@ -1012,11 +1137,20 @@ private:
 	MESSAGE void __fastcall CNNotify(Messages::TWMNotify &Message);
 	void __fastcall EditWndProc(Messages::TMessage &Message);
 	void __fastcall DoDragOver(Controls::TDragObject* Source, int X, int Y, bool CanDrop);
+	void __fastcall NodeDeselect(int Index);
+	void __fastcall NodeSelect(TTreeNode* Node, int At = 0x0);
+	void __fastcall FinishSelection(TTreeNode* Node, Classes::TShiftState ShiftState);
+	void __fastcall ControlSelectNode(TTreeNode* Node);
+	void __fastcall ShiftSelectNode(TTreeNode* Node, bool Backward, bool Deselect = true);
+	void __fastcall ControlShiftSelectNode(TTreeNode* Node, bool Backward);
+	void __fastcall SelectNode(TTreeNode* Node);
 	int __fastcall GetChangeDelay(void);
 	TTreeNode* __fastcall GetDropTarget(void);
 	int __fastcall GetIndent(void);
 	TTreeNode* __fastcall GetNodeFromItem(const tagTVITEMA &Item);
-	TTreeNode* __fastcall GetSelection(void);
+	TTreeNode* __fastcall GetSelected(void);
+	unsigned __fastcall GetSelectionCount(void);
+	TTreeNode* __fastcall GetSelection(int Index);
 	TTreeNode* __fastcall GetTopItem(void);
 	void __fastcall ImageListChange(System::TObject* Sender);
 	void __fastcall SetAutoExpand(bool Value);
@@ -1030,10 +1164,12 @@ private:
 	void __fastcall SetIndent(int Value);
 	void __fastcall SetImages(Imglist::TCustomImageList* Value);
 	void __fastcall SetLineStyle(bool Value);
+	void __fastcall SetMultiSelect(const bool Value);
+	void __fastcall SetMultiSelectStyle(const TMultiSelectStyle Value);
 	void __fastcall SetReadOnly(bool Value);
 	void __fastcall SetRootStyle(bool Value);
 	void __fastcall SetRowSelect(bool Value);
-	void __fastcall SetSelection(TTreeNode* Value);
+	void __fastcall SetSelected(TTreeNode* Value);
 	void __fastcall SetSortType(TSortType Value);
 	void __fastcall SetStateImages(Imglist::TCustomImageList* Value);
 	void __fastcall SetToolTips(bool Value);
@@ -1054,12 +1190,13 @@ protected:
 	DYNAMIC void __fastcall Change(TTreeNode* Node);
 	DYNAMIC void __fastcall Collapse(TTreeNode* Node);
 	virtual TTreeNode* __fastcall CreateNode(void);
+	virtual TTreeNodes* __fastcall CreateNodes(void);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
-	virtual bool __fastcall CustomDraw(const Windows::TRect &ARect, TCustomDrawStage Stage);
-	virtual bool __fastcall CustomDrawItem(TTreeNode* Node, TCustomDrawState State, TCustomDrawStage Stage
-		, bool &PaintImages);
+	virtual bool __fastcall CustomDraw(const Types::TRect &ARect, TCustomDrawStage Stage);
+	virtual bool __fastcall CustomDrawItem(TTreeNode* Node, TCustomDrawState State, TCustomDrawStage Stage, bool &PaintImages);
 	DYNAMIC void __fastcall Delete(TTreeNode* Node);
+	DYNAMIC void __fastcall Added(TTreeNode* Node);
 	virtual void __fastcall DestroyWnd(void);
 	DYNAMIC void __fastcall DoEndDrag(System::TObject* Target, int X, int Y);
 	DYNAMIC void __fastcall DoStartDrag(Controls::TDragObject* &DragObject);
@@ -1068,20 +1205,27 @@ protected:
 	virtual Controls::TDragImageList* __fastcall GetDragImages(void);
 	virtual void __fastcall GetImageIndex(TTreeNode* Node);
 	virtual void __fastcall GetSelectedIndex(TTreeNode* Node);
-	bool __fastcall IsCustomDrawn(TCustomDrawTarget Target, TCustomDrawStage Stage);
+	virtual bool __fastcall IsCustomDrawn(TCustomDrawTarget Target, TCustomDrawStage Stage);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall SetDragMode(Controls::TDragMode Value);
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
+	void __fastcall ValidateSelection(void);
+	void __fastcall InvalidateSelectionsRects(void);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	DYNAMIC void __fastcall DoEnter(void);
+	DYNAMIC void __fastcall DoExit(void);
 	__property bool AutoExpand = {read=FAutoExpand, write=SetAutoExpand, default=0};
 	__property Forms::TBorderStyle BorderStyle = {read=FBorderStyle, write=SetBorderStyle, default=1};
 	__property int ChangeDelay = {read=GetChangeDelay, write=SetChangeDelay, default=0};
+	__property bool CreateWndRestores = {read=FCreateWndRestores, write=FCreateWndRestores, default=1};
 	__property bool HideSelection = {read=FHideSelection, write=SetHideSelection, default=1};
 	__property bool HotTrack = {read=FHotTrack, write=SetHotTrack, default=0};
 	__property Imglist::TCustomImageList* Images = {read=FImages, write=SetImages};
 	__property int Indent = {read=GetIndent, write=SetIndent, nodefault};
 	__property TTreeNodes* Items = {read=FTreeNodes, write=SetTreeNodes};
+	__property bool MultiSelect = {read=FMultiSelect, write=SetMultiSelect, default=0};
+	__property TMultiSelectStyle MultiSelectStyle = {read=FMultiSelectStyle, write=SetMultiSelectStyle, default=1};
 	__property bool ReadOnly = {read=FReadOnly, write=SetReadOnly, default=0};
 	__property bool RightClickSelect = {read=FRightClickSelect, write=FRightClickSelect, default=0};
 	__property bool RowSelect = {read=FRowSelect, write=SetRowSelect, default=0};
@@ -1091,32 +1235,31 @@ protected:
 	__property TSortType SortType = {read=FSortType, write=SetSortType, default=0};
 	__property Imglist::TCustomImageList* StateImages = {read=FStateImages, write=SetStateImages};
 	__property bool ToolTips = {read=FToolTips, write=SetToolTips, default=1};
-	__property TTVAdvancedCustomDrawEvent OnAdvancedCustomDraw = {read=FOnAdvancedCustomDraw, write=FOnAdvancedCustomDraw
-		};
-	__property TTVAdvancedCustomDrawItemEvent OnAdvancedCustomDrawItem = {read=FOnAdvancedCustomDrawItem
-		, write=FOnAdvancedCustomDrawItem};
+	__property TTVExpandedEvent OnAddition = {read=FOnAddition, write=FOnAddition};
+	__property TTVAdvancedCustomDrawEvent OnAdvancedCustomDraw = {read=FOnAdvancedCustomDraw, write=FOnAdvancedCustomDraw};
+	__property TTVAdvancedCustomDrawItemEvent OnAdvancedCustomDrawItem = {read=FOnAdvancedCustomDrawItem, write=FOnAdvancedCustomDrawItem};
+	__property TTVChangedEvent OnCancelEdit = {read=FOnCancelEdit, write=FOnCancelEdit};
 	__property TTVChangedEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property TTVChangingEvent OnChanging = {read=FOnChanging, write=FOnChanging};
 	__property TTVExpandedEvent OnCollapsed = {read=FOnCollapsed, write=FOnCollapsed};
 	__property TTVCollapsingEvent OnCollapsing = {read=FOnCollapsing, write=FOnCollapsing};
 	__property TTVCompareEvent OnCompare = {read=FOnCompare, write=FOnCompare};
 	__property TTVCustomDrawEvent OnCustomDraw = {read=FOnCustomDraw, write=FOnCustomDraw};
-	__property TTVCustomDrawItemEvent OnCustomDrawItem = {read=FOnCustomDrawItem, write=FOnCustomDrawItem
-		};
+	__property TTVCustomDrawItemEvent OnCustomDrawItem = {read=FOnCustomDrawItem, write=FOnCustomDrawItem};
 	__property TTVExpandedEvent OnDeletion = {read=FOnDeletion, write=FOnDeletion};
 	__property TTVEditingEvent OnEditing = {read=FOnEditing, write=FOnEditing};
 	__property TTVEditedEvent OnEdited = {read=FOnEdited, write=FOnEdited};
 	__property TTVExpandingEvent OnExpanding = {read=FOnExpanding, write=FOnExpanding};
 	__property TTVExpandedEvent OnExpanded = {read=FOnExpanded, write=FOnExpanded};
 	__property TTVExpandedEvent OnGetImageIndex = {read=FOnGetImageIndex, write=FOnGetImageIndex};
-	__property TTVExpandedEvent OnGetSelectedIndex = {read=FOnGetSelectedIndex, write=FOnGetSelectedIndex
-		};
+	__property TTVExpandedEvent OnGetSelectedIndex = {read=FOnGetSelectedIndex, write=FOnGetSelectedIndex};
+	__property TTVCreateNodeClassEvent OnCreateNodeClass = {read=FOnCreateNodeClass, write=FOnCreateNodeClass};
 	
 public:
 	__fastcall virtual TCustomTreeView(Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomTreeView(void);
-	bool __fastcall AlphaSort(void);
-	bool __fastcall CustomSort(PFNTVCOMPARE SortProc, int Data);
+	bool __fastcall AlphaSort(bool ARecurse = true);
+	bool __fastcall CustomSort(PFNTVCOMPARE SortProc, int Data, bool ARecurse = true);
 	void __fastcall FullCollapse(void);
 	void __fastcall FullExpand(void);
 	THitTests __fastcall GetHitTestInfoAt(int X, int Y);
@@ -1128,31 +1271,46 @@ public:
 	void __fastcall SaveToStream(Classes::TStream* Stream);
 	__property Graphics::TCanvas* Canvas = {read=FCanvas};
 	__property TTreeNode* DropTarget = {read=GetDropTarget, write=SetDropTarget};
-	__property TTreeNode* Selected = {read=GetSelection, write=SetSelection};
+	__property TTreeNode* Selected = {read=GetSelected, write=SetSelected};
 	__property TTreeNode* TopItem = {read=GetTopItem, write=SetTopItem};
+	virtual void __fastcall Select(TTreeNode* Node, Classes::TShiftState ShiftState = System::Set<Classes__1, ssShift, ssDouble> () )/* overload */;
+	virtual void __fastcall Select(const TTreeNode* * Nodes, const int Nodes_Size)/* overload */;
+	virtual void __fastcall Select(Classes::TList* Nodes)/* overload */;
+	virtual void __fastcall Deselect(TTreeNode* Node);
+	virtual void __fastcall Subselect(TTreeNode* Node, bool Validate = false);
+	__property unsigned SelectionCount = {read=GetSelectionCount, nodefault};
+	__property TTreeNode* Selections[int Index] = {read=GetSelection};
+	virtual void __fastcall ClearSelection(bool KeepPrimary = false);
+	TTreeNode* __fastcall GetSelections(Classes::TList* AList);
+	virtual TTreeNode* __fastcall FindNextToSelect(void);
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomTreeView(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomTreeView(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
+#pragma pack(push, 4)
 struct TNodeCache
 {
 	TTreeNode* CacheNode;
 	int CacheIndex;
 } ;
+#pragma pack(pop)
 
 class PASCALIMPLEMENTATION TTreeNodes : public Classes::TPersistent 
 {
 	typedef Classes::TPersistent inherited;
 	
+public:
+	TTreeNode* operator[](int Index) { return Item[Index]; }
+	
 private:
 	TCustomTreeView* FOwner;
 	int FUpdateCount;
 	TNodeCache FNodeCache;
+	bool FReading;
 	void __fastcall AddedNode(TTreeNode* Value);
 	HWND __fastcall GetHandle(void);
 	TTreeNode* __fastcall GetNodeFromIndex(int Index);
@@ -1164,36 +1322,38 @@ private:
 	void __fastcall ReadExpandedState(Classes::TStream* Stream);
 	
 protected:
-	HTREEITEM __fastcall AddItem(HTREEITEM Parent, HTREEITEM Target, const tagTVITEMA &Item, TAddMode AddMode
-		);
-	TTreeNode* __fastcall InternalAddObject(TTreeNode* Node, const AnsiString S, void * Ptr, TAddMode AddMode
-		);
+	HTREEITEM __fastcall AddItem(HTREEITEM Parent, HTREEITEM Target, const tagTVITEMA &Item, TAddMode AddMode);
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
 	tagTVITEMA __fastcall CreateItem(TTreeNode* Node);
 	int __fastcall GetCount(void);
 	void __fastcall SetItem(int Index, TTreeNode* Value);
 	void __fastcall SetUpdateState(bool Updating);
+	__property bool Reading = {read=FReading, nodefault};
 	
 public:
 	__fastcall TTreeNodes(TCustomTreeView* AOwner);
 	__fastcall virtual ~TTreeNodes(void);
-	TTreeNode* __fastcall AddChildFirst(TTreeNode* Node, const AnsiString S);
-	TTreeNode* __fastcall AddChild(TTreeNode* Node, const AnsiString S);
-	TTreeNode* __fastcall AddChildObjectFirst(TTreeNode* Node, const AnsiString S, void * Ptr);
-	TTreeNode* __fastcall AddChildObject(TTreeNode* Node, const AnsiString S, void * Ptr);
-	TTreeNode* __fastcall AddFirst(TTreeNode* Node, const AnsiString S);
-	TTreeNode* __fastcall Add(TTreeNode* Node, const AnsiString S);
-	TTreeNode* __fastcall AddObjectFirst(TTreeNode* Node, const AnsiString S, void * Ptr);
-	TTreeNode* __fastcall AddObject(TTreeNode* Node, const AnsiString S, void * Ptr);
+	TTreeNode* __fastcall AddChildFirst(TTreeNode* Parent, const AnsiString S);
+	TTreeNode* __fastcall AddChild(TTreeNode* Parent, const AnsiString S);
+	TTreeNode* __fastcall AddChildObjectFirst(TTreeNode* Parent, const AnsiString S, void * Ptr);
+	TTreeNode* __fastcall AddChildObject(TTreeNode* Parent, const AnsiString S, void * Ptr);
+	TTreeNode* __fastcall AddFirst(TTreeNode* Sibling, const AnsiString S);
+	TTreeNode* __fastcall Add(TTreeNode* Sibling, const AnsiString S);
+	TTreeNode* __fastcall AddObjectFirst(TTreeNode* Sibling, const AnsiString S, void * Ptr);
+	TTreeNode* __fastcall AddObject(TTreeNode* Sibling, const AnsiString S, void * Ptr);
+	TTreeNode* __fastcall AddNode(TTreeNode* Node, TTreeNode* Relative, const AnsiString S, void * Ptr, TNodeAttachMode Method);
+	bool __fastcall AlphaSort(bool ARecurse = false);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	void __fastcall BeginUpdate(void);
 	void __fastcall Clear(void);
+	bool __fastcall CustomSort(PFNTVCOMPARE SortProc, int Data, bool ARecurse = false);
 	void __fastcall Delete(TTreeNode* Node);
 	void __fastcall EndUpdate(void);
 	TTreeNode* __fastcall GetFirstNode(void);
 	TTreeNode* __fastcall GetNode(HTREEITEM ItemId);
-	TTreeNode* __fastcall Insert(TTreeNode* Node, const AnsiString S);
-	TTreeNode* __fastcall InsertObject(TTreeNode* Node, const AnsiString S, void * Ptr);
+	TTreeNode* __fastcall Insert(TTreeNode* Sibling, const AnsiString S);
+	TTreeNode* __fastcall InsertObject(TTreeNode* Sibling, const AnsiString S, void * Ptr);
+	TTreeNode* __fastcall InsertNode(TTreeNode* Node, TTreeNode* Sibling, const AnsiString S, void * Ptr);
 	__property int Count = {read=GetCount, nodefault};
 	__property HWND Handle = {read=GetHandle, nodefault};
 	__property TTreeNode* Item[int Index] = {read=GetNodeFromIndex/*, default*/};
@@ -1204,6 +1364,9 @@ public:
 class PASCALIMPLEMENTATION TTreeNode : public Classes::TPersistent 
 {
 	typedef Classes::TPersistent inherited;
+	
+public:
+	TTreeNode* operator[](int Index) { return Item[Index]; }
 	
 private:
 	TTreeNodes* FOwner;
@@ -1231,11 +1394,9 @@ private:
 	int __fastcall GetIndex(void);
 	TTreeNode* __fastcall GetItem(int Index);
 	bool __fastcall GetSelected(void);
-	bool __fastcall GetState(TNodeState NodeState);
 	int __fastcall GetCount(void);
 	TCustomTreeView* __fastcall GetTreeView(void);
-	void __fastcall InternalMove(TTreeNode* ParentNode, TTreeNode* Node, HTREEITEM HItem, TAddMode AddMode
-		);
+	void __fastcall InternalMove(TTreeNode* ParentNode, TTreeNode* Node, HTREEITEM HItem, TAddMode AddMode);
 	bool __fastcall IsEqual(TTreeNode* Node);
 	bool __fastcall IsNodeVisible(void);
 	void __fastcall ReadData(Classes::TStream* Stream, PNodeInfo Info);
@@ -1254,16 +1415,21 @@ private:
 	void __fastcall SetText(const AnsiString S);
 	void __fastcall WriteData(Classes::TStream* Stream, PNodeInfo Info);
 	
+protected:
+	bool __fastcall GetState(TNodeState NodeState);
+	void __fastcall SetState(TNodeState NodeState, bool Value);
+	void __fastcall SetSelectedBit(bool Value);
+	
 public:
 	__fastcall TTreeNode(TTreeNodes* AOwner);
 	__fastcall virtual ~TTreeNode(void);
-	bool __fastcall AlphaSort(void);
+	bool __fastcall AlphaSort(bool ARecurse = false);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	void __fastcall Collapse(bool Recurse);
-	bool __fastcall CustomSort(PFNTVCOMPARE SortProc, int Data);
+	bool __fastcall CustomSort(PFNTVCOMPARE SortProc, int Data, bool ARecurse = false);
 	void __fastcall Delete(void);
 	void __fastcall DeleteChildren(void);
-	Windows::TRect __fastcall DisplayRect(bool TextOnly);
+	Types::TRect __fastcall DisplayRect(bool TextOnly);
 	bool __fastcall EditText(void);
 	void __fastcall EndEdit(bool Cancel);
 	void __fastcall Expand(bool Recurse);
@@ -1283,6 +1449,7 @@ public:
 	void __fastcall MakeVisible(void);
 	virtual void __fastcall MoveTo(TTreeNode* Destination, TNodeAttachMode Mode);
 	__property int AbsoluteIndex = {read=GetAbsoluteIndex, nodefault};
+	bool __fastcall IsFirstNode(void);
 	__property int Count = {read=GetCount, nodefault};
 	__property bool Cut = {read=GetCut, write=SetCut, nodefault};
 	__property void * Data = {read=FData, write=SetData};
@@ -1318,38 +1485,28 @@ class PASCALIMPLEMENTATION ETreeViewError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall ETreeViewError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall ETreeViewError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall ETreeViewError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall ETreeViewError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall ETreeViewError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall ETreeViewError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall ETreeViewError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall ETreeViewError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall ETreeViewError(const AnsiString Msg, int AHelpContext)
-		 : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall ETreeViewError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall ETreeViewError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ETreeViewError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall ETreeViewError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ETreeViewError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall ETreeViewError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ETreeViewError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -1366,44 +1523,52 @@ class PASCALIMPLEMENTATION TTreeView : public TCustomTreeView
 	typedef TCustomTreeView inherited;
 	
 __published:
-	__property Align ;
-	__property Anchors ;
-	__property AutoExpand ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property AutoExpand  = {default=0};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelOuter  = {index=1, default=1};
+	__property BevelKind  = {default=0};
+	__property BevelWidth  = {default=1};
 	__property BiDiMode ;
-	__property BorderStyle ;
-	__property BorderWidth ;
-	__property ChangeDelay ;
-	__property Color ;
+	__property BorderStyle  = {default=1};
+	__property BorderWidth  = {default=0};
+	__property ChangeDelay  = {default=0};
+	__property Color  = {default=-2147483643};
 	__property Ctl3D ;
 	__property Constraints ;
-	__property DragKind ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragKind  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property HideSelection ;
-	__property HotTrack ;
+	__property HideSelection  = {default=1};
+	__property HotTrack  = {default=0};
 	__property Images ;
 	__property Indent ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property MultiSelect  = {default=0};
+	__property MultiSelectStyle  = {default=1};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property ReadOnly ;
-	__property RightClickSelect ;
-	__property RowSelect ;
-	__property ShowButtons ;
+	__property ReadOnly  = {default=0};
+	__property RightClickSelect  = {default=0};
+	__property RowSelect  = {default=0};
+	__property ShowButtons  = {default=1};
 	__property ShowHint ;
-	__property ShowLines ;
-	__property ShowRoot ;
-	__property SortType ;
+	__property ShowLines  = {default=1};
+	__property ShowRoot  = {default=1};
+	__property SortType  = {default=0};
 	__property StateImages ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property ToolTips ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property ToolTips  = {default=1};
+	__property Visible  = {default=1};
+	__property OnAddition ;
 	__property OnAdvancedCustomDraw ;
 	__property OnAdvancedCustomDrawItem ;
 	__property OnChange ;
@@ -1413,6 +1578,7 @@ __published:
 	__property OnCollapsing ;
 	__property OnCompare ;
 	__property OnContextPopup ;
+	__property OnCreateNodeClass ;
 	__property OnCustomDraw ;
 	__property OnCustomDrawItem ;
 	__property OnDblClick ;
@@ -1440,8 +1606,7 @@ __published:
 	__property Items ;
 public:
 	#pragma option push -w-inl
-	/* TCustomTreeView.Create */ inline __fastcall virtual TTreeView(Classes::TComponent* AOwner) : TCustomTreeView(
-		AOwner) { }
+	/* TCustomTreeView.Create */ inline __fastcall virtual TTreeView(Classes::TComponent* AOwner) : TCustomTreeView(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomTreeView.Destroy */ inline __fastcall virtual ~TTreeView(void) { }
@@ -1449,8 +1614,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TTreeView(HWND ParentWindow) : TCustomTreeView(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TTreeView(HWND ParentWindow) : TCustomTreeView(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1518,22 +1682,21 @@ public:
 	void __fastcall SetTick(int Value);
 	
 __published:
-	__property Align ;
-	__property Anchors ;
-	__property BorderWidth ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property BorderWidth  = {default=0};
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Constraints ;
 	__property int LineSize = {read=FLineSize, write=SetLineSize, default=1};
 	__property int Max = {read=FMax, write=SetMax, default=10};
 	__property int Min = {read=FMin, write=SetMin, default=0};
 	__property TTrackBarOrientation Orientation = {read=FOrientation, write=SetOrientation, nodefault};
-		
-	__property ParentCtl3D ;
-	__property ParentShowHint ;
+	__property ParentCtl3D  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property int PageSize = {read=FPageSize, write=SetPageSize, default=2};
 	__property PopupMenu ;
 	__property int Frequency = {read=FFrequency, write=SetFrequency, nodefault};
@@ -1542,12 +1705,12 @@ __published:
 	__property int SelEnd = {read=FSelEnd, write=SetSelEnd, nodefault};
 	__property int SelStart = {read=FSelStart, write=SetSelStart, nodefault};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
 	__property int ThumbLength = {read=GetThumbLength, write=SetThumbLength, default=20};
 	__property TTickMark TickMarks = {read=FTickMarks, write=SetTickMarks, nodefault};
 	__property TTickStyle TickStyle = {read=FTickStyle, write=SetTickStyle, nodefault};
-	__property Visible ;
+	__property Visible  = {default=1};
 	__property OnContextPopup ;
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property OnDragDrop ;
@@ -1563,8 +1726,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TTrackBar(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TTrackBar(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TTrackBar(void) { }
@@ -1614,28 +1776,27 @@ public:
 	void __fastcall StepBy(int Delta);
 	
 __published:
-	__property Align ;
-	__property Anchors ;
-	__property BorderWidth ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property BorderWidth  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Hint ;
 	__property Constraints ;
 	__property int Min = {read=GetMin, write=SetMin, nodefault};
 	__property int Max = {read=GetMax, write=SetMax, nodefault};
-	__property TProgressBarOrientation Orientation = {read=FOrientation, write=SetOrientation, default=0
-		};
-	__property ParentShowHint ;
+	__property TProgressBarOrientation Orientation = {read=FOrientation, write=SetOrientation, default=0};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property int Position = {read=GetPosition, write=SetPosition, default=0};
 	__property bool Smooth = {read=FSmooth, write=SetSmooth, default=0};
 	__property int Step = {read=FStep, write=SetStep, default=10};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
+	__property Visible  = {default=1};
 	__property OnContextPopup ;
 	__property OnDragDrop ;
 	__property OnDragOver ;
@@ -1650,8 +1811,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TProgressBar(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TProgressBar(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TProgressBar(void) { }
@@ -1665,8 +1825,7 @@ enum TAttributeType { atSelected, atDefaultText };
 #pragma option pop
 
 #pragma option push -b-
-enum TConsistentAttribute { caBold, caColor, caFace, caItalic, caSize, caStrikeOut, caUnderline, caProtected 
-	};
+enum TConsistentAttribute { caBold, caColor, caFace, caItalic, caSize, caStrikeOut, caUnderline, caProtected };
 #pragma option pop
 
 typedef Set<TConsistentAttribute, caBold, caProtected>  TConsistentAttributes;
@@ -1722,14 +1881,11 @@ public:
 
 typedef TMetaClass*TConversionClass;
 
-typedef void __fastcall (__closure *TRichEditResizeEvent)(System::TObject* Sender, const Windows::TRect 
-	&Rect);
+typedef void __fastcall (__closure *TRichEditResizeEvent)(System::TObject* Sender, const Types::TRect &Rect);
 
-typedef void __fastcall (__closure *TRichEditProtectChange)(System::TObject* Sender, int StartPos, int 
-	EndPos, bool &AllowChange);
+typedef void __fastcall (__closure *TRichEditProtectChange)(System::TObject* Sender, int StartPos, int EndPos, bool &AllowChange);
 
-typedef void __fastcall (__closure *TRichEditSaveClipboard)(System::TObject* Sender, int NumObjects, 
-	int NumChars, bool &SaveClipboard);
+typedef void __fastcall (__closure *TRichEditSaveClipboard)(System::TObject* Sender, int NumObjects, int NumChars, bool &SaveClipboard);
 
 #pragma option push -b-
 enum TSearchType { stWholeWord, stMatchCase };
@@ -1757,7 +1913,10 @@ private:
 	TRichEditResizeEvent FOnResizeRequest;
 	TRichEditProtectChange FOnProtectChange;
 	TRichEditSaveClipboard FOnSaveClipboard;
-	Windows::TRect FPageRect;
+	#pragma pack(push, 1)
+	Types::TRect FPageRect;
+	#pragma pack(pop)
+	
 	HIDESBASE MESSAGE void __fastcall CMBiDiModeChanged(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMColorChanged(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMFontChanged(Messages::TMessage &Message);
@@ -1781,10 +1940,11 @@ protected:
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
 	virtual void __fastcall DestroyWnd(void);
-	virtual void __fastcall RequestSize(const Windows::TRect &Rect);
+	virtual void __fastcall RequestSize(const Types::TRect &Rect);
 	DYNAMIC void __fastcall SelectionChange(void);
 	virtual void __fastcall DoSetMaxLength(int Value);
-	virtual Windows::TPoint __fastcall GetCaretPos();
+	virtual Types::TPoint __fastcall GetCaretPos();
+	virtual void __fastcall SetCaretPos(const Types::TPoint &Value);
 	virtual int __fastcall GetSelLength(void);
 	virtual int __fastcall GetSelStart(void);
 	virtual AnsiString __fastcall GetSelText();
@@ -1793,11 +1953,9 @@ protected:
 	__property bool HideSelection = {read=FHideSelection, write=SetHideSelection, default=1};
 	__property bool HideScrollBars = {read=FHideScrollBars, write=SetHideScrollBars, default=1};
 	__property Classes::TStrings* Lines = {read=FRichEditStrings, write=SetRichEditStrings};
-	__property TRichEditSaveClipboard OnSaveClipboard = {read=FOnSaveClipboard, write=FOnSaveClipboard}
-		;
+	__property TRichEditSaveClipboard OnSaveClipboard = {read=FOnSaveClipboard, write=FOnSaveClipboard};
 	__property Classes::TNotifyEvent OnSelectionChange = {read=FOnSelChange, write=FOnSelChange};
-	__property TRichEditProtectChange OnProtectChange = {read=FOnProtectChange, write=FOnProtectChange}
-		;
+	__property TRichEditProtectChange OnProtectChange = {read=FOnProtectChange, write=FOnProtectChange};
 	__property TRichEditResizeEvent OnResizeRequest = {read=FOnResizeRequest, write=FOnResizeRequest};
 	__property bool PlainText = {read=GetPlainText, write=SetPlainText, default=0};
 	
@@ -1805,21 +1963,18 @@ public:
 	__fastcall virtual TCustomRichEdit(Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomRichEdit(void);
 	virtual void __fastcall Clear(void);
-	int __fastcall FindText(const AnsiString SearchStr, int StartPos, int Length, TSearchTypes Options)
-		;
+	int __fastcall FindText(const AnsiString SearchStr, int StartPos, int Length, TSearchTypes Options);
 	virtual int __fastcall GetSelTextBuf(char * Buffer, int BufSize);
 	virtual void __fastcall Print(const AnsiString Caption);
-	/*         class method */ static void __fastcall RegisterConversionFormat(TMetaClass* vmt, const AnsiString 
-		AExtension, TMetaClass* AConversionClass);
+	/*         class method */ static void __fastcall RegisterConversionFormat(TMetaClass* vmt, const AnsiString AExtension, TMetaClass* AConversionClass);
 	__property TMetaClass* DefaultConverter = {read=FDefaultConverter, write=FDefaultConverter};
 	__property TTextAttributes* DefAttributes = {read=FDefAttributes, write=SetDefAttributes};
 	__property TTextAttributes* SelAttributes = {read=FSelAttributes, write=SetSelAttributes};
-	__property Windows::TRect PageRect = {read=FPageRect, write=FPageRect};
+	__property Types::TRect PageRect = {read=FPageRect, write=FPageRect};
 	__property TParaAttributes* Paragraph = {read=FParagraph};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomRichEdit(HWND ParentWindow) : Stdctrls::TCustomMemo(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomRichEdit(HWND ParentWindow) : Stdctrls::TCustomMemo(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1885,7 +2040,6 @@ public:
 	virtual int __fastcall ConvertReadStream(Classes::TStream* Stream, char * Buffer, int BufSize);
 	virtual int __fastcall ConvertWriteStream(Classes::TStream* Stream, char * Buffer, int BufSize);
 public:
-		
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall TConversion(void) : System::TObject() { }
 	#pragma option pop
@@ -1899,18 +2053,22 @@ public:
 struct TConversionFormat;
 typedef TConversionFormat *PConversionFormat;
 
+#pragma pack(push, 4)
 struct TConversionFormat
 {
 	TMetaClass*ConversionClass;
 	AnsiString Extension;
 	TConversionFormat *Next;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TRichEditStreamInfo
 {
 	TConversion* Converter;
 	Classes::TStream* Stream;
 } ;
+#pragma pack(pop)
 
 typedef TRichEditStreamInfo *PRichEditStreamInfo;
 
@@ -1920,42 +2078,47 @@ class PASCALIMPLEMENTATION TRichEdit : public TCustomRichEdit
 	typedef TCustomRichEdit inherited;
 	
 __published:
-	__property Align ;
-	__property Alignment ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Alignment  = {default=0};
+	__property Anchors  = {default=3};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelOuter  = {index=1, default=1};
+	__property BevelKind  = {default=0};
+	__property BevelWidth  = {default=1};
 	__property BiDiMode ;
-	__property BorderStyle ;
-	__property BorderWidth ;
-	__property Color ;
+	__property BorderStyle  = {default=1};
+	__property BorderWidth  = {default=0};
+	__property Color  = {default=-2147483643};
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property HideSelection ;
-	__property HideScrollBars ;
-	__property ImeMode ;
+	__property HideSelection  = {default=1};
+	__property HideScrollBars  = {default=1};
+	__property ImeMode  = {default=3};
 	__property ImeName ;
 	__property Constraints ;
 	__property Lines ;
-	__property MaxLength ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
-	__property PlainText ;
+	__property MaxLength  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
+	__property PlainText  = {default=0};
 	__property PopupMenu ;
-	__property ReadOnly ;
-	__property ScrollBars ;
+	__property ReadOnly  = {default=0};
+	__property ScrollBars  = {default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
-	__property WantTabs ;
-	__property WantReturns ;
-	__property WordWrap ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
+	__property WantTabs  = {default=0};
+	__property WantReturns  = {default=1};
+	__property WordWrap  = {default=1};
 	__property OnChange ;
 	__property OnContextPopup ;
 	__property OnDragDrop ;
@@ -1981,8 +2144,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TCustomRichEdit.Create */ inline __fastcall virtual TRichEdit(Classes::TComponent* AOwner) : TCustomRichEdit(
-		AOwner) { }
+	/* TCustomRichEdit.Create */ inline __fastcall virtual TRichEdit(Classes::TComponent* AOwner) : TCustomRichEdit(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomRichEdit.Destroy */ inline __fastcall virtual ~TRichEdit(void) { }
@@ -1990,8 +2152,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TRichEdit(HWND ParentWindow) : TCustomRichEdit(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TRichEdit(HWND ParentWindow) : TCustomRichEdit(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -2017,8 +2178,7 @@ typedef void __fastcall (__closure *TUDClickEvent)(System::TObject* Sender, TUDB
 
 typedef void __fastcall (__closure *TUDChangingEvent)(System::TObject* Sender, bool &AllowChange);
 
-typedef void __fastcall (__closure *TUDChangingEventEx)(System::TObject* Sender, bool &AllowChange, 
-	short NewValue, TUpDownDirection Direction);
+typedef void __fastcall (__closure *TUDChangingEventEx)(System::TObject* Sender, bool &AllowChange, short NewValue, TUpDownDirection Direction);
 
 class DELPHICLASS TCustomUpDown;
 class PASCALIMPLEMENTATION TCustomUpDown : public Controls::TWinControl 
@@ -2064,8 +2224,7 @@ protected:
 	DYNAMIC bool __fastcall CanChange(void);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	HIDESBASEDYNAMIC void __fastcall Click(TUDBtnType Button);
 	__property TUDAlignButton AlignButton = {read=FAlignButton, write=SetAlignButton, default=1};
 	__property bool ArrowKeys = {read=FArrowKeys, write=SetArrowKeys, default=1};
@@ -2085,8 +2244,7 @@ public:
 	__fastcall virtual TCustomUpDown(Classes::TComponent* AOwner);
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomUpDown(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomUpDown(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TCustomUpDown(void) { }
@@ -2101,25 +2259,25 @@ class PASCALIMPLEMENTATION TUpDown : public TCustomUpDown
 	typedef TCustomUpDown inherited;
 	
 __published:
-	__property AlignButton ;
-	__property Anchors ;
+	__property AlignButton  = {default=1};
+	__property Anchors  = {default=3};
 	__property Associate ;
-	__property ArrowKeys ;
-	__property Enabled ;
+	__property ArrowKeys  = {default=1};
+	__property Enabled  = {default=1};
 	__property Hint ;
 	__property Min ;
-	__property Max ;
-	__property Increment ;
+	__property Max  = {default=100};
+	__property Increment  = {default=1};
 	__property Constraints ;
-	__property Orientation ;
-	__property ParentShowHint ;
+	__property Orientation  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property Position ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Thousands ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
+	__property Thousands  = {default=1};
+	__property Visible  = {default=1};
 	__property Wrap ;
 	__property OnChanging ;
 	__property OnChangingEx ;
@@ -2132,14 +2290,12 @@ __published:
 	__property OnMouseUp ;
 public:
 	#pragma option push -w-inl
-	/* TCustomUpDown.Create */ inline __fastcall virtual TUpDown(Classes::TComponent* AOwner) : TCustomUpDown(
-		AOwner) { }
+	/* TCustomUpDown.Create */ inline __fastcall virtual TUpDown(Classes::TComponent* AOwner) : TCustomUpDown(AOwner) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TUpDown(HWND ParentWindow) : TCustomUpDown(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TUpDown(HWND ParentWindow) : TCustomUpDown(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TUpDown(void) { }
@@ -2155,8 +2311,7 @@ enum THKModifier { hkShift, hkCtrl, hkAlt, hkExt };
 typedef Set<THKModifier, hkShift, hkExt>  THKModifiers;
 
 #pragma option push -b-
-enum THKInvalidKey { hcNone, hcShift, hcCtrl, hcAlt, hcShiftCtrl, hcShiftAlt, hcCtrlAlt, hcShiftCtrlAlt 
-	};
+enum THKInvalidKey { hcNone, hcShift, hcCtrl, hcAlt, hcShiftCtrl, hcShiftAlt, hcCtrlAlt, hcShiftCtrlAlt };
 #pragma option pop
 
 typedef Set<THKInvalidKey, hcNone, hcShiftCtrlAlt>  THKInvalidKeys;
@@ -2171,8 +2326,8 @@ private:
 	THKModifiers FModifiers;
 	THKInvalidKeys FInvalidKeys;
 	Word FHotKey;
+	Classes::TNotifyEvent FOnChange;
 	void __fastcall AdjustHeight(void);
-	HIDESBASE void __fastcall SetAutoSize(bool Value);
 	void __fastcall SetInvalidKeys(THKInvalidKeys Value);
 	void __fastcall SetModifiers(THKModifiers Value);
 	void __fastcall UpdateHeight(void);
@@ -2184,18 +2339,20 @@ private:
 protected:
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
+	MESSAGE void __fastcall CNCommand(Messages::TWMCommand &Message);
+	virtual void __fastcall SetAutoSize(bool Value);
 	__property bool AutoSize = {read=FAutoSize, write=SetAutoSize, default=1};
 	__property THKInvalidKeys InvalidKeys = {read=FInvalidKeys, write=SetInvalidKeys, nodefault};
 	__property THKModifiers Modifiers = {read=FModifiers, write=SetModifiers, nodefault};
 	__property Classes::TShortCut HotKey = {read=GetHotKey, write=SetHotKey, nodefault};
-	__property TabStop ;
+	__property TabStop  = {default=1};
+	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	
 public:
 	__fastcall virtual TCustomHotKey(Classes::TComponent* AOwner);
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomHotKey(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomHotKey(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TCustomHotKey(void) { }
@@ -2210,22 +2367,23 @@ class PASCALIMPLEMENTATION THotKey : public TCustomHotKey
 	typedef TCustomHotKey inherited;
 	
 __published:
-	__property Anchors ;
-	__property AutoSize ;
+	__property Anchors  = {default=3};
+	__property AutoSize  = {default=1};
 	__property BiDiMode ;
 	__property Constraints ;
-	__property Enabled ;
+	__property Enabled  = {default=1};
 	__property Hint ;
 	__property HotKey ;
 	__property InvalidKeys ;
 	__property Modifiers ;
-	__property ParentBiDiMode ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
+	__property OnChange ;
 	__property OnContextPopup ;
 	__property OnEnter ;
 	__property OnExit ;
@@ -2234,14 +2392,12 @@ __published:
 	__property OnMouseUp ;
 public:
 	#pragma option push -w-inl
-	/* TCustomHotKey.Create */ inline __fastcall virtual THotKey(Classes::TComponent* AOwner) : TCustomHotKey(
-		AOwner) { }
+	/* TCustomHotKey.Create */ inline __fastcall virtual THotKey(Classes::TComponent* AOwner) : TCustomHotKey(AOwner) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall THotKey(HWND ParentWindow) : TCustomHotKey(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall THotKey(HWND ParentWindow) : TCustomHotKey(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~THotKey(void) { }
@@ -2316,6 +2472,9 @@ class PASCALIMPLEMENTATION TListItems : public Classes::TPersistent
 {
 	typedef Classes::TPersistent inherited;
 	
+public:
+	TListItem* operator[](int Index) { return Item[Index]; }
+	
 private:
 	TCustomListView* FOwner;
 	int FUpdateCount;
@@ -2337,6 +2496,7 @@ public:
 	__fastcall TListItems(TCustomListView* AOwner);
 	__fastcall virtual ~TListItems(void);
 	TListItem* __fastcall Add(void);
+	TListItem* __fastcall AddItem(TListItem* Item, int Index = 0xffffffff);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	void __fastcall BeginUpdate(void);
 	void __fastcall Clear(void);
@@ -2396,6 +2556,9 @@ class PASCALIMPLEMENTATION TWorkAreas : public Classes::TOwnedCollection
 {
 	typedef Classes::TOwnedCollection inherited;
 	
+public:
+	TWorkArea* operator[](int Index) { return Items[Index]; }
+	
 private:
 	HIDESBASE TWorkArea* __fastcall GetItem(int Index);
 	HIDESBASE void __fastcall SetItem(int Index, const TWorkArea* Value);
@@ -2411,8 +2574,7 @@ public:
 	__property TWorkArea* Items[int Index] = {read=GetItem, write=SetItem/*, default*/};
 public:
 	#pragma option push -w-inl
-	/* TOwnedCollection.Create */ inline __fastcall TWorkAreas(Classes::TPersistent* AOwner, TMetaClass* 
-		ItemClass) : Classes::TOwnedCollection(AOwner, ItemClass) { }
+	/* TOwnedCollection.Create */ inline __fastcall TWorkAreas(Classes::TPersistent* AOwner, TMetaClass* ItemClass) : Classes::TOwnedCollection(AOwner, ItemClass) { }
 	#pragma option pop
 	
 public:
@@ -2423,42 +2585,31 @@ public:
 };
 
 
-typedef void __fastcall (__closure *TLVAdvancedCustomDrawEvent)(TCustomListView* Sender, const Windows::TRect 
-	&ARect, TCustomDrawStage Stage, bool &DefaultDraw);
+typedef void __fastcall (__closure *TLVAdvancedCustomDrawEvent)(TCustomListView* Sender, const Types::TRect &ARect, TCustomDrawStage Stage, bool &DefaultDraw);
 
-typedef void __fastcall (__closure *TLVAdvancedCustomDrawItemEvent)(TCustomListView* Sender, TListItem* 
-	Item, TCustomDrawState State, TCustomDrawStage Stage, bool &DefaultDraw);
+typedef void __fastcall (__closure *TLVAdvancedCustomDrawItemEvent)(TCustomListView* Sender, TListItem* Item, TCustomDrawState State, TCustomDrawStage Stage, bool &DefaultDraw);
 
-typedef void __fastcall (__closure *TLVAdvancedCustomDrawSubItemEvent)(TCustomListView* Sender, TListItem* 
-	Item, int SubItem, TCustomDrawState State, TCustomDrawStage Stage, bool &DefaultDraw);
+typedef void __fastcall (__closure *TLVAdvancedCustomDrawSubItemEvent)(TCustomListView* Sender, TListItem* Item, int SubItem, TCustomDrawState State, TCustomDrawStage Stage, bool &DefaultDraw);
 
 #pragma option push -b-
 enum TItemChange { ctText, ctImage, ctState };
 #pragma option pop
 
-typedef void __fastcall (__closure *TLVChangeEvent)(System::TObject* Sender, TListItem* Item, TItemChange 
-	Change);
+typedef void __fastcall (__closure *TLVChangeEvent)(System::TObject* Sender, TListItem* Item, TItemChange Change);
 
-typedef void __fastcall (__closure *TLVChangingEvent)(System::TObject* Sender, TListItem* Item, TItemChange 
-	Change, bool &AllowChange);
+typedef void __fastcall (__closure *TLVChangingEvent)(System::TObject* Sender, TListItem* Item, TItemChange Change, bool &AllowChange);
 
-typedef void __fastcall (__closure *TLVColumnClickEvent)(System::TObject* Sender, TListColumn* Column
-	);
+typedef void __fastcall (__closure *TLVColumnClickEvent)(System::TObject* Sender, TListColumn* Column);
 
-typedef void __fastcall (__closure *TLVColumnRClickEvent)(System::TObject* Sender, TListColumn* Column
-	, const Windows::TPoint &Point);
+typedef void __fastcall (__closure *TLVColumnRClickEvent)(System::TObject* Sender, TListColumn* Column, const Types::TPoint &Point);
 
-typedef void __fastcall (__closure *TLVCompareEvent)(System::TObject* Sender, TListItem* Item1, TListItem* 
-	Item2, int Data, int &Compare);
+typedef void __fastcall (__closure *TLVCompareEvent)(System::TObject* Sender, TListItem* Item1, TListItem* Item2, int Data, int &Compare);
 
-typedef void __fastcall (__closure *TLVCustomDrawEvent)(TCustomListView* Sender, const Windows::TRect 
-	&ARect, bool &DefaultDraw);
+typedef void __fastcall (__closure *TLVCustomDrawEvent)(TCustomListView* Sender, const Types::TRect &ARect, bool &DefaultDraw);
 
-typedef void __fastcall (__closure *TLVCustomDrawItemEvent)(TCustomListView* Sender, TListItem* Item
-	, TCustomDrawState State, bool &DefaultDraw);
+typedef void __fastcall (__closure *TLVCustomDrawItemEvent)(TCustomListView* Sender, TListItem* Item, TCustomDrawState State, bool &DefaultDraw);
 
-typedef void __fastcall (__closure *TLVCustomDrawSubItemEvent)(TCustomListView* Sender, TListItem* Item
-	, int SubItem, TCustomDrawState State, bool &DefaultDraw);
+typedef void __fastcall (__closure *TLVCustomDrawSubItemEvent)(TCustomListView* Sender, TListItem* Item, int SubItem, TCustomDrawState State, bool &DefaultDraw);
 
 typedef void __fastcall (__closure *TLVOwnerDataEvent)(System::TObject* Sender, TListItem* Item);
 
@@ -2470,12 +2621,9 @@ enum TItemFind { ifData, ifPartialString, ifExactString, ifNearest };
 enum TSearchDirection { sdLeft, sdRight, sdAbove, sdBelow, sdAll };
 #pragma option pop
 
-typedef void __fastcall (__closure *TLVOwnerDataFindEvent)(System::TObject* Sender, TItemFind Find, 
-	const AnsiString FindString, const Windows::TPoint &FindPosition, void * FindData, int StartIndex, 
-	TSearchDirection Direction, bool Wrap, int &Index);
+typedef void __fastcall (__closure *TLVOwnerDataFindEvent)(System::TObject* Sender, TItemFind Find, const AnsiString FindString, const Types::TPoint &FindPosition, void * FindData, int StartIndex, TSearchDirection Direction, bool Wrap, int &Index);
 
-typedef void __fastcall (__closure *TLVOwnerDataHintEvent)(System::TObject* Sender, int StartIndex, 
-	int EndIndex);
+typedef void __fastcall (__closure *TLVOwnerDataHintEvent)(System::TObject* Sender, int StartIndex, int EndIndex);
 
 #pragma option push -b-
 enum TItemState { isNone, isCut, isDropHilited, isFocused, isSelected, isActivating };
@@ -2483,30 +2631,27 @@ enum TItemState { isNone, isCut, isDropHilited, isFocused, isSelected, isActivat
 
 typedef Set<TItemState, isNone, isActivating>  TItemStates;
 
-typedef void __fastcall (__closure *TLVOwnerDataStateChangeEvent)(System::TObject* Sender, int StartIndex
-	, int EndIndex, TItemStates OldState, TItemStates NewState);
+typedef void __fastcall (__closure *TLVOwnerDataStateChangeEvent)(System::TObject* Sender, int StartIndex, int EndIndex, TItemStates OldState, TItemStates NewState);
 
 typedef void __fastcall (__closure *TLVDeletedEvent)(System::TObject* Sender, TListItem* Item);
 
-typedef void __fastcall (__closure *TLVDrawItemEvent)(TCustomListView* Sender, TListItem* Item, const 
-	Windows::TRect &Rect, Windows::TOwnerDrawState State);
+typedef void __fastcall (__closure *TLVDrawItemEvent)(TCustomListView* Sender, TListItem* Item, const Types::TRect &Rect, Windows::TOwnerDrawState State);
 
-typedef void __fastcall (__closure *TLVEditedEvent)(System::TObject* Sender, TListItem* Item, AnsiString 
-	&S);
+typedef void __fastcall (__closure *TLVEditedEvent)(System::TObject* Sender, TListItem* Item, AnsiString &S);
 
-typedef void __fastcall (__closure *TLVEditingEvent)(System::TObject* Sender, TListItem* Item, bool 
-	&AllowEdit);
+typedef void __fastcall (__closure *TLVEditingEvent)(System::TObject* Sender, TListItem* Item, bool &AllowEdit);
 
 typedef void __fastcall (__closure *TLVNotifyEvent)(System::TObject* Sender, TListItem* Item);
 
-typedef void __fastcall (__closure *TLVSubItemImageEvent)(System::TObject* Sender, TListItem* Item, 
-	int SubItem, int &ImageIndex);
+typedef void __fastcall (__closure *TLVSubItemImageEvent)(System::TObject* Sender, TListItem* Item, int SubItem, int &ImageIndex);
 
-typedef void __fastcall (__closure *TLVInfoTipEvent)(System::TObject* Sender, TListItem* Item, AnsiString 
-	&InfoTip);
+typedef void __fastcall (__closure *TLVInfoTipEvent)(System::TObject* Sender, TListItem* Item, AnsiString &InfoTip);
 
-typedef void __fastcall (__closure *TLVSelectItemEvent)(System::TObject* Sender, TListItem* Item, bool 
-	Selected);
+typedef void __fastcall (__closure *TLVSelectItemEvent)(System::TObject* Sender, TListItem* Item, bool Selected);
+
+typedef TMetaClass*TListItemClass;
+
+typedef void __fastcall (__closure *TLVCreateItemClassEvent)(TCustomListView* Sender, TMetaClass* &ItemClass);
 
 #pragma option push -b-
 enum TItemRequests { irText, irImage, irParam, irState, irIndent };
@@ -2515,13 +2660,12 @@ enum TItemRequests { irText, irImage, irParam, irState, irIndent };
 typedef Set<TItemRequests, irText, irIndent>  TItemRequest;
 
 #pragma option push -b-
-enum TListArrangement { arAlignBottom, arAlignLeft, arAlignRight, arAlignTop, arDefault, arSnapToGrid 
-	};
+enum TListArrangement { arAlignBottom, arAlignLeft, arAlignRight, arAlignTop, arDefault, arSnapToGrid };
 #pragma option pop
 
-class PASCALIMPLEMENTATION TCustomListView : public Controls::TWinControl 
+class PASCALIMPLEMENTATION TCustomListView : public Controls::TCustomMultiSelectListControl 
 {
-	typedef Controls::TWinControl inherited;
+	typedef Controls::TCustomMultiSelectListControl inherited;
 	
 private:
 	Graphics::TCanvas* FCanvas;
@@ -2573,6 +2717,8 @@ private:
 	TWorkAreas* FWorkAreas;
 	bool FShowWorkAreas;
 	bool FUpdatingColumnOrder;
+	int FOurFont;
+	int FStockFont;
 	int FOwnerDataCount;
 	TLVAdvancedCustomDrawEvent FOnAdvancedCustomDraw;
 	TLVAdvancedCustomDrawItemEvent FOnAdvancedCustomDrawItem;
@@ -2599,6 +2745,7 @@ private:
 	TLVInfoTipEvent FOnInfoTip;
 	TLVDeletedEvent FOnInsert;
 	TLVSelectItemEvent FOnSelectItem;
+	TLVCreateItemClassEvent FOnCreateItemClass;
 	bool __fastcall AreItemsStored(void);
 	void __fastcall CanvasChanged(System::TObject* Sender);
 	HIDESBASE MESSAGE void __fastcall CMColorChanged(Messages::TMessage &Message);
@@ -2610,7 +2757,7 @@ private:
 	void __fastcall DoDragOver(Controls::TDragObject* Source, int X, int Y, bool CanDrop);
 	void __fastcall DrawWorkAreas(void);
 	void __fastcall EditWndProc(Messages::TMessage &Message);
-	Windows::TRect __fastcall GetBoundingRect();
+	Types::TRect __fastcall GetBoundingRect();
 	TListColumn* __fastcall GetColumnFromIndex(int Index);
 	TListColumn* __fastcall GetColumnFromTag(int Tag);
 	TListItem* __fastcall GetDropTarget(void);
@@ -2618,10 +2765,9 @@ private:
 	void __fastcall GetImageIndex(TListItem* Item);
 	void __fastcall GetSubItemImage(TListItem* Item, int SubItem, int &ImageIndex);
 	TListItem* __fastcall GetItem(const tagLVITEMA &Value);
-	int __fastcall GetSelCount(void);
-	TListItem* __fastcall GetSelection(void);
+	TListItem* __fastcall GetSelected(void);
 	TListItem* __fastcall GetTopItem(void);
-	Windows::TPoint __fastcall GetViewOrigin();
+	Types::TPoint __fastcall GetViewOrigin();
 	int __fastcall GetVisibleRowCount(void);
 	int __fastcall GetHoverTime(void);
 	void __fastcall HeaderWndProc(Messages::TMessage &Message);
@@ -2640,18 +2786,16 @@ private:
 	void __fastcall SetAllocBy(int Value);
 	void __fastcall SetItems(TListItems* Value);
 	void __fastcall SetListColumns(TListColumns* Value);
-	void __fastcall SetMultiSelect(bool Value);
 	void __fastcall SetOwnerData(bool Value);
 	void __fastcall SetOwnerDraw(bool Value);
 	void __fastcall SetReadOnly(bool Value);
 	void __fastcall SetShowWorkAreas(const bool Value);
 	void __fastcall SetSmallImages(Imglist::TCustomImageList* Value);
 	void __fastcall SetSortType(TSortType Value);
-	void __fastcall SetSelection(TListItem* Value);
+	void __fastcall SetSelected(TListItem* Value);
 	void __fastcall SetStateImages(Imglist::TCustomImageList* Value);
 	void __fastcall SetTextBkColor(Graphics::TColor Value);
 	void __fastcall SetTextColor(Graphics::TColor Value);
-	void __fastcall SetViewStyle(TViewStyle Value);
 	void __fastcall SetCheckboxes(bool Value);
 	void __fastcall SetFlatScrollBars(bool Value);
 	void __fastcall SetFullDrag(bool Value);
@@ -2672,43 +2816,45 @@ private:
 	HIDESBASE MESSAGE void __fastcall WMContextMenu(Messages::TWMContextMenu &Message);
 	
 protected:
+	DYNAMIC void __fastcall ActionChange(System::TObject* Sender, bool CheckDefaults);
 	DYNAMIC bool __fastcall CanChange(TListItem* Item, int Change);
 	DYNAMIC bool __fastcall CanEdit(TListItem* Item);
 	DYNAMIC void __fastcall Change(TListItem* Item, int Change);
 	DYNAMIC void __fastcall ChangeScale(int M, int D);
 	DYNAMIC void __fastcall ColClick(TListColumn* Column);
-	DYNAMIC void __fastcall ColRightClick(TListColumn* Column, const Windows::TPoint &Point);
+	DYNAMIC void __fastcall ColRightClick(TListColumn* Column, const Types::TPoint &Point);
 	bool __fastcall ColumnsShowing(void);
 	virtual TListItem* __fastcall CreateListItem(void);
+	virtual TListItems* __fastcall CreateListItems(void);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
-	virtual bool __fastcall CustomDraw(const Windows::TRect &ARect, TCustomDrawStage Stage);
-	virtual bool __fastcall CustomDrawItem(TListItem* Item, TCustomDrawState State, TCustomDrawStage Stage
-		);
-	virtual bool __fastcall CustomDrawSubItem(TListItem* Item, int SubItem, TCustomDrawState State, TCustomDrawStage 
-		Stage);
+	virtual bool __fastcall CustomDraw(const Types::TRect &ARect, TCustomDrawStage Stage);
+	virtual bool __fastcall CustomDrawItem(TListItem* Item, TCustomDrawState State, TCustomDrawStage Stage);
+	virtual bool __fastcall CustomDrawSubItem(TListItem* Item, int SubItem, TCustomDrawState State, TCustomDrawStage Stage);
 	DYNAMIC void __fastcall Delete(TListItem* Item);
 	virtual void __fastcall DestroyWnd(void);
 	DYNAMIC void __fastcall DoEndDrag(System::TObject* Target, int X, int Y);
 	DYNAMIC void __fastcall DoStartDrag(Controls::TDragObject* &DragObject);
 	virtual void __fastcall DoInfoTip(TListItem* Item, AnsiString &InfoTip);
-	virtual void __fastcall DrawItem(TListItem* Item, const Windows::TRect &Rect, Windows::TOwnerDrawState 
-		State);
+	virtual void __fastcall DrawItem(TListItem* Item, const Types::TRect &Rect, Windows::TOwnerDrawState State);
 	DYNAMIC void __fastcall Edit(const tagLVITEMA &Item);
-	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int 
-		Y);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	virtual bool __fastcall OwnerDataFetch(TListItem* Item, TItemRequest Request);
-	virtual int __fastcall OwnerDataFind(TItemFind Find, const AnsiString FindString, const Windows::TPoint 
-		&FindPosition, void * FindData, int StartIndex, TSearchDirection Direction, bool Wrap);
+	virtual int __fastcall OwnerDataFind(TItemFind Find, const AnsiString FindString, const Types::TPoint &FindPosition, void * FindData, int StartIndex, TSearchDirection Direction, bool Wrap);
 	virtual bool __fastcall OwnerDataHint(int StartIndex, int EndIndex);
-	virtual bool __fastcall OwnerDataStateChange(int StartIndex, int EndIndex, TItemStates OldState, TItemStates 
-		NewState);
+	virtual bool __fastcall OwnerDataStateChange(int StartIndex, int EndIndex, TItemStates OldState, TItemStates NewState);
+	DYNAMIC TMetaClass* __fastcall GetActionLinkClass(void);
+	virtual int __fastcall GetCount(void);
 	virtual Controls::TDragImageList* __fastcall GetDragImages(void);
-	int __fastcall GetItemIndex(TListItem* Value);
+	HIDESBASE int __fastcall GetItemIndex(TListItem* Value)/* overload */;
+	virtual int __fastcall GetItemIndex(void)/* overload */;
+	virtual int __fastcall GetSelCount(void);
 	DYNAMIC void __fastcall InsertItem(TListItem* Item);
-	bool __fastcall IsCustomDrawn(TCustomDrawTarget Target, TCustomDrawStage Stage);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual bool __fastcall IsCustomDrawn(TCustomDrawTarget Target, TCustomDrawStage Stage);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
+	virtual void __fastcall SetItemIndex(const int Value)/* overload */;
+	virtual void __fastcall SetMultiSelect(bool Value);
+	virtual void __fastcall SetViewStyle(TViewStyle Value);
 	void __fastcall UpdateColumn(int AnIndex);
 	void __fastcall UpdateColumns(void);
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
@@ -2725,30 +2871,22 @@ protected:
 	__property bool MultiSelect = {read=FMultiSelect, write=SetMultiSelect, default=0};
 	__property bool OwnerData = {read=FOwnerData, write=SetOwnerData, default=0};
 	__property bool OwnerDraw = {read=FOwnerDraw, write=SetOwnerDraw, default=0};
-	__property TLVAdvancedCustomDrawEvent OnAdvancedCustomDraw = {read=FOnAdvancedCustomDraw, write=FOnAdvancedCustomDraw
-		};
-	__property TLVAdvancedCustomDrawItemEvent OnAdvancedCustomDrawItem = {read=FOnAdvancedCustomDrawItem
-		, write=FOnAdvancedCustomDrawItem};
-	__property TLVAdvancedCustomDrawSubItemEvent OnAdvancedCustomDrawSubItem = {read=FOnAdvancedCustomDrawSubItem
-		, write=FOnAdvancedCustomDrawSubItem};
+	__property TLVAdvancedCustomDrawEvent OnAdvancedCustomDraw = {read=FOnAdvancedCustomDraw, write=FOnAdvancedCustomDraw};
+	__property TLVAdvancedCustomDrawItemEvent OnAdvancedCustomDrawItem = {read=FOnAdvancedCustomDrawItem, write=FOnAdvancedCustomDrawItem};
+	__property TLVAdvancedCustomDrawSubItemEvent OnAdvancedCustomDrawSubItem = {read=FOnAdvancedCustomDrawSubItem, write=FOnAdvancedCustomDrawSubItem};
 	__property TLVChangeEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property TLVChangingEvent OnChanging = {read=FOnChanging, write=FOnChanging};
 	__property TLVColumnClickEvent OnColumnClick = {read=FOnColumnClick, write=FOnColumnClick};
 	__property Classes::TNotifyEvent OnColumnDragged = {read=FOnColumnDragged, write=FOnColumnDragged};
-		
-	__property TLVColumnRClickEvent OnColumnRightClick = {read=FOnColumnRightClick, write=FOnColumnRightClick
-		};
+	__property TLVColumnRClickEvent OnColumnRightClick = {read=FOnColumnRightClick, write=FOnColumnRightClick};
 	__property TLVCompareEvent OnCompare = {read=FOnCompare, write=FOnCompare};
 	__property TLVCustomDrawEvent OnCustomDraw = {read=FOnCustomDraw, write=FOnCustomDraw};
-	__property TLVCustomDrawItemEvent OnCustomDrawItem = {read=FOnCustomDrawItem, write=FOnCustomDrawItem
-		};
-	__property TLVCustomDrawSubItemEvent OnCustomDrawSubItem = {read=FOnCustomDrawSubItem, write=FOnCustomDrawSubItem
-		};
+	__property TLVCustomDrawItemEvent OnCustomDrawItem = {read=FOnCustomDrawItem, write=FOnCustomDrawItem};
+	__property TLVCustomDrawSubItemEvent OnCustomDrawSubItem = {read=FOnCustomDrawSubItem, write=FOnCustomDrawSubItem};
 	__property TLVOwnerDataEvent OnData = {read=FOnData, write=FOnData};
 	__property TLVOwnerDataFindEvent OnDataFind = {read=FOnDataFind, write=FOnDataFind};
 	__property TLVOwnerDataHintEvent OnDataHint = {read=FOnDataHint, write=FOnDataHint};
-	__property TLVOwnerDataStateChangeEvent OnDataStateChange = {read=FOnDataStateChange, write=FOnDataStateChange
-		};
+	__property TLVOwnerDataStateChangeEvent OnDataStateChange = {read=FOnDataStateChange, write=FOnDataStateChange};
 	__property TLVDeletedEvent OnDeletion = {read=FOnDeletion, write=FOnDeletion};
 	__property TLVDrawItemEvent OnDrawItem = {read=FOnDrawItem, write=FOnDrawItem};
 	__property TLVEditedEvent OnEdited = {read=FOnEdited, write=FOnEdited};
@@ -2756,8 +2894,7 @@ protected:
 	__property TLVInfoTipEvent OnInfoTip = {read=FOnInfoTip, write=FOnInfoTip};
 	__property TLVDeletedEvent OnInsert = {read=FOnInsert, write=FOnInsert};
 	__property TLVNotifyEvent OnGetImageIndex = {read=FOnGetImageIndex, write=FOnGetImageIndex};
-	__property TLVSubItemImageEvent OnGetSubItemImage = {read=FOnGetSubItemImage, write=FOnGetSubItemImage
-		};
+	__property TLVSubItemImageEvent OnGetSubItemImage = {read=FOnGetSubItemImage, write=FOnGetSubItemImage};
 	__property TLVSelectItemEvent OnSelectItem = {read=FOnSelectItem, write=FOnSelectItem};
 	__property bool ShowColumnHeaders = {read=FShowColumnHeaders, write=SetColumnHeaders, default=1};
 	__property bool ShowWorkAreas = {read=FShowWorkAreas, write=SetShowWorkAreas, default=0};
@@ -2765,22 +2902,27 @@ protected:
 	__property TSortType SortType = {read=FSortType, write=SetSortType, default=0};
 	__property Imglist::TCustomImageList* StateImages = {read=FStateImages, write=SetStateImages};
 	__property TViewStyle ViewStyle = {read=FViewStyle, write=SetViewStyle, default=0};
+	__property TLVCreateItemClassEvent OnCreateItemClass = {read=FOnCreateItemClass, write=FOnCreateItemClass};
 	
 public:
 	__fastcall virtual TCustomListView(Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomListView(void);
+	virtual void __fastcall AddItem(AnsiString Item, System::TObject* AObject);
 	bool __fastcall AlphaSort(void);
 	void __fastcall Arrange(TListArrangement Code);
-	TListItem* __fastcall FindCaption(int StartIndex, AnsiString Value, bool Partial, bool Inclusive, bool 
-		Wrap);
+	virtual void __fastcall Clear(void);
+	virtual void __fastcall ClearSelection(void);
+	virtual void __fastcall CopySelection(Controls::TCustomListControl* Destination);
+	virtual void __fastcall DeleteSelected(void);
+	TListItem* __fastcall FindCaption(int StartIndex, AnsiString Value, bool Partial, bool Inclusive, bool Wrap);
 	TListItem* __fastcall FindData(int StartIndex, void * Value, bool Inclusive, bool Wrap);
 	THitTests __fastcall GetHitTestInfoAt(int X, int Y);
 	TListItem* __fastcall GetItemAt(int X, int Y);
-	TListItem* __fastcall GetNearestItem(const Windows::TPoint &Point, TSearchDirection Direction);
-	TListItem* __fastcall GetNextItem(TListItem* StartItem, TSearchDirection Direction, TItemStates States
-		);
+	TListItem* __fastcall GetNearestItem(const Types::TPoint &Point, TSearchDirection Direction);
+	TListItem* __fastcall GetNextItem(TListItem* StartItem, TSearchDirection Direction, TItemStates States);
 	AnsiString __fastcall GetSearchString();
 	bool __fastcall IsEditing(void);
+	virtual void __fastcall SelectAll(void);
 	void __fastcall Scroll(int DX, int DY);
 	__property Graphics::TCanvas* Canvas = {read=FCanvas};
 	__property bool Checkboxes = {read=FCheckboxes, write=SetCheckboxes, default=0};
@@ -2790,24 +2932,22 @@ public:
 	__property bool FullDrag = {read=FFullDrag, write=SetFullDrag, default=0};
 	__property bool GridLines = {read=FGridLines, write=SetGridLines, default=0};
 	__property bool HotTrack = {read=FHotTrack, write=SetHotTrack, default=0};
-	__property TListHotTrackStyles HotTrackStyles = {read=FHotTrackStyles, write=SetHotTrackStyles, default=0
-		};
+	__property TListHotTrackStyles HotTrackStyles = {read=FHotTrackStyles, write=SetHotTrackStyles, default=0};
 	__property TListItem* ItemFocused = {read=GetFocused, write=SetFocused};
 	__property bool RowSelect = {read=FRowSelect, write=SetRowSelect, default=0};
 	__property int SelCount = {read=GetSelCount, nodefault};
-	__property TListItem* Selected = {read=GetSelection, write=SetSelection};
+	__property TListItem* Selected = {read=GetSelected, write=SetSelected};
 	bool __fastcall CustomSort(PFNLVCOMPARE SortProc, int lParam);
 	int __fastcall StringWidth(AnsiString S);
 	void __fastcall UpdateItems(int FirstIndex, int LastIndex);
 	__property TListItem* TopItem = {read=GetTopItem};
-	__property Windows::TPoint ViewOrigin = {read=GetViewOrigin};
+	__property Types::TPoint ViewOrigin = {read=GetViewOrigin};
 	__property int VisibleRowCount = {read=GetVisibleRowCount, nodefault};
-	__property Windows::TRect BoundingRect = {read=GetBoundingRect};
+	__property Types::TRect BoundingRect = {read=GetBoundingRect};
 	__property TWorkAreas* WorkAreas = {read=FWorkAreas};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomListView(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomListView(HWND ParentWindow) : Controls::TCustomMultiSelectListControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -2816,6 +2956,9 @@ public:
 class PASCALIMPLEMENTATION TListColumns : public Classes::TCollection 
 {
 	typedef Classes::TCollection inherited;
+	
+public:
+	TListColumn* operator[](int Index) { return Items[Index]; }
 	
 private:
 	TCustomListView* FOwner;
@@ -2830,7 +2973,7 @@ protected:
 public:
 	__fastcall TListColumns(TCustomListView* AOwner);
 	HIDESBASE TListColumn* __fastcall Add(void);
-	__property TCustomListView* Owner = {read=FOwner};
+	HIDESBASE TCustomListView* __fastcall Owner(void);
 	__property TListColumn* Items[int Index] = {read=GetItem, write=SetItem/*, default*/};
 public:
 	#pragma option push -w-inl
@@ -2887,33 +3030,31 @@ public:
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	void __fastcall CancelEdit(void);
 	void __fastcall Delete(void);
-	Windows::TRect __fastcall DisplayRect(TDisplayCode Code);
+	Types::TRect __fastcall DisplayRect(TDisplayCode Code);
 	bool __fastcall EditCaption(void);
-	Windows::TPoint __fastcall GetPosition();
+	Types::TPoint __fastcall GetPosition();
 	void __fastcall MakeVisible(bool PartialOK);
 	void __fastcall Update(void);
-	void __fastcall SetPosition(const Windows::TPoint &Value);
+	void __fastcall SetPosition(const Types::TPoint &Value);
 	int __fastcall WorkArea(void);
 	__property AnsiString Caption = {read=FCaption, write=SetCaption};
 	__property bool Checked = {read=GetChecked, write=SetChecked, nodefault};
 	__property bool Cut = {read=GetState, write=SetState, index=0, nodefault};
 	__property void * Data = {read=FData, write=SetData};
+	__property bool Deleting = {read=FDeleting, nodefault};
 	__property bool DropTarget = {read=GetState, write=SetState, index=1, nodefault};
 	__property bool Focused = {read=GetState, write=SetState, index=2, nodefault};
 	__property HWND Handle = {read=GetHandle, nodefault};
-	__property Imglist::TImageIndex ImageIndex = {read=FImageIndex, write=SetImage, index=0, nodefault}
-		;
+	__property Imglist::TImageIndex ImageIndex = {read=FImageIndex, write=SetImage, index=0, nodefault};
 	__property int Indent = {read=FIndent, write=SetIndent, default=0};
 	__property int Index = {read=GetIndex, nodefault};
 	__property int Left = {read=GetLeft, write=SetLeft, nodefault};
 	__property TCustomListView* ListView = {read=GetListView};
 	__property TListItems* Owner = {read=FOwner};
-	__property Imglist::TImageIndex OverlayIndex = {read=FOverlayIndex, write=SetImage, index=1, nodefault
-		};
-	__property Windows::TPoint Position = {read=GetPosition, write=SetPosition};
+	__property Imglist::TImageIndex OverlayIndex = {read=FOverlayIndex, write=SetImage, index=1, nodefault};
+	__property Types::TPoint Position = {read=GetPosition, write=SetPosition};
 	__property bool Selected = {read=GetState, write=SetState, index=3, nodefault};
-	__property Imglist::TImageIndex StateIndex = {read=FStateIndex, write=SetImage, index=2, nodefault}
-		;
+	__property Imglist::TImageIndex StateIndex = {read=FStateIndex, write=SetImage, index=2, nodefault};
 	__property Classes::TStrings* SubItems = {read=FSubItems, write=SetSubItems};
 	__property int SubItemImages[int Index] = {read=GetSubItemImage, write=SetSubItemImage};
 	__property int Top = {read=GetTop, write=SetTop, nodefault};
@@ -2925,17 +3066,20 @@ class PASCALIMPLEMENTATION TWorkArea : public Classes::TCollectionItem
 	typedef Classes::TCollectionItem inherited;
 	
 private:
-	Windows::TRect FRect;
+	#pragma pack(push, 1)
+	Types::TRect FRect;
+	#pragma pack(pop)
+	
 	AnsiString FDisplayName;
 	Graphics::TColor FColor;
-	void __fastcall SetRect(const Windows::TRect &Value);
+	void __fastcall SetRect(const Types::TRect &Value);
 	void __fastcall SetColor(const Graphics::TColor Value);
 	
 public:
 	__fastcall virtual TWorkArea(Classes::TCollection* Collection);
 	virtual void __fastcall SetDisplayName(const AnsiString Value);
 	virtual AnsiString __fastcall GetDisplayName();
-	__property Windows::TRect Rect = {read=FRect, write=SetRect};
+	__property Types::TRect Rect = {read=FRect, write=SetRect};
 	__property Graphics::TColor Color = {read=FColor, write=SetColor, nodefault};
 public:
 	#pragma option push -w-inl
@@ -2951,53 +3095,59 @@ class PASCALIMPLEMENTATION TListView : public TCustomListView
 	typedef TCustomListView inherited;
 	
 __published:
-	__property Align ;
-	__property AllocBy ;
-	__property Anchors ;
+	__property Action ;
+	__property Align  = {default=0};
+	__property AllocBy  = {default=0};
+	__property Anchors  = {default=3};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelOuter  = {index=1, default=1};
+	__property BevelKind  = {default=0};
+	__property BevelWidth  = {default=1};
 	__property BiDiMode ;
-	__property BorderStyle ;
-	__property BorderWidth ;
-	__property Checkboxes ;
-	__property Color ;
+	__property BorderStyle  = {default=1};
+	__property BorderWidth  = {default=0};
+	__property Checkboxes  = {default=0};
+	__property Color  = {default=-2147483643};
 	__property Columns ;
-	__property ColumnClick ;
+	__property ColumnClick  = {default=1};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property FlatScrollBars ;
-	__property FullDrag ;
-	__property GridLines ;
-	__property HideSelection ;
-	__property HotTrack ;
-	__property HotTrackStyles ;
-	__property HoverTime ;
+	__property FlatScrollBars  = {default=0};
+	__property FullDrag  = {default=0};
+	__property GridLines  = {default=0};
+	__property HideSelection  = {default=1};
+	__property HotTrack  = {default=0};
+	__property HotTrackStyles  = {default=0};
+	__property HoverTime  = {default=-1};
 	__property IconOptions ;
 	__property Items ;
 	__property LargeImages ;
-	__property MultiSelect ;
-	__property OwnerData ;
-	__property OwnerDraw ;
-	__property ReadOnly ;
-	__property RowSelect ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property MultiSelect  = {default=0};
+	__property OwnerData  = {default=0};
+	__property OwnerDraw  = {default=0};
+	__property ReadOnly  = {default=0};
+	__property RowSelect  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property ShowColumnHeaders ;
-	__property ShowWorkAreas ;
+	__property ShowColumnHeaders  = {default=1};
+	__property ShowWorkAreas  = {default=0};
 	__property ShowHint ;
 	__property SmallImages ;
-	__property SortType ;
+	__property SortType  = {default=0};
 	__property StateImages ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property ViewStyle ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property ViewStyle  = {default=0};
+	__property Visible  = {default=1};
 	__property OnAdvancedCustomDraw ;
 	__property OnAdvancedCustomDrawItem ;
 	__property OnAdvancedCustomDrawSubItem ;
@@ -3043,8 +3193,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TCustomListView.Create */ inline __fastcall virtual TListView(Classes::TComponent* AOwner) : TCustomListView(
-		AOwner) { }
+	/* TCustomListView.Create */ inline __fastcall virtual TListView(Classes::TComponent* AOwner) : TCustomListView(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomListView.Destroy */ inline __fastcall virtual ~TListView(void) { }
@@ -3052,16 +3201,34 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TListView(HWND ParentWindow) : TCustomListView(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TListView(HWND ParentWindow) : TCustomListView(ParentWindow) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TListViewActionLink;
+class PASCALIMPLEMENTATION TListViewActionLink : public Listactns::TListActionLink 
+{
+	typedef Listactns::TListActionLink inherited;
+	
+protected:
+	virtual void __fastcall AddItem(Listactns::TListControlItem* AnItem)/* overload */;
+	virtual void __fastcall AddItem(AnsiString ACaption, int AImageIndex, void * DataPtr)/* overload */;
+	virtual void __fastcall SetImages(Imglist::TCustomImageList* Value);
+public:
+	#pragma option push -w-inl
+	/* TBasicActionLink.Create */ inline __fastcall virtual TListViewActionLink(System::TObject* AClient) : Listactns::TListActionLink(AClient) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TBasicActionLink.Destroy */ inline __fastcall virtual ~TListViewActionLink(void) { }
 	#pragma option pop
 	
 };
 
 
 #pragma option push -b-
-enum TCommonAVI { aviNone, aviFindFolder, aviFindFile, aviFindComputer, aviCopyFiles, aviCopyFile, aviRecycleFile, 
-	aviEmptyRecycle, aviDeleteFile };
+enum TCommonAVI { aviNone, aviFindFolder, aviFindFile, aviFindComputer, aviCopyFiles, aviCopyFile, aviRecycleFile, aviEmptyRecycle, aviDeleteFile };
 #pragma option pop
 
 class DELPHICLASS TAnimate;
@@ -3149,33 +3316,32 @@ public:
 	__property AnsiString ResName = {read=FResName, write=SetResName};
 	
 __published:
-	__property Align ;
+	__property Align  = {default=0};
 	__property bool Active = {read=FActive, write=SetActive, nodefault};
-	__property Anchors ;
-	__property AutoSize ;
-	__property BorderWidth ;
+	__property Anchors  = {default=3};
+	__property AutoSize  = {default=1};
+	__property BorderWidth  = {default=0};
 	__property bool Center = {read=FCenter, write=SetCenter, default=1};
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property TCommonAVI CommonAVI = {read=FCommonAVI, write=SetCommonAVI, default=0};
 	__property Constraints ;
 	__property AnsiString FileName = {read=FFileName, write=SetFileName};
-	__property ParentColor ;
-	__property ParentShowHint ;
+	__property ParentColor  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property int Repetitions = {read=FRepetitions, write=SetRepetitions, default=0};
 	__property ShowHint ;
 	__property short StartFrame = {read=FStartFrame, write=SetStartFrame, default=1};
 	__property short StopFrame = {read=FStopFrame, write=SetStopFrame, default=0};
 	__property bool Timers = {read=FTimers, write=SetTimers, default=0};
 	__property bool Transparent = {read=FTransparent, write=SetTransparent, default=1};
-	__property Visible ;
+	__property Visible  = {default=1};
 	__property Classes::TNotifyEvent OnOpen = {read=FOnOpen, write=FOnOpen};
 	__property Classes::TNotifyEvent OnClose = {read=FOnClose, write=FOnClose};
 	__property Classes::TNotifyEvent OnStart = {read=FOnStart, write=FOnStart};
 	__property Classes::TNotifyEvent OnStop = {read=FOnStop, write=FOnStop};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TAnimate(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TAnimate(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TAnimate(void) { }
@@ -3189,30 +3355,31 @@ enum TToolButtonStyle { tbsButton, tbsCheck, tbsDropDown, tbsSeparator, tbsDivid
 #pragma option pop
 
 #pragma option push -b-
-enum TToolButtonState { tbsChecked, tbsPressed, tbsEnabled, tbsHidden, tbsIndeterminate, tbsWrap, tbsEllipses, 
-	tbsMarked };
+enum TToolButtonState { tbsChecked, tbsPressed, tbsEnabled, tbsHidden, tbsIndeterminate, tbsWrap, tbsEllipses, tbsMarked };
 #pragma option pop
 
 class DELPHICLASS TToolButtonActionLink;
 class DELPHICLASS TToolButton;
 class DELPHICLASS TToolBar;
-typedef void __fastcall (__closure *TTBAdvancedCustomDrawEvent)(TToolBar* Sender, const Windows::TRect 
-	&ARect, TCustomDrawStage Stage, bool &DefaultDraw);
+typedef void __fastcall (__closure *TTBAdvancedCustomDrawEvent)(TToolBar* Sender, const Types::TRect &ARect, TCustomDrawStage Stage, bool &DefaultDraw);
 
 #pragma option push -b-
-enum ComCtrls__04 { tbNoEdges, tbHiliteHotTrack, tbNoOffset, tbNoMark, tbNoEtchedEffect };
+enum ComCtrls__34 { tbNoEdges, tbHiliteHotTrack, tbNoOffset, tbNoMark, tbNoEtchedEffect };
 #pragma option pop
 
-typedef Set<ComCtrls__04, tbNoEdges, tbNoEtchedEffect>  TTBCustomDrawFlags;
+typedef Set<ComCtrls__34, tbNoEdges, tbNoEtchedEffect>  TTBCustomDrawFlags;
 
-typedef void __fastcall (__closure *TTBAdvancedCustomDrawBtnEvent)(TToolBar* Sender, TToolButton* Button
-	, TCustomDrawState State, TCustomDrawStage Stage, TTBCustomDrawFlags &Flags, bool &DefaultDraw);
+typedef void __fastcall (__closure *TTBAdvancedCustomDrawBtnEvent)(TToolBar* Sender, TToolButton* Button, TCustomDrawState State, TCustomDrawStage Stage, TTBCustomDrawFlags &Flags, bool &DefaultDraw);
 
-typedef void __fastcall (__closure *TTBCustomDrawEvent)(TToolBar* Sender, const Windows::TRect &ARect
-	, bool &DefaultDraw);
+typedef void __fastcall (__closure *TTBCustomDrawEvent)(TToolBar* Sender, const Types::TRect &ARect, bool &DefaultDraw);
 
-typedef void __fastcall (__closure *TTBCustomDrawBtnEvent)(TToolBar* Sender, TToolButton* Button, TCustomDrawState 
-	State, bool &DefaultDraw);
+typedef void __fastcall (__closure *TTBCustomDrawBtnEvent)(TToolBar* Sender, TToolButton* Button, TCustomDrawState State, bool &DefaultDraw);
+
+typedef void __fastcall (__closure *TTBCustomizeQueryEvent)(TToolBar* Sender, int Index, bool &Allow);
+
+typedef void __fastcall (__closure *TTBNewButtonEvent)(TToolBar* Sender, int Index, TToolButton* &Button);
+
+typedef void __fastcall (__closure *TTBButtonEvent)(TToolBar* Sender, TToolButton* Button);
 
 class PASCALIMPLEMENTATION TToolBar : public Toolwin::TToolWindow 
 {
@@ -3225,6 +3392,8 @@ private:
 	AnsiString FCaption;
 	Graphics::TCanvas* FCanvas;
 	bool FCanvasChanged;
+	bool FCustomizable;
+	bool FCustomizing;
 	bool FShowCaptions;
 	bool FList;
 	bool FFlat;
@@ -3240,12 +3409,22 @@ private:
 	bool FNewStyle;
 	Graphics::TBitmap* FNullBitmap;
 	HBITMAP FOldHandle;
+	bool FRestoring;
 	int FUpdateCount;
 	int FHeightMargin;
+	int FSeparators;
 	TTBAdvancedCustomDrawEvent FOnAdvancedCustomDraw;
 	TTBAdvancedCustomDrawBtnEvent FOnAdvancedCustomDrawButton;
 	TTBCustomDrawEvent FOnCustomDraw;
 	TTBCustomDrawBtnEvent FOnCustomDrawButton;
+	TTBCustomizeQueryEvent FOnCustomizeCanDelete;
+	TTBCustomizeQueryEvent FOnCustomizeCanInsert;
+	TTBNewButtonEvent FOnCustomizeNewButton;
+	Classes::TNotifyEvent FOnCustomized;
+	TTBButtonEvent FOnCustomizeDelete;
+	TTBButtonEvent FOnCustomizeAdded;
+	Classes::TNotifyEvent FOnCustomizing;
+	Classes::TNotifyEvent FOnCustomizeReset;
 	bool FCaptureChangeCancels;
 	bool FInMenuLoop;
 	Menus::TPopupMenu* FTempMenu;
@@ -3253,8 +3432,14 @@ private:
 	TToolButton* FMenuButton;
 	bool FMenuResult;
 	bool FMenuDropped;
+	Menus::TMainMenu* FMenu;
+	AnsiString FCustomizeKeyName;
+	AnsiString FCustomizeValueName;
+	int FOurFont;
+	int FStockFont;
 	int __fastcall ButtonIndex(int OldIndex, int ALeft, int ATop);
 	void __fastcall CanvasChanged(System::TObject* Sender);
+	bool __fastcall DoGetButton(Commctrl::PNMToolBarA NMToolbar);
 	void __fastcall LoadImages(Imglist::TCustomImageList* AImages);
 	TToolButton* __fastcall GetButton(int Index);
 	int __fastcall GetButtonCount(void);
@@ -3289,11 +3474,14 @@ private:
 	void __fastcall SetHotImageList(unsigned Value);
 	void __fastcall SetHotImages(Imglist::TCustomImageList* Value);
 	void __fastcall SetIndent(int Value);
+	void __fastcall SetMenu(const Menus::TMainMenu* Value);
 	void __fastcall AdjustControl(Controls::TControl* Control);
 	void __fastcall RecreateButtons(void);
+	void __fastcall RecreateButtonsFromToolbar(void);
 	void __fastcall BeginUpdate(void);
 	void __fastcall EndUpdate(void);
 	void __fastcall ResizeButtons(void);
+	void __fastcall SaveButtons(bool Save);
 	int __fastcall InternalButtonCount(void);
 	int __fastcall ReorderButton(int OldIndex, int ALeft, int ATop);
 	MESSAGE void __fastcall WMCaptureChanged(Messages::TMessage &Message);
@@ -3320,9 +3508,10 @@ private:
 	HIDESBASE MESSAGE void __fastcall CMSysFontChanged(Messages::TMessage &Message);
 	MESSAGE void __fastcall CNDropDownClosed(Messages::TMessage &Message);
 	MESSAGE void __fastcall CNNotify(Messages::TWMNotify &Message);
+	void __fastcall SetCustomizable(const bool Value);
 	
 protected:
-	virtual void __fastcall AlignControls(Controls::TControl* AControl, Windows::TRect &Rect);
+	virtual void __fastcall AlignControls(Controls::TControl* AControl, Types::TRect &Rect);
 	virtual bool __fastcall CanAutoSize(int &NewWidth, int &NewHeight);
 	DYNAMIC void __fastcall CancelMenu(void);
 	DYNAMIC void __fastcall ChangeScale(int M, int D);
@@ -3330,16 +3519,16 @@ protected:
 	DYNAMIC void __fastcall ClickButton(TToolButton* Button);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
-	virtual bool __fastcall CustomDraw(const Windows::TRect &ARect, TCustomDrawStage Stage);
-	virtual bool __fastcall CustomDrawButton(TToolButton* Button, TCustomDrawState State, TCustomDrawStage 
-		Stage, TTBCustomDrawFlags &Flags);
+	virtual bool __fastcall CustomDraw(const Types::TRect &ARect, TCustomDrawStage Stage);
+	virtual bool __fastcall CustomDrawButton(TToolButton* Button, TCustomDrawState State, TCustomDrawStage Stage, TTBCustomDrawFlags &Flags);
+	virtual bool __fastcall DoQueryInsert(int Index);
+	virtual bool __fastcall DoQueryDelete(int Index);
 	TToolButton* __fastcall FindButtonFromAccel(Word Accel);
 	DYNAMIC void __fastcall GetChildren(Classes::TGetChildProc Proc, Classes::TComponent* Root);
 	DYNAMIC void __fastcall InitMenu(TToolButton* Button);
-	bool __fastcall IsCustomDrawn(TCustomDrawTarget Target, TCustomDrawStage Stage);
+	virtual bool __fastcall IsCustomDrawn(TCustomDrawTarget Target, TCustomDrawStage Stage);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	void __fastcall RepositionButton(int Index);
 	void __fastcall RepositionButtons(int Index);
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
@@ -3353,56 +3542,64 @@ public:
 	__property int ButtonCount = {read=GetButtonCount, nodefault};
 	__property TToolButton* Buttons[int Index] = {read=GetButton};
 	__property Graphics::TCanvas* Canvas = {read=FCanvas};
+	__property AnsiString CustomizeKeyName = {read=FCustomizeKeyName, write=FCustomizeKeyName};
+	__property AnsiString CustomizeValueName = {read=FCustomizeValueName, write=FCustomizeValueName};
 	__property int RowCount = {read=GetRowCount, nodefault};
 	
 __published:
-	__property Align ;
-	__property Anchors ;
-	__property AutoSize ;
-	__property BorderWidth ;
+	__property Align  = {default=1};
+	__property Anchors  = {default=3};
+	__property AutoSize  = {default=0};
+	__property BorderWidth  = {default=0};
 	__property int ButtonHeight = {read=FButtonHeight, write=SetButtonHeight, default=22};
 	__property int ButtonWidth = {read=FButtonWidth, write=SetButtonWidth, default=23};
 	__property Caption ;
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property Imglist::TCustomImageList* DisabledImages = {read=FDisabledImages, write=SetDisabledImages
-		};
-	__property DockSite ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property EdgeBorders ;
-	__property EdgeInner ;
-	__property EdgeOuter ;
-	__property Enabled ;
+	__property bool Customizable = {read=FCustomizable, write=SetCustomizable, default=0};
+	__property Imglist::TCustomImageList* DisabledImages = {read=FDisabledImages, write=SetDisabledImages};
+	__property DockSite  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property EdgeBorders  = {default=2};
+	__property EdgeInner  = {default=1};
+	__property EdgeOuter  = {default=2};
+	__property Enabled  = {default=1};
 	__property bool Flat = {read=FFlat, write=SetFlat, default=0};
 	__property Font ;
-	__property Height ;
+	__property Height  = {default=32};
 	__property Imglist::TCustomImageList* HotImages = {read=FHotImages, write=SetHotImages};
 	__property Imglist::TCustomImageList* Images = {read=FImages, write=SetImages};
 	__property int Indent = {read=FIndent, write=SetIndent, default=0};
 	__property bool List = {read=FList, write=SetList, default=0};
-	__property ParentColor ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property Menus::TMainMenu* Menu = {read=FMenu, write=SetMenu};
+	__property ParentColor  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property bool ShowCaptions = {read=FShowCaptions, write=SetShowCaptions, default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
 	__property bool Transparent = {read=FTransparent, write=SetTransparent, default=0};
-	__property Visible ;
+	__property Visible  = {default=1};
 	__property bool Wrapable = {read=FWrapable, write=SetWrapable, default=1};
-	__property TTBAdvancedCustomDrawEvent OnAdvancedCustomDraw = {read=FOnAdvancedCustomDraw, write=FOnAdvancedCustomDraw
-		};
-	__property TTBAdvancedCustomDrawBtnEvent OnAdvancedCustomDrawButton = {read=FOnAdvancedCustomDrawButton
-		, write=FOnAdvancedCustomDrawButton};
+	__property TTBAdvancedCustomDrawEvent OnAdvancedCustomDraw = {read=FOnAdvancedCustomDraw, write=FOnAdvancedCustomDraw};
+	__property TTBAdvancedCustomDrawBtnEvent OnAdvancedCustomDrawButton = {read=FOnAdvancedCustomDrawButton, write=FOnAdvancedCustomDrawButton};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property TTBCustomDrawEvent OnCustomDraw = {read=FOnCustomDraw, write=FOnCustomDraw};
-	__property TTBCustomDrawBtnEvent OnCustomDrawButton = {read=FOnCustomDrawButton, write=FOnCustomDrawButton
-		};
+	__property TTBCustomDrawBtnEvent OnCustomDrawButton = {read=FOnCustomDrawButton, write=FOnCustomDrawButton};
+	__property TTBButtonEvent OnCustomizeAdded = {read=FOnCustomizeAdded, write=FOnCustomizeAdded};
+	__property TTBCustomizeQueryEvent OnCustomizeCanInsert = {read=FOnCustomizeCanInsert, write=FOnCustomizeCanInsert};
+	__property TTBCustomizeQueryEvent OnCustomizeCanDelete = {read=FOnCustomizeCanDelete, write=FOnCustomizeCanDelete};
+	__property Classes::TNotifyEvent OnCustomized = {read=FOnCustomized, write=FOnCustomized};
+	__property TTBButtonEvent OnCustomizeDelete = {read=FOnCustomizeDelete, write=FOnCustomizeDelete};
+	__property Classes::TNotifyEvent OnCustomizing = {read=FOnCustomizing, write=FOnCustomizing};
+	__property TTBNewButtonEvent OnCustomizeNewButton = {read=FOnCustomizeNewButton, write=FOnCustomizeNewButton};
+	__property Classes::TNotifyEvent OnCustomizeReset = {read=FOnCustomizeReset, write=FOnCustomizeReset};
 	__property OnDblClick ;
 	__property OnDockDrop ;
 	__property OnDockOver ;
@@ -3422,8 +3619,7 @@ __published:
 	__property OnUnDock ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TToolBar(HWND ParentWindow) : Toolwin::TToolWindow(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TToolBar(HWND ParentWindow) : Toolwin::TToolWindow(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -3451,7 +3647,6 @@ private:
 	bool __fastcall IsCheckedStored(void);
 	bool __fastcall IsImageIndexStored(void);
 	bool __fastcall IsWidthStored(void);
-	HIDESBASE void __fastcall SetAutoSize(bool Value);
 	void __fastcall SetButtonState(Byte State);
 	void __fastcall SetDown(bool Value);
 	void __fastcall SetDropdownMenu(Menus::TPopupMenu* Value);
@@ -3474,15 +3669,13 @@ protected:
 	virtual void __fastcall BeginUpdate(void);
 	virtual void __fastcall EndUpdate(void);
 	DYNAMIC TMetaClass* __fastcall GetActionLinkClass(void);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
-	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int 
-		Y);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall Paint(void);
 	virtual void __fastcall RefreshControl(void);
+	virtual void __fastcall SetAutoSize(bool Value);
 	void __fastcall SetToolBar(TToolBar* AToolBar);
 	virtual void __fastcall UpdateControl(void);
 	DYNAMIC void __fastcall ValidateContainer(Classes::TComponent* AComponent);
@@ -3500,24 +3693,23 @@ __published:
 	__property bool AutoSize = {read=FAutoSize, write=SetAutoSize, default=0};
 	__property Caption ;
 	__property bool Down = {read=FDown, write=SetDown, stored=IsCheckedStored, default=0};
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
 	__property Menus::TPopupMenu* DropdownMenu = {read=FDropdownMenu, write=SetDropdownMenu};
-	__property Enabled ;
+	__property Enabled  = {default=1};
 	__property bool Grouped = {read=FGrouped, write=SetGrouped, default=0};
 	__property Height  = {stored=false};
-	__property Imglist::TImageIndex ImageIndex = {read=FImageIndex, write=SetImageIndex, stored=IsImageIndexStored
-		, default=-1};
+	__property Imglist::TImageIndex ImageIndex = {read=FImageIndex, write=SetImageIndex, stored=IsImageIndexStored, default=-1};
 	__property bool Indeterminate = {read=FIndeterminate, write=SetIndeterminate, default=0};
 	__property bool Marked = {read=FMarked, write=SetMarked, default=0};
 	__property Menus::TMenuItem* MenuItem = {read=FMenuItem, write=SetMenuItem};
-	__property ParentShowHint ;
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property bool Wrap = {read=FWrap, write=SetWrap, default=0};
 	__property ShowHint ;
 	__property TToolButtonStyle Style = {read=FStyle, write=SetStyle, default=0};
-	__property Visible ;
+	__property Visible  = {default=1};
 	__property Width  = {stored=IsWidthStored};
 	__property OnClick ;
 	__property OnContextPopup ;
@@ -3551,8 +3743,7 @@ protected:
 	virtual void __fastcall SetImageIndex(int Value);
 public:
 	#pragma option push -w-inl
-	/* TBasicActionLink.Create */ inline __fastcall virtual TToolButtonActionLink(System::TObject* AClient
-		) : Controls::TControlActionLink(AClient) { }
+	/* TBasicActionLink.Create */ inline __fastcall virtual TToolButtonActionLink(System::TObject* AClient) : Controls::TControlActionLink(AClient) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBasicActionLink.Destroy */ inline __fastcall virtual ~TToolButtonActionLink(void) { }
@@ -3569,19 +3760,21 @@ class PASCALIMPLEMENTATION TToolBarDockObject : public Controls::TDragDockObject
 	typedef Controls::TDragDockObject inherited;
 	
 private:
-	Windows::TRect FEraseDockRect;
+	#pragma pack(push, 1)
+	Types::TRect FEraseDockRect;
+	#pragma pack(pop)
+	
 	bool FErase;
 	
 protected:
-	virtual void __fastcall AdjustDockRect(const Windows::TRect &ARect);
+	virtual void __fastcall AdjustDockRect(const Types::TRect &ARect);
 	virtual void __fastcall DrawDragDockImage(void);
 	virtual void __fastcall EraseDragDockImage(void);
 	virtual Controls::TCursor __fastcall GetDragCursor(bool Accepted, int X, int Y);
 	virtual bool __fastcall ToolDockImage(bool Erase);
 public:
 	#pragma option push -w-inl
-	/* TDragDockObject.Create */ inline __fastcall virtual TToolBarDockObject(Controls::TControl* AControl
-		) : Controls::TDragDockObject(AControl) { }
+	/* TDragDockObject.Create */ inline __fastcall virtual TToolBarDockObject(Controls::TControl* AControl) : Controls::TDragDockObject(AControl) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TDragDockObject.Destroy */ inline __fastcall virtual ~TToolBarDockObject(void) { }
@@ -3653,8 +3846,7 @@ __published:
 	__property Graphics::TBitmap* Bitmap = {read=FBitmap, write=SetBitmap, stored=IsBitmapStored};
 	__property Forms::TBorderStyle BorderStyle = {read=FBorderStyle, write=SetBorderStyle, default=0};
 	__property bool Break = {read=FBreak, write=SetBreak, default=1};
-	__property Graphics::TColor Color = {read=FColor, write=SetColor, stored=IsColorStored, default=-2147483633
-		};
+	__property Graphics::TColor Color = {read=FColor, write=SetColor, stored=IsColorStored, default=-2147483633};
 	__property Controls::TWinControl* Control = {read=FControl, write=SetControl};
 	__property bool FixedBackground = {read=FFixedBackground, write=SetFixedBackground, default=1};
 	__property bool FixedSize = {read=FFixedSize, write=SetFixedSize, default=0};
@@ -3674,6 +3866,9 @@ class DELPHICLASS TCoolBands;
 class PASCALIMPLEMENTATION TCoolBands : public Classes::TCollection 
 {
 	typedef Classes::TCollection inherited;
+	
+public:
+	TCoolBand* operator[](int Index) { return Items[Index]; }
 	
 private:
 	TCoolBar* FCoolBar;
@@ -3723,7 +3918,7 @@ private:
 	bool FShowText;
 	bool FVertical;
 	#pragma pack(push, 1)
-	Windows::TSmallPoint FTrackDrag;
+	Types::TSmallPoint FTrackDrag;
 	#pragma pack(pop)
 	
 	int FUpdateCount;
@@ -3751,7 +3946,7 @@ private:
 	void __fastcall SetShowText(bool Value);
 	void __fastcall SetVertical(bool Value);
 	void __fastcall ImageListChange(System::TObject* Sender);
-	int __fastcall PtInGripRect(const Windows::TPoint &Pos, TCoolBand* &Band);
+	int __fastcall PtInGripRect(const Types::TPoint &Pos, TCoolBand* &Band);
 	bool __fastcall ReadBands(void);
 	bool __fastcall UpdateItem(int Message, int FromIndex, int ToIndex);
 	void __fastcall UpdateBand(int Index);
@@ -3773,16 +3968,15 @@ private:
 	HIDESBASE MESSAGE void __fastcall CMWinIniChange(Messages::TWMWinIniChange &Message);
 	
 protected:
-	virtual void __fastcall AlignControls(Controls::TControl* AControl, Windows::TRect &Rect);
+	virtual void __fastcall AlignControls(Controls::TControl* AControl, Types::TRect &Rect);
 	virtual bool __fastcall CanAutoSize(int &NewWidth, int &NewHeight);
 	DYNAMIC void __fastcall Change(void);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
 	DYNAMIC HPALETTE __fastcall GetPalette(void);
-	TCoolBand* __fastcall HitTest(const Windows::TPoint &Pos);
+	TCoolBand* __fastcall HitTest(const Types::TPoint &Pos);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
 	virtual void __fastcall PaintWindow(HDC DC);
 	
@@ -3793,38 +3987,36 @@ public:
 	
 __published:
 	__property Align  = {read=GetAlign, write=SetAlign, default=1};
-	__property Anchors ;
-	__property AutoSize ;
-	__property Forms::TBorderStyle BandBorderStyle = {read=FBandBorderStyle, write=SetBandBorderStyle, 
-		default=1};
+	__property Anchors  = {default=3};
+	__property AutoSize  = {default=0};
+	__property Forms::TBorderStyle BandBorderStyle = {read=FBandBorderStyle, write=SetBandBorderStyle, default=1};
 	__property TCoolBandMaximize BandMaximize = {read=FBandMaximize, write=SetBandMaximize, default=1};
-		
 	__property TCoolBands* Bands = {read=FBands, write=SetBands};
-	__property BorderWidth ;
-	__property Color ;
+	__property BorderWidth  = {default=0};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DockSite ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property EdgeBorders ;
-	__property EdgeInner ;
-	__property EdgeOuter ;
-	__property Enabled ;
+	__property DockSite  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property EdgeBorders  = {default=15};
+	__property EdgeInner  = {default=1};
+	__property EdgeOuter  = {default=2};
+	__property Enabled  = {default=1};
 	__property bool FixedSize = {read=FFixedSize, write=SetFixedSize, default=0};
 	__property bool FixedOrder = {read=FFixedOrder, write=SetFixedOrder, default=0};
 	__property Font ;
 	__property Imglist::TCustomImageList* Images = {read=FImages, write=SetImages};
-	__property ParentColor ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentColor  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property Graphics::TBitmap* Bitmap = {read=FBitmap, write=SetBitmap};
 	__property PopupMenu ;
 	__property ShowHint ;
 	__property bool ShowText = {read=FShowText, write=SetShowText, default=1};
 	__property bool Vertical = {read=FVertical, write=SetVertical, default=0};
-	__property Visible ;
+	__property Visible  = {default=1};
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property OnClick ;
 	__property OnContextPopup ;
@@ -3845,8 +4037,7 @@ __published:
 	__property OnUnDock ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCoolBar(HWND ParentWindow) : Toolwin::TToolWindow(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCoolBar(HWND ParentWindow) : Toolwin::TToolWindow(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -3859,38 +4050,28 @@ class PASCALIMPLEMENTATION ECommonCalendarError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall ECommonCalendarError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall ECommonCalendarError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall ECommonCalendarError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall ECommonCalendarError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall ECommonCalendarError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall ECommonCalendarError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall ECommonCalendarError(int Ident, const System::TVarRec 
-		* Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall ECommonCalendarError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall ECommonCalendarError(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall ECommonCalendarError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall ECommonCalendarError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ECommonCalendarError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall ECommonCalendarError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ECommonCalendarError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall ECommonCalendarError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ECommonCalendarError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -3904,12 +4085,10 @@ public:
 class DELPHICLASS TMonthCalColors;
 class DELPHICLASS TCommonCalendar;
 #pragma option push -b-
-enum TCalDayOfWeek { dowMonday, dowTuesday, dowWednesday, dowThursday, dowFriday, dowSaturday, dowSunday, 
-	dowLocaleDefault };
+enum TCalDayOfWeek { dowMonday, dowTuesday, dowWednesday, dowThursday, dowFriday, dowSaturday, dowSunday, dowLocaleDefault };
 #pragma option pop
 
-typedef void __fastcall (__closure *TOnGetMonthInfoEvent)(System::TObject* Sender, unsigned Month, unsigned 
-	&MonthBoldInfo);
+typedef void __fastcall (__closure *TOnGetMonthInfoEvent)(System::TObject* Sender, unsigned Month, unsigned &MonthBoldInfo);
 
 class PASCALIMPLEMENTATION TCommonCalendar : public Controls::TWinControl 
 {
@@ -3965,8 +4144,7 @@ protected:
 	__property TDate Date = {read=GetDate, write=SetDate};
 	__property System::TDateTime DateTime = {read=FDateTime, write=SetDateTime};
 	__property TDate EndDate = {read=FEndDate, write=SetEndDate, stored=DoStoreEndDate};
-	__property TCalDayOfWeek FirstDayOfWeek = {read=FFirstDayOfWeek, write=SetFirstDayOfWeek, default=7
-		};
+	__property TCalDayOfWeek FirstDayOfWeek = {read=FFirstDayOfWeek, write=SetFirstDayOfWeek, default=7};
 	__property TDate MaxDate = {read=FMaxDate, write=SetMaxDate, stored=DoStoreMaxDate};
 	__property int MaxSelectRange = {read=FMaxSelectRange, write=SetMaxSelectRange, default=31};
 	__property TDate MinDate = {read=FMinDate, write=SetMinDate, stored=DoStoreMinDate};
@@ -3982,10 +4160,8 @@ public:
 	__fastcall virtual ~TCommonCalendar(void);
 	void __fastcall BoldDays(const unsigned * Days, const int Days_Size, unsigned &MonthBoldInfo);
 public:
-		
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCommonCalendar(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCommonCalendar(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -4011,18 +4187,12 @@ public:
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	
 __published:
-	__property Graphics::TColor BackColor = {read=FBackColor, write=SetColor, index=0, default=-2147483643
-		};
-	__property Graphics::TColor TextColor = {read=FTextColor, write=SetColor, index=1, default=-2147483640
-		};
-	__property Graphics::TColor TitleBackColor = {read=FTitleBackColor, write=SetColor, index=2, default=-2147483646
-		};
-	__property Graphics::TColor TitleTextColor = {read=FTitleTextColor, write=SetColor, index=3, default=16777215
-		};
-	__property Graphics::TColor MonthBackColor = {read=FMonthBackColor, write=SetColor, index=4, default=16777215
-		};
-	__property Graphics::TColor TrailingTextColor = {read=FTrailingTextColor, write=SetColor, index=5, 
-		default=-2147483629};
+	__property Graphics::TColor BackColor = {read=FBackColor, write=SetColor, index=0, default=-2147483643};
+	__property Graphics::TColor TextColor = {read=FTextColor, write=SetColor, index=1, default=-2147483640};
+	__property Graphics::TColor TitleBackColor = {read=FTitleBackColor, write=SetColor, index=2, default=-2147483646};
+	__property Graphics::TColor TitleTextColor = {read=FTitleTextColor, write=SetColor, index=3, default=16777215};
+	__property Graphics::TColor MonthBackColor = {read=FMonthBackColor, write=SetColor, index=4, default=16777215};
+	__property Graphics::TColor TrailingTextColor = {read=FTrailingTextColor, write=SetColor, index=5, default=-2147483629};
 public:
 	#pragma option push -w-inl
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TMonthCalColors(void) { }
@@ -4038,38 +4208,28 @@ class PASCALIMPLEMENTATION EMonthCalError : public ECommonCalendarError
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EMonthCalError(const AnsiString Msg) : ECommonCalendarError(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EMonthCalError(const AnsiString Msg) : ECommonCalendarError(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EMonthCalError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : ECommonCalendarError(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EMonthCalError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : ECommonCalendarError(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EMonthCalError(int Ident)/* overload */ : ECommonCalendarError(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EMonthCalError(int Ident)/* overload */ : ECommonCalendarError(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EMonthCalError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : ECommonCalendarError(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EMonthCalError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : ECommonCalendarError(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EMonthCalError(const AnsiString Msg, int AHelpContext)
-		 : ECommonCalendarError(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EMonthCalError(const AnsiString Msg, int AHelpContext) : ECommonCalendarError(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EMonthCalError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : ECommonCalendarError(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EMonthCalError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : ECommonCalendarError(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EMonthCalError(int Ident, int AHelpContext)/* overload */
-		 : ECommonCalendarError(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EMonthCalError(int Ident, int AHelpContext)/* overload */ : ECommonCalendarError(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EMonthCalError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : ECommonCalendarError(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EMonthCalError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : ECommonCalendarError(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -4091,8 +4251,7 @@ private:
 	
 protected:
 	virtual bool __fastcall CanAutoSize(int &NewWidth, int &NewHeight);
-	virtual void __fastcall ConstrainedResize(int &MinWidth, int &MinHeight, int &MaxWidth, int &MaxHeight
-		);
+	virtual void __fastcall ConstrainedResize(int &MinWidth, int &MinHeight, int &MaxWidth, int &MaxHeight);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual HWND __fastcall GetCalendarHandle(void);
 	virtual bool __fastcall MsgSetCalColors(int ColorIndex, Graphics::TColor ColorValue);
@@ -4103,38 +4262,38 @@ public:
 	__fastcall virtual TMonthCalendar(Classes::TComponent* AOwner);
 	
 __published:
-	__property Align ;
-	__property Anchors ;
-	__property AutoSize ;
-	__property BorderWidth ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property AutoSize  = {default=0};
+	__property BorderWidth  = {default=0};
 	__property BiDiMode ;
 	__property CalColors ;
 	__property Constraints ;
-	__property MultiSelect ;
+	__property MultiSelect  = {default=0};
 	__property Date ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property EndDate ;
-	__property FirstDayOfWeek ;
+	__property FirstDayOfWeek  = {default=7};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
 	__property MaxDate ;
-	__property MaxSelectRange ;
+	__property MaxSelectRange  = {default=31};
 	__property MinDate ;
-	__property ParentBiDiMode ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property ShowToday ;
-	__property ShowTodayCircle ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
-	__property WeekNumbers ;
+	__property ShowToday  = {default=1};
+	__property ShowTodayCircle  = {default=1};
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
+	__property Visible  = {default=1};
+	__property WeekNumbers  = {default=0};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property OnDblClick ;
@@ -4157,8 +4316,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TMonthCalendar(HWND ParentWindow) : TCommonCalendar(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TMonthCalendar(HWND ParentWindow) : TCommonCalendar(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -4171,38 +4329,28 @@ class PASCALIMPLEMENTATION EDateTimeError : public ECommonCalendarError
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EDateTimeError(const AnsiString Msg) : ECommonCalendarError(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EDateTimeError(const AnsiString Msg) : ECommonCalendarError(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EDateTimeError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : ECommonCalendarError(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EDateTimeError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : ECommonCalendarError(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EDateTimeError(int Ident)/* overload */ : ECommonCalendarError(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EDateTimeError(int Ident)/* overload */ : ECommonCalendarError(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EDateTimeError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : ECommonCalendarError(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EDateTimeError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : ECommonCalendarError(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EDateTimeError(const AnsiString Msg, int AHelpContext)
-		 : ECommonCalendarError(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EDateTimeError(const AnsiString Msg, int AHelpContext) : ECommonCalendarError(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EDateTimeError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : ECommonCalendarError(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EDateTimeError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : ECommonCalendarError(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EDateTimeError(int Ident, int AHelpContext)/* overload */
-		 : ECommonCalendarError(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EDateTimeError(int Ident, int AHelpContext)/* overload */ : ECommonCalendarError(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EDateTimeError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : ECommonCalendarError(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EDateTimeError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : ECommonCalendarError(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -4229,8 +4377,7 @@ enum TDTDateFormat { dfShort, dfLong };
 enum TDTCalAlignment { dtaLeft, dtaRight };
 #pragma option pop
 
-typedef void __fastcall (__closure *TDTParseInputEvent)(System::TObject* Sender, const AnsiString UserString
-	, System::TDateTime &DateAndTime, bool &AllowChange);
+typedef void __fastcall (__closure *TDTParseInputEvent)(System::TObject* Sender, const AnsiString UserString, System::TDateTime &DateAndTime, bool &AllowChange);
 
 typedef TMonthCalColors TDateTimeColors;
 ;
@@ -4255,6 +4402,7 @@ private:
 	Classes::TNotifyEvent FOnCloseUp;
 	Classes::TNotifyEvent FOnChange;
 	Classes::TNotifyEvent FOnDropDown;
+	AnsiString FFormat;
 	void __fastcall AdjustHeight(void);
 	TTime __fastcall GetTime(void);
 	void __fastcall SetCalAlignment(TDTCalAlignment Value);
@@ -4268,6 +4416,7 @@ private:
 	HIDESBASE MESSAGE void __fastcall CMColorChanged(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMFontChanged(Messages::TMessage &Message);
 	MESSAGE void __fastcall CNNotify(Messages::TWMNotify &Message);
+	void __fastcall SetFormat(const AnsiString Value);
 	
 protected:
 	virtual void __fastcall CheckEmptyDate(void);
@@ -4285,38 +4434,44 @@ public:
 	__property bool DroppedDown = {read=FDroppedDown, nodefault};
 	
 __published:
-	__property Anchors ;
+	__property Anchors  = {default=3};
+	__property BevelEdges  = {default=15};
+	__property BevelInner  = {index=0, default=2};
+	__property BevelOuter  = {index=1, default=1};
+	__property BevelKind  = {default=0};
+	__property BevelWidth  = {default=1};
 	__property BiDiMode ;
 	__property TDTCalAlignment CalAlignment = {read=FCalAlignment, write=SetCalAlignment, nodefault};
 	__property CalColors ;
 	__property Constraints ;
 	__property Date ;
+	__property AnsiString Format = {read=FFormat, write=SetFormat};
 	__property TTime Time = {read=GetTime, write=SetTime};
 	__property bool ShowCheckbox = {read=FShowCheckbox, write=SetShowCheckbox, default=0};
 	__property bool Checked = {read=FChecked, write=SetChecked, default=1};
 	__property Color  = {stored=true, default=-2147483643};
 	__property TDTDateFormat DateFormat = {read=FDateFormat, write=SetDateFormat, nodefault};
 	__property TDTDateMode DateMode = {read=FDateMode, write=SetDateMode, nodefault};
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
 	__property TDateTimeKind Kind = {read=FKind, write=SetKind, nodefault};
 	__property MaxDate ;
 	__property MinDate ;
 	__property bool ParseInput = {read=FParseInput, write=SetParseInput, nodefault};
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property Classes::TNotifyEvent OnCloseUp = {read=FOnCloseUp, write=FOnCloseUp};
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
@@ -4342,8 +4497,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDateTimePicker(HWND ParentWindow) : TCommonCalendar(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDateTimePicker(HWND ParentWindow) : TCommonCalendar(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -4361,8 +4515,7 @@ enum TPageScrollerButton { sbFirst, sbLast };
 enum TPageScrollerButtonState { bsNormal, bsInvisible, bsGrayed, bsDepressed, bsHot };
 #pragma option pop
 
-typedef void __fastcall (__closure *TPageScrollEvent)(System::TObject* Sender, Classes::TShiftState 
-	Shift, int X, int Y, TPageScrollerOrientation Orientation, int &Delta);
+typedef void __fastcall (__closure *TPageScrollEvent)(System::TObject* Sender, Classes::TShiftState Shift, int X, int Y, TPageScrollerOrientation Orientation, int &Delta);
 
 class DELPHICLASS TPageScroller;
 class PASCALIMPLEMENTATION TPageScroller : public Controls::TWinControl 
@@ -4394,46 +4547,43 @@ private:
 	HIDESBASE MESSAGE void __fastcall CMColorChanged(Messages::TMessage &Message);
 	
 protected:
-	virtual void __fastcall AlignControls(Controls::TControl* AControl, Windows::TRect &Rect);
+	virtual void __fastcall AlignControls(Controls::TControl* AControl, Types::TRect &Rect);
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
-	DYNAMIC void __fastcall Scroll(Classes::TShiftState Shift, int X, int Y, TPageScrollerOrientation Orientation
-		, int &Delta);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
+	DYNAMIC void __fastcall Scroll(Classes::TShiftState Shift, int X, int Y, TPageScrollerOrientation Orientation, int &Delta);
 	
 public:
 	__fastcall virtual TPageScroller(Classes::TComponent* AOwner);
 	TPageScrollerButtonState __fastcall GetButtonState(TPageScrollerButton Button);
 	
 __published:
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
 	__property bool AutoScroll = {read=FAutoScroll, write=SetAutoScroll, nodefault};
-	__property BorderWidth ;
+	__property BorderWidth  = {default=0};
 	__property int ButtonSize = {read=FButtonSize, write=SetButtonSize, default=12};
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Controls::TWinControl* Control = {read=FControl, write=SetControl};
-	__property DockSite ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
+	__property DockSite  = {default=0};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
 	__property bool DragScroll = {read=FDragScroll, write=SetDragScroll, default=1};
-	__property Enabled ;
+	__property Enabled  = {default=1};
 	__property Font ;
 	__property int Margin = {read=FMargin, write=SetMargin, default=0};
-	__property TPageScrollerOrientation Orientation = {read=FOrientation, write=SetOrientation, default=0
-		};
-	__property ParentColor ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property TPageScrollerOrientation Orientation = {read=FOrientation, write=SetOrientation, default=0};
+	__property ParentColor  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property int Position = {read=FPosition, write=SetPosition, default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnContextPopup ;
 	__property OnDblClick ;
@@ -4453,11 +4603,290 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TPageScroller(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TPageScroller(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TPageScroller(void) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TComboExItem;
+class PASCALIMPLEMENTATION TComboExItem : public Listactns::TListControlItem 
+{
+	typedef Listactns::TListControlItem inherited;
+	
+private:
+	Imglist::TImageIndex FSelectedImageIndex;
+	Imglist::TImageIndex FOverlayImageIndex;
+	int FIndent;
+	
+protected:
+	virtual void __fastcall SetOverlayImageIndex(const Imglist::TImageIndex Value);
+	virtual void __fastcall SetSelectedImageIndex(const Imglist::TImageIndex Value);
+	virtual void __fastcall SetCaption(const AnsiString Value);
+	virtual void __fastcall SetData(const void * Value);
+	virtual void __fastcall SetDisplayName(const AnsiString Value);
+	virtual void __fastcall SetImageIndex(const Imglist::TImageIndex Value);
+	virtual void __fastcall SetIndex(int Value);
+	
+public:
+	virtual void __fastcall Assign(Classes::TPersistent* Source);
+	
+__published:
+	__property int Indent = {read=FIndent, write=FIndent, default=-1};
+	__property Imglist::TImageIndex OverlayImageIndex = {read=FOverlayImageIndex, write=SetOverlayImageIndex, default=-1};
+	__property Imglist::TImageIndex SelectedImageIndex = {read=FSelectedImageIndex, write=SetSelectedImageIndex, default=-1};
+public:
+	#pragma option push -w-inl
+	/* TListControlItem.Create */ inline __fastcall virtual TComboExItem(Classes::TCollection* Collection) : Listactns::TListControlItem(Collection) { }
+	#pragma option pop
+	
+public:
+	#pragma option push -w-inl
+	/* TCollectionItem.Destroy */ inline __fastcall virtual ~TComboExItem(void) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TComboExItems;
+class PASCALIMPLEMENTATION TComboExItems : public Listactns::TListControlItems 
+{
+	typedef Listactns::TListControlItems inherited;
+	
+private:
+	TComboExItem* __fastcall GetComboItem(const int Index);
+	
+protected:
+	virtual void __fastcall Notify(Classes::TCollectionItem* Item, Classes::TCollectionNotification Action);
+	HIDESBASE virtual void __fastcall SetItem(const int Index);
+	
+public:
+	HIDESBASE TComboExItem* __fastcall Add(void);
+	TComboExItem* __fastcall AddItem(const AnsiString Caption, const int ImageIndex, const int SelectedImageIndex, const int OverlayImageIndex, const int Indent, void * Data);
+	HIDESBASE TComboExItem* __fastcall Insert(int Index);
+	__property TComboExItem* ComboItems[int Index] = {read=GetComboItem};
+public:
+	#pragma option push -w-inl
+	/* TOwnedCollection.Create */ inline __fastcall TComboExItems(Classes::TPersistent* AOwner, TMetaClass* ItemClass) : Listactns::TListControlItems(AOwner, ItemClass) { }
+	#pragma option pop
+	
+public:
+	#pragma option push -w-inl
+	/* TCollection.Destroy */ inline __fastcall virtual ~TComboExItems(void) { }
+	#pragma option pop
+	
+};
+
+
+typedef TMetaClass*TComboExItemsClass;
+
+typedef TMetaClass*TComboExItemClass;
+
+class DELPHICLASS TComboBoxExStrings;
+class DELPHICLASS TCustomComboBoxEx;
+class PASCALIMPLEMENTATION TComboBoxExStrings : public Stdctrls::TCustomComboBoxStrings 
+{
+	typedef Stdctrls::TCustomComboBoxStrings inherited;
+	
+private:
+	TComboExItems* FItems;
+	Listactns::TListItemsSortType __fastcall GetSortType(void);
+	void __fastcall SetItems(const TComboExItems* Value);
+	void __fastcall SetSortType(const Listactns::TListItemsSortType Value);
+	
+protected:
+	virtual TMetaClass* __fastcall GetItemsClass(void);
+	virtual TMetaClass* __fastcall GetItemClass(void);
+	virtual void __fastcall Put(int Index, const AnsiString S);
+	virtual void __fastcall PutObject(int Index, System::TObject* AObject);
+	virtual void __fastcall SetUpdateState(bool Updating);
+	
+public:
+	__fastcall TComboBoxExStrings(TCustomComboBoxEx* Owner);
+	__fastcall virtual ~TComboBoxExStrings(void);
+	virtual int __fastcall Add(const AnsiString S);
+	TComboExItem* __fastcall AddItem(const AnsiString Caption, const int ImageIndex, const int SelectedImageIndex, const int OverlayImageIndex, const int Indent, void * Data);
+	virtual int __fastcall AddObject(const AnsiString S, System::TObject* AObject);
+	virtual void __fastcall Clear(void);
+	virtual void __fastcall Delete(int Index);
+	virtual void __fastcall Exchange(int Index1, int Index2);
+	virtual AnsiString __fastcall Get(int Index);
+	virtual int __fastcall GetCapacity(void);
+	virtual int __fastcall GetCount(void);
+	virtual System::TObject* __fastcall GetObject(int Index);
+	virtual int __fastcall IndexOf(const AnsiString S);
+	virtual int __fastcall IndexOfName(const AnsiString Name);
+	virtual void __fastcall Insert(int Index, const AnsiString S);
+	virtual void __fastcall Move(int CurIndex, int NewIndex);
+	__property Listactns::TListItemsSortType SortType = {read=GetSortType, write=SetSortType, nodefault};
+	__property TComboExItems* ItemsEx = {read=FItems, write=SetItems};
+};
+
+
+#pragma option push -b-
+enum TComboBoxExStyle { csExDropDown, csExSimple, csExDropDownList };
+#pragma option pop
+
+#pragma option push -b-
+enum TComboBoxExStyleEx { csExCaseSensitive, csExNoEditImage, csExNoEditImageIndent, csExNoSizeLimit, csExPathWordBreak };
+#pragma option pop
+
+typedef Set<TComboBoxExStyleEx, csExCaseSensitive, csExPathWordBreak>  TComboBoxExStyles;
+
+class PASCALIMPLEMENTATION TCustomComboBoxEx : public Stdctrls::TCustomCombo 
+{
+	typedef Stdctrls::TCustomCombo inherited;
+	
+private:
+	HWND FComboBoxExHandle;
+	void *FComboBoxExDefProc;
+	void *FComboBoxExInstance;
+	Imglist::TChangeLink* FImageChangeLink;
+	Imglist::TCustomImageList* FImages;
+	Classes::TCollection* FMemStream;
+	bool FReading;
+	TComboBoxExStyle FStyle;
+	TComboBoxExStyles FStyleEx;
+	TComboExItems* FItemsEx;
+	Classes::TNotifyEvent FOnBeginEdit;
+	Classes::TNotifyEvent FOnEndEdit;
+	AnsiString __fastcall GetSelText();
+	void __fastcall ImageListChange(System::TObject* Sender);
+	void __fastcall SetImages(const Imglist::TCustomImageList* Value);
+	void __fastcall SetSelText(const AnsiString Value);
+	void __fastcall SetStyle(TComboBoxExStyle Value);
+	void __fastcall SetItemsEx(const TComboExItems* Value);
+	void __fastcall SetStyleEx(const TComboBoxExStyles Value);
+	bool __fastcall IsItemsExStored(void);
+	int __fastcall GetDropDownCount(void);
+	
+protected:
+	DYNAMIC void __fastcall ActionChange(System::TObject* Sender, bool CheckDefaults);
+	HIDESBASE MESSAGE void __fastcall CMColorChanged(Messages::TMessage &Message);
+	HIDESBASE MESSAGE void __fastcall CMParentColorChanged(Messages::TMessage &Message);
+	MESSAGE void __fastcall CNNotify(Messages::TWMNotify &Message);
+	void __fastcall ComboExWndProc(Messages::TMessage &Message);
+	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
+	virtual void __fastcall CreateWnd(void);
+	virtual void __fastcall DestroyWnd(void);
+	DYNAMIC TMetaClass* __fastcall GetActionLinkClass(void);
+	virtual TMetaClass* __fastcall GetItemsClass(void);
+	virtual int __fastcall GetItemCount(void);
+	virtual int __fastcall GetItemHt(void);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
+	virtual void __fastcall SetDropDownCount(const int Value);
+	HIDESBASE MESSAGE void __fastcall WMLButtonDown(Messages::TWMMouse &Message);
+	virtual void __fastcall WndProc(Messages::TMessage &Message);
+	
+public:
+	__fastcall virtual TCustomComboBoxEx(Classes::TComponent* AOwner);
+	__fastcall virtual ~TCustomComboBoxEx(void);
+	DYNAMIC bool __fastcall Focused(void);
+	__property int DropDownCount = {read=GetDropDownCount, write=SetDropDownCount, nodefault};
+	__property Imglist::TCustomImageList* Images = {read=FImages, write=SetImages};
+	__property TComboExItems* ItemsEx = {read=FItemsEx, write=SetItemsEx, stored=IsItemsExStored};
+	__property AnsiString SelText = {read=GetSelText, write=SetSelText};
+	__property TComboBoxExStyle Style = {read=FStyle, write=SetStyle, default=0};
+	__property TComboBoxExStyles StyleEx = {read=FStyleEx, write=SetStyleEx, nodefault};
+	__property Classes::TNotifyEvent OnBeginEdit = {read=FOnBeginEdit, write=FOnBeginEdit};
+	__property Classes::TNotifyEvent OnEndEdit = {read=FOnEndEdit, write=FOnEndEdit};
+public:
+	#pragma option push -w-inl
+	/* TWinControl.CreateParented */ inline __fastcall TCustomComboBoxEx(HWND ParentWindow) : Stdctrls::TCustomCombo(ParentWindow) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TComboBoxEx;
+class PASCALIMPLEMENTATION TComboBoxEx : public TCustomComboBoxEx 
+{
+	typedef TCustomComboBoxEx inherited;
+	
+__published:
+	__property ItemsEx ;
+	__property Style  = {default=0};
+	__property StyleEx ;
+	__property Action ;
+	__property Anchors  = {default=3};
+	__property BiDiMode ;
+	__property Color  = {default=-2147483643};
+	__property Constraints ;
+	__property Ctl3D ;
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
+	__property Font ;
+	__property ImeMode  = {default=3};
+	__property ImeName ;
+	__property ItemHeight ;
+	__property MaxLength  = {default=0};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
+	__property PopupMenu ;
+	__property ShowHint ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Text ;
+	__property Visible  = {default=1};
+	__property OnBeginEdit ;
+	__property OnChange ;
+	__property OnClick ;
+	__property OnContextPopup ;
+	__property OnDblClick ;
+	__property OnDragDrop ;
+	__property OnDragOver ;
+	__property OnDropDown ;
+	__property OnEndEdit ;
+	__property OnEndDock ;
+	__property OnEndDrag ;
+	__property OnEnter ;
+	__property OnExit ;
+	__property OnKeyDown ;
+	__property OnKeyPress ;
+	__property OnKeyUp ;
+	__property OnSelect ;
+	__property OnStartDock ;
+	__property OnStartDrag ;
+	__property Images ;
+	__property DropDownCount ;
+public:
+	#pragma option push -w-inl
+	/* TCustomComboBoxEx.Create */ inline __fastcall virtual TComboBoxEx(Classes::TComponent* AOwner) : TCustomComboBoxEx(AOwner) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TCustomComboBoxEx.Destroy */ inline __fastcall virtual ~TComboBoxEx(void) { }
+	#pragma option pop
+	
+public:
+	#pragma option push -w-inl
+	/* TWinControl.CreateParented */ inline __fastcall TComboBoxEx(HWND ParentWindow) : TCustomComboBoxEx(ParentWindow) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TComboBoxExActionLink;
+class PASCALIMPLEMENTATION TComboBoxExActionLink : public Listactns::TListActionLink 
+{
+	typedef Listactns::TListActionLink inherited;
+	
+protected:
+	virtual void __fastcall AddItem(Listactns::TListControlItem* AnItem)/* overload */;
+	virtual void __fastcall AddItem(AnsiString ACaption, int AImageIndex, void * DataPtr)/* overload */;
+public:
+	#pragma option push -w-inl
+	/* TBasicActionLink.Create */ inline __fastcall virtual TComboBoxExActionLink(System::TObject* AClient) : Listactns::TListActionLink(AClient) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TBasicActionLink.Destroy */ inline __fastcall virtual ~TComboBoxExActionLink(void) { }
 	#pragma option pop
 	
 };
@@ -4478,9 +4907,7 @@ extern PACKAGE int __fastcall GetComCtlVersion(void);
 extern PACKAGE void __fastcall CheckToolMenuDropdown(TToolButton* ToolButton);
 
 }	/* namespace Comctrls */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Comctrls;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

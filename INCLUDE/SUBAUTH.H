@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0005     Increment this if a change has global effects
 
-Copyright (c) 1990-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -15,14 +15,13 @@ Revision History:
 --*/
 
 #ifndef _NTSUBAUTH_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _NTSUBAUTH_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifndef _NTDEF_
+#if (!defined(_NTDEF_)) && (!defined(_NTSECAPI_))
 typedef LONG NTSTATUS, *PNTSTATUS;
 
 typedef struct _UNICODE_STRING {
@@ -36,6 +35,9 @@ typedef struct _STRING {
     USHORT MaximumLength;
     PCHAR Buffer;
 } STRING, *PSTRING;
+#endif
+
+#ifndef _NTDEF_
 
 typedef struct _OLD_LARGE_INTEGER {
     ULONG LowPart;
@@ -73,7 +75,9 @@ typedef PVOID SAM_HANDLE, *PSAM_HANDLE;
 #define USER_NOT_DELEGATED                   (0x00004000)
 #define USER_USE_DES_KEY_ONLY                (0x00008000)
 #define USER_DONT_REQUIRE_PREAUTH            (0x00010000)
-#define NEXT_FREE_ACCOUNT_CONTROL_BIT (USER_DONT_REQUIRE_PREAUTH << 1)
+#define USER_PASSWORD_EXPIRED                (0x00020000)
+#define USER_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION (0x00040000)
+#define NEXT_FREE_ACCOUNT_CONTROL_BIT (USER_TRUSTED_TO_AUTHENTICATE_FOR_DELEGATION << 1)
 
 
 #define USER_MACHINE_ACCOUNT_MASK      \
@@ -353,6 +357,5 @@ Msv1_0SubAuthenticationFilter(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif /* _NTSUBAUTH_ */
 

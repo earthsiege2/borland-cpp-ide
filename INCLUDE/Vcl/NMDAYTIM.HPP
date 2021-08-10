@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NMDayTim.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NMDayTim.pas' rev: 6.00
 
 #ifndef NMDayTimHPP
 #define NMDayTimHPP
@@ -46,9 +46,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Nmdaytim */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nmdaytim;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

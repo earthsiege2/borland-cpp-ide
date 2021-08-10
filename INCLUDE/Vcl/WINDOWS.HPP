@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Windows.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Windows.pas' rev: 6.00
 
 #ifndef WindowsHPP
 #define WindowsHPP
@@ -10,10 +10,17 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
+#include <Types.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
 //-- user supplied -----------------------------------------------------------
+// WINVER check BEGIN 
+#if (WINVER < 0x0400)
+#error WINVER < 0x0400
+#endif
+// WINVER check END. 
+
 // WIN2K SDK fixes BEGIN 
 #ifndef WINTRUST_H
 #include<wintrust.h>
@@ -52,48 +59,45 @@ typedef struct tagBLOB __RPC_FAR *LPBLOB;
 
 namespace Windows {
 typedef _LARGE_INTEGER TLargeInteger;
+
+#if (WINVER >= 0x0500)
+typedef BITMAPV5HEADER *PBitmapV5Header;
+typedef BITMAPV5HEADER  TBitmapV5Header;
+typedef tagEMRGRADIENTFILL *PEMGradientFill;
+typedef tagEMRGRADIENTFILL  TEMGradientFill;
+typedef tagEMRALPHABLEND *PEMRAlphaBlend;
+typedef tagEMRALPHABLEND  TEMRAlphaBlend;
+typedef tagEMRTRANSPARENTBLT *PEMRTransparentBLT;
+typedef tagEMRTRANSPARENTBLT  TEMRTransparentBLT;
+typedef _WGLSWAP *PWGLSwap;
+typedef _WGLSWAP  TWGLSwap;
+typedef tagMOUSEMOVEPOINT *PMouseMovePoint;
+typedef tagMOUSEMOVEPOINT  TMouseMovePoint;
+typedef FLASHWINFO  TFlashWInfo;
+typedef tagMENUINFO *PMenuInfo;
+typedef tagMENUINFO  TMenuInfo;
+typedef tagMENUGETOBJECTINFO *PMenuGetObjectInfo;
+typedef tagMENUGETOBJECTINFO  TMenuGetObjectInfo;
+typedef tagGUITHREADINFO *PGUIThreadInfo;
+typedef tagGUITHREADINFO  TGUIThreadInfo;
+typedef tagCURSORINFO *PCursorInfo;
+typedef tagCURSORINFO  TCursorInfo;
+typedef tagWINDOWINFO *PWindowInfo;
+typedef tagWINDOWINFO  TWindowInfo;
+typedef tagTITLEBARINFO *PTitleBarInfo;
+typedef tagTITLEBARINFO  TTitleBarInfo;
+typedef tagMENUBARINFO *PMenuBarInfo;
+typedef tagMENUBARINFO  TMenuBarInfo;
+typedef tagSCROLLBARINFO *PScrollBarInfo;
+typedef tagSCROLLBARINFO  TScrollBarInfo;
+typedef tagCOMBOBOXINFO *PComboBoxInfo;
+typedef tagCOMBOBOXINFO  TComboBoxInfo;
+typedef tagALTTABINFO *PAltTabInfo;
+typedef tagALTTABINFO  TAltTabInfo;
+#endif
+
 } // namespace Windows
-namespace Windows
-{
-  struct TPoint : public POINT
-  {
-    TPoint() {}
-    TPoint(int _x, int _y) { x=_x; y=_y; }
-    TPoint(POINT& pt)
-    {
-      x = pt.x;
-      y = pt.y;
-    }
-  };
- 
-  struct TRect : public RECT
-  {
-    TRect() {}
-    TRect(const TPoint& TL, const TPoint& BR) { left=TL.x; top=TL.y; right=BR.x; bottom=BR.y; }
-    TRect(int l, int t, int r, int b)         { left=l;    top=t;    right=r;    bottom=b;    }
-    TRect(RECT& r)
-    {
-      left    = r.left;
-      top     = r.top;
-      right   = r.right;
-      bottom  = r.bottom;
-    }
-    int Width () const { return right  - left; }
-    int Height() const { return bottom - top ; }
-    bool operator ==(const TRect& rc) const 
-    {
-       return left ==  rc.left  && top==rc.top &&     
-              right == rc.right && bottom==rc.bottom; 
-    }
-    bool operator !=(const TRect& rc) const 
-    {  return !(rc==*this); }
- 
-       __property LONG Left    = { read=left,   write=left   }; 
-       __property LONG Top     = { read=top,       write=top }; 
-       __property LONG Right   = { read=right,  write=right  }; 
-       __property LONG Bottom  = { read=bottom, write=bottom }; 
-  };
-} /* namespace Windows */
+
 
 namespace Windows
 {
@@ -103,18 +107,6 @@ typedef wchar_t *PWChar;
 typedef Byte *PByte;
 
 typedef float *PSingle;
-
-typedef int *PLongint;
-
-typedef int *PInteger;
-
-typedef unsigned *PLongWord;
-
-typedef short *PSmallInt;
-
-typedef double *PDouble;
-
-typedef Shortint *PShortInt;
 
 typedef unsigned THandle;
 
@@ -329,27 +321,9 @@ typedef unsigned HINST;
 
 typedef unsigned TColorRef;
 
-typedef TPoint *PPoint;
-
-typedef TRect *PRect;
-
 typedef _POINTL *PPointL;
 
 typedef _POINTL  TPointL;
-
-typedef tagSIZE *PSize;
-
-typedef tagSIZE  TSize;
-
-#pragma pack(push, 1)
-struct TSmallPoint
-{
-	short x;
-	short y;
-} ;
-#pragma pack(pop)
-
-typedef TSmallPoint *PSmallPoint;
 
 typedef _OVERLAPPED *POverlapped;
 
@@ -479,11 +453,9 @@ typedef _TIME_ZONE_INFORMATION *PTimeZoneInformation;
 
 typedef _TIME_ZONE_INFORMATION  TTimeZoneInformation;
 
-typedef unsigned __stdcall (*TFNExportFunc)(void * pbData, void * pvCallbackContext, unsigned ulLength
-	);
+typedef unsigned __stdcall (*TFNExportFunc)(void * pbData, void * pvCallbackContext, unsigned ulLength);
 
-typedef unsigned __stdcall (*TFNImportFunc)(void * pbData, void * pvCallbackContext, unsigned ulLength
-	);
+typedef unsigned __stdcall (*TFNImportFunc)(void * pbData, void * pvCallbackContext, unsigned ulLength);
 
 struct _RECOVERY_AGENT_INFORMATIONA;
 typedef _RECOVERY_AGENT_INFORMATIONA *PRecoveryAgentInformationA;
@@ -493,19 +465,23 @@ typedef _RECOVERY_AGENT_INFORMATIONW *PRecoveryAgentInformationW;
 
 typedef _RECOVERY_AGENT_INFORMATIONA *PRecoveryAgentInformation;
 
+#pragma pack(push, 4)
 struct _RECOVERY_AGENT_INFORMATIONA
 {
 	unsigned NextEntryOffset;
 	unsigned AgentNameLength;
 	char AgentInformation[1];
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct _RECOVERY_AGENT_INFORMATIONW
 {
 	unsigned NextEntryOffset;
 	unsigned AgentNameLength;
 	char AgentInformation[1];
 } ;
+#pragma pack(pop)
 
 typedef _RECOVERY_AGENT_INFORMATIONA  _RECOVERY_AGENT_INFORMATION;
 
@@ -666,10 +642,6 @@ typedef tagBITMAPINFOHEADER  TBitmapInfoHeader;
 typedef BITMAPV4HEADER *PBitmapV4Header;
 
 typedef BITMAPV4HEADER  TBitmapV4Header;
-
-typedef BITMAPV5HEADER *PBitmapV5Header;
-
-typedef BITMAPV5HEADER  TBitmapV5Header;
 
 typedef tagBITMAPINFO *PBitmapInfo;
 
@@ -1401,12 +1373,6 @@ typedef tagEMRFRAMERGN *PEMRFrameRgn;
 
 typedef tagEMRFRAMERGN  TEMRFrameRgn;
 
-typedef tagEMRGRADIENTFILL *PEMGradientFill;
-
-typedef tagEMRGRADIENTFILL  TEMGradientFill;
-
-typedef tagEMRGRADIENTFILL  EMRGRADIENTFILL;
-
 typedef tagEMREXTSELECTCLIPRGN *PEMRExtSelectClipRgn;
 
 typedef tagEMREXTSELECTCLIPRGN  TEMRExtSelectClipRgn;
@@ -1442,10 +1408,6 @@ typedef tagEMRSETDIBITSTODEVICE  TEMRSetDIBitsToDevice;
 typedef tagEMRSTRETCHDIBITS *PEMRStretchDIBits;
 
 typedef tagEMRSTRETCHDIBITS  TEMRStretchDIBits;
-
-typedef tagEMRALPHABLEND *PEMRAlphaBlend;
-
-typedef tagEMRALPHABLEND  TEMRAlphaBlend;
 
 typedef tagEMRTRANSPARENTBLT *PEMRTransparentBLT;
 
@@ -1510,10 +1472,6 @@ typedef _GLYPHMETRICSFLOAT  TGlyphMetricsFloat;
 typedef tagLAYERPLANEDESCRIPTOR *PLayerPlaneDescriptor;
 
 typedef tagLAYERPLANEDESCRIPTOR  TLayerPlaneDescriptor;
-
-typedef _WGLSWAP *PWGLSwap;
-
-typedef _WGLSWAP  TWGLSwap;
 
 typedef void *TFNWndProc;
 
@@ -1593,10 +1551,6 @@ typedef tagHARDWAREHOOKSTRUCT *PHardwareHookStruct;
 
 typedef tagHARDWAREHOOKSTRUCT  THardwareHookStruct;
 
-typedef tagMOUSEMOVEPOINT *PMouseMovePoint;
-
-typedef tagMOUSEMOVEPOINT  TMouseMovePoint;
-
 typedef tagUSEROBJECTFLAGS *PUserObjectFlags;
 
 typedef tagUSEROBJECTFLAGS  TUserObjectFlags;
@@ -1670,8 +1624,7 @@ typedef tagSTYLESTRUCT *PStyleStruct;
 typedef tagSTYLESTRUCT  TStyleStruct;
 
 #pragma option push -b
-enum Windows__1 { odSelected, odGrayed, odDisabled, odChecked, odFocused, odDefault, odHotLight, odInactive, 
-	odNoAccel, odNoFocusRect, odReserved1, odReserved2, odComboBoxEdit };
+enum Windows__1 { odSelected, odGrayed, odDisabled, odChecked, odFocused, odDefault, odHotLight, odInactive, odNoAccel, odNoFocusRect, odReserved1, odReserved2, odComboBoxEdit };
 #pragma option pop
 
 typedef Set<Windows__1, odSelected, odComboBoxEdit>  TOwnerDrawState;
@@ -1706,8 +1659,6 @@ typedef tagBROADCASTSYSMSG *PBroadcastSysMsg;
 typedef tagBROADCASTSYSMSG  TBroadcastSysMsg;
 
 typedef tagBROADCASTSYSMSG  BROADCASTSYSMSG;
-
-typedef FLASHWINFO  TFlashWInfo;
 
 typedef DLGTEMPLATE *PDlgTemplate;
 
@@ -1744,14 +1695,6 @@ typedef tagLASTINPUTINFO  TLastInputInfo;
 typedef tagTPMPARAMS *PTPMParams;
 
 typedef tagTPMPARAMS  TTPMParams;
-
-typedef tagMENUINFO *PMenuInfo;
-
-typedef tagMENUINFO  TMenuInfo;
-
-typedef tagMENUGETOBJECTINFO *PMenuGetObjectInfo;
-
-typedef tagMENUGETOBJECTINFO  TMenuGetObjectInfo;
 
 typedef tagMENUITEMINFOA *PMenuItemInfoA;
 
@@ -1938,38 +1881,6 @@ typedef tagSOUNDSENTRYA  TSoundsEntry;
 typedef tagTOGGLEKEYS *PToggleKeys;
 
 typedef tagTOGGLEKEYS  TToggleKeys;
-
-typedef tagGUITHREADINFO *PGUIThreadInfo;
-
-typedef tagGUITHREADINFO  TGUIThreadInfo;
-
-typedef tagCURSORINFO *PCursorInfo;
-
-typedef tagCURSORINFO  TCursorInfo;
-
-typedef tagWINDOWINFO *PWindowInfo;
-
-typedef tagWINDOWINFO  TWindowInfo;
-
-typedef tagTITLEBARINFO *PTitleBarInfo;
-
-typedef tagTITLEBARINFO  TTitleBarInfo;
-
-typedef tagMENUBARINFO *PMenuBarInfo;
-
-typedef tagMENUBARINFO  TMenuBarInfo;
-
-typedef tagSCROLLBARINFO *PScrollBarInfo;
-
-typedef tagSCROLLBARINFO  TScrollBarInfo;
-
-typedef tagCOMBOBOXINFO *PComboBoxInfo;
-
-typedef tagCOMBOBOXINFO  TComboBoxInfo;
-
-typedef tagALTTABINFO *PAltTabInfo;
-
-typedef tagALTTABINFO  TAltTabInfo;
 
 typedef _cpinfo *PCPInfo;
 
@@ -2246,7 +2157,7 @@ static const Byte GCP_GLYPHINDEXING = 0x80;
 static const int GCP_NODIACRITICS = 0x20000;
 static const Word wnd_Broadcast = 0xffff;
 static const Shortint wnd_Message = 0xfffffffd;
-static const Shortint COLOR_ENDCOLORS = 0x1c;
+static const Shortint COLOR_ENDCOLORS = 0x1e;
 static const Shortint ID_OK = 0x1;
 static const Shortint ID_CANCEL = 0x2;
 static const Shortint ID_ABORT = 0x3;
@@ -2278,13 +2189,9 @@ extern PACKAGE int __fastcall HResultFacility(HRESULT hr);
 extern PACKAGE int __fastcall HResultSeverity(HRESULT hr);
 extern PACKAGE HRESULT __fastcall HResultFromWin32(int x);
 extern PACKAGE HRESULT __fastcall HResultFromNT(int x);
-extern PACKAGE TPoint __fastcall SmallPointToPoint(const TSmallPoint P);
-extern PACKAGE TSmallPoint __fastcall PointToSmallPoint(const TPoint &P);
 
 }	/* namespace Windows */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Windows;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

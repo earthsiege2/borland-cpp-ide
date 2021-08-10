@@ -1,23 +1,23 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Qrctrls.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QRCtrls.pas' rev: 6.00
 
-#ifndef QrctrlsHPP
-#define QrctrlsHPP
+#ifndef QRCtrlsHPP
+#define QRCtrlsHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
 #include <QRExpr.hpp>	// Pascal unit
-#include <qr3const.hpp>	// Pascal unit
+#include <QR3Const.hpp>	// Pascal unit
 #include <QuickRpt.hpp>	// Pascal unit
 #include <QRPrntr.hpp>	// Pascal unit
 #include <RichEdit.hpp>	// Pascal unit
 #include <ComCtrls.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Printers.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
@@ -38,8 +38,7 @@
 namespace Qrctrls
 {
 //-- type declarations -------------------------------------------------------
-typedef void __fastcall (__closure *TQRLabelOnPrintEvent)(System::TObject* sender, AnsiString &Value
-	);
+typedef void __fastcall (__closure *TQRLabelOnPrintEvent)(System::TObject* sender, AnsiString &Value);
 
 class DELPHICLASS TQRCustomLabel;
 class PASCALIMPLEMENTATION TQRCustomLabel : public Quickrpt::TQRPrintable 
@@ -66,10 +65,8 @@ private:
 	void __fastcall SetCaption(AnsiString Value);
 	void __fastcall SetLines(Classes::TStrings* Value);
 	void __fastcall SetWordWrap(bool Value);
-	void __fastcall PaintToCanvas(Graphics::TCanvas* aCanvas, const Windows::TRect &aRect, bool CanExpand
-		, int LineHeight);
-	void __fastcall PrintToCanvas(Graphics::TCanvas* aCanvas, Extended aLeft, Extended aTop, Extended aWidth
-		, Extended aHeight, Extended LineHeight, bool CanExpand);
+	void __fastcall PaintToCanvas(Graphics::TCanvas* aCanvas, const Types::TRect &aRect, bool CanExpand, int LineHeight);
+	void __fastcall PrintToCanvas(Graphics::TCanvas* aCanvas, Extended aLeft, Extended aTop, Extended aWidth, Extended aHeight, Extended LineHeight, bool CanExpand);
 	HIDESBASE MESSAGE void __fastcall CMFontChanged(Messages::TMessage &Message);
 	
 protected:
@@ -96,14 +93,13 @@ public:
 	__property bool AutoSize = {read=FAutoSize, write=FAutoSize, nodefault};
 	__property bool AutoStretch = {read=FAutoStretch, write=SetAutoStretch, nodefault};
 	__property AnsiString Caption = {read=GetCaption, write=SetCaption, stored=true};
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Font ;
 	__property Classes::TStrings* Lines = {read=FLines, write=SetLines};
 	__property bool WordWrap = {read=FWordWrap, write=SetWordWrap, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRCustomLabel(HWND ParentWindow) : Quickrpt::TQRPrintable(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRCustomLabel(HWND ParentWindow) : Quickrpt::TQRPrintable(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -123,18 +119,17 @@ __published:
 	__property AutoSize ;
 	__property AutoStretch ;
 	__property BiDiMode ;
-	__property ParentBiDiMode ;
+	__property ParentBiDiMode  = {default=1};
 	__property Caption ;
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Font ;
 	__property OnPrint ;
-	__property ParentFont ;
+	__property ParentFont  = {default=1};
 	__property Transparent ;
 	__property WordWrap ;
 public:
 	#pragma option push -w-inl
-	/* TQRCustomLabel.Create */ inline __fastcall virtual TQRLabel(Classes::TComponent* AOwner) : TQRCustomLabel(
-		AOwner) { }
+	/* TQRCustomLabel.Create */ inline __fastcall virtual TQRLabel(Classes::TComponent* AOwner) : TQRCustomLabel(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TQRCustomLabel.Destroy */ inline __fastcall virtual ~TQRLabel(void) { }
@@ -142,8 +137,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRLabel(HWND ParentWindow) : TQRCustomLabel(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRLabel(HWND ParentWindow) : TQRCustomLabel(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -167,17 +161,16 @@ __published:
 	__property AutoSize ;
 	__property AutoStretch ;
 	__property BiDiMode ;
-	__property ParentBiDiMode ;
-	__property Color ;
+	__property ParentBiDiMode  = {default=1};
+	__property Color  = {default=-2147483643};
 	__property Font ;
 	__property Lines ;
-	__property ParentFont ;
+	__property ParentFont  = {default=1};
 	__property Transparent ;
 	__property WordWrap ;
 public:
 	#pragma option push -w-inl
-	/* TQRCustomLabel.Create */ inline __fastcall virtual TQRMemo(Classes::TComponent* AOwner) : TQRCustomLabel(
-		AOwner) { }
+	/* TQRCustomLabel.Create */ inline __fastcall virtual TQRMemo(Classes::TComponent* AOwner) : TQRCustomLabel(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TQRCustomLabel.Destroy */ inline __fastcall virtual ~TQRMemo(void) { }
@@ -185,8 +178,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRMemo(HWND ParentWindow) : TQRCustomLabel(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRMemo(HWND ParentWindow) : TQRCustomLabel(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -214,8 +206,7 @@ private:
 protected:
 	virtual bool __fastcall GetCaptionBased(void);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall Prepare(void);
 	virtual void __fastcall Print(int OfsX, int OfsY);
 	virtual void __fastcall Unprepare(void);
@@ -230,14 +221,14 @@ __published:
 	__property AutoSize ;
 	__property AutoStretch ;
 	__property BiDiMode ;
-	__property ParentBiDiMode ;
-	__property Color ;
+	__property ParentBiDiMode  = {default=1};
+	__property Color  = {default=-2147483643};
 	__property Db::TDataSet* DataSet = {read=FDataSet, write=SetDataSet};
 	__property AnsiString DataField = {read=FDataField, write=SetDataField};
 	__property Font ;
 	__property AnsiString Mask = {read=FMask, write=SetMask};
 	__property OnPrint ;
-	__property ParentFont ;
+	__property ParentFont  = {default=1};
 	__property Transparent ;
 	__property WordWrap ;
 public:
@@ -247,8 +238,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRDBText(HWND ParentWindow) : TQRCustomLabel(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRDBText(HWND ParentWindow) : TQRCustomLabel(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -272,8 +262,7 @@ private:
 protected:
 	virtual void __fastcall Prepare(void);
 	virtual void __fastcall Unprepare(void);
-	virtual void __fastcall QRNotification(System::TObject* Sender, Quickrpt::TQRNotifyOperation Operation
-		);
+	virtual void __fastcall QRNotification(System::TObject* Sender, Quickrpt::TQRNotifyOperation Operation);
 	virtual void __fastcall Print(int OfsX, int OfsY);
 	void __fastcall SetMaster(Classes::TComponent* AComponent);
 	
@@ -289,12 +278,12 @@ __published:
 	__property AutoSize ;
 	__property AutoStretch ;
 	__property BiDiMode ;
-	__property ParentBiDiMode ;
+	__property ParentBiDiMode  = {default=1};
 	__property Font ;
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Classes::TComponent* Master = {read=FMaster, write=SetMaster};
 	__property OnPrint ;
-	__property ParentFont ;
+	__property ParentFont  = {default=1};
 	__property bool ResetAfterPrint = {read=FResetAfterPrint, write=FResetAfterPrint, nodefault};
 	__property Transparent ;
 	__property WordWrap ;
@@ -302,16 +291,14 @@ __published:
 	__property AnsiString Mask = {read=FMask, write=SetMask};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRExpr(HWND ParentWindow) : TQRCustomLabel(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRExpr(HWND ParentWindow) : TQRCustomLabel(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 #pragma option push -b-
-enum TQRSysDataType { qrsTime, qrsDate, qrsDateTime, qrsPageNumber, qrsReportTitle, qrsDetailCount, 
-	qrsDetailNo };
+enum TQRSysDataType { qrsTime, qrsDate, qrsDateTime, qrsPageNumber, qrsReportTitle, qrsDetailCount, qrsDetailNo };
 #pragma option pop
 
 class DELPHICLASS TQRSysData;
@@ -337,12 +324,12 @@ __published:
 	__property AlignToBand ;
 	__property AutoSize ;
 	__property BiDiMode ;
-	__property ParentBiDiMode ;
-	__property Color ;
+	__property ParentBiDiMode  = {default=1};
+	__property Color  = {default=-2147483643};
 	__property TQRSysDataType Data = {read=FData, write=SetData, nodefault};
 	__property Font ;
 	__property OnPrint ;
-	__property ParentFont ;
+	__property ParentFont  = {default=1};
 	__property AnsiString Text = {read=FText, write=SetText};
 	__property Transparent ;
 public:
@@ -352,16 +339,14 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRSysData(HWND ParentWindow) : TQRCustomLabel(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRSysData(HWND ParentWindow) : TQRCustomLabel(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 #pragma option push -b-
-enum TQRShapeType { qrsRectangle, qrsCircle, qrsVertLine, qrsHorLine, qrsTopAndBottom, qrsRightAndLeft 
-	};
+enum TQRShapeType { qrsRectangle, qrsCircle, qrsVertLine, qrsHorLine, qrsTopAndBottom, qrsRightAndLeft };
 #pragma option pop
 
 class DELPHICLASS TQRShape;
@@ -388,14 +373,13 @@ public:
 	
 __published:
 	__property Graphics::TBrush* Brush = {read=FBrush, write=SetBrush};
-	__property Height ;
+	__property Height  = {default=65};
 	__property Graphics::TPen* Pen = {read=FPen, write=SetPen};
 	__property TQRShapeType Shape = {read=FShape, write=SetShape, nodefault};
-	__property Width ;
+	__property Width  = {default=65};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRShape(HWND ParentWindow) : Quickrpt::TQRPrintable(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRShape(HWND ParentWindow) : Quickrpt::TQRPrintable(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -435,8 +419,7 @@ __published:
 	__property bool Stretch = {read=FStretch, write=SetStretch, default=0};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRImage(HWND ParentWindow) : Quickrpt::TQRPrintable(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRImage(HWND ParentWindow) : Quickrpt::TQRPrintable(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -464,8 +447,7 @@ private:
 	
 protected:
 	DYNAMIC HPALETTE __fastcall GetPalette(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall Paint(void);
 	virtual void __fastcall Prepare(void);
 	virtual void __fastcall Print(int OfsX, int OfsY);
@@ -485,8 +467,7 @@ __published:
 	__property bool Stretch = {read=FStretch, write=SetStretch, default=0};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRDBImage(HWND ParentWindow) : Quickrpt::TQRPrintable(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRDBImage(HWND ParentWindow) : Quickrpt::TQRPrintable(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -498,11 +479,10 @@ class PASCALIMPLEMENTATION TQRRichEdit : public Comctrls::TCustomRichEdit
 	typedef Comctrls::TCustomRichEdit inherited;
 	
 public:
-	__property BorderStyle ;
+	__property BorderStyle  = {default=1};
 public:
 	#pragma option push -w-inl
-	/* TCustomRichEdit.Create */ inline __fastcall virtual TQRRichEdit(Classes::TComponent* AOwner) : Comctrls::TCustomRichEdit(
-		AOwner) { }
+	/* TCustomRichEdit.Create */ inline __fastcall virtual TQRRichEdit(Classes::TComponent* AOwner) : Comctrls::TCustomRichEdit(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomRichEdit.Destroy */ inline __fastcall virtual ~TQRRichEdit(void) { }
@@ -510,8 +490,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRRichEdit(HWND ParentWindow) : Comctrls::TCustomRichEdit(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRRichEdit(HWND ParentWindow) : Comctrls::TCustomRichEdit(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -555,8 +534,7 @@ __published:
 	__property Graphics::TFont* Font = {read=GetFont, write=SetFont};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRCustomRichText(HWND ParentWindow) : Quickrpt::TQRPrintable(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRCustomRichText(HWND ParentWindow) : Quickrpt::TQRPrintable(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -572,8 +550,7 @@ __published:
 	__property ParentRichEdit ;
 public:
 	#pragma option push -w-inl
-	/* TQRCustomRichText.Create */ inline __fastcall virtual TQRRichText(Classes::TComponent* AOwner) : 
-		TQRCustomRichText(AOwner) { }
+	/* TQRCustomRichText.Create */ inline __fastcall virtual TQRRichText(Classes::TComponent* AOwner) : TQRCustomRichText(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TQRCustomRichText.Destroy */ inline __fastcall virtual ~TQRRichText(void) { }
@@ -581,8 +558,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRRichText(HWND ParentWindow) : TQRCustomRichText(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRRichText(HWND ParentWindow) : TQRCustomRichText(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -599,8 +575,7 @@ private:
 	Db::TDataSet* FDataSet;
 	
 protected:
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	void __fastcall SetDataSet(Db::TDataSet* Value);
 	virtual void __fastcall Prepare(void);
 	virtual void __fastcall Unprepare(void);
@@ -611,8 +586,7 @@ __published:
 	__property Db::TDataSet* DataSet = {read=FDataSet, write=SetDataSet};
 public:
 	#pragma option push -w-inl
-	/* TQRCustomRichText.Create */ inline __fastcall virtual TQRDBRichText(Classes::TComponent* AOwner)
-		 : TQRCustomRichText(AOwner) { }
+	/* TQRCustomRichText.Create */ inline __fastcall virtual TQRDBRichText(Classes::TComponent* AOwner) : TQRCustomRichText(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TQRCustomRichText.Destroy */ inline __fastcall virtual ~TQRDBRichText(void) { }
@@ -620,8 +594,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRDBRichText(HWND ParentWindow) : TQRCustomRichText(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRDBRichText(HWND ParentWindow) : TQRCustomRichText(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -685,10 +658,10 @@ __published:
 	__property AlignToBand ;
 	__property AutoSize ;
 	__property AutoStretch ;
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Font ;
 	__property Lines ;
-	__property ParentFont ;
+	__property ParentFont  = {default=1};
 	__property Transparent ;
 	__property WordWrap ;
 public:
@@ -698,8 +671,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRExprMemo(HWND ParentWindow) : TQRCustomLabel(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRExprMemo(HWND ParentWindow) : TQRCustomLabel(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -731,13 +703,12 @@ __published:
 	__property Db::TDataSource* DataSource = {read=FDataSource, write=FDataSource};
 	__property OnPrint ;
 	__property TQRCalcOperation Operation = {read=FOperation, write=SetOperation, nodefault};
-	__property ParentFont ;
+	__property ParentFont  = {default=1};
 	__property AnsiString PrintMask = {read=GetPrintMask, write=SetPrintMask};
 	__property Quickrpt::TQRBand* ResetBand = {read=FResetBand, write=FResetBand};
 public:
 	#pragma option push -w-inl
-	/* TQRExpr.Create */ inline __fastcall virtual TQRDBCalc(Classes::TComponent* AOwner) : TQRExpr(AOwner
-		) { }
+	/* TQRExpr.Create */ inline __fastcall virtual TQRDBCalc(Classes::TComponent* AOwner) : TQRExpr(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TQRExpr.Destroy */ inline __fastcall virtual ~TQRDBCalc(void) { }
@@ -745,8 +716,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRDBCalc(HWND ParentWindow) : TQRExpr(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRDBCalc(HWND ParentWindow) : TQRExpr(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -755,12 +725,10 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Qrctrls */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qrctrls;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Qrctrls
+#endif	// QRCtrls

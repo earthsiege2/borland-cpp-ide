@@ -1,22 +1,29 @@
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
+{ *************************************************************************** }
+{                                                                             }
+{ Kylix and Delphi Cross-Platform Visual Component Library                    }
+{                                                                             }
+{ Copyright (c) 1995, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ *************************************************************************** }
+
 
 unit Midas;
 
 interface
 
+{$IFDEF MSWINDOWS}
 uses ActiveX;
+{$ENDIF}
+{$IFDEF LINUX}
+uses Libc;
+{$ENDIF}
 
 const
   LIBID_Midas: TGUID = '{83F57D68-CA9A-11D2-9088-00C04FA35CFA}';
   IID_IAppServer: TGUID = '{1AEFCC20-7A24-11D2-98B0-C69BEB4B5B6D}';
 type
 
+{$M+}
   IAppServer = interface(IDispatch)
     ['{1AEFCC20-7A24-11D2-98B0-C69BEB4B5B6D}']
     function  AS_ApplyUpdates(const ProviderName: WideString; Delta: OleVariant;
@@ -32,6 +39,7 @@ type
     procedure AS_Execute(const ProviderName: WideString; const CommandText: WideString;
                          var Params: OleVariant; var OwnerData: OleVariant); safecall;
   end;
+{$M-}
 
   IAppServerDisp = dispinterface
     ['{1AEFCC20-7A24-11D2-98B0-C69BEB4B5B6D}']

@@ -1,5 +1,5 @@
-LIBRARY ICMUI
+LIBRARY Icmui
 EXPORTS
 
-    SetupColorMatchingA                      = 'ICMUI.DLL'.*
-    SetupColorMatchingW                      = 'ICMUI.DLL'.*
+    SetupColorMatchingA
+    SetupColorMatchingW

@@ -6,21 +6,19 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.11  $ */
+/* $Revision: 9.16.2.2 $ */
 
 #ifndef __FLOAT_H
 #define __FLOAT_H
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 #ifdef __cplusplus
 namespace std {
@@ -56,11 +54,18 @@ namespace std {
 /* smallest positive IEEE normal numbers */
 #define DBL_MIN             2.2250738585072014E-308
 #define FLT_MIN             1.17549435E-38F
-#define LDBL_MIN            _tiny_ldble
 
+#ifdef __cplusplus
+#define LDBL_MIN            std::_tiny_ldble
+#define DBL_MAX             std::_max_dble
+#define FLT_MAX             std::_max_flt
+#define LDBL_MAX            std::_max_ldble
+#else
+#define LDBL_MIN            _tiny_ldble
 #define DBL_MAX             _max_dble
 #define FLT_MAX             _max_flt
 #define LDBL_MAX            _max_ldble
+#endif
 
 #define DBL_MAX_EXP         +1024
 #define FLT_MAX_EXP         +128

@@ -2,7 +2,7 @@
 //
 //  Microsoft Windows
 //
-//  Copyright (C) Microsoft Corporation, 1996-1999
+//  Copyright (C) Microsoft Corporation, 1996 - 1999
 //
 //  File:       wintrust.h
 //
@@ -13,7 +13,6 @@
 //--------------------------------------------------------------------------
 
 #ifndef WINTRUST_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define WINTRUST_H
 
 #if _MSC_VER > 1000
@@ -105,6 +104,11 @@ typedef struct _WINTRUST_DATA
 #       define WTD_REVOCATION_CHECK_END_CERT            0x00000020
 #       define WTD_REVOCATION_CHECK_CHAIN               0x00000040
 #       define WTD_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT  0x00000080
+#       define WTD_SAFER_FLAG                           0x00000100
+#       define WTD_HASH_ONLY_FLAG                       0x00000200
+#       define WTD_USE_DEFAULT_OSVER_CHECK              0x00000400
+#       define WTD_LIFETIME_SIGNING_FLAG                0x00000800
+
 } WINTRUST_DATA, *PWINTRUST_DATA;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -230,6 +234,21 @@ typedef struct WINTRUST_CERT_INFO_
 //  Exported from WINTRUST.DLL.
 //  Call this function to verify the trust based on a digital signer.
 //
+//  pWVTData points to a WINTRUST_DATA data structure.
+//
+//  WTD_SAFER_FLAG should be set in WINTRUST_DATA's dwProvFlags to enable
+//  the following semantics for the WINTRUST_ACTION_GENERIC_VERIFY_V2
+//  policy provider specified in pgActionID:
+//   - return TRUST_E_NOSIGNATURE if the subject isn't signed, has an
+//     invalid signature or unable to find the signer certificate.
+//     UI will never be displayed when not signed.
+//   - ignore NO_CHECK revocation errors. Otherwise, continue to return
+//     CERT_E_REVOCATION_FAILURE.
+//   - search the code hash and publisher databases for the WTD_UI_NONE
+//     dwUIChoice case. The default is to only search these databases when
+//     UI has been enabled or user trust has been disabled.
+//  
+//
 //  Returns:
 //          ERROR_SUCCESS               If the trust is authenticated or
 //                                      if the user accepted the risk.
@@ -239,8 +258,62 @@ typedef struct WINTRUST_CERT_INFO_
 //
 //          all error codes passed back are based on the Policy Provider used.
 //
+//  The following errors are returned when the
+//  WINTRUST_ACTION_GENERIC_VERIFY_V2 policy provider is specified in
+//  pgActionID:
+//  
+//    TRUST_E_NOSIGNATURE (when WTD_SAFER_FLAG is set in dwProvFlags)
+//      The subject isn't signed, has an invalid signature or unable
+//      to find the signer certificate. All signature verification
+//      errors will map to this error. Basically all errors except for
+//      publisher or timestamp certificate verification.
+//
+//      Call GetLastError() to get the underlying reason for not having
+//      a valid signature.
+//
+//      The following LastErrors indicate that the file doesn't have a
+//      signature: TRUST_E_NOSIGNATURE, TRUST_E_SUBJECT_FORM_UNKNOWN or
+//      TRUST_E_PROVIDER_UNKNOWN.
+//      
+//      UI will never be displayed for this case.
+//
+//    TRUST_E_EXPLICIT_DISTRUST
+//      Returned if the hash representing the subject is trusted as
+//      AUTHZLEVELID_DISALLOWED or the publisher is in the "Disallowed"
+//      store. Also returned if the publisher certificate is revoked.
+//      
+//      UI will never be displayed for this case.
+//      
+//    ERROR_SUCCESS
+//      No UI unless noted below.
+//
+//      Returned for the following:
+//       - Hash representing the subject is trusted as
+//         AUTHZLEVELID_FULLYTRUSTED
+//       - The publisher certificate exists in the
+//         "TrustedPublisher" store and there weren't any verification errors.
+//       - UI was enabled and the user clicked "Yes" when asked
+//         to install and run the signed subject.
+//       - UI was disabled. No publisher or timestamp chain error.
+//
+//    TRUST_E_SUBJECT_NOT_TRUSTED
+//      UI was enabled and the the user clicked "No" when asked to install
+//      and run the signed subject.
+//
+//    CRYPT_E_SECURITY_SETTINGS
+//      The subject hash or publisher wasn't explicitly trusted and
+//      user trust wasn't allowed in the safer authenticode flags.
+//      No UI will be displayed for this case.
+//
+//      The subject is signed and its signature successfully
+//      verified.
+//      
+//    Any publisher or timestamp chain error. If WTD_SAFER_FLAG wasn't set in
+//    dwProvFlags, any signed code verification error.
+//
 extern LONG WINAPI WinVerifyTrust(HWND hwnd, GUID *pgActionID,
                                   LPVOID pWVTData);
+
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -439,7 +512,7 @@ typedef BOOL        (*PFN_PROVIDER_CERTCHKPOLICY_CALL)( IN          struct _CRYP
                                                         IN OPTIONAL DWORD idxCounterSigner);
 
 
-#define WVT_OFFSETOF(t,f)   ((ULONG_PTR)(&((t*)0)->f))
+#define WVT_OFFSETOF(t,f)   ((ULONG)((ULONG_PTR)(&((t*)0)->f)))
 
 #define WVT_ISINSTRUCT(structtypedef, structpassedsize, member) \
                     ((WVT_OFFSETOF(structtypedef, member) < structpassedsize) ? TRUE : FALSE)
@@ -514,9 +587,6 @@ typedef struct _CRYPT_PROVIDER_DATA
 
     // 17-Feb-1998 philh: added
     // LOWORD intialized from WINTRUST_DATA's dwProvFlags.
-    //
-    // Debug version reads "DEBUG_TRUST_PROV_FLAGS" environment variable
-    // and OR's with WINTRUST_DATA's dwProvFlags to initialize the LOWORD.
     DWORD                               dwProvFlags;
 #       define CPD_USE_NT5_CHAIN_FLAG                   0x80000000
 #       define CPD_REVOCATION_CHECK_NONE                0x00010000
@@ -529,6 +599,9 @@ typedef struct _CRYPT_PROVIDER_DATA
 
     // 20-May-1998 KeithV: added
     PCERT_USAGE_MATCH					pRequestUsage;
+
+    // 02-Aug-2000 philh: added
+    DWORD                               dwTrustPubSettings;
 
 } CRYPT_PROVIDER_DATA, *PCRYPT_PROVIDER_DATA;
 
@@ -700,6 +773,8 @@ typedef struct _CRYPT_PROVIDER_CERT
     // 12-Mar-1998 philh: added
     BOOL                                fIsCyclic;
 
+    // 12-Oct-2000 DSIE: added
+    PCERT_CHAIN_ELEMENT                 pChainElement;
 } CRYPT_PROVIDER_CERT, *PCRYPT_PROVIDER_CERT;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -832,8 +907,13 @@ typedef struct _CRYPT_PROVIDER_DEFUSAGE
 //      FALSE:                          Errors occured.  See GetLastError()
 //
 extern BOOL WINAPI  WintrustAddActionID(IN GUID *pgActionID,
-                                        IN DWORD fdwReserved,    // future use.
+                                        IN DWORD fdwFlags,
                                         IN CRYPT_REGISTER_ACTIONID *psProvInfo);
+
+// By default, WintrustAddActionID doesn't return registry errors.
+// Set this flag to return registry errors. If FALSE is returned,
+// LastError is set.
+#define WT_ADD_ACTION_ID_RET_RESULT_FLAG    0x1
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1249,5 +1329,4 @@ typedef struct _WIN_SPUB_TRUSTED_PUBLISHER_DATA
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // WINTRUST_H

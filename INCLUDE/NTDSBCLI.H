@@ -20,7 +20,6 @@ Notes:
 --*/
 
 #ifndef _NTDSBCLI_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _NTDSBCLI_H_
 
 #if _MSC_VER > 1000
@@ -35,7 +34,11 @@ extern "C" {
 #define	xRPC_STRING [string]
 #else
 #define	xRPC_STRING
+#if !defined(_NATIVE_WCHAR_T_DEFINED)
 typedef unsigned short WCHAR;
+#else
+typedef wchar_t WCHAR;
+#endif
 #endif
 
 #ifndef _NTDSBCLI_DEFINED
@@ -721,6 +724,5 @@ DsSetAuthIdentityW(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _NTDSBCLI_H_
 

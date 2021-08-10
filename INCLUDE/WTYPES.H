@@ -1,5 +1,3 @@
-#ifndef __WTYPES_H
-#define __WTYPES_H
 #pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
@@ -7,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Wed Aug 04 16:23:32 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for wtypes.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -36,6 +33,10 @@
 #ifndef __wtypes_h__
 #define __wtypes_h__
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
 /* Forward Declarations */ 
 
 /* header files for imported files */
@@ -46,8 +47,8 @@
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_wtypes_0000 */
 /* [local] */ 
@@ -55,7 +56,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //--------------------------------------------------------------------------
 #if ( _MSC_VER >= 1020 )
@@ -77,7 +78,7 @@ typedef struct tagRemHGLOBAL
     long fNullHGlobal;
     unsigned long cbData;
     /* [size_is] */ byte data[ 1 ];
-    }	RemHGLOBAL;
+    } 	RemHGLOBAL;
 
 typedef struct tagRemHMETAFILEPICT
     {
@@ -86,31 +87,31 @@ typedef struct tagRemHMETAFILEPICT
     long yExt;
     unsigned long cbData;
     /* [size_is] */ byte data[ 1 ];
-    }	RemHMETAFILEPICT;
+    } 	RemHMETAFILEPICT;
 
 typedef struct tagRemHENHMETAFILE
     {
     unsigned long cbData;
     /* [size_is] */ byte data[ 1 ];
-    }	RemHENHMETAFILE;
+    } 	RemHENHMETAFILE;
 
 typedef struct tagRemHBITMAP
     {
     unsigned long cbData;
     /* [size_is] */ byte data[ 1 ];
-    }	RemHBITMAP;
+    } 	RemHBITMAP;
 
 typedef struct tagRemHPALETTE
     {
     unsigned long cbData;
     /* [size_is] */ byte data[ 1 ];
-    }	RemHPALETTE;
+    } 	RemHPALETTE;
 
 typedef struct tagRemBRUSH
     {
     unsigned long cbData;
     /* [size_is] */ byte data[ 1 ];
-    }	RemHBRUSH;
+    } 	RemHBRUSH;
 
 #if !defined(_WIN32) && !defined(_MPPC_)
 // The following code is for Win16 only
@@ -166,35 +167,35 @@ typedef LONG_PTR LPARAM;
 typedef LONG_PTR LRESULT;
 
 #endif // !_LRESULT_DEFINED
-typedef void __RPC_FAR *HANDLE;
+typedef void *HANDLE;
 
-typedef void __RPC_FAR *HMODULE;
+typedef void *HMODULE;
 
-typedef void __RPC_FAR *HINSTANCE;
+typedef void *HINSTANCE;
 
-typedef void __RPC_FAR *HRGN;
+typedef void *HRGN;
 
-typedef void __RPC_FAR *HTASK;
+typedef void *HTASK;
 
-typedef void __RPC_FAR *HKEY;
+typedef void *HKEY;
 
-typedef void __RPC_FAR *HDESK;
+typedef void *HDESK;
 
-typedef void __RPC_FAR *HMF;
+typedef void *HMF;
 
-typedef void __RPC_FAR *HEMF;
+typedef void *HEMF;
 
-typedef void __RPC_FAR *HPEN;
+typedef void *HPEN;
 
-typedef void __RPC_FAR *HRSRC;
+typedef void *HRSRC;
 
-typedef void __RPC_FAR *HSTR;
+typedef void *HSTR;
 
-typedef void __RPC_FAR *HWINSTA;
+typedef void *HWINSTA;
 
-typedef void __RPC_FAR *HKL;
+typedef void *HKL;
 
-typedef void __RPC_FAR *HGDIOBJ;
+typedef void *HGDIOBJ;
 
 typedef HANDLE HDWP;
 
@@ -205,19 +206,19 @@ typedef INT HFILE;
 #endif // !_HFILE_DEFINED
 #ifndef _LPWORD_DEFINED
 #define _LPWORD_DEFINED
-typedef WORD __RPC_FAR *LPWORD;
+typedef WORD *LPWORD;
 
 #endif // !_LPWORD_DEFINED
 #ifndef _LPDWORD_DEFINED
 #define _LPDWORD_DEFINED
-typedef DWORD __RPC_FAR *LPDWORD;
+typedef DWORD *LPDWORD;
 
 #endif // !_LPDWORD_DEFINED
 typedef char CHAR;
 
-typedef /* [string] */ CHAR __RPC_FAR *LPSTR;
+typedef /* [string] */ CHAR *LPSTR;
 
-typedef /* [string] */ const CHAR __RPC_FAR *LPCSTR;
+typedef /* [string] */ const CHAR *LPCSTR;
 
 #ifndef _WCHAR_DEFINED
 #define _WCHAR_DEFINED
@@ -226,13 +227,13 @@ typedef wchar_t WCHAR;
 typedef WCHAR TCHAR;
 
 #endif // !_WCHAR_DEFINED
-typedef /* [string] */ WCHAR __RPC_FAR *LPWSTR;
+typedef /* [string] */ WCHAR *LPWSTR;
 
-typedef /* [string] */ TCHAR __RPC_FAR *LPTSTR;
+typedef /* [string] */ TCHAR *LPTSTR;
 
-typedef /* [string] */ const WCHAR __RPC_FAR *LPCWSTR;
+typedef /* [string] */ const WCHAR *LPCWSTR;
 
-typedef /* [string] */ const TCHAR __RPC_FAR *LPCTSTR;
+typedef /* [string] */ const TCHAR *LPCTSTR;
 
 #ifndef _COLORREF_DEFINED
 #define _COLORREF_DEFINED
@@ -241,10 +242,10 @@ typedef DWORD COLORREF;
 #endif // !_COLORREF_DEFINED
 #ifndef _LPCOLORREF_DEFINED
 #define _LPCOLORREF_DEFINED
-typedef DWORD __RPC_FAR *LPCOLORREF;
+typedef DWORD *LPCOLORREF;
 
 #endif // !_LPCOLORREF_DEFINED
-typedef HANDLE __RPC_FAR *LPHANDLE;
+typedef HANDLE *LPHANDLE;
 
 typedef struct _RECTL
     {
@@ -252,40 +253,40 @@ typedef struct _RECTL
     LONG top;
     LONG right;
     LONG bottom;
-    }	RECTL;
+    } 	RECTL;
 
-typedef struct _RECTL __RPC_FAR *PRECTL;
+typedef struct _RECTL *PRECTL;
 
-typedef struct _RECTL __RPC_FAR *LPRECTL;
+typedef struct _RECTL *LPRECTL;
 
 typedef struct tagPOINT
     {
     LONG x;
     LONG y;
-    }	POINT;
+    } 	POINT;
 
-typedef struct tagPOINT __RPC_FAR *PPOINT;
+typedef struct tagPOINT *PPOINT;
 
-typedef struct tagPOINT __RPC_FAR *LPPOINT;
+typedef struct tagPOINT *LPPOINT;
 
 typedef struct _POINTL
     {
     LONG x;
     LONG y;
-    }	POINTL;
+    } 	POINTL;
 
-typedef struct _POINTL __RPC_FAR *PPOINTL;
+typedef struct _POINTL *PPOINTL;
 
 #ifndef WIN16
 typedef struct tagSIZE
     {
     LONG cx;
     LONG cy;
-    }	SIZE;
+    } 	SIZE;
 
-typedef struct tagSIZE __RPC_FAR *PSIZE;
+typedef struct tagSIZE *PSIZE;
 
-typedef struct tagSIZE __RPC_FAR *LPSIZE;
+typedef struct tagSIZE *LPSIZE;
 
 #else // WIN16
 typedef struct tagSIZE
@@ -298,11 +299,11 @@ typedef struct tagSIZEL
     {
     LONG cx;
     LONG cy;
-    }	SIZEL;
+    } 	SIZEL;
 
-typedef struct tagSIZEL __RPC_FAR *PSIZEL;
+typedef struct tagSIZEL *PSIZEL;
 
-typedef struct tagSIZEL __RPC_FAR *LPSIZEL;
+typedef struct tagSIZEL *LPSIZEL;
 
 #endif  //WINAPI
 #endif  //!WIN32 && !MPPC
@@ -314,11 +315,11 @@ typedef struct tagPALETTEENTRY
     BYTE peGreen;
     BYTE peBlue;
     BYTE peFlags;
-    }	PALETTEENTRY;
+    } 	PALETTEENTRY;
 
-typedef struct tagPALETTEENTRY __RPC_FAR *PPALETTEENTRY;
+typedef struct tagPALETTEENTRY *PPALETTEENTRY;
 
-typedef struct tagPALETTEENTRY __RPC_FAR *LPPALETTEENTRY;
+typedef struct tagPALETTEENTRY *LPPALETTEENTRY;
 
 #endif // !_PALETTEENTRY_DEFINED
 #ifndef _LOGPALETTE_DEFINED
@@ -328,19 +329,19 @@ typedef struct tagLOGPALETTE
     WORD palVersion;
     WORD palNumEntries;
     /* [size_is] */ PALETTEENTRY palPalEntry[ 1 ];
-    }	LOGPALETTE;
+    } 	LOGPALETTE;
 
-typedef struct tagLOGPALETTE __RPC_FAR *PLOGPALETTE;
+typedef struct tagLOGPALETTE *PLOGPALETTE;
 
-typedef struct tagLOGPALETTE __RPC_FAR *LPLOGPALETTE;
+typedef struct tagLOGPALETTE *LPLOGPALETTE;
 
 #endif // !_LOGPALETTE_DEFINED
 #if defined(_WIN32) && !defined(OLE2ANSI)
 typedef WCHAR OLECHAR;
 
-typedef /* [string] */ OLECHAR __RPC_FAR *LPOLESTR;
+typedef /* [string] */ OLECHAR *LPOLESTR;
 
-typedef /* [string] */ const OLECHAR __RPC_FAR *LPCOLESTR;
+typedef /* [string] */ const OLECHAR *LPCOLESTR;
 
 #define OLESTR(str) L##str
 
@@ -352,11 +353,11 @@ typedef LPCSTR    LPCOLESTR;
 #define OLESTR(str) str
 #endif
 #ifndef _WINDEF_
-typedef const RECTL __RPC_FAR *LPCRECTL;
+typedef const RECTL *LPCRECTL;
 
-typedef void __RPC_FAR *PVOID;
+typedef void *PVOID;
 
-typedef void __RPC_FAR *LPVOID;
+typedef void *LPVOID;
 
 typedef float FLOAT;
 
@@ -366,13 +367,13 @@ typedef struct tagRECT
     LONG top;
     LONG right;
     LONG bottom;
-    }	RECT;
+    } 	RECT;
 
-typedef struct tagRECT __RPC_FAR *PRECT;
+typedef struct tagRECT *PRECT;
 
-typedef struct tagRECT __RPC_FAR *LPRECT;
+typedef struct tagRECT *LPRECT;
 
-typedef const RECT __RPC_FAR *LPCRECT;
+typedef const RECT *LPCRECT;
 
 #endif  //_WINDEF_
 typedef unsigned char UCHAR;
@@ -388,7 +389,7 @@ typedef double DOUBLE;
 #ifndef _DWORDLONG_
 typedef unsigned __int64 DWORDLONG;
 
-typedef DWORDLONG __RPC_FAR *PDWORDLONG;
+typedef DWORDLONG *PDWORDLONG;
 
 #endif // !_DWORDLONG_
 #ifndef _ULONGLONG_
@@ -396,23 +397,23 @@ typedef __int64 LONGLONG;
 
 typedef unsigned __int64 ULONGLONG;
 
-typedef LONGLONG __RPC_FAR *PLONGLONG;
+typedef LONGLONG *PLONGLONG;
 
-typedef ULONGLONG __RPC_FAR *PULONGLONG;
+typedef ULONGLONG *PULONGLONG;
 
 #endif // _ULONGLONG_
 #if 0
 typedef struct _LARGE_INTEGER
     {
     LONGLONG QuadPart;
-    }	LARGE_INTEGER;
+    } 	LARGE_INTEGER;
 
-typedef LARGE_INTEGER __RPC_FAR *PLARGE_INTEGER;
+typedef LARGE_INTEGER *PLARGE_INTEGER;
 
 typedef struct _ULARGE_INTEGER
     {
     ULONGLONG QuadPart;
-    }	ULARGE_INTEGER;
+    } 	ULARGE_INTEGER;
 
 #endif // 0
 #ifndef _WINBASE_
@@ -422,11 +423,11 @@ typedef struct _FILETIME
     {
     DWORD dwLowDateTime;
     DWORD dwHighDateTime;
-    }	FILETIME;
+    } 	FILETIME;
 
-typedef struct _FILETIME __RPC_FAR *PFILETIME;
+typedef struct _FILETIME *PFILETIME;
 
-typedef struct _FILETIME __RPC_FAR *LPFILETIME;
+typedef struct _FILETIME *LPFILETIME;
 
 #endif // !_FILETIME
 #ifndef _SYSTEMTIME_
@@ -441,11 +442,11 @@ typedef struct _SYSTEMTIME
     WORD wMinute;
     WORD wSecond;
     WORD wMilliseconds;
-    }	SYSTEMTIME;
+    } 	SYSTEMTIME;
 
-typedef struct _SYSTEMTIME __RPC_FAR *PSYSTEMTIME;
+typedef struct _SYSTEMTIME *PSYSTEMTIME;
 
-typedef struct _SYSTEMTIME __RPC_FAR *LPSYSTEMTIME;
+typedef struct _SYSTEMTIME *LPSYSTEMTIME;
 
 #endif // !_SYSTEMTIME
 #ifndef _SECURITY_ATTRIBUTES_
@@ -455,17 +456,17 @@ typedef struct _SECURITY_ATTRIBUTES
     DWORD nLength;
     /* [size_is] */ LPVOID lpSecurityDescriptor;
     BOOL bInheritHandle;
-    }	SECURITY_ATTRIBUTES;
+    } 	SECURITY_ATTRIBUTES;
 
-typedef struct _SECURITY_ATTRIBUTES __RPC_FAR *PSECURITY_ATTRIBUTES;
+typedef struct _SECURITY_ATTRIBUTES *PSECURITY_ATTRIBUTES;
 
-typedef struct _SECURITY_ATTRIBUTES __RPC_FAR *LPSECURITY_ATTRIBUTES;
+typedef struct _SECURITY_ATTRIBUTES *LPSECURITY_ATTRIBUTES;
 
 #endif // !_SECURITY_ATTRIBUTES_
 #ifndef SECURITY_DESCRIPTOR_REVISION
 typedef USHORT SECURITY_DESCRIPTOR_CONTROL;
 
-typedef USHORT __RPC_FAR *PSECURITY_DESCRIPTOR_CONTROL;
+typedef USHORT *PSECURITY_DESCRIPTOR_CONTROL;
 
 typedef PVOID PSID;
 
@@ -476,9 +477,9 @@ typedef struct _ACL
     USHORT AclSize;
     USHORT AceCount;
     USHORT Sbz2;
-    }	ACL;
+    } 	ACL;
 
-typedef ACL __RPC_FAR *PACL;
+typedef ACL *PACL;
 
 typedef struct _SECURITY_DESCRIPTOR
     {
@@ -489,22 +490,22 @@ typedef struct _SECURITY_DESCRIPTOR
     PSID Group;
     PACL Sacl;
     PACL Dacl;
-    }	SECURITY_DESCRIPTOR;
+    } 	SECURITY_DESCRIPTOR;
 
-typedef struct _SECURITY_DESCRIPTOR __RPC_FAR *PISECURITY_DESCRIPTOR;
+typedef struct _SECURITY_DESCRIPTOR *PISECURITY_DESCRIPTOR;
 
 #endif // !SECURITY_DESCRIPTOR_REVISION
 #endif //_WINBASE_
 typedef struct _COAUTHIDENTITY
     {
-    /* [size_is] */ USHORT __RPC_FAR *User;
+    /* [size_is] */ USHORT *User;
     ULONG UserLength;
-    /* [size_is] */ USHORT __RPC_FAR *Domain;
+    /* [size_is] */ USHORT *Domain;
     ULONG DomainLength;
-    /* [size_is] */ USHORT __RPC_FAR *Password;
+    /* [size_is] */ USHORT *Password;
     ULONG PasswordLength;
     ULONG Flags;
-    }	COAUTHIDENTITY;
+    } 	COAUTHIDENTITY;
 
 typedef struct _COAUTHINFO
     {
@@ -513,9 +514,9 @@ typedef struct _COAUTHINFO
     LPWSTR pwszServerPrincName;
     DWORD dwAuthnLevel;
     DWORD dwImpersonationLevel;
-    COAUTHIDENTITY __RPC_FAR *pAuthIdentityData;
+    COAUTHIDENTITY *pAuthIdentityData;
     DWORD dwCapabilities;
-    }	COAUTHINFO;
+    } 	COAUTHINFO;
 
 typedef LONG SCODE;
 
@@ -524,7 +525,7 @@ typedef LONG SCODE;
 typedef LONG HRESULT;
 
 #endif // !_HRESULT_DEFINED
-typedef SCODE __RPC_FAR *PSCODE;
+typedef SCODE *PSCODE;
 
 #ifndef __OBJECTID_DEFINED
 #define __OBJECTID_DEFINED
@@ -533,17 +534,17 @@ typedef struct _OBJECTID
     {
     GUID Lineage;
     unsigned long Uniquifier;
-    }	OBJECTID;
+    } 	OBJECTID;
 
 #endif // !_OBJECTID_DEFINED
 #if 0
-typedef GUID __RPC_FAR *REFGUID;
+typedef GUID *REFGUID;
 
-typedef IID __RPC_FAR *REFIID;
+typedef IID *REFIID;
 
-typedef CLSID __RPC_FAR *REFCLSID;
+typedef CLSID *REFCLSID;
 
-typedef FMTID __RPC_FAR *REFFMTID;
+typedef FMTID *REFFMTID;
 
 #endif // 0
 typedef 
@@ -553,7 +554,7 @@ enum tagMEMCTX
 	MEMCTX_MACSYSTEM	= 3,
 	MEMCTX_UNKNOWN	= -1,
 	MEMCTX_SAME	= -2
-    }	MEMCTX;
+    } 	MEMCTX;
 
 #ifndef _ROTFLAGS_DEFINED
 #define _ROTFLAGS_DEFINED
@@ -580,8 +581,11 @@ enum tagCLSCTX
 	CLSCTX_NO_WX86_TRANSLATION	= 0x800,
 	CLSCTX_NO_CUSTOM_MARSHAL	= 0x1000,
 	CLSCTX_ENABLE_CODE_DOWNLOAD	= 0x2000,
-	CLSCTX_NO_FAILURE_LOG	= 0x4000
-    }	CLSCTX;
+	CLSCTX_NO_FAILURE_LOG	= 0x4000,
+	CLSCTX_DISABLE_AAA	= 0x8000,
+	CLSCTX_ENABLE_AAA	= 0x10000,
+	CLSCTX_FROM_DEFAULT_CONTEXT	= 0x20000
+    } 	CLSCTX;
 
 typedef 
 enum tagMSHLFLAGS
@@ -593,7 +597,7 @@ enum tagMSHLFLAGS
 	MSHLFLAGS_RESERVED2	= 16,
 	MSHLFLAGS_RESERVED3	= 32,
 	MSHLFLAGS_RESERVED4	= 64
-    }	MSHLFLAGS;
+    } 	MSHLFLAGS;
 
 typedef 
 enum tagMSHCTX
@@ -602,7 +606,7 @@ enum tagMSHCTX
 	MSHCTX_DIFFERENTMACHINE	= 2,
 	MSHCTX_INPROC	= 3,
 	MSHCTX_CROSSCTX	= 4
-    }	MSHCTX;
+    } 	MSHCTX;
 
 typedef 
 enum tagDVASPECT
@@ -610,7 +614,7 @@ enum tagDVASPECT
 	DVASPECT_THUMBNAIL	= 2,
 	DVASPECT_ICON	= 4,
 	DVASPECT_DOCPRINT	= 8
-    }	DVASPECT;
+    } 	DVASPECT;
 
 typedef 
 enum tagSTGC
@@ -619,23 +623,23 @@ enum tagSTGC
 	STGC_ONLYIFCURRENT	= 2,
 	STGC_DANGEROUSLYCOMMITMERELYTODISKCACHE	= 4,
 	STGC_CONSOLIDATE	= 8
-    }	STGC;
+    } 	STGC;
 
 typedef 
 enum tagSTGMOVE
     {	STGMOVE_MOVE	= 0,
 	STGMOVE_COPY	= 1,
 	STGMOVE_SHALLOWCOPY	= 2
-    }	STGMOVE;
+    } 	STGMOVE;
 
 typedef 
 enum tagSTATFLAG
     {	STATFLAG_DEFAULT	= 0,
 	STATFLAG_NONAME	= 1,
 	STATFLAG_NOOPEN	= 2
-    }	STATFLAG;
+    } 	STATFLAG;
 
-typedef /* [context_handle] */ void __RPC_FAR *HCONTEXT;
+typedef /* [context_handle] */ void *HCONTEXT;
 
 #ifndef _LCID_DEFINED
 #define _LCID_DEFINED
@@ -651,67 +655,67 @@ typedef struct _BYTE_BLOB
     {
     unsigned long clSize;
     /* [size_is] */ byte abData[ 1 ];
-    }	BYTE_BLOB;
+    } 	BYTE_BLOB;
 
-typedef /* [unique] */ BYTE_BLOB __RPC_FAR *UP_BYTE_BLOB;
+typedef /* [unique] */ BYTE_BLOB *UP_BYTE_BLOB;
 
 typedef struct _WORD_BLOB
     {
     unsigned long clSize;
     /* [size_is] */ unsigned short asData[ 1 ];
-    }	WORD_BLOB;
+    } 	WORD_BLOB;
 
-typedef /* [unique] */ WORD_BLOB __RPC_FAR *UP_WORD_BLOB;
+typedef /* [unique] */ WORD_BLOB *UP_WORD_BLOB;
 
 typedef struct _DWORD_BLOB
     {
     unsigned long clSize;
     /* [size_is] */ unsigned long alData[ 1 ];
-    }	DWORD_BLOB;
+    } 	DWORD_BLOB;
 
-typedef /* [unique] */ DWORD_BLOB __RPC_FAR *UP_DWORD_BLOB;
+typedef /* [unique] */ DWORD_BLOB *UP_DWORD_BLOB;
 
 typedef struct _FLAGGED_BYTE_BLOB
     {
     unsigned long fFlags;
     unsigned long clSize;
     /* [size_is] */ byte abData[ 1 ];
-    }	FLAGGED_BYTE_BLOB;
+    } 	FLAGGED_BYTE_BLOB;
 
-typedef /* [unique] */ FLAGGED_BYTE_BLOB __RPC_FAR *UP_FLAGGED_BYTE_BLOB;
+typedef /* [unique] */ FLAGGED_BYTE_BLOB *UP_FLAGGED_BYTE_BLOB;
 
 typedef struct _FLAGGED_WORD_BLOB
     {
     unsigned long fFlags;
     unsigned long clSize;
     /* [size_is] */ unsigned short asData[ 1 ];
-    }	FLAGGED_WORD_BLOB;
+    } 	FLAGGED_WORD_BLOB;
 
-typedef /* [unique] */ FLAGGED_WORD_BLOB __RPC_FAR *UP_FLAGGED_WORD_BLOB;
+typedef /* [unique] */ FLAGGED_WORD_BLOB *UP_FLAGGED_WORD_BLOB;
 
 typedef struct _BYTE_SIZEDARR
     {
     unsigned long clSize;
-    /* [size_is] */ byte __RPC_FAR *pData;
-    }	BYTE_SIZEDARR;
+    /* [size_is] */ byte *pData;
+    } 	BYTE_SIZEDARR;
 
 typedef struct _SHORT_SIZEDARR
     {
     unsigned long clSize;
-    /* [size_is] */ unsigned short __RPC_FAR *pData;
-    }	WORD_SIZEDARR;
+    /* [size_is] */ unsigned short *pData;
+    } 	WORD_SIZEDARR;
 
 typedef struct _LONG_SIZEDARR
     {
     unsigned long clSize;
-    /* [size_is] */ unsigned long __RPC_FAR *pData;
-    }	DWORD_SIZEDARR;
+    /* [size_is] */ unsigned long *pData;
+    } 	DWORD_SIZEDARR;
 
 typedef struct _HYPER_SIZEDARR
     {
     unsigned long clSize;
-    /* [size_is] */ hyper __RPC_FAR *pData;
-    }	HYPER_SIZEDARR;
+    /* [size_is] */ hyper *pData;
+    } 	HYPER_SIZEDARR;
 
 #define	WDT_INPROC_CALL	( 0x48746457 )
 
@@ -725,11 +729,11 @@ typedef struct _userCLIPFORMAT
     /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0001
         {
         /* [case()] */ DWORD dwValue;
-        /* [case()][string] */ wchar_t __RPC_FAR *pwszName;
-        }	u;
-    }	userCLIPFORMAT;
+        /* [case()][string] */ wchar_t *pwszName;
+        } 	u;
+    } 	userCLIPFORMAT;
 
-typedef /* [unique] */ userCLIPFORMAT __RPC_FAR *wireCLIPFORMAT;
+typedef /* [unique] */ userCLIPFORMAT *wireCLIPFORMAT;
 
 typedef /* [wire_marshal] */ WORD CLIPFORMAT;
 
@@ -739,9 +743,9 @@ typedef struct _GDI_NONREMOTE
     /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0002
         {
         /* [case()] */ long hInproc;
-        /* [case()] */ DWORD_BLOB __RPC_FAR *hRemote;
-        }	u;
-    }	GDI_NONREMOTE;
+        /* [case()] */ DWORD_BLOB *hRemote;
+        } 	u;
+    } 	GDI_NONREMOTE;
 
 typedef struct _userHGLOBAL
     {
@@ -749,12 +753,12 @@ typedef struct _userHGLOBAL
     /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0003
         {
         /* [case()] */ long hInproc;
-        /* [case()] */ FLAGGED_BYTE_BLOB __RPC_FAR *hRemote;
+        /* [case()] */ FLAGGED_BYTE_BLOB *hRemote;
         /* [case()] */ __int64 hInproc64;
-        }	u;
-    }	userHGLOBAL;
+        } 	u;
+    } 	userHGLOBAL;
 
-typedef /* [unique] */ userHGLOBAL __RPC_FAR *wireHGLOBAL;
+typedef /* [unique] */ userHGLOBAL *wireHGLOBAL;
 
 typedef struct _userHMETAFILE
     {
@@ -762,17 +766,18 @@ typedef struct _userHMETAFILE
     /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0004
         {
         /* [case()] */ long hInproc;
-        /* [case()] */ BYTE_BLOB __RPC_FAR *hRemote;
-        }	u;
-    }	userHMETAFILE;
+        /* [case()] */ BYTE_BLOB *hRemote;
+        /* [case()] */ __int64 hInproc64;
+        } 	u;
+    } 	userHMETAFILE;
 
 typedef struct _remoteMETAFILEPICT
     {
     long mm;
     long xExt;
     long yExt;
-    userHMETAFILE __RPC_FAR *hMF;
-    }	remoteMETAFILEPICT;
+    userHMETAFILE *hMF;
+    } 	remoteMETAFILEPICT;
 
 typedef struct _userHMETAFILEPICT
     {
@@ -780,9 +785,10 @@ typedef struct _userHMETAFILEPICT
     /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0005
         {
         /* [case()] */ long hInproc;
-        /* [case()] */ remoteMETAFILEPICT __RPC_FAR *hRemote;
-        }	u;
-    }	userHMETAFILEPICT;
+        /* [case()] */ remoteMETAFILEPICT *hRemote;
+        /* [case()] */ __int64 hInproc64;
+        } 	u;
+    } 	userHMETAFILEPICT;
 
 typedef struct _userHENHMETAFILE
     {
@@ -790,9 +796,10 @@ typedef struct _userHENHMETAFILE
     /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0006
         {
         /* [case()] */ long hInproc;
-        /* [case()] */ BYTE_BLOB __RPC_FAR *hRemote;
-        }	u;
-    }	userHENHMETAFILE;
+        /* [case()] */ BYTE_BLOB *hRemote;
+        /* [case()] */ __int64 hInproc64;
+        } 	u;
+    } 	userHENHMETAFILE;
 
 typedef struct _userBITMAP
     {
@@ -804,7 +811,7 @@ typedef struct _userBITMAP
     WORD bmBitsPixel;
     ULONG cbSize;
     /* [size_is] */ byte pBuffer[ 1 ];
-    }	userBITMAP;
+    } 	userBITMAP;
 
 typedef struct _userHBITMAP
     {
@@ -812,9 +819,10 @@ typedef struct _userHBITMAP
     /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0007
         {
         /* [case()] */ long hInproc;
-        /* [case()] */ userBITMAP __RPC_FAR *hRemote;
-        }	u;
-    }	userHBITMAP;
+        /* [case()] */ userBITMAP *hRemote;
+        /* [case()] */ __int64 hInproc64;
+        } 	u;
+    } 	userHBITMAP;
 
 typedef struct _userHPALETTE
     {
@@ -822,9 +830,10 @@ typedef struct _userHPALETTE
     /* [switch_is] */ /* [switch_type] */ union __MIDL_IWinTypes_0008
         {
         /* [case()] */ long hInproc;
-        /* [case()] */ LOGPALETTE __RPC_FAR *hRemote;
-        }	u;
-    }	userHPALETTE;
+        /* [case()] */ LOGPALETTE *hRemote;
+        /* [case()] */ __int64 hInproc64;
+        } 	u;
+    } 	userHPALETTE;
 
 typedef struct _RemotableHandle
     {
@@ -833,37 +842,37 @@ typedef struct _RemotableHandle
         {
         /* [case()] */ long hInproc;
         /* [case()] */ long hRemote;
-        }	u;
-    }	RemotableHandle;
+        } 	u;
+    } 	RemotableHandle;
 
-typedef /* [unique] */ RemotableHandle __RPC_FAR *wireHWND;
+typedef /* [unique] */ RemotableHandle *wireHWND;
 
-typedef /* [unique] */ RemotableHandle __RPC_FAR *wireHMENU;
+typedef /* [unique] */ RemotableHandle *wireHMENU;
 
-typedef /* [unique] */ RemotableHandle __RPC_FAR *wireHACCEL;
+typedef /* [unique] */ RemotableHandle *wireHACCEL;
 
-typedef /* [unique] */ RemotableHandle __RPC_FAR *wireHBRUSH;
+typedef /* [unique] */ RemotableHandle *wireHBRUSH;
 
-typedef /* [unique] */ RemotableHandle __RPC_FAR *wireHFONT;
+typedef /* [unique] */ RemotableHandle *wireHFONT;
 
-typedef /* [unique] */ RemotableHandle __RPC_FAR *wireHDC;
+typedef /* [unique] */ RemotableHandle *wireHDC;
 
-typedef /* [unique] */ RemotableHandle __RPC_FAR *wireHICON;
+typedef /* [unique] */ RemotableHandle *wireHICON;
 
 #if 0
-typedef /* [wire_marshal] */ void __RPC_FAR *HWND;
+typedef /* [wire_marshal] */ void *HWND;
 
-typedef /* [wire_marshal] */ void __RPC_FAR *HMENU;
+typedef /* [wire_marshal] */ void *HMENU;
 
-typedef /* [wire_marshal] */ void __RPC_FAR *HACCEL;
+typedef /* [wire_marshal] */ void *HACCEL;
 
-typedef /* [wire_marshal] */ void __RPC_FAR *HBRUSH;
+typedef /* [wire_marshal] */ void *HBRUSH;
 
-typedef /* [wire_marshal] */ void __RPC_FAR *HFONT;
+typedef /* [wire_marshal] */ void *HFONT;
 
-typedef /* [wire_marshal] */ void __RPC_FAR *HDC;
+typedef /* [wire_marshal] */ void *HDC;
 
-typedef /* [wire_marshal] */ void __RPC_FAR *HICON;
+typedef /* [wire_marshal] */ void *HICON;
 
 #ifndef _HCURSOR_DEFINED
 #define _HCURSOR_DEFINED
@@ -895,11 +904,11 @@ typedef struct tagTEXTMETRICW
     BYTE tmStruckOut;
     BYTE tmPitchAndFamily;
     BYTE tmCharSet;
-    }	TEXTMETRICW;
+    } 	TEXTMETRICW;
 
-typedef struct tagTEXTMETRICW __RPC_FAR *PTEXTMETRICW;
+typedef struct tagTEXTMETRICW *PTEXTMETRICW;
 
-typedef struct tagTEXTMETRICW __RPC_FAR *LPTEXTMETRICW;
+typedef struct tagTEXTMETRICW *LPTEXTMETRICW;
 
 #endif // !_TEXTMETRIC_DEFINED
 #ifndef _WIN32           // The following code is for Win16 only
@@ -912,41 +921,41 @@ typedef struct tagMSG
     LPARAM lParam;
     DWORD time;
     POINT pt;
-    }	MSG;
+    } 	MSG;
 
-typedef struct tagMSG __RPC_FAR *PMSG;
+typedef struct tagMSG *PMSG;
 
-typedef struct tagMSG __RPC_FAR *NPMSG;
+typedef struct tagMSG *NPMSG;
 
-typedef struct tagMSG __RPC_FAR *LPMSG;
+typedef struct tagMSG *LPMSG;
 
 #endif // _WIN32
 #endif // WINAPI
-typedef /* [unique] */ userHBITMAP __RPC_FAR *wireHBITMAP;
+typedef /* [unique] */ userHBITMAP *wireHBITMAP;
 
-typedef /* [unique] */ userHPALETTE __RPC_FAR *wireHPALETTE;
+typedef /* [unique] */ userHPALETTE *wireHPALETTE;
 
-typedef /* [unique] */ userHENHMETAFILE __RPC_FAR *wireHENHMETAFILE;
+typedef /* [unique] */ userHENHMETAFILE *wireHENHMETAFILE;
 
-typedef /* [unique] */ userHMETAFILE __RPC_FAR *wireHMETAFILE;
+typedef /* [unique] */ userHMETAFILE *wireHMETAFILE;
 
-typedef /* [unique] */ userHMETAFILEPICT __RPC_FAR *wireHMETAFILEPICT;
+typedef /* [unique] */ userHMETAFILEPICT *wireHMETAFILEPICT;
 
 #if 0
-typedef /* [wire_marshal] */ void __RPC_FAR *HGLOBAL;
+typedef /* [wire_marshal] */ void *HGLOBAL;
 
 typedef HGLOBAL HLOCAL;
 
-typedef /* [wire_marshal] */ void __RPC_FAR *HBITMAP;
+typedef /* [wire_marshal] */ void *HBITMAP;
 
-typedef /* [wire_marshal] */ void __RPC_FAR *HPALETTE;
+typedef /* [wire_marshal] */ void *HPALETTE;
 
-typedef /* [wire_marshal] */ void __RPC_FAR *HENHMETAFILE;
+typedef /* [wire_marshal] */ void *HENHMETAFILE;
 
-typedef /* [wire_marshal] */ void __RPC_FAR *HMETAFILE;
+typedef /* [wire_marshal] */ void *HMETAFILE;
 
 #endif //0
-typedef /* [wire_marshal] */ void __RPC_FAR *HMETAFILEPICT;
+typedef /* [wire_marshal] */ void *HMETAFILEPICT;
 
 
 
@@ -974,7 +983,7 @@ typedef double DATE;
 typedef struct tagCY
     {
     LONGLONG int64;
-    }	CY;
+    } 	CY;
 
 #else /* 0 */
 /* real definition that makes the C++ compiler happy */
@@ -992,7 +1001,7 @@ typedef union tagCY {
 } CY;
 #endif /* 0 */
 #endif /* _tagCY_DEFINED */
-typedef CY __RPC_FAR *LPCY;
+typedef CY *LPCY;
 
 #if 0 /* _tagDEC_DEFINED */
 /* The following isn't the real definition of Decimal type, */
@@ -1004,7 +1013,7 @@ typedef struct tagDEC
     BYTE sign;
     ULONG Hi32;
     ULONGLONG Lo64;
-    }	DECIMAL;
+    } 	DECIMAL;
 
 #else /* _tagDEC_DEFINED */
 /* real definition that makes the C++ compiler happy */
@@ -1035,7 +1044,7 @@ typedef struct tagDEC {
 #define DECIMAL_SETZERO(dec) \
         {(dec).Lo64 = 0; (dec).Hi32 = 0; (dec).signscale = 0;}
 #endif /* _tagDEC_DEFINED */
-typedef DECIMAL __RPC_FAR *LPDECIMAL;
+typedef DECIMAL *LPDECIMAL;
 
 #if ( _MSC_VER >= 800 )
 #if _MSC_VER >= 1200
@@ -1044,11 +1053,11 @@ typedef DECIMAL __RPC_FAR *LPDECIMAL;
 #pragma warning(default:4201)
 #endif
 #endif
-typedef /* [unique] */ FLAGGED_WORD_BLOB __RPC_FAR *wireBSTR;
+typedef /* [unique] */ FLAGGED_WORD_BLOB *wireBSTR;
 
-typedef /* [wire_marshal] */ OLECHAR __RPC_FAR *BSTR;
+typedef /* [wire_marshal] */ OLECHAR *BSTR;
 
-typedef BSTR __RPC_FAR *LPBSTR;
+typedef BSTR *LPBSTR;
 
 /* 0 == FALSE, -1 == TRUE */
 typedef short VARIANT_BOOL;
@@ -1071,10 +1080,10 @@ typedef boolean BOOLEAN;
 typedef struct tagBSTRBLOB
     {
     ULONG cbSize;
-    /* [size_is] */ BYTE __RPC_FAR *pData;
-    }	BSTRBLOB;
+    /* [size_is] */ BYTE *pData;
+    } 	BSTRBLOB;
 
-typedef struct tagBSTRBLOB __RPC_FAR *LPBSTRBLOB;
+typedef struct tagBSTRBLOB *LPBSTRBLOB;
 
 #endif
 #define VARIANT_TRUE ((VARIANT_BOOL)-1)
@@ -1086,18 +1095,18 @@ typedef struct tagBSTRBLOB __RPC_FAR *LPBSTRBLOB;
 typedef struct tagBLOB
     {
     ULONG cbSize;
-    /* [size_is] */ BYTE __RPC_FAR *pBlobData;
-    }	BLOB;
+    /* [size_is] */ BYTE *pBlobData;
+    } 	BLOB;
 
-typedef struct tagBLOB __RPC_FAR *LPBLOB;
+typedef struct tagBLOB *LPBLOB;
 
 #endif
 typedef struct tagCLIPDATA
     {
     ULONG cbSize;
     long ulClipFmt;
-    /* [size_is] */ BYTE __RPC_FAR *pClipData;
-    }	CLIPDATA;
+    /* [size_is] */ BYTE *pClipData;
+    } 	CLIPDATA;
 
 // Macro to calculate the size of the above pClipData
 #define CBPCLIPDATA(clipdata)    ( (clipdata).cbSize - sizeof((clipdata).ulClipFmt) )
@@ -1136,6 +1145,8 @@ typedef unsigned short VARTYPE;
  *  VT_UI8                 [T][P]     unsigned 64-bit int
  *  VT_INT              [V][T][P][S]  signed machine int
  *  VT_UINT             [V][T]   [S]  unsigned machine int
+ *  VT_INT_PTR             [T]        signed machine register size width
+ *  VT_UINT_PTR            [T]        unsigned machine register size width
  *  VT_VOID                [T]        C style void
  *  VT_HRESULT             [T]        Standard return type
  *  VT_PTR                 [T]        pointer type
@@ -1193,6 +1204,8 @@ enum VARENUM
 	VT_LPSTR	= 30,
 	VT_LPWSTR	= 31,
 	VT_RECORD	= 36,
+	VT_INT_PTR	= 37,
+	VT_UINT_PTR	= 38,
 	VT_FILETIME	= 64,
 	VT_BLOB	= 65,
 	VT_STREAM	= 66,
@@ -1211,14 +1224,7 @@ enum VARENUM
 	VT_ILLEGAL	= 0xffff,
 	VT_ILLEGALMASKED	= 0xfff,
 	VT_TYPEMASK	= 0xfff
-    };
-#ifdef _WIN64
-#define VT_INT_PTR  VT_I8
-#define VT_UINT_PTR VT_UI8
-#else
-#define VT_INT_PTR  VT_I4
-#define VT_UINT_PTR VT_UI4
-#endif
+    } ;
 typedef ULONG PROPID;
 
 #ifndef SID_IDENTIFIER_AUTHORITY_DEFINED
@@ -1226,9 +1232,9 @@ typedef ULONG PROPID;
 typedef struct _SID_IDENTIFIER_AUTHORITY
     {
     UCHAR Value[ 6 ];
-    }	SID_IDENTIFIER_AUTHORITY;
+    } 	SID_IDENTIFIER_AUTHORITY;
 
-typedef struct _SID_IDENTIFIER_AUTHORITY __RPC_FAR *PSID_IDENTIFIER_AUTHORITY;
+typedef struct _SID_IDENTIFIER_AUTHORITY *PSID_IDENTIFIER_AUTHORITY;
 
 #endif
 #ifndef SID_DEFINED
@@ -1239,17 +1245,17 @@ typedef struct _SID
     BYTE SubAuthorityCount;
     SID_IDENTIFIER_AUTHORITY IdentifierAuthority;
     /* [size_is] */ ULONG SubAuthority[ 1 ];
-    }	SID;
+    } 	SID;
 
-typedef struct _SID __RPC_FAR *PISID;
+typedef struct _SID *PISID;
 
 typedef struct _SID_AND_ATTRIBUTES
     {
-    SID __RPC_FAR *Sid;
+    SID *Sid;
     DWORD Attributes;
-    }	SID_AND_ATTRIBUTES;
+    } 	SID_AND_ATTRIBUTES;
 
-typedef struct _SID_AND_ATTRIBUTES __RPC_FAR *PSID_AND_ATTRIBUTES;
+typedef struct _SID_AND_ATTRIBUTES *PSID_AND_ATTRIBUTES;
 
 #endif
 typedef struct tagCSPLATFORM
@@ -1258,7 +1264,7 @@ typedef struct tagCSPLATFORM
     DWORD dwVersionHi;
     DWORD dwVersionLo;
     DWORD dwProcessorArch;
-    }	CSPLATFORM;
+    } 	CSPLATFORM;
 
 typedef struct tagQUERYCONTEXT
     {
@@ -1267,7 +1273,7 @@ typedef struct tagQUERYCONTEXT
     LCID Locale;
     DWORD dwVersionHi;
     DWORD dwVersionLo;
-    }	QUERYCONTEXT;
+    } 	QUERYCONTEXT;
 
 typedef /* [v1_enum] */ 
 enum tagTYSPEC
@@ -1278,7 +1284,7 @@ enum tagTYSPEC
 	TYSPEC_PROGID	= TYSPEC_FILENAME + 1,
 	TYSPEC_PACKAGENAME	= TYSPEC_PROGID + 1,
 	TYSPEC_OBJECTID	= TYSPEC_PACKAGENAME + 1
-    }	TYSPEC;
+    } 	TYSPEC;
 
 typedef /* [public] */ struct __MIDL___MIDL_itf_wtypes_0003_0001
     {
@@ -1294,14 +1300,14 @@ typedef /* [public] */ struct __MIDL___MIDL_itf_wtypes_0003_0001
             {
             LPOLESTR pPackageName;
             GUID PolicyId;
-            }	ByName;
+            } 	ByName;
         /* [case()] */ struct 
             {
             GUID ObjectId;
             GUID PolicyId;
-            }	ByObjectId;
-        }	tagged_union;
-    }	uCLSSPEC;
+            } 	ByObjectId;
+        } 	tagged_union;
+    } 	uCLSSPEC;
 
 
 
@@ -1319,5 +1325,5 @@ extern RPC_IF_HANDLE __MIDL_itf_wtypes_0003_v0_0_s_ifspec;
 #endif
 
 
+
 #pragma option pop /*P_O_Pop*/
-#endif /* __WTYPES_H */

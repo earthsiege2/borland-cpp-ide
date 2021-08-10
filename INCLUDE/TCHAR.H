@@ -1,20 +1,18 @@
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1995, 2000 by Inprise Corporation
+ *      Copyright (c) 1995, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.21  $ */
+/* $Revision: 9.27.2.2 $ */
 
 #if !defined(__TCHAR_H)
 #define __TCHAR_H
 #define _INC_TCHAR  /* MSC Guard name */
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 /*
     This file is parsed with a tool that will spit out a table of
@@ -38,18 +36,18 @@
 
 #if defined(__USING_CNAME__)
 #  undef __USING_CNAME__
-#  include <string.h>
+#  include <oldstl/string.h>
 #  define __USING_CNAME__
 #else
-#  include <string.h>
-#endif
-
-#ifdef  __cplusplus
-extern "C" {
+#  include <oldstl/string.h>
 #endif
 
 #if defined(_MBCS) && !defined(__MBSTRING_H)
 #include <mbstring.h>
+#endif
+
+#ifdef  __cplusplus
+extern "C" {
 #endif
 
 #if !defined(_UNICODE)

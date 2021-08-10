@@ -1,114 +1,115 @@
-LIBRARY RTM
+LIBRARY Rtm
 EXPORTS
 
-    BestMatchInTable                         = 'RTM.DLL'.*
-    CheckTable                               = 'RTM.DLL'.*
-    CreateTable                              = 'RTM.DLL'.*
-    DeleteFromTable                          = 'RTM.DLL'.*
-    DestroyTable                             = 'RTM.DLL'.*
-    DumpTable                                = 'RTM.DLL'.*
-    EnumOverTable                            = 'RTM.DLL'.*
-    InsertIntoTable                          = 'RTM.DLL'.*
-    MgmAddGroupMembershipEntry               = 'RTM.DLL'.*
-    MgmDeInitialize                          = 'RTM.DLL'.*
-    MgmDeRegisterMProtocol                   = 'RTM.DLL'.*
-    MgmDeleteGroupMembershipEntry            = 'RTM.DLL'.*
-    MgmGetFirstMfe                           = 'RTM.DLL'.*
-    MgmGetFirstMfeStats                      = 'RTM.DLL'.*
-    MgmGetMfe                                = 'RTM.DLL'.*
-    MgmGetMfeStats                           = 'RTM.DLL'.*
-    MgmGetNextMfe                            = 'RTM.DLL'.*
-    MgmGetNextMfeStats                       = 'RTM.DLL'.*
-    MgmGetProtocolOnInterface                = 'RTM.DLL'.*
-    MgmGroupEnumerationEnd                   = 'RTM.DLL'.*
-    MgmGroupEnumerationGetNext               = 'RTM.DLL'.*
-    MgmGroupEnumerationStart                 = 'RTM.DLL'.*
-    MgmInitialize                            = 'RTM.DLL'.*
-    MgmRegisterMProtocol                     = 'RTM.DLL'.*
-    MgmReleaseInterfaceOwnership             = 'RTM.DLL'.*
-    MgmTakeInterfaceOwnership                = 'RTM.DLL'.*
-    NextMatchInTable                         = 'RTM.DLL'.*
-    RtmAddNextHop                            = 'RTM.DLL'.*
-    RtmAddRoute                              = 'RTM.DLL'.*
-    RtmAddRouteToDest                        = 'RTM.DLL'.*
-    RtmBlockConvertRoutesToStatic            = 'RTM.DLL'.*
-    RtmBlockDeleteRoutes                     = 'RTM.DLL'.*
-    RtmBlockMethods                          = 'RTM.DLL'.*
-    RtmBlockSetRouteEnable                   = 'RTM.DLL'.*
-    RtmCloseEnumerationHandle                = 'RTM.DLL'.*
-    RtmCreateDestEnum                        = 'RTM.DLL'.*
-    RtmCreateEnumerationHandle               = 'RTM.DLL'.*
-    RtmCreateNextHopEnum                     = 'RTM.DLL'.*
-    RtmCreateRouteEnum                       = 'RTM.DLL'.*
-    RtmCreateRouteList                       = 'RTM.DLL'.*
-    RtmCreateRouteListEnum                   = 'RTM.DLL'.*
-    RtmCreateRouteTable                      = 'RTM.DLL'.*
-    RtmDeleteEnumHandle                      = 'RTM.DLL'.*
-    RtmDeleteNextHop                         = 'RTM.DLL'.*
-    RtmDeleteRoute                           = 'RTM.DLL'.*
-    RtmDeleteRouteList                       = 'RTM.DLL'.*
-    RtmDeleteRouteTable                      = 'RTM.DLL'.*
-    RtmDeleteRouteToDest                     = 'RTM.DLL'.*
-    RtmDequeueRouteChangeMessage             = 'RTM.DLL'.*
-    RtmDereferenceHandles                    = 'RTM.DLL'.*
-    RtmDeregisterClient                      = 'RTM.DLL'.*
-    RtmDeregisterEntity                      = 'RTM.DLL'.*
-    RtmDeregisterFromChangeNotification      = 'RTM.DLL'.*
-    RtmEnumerateGetNextRoute                 = 'RTM.DLL'.*
-    RtmFindNextHop                           = 'RTM.DLL'.*
-    RtmGetAddressFamilyInfo                  = 'RTM.DLL'.*
-    RtmGetChangeStatus                       = 'RTM.DLL'.*
-    RtmGetChangedDests                       = 'RTM.DLL'.*
-    RtmGetDestInfo                           = 'RTM.DLL'.*
-    RtmGetEntityInfo                         = 'RTM.DLL'.*
-    RtmGetEntityMethods                      = 'RTM.DLL'.*
-    RtmGetEnumDests                          = 'RTM.DLL'.*
-    RtmGetEnumNextHops                       = 'RTM.DLL'.*
-    RtmGetEnumRoutes                         = 'RTM.DLL'.*
-    RtmGetExactMatchDestination              = 'RTM.DLL'.*
-    RtmGetExactMatchRoute                    = 'RTM.DLL'.*
-    RtmGetFirstRoute                         = 'RTM.DLL'.*
-    RtmGetInstanceInfo                       = 'RTM.DLL'.*
-    RtmGetInstances                          = 'RTM.DLL'.*
-    RtmGetLessSpecificDestination            = 'RTM.DLL'.*
-    RtmGetListEnumRoutes                     = 'RTM.DLL'.*
-    RtmGetMostSpecificDestination            = 'RTM.DLL'.*
-    RtmGetNetworkCount                       = 'RTM.DLL'.*
-    RtmGetNextHopInfo                        = 'RTM.DLL'.*
-    RtmGetNextHopPointer                     = 'RTM.DLL'.*
-    RtmGetNextRoute                          = 'RTM.DLL'.*
-    RtmGetOpaqueInformationPointer           = 'RTM.DLL'.*
-    RtmGetRegisteredEntities                 = 'RTM.DLL'.*
-    RtmGetRouteAge                           = 'RTM.DLL'.*
-    RtmGetRouteInfo                          = 'RTM.DLL'.*
-    RtmGetRoutePointer                       = 'RTM.DLL'.*
-    RtmHoldDestination                       = 'RTM.DLL'.*
-    RtmIgnoreChangedDests                    = 'RTM.DLL'.*
-    RtmInsertInRouteList                     = 'RTM.DLL'.*
-    RtmInvokeMethod                          = 'RTM.DLL'.*
-    RtmIsBestRoute                           = 'RTM.DLL'.*
-    RtmIsMarkedForChangeNotification         = 'RTM.DLL'.*
-    RtmIsRoute                               = 'RTM.DLL'.*
-    RtmLockNextHop                           = 'RTM.DLL'.*
-    RtmLockRoute                             = 'RTM.DLL'.*
-    RtmLookupIPDestination                   = 'RTM.DLL'.*
-    RtmMarkDestForChangeNotification         = 'RTM.DLL'.*
-    RtmReadAddressFamilyConfig               = 'RTM.DLL'.*
-    RtmReadInstanceConfig                    = 'RTM.DLL'.*
-    RtmReferenceHandles                      = 'RTM.DLL'.*
-    RtmRegisterClient                        = 'RTM.DLL'.*
-    RtmRegisterEntity                        = 'RTM.DLL'.*
-    RtmRegisterForChangeNotification         = 'RTM.DLL'.*
-    RtmReleaseChangedDests                   = 'RTM.DLL'.*
-    RtmReleaseDestInfo                       = 'RTM.DLL'.*
-    RtmReleaseDests                          = 'RTM.DLL'.*
-    RtmReleaseEntities                       = 'RTM.DLL'.*
-    RtmReleaseEntityInfo                     = 'RTM.DLL'.*
-    RtmReleaseNextHopInfo                    = 'RTM.DLL'.*
-    RtmReleaseNextHops                       = 'RTM.DLL'.*
-    RtmReleaseRouteInfo                      = 'RTM.DLL'.*
-    RtmReleaseRoutes                         = 'RTM.DLL'.*
-    RtmUpdateRoute                           = 'RTM.DLL'.*
-    RtmWriteAddressFamilyConfig              = 'RTM.DLL'.*
-    RtmWriteInstanceConfig                   = 'RTM.DLL'.*
-    SearchInTable                            = 'RTM.DLL'.*
+    BestMatchInTable
+    CheckTable
+    CreateTable
+    DeleteFromTable
+    DestroyTable
+    DumpTable
+    EnumOverTable
+    InsertIntoTable
+    MgmAddGroupMembershipEntry
+    MgmDeInitialize
+    MgmDeRegisterMProtocol
+    MgmDeleteGroupMembershipEntry
+    MgmGetFirstMfe
+    MgmGetFirstMfeStats
+    MgmGetMfe
+    MgmGetMfeStats
+    MgmGetNextMfe
+    MgmGetNextMfeStats
+    MgmGetProtocolOnInterface
+    MgmGroupEnumerationEnd
+    MgmGroupEnumerationGetNext
+    MgmGroupEnumerationStart
+    MgmInitialize
+    MgmRegisterMProtocol
+    MgmReleaseInterfaceOwnership
+    MgmTakeInterfaceOwnership
+    NextMatchInTable
+    RtmAddNextHop
+    RtmAddRoute
+    RtmAddRouteToDest
+    RtmBlockConvertRoutesToStatic
+    RtmBlockDeleteRoutes
+    RtmBlockMethods
+    RtmBlockSetRouteEnable
+    RtmCloseEnumerationHandle
+    RtmCreateDestEnum
+    RtmCreateEnumerationHandle
+    RtmCreateNextHopEnum
+    RtmCreateRouteEnum
+    RtmCreateRouteList
+    RtmCreateRouteListEnum
+    RtmCreateRouteTable
+    RtmDeleteEnumHandle
+    RtmDeleteNextHop
+    RtmDeleteRoute
+    RtmDeleteRouteList
+    RtmDeleteRouteTable
+    RtmDeleteRouteToDest
+    RtmDequeueRouteChangeMessage
+    RtmDereferenceHandles
+    RtmDeregisterClient
+    RtmDeregisterEntity
+    RtmDeregisterFromChangeNotification
+    RtmEnumerateGetNextRoute
+    RtmFindNextHop
+    RtmGetAddressFamilyInfo
+    RtmGetChangeStatus
+    RtmGetChangedDests
+    RtmGetDestInfo
+    RtmGetEntityInfo
+    RtmGetEntityMethods
+    RtmGetEnumDests
+    RtmGetEnumNextHops
+    RtmGetEnumRoutes
+    RtmGetExactMatchDestination
+    RtmGetExactMatchRoute
+    RtmGetFirstRoute
+    RtmGetInstanceInfo
+    RtmGetInstances
+    RtmGetLessSpecificDestination
+    RtmGetListEnumRoutes
+    RtmGetMostSpecificDestination
+    RtmGetNetworkCount
+    RtmGetNextHopInfo
+    RtmGetNextHopPointer
+    RtmGetNextRoute
+    RtmGetOpaqueInformationPointer
+    RtmGetRegisteredEntities
+    RtmGetRouteAge
+    RtmGetRouteInfo
+    RtmGetRoutePointer
+    RtmHoldDestination
+    RtmIgnoreChangedDests
+    RtmInsertInRouteList
+    RtmInvokeMethod
+    RtmIsBestRoute
+    RtmIsMarkedForChangeNotification
+    RtmIsRoute
+    RtmLockDestination
+    RtmLockNextHop
+    RtmLockRoute
+    RtmLookupIPDestination
+    RtmMarkDestForChangeNotification
+    RtmReadAddressFamilyConfig
+    RtmReadInstanceConfig
+    RtmReferenceHandles
+    RtmRegisterClient
+    RtmRegisterEntity
+    RtmRegisterForChangeNotification
+    RtmReleaseChangedDests
+    RtmReleaseDestInfo
+    RtmReleaseDests
+    RtmReleaseEntities
+    RtmReleaseEntityInfo
+    RtmReleaseNextHopInfo
+    RtmReleaseNextHops
+    RtmReleaseRouteInfo
+    RtmReleaseRoutes
+    RtmUpdateAndUnlockRoute
+    RtmWriteAddressFamilyConfig
+    RtmWriteInstanceConfig
+    SearchInTable

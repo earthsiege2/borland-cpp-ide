@@ -2,7 +2,8 @@
 #ifndef VersionInfoDesignTimeCodeH
 #define VersionInfoDesignTimeCodeH
 
-#include <DsgnIntf.hpp>
+#include <DesignIntf.hpp>
+#include <DesignEditors.hpp>
 
 class PACKAGE TVersionInfoFileNameEditor : public TStringProperty
 {

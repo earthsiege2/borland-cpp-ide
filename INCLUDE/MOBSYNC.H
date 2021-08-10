@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:33:44 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for mobsync.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -20,7 +18,7 @@
 
 /* verify that the <rpcndr.h> version is high enough to compile this file*/
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
-#define __REQUIRED_RPCNDR_H_VERSION__ 440
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
 
 #include "rpc.h"
@@ -37,6 +35,10 @@
 
 #ifndef __mobsync_h__
 #define __mobsync_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -90,8 +92,8 @@ typedef struct SyncMgr SyncMgr;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_mobsync_0000 */
 /* [local] */ 
@@ -132,7 +134,7 @@ extern RPC_IF_HANDLE __MIDL_itf_mobsync_0000_v0_0_s_ifspec;
 /* interface ISyncMgrSynchronize */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ ISyncMgrSynchronize __RPC_FAR *LPSYNCMGRSYNCHRONIZE;
+typedef /* [unique] */ ISyncMgrSynchronize *LPSYNCMGRSYNCHRONIZE;
 
 typedef 
 enum _tagSYNCMGRFLAG
@@ -145,7 +147,7 @@ enum _tagSYNCMGRFLAG
 	SYNCMGRFLAG_EVENTMASK	= 0xff,
 	SYNCMGRFLAG_SETTINGS	= 0x100,
 	SYNCMGRFLAG_MAYBOTHERUSER	= 0x200
-    }	SYNCMGRFLAG;
+    } 	SYNCMGRFLAG;
 
 #define	MAX_SYNCMGRHANDLERNAME	( 32 )
 
@@ -156,7 +158,7 @@ enum _tagSYNCMGRHANDLERFLAGS
     {	SYNCMGRHANDLER_HASPROPERTIES	= 0x1,
 	SYNCMGRHANDLER_MAYESTABLISHCONNECTION	= 0x2,
 	SYNCMGRHANDLER_ALWAYSLISTHANDLER	= 0x4
-    }	SYNCMGRHANDLERFLAGS;
+    } 	SYNCMGRHANDLERFLAGS;
 
 typedef struct _tagSYNCMGRHANDLERINFO
     {
@@ -164,9 +166,9 @@ typedef struct _tagSYNCMGRHANDLERINFO
     HICON hIcon;
     DWORD SyncMgrHandlerFlags;
     WCHAR wszHandlerName[ 32 ];
-    }	SYNCMGRHANDLERINFO;
+    } 	SYNCMGRHANDLERINFO;
 
-typedef struct _tagSYNCMGRHANDLERINFO __RPC_FAR *LPSYNCMGRHANDLERINFO;
+typedef struct _tagSYNCMGRHANDLERINFO *LPSYNCMGRHANDLERINFO;
 
 #define   SYNCMGRITEMSTATE_UNCHECKED    0x0000
 #define   SYNCMGRITEMSTATE_CHECKED      0x0001
@@ -182,7 +184,7 @@ enum _tagSYNCMGRSTATUS
 	SYNCMGRSTATUS_PAUSED	= 0x6,
 	SYNCMGRSTATUS_RESUMING	= 0x7,
 	SYNCMGRSTATUS_DELETED	= 0x100
-    }	SYNCMGRSTATUS;
+    } 	SYNCMGRSTATUS;
 
 
 EXTERN_C const IID IID_ISyncMgrSynchronize;
@@ -197,29 +199,29 @@ EXTERN_C const IID IID_ISyncMgrSynchronize;
             /* [in] */ DWORD dwReserved,
             /* [in] */ DWORD dwSyncMgrFlags,
             /* [in] */ DWORD cbCookie,
-            /* [size_is][unique][in] */ const BYTE __RPC_FAR *lpCookie) = 0;
+            /* [size_is][unique][in] */ const BYTE *lpCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHandlerInfo( 
-            /* [out] */ LPSYNCMGRHANDLERINFO __RPC_FAR *ppSyncMgrHandlerInfo) = 0;
+            /* [out] */ LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumSyncMgrItems( 
-            /* [out] */ ISyncMgrEnumItems __RPC_FAR *__RPC_FAR *ppSyncMgrEnumItems) = 0;
+            /* [out] */ ISyncMgrEnumItems **ppSyncMgrEnumItems) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItemObject( 
             /* [in] */ REFSYNCMGRITEMID ItemID,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppv) = 0;
+            /* [iid_is][out] */ void **ppv) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowProperties( 
             /* [in] */ HWND hWndParent,
             /* [in] */ REFSYNCMGRITEMID ItemID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProgressCallback( 
-            /* [unique][in] */ ISyncMgrSynchronizeCallback __RPC_FAR *lpCallBack) = 0;
+            /* [unique][in] */ ISyncMgrSynchronizeCallback *lpCallBack) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PrepareForSync( 
             /* [in] */ ULONG cbNumItems,
-            /* [size_is][in] */ SYNCMGRITEMID __RPC_FAR *pItemIDs,
+            /* [size_is][in] */ SYNCMGRITEMID *pItemIDs,
             /* [in] */ HWND hWndParent,
             /* [in] */ DWORD dwReserved) = 0;
         
@@ -242,65 +244,65 @@ EXTERN_C const IID IID_ISyncMgrSynchronize;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISyncMgrSynchronize __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISyncMgrSynchronize * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISyncMgrSynchronize __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISyncMgrSynchronize * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISyncMgrSynchronize __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISyncMgrSynchronize * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            ISyncMgrSynchronize __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+            ISyncMgrSynchronize * This,
             /* [in] */ DWORD dwReserved,
             /* [in] */ DWORD dwSyncMgrFlags,
             /* [in] */ DWORD cbCookie,
-            /* [size_is][unique][in] */ const BYTE __RPC_FAR *lpCookie);
+            /* [size_is][unique][in] */ const BYTE *lpCookie);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHandlerInfo )( 
-            ISyncMgrSynchronize __RPC_FAR * This,
-            /* [out] */ LPSYNCMGRHANDLERINFO __RPC_FAR *ppSyncMgrHandlerInfo);
+        HRESULT ( STDMETHODCALLTYPE *GetHandlerInfo )( 
+            ISyncMgrSynchronize * This,
+            /* [out] */ LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumSyncMgrItems )( 
-            ISyncMgrSynchronize __RPC_FAR * This,
-            /* [out] */ ISyncMgrEnumItems __RPC_FAR *__RPC_FAR *ppSyncMgrEnumItems);
+        HRESULT ( STDMETHODCALLTYPE *EnumSyncMgrItems )( 
+            ISyncMgrSynchronize * This,
+            /* [out] */ ISyncMgrEnumItems **ppSyncMgrEnumItems);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetItemObject )( 
-            ISyncMgrSynchronize __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetItemObject )( 
+            ISyncMgrSynchronize * This,
             /* [in] */ REFSYNCMGRITEMID ItemID,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppv);
+            /* [iid_is][out] */ void **ppv);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowProperties )( 
-            ISyncMgrSynchronize __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ShowProperties )( 
+            ISyncMgrSynchronize * This,
             /* [in] */ HWND hWndParent,
             /* [in] */ REFSYNCMGRITEMID ItemID);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProgressCallback )( 
-            ISyncMgrSynchronize __RPC_FAR * This,
-            /* [unique][in] */ ISyncMgrSynchronizeCallback __RPC_FAR *lpCallBack);
+        HRESULT ( STDMETHODCALLTYPE *SetProgressCallback )( 
+            ISyncMgrSynchronize * This,
+            /* [unique][in] */ ISyncMgrSynchronizeCallback *lpCallBack);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrepareForSync )( 
-            ISyncMgrSynchronize __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *PrepareForSync )( 
+            ISyncMgrSynchronize * This,
             /* [in] */ ULONG cbNumItems,
-            /* [size_is][in] */ SYNCMGRITEMID __RPC_FAR *pItemIDs,
+            /* [size_is][in] */ SYNCMGRITEMID *pItemIDs,
             /* [in] */ HWND hWndParent,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Synchronize )( 
-            ISyncMgrSynchronize __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
+            ISyncMgrSynchronize * This,
             /* [in] */ HWND hWndParent);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetItemStatus )( 
-            ISyncMgrSynchronize __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetItemStatus )( 
+            ISyncMgrSynchronize * This,
             /* [in] */ REFSYNCMGRITEMID pItemID,
             /* [in] */ DWORD dwSyncMgrStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowError )( 
-            ISyncMgrSynchronize __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ShowError )( 
+            ISyncMgrSynchronize * This,
             /* [in] */ HWND hWndParent,
             /* [in] */ REFSYNCMGRERRORID ErrorID);
         
@@ -309,7 +311,7 @@ EXTERN_C const IID IID_ISyncMgrSynchronize;
 
     interface ISyncMgrSynchronize
     {
-        CONST_VTBL struct ISyncMgrSynchronizeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISyncMgrSynchronizeVtbl *lpVtbl;
     };
 
     
@@ -365,11 +367,11 @@ EXTERN_C const IID IID_ISyncMgrSynchronize;
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronize_Initialize_Proxy( 
-    ISyncMgrSynchronize __RPC_FAR * This,
+    ISyncMgrSynchronize * This,
     /* [in] */ DWORD dwReserved,
     /* [in] */ DWORD dwSyncMgrFlags,
     /* [in] */ DWORD cbCookie,
-    /* [size_is][unique][in] */ const BYTE __RPC_FAR *lpCookie);
+    /* [size_is][unique][in] */ const BYTE *lpCookie);
 
 
 void __RPC_STUB ISyncMgrSynchronize_Initialize_Stub(
@@ -380,8 +382,8 @@ void __RPC_STUB ISyncMgrSynchronize_Initialize_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronize_GetHandlerInfo_Proxy( 
-    ISyncMgrSynchronize __RPC_FAR * This,
-    /* [out] */ LPSYNCMGRHANDLERINFO __RPC_FAR *ppSyncMgrHandlerInfo);
+    ISyncMgrSynchronize * This,
+    /* [out] */ LPSYNCMGRHANDLERINFO *ppSyncMgrHandlerInfo);
 
 
 void __RPC_STUB ISyncMgrSynchronize_GetHandlerInfo_Stub(
@@ -392,8 +394,8 @@ void __RPC_STUB ISyncMgrSynchronize_GetHandlerInfo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronize_EnumSyncMgrItems_Proxy( 
-    ISyncMgrSynchronize __RPC_FAR * This,
-    /* [out] */ ISyncMgrEnumItems __RPC_FAR *__RPC_FAR *ppSyncMgrEnumItems);
+    ISyncMgrSynchronize * This,
+    /* [out] */ ISyncMgrEnumItems **ppSyncMgrEnumItems);
 
 
 void __RPC_STUB ISyncMgrSynchronize_EnumSyncMgrItems_Stub(
@@ -404,10 +406,10 @@ void __RPC_STUB ISyncMgrSynchronize_EnumSyncMgrItems_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronize_GetItemObject_Proxy( 
-    ISyncMgrSynchronize __RPC_FAR * This,
+    ISyncMgrSynchronize * This,
     /* [in] */ REFSYNCMGRITEMID ItemID,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppv);
+    /* [iid_is][out] */ void **ppv);
 
 
 void __RPC_STUB ISyncMgrSynchronize_GetItemObject_Stub(
@@ -418,7 +420,7 @@ void __RPC_STUB ISyncMgrSynchronize_GetItemObject_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronize_ShowProperties_Proxy( 
-    ISyncMgrSynchronize __RPC_FAR * This,
+    ISyncMgrSynchronize * This,
     /* [in] */ HWND hWndParent,
     /* [in] */ REFSYNCMGRITEMID ItemID);
 
@@ -431,8 +433,8 @@ void __RPC_STUB ISyncMgrSynchronize_ShowProperties_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronize_SetProgressCallback_Proxy( 
-    ISyncMgrSynchronize __RPC_FAR * This,
-    /* [unique][in] */ ISyncMgrSynchronizeCallback __RPC_FAR *lpCallBack);
+    ISyncMgrSynchronize * This,
+    /* [unique][in] */ ISyncMgrSynchronizeCallback *lpCallBack);
 
 
 void __RPC_STUB ISyncMgrSynchronize_SetProgressCallback_Stub(
@@ -443,9 +445,9 @@ void __RPC_STUB ISyncMgrSynchronize_SetProgressCallback_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronize_PrepareForSync_Proxy( 
-    ISyncMgrSynchronize __RPC_FAR * This,
+    ISyncMgrSynchronize * This,
     /* [in] */ ULONG cbNumItems,
-    /* [size_is][in] */ SYNCMGRITEMID __RPC_FAR *pItemIDs,
+    /* [size_is][in] */ SYNCMGRITEMID *pItemIDs,
     /* [in] */ HWND hWndParent,
     /* [in] */ DWORD dwReserved);
 
@@ -458,7 +460,7 @@ void __RPC_STUB ISyncMgrSynchronize_PrepareForSync_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronize_Synchronize_Proxy( 
-    ISyncMgrSynchronize __RPC_FAR * This,
+    ISyncMgrSynchronize * This,
     /* [in] */ HWND hWndParent);
 
 
@@ -470,7 +472,7 @@ void __RPC_STUB ISyncMgrSynchronize_Synchronize_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronize_SetItemStatus_Proxy( 
-    ISyncMgrSynchronize __RPC_FAR * This,
+    ISyncMgrSynchronize * This,
     /* [in] */ REFSYNCMGRITEMID pItemID,
     /* [in] */ DWORD dwSyncMgrStatus);
 
@@ -483,7 +485,7 @@ void __RPC_STUB ISyncMgrSynchronize_SetItemStatus_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronize_ShowError_Proxy( 
-    ISyncMgrSynchronize __RPC_FAR * This,
+    ISyncMgrSynchronize * This,
     /* [in] */ HWND hWndParent,
     /* [in] */ REFSYNCMGRERRORID ErrorID);
 
@@ -505,7 +507,7 @@ void __RPC_STUB ISyncMgrSynchronize_ShowError_Stub(
 /* interface ISyncMgrSynchronizeCallback */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ ISyncMgrSynchronizeCallback __RPC_FAR *LPSYNCMGRSYNCHRONIZECALLBACK;
+typedef /* [unique] */ ISyncMgrSynchronizeCallback *LPSYNCMGRSYNCHRONIZECALLBACK;
 
 #define   SYNCMGRPROGRESSITEM_STATUSTEXT         0x0001
 #define   SYNCMGRPROGRESSITEM_STATUSTYPE         0x0002
@@ -520,16 +522,16 @@ typedef struct _tagSYNCMGRPROGRESSITEM
     DWORD dwStatusType;
     INT iProgValue;
     INT iMaxValue;
-    }	SYNCMGRPROGRESSITEM;
+    } 	SYNCMGRPROGRESSITEM;
 
-typedef struct _tagSYNCMGRPROGRESSITEM __RPC_FAR *LPSYNCMGRPROGRESSITEM;
+typedef struct _tagSYNCMGRPROGRESSITEM *LPSYNCMGRPROGRESSITEM;
 
 typedef 
 enum _tagSYNCMGRLOGLEVEL
     {	SYNCMGRLOGLEVEL_INFORMATION	= 0x1,
 	SYNCMGRLOGLEVEL_WARNING	= 0x2,
 	SYNCMGRLOGLEVEL_ERROR	= 0x3
-    }	SYNCMGRLOGLEVEL;
+    } 	SYNCMGRLOGLEVEL;
 
 #define   SYNCMGRLOGERROR_ERRORFLAGS                     0x0001
 #define   SYNCMGRLOGERROR_ERRORID                        0x0002
@@ -538,7 +540,7 @@ enum _tagSYNCMGRLOGLEVEL
 typedef 
 enum _tagSYNCMGRERRORFLAGS
     {	SYNCMGRERRORFLAG_ENABLEJUMPTEXT	= 0x1
-    }	SYNCMGRERRORFLAGS;
+    } 	SYNCMGRERRORFLAGS;
 
 typedef struct _tagSYNCMGRLOGERRORINFO
     {
@@ -547,9 +549,9 @@ typedef struct _tagSYNCMGRLOGERRORINFO
     DWORD dwSyncMgrErrorFlags;
     SYNCMGRERRORID ErrorID;
     SYNCMGRITEMID ItemID;
-    }	SYNCMGRLOGERRORINFO;
+    } 	SYNCMGRLOGERRORINFO;
 
-typedef struct _tagSYNCMGRLOGERRORINFO __RPC_FAR *LPSYNCMGRLOGERRORINFO;
+typedef struct _tagSYNCMGRLOGERRORINFO *LPSYNCMGRLOGERRORINFO;
 
 
 EXTERN_C const IID IID_ISyncMgrSynchronizeCallback;
@@ -572,7 +574,7 @@ EXTERN_C const IID IID_ISyncMgrSynchronizeCallback;
         virtual HRESULT STDMETHODCALLTYPE ShowErrorCompleted( 
             /* [in] */ HRESULT hr,
             /* [in] */ ULONG cbNumItems,
-            /* [size_is][unique][in] */ SYNCMGRITEMID __RPC_FAR *pItemIDs) = 0;
+            /* [size_is][unique][in] */ SYNCMGRITEMID *pItemIDs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableModeless( 
             /* [in] */ BOOL fEnable) = 0;
@@ -602,57 +604,57 @@ EXTERN_C const IID IID_ISyncMgrSynchronizeCallback;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISyncMgrSynchronizeCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISyncMgrSynchronizeCallback * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISyncMgrSynchronizeCallback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISyncMgrSynchronizeCallback * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISyncMgrSynchronizeCallback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISyncMgrSynchronizeCallback * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowPropertiesCompleted )( 
-            ISyncMgrSynchronizeCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ShowPropertiesCompleted )( 
+            ISyncMgrSynchronizeCallback * This,
             /* [in] */ HRESULT hr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrepareForSyncCompleted )( 
-            ISyncMgrSynchronizeCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *PrepareForSyncCompleted )( 
+            ISyncMgrSynchronizeCallback * This,
             /* [in] */ HRESULT hr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SynchronizeCompleted )( 
-            ISyncMgrSynchronizeCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SynchronizeCompleted )( 
+            ISyncMgrSynchronizeCallback * This,
             /* [in] */ HRESULT hr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowErrorCompleted )( 
-            ISyncMgrSynchronizeCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ShowErrorCompleted )( 
+            ISyncMgrSynchronizeCallback * This,
             /* [in] */ HRESULT hr,
             /* [in] */ ULONG cbNumItems,
-            /* [size_is][unique][in] */ SYNCMGRITEMID __RPC_FAR *pItemIDs);
+            /* [size_is][unique][in] */ SYNCMGRITEMID *pItemIDs);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnableModeless )( 
-            ISyncMgrSynchronizeCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnableModeless )( 
+            ISyncMgrSynchronizeCallback * This,
             /* [in] */ BOOL fEnable);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Progress )( 
-            ISyncMgrSynchronizeCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Progress )( 
+            ISyncMgrSynchronizeCallback * This,
             /* [in] */ REFSYNCMGRITEMID pItemID,
             /* [unique][in] */ LPSYNCMGRPROGRESSITEM lpSyncProgressItem);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LogError )( 
-            ISyncMgrSynchronizeCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *LogError )( 
+            ISyncMgrSynchronizeCallback * This,
             /* [in] */ DWORD dwErrorLevel,
             /* [in] */ LPCWSTR lpcErrorText,
             /* [unique][in] */ LPSYNCMGRLOGERRORINFO lpSyncLogError);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeleteLogError )( 
-            ISyncMgrSynchronizeCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DeleteLogError )( 
+            ISyncMgrSynchronizeCallback * This,
             /* [in] */ REFSYNCMGRERRORID ErrorID,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EstablishConnection )( 
-            ISyncMgrSynchronizeCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EstablishConnection )( 
+            ISyncMgrSynchronizeCallback * This,
             /* [unique][in] */ LPCWSTR lpwszConnection,
             /* [in] */ DWORD dwReserved);
         
@@ -661,7 +663,7 @@ EXTERN_C const IID IID_ISyncMgrSynchronizeCallback;
 
     interface ISyncMgrSynchronizeCallback
     {
-        CONST_VTBL struct ISyncMgrSynchronizeCallbackVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISyncMgrSynchronizeCallbackVtbl *lpVtbl;
     };
 
     
@@ -714,7 +716,7 @@ EXTERN_C const IID IID_ISyncMgrSynchronizeCallback;
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronizeCallback_ShowPropertiesCompleted_Proxy( 
-    ISyncMgrSynchronizeCallback __RPC_FAR * This,
+    ISyncMgrSynchronizeCallback * This,
     /* [in] */ HRESULT hr);
 
 
@@ -726,7 +728,7 @@ void __RPC_STUB ISyncMgrSynchronizeCallback_ShowPropertiesCompleted_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronizeCallback_PrepareForSyncCompleted_Proxy( 
-    ISyncMgrSynchronizeCallback __RPC_FAR * This,
+    ISyncMgrSynchronizeCallback * This,
     /* [in] */ HRESULT hr);
 
 
@@ -738,7 +740,7 @@ void __RPC_STUB ISyncMgrSynchronizeCallback_PrepareForSyncCompleted_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronizeCallback_SynchronizeCompleted_Proxy( 
-    ISyncMgrSynchronizeCallback __RPC_FAR * This,
+    ISyncMgrSynchronizeCallback * This,
     /* [in] */ HRESULT hr);
 
 
@@ -750,10 +752,10 @@ void __RPC_STUB ISyncMgrSynchronizeCallback_SynchronizeCompleted_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronizeCallback_ShowErrorCompleted_Proxy( 
-    ISyncMgrSynchronizeCallback __RPC_FAR * This,
+    ISyncMgrSynchronizeCallback * This,
     /* [in] */ HRESULT hr,
     /* [in] */ ULONG cbNumItems,
-    /* [size_is][unique][in] */ SYNCMGRITEMID __RPC_FAR *pItemIDs);
+    /* [size_is][unique][in] */ SYNCMGRITEMID *pItemIDs);
 
 
 void __RPC_STUB ISyncMgrSynchronizeCallback_ShowErrorCompleted_Stub(
@@ -764,7 +766,7 @@ void __RPC_STUB ISyncMgrSynchronizeCallback_ShowErrorCompleted_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronizeCallback_EnableModeless_Proxy( 
-    ISyncMgrSynchronizeCallback __RPC_FAR * This,
+    ISyncMgrSynchronizeCallback * This,
     /* [in] */ BOOL fEnable);
 
 
@@ -776,7 +778,7 @@ void __RPC_STUB ISyncMgrSynchronizeCallback_EnableModeless_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronizeCallback_Progress_Proxy( 
-    ISyncMgrSynchronizeCallback __RPC_FAR * This,
+    ISyncMgrSynchronizeCallback * This,
     /* [in] */ REFSYNCMGRITEMID pItemID,
     /* [unique][in] */ LPSYNCMGRPROGRESSITEM lpSyncProgressItem);
 
@@ -789,7 +791,7 @@ void __RPC_STUB ISyncMgrSynchronizeCallback_Progress_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronizeCallback_LogError_Proxy( 
-    ISyncMgrSynchronizeCallback __RPC_FAR * This,
+    ISyncMgrSynchronizeCallback * This,
     /* [in] */ DWORD dwErrorLevel,
     /* [in] */ LPCWSTR lpcErrorText,
     /* [unique][in] */ LPSYNCMGRLOGERRORINFO lpSyncLogError);
@@ -803,7 +805,7 @@ void __RPC_STUB ISyncMgrSynchronizeCallback_LogError_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronizeCallback_DeleteLogError_Proxy( 
-    ISyncMgrSynchronizeCallback __RPC_FAR * This,
+    ISyncMgrSynchronizeCallback * This,
     /* [in] */ REFSYNCMGRERRORID ErrorID,
     /* [in] */ DWORD dwReserved);
 
@@ -816,7 +818,7 @@ void __RPC_STUB ISyncMgrSynchronizeCallback_DeleteLogError_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronizeCallback_EstablishConnection_Proxy( 
-    ISyncMgrSynchronizeCallback __RPC_FAR * This,
+    ISyncMgrSynchronizeCallback * This,
     /* [unique][in] */ LPCWSTR lpwszConnection,
     /* [in] */ DWORD dwReserved);
 
@@ -838,7 +840,7 @@ void __RPC_STUB ISyncMgrSynchronizeCallback_EstablishConnection_Stub(
 /* interface ISyncMgrEnumItems */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ ISyncMgrEnumItems __RPC_FAR *LPSYNCMGRENUMITEMS;
+typedef /* [unique] */ ISyncMgrEnumItems *LPSYNCMGRENUMITEMS;
 
 #define SYNCMGRITEM_ITEMFLAGMASK  0x1F
 #define	MAX_SYNCMGRITEMNAME	( 128 )
@@ -850,7 +852,7 @@ enum _tagSYNCMGRITEMFLAGS
 	SYNCMGRITEM_ROAMINGUSER	= 0x4,
 	SYNCMGRITEM_LASTUPDATETIME	= 0x8,
 	SYNCMGRITEM_MAYDELETEITEM	= 0x10
-    }	SYNCMGRITEMFLAGS;
+    } 	SYNCMGRITEMFLAGS;
 
 typedef struct _tagSYNCMGRITEM
     {
@@ -861,9 +863,9 @@ typedef struct _tagSYNCMGRITEM
     HICON hIcon;
     WCHAR wszItemName[ 128 ];
     FILETIME ftLastUpdate;
-    }	SYNCMGRITEM;
+    } 	SYNCMGRITEM;
 
-typedef struct _tagSYNCMGRITEM __RPC_FAR *LPSYNCMGRITEM;
+typedef struct _tagSYNCMGRITEM *LPSYNCMGRITEM;
 
 
 EXTERN_C const IID IID_ISyncMgrEnumItems;
@@ -877,7 +879,7 @@ EXTERN_C const IID IID_ISyncMgrEnumItems;
         virtual HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
             /* [length_is][size_is][out] */ LPSYNCMGRITEM rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [out] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -885,7 +887,7 @@ EXTERN_C const IID IID_ISyncMgrEnumItems;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ ISyncMgrEnumItems __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ ISyncMgrEnumItems **ppenum) = 0;
         
     };
     
@@ -895,40 +897,40 @@ EXTERN_C const IID IID_ISyncMgrEnumItems;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISyncMgrEnumItems __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISyncMgrEnumItems * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISyncMgrEnumItems __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISyncMgrEnumItems * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISyncMgrEnumItems __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISyncMgrEnumItems * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            ISyncMgrEnumItems __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Next )( 
+            ISyncMgrEnumItems * This,
             /* [in] */ ULONG celt,
             /* [length_is][size_is][out] */ LPSYNCMGRITEM rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+            /* [out] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            ISyncMgrEnumItems __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            ISyncMgrEnumItems * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            ISyncMgrEnumItems __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            ISyncMgrEnumItems * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            ISyncMgrEnumItems __RPC_FAR * This,
-            /* [out] */ ISyncMgrEnumItems __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            ISyncMgrEnumItems * This,
+            /* [out] */ ISyncMgrEnumItems **ppenum);
         
         END_INTERFACE
     } ISyncMgrEnumItemsVtbl;
 
     interface ISyncMgrEnumItems
     {
-        CONST_VTBL struct ISyncMgrEnumItemsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISyncMgrEnumItemsVtbl *lpVtbl;
     };
 
     
@@ -966,10 +968,10 @@ EXTERN_C const IID IID_ISyncMgrEnumItems;
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrEnumItems_Next_Proxy( 
-    ISyncMgrEnumItems __RPC_FAR * This,
+    ISyncMgrEnumItems * This,
     /* [in] */ ULONG celt,
     /* [length_is][size_is][out] */ LPSYNCMGRITEM rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [out] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB ISyncMgrEnumItems_Next_Stub(
@@ -980,7 +982,7 @@ void __RPC_STUB ISyncMgrEnumItems_Next_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrEnumItems_Skip_Proxy( 
-    ISyncMgrEnumItems __RPC_FAR * This,
+    ISyncMgrEnumItems * This,
     /* [in] */ ULONG celt);
 
 
@@ -992,7 +994,7 @@ void __RPC_STUB ISyncMgrEnumItems_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrEnumItems_Reset_Proxy( 
-    ISyncMgrEnumItems __RPC_FAR * This);
+    ISyncMgrEnumItems * This);
 
 
 void __RPC_STUB ISyncMgrEnumItems_Reset_Stub(
@@ -1003,8 +1005,8 @@ void __RPC_STUB ISyncMgrEnumItems_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrEnumItems_Clone_Proxy( 
-    ISyncMgrEnumItems __RPC_FAR * This,
-    /* [out] */ ISyncMgrEnumItems __RPC_FAR *__RPC_FAR *ppenum);
+    ISyncMgrEnumItems * This,
+    /* [out] */ ISyncMgrEnumItems **ppenum);
 
 
 void __RPC_STUB ISyncMgrEnumItems_Clone_Stub(
@@ -1024,13 +1026,13 @@ void __RPC_STUB ISyncMgrEnumItems_Clone_Stub(
 /* interface ISyncMgrSynchronizeInvoke */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ ISyncMgrSynchronizeInvoke __RPC_FAR *LPSYNCMGRSYNCHRONIZEINVOKE;
+typedef /* [unique] */ ISyncMgrSynchronizeInvoke *LPSYNCMGRSYNCHRONIZEINVOKE;
 
 typedef 
 enum _tagSYNCMGRINVOKEFLAGS
     {	SYNCMGRINVOKE_STARTSYNC	= 0x2,
 	SYNCMGRINVOKE_MINIMIZED	= 0x4
-    }	SYNCMGRINVOKEFLAGS;
+    } 	SYNCMGRINVOKEFLAGS;
 
 
 EXTERN_C const IID IID_ISyncMgrSynchronizeInvoke;
@@ -1045,7 +1047,7 @@ EXTERN_C const IID IID_ISyncMgrSynchronizeInvoke;
             /* [in] */ DWORD dwInvokeFlags,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ DWORD cbCookie,
-            /* [size_is][unique][in] */ const BYTE __RPC_FAR *lpCookie) = 0;
+            /* [size_is][unique][in] */ const BYTE *lpCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateAll( void) = 0;
         
@@ -1057,33 +1059,33 @@ EXTERN_C const IID IID_ISyncMgrSynchronizeInvoke;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISyncMgrSynchronizeInvoke __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISyncMgrSynchronizeInvoke * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISyncMgrSynchronizeInvoke __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISyncMgrSynchronizeInvoke * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISyncMgrSynchronizeInvoke __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISyncMgrSynchronizeInvoke * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UpdateItems )( 
-            ISyncMgrSynchronizeInvoke __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *UpdateItems )( 
+            ISyncMgrSynchronizeInvoke * This,
             /* [in] */ DWORD dwInvokeFlags,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ DWORD cbCookie,
-            /* [size_is][unique][in] */ const BYTE __RPC_FAR *lpCookie);
+            /* [size_is][unique][in] */ const BYTE *lpCookie);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UpdateAll )( 
-            ISyncMgrSynchronizeInvoke __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *UpdateAll )( 
+            ISyncMgrSynchronizeInvoke * This);
         
         END_INTERFACE
     } ISyncMgrSynchronizeInvokeVtbl;
 
     interface ISyncMgrSynchronizeInvoke
     {
-        CONST_VTBL struct ISyncMgrSynchronizeInvokeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISyncMgrSynchronizeInvokeVtbl *lpVtbl;
     };
 
     
@@ -1115,11 +1117,11 @@ EXTERN_C const IID IID_ISyncMgrSynchronizeInvoke;
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronizeInvoke_UpdateItems_Proxy( 
-    ISyncMgrSynchronizeInvoke __RPC_FAR * This,
+    ISyncMgrSynchronizeInvoke * This,
     /* [in] */ DWORD dwInvokeFlags,
     /* [in] */ REFCLSID rclsid,
     /* [in] */ DWORD cbCookie,
-    /* [size_is][unique][in] */ const BYTE __RPC_FAR *lpCookie);
+    /* [size_is][unique][in] */ const BYTE *lpCookie);
 
 
 void __RPC_STUB ISyncMgrSynchronizeInvoke_UpdateItems_Stub(
@@ -1130,7 +1132,7 @@ void __RPC_STUB ISyncMgrSynchronizeInvoke_UpdateItems_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrSynchronizeInvoke_UpdateAll_Proxy( 
-    ISyncMgrSynchronizeInvoke __RPC_FAR * This);
+    ISyncMgrSynchronizeInvoke * This);
 
 
 void __RPC_STUB ISyncMgrSynchronizeInvoke_UpdateAll_Stub(
@@ -1150,7 +1152,7 @@ void __RPC_STUB ISyncMgrSynchronizeInvoke_UpdateAll_Stub(
 /* interface ISyncMgrRegister */
 /* [unique][uuid][object][local] */ 
 
-typedef /* [unique] */ ISyncMgrRegister __RPC_FAR *LPSYNCMGRREGISTER;
+typedef /* [unique] */ ISyncMgrRegister *LPSYNCMGRREGISTER;
 
 #define SYNCMGRREGISTERFLAGS_MASK  0x07
 
@@ -1159,7 +1161,7 @@ enum _tagSYNCMGRREGISTERFLAGS
     {	SYNCMGRREGISTERFLAG_CONNECT	= 0x1,
 	SYNCMGRREGISTERFLAG_PENDINGDISCONNECT	= 0x2,
 	SYNCMGRREGISTERFLAG_IDLE	= 0x4
-    }	SYNCMGRREGISTERFLAGS;
+    } 	SYNCMGRREGISTERFLAGS;
 
 
 EXTERN_C const IID IID_ISyncMgrRegister;
@@ -1191,30 +1193,30 @@ EXTERN_C const IID IID_ISyncMgrRegister;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ISyncMgrRegister __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ISyncMgrRegister * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ISyncMgrRegister __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ISyncMgrRegister * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ISyncMgrRegister __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ISyncMgrRegister * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterSyncMgrHandler )( 
-            ISyncMgrRegister __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RegisterSyncMgrHandler )( 
+            ISyncMgrRegister * This,
             /* [in] */ REFCLSID rclsidHandler,
             /* [unique][in] */ LPCWSTR pwszDescription,
             /* [in] */ DWORD dwSyncMgrRegisterFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnregisterSyncMgrHandler )( 
-            ISyncMgrRegister __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *UnregisterSyncMgrHandler )( 
+            ISyncMgrRegister * This,
             /* [in] */ REFCLSID rclsidHandler,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHandlerRegistrationInfo )( 
-            ISyncMgrRegister __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetHandlerRegistrationInfo )( 
+            ISyncMgrRegister * This,
             /* [in] */ REFCLSID rclsidHandler,
             /* [out][in] */ LPDWORD pdwSyncMgrRegisterFlags);
         
@@ -1223,7 +1225,7 @@ EXTERN_C const IID IID_ISyncMgrRegister;
 
     interface ISyncMgrRegister
     {
-        CONST_VTBL struct ISyncMgrRegisterVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ISyncMgrRegisterVtbl *lpVtbl;
     };
 
     
@@ -1258,7 +1260,7 @@ EXTERN_C const IID IID_ISyncMgrRegister;
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrRegister_RegisterSyncMgrHandler_Proxy( 
-    ISyncMgrRegister __RPC_FAR * This,
+    ISyncMgrRegister * This,
     /* [in] */ REFCLSID rclsidHandler,
     /* [unique][in] */ LPCWSTR pwszDescription,
     /* [in] */ DWORD dwSyncMgrRegisterFlags);
@@ -1272,7 +1274,7 @@ void __RPC_STUB ISyncMgrRegister_RegisterSyncMgrHandler_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrRegister_UnregisterSyncMgrHandler_Proxy( 
-    ISyncMgrRegister __RPC_FAR * This,
+    ISyncMgrRegister * This,
     /* [in] */ REFCLSID rclsidHandler,
     /* [in] */ DWORD dwReserved);
 
@@ -1285,7 +1287,7 @@ void __RPC_STUB ISyncMgrRegister_UnregisterSyncMgrHandler_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ISyncMgrRegister_GetHandlerRegistrationInfo_Proxy( 
-    ISyncMgrRegister __RPC_FAR * This,
+    ISyncMgrRegister * This,
     /* [in] */ REFCLSID rclsidHandler,
     /* [out][in] */ LPDWORD pdwSyncMgrRegisterFlags);
 
@@ -1301,7 +1303,7 @@ void __RPC_STUB ISyncMgrRegister_GetHandlerRegistrationInfo_Stub(
 #endif 	/* __ISyncMgrRegister_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_mobsync_0112 */
+/* interface __MIDL_itf_mobsync_0117 */
 /* [local] */ 
 
 
@@ -1383,8 +1385,8 @@ int WINAPI SyncMgrResolveConflictA(HWND hWndParent, RFCDLGPARAMA *pdlgParam);
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_mobsync_0112_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_mobsync_0112_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mobsync_0117_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_mobsync_0117_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
@@ -1397,4 +1399,3 @@ extern RPC_IF_HANDLE __MIDL_itf_mobsync_0112_v0_0_s_ifspec;
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

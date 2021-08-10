@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBBlob.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBBlob.pas' rev: 6.00
 
 #ifndef IBBlobHPP
 #define IBBlobHPP
@@ -13,14 +13,12 @@
 #include <IBUtils.hpp>	// Pascal unit
 #include <IBDatabase.hpp>	// Pascal unit
 #include <IB.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <IBExternals.hpp>	// Pascal unit
 #include <IBErrorCodes.hpp>	// Pascal unit
 #include <IBHeader.hpp>	// Pascal unit
-#include <Forms.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
-#include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -67,6 +65,7 @@ public:
 	__fastcall TIBBlobStream(void);
 	__fastcall virtual ~TIBBlobStream(void);
 	int __fastcall Call(int ErrCode, bool RaiseError);
+	void __fastcall Cancel(void);
 	void __fastcall CheckReadable(void);
 	void __fastcall CheckWritable(void);
 	void __fastcall Finalize(void);
@@ -75,8 +74,8 @@ public:
 	virtual int __fastcall Read(void *Buffer, int Count);
 	void __fastcall SaveToFile(AnsiString Filename);
 	void __fastcall SaveToStream(Classes::TStream* Stream);
-	virtual int __fastcall Seek(int Offset, Word Origin);
-	virtual void __fastcall SetSize(int NewSize);
+	virtual int __fastcall Seek(int Offset, Word Origin)/* overload */;
+	virtual void __fastcall SetSize(int NewSize)/* overload */;
 	void __fastcall Truncate(void);
 	virtual int __fastcall Write(const void *Buffer, int Count);
 	__property Ibexternals::PVoid Handle = {read=FHandle};
@@ -91,22 +90,26 @@ public:
 	__property bool Modified = {read=FModified, nodefault};
 	__property Ibdatabase::TIBTransaction* Transaction = {read=GetTransaction, write=SetTransaction};
 	__property Ibheader::PISC_TR_HANDLE TRHandle = {read=GetTRHandle};
+	
+/* Hoisted overloads: */
+	
+public:
+	inline __int64 __fastcall  Seek(const __int64 Offset, Classes::TSeekOrigin Origin){ return TStream::Seek(Offset, Origin); }
+	
+protected:
+	inline void __fastcall  SetSize(const __int64 NewSize){ TStream::SetSize(NewSize); }
+	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
 static const Word DefaultBlobSegmentSize = 0x4000;
-extern PACKAGE void __fastcall GetBlobInfo(Ibheader::PISC_BLOB_HANDLE hBlobHandle, int &NumSegments, 
-	int &MaxSegmentSize, int &TotalSize, short &BlobType);
-extern PACKAGE void __fastcall ReadBlob(Ibheader::PISC_BLOB_HANDLE hBlobHandle, char * Buffer, int BlobSize
-	);
-extern PACKAGE void __fastcall WriteBlob(Ibheader::PISC_BLOB_HANDLE hBlobHandle, char * Buffer, int 
-	BlobSize);
+extern PACKAGE void __fastcall GetBlobInfo(Ibheader::PISC_BLOB_HANDLE hBlobHandle, int &NumSegments, int &MaxSegmentSize, int &TotalSize, short &BlobType);
+extern PACKAGE void __fastcall ReadBlob(Ibheader::PISC_BLOB_HANDLE hBlobHandle, char * Buffer, int BlobSize);
+extern PACKAGE void __fastcall WriteBlob(Ibheader::PISC_BLOB_HANDLE hBlobHandle, char * Buffer, int BlobSize);
 
 }	/* namespace Ibblob */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ibblob;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

@@ -1,21 +1,23 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Kylix and Delphi Cross-Platform Visual Component Library                    }
+{                                                                             }
+{ Copyright (c) 1997, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{       Client DataSet                                  }
-{                                                       }
-{       Copyright (c) 1997,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
 unit DBClient;
 
 {$R-,T-,H+,X+}
 
 interface
-
-uses Windows, SysUtils, ActiveX, Graphics, Classes, Controls, Forms, Db,
-  DSIntf, DBCommon, Midas;
+{$IFDEF MSWINDOWS}
+uses Windows, SysUtils, Variants, Classes, DB, DSIntf, DBCommon, Midas, SqlTimSt, ActiveX;
+{$ENDIF}
+{$IFDEF LINUX}
+uses Libc, SysUtils, Variants, Classes, DB, DSIntf, DBCommon, Midas, SqlTimSt;
+{$ENDIF}
 
 type
 
@@ -42,15 +44,56 @@ type
 
 { TCustomRemoteServer }
 
+  TCustomClientDataSet = class;
   TClientDataSet = class;
 
+  TGetUsernameEvent = procedure(Sender: TObject; var Username: string) of object;
+
   TCustomRemoteServer = class(TCustomConnection)
+  private
+    FAppServer: Variant;
+    FOnGetUsername: TGetUsernameEvent;
   protected
+    function GetAppServer: Variant; virtual;
+    procedure SetAppServer(Value: Variant); virtual;
     function GetServerList: OleVariant; virtual;
     procedure GetProviderNames(Proc: TGetStrProc); virtual;
+    property OnGetUsername: TGetUsernameEvent read FOnGetUsername write FOnGetUsername;
   public
     constructor Create(AOwner: TComponent); override;
     function GetServer: IAppServer; virtual;
+    property AppServer: Variant read GetAppServer;
+  end;
+
+{ TConnectionBroker }
+
+  TConnectionBroker = class(TCustomRemoteServer)
+  private
+    FConnection: TCustomRemoteServer;
+{$IFDEF MSWINDOWS}
+    FStreamedConnected: Boolean;
+{$ENDIF}
+    procedure SetConnection(const Value: TCustomRemoteServer);
+  protected
+{$IFDEF MSWINDOWS}
+    function GetAppServer: Variant; override;
+    function GetConnected: Boolean; override;
+    procedure Loaded; override;
+{$ENDIF}
+    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
+    procedure SetConnected(Value: Boolean); override;
+  public
+    function GetServer: IAppServer; override;
+  published
+    property Connected;
+    property Connection: TCustomRemoteServer read FConnection write SetConnection;
+    property LoginPrompt default False;
+    property AfterConnect;
+    property AfterDisconnect;
+    property BeforeConnect;
+    property BeforeDisconnect;
+    property OnGetUsername;
+    property OnLogin;
   end;
 
 { TAggregate }
@@ -66,7 +109,7 @@ type
     FHAggregate: hDSAggregate;
     FAggregateName: String;
     FGroupingLevel: Integer;
-    FDataSet: TClientDataSet;
+    FDataSet: TCustomClientDataSet;
     FIndexName: string;
     FDataBuffer: Array of Byte;
     FDataType: TFieldType;
@@ -87,14 +130,14 @@ type
     property DependentFields: TBits read FDependentFields;
     property RecBufOfs: Integer read FRecBufOfs write FRecBufOfs;
   public
-    constructor Create(Aggregates: TAggregates; ADataSet: TClientDataSet); reintroduce; overload;
+    constructor Create(Aggregates: TAggregates; ADataSet: TCustomClientDataSet); reintroduce; overload;
     destructor Destroy; override;
     procedure Assign(Source: TPersistent); override;
     function GetDisplayName: string; override;
     function Value: Variant;
     property AggHandle: hDSAggregate read FHAggregate write FHAggregate;
     property InUse: Boolean read FInUse write FInUse default false;
-    property DataSet: TClientDataSet read FDataSet;
+    property DataSet: TCustomClientDataSet read FDataSet;
     property DataSize: Integer read FDataSize;
     property DataType: TFieldType read FDataType;
   published
@@ -147,10 +190,10 @@ type
     Data: record end;
   end;
 
-  TDataPacketFormat = (dfBinary, dfXML);
-  
+  TDataPacketFormat = (dfBinary, dfXML, dfXMLUTF8);
+
   TReconcileAction = (raSkip, raAbort, raMerge, raCorrect, raCancel, raRefresh);
-  TReconcileErrorEvent = procedure(DataSet: TClientDataSet; E: EReconcileError;
+  TReconcileErrorEvent = procedure(DataSet: TCustomClientDataSet; E: EReconcileError;
     UpdateKind: TUpdateKind; var Action: TReconcileAction) of object;
   TRemoteEvent = procedure(Sender: TObject; var OwnerData: OleVariant) of object;
 
@@ -160,7 +203,7 @@ type
   TFetchOption = (foRecord, foBlobs, foDetails);
   TFetchOptions = set of TFetchOption;
 
-  TClientDataSet = class(TDataSet)
+  TCustomClientDataSet = class(TDataSet)
   private
     FActiveAggLists: TList;
     FAggFieldsUpdated: TBits;
@@ -172,12 +215,13 @@ type
     FAggregates: TAggregates;
     FAggregatesActive: Boolean;
     FCommandText: string;
+    FDisableStringTrim: Boolean;
     FDSBase: IDSBase;
     FDSCursor: IDSCursor;
     FDSOptions: TDataSetOptions;
     FFindCursor: IDSCursor;
-    FCloneSource: TClientDataSet;
-    FReconcileDataSet: TClientDataSet;
+    FCloneSource: TCustomClientDataSet;
+    FReconcileDataSet: TCustomClientDataSet;
     FSavedPacket: TDataPacket;
     FDeltaPacket: TDataPacket;
     FParams: TParams;
@@ -204,13 +248,13 @@ type
     FPacketRecords: Integer;
     FConstDisableCount: Integer;
     FMaxAggGroupingLevel: Integer;
-    FParentDataSet: TClientDataSet;
+    FParentDataSet: TCustomClientDataSet;
     { Word & Byte size data members }
     FKeySize: Word;
-    FRecordSize: Word;
-    FBookmarkOfs: Word;
-    FRecInfoOfs: Word;
-    FRecBufSize: Word;
+    FRecordSize: Integer;
+    FBookmarkOfs: Integer;
+    FRecInfoOfs: Integer;
+    FRecBufSize: Integer;
     FReadOnly: Boolean;
     FFieldsIndex: Boolean;
     FCanModify: Boolean;
@@ -233,6 +277,7 @@ type
     FAfterExecute: TRemoteEvent;
     FBeforeGetParams: TRemoteEvent;
     FAfterGetParams: TRemoteEvent;
+    FConnectionBroker: TConnectionBroker;
     procedure AddExprFilter(const Expr: string; Options: TFilterOptions);
     procedure AddFuncFilter;
     function CalcFieldsCallBack(RecBuf: PChar): DBResult; stdcall;
@@ -252,7 +297,7 @@ type
     procedure EncodeIndexDesc(var IndexDesc: DSIDXDesc;
       const Name, Fields, DescFields, CaseInsFields: string; Options: TIndexOptions);
     procedure FetchMoreData(All: Boolean);
-    function FilterCallback(RecBuf: PChar): Bool; stdcall;
+    function FilterCallback(RecBuf: PChar): LongBool; stdcall;
     procedure DoAggUpdates(IsUpdate: Boolean);
     function  GetActiveAggs(Index: Integer) : TList;
     function GetActiveRecBuf(var RecBuf: PChar): Boolean;
@@ -266,7 +311,6 @@ type
     function GetIndexName: string;
     function GetLogChanges: Boolean;
     function GetMasterFields: string;
-    function GetAppServer: IAppServer;
     function GetProviderEOF: Boolean;
     function GetSavePoint: Integer;
     function GetHasAppServer: Boolean;
@@ -285,19 +329,21 @@ type
     procedure ResetAllAggs(Value: Boolean);
     procedure ResetGrouping;
     procedure SetAggsActive(Value: Boolean);
-    procedure SaveDataPacket(XMLFormat: Boolean = False);
+    procedure SetConnectionBroker(const Value: TConnectionBroker);
+    procedure SaveDataPacket(Format: TDataPacketFormat = dfBinary);
     procedure SetData(const Value: OleVariant);
     procedure SetDataSource(Value: TDataSource);
+    procedure SetDisableStringTrim(Value: Boolean);
     procedure SetIndex(const Value: string; FieldsIndex: Boolean);
     procedure SetIndexDefs(Value: TIndexDefs);
+    procedure SetFileName(const Value: string);
     procedure SetIndexFieldNames(const Value: string);
     procedure SetIndexName(const Value: string);
     procedure SetLogChanges(Value: Boolean);
     procedure SetMasterFields(const Value: string);
     procedure SetNotifyCallback;
     procedure SetParams(Value: TParams);
-    procedure SetAppServer(Value: IAppServer);
-    procedure SetProviderEOF(Value: Boolean);
+    procedure SetProviderEOF(Value: Boolean); 
     procedure SetProviderName(const Value: string);
     procedure SetReadOnly(Value: Boolean);
     procedure SetSavePoint(Value: Integer);
@@ -306,14 +352,28 @@ type
     procedure SetupConstraints;
     procedure SetupInternalCalcFields(Add: Boolean);
     procedure WriteData(Stream: TStream);
-    procedure SetAggregates(Value: TAggregates);
     procedure SetStatusFilter(const Value: TUpdateStatusSet);
+    function GetXMLData: string;
+    procedure SetXMLData(const Value: string);
+  protected
+    { IProviderSupport }
+    function PSGetIndexDefs(IndexTypes: TIndexOptions): TIndexDefs; override;
   protected
     { DataIntf Helper functions }
+    procedure DoAfterApplyUpdates(var OwnerData: OleVariant); virtual;
+    procedure DoBeforeApplyUpdates(var OwnerData: OleVariant); virtual;
     function DoApplyUpdates(Delta: OleVariant; MaxErrors: Integer; out ErrorCount: Integer): OleVariant; virtual;
+    procedure DoAfterGetParams(var OwnerData: OleVariant); virtual;
+    procedure DoBeforeGetParams(var OwnerData: OleVariant); virtual;
+    procedure DoAfterGetRecords(var OwnerData: OleVariant); virtual;
+    procedure DoBeforeGetRecords(var OwnerData: OleVariant); virtual;
     function DoGetRecords(Count: Integer; out RecsOut: Integer; Options: Integer;
        const CommandText: WideString; Params: OleVariant): OleVariant; virtual;
+    procedure DoAfterRowRequest(var OwnerData: OleVariant); virtual;
+    procedure DoBeforeRowRequest(var OwnerData: OleVariant); virtual;
     function DoRowRequest(Row: OleVariant; RequestType: Integer): OleVariant; virtual;
+    procedure DoAfterExecute(var OwnerData: OleVariant); virtual;
+    procedure DoBeforeExecute(var OwnerData: OleVariant); virtual;
     procedure DoExecute(Params: OleVariant); virtual;
     { DataSet methods }
     procedure ResetAggField(Field: TField); override;
@@ -340,6 +400,7 @@ type
     procedure FreeKeyBuffers;
     procedure FreeRecordBuffer(var Buffer: PChar); override;
     function GetAggregateValue(Field: TField): Variant; override;
+    function GetAppServer: IAppServer; virtual;
     procedure GetBookmarkData(Buffer: PChar; Data: Pointer); override;
     function GetBookmarkFlag(Buffer: PChar): TBookmarkFlag; override;
     function GetCanModify: Boolean; override;
@@ -386,8 +447,11 @@ type
     procedure RefreshInternalCalcFields(Buffer: PChar); override;
     procedure ReadDataPacket(Stream: TStream; ReadSize: Boolean);
     function ResetCursorRange: Boolean;
+    procedure SetAggregates(Value: TAggregates); virtual;
+    procedure SetAppServer(Value: IAppServer); virtual;
     procedure SetBookmarkData(Buffer: PChar; Data: Pointer); override;
     procedure SetBookmarkFlag(Buffer: PChar; Value: TBookmarkFlag); override;
+    procedure SetCommandText(Value: String); virtual;
     function SetCursorRange: Boolean;
     procedure SetDataSetField(const Value: TDataSetField); override;
     procedure SetFieldData(Field: TField; Buffer: Pointer); override;
@@ -407,104 +471,21 @@ type
     procedure SwitchToIndex(const IndexName: string);
     procedure SyncCursors(Cursor1, Cursor2: IDSCursor);
     procedure UpdateIndexDefs; override;
-    procedure WriteDataPacket(Stream: TStream; WriteSize: Boolean; XMLFormat: Boolean = False);
+    procedure WriteDataPacket(Stream: TStream; WriteSize: Boolean;
+      Format: TDataPacketFormat = dfBinary);
     function ConstraintsStored: Boolean;
-    property DSBase: IDSBase read FDSBase write FDSBase;
-    property DSCursor: IDSCursor read FDSCursor;
-    property ProviderEOF: Boolean read GetProviderEOF write SetProviderEOF;
-  public
-    constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
-    procedure AddIndex(const Name, Fields: string; Options: TIndexOptions;
-      const DescFields: string = ''; const CaseInsFields: string = '';
-      const GroupingLevel: Integer = 0);
-    procedure AppendData(const Data: OleVariant; HitEOF: Boolean);
-    procedure ApplyRange;
-    function ApplyUpdates(MaxErrors: Integer): Integer; virtual;
-    function BookmarkValid(Bookmark: TBookmark): Boolean; override;
-    procedure Cancel; override;
-    procedure CancelRange;
-    procedure CancelUpdates;
-    function CreateBlobStream(Field: TField; Mode: TBlobStreamMode): TStream; override;
-    procedure CreateDataSet;
-    procedure CloneCursor(Source: TClientDataSet; Reset: Boolean;
-      KeepSettings: Boolean = False);
-    function CompareBookmarks(Bookmark1, Bookmark2: TBookmark): Integer; override;
-    function ConstraintsDisabled: Boolean;
-    function DataRequest(Data: OleVariant): OleVariant; virtual;
-    procedure DeleteIndex(const Name: string);
-    procedure DisableConstraints;
-    procedure EnableConstraints;
-    procedure EditKey;
-    procedure EditRangeEnd;
-    procedure EditRangeStart;
-    procedure EmptyDataSet;
-    procedure Execute; virtual;
-    procedure FetchBlobs;
-    procedure FetchDetails;
-    procedure RefreshRecord;
-    procedure FetchParams;
-    function FindKey(const KeyValues: array of const): Boolean; virtual;
-    procedure FindNearest(const KeyValues: array of const);
-    function GetCurrentRecord(Buffer: PChar): Boolean; override;
-    function GetFieldData(Field: TField; Buffer: Pointer): Boolean; override;
-    function GetFieldData(FieldNo: Integer; Buffer: Pointer): Boolean; overload; override;
-    function GetGroupState(Level: Integer): TGroupPosInds;
-    procedure GetIndexInfo(IndexName: string);
-    procedure GetIndexNames(List: TStrings);
-    function GetNextPacket: Integer;
-    function GetOptionalParam(const ParamName: string): OleVariant;
-    procedure GotoCurrent(DataSet: TClientDataSet);
-    function GotoKey: Boolean;
-    procedure GotoNearest;
-    property HasAppServer: Boolean read GetHasAppServer;
-    function Locate(const KeyFields: string; const KeyValues: Variant;
-      Options: TLocateOptions): Boolean; override;
-    function Lookup(const KeyFields: string; const KeyValues: Variant;
-      const ResultFields: string): Variant; override;
-    procedure LoadFromFile(const FileName: string = '');
-    procedure LoadFromStream(Stream: TStream);
-    procedure MergeChangeLog;
-    procedure Post; override;
-    function Reconcile(const Results: OleVariant): Boolean;
-    procedure RevertRecord;
-    procedure SaveToFile(const FileName: string = ''; Format: TDataPacketFormat = dfBinary);
-    procedure SaveToStream(Stream: TStream; Format: TDataPacketFormat = dfBinary);
-    procedure SetAltRecBuffers(Old, New, Cur: PChar);
-    procedure SetKey;
-    procedure SetOptionalParam(const ParamName: string; const Value: OleVariant;
-      IncludeInDelta: Boolean = False);
-    procedure SetProvider(Provider: TComponent);
-    procedure SetRange(const StartValues, EndValues: array of const);
-    procedure SetRangeEnd;
-    procedure SetRangeStart;
-    function UndoLastChange(FollowChange: Boolean): Boolean;
-    function UpdateStatus: TUpdateStatus; override;
-    property ActiveAggs[Index: Integer] : TList read GetActiveAggs;
-    property ChangeCount: Integer read GetChangeCount;
-    property CloneSource: TClientDataSet read FCloneSource;
-    property Data: OleVariant read GetData write SetData;
-    property AppServer: IAppServer read GetAppServer write SetAppServer;
-    property DataSize: Integer read GetDataSize;
-    property Delta: OleVariant read GetDelta;
-    property GroupingLevel: Integer read FGroupingLevel;
-    property IndexFieldCount: Integer read GetIndexFieldCount;
-    property IndexFields[Index: Integer]: TField read GetIndexField write SetIndexField;
-    property KeyExclusive: Boolean read GetKeyExclusive write SetKeyExclusive;
-    property KeyFieldCount: Integer read GetKeyFieldCount write SetKeyFieldCount;
-    property KeySize: Word read FKeySize;
-    property LogChanges: Boolean read GetLogChanges write SetLogChanges;
-    property SavePoint: Integer read GetSavePoint write SetSavePoint;
-    property StatusFilter: TUpdateStatusSet read FStatusFilter write SetStatusFilter;
-  published
     property Active;
     property Aggregates: TAggregates read FAggregates write SetAggregates;
     property AggregatesActive: Boolean read FAggregatesActive write SetAggsActive default False;
     property AutoCalcFields;
-    property CommandText: string read FCommandText write FCommandText;
+    property CommandText: string read FCommandText write SetCommandText;
+    property ConnectionBroker: TConnectionBroker read FConnectionBroker write SetConnectionBroker;
     property Constraints stored ConstraintsStored;
     property DataSetField;
-    property FileName: string read FFileName write FFileName;
+    property DisableStringTrim: Boolean read FDisableStringTrim write SetDisableStringTrim default False;
+    property DSBase: IDSBase read FDSBase write FDSBase;
+    property DSCursor: IDSCursor read FDSCursor;
+    property FileName: string read FFileName write SetFileName;
     property Filter;
     property Filtered;
     property FilterOptions;
@@ -518,6 +499,7 @@ type
     property ObjectView default True;
     property PacketRecords: Integer read FPacketRecords write FPacketRecords default -1;
     property Params: TParams read FParams write SetParams;
+    property ProviderEOF: Boolean read GetProviderEOF write SetProviderEOF;
     property ProviderName: string read FProviderName write SetProviderName;
     property ReadOnly: Boolean read FReadOnly write SetReadOnly default False;
     property RemoteServer: TCustomRemoteServer read GetRemoteServer write SetRemoteServer;
@@ -557,6 +539,157 @@ type
     property AfterExecute: TRemoteEvent read FAfterExecute write FAfterExecute;
     property BeforeGetParams: TRemoteEvent read FBeforeGetParams write FBeforeGetParams;
     property AfterGetParams: TRemoteEvent read FAfterGetParams write FAfterGetParams;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure AddIndex(const Name, Fields: string; Options: TIndexOptions;
+      const DescFields: string = ''; const CaseInsFields: string = '';
+      const GroupingLevel: Integer = 0);
+    procedure AppendData(const Data: OleVariant; HitEOF: Boolean);
+    procedure ApplyRange;
+    function ApplyUpdates(MaxErrors: Integer): Integer; virtual;
+    function BookmarkValid(Bookmark: TBookmark): Boolean; override;
+    procedure Cancel; override;
+    procedure CancelRange;
+    procedure CancelUpdates;
+    function CreateBlobStream(Field: TField; Mode: TBlobStreamMode): TStream; override;
+    procedure CreateDataSet;
+    procedure CloneCursor(Source: TCustomClientDataSet; Reset: Boolean;
+      KeepSettings: Boolean = False); virtual;
+    function CompareBookmarks(Bookmark1, Bookmark2: TBookmark): Integer; override;
+    function ConstraintsDisabled: Boolean;
+    function DataRequest(Data: OleVariant): OleVariant; virtual;
+    procedure DeleteIndex(const Name: string);
+    procedure DisableConstraints;
+    procedure EnableConstraints;
+    procedure EditKey;
+    procedure EditRangeEnd;
+    procedure EditRangeStart;
+    procedure EmptyDataSet;
+    procedure Execute; virtual;
+    procedure FetchBlobs;
+    procedure FetchDetails;
+    procedure RefreshRecord;
+    procedure FetchParams;
+    function FindKey(const KeyValues: array of const): Boolean; virtual;
+    procedure FindNearest(const KeyValues: array of const);
+    function GetCurrentRecord(Buffer: PChar): Boolean; override;
+    function GetFieldData(Field: TField; Buffer: Pointer): Boolean; override;
+    function GetFieldData(FieldNo: Integer; Buffer: Pointer): Boolean; overload; override;
+    function GetGroupState(Level: Integer): TGroupPosInds;
+    procedure GetIndexInfo(IndexName: string);
+    procedure GetIndexNames(List: TStrings);
+    function GetNextPacket: Integer;
+    function GetOptionalParam(const ParamName: string): OleVariant;
+    procedure GotoCurrent(DataSet: TCustomClientDataSet);
+    function GotoKey: Boolean;
+    procedure GotoNearest;
+    property HasAppServer: Boolean read GetHasAppServer;
+    function Locate(const KeyFields: string; const KeyValues: Variant;
+      Options: TLocateOptions): Boolean; override;
+    function Lookup(const KeyFields: string; const KeyValues: Variant;
+      const ResultFields: string): Variant; override;
+    procedure LoadFromFile(const FileName: string = '');
+    procedure LoadFromStream(Stream: TStream);
+    procedure MergeChangeLog;
+    procedure Post; override;
+    function Reconcile(const Results: OleVariant): Boolean;
+    procedure RevertRecord;
+    procedure SaveToFile(const FileName: string = ''; Format: TDataPacketFormat = dfBinary);
+    procedure SaveToStream(Stream: TStream; Format: TDataPacketFormat = dfBinary);
+    procedure SetAltRecBuffers(Old, New, Cur: PChar);
+    procedure SetKey;
+    procedure SetOptionalParam(const ParamName: string; const Value: OleVariant;
+      IncludeInDelta: Boolean = False);
+    procedure SetProvider(Provider: TComponent);
+    procedure SetRange(const StartValues, EndValues: array of const);
+    procedure SetRangeEnd;
+    procedure SetRangeStart;
+    function UndoLastChange(FollowChange: Boolean): Boolean;
+    function UpdateStatus: TUpdateStatus; override;
+    property ActiveAggs[Index: Integer] : TList read GetActiveAggs;
+    property ChangeCount: Integer read GetChangeCount;
+    property CloneSource: TCustomClientDataSet read FCloneSource;
+    property Data: OleVariant read GetData write SetData;
+    property XMLData: string read GetXMLData write SetXMLData;
+    property AppServer: IAppServer read GetAppServer write SetAppServer;
+    property DataSize: Integer read GetDataSize;
+    property Delta: OleVariant read GetDelta;
+    property GroupingLevel: Integer read FGroupingLevel;
+    property IndexFieldCount: Integer read GetIndexFieldCount;
+    property IndexFields[Index: Integer]: TField read GetIndexField write SetIndexField;
+    property KeyExclusive: Boolean read GetKeyExclusive write SetKeyExclusive;
+    property KeyFieldCount: Integer read GetKeyFieldCount write SetKeyFieldCount;
+    property KeySize: Word read FKeySize;
+    property LogChanges: Boolean read GetLogChanges write SetLogChanges;
+    property SavePoint: Integer read GetSavePoint write SetSavePoint;
+    property StatusFilter: TUpdateStatusSet read FStatusFilter write SetStatusFilter;
+  end;
+
+  TClientDataSet = class(TCustomClientDataSet)
+  published
+    property Active;
+    property Aggregates;
+    property AggregatesActive;
+    property AutoCalcFields;
+    property CommandText;
+    property ConnectionBroker;
+    property Constraints;
+    property DataSetField;
+    property DisableStringTrim;
+    property FileName;
+    property Filter;
+    property Filtered;
+    property FilterOptions;
+    property FieldDefs;
+    property IndexDefs;
+    property IndexFieldNames;
+    property IndexName;
+    property FetchOnDemand;
+    property MasterFields;
+    property MasterSource;
+    property ObjectView;
+    property PacketRecords;
+    property Params;
+    property ProviderName;
+    property ReadOnly;
+    property RemoteServer;
+    property StoreDefs;
+    property BeforeOpen;
+    property AfterOpen;
+    property BeforeClose;
+    property AfterClose;
+    property BeforeInsert;
+    property AfterInsert;
+    property BeforeEdit;
+    property AfterEdit;
+    property BeforePost;
+    property AfterPost;
+    property BeforeCancel;
+    property AfterCancel;
+    property BeforeDelete;
+    property AfterDelete;
+    property BeforeScroll;
+    property AfterScroll;
+    property BeforeRefresh;
+    property AfterRefresh;
+    property OnCalcFields;
+    property OnDeleteError;
+    property OnEditError;
+    property OnFilterRecord;
+    property OnNewRecord;
+    property OnPostError;
+    property OnReconcileError;
+    property BeforeApplyUpdates;
+    property AfterApplyUpdates;
+    property BeforeGetRecords;
+    property AfterGetRecords;
+    property BeforeRowRequest;
+    property AfterRowRequest;
+    property BeforeExecute;
+    property AfterExecute;
+    property BeforeGetParams;
+    property AfterGetParams;
   end;
 
 { TClientBlobStream }
@@ -564,7 +697,7 @@ type
   TClientBlobStream = class(TMemoryStream)
   private
     FField: TBlobField;
-    FDataSet: TClientDataSet;
+    FDataSet: TCustomClientDataSet;
     FBuffer: PChar;
     FFieldNo: Integer;
     FModified: Boolean;
@@ -586,9 +719,12 @@ const
   AllRecords = -1;
 
 implementation
-
-uses DBConsts, MidConst, Provider, TypInfo, ComObj;
-
+{$IFDEF MSWINDOWS}
+uses DBConsts, MidConst, Provider, TypInfo, ComObj, FMTBcd;
+{$ENDIF}
+{$IFDEF LINUX}
+uses DBConsts, MidConst, Provider, TypInfo, VarUtils, FMTBcd, Types;
+{$ENDIF}
 { Exceptions }
 
 constructor EDBClient.Create(Message: string; ErrorCode: DBResult);
@@ -676,12 +812,35 @@ begin
 end;
 
 procedure TCustomRemoteServer.GetProviderNames(Proc: TGetStrProc);
+var
+  List: Variant;
+  I: Integer;
 begin
+  Connected := True;
+  VarClear(List);
+  try
+    List := AppServer.AS_GetProviderNames;
+  except
+    { Assume any errors means the list is not available. }
+  end;
+  if VarIsArray(List) and (VarArrayDimCount(List) = 1) then
+    for I := VarArrayLowBound(List, 1) to VarArrayHighBound(List, 1) do
+      Proc(List[I]);
 end;
 
-{ TClientDataSet }
+function TCustomRemoteServer.GetAppServer: Variant;
+begin
+  Result := FAppServer;
+end;
 
-constructor TClientDataSet.Create(AOwner: TComponent);
+procedure TCustomRemoteServer.SetAppServer(Value: Variant);
+begin
+  FAppServer := Value;
+end;
+
+{ TCustomClientDataSet }
+
+constructor TCustomClientDataSet.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FMasterLink := TMasterDataLink.Create(Self);
@@ -693,17 +852,18 @@ begin
   FAggregates := TAggregates.Create(Self);
   FActiveAggLists := TList.Create;
   FOpeningFile := False;
+  FDisableStringTrim := False;
   ObjectView := True;
-  RCS;
 end;
 
-destructor TClientDataSet.Destroy;
+destructor TCustomClientDataSet.Destroy;
 begin
   FSavePacketOnClose := False;
   inherited Destroy;
   ClearSavedPacket;
   FreeDataPacket(FDeltaPacket);
   SetRemoteServer(nil);
+  SetConnectionBroker(nil);
   AppServer := nil;
   FMasterLink.Free;
   FIndexDefs.Free;
@@ -714,12 +874,12 @@ begin
   FAggFieldsUpdated.Free;
 end;
 
-function TClientDataSet.CreateDSBase: IDSBase;
+function TCustomClientDataSet.CreateDSBase: IDSBase;
 begin
   CreateDbClientObject(CLSID_DSBase, IDSBase, Result);
 end;
 
-function TClientDataSet.CreateDSCursor(SourceCursor: IDSCursor): IDSCursor;
+function TCustomClientDataSet.CreateDSCursor(SourceCursor: IDSCursor): IDSCursor;
 begin
   CreateDbClientObject(CLSID_DSCursor, IDSCursor, Result);
   if Assigned(SourceCursor) then
@@ -727,37 +887,80 @@ begin
     Check(Result.InitCursor(FDSBase));
 end;
 
-procedure TClientDataSet.SetParams(Value: TParams);
+procedure TCustomClientDataSet.SetCommandText(Value: String);
+var
+  SQL: String;
+  List: TParams;
+begin
+  if FCommandText <> Value then
+  begin
+    FCommandText := Value;
+    if Value <> '' then
+    begin
+      List := TParams.Create(Self);
+      try
+        SQL := copy(Value, 1, Length(Value));
+        List.ParseSQL(SQL, True);
+        List.AssignValues(FParams);
+        FParams.Clear;
+        FParams.Assign(List);
+      finally
+        List.Free;
+      end;
+    end else
+      FParams.Clear;
+  end;
+end;
+
+procedure TCustomClientDataSet.SetDisableStringTrim(Value: Boolean);
+begin
+  CheckInactive;
+  FDisableStringTrim := Value;
+end;
+
+procedure TCustomClientDataSet.SetParams(Value: TParams);
 begin
   FParams.Assign(Value);
 end;
 
-procedure TClientDataSet.SetOptionalParam(const ParamName: string;
+procedure TCustomClientDataSet.SetOptionalParam(const ParamName: string;
   const Value: OleVariant; IncludeInDelta: Boolean);
 const
-  ParamTypeMap: array[varSmallInt..varByte] of Integer =
+  ParamTypeMap: array[varSmallInt..varInt64] of Integer =
     ( dsfldINT, dsfldINT, dsfldFLOATIEEE, dsfldFLOATIEEE, dsfldBCD,
-      dsfldTIMESTAMP, dsfldZSTRING, 0, 0, dsfldBOOL, 0, 0, 0, 0, 0, dsfldINT);
-  ParamTypeSize: array[varSmallInt..varByte] of Integer =
+      dsfldTIMESTAMP, dsfldZSTRING, 0, 0, dsfldBOOL, 0, 0, 0, 0, 0, dsfldINT,
+      dsfldINT, dsfldINT, dsfldFLOATIEEE);
+  ParamTypeSize: array[varSmallInt..varInt64] of Integer =
     ( SizeOf(SmallInt), SizeOf(Integer), SizeOf(Single), SizeOf(Double),
       SizeOf(Currency), SizeOf(TDateTime), 0, 0, 0, SizeOf(WordBool), 0, 0, 0,
-      0, 0, SizeOf(Byte));
+      0, 0, SizeOf(Byte), SizeOf(SmallInt), SizeOf(Integer), SizeOf(Int64));
 var
   ParamType, ParamLen, t, l: DWord;
   S: string;
   P: Pointer;
   Unlock: Boolean;
   V, Name: Pointer;
+  TimeStampRec: TSQLTimeStamp;
+  FByteBuffer: array of Byte;
 begin
   CheckActive;
   if ((VarType(Value) and varTypeMask) in [varSmallInt, varInteger, varSingle,
-      varDouble, varCurrency, varDate, varOleStr, varBoolean, varByte]) and
+      varDouble, varCurrency, varDate, varOleStr, varBoolean, varByte, varWord,
+      varLongWord, varInt64]) and
      ((not VarIsArray(Value)) or (VarType(Value) and varTypeMask = varByte)) then
   begin
     Unlock := False;
     try
       ParamType := ParamTypeMap[VarType(Value) and varTypeMask];
       ParamLen := ParamTypeSize[VarType(Value) and varTypeMask];
+      if varType(Value) = varOleStr then
+      begin
+        if TryStrToSqlTimeStamp(String(Variant(Value)), TimeStampRec) then
+        begin
+          ParamType := dsfldTIMESTAMP;
+          ParamLen := sizeof(TSQLTimeStamp);
+        end;
+      end;
       if ParamType = dsfldZSTRING then
       begin
         S := Value;
@@ -767,9 +970,17 @@ begin
       if VarIsArray(Value) then
       begin
         ParamType := dsfldBYTES;
-        ParamLen := VarArrayHighBound(Value, 1) - VarArrayLowBound(Value, 1);
+        ParamLen := 1 + (VarArrayHighBound(Value, 1) - VarArrayLowBound(Value, 1));
+        SetLength(FByteBuffer,ParamLen+sizeof(Integer));
+        PInteger(FByteBuffer)^ := ParamLen;
         P := VarArrayLock(Value);
-        Unlock := True;
+        try
+          Move(P^, FByteBuffer[SizeOf(Integer)], ParamLen);
+          Inc(ParamLen, SizeOf(Integer));
+        finally
+          VarArrayUnlock(Value);
+        end;
+        P := FByteBuffer;
       end else
       if (VarType(Value) and varByRef) = varByRef then
         P := TVarData(Value).VPointer else
@@ -789,12 +1000,12 @@ begin
     DatabaseError(SInvalidOptParamType, Self);
 end;
 
-function TClientDataSet.GetOptionalParam(const ParamName: string): OleVariant;
+function TCustomClientDataSet.GetOptionalParam(const ParamName: string): OleVariant;
 begin
   Result := InternalGetOptionalParam(ParamName);
 end;
 
-function TClientDataSet.InternalGetOptionalParam(const ParamName: string;
+function TCustomClientDataSet.InternalGetOptionalParam(const ParamName: string;
   FieldNo: Integer = 0): OleVariant;
 var
   ParamType, ParamLen: DWord;
@@ -807,43 +1018,48 @@ begin
   Name := PChar(ParamName);
   if FDSBase.GetOptParameter(0, FieldNo, Pointer(Name), ParamType,
     ParamLen, Value) <> 0 then Exit;
-  case (ParamType and dsTypeBitsMask) shr dsSizeBitsLen of
-    dsfldINT,
-    dsfldUINT:
+  ParamType := (ParamType and dsTypeBitsMask) shr dsSizeBitsLen;
+  if (ParamType = dsfldBYTES) or
+     ((ParamType in [dsfldINT, dsfldUINT]) and (ParamLen > 4 )) then
     begin
-      case ParamLen of
-        1: Result := Byte(Value^);
-        2: Result := SmallInt(Value^);
-        4: Result := Integer(Value^);
-      end;
-    end;
-    dsfldBOOL: Result := WordBool(Value^);
-    dsfldFLOATIEEE: Result := Double(Value^);
-    dsfldBCD: Result := Currency(Value^);
-    dsfldDATE: Result := TDateTimeRec(Value^).Date - DateDelta;
-    dsfldTIME: Result := TDateTimeRec(Value^).Time / MSecsPerDay;
-    dsfldTIMESTAMP: Result := (TDateTimeRec(Value^).DateTime / MSecsPerDay) - DateDelta;
-    dsfldZSTRING:
-    begin
-      SetString(S, PChar(Value), ParamLen-1);
-      Result := S;
-    end;
-    dsfldBYTES:
-    begin
-      Result := VarArrayCreate([0, ParamLen], varByte);
+      Result := VarArrayCreate([0, ParamLen-sizeof(Integer)], varByte);
       P := VarArrayLock(Result);
       try
-        Move(Value^, P^, ParamLen);
+        Move((PChar(Value) + SizeOf(Integer))^, P^, ParamLen-SizeOf(Integer));
       finally
         VarArrayUnlock(Result);
       end;
+    end else
+    begin
+      case ParamType of
+        dsfldINT,
+        dsfldUINT:
+        begin
+          case ParamLen of
+            1: Result := Byte(Value^);
+            2: Result := SmallInt(Value^);
+            4: Result := Integer(Value^);
+          end;
+        end;
+        dsfldBOOL: Result := WordBool(Value^);
+        dsfldFLOATIEEE: Result := Double(Value^);
+        dsfldBCD: Result := Currency(Value^);
+        dsfldDATE: Result := TDateTimeRec(Value^).Date - DateDelta;
+        dsfldTIME: Result := TDateTimeRec(Value^).Time / MSecsPerDay;
+        dsfldTIMESTAMP: Result := (TDateTimeRec(Value^).DateTime / MSecsPerDay) - DateDelta;
+        dsfldDATETIME: Result := VarSQLTimeStampCreate(TSQLTimeStamp(Value^));
+        dsfldZSTRING:
+        begin
+          SetString(S, PChar(Value), ParamLen-1);
+          Result := S;
+        end;
+        else
+          VarClear(Result);
+      end;
     end;
-  else
-    VarClear(Result);
-  end;
 end;
 
-procedure TClientDataSet.OpenCursor(InfoQuery: Boolean);
+procedure TCustomClientDataSet.OpenCursor(InfoQuery: Boolean);
 var
   RecsOut: Integer;
   Options: TGetRecordOptions;
@@ -863,7 +1079,7 @@ begin
   end;
   if DataSetField <> nil then
   begin
-    FParentDataSet := DataSetField.DataSet as TClientDataSet;
+    FParentDataSet := DataSetField.DataSet as TCustomClientDataSet;
     OpenParentDataSet(FParentDataSet);
     Check(FParentDataSet.DSBase.GetEmbeddedDS(DataSetField.FieldNo, FDSBase));
     FieldDefs.HiddenFields := FParentDataSet.FieldDefs.HiddenFields;
@@ -893,16 +1109,26 @@ begin
   FSavePacketOnClose := True;
 end;
 
-procedure TClientDataSet.FetchParams;
+procedure TCustomClientDataSet.DoAfterGetParams(var OwnerData: OleVariant);
+begin
+  if Assigned(FAfterGetParams) then FAfterGetParams(Self, OwnerData);
+end;
+
+procedure TCustomClientDataSet.DoBeforeGetParams(var OwnerData: OleVariant);
+begin
+  if Assigned(FBeforeGetParams) then FBeforeGetParams(Self, OwnerData);
+end;
+
+procedure TCustomClientDataSet.FetchParams;
 var
   OwnerData: OleVariant;
 begin
-  if Assigned(FBeforeExecute) then FBeforeExecute(Self, OwnerData);
+  DoBeforeGetParams(OwnerData);
   UnpackParams(AppServer.AS_GetParams(ProviderName, OwnerData), Params);
-  if Assigned(FAfterExecute) then FAfterExecute(Self, OwnerData);
+  DoAfterGetParams(OwnerData);
 end;
 
-procedure TClientDataSet.Check(Status: DBResult);
+procedure TCustomClientDataSet.Check(Status: DBResult);
 var
   ErrMsg: array[0..2048] of Char;
 begin
@@ -913,13 +1139,17 @@ begin
   end;
 end;
 
-procedure TClientDataSet.CloseCursor;
+procedure TCustomClientDataSet.CloseCursor;
 var
   Params: OleVariant;
   RecsOut: Integer;
   Options: TGetRecordOptions;
+  ChangesMade: LongBool;
 begin
-  if (FileName <> '') and not (csDesigning in ComponentState) then
+  ChangesMade := True;
+  if Assigned(FDSBase) then
+    FDSBase.GetProp(dspropDATAHASCHANGED, @ChangesMade);
+  if (FileName <> '') and ChangesMade and not (csDesigning in ComponentState) then
     SaveToFile(FileName);
   inherited CloseCursor;
   if HasAppServer then
@@ -938,18 +1168,18 @@ begin
       FAppServer := nil;
     end;
   end
-  else if FSavePacketOnClose  and (FileName <> '') then
+  else if FSavePacketOnClose and (FileName = '') then
     SaveDataPacket;
   FDSBase := nil;
   FParentDataSet := nil;
 end;
 
-procedure TClientDataSet.DefChanged(Sender: TObject);
+procedure TCustomClientDataSet.DefChanged(Sender: TObject);
 begin
   FStoreDefs := True;
 end;
 
-procedure TClientDataSet.InternalInitFieldDefs;
+procedure TCustomClientDataSet.InternalInitFieldDefs;
 var
   FieldID, I: Integer;
   FieldDescs: TFieldDescList;
@@ -969,7 +1199,7 @@ end;
 type
   TPropReader = class(TReader);
 
-procedure TClientDataSet.CheckFieldProps;
+procedure TCustomClientDataSet.CheckFieldProps;
 
   procedure GetTypeName(Field: TObjectField);
   var
@@ -977,7 +1207,7 @@ procedure TClientDataSet.CheckFieldProps;
     i: Integer;
   begin
     V := InternalGetOptionalParam(szTYPENAME, Field.FieldNo);
-    if not VarIsNull(V) and not VarIsEmpty(V) then
+    if not VarIsNull(V) and not VarIsClear(V) then
       Field.ObjectType := V;
     if Field.DataType in [ftADT, ftArray] then
       for i := 0 to Field.FieldCount - 1 do
@@ -999,15 +1229,18 @@ begin
       if Fields[i] is TObjectField then
         GetTypeName(TObjectField(Fields[i]));
       V := InternalGetOptionalParam(szORIGIN, Fields[i].FieldNo);
-      if not VarIsNull(V) and not VarIsEmpty(V) then
+      if not VarIsNull(V) and not VarIsClear(V) then
         Fields[i].Origin := VarToStr(V);
+      V := InternalGetOptionalParam(szPROVFLAGS, Fields[i].FieldNo);
+      if not (VarIsNull(V) or VarIsClear(V)) then
+        Fields[i].ProviderFlags := TProviderFlags(Byte(V));
       V := InternalGetOptionalParam(szFIELDPROPS, Fields[i].FieldNo);
-      if VarIsNull(V) or VarIsEmpty(V) or not VarIsArray(V) then continue;
-      Stream.Size := VarArrayHighBound(V, 1) - SizeOf(Integer);
+      if VarIsNull(V) or VarIsClear(V) or not VarIsArray(V) then continue;
+      Stream.Size := VarArrayHighBound(V, 1);
       P := VarArrayLock(V);
       try
         Stream.Position := 0;
-        Stream.Write(Pointer(Integer(P) + SizeOf(Integer))^, Stream.Size);
+        Stream.Write(Pointer(Integer(P))^, Stream.Size);
         Stream.Position := 0;
       finally
         VarArrayUnlock(V);
@@ -1028,14 +1261,14 @@ begin
   end;
 end;
 
-procedure TClientDataSet.InternalOpen;
+procedure TCustomClientDataSet.InternalOpen;
 
   function GetBoolParam(const ParamName: string): Boolean;
   var
     V: OleVariant;
   begin
     V := GetOptionalParam(ParamName);
-    Result := not VarIsNull(V) and not VarIsEmpty(V) and (VarType(V) = varBoolean);
+    Result := not VarIsNull(V) and not VarIsClear(V) and (VarType(V) = varBoolean);
     if Result then
       Result := V;
   end;
@@ -1088,12 +1321,13 @@ begin
   begin
     if InternalCalcFields and not (csDesigning in ComponentState) then
       Check(FDSBase.SetFieldCalculation(Integer(Self),
-        @TClientDataSet.CalcFieldsCallback));
+        @TCustomClientDataSet.CalcFieldsCallback));
     if FIndexName <> '' then
        if FFieldsIndex then
          SortOnFields(FDSCursor, FIndexName, False, False) else
          SwitchToIndex(FIndexName);
     CheckMasterRange;
+    if DisableStringTrim then FDSBase.SetProp(dspropDISABLESTRINGTRIM, Integer(True));
     if FReadOnly then FDSBase.SetProp(dspropREADONLY, Integer(True));
     ResetAllAggs(FAggregatesActive);
     if Filtered then ActivateFilters;
@@ -1104,7 +1338,7 @@ begin
   SetupConstraints;
 end;
 
-procedure TClientDataSet.InternalClose;
+procedure TCustomClientDataSet.InternalClose;
 begin
   if Filtered then DeactivateFilters;
   FreeKeyBuffers;
@@ -1120,7 +1354,7 @@ begin
   FNotifyCallback := False;
 end;
 
-procedure TClientDataSet.InternalRefresh;
+procedure TCustomClientDataSet.InternalRefresh;
 const
   Options: TGetRecordOptions = [grReset];
 var
@@ -1151,17 +1385,32 @@ begin
   end;
 end;
 
-function TClientDataSet.IsCursorOpen: Boolean;
+function TCustomClientDataSet.IsCursorOpen: Boolean;
 begin
   Result := FDSCursor <> nil;
 end;
 
-procedure TClientDataSet.InternalHandleException;
+procedure TCustomClientDataSet.InternalHandleException;
 begin
-  Application.HandleException(Self)
+ if Assigned(Classes.ApplicationHandleException) then
+   ApplicationHandleException(Self);
 end;
 
-procedure TClientDataSet.SetData(const Value: OleVariant);
+function TCustomClientDataSet.GetData: OleVariant;
+var
+  DataPacket: TDataPacket;
+begin
+  if Active then
+  begin
+    CheckBrowseMode;
+    FDSBase.SetProp(dspropXML_STREAMMODE, xmlOFF);
+    Check(FDSBase.StreamDS(DataPacket));
+  end else
+    SafeArrayCopy(FSavedPacket, DataPacket);
+  DataPacketToVariant(DataPacket, Result);
+end;
+
+procedure TCustomClientDataSet.SetData(const Value: OleVariant);
 begin
   FSavePacketOnClose := False;
   Close;
@@ -1173,37 +1422,44 @@ begin
   end;
 end;
 
-function TClientDataSet.GetData: OleVariant;
+function TCustomClientDataSet.GetXMLData: string;
 var
   DataPacket: TDataPacket;
+  VarPacket: OleVariant;
 begin
   if Active then
   begin
     CheckBrowseMode;
+    FDSBase.SetProp(dspropXML_STREAMMODE, xmlON);
     Check(FDSBase.StreamDS(DataPacket));
-  end else
-    DataPacket := FSavedPacket;
-  DataPacketToVariant(DataPacket, Result);
+    DataPacketToVariant(DataPacket, VarPacket);
+    Result := VariantArrayToString(VarPacket);
+  end;
 end;
 
-procedure TClientDataSet.ClearSavedPacket;
+procedure TCustomClientDataSet.SetXMLData(const Value: string);
+begin
+  SetData(StringToVariantArray(Value)); 
+end;
+
+procedure TCustomClientDataSet.ClearSavedPacket;
 begin
   FreeDataPacket(FSavedPacket);
 end;
 
-procedure TClientDataSet.SaveDataPacket(XMLFormat: Boolean = False);
+procedure TCustomClientDataSet.SaveDataPacket(Format: TDataPacketFormat);
 const
-  StreamMode: array[Boolean] of DWord = (xmlOFF, xmlON); 
+  StreamMode: array[TDataPacketFormat] of DWord = (xmlOFF, xmlON, xmlUTF8);
 begin
   if Assigned(FDSBase) and (DataSetField = nil) then
   begin
-    FDSBase.SetProp(dspropXML_STREAMMODE, StreamMode[XMLFormat]);
+    FDSBase.SetProp(dspropXML_STREAMMODE, StreamMode[Format]);
     ClearSavedPacket;
     Check(FDSBase.StreamDS(FSavedPacket));
   end;
 end;
 
-function TClientDataSet.GetDataSize: Integer;
+function TCustomClientDataSet.GetDataSize: Integer;
 begin
   if Assigned(DataSetField) then
     Result := -1
@@ -1219,7 +1475,7 @@ begin
     Result := 0;
 end;
 
-procedure TClientDataSet.FetchMoreData(All: Boolean);
+procedure TCustomClientDataSet.FetchMoreData(All: Boolean);
 var
   Count: Integer;
   RecsOut: Integer;
@@ -1230,11 +1486,11 @@ begin
   ProviderEOF := RecsOut <> Count;
 end;
 
-procedure TClientDataSet.InternalFetch(Options: TFetchOptions);
+procedure TCustomClientDataSet.InternalFetch(Options: TFetchOptions);
 var
   DataPacket: TDataPacket;
   NewData: OleVariant;
-  BaseDS: TClientDataSet;
+  BaseDS: TCustomClientDataSet;
 begin
   CheckActive;
   UpdateCursorPos;
@@ -1251,33 +1507,34 @@ begin
     DataEvent(deDataSetChange, 0);
 end;
 
-procedure TClientDataSet.FetchBlobs;
+procedure TCustomClientDataSet.FetchBlobs;
 begin
   InternalFetch([foBlobs]);
 end;
 
-procedure TClientDataSet.FetchDetails;
+procedure TCustomClientDataSet.FetchDetails;
 begin
   InternalFetch([foDetails]);
 end;
 
-procedure TClientDataSet.RefreshRecord;
+procedure TCustomClientDataSet.RefreshRecord;
 begin
   InternalFetch([foRecord]);
+  Resync([]);
 end;
 
-procedure TClientDataSet.CheckProviderEOF;
+procedure TCustomClientDataSet.CheckProviderEOF;
 begin
   if HasAppServer and not ProviderEOF and FFetchOnDemand and (FPacketRecords <> 0) then
     FetchMoreData(True);
 end;
 
-procedure TClientDataSet.AddDataPacket(const Data: OleVariant; HitEOF: Boolean);
+procedure TCustomClientDataSet.AddDataPacket(const Data: OleVariant; HitEOF: Boolean);
 begin
   Check(FDSBase.AppendData(VarToDataPacket(Data), HitEOF));
 end;
 
-procedure TClientDataSet.AppendData(const Data: OleVariant; HitEOF: Boolean);
+procedure TCustomClientDataSet.AppendData(const Data: OleVariant; HitEOF: Boolean);
 begin
   if not Active then
   begin
@@ -1296,7 +1553,7 @@ begin
   end;
 end;
 
-function TClientDataSet.GetNextPacket: Integer;
+function TCustomClientDataSet.GetNextPacket: Integer;
 begin
   CheckActive;
   if ProviderEOF then Result := 0 else
@@ -1313,7 +1570,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.SetProviderName(const Value: string);
+procedure TCustomClientDataSet.SetProviderName(const Value: string);
 begin
   if Value = FProviderName then Exit;
   if (Value <> '') then
@@ -1325,14 +1582,16 @@ begin
   FProviderName := Value;
 end;
 
-procedure TClientDataSet.SetProvider(Provider: TComponent);
+procedure TCustomClientDataSet.SetProvider(Provider: TComponent);
 begin
   if Provider is TCustomProvider then
     AppServer := TLocalAppServer.Create(TCustomProvider(Provider)) else
+  if Provider is TDataset then
+    AppServer := TLocalAppServer.Create(TDataset(Provider)) else
     AppServer := nil;
 end;
 
-function TClientDataSet.GetAppServer: IAppServer;
+function TCustomClientDataSet.GetAppServer: IAppServer;
 var
   ProvComp: TComponent;
   DS: TObject;
@@ -1342,6 +1601,8 @@ begin
     if ProviderName <> '' then
       if Assigned(RemoteServer) then
         FAppServer := RemoteServer.GetServer else
+      if Assigned(ConnectionBroker) then
+        FAppServer := ConnectionBroker.GetServer else
       begin
         if Assigned(Owner) then
         begin
@@ -1361,42 +1622,47 @@ begin
   Result := FAppServer;
 end;
 
-function TClientDataSet.GetHasAppServer: Boolean;
+
+function TCustomClientDataSet.GetHasAppServer: Boolean;
 begin
   Result := Assigned(FAppServer);
 end;
 
-procedure TClientDataSet.SetAppServer(Value: IAppServer);
+
+procedure TCustomClientDataSet.SetAppServer(Value: IAppServer);
 begin
   FAppServer := Value;
   if Assigned(Value) then
     ClearSavedPacket;
 end;
 
-procedure TClientDataSet.SetProviderEOF(Value: Boolean);
+procedure TCustomClientDataSet.SetProviderEOF(Value: Boolean);
 begin
   FProviderEOF := Value;
   if Assigned(FCloneSource) then
     FCloneSource.ProviderEOF := Value;
 end;
 
-function TClientDataSet.GetProviderEOF: Boolean;
+function TCustomClientDataSet.GetProviderEOF: Boolean;
 begin
   if Assigned(FCloneSource) then
     FProviderEOF := FCloneSource.ProviderEOF;
   Result := FProviderEOF;
 end;
 
-function TClientDataSet.GetRemoteServer: TCustomRemoteServer;
+function TCustomClientDataSet.GetRemoteServer: TCustomRemoteServer;
 begin
   Result := FRemoteServer;
 end;
 
-procedure TClientDataSet.SetRemoteServer(Value: TCustomRemoteServer);
+procedure TCustomClientDataSet.SetRemoteServer(Value: TCustomRemoteServer);
 begin
   if Value = FRemoteServer then Exit;
+  if Assigned(Value) and Assigned(ConnectionBroker) then
+    SetConnectionBroker(Nil);
   AppServer := nil;
   if Assigned(FRemoteServer) then FRemoteServer.UnRegisterClient(Self);
+  FRemoteServer := Value;
   if Assigned(Value) then
   begin
     CheckInactive;
@@ -1407,7 +1673,7 @@ begin
   FRemoteServer := Value;
 end;
 
-procedure TClientDataSet.Notification(AComponent: TComponent; Operation: TOperation);
+procedure TCustomClientDataSet.Notification(AComponent: TComponent; Operation: TOperation);
 begin
   inherited Notification(AComponent, Operation);
   if (Operation = opRemove) and (AComponent = RemoteServer) then
@@ -1417,9 +1683,11 @@ begin
     FProviderEOF := FCloneSource.ProviderEOF;
     FCloneSource := nil;
   end;
+  if (Operation = opRemove) and (AComponent = FConnectionBroker) then
+    FConnectionBroker:= nil;
 end;
 
-procedure TClientDataSet.DataEvent(Event: TDataEvent; Info: Integer);
+procedure TCustomClientDataSet.DataEvent(Event: TDataEvent; Info: Integer);
 begin
   case Event of
     deParentScroll: MasterChanged(Self);
@@ -1427,13 +1695,13 @@ begin
     deDataSetChange: SetAltRecBuffers(nil, nil, nil);
     deFieldListChange: FAggFieldsInit := False;
     deConnectChange:
-      if not Bool(Info) then
+      if not LongBool(Info) then
         AppServer := nil;
   end;
   inherited;
 end;
 
-function TClientDataSet.GetDelta: OleVariant;
+function TCustomClientDataSet.GetDelta: OleVariant;
 var
   FDeltaDS: IDSBase;
   TempPacket: TDataPacket;
@@ -1446,38 +1714,44 @@ begin
   DataPacketToVariant(TempPacket, Result);
 end;
 
-procedure TClientDataSet.Execute;
+procedure TCustomClientDataSet.Execute;
 begin
   DoExecute(PackageParams(Params));
 end;
 
-function TClientDataSet.DataRequest(Data: OleVariant): OleVariant;
+function TCustomClientDataSet.DataRequest(Data: OleVariant): OleVariant;
 begin
   Result := AppServer.AS_DataRequest(ProviderName, Data);
 end;
 
-function TClientDataSet.ApplyUpdates(MaxErrors: Integer): Integer;
+function TCustomClientDataSet.ApplyUpdates(MaxErrors: Integer): Integer;
+var
+  RootDataset: TCustomClientDataset;
 begin
   CheckBrowseMode;
-  if ChangeCount = 0 then
-    Result := 0 else
-    Reconcile(DoApplyUpdates(Delta, MaxErrors, Result));
+  RootDataset := Self;
+  while RootDataset.FParentDataSet <> nil do
+    RootDataset := RootDataset.FParentDataset;
+  with RootDataset do
+    if ChangeCount = 0 then
+      Result := 0 else
+      Reconcile(DoApplyUpdates(Delta, MaxErrors, Result));
 end;
 
-procedure TClientDataSet.MergeChangeLog;
+procedure TCustomClientDataSet.MergeChangeLog;
 begin
   CheckBrowseMode;
   FDSBase.AcceptChanges;
 end;
 
-procedure TClientDataSet.SetAltRecBuffers(Old, New, Cur: PChar);
+procedure TCustomClientDataSet.SetAltRecBuffers(Old, New, Cur: PChar);
 begin
   FOldValueBuffer := Old;
   FNewValueBuffer := New;
   FCurValueBuffer := Cur;
 end;
 
-function TClientDataSet.ReconcileCallback(
+function TCustomClientDataSet.ReconcileCallback(
     iRslt         : Integer;   { Previous error if any }
     iUpdateKind   : DSAttr;    { Update request Insert/Modify/Delete }
     iResAction    : dsCBRType; { Resolver response }
@@ -1494,7 +1768,7 @@ var
   I: Integer;
   Action: TReconcileAction;
   UpdateKind: TUpdateKind;
-  DataSet: TClientDataSet;
+  DataSet: TCustomClientDataSet;
   E: EReconcileError;
 begin
   FInReconcileCallback := True;
@@ -1514,7 +1788,7 @@ begin
       DataSet := FReconcileDataSet;
       for I := 1 to iLevels do
       begin
-         DataSet := TClientDataSet((DataSet.Fields.FieldByNumber(piFieldIDs^) as TDataSetField).NestedDataSet);
+         DataSet := TCustomClientDataSet((DataSet.Fields.FieldByNumber(piFieldIDs^) as TDataSetField).NestedDataSet);
          inc(piFieldIDs);
       end;
       if UpdateKind = ukDelete then
@@ -1525,28 +1799,37 @@ begin
       E.Free;
     end;
   except
-    Application.HandleException(Self);
+    if Assigned(Classes.ApplicationHandleException) then
+      ApplicationHandleException(Self);
     Action := raAbort;
   end;
   Result := Ord(Action) + 1;
   FInReconcileCallback := False;
 end;
 
-function TClientDataSet.Reconcile(const Results: OleVariant): Boolean;
+function TCustomClientDataSet.Reconcile(const Results: OleVariant): Boolean;
 var
   RCB: Pointer;
+  I: Integer;
+  AField: TField;
 begin
   if VarIsNull(Results) then MergeChangeLog else
   begin
     UpdateCursorPos;
     if Assigned(FOnReconcileError) then
-      RCB := @TClientDataSet.ReconcileCallback else
+      RCB := @TCustomClientDataSet.ReconcileCallback else
       RCB := nil;
-    FReconcileDataSet := TClientDataSet.Create(Self);
+    FReconcileDataSet := TCustomClientDataSet.Create(Self);
     try
       Check(FDSBase.Clone(0, True, False, FReconcileDataSet.FDSBase));
       FReconcileDataSet.ObjectView := True;
       FReconcileDataSet.Open;
+      for I := 0 to FReconcileDataSet.FieldCount - 1 do
+      begin
+        AField := Self.FindField(FReconcileDataSet.Fields[I].FieldName);
+        if Assigned(AField) then
+          FReconcileDataSet.Fields[I].DisplayLabel := AField.DisplayLabel;
+      end;
       Check(FDSBase.Reconcile_MD(FReconcileDataSet.FDSBase, FDeltaPacket,
         VarToDataPacket(Results), Integer(Self), RCB));
     finally
@@ -1558,28 +1841,29 @@ begin
   Result := (ChangeCount = 0);
 end;
 
-procedure TClientDataSet.NotifyCallback;
+procedure TCustomClientDataSet.NotifyCallback;
 begin
   try
     if State = dsBrowse then
     begin
       UpdateCursorPos;
       Resync([]);
+      UpdateCursorPos;
     end;
   except
   end;
 end;
 
-procedure TClientDataSet.SetNotifyCallback;
+procedure TCustomClientDataSet.SetNotifyCallback;
 begin
   if not FNotifyCallback then
   begin
-    Check(FDSCursor.SetNotifyCallBack(Integer(Self), @TClientDataSet.NotifyCallback));
+    Check(FDSCursor.SetNotifyCallBack(Integer(Self), @TCustomClientDataSet.NotifyCallback));
     FNotifyCallback := True;
   end;
 end;
 
-procedure TClientDataSet.CloneCursor(Source: TClientDataSet; Reset, KeepSettings: Boolean);
+procedure TCustomClientDataSet.CloneCursor(Source: TCustomClientDataSet; Reset, KeepSettings: Boolean);
 begin
   Source.CheckActive;
   Close;
@@ -1628,14 +1912,14 @@ begin
   Source.SetNotifyCallback;
 end;
 
-procedure TClientDataSet.EncodeFieldDesc(var FieldDesc: DSFLDDesc;
+procedure TCustomClientDataSet.EncodeFieldDesc(var FieldDesc: DSFLDDesc;
   const Name: string; DataType: TFieldType; Size, Precision: Integer;
   Calculated: Boolean; Attributes: TFieldAttributes);
 begin
   with FieldDesc do
   begin
     FillChar(FieldDesc, SizeOf(FieldDesc), #0);
-    StrCopy(szName, PChar(Name));
+    StrLCopy(szName, PChar(Name), SizeOf(szName)-1);
     if DataType = ftWideString then
       iFldType := fldUNICODE else
       iFldType := FieldTypeMap[DataType];
@@ -1644,9 +1928,11 @@ begin
     iFldAttr := Integer(Byte(Attributes));
     case DataType of
       ftADT, ftArray, ftDataSet, ftString, ftFixedChar, ftGUID, ftBytes,
-      ftVarBytes, ftBlob..ftTypedBinary, ftOraClob, ftOraBlob, ftWideString:
+      ftVarBytes, ftBlob..ftTypedBinary, ftOraClob, ftOraBlob:
         iUnits1 := Size;
-      ftBCD:
+      ftWideString:
+        iUnits1 := Size * 2;
+      ftBCD, ftFMTBcd:
         begin
           { Default precision is 32, Size = Scale }
           if (Precision > 0) and (Precision <= 32) then
@@ -1658,7 +1944,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.CreateDataSet;
+procedure TCustomClientDataSet.CreateDataSet;
 
   procedure GetFieldDefCount(FieldDefs: TFieldDefs; var Count: Integer);
   var
@@ -1667,8 +1953,12 @@ procedure TClientDataSet.CreateDataSet;
     Inc(Count, FieldDefs.Count);
     for I := 0 to FieldDefs.Count - 1 do
     with FieldDefs[I] do
+    begin
+      if Length(Name) >= SizeOf(MIDASNAME) then
+        raise EDSWriter.CreateFmt(SFieldNameTooLarge,[Name, SizeOf(MIDASNAME) - 1]);
       if HasChildDefs then
         GetFieldDefCount(ChildDefs, Count);
+    end;
   end;
 
   procedure EncodeFieldDescs(FieldDefs: TFieldDefs; FieldDescs: TFieldDescList;
@@ -1727,7 +2017,7 @@ begin
   Open;
 end;
 
-procedure TClientDataSet.EmptyDataSet;
+procedure TCustomClientDataSet.EmptyDataSet;
 begin
   CheckBrowseMode;
   Check(FDSBase.Reset);
@@ -1736,7 +2026,7 @@ begin
   InitRecord(ActiveBuffer);
 end;
 
-procedure TClientDataSet.SetupInternalCalcFields(Add: Boolean);
+procedure TCustomClientDataSet.SetupInternalCalcFields(Add: Boolean);
 var
   Precision, I: Integer;
   FieldDesc: DSFLDDesc;
@@ -1748,7 +2038,7 @@ begin
       if Fields[I].FieldKind = fkInternalCalc then
         with Fields[I] do
         begin
-          if DataType = ftBCD then
+          if DataType in [ftBCD,ftFMTBcd] then
             Precision := TBCDField(Fields[I]).Precision else
             Precision := 0;
           EncodeFieldDesc(FieldDesc, FieldName, DataType, Size, Precision, True, []);
@@ -1763,18 +2053,17 @@ begin
   end;
 end;
 
-procedure TClientDataSet.WriteDataPacket(Stream: TStream; WriteSize: Boolean;
-  XMLFormat: Boolean = False);
+procedure TCustomClientDataSet.WriteDataPacket(Stream: TStream; WriteSize: Boolean;
+  Format: TDataPacketFormat = dfBinary);
 var
   Size: Integer;
   DataPtr: Pointer;
 begin
-  RCS;
   if Active then CheckBrowseMode;
   if IsCursorOpen then
   begin
     CheckProviderEOF;
-    SaveDataPacket(XMLFormat);
+    SaveDataPacket(Format);
   end;
   if Assigned(FSavedPacket) then
   begin
@@ -1791,13 +2080,17 @@ begin
   end;
 end;
 
-procedure TClientDataSet.ReadDataPacket(Stream: TStream; ReadSize: Boolean);
+procedure TCustomClientDataSet.ReadDataPacket(Stream: TStream; ReadSize: Boolean);
 var
   Size: Integer;
   DataPtr: Pointer;
+{$IFDEF MSWINDOWS}
   VarBound: TVarArrayBound;
+{$ENDIF}
+{$IFDEF LINUX}
+  VarBound: TVarArrayBoundArray;
+{$ENDIF}
 begin
-  RCS;
   if ReadSize then
     Stream.ReadBuffer(Size, SizeOf(Size)) else
     Size := Stream.Size - Stream.Position;
@@ -1805,7 +2098,12 @@ begin
   begin
     ClearSavedPacket;
     FillChar(VarBound, SizeOf(VarBound), 0);
+{$IFDEF MSWINDOWS}
     VarBound.ElementCount := Size;
+{$ENDIF}
+{$IFDEF LINUX}
+    VarBound[0].ElementCount := Size;
+{$ENDIF}
     FSavedPacket := TDataPacket(SafeArrayCreate(varByte, 1, VarBound));
     try
       SafeArrayAccessData(FSavedPacket, DataPtr);
@@ -1821,26 +2119,31 @@ begin
   end;
 end;
 
-procedure TClientDataSet.LoadFromStream(Stream: TStream);
+procedure TCustomClientDataSet.LoadFromStream(Stream: TStream);
 begin
   Close;
   ReadDataPacket(Stream, False);
   Open;
 end;
 
-procedure TClientDataSet.SaveToStream(Stream: TStream; Format: TDataPacketFormat = dfBinary);
+procedure TCustomClientDataSet.SaveToStream(Stream: TStream; Format: TDataPacketFormat = dfBinary);
 begin
-  WriteDataPacket(Stream, False, (Format=dfXML));
+  WriteDataPacket(Stream, False, Format);
 end;
 
-procedure TClientDataSet.LoadFromFile(const FileName: string = '');
+procedure TCustomClientDataSet.LoadFromFile(const FileName: string = '');
 var
   Stream: TStream;
 begin
   Close;
   if FileName = '' then
     Stream := TFileStream.Create(Self.FileName, fmOpenRead) else
+{$IFDEF MSWINDOWS}
     Stream := TFileStream.Create(FileName, fmOpenRead);
+{$ENDIF}
+{$IFDEF LINUX}
+    Stream := TFileStream.Create(ExpandFileName(FileName), fmOpenRead);
+{$ENDIF}
   try
     FOpeningFile := True;
     try
@@ -1853,30 +2156,41 @@ begin
   end;
 end;
 
-procedure TClientDataSet.SaveToFile(const FileName: string = '';
+procedure TCustomClientDataSet.SaveToFile(const FileName: string = '';
   Format: TDataPacketFormat = dfBinary);
 var
   Stream: TStream;
+  TempFileName: string;
 begin
-  if FileName = '' then
-    Stream := TFileStream.Create(Self.FileName, fmCreate) else
-    Stream := TFileStream.Create(FileName, fmCreate);
-  try
-    if LowerCase(ExtractFileExt(FileName)) = '.xml' then
-      Format := dfXML;
-    SaveToStream(Stream, Format);
-  finally
-    Stream.Free;
+  // Prevent writing a zero-byte file
+  if Active or (Assigned(FDSBase) and (DatasetField = nil)) then
+  begin
+    if FileName = '' then
+      TempFileName := Self.FileName else
+{$IFDEF MSWINDOWS}
+      TempFileName := FileName;
+{$ENDIF}
+{$IFDEF LINUX}
+      TempFileName := ExpandFileName(FileName);
+{$ENDIF}
+    Stream := TFileStream.Create(TempFileName, fmCreate);
+    try
+      if (Format = dfBinary) and (LowerCase(ExtractFileExt(TempFileName)) = '.xml') then
+        Format := dfXML;
+      SaveToStream(Stream, Format);
+    finally
+      Stream.Free;
+    end;
   end;
 end;
 
-procedure TClientDataSet.SetLogChanges(Value: Boolean);
+procedure TCustomClientDataSet.SetLogChanges(Value: Boolean);
 begin
   CheckBrowseMode;
   Check(FDSBase.SetProp(dspropLOGCHANGES, Integer(Value)));
 end;
 
-function TClientDataSet.GetLogChanges: Boolean;
+function TCustomClientDataSet.GetLogChanges: Boolean;
 var
   LogChanges: Integer;
 begin
@@ -1885,12 +2199,12 @@ begin
   Result := Boolean(LogChanges);
 end;
 
-function TClientDataSet.GetCanModify: Boolean;
+function TCustomClientDataSet.GetCanModify: Boolean;
 begin
   Result := FCanModify and not ReadOnly;
 end;
 
-procedure TClientDataSet.SetReadOnly(Value: Boolean);
+procedure TCustomClientDataSet.SetReadOnly(Value: Boolean);
 begin
   FReadOnly := Value;
   if Assigned(FDSBase) then
@@ -1900,19 +2214,19 @@ begin
   end;
 end;
 
-function TClientDataSet.ConstraintsDisabled: Boolean;
+function TCustomClientDataSet.ConstraintsDisabled: Boolean;
 begin
   Result := FConstDisableCount > 0;
 end;
 
-procedure TClientDataSet.DisableConstraints;
+procedure TCustomClientDataSet.DisableConstraints;
 begin
   if FConstDisableCount = 0 then
     Check(FDSBase.SetProp(dspropCONSTRAINTS_DISABLED, Longint(True)));
   Inc(FConstDisableCount);
 end;
 
-procedure TClientDataSet.EnableConstraints;
+procedure TCustomClientDataSet.EnableConstraints;
 begin
   if FConstDisableCount <> 0 then
   begin
@@ -1924,7 +2238,7 @@ end;
 
 { Record Functions }
 
-procedure TClientDataSet.InitBufferPointers(GetProps: Boolean);
+procedure TCustomClientDataSet.InitBufferPointers(GetProps: Boolean);
 var
   CursorProps: DSProps;
 begin
@@ -1942,27 +2256,27 @@ begin
   FRecBufSize := FAggFieldsOfs + FAggFieldsSize;
 end;
 
-function TClientDataSet.AllocRecordBuffer: PChar;
+function TCustomClientDataSet.AllocRecordBuffer: PChar;
 begin
   Result := AllocMem(FRecBufSize);
 end;
 
-procedure TClientDataSet.FreeRecordBuffer(var Buffer: PChar);
+procedure TCustomClientDataSet.FreeRecordBuffer(var Buffer: PChar);
 begin
   FreeMem(Buffer);
 end;
 
-procedure TClientDataSet.InternalInitRecord(Buffer: PChar);
+procedure TCustomClientDataSet.InternalInitRecord(Buffer: PChar);
 begin
   Check(FDSCursor.InitRecord(Buffer));
 end;
 
-procedure TClientDataSet.ClearCalcFields(Buffer: PChar);
+procedure TCustomClientDataSet.ClearCalcFields(Buffer: PChar);
 begin
-  FillChar(Buffer[RecordSize], CalcFieldsSize, 0);
+  FillChar(Buffer[FRecordSize], CalcFieldsSize, 0);
 end;
 
-procedure TClientDataSet.InitRecord(Buffer: PChar);
+procedure TCustomClientDataSet.InitRecord(Buffer: PChar);
 begin
   inherited InitRecord(Buffer);
   with PRecInfo(Buffer + FRecInfoOfs)^ do
@@ -1973,7 +2287,7 @@ begin
   end;
 end;
 
-function TClientDataSet.GetRecord(Buffer: PChar; GetMode: TGetMode;
+function TCustomClientDataSet.GetRecord(Buffer: PChar; GetMode: TGetMode;
   DoCheck: Boolean): TGetResult;
 var
   Status: DBResult;
@@ -2021,7 +2335,7 @@ begin
   end;
 end;
 
-function TClientDataSet.GetCurrentRecord(Buffer: PChar): Boolean;
+function TCustomClientDataSet.GetCurrentRecord(Buffer: PChar): Boolean;
 begin
   if not IsEmpty and (GetBookmarkFlag(ActiveBuffer) = bfCurrent) then
   begin
@@ -2031,7 +2345,7 @@ begin
     Result := False;
 end;
 
-function TClientDataSet.GetRecordCount: Integer;
+function TCustomClientDataSet.GetRecordCount: Integer;
 var
   Status: DBResult;
 begin
@@ -2043,7 +2357,7 @@ begin
     Check(Status);
 end;
 
-function TClientDataSet.GetRecNo: Integer;
+function TCustomClientDataSet.GetRecNo: Integer;
 var
   BufPtr: PChar;
 begin
@@ -2059,7 +2373,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.SetRecNo(Value: Integer);
+procedure TCustomClientDataSet.SetRecNo(Value: Integer);
 begin
   CheckBrowseMode;
   if Value <> RecNo then
@@ -2071,19 +2385,19 @@ begin
   end;
 end;
 
-function TClientDataSet.GetRecordSize: Word;
+function TCustomClientDataSet.GetRecordSize: Word;
 begin
   Result := FRecordSize;
 end;
 
-function TClientDataSet.GetActiveRecBuf(var RecBuf: PChar): Boolean;
+function TCustomClientDataSet.GetActiveRecBuf(var RecBuf: PChar): Boolean;
 
   function GetOriginalBuffer: PChar;
   begin
     UpdateCursorPos;
     Result := TempBuffer;
     if FDSCursor.GetProp(curpropGETORG_RECBUF, Result) <> DBERR_NONE then
-      Result := nil;
+      GetCurrentRecord(Result);
   end;
 
 begin
@@ -2107,14 +2421,14 @@ begin
   Result := RecBuf <> nil;
 end;
 
-function TClientDataSet.GetChangeCount: Integer;
+function TCustomClientDataSet.GetChangeCount: Integer;
 begin
   if Active then
     Check(FDSBase.GetProp(dspropNOOFCHANGES, @Result)) else
     Result := 0;
 end;
 
-function TClientDataSet.UpdateStatus: TUpdateStatus;
+function TCustomClientDataSet.UpdateStatus: TUpdateStatus;
 var
   BufPtr: PChar;
   Attr: Byte;
@@ -2141,7 +2455,7 @@ end;
 
 { Field Related }
 
-procedure TClientDataSet.AddFieldDesc(FieldDescs: TFieldDescList;
+procedure TCustomClientDataSet.AddFieldDesc(FieldDescs: TFieldDescList;
   var DescNo: Integer; var FieldID: Integer; FieldDefs: TFieldDefs);
 var
   FPrecision, I: Integer;
@@ -2188,10 +2502,12 @@ begin
         if iFldSubType = fldstAUTOINC then FType := ftAutoInc;
       fldFLOAT:
         if iFldSubType = fldstMONEY then FType := ftCurrency;
-      fldBCD:
+      fldFMTBCD, fldBCD:
         begin
           FSize := Abs(iUnits2);
           FPrecision := iUnits1;
+          if iFldType = fldFMTBCD then
+            FType := ftFMTBcd;
         end;
       fldBLOB:
         begin
@@ -2231,7 +2547,7 @@ begin
   end;
 end;
 
-function TClientDataSet.GetFieldData(Field: TField; Buffer: Pointer): Boolean;
+function TCustomClientDataSet.GetFieldData(Field: TField; Buffer: Pointer): Boolean;
 var
   IsBlank: LongBool;
   RecBuf: PChar;
@@ -2253,7 +2569,7 @@ begin
         end;
 end;
 
-function TClientDataSet.GetFieldData(FieldNo: Integer; Buffer: Pointer): Boolean; 
+function TCustomClientDataSet.GetFieldData(FieldNo: Integer; Buffer: Pointer): Boolean; 
 var
   RecBuf: PChar;
   IsBlank: LongBool;
@@ -2266,7 +2582,7 @@ begin
   end;
 end;
 
-function TClientDataSet.GetStateFieldValue(State: TDataSetState; Field: TField): Variant;
+function TCustomClientDataSet.GetStateFieldValue(State: TDataSetState; Field: TField): Variant;
 
   function CheckNotChanged(Buffer: PChar): Variant;
   var
@@ -2301,7 +2617,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.SetFieldData(Field: TField; Buffer: Pointer);
+procedure TCustomClientDataSet.SetFieldData(Field: TField; Buffer: Pointer);
 var
   RecBuf: PChar;
 begin
@@ -2333,7 +2649,7 @@ begin
   end;
 end;
 
-function TClientDataSet.CreateBlobStream(Field: TField; Mode: TBlobStreamMode): TStream;
+function TCustomClientDataSet.CreateBlobStream(Field: TField; Mode: TBlobStreamMode): TStream;
 var
   Status: DBResult;
   BlobLen: DWord;
@@ -2348,12 +2664,12 @@ begin
   Result := TClientBlobStream.Create(Field as TBlobField, Mode);
 end;
 
-procedure TClientDataSet.RefreshInternalCalcFields(Buffer: PChar);
+procedure TCustomClientDataSet.RefreshInternalCalcFields(Buffer: PChar);
 begin
   CalculateFields(Buffer);
 end;
 
-function TClientDataSet.CalcFieldsCallBack(RecBuf: PChar): DBResult;
+function TCustomClientDataSet.CalcFieldsCallBack(RecBuf: PChar): DBResult;
 var
   SaveState: TDataSetState;
 begin
@@ -2369,7 +2685,7 @@ begin
   Result := 0;
 end;
 
-procedure TClientDataSet.DataConvert(Field: TField; Source, Dest: Pointer;
+procedure TCustomClientDataSet.DataConvert(Field: TField; Source, Dest: Pointer;
   ToNative: Boolean);
 begin
   if Field.DataType = ftWideString then
@@ -2379,26 +2695,27 @@ begin
       Word(Dest^) := Length(PWideString(Source)^)*2;
       Move(PWideChar(Source^)^, (PWideChar(Dest)+1)^, Word(Dest^));
     end else
-      PWideChar(Dest^) := SysAllocStringLen(PWideChar(PChar(Source)+2), Word(Source^) div 2);
+      SetString(WideString(Dest^), PWideChar(PChar(Source)+2), Word(Source^) div 2);
   end else
     inherited;
 end;
 
 { Navigation / Editing }
 
-procedure TClientDataSet.InternalFirst;
+procedure TCustomClientDataSet.InternalFirst;
 begin
   Check(FDSCursor.MoveToBOF);
 end;
 
-procedure TClientDataSet.InternalLast;
+procedure TCustomClientDataSet.InternalLast;
 begin
   CheckProviderEOF;
   Check(FDSCursor.MoveToEOF);
 end;
 
-procedure TClientDataSet.InternalPost;
+procedure TCustomClientDataSet.InternalPost;
 begin
+  inherited;
   if State = dsEdit then
     Check(FDSCursor.ModifyRecord(ActiveBuffer)) else
     Check(FDSCursor.InsertRecord(ActiveBuffer));
@@ -2406,13 +2723,13 @@ begin
     DoAggUpdates(State = dsEdit);
 end;
 
-procedure TClientDataSet.InternalCancel;
+procedure TCustomClientDataSet.InternalCancel;
 begin
   if BlobFieldCount > 0 then
     FDSBase.ReleaseBlobs(0);
 end;
 
-procedure TClientDataSet.InternalDelete;
+procedure TCustomClientDataSet.InternalDelete;
 begin
   if doDisableDeletes in FDSOptions then
     DatabaseError(SNoDeletesAllowed, Self);
@@ -2421,13 +2738,13 @@ begin
     DoAggUpdates(False);
 end;
 
-procedure TClientDataSet.InternalEdit;
+procedure TCustomClientDataSet.InternalEdit;
 begin
   if doDisableEdits in FDSOptions then
     DatabaseError(SNoEditsAllowed, Self);
 end;
 
-procedure TClientDataSet.DoBeforeInsert;
+procedure TCustomClientDataSet.DoBeforeInsert;
 begin
   if doDisableInserts in FDSOptions then
     DatabaseError(SNoInsertsAllowed, Self);
@@ -2440,13 +2757,13 @@ begin
   end;
 end;
 
-procedure TClientDataSet.InternalInsert;
+procedure TCustomClientDataSet.InternalInsert;
 begin
   DSCursor.SetProp(curpropSETCRACK, 0);
   CursorPosChanged;
 end;
 
-procedure TClientDataSet.Post;
+procedure TCustomClientDataSet.Post;
 var
   CursorProps: DSProps;
 begin
@@ -2464,50 +2781,50 @@ begin
   end;
 end;
 
-procedure TClientDataSet.Cancel;
+procedure TCustomClientDataSet.Cancel;
 begin
   inherited Cancel;
   if State = dsSetKey then
     PostKeyBuffer(False);
 end;
 
-procedure TClientDataSet.InternalAddRecord(Buffer: Pointer; Append: Boolean);
+procedure TCustomClientDataSet.InternalAddRecord(Buffer: Pointer; Append: Boolean);
 begin
   if Append then FDSCursor.MoveToEOF;
   Check(FDSCursor.InsertRecord(Buffer));
 end;
 
-procedure TClientDataSet.InternalGotoBookmark(Bookmark: TBookmark);
+procedure TCustomClientDataSet.InternalGotoBookmark(Bookmark: TBookmark);
 begin
   Check(FDSCursor.MoveToBookmark(Bookmark));
 end;
 
-procedure TClientDataSet.InternalSetToRecord(Buffer: PChar);
+procedure TCustomClientDataSet.InternalSetToRecord(Buffer: PChar);
 begin
   InternalGotoBookmark(Buffer + FBookmarkOfs);
 end;
 
-function TClientDataSet.GetBookmarkFlag(Buffer: PChar): TBookmarkFlag;
+function TCustomClientDataSet.GetBookmarkFlag(Buffer: PChar): TBookmarkFlag;
 begin
   Result := PRecInfo(Buffer + FRecInfoOfs).BookmarkFlag;
 end;
 
-procedure TClientDataSet.SetBookmarkFlag(Buffer: PChar; Value: TBookmarkFlag);
+procedure TCustomClientDataSet.SetBookmarkFlag(Buffer: PChar; Value: TBookmarkFlag);
 begin
   PRecInfo(Buffer + FRecInfoOfs).BookmarkFlag := Value;
 end;
 
-procedure TClientDataSet.GetBookmarkData(Buffer: PChar; Data: Pointer);
+procedure TCustomClientDataSet.GetBookmarkData(Buffer: PChar; Data: Pointer);
 begin
   Move(Buffer[FBookmarkOfs], Data^, BookmarkSize);
 end;
 
-procedure TClientDataSet.SetBookmarkData(Buffer: PChar; Data: Pointer);
+procedure TCustomClientDataSet.SetBookmarkData(Buffer: PChar; Data: Pointer);
 begin
   Move(Data^, ActiveBuffer[FBookmarkOfs], BookmarkSize);
 end;
 
-function TClientDataSet.CompareBookmarks(Bookmark1, Bookmark2: TBookmark): Integer;
+function TCustomClientDataSet.CompareBookmarks(Bookmark1, Bookmark2: TBookmark): Integer;
 const
   RetCodes: array[Boolean, Boolean] of ShortInt = ((2, -1),(1, 0));
 begin
@@ -2520,7 +2837,7 @@ begin
   end;
 end;
 
-function TClientDataSet.BookmarkValid(Bookmark: TBookmark): Boolean;
+function TCustomClientDataSet.BookmarkValid(Bookmark: TBookmark): Boolean;
 begin
   Result := FDSCursor <> nil;
   if Result then
@@ -2531,7 +2848,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.SyncCursors(Cursor1, Cursor2: IDSCursor);
+procedure TCustomClientDataSet.SyncCursors(Cursor1, Cursor2: IDSCursor);
 var
   BM: DSBOOKMRK;
 begin
@@ -2539,7 +2856,7 @@ begin
   Cursor1.MoveToBookmark(@BM);
 end;
 
-function TClientDataSet.UndoLastChange(FollowChange: Boolean): Boolean;
+function TCustomClientDataSet.UndoLastChange(FollowChange: Boolean): Boolean;
 begin
   Cancel;
   CheckBrowseMode;
@@ -2552,7 +2869,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.RevertRecord;
+procedure TCustomClientDataSet.RevertRecord;
 begin
   Cancel;
   CheckBrowseMode;
@@ -2561,13 +2878,13 @@ begin
   Resync([]);
 end;
 
-function TClientDataSet.GetSavePoint: Integer;
+function TCustomClientDataSet.GetSavePoint: Integer;
 begin
   CheckBrowseMode;
   FDSBase.GetProp(dspropGETSAVEPOINT, @Result);
 end;
 
-procedure TClientDataSet.SetSavePoint(Value: Integer);
+procedure TCustomClientDataSet.SetSavePoint(Value: Integer);
 begin
   Cancel;
   CheckBrowseMode;
@@ -2577,14 +2894,14 @@ begin
   Resync([]);
 end;
 
-procedure TClientDataSet.CancelUpdates;
+procedure TCustomClientDataSet.CancelUpdates;
 begin
   SetSavePoint(0);
 end;
 
 { Indexes }
 
-procedure TClientDataSet.UpdateIndexDefs;
+procedure TCustomClientDataSet.UpdateIndexDefs;
 var
   I: Integer;
   CursorProps: DSProps;
@@ -2617,7 +2934,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.DecodeIndexDesc(const IndexDesc: DSIDXDesc;
+procedure TCustomClientDataSet.DecodeIndexDesc(const IndexDesc: DSIDXDesc;
   var Name, Fields, DescFields, CaseInsFields: string; var Options: TIndexOptions);
 
   procedure ConcatField(var FieldList: string; const FieldName: string);
@@ -2669,25 +2986,25 @@ begin
   end;
 end;
 
-procedure TClientDataSet.GetIndexNames(List: TStrings);
+procedure TCustomClientDataSet.GetIndexNames(List: TStrings);
 begin
   IndexDefs.Update;
   IndexDefs.GetItemNames(List);
 end;
 
-function TClientDataSet.GetIndexDefs: TIndexDefs;
+function TCustomClientDataSet.GetIndexDefs: TIndexDefs;
 begin
   if FIndexDefs = nil then
     FIndexDefs := TIndexDefs.Create(Self);
   Result := FIndexDefs;
 end;
 
-procedure TClientDataSet.SetIndexDefs(Value: TIndexDefs);
+procedure TCustomClientDataSet.SetIndexDefs(Value: TIndexDefs);
 begin
   IndexDefs.Assign(Value);
 end;
 
-procedure TClientDataSet.GetIndexInfo(IndexName: string);
+procedure TCustomClientDataSet.GetIndexInfo(IndexName: string);
 var
   Index: Integer;
   IndexDesc: DSIDXDesc;
@@ -2704,7 +3021,7 @@ begin
     FIndexGroupingLevel := 0;
 end;
 
-procedure TClientDataSet.SwitchToIndex(const IndexName: string);
+procedure TCustomClientDataSet.SwitchToIndex(const IndexName: string);
 var
   Status: DBResult;
   IndexDesc: DSIDXDesc;
@@ -2727,7 +3044,9 @@ begin
   GetIndexInfo(IndexName);
 end;
 
-procedure TClientDataSet.SetIndex(const Value: string; FieldsIndex: Boolean);
+procedure TCustomClientDataSet.SetIndex(const Value: string; FieldsIndex: Boolean);
+var
+  SeqNo: DWord;
 begin
   if Active then
   begin
@@ -2741,6 +3060,12 @@ begin
         SwitchToIndex(Value);
       FIndexName := Value;
       FFieldsIndex := FieldsIndex;
+      if FParentDataSet <> nil then
+        with FParentDataSet.DSCursor do begin
+          GetSequenceNumber(SeqNo);
+          MoveToBOF;
+          MoveToSeqNo(SeqNo);
+        end;
       if FAggregatesActive then
       begin
         FAggFieldsInit := False;
@@ -2764,7 +3089,7 @@ begin
   FFieldsIndex := FieldsIndex;
 end;
 
-procedure TClientDataSet.EncodeIndexDesc(var IndexDesc: DSIDXDesc;
+procedure TCustomClientDataSet.EncodeIndexDesc(var IndexDesc: DSIDXDesc;
   const Name, Fields, DescFields, CaseInsFields: string; Options: TIndexOptions);
 
   function IndexFieldOfs(const FieldName: string): Integer;
@@ -2781,12 +3106,12 @@ procedure TClientDataSet.EncodeIndexDesc(var IndexDesc: DSIDXDesc;
 var
   Pos: Integer;
   Descending,
-  CaseInsensitive: Bool;
+  CaseInsensitive: LongBool;
 begin
   FillChar(IndexDesc, SizeOf(IndexDesc), 0);
   with IndexDesc do
   begin
-    StrCopy(szName, PChar(Name));
+    StrLCopy(szName, PChar(Name), SizeOf(szName) - 1);
     bUnique := ixUnique in Options;
     Descending := (ixDescending in Options) and (DescFields = '');
     CaseInsensitive := (ixCaseInsensitive in Options) and (CaseInsFields = '');
@@ -2808,7 +3133,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.AddIndex(const Name, Fields: string;
+procedure TCustomClientDataSet.AddIndex(const Name, Fields: string;
   Options: TIndexOptions; const DescFields, CaseInsFields: string;
   const GroupingLevel: Integer);
 var
@@ -2831,7 +3156,7 @@ begin
     IndexDefs.Updated := False;
 end;
 
-procedure TClientDataSet.DeleteIndex(const Name: string);
+procedure TCustomClientDataSet.DeleteIndex(const Name: string);
 begin
   CheckBrowseMode;
   if AnsiCompareText(Name, IndexName) = 0 then IndexName := '';
@@ -2839,7 +3164,7 @@ begin
   IndexDefs.Updated := False;
 end;
 
-function TClientDataSet.GetIndexField(Index: Integer): TField;
+function TCustomClientDataSet.GetIndexField(Index: Integer): TField;
 var
   FieldNo: Integer;
 begin
@@ -2851,7 +3176,7 @@ begin
     DatabaseErrorFmt(SIndexFieldMissing, [FieldDefs[FieldNo - 1].Name], Self);
 end;
 
-function TClientDataSet.GetIsIndexField(Field: TField): Boolean;
+function TCustomClientDataSet.GetIsIndexField(Field: TField): Boolean;
 var
   I: Integer;
 begin
@@ -2866,44 +3191,54 @@ begin
         end;
 end;
 
-function TClientDataSet.GetIndexName: string;
+function TCustomClientDataSet.GetIndexName: string;
 begin
   if FFieldsIndex then Result := '' else Result := FIndexName;
 end;
 
-procedure TClientDataSet.SetIndexName(const Value: string);
+procedure TCustomClientDataSet.SetFileName(const Value: string);
+begin
+{$IFDEF MSWINDOWS}
+  FFileName := Value;
+{$ENDIF}
+{$IFDEF LINUX}
+  FFileName := ExpandFileName(Value);
+{$ENDIF}
+end;
+
+procedure TCustomClientDataSet.SetIndexName(const Value: string);
 begin
   SetIndex(Value, False);
 end;
 
-procedure TClientDataSet.SetIndexField(Index: Integer; Value: TField);
+procedure TCustomClientDataSet.SetIndexField(Index: Integer; Value: TField);
 begin
   GetIndexField(Index).Assign(Value);
 end;
 
-function TClientDataSet.GetIndexFieldNames: string;
+function TCustomClientDataSet.GetIndexFieldNames: string;
 begin
   if FFieldsIndex then Result := FIndexName else Result := '';
 end;
 
-procedure TClientDataSet.SetIndexFieldNames(const Value: string);
+procedure TCustomClientDataSet.SetIndexFieldNames(const Value: string);
 begin
   SetIndex(Value, Value <> '');
 end;
 
-function TClientDataSet.GetIndexFieldCount: Integer;
+function TCustomClientDataSet.GetIndexFieldCount: Integer;
 begin
   Result := FIndexFieldCount;
 end;
 
-procedure TClientDataSet.SortOnFields(Cursor: IDSCursor; const Fields: string;
+procedure TCustomClientDataSet.SortOnFields(Cursor: IDSCursor; const Fields: string;
   CaseInsensitive, Descending: Boolean);
 var
   I: Integer;
   FieldList: TList;
   DescFlags, CaseFlags: DSKEYBOOL;
 
-  function GetFlags(Flag: Bool; var FlagArray: DSKEYBOOL): Pointer;
+  function GetFlags(Flag: LongBool; var FlagArray: DSKEYBOOL): Pointer;
   var
     J: Integer;
   begin
@@ -2923,7 +3258,7 @@ begin
       if TField(FieldList[I]).FieldNo > 0 then
         FieldList[I] := Pointer(TField(FieldList[I]).FieldNo) else
         DatabaseError(SFieldIndexError, Self);
-    Check(Cursor.SortOnFields(FieldList.Count, PDWord(FieldList.List),
+    Check(Cursor.SortOnFields(FieldList.Count, PLongWord(FieldList.List),
       GetFlags(Descending, DescFlags), GetFlags(CaseInsensitive, CaseFlags)));
     GetIndexInfo('');
   finally
@@ -2933,7 +3268,7 @@ end;
 
 { Ranges / Keys }
 
-procedure TClientDataSet.AllocKeyBuffers;
+procedure TCustomClientDataSet.AllocKeyBuffers;
 var
   KeyIndex: TKeyIndex;
 begin
@@ -2950,12 +3285,12 @@ begin
   end;
 end;
 
-function TClientDataSet.GetKeyBuffer(KeyIndex: TKeyIndex): PKeyBuffer;
+function TCustomClientDataSet.GetKeyBuffer(KeyIndex: TKeyIndex): PKeyBuffer;
 begin
   Result := FKeyBuffers[KeyIndex];
 end;
 
-procedure TClientDataSet.FreeKeyBuffers;
+procedure TCustomClientDataSet.FreeKeyBuffers;
 var
   KeyIndex: TKeyIndex;
 begin
@@ -2963,19 +3298,19 @@ begin
     DisposeMem(FKeyBuffers[KeyIndex], SizeOf(TKeyBuffer) + FRecordSize);
 end;
 
-function TClientDataSet.InitKeyBuffer(Buffer: PKeyBuffer): PKeyBuffer;
+function TCustomClientDataSet.InitKeyBuffer(Buffer: PKeyBuffer): PKeyBuffer;
 begin
   FillChar(Buffer^, SizeOf(TKeyBuffer) + FRecordSize, 0);
   Check(FDSCursor.InitRecord(PChar(Buffer) + SizeOf(TKeyBuffer)));
   Result := Buffer;
 end;
 
-procedure TClientDataSet.CheckSetKeyMode;
+procedure TCustomClientDataSet.CheckSetKeyMode;
 begin
   if State <> dsSetKey then DatabaseError(SNotEditing, Self);
 end;
 
-function TClientDataSet.SetCursorRange: Boolean;
+function TCustomClientDataSet.SetCursorRange: Boolean;
 var
   RangeStart, RangeEnd: PKeyBuffer;
   StartKey, EndKey: PChar;
@@ -3007,7 +3342,7 @@ begin
   end;
 end;
 
-function TClientDataSet.ResetCursorRange: Boolean;
+function TCustomClientDataSet.ResetCursorRange: Boolean;
 begin
   Result := False;
   if FKeyBuffers[kiCurRangeStart].Modified or
@@ -3021,7 +3356,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.SetLinkRanges(MasterFields: TList);
+procedure TCustomClientDataSet.SetLinkRanges(MasterFields: TList);
 var
   I: Integer;
   SaveState: TDataSetState;
@@ -3040,7 +3375,7 @@ begin
     SizeOf(TKeyBuffer) + FRecordSize);
 end;
 
-procedure TClientDataSet.SetKeyBuffer(KeyIndex: TKeyIndex; Clear: Boolean);
+procedure TCustomClientDataSet.SetKeyBuffer(KeyIndex: TKeyIndex; Clear: Boolean);
 begin
   CheckBrowseMode;
   FKeyBuffer := FKeyBuffers[KeyIndex];
@@ -3051,7 +3386,7 @@ begin
   DataEvent(deDataSetChange, 0);
 end;
 
-procedure TClientDataSet.PostKeyBuffer(Commit: Boolean);
+procedure TCustomClientDataSet.PostKeyBuffer(Commit: Boolean);
 begin
   DataEvent(deCheckBrowseMode, 0);
   if Commit then
@@ -3061,31 +3396,31 @@ begin
   DataEvent(deDataSetChange, 0);
 end;
 
-function TClientDataSet.GetKeyExclusive: Boolean;
+function TCustomClientDataSet.GetKeyExclusive: Boolean;
 begin
   CheckSetKeyMode;
   Result := FKeyBuffer.Exclusive;
 end;
 
-procedure TClientDataSet.SetKeyExclusive(Value: Boolean);
+procedure TCustomClientDataSet.SetKeyExclusive(Value: Boolean);
 begin
   CheckSetKeyMode;
   FKeyBuffer.Exclusive := Value;
 end;
 
-function TClientDataSet.GetKeyFieldCount: Integer;
+function TCustomClientDataSet.GetKeyFieldCount: Integer;
 begin
   CheckSetKeyMode;
   Result := FKeyBuffer.FieldCount;
 end;
 
-procedure TClientDataSet.SetKeyFieldCount(Value: Integer);
+procedure TCustomClientDataSet.SetKeyFieldCount(Value: Integer);
 begin
   CheckSetKeyMode;
   FKeyBuffer.FieldCount := Value;
 end;
 
-procedure TClientDataSet.SetKeyFields(KeyIndex: TKeyIndex;
+procedure TCustomClientDataSet.SetKeyFields(KeyIndex: TKeyIndex;
   const Values: array of const);
 var
   I: Integer;
@@ -3104,7 +3439,7 @@ begin
     begin
       { Skip the linking field for nested datasets }
       for I := 0 to High(Values) do GetIndexField(I+1).AssignValue(Values[I]);
-      FKeyBuffer^.FieldCount := High(Values);
+      FKeyBuffer^.FieldCount := High(Values) + 1;
     end;
     FKeyBuffer^.Modified := Modified;
   finally
@@ -3113,21 +3448,21 @@ begin
   DoAfterScroll;
 end;
 
-function TClientDataSet.FindKey(const KeyValues: array of const): Boolean;
+function TCustomClientDataSet.FindKey(const KeyValues: array of const): Boolean;
 begin
   CheckBrowseMode;
   SetKeyFields(kiLookup, KeyValues);
   Result := GotoKey;
 end;
 
-procedure TClientDataSet.FindNearest(const KeyValues: array of const);
+procedure TCustomClientDataSet.FindNearest(const KeyValues: array of const);
 begin
   CheckBrowseMode;
   SetKeyFields(kiLookup, KeyValues);
   GotoNearest
 end;
 
-function TClientDataSet.GotoKey: Boolean;
+function TCustomClientDataSet.GotoKey: Boolean;
 var
   KeyBuffer: PKeyBuffer;
   RecBuffer: PChar;
@@ -3141,7 +3476,7 @@ begin
   if Result then Resync([rmExact, rmCenter]);
 end;
 
-procedure TClientDataSet.GotoNearest;
+procedure TCustomClientDataSet.GotoNearest;
 var
   SearchCond: DBSearchCond;
   KeyBuffer: PKeyBuffer;
@@ -3158,30 +3493,30 @@ begin
   Resync([rmCenter]);
 end;
 
-procedure TClientDataSet.SetKey;
+procedure TCustomClientDataSet.SetKey;
 begin
   SetKeyBuffer(kiLookup, True);
 end;
 
-procedure TClientDataSet.EditKey;
+procedure TCustomClientDataSet.EditKey;
 begin
   SetKeyBuffer(kiLookup, False);
 end;
 
-procedure TClientDataSet.ApplyRange;
+procedure TCustomClientDataSet.ApplyRange;
 begin
   CheckBrowseMode;
   if SetCursorRange then First;
 end;
 
-procedure TClientDataSet.CancelRange;
+procedure TCustomClientDataSet.CancelRange;
 begin
   CheckBrowseMode;
   UpdateCursorPos;
   if ResetCursorRange then Resync([]);
 end;
 
-procedure TClientDataSet.SetRange(const StartValues, EndValues: array of const);
+procedure TCustomClientDataSet.SetRange(const StartValues, EndValues: array of const);
 begin
   CheckBrowseMode;
   SetKeyFields(kiRangeStart, StartValues);
@@ -3189,29 +3524,29 @@ begin
   ApplyRange;
 end;
 
-procedure TClientDataSet.SetRangeEnd;
+procedure TCustomClientDataSet.SetRangeEnd;
 begin
   SetKeyBuffer(kiRangeEnd, True);
 end;
 
-procedure TClientDataSet.SetRangeStart;
+procedure TCustomClientDataSet.SetRangeStart;
 begin
   SetKeyBuffer(kiRangeStart, True);
 end;
 
-procedure TClientDataSet.EditRangeEnd;
+procedure TCustomClientDataSet.EditRangeEnd;
 begin
   SetKeyBuffer(kiRangeEnd, False);
 end;
 
-procedure TClientDataSet.EditRangeStart;
+procedure TCustomClientDataSet.EditRangeStart;
 begin
   SetKeyBuffer(kiRangeStart, False);
 end;
 
 { Master / Detail }
 
-procedure TClientDataSet.CheckDetailRecords;
+procedure TCustomClientDataSet.CheckDetailRecords;
 var
   I, RecCount: Integer;
   MasterValues: OleVariant;
@@ -3231,14 +3566,14 @@ begin
       MasterValues := VarArrayCreate([0, FMasterLink.Fields.Count - 1], varVariant);
       for I := 0 to FMasterLink.Fields.Count - 1 do
         with TField(FMasterLink.Fields[I]) do
-          MasterValues[I] := VarArrayOf([IndexFields[I].FieldName, Value]);
+          MasterValues[I] := VarArrayOf([IndexFields[I].FieldName, Value, IndexFields[I].DataType]);
       AddDataPacket(DoGetRecords(-1, RecCount, 0, '', MasterValues), False);
       if Active then First;
     end;
   end;
 end;
 
-procedure TClientDataSet.CheckMasterRange;
+procedure TCustomClientDataSet.CheckMasterRange;
 begin
   if FMasterLink.Active and (FMasterLink.Fields.Count > 0) then
   begin
@@ -3248,7 +3583,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.MasterChanged(Sender: TObject);
+procedure TCustomClientDataSet.MasterChanged(Sender: TObject);
 begin
   CheckBrowseMode;
   if DataSetField = nil then
@@ -3273,12 +3608,12 @@ begin
   end;
 end;
 
-procedure TClientDataSet.MasterDisabled(Sender: TObject);
+procedure TCustomClientDataSet.MasterDisabled(Sender: TObject);
 begin
   CancelRange;
 end;
 
-procedure TClientDataSet.SetDataSetField(const Value: TDataSetField);
+procedure TCustomClientDataSet.SetDataSetField(const Value: TDataSetField);
 begin
   if Assigned(Value) then
   begin
@@ -3290,28 +3625,28 @@ begin
   inherited;
 end;
 
-procedure TClientDataSet.Loaded;
+procedure TCustomClientDataSet.Loaded;
 begin
   inherited Loaded;
   if Active and Assigned(FSavedPacket) then Open;
 end;
 
-procedure TClientDataSet.ReadData(Stream: TStream);
+procedure TCustomClientDataSet.ReadData(Stream: TStream);
 begin
   ReadDataPacket(Stream, True);
 end;
 
-procedure TClientDataSet.WriteData(Stream: TStream);
+procedure TCustomClientDataSet.WriteData(Stream: TStream);
 begin
   WriteDataPacket(Stream, True);
 end;
 
-function TClientDataSet.GetDataSource: TDataSource;
+function TCustomClientDataSet.GetDataSource: TDataSource;
 begin
   Result := FMasterLink.DataSource;
 end;
 
-procedure TClientDataSet.SetDataSource(Value: TDataSource);
+procedure TCustomClientDataSet.SetDataSource(Value: TDataSource);
 begin
   if (Value <> nil) and (DataSetField <> nil) then
     DatabaseError(SNoNestedMasterSource, Self);
@@ -3328,17 +3663,17 @@ begin
   end;
 end;
 
-function TClientDataSet.GetMasterFields: string;
+function TCustomClientDataSet.GetMasterFields: string;
 begin
   Result := FMasterLink.FieldNames;
 end;
 
-procedure TClientDataSet.SetMasterFields(const Value: string);
+procedure TCustomClientDataSet.SetMasterFields(const Value: string);
 begin
   FMasterLink.FieldNames := Value;
 end;
 
-procedure TClientDataSet.DoOnNewRecord;
+procedure TCustomClientDataSet.DoOnNewRecord;
 var
   I: Integer;
 begin
@@ -3351,14 +3686,14 @@ begin
   inherited DoOnNewRecord;
 end;
 
-procedure TClientDataSet.DefineProperties(Filer: TFiler);
+procedure TCustomClientDataSet.DefineProperties(Filer: TFiler);
 
   function DataStored: Boolean;
   begin
     Result := Active and (DataSetField = nil) and not HasAppServer and
       (ProviderName = '') and (FCloneSource = nil);
     if Result and Assigned(Filer.Ancestor) then
-      with TClientDataSet(Filer.Ancestor) do
+      with TCustomClientDataSet(Filer.Ancestor) do
         Result := not Active or HasAppServer or (ProviderName <> '') or
           (DataSize <> Self.DataSize);
   end;
@@ -3370,7 +3705,7 @@ end;
 
 { Filters }
 
-procedure TClientDataSet.ActivateFilters;
+procedure TCustomClientDataSet.ActivateFilters;
 begin
   if Filter <> '' then
     AddExprFilter(Filter, FilterOptions);
@@ -3378,7 +3713,7 @@ begin
     AddFuncFilter;
 end;
 
-procedure TClientDataSet.DeactivateFilters;
+procedure TCustomClientDataSet.DeactivateFilters;
 begin
   if FFuncFilter <> nil then
   begin
@@ -3392,7 +3727,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.AddExprFilter(const Expr: string; Options: TFilterOptions);
+procedure TCustomClientDataSet.AddExprFilter(const Expr: string; Options: TFilterOptions);
 begin
   if FExprFilter <> nil then FDSCursor.DropFilter(FExprFilter);
   if Expr <> '' then
@@ -3405,7 +3740,7 @@ begin
     end;
 end;
 
-function TClientDataSet.FilterCallback(RecBuf: PChar): Bool;
+function TCustomClientDataSet.FilterCallback(RecBuf: PChar): LongBool;
 var
   SaveState: TDataSetState;
   Accept: Boolean;
@@ -3416,21 +3751,22 @@ begin
     Accept := True;
     OnFilterRecord(Self, Accept);
   except
-    Application.HandleException(Self);
+    if Assigned(Classes.ApplicationHandleException) then
+      ApplicationHandleException(Self);
   end;
   RestoreState(SaveState);
   Result := Accept;
 end;
 
-procedure TClientDataSet.AddFuncFilter;
+procedure TCustomClientDataSet.AddFuncFilter;
 begin
   if FFuncFilter <> nil then FDSCursor.DropFilter(FFuncFilter);
   CheckProviderEOF;
-  Check(FDSCursor.AddFilterCallBack(Integer(Self), @TClientDataSet.FilterCallback,
+  Check(FDSCursor.AddFilterCallBack(Integer(Self), @TCustomClientDataSet.FilterCallback,
     FFuncFilter));
 end;
 
-procedure TClientDataSet.SetFilterData(const Text: string; Options: TFilterOptions);
+procedure TCustomClientDataSet.SetFilterData(const Text: string; Options: TFilterOptions);
 begin
   if Active and Filtered then
   begin
@@ -3444,17 +3780,17 @@ begin
   inherited SetFilterOptions(Options);
 end;
 
-procedure TClientDataSet.SetFilterText(const Value: string);
+procedure TCustomClientDataSet.SetFilterText(const Value: string);
 begin
   SetFilterData(Value, FilterOptions);
 end;
 
-procedure TClientDataSet.SetFilterOptions(Value: TFilterOptions);
+procedure TCustomClientDataSet.SetFilterOptions(Value: TFilterOptions);
 begin
   SetFilterData(Filter, Value);
 end;
 
-procedure TClientDataSet.SetOnFilterRecord(const Value: TFilterRecordEvent);
+procedure TCustomClientDataSet.SetOnFilterRecord(const Value: TFilterRecordEvent);
 begin
   if Active and Filtered then
   begin
@@ -3474,7 +3810,7 @@ begin
   inherited SetOnFilterRecord(Value);
 end;
 
-procedure TClientDataSet.SetFiltered(Value: Boolean);
+procedure TCustomClientDataSet.SetFiltered(Value: Boolean);
 begin
   if Active then
   begin
@@ -3491,7 +3827,7 @@ begin
     inherited SetFiltered(Value);
 end;
 
-procedure TClientDataSet.SetStatusFilter(const Value: TUpdateStatusSet);
+procedure TCustomClientDataSet.SetStatusFilter(const Value: TUpdateStatusSet);
 var
   StatusValues: Integer;
 begin
@@ -3517,7 +3853,7 @@ begin
   Resync([]);
 end;
 
-function TClientDataSet.FindRecord(Restart, GoForward: Boolean): Boolean;
+function TCustomClientDataSet.FindRecord(Restart, GoForward: Boolean): Boolean;
 var
   Status: DBResult;
   Cursor: IDSCursor;
@@ -3567,12 +3903,12 @@ begin
   if Result then DoAfterScroll;
 end;
 
-procedure TClientDataSet.DestroyLookupCursor;
+procedure TCustomClientDataSet.DestroyLookupCursor;
 begin
   FFindCursor := nil;
 end;
 
-function TClientDataSet.LocateRecord(const KeyFields: string;
+function TCustomClientDataSet.LocateRecord(const KeyFields: string;
   const KeyValues: Variant; Options: TLocateOptions;
   SyncCursor: Boolean): Boolean;
 var
@@ -3601,17 +3937,17 @@ begin
           if (i = Fields.Count - 1) and (loPartialKey in Options) then
             ValStr := Format('''%s*''',[VarToStr(Value)]) else
             ValStr := Format('''%s''',[VarToStr(Value)]);
-        ftDate, ftTime, ftDateTime:
+        ftDate, ftTime, ftDateTime, ftTimeStamp:
           ValStr := Format('''%s''',[VarToStr(Value)]);
-        ftSmallint, ftInteger, ftWord, ftAutoInc, ftBoolean, ftFloat, ftCurrency, ftBCD, ftLargeInt:
+        ftSmallint, ftInteger, ftWord, ftAutoInc, ftBoolean, ftFloat, ftCurrency, ftBCD, ftLargeInt, ftFMTBcd:
           ValStr := VarToStr(Value);
       else
         DatabaseErrorFmt(SBadFieldType, [TField(Fields[i]).FieldName]);
       end;
       if Expr <> '' then
-        Expr := Expr + ' and ';
+        Expr := Expr + ' and ';    { Do not localize }
       if VarIsNull(Value) then
-        Expr := Expr + Format('[%s] IS NULL',[TField(Fields[i]).FieldName]) 
+        Expr := Expr + Format('[%s] IS NULL',[TField(Fields[i]).FieldName])  { Do not localize }
       else
         Expr := Expr + Format('[%s]=%s',[TField(Fields[i]).FieldName, ValStr]);
     end;
@@ -3635,7 +3971,7 @@ begin
   Result := Status = DBERR_NONE;
 end;
 
-function TClientDataSet.Lookup(const KeyFields: string; const KeyValues: Variant;
+function TCustomClientDataSet.Lookup(const KeyFields: string; const KeyValues: Variant;
   const ResultFields: string): Variant;
 begin
   Result := Null;
@@ -3651,7 +3987,7 @@ begin
   end;
 end;
 
-function TClientDataSet.Locate(const KeyFields: string;
+function TCustomClientDataSet.Locate(const KeyFields: string;
   const KeyValues: Variant; Options: TLocateOptions): Boolean;
 begin
   DoBeforeScroll;
@@ -3663,7 +3999,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.GotoCurrent(DataSet: TClientDataSet);
+procedure TCustomClientDataSet.GotoCurrent(DataSet: TCustomClientDataSet);
 begin
   CheckBrowseMode;
   CheckProviderEOF;
@@ -3686,7 +4022,7 @@ begin
       Result := WordBool(Buffer^);
     ftFloat:
       Result := Double(Buffer^);
-    ftBCD:
+    ftBCD, ftFMTBcd:
       begin
         BCDToCurr(TBcd(Buffer^), C);
         Result := C;
@@ -3697,25 +4033,27 @@ begin
       Result := VarFromDateTime(TDateTimeRec(Buffer^).Time / MSecsPerDay);
     ftDateTime:
       Result := VarFromDateTime((TDateTimeRec(Buffer^).DateTime / MSecsPerDay) - DateDelta);
+    ftTimeStamp:
+      Result := VarSQLTimeStampCreate(TSQLTimeStamp(Buffer^));
     ftString, ftGUID:
       Result := string(PChar(Buffer));
     ftWideString:
       with TVarData(Result) do
       begin
         VType := varOleStr;
-        VOleStr := SysAllocStringLen(PWideChar(PChar(Buffer)+2), Word(Buffer^) div 2);
+        SetString(PWideString(VOleStr)^, PWideChar(PChar(Buffer)+2), Word(Buffer^) div 2);
       end;
     else
       Result := Null;
   end;
 end;
 
-procedure TClientDataSet.SetAggregates(Value: TAggregates);
+procedure TCustomClientDataSet.SetAggregates(Value: TAggregates);
 begin
   FAggregates.Assign(Value);
 end;
 
-procedure TClientDataSet.SetAggsActive(Value: Boolean);
+procedure TCustomClientDataSet.SetAggsActive(Value: Boolean);
 begin
   if FAggregatesActive <> Value then
   begin
@@ -3732,7 +4070,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.ClearActiveAggs;
+procedure TCustomClientDataSet.ClearActiveAggs;
 var
   I: Integer;
 begin
@@ -3742,7 +4080,7 @@ begin
   FActiveAggLists.Clear;
 end;
 
-procedure TClientDataSet.CloseAggs;
+procedure TCustomClientDataSet.CloseAggs;
 var
   I: Integer;
   Field: TAggregateField;
@@ -3765,7 +4103,7 @@ begin
   FAggFieldsInit := False;
 end;
 
-procedure TClientDataSet.ResetGrouping;
+procedure TCustomClientDataSet.ResetGrouping;
 
   function HasAggs(Level: Integer): Boolean;
   var
@@ -3800,7 +4138,7 @@ begin
   end;
 end;
 
-procedure TClientDataSet.ResetAgg(Agg: TAggregate; DeleteFirst: Boolean);
+procedure TCustomClientDataSet.ResetAgg(Agg: TAggregate; DeleteFirst: Boolean);
 var
   I, J: Integer;
 begin
@@ -3837,7 +4175,7 @@ begin
     Agg.FInUse := False;
     if Agg.AggHandle <> 0 then
     begin
-      Check(DSCursor.DropAggregate(Agg.AggHandle));
+      DSCursor.DropAggregate(Agg.AggHandle);
       Agg.AggHandle := 0;
     end
   end;
@@ -3845,8 +4183,7 @@ begin
     FGroupingLevel := FMaxAggGroupingLevel;
 end;
 
-
-procedure TClientDataSet.ResetAllAggs(Value: Boolean);
+procedure TCustomClientDataSet.ResetAllAggs(Value: Boolean);
 
   procedure CreateAggsFromAggFields;
   var
@@ -3892,6 +4229,7 @@ var
   Agg: TAggregate;
   Field: TAggregateField;
 begin
+  if (FParentDataset <> nil) and (csLoading in FParentDataSet.ComponentState) then Exit;
   ClearActiveAggs;
   if FAggFieldsUpdated = nil then
     FAggFieldsUpdated := TBits.Create;
@@ -3924,7 +4262,7 @@ begin
   end;
 end;
 
-function TClientDataSet.InternalGetGroupState(Level: Integer): TGroupPosInds;
+function TCustomClientDataSet.InternalGetGroupState(Level: Integer): TGroupPosInds;
 var
   Status: DBResult;
   DSGrpState: GROUPSTATE;
@@ -3941,7 +4279,7 @@ begin
     Result := [];
 end;
 
-function TClientDataSet.GetGroupState(Level: Integer): TGroupPosInds;
+function TCustomClientDataSet.GetGroupState(Level: Integer): TGroupPosInds;
 begin
   if not Active or not AggregatesActive or (FIndexName = '') then
     Result := []
@@ -3954,14 +4292,14 @@ begin
   end;
 end;
 
-function TClientDataSet.GetActiveAggs(Index: Integer): TList;
+function TCustomClientDataSet.GetActiveAggs(Index: Integer): TList;
 begin
   if Index < FActiveAggLists.Count then
     Result := FActiveAggLists.Items[Index] else
     Result := nil;
 end;
 
-procedure TClientDataSet.DoAggUpdates(IsUpdate: Boolean);
+procedure TCustomClientDataSet.DoAggUpdates(IsUpdate: Boolean);
 
   function Intersect(List1, List2: TBits): Boolean;
   var
@@ -3993,13 +4331,13 @@ begin
     FAggFieldsUpdated[I] := False;
 end;
 
-procedure TClientDataSet.GetAggFieldData(Buffer: PChar);
+procedure TCustomClientDataSet.GetAggFieldData(Buffer: PChar);
 type
   PTGroupPosInds = ^TGroupPosInds;
 var
   I: Integer;
   Agg: TAggregate;
-  Blank: Bool;
+  Blank: LongBool;
   PAggData: PChar;
 begin
   for I := 0 to AggFields.Count - 1 do
@@ -4016,13 +4354,13 @@ begin
   end;
 end;
 
-function TClientDataSet.GetAggregateValue(Field: TField): Variant;
+function TCustomClientDataSet.GetAggregateValue(Field: TField): Variant;
 var
  Agg: TAggregate;
  RecBuf: PChar;
 begin
  Result := NULL;
- if GetActiveRecBuf(RecBuf) then
+ if FAggregatesActive and GetActiveRecBuf(RecBuf) then
  begin
    Agg := TAggregate(TAggregateField(Field).Handle);
    if Agg <> nil then
@@ -4039,7 +4377,7 @@ begin
  end;
 end;
 
-procedure TClientDataSet.ResetAggField(Field: TField);
+procedure TCustomClientDataSet.ResetAggField(Field: TField);
 var
   I: Integer;
   Agg: TAggregate;
@@ -4058,53 +4396,93 @@ begin
     end;
 end;
 
-function TClientDataSet.DoApplyUpdates(Delta: OleVariant; MaxErrors: Integer;
+procedure TCustomClientDataSet.DoAfterApplyUpdates(var OwnerData: OleVariant);
+begin
+  if Assigned(FAfterApplyUpdates) then FAfterApplyUpdates(Self, OwnerData);
+end;
+
+procedure TCustomClientDataSet.DoBeforeApplyUpdates(var OwnerData: OleVariant);
+begin
+  if Assigned(FBeforeApplyUpdates) then FBeforeApplyUpdates(Self, OwnerData);
+end;
+
+function TCustomClientDataSet.DoApplyUpdates(Delta: OleVariant; MaxErrors: Integer;
   out ErrorCount: Integer): OleVariant;
 var
   OwnerData: OleVariant;
 begin
-  if Assigned(FBeforeApplyUpdates) then FBeforeApplyUpdates(Self, OwnerData);
+  DoBeforeApplyUpdates(OwnerData);
   Result := AppServer.AS_ApplyUpdates(ProviderName, Delta, MaxErrors, ErrorCount, OwnerData);
-  if Assigned(FAfterApplyUpdates) then FAfterApplyUpdates(Self, OwnerData);
+  DoAfterApplyUpdates(OwnerData);
 end;
 
-function TClientDataSet.DoGetRecords(Count: Integer; out RecsOut: Integer;
+procedure TCustomClientDataSet.DoBeforeGetRecords(var OwnerData: OleVariant);
+begin
+  if Assigned(FBeforeGetRecords) then FBeforeGetRecords(Self, OwnerData);
+end;
+
+procedure TCustomClientDataSet.DoAfterGetRecords(var OwnerData: OleVariant);
+begin
+  if Assigned(FAfterGetRecords) then FAfterGetRecords(Self, OwnerData);
+end;
+
+function TCustomClientDataSet.DoGetRecords(Count: Integer; out RecsOut: Integer;
   Options: Integer; const CommandText: WideString; Params: OleVariant): OleVariant;
 var
   OwnerData: OleVariant;
 begin
-  if Assigned(FBeforeGetRecords) then FBeforeGetRecords(Self, OwnerData);
+  DoBeforeGetRecords(OwnerData);
   Result := AppServer.AS_GetRecords(ProviderName, Count, RecsOut, Options,
     CommandText, Params, OwnerData);
   UnPackParams(Params, Self.Params);
-  if Assigned(FAfterGetRecords) then FAfterGetRecords(Self, OwnerData);
+  DoAfterGetRecords(OwnerData);
 end;
 
-function TClientDataSet.DoRowRequest(Row: OleVariant; RequestType: Integer): OleVariant;
-var
-  OwnerData: OleVariant;
+procedure TCustomClientDataSet.DoAfterRowRequest(var OwnerData: OleVariant);
 begin
-  if Assigned(FBeforeRowRequest) then FBeforeRowRequest(Self, OwnerData);
-  Result := AppServer.AS_RowRequest(ProviderName, Row, RequestType, OwnerData);
   if Assigned(FAfterRowRequest) then FAfterRowRequest(Self, OwnerData);
 end;
 
-procedure TClientDataSet.DoExecute(Params: OleVariant);
+procedure TCustomClientDataSet.DoBeforeRowRequest(var OwnerData: OleVariant);
+begin
+  if Assigned(FBeforeRowRequest) then FBeforeRowRequest(Self, OwnerData);
+end;
+
+function TCustomClientDataSet.DoRowRequest(Row: OleVariant; RequestType: Integer): OleVariant;
 var
   OwnerData: OleVariant;
 begin
-  if Assigned(FBeforeExecute) then FBeforeExecute(Self, OwnerData);
-  AppServer.AS_Execute(ProviderName, CommandText, Params, OwnerData);
-  UnPackParams(Params, Self.Params);
+  DoBeforeRowRequest(OwnerData);
+  Result := AppServer.AS_RowRequest(ProviderName, Row, RequestType, OwnerData);
+  DoAfterRowRequest(OwnerData);
+end;
+
+procedure TCustomClientDataSet.DoAfterExecute(var OwnerData: OleVariant);
+begin
   if Assigned(FAfterExecute) then FAfterExecute(Self, OwnerData);
 end;
 
-function TClientDataSet.ConstraintsStored: Boolean;
+procedure TCustomClientDataSet.DoBeforeExecute(var OwnerData: OleVariant);
+begin
+  if Assigned(FBeforeExecute) then FBeforeExecute(Self, OwnerData);
+end;
+
+procedure TCustomClientDataSet.DoExecute(Params: OleVariant);
+var
+  OwnerData: OleVariant;
+begin
+  DoBeforeExecute(OwnerData);
+  AppServer.AS_Execute(ProviderName, CommandText, Params, OwnerData);
+  UnPackParams(Params, Self.Params);
+  DoAfterExecute(OwnerData);
+end;
+
+function TCustomClientDataSet.ConstraintsStored: Boolean;
 begin
   Result := Constraints.Count > 0;
 end;
 
-procedure TClientDataSet.SetupConstraints;
+procedure TCustomClientDataSet.SetupConstraints;
 type
   TConstraintType = (ctField, ctRecord, ctDefault);
 
@@ -4156,7 +4534,7 @@ type
         AttrSize := DataSize + SizeOf(TSQLExprInfo) + Len;
       end;
       if Len > 0 then
-        StrCopy(@FBuffer[SizeOf(TSQLExprInfo)], PChar(ErrorStr));
+        StrLCopy(@FBuffer[SizeOf(TSQLExprInfo)], PChar(ErrorStr), Length(FBuffer) - SizeOf(TSQLExprInfo) - 1);
       AttrType := TypeStr[ConstraintType];
       Check(FDSBase.AddOptParameter(0, AttrType, Attr, AttrSize + SizeOf(Integer), PByte(FBuffer)));
     finally
@@ -4184,53 +4562,72 @@ begin
               ctRecord, False);
           end;
       except
-        on E: Exception do
-        begin
-          if Name <> '' then
-            ErrMsg := Format('%s: %s',[Name, SRecConstFail]) else
-            ErrMsg := SRecConstFail;
-          raise EDSWriter.CreateFmt(ErrMsg, [E.Message]);
-        end;
+        if Name <> '' then
+          ErrMsg := Format('%s: %s',[Name, SRecConstFail])
+        else
+          ErrMsg := SRecConstFail;
+        if ExceptObject is Exception then
+          raise EDSWriter.CreateFmt(ErrMsg, [Exception(ExceptObject).Message])
+        else
+          raise EDSWriter.CreateFmt(ErrMsg, ['']);
       end;
     end;
     for i := 0 to FieldList.Count - 1 do
       with FieldList[i] do
       begin
         try
-          AddSQLExprAttr(ExprParser, DefaultExpression, '', FullName, i + 1,
+          AddSQLExprAttr(ExprParser, DefaultExpression, '', FullName, FieldNo,
             ctDefault, False);
         except
-          on E: Exception do
-          begin
-            if Name <> '' then
-              ErrMsg := Format('%s: %s',[Name, SDefExprFail]) else
-            if DataSet.Name <> '' then
-              ErrMsg := Format('%s.%s: %s',[Name, FullName, SDefExprFail]) else
-              ErrMsg := Format('%s: %s',[FullName, SDefExprFail]);
-            raise EDSWriter.CreateFmt(ErrMsg, [E.Message]);
-          end;
+          if Name <> '' then
+            ErrMsg := Format('%s: %s',[Name, SDefExprFail])
+          else
+          if DataSet.Name <> '' then
+            ErrMsg := Format('%s.%s: %s',[Name, FullName, SDefExprFail]) else
+            ErrMsg := Format('%s: %s',[FullName, SDefExprFail]);
+          if ExceptObject is Exception then
+            raise EDSWriter.CreateFmt(ErrMsg, [Exception(ExceptObject).Message])
+          else
+            raise EDSWriter.CreateFmt(ErrMsg, ['']);
         end;
         try
           AddSQLExprAttr(ExprParser, ImportedConstraint, ConstraintErrorMessage,
-            FullName, i + 1, ctField, False);
+            FullName, FieldNo, ctField, False);
           AddSQLExprAttr(ExprParser, CustomConstraint, ConstraintErrorMessage,
-            FullName, i + 1, ctField, False);
+            FullName, FieldNo, ctField, False);
         except
-          on E: Exception do
-          begin
-            if Name <> '' then
-              ErrMsg := Format('%s: %s',[Name, SFieldConstFail]) else
-{
-            if DataSet.Name <> '' then
-              ErrMsg := Format('%s.%s: %s',[DataSet.Name, FullName, SFieldConstFail]) else
-              ErrMsg := Format('%s: %s',[FullName, SFieldConstFail]); }
-            raise EDSWriter.CreateFmt(ErrMsg, [E.Message]);
-          end;
+          if Name <> '' then
+            ErrMsg := Format('%s: %s',[Name, SFieldConstFail]) else
+          if DataSet.Name <> '' then
+            ErrMsg := Format('%s.%s: %s',[Name, FullName, SFieldConstFail]) else
+            ErrMsg := Format('%s: %s',[FullName, SFieldConstFail]);
+          if ExceptObject is Exception then
+            raise EDSWriter.CreateFmt(ErrMsg, [Exception(ExceptObject).Message])
+          else
+            raise EDSWriter.CreateFmt(ErrMsg, ['']);
         end;
       end;
   finally
     ExprParser.Free;
   end;
+end;
+
+procedure TCustomClientDataSet.SetConnectionBroker(
+  const Value: TConnectionBroker);
+begin
+  if Assigned(FConnectionBroker) then FConnectionBroker.UnRegisterClient(Self);
+  FConnectionBroker := Value;
+  if Assigned(Value) then
+  begin
+    Value.RegisterClient(Self);
+    Value.FreeNotification(Self);
+    SetRemoteServer(Nil);
+  end;
+end;
+
+function TCustomClientDataSet.PSGetIndexDefs(IndexTypes: TIndexOptions): TIndexDefs;
+begin
+  Result := inherited GetIndexDefs(IndexDefs, IndexTypes);
 end;
 
 { TClientBlobStream }
@@ -4239,7 +4636,7 @@ constructor TClientBlobStream.Create(Field: TBlobField; Mode: TBlobStreamMode);
 begin
   FField := Field;
   FFieldNo := FField.FieldNo;
-  FDataSet := FField.DataSet as TClientDataSet;
+  FDataSet := FField.DataSet as TCustomClientDataSet;
   if not FDataSet.GetActiveRecBuf(FBuffer) then Exit;
   if Mode <> bmRead then
   begin
@@ -4260,7 +4657,8 @@ begin
     FField.Modified := True;
     FDataSet.DataEvent(deFieldChange, Longint(FField));
   except
-    Application.HandleException(Self);
+    if Assigned(Classes.ApplicationHandleException) then
+      ApplicationHandleException(Self);
   end;
   inherited Destroy;
 end;
@@ -4301,15 +4699,15 @@ end;
 function TAggregates.Add: TAggregate;
 begin
   Result := TAggregate(inherited Add);
-  Result.FDataSet := TClientDataSet(GetOwner);
+  Result.FDataSet := TCustomClientDataSet(GetOwner);
 end;
 
 procedure TAggregates.Clear;
 var
-  DataSet: TClientDataSet;
+  DataSet: TCustomClientDataSet;
 begin
   inherited Clear;
-  DataSet := TClientDataSet(GetOwner);
+  DataSet := TCustomClientDataSet(GetOwner);
   if DataSet <> nil then
     DataSet.ResetAllAggs(DataSet.AggregatesActive);
 end;
@@ -4346,7 +4744,7 @@ end;
 
 { TAggregate }
 
-constructor TAggregate.Create(Aggregates: TAggregates; ADataSet: TClientDataSet);
+constructor TAggregate.Create(Aggregates: TAggregates; ADataSet: TCustomClientDataSet);
 begin
   FDataSet := ADataSet;
   inherited Create(Aggregates);
@@ -4486,7 +4884,7 @@ end;
 
 function TAggregate.Value: Variant;
 var
-  Blank: Bool;
+  Blank: LongBool;
 begin
   Result := Null;
   if InUse and Active and Assigned(FDataSet) then
@@ -4496,6 +4894,83 @@ begin
     if Blank then
       Result := NULL else
       Result := AggValueAsVariant(Self, FDataBuffer);
+  end;
+end;
+
+{ TConnectionBroker }
+
+function TConnectionBroker.GetServer: IAppServer;
+begin
+  if Connection <> nil then
+    Result := Connection.GetServer else
+    Result := nil;
+end;
+
+{$IFDEF MSWINDOWS}
+function TConnectionBroker.GetAppServer: Variant;
+begin
+  if not Assigned(Connection) then
+    raise Exception.CreateRes(@SNoParentConnection);
+  Result := Connection.GetServer;    
+end;
+
+function TConnectionBroker.GetConnected: Boolean; 
+begin
+  Result := inherited GetConnected;
+  if Assigned(Connection) then
+    Result := Connection.Connected;
+end;
+{$ENDIF}
+
+procedure TConnectionBroker.Notification(AComponent: TComponent;
+  Operation: TOperation);
+begin
+  inherited Notification(AComponent, Operation);
+  if (Operation = opRemove) and (AComponent = FConnection) then
+    Connection:= nil;
+end;
+
+{$IFDEF MSWINDOWS}
+procedure TConnectionBroker.Loaded;
+begin
+  inherited Loaded;
+  if StreamedConnected then
+    SetConnected(True);
+end;
+{$ENDIF}
+
+procedure TConnectionBroker.SetConnected(Value: Boolean);
+begin
+{$IFDEF MSWINDOWS}
+  if csLoading in ComponentState then
+  begin
+    FStreamedConnected := True;
+    exit;
+  end;
+{$ENDIF}
+  if Value and (Connection = nil) then
+    raise Exception.Create(SConnectionMissing);
+{$IFDEF MSWINDOWS}
+  FStreamedConnected := False;
+{$ENDIF}
+  inherited SetConnected(Value);
+  if Assigned(Connection) then
+    Connection.Connected := Value;
+end;
+
+procedure TConnectionBroker.SetConnection(
+  const Value: TCustomRemoteServer);
+resourcestring
+  SNoConnectToBroker = 'Connection not allowed to TConnectionBroker';
+begin
+  if FConnection <> Value then
+  begin
+    if Value = Self then
+      raise Exception.Create(SNoCircularConnection)
+    else
+      if Assigned(Value) and (Value is TConnectionBroker) then
+        raise Exception.Create(SNoConnectToBroker);
+    FConnection := Value;
   end;
 end;
 

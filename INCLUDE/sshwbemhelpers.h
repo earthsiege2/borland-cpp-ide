@@ -15,12 +15,11 @@
 //                                                                                        //
 //  See T_SafeVector.h for help with safe arrays and arrays of embedded objects.          //
 //                                                                                        //
-//  Copyright (c)1997-99 Microsoft Corporation, All Rights Reserved                       //
+//  Copyright (c)1997 - 1999 Microsoft Corporation, All Rights Reserved                       //
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
 #if !defined(__SdkWbemHelpers_H)
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define      __SdkWbemHelpers_H
 #pragma once
 
@@ -766,6 +765,5 @@ public:
 };
 
 
-#pragma option pop /*P_O_Pop*/
 #endif //__SdkWbemHelpers_H
 

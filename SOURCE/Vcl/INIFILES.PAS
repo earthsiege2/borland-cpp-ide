@@ -1,11 +1,11 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Delphi and Kylix Cross-Platform Visual Component Library                    }
+{                                                                             }
+{ Copyright (c) 1995, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
 unit IniFiles;
 
@@ -13,9 +13,11 @@ unit IniFiles;
 
 interface
 
-uses Windows, SysUtils, Classes;
+uses SysUtils, Classes;
 
 type
+  EIniFileException = class(Exception);
+
   TCustomIniFile = class(TObject)
   private
     FFileName: string;
@@ -28,10 +30,12 @@ type
     procedure WriteInteger(const Section, Ident: string; Value: Longint); virtual;
     function ReadBool(const Section, Ident: string; Default: Boolean): Boolean; virtual;
     procedure WriteBool(const Section, Ident: string; Value: Boolean); virtual;
+    function ReadBinaryStream(const Section, Name: string; Value: TStream): Integer; virtual;
     function ReadDate(const Section, Name: string; Default: TDateTime): TDateTime; virtual;
     function ReadDateTime(const Section, Name: string; Default: TDateTime): TDateTime; virtual;
     function ReadFloat(const Section, Name: string; Default: Double): Double; virtual;
     function ReadTime(const Section, Name: string; Default: TDateTime): TDateTime; virtual;
+    procedure WriteBinaryStream(const Section, Name: string; Value: TStream); virtual;
     procedure WriteDate(const Section, Name: string; Value: TDateTime); virtual;
     procedure WriteDateTime(const Section, Name: string; Value: TDateTime); virtual;
     procedure WriteFloat(const Section, Name: string; Value: Double); virtual;
@@ -46,19 +50,48 @@ type
     property FileName: string read FFileName;
   end;
 
-  { TIniFile - Encapsulates the Windows INI file interface
-    (Get/SetPrivateProfileXXX functions) }
+  { TStringHash - used internally by TMemIniFile to optimize searches. }
 
-  TIniFile = class(TCustomIniFile)
+  PPHashItem = ^PHashItem;
+  PHashItem = ^THashItem;
+  THashItem = record
+    Next: PHashItem;
+    Key: string;
+    Value: Integer;
+  end;
+
+  TStringHash = class
+  private
+    Buckets: array of PHashItem;
+  protected
+    function Find(const Key: string): PPHashItem;
+    function HashOf(const Key: string): Cardinal; virtual;
   public
-    function ReadString(const Section, Ident, Default: string): string; override;
-    procedure WriteString(const Section, Ident, Value: String); override;
-    procedure ReadSection(const Section: string; Strings: TStrings); override;
-    procedure ReadSections(Strings: TStrings); override;
-    procedure ReadSectionValues(const Section: string; Strings: TStrings); override;
-    procedure EraseSection(const Section: string); override;
-    procedure DeleteKey(const Section, Ident: String); override;
-    procedure UpdateFile; override;
+    constructor Create(Size: Integer = 256);
+    destructor Destroy; override;
+    procedure Add(const Key: string; Value: Integer);
+    procedure Clear;
+    procedure Remove(const Key: string);
+    function Modify(const Key: string; Value: Integer): Boolean;
+    function ValueOf(const Key: string): Integer;
+  end;
+
+  { THashedStringList - A TStringList that uses TStringHash to improve the
+    speed of Find }
+  THashedStringList = class(TStringList)
+  private
+    FValueHash: TStringHash;
+    FNameHash: TStringHash;
+    FValueHashValid: Boolean;
+    FNameHashValid: Boolean;
+    procedure UpdateValueHash;
+    procedure UpdateNameHash;
+  protected
+    procedure Changed; override;
+  public
+    destructor Destroy; override;
+    function IndexOf(const S: string): Integer; override;
+    function IndexOfName(const Name: string): Integer; override;
   end;
 
   { TMemIniFile - loads and entire ini file into memory and allows all
@@ -69,7 +102,9 @@ type
   private
     FSections: TStringList;
     function AddSection(const Section: string): TStrings;
+    function GetCaseSensitive: Boolean;
     procedure LoadValues;
+    procedure SetCaseSensitive(Value: Boolean);
   public
     constructor Create(const FileName: string);
     destructor Destroy; override;
@@ -85,11 +120,36 @@ type
     procedure SetStrings(List: TStrings);
     procedure UpdateFile; override;
     procedure WriteString(const Section, Ident, Value: String); override;
+    property CaseSensitive: Boolean read GetCaseSensitive write SetCaseSensitive;
   end;
+
+{$IFDEF MSWINDOWS}
+  { TIniFile - Encapsulates the Windows INI file interface
+    (Get/SetPrivateProfileXXX functions) }
+
+  TIniFile = class(TCustomIniFile)
+  public
+    destructor Destroy; override;
+    function ReadString(const Section, Ident, Default: string): string; override;
+    procedure WriteString(const Section, Ident, Value: String); override;
+    procedure ReadSection(const Section: string; Strings: TStrings); override;
+    procedure ReadSections(Strings: TStrings); override;
+    procedure ReadSectionValues(const Section: string; Strings: TStrings); override;
+    procedure EraseSection(const Section: string); override;
+    procedure DeleteKey(const Section, Ident: String); override;
+    procedure UpdateFile; override;
+  end;
+{$ELSE}
+    TIniFile = class(TMemIniFile);
+{$ENDIF}
+
 
 implementation
 
-uses Consts;
+uses RTLConsts
+{$IFDEF MSWINDOWS}
+  , Windows
+{$ENDIF};
 
 { TCustomIniFile }
 
@@ -234,117 +294,243 @@ begin
   end;
 end;
 
-{ TIniFile }
-
-function TIniFile.ReadString(const Section, Ident, Default: string): string;
+function TCustomIniFile.ReadBinaryStream(const Section, Name: string;
+  Value: TStream): Integer;
 var
-  Buffer: array[0..2047] of Char;
+  Text: string;
+  Stream: TMemoryStream;
+  Pos: Integer;
 begin
-  SetString(Result, Buffer, GetPrivateProfileString(PChar(Section),
-    PChar(Ident), PChar(Default), Buffer, SizeOf(Buffer), PChar(FFileName)));
-end;
-
-procedure TIniFile.WriteString(const Section, Ident, Value: string);
-begin
-  if not WritePrivateProfileString(PChar(Section), PChar(Ident),
-    PChar(Value), PChar(FFileName)) then
-    raise Exception.CreateResFmt(@SIniFileWriteError, [FileName]);
-end;
-
-procedure TIniFile.ReadSections(Strings: TStrings);
-const
-  BufSize = 16384;
-var
-  Buffer, P: PChar;
-begin
-  GetMem(Buffer, BufSize);
-  try
-    Strings.BeginUpdate;
+  Text := ReadString(Section, Name, '');
+  if Text <> '' then
+  begin
+    if Value is TMemoryStream then
+      Stream := TMemoryStream(Value)
+    else Stream := TMemoryStream.Create;
     try
-      Strings.Clear;
-      if GetPrivateProfileString(nil, nil, nil, Buffer, BufSize,
-        PChar(FFileName)) <> 0 then
-      begin
-        P := Buffer;
-        while P^ <> #0 do
-        begin
-          Strings.Add(P);
-          Inc(P, StrLen(P) + 1);
-        end;
-      end;
+      Pos := Stream.Position;
+      Stream.SetSize(Stream.Size + Length(Text) div 2);
+      HexToBin(PChar(Text), PChar(Integer(Stream.Memory) + Stream.Position), Length(Text) div 2);
+      Stream.Position := Pos;
+      if Value <> Stream then Value.CopyFrom(Stream, Length(Text) div 2);
+      Result := Stream.Size - Pos;
     finally
-      Strings.EndUpdate;
+      if Value <> Stream then Stream.Free;
     end;
-  finally
-    FreeMem(Buffer, BufSize);
+  end else Result := 0;
+end;
+
+procedure TCustomIniFile.WriteBinaryStream(const Section, Name: string;
+  Value: TStream);
+var
+  Text: string;
+  Stream: TMemoryStream;
+begin
+  SetLength(Text, (Value.Size - Value.Position) * 2);
+  if Length(Text) > 0 then
+  begin
+    if Value is TMemoryStream then
+      Stream := TMemoryStream(Value)
+    else Stream := TMemoryStream.Create;
+    try
+      if Stream <> Value then
+      begin
+        Stream.CopyFrom(Value, Value.Size - Value.Position);
+        Stream.Position := 0;
+      end;
+      BinToHex(PChar(Integer(Stream.Memory) + Stream.Position), PChar(Text),
+        Stream.Size - Stream.Position);
+    finally
+      if Value <> Stream then Stream.Free;
+    end;
+  end;
+  WriteString(Section, Name, Text);
+end;
+
+{ TStringHash }
+
+procedure TStringHash.Add(const Key: string; Value: Integer);
+var
+  Hash: Integer;
+  Bucket: PHashItem;
+begin
+  Hash := HashOf(Key) mod Cardinal(Length(Buckets));
+  New(Bucket);
+  Bucket^.Key := Key;
+  Bucket^.Value := Value;
+  Bucket^.Next := Buckets[Hash];
+  Buckets[Hash] := Bucket;
+end;
+
+procedure TStringHash.Clear;
+var
+  I: Integer;
+  P, N: PHashItem;
+begin
+  for I := 0 to Length(Buckets) - 1 do
+  begin
+    P := Buckets[I];
+    while P <> nil do
+    begin
+      N := P^.Next;
+      Dispose(P);
+      P := N;
+    end;
+    Buckets[I] := nil;
   end;
 end;
 
-procedure TIniFile.ReadSection(const Section: string; Strings: TStrings);
-const
-  BufSize = 16384;
-var
-  Buffer, P: PChar;
+constructor TStringHash.Create(Size: Integer);
 begin
-  GetMem(Buffer, BufSize);
-  try
-    Strings.BeginUpdate;
-    try
-      Strings.Clear;
-      if GetPrivateProfileString(PChar(Section), nil, nil, Buffer, BufSize,
-        PChar(FFileName)) <> 0 then
-      begin
-        P := Buffer;
-        while P^ <> #0 do
-        begin
-          Strings.Add(P);
-          Inc(P, StrLen(P) + 1);
-        end;
-      end;
-    finally
-      Strings.EndUpdate;
-    end;
-  finally
-    FreeMem(Buffer, BufSize);
+  inherited Create;
+  SetLength(Buckets, Size);
+end;
+
+destructor TStringHash.Destroy;
+begin
+  Clear;
+  inherited;
+end;
+
+function TStringHash.Find(const Key: string): PPHashItem;
+var
+  Hash: Integer;
+begin
+  Hash := HashOf(Key) mod Cardinal(Length(Buckets));
+  Result := @Buckets[Hash];
+  while Result^ <> nil do
+  begin
+    if Result^.Key = Key then
+      Exit
+    else
+      Result := @Result^.Next;
   end;
 end;
 
-procedure TIniFile.ReadSectionValues(const Section: string; Strings: TStrings);
+function TStringHash.HashOf(const Key: string): Cardinal;
 var
-  KeyList: TStringList;
   I: Integer;
 begin
-  KeyList := TStringList.Create;
-  try
-    ReadSection(Section, KeyList);
-    Strings.BeginUpdate;
-    try
-      for I := 0 to KeyList.Count - 1 do
-        Strings.Values[KeyList[I]] := ReadString(Section, KeyList[I], '');
-    finally
-      Strings.EndUpdate;
-    end;
-  finally
-    KeyList.Free;
+  Result := 0;
+  for I := 1 to Length(Key) do
+    Result := ((Result shl 2) or (Result shr (SizeOf(Result) * 8 - 2))) xor
+      Ord(Key[I]);
+end;
+
+function TStringHash.Modify(const Key: string; Value: Integer): Boolean;
+var
+  P: PHashItem;
+begin
+  P := Find(Key)^;
+  if P <> nil then
+  begin
+    Result := True;
+    P^.Value := Value;
+  end
+  else
+    Result := False;
+end;
+
+procedure TStringHash.Remove(const Key: string);
+var
+  P: PHashItem;
+  Prev: PPHashItem;
+begin
+  Prev := Find(Key);
+  P := Prev^;
+  if P <> nil then
+  begin
+    Prev^ := P^.Next;
+    Dispose(P);
   end;
 end;
 
-procedure TIniFile.EraseSection(const Section: string);
+function TStringHash.ValueOf(const Key: string): Integer;
+var
+  P: PHashItem;
 begin
-  if not WritePrivateProfileString(PChar(Section), nil, nil,
-    PChar(FFileName)) then
-    raise Exception.CreateResFmt(@SIniFileWriteError, [FileName]);
+  P := Find(Key)^;
+  if P <> nil then
+    Result := P^.Value else
+    Result := -1;
 end;
 
-procedure TIniFile.DeleteKey(const Section, Ident: String);
+{ THashedStringList }
+
+procedure THashedStringList.Changed;
 begin
-  WritePrivateProfileString(PChar(Section), PChar(Ident), nil,
-     PChar(FFileName));
+  inherited;
+  FValueHashValid := False;
+  FNameHashValid := False;
 end;
 
-procedure TIniFile.UpdateFile;
+destructor THashedStringList.Destroy;
 begin
-  WritePrivateProfileString(nil, nil, nil, PChar(FFileName));
+  FValueHash.Free;
+  FNameHash.Free;
+  inherited;
+end;
+
+function THashedStringList.IndexOf(const S: string): Integer;
+begin
+  UpdateValueHash;
+  if not CaseSensitive then
+    Result :=  FValueHash.ValueOf(AnsiUpperCase(S))
+  else
+    Result :=  FValueHash.ValueOf(S);
+end;
+
+function THashedStringList.IndexOfName(const Name: string): Integer;
+begin
+  UpdateNameHash;
+  if not CaseSensitive then
+    Result := FNameHash.ValueOf(AnsiUpperCase(Name))
+  else
+    Result := FNameHash.ValueOf(Name);
+end;
+
+procedure THashedStringList.UpdateNameHash;
+var
+  I: Integer;
+  P: Integer;
+  Key: string;
+begin
+  if FNameHashValid then Exit;
+  if FNameHash = nil then
+    FNameHash := TStringHash.Create
+  else
+    FNameHash.Clear;
+  for I := 0 to Count - 1 do
+  begin
+    Key := Get(I);
+    P := AnsiPos('=', Key);
+    if P <> 0 then
+    begin
+      if not CaseSensitive then
+        Key := AnsiUpperCase(Copy(Key, 1, P - 1))
+      else
+        Key := Copy(Key, 1, P - 1);
+      FNameHash.Add(Key, I);
+    end;
+  end;
+  FNameHashValid := True;
+end;
+
+procedure THashedStringList.UpdateValueHash;
+var
+  I: Integer;
+begin
+  if FValueHashValid then Exit;
+  if FValueHash = nil then
+    FValueHash := TStringHash.Create
+  else
+    FValueHash.Clear;
+  for I := 0 to Count - 1 do
+    if not CaseSensitive then
+      FValueHash.Add(AnsiUpperCase(Self[I]), I)
+    else
+      FValueHash.Add(Self[I], I);
+  FValueHashValid := True;
 end;
 
 { TMemIniFile }
@@ -352,7 +538,10 @@ end;
 constructor TMemIniFile.Create(const FileName: string);
 begin
   inherited Create(FileName);
-  FSections := TStringList.Create;
+  FSections := THashedStringList.Create;
+{$IFDEF LINUX}
+  FSections.CaseSensitive := True;
+{$ENDIF}
   LoadValues;
 end;
 
@@ -365,11 +554,13 @@ end;
 
 function TMemIniFile.AddSection(const Section: string): TStrings;
 begin
-  Result := TStringList.Create;
+  Result := THashedStringList.Create;
   try
+    THashedStringList(Result).CaseSensitive := CaseSensitive;
     FSections.AddObject(Section, Result);
   except
     Result.Free;
+    raise;
   end;
 end;
 
@@ -378,7 +569,7 @@ var
   I: Integer;
 begin
   for I := 0 to FSections.Count - 1 do
-    TStrings(FSections.Objects[I]).Free;
+    TObject(FSections.Objects[I]).Free;
   FSections.Clear;
 end;
 
@@ -406,6 +597,11 @@ begin
     TStrings(FSections.Objects[I]).Free;
     FSections.Delete(I);
   end;
+end;
+
+function TMemIniFile.GetCaseSensitive: Boolean;
+begin
+  Result := FSections.CaseSensitive;
 end;
 
 procedure TMemIniFile.GetStrings(List: TStrings);
@@ -510,9 +706,26 @@ begin
   if Reload then LoadValues;
 end;
 
-procedure TMemIniFile.SetStrings(List: TStrings);
+procedure TMemIniFile.SetCaseSensitive(Value: Boolean);
 var
   I: Integer;
+begin
+  if Value <> FSections.CaseSensitive then
+  begin
+    FSections.CaseSensitive := Value;
+    for I := 0 to FSections.Count - 1 do
+      with THashedStringList(FSections.Objects[I]) do
+      begin
+        CaseSensitive := Value;
+        Changed;
+      end;
+    THashedStringList(FSections).Changed;
+  end;
+end;
+
+procedure TMemIniFile.SetStrings(List: TStrings);
+var
+  I, J: Integer;
   S: string;
   Strings: TStrings;
 begin
@@ -520,12 +733,23 @@ begin
   Strings := nil;
   for I := 0 to List.Count - 1 do
   begin
-    S := List[I];
+    S := Trim(List[I]);
     if (S <> '') and (S[1] <> ';') then
       if (S[1] = '[') and (S[Length(S)] = ']') then
-        Strings := AddSection(Copy(S, 2, Length(S) - 2))
+      begin
+        Delete(S, 1, 1);
+        SetLength(S, Length(S)-1);
+        Strings := AddSection(Trim(S));
+      end
       else
-        if Strings <> nil then Strings.Add(S);
+        if Strings <> nil then
+        begin
+          J := Pos('=', S);
+          if J > 0 then // remove spaces before and after '='
+            Strings.Add(Trim(Copy(S, 1, J-1)) + '=' + Trim(Copy(S, J+1, MaxInt)) )
+          else
+            Strings.Add(S);
+        end;
   end;
 end;
 
@@ -556,5 +780,127 @@ begin
   I := Strings.IndexOfName(Ident);
   if I >= 0 then Strings[I] := S else Strings.Add(S);
 end;
+
+{$IFDEF MSWINDOWS}
+{ TIniFile }
+
+destructor TIniFile.Destroy;
+begin
+  UpdateFile;         // flush changes to disk
+  inherited Destroy;
+end;
+
+function TIniFile.ReadString(const Section, Ident, Default: string): string;
+var
+  Buffer: array[0..2047] of Char;
+begin
+  SetString(Result, Buffer, GetPrivateProfileString(PChar(Section),
+    PChar(Ident), PChar(Default), Buffer, SizeOf(Buffer), PChar(FFileName)));
+end;
+
+procedure TIniFile.WriteString(const Section, Ident, Value: string);
+begin
+  if not WritePrivateProfileString(PChar(Section), PChar(Ident),
+    PChar(Value), PChar(FFileName)) then
+    raise EIniFileException.CreateResFmt(@SIniFileWriteError, [FileName]);
+end;
+
+procedure TIniFile.ReadSections(Strings: TStrings);
+const
+  BufSize = 16384;
+var
+  Buffer, P: PChar;
+begin
+  GetMem(Buffer, BufSize);
+  try
+    Strings.BeginUpdate;
+    try
+      Strings.Clear;
+      if GetPrivateProfileString(nil, nil, nil, Buffer, BufSize,
+        PChar(FFileName)) <> 0 then
+      begin
+        P := Buffer;
+        while P^ <> #0 do
+        begin
+          Strings.Add(P);
+          Inc(P, StrLen(P) + 1);
+        end;
+      end;
+    finally
+      Strings.EndUpdate;
+    end;
+  finally
+    FreeMem(Buffer, BufSize);
+  end;
+end;
+
+procedure TIniFile.ReadSection(const Section: string; Strings: TStrings);
+const
+  BufSize = 16384;
+var
+  Buffer, P: PChar;
+begin
+  GetMem(Buffer, BufSize);
+  try
+    Strings.BeginUpdate;
+    try
+      Strings.Clear;
+      if GetPrivateProfileString(PChar(Section), nil, nil, Buffer, BufSize,
+        PChar(FFileName)) <> 0 then
+      begin
+        P := Buffer;
+        while P^ <> #0 do
+        begin
+          Strings.Add(P);
+          Inc(P, StrLen(P) + 1);
+        end;
+      end;
+    finally
+      Strings.EndUpdate;
+    end;
+  finally
+    FreeMem(Buffer, BufSize);
+  end;
+end;
+
+procedure TIniFile.ReadSectionValues(const Section: string; Strings: TStrings);
+var
+  KeyList: TStringList;
+  I: Integer;
+begin
+  KeyList := TStringList.Create;
+  try
+    ReadSection(Section, KeyList);
+    Strings.BeginUpdate;
+    try
+      Strings.Clear;
+      for I := 0 to KeyList.Count - 1 do
+        Strings.Add(KeyList[I] + '=' + ReadString(Section, KeyList[I], ''))
+    finally
+      Strings.EndUpdate;
+    end;
+  finally
+    KeyList.Free;
+  end;
+end;
+
+procedure TIniFile.EraseSection(const Section: string);
+begin
+  if not WritePrivateProfileString(PChar(Section), nil, nil,
+    PChar(FFileName)) then
+    raise EIniFileException.CreateResFmt(@SIniFileWriteError, [FileName]);
+end;
+
+procedure TIniFile.DeleteKey(const Section, Ident: String);
+begin
+  WritePrivateProfileString(PChar(Section), PChar(Ident), nil,
+     PChar(FFileName));
+end;
+
+procedure TIniFile.UpdateFile;
+begin
+  WritePrivateProfileString(nil, nil, nil, PChar(FFileName));
+end;
+{$ENDIF}
 
 end.

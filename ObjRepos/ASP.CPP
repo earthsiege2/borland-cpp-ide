@@ -1,4 +1,4 @@
-[!outputon] // $Revision:   1.0.1.1  $
+[!outputon] // $Revision:   1.2  $
 // [!CPPName] : Implementation of [!ClassName]
 
 #include <vcl.h>

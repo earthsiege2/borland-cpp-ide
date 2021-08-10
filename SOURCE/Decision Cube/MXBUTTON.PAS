@@ -6,14 +6,14 @@
 {                                                       }
 {*******************************************************}
 
-unit mxbutton;
+unit MXBUTTON;
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Grids, Buttons, Controls,
-  StdCtrls, Forms, Dialogs, Bde, DB, DBTables, Menus, ExtCtrls,
-  mxConsts, mxdb, mxstore, mxcommon;
+  Windows, Variants, Messages, SysUtils, Classes, Graphics, Grids, Buttons, Controls,
+  StdCtrls, Forms, Dialogs, BDE, DB, DBTables, Menus, ExtCtrls,
+  Mxconsts, MXDB, Mxstore, MXCOMMON;
 
 type
   TMenuProp = (tmChecked, tmRadio, tmNone);

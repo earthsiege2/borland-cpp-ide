@@ -2,7 +2,7 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="SPrmClnt.exe"/>
     <OBJFILES value="SPrmClnt.obj ClntMain.obj ClntDM.obj ClntAbout.obj"/>
     <RESFILES value="SPrmClnt.res"/>
@@ -11,16 +11,16 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) ClntMain.dfm ClntDM.dfm ClntAbout.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value=""/>
-    <SPARELIBS value="Vcl50.lib Vcldb50.lib Vclmid50.lib"/>
-    <PACKAGES value="Vcl50.bpi Vclx50.bpi Vcldb50.bpi VCLBDE50.bpi vcldbx50.bpi Vclmid50.bpi"/>
+    <LIBRARIES value="dsnapcon.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib dbrtl.lib vcldb.lib dsnap.lib dsnapcon.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi dbrtl.bpi vcldb.bpi bdertl.bpi vcldbx.bpi dsnap.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
-    <LINKER value="tlink32"/>
+    <LINKER value="ilink32"/>
     <USERDEFINES value=""/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
     <MAINSOURCE value="SPrmClnt.cpp"/>
@@ -29,19 +29,28 @@
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I&quot;..\&quot; -I$(BCB)\include -I$(BCB)\include\vcl -src_suffixcpp"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
-      -tW -tWM"/>
+    <IDLCFLAGS value="-src_suffix cpp -I..\. -I$(BCB)\include -I$(BCB)\include\vcl"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -Gn -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="SPrmClnt.cpp" FORMNAME="" UNITNAME="SPrmClnt" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SPrmClnt.res" FORMNAME="" UNITNAME="SPrmClnt" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ClntMain.cpp" FORMNAME="FormMain" UNITNAME="ClntMain" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ClntDM.cpp" FORMNAME="DataModule1" UNITNAME="ClntDM" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="readmec.txt" FORMNAME="" UNITNAME="readmec" CONTAINERID="File" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ClntAbout.cpp" FORMNAME="AboutBox" UNITNAME="ClntAbout" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -75,9 +84,14 @@ DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]

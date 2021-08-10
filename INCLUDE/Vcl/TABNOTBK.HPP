@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Tabnotbk.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'TabNotBk.pas' rev: 6.00
 
-#ifndef TabnotbkHPP
-#define TabnotbkHPP
+#ifndef TabNotBkHPP
+#define TabNotBkHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -27,8 +27,7 @@
 namespace Tabnotbk
 {
 //-- type declarations -------------------------------------------------------
-typedef void __fastcall (__closure *TPageChangeEvent)(System::TObject* Sender, int NewTab, bool &AllowChange
-	);
+typedef void __fastcall (__closure *TPageChangeEvent)(System::TObject* Sender, int NewTab, bool &AllowChange);
 
 class DELPHICLASS TTabPage;
 class PASCALIMPLEMENTATION TTabPage : public Controls::TWinControl 
@@ -50,8 +49,7 @@ __published:
 	__property Enabled  = {stored=false, default=1};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TTabPage(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TTabPage(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TTabPage(void) { }
@@ -83,7 +81,7 @@ private:
 	HIDESBASE MESSAGE void __fastcall WMPaint(Messages::TWMPaint &Message);
 	
 protected:
-	virtual void __fastcall AlignControls(Controls::TControl* AControl, Windows::TRect &Rect);
+	virtual void __fastcall AlignControls(Controls::TControl* AControl, Types::TRect &Rect);
 	DYNAMIC void __fastcall Change(void);
 	DYNAMIC void __fastcall Click(void);
 	virtual void __fastcall CreateHandle(void);
@@ -106,21 +104,21 @@ public:
 	
 __published:
 	__property AnsiString ActivePage = {read=GetActivePage, write=SetActivePage, stored=false};
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
 	__property Constraints ;
-	__property Enabled ;
+	__property Enabled  = {default=1};
 	__property int PageIndex = {read=FPageIndex, write=SetPageIndex, default=0};
 	__property Classes::TStrings* Pages = {read=FAccess, write=SetPages, stored=false};
 	__property Font ;
 	__property int TabsPerRow = {read=FTabsPerRow, write=SetTabsPerRow, default=3};
 	__property Graphics::TFont* TabFont = {read=FTabFont, write=SetTabFont};
-	__property ParentShowHint ;
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property Classes::TNotifyEvent OnClick = {read=FOnClick, write=FOnClick};
 	__property TPageChangeEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property OnContextPopup ;
@@ -128,8 +126,7 @@ __published:
 	__property OnExit ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TTabbedNotebook(HWND ParentWindow) : Comctrls::TCustomTabControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TTabbedNotebook(HWND ParentWindow) : Comctrls::TCustomTabControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -139,12 +136,10 @@ public:
 static const Word CM_TABFONTCHANGED = 0xb064;
 
 }	/* namespace Tabnotbk */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Tabnotbk;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Tabnotbk
+#endif	// TabNotBk

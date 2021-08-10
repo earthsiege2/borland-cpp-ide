@@ -74,6 +74,10 @@
 #define cdoTextHTML	L"text/html"
 #define cdoTextPlain	L"text/plain"
 
+//	__CdoDAV_MODULE_DEFINED__
+#define cdoContentClass	L"DAV:contentclass"
+#define cdoGetContentType	L"DAV:getcontenttype"
+
 //	__CdoEncodingType_MODULE_DEFINED__
 #define cdo7bit	L"7bit"
 #define cdo8bit	L"8bit"
@@ -164,6 +168,9 @@
 #define cdoNewsgroupList	L"http://schemas.microsoft.com/cdo/nntpenvelope/newsgrouplist"
 #define cdoNNTPProcessing	L"http://schemas.microsoft.com/cdo/nntpenvelope/nntpprocessing"
 
+//	__CdoOffice_MODULE_DEFINED__
+#define cdoKeywords	L"urn:schemas-microsoft-com:office:office#Keywords"
+
 //	__CdoSMTPEnvelope_MODULE_DEFINED__
 #define cdoArrivalTime	L"http://schemas.microsoft.com/cdo/smtpenvelope/arrivaltime"
 #define cdoClientIPAddress	L"http://schemas.microsoft.com/cdo/smtpenvelope/clientipaddress"
@@ -173,6 +180,7 @@
 #define cdoSenderEmailAddress	L"http://schemas.microsoft.com/cdo/smtpenvelope/senderemailaddress"
 
 //	__CdoErrors_MODULE_DEFINED__
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // __cdostr_h_

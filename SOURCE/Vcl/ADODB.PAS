@@ -12,11 +12,10 @@ unit ADODB;
 
 interface
 
-{$R-}
+{$R-,Q-}
 
 uses
-  Windows, ActiveX, SysUtils, Classes, Graphics, TypInfo, DB,
-  OLEDB, ADOInt;
+  Windows, Variants, ActiveX, SysUtils, Classes, TypInfo, DB, OleDB, ADOInt;
 
 type
 
@@ -129,6 +128,7 @@ type
     FCommands: TList;
     FConnectionObject: _Connection;
     FConnEventsID: Integer;
+    FConnectionString: WideString;
     FDefaultDatabase: WideString;
     FUserID: WideString;
     FPassword: WideString;
@@ -435,7 +435,6 @@ type
     procedure OpenConnection; virtual;
     procedure SetCommandText(const Value: WideString); virtual;
     function SetConnectionFlag(Flag: Integer; Value: Boolean): Boolean; virtual;
-    procedure SetName(const NewName: TComponentName); override;
     property ActiveConnection: _Connection read GetActiveConnection;
     property CommandTextAlias: string read FCommandTextAlias write FCommandTextAlias;
     property ComponentRef: TComponent read FComponentRef write FComponentRef;
@@ -525,11 +524,15 @@ type
   TRecordsetEvent = procedure(DataSet: TCustomADODataSet;
     const Error: Error; var EventStatus: TEventStatus) of object;
 
+  TRecordsetCreate = procedure(DataSet: TCustomADODataSet;
+    const Recordset: _Recordset) of object;
+
   TCustomADODataSet = class(TDataSet, IUnknown, RecordsetEventsVt)
   private
     FRecordsetObject: _Recordset;
     FFindCursor: _Recordset;
     FLookupCursor: _Recordset;
+    FLockCursor: _Recordset;
     FRowset: IRowset;
     FAccessor: IAccessor;
     FRowsetFind: IRowsetFind;
@@ -573,8 +576,8 @@ type
     FOnEndOfRecordset: TEndOfRecordsetEvent;
     FOnFetchComplete: TRecordsetEvent;
     FOnFetchProgress: TFetchProgressEvent;
+    FOnRecordsetCreate: TRecordsetCreate;
     function GetCacheSize: Integer;
-    function GetCommandText: WideString;
     function GetCommandTimeout: Integer;
     function GetCommandType: TCommandType;
     function GetConnection: TADOConnection;
@@ -602,7 +605,6 @@ type
     procedure ReadDesignerData(Reader: TReader);
     procedure RefreshIndexFields;
     procedure SetCacheSize(const Value: Integer);
-    procedure SetCommandText(const Value: WideString);
     procedure SetCommandTimeout(const Value: Integer);
     procedure SetCommandType(const Value: TCommandType);
     procedure SetConnectionString(const Value: WideString);
@@ -664,6 +666,7 @@ type
     procedure GetBookmarkData(Buffer: PChar; Data: Pointer); override;
     function GetBookmarkFlag(Buffer: PChar): TBookmarkFlag; override;
     function GetCanModify: Boolean; override;
+    function GetCommandText: WideString;
     function GetDataSource: TDataSource; override;
     function GetRecNo: Integer; override;
     function GetRecord(Buffer: PChar; GetMode: TGetMode; DoCheck: Boolean): TGetResult; override;
@@ -687,6 +690,7 @@ type
     procedure InternalOpen; override;
     procedure InternalPost; override;
     procedure InternalRefresh; override;
+    procedure InternalRequery(Options: TExecuteOptions = []);
     procedure InternalSetSort(Value: WideString);
     procedure InternalSetToRecord(Buffer: PChar); override;
     function IsCursorOpen: Boolean; override;
@@ -698,9 +702,11 @@ type
     procedure OpenCursor(InfoQuery: Boolean); override;
     procedure PrepareCursor; virtual;
     procedure RefreshParams;
+    procedure ReleaseLock;
     procedure SetBlockReadSize(Value: Integer); override;
     procedure SetBookmarkFlag(Buffer: PChar; Value: TBookmarkFlag); override;
     procedure SetBookmarkData(Buffer: PChar; Data: Pointer); override;
+    procedure SetCommandText(const Value: WideString);
     procedure SetConnection(const Value: TADOConnection); virtual;
     function SetConnectionFlag(Flag: Integer; Value: Boolean): Boolean; virtual;
     procedure SetDataSource(const Value: TDataSource); virtual;
@@ -770,11 +776,7 @@ type
     property EnableBCD: Boolean read FEnableBCD write FEnableBCD default True;
     procedure FilterOnBookmarks(Bookmarks: array of const);
     function GetBlobFieldData(FieldNo: Integer; var Buffer: TBlobByteData): Integer; override;
-    // Add the following method to fix missing key assignment when inserting
-    // detail records in a client dataset provided from an ADO dataset.
-    // Note: This fix requires an interface change and is therefore not part of the
-    //       Version 5 update pack.
-    //procedure GetDetailLinkFields(MasterFields, DetailFields: TList); override;
+    procedure GetDetailLinkFields(MasterFields, DetailFields: TList); override;
     function GetFieldData(Field: TField; Buffer: Pointer): Boolean; override;
     function GetFieldData(Field: TField; Buffer: Pointer; NativeFormat: Boolean): Boolean; override;
     function GetFieldData(FieldNo: Integer; Buffer: Pointer): Boolean; overload; override;
@@ -850,6 +852,7 @@ type
     property OnEndOfRecordset: TEndOfRecordsetEvent read FOnEndOfRecordset write FOnEndOfRecordset;
     property OnFetchComplete: TRecordsetEvent read FOnFetchComplete write FOnFetchComplete;
     property OnFetchProgress: TFetchProgressEvent read FOnFetchProgress write FOnFetchProgress;
+    property OnRecordsetCreate: TRecordsetCreate read FOnRecordsetCreate write FOnRecordsetCreate;
   end;
 
 { TADODataSet }
@@ -919,6 +922,7 @@ type
     procedure GetIndexNames(List: TStrings);
     property IndexDefs;
   published
+    property CommandTimeout;
     property EnableBCD;
     property IndexFieldNames;
     property IndexName;
@@ -933,7 +937,7 @@ type
 
   TADOQuery = class(TCustomADODataSet)
   private
-    FSQL: TSTrings;
+    FSQL: TStrings;
     FRowsAffected: Integer;
     function GetSQL: TStrings;
     procedure SetSQL(const Value: TStrings);
@@ -945,6 +949,7 @@ type
     function ExecSQL: Integer; {for TQuery compatibility}
     property RowsAffected: Integer read FRowsAffected;
   published
+    property CommandTimeout;
     property DataSource;
     property EnableBCD;
     property ParamCheck;
@@ -960,6 +965,7 @@ type
     constructor Create(AOwner: TComponent); override;
     procedure ExecProc;
   published
+    property CommandTimeout;
     property DataSource;
     property EnableBCD;
     property ProcedureName: WideString read GetCommandText write SetCommandText;
@@ -999,10 +1005,9 @@ function GetDataLinkFiles(FileNames: TStrings; Directory: string = ''): Integer;
 
 implementation
 
-uses
-  DBCommon, DBLogDlg, Forms, MTX, OleCtrls, DBConsts, ComObj, ADOConst;
+uses DBCommon, Mtx, DBConsts, ComObj, ADOConst;
 
-type  
+type
   PRecInfo = ^TRecInfo;
   TRecInfo = packed record
     Bookmark: OleVariant;
@@ -1018,7 +1023,7 @@ const
   cfIndex      = 3;
   cfParameters = 4;
   cfProvider   = 5;
-  
+
   bfNA = TBookmarkFlag(Ord(High(TBookmarkFlag)) + 1);
   RSOnlyCommandTypes = [cmdTableDirect, cmdFile]; { Command Types valid only in RecordSet.Open calls }
 
@@ -1054,7 +1059,7 @@ const
     adLongVarChar, adLongVarBinary, adLongVarBinary, adLongVarBinary,
     adLongVarBinary, adLongVarBinary, adEmpty, adChar, adChar, adBigInt,
     adEmpty, adEmpty, adEmpty, adEmpty, adEmpty, adEmpty, adVariant,
-    adIUnknown, adIDispatch, adGuid
+    adIUnknown, adIDispatch, adGuid, adEmpty, adEmpty
     );
 
   EventReasonValues: array[TEventReason] of TOleEnum = (adRsnAddNew,
@@ -1069,7 +1074,7 @@ const
   ExecuteOptionValues: array[TExecuteOption] of TOleEnum = (adAsyncExecute,
     adAsyncFetch, adAsyncFetchNonBlocking, adExecuteNoRecords);
 
-  FilterGroupValues: array[TFilterGroup] of TOleEnum = (-1 {Unassigned},
+  FilterGroupValues: array[TFilterGroup] of TOleEnum = ($FFFFFFFF {Unassigned},
     adFilterNone, adFilterPendingRecords, adFilterAffectedRecords,
     adFilterFetchedRecords, adFilterPredicate, adFilterConflictingRecords);
 
@@ -1084,7 +1089,7 @@ const
 
   MarshalOptionValues: array[TMarshalOption] of TOleEnum = (adMarshalAll,
     adMarshalModifiedOnly);
-    
+
   ObjectStateValues: array[TObjectState] of TOleEnum = (adStateClosed,
     adStateOpen, adStateConnecting, adStateExecuting, adStateFetching);
 
@@ -1098,7 +1103,7 @@ const
   RecordStatusValues: array[TRecordStatus] of TOleEnum = (adRecOK, adRecNew,
     adRecModified, adRecDeleted, adRecUnmodified, adRecInvalid,
     adRecMultipleChanges, adRecPendingChanges, adRecCanceled, adRecCantRelease,
-    adRecConcurrencyViolation, adRecIntegrityViolation, adRecMaxChangesExceeded,
+    adRecConcurrencyViolation, adRecIntegrityViolation,adRecMaxChangesExceeded,
     adRecObjectOpen, adRecOutOfMemory, adRecPermissionDenied,
     adRecSchemaViolation, adRecDBDeleted);
 
@@ -1196,36 +1201,6 @@ begin
   end;
 end;
 
-function StripVarByteLenPrefix(const Value: Variant): Variant;
-var
-  PSource, PDest: Pointer;
-  Size: Word;
-begin
-  if VarIsNull(Value) then
-    Result := Null
-  else
-  begin
-    PSource := VarArrayLock(Value);
-    try
-      Size := PWord(PSource)^;
-      { Verify the length prefix is valid before trying to strip it }
-      if Size < VarArrayHighBound(Value, 1)  then
-      begin
-        Result := VarArrayCreate([0, Size-1], varByte);
-        PDest := VarArrayLock(Result);
-        try
-          Move((PChar(PSource)+2)^, PDest^, Size);
-        finally
-          VarArrayUnlock(Result);
-        end;
-      end else
-        Result := Value;
-    finally
-      VarArrayUnlock(Value);
-    end;
-  end;
-end;
-
 function StringToVarArray(const Value: string): OleVariant;
 var
   PData: Pointer;
@@ -1248,7 +1223,11 @@ begin
   else if VarIsArray(Value) then
     Result := VarArrayHighBound(Value, 1) + 1
   else if TVarData(Value).VType = varOleStr then
-    Result := Length(PWideString(@TVarData(Value).VOleStr)^)
+  begin
+    Result := Length(PWideString(@TVarData(Value).VOleStr)^);
+    if Result = 0 then
+      Result := -1;
+  end
   else
     Result := SizeOf(OleVariant);
 end;
@@ -1315,7 +1294,7 @@ begin
   FieldName := Field.FieldName;
   if Pos(' ', FieldName) > 0 then
     FieldName := Format('[%s]', [FieldName]);
-  if VarIsNull(Value) or VarIsEmpty(Value) then
+  if VarIsNull(Value) or VarIsClear(Value) then
     Value := 'Null'
   else
     case Field.DataType of
@@ -1326,7 +1305,7 @@ begin
           if Partial and (Value <> '') then
           begin
             Value := Value + '*';
-            Operator := ' like ';
+            Operator := ' like ';     { Do not localize }
           end;
           if Pos('''', Value) > 0 then
             QuoteCh := '#' else
@@ -1346,22 +1325,6 @@ begin
       Result := True;
       Exit;
     end;
-  Result := False;
-end;
-
-function PropertyEquals(const PropCollection: Properties; const Name: WideString;
-  const Value: OleVariant): Boolean;
-var
-  I: Integer;
-begin
-  for I := 0 to PropCollection.Count - 1 do
-  begin
-    if PropCollection[I].Name = Name then
-    begin
-      Result := PropCollection[I].Value = Value;
-      Exit;
-    end;
-  end;
   Result := False;
 end;
 
@@ -1511,6 +1474,12 @@ begin
   Result := FileNames.Count;
 end;
 
+procedure ApplicationHandleException(Sender: TObject);
+begin
+  if Assigned(Classes.ApplicationHandleException) then
+    Classes.ApplicationHandleException(Sender);
+end;
+
 { TADOConnection }
 
 constructor TADOConnection.Create(AOwner: TComponent);
@@ -1544,7 +1513,7 @@ begin
     inherited Loaded;
   except
     { Need to trap any exceptions opening while we are loading here }
-    Application.HandleException(Self)
+    ApplicationHandleException(Self);
   end;
 end;
 
@@ -1600,7 +1569,7 @@ procedure TADOConnection.WaitForConnectComplete;
 begin
   if Assigned(ConnectionObject) then
     while (ConnectionObject.State = adStateConnecting) do
-      Application.ProcessMessages;
+      DBApplication.ProcessMessages;
 end;
 
 procedure TADOConnection.DoConnect;
@@ -1651,7 +1620,7 @@ var
 begin
   CheckActive;
   Result := ConnectionObject.Execute(CommandText, VarRecsAffected,
-    CommandTypeValues[CommandType]+ExecuteOptionsToOrd(ExecuteOptions));
+    Integer(CommandTypeValues[CommandType])+ExecuteOptionsToOrd(ExecuteOptions));
 end;
 
 procedure TADOConnection.Open(const UserID, Password: WideString);
@@ -1766,7 +1735,7 @@ var
 begin
   OleCheck(ConnectionObject.QueryInterface(IConnectionPointContainer,
     ConnPtContainer));
-  OleCheck(ConnPtContainer.FindConnectionPoint(ConnectionEvents, Result));
+  OleCheck(ConnPtContainer.FindConnectionPoint(DIID_ConnectionEvents, Result));
 end;
 
 procedure TADOConnection.BeginTransComplete(TransactionLevel: Integer;
@@ -1846,7 +1815,7 @@ procedure TADOConnection.ExecuteComplete(RecordsAffected: Integer;
             Break;
           end;
     except
-      Application.HandleException(Self);
+      ApplicationHandleException(Self);
     end;
   end;
 
@@ -1941,12 +1910,13 @@ begin
     if UserID = '' then
       SUserID := UserID;
       SUserID := GetUserName(ConnectionString);
-    if LoginDialogEx(Name, SUserID, SPassword, False) then
-    begin
-      UserID := SUserID;
-      Password := SPassword;
-    end else
-      adStatus := adStatusCancel;
+    if Assigned(LoginDialogExProc) then
+      if LoginDialogExProc(Name, SUserID, SPassword, False) then
+      begin
+        UserID := SUserID;
+        Password := SPassword;
+      end else
+        adStatus := adStatusCancel;
   end;
   if Assigned(OnLogin) then
     OnLogin(Self, UserID, Password);
@@ -1984,7 +1954,7 @@ begin
       ExecuteOptions, EventStatus, pCommand, pRecordset);
     CursorType := CursorTypeValues[ECursorType];
     LockType := LockTypeValues[ELockType];
-    Options := CommandTypeValues[CommandType] + ExecuteOptionsToOrd(ExecuteOptions);
+    Options := Integer(CommandTypeValues[CommandType]) + ExecuteOptionsToOrd(ExecuteOptions);
     adStatus := EventStatusValues[EventStatus];
   end;
 end;
@@ -2006,7 +1976,7 @@ end;
 
 procedure TADOConnection.SetAttributes(const Value: TXactAttributes);
 var
-  Attributes: Integer;
+  Attributes: LongWord;
   Xa: TXactAttribute;
 begin
   Attributes := 0;
@@ -2037,12 +2007,19 @@ procedure TADOConnection.SetConnectionObject(const Value: _Connection);
 begin
   CheckInActive;
   if Assigned(Value) then
+  begin
+    OleCheck(ConnectionPoint.UnAdvise(FConnEventsID));
     FConnectionObject := Value;
+    OleCheck(ConnectionPoint.Advise(Self as IUnknown, FConnEventsID));
+  end;
 end;
 
 function TADOConnection.GetConnectionString: WideString;
 begin
-  Result := ConnectionObject.ConnectionString;
+  if (csWriting in ComponentState) and Connected then
+    Result := FConnectionString
+  else
+    Result := ConnectionObject.ConnectionString;
 end;
 
 procedure TADOConnection.SetConnectionString(const Value: WideString);
@@ -2051,6 +2028,7 @@ begin
   begin
     CheckInactive;
     ConnectionObject.ConnectionString := Value;
+    FConnectionString := Value;
   end;
 end;
 
@@ -2288,7 +2266,7 @@ end;
 
 function TRDSConnection.GetConnected: Boolean;
 begin
-  Result := not VarIsEmpty(FAppServer);
+  Result := not VarIsClear(FAppServer);
 end;
 
 function TRDSConnection.GetRecordset(const CommandText: Widestring;
@@ -2475,7 +2453,7 @@ begin
   begin
     try
       { Create a dummy parameter first, so that we won't raise an exception
-        on the call to Count if the provider does not supply prameter info }
+        on the call to Count if the provider does not supply parameter info }
       ParameterCollection.Append(Create_Parameter('_', ftInteger));
       for I := ParameterCollection.Count - 1 downto 0 do
         ParameterCollection.Delete(I);
@@ -2695,12 +2673,15 @@ begin
 end;
 
 function TParameters.GetAttr(Index: Integer): string;
+resourcestring
+  sNameAttr = 'Name';
+  sValueAttr = 'Value';
 begin
   case Index of
-    0: Result := 'Name';
-    1: Result := 'Value';
+    0: Result := sNameAttr;
+    1: Result := sValueAttr;
   else
-    Result := '';
+    Result := ''; { do not localize }
   end;
 end;
 
@@ -2788,13 +2769,13 @@ procedure TParameter.Assign(Source: TPersistent);
       DataType := Param.DataType;
   end;
 
-  procedure LoadFromBitmap(Bitmap: TBitmap);
+  procedure LoadFromStreamPersist(const StreamPersist: IStreamPersist);
   var
     MS: TMemoryStream;
   begin
     MS := TMemoryStream.Create;
     try
-      Bitmap.SaveToStream(MS);
+      StreamPersist.SaveToStream(MS);
       LoadFromStream(MS, ftGraphic);
     finally
       MS.Free;
@@ -2807,6 +2788,8 @@ procedure TParameter.Assign(Source: TPersistent);
     DataType := ftString;
   end;
 
+var
+  StreamPersist: IStreamPersist;
 begin
   if Source is TParameter then
     AssignParameter(TParameter(Source))
@@ -2816,10 +2799,8 @@ begin
     AssignParam(TParam(Source))
   else if Source is TStrings then
     LoadFromStrings(TStrings(Source))
-  else if Source is TBitmap then
-    LoadFromBitmap(TBitmap(Source))
-  else if (Source is TPicture) and (TPicture(Source).Graphic is TBitmap) then
-    LoadFromBitmap(TBitmap(TPicture(Source).Graphic))
+  else if Supports(Source, IStreamPersist, StreamPersist) then
+    LoadFromStreamPersist(StreamPersist)
   else
     inherited Assign(Source);
 end;
@@ -2898,7 +2879,7 @@ end;
 function TParameter.IsEqual(Value: TParameter): Boolean;
 begin
   Result := (VarType(Self.Value) = VarType(Value.Value)) and
-    (VarIsEmpty(Self.Value) or (Self.Value = Value.Value)) and (Name = Value.Name) and
+    (VarIsClear(Self.Value) or (Self.Value = Value.Value)) and (Name = Value.Name) and
     (DataType = Value.DataType) and (Direction = Value.Direction) and
     (NumericScale = Value.NumericScale) and (Precision = Value.Precision) and
     (Size = Value.Size);
@@ -2919,7 +2900,7 @@ end;
 
 procedure TParameter.SetAttributes(const Value: TParameterAttributes);
 var
-  Attributes: Integer;
+  Attributes: LongWord;
   Pa: TParameterAttribute;
 begin
   Attributes := 0;
@@ -3033,7 +3014,7 @@ var
   NewSize: Integer;
   NewValue: OleVariant;
 begin
-  if VarIsEmpty(Value) or VarIsNull(Value) then
+  if VarIsClear(Value) or VarIsNull(Value) then
     NewValue := Null
   else
   begin
@@ -3169,7 +3150,7 @@ begin
   try
     Initialize;
     Result := CommandObject.Execute(VarRecsAffected, Parameters,
-      CommandObject.CommandType + ExecuteOptionsToOrd(FExecuteOptions));
+      Integer(CommandObject.CommandType) + ExecuteOptionsToOrd(FExecuteOptions));
     RecordsAffected := VarRecsAffected;
   finally
     SetConnectionFlag(cfExecute, False);
@@ -3177,14 +3158,29 @@ begin
 end;
 
 procedure TADOCommand.Initialize(DoAppend: Boolean);
+var
+  BracketText: string;
 begin
   CheckCommandText;
-  { Put brackets around table names with spaces }
-  if (CommandType in [cmdTable, cmdStoredProc]) and (Pos(' ', FCommandText) > 0) and
-     (FCommandText[1] <> '[') then
-    CommandObject.CommandText := '['+FCommandText+']';
   if DoAppend then
+  begin
+    { Put brackets around table names with spaces }
+    if (CommandType in [cmdTable, cmdStoredProc]) and
+       (Pos(' ', FCommandText) > 0) and (FCommandText[1] <> '[') then
+    begin
+      BracketText:= FCommandText;
+      { Left bracket goes after any owner qualifier }
+      if (Pos('.', BracketText) > 0) then
+        BracketText:= StringReplace(BracketText, '.', '.[', []) else
+        BracketText:= '[' + BracketText;
+      { Right bracket goes before any grouping indicator }
+      if (Pos(';', BracketText) > 0) then
+        BracketText:= StringReplace(BracketText, ';', '];', []) else
+        BracketText:= BracketText + ']';
+      CommandObject.CommandText := BracketText;
+    end;
     Parameters.AppendParameters;
+  end;
 end;
 
 { Property Access }
@@ -3312,13 +3308,6 @@ begin
   end;
 end;
 
-procedure TADOCommand.SetName(const NewName: TComponentName);
-begin
-  inherited SetName(NewName);
-  if (NewName <> '') and Assigned(CommandObject) then
-    CommandObject.Name := NewName;
-end;
-
 procedure TADOCommand.SetParameters(const Value: TParameters);
 begin
   FParameters.Assign(Value);
@@ -3405,7 +3394,7 @@ begin
     inherited Loaded;
   except
     { Need to trap any exceptions opening while we are loading here }
-    Application.HandleException(Self)
+    ApplicationHandleException(Self);
   end;
 end;
 
@@ -3421,7 +3410,7 @@ const
 var
   ActiveConnection,
   Source: OleVariant;
-  
+
   procedure InitializeConnection;
   var
     UseCommand: Boolean;
@@ -3464,6 +3453,14 @@ var
       RefreshIndexFields;
     end;
     EnableEvents;
+    if Assigned(FOnRecordsetCreate) then
+    begin
+      if VarType(ActiveConnection) = varDispatch then
+        Recordset.Set_ActiveConnection(ActiveConnection)
+      else if Assigned(Command.CommandObject.Get_ActiveConnection) then
+        Recordset.Set_ActiveConnection(Command.CommandObject.Get_ActiveConnection);
+      FOnRecordsetCreate(Self, FRecordsetObject);
+    end;
   end;
 
 var
@@ -3475,7 +3472,7 @@ begin
     InitializeRecordset;
     Recordset.Open(Source, ActiveConnection,
       CursorTypeValues[FCursorType], LockTypeValues[FLockType],
-      CommandTypeValues[CommandType] + ExecuteOptionsToOrd(ExecuteOptions));
+      Integer(CommandTypeValues[CommandType]) + ExecuteOptionsToOrd(ExecuteOptions));
     while Recordset.State = adStateClosed do
     try
       FRecordsetObject := Recordset.NextRecordset(VarRecsAffected);
@@ -3512,13 +3509,11 @@ begin
   DestroyLookupCursor;
   if stOpen in RecordsetState then
   begin
-    Recordset.CancelUpdate;
     if FEventsID > 0 then
     begin
       OleCheck(ConnectionPoint.UnAdvise(FEventsID));
       FEventsID := 0;
     end;
-    Recordset.Close;
   end;
   FFindCursor := nil;
   FRecordsetObject := nil;
@@ -3529,12 +3524,14 @@ end;
 
 procedure TCustomADODataSet.InternalRefresh;
 begin
-  Recordset.Resync(adAffectAll, adResyncAllValues);
+  if Recordset.Supports(adResync) then
+    Recordset.Resync(adAffectAll, adResyncAllValues)
+  else
+    InternalRequery;
 end;
 
-procedure TCustomADODataSet.Requery(Options: TExecuteOptions);
+procedure TCustomADODataSet.InternalRequery(Options: TExecuteOptions = []);
 begin
-  CheckBrowseMode;
   if FConnectionChanged then
     DatabaseError(SCantRequery);
   try
@@ -3544,6 +3541,12 @@ begin
     raise;
   end;
   DestroyLookupCursor;
+end;
+
+procedure TCustomADODataSet.Requery(Options: TExecuteOptions = []);
+begin
+  CheckBrowseMode;
+  InternalRequery(Options);
   First;
 end;
 
@@ -3551,7 +3554,7 @@ procedure TCustomADODataSet.CheckActive;
 begin
   { Block here to prevent errors }
   while State = dsOpening do
-    Application.ProcessMessages;
+    DBApplication.ProcessMessages;
   inherited CheckActive;
 end;
 
@@ -3618,6 +3621,9 @@ var
             FName := Format('%s_%d', [F.Name, I]);
         end;
         Name := FName;
+        if (F.Type_ = adNumeric) and (F.NumericScale = 0) and
+           (F.Precision < 10) then
+          FieldType := ftInteger;
         case FieldType of
           ftString, ftWideString, ftBytes, ftVarBytes, ftFixedChar:
             FSize := F.DefinedSize;
@@ -3633,11 +3639,13 @@ var
           ftGuid:
             FSize := 38;
         end;
+
         if ((adFldRowID and F.Attributes) <> 0) then
            Attributes := Attributes + [faHiddenCol];
         if ((adFldFixed and F.Attributes) <> 0) then
            Attributes := Attributes + [faFixed];
-        if (((adFldUpdatable+adFldUnknownUpdatable) and F.Attributes) = 0) then
+        if (((adFldUpdatable+adFldUnknownUpdatable) and F.Attributes) = 0) or
+           (FieldType = ftAutoInc) then
           Attributes := Attributes + [faReadOnly];
         DataType := FieldType;
         Size := FSize;
@@ -3661,7 +3669,7 @@ end;
 
 { Routine to initialize OLE DB Intefaces for data access.  Not currently
   used but my be in a future release }
-  
+
 procedure TCustomADODataSet.InitOleDBAccess(Initializing: Boolean);
 
   procedure InitBinding(var Binding: TDBBinding; const ColInfo: TDBColumnInfo;
@@ -3734,7 +3742,7 @@ end;
 
 procedure TCustomADODataSet.PrepareCursor;
 begin
-  if FIndexFieldNames <> '' then
+  if (FIndexFieldNames <> '') then
     InternalSetSort(StringReplace(FIndexFieldNames, ';', ',', [rfReplaceAll]));
   if MasterDataLink.Active and (Parameters.Count = 0) then
     SetDetailFilter;
@@ -3746,7 +3754,7 @@ end;
 
 procedure TCustomADODataSet.InternalHandleException;
 begin
-  Application.HandleException(Self);
+  ApplicationHandleException(Self);
 end;
 
 procedure TCustomADODataSet.LoadFromFile(const FileName: WideString);
@@ -3896,7 +3904,7 @@ begin
       LinkField := MasterDataLink.Fields[I];
     FieldExpr := GetFilterStr(LinkField, TField(MasterDataLink.Fields[I]).Value);
     if FilterStr <> '' then
-      FilterStr := FilterStr + ' AND ' + FieldExpr
+      FilterStr := FilterStr + ' AND ' + FieldExpr      { Do not localize }
     else
       FilterStr := FieldExpr;
     end;
@@ -3913,14 +3921,16 @@ var
   I: Integer;
   LinkField: TField;
 begin
+  PRecInfo(ActiveBuffer)^.RecordStatus := adRecNew;
   FModifiedFields.Clear;
   if MasterDataLink.Active and (MasterDataLink.Fields.Count > 0) then
     for I := 0 to MasterDataLink.Fields.Count - 1 do
     begin
       if IndexFieldCount > I then
         LinkField := IndexFields[I] else
-        LinkField := FieldByName(TField(MasterDataLink.Fields[I]).FieldName);
-      LinkField.Assign(TField(MasterDataLink.Fields[I]));
+        LinkField := FindField(TField(MasterDataLink.Fields[I]).FieldName);
+      if LinkField <> nil then
+        LinkField.Assign(TField(MasterDataLink.Fields[I]));
     end;
   inherited DoOnNewRecord;
 end;
@@ -3975,6 +3985,8 @@ end;
 
 function TCustomADODataSet.CompareBookmarks(Bookmark1,
   Bookmark2: TBookmark): Integer;
+var
+  B1, B2: Integer;
 const
   RetCodes: array[Boolean, Boolean] of ShortInt = ((2, -1),(1, 0));
 begin
@@ -3983,7 +3995,14 @@ begin
   try
     Result := RecordSet.CompareBookmarks(POleVariant(Bookmark1)^,
       POleVariant(Bookmark2)^) - 1;
-    if Result > 1 then Result := 0;
+    if Result > 1 then
+    begin
+      B1 := POleVariant(Bookmark1)^;
+      B2 := POleVariant(Bookmark2)^;
+      if B1 > B2 then
+        Result := 1 else
+        Result := -1;
+    end;
   except
     Result := 0;
   end;
@@ -4006,7 +4025,8 @@ end;
 procedure TCustomADODataSet.FreeRecordBuffer(var Buffer: PChar);
 begin
   Finalize(PRecInfo(Buffer)^);
-  Finalize(PVariantList(Buffer+SizeOf(TRecInfo))^, Fields.Count);
+  if Fields.Count > 0 then
+    Finalize(PVariantList(Buffer+SizeOf(TRecInfo))^, Fields.Count);
   FreeMem(Buffer);
 end;
 
@@ -4054,13 +4074,13 @@ begin
       with PRecInfo(Buffer)^ do
       begin
         RecordStatus := Recordset.Status;
-        if ControlsDisabled then
-          RecordNumber := -2 else
-          RecordNumber := Recordset.AbsolutePosition;
         if (BookmarkSize > 0) and ((adRecDeleted and RecordStatus) = 0) then
         begin
           BookmarkFlag := bfCurrent;
           Bookmark := Recordset.Bookmark;
+          if ControlsDisabled then
+            RecordNumber := -2 else
+            RecordNumber := Recordset.AbsolutePosition;
         end else
           BookmarkFlag := bfNA;
       end;
@@ -4097,7 +4117,7 @@ begin
         end;
       until Accept or (Result <> grOK);
     except
-      Application.HandleException(Self);
+      ApplicationHandleException(Self);
       Result := grError;
     end;
     RestoreState(SaveState);
@@ -4191,14 +4211,15 @@ var
               Buffer, Field.Size, nil, nil);
           end;
         ftWideString:
-        begin
-          VarDataSize(Data);
           WideString(Buffer^) := bStrVal;
-        end;
         ftSmallint:
-          SmallInt(Buffer^) := iVal;
+          if vt = VT_UI1 then
+            SmallInt(Buffer^) := Byte(cVal) else
+            SmallInt(Buffer^) := iVal;
         ftWord:
-          Word(Buffer^) := bVal;
+          if vt = VT_UI1 then
+            Word(Buffer^) := bVal else
+            Word(Buffer^) := uiVal;
         ftAutoInc, ftInteger:
           Integer(Buffer^) := lVal;
         ftFloat, ftCurrency:
@@ -4237,15 +4258,19 @@ var
   end;
 
 begin
+  if not Assigned(Reserved) then RefreshBuffers;
   Result := GetActiveRecBuf(RecBuf);
   if not Result then Exit;
-  if not Assigned(Reserved) then RefreshBuffers;
   Data := PVariantList(RecBuf+SizeOf(TRecInfo))[Field.Index];
-  if VarIsEmpty(Data) and (Field.FieldNo > 0) then
+  if VarIsClear(Data) and (Field.FieldNo > 0) then
   begin
-    UpdateRecordSetPosition(RecBuf);
-    Data := Recordset.Fields[Field.FieldNo-1].Value;
-    if VarIsEmpty(Data) then Data := Null;
+    { Don't try to read data from a deleted record }
+    if (PRecInfo(RecBuf)^.RecordStatus and adRecDeleted) = 0 then
+    begin
+      UpdateRecordSetPosition(RecBuf);
+      Data := Recordset.Fields[Field.FieldNo-1].Value;
+    end;
+    if VarIsClear(Data) then Data := Null;
     PVariantList(RecBuf+SizeOf(TRecInfo))[Field.Index] := Data;
   end;
   Result := not VarIsNull(Data);
@@ -4396,8 +4421,24 @@ begin
 end;
 
 procedure TCustomADODataSet.InternalEdit;
+var
+  I: Integer;
 begin
   FModifiedFields.Clear;
+  if FRecordsetObject.LockType = adLockPessimistic then
+  begin
+    UpdateCursorPos;
+    FLockCursor := FRecordsetObject.Clone(adLockUnspecified);
+    FLockCursor.Bookmark := FRecordsetObject.Bookmark;
+    { Find an updatable field, and then assign the existing value to lock }
+    for I := 0 to FLockCursor.Fields.Count - 1 do
+      if ((adFldUpdatable+adFldUnknownUpdatable) and
+          Recordset.Fields[I].Attributes) <> 0 then
+      begin
+        FLockCursor.Fields[I].Value := FLockCursor.Fields[I].Value;
+        Break;
+      end;
+  end;
 end;
 
 procedure TCustomADODataSet.InternalInsert;
@@ -4418,17 +4459,25 @@ procedure TCustomADODataSet.InternalPost;
     FieldData: PVariantList;
     Data: OleVariant;
   begin
-    FieldData := PVariantList(ActiveBuffer + SizeOf(TRecInfo));
-    for I := 0 to FModifiedFields.Count - 1 do
-      with TField(FModifiedFields[I]) do
-      if not ReadOnly then
-      begin
-        Data := FieldData[Index];
-        if not VarIsEmpty(Data) then
-          Recordset.Fields[FieldNo-1].Value := Data;
-      end;
-    if (Recordset.EditMode * (adEditInProgress + adEditAdd)) <> 0 then
-      Recordset.Update(EmptyParam, EmptyParam);
+    try
+      FieldData := PVariantList(ActiveBuffer + SizeOf(TRecInfo));
+      for I := 0 to FModifiedFields.Count - 1 do
+        with TField(FModifiedFields[I]) do
+        begin
+          Data := FieldData[Index];
+          if not VarIsClear(Data) and
+             (((adFldUpdatable+adFldUnknownUpdatable) and
+             Recordset.Fields[FieldNo-1].Attributes) <> 0) then
+            Recordset.Fields[FieldNo-1].Value := Data;
+        end;
+      if (Recordset.EditMode * (adEditInProgress + adEditAdd)) <> 0 then
+        Recordset.Update(EmptyParam, EmptyParam);
+      ReleaseLock;
+    except
+      CursorPosChanged;
+      Recordset.CancelUpdate;
+      raise;
+    end;
   end;
 
   procedure CheckForFlyAway;
@@ -4452,6 +4501,7 @@ procedure TCustomADODataSet.InternalPost;
   end;
 
 begin
+  inherited;
   UpdateCursorPos;
   try
     if State = dsEdit then
@@ -4462,8 +4512,9 @@ begin
       try
         UpdateData;
       except
-        CursorPosChanged;
-        Recordset.CancelUpdate;
+        { When appending recordset may be left in an invalid state, reset it }
+        if Recordset.EOF and Recordset.BOF and (Recordset.RecordCount > 0) and EOF then
+          Recordset.MoveLast;
         raise;
       end;
     end;
@@ -4474,10 +4525,18 @@ begin
   CheckForFlyAway;
 end;
 
-procedure TCustomADODataSet.InternalDelete;
+procedure DoRecordsetDelete(DataSet: TCustomADODataSet; AffectRecords: TAffectRecords);
 begin
+  with DataSet do
   try
-    Recordset.Delete(adAffectCurrent);
+    Recordset.Delete(AffectRecordsValues[AffectRecords]);
+    { When CacheSize > 1, Recordset allows fetching of deleted records.
+      Calling MovePrevious seems to work around it }
+    if (CacheSize > 1) and (PRecInfo(ActiveBuffer).RecordNumber <> 1) then
+    begin
+      Recordset.MovePrevious;
+      Recordset.MoveNext;
+    end;
     Recordset.MoveNext;
   except
     on E: Exception do
@@ -4488,18 +4547,32 @@ begin
   end;
 end;
 
+procedure TCustomADODataSet.InternalDelete;
+begin
+  DoRecordsetDelete(Self, arCurrent);
+end;
+
 procedure TCustomADODataSet.DeleteRecords(AffectRecords: TAffectRecords);
 begin
   CheckActive;
   UpdateCursorPos;
   CursorPosChanged;
-  Recordset.Delete(AffectRecordsValues[AffectRecords]);
+  DoRecordsetDelete(Self, AffectRecords);
   Resync([]);
+end;
+
+procedure TCustomADODataSet.ReleaseLock;
+begin
+  if Assigned(FLockCursor) then
+  begin
+    FLockCursor.CancelUpdate;
+    FLockCursor := nil;
+  end;
 end;
 
 procedure TCustomADODataSet.InternalCancel;
 begin
-  Recordset.CancelUpdate;
+  ReleaseLock;
 end;
 
 procedure TCustomADODataSet.CancelUpdates;
@@ -4541,7 +4614,7 @@ end;
 
 procedure TCustomADODataSet.DeactivateFilters;
 begin
-  Recordset.Filter := adFilterNone;
+  Recordset.Filter := '';
 end;
 
 procedure TCustomADODataSet.SetFilterOptions(Value: TFilterOptions);
@@ -4554,7 +4627,7 @@ procedure TCustomADODataSet.SetFilterText(const Value: string);
 begin
   if Filter <> Value then
   begin
-    if (Value <> '') and (MasterFields <> '') then
+    if (Parameters.Count = 0) and (Value <> '') and (MasterFields <> '') then
       DatabaseError(SNoDetailFilter, Self);
     if Active and Filtered then
     begin
@@ -4581,7 +4654,7 @@ begin
       if Value then
       begin
         if FFilterGroup <> fgUnassigned then
-          Recordset.Filter := FilterGroupValues[FFilterGroup] else
+          Recordset.Filter := Integer(FilterGroupValues[FFilterGroup]) else
           ActivateTextFilter(Filter)
       end
       else
@@ -4602,7 +4675,7 @@ begin
     FilterVar := Recordset.Filter;
     if (VarType(FilterVar) = varInteger) and
       (FilterVar >= adFilterNone) and (FilterVar <= adFilterConflictingRecords) then
-      FFilterGroup := TFilterGroup(OleEnumToOrd(FilterGroupValues, FilterVar))
+      FFilterGroup := TFilterGroup(DWORD(OleEnumToOrd(FilterGroupValues, FilterVar)))
     else
       FFilterGroup := fgUnassigned;
   end;
@@ -4616,7 +4689,7 @@ begin
   FFilterGroup := Value;
   if (FFilterGroup <> fgUnassigned) and Filtered then
   begin
-    Recordset.Filter := FilterGroupValues[FFilterGroup];
+    Recordset.Filter := Integer(FilterGroupValues[FFilterGroup]);
     First;
   end;
 end;
@@ -4726,7 +4799,8 @@ begin
             SortList := Format('%s[%s],', [SortList, FieldName]) else
             SortList := Format('%s%s,', [SortList, FieldName]);
         SetLength(SortList, Length(SortList)-1);
-        FLookupCursor.Sort := SortList;
+        if FLookupCursor.Sort <> SortList then
+          FLookupCursor.Sort := SortList;
       end;
       FLookupCursor.Filter := '';
       FFilterBuffer := Buffer;
@@ -4743,7 +4817,7 @@ begin
           begin
             FieldExpr := GetFilterStr(Fields[I], KeyValues[I], (Partial and (I = FieldCount-1)));
             if LocateFilter <> '' then
-               LocateFilter := LocateFilter + ' AND ' + FieldExpr else
+               LocateFilter := LocateFilter + ' AND ' + FieldExpr else    { Do not localize }
                LocateFilter := FieldExpr;
           end;
           FLookupCursor.Filter := LocateFilter;
@@ -4757,7 +4831,14 @@ begin
     Result := not FLookupCursor.EOF;
     if Result then
       if SyncCursor then
-        Recordset.Bookmark := FLookupCursor.Bookmark
+      begin
+        Recordset.Bookmark := FLookupCursor.Bookmark;
+        if Recordset.EOF or Recordset.BOF then
+        begin
+          Result := False;
+          CursorPosChanged;
+        end
+      end
       else
         { For lookups, read all field values into the temp buffer }
         for I := 0 to Self.Fields.Count - 1 do
@@ -4890,7 +4971,7 @@ var
 begin
   OleCheck(Recordset.QueryInterface(IConnectionPointContainer,
     ConnPtContainer));
-  OleCheck(ConnPtContainer.FindConnectionPoint(RecordsetEvents, Result));
+  OleCheck(ConnPtContainer.FindConnectionPoint(DIID_RecordsetEvents, Result));
 end;
 
 procedure TCustomADODataSet.WillChangeField(cFields: Integer;
@@ -5074,7 +5155,7 @@ var
   BufPtr: PChar;
 begin
   CheckActive;
-  if IsEmpty then
+  if IsEmpty or (State = dsInsert) then
     Result := -1
   else
   begin
@@ -5389,15 +5470,17 @@ function TCustomADODataSet.GetProperties: Properties;
 begin
   if Assigned(Recordset) then
     Result := Recordset.Properties else
-    Result := nil; 
+    Result := nil;
 end;
 
 procedure TCustomADODataSet.SetRecordset(const Value: _Recordset);
 begin
   Close;
-  FRecordsetObject := Value;
   if Assigned(Value) then
   try
+    if (Value.State and adStateOpen) = 0 then
+      DatabaseError(SRecordsetNotOpen, Self);
+    FRecordsetObject := Value;
     Open;
   except
     Close;
@@ -5450,7 +5533,7 @@ end;
 
 function TCustomADODataSet.GetIndexFieldNames: string;
 begin
-  if Active then
+  if Active and (FIndexName = '') then
   begin
     if Supports([coIndex]) and (Recordset.Index <> '') then
     begin
@@ -5475,6 +5558,7 @@ begin
       end else
         Sort := StringReplace(Value, ';', ',', [rfReplaceAll]);
     FIndexFieldNames := Value;
+    FIndexName := '';
   end;
 end;
 
@@ -5510,8 +5594,8 @@ begin
   end else
   begin
     FList := StringReplace(Sort, ',', ';', [rfReplaceAll]);
-    FList := StringReplace(FList, ' DESC', '', [rfReplaceAll]);
-    FList := StringReplace(FList, ' ASC', '', [rfReplaceAll]);
+    FList := StringReplace(FList, ' DESC', '', [rfReplaceAll]);   { Do not localize }
+    FList := StringReplace(FList, ' ASC', '', [rfReplaceAll]);    { Do not localize }
     FList := StringReplace(FList, '[', '', [rfReplaceAll]);
     FList := StringReplace(FList, ']', '', [rfReplaceAll]);
   end;
@@ -5535,6 +5619,7 @@ begin
     Resync([]);
   end;
   FIndexName := Value;
+  FIndexFieldNames := '';
   RefreshIndexFields;
 end;
 
@@ -5783,7 +5868,7 @@ procedure TCustomADODataSet.PSSetParams(AParams: TParams);
     begin
       FieldExpr := GetFilterStr(FieldByName(AParams[I].Name), AParams[I].Value);
       if FilterStr <> '' then
-        FilterStr := FilterStr + ' AND ' + FieldExpr
+        FilterStr := FilterStr + ' AND ' + FieldExpr     { Do not localize }
       else
         FilterStr := FieldExpr;
     end;
@@ -5843,37 +5928,55 @@ begin
   Result := False;
 end;
 
-(* Implementation of fix for inserting detail records in Midas
 procedure TCustomADODataSet.GetDetailLinkFields(MasterFields,
   DetailFields: TList);
+
+  function AddFieldToList(const FieldName: string; DataSet: TDataSet;
+    List: TList): Boolean;
+  var
+    Field: TField;
+  begin
+    Field := DataSet.FindField(FieldName);
+    if (Field <> nil) then
+      List.Add(Field);
+    Result := Field <> nil;
+  end;
+
 var
   i: Integer;
   Idx: TIndexDef;
 begin
   MasterFields.Clear;
   DetailFields.Clear;
-  if (DataSource <> nil) and (DataSource.DataSet <> nil) and
-     (Self.MasterFields <> '') then
+  if (DataSource <> nil) and (DataSource.DataSet <> nil) then
   begin
-    Idx := nil;
-    DataSource.DataSet.GetFieldList(MasterFields, Self.MasterFields);
-    UpdateIndexDefs;
-    if IndexName <> '' then
-      Idx := IndexDefs.Find(IndexName)
-    else if IndexFieldNames <> '' then
-      Idx := IndexDefs.GetIndexForFields(IndexFieldNames, False)
-    else
-      for i := 0 to IndexDefs.Count - 1 do
-        if ixPrimary in IndexDefs[i].Options then
-        begin
-          Idx := IndexDefs[i];
-          break;
-        end;
-    if Idx <> nil then
-      GetFieldList(DetailFields, Idx.Fields);
+    if Parameters.Count > 0 then
+    begin
+      for i := 0 to Parameters.Count - 1 do
+        if AddFieldToList(Parameters[i].Name, DataSource.DataSet, MasterFields) then
+           AddFieldToList(Parameters[i].Name, Self, DetailFields)
+    end
+    else if (Self.MasterFields <> '') then
+    begin
+      Idx := nil;
+      DataSource.DataSet.GetFieldList(MasterFields, Self.MasterFields);
+      UpdateIndexDefs;
+      if IndexName <> '' then
+        Idx := IndexDefs.Find(IndexName)
+      else if IndexFieldNames <> '' then
+        Idx := IndexDefs.GetIndexForFields(IndexFieldNames, False)
+      else
+        for i := 0 to IndexDefs.Count - 1 do
+          if ixPrimary in IndexDefs[i].Options then
+          begin
+            Idx := IndexDefs[i];
+            break;
+          end;
+      if Idx <> nil then
+        GetFieldList(DetailFields, Idx.Fields);
+    end;
   end;
 end;
-*)
 
 { TADODataSet }
 
@@ -5890,7 +5993,7 @@ procedure TADODataSet.CreateDataSet;
         Options := 0 else
         Options := adFldIsNullable + adFldMayBeNull;
       if (DataType in [ftMemo, ftBlob]) and (Size = 0) then
-        Size := High(Integer); 
+        Size := High(Integer);
       Recordset.Fields.Append(Name, FieldTypeToADOType(DataType), Size, Options);
     end;
   end;
@@ -5942,6 +6045,8 @@ begin
 end;
 
 procedure TADODataSet.OpenCursor(InfoQuery: Boolean);
+var
+  ParentIsEmpty: Boolean;
 begin
   if not Assigned(FRecordsetObject) then
   begin
@@ -5949,7 +6054,15 @@ begin
     begin
       FParentDataSet := DataSetField.DataSet as TCustomADODataSet;
       OpenParentDataSet(FParentDataSet);
-      FRecordsetObject := IUnknown(FParentDataSet.Recordset.Fields[DataSetField.FieldName].Value) as _Recordset;
+      ParentIsEmpty := FParentDataSet.RecordSet.EOF and FParentDataSet.RecordSet.BOF;
+      if ParentIsEmpty then
+        FParentDataSet.RecordSet.AddNew(EmptyParam, EmptyParam);
+      try
+        FRecordsetObject := IUnknown(FParentDataSet.Recordset.Fields[DataSetField.FieldName].Value) as _Recordset;
+      finally
+        if ParentIsEmpty then
+          FParentDataSet.RecordSet.CancelUpdate;
+      end;
     end
     else if Assigned(RDSConnection)then
       FRecordsetObject := RDSConnection.GetRecordSet(CommandText, ConnectionString);
@@ -6052,6 +6165,8 @@ end;
 
 procedure TADOQuery.QueryChanged(Sender: TObject);
 begin
+  if not (csLoading in ComponentState) then
+    Close;
   CommandText := FSQL.Text;
 end;
 
@@ -6111,7 +6226,7 @@ begin
     FField.Modified := True;
     FDataSet.DataEvent(deFieldChange, Longint(FField));
   except
-    Application.HandleException(Self);
+    ApplicationHandleException(Self);
   end;
   inherited Destroy;
 end;
@@ -6145,7 +6260,7 @@ function TADOBlobStream.Realloc(var NewCapacity: Longint): Pointer;
       V := S;
     end else
     begin
-      if VarIsEmpty(V) or VarIsNull(V) then
+      if VarIsClear(V) or VarIsNull(V) then
         V := VarArrayCreate([0, NewCapacity-1], varByte) else
         VarArrayRedim(V, NewCapacity-1);
     end;

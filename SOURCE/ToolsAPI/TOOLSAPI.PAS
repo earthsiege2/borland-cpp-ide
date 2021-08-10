@@ -1,25 +1,33 @@
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
+{ ********************************************************************** }
+{                                                                        }
+{ Delphi and Kylix Cross-Platform Open Tools API                         }
+{                                                                        }
+{ Copyright (C) 1995, 2001 Borland Software Corporation                  }
+{                                                                        }
+{ All Rights Reserved.                                                   }
+{                                                                        }
+{ ********************************************************************** }
+
 
 unit ToolsAPI;
 
 interface
 
-uses Windows, SysUtils, Classes, ActiveX, TypInfo, DsgnIntf, Menus, ActnList,
+{$IFDEF MSWINDOWS}
+uses Windows, SysUtils, Classes, ActiveX, TypInfo, DesignIntf, Menus, ActnList,
   Graphics, ImgList, Forms, ComCtrls;
-
+{$ENDIF}
+{$IFDEF LINUX}
+uses Types, SysUtils, Classes, TypInfo, DesignIntf, Menus, ActnList,
+  Graphics, ImgList, Forms, ComCtrls;
+{$ENDIF}
 
 (*$HPPEMIT 'DEFINE_GUID(IID_IBorlandIDEServices,0x7FD1CE92,0xE053,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_INTAComponent,0x34B2E2D1,0xE36F,0x11D1,0xAB,0x0E,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_INTACustomDrawMessage,0x589BBDA2,0xF995,0x11D1,0xAB,0x27,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
-(*$HPPEMIT 'DEFINE_GUID(IID_INTACustomMessage,0xB7523AB7,0xEB81,0x11D2,0xAC,0x7B,0x00,0xC0,0x4F,0xB1,0x73,0xDC);'*)
-(*$HPPEMIT 'DEFINE_GUID(IID_INTACustomMessage40,0x589BBDA1,0xF995,0x11D1,0xAB,0x27,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
-(*$HPPEMIT 'DEFINE_GUID(IID_INTAFormEditor,0x34B2E2CF,0xE36F,0x11D1,0xAB,0x0E,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTACustomMessage50,0xB7523AB7,0xEB81,0x11D2,0xAC,0x7B,0x00,0xC0,0x4F,0xB1,0x73,0xDC);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTACustomMessage,0x589BBDA1,0xF995,0x11D1,0xAB,0x27,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_INTAFormEditor,0x56931EB9,0x329A,0xD411,0x87,0xC6,0x9B,0x27,0x30,0x41,0x22,0x00);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_INTAServices,0xC17B3DF1,0xDFE5,0x11D2,0xA8,0xC7,0x00,0xC0,0x4F,0xA3,0x2F,0x53);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_INTAServices40,0x3C7F3267,0xF0BF,0x11D1,0xAB,0x1E,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_INTAToDoItem,0x094003D8,0xE7AA,0x11D2,0xAA,0x99,0x00,0xC0,0x4F,0xA3,0x5C,0xE8);'*)
@@ -30,8 +38,10 @@ uses Windows, SysUtils, Classes, ActiveX, TypInfo, DsgnIntf, Menus, ActnList,
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTABreakpoint40,0x34B2E2D4,0xE36F,0x11D1,0xAB,0x0E,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTABreakpointNotifier,0x34B2E2D5,0xE36F,0x11D1,0xAB,0x0E,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTABufferOptions,0x8C748540,0xC6C1,0x11D2,0x81,0x39,0x00,0x60,0x97,0x92,0xF1,0x34);'*)
-(*$HPPEMIT 'DEFINE_GUID(IID_IOTAComponent,0x34B2E2D0,0xE36F,0x11D1,0xAB,0x0E,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTACodeInsightServices,0x476904F8,0x89A9,0x4CD8,0xA7,0x1E,0x16,0x46,0x60,0x65,0x97,0x63);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAComponent,0xAC139ADF,0x329A,0xD411,0x87,0xC6,0x9B,0x27,0x30,0x41,0x22,0x00);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTACreator,0x6EDB9B9E,0xF57A,0x11D1,0xAB,0x23,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_INTACustomDrawCodeInsightViewer,0x32CA7B43,0x9AFC,0x49CF,0xAB,0xC9,0x7E,0xCD,0x77,0x24,0x88,0xD9);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTADebuggerNotifier,0x34B2E2D8,0xE36F,0x11D1,0xAB,0x0E,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTADebuggerServices,0x0E3B9D7A,0xE119,0x11D1,0xAB,0x0C,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAEditActions,0xECB23623,0xE2D8,0x11D2,0xAB,0xE5,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
@@ -62,12 +72,24 @@ uses Windows, SysUtils, Classes, ActiveX, TypInfo, DsgnIntf, Menus, ActnList,
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAKeyboardServices,0xF8CAF8D5,0xD263,0x11D2,0xAB,0xD8,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAKeyboardDiagnostics,0xAEFC65F1,0x2504,0x11D3,0xAC,0x25,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAKeyContext,0x3E7790CB,0xD2BB,0x11D2,0xAB,0xD8,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTACodeInsightManager,0xBA5B444A,0x6E78,0x4A79,0xBF,0x05,0xE1,0x84,0xC1,0x13,0x2B,0x30);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTACodeInsightParameterList,0x99B6A644,0x3E97,0x48A1,0x97,0x58,0x0A,0x5F,0xE9,0x47,0x67,0xC7);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTACodeInsightParamQuery,0xB1842926,0xC7F7,0x4869,0xB5,0x5A,0xCF,0xDB,0x6B,0xF7,0x05,0xB5);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTACodeInsightSymbolList,0x4CA1CDFD,0xBD9A,0x4628,0x94,0xAE,0x9B,0xF3,0xEB,0x2D,0xA2,0x2E);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTACodeInsightViewer,0xAAA55FAC,0x350E,0x4F43,0x9C,0x42,0x4F,0xC2,0x8B,0x6B,0xFE,0x33);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTACodeInsightViewerCanvas,0x8C60AB99,0x5BDB,0x44EE,0xB5,0xC8,0x33,0xCB,0x43,0x69,0x0D,0xF2);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAMenuWizard,0xB75C0CE2,0xEEA6,0x11D1,0x95,0x04,0x00,0x60,0x8C,0xCB,0xF1,0x53);'*)
-(*$HPPEMIT 'DEFINE_GUID(IID_IOTAMessageServices,0x3263774B,0xE959,0x11D2,0xAC,0x7B,0x00,0xC0,0x4F,0xB1,0x73,0xDC);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAMessageServices40,0x26EB0E4E,0xF97B,0x11D1,0xAB,0x27,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
-(*$HPPEMIT 'DEFINE_GUID(IID_IOTAModule,0xF17A7BCC,0xE07D,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAMessageServices50,0x3263774B,0xE959,0x11D2,0xAC,0x7B,0x00,0xC0,0x4F,0xB1,0x73,0xDC);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAMessageGroup,0x233F4508,0x6022,0x4DDF,0xB6,0xD3,0xD2,0x10,0x8B,0xAf,0x80,0xDB);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAMessageNotifier,0xFDCB2ED4,0xB89C,0x4D00,0xB0,0xDB,0x19,0x56,0x29,0x51,0xCD,0xBB);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAMessageServices,0x58A40C76,0x7EC6,0x41DA,0xA2,0xEF,0x4B,0x3A,0xF3,0x1D,0x39,0x77);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAModule40,0xF17A7BCC,0xE07D,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAModule50,0x15D3FB81,0xEF27,0x488E,0xB2,0xB4,0x26,0xB5,0x9C,0xA8,0x9D,0x9D);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAModule,0x2438BFB8,0xC742,0x48CD,0x8F,0x50,0xDE,0x6C,0x7F,0x76,0x4A,0x55);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAModuleCreator,0x6EDB9B9A,0xF57A,0x11D1,0xAB,0x23,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
-(*$HPPEMIT 'DEFINE_GUID(IID_IOTAModuleInfo,0xF17A7BD6,0xE07D,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAModuleInfo50,0xF17A7BD6,0xE07D,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAModuleInfo,0xB3EEB4D2,0xECDD,0x4CDC,0xB9,0x6E,0xB5,0xC8,0xF6,0xD0,0x50,0xA8);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAModuleNotifier,0xF17A7BCE,0xE07D,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAModuleServices,0xF17A7BCD,0xE07D,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTANotifier,0xF17A7BCF,0xE07D,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
@@ -81,6 +103,7 @@ uses Windows, SysUtils, Classes, ActiveX, TypInfo, DsgnIntf, Menus, ActnList,
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAProjectBuilder,0x08A5B1F5,0xFCDA,0x11D2,0xAC,0x82,0x00,0xC0,0x4F,0xB1,0x73,0xDC);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAProjectBuilder40,0xF17A7BD5,0xE07D,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAProjectCreator,0x6EDB9B9D,0xF57A,0x11D1,0xAB,0x23,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAProjectCreator50,0x64312F82,0x62F3,0x48E9,0xBA,0xF6,0xB0,0x3D,0xF4,0x50,0x31,0x2A);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAProjectGroup,0xF17A7BCB,0xE07D,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAProjectGroupCreator,0x6EDB9B9F,0xF57A,0x11D1,0xAB,0x23,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAProjectOptions,0xF899EBC6,0xE6E2,0x11D2,0xAA,0x90,0x00,0xC0,0x4F,0xA3,0x70,0xE9);'*)
@@ -90,9 +113,11 @@ uses Windows, SysUtils, Classes, ActiveX, TypInfo, DsgnIntf, Menus, ActnList,
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTARecord,0xF8CAF8D6,0xD263,0x11D2,0xAB,0xD8,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAReplaceOptions,0xD1766F8C,0xD915,0x11D2,0xA8,0xC1,0x00,0xC0,0x4F,0xA3,0x2F,0x53);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTARepositoryWizard,0xB75C0CE1,0xEEA6,0x11D1,0x95,0x04,0x00,0x60,0x8C,0xCB,0xF1,0x53);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTARepositoryWizard60,0x08FCCD88,0x3A21,0x4281,0xAD,0xC9,0x62,0xFC,0x03,0x4C,0xDD,0x12);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAResourceEntry,0x26EB0E51,0xF97B,0x11D1,0xAB,0x27,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTASearchOptions,0xD1766F8B,0xD915,0x11D2,0xA8,0xC1,0x00,0xC0,0x4F,0xA3,0x2F,0x53);'*)
-(*$HPPEMIT 'DEFINE_GUID(IID_IOTAServices,0x7FD1CE91,0xE053,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAServices50,0x7FD1CE91,0xE053,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAServices,0x577ECE00,0x59EE,0x4F21,0x81,0x90,0x9F,0xD8,0xA4,0x5F,0xE5,0x50);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTASourceBreakpoint,0x09063877,0xE43A,0x11D1,0xAB,0x0F,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTASourceEditor,0xF17A7BD1,0xE07D,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTASpeedSetting,0xB5CDCE07,0xE093,0x11D2,0xAB,0xE2,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
@@ -100,6 +125,8 @@ uses Windows, SysUtils, Classes, ActiveX, TypInfo, DsgnIntf, Menus, ActnList,
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAThreadNotifier,0x34B2E2D7,0xE36F,0x11D1,0xAB,0x0E,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAToDoManager,0x3D4A0565,0xEB77,0x11D2,0xAA,0x9A,0x00,0xC0,0x4F,0xA3,0x5C,0xE8);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAToDoServices,0xF8FC00EF,0xE61A,0x11D2,0xAA,0x99,0x00,0xC0,0x4F,0xA3,0x5C,0xE8);'*)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAToolsFilterNotifier,0xCEF1F13A,0xE877,0x4F20,0x88,0xF2,0xF7,0xE2,0xBA,0x61,0xAA,0xF4); *)
+(*$HPPEMIT 'DEFINE_GUID(IID_IOTAToolsFilter,0x8864B891,0x9B6D,0x4002,0xBB,0x2E,0x1D,0x6E,0x59,0xBF,0xA4,0x9A); *)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTATypeLibEditor,0xF17A7BD3,0xE07D,0x11D1,0xAB,0x0B,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTATypeLibModule,0x0BBAEEA0,0xEF74,0x11D1,0xAB,0x1C,0x00,0xC0,0x4F,0xB1,0x6F,0xB3);'*)
 (*$HPPEMIT 'DEFINE_GUID(IID_IOTAWizard,0xB75C0CE0,0xEEA6,0x11D1,0x95,0x04,0x00,0x60,0x8C,0xCB,0xF1,0x53);'*)
@@ -147,6 +174,8 @@ const
   MarkedBlock      = 15;
   SearchMatch      = 16;
 
+  RightMargin      = 37;
+
   lfCurrentEIP          = $0001;
   lfBreakpointEnabled   = $0002;
   lfBreakpointDisabled  = $0004;
@@ -179,32 +208,40 @@ const
   mcModify = 'Modify';
   mcAddWatchAtCursor = 'AddWatchAtCursor';
   mcInspectAtCursor = 'InspectAtCursor';
-  mcSetMark0 = 'SetMark0';
-  mcSetMark1 = 'SetMark1';
-  mcSetMark2 = 'SetMark2';
-  mcSetMark3 = 'SetMark3';
-  mcSetMark4 = 'SetMark4';
-  mcSetMark5 = 'SetMark5';
-  mcSetMark6 = 'SetMark6';
-  mcSetMark7 = 'SetMark7';
-  mcSetMark8 = 'SetMark8';
-  mcSetMark9 = 'SetMark9';
-  mcMoveToMark0 = 'MoveToMark0';
-  mcMoveToMark1 = 'MoveToMark1';
-  mcMoveToMark2 = 'MoveToMark2';
-  mcMoveToMark3 = 'MoveToMark3';
-  mcMoveToMark4 = 'MoveToMark4';
-  mcMoveToMark5 = 'MoveToMark5';
-  mcMoveToMark6 = 'MoveToMark6';
-  mcMoveToMark7 = 'MoveToMark7';
-  mcMoveToMark8 = 'MoveToMark8';
-  mcMoveToMark9 = 'MoveToMark9';
+  mcSetMark0 = 'setMark0';
+  mcSetMark1 = 'setMark1';
+  mcSetMark2 = 'setMark2';
+  mcSetMark3 = 'setMark3';
+  mcSetMark4 = 'setMark4';
+  mcSetMark5 = 'setMark5';
+  mcSetMark6 = 'setMark6';
+  mcSetMark7 = 'setMark7';
+  mcSetMark8 = 'setMark8';
+  mcSetMark9 = 'setMark9';
+  mcMoveToMark0 = 'moveToMark0';
+  mcMoveToMark1 = 'moveToMark1';
+  mcMoveToMark2 = 'moveToMark2';
+  mcMoveToMark3 = 'moveToMark3';
+  mcMoveToMark4 = 'moveToMark4';
+  mcMoveToMark5 = 'moveToMark5';
+  mcMoveToMark6 = 'moveToMark6';
+  mcMoveToMark7 = 'moveToMark7';
+  mcMoveToMark8 = 'moveToMark8';
+  mcMoveToMark9 = 'moveToMark9';
 
   // the following constant defines the name of the IDE's editor keymapping
   // table.  This keyboard is *always* defined and should not be popped
   // from the stack.
 
   sEditor = 'editor';
+
+  // The following constants define the currently available form designers,
+  // CLX or VCL.  Use dAny for a wizard that doesn't care under which designer 
+  // it is invoked.
+
+  dVCL = 'dfm';
+  dCLX = 'xfm';
+  dAny = 'Any';
 
   WizardEntryPoint = 'INITWIZARD0001';
   isWizards = 'Wizards';
@@ -215,6 +252,8 @@ const
   sDebugToolBar = 'DebugToolBar';
   sViewToolBar = 'ViewToolBar';
   sDesktopToolBar = 'DesktopToolBar';
+  sInternetToolBar = 'InternetToolBar';
+  sCORBAToolBar = 'CORBAToolBar';
 
   { Default IDE application/project types }
   sApplication = 'Application';
@@ -258,8 +297,8 @@ const
 
   { TCodeCompleteStyle }
   { The code completion syle can be built from one the following
-    csCodeList     - Invoke the IDE's CodeInsite Code completion function
-    csParamList    - Invoke the IDE's CodeInsite Code parameters function
+    csCodeList     - Invoke the IDE's CodeInsight Code completion function
+    csParamList    - Invoke the IDE's CodeInsight Code parameters function
 
     One of the above can be combined with the following
     csManual       - This will cause the operation to be invoked immediately,
@@ -308,6 +347,24 @@ const
   rfIncludeNumericChars    = $0004;
   rfIncludeSpecialChars    = $0008;
 
+  { Possible values for TOTAModuleType }
+
+  omtForm          = 0;
+  omtDataModule    = 1;
+  omtProjUnit      = 2;
+  omtUnit          = 3;
+  omtRc            = 4;
+  omtAsm           = 5;
+  omtDef           = 6;
+  omtObj           = 7;
+  omtRes           = 8;
+  omtLib           = 9;
+  omtTypeLib       = 10;
+  omtPackageImport = 11;
+  omtFormResource  = 12;
+  omtCustom        = 13;
+  omtIDL           = 14;
+
 type
   {
     cmOTAMake - Normal make
@@ -317,6 +374,7 @@ type
   }
 
   TOTACompileMode = (cmOTAMake, cmOTABuild, cmOTACheck, cmOTAMakeUnit);
+
 
   TOTAModuleType = type Integer;
   TOTAHandle = Pointer;
@@ -452,6 +510,28 @@ type
     property Module: IOTAModule read GetModule;
   end;
 
+  IOTAToolsFilterNotifier = interface(IOTANotifier)
+    ['{CEF1F13A-E877-4F20-88F2-F7E2BA61AAF4}']
+    { Used by tools filter to fill message view with build result information. }
+    { FileName is the name of the file that was compiled. }
+    { ErrorCode is the error code result from the compile. }
+    { StdOut is a string list of the standard out while the tool was executed. }
+    { StdError is a string list of the standard error while the tool was executed. }
+    procedure Filter(FileName: string; ErrorCode: Integer;
+      StdOut,  StdError: TStrings);
+    { Should return an unique name for the filter. }
+    function GetFilterName: string;
+  end;
+
+  IOTAToolsFilter = interface(IUnknown)
+    ['{8864B891-9B6D-4002-BB2E-1D6E59BFA49A}']
+    { Call this to register an IOTANotifier. The result is the index to be
+      used when calling RemoveNotifier. If <0 then an error occured. }
+    function AddNotifier(const ANotifier: IOTANotifier): Integer;
+    { Call with the index obtained from AddNotifier }
+    procedure RemoveNotifier(Index: Integer);
+  end;
+
   { Use the IOTAEditReader class to gain read access to an editor buffer:
 
     NOTES:
@@ -479,9 +559,9 @@ type
        to the "copy" metaphor of the writer it does not support moving backward
        in the editor buffer. It is recomended that all modifications that must
        be performed should be done from the start to the finish.
-     o After the TIEditWriter is freed(released), the undo-buffer of the editor
+     o After the IOTAEditWriter is released, the undo-buffer of the editor
        is flushed unless CreateUndoableWriter was called to obtain the
-       TIEditWriter.
+       IOTAEditWriter.
 
     WARNING!!!
      o A IOTAEditWriter should never be active at the same time as an IOTAEditReader.
@@ -906,7 +986,8 @@ type
     the component may be deleted at any time. }
 
   IOTAComponent = interface(IUnknown)
-    ['{34B2E2D0-E36F-11D1-AB0E-00C04FB16FB3}']
+    ['{AC139ADF-329A-D411-87C6-9B2730412200}']
+    // Old GUID ['{34B2E2D0-E36F-11D1-AB0E-00C04FB16FB3}']
     { Returns a string representing the type of the component. }
     function GetComponentType: string;
     { Returns a unique Handle to the TComponent/TPersistent }
@@ -936,8 +1017,8 @@ type
     function SetPropByName(const Name: string; const Value): Boolean;
     { Enumerate the child controls just like TComponent.GetChildren }
     function GetChildren(Param: Pointer; Proc: TOTAGetChildCallback): Boolean;
-    { Returns the number of child controls (if a TWinControl descendant, else
-      returns 0). }
+    { Returns the number of child controls (if a TWinControl/TWidgetControl descendant,
+      else returns 0). }
     function GetControlCount: Integer;
     { Given the index, returns an interface to the child control. }
     function GetControl(Index: Integer): IOTAComponent;
@@ -958,18 +1039,19 @@ type
       will now be invalid and must be release. }
     function Delete: Boolean;
     { Returns the IPersistent interface }
-    function GetIPersistent: IPersistent;
+    //function GetIPersistent: IPersistent;
     { Returns the IComponent interface if instance is a TComponent else nil }
-    function GetIComponent: IComponent;
+    //function GetIComponent: IComponent;
   end;
 
   INTAFormEditor = interface(IUnknown)
-    ['{34B2E2CF-E36F-11D1-AB0E-00C04FB16FB3}']
+    ['{56931EB9-329A-D411-87C6-9B2730412200}']
+    // Old GUID ['{34B2E2CF-E36F-11D1-AB0E-00C04FB16FB3}']
     { Return the instance of the TFormDesigner on this editor }
-    function GetFormDesigner: IFormDesigner;
+    function GetFormDesigner: DesignIntf.IDesigner;
     procedure GetFormResource(Stream: TStream);
 
-    property FormDesigner: IFormDesigner read GetFormDesigner;
+    property FormDesigner: DesignIntf.IDesigner read GetFormDesigner;
   end;
 
   IOTAFormEditor = interface(IOTAEditor)
@@ -1002,7 +1084,7 @@ type
     procedure ModuleRenamed(const NewName: string);
   end;
 
-  IOTAModuleInfo = interface(IUnknown)
+  IOTAModuleInfo50 = interface(IUnknown)
     ['{F17A7BD6-E07D-11D1-AB0B-00C04FB16FB3}']
     { Returns the type of this module }
     function GetModuleType: TOTAModuleType;
@@ -1026,6 +1108,16 @@ type
     property DesignClass: string read GetDesignClass;
   end;
 
+  IOTAModuleInfo = interface(IOTAModuleInfo50)
+    ['{B3EEB4D2-ECDD-4CDC-B96E-B5C8F6D050A8}']
+    { Returns the Custom module type identifier }
+    function GetCustomId: string;
+    { Fills the TStrings class with the Additional files }
+    procedure GetAdditionalFiles(Files: TStrings);
+
+    property CustomId: string read GetCustomId;
+  end;
+
   IOTAModule40 = interface(IUnknown)
     ['{F17A7BCC-E07D-11D1-AB0B-00C04FB16FB3}']
     { Call this to register an IOTANotifier. The result is the index to be
@@ -1046,10 +1138,10 @@ type
     { Returns the associated file editor.  Use QueryInterface to determine if
       this is an IOTASourceEditor or IOTAFormEditor }
     function GetModuleFileEditor(Index: Integer): IOTAEditor;
-    { Return the number of open projects than own this module }
-    function GetOwnerCount: Integer;
+    { Return the number of open projects that own this module }
+    function GetOwnerCount: Integer; deprecated;
     { Return the Indexed Project that owns this module }
-    function GetOwner(Index: Integer): IOTAProject;
+    function GetOwner(Index: Integer): IOTAProject; deprecated;
     { Returns True if this modules has CoClasses.  Can be used to determine if
       AddToInterface can be called }
     function HasCoClasses: Boolean;
@@ -1071,14 +1163,59 @@ type
     property FileSystem: string read GetFileSystem write SetFileSystem;
   end;
 
-  IOTAModule = interface(IOTAModule40)
+  IOTAModule50 = interface(IOTAModule40)
     ['{15D3FB81-EF27-488E-B2B4-26B59CA89D9D}']
     { CloseModule allows an add-in to force a module closed regardless of
       whether or not it is modified.  If ForceClosed is False, then calling
       this method has the same behaviour as Close as implemented in
       IOTAModule40 }
     function CloseModule(ForceClosed: Boolean): Boolean;
+
+    // access to the IOTAEditors contained by a Module
+    property ModuleFileCount: Integer read GetModuleFileCount;
+    property ModuleFileEditors[Index: Integer]: IOTAEditor read GetModuleFileEditor;
   end;
+
+  IOTAModule = interface(IOTAModule50)
+    ['{2438BFB8-C742-48CD-8F50-DE6C7F764A55}']
+    { GetCurrentEditor returns the topmost editor associated with this module.
+      If the form editor was the last editor focused, then that is returned,
+      likewise, if one of the code editor was the last focused then that one
+      is returned. }
+    function GetCurrentEditor: IOTAEditor;
+    { Return the number of open modules that own this module }
+    function GetOwnerModuleCount: Integer;
+    { Return the Indexed module that owns this module. If this is an IOTAProject
+      then these two methods may not return and owner in the case where this is
+      a package project and it is not a member of the currently open project group. }
+    function GetOwnerModule(Index: Integer): IOTAModule;
+    { MarkModifed will mark this module as "modified" without actually indicating
+      *why* is it modified (which will cause internal file dates to remain constant).
+      This *will* force the IDE to ask to save this module when the user attempts
+      to close it.  It will also clear the "discardability" of a new unnamed
+      module such as when File|New|Application is selected. }
+    procedure MarkModified;  
+
+    property CurrentEditor: IOTAEditor read GetCurrentEditor;
+    property OwnerModuleCount: Integer read GetOwnerModuleCount;
+    property OwnerModules[Index: Integer]: IOTAModule read GetOwnerModule;
+  end;
+
+{$IFDEF MSWINDOWS}
+  IOTAAdditionalModuleFiles = interface
+    ['{2D73A12F-6FB3-11D4-A4B8-00C04F6BB853}']
+    function GetAdditionalModuleFileCount: Integer;
+    { Returns the associated IOTASourceEditor. }
+    function GetAdditionalModuleFileEditor(Index: Integer): IOTAEditor;
+    property AdditionalModuleFileCount: Integer read GetAdditionalModuleFileCount;
+    property AdditionalModuleFileEditors[Index: Integer]: IOTAEditor read GetAdditionalModuleFileEditor;
+  end;
+
+  IOTAModuleData = interface
+    ['{FFD0A5AF-49CB-4EC2-A658-957146030CEC}']
+    function HasObjects: Boolean;
+  end;
+{$ENDIF}
 
   IOTATypeLibModule = interface(IOTAModule)
     ['{0BBAEEA0-EF74-11D1-AB1C-00C04FB16FB3}']
@@ -1101,6 +1238,18 @@ type
   IOTAProjectOptions40 = interface(IOTAOptions)
     ['{F17A7BD4-E07D-11D1-AB0B-00C04FB16FB3}']
   end;
+
+  { One special note about IOTAProjectOptions.
+    Under Windows, there is one option called "Keys" and this options is of
+    type tkClass.  This is a TStrings object and corresponds to the list of
+    key/value pairs in the project's version info.  When GetOptionValue is
+    called for the "Keys" Option it will be returned as a Variant varType of
+    vtInteger.  You should cast the Variant result to Integer then to TStrings.
+    NOTE: Do NOT free the TStrings object that is returned as this is owned by
+    the internal object.  Calling SetOptionValue with a TStrings object (not
+    the one read with GetOptionValue), will cause the typical "SetKeys" method
+    to be called and the internal Keys object is "Assigned" the values from
+    the given TStrings object (ie. FKeys.Assign(Value);) }
 
   IOTAProjectOptions = interface(IOTAProjectOptions40)
     ['{F899EBC6-E6E2-11D2-AA90-00C04FA370E9}']
@@ -1149,7 +1298,7 @@ type
     ['{06C88136-F367-4D47-B8B4-CCACB3D7439A}']
     { Call this function to add an arbitrary file to the project.  NOTE: some
       files have special meaning to different projects.  For example: adding
-      VCL50.DCP will cause a new entry in a package project's "requires" list
+      VCL60.DCP will cause a new entry in a package project's "requires" list
       while it will be a raw file to any other project type.  Set IsUnitOrForm
       to true for files that are considered items that the project would
       process directly or indirectly (ie. .pas, .cpp, .rc, etc..) or can be
@@ -1249,7 +1398,9 @@ type
     { Return the Ancestor form name }
     function GetAncestorName: string;
     { Return the implementation filename, or blank to have the IDE create a new
-      unique one. (C++ .cpp file or Delphi unit) }
+      unique one. (C++ .cpp file or Delphi unit) NOTE: If a value is returned then it *must* be a
+      fully qualified filename.  This also applies to GetIntfFileName and
+      GetAdditionalFileName on the IOTAAdditionalFilesModuleCreator interface. }
     function GetImplFileName: string;
     { Return the interface filename, or blank to have the IDE create a new
       unique one.  (C++ header) }
@@ -1281,9 +1432,23 @@ type
     property ShowSource: Boolean read GetShowSource;
   end;
 
+{$IFDEF MSWINDOWS}
+  IOTAAdditionalFilesModuleCreator = interface(IOTAModuleCreator)
+    ['{BACD1450-1AC5-11D4-A455-00C04F6BB853}']
+    function GetAdditionalFilesCount: Integer;
+    { Create and return the source for this additional file }
+    function NewAdditionalFileSource(I: Integer; const ModuleIdent, FormIdent, AncestorIdent: string): IOTAFile;
+    { Return the additional filename, or blank to have the IDE create a new
+      unique one. }
+    function GetAdditionalFileName(I: Integer): string;
+    { Get the file extent used to create a new file name }
+    function GetAdditionalFileExt(I: Integer): string;
+  end;
+{$ENDIF}
+
   IOTAProjectCreator = interface(IOTACreator)
     ['{6EDB9B9D-F57A-11D1-AB23-00C04FB16FB3}']
-    { Return the project filename }
+    { Return the project filename. NOTE: This *must* be a fully qualified file name. }
     function GetFileName: string;
     { Return the option file name (C++ .bpr, .bpk, etc...) }
     function GetOptionFileName: string;
@@ -1348,7 +1513,7 @@ type
       ClassName, FileName: string);
     { Open the File|New dialog }
     function NewModule: Boolean;
-    { Remove's the index'd file system from the installed file system list }
+    { Removes the index'd file system from the installed file system list }
     procedure RemoveFileSystem(Index: Integer);
     { Save all modules. Same as File|Save All }
     function SaveAll: Boolean;
@@ -1397,7 +1562,10 @@ type
     function DefaultTrigger: Boolean;
     { Decrement the CurPassCount if > 0.  Return True if it goes to 0 or is 0 }
     function DecPassCount: Boolean;
-    { Invokes the normal edit processing }
+    { Invokes the normal edit processing.  Calling Edit on Address breakpoints
+      with an AllowKeyChanges parameter of True can cause the Breakpoint object
+      to be deleted and recreated.  To properly handle this, you should install
+      a breakpoint notifier and listen for the Deleted notification }
     procedure Edit(AllowKeyChanges: Boolean);
     { Evaluates the expression associated with this breakpoint }
     function EvaluateExpression: Boolean;
@@ -1536,7 +1704,7 @@ type
 
   IOTAThread = interface(IUnknown)
     ['{34B2E2D3-E36F-11D1-AB0E-00C04FB16FB3}']
-    { Add an IOTAThreadNotifiter }
+    { Add an IOTAThreadNotifier }
     function AddNotifier(const Notifier: IOTAThreadNotifier): Integer;
     { Evaluate the given expression.
       CanModify -        will be set to true if the expression can be modified.
@@ -1567,7 +1735,9 @@ type
       out ResultVal: Integer): TOTAEvaluateResult;
     { Return the number of Items on the call stack }
     function GetCallCount: Integer;
-    { Return the evaluator generated string for the given stack index }
+    { Return the evaluator generated string for the given stack index.  GetCallCount
+      must be called before GetCallHeader. CallHeaders are one-based (not zero-based)
+      so the first item in the list is at index 1 }
     function GetCallHeader(Index: Integer): string;
     { Return the source file name and line number of the given stack index }
     procedure GetCallPos(Index: Integer; out FileName: string; out LineNum: Integer);
@@ -1578,8 +1748,10 @@ type
     { If the process is stopped, return the line number in the above file at
       which this process is stopped }
     function GetCurrentLine: LongWord;
+{$IFDEF MSWINDOWS}
     { Return the Current Thread context }
     function GetContext: TContext;
+{$ENDIF}
     { Return the OS Thread Handle }
     function GetHandle: THandle;
     { Return the OS Thread ID }
@@ -1593,7 +1765,9 @@ type
     property CallHeaders[Index: Integer]: string read GetCallHeader;
     property CurrentFile: string read GetCurrentFile;
     property CurrentLine: LongWord read GetCurrentLine;
+{$IFDEF MSWINDOWS}
     property Context: TContext read GetContext;
+{$ENDIF}
     property Handle: THandle read GetHandle;
     property State: TOTAThreadState read GetState;
   end;
@@ -1660,7 +1834,7 @@ type
     procedure ProcessModuleDestroyed(ProcessModule: IOTAProcessModule);
   end;
 
-  IOTAProcess = interface(IUnknown)
+  IOTAProcess60 = interface(IUnknown)
     ['{34B2E2D2-E36F-11D1-AB0E-00C04FB16FB3}']
     { Adds an IOTAProcessNotifier }
     function AddNotifier(const Notifier: IOTAProcessNotifier): Integer;
@@ -1670,7 +1844,7 @@ type
     function GetThreadCount: Integer;
     { Return the index'd Thread }
     function GetThread(Index: Integer): IOTAThread;
-    { Get the OS process ID }
+    { Get the debugger's internal process ID }
     function GetProcessId: LongWord;
     { Stop/Pause the process }
     procedure Pause;
@@ -1692,6 +1866,15 @@ type
     property ThreadCount: Integer read GetThreadCount;
     property Threads[Index: Integer]: IOTAThread read GetThread;
   end;
+
+  IOTAProcess = interface(IOTAProcess60)
+  ['{64FC3321-BEC8-4E88-B17A-3E78EA15F10E}']
+    { Get the OS process ID }
+    function GetOSProcessId: LongWord;
+
+    property OSProcessId: LongWord read GetOSProcessId;
+  end;
+
 
   IOTADebuggerNotifier = interface(IOTANotifier)
     ['{34B2E2D8-E36F-11D1-AB0E-00C04FB16FB3}']
@@ -1762,7 +1945,8 @@ type
 
   TOTAFileNotification = (ofnFileOpening, ofnFileOpened, ofnFileClosing,
     ofnDefaultDesktopLoad, ofnDefaultDesktopSave, ofnProjectDesktopLoad,
-    ofnProjectDesktopSave, ofnPackageInstalled, ofnPackageUninstalled);
+    ofnProjectDesktopSave, ofnPackageInstalled, ofnPackageUninstalled,
+    ofnActiveProjectChanged);
 
   IOTAIDENotifier = interface(IOTANotifier)
     ['{E052204F-ECE9-11D1-AB19-00C04FB16FB3}']
@@ -1808,7 +1992,18 @@ type
     function GetAuthor: string;
     function GetComment: string;
     function GetPage: string;
-    function GetGlyph: HICON;
+    function GetGlyph: Cardinal;
+  end;
+
+  IOTARepositoryWizard60 = interface(IOTARepositoryWizard)
+    ['{08FCCD88-3A21-4281-ADC9-62FC034CDD12}']
+    { This function should return the appropriate designer affinity for which
+      this wizard is applicable.  This will help the File|New|Other... dialog
+      filter the appropriate items based on the current project either CLX or
+      VCL.  See the dVCL, dCLX, and dAny constants. }
+    function GetDesigner: string;
+
+    property Designer: string read GetDesigner;
   end;
 
   IOTAFormWizard = interface(IOTARepositoryWizard)
@@ -1842,7 +2037,7 @@ type
     ['{26EB0E4D-F97B-11D1-AB27-00C04FB16FB3}']
     { Returns the number of loaded packages }
     function GetPackageCount: Integer;
-    { Returns the named of the loaded package }
+    { Returns the name of the loaded package }
     function GetPackageName(Index: Integer): string;
     { Returns the number of components registered by this package index }
     function GetComponentCount(PkgIndex: Integer): Integer;
@@ -1857,7 +2052,7 @@ type
 
   IOTACustomMessage = interface(IUnknown)
     ['{589BBDA1-F995-11D1-AB27-00C04FB16FB3}']
-    { Returns the Line number of the above file if the above file is given }
+    { Returns the Column number of the file if the file is given }
     function GetColumnNumber: Integer;
     { Returns a Fully qualified filename if this message line can navigate to a
       file line }
@@ -1916,11 +2111,11 @@ type
     procedure ClearCompilerMessages;
     { Clears all "Find in files" messages }
     procedure ClearSearchMessages;
-    { Clears all the externally defined messages }
+    { Clears all the externally defined messages -- from all message groups }
     procedure ClearToolMessages;
   end;
 
-  IOTAMessageServices = interface(IOTAMessageServices40)
+  IOTAMessageServices50 = interface(IOTAMessageServices40)
     ['{3263774B-E959-11D2-AC7B-00C04FB173DC}']
     { See IOTAMessageServices40 for base description.  This method adds an out
       parameter (LineRef) which returns an opaque pointer to the Line object
@@ -1932,6 +2127,73 @@ type
       LineNumber, ColumnNumber: Integer; Parent: Pointer; out LineRef: Pointer); overload;
   end;
 
+  IOTAMessageGroup = interface(IUnknown)
+    ['{233F4508-6022-4DDF-B6D3-D2108BAF80DB}']
+    function GetGroupName: string;
+    property Name: string read GetGroupName;
+  end;
+
+  { Interface implemented by a client to receive notifications
+    on message groups }
+  IOTAMessageNotifier = interface(IOTANotifier)
+    ['{FDCB2ED4-B89C-4D00-B0DB-19562951CDBB}']
+    { BeforeSave, AfterSave, Destroyed, and Modified are
+      currently not called for this notifier, though they
+      may be in future releases }
+    { Called when a new message group is added }
+    procedure MessageGroupAdded(const Group: IOTAMessageGroup);
+    { Called when a message group is deleted }
+    procedure MessageGroupDeleted(const Group: IOTAMessageGroup);
+  end;
+
+  IOTAMessageServices = interface(IOTAMessageServices50)
+    ['{58A40C76-7EC6-41DA-A2EF-4B3AF31D3977}']
+    { Call this to register an IOTAMessageNotifier. The result is the index
+      to be used when calling RemoveNotifier. If <0 then an error occured. }
+    function AddNotifier(const ANotifier: IOTAMessageNotifier): Integer;
+    { Call with the index obtained from AddNotifier }
+    procedure RemoveNotifier(Index: Integer);
+    { This method allows you to add a new message group to the message view.
+      A message group shows up as a distinct tab in the message view in the IDE.
+      An interface to the newly added group is returned.  Use this interface
+      when calling other methods in the IOTAMessageServices interface.  If you
+      hold onto the IOTAMessageGroup reference which is returned, you should
+      install an IOTAMessageNotifier and listen for the MessageGroupDeleted
+      notification.  When you receive this notification, you should release your
+      reference to the indicated IOTAMessageGroup. }
+    function AddMessageGroup(const GroupName: string): IOTAMessageGroup;
+    { See IOTAMessageServices50 for base description of AddCustomMessage,
+      AddTitleMessage and AddToolMessage.  These methods add one parameter:
+      MessageGroupIntf indicates which MessageGroup this message belongs to.
+      If MessageGroupIntf is nil, the message is added to the "Build" tab. }
+    procedure AddCustomMessage(const CustomMsg: IOTACustomMessage;
+      const MessageGroupIntf: IOTAMessageGroup); overload;
+    procedure AddTitleMessage(const MessageStr: string; const MessageGroupIntf: IOTAMessageGroup); overload;
+    procedure AddToolMessage(const FileName, MessageStr, PrefixStr: string;
+      LineNumber, ColumnNumber: Integer; Parent: Pointer; out LineRef: Pointer;
+      const MessageGroupIntf: IOTAMessageGroup); overload;
+    { Clears all messages in the specified group. If MessageGroupIntf is nil,
+      all groups are cleared }
+    procedure ClearMessageGroup(const MessageGroupIntf: IOTAMessageGroup);
+    { Clears all the externally defined messages from the specified group.
+      If MessageGroupIntf is nil, all externally defined messages in all
+      groups are cleared }
+    procedure ClearToolMessages(const MessageGroupIntf: IOTAMessageGroup); overload;
+    { Returns the number of message groups currently defined }
+    function GetMessageGroupCount: Integer;
+    { Returns an interface to the group specified by the index }
+    function GetMessageGroup(Index: Integer): IOTAMessageGroup;
+    { Returns the specified group }
+    function GetGroup(const GroupName: string): IOTAMessageGroup;
+    { Tells the IDE to open the message view. If MessageGroupIntf is nil the
+      "current" tab is focused. }
+    procedure ShowMessageView(const MessageGroupIntf: IOTAMessageGroup);
+    { Removes the specified message group.  If MessageGroupIntf is nil then
+      this does nothing. }
+    procedure RemoveMessageGroup(const MessageGroupIntf: IOTAMessageGroup);
+    property MessageGroupCount: Integer read GetMessageGroupCount;
+    property MessageGroup[Index: Integer]: IOTAMessageGroup read GetMessageGroup;
+  end;
 
   IOTAEnvironmentOptions = interface(IOTAOptions)
     ['{9C0E91FB-FA5A-11D1-AB28-00C04FB16FB3}']
@@ -1969,10 +2231,10 @@ type
       unloaded then reloaded in the same IDE session and still acquire the same
       image index }
     function AddMasked(Image: TBitmap; MaskColor: TColor; const Ident: string): Integer; overload;
-     
+
   end;
 
-  IOTAServices = interface(IUnknown)
+  IOTAServices50 = interface(IUnknown)
     ['{7FD1CE91-E053-11D1-AB0B-00C04FB16FB3}']
     { General IDE event notifications }
     function AddNotifier(const Notifier: IOTAIDENotifier): Integer;
@@ -1980,15 +2242,23 @@ type
     procedure RemoveNotifier(Index: Integer);
     { Configuration Access }
     function GetBaseRegistryKey: string;
-    { Returns the product Identifier, 'C++ Builder' or 'Delphi' }
+    { Returns the product Identifier, 'C++Builder' or 'Delphi' }
     function GetProductIdentifier: string;
-    { Main appliction handle }
+{$IFDEF MSWINDOWS}
+    { Main application handle }
     function GetParentHandle: HWND;
+{$ENDIF}
     { Return an interface to the IDE environment options }
     function GetEnvironmentOptions: IOTAEnvironmentOptions;
   end;
 
-  IOTABufferOptions = interface(IUnknown)
+  IOTAServices = interface(IOTAServices50)
+    ['{577ECE00-59EE-4F21-8190-9FD8A45FE550}']
+    { Return 'xfm' for CLX designer and 'dfm' for VCL designer }
+    function GetActiveDesignerType: string;
+  end;
+
+  IOTABufferOptions60 = interface(IUnknown)
     ['{8C748540-C6C1-11D2-8139-00609792F134}']
     function GetAutoIndent: Boolean;
     function GetBackspaceUnindents: Boolean;
@@ -2045,6 +2315,16 @@ type
     property UndoAfterSave: Boolean read GetUndoAfterSave write SetUndoAfterSave;
     property UndoLimit: Integer read GetUndoLimit write SetUndoLimit;
     property UseTabCharacter: Boolean read GetuseTabCharacter write SetUseTabCharacter;
+  end;
+
+  IOTABufferOptions = interface(IOTABufferOptions60)
+    ['{F8F13ACE-1124-408F-934F-8E92DA135424}']
+    function GetShowSpace: Boolean;
+    function GetShowTab: Boolean;
+    procedure SetShowSpace(Value: Boolean);
+    procedure SetShowTab(Value: Boolean);
+    property ShowSpace: Boolean read GetShowSpace write SetShowSpace;
+    property ShowTab: Boolean read GetShowTab write SetShowTab;
   end;
 
   IOTAEditLineNotifier = interface(IOTANotifier)
@@ -2155,7 +2435,7 @@ type
     function AddKeyBinding(const Keys: array of TShortCut; KeyProc: TKeyBindingProc;
       Context: Pointer; Flags: TKeyBindingFlags = kfImplicitShift or
       kfImplicitModifier or kfImplicitKeypad; const Keyboard: string = '';
-      const HotKey: string = ''): Boolean;
+      const MenuItemName: string = ''): Boolean;
     function AddMenuCommand(const Command: string; KeyProc: TKeyBindingProc;
       Context: Pointer): Boolean;
     procedure SetDefaultKeyProc(KeyProc: TKeyBindingProc; Context: Pointer;
@@ -2367,6 +2647,341 @@ type
     property Items[Index: Integer]: INTAToDoItem read GetItem;
   end;
 
+  { types and interfaces for code completion }
+  TOTAInvokeType = (itAuto, itManual, itTimer);
+
+  TOTACodeInsightType = (citNone, { don't invoke code insight }
+                         citCodeInsight, { perform code completion }
+                         citParameterCodeInsight, { perform parameter completion }
+                         citBrowseCodeInsight, { browse code (CTRL + click) }
+                         citHintCodeInsight); { pop up hints over idents in the editor }
+
+  TOTASortOrder = (soAlpha, { sort the code completion list alphanumerically }
+                   soScope); { sort the code completion list by scope }
+
+  { TOTAViewerSymbolFlags is used for color coding the class name of the ident }                   
+  TOTAViewerSymbolFlags = (vsfUnknown,
+                           vsfConstant,
+                           vsfType,
+                           vsfVariable,
+                           vsfProcedure,
+                           vsfFunction,
+                           vsfUnit,
+                           vsfLabel,
+                           vsfProperty,
+                           vsfConstructor,
+                           vsfDestructor,
+                           vsfInterface,
+                           vsfEvent);
+  { TOTAViewerVisibilityFlags for future use }
+  TOTAViewerVisibilityFlags = (vvfPrivate,
+                               vvfProtected,
+                               vvfPublic,
+                               vvfPublished);
+
+  { TOTAProcDispatchFlags for future use }
+  TOTAProcDispatchFlags = (pdfNone,
+                           pdfVirtual,
+                           pdfDynamic);
+
+  IOTACodeInsightSymbolList = interface(IUnknown)
+    ['{4CA1CDFD-BD9A-4628-94AE-9BF3EB2DA22E}']
+    { Implementor should clear its symbol list }
+    procedure Clear;
+    { returns the count of the symbols in the list - may be modified by setting a filter - }
+    function GetCount: Integer;
+    { returns whether the symbol is able to be read from and written to }
+    function GetSymbolIsReadWrite(I: Integer): Boolean;
+    { returns whether the symbols is abstract.  Viewer draws these in the 'need to implement' color }
+    function GetSymbolIsAbstract(I: Integer): Boolean;
+    { return the symbol flags for the item at index 'I'.  I is the index in the filtered list }
+    function GetViewerSymbolFlags(I: Integer): TOTAViewerSymbolFlags;
+    { return the visibility flags for the item at index 'I'.  I is the index in the filtered list }
+    function GetViewerVisibilityFlags(I: Integer): TOTAViewerVisibilityFlags;
+    { return the procedure flags for the item at index 'I'.  I is the index in the filtered list }
+    function GetProcDispatchFlags(I: Integer): TOTAProcDispatchFlags;
+    { The list was requested to be sorted by 'Value' }
+    procedure SetSortOrder(const Value: TOTASortOrder);
+    { returns the sort order of the list }
+    function GetSortOrder: TOTASortOrder;
+    { given an identifier, return the index of the closest partial match }
+    function FindIdent(const AnIdent: string): Integer;
+    { given an identifier, find the 'Index' of an exact match in the list and return True.  Otherwise return False }
+    function FindSymIndex(const Ident: string; var Index: Integer): Boolean;
+    { set the lists filter to 'FilterText'.  It is up to the implementor to determine how to filter or if they even want to filter }
+    procedure SetFilter(const FilterText: string);
+    { return the symbol text for item 'Index'.  i.e. Form1 }
+    function GetSymbolText(Index: Integer): string;
+    { return the symbol type text for item 'Index'.  i.e. TForm1 }
+    function GetSymbolTypeText(Index: Integer): string;
+    { return the symbol class text for item 'Index'.  i.e. 'var', 'function', 'type', etc }
+    function GetSymbolClassText(I: Integer): string;
+    property SymbolClassText[I: Integer]: string read GetSymbolClassText;
+    property SymbolTypeText[I: Integer]: string read GetSymbolTypeText;
+    property SymbolText[I: Integer]: string read GetSymbolText;
+    property SymbolFlags[I: Integer]: TOTAViewerSymbolFlags read GetViewerSymbolFlags;
+    property SymbolVisibility[I: Integer]: TOTAViewerVisibilityFlags read GetViewerVisibilityFlags;
+    property SymbolIsAbstract[I: Integer]: Boolean read GetSymbolIsAbstract;
+    property SymbolIsReadWrite[I: Integer]: Boolean read GetSymbolIsReadWrite;
+    property FuncDispatchFlags[I: Integer]: TOTAProcDispatchFlags read GetProcDispatchFlags;
+    property SortOrder: TOTASortOrder read GetSortOrder write SetSortOrder;
+    property Count: Integer read GetCount;
+  end;
+
+  IOTACodeInsightParamQuery = interface(IUnknown)
+    ['{B1842926-C7F7-4869-B55A-CFDB6BF705B5}']
+    { returns the count of the parameters }
+    function GetQueryParamCount: Integer;
+    { returns a string representing the return value of the method/proc }
+    function GetQueryRetVal: string;
+    { returns the symbol text of the parameter at 'Index' }
+    function GetQueryParamSymText(Index: Integer): string;
+    { returns the symbol type text of the parameter at 'Index' }
+    function GetQueryParamTypeText(Index: Integer): string;
+    { returns whether the symbol at index 'Index' as a default value }
+    function GetQueryParamHasDefaultVal(Index: Integer): Boolean;
+    { returns a string representing the type of invocation for the paramater at 'Index'. i.e. 'var', 'out', 'const' }
+    function GetQueryParamInvokeTypeText(Index: Integer): string;
+    property RetValType: string read GetQueryRetVal;
+    property ParamSymText[Index: Integer]: string read GetQueryParamSymText;
+    property ParamTypeText[Index: Integer]: string read GetQueryParamTypeText;
+    property ParamCount: Integer read GetQueryParamCount;
+    property ParamHasDefaultVal[Index: Integer]: Boolean read GetQueryParamHasDefaultVal;
+    property ParamInvokeTypeText[Index: Integer]: string read GetQueryParamInvokeTypeText;
+  end;
+
+  IOTACodeInsightParameterList = interface(IUnknown)
+    ['{99B6A644-3E97-48A1-9758-0A5FE94767C7}']
+    {
+      returns a ParamQuery to the caller based upon the ProcIndex.  There may be multiple
+      items in list as we may be dealing with overloaded functions.
+    }
+    procedure GetParameterQuery(ProcIndex: Integer; out ParamQuery: IOTACodeInsightParamQuery);
+    {
+      return which character to use to delimit parameters in the parameter hint window.
+      i.e.  Delphi uses ';'
+            C++ uses ','
+    }
+    function GetParamDelimiter: Char;
+    { returns the count of procedures in the list }
+    function GetProcedureCount: Integer;
+    {
+      returns the parameters as a string from the procedure at index I.  The parameters
+      should be delimited by a line ending (sLineBreak for instance).
+    }
+    function GetProcedureParamsText(I: Integer): string;
+    property ProcedureParamsText[I: Integer]: string read GetProcedureParamsText;
+    property ProcedureCount: Integer read GetProcedureCount;
+    property ParamDelimiter: Char read GetParamDelimiter;
+  end;
+
+  IOTACodeInsightManager = interface(IUnknown)
+    ['{BA5B444A-6E78-4A79-BF05-E184C1132B30}']
+    { returns a description of the language which we handle }
+    function GetName: string;
+    { returns a unique IDString to the services module }
+    function GetIDString: string;
+    { returns whether we should be able to be invoked or not }
+    function GetEnabled: Boolean;
+    { sets the active state to Value so this manager may be turned off }
+    procedure SetEnabled(Value: Boolean);
+    {
+      returns a charset used to get the token at the current editor position.  This is
+      used for retrieving the seed text when code completion is invoked as well as
+      retrieving the token from the editor when we are typing for look ahead.
+      The PreValidating parameter should be used to add special tokens to the charset for retrieval
+      from the editor.  For instance, C++ might add ['.', '-', '>'] to the returned charset
+      when it is prevalidating.
+    }
+    function EditorTokenValidChars(PreValidating: Boolean): TSysCharSet;
+    {
+      the implementor should set Allow to True if it wishes to be invoked for the key 'Key'.
+      'Key' is the key which the user pressed to invoke code completion.
+      There are four special values to 'Key' when invoked by the code insight timer.
+
+      They are as follows:
+        #0 : Code completion was requested.
+        #1 : Parameter insight was requested.
+        #2 : A browse was requested.
+        #3 : a symbol hint was requested.
+    }
+    procedure AllowCodeInsight(var Allow: Boolean; const Key: Char);
+    {
+      the implementor should return true if it wishes to allow the token 'str' to be
+      a valid code point for Code Insight.
+    }
+    function PreValidateCodeInsight(const Str: string): Boolean;
+    { returns whether the symbol at index 'Index' as browseable in the Code completion viewer }
+    function IsViewerBrowsable(Index: Integer): Boolean;
+    { returns whether the code completion viewer allows multi-select }
+    function GetMultiSelect: Boolean;
+    { returns the symbol list to the caller }
+    procedure GetSymbolList(out SymbolList: IOTACodeInsightSymbolList);
+    {
+      determines whether or not the key 'Key' which was entered into the editor should close
+      the code completion viewer or not (set CloseViewer to True or False depending on your choice).
+      Also, the implementor should inform the manager whether or not it should accept the symbol
+      at the currently selected index/indices.
+    }
+    procedure OnEditorKey(Key: Char; var CloseViewer: Boolean; var Accept: Boolean);
+    { returns true if this manager should handle this file }
+    function HandlesFile(const AFileName: string): Boolean;
+    { returns the longest symbol class text for measurement for the viewer.  i.e.  'constructor' is longer than 'var' }
+    function GetLongestItem: string;
+    { returns a parameter list to the manager }
+    procedure GetParameterList(out ParameterList: IOTACodeInsightParameterList);
+    {
+      given key 'AChar' which was entered into the editor and the current element (atComment, atIdentifier, etc),
+      return how code insight should be invoked and which type of invocation it should be.
+
+      As an example, GetCodeInsightType() might be implemented something like this:
+      ...
+      begin
+        InvokeType := itManual;
+        if not ((AElement = atString) and (AChar <> #1)) and not (AElement = atComment) then
+        begin
+          case AChar of
+            #0: CodeInsightType := citCodeInsight;
+            #1: CodeInsightType := citParameterCodeInsight;
+            #2: CodeInsightType := citBrowseCodeInsight;
+            #3: CodeInsightType := citHintCodeInsight;
+            '.':
+            begin
+              CodeInsightType := citCodeInsight;
+              InvokeType := itTimer;
+            end;
+            '(':
+            begin
+              CodeInsightType := citParameterCodeInsight;
+              InvokeType := itTimer;
+            end;
+          end;
+        end
+        else
+          CodeInsightType := citNone;
+      end;
+    }
+    procedure GetCodeInsightType(AChar: Char; AElement: Integer; out CodeInsightType: TOTACodeInsightType;
+      out InvokeType: TOTAInvokeType);
+    {
+      returns true if invocation was successful.  HowInvoked informs the implementor whether
+      it was invoked via timer, manual, etc...  Str is the text to seed to viewer with and
+      is used for the initial filtering in the viewer.
+    }
+    function InvokeCodeCompletion(HowInvoked: TOTAInvokeType; var Str: string): Boolean;
+    {
+      returns true if invocation was successful.  HowInvoked informs the implementor whether
+      it was invoked via timer, manual, etc...  SelectedIndex is the index of the current parameter
+      for the method/proc.
+    }
+    function InvokeParameterCodeInsight(HowInvoked: TOTAInvokeType; var SelectedIndex: Integer): Boolean;
+    {
+      tells the manager where it should anchor the parameter hint window.
+      A default value (EdPos) is provided for the implementor to change if they so wish.
+    }
+    procedure ParameterCodeInsightAnchorPos(var EdPos: TOTAEditPos);
+    {
+      returns the index of the parameter which should be highlighted based upon EdPos.
+      This is used to reduce extra codeinsight invocations as an implementor might
+      store off the editor positions of parameters on the first invocation.
+      return a -1 if you want to be reinvoked.
+    }
+    function ParameterCodeInsightParamIndex(EdPos: TOTAEditPos): Integer;
+    { return the hint string for the position in the editor (HintLine/HintCol are the editor coordinates) }
+    function GetHintText(HintLine, HintCol: Integer): string;
+    {
+      return a FileName and LineNumber for the symbol which is requested to be browsed to.
+      if Index > -1 then it is an index into the symbol list and the browse was requested
+      by a user clicking in the code completion viewer.
+      return false if you'd like to inform the user that the requested operation failed otherwise return true.
+      if you wish to fail by not informing the user, set AFileName = '' and ALineNum = 0.
+      if Index is -1, you should use the global CodeInsightServices() and request the EditView from it.
+      This should be able to give you any information you require.
+    }
+    function GotoDefinition(out AFileName: string; out ALineNum: Integer; Index: Integer = -1): Boolean;
+    {
+      called when the code completion is completed.  Accepted is true if the user has requested
+      the item hinted to them in the viewer otherwise Accepted is false.
+      DisplayParams should be set to true if the implementor would like to be requeried
+      for parameter invocation.  It is up to the implementor to insert the text into the editor.
+      One way might be to use CodeInsightServices.InsertText(StrToInsert, ShouldReplace);
+      Another might be to acquire the EditView from CodeInsightServices.GetEditView() and do
+      the insertion yourself.
+    }
+    procedure Done(Accepted: Boolean; out DisplayParams: Boolean);
+    property Name: string read GetName;
+    property MultiSelect: Boolean read GetMultiSelect;
+    property Enabled: Boolean read GetEnabled write SetEnabled;
+  end;
+
+  IOTACodeInsightViewer = interface(IUnknown)
+    ['{AAA55FAC-350E-4F43-9C42-4FC28B6BFE33}']
+    { returns whether the item at index 'Index' is selected in the viewer } 
+    function GetSelected(Index: Integer): Boolean;
+    { returns the count of the items in the viewer }
+    function GetItemCount: Integer;
+    { returns the selected string.  Is useful when implementing IOTACodeInsightManager.Done() }
+    function GetSelectedString: string;
+    { returns the index of the selected item }
+    function GetSelectedIndex: Integer;
+    {
+      returns the key which was used to close the viewer.  An implementation
+      of IOTACodeInsightManager.Done() might use this to determine whether it should be inserted
+      into the completed text or not.  For instance, a user might accept an identifier in the
+      list by typing a ';'.  The comma would be the 'closekey' and the implementor of
+      IOTACodeInsightManager.Done() might want to insert the identifier selected as well
+      as the ';'.
+    }
+    function GetCloseKey: Char;
+    { returns whether the selection in the viewer is valid }
+    function GetIsValidSelection: Boolean;
+    property Selected[Index: Integer]: Boolean read GetSelected;
+    property ItemCount: Integer read GetItemCount;
+    property SelectedString: string read GetSelectedString;
+    property SelectedIndex: Integer read GetSelectedIndex;
+    property CloseKey: Char read GetCloseKey;
+    property IsValidSelection: Boolean read GetIsValidSelection;
+  end;
+
+  {
+    An IOTACodeInsightManager should implement this interface if it would like to
+    do custom drawing in the viewer.
+  }
+  INTACustomDrawCodeInsightViewer = interface(IUnknown)
+    ['{32CA7B43-9AFC-49CF-ABC9-7ECD772488D9}']
+    {
+      called when the viewer draws the item at index 'Index'.  if DoDraw is false,
+      then only a rectangle calculation is being requested.  The rectangle should be returned
+      by the 'Rect' out parameter.
+    }
+    procedure DrawLine(Index: Integer; Canvas: TCanvas; var Rect: TRect;
+      DrawingHintText: Boolean; DoDraw: Boolean; var DefaultDraw: Boolean);
+  end;
+
+  { may be queried by using (BorlandIDEServices as IOTACodeInsightServices). }
+  IOTACodeInsightServices = interface(IUnknown)
+    ['{476904F8-89A9-4CD8-A71E-164660659763}']
+    { returns the current edit view to work with }
+    procedure GetEditView(out EditView: IOTAEditView);
+    { returns the viewer interface to be queried by code completion implementors }
+    procedure GetViewer(out Viewer: IOTACodeInsightViewer);
+    { returns the current code completion manager }
+    procedure GetCurrentCodeInsightManager(out CodeInsightManager: IOTACodeInsightManager);
+    { cancel the invocation requested from the current IOTACodeInsightManager }
+    procedure CancelCodeInsightProcessing;
+    { registers a new code insight manager and returns its index }
+    function AddCodeInsightManager(const ACodeInsightManager: IOTACodeInsightManager): Integer;
+    { unregister the manager at index 'Index' }
+    procedure RemoveCodeInsightManager(Index: Integer);
+    { inserts 'Str' into the editor optionally replacing the token which the editor is currently on }
+    procedure InsertText(const Str: string; Replace: Boolean);
+    { returns the count of installed code insight managers }
+    function GetCodeInsightManagerCount: Integer;
+    { returns the code insight manager at index 'Index' }
+    function GetCodeInsightManager(Index: Integer): IOTACodeInsightManager;
+    property CodeInsightManagerCount: Integer read GetCodeInsightManagerCount;
+    property CodeInsightManager[Index: Integer]: IOTACodeInsightManager read GetCodeInsightManager;
+  end;
 
   IBorlandIDEServices = interface(IUnknown)
     ['{7FD1CE92-E053-11D1-AB0B-00C04FB16FB3}']
@@ -2405,15 +3020,15 @@ var
 
       ...
 
-      if BorlandIDEServices.QueryInterface(IOTAModuleServices, ModuleServices) = S_OK then
+      if Supports(BorlandIDEServices, IOTAModuleServices, ModuleServices) then
       begin
         ...
       end;
 
-    or in C++BUilder;
+    or in C++Builder;
 
       IOTAModuleServices *ModuleServices;
-      if (BorlandIDEServices->QueryInterface(__uuidof(IOTAModuleServices), &ModuleServices) == S_OK)
+      if (Supports(BorlandIDEServices, __uuidof(IOTAModuleServices), &ModuleServices))
       {
         ...
       }

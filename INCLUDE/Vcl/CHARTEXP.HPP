@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ChartExp.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ChartExp.pas' rev: 6.00
 
 #ifndef ChartExpHPP
 #define ChartExpHPP
@@ -15,7 +15,7 @@
 #include <SysUtils.hpp>	// Pascal unit
 #include <VirtIntf.hpp>	// Pascal unit
 #include <ToolIntf.hpp>	// Pascal unit
-#include <Exptintf.hpp>	// Pascal unit
+#include <ExptIntf.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
@@ -59,9 +59,7 @@ public:
 extern PACKAGE void __fastcall Register(void);
 
 }	/* namespace Chartexp */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Chartexp;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

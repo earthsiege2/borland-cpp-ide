@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'AxisIncr.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'AxisIncr.pas' rev: 6.00
 
 #ifndef AxisIncrHPP
 #define AxisIncrHPP
@@ -21,9 +21,9 @@
 #include <Controls.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
+#include <SysUtils.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
-#include <SysUtils.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -61,12 +61,10 @@ public:
 	Teeprocs::TDateTimeStep IStep;
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TAxisIncrement(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TAxisIncrement(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TAxisIncrement(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TAxisIncrement(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TAxisIncrement(void) { }
@@ -74,21 +72,17 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TAxisIncrement(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TAxisIncrement(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE AnsiString __fastcall GetIncrementText(Classes::TComponent* AOwner, const double Increment
-	, bool IsDateTime, bool ExactDateTime, const AnsiString AFormat);
+extern PACKAGE AnsiString __fastcall GetIncrementText(Classes::TComponent* AOwner, const double Increment, bool IsDateTime, bool ExactDateTime, const AnsiString AFormat);
 
 }	/* namespace Axisincr */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Axisincr;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

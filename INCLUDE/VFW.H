@@ -38,7 +38,6 @@
  ****************************************************************************/
 
 #ifndef _INC_VFW
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_VFW
 
 #ifdef __cplusplus
@@ -3151,7 +3150,7 @@ typedef struct videohdr_tag {
     DWORD       dwBufferLength;         /* Length of data buffer */
     DWORD       dwBytesUsed;            /* Bytes actually used */
     DWORD       dwTimeCaptured;         /* Milliseconds from start of stream */
-    DWORD       dwUser;                 /* for client's use */
+    DWORD_PTR   dwUser;                 /* for client's use */
     DWORD       dwFlags;                /* assorted flags (see defines) */
     DWORD_PTR   dwReserved[4];          /* reserved for driver */
 } VIDEOHDR, NEAR *PVIDEOHDR, FAR * LPVIDEOHDR;
@@ -3784,5 +3783,4 @@ extern "C" {            /* Assume C declarations for C++ */
 }                       /* End of extern "C" { */
 #endif  /* __cplusplus */
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* _INC_VFW */

@@ -7,7 +7,6 @@
 \*****************************************************************************/
 
 #ifndef _INC_CUSTCNTL
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_CUSTCNTL
 
 #if _MSC_VER > 1000
@@ -210,5 +209,4 @@ typedef UINT (CALLBACK* LPFNCCINFOW)(LPCCINFOW acci);
 }
 #endif  /* __cplusplus */
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* _INC_CUSTCNTL */

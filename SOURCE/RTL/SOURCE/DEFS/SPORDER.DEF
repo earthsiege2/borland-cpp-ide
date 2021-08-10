@@ -1,5 +1,5 @@
-LIBRARY SPORDER
+LIBRARY SpOrder
 EXPORTS
 
-    WSCWriteNameSpaceOrder                   = 'SPORDER.DLL'.*
-    WSCWriteProviderOrder                    = 'SPORDER.DLL'.*
+    WSCWriteNameSpaceOrder
+    WSCWriteProviderOrder

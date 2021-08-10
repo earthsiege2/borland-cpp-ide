@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Buttons.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Buttons.pas' rev: 6.00
 
 #ifndef ButtonsHPP
 #define ButtonsHPP
@@ -11,7 +11,8 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <Menus.hpp>	// Pascal unit
-#include <Commctrl.hpp>	// Pascal unit
+#include <ActnList.hpp>	// Pascal unit
+#include <CommCtrl.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
@@ -42,6 +43,7 @@ enum TButtonStyle { bsAutoDetect, bsWin31, bsNew };
 
 typedef Shortint TNumGlyphs;
 
+class DELPHICLASS TSpeedButtonActionLink;
 class DELPHICLASS TSpeedButton;
 class PASCALIMPLEMENTATION TSpeedButton : public Controls::TGraphicControl 
 {
@@ -87,13 +89,12 @@ private:
 protected:
 	TButtonState FState;
 	DYNAMIC void __fastcall ActionChange(System::TObject* Sender, bool CheckDefaults);
+	DYNAMIC TMetaClass* __fastcall GetActionLinkClass(void);
 	DYNAMIC HPALETTE __fastcall GetPalette(void);
 	virtual void __fastcall Loaded(void);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
-	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int 
-		Y);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	virtual void __fastcall Paint(void);
 	__property bool MouseInControl = {read=FMouseInControl, nodefault};
 	
@@ -105,27 +106,27 @@ public:
 __published:
 	__property Action ;
 	__property bool AllowAllUp = {read=FAllowAllUp, write=SetAllowAllUp, default=0};
-	__property Anchors ;
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
 	__property Constraints ;
 	__property int GroupIndex = {read=FGroupIndex, write=SetGroupIndex, default=0};
 	__property bool Down = {read=FDown, write=SetDown, default=0};
 	__property Caption ;
-	__property Enabled ;
+	__property Enabled  = {default=1};
 	__property bool Flat = {read=FFlat, write=SetFlat, default=0};
 	__property Font ;
 	__property Graphics::TBitmap* Glyph = {read=GetGlyph, write=SetGlyph};
 	__property TButtonLayout Layout = {read=FLayout, write=SetLayout, default=0};
 	__property int Margin = {read=FMargin, write=SetMargin, default=-1};
 	__property TNumGlyphs NumGlyphs = {read=GetNumGlyphs, write=SetNumGlyphs, default=1};
-	__property ParentFont ;
-	__property ParentShowHint ;
-	__property ParentBiDiMode ;
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
+	__property ParentBiDiMode  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
 	__property int Spacing = {read=FSpacing, write=SetSpacing, default=4};
 	__property bool Transparent = {read=FTransparent, write=SetTransparent, default=1};
-	__property Visible ;
+	__property Visible  = {default=1};
 	__property OnClick ;
 	__property OnDblClick ;
 	__property OnMouseDown ;
@@ -134,9 +135,30 @@ __published:
 };
 
 
+class PASCALIMPLEMENTATION TSpeedButtonActionLink : public Controls::TControlActionLink 
+{
+	typedef Controls::TControlActionLink inherited;
+	
+protected:
+	TSpeedButton* FClient;
+	virtual void __fastcall AssignClient(System::TObject* AClient);
+	virtual bool __fastcall IsCheckedLinked(void);
+	virtual bool __fastcall IsGroupIndexLinked(void);
+	virtual void __fastcall SetGroupIndex(int Value);
+	virtual void __fastcall SetChecked(bool Value);
+public:
+	#pragma option push -w-inl
+	/* TBasicActionLink.Create */ inline __fastcall virtual TSpeedButtonActionLink(System::TObject* AClient) : Controls::TControlActionLink(AClient) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TBasicActionLink.Destroy */ inline __fastcall virtual ~TSpeedButtonActionLink(void) { }
+	#pragma option pop
+	
+};
+
+
 #pragma option push -b-
-enum TBitBtnKind { bkCustom, bkOK, bkCancel, bkHelp, bkYes, bkNo, bkClose, bkAbort, bkRetry, bkIgnore, 
-	bkAll };
+enum TBitBtnKind { bkCustom, bkOK, bkCancel, bkHelp, bkYes, bkNo, bkClose, bkAbort, bkRetry, bkIgnore, bkAll };
 #pragma option pop
 
 class DELPHICLASS TBitBtn;
@@ -188,47 +210,42 @@ public:
 	
 __published:
 	__property Action ;
-	__property Anchors ;
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
 	__property Cancel  = {stored=IsCustom, default=0};
 	__property Caption  = {stored=IsCustomCaption};
 	__property Constraints ;
 	__property Default  = {stored=IsCustom, default=0};
-	__property Enabled ;
+	__property Enabled  = {default=1};
 	__property Graphics::TBitmap* Glyph = {read=GetGlyph, write=SetGlyph, stored=IsCustom};
 	__property TBitBtnKind Kind = {read=GetKind, write=SetKind, default=0};
 	__property TButtonLayout Layout = {read=FLayout, write=SetLayout, default=0};
 	__property int Margin = {read=FMargin, write=SetMargin, default=-1};
 	__property ModalResult  = {stored=IsCustom, default=0};
-	__property TNumGlyphs NumGlyphs = {read=GetNumGlyphs, write=SetNumGlyphs, stored=IsCustom, default=1
-		};
-	__property ParentShowHint ;
-	__property ParentBiDiMode ;
+	__property TNumGlyphs NumGlyphs = {read=GetNumGlyphs, write=SetNumGlyphs, stored=IsCustom, default=1};
+	__property ParentShowHint  = {default=1};
+	__property ParentBiDiMode  = {default=1};
 	__property ShowHint ;
 	__property TButtonStyle Style = {read=FStyle, write=SetStyle, default=0};
 	__property int Spacing = {read=FSpacing, write=SetSpacing, default=4};
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnEnter ;
 	__property OnExit ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TBitBtn(HWND ParentWindow) : Stdctrls::TButton(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TBitBtn(HWND ParentWindow) : Stdctrls::TButton(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE Windows::TRect __fastcall DrawButtonFace(Graphics::TCanvas* Canvas, const Windows::TRect 
-	&Client, int BevelWidth, TButtonStyle Style, bool IsRounded, bool IsDown, bool IsFocused);
+extern PACKAGE Types::TRect __fastcall DrawButtonFace(Graphics::TCanvas* Canvas, const Types::TRect &Client, int BevelWidth, TButtonStyle Style, bool IsRounded, bool IsDown, bool IsFocused);
 
 }	/* namespace Buttons */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Buttons;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

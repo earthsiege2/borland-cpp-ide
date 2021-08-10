@@ -13,12 +13,11 @@
 **																		*
 **																		*
 *************************************************************************
-** Copyright (C) 1996 - 1999 Microsoft Corporation		 					*
+** Copyright (C) 1996 by Microsoft Corporation		 					*
 **		   All Rights Reserved					 						*
 ************************************************************************/
 
 #ifndef _DDAOERR_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _DDAOERR_H_
 
 #define DBDAOERR(x) MAKE_SCODE(SEVERITY_ERROR, FACILITY_CONTROL, x)
@@ -697,6 +696,5 @@
 #define E_DAO_VtoCanNotFindTable			DBDAOERR(3671) //Can not find table to update.
 #define E_DAO_VtoCanNotFindCursLib			DBDAOERR(3672) //Failed to load RDOCURS.DLL.
 
-#pragma option pop /*P_O_Pop*/
 #endif // def _DBDAOERR.H_
 

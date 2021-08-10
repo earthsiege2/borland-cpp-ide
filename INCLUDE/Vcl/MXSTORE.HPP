@@ -1,24 +1,24 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxstore.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Mxstore.pas' rev: 6.00
 
-#ifndef mxstoreHPP
-#define mxstoreHPP
+#ifndef MxstoreHPP
+#define MxstoreHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <mxtables.hpp>	// Pascal unit
-#include <mxcommon.hpp>	// Pascal unit
-#include <mxpbar.hpp>	// Pascal unit
+#include <MXTABLES.hpp>	// Pascal unit
+#include <MXCOMMON.hpp>	// Pascal unit
+#include <MXPBAR.hpp>	// Pascal unit
 #include <Menus.hpp>	// Pascal unit
-#include <mxarrays.hpp>	// Pascal unit
+#include <Mxarrays.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
 #include <DBCommon.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
-#include <Bde.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
+#include <BDE.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -26,6 +26,7 @@
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
@@ -45,8 +46,7 @@ class DELPHICLASS TCustomDataStore;
 typedef void __fastcall (__closure *TCubeNotifyEvent)(TCustomDataStore* DataCube);
 
 class DELPHICLASS TCubeDims;
-typedef void __fastcall (__closure *TCubeRefreshEvent)(TCustomDataStore* DataCube, TCubeDims* DimMap
-	);
+typedef void __fastcall (__closure *TCubeRefreshEvent)(TCustomDataStore* DataCube, TCubeDims* DimMap);
 
 #pragma option push -b-
 enum TCubeDataState { dsNoData, dsMetaData, dsDimensionData, dsAllData };
@@ -131,6 +131,9 @@ class PASCALIMPLEMENTATION TCubeDims : public Mxcommon::TDimensionItems
 {
 	typedef Mxcommon::TDimensionItems inherited;
 	
+public:
+	TCubeDim* operator[](int Index) { return Items[Index]; }
+	
 private:
 	TCubeDim* __fastcall GetCubeDim(int Index);
 	void __fastcall SetCubeDim(int Index, TCubeDim* Value);
@@ -189,8 +192,7 @@ public:
 
 
 class DELPHICLASS TSummary;
-typedef bool __fastcall (*TAggProc)(int eCnt, int Range, TSummary* Summary, Mxarrays::TSmallIntArray* 
-	SumIndex, Variant &vNew);
+typedef bool __fastcall (*TAggProc)(int eCnt, int Range, TSummary* Summary, Mxarrays::TSmallIntArray* SumIndex, Variant &vNew);
 
 #pragma option push -b-
 enum TCalcTotalsFlags { ctPreCalc, ctRunning, ctNone };
@@ -235,8 +237,7 @@ private:
 	int __fastcall GetSummaryCount(void);
 	TSummary* __fastcall GetSummary(int Index);
 	void __fastcall SetActiveSummary(int Index);
-	void __fastcall GetScope(int &OffsetIdx, int &AggIdx, int &AggRange, Mxarrays::TSmallIntArray* SumIndex
-		);
+	void __fastcall GetScope(int &OffsetIdx, int &AggIdx, int &AggRange, Mxarrays::TSmallIntArray* SumIndex);
 	bool __fastcall IsIndexSparse(Mxarrays::TSmallIntArray* SumIndex);
 	bool __fastcall GetSuccess(void);
 	void __fastcall SetSuccess(bool Value);
@@ -246,10 +247,8 @@ private:
 	void __fastcall SetSparsing(bool Value);
 	bool __fastcall GetHasIndex(void);
 	void __fastcall SetHasIndex(bool Value);
-	bool __fastcall GetAggSummary(Mxarrays::TSmallIntArray* SumIndex, TSummary* Summary, Variant &Value
-		);
-	bool __fastcall GetBaseSummary(Mxarrays::TSmallIntArray* SumIndex, TSummary* Summary, Variant &Value
-		);
+	bool __fastcall GetAggSummary(Mxarrays::TSmallIntArray* SumIndex, TSummary* Summary, Variant &Value);
+	bool __fastcall GetBaseSummary(Mxarrays::TSmallIntArray* SumIndex, TSummary* Summary, Variant &Value);
 	
 protected:
 	void __fastcall FreeCache(void);
@@ -276,15 +275,13 @@ public:
 	Variant __fastcall GetDimensionMemberAsVariant(int DimIndex, int MemberIndex);
 	int __fastcall GetDimensionMemberCount(int DimIndex);
 	int __fastcall GetIndexCount(void);
-	bool __fastcall IncSummaryIndex(TSummary* Summary, Mxarrays::TSmallIntArray* SumIndex, Mxarrays::TSmallIntArray* 
-		rangeCount, bool &bGroupBreak);
+	bool __fastcall IncSummaryIndex(TSummary* Summary, Mxarrays::TSmallIntArray* SumIndex, Mxarrays::TSmallIntArray* rangeCount, bool &bGroupBreak);
 	bool __fastcall HasSubTotals(Mxarrays::TSmallIntArray* SumIndex);
 	bool __fastcall HasValidSubTotals(TSummary* Summary, Mxarrays::TSmallIntArray* SumIndex);
 	AnsiString __fastcall GetSummaryAsString(Mxarrays::TSmallIntArray* SumIndex);
 	Variant __fastcall GetSummaryAsVariant(Mxarrays::TSmallIntArray* SumIndex);
 	void __fastcall CreateTable(const AnsiString Filename);
-	int __fastcall GetDomain(Mxarrays::TIntArray* DimensionIDs, int nDims, bool ATotals, Mxarrays::TTwoDimArray* 
-		Domain);
+	int __fastcall GetDomain(Mxarrays::TIntArray* DimensionIDs, int nDims, bool ATotals, Mxarrays::TTwoDimArray* Domain);
 	__property bool PreCalculateTotals = {read=GetPreCalcTotals, write=SetPreCalcTotals, nodefault};
 	__property int CurrentSummary = {read=FActiveSummary, write=SetActiveSummary, nodefault};
 	__property int DimensionCount = {read=GetDimensionCount, nodefault};
@@ -382,10 +379,8 @@ protected:
 	virtual void __fastcall DoAfterClose(void);
 	virtual void __fastcall DoOnRefresh(TCubeDims* DimMap);
 	Db::TDataSet* __fastcall GetDataSet(void);
-	int __fastcall GetDomain(Mxarrays::TIntArray* DimensionIDs, bool ATotals, Mxarrays::TTwoDimArray* Domain
-		);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	int __fastcall GetDomain(Mxarrays::TIntArray* DimensionIDs, bool ATotals, Mxarrays::TTwoDimArray* Domain);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	void __fastcall SetDataSet(Db::TDataSet* ADataSet);
 	int __fastcall GetCurrentSummary(void);
 	void __fastcall SetCurrentSummary(int Value);
@@ -436,8 +431,7 @@ public:
 
 
 #pragma option push -b-
-enum TFormatType { fxNone, fxFloat, fxCurrency, fxDateTime, fxTime, fxDate, fxString, fxInteger, fxBoolean 
-	};
+enum TFormatType { fxNone, fxFloat, fxCurrency, fxDateTime, fxTime, fxDate, fxString, fxInteger, fxBoolean };
 #pragma option pop
 
 class DELPHICLASS TFieldDefinition;
@@ -515,6 +509,7 @@ enum TIndexFlag { idxNormal, idxSparsed, idxFiltered, idxSubTotals, idxDeleted }
 
 typedef Set<TIndexFlag, idxNormal, idxDeleted>  TIndexFlags;
 
+#pragma pack(push, 4)
 struct TIndexInfoRec
 {
 	int SparseCnt;
@@ -522,6 +517,7 @@ struct TIndexInfoRec
 	int AggOffset;
 	TIndexFlags Flags;
 } ;
+#pragma pack(pop)
 
 typedef Variant __fastcall (*TDerivedAggProc)(const Variant &Val1, const Variant &Val2);
 
@@ -549,8 +545,7 @@ public:
 };
 
 
-typedef bool __fastcall (__closure *TSumMethod)(Mxarrays::TSmallIntArray* SumIndex, TSummary* Summary
-	, Variant &Value);
+typedef bool __fastcall (__closure *TSumMethod)(Mxarrays::TSmallIntArray* SumIndex, TSummary* Summary, Variant &Value);
 
 class PASCALIMPLEMENTATION TSummary : public Mxarrays::TCustomArray 
 {
@@ -577,8 +572,7 @@ private:
 	
 protected:
 	bool __fastcall HasFlag(Mxcommon::TDimFlags aFlag);
-	bool __fastcall SetAggregator(AnsiString aName, TCubeDims* DimMap, Mxcommon::TDimFlags dimType, int 
-		&dIdx);
+	bool __fastcall SetAggregator(AnsiString aName, TCubeDims* DimMap, Mxcommon::TDimFlags dimType, int &dIdx);
 	
 public:
 	__fastcall TSummary(unsigned Items, Db::TFieldType DataType);
@@ -610,38 +604,28 @@ class PASCALIMPLEMENTATION ECacheError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall ECacheError(const AnsiString Msg) : Sysutils::Exception(Msg
-		) { }
+	/* Exception.Create */ inline __fastcall ECacheError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall ECacheError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall ECacheError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall ECacheError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall ECacheError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall ECacheError(int Ident, const System::TVarRec * Args, 
-		const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall ECacheError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall ECacheError(const AnsiString Msg, int AHelpContext) : 
-		Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall ECacheError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall ECacheError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ECacheError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall ECacheError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ECacheError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall ECacheError(System::PResStringRec ResStringRec, 
-		const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ECacheError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -695,12 +679,10 @@ static const Shortint LargeValueCount = 0x32;
 extern PACKAGE bool __fastcall TestMatch(Mxarrays::TSmallIntArray* SumIdx);
 
 }	/* namespace Mxstore */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxstore;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxstore
+#endif	// Mxstore

@@ -1,0 +1,48 @@
+package dcldss;
+
+{$R *.res}
+{$R 'MXREG.DCR'}
+{$ALIGN 8}
+{ ASSERTIONS OFF}
+{$BOOLEVAL OFF}
+{ DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{ LOCALSYMBOLS OFF}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{ STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $5059FFEB}
+{$DESCRIPTION 'Borland Decision Cube Components'}
+{$DESIGNONLY}
+{$IMPLICITBUILD OFF}
+{$LIBSUFFIX '60'}
+
+requires
+  rtl,
+  dbrtl,
+  bdertl,
+  vcl,
+  vcldb,
+  dss,
+  dcltee,
+  designide;
+
+contains
+  mxdconst in 'mxdconst.pas',
+  mxdimedt in 'mxdimedt.pas',
+  mxdssqry in 'mxdssqry.pas',
+  MXReg in 'MXReg.pas';
+
+end.
+

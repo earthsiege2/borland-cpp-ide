@@ -1,23 +1,29 @@
-LIBRARY ACTIVEDS
+LIBRARY ActiveDS
 EXPORTS
 
-    ADsBuildEnumerator                       = 'ACTIVEDS.DLL'.* @4 @3
-    ADsBuildVarArrayInt                      = 'ACTIVEDS.DLL'.* @8 @7
-    ADsBuildVarArrayStr                      = 'ACTIVEDS.DLL'.* @7 @6
-    ADsDecodeBinaryData                      = 'ACTIVEDS.DLL'.* @24 @23
-    ADsEncodeBinaryData                      = 'ACTIVEDS.DLL'.* @20 @19
-    ADsEnumerateNext                         = 'ACTIVEDS.DLL'.* @6 @5
-    ADsFreeEnumerator                        = 'ACTIVEDS.DLL'.* @5 @4
-    ADsGetLastError                          = 'ACTIVEDS.DLL'.* @13 @12
-    ADsGetObject                             = 'ACTIVEDS.DLL'.* @3 @2
-    ADsOpenObject                            = 'ACTIVEDS.DLL'.* @9 @8
-    ADsSetLastError                          = 'ACTIVEDS.DLL'.* @12 @11
-    AdsFreeAdsValues                         = 'ACTIVEDS.DLL'.* @23 @22
-    AdsTypeToPropVariant                     = 'ACTIVEDS.DLL'.* @22 @21
-    AllocADsMem                              = 'ACTIVEDS.DLL'.* @14 @13
-    AllocADsStr                              = 'ACTIVEDS.DLL'.* @17 @16
-    FreeADsMem                               = 'ACTIVEDS.DLL'.* @15 @14
-    FreeADsStr                               = 'ACTIVEDS.DLL'.* @18 @17
-    PropVariantToAdsType                     = 'ACTIVEDS.DLL'.* @21 @20
-    ReallocADsMem                            = 'ACTIVEDS.DLL'.* @16 @15
-    ReallocADsStr                            = 'ACTIVEDS.DLL'.* @19 @18
+    ADsBuildEnumerator        @4
+    ADsBuildVarArrayInt        @8
+    ADsBuildVarArrayStr        @7
+    ADsDecodeBinaryData        @24
+    ADsEncodeBinaryData        @20
+    ADsEnumerateNext        @6
+    ADsFreeEnumerator        @5
+    ADsGetLastError        @13
+    ADsGetObject        @3
+    ADsOpenObject        @9
+    ADsSetLastError        @12
+    AdsFreeAdsValues        @23
+    AdsTypeToPropVariant2        @25
+    AdsTypeToPropVariant        @22
+    AllocADsMem        @14
+    AllocADsStr        @17
+    BinarySDToSecurityDescriptor        @29
+    ConvertSecDescriptorToVariant        @27
+    ConvertSecurityDescriptorToSecDes        @28
+    FreeADsMem        @15
+    FreeADsStr        @18
+    PropVariantToAdsType2        @26
+    PropVariantToAdsType        @21
+    ReallocADsMem        @16
+    ReallocADsStr        @19
+    SecurityDescriptorToBinarySD        @30

@@ -1,6 +1,6 @@
 
 //=============================================================================
-//  Microsoft (R) Bloodhound. Copyright (C) 1991-1994.
+//  Microsoft (R) Bloodhound. Copyright (C) 1991-1999.
 //
 //  MODULE: nal.h
 //
@@ -8,7 +8,6 @@
 //=============================================================================
 
 #if !defined(_NAL_)
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #define _NAL_
 
@@ -98,5 +97,4 @@ extern DWORD                WINAPI GetBufferTotalBytesCaptured(HBUFFER hBuffer);
 extern LPSYSTEMTIME         WINAPI GetBufferTimeStamp(HBUFFER hBuffer, LPSYSTEMTIME SystemTime);
 
 #pragma pack()
-#pragma option pop /*P_O_Pop*/
 #endif

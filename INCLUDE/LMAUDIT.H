@@ -24,7 +24,6 @@ Notes:
 --*/
 
 #ifndef _LMAUDIT_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMAUDIT_
 
 #if _MSC_VER > 1000
@@ -399,5 +398,4 @@ typedef struct _AE_GENERIC {
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif  // _LMAUDIT_

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'TeExport.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'TeExport.pas' rev: 6.00
 
 #ifndef TeExportHPP
 #define TeExportHPP
@@ -49,12 +49,10 @@ public:
 	Teeprocs::TCustomTeePanel* ExportPanel;
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TTeeExportForm(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TTeeExportForm(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TTeeExportForm(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TTeeExportForm(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TTeeExportForm(void) { }
@@ -62,27 +60,21 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TTeeExportForm(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TTeeExportForm(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
-typedef void __fastcall (*TExportSaveProc)(Teeprocs::TCustomTeePanel* ExportPanel, const AnsiString 
-	AFileName);
+typedef void __fastcall (*TExportSaveProc)(Teeprocs::TCustomTeePanel* ExportPanel, const AnsiString AFileName);
 
 //-- var, const, procedure ---------------------------------------------------
 extern PACKAGE TExportSaveProc TeeExportSave;
-extern PACKAGE void __fastcall SaveTeeToFile(Teeprocs::TCustomTeePanel* ATree, const AnsiString AName
-	);
-extern PACKAGE void __fastcall LoadTeeFromFile(Teeprocs::TCustomTeePanel* &ATree, const AnsiString AName
-	);
+extern PACKAGE void __fastcall SaveTeeToFile(Teeprocs::TCustomTeePanel* ATree, const AnsiString AName);
+extern PACKAGE void __fastcall LoadTeeFromFile(Teeprocs::TCustomTeePanel* &ATree, const AnsiString AName);
 
 }	/* namespace Teexport */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Teexport;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

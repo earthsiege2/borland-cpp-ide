@@ -1,0 +1,865 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 00008718H .text                   CODE
+ 0002:00000000 00000080H .data                   DATA
+ 0002:00000080 000000A5H .bss                    BSS
+
+
+Detailed map of segments
+
+ 0001:00000000 000001EE C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:000001F0 000001EC C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:000003DC 00000166 C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:00000544 0000000E C=CODE     S=.text    G=(none)   M=ActiveX  ACBP=A9
+ 0001:00000554 00000038 C=CODE     S=.text    G=(none)   M=Messages ACBP=A9
+ 0001:0000058C 00000050 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:000005DC 00000016 C=CODE     S=.text    G=(none)   M=Types    ACBP=A9
+ 0001:000005F4 00000016 C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:0000060C 000000A6 C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:000006B4 0000000E C=CODE     S=.text    G=(none)   M=SysConst ACBP=A9
+ 0001:000006C4 0000000E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:000006D4 0000000E C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:000006E4 0000000E C=CODE     S=.text    G=(none)   M=RTLConsts ACBP=A9
+ 0001:000006F4 000005AE C=CODE     S=.text    G=(none)   M=ComponentDesigner ACBP=A9
+ 0001:00000CA4 0000000E C=CODE     S=.text    G=(none)   M=EditIntf ACBP=A9
+ 0001:00000CB4 0000000E C=CODE     S=.text    G=(none)   M=VirtIntf ACBP=A9
+ 0001:00000CC4 0000001E C=CODE     S=.text    G=(none)   M=Events   ACBP=A9
+ 0001:00000CE4 0000000E C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:00000CF4 0000000E C=CODE     S=.text    G=(none)   M=ToolUtils ACBP=A9
+ 0001:00000D04 0000002E C=CODE     S=.text    G=(none)   M=DesignIntf ACBP=A9
+ 0001:00000D34 0000000E C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00000D44 00000026 C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:00000D6C 0000000E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:00000D7C 0000000E C=CODE     S=.text    G=(none)   M=Math     ACBP=A9
+ 0001:00000D8C 0000001E C=CODE     S=.text    G=(none)   M=ImgList  ACBP=A9
+ 0001:00000DAC 00000038 C=CODE     S=.text    G=(none)   M=CommCtrl ACBP=A9
+ 0001:00000DE4 0000000E C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:00000DF4 0000000E C=CODE     S=.text    G=(none)   M=Consts   ACBP=A9
+ 0001:00000E04 00000026 C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:00000E2C 0000000E C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000E3C 0000000E C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:00000E4C 00000038 C=CODE     S=.text    G=(none)   M=Imm      ACBP=A9
+ 0001:00000E84 00000026 C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:00000EAC 0000000E C=CODE     S=.text    G=(none)   M=WinHelpViewer ACBP=A9
+ 0001:00000EBC 0000000E C=CODE     S=.text    G=(none)   M=StdActns ACBP=A9
+ 0001:00000ECC 0000000E C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:00000EDC 00000038 C=CODE     S=.text    G=(none)   M=ShlObj   ACBP=A9
+ 0001:00000F14 00000038 C=CODE     S=.text    G=(none)   M=UrlMon   ACBP=A9
+ 0001:00000F4C 00000038 C=CODE     S=.text    G=(none)   M=WinInet  ACBP=A9
+ 0001:00000F84 00000038 C=CODE     S=.text    G=(none)   M=RegStr   ACBP=A9
+ 0001:00000FBC 00000038 C=CODE     S=.text    G=(none)   M=ShellAPI ACBP=A9
+ 0001:00000FF4 0000000E C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00001004 00000038 C=CODE     S=.text    G=(none)   M=WinSpool ACBP=A9
+ 0001:0000103C 0000000E C=CODE     S=.text    G=(none)   M=StdCtrls ACBP=A9
+ 0001:0000104C 00000038 C=CODE     S=.text    G=(none)   M=CommDlg  ACBP=A9
+ 0001:00001084 00000038 C=CODE     S=.text    G=(none)   M=Dlgs     ACBP=A9
+ 0001:000010BC 0000000E C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:000010CC 0000000E C=CODE     S=.text    G=(none)   M=StrUtils ACBP=A9
+ 0001:000010DC 0000000E C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:000010EC 0000000E C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:000010FC 0000000E C=CODE     S=.text    G=(none)   M=DesignMenus ACBP=A9
+ 0001:0000110C 0000000E C=CODE     S=.text    G=(none)   M=ToolsAPI ACBP=A9
+ 0001:0000111C 0000000E C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:0000112C 0000000E C=CODE     S=.text    G=(none)   M=ListActns ACBP=A9
+ 0001:0000113C 0000000E C=CODE     S=.text    G=(none)   M=ToolWin  ACBP=A9
+ 0001:0000114C 00000038 C=CODE     S=.text    G=(none)   M=RichEdit ACBP=A9
+ 0001:00001184 0000000E C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00001194 0000000E C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:000011A4 0000000E C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:000011B4 0000000E C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:000011C4 0000000E C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:000011D4 0000000E C=CODE     S=.text    G=(none)   M=ComStrs  ACBP=A9
+ 0001:000011E4 0000000E C=CODE     S=.text    G=(none)   M=Update   ACBP=A9
+ 0001:000011F4 0000000E C=CODE     S=.text    G=(none)   M=LibConst ACBP=A9
+ 0001:00001204 00000046 C=CODE     S=.text    G=(none)   M=DesignEditors ACBP=A9
+ 0001:0000124C 0000000E C=CODE     S=.text    G=(none)   M=Proxies  ACBP=A9
+ 0001:0000125C 0000000E C=CODE     S=.text    G=(none)   M=DesignConst ACBP=A9
+ 0001:0000126C 00000016 C=CODE     S=.text    G=(none)   M=Designer ACBP=A9
+ 0001:00001284 0000001E C=CODE     S=.text    G=(none)   M=TopLevels ACBP=A9
+ 0001:000012A4 0000000E C=CODE     S=.text    G=(none)   M=StFilSys ACBP=A9
+ 0001:000012B4 0000000E C=CODE     S=.text    G=(none)   M=IStreams ACBP=A9
+ 0001:000012C4 0000000E C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:000012D4 0000000E C=CODE     S=.text    G=(none)   M=StdVCL   ACBP=A9
+ 0001:000012E4 0000000E C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:000012F4 0000000E C=CODE     S=.text    G=(none)   M=ComConst ACBP=A9
+ 0001:00001304 0000001E C=CODE     S=.text    G=(none)   M=TreeIntf ACBP=A9
+ 0001:00001324 0000008E C=CODE     S=.text    G=(none)   M=Qt       ACBP=A9
+ 0001:000013B4 0000000E C=CODE     S=.text    G=(none)   M=BindHelp ACBP=A9
+ 0001:000013C4 00000016 C=CODE     S=.text    G=(none)   M=QGraphics ACBP=A9
+ 0001:000013DC 0000000E C=CODE     S=.text    G=(none)   M=QTypes   ACBP=A9
+ 0001:000013EC 0000000E C=CODE     S=.text    G=(none)   M=QConsts  ACBP=A9
+ 0001:000013FC 0000002E C=CODE     S=.text    G=(none)   M=QForms   ACBP=A9
+ 0001:0000142C 0000000E C=CODE     S=.text    G=(none)   M=QStyle   ACBP=A9
+ 0001:0000143C 0000000E C=CODE     S=.text    G=(none)   M=QActnList ACBP=A9
+ 0001:0000144C 0000000E C=CODE     S=.text    G=(none)   M=QImgList ACBP=A9
+ 0001:0000145C 0000006E C=CODE     S=.text    G=(none)   M=QControls ACBP=A9
+ 0001:000014CC 0000000E C=CODE     S=.text    G=(none)   M=QMenus   ACBP=A9
+ 0001:000014DC 0000000E C=CODE     S=.text    G=(none)   M=QExtCtrls ACBP=A9
+ 0001:000014EC 0000000E C=CODE     S=.text    G=(none)   M=QStdCtrls ACBP=A9
+ 0001:000014FC 0000001E C=CODE     S=.text    G=(none)   M=QClipbrd ACBP=A9
+ 0001:0000151C 0000000E C=CODE     S=.text    G=(none)   M=QStdActns ACBP=A9
+ 0001:0000152C 0000000E C=CODE     S=.text    G=(none)   M=QSearch  ACBP=A9
+ 0001:0000153C 0000000E C=CODE     S=.text    G=(none)   M=QDialogs ACBP=A9
+ 0001:0000154C 00000076 C=CODE     S=.text    G=(none)   M=Creators ACBP=A9
+ 0001:000015C4 0000000E C=CODE     S=.text    G=(none)   M=ResUtils ACBP=A9
+ 0001:000015D4 00000016 C=CODE     S=.text    G=(none)   M=FIRecov  ACBP=A9
+ 0001:000015EC 00000016 C=CODE     S=.text    G=(none)   M=ClxSurface ACBP=A9
+ 0001:00001604 0000000E C=CODE     S=.text    G=(none)   M=ClxMenus ACBP=A9
+ 0001:00001614 0000000E C=CODE     S=.text    G=(none)   M=DesignActionLink ACBP=A9
+ 0001:00001624 0000003E C=CODE     S=.text    G=(none)   M=ClxEditors ACBP=A9
+ 0001:00001664 0000000E C=CODE     S=.text    G=(none)   M=ClxImgEdit ACBP=A9
+ 0001:00001674 0000000E C=CODE     S=.text    G=(none)   M=QComCtrls ACBP=A9
+ 0001:00001684 0000000E C=CODE     S=.text    G=(none)   M=QButtons ACBP=A9
+ 0001:00001694 0000000E C=CODE     S=.text    G=(none)   M=LibHelp  ACBP=A9
+ 0001:000016A4 0000000E C=CODE     S=.text    G=(none)   M=DsnConst ACBP=A9
+ 0001:000016B4 0000000E C=CODE     S=.text    G=(none)   M=Surface  ACBP=A9
+ 0001:000016C4 00000016 C=CODE     S=.text    G=(none)   M=LinkRedr ACBP=A9
+ 0001:000016DC 00000016 C=CODE     S=.text    G=(none)   M=FormRead ACBP=A9
+ 0001:000016F4 0000000E C=CODE     S=.text    G=(none)   M=ColnEdit ACBP=A9
+ 0001:00001704 0000000E C=CODE     S=.text    G=(none)   M=ToolWnds ACBP=A9
+ 0001:00001714 0000000E C=CODE     S=.text    G=(none)   M=DesignWindows ACBP=A9
+ 0001:00001724 0000000E C=CODE     S=.text    G=(none)   M=VCLEditors ACBP=A9
+ 0001:00001734 00000016 C=CODE     S=.text    G=(none)   M=AppEvnts ACBP=A9
+ 0001:0000174C 00000016 C=CODE     S=.text    G=(none)   M=ClxMnuBuild ACBP=A9
+ 0001:00001764 0000000E C=CODE     S=.text    G=(none)   M=ClxMenuTmpl ACBP=A9
+ 0001:00001774 0000000E C=CODE     S=.text    G=(none)   M=MnuConst ACBP=A9
+ 0001:00001784 0000000E C=CODE     S=.text    G=(none)   M=ClxDesignWindows ACBP=A9
+ 0001:00001794 0000000E C=CODE     S=.text    G=(none)   M=ClxMnuSelect ACBP=A9
+ 0001:000017A4 0000000E C=CODE     S=.text    G=(none)   M=ClxMnuFile ACBP=A9
+ 0001:000017B4 0000000E C=CODE     S=.text    G=(none)   M=ClxMtMisc ACBP=A9
+ 0001:000017C4 0000000E C=CODE     S=.text    G=(none)   M=ClxMtSvDlg ACBP=A9
+ 0001:000017D4 0000000E C=CODE     S=.text    G=(none)   M=ClxMtInDlg ACBP=A9
+ 0001:000017E4 0000000E C=CODE     S=.text    G=(none)   M=ClxMtDeDlg ACBP=A9
+ 0001:000017F4 0000000E C=CODE     S=.text    G=(none)   M=AppConst ACBP=A9
+ 0001:00001804 0000000E C=CODE     S=.text    G=(none)   M=ClxSprigs ACBP=A9
+ 0001:00001814 0000000E C=CODE     S=.text    G=(none)   M=ClxVclInterop ACBP=A9
+ 0001:00001824 0000001E C=CODE     S=.text    G=(none)   M=ClxDmSurface ACBP=A9
+ 0001:00001844 00000016 C=CODE     S=.text    G=(none)   M=WidgetDesignForm ACBP=A9
+ 0001:0000185C 00003980 C=CODE     S=.text    G=(none)   M=ClxFormDesigner ACBP=A9
+ 0001:000051DC 0000000E C=CODE     S=.text    G=(none)   M=IDEIntf  ACBP=A9
+ 0001:000051EC 0000000E C=CODE     S=.text    G=(none)   M=ExptIntf ACBP=A9
+ 0001:000051FC 0000000E C=CODE     S=.text    G=(none)   M=ToolIntf ACBP=A9
+ 0001:0000520C 0000000E C=CODE     S=.text    G=(none)   M=FileIntf ACBP=A9
+ 0001:0000521C 0000000E C=CODE     S=.text    G=(none)   M=ComTypes ACBP=A9
+ 0001:0000522C 0000000E C=CODE     S=.text    G=(none)   M=DbkHelper ACBP=A9
+ 0001:0000523C 0000000E C=CODE     S=.text    G=(none)   M=dbk_tlb  ACBP=A9
+ 0001:0000524C 0000000E C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:0000525C 0000000E C=CODE     S=.text    G=(none)   M=OleConst ACBP=A9
+ 0001:0000526C 0000000E C=CODE     S=.text    G=(none)   M=Debug    ACBP=A9
+ 0001:0000527C 0000000E C=CODE     S=.text    G=(none)   M=IDEMessages ACBP=A9
+ 0001:0000528C 0000000E C=CODE     S=.text    G=(none)   M=IDEServices ACBP=A9
+ 0001:0000529C 0000000E C=CODE     S=.text    G=(none)   M=CodeMgr  ACBP=A9
+ 0001:000052AC 0000000E C=CODE     S=.text    G=(none)   M=IDEModel ACBP=A9
+ 0001:000052BC 0000000E C=CODE     S=.text    G=(none)   M=IDEEvent ACBP=A9
+ 0001:000052CC 0000000E C=CODE     S=.text    G=(none)   M=IDEUtil  ACBP=A9
+ 0001:000052DC 0000000E C=CODE     S=.text    G=(none)   M=IDEConst ACBP=A9
+ 0001:000052EC 0000000E C=CODE     S=.text    G=(none)   M=OptIntf  ACBP=A9
+ 0001:000052FC 0000000E C=CODE     S=.text    G=(none)   M=IDEHistoryManager ACBP=A9
+ 0001:0000530C 0000000E C=CODE     S=.text    G=(none)   M=IDERegIniPropSet ACBP=A9
+ 0001:0000531C 0000000E C=CODE     S=.text    G=(none)   M=IDEPropSet ACBP=A9
+ 0001:0000532C 0000000E C=CODE     S=.text    G=(none)   M=Mask     ACBP=A9
+ 0001:0000533C 0000000E C=CODE     S=.text    G=(none)   M=MaskUtils ACBP=A9
+ 0001:0000534C 0000000E C=CODE     S=.text    G=(none)   M=PackageList ACBP=A9
+ 0001:0000535C 0000000E C=CODE     S=.text    G=(none)   M=UIUtils  ACBP=A9
+ 0001:0000536C 0000000E C=CODE     S=.text    G=(none)   M=VerInf   ACBP=A9
+ 0001:0000537C 0000000E C=CODE     S=.text    G=(none)   M=Grids    ACBP=A9
+ 0001:0000538C 0000000E C=CODE     S=.text    G=(none)   M=IDEVersionInfo ACBP=A9
+ 0001:0000539C 0000000E C=CODE     S=.text    G=(none)   M=AppStrs  ACBP=A9
+ 0001:000053AC 0000000E C=CODE     S=.text    G=(none)   M=RegistryEx ACBP=A9
+ 0001:000053BC 0000000E C=CODE     S=.text    G=(none)   M=FileCtrl ACBP=A9
+ 0001:000053CC 0000000E C=CODE     S=.text    G=(none)   M=EnvVariableFrame ACBP=A9
+ 0001:000053DC 0000000E C=CODE     S=.text    G=(none)   M=EnvVariableEntry ACBP=A9
+ 0001:000053EC 0000000E C=CODE     S=.text    G=(none)   M=Containers ACBP=A9
+ 0001:000053FC 0000000E C=CODE     S=.text    G=(none)   M=MakeObjs ACBP=A9
+ 0001:0000540C 0000000E C=CODE     S=.text    G=(none)   M=ProjectMgr ACBP=A9
+ 0001:0000541C 0000000E C=CODE     S=.text    G=(none)   M=IDEControl ACBP=A9
+ 0001:0000542C 0000000E C=CODE     S=.text    G=(none)   M=IDEPeer  ACBP=A9
+ 0001:0000543C 0000000E C=CODE     S=.text    G=(none)   M=IDEItem  ACBP=A9
+ 0001:0000544C 0000000E C=CODE     S=.text    G=(none)   M=IDEUIEvent ACBP=A9
+ 0001:0000545C 0000000E C=CODE     S=.text    G=(none)   M=IDEFixups ACBP=A9
+ 0001:0000546C 0000000E C=CODE     S=.text    G=(none)   M=IDEMulticast ACBP=A9
+ 0001:0000547C 0000000E C=CODE     S=.text    G=(none)   M=IDEViewImpl ACBP=A9
+ 0001:0000548C 0000000E C=CODE     S=.text    G=(none)   M=IDEUtil2 ACBP=A9
+ 0001:0000549C 0000000E C=CODE     S=.text    G=(none)   M=IDESubfocus ACBP=A9
+ 0001:000054AC 0000000E C=CODE     S=.text    G=(none)   M=IDESelection ACBP=A9
+ 0001:000054BC 0000000E C=CODE     S=.text    G=(none)   M=IDEModelEvent ACBP=A9
+ 0001:000054CC 0000000E C=CODE     S=.text    G=(none)   M=IDEViewManager ACBP=A9
+ 0001:000054DC 0000000E C=CODE     S=.text    G=(none)   M=IDEView  ACBP=A9
+ 0001:000054EC 0000000E C=CODE     S=.text    G=(none)   M=IDEItemEditors ACBP=A9
+ 0001:000054FC 0000000E C=CODE     S=.text    G=(none)   M=IDEItemPainters ACBP=A9
+ 0001:0000550C 0000000E C=CODE     S=.text    G=(none)   M=IDEGraphImpl ACBP=A9
+ 0001:0000551C 0000000E C=CODE     S=.text    G=(none)   M=IDEJgl   ACBP=A9
+ 0001:0000552C 0000000E C=CODE     S=.text    G=(none)   M=IDESelectionImpl ACBP=A9
+ 0001:0000553C 0000000E C=CODE     S=.text    G=(none)   M=IDESubfocusImpl ACBP=A9
+ 0001:0000554C 0000000E C=CODE     S=.text    G=(none)   M=IDEModelImpl ACBP=A9
+ 0001:0000555C 0000000E C=CODE     S=.text    G=(none)   M=IDEVectorImpl ACBP=A9
+ 0001:0000556C 0000000E C=CODE     S=.text    G=(none)   M=IDESingletonImpl ACBP=A9
+ 0001:0000557C 0000000E C=CODE     S=.text    G=(none)   M=IDEViewManagerImpl ACBP=A9
+ 0001:0000558C 00000036 C=CODE     S=.text    G=(none)   M=Modules  ACBP=A9
+ 0001:000055C4 0000000E C=CODE     S=.text    G=(none)   M=EditorViewSupport ACBP=A9
+ 0001:000055D4 0000000E C=CODE     S=.text    G=(none)   M=CompIntf ACBP=A9
+ 0001:000055E4 0000000E C=CODE     S=.text    G=(none)   M=ExplorerIntf ACBP=A9
+ 0001:000055F4 0000000E C=CODE     S=.text    G=(none)   M=Updaters ACBP=A9
+ 0001:00005604 0000000E C=CODE     S=.text    G=(none)   M=Symbols  ACBP=A9
+ 0001:00005614 0000000E C=CODE     S=.text    G=(none)   M=Context  ACBP=A9
+ 0001:00005624 0000000E C=CODE     S=.text    G=(none)   M=ProjectIntf ACBP=A9
+ 0001:00005634 0000000E C=CODE     S=.text    G=(none)   M=ComInOut ACBP=A9
+ 0001:00005644 0000000E C=CODE     S=.text    G=(none)   M=SyncObjs ACBP=A9
+ 0001:00005654 0000000E C=CODE     S=.text    G=(none)   M=ComMgr   ACBP=A9
+ 0001:00005664 0000000E C=CODE     S=.text    G=(none)   M=TypeLib  ACBP=A9
+ 0001:00005674 0000000E C=CODE     S=.text    G=(none)   M=tlberror ACBP=A9
+ 0001:00005684 0000000E C=CODE     S=.text    G=(none)   M=TlbConst ACBP=A9
+ 0001:00005694 0000000E C=CODE     S=.text    G=(none)   M=regutl   ACBP=A9
+ 0001:000056A4 0000000E C=CODE     S=.text    G=(none)   M=TlbHash  ACBP=A9
+ 0001:000056B4 0000000E C=CODE     S=.text    G=(none)   M=tlbdebug ACBP=A9
+ 0001:000056C4 0000000E C=CODE     S=.text    G=(none)   M=guidutl  ACBP=A9
+ 0001:000056D4 0000000E C=CODE     S=.text    G=(none)   M=ComPlusUtl ACBP=A9
+ 0001:000056E4 0000000E C=CODE     S=.text    G=(none)   M=DTLWrite ACBP=A9
+ 0001:000056F4 0000000E C=CODE     S=.text    G=(none)   M=TlbWrite ACBP=A9
+ 0001:00005704 0000000E C=CODE     S=.text    G=(none)   M=TlbUtils ACBP=A9
+ 0001:00005714 0000000E C=CODE     S=.text    G=(none)   M=AgeCache ACBP=A9
+ 0001:00005724 0000000E C=CODE     S=.text    G=(none)   M=StatIntf ACBP=A9
+ 0001:00005734 0000000E C=CODE     S=.text    G=(none)   M=PakLoad  ACBP=A9
+ 0001:00005744 0000000E C=CODE     S=.text    G=(none)   M=VEdOpts  ACBP=A9
+ 0001:00005754 0000000E C=CODE     S=.text    G=(none)   M=EK       ACBP=A9
+ 0001:00005764 0000000E C=CODE     S=.text    G=(none)   M=EdKrnl   ACBP=A9
+ 0001:00005774 0000000E C=CODE     S=.text    G=(none)   M=VEdTypes ACBP=A9
+ 0001:00005784 0000000E C=CODE     S=.text    G=(none)   M=IDEKbd   ACBP=A9
+ 0001:00005794 00000016 C=CODE     S=.text    G=(none)   M=KbClient ACBP=A9
+ 0001:000057AC 0000000E C=CODE     S=.text    G=(none)   M=MsgLines ACBP=A9
+ 0001:000057BC 0000000E C=CODE     S=.text    G=(none)   M=MsgLinesIntf ACBP=A9
+ 0001:000057CC 0000000E C=CODE     S=.text    G=(none)   M=MsgViewForm ACBP=A9
+ 0001:000057DC 0000000E C=CODE     S=.text    G=(none)   M=DeskForm ACBP=A9
+ 0001:000057EC 0000000E C=CODE     S=.text    G=(none)   M=DeskStrs ACBP=A9
+ 0001:000057FC 0000000E C=CODE     S=.text    G=(none)   M=Tabs     ACBP=A9
+ 0001:0000580C 0000000E C=CODE     S=.text    G=(none)   M=MsgView  ACBP=A9
+ 0001:0000581C 0000000E C=CODE     S=.text    G=(none)   M=AppUtils ACBP=A9
+ 0001:0000582C 0000000E C=CODE     S=.text    G=(none)   M=Editors  ACBP=A9
+ 0001:0000583C 0000000E C=CODE     S=.text    G=(none)   M=IDEMenuAction ACBP=A9
+ 0001:0000584C 0000000E C=CODE     S=.text    G=(none)   M=IDEDockPanel ACBP=A9
+ 0001:0000585C 0000000E C=CODE     S=.text    G=(none)   M=TabDock  ACBP=A9
+ 0001:0000586C 0000000E C=CODE     S=.text    G=(none)   M=DockForm ACBP=A9
+ 0001:0000587C 0000000E C=CODE     S=.text    G=(none)   M=DeskUtil ACBP=A9
+ 0001:0000588C 0000000E C=CODE     S=.text    G=(none)   M=IDEDockCtrls ACBP=A9
+ 0001:0000589C 0000000E C=CODE     S=.text    G=(none)   M=BaseDock ACBP=A9
+ 0001:000058AC 0000000E C=CODE     S=.text    G=(none)   M=JoinDock ACBP=A9
+ 0001:000058BC 0000000E C=CODE     S=.text    G=(none)   M=IDETabControl ACBP=A9
+ 0001:000058CC 0000000E C=CODE     S=.text    G=(none)   M=BaseEnvironDialog ACBP=A9
+ 0001:000058DC 0000000E C=CODE     S=.text    G=(none)   M=IDEPropSheet ACBP=A9
+ 0001:000058EC 0000000E C=CODE     S=.text    G=(none)   M=BaseModExplorerForm ACBP=A9
+ 0001:000058FC 0000000E C=CODE     S=.text    G=(none)   M=EnvOptions ACBP=A9
+ 0001:0000590C 0000000E C=CODE     S=.text    G=(none)   M=AddInEnvOptions ACBP=A9
+ 0001:0000591C 0000000E C=CODE     S=.text    G=(none)   M=PakUtil  ACBP=A9
+ 0001:0000592C 0000000E C=CODE     S=.text    G=(none)   M=DocModul ACBP=A9
+ 0001:0000593C 0000000E C=CODE     S=.text    G=(none)   M=VirtFile ACBP=A9
+ 0001:0000594C 0000000E C=CODE     S=.text    G=(none)   M=ToolMain ACBP=A9
+ 0001:0000595C 00000096 C=CODE     S=.text    G=(none)   M=Gallery  ACBP=A9
+ 0001:000059F4 0000000E C=CODE     S=.text    G=(none)   M=CmdConst ACBP=A9
+ 0001:00005A04 0000000E C=CODE     S=.text    G=(none)   M=EdTrackr ACBP=A9
+ 0001:00005A14 0000000E C=CODE     S=.text    G=(none)   M=EdProcs  ACBP=A9
+ 0001:00005A24 0000000E C=CODE     S=.text    G=(none)   M=EdToken  ACBP=A9
+ 0001:00005A34 0000000E C=CODE     S=.text    G=(none)   M=MsgWnds  ACBP=A9
+ 0001:00005A44 0000000E C=CODE     S=.text    G=(none)   M=FileFind ACBP=A9
+ 0001:00005A54 0000000E C=CODE     S=.text    G=(none)   M=DebugOpts ACBP=A9
+ 0001:00005A64 0000000E C=CODE     S=.text    G=(none)   M=ExprDlg  ACBP=A9
+ 0001:00005A74 0000000E C=CODE     S=.text    G=(none)   M=IDEPropCtrls ACBP=A9
+ 0001:00005A84 0000000E C=CODE     S=.text    G=(none)   M=ColorGrd ACBP=A9
+ 0001:00005A94 0000000E C=CODE     S=.text    G=(none)   M=EvalMod  ACBP=A9
+ 0001:00005AA4 0000000E C=CODE     S=.text    G=(none)   M=DockToolForm ACBP=A9
+ 0001:00005AB4 0000000E C=CODE     S=.text    G=(none)   M=IDECommandButton ACBP=A9
+ 0001:00005AC4 0000000E C=CODE     S=.text    G=(none)   M=DebugFindFile ACBP=A9
+ 0001:00005AD4 0000000E C=CODE     S=.text    G=(none)   M=DataBPModify ACBP=A9
+ 0001:00005AE4 0000000E C=CODE     S=.text    G=(none)   M=DataBPAdd ACBP=A9
+ 0001:00005AF4 0000000E C=CODE     S=.text    G=(none)   M=AdrBPAdd ACBP=A9
+ 0001:00005B04 0000000E C=CODE     S=.text    G=(none)   M=Verify   ACBP=A9
+ 0001:00005B14 0000000E C=CODE     S=.text    G=(none)   M=ComDebug ACBP=A9
+ 0001:00005B24 0000000E C=CODE     S=.text    G=(none)   M=BPModify ACBP=A9
+ 0001:00005B34 0000000E C=CODE     S=.text    G=(none)   M=BPAdd    ACBP=A9
+ 0001:00005B44 0000000E C=CODE     S=.text    G=(none)   M=AdrBPModify ACBP=A9
+ 0001:00005B54 0000000E C=CODE     S=.text    G=(none)   M=GetAddr  ACBP=A9
+ 0001:00005B64 0000000E C=CODE     S=.text    G=(none)   M=DisView  ACBP=A9
+ 0001:00005B74 0000000E C=CODE     S=.text    G=(none)   M=PkgProjects ACBP=A9
+ 0001:00005B84 0000000E C=CODE     S=.text    G=(none)   M=Desktop  ACBP=A9
+ 0001:00005B94 0000000E C=CODE     S=.text    G=(none)   M=ProjectFrm ACBP=A9
+ 0001:00005BA4 0000000E C=CODE     S=.text    G=(none)   M=TreeSearch ACBP=A9
+ 0001:00005BB4 0000000E C=CODE     S=.text    G=(none)   M=PkgEditors ACBP=A9
+ 0001:00005BC4 0000000E C=CODE     S=.text    G=(none)   M=PkgContainers ACBP=A9
+ 0001:00005BD4 0000000E C=CODE     S=.text    G=(none)   M=CompHelp ACBP=A9
+ 0001:00005BE4 0000000E C=CODE     S=.text    G=(none)   M=WinHelpTester ACBP=A9
+ 0001:00005BF4 0000000E C=CODE     S=.text    G=(none)   M=HelpList ACBP=A9
+ 0001:00005C04 0000000E C=CODE     S=.text    G=(none)   M=PrintSel ACBP=A9
+ 0001:00005C14 0000000E C=CODE     S=.text    G=(none)   M=HelpSelector ACBP=A9
+ 0001:00005C24 0000000E C=CODE     S=.text    G=(none)   M=ComPrgrs ACBP=A9
+ 0001:00005C34 0000000E C=CODE     S=.text    G=(none)   M=Compiler ACBP=A9
+ 0001:00005C44 0000000E C=CODE     S=.text    G=(none)   M=PackageState ACBP=A9
+ 0001:00005C54 0000000E C=CODE     S=.text    G=(none)   M=PakMgr   ACBP=A9
+ 0001:00005C64 0000000E C=CODE     S=.text    G=(none)   M=ExpertReg ACBP=A9
+ 0001:00005C74 0000000E C=CODE     S=.text    G=(none)   M=CompList ACBP=A9
+ 0001:00005C84 0000000E C=CODE     S=.text    G=(none)   M=PalMgr   ACBP=A9
+ 0001:00005C94 0000000E C=CODE     S=.text    G=(none)   M=ViewDlg  ACBP=A9
+ 0001:00005CA4 0000000E C=CODE     S=.text    G=(none)   M=Palettes ACBP=A9
+ 0001:00005CB4 0000000E C=CODE     S=.text    G=(none)   M=PakWarn  ACBP=A9
+ 0001:00005CC4 0000000E C=CODE     S=.text    G=(none)   M=AddRequires ACBP=A9
+ 0001:00005CD4 0000000E C=CODE     S=.text    G=(none)   M=AddContainsRequiresBase ACBP=A9
+ 0001:00005CE4 0000000E C=CODE     S=.text    G=(none)   M=PackageAddBase ACBP=A9
+ 0001:00005CF4 0000000E C=CODE     S=.text    G=(none)   M=AddContains ACBP=A9
+ 0001:00005D04 0000000E C=CODE     S=.text    G=(none)   M=AddContainsRequires ACBP=A9
+ 0001:00005D14 0000000E C=CODE     S=.text    G=(none)   M=PakAnaly ACBP=A9
+ 0001:00005D24 0000000E C=CODE     S=.text    G=(none)   M=PakList  ACBP=A9
+ 0001:00005D34 0000000E C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:00005D44 0000000E C=CODE     S=.text    G=(none)   M=PakRemRu ACBP=A9
+ 0001:00005D54 0000000E C=CODE     S=.text    G=(none)   M=InstColl ACBP=A9
+ 0001:00005D64 0000000E C=CODE     S=.text    G=(none)   M=Archiver ACBP=A9
+ 0001:00005D74 0000000E C=CODE     S=.text    G=(none)   M=ZLib     ACBP=A9
+ 0001:00005D84 0000000E C=CODE     S=.text    G=(none)   M=ZLibConst ACBP=A9
+ 0001:00005D94 0000000E C=CODE     S=.text    G=(none)   M=PCEGlobs ACBP=A9
+ 0001:00005DA4 0000000E C=CODE     S=.text    G=(none)   M=PakCust  ACBP=A9
+ 0001:00005DB4 0000000E C=CODE     S=.text    G=(none)   M=PkgDir   ACBP=A9
+ 0001:00005DC4 0000000E C=CODE     S=.text    G=(none)   M=PakComp  ACBP=A9
+ 0001:00005DD4 0000000E C=CODE     S=.text    G=(none)   M=FileHist ACBP=A9
+ 0001:00005DE4 0000000E C=CODE     S=.text    G=(none)   M=ProjectItem ACBP=A9
+ 0001:00005DF4 0000000E C=CODE     S=.text    G=(none)   M=PrefOptDlg ACBP=A9
+ 0001:00005E04 0000000E C=CODE     S=.text    G=(none)   M=ReposCfg ACBP=A9
+ 0001:00005E14 0000000E C=CODE     S=.text    G=(none)   M=EditTpl  ACBP=A9
+ 0001:00005E24 0000000E C=CODE     S=.text    G=(none)   M=Template ACBP=A9
+ 0001:00005E34 0000000E C=CODE     S=.text    G=(none)   M=PrjTpl   ACBP=A9
+ 0001:00005E44 0000000E C=CODE     S=.text    G=(none)   M=FormTpl  ACBP=A9
+ 0001:00005E54 0000000E C=CODE     S=.text    G=(none)   M=PalEdit  ACBP=A9
+ 0001:00005E64 0000000E C=CODE     S=.text    G=(none)   M=GalBrow  ACBP=A9
+ 0001:00005E74 0000000E C=CODE     S=.text    G=(none)   M=ExptMain ACBP=A9
+ 0001:00005E84 0000000E C=CODE     S=.text    G=(none)   M=ParserThread ACBP=A9
+ 0001:00005E94 0000000E C=CODE     S=.text    G=(none)   M=EditMain ACBP=A9
+ 0001:00005EA4 0000000E C=CODE     S=.text    G=(none)   M=VcsMain  ACBP=A9
+ 0001:00005EB4 0000000E C=CODE     S=.text    G=(none)   M=VcsIntf  ACBP=A9
+ 0001:00005EC4 0000000E C=CODE     S=.text    G=(none)   M=NewFile  ACBP=A9
+ 0001:00005ED4 0000000E C=CODE     S=.text    G=(none)   M=DisComp  ACBP=A9
+ 0001:00005EE4 0000000E C=CODE     S=.text    G=(none)   M=SelectTh ACBP=A9
+ 0001:00005EF4 0000000E C=CODE     S=.text    G=(none)   M=WinMsg   ACBP=A9
+ 0001:00005F04 0000000E C=CODE     S=.text    G=(none)   M=EdScript ACBP=A9
+ 0001:00005F14 0000000E C=CODE     S=.text    G=(none)   M=GotoLine ACBP=A9
+ 0001:00005F24 0000000E C=CODE     S=.text    G=(none)   M=VClient  ACBP=A9
+ 0001:00005F34 0000000E C=CODE     S=.text    G=(none)   M=SrchPrgs ACBP=A9
+ 0001:00005F44 0000000E C=CODE     S=.text    G=(none)   M=SrchDlg  ACBP=A9
+ 0001:00005F54 0000000E C=CODE     S=.text    G=(none)   M=WinList  ACBP=A9
+ 0001:00005F64 0000000E C=CODE     S=.text    G=(none)   M=BarFrm   ACBP=A9
+ 0001:00005F74 0000000E C=CODE     S=.text    G=(none)   M=BottomBarFrm ACBP=A9
+ 0001:00005F84 0000000E C=CODE     S=.text    G=(none)   M=RightBarFrm ACBP=A9
+ 0001:00005F94 0000000E C=CODE     S=.text    G=(none)   M=LeftBarFrm ACBP=A9
+ 0001:00005FA4 0000000E C=CODE     S=.text    G=(none)   M=MainWorkFrm ACBP=A9
+ 0001:00005FB4 0000000E C=CODE     S=.text    G=(none)   M=WorkFrm  ACBP=A9
+ 0001:00005FC4 0000000E C=CODE     S=.text    G=(none)   M=PrintSes ACBP=A9
+ 0001:00005FD4 0000000E C=CODE     S=.text    G=(none)   M=PrintSts ACBP=A9
+ 0001:00005FE4 0000000E C=CODE     S=.text    G=(none)   M=OptStr   ACBP=A9
+ 0001:00005FF4 0000000E C=CODE     S=.text    G=(none)   M=RplcDlg  ACBP=A9
+ 0001:00006004 0000000E C=CODE     S=.text    G=(none)   M=FileMain ACBP=A9
+ 0001:00006014 0000000E C=CODE     S=.text    G=(none)   M=WorkspaceCrtrs ACBP=A9
+ 0001:00006024 0000005E C=CODE     S=.text    G=(none)   M=CppCrtrs ACBP=A9
+ 0001:00006084 0000000E C=CODE     S=.text    G=(none)   M=XMLProj  ACBP=A9
+ 0001:00006094 0000000E C=CODE     S=.text    G=(none)   M=MakeFileMgr ACBP=A9
+ 0001:000060A4 0000000E C=CODE     S=.text    G=(none)   M=IdlModul ACBP=A9
+ 0001:000060B4 0000000E C=CODE     S=.text    G=(none)   M=ConvertXML ACBP=A9
+ 0001:000060C4 0000000E C=CODE     S=.text    G=(none)   M=XmlIde   ACBP=A9
+ 0001:000060D4 0000000E C=CODE     S=.text    G=(none)   M=CppProjOpts ACBP=A9
+ 0001:000060E4 0000000E C=CODE     S=.text    G=(none)   M=CppContainers ACBP=A9
+ 0001:000060F4 0000000E C=CODE     S=.text    G=(none)   M=CppCompilerContainer ACBP=A9
+ 0001:00006104 0000000E C=CODE     S=.text    G=(none)   M=InternalToolStream ACBP=A9
+ 0001:00006114 0000000E C=CODE     S=.text    G=(none)   M=IdlUpdaters ACBP=A9
+ 0001:00006124 0000000E C=CODE     S=.text    G=(none)   M=ProjOptDlg ACBP=A9
+ 0001:00006134 0000000E C=CODE     S=.text    G=(none)   M=Deploy   ACBP=A9
+ 0001:00006144 0000000E C=CODE     S=.text    G=(none)   M=DepFiles ACBP=A9
+ 0001:00006154 0000000E C=CODE     S=.text    G=(none)   M=ImageHlp ACBP=A9
+ 0001:00006164 0000000E C=CODE     S=.text    G=(none)   M=DepProg  ACBP=A9
+ 0001:00006174 0000000E C=CODE     S=.text    G=(none)   M=ApplOpts ACBP=A9
+ 0001:00006184 0000000E C=CODE     S=.text    G=(none)   M=CppMgr   ACBP=A9
+ 0001:00006194 0000000E C=CODE     S=.text    G=(none)   M=IDEToDoIntf ACBP=A9
+ 0001:000061A4 0000000E C=CODE     S=.text    G=(none)   M=ATLWizConst ACBP=A9
+ 0001:000061B4 0000000E C=CODE     S=.text    G=(none)   M=CppSym   ACBP=A9
+ 0001:000061C4 0000000E C=CODE     S=.text    G=(none)   M=RemovMod ACBP=A9
+ 0001:000061D4 0000000E C=CODE     S=.text    G=(none)   M=FindHdr  ACBP=A9
+ 0001:000061E4 0000000E C=CODE     S=.text    G=(none)   M=FindLib  ACBP=A9
+ 0001:000061F4 0000000E C=CODE     S=.text    G=(none)   M=LocalProjOptDlg ACBP=A9
+ 0001:00006204 0000000E C=CODE     S=.text    G=(none)   M=PackageCompExpert ACBP=A9
+ 0001:00006214 00000016 C=CODE     S=.text    G=(none)   M=NewThrd  ACBP=A9
+ 0001:0000622C 00001903 C=CODE     S=.text    G=(none)   M=CppClxIDECmd ACBP=A9
+ 0001:00007B30 00000BE5 C=CODE     S=.text    G=(none)   M=bcbclxide ACBP=A9
+ 0002:00000000 00000028 C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00000028 00000004 C=DATA     S=.data    G=DGROUP   M=CppClxIDECmd ACBP=A9
+ 0002:00001000 00000018 C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00001018 00000004 C=BSS      S=.bss     G=DGROUP   M=Messages ACBP=A9
+ 0002:0000101C 00000004 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0002:00001020 00000004 C=BSS      S=.bss     G=DGROUP   M=CommCtrl ACBP=A9
+ 0002:00001024 00000004 C=BSS      S=.bss     G=DGROUP   M=Imm      ACBP=A9
+ 0002:00001028 00000004 C=BSS      S=.bss     G=DGROUP   M=ShlObj   ACBP=A9
+ 0002:0000102C 00000004 C=BSS      S=.bss     G=DGROUP   M=UrlMon   ACBP=A9
+ 0002:00001030 00000004 C=BSS      S=.bss     G=DGROUP   M=WinInet  ACBP=A9
+ 0002:00001034 00000004 C=BSS      S=.bss     G=DGROUP   M=RegStr   ACBP=A9
+ 0002:00001038 00000004 C=BSS      S=.bss     G=DGROUP   M=ShellAPI ACBP=A9
+ 0002:0000103C 00000004 C=BSS      S=.bss     G=DGROUP   M=WinSpool ACBP=A9
+ 0002:00001040 00000004 C=BSS      S=.bss     G=DGROUP   M=CommDlg  ACBP=A9
+ 0002:00001044 00000004 C=BSS      S=.bss     G=DGROUP   M=Dlgs     ACBP=A9
+ 0002:00001048 00000004 C=BSS      S=.bss     G=DGROUP   M=RichEdit ACBP=A9
+ 0002:0000104C 00000034 C=BSS      S=.bss     G=DGROUP   M=ClxFormDesigner ACBP=A9
+ 0002:00001080 00000024 C=BSS      S=.bss     G=DGROUP   M=CppClxIDECmd ACBP=A9
+
+
+  Address         Publics by Name
+
+ 0002:00001034       .1
+ 0002:0000104C       .1
+ 0002:00001018       .1
+ 0002:00001030       .1
+ 0002:00001040       .1
+ 0002:00001010       .1
+ 0002:00001048       .1
+ 0002:00001020       .1
+ 0002:00001024       .1
+ 0002:00001044       .1
+ 0002:00001038       .1
+ 0002:00001028       .1
+ 0002:0000102C       .1
+ 0002:00001080       .2
+ 0002:0000103C       .3
+ 0002:0000101C       .3
+ 0001:000086F0       @GetPackageInfoTable
+ 0001:00000328       @InitPkg
+ 0001:0000038C       @PackageLoad
+ 0001:000086F8       @PackageLoad
+ 0001:00000398       @PackageUnload
+ 0001:00008704       @PackageUnload
+ 0001:000078FC       AddActionMenu
+ 0001:00002BB8       AdjustPosition
+ 0001:00002D44       AdjustUsingRects
+ 0001:00000228       AllocTlsBuffer
+ 0002:00001060       AtomText
+ 0001:00008710       bcbclxide
+ 0001:00003584       CanCutCopy
+ 0002:00001050       ClxAtom
+ 0001:00005158       ClxFormDesigner
+ 0001:00000DDC       CommCtrl
+ 0001:0000107C       CommDlg
+ 0001:00004D78       ContainsComponentOfClass
+ 0001:00007B20       CppClxIDECmd
+ 0001:00002A78       Designer
+ 0001:000010B4       Dlgs
+ 0001:00007664       DoneModuleSources
+ 0001:000002D4       ExitProcessTLS
+ 0001:000002AC       ExitThreadTLS
+ 0001:0000114C       Finalization
+ 0001:00000E4C       Finalization
+ 0001:00000EDC       Finalization
+ 0001:00000F14       Finalization
+ 0001:00000F4C       Finalization
+ 0001:00001084       Finalization
+ 0001:00000FBC       Finalization
+ 0001:00000F84       Finalization
+ 0001:00007AE8       Finalization
+ 0001:000003A4       Finalization
+ 0001:00000DAC       Finalization
+ 0001:00000554       Finalization
+ 0001:000050B8       Finalization
+ 0001:000005A4       Finalization
+ 0001:00001004       Finalization
+ 0001:0000104C       Finalization
+ 0001:000001F0       FreeLibrary
+ 0001:0000058C       GetCurrentProcessId
+ 0001:00003548       GetNVCompCount
+ 0001:00000234       GetTlsSize
+ 0001:00000594       GlobalAddAtom
+ 0002:0000100C       HInstance
+ 0001:000076C0       IDERegister
+ 0001:00000E7C       Imm
+ 0001:0000298C       InitializeDesigner
+ 0001:000002F8       InitializeModule
+ 0001:0000788C       InitIndecies
+ 0001:0000764C       InitModuleSources
+ 0001:00000280       InitProcessTLS
+ 0001:0000023C       InitThreadTLS
+ 0002:00001054       InternalDesigner
+ 0001:000035EC       IsValidTemplateSelection
+ 0001:000001F8       LocalAlloc
+ 0001:00000200       LocalFree
+ 0001:00004708       MakeBackupFileName
+ 0001:00000584       Messages
+ 0002:00000000       Module
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0002:00001084       ModuleSources
+ 0002:0000109C       ModuleText
+ 0002:00000028       NewPageIndexes
+ 0002:000010A0       ProductStartup
+ 0001:00004E5C       Register
+ 0001:00007670       RegisterNewPages
+ 0001:00000FB4       RegStr
+ 0001:0000117C       RichEdit
+ 0001:00003FB8       Scale
+ 0001:00003FCC       SetFormDefaults
+ 0001:0000059C       SetProp
+ 0001:00000FEC       ShellAPI
+ 0001:00000F0C       ShlObj
+ 0001:000003D4       SysInit
+ 0001:00007AA4       TClxCommands.FileNewCLXApplicationCommandExecute
+ 0001:00007AB8       TClxCommands.FileNewCLXApplicationCommandUpdate
+ 0001:00004200       TClxFormDesigner.Active
+ 0001:00004204       TClxFormDesigner.Create
+ 0001:000042D4       TClxFormDesigner.CreateFromStream
+ 0001:0000435C       TClxFormDesigner.CreateNewRoot
+ 0001:00004604       TClxFormDesigner.CreateRoot
+ 0001:000042A4       TClxFormDesigner.Destroy
+ 0001:00004690       TClxFormDesigner.FileSystemDeleteFile
+ 0001:000046E0       TClxFormDesigner.FileSystemFileAge
+ 0001:000046E8       TClxFormDesigner.FileSystemFileExists
+ 0001:000046F0       TClxFormDesigner.FileSystemFileOpen
+ 0001:00004798       TClxFormDesigner.FileSystemGetBackupName
+ 0001:000047B0       TClxFormDesigner.FileSystemGetTempFileName
+ 0001:000047DC       TClxFormDesigner.FileSystemIsReadOnly
+ 0001:00004864       TClxFormDesigner.FileSystemRenameFile
+ 0001:00004878       TClxFormDesigner.FileSystemSetDate
+ 0001:000048A0       TClxFormDesigner.GetEnvironment
+ 0001:00004FD4       TClxFormDesigner.GetExtension
+ 0001:00004FF4       TClxFormDesigner.ValidBaseClass
+ 0001:000050A8       TClxFormDesigner.VclIdle
+ 0001:00002A8C       TClxRootDesigner.Activate
+ 0001:00002A94       TClxRootDesigner.Activate
+ 0001:00002B6C       TClxRootDesigner.AddClassProp
+ 0001:00002E2C       TClxRootDesigner.AdjustComponent
+ 0001:00002E88       TClxRootDesigner.CancelModes
+ 0001:00002E94       TClxRootDesigner.CanClassBeFrame
+ 0001:00002EA4       TClxRootDesigner.CanPaste
+ 0001:00003F34       TClxRootDesigner.ClearRootReferences
+ 0001:00002F30       TClxRootDesigner.CopySelection
+ 0001:00002FA0       TClxRootDesigner.CutSelection
+ 0001:00003054       TClxRootDesigner.DeinitializeDesigner
+ 0001:00002FC0       TClxRootDesigner.DesignerHide
+ 0001:0000302C       TClxRootDesigner.DesignerShow
+ 0001:0000324C       TClxRootDesigner.DisableAlignments
+ 0001:00003270       TClxRootDesigner.EditAction
+ 0001:0000330C       TClxRootDesigner.EnableAlignments
+ 0001:00003330       TClxRootDesigner.FinalizeNewRoot
+ 0001:0000338C       TClxRootDesigner.FindRootOf
+ 0001:00003418       TClxRootDesigner.FlipChildren
+ 0001:00003EF0       TClxRootDesigner.ForceRefuseChildren
+ 0001:000031DC       TClxRootDesigner.FreeRoot
+ 0001:00003F1C       TClxRootDesigner.GetActiveClassGroup
+ 0001:00003D00       TClxRootDesigner.GetControl
+ 0001:00003CD8       TClxRootDesigner.GetControlCount
+ 0001:00003518       TClxRootDesigner.GetDesigner
+ 0001:00003654       TClxRootDesigner.GetEditState
+ 0001:00003740       TClxRootDesigner.GetNVComp
+ 0001:00003D40       TClxRootDesigner.GetParent
+ 0001:0000376C       TClxRootDesigner.GetShiftState
+ 0001:00003780       TClxRootDesigner.GetState
+ 0001:000037C8       TClxRootDesigner.GetTabCompCount
+ 0001:000037F0       TClxRootDesigner.GetTabCompInfo
+ 0001:0000383C       TClxRootDesigner.GetTabComponent
+ 0001:0000389C       TClxRootDesigner.GetTabParent
+ 0001:000041F4       TClxRootDesigner.GoDormant
+ 0001:0000390C       TClxRootDesigner.Hide
+ 0001:0000392C       TClxRootDesigner.InheritenceRecovery
+ 0001:00003948       TClxRootDesigner.InitCustomModule
+ 0001:00003AE0       TClxRootDesigner.InitializeDesigner
+ 0001:00003BFC       TClxRootDesigner.IsBlankNameInheritenceException
+ 0001:00003D2C       TClxRootDesigner.IsTControl
+ 0001:00003C10       TClxRootDesigner.NonAncestorDeleteWarning
+ 0001:00003D74       TClxRootDesigner.PasteSelection
+ 0001:00003DE8       TClxRootDesigner.QueryRedirectLinks
+ 0001:00003F68       TClxRootDesigner.ReadObjectFromStream
+ 0001:00003EB0       TClxRootDesigner.RedirectLinks
+ 0001:00003EBC       TClxRootDesigner.RefuseChildren
+ 0001:00003F4C       TClxRootDesigner.RootReadError
+ 0001:00003F70       TClxRootDesigner.Scale
+ 0001:00003F24       TClxRootDesigner.SendRootComponent
+ 0001:00003F98       TClxRootDesigner.SetDesignerListenerFor
+ 0001:00003F48       TClxRootDesigner.SetInstanceParent
+ 0001:00003F9C       TClxRootDesigner.SetNVComp
+ 0001:00004090       TClxRootDesigner.SetRootDefaults
+ 0001:000040F4       TClxRootDesigner.SetTabCompOrder
+ 0001:00004110       TClxRootDesigner.Show
+ 0001:00004168       TClxRootDesigner.ShowAs
+ 0001:000041DC       TClxRootDesigner.ShowComponentHelp
+ 0001:000041E0       TClxRootDesigner.SpecialPropertyHelp
+ 0001:00006E20       TCppCLXFormCreator.GetInterfaceSource
+ 0001:00006D34       TCppCLXFormCreator.GetSource
+ 0001:000070B0       TCppCLXProjectCreator.CreateDefaultModule
+ 0001:00006FC0       TCppCLXProjectCreator.GetMakeSource
+ 0001:00006F08       TCppCLXProjectCreator.GetSource
+ 0001:00007318       TCppClxThreadModuleCreator.Create
+ 0001:0000742C       TCppClxThreadModuleCreator.GetInterfaceSource
+ 0001:0000736C       TCppClxThreadModuleCreator.GetSource
+ 0001:00004B48       TFrameModule.EnsureUnnamed
+ 0001:00004948       TFrameModule.ExecuteVerb
+ 0001:00004B28       TFrameModule.GetVerb
+ 0001:00004B40       TFrameModule.GetVerbCount
+ 0001:0000493C       TFrameModule.Nestable
+ 0001:00004C28       TFrameModule.RequestTemplate
+ 0001:00004E08       TFrameModule.ValidateComponent
+ 0001:00000208       TlsAlloc
+ 0002:00001014       tlsBuffer
+ 0001:00000210       TlsFree
+ 0001:00000218       TlsGetValue
+ 0002:00001004       TlsIndex
+ 0002:FFBF6000       TlsLast
+ 0002:00000018       TlsProc
+ 0001:00000220       TlsSetValue
+ 0001:00006964       TNewCLXApplication.GetProjectCreator
+ 0001:00006CF4       TNewCLXDataModule.GetModuleCreator
+ 0001:00006A9C       TNewCLXForm.CreateBlankForm
+ 0001:00006BC4       TNewCLXFrame.CreateBlankForm
+ 0001:000075BC       TNewCLXThread.GetModuleCreator
+ 0001:000071AC       TNewInheritedProjectModule.Selected
+ 0002:00001058       TopLevelsHandler
+ 0001:000077A8       TProductStartup.Create
+ 0001:000077F0       TProductStartup.Destroy
+ 0001:00007830       TProductStartup.Notification
+ 0001:000079A4       TProductStartup.ProductStartup
+ 0001:00002864       TTopLevelsHandler.Activate
+ 0001:00002850       TTopLevelsHandler.ComponentFromHandle
+ 0001:00002888       TTopLevelsHandler.GetCaptionOf
+ 0001:00002964       TTopLevelsHandler.IsDesignerRoot
+ 0001:00003128       TUninstallWatcher.Create
+ 0001:0000316C       TUninstallWatcher.DoPostEvents
+ 0001:0000317C       TUninstallWatcher.Uninstall
+ 0001:00000304       UninitializeModule
+ 0002:0000105C       UninstallPending
+ 0001:00000F44       UrlMon
+ 0001:00004DD4       ValidateFrameInsert
+ 0001:000031A4       WatchForPackageUninstall
+ 0001:000005D4       Windows
+ 0001:00000F7C       WinInet
+ 0001:00001034       WinSpool
+
+
+  Address         Publics by Value
+
+ 0002:FFBF6000       TlsLast
+ 0001:000001F0       FreeLibrary
+ 0001:000001F8       LocalAlloc
+ 0001:00000200       LocalFree
+ 0001:00000208       TlsAlloc
+ 0001:00000210       TlsFree
+ 0001:00000218       TlsGetValue
+ 0001:00000220       TlsSetValue
+ 0001:00000228       AllocTlsBuffer
+ 0001:00000234       GetTlsSize
+ 0001:0000023C       InitThreadTLS
+ 0001:00000280       InitProcessTLS
+ 0001:000002AC       ExitThreadTLS
+ 0001:000002D4       ExitProcessTLS
+ 0001:000002F8       InitializeModule
+ 0001:00000304       UninitializeModule
+ 0001:00000328       @InitPkg
+ 0001:0000038C       @PackageLoad
+ 0001:00000398       @PackageUnload
+ 0001:000003A4       Finalization
+ 0001:000003D4       SysInit
+ 0001:00000554       Finalization
+ 0001:00000584       Messages
+ 0001:0000058C       GetCurrentProcessId
+ 0001:00000594       GlobalAddAtom
+ 0001:0000059C       SetProp
+ 0001:000005A4       Finalization
+ 0001:000005D4       Windows
+ 0001:00000DAC       Finalization
+ 0001:00000DDC       CommCtrl
+ 0001:00000E4C       Finalization
+ 0001:00000E7C       Imm
+ 0001:00000EDC       Finalization
+ 0001:00000F0C       ShlObj
+ 0001:00000F14       Finalization
+ 0001:00000F44       UrlMon
+ 0001:00000F4C       Finalization
+ 0001:00000F7C       WinInet
+ 0001:00000F84       Finalization
+ 0001:00000FB4       RegStr
+ 0001:00000FBC       Finalization
+ 0001:00000FEC       ShellAPI
+ 0001:00001004       Finalization
+ 0001:00001034       WinSpool
+ 0001:0000104C       Finalization
+ 0001:0000107C       CommDlg
+ 0001:00001084       Finalization
+ 0001:000010B4       Dlgs
+ 0001:0000114C       Finalization
+ 0001:0000117C       RichEdit
+ 0001:00002850       TTopLevelsHandler.ComponentFromHandle
+ 0001:00002864       TTopLevelsHandler.Activate
+ 0001:00002888       TTopLevelsHandler.GetCaptionOf
+ 0001:00002964       TTopLevelsHandler.IsDesignerRoot
+ 0001:0000298C       InitializeDesigner
+ 0001:00002A78       Designer
+ 0001:00002A8C       TClxRootDesigner.Activate
+ 0001:00002A94       TClxRootDesigner.Activate
+ 0001:00002B6C       TClxRootDesigner.AddClassProp
+ 0001:00002BB8       AdjustPosition
+ 0001:00002D44       AdjustUsingRects
+ 0001:00002E2C       TClxRootDesigner.AdjustComponent
+ 0001:00002E88       TClxRootDesigner.CancelModes
+ 0001:00002E94       TClxRootDesigner.CanClassBeFrame
+ 0001:00002EA4       TClxRootDesigner.CanPaste
+ 0001:00002F30       TClxRootDesigner.CopySelection
+ 0001:00002FA0       TClxRootDesigner.CutSelection
+ 0001:00002FC0       TClxRootDesigner.DesignerHide
+ 0001:0000302C       TClxRootDesigner.DesignerShow
+ 0001:00003054       TClxRootDesigner.DeinitializeDesigner
+ 0001:00003128       TUninstallWatcher.Create
+ 0001:0000316C       TUninstallWatcher.DoPostEvents
+ 0001:0000317C       TUninstallWatcher.Uninstall
+ 0001:000031A4       WatchForPackageUninstall
+ 0001:000031DC       TClxRootDesigner.FreeRoot
+ 0001:0000324C       TClxRootDesigner.DisableAlignments
+ 0001:00003270       TClxRootDesigner.EditAction
+ 0001:0000330C       TClxRootDesigner.EnableAlignments
+ 0001:00003330       TClxRootDesigner.FinalizeNewRoot
+ 0001:0000338C       TClxRootDesigner.FindRootOf
+ 0001:00003418       TClxRootDesigner.FlipChildren
+ 0001:00003518       TClxRootDesigner.GetDesigner
+ 0001:00003548       GetNVCompCount
+ 0001:00003584       CanCutCopy
+ 0001:000035EC       IsValidTemplateSelection
+ 0001:00003654       TClxRootDesigner.GetEditState
+ 0001:00003740       TClxRootDesigner.GetNVComp
+ 0001:0000376C       TClxRootDesigner.GetShiftState
+ 0001:00003780       TClxRootDesigner.GetState
+ 0001:000037C8       TClxRootDesigner.GetTabCompCount
+ 0001:000037F0       TClxRootDesigner.GetTabCompInfo
+ 0001:0000383C       TClxRootDesigner.GetTabComponent
+ 0001:0000389C       TClxRootDesigner.GetTabParent
+ 0001:0000390C       TClxRootDesigner.Hide
+ 0001:0000392C       TClxRootDesigner.InheritenceRecovery
+ 0001:00003948       TClxRootDesigner.InitCustomModule
+ 0001:00003AE0       TClxRootDesigner.InitializeDesigner
+ 0001:00003BFC       TClxRootDesigner.IsBlankNameInheritenceException
+ 0001:00003C10       TClxRootDesigner.NonAncestorDeleteWarning
+ 0001:00003CD8       TClxRootDesigner.GetControlCount
+ 0001:00003D00       TClxRootDesigner.GetControl
+ 0001:00003D2C       TClxRootDesigner.IsTControl
+ 0001:00003D40       TClxRootDesigner.GetParent
+ 0001:00003D74       TClxRootDesigner.PasteSelection
+ 0001:00003DE8       TClxRootDesigner.QueryRedirectLinks
+ 0001:00003EB0       TClxRootDesigner.RedirectLinks
+ 0001:00003EBC       TClxRootDesigner.RefuseChildren
+ 0001:00003EF0       TClxRootDesigner.ForceRefuseChildren
+ 0001:00003F1C       TClxRootDesigner.GetActiveClassGroup
+ 0001:00003F24       TClxRootDesigner.SendRootComponent
+ 0001:00003F34       TClxRootDesigner.ClearRootReferences
+ 0001:00003F48       TClxRootDesigner.SetInstanceParent
+ 0001:00003F4C       TClxRootDesigner.RootReadError
+ 0001:00003F68       TClxRootDesigner.ReadObjectFromStream
+ 0001:00003F70       TClxRootDesigner.Scale
+ 0001:00003F98       TClxRootDesigner.SetDesignerListenerFor
+ 0001:00003F9C       TClxRootDesigner.SetNVComp
+ 0001:00003FB8       Scale
+ 0001:00003FCC       SetFormDefaults
+ 0001:00004090       TClxRootDesigner.SetRootDefaults
+ 0001:000040F4       TClxRootDesigner.SetTabCompOrder
+ 0001:00004110       TClxRootDesigner.Show
+ 0001:00004168       TClxRootDesigner.ShowAs
+ 0001:000041DC       TClxRootDesigner.ShowComponentHelp
+ 0001:000041E0       TClxRootDesigner.SpecialPropertyHelp
+ 0001:000041F4       TClxRootDesigner.GoDormant
+ 0001:00004200       TClxFormDesigner.Active
+ 0001:00004204       TClxFormDesigner.Create
+ 0001:000042A4       TClxFormDesigner.Destroy
+ 0001:000042D4       TClxFormDesigner.CreateFromStream
+ 0001:0000435C       TClxFormDesigner.CreateNewRoot
+ 0001:00004604       TClxFormDesigner.CreateRoot
+ 0001:00004690       TClxFormDesigner.FileSystemDeleteFile
+ 0001:000046E0       TClxFormDesigner.FileSystemFileAge
+ 0001:000046E8       TClxFormDesigner.FileSystemFileExists
+ 0001:000046F0       TClxFormDesigner.FileSystemFileOpen
+ 0001:00004708       MakeBackupFileName
+ 0001:00004798       TClxFormDesigner.FileSystemGetBackupName
+ 0001:000047B0       TClxFormDesigner.FileSystemGetTempFileName
+ 0001:000047DC       TClxFormDesigner.FileSystemIsReadOnly
+ 0001:00004864       TClxFormDesigner.FileSystemRenameFile
+ 0001:00004878       TClxFormDesigner.FileSystemSetDate
+ 0001:000048A0       TClxFormDesigner.GetEnvironment
+ 0001:0000493C       TFrameModule.Nestable
+ 0001:00004948       TFrameModule.ExecuteVerb
+ 0001:00004B28       TFrameModule.GetVerb
+ 0001:00004B40       TFrameModule.GetVerbCount
+ 0001:00004B48       TFrameModule.EnsureUnnamed
+ 0001:00004C28       TFrameModule.RequestTemplate
+ 0001:00004D78       ContainsComponentOfClass
+ 0001:00004DD4       ValidateFrameInsert
+ 0001:00004E08       TFrameModule.ValidateComponent
+ 0001:00004E5C       Register
+ 0001:00004FD4       TClxFormDesigner.GetExtension
+ 0001:00004FF4       TClxFormDesigner.ValidBaseClass
+ 0001:000050A8       TClxFormDesigner.VclIdle
+ 0001:000050B8       Finalization
+ 0001:00005158       ClxFormDesigner
+ 0001:00006964       TNewCLXApplication.GetProjectCreator
+ 0001:00006A9C       TNewCLXForm.CreateBlankForm
+ 0001:00006BC4       TNewCLXFrame.CreateBlankForm
+ 0001:00006CF4       TNewCLXDataModule.GetModuleCreator
+ 0001:00006D34       TCppCLXFormCreator.GetSource
+ 0001:00006E20       TCppCLXFormCreator.GetInterfaceSource
+ 0001:00006F08       TCppCLXProjectCreator.GetSource
+ 0001:00006FC0       TCppCLXProjectCreator.GetMakeSource
+ 0001:000070B0       TCppCLXProjectCreator.CreateDefaultModule
+ 0001:000071AC       TNewInheritedProjectModule.Selected
+ 0001:00007318       TCppClxThreadModuleCreator.Create
+ 0001:0000736C       TCppClxThreadModuleCreator.GetSource
+ 0001:0000742C       TCppClxThreadModuleCreator.GetInterfaceSource
+ 0001:000075BC       TNewCLXThread.GetModuleCreator
+ 0001:0000764C       InitModuleSources
+ 0001:00007664       DoneModuleSources
+ 0001:00007670       RegisterNewPages
+ 0001:000076C0       IDERegister
+ 0001:000077A8       TProductStartup.Create
+ 0001:000077F0       TProductStartup.Destroy
+ 0001:00007830       TProductStartup.Notification
+ 0001:0000788C       InitIndecies
+ 0001:000078FC       AddActionMenu
+ 0001:000079A4       TProductStartup.ProductStartup
+ 0001:00007AA4       TClxCommands.FileNewCLXApplicationCommandExecute
+ 0001:00007AB8       TClxCommands.FileNewCLXApplicationCommandUpdate
+ 0001:00007AE8       Finalization
+ 0001:00007B20       CppClxIDECmd
+ 0001:000086F0       @GetPackageInfoTable
+ 0001:000086F8       @PackageLoad
+ 0001:00008704       @PackageUnload
+ 0001:00008710       bcbclxide
+ 0002:00000000       Module
+ 0002:00000018       TlsProc
+ 0002:00000028       NewPageIndexes
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0002:00001004       TlsIndex
+ 0002:0000100C       HInstance
+ 0002:00001010       .1
+ 0002:00001014       tlsBuffer
+ 0002:00001018       .1
+ 0002:0000101C       .3
+ 0002:00001020       .1
+ 0002:00001024       .1
+ 0002:00001028       .1
+ 0002:0000102C       .1
+ 0002:00001030       .1
+ 0002:00001034       .1
+ 0002:00001038       .1
+ 0002:0000103C       .3
+ 0002:00001040       .1
+ 0002:00001044       .1
+ 0002:00001048       .1
+ 0002:0000104C       .1
+ 0002:00001050       ClxAtom
+ 0002:00001054       InternalDesigner
+ 0002:00001058       TopLevelsHandler
+ 0002:0000105C       UninstallPending
+ 0002:00001060       AtomText
+ 0002:00001080       .2
+ 0002:00001084       ModuleSources
+ 0002:0000109C       ModuleText
+ 0002:000010A0       ProductStartup
+
+
+Bound resource files
+
+CppClxIDECmd.dfm
+CppClxIDECmd.res
+bcbclxide.res
+C:\DOCUME~1\~storm\LOCALS~1\Temp\dtf71B1.tmp
+
+
+Program entry point at 0001:00008710

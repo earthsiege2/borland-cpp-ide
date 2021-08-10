@@ -6,13 +6,13 @@
 {                                                       }
 {*******************************************************}
 
-unit mxgrid;
+unit MXGRID;
 
 interface
 
 uses
   Windows, SysUtils, Classes, Dialogs, Controls, StdCtrls, Graphics, DB,
-  Menus, Grids, Forms, mxarrays, mxConsts, MXDB, mxbutton, mxcommon, ImgList;
+  Menus, Grids, Forms, Mxarrays, Mxconsts, MXDB, MXBUTTON, MXCOMMON, ImgList;
 
 type
   TValueArray = class(TSmallIntArray);
@@ -2388,6 +2388,10 @@ procedure TDisplayDim.NotifyCollection(aType: TDDNotifyType);
 begin
   TDisplayDims(FOwner).NotifyOwner(aType);
 end;
+
+initialization
+  StartClassGroup(TControl);
+  GroupDescendentsWith(TDecisionGrid, TControl);
 
 end.
 

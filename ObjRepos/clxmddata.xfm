@@ -1,0 +1,76 @@
+object MDDataForm: TMDDataForm
+  Left = 315
+  Top = 219
+  Width = 600
+  Height = 600
+  HelpType = htKeyword
+  ActiveControl = MasterGrid
+  Caption = 'Master - Detail Data'
+  Color = clBackground
+  Scaled = False
+  PixelsPerInch = 75
+  object MasterPanel: TPanel
+    Left = 0
+    Top = 0
+    Width = 600
+    Height = 313
+    HelpType = htKeyword
+    Align = alTop
+    Caption = 'MasterPanel'
+    TabOrder = 0
+    object MasterNav: TDBNavigator
+      Left = 2
+      Top = 2
+      Width = 596
+      Height = 26
+      HelpType = htKeyword
+      Align = alTop
+      TabOrder = 0
+    end
+    object MasterGrid: TDBGrid
+      Left = 2
+      Top = 28
+      Width = 596
+      Height = 283
+      HelpType = htKeyword
+      Align = alClient
+      TabOrder = 1
+    end
+  end
+  object DetailPanel: TPanel
+    Left = 0
+    Top = 313
+    Width = 600
+    Height = 287
+    HelpType = htKeyword
+    Align = alClient
+    Caption = 'DetailPanel'
+    TabOrder = 1
+    object DetailNav: TDBNavigator
+      Left = 2
+      Top = 2
+      Width = 596
+      Height = 26
+      HelpType = htKeyword
+      Align = alTop
+      TabOrder = 0
+    end
+    object DetailGrid: TDBGrid
+      Left = 2
+      Top = 28
+      Width = 596
+      Height = 257
+      HelpType = htKeyword
+      Align = alClient
+      TabOrder = 1
+    end
+  end
+  object MasterSource: TDataSource
+    Left = 544
+    Top = 120
+  end
+  object DetailSource: TDataSource
+    Left = 552
+    Top = 536
+  end
+end

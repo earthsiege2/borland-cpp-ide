@@ -13,8 +13,21 @@ unit DBCtrls;
 
 interface
 
-uses Windows, SysUtils, Messages, Classes, Controls, Forms,
-     Graphics, Menus, StdCtrls, ExtCtrls, Mask, Buttons, ComCtrls, Db;
+uses Variants, Windows, SysUtils, Messages, Controls, Forms, Classes, 
+     Graphics, Menus, StdCtrls, ExtCtrls, Mask, Buttons, ComCtrls, DB;
+
+{$HPPEMIT ''}
+{$HPPEMIT '/* automatically link to dblogdlg.obj so that the login dialog is automatically shown */'}
+{$HPPEMIT '#pragma link "dblogdlg.obj"'}
+{$HPPEMIT '/* automatically link to dbrtl and vcldb as well */'}
+{$HPPEMIT '#ifdef USEPACKAGES'}
+{$HPPEMIT '#pragma link "dbrtl.bpi"'}
+{$HPPEMIT '#pragma link "vcldb.bpi"'}
+{$HPPEMIT '#else'}
+{$HPPEMIT '#pragma link "dbrtl.lib"'}
+{$HPPEMIT '#pragma link "vcldb.lib"'}
+{$HPPEMIT '#endif'}
+{$HPPEMIT ''}
 
 type
 
@@ -130,6 +143,11 @@ type
     property Anchors;
     property AutoSelect;
     property AutoSize;
+    property BevelEdges;
+    property BevelInner;
+    property BevelOuter;
+    property BevelKind;
+    property BevelWidth;
     property BiDiMode;
     property BorderStyle;
     property CharCase;
@@ -346,7 +364,6 @@ type
     procedure SetDataField(const Value: string);
     procedure SetDataSource(Value: TDataSource);
     procedure SetEditReadOnly;
-    procedure SetItems(Value: TStrings);
     procedure SetReadOnly(Value: Boolean);
     procedure UpdateData(Sender: TObject);
     procedure CMEnter(var Message: TCMEnter); message CM_ENTER;
@@ -365,6 +382,7 @@ type
     procedure Loaded; override;
     procedure Notification(AComponent: TComponent;
       Operation: TOperation); override;
+    procedure SetItems(const Value: TStrings); override;
     procedure SetStyle(Value: TComboboxStyle); override;
     procedure WndProc(var Message: TMessage); override;
   public
@@ -378,7 +396,15 @@ type
   published
     property Style; {Must be published before Items}
     property Anchors;
+    property AutoComplete;
+    property AutoDropDown;
+    property BevelEdges;
+    property BevelInner;
+    property BevelOuter;
+    property BevelKind;
+    property BevelWidth;
     property BiDiMode;
+    property CharCase;
     property Color;
     property Constraints;
     property Ctl3D;
@@ -443,6 +469,7 @@ type
     procedure SetItems(Value: TStrings);
     procedure WMLButtonDown(var Message: TWMLButtonDown); message WM_LBUTTONDOWN;
     procedure CMExit(var Message: TCMExit); message CM_EXIT;
+    procedure CMGetDataLink(var Message: TMessage); message CM_GETDATALINK;
   protected
     procedure Click; override;
     procedure KeyDown(var Key: Word; Shift: TShiftState); override;
@@ -459,6 +486,12 @@ type
   published
     property Align;
     property Anchors;
+    property AutoComplete;    
+    property BevelEdges;
+    property BevelInner;
+    property BevelOuter;
+    property BevelKind;
+    property BevelWidth;
     property BiDiMode;
     property BorderStyle;
     property Color;
@@ -532,6 +565,7 @@ type
     procedure SetItems(Value: TStrings);
     procedure SetValues(Value: TStrings);
     procedure CMExit(var Message: TCMExit); message CM_EXIT;
+    procedure CMGetDataLink(var Message: TMessage); message CM_GETDATALINK;
   protected
     procedure Change; dynamic;
     procedure Click; override;
@@ -641,6 +675,11 @@ type
     property Alignment;
     property Anchors;
     property AutoDisplay: Boolean read FAutoDisplay write SetAutoDisplay default True;
+    property BevelEdges;
+    property BevelInner;
+    property BevelOuter;
+    property BevelKind;
+    property BevelWidth;
     property BiDiMode;
     property BorderStyle;
     property Color;
@@ -653,6 +692,7 @@ type
     property DragMode;
     property Enabled;
     property Font;
+    property HideSelection;    
     property ImeMode;
     property ImeName;
     property MaxLength;
@@ -668,6 +708,7 @@ type
     property TabOrder;
     property TabStop;
     property Visible;
+    property WantReturns;
     property WantTabs;
     property WordWrap;
     property OnChange;
@@ -978,6 +1019,7 @@ type
     FLookupMode: Boolean;
     FListActive: Boolean;
     FHasFocus: Boolean;
+    FNullValueKey: TShortCut;
     procedure CheckNotCircular;
     procedure CheckNotLookup;
     procedure DataLinkRecordChanged(Field: TField);
@@ -994,9 +1036,11 @@ type
     procedure SetLookupMode(Value: Boolean);
     procedure SetReadOnly(Value: Boolean);
     procedure WMGetDlgCode(var Message: TMessage); message WM_GETDLGCODE;
+    procedure WMKeyDown(var Message: TWMKeyDown); message WM_KEYDOWN;    
     procedure WMKillFocus(var Message: TMessage); message WM_KILLFOCUS;
     procedure WMSetFocus(var Message: TMessage); message WM_SETFOCUS;
     procedure CMEnabledChanged(var Message: TMessage); message CM_ENABLEDCHANGED;
+    procedure CMGetDataLink(var Message: TMessage); message CM_GETDATALINK;
   protected
     function CanModify: Boolean; virtual;
     function GetBorderSize: Integer; virtual;
@@ -1011,6 +1055,7 @@ type
     procedure UpdateDataFields; virtual;
     procedure UpdateListFields; virtual;
     property DataField: string read FDataFieldName write SetDataFieldName;
+    property DataLink: TDataSourceLink read FDataLink;
     property DataSource: TDataSource read GetDataSource write SetDataSource;
     property HasFocus: Boolean read FHasFocus;
     property KeyField: string read GetKeyFieldName write SetKeyFieldName;
@@ -1021,6 +1066,7 @@ type
     property ListFields: TList read FListFields;
     property ListLink: TListSourceLink read FListLink;
     property ListSource: TDataSource read GetListSource write SetListSource;
+    property NullValueKey: TShortCut read FNullValueKey write FNullValueKey default 0;    
     property ParentColor default False;
     property ReadOnly: Boolean read GetReadOnly write SetReadOnly default False;
     property SearchText: string read FSearchText write FSearchText;
@@ -1087,6 +1133,11 @@ type
   published
     property Align;
     property Anchors;
+    property BevelEdges;
+    property BevelInner;
+    property BevelOuter;
+    property BevelKind;
+    property BevelWidth;
     property BiDiMode;
     property BorderStyle: TBorderStyle read FBorderStyle write SetBorderStyle default bsSingle;
     property Color;
@@ -1105,6 +1156,7 @@ type
     property ListField;
     property ListFieldIndex;
     property ListSource;
+    property NullValueKey;
     property ParentBiDiMode;
     property ParentColor;
     property ParentCtl3D;
@@ -1201,6 +1253,11 @@ type
     property Text: string read FText;
   published
     property Anchors;
+    property BevelEdges;
+    property BevelInner;
+    property BevelOuter;
+    property BevelKind;
+    property BevelWidth;
     property BiDiMode;
     property Color;
     property Constraints;
@@ -1221,6 +1278,7 @@ type
     property ListField;
     property ListFieldIndex;
     property ListSource;
+    property NullValueKey;    
     property ParentBiDiMode;
     property ParentColor;
     property ParentCtl3D;
@@ -1300,6 +1358,11 @@ type
     property Alignment;
     property Anchors;
     property AutoDisplay: Boolean read FAutoDisplay write SetAutoDisplay default True;
+    property BevelEdges;
+    property BevelInner;
+    property BevelOuter;
+    property BevelKind;
+    property BevelWidth;
     property BiDiMode;
     property BorderStyle;
     property Color;
@@ -1362,7 +1425,7 @@ function DBUseRightToLeftAlignment(AControl: TControl; AField: TField): Boolean;
 
 implementation
 
-uses Clipbrd, DBConsts, Dialogs, Math;
+uses DBLogDlg, DBPWDlg, Clipbrd, DBConsts, VDBConsts, Dialogs, Math;
 
 {$R DBCTRLS}
 
@@ -1372,11 +1435,13 @@ function OkToChangeFieldAlignment(AField: TField; Alignment: TAlignment): Boolea
 begin
   { dont change the alignment for these fields:
     ftSmallInt     ftInteger      ftWord         ftFloat        ftCurrency
-    ftBCD          ftDate         ftTime         ftDateTime     ftAutoInc }
+    ftBCD          ftDate         ftTime         ftDateTime     ftAutoInc
+    ftTimeStamp    ftFMTBcd}
   if Assigned(AField) then with AField do
     Result := (DataType < ftSmallInt) or
               (DataType = ftBoolean) or
-              ((DataType > ftDateTime) and (DataType <> ftAutoInc))
+              ((DataType > ftDateTime) and (DataType <> ftAutoInc)
+              and (DataType <> ftFMTBcd))
   else
     Result := Alignment <> taCenter;
 end;
@@ -2571,9 +2636,9 @@ begin
     inherited;
 end;
 
-procedure TDBComboBox.SetItems(Value: TStrings);
+procedure TDBComboBox.SetItems(const Value: TStrings);
 begin
-  Items.Assign(Value);
+  inherited SetItems(Value);
   DataChange(Self);
 end;
 
@@ -2737,6 +2802,11 @@ begin
   inherited;
 end;
 
+procedure TDBListBox.CMGetDataLink(var Message: TMessage);
+begin
+  Message.Result := Integer(FDataLink);
+end;
+
 procedure TDBListBox.SetItems(Value: TStrings);
 begin
   Items.Assign(Value);
@@ -2881,6 +2951,11 @@ begin
     raise;
   end;
   inherited;
+end;
+
+procedure TDBRadioGroup.CMGetDataLink(var Message: TMessage);
+begin
+  Message.Result := Integer(FDataLink);
 end;
 
 procedure TDBRadioGroup.Click;
@@ -3521,7 +3596,9 @@ end;
 procedure TDBImage.CMExit(var Message: TCMExit);
 begin
   try
-    FDataLink.UpdateRecord;
+    if Assigned(DataSource) and Assigned(DataSource.DataSet) and
+       (DataSource.DataSet.State in [dsInsert, dsEdit]) then
+      FDataLink.UpdateRecord;
   except
     SetFocus;
     raise;
@@ -3902,16 +3979,18 @@ begin
   case Key of
     VK_RIGHT:
       begin
-        NewFocus := FocusedButton;
-        repeat
-          if NewFocus < High(Buttons) then
-            NewFocus := Succ(NewFocus);
-        until (NewFocus = High(Buttons)) or (Buttons[NewFocus].Visible);
-        if NewFocus <> FocusedButton then
+        if OldFocus < High(Buttons) then
         begin
-          FocusedButton := NewFocus;
-          Buttons[OldFocus].Invalidate;
-          Buttons[FocusedButton].Invalidate;
+          NewFocus := OldFocus;
+          repeat
+            NewFocus := Succ(NewFocus);
+          until (NewFocus = High(Buttons)) or (Buttons[NewFocus].Visible);
+          if Buttons[NewFocus].Visible then
+          begin
+            FocusedButton := NewFocus;
+            Buttons[OldFocus].Invalidate;
+            Buttons[NewFocus].Invalidate;
+          end;
         end;
       end;
     VK_LEFT:
@@ -4202,10 +4281,12 @@ begin
   inherited Destroy;
   FListFields.Free;
   FListFields := nil;
-  FListLink.FDBLookupControl := nil;
+  if FListLink <> nil then
+    FListLink.FDBLookupControl := nil;
   FListLink.Free;
   FListLink := nil;
-  FDataLink.FDBLookupControl := nil;
+  if FDataLink <> nil then
+    FDataLink.FDBLookupControl := nil;
   FDataLink.Free;
   FDataLink := nil;
 end;
@@ -4532,6 +4613,11 @@ begin
   Invalidate;
 end;
 
+procedure TDBLookupControl.CMGetDataLink(var Message: TMessage);
+begin
+  Message.Result := Integer(FDataLink);
+end;
+
 function TDBLookupControl.ExecuteAction(Action: TBasicAction): Boolean;
 begin
   Result := inherited ExecuteAction(Action) or (FDataLink <> nil) and
@@ -4542,6 +4628,18 @@ function TDBLookupControl.UpdateAction(Action: TBasicAction): Boolean;
 begin
   Result := inherited UpdateAction(Action) or (FDataLink <> nil) and
     FDataLink.UpdateAction(Action);
+end;
+
+procedure TDBLookupControl.WMKeyDown(var Message: TWMKeyDown);
+begin
+  if (FNullValueKey <> 0) and CanModify and (FNullValueKey = ShortCut(Message.CharCode,
+     KeyDataToShiftState(Message.KeyData))) then
+  begin
+    FDataLink.Edit;
+    Field.Clear;
+    Message.CharCode := 0;
+  end;
+  inherited;
 end;
 
 { TDBLookupListBox }
@@ -5296,7 +5394,7 @@ begin
     R.Left := 0;
     R.Right:= FButtonWidth;
   end;
-  if not ListActive then
+  if not (ListActive and Enabled) then
     Flags := DFCS_SCROLLCOMBOBOX or DFCS_INACTIVE
   else if FPressed then
     Flags := DFCS_SCROLLCOMBOBOX or DFCS_FLAT or DFCS_PUSHED
@@ -5655,4 +5753,58 @@ begin
     FDataLink.UpdateAction(Action);
 end;
 
+type
+  TVCLScreenApplication = class(TInterfacedObject, IDBScreen, IDBApplication)
+    function GetCursor: TDBScreenCursor;
+    procedure SetCursor(Cursor: TDBScreenCursor);
+    function GetTitle: string;
+    procedure ProcessMessages;
+    procedure SetTitle(const Value: string);
+  end;
+
+{ TVCLScreenApplication }
+
+function TVCLScreenApplication.GetCursor: TDBScreenCursor;
+begin
+  case Forms.Screen.Cursor of
+    crDefault: Result := dcrDefault;
+    crHourGlass: Result := dcrHourGlass;
+    crSQLWait: Result := dcrSQLWait;
+  else
+    Result := dcrOther;
+  end;
+end;
+
+function TVCLScreenApplication.GetTitle: string;
+begin
+  Result := Forms.Application.Title;
+end;
+
+procedure TVCLScreenApplication.ProcessMessages;
+begin
+  Forms.Application.ProcessMessages;
+end;
+
+procedure TVCLScreenApplication.SetCursor(Cursor: TDBScreenCursor);
+begin
+  case Cursor of
+    dcrDefault: Forms.Screen.Cursor := crDefault;
+    dcrHourGlass: Forms.Screen.Cursor := crHourGlass;
+    dcrSQLWait: Forms.Screen.Cursor := crSQLWait;
+  end;
+end;
+
+procedure TVCLScreenApplication.SetTitle(const Value: string);
+begin
+  Forms.Application.Title := Value;
+end;
+
+initialization
+  DB.DBScreen := TVCLScreenApplication.Create as IDBScreen;
+  DB.DBApplication := DB.DBScreen as IDBApplication;
+
+finalization
+  DB.DBScreen := nil;
+  DB.DBApplication := nil;
+  
 end.

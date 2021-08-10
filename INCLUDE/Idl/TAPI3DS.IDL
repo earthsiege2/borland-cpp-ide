@@ -1,18 +1,13 @@
 //
-// Copyright (c) 1998-1999  Microsoft Corporation
-//
+// Copyright (c) Microsoft Corporation. All rights reserved.
 
-cpp_quote("/* Copyright (c) 1998-1999  Microsoft Corporation  */")
+cpp_quote("/* Copyright (c) Microsoft Corporation. All rights reserved. */")
 
 #ifndef __TAPI3DS_IDL__
 #define __TAPI3DS_IDL__
 
 import "oaidl.idl";
 import "strmif.idl";
-
-// import the silence suppressor interface ISilenceSuppressor
-import "amrtpss.idl";
-
 
 // this is exposed by the Media Streaming Terminal (MST) samples
 [
@@ -88,26 +83,6 @@ interface ITAllocatorProperties : IUnknown
         [out] DWORD	*pBufferSize
         );		
 };
-
-
-// this is exposed by the media stream terminal that supports reading audio samples
-[
-    uuid( 1F0B1BE8-4B6D-11D1-A671-006097C9A2E8 ),
-    helpstring("TAPI 3.0 ITAudioReadMedia interface"),
-]
-interface ITAudioReadMedia : IUnknown
-{
-    [propput, id(1), helpstring("property EnableSilenceSuppressor")]
-    HRESULT EnableSilenceSuppressor(
-            [in] VARIANT_BOOL bEnable
-            );
-
-    [propget, id(2), helpstring("property SilenceSuppressor")]
-    HRESULT SilenceSuppressor(
-            [out, retval] ISilenceSuppressor **ppSilenceSuppressor
-            );
-};  
-
 
 #endif
 

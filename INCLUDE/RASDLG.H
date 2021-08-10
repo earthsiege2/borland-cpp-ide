@@ -1,17 +1,23 @@
-/* Copyright (c) 1995-1999, Microsoft Corporation, all rights reserved
-**
-** rasdlg.h
-** Remote Access Common Dialog APIs
-** Public header
-**
-** These APIs live in RASDLG.DLL.
-**
-** The APIs in this header are added in Windows NT SUR and are not available
-** in prior Windows NT or Windows 95 releases.
-*/
+/*++
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+Module Name:
+
+    rasdlg.h
+
+Abstract:
+
+    Remote Access Common Dialog APIs
+
+    These APIs live in RASDLG.DLL.
+
+    The APIs in this header are added in Windows NT SUR and are not available
+    in prior Windows NT or Windows 95 releases.
+    
+--*/
 
 #ifndef _RASDLG_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _RASDLG_H_
 
 #if _MSC_VER > 1000
@@ -139,7 +145,8 @@ RASPBDLGA
 #define RASEDFLAG_NewPhoneEntry  0x00000010
 #define RASEDFLAG_NewTunnelEntry 0x00000020
 #define RASEDFLAG_NewDirectEntry 0x00000040
-
+#define RASEDFLAG_NewBroadbandEntry  0x00000080
+#define RASEDFLAG_InternetEntry  0x00000100
 
 #define RASENTRYDLGW struct tagRASENTRYDLGW
 RASENTRYDLGW
@@ -205,7 +212,7 @@ RASDIALDLG
 
 /* RasMonitorDlg API parameters.
 */
-
+#if (WINVER <= 0x500)
 #define RASMDPAGE_Status            0
 #define RASMDPAGE_Summary           1
 #define RASMDPAGE_Preferences       2
@@ -228,6 +235,7 @@ RASMONITORDLG
 };
 
 #define LPRASMONITORDLG RASMONITORDLG*
+#endif
 
 #if (WINVER >= 0x500)
 typedef BOOL (WINAPI *RasCustomDialDlgFn) (
@@ -248,7 +256,9 @@ typedef BOOL (WINAPI *RasCustomEntryDlgFn) (
                             DWORD  dwFlags
                             );
 
+
 #endif
+
 
 /* RAS common dialog API prototypes.
 */
@@ -272,23 +282,29 @@ BOOL APIENTRY RasDialDlgW(
     LPWSTR lpszPhonebook, LPWSTR lpszEntry, LPWSTR lpszPhoneNumber,
     LPRASDIALDLG lpInfo );
 
+#if (WINVER <= 0x500)
 BOOL APIENTRY RasMonitorDlgA(
     LPSTR lpszDeviceName, LPRASMONITORDLG lpInfo );
 
 BOOL APIENTRY RasMonitorDlgW(
     LPWSTR lpszDeviceName, LPRASMONITORDLG lpInfo );
+#endif
 
 
 #ifdef UNICODE
 #define RasPhonebookDlg RasPhonebookDlgW
 #define RasEntryDlg     RasEntryDlgW
 #define RasDialDlg      RasDialDlgW
+#if (WINVER <= 0x500)
 #define RasMonitorDlg   RasMonitorDlgW
+#endif
 #else
 #define RasPhonebookDlg RasPhonebookDlgA
 #define RasEntryDlg     RasEntryDlgA
 #define RasDialDlg      RasDialDlgA
+#if (WINVER <= 0x500)
 #define RasMonitorDlg   RasMonitorDlgA
+#endif
 #endif
 
 
@@ -299,5 +315,4 @@ BOOL APIENTRY RasMonitorDlgW(
 
 #include <poppack.h>
 
-#pragma option pop /*P_O_Pop*/
 #endif // _RASDLG_H_

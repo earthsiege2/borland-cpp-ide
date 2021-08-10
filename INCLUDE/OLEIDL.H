@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:37:35 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for oleidl.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -37,6 +36,10 @@
 
 #ifndef __oleidl_h__
 #define __oleidl_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -179,8 +182,8 @@ typedef interface IEnumOLEVERB IEnumOLEVERB;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_oleidl_0000 */
 /* [local] */ 
@@ -188,7 +191,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //--------------------------------------------------------------------------
 #if ( _MSC_VER >= 1020 )
@@ -207,7 +210,7 @@ extern RPC_IF_HANDLE __MIDL_itf_oleidl_0000_v0_0_s_ifspec;
 /* interface IOleAdviseHolder */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ IOleAdviseHolder __RPC_FAR *LPOLEADVISEHOLDER;
+typedef /* [unique] */ IOleAdviseHolder *LPOLEADVISEHOLDER;
 
 
 EXTERN_C const IID IID_IOleAdviseHolder;
@@ -219,17 +222,17 @@ EXTERN_C const IID IID_IOleAdviseHolder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Advise( 
-            /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvise,
-            /* [out] */ DWORD __RPC_FAR *pdwConnection) = 0;
+            /* [unique][in] */ IAdviseSink *pAdvise,
+            /* [out] */ DWORD *pdwConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unadvise( 
             /* [in] */ DWORD dwConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumAdvise( 
-            /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumAdvise) = 0;
+            /* [out] */ IEnumSTATDATA **ppenumAdvise) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendOnRename( 
-            /* [unique][in] */ IMoniker __RPC_FAR *pmk) = 0;
+            /* [unique][in] */ IMoniker *pmk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SendOnSave( void) = 0;
         
@@ -243,46 +246,46 @@ EXTERN_C const IID IID_IOleAdviseHolder;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleAdviseHolder __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleAdviseHolder * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleAdviseHolder __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleAdviseHolder * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleAdviseHolder __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleAdviseHolder * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Advise )( 
-            IOleAdviseHolder __RPC_FAR * This,
-            /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvise,
-            /* [out] */ DWORD __RPC_FAR *pdwConnection);
+        HRESULT ( STDMETHODCALLTYPE *Advise )( 
+            IOleAdviseHolder * This,
+            /* [unique][in] */ IAdviseSink *pAdvise,
+            /* [out] */ DWORD *pdwConnection);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unadvise )( 
-            IOleAdviseHolder __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Unadvise )( 
+            IOleAdviseHolder * This,
             /* [in] */ DWORD dwConnection);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumAdvise )( 
-            IOleAdviseHolder __RPC_FAR * This,
-            /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumAdvise);
+        HRESULT ( STDMETHODCALLTYPE *EnumAdvise )( 
+            IOleAdviseHolder * This,
+            /* [out] */ IEnumSTATDATA **ppenumAdvise);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendOnRename )( 
-            IOleAdviseHolder __RPC_FAR * This,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmk);
+        HRESULT ( STDMETHODCALLTYPE *SendOnRename )( 
+            IOleAdviseHolder * This,
+            /* [unique][in] */ IMoniker *pmk);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendOnSave )( 
-            IOleAdviseHolder __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *SendOnSave )( 
+            IOleAdviseHolder * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendOnClose )( 
-            IOleAdviseHolder __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *SendOnClose )( 
+            IOleAdviseHolder * This);
         
         END_INTERFACE
     } IOleAdviseHolderVtbl;
 
     interface IOleAdviseHolder
     {
-        CONST_VTBL struct IOleAdviseHolderVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleAdviseHolderVtbl *lpVtbl;
     };
 
     
@@ -326,9 +329,9 @@ EXTERN_C const IID IID_IOleAdviseHolder;
 
 
 HRESULT STDMETHODCALLTYPE IOleAdviseHolder_Advise_Proxy( 
-    IOleAdviseHolder __RPC_FAR * This,
-    /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvise,
-    /* [out] */ DWORD __RPC_FAR *pdwConnection);
+    IOleAdviseHolder * This,
+    /* [unique][in] */ IAdviseSink *pAdvise,
+    /* [out] */ DWORD *pdwConnection);
 
 
 void __RPC_STUB IOleAdviseHolder_Advise_Stub(
@@ -339,7 +342,7 @@ void __RPC_STUB IOleAdviseHolder_Advise_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleAdviseHolder_Unadvise_Proxy( 
-    IOleAdviseHolder __RPC_FAR * This,
+    IOleAdviseHolder * This,
     /* [in] */ DWORD dwConnection);
 
 
@@ -351,8 +354,8 @@ void __RPC_STUB IOleAdviseHolder_Unadvise_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleAdviseHolder_EnumAdvise_Proxy( 
-    IOleAdviseHolder __RPC_FAR * This,
-    /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumAdvise);
+    IOleAdviseHolder * This,
+    /* [out] */ IEnumSTATDATA **ppenumAdvise);
 
 
 void __RPC_STUB IOleAdviseHolder_EnumAdvise_Stub(
@@ -363,8 +366,8 @@ void __RPC_STUB IOleAdviseHolder_EnumAdvise_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleAdviseHolder_SendOnRename_Proxy( 
-    IOleAdviseHolder __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmk);
+    IOleAdviseHolder * This,
+    /* [unique][in] */ IMoniker *pmk);
 
 
 void __RPC_STUB IOleAdviseHolder_SendOnRename_Stub(
@@ -375,7 +378,7 @@ void __RPC_STUB IOleAdviseHolder_SendOnRename_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleAdviseHolder_SendOnSave_Proxy( 
-    IOleAdviseHolder __RPC_FAR * This);
+    IOleAdviseHolder * This);
 
 
 void __RPC_STUB IOleAdviseHolder_SendOnSave_Stub(
@@ -386,7 +389,7 @@ void __RPC_STUB IOleAdviseHolder_SendOnSave_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleAdviseHolder_SendOnClose_Proxy( 
-    IOleAdviseHolder __RPC_FAR * This);
+    IOleAdviseHolder * This);
 
 
 void __RPC_STUB IOleAdviseHolder_SendOnClose_Stub(
@@ -406,7 +409,7 @@ void __RPC_STUB IOleAdviseHolder_SendOnClose_Stub(
 /* interface IOleCache */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleCache __RPC_FAR *LPOLECACHE;
+typedef /* [unique] */ IOleCache *LPOLECACHE;
 
 
 EXTERN_C const IID IID_IOleCache;
@@ -418,22 +421,22 @@ EXTERN_C const IID IID_IOleCache;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Cache( 
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
+            /* [unique][in] */ FORMATETC *pformatetc,
             /* [in] */ DWORD advf,
-            /* [out] */ DWORD __RPC_FAR *pdwConnection) = 0;
+            /* [out] */ DWORD *pdwConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Uncache( 
             /* [in] */ DWORD dwConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCache( 
-            /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumSTATDATA) = 0;
+            /* [out] */ IEnumSTATDATA **ppenumSTATDATA) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitCache( 
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObject) = 0;
+            /* [unique][in] */ IDataObject *pDataObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetData( 
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-            /* [unique][in] */ STGMEDIUM __RPC_FAR *pmedium,
+            /* [unique][in] */ FORMATETC *pformatetc,
+            /* [unique][in] */ STGMEDIUM *pmedium,
             /* [in] */ BOOL fRelease) = 0;
         
     };
@@ -444,39 +447,39 @@ EXTERN_C const IID IID_IOleCache;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleCache __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleCache * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleCache __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleCache * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleCache __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleCache * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Cache )( 
-            IOleCache __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
+        HRESULT ( STDMETHODCALLTYPE *Cache )( 
+            IOleCache * This,
+            /* [unique][in] */ FORMATETC *pformatetc,
             /* [in] */ DWORD advf,
-            /* [out] */ DWORD __RPC_FAR *pdwConnection);
+            /* [out] */ DWORD *pdwConnection);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Uncache )( 
-            IOleCache __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Uncache )( 
+            IOleCache * This,
             /* [in] */ DWORD dwConnection);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumCache )( 
-            IOleCache __RPC_FAR * This,
-            /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumSTATDATA);
+        HRESULT ( STDMETHODCALLTYPE *EnumCache )( 
+            IOleCache * This,
+            /* [out] */ IEnumSTATDATA **ppenumSTATDATA);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitCache )( 
-            IOleCache __RPC_FAR * This,
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObject);
+        HRESULT ( STDMETHODCALLTYPE *InitCache )( 
+            IOleCache * This,
+            /* [unique][in] */ IDataObject *pDataObject);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetData )( 
-            IOleCache __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-            /* [unique][in] */ STGMEDIUM __RPC_FAR *pmedium,
+        HRESULT ( STDMETHODCALLTYPE *SetData )( 
+            IOleCache * This,
+            /* [unique][in] */ FORMATETC *pformatetc,
+            /* [unique][in] */ STGMEDIUM *pmedium,
             /* [in] */ BOOL fRelease);
         
         END_INTERFACE
@@ -484,7 +487,7 @@ EXTERN_C const IID IID_IOleCache;
 
     interface IOleCache
     {
-        CONST_VTBL struct IOleCacheVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleCacheVtbl *lpVtbl;
     };
 
     
@@ -525,10 +528,10 @@ EXTERN_C const IID IID_IOleCache;
 
 
 HRESULT STDMETHODCALLTYPE IOleCache_Cache_Proxy( 
-    IOleCache __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
+    IOleCache * This,
+    /* [unique][in] */ FORMATETC *pformatetc,
     /* [in] */ DWORD advf,
-    /* [out] */ DWORD __RPC_FAR *pdwConnection);
+    /* [out] */ DWORD *pdwConnection);
 
 
 void __RPC_STUB IOleCache_Cache_Stub(
@@ -539,7 +542,7 @@ void __RPC_STUB IOleCache_Cache_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleCache_Uncache_Proxy( 
-    IOleCache __RPC_FAR * This,
+    IOleCache * This,
     /* [in] */ DWORD dwConnection);
 
 
@@ -551,8 +554,8 @@ void __RPC_STUB IOleCache_Uncache_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleCache_EnumCache_Proxy( 
-    IOleCache __RPC_FAR * This,
-    /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumSTATDATA);
+    IOleCache * This,
+    /* [out] */ IEnumSTATDATA **ppenumSTATDATA);
 
 
 void __RPC_STUB IOleCache_EnumCache_Stub(
@@ -563,8 +566,8 @@ void __RPC_STUB IOleCache_EnumCache_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleCache_InitCache_Proxy( 
-    IOleCache __RPC_FAR * This,
-    /* [unique][in] */ IDataObject __RPC_FAR *pDataObject);
+    IOleCache * This,
+    /* [unique][in] */ IDataObject *pDataObject);
 
 
 void __RPC_STUB IOleCache_InitCache_Stub(
@@ -575,9 +578,9 @@ void __RPC_STUB IOleCache_InitCache_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleCache_SetData_Proxy( 
-    IOleCache __RPC_FAR * This,
-    /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-    /* [unique][in] */ STGMEDIUM __RPC_FAR *pmedium,
+    IOleCache * This,
+    /* [unique][in] */ FORMATETC *pformatetc,
+    /* [unique][in] */ STGMEDIUM *pmedium,
     /* [in] */ BOOL fRelease);
 
 
@@ -598,7 +601,7 @@ void __RPC_STUB IOleCache_SetData_Stub(
 /* interface IOleCache2 */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleCache2 __RPC_FAR *LPOLECACHE2;
+typedef /* [unique] */ IOleCache2 *LPOLECACHE2;
 
 #define	UPDFCACHE_NODATACACHE	( 0x1 )
 
@@ -622,7 +625,7 @@ typedef /* [v1_enum] */
 enum tagDISCARDCACHE
     {	DISCARDCACHE_SAVEIFDIRTY	= 0,
 	DISCARDCACHE_NOSAVE	= 1
-    }	DISCARDCACHE;
+    } 	DISCARDCACHE;
 
 
 EXTERN_C const IID IID_IOleCache2;
@@ -649,49 +652,49 @@ EXTERN_C const IID IID_IOleCache2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleCache2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleCache2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleCache2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleCache2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleCache2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleCache2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Cache )( 
-            IOleCache2 __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
+        HRESULT ( STDMETHODCALLTYPE *Cache )( 
+            IOleCache2 * This,
+            /* [unique][in] */ FORMATETC *pformatetc,
             /* [in] */ DWORD advf,
-            /* [out] */ DWORD __RPC_FAR *pdwConnection);
+            /* [out] */ DWORD *pdwConnection);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Uncache )( 
-            IOleCache2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Uncache )( 
+            IOleCache2 * This,
             /* [in] */ DWORD dwConnection);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumCache )( 
-            IOleCache2 __RPC_FAR * This,
-            /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumSTATDATA);
+        HRESULT ( STDMETHODCALLTYPE *EnumCache )( 
+            IOleCache2 * This,
+            /* [out] */ IEnumSTATDATA **ppenumSTATDATA);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitCache )( 
-            IOleCache2 __RPC_FAR * This,
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObject);
+        HRESULT ( STDMETHODCALLTYPE *InitCache )( 
+            IOleCache2 * This,
+            /* [unique][in] */ IDataObject *pDataObject);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetData )( 
-            IOleCache2 __RPC_FAR * This,
-            /* [unique][in] */ FORMATETC __RPC_FAR *pformatetc,
-            /* [unique][in] */ STGMEDIUM __RPC_FAR *pmedium,
+        HRESULT ( STDMETHODCALLTYPE *SetData )( 
+            IOleCache2 * This,
+            /* [unique][in] */ FORMATETC *pformatetc,
+            /* [unique][in] */ STGMEDIUM *pmedium,
             /* [in] */ BOOL fRelease);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UpdateCache )( 
-            IOleCache2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *UpdateCache )( 
+            IOleCache2 * This,
             /* [in] */ LPDATAOBJECT pDataObject,
             /* [in] */ DWORD grfUpdf,
             /* [in] */ LPVOID pReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DiscardCache )( 
-            IOleCache2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DiscardCache )( 
+            IOleCache2 * This,
             /* [in] */ DWORD dwDiscardOptions);
         
         END_INTERFACE
@@ -699,7 +702,7 @@ EXTERN_C const IID IID_IOleCache2;
 
     interface IOleCache2
     {
-        CONST_VTBL struct IOleCache2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleCache2Vtbl *lpVtbl;
     };
 
     
@@ -747,7 +750,7 @@ EXTERN_C const IID IID_IOleCache2;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IOleCache2_RemoteUpdateCache_Proxy( 
-    IOleCache2 __RPC_FAR * This,
+    IOleCache2 * This,
     /* [in] */ LPDATAOBJECT pDataObject,
     /* [in] */ DWORD grfUpdf,
     /* [in] */ LONG_PTR pReserved);
@@ -761,7 +764,7 @@ void __RPC_STUB IOleCache2_RemoteUpdateCache_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleCache2_DiscardCache_Proxy( 
-    IOleCache2 __RPC_FAR * This,
+    IOleCache2 * This,
     /* [in] */ DWORD dwDiscardOptions);
 
 
@@ -782,7 +785,7 @@ void __RPC_STUB IOleCache2_DiscardCache_Stub(
 /* interface IOleCacheControl */
 /* [uuid][object] */ 
 
-typedef /* [unique] */ IOleCacheControl __RPC_FAR *LPOLECACHECONTROL;
+typedef /* [unique] */ IOleCacheControl *LPOLECACHECONTROL;
 
 
 EXTERN_C const IID IID_IOleCacheControl;
@@ -806,30 +809,30 @@ EXTERN_C const IID IID_IOleCacheControl;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleCacheControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleCacheControl * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleCacheControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleCacheControl * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleCacheControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleCacheControl * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnRun )( 
-            IOleCacheControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OnRun )( 
+            IOleCacheControl * This,
             LPDATAOBJECT pDataObject);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnStop )( 
-            IOleCacheControl __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *OnStop )( 
+            IOleCacheControl * This);
         
         END_INTERFACE
     } IOleCacheControlVtbl;
 
     interface IOleCacheControl
     {
-        CONST_VTBL struct IOleCacheControlVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleCacheControlVtbl *lpVtbl;
     };
 
     
@@ -861,7 +864,7 @@ EXTERN_C const IID IID_IOleCacheControl;
 
 
 HRESULT STDMETHODCALLTYPE IOleCacheControl_OnRun_Proxy( 
-    IOleCacheControl __RPC_FAR * This,
+    IOleCacheControl * This,
     LPDATAOBJECT pDataObject);
 
 
@@ -873,7 +876,7 @@ void __RPC_STUB IOleCacheControl_OnRun_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleCacheControl_OnStop_Proxy( 
-    IOleCacheControl __RPC_FAR * This);
+    IOleCacheControl * This);
 
 
 void __RPC_STUB IOleCacheControl_OnStop_Stub(
@@ -893,7 +896,7 @@ void __RPC_STUB IOleCacheControl_OnStop_Stub(
 /* interface IParseDisplayName */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IParseDisplayName __RPC_FAR *LPPARSEDISPLAYNAME;
+typedef /* [unique] */ IParseDisplayName *LPPARSEDISPLAYNAME;
 
 
 EXTERN_C const IID IID_IParseDisplayName;
@@ -905,10 +908,10 @@ EXTERN_C const IID IID_IParseDisplayName;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ParseDisplayName( 
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+            /* [unique][in] */ IBindCtx *pbc,
             /* [in] */ LPOLESTR pszDisplayName,
-            /* [out] */ ULONG __RPC_FAR *pchEaten,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkOut) = 0;
+            /* [out] */ ULONG *pchEaten,
+            /* [out] */ IMoniker **ppmkOut) = 0;
         
     };
     
@@ -918,30 +921,30 @@ EXTERN_C const IID IID_IParseDisplayName;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IParseDisplayName __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IParseDisplayName * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IParseDisplayName __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IParseDisplayName * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IParseDisplayName __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IParseDisplayName * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ParseDisplayName )( 
-            IParseDisplayName __RPC_FAR * This,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+        HRESULT ( STDMETHODCALLTYPE *ParseDisplayName )( 
+            IParseDisplayName * This,
+            /* [unique][in] */ IBindCtx *pbc,
             /* [in] */ LPOLESTR pszDisplayName,
-            /* [out] */ ULONG __RPC_FAR *pchEaten,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkOut);
+            /* [out] */ ULONG *pchEaten,
+            /* [out] */ IMoniker **ppmkOut);
         
         END_INTERFACE
     } IParseDisplayNameVtbl;
 
     interface IParseDisplayName
     {
-        CONST_VTBL struct IParseDisplayNameVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IParseDisplayNameVtbl *lpVtbl;
     };
 
     
@@ -970,11 +973,11 @@ EXTERN_C const IID IID_IParseDisplayName;
 
 
 HRESULT STDMETHODCALLTYPE IParseDisplayName_ParseDisplayName_Proxy( 
-    IParseDisplayName __RPC_FAR * This,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+    IParseDisplayName * This,
+    /* [unique][in] */ IBindCtx *pbc,
     /* [in] */ LPOLESTR pszDisplayName,
-    /* [out] */ ULONG __RPC_FAR *pchEaten,
-    /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkOut);
+    /* [out] */ ULONG *pchEaten,
+    /* [out] */ IMoniker **ppmkOut);
 
 
 void __RPC_STUB IParseDisplayName_ParseDisplayName_Stub(
@@ -994,7 +997,7 @@ void __RPC_STUB IParseDisplayName_ParseDisplayName_Stub(
 /* interface IOleContainer */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleContainer __RPC_FAR *LPOLECONTAINER;
+typedef /* [unique] */ IOleContainer *LPOLECONTAINER;
 
 
 EXTERN_C const IID IID_IOleContainer;
@@ -1007,7 +1010,7 @@ EXTERN_C const IID IID_IOleContainer;
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumObjects( 
             /* [in] */ DWORD grfFlags,
-            /* [out] */ IEnumUnknown __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumUnknown **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LockContainer( 
             /* [in] */ BOOL fLock) = 0;
@@ -1020,31 +1023,31 @@ EXTERN_C const IID IID_IOleContainer;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleContainer * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleContainer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleContainer * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleContainer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleContainer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ParseDisplayName )( 
-            IOleContainer __RPC_FAR * This,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+        HRESULT ( STDMETHODCALLTYPE *ParseDisplayName )( 
+            IOleContainer * This,
+            /* [unique][in] */ IBindCtx *pbc,
             /* [in] */ LPOLESTR pszDisplayName,
-            /* [out] */ ULONG __RPC_FAR *pchEaten,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkOut);
+            /* [out] */ ULONG *pchEaten,
+            /* [out] */ IMoniker **ppmkOut);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumObjects )( 
-            IOleContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnumObjects )( 
+            IOleContainer * This,
             /* [in] */ DWORD grfFlags,
-            /* [out] */ IEnumUnknown __RPC_FAR *__RPC_FAR *ppenum);
+            /* [out] */ IEnumUnknown **ppenum);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockContainer )( 
-            IOleContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *LockContainer )( 
+            IOleContainer * This,
             /* [in] */ BOOL fLock);
         
         END_INTERFACE
@@ -1052,7 +1055,7 @@ EXTERN_C const IID IID_IOleContainer;
 
     interface IOleContainer
     {
-        CONST_VTBL struct IOleContainerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleContainerVtbl *lpVtbl;
     };
 
     
@@ -1088,9 +1091,9 @@ EXTERN_C const IID IID_IOleContainer;
 
 
 HRESULT STDMETHODCALLTYPE IOleContainer_EnumObjects_Proxy( 
-    IOleContainer __RPC_FAR * This,
+    IOleContainer * This,
     /* [in] */ DWORD grfFlags,
-    /* [out] */ IEnumUnknown __RPC_FAR *__RPC_FAR *ppenum);
+    /* [out] */ IEnumUnknown **ppenum);
 
 
 void __RPC_STUB IOleContainer_EnumObjects_Stub(
@@ -1101,7 +1104,7 @@ void __RPC_STUB IOleContainer_EnumObjects_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleContainer_LockContainer_Proxy( 
-    IOleContainer __RPC_FAR * This,
+    IOleContainer * This,
     /* [in] */ BOOL fLock);
 
 
@@ -1122,7 +1125,7 @@ void __RPC_STUB IOleContainer_LockContainer_Stub(
 /* interface IOleClientSite */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleClientSite __RPC_FAR *LPOLECLIENTSITE;
+typedef /* [unique] */ IOleClientSite *LPOLECLIENTSITE;
 
 
 EXTERN_C const IID IID_IOleClientSite;
@@ -1138,10 +1141,10 @@ EXTERN_C const IID IID_IOleClientSite;
         virtual HRESULT STDMETHODCALLTYPE GetMoniker( 
             /* [in] */ DWORD dwAssign,
             /* [in] */ DWORD dwWhichMoniker,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk) = 0;
+            /* [out] */ IMoniker **ppmk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetContainer( 
-            /* [out] */ IOleContainer __RPC_FAR *__RPC_FAR *ppContainer) = 0;
+            /* [out] */ IOleContainer **ppContainer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowObject( void) = 0;
         
@@ -1158,46 +1161,46 @@ EXTERN_C const IID IID_IOleClientSite;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleClientSite __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleClientSite * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleClientSite __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleClientSite * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleClientSite __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleClientSite * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveObject )( 
-            IOleClientSite __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *SaveObject )( 
+            IOleClientSite * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMoniker )( 
-            IOleClientSite __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetMoniker )( 
+            IOleClientSite * This,
             /* [in] */ DWORD dwAssign,
             /* [in] */ DWORD dwWhichMoniker,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk);
+            /* [out] */ IMoniker **ppmk);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetContainer )( 
-            IOleClientSite __RPC_FAR * This,
-            /* [out] */ IOleContainer __RPC_FAR *__RPC_FAR *ppContainer);
+        HRESULT ( STDMETHODCALLTYPE *GetContainer )( 
+            IOleClientSite * This,
+            /* [out] */ IOleContainer **ppContainer);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowObject )( 
-            IOleClientSite __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *ShowObject )( 
+            IOleClientSite * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnShowWindow )( 
-            IOleClientSite __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OnShowWindow )( 
+            IOleClientSite * This,
             /* [in] */ BOOL fShow);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestNewObjectLayout )( 
-            IOleClientSite __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *RequestNewObjectLayout )( 
+            IOleClientSite * This);
         
         END_INTERFACE
     } IOleClientSiteVtbl;
 
     interface IOleClientSite
     {
-        CONST_VTBL struct IOleClientSiteVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleClientSiteVtbl *lpVtbl;
     };
 
     
@@ -1241,7 +1244,7 @@ EXTERN_C const IID IID_IOleClientSite;
 
 
 HRESULT STDMETHODCALLTYPE IOleClientSite_SaveObject_Proxy( 
-    IOleClientSite __RPC_FAR * This);
+    IOleClientSite * This);
 
 
 void __RPC_STUB IOleClientSite_SaveObject_Stub(
@@ -1252,10 +1255,10 @@ void __RPC_STUB IOleClientSite_SaveObject_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleClientSite_GetMoniker_Proxy( 
-    IOleClientSite __RPC_FAR * This,
+    IOleClientSite * This,
     /* [in] */ DWORD dwAssign,
     /* [in] */ DWORD dwWhichMoniker,
-    /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk);
+    /* [out] */ IMoniker **ppmk);
 
 
 void __RPC_STUB IOleClientSite_GetMoniker_Stub(
@@ -1266,8 +1269,8 @@ void __RPC_STUB IOleClientSite_GetMoniker_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleClientSite_GetContainer_Proxy( 
-    IOleClientSite __RPC_FAR * This,
-    /* [out] */ IOleContainer __RPC_FAR *__RPC_FAR *ppContainer);
+    IOleClientSite * This,
+    /* [out] */ IOleContainer **ppContainer);
 
 
 void __RPC_STUB IOleClientSite_GetContainer_Stub(
@@ -1278,7 +1281,7 @@ void __RPC_STUB IOleClientSite_GetContainer_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleClientSite_ShowObject_Proxy( 
-    IOleClientSite __RPC_FAR * This);
+    IOleClientSite * This);
 
 
 void __RPC_STUB IOleClientSite_ShowObject_Stub(
@@ -1289,7 +1292,7 @@ void __RPC_STUB IOleClientSite_ShowObject_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleClientSite_OnShowWindow_Proxy( 
-    IOleClientSite __RPC_FAR * This,
+    IOleClientSite * This,
     /* [in] */ BOOL fShow);
 
 
@@ -1301,7 +1304,7 @@ void __RPC_STUB IOleClientSite_OnShowWindow_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleClientSite_RequestNewObjectLayout_Proxy( 
-    IOleClientSite __RPC_FAR * This);
+    IOleClientSite * This);
 
 
 void __RPC_STUB IOleClientSite_RequestNewObjectLayout_Stub(
@@ -1321,7 +1324,7 @@ void __RPC_STUB IOleClientSite_RequestNewObjectLayout_Stub(
 /* interface IOleObject */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleObject __RPC_FAR *LPOLEOBJECT;
+typedef /* [unique] */ IOleObject *LPOLEOBJECT;
 
 typedef 
 enum tagOLEGETMONIKER
@@ -1329,21 +1332,21 @@ enum tagOLEGETMONIKER
 	OLEGETMONIKER_FORCEASSIGN	= 2,
 	OLEGETMONIKER_UNASSIGN	= 3,
 	OLEGETMONIKER_TEMPFORUSER	= 4
-    }	OLEGETMONIKER;
+    } 	OLEGETMONIKER;
 
 typedef 
 enum tagOLEWHICHMK
     {	OLEWHICHMK_CONTAINER	= 1,
 	OLEWHICHMK_OBJREL	= 2,
 	OLEWHICHMK_OBJFULL	= 3
-    }	OLEWHICHMK;
+    } 	OLEWHICHMK;
 
 typedef 
 enum tagUSERCLASSTYPE
     {	USERCLASSTYPE_FULL	= 1,
 	USERCLASSTYPE_SHORT	= 2,
 	USERCLASSTYPE_APPNAME	= 3
-    }	USERCLASSTYPE;
+    } 	USERCLASSTYPE;
 
 typedef 
 enum tagOLEMISC
@@ -1369,14 +1372,14 @@ enum tagOLEMISC
 	OLEMISC_IGNOREACTIVATEWHENVISIBLE	= 0x80000,
 	OLEMISC_WANTSTOMENUMERGE	= 0x100000,
 	OLEMISC_SUPPORTSMULTILEVELUNDO	= 0x200000
-    }	OLEMISC;
+    } 	OLEMISC;
 
 typedef 
 enum tagOLECLOSE
     {	OLECLOSE_SAVEIFDIRTY	= 0,
 	OLECLOSE_NOSAVE	= 1,
 	OLECLOSE_PROMPTSAVE	= 2
-    }	OLECLOSE;
+    } 	OLECLOSE;
 
 
 EXTERN_C const IID IID_IOleObject;
@@ -1388,10 +1391,10 @@ EXTERN_C const IID IID_IOleObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetClientSite( 
-            /* [unique][in] */ IOleClientSite __RPC_FAR *pClientSite) = 0;
+            /* [unique][in] */ IOleClientSite *pClientSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClientSite( 
-            /* [out] */ IOleClientSite __RPC_FAR *__RPC_FAR *ppClientSite) = 0;
+            /* [out] */ IOleClientSite **ppClientSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetHostNames( 
             /* [in] */ LPCOLESTR szContainerApp,
@@ -1402,68 +1405,68 @@ EXTERN_C const IID IID_IOleObject;
         
         virtual HRESULT STDMETHODCALLTYPE SetMoniker( 
             /* [in] */ DWORD dwWhichMoniker,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmk) = 0;
+            /* [unique][in] */ IMoniker *pmk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMoniker( 
             /* [in] */ DWORD dwAssign,
             /* [in] */ DWORD dwWhichMoniker,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk) = 0;
+            /* [out] */ IMoniker **ppmk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitFromData( 
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObject,
+            /* [unique][in] */ IDataObject *pDataObject,
             /* [in] */ BOOL fCreation,
             /* [in] */ DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetClipboardData( 
             /* [in] */ DWORD dwReserved,
-            /* [out] */ IDataObject __RPC_FAR *__RPC_FAR *ppDataObject) = 0;
+            /* [out] */ IDataObject **ppDataObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DoVerb( 
             /* [in] */ LONG iVerb,
             /* [unique][in] */ LPMSG lpmsg,
-            /* [unique][in] */ IOleClientSite __RPC_FAR *pActiveSite,
+            /* [unique][in] */ IOleClientSite *pActiveSite,
             /* [in] */ LONG lindex,
             /* [in] */ HWND hwndParent,
             /* [unique][in] */ LPCRECT lprcPosRect) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumVerbs( 
-            /* [out] */ IEnumOLEVERB __RPC_FAR *__RPC_FAR *ppEnumOleVerb) = 0;
+            /* [out] */ IEnumOLEVERB **ppEnumOleVerb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Update( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsUpToDate( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUserClassID( 
-            /* [out] */ CLSID __RPC_FAR *pClsid) = 0;
+            /* [out] */ CLSID *pClsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUserType( 
             /* [in] */ DWORD dwFormOfType,
-            /* [out] */ LPOLESTR __RPC_FAR *pszUserType) = 0;
+            /* [out] */ LPOLESTR *pszUserType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetExtent( 
             /* [in] */ DWORD dwDrawAspect,
-            /* [in] */ SIZEL __RPC_FAR *psizel) = 0;
+            /* [in] */ SIZEL *psizel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetExtent( 
             /* [in] */ DWORD dwDrawAspect,
-            /* [out] */ SIZEL __RPC_FAR *psizel) = 0;
+            /* [out] */ SIZEL *psizel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Advise( 
-            /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvSink,
-            /* [out] */ DWORD __RPC_FAR *pdwConnection) = 0;
+            /* [unique][in] */ IAdviseSink *pAdvSink,
+            /* [out] */ DWORD *pdwConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unadvise( 
             /* [in] */ DWORD dwConnection) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumAdvise( 
-            /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumAdvise) = 0;
+            /* [out] */ IEnumSTATDATA **ppenumAdvise) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMiscStatus( 
             /* [in] */ DWORD dwAspect,
-            /* [out] */ DWORD __RPC_FAR *pdwStatus) = 0;
+            /* [out] */ DWORD *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetColorScheme( 
-            /* [in] */ LOGPALETTE __RPC_FAR *pLogpal) = 0;
+            /* [in] */ LOGPALETTE *pLogpal) = 0;
         
     };
     
@@ -1473,122 +1476,122 @@ EXTERN_C const IID IID_IOleObject;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleObject * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleObject * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleObject * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetClientSite )( 
-            IOleObject __RPC_FAR * This,
-            /* [unique][in] */ IOleClientSite __RPC_FAR *pClientSite);
+        HRESULT ( STDMETHODCALLTYPE *SetClientSite )( 
+            IOleObject * This,
+            /* [unique][in] */ IOleClientSite *pClientSite);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClientSite )( 
-            IOleObject __RPC_FAR * This,
-            /* [out] */ IOleClientSite __RPC_FAR *__RPC_FAR *ppClientSite);
+        HRESULT ( STDMETHODCALLTYPE *GetClientSite )( 
+            IOleObject * This,
+            /* [out] */ IOleClientSite **ppClientSite);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetHostNames )( 
-            IOleObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetHostNames )( 
+            IOleObject * This,
             /* [in] */ LPCOLESTR szContainerApp,
             /* [unique][in] */ LPCOLESTR szContainerObj);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Close )( 
-            IOleObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Close )( 
+            IOleObject * This,
             /* [in] */ DWORD dwSaveOption);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMoniker )( 
-            IOleObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetMoniker )( 
+            IOleObject * This,
             /* [in] */ DWORD dwWhichMoniker,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmk);
+            /* [unique][in] */ IMoniker *pmk);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMoniker )( 
-            IOleObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetMoniker )( 
+            IOleObject * This,
             /* [in] */ DWORD dwAssign,
             /* [in] */ DWORD dwWhichMoniker,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk);
+            /* [out] */ IMoniker **ppmk);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitFromData )( 
-            IOleObject __RPC_FAR * This,
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObject,
+        HRESULT ( STDMETHODCALLTYPE *InitFromData )( 
+            IOleObject * This,
+            /* [unique][in] */ IDataObject *pDataObject,
             /* [in] */ BOOL fCreation,
             /* [in] */ DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClipboardData )( 
-            IOleObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetClipboardData )( 
+            IOleObject * This,
             /* [in] */ DWORD dwReserved,
-            /* [out] */ IDataObject __RPC_FAR *__RPC_FAR *ppDataObject);
+            /* [out] */ IDataObject **ppDataObject);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoVerb )( 
-            IOleObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DoVerb )( 
+            IOleObject * This,
             /* [in] */ LONG iVerb,
             /* [unique][in] */ LPMSG lpmsg,
-            /* [unique][in] */ IOleClientSite __RPC_FAR *pActiveSite,
+            /* [unique][in] */ IOleClientSite *pActiveSite,
             /* [in] */ LONG lindex,
             /* [in] */ HWND hwndParent,
             /* [unique][in] */ LPCRECT lprcPosRect);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumVerbs )( 
-            IOleObject __RPC_FAR * This,
-            /* [out] */ IEnumOLEVERB __RPC_FAR *__RPC_FAR *ppEnumOleVerb);
+        HRESULT ( STDMETHODCALLTYPE *EnumVerbs )( 
+            IOleObject * This,
+            /* [out] */ IEnumOLEVERB **ppEnumOleVerb);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Update )( 
-            IOleObject __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Update )( 
+            IOleObject * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsUpToDate )( 
-            IOleObject __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *IsUpToDate )( 
+            IOleObject * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetUserClassID )( 
-            IOleObject __RPC_FAR * This,
-            /* [out] */ CLSID __RPC_FAR *pClsid);
+        HRESULT ( STDMETHODCALLTYPE *GetUserClassID )( 
+            IOleObject * This,
+            /* [out] */ CLSID *pClsid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetUserType )( 
-            IOleObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetUserType )( 
+            IOleObject * This,
             /* [in] */ DWORD dwFormOfType,
-            /* [out] */ LPOLESTR __RPC_FAR *pszUserType);
+            /* [out] */ LPOLESTR *pszUserType);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetExtent )( 
-            IOleObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetExtent )( 
+            IOleObject * This,
             /* [in] */ DWORD dwDrawAspect,
-            /* [in] */ SIZEL __RPC_FAR *psizel);
+            /* [in] */ SIZEL *psizel);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetExtent )( 
-            IOleObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetExtent )( 
+            IOleObject * This,
             /* [in] */ DWORD dwDrawAspect,
-            /* [out] */ SIZEL __RPC_FAR *psizel);
+            /* [out] */ SIZEL *psizel);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Advise )( 
-            IOleObject __RPC_FAR * This,
-            /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvSink,
-            /* [out] */ DWORD __RPC_FAR *pdwConnection);
+        HRESULT ( STDMETHODCALLTYPE *Advise )( 
+            IOleObject * This,
+            /* [unique][in] */ IAdviseSink *pAdvSink,
+            /* [out] */ DWORD *pdwConnection);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unadvise )( 
-            IOleObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Unadvise )( 
+            IOleObject * This,
             /* [in] */ DWORD dwConnection);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumAdvise )( 
-            IOleObject __RPC_FAR * This,
-            /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumAdvise);
+        HRESULT ( STDMETHODCALLTYPE *EnumAdvise )( 
+            IOleObject * This,
+            /* [out] */ IEnumSTATDATA **ppenumAdvise);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMiscStatus )( 
-            IOleObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetMiscStatus )( 
+            IOleObject * This,
             /* [in] */ DWORD dwAspect,
-            /* [out] */ DWORD __RPC_FAR *pdwStatus);
+            /* [out] */ DWORD *pdwStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetColorScheme )( 
-            IOleObject __RPC_FAR * This,
-            /* [in] */ LOGPALETTE __RPC_FAR *pLogpal);
+        HRESULT ( STDMETHODCALLTYPE *SetColorScheme )( 
+            IOleObject * This,
+            /* [in] */ LOGPALETTE *pLogpal);
         
         END_INTERFACE
     } IOleObjectVtbl;
 
     interface IOleObject
     {
-        CONST_VTBL struct IOleObjectVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleObjectVtbl *lpVtbl;
     };
 
     
@@ -1677,8 +1680,8 @@ EXTERN_C const IID IID_IOleObject;
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_SetClientSite_Proxy( 
-    IOleObject __RPC_FAR * This,
-    /* [unique][in] */ IOleClientSite __RPC_FAR *pClientSite);
+    IOleObject * This,
+    /* [unique][in] */ IOleClientSite *pClientSite);
 
 
 void __RPC_STUB IOleObject_SetClientSite_Stub(
@@ -1689,8 +1692,8 @@ void __RPC_STUB IOleObject_SetClientSite_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_GetClientSite_Proxy( 
-    IOleObject __RPC_FAR * This,
-    /* [out] */ IOleClientSite __RPC_FAR *__RPC_FAR *ppClientSite);
+    IOleObject * This,
+    /* [out] */ IOleClientSite **ppClientSite);
 
 
 void __RPC_STUB IOleObject_GetClientSite_Stub(
@@ -1701,7 +1704,7 @@ void __RPC_STUB IOleObject_GetClientSite_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_SetHostNames_Proxy( 
-    IOleObject __RPC_FAR * This,
+    IOleObject * This,
     /* [in] */ LPCOLESTR szContainerApp,
     /* [unique][in] */ LPCOLESTR szContainerObj);
 
@@ -1714,7 +1717,7 @@ void __RPC_STUB IOleObject_SetHostNames_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_Close_Proxy( 
-    IOleObject __RPC_FAR * This,
+    IOleObject * This,
     /* [in] */ DWORD dwSaveOption);
 
 
@@ -1726,9 +1729,9 @@ void __RPC_STUB IOleObject_Close_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_SetMoniker_Proxy( 
-    IOleObject __RPC_FAR * This,
+    IOleObject * This,
     /* [in] */ DWORD dwWhichMoniker,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmk);
+    /* [unique][in] */ IMoniker *pmk);
 
 
 void __RPC_STUB IOleObject_SetMoniker_Stub(
@@ -1739,10 +1742,10 @@ void __RPC_STUB IOleObject_SetMoniker_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_GetMoniker_Proxy( 
-    IOleObject __RPC_FAR * This,
+    IOleObject * This,
     /* [in] */ DWORD dwAssign,
     /* [in] */ DWORD dwWhichMoniker,
-    /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk);
+    /* [out] */ IMoniker **ppmk);
 
 
 void __RPC_STUB IOleObject_GetMoniker_Stub(
@@ -1753,8 +1756,8 @@ void __RPC_STUB IOleObject_GetMoniker_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_InitFromData_Proxy( 
-    IOleObject __RPC_FAR * This,
-    /* [unique][in] */ IDataObject __RPC_FAR *pDataObject,
+    IOleObject * This,
+    /* [unique][in] */ IDataObject *pDataObject,
     /* [in] */ BOOL fCreation,
     /* [in] */ DWORD dwReserved);
 
@@ -1767,9 +1770,9 @@ void __RPC_STUB IOleObject_InitFromData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_GetClipboardData_Proxy( 
-    IOleObject __RPC_FAR * This,
+    IOleObject * This,
     /* [in] */ DWORD dwReserved,
-    /* [out] */ IDataObject __RPC_FAR *__RPC_FAR *ppDataObject);
+    /* [out] */ IDataObject **ppDataObject);
 
 
 void __RPC_STUB IOleObject_GetClipboardData_Stub(
@@ -1780,10 +1783,10 @@ void __RPC_STUB IOleObject_GetClipboardData_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_DoVerb_Proxy( 
-    IOleObject __RPC_FAR * This,
+    IOleObject * This,
     /* [in] */ LONG iVerb,
     /* [unique][in] */ LPMSG lpmsg,
-    /* [unique][in] */ IOleClientSite __RPC_FAR *pActiveSite,
+    /* [unique][in] */ IOleClientSite *pActiveSite,
     /* [in] */ LONG lindex,
     /* [in] */ HWND hwndParent,
     /* [unique][in] */ LPCRECT lprcPosRect);
@@ -1797,8 +1800,8 @@ void __RPC_STUB IOleObject_DoVerb_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_EnumVerbs_Proxy( 
-    IOleObject __RPC_FAR * This,
-    /* [out] */ IEnumOLEVERB __RPC_FAR *__RPC_FAR *ppEnumOleVerb);
+    IOleObject * This,
+    /* [out] */ IEnumOLEVERB **ppEnumOleVerb);
 
 
 void __RPC_STUB IOleObject_EnumVerbs_Stub(
@@ -1809,7 +1812,7 @@ void __RPC_STUB IOleObject_EnumVerbs_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_Update_Proxy( 
-    IOleObject __RPC_FAR * This);
+    IOleObject * This);
 
 
 void __RPC_STUB IOleObject_Update_Stub(
@@ -1820,7 +1823,7 @@ void __RPC_STUB IOleObject_Update_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_IsUpToDate_Proxy( 
-    IOleObject __RPC_FAR * This);
+    IOleObject * This);
 
 
 void __RPC_STUB IOleObject_IsUpToDate_Stub(
@@ -1831,8 +1834,8 @@ void __RPC_STUB IOleObject_IsUpToDate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_GetUserClassID_Proxy( 
-    IOleObject __RPC_FAR * This,
-    /* [out] */ CLSID __RPC_FAR *pClsid);
+    IOleObject * This,
+    /* [out] */ CLSID *pClsid);
 
 
 void __RPC_STUB IOleObject_GetUserClassID_Stub(
@@ -1843,9 +1846,9 @@ void __RPC_STUB IOleObject_GetUserClassID_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_GetUserType_Proxy( 
-    IOleObject __RPC_FAR * This,
+    IOleObject * This,
     /* [in] */ DWORD dwFormOfType,
-    /* [out] */ LPOLESTR __RPC_FAR *pszUserType);
+    /* [out] */ LPOLESTR *pszUserType);
 
 
 void __RPC_STUB IOleObject_GetUserType_Stub(
@@ -1856,9 +1859,9 @@ void __RPC_STUB IOleObject_GetUserType_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_SetExtent_Proxy( 
-    IOleObject __RPC_FAR * This,
+    IOleObject * This,
     /* [in] */ DWORD dwDrawAspect,
-    /* [in] */ SIZEL __RPC_FAR *psizel);
+    /* [in] */ SIZEL *psizel);
 
 
 void __RPC_STUB IOleObject_SetExtent_Stub(
@@ -1869,9 +1872,9 @@ void __RPC_STUB IOleObject_SetExtent_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_GetExtent_Proxy( 
-    IOleObject __RPC_FAR * This,
+    IOleObject * This,
     /* [in] */ DWORD dwDrawAspect,
-    /* [out] */ SIZEL __RPC_FAR *psizel);
+    /* [out] */ SIZEL *psizel);
 
 
 void __RPC_STUB IOleObject_GetExtent_Stub(
@@ -1882,9 +1885,9 @@ void __RPC_STUB IOleObject_GetExtent_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_Advise_Proxy( 
-    IOleObject __RPC_FAR * This,
-    /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvSink,
-    /* [out] */ DWORD __RPC_FAR *pdwConnection);
+    IOleObject * This,
+    /* [unique][in] */ IAdviseSink *pAdvSink,
+    /* [out] */ DWORD *pdwConnection);
 
 
 void __RPC_STUB IOleObject_Advise_Stub(
@@ -1895,7 +1898,7 @@ void __RPC_STUB IOleObject_Advise_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_Unadvise_Proxy( 
-    IOleObject __RPC_FAR * This,
+    IOleObject * This,
     /* [in] */ DWORD dwConnection);
 
 
@@ -1907,8 +1910,8 @@ void __RPC_STUB IOleObject_Unadvise_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_EnumAdvise_Proxy( 
-    IOleObject __RPC_FAR * This,
-    /* [out] */ IEnumSTATDATA __RPC_FAR *__RPC_FAR *ppenumAdvise);
+    IOleObject * This,
+    /* [out] */ IEnumSTATDATA **ppenumAdvise);
 
 
 void __RPC_STUB IOleObject_EnumAdvise_Stub(
@@ -1919,9 +1922,9 @@ void __RPC_STUB IOleObject_EnumAdvise_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_GetMiscStatus_Proxy( 
-    IOleObject __RPC_FAR * This,
+    IOleObject * This,
     /* [in] */ DWORD dwAspect,
-    /* [out] */ DWORD __RPC_FAR *pdwStatus);
+    /* [out] */ DWORD *pdwStatus);
 
 
 void __RPC_STUB IOleObject_GetMiscStatus_Stub(
@@ -1932,8 +1935,8 @@ void __RPC_STUB IOleObject_GetMiscStatus_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleObject_SetColorScheme_Proxy( 
-    IOleObject __RPC_FAR * This,
-    /* [in] */ LOGPALETTE __RPC_FAR *pLogpal);
+    IOleObject * This,
+    /* [in] */ LOGPALETTE *pLogpal);
 
 
 void __RPC_STUB IOleObject_SetColorScheme_Stub(
@@ -1959,9 +1962,9 @@ enum tagOLERENDER
 	OLERENDER_DRAW	= 1,
 	OLERENDER_FORMAT	= 2,
 	OLERENDER_ASIS	= 3
-    }	OLERENDER;
+    } 	OLERENDER;
 
-typedef OLERENDER __RPC_FAR *LPOLERENDER;
+typedef OLERENDER *LPOLERENDER;
 
 typedef struct tagOBJECTDESCRIPTOR
     {
@@ -1973,17 +1976,17 @@ typedef struct tagOBJECTDESCRIPTOR
     DWORD dwStatus;
     DWORD dwFullUserTypeName;
     DWORD dwSrcOfCopy;
-    }	OBJECTDESCRIPTOR;
+    } 	OBJECTDESCRIPTOR;
 
-typedef struct tagOBJECTDESCRIPTOR __RPC_FAR *POBJECTDESCRIPTOR;
+typedef struct tagOBJECTDESCRIPTOR *POBJECTDESCRIPTOR;
 
-typedef struct tagOBJECTDESCRIPTOR __RPC_FAR *LPOBJECTDESCRIPTOR;
+typedef struct tagOBJECTDESCRIPTOR *LPOBJECTDESCRIPTOR;
 
 typedef struct tagOBJECTDESCRIPTOR LINKSRCDESCRIPTOR;
 
-typedef struct tagOBJECTDESCRIPTOR __RPC_FAR *PLINKSRCDESCRIPTOR;
+typedef struct tagOBJECTDESCRIPTOR *PLINKSRCDESCRIPTOR;
 
-typedef struct tagOBJECTDESCRIPTOR __RPC_FAR *LPLINKSRCDESCRIPTOR;
+typedef struct tagOBJECTDESCRIPTOR *LPLINKSRCDESCRIPTOR;
 
 
 
@@ -1997,7 +2000,7 @@ extern RPC_IF_HANDLE IOLETypes_v0_0_s_ifspec;
 /* interface IOleWindow */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleWindow __RPC_FAR *LPOLEWINDOW;
+typedef /* [unique] */ IOleWindow *LPOLEWINDOW;
 
 
 EXTERN_C const IID IID_IOleWindow;
@@ -2009,7 +2012,7 @@ EXTERN_C const IID IID_IOleWindow;
     {
     public:
         virtual /* [input_sync] */ HRESULT STDMETHODCALLTYPE GetWindow( 
-            /* [out] */ HWND __RPC_FAR *phwnd) = 0;
+            /* [out] */ HWND *phwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ContextSensitiveHelp( 
             /* [in] */ BOOL fEnterMode) = 0;
@@ -2022,23 +2025,23 @@ EXTERN_C const IID IID_IOleWindow;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleWindow __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleWindow * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleWindow __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleWindow * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleWindow __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleWindow * This);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWindow )( 
-            IOleWindow __RPC_FAR * This,
-            /* [out] */ HWND __RPC_FAR *phwnd);
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
+            IOleWindow * This,
+            /* [out] */ HWND *phwnd);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ContextSensitiveHelp )( 
-            IOleWindow __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ContextSensitiveHelp )( 
+            IOleWindow * This,
             /* [in] */ BOOL fEnterMode);
         
         END_INTERFACE
@@ -2046,7 +2049,7 @@ EXTERN_C const IID IID_IOleWindow;
 
     interface IOleWindow
     {
-        CONST_VTBL struct IOleWindowVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleWindowVtbl *lpVtbl;
     };
 
     
@@ -2078,8 +2081,8 @@ EXTERN_C const IID IID_IOleWindow;
 
 
 /* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleWindow_GetWindow_Proxy( 
-    IOleWindow __RPC_FAR * This,
-    /* [out] */ HWND __RPC_FAR *phwnd);
+    IOleWindow * This,
+    /* [out] */ HWND *phwnd);
 
 
 void __RPC_STUB IOleWindow_GetWindow_Stub(
@@ -2090,7 +2093,7 @@ void __RPC_STUB IOleWindow_GetWindow_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleWindow_ContextSensitiveHelp_Proxy( 
-    IOleWindow __RPC_FAR * This,
+    IOleWindow * This,
     /* [in] */ BOOL fEnterMode);
 
 
@@ -2111,22 +2114,22 @@ void __RPC_STUB IOleWindow_ContextSensitiveHelp_Stub(
 /* interface IOleLink */
 /* [uuid][object] */ 
 
-typedef /* [unique] */ IOleLink __RPC_FAR *LPOLELINK;
+typedef /* [unique] */ IOleLink *LPOLELINK;
 
 typedef 
 enum tagOLEUPDATE
     {	OLEUPDATE_ALWAYS	= 1,
 	OLEUPDATE_ONCALL	= 3
-    }	OLEUPDATE;
+    } 	OLEUPDATE;
 
-typedef OLEUPDATE __RPC_FAR *LPOLEUPDATE;
+typedef OLEUPDATE *LPOLEUPDATE;
 
-typedef OLEUPDATE __RPC_FAR *POLEUPDATE;
+typedef OLEUPDATE *POLEUPDATE;
 
 typedef 
 enum tagOLELINKBIND
     {	OLELINKBIND_EVENIFCLASSDIFF	= 1
-    }	OLELINKBIND;
+    } 	OLELINKBIND;
 
 
 EXTERN_C const IID IID_IOleLink;
@@ -2141,34 +2144,34 @@ EXTERN_C const IID IID_IOleLink;
             /* [in] */ DWORD dwUpdateOpt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUpdateOptions( 
-            /* [out] */ DWORD __RPC_FAR *pdwUpdateOpt) = 0;
+            /* [out] */ DWORD *pdwUpdateOpt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSourceMoniker( 
-            /* [unique][in] */ IMoniker __RPC_FAR *pmk,
+            /* [unique][in] */ IMoniker *pmk,
             /* [in] */ REFCLSID rclsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceMoniker( 
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk) = 0;
+            /* [out] */ IMoniker **ppmk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSourceDisplayName( 
             /* [in] */ LPCOLESTR pszStatusText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceDisplayName( 
-            /* [out] */ LPOLESTR __RPC_FAR *ppszDisplayName) = 0;
+            /* [out] */ LPOLESTR *ppszDisplayName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BindToSource( 
             /* [in] */ DWORD bindflags,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc) = 0;
+            /* [unique][in] */ IBindCtx *pbc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BindIfRunning( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBoundSource( 
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk) = 0;
+            /* [out] */ IUnknown **ppunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnbindSource( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Update( 
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc) = 0;
+            /* [unique][in] */ IBindCtx *pbc) = 0;
         
     };
     
@@ -2178,67 +2181,67 @@ EXTERN_C const IID IID_IOleLink;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleLink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleLink * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleLink __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleLink * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleLink __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleLink * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetUpdateOptions )( 
-            IOleLink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetUpdateOptions )( 
+            IOleLink * This,
             /* [in] */ DWORD dwUpdateOpt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetUpdateOptions )( 
-            IOleLink __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwUpdateOpt);
+        HRESULT ( STDMETHODCALLTYPE *GetUpdateOptions )( 
+            IOleLink * This,
+            /* [out] */ DWORD *pdwUpdateOpt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSourceMoniker )( 
-            IOleLink __RPC_FAR * This,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmk,
+        HRESULT ( STDMETHODCALLTYPE *SetSourceMoniker )( 
+            IOleLink * This,
+            /* [unique][in] */ IMoniker *pmk,
             /* [in] */ REFCLSID rclsid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSourceMoniker )( 
-            IOleLink __RPC_FAR * This,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk);
+        HRESULT ( STDMETHODCALLTYPE *GetSourceMoniker )( 
+            IOleLink * This,
+            /* [out] */ IMoniker **ppmk);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetSourceDisplayName )( 
-            IOleLink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetSourceDisplayName )( 
+            IOleLink * This,
             /* [in] */ LPCOLESTR pszStatusText);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSourceDisplayName )( 
-            IOleLink __RPC_FAR * This,
-            /* [out] */ LPOLESTR __RPC_FAR *ppszDisplayName);
+        HRESULT ( STDMETHODCALLTYPE *GetSourceDisplayName )( 
+            IOleLink * This,
+            /* [out] */ LPOLESTR *ppszDisplayName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BindToSource )( 
-            IOleLink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *BindToSource )( 
+            IOleLink * This,
             /* [in] */ DWORD bindflags,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc);
+            /* [unique][in] */ IBindCtx *pbc);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BindIfRunning )( 
-            IOleLink __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *BindIfRunning )( 
+            IOleLink * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBoundSource )( 
-            IOleLink __RPC_FAR * This,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+        HRESULT ( STDMETHODCALLTYPE *GetBoundSource )( 
+            IOleLink * This,
+            /* [out] */ IUnknown **ppunk);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnbindSource )( 
-            IOleLink __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *UnbindSource )( 
+            IOleLink * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Update )( 
-            IOleLink __RPC_FAR * This,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc);
+        HRESULT ( STDMETHODCALLTYPE *Update )( 
+            IOleLink * This,
+            /* [unique][in] */ IBindCtx *pbc);
         
         END_INTERFACE
     } IOleLinkVtbl;
 
     interface IOleLink
     {
-        CONST_VTBL struct IOleLinkVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleLinkVtbl *lpVtbl;
     };
 
     
@@ -2297,7 +2300,7 @@ EXTERN_C const IID IID_IOleLink;
 
 
 HRESULT STDMETHODCALLTYPE IOleLink_SetUpdateOptions_Proxy( 
-    IOleLink __RPC_FAR * This,
+    IOleLink * This,
     /* [in] */ DWORD dwUpdateOpt);
 
 
@@ -2309,8 +2312,8 @@ void __RPC_STUB IOleLink_SetUpdateOptions_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleLink_GetUpdateOptions_Proxy( 
-    IOleLink __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwUpdateOpt);
+    IOleLink * This,
+    /* [out] */ DWORD *pdwUpdateOpt);
 
 
 void __RPC_STUB IOleLink_GetUpdateOptions_Stub(
@@ -2321,8 +2324,8 @@ void __RPC_STUB IOleLink_GetUpdateOptions_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleLink_SetSourceMoniker_Proxy( 
-    IOleLink __RPC_FAR * This,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmk,
+    IOleLink * This,
+    /* [unique][in] */ IMoniker *pmk,
     /* [in] */ REFCLSID rclsid);
 
 
@@ -2334,8 +2337,8 @@ void __RPC_STUB IOleLink_SetSourceMoniker_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleLink_GetSourceMoniker_Proxy( 
-    IOleLink __RPC_FAR * This,
-    /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk);
+    IOleLink * This,
+    /* [out] */ IMoniker **ppmk);
 
 
 void __RPC_STUB IOleLink_GetSourceMoniker_Stub(
@@ -2346,7 +2349,7 @@ void __RPC_STUB IOleLink_GetSourceMoniker_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleLink_SetSourceDisplayName_Proxy( 
-    IOleLink __RPC_FAR * This,
+    IOleLink * This,
     /* [in] */ LPCOLESTR pszStatusText);
 
 
@@ -2358,8 +2361,8 @@ void __RPC_STUB IOleLink_SetSourceDisplayName_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleLink_GetSourceDisplayName_Proxy( 
-    IOleLink __RPC_FAR * This,
-    /* [out] */ LPOLESTR __RPC_FAR *ppszDisplayName);
+    IOleLink * This,
+    /* [out] */ LPOLESTR *ppszDisplayName);
 
 
 void __RPC_STUB IOleLink_GetSourceDisplayName_Stub(
@@ -2370,9 +2373,9 @@ void __RPC_STUB IOleLink_GetSourceDisplayName_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleLink_BindToSource_Proxy( 
-    IOleLink __RPC_FAR * This,
+    IOleLink * This,
     /* [in] */ DWORD bindflags,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc);
+    /* [unique][in] */ IBindCtx *pbc);
 
 
 void __RPC_STUB IOleLink_BindToSource_Stub(
@@ -2383,7 +2386,7 @@ void __RPC_STUB IOleLink_BindToSource_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleLink_BindIfRunning_Proxy( 
-    IOleLink __RPC_FAR * This);
+    IOleLink * This);
 
 
 void __RPC_STUB IOleLink_BindIfRunning_Stub(
@@ -2394,8 +2397,8 @@ void __RPC_STUB IOleLink_BindIfRunning_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleLink_GetBoundSource_Proxy( 
-    IOleLink __RPC_FAR * This,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+    IOleLink * This,
+    /* [out] */ IUnknown **ppunk);
 
 
 void __RPC_STUB IOleLink_GetBoundSource_Stub(
@@ -2406,7 +2409,7 @@ void __RPC_STUB IOleLink_GetBoundSource_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleLink_UnbindSource_Proxy( 
-    IOleLink __RPC_FAR * This);
+    IOleLink * This);
 
 
 void __RPC_STUB IOleLink_UnbindSource_Stub(
@@ -2417,8 +2420,8 @@ void __RPC_STUB IOleLink_UnbindSource_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleLink_Update_Proxy( 
-    IOleLink __RPC_FAR * This,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc);
+    IOleLink * This,
+    /* [unique][in] */ IBindCtx *pbc);
 
 
 void __RPC_STUB IOleLink_Update_Stub(
@@ -2438,14 +2441,14 @@ void __RPC_STUB IOleLink_Update_Stub(
 /* interface IOleItemContainer */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleItemContainer __RPC_FAR *LPOLEITEMCONTAINER;
+typedef /* [unique] */ IOleItemContainer *LPOLEITEMCONTAINER;
 
 typedef 
 enum tagBINDSPEED
     {	BINDSPEED_INDEFINITE	= 1,
 	BINDSPEED_MODERATE	= 2,
 	BINDSPEED_IMMEDIATE	= 3
-    }	BINDSPEED;
+    } 	BINDSPEED;
 
 typedef /* [v1_enum] */ 
 enum tagOLECONTF
@@ -2454,7 +2457,7 @@ enum tagOLECONTF
 	OLECONTF_OTHERS	= 4,
 	OLECONTF_ONLYUSER	= 8,
 	OLECONTF_ONLYIFRUNNING	= 16
-    }	OLECONTF;
+    } 	OLECONTF;
 
 
 EXTERN_C const IID IID_IOleItemContainer;
@@ -2468,15 +2471,15 @@ EXTERN_C const IID IID_IOleItemContainer;
         virtual HRESULT STDMETHODCALLTYPE GetObject( 
             /* [in] */ LPOLESTR pszItem,
             /* [in] */ DWORD dwSpeedNeeded,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+            /* [unique][in] */ IBindCtx *pbc,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+            /* [iid_is][out] */ void **ppvObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectStorage( 
             /* [in] */ LPOLESTR pszItem,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+            /* [unique][in] */ IBindCtx *pbc,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvStorage) = 0;
+            /* [iid_is][out] */ void **ppvStorage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsRunning( 
             /* [in] */ LPOLESTR pszItem) = 0;
@@ -2489,50 +2492,50 @@ EXTERN_C const IID IID_IOleItemContainer;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleItemContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleItemContainer * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleItemContainer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleItemContainer * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleItemContainer __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleItemContainer * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ParseDisplayName )( 
-            IOleItemContainer __RPC_FAR * This,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+        HRESULT ( STDMETHODCALLTYPE *ParseDisplayName )( 
+            IOleItemContainer * This,
+            /* [unique][in] */ IBindCtx *pbc,
             /* [in] */ LPOLESTR pszDisplayName,
-            /* [out] */ ULONG __RPC_FAR *pchEaten,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmkOut);
+            /* [out] */ ULONG *pchEaten,
+            /* [out] */ IMoniker **ppmkOut);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumObjects )( 
-            IOleItemContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnumObjects )( 
+            IOleItemContainer * This,
             /* [in] */ DWORD grfFlags,
-            /* [out] */ IEnumUnknown __RPC_FAR *__RPC_FAR *ppenum);
+            /* [out] */ IEnumUnknown **ppenum);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LockContainer )( 
-            IOleItemContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *LockContainer )( 
+            IOleItemContainer * This,
             /* [in] */ BOOL fLock);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObject )( 
-            IOleItemContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetObject )( 
+            IOleItemContainer * This,
             /* [in] */ LPOLESTR pszItem,
             /* [in] */ DWORD dwSpeedNeeded,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+            /* [unique][in] */ IBindCtx *pbc,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectStorage )( 
-            IOleItemContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetObjectStorage )( 
+            IOleItemContainer * This,
             /* [in] */ LPOLESTR pszItem,
-            /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+            /* [unique][in] */ IBindCtx *pbc,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvStorage);
+            /* [iid_is][out] */ void **ppvStorage);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsRunning )( 
-            IOleItemContainer __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *IsRunning )( 
+            IOleItemContainer * This,
             /* [in] */ LPOLESTR pszItem);
         
         END_INTERFACE
@@ -2540,7 +2543,7 @@ EXTERN_C const IID IID_IOleItemContainer;
 
     interface IOleItemContainer
     {
-        CONST_VTBL struct IOleItemContainerVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleItemContainerVtbl *lpVtbl;
     };
 
     
@@ -2586,12 +2589,12 @@ EXTERN_C const IID IID_IOleItemContainer;
 
 
 HRESULT STDMETHODCALLTYPE IOleItemContainer_GetObject_Proxy( 
-    IOleItemContainer __RPC_FAR * This,
+    IOleItemContainer * This,
     /* [in] */ LPOLESTR pszItem,
     /* [in] */ DWORD dwSpeedNeeded,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+    /* [unique][in] */ IBindCtx *pbc,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+    /* [iid_is][out] */ void **ppvObject);
 
 
 void __RPC_STUB IOleItemContainer_GetObject_Stub(
@@ -2602,11 +2605,11 @@ void __RPC_STUB IOleItemContainer_GetObject_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleItemContainer_GetObjectStorage_Proxy( 
-    IOleItemContainer __RPC_FAR * This,
+    IOleItemContainer * This,
     /* [in] */ LPOLESTR pszItem,
-    /* [unique][in] */ IBindCtx __RPC_FAR *pbc,
+    /* [unique][in] */ IBindCtx *pbc,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvStorage);
+    /* [iid_is][out] */ void **ppvStorage);
 
 
 void __RPC_STUB IOleItemContainer_GetObjectStorage_Stub(
@@ -2617,7 +2620,7 @@ void __RPC_STUB IOleItemContainer_GetObjectStorage_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleItemContainer_IsRunning_Proxy( 
-    IOleItemContainer __RPC_FAR * This,
+    IOleItemContainer * This,
     /* [in] */ LPOLESTR pszItem);
 
 
@@ -2638,7 +2641,7 @@ void __RPC_STUB IOleItemContainer_IsRunning_Stub(
 /* interface IOleInPlaceUIWindow */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleInPlaceUIWindow __RPC_FAR *LPOLEINPLACEUIWINDOW;
+typedef /* [unique] */ IOleInPlaceUIWindow *LPOLEINPLACEUIWINDOW;
 
 typedef RECT BORDERWIDTHS;
 
@@ -2665,7 +2668,7 @@ EXTERN_C const IID IID_IOleInPlaceUIWindow;
             /* [unique][in] */ LPCBORDERWIDTHS pborderwidths) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetActiveObject( 
-            /* [unique][in] */ IOleInPlaceActiveObject __RPC_FAR *pActiveObject,
+            /* [unique][in] */ IOleInPlaceActiveObject *pActiveObject,
             /* [unique][string][in] */ LPCOLESTR pszObjName) = 0;
         
     };
@@ -2676,40 +2679,40 @@ EXTERN_C const IID IID_IOleInPlaceUIWindow;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleInPlaceUIWindow __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleInPlaceUIWindow * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleInPlaceUIWindow __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleInPlaceUIWindow * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleInPlaceUIWindow __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleInPlaceUIWindow * This);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWindow )( 
-            IOleInPlaceUIWindow __RPC_FAR * This,
-            /* [out] */ HWND __RPC_FAR *phwnd);
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
+            IOleInPlaceUIWindow * This,
+            /* [out] */ HWND *phwnd);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ContextSensitiveHelp )( 
-            IOleInPlaceUIWindow __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ContextSensitiveHelp )( 
+            IOleInPlaceUIWindow * This,
             /* [in] */ BOOL fEnterMode);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBorder )( 
-            IOleInPlaceUIWindow __RPC_FAR * This,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *GetBorder )( 
+            IOleInPlaceUIWindow * This,
             /* [out] */ LPRECT lprectBorder);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestBorderSpace )( 
-            IOleInPlaceUIWindow __RPC_FAR * This,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *RequestBorderSpace )( 
+            IOleInPlaceUIWindow * This,
             /* [unique][in] */ LPCBORDERWIDTHS pborderwidths);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBorderSpace )( 
-            IOleInPlaceUIWindow __RPC_FAR * This,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *SetBorderSpace )( 
+            IOleInPlaceUIWindow * This,
             /* [unique][in] */ LPCBORDERWIDTHS pborderwidths);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetActiveObject )( 
-            IOleInPlaceUIWindow __RPC_FAR * This,
-            /* [unique][in] */ IOleInPlaceActiveObject __RPC_FAR *pActiveObject,
+        HRESULT ( STDMETHODCALLTYPE *SetActiveObject )( 
+            IOleInPlaceUIWindow * This,
+            /* [unique][in] */ IOleInPlaceActiveObject *pActiveObject,
             /* [unique][string][in] */ LPCOLESTR pszObjName);
         
         END_INTERFACE
@@ -2717,7 +2720,7 @@ EXTERN_C const IID IID_IOleInPlaceUIWindow;
 
     interface IOleInPlaceUIWindow
     {
-        CONST_VTBL struct IOleInPlaceUIWindowVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleInPlaceUIWindowVtbl *lpVtbl;
     };
 
     
@@ -2762,7 +2765,7 @@ EXTERN_C const IID IID_IOleInPlaceUIWindow;
 
 
 /* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleInPlaceUIWindow_GetBorder_Proxy( 
-    IOleInPlaceUIWindow __RPC_FAR * This,
+    IOleInPlaceUIWindow * This,
     /* [out] */ LPRECT lprectBorder);
 
 
@@ -2774,7 +2777,7 @@ void __RPC_STUB IOleInPlaceUIWindow_GetBorder_Stub(
 
 
 /* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleInPlaceUIWindow_RequestBorderSpace_Proxy( 
-    IOleInPlaceUIWindow __RPC_FAR * This,
+    IOleInPlaceUIWindow * This,
     /* [unique][in] */ LPCBORDERWIDTHS pborderwidths);
 
 
@@ -2786,7 +2789,7 @@ void __RPC_STUB IOleInPlaceUIWindow_RequestBorderSpace_Stub(
 
 
 /* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleInPlaceUIWindow_SetBorderSpace_Proxy( 
-    IOleInPlaceUIWindow __RPC_FAR * This,
+    IOleInPlaceUIWindow * This,
     /* [unique][in] */ LPCBORDERWIDTHS pborderwidths);
 
 
@@ -2798,8 +2801,8 @@ void __RPC_STUB IOleInPlaceUIWindow_SetBorderSpace_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceUIWindow_SetActiveObject_Proxy( 
-    IOleInPlaceUIWindow __RPC_FAR * This,
-    /* [unique][in] */ IOleInPlaceActiveObject __RPC_FAR *pActiveObject,
+    IOleInPlaceUIWindow * This,
+    /* [unique][in] */ IOleInPlaceActiveObject *pActiveObject,
     /* [unique][string][in] */ LPCOLESTR pszObjName);
 
 
@@ -2820,7 +2823,7 @@ void __RPC_STUB IOleInPlaceUIWindow_SetActiveObject_Stub(
 /* interface IOleInPlaceActiveObject */
 /* [uuid][object] */ 
 
-typedef /* [unique] */ IOleInPlaceActiveObject __RPC_FAR *LPOLEINPLACEACTIVEOBJECT;
+typedef /* [unique] */ IOleInPlaceActiveObject *LPOLEINPLACEACTIVEOBJECT;
 
 
 EXTERN_C const IID IID_IOleInPlaceActiveObject;
@@ -2842,7 +2845,7 @@ EXTERN_C const IID IID_IOleInPlaceActiveObject;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE ResizeBorder( 
             /* [in] */ LPCRECT prcBorder,
-            /* [unique][in] */ IOleInPlaceUIWindow __RPC_FAR *pUIWindow,
+            /* [unique][in] */ IOleInPlaceUIWindow *pUIWindow,
             /* [in] */ BOOL fFrameWindow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableModeless( 
@@ -2856,45 +2859,45 @@ EXTERN_C const IID IID_IOleInPlaceActiveObject;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleInPlaceActiveObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleInPlaceActiveObject * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleInPlaceActiveObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleInPlaceActiveObject * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleInPlaceActiveObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleInPlaceActiveObject * This);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWindow )( 
-            IOleInPlaceActiveObject __RPC_FAR * This,
-            /* [out] */ HWND __RPC_FAR *phwnd);
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
+            IOleInPlaceActiveObject * This,
+            /* [out] */ HWND *phwnd);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ContextSensitiveHelp )( 
-            IOleInPlaceActiveObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ContextSensitiveHelp )( 
+            IOleInPlaceActiveObject * This,
             /* [in] */ BOOL fEnterMode);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TranslateAccelerator )( 
-            IOleInPlaceActiveObject __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *TranslateAccelerator )( 
+            IOleInPlaceActiveObject * This,
             /* [in] */ LPMSG lpmsg);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnFrameWindowActivate )( 
-            IOleInPlaceActiveObject __RPC_FAR * This,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *OnFrameWindowActivate )( 
+            IOleInPlaceActiveObject * This,
             /* [in] */ BOOL fActivate);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnDocWindowActivate )( 
-            IOleInPlaceActiveObject __RPC_FAR * This,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *OnDocWindowActivate )( 
+            IOleInPlaceActiveObject * This,
             /* [in] */ BOOL fActivate);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResizeBorder )( 
-            IOleInPlaceActiveObject __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *ResizeBorder )( 
+            IOleInPlaceActiveObject * This,
             /* [in] */ LPCRECT prcBorder,
-            /* [unique][in] */ IOleInPlaceUIWindow __RPC_FAR *pUIWindow,
+            /* [unique][in] */ IOleInPlaceUIWindow *pUIWindow,
             /* [in] */ BOOL fFrameWindow);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnableModeless )( 
-            IOleInPlaceActiveObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnableModeless )( 
+            IOleInPlaceActiveObject * This,
             /* [in] */ BOOL fEnable);
         
         END_INTERFACE
@@ -2902,7 +2905,7 @@ EXTERN_C const IID IID_IOleInPlaceActiveObject;
 
     interface IOleInPlaceActiveObject
     {
-        CONST_VTBL struct IOleInPlaceActiveObjectVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleInPlaceActiveObjectVtbl *lpVtbl;
     };
 
     
@@ -2950,7 +2953,7 @@ EXTERN_C const IID IID_IOleInPlaceActiveObject;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_RemoteTranslateAccelerator_Proxy( 
-    IOleInPlaceActiveObject __RPC_FAR * This);
+    IOleInPlaceActiveObject * This);
 
 
 void __RPC_STUB IOleInPlaceActiveObject_RemoteTranslateAccelerator_Stub(
@@ -2961,7 +2964,7 @@ void __RPC_STUB IOleInPlaceActiveObject_RemoteTranslateAccelerator_Stub(
 
 
 /* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_OnFrameWindowActivate_Proxy( 
-    IOleInPlaceActiveObject __RPC_FAR * This,
+    IOleInPlaceActiveObject * This,
     /* [in] */ BOOL fActivate);
 
 
@@ -2973,7 +2976,7 @@ void __RPC_STUB IOleInPlaceActiveObject_OnFrameWindowActivate_Stub(
 
 
 /* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_OnDocWindowActivate_Proxy( 
-    IOleInPlaceActiveObject __RPC_FAR * This,
+    IOleInPlaceActiveObject * This,
     /* [in] */ BOOL fActivate);
 
 
@@ -2985,10 +2988,10 @@ void __RPC_STUB IOleInPlaceActiveObject_OnDocWindowActivate_Stub(
 
 
 /* [input_sync][call_as] */ HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_RemoteResizeBorder_Proxy( 
-    IOleInPlaceActiveObject __RPC_FAR * This,
+    IOleInPlaceActiveObject * This,
     /* [in] */ LPCRECT prcBorder,
     /* [in] */ REFIID riid,
-    /* [iid_is][unique][in] */ IOleInPlaceUIWindow __RPC_FAR *pUIWindow,
+    /* [iid_is][unique][in] */ IOleInPlaceUIWindow *pUIWindow,
     /* [in] */ BOOL fFrameWindow);
 
 
@@ -3000,7 +3003,7 @@ void __RPC_STUB IOleInPlaceActiveObject_RemoteResizeBorder_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_EnableModeless_Proxy( 
-    IOleInPlaceActiveObject __RPC_FAR * This,
+    IOleInPlaceActiveObject * This,
     /* [in] */ BOOL fEnable);
 
 
@@ -3021,7 +3024,7 @@ void __RPC_STUB IOleInPlaceActiveObject_EnableModeless_Stub(
 /* interface IOleInPlaceFrame */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleInPlaceFrame __RPC_FAR *LPOLEINPLACEFRAME;
+typedef /* [unique] */ IOleInPlaceFrame *LPOLEINPLACEFRAME;
 
 typedef struct tagOIFI
     {
@@ -3030,16 +3033,16 @@ typedef struct tagOIFI
     HWND hwndFrame;
     HACCEL haccel;
     UINT cAccelEntries;
-    }	OLEINPLACEFRAMEINFO;
+    } 	OLEINPLACEFRAMEINFO;
 
-typedef struct tagOIFI __RPC_FAR *LPOLEINPLACEFRAMEINFO;
+typedef struct tagOIFI *LPOLEINPLACEFRAMEINFO;
 
 typedef struct tagOleMenuGroupWidths
     {
     LONG width[ 6 ];
-    }	OLEMENUGROUPWIDTHS;
+    } 	OLEMENUGROUPWIDTHS;
 
-typedef struct tagOleMenuGroupWidths __RPC_FAR *LPOLEMENUGROUPWIDTHS;
+typedef struct tagOleMenuGroupWidths *LPOLEMENUGROUPWIDTHS;
 
 typedef HGLOBAL HOLEMENU;
 
@@ -3082,67 +3085,67 @@ EXTERN_C const IID IID_IOleInPlaceFrame;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleInPlaceFrame __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleInPlaceFrame * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleInPlaceFrame __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleInPlaceFrame * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleInPlaceFrame __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleInPlaceFrame * This);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWindow )( 
-            IOleInPlaceFrame __RPC_FAR * This,
-            /* [out] */ HWND __RPC_FAR *phwnd);
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
+            IOleInPlaceFrame * This,
+            /* [out] */ HWND *phwnd);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ContextSensitiveHelp )( 
-            IOleInPlaceFrame __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ContextSensitiveHelp )( 
+            IOleInPlaceFrame * This,
             /* [in] */ BOOL fEnterMode);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBorder )( 
-            IOleInPlaceFrame __RPC_FAR * This,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *GetBorder )( 
+            IOleInPlaceFrame * This,
             /* [out] */ LPRECT lprectBorder);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RequestBorderSpace )( 
-            IOleInPlaceFrame __RPC_FAR * This,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *RequestBorderSpace )( 
+            IOleInPlaceFrame * This,
             /* [unique][in] */ LPCBORDERWIDTHS pborderwidths);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetBorderSpace )( 
-            IOleInPlaceFrame __RPC_FAR * This,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *SetBorderSpace )( 
+            IOleInPlaceFrame * This,
             /* [unique][in] */ LPCBORDERWIDTHS pborderwidths);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetActiveObject )( 
-            IOleInPlaceFrame __RPC_FAR * This,
-            /* [unique][in] */ IOleInPlaceActiveObject __RPC_FAR *pActiveObject,
+        HRESULT ( STDMETHODCALLTYPE *SetActiveObject )( 
+            IOleInPlaceFrame * This,
+            /* [unique][in] */ IOleInPlaceActiveObject *pActiveObject,
             /* [unique][string][in] */ LPCOLESTR pszObjName);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertMenus )( 
-            IOleInPlaceFrame __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *InsertMenus )( 
+            IOleInPlaceFrame * This,
             /* [in] */ HMENU hmenuShared,
             /* [out][in] */ LPOLEMENUGROUPWIDTHS lpMenuWidths);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetMenu )( 
-            IOleInPlaceFrame __RPC_FAR * This,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *SetMenu )( 
+            IOleInPlaceFrame * This,
             /* [in] */ HMENU hmenuShared,
             /* [in] */ HOLEMENU holemenu,
             /* [in] */ HWND hwndActiveObject);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveMenus )( 
-            IOleInPlaceFrame __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RemoveMenus )( 
+            IOleInPlaceFrame * This,
             /* [in] */ HMENU hmenuShared);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetStatusText )( 
-            IOleInPlaceFrame __RPC_FAR * This,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *SetStatusText )( 
+            IOleInPlaceFrame * This,
             /* [unique][in] */ LPCOLESTR pszStatusText);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnableModeless )( 
-            IOleInPlaceFrame __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnableModeless )( 
+            IOleInPlaceFrame * This,
             /* [in] */ BOOL fEnable);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TranslateAccelerator )( 
-            IOleInPlaceFrame __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *TranslateAccelerator )( 
+            IOleInPlaceFrame * This,
             /* [in] */ LPMSG lpmsg,
             /* [in] */ WORD wID);
         
@@ -3151,7 +3154,7 @@ EXTERN_C const IID IID_IOleInPlaceFrame;
 
     interface IOleInPlaceFrame
     {
-        CONST_VTBL struct IOleInPlaceFrameVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleInPlaceFrameVtbl *lpVtbl;
     };
 
     
@@ -3215,7 +3218,7 @@ EXTERN_C const IID IID_IOleInPlaceFrame;
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceFrame_InsertMenus_Proxy( 
-    IOleInPlaceFrame __RPC_FAR * This,
+    IOleInPlaceFrame * This,
     /* [in] */ HMENU hmenuShared,
     /* [out][in] */ LPOLEMENUGROUPWIDTHS lpMenuWidths);
 
@@ -3228,7 +3231,7 @@ void __RPC_STUB IOleInPlaceFrame_InsertMenus_Stub(
 
 
 /* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleInPlaceFrame_SetMenu_Proxy( 
-    IOleInPlaceFrame __RPC_FAR * This,
+    IOleInPlaceFrame * This,
     /* [in] */ HMENU hmenuShared,
     /* [in] */ HOLEMENU holemenu,
     /* [in] */ HWND hwndActiveObject);
@@ -3242,7 +3245,7 @@ void __RPC_STUB IOleInPlaceFrame_SetMenu_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceFrame_RemoveMenus_Proxy( 
-    IOleInPlaceFrame __RPC_FAR * This,
+    IOleInPlaceFrame * This,
     /* [in] */ HMENU hmenuShared);
 
 
@@ -3254,7 +3257,7 @@ void __RPC_STUB IOleInPlaceFrame_RemoveMenus_Stub(
 
 
 /* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleInPlaceFrame_SetStatusText_Proxy( 
-    IOleInPlaceFrame __RPC_FAR * This,
+    IOleInPlaceFrame * This,
     /* [unique][in] */ LPCOLESTR pszStatusText);
 
 
@@ -3266,7 +3269,7 @@ void __RPC_STUB IOleInPlaceFrame_SetStatusText_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceFrame_EnableModeless_Proxy( 
-    IOleInPlaceFrame __RPC_FAR * This,
+    IOleInPlaceFrame * This,
     /* [in] */ BOOL fEnable);
 
 
@@ -3278,7 +3281,7 @@ void __RPC_STUB IOleInPlaceFrame_EnableModeless_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceFrame_TranslateAccelerator_Proxy( 
-    IOleInPlaceFrame __RPC_FAR * This,
+    IOleInPlaceFrame * This,
     /* [in] */ LPMSG lpmsg,
     /* [in] */ WORD wID);
 
@@ -3300,7 +3303,7 @@ void __RPC_STUB IOleInPlaceFrame_TranslateAccelerator_Stub(
 /* interface IOleInPlaceObject */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleInPlaceObject __RPC_FAR *LPOLEINPLACEOBJECT;
+typedef /* [unique] */ IOleInPlaceObject *LPOLEINPLACEOBJECT;
 
 
 EXTERN_C const IID IID_IOleInPlaceObject;
@@ -3329,45 +3332,45 @@ EXTERN_C const IID IID_IOleInPlaceObject;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleInPlaceObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleInPlaceObject * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleInPlaceObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleInPlaceObject * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleInPlaceObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleInPlaceObject * This);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWindow )( 
-            IOleInPlaceObject __RPC_FAR * This,
-            /* [out] */ HWND __RPC_FAR *phwnd);
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
+            IOleInPlaceObject * This,
+            /* [out] */ HWND *phwnd);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ContextSensitiveHelp )( 
-            IOleInPlaceObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ContextSensitiveHelp )( 
+            IOleInPlaceObject * This,
             /* [in] */ BOOL fEnterMode);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InPlaceDeactivate )( 
-            IOleInPlaceObject __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *InPlaceDeactivate )( 
+            IOleInPlaceObject * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UIDeactivate )( 
-            IOleInPlaceObject __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *UIDeactivate )( 
+            IOleInPlaceObject * This);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetObjectRects )( 
-            IOleInPlaceObject __RPC_FAR * This,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *SetObjectRects )( 
+            IOleInPlaceObject * This,
             /* [in] */ LPCRECT lprcPosRect,
             /* [in] */ LPCRECT lprcClipRect);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReactivateAndUndo )( 
-            IOleInPlaceObject __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *ReactivateAndUndo )( 
+            IOleInPlaceObject * This);
         
         END_INTERFACE
     } IOleInPlaceObjectVtbl;
 
     interface IOleInPlaceObject
     {
-        CONST_VTBL struct IOleInPlaceObjectVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleInPlaceObjectVtbl *lpVtbl;
     };
 
     
@@ -3412,7 +3415,7 @@ EXTERN_C const IID IID_IOleInPlaceObject;
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceObject_InPlaceDeactivate_Proxy( 
-    IOleInPlaceObject __RPC_FAR * This);
+    IOleInPlaceObject * This);
 
 
 void __RPC_STUB IOleInPlaceObject_InPlaceDeactivate_Stub(
@@ -3423,7 +3426,7 @@ void __RPC_STUB IOleInPlaceObject_InPlaceDeactivate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceObject_UIDeactivate_Proxy( 
-    IOleInPlaceObject __RPC_FAR * This);
+    IOleInPlaceObject * This);
 
 
 void __RPC_STUB IOleInPlaceObject_UIDeactivate_Stub(
@@ -3434,7 +3437,7 @@ void __RPC_STUB IOleInPlaceObject_UIDeactivate_Stub(
 
 
 /* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleInPlaceObject_SetObjectRects_Proxy( 
-    IOleInPlaceObject __RPC_FAR * This,
+    IOleInPlaceObject * This,
     /* [in] */ LPCRECT lprcPosRect,
     /* [in] */ LPCRECT lprcClipRect);
 
@@ -3447,7 +3450,7 @@ void __RPC_STUB IOleInPlaceObject_SetObjectRects_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceObject_ReactivateAndUndo_Proxy( 
-    IOleInPlaceObject __RPC_FAR * This);
+    IOleInPlaceObject * This);
 
 
 void __RPC_STUB IOleInPlaceObject_ReactivateAndUndo_Stub(
@@ -3467,7 +3470,7 @@ void __RPC_STUB IOleInPlaceObject_ReactivateAndUndo_Stub(
 /* interface IOleInPlaceSite */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleInPlaceSite __RPC_FAR *LPOLEINPLACESITE;
+typedef /* [unique] */ IOleInPlaceSite *LPOLEINPLACESITE;
 
 
 EXTERN_C const IID IID_IOleInPlaceSite;
@@ -3485,8 +3488,8 @@ EXTERN_C const IID IID_IOleInPlaceSite;
         virtual HRESULT STDMETHODCALLTYPE OnUIActivate( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWindowContext( 
-            /* [out] */ IOleInPlaceFrame __RPC_FAR *__RPC_FAR *ppFrame,
-            /* [out] */ IOleInPlaceUIWindow __RPC_FAR *__RPC_FAR *ppDoc,
+            /* [out] */ IOleInPlaceFrame **ppFrame,
+            /* [out] */ IOleInPlaceUIWindow **ppDoc,
             /* [out] */ LPRECT lprcPosRect,
             /* [out] */ LPRECT lprcClipRect,
             /* [out][in] */ LPOLEINPLACEFRAMEINFO lpFrameInfo) = 0;
@@ -3514,61 +3517,61 @@ EXTERN_C const IID IID_IOleInPlaceSite;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleInPlaceSite __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleInPlaceSite * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleInPlaceSite __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleInPlaceSite * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleInPlaceSite __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleInPlaceSite * This);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWindow )( 
-            IOleInPlaceSite __RPC_FAR * This,
-            /* [out] */ HWND __RPC_FAR *phwnd);
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
+            IOleInPlaceSite * This,
+            /* [out] */ HWND *phwnd);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ContextSensitiveHelp )( 
-            IOleInPlaceSite __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ContextSensitiveHelp )( 
+            IOleInPlaceSite * This,
             /* [in] */ BOOL fEnterMode);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CanInPlaceActivate )( 
-            IOleInPlaceSite __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *CanInPlaceActivate )( 
+            IOleInPlaceSite * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnInPlaceActivate )( 
-            IOleInPlaceSite __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *OnInPlaceActivate )( 
+            IOleInPlaceSite * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnUIActivate )( 
-            IOleInPlaceSite __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *OnUIActivate )( 
+            IOleInPlaceSite * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWindowContext )( 
-            IOleInPlaceSite __RPC_FAR * This,
-            /* [out] */ IOleInPlaceFrame __RPC_FAR *__RPC_FAR *ppFrame,
-            /* [out] */ IOleInPlaceUIWindow __RPC_FAR *__RPC_FAR *ppDoc,
+        HRESULT ( STDMETHODCALLTYPE *GetWindowContext )( 
+            IOleInPlaceSite * This,
+            /* [out] */ IOleInPlaceFrame **ppFrame,
+            /* [out] */ IOleInPlaceUIWindow **ppDoc,
             /* [out] */ LPRECT lprcPosRect,
             /* [out] */ LPRECT lprcClipRect,
             /* [out][in] */ LPOLEINPLACEFRAMEINFO lpFrameInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Scroll )( 
-            IOleInPlaceSite __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Scroll )( 
+            IOleInPlaceSite * This,
             /* [in] */ SIZE scrollExtant);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnUIDeactivate )( 
-            IOleInPlaceSite __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OnUIDeactivate )( 
+            IOleInPlaceSite * This,
             /* [in] */ BOOL fUndoable);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnInPlaceDeactivate )( 
-            IOleInPlaceSite __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *OnInPlaceDeactivate )( 
+            IOleInPlaceSite * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DiscardUndoState )( 
-            IOleInPlaceSite __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *DiscardUndoState )( 
+            IOleInPlaceSite * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DeactivateAndUndo )( 
-            IOleInPlaceSite __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *DeactivateAndUndo )( 
+            IOleInPlaceSite * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnPosRectChange )( 
-            IOleInPlaceSite __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *OnPosRectChange )( 
+            IOleInPlaceSite * This,
             /* [in] */ LPCRECT lprcPosRect);
         
         END_INTERFACE
@@ -3576,7 +3579,7 @@ EXTERN_C const IID IID_IOleInPlaceSite;
 
     interface IOleInPlaceSite
     {
-        CONST_VTBL struct IOleInPlaceSiteVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleInPlaceSiteVtbl *lpVtbl;
     };
 
     
@@ -3639,7 +3642,7 @@ EXTERN_C const IID IID_IOleInPlaceSite;
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceSite_CanInPlaceActivate_Proxy( 
-    IOleInPlaceSite __RPC_FAR * This);
+    IOleInPlaceSite * This);
 
 
 void __RPC_STUB IOleInPlaceSite_CanInPlaceActivate_Stub(
@@ -3650,7 +3653,7 @@ void __RPC_STUB IOleInPlaceSite_CanInPlaceActivate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceSite_OnInPlaceActivate_Proxy( 
-    IOleInPlaceSite __RPC_FAR * This);
+    IOleInPlaceSite * This);
 
 
 void __RPC_STUB IOleInPlaceSite_OnInPlaceActivate_Stub(
@@ -3661,7 +3664,7 @@ void __RPC_STUB IOleInPlaceSite_OnInPlaceActivate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceSite_OnUIActivate_Proxy( 
-    IOleInPlaceSite __RPC_FAR * This);
+    IOleInPlaceSite * This);
 
 
 void __RPC_STUB IOleInPlaceSite_OnUIActivate_Stub(
@@ -3672,9 +3675,9 @@ void __RPC_STUB IOleInPlaceSite_OnUIActivate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceSite_GetWindowContext_Proxy( 
-    IOleInPlaceSite __RPC_FAR * This,
-    /* [out] */ IOleInPlaceFrame __RPC_FAR *__RPC_FAR *ppFrame,
-    /* [out] */ IOleInPlaceUIWindow __RPC_FAR *__RPC_FAR *ppDoc,
+    IOleInPlaceSite * This,
+    /* [out] */ IOleInPlaceFrame **ppFrame,
+    /* [out] */ IOleInPlaceUIWindow **ppDoc,
     /* [out] */ LPRECT lprcPosRect,
     /* [out] */ LPRECT lprcClipRect,
     /* [out][in] */ LPOLEINPLACEFRAMEINFO lpFrameInfo);
@@ -3688,7 +3691,7 @@ void __RPC_STUB IOleInPlaceSite_GetWindowContext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceSite_Scroll_Proxy( 
-    IOleInPlaceSite __RPC_FAR * This,
+    IOleInPlaceSite * This,
     /* [in] */ SIZE scrollExtant);
 
 
@@ -3700,7 +3703,7 @@ void __RPC_STUB IOleInPlaceSite_Scroll_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceSite_OnUIDeactivate_Proxy( 
-    IOleInPlaceSite __RPC_FAR * This,
+    IOleInPlaceSite * This,
     /* [in] */ BOOL fUndoable);
 
 
@@ -3712,7 +3715,7 @@ void __RPC_STUB IOleInPlaceSite_OnUIDeactivate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceSite_OnInPlaceDeactivate_Proxy( 
-    IOleInPlaceSite __RPC_FAR * This);
+    IOleInPlaceSite * This);
 
 
 void __RPC_STUB IOleInPlaceSite_OnInPlaceDeactivate_Stub(
@@ -3723,7 +3726,7 @@ void __RPC_STUB IOleInPlaceSite_OnInPlaceDeactivate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceSite_DiscardUndoState_Proxy( 
-    IOleInPlaceSite __RPC_FAR * This);
+    IOleInPlaceSite * This);
 
 
 void __RPC_STUB IOleInPlaceSite_DiscardUndoState_Stub(
@@ -3734,7 +3737,7 @@ void __RPC_STUB IOleInPlaceSite_DiscardUndoState_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceSite_DeactivateAndUndo_Proxy( 
-    IOleInPlaceSite __RPC_FAR * This);
+    IOleInPlaceSite * This);
 
 
 void __RPC_STUB IOleInPlaceSite_DeactivateAndUndo_Stub(
@@ -3745,7 +3748,7 @@ void __RPC_STUB IOleInPlaceSite_DeactivateAndUndo_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleInPlaceSite_OnPosRectChange_Proxy( 
-    IOleInPlaceSite __RPC_FAR * This,
+    IOleInPlaceSite * This,
     /* [in] */ LPCRECT lprcPosRect);
 
 
@@ -3785,26 +3788,26 @@ EXTERN_C const IID IID_IContinue;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IContinue __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IContinue * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IContinue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IContinue * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IContinue __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IContinue * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FContinue )( 
-            IContinue __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *FContinue )( 
+            IContinue * This);
         
         END_INTERFACE
     } IContinueVtbl;
 
     interface IContinue
     {
-        CONST_VTBL struct IContinueVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IContinueVtbl *lpVtbl;
     };
 
     
@@ -3833,7 +3836,7 @@ EXTERN_C const IID IID_IContinue;
 
 
 HRESULT STDMETHODCALLTYPE IContinue_FContinue_Proxy( 
-    IContinue __RPC_FAR * This);
+    IContinue * This);
 
 
 void __RPC_STUB IContinue_FContinue_Stub(
@@ -3853,7 +3856,7 @@ void __RPC_STUB IContinue_FContinue_Stub(
 /* interface IViewObject */
 /* [uuid][object] */ 
 
-typedef /* [unique] */ IViewObject __RPC_FAR *LPVIEWOBJECT;
+typedef /* [unique] */ IViewObject *LPVIEWOBJECT;
 
 
 EXTERN_C const IID IID_IViewObject;
@@ -3867,29 +3870,29 @@ EXTERN_C const IID IID_IViewObject;
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Draw( 
             /* [in] */ DWORD dwDrawAspect,
             /* [in] */ LONG lindex,
-            /* [unique][in] */ void __RPC_FAR *pvAspect,
-            /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+            /* [unique][in] */ void *pvAspect,
+            /* [unique][in] */ DVTARGETDEVICE *ptd,
             /* [in] */ HDC hdcTargetDev,
             /* [in] */ HDC hdcDraw,
             /* [in] */ LPCRECTL lprcBounds,
             /* [unique][in] */ LPCRECTL lprcWBounds,
-            /* [in] */ BOOL ( STDMETHODCALLTYPE __RPC_FAR *pfnContinue )( 
+            /* [in] */ BOOL ( STDMETHODCALLTYPE *pfnContinue )( 
                 ULONG_PTR dwContinue),
             /* [in] */ ULONG_PTR dwContinue) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetColorSet( 
             /* [in] */ DWORD dwDrawAspect,
             /* [in] */ LONG lindex,
-            /* [unique][in] */ void __RPC_FAR *pvAspect,
-            /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+            /* [unique][in] */ void *pvAspect,
+            /* [unique][in] */ DVTARGETDEVICE *ptd,
             /* [in] */ HDC hicTargetDev,
-            /* [out] */ LOGPALETTE __RPC_FAR *__RPC_FAR *ppColorSet) = 0;
+            /* [out] */ LOGPALETTE **ppColorSet) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Freeze( 
             /* [in] */ DWORD dwDrawAspect,
             /* [in] */ LONG lindex,
-            /* [unique][in] */ void __RPC_FAR *pvAspect,
-            /* [out] */ DWORD __RPC_FAR *pdwFreeze) = 0;
+            /* [unique][in] */ void *pvAspect,
+            /* [out] */ DWORD *pdwFreeze) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unfreeze( 
             /* [in] */ DWORD dwFreeze) = 0;
@@ -3897,12 +3900,12 @@ EXTERN_C const IID IID_IViewObject;
         virtual HRESULT STDMETHODCALLTYPE SetAdvise( 
             /* [in] */ DWORD aspects,
             /* [in] */ DWORD advf,
-            /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvSink) = 0;
+            /* [unique][in] */ IAdviseSink *pAdvSink) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetAdvise( 
-            /* [unique][out] */ DWORD __RPC_FAR *pAspects,
-            /* [unique][out] */ DWORD __RPC_FAR *pAdvf,
-            /* [out] */ IAdviseSink __RPC_FAR *__RPC_FAR *ppAdvSink) = 0;
+            /* [unique][out] */ DWORD *pAspects,
+            /* [unique][out] */ DWORD *pAdvf,
+            /* [out] */ IAdviseSink **ppAdvSink) = 0;
         
     };
     
@@ -3912,69 +3915,69 @@ EXTERN_C const IID IID_IViewObject;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IViewObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IViewObject * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IViewObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IViewObject * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IViewObject __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IViewObject * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Draw )( 
-            IViewObject __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Draw )( 
+            IViewObject * This,
             /* [in] */ DWORD dwDrawAspect,
             /* [in] */ LONG lindex,
-            /* [unique][in] */ void __RPC_FAR *pvAspect,
-            /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+            /* [unique][in] */ void *pvAspect,
+            /* [unique][in] */ DVTARGETDEVICE *ptd,
             /* [in] */ HDC hdcTargetDev,
             /* [in] */ HDC hdcDraw,
             /* [in] */ LPCRECTL lprcBounds,
             /* [unique][in] */ LPCRECTL lprcWBounds,
-            /* [in] */ BOOL ( STDMETHODCALLTYPE __RPC_FAR *pfnContinue )( 
+            /* [in] */ BOOL ( STDMETHODCALLTYPE *pfnContinue )( 
                 ULONG_PTR dwContinue),
             /* [in] */ ULONG_PTR dwContinue);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetColorSet )( 
-            IViewObject __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetColorSet )( 
+            IViewObject * This,
             /* [in] */ DWORD dwDrawAspect,
             /* [in] */ LONG lindex,
-            /* [unique][in] */ void __RPC_FAR *pvAspect,
-            /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+            /* [unique][in] */ void *pvAspect,
+            /* [unique][in] */ DVTARGETDEVICE *ptd,
             /* [in] */ HDC hicTargetDev,
-            /* [out] */ LOGPALETTE __RPC_FAR *__RPC_FAR *ppColorSet);
+            /* [out] */ LOGPALETTE **ppColorSet);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Freeze )( 
-            IViewObject __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Freeze )( 
+            IViewObject * This,
             /* [in] */ DWORD dwDrawAspect,
             /* [in] */ LONG lindex,
-            /* [unique][in] */ void __RPC_FAR *pvAspect,
-            /* [out] */ DWORD __RPC_FAR *pdwFreeze);
+            /* [unique][in] */ void *pvAspect,
+            /* [out] */ DWORD *pdwFreeze);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unfreeze )( 
-            IViewObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Unfreeze )( 
+            IViewObject * This,
             /* [in] */ DWORD dwFreeze);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAdvise )( 
-            IViewObject __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetAdvise )( 
+            IViewObject * This,
             /* [in] */ DWORD aspects,
             /* [in] */ DWORD advf,
-            /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvSink);
+            /* [unique][in] */ IAdviseSink *pAdvSink);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAdvise )( 
-            IViewObject __RPC_FAR * This,
-            /* [unique][out] */ DWORD __RPC_FAR *pAspects,
-            /* [unique][out] */ DWORD __RPC_FAR *pAdvf,
-            /* [out] */ IAdviseSink __RPC_FAR *__RPC_FAR *ppAdvSink);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetAdvise )( 
+            IViewObject * This,
+            /* [unique][out] */ DWORD *pAspects,
+            /* [unique][out] */ DWORD *pAdvf,
+            /* [out] */ IAdviseSink **ppAdvSink);
         
         END_INTERFACE
     } IViewObjectVtbl;
 
     interface IViewObject
     {
-        CONST_VTBL struct IViewObjectVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IViewObjectVtbl *lpVtbl;
     };
 
     
@@ -4018,16 +4021,16 @@ EXTERN_C const IID IID_IViewObject;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IViewObject_RemoteDraw_Proxy( 
-    IViewObject __RPC_FAR * This,
+    IViewObject * This,
     /* [in] */ DWORD dwDrawAspect,
     /* [in] */ LONG lindex,
     /* [in] */ ULONG_PTR pvAspect,
-    /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+    /* [unique][in] */ DVTARGETDEVICE *ptd,
     /* [in] */ ULONG_PTR hdcTargetDev,
     /* [in] */ ULONG_PTR hdcDraw,
     /* [in] */ LPCRECTL lprcBounds,
     /* [unique][in] */ LPCRECTL lprcWBounds,
-    /* [in] */ IContinue __RPC_FAR *pContinue);
+    /* [in] */ IContinue *pContinue);
 
 
 void __RPC_STUB IViewObject_RemoteDraw_Stub(
@@ -4038,13 +4041,13 @@ void __RPC_STUB IViewObject_RemoteDraw_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IViewObject_RemoteGetColorSet_Proxy( 
-    IViewObject __RPC_FAR * This,
+    IViewObject * This,
     /* [in] */ DWORD dwDrawAspect,
     /* [in] */ LONG lindex,
     /* [in] */ ULONG_PTR pvAspect,
-    /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+    /* [unique][in] */ DVTARGETDEVICE *ptd,
     /* [in] */ ULONG_PTR hicTargetDev,
-    /* [out] */ LOGPALETTE __RPC_FAR *__RPC_FAR *ppColorSet);
+    /* [out] */ LOGPALETTE **ppColorSet);
 
 
 void __RPC_STUB IViewObject_RemoteGetColorSet_Stub(
@@ -4055,11 +4058,11 @@ void __RPC_STUB IViewObject_RemoteGetColorSet_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IViewObject_RemoteFreeze_Proxy( 
-    IViewObject __RPC_FAR * This,
+    IViewObject * This,
     /* [in] */ DWORD dwDrawAspect,
     /* [in] */ LONG lindex,
     /* [in] */ ULONG_PTR pvAspect,
-    /* [out] */ DWORD __RPC_FAR *pdwFreeze);
+    /* [out] */ DWORD *pdwFreeze);
 
 
 void __RPC_STUB IViewObject_RemoteFreeze_Stub(
@@ -4070,7 +4073,7 @@ void __RPC_STUB IViewObject_RemoteFreeze_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IViewObject_Unfreeze_Proxy( 
-    IViewObject __RPC_FAR * This,
+    IViewObject * This,
     /* [in] */ DWORD dwFreeze);
 
 
@@ -4082,10 +4085,10 @@ void __RPC_STUB IViewObject_Unfreeze_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IViewObject_SetAdvise_Proxy( 
-    IViewObject __RPC_FAR * This,
+    IViewObject * This,
     /* [in] */ DWORD aspects,
     /* [in] */ DWORD advf,
-    /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvSink);
+    /* [unique][in] */ IAdviseSink *pAdvSink);
 
 
 void __RPC_STUB IViewObject_SetAdvise_Stub(
@@ -4096,10 +4099,10 @@ void __RPC_STUB IViewObject_SetAdvise_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IViewObject_RemoteGetAdvise_Proxy( 
-    IViewObject __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pAspects,
-    /* [out] */ DWORD __RPC_FAR *pAdvf,
-    /* [out] */ IAdviseSink __RPC_FAR *__RPC_FAR *ppAdvSink);
+    IViewObject * This,
+    /* [out] */ DWORD *pAspects,
+    /* [out] */ DWORD *pAdvf,
+    /* [out] */ IAdviseSink **ppAdvSink);
 
 
 void __RPC_STUB IViewObject_RemoteGetAdvise_Stub(
@@ -4119,7 +4122,7 @@ void __RPC_STUB IViewObject_RemoteGetAdvise_Stub(
 /* interface IViewObject2 */
 /* [uuid][object] */ 
 
-typedef /* [unique] */ IViewObject2 __RPC_FAR *LPVIEWOBJECT2;
+typedef /* [unique] */ IViewObject2 *LPVIEWOBJECT2;
 
 
 EXTERN_C const IID IID_IViewObject2;
@@ -4133,7 +4136,7 @@ EXTERN_C const IID IID_IViewObject2;
         virtual HRESULT STDMETHODCALLTYPE GetExtent( 
             /* [in] */ DWORD dwDrawAspect,
             /* [in] */ LONG lindex,
-            /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+            /* [unique][in] */ DVTARGETDEVICE *ptd,
             /* [out] */ LPSIZEL lpsizel) = 0;
         
     };
@@ -4144,68 +4147,68 @@ EXTERN_C const IID IID_IViewObject2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IViewObject2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IViewObject2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IViewObject2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IViewObject2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IViewObject2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IViewObject2 * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Draw )( 
-            IViewObject2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Draw )( 
+            IViewObject2 * This,
             /* [in] */ DWORD dwDrawAspect,
             /* [in] */ LONG lindex,
-            /* [unique][in] */ void __RPC_FAR *pvAspect,
-            /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+            /* [unique][in] */ void *pvAspect,
+            /* [unique][in] */ DVTARGETDEVICE *ptd,
             /* [in] */ HDC hdcTargetDev,
             /* [in] */ HDC hdcDraw,
             /* [in] */ LPCRECTL lprcBounds,
             /* [unique][in] */ LPCRECTL lprcWBounds,
-            /* [in] */ BOOL ( STDMETHODCALLTYPE __RPC_FAR *pfnContinue )( 
+            /* [in] */ BOOL ( STDMETHODCALLTYPE *pfnContinue )( 
                 ULONG_PTR dwContinue),
             /* [in] */ ULONG_PTR dwContinue);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetColorSet )( 
-            IViewObject2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetColorSet )( 
+            IViewObject2 * This,
             /* [in] */ DWORD dwDrawAspect,
             /* [in] */ LONG lindex,
-            /* [unique][in] */ void __RPC_FAR *pvAspect,
-            /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+            /* [unique][in] */ void *pvAspect,
+            /* [unique][in] */ DVTARGETDEVICE *ptd,
             /* [in] */ HDC hicTargetDev,
-            /* [out] */ LOGPALETTE __RPC_FAR *__RPC_FAR *ppColorSet);
+            /* [out] */ LOGPALETTE **ppColorSet);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Freeze )( 
-            IViewObject2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Freeze )( 
+            IViewObject2 * This,
             /* [in] */ DWORD dwDrawAspect,
             /* [in] */ LONG lindex,
-            /* [unique][in] */ void __RPC_FAR *pvAspect,
-            /* [out] */ DWORD __RPC_FAR *pdwFreeze);
+            /* [unique][in] */ void *pvAspect,
+            /* [out] */ DWORD *pdwFreeze);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unfreeze )( 
-            IViewObject2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Unfreeze )( 
+            IViewObject2 * This,
             /* [in] */ DWORD dwFreeze);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetAdvise )( 
-            IViewObject2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetAdvise )( 
+            IViewObject2 * This,
             /* [in] */ DWORD aspects,
             /* [in] */ DWORD advf,
-            /* [unique][in] */ IAdviseSink __RPC_FAR *pAdvSink);
+            /* [unique][in] */ IAdviseSink *pAdvSink);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetAdvise )( 
-            IViewObject2 __RPC_FAR * This,
-            /* [unique][out] */ DWORD __RPC_FAR *pAspects,
-            /* [unique][out] */ DWORD __RPC_FAR *pAdvf,
-            /* [out] */ IAdviseSink __RPC_FAR *__RPC_FAR *ppAdvSink);
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetAdvise )( 
+            IViewObject2 * This,
+            /* [unique][out] */ DWORD *pAspects,
+            /* [unique][out] */ DWORD *pAdvf,
+            /* [out] */ IAdviseSink **ppAdvSink);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetExtent )( 
-            IViewObject2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetExtent )( 
+            IViewObject2 * This,
             /* [in] */ DWORD dwDrawAspect,
             /* [in] */ LONG lindex,
-            /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+            /* [unique][in] */ DVTARGETDEVICE *ptd,
             /* [out] */ LPSIZEL lpsizel);
         
         END_INTERFACE
@@ -4213,7 +4216,7 @@ EXTERN_C const IID IID_IViewObject2;
 
     interface IViewObject2
     {
-        CONST_VTBL struct IViewObject2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IViewObject2Vtbl *lpVtbl;
     };
 
     
@@ -4261,10 +4264,10 @@ EXTERN_C const IID IID_IViewObject2;
 
 
 HRESULT STDMETHODCALLTYPE IViewObject2_GetExtent_Proxy( 
-    IViewObject2 __RPC_FAR * This,
+    IViewObject2 * This,
     /* [in] */ DWORD dwDrawAspect,
     /* [in] */ LONG lindex,
-    /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+    /* [unique][in] */ DVTARGETDEVICE *ptd,
     /* [out] */ LPSIZEL lpsizel);
 
 
@@ -4285,7 +4288,7 @@ void __RPC_STUB IViewObject2_GetExtent_Stub(
 /* interface IDropSource */
 /* [uuid][object][local] */ 
 
-typedef /* [unique] */ IDropSource __RPC_FAR *LPDROPSOURCE;
+typedef /* [unique] */ IDropSource *LPDROPSOURCE;
 
 
 EXTERN_C const IID IID_IDropSource;
@@ -4311,24 +4314,24 @@ EXTERN_C const IID IID_IDropSource;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDropSource __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDropSource * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDropSource __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDropSource * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDropSource __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDropSource * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryContinueDrag )( 
-            IDropSource __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryContinueDrag )( 
+            IDropSource * This,
             /* [in] */ BOOL fEscapePressed,
             /* [in] */ DWORD grfKeyState);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GiveFeedback )( 
-            IDropSource __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GiveFeedback )( 
+            IDropSource * This,
             /* [in] */ DWORD dwEffect);
         
         END_INTERFACE
@@ -4336,7 +4339,7 @@ EXTERN_C const IID IID_IDropSource;
 
     interface IDropSource
     {
-        CONST_VTBL struct IDropSourceVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDropSourceVtbl *lpVtbl;
     };
 
     
@@ -4368,7 +4371,7 @@ EXTERN_C const IID IID_IDropSource;
 
 
 HRESULT STDMETHODCALLTYPE IDropSource_QueryContinueDrag_Proxy( 
-    IDropSource __RPC_FAR * This,
+    IDropSource * This,
     /* [in] */ BOOL fEscapePressed,
     /* [in] */ DWORD grfKeyState);
 
@@ -4381,7 +4384,7 @@ void __RPC_STUB IDropSource_QueryContinueDrag_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDropSource_GiveFeedback_Proxy( 
-    IDropSource __RPC_FAR * This,
+    IDropSource * This,
     /* [in] */ DWORD dwEffect);
 
 
@@ -4402,7 +4405,7 @@ void __RPC_STUB IDropSource_GiveFeedback_Stub(
 /* interface IDropTarget */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IDropTarget __RPC_FAR *LPDROPTARGET;
+typedef /* [unique] */ IDropTarget *LPDROPTARGET;
 
 #define	MK_ALT	( 0x20 )
 
@@ -4446,23 +4449,23 @@ EXTERN_C const IID IID_IDropTarget;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DragEnter( 
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObj,
+            /* [unique][in] */ IDataObject *pDataObj,
             /* [in] */ DWORD grfKeyState,
             /* [in] */ POINTL pt,
-            /* [out][in] */ DWORD __RPC_FAR *pdwEffect) = 0;
+            /* [out][in] */ DWORD *pdwEffect) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DragOver( 
             /* [in] */ DWORD grfKeyState,
             /* [in] */ POINTL pt,
-            /* [out][in] */ DWORD __RPC_FAR *pdwEffect) = 0;
+            /* [out][in] */ DWORD *pdwEffect) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DragLeave( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Drop( 
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObj,
+            /* [unique][in] */ IDataObject *pDataObj,
             /* [in] */ DWORD grfKeyState,
             /* [in] */ POINTL pt,
-            /* [out][in] */ DWORD __RPC_FAR *pdwEffect) = 0;
+            /* [out][in] */ DWORD *pdwEffect) = 0;
         
     };
     
@@ -4472,46 +4475,46 @@ EXTERN_C const IID IID_IDropTarget;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IDropTarget __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IDropTarget * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IDropTarget __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IDropTarget * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IDropTarget __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IDropTarget * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DragEnter )( 
-            IDropTarget __RPC_FAR * This,
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObj,
+        HRESULT ( STDMETHODCALLTYPE *DragEnter )( 
+            IDropTarget * This,
+            /* [unique][in] */ IDataObject *pDataObj,
             /* [in] */ DWORD grfKeyState,
             /* [in] */ POINTL pt,
-            /* [out][in] */ DWORD __RPC_FAR *pdwEffect);
+            /* [out][in] */ DWORD *pdwEffect);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DragOver )( 
-            IDropTarget __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *DragOver )( 
+            IDropTarget * This,
             /* [in] */ DWORD grfKeyState,
             /* [in] */ POINTL pt,
-            /* [out][in] */ DWORD __RPC_FAR *pdwEffect);
+            /* [out][in] */ DWORD *pdwEffect);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DragLeave )( 
-            IDropTarget __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *DragLeave )( 
+            IDropTarget * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Drop )( 
-            IDropTarget __RPC_FAR * This,
-            /* [unique][in] */ IDataObject __RPC_FAR *pDataObj,
+        HRESULT ( STDMETHODCALLTYPE *Drop )( 
+            IDropTarget * This,
+            /* [unique][in] */ IDataObject *pDataObj,
             /* [in] */ DWORD grfKeyState,
             /* [in] */ POINTL pt,
-            /* [out][in] */ DWORD __RPC_FAR *pdwEffect);
+            /* [out][in] */ DWORD *pdwEffect);
         
         END_INTERFACE
     } IDropTargetVtbl;
 
     interface IDropTarget
     {
-        CONST_VTBL struct IDropTargetVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IDropTargetVtbl *lpVtbl;
     };
 
     
@@ -4549,11 +4552,11 @@ EXTERN_C const IID IID_IDropTarget;
 
 
 HRESULT STDMETHODCALLTYPE IDropTarget_DragEnter_Proxy( 
-    IDropTarget __RPC_FAR * This,
-    /* [unique][in] */ IDataObject __RPC_FAR *pDataObj,
+    IDropTarget * This,
+    /* [unique][in] */ IDataObject *pDataObj,
     /* [in] */ DWORD grfKeyState,
     /* [in] */ POINTL pt,
-    /* [out][in] */ DWORD __RPC_FAR *pdwEffect);
+    /* [out][in] */ DWORD *pdwEffect);
 
 
 void __RPC_STUB IDropTarget_DragEnter_Stub(
@@ -4564,10 +4567,10 @@ void __RPC_STUB IDropTarget_DragEnter_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDropTarget_DragOver_Proxy( 
-    IDropTarget __RPC_FAR * This,
+    IDropTarget * This,
     /* [in] */ DWORD grfKeyState,
     /* [in] */ POINTL pt,
-    /* [out][in] */ DWORD __RPC_FAR *pdwEffect);
+    /* [out][in] */ DWORD *pdwEffect);
 
 
 void __RPC_STUB IDropTarget_DragOver_Stub(
@@ -4578,7 +4581,7 @@ void __RPC_STUB IDropTarget_DragOver_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDropTarget_DragLeave_Proxy( 
-    IDropTarget __RPC_FAR * This);
+    IDropTarget * This);
 
 
 void __RPC_STUB IDropTarget_DragLeave_Stub(
@@ -4589,11 +4592,11 @@ void __RPC_STUB IDropTarget_DragLeave_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IDropTarget_Drop_Proxy( 
-    IDropTarget __RPC_FAR * This,
-    /* [unique][in] */ IDataObject __RPC_FAR *pDataObj,
+    IDropTarget * This,
+    /* [unique][in] */ IDataObject *pDataObj,
     /* [in] */ DWORD grfKeyState,
     /* [in] */ POINTL pt,
-    /* [out][in] */ DWORD __RPC_FAR *pdwEffect);
+    /* [out][in] */ DWORD *pdwEffect);
 
 
 void __RPC_STUB IDropTarget_Drop_Stub(
@@ -4613,7 +4616,7 @@ void __RPC_STUB IDropTarget_Drop_Stub(
 /* interface IEnumOLEVERB */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEnumOLEVERB __RPC_FAR *LPENUMOLEVERB;
+typedef /* [unique] */ IEnumOLEVERB *LPENUMOLEVERB;
 
 typedef struct tagOLEVERB
     {
@@ -4621,15 +4624,15 @@ typedef struct tagOLEVERB
     LPOLESTR lpszVerbName;
     DWORD fuFlags;
     DWORD grfAttribs;
-    }	OLEVERB;
+    } 	OLEVERB;
 
-typedef struct tagOLEVERB __RPC_FAR *LPOLEVERB;
+typedef struct tagOLEVERB *LPOLEVERB;
 
 typedef /* [v1_enum] */ 
 enum tagOLEVERBATTRIB
     {	OLEVERBATTRIB_NEVERDIRTIES	= 1,
 	OLEVERBATTRIB_ONCONTAINERMENU	= 2
-    }	OLEVERBATTRIB;
+    } 	OLEVERBATTRIB;
 
 
 EXTERN_C const IID IID_IEnumOLEVERB;
@@ -4643,7 +4646,7 @@ EXTERN_C const IID IID_IEnumOLEVERB;
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
             /* [length_is][size_is][out] */ LPOLEVERB rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [out] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -4651,7 +4654,7 @@ EXTERN_C const IID IID_IEnumOLEVERB;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumOLEVERB __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumOLEVERB **ppenum) = 0;
         
     };
     
@@ -4661,40 +4664,40 @@ EXTERN_C const IID IID_IEnumOLEVERB;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumOLEVERB __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumOLEVERB * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumOLEVERB __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumOLEVERB * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumOLEVERB __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumOLEVERB * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumOLEVERB __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumOLEVERB * This,
             /* [in] */ ULONG celt,
             /* [length_is][size_is][out] */ LPOLEVERB rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+            /* [out] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumOLEVERB __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumOLEVERB * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumOLEVERB __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumOLEVERB * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumOLEVERB __RPC_FAR * This,
-            /* [out] */ IEnumOLEVERB __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumOLEVERB * This,
+            /* [out] */ IEnumOLEVERB **ppenum);
         
         END_INTERFACE
     } IEnumOLEVERBVtbl;
 
     interface IEnumOLEVERB
     {
-        CONST_VTBL struct IEnumOLEVERBVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumOLEVERBVtbl *lpVtbl;
     };
 
     
@@ -4732,10 +4735,10 @@ EXTERN_C const IID IID_IEnumOLEVERB;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumOLEVERB_RemoteNext_Proxy( 
-    IEnumOLEVERB __RPC_FAR * This,
+    IEnumOLEVERB * This,
     /* [in] */ ULONG celt,
     /* [length_is][size_is][out] */ LPOLEVERB rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [out] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumOLEVERB_RemoteNext_Stub(
@@ -4746,7 +4749,7 @@ void __RPC_STUB IEnumOLEVERB_RemoteNext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumOLEVERB_Skip_Proxy( 
-    IEnumOLEVERB __RPC_FAR * This,
+    IEnumOLEVERB * This,
     /* [in] */ ULONG celt);
 
 
@@ -4758,7 +4761,7 @@ void __RPC_STUB IEnumOLEVERB_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumOLEVERB_Reset_Proxy( 
-    IEnumOLEVERB __RPC_FAR * This);
+    IEnumOLEVERB * This);
 
 
 void __RPC_STUB IEnumOLEVERB_Reset_Stub(
@@ -4769,8 +4772,8 @@ void __RPC_STUB IEnumOLEVERB_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumOLEVERB_Clone_Proxy( 
-    IEnumOLEVERB __RPC_FAR * This,
-    /* [out] */ IEnumOLEVERB __RPC_FAR *__RPC_FAR *ppenum);
+    IEnumOLEVERB * This,
+    /* [out] */ IEnumOLEVERB **ppenum);
 
 
 void __RPC_STUB IEnumOLEVERB_Clone_Stub(
@@ -4786,157 +4789,157 @@ void __RPC_STUB IEnumOLEVERB_Clone_Stub(
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  CLIPFORMAT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , CLIPFORMAT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  CLIPFORMAT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, CLIPFORMAT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  CLIPFORMAT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, CLIPFORMAT __RPC_FAR * ); 
-void                      __RPC_USER  CLIPFORMAT_UserFree(     unsigned long __RPC_FAR *, CLIPFORMAT __RPC_FAR * ); 
+unsigned long             __RPC_USER  CLIPFORMAT_UserSize(     unsigned long *, unsigned long            , CLIPFORMAT * ); 
+unsigned char * __RPC_USER  CLIPFORMAT_UserMarshal(  unsigned long *, unsigned char *, CLIPFORMAT * ); 
+unsigned char * __RPC_USER  CLIPFORMAT_UserUnmarshal(unsigned long *, unsigned char *, CLIPFORMAT * ); 
+void                      __RPC_USER  CLIPFORMAT_UserFree(     unsigned long *, CLIPFORMAT * ); 
 
-unsigned long             __RPC_USER  HACCEL_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HACCEL __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HACCEL_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HACCEL __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HACCEL_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HACCEL __RPC_FAR * ); 
-void                      __RPC_USER  HACCEL_UserFree(     unsigned long __RPC_FAR *, HACCEL __RPC_FAR * ); 
+unsigned long             __RPC_USER  HACCEL_UserSize(     unsigned long *, unsigned long            , HACCEL * ); 
+unsigned char * __RPC_USER  HACCEL_UserMarshal(  unsigned long *, unsigned char *, HACCEL * ); 
+unsigned char * __RPC_USER  HACCEL_UserUnmarshal(unsigned long *, unsigned char *, HACCEL * ); 
+void                      __RPC_USER  HACCEL_UserFree(     unsigned long *, HACCEL * ); 
 
-unsigned long             __RPC_USER  HGLOBAL_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HGLOBAL __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HGLOBAL_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HGLOBAL __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HGLOBAL_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HGLOBAL __RPC_FAR * ); 
-void                      __RPC_USER  HGLOBAL_UserFree(     unsigned long __RPC_FAR *, HGLOBAL __RPC_FAR * ); 
+unsigned long             __RPC_USER  HGLOBAL_UserSize(     unsigned long *, unsigned long            , HGLOBAL * ); 
+unsigned char * __RPC_USER  HGLOBAL_UserMarshal(  unsigned long *, unsigned char *, HGLOBAL * ); 
+unsigned char * __RPC_USER  HGLOBAL_UserUnmarshal(unsigned long *, unsigned char *, HGLOBAL * ); 
+void                      __RPC_USER  HGLOBAL_UserFree(     unsigned long *, HGLOBAL * ); 
 
-unsigned long             __RPC_USER  HMENU_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HMENU __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HMENU_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HMENU __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HMENU_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HMENU __RPC_FAR * ); 
-void                      __RPC_USER  HMENU_UserFree(     unsigned long __RPC_FAR *, HMENU __RPC_FAR * ); 
+unsigned long             __RPC_USER  HMENU_UserSize(     unsigned long *, unsigned long            , HMENU * ); 
+unsigned char * __RPC_USER  HMENU_UserMarshal(  unsigned long *, unsigned char *, HMENU * ); 
+unsigned char * __RPC_USER  HMENU_UserUnmarshal(unsigned long *, unsigned char *, HMENU * ); 
+void                      __RPC_USER  HMENU_UserFree(     unsigned long *, HMENU * ); 
 
-unsigned long             __RPC_USER  HWND_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HWND __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HWND_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HWND __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HWND_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HWND __RPC_FAR * ); 
-void                      __RPC_USER  HWND_UserFree(     unsigned long __RPC_FAR *, HWND __RPC_FAR * ); 
+unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long            , HWND * ); 
+unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * ); 
+unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
+void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
 
-unsigned long             __RPC_USER  STGMEDIUM_UserSize(     unsigned long __RPC_FAR *, unsigned long            , STGMEDIUM __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  STGMEDIUM_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, STGMEDIUM __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  STGMEDIUM_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, STGMEDIUM __RPC_FAR * ); 
-void                      __RPC_USER  STGMEDIUM_UserFree(     unsigned long __RPC_FAR *, STGMEDIUM __RPC_FAR * ); 
+unsigned long             __RPC_USER  STGMEDIUM_UserSize(     unsigned long *, unsigned long            , STGMEDIUM * ); 
+unsigned char * __RPC_USER  STGMEDIUM_UserMarshal(  unsigned long *, unsigned char *, STGMEDIUM * ); 
+unsigned char * __RPC_USER  STGMEDIUM_UserUnmarshal(unsigned long *, unsigned char *, STGMEDIUM * ); 
+void                      __RPC_USER  STGMEDIUM_UserFree(     unsigned long *, STGMEDIUM * ); 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IOleCache2_UpdateCache_Proxy( 
-    IOleCache2 __RPC_FAR * This,
+    IOleCache2 * This,
     /* [in] */ LPDATAOBJECT pDataObject,
     /* [in] */ DWORD grfUpdf,
     /* [in] */ LPVOID pReserved);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IOleCache2_UpdateCache_Stub( 
-    IOleCache2 __RPC_FAR * This,
+    IOleCache2 * This,
     /* [in] */ LPDATAOBJECT pDataObject,
     /* [in] */ DWORD grfUpdf,
     /* [in] */ LONG_PTR pReserved);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_TranslateAccelerator_Proxy( 
-    IOleInPlaceActiveObject __RPC_FAR * This,
+    IOleInPlaceActiveObject * This,
     /* [in] */ LPMSG lpmsg);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_TranslateAccelerator_Stub( 
-    IOleInPlaceActiveObject __RPC_FAR * This);
+    IOleInPlaceActiveObject * This);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_ResizeBorder_Proxy( 
-    IOleInPlaceActiveObject __RPC_FAR * This,
+    IOleInPlaceActiveObject * This,
     /* [in] */ LPCRECT prcBorder,
-    /* [unique][in] */ IOleInPlaceUIWindow __RPC_FAR *pUIWindow,
+    /* [unique][in] */ IOleInPlaceUIWindow *pUIWindow,
     /* [in] */ BOOL fFrameWindow);
 
 
 /* [input_sync][call_as] */ HRESULT STDMETHODCALLTYPE IOleInPlaceActiveObject_ResizeBorder_Stub( 
-    IOleInPlaceActiveObject __RPC_FAR * This,
+    IOleInPlaceActiveObject * This,
     /* [in] */ LPCRECT prcBorder,
     /* [in] */ REFIID riid,
-    /* [iid_is][unique][in] */ IOleInPlaceUIWindow __RPC_FAR *pUIWindow,
+    /* [iid_is][unique][in] */ IOleInPlaceUIWindow *pUIWindow,
     /* [in] */ BOOL fFrameWindow);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IViewObject_Draw_Proxy( 
-    IViewObject __RPC_FAR * This,
+    IViewObject * This,
     /* [in] */ DWORD dwDrawAspect,
     /* [in] */ LONG lindex,
-    /* [unique][in] */ void __RPC_FAR *pvAspect,
-    /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+    /* [unique][in] */ void *pvAspect,
+    /* [unique][in] */ DVTARGETDEVICE *ptd,
     /* [in] */ HDC hdcTargetDev,
     /* [in] */ HDC hdcDraw,
     /* [in] */ LPCRECTL lprcBounds,
     /* [unique][in] */ LPCRECTL lprcWBounds,
-    /* [in] */ BOOL ( STDMETHODCALLTYPE __RPC_FAR *pfnContinue )( 
+    /* [in] */ BOOL ( STDMETHODCALLTYPE *pfnContinue )( 
         ULONG_PTR dwContinue),
     /* [in] */ ULONG_PTR dwContinue);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IViewObject_Draw_Stub( 
-    IViewObject __RPC_FAR * This,
+    IViewObject * This,
     /* [in] */ DWORD dwDrawAspect,
     /* [in] */ LONG lindex,
     /* [in] */ ULONG_PTR pvAspect,
-    /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+    /* [unique][in] */ DVTARGETDEVICE *ptd,
     /* [in] */ ULONG_PTR hdcTargetDev,
     /* [in] */ ULONG_PTR hdcDraw,
     /* [in] */ LPCRECTL lprcBounds,
     /* [unique][in] */ LPCRECTL lprcWBounds,
-    /* [in] */ IContinue __RPC_FAR *pContinue);
+    /* [in] */ IContinue *pContinue);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IViewObject_GetColorSet_Proxy( 
-    IViewObject __RPC_FAR * This,
+    IViewObject * This,
     /* [in] */ DWORD dwDrawAspect,
     /* [in] */ LONG lindex,
-    /* [unique][in] */ void __RPC_FAR *pvAspect,
-    /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+    /* [unique][in] */ void *pvAspect,
+    /* [unique][in] */ DVTARGETDEVICE *ptd,
     /* [in] */ HDC hicTargetDev,
-    /* [out] */ LOGPALETTE __RPC_FAR *__RPC_FAR *ppColorSet);
+    /* [out] */ LOGPALETTE **ppColorSet);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IViewObject_GetColorSet_Stub( 
-    IViewObject __RPC_FAR * This,
+    IViewObject * This,
     /* [in] */ DWORD dwDrawAspect,
     /* [in] */ LONG lindex,
     /* [in] */ ULONG_PTR pvAspect,
-    /* [unique][in] */ DVTARGETDEVICE __RPC_FAR *ptd,
+    /* [unique][in] */ DVTARGETDEVICE *ptd,
     /* [in] */ ULONG_PTR hicTargetDev,
-    /* [out] */ LOGPALETTE __RPC_FAR *__RPC_FAR *ppColorSet);
+    /* [out] */ LOGPALETTE **ppColorSet);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IViewObject_Freeze_Proxy( 
-    IViewObject __RPC_FAR * This,
+    IViewObject * This,
     /* [in] */ DWORD dwDrawAspect,
     /* [in] */ LONG lindex,
-    /* [unique][in] */ void __RPC_FAR *pvAspect,
-    /* [out] */ DWORD __RPC_FAR *pdwFreeze);
+    /* [unique][in] */ void *pvAspect,
+    /* [out] */ DWORD *pdwFreeze);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IViewObject_Freeze_Stub( 
-    IViewObject __RPC_FAR * This,
+    IViewObject * This,
     /* [in] */ DWORD dwDrawAspect,
     /* [in] */ LONG lindex,
     /* [in] */ ULONG_PTR pvAspect,
-    /* [out] */ DWORD __RPC_FAR *pdwFreeze);
+    /* [out] */ DWORD *pdwFreeze);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IViewObject_GetAdvise_Proxy( 
-    IViewObject __RPC_FAR * This,
-    /* [unique][out] */ DWORD __RPC_FAR *pAspects,
-    /* [unique][out] */ DWORD __RPC_FAR *pAdvf,
-    /* [out] */ IAdviseSink __RPC_FAR *__RPC_FAR *ppAdvSink);
+    IViewObject * This,
+    /* [unique][out] */ DWORD *pAspects,
+    /* [unique][out] */ DWORD *pAdvf,
+    /* [out] */ IAdviseSink **ppAdvSink);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IViewObject_GetAdvise_Stub( 
-    IViewObject __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pAspects,
-    /* [out] */ DWORD __RPC_FAR *pAdvf,
-    /* [out] */ IAdviseSink __RPC_FAR *__RPC_FAR *ppAdvSink);
+    IViewObject * This,
+    /* [out] */ DWORD *pAspects,
+    /* [out] */ DWORD *pAdvf,
+    /* [out] */ IAdviseSink **ppAdvSink);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEnumOLEVERB_Next_Proxy( 
-    IEnumOLEVERB __RPC_FAR * This,
+    IEnumOLEVERB * This,
     /* [in] */ ULONG celt,
     /* [length_is][size_is][out] */ LPOLEVERB rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [out] */ ULONG *pceltFetched);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumOLEVERB_Next_Stub( 
-    IEnumOLEVERB __RPC_FAR * This,
+    IEnumOLEVERB * This,
     /* [in] */ ULONG celt,
     /* [length_is][size_is][out] */ LPOLEVERB rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [out] */ ULONG *pceltFetched);
 
 
 
@@ -4947,6 +4950,7 @@ void                      __RPC_USER  STGMEDIUM_UserFree(     unsigned long __RP
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

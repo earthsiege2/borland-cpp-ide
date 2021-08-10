@@ -1,7 +1,6 @@
   /*BEGIN CMC INTERFACE */
 
 #ifndef _XCMC_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _XCMC_H
 
 #ifdef __cplusplus
@@ -378,6 +377,5 @@ cmc_query_configuration(
 }       /* extern "C" */
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* _XCMC_H */
 

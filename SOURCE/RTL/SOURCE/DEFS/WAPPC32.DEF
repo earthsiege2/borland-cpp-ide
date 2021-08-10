@@ -1,47 +1,47 @@
 LIBRARY WAPPC32
 EXPORTS
 
-    APPC                                     = 'WAPPC32.DLL'.*
-    APPC_C                                   = 'WAPPC32.DLL'.*
-    APPC_C_ext                               = 'WAPPC32.DLL'.*
-    APPC_P                                   = 'WAPPC32.DLL'.*
-    APPC_P_ext                               = 'WAPPC32.DLL'.*
-    APPC_ext                                 = 'WAPPC32.DLL'.*
-    GetAppcConfig                            = 'WAPPC32.DLL'.*
-    GetAppcConfigCb                          = 'WAPPC32.DLL'.*
-    GetAppcConfigCb_ext                      = 'WAPPC32.DLL'.*
-    GetAppcConfig_ext                        = 'WAPPC32.DLL'.*
-    GetAppcReturnCode                        = 'WAPPC32.DLL'.*
-    GetAppcReturnCode_ext                    = 'WAPPC32.DLL'.*
-    GetAppcSignatureFields                   = 'WAPPC32.DLL'.*
-    GetAppcSignatureFields_ext               = 'WAPPC32.DLL'.*
-    WinAPPCCancelAsyncRequest                = 'WAPPC32.DLL'.*
-    WinAPPCCancelAsyncRequest_ext            = 'WAPPC32.DLL'.*
-    WinAPPCCancelBlockingCall                = 'WAPPC32.DLL'.*
-    WinAPPCCancelBlockingCall_ext            = 'WAPPC32.DLL'.*
-    WinAPPCCancelConversation                = 'WAPPC32.DLL'.*
-    WinAPPCCancelConversation_ext            = 'WAPPC32.DLL'.*
-    WinAPPCCleanup                           = 'WAPPC32.DLL'.*
-    WinAPPCCleanup_ext                       = 'WAPPC32.DLL'.*
-    WinAPPCDeregisterApp                     = 'WAPPC32.DLL'.*
-    WinAPPCIsBlocking                        = 'WAPPC32.DLL'.*
-    WinAPPCIsBlocking_ext                    = 'WAPPC32.DLL'.*
-    WinAPPCQueryBlockingHook                 = 'WAPPC32.DLL'.*
-    WinAPPCQueryBlockingHook_ext             = 'WAPPC32.DLL'.*
-    WinAPPCRegisterApp                       = 'WAPPC32.DLL'.*
-    WinAPPCSetBlockingHook                   = 'WAPPC32.DLL'.*
-    WinAPPCSetBlockingHook_ext               = 'WAPPC32.DLL'.*
-    WinAPPCStartup                           = 'WAPPC32.DLL'.*
-    WinAPPCStartup_ext                       = 'WAPPC32.DLL'.*
-    WinAPPCUnhookBlockingHook                = 'WAPPC32.DLL'.*
-    WinAPPCUnhookBlockingHook_ext            = 'WAPPC32.DLL'.*
-    WinAsyncAPPC                             = 'WAPPC32.DLL'.*
-    WinAsyncAPPCEx                           = 'WAPPC32.DLL'.*
-    WinAsyncAPPCEx_ext                       = 'WAPPC32.DLL'.*
-    WinAsyncAPPC_ext                         = 'WAPPC32.DLL'.*
-    WinCallbackAPPC                          = 'WAPPC32.DLL'.*
-    WinCallbackAPPC_ext                      = 'WAPPC32.DLL'.*
-    dflt_lu_names_callback                   = 'WAPPC32.DLL'.*
-    dflt_lu_names_callback_ext               = 'WAPPC32.DLL'.*
-    receive_allocate_callback                = 'WAPPC32.DLL'.*
-    receive_allocate_callback_ext            = 'WAPPC32.DLL'.*
+    APPC                                     
+    APPC_C                                   
+    APPC_C_ext                               
+    APPC_P                                   
+    APPC_P_ext                               
+    APPC_ext                                 
+    GetAppcConfig                            
+    GetAppcConfigCb                          
+    GetAppcConfigCb_ext                      
+    GetAppcConfig_ext                        
+    GetAppcReturnCode                        
+    GetAppcReturnCode_ext                    
+    GetAppcSignatureFields                   
+    GetAppcSignatureFields_ext               
+    WinAPPCCancelAsyncRequest                
+    WinAPPCCancelAsyncRequest_ext            
+    WinAPPCCancelBlockingCall                
+    WinAPPCCancelBlockingCall_ext            
+    WinAPPCCancelConversation                
+    WinAPPCCancelConversation_ext            
+    WinAPPCCleanup                           
+    WinAPPCCleanup_ext                       
+    WinAPPCDeregisterApp                     
+    WinAPPCIsBlocking                        
+    WinAPPCIsBlocking_ext                    
+    WinAPPCQueryBlockingHook                 
+    WinAPPCQueryBlockingHook_ext             
+    WinAPPCRegisterApp                       
+    WinAPPCSetBlockingHook                   
+    WinAPPCSetBlockingHook_ext               
+    WinAPPCStartup                           
+    WinAPPCStartup_ext                       
+    WinAPPCUnhookBlockingHook                
+    WinAPPCUnhookBlockingHook_ext            
+    WinAsyncAPPC                             
+    WinAsyncAPPCEx                           
+    WinAsyncAPPCEx_ext                       
+    WinAsyncAPPC_ext                         
+    WinCallbackAPPC                          
+    WinCallbackAPPC_ext                      
+    dflt_lu_names_callback                   
+    dflt_lu_names_callback_ext               
+    receive_allocate_callback                
+    receive_allocate_callback_ext            

@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1996-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -15,7 +15,6 @@ Revision History:
 --*/
 
 #ifndef _ICM_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _ICM_H_
 
 #if _MSC_VER > 1000
@@ -115,6 +114,12 @@ typedef union tagCOLOR {
     struct GENERIC3CHANNEL  gen3ch;
     struct NAMEDCOLOR       named;
     struct HiFiCOLOR        hifi;
+    
+    struct {                // alignment padding.   
+        DWORD reserved1;
+        VOID *reserved2;
+    };
+
 } COLOR;
 typedef COLOR *PCOLOR, *LPCOLOR;
 
@@ -905,6 +910,5 @@ BOOL WINAPI CMTranslateRGBsExt(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif  // ifndef _ICM_H_
 

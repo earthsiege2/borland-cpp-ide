@@ -29,8 +29,8 @@ void __fastcall TDataModule1::ApplyUpdates(void)
 }
 //---------------------------------------------------------------------------
 void __fastcall TDataModule1::ProjectReconcileError(
-      TClientDataSet *DataSet, EReconcileError *E, TUpdateKind UpdateKind,
-      TReconcileAction &Action)
+      TCustomClientDataSet *DataSet, EReconcileError *E,
+      TUpdateKind UpdateKind, TReconcileAction &Action)
 {
 //  Action = HandleReconcileError(Owner, DataSet, UpdateKind, E);
   ShowMessage(E->Message);
@@ -69,5 +69,3 @@ void __fastcall TDataModule1::ProjectNewRecord(TDataSet *DataSet)
     Abort();
 }
 //---------------------------------------------------------------------------
-
-

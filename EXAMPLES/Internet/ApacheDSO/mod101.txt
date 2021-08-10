@@ -1,0 +1,81 @@
+Online DSO help from apache....
+http://httpd.apache.org/docs/misc/API.html
+http://httpd.apache.org/docs/dso.html
+
+Creating and using a DSO in a nutshell.....
+
+* Create the Module
+* Load the Module
+* Set the handler
+
+Expanded....
+
+  When compiling the module there are Three Key strings to be aware of.
+  To better explain here is an example of a BCB Project File.
+  Note that I've added a few lines.....
+    //-----------HelloModule.bpr---------------//
+    ...
+    extern "C"
+    {
+      Httpd::module __declspec(dllexport) hello_module;
+    }
+    int WINAPI DllEntryPoint(HINSTANCE hinst, unsigned long reason, void*)
+    {
+      try
+      {
+        if (reason == DLL_PROCESS_ATTACH) {
+          strcpy(ContentType, "hello-handler");
+          strcpy(ModuleName, "mod_hello");
+          Apacheapp::set_module(&hello_module);
+
+                Application->Initialize();
+                Application->CreateForm(__classid(TWebModule1), &WebModule1);
+                Application->Run();
+        }
+      }
+      catch (Exception &exception)
+      {
+      }
+      return 1;
+    }
+    //----------end HelloModule.bpr-------------//
+  
+  The Three Key Strings are:
+  1. The Exported name 'hello_module'
+     This the CASE SENSITIVE value used for the LoadModule Directive
+     LoadModule _hello_module  [path to module]
+     Notice the underscore. BCB exports global variables with an underscore
+     preceding their filename.
+  2. The ModuleName variable 'mod_hello'
+     This is the ModuleName used in the AddModule Directive.
+     As you can see you have the power to set this your self, however;
+     If not specified it is set using GetModuleFileName, thus setting to the
+     name of your library.
+  3. The ContentType variable 'hello-handler'
+     You can also  set this yourself, else it is set for you
+     as  LowerCase(LibraryName) + '-handler';
+
+
+  Given this information, the entries httpd.conf file would look like this:
+
+    LoadModule Hello_module modules/HelloModule.dll
+
+    <Location /HelloWorld>
+	    SetHandler hello-handler
+    </Location>
+
+  In Apache 1.3.22 and later it would look like this:
+
+    # LoadModule Section
+    LoadModule _hello_module modules/HelloModule.dll
+
+    # AddModule Section (After ClearModuleList directive)
+    AddModule mod_hello
+
+    # After AddModule Section
+    <Location /HelloWorld>
+            SetHandler hello-handler
+    </Location>
+
+  And the url to invoke this module would be
+  http://localhost/HelloWorld/

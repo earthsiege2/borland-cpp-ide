@@ -1,7 +1,6 @@
 //  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
 
 #ifndef __MTXDM_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __MTXDM_H__
 
 // mtxdm.h
@@ -26,5 +25,4 @@ __declspec(dllimport) HRESULT __cdecl GetDispenserManager(IDispenserManager**);
 #endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif

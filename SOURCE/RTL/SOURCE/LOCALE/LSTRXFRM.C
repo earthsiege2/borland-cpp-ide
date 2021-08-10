@@ -9,14 +9,14 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.0  $        */
+/* $Revision: 9.5.2.1 $        */
 
 
 #include <string.h>
@@ -49,5 +49,5 @@ size_t _RTLENTRY _EXPFUNC _ltcsxfrm( _TCHAR *s1, const _TCHAR *s2, size_t n )
         return _tcslen(s2);
     }
 
-    return LCMapString(locale->handle, LCMAP_SORTKEY, (LPCSTR)s1, -1, (LPTSTR)s2, n);
+    return LCMapString(locale->handle, LCMAP_SORTKEY, s2, -1, s1, n);
 }

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBHeader.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBHeader.pas' rev: 6.00
 
 #ifndef IBHeaderHPP
 #define IBHeaderHPP
@@ -67,19 +67,23 @@ typedef unsigned ISC_TIME;
 
 typedef unsigned *PISC_TIME;
 
+#pragma pack(push, 4)
 struct TISC_TIMESTAMP
 {
 	int timestamp_date;
 	unsigned timestamp_time;
 } ;
+#pragma pack(pop)
 
 typedef TISC_TIMESTAMP *PISC_TIMESTAMP;
 
+#pragma pack(push, 4)
 struct TGDS_QUAD
 {
 	int gds_quad_high;
 	unsigned gds_quad_low;
 } ;
+#pragma pack(pop)
 
 typedef TGDS_QUAD  TGDS__QUAD;
 
@@ -91,14 +95,17 @@ typedef TGDS_QUAD *PGDS__QUAD;
 
 typedef TGDS_QUAD *PISC_QUAD;
 
+#pragma pack(push, 2)
 struct TISC_ARRAY_BOUND
 {
 	short array_bound_lower;
 	short array_bound_upper;
 } ;
+#pragma pack(pop)
 
 typedef TISC_ARRAY_BOUND *PISC_ARRAY_BOUND;
 
+#pragma pack(push, 2)
 struct TISC_ARRAY_DESC
 {
 	Byte array_desc_dtype;
@@ -110,9 +117,11 @@ struct TISC_ARRAY_DESC
 	short array_desc_flags;
 	TISC_ARRAY_BOUND array_desc_bounds[16];
 } ;
+#pragma pack(pop)
 
 typedef TISC_ARRAY_DESC *PISC_ARRAY_DESC;
 
+#pragma pack(push, 2)
 struct TISC_BLOB_DESC
 {
 	short blob_desc_subtype;
@@ -121,6 +130,7 @@ struct TISC_BLOB_DESC
 	Byte blob_desc_field_name[32];
 	Byte blob_desc_relation_name[32];
 } ;
+#pragma pack(pop)
 
 typedef TISC_BLOB_DESC *PISC_BLOB_DESC;
 
@@ -129,6 +139,7 @@ typedef int __fastcall (*TISC_BLOB_CTL_SOURCE_FUNCTION)(void);
 struct TISC_BLOB_CTL;
 typedef TISC_BLOB_CTL *PISC_BLOB_CTL;
 
+#pragma pack(push, 4)
 struct TISC_BLOB_CTL
 {
 	TISC_BLOB_CTL_SOURCE_FUNCTION ctl_source;
@@ -146,7 +157,9 @@ struct TISC_BLOB_CTL
 	int *ctl_status;
 	int ctl_data[8];
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TBSTREAM
 {
 	void * *bstr_blob;
@@ -156,9 +169,11 @@ struct TBSTREAM
 	short bstr_cnt;
 	char bstr_mode;
 } ;
+#pragma pack(pop)
 
 typedef TBSTREAM *PBSTREAM;
 
+#pragma pack(push, 4)
 struct TXSQLVAR
 {
 	short sqltype;
@@ -176,9 +191,11 @@ struct TXSQLVAR
 	short aliasname_length;
 	char aliasname[32];
 } ;
+#pragma pack(pop)
 
 typedef TXSQLVAR *PXSQLVAR;
 
+#pragma pack(push, 4)
 struct TXSQLDA
 {
 	short version;
@@ -188,22 +205,27 @@ struct TXSQLDA
 	short sqld;
 	TXSQLVAR sqlvar[1];
 } ;
+#pragma pack(pop)
 
 typedef TXSQLDA *PXSQLDA;
 
+#pragma pack(push, 4)
 struct TISC_START_TRANS
 {
 	Ibexternals::PVoid *db_handle;
 	Word tpb_length;
 	char *tpb_address;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TISC_TEB
 {
 	Ibexternals::PVoid *db_handle;
 	int tpb_length;
 	char *tpb_address;
 } ;
+#pragma pack(pop)
 
 typedef TISC_TEB *PISC_TEB;
 
@@ -211,235 +233,151 @@ typedef TISC_TEB TISC_TEB_ARRAY[1];
 
 typedef TISC_TEB *PISC_TEB_ARRAY;
 
-typedef int __stdcall (*Tisc_attach_database)(Ibexternals::PISC_STATUS status_vector, short db_name_length
-	, char * db_name, PISC_DB_HANDLE db_handle, short parm_buffer_length, char * parm_buffer);
+typedef int __stdcall (*Tisc_attach_database)(Ibexternals::PISC_STATUS status_vector, short db_name_length, char * db_name, PISC_DB_HANDLE db_handle, short parm_buffer_length, char * parm_buffer);
 
-typedef int __stdcall (*Tisc_array_gen_sdl)(Ibexternals::PISC_STATUS status_vector, PISC_ARRAY_DESC 
-	isc_array_desc, Ibexternals::PShort isc_arg3, char * isc_arg4, Ibexternals::PShort isc_arg5);
+typedef int __stdcall (*Tisc_array_gen_sdl)(Ibexternals::PISC_STATUS status_vector, PISC_ARRAY_DESC isc_array_desc, Ibexternals::PShort isc_arg3, char * isc_arg4, Ibexternals::PShort isc_arg5);
 
-typedef int __stdcall (*Tisc_array_get_slice)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE trans_handle, PISC_QUAD array_id, PISC_ARRAY_DESC descriptor, Ibexternals::PVoid 
-	dest_array, int slice_length);
+typedef int __stdcall (*Tisc_array_get_slice)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE trans_handle, PISC_QUAD array_id, PISC_ARRAY_DESC descriptor, Ibexternals::PVoid dest_array, int slice_length);
 
-typedef int __stdcall (*Tisc_array_lookup_bounds)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE trans_handle, char * table_name, char * column_name, PISC_ARRAY_DESC descriptor
-	);
+typedef int __stdcall (*Tisc_array_lookup_bounds)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE trans_handle, char * table_name, char * column_name, PISC_ARRAY_DESC descriptor);
 
-typedef int __stdcall (*Tisc_array_lookup_desc)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE trans_handle, char * table_name, char * column_name, PISC_ARRAY_DESC descriptor
-	);
+typedef int __stdcall (*Tisc_array_lookup_desc)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE trans_handle, char * table_name, char * column_name, PISC_ARRAY_DESC descriptor);
 
-typedef int __stdcall (*Tisc_array_set_desc)(Ibexternals::PISC_STATUS status_vector, char * table_name
-	, char * column_name, Ibexternals::PShort sql_dtype, Ibexternals::PShort sql_length, Ibexternals::PShort 
-	sql_dimensions, PISC_ARRAY_DESC descriptor);
+typedef int __stdcall (*Tisc_array_set_desc)(Ibexternals::PISC_STATUS status_vector, char * table_name, char * column_name, Ibexternals::PShort sql_dtype, Ibexternals::PShort sql_length, Ibexternals::PShort sql_dimensions, PISC_ARRAY_DESC descriptor);
 
-typedef int __stdcall (*Tisc_array_put_slice)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE trans_handle, PISC_QUAD array_id, PISC_ARRAY_DESC descriptor, Ibexternals::PVoid 
-	source_array, Ibexternals::PISC_LONG slice_length);
+typedef int __stdcall (*Tisc_array_put_slice)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE trans_handle, PISC_QUAD array_id, PISC_ARRAY_DESC descriptor, Ibexternals::PVoid source_array, Ibexternals::PISC_LONG slice_length);
 
-typedef void __stdcall (*Tisc_blob_default_desc)(PISC_BLOB_DESC descriptor, Ibexternals::PUChar table_name
-	, Ibexternals::PUChar column_name);
+typedef void __stdcall (*Tisc_blob_default_desc)(PISC_BLOB_DESC descriptor, Ibexternals::PUChar table_name, Ibexternals::PUChar column_name);
 
-typedef int __stdcall (*Tisc_blob_gen_bpb)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_DESC to_descriptor
-	, PISC_BLOB_DESC from_descriptor, Word bpb_buffer_length, Ibexternals::PUChar bpb_buffer, Ibexternals::PUShort 
-	bpb_length);
+typedef int __stdcall (*Tisc_blob_gen_bpb)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_DESC to_descriptor, PISC_BLOB_DESC from_descriptor, Word bpb_buffer_length, Ibexternals::PUChar bpb_buffer, Ibexternals::PUShort bpb_length);
 
-typedef int __stdcall (*Tisc_blob_info)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_HANDLE blob_handle
-	, short item_list_buffer_length, char * item_list_buffer, short result_buffer_length, char * result_buffer
-	);
+typedef int __stdcall (*Tisc_blob_info)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_HANDLE blob_handle, short item_list_buffer_length, char * item_list_buffer, short result_buffer_length, char * result_buffer);
 
-typedef int __stdcall (*Tisc_blob_lookup_desc)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE trans_handle, char * table_name, char * column_name, PISC_BLOB_DESC descriptor
-	, Ibexternals::PUChar global);
+typedef int __stdcall (*Tisc_blob_lookup_desc)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE trans_handle, char * table_name, char * column_name, PISC_BLOB_DESC descriptor, Ibexternals::PUChar global);
 
-typedef int __stdcall (*Tisc_blob_set_desc)(Ibexternals::PISC_STATUS status_vector, char * table_name
-	, char * column_name, short subtype, short charset, short segment_size, PISC_BLOB_DESC descriptor);
-	
+typedef int __stdcall (*Tisc_blob_set_desc)(Ibexternals::PISC_STATUS status_vector, char * table_name, char * column_name, short subtype, short charset, short segment_size, PISC_BLOB_DESC descriptor);
 
-typedef int __stdcall (*Tisc_cancel_blob)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_HANDLE blob_handle
-	);
+typedef int __stdcall (*Tisc_cancel_blob)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_HANDLE blob_handle);
 
-typedef int __stdcall (*Tisc_cancel_events)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, Ibexternals::PISC_LONG event_id);
+typedef int __stdcall (*Tisc_cancel_events)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, Ibexternals::PISC_LONG event_id);
 
-typedef int __stdcall (*Tisc_close_blob)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_HANDLE blob_handle
-	);
+typedef int __stdcall (*Tisc_close_blob)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_HANDLE blob_handle);
 
-typedef int __stdcall (*Tisc_commit_retaining)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle);
+typedef int __stdcall (*Tisc_commit_retaining)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle);
 
-typedef int __stdcall (*Tisc_commit_transaction)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle);
+typedef int __stdcall (*Tisc_commit_transaction)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle);
 
-typedef int __stdcall (*Tisc_create_blob)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, PISC_TR_HANDLE tran_handle, PISC_BLOB_HANDLE blob_handle, PISC_QUAD blob_id);
+typedef int __stdcall (*Tisc_create_blob)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, PISC_BLOB_HANDLE blob_handle, PISC_QUAD blob_id);
 
-typedef int __stdcall (*Tisc_create_blob2)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, PISC_TR_HANDLE tran_handle, PISC_BLOB_HANDLE blob_handle, PISC_QUAD blob_id, short bpb_length, char * 
-	bpb_address);
+typedef int __stdcall (*Tisc_create_blob2)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, PISC_BLOB_HANDLE blob_handle, PISC_QUAD blob_id, short bpb_length, char * bpb_address);
 
-typedef int __stdcall (*Tisc_create_database)(Ibexternals::PISC_STATUS status_vector, short isc_arg2
-	, char * isc_arg3, PISC_DB_HANDLE db_handle, short isc_arg5, char * isc_arg6, short isc_arg7);
+typedef int __stdcall (*Tisc_create_database)(Ibexternals::PISC_STATUS status_vector, short isc_arg2, char * isc_arg3, PISC_DB_HANDLE db_handle, short isc_arg5, char * isc_arg6, short isc_arg7);
 
-typedef int __stdcall (*Tisc_database_info)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, short item_list_buffer_length, char * item_list_buffer, short result_buffer_length, char * result_buffer
-	);
+typedef int __stdcall (*Tisc_database_info)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, short item_list_buffer_length, char * item_list_buffer, short result_buffer_length, char * result_buffer);
 
 typedef void __stdcall (*Tisc_decode_date)(PISC_QUAD ib_date, Ibexternals::PCTimeStructure tm_date);
-	
 
-typedef void __stdcall (*Tisc_decode_sql_date)(PISC_DATE ib_date, Ibexternals::PCTimeStructure tm_date
-	);
+typedef void __stdcall (*Tisc_decode_sql_date)(PISC_DATE ib_date, Ibexternals::PCTimeStructure tm_date);
 
-typedef void __stdcall (*Tisc_decode_sql_time)(PISC_TIME ib_time, Ibexternals::PCTimeStructure tm_date
-	);
+typedef void __stdcall (*Tisc_decode_sql_time)(PISC_TIME ib_time, Ibexternals::PCTimeStructure tm_date);
 
-typedef void __stdcall (*Tisc_decode_timestamp)(PISC_TIMESTAMP ib_timestamp, Ibexternals::PCTimeStructure 
-	tm_date);
+typedef void __stdcall (*Tisc_decode_timestamp)(PISC_TIMESTAMP ib_timestamp, Ibexternals::PCTimeStructure tm_date);
 
-typedef int __stdcall (*Tisc_detach_database)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle);
+typedef int __stdcall (*Tisc_detach_database)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle);
 
-typedef int __stdcall (*Tisc_drop_database)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	);
+typedef int __stdcall (*Tisc_drop_database)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle);
 
-typedef int __stdcall (*Tisc_dsql_allocate_statement)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_STMT_HANDLE stmt_handle);
+typedef int __stdcall (*Tisc_dsql_allocate_statement)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_STMT_HANDLE stmt_handle);
 
-typedef int __stdcall (*Tisc_dsql_alloc_statement2)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_STMT_HANDLE stmt_handle);
+typedef int __stdcall (*Tisc_dsql_alloc_statement2)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_STMT_HANDLE stmt_handle);
 
-typedef int __stdcall (*Tisc_dsql_describe)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE 
-	stmt_handle, Word dialect, PXSQLDA xsqlda);
+typedef int __stdcall (*Tisc_dsql_describe)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE stmt_handle, Word dialect, PXSQLDA xsqlda);
 
-typedef int __stdcall (*Tisc_dsql_describe_bind)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE 
-	stmt_handle, Word dialect, PXSQLDA xsqlda);
+typedef int __stdcall (*Tisc_dsql_describe_bind)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE stmt_handle, Word dialect, PXSQLDA xsqlda);
 
-typedef int __stdcall (*Tisc_dsql_exec_immed2)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE tran_handle, Word length, char * statement, Word dialect, PXSQLDA in_xsqlda
-	, PXSQLDA out_xsqlda);
+typedef int __stdcall (*Tisc_dsql_exec_immed2)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, Word length, char * statement, Word dialect, PXSQLDA in_xsqlda, PXSQLDA out_xsqlda);
 
-typedef int __stdcall (*Tisc_dsql_execute)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle
-	, PISC_STMT_HANDLE stmt_handle, Word dialect, PXSQLDA xsqlda);
+typedef int __stdcall (*Tisc_dsql_execute)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, PISC_STMT_HANDLE stmt_handle, Word dialect, PXSQLDA xsqlda);
 
-typedef int __stdcall (*Tisc_dsql_execute2)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle
-	, PISC_STMT_HANDLE stmt_handle, Word dialect, PXSQLDA in_xsqlda, PXSQLDA out_xsqlda);
+typedef int __stdcall (*Tisc_dsql_execute2)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, PISC_STMT_HANDLE stmt_handle, Word dialect, PXSQLDA in_xsqlda, PXSQLDA out_xsqlda);
 
-typedef int __stdcall (*Tisc_dsql_execute_immediate)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE tran_handle, Word length, char * statement, Word dialect, PXSQLDA xsqlda)
-	;
+typedef int __stdcall (*Tisc_dsql_execute_immediate)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, Word length, char * statement, Word dialect, PXSQLDA xsqlda);
 
-typedef int __stdcall (*Tisc_dsql_fetch)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE stmt_handle
-	, Word dialect, PXSQLDA xsqlda);
+typedef int __stdcall (*Tisc_dsql_fetch)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE stmt_handle, Word dialect, PXSQLDA xsqlda);
 
 typedef int __stdcall (*Tisc_dsql_finish)(PISC_DB_HANDLE db_handle);
 
-typedef int __stdcall (*Tisc_dsql_free_statement)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE 
-	stmt_handle, Word options);
+typedef int __stdcall (*Tisc_dsql_free_statement)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE stmt_handle, Word options);
 
-typedef int __stdcall (*Tisc_dsql_insert)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE stmt_handle
-	, Word arg3, PXSQLDA xsqlda);
+typedef int __stdcall (*Tisc_dsql_insert)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE stmt_handle, Word arg3, PXSQLDA xsqlda);
 
-typedef int __stdcall (*Tisc_dsql_prepare)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle
-	, PISC_STMT_HANDLE stmt_handle, Word length, char * statement, Word dialect, PXSQLDA xsqlda);
+typedef int __stdcall (*Tisc_dsql_prepare)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, PISC_STMT_HANDLE stmt_handle, Word length, char * statement, Word dialect, PXSQLDA xsqlda);
 
-typedef int __stdcall (*Tisc_dsql_set_cursor_name)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE 
-	stmt_handle, char * cursor_name, Word _type);
+typedef int __stdcall (*Tisc_dsql_set_cursor_name)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE stmt_handle, char * cursor_name, Word _type);
 
-typedef int __stdcall (*Tisc_dsql_sql_info)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE 
-	stmt_handle, short item_length, char * items, short buffer_length, char * buffer);
+typedef int __stdcall (*Tisc_dsql_sql_info)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE stmt_handle, short item_length, char * items, short buffer_length, char * buffer);
 
 typedef void __stdcall (*Tisc_encode_date)(Ibexternals::PCTimeStructure tm_date, PISC_QUAD ib_date);
-	
 
-typedef void __stdcall (*Tisc_encode_sql_date)(Ibexternals::PCTimeStructure tm_date, PISC_DATE ib_date
-	);
+typedef void __stdcall (*Tisc_encode_sql_date)(Ibexternals::PCTimeStructure tm_date, PISC_DATE ib_date);
 
-typedef void __stdcall (*Tisc_encode_sql_time)(Ibexternals::PCTimeStructure tm_date, PISC_TIME ib_time
-	);
+typedef void __stdcall (*Tisc_encode_sql_time)(Ibexternals::PCTimeStructure tm_date, PISC_TIME ib_time);
 
-typedef void __stdcall (*Tisc_encode_timestamp)(Ibexternals::PCTimeStructure tm_date, PISC_TIMESTAMP 
-	ib_timestamp);
+typedef void __stdcall (*Tisc_encode_timestamp)(Ibexternals::PCTimeStructure tm_date, PISC_TIMESTAMP ib_timestamp);
 
-typedef int __cdecl (*Tisc_event_block)(Ibexternals::PPChar event_buffer, Ibexternals::PPChar result_buffer
-	, Word id_count, const char * * event_list, const int event_list_Size);
+typedef int __cdecl (*Tisc_event_block)(Ibexternals::PPChar event_buffer, Ibexternals::PPChar result_buffer, Word id_count, const char * const * event_list, const int event_list_Size);
 
-typedef void __stdcall (*Tisc_event_counts)(Ibexternals::PISC_STATUS status_vector, short buffer_length
-	, char * event_buffer, char * result_buffer);
+typedef void __stdcall (*Tisc_event_counts)(Ibexternals::PISC_STATUS status_vector, short buffer_length, char * event_buffer, char * result_buffer);
 
-typedef void __cdecl (*Tisc_expand_dpb)(Ibexternals::PPChar dpb, Ibexternals::PShort dpb_length, const 
-	void * * item_list, const int item_list_Size);
+typedef void __cdecl (*Tisc_expand_dpb)(Ibexternals::PPChar dpb, Ibexternals::PShort dpb_length, const void * const * item_list, const int item_list_Size);
 
-typedef int __stdcall (*Tisc_modify_dpb)(Ibexternals::PPChar dpb, Ibexternals::PShort isc_arg2, Ibexternals::PShort 
-	isc_arg3, Word isc_arg4, char * isc_arg5, short isc_arg6);
+typedef int __stdcall (*Tisc_modify_dpb)(Ibexternals::PPChar dpb, Ibexternals::PShort isc_arg2, Ibexternals::PShort isc_arg3, Word isc_arg4, char * isc_arg5, short isc_arg6);
 
 typedef int __stdcall (*Tisc_free)(char * isc_arg1);
 
-typedef int __stdcall (*Tisc_get_segment)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_HANDLE blob_handle
-	, Ibexternals::PUShort actual_seg_length, Word seg_buffer_length, char * seg_buffer);
+typedef int __stdcall (*Tisc_get_segment)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_HANDLE blob_handle, Ibexternals::PUShort actual_seg_length, Word seg_buffer_length, char * seg_buffer);
 
-typedef int __stdcall (*Tisc_get_slice)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, PISC_TR_HANDLE tran_handle, PISC_QUAD isc_arg4, short isc_arg5, char * isc_arg6, short isc_arg7, 
-	Ibexternals::PISC_LONG isc_arg8, int isc_arg9, Ibexternals::PVoid isc_arg10, Ibexternals::PISC_LONG 
-	isc_arg11);
+typedef int __stdcall (*Tisc_get_slice)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, PISC_QUAD isc_arg4, short isc_arg5, char * isc_arg6, short isc_arg7, Ibexternals::PISC_LONG isc_arg8, int isc_arg9, Ibexternals::PVoid isc_arg10, Ibexternals::PISC_LONG isc_arg11);
 
 typedef int __stdcall (*Tisc_interprete)(char * buffer, Ibexternals::PPISC_STATUS status_vector);
 
-typedef int __stdcall (*Tisc_open_blob)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, PISC_TR_HANDLE tran_handle, PISC_BLOB_HANDLE blob_handle, PISC_QUAD blob_id);
+typedef int __stdcall (*Tisc_open_blob)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, PISC_BLOB_HANDLE blob_handle, PISC_QUAD blob_id);
 
-typedef int __stdcall (*Tisc_open_blob2)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, PISC_TR_HANDLE tran_handle, PISC_BLOB_HANDLE blob_handle, PISC_QUAD blob_id, short bpb_length, char * 
-	bpb_buffer);
+typedef int __stdcall (*Tisc_open_blob2)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, PISC_BLOB_HANDLE blob_handle, PISC_QUAD blob_id, short bpb_length, char * bpb_buffer);
 
-typedef int __stdcall (*Tisc_prepare_transaction2)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle, short msg_length, char * msg);
+typedef int __stdcall (*Tisc_prepare_transaction2)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, short msg_length, char * msg);
 
-typedef void __stdcall (*Tisc_print_sqlerror)(short sqlcode, Ibexternals::PISC_STATUS status_vector)
-	;
+typedef void __stdcall (*Tisc_print_sqlerror)(short sqlcode, Ibexternals::PISC_STATUS status_vector);
 
 typedef int __stdcall (*Tisc_print_status)(Ibexternals::PISC_STATUS status_vector);
 
-typedef int __stdcall (*Tisc_put_segment)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_HANDLE blob_handle
-	, Word seg_buffer_len, char * seg_buffer);
+typedef int __stdcall (*Tisc_put_segment)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_HANDLE blob_handle, Word seg_buffer_len, char * seg_buffer);
 
-typedef int __stdcall (*Tisc_put_slice)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, PISC_TR_HANDLE tran_handle, PISC_QUAD isc_arg4, short isc_arg5, char * isc_arg6, short isc_arg7, 
-	Ibexternals::PISC_LONG isc_arg8, int isc_arg9, Ibexternals::PVoid isc_arg10);
+typedef int __stdcall (*Tisc_put_slice)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, PISC_QUAD isc_arg4, short isc_arg5, char * isc_arg6, short isc_arg7, Ibexternals::PISC_LONG isc_arg8, int isc_arg9, Ibexternals::PVoid isc_arg10);
 
-typedef int __stdcall (*Tisc_que_events)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, Ibexternals::PISC_LONG event_id, short length, char * event_buffer, TISC_CALLBACK event_function, 
-	Ibexternals::PVoid event_function_arg);
+typedef int __stdcall (*Tisc_que_events)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, Ibexternals::PISC_LONG event_id, short length, char * event_buffer, TISC_CALLBACK event_function, Ibexternals::PVoid event_function_arg);
 
-typedef int __stdcall (*Tisc_rollback_retaining)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle);
+typedef int __stdcall (*Tisc_rollback_retaining)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle);
 
-typedef int __stdcall (*Tisc_rollback_transaction)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle);
+typedef int __stdcall (*Tisc_rollback_transaction)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle);
 
-typedef int __stdcall (*Tisc_start_multiple)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle, short db_handle_count, PISC_TEB teb_vector_address);
+typedef int __stdcall (*Tisc_start_multiple)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, short db_handle_count, PISC_TEB teb_vector_address);
 
-typedef int __cdecl (*Tisc_start_transaction)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle, short db_handle_count, PISC_DB_HANDLE db_handle, Word tpb_length, char * tpb_address);
-	
+typedef int __cdecl (*Tisc_start_transaction)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, short db_handle_count, PISC_DB_HANDLE db_handle, Word tpb_length, char * tpb_address);
 
 typedef int __stdcall (*Tisc_sqlcode)(Ibexternals::PISC_STATUS status_vector);
 
 typedef void __stdcall (*Tisc_sql_interprete)(short sqlcode, char * buffer, short buffer_length);
 
-typedef int __stdcall (*Tisc_transaction_info)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle, short item_list_buffer_length, char * item_list_buffer, short result_buffer_length, char * 
-	result_buffer);
+typedef int __stdcall (*Tisc_transaction_info)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, short item_list_buffer_length, char * item_list_buffer, short result_buffer_length, char * result_buffer);
 
-typedef int __stdcall (*Tisc_transact_request)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE tran_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, char * isc_arg7
-	, Word isc_arg8, char * isc_arg9);
+typedef int __stdcall (*Tisc_transact_request)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, char * isc_arg7, Word isc_arg8, char * isc_arg9);
 
 typedef int __stdcall (*Tisc_vax_integer)(char * buffer, short length);
 
 typedef __int64 __stdcall (*Tisc_portable_integer)(char * buffer, short length);
 
+#pragma pack(push, 4)
 struct TUserSecData
 {
 	short sec_flags;
@@ -456,166 +394,107 @@ struct TUserSecData
 	char *dba_user_name;
 	char *dba_password;
 } ;
+#pragma pack(pop)
 
 typedef TUserSecData *PUserSecData;
 
-typedef int __stdcall (*Tisc_add_user)(Ibexternals::PISC_STATUS status_vector, PUserSecData user_sec_data
-	);
+typedef int __stdcall (*Tisc_add_user)(Ibexternals::PISC_STATUS status_vector, PUserSecData user_sec_data);
 
-typedef int __stdcall (*Tisc_delete_user)(Ibexternals::PISC_STATUS status_vector, PUserSecData user_sec_data
-	);
+typedef int __stdcall (*Tisc_delete_user)(Ibexternals::PISC_STATUS status_vector, PUserSecData user_sec_data);
 
-typedef int __stdcall (*Tisc_modify_user)(Ibexternals::PISC_STATUS status_vector, PUserSecData user_sec_data
-	);
+typedef int __stdcall (*Tisc_modify_user)(Ibexternals::PISC_STATUS status_vector, PUserSecData user_sec_data);
 
-typedef int __stdcall (*Tisc_compile_request)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_REQ_HANDLE request_handle, short isc_arg4, char * isc_arg5);
+typedef int __stdcall (*Tisc_compile_request)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_REQ_HANDLE request_handle, short isc_arg4, char * isc_arg5);
 
-typedef int __stdcall (*Tisc_compile_request2)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_REQ_HANDLE request_handle, short isc_arg4, char * isc_arg5);
+typedef int __stdcall (*Tisc_compile_request2)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_REQ_HANDLE request_handle, short isc_arg4, char * isc_arg5);
 
-typedef int __stdcall (*Tisc_ddl)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, 
-	PISC_TR_HANDLE tran_handle, short isc_arg4, char * isc_arg5);
+typedef int __stdcall (*Tisc_ddl)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, short isc_arg4, char * isc_arg5);
 
-typedef int __stdcall (*Tisc_prepare_transaction)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle);
+typedef int __stdcall (*Tisc_prepare_transaction)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle);
 
-typedef int __stdcall (*Tisc_receive)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle
-	, short isc_arg3, short isc_arg4, Ibexternals::PVoid isc_arg5, short isc_arg6);
+typedef int __stdcall (*Tisc_receive)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle, short isc_arg3, short isc_arg4, Ibexternals::PVoid isc_arg5, short isc_arg6);
 
-typedef int __stdcall (*Tisc_receive2)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle
-	, short isc_arg3, short isc_arg4, Ibexternals::PVoid isc_arg5, short isc_arg6, short isc_arg7, int 
-	isc_arg8);
+typedef int __stdcall (*Tisc_receive2)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle, short isc_arg3, short isc_arg4, Ibexternals::PVoid isc_arg5, short isc_arg6, short isc_arg7, int isc_arg8);
 
-typedef int __stdcall (*Tisc_reconnect_transaction)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE tran_handle, short isc_arg4, char * isc_arg5);
+typedef int __stdcall (*Tisc_reconnect_transaction)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, short isc_arg4, char * isc_arg5);
 
-typedef int __stdcall (*Tisc_release_request)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE 
-	request_handle);
+typedef int __stdcall (*Tisc_release_request)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle);
 
-typedef int __stdcall (*Tisc_request_info)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle
-	, short isc_arg3, short isc_arg4, char * isc_arg5, short isc_arg6, char * isc_arg7);
+typedef int __stdcall (*Tisc_request_info)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle, short isc_arg3, short isc_arg4, char * isc_arg5, short isc_arg6, char * isc_arg7);
 
-typedef int __stdcall (*Tisc_seek_blob)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_HANDLE blob_handle
-	, short isc_arg3, int isc_arg4, Ibexternals::PISC_LONG isc_arg5);
+typedef int __stdcall (*Tisc_seek_blob)(Ibexternals::PISC_STATUS status_vector, PISC_BLOB_HANDLE blob_handle, short isc_arg3, int isc_arg4, Ibexternals::PISC_LONG isc_arg5);
 
-typedef int __stdcall (*Tisc_send)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle
-	, short isc_arg3, short isc_arg4, Ibexternals::PVoid isc_arg5, short isc_arg6);
+typedef int __stdcall (*Tisc_send)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle, short isc_arg3, short isc_arg4, Ibexternals::PVoid isc_arg5, short isc_arg6);
 
-typedef int __stdcall (*Tisc_start_and_send)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE 
-	request_handle, PISC_TR_HANDLE tran_handle, short isc_arg4, short isc_arg5, Ibexternals::PVoid isc_arg6
-	, short isc_arg7);
+typedef int __stdcall (*Tisc_start_and_send)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle, PISC_TR_HANDLE tran_handle, short isc_arg4, short isc_arg5, Ibexternals::PVoid isc_arg6, short isc_arg7);
 
-typedef int __stdcall (*Tisc_start_request)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE 
-	request_handle, PISC_TR_HANDLE tran_handle, short isc_arg4);
+typedef int __stdcall (*Tisc_start_request)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle, PISC_TR_HANDLE tran_handle, short isc_arg4);
 
-typedef int __stdcall (*Tisc_unwind_request)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle, short isc_arg3);
+typedef int __stdcall (*Tisc_unwind_request)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, short isc_arg3);
 
-typedef int __stdcall (*Tisc_wait_for_event)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, short length, char * event_buffer, char * result_buffer);
+typedef int __stdcall (*Tisc_wait_for_event)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, short length, char * event_buffer, char * result_buffer);
 
 typedef int __stdcall (*Tisc_close)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2);
 
-typedef int __stdcall (*Tisc_declare)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2, char * 
-	isc_arg3);
+typedef int __stdcall (*Tisc_declare)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2, char * isc_arg3);
 
-typedef int __stdcall (*Tisc_describe)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2, PXSQLDA 
-	isc_arg3);
+typedef int __stdcall (*Tisc_describe)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2, PXSQLDA isc_arg3);
 
-typedef int __stdcall (*Tisc_describe_bind)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2, 
-	PXSQLDA isc_arg3);
+typedef int __stdcall (*Tisc_describe_bind)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2, PXSQLDA isc_arg3);
 
-typedef int __stdcall (*Tisc_execute)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle
-	, char * isc_arg3, PXSQLDA isc_arg4);
+typedef int __stdcall (*Tisc_execute)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, char * isc_arg3, PXSQLDA isc_arg4);
 
-typedef int __stdcall (*Tisc_execute_immediate)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE tran_handle, Ibexternals::PShort isc_arg4, char * isc_arg5);
+typedef int __stdcall (*Tisc_execute_immediate)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, Ibexternals::PShort isc_arg4, char * isc_arg5);
 
-typedef int __stdcall (*Tisc_fetch)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2, PXSQLDA 
-	isc_arg3);
+typedef int __stdcall (*Tisc_fetch)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2, PXSQLDA isc_arg3);
 
-typedef int __stdcall (*Tisc_open)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle
-	, char * isc_arg3, PXSQLDA isc_arg4);
+typedef int __stdcall (*Tisc_open)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, char * isc_arg3, PXSQLDA isc_arg4);
 
-typedef int __stdcall (*Tisc_prepare)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, PISC_TR_HANDLE tran_handle, char * isc_arg4, Ibexternals::PShort isc_arg5, char * isc_arg6, PXSQLDA 
-	isc_arg7);
+typedef int __stdcall (*Tisc_prepare)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, char * isc_arg4, Ibexternals::PShort isc_arg5, char * isc_arg6, PXSQLDA isc_arg7);
 
-typedef int __stdcall (*Tisc_dsql_execute_m)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle, PISC_STMT_HANDLE statement_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, Word 
-	isc_arg7, char * isc_arg8);
+typedef int __stdcall (*Tisc_dsql_execute_m)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, PISC_STMT_HANDLE statement_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, Word isc_arg7, char * isc_arg8);
 
-typedef int __stdcall (*Tisc_dsql_execute2_m)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle, PISC_STMT_HANDLE statement_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, Word 
-	isc_arg7, char * isc_arg8, Word isc_arg9, char * isc_arg10, Word isc_arg11, Word isc_arg12, char * 
-	isc_arg13);
+typedef int __stdcall (*Tisc_dsql_execute2_m)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, PISC_STMT_HANDLE statement_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, Word isc_arg7, char * isc_arg8, Word isc_arg9, char * isc_arg10, Word isc_arg11, Word isc_arg12, char * isc_arg13);
 
-typedef int __stdcall (*Tisc_dsql_execute_immediate_m)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE tran_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, Word isc_arg7
-	, char * isc_arg8, Word isc_arg9, Word isc_arg10, char * isc_arg11);
+typedef int __stdcall (*Tisc_dsql_execute_immediate_m)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, Word isc_arg7, char * isc_arg8, Word isc_arg9, Word isc_arg10, char * isc_arg11);
 
-typedef int __stdcall (*Tisc_dsql_exec_immed3_m)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE tran_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, Word isc_arg7
-	, char * isc_arg8, Word isc_arg9, Word isc_arg10, char * isc_arg11, Word isc_arg12, char * isc_arg13
-	, Word isc_arg14, Word isc_arg15, char * isc_arg16);
+typedef int __stdcall (*Tisc_dsql_exec_immed3_m)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, Word isc_arg7, char * isc_arg8, Word isc_arg9, Word isc_arg10, char * isc_arg11, Word isc_arg12, char * isc_arg13, Word isc_arg14, Word isc_arg15, char * isc_arg16);
 
-typedef int __stdcall (*Tisc_dsql_fetch_m)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE 
-	statement_handle, Word isc_arg3, char * isc_arg4, Word isc_arg5, Word isc_arg6, char * isc_arg7);
+typedef int __stdcall (*Tisc_dsql_fetch_m)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE statement_handle, Word isc_arg3, char * isc_arg4, Word isc_arg5, Word isc_arg6, char * isc_arg7);
 
-typedef int __stdcall (*Tisc_dsql_insert_m)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE 
-	statement_handle, Word isc_arg3, char * isc_arg4, Word isc_arg5, Word isc_arg6, char * isc_arg7);
+typedef int __stdcall (*Tisc_dsql_insert_m)(Ibexternals::PISC_STATUS status_vector, PISC_STMT_HANDLE statement_handle, Word isc_arg3, char * isc_arg4, Word isc_arg5, Word isc_arg6, char * isc_arg7);
 
-typedef int __stdcall (*Tisc_dsql_prepare_m)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle, PISC_STMT_HANDLE statement_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, Word 
-	isc_arg7, char * isc_arg8, Word isc_arg9, char * isc_arg10);
+typedef int __stdcall (*Tisc_dsql_prepare_m)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, PISC_STMT_HANDLE statement_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, Word isc_arg7, char * isc_arg8, Word isc_arg9, char * isc_arg10);
 
 typedef int __stdcall (*Tisc_dsql_release)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2);
-	
 
-typedef int __stdcall (*Tisc_embed_dsql_close)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2
-	);
+typedef int __stdcall (*Tisc_embed_dsql_close)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2);
 
-typedef int __stdcall (*Tisc_embed_dsql_declare)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2
-	, char * isc_arg3);
+typedef int __stdcall (*Tisc_embed_dsql_declare)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2, char * isc_arg3);
 
-typedef int __stdcall (*Tisc_embed_dsql_describe)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2
-	, Word isc_arg3, PXSQLDA isc_arg4);
+typedef int __stdcall (*Tisc_embed_dsql_describe)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2, Word isc_arg3, PXSQLDA isc_arg4);
 
-typedef int __stdcall (*Tisc_embed_dsql_describe_bind)(Ibexternals::PISC_STATUS status_vector, char * 
-	isc_arg2, Word isc_arg3, PXSQLDA isc_arg4);
+typedef int __stdcall (*Tisc_embed_dsql_describe_bind)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2, Word isc_arg3, PXSQLDA isc_arg4);
 
-typedef int __stdcall (*Tisc_embed_dsql_execute)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle, char * isc_arg3, Word isc_arg4, PXSQLDA isc_arg5);
+typedef int __stdcall (*Tisc_embed_dsql_execute)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, char * isc_arg3, Word isc_arg4, PXSQLDA isc_arg5);
 
-typedef int __stdcall (*Tisc_embed_dsql_execute2)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle, char * isc_arg3, Word isc_arg4, PXSQLDA isc_arg5, PXSQLDA isc_arg6);
+typedef int __stdcall (*Tisc_embed_dsql_execute2)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, char * isc_arg3, Word isc_arg4, PXSQLDA isc_arg5, PXSQLDA isc_arg6);
 
-typedef int __stdcall (*Tisc_embed_dsql_execute_immed)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE tran_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, PXSQLDA isc_arg7
-	);
+typedef int __stdcall (*Tisc_embed_dsql_execute_immed)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, PXSQLDA isc_arg7);
 
-typedef int __stdcall (*Tisc_embed_dsql_fetch)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2
-	, Word isc_arg3, PXSQLDA isc_arg4);
+typedef int __stdcall (*Tisc_embed_dsql_fetch)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2, Word isc_arg3, PXSQLDA isc_arg4);
 
-typedef int __stdcall (*Tisc_embed_dsql_open)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle, char * isc_arg3, Word isc_arg4, PXSQLDA isc_arg5);
+typedef int __stdcall (*Tisc_embed_dsql_open)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, char * isc_arg3, Word isc_arg4, PXSQLDA isc_arg5);
 
-typedef int __stdcall (*Tisc_embed_dsql_open2)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE 
-	tran_handle, char * isc_arg3, Word isc_arg4, PXSQLDA isc_arg5, PXSQLDA isc_arg6);
+typedef int __stdcall (*Tisc_embed_dsql_open2)(Ibexternals::PISC_STATUS status_vector, PISC_TR_HANDLE tran_handle, char * isc_arg3, Word isc_arg4, PXSQLDA isc_arg5, PXSQLDA isc_arg6);
 
-typedef int __stdcall (*Tisc_embed_dsql_insert)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2
-	, Word isc_arg3, PXSQLDA isc_arg4);
+typedef int __stdcall (*Tisc_embed_dsql_insert)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2, Word isc_arg3, PXSQLDA isc_arg4);
 
-typedef int __stdcall (*Tisc_embed_dsql_prepare)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE 
-	db_handle, PISC_TR_HANDLE tran_handle, char * isc_arg4, Word isc_arg5, char * isc_arg6, Word isc_arg7
-	, PXSQLDA isc_arg8);
+typedef int __stdcall (*Tisc_embed_dsql_prepare)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, char * isc_arg4, Word isc_arg5, char * isc_arg6, Word isc_arg7, PXSQLDA isc_arg8);
 
-typedef int __stdcall (*Tisc_embed_dsql_release)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2
-	);
+typedef int __stdcall (*Tisc_embed_dsql_release)(Ibexternals::PISC_STATUS status_vector, char * isc_arg2);
 
-typedef PBSTREAM __stdcall (*TBLOB_open)(Ibexternals::PVoid blob_handle, char * isc_arg2, int isc_arg3
-	);
+typedef PBSTREAM __stdcall (*TBLOB_open)(Ibexternals::PVoid blob_handle, char * isc_arg2, int isc_arg3);
 
 typedef int __stdcall (*TBLOB_put)(char isc_arg1, PBSTREAM isc_arg2);
 
@@ -623,34 +502,25 @@ typedef int __stdcall (*TBLOB_close)(PBSTREAM isc_arg1);
 
 typedef int __stdcall (*TBLOB_get)(PBSTREAM isc_arg1);
 
-typedef int __stdcall (*TBLOB_display)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid 
-	tran_handle, char * isc_arg4);
+typedef int __stdcall (*TBLOB_display)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid tran_handle, char * isc_arg4);
 
-typedef int __stdcall (*TBLOB_dump)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid 
-	tran_handle, char * isc_arg4);
+typedef int __stdcall (*TBLOB_dump)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid tran_handle, char * isc_arg4);
 
-typedef int __stdcall (*TBLOB_edit)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid 
-	tran_handle, char * isc_arg4);
+typedef int __stdcall (*TBLOB_edit)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid tran_handle, char * isc_arg4);
 
-typedef int __stdcall (*TBLOB_load)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid 
-	tran_handle, char * isc_arg4);
+typedef int __stdcall (*TBLOB_load)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid tran_handle, char * isc_arg4);
 
-typedef int __stdcall (*TBLOB_text_dump)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid 
-	tran_handle, char * isc_arg4);
+typedef int __stdcall (*TBLOB_text_dump)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid tran_handle, char * isc_arg4);
 
-typedef int __stdcall (*TBLOB_text_load)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid 
-	tran_handle, char * isc_arg4);
+typedef int __stdcall (*TBLOB_text_load)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid tran_handle, char * isc_arg4);
 
-typedef int __stdcall (*TBopen)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid 
-	tran_handle, char * isc_arg4);
+typedef int __stdcall (*TBopen)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid tran_handle, char * isc_arg4);
 
-typedef PBSTREAM __stdcall (*TBopen2)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid 
-	tran_handle, char * isc_arg4, Word isc_arg5);
+typedef PBSTREAM __stdcall (*TBopen2)(PISC_QUAD isc_arg1, Ibexternals::PVoid db_handle, Ibexternals::PVoid tran_handle, char * isc_arg4, Word isc_arg5);
 
 typedef int __stdcall (*Tisc_ftof)(char * isc_arg1, Word isc_arg2, char * isc_arg3, Word isc_arg4);
 
-typedef int __stdcall (*Tisc_print_blr)(char * isc_arg1, TISC_CALLBACK isc_arg2, Ibexternals::PVoid 
-	isc_arg3, short isc_arg4);
+typedef int __stdcall (*Tisc_print_blr)(char * isc_arg1, TISC_CALLBACK isc_arg2, Ibexternals::PVoid isc_arg3, short isc_arg4);
 
 typedef void __stdcall (*Tisc_set_debug)(int isc_arg1);
 
@@ -660,83 +530,53 @@ typedef void __stdcall (*Tisc_vtof)(char * isc_arg1, char * isc_arg2, Word isc_a
 
 typedef void __stdcall (*Tisc_vtov)(char * isc_arg1, char * isc_arg2, short isc_arg3);
 
-typedef int __stdcall (*Tisc_version)(PISC_DB_HANDLE db_handle, TISC_CALLBACK isc_arg2, Ibexternals::PVoid 
-	isc_arg3);
+typedef int __stdcall (*Tisc_version)(PISC_DB_HANDLE db_handle, TISC_CALLBACK isc_arg2, Ibexternals::PVoid isc_arg3);
 
 typedef int __stdcall (*Tisc_reset_fpe)(Word isc_arg1);
 
-typedef int __stdcall (*Tisc_service_attach)(Ibexternals::PISC_STATUS status_vector, Word isc_arg2, 
-	char * isc_arg3, PISC_SVC_HANDLE service_handle, Word isc_arg5, char * isc_arg6);
+typedef int __stdcall (*Tisc_service_attach)(Ibexternals::PISC_STATUS status_vector, Word isc_arg2, char * isc_arg3, PISC_SVC_HANDLE service_handle, Word isc_arg5, char * isc_arg6);
 
-typedef int __stdcall (*Tisc_service_detach)(Ibexternals::PISC_STATUS status_vector, PISC_SVC_HANDLE 
-	service_handle);
+typedef int __stdcall (*Tisc_service_detach)(Ibexternals::PISC_STATUS status_vector, PISC_SVC_HANDLE service_handle);
 
-typedef int __stdcall (*Tisc_service_query)(Ibexternals::PISC_STATUS status_vector, PISC_SVC_HANDLE 
-	service_handle, PISC_SVC_HANDLE recv_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, char * 
-	isc_arg7, Word isc_arg8, char * isc_arg9);
+typedef int __stdcall (*Tisc_service_query)(Ibexternals::PISC_STATUS status_vector, PISC_SVC_HANDLE service_handle, PISC_SVC_HANDLE recv_handle, Word isc_arg4, char * isc_arg5, Word isc_arg6, char * isc_arg7, Word isc_arg8, char * isc_arg9);
 
-typedef int __stdcall (*Tisc_service_start)(Ibexternals::PISC_STATUS status_vector, PISC_SVC_HANDLE 
-	service_handle, PISC_SVC_HANDLE recv_handle, Word isc_arg4, char * isc_arg5);
+typedef int __stdcall (*Tisc_service_start)(Ibexternals::PISC_STATUS status_vector, PISC_SVC_HANDLE service_handle, PISC_SVC_HANDLE recv_handle, Word isc_arg4, char * isc_arg5);
 
-typedef int __stdcall (*Tisc_compile_map)(Ibexternals::PISC_STATUS status_vector, PISC_FORM_HANDLE form_handle
-	, PISC_REQ_HANDLE request_handle, Ibexternals::PShort isc_arg4, char * isc_arg5);
+typedef int __stdcall (*Tisc_compile_map)(Ibexternals::PISC_STATUS status_vector, PISC_FORM_HANDLE form_handle, PISC_REQ_HANDLE request_handle, Ibexternals::PShort isc_arg4, char * isc_arg5);
 
-typedef int __stdcall (*Tisc_compile_menu)(Ibexternals::PISC_STATUS status_vector, PISC_FORM_HANDLE 
-	form_handle, PISC_REQ_HANDLE request_handle, Ibexternals::PShort isc_arg4, char * isc_arg5);
+typedef int __stdcall (*Tisc_compile_menu)(Ibexternals::PISC_STATUS status_vector, PISC_FORM_HANDLE form_handle, PISC_REQ_HANDLE request_handle, Ibexternals::PShort isc_arg4, char * isc_arg5);
 
-typedef int __stdcall (*Tisc_compile_sub_map)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE 
-	win_handle, PISC_REQ_HANDLE request_handle, Ibexternals::PShort isc_arg4, char * isc_arg5);
+typedef int __stdcall (*Tisc_compile_sub_map)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE win_handle, PISC_REQ_HANDLE request_handle, Ibexternals::PShort isc_arg4, char * isc_arg5);
 
-typedef int __stdcall (*Tisc_create_window)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE 
-	win_handle, Ibexternals::PShort isc_arg3, char * isc_arg4, Ibexternals::PShort isc_arg5, Ibexternals::PShort 
-	isc_arg6);
+typedef int __stdcall (*Tisc_create_window)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE win_handle, Ibexternals::PShort isc_arg3, char * isc_arg4, Ibexternals::PShort isc_arg5, Ibexternals::PShort isc_arg6);
 
-typedef int __stdcall (*Tisc_delete_window)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE 
-	win_handle);
+typedef int __stdcall (*Tisc_delete_window)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE win_handle);
 
-typedef int __stdcall (*Tisc_drive_form)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, PISC_TR_HANDLE tran_handle, PISC_WIN_HANDLE win_handle, PISC_REQ_HANDLE request_handle, Ibexternals::PUChar 
-	isc_arg6, Ibexternals::PUChar isc_arg7);
+typedef int __stdcall (*Tisc_drive_form)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, PISC_WIN_HANDLE win_handle, PISC_REQ_HANDLE request_handle, Ibexternals::PUChar isc_arg6, Ibexternals::PUChar isc_arg7);
 
-typedef int __stdcall (*Tisc_drive_menu)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE win_handle
-	, PISC_REQ_HANDLE request_handle, Ibexternals::PShort isc_arg4, char * isc_arg5, Ibexternals::PShort 
-	isc_arg6, char * isc_arg7, Ibexternals::PShort isc_arg8, Ibexternals::PShort isc_arg9, char * isc_arg10
-	, Ibexternals::PISC_LONG isc_arg11);
+typedef int __stdcall (*Tisc_drive_menu)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE win_handle, PISC_REQ_HANDLE request_handle, Ibexternals::PShort isc_arg4, char * isc_arg5, Ibexternals::PShort isc_arg6, char * isc_arg7, Ibexternals::PShort isc_arg8, Ibexternals::PShort isc_arg9, char * isc_arg10, Ibexternals::PISC_LONG isc_arg11);
 
-typedef int __stdcall (*Tisc_form_delete)(Ibexternals::PISC_STATUS status_vector, PISC_FORM_HANDLE form_handle
-	);
+typedef int __stdcall (*Tisc_form_delete)(Ibexternals::PISC_STATUS status_vector, PISC_FORM_HANDLE form_handle);
 
-typedef int __stdcall (*Tisc_form_fetch)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, PISC_TR_HANDLE tran_handle, PISC_REQ_HANDLE request_handle, Ibexternals::PUChar isc_arg5);
+typedef int __stdcall (*Tisc_form_fetch)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, PISC_REQ_HANDLE request_handle, Ibexternals::PUChar isc_arg5);
 
-typedef int __stdcall (*Tisc_form_insert)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, PISC_TR_HANDLE tran_handle, PISC_REQ_HANDLE request_handle, Ibexternals::PUChar isc_arg5);
+typedef int __stdcall (*Tisc_form_insert)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, PISC_REQ_HANDLE request_handle, Ibexternals::PUChar isc_arg5);
 
-typedef int __stdcall (*Tisc_get_entree)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle
-	, Ibexternals::PShort isc_arg3, char * isc_arg4, Ibexternals::PISC_LONG isc_arg5, Ibexternals::PShort 
-	isc_arg6);
+typedef int __stdcall (*Tisc_get_entree)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle, Ibexternals::PShort isc_arg3, char * isc_arg4, Ibexternals::PISC_LONG isc_arg5, Ibexternals::PShort isc_arg6);
 
-typedef int __stdcall (*Tisc_initialize_menu)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE 
-	request_handle);
+typedef int __stdcall (*Tisc_initialize_menu)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle);
 
-typedef int __stdcall (*Tisc_menu)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE win_handle
-	, PISC_REQ_HANDLE request_handle, Ibexternals::PShort isc_arg4, char * isc_arg5);
+typedef int __stdcall (*Tisc_menu)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE win_handle, PISC_REQ_HANDLE request_handle, Ibexternals::PShort isc_arg4, char * isc_arg5);
 
-typedef int __stdcall (*Tisc_load_form)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle
-	, PISC_TR_HANDLE tran_handle, PISC_FORM_HANDLE form_handle, Ibexternals::PShort isc_arg5, char * isc_arg6
-	);
+typedef int __stdcall (*Tisc_load_form)(Ibexternals::PISC_STATUS status_vector, PISC_DB_HANDLE db_handle, PISC_TR_HANDLE tran_handle, PISC_FORM_HANDLE form_handle, Ibexternals::PShort isc_arg5, char * isc_arg6);
 
-typedef int __stdcall (*Tisc_pop_window)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE win_handle
-	);
+typedef int __stdcall (*Tisc_pop_window)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE win_handle);
 
-typedef int __stdcall (*Tisc_put_entree)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle
-	, Ibexternals::PShort isc_arg3, char * isc_arg4, Ibexternals::PISC_LONG isc_arg5);
+typedef int __stdcall (*Tisc_put_entree)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle, Ibexternals::PShort isc_arg3, char * isc_arg4, Ibexternals::PISC_LONG isc_arg5);
 
-typedef int __stdcall (*Tisc_reset_form)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle
-	);
+typedef int __stdcall (*Tisc_reset_form)(Ibexternals::PISC_STATUS status_vector, PISC_REQ_HANDLE request_handle);
 
-typedef int __stdcall (*Tisc_suspend_window)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE 
-	win_handle);
+typedef int __stdcall (*Tisc_suspend_window)(Ibexternals::PISC_STATUS status_vector, PISC_WIN_HANDLE win_handle);
 
 //-- var, const, procedure ---------------------------------------------------
 static const Shortint ISC_TRUE = 0x1;
@@ -1328,6 +1168,7 @@ static const Shortint isc_spb_sec_middlename = 0xb;
 static const Shortint isc_spb_sec_lastname = 0xc;
 static const Shortint isc_spb_lic_key = 0x5;
 static const Shortint isc_spb_lic_id = 0x6;
+static const Shortint isc_spb_lic_desc = 0x7;
 static const Shortint isc_spb_bkp_file = 0x5;
 static const Shortint isc_spb_bkp_factor = 0x6;
 static const Shortint isc_spb_bkp_length = 0x7;
@@ -1338,12 +1179,7 @@ static const Shortint isc_spb_bkp_no_garbage_collect = 0x8;
 static const Shortint isc_spb_bkp_old_descriptions = 0x10;
 static const Shortint isc_spb_bkp_non_transportable = 0x20;
 static const Shortint isc_spb_bkp_convert = 0x40;
-static const Shortint isc_spb_lck_sample = 0x5;
-static const Shortint isc_spb_lck_secs = 0x6;
-static const Shortint isc_spb_lck_contents = 0x1;
-static const Shortint isc_spb_lck_summary = 0x2;
-static const Shortint isc_spb_lck_wait = 0x4;
-static const Shortint isc_spb_lck_stats = 0x8;
+static const Byte isc_spb_bkp_expand = 0x80;
 static const Shortint isc_spb_prp_page_buffers = 0x5;
 static const Shortint isc_spb_prp_sweep_interval = 0x6;
 static const Shortint isc_spb_prp_shutdown_db = 0x7;
@@ -1379,13 +1215,13 @@ static const Shortint isc_spb_tra_advise = 0x1d;
 static const Shortint isc_spb_tra_advise_commit = 0x1e;
 static const Shortint isc_spb_tra_advise_rollback = 0x1f;
 static const Shortint isc_spb_tra_advise_unknown = 0x21;
-static const Shortint isc_spb_rpr_list_limbo_trans = 0x1;
-static const Shortint isc_spb_rpr_check_db = 0x2;
-static const Shortint isc_spb_rpr_ignore_checksum = 0x4;
-static const Shortint isc_spb_rpr_kill_shadows = 0x8;
-static const Shortint isc_spb_rpr_mend_db = 0x10;
-static const Shortint isc_spb_rpr_sweep_db = 0x20;
-static const Shortint isc_spb_rpr_validate_db = 0x40;
+static const Shortint isc_spb_rpr_validate_db = 0x1;
+static const Shortint isc_spb_rpr_sweep_db = 0x2;
+static const Shortint isc_spb_rpr_mend_db = 0x4;
+static const Shortint isc_spb_rpr_list_limbo_trans = 0x8;
+static const Shortint isc_spb_rpr_check_db = 0x10;
+static const Shortint isc_spb_rpr_ignore_checksum = 0x20;
+static const Shortint isc_spb_rpr_kill_shadows = 0x40;
 static const Byte isc_spb_rpr_full = 0x80;
 static const Shortint isc_spb_res_buffers = 0x9;
 static const Shortint isc_spb_res_page_size = 0xa;
@@ -1394,7 +1230,7 @@ static const Shortint isc_spb_res_access_mode = 0xc;
 static const Word isc_spb_res_deactivate_idx = 0x100;
 static const Word isc_spb_res_no_shadow = 0x200;
 static const Word isc_spb_res_no_validity = 0x400;
-static const Word isc_spb_res_one_ata_time = 0x800;
+static const Word isc_spb_res_one_at_a_time = 0x800;
 static const Word isc_spb_res_replace = 0x1000;
 static const Word isc_spb_res_create = 0x2000;
 static const Word isc_spb_res_use_all_space = 0x4000;
@@ -1757,9 +1593,7 @@ extern PACKAGE void __fastcall add_spb_length(char * &p, int length);
 extern PACKAGE void __fastcall add_spb_numeric(char * &p, int data);
 
 }	/* namespace Ibheader */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ibheader;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

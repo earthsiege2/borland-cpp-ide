@@ -4,14 +4,15 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.6  $ */
+
+/* $Revision: 9.11.2.2 $ */
 
 #if !defined(__STAT_H)
 #define __STAT_H
@@ -56,8 +57,10 @@ typedef unsigned short wchar_t;
 #define S_IWUSR  0x0080 /* owner may write */
 #define S_IXUSR  0x0040 /* owner may execute <directory search> */
 
+/* Changed alignment to 8 to match MS headers */
+
 #if !defined(_RC_INVOKED)
-#pragma option push -a1
+#pragma option push -a8
 #endif
 
 struct  stat
@@ -112,6 +115,12 @@ extern "C" {
 #define _S_IWRITE S_IWRITE
 #define _S_IEXEC  S_IEXEC
 
+/*
+ * This MS compatible name of _stat has a different size than
+ * the non-MS compatible stat, but stat(...) and _stat(...) share
+ * the same implementation -- so these two structs must have the
+ * same size and layout.
+
 struct  _stat
 {
     short st_dev;
@@ -126,7 +135,30 @@ struct  _stat
     long  st_mtime;
     long  st_ctime;
 };
+*/
 
+#if !defined(_RC_INVOKED)
+#pragma option push -a8
+#endif
+
+struct  _stat
+{
+    dev_t   st_dev;
+    ino_t   st_ino;
+    mode_t  st_mode;
+    nlink_t st_nlink;
+    uid_t   st_uid;
+    gid_t   st_gid;
+    dev_t   st_rdev;
+    off_t   st_size;
+    _TIME_T  st_atime;
+    _TIME_T  st_mtime;
+    _TIME_T  st_ctime;
+};
+
+#if !defined(_RC_INVOKED)
+#pragma option pop
+#endif
 
 int  _RTLENTRY _EXPFUNC _fstat(int __handle, struct _stat  *__statbuf);
 int  _RTLENTRY _EXPFUNC fstat(int __handle, struct stat  *__statbuf);
@@ -138,6 +170,10 @@ int  _RTLENTRY _EXPFUNC _stat(const char  *__path, struct _stat  *__statbuf);
 int  _RTLENTRY _EXPFUNC stat(const char *__path, struct stat  *__statbuf);
 #endif  /* __STDC__ && __BORLANDC__ */
 
+__inline int  _RTLENTRY _fstat(int __handle, struct _stat  *__statbuf)
+{
+    return fstat(__handle, (struct stat *)__statbuf);
+}
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 #ifndef CcalendrH
 #define CcalendrH
@@ -105,11 +105,11 @@ __published:
   __property OnKeyUp ;
   __property OnStartDock ;
   __property OnStartDrag ;
-                      
+
   BEGIN_MESSAGE_MAP
     VCL_MESSAGE_HANDLER(WM_SIZE, TWMSize, WMSize);
   END_MESSAGE_MAP(TCustomGrid);
 };
 
-#endif  // CalendarH
+#endif  // CcalendrH
 

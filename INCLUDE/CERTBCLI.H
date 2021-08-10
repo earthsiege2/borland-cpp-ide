@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 //+--------------------------------------------------------------------------
 //
 // Microsoft Windows
@@ -77,9 +76,7 @@ extern "C" {
 // file path. The code in the Backup API's rely on the fact that values 0-256
 // in 8 bit ascii map to the values 0-256 in unicode.
 
-#ifdef UNICODE
-    typedef WCHAR CSBFT;
-#endif
+typedef WCHAR CSBFT;
 
 
 // Bit flags:
@@ -111,17 +108,13 @@ typedef struct tagCSEDB_RSTMAPW {
     RPC_STRING WCHAR *pwszNewDatabaseName;
 } CSEDB_RSTMAPW;
 
-#ifdef UNICODE
-# define CSEDB_RSTMAP CSEDB_RSTMAPW
-#endif
+#define CSEDB_RSTMAP CSEDB_RSTMAPW
 #endif // CSEDB_RSTMAP
 
 
 // For all the functions in this interface that have at least one string
 // parameter, provide macros to invoke the appropriate version of the
 // corresponding function.
-
-#ifdef UNICODE
 
 #define CertSrvIsServerOnline		CertSrvIsServerOnlineW
 #define CertSrvBackupGetDynamicFileList	CertSrvBackupGetDynamicFileListW
@@ -135,8 +128,6 @@ typedef struct tagCSEDB_RSTMAPW {
 #define CertSrvRestoreRegister		CertSrvRestoreRegisterW
 
 #define CertSrvServerControl		CertSrvServerControlW
-
-#endif // #ifdef UNICODE
 
 
 //+--------------------------------------------------------------------------
@@ -591,6 +582,18 @@ CertSrvRestoreRegisterW(
     IN ULONG genLow,
     IN ULONG genHigh);
 
+HRESULT
+CERTBCLI_API
+CertSrvRestoreRegisterThroughFile(
+    IN HCSBC hbc,
+    OPTIONAL IN WCHAR const *pwszCheckPointFilePath,
+    OPTIONAL IN WCHAR const *pwszLogPath,
+    OPTIONAL IN CSEDB_RSTMAPW rgrstmap[],
+    IN LONG crstmap,
+    OPTIONAL IN WCHAR const *pwszBackupLogPath,
+    IN ULONG genLow,
+    IN ULONG genHigh);
+
 #ifdef _CERTBCLI_TYPECHECK
 FNCERTSRVRESTOREREGISTERW *pfnCertSrvRestoreRegister = CertSrvRestoreRegister;
 #endif
@@ -691,4 +694,3 @@ FNCERTSRVSERVERCONTROLW *pfnCertSrvServerControl = CertSrvServerControl;
 #endif
 
 #endif // __CERTBCLI_H__
-#pragma option pop /*P_O_Pop*/

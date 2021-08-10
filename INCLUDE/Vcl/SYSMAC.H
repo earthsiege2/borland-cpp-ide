@@ -1,5 +1,5 @@
 // SYSMAC.H: Generic macros and forward type definitions of Pascal types
-// Copyright (c) 1997, 1999 Borland International
+// Copyright (c) 1997, 2002 Borland Software Corporation
 
 #if !defined(SYSMAC_H)
 #define SYSMAC_H
@@ -9,7 +9,7 @@
 #endif
 
 #if !defined(__RTL_BUILD__)
-#pragma comment(lib, "vcle50.lib")
+#pragma comment(lib, "vcle.lib")
 #endif
 
 #if __BORLANDC__ < 0x500
@@ -48,7 +48,7 @@
 #endif // UNICODE || _UNICODE
 
 extern "C" {
-#pragma option push -vi // force inlining on
+#pragma option push -vi
 
 #undef GetDiskFreeSpaceEx
 inline BOOL WINAPI
@@ -63,14 +63,6 @@ GetDiskFreeSpaceEx(LPCTSTR lpDirectoryName,
                                           lpTotalNumberOfFreeBytes);
 }
 
-#include <winspool.h> // this is fortunately fairly small
-#undef SetPort
-inline BOOL WINAPI
-SetPort(LPTSTR pName, LPTSTR pPortName, DWORD dwLevel, LPBYTE pPortInfo)
-{
-  return _MAP_WINNAME(SetPort)(pName, pPortName, dwLevel, pPortInfo);
-}
-        
 #pragma option pop // -vi
 } // extern "C"
 
@@ -80,9 +72,6 @@ SetPort(LPTSTR pName, LPTSTR pPortName, DWORD dwLevel, LPBYTE pPortInfo)
 #if !defined(_BASETYPS_H_)
 #include <basetyps.h>
 #endif
-
-#define _ARRAYOF								// Used as a special token to tell the IDE when a
-												// event handler contains an open array
 
 #define __safecall __stdcall
 #define __interface class
@@ -113,8 +102,21 @@ SetPort(LPTSTR pName, LPTSTR pPortName, DWORD dwLevel, LPBYTE pPortInfo)
 #define MESSAGE
 #endif
 
-#if !defined(__typeinfo)
+#if !defined(__typeinfo)		// Use with TObject-derived classes
 #define __typeinfo(type)  (PTypeInfo)TObject::ClassInfo(__classid(type))
+#endif
+#if !defined(__arrayTypeinfo)		// Use with DynamicArray<T> types
+#define __arrayTypeinfo(type)  __delphirtti(type)
+#endif
+#if !defined(__interfaceTypeinfo)	// Use with interfaces that have DECLSPEC_RTTI
+#define __interfaceTypeinfo(type)  __delphirtti(type)
+#endif
+
+
+#if (__BORLANDC__ < 0x0560)
+#define DECLSPEC_DRTTI
+#else
+#define DECLSPEC_DRTTI       __declspec(delphirtti)             // Emit RTTI that's compatible with Delphi's format (Interfaces only)
 #endif
 
 #define BEGIN_MESSAGE_MAP   virtual void __fastcall Dispatch(void *Message) \
@@ -141,9 +143,39 @@ SetPort(LPTSTR pName, LPTSTR pPortName, DWORD dwLevel, LPBYTE pPortInfo)
           }                                         \
         }
 
+#if !defined(__unknwn_h__)
+#include <unknwn.h>
+#endif
+
 
 namespace System
 {
+
+// Forward ref. for QI of IInterface
+template <class T> class RTL_DELPHIRETURN DelphiInterface;
+
+// NOTE: IInvokable is really IUnknown - with the same UUID - resolves the mangling issues
+// we've been having in COM stuff
+__interface INTERFACE_UUID("00000000-0000-0000-C000-000000000046") IInterface : public IUnknown
+{
+public:
+  /** Template function to ease querying for a smart-Interface-object */
+  template <typename T>
+  bool __stdcall Supports(DelphiInterface<T>& smartIntf)
+  {
+    return QueryInterface(__uuidof(T), reinterpret_cast<void**>(static_cast<T**>(&smartIntf))) == S_OK;
+  }
+};
+
+// Base type from which SOAP remotable interfaces derive.
+// It triggers the compiler to generate RTTI for the
+// methods and their parameters. This information is then
+// used to expose the interface as SOAP ports/operations.
+//
+// NOTE: IInvokable is really IInterface - with the same UUID - with __declspec(delphirtti)
+__interface INTERFACE_UUID("00000000-0000-0000-C000-000000000046") DECLSPEC_DRTTI IInvokable : public IInterface
+{};
+
     class DELPHICLASS TObject;
     class PACKAGE TMetaClass;
     typedef TMetaClass* TClass;
@@ -168,6 +200,9 @@ namespace System
     class PACKAGE THeapStatus;
     class PACKAGE TMemoryManager;
 
+    class PACKAGE TVariantManager;
+    /* class PACKAGE TDynArrayTypeInfo; */
+
     // Inspector Query
     struct THeapBlock;
 
@@ -179,6 +214,7 @@ namespace System
     // Inspector Query
 
     typedef class TMemoryManager *PMemoryManager;
+    typedef class TVariantManager *PVariantManager;
 
     class RTL_DELPHIRETURN TDateTimeBase;
     class RTL_DELPHIRETURN TDateTime;
@@ -198,6 +234,9 @@ namespace System
     class PACKAGE TVarArrayBound;
     class PACKAGE TVarArray;
     typedef TVarArray *PVarArray;
+    typedef int TVarArrayCoorArray;
+    typedef TVarArrayCoorArray *PVarArrayCoorArray;
+
 
     typedef bool                 Boolean;          //
     typedef int                  Integer;          // -2147483648..2147484647
@@ -208,10 +247,11 @@ namespace System
     typedef unsigned char        Byte;             // 0..255
     typedef unsigned short       Word;             // 0..65535
     typedef unsigned long        DWord;            // 0..4294967295
+    typedef unsigned             LongWord;         // 0..4294967295
     typedef void*                Pointer;          //
     typedef char                 AnsiChar;         //
     typedef signed long          Longint;          // -2147483648..2147484647
-    typedef unsigned int         Cardinal;         // 0..2147484647
+    typedef unsigned int         Cardinal;         // 0..4294967295
     typedef long double          Extended;         // 10 byte real
     typedef float                Single;           // 4 byte real
     typedef double               Double;           // 8 byte real
@@ -235,19 +275,49 @@ namespace System
     typedef Extended*            PExtended;        //
     typedef Currency*            PCurrency;        //
     typedef Variant*             PVariant;         //
-    typedef OleVariant*          POleVariant;      //    
-    typedef __int64              LONG64;           // !! obsolete
+    typedef OleVariant*          POleVariant;      //
     typedef GUID                 TGUID;            //
     typedef TGUID*               PGUID;            //
     typedef HRESULT              HResult;          //
+    typedef AnsiString           UTF8String;
+    typedef PAnsiString          PUTF8String;
+
+    typedef Byte*                PByte;            //
+    typedef Integer*             PInteger;         //
+    typedef LongWord*            PLongWord;        //
+    typedef int*                 PLongint;         // 
+    typedef short*               PShortint;        // 
+    typedef short*               PSmallInt;        //
+    typedef bool*                PBoolean;         //
+    typedef PChar*               PPChar;           //
+    typedef double*              PDouble;          //
+    typedef LongWord             UCS4Char;         //
+    typedef LongWord*            PUCS4Char;        //
+    typedef DynamicArray<UCS4Char> UCS4String;     //
 
     typedef Integer __fastcall (*TThreadFunc)(Pointer Parameter);
     typedef void (*TModuleUnloadProc)(HINSTANCE hinstance);
     typedef bool (*TEnumModuleFunc)(HINSTANCE hinstance, void *data);
     typedef void (*TModuleUnloadProcLW)(HINSTANCE hinstance);
     typedef bool (*TEnumModuleFuncLW)(HINSTANCE hinstance, void *data);
+    typedef void (*TAssertErrorProc) (const AnsiString Message,
+                                      const AnsiString Filename,
+                                      int LineNumber,
+                                      void *ErrorAddr);
+    typedef void (*TSafeCallErrorProc) (HRESULT ErrorCode, void *ErrorAddr);
+    typedef void (*TDLLProc) (int Reason);
+    typedef void (*TDLLProcEx) (int Reason, int Reserved);
 
     typedef struct TVarData *PVarData;
+    enum TTextLineBreakStyle { tlbsLF, tlbsCRLF };
+
+    struct TMethod
+    {
+        void *Code;
+        void *Data;
+    };
+
+    typedef System::DelphiInterface<System::IInterface> _di_IInterface;
 }
 
 extern "C" __int64 _roundToInt64(long double);

@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1997  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -16,7 +16,6 @@ Revision History:
 --*/
 
 #ifndef __QOS_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __QOS_H_
 
 
@@ -46,14 +45,15 @@ typedef ULONG   SERVICETYPE;
 #define SERVICETYPE_NETWORK_CONTROL         0x0000000A  /* Network Control traffic */
 #define SERVICETYPE_QUALITATIVE             0x0000000D  /* Qualitative applications */ 
 
-/*
- *  Definitions for bitmap-based Service Type for each direction of data flow.
- */
 
+
+/*********  The usage of these is currently not supported.  ***************/
 #define SERVICE_BESTEFFORT                  0x80010000
 #define SERVICE_CONTROLLEDLOAD              0x80020000
 #define SERVICE_GUARANTEED                  0x80040000
 #define SERVICE_QUALITATIVE                 0x80200000
+/* **************************** ***** ************************************ */
+
 
 
 /*
@@ -78,6 +78,8 @@ typedef ULONG   SERVICETYPE;
  */
 
 #define SERVICE_NO_QOS_SIGNALING   0x40000000
+
+
 
 
 /*
@@ -179,7 +181,8 @@ typedef struct _QOS_SD_MODE {
 #define TC_NONCONF_BORROW      0
 #define TC_NONCONF_SHAPE       1
 #define TC_NONCONF_DISCARD     2
-#define TC_NONCONF_BORROW_PLUS 3
+#define TC_NONCONF_BORROW_PLUS 3 // Not supported currently
+
 
 /*
  * This structure allows an app to specify a prorated "average token rate" using by
@@ -196,5 +199,5 @@ typedef struct _QOS_SHAPING_RATE {
 
 } QOS_SHAPING_RATE, *LPQOS_SHAPING_RATE;
 
-#pragma option pop /*P_O_Pop*/
+
 #endif  /* __QOS_H_ */

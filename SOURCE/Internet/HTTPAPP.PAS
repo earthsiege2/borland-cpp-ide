@@ -1,18 +1,22 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Delphi and Kylix Cross-Platform Visual Component Library                    }
+{ Internet Application Runtime                                                }
+{                                                                             }
+{ Copyright (C) 1997, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ Licensees holding a valid Borland No-Nonsense License for this Software may }
+{ use this file in accordance with such license, which appears in the file    }
+{ license.txt that came with this Software.                                   }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{       Web server application components               }
-{                                                       }
-{       Copyright (c) 1997,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
 unit HTTPApp;
-
+                                                   
 interface
 
-uses SyncObjs, SysUtils, Classes, Forms, Masks, Contnrs;
+uses SysUtils, Classes, Masks, Contnrs;
 
 const
   sDateFormat = '"%s", dd "%s" yyyy hh:mm:ss';
@@ -22,6 +26,7 @@ const
   MAX_DATETIMES = 3;
 
 type
+  TWebExceptionEvent = procedure (Sender: TObject; E: Exception; var Handled: Boolean) of object;
   TMethodType = (mtAny, mtGet, mtPut, mtPost, mtHead);
 
 { Forward declaration }
@@ -30,19 +35,27 @@ type
 
 { TWebRequest }
 
+  TAbstractContentParser = class;
+  TAbstractWebRequestFiles = class;
   TWebRequest = class(TObject)
   private
+    FContentParser: TAbstractContentParser;
     FMethodType: TMethodType;
     FContentFields,
     FCookieFields,
     FQueryFields: TStrings;
+    function GetContentParser: TAbstractContentParser;
     function GetContentFields: TStrings;
     function GetCookieFields: TStrings;
     function GetQueryFields: TStrings;
+    function GetFiles: TAbstractWebRequestFiles;
   protected
     function GetStringVariable(Index: Integer): string; virtual; abstract;
     function GetDateVariable(Index: Integer): TDateTime; virtual; abstract;
     function GetIntegerVariable(Index: Integer): Integer; virtual; abstract;
+    function GetInternalPathInfo: string; virtual;
+    function GetInternalScriptName: string; virtual;
+    procedure UpdateMethodType;
   public
     constructor Create;
     destructor Destroy; override;
@@ -56,6 +69,8 @@ type
     function WriteClient(var Buffer; Count: Integer): Integer; virtual; abstract;
     // Write string contents back to client
     function WriteString(const AString: string): Boolean; virtual; abstract;
+    // Write HTTP header string
+    function WriteHeaders(StatusCode: Integer; const ReasonString, Headers: string): Boolean; virtual; abstract;
     // Utility to extract fields from a given string buffer
     procedure ExtractFields(Separators, WhiteSpace: TSysCharSet;
       Content: PChar; Strings: TStrings);
@@ -71,6 +86,8 @@ type
     function GetFieldByName(const Name: string): string; virtual; abstract;
     // The request method as an enumeration
     property MethodType: TMethodType read FMethodType;
+    // Content parser
+    property ContentParser: TAbstractContentParser read GetContentParser;
     // Field lists
     property ContentFields: TStrings read GetContentFields;
     property CookieFields: TStrings read GetCookieFields;
@@ -105,7 +122,59 @@ type
     property RemoteHost: string index 22 read GetStringVariable;
     property ScriptName: string index 23 read GetStringVariable;
     property ServerPort: Integer index 24 read GetIntegerVariable;
+    property InternalPathInfo: string read GetInternalPathInfo;
+    property InternalScriptName: string read GetInternalScriptName;
+    property Files: TAbstractWebRequestFiles read GetFiles;
   end;
+
+  TAbstractContentParser = class(TObject)
+  private
+    FWebRequest: TWebRequest;
+  protected
+    property WebRequest: TWebRequest read FWebRequest;
+    function GetContentFields: TStrings; virtual; abstract;
+    function GetFiles: TAbstractWebRequestFiles; virtual; abstract;
+  public
+    constructor Create(AWebRequest: TWebRequest); virtual;
+    class function CanParse(AWebRequest: TWebRequest): Boolean; virtual;
+  end;
+
+  TContentParser = class(TAbstractContentParser)
+  private
+    FContentFields: TStrings;
+    FFiles: TAbstractWebRequestFiles;
+  public
+    destructor Destroy; override;
+    function GetContentFields: TStrings; override;
+    function GetFiles: TAbstractWebRequestFiles; override;
+    class function CanParse(AWebRequest: TWebRequest): Boolean; override;
+  end;
+
+  TContentParserClass = class of TAbstractContentParser;
+
+  TAbstractWebRequestFile = class;
+  TAbstractWebRequestFiles = class(TObject)
+  protected
+    function GetCount: Integer; virtual; abstract;
+    function GetItem(I: Integer): TAbstractWebRequestFile; virtual; abstract;
+  public
+    property Items[I: Integer]: TAbstractWebRequestFile read GetItem; default;
+    property Count: Integer read GetCount;
+  end;
+
+  TAbstractWebRequestFile = class(TObject)
+  protected
+    function GetFieldName: string; virtual; abstract;
+    function GetFileName: string; virtual; abstract;
+    function GetStream: TStream; virtual; abstract;
+    function GetContentType: string; virtual; abstract;
+  public
+    property FieldName: string read GetFieldName;
+    property FileName: string read GetFileName;
+    property Stream: TStream read GetStream;
+    property ContentType: string read GetContentType;
+  end;
+
 
 { TCookie }
 
@@ -151,11 +220,11 @@ type
   TWebResponse = class(TObject)
   private
     FContentStream: TStream;
-    FCustomHeaders: TStrings;
     FCookies: TCookieCollection;
     procedure SetCustomHeaders(Value: TStrings);
   protected
     FHTTPRequest: TWebRequest;
+    FCustomHeaders: TStrings;      
     procedure AddCustomHeaders(var Headers: string);
     function GetStringVariable(Index: Integer): string; virtual; abstract;
     procedure SetStringVariable(Index: Integer; const Value: string); virtual; abstract;
@@ -211,153 +280,123 @@ type
     property CustomHeaders: TStrings read FCustomHeaders write SetCustomHeaders;
   end;
 
+  TAbstractWebSession = class(TObject)
+  protected
+    function GetValue(const AName: string): Variant; virtual; abstract;
+    procedure SetValue(const AName: string; const AValue: Variant); virtual; abstract;
+    function GetTimeoutMinutes: Integer; virtual; abstract;
+    procedure SetTimeoutMinutes(AValue: Integer); virtual; abstract;
+    function GetSessionID: string; virtual; abstract;
+  public
+    procedure UpdateResponse(AResponse: TWebResponse); virtual; abstract;
+    procedure Terminate; virtual; abstract;
+    property TimeoutMinutes: Integer read GetTimeoutMinutes write SetTimeoutMinutes;
+    property Values[const AName: string]: Variant read GetValue write SetValue;
+    property SessionID: string read GetSessionID;
+  end;
+
+
 { TWebDispatcherEditor }
 
   TCustomWebDispatcher = class;
   TCustomContentProducer = class;
 
-{ THTMLTagAttributes }
-
-  THTMLAlign = (haDefault, haLeft, haRight, haCenter);
-  THTMLVAlign = (haVDefault, haTop, haMiddle, haBottom, haBaseline);
-  THTMLBgColor = type string;
-
-  THTMLTagAttributes = class(TPersistent)
-  private
-    FProducer: TCustomContentProducer;
-    FCustom: string;
-    FOnChange: TNotifyEvent;
-    procedure SetCustom(const Value: string);
-  protected
-    procedure Changed;
-  public
-    constructor Create(Producer: TCustomContentProducer);
-    procedure RestoreDefaults; virtual;
-    property Producer: TCustomContentProducer read FProducer;
-    property OnChange: TNotifyEvent read FOnChange write FOnChange;
-  published
-    property Custom: string read FCustom write SetCustom;
+  ISetAppDispatcher = interface
+  ['{2F5E959E-DA65-11D3-A411-00C04F6BB853}']
+    procedure SetAppDispatcher(const ADispatcher: TComponent);
   end;
 
-  THTMLTableAttributes = class(THTMLTagAttributes)
-  private
-    FAlign: THTMLAlign;
-    FBorder: Integer;
-    FBgColor: THTMLBgColor;
-    FCellSpacing: Integer;
-    FCellPadding: Integer;
-    FWidth: Integer;
-    procedure SetAlign(Value: THTMLAlign);
-    procedure SetBorder(Value: Integer);
-    procedure SetBGColor(Value: THTMLBgColor);
-    procedure SetCellSpacing(Value: Integer);
-    procedure SetCellPadding(Value: Integer);
-    procedure SetWidth(Value: Integer);
-  protected
-    procedure AssignTo(Dest: TPersistent); override;
-  public
-    constructor Create(Producer: TCustomContentProducer);
-    procedure RestoreDefaults; override;
-  published
-    property Align: THTMLAlign read FAlign write SetAlign default haDefault;
-    property BgColor: THTMLBgColor read FBgColor write SetBgColor;
-    property Border: Integer read FBorder write SetBorder default -1;
-    property CellSpacing: Integer read FCellSpacing write SetCellSpacing default -1;
-    property CellPadding: Integer read FCellPadding write SetCellPAdding default -1;
-    property Width: Integer read FWidth write SetWidth default 100;
+  IGetAppDispatcher = interface
+  ['{2BF38474-E821-11D4-A54A-00C04F6BB853}']
+    function GetAppDispatcher: TComponent;
   end;
 
-  THTMLTableElementAttributes = class(THTMLTagAttributes)
-  private
-    FAlign: THTMLAlign;
-    FBgColor: THTMLBgColor;
-    FVAlign: THTMLVAlign;
-    procedure SetAlign(Value: THTMLAlign);
-    procedure SetBGColor(Value: THTMLBgColor);
-    procedure SetVAlign(Value: THTMLVAlign);
-  protected
-    procedure AssignTo(Dest: TPersistent); override;
-  public  
-    procedure RestoreDefaults; override;
-  published
-    property Align: THTMLAlign read FAlign write SetAlign default haDefault;
-    property BgColor: THTMLBgColor read FBgColor write SetBgColor;
-    property VAlign: THTMLVAlign read FVAlign write SetVAlign default haVDefault;
+  IProduceContent = interface
+  ['{AAFA17B7-E814-11D4-A54A-00C04F6BB853}']
+    function ProduceContent: string;
   end;
 
-  THTMLTableHeaderAttributes = class(THTMLTableElementAttributes)
-  private
-    FCaption: string;
-    procedure SetCaption(Value: string);
-  protected
-    procedure AssignTo(Dest: TPersistent); override;
-  public
-    procedure RestoreDefaults; override;
-  published
-    property Caption: string read FCaption write SetCaption;
+  IProduceContentFrom = interface
+  ['{AA0CC875-E81B-11D4-A54A-00C04F6BB853}']
+    function ProduceContentFromStream(Stream: TStream): string;
+    function ProduceContentFromString(const S: string): string;
   end;
 
-  THTMLTableRowAttributes = class(THTMLTableElementAttributes);
-  THTMLTableCellAttributes = class(THTMLTableElementAttributes);
+  TAbstractWebModuleList = class;
+
+  IMultiModuleSupport = interface
+  ['{06F13260-8FF8-11D4-A4E5-00C04F6BB853}']
+    procedure InitContext(Request: TWebRequest; Response: TWebResponse);
+    procedure InitModule(AModule: TComponent);
+    procedure FinishContext;
+  end;
+
+  IWebAppServices = interface
+  ['{D62F1586-E307-11D3-A418-00C04F6BB853}']
+    procedure InitContext(WebModuleList: TAbstractWebModuleList; Request: TWebRequest;
+  Response: TWebResponse);
+    function HandleRequest: Boolean;
+    procedure FinishContext;
+    function GetExceptionHandler: TObject;
+    property ExceptionHandler: TObject read GetExceptionHandler;
+  end;
+
+  IWebExceptionHandler = interface
+  ['{7664268F-9629-11D4-A4EC-00C04F6BB853}']
+    procedure HandleException(E: Exception; var Handled: Boolean);
+  end;
+
+  IGetWebAppServices = interface
+  ['{0BA86C6E-8E85-11D4-A4E3-00C04F6BB853}']
+    function GetWebAppServices: IWebAppServices;
+  end;
+
+  IWebRequestHandler = interface
+  ['{6FCCB05F-8FE0-11D4-A4E5-00C04F6BB853}']
+    function HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean;
+  end;
+
+  // Indicates dispatch actions container
+  IWebDispatchActions = interface
+  ['{C6E0CEA2-9483-4DCD-B75C-FFAE749729EC}']
+  end;
+
+  IGetWebRequestHandler = interface
+  ['{6FCCB060-8FE0-11D4-A4E5-00C04F6BB853}']
+    function GetWebRequestHandler: IWebRequestHandler;
+  end;
+
+  IWebDispatcherAccess = interface
+  ['{BD6000E1-177A-11D4-ABF9-C3E8C8ACE95A}']
+    function Request: TWebRequest;
+    function Response: TWebResponse;
+  end;
 
 { TCustomContentProducer }
 
-  TCustomContentProducer = class(TComponent)
+  TCustomContentProducer = class(TComponent, ISetAppDispatcher, IGetAppDispatcher, IProduceContent, IProduceContentFrom)
   private
-    FDispatcher: TCustomWebDispatcher;
+    FDispatcher: TComponent;
+    function GetDispatcher: IWebDispatcherAccess;
+    procedure SetDispatcher(Value: TComponent);
   protected
-    procedure SetDispatcher(Value: TCustomWebDispatcher); virtual;
+    { IProduceContent }
+    function ProduceContent: string;
+    { IProduceContentFrom }
+    function ProduceContentFromStream(Stream: TStream): string;
+    function ProduceContentFromString(const S: string): string;
+    { ISetAppDispatcher }
+    procedure SetAppDispatcher(const ADispatcher: TComponent);
+    { IGetAppDispatcher }
+    function GetAppDispatcher: TComponent;
+
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
   public
     function Content: string; virtual;
     function ContentFromStream(Stream: TStream): string; virtual;
     function ContentFromString(const S: string): string; virtual;
-  published
-    property Dispatcher: TCustomWebDispatcher read FDispatcher
-      write SetDispatcher stored False;
-  end;
-
-{ TCustomHTTPPageProducer }
-
-  TCustomPageProducer = class(TCustomContentProducer)
-  private
-    FHTMLFile: TFileName;
-    FHTMLDoc: TStrings;
-    FStripParamQuotes: Boolean;
-    procedure SetHTMLFile(const Value: TFileName);
-    procedure SetHTMLDoc(Value: TStrings);
-  protected
-    function HandleTag(const TagString: string; TagParams: TStrings): string; virtual;
-    property HTMLDoc: TStrings read FHTMLDoc write SetHTMLDoc;
-    property HTMLFile: TFileName read FHTMLFile write SetHTMLFile;
-    property StripParamQuotes: Boolean read FStripParamQuotes write FStripParamQuotes default True;
-  public
-    constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
-    function Content: string; override;
-    function ContentFromStream(Stream: TStream): string; override;
-    function ContentFromString(const S: string): string; override;
-  end;
-
-{ TPageProducer }
-
-  TTag = (tgCustom, tgLink, tgImage, tgTable, tgImageMap, tgObject, tgEmbed);
-
-  THTMLTagEvent = procedure (Sender: TObject; Tag: TTag; const TagString: string;
-    TagParams: TStrings; var ReplaceText: string) of object;
-
-  TPageProducer = class(TCustomPageProducer)
-  private
-    FOnHTMLTag: THTMLTagEvent;
-  protected
-    function HandleTag(const TagString: string; TagParams: TStrings): string; override;
-    procedure DoTagEvent(Tag: TTag; const TagString: string; TagParams: TStrings;
-      var ReplaceText: string); dynamic;
-  published
-    property HTMLDoc;
-    property HTMLFile;
-    property StripParamQuotes;
-    property OnHTMLTag: THTMLTagEvent read FOnHTMLTag write FOnHTMLTag;
+    property Dispatcher: IWebDispatcherAccess read GetDispatcher;
+    property DispatcherComponent: TComponent read FDispatcher;
   end;
 
 { TWebActionItem }
@@ -376,6 +415,7 @@ type
     FMask: TMask;
     FName: string;
     FProducer: TCustomContentProducer;
+    FProducerContent: TComponent;
     function DispatchAction(Request: TWebRequest; Response: TWebResponse;
       DoDefault: Boolean): Boolean;
     procedure SetDefault(Value: Boolean);
@@ -386,6 +426,7 @@ type
     procedure SetProducer(const Value: TCustomContentProducer);
     function GetMask: TMask;
     function ProducerPathInfo: string;
+    procedure SetProducerContent(const Value: TComponent);
   protected
     function GetDisplayName: string; override;
     procedure SetDisplayName(const Value: string); override;
@@ -401,6 +442,7 @@ type
     property Name: string read GetDisplayName write SetDisplayName;
     property PathInfo: string read GetPathInfo write SetPathInfo;
     property Producer: TCustomContentProducer read FProducer write SetProducer;
+    property ProducerContent: TComponent read FProducerContent write SetProducerContent;
     property OnAction: THTTPMethodEvent read FOnAction write SetOnAction;
   end;
 
@@ -435,16 +477,15 @@ type
     function DispatchMethodType: TMethodType;
     function DispatchRequest(Sender: TObject; Request: TWebRequest; Response: TWebResponse): Boolean;
     function DispatchMask: TMask;
-    function DispatchSubItems: IInterfaceList;
     property Enabled: Boolean read DispatchEnabled;
     property MethodType: TMethodType read DispatchMethodType;
     property Mask: TMask read DispatchMask;
-    property SubItems: IInterfaceList read DispatchSubItems;
   end;
 
 { TCustomWebDispatcher }
 
-  TCustomWebDispatcher = class(TDataModule)
+  TCustomWebDispatcher = class(TDataModule, IWebRequestHandler, IWebDispatchActions, IWebDispatcherAccess,
+    IMultiModuleSupport, IWebExceptionHandler)
   private
     FRequest: TWebRequest;
     FResponse: TWebResponse;
@@ -452,9 +493,27 @@ type
     FBeforeDispatch: THTTPMethodEvent;
     FAfterDispatch: THTTPMethodEvent;
     FDispatchList: TComponentList;
+    FOnException: TWebExceptionEvent;
+
     function GetAction(Index: Integer): TWebActionItem;
     procedure SetActions(Value: TWebActionItems);
+    function GetRequest: TWebRequest;
+    function GetResponse: TWebResponse;
   protected
+    { IWebRequestHandler }
+    function HandleRequest(Request: TWebRequest; Response: TWebResponse): Boolean;
+    { IMultiModuleSupport }
+    procedure InitContext(Request: TWebRequest; Response: TWebResponse);
+    procedure InitModule(AModule: TComponent);
+    procedure FinishContext;
+    { IWebDispatcherAccess }
+    function Access_Request: TWebRequest;
+    function Access_Response: TWebResponse;
+    function IWebDispatcherAccess.Request = Access_Request;
+    function IWebDispatcherAccess.Response = Access_Response;
+    { IWebExceptionHandler }
+    procedure HandleException(E: Exception; var Handled: Boolean);
+
     function DoAfterDispatch(Request: TWebRequest; Response: TWebResponse): Boolean;
     function DoBeforeDispatch(Request: TWebRequest; Response: TWebResponse): Boolean;
     function DispatchAction(Request: TWebRequest;
@@ -462,14 +521,16 @@ type
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     property BeforeDispatch: THTTPMethodEvent read FBeforeDispatch write FBeforeDispatch;
     property AfterDispatch: THTTPMethodEvent read FAfterDispatch write FAfterDispatch;
+
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function ActionByName(const AName: string): TWebActionItem;
     property Actions: TWebActionItems read FActions write SetActions;
     property Action[Index: Integer]: TWebActionItem read GetAction;
-    property Request: TWebRequest read FRequest;
-    property Response: TWebResponse read FResponse;
+    property Request: TWebRequest read GetRequest;
+    property Response: TWebResponse read GetResponse;
+    property OnException: TWebExceptionEvent read FOnException write FOnException;
   end;
 
 { TWebDispatcher }
@@ -479,7 +540,12 @@ type
     property Actions;
     property BeforeDispatch;
     property AfterDispatch;
+    property OnException;
   end;
+
+{ TWebModuleContext }
+
+  TWebModuleContext = TObject;
 
 { TWebModule }
 
@@ -490,24 +556,121 @@ type
     property Actions;
     property BeforeDispatch;
     property AfterDispatch;
+    property OnException;
   end;
 
-const
-  HTMLAlign: array[THTMLAlign] of string =
-    ('',
-     ' Align="Left"',
-     ' Align="Right"',
-     ' Align="Center"');
-  HTMLVAlign: array[THTMLVAlign] of string =
-    ('',
-     ' VAlign="Top"',
-     ' VAlign="Middle"',
-     ' VAlign="Bottom"',
-     ' VAlign="Basline"');
+  TAbstractWebPageInfo = class;
+  TWebModuleCreateMode = (crOnDemand, crAlways);
+  TWebModuleCacheMode = (caCache, caDestroy);
+  TAbstractWebModuleFactory = class
+  protected
+    function GetModuleName: string; virtual; abstract;
+    function GetIsAppModule: Boolean; virtual; abstract;
+    function GetCreateMode: TWebModuleCreateMode; virtual; abstract;
+    function GetCacheMode: TWebModuleCacheMode; virtual; abstract;
+    function GetComponentClass: TComponentClass; virtual; abstract;
+    function GetWebPageInfo: TAbstractWebPageInfo; virtual;
+  public
+    function GetModule: TComponent; virtual; abstract;
+    procedure PreventDestruction; virtual; abstract;
+    property ModuleName: string read GetModuleName;
+    property IsAppModule: Boolean read GetIsAppModule;
+    property ComponentClass: TComponentClass read GetComponentClass;
+    property CreateMode: TWebModuleCreateMode read GetCreateMode;
+    property CacheMode: TWebModuleCacheMode read GetCacheMode;
+    property WebPageInfo: TAbstractWebPageInfo read GetWebPageInfo;
+  end;
+
+  TAbstractWebPageModuleFactory = class(TAbstractWebModuleFactory)
+  private
+    FWebPageInfo: TAbstractWebPageInfo;
+  protected
+    function GetWebPageInfo: TAbstractWebPageInfo; override;
+  public
+    constructor Create(AWebPageInfo: TAbstractWebPageInfo);
+    destructor Destroy; override;
+  end;
+
+  TAbstractWebPageInfo = class
+  private
+    FFactory: TAbstractWebPageModuleFactory;
+  protected
+    function GetPageFile: string; virtual; abstract;
+    function GetPageHREF: string; virtual;
+    function GetPageName: string; virtual; abstract;
+    function GetPageDescription: string; virtual;
+    function GetPageTitle: string; virtual;
+    function GetIsPublished: Boolean; virtual;
+    function GetIsLoginRequired: Boolean; virtual;
+    function GetViewAccess: string; virtual;
+    function GetFactory: TAbstractWebPageModuleFactory;
+    procedure SetFactory(AFactory: TAbstractWebPageModuleFactory); virtual;
+  public
+    property PageHREF: string read GetPageHREF;
+    property PageDescription: string read GetPageDescription;
+    property PageTitle: string read GetPageTitle;
+    property PageName: string read GetPageName;
+    property IsPublished: Boolean read GetIsPublished;
+    property IsLoginRequired: Boolean read GetIsLoginRequired;
+    property PageFile: string read GetPageFile;
+    property ViewAccess: string read GetViewAccess;
+    property Factory: TAbstractWebPageModuleFactory read GetFactory write SetFactory;
+  end;
+
+  TModuleAddedProc = procedure(AWebModule: TComponent) of object;
+
+  TAbstractWebModuleList = class(TObject)
+  protected
+    function GetItem(I: Integer): TComponent; virtual; abstract;
+    function GetItemCount: Integer; virtual; abstract;
+    function GetOnModuleAdded: TModuleAddedProc; virtual; abstract;
+    procedure SetOnModuleAdded(AProc: TModuleAddedProc); virtual; abstract;
+    function GetFactoryCount: Integer; virtual; abstract;
+    function GetFactory(I: Integer): TAbstractWebModuleFactory; virtual; abstract;
+  public
+    function FindModuleClass(AClass: TComponentClass): TComponent; virtual; abstract;
+    function FindModuleName(const AClass: string): TComponent; virtual; abstract;
+    function AddModuleClass(AClass: TComponentClass): TComponent; virtual; abstract;
+    function AddModuleName(const AClass: string): TComponent; virtual; abstract;
+    property Items[I: Integer]: TComponent read GetItem;  default;
+    property ItemCount: Integer read GetItemCount;
+    property FactoryCount: Integer read GetFactoryCount;
+    property Factory[I: Integer]: TAbstractWebModuleFactory read GetFactory;
+    property OnModuleAdded: TModuleAddedProc read GetOnModuleAdded write SetOnModuleAdded;
+  end;
+
+  TDefaultWebAppServices = class(TInterfacedObject, IWebAppServices)
+  private
+    FRequestHandler: IWebRequestHandler;
+    FRequest: TWebRequest;
+    FWebModules: TAbstractWebModuleList;
+    FResponse: TWebResponse;
+    function FindWebDispatcher: TComponent;
+  protected
+    { IWebAppServices }
+    procedure InitContext(WebModuleList: TAbstractWebModuleList; Request: TWebRequest;
+      Response: TWebResponse);
+    procedure FinishContext;
+    function HandleRequest: Boolean;
+    function GetExceptionHandler: TObject;
+
+    function InvokeDispatcher: Boolean;
+    function FindRequestHandler: IWebRequestHandler; virtual;
+    function GetRequestHandler: IWebRequestHandler;
+    property Request: TWebRequest read FRequest;
+    property Response: TWebResponse read FResponse;
+    property WebModules: TAbstractWebModuleList read FWebModules;
+    property RequestHandler: IWebRequestHandler read GetRequestHandler;
+  end;
+
+  EWebBrokerException = class(Exception)
+  end;
 
 function DosPathToUnixPath(const Path: string): string;
 function HTTPDecode(const AStr: String): string;
 function HTTPEncode(const AStr: String): string;
+function HTMLEncode(const AStr: String): String;
+function HTMLDecode(const AStr: String): String;
 function ParseDate(const DateStr: string): TDateTime;
 procedure ExtractHTTPFields(Separators, WhiteSpace: TSysCharSet; Content: PChar;
   Strings: TStrings; StripQuotes: Boolean = False);
@@ -518,22 +681,37 @@ function UnixPathToDosPath(const Path: string): string;
 function MonthStr(DateTime: TDateTime): string;
 function DayOfWeekStr(DateTime: TDateTime): string;
 
+procedure RegisterContentParser(AClass: TContentParserClass);
+
 implementation
 
-uses Windows, CopyPrsr, WebConst;
+uses WebConst, BrkrConst;
+
+var
+  ContentParsers: TList;
+
+procedure RegisterContentParser(AClass: TContentParserClass);
+begin
+  ContentParsers.Add(AClass);
+end;
 
 { TWebRequest }
 
 constructor TWebRequest.Create;
 begin
   inherited Create;
-  if CompareText(Method, 'GET') = 0 then
+  UpdateMethodType;
+end;
+
+procedure TWebRequest.UpdateMethodType;
+begin
+  if CompareText(Method, 'GET') = 0 then  { do not localize }
     FMethodType := mtGet
-  else if CompareText(Method, 'PUT') = 0 then
+  else if CompareText(Method, 'PUT') = 0 then   { do not localize }
     FMethodType := mtPut
-  else if CompareText(Method, 'POST') = 0 then
+  else if CompareText(Method, 'POST') = 0 then  { do not localize }
     FMethodType := mtPost
-  else if CompareText(Method, 'HEAD') = 0 then
+  else if CompareText(Method, 'HEAD') = 0 then  { do not localize }
     FMethodType := mtHead;
 end;
 
@@ -542,6 +720,7 @@ begin
   FContentFields.Free;
   FCookieFields.Free;
   FQueryFields.Free;
+  FContentParser.Free;
   inherited Destroy;
 end;
 
@@ -564,12 +743,13 @@ begin
   end;
 end;
 
+
 procedure TWebRequest.ExtractCookieFields(Strings: TStrings);
 var
   CookieStr: string;
 begin
   CookieStr := Cookie;
-  ExtractHeaderFields([';'], [' '], PChar(CookieStr), Strings, False);
+  ExtractHeaderFields([';'], [' '], PChar(CookieStr), Strings, True);
 end;
 
 procedure TWebRequest.ExtractQueryFields(Strings: TStrings);
@@ -582,14 +762,9 @@ end;
 
 function TWebRequest.GetContentFields: TStrings;
 begin
-  if FContentFields = nil then
-  begin
-    FContentFields := TStringList.Create;
-    ExtractContentFields(FContentFields);
-  end;
-  Result := FContentFields;
+  Result := ContentParser.GetContentFields;
 end;
-
+ 
 function TWebRequest.GetCookieFields: TStrings;
 begin
   if FCookieFields = nil then
@@ -608,6 +783,43 @@ begin
     ExtractQueryFields(FQueryFields);
   end;
   Result := FQueryFields;
+end;
+
+function TWebRequest.GetInternalPathInfo: string;
+begin
+  Result := PathInfo;
+end;
+
+function TWebRequest.GetInternalScriptName: string;
+begin
+  Result := ScriptName;
+end;
+
+function TWebRequest.GetFiles: TAbstractWebRequestFiles;
+begin
+  Result := ContentParser.GetFiles;
+end;
+
+function TWebRequest.GetContentParser: TAbstractContentParser;
+var
+  I: Integer;
+  C: TContentParserClass;
+begin
+  if FContentParser = nil then
+  begin
+    for I := ContentParsers.Count - 1 downto 0 do
+    begin
+      C := TContentParserClass(ContentParsers[I]);
+      if C.CanParse(Self) then
+      begin
+        FContentParser := C.Create(Self);
+        Break;
+      end;
+    end;
+  end;
+  if FContentParser = nil then
+    FContentParser := TContentParser.Create(Self);
+  Result := FContentParser;
 end;
 
 { TCookie }
@@ -634,17 +846,17 @@ end;
 
 function TCookie.GetHeaderValue: string;
 begin
-  Result := Format('%s=%s; ', [FName, FValue]);
+  Result := Format('%s=%s; ', [HTTPEncode(FName), HTTPEncode(FValue)]);
   if Domain <> '' then
-    Result := Result + Format('domain=%s; ', [Domain]);
+    Result := Result + Format('domain=%s; ', [Domain]);  { do not localize }
   if Path <> '' then
-    Result := Result + Format('path=%s; ', [Path]);
+    Result := Result + Format('path=%s; ', [Path]);      { do not localize }
   if Expires > -1 then
     Result := Result +
-      Format(FormatDateTime('"expires="' + sDateFormat + ' "GMT; "', Expires),
+      Format(FormatDateTime('"expires="' + sDateFormat + ' "GMT; "', Expires),  { do not localize }
         [DayOfWeekStr(Expires), MonthStr(Expires)]);
-  if Secure then Result := Result + 'secure';
-  if Copy(Result, Length(Result) - 2, MaxInt) = '; ' then
+  if Secure then Result := Result + 'secure';  { do not localize }
+  if Copy(Result, Length(Result) - 1, MaxInt) = '; ' then
     SetLength(Result, Length(Result) - 2);
 end;
 
@@ -720,7 +932,7 @@ begin
     FContentStream := Value;
     if FContentStream <> nil then
       ContentLength := FContentStream.Size
-    else ContentLength := Length(Content);  
+    else ContentLength := Length(Content);
   end;
 end;
 
@@ -751,210 +963,7 @@ begin
   FCustomHeaders.Assign(Value);
 end;
 
-{ THTMLTagAttributes }
-
-constructor THTMLTagAttributes.Create(Producer: TCustomContentProducer);
-begin
-  inherited Create;
-  FProducer := Producer;
-end;
-
-procedure THTMLTagAttributes.Changed;
-begin
-  if Assigned(FOnChange) then FOnChange(Self);
-end;
-
-procedure THTMLTagAttributes.RestoreDefaults;
-begin
-  FCustom := '';
-  Changed;
-end;
-
-procedure THTMLTagAttributes.SetCustom(const Value: string);
-begin
-  if Value <> FCustom then
-  begin
-    FCustom := Value;
-    Changed;
-  end;
-end;
-
-{ THTMLTableAttributes }
-
-constructor THTMLTableAttributes.Create(Producer: TCustomContentProducer);
-begin
-  inherited Create(Producer);
-  FWidth := 100;
-  FBorder := -1;
-  FCellPadding := -1;
-  FCellSpacing := -1;
-end;
-
-procedure THTMLTableAttributes.AssignTo(Dest: TPersistent);
-begin
-  if Dest is THTMLTableAttributes then
-    with THTMLTableAttributes(Dest) do
-    begin
-      FWidth := Self.FWidth;
-      FAlign := Self.FAlign;
-      FBorder := Self.FBorder;
-      FBgColor := Self.FBgColor;
-      FCellSpacing := Self.FCellSpacing;
-      FCellPadding := Self.FCellPadding;
-      Changed;
-    end else inherited AssignTo(Dest);
-end;
-
-procedure THTMLTableAttributes.RestoreDefaults;
-begin
-  FCustom := '';
-  FAlign := haDefault;
-  FWidth := 100;
-  FBorder := -1;
-  FCellPadding := -1;
-  FCellSpacing := -1;
-  Changed;
-end;
-
-procedure THTMLTableAttributes.SetAlign(Value: THTMLAlign);
-begin
-  if Value <> FAlign then
-  begin
-    FAlign := Value;
-    Changed;
-  end;
-end;
-
-procedure THTMLTableAttributes.SetBorder(Value: Integer);
-begin
-  if Value <> FBorder then
-  begin
-    FBorder := Value;
-    Changed;
-  end;
-end;
-
-procedure THTMLTableAttributes.SetBGColor(Value: THTMLBgColor);
-begin
-  if Value <> FBgColor then
-  begin
-    FBgColor := Value;
-    Changed;
-  end;
-end;
-
-procedure THTMLTableAttributes.SetCellSpacing(Value: Integer);
-begin
-  if Value <> FCellSpacing then
-  begin
-    FCellSpacing := Value;
-    Changed;
-  end;
-end;
-
-procedure THTMLTableAttributes.SetCellPadding(Value: Integer);
-begin
-  if Value <> FCellPadding then
-  begin
-    FCellPadding := Value;
-    Changed;
-  end;
-end;
-
-procedure THTMLTableAttributes.SetWidth(Value: Integer);
-begin
-  if Value <> FWidth then
-  begin
-    FWidth := Value;
-    Changed;
-  end;
-end;
-
-{ THTMLTableElementAttributes }
-
-procedure THTMLTableElementAttributes.AssignTo(Dest: TPersistent);
-begin
-  if Dest is THTMLTableElementAttributes then
-    with THTMLTableElementAttributes(Dest) do
-    begin
-      FAlign := Self.FAlign;
-      FVAlign := Self.FVAlign;
-      FBgColor := Self.FBgColor;
-      Changed;
-    end else inherited AssignTo(Dest);
-end;
-
-procedure THTMLTableElementAttributes.RestoreDefaults;
-begin
-  FCustom := '';
-  FAlign := haDefault;
-  FVAlign := haVDefault;
-  FBgColor := '';
-  Changed;
-end;
-
-procedure THTMLTableElementAttributes.SetAlign(Value: THTMLAlign);
-begin
-  if Value <> FAlign then
-  begin
-    FAlign := Value;
-    Changed;
-  end;
-end;
-
-procedure THTMLTableElementAttributes.SetBGColor(Value: THTMLBgColor);
-begin
-  if Value <> FBgColor then
-  begin
-    FBgColor := Value;
-    Changed;
-  end;
-end;
-
-procedure THTMLTableElementAttributes.SetVAlign(Value: THTMLVAlign);
-begin
-  if Value <> FVAlign then
-  begin
-    FVAlign := Value;
-    Changed;
-  end;
-end;
-
-{ THTMLTableHeaderAttributes }
-
-procedure THTMLTableHeaderAttributes.AssignTo(Dest: TPersistent);
-begin
-  if Dest is THTMLTableHeaderAttributes then
-    with THTMLTableHeaderAttributes(Dest) do
-    begin
-      FAlign := Self.FAlign;
-      FVAlign := Self.FVAlign;
-      FBgColor := Self.FBgColor;
-      FCaption := Self.FCaption;
-      Changed;
-    end else inherited AssignTo(Dest);
-end;
-
-procedure THTMLTableHeaderAttributes.RestoreDefaults;
-begin
-  FCustom := '';
-  FAlign := haDefault;
-  FVAlign := haVDefault;
-  FBgColor := '';
-  FCaption := '';
-  Changed;
-end;
-
-procedure THTMLTableHeaderAttributes.SetCaption(Value: string);
-begin
-  if AnsiCompareStr(Value, FCaption) <> 0 then
-  begin
-    FCaption := Value;
-    Changed;
-  end;
-end;
-
-{ TCustomHTMLProducer }
+{ TCustomContentProducer }
 
 procedure TCustomContentProducer.Notification(AComponent: TComponent;
   Operation: TOperation);
@@ -964,7 +973,7 @@ begin
     FDispatcher := nil;
 end;
 
-procedure TCustomContentProducer.SetDispatcher(Value: TCustomWebDispatcher);
+procedure TCustomContentProducer.SetDispatcher(Value: TComponent);
 begin
   if FDispatcher <> Value then
   begin
@@ -988,148 +997,40 @@ begin
   Result := Content;
 end;
 
-{ TCustomPageProducer }
-
-constructor TCustomPageProducer.Create(AOwner: TComponent);
+procedure TCustomContentProducer.SetAppDispatcher(
+  const ADispatcher: TComponent);
 begin
-  inherited Create(AOwner);
-  RPR;
-  FStripParamQuotes := True;
-  FHTMLDoc := TStringList.Create;
+  SetDispatcher(ADispatcher);
 end;
 
-destructor TCustomPageProducer.Destroy;
+function TCustomContentProducer.GetDispatcher: IWebDispatcherAccess;
 begin
-  FHTMLDoc.Free;
-  inherited Destroy;
+  if Assigned(FDispatcher) then
+    Supports(IInterface(FDispatcher), IWebDispatcherAccess, Result)
+  else
+    Result := nil;
 end;
 
-function TCustomPageProducer.Content: string;
-var
-  InStream: TStream;
+function TCustomContentProducer.ProduceContent: string;
 begin
-  Result := '';
-  if FHTMLFile <> '' then
-    InStream := TFileStream.Create(FHTMLFile, fmOpenRead + fmShareDenyWrite)
-  else InStream := TStringStream.Create(FHTMLDoc.Text);
-  if InStream <> nil then
-  try
-    Result := ContentFromStream(InStream);
-  finally
-    InStream.Free;
-  end;
+  Result := Content;
 end;
 
-function TCustomPageProducer.ContentFromStream(Stream: TStream): string;
-var
-  Parser: TCopyParser;
-  OutStream: TStringStream;
-  ParamStr, ReplaceStr, TokenStr: string;
-  ParamList: TStringList;
+function TCustomContentProducer.ProduceContentFromStream(
+  Stream: TStream): string;
 begin
-  OutStream := TStringStream.Create('');
-  try
-    Parser := TCopyParser.Create(Stream, OutStream);
-    with Parser do
-    try
-      while True do
-      begin
-        while not (Token in [toEof, '<']) do
-        begin
-          CopyTokenToOutput;
-          SkipToken(True);
-        end;
-        if Token = toEOF then Break;
-        if Token = '<' then
-        begin
-          if SkipToken(False) = '#' then
-          begin
-            SkipToken(False);
-            TokenStr := TokenString;
-            ParamStr := TrimLeft(TrimRight(SkipToToken('>')));
-            ParamList := TStringList.Create;
-            try
-              ExtractHTTPFields([' '], [' '], PChar(ParamStr), ParamList, FStripParamQuotes);
-              ReplaceStr := HandleTag(TokenStr, ParamList);
-              OutStream.WriteString(ReplaceStr);
-            finally
-              ParamList.Free;
-            end;
-            SkipToken(True);
-          end else
-          begin
-            OutStream.WriteString('<');
-            CopyTokenToOutput;
-            SkipToken(True);
-          end;
-        end;
-      end;
-    finally
-      Parser.Free;
-    end;
-    Result := OutStream.DataString;
-  finally
-    OutStream.Free;
-  end;
+  Result := ContentFromStream(Stream);
 end;
 
-function TCustomPageProducer.ContentFromString(const S: string): string;
-var
-  InStream: TStream;
+function TCustomContentProducer.ProduceContentFromString(
+  const S: string): string;
 begin
-  InStream := TStringStream.Create(S);
-  try
-    Result := ContentFromStream(InStream);
-  finally
-    InStream.Free;
-  end;
+  Result := ContentFromString(S);
 end;
 
-function TCustomPageProducer.HandleTag(const TagString: string; TagParams: TStrings): string;
+function TCustomContentProducer.GetAppDispatcher: TComponent;
 begin
-  Result := Format('<#%s>', [TagString]);
-end;
-
-procedure TCustomPageProducer.SetHTMLFile(const Value: TFileName);
-begin
-  if CompareText(FHTMLFile, Value) <> 0 then
-  begin
-    FHTMLDoc.Clear;
-    FHTMLFile := Value;
-  end;
-end;
-
-procedure TCustomPageProducer.SetHTMLDoc(Value: TStrings);
-begin
-  FHTMLDoc.Assign(Value);
-  FHTMLFile := '';
-end;
-
-{ TPageProducer }
-
-var
-  TagSymbols: array[TTag] of string =
-    ('', 'LINK', 'IMAGE', 'TABLE', 'IMAGEMAP', 'OBJECT', 'EMBED');
-
-function TPageProducer.HandleTag(const TagString: string; TagParams: TStrings): string;
-var
-  Tag: TTag;
-begin
-  Tag := High(TTag);
-  while Tag >= Low(TTag) do
-  begin
-    if (Tag = tgCustom) or (CompareText(TagSymbols[Tag], TagString) = 0) then Break;
-    Dec(Tag);
-  end;
-  Result := '';
-  DoTagEvent(Tag, TagString, TagParams, Result);
-end;
-
-procedure TPageProducer.DoTagEvent(Tag: TTag; const TagString: string;
-  TagParams: TStrings; var ReplaceText: string);
-begin
-  if Assigned(FOnHTMLTag) then
-    FOnHTMLTag(Self, Tag, TagString, TagParams, ReplaceText);
+  Result := FDispatcher;
 end;
 
 { TWebActionItem }
@@ -1167,16 +1068,24 @@ end;
 
 function TWebActionItem.DispatchAction(Request: TWebRequest; Response: TWebResponse;
   DoDefault: Boolean): Boolean;
+var
+  Intf: IProduceContent;
 begin
   Result := False;
   if (FDefault and DoDefault) or (FEnabled and ((FMethodType = mtAny) or
     (FMethodType = Request.MethodType)) and
-    GetMask.Matches(Request.PathInfo)) then
+    GetMask.Matches(Request.InternalPathInfo)) then
   begin
     if Assigned(FProducer) then
     begin
       Result := True;
       Response.Content := FProducer.Content;
+    end
+    else if Assigned(FProducerContent) then
+    begin
+      Result := Supports(IUnknown(FProducerContent), IProduceContent, Intf);
+      if Result then
+        Response.Content := Intf.ProduceContent;
     end;
     if Assigned(FOnAction) then
     begin
@@ -1241,7 +1150,7 @@ begin
         Action := TWebActionItems(Collection).Items[I];
         if (Action <> Self) and (Action is TWebActionItem) and
           (AnsiCompareText(Value, Action.Name) = 0) then
-          raise Exception.Create(sDuplicateActionName);
+          raise EWebBrokerException.Create(sDuplicateActionName);
       end;
     FName := Value;
     Changed(False);
@@ -1272,7 +1181,10 @@ end;
 procedure TWebActionItem.SetProducer(const Value: TCustomContentProducer);
 begin
   if Assigned(Value) then
+  begin
     Value.FreeNotification(TWebActionItems(Collection).WebDispatcher);
+    FProducerContent := nil;
+  end;
   FProducer := Value;
 end;
 
@@ -1314,6 +1226,16 @@ begin
     FMask := Mask;
   end;
   Result := FMask;
+end;
+
+procedure TWebActionItem.SetProducerContent(const Value: TComponent);
+begin
+  if Assigned(Value) then
+  begin
+    Value.FreeNotification(TWebActionItems(Collection).WebDispatcher);
+    FProducer := nil;
+  end;
+  FProducerContent := Value;
 end;
 
 { TWebActionItems }
@@ -1363,7 +1285,11 @@ begin
     3: if Items[ItemIndex].Default then
          Result := '*' else Result := '';  //do not localize
     4: if Items[ItemIndex].Producer <> nil then
-         Result := Items[ItemIndex].Producer.Name else Result := '';  //do not localize
+         Result := Items[ItemIndex].Producer.Name
+       else if Items[ItemIndex].ProducerContent <> nil then
+         Result := Items[ItemIndex].ProducerContent.Name
+       else
+         Result := ''  //do not localize
   else
     Result := '';
   end;
@@ -1388,7 +1314,7 @@ begin
   J := 1;
   while True do
   begin
-    ItemName := Format('WebActionItem%d', [J]);
+    ItemName := Format('WebActionItem%d', [J]);  { do not localize }
     I := 0;
     while I < Count do
     begin
@@ -1421,26 +1347,33 @@ var
   I: Integer;
   Component: TComponent;
   DispatchIntf: IWebDispatch;
+  SetAppDispatcher: ISetAppDispatcher;
 begin
+{$IFDEF MSWINDOWS}
   RPR;
+{$ENDIF}
+{$IFDEF LINUX}
+  RCS;
+{$ENDIF}
   FDispatchList := TComponentList.Create;
   FDispatchList.OwnsObjects := False;
-  if (AOwner <> nil) and (AOwner <> Application) then
+  FOnException := nil;
+  if AOwner <> nil then
     if AOwner is TCustomWebDispatcher then
-      raise Exception.Create(sOnlyOneDispatcher)
-    else if csDesigning in ComponentState then 
+      raise EWebBrokerException.Create(sOnlyOneDispatcher)
+    else
       for I := 0 to AOwner.ComponentCount - 1 do
         if AOwner.Components[I] is TCustomWebDispatcher then
-          raise Exception.Create(sOnlyOneDispatcher);
-  inherited CreateNew(AOwner);
+          raise EWebBrokerException.Create(sOnlyOneDispatcher);
+  inherited CreateNew(AOwner, -1);
   FActions := TWebActionItems.Create(Self, TWebActionItem);
   if Owner <> nil then
     for I := 0 to Owner.ComponentCount - 1 do
     begin
       Component := Owner.Components[I];
-      if Component is TCustomContentProducer then
-        TCustomContentProducer(Component).Dispatcher := Self
-      else if Component.GetInterface(IWebDispatch, DispatchIntf) then
+      if Supports(IInterface(Component), ISetAppDispatcher, SetAppDispatcher) then
+        SetAppDispatcher.SetAppDispatcher(Self)
+      else if Supports(IInterface(Component), IWebDispatch, DispatchIntf) then
         FDispatchList.Add(Component);
     end;
 end;
@@ -1450,6 +1383,32 @@ begin
   inherited Destroy;
   FActions.Free;
   FDispatchList.Free;
+end;
+
+procedure TCustomWebDispatcher.HandleException(E: Exception; var Handled: Boolean);
+begin
+  Handled := False;
+  if Assigned(FOnException) then
+  begin
+    Handled := True;
+    FOnException(Self, E, Handled);
+    if Handled and (Response <> nil) then
+    begin
+      Response.StatusCode := 500;
+      Response.SendResponse;
+    end;
+  end;
+  if not Handled then
+    if Response <> nil then
+    begin
+      Response.Content := Format(sInternalApplicationError, [E.Message, Request.PathInfo]);
+      if not Response.Sent then
+      begin
+        Response.StatusCode := 500;
+        Response.SendResponse;
+      end;
+      Handled := True;
+    end;
 end;
 
 function TCustomWebDispatcher.ActionByName(const AName: string): TWebActionItem;
@@ -1484,7 +1443,7 @@ begin
   Result := False;
   if (Dispatch.Enabled and ((Dispatch.MethodType = mtAny) or
     (Dispatch.MethodType = Dispatch.MethodType)) and
-    Dispatch.Mask.Matches(Request.PathInfo)) then
+    Dispatch.Mask.Matches(Request.InternalPathInfo)) then
   begin
     Result := Dispatch.DispatchRequest(Sender, Request, Response);
   end;
@@ -1501,6 +1460,12 @@ begin
   FResponse := Response;
   I := 0;
   Default := nil;
+  if Response.Sent then
+  begin
+    Result := True;
+    { Note that WebSnapSvr enabled apps have no way to mark response as sent }
+    Exit;
+  end;
   Result := DoBeforeDispatch(Request, Response) or Response.Sent;
   while not Result and (I < FActions.Count) do
   begin
@@ -1513,7 +1478,7 @@ begin
   I := 0;
   while not Result and (I < FDispatchList.Count) do
   begin
-    if FDispatchList.Items[I].GetInterface(IWebDispatch, Dispatch) then
+    if Supports(IInterface(FDispatchList.Items[I]), IWebDispatch, Dispatch) then
     begin
       Result := DispatchHandler(Self, Dispatch,
         Request, Response, False);
@@ -1538,19 +1503,31 @@ procedure TCustomWebDispatcher.Notification(AComponent: TComponent;
 var
   I: Integer;
   DispatchIntf: IWebDispatch;
+  SetAppDispatcher: ISetAppDispatcher;
 begin
+  { For classic style WebBroker apps we assume a single data module that owns all producers. }
   inherited Notification(AComponent, Operation);
   if (Operation = opInsert) then
   begin
-    if (AComponent is TCustomContentProducer) then
-      TCustomContentProducer(AComponent).Dispatcher := Self
-    else if AComponent.GetInterface(IWebDispatch, DispatchIntf) then
+    if Supports(IInterface(AComponent), ISetAppDispatcher, SetAppDispatcher) then
+      SetAppDispatcher.SetAppDispatcher(Self)
+    else if Supports(IInterface(AComponent), IWebDispatch, DispatchIntf) then
       FDispatchList.Add(AComponent);
   end;
   if (Operation = opRemove) and (AComponent is TCustomContentProducer) then
     for I := 0 to FActions.Count - 1 do
       if FActions.Items[I].Producer = AComponent then
-        FActions.Items[I].Producer := nil;
+        FActions.Items[I].Producer := nil
+      else if FActions.Items[I].ProducerContent = AComponent then
+        FActions.Items[I].ProducerContent := nil;
+end;
+
+function TCustomWebDispatcher.HandleRequest(
+  Request: TWebRequest; Response: TWebResponse): Boolean;
+begin
+  FRequest := Request;
+  FResponse := Response;
+  Result := DispatchAction(Request, Response);
 end;
 
 procedure TCustomWebDispatcher.SetActions(Value: TWebActionItems);
@@ -1558,56 +1535,130 @@ begin
   FActions.Assign(Value);
 end;
 
+function TCustomWebDispatcher.GetRequest: TWebRequest;
+begin
+  Result := FRequest;
+end;
+
+function TCustomWebDispatcher.GetResponse: TWebResponse;
+begin
+  Result := FResponse;
+end;
+
+function TCustomWebDispatcher.Access_Request: TWebRequest;
+begin
+  Result := GetRequest;
+end;
+
+function TCustomWebDispatcher.Access_Response: TWebResponse;
+begin
+  Result := GetResponse;
+end;
+
+procedure TCustomWebDispatcher.FinishContext;
+begin
+  //
+end;
+
+procedure TCustomWebDispatcher.InitContext(Request: TWebRequest;
+  Response: TWebResponse);
+begin
+  FRequest := Request;
+  FResponse := Response;
+  FDispatchList.Clear;
+end;
+
+procedure TCustomWebDispatcher.InitModule(AModule: TComponent);
+var
+  I: Integer;
+  Component: TComponent;
+  DispatchIntf: IWebDispatch;
+begin
+  if AModule <> nil then
+    for I := 0 to AModule.ComponentCount - 1 do
+    begin
+      Component := AModule.Components[I];
+      if Supports(IInterface(Component), IWebDispatch, DispatchIntf) then
+        FDispatchList.Add(Component);
+    end;
+end;
+
 { TWebModule }
 
 constructor TWebModule.Create(AOwner: TComponent);
 begin
+  // Code to load a resource associated with this module.  If the class
+  // is TCustomWebDispatcher, assume that there is no resource.  This
+  // allows an app to dynamically instantiate a TCustomWebDispatcher as
+  // run time.
   inherited Create(AOwner);
   if (ClassType <> TCustomWebDispatcher) and not (csDesigning in ComponentState) then
-  begin
+  try
     if not InitInheritedComponent(Self, TCustomWebDispatcher) then
       raise EResNotFound.CreateFmt(SResNotFound, [ClassName]);
-    try
-      if Assigned(OnCreate) and OldCreateOrder then OnCreate(Self);
-    except
-      Forms.Application.HandleException(Self);
-    end;
+  {$IFDEF MSWINDOWS}
+    if Assigned(OnCreate) and OldCreateOrder then OnCreate(Self);
+  {$ENDIF}
+
+  {$IFDEF LINUX}
+    if Assigned(OnCreate) then OnCreate(Self);
+  {$ENDIF}
+  except
+    if Assigned(ApplicationHandleException) then
+      ApplicationHandleException(nil);
   end;
 end;
+
 
 function HTTPDecode(const AStr: String): String;
 var
   Sp, Rp, Cp: PChar;
+  S: String;
 begin
   SetLength(Result, Length(AStr));
   Sp := PChar(AStr);
   Rp := PChar(Result);
-  while Sp^ <> #0 do
-  begin
-    if not (Sp^ in ['+','%']) then
-      Rp^ := Sp^
-    else
-      if Sp^ = '+' then
-        Rp^ := ' '
+  Cp := Sp;
+  try
+    while Sp^ <> #0 do
+    begin
+      case Sp^ of
+        '+': Rp^ := ' ';
+        '%': begin
+               // Look for an escaped % (%%) or %<hex> encoded character
+               Inc(Sp);
+               if Sp^ = '%' then
+                 Rp^ := '%'
+               else
+               begin
+                 Cp := Sp;
+                 Inc(Sp);
+                 if (Cp^ <> #0) and (Sp^ <> #0) then
+                 begin
+                   S := '$' + Cp^ + Sp^;
+                   Rp^ := Chr(StrToInt(S));
+                 end
+                 else
+                   raise EWebBrokerException.CreateFmt(sErrorDecodingURLText, [Cp - PChar(AStr)]);
+               end;
+             end;
       else
-      begin
-        inc(Sp);
-        if Sp^ = '%' then
-          Rp^ := '%'
-        else
-        begin
-          Cp := Sp;
-          Inc(Sp);
-          Rp^ := Chr(StrToInt(Format('$%s%s',[Cp^, Sp^])));
-        end;
+        Rp^ := Sp^;
       end;
-    Inc(Rp);
-    Inc(Sp);
+      Inc(Rp);
+      Inc(Sp);
+    end;
+  except
+    on E:EConvertError do
+      raise EConvertError.CreateFmt(sInvalidURLEncodedChar,
+        ['%' + Cp^ + Sp^, Cp - PChar(AStr)])
   end;
   SetLength(Result, Rp - PChar(Result));
 end;
 
 function HTTPEncode(const AStr: String): String;
+// The NoConversion set contains characters as specificed in RFC 1738 and
+// should not be modified unless the standard changes.
 const
   NoConversion = ['A'..'Z','a'..'z','*','@','.','_','-',
                   '0'..'9','$','!','''','(',')'];
@@ -1635,6 +1686,111 @@ begin
   SetLength(Result, Rp - PChar(Result));
 end;
 
+function HTMLEncode(const AStr: String): String;
+const
+  Convert = ['&','<','>','"'];
+var
+  Sp, Rp: PChar;
+begin
+  SetLength(Result, Length(AStr) * 10);
+  Sp := PChar(AStr);
+  Rp := PChar(Result);
+  while Sp^ <> #0 do
+  begin
+    case Sp^ of
+      '&': begin
+             FormatBuf(Rp^, 5, '&amp;', 5, []);
+             Inc(Rp,4);
+           end;
+      '<',
+      '>': begin
+             if Sp^ = '<' then
+               FormatBuf(Rp^, 4, '&lt;', 4, [])
+             else
+               FormatBuf(Rp^, 4, '&gt;', 4, []);
+             Inc(Rp,3);
+           end;
+      '"': begin
+             FormatBuf(Rp^, 6, '&quot;', 6, []);
+             Inc(Rp,5);
+           end;
+    else
+      Rp^ := Sp^
+    end;
+    Inc(Rp);
+    Inc(Sp);
+  end;
+  SetLength(Result, Rp - PChar(Result));
+end;
+
+function HTMLDecode(const AStr: String): String;
+var
+  Sp, Rp, Cp, Tp: PChar;
+  S: String;
+  I, Code: Integer;
+begin
+  SetLength(Result, Length(AStr));
+  Sp := PChar(AStr);
+  Rp := PChar(Result);
+  Cp := Sp;
+  try
+    while Sp^ <> #0 do
+    begin
+      case Sp^ of
+        '&': begin
+               Cp := Sp;
+               Inc(Sp);
+               case Sp^ of
+                 'a': if AnsiStrPos(Sp, 'amp;') = Sp then  { do not localize }
+                      begin
+                        Inc(Sp, 3);
+                        Rp^ := '&';
+                      end;
+                 'l',
+                 'g': if (AnsiStrPos(Sp, 'lt;') = Sp) or (AnsiStrPos(Sp, 'lt;') = Sp) then { do not localize }
+                      begin
+                        Cp := Sp;
+                        Inc(Sp, 2);
+                        while (Sp^ <> ';') and (Sp^ <> #0) do
+                          Inc(Sp);
+                        if Cp^ = 'l' then
+                          Rp^ := '<'
+                        else
+                          Rp^ := '>';
+                      end;
+                 'q': if AnsiStrPos(Sp, 'quot;') = Sp then  { do not localize }
+                      begin
+                        Inc(Sp,4);
+                        Rp^ := '"';
+                      end;
+                 '#': begin
+                        Tp := Sp;
+                        Inc(Tp);
+                        while (Sp^ <> ';') and (Sp^ <> #0) do
+                          Inc(Sp);
+                        SetString(S, Tp, Sp - Tp);
+                        Val(S, I, Code);
+                        Rp^ := Chr((I));
+                      end;
+                 else
+                   raise EConvertError.CreateFmt(sInvalidHTMLEncodedChar,
+                     [Cp^ + Sp^, Cp - PChar(AStr)])
+               end;
+           end
+      else
+        Rp^ := Sp^;
+      end;
+      Inc(Rp);
+      Inc(Sp);
+    end;
+  except
+    on E:EConvertError do
+      raise EConvertError.CreateFmt(sInvalidHTMLEncodedChar,
+        [Cp^ + Sp^, Cp - PChar(AStr)])
+  end;
+  SetLength(Result, Rp - PChar(Result));
+end;
+
 const
 // These strings are NOT to be resourced
 
@@ -1654,6 +1810,11 @@ var
 
   function GetMonth: Boolean;
   begin
+    if Month < 13 then
+    begin
+      Result := False;
+      Exit;
+    end;
     Month := 1;
     while not Parser.TokenSymbolIs(Months[Month]) and (Month < 13) do Inc(Month);
     Result := Month < 13;
@@ -1675,11 +1836,13 @@ var
   end;
 
 begin
+  Month := 13;
   StringStream := TStringStream.Create(DateStr);
   try
     Parser := TParser.Create(StringStream);
     with Parser do
     try
+      Month := TokenInt;
       NextToken;
       if Token = ':' then NextToken;
       NextToken;
@@ -1723,26 +1886,53 @@ var
   function DoStripQuotes(const S: string): string;
   var
     I: Integer;
+    InStripQuote: Boolean;
+    StripQuoteChar: Char;
   begin
     Result := S;
+    InStripQuote := False;
+    StripQuoteChar := #0;
     if StripQuotes then
       for I := Length(Result) downto 1 do
         if Result[I] in ['''', '"'] then
+          if InStripQuote and (StripQuoteChar = Result[I]) then
+          begin
           Delete(Result, I, 1);
+            InStripQuote := False;
+          end
+          else
+          if not InStripQuote then
+          begin
+            StripQuoteChar := Result[I];
+            InStripQuote := True;
+            Delete(Result, I, 1);
+          end
+          else
+          if Result[I] = '''' then
+          begin
+            Delete(Result, I, 1);
+            Insert('&#39;', Result, I);  // This prevents some further processing to get problems with the apostrophe. { do not localize }
+          end
+          else
+          if Result[I] = '"' then
+          begin
+            Delete(Result, I, 1);
+            Insert('&quot;', Result, I); // Convert any instring placed " to the correct HTML value { do not localize }
+          end;
   end;
 
 begin
   if (Content = nil) or (Content^ = #0) then Exit;
   Tail := Content;
-  InQuote := False;
   QuoteChar := #0;
   repeat
     while Tail^ in WhiteSpace + [#13, #10] do Inc(Tail);
     Head := Tail;
+    InQuote := False;
     LeadQuote := False;
     while True do
     begin
-      while (InQuote and (Tail^ <> '"')) or
+     while (InQuote and not (Tail^ in [#0, '"'])) or
         not (Tail^ in Separators + [#0, #13, #10, '"']) do Inc(Tail);
       if Tail^ = '"' then
       begin
@@ -1781,39 +1971,39 @@ end;
 function StatusString(StatusCode: Integer): string;
 begin
   case StatusCode of
-    100: Result := 'Continue';
-    101: Result := 'Switching Protocols';
-    200: Result := 'OK';
-    201: Result := 'Created';
-    202: Result := 'Accepted';
-    203: Result := 'Non-Authoritative Information';
-    204: Result := 'No Content';
-    205: Result := 'Reset Content';
-    206: Result := 'Partial Content';
-    300: Result := 'Multiple Choices';
-    301: Result := 'Moved Permanently';
-    302: Result := 'Moved Temporarily';
-    303: Result := 'See Other';
-    304: Result := 'Not Modified';
-    305: Result := 'Use Proxy';
-    400: Result := 'Bad Request';
-    401: Result := 'Unauthorized';
-    402: Result := 'Payment Required';
-    403: Result := 'Forbidden';
-    404: Result := 'Not Found';
-    405: Result := 'Method Not Allowed';
-    406: Result := 'None Acceptable';
-    407: Result := 'Proxy Authentication Required';
-    408: Result := 'Request Timeout';
-    409: Result := 'Conflict';
-    410: Result := 'Gone';
-    411: Result := 'Length Required';
-    412: Result := 'Unless True';
-    500: Result := 'Internal Server Error';
-    501: Result := 'Not Implemented';
-    502: Result := 'Bad Gateway';
-    503: Result := 'Service Unavailable';
-    504: Result := 'Gateway Timeout';
+    100: Result := 'Continue';                                 {do not localize}
+    101: Result := 'Switching Protocols';                      {do not localize}
+    200: Result := 'OK';                                       {do not localize}
+    201: Result := 'Created';                                  {do not localize}
+    202: Result := 'Accepted';                                 {do not localize}
+    203: Result := 'Non-Authoritative Information';            {do not localize}
+    204: Result := 'No Content';                               {do not localize}
+    205: Result := 'Reset Content';                            {do not localize}
+    206: Result := 'Partial Content';                          {do not localize}
+    300: Result := 'Multiple Choices';                         {do not localize}
+    301: Result := 'Moved Permanently';                        {do not localize}
+    302: Result := 'Moved Temporarily';                        {do not localize}
+    303: Result := 'See Other';                                {do not localize}
+    304: Result := 'Not Modified';                             {do not localize}
+    305: Result := 'Use Proxy';                                {do not localize}
+    400: Result := 'Bad Request';                              {do not localize}
+    401: Result := 'Unauthorized';                             {do not localize}
+    402: Result := 'Payment Required';                         {do not localize}
+    403: Result := 'Forbidden';                                {do not localize}
+    404: Result := 'Not Found';                                {do not localize}
+    405: Result := 'Method Not Allowed';                       {do not localize}
+    406: Result := 'None Acceptable';                          {do not localize}
+    407: Result := 'Proxy Authentication Required';            {do not localize}
+    408: Result := 'Request Timeout';                          {do not localize}
+    409: Result := 'Conflict';                                 {do not localize}
+    410: Result := 'Gone';                                     {do not localize}
+    411: Result := 'Length Required';                          {do not localize}
+    412: Result := 'Unless True';                              {do not localize}
+    500: Result := 'Internal Server Error';                    {do not localize}
+    501: Result := 'Not Implemented';                          {do not localize}
+    502: Result := 'Bad Gateway';                              {do not localize}
+    503: Result := 'Service Unavailable';                      {do not localize}
+    504: Result := 'Gateway Timeout';                          {do not localize}
   else
     Result := '';
   end
@@ -1852,4 +2042,222 @@ begin
   Result := DaysOfWeek[DayOfWeek(DateTime)];
 end;
 
+
+{ TAbstractWebPageInfo }
+
+function TAbstractWebPageInfo.GetIsPublished: Boolean;
+begin
+  Result := False;
+end;
+
+function TAbstractWebPageInfo.GetPageDescription: string;
+begin
+  Result := GetPageName;
+end;
+
+function TAbstractWebPageInfo.GetPageHREF: string;
+begin
+  Result := GetPageName;
+end;
+
+function TAbstractWebPageInfo.GetPageTitle: string;
+begin
+  Result := GetPageName;
+end;
+
+function TAbstractWebPageInfo.GetFactory: TAbstractWebPageModuleFactory;
+begin
+  Result := FFactory;
+end;
+
+procedure TAbstractWebPageInfo.SetFactory(
+  AFactory: TAbstractWebPageModuleFactory);
+begin
+  FFactory := AFactory;
+end;
+
+function TAbstractWebPageInfo.GetIsLoginRequired: Boolean;
+begin
+  Result := False;
+end;
+
+function TAbstractWebPageInfo.GetViewAccess: string;
+begin
+  Result := '';
+end;
+
+{ TAbstractWebModuleFactory }
+
+function TAbstractWebModuleFactory.GetWebPageInfo: TAbstractWebPageInfo;
+begin
+  Result := nil;
+end;
+
+{ TAbstractWebPageModuleFactory }
+
+constructor TAbstractWebPageModuleFactory.Create(
+  AWebPageInfo: TAbstractWebPageInfo);
+begin
+  inherited Create;
+  FWebPageInfo := AWebPageInfo;
+  FWebPageInfo.Factory := Self;
+end;
+
+destructor TAbstractWebPageModuleFactory.Destroy;
+begin
+  inherited;
+  FWebPageInfo.Free;
+end;
+
+function TAbstractWebPageModuleFactory.GetWebPageInfo: TAbstractWebPageInfo;
+begin
+  Result := FWebPageInfo;
+end;
+
+{ TDefaultWebAppServices }
+
+function TDefaultWebAppServices.FindRequestHandler: IWebRequestHandler;
+var
+  Component: TComponent;
+begin
+  Result := nil;
+  Component := FindWebDispatcher;
+  if Component <> nil then
+    if not Supports(Component, IWebRequestHandler, Result) then
+      Assert(False, 'Expect support for IWebRequestHandler');  { do not localize }
+end;
+
+function TDefaultWebAppServices.GetRequestHandler: IWebRequestHandler;
+begin
+  if FRequestHandler = nil then
+    FRequestHandler := FindRequestHandler;
+  Result := FRequestHandler;
+end;
+
+function TDefaultWebAppServices.HandleRequest: Boolean;
+begin
+  Result := InvokeDispatcher;
+end;
+
+procedure TDefaultWebAppServices.InitContext(
+  WebModuleList: TAbstractWebModuleList; Request: TWebRequest;
+  Response: TWebResponse);
+begin
+  FRequest := Request;
+  FResponse := Response;
+  FWebModules := WebModuleList;
+end;
+
+procedure TDefaultWebAppServices.FinishContext;
+begin
+end;
+
+function TDefaultWebAppServices.InvokeDispatcher: Boolean;
+begin
+  if RequestHandler <> nil then
+  begin
+    Result := RequestHandler.HandleRequest(Request, Response);
+  end
+  else
+    raise EWebBrokerException.CreateRes(@sNoDispatcherComponent);
+end;
+
+function TDefaultWebAppServices.FindWebDispatcher: TComponent;
+var
+  WebModule: TComponent;
+  I, J: Integer;
+begin
+  Result := nil;
+  for I := 0 to WebModules.ItemCount - 1 do
+  begin
+    WebModule := WebModules[I];
+    if WebModule is TCustomWebDispatcher then
+      Result := WebModule
+    else
+      for J := 0 to WebModule.ComponentCount - 1 do
+        if WebModule.Components[J] is TCustomWebDispatcher then
+        begin
+          Result := WebModule.Components[J];
+          break;
+        end;
+    if Result <> nil then break;
+  end;
+end;
+
+function TDefaultWebAppServices.GetExceptionHandler: TObject;
+var
+  Intf: IUnknown;
+begin
+  Result := FindWebDispatcher;
+  if Result <> nil then
+    if not Supports(Result, IWebExceptionHandler, Intf) then
+      Assert(False, 'Expect support for IWebExceptionHandler'); { do not localize }
+end;
+
+{ TAbstractContentParser }
+
+class function TAbstractContentParser.CanParse(
+  AWebRequest: TWebRequest): Boolean;
+begin
+  Result := False;
+end;
+
+constructor TAbstractContentParser.Create(AWebRequest: TWebRequest);
+begin
+  FWebRequest := AWebRequest;
+  inherited Create;
+end;
+
+{ TContentParser }
+
+class function TContentParser.CanParse(AWebRequest: TWebRequest): Boolean;
+begin
+  Result := True;
+end;
+
+destructor TContentParser.Destroy;
+begin
+  FContentFields.Free;
+  FFiles.Free;
+  inherited;
+end;
+
+function TContentParser.GetContentFields: TStrings;
+begin
+  if FContentFields = nil then
+  begin
+    FContentFields := TStringList.Create;
+    WebRequest.ExtractContentFields(FContentFields);
+  end;
+  Result := FContentFields;
+end;
+
+type
+  TEmptyRequestFiles = class(TAbstractWebRequestFiles)
+  protected
+    function GetCount: Integer; override;
+    function GetItem(I: Integer): TAbstractWebRequestFile; override;
+  end;
+
+function TEmptyRequestFiles.GetCount: Integer;
+begin
+  Result := 0;
+end;
+
+function TEmptyRequestFiles.GetItem(I: Integer): TAbstractWebRequestFile;
+begin
+  Result := nil;
+end;
+
+function TContentParser.GetFiles: TAbstractWebRequestFiles;
+begin
+  if FFiles = nil then
+    FFiles := TEmptyRequestFiles.Create;
+  Result := FFiles;
+end;
+
+initialization
+  ContentParsers := TClassList.Create;
+finalization
+  ContentParsers.Free;
 end.

@@ -18,7 +18,6 @@
 
 
 #ifndef __SECEXT_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __SECEXT_H__
 #if _MSC_VER > 1000
 #pragma once
@@ -26,115 +25,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
-
-//
-// This is the combined authentication identity structure that may be
-// used with the negotiate package, NTLM, Kerberos, or SCHANNEL
-//
-
-
-#ifndef SEC_WINNT_AUTH_IDENTITY_VERSION
-#define SEC_WINNT_AUTH_IDENTITY_VERSION 0x200
-
-typedef struct _SEC_WINNT_AUTH_IDENTITY_EXW {
-    unsigned long Version;
-    unsigned long Length;
-    unsigned short SEC_FAR *User;
-    unsigned long UserLength;
-    unsigned short SEC_FAR *Domain;
-    unsigned long DomainLength;
-    unsigned short SEC_FAR *Password;
-    unsigned long PasswordLength;
-    unsigned long Flags;
-    unsigned short SEC_FAR * PackageList;
-    unsigned long PackageListLength;
-} SEC_WINNT_AUTH_IDENTITY_EXW, *PSEC_WINNT_AUTH_IDENTITY_EXW;
-
-
-typedef struct _SEC_WINNT_AUTH_IDENTITY_EXA {
-    unsigned long Version;
-    unsigned long Length;
-    unsigned char SEC_FAR *User;
-    unsigned long UserLength;
-    unsigned char SEC_FAR *Domain;
-    unsigned long DomainLength;
-    unsigned char SEC_FAR *Password;
-    unsigned long PasswordLength;
-    unsigned long Flags;
-    unsigned char SEC_FAR * PackageList;
-    unsigned long PackageListLength;
-} SEC_WINNT_AUTH_IDENTITY_EXA, *PSEC_WINNT_AUTH_IDENTITY_EXA;
-
-#ifdef UNICODE
-#define SEC_WINNT_AUTH_IDENTITY_EX  SEC_WINNT_AUTH_IDENTITY_EXW
-#else 
-#define SEC_WINNT_AUTH_IDENTITY_EX  SEC_WINNT_AUTH_IDENTITY_EXA
-#endif 
-
-#endif // SEC_WINNT_AUTH_IDENTITY_VERSION
-
-
-//
-// Common types used by negotiable security packages
-//
-
-#define SEC_WINNT_AUTH_IDENTITY_MARSHALLED      0x4     // all data is in one buffer
-#define SEC_WINNT_AUTH_IDENTITY_ONLY            0x8     // these credentials are for identity only - no PAC needed
-
-
-//
-// Routines for manipulating packages
-//
-
-typedef struct _SECURITY_PACKAGE_OPTIONS {
-    unsigned long   Size;
-    unsigned long   Type;
-    unsigned long   Flags;
-    unsigned long   SignatureSize;
-    void SEC_FAR *  Signature;
-} SECURITY_PACKAGE_OPTIONS, SEC_FAR * PSECURITY_PACKAGE_OPTIONS;
-
-#define SECPKG_OPTIONS_TYPE_UNKNOWN 0
-#define SECPKG_OPTIONS_TYPE_LSA     1
-#define SECPKG_OPTIONS_TYPE_SSPI    2
-
-#define SECPKG_OPTIONS_PERMANENT    0x00000001
-
-SECURITY_STATUS
-SEC_ENTRY
-AddSecurityPackageA(
-    SEC_CHAR SEC_FAR *  pszPackageName,
-    SECURITY_PACKAGE_OPTIONS SEC_FAR * Options
-    );
-
-SECURITY_STATUS
-SEC_ENTRY
-AddSecurityPackageW(
-    SEC_WCHAR SEC_FAR * pszPackageName,
-    SECURITY_PACKAGE_OPTIONS SEC_FAR * Options
-    );
-
-#ifdef UNICODE
-#define AddSecurityPackage  AddSecurityPackageW
-#else
-#define AddSecurityPackage  AddSecurityPackageA
-#endif
-
-SECURITY_STATUS
-SEC_ENTRY
-DeleteSecurityPackageA(
-    SEC_CHAR SEC_FAR *  pszPackageName );
-
-SECURITY_STATUS
-SEC_ENTRY
-DeleteSecurityPackageW(
-    SEC_WCHAR SEC_FAR * pszPackageName );
-
-#ifdef UNICODE
-#define DeleteSecurityPackage   DeleteSecurityPackageW
-#else
-#define DeleteSecurityPackage   DeleteSecurityPackageA
 #endif
 
 
@@ -206,9 +96,14 @@ typedef enum
     NameCanonicalEx = 9,
 
     // www/srv.engineering.com/engineering.com
-    NameServicePrincipal = 10
+    NameServicePrincipal = 10,
+
+    // DNS domain name + SAM username
+    // eg: engineering.widget.com\JohnDoe
+    NameDnsDomain = 12
 
 } EXTENDED_NAME_FORMAT, * PEXTENDED_NAME_FORMAT ;
+
 
 BOOLEAN
 SEC_ENTRY
@@ -280,5 +175,4 @@ TranslateNameW(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // __SECEXT_H__

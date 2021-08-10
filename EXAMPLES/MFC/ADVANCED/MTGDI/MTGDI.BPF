@@ -1,9 +1,10 @@
-USEUNIT("mainfrm.cpp");
-USEUNIT("mtgdi.cpp");
-USEUNIT("mtgdidoc.cpp");
-USEUNIT("mtgdivw.cpp");
-USEUNIT("stdafx.cpp");
-USEUNIT("threads.cpp");
-USERC("mtgdi.rc");
+USEUNIT(".\Mainfrm.cpp");
+USEUNIT(".\Mtgdi.cpp");
+USEUNIT(".\Mtgdidoc.cpp");
+USEUNIT(".\Mtgdivw.cpp");
+USEUNIT(".\Stdafx.cpp");
+USEUNIT(".\Threads.cpp");
+USERC(".\Mtgdi.rc");
+USEFILE("vctobpr.log");
 
 #define WinMain

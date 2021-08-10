@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NMFtp.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NMFtp.pas' rev: 6.00
 
 #ifndef NMFtpHPP
 #define NMFtpHPP
@@ -217,9 +217,7 @@ public:
 
 
 #pragma option push -b-
-enum TCmdType { cmdChangeDir, cmdMakeDir, cmdDelete, cmdRemoveDir, cmdList, cmdRename, cmdUpRestore, 
-	cmdDownRestore, cmdDownload, cmdUpload, cmdAppend, cmdReInit, cmdAllocate, cmdNList, cmdDoCommand, 
-	cmdCurrentDir };
+enum TCmdType { cmdChangeDir, cmdMakeDir, cmdDelete, cmdRemoveDir, cmdList, cmdRename, cmdUpRestore, cmdDownRestore, cmdDownload, cmdUpload, cmdAppend, cmdReInit, cmdAllocate, cmdNList, cmdDoCommand, cmdCurrentDir };
 #pragma option pop
 
 class DELPHICLASS FTPException;
@@ -229,38 +227,28 @@ class PASCALIMPLEMENTATION FTPException : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall FTPException(const AnsiString Msg) : Sysutils::Exception(Msg
-		) { }
+	/* Exception.Create */ inline __fastcall FTPException(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall FTPException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall FTPException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall FTPException(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall FTPException(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall FTPException(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall FTPException(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall FTPException(const AnsiString Msg, int AHelpContext) : 
-		Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall FTPException(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall FTPException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall FTPException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall FTPException(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall FTPException(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall FTPException(System::PResStringRec ResStringRec, 
-		const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall FTPException(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -352,19 +340,14 @@ __published:
 	__property Classes::TNotifyEvent OnConnect = {read=FOnConnect, write=FOnConnect};
 	__property AnsiString UserID = {read=FUserID, write=FUserID};
 	__property AnsiString Password = {read=FPassword, write=FPassword};
-	__property Classes::TNotifyEvent OnTransactionStart = {read=FTransactionStart, write=FTransactionStart
-		};
-	__property Classes::TNotifyEvent OnTransactionStop = {read=FTransactionStop, write=FTransactionStop
-		};
-	__property Psock::THandlerEvent OnAuthenticationNeeded = {read=FOnAuthenticationNeeded, write=FOnAuthenticationNeeded
-		};
-	__property Psock::THandlerEvent OnAuthenticationFailed = {read=FOnAuthenticationFailed, write=FOnAuthenticationFailed
-		};
+	__property Classes::TNotifyEvent OnTransactionStart = {read=FTransactionStart, write=FTransactionStart};
+	__property Classes::TNotifyEvent OnTransactionStop = {read=FTransactionStop, write=FTransactionStop};
+	__property Psock::THandlerEvent OnAuthenticationNeeded = {read=FOnAuthenticationNeeded, write=FOnAuthenticationNeeded};
+	__property Psock::THandlerEvent OnAuthenticationFailed = {read=FOnAuthenticationFailed, write=FOnAuthenticationFailed};
 	__property TFailureEvent OnFailure = {read=FOnFailure, write=FOnFailure};
 	__property TSuccessEvent OnSuccess = {read=FOnSuccess, write=FOnSuccess};
 	__property TNMListItem OnListItem = {read=FOnListItem, write=FOnListItem};
-	__property TUnsupportedEvent OnUnSupportedFunction = {read=FOnUnSupportedFunction, write=FOnUnSupportedFunction
-		};
+	__property TUnsupportedEvent OnUnSupportedFunction = {read=FOnUnSupportedFunction, write=FOnUnSupportedFunction};
 	__property int Vendor = {read=FVendor, write=FVendor, nodefault};
 	__property bool ParseList = {read=FParseList, write=FParseList, nodefault};
 	__property Proxy ;
@@ -424,9 +407,7 @@ static const Word NMOS_OS9 = 0x96f;
 static const Word NMOS_NETWARE = 0x970;
 
 }	/* namespace Nmftp */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nmftp;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

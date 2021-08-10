@@ -5,7 +5,7 @@
 //**  TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR
 //**  A PARTICULAR PURPOSE.
 //**
-//**  Copyright (C) 1993 - 1995 Microsoft Corporation. All Rights Reserved.
+//**  Copyright (C) 1993 - 1999 Microsoft Corporation. All Rights Reserved.
 //**
 //**  IDF.h
 //**
@@ -21,7 +21,6 @@
 //************************************************************************
 
 #ifndef __IDF_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __IDF_H__
 
 /*
@@ -392,5 +391,4 @@ typedef struct tag_IDFKEYMAP
    BYTE  abKeyMap[128];
 } IDFKEYMAP, *PIDFKEYMAP, FAR *LPIDFKEYMAP;
 
-#pragma option pop /*P_O_Pop*/
 #endif

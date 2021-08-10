@@ -17,7 +17,7 @@
 #include <tchar.h>
 #endif
 
-#if _MSC_VER >= 1100
+#if (_MSC_VER >= 1100) || (__BORLANDC__ >= 0x0550)
 #define DECLSPEC_UUID(x)    __declspec(uuid(x))
 #else
 #define DECLSPEC_UUID(x)

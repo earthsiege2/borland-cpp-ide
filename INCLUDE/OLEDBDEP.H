@@ -180,7 +180,7 @@ extern RPC_IF_HANDLE __MIDL_itf_oledbdep_0000_v0_0_s_ifspec;
 #endif
 #endif //UNALIGNED
 #undef OLEDBDECLSPEC
-#if _MSC_VER >= 1100
+#if (_MSC_VER >= 1100) || defined(__BORLANDC__)
 #define OLEDBDECLSPEC __declspec(selectany)
 #else
 #define OLEDBDECLSPEC 

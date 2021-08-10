@@ -13,7 +13,6 @@ Abstract:
 --*/
 
 #ifndef _INC_MGMTAPI
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_MGMTAPI
 
 #if _MSC_VER > 1000
@@ -155,5 +154,4 @@ SnmpMgrGetTrapEx(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _INC_MGMTAPI

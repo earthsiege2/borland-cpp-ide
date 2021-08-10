@@ -5,7 +5,7 @@
  *
  * random.h - Header for the Standard Library random generator
  *
- * $Id: random.h,v 1.6 1996/08/28 01:30:28 smithey Exp $
+ * $Id: random.h,v 9.9 2001/07/10 17:24:13 nyork Exp $
  *
  ***************************************************************************
  *

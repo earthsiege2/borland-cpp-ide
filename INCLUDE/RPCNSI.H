@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1992-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -14,7 +14,6 @@ Abstract:
 --*/
 
 #ifndef __RPCNSI_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __RPCNSI_H__
 
 #if _MSC_VER > 1000
@@ -553,5 +552,4 @@ RpcNsBindingSelect(
 #define RpcNsBindingUnexportPnP RpcNsBindingUnexportPnPA
 #endif /* UNICODE */
 
-#pragma option pop /*P_O_Pop*/
 #endif /* __RPCNSI_H__ */

@@ -14,7 +14,6 @@ Abstract:
 --*/
 
 #ifndef _VDMDBG_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _VDMDBG_
 
 #if _MSC_VER > 1000
@@ -80,6 +79,7 @@ extern "C" {
 #define VDMCONTEXT_SEGMENTS        (VDMCONTEXT_i386 | 0x00000004L) // DS, ES, FS, GS
 #define VDMCONTEXT_FLOATING_POINT  (VDMCONTEXT_i386 | 0x00000008L) // 387 state
 #define VDMCONTEXT_DEBUG_REGISTERS (VDMCONTEXT_i386 | 0x00000010L) // DB 0-3,6,7
+#define VDMCONTEXT_EXTENDED_REGISTERS  (VDMCONTEXT_i386 | 0x00000020L) // cpu specific extensions
 
 #define VDMCONTEXT_FULL (VDMCONTEXT_CONTROL | VDMCONTEXT_INTEGER |\
                       VDMCONTEXT_SEGMENTS)
@@ -93,17 +93,6 @@ typedef struct _CONTEXT VDMCONTEXT;
 typedef struct _LDT_ENTRY VDMLDT_ENTRY;
 
 #else // _X86_
-
-#if defined(_IA64_)
-
-//
-// FLOATING_SAVE_AREA, _CONTEXT86, _LDT_ENTRY are defined in ntia64.h
-//
-
-typedef struct _CONTEXT86 VDMCONTEXT;
-typedef struct _LDT_ENTRY VDMLDT_ENTRY;
-
-#else
 
 //
 //  Define the size of the 80387 save area, which is in the context frame.
@@ -237,8 +226,6 @@ typedef struct _VDMLDT_ENTRY {
         } Bits;
     } HighWord;
 } VDMLDT_ENTRY;
-
-#endif // _IA64_
 
 #endif // _X86_
 
@@ -711,5 +698,4 @@ typedef BOOL  (WINAPI *VDMGETADDREXPRESSIONPROC)(LPSTR, LPSTR, PWORD, PDWORD, PW
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _VDMDBG_

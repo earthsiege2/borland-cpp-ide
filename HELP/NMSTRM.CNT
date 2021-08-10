@@ -3,7 +3,7 @@
 
 :BASE NMStrm.hlp
 :TITLE FastNet Stream Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 TNMStrm component
 2 TNMStrm component Reference=Scribble1010
 2 Properties

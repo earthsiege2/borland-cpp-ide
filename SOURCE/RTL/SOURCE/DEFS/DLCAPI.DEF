@@ -1,8 +1,8 @@
-LIBRARY DLCAPI
+LIBRARY DlcAPI
 EXPORTS
 
-    AcsLan                                   = 'DLCAPI.DLL'.*
-    DlcCallDriver                            = 'DLCAPI.DLL'.*
-    GetAdapterNameFromNumber                 = 'DLCAPI.DLL'.*
-    GetAdapterNumberFromName                 = 'DLCAPI.DLL'.*
-    NtAcsLan                                 = 'DLCAPI.DLL'.*
+    AcsLan
+    DlcCallDriver
+    GetAdapterNameFromNumber
+    GetAdapterNumberFromName
+    NtAcsLan

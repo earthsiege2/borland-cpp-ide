@@ -1,18 +1,24 @@
-/* Copyright (c) 1992-1999, Microsoft Corporation, all rights reserved
-**
-** routeerr.h
-** Router external API
-** Router specific error codes
-*/
+/*++
+
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+Module Name:
+
+    mprerror.h
+
+Abstract:
+
+    Router specific error codes
+    
+--*/
 
 //
 // Don't change the comments following the manifest constants without
 // understanding how mapmsg works.
 //
 
-#ifndef _ROUTEERR_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
-#define _ROUTEERR_H_
+#ifndef _MPRERROR_H_
+#define _MPRERROR_H_
 
 #if _MSC_VER > 1000
 #pragma once
@@ -260,10 +266,44 @@
 
 #define ERROR_PROTOCOL_ALREADY_INSTALLED            (ROUTEBASE+48)
 /*
- * The transport is already installed with the router,
+ * The transport is already installed with the router.%0
  */
 
-#define ROUTEBASEEND                                (ROUTEBASE+48)
+#define ERROR_INVALID_SIGNATURE_LENGTH              (ROUTEBASE+49)
+/*
+ * Received invalid signature length in packet from RADIUS server.%0
+ */
 
-#pragma option pop /*P_O_Pop*/
-#endif // _ROUTEERR_H_
+#define ERROR_INVALID_SIGNATURE                     (ROUTEBASE+50)
+/*
+ * Received invalid signature in packet from RADIUS server.%0
+ */
+
+#define ERROR_NO_SIGNATURE                          (ROUTEBASE+51)
+/*
+ * Did not receive signature along with EAPMessage from RADIUS server.%0
+ */
+
+#define ERROR_INVALID_PACKET_LENGTH_OR_ID           (ROUTEBASE+52)
+/*
+ * Received packet with invalid length or Id from RADIUS server.%0
+ */
+
+#define ERROR_INVALID_ATTRIBUTE_LENGTH              (ROUTEBASE+53)
+/*
+ * Received packet with attribute with invalid length from RADIUS server.%0
+ */
+
+#define ERROR_INVALID_PACKET                        (ROUTEBASE+54)
+/*
+ * Received invalid packet from RADIUS server.%0
+ */
+
+#define ERROR_AUTHENTICATOR_MISMATCH                (ROUTEBASE+55)
+/*
+ * Authenticator does not match in packet from RADIUS server.%0
+ */
+
+#define ROUTEBASEEND                                (ROUTEBASE+56)
+
+#endif // _MPRERROR_H_

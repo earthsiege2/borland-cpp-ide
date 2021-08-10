@@ -1,43 +1,43 @@
-LIBRARY ADPTIF
+LIBRARY Adptif
 EXPORTS
 
-    CreateSocketPort                         = 'ADPTIF.DLL'.*
-    DeleteSocketPort                         = 'ADPTIF.DLL'.*
-    FwBindFwInterfaceToAdapter               = 'ADPTIF.DLL'.*
-    FwConnectionRequestFailed                = 'ADPTIF.DLL'.*
-    FwCreateInterface                        = 'ADPTIF.DLL'.*
-    FwDeleteInterface                        = 'ADPTIF.DLL'.*
-    FwDisableFwInterface                     = 'ADPTIF.DLL'.*
-    FwEnableFwInterface                      = 'ADPTIF.DLL'.*
-    FwGetInterface                           = 'ADPTIF.DLL'.*
-    FwGetNotificationResult                  = 'ADPTIF.DLL'.*
-    FwGetStaticNetbiosNames                  = 'ADPTIF.DLL'.*
-    FwIsStarted                              = 'ADPTIF.DLL'.*
-    FwNotifyConnectionRequest                = 'ADPTIF.DLL'.*
-    FwSetInterface                           = 'ADPTIF.DLL'.*
-    FwSetStaticNetbiosNames                  = 'ADPTIF.DLL'.*
-    FwStart                                  = 'ADPTIF.DLL'.*
-    FwStop                                   = 'ADPTIF.DLL'.*
-    FwUnbindFwInterfaceFromAdapter           = 'ADPTIF.DLL'.*
-    FwUpdateConfig                           = 'ADPTIF.DLL'.*
-    FwUpdateRouteTable                       = 'ADPTIF.DLL'.*
-    GetAdapterNameFromMacAddrW               = 'ADPTIF.DLL'.*
-    GetAdapterNameW                          = 'ADPTIF.DLL'.*
-    GetFilters                               = 'ADPTIF.DLL'.*
-    IpxAdjustIoCompletionParams              = 'ADPTIF.DLL'.*
-    IpxCreateAdapterConfigurationPort        = 'ADPTIF.DLL'.*
-    IpxDeleteAdapterConfigurationPort        = 'ADPTIF.DLL'.*
-    IpxDoesRouteExist                        = 'ADPTIF.DLL'.*
-    IpxGetAdapterConfig                      = 'ADPTIF.DLL'.*
-    IpxGetAdapterList                        = 'ADPTIF.DLL'.*
-    IpxGetOverlappedResult                   = 'ADPTIF.DLL'.*
-    IpxGetQueuedAdapterConfigurationStatus   = 'ADPTIF.DLL'.*
-    IpxGetQueuedCompletionStatus             = 'ADPTIF.DLL'.*
-    IpxPostQueuedCompletionStatus            = 'ADPTIF.DLL'.*
-    IpxRecvPacket                            = 'ADPTIF.DLL'.*
-    IpxSendPacket                            = 'ADPTIF.DLL'.*
-    IpxWanCreateAdapterConfigurationPort     = 'ADPTIF.DLL'.*
-    IpxWanQueryInactivityTimer               = 'ADPTIF.DLL'.*
-    IpxWanSetAdapterConfiguration            = 'ADPTIF.DLL'.*
-    ServiceMain                              = 'ADPTIF.DLL'.*
-    SetFilters                               = 'ADPTIF.DLL'.*
+    CreateSocketPort
+    DeleteSocketPort
+    FwBindFwInterfaceToAdapter
+    FwConnectionRequestFailed
+    FwCreateInterface
+    FwDeleteInterface
+    FwDisableFwInterface
+    FwEnableFwInterface
+    FwGetInterface
+    FwGetNotificationResult
+    FwGetStaticNetbiosNames
+    FwIsStarted
+    FwNotifyConnectionRequest
+    FwSetInterface
+    FwSetStaticNetbiosNames
+    FwStart
+    FwStop
+    FwUnbindFwInterfaceFromAdapter
+    FwUpdateConfig
+    FwUpdateRouteTable
+    GetAdapterNameFromMacAddrW
+    GetAdapterNameW
+    GetFilters
+    IpxAdjustIoCompletionParams
+    IpxCreateAdapterConfigurationPort
+    IpxDeleteAdapterConfigurationPort
+    IpxDoesRouteExist
+    IpxGetAdapterConfig
+    IpxGetAdapterList
+    IpxGetOverlappedResult
+    IpxGetQueuedAdapterConfigurationStatus
+    IpxGetQueuedCompletionStatus
+    IpxPostQueuedCompletionStatus
+    IpxRecvPacket
+    IpxSendPacket
+    IpxWanCreateAdapterConfigurationPort
+    IpxWanQueryInactivityTimer
+    IpxWanSetAdapterConfiguration
+    ServiceMain
+    SetFilters

@@ -1,14 +1,16 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1999-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
 {       NetBIOS 3.0 interface unit                      }
-{                                                       }
-{       Copyright (C) 1999 Inprise Corporation          }
-{                                                       }
 {*******************************************************}
 
-unit NB30;
+unit Nb30;
 
 { This unit contains the definitions
   for portable NetBIOS 3.0 support. }

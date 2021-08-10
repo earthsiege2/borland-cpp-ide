@@ -2,7 +2,7 @@
 **      D B D A O . H                                                   *
 **                                                                      *
 *************************************************************************
-** Copyright (C) 1996 - 1999 Microsoft Corporation			                *
+** Copyright (C) 1996 by Microsoft Corporation			                *
 **                 All Rights Reserved                                  *
 ************************************************************************/
 /*
@@ -17,7 +17,6 @@ Microsoft Data Access Objects SDK product.
 */
 
 #ifndef _DBDAO_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _DBDAO_H_
 
 // Ignore warning "non dll-interface class 'X' used as base for dll-interface class 'Y'
@@ -1201,5 +1200,4 @@ return Documents[pstrIndex];
 
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // _DBDAO_H_ 

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DSAttrA.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DSAttrA.pas' rev: 6.00
 
 #ifndef DSAttrAHPP
 #define DSAttrAHPP
@@ -58,12 +58,10 @@ public:
 	bool __fastcall Execute(Drintf::TAttrID &AttrID, bool &Continue);
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TAssociateAttributes(Classes::TComponent* AOwner
-		) : Forms::TForm(AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TAssociateAttributes(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TAssociateAttributes(Classes::TComponent* AOwner
-		, int Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TAssociateAttributes(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TAssociateAttributes(void) { }
@@ -71,8 +69,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TAssociateAttributes(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TAssociateAttributes(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -82,9 +79,7 @@ public:
 extern PACKAGE bool __fastcall GetAssociateAttributes(Drintf::TAttrID &AttrID, bool &Continue);
 
 }	/* namespace Dsattra */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dsattra;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

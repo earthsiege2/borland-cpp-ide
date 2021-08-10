@@ -11,7 +11,6 @@ Filename :	xolehlp.h
 ----------------------------------------------------------------------------- */
 
 #ifndef __XOLEHLP__H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __XOLEHLP__H__
 
 
@@ -30,7 +29,7 @@ const DWORD		OLE_TM_FLAG_NODEMANDSTART	= 0x00000001;
 
 // The following are flags used specifically for MSDTC.
 const DWORD		OLE_TM_FLAG_QUERY_SERVICE_LOCKSTATUS = 0x80000000;
-const DWORD		OLE_TM_FLAG_INTERNAL_TO_TM	=		   0x80000001;
+const DWORD		OLE_TM_FLAG_INTERNAL_TO_TM	=		   0x40000000;
 
 /*----------------------------------------
 //	Structure definitions
@@ -119,5 +118,4 @@ EXTERN_GUID(CLSID_MSDtcTransactionManager, 0x5b18ab61, 0x91d, 0x11d1, 0x97, 0xdf
 //--------------------------------------*/
 EXTERN_GUID(CLSID_MSDtcTransaction, 0x39f8d76b, 0x928, 0x11d1, 0x97, 0xdf, 0x0, 0xc0, 0x4f, 0xb9, 0x61, 0x8a);
 
-#pragma option pop /*P_O_Pop*/
 #endif

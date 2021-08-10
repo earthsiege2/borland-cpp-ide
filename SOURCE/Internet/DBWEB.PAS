@@ -1,18 +1,22 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Kylix and Delphi Cross-Platform Visual Component Library                    }
+{ Internet Application Runtime                                                }
+{                                                                             }
+{ Copyright (C) 1997, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ Licensees holding a valid Borland No-Nonsense License for this Software may }
+{ use this file in accordance with such license, which appears in the file    }
+{ license.txt that came with this Software.                                   }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{       Database Web server application components      }
-{                                                       }
-{       Copyright (c) 1997,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
 unit DBWeb;
 
 interface
 
-uses Windows, SysUtils, Classes, SyncObjs, HTTPApp, DB, DBTables;
+uses SysUtils, Classes, HTTPApp, DB, HTTPProd;
 
 type
 
@@ -93,6 +97,7 @@ type
   protected
     function GeTDSTableProducer: TDSTableProducer;
     function GetDisplayName: string; override;
+    function IsStored: Boolean;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
@@ -237,33 +242,6 @@ type
       write SetTableAttributes;
   end;
 
-{ TQueryTableProducer }
-
-  TQueryTableProducer = class(TDSTableProducer)
-  private
-    FQuery: TQuery;
-    procedure SetQuery(AQuery: TQuery);
-  protected
-    function GetDataSet: TDataSet; override;
-    procedure Notification(AComponent: TComponent; Operation: TOperation); override;
-    procedure SetDataSet(ADataSet: TDataSet); override;
-  public
-    function Content: string; override;
-  published
-    property Caption;
-    property CaptionAlignment;
-    property Columns;
-    property Footer;
-    property Header;
-    property MaxRows;
-    property Query: TQuery read FQuery write SetQuery;
-    property RowAttributes;
-    property TableAttributes;
-    property OnCreateContent;
-    property OnFormatCell;
-    property OnGetTableCaption;
-  end;
-
 { TDataSetTableProducer }
 
   TDataSetTableProducer = class(TDSTableProducer)
@@ -295,8 +273,7 @@ function HtmlTable(DataSet: TDataSet; DataSetHandler: TDSTableProducer;
 
 implementation
 
-uses
-  WebConst;
+uses WebConst;
 
 { Error reporting }
 
@@ -310,9 +287,14 @@ end;
 constructor TDSTableProducerEditor.Create(DSTableProducer: TDSTableProducer);
 begin
   inherited Create;
-  RPR;
   FDSTableProducer := DSTableProducer;
   FDSTableProducer.Editor := Self;
+{$IFDEF MSWINDOWS}
+  RPR;
+{$ENDIF}
+{$IFDEF LINUX}
+  RCS;
+{$ENDIF}
 end;
 
 destructor TDSTableProducerEditor.Destroy;
@@ -424,6 +406,11 @@ begin
   else Result := inherited GetDisplayName;
 end;
 
+function THTMLTableColumn.IsStored: Boolean;
+begin
+  Result := True;
+end;
+
 procedure THTMLTableColumn.RestoreDefaults;
 begin
   FAlign := haDefault;
@@ -510,18 +497,6 @@ begin
   GetField;
 end;
 
-type
-  TDefaultHTMLTableColumn = class(THTMLTableColumn)
-    constructor Create(Collection: TCollection); override;
-  end;
-
-{ TDefaultHTMLTableColumn }
-
-constructor TDefaultHTMLTableColumn.Create(Collection: TCollection);
-begin
-  inherited Create(Collection);
-end;
-
 { THTMLTableColumns }
 
 constructor THTMLTableColumns.Create(DSTableProducer: TDSTableProducer;
@@ -543,7 +518,10 @@ end;
 
 function THTMLTableColumns.GetState: THTMLColumnState;
 begin
-  Result := THTMLColumnState((Count > 0) and not (Items[0] is TDefaultHTMLTableColumn));
+  if Count > 0 then
+    Result := csCustom
+  else
+    Result := csDefault;
 end;
 
 procedure THTMLTableColumns.RestoreDefaults;
@@ -698,6 +676,9 @@ begin
     Field := DataSet.FindField(FieldName)
   else
     Field := DataSet.FieldByName(FieldName);
+
+  if Assigned(Field) and (csDestroying in Field.ComponentState) then
+    Field := nil;
 
   if FFieldCount = FFieldMapSize then
   begin
@@ -960,19 +941,19 @@ var
   end;
 
 begin
-  if (csLoading in ComponentState) then Exit;
+  if (csLoading in ComponentState) or (csDestroying in ComponentState) then Exit;
   SeenDefColumn := False;
   for I := 0 to FColumns.Count - 1 do
   begin
-    if (FColumns[I] is TDefaultHTMLTableColumn) then
+    if not FColumns[I].IsStored then
       SeenDefColumn := True
     else
       if SeenDefColumn then
       begin   { We have both custom and "passthrough columns". Kill the latter }
-        for J := FColumns.Count-1 downto 0 do
+        for J := FColumns.Count - 1 downto 0 do
         begin
           Column := FColumns[J];
-          if Column is TDefaultHTMLTableColumn then
+          if not Column.IsStored then
             Column.Free;
         end;
         Break;
@@ -1009,12 +990,12 @@ begin
           Column := FColumns[K]
         else
         begin
-          Column := TDefaultHTMLTableColumn.Create(FColumns);
+          Column := THTMLTableColumn.Create(FColumns);
           Column.Field := Fld;
         end;
       end
       else
-        Column := TDefaultHTMLTableColumn.Create(FColumns);
+        Column := THTMLTableColumn.Create(FColumns);
       Column.Index := J;
     end;
   end
@@ -1126,9 +1107,9 @@ end;
 const
   Align: array[THTMLCaptionAlignment] of string =
     ('>',
-     ' Align="Top">',
-     ' Align="Bottom">');
-  EndRow = '</TR>';
+     ' Align="Top">',        { do not localize }
+     ' Align="Bottom">');    { do not localize }
+  EndRow = '</TR>';          { do not localize }
 
 function TDSTableProducer.FormatCell(CellRow, CellColumn: Integer;
   CellData: string; const Tag: string; const BgColor: THTMLBgColor;
@@ -1149,7 +1130,7 @@ begin
   Result := Result + HTMLAlign[CellAlign];
   Result := Result + HTMLVAlign[CellVAlign];
   if CellBg <> '' then
-    Result := Format('%s BgColor="%s"', [Result, CellBg]);
+    Result := Format('%s BgColor="%s"', [Result, CellBg]);  { do not localize }
   if CustomAttrs <> '' then
     Result := Format('%s %s', [Result, CustomAttrs]);
   Result := Result + Format('>%s</%s>', [CellData, Tag]);
@@ -1157,13 +1138,13 @@ end;
 
 function TDSTableProducer.RowHeader: string;
 begin
-  Result := '<TR';
+  Result := '<TR';    { do not localize }
   with RowAttributes do
   begin
     Result := Result + HTMLAlign[Align];
     Result := Result + HTMLVAlign[VAlign];
     if BgColor <> '' then
-      Result := Format('%s BgColor="%s"', [Result, BgColor]);
+      Result := Format('%s BgColor="%s"', [Result, BgColor]);  { do not localize }
     if Custom <> '' then
       Result := Format('%s %s', [Result, Custom]);
   end;
@@ -1179,26 +1160,26 @@ begin
   CaptionAlign := CaptionAlignment;
   DoGetCaption(ACaption, CaptionAlign);
   if ACaption <> '' then
-    Result := Format('<Caption %s%s</Caption>', [Align[CaptionAlign], ACaption])
+    Result := Format('<Caption %s%s</Caption>', [Align[CaptionAlign], ACaption])  { do not localize }
   else Result := '';
 end;
 
 function TDSTableProducer.TableHeader: string;
 begin
-  Result := '<Table';
+  Result := '<Table';    { do not localize }
   with TableAttributes do
   begin
     if Width > 0 then
-      Result := Format('%s Width="%d%%"', [Result, Width]);
+      Result := Format('%s Width="%d%%"', [Result, Width]);   { do not localize }
     Result := Result + HTMLAlign[Align];
     if CellSpacing > -1 then
-      Result := Format('%s CellSpacing=%d', [Result, CellSpacing]);
+      Result := Format('%s CellSpacing=%d', [Result, CellSpacing]);  { do not localize }
     if CellPadding > -1 then
-      Result := Format('%s CellPadding=%d', [Result, CellPadding]);
+      Result := Format('%s CellPadding=%d', [Result, CellPadding]);  { do not localize }
     if Border > -1 then
-      Result := Format('%s Border=%d', [Result, Border]);
+      Result := Format('%s Border=%d', [Result, Border]);            { do not localize }
     if BgColor <> '' then
-      Result := Format('%s BgColor="%s"', [Result, BgColor]);
+      Result := Format('%s BgColor="%s"', [Result, BgColor]);        { do not localize }
     if Custom <> '' then
       Result := Format('%s %s', [Result, Custom]);
   end;
@@ -1223,81 +1204,29 @@ begin
       DisplayText := Field.DisplayLabel
     else DisplayText := Column.DisplayName;
     with Column.Title do
-      Result := Result + FormatCell(0, I, DisplayText, 'TH',
+      Result := Result + FormatCell(0, I, DisplayText, 'TH',   { do not localize }
         BgColor, Align, VAlign, Custom);
-  end;
-end;
-
-{ TQueryTableProducer }
-
-function TQueryTableProducer.Content: string;
-var
-  Params: TStrings;
-  I: Integer;
-  Name: string;
-  Param: TParam;
-begin
-  Result := '';
-  if FQuery <> nil then
-  begin
-    FQuery.Close;
-    Params := nil;
-    if Dispatcher <> nil then
-      if Dispatcher.Request.MethodType = mtPost then
-        Params := Dispatcher.Request.ContentFields
-      else if Dispatcher.Request.MethodType = mtGet then
-        Params := Dispatcher.Request.QueryFields;
-    if Params <> nil then
-      for I := 0 to Params.Count - 1 do
-      begin
-        Name := Params.Names[I];
-        Param := FQuery.Params.ParamByName(Name);
-        if Param <> nil then
-          Param.Text := Params.Values[Name];
-      end;
-    FQuery.Open;
-    if DoCreateContent then
-      Result := FHeader.Text + HTMLTable(FQuery, Self, FMaxRows) + FFooter.Text;
-  end;
-end;
-
-function TQueryTableProducer.GetDataSet: TDataSet;
-begin
-  Result := FQuery;
-end;
-
-procedure TQueryTableProducer.Notification(AComponent: TComponent; Operation: TOperation);
-begin
-  inherited Notification(AComponent, Operation);
-  if (Operation = opRemove) and (AComponent = FQuery) then
-    FQuery := nil;
-end;
-
-procedure TQueryTableProducer.SetDataSet(ADataSet: TDataSet);
-begin
-  SetQuery(ADataSet as TQuery);
-end;
-
-procedure TQueryTableProducer.SetQuery(AQuery: TQuery);
-begin
-  if FQuery <> AQuery then
-  begin
-    if AQuery <> nil then AQuery.FreeNotification(Self);
-    FQuery := AQuery;
-    InternalDataSource.DataSet := FQuery;
   end;
 end;
 
 { TDataSetTableProducer }
 
 function TDataSetTableProducer.Content: string;
+var
+  AutoActivate: Boolean;
 begin
   Result := '';
   if FDataSet <> nil then
   begin
     if FDataSet.Active and (Columns.Count = 0) then LayoutChanged;
-    if DoCreateContent then
-      Result := FHeader.Text + HTMLTable(FDataSet, Self, FMaxRows) + FFooter.Text;
+    AutoActivate := not FDataSet.Active;
+    if AutoActivate then FDataSet.Open;
+    try
+      if DoCreateContent then
+        Result := FHeader.Text + HTMLTable(FDataSet, Self, FMaxRows) + FFooter.Text;
+    finally
+      if AutoActivate then FDataSet.Close;
+    end;
   end;
 end;
 
@@ -1349,7 +1278,7 @@ begin
           DisplayText := Field.DisplayText
         else DisplayText := '';
         with Column do
-          Result := Result + DataSetHandler.FormatCell(J, I, DisplayText, 'TD',
+          Result := Result + DataSetHandler.FormatCell(J, I, DisplayText, 'TD',  { do not localize }
             BgColor, Align, VAlign, Custom);
       end;
       Result := Result + EndRow + #13#10;
@@ -1358,7 +1287,8 @@ begin
       Inc(J);
     end;
   end;
-  Result := Result + '</Table>';
+  Result := Result + '</Table>';  { do not localize }
 end;
 
 end.
+

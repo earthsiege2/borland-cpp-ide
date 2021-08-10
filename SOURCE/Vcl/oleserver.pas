@@ -1,13 +1,16 @@
+
 {*******************************************************}
-{       Borland Delphi Visual Component Library         }
-{       Support classes for hosting servers in IDE      }
 {                                                       }
-{       $Revision:   1.19  $                            }
-{       Copyright (c) 1999 Inprise Corporation          }
+{       Borland Delphi Visual Component Library         }
+{                                                       }
+{  Copyright (c) 1999-2001 Borland Software Corporation }
+{                                                       }
 {*******************************************************}
+
 unit OleServer;
 
 {$R-}
+{$WARN SYMBOL_PLATFORM OFF}
 
 interface
 
@@ -108,7 +111,7 @@ type
 
 implementation
 
-uses OleConst;
+uses OleConst, Controls;
 
 { TServerEventDispatch }
 constructor TServerEventDispatch.Create(Server: TOleServer);
@@ -176,15 +179,24 @@ var
 begin
   // Get parameter count
   ParamCount := TDispParams(Params).cArgs;
+
   // Set our array to appropriate length
   SetLength(VarArray, ParamCount);
+
   // Copy over data
   for I := Low(VarArray) to High(VarArray) do
     VarArray[High(VarArray)-I] := OleVariant(TDispParams(Params).rgvarg^[I]);
+
   // Invoke Server proxy class
   if FServer <> nil then FServer.InvokeEvent(DispID, VarArray);
+
+  // Copy data back
+  for I := Low(VarArray) to High(VarArray) do
+    OleVariant(TDispParams(Params).rgvarg^[I]) := VarArray[High(VarArray)-I];
+
   // Clean array
   SetLength(VarArray, 0);
+
   // Pascal Events return 'void' - so assume success!
   Result := S_OK;
 end;
@@ -329,4 +341,6 @@ begin
   Result := FRefCount;
 end;
 
+initialization
+  GroupDescendentsWith(TOleServer, Controls.TControl);
 end.

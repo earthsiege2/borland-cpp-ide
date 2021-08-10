@@ -6,7 +6,7 @@
  * vendor -- Vendor-supplied declarations for the Standard Library locale
  *           classes.
  *
- * $Id: vendor,v 1.10 1996/10/02 01:48:00 smithey Exp $
+ * $Id: vendor.h,v 9.9 2001/07/10 17:24:13 nyork Exp $
  *
  ***************************************************************************
  *

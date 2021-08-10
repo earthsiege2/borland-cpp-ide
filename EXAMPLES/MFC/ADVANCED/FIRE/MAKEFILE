@@ -11,4 +11,14 @@
 PROJ=FIRE
 OBJS=fire.obj firedlg.obj firewnd.obj
 
-!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+#!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+!include <..\..\mfcrules.mak>
+
+default: integration
+	$(MAKE) -f $(PROJ).mak
+
+clean:
+	$(CLEAN_MFC)
+                                
+integration: $(PROJ).bpr $(PROJ).mak
+    $(NOP)

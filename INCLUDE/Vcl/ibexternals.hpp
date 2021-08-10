@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBExternals.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBExternals.pas' rev: 6.00
 
 #ifndef IBExternalsHPP
 #define IBExternalsHPP
@@ -82,6 +82,7 @@ typedef PISC_STATUS *PPISC_STATUS;
 
 typedef unsigned *PUISC_STATUS;
 
+#pragma pack(push, 4)
 struct TCTimeStructure
 {
 	int tm_sec;
@@ -94,6 +95,7 @@ struct TCTimeStructure
 	int tm_yday;
 	int tm_isdst;
 } ;
+#pragma pack(pop)
 
 typedef TCTimeStructure *PCTimeStructure;
 
@@ -101,17 +103,19 @@ typedef TCTimeStructure  TM;
 
 typedef TCTimeStructure *PTM;
 
+#pragma pack(push, 2)
 struct TISC_VARYING
 {
 	short strlen;
 	char str[1];
 } ;
+#pragma pack(pop)
 
-typedef short __cdecl (*TISC_BlobGetSegment)(PInt BlobHandle, char * Buffer, int BufferSize, int &ResultLength
-	);
+typedef short __cdecl (*TISC_BlobGetSegment)(PInt BlobHandle, char * Buffer, int BufferSize, int &ResultLength);
 
 typedef void __cdecl (*TISC_BlobPutSegment)(PInt BlobHandle, char * Buffer, short BufferLength);
 
+#pragma pack(push, 4)
 struct TBlob
 {
 	TISC_BlobGetSegment GetSegment;
@@ -121,6 +125,7 @@ struct TBlob
 	int TotalSize;
 	TISC_BlobPutSegment PutSegment;
 } ;
+#pragma pack(pop)
 
 typedef TBlob *PBlob;
 
@@ -167,9 +172,7 @@ static const Shortint cDec = 0xb;
 extern PACKAGE void __fastcall InitializeTCTimeStructure(TCTimeStructure &tm_record);
 
 }	/* namespace Ibexternals */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ibexternals;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

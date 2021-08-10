@@ -1,19 +1,18 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1997-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
-{       ActiveX / OLE 2 Interface Unit                  }
-{                                                       }
-{       Copyright (C) 1997,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
+{ ActiveX / OLE 2 Interface Unit }
 
 unit ActiveX;
 
 interface
 
 uses Windows, Messages;
-
 (*$HPPEMIT '//---------------------------------------------------------------------------'*)
 (*$HPPEMIT '// if compilation errors occur while attempting to access structs, unions, or enums'*)
 (*$HPPEMIT '// define NO_WIN32_LEAN_AND_MEAN so that the appropriate windows headers are included.'*)
@@ -24,6 +23,7 @@ uses Windows, Messages;
 (*$HPPEMIT '#include <docobj.H>' *)
 (*$HPPEMIT '#endif' *)
 
+(*$HPPEMIT '#include <oleauto.h>' *)
 (*$HPPEMIT '#include <oleauto.h>' *)
 (*$HPPEMIT '#if defined(NO_WIN32_LEAN_AND_MEAN)' *)
 (*$HPPEMIT '#include <propidl.h>' *) // WIN2K
@@ -159,6 +159,7 @@ uses Windows, Messages;
 (*$HPPEMIT 'struct tagQACONTROL;' *)
 (*$HPPEMIT 'struct tagMULTI_QI;' *)
 (*$HPPEMIT '#endif'*)
+
 
 { Do not WEAKPACKAGE this unit.
   This unit requires startup code to initialize constants. }
@@ -381,9 +382,9 @@ const
   {$EXTERNALSYM PROPSETFLAG_DEFAULT}
   PROPSETFLAG_DEFAULT   = 0;
   {$EXTERNALSYM PROPSETFLAG_NONSIMPLE}
-  PROPSETFLAG_NONSIMPLE	= 1;
+  PROPSETFLAG_NONSIMPLE = 1;
   {$EXTERNALSYM PROPSETFLAG_ANSI}
-  PROPSETFLAG_ANSI	= 2;
+  PROPSETFLAG_ANSI      = 2;
 
 { from OBJBASE.H }
   {$EXTERNALSYM REGCLS_SINGLEUSE}
@@ -503,7 +504,7 @@ const
   {$EXTERNALSYM VT_UI2}
   VT_UI2             = 18;  {    [T]     unsigned short              }
   {$EXTERNALSYM VT_UI4}
-  VT_UI4             = 19;  {    [T]     unsigned short              }
+  VT_UI4             = 19;  {    [T]     unsigned long               }
   {$EXTERNALSYM VT_I8}
   VT_I8              = 20;  {    [T][P]  signed 64-bit int           }
   {$EXTERNALSYM VT_UI8}
@@ -590,7 +591,15 @@ const
   TKIND_UNION     = 7;
   {$EXTERNALSYM TKIND_MAX}
   TKIND_MAX       = 8;
+  {$EXTERNALSYM TKIND_TYPELIB}
+  TKIND_TYPELIB   = 8;
+  {$EXTERNALSYM TKIND_FUNC}
+  TKIND_FUNC      = 9;
+  {$EXTERNALSYM TKIND_VAR}
+  TKIND_VAR       = 10;
 
+  {$EXTERNALSYM CC_SAFECALL}
+  CC_SAFECALL    = 0;
   {$EXTERNALSYM CC_CDECL}
   CC_CDECL       = 1;
   {$EXTERNALSYM CC_PASCAL}
@@ -735,6 +744,8 @@ const
   DISPID_VALUE       = 0;
   {$EXTERNALSYM DISPID_UNKNOWN}
   DISPID_UNKNOWN     = -1;
+  {$EXTERNALSYM DISPID_STARTENUM}
+  DISPID_STARTENUM   = DISPID_UNKNOWN;
   {$EXTERNALSYM DISPID_PROPERTYPUT}
   DISPID_PROPERTYPUT = -3;
   {$EXTERNALSYM DISPID_NEWENUM}
@@ -799,13 +810,15 @@ const
   ID_DEFAULTINST = -2;
 
   {$EXTERNALSYM DISPATCH_METHOD}
-  DISPATCH_METHOD         = 1;
+  DISPATCH_METHOD         = $1;
   {$EXTERNALSYM DISPATCH_PROPERTYGET}
-  DISPATCH_PROPERTYGET    = 2;
+  DISPATCH_PROPERTYGET    = $2;
   {$EXTERNALSYM DISPATCH_PROPERTYPUT}
-  DISPATCH_PROPERTYPUT    = 4;
+  DISPATCH_PROPERTYPUT    = $4;
   {$EXTERNALSYM DISPATCH_PROPERTYPUTREF}
-  DISPATCH_PROPERTYPUTREF = 8;
+  DISPATCH_PROPERTYPUTREF = $8;
+  {$EXTERNALSYM DISPATCH_CONSTRUCT}
+  DISPATCH_CONSTRUCT      = $4000;
 
 { from OAIDL.H }
   {$EXTERNALSYM IDLFLAG_NONE}
@@ -1016,6 +1029,9 @@ const
   DROPEFFECT_LINK   = 4;
   {$EXTERNALSYM DROPEFFECT_SCROLL}
   DROPEFFECT_SCROLL = DWORD($80000000);
+
+  {$EXTERNALSYM MK_ALT}
+  MK_ALT = $20;
 
   {$EXTERNALSYM DD_DEFSCROLLINSET}
   DD_DEFSCROLLINSET    = 11;
@@ -1396,6 +1412,11 @@ const
   {$EXTERNALSYM DISPID_READYSTATECHANGE}
   DISPID_READYSTATECHANGE = -609;
 
+  { DISPID_THIS is from dispex.h }
+
+  {$EXTERNALSYM DISPID_THIS}
+  DISPID_THIS = -613;
+
   {$EXTERNALSYM DISPID_AMBIENT_BACKCOLOR}
   DISPID_AMBIENT_BACKCOLOR         = -701;
   {$EXTERNALSYM DISPID_AMBIENT_DISPLAYNAME}
@@ -1480,19 +1501,19 @@ const
 
   // Reserved global Property IDs
   {$EXTERNALSYM PID_DICTIONARY}
-  PID_DICTIONARY	 = 0;
+  PID_DICTIONARY     = 0;
   {$EXTERNALSYM PID_CODEPAGE}
-  PID_CODEPAGE	         = $1;
+  PID_CODEPAGE       = $1;
   {$EXTERNALSYM PID_FIRST_USABLE}
-  PID_FIRST_USABLE	 = $2;
+  PID_FIRST_USABLE   = $2;
   {$EXTERNALSYM PID_FIRST_NAME_DEFAULT}
   PID_FIRST_NAME_DEFAULT = $fff;
   {$EXTERNALSYM PID_LOCALE}
-  PID_LOCALE	         = $80000000;
+  PID_LOCALE         = $80000000;
   {$EXTERNALSYM PID_MODIFY_TIME}
-  PID_MODIFY_TIME	 = $80000001;
+  PID_MODIFY_TIME    = $80000001;
   {$EXTERNALSYM PID_SECURITY}
-  PID_SECURITY	         = $80000002;
+  PID_SECURITY       = $80000002;
   {$EXTERNALSYM PID_ILLEGAL}
   PID_ILLEGAL            = $ffffffff;
 
@@ -1696,7 +1717,8 @@ type
   {$EXTERNALSYM TVarType}
   TVarType = Word;
 
-  TOleEnum = type Integer;
+  TOldOleEnum = type Integer;
+  TOleEnum = type LongWord;
 
 { from OLECTL.H }
   {$EXTERNALSYM OLE_XPOS_PIXELS}
@@ -1841,6 +1863,7 @@ type
   IPropertyStorage = interface;
   IEnumSTATPROPSTG = interface;
   IEnumSTATPROPSETSTG = interface;
+  IGlobalInterfaceTable = interface;
 
 { IClassFactory interface }
 
@@ -2938,6 +2961,16 @@ type
     function Clone(out ppenum: IEnumSTATPROPSETSTG): HResult; stdcall;
   end;
 
+  {$EXTERNALSYM IGlobalInterfaceTable}
+  IGlobalInterfaceTable = interface(IUnknown)
+    ['{00000146-0000-0000-C000-000000000046}']
+    function RegisterInterfaceInGlobal(const pUnk: IUnknown; const riid: TIID;
+                                       out dwCookie: DWORD): HResult; stdcall;
+    function RevokeInterfaceFromGlobal(const riid: TIID): HResult; stdcall;
+    function GetInterfaceFromGlobal(dwCookie: DWORD; const riid: TIID;
+                                    out ppv): HResult; stdcall;
+  end;
+
 { from OAIDL.H }
 
   PVariantArg = ^TVariantArg;
@@ -3313,20 +3346,6 @@ type
     function Reset: HResult; stdcall;
     function Clone(out Enum: IEnumVariant): HResult; stdcall;
   end;
-
-  {$EXTERNALSYM IEnumVariant_D4}
-  IEnumVariant_D4 = interface(IUnknown)
-    ['{00020404-0000-0000-C000-000000000046}']
-    function Next(celt: Longint; out elt;
-      pceltFetched: PLongint): HResult; stdcall;
-    function Skip(celt: Longint): HResult; stdcall;
-    function Reset: HResult; stdcall;
-    function Clone(out Enum: IEnumVariant): HResult; stdcall;
-  end;
-
-  { IEnumVariant_D4 is the IEnumVariant interface as used by Delphi 4, and
-    has been deprecated due to changes in the type library. IEnumVariant
-    has been updated to reflect those changes. }
 
 { ITypeComp interface }
 
@@ -3856,6 +3875,8 @@ type
     function ReactivateAndUndo: HResult; stdcall;
   end;
 
+
+
 { IOleInPlaceSite interface }
 
   {$EXTERNALSYM IOleInPlaceSite}
@@ -4193,6 +4214,49 @@ type
   CADWORD = tagCADWORD;
   TCALongint = tagCADWORD;
 
+{ IOleInPlaceObjectWindowless interface }
+  
+  {$EXTERNALSYM IOleInPlaceObjectWindowless}
+  IOleInPlaceObjectWindowless = interface(IOleInPlaceObject)
+    ['{1C2056CC-5EF4-101B-8BC8-00AA003E3B29}']
+    function OnWindowMessage(msg: LongWord; wParam: WPARAM; lParam: LPARAM; 
+        var lResult: LRESULT): HResult; stdcall;
+    function OnDropTarget(var pDropTarget: IDropTarget):HResult ; stdcall;
+  end;
+  
+{ IOleInPlaceSiteEx interface }
+
+  {$EXTERNALSYM IOleInPlaceSiteEx }
+  IOleInPlaceSiteEx = interface(IOleInPlaceSite)
+    ['{9C2CAD80-3424-11CF-B670-00AA004CD6D8}'] 
+    function OnInPlaceActivateEx(fNoRedraw: PBOOL; 
+       dwFlags: DWORD): HResult; stdcall;
+    function OnInPlaceDeActivateEx(fNoRedraw: BOOL): HResult; stdcall;
+    function RequestUIActivate: HResult; stdcall;
+  end;
+
+{ IOleInPlaceSiteWindowless interface }
+
+  {$EXTERNALSYM IOleInPlaceSiteWindowless}
+  IOleInPlaceSiteWindowless = interface(IOleInPlaceSiteEx)
+    ['{922EADA0-3424-11CF-B670-00AA004CD6D8}'] 
+    function CanWindowlessActivate: HResult; stdcall;
+    function GetCapture: HResult; stdcall;
+    function SetCapture(fCapture: BOOL): HResult; stdcall;
+    function GetFocus: HResult; stdcall;
+    function SetFocus(fFocus: BOOL): HResult; stdcall;
+    function GetDC(var Rect: TRect; qrfFlags: DWORD; 
+       var hDC: HDC): HResult; stdcall;
+    function ReleaseDC(hDC: HDC): HResult; stdcall;
+    function InvalidateRect(var Rect: TRect; fErase: BOOL): HResult; stdcall;
+    function InvalidateRgn(hRGN: HRGN; fErase: BOOL): HResult; stdcall;
+    function ScrollRect(dx, dy: Integer; var RectScroll: TRect; 
+       var RectClip: TRect): HResult; stdcall;
+    function AdjustRect(var rc: TRect): HResult; stdcall;
+    function OnDefWindowMessage(msg: LongWord; wParam: WPARAM;
+       lParam: LPARAM; var LResult: LRESULT): HResult; stdcall;
+  end;
+   
 { from OLECTL.H }
 { TOCPFIParams - parameters for OleCreatePropertyFrameIndirect }
 
@@ -4492,6 +4556,9 @@ type
     ['{6d5140c1-7436-11ce-8034-00aa006009fa}']
     function QueryService(const rsid, iid: TGuid; out Obj): HResult; stdcall;
   end;
+
+  PServiceProvider = ^IServiceProvider;
+  {$EXTERNALSYM PServiceProvider}
 
 
 const
@@ -4953,6 +5020,91 @@ type
       dwEnabledOptions: DWORD): HResult; stdcall;
   end;
 
+{ from DISPEX.H }
+type
+  {$EXTERNALSYM IDispatchEx}
+  IDispatchEx = interface(IDispatch)
+    ['{A6EF9860-C720-11D0-9337-00AC090DCAA9}']
+    function GetDispID(const bstrName: TBSTR; const grfdex: DWORD;
+       out id: TDispID): HResult; stdcall;
+    function InvokeEx(const id: TDispID; const lcid: LCID; const wflags:
+       WORD; const pdp: PDispParams; out varRes: OleVariant; out pei:
+       TExcepInfo; const pspCaller: PServiceProvider): HResult; stdcall;
+    function DeleteMemberByName(const bstr: TBSTR; 
+       const grfdex: DWORD): HResult; stdcall;
+    function DeleteMemberByDispID(const id: TDispID): HResult; stdcall;
+    function GetMemberProperties(const id: TDispID; const grfdexFetch:
+       DWORD; out grfdex: DWORD): HResult; stdcall;
+    function GetMemberName(const id: TDispID; out bstrName: TBSTR):
+       HResult; stdcall;
+    function GetNextDispID(const grfdex: DWORD; const id: TDispID;
+       out nid: TDispID): HResult; stdcall;
+    function GetNameSpaceParent(out unk: IUnknown): HResult; stdcall;
+  end;
+
+const
+  { Input flags for GetDispID }
+  {$EXTERNALSYM fdexNameCaseSensitive}
+  fdexNameCaseSensitive       = $1;
+  {$EXTERNALSYM fdexNameEnsure}
+  fdexNameEnsure              = $2;
+  {$EXTERNALSYM fdexNameImplicit}
+  fdexNameImplicit            = $4;
+  {$EXTERNALSYM fdexNameCaseInsensitive}
+  fdexNameCaseInsensitive     = $8;
+
+  { input flags for GetMemberProperties }
+  {$EXTERNALSYM fdexPropCanGet}
+  fdexPropCanGet              = $1;
+  {$EXTERNALSYM fdexPropCannotGet}
+  fdexPropCannotGet           = $2;
+  {$EXTERNALSYM fdexPropCanPut}
+  fdexPropCanPut              = $4;
+  {$EXTERNALSYM fdexPropCannotPut}
+  fdexPropCannotPut           = $8;
+  {$EXTERNALSYM fdexPropCanPutRef}
+  fdexPropCanPutRef           = $10;
+  {$EXTERNALSYM fdexPropCannotPutRef}
+  fdexPropCannotPutRef        = $20;
+  {$EXTERNALSYM fdexPropNoSideEffects}
+  fdexPropNoSideEffects       = $40;
+  {$EXTERNALSYM fdexPropDynamicType}
+  fdexPropDynamicType         = $80;
+  {$EXTERNALSYM fdexPropCanCall}
+  fdexPropCanCall             = $100;
+  {$EXTERNALSYM fdexPropCannotCall}
+  fdexPropCannotCall          = $200;
+  {$EXTERNALSYM fdexPropCanConstruct}
+  fdexPropCanConstruct        = $400;
+  {$EXTERNALSYM fdexPropCannotConstruct}
+  fdexPropCannotConstruct     = $800;
+  {$EXTERNALSYM fdexPropCanSourceEvents}
+  fdexPropCanSourceEvents     = $1000;
+  {$EXTERNALSYM fdexPropCannotSourceEvents}
+  fdexPropCannotSourceEvents  = $2000;
+
+  {$EXTERNALSYM fdexPropCanAll}
+  fdexPropCanAll = fdexPropCanGet or fdexPropCanPut or 
+                   fdexPropCanPutRef or fdexPropCanCall or
+                   fdexPropCanConstruct or fdexPropCanSourceEvents;
+
+  {$EXTERNALSYM fdexPropCannotAll}
+  fdexPropCannotAll = fdexPropCannotGet or fdexPropCannotPut or
+                      fdexPropCannotPutRef or fdexPropCannotCall or
+                      fdexPropCannotConstruct or fdexPropCannotSourceEvents;
+
+  {$EXTERNALSYM fdexPropExtraAll}
+  fdexPropExtraAll = fdexPropNoSideEffects or fdexPropDynamicType;
+
+  {$EXTERNALSYM fdexPropAll}
+  fdexPropAll = fdexPropCanAll or fdexPropCannotAll or fdexPropExtraAll;
+
+  { input flags for GetNextDispID }
+  {$EXTERNALSYM fdexEnumDefault}
+  fdexEnumDefault = $01;
+  {$EXTERNALSYM fdexEnumAll}
+  fdexEnumAll     = $02;
+
 { from OBJBASE.H }
 { HResult manipulation routines }
 
@@ -4992,7 +5144,7 @@ const
   {$EXTERNALSYM COINIT_APARTMENTTHREADED}
   COINIT_APARTMENTTHREADED  = 2;      // Apartment model
   {$EXTERNALSYM COINIT_DISABLE_OLE1DDE}
-  COINIT_DISABLE_OLE1DDE    = 4;      // Don't use DDE for Ole1 support.
+  COINIT_DISABLE_OLE1DDE    = 4;      // Dont use DDE for Ole1 support.
   {$EXTERNALSYM COINIT_SPEED_OVER_MEMORY}
   COINIT_SPEED_OVER_MEMORY  = 8;      // Trade memory for speed.
 
@@ -5096,7 +5248,7 @@ procedure CoFreeUnusedLibraries; stdcall;
 { Call Security. }
 
 {$EXTERNALSYM CoInitializeSecurity}
-function CoInitializeSecurity(pSecDesc: PSecurityDescriptor; cAuthSvc: Longint;
+function CoInitializeSecurity(pSecDesc: Pointer; cAuthSvc: Longint;
   asAuthSvc: PSOleAuthenticationService; pReserved1: Pointer;
   dwAuthnLevel, dImpLevel: Longint; pReserved2: Pointer; dwCapabilities: Longint;
   pReserved3: Pointer): HResult; stdcall;
@@ -5104,7 +5256,7 @@ function CoInitializeSecurity(pSecDesc: PSecurityDescriptor; cAuthSvc: Longint;
 function CoGetCallContext(const iid: TIID; pInterface: Pointer): HResult; stdcall;
 {$EXTERNALSYM CoQueryProxyBlanket}
 function CoQueryProxyBlanket(Proxy: IUnknown; pwAuthnSvc, pAuthzSvc: PLongint;
-  pServerPrincName: POleStr; pAuthnLevel, pImpLevel: PLongint;
+  pServerPrincName: PPOleStr; pAuthnLevel, pImpLevel: PLongint;
   pAuthInfo: Pointer; pCapabilites: PLongint): HResult; stdcall;
 {$EXTERNALSYM CoSetProxyBlanket}
 function CoSetProxyBlanket(Proxy: IUnknown; dwAuthnSvc, dwAuthzSvc: Longint;
@@ -5114,8 +5266,8 @@ function CoSetProxyBlanket(Proxy: IUnknown; dwAuthnSvc, dwAuthzSvc: Longint;
 function CoCopyProxy(Proxy: IUnknown; var pCopy: IUnknown): HResult; stdcall;
 {$EXTERNALSYM CoQueryClientBlanket}
 function CoQueryClientBlanket(pwAuthnSvc, pAuthzSvc: PLongint;
-  pServerPrincName: POleStr; dwAuthnLevel, dwImpLevel: Longint;
-  pPrivs: Pointer; dwCapabilites: Longint): HResult; stdcall;
+  pServerPrincName: PPOleStr; var dwAuthnLevel, dwImpLevel: Longint;
+  pPrivs: Pointer; var dwCapabilites: Longint): HResult; stdcall;
 {$EXTERNALSYM CoImpersonateClient}
 function CoImpersonateClient: HResult; stdcall;
 {$EXTERNALSYM CoRevertToSelf}

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DBLogDlg.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DBLogDlg.pas' rev: 6.00
 
 #ifndef DBLogDlgHPP
 #define DBLogDlgHPP
@@ -10,6 +10,7 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
+#include <DB.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
@@ -47,12 +48,10 @@ __published:
 	void __fastcall FormShow(System::TObject* Sender);
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TLoginDialog(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TLoginDialog(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TLoginDialog(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TLoginDialog(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TLoginDialog(void) { }
@@ -60,24 +59,20 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TLoginDialog(HWND ParentWindow) : Forms::TForm(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TLoginDialog(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE bool __fastcall LoginDialog(const AnsiString ADatabaseName, AnsiString &AUserName, AnsiString 
-	&APassword);
-extern PACKAGE bool __fastcall LoginDialogEx(const AnsiString ADatabaseName, AnsiString &AUserName, 
-	AnsiString &APassword, bool NameReadOnly);
+extern PACKAGE bool __fastcall LoginDialog(const AnsiString ADatabaseName, AnsiString &AUserName, AnsiString &APassword);
+extern PACKAGE bool __fastcall LoginDialogEx(const AnsiString ADatabaseName, AnsiString &AUserName, AnsiString &APassword, bool NameReadOnly);
 extern PACKAGE bool __fastcall RemoteLoginDialog(AnsiString &AUserName, AnsiString &APassword);
+extern PACKAGE void __fastcall SetCursorType(const int CurIndex);
 
 }	/* namespace Dblogdlg */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dblogdlg;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

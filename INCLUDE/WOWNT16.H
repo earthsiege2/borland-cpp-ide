@@ -14,7 +14,6 @@ Abstract:
 --*/
 
 #ifndef _WOWNT16_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WOWNT16_
 
 #if defined(_MSC_VER)
@@ -132,5 +131,4 @@ DWORD FAR CDECL CallProcEx32W( DWORD, DWORD, DWORD, ... );
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif /* !_WOWNT16_ */

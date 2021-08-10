@@ -1,6 +1,6 @@
 /*********************************************************/
 /**               Microsoft LAN Manager                 **/
-/**       Copyright(c) Microsoft Corp., 1987-1999       **/
+/**       Copyright (c) Microsoft Corporation. All rights reserved. **/ /* __BORLANDC__ -- fixed unterminated comment this line */ 
 /**                                                     **/
 /**     Rpc Error Codes from the compiler and runtime   **/
 /**                                                     **/
@@ -11,7 +11,6 @@ If you change this file, you must also change rpcerr.h.
 */
 
 #ifndef __RPCNTERR_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __RPCNTERR_H__
 
 #if _MSC_VER > 1000
@@ -40,5 +39,4 @@ If you change this file, you must also change rpcerr.h.
 #define RPC_X_PIPE_APP_MEMORY             ERROR_OUTOFMEMORY
 #define RPC_X_INVALID_PIPE_OPERATION      RPC_X_WRONG_PIPE_ORDER
 
-#pragma option pop /*P_O_Pop*/
 #endif /* __RPCNTERR_H__ */

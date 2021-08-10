@@ -26,6 +26,7 @@
 #include "colorlis.h"
 #include "pageset.h"
 #include <penwin.h>
+#include <algorithm>
 
 extern CLIPFORMAT cfEmbeddedObject;
 extern CLIPFORMAT cfRTO;
@@ -764,7 +765,7 @@ void CWordPadView::OnPenLens()
 		GetRichEditCtrl().GetSel(cr);
 		int nCnt = 2*(cr.cpMax-cr.cpMin);
 		BOOL bSel = (nCnt != 0);
-		nCnt = max(1024, nCnt);
+		nCnt = std::max(1024, nCnt);
 		char* pBuf = new char[nCnt];
 		pBuf[0] = NULL;
 		if (bSel)

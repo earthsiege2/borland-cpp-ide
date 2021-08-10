@@ -1,45 +1,4 @@
-LIBRARY BHSUPP
+LIBRARY bhsupp
 EXPORTS
 
-    AdjustOperatorPrecedence                 = 'BHSUPP.DLL'.*
-    AllocMemory                              = 'BHSUPP.DLL'.*
-    AllocObject                              = 'BHSUPP.DLL'.*
-    AndExpression                            = 'BHSUPP.DLL'.*
-    BhAllocNetworkBuffer                     = 'BHSUPP.DLL'.*
-    BhAllocSystemMemory                      = 'BHSUPP.DLL'.*
-    BhCloseService                           = 'BHSUPP.DLL'.*
-    BhCompactNetworkBuffer                   = 'BHSUPP.DLL'.*
-    BhFreeNetworkBuffer                      = 'BHSUPP.DLL'.*
-    BhFreeSystemMemory                       = 'BHSUPP.DLL'.*
-    BhGetLastError                           = 'BHSUPP.DLL'.*
-    BhGetNetworkFrame                        = 'BHSUPP.DLL'.*
-    BhGetNetworkRequestAddress               = 'BHSUPP.DLL'.*
-    BhGetWindowsVersion                      = 'BHSUPP.DLL'.*
-    BhGlobalTimer                            = 'BHSUPP.DLL'.*
-    BhKillTimer                              = 'BHSUPP.DLL'.*
-    BhOpenService                            = 'BHSUPP.DLL'.*
-    BhSetLastError                           = 'BHSUPP.DLL'.*
-    BhSetTimer                               = 'BHSUPP.DLL'.*
-    BhStartService                           = 'BHSUPP.DLL'.*
-    BhStopService                            = 'BHSUPP.DLL'.*
-    CreateObjectHeap                         = 'BHSUPP.DLL'.*
-    CreatePassword                           = 'BHSUPP.DLL'.*
-    DestroyObjectHeap                        = 'BHSUPP.DLL'.*
-    DestroyPassword                          = 'BHSUPP.DLL'.*
-    FreeMemory                               = 'BHSUPP.DLL'.*
-    FreeObject                               = 'BHSUPP.DLL'.*
-    GetObjectHeapSize                        = 'BHSUPP.DLL'.*
-    GrowObjectHeap                           = 'BHSUPP.DLL'.*
-    InitializeExpression                     = 'BHSUPP.DLL'.*
-    InitializePattern                        = 'BHSUPP.DLL'.*
-    IsDaytona                                = 'BHSUPP.DLL'.*
-    MemorySize                               = 'BHSUPP.DLL'.*
-    NegatePattern                            = 'BHSUPP.DLL'.*
-    NormalizeAddress                         = 'BHSUPP.DLL'.*
-    NormalizeAddressTable                    = 'BHSUPP.DLL'.*
-    OrExpression                             = 'BHSUPP.DLL'.*
-    PurgeObjectHeap                          = 'BHSUPP.DLL'.*
-    ReallocMemory                            = 'BHSUPP.DLL'.*
-    TestMemory                               = 'BHSUPP.DLL'.*
-    ValidatePassword                         = 'BHSUPP.DLL'.*
-    _dprintf                                 = 'BHSUPP.DLL'.dprintf
+    _dprintf        = dprintf

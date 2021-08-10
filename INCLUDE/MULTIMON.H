@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 //=============================================================================
 //
 // multimon.h -- Stub module that fakes multiple monitor apis on Win32 OSes
@@ -11,7 +10,7 @@
 //
 // Exactly one source must include this with COMPILE_MULTIMON_STUBS defined.
 //
-// Copyright (c) 1985-1998, Microsoft Corporation
+// Copyright (c) Microsoft Corporation. All rights reserved. 
 //
 //=============================================================================
 
@@ -483,4 +482,3 @@ extern BOOL WINAPI xEnumDisplayDevices(PVOID, DWORD, PDISPLAY_DEVICE, DWORD);
 }
 #endif  // __cplusplus
 
-#pragma option pop /*P_O_Pop*/

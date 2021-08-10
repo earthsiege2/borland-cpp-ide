@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1999 Inprise Corporation       }
+{   Copyright (c) 1999-2001 Borland Software Corp.      }
 {                                                       }
 {*******************************************************}
 
@@ -28,6 +28,7 @@ resourcestring
   ScriptIDsVar = '%s_IDs';
   ScriptXMLDisplayName = '%s_Disp';
   sInvalidParent = 'Invalid parent';
+  sInvalidParentClass = 'Invalid parent class: %s';
   sDuplicateStatusField = 'Field %s ignored, only one status field allowed';
   sFirstButton = '|<';
   sLastButton = '>|';
@@ -46,8 +47,6 @@ resourcestring
                 '</TABLE>'#13#10;
   ScriptDocumentVarName = '%s_Doc';
   ScriptXMLVarName = '%s_XML';
-  sInvalidWebComponentsRegistration =  'Invalid Web component registration';
-  sInvalidWebComponentsEnumeration =  'Invalid Web component enumeration';
   sInvalidWebComponentsCreation =  'Invalid Web component creation';
   ScriptRowSetVarName = '%s_RS';
   sApplyUpdatesError = 'ApplyUpdates error.  Error count: %d.';

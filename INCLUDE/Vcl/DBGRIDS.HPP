@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DBGrids.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DBGrids.pas' rev: 6.00
 
 #ifndef DBGridsHPP
 #define DBGridsHPP
@@ -12,7 +12,7 @@
 #pragma option push -Vx
 #include <ImgList.hpp>	// Pascal unit
 #include <Menus.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <DBCtrls.hpp>	// Pascal unit
 #include <Grids.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
@@ -23,6 +23,7 @@
 #include <Messages.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -32,8 +33,7 @@ namespace Dbgrids
 {
 //-- type declarations -------------------------------------------------------
 #pragma option push -b-
-enum TColumnValue { cvColor, cvWidth, cvFont, cvAlignment, cvReadOnly, cvTitleColor, cvTitleCaption, 
-	cvTitleAlignment, cvTitleFont, cvImeMode, cvImeName };
+enum TColumnValue { cvColor, cvWidth, cvFont, cvAlignment, cvReadOnly, cvTitleColor, cvTitleCaption, cvTitleAlignment, cvTitleFont, cvImeMode, cvImeName };
 #pragma option pop
 
 typedef Set<TColumnValue, cvColor, cvImeName>  TColumnValues;
@@ -135,22 +135,18 @@ public:
 	__property bool Showing = {read=GetShowing, nodefault};
 	
 __published:
-	__property Classes::TAlignment Alignment = {read=GetAlignment, write=SetAlignment, stored=IsAlignmentStored
-		, nodefault};
+	__property Classes::TAlignment Alignment = {read=GetAlignment, write=SetAlignment, stored=IsAlignmentStored, nodefault};
 	__property TColumnButtonStyle ButtonStyle = {read=FButtonStyle, write=SetButtonStyle, default=0};
-	__property Graphics::TColor Color = {read=GetColor, write=SetColor, stored=IsColorStored, nodefault
-		};
+	__property Graphics::TColor Color = {read=GetColor, write=SetColor, stored=IsColorStored, nodefault};
 	__property unsigned DropDownRows = {read=FDropDownRows, write=FDropDownRows, default=7};
 	__property bool Expanded = {read=GetExpanded, write=SetExpanded, default=1};
 	__property AnsiString FieldName = {read=FFieldName, write=SetFieldName};
 	__property Graphics::TFont* Font = {read=GetFont, write=SetFont, stored=IsFontStored};
-	__property Controls::TImeMode ImeMode = {read=GetImeMode, write=SetImeMode, stored=IsImeModeStored, 
-		nodefault};
+	__property Controls::TImeMode ImeMode = {read=GetImeMode, write=SetImeMode, stored=IsImeModeStored, nodefault};
 	__property AnsiString ImeName = {read=GetImeName, write=SetImeName, stored=IsImeNameStored};
 	__property Classes::TStrings* PickList = {read=GetPickList, write=SetPickList};
 	__property Menus::TPopupMenu* PopupMenu = {read=FPopupMenu, write=SetPopupMenu};
-	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, stored=IsReadOnlyStored, nodefault
-		};
+	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, stored=IsReadOnlyStored, nodefault};
 	__property TColumnTitle* Title = {read=FTitle, write=SetTitle};
 	__property int Width = {read=GetWidth, write=SetWidth, stored=IsWidthStored, nodefault};
 	__property bool Visible = {read=GetVisible, write=SetVisible, nodefault};
@@ -196,11 +192,9 @@ public:
 	__property TColumn* Column = {read=FColumn};
 	
 __published:
-	__property Classes::TAlignment Alignment = {read=GetAlignment, write=SetAlignment, stored=IsAlignmentStored
-		, nodefault};
+	__property Classes::TAlignment Alignment = {read=GetAlignment, write=SetAlignment, stored=IsAlignmentStored, nodefault};
 	__property AnsiString Caption = {read=GetCaption, write=SetCaption, stored=IsCaptionStored};
-	__property Graphics::TColor Color = {read=GetColor, write=SetColor, stored=IsColorStored, nodefault
-		};
+	__property Graphics::TColor Color = {read=GetColor, write=SetColor, stored=IsColorStored, nodefault};
 	__property Graphics::TFont* Font = {read=GetFont, write=SetFont, stored=IsFontStored};
 };
 
@@ -215,6 +209,9 @@ class DELPHICLASS TDBGridColumns;
 class PASCALIMPLEMENTATION TDBGridColumns : public Classes::TCollection 
 {
 	typedef Classes::TCollection inherited;
+	
+public:
+	TColumn* operator[](int Index) { return Items[Index]; }
 	
 private:
 	TCustomDBGrid* FGrid;
@@ -289,6 +286,7 @@ public:
 	__property int FieldCount = {read=FFieldCount, nodefault};
 	__property Db::TField* Fields[int I] = {read=GetFields};
 	__property bool SparseMap = {read=FSparseMap, write=FSparseMap, nodefault};
+	__property TCustomDBGrid* Grid = {read=FGrid};
 };
 
 
@@ -296,6 +294,9 @@ class DELPHICLASS TBookmarkList;
 class PASCALIMPLEMENTATION TBookmarkList : public System::TObject 
 {
 	typedef System::TObject inherited;
+	
+public:
+	AnsiString operator[](int Index) { return Items[Index]; }
 	
 private:
 	Classes::TStringList* FList;
@@ -324,25 +325,20 @@ public:
 	int __fastcall IndexOf(const AnsiString Item);
 	bool __fastcall Refresh(void);
 	__property int Count = {read=GetCount, nodefault};
-	__property bool CurrentRowSelected = {read=GetCurrentRowSelected, write=SetCurrentRowSelected, nodefault
-		};
+	__property bool CurrentRowSelected = {read=GetCurrentRowSelected, write=SetCurrentRowSelected, nodefault};
 	__property AnsiString Items[int Index] = {read=GetItem/*, default*/};
 };
 
 
 #pragma option push -b-
-enum TDBGridOption { dgEditing, dgAlwaysShowEditor, dgTitles, dgIndicator, dgColumnResize, dgColLines, 
-	dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect 
-	};
+enum TDBGridOption { dgEditing, dgAlwaysShowEditor, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgMultiSelect };
 #pragma option pop
 
 typedef Set<TDBGridOption, dgEditing, dgMultiSelect>  TDBGridOptions;
 
-typedef void __fastcall (__closure *TDrawDataCellEvent)(System::TObject* Sender, const Windows::TRect 
-	&Rect, Db::TField* Field, Grids::TGridDrawState State);
+typedef void __fastcall (__closure *TDrawDataCellEvent)(System::TObject* Sender, const Types::TRect &Rect, Db::TField* Field, Grids::TGridDrawState State);
 
-typedef void __fastcall (__closure *TDrawColumnCellEvent)(System::TObject* Sender, const Windows::TRect 
-	&Rect, int DataCol, TColumn* Column, Grids::TGridDrawState State);
+typedef void __fastcall (__closure *TDrawColumnCellEvent)(System::TObject* Sender, const Types::TRect &Rect, int DataCol, TColumn* Column, Grids::TGridDrawState State);
 
 typedef void __fastcall (__closure *TDBGridClickEvent)(TColumn* Column);
 
@@ -432,53 +428,47 @@ protected:
 	bool __fastcall AcquireLayoutLock(void);
 	void __fastcall BeginLayout(void);
 	void __fastcall BeginUpdate(void);
-	virtual void __fastcall CalcSizingState(int X, int Y, Grids::TGridState &State, int &Index, int &SizingPos
-		, int &SizingOfs, Grids::TGridDrawInfo &FixedInfo);
+	virtual void __fastcall CalcSizingState(int X, int Y, Grids::TGridState &State, int &Index, int &SizingPos, int &SizingOfs, Grids::TGridDrawInfo &FixedInfo);
 	void __fastcall CancelLayout(void);
 	DYNAMIC bool __fastcall CanEditAcceptKey(char Key);
 	DYNAMIC bool __fastcall CanEditModify(void);
 	virtual bool __fastcall CanEditShow(void);
 	DYNAMIC void __fastcall CellClick(TColumn* Column);
 	DYNAMIC void __fastcall ColumnMoved(int FromIndex, int ToIndex);
-	Windows::TRect __fastcall CalcTitleRect(TColumn* Col, int ARow, TColumn* &MasterCol);
+	Types::TRect __fastcall CalcTitleRect(TColumn* Col, int ARow, TColumn* &MasterCol);
 	TColumn* __fastcall ColumnAtDepth(TColumn* Col, int ADepth);
 	DYNAMIC void __fastcall ColEnter(void);
 	DYNAMIC void __fastcall ColExit(void);
 	DYNAMIC void __fastcall ColWidthsChanged(void);
 	DYNAMIC TDBGridColumns* __fastcall CreateColumns(void);
 	virtual Grids::TInplaceEdit* __fastcall CreateEditor(void);
+	DYNAMIC TGridDataLink* __fastcall CreateDataLink(void);
 	virtual void __fastcall CreateWnd(void);
 	void __fastcall DeferLayout(void);
 	virtual void __fastcall DefineFieldMap(void);
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
-	virtual void __fastcall DrawCell(int ACol, int ARow, const Windows::TRect &ARect, Grids::TGridDrawState 
-		AState);
-	DYNAMIC void __fastcall DrawDataCell(const Windows::TRect &Rect, Db::TField* Field, Grids::TGridDrawState 
-		State);
-	DYNAMIC void __fastcall DrawColumnCell(const Windows::TRect &Rect, int DataCol, TColumn* Column, Grids::TGridDrawState 
-		State);
+	virtual void __fastcall DrawCell(int ACol, int ARow, const Types::TRect &ARect, Grids::TGridDrawState AState);
+	DYNAMIC void __fastcall DrawDataCell(const Types::TRect &Rect, Db::TField* Field, Grids::TGridDrawState State);
+	DYNAMIC void __fastcall DrawColumnCell(const Types::TRect &Rect, int DataCol, TColumn* Column, Grids::TGridDrawState State);
 	DYNAMIC void __fastcall EditButtonClick(void);
 	void __fastcall EndLayout(void);
 	void __fastcall EndUpdate(void);
 	Db::TField* __fastcall GetColField(int DataCol);
 	DYNAMIC int __fastcall GetEditLimit(void);
 	DYNAMIC AnsiString __fastcall GetEditMask(int ACol, int ARow);
+	DYNAMIC Grids::TEditStyle __fastcall GetEditStyle(int ACol, int ARow);
 	DYNAMIC AnsiString __fastcall GetEditText(int ACol, int ARow);
 	AnsiString __fastcall GetFieldValue(int ACol);
-	virtual bool __fastcall HighlightCell(int DataCol, int DataRow, const AnsiString Value, Grids::TGridDrawState 
-		AState);
+	virtual bool __fastcall HighlightCell(int DataCol, int DataRow, const AnsiString Value, Grids::TGridDrawState AState);
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
 	DYNAMIC void __fastcall KeyPress(char &Key);
 	void __fastcall InvalidateTitles(void);
 	virtual void __fastcall LayoutChanged(void);
 	virtual void __fastcall LinkActive(bool Value);
 	virtual void __fastcall Loaded(void);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
-	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int 
-		Y);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall Scroll(int Distance);
 	virtual void __fastcall SetColumnAttributes(void);
 	DYNAMIC void __fastcall SetEditText(int ACol, int ARow, const AnsiString Value);
@@ -486,21 +476,17 @@ protected:
 	DYNAMIC void __fastcall TimedScroll(Grids::TGridScrollDirection Direction);
 	DYNAMIC void __fastcall TitleClick(TColumn* Column);
 	DYNAMIC void __fastcall TopLeftChanged(void);
-	bool __fastcall UseRightToLeftAlignmentForField(const Db::TField* AField, Classes::TAlignment Alignment
-		);
-	DYNAMIC bool __fastcall BeginColumnDrag(int &Origin, int &Destination, const Windows::TPoint &MousePt
-		);
-	DYNAMIC bool __fastcall CheckColumnDrag(int &Origin, int &Destination, const Windows::TPoint &MousePt
-		);
-	DYNAMIC bool __fastcall EndColumnDrag(int &Origin, int &Destination, const Windows::TPoint &MousePt
-		);
+	bool __fastcall UseRightToLeftAlignmentForField(const Db::TField* AField, Classes::TAlignment Alignment);
+	DYNAMIC bool __fastcall BeginColumnDrag(int &Origin, int &Destination, const Types::TPoint &MousePt);
+	DYNAMIC bool __fastcall CheckColumnDrag(int &Origin, int &Destination, const Types::TPoint &MousePt);
+	DYNAMIC bool __fastcall EndColumnDrag(int &Origin, int &Destination, const Types::TPoint &MousePt);
 	__property TDBGridColumns* Columns = {read=FColumns, write=SetColumns};
 	__property bool DefaultDrawing = {read=FDefaultDrawing, write=FDefaultDrawing, default=1};
 	__property TGridDataLink* DataLink = {read=FDataLink};
 	__property Byte IndicatorOffset = {read=FIndicatorOffset, nodefault};
 	__property Byte LayoutLock = {read=FLayoutLock, nodefault};
 	__property TDBGridOptions Options = {read=FOptions, write=SetOptions, default=3325};
-	__property ParentColor ;
+	__property ParentColor  = {default=0};
 	__property bool ReadOnly = {read=FReadOnly, write=FReadOnly, default=0};
 	__property TBookmarkList* SelectedRows = {read=FBookmarks};
 	__property Graphics::TFont* TitleFont = {read=FTitleFont, write=SetTitleFont};
@@ -508,10 +494,8 @@ protected:
 	__property Classes::TNotifyEvent OnColEnter = {read=FOnColEnter, write=FOnColEnter};
 	__property Classes::TNotifyEvent OnColExit = {read=FOnColExit, write=FOnColExit};
 	__property TDrawDataCellEvent OnDrawDataCell = {read=FOnDrawDataCell, write=FOnDrawDataCell};
-	__property TDrawColumnCellEvent OnDrawColumnCell = {read=FOnDrawColumnCell, write=FOnDrawColumnCell
-		};
-	__property Classes::TNotifyEvent OnEditButtonClick = {read=FOnEditButtonClick, write=FOnEditButtonClick
-		};
+	__property TDrawColumnCellEvent OnDrawColumnCell = {read=FOnDrawColumnCell, write=FOnDrawColumnCell};
+	__property Classes::TNotifyEvent OnEditButtonClick = {read=FOnEditButtonClick, write=FOnEditButtonClick};
 	__property Grids::TMovedEvent OnColumnMoved = {read=FOnColumnMoved, write=FOnColumnMoved};
 	__property TDBGridClickEvent OnCellClick = {read=FOnCellClick, write=FOnCellClick};
 	__property TDBGridClickEvent OnTitleClick = {read=FOnTitleClick, write=FOnTitleClick};
@@ -519,13 +503,11 @@ protected:
 public:
 	__fastcall virtual TCustomDBGrid(Classes::TComponent* AOwner);
 	__fastcall virtual ~TCustomDBGrid(void);
-	void __fastcall DefaultDrawDataCell(const Windows::TRect &Rect, Db::TField* Field, Grids::TGridDrawState 
-		State);
-	void __fastcall DefaultDrawColumnCell(const Windows::TRect &Rect, int DataCol, TColumn* Column, Grids::TGridDrawState 
-		State);
+	void __fastcall DefaultDrawDataCell(const Types::TRect &Rect, Db::TField* Field, Grids::TGridDrawState State);
+	void __fastcall DefaultDrawColumnCell(const Types::TRect &Rect, int DataCol, TColumn* Column, Grids::TGridDrawState State);
 	virtual void __fastcall DefaultHandler(void *Msg);
 	DYNAMIC bool __fastcall ExecuteAction(Classes::TBasicAction* Action);
-	DYNAMIC void __fastcall ShowPopupEditor(TColumn* Column, int X, int Y);
+	DYNAMIC void __fastcall ShowPopupEditor(TColumn* Column, int X = 0x80000000, int Y = 0x80000000);
 	DYNAMIC bool __fastcall UpdateAction(Classes::TBasicAction* Action);
 	bool __fastcall ValidFieldIndex(int FieldIndex);
 	__property EditorMode ;
@@ -536,8 +518,7 @@ public:
 	__property Db::TDataSource* DataSource = {read=GetDataSource, write=SetDataSource};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomDBGrid(HWND ParentWindow) : Grids::TCustomGrid(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomDBGrid(HWND ParentWindow) : Grids::TCustomGrid(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -553,37 +534,37 @@ public:
 	__property SelectedRows ;
 	
 __published:
-	__property Align ;
-	__property Anchors ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
 	__property BiDiMode ;
-	__property BorderStyle ;
-	__property Color ;
+	__property BorderStyle  = {default=1};
+	__property Color  = {default=-2147483643};
 	__property Columns  = {stored=false};
 	__property Constraints ;
 	__property Ctl3D ;
 	__property DataSource ;
-	__property DefaultDrawing ;
-	__property DragCursor ;
-	__property DragKind ;
-	__property DragMode ;
-	__property Enabled ;
-	__property FixedColor ;
+	__property DefaultDrawing  = {default=1};
+	__property DragCursor  = {default=-12};
+	__property DragKind  = {default=0};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
+	__property FixedColor  = {default=-2147483633};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
-	__property Options ;
-	__property ParentBiDiMode ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property Options  = {default=3325};
+	__property ParentBiDiMode  = {default=1};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
-	__property ReadOnly ;
+	__property ReadOnly  = {default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
 	__property TitleFont ;
-	__property Visible ;
+	__property Visible  = {default=1};
 	__property OnCellClick ;
 	__property OnColEnter ;
 	__property OnColExit ;
@@ -609,8 +590,7 @@ __published:
 	__property OnTitleClick ;
 public:
 	#pragma option push -w-inl
-	/* TCustomDBGrid.Create */ inline __fastcall virtual TDBGrid(Classes::TComponent* AOwner) : TCustomDBGrid(
-		AOwner) { }
+	/* TCustomDBGrid.Create */ inline __fastcall virtual TDBGrid(Classes::TComponent* AOwner) : TCustomDBGrid(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomDBGrid.Destroy */ inline __fastcall virtual ~TDBGrid(void) { }
@@ -618,22 +598,19 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBGrid(HWND ParentWindow) : TCustomDBGrid(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBGrid(HWND ParentWindow) : TCustomDBGrid(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
-#define ColumnTitleValues (System::Set<TColumnValue, cvColor, cvImeName> () )
+#define ColumnTitleValues (System::Set<TColumnValue, cvColor, cvImeName> () << TColumnValue(5) << TColumnValue(6) << TColumnValue(7) << TColumnValue(8) )
 static const Word cm_DeferLayout = 0x464;
 static const Shortint IndicatorWidth = 0xb;
 
 }	/* namespace Dbgrids */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dbgrids;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

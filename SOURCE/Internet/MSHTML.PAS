@@ -1,17 +1,7 @@
 unit MSHTML;
+{$WARN SYMBOL_PLATFORM OFF}
 
-// ************************************************************************ //
-// WARNING                                                                    
-// -------                                                                    
-// The types declared in this file were generated from data read from a       
-// Type Library. If this type library is explicitly or indirectly (via        
-// another type library referring to this type library) re-imported, or the   
-// 'Refresh' command of the Type Library Editor activated while editing the   
-// Type Library, the contents of this file will be regenerated and all        
-// manual modifications will be lost.                                         
-// ************************************************************************ //
-
-// PASTLWTR : $Revision:   1.1  $
+// PASTLWTR : $Revision:   1.6  $
 // File generated on 7/26/99 12:19:44 PM from Type Library described below.
 
 // ************************************************************************ //
@@ -21,70 +11,11 @@ unit MSHTML;
 // DepndLst: 
 //   (1) v2.0 stdole, (C:\WINNT\System32\STDOLE2.TLB)
 //   (2) v4.0 StdVCL, (C:\WINNT\System32\STDVCL40.DLL)
-// Errors:
-//   Hint: Member 'type' of 'IHTMLEventObj' changed to 'type_'
-//   Hint: Parameter 'String' of IHTMLElement.toString changed to 'String_'
-//   Hint: Parameter 'String' of IHTMLStyle.toString changed to 'String_'
-//   Hint: Parameter 'String' of IHTMLDOMTextNode.toString changed to 'String_'
-//   Hint: Enum Member 'htmlInputImage' of '_htmlInput' changed to 'htmlInputImage_'
-//   Hint: Parameter 'String' of IHTMLElementCollection.toString changed to 'String_'
-//   Hint: Member 'type' of 'IHTMLStyleSheet' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLLinkElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispHTMLLinkElement' changed to 'type_'
-//   Hint: Parameter 'Unit' of IHTMLTxtRange.expand changed to 'Unit_'
-//   Hint: Parameter 'Unit' of IHTMLTxtRange.move changed to 'Unit_'
-//   Hint: Parameter 'Unit' of IHTMLTxtRange.moveStart changed to 'Unit_'
-//   Hint: Parameter 'Unit' of IHTMLTxtRange.moveEnd changed to 'Unit_'
-//   Hint: Parameter 'String' of IHTMLTxtRange.findText changed to 'String_'
-//   Hint: Member 'type' of 'IHTMLUListElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispHTMLUListElement' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLOListElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispHTMLOListElement' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLLIElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispHTMLLIElement' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLSelectElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispHTMLSelectElement' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLSelectionObject' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLInputElement' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLInputButtonElement' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLInputHiddenElement' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLInputTextElement' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLInputFileElement' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLOptionButtonElement' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLInputImage' changed to 'type_'
-//   Hint: Member 'type' of 'DispHTMLInputElement' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLTextAreaElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispHTMLTextAreaElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispHTMLRichtextElement' changed to 'type_'
-//   Hint: Member 'type' of 'IHTMLButtonElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispHTMLButtonElement' changed to 'type_'
-//   Hint: Parameter 'String' of IOmNavigator.toString changed to 'String_'
-//   Hint: Symbol 'assign' renamed to 'Assign_'
-//   Hint: Parameter 'String' of IHTMLLocation.toString changed to 'String_'
-//   Hint: Member 'repeat' of 'IHTMLEventObj2' changed to 'repeat_'
-//   Hint: Member 'type' of 'IHTMLEventObj2' changed to 'type_'
-//   Hint: Member 'repeat' of 'DispCEventObj' changed to 'repeat_'
-//   Hint: Member 'type' of 'DispCEventObj' changed to 'type_'
-//   Hint: Parameter 'String' of IHTMLDocument2.toString changed to 'String_'
-//   Hint: Parameter 'String' of IHTMLWindow2.toString changed to 'String_'
-//   Hint: Member 'type' of 'IHTMLScriptElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispHTMLScriptElement' changed to 'type_'
-//   Hint: Member 'object' of 'IHTMLObjectElement' changed to 'object_'
-//   Hint: Member 'type' of 'IHTMLObjectElement' changed to 'type_'
-//   Hint: Member 'object' of 'DispHTMLObjectElement' changed to 'object_'
-//   Hint: Member 'type' of 'DispHTMLObjectElement' changed to 'type_'
-//   Hint: Parameter 'object' of IHTMLOptionsHolder.isApartmentModel changed to 'object_'
-//   Hint: Member 'type' of 'IHTMLStyleElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispHTMLStyleElement' changed to 'type_'
-//   Hint: Parameter 'String' of IHTMLDialog.toString changed to 'String_'
-//   Hint: Member 'type' of 'DispIHTMLInputButtonElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispIHTMLInputTextElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispIHTMLInputFileElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispIHTMLOptionButtonElement' changed to 'type_'
-//   Hint: Member 'type' of 'DispIHTMLInputImage' changed to 'type_'
-//   Error creating palette bitmap of (TScriptlet) : Error reading control bitmap
 // ************************************************************************ //
 {$TYPEDADDRESS OFF} // Unit must be compiled without type-checked pointers. 
+{$WRITEABLECONST ON}
+{$WARN SYMBOL_PLATFORM OFF}
+
 interface
 
 uses Windows, ActiveX, Classes, Graphics, OleServer, OleCtrls, StdVCL;

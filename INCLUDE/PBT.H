@@ -1,33 +1,32 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*
-*  TITLE:       PBT.H
-*
-*  VERSION:     1.0
-*
-*  DATE:        15 Jan 1994
-*
-*  Definitions for the Virtual Power Management Device.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  15 Jan 1994 TCS Original implementation.
-*
-*******************************************************************************/
+
+
+/*++ BUILD Version: 0000     Increment this if a change has global effects
+
+Copyright (c) 1990-1999  Microsoft Corporation
+
+Module Name:
+
+    pbt.h
+
+Abstract:
+
+    Definitions for the Virtual Power Management Device.
+
+Revision History:
+
+    DATE        REV DESCRIPTION
+    ----------- --- ----------------------------------------
+    15 Jan 1994 TCS Original implementation.
+
+--*/
 
 #ifndef _INC_PBT
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_PBT
 
-#ifndef WM_POWERBROADCAST
-#define WM_POWERBROADCAST               0x218
-#endif
 
+#define WM_POWERBROADCAST               0x0218
+
+#ifndef _WIN32_WCE
 #define PBT_APMQUERYSUSPEND             0x0000
 #define PBT_APMQUERYSTANDBY             0x0001
 
@@ -47,6 +46,6 @@
 #define PBT_APMPOWERSTATUSCHANGE        0x000A
 
 #define PBT_APMOEMEVENT                 0x000B
-
-#pragma option pop /*P_O_Pop*/
+#define PBT_APMRESUMEAUTOMATIC          0x0012
+#endif
 #endif // _INC_PBT

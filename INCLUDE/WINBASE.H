@@ -2,14 +2,19 @@
 *                                                                       *
 *   winbase.h -- This module defines the 32-Bit Windows Base APIs       *
 *                                                                       *
-*   Copyright (c) 1990-1998, Microsoft Corp. All rights reserved.       *
+*   Copyright (c) Microsoft Corp. All rights reserved.                  *
 *                                                                       *
 ************************************************************************/
 #ifndef _WINBASE_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINBASE_
 
 
+
+
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 #ifdef _MAC
 #include <macwin32.h>
@@ -54,9 +59,10 @@ extern "C" {
 
 #define Yield()
 
-#define INVALID_HANDLE_VALUE ((HANDLE)-1)
+#define INVALID_HANDLE_VALUE ((HANDLE)(LONG_PTR)-1)
 #define INVALID_FILE_SIZE ((DWORD)0xFFFFFFFF)
 #define INVALID_SET_FILE_POINTER ((DWORD)-1)
+#define INVALID_FILE_ATTRIBUTES ((DWORD)-1)
 
 #define FILE_BEGIN           0
 #define FILE_CURRENT         1
@@ -100,13 +106,6 @@ extern "C" {
 #define FillMemory RtlFillMemory
 #define ZeroMemory RtlZeroMemory
 
-#if (_WIN32_WINNT >= 0x0500) && defined(_ALPHA_)
-#define MoveMemoryVlm RtlMoveMemory64
-#define CopyMemoryVlm RtlMoveMemory64
-#define FillMemoryVlm RtlFillMemory64
-#define ZeroMemoryVlm RtlZeroMemory64
-#endif
-
 //
 // File creation flags must start at the high end since they
 // are combined with the attributes
@@ -122,6 +121,7 @@ extern "C" {
 #define FILE_FLAG_POSIX_SEMANTICS       0x01000000
 #define FILE_FLAG_OPEN_REPARSE_POINT    0x00200000
 #define FILE_FLAG_OPEN_NO_RECALL        0x00100000
+#define FILE_FLAG_FIRST_PIPE_INSTANCE   0x00080000
 
 #define CREATE_NEW          1
 #define CREATE_ALWAYS       2
@@ -150,10 +150,10 @@ extern "C" {
 // Define CopyFileEx option flags
 //
 
-#define COPY_FILE_FAIL_IF_EXISTS        0x00000001
-#define COPY_FILE_RESTARTABLE           0x00000002
-#define COPY_FILE_OPEN_SOURCE_FOR_WRITE 0x00000004
-
+#define COPY_FILE_FAIL_IF_EXISTS              0x00000001
+#define COPY_FILE_RESTARTABLE                 0x00000002
+#define COPY_FILE_OPEN_SOURCE_FOR_WRITE       0x00000004
+#define COPY_FILE_ALLOW_DECRYPTED_DESTINATION 0x00000008
 #endif /* _WIN32_WINNT >= 0x0400 */
 
 #if (_WIN32_WINNT >= 0x0500)
@@ -226,8 +226,15 @@ extern "C" {
 typedef struct _OVERLAPPED {
     ULONG_PTR Internal;
     ULONG_PTR InternalHigh;
-    DWORD   Offset;
-    DWORD   OffsetHigh;
+    union {
+        struct {
+            DWORD Offset;
+            DWORD OffsetHigh;
+        };
+
+        PVOID Pointer;
+    };
+
     HANDLE  hEvent;
 } OVERLAPPED, *LPOVERLAPPED;
 
@@ -291,7 +298,7 @@ typedef RTL_CRITICAL_SECTION_DEBUG CRITICAL_SECTION_DEBUG;
 typedef PRTL_CRITICAL_SECTION_DEBUG PCRITICAL_SECTION_DEBUG;
 typedef PRTL_CRITICAL_SECTION_DEBUG LPCRITICAL_SECTION_DEBUG;
 
-#if defined(_X86_) || defined(_IA64_)
+#if defined(_X86_)
 typedef PLDT_ENTRY LPLDT_ENTRY;
 #else
 typedef LPVOID LPLDT_ENTRY;
@@ -600,44 +607,42 @@ typedef struct _MEMORYSTATUS {
 // dwCreationFlag values
 //
 
-#define DEBUG_PROCESS               0x00000001
-#define DEBUG_ONLY_THIS_PROCESS     0x00000002
+#define DEBUG_PROCESS                     0x00000001
+#define DEBUG_ONLY_THIS_PROCESS           0x00000002
 
-#define CREATE_SUSPENDED            0x00000004
+#define CREATE_SUSPENDED                  0x00000004
 
-#define DETACHED_PROCESS            0x00000008
+#define DETACHED_PROCESS                  0x00000008
 
-#define CREATE_NEW_CONSOLE          0x00000010
+#define CREATE_NEW_CONSOLE                0x00000010
 
-#define NORMAL_PRIORITY_CLASS       0x00000020
-#define IDLE_PRIORITY_CLASS         0x00000040
-#define HIGH_PRIORITY_CLASS         0x00000080
-#define REALTIME_PRIORITY_CLASS     0x00000100
+#define NORMAL_PRIORITY_CLASS             0x00000020
+#define IDLE_PRIORITY_CLASS               0x00000040
+#define HIGH_PRIORITY_CLASS               0x00000080
+#define REALTIME_PRIORITY_CLASS           0x00000100
 
-#define CREATE_NEW_PROCESS_GROUP    0x00000200
-#define CREATE_UNICODE_ENVIRONMENT  0x00000400
+#define CREATE_NEW_PROCESS_GROUP          0x00000200
+#define CREATE_UNICODE_ENVIRONMENT        0x00000400
 
-#define CREATE_SEPARATE_WOW_VDM     0x00000800
-#define CREATE_SHARED_WOW_VDM       0x00001000
-#define CREATE_FORCEDOS             0x00002000
+#define CREATE_SEPARATE_WOW_VDM           0x00000800
+#define CREATE_SHARED_WOW_VDM             0x00001000
+#define CREATE_FORCEDOS                   0x00002000
 
-#define BELOW_NORMAL_PRIORITY_CLASS 0x00004000
-#define ABOVE_NORMAL_PRIORITY_CLASS 0x00008000
+#define BELOW_NORMAL_PRIORITY_CLASS       0x00004000
+#define ABOVE_NORMAL_PRIORITY_CLASS       0x00008000
+#define STACK_SIZE_PARAM_IS_A_RESERVATION 0x00010000
 
-#define CREATE_BREAKAWAY_FROM_JOB   0x01000000
+#define CREATE_BREAKAWAY_FROM_JOB         0x01000000
+#define CREATE_PRESERVE_CODE_AUTHZ_LEVEL  0x02000000
 
-//
-// used only by CreateProcessWithLogonW
-// Should NOT be passed to any other CreateProcess variations.
-//
-#define CREATE_WITH_USERPROFILE     0x02000000
+#define CREATE_DEFAULT_ERROR_MODE         0x04000000
+#define CREATE_NO_WINDOW                  0x08000000
 
-#define CREATE_DEFAULT_ERROR_MODE   0x04000000
-#define CREATE_NO_WINDOW            0x08000000
+#define PROFILE_USER                      0x10000000
+#define PROFILE_KERNEL                    0x20000000
+#define PROFILE_SERVER                    0x40000000
 
-#define PROFILE_USER                0x10000000
-#define PROFILE_KERNEL              0x20000000
-#define PROFILE_SERVER              0x40000000
+#define CREATE_IGNORE_SYSTEM_DEFAULT      0x80000000
 
 #define THREAD_PRIORITY_LOWEST          THREAD_BASE_PRIORITY_MIN
 #define THREAD_PRIORITY_BELOW_NORMAL    (THREAD_PRIORITY_LOWEST+1)
@@ -977,124 +982,11 @@ typedef struct _OFSTRUCT {
 // increment, decrement, and exchange.
 //
 
-#if (defined(_M_ALPHA) && (_MSC_VER >= 1000)) && !defined(RC_INVOKED)
+#ifndef NOWINBASEINTERLOCK
 
-#define InterlockedIncrement _InterlockedIncrement
-#define InterlockedDecrement _InterlockedDecrement
-#define InterlockedExchange _InterlockedExchange
-#define InterlockedExchangeAdd _InterlockedExchangeAdd
+#ifndef _NTOS_
 
-LONG
-InterlockedIncrement(
-    IN OUT LPLONG lpAddend
-    );
-
-LONG
-InterlockedDecrement(
-    IN OUT LPLONG lpAddend
-    );
-
-LONG
-InterlockedExchange(
-    IN OUT LPLONG Target,
-    IN LONG Value
-    );
-
-LONG
-InterlockedExchangeAdd(
-    IN OUT LPLONG Addend,
-    IN LONG Value
-    );
-
-#if defined(_M_AXP64) || defined(__INITIAL_POINTER_SIZE)
-
-#define InterlockedCompareExchange _InterlockedCompareExchange
-#define InterlockedExchangePointer _InterlockedExchangePointer
-#define InterlockedCompareExchangePointer _InterlockedCompareExchangePointer
-
-LONG
-InterlockedCompareExchange (
-    IN OUT PLONG Destination,
-    IN LONG ExChange,
-    IN LONG Comperand
-    );
-
-PVOID
-InterlockedExchangePointer (
-    IN OUT PVOID *Target,
-    IN PVOID Value
-    );
-
-PVOID
-InterlockedCompareExchangePointer (
-    IN OUT PVOID *Destination,
-    IN PVOID ExChange,
-    IN PVOID Comperand
-    );
-
-#pragma intrinsic(_InterlockedCompareExchange)
-#pragma intrinsic(_InterlockedExchangePointer)
-#pragma intrinsic(_InterlockedCompareExchangePointer)
-
-#else
-
-#define InterlockedExchangePointer(Target, Value) \
-    (PVOID)InterlockedExchange((PLONG)(Target), (LONG)(Value))
-
-#define InterlockedCompareExchange(Destination, ExChange, Comperand) \
-    (LONG)_InterlockedCompareExchange((PVOID *)(Destination), (PVOID)(ExChange), (PVOID)(Comperand))
-
-#define InterlockedCompareExchangePointer(Destination, ExChange, Comperand) \
-    _InterlockedCompareExchange(Destination, ExChange, Comperand)
-
-PVOID
-_InterlockedCompareExchange (
-    IN OUT PVOID *Destination,
-    IN PVOID ExChange,
-    IN PVOID Comperand
-    );
-
-#endif
-
-#pragma intrinsic(_InterlockedIncrement)
-#pragma intrinsic(_InterlockedDecrement)
-#pragma intrinsic(_InterlockedExchange)
-#pragma intrinsic(_InterlockedCompareExchange)
-#pragma intrinsic(_InterlockedExchangeAdd)
-
-// VLM interlocked ops
-#if (_WIN32_WINNT >= 0x0500) && defined(_ALPHA_)
-LONG
-InterlockedIncrementVlm(
-    IN OUT LONG * __ptr64 lpAddend
-    );
-
-LONG
-InterlockedDecrementVlm(
-    IN OUT LONG * __ptr64 lpAddend
-    );
-
-LONG
-InterlockedExchangeVlm(
-    IN OUT LONG * __ptr64 Target,
-    IN LONG Value
-    );
-
-LONG
-InterlockedExchangeAddVlm(
-    IN OUT LONG * __ptr64 Addend,
-    IN LONG Value
-    );
-
-LONG
-InterlockedCompareExchangeVlm (
-    IN OUT LONG * __ptr64 Destination,
-    IN LONG ExChange,
-    IN LONG Comperand
-    );
-#endif
-
-#elif defined(_M_IA64) && !defined(RC_INVOKED)
+#if defined(_M_IA64) && !defined(RC_INVOKED)
 
 #define InterlockedIncrement _InterlockedIncrement
 #define InterlockedDecrement _InterlockedDecrement
@@ -1107,33 +999,33 @@ InterlockedCompareExchangeVlm (
 LONG
 __cdecl
 InterlockedIncrement(
-    IN OUT LPLONG lpAddend
+    IN OUT LONG volatile *lpAddend
     );
 
 LONG
 __cdecl
 InterlockedDecrement(
-    IN OUT LPLONG lpAddend
+    IN OUT LONG volatile *lpAddend
     );
 
 LONG
 __cdecl
 InterlockedExchange(
-    IN OUT LPLONG Target,
+    IN OUT LONG volatile *Target,
     IN LONG Value
     );
 
 LONG
 __cdecl
 InterlockedExchangeAdd(
-    IN OUT LPLONG Addend,
+    IN OUT LONG volatile *Addend,
     IN LONG Value
     );
 
 LONG
 __cdecl
 InterlockedCompareExchange (
-    IN OUT PLONG Destination,
+    IN OUT LONG volatile *Destination,
     IN LONG ExChange,
     IN LONG Comperand
     );
@@ -1141,14 +1033,14 @@ InterlockedCompareExchange (
 PVOID
 __cdecl
 InterlockedExchangePointer(
-    IN OUT PVOID * Target,
+    IN OUT PVOID volatile *Target,
     IN PVOID Value
     );
 
 PVOID
 __cdecl
 InterlockedCompareExchangePointer (
-    IN OUT PVOID *Destination,
+    IN OUT PVOID volatile *Destination,
     IN PVOID ExChange,
     IN PVOID Comperand
     );
@@ -1161,29 +1053,87 @@ InterlockedCompareExchangePointer (
 #pragma intrinsic(_InterlockedExchangePointer)
 #pragma intrinsic(_InterlockedCompareExchangePointer)
 
-#else
+#elif defined(_M_AMD64) && !defined(RC_INVOKED)
 
-#ifndef _NTOS_
+#define InterlockedIncrement _InterlockedIncrement
+#define InterlockedDecrement _InterlockedDecrement
+#define InterlockedExchange _InterlockedExchange
+#define InterlockedExchangeAdd _InterlockedExchangeAdd
+#define InterlockedCompareExchange _InterlockedCompareExchange
+#define InterlockedExchangePointer _InterlockedExchangePointer
+#define InterlockedCompareExchangePointer _InterlockedCompareExchangePointer
+
+LONG
+InterlockedIncrement(
+    IN OUT LONG volatile *Addend
+    );
+
+LONG
+InterlockedDecrement(
+    IN OUT LONG volatile *Addend
+    );
+
+LONG
+InterlockedExchange(
+    IN OUT LONG volatile *Target,
+    IN LONG Value
+    );
+
+LONG
+InterlockedExchangeAdd(
+    IN OUT LONG volatile *Addend,
+    IN LONG Value
+    );
+
+LONG
+InterlockedCompareExchange (
+    IN OUT LONG volatile *Destination,
+    IN LONG ExChange,
+    IN LONG Comperand
+    );
+
+PVOID
+InterlockedCompareExchangePointer (
+    IN OUT PVOID volatile *Destination,
+    IN PVOID Exchange,
+    IN PVOID Comperand
+    );
+
+PVOID
+InterlockedExchangePointer(
+    IN OUT PVOID volatile *Target,
+    IN PVOID Value
+    );
+
+#pragma intrinsic(_InterlockedIncrement)
+#pragma intrinsic(_InterlockedDecrement)
+#pragma intrinsic(_InterlockedExchange)
+#pragma intrinsic(_InterlockedExchangeAdd)
+#pragma intrinsic(_InterlockedCompareExchange)
+#pragma intrinsic(_InterlockedExchangePointer)
+#pragma intrinsic(_InterlockedCompareExchangePointer)
+
+#else           // X86 interlocked definitions
 
 WINBASEAPI
 LONG
 WINAPI
 InterlockedIncrement(
-    IN OUT LPLONG lpAddend
+    IN OUT LONG volatile *lpAddend
     );
 
 WINBASEAPI
 LONG
 WINAPI
 InterlockedDecrement(
-    IN OUT LPLONG lpAddend
+    IN OUT LONG volatile *lpAddend
     );
 
 WINBASEAPI
 LONG
 WINAPI
 InterlockedExchange(
-    IN OUT LPLONG Target,
+    IN OUT LONG volatile *Target,
     IN LONG Value
     );
 
@@ -1194,7 +1144,7 @@ WINBASEAPI
 LONG
 WINAPI
 InterlockedExchangeAdd(
-    IN OUT LPLONG Addend,
+    IN OUT LONG volatile *Addend,
     IN LONG Value
     );
 
@@ -1202,36 +1152,86 @@ WINBASEAPI
 LONG
 WINAPI
 InterlockedCompareExchange (
-    IN OUT LPLONG Destination,
+    IN OUT LONG volatile *Destination,
     IN LONG Exchange,
     IN LONG Comperand
     );
 
-#ifdef __cplusplus
+//
 // Use a function for C++ so X86 will generate the same errors as RISC.
+//
+
+#ifdef __cplusplus
+
+#ifdef __BORLANDC__
 __inline
+#else
+FORCEINLINE
+#endif
 PVOID
 __cdecl
 __InlineInterlockedCompareExchangePointer (
-    IN OUT PVOID *Destination,
+    IN OUT PVOID volatile *Destination,
     IN PVOID ExChange,
     IN PVOID Comperand
     )
 {
-    return((PVOID)InterlockedCompareExchange((PLONG)Destination, (LONG)ExChange, (LONG)Comperand));
+    return((PVOID)(LONG_PTR)InterlockedCompareExchange((LONG volatile *)Destination, (LONG)(LONG_PTR)ExChange, (LONG)(LONG_PTR)Comperand));
 }
+
 #define InterlockedCompareExchangePointer __InlineInterlockedCompareExchangePointer
 
 #else
 
 #define InterlockedCompareExchangePointer(Destination, ExChange, Comperand) \
-    (PVOID)InterlockedCompareExchange((PLONG)(Destination), (LONG)(ExChange), (LONG)(Comperand))
+    (PVOID)(LONG_PTR)InterlockedCompareExchange((LONG volatile *)(Destination), (LONG)(LONG_PTR)(ExChange), (LONG)(LONG_PTR)(Comperand))
 
-#endif
+#endif /* __cplusplus */
 
-#endif /* NT_INCLUDED */
+#endif /* X86 | IA64 */
 
-#endif
+#if defined(_SLIST_HEADER_) && !defined(_NTOSP_)
+
+WINBASEAPI
+VOID
+WINAPI
+InitializeSListHead (
+    IN PSLIST_HEADER ListHead
+    );
+
+WINBASEAPI
+PSINGLE_LIST_ENTRY
+WINAPI
+InterlockedPopEntrySList (
+    IN PSLIST_HEADER ListHead
+    );
+
+WINBASEAPI
+PSINGLE_LIST_ENTRY
+WINAPI
+InterlockedPushEntrySList (
+    IN PSLIST_HEADER ListHead,
+    IN PSINGLE_LIST_ENTRY ListEntry
+    );
+
+WINBASEAPI
+PSINGLE_LIST_ENTRY
+WINAPI
+InterlockedFlushSList (
+    IN PSLIST_HEADER ListHead
+    );
+
+WINBASEAPI
+USHORT
+WINAPI
+QueryDepthSList (
+    IN PSLIST_HEADER ListHead
+    );
+
+#endif /* _SLIST_HEADER_ */
+#endif /* _NTOS_ */
+
+#endif /* NOWINBASEINTERLOCK */
 
 WINBASEAPI
 BOOL
@@ -1507,7 +1507,7 @@ WINAPI
 FlushInstructionCache(
     IN HANDLE hProcess,
     IN LPCVOID lpBaseAddress,
-    IN DWORD dwSize
+    IN SIZE_T dwSize
     );
 
 WINBASEAPI
@@ -1540,12 +1540,12 @@ VirtualProtect(
     );
 
 WINBASEAPI
-DWORD
+SIZE_T
 WINAPI
 VirtualQuery(
     IN LPCVOID lpAddress,
     OUT PMEMORY_BASIC_INFORMATION lpBuffer,
-    IN DWORD dwLength
+    IN SIZE_T dwLength
     );
 
 WINBASEAPI
@@ -1601,13 +1601,13 @@ VirtualProtectEx(
     );
 
 WINBASEAPI
-DWORD
+SIZE_T
 WINAPI
 VirtualQueryEx(
     IN HANDLE hProcess,
     IN LPCVOID lpAddress,
     OUT PMEMORY_BASIC_INFORMATION lpBuffer,
-    IN DWORD dwLength
+    IN SIZE_T dwLength
     );
 
 WINBASEAPI
@@ -1743,6 +1743,28 @@ HeapWalk(
     IN OUT LPPROCESS_HEAP_ENTRY lpEntry
     );
 
+
+WINBASEAPI
+BOOL
+WINAPI
+HeapSetInformation (
+    IN PVOID HeapHandle, 
+    IN HEAP_INFORMATION_CLASS HeapInformationClass,
+    IN PVOID HeapInformation OPTIONAL,
+    IN SIZE_T HeapInformationLength OPTIONAL
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+HeapQueryInformation (
+    IN PVOID HeapHandle, 
+    IN HEAP_INFORMATION_CLASS HeapInformationClass,
+    OUT PVOID HeapInformation OPTIONAL,
+    IN SIZE_T HeapInformationLength OPTIONAL,
+    OUT PSIZE_T ReturnLength OPTIONAL
+    );
+
 // GetBinaryType return values.
 
 #define SCS_32BIT_BINARY    0
@@ -1751,6 +1773,13 @@ HeapWalk(
 #define SCS_PIF_BINARY      3
 #define SCS_POSIX_BINARY    4
 #define SCS_OS216_BINARY    5
+#define SCS_64BIT_BINARY    6
+
+#if defined(_WIN64)
+# define SCS_THIS_PLATFORM_BINARY SCS_64BIT_BINARY
+#else
+# define SCS_THIS_PLATFORM_BINARY SCS_32BIT_BINARY
+#endif
 
 WINBASEAPI
 BOOL
@@ -1994,13 +2023,25 @@ SetUnhandledExceptionFilter(
     );
 
 #if(_WIN32_WINNT >= 0x0400)
+
 WINBASEAPI
 LPVOID
 WINAPI
 CreateFiber(
-    IN DWORD dwStackSize,
+    IN SIZE_T dwStackSize,
     IN LPFIBER_START_ROUTINE lpStartAddress,
     IN LPVOID lpParameter
+    );
+
+WINBASEAPI
+LPVOID
+WINAPI
+CreateFiberEx(
+    SIZE_T dwStackCommitSize,
+    SIZE_T dwStackReserveSize,
+    DWORD dwFlags,
+    LPFIBER_START_ROUTINE lpStartAddress,
+    LPVOID lpParameter
     );
 
 WINBASEAPI
@@ -2015,6 +2056,13 @@ LPVOID
 WINAPI
 ConvertThreadToFiber(
     IN LPVOID lpParameter
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+ConvertFiberToThread(
+    VOID
     );
 
 WINBASEAPI
@@ -2037,7 +2085,7 @@ HANDLE
 WINAPI
 CreateThread(
     IN LPSECURITY_ATTRIBUTES lpThreadAttributes,
-    IN DWORD dwStackSize,
+    IN SIZE_T dwStackSize,
     IN LPTHREAD_START_ROUTINE lpStartAddress,
     IN LPVOID lpParameter,
     IN DWORD dwCreationFlags,
@@ -2050,7 +2098,7 @@ WINAPI
 CreateRemoteThread(
     IN HANDLE hProcess,
     IN LPSECURITY_ATTRIBUTES lpThreadAttributes,
-    IN DWORD dwStackSize,
+    IN SIZE_T dwStackSize,
     IN LPTHREAD_START_ROUTINE lpStartAddress,
     IN LPVOID lpParameter,
     IN DWORD dwCreationFlags,
@@ -2224,6 +2272,25 @@ SetLastError(
     IN DWORD dwErrCode
     );
 
+#if !defined(RC_INVOKED) // RC warns because "WINBASE_DECLARE_RESTORE_LAST_ERROR" is a bit long.
+//#if _WIN32_WINNT >= 0x0501 || defined(WINBASE_DECLARE_RESTORE_LAST_ERROR)
+#if defined(WINBASE_DECLARE_RESTORE_LAST_ERROR)
+
+WINBASEAPI
+VOID
+WINAPI
+RestoreLastError(
+    IN DWORD dwErrCode
+    );
+
+typedef VOID (WINAPI* PRESTORE_LAST_ERROR)(DWORD);
+#define RESTORE_LAST_ERROR_NAME_A      "RestoreLastError"
+#define RESTORE_LAST_ERROR_NAME_W     L"RestoreLastError"
+#define RESTORE_LAST_ERROR_NAME   TEXT("RestoreLastError")
+
+#endif
+#endif
+
 #define HasOverlappedIoCompleted(lpOverlapped) ((lpOverlapped)->Internal != STATUS_PENDING)
 
 WINBASEAPI
@@ -2286,8 +2353,8 @@ ReadProcessMemory(
     IN HANDLE hProcess,
     IN LPCVOID lpBaseAddress,
     OUT LPVOID lpBuffer,
-    IN DWORD nSize,
-    OUT LPDWORD lpNumberOfBytesRead
+    IN SIZE_T nSize,
+    OUT SIZE_T * lpNumberOfBytesRead
     );
 
 WINBASEAPI
@@ -2296,9 +2363,9 @@ WINAPI
 WriteProcessMemory(
     IN HANDLE hProcess,
     IN LPVOID lpBaseAddress,
-    IN LPVOID lpBuffer,
-    IN DWORD nSize,
-    OUT LPDWORD lpNumberOfBytesWritten
+    IN LPCVOID lpBuffer,
+    IN SIZE_T nSize,
+    OUT SIZE_T * lpNumberOfBytesWritten
     );
 
 #if !defined(MIDL_PASS)
@@ -2334,7 +2401,8 @@ ResumeThread(
     );
 
 
-#if(_WIN32_WINNT >= 0x0400)
+#if(_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
+
 typedef
 VOID
 (APIENTRY *PAPCFUNC)(
@@ -2350,7 +2418,7 @@ QueueUserAPC(
     IN ULONG_PTR dwData
     );
 
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif /* _WIN32_WINNT >= 0x0400 || _WIN32_WINDOWS > 0x0400 */
 
 #if (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
 WINBASEAPI
@@ -2390,6 +2458,27 @@ BOOL
 WINAPI
 DebugActiveProcess(
     IN DWORD dwProcessId
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+DebugActiveProcessStop(
+    IN DWORD dwProcessId
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+DebugSetProcessKillOnExit(
+    IN BOOL KillOnExit
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+DebugBreakProcess (
+    IN HANDLE Process
     );
 
 WINBASEAPI
@@ -2799,6 +2888,34 @@ SetFileTime(
 WINBASEAPI
 BOOL
 WINAPI
+SetFileValidData(
+    IN HANDLE hFile,
+    IN LONGLONG ValidDataLength
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+SetFileShortNameA(
+    IN HANDLE hFile,
+    IN LPCSTR lpShortName
+    );
+WINBASEAPI
+BOOL
+WINAPI
+SetFileShortNameW(
+    IN HANDLE hFile,
+    IN LPCWSTR lpShortName
+    );
+#ifdef UNICODE
+#define SetFileShortName  SetFileShortNameW
+#else
+#define SetFileShortName  SetFileShortNameA
+#endif // !UNICODE
+
+WINBASEAPI
+BOOL
+WINAPI
 CloseHandle(
     IN OUT HANDLE hObject
     );
@@ -3154,6 +3271,16 @@ GetSystemInfo(
     OUT LPSYSTEM_INFO lpSystemInfo
     );
 
+
+#if _WIN32_WINNT >= 0x0501
+WINBASEAPI
+VOID
+WINAPI
+GetNativeSystemInfo(
+    OUT LPSYSTEM_INFO lpSystemInfo
+    );
+#endif
+
 WINBASEAPI
 BOOL
 WINAPI
@@ -3178,6 +3305,15 @@ SystemTimeToTzSpecificLocalTime(
     IN LPTIME_ZONE_INFORMATION lpTimeZoneInformation,
     IN LPSYSTEMTIME lpUniversalTime,
     OUT LPSYSTEMTIME lpLocalTime
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+TzSpecificLocalTimeToSystemTime(
+    IN LPTIME_ZONE_INFORMATION lpTimeZoneInformation,
+    IN LPSYSTEMTIME lpLocalTime,
+    OUT LPSYSTEMTIME lpUniversalTime
     );
 
 WINBASEAPI
@@ -3447,18 +3583,6 @@ MapViewOfFile(
     IN SIZE_T dwNumberOfBytesToMap
     );
 
-
-WINBASEAPI
-PVOID64
-WINAPI
-MapViewOfFileVlm(
-    HANDLE hFileMappingObject,
-    DWORD dwDesiredAccess,
-    DWORDLONG ulOffset,
-    DWORDLONG ulNumberOfBytesToMap,
-    PVOID64 lpBaseAddress
-    );
-
 WINBASEAPI
 BOOL
 WINAPI
@@ -3472,13 +3596,6 @@ BOOL
 WINAPI
 UnmapViewOfFile(
     IN LPCVOID lpBaseAddress
-    );
-
-WINBASEAPI
-BOOL
-WINAPI
-UnmapViewOfFileVlm(
-    IN PVOID64 lpBaseAddress
     );
 
 //
@@ -3566,7 +3683,7 @@ FileEncryptionStatusW(
 
 typedef
 DWORD
-(*PFE_EXPORT_FUNC)(
+(WINAPI *PFE_EXPORT_FUNC)(
     PBYTE pbData,
     PVOID pvCallbackContext,
     ULONG ulLength
@@ -3574,7 +3691,7 @@ DWORD
 
 typedef
 DWORD
-(*PFE_IMPORT_FUNC)(
+(WINAPI *PFE_IMPORT_FUNC)(
     PBYTE pbData,
     PVOID pvCallbackContext,
     PULONG ulLength
@@ -3587,6 +3704,7 @@ DWORD
 
 #define CREATE_FOR_IMPORT  (1)
 #define CREATE_FOR_DIR     (2)
+#define OVERWRITE_HIDDEN   (4)
 
 
 WINADVAPI
@@ -3841,7 +3959,7 @@ WINADVAPI
 BOOL
 WINAPI
 IsTextUnicode(
-    IN CONST LPVOID lpBuffer,
+    IN CONST VOID* lpBuffer,
     IN int cb,
     IN OUT LPINT lpi
     );
@@ -3853,7 +3971,7 @@ TlsAlloc(
     VOID
     );
 
-#define TLS_OUT_OF_INDEXES (DWORD)0xFFFFFFFF
+#define TLS_OUT_OF_INDEXES ((DWORD)0xFFFFFFFF)
 
 WINBASEAPI
 LPVOID
@@ -4445,6 +4563,32 @@ GetLogicalDriveStringsW(
 #define GetLogicalDriveStrings  GetLogicalDriveStringsA
 #endif // !UNICODE
 
+#if _WIN32_WINNT >= 0x0501
+
+typedef enum _MEMORY_RESOURCE_NOTIFICATION_TYPE {
+    LowMemoryResourceNotification,
+    HighMemoryResourceNotification
+} MEMORY_RESOURCE_NOTIFICATION_TYPE;
+
+WINBASEAPI
+HANDLE
+WINAPI
+CreateMemoryResourceNotification(
+    IN MEMORY_RESOURCE_NOTIFICATION_TYPE NotificationType
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+QueryMemoryResourceNotification(
+    IN  HANDLE ResourceNotificationHandle,
+    OUT PBOOL  ResourceState
+    );
+
+#endif // _WIN32_WINNT >= 0x0501
+
+
+
 WINBASEAPI
 HMODULE
 WINAPI
@@ -4489,6 +4633,7 @@ LoadLibraryExW(
 #define DONT_RESOLVE_DLL_REFERENCES     0x00000001
 #define LOAD_LIBRARY_AS_DATAFILE        0x00000002
 #define LOAD_WITH_ALTERED_SEARCH_PATH   0x00000008
+#define LOAD_IGNORE_CODE_AUTHZ_LEVEL    0x00000010
 
 
 WINBASEAPI
@@ -4531,6 +4676,60 @@ GetModuleHandleW(
 #define GetModuleHandle  GetModuleHandleA
 #endif // !UNICODE
 
+#if !defined(RC_INVOKED)
+#if _WIN32_WINNT > 0x0500 || defined(WINBASE_DECLARE_GET_MODULE_HANDLE_EX) || ISOLATION_AWARE_ENABLED
+
+#define GET_MODULE_HANDLE_EX_FLAG_PIN                 (0x00000001)
+#define GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT  (0x00000002)
+#define GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS        (0x00000004)
+
+typedef
+BOOL
+(WINAPI*
+PGET_MODULE_HANDLE_EXA)(
+    IN DWORD        dwFlags,
+    IN LPCSTR     lpModuleName,
+    OUT HMODULE*    phModule
+    );
+typedef
+BOOL
+(WINAPI*
+PGET_MODULE_HANDLE_EXW)(
+    IN DWORD        dwFlags,
+    IN LPCWSTR     lpModuleName,
+    OUT HMODULE*    phModule
+    );
+#ifdef UNICODE
+#define PGET_MODULE_HANDLE_EX  PGET_MODULE_HANDLE_EXW
+#else
+#define PGET_MODULE_HANDLE_EX  PGET_MODULE_HANDLE_EXA
+#endif // !UNICODE
+
+WINBASEAPI
+BOOL
+WINAPI
+GetModuleHandleExA(
+    IN DWORD        dwFlags,
+    IN LPCSTR     lpModuleName,
+    OUT HMODULE*    phModule
+    );
+WINBASEAPI
+BOOL
+WINAPI
+GetModuleHandleExW(
+    IN DWORD        dwFlags,
+    IN LPCWSTR     lpModuleName,
+    OUT HMODULE*    phModule
+    );
+#ifdef UNICODE
+#define GetModuleHandleEx  GetModuleHandleExW
+#else
+#define GetModuleHandleEx  GetModuleHandleExA
+#endif // !UNICODE
+
+#endif
+#endif
+
 WINBASEAPI
 BOOL
 WINAPI
@@ -4566,6 +4765,8 @@ CreateProcessW(
 #else
 #define CreateProcess  CreateProcessA
 #endif // !UNICODE
+
+
 
 WINBASEAPI
 BOOL
@@ -4709,6 +4910,55 @@ ExpandEnvironmentStringsW(
 #else
 #define ExpandEnvironmentStrings  ExpandEnvironmentStringsA
 #endif // !UNICODE
+
+WINBASEAPI
+DWORD
+WINAPI
+GetFirmwareEnvironmentVariableA(
+    IN LPCSTR lpName,
+    IN LPCSTR lpGuid,
+    OUT PVOID   pBuffer,
+    IN DWORD    nSize
+    );
+WINBASEAPI
+DWORD
+WINAPI
+GetFirmwareEnvironmentVariableW(
+    IN LPCWSTR lpName,
+    IN LPCWSTR lpGuid,
+    OUT PVOID   pBuffer,
+    IN DWORD    nSize
+    );
+#ifdef UNICODE
+#define GetFirmwareEnvironmentVariable  GetFirmwareEnvironmentVariableW
+#else
+#define GetFirmwareEnvironmentVariable  GetFirmwareEnvironmentVariableA
+#endif // !UNICODE
+
+WINBASEAPI
+BOOL
+WINAPI
+SetFirmwareEnvironmentVariableA(
+    IN LPCSTR lpName,
+    IN LPCSTR lpGuid,
+    IN PVOID    pValue,
+    IN DWORD    nSize
+    );
+WINBASEAPI
+BOOL
+WINAPI
+SetFirmwareEnvironmentVariableW(
+    IN LPCWSTR lpName,
+    IN LPCWSTR lpGuid,
+    IN PVOID    pValue,
+    IN DWORD    nSize
+    );
+#ifdef UNICODE
+#define SetFirmwareEnvironmentVariable  SetFirmwareEnvironmentVariableW
+#else
+#define SetFirmwareEnvironmentVariable  SetFirmwareEnvironmentVariableA
+#endif // !UNICODE
+
 
 WINBASEAPI
 VOID
@@ -5515,6 +5765,59 @@ GetSystemWindowsDirectoryW(
 #define GetSystemWindowsDirectory  GetSystemWindowsDirectoryA
 #endif // !UNICODE
 
+#if !defined(RC_INVOKED) // RC warns because "WINBASE_DECLARE_GET_SYSTEM_WOW64_DIRECTORY" is a bit long.
+#if _WIN32_WINNT >= 0x0501 || defined(WINBASE_DECLARE_GET_SYSTEM_WOW64_DIRECTORY)
+
+WINBASEAPI
+UINT
+WINAPI
+GetSystemWow64DirectoryA(
+    OUT LPSTR lpBuffer,
+    IN UINT uSize
+    );
+WINBASEAPI
+UINT
+WINAPI
+GetSystemWow64DirectoryW(
+    OUT LPWSTR lpBuffer,
+    IN UINT uSize
+    );
+#ifdef UNICODE
+#define GetSystemWow64Directory  GetSystemWow64DirectoryW
+#else
+#define GetSystemWow64Directory  GetSystemWow64DirectoryA
+#endif // !UNICODE
+
+//
+// for GetProcAddress
+//
+typedef UINT (WINAPI* PGET_SYSTEM_WOW64_DIRECTORY_A)(OUT  LPSTR lpBuffer, UINT uSize);
+typedef UINT (WINAPI* PGET_SYSTEM_WOW64_DIRECTORY_W)(OUT LPWSTR lpBuffer, UINT uSize);
+
+//
+// GetProcAddress only accepts GET_SYSTEM_WOW64_DIRECTORY_NAME_A_A,
+// GET_SYSTEM_WOW64_DIRECTORY_NAME_W_A, GET_SYSTEM_WOW64_DIRECTORY_NAME_T_A.
+// The others are if you want to use the strings in some other way.
+//
+#define GET_SYSTEM_WOW64_DIRECTORY_NAME_A_A      "GetSystemWow64DirectoryA"
+#define GET_SYSTEM_WOW64_DIRECTORY_NAME_A_W     L"GetSystemWow64DirectoryA"
+#define GET_SYSTEM_WOW64_DIRECTORY_NAME_A_T TEXT("GetSystemWow64DirectoryA")
+#define GET_SYSTEM_WOW64_DIRECTORY_NAME_W_A      "GetSystemWow64DirectoryW"
+#define GET_SYSTEM_WOW64_DIRECTORY_NAME_W_W     L"GetSystemWow64DirectoryW"
+#define GET_SYSTEM_WOW64_DIRECTORY_NAME_W_T TEXT("GetSystemWow64DirectoryW")
+
+#ifdef UNICODE
+#define GET_SYSTEM_WOW64_DIRECTORY_NAME_T_A GET_SYSTEM_WOW64_DIRECTORY_NAME_W_A
+#define GET_SYSTEM_WOW64_DIRECTORY_NAME_T_W GET_SYSTEM_WOW64_DIRECTORY_NAME_W_W
+#define GET_SYSTEM_WOW64_DIRECTORY_NAME_T_T GET_SYSTEM_WOW64_DIRECTORY_NAME_W_T
+#else
+#define GET_SYSTEM_WOW64_DIRECTORY_NAME_T_A GET_SYSTEM_WOW64_DIRECTORY_NAME_A_A
+#define GET_SYSTEM_WOW64_DIRECTORY_NAME_T_W GET_SYSTEM_WOW64_DIRECTORY_NAME_A_W
+#define GET_SYSTEM_WOW64_DIRECTORY_NAME_T_T GET_SYSTEM_WOW64_DIRECTORY_NAME_A_T
+#endif
+
+#endif // _WIN32_WINNT >= 0x0501
+#endif
 
 WINBASEAPI
 BOOL
@@ -5693,6 +5996,7 @@ GetFullPathNameW(
 #define DDD_REMOVE_DEFINITION       0x00000002
 #define DDD_EXACT_MATCH_ON_REMOVE   0x00000004
 #define DDD_NO_BROADCAST_SYSTEM     0x00000008
+#define DDD_LUID_BROADCAST_DRIVE    0x00000010
 
 WINBASEAPI
 BOOL
@@ -5956,6 +6260,8 @@ FindNextFileW(
 #else
 #define FindNextFile  FindNextFileA
 #endif // !UNICODE
+
+
 
 WINBASEAPI
 DWORD
@@ -7124,6 +7430,103 @@ PrivilegedServiceAuditAlarmW (
 #endif // !UNICODE
 
 
+
+#if(_WIN32_WINNT >= 0x0501)
+
+typedef enum {
+
+    WinNullSid                                  = 0,
+    WinWorldSid                                 = 1,
+    WinLocalSid                                 = 2,
+    WinCreatorOwnerSid                          = 3,
+    WinCreatorGroupSid                          = 4,
+    WinCreatorOwnerServerSid                    = 5,
+    WinCreatorGroupServerSid                    = 6,
+    WinNtAuthoritySid                           = 7,
+    WinDialupSid                                = 8,
+    WinNetworkSid                               = 9,
+    WinBatchSid                                 = 10,
+    WinInteractiveSid                           = 11,
+    WinServiceSid                               = 12,
+    WinAnonymousSid                             = 13,
+    WinProxySid                                 = 14,
+    WinEnterpriseControllersSid                 = 15,
+    WinSelfSid                                  = 16,
+    WinAuthenticatedUserSid                     = 17,
+    WinRestrictedCodeSid                        = 18,
+    WinTerminalServerSid                        = 19,
+    WinRemoteLogonIdSid                         = 20,
+    WinLogonIdsSid                              = 21,
+    WinLocalSystemSid                           = 22,
+    WinLocalServiceSid                          = 23,
+    WinNetworkServiceSid                        = 24,
+    WinBuiltinDomainSid                         = 25,
+    WinBuiltinAdministratorsSid                 = 26,
+    WinBuiltinUsersSid                          = 27,
+    WinBuiltinGuestsSid                         = 28,
+    WinBuiltinPowerUsersSid                     = 29,
+    WinBuiltinAccountOperatorsSid               = 30,
+    WinBuiltinSystemOperatorsSid                = 31,
+    WinBuiltinPrintOperatorsSid                 = 32,
+    WinBuiltinBackupOperatorsSid                = 33,
+    WinBuiltinReplicatorSid                     = 34,
+    WinBuiltinPreWindows2000CompatibleAccessSid = 35,
+    WinBuiltinRemoteDesktopUsersSid             = 36,
+    WinBuiltinNetworkConfigurationOperatorsSid  = 37,
+    WinAccountAdministratorSid                  = 38,
+    WinAccountGuestSid                          = 39,
+    WinAccountKrbtgtSid                         = 40,
+    WinAccountDomainAdminsSid                   = 41,
+    WinAccountDomainUsersSid                    = 42,
+    WinAccountDomainGuestsSid                   = 43,
+    WinAccountComputersSid                      = 44,
+    WinAccountControllersSid                    = 45,
+    WinAccountCertAdminsSid                     = 46,
+    WinAccountSchemaAdminsSid                   = 47,
+    WinAccountEnterpriseAdminsSid               = 48,
+    WinAccountPolicyAdminsSid                   = 49,
+    WinAccountRasAndIasServersSid               = 50,
+
+} WELL_KNOWN_SID_TYPE;
+
+WINADVAPI
+BOOL
+WINAPI
+IsWellKnownSid (
+    IN  PSID pSid,
+    IN  WELL_KNOWN_SID_TYPE WellKnownSidType
+    );
+
+WINADVAPI
+BOOL
+WINAPI
+CreateWellKnownSid(
+    IN WELL_KNOWN_SID_TYPE WellKnownSidType,
+    IN PSID DomainSid  OPTIONAL,
+    OUT PSID pSid,
+    IN OUT DWORD *cbSid
+    );
+
+WINADVAPI
+BOOL
+WINAPI
+EqualDomainSid(
+    IN PSID pSid1,
+    IN PSID pSid2,
+    OUT BOOL *pfEqual
+    );
+
+WINADVAPI
+BOOL
+WINAPI
+GetWindowsAccountDomainSid(
+    IN PSID pSid,
+    OUT PSID ppDomainSid OPTIONAL,
+    IN OUT DWORD *cbSid
+    );
+
+#endif //(_WIN32_WINNT >= 0x0501)
+
 WINADVAPI
 BOOL
 WINAPI
@@ -7627,7 +8030,6 @@ ConvertToAutoInheritPrivateObjectSecurity(
     IN PGENERIC_MAPPING GenericMapping
     );
 
-
 WINADVAPI
 BOOL
 WINAPI
@@ -7635,7 +8037,22 @@ CreatePrivateObjectSecurityEx (
     IN PSECURITY_DESCRIPTOR ParentDescriptor,
     IN PSECURITY_DESCRIPTOR CreatorDescriptor,
     OUT PSECURITY_DESCRIPTOR * NewDescriptor,
-    IN GUID *ObjectType,
+    IN GUID *ObjectType OPTIONAL,
+    IN BOOL IsContainerObject,
+    IN ULONG AutoInheritFlags,
+    IN HANDLE Token,
+    IN PGENERIC_MAPPING GenericMapping
+    );
+
+WINADVAPI
+BOOL
+WINAPI
+CreatePrivateObjectSecurityWithMultipleInheritance (
+    IN PSECURITY_DESCRIPTOR ParentDescriptor,
+    IN PSECURITY_DESCRIPTOR CreatorDescriptor,
+    OUT PSECURITY_DESCRIPTOR * NewDescriptor,
+    IN GUID **ObjectTypes OPTIONAL,
+    IN ULONG GuidCount,
     IN BOOL IsContainerObject,
     IN ULONG AutoInheritFlags,
     IN HANDLE Token,
@@ -8284,12 +8701,103 @@ SetComputerNameExW (
 #else
 #define SetComputerNameEx  SetComputerNameExA
 #endif // !UNICODE
+    
+WINBASEAPI
+DWORD
+WINAPI
+AddLocalAlternateComputerNameA (
+    IN LPCSTR lpDnsFQHostname,
+    IN ULONG    ulFlags
+    );
+WINBASEAPI
+DWORD
+WINAPI
+AddLocalAlternateComputerNameW (
+    IN LPCWSTR lpDnsFQHostname,
+    IN ULONG    ulFlags
+    );
+#ifdef UNICODE
+#define AddLocalAlternateComputerName  AddLocalAlternateComputerNameW
+#else
+#define AddLocalAlternateComputerName  AddLocalAlternateComputerNameA
+#endif // !UNICODE
+
+WINBASEAPI
+DWORD
+WINAPI
+RemoveLocalAlternateComputerNameA (
+    IN LPCSTR lpAltDnsFQHostname,
+    IN ULONG    ulFlags
+    );
+WINBASEAPI
+DWORD
+WINAPI
+RemoveLocalAlternateComputerNameW (
+    IN LPCWSTR lpAltDnsFQHostname,
+    IN ULONG    ulFlags
+    );
+#ifdef UNICODE
+#define RemoveLocalAlternateComputerName  RemoveLocalAlternateComputerNameW
+#else
+#define RemoveLocalAlternateComputerName  RemoveLocalAlternateComputerNameA
+#endif // !UNICODE
+
+WINBASEAPI
+DWORD
+WINAPI
+SetLocalPrimaryComputerNameA (
+    IN LPCSTR  lpAltDnsFQHostname,
+    IN ULONG     ulFlags
+    );
+WINBASEAPI
+DWORD
+WINAPI
+SetLocalPrimaryComputerNameW (
+    IN LPCWSTR  lpAltDnsFQHostname,
+    IN ULONG     ulFlags
+    );
+#ifdef UNICODE
+#define SetLocalPrimaryComputerName  SetLocalPrimaryComputerNameW
+#else
+#define SetLocalPrimaryComputerName  SetLocalPrimaryComputerNameA
+#endif // !UNICODE
+
+typedef enum _COMPUTER_NAME_TYPE {
+    PrimaryComputerName,
+    AlternateComputerNames,
+    AllComputerNames,
+    ComputerNameTypeMax
+} COMPUTER_NAME_TYPE ;
+
+WINBASEAPI
+DWORD
+WINAPI
+EnumerateLocalComputerNamesA (
+    IN COMPUTER_NAME_TYPE        NameType,
+    IN ULONG                     ulFlags,
+    IN OUT LPSTR               lpDnsFQHostname,
+    IN OUT LPDWORD               nSize
+    );
+WINBASEAPI
+DWORD
+WINAPI
+EnumerateLocalComputerNamesW (
+    IN COMPUTER_NAME_TYPE        NameType,
+    IN ULONG                     ulFlags,
+    IN OUT LPWSTR               lpDnsFQHostname,
+    IN OUT LPDWORD               nSize
+    );
+#ifdef UNICODE
+#define EnumerateLocalComputerNames  EnumerateLocalComputerNamesW
+#else
+#define EnumerateLocalComputerNames  EnumerateLocalComputerNamesA
+#endif // !UNICODE
 
 WINBASEAPI
 BOOL
 WINAPI
 DnsHostnameToComputerNameA (
-    IN LPSTR Hostname,
+    IN LPCSTR Hostname,
     OUT LPSTR ComputerName,
     IN OUT LPDWORD nSize
     );
@@ -8297,7 +8805,7 @@ WINBASEAPI
 BOOL
 WINAPI
 DnsHostnameToComputerNameW (
-    IN LPWSTR Hostname,
+    IN LPCWSTR Hostname,
     OUT LPWSTR ComputerName,
     IN OUT LPDWORD nSize
     );
@@ -8380,6 +8888,42 @@ LogonUserW (
 #define LogonUser  LogonUserW
 #else
 #define LogonUser  LogonUserA
+#endif // !UNICODE
+
+WINADVAPI
+BOOL
+WINAPI
+LogonUserExA (
+    IN LPSTR lpszUsername,
+    IN LPSTR lpszDomain,
+    IN LPSTR lpszPassword,
+    IN DWORD dwLogonType,
+    IN DWORD dwLogonProvider,
+    OUT PHANDLE phToken           OPTIONAL,
+    OUT PSID  *ppLogonSid       OPTIONAL,
+    OUT PVOID *ppProfileBuffer  OPTIONAL,
+    OUT LPDWORD pdwProfileLength  OPTIONAL,
+    OUT PQUOTA_LIMITS pQuotaLimits OPTIONAL
+    );
+WINADVAPI
+BOOL
+WINAPI
+LogonUserExW (
+    IN LPWSTR lpszUsername,
+    IN LPWSTR lpszDomain,
+    IN LPWSTR lpszPassword,
+    IN DWORD dwLogonType,
+    IN DWORD dwLogonProvider,
+    OUT PHANDLE phToken           OPTIONAL,
+    OUT PSID  *ppLogonSid       OPTIONAL,
+    OUT PVOID *ppProfileBuffer  OPTIONAL,
+    OUT LPDWORD pdwProfileLength  OPTIONAL,
+    OUT PQUOTA_LIMITS pQuotaLimits OPTIONAL
+    );
+#ifdef UNICODE
+#define LogonUserEx  LogonUserExW
+#else
+#define LogonUserEx  LogonUserExA
 #endif // !UNICODE
 
 WINADVAPI
@@ -8488,10 +9032,6 @@ CreateRestrictedToken(
     OUT PHANDLE NewTokenHandle
     );
 
-WINADVAPI
-BOOL
-WINAPI
-IsProcessRestricted();
 
 WINADVAPI
 BOOL
@@ -8501,55 +9041,12 @@ IsTokenRestricted(
     );
 
 WINADVAPI
-PSID
+BOOL
 WINAPI
-GetSiteSidFromToken(
+IsTokenUntrusted(
     IN HANDLE TokenHandle
     );
 
-WINADVAPI
-PSID
-WINAPI
-GetSiteSidFromUrl(
-    IN LPCWSTR pszUrl
-    );
-
-WINADVAPI
-HRESULT
-WINAPI
-GetSiteNameFromSid(
-    IN  PSID pSid,
-    OUT LPWSTR *pwsSite);
-
-WINADVAPI
-HRESULT
-WINAPI
-GetMangledSiteSid(
-    IN      PSID    pSid,
-    IN      ULONG   cchMangledSite,
-    IN OUT  LPWSTR *ppwszMangledSite);
-
-#define MAX_MANGLED_SITE    (27)
-
-WINADVAPI
-ULONG
-WINAPI GetSiteDirectoryA (
-    IN  HANDLE  hToken,
-    OUT LPSTR pszSiteDirectory,
-    IN  ULONG uSize
-    );
-WINADVAPI
-ULONG
-WINAPI GetSiteDirectoryW (
-    IN  HANDLE  hToken,
-    OUT LPWSTR pszSiteDirectory,
-    IN  ULONG uSize
-    );
-#ifdef UNICODE
-#define GetSiteDirectory  GetSiteDirectoryW
-#else
-#define GetSiteDirectory  GetSiteDirectoryA
-#endif // !UNICODE
 
 BOOL
 APIENTRY
@@ -8913,94 +9410,6 @@ MapUserPhysicalPagesScatter(
     IN PULONG_PTR PageArray OPTIONAL
     );
 
-#if defined(_ALPHA_)
-WINBASEAPI
-PVOID64
-WINAPI
-VirtualAllocVlm(
-    IN HANDLE hProcess,
-    IN PVOID64 lpAddress,
-    IN DWORDLONG ullSize,
-    IN DWORD flAllocationType,
-    IN DWORD flProtect
-    );
-
-WINBASEAPI
-BOOL
-WINAPI
-VirtualFreeVlm(
-    IN HANDLE hProcess,
-    IN PVOID64 lpAddress,
-    IN DWORDLONG ullSize,
-    IN DWORD dwFreeType
-    );
-
-WINBASEAPI
-BOOL
-WINAPI
-VirtualProtectVlm(
-    IN HANDLE hProcess,
-    IN PVOID64 lpAddress,
-    IN DWORDLONG ullSize,
-    IN DWORD flNewProtect,
-    OUT PDWORD lpflOldProtect
-    );
-
-WINBASEAPI
-DWORD
-WINAPI
-VirtualQueryVlm(
-    IN HANDLE hProcess,
-    IN PVOID64 lpAddress,
-    OUT PMEMORY_BASIC_INFORMATION_VLM lpBuffer,
-    IN DWORD dwLength
-    );
-
-WINBASEAPI
-BOOL
-WINAPI
-ReadProcessMemoryVlm(
-    IN HANDLE hProcess,
-    IN PVOID64 lpBaseAddress,
-    OUT PVOID64 lpBuffer,
-    IN DWORD nSize,
-    OUT LPDWORD lpNumberOfBytesRead
-    );
-
-WINBASEAPI
-BOOL
-WINAPI
-WriteProcessMemoryVlm(
-    IN HANDLE hProcess,
-    IN PVOID64 lpBaseAddress,
-    IN PVOID64 lpBuffer,
-    IN DWORD nSize,
-    OUT LPDWORD lpNumberOfBytesWritten
-    );
-
-WINBASEAPI
-BOOL
-WINAPI
-ReadFileVlm(
-    IN HANDLE hFile,
-    OUT PVOID64 lpBuffer,
-    IN DWORD nNumberOfBytesToRead,
-    IN LPDWORD lpReserved,
-    IN LPOVERLAPPED lpOverlapped
-    );
-
-WINBASEAPI
-BOOL
-WINAPI
-WriteFileVlm(
-    IN HANDLE hFile,
-    IN PVOID64 lpBuffer,
-    IN DWORD nNumberOfBytesToWrite,
-    IN LPDWORD lpReserved,
-    IN LPOVERLAPPED lpOverlapped
-    );
-#endif
-
 WINBASEAPI
 HANDLE
 WINAPI
@@ -9078,6 +9487,40 @@ SetInformationJobObject(
     IN JOBOBJECTINFOCLASS JobObjectInformationClass,
     IN LPVOID lpJobObjectInformation,
     IN DWORD cbJobObjectInformationLength
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+IsProcessInJob (
+    IN HANDLE ProcessHandle,
+    IN HANDLE JobHandle,
+    OUT PBOOL Result
+    );
+
+
+WINBASEAPI
+BOOL
+WINAPI
+CreateJobSet (
+    IN ULONG NumJob,
+    IN PJOB_SET_ARRAY UserJobSet,
+    IN ULONG Flags);
+
+
+WINBASEAPI
+PVOID
+WINAPI
+AddVectoredExceptionHandler(
+    IN ULONG FirstHandler,
+    IN PVECTORED_EXCEPTION_HANDLER VectoredHandler
+    );
+
+WINBASEAPI
+ULONG
+WINAPI
+RemoveVectoredExceptionHandler(
+    IN PVOID VectoredHandlerHandle
     );
 
 //
@@ -9199,9 +9642,9 @@ SetVolumeMountPointW(
     LPCWSTR lpszVolumeName
     );
 #ifdef UNICODE
-#define SetVolumeMountPoint SetVolumeMountPointW
+#define SetVolumeMountPoint  SetVolumeMountPointW
 #else
-#define SetVolumeMountPoint SetVolumeMountPointA
+#define SetVolumeMountPoint  SetVolumeMountPointA
 #endif // !UNICODE
 
 WINBASEAPI
@@ -9217,9 +9660,9 @@ DeleteVolumeMountPointW(
     LPCWSTR lpszVolumeMountPoint
     );
 #ifdef UNICODE
-#define DeleteVolumeMountPoint DeleteVolumeMountPointW
+#define DeleteVolumeMountPoint  DeleteVolumeMountPointW
 #else
-#define DeleteVolumeMountPoint DeleteVolumeMountPointA
+#define DeleteVolumeMountPoint  DeleteVolumeMountPointA
 #endif // !UNICODE
 
 WINBASEAPI
@@ -9239,9 +9682,9 @@ GetVolumeNameForVolumeMountPointW(
     DWORD cchBufferLength
     );
 #ifdef UNICODE
-#define GetVolumeNameForVolumeMountPoint GetVolumeNameForVolumeMountPointW
+#define GetVolumeNameForVolumeMountPoint  GetVolumeNameForVolumeMountPointW
 #else
-#define GetVolumeNameForVolumeMountPoint GetVolumeNameForVolumeMountPointA
+#define GetVolumeNameForVolumeMountPoint  GetVolumeNameForVolumeMountPointA
 #endif // !UNICODE
 
 WINBASEAPI
@@ -9261,12 +9704,303 @@ GetVolumePathNameW(
     DWORD cchBufferLength
     );
 #ifdef UNICODE
-#define GetVolumePathName GetVolumePathNameW
+#define GetVolumePathName  GetVolumePathNameW
 #else
-#define GetVolumePathName GetVolumePathNameA
+#define GetVolumePathName  GetVolumePathNameA
 #endif // !UNICODE
 
-#endif // (_WIN32_WINNT >= 0x0500)
+WINBASEAPI
+BOOL
+WINAPI
+GetVolumePathNamesForVolumeNameA(
+    LPCSTR lpszVolumeName,
+    LPSTR lpszVolumePathNames,
+    DWORD cchBufferLength,
+    PDWORD lpcchReturnLength
+    );
+WINBASEAPI
+BOOL
+WINAPI
+GetVolumePathNamesForVolumeNameW(
+    LPCWSTR lpszVolumeName,
+    LPWSTR lpszVolumePathNames,
+    DWORD cchBufferLength,
+    PDWORD lpcchReturnLength
+    );
+#ifdef UNICODE
+#define GetVolumePathNamesForVolumeName  GetVolumePathNamesForVolumeNameW
+#else
+#define GetVolumePathNamesForVolumeName  GetVolumePathNamesForVolumeNameA
+#endif // !UNICODE
+
+#endif
+
+#if (_WIN32_WINNT >= 0x0500) || (_WIN32_FUSION >= 0x0100) || ISOLATION_AWARE_ENABLED
+
+#define ACTCTX_FLAG_PROCESSOR_ARCHITECTURE_VALID    (0x00000001)
+#define ACTCTX_FLAG_LANGID_VALID                    (0x00000002)
+#define ACTCTX_FLAG_ASSEMBLY_DIRECTORY_VALID        (0x00000004)
+#define ACTCTX_FLAG_RESOURCE_NAME_VALID             (0x00000008)
+#define ACTCTX_FLAG_SET_PROCESS_DEFAULT             (0x00000010)
+#define ACTCTX_FLAG_APPLICATION_NAME_VALID          (0x00000020)
+#define ACTCTX_FLAG_SOURCE_IS_ASSEMBLYREF           (0x00000040)
+#define ACTCTX_FLAG_HMODULE_VALID                   (0x00000080)
+
+typedef struct tagACTCTXA {
+    ULONG       cbSize;
+    DWORD       dwFlags;
+    LPCSTR      lpSource;
+    USHORT      wProcessorArchitecture;
+    LANGID      wLangId;
+    LPCSTR      lpAssemblyDirectory;
+    LPCSTR      lpResourceName;
+    LPCSTR      lpApplicationName;
+    HMODULE     hModule;
+} ACTCTXA, *PACTCTXA;
+typedef struct tagACTCTXW {
+    ULONG       cbSize;
+    DWORD       dwFlags;
+    LPCWSTR     lpSource;
+    USHORT      wProcessorArchitecture;
+    LANGID      wLangId;
+    LPCWSTR     lpAssemblyDirectory;
+    LPCWSTR     lpResourceName;
+    LPCWSTR     lpApplicationName;
+    HMODULE     hModule;
+} ACTCTXW, *PACTCTXW;
+#ifdef UNICODE
+typedef ACTCTXW ACTCTX;
+typedef PACTCTXW PACTCTX;
+#else
+typedef ACTCTXA ACTCTX;
+typedef PACTCTXA PACTCTX;
+#endif // UNICODE
+
+typedef const ACTCTXA *PCACTCTXA;
+typedef const ACTCTXW *PCACTCTXW;
+#ifdef UNICODE
+typedef ACTCTXW ACTCTX;
+typedef PCACTCTXW PCACTCTX;
+#else
+typedef ACTCTXA ACTCTX;
+typedef PCACTCTXA PCACTCTX;
+#endif // UNICODE
+
+#endif
+
+#if (_WIN32_WINNT >= 0x0500) || (_WIN32_FUSION >= 0x0100)
+
+
+
+WINBASEAPI
+HANDLE
+WINAPI
+CreateActCtxA(
+    PCACTCTXA pActCtx
+    );
+WINBASEAPI
+HANDLE
+WINAPI
+CreateActCtxW(
+    PCACTCTXW pActCtx
+    );
+#ifdef UNICODE
+#define CreateActCtx  CreateActCtxW
+#else
+#define CreateActCtx  CreateActCtxA
+#endif // !UNICODE
+
+WINBASEAPI
+VOID
+WINAPI
+AddRefActCtx(
+    HANDLE hActCtx
+    );
+
+
+
+WINBASEAPI
+VOID
+WINAPI
+ReleaseActCtx(
+    HANDLE hActCtx
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+ZombifyActCtx(
+    HANDLE hActCtx
+    );
+
+
+
+WINBASEAPI
+BOOL
+WINAPI
+ActivateActCtx(
+    HANDLE hActCtx,
+    ULONG_PTR *lpCookie
+    );
+
+
+
+#define DEACTIVATE_ACTCTX_FLAG_FORCE_EARLY_DEACTIVATION (0x00000001)
+
+WINBASEAPI
+BOOL
+WINAPI
+DeactivateActCtx(
+    DWORD dwFlags,
+    ULONG_PTR ulCookie
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+GetCurrentActCtx(
+    HANDLE *lphActCtx);
+
+#endif
+
+#if (_WIN32_WINNT >= 0x0500) || (_WIN32_FUSION >= 0x0100) || ISOLATION_AWARE_ENABLED
+
+typedef struct tagACTCTX_SECTION_KEYED_DATA {
+    ULONG cbSize;
+    ULONG ulDataFormatVersion;
+    PVOID lpData;
+    ULONG ulLength;
+    PVOID lpSectionGlobalData;
+    ULONG ulSectionGlobalDataLength;
+    PVOID lpSectionBase;
+    ULONG ulSectionTotalLength;
+    HANDLE hActCtx;
+    ULONG ulAssemblyRosterIndex;
+} ACTCTX_SECTION_KEYED_DATA, *PACTCTX_SECTION_KEYED_DATA;
+
+#define FIND_ACTCTX_SECTION_KEY_RETURN_HACTCTX (0x00000001)
+
+#endif
+
+#if (_WIN32_WINNT >= 0x0500) || (_WIN32_FUSION >= 0x0100)
+
+
+
+WINBASEAPI
+BOOL
+WINAPI
+FindActCtxSectionStringA(
+    DWORD dwFlags,
+    const GUID *lpExtensionGuid,
+    ULONG ulSectionId,
+    LPCSTR lpStringToFind,
+    PACTCTX_SECTION_KEYED_DATA ReturnedData
+    );
+WINBASEAPI
+BOOL
+WINAPI
+FindActCtxSectionStringW(
+    DWORD dwFlags,
+    const GUID *lpExtensionGuid,
+    ULONG ulSectionId,
+    LPCWSTR lpStringToFind,
+    PACTCTX_SECTION_KEYED_DATA ReturnedData
+    );
+#ifdef UNICODE
+#define FindActCtxSectionString  FindActCtxSectionStringW
+#else
+#define FindActCtxSectionString  FindActCtxSectionStringA
+#endif // !UNICODE
+
+WINBASEAPI
+BOOL
+WINAPI
+FindActCtxSectionGuid(
+    DWORD dwFlags,
+    const GUID *lpExtensionGuid,
+    ULONG ulSectionId,
+    const GUID *lpGuidToFind,
+    PACTCTX_SECTION_KEYED_DATA ReturnedData
+    );
+
+#endif
+
+#if (_WIN32_WINNT >= 0x0500) || (_WIN32_FUSION >= 0x0100) || ISOLATION_AWARE_ENABLED
+
+#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+#if !defined(ACTIVATION_CONTEXT_BASIC_INFORMATION_DEFINED)
+
+typedef struct _ACTIVATION_CONTEXT_BASIC_INFORMATION {
+    HANDLE  hActCtx;
+    DWORD   dwFlags;
+} ACTIVATION_CONTEXT_BASIC_INFORMATION, *PACTIVATION_CONTEXT_BASIC_INFORMATION;
+
+typedef const struct _ACTIVATION_CONTEXT_BASIC_INFORMATION *PCACTIVATION_CONTEXT_BASIC_INFORMATION;
+
+#define ACTIVATION_CONTEXT_BASIC_INFORMATION_DEFINED 1
+
+#endif // !defined(ACTIVATION_CONTEXT_BASIC_INFORMATION_DEFINED)
+#endif
+
+#define QUERY_ACTCTX_FLAG_USE_ACTIVE_ACTCTX (0x00000004)
+#define QUERY_ACTCTX_FLAG_ACTCTX_IS_HMODULE (0x00000008)
+#define QUERY_ACTCTX_FLAG_ACTCTX_IS_ADDRESS (0x00000010)
+#define QUERY_ACTCTX_FLAG_NO_ADDREF         (0x80000000)
+
+#endif
+
+#if (_WIN32_WINNT >= 0x0500) || (_WIN32_FUSION >= 0x0100)
+
+
+
+//
+// switch (ulInfoClass)
+//
+//  case ActivationContextBasicInformation:
+//    pvSubInstance == NULL
+//    pvBuffer is of type PACTIVATION_CONTEXT_BASIC_INFORMATION
+//
+//  case ActivationContextDetailedInformation:
+//    pvSubInstance == NULL
+//    pvBuffer is of type PACTIVATION_CONTEXT_DETAILED_INFORMATION
+//
+//  case AssemblyDetailedInformationInActivationContext:
+//    pvSubInstance is of type PULONG
+//      *pvSubInstance < ACTIVATION_CONTEXT_DETAILED_INFORMATION::ulAssemblyCount
+//    pvBuffer is of type PACTIVATION_CONTEXT_ASSEMBLY_DETAILED_INFORMATION
+//
+//  case FileInformationInAssemblyOfAssemblyInActivationContext:
+//    pvSubInstance is of type PACTIVATION_CONTEXT_QUERY_INDEX
+//      pvSubInstance->ulAssemblyIndex < ACTIVATION_CONTEXT_DETAILED_INFORMATION::ulAssemblyCount
+//      pvSubInstance->ulFileIndexInAssembly < ACTIVATION_CONTEXT_ASSEMBLY_DETAILED_INFORMATION::ulFileCount
+//    pvBuffer is of type PASSEMBLY_FILE_DETAILED_INFORMATION
+//
+// String are placed after the structs.
+//
+WINBASEAPI
+BOOL
+WINAPI
+QueryActCtxW(
+    IN DWORD dwFlags,
+    IN HANDLE hActCtx,
+    IN PVOID pvSubInstance,
+    IN ULONG ulInfoClass,
+    OUT PVOID pvBuffer,
+    IN SIZE_T cbBuffer OPTIONAL,
+    OUT SIZE_T *pcbWrittenOrRequired OPTIONAL
+    );
+
+typedef BOOL (WINAPI * PQUERYACTCTXW_FUNC)(
+    IN DWORD dwFlags,
+    IN HANDLE hActCtx,
+    IN PVOID pvSubInstance,
+    IN ULONG ulInfoClass,
+    OUT PVOID pvBuffer,
+    IN SIZE_T cbBuffer OPTIONAL,
+    OUT SIZE_T *pcbWrittenOrRequired OPTIONAL
+    );
+
+#endif // (_WIN32_WINNT > 0x0500) || (_WIN32_FUSION >= 0x0100)
 
 
 WINBASEAPI
@@ -9277,6 +10011,95 @@ ProcessIdToSessionId(
     OUT DWORD *pSessionId
     );
 
+#if _WIN32_WINNT >= 0x0501
+
+WINBASEAPI
+DWORD
+WINAPI
+WTSGetActiveConsoleSessionId();
+
+WINBASEAPI
+BOOL
+WINAPI
+IsWow64Process(
+    HANDLE hProcess,
+    PBOOL Wow64Process
+    );
+
+#endif // (_WIN32_WINNT >= 0x0501)
+
+
+//
+// NUMA Information routines.
+//
+
+WINBASEAPI
+BOOL
+WINAPI
+GetNumaHighestNodeNumber(
+    PULONG HighestNodeNumber
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+GetNumaProcessorNode(
+    UCHAR Processor,
+    PUCHAR NodeNumber
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+GetNumaNodeProcessorMask(
+    UCHAR Node,
+    PULONGLONG ProcessorMask
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+GetNumaProcessorMap(
+    PSYSTEM_NUMA_INFORMATION Map,
+    ULONG Length,
+    PULONG ReturnedLength
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+GetNumaAvailableMemory(
+    PSYSTEM_NUMA_INFORMATION Memory,
+    ULONG Length,
+    PULONG ReturnedLength
+    );
+
+WINBASEAPI
+BOOL
+WINAPI
+GetNumaAvailableMemoryNode(
+    UCHAR Node,
+    PULONGLONG AvailableBytes
+    );
+
+WINBASEAPI
+ULONGLONG
+WINAPI
+NumaVirtualQueryNode(
+    IN  ULONG       NumberOfRanges,
+    IN  PULONG_PTR  RangeList,
+    OUT PULONG_PTR  VirtualPageAndNode,
+    IN  SIZE_T      MaximumOutputLength
+    );
+
+
+
+
+#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+#if ISOLATION_AWARE_ENABLED
+#include "winbase.inl"
+#endif /* ISOLATION_AWARE_ENABLED */
+#endif /* RC */
 
 #ifdef __cplusplus
 }
@@ -9284,6 +10107,5 @@ ProcessIdToSessionId(
 
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // _WINBASE_
 

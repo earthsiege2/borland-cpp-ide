@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 2000 Inprise Corporation. All Rights Reserved.
+// Copyright (c) 1987, 2000-2002 Borland Corporation. All Rights Reserved.
 //---------------------------------------------------------------------------
 #ifndef TRAYICON_H
 #define TRAYICON_H
@@ -9,6 +9,7 @@
 #include <Controls.hpp>
 #include <Classes.hpp>
 #include <Forms.hpp>
+#include <Extctrls.hpp>
 #include <ShellAPI.hpp>
 #include <StdLib.h>
 

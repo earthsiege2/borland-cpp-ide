@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Series.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Series.pas' rev: 6.00
 
 #ifndef SeriesHPP
 #define SeriesHPP
@@ -16,8 +16,8 @@
 #include <SysUtils.hpp>	// Pascal unit
 #include <Chart.hpp>	// Pascal unit
 #include <TeEngine.hpp>	// Pascal unit
-#include <Windows.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
+#include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -27,12 +27,10 @@ namespace Series
 {
 //-- type declarations -------------------------------------------------------
 #pragma option push -b-
-enum TSeriesPointerStyle { psRectangle, psCircle, psTriangle, psDownTriangle, psCross, psDiagCross, 
-	psStar, psDiamond, psSmallDot };
+enum TSeriesPointerStyle { psRectangle, psCircle, psTriangle, psDownTriangle, psCross, psDiagCross, psStar, psDiamond, psSmallDot };
 #pragma option pop
 
-typedef TSeriesPointerStyle __fastcall (__closure *TOnGetPointerStyle)(Teengine::TChartSeries* Sender
-	, int ValueIndex);
+typedef TSeriesPointerStyle __fastcall (__closure *TOnGetPointerStyle)(Teengine::TChartSeries* Sender, int ValueIndex);
 
 class DELPHICLASS TSeriesPointer;
 class PASCALIMPLEMENTATION TSeriesPointer : public Classes::TPersistent 
@@ -77,10 +75,8 @@ public:
 	void __fastcall ChangeStyle(TSeriesPointerStyle NewStyle);
 	void __fastcall ChangeVertSize(int NewSize);
 	void __fastcall Draw(int px, int py, Graphics::TColor ColorValue, TSeriesPointerStyle AStyle);
-	void __fastcall DrawLegendShape(Graphics::TColor AColor, const Windows::TRect &Rect, bool DrawPen);
-		
-	void __fastcall DrawPointer(bool Is3D, int px, int py, int tmpHoriz, int tmpVert, Graphics::TColor 
-		ColorValue, TSeriesPointerStyle AStyle);
+	void __fastcall DrawLegendShape(Graphics::TColor AColor, const Types::TRect &Rect, bool DrawPen);
+	void __fastcall DrawPointer(bool Is3D, int px, int py, int tmpHoriz, int tmpVert, Graphics::TColor ColorValue, TSeriesPointerStyle AStyle);
 	void __fastcall PrepareCanvas(Graphics::TColor ColorValue);
 	__property Teengine::TChartSeries* ParentSeries = {read=FOwner};
 	
@@ -98,8 +94,7 @@ __published:
 
 
 class DELPHICLASS TCustomSeries;
-typedef void __fastcall (__closure *TSeriesClickPointerEvent)(TCustomSeries* Sender, int ValueIndex, 
-	int X, int Y);
+typedef void __fastcall (__closure *TSeriesClickPointerEvent)(TCustomSeries* Sender, int ValueIndex, int X, int Y);
 
 class PASCALIMPLEMENTATION TCustomSeries : public Teengine::TChartSeries 
 {
@@ -142,8 +137,7 @@ private:
 	
 protected:
 	virtual bool __fastcall ClickedPointer(int ValueIndex, int tmpX, int tmpY, int x, int y);
-	virtual void __fastcall DrawMark(int ValueIndex, const AnsiString St, Teengine::TSeriesMarkPosition* 
-		APosition);
+	virtual void __fastcall DrawMark(int ValueIndex, const AnsiString St, Teengine::TSeriesMarkPosition* APosition);
 	virtual void __fastcall DrawPointer(int AX, int AY, Graphics::TColor AColor, int ValueIndex);
 	virtual void __fastcall DrawValue(int ValueIndex);
 	Graphics::TColor __fastcall GetAreaBrushColor(Graphics::TColor AColor);
@@ -156,11 +150,11 @@ public:
 	virtual void __fastcall CalcHorizMargins(int &LeftMargin, int &RightMargin);
 	virtual void __fastcall CalcVerticalMargins(int &TopMargin, int &BottomMargin);
 	virtual int __fastcall Clicked(int x, int y);
-	virtual void __fastcall DrawLegendShape(int ValueIndex, const Windows::TRect &Rect);
+	virtual void __fastcall DrawLegendShape(int ValueIndex, const Types::TRect &Rect);
 	virtual AnsiString __fastcall GetEditorClass();
 	virtual int __fastcall GetOriginPos(int ValueIndex);
 	__property Graphics::TBrushStyle AreaBrush = {read=FAreaBrush, write=SetAreaBrush, default=0};
-	__property Graphics::TColor AreaColor = {read=FAreaColor, write=SetAreaColor, nodefault};
+	__property Graphics::TColor AreaColor = {read=FAreaColor, write=SetAreaColor, default=536870912};
 	__property Tecanvas::TChartPen* AreaLinesPen = {read=FAreaLinesPen, write=SetAreaLinesPen};
 	__property bool ClickableLine = {read=FClickableLine, write=FClickableLine, nodefault};
 	__property bool Dark3D = {read=FDark3D, write=SetDark3D, default=1};
@@ -170,13 +164,11 @@ public:
 	__property int LineHeight = {read=FLineHeight, write=SetLineHeight, default=0};
 	__property Tecanvas::TChartPen* LinePen = {read=FLinePen, write=SetLinePen};
 	__property TSeriesClickPointerEvent OnClickPointer = {read=FOnClickPointer, write=FOnClickPointer};
-		
 	__property TSeriesPointer* Pointer = {read=FPointer, write=SetPointer};
 	__property bool Stairs = {read=FStairs, write=SetStairs, default=0};
 	
 __published:
-	__property TOnGetPointerStyle OnGetPointerStyle = {read=FOnGetPointerStyle, write=FOnGetPointerStyle
-		};
+	__property TOnGetPointerStyle OnGetPointerStyle = {read=FOnGetPointerStyle, write=FOnGetPointerStyle};
 };
 
 
@@ -188,17 +180,16 @@ class PASCALIMPLEMENTATION TLineSeries : public TCustomSeries
 public:
 	__fastcall virtual TLineSeries(Classes::TComponent* AOwner);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
-	virtual void __fastcall PrepareLegendCanvas(int ValueIndex, Graphics::TColor &BackColor, Graphics::TBrushStyle 
-		&BrushStyle);
+	virtual void __fastcall PrepareLegendCanvas(int ValueIndex, Graphics::TColor &BackColor, Graphics::TBrushStyle &BrushStyle);
 	
 __published:
-	__property Dark3D ;
-	__property InvertedStairs ;
-	__property LineBrush ;
-	__property LineHeight ;
+	__property Dark3D  = {default=1};
+	__property InvertedStairs  = {default=0};
+	__property LineBrush  = {default=0};
+	__property LineHeight  = {default=0};
 	__property LinePen ;
 	__property Pointer ;
-	__property Stairs ;
+	__property Stairs  = {default=0};
 	__property XValues ;
 	__property YValues ;
 public:
@@ -257,22 +248,21 @@ public:
 	virtual int __fastcall CalcYPos(int ValueIndex);
 	virtual AnsiString __fastcall GetEditorClass();
 	virtual int __fastcall GetOriginPos(int ValueIndex);
-	virtual void __fastcall PrepareLegendCanvas(int ValueIndex, Graphics::TColor &BackColor, Graphics::TBrushStyle 
-		&BrushStyle);
+	virtual void __fastcall PrepareLegendCanvas(int ValueIndex, Graphics::TColor &BackColor, Graphics::TBrushStyle &BrushStyle);
 	virtual double __fastcall MaxYValue(void);
 	virtual double __fastcall MinYValue(void);
 	
 __published:
-	__property AreaBrush ;
-	__property AreaColor ;
+	__property AreaBrush  = {default=0};
+	__property AreaColor  = {default=536870912};
 	__property AreaLinesPen ;
-	__property Dark3D ;
-	__property DrawArea ;
-	__property InvertedStairs ;
+	__property Dark3D  = {default=1};
+	__property DrawArea  = {default=0};
+	__property InvertedStairs  = {default=0};
 	__property LinePen ;
 	__property TMultiArea MultiArea = {read=FMultiArea, write=SetMultiArea, default=0};
 	__property Pointer ;
-	__property Stairs ;
+	__property Stairs  = {default=0};
 	__property XValues ;
 	__property YValues ;
 public:
@@ -290,38 +280,28 @@ class PASCALIMPLEMENTATION BarException : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall BarException(const AnsiString Msg) : Sysutils::Exception(Msg
-		) { }
+	/* Exception.Create */ inline __fastcall BarException(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall BarException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall BarException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall BarException(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall BarException(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall BarException(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall BarException(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall BarException(const AnsiString Msg, int AHelpContext) : 
-		Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall BarException(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall BarException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall BarException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall BarException(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall BarException(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall BarException(System::PResStringRec ResStringRec, 
-		const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall BarException(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -333,17 +313,15 @@ public:
 
 
 #pragma option push -b-
-enum TMultiBar { mbNone, mbSide, mbStacked, mbStacked100, mbSeries };
+enum TMultiBar { mbNone, mbSide, mbStacked, mbStacked100 };
 #pragma option pop
 
 #pragma option push -b-
-enum TBarStyle { bsRectangle, bsPyramid, bsInvPyramid, bsCilinder, bsEllipse, bsArrow, bsRectGradient, 
-	bsCone };
+enum TBarStyle { bsRectangle, bsPyramid, bsInvPyramid, bsCilinder, bsEllipse, bsArrow, bsRectGradient };
 #pragma option pop
 
 class DELPHICLASS TCustomBarSeries;
-typedef void __fastcall (__closure *TGetBarStyleEvent)(TCustomBarSeries* Sender, int ValueIndex, TBarStyle 
-	&TheBarStyle);
+typedef void __fastcall (__closure *TGetBarStyleEvent)(TCustomBarSeries* Sender, int ValueIndex, TBarStyle &TheBarStyle);
 
 class PASCALIMPLEMENTATION TCustomBarSeries : public Teengine::TChartSeries 
 {
@@ -356,7 +334,6 @@ private:
 	Tecanvas::TChartPen* FBarPen;
 	TBarStyle FBarStyle;
 	int FBarWidthPercent;
-	int FCustomBarSize;
 	bool FDark3D;
 	TMultiBar FMultiBar;
 	int FOffsetPercent;
@@ -364,8 +341,10 @@ private:
 	bool FUseOrigin;
 	double FOrigin;
 	TGetBarStyleEvent FOnGetBarStyle;
-	int IBarSize;
-	Windows::TRect FBarBounds;
+	#pragma pack(push, 1)
+	Types::TRect FBarBounds;
+	#pragma pack(pop)
+	
 	void __fastcall CalcBarWidth(void);
 	virtual int __fastcall InternalCalcMarkLength(int ValueIndex) = 0 ;
 	void __fastcall SetAutoBarSize(bool Value);
@@ -381,7 +360,7 @@ private:
 	void __fastcall SetOrigin(const double Value);
 	void __fastcall SetMultiBar(TMultiBar Value);
 	void __fastcall SetOtherMultiBar(void);
-	void __fastcall AdjustGradientRectPen(Windows::TRect &R);
+	void __fastcall AdjustGradientRectPen(Types::TRect &R);
 	int __fastcall BarOrderPos(void);
 	int __fastcall BarSeriesCount(void);
 	double __fastcall MaxMandatoryValue(const double Value, Teengine::TChartValueList* AList);
@@ -389,7 +368,9 @@ private:
 	void __fastcall InternalApplyBarMargin(int &MarginA, int &MarginB);
 	
 protected:
-	virtual bool __fastcall InternalClicked(int ValueIndex, const Windows::TPoint &APoint);
+	int FCustomBarSize;
+	int IBarSize;
+	virtual bool __fastcall InternalClicked(int ValueIndex, const Types::TPoint &APoint);
 	int __fastcall InternalGetOriginPos(int ValueIndex, int DefaultOrigin);
 	void __fastcall SetCustomBarSize(int Value);
 	
@@ -401,21 +382,19 @@ public:
 	int __fastcall ApplyBarOffset(int Position);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	int __fastcall BarMargin(void);
-	void __fastcall BarRectangle(Graphics::TColor BarColor, int ALeft, int ATop, int ARight, int ABottom
-		);
+	void __fastcall BarRectangle(Graphics::TColor BarColor, int ALeft, int ATop, int ARight, int ABottom);
 	int __fastcall CalcMarkLength(int ValueIndex);
 	virtual void __fastcall CalcZOrder(void);
 	virtual int __fastcall Clicked(int x, int y);
-	virtual void __fastcall DrawLegendShape(int ValueIndex, const Windows::TRect &Rect);
+	virtual void __fastcall DrawLegendShape(int ValueIndex, const Types::TRect &Rect);
 	TBarStyle __fastcall GetBarStyle(int ValueIndex);
 	virtual AnsiString __fastcall GetEditorClass();
 	virtual int __fastcall NumSampleValues(void);
 	virtual double __fastcall PointOrigin(int ValueIndex, bool SumAll);
 	virtual void __fastcall PrepareForGallery(bool IsEnabled);
-	virtual void __fastcall PrepareLegendCanvas(int ValueIndex, Graphics::TColor &BackColor, Graphics::TBrushStyle 
-		&BrushStyle);
+	virtual void __fastcall PrepareLegendCanvas(int ValueIndex, Graphics::TColor &BackColor, Graphics::TBrushStyle &BrushStyle);
 	void __fastcall SetPenBrushBar(Graphics::TColor BarColor);
-	__property Windows::TRect BarBounds = {read=FBarBounds};
+	__property Types::TRect BarBounds = {read=FBarBounds};
 	
 __published:
 	__property bool AutoBarSize = {read=FAutoBarSize, write=SetAutoBarSize, default=0};
@@ -446,11 +425,10 @@ private:
 	
 protected:
 	virtual void __fastcall DrawValue(int ValueIndex);
-	virtual void __fastcall DrawMark(int ValueIndex, const AnsiString St, Teengine::TSeriesMarkPosition* 
-		APosition);
+	virtual void __fastcall DrawMark(int ValueIndex, const AnsiString St, Teengine::TSeriesMarkPosition* APosition);
 	
 public:
-	virtual bool __fastcall InternalClicked(int ValueIndex, const Windows::TPoint &APoint);
+	virtual bool __fastcall InternalClicked(int ValueIndex, const Types::TPoint &APoint);
 	virtual void __fastcall CalcHorizMargins(int &LeftMargin, int &RightMargin);
 	virtual void __fastcall CalcVerticalMargins(int &TopMargin, int &BottomMargin);
 	virtual int __fastcall CalcXPos(int ValueIndex);
@@ -467,8 +445,7 @@ __published:
 	__property int CustomBarWidth = {read=FCustomBarSize, write=SetCustomBarSize, default=0};
 public:
 	#pragma option push -w-inl
-	/* TCustomBarSeries.Create */ inline __fastcall virtual TBarSeries(Classes::TComponent* AOwner) : TCustomBarSeries(
-		AOwner) { }
+	/* TCustomBarSeries.Create */ inline __fastcall virtual TBarSeries(Classes::TComponent* AOwner) : TCustomBarSeries(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomBarSeries.Destroy */ inline __fastcall virtual ~TBarSeries(void) { }
@@ -487,11 +464,10 @@ private:
 	
 protected:
 	virtual void __fastcall DrawValue(int ValueIndex);
-	virtual void __fastcall DrawMark(int ValueIndex, const AnsiString St, Teengine::TSeriesMarkPosition* 
-		APosition);
+	virtual void __fastcall DrawMark(int ValueIndex, const AnsiString St, Teengine::TSeriesMarkPosition* APosition);
 	
 public:
-	virtual bool __fastcall InternalClicked(int ValueIndex, const Windows::TPoint &APoint);
+	virtual bool __fastcall InternalClicked(int ValueIndex, const Types::TPoint &APoint);
 	virtual void __fastcall CalcHorizMargins(int &LeftMargin, int &RightMargin);
 	virtual void __fastcall CalcVerticalMargins(int &TopMargin, int &BottomMargin);
 	virtual int __fastcall CalcXPos(int ValueIndex);
@@ -510,8 +486,7 @@ __published:
 	__property int CustomBarHeight = {read=FCustomBarSize, write=SetCustomBarSize, default=0};
 public:
 	#pragma option push -w-inl
-	/* TCustomBarSeries.Create */ inline __fastcall virtual THorizBarSeries(Classes::TComponent* AOwner
-		) : TCustomBarSeries(AOwner) { }
+	/* TCustomBarSeries.Create */ inline __fastcall virtual THorizBarSeries(Classes::TComponent* AOwner) : TCustomBarSeries(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomBarSeries.Destroy */ inline __fastcall virtual ~THorizBarSeries(void) { }
@@ -538,7 +513,10 @@ private:
 	int FCircleHeight;
 	int FCircleXCenter;
 	int FCircleYCenter;
-	Windows::TRect FCircleRect;
+	#pragma pack(push, 1)
+	Types::TRect FCircleRect;
+	#pragma pack(pop)
+	
 	void __fastcall SetCircleBackColor(Graphics::TColor Value);
 	void __fastcall SetCustomXRadius(int Value);
 	void __fastcall SetCustomYRadius(int Value);
@@ -557,13 +535,11 @@ protected:
 public:
 	__fastcall virtual TCircledSeries(Classes::TComponent* AOwner);
 	__fastcall virtual ~TCircledSeries(void);
-	void __fastcall AngleToPos(const double Angle, const double AXRadius, const double AYRadius, int &X
-		, int &Y);
+	void __fastcall AngleToPos(const double Angle, const double AXRadius, const double AYRadius, int &X, int &Y);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	virtual bool __fastcall AssociatedToAxis(Teengine::TCustomChartAxis* Axis);
 	double __fastcall PointToAngle(int x, int y);
-	virtual void __fastcall PrepareLegendCanvas(int ValueIndex, Graphics::TColor &BackColor, Graphics::TBrushStyle 
-		&BrushStyle);
+	virtual void __fastcall PrepareLegendCanvas(int ValueIndex, Graphics::TColor &BackColor, Graphics::TBrushStyle &BrushStyle);
 	void __fastcall Rotate(int Angle);
 	virtual void __fastcall SetParentProperties(bool EnableParentProps);
 	virtual bool __fastcall UseAxis(void);
@@ -573,9 +549,8 @@ public:
 	__property int CircleYCenter = {read=FCircleYCenter, nodefault};
 	__property int CircleWidth = {read=FCircleWidth, nodefault};
 	__property int CircleHeight = {read=FCircleHeight, nodefault};
-	__property Windows::TRect CircleRect = {read=FCircleRect};
-	__property Graphics::TColor CircleBackColor = {read=FCircleBackColor, write=SetCircleBackColor, nodefault
-		};
+	__property Types::TRect CircleRect = {read=FCircleRect};
+	__property Graphics::TColor CircleBackColor = {read=FCircleBackColor, write=SetCircleBackColor, default=536870912};
 	__property int RotationAngle = {read=FRotationAngle, write=SetRotationAngle, default=0};
 	
 __published:
@@ -592,38 +567,28 @@ class PASCALIMPLEMENTATION PieException : public Teeprocs::ChartException
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall PieException(const AnsiString Msg) : Teeprocs::ChartException(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall PieException(const AnsiString Msg) : Teeprocs::ChartException(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall PieException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Teeprocs::ChartException(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall PieException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Teeprocs::ChartException(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall PieException(int Ident)/* overload */ : Teeprocs::ChartException(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall PieException(int Ident)/* overload */ : Teeprocs::ChartException(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall PieException(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Teeprocs::ChartException(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall PieException(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Teeprocs::ChartException(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall PieException(const AnsiString Msg, int AHelpContext) : 
-		Teeprocs::ChartException(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall PieException(const AnsiString Msg, int AHelpContext) : Teeprocs::ChartException(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall PieException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Teeprocs::ChartException(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall PieException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Teeprocs::ChartException(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall PieException(int Ident, int AHelpContext)/* overload */
-		 : Teeprocs::ChartException(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall PieException(int Ident, int AHelpContext)/* overload */ : Teeprocs::ChartException(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall PieException(System::PResStringRec ResStringRec, 
-		const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Teeprocs::ChartException(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall PieException(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Teeprocs::ChartException(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -649,6 +614,9 @@ class DELPHICLASS TExplodedSlices;
 class PASCALIMPLEMENTATION TExplodedSlices : public Classes::TList 
 {
 	typedef Classes::TList inherited;
+	
+public:
+	int operator[](int Index) { return Value[Index]; }
 	
 private:
 	void __fastcall SetValue(int Index, int Value);
@@ -740,8 +708,7 @@ protected:
 	virtual void __fastcall DrawAllValues(void);
 	virtual void __fastcall DrawPie(int ValueIndex);
 	virtual void __fastcall DrawValue(int ValueIndex);
-	virtual void __fastcall DrawMark(int ValueIndex, const AnsiString St, Teengine::TSeriesMarkPosition* 
-		APosition);
+	virtual void __fastcall DrawMark(int ValueIndex, const AnsiString St, Teengine::TSeriesMarkPosition* APosition);
 	virtual void __fastcall ClearLists(void);
 	
 public:
@@ -764,21 +731,20 @@ public:
 	virtual double __fastcall MinYValue(void);
 	virtual int __fastcall NumSampleValues(void);
 	virtual void __fastcall PrepareForGallery(bool IsEnabled);
-	virtual void __fastcall PrepareLegendCanvas(int ValueIndex, Graphics::TColor &BackColor, Graphics::TBrushStyle 
-		&BrushStyle);
+	virtual void __fastcall PrepareLegendCanvas(int ValueIndex, Graphics::TColor &BackColor, Graphics::TBrushStyle &BrushStyle);
 	virtual void __fastcall SwapValueIndex(int a, int b);
 	__property TPieAngles Angles = {read=FAngles};
 	__property TExplodedSlices* ExplodedSlice = {read=FExplodedSlice};
 	
 __published:
-	__property CircleBackColor ;
-	__property ColorEachPoint ;
+	__property CircleBackColor  = {default=536870912};
+	__property ColorEachPoint  = {default=1};
 	__property bool Dark3D = {read=FDark3d, write=SetDark3d, default=1};
 	__property int ExplodeBiggest = {read=FExplodeBiggest, write=SetExplodeBiggest, default=0};
 	__property TPieOtherSlice* OtherSlice = {read=FOtherSlice, write=SetOtherSlice};
 	__property Tecanvas::TChartPen* PiePen = {read=FPiePen, write=SetPiePen};
 	__property Teengine::TChartValueList* PieValues = {read=GetPieValues, write=SetPieValues};
-	__property RotationAngle ;
+	__property RotationAngle  = {default=0};
 	__property bool UsePatterns = {read=FUsePatterns, write=SetUsePatterns, default=0};
 };
 
@@ -800,15 +766,14 @@ protected:
 	virtual void __fastcall DrawAllValues(void);
 	virtual void __fastcall SetSeriesColor(Graphics::TColor AColor);
 	void __fastcall PrepareCanvas(void);
-	virtual void __fastcall DrawMark(int ValueIndex, const AnsiString St, Teengine::TSeriesMarkPosition* 
-		APosition);
+	virtual void __fastcall DrawMark(int ValueIndex, const AnsiString St, Teengine::TSeriesMarkPosition* APosition);
 	
 public:
 	__fastcall virtual TFastLineSeries(Classes::TComponent* AOwner);
 	__fastcall virtual ~TFastLineSeries(void);
 	virtual void __fastcall Assign(Classes::TPersistent* Source);
 	virtual int __fastcall Clicked(int x, int y);
-	virtual void __fastcall DrawLegendShape(int ValueIndex, const Windows::TRect &Rect);
+	virtual void __fastcall DrawLegendShape(int ValueIndex, const Types::TRect &Rect);
 	virtual AnsiString __fastcall GetEditorClass();
 	virtual void __fastcall NotifyNewValue(Teengine::TChartSeries* Sender, int ValueIndex);
 	
@@ -826,9 +791,7 @@ extern PACKAGE double HalfPi;
 extern PACKAGE double PiDegree;
 
 }	/* namespace Series */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Series;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

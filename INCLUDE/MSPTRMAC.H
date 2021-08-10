@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-//        Copyright (c) 1998-1999  Microsoft Corporation
+//        Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //        Name: tmaudcap.h
 //
@@ -19,12 +19,17 @@
 
 class CAudioCaptureTerminal : 
     public IDispatchImpl<ITBasicAudioTerminal, &IID_ITBasicAudioTerminal, &LIBID_TAPI3Lib>, 
-    public CSingleFilterTerminal
+    public IDispatchImpl<ITStaticAudioTerminal, &IID_ITStaticAudioTerminal, &LIBID_TAPI3Lib>, 
+    public CSingleFilterStaticTerminal,
+    public CMSPObjectSafetyImpl
+
 {
 
 BEGIN_COM_MAP(CAudioCaptureTerminal)
+    COM_INTERFACE_ENTRY(IObjectSafety)
     COM_INTERFACE_ENTRY(ITBasicAudioTerminal)
-    COM_INTERFACE_ENTRY_CHAIN(CSingleFilterTerminal)
+    COM_INTERFACE_ENTRY(ITStaticAudioTerminal)
+    COM_INTERFACE_ENTRY_CHAIN(CSingleFilterStaticTerminal)
 END_COM_MAP()
 
 DECLARE_VQI()
@@ -50,10 +55,12 @@ public:
     STDMETHOD(get_Volume) (OUT  long *pVal);
     STDMETHOD(put_Volume) (IN   long newVal);
 
+// ITStaticAudioTerminal
 public:
 
-    // public because CreateTerminal accesses it
-    CComPtr<IMoniker> m_pMoniker;
+    STDMETHOD(get_WaveId) (OUT  long * plWaveId);
+
+public:
 
     // CBaseTerminal overrides 
 
@@ -92,6 +99,7 @@ CAudioCaptureTerminal::CreateFiltersIfRequired(
     
     return S_OK;
 }
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // _MSPTRMAC_H_

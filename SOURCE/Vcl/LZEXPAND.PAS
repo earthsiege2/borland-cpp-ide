@@ -6,7 +6,7 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
@@ -47,18 +47,18 @@ const
 function LZCopy(Source, Dest: Integer): Longint; stdcall;
 {$EXTERNALSYM LZInit}
 function LZInit(Source: Integer): Integer; stdcall;
+{$EXTERNALSYM GetExpandedName}
+function GetExpandedName(Source, Buffer: PChar): Integer; stdcall;
 {$EXTERNALSYM GetExpandedNameA}
 function GetExpandedNameA(Source, Buffer: PAnsiChar): Integer; stdcall;
 {$EXTERNALSYM GetExpandedNameW}
 function GetExpandedNameW(Source, Buffer: PWideChar): Integer; stdcall;
-{$EXTERNALSYM GetExpandedName}
-function GetExpandedName(Source, Buffer: PChar): Integer; stdcall;
+{$EXTERNALSYM LZOpenFile}
+function LZOpenFile(Filename: PChar; var ReOpenBuff: TOFStruct; Style: Word): Integer; stdcall;
 {$EXTERNALSYM LZOpenFileA}
 function LZOpenFileA(Filename: PAnsiChar; var ReOpenBuff: TOFStruct; Style: Word): Integer; stdcall;
 {$EXTERNALSYM LZOpenFileW}
 function LZOpenFileW(Filename: PWideChar; var ReOpenBuff: TOFStruct; Style: Word): Integer; stdcall;
-{$EXTERNALSYM LZOpenFile}
-function LZOpenFile(Filename: PChar; var ReOpenBuff: TOFStruct; Style: Word): Integer; stdcall;
 {$EXTERNALSYM LZSeek}
 function LZSeek(hFile: Integer; Offset: Longint; Origin: Integer): Longint; stdcall;
 {$EXTERNALSYM LZRead}
@@ -72,15 +72,15 @@ implementation
 const
   lz32 = 'LZ32.DLL';
 
+function GetExpandedName;    external lz32 name 'GetExpandedNameA';
 function GetExpandedNameA;    external lz32 name 'GetExpandedNameA';
 function GetExpandedNameW;    external lz32 name 'GetExpandedNameW';
-function GetExpandedName;    external lz32 name 'GetExpandedNameA';
 procedure LZClose;              external lz32 name 'LZClose';
 function LZCopy;                external lz32 name 'LZCopy';
 function LZInit;                external lz32 name 'LZInit';
+function LZOpenFile;         external lz32 name 'LZOpenFileA';
 function LZOpenFileA;         external lz32 name 'LZOpenFileA';
 function LZOpenFileW;         external lz32 name 'LZOpenFileW';
-function LZOpenFile;         external lz32 name 'LZOpenFileA';
 function LZRead;                external lz32 name 'LZRead';
 function LZSeek;                external lz32 name 'LZSeek';
 

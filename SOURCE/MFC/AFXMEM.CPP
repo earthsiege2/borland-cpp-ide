@@ -47,7 +47,7 @@ void PASCAL CObject::operator delete(void* p)
 #endif
 }
 
-#if 0 // _MSC_VER >= 1200
+#if 0 //__BORLANDC__ was _MSC_VER >= 1200
 void PASCAL CObject::operator delete(void* p, void*)
 {
 #ifdef _AFX_NO_DEBUG_CRT
@@ -65,7 +65,7 @@ void* AFX_CDECL operator new(size_t nSize, LPCSTR lpszFileName, int nLine)
 	return ::operator new(nSize, _NORMAL_BLOCK, lpszFileName, nLine);
 }
 
-#if 0 //_MSC_VER >= 1200
+#if _MSC_VER >= 1200
 void AFX_CDECL operator delete(void* pData, LPCSTR /* lpszFileName */,
 	int /* nLine */)
 {
@@ -79,7 +79,7 @@ CObject::operator new(size_t nSize, LPCSTR lpszFileName, int nLine)
 	return ::operator new(nSize, _CLIENT_BLOCK, lpszFileName, nLine);
 }
 
-#if 0 //_MSC_VER >= 1200
+#if _MSC_VER >= 1200
 void PASCAL
 CObject::operator delete(void *pObject, LPCSTR /* lpszFileName */,
 	int /* nLine */)

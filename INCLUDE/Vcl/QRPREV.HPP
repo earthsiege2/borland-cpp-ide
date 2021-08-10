@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'QRPrev.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QRPrev.pas' rev: 6.00
 
 #ifndef QRPrevHPP
 #define QRPrevHPP
@@ -14,7 +14,7 @@
 #include <Menus.hpp>	// Pascal unit
 #include <ToolWin.hpp>	// Pascal unit
 #include <ComCtrls.hpp>	// Pascal unit
-#include <qr3const.hpp>	// Pascal unit
+#include <QR3Const.hpp>	// Pascal unit
 #include <QRPrntr.hpp>	// Pascal unit
 #include <Buttons.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
@@ -87,19 +87,16 @@ private:
 	int LastProgress;
 	
 public:
-	__fastcall virtual TQRStandardPreview(Classes::TComponent* AOwner, Qrprntr::TQRPrinter* aQRPrinter)
-		;
+	__fastcall virtual TQRStandardPreview(Classes::TComponent* AOwner, Qrprntr::TQRPrinter* aQRPrinter);
 	HIDESBASE void __fastcall Show(void);
 	void __fastcall UpdateInfo(void);
 	__property Qrprntr::TQRPrinter* QRPrinter = {read=FQRPrinter, write=FQRPrinter};
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TQRStandardPreview(Classes::TComponent* AOwner) : 
-		Forms::TForm(AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TQRStandardPreview(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TQRStandardPreview(Classes::TComponent* AOwner
-		, int Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TQRStandardPreview(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TQRStandardPreview(void) { }
@@ -107,8 +104,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRStandardPreview(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRStandardPreview(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -117,9 +113,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Qrprev */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qrprev;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

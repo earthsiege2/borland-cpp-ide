@@ -1,16 +1,17 @@
 //=============================================================================
-//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1992.
+//  Microsoft (R) Network Monitor (tm). 
+//  Copyright (C) 1991-1999. All rights reserved.
 //
-//  MODULE: neterr.h
+//  MODULE: nmneterr.h
 //
 //  This is the top-level include file for all NETWORK topology error codes
-//  Bloodhound driver network error codes -- DO NOT CHANGE!
+//  Network Monitor driver network error codes -- DO NOT CHANGE!
 //=============================================================================
 
-#if !defined(_NETERR_)
+#if !defined(_NMNETERR_)
 #pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
-#define _NETERR_
+#define _NMNETERR_
 
 //=============================================================================
 //  TOKENRING errors
@@ -55,6 +56,7 @@
 //=============================================================================
 //  FDDI errors
 //=============================================================================
+
 
 #pragma option pop /*P_O_Pop*/
 #endif

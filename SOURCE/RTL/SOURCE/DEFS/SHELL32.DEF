@@ -1,150 +1,132 @@
-LIBRARY SHELL32
+LIBRARY Shell32
 EXPORTS
 
-    WOWShellExecute                          = 'SHELL32.DLL'.*
-    StrStrW                                  = 'SHELL32.DLL'.*
-    StrStrIW                                 = 'SHELL32.DLL'.*
-    StrStrIA                                 = 'SHELL32.DLL'.*
-    StrStrA                                  = 'SHELL32.DLL'.*
-    StrRStrW                                 = 'SHELL32.DLL'.*
-    StrRStrIW                                = 'SHELL32.DLL'.*
-    StrRStrIA                                = 'SHELL32.DLL'.*
-    StrRStrA                                 = 'SHELL32.DLL'.*
-    StrRChrW                                 = 'SHELL32.DLL'.*
-    StrRChrIW                                = 'SHELL32.DLL'.*
-    StrRChrIA                                = 'SHELL32.DLL'.*
-    StrRChrA                                 = 'SHELL32.DLL'.*
-    StrNCpyW                                 = 'SHELL32.DLL'.*
-    StrNCpyA                                 = 'SHELL32.DLL'.*
-    StrNCmpW                                 = 'SHELL32.DLL'.*
-    StrNCmpIW                                = 'SHELL32.DLL'.*
-    StrNCmpIA                                = 'SHELL32.DLL'.*
-    StrNCmpA                                 = 'SHELL32.DLL'.*
-    StrCpyNW                                 = 'SHELL32.DLL'.*
-    StrCpyNA                                 = 'SHELL32.DLL'.*
-    StrCmpNW                                 = 'SHELL32.DLL'.*
-    StrCmpNIW                                = 'SHELL32.DLL'.*
-    StrCmpNIA                                = 'SHELL32.DLL'.*
-    StrCmpNA                                 = 'SHELL32.DLL'.*
-    StrChrW                                  = 'SHELL32.DLL'.*
-    StrChrIW                                 = 'SHELL32.DLL'.*
-    StrChrIA                                 = 'SHELL32.DLL'.*
-    StrChrA                                  = 'SHELL32.DLL'.*
-    Shell_NotifyIconW                        = 'SHELL32.DLL'.*
-    Shell_NotifyIconA                        = 'SHELL32.DLL'.*
-    Shell_NotifyIcon                         = 'SHELL32.DLL'.*
-    ShellHookProc                            = 'SHELL32.DLL'.*
-    ShellExecuteW                            = 'SHELL32.DLL'.*
-    ShellExecuteExW                          = 'SHELL32.DLL'.*
-    ShellExecuteExA                          = 'SHELL32.DLL'.*
-    ShellExecuteEx                           = 'SHELL32.DLL'.*
-    ShellExecuteA                            = 'SHELL32.DLL'.*
-    ShellAboutW                              = 'SHELL32.DLL'.*
-    ShellAboutA                              = 'SHELL32.DLL'.*
-    SheShortenPathW                          = 'SHELL32.DLL'.*
-    SheShortenPathA                          = 'SHELL32.DLL'.*
-    SheSetCurDrive                           = 'SHELL32.DLL'.*
-    SheRemoveQuotesW                         = 'SHELL32.DLL'.*
-    SheRemoveQuotesA                         = 'SHELL32.DLL'.*
-    SheGetPathOffsetW                        = 'SHELL32.DLL'.*
-    SheGetDirW                               = 'SHELL32.DLL'.*
-    SheGetDirExW                             = 'SHELL32.DLL'.*
-    SheGetDirA                               = 'SHELL32.DLL'.*
-    SheGetCurDrive                           = 'SHELL32.DLL'.*
-    SheFullPathW                             = 'SHELL32.DLL'.*
-    SheFullPathA                             = 'SHELL32.DLL'.*
-    SheConvertPathW                          = 'SHELL32.DLL'.*
-    SheChangeDirW                            = 'SHELL32.DLL'.*
-    SheChangeDirExW                          = 'SHELL32.DLL'.*
-    SheChangeDirExA                          = 'SHELL32.DLL'.*
-    SheChangeDirA                            = 'SHELL32.DLL'.*
-    SHUpdateRecycleBinIcon                   = 'SHELL32.DLL'.*
-    SHQueryRecycleBinW                       = 'SHELL32.DLL'.*
-    SHQueryRecycleBinA                       = 'SHELL32.DLL'.*
-    SHPathPrepareForWriteW                   = 'SHELL32.DLL'.*
-    SHPathPrepareForWriteA                   = 'SHELL32.DLL'.*
-    SHLoadNonloadedIconOverlayIdentifiers    = 'SHELL32.DLL'.*
-    SHLoadInProc                             = 'SHELL32.DLL'.*
-    SHInvokePrinterCommandW                  = 'SHELL32.DLL'.*
-    SHInvokePrinterCommandA                  = 'SHELL32.DLL'.*
-    SHGetSpecialFolderPathW                  = 'SHELL32.DLL'.*
-    SHGetSpecialFolderPathA                  = 'SHELL32.DLL'.*
-    SHGetSpecialFolderLocation               = 'SHELL32.DLL'.*
-    SHGetSettings                            = 'SHELL32.DLL'.*
-    SHGetPathFromIDListW                     = 'SHELL32.DLL'.*
-    SHGetPathFromIDListA                     = 'SHELL32.DLL'.*
-    SHGetPathFromIDList                      = 'SHELL32.DLL'.*
-    SHGetNewLinkInfoW                        = 'SHELL32.DLL'.* @180 @179
-    SHGetNewLinkInfoA                        = 'SHELL32.DLL'.* @179 @178
-    SHGetNewLinkInfo                         = 'SHELL32.DLL'.*
-    SHGetMalloc                              = 'SHELL32.DLL'.*
-    SHGetInstanceExplorer                    = 'SHELL32.DLL'.*
-    SHGetIconOverlayIndexW                   = 'SHELL32.DLL'.*
-    SHGetIconOverlayIndexA                   = 'SHELL32.DLL'.*
-    SHGetFolderPathW                         = 'SHELL32.DLL'.*
-    SHGetFolderPathA                         = 'SHELL32.DLL'.*
-    SHGetFolderLocation                      = 'SHELL32.DLL'.*
-    SHGetFileInfoW                           = 'SHELL32.DLL'.*
-    SHGetFileInfoA                           = 'SHELL32.DLL'.*
-    SHGetFileInfo                            = 'SHELL32.DLL'.*
-    SHGetDiskFreeSpaceExW                    = 'SHELL32.DLL'.*
-    SHGetDiskFreeSpaceExA                    = 'SHELL32.DLL'.*
-    SHGetDiskFreeSpaceA                      = 'SHELL32.DLL'.*
-    SHGetDesktopFolder                       = 'SHELL32.DLL'.*
-    SHGetDataFromIDListW                     = 'SHELL32.DLL'.*
-    SHGetDataFromIDListA                     = 'SHELL32.DLL'.*
-    SHFreeNameMappings                       = 'SHELL32.DLL'.*
-    SHFormatDrive                            = 'SHELL32.DLL'.*
-    SHFileOperationW                         = 'SHELL32.DLL'.*
-    SHFileOperationA                         = 'SHELL32.DLL'.*
-    SHFileOperation                          = 'SHELL32.DLL'.*
-    SHExtractIconsW                          = 'SHELL32.DLL'.*
-    SHEmptyRecycleBinW                       = 'SHELL32.DLL'.*
-    SHEmptyRecycleBinA                       = 'SHELL32.DLL'.*
-    SHCreateProcessAsUserW                   = 'SHELL32.DLL'.*
-    SHCreateDirectoryExW                     = 'SHELL32.DLL'.*
-    SHCreateDirectoryExA                     = 'SHELL32.DLL'.*
-    SHChangeNotifySuspendResume              = 'SHELL32.DLL'.*
-    SHChangeNotify                           = 'SHELL32.DLL'.*
-    SHBrowseForFolderW                       = 'SHELL32.DLL'.*
-    SHBrowseForFolderA                       = 'SHELL32.DLL'.*
-    SHBrowseForFolder                        = 'SHELL32.DLL'.*
-    SHBindToParent                           = 'SHELL32.DLL'.*
-    SHAppBarMessage                          = 'SHELL32.DLL'.*
-    SHAddToRecentDocs                        = 'SHELL32.DLL'.*
-    RegenerateUserEnvironment                = 'SHELL32.DLL'.*
-    RealShellExecuteW                        = 'SHELL32.DLL'.*
-    RealShellExecuteExW                      = 'SHELL32.DLL'.*
-    RealShellExecuteExA                      = 'SHELL32.DLL'.*
-    RealShellExecuteA                        = 'SHELL32.DLL'.*
-    InternalExtractIconListW                 = 'SHELL32.DLL'.*
-    InternalExtractIconListA                 = 'SHELL32.DLL'.*
-    FreeIconList                             = 'SHELL32.DLL'.*
-    FindExecutableW                          = 'SHELL32.DLL'.*
-    FindExecutableA                          = 'SHELL32.DLL'.*
-    FindExeDlgProc                           = 'SHELL32.DLL'.*
-    ExtractVersionResource16W                = 'SHELL32.DLL'.*
-    ExtractIconW                             = 'SHELL32.DLL'.*
-    ExtractIconResInfoW                      = 'SHELL32.DLL'.*
-    ExtractIconResInfoA                      = 'SHELL32.DLL'.*
-    ExtractIconExW                           = 'SHELL32.DLL'.*
-    ExtractIconExA                           = 'SHELL32.DLL'.*
-    ExtractIconEx                            = 'SHELL32.DLL'.*
-    ExtractIconA                             = 'SHELL32.DLL'.*
-    ExtractAssociatedIconW                   = 'SHELL32.DLL'.*
-    ExtractAssociatedIconExW                 = 'SHELL32.DLL'.*
-    ExtractAssociatedIconExA                 = 'SHELL32.DLL'.*
-    ExtractAssociatedIconA                   = 'SHELL32.DLL'.*
-    DuplicateIcon                            = 'SHELL32.DLL'.*
-    DragQueryPoint                           = 'SHELL32.DLL'.*
-    DragQueryFileW                           = 'SHELL32.DLL'.*
-    DragQueryFileAorW                        = 'SHELL32.DLL'.*
-    DragQueryFileA                           = 'SHELL32.DLL'.*
-    DragQueryFile                            = 'SHELL32.DLL'.*
-    DragFinish                               = 'SHELL32.DLL'.*
-    DragAcceptFiles                          = 'SHELL32.DLL'.*
-    DoEnvironmentSubstW                      = 'SHELL32.DLL'.*
-    DoEnvironmentSubstA                      = 'SHELL32.DLL'.*
-    CommandLineToArgvW                       = 'SHELL32.DLL'.*
-    CheckEscapesW                            = 'SHELL32.DLL'.*
-    CheckEscapesA                            = 'SHELL32.DLL'.*
+    WOWShellExecute
+    Shell_NotifyIconW
+    Shell_NotifyIconA
+    Shell_NotifyIcon
+    ShellHookProc
+    ShellExecuteW
+    ShellExecuteExW
+    ShellExecuteExA
+    ShellExecuteEx
+    ShellExecuteA
+    ShellAboutW
+    ShellAboutA
+    SheShortenPathW
+    SheShortenPathA
+    SheSetCurDrive
+    SheRemoveQuotesW
+    SheRemoveQuotesA
+    SheGetPathOffsetW
+    SheGetDirW
+    SheGetDirExW
+    SheGetDirA
+    SheGetCurDrive
+    SheFullPathW
+    SheFullPathA
+    SheConvertPathW
+    SheChangeDirW
+    SheChangeDirExW
+    SheChangeDirExA
+    SheChangeDirA
+    SHUpdateRecycleBinIcon
+    SHSetUnreadMailCountW
+    SHSetLocalizedName
+    SHQueryRecycleBinW
+    SHQueryRecycleBinA
+    SHPathPrepareForWriteW
+    SHPathPrepareForWriteA
+    SHParseDisplayName
+    SHOpenFolderAndSelectItems
+    SHLoadNonloadedIconOverlayIdentifiers
+    SHLoadInProc
+    SHIsFileAvailableOffline
+    SHInvokePrinterCommandW
+    SHInvokePrinterCommandA
+    SHGetUnreadMailCountW
+    SHGetSpecialFolderPathW
+    SHGetSpecialFolderPathA
+    SHGetSpecialFolderLocation
+    SHGetSettings
+    SHGetPathFromIDListW
+    SHGetPathFromIDListA
+    SHGetPathFromIDList
+    SHGetNewLinkInfoW        @180
+    SHGetNewLinkInfoA        @179
+    SHGetNewLinkInfo
+    SHGetMalloc
+    SHGetInstanceExplorer
+    SHGetIconOverlayIndexW
+    SHGetIconOverlayIndexA
+    SHGetFolderPathW
+    SHGetFolderPathAndSubDirW
+    SHGetFolderPathAndSubDirA
+    SHGetFolderPathA
+    SHGetFolderLocation
+    SHGetFileInfoW
+    SHGetFileInfoA
+    SHGetFileInfo
+    SHGetDiskFreeSpaceExW
+    SHGetDiskFreeSpaceExA
+    SHGetDiskFreeSpaceA
+    SHGetDesktopFolder
+    SHGetDataFromIDListW
+    SHGetDataFromIDListA
+    SHFreeNameMappings
+    SHFormatDrive
+    SHFileOperationW
+    SHFileOperationA
+    SHFileOperation
+    SHExtractIconsW
+    SHEnumerateUnreadMailAccountsW
+    SHEmptyRecycleBinW
+    SHEmptyRecycleBinA
+    SHCreateShellItem
+    SHCreateQueryCancelAutoPlayMoniker
+    SHCreateProcessAsUserW
+    SHCreateDirectoryExW
+    SHCreateDirectoryExA
+    SHChangeNotify
+    SHBrowseForFolderW
+    SHBrowseForFolderA
+    SHBrowseForFolder
+    SHBindToParent
+    SHAppBarMessage
+    SHAddToRecentDocs
+    RegenerateUserEnvironment
+    RealShellExecuteW
+    RealShellExecuteExW
+    RealShellExecuteExA
+    RealShellExecuteA
+    InternalExtractIconListW
+    InternalExtractIconListA
+    FreeIconList
+    FindExecutableW
+    FindExecutableA
+    FindExeDlgProc
+    ExtractVersionResource16W
+    ExtractIconW
+    ExtractIconResInfoW
+    ExtractIconResInfoA
+    ExtractIconExW
+    ExtractIconExA
+    ExtractIconEx
+    ExtractIconA
+    ExtractAssociatedIconW
+    ExtractAssociatedIconExW
+    ExtractAssociatedIconExA
+    ExtractAssociatedIconA
+    DuplicateIcon
+    DragQueryPoint
+    DragQueryFileW
+    DragQueryFileAorW
+    DragQueryFileA
+    DragQueryFile
+    DragFinish
+    DragAcceptFiles
+    DoEnvironmentSubstW
+    DoEnvironmentSubstA
+    CommandLineToArgvW
+    CheckEscapesW
+    CheckEscapesA

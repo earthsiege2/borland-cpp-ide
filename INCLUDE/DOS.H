@@ -5,21 +5,19 @@
 
 */
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.18  $ */
+/* $Revision: 9.23.2.2 $ */
 
 #ifndef __DOS_H
 #define __DOS_H
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 #ifndef __ERRNO_H
 #include <errno.h>
@@ -285,16 +283,38 @@ __inline void _enable(void)  { __emit__((unsigned char)(0xfb)); }
 #   define __argv        _argv  /* MSC Version */
 #endif /* __ARGV_DEFINED */
 
-extern int const     _RTLENTRY _EXPDATA _8087;
-extern char **       _RTLENTRY _EXPDATA _environ;
+extern int const      _RTLENTRY _EXPDATA _8087;
+extern char **        _RTLENTRY _EXPDATA _environ;
+extern wchar_t **     _RTLENTRY _EXPDATA _wenviron;
 
-extern unsigned char _RTLENTRY _EXPDATA _osmajor;
-extern unsigned char _RTLENTRY _EXPDATA _osminor;
-extern unsigned      _RTLENTRY _EXPDATA _osversion;
-extern unsigned      _RTLENTRY _EXPDATA _version;
+extern unsigned char  _RTLENTRY _EXPDATA _osmajor;
+extern unsigned char  _RTLENTRY _EXPDATA _osminor;
+extern unsigned short _RTLENTRY _EXPDATA _ossubminor;
+extern unsigned char  _RTLENTRY _EXPDATA _osmode;
+extern unsigned int   _RTLENTRY _EXPDATA _osversion;
+extern char *         _RTLENTRY _EXPDATA _osversionstr;
+extern unsigned int   _RTLENTRY _EXPDATA _version;
+extern unsigned int   _RTLENTRY _EXPDATA _rtlversion;
+extern unsigned int   _RTLENTRY _EXPDATA _libcversion;
+
+extern int            _RTLENTRY _EXPDATA _fileinfo;
+extern int            _RTLENTRY          _fmode;
+extern int            _RTLENTRY _EXPDATA _cmdline_escapes;
+
+
+/* Values for _osmode */
+
+#define _WIN_MODE    2  /* Windows 16- or 32-bit */
+#define _OS2_20_MODE 3  /* OS/2 32-bit */
+#define _DOSX32_MODE 4  /* DOS 32-bit */
+
 
 void _RTLENTRY _EXPFUNC _sleep(unsigned __seconds);
 void _RTLENTRY _EXPFUNC sleep(unsigned __seconds);
+
+unsigned long    _RTLENTRY _EXPFUNC _rtl_mstick(void);
+unsigned __int64 _RTLENTRY _EXPFUNC _rtl_ustick(void);
+
 
 #ifdef __MFC_COMPAT__
 #define _getdiskfree _dos_getdiskfree
@@ -395,6 +415,7 @@ void _RTLENTRY _EXPFUNC sleep(unsigned __seconds);
     using std::_environ;
     using std::_osmajor;
     using std::_osminor;
+    using std::_ossubminor;
     using std::_osversion;
     using std::_version;
     using std::_sleep;

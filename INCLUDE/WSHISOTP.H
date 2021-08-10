@@ -12,7 +12,6 @@
  */
 
 #ifndef _WSHISOTP_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WSHISOTP_
 
 #if _MSC_VER > 1000
@@ -92,6 +91,5 @@ typedef struct sockaddr_tp {
 #define ISO_EXP_DATA_USE  00    /* Use of Expedited Data */
 #define ISO_EXP_DATA_NUSE 01    /* Non-use of Expedited Data */
 
-#pragma option pop /*P_O_Pop*/
 #endif
 

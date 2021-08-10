@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'MMSystem.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MMSystem.pas' rev: 6.00
 
 #ifndef MMSystemHPP
 #define MMSystemHPP
@@ -34,11 +34,9 @@ typedef tagDRVCONFIGINFO *PDrvConfigInfo;
 
 typedef tagDRVCONFIGINFO  TDrvConfigInfo;
 
-typedef int __stdcall (*TFNDriverProc)(unsigned dwDriverId, int hdrvr, unsigned msg, int lparam1, int 
-	lparam2);
+typedef int __stdcall (*TFNDriverProc)(unsigned dwDriverId, int hdrvr, unsigned msg, int lparam1, int lparam2);
 
-typedef void __stdcall (*TFNDrvCallBack)(int hdrvr, unsigned uMsg, unsigned dwUser, unsigned dw1, unsigned 
-	dw2);
+typedef void __stdcall (*TFNDrvCallBack)(int hdrvr, unsigned uMsg, unsigned dwUser, unsigned dw1, unsigned dw2);
 
 typedef int *PHWAVE;
 
@@ -46,8 +44,7 @@ typedef int *PHWAVEIN;
 
 typedef int *PHWAVEOUT;
 
-typedef void __stdcall (*TFNWaveCallBack)(int hdrvr, unsigned uMsg, unsigned dwUser, unsigned dw1, unsigned 
-	dw2);
+typedef void __stdcall (*TFNWaveCallBack)(int hdrvr, unsigned uMsg, unsigned dwUser, unsigned dw1, unsigned dw2);
 
 typedef wavehdr_tag *PWaveHdr;
 
@@ -95,8 +92,7 @@ typedef int *PHMIDIOUT;
 
 typedef int *PHMIDISTRM;
 
-typedef void __stdcall (*TFNMidiCallBack)(int hdrvr, unsigned uMsg, unsigned dwUser, unsigned dw1, unsigned 
-	dw2);
+typedef void __stdcall (*TFNMidiCallBack)(int hdrvr, unsigned uMsg, unsigned dwUser, unsigned dw1, unsigned dw2);
 
 typedef Word TPatchArray[128];
 
@@ -184,6 +180,7 @@ typedef tagMIXERLINEW *PMixerLineW;
 
 typedef tagMIXERLINEA *PMixerLine;
 
+#pragma pack(push, 4)
 struct MMSystem__1
 {
 	unsigned dwType;
@@ -193,7 +190,9 @@ struct MMSystem__1
 	unsigned vDriverVersion;
 	char szPname[32];
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct MMSystem__2
 {
 	unsigned dwType;
@@ -203,6 +202,7 @@ struct MMSystem__2
 	unsigned vDriverVersion;
 	wchar_t szPname[32];
 } ;
+#pragma pack(pop)
 
 typedef tagMIXERLINEA  TMixerLineA;
 
@@ -216,6 +216,7 @@ typedef tagMIXERCONTROLW *PMixerControlW;
 
 typedef tagMIXERCONTROLA *PMixerControl;
 
+#pragma pack(push, 4)
 struct MMSystem__3
 {
 	
@@ -241,7 +242,9 @@ struct MMSystem__3
 		
 	};
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct MMSystem__4
 {
 	
@@ -265,7 +268,9 @@ struct MMSystem__4
 		
 	};
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct MMSystem__5
 {
 	
@@ -291,7 +296,9 @@ struct MMSystem__5
 		
 	};
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct MMSystem__6
 {
 	
@@ -315,6 +322,7 @@ struct MMSystem__6
 		
 	};
 } ;
+#pragma pack(pop)
 
 typedef tagMIXERCONTROLA  TMixerControlA;
 
@@ -360,8 +368,7 @@ typedef tMIXERCONTROLDETAILS_UNSIGNED *PMixerControlDetailsUnsigned;
 
 typedef tMIXERCONTROLDETAILS_UNSIGNED  TMixerControlDetailsUnsigned;
 
-typedef void __stdcall (*TFNTimeCallBack)(unsigned uTimerID, unsigned uMessage, unsigned dwUser, unsigned 
-	dw1, unsigned dw2);
+typedef void __stdcall (*TFNTimeCallBack)(unsigned uTimerID, unsigned uMessage, unsigned dwUser, unsigned dw1, unsigned dw2);
 
 typedef timecaps_tag *PTimeCaps;
 
@@ -389,8 +396,7 @@ typedef joyinfoex_tag  TJoyInfoEx;
 
 typedef int *PHMMIO;
 
-typedef int __stdcall (*TFNMMIOProc)(char * lpmmioinfo, unsigned uMessage, int lParam1, int lParam2)
-	;
+typedef int __stdcall (*TFNMMIOProc)(char * lpmmioinfo, unsigned uMessage, int lParam1, int lParam2);
 
 typedef _MMIOINFO *PMMIOInfo;
 
@@ -469,21 +475,47 @@ typedef tagMCI_BREAK_PARMS  TMCI_BReak_Parms;
 struct TMCI_Sound_Parms;
 typedef TMCI_Sound_Parms *PMCI_Sound_Parms;
 
+#pragma pack(push, 4)
 struct TMCI_Sound_Parms
 {
 	int dwCallback;
 	char *lpstrSoundName;
 } ;
+#pragma pack(pop)
 
+struct MCI_SAVE_PARMSA;
 typedef MCI_SAVE_PARMSA *PMCI_Save_ParmsA;
 
+struct MCI_SAVE_PARMSW;
 typedef MCI_SAVE_PARMSW *PMCI_Save_ParmsW;
 
 typedef MCI_SAVE_PARMSA *PMCI_Save_Parms;
 
+#pragma pack(push, 4)
+struct MCI_SAVE_PARMSA
+{
+	unsigned dwCallback;
+	char *lpfilename;
+} ;
+#pragma pack(pop)
+
+#pragma pack(push, 4)
+struct MCI_SAVE_PARMSW
+{
+	unsigned dwCallback;
+	wchar_t *lpfilename;
+} ;
+#pragma pack(pop)
+
+typedef MCI_SAVE_PARMSA  MCI_SAVE_PARMS;
+
 typedef MCI_SAVE_PARMSA  TMCI_SaveParmsA;
 
+typedef MCI_SAVE_PARMSA *LPMCI_SAVE_PARMSA;
+
 typedef MCI_SAVE_PARMSW  TMCI_SaveParmsW;
+
+typedef MCI_SAVE_PARMSW *LPMCI_SAVE_PARMSW;
 
 typedef MCI_SAVE_PARMSA  TMCI_SaveParms;
 
@@ -646,9 +678,7 @@ static const Word MCI_SOUND_NAME = 0x100;
 extern PACKAGE int __fastcall DIBIndex(int N);
 
 }	/* namespace Mmsystem */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mmsystem;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

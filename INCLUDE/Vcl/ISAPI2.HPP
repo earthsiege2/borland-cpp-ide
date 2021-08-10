@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Isapi2.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Isapi2.pas' rev: 6.00
 
 #ifndef Isapi2HPP
 #define Isapi2HPP
@@ -33,16 +33,13 @@ struct HSE_VERSION_INFO
 
 typedef HSE_VERSION_INFO  THSE_VERSION_INFO;
 
-typedef BOOL __stdcall (*TGetServerVariableProc)(unsigned hConn, char * VariableName, void * Buffer, 
-	unsigned &Size);
+typedef BOOL __stdcall (*TGetServerVariableProc)(unsigned hConn, char * VariableName, void * Buffer, unsigned &Size);
 
-typedef BOOL __stdcall (*TWriteClientProc)(unsigned ConnID, void * Buffer, unsigned &Bytes, unsigned 
-	dwReserved);
+typedef BOOL __stdcall (*TWriteClientProc)(unsigned ConnID, void * Buffer, unsigned &Bytes, unsigned dwReserved);
 
 typedef BOOL __stdcall (*TReadClientProc)(unsigned ConnID, void * Buffer, unsigned &Size);
 
-typedef BOOL __stdcall (*TServerSupportFunctionProc)(unsigned hConn, unsigned HSERRequest, void * Buffer
-	, PDWORD Size, PDWORD DataType);
+typedef BOOL __stdcall (*TServerSupportFunctionProc)(unsigned hConn, unsigned HSERRequest, void * Buffer, PDWORD Size, PDWORD DataType);
 
 struct TEXTENSION_CONTROL_BLOCK;
 typedef TEXTENSION_CONTROL_BLOCK *PEXTENSION_CONTROL_BLOCK;
@@ -76,12 +73,12 @@ typedef unsigned __stdcall (*THttpExtensionProc)(TEXTENSION_CONTROL_BLOCK &ECB);
 
 typedef BOOL __stdcall (*TTerminateExtension)(unsigned dwFlags);
 
-typedef void __stdcall (*THseIoCompletion)(TEXTENSION_CONTROL_BLOCK &ECB, void * pContext, unsigned 
-	cbIO, unsigned dwError);
+typedef void __stdcall (*THseIoCompletion)(TEXTENSION_CONTROL_BLOCK &ECB, void * pContext, unsigned cbIO, unsigned dwError);
 
 struct THSE_TF_INFO;
 typedef THSE_TF_INFO *PHSE_TF_INFO;
 
+#pragma pack(push, 4)
 struct THSE_TF_INFO
 {
 	THseIoCompletion pfnHseIO;
@@ -96,24 +93,22 @@ struct THSE_TF_INFO
 	unsigned TailLength;
 	unsigned dwFlags;
 } ;
+#pragma pack(pop)
 
-typedef BOOL __stdcall (*TFilterGetServerVariableProc)(void *pfc, char * VariableName, void * Buffer
-	, unsigned &Size);
+typedef BOOL __stdcall (*TFilterGetServerVariableProc)(void *pfc, char * VariableName, void * Buffer, unsigned &Size);
 
-typedef BOOL __stdcall (*TFilterAddResponseHeadersProc)(void *pfc, char * lpszHeaders, unsigned dwReserved
-	);
+typedef BOOL __stdcall (*TFilterAddResponseHeadersProc)(void *pfc, char * lpszHeaders, unsigned dwReserved);
 
-typedef BOOL __stdcall (*TFilterWriteClientProc)(void *pfc, void * Buffer, unsigned &Bytes, unsigned 
-	dwReserved);
+typedef BOOL __stdcall (*TFilterWriteClientProc)(void *pfc, void * Buffer, unsigned &Bytes, unsigned dwReserved);
 
 typedef void * __stdcall (*TFilterAllocMemProc)(void *pfc, unsigned cbSize, unsigned dwReserved);
 
-typedef BOOL __stdcall (*TFilterServerSupportFunctionProc)(void *pfc, unsigned sfReq, void * pData, 
-	unsigned ul1, unsigned ul2);
+typedef BOOL __stdcall (*TFilterServerSupportFunctionProc)(void *pfc, unsigned sfReq, void * pData, unsigned ul1, unsigned ul2);
 
 struct THTTP_FILTER_CONTEXT;
 typedef THTTP_FILTER_CONTEXT *PHTTP_FILTER_CONTEXT;
 
+#pragma pack(push, 4)
 struct THTTP_FILTER_CONTEXT
 {
 	unsigned cbSize;
@@ -128,23 +123,22 @@ struct THTTP_FILTER_CONTEXT
 	TFilterAllocMemProc AllocMem;
 	TFilterServerSupportFunctionProc ServerSupportFunction;
 } ;
+#pragma pack(pop)
 
 typedef HTTP_FILTER_RAW_DATA *PHTTP_FILTER_RAW_DATA;
 
 typedef HTTP_FILTER_RAW_DATA  THTTP_FILTER_RAW_DATA;
 
-typedef BOOL __stdcall (*TGetHeaderProc)(THTTP_FILTER_CONTEXT &pfc, char * lpszName, void *lpvBuffer
-	, unsigned &lpdwSize);
+typedef BOOL __stdcall (*TGetHeaderProc)(THTTP_FILTER_CONTEXT &pfc, char * lpszName, void *lpvBuffer, unsigned &lpdwSize);
 
-typedef BOOL __stdcall (*TSetHeaderProc)(THTTP_FILTER_CONTEXT &pfc, char * lpszName, char * lpszValue
-	);
+typedef BOOL __stdcall (*TSetHeaderProc)(THTTP_FILTER_CONTEXT &pfc, char * lpszName, char * lpszValue);
 
-typedef BOOL __stdcall (*TAddHeaderProc)(THTTP_FILTER_CONTEXT &pfc, char * lpszName, char * lpszValue
-	);
+typedef BOOL __stdcall (*TAddHeaderProc)(THTTP_FILTER_CONTEXT &pfc, char * lpszName, char * lpszValue);
 
 struct THTTP_FILTER_PREPROC_HEADERS;
 typedef THTTP_FILTER_PREPROC_HEADERS *PHTTP_FILTER_PREPROC_HEADERS;
 
+#pragma pack(push, 4)
 struct THTTP_FILTER_PREPROC_HEADERS
 {
 	TGetHeaderProc GetHeader;
@@ -152,6 +146,7 @@ struct THTTP_FILTER_PREPROC_HEADERS
 	TAddHeaderProc AddHeader;
 	unsigned dwReserved;
 } ;
+#pragma pack(pop)
 
 typedef HTTP_FILTER_AUTHENT *PHTTP_FILTER_AUTHENT;
 
@@ -173,17 +168,14 @@ typedef HTTP_FILTER_VERSION *PHTTP_FILTER_VERSION;
 
 typedef HTTP_FILTER_VERSION  THTTP_FILTER_VERSION;
 
-typedef unsigned __stdcall (*THttpFilterProc)(THTTP_FILTER_CONTEXT &pfc, unsigned Notificationtype, 
-	void * pvNotification);
+typedef unsigned __stdcall (*THttpFilterProc)(THTTP_FILTER_CONTEXT &pfc, unsigned Notificationtype, void * pvNotification);
 
 typedef BOOL __stdcall (*TGetFilterVersion)(HTTP_FILTER_VERSION &pVer);
 
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Isapi2 */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Isapi2;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

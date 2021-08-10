@@ -1,0 +1,21 @@
+USEUNIT(".\animctrl.cpp");
+USEUNIT(".\ctrldemo.cpp");
+USEUNIT(".\spinctrl.cpp");
+USEUNIT(".\spinctrl.cpp");
+USEUNIT(".\mlistctl.cpp");
+USEUNIT(".\listcpg.cpp");
+USEUNIT(".\treecpg.cpp");
+USEUNIT(".\slidctrl.cpp");
+USEUNIT(".\progctrl.cpp");
+USEUNIT(".\mtreectl.cpp");
+USEUNIT(".\notifwdw.cpp");
+USEUNIT(".\propsht.cpp");
+USEUNIT(".\StdAfx.cpp");
+USEUNIT(".\toolbar1.cpp");
+USEUNIT(".\toolbar2.cpp");
+USEUNIT(".\toolpage.cpp");
+USEUNIT(".\treecpg.cpp");
+USERC(".\CmnCtrls.rc");
+USEFILE("vctobpr.log");
+
+#define WinMain

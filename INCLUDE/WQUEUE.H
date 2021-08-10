@@ -1,6 +1,6 @@
 
 //=============================================================================
-//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1993.
+//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991 - 1999.
 //
 //  MODULE: queue.h
 //
@@ -13,9 +13,9 @@
 #pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #ifdef __BORLANDC__
-#include "wlist.h"
+# include "wlist.h"
 #else
-#include "list.h"
+# include "list.h"
 #endif
 
 #define _QUEUE_
@@ -60,5 +60,6 @@ typedef QUEUE *LPQUEUE;
 #endif
 
 #pragma pack()
+
 #pragma option pop /*P_O_Pop*/
 #endif

@@ -1,6 +1,5 @@
-:Base OPENHELP.HLP
+:Base openhelp.hlp
 :Title Borland OpenHelp Help
-:Index OpenHelp=OPENHELP.HLP
 ;
 1 Borland OpenHelp
 2 OpenHelp overview
@@ -15,5 +14,3 @@
 3 Opening a project=ohOpeningAProject
 3 Editing a project=ohEditingAProject
 3 Saving a project=ohSavingAProject
-
-

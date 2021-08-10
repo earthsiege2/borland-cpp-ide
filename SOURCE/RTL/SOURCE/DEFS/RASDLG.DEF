@@ -1,35 +1,39 @@
-LIBRARY RASDLG
+LIBRARY RASDlg
 EXPORTS
 
-    GetRasDialOutProtocols                   = 'RASDLG.DLL'.*
-    RasAutodialDisableDlgA                   = 'RASDLG.DLL'.*
-    RasAutodialQueryDlgA                     = 'RASDLG.DLL'.*
-    RasDialDlgA                              = 'RASDLG.DLL'.*
-    RasDialDlgW                              = 'RASDLG.DLL'.*
-    RasEntryDlgA                             = 'RASDLG.DLL'.*
-    RasEntryDlgW                             = 'RASDLG.DLL'.*
-    RasMonitorDlgA                           = 'RASDLG.DLL'.*
-    RasMonitorDlgW                           = 'RASDLG.DLL'.*
-    RasPhonebookDlgA                         = 'RASDLG.DLL'.*
-    RasPhonebookDlgW                         = 'RASDLG.DLL'.*
-    RasSharedAccessSettingsDlg               = 'RASDLG.DLL'.*
-    RasSrvAddPropPages                       = 'RASDLG.DLL'.*
-    RasSrvAddWizPages                        = 'RASDLG.DLL'.*
-    RasSrvAllowConnectionsConfig             = 'RASDLG.DLL'.*
-    RasSrvCleanupService                     = 'RASDLG.DLL'.*
-    RasSrvEnumConnections                    = 'RASDLG.DLL'.*
-    RasSrvHangupConnection                   = 'RASDLG.DLL'.*
-    RasSrvInitializeService                  = 'RASDLG.DLL'.*
-    RasSrvIsConnectionConnected              = 'RASDLG.DLL'.*
-    RasSrvIsServiceRunning                   = 'RASDLG.DLL'.*
-    RasSrvQueryShowIcon                      = 'RASDLG.DLL'.*
-    RasUserEnableManualDial                  = 'RASDLG.DLL'.*
-    RasUserGetManualDial                     = 'RASDLG.DLL'.*
-    RasUserPrefsDlg                          = 'RASDLG.DLL'.*
-    RasWizCreateNewEntry                     = 'RASDLG.DLL'.*
-    RasWizGetSuggestedEntryName              = 'RASDLG.DLL'.*
-    RasWizIsEntryRenamable                   = 'RASDLG.DLL'.*
-    RasWizQueryMaxPageCount                  = 'RASDLG.DLL'.*
-    RasWizSetEntryName                       = 'RASDLG.DLL'.*
-    RouterEntryDlgA                          = 'RASDLG.DLL'.*
-    RouterEntryDlgW                          = 'RASDLG.DLL'.*
+    DwTerminalDlg
+    GetRasDialOutProtocols
+    RasAutodialDisableDlgA
+    RasAutodialDisableDlgW
+    RasAutodialQueryDlgA
+    RasAutodialQueryDlgW
+    RasDialDlgA
+    RasDialDlgW
+    RasEntryDlgA
+    RasEntryDlgW
+    RasMonitorDlgA
+    RasMonitorDlgW
+    RasPhonebookDlgA
+    RasPhonebookDlgW
+    RasSrvAddPropPages
+    RasSrvAddWizPages
+    RasSrvAllowConnectionsConfig
+    RasSrvCleanupService
+    RasSrvEnumConnections
+    RasSrvHangupConnection
+    RasSrvInitializeService
+    RasSrvIsConnectionConnected
+    RasSrvIsServiceRunning
+    RasSrvQueryShowIcon
+    RasUserEnableManualDial
+    RasUserGetManualDial
+    RasUserPrefsDlg
+    RasWizCreateNewEntry
+    RasWizGetNCCFlags
+    RasWizGetSuggestedEntryName
+    RasWizGetUserInputConnectionName
+    RasWizIsEntryRenamable
+    RasWizQueryMaxPageCount
+    RasWizSetEntryName
+    RouterEntryDlgA
+    RouterEntryDlgW

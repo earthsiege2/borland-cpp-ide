@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0268 */
-/* at Wed Aug 04 16:37:49 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for txcoord.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Os, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -38,12 +37,22 @@
 #ifndef __txcoord_h__
 #define __txcoord_h__
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
 /* Forward Declarations */ 
 
 #ifndef __ITransactionResourceAsync_FWD_DEFINED__
 #define __ITransactionResourceAsync_FWD_DEFINED__
 typedef interface ITransactionResourceAsync ITransactionResourceAsync;
 #endif 	/* __ITransactionResourceAsync_FWD_DEFINED__ */
+
+
+#ifndef __ITransactionLastResourceAsync_FWD_DEFINED__
+#define __ITransactionLastResourceAsync_FWD_DEFINED__
+typedef interface ITransactionLastResourceAsync ITransactionLastResourceAsync;
+#endif 	/* __ITransactionLastResourceAsync_FWD_DEFINED__ */
 
 
 #ifndef __ITransactionResource_FWD_DEFINED__
@@ -56,6 +65,12 @@ typedef interface ITransactionResource ITransactionResource;
 #define __ITransactionEnlistmentAsync_FWD_DEFINED__
 typedef interface ITransactionEnlistmentAsync ITransactionEnlistmentAsync;
 #endif 	/* __ITransactionEnlistmentAsync_FWD_DEFINED__ */
+
+
+#ifndef __ITransactionLastEnlistmentAsync_FWD_DEFINED__
+#define __ITransactionLastEnlistmentAsync_FWD_DEFINED__
+typedef interface ITransactionLastEnlistmentAsync ITransactionLastEnlistmentAsync;
+#endif 	/* __ITransactionLastEnlistmentAsync_FWD_DEFINED__ */
 
 
 #ifndef __ITransactionExportFactory_FWD_DEFINED__
@@ -108,11 +123,12 @@ typedef interface ITipPullSink ITipPullSink;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_txcoord_0000 */
 /* [local] */ 
+
 
 
 
@@ -152,12 +168,12 @@ EXTERN_C const IID IID_ITransactionResourceAsync;
         
         virtual HRESULT STDMETHODCALLTYPE CommitRequest( 
             /* [in] */ DWORD grfRM,
-            /* [unique][in] */ XACTUOW __RPC_FAR *pNewUOW) = 0;
+            /* [unique][in] */ XACTUOW *pNewUOW) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AbortRequest( 
-            /* [unique][in] */ BOID __RPC_FAR *pboidReason,
+            /* [unique][in] */ BOID *pboidReason,
             /* [in] */ BOOL fRetaining,
-            /* [unique][in] */ XACTUOW __RPC_FAR *pNewUOW) = 0;
+            /* [unique][in] */ XACTUOW *pNewUOW) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TMDown( void) = 0;
         
@@ -169,44 +185,44 @@ EXTERN_C const IID IID_ITransactionResourceAsync;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITransactionResourceAsync __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITransactionResourceAsync * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITransactionResourceAsync __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITransactionResourceAsync * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITransactionResourceAsync __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITransactionResourceAsync * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrepareRequest )( 
-            ITransactionResourceAsync __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *PrepareRequest )( 
+            ITransactionResourceAsync * This,
             /* [in] */ BOOL fRetaining,
             /* [in] */ DWORD grfRM,
             /* [in] */ BOOL fWantMoniker,
             /* [in] */ BOOL fSinglePhase);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CommitRequest )( 
-            ITransactionResourceAsync __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CommitRequest )( 
+            ITransactionResourceAsync * This,
             /* [in] */ DWORD grfRM,
-            /* [unique][in] */ XACTUOW __RPC_FAR *pNewUOW);
+            /* [unique][in] */ XACTUOW *pNewUOW);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AbortRequest )( 
-            ITransactionResourceAsync __RPC_FAR * This,
-            /* [unique][in] */ BOID __RPC_FAR *pboidReason,
+        HRESULT ( STDMETHODCALLTYPE *AbortRequest )( 
+            ITransactionResourceAsync * This,
+            /* [unique][in] */ BOID *pboidReason,
             /* [in] */ BOOL fRetaining,
-            /* [unique][in] */ XACTUOW __RPC_FAR *pNewUOW);
+            /* [unique][in] */ XACTUOW *pNewUOW);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TMDown )( 
-            ITransactionResourceAsync __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *TMDown )( 
+            ITransactionResourceAsync * This);
         
         END_INTERFACE
     } ITransactionResourceAsyncVtbl;
 
     interface ITransactionResourceAsync
     {
-        CONST_VTBL struct ITransactionResourceAsyncVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITransactionResourceAsyncVtbl *lpVtbl;
     };
 
     
@@ -244,7 +260,7 @@ EXTERN_C const IID IID_ITransactionResourceAsync;
 
 
 HRESULT STDMETHODCALLTYPE ITransactionResourceAsync_PrepareRequest_Proxy( 
-    ITransactionResourceAsync __RPC_FAR * This,
+    ITransactionResourceAsync * This,
     /* [in] */ BOOL fRetaining,
     /* [in] */ DWORD grfRM,
     /* [in] */ BOOL fWantMoniker,
@@ -259,9 +275,9 @@ void __RPC_STUB ITransactionResourceAsync_PrepareRequest_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITransactionResourceAsync_CommitRequest_Proxy( 
-    ITransactionResourceAsync __RPC_FAR * This,
+    ITransactionResourceAsync * This,
     /* [in] */ DWORD grfRM,
-    /* [unique][in] */ XACTUOW __RPC_FAR *pNewUOW);
+    /* [unique][in] */ XACTUOW *pNewUOW);
 
 
 void __RPC_STUB ITransactionResourceAsync_CommitRequest_Stub(
@@ -272,10 +288,10 @@ void __RPC_STUB ITransactionResourceAsync_CommitRequest_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITransactionResourceAsync_AbortRequest_Proxy( 
-    ITransactionResourceAsync __RPC_FAR * This,
-    /* [unique][in] */ BOID __RPC_FAR *pboidReason,
+    ITransactionResourceAsync * This,
+    /* [unique][in] */ BOID *pboidReason,
     /* [in] */ BOOL fRetaining,
-    /* [unique][in] */ XACTUOW __RPC_FAR *pNewUOW);
+    /* [unique][in] */ XACTUOW *pNewUOW);
 
 
 void __RPC_STUB ITransactionResourceAsync_AbortRequest_Stub(
@@ -286,7 +302,7 @@ void __RPC_STUB ITransactionResourceAsync_AbortRequest_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITransactionResourceAsync_TMDown_Proxy( 
-    ITransactionResourceAsync __RPC_FAR * This);
+    ITransactionResourceAsync * This);
 
 
 void __RPC_STUB ITransactionResourceAsync_TMDown_Stub(
@@ -298,6 +314,118 @@ void __RPC_STUB ITransactionResourceAsync_TMDown_Stub(
 
 
 #endif 	/* __ITransactionResourceAsync_INTERFACE_DEFINED__ */
+
+
+#ifndef __ITransactionLastResourceAsync_INTERFACE_DEFINED__
+#define __ITransactionLastResourceAsync_INTERFACE_DEFINED__
+
+/* interface ITransactionLastResourceAsync */
+/* [unique][uuid][object] */ 
+
+
+EXTERN_C const IID IID_ITransactionLastResourceAsync;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("C82BD532-5B30-11d3-8A91-00C04F79EB6D")
+    ITransactionLastResourceAsync : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE DelegateCommit( 
+            /* [in] */ DWORD grfRM) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE ForgetRequest( 
+            /* [in] */ XACTUOW *pNewUOW) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct ITransactionLastResourceAsyncVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITransactionLastResourceAsync * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITransactionLastResourceAsync * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITransactionLastResourceAsync * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *DelegateCommit )( 
+            ITransactionLastResourceAsync * This,
+            /* [in] */ DWORD grfRM);
+        
+        HRESULT ( STDMETHODCALLTYPE *ForgetRequest )( 
+            ITransactionLastResourceAsync * This,
+            /* [in] */ XACTUOW *pNewUOW);
+        
+        END_INTERFACE
+    } ITransactionLastResourceAsyncVtbl;
+
+    interface ITransactionLastResourceAsync
+    {
+        CONST_VTBL struct ITransactionLastResourceAsyncVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define ITransactionLastResourceAsync_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define ITransactionLastResourceAsync_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define ITransactionLastResourceAsync_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define ITransactionLastResourceAsync_DelegateCommit(This,grfRM)	\
+    (This)->lpVtbl -> DelegateCommit(This,grfRM)
+
+#define ITransactionLastResourceAsync_ForgetRequest(This,pNewUOW)	\
+    (This)->lpVtbl -> ForgetRequest(This,pNewUOW)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE ITransactionLastResourceAsync_DelegateCommit_Proxy( 
+    ITransactionLastResourceAsync * This,
+    /* [in] */ DWORD grfRM);
+
+
+void __RPC_STUB ITransactionLastResourceAsync_DelegateCommit_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE ITransactionLastResourceAsync_ForgetRequest_Proxy( 
+    ITransactionLastResourceAsync * This,
+    /* [in] */ XACTUOW *pNewUOW);
+
+
+void __RPC_STUB ITransactionLastResourceAsync_ForgetRequest_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __ITransactionLastResourceAsync_INTERFACE_DEFINED__ */
 
 
 #ifndef __ITransactionResource_INTERFACE_DEFINED__
@@ -323,12 +451,12 @@ EXTERN_C const IID IID_ITransactionResource;
         
         virtual HRESULT STDMETHODCALLTYPE CommitRequest( 
             /* [in] */ DWORD grfRM,
-            /* [unique][in] */ XACTUOW __RPC_FAR *pNewUOW) = 0;
+            /* [unique][in] */ XACTUOW *pNewUOW) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AbortRequest( 
-            /* [unique][in] */ BOID __RPC_FAR *pboidReason,
+            /* [unique][in] */ BOID *pboidReason,
             /* [in] */ BOOL fRetaining,
-            /* [unique][in] */ XACTUOW __RPC_FAR *pNewUOW) = 0;
+            /* [unique][in] */ XACTUOW *pNewUOW) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TMDown( void) = 0;
         
@@ -340,44 +468,44 @@ EXTERN_C const IID IID_ITransactionResource;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITransactionResource __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITransactionResource * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITransactionResource __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITransactionResource * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITransactionResource __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITransactionResource * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrepareRequest )( 
-            ITransactionResource __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *PrepareRequest )( 
+            ITransactionResource * This,
             /* [in] */ BOOL fRetaining,
             /* [in] */ DWORD grfRM,
             /* [in] */ BOOL fWantMoniker,
             /* [in] */ BOOL fSinglePhase);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CommitRequest )( 
-            ITransactionResource __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CommitRequest )( 
+            ITransactionResource * This,
             /* [in] */ DWORD grfRM,
-            /* [unique][in] */ XACTUOW __RPC_FAR *pNewUOW);
+            /* [unique][in] */ XACTUOW *pNewUOW);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AbortRequest )( 
-            ITransactionResource __RPC_FAR * This,
-            /* [unique][in] */ BOID __RPC_FAR *pboidReason,
+        HRESULT ( STDMETHODCALLTYPE *AbortRequest )( 
+            ITransactionResource * This,
+            /* [unique][in] */ BOID *pboidReason,
             /* [in] */ BOOL fRetaining,
-            /* [unique][in] */ XACTUOW __RPC_FAR *pNewUOW);
+            /* [unique][in] */ XACTUOW *pNewUOW);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TMDown )( 
-            ITransactionResource __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *TMDown )( 
+            ITransactionResource * This);
         
         END_INTERFACE
     } ITransactionResourceVtbl;
 
     interface ITransactionResource
     {
-        CONST_VTBL struct ITransactionResourceVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITransactionResourceVtbl *lpVtbl;
     };
 
     
@@ -415,7 +543,7 @@ EXTERN_C const IID IID_ITransactionResource;
 
 
 HRESULT STDMETHODCALLTYPE ITransactionResource_PrepareRequest_Proxy( 
-    ITransactionResource __RPC_FAR * This,
+    ITransactionResource * This,
     /* [in] */ BOOL fRetaining,
     /* [in] */ DWORD grfRM,
     /* [in] */ BOOL fWantMoniker,
@@ -430,9 +558,9 @@ void __RPC_STUB ITransactionResource_PrepareRequest_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITransactionResource_CommitRequest_Proxy( 
-    ITransactionResource __RPC_FAR * This,
+    ITransactionResource * This,
     /* [in] */ DWORD grfRM,
-    /* [unique][in] */ XACTUOW __RPC_FAR *pNewUOW);
+    /* [unique][in] */ XACTUOW *pNewUOW);
 
 
 void __RPC_STUB ITransactionResource_CommitRequest_Stub(
@@ -443,10 +571,10 @@ void __RPC_STUB ITransactionResource_CommitRequest_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITransactionResource_AbortRequest_Proxy( 
-    ITransactionResource __RPC_FAR * This,
-    /* [unique][in] */ BOID __RPC_FAR *pboidReason,
+    ITransactionResource * This,
+    /* [unique][in] */ BOID *pboidReason,
     /* [in] */ BOOL fRetaining,
-    /* [unique][in] */ XACTUOW __RPC_FAR *pNewUOW);
+    /* [unique][in] */ XACTUOW *pNewUOW);
 
 
 void __RPC_STUB ITransactionResource_AbortRequest_Stub(
@@ -457,7 +585,7 @@ void __RPC_STUB ITransactionResource_AbortRequest_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITransactionResource_TMDown_Proxy( 
-    ITransactionResource __RPC_FAR * This);
+    ITransactionResource * This);
 
 
 void __RPC_STUB ITransactionResource_TMDown_Stub(
@@ -488,8 +616,8 @@ EXTERN_C const IID IID_ITransactionEnlistmentAsync;
     public:
         virtual HRESULT STDMETHODCALLTYPE PrepareRequestDone( 
             /* [in] */ HRESULT hr,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmk,
-            /* [unique][in] */ BOID __RPC_FAR *pboidReason) = 0;
+            /* [unique][in] */ IMoniker *pmk,
+            /* [unique][in] */ BOID *pboidReason) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommitRequestDone( 
             /* [in] */ HRESULT hr) = 0;
@@ -505,29 +633,29 @@ EXTERN_C const IID IID_ITransactionEnlistmentAsync;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITransactionEnlistmentAsync __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITransactionEnlistmentAsync * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITransactionEnlistmentAsync __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITransactionEnlistmentAsync * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITransactionEnlistmentAsync __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITransactionEnlistmentAsync * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrepareRequestDone )( 
-            ITransactionEnlistmentAsync __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *PrepareRequestDone )( 
+            ITransactionEnlistmentAsync * This,
             /* [in] */ HRESULT hr,
-            /* [unique][in] */ IMoniker __RPC_FAR *pmk,
-            /* [unique][in] */ BOID __RPC_FAR *pboidReason);
+            /* [unique][in] */ IMoniker *pmk,
+            /* [unique][in] */ BOID *pboidReason);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CommitRequestDone )( 
-            ITransactionEnlistmentAsync __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CommitRequestDone )( 
+            ITransactionEnlistmentAsync * This,
             /* [in] */ HRESULT hr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AbortRequestDone )( 
-            ITransactionEnlistmentAsync __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *AbortRequestDone )( 
+            ITransactionEnlistmentAsync * This,
             /* [in] */ HRESULT hr);
         
         END_INTERFACE
@@ -535,7 +663,7 @@ EXTERN_C const IID IID_ITransactionEnlistmentAsync;
 
     interface ITransactionEnlistmentAsync
     {
-        CONST_VTBL struct ITransactionEnlistmentAsyncVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITransactionEnlistmentAsyncVtbl *lpVtbl;
     };
 
     
@@ -570,10 +698,10 @@ EXTERN_C const IID IID_ITransactionEnlistmentAsync;
 
 
 HRESULT STDMETHODCALLTYPE ITransactionEnlistmentAsync_PrepareRequestDone_Proxy( 
-    ITransactionEnlistmentAsync __RPC_FAR * This,
+    ITransactionEnlistmentAsync * This,
     /* [in] */ HRESULT hr,
-    /* [unique][in] */ IMoniker __RPC_FAR *pmk,
-    /* [unique][in] */ BOID __RPC_FAR *pboidReason);
+    /* [unique][in] */ IMoniker *pmk,
+    /* [unique][in] */ BOID *pboidReason);
 
 
 void __RPC_STUB ITransactionEnlistmentAsync_PrepareRequestDone_Stub(
@@ -584,7 +712,7 @@ void __RPC_STUB ITransactionEnlistmentAsync_PrepareRequestDone_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITransactionEnlistmentAsync_CommitRequestDone_Proxy( 
-    ITransactionEnlistmentAsync __RPC_FAR * This,
+    ITransactionEnlistmentAsync * This,
     /* [in] */ HRESULT hr);
 
 
@@ -596,7 +724,7 @@ void __RPC_STUB ITransactionEnlistmentAsync_CommitRequestDone_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITransactionEnlistmentAsync_AbortRequestDone_Proxy( 
-    ITransactionEnlistmentAsync __RPC_FAR * This,
+    ITransactionEnlistmentAsync * This,
     /* [in] */ HRESULT hr);
 
 
@@ -609,6 +737,99 @@ void __RPC_STUB ITransactionEnlistmentAsync_AbortRequestDone_Stub(
 
 
 #endif 	/* __ITransactionEnlistmentAsync_INTERFACE_DEFINED__ */
+
+
+#ifndef __ITransactionLastEnlistmentAsync_INTERFACE_DEFINED__
+#define __ITransactionLastEnlistmentAsync_INTERFACE_DEFINED__
+
+/* interface ITransactionLastEnlistmentAsync */
+/* [unique][uuid][object] */ 
+
+
+EXTERN_C const IID IID_ITransactionLastEnlistmentAsync;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("C82BD533-5B30-11d3-8A91-00C04F79EB6D")
+    ITransactionLastEnlistmentAsync : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE TransactionOutcome( 
+            /* [in] */ XACTSTAT XactStat,
+            /* [unique][in] */ BOID *pboidReason) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct ITransactionLastEnlistmentAsyncVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITransactionLastEnlistmentAsync * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITransactionLastEnlistmentAsync * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITransactionLastEnlistmentAsync * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *TransactionOutcome )( 
+            ITransactionLastEnlistmentAsync * This,
+            /* [in] */ XACTSTAT XactStat,
+            /* [unique][in] */ BOID *pboidReason);
+        
+        END_INTERFACE
+    } ITransactionLastEnlistmentAsyncVtbl;
+
+    interface ITransactionLastEnlistmentAsync
+    {
+        CONST_VTBL struct ITransactionLastEnlistmentAsyncVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define ITransactionLastEnlistmentAsync_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define ITransactionLastEnlistmentAsync_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define ITransactionLastEnlistmentAsync_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define ITransactionLastEnlistmentAsync_TransactionOutcome(This,XactStat,pboidReason)	\
+    (This)->lpVtbl -> TransactionOutcome(This,XactStat,pboidReason)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE ITransactionLastEnlistmentAsync_TransactionOutcome_Proxy( 
+    ITransactionLastEnlistmentAsync * This,
+    /* [in] */ XACTSTAT XactStat,
+    /* [unique][in] */ BOID *pboidReason);
+
+
+void __RPC_STUB ITransactionLastEnlistmentAsync_TransactionOutcome_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __ITransactionLastEnlistmentAsync_INTERFACE_DEFINED__ */
 
 
 #ifndef __ITransactionExportFactory_INTERFACE_DEFINED__
@@ -627,12 +848,12 @@ EXTERN_C const IID IID_ITransactionExportFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRemoteClassId( 
-            /* [out] */ CLSID __RPC_FAR *pclsid) = 0;
+            /* [out] */ CLSID *pclsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Create( 
             /* [in] */ ULONG cbWhereabouts,
-            /* [size_is][in] */ byte __RPC_FAR *rgbWhereabouts,
-            /* [out] */ ITransactionExport __RPC_FAR *__RPC_FAR *ppExport) = 0;
+            /* [size_is][in] */ byte *rgbWhereabouts,
+            /* [out] */ ITransactionExport **ppExport) = 0;
         
     };
     
@@ -642,33 +863,33 @@ EXTERN_C const IID IID_ITransactionExportFactory;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITransactionExportFactory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITransactionExportFactory * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITransactionExportFactory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITransactionExportFactory * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITransactionExportFactory __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITransactionExportFactory * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRemoteClassId )( 
-            ITransactionExportFactory __RPC_FAR * This,
-            /* [out] */ CLSID __RPC_FAR *pclsid);
+        HRESULT ( STDMETHODCALLTYPE *GetRemoteClassId )( 
+            ITransactionExportFactory * This,
+            /* [out] */ CLSID *pclsid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Create )( 
-            ITransactionExportFactory __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Create )( 
+            ITransactionExportFactory * This,
             /* [in] */ ULONG cbWhereabouts,
-            /* [size_is][in] */ byte __RPC_FAR *rgbWhereabouts,
-            /* [out] */ ITransactionExport __RPC_FAR *__RPC_FAR *ppExport);
+            /* [size_is][in] */ byte *rgbWhereabouts,
+            /* [out] */ ITransactionExport **ppExport);
         
         END_INTERFACE
     } ITransactionExportFactoryVtbl;
 
     interface ITransactionExportFactory
     {
-        CONST_VTBL struct ITransactionExportFactoryVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITransactionExportFactoryVtbl *lpVtbl;
     };
 
     
@@ -700,8 +921,8 @@ EXTERN_C const IID IID_ITransactionExportFactory;
 
 
 HRESULT STDMETHODCALLTYPE ITransactionExportFactory_GetRemoteClassId_Proxy( 
-    ITransactionExportFactory __RPC_FAR * This,
-    /* [out] */ CLSID __RPC_FAR *pclsid);
+    ITransactionExportFactory * This,
+    /* [out] */ CLSID *pclsid);
 
 
 void __RPC_STUB ITransactionExportFactory_GetRemoteClassId_Stub(
@@ -712,10 +933,10 @@ void __RPC_STUB ITransactionExportFactory_GetRemoteClassId_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITransactionExportFactory_Create_Proxy( 
-    ITransactionExportFactory __RPC_FAR * This,
+    ITransactionExportFactory * This,
     /* [in] */ ULONG cbWhereabouts,
-    /* [size_is][in] */ byte __RPC_FAR *rgbWhereabouts,
-    /* [out] */ ITransactionExport __RPC_FAR *__RPC_FAR *ppExport);
+    /* [size_is][in] */ byte *rgbWhereabouts,
+    /* [out] */ ITransactionExport **ppExport);
 
 
 void __RPC_STUB ITransactionExportFactory_Create_Stub(
@@ -745,12 +966,12 @@ EXTERN_C const IID IID_ITransactionImportWhereabouts;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetWhereaboutsSize( 
-            /* [out] */ ULONG __RPC_FAR *pcbWhereabouts) = 0;
+            /* [out] */ ULONG *pcbWhereabouts) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetWhereabouts( 
             /* [in] */ ULONG cbWhereabouts,
-            /* [size_is][out] */ byte __RPC_FAR *rgbWhereabouts,
-            /* [out] */ ULONG __RPC_FAR *pcbUsed) = 0;
+            /* [size_is][out] */ byte *rgbWhereabouts,
+            /* [out] */ ULONG *pcbUsed) = 0;
         
     };
     
@@ -760,33 +981,33 @@ EXTERN_C const IID IID_ITransactionImportWhereabouts;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITransactionImportWhereabouts __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITransactionImportWhereabouts * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITransactionImportWhereabouts __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITransactionImportWhereabouts * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITransactionImportWhereabouts __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITransactionImportWhereabouts * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWhereaboutsSize )( 
-            ITransactionImportWhereabouts __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pcbWhereabouts);
+        HRESULT ( STDMETHODCALLTYPE *GetWhereaboutsSize )( 
+            ITransactionImportWhereabouts * This,
+            /* [out] */ ULONG *pcbWhereabouts);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetWhereabouts )( 
-            ITransactionImportWhereabouts __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetWhereabouts )( 
+            ITransactionImportWhereabouts * This,
             /* [in] */ ULONG cbWhereabouts,
-            /* [size_is][out] */ byte __RPC_FAR *rgbWhereabouts,
-            /* [out] */ ULONG __RPC_FAR *pcbUsed);
+            /* [size_is][out] */ byte *rgbWhereabouts,
+            /* [out] */ ULONG *pcbUsed);
         
         END_INTERFACE
     } ITransactionImportWhereaboutsVtbl;
 
     interface ITransactionImportWhereabouts
     {
-        CONST_VTBL struct ITransactionImportWhereaboutsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITransactionImportWhereaboutsVtbl *lpVtbl;
     };
 
     
@@ -818,8 +1039,8 @@ EXTERN_C const IID IID_ITransactionImportWhereabouts;
 
 
 HRESULT STDMETHODCALLTYPE ITransactionImportWhereabouts_GetWhereaboutsSize_Proxy( 
-    ITransactionImportWhereabouts __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pcbWhereabouts);
+    ITransactionImportWhereabouts * This,
+    /* [out] */ ULONG *pcbWhereabouts);
 
 
 void __RPC_STUB ITransactionImportWhereabouts_GetWhereaboutsSize_Stub(
@@ -830,10 +1051,10 @@ void __RPC_STUB ITransactionImportWhereabouts_GetWhereaboutsSize_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionImportWhereabouts_RemoteGetWhereabouts_Proxy( 
-    ITransactionImportWhereabouts __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pcbUsed,
+    ITransactionImportWhereabouts * This,
+    /* [out] */ ULONG *pcbUsed,
     /* [in] */ ULONG cbWhereabouts,
-    /* [length_is][size_is][out] */ byte __RPC_FAR *rgbWhereabouts);
+    /* [length_is][size_is][out] */ byte *rgbWhereabouts);
 
 
 void __RPC_STUB ITransactionImportWhereabouts_RemoteGetWhereabouts_Stub(
@@ -863,14 +1084,14 @@ EXTERN_C const IID IID_ITransactionExport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Export( 
-            /* [in] */ IUnknown __RPC_FAR *punkTransaction,
-            /* [out] */ ULONG __RPC_FAR *pcbTransactionCookie) = 0;
+            /* [in] */ IUnknown *punkTransaction,
+            /* [out] */ ULONG *pcbTransactionCookie) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetTransactionCookie( 
-            /* [in] */ IUnknown __RPC_FAR *punkTransaction,
+            /* [in] */ IUnknown *punkTransaction,
             /* [in] */ ULONG cbTransactionCookie,
-            /* [size_is][out] */ byte __RPC_FAR *rgbTransactionCookie,
-            /* [out] */ ULONG __RPC_FAR *pcbUsed) = 0;
+            /* [size_is][out] */ byte *rgbTransactionCookie,
+            /* [out] */ ULONG *pcbUsed) = 0;
         
     };
     
@@ -880,35 +1101,35 @@ EXTERN_C const IID IID_ITransactionExport;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITransactionExport __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITransactionExport * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITransactionExport __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITransactionExport * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITransactionExport __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITransactionExport * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Export )( 
-            ITransactionExport __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *punkTransaction,
-            /* [out] */ ULONG __RPC_FAR *pcbTransactionCookie);
+        HRESULT ( STDMETHODCALLTYPE *Export )( 
+            ITransactionExport * This,
+            /* [in] */ IUnknown *punkTransaction,
+            /* [out] */ ULONG *pcbTransactionCookie);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTransactionCookie )( 
-            ITransactionExport __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *punkTransaction,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetTransactionCookie )( 
+            ITransactionExport * This,
+            /* [in] */ IUnknown *punkTransaction,
             /* [in] */ ULONG cbTransactionCookie,
-            /* [size_is][out] */ byte __RPC_FAR *rgbTransactionCookie,
-            /* [out] */ ULONG __RPC_FAR *pcbUsed);
+            /* [size_is][out] */ byte *rgbTransactionCookie,
+            /* [out] */ ULONG *pcbUsed);
         
         END_INTERFACE
     } ITransactionExportVtbl;
 
     interface ITransactionExport
     {
-        CONST_VTBL struct ITransactionExportVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITransactionExportVtbl *lpVtbl;
     };
 
     
@@ -940,9 +1161,9 @@ EXTERN_C const IID IID_ITransactionExport;
 
 
 HRESULT STDMETHODCALLTYPE ITransactionExport_Export_Proxy( 
-    ITransactionExport __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *punkTransaction,
-    /* [out] */ ULONG __RPC_FAR *pcbTransactionCookie);
+    ITransactionExport * This,
+    /* [in] */ IUnknown *punkTransaction,
+    /* [out] */ ULONG *pcbTransactionCookie);
 
 
 void __RPC_STUB ITransactionExport_Export_Stub(
@@ -953,11 +1174,11 @@ void __RPC_STUB ITransactionExport_Export_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionExport_RemoteGetTransactionCookie_Proxy( 
-    ITransactionExport __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *punkTransaction,
-    /* [out] */ ULONG __RPC_FAR *pcbUsed,
+    ITransactionExport * This,
+    /* [in] */ IUnknown *punkTransaction,
+    /* [out] */ ULONG *pcbUsed,
     /* [in] */ ULONG cbTransactionCookie,
-    /* [length_is][size_is][out] */ byte __RPC_FAR *rgbTransactionCookie);
+    /* [length_is][size_is][out] */ byte *rgbTransactionCookie);
 
 
 void __RPC_STUB ITransactionExport_RemoteGetTransactionCookie_Stub(
@@ -988,9 +1209,9 @@ EXTERN_C const IID IID_ITransactionImport;
     public:
         virtual HRESULT STDMETHODCALLTYPE Import( 
             /* [in] */ ULONG cbTransactionCookie,
-            /* [size_is][in] */ byte __RPC_FAR *rgbTransactionCookie,
-            /* [in] */ IID __RPC_FAR *piid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvTransaction) = 0;
+            /* [size_is][in] */ byte *rgbTransactionCookie,
+            /* [in] */ IID *piid,
+            /* [iid_is][out] */ void **ppvTransaction) = 0;
         
     };
     
@@ -1000,30 +1221,30 @@ EXTERN_C const IID IID_ITransactionImport;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITransactionImport __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITransactionImport * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITransactionImport __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITransactionImport * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITransactionImport __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITransactionImport * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Import )( 
-            ITransactionImport __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Import )( 
+            ITransactionImport * This,
             /* [in] */ ULONG cbTransactionCookie,
-            /* [size_is][in] */ byte __RPC_FAR *rgbTransactionCookie,
-            /* [in] */ IID __RPC_FAR *piid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvTransaction);
+            /* [size_is][in] */ byte *rgbTransactionCookie,
+            /* [in] */ IID *piid,
+            /* [iid_is][out] */ void **ppvTransaction);
         
         END_INTERFACE
     } ITransactionImportVtbl;
 
     interface ITransactionImport
     {
-        CONST_VTBL struct ITransactionImportVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITransactionImportVtbl *lpVtbl;
     };
 
     
@@ -1052,11 +1273,11 @@ EXTERN_C const IID IID_ITransactionImport;
 
 
 HRESULT STDMETHODCALLTYPE ITransactionImport_Import_Proxy( 
-    ITransactionImport __RPC_FAR * This,
+    ITransactionImport * This,
     /* [in] */ ULONG cbTransactionCookie,
-    /* [size_is][in] */ byte __RPC_FAR *rgbTransactionCookie,
-    /* [in] */ IID __RPC_FAR *piid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvTransaction);
+    /* [size_is][in] */ byte *rgbTransactionCookie,
+    /* [in] */ IID *piid,
+    /* [iid_is][out] */ void **ppvTransaction);
 
 
 void __RPC_STUB ITransactionImport_Import_Stub(
@@ -1086,11 +1307,11 @@ EXTERN_C const IID IID_ITipTransaction;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Push( 
-            /* [in] */ char __RPC_FAR *i_pszRemoteTmUrl,
-            /* [out] */ char __RPC_FAR *__RPC_FAR *o_ppszRemoteTxUrl) = 0;
+            /* [in] */ char *i_pszRemoteTmUrl,
+            /* [out] */ char **o_ppszRemoteTxUrl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTransactionUrl( 
-            /* [out] */ char __RPC_FAR *__RPC_FAR *o_ppszLocalTxUrl) = 0;
+            /* [out] */ char **o_ppszLocalTxUrl) = 0;
         
     };
     
@@ -1100,32 +1321,32 @@ EXTERN_C const IID IID_ITipTransaction;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITipTransaction __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITipTransaction * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITipTransaction __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITipTransaction * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITipTransaction __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITipTransaction * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Push )( 
-            ITipTransaction __RPC_FAR * This,
-            /* [in] */ char __RPC_FAR *i_pszRemoteTmUrl,
-            /* [out] */ char __RPC_FAR *__RPC_FAR *o_ppszRemoteTxUrl);
+        HRESULT ( STDMETHODCALLTYPE *Push )( 
+            ITipTransaction * This,
+            /* [in] */ char *i_pszRemoteTmUrl,
+            /* [out] */ char **o_ppszRemoteTxUrl);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTransactionUrl )( 
-            ITipTransaction __RPC_FAR * This,
-            /* [out] */ char __RPC_FAR *__RPC_FAR *o_ppszLocalTxUrl);
+        HRESULT ( STDMETHODCALLTYPE *GetTransactionUrl )( 
+            ITipTransaction * This,
+            /* [out] */ char **o_ppszLocalTxUrl);
         
         END_INTERFACE
     } ITipTransactionVtbl;
 
     interface ITipTransaction
     {
-        CONST_VTBL struct ITipTransactionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITipTransactionVtbl *lpVtbl;
     };
 
     
@@ -1157,9 +1378,9 @@ EXTERN_C const IID IID_ITipTransaction;
 
 
 HRESULT STDMETHODCALLTYPE ITipTransaction_Push_Proxy( 
-    ITipTransaction __RPC_FAR * This,
-    /* [in] */ char __RPC_FAR *i_pszRemoteTmUrl,
-    /* [out] */ char __RPC_FAR *__RPC_FAR *o_ppszRemoteTxUrl);
+    ITipTransaction * This,
+    /* [in] */ char *i_pszRemoteTmUrl,
+    /* [out] */ char **o_ppszRemoteTxUrl);
 
 
 void __RPC_STUB ITipTransaction_Push_Stub(
@@ -1170,8 +1391,8 @@ void __RPC_STUB ITipTransaction_Push_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITipTransaction_GetTransactionUrl_Proxy( 
-    ITipTransaction __RPC_FAR * This,
-    /* [out] */ char __RPC_FAR *__RPC_FAR *o_ppszLocalTxUrl);
+    ITipTransaction * This,
+    /* [out] */ char **o_ppszLocalTxUrl);
 
 
 void __RPC_STUB ITipTransaction_GetTransactionUrl_Stub(
@@ -1201,16 +1422,16 @@ EXTERN_C const IID IID_ITipHelper;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Pull( 
-            /* [in] */ char __RPC_FAR *i_pszTxUrl,
-            /* [out] */ ITransaction __RPC_FAR *__RPC_FAR *o_ppITransaction) = 0;
+            /* [in] */ char *i_pszTxUrl,
+            /* [out] */ ITransaction **o_ppITransaction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PullAsync( 
-            /* [in] */ char __RPC_FAR *i_pszTxUrl,
-            /* [in] */ ITipPullSink __RPC_FAR *i_pTipPullSink,
-            /* [out] */ ITransaction __RPC_FAR *__RPC_FAR *o_ppITransaction) = 0;
+            /* [in] */ char *i_pszTxUrl,
+            /* [in] */ ITipPullSink *i_pTipPullSink,
+            /* [out] */ ITransaction **o_ppITransaction) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLocalTmUrl( 
-            /* [out] */ char __RPC_FAR *__RPC_FAR *o_ppszLocalTmUrl) = 0;
+            /* [out] */ char **o_ppszLocalTmUrl) = 0;
         
     };
     
@@ -1220,38 +1441,38 @@ EXTERN_C const IID IID_ITipHelper;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITipHelper __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITipHelper * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITipHelper __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITipHelper * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITipHelper __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITipHelper * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Pull )( 
-            ITipHelper __RPC_FAR * This,
-            /* [in] */ char __RPC_FAR *i_pszTxUrl,
-            /* [out] */ ITransaction __RPC_FAR *__RPC_FAR *o_ppITransaction);
+        HRESULT ( STDMETHODCALLTYPE *Pull )( 
+            ITipHelper * This,
+            /* [in] */ char *i_pszTxUrl,
+            /* [out] */ ITransaction **o_ppITransaction);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PullAsync )( 
-            ITipHelper __RPC_FAR * This,
-            /* [in] */ char __RPC_FAR *i_pszTxUrl,
-            /* [in] */ ITipPullSink __RPC_FAR *i_pTipPullSink,
-            /* [out] */ ITransaction __RPC_FAR *__RPC_FAR *o_ppITransaction);
+        HRESULT ( STDMETHODCALLTYPE *PullAsync )( 
+            ITipHelper * This,
+            /* [in] */ char *i_pszTxUrl,
+            /* [in] */ ITipPullSink *i_pTipPullSink,
+            /* [out] */ ITransaction **o_ppITransaction);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLocalTmUrl )( 
-            ITipHelper __RPC_FAR * This,
-            /* [out] */ char __RPC_FAR *__RPC_FAR *o_ppszLocalTmUrl);
+        HRESULT ( STDMETHODCALLTYPE *GetLocalTmUrl )( 
+            ITipHelper * This,
+            /* [out] */ char **o_ppszLocalTmUrl);
         
         END_INTERFACE
     } ITipHelperVtbl;
 
     interface ITipHelper
     {
-        CONST_VTBL struct ITipHelperVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITipHelperVtbl *lpVtbl;
     };
 
     
@@ -1286,9 +1507,9 @@ EXTERN_C const IID IID_ITipHelper;
 
 
 HRESULT STDMETHODCALLTYPE ITipHelper_Pull_Proxy( 
-    ITipHelper __RPC_FAR * This,
-    /* [in] */ char __RPC_FAR *i_pszTxUrl,
-    /* [out] */ ITransaction __RPC_FAR *__RPC_FAR *o_ppITransaction);
+    ITipHelper * This,
+    /* [in] */ char *i_pszTxUrl,
+    /* [out] */ ITransaction **o_ppITransaction);
 
 
 void __RPC_STUB ITipHelper_Pull_Stub(
@@ -1299,10 +1520,10 @@ void __RPC_STUB ITipHelper_Pull_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITipHelper_PullAsync_Proxy( 
-    ITipHelper __RPC_FAR * This,
-    /* [in] */ char __RPC_FAR *i_pszTxUrl,
-    /* [in] */ ITipPullSink __RPC_FAR *i_pTipPullSink,
-    /* [out] */ ITransaction __RPC_FAR *__RPC_FAR *o_ppITransaction);
+    ITipHelper * This,
+    /* [in] */ char *i_pszTxUrl,
+    /* [in] */ ITipPullSink *i_pTipPullSink,
+    /* [out] */ ITransaction **o_ppITransaction);
 
 
 void __RPC_STUB ITipHelper_PullAsync_Stub(
@@ -1313,8 +1534,8 @@ void __RPC_STUB ITipHelper_PullAsync_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ITipHelper_GetLocalTmUrl_Proxy( 
-    ITipHelper __RPC_FAR * This,
-    /* [out] */ char __RPC_FAR *__RPC_FAR *o_ppszLocalTmUrl);
+    ITipHelper * This,
+    /* [out] */ char **o_ppszLocalTmUrl);
 
 
 void __RPC_STUB ITipHelper_GetLocalTmUrl_Stub(
@@ -1354,19 +1575,19 @@ EXTERN_C const IID IID_ITipPullSink;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ITipPullSink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ITipPullSink * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ITipPullSink __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ITipPullSink * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ITipPullSink __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ITipPullSink * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PullComplete )( 
-            ITipPullSink __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *PullComplete )( 
+            ITipPullSink * This,
             /* [in] */ HRESULT i_hrPull);
         
         END_INTERFACE
@@ -1374,7 +1595,7 @@ EXTERN_C const IID IID_ITipPullSink;
 
     interface ITipPullSink
     {
-        CONST_VTBL struct ITipPullSinkVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ITipPullSinkVtbl *lpVtbl;
     };
 
     
@@ -1403,7 +1624,7 @@ EXTERN_C const IID IID_ITipPullSink;
 
 
 HRESULT STDMETHODCALLTYPE ITipPullSink_PullComplete_Proxy( 
-    ITipPullSink __RPC_FAR * This,
+    ITipPullSink * This,
     /* [in] */ HRESULT i_hrPull);
 
 
@@ -1418,7 +1639,7 @@ void __RPC_STUB ITipPullSink_PullComplete_Stub(
 #endif 	/* __ITipPullSink_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_txcoord_0102 */
+/* interface __MIDL_itf_txcoord_0108 */
 /* [local] */ 
 
 
@@ -1426,8 +1647,10 @@ void __RPC_STUB ITipPullSink_PullComplete_Stub(
 #if _MSC_VER < 1100 || !defined(__cplusplus)
 
 DEFINE_GUID(IID_ITransactionResourceAsync,		0x69E971F0, 0x23CE, 0x11cf, 0xAD, 0x60, 0x00, 0xAA, 0x00, 0xA7, 0x4C, 0xCD);
+DEFINE_GUID(IID_ITransactionLastResourceAsync,	0xC82BD532, 0x5B30, 0x11D3, 0x8A, 0x91, 0x00, 0xC0, 0x4F, 0x79, 0xEB, 0x6D);
 DEFINE_GUID(IID_ITransactionResource,			0xEE5FF7B3, 0x4572, 0x11d0, 0x94, 0x52, 0x00, 0xA0, 0xC9, 0x05, 0x41, 0x6E);
 DEFINE_GUID(IID_ITransactionEnlistmentAsync,		0x0fb15081, 0xaf41, 0x11ce, 0xbd, 0x2b, 0x20, 0x4c, 0x4f, 0x4f, 0x50, 0x20);
+DEFINE_GUID(IID_ITransactionLastEnlistmentAsync,	0xC82BD533, 0x5B30, 0x11D3, 0x8A, 0x91, 0x00, 0xC0, 0x4F, 0x79, 0xEB, 0x6D);
 DEFINE_GUID(IID_ITransactionExportFactory,		0xE1CF9B53, 0x8745, 0x11ce, 0xA9, 0xBA, 0x00, 0xAA, 0x00, 0x6C, 0x37, 0x06);
 DEFINE_GUID(IID_ITransactionImportWhereabouts,	0x0141fda4, 0x8fc0, 0x11ce, 0xbd, 0x18, 0x20, 0x4c, 0x4f, 0x4f, 0x50, 0x20);
 DEFINE_GUID(IID_ITransactionExport,				0x0141fda5, 0x8fc0, 0x11ce, 0xbd, 0x18, 0x20, 0x4c, 0x4f, 0x4f, 0x50, 0x20);
@@ -1439,8 +1662,10 @@ DEFINE_GUID(IID_ITipPullSink,					0x17cf72d2, 0xbac5, 0x11d1, 0xb1, 0xbf, 0x0, 0
 #else
 
 #define  IID_ITransactionResourceAsync               __uuidof(ITransactionResourceAsync)
+#define  IID_ITransactionLastResourceAsync           __uuidof(ITransactionLastResourceAsync)
 #define  IID_ITransactionResource                    __uuidof(ITransactionResource)
 #define  IID_ITransactionEnlistmentAsync             __uuidof(ITransactionEnlistmentAsync)
+#define  IID_ITransactionLastEnlistmentAsync             __uuidof(ITransactionLastEnlistmentAsync)
 #define  IID_ITransactionExportFactory               __uuidof(ITransactionExportFactory)
 #define  IID_ITransactionImportWhereabouts           __uuidof(ITransactionImportWhereabouts)
 #define  IID_ITransactionExport                      __uuidof(ITransactionExport)
@@ -1452,38 +1677,38 @@ DEFINE_GUID(IID_ITipPullSink,					0x17cf72d2, 0xbac5, 0x11d1, 0xb1, 0xbf, 0x0, 0
 #endif
 
 
-extern RPC_IF_HANDLE __MIDL_itf_txcoord_0102_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_txcoord_0102_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_txcoord_0108_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_txcoord_0108_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITransactionImportWhereabouts_GetWhereabouts_Proxy( 
-    ITransactionImportWhereabouts __RPC_FAR * This,
+    ITransactionImportWhereabouts * This,
     /* [in] */ ULONG cbWhereabouts,
-    /* [size_is][out] */ byte __RPC_FAR *rgbWhereabouts,
-    /* [out] */ ULONG __RPC_FAR *pcbUsed);
+    /* [size_is][out] */ byte *rgbWhereabouts,
+    /* [out] */ ULONG *pcbUsed);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionImportWhereabouts_GetWhereabouts_Stub( 
-    ITransactionImportWhereabouts __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pcbUsed,
+    ITransactionImportWhereabouts * This,
+    /* [out] */ ULONG *pcbUsed,
     /* [in] */ ULONG cbWhereabouts,
-    /* [length_is][size_is][out] */ byte __RPC_FAR *rgbWhereabouts);
+    /* [length_is][size_is][out] */ byte *rgbWhereabouts);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ITransactionExport_GetTransactionCookie_Proxy( 
-    ITransactionExport __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *punkTransaction,
+    ITransactionExport * This,
+    /* [in] */ IUnknown *punkTransaction,
     /* [in] */ ULONG cbTransactionCookie,
-    /* [size_is][out] */ byte __RPC_FAR *rgbTransactionCookie,
-    /* [out] */ ULONG __RPC_FAR *pcbUsed);
+    /* [size_is][out] */ byte *rgbTransactionCookie,
+    /* [out] */ ULONG *pcbUsed);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ITransactionExport_GetTransactionCookie_Stub( 
-    ITransactionExport __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *punkTransaction,
-    /* [out] */ ULONG __RPC_FAR *pcbUsed,
+    ITransactionExport * This,
+    /* [in] */ IUnknown *punkTransaction,
+    /* [out] */ ULONG *pcbUsed,
     /* [in] */ ULONG cbTransactionCookie,
-    /* [length_is][size_is][out] */ byte __RPC_FAR *rgbTransactionCookie);
+    /* [length_is][size_is][out] */ byte *rgbTransactionCookie);
 
 
 
@@ -1494,6 +1719,7 @@ extern RPC_IF_HANDLE __MIDL_itf_txcoord_0102_v0_0_s_ifspec;
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

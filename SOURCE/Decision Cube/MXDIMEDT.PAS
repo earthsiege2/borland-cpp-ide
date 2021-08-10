@@ -6,14 +6,14 @@
 {                                                       }
 {*******************************************************}
 
-unit mxdimedt;
+unit MXDIMEDT;
 
 interface
 
 uses
  Windows, Messages, SysUtils, Classes, Controls, StdCtrls, Graphics, DB,
- Grids, Forms, ExtCtrls, mxConsts, mxgrid, mxdb, mxstore, mxdconst,
- DsgnIntf, DsgnWnds;
+ Grids, Forms, ExtCtrls, Mxconsts, MXGRID, MXDB, Mxstore, MXDCONST,
+ DesignIntf, DesignEditors, DesignWindows;
 
 type
   TDimEditor = class(TDesignWindow)
@@ -22,7 +22,7 @@ type
   private
     myDims: TCollection;
     myForm: TCustomForm;
-    myDesigner: IFormDesigner;
+    myDesigner: IDesigner;
     myObject: TComponent;
     procedure UpdateSelection;
     procedure UpdateList;
@@ -30,24 +30,24 @@ type
     function UniqueName(Component: TComponent): string; override;
     procedure Activated; override;
   public
-    procedure ComponentDeleted(Component: IPersistent); override;
-    procedure FormClosed(AForm: TCustomForm); override;
-    procedure FormModified; override;
+    procedure ItemDeleted(const ADesigner: IDesigner; AItem: TPersistent); override;
+    procedure DesignerClosed(const ADesigner: IDesigner; AGoingDormant: Boolean); override;
+    procedure ItemsModified(const ADesigner: IDesigner); override;
   end;
 
 procedure ShowDisplayDimEditor(const Designer: IDesigner; anObject: TComponent);
 
 implementation
 
-{$R *.DFM}
+{$R *.dfm}
 
 procedure ShowDisplayDimEditor(const Designer: IDesigner; anObject: TComponent);
 var
   aForm: TDimEditor;
 begin
   aForm := TDimEditor.Create(application);
-  aForm.myDesigner := Designer as IFormDesigner;
-  aForm.myForm := Designer.Form;
+  aForm.myDesigner := Designer as IDesigner;
+  aForm.myForm := Designer.Root as TCustomForm;
   aForm.myObject := anObject;
   aForm.Caption := sGridDimOptions;
   if (anObject is TDecisionGrid) then
@@ -67,12 +67,8 @@ begin
 end;
 
 procedure TDimEditor.Activated;
-var
-  Msg: TMessage;
 begin
-  Msg.Msg := WM_ACTIVATE;
-  Msg.WParam := 1;
-  myDesigner.IsDesignMsg(myForm, Msg);
+  myDesigner.Activate;
   UpdateSelection;
 end;
 
@@ -85,27 +81,22 @@ procedure TDimEditor.UpdateSelection;
 var
   i: Integer;
   bSelected: Boolean;
-  ComponentList: TDesignerSelectionList;
+  List: IDesignerSelections;
 begin
   bSelected := False;
   if not assigned(myDims) then Exit;
-  ComponentList := TDesignerSelectionList.Create;
-  try
-    with DimListBox1 do
-      for I := 0 to Items.Count - 1 do
-        if Selected[I] then
-        begin
-          bSelected := True;
-          ComponentList.Add(myDims.Items[i]);
-        end;
-  except
-    ComponentList.Free;
-    raise;
-  end;
-  if not bSelected then
-    ComponentList.Free
-  else
-    myDesigner.SetSelections(ComponentList);
+
+  List := CreateSelectionList;
+  with DimListBox1 do
+    for I := 0 to Items.Count - 1 do
+      if Selected[I] then
+      begin
+        bSelected := True;
+        List.Add(myDims.Items[i]);
+      end;
+
+  if bSelected then
+    myDesigner.SetSelections(List);
 end;
 
 procedure TDimEditor.UpdateList;
@@ -124,17 +115,18 @@ begin
       DimListBox1.Items.Add('# ' + inttostr(i + 1));
   end;
 end;
-procedure TDimEditor.ComponentDeleted(Component: IPersistent);
+
+procedure TDimEditor.ItemDeleted(const ADesigner: IDesigner; AItem: TPersistent);
 begin
-  if ExtractPersistent(Component) = myObject then Close;
+  if AItem = myObject then Close;
 end;
 
-procedure TDimEditor.FormClosed(AForm: TCustomForm);
+procedure TDimEditor.DesignerClosed(const ADesigner: IDesigner; AGoingDormant: Boolean);
 begin
-  if (myForm = AForm) then Close;
+  if (myForm = ADesigner.Root) then Close;
 end;
 
-procedure TDimEditor.FormModified;
+procedure TDimEditor.ItemsModified(const ADesigner: IDesigner);
 begin
   UpdateList;
   UpdateSelection;

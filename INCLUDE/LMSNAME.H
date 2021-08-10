@@ -18,7 +18,6 @@ Environment:
 --*/
 
 #ifndef _LMSNAME_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMSNAME_
 
 #if _MSC_VER > 1000
@@ -127,5 +126,4 @@ Environment:
 #define SERVICE_ISMSERV           TEXT("IsmServ")
 #define SERVICE_LM20_ISMSERV      SERVICE_ISMSERV
 
-#pragma option pop /*P_O_Pop*/
 #endif

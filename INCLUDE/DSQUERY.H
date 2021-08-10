@@ -1,5 +1,4 @@
 #ifndef __dsquery_h
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __dsquery_h
 
 //
@@ -42,6 +41,7 @@ DEFINE_GUID(CLSID_DsFindFrsMembers, 0x94ce4b18, 0xb3d3, 0x11d1, 0xb9, 0xb4, 0x0,
 #define DSQPF_ENABLEADMINFEATURES    0x00000008 // = 1 => show admin verbs, property pages etc
 #define DSQPF_ENABLEADVANCEDFEATURES 0x00000010 // = 1 => set the advanced flag for the property pages
 #define DSQPF_HASCREDENTIALS         0x00000020 // = 1 => pServer, pUserName & pPassword are valid
+#define DSQPF_NOCHOOSECOLUMNS        0x00000040 // = 1 => remove choose columns from view
 
 typedef struct
 {
@@ -129,5 +129,4 @@ typedef struct
 
 
 #endif  // GUID_DEFS_ONLY
-#pragma option pop /*P_O_Pop*/
 #endif

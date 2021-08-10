@@ -22,7 +22,6 @@ Notes:
 --*/
 
 #ifndef __LMJOIN_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __LMJOIN_H__
 
 #if _MSC_VER > 1000
@@ -73,6 +72,11 @@ typedef enum _NETSETUP_JOIN_STATUS {
 #define NETSETUP_DOMAIN_JOIN_IF_JOINED  0x00000020  // Allow the client to join a new domain
                                                 // even if it is already joined to a domain
 #define NETSETUP_JOIN_UNSECURE  0x00000040      // Performs an unsecure join
+#define NETSETUP_MACHINE_PWD_PASSED 0x00000080  // Indicates that the machine (not user) password
+                                                //  is passed. Valid only for unsecure joins
+#define NETSETUP_DEFER_SPN_SET  0x00000100      // Specifies that writting SPN and DnsHostName
+                                                //  attributes on the computer object should be
+                                                //  defered until rename that will follow join
 
 #define NETSETUP_INSTALL_INVOCATION 0x00040000  // The APIs were invoked during install
 
@@ -153,9 +157,67 @@ NetGetJoinableOUs(
     OUT LPWSTR    **OUs
     );
 
+//
+// Computer rename preparation APIs
+//
+
+#define NET_IGNORE_UNSUPPORTED_FLAGS  0x01
+
+NET_API_STATUS
+NET_API_FUNCTION
+NetAddAlternateComputerName(
+    IN  LPCWSTR Server OPTIONAL,
+    IN  LPCWSTR AlternateName,
+    IN  LPCWSTR DomainAccount OPTIONAL,
+    IN  LPCWSTR DomainAccountPassword OPTIONAL,
+    IN  ULONG Reserved
+    );
+
+NET_API_STATUS
+NET_API_FUNCTION
+NetRemoveAlternateComputerName(
+    IN  LPCWSTR Server OPTIONAL,
+    IN  LPCWSTR AlternateName,
+    IN  LPCWSTR DomainAccount OPTIONAL,
+    IN  LPCWSTR DomainAccountPassword OPTIONAL,
+    IN  ULONG Reserved
+    );
+
+NET_API_STATUS
+NET_API_FUNCTION
+NetSetPrimaryComputerName(
+    IN  LPCWSTR Server OPTIONAL,
+    IN  LPCWSTR PrimaryName,
+    IN  LPCWSTR DomainAccount OPTIONAL,
+    IN  LPCWSTR DomainAccountPassword OPTIONAL,
+    IN  ULONG Reserved
+    );
+
+//
+// The following enumeration must be kept
+// in sync with COMPUTER_NAME_TYPE defined
+// in winbase.h
+//
+
+typedef enum _NET_COMPUTER_NAME_TYPE {
+    NetPrimaryComputerName,
+    NetAlternateComputerNames,
+    NetAllComputerNames,
+    NetComputerNameTypeMax
+} NET_COMPUTER_NAME_TYPE, *PNET_COMPUTER_NAME_TYPE;
+
+NET_API_STATUS
+NET_API_FUNCTION
+NetEnumerateComputerNames(
+    IN  LPCWSTR Server OPTIONAL,
+    IN  NET_COMPUTER_NAME_TYPE NameType,
+    IN  ULONG Reserved,
+    OUT PDWORD EntryCount,
+    OUT LPWSTR **ComputerNames
+    );
+
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // __LMJOIN_H__

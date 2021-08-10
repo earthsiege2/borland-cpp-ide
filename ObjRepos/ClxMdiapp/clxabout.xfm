@@ -1,0 +1,78 @@
+object AboutBox: TAboutBox
+  HelpType = htKeyword
+  Left = 495
+  Top = 427
+  Width = 298
+  Height = 218
+  ActiveControl = OKButton
+  Caption = 'About'
+  Color = clBackground
+  Position = poScreenCenter
+  PixelsPerInch = 75
+  TextHeight = 15
+  TextWidth = 7
+  object Panel1: TPanel
+    HelpType = htKeyword
+    Left = 8
+    Top = 8
+    Width = 281
+    Height = 161
+    BevelOuter = bvLowered
+    TabOrder = 0
+    object ProgramIcon: TImage
+      HelpType = htKeyword
+      Left = 8
+      Top = 8
+      Width = 65
+      Height = 57
+    end
+    object ProductName: TLabel
+      HelpType = htKeyword
+      Left = 88
+      Top = 16
+      Width = 79
+      Height = 15
+      Caption = 'Product Name'
+      Layout = tlCenter
+    end
+    object Version: TLabel
+      HelpType = htKeyword
+      Left = 88
+      Top = 40
+      Width = 43
+      Height = 15
+      Caption = 'Version'
+      Layout = tlCenter
+    end
+    object Copyright: TLabel
+      HelpType = htKeyword
+      Left = 8
+      Top = 80
+      Width = 54
+      Height = 15
+      Caption = 'Copyright'
+      Layout = tlCenter
+    end
+    object Comments: TLabel
+      HelpType = htKeyword
+      Left = 8
+      Top = 104
+      Width = 57
+      Height = 15
+      Caption = 'Comments'
+      Layout = tlCenter
+      WordWrap = True
+    end
+  end
+  object OKButton: TButton
+    HelpType = htKeyword
+    Left = 120
+    Top = 178
+    Width = 65
+    Height = 33
+    Caption = 'OK'
+    Default = True
+    ModalResult = 1
+    TabOrder = 1
+  end
+end

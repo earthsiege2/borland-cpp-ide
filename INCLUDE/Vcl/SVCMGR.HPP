@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'SvcMgr.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'SvcMgr.pas' rev: 6.00
 
 #ifndef SvcMgrHPP
 #define SvcMgrHPP
@@ -10,7 +10,6 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <Forms.hpp>	// Pascal unit
 #include <WinSvc.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
@@ -36,7 +35,7 @@ private:
 public:
 	__fastcall TEventLogger(AnsiString Name);
 	__fastcall virtual ~TEventLogger(void);
-	void __fastcall LogMessage(AnsiString Message, unsigned EventType, Word Category, unsigned ID);
+	void __fastcall LogMessage(AnsiString Message, unsigned EventType = (unsigned)(0x1), Word Category = (Word)(0x0), unsigned ID = (unsigned)(0x0));
 };
 
 
@@ -57,8 +56,7 @@ __published:
 	__property bool IsGroup = {read=FIsGroup, write=FIsGroup, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TCollectionItem.Create */ inline __fastcall virtual TDependency(Classes::TCollection* Collection
-		) : Classes::TCollectionItem(Collection) { }
+	/* TCollectionItem.Create */ inline __fastcall virtual TDependency(Classes::TCollection* Collection) : Classes::TCollectionItem(Collection) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCollectionItem.Destroy */ inline __fastcall virtual ~TDependency(void) { }
@@ -71,6 +69,9 @@ class DELPHICLASS TDependencies;
 class PASCALIMPLEMENTATION TDependencies : public Classes::TCollection 
 {
 	typedef Classes::TCollection inherited;
+	
+public:
+	TDependency* operator[](int Index) { return Items[Index]; }
 	
 private:
 	Classes::TPersistent* FOwner;
@@ -106,8 +107,7 @@ enum TStartType { stBoot, stSystem, stAuto, stManual, stDisabled };
 #pragma option pop
 
 #pragma option push -b-
-enum TCurrentStatus { csStopped, csStartPending, csStopPending, csRunning, csContinuePending, csPausePending, 
-	csPaused };
+enum TCurrentStatus { csStopped, csStartPending, csStopPending, csRunning, csContinuePending, csPausePending, csPaused };
 #pragma option pop
 
 typedef void __fastcall (__closure *TServiceEvent)(TService* Sender);
@@ -122,9 +122,9 @@ typedef void __fastcall (__closure *TStopEvent)(TService* Sender, bool &Stopped)
 
 typedef void __stdcall (*TServiceController)(unsigned CtrlCode);
 
-class PASCALIMPLEMENTATION TService : public Forms::TDataModule 
+class PASCALIMPLEMENTATION TService : public Classes::TDataModule 
 {
-	typedef Forms::TDataModule inherited;
+	typedef Classes::TDataModule inherited;
 	
 private:
 	bool FAllowStop;
@@ -193,7 +193,7 @@ public:
 	__fastcall virtual ~TService(void);
 	virtual TServiceController __fastcall GetServiceController(void) = 0 ;
 	void __fastcall ReportStatus(void);
-	void __fastcall LogMessage(AnsiString Message, unsigned EventType, int Category, int ID);
+	void __fastcall LogMessage(AnsiString Message, unsigned EventType = (unsigned)(0x1), int Category = 0x0, int ID = 0x0);
 	__property unsigned ErrCode = {read=FErrCode, write=FErrCode, nodefault};
 	__property int ParamCount = {read=GetParamCount, nodefault};
 	__property AnsiString Param[int Index] = {read=GetParam};
@@ -205,8 +205,7 @@ public:
 __published:
 	__property bool AllowStop = {read=FAllowStop, write=FAllowStop, default=1};
 	__property bool AllowPause = {read=FAllowPause, write=FAllowPause, default=1};
-	__property TDependencies* Dependencies = {read=FDependencies, write=SetDependencies, stored=AreDependenciesStored
-		};
+	__property TDependencies* Dependencies = {read=FDependencies, write=SetDependencies, stored=AreDependenciesStored};
 	__property AnsiString DisplayName = {read=GetDisplayName, write=FDisplayName};
 	__property TErrorSeverity ErrorSeverity = {read=FErrorSeverity, write=FErrorSeverity, default=1};
 	__property bool Interactive = {read=FInteractive, write=SetInteractive, default=0};
@@ -288,9 +287,7 @@ static const Word CM_SERVICE_CONTROL_CODE = 0x401;
 extern PACKAGE TServiceApplication* Application;
 
 }	/* namespace Svcmgr */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Svcmgr;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

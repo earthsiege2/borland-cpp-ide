@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ActiveX.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ActiveX.pas' rev: 6.00
 
 #ifndef ActiveXHPP
 #define ActiveXHPP
@@ -25,6 +25,7 @@
 #include <olectl.h>
 #include <docobj.H>
 #endif
+#include <oleauto.h>
 #include <oleauto.h>
 #if defined(NO_WIN32_LEAN_AND_MEAN)
 #include <propidl.h>
@@ -168,9 +169,9 @@ typedef unsigned *PPropID;
 
 typedef unsigned TPropID;
 
-typedef Windows::TRect *PBorderWidths;
+typedef Types::TRect *PBorderWidths;
 
-typedef Windows::TRect  TBorderWidths;
+typedef Types::TRect  TBorderWidths;
 
 typedef HRESULT *PHResult;
 
@@ -178,9 +179,9 @@ typedef HRESULT TResultList[65536];
 
 typedef HRESULT *PResultList;
 
-typedef _di_IUnknown TUnknownList[65536];
+typedef System::_di_IInterface TUnknownList[65536];
 
-typedef _di_IUnknown *PUnknownList;
+typedef System::_di_IInterface *PUnknownList;
 
 typedef wchar_t TOleChar;
 
@@ -240,7 +241,9 @@ typedef double *POleDate;
 
 typedef Word *POleBool;
 
-typedef int TOleEnum;
+typedef int TOldOleEnum;
+
+typedef unsigned TOleEnum;
 
 typedef tagPOINTF *PPointF;
 
@@ -642,9 +645,7 @@ typedef tagQACONTROL  TQaControl;
 extern PACKAGE GUID CLSID_StdComponentCategoryMgr;
 
 }	/* namespace Activex */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Activex;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

@@ -76,6 +76,8 @@ type
     UserStatus: TStatusBar;
     ExportedObjectOnly1: TMenuItem;
     RegisteredAction: TAction;
+    XMLPacket1: TMenuItem;
+    AllowXML: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure miCloseClick(Sender: TObject);
@@ -100,6 +102,7 @@ type
     procedure IntegerExit(Sender: TObject);
     procedure UpdateTimerTimer(Sender: TObject);
     procedure RegisteredActionExecute(Sender: TObject);
+    procedure AllowXMLExecute(Sender: TObject);
   private
     FTaskMessage: DWord;
     FIconData: TNotifyIconData;
@@ -147,7 +150,7 @@ implementation
 
 uses ScktCnst, SConnect, ActiveX, MidConst;
 
-{$R *.DFM}
+{$R *.dfm}
 
 { TSocketDispatcherThread }
 
@@ -161,6 +164,7 @@ type
     FLastActivity: TDateTime;
     FTimeout: TDateTime;
     FRegisteredOnly: Boolean;
+    FAllowXML: Boolean;
   protected
     function CreateServerTransport: ITransport; virtual;
     procedure AddClient;
@@ -173,19 +177,20 @@ type
     function Send(const Data: IDataBlock; WaitForResult: Boolean): IDataBlock; stdcall;
   public
     constructor Create(CreateSuspended: Boolean; ASocket: TServerClientWinSocket;
-      const InterceptGUID: string; Timeout: Integer; RegisteredOnly: Boolean);
+      const InterceptGUID: string; Timeout: Integer; RegisteredOnly, AllowXML: Boolean);
     procedure ClientExecute; override;
     property LastActivity: TDateTime read FLastActivity;
   end;
 
 constructor TSocketDispatcherThread.Create(CreateSuspended: Boolean;
   ASocket: TServerClientWinSocket; const InterceptGUID: string; Timeout: Integer;
-  RegisteredOnly: Boolean);
+  RegisteredOnly, AllowXML: Boolean);
 begin
   FInterceptGUID := InterceptGUID;
   FTimeout := EncodeTime(Timeout div 60, Timeout mod 60, 0, 0);
   FLastActivity := Now;
   FRegisteredOnly := RegisteredOnly;
+  FAllowXML := AllowXML;
   inherited Create(CreateSuspended, ASocket);
 end;
 
@@ -261,7 +266,7 @@ begin
       PeekMessage(msg, 0, WM_USER, WM_USER, PM_NOREMOVE);
       GetInterface(ISendDataBlock, Obj);
       if FRegisteredOnly then
-        FInterpreter := TDataBlockInterpreter.Create(Obj, SSockets) else
+        FInterpreter := TDataBlockInterpreter.Create(Obj, SSockets) else 
         FInterpreter := TDataBlockInterpreter.Create(Obj, '');
       try
         Obj := nil;
@@ -335,7 +340,7 @@ procedure TSocketDispatcher.GetThread(Sender: TObject;
   var SocketThread: TServerClientThread);
 begin
   SocketThread := TSocketDispatcherThread.Create(False, ClientSocket,
-    InterceptGUID, Timeout, SocketForm.RegisteredAction.Checked);
+    InterceptGUID, Timeout, SocketForm.RegisteredAction.Checked, SocketForm.AllowXML.Checked);
 end;
 
 procedure TSocketDispatcher.ReadSettings(PortNo: Integer; Reg: TRegINIFile);
@@ -881,6 +886,11 @@ procedure TSocketForm.RegisteredActionExecute(Sender: TObject);
 begin
   RegisteredAction.Checked := not RegisteredAction.Checked;
   ShowMessage(SNotUntilRestart);
+end;
+
+procedure TSocketForm.AllowXMLExecute(Sender: TObject);
+begin
+  AllowXML.Checked := not AllowXML.Checked;
 end;
 
 end.

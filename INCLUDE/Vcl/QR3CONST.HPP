@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'qr3const.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QR3Const.pas' rev: 6.00
 
-#ifndef qr3constHPP
-#define qr3constHPP
+#ifndef QR3ConstHPP
+#define QR3ConstHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -101,25 +101,20 @@ extern PACKAGE System::ResourceString _SqrTitleBandName;
 #define Qr3const_SqrTitleBandName System::LoadResourceString(&Qr3const::_SqrTitleBandName)
 extern PACKAGE System::ResourceString _SqrPageHeaderBandName;
 #define Qr3const_SqrPageHeaderBandName System::LoadResourceString(&Qr3const::_SqrPageHeaderBandName)
-	
 extern PACKAGE System::ResourceString _SqrDetailBandName;
 #define Qr3const_SqrDetailBandName System::LoadResourceString(&Qr3const::_SqrDetailBandName)
 extern PACKAGE System::ResourceString _SqrPageFooterBandName;
 #define Qr3const_SqrPageFooterBandName System::LoadResourceString(&Qr3const::_SqrPageFooterBandName)
-	
 extern PACKAGE System::ResourceString _SqrSummaryBandName;
 #define Qr3const_SqrSummaryBandName System::LoadResourceString(&Qr3const::_SqrSummaryBandName)
 extern PACKAGE System::ResourceString _SqrGroupHeaderBandName;
 #define Qr3const_SqrGroupHeaderBandName System::LoadResourceString(&Qr3const::_SqrGroupHeaderBandName)
-	
 extern PACKAGE System::ResourceString _SqrGroupFooterBandName;
 #define Qr3const_SqrGroupFooterBandName System::LoadResourceString(&Qr3const::_SqrGroupFooterBandName)
-	
 extern PACKAGE System::ResourceString _SqrSubDetailBandName;
 #define Qr3const_SqrSubDetailBandName System::LoadResourceString(&Qr3const::_SqrSubDetailBandName)
 extern PACKAGE System::ResourceString _SqrColumnHeaderBandName;
 #define Qr3const_SqrColumnHeaderBandName System::LoadResourceString(&Qr3const::_SqrColumnHeaderBandName)
-	
 extern PACKAGE System::ResourceString _SqrOverlayBandName;
 #define Qr3const_SqrOverlayBandName System::LoadResourceString(&Qr3const::_SqrOverlayBandName)
 extern PACKAGE System::ResourceString _SqrChildBandName;
@@ -250,18 +245,14 @@ extern PACKAGE System::ResourceString _SqrQuSoft;
 #define Qr3const_SqrQuSoft System::LoadResourceString(&Qr3const::_SqrQuSoft)
 extern PACKAGE System::ResourceString _SqrAbstractFilterDescription;
 #define Qr3const_SqrAbstractFilterDescription System::LoadResourceString(&Qr3const::_SqrAbstractFilterDescription)
-	
 extern PACKAGE System::ResourceString _SqrAbstractFilterName;
 #define Qr3const_SqrAbstractFilterName System::LoadResourceString(&Qr3const::_SqrAbstractFilterName)
-	
 extern PACKAGE System::ResourceString _SqrAsciiFilterDescription;
 #define Qr3const_SqrAsciiFilterDescription System::LoadResourceString(&Qr3const::_SqrAsciiFilterDescription)
-	
 extern PACKAGE System::ResourceString _SqrAsciiFilterName;
 #define Qr3const_SqrAsciiFilterName System::LoadResourceString(&Qr3const::_SqrAsciiFilterName)
 extern PACKAGE System::ResourceString _SqrAsciiFilterExtension;
 #define Qr3const_SqrAsciiFilterExtension System::LoadResourceString(&Qr3const::_SqrAsciiFilterExtension)
-	
 extern PACKAGE System::ResourceString _SqrRectangle;
 #define Qr3const_SqrRectangle System::LoadResourceString(&Qr3const::_SqrRectangle)
 extern PACKAGE System::ResourceString _SqrCircle;
@@ -414,20 +405,16 @@ extern PACKAGE System::ResourceString _SqrExpDivideByZero;
 #define Qr3const_SqrExpDivideByZero System::LoadResourceString(&Qr3const::_SqrExpDivideByZero)
 extern PACKAGE System::ResourceString _SqrExpOperatorNotCompatible;
 #define Qr3const_SqrExpOperatorNotCompatible System::LoadResourceString(&Qr3const::_SqrExpOperatorNotCompatible)
-	
 extern PACKAGE System::ResourceString _SqrExpUnknownFieldType;
 #define Qr3const_SqrExpUnknownFieldType System::LoadResourceString(&Qr3const::_SqrExpUnknownFieldType)
-	
 extern PACKAGE System::ResourceString _SqrExpIllegalCharInNumeric;
 #define Qr3const_SqrExpIllegalCharInNumeric System::LoadResourceString(&Qr3const::_SqrExpIllegalCharInNumeric)
-	
 extern PACKAGE System::ResourceString _SqrExpMissing;
 #define Qr3const_SqrExpMissing System::LoadResourceString(&Qr3const::_SqrExpMissing)
 extern PACKAGE System::ResourceString _SqrExpEndString;
 #define Qr3const_SqrExpEndString System::LoadResourceString(&Qr3const::_SqrExpEndString)
 extern PACKAGE System::ResourceString _SqrExpUnknownFunction;
 #define Qr3const_SqrExpUnknownFunction System::LoadResourceString(&Qr3const::_SqrExpUnknownFunction)
-	
 extern PACKAGE System::ResourceString _SqrExpError;
 #define Qr3const_SqrExpError System::LoadResourceString(&Qr3const::_SqrExpError)
 extern PACKAGE System::ResourceString _SqrExpRecursive;
@@ -462,12 +449,10 @@ extern PACKAGE System::ResourceString _SqrCommaSeparated;
 #define Qr3const_SqrCommaSeparated System::LoadResourceString(&Qr3const::_SqrCommaSeparated)
 extern PACKAGE System::ResourceString _SqrCommaSeparatedTextFilter;
 #define Qr3const_SqrCommaSeparatedTextFilter System::LoadResourceString(&Qr3const::_SqrCommaSeparatedTextFilter)
-	
 extern PACKAGE System::ResourceString _SqrHtmlDocument;
 #define Qr3const_SqrHtmlDocument System::LoadResourceString(&Qr3const::_SqrHtmlDocument)
 extern PACKAGE System::ResourceString _SqrHtmlDocumentForWeb;
 #define Qr3const_SqrHtmlDocumentForWeb System::LoadResourceString(&Qr3const::_SqrHtmlDocumentForWeb)
-	
 extern PACKAGE System::ResourceString _SqrExcel;
 #define Qr3const_SqrExcel System::LoadResourceString(&Qr3const::_SqrExcel)
 extern PACKAGE System::ResourceString _SqrExcelFile;
@@ -478,23 +463,18 @@ extern PACKAGE System::ResourceString _SqrPlainWizardName;
 #define Qr3const_SqrPlainWizardName System::LoadResourceString(&Qr3const::_SqrPlainWizardName)
 extern PACKAGE System::ResourceString _SqrPlainWizardDescription;
 #define Qr3const_SqrPlainWizardDescription System::LoadResourceString(&Qr3const::_SqrPlainWizardDescription)
-	
 extern PACKAGE System::ResourceString _SqrListWizardName;
 #define Qr3const_SqrListWizardName System::LoadResourceString(&Qr3const::_SqrListWizardName)
 extern PACKAGE System::ResourceString _SqrListWizardDescription;
 #define Qr3const_SqrListWizardDescription System::LoadResourceString(&Qr3const::_SqrListWizardDescription)
-	
 extern PACKAGE System::ResourceString _SqrMasterDetailWizardName;
 #define Qr3const_SqrMasterDetailWizardName System::LoadResourceString(&Qr3const::_SqrMasterDetailWizardName)
-	
 extern PACKAGE System::ResourceString _SqrMasterDetailWizardDescription;
 #define Qr3const_SqrMasterDetailWizardDescription System::LoadResourceString(&Qr3const::_SqrMasterDetailWizardDescription)
-	
 extern PACKAGE System::ResourceString _SqrLabelWizardName;
 #define Qr3const_SqrLabelWizardName System::LoadResourceString(&Qr3const::_SqrLabelWizardName)
 extern PACKAGE System::ResourceString _SqrLabelWizardDescription;
 #define Qr3const_SqrLabelWizardDescription System::LoadResourceString(&Qr3const::_SqrLabelWizardDescription)
-	
 extern PACKAGE System::ResourceString _SqrExpBldNumeric;
 #define Qr3const_SqrExpBldNumeric System::LoadResourceString(&Qr3const::_SqrExpBldNumeric)
 extern PACKAGE System::ResourceString _SqrExpBldLogical;
@@ -519,21 +499,28 @@ extern PACKAGE System::ResourceString _SqrValueTooBig;
 #define Qr3const_SqrValueTooBig System::LoadResourceString(&Qr3const::_SqrValueTooBig)
 extern PACKAGE System::ResourceString _SqrInvalidFormatnumeric;
 #define Qr3const_SqrInvalidFormatnumeric System::LoadResourceString(&Qr3const::_SqrInvalidFormatnumeric)
-	
 extern PACKAGE System::ResourceString _SqrSQRTInvalid;
 #define Qr3const_SqrSQRTInvalid System::LoadResourceString(&Qr3const::_SqrSQRTInvalid)
 extern PACKAGE System::ResourceString _SqrInvalidNot;
 #define Qr3const_SqrInvalidNot System::LoadResourceString(&Qr3const::_SqrInvalidNot)
 extern PACKAGE System::ResourceString _SqrDesignAReport;
 #define Qr3const_SqrDesignAReport System::LoadResourceString(&Qr3const::_SqrDesignAReport)
+extern PACKAGE System::ResourceString _SqrRTFExportFilter;
+#define Qr3const_SqrRTFExportFilter System::LoadResourceString(&Qr3const::_SqrRTFExportFilter)
+extern PACKAGE System::ResourceString _SqrRTFFile;
+#define Qr3const_SqrRTFFile System::LoadResourceString(&Qr3const::_SqrRTFFile)
+extern PACKAGE System::ResourceString _SqrWMFExportFilter;
+#define Qr3const_SqrWMFExportFilter System::LoadResourceString(&Qr3const::_SqrWMFExportFilter)
+extern PACKAGE System::ResourceString _SqrWMFFile;
+#define Qr3const_SqrWMFFile System::LoadResourceString(&Qr3const::_SqrWMFFile)
+extern PACKAGE System::ResourceString _SqrWritingXLS;
+#define Qr3const_SqrWritingXLS System::LoadResourceString(&Qr3const::_SqrWritingXLS)
 
 }	/* namespace Qr3const */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qr3const;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// qr3const
+#endif	// QR3Const

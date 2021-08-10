@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1991-1998  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -21,7 +21,6 @@ Notes:
 --*/
 
 #ifndef _WINNETWK_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINNETWK_
 
 
@@ -61,6 +60,10 @@ extern "C" {
 #define     WNNC_NET_DCE         0x00190000
 #define     WNNC_NET_AVID        0x001A0000
 #define     WNNC_NET_DOCUSPACE   0x001B0000
+#define     WNNC_NET_MANGOSOFT   0x001C0000
+#define     WNNC_NET_SERNET      0x001D0000
+#define     WNNC_NET_RIVERFRONT1 0X001E0000
+#define     WNNC_NET_RIVERFRONT2 0x001F0000
 #define     WNNC_NET_DECORB      0x00200000
 #define     WNNC_NET_PROTSTOR    0x00210000
 #define     WNNC_NET_FJ_REDIR    0x00220000
@@ -70,11 +73,19 @@ extern "C" {
 #define     WNNC_NET_CSC         0x00260000
 #define     WNNC_NET_3IN1        0x00270000
 #define     WNNC_NET_EXTENDNET   0x00290000
+#define     WNNC_NET_STAC        0x002A0000
+#define     WNNC_NET_FOXBAT      0x002B0000
+#define     WNNC_NET_YAHOO       0x002C0000
+#define     WNNC_NET_EXIFS       0x002D0000
+#define     WNNC_NET_DAV         0x002E0000
+#define     WNNC_NET_KNOWARE     0x002F0000
 #define     WNNC_NET_OBJECT_DIRE 0x00300000
 #define     WNNC_NET_MASFAX      0x00310000
 #define     WNNC_NET_HOB_NFS     0x00320000
 #define     WNNC_NET_SHIVA       0x00330000
 #define     WNNC_NET_IBMAL       0x00340000
+#define     WNNC_NET_LOCK        0x00350000
+#define     WNNC_NET_TERMSRV     0x00360000
 
 #define     WNNC_CRED_MANAGER   0xFFFF0000
 
@@ -174,6 +185,10 @@ typedef LPNETRESOURCEA LPNETRESOURCE;
 #define CONNECT_DEFERRED            0x00000400
 #define CONNECT_RESERVED            0xFF000000
 #endif /* WINVER >= 0x0400 */
+#if(WINVER >= 0x0500)
+#define CONNECT_COMMANDLINE         0x00000800
+#define CONNECT_CMD_SAVECRED        0x00001000
+#endif /* WINVER >= 0x0500 */
 
 DWORD APIENTRY
 WNetAddConnectionA(
@@ -293,10 +308,10 @@ DWORD APIENTRY
 WNetUseConnectionA(
     IN HWND            hwndOwner,
     IN LPNETRESOURCEA  lpNetResource,
-    IN LPCSTR        lpUserID,
     IN LPCSTR        lpPassword,
+    IN LPCSTR        lpUserID,
     IN DWORD           dwFlags,
-    OUT LPSTR         lpAccessName,
+    OUT LPSTR        lpAccessName,
     IN OUT LPDWORD     lpBufferSize,
     OUT LPDWORD        lpResult
     );
@@ -304,10 +319,10 @@ DWORD APIENTRY
 WNetUseConnectionW(
     IN HWND            hwndOwner,
     IN LPNETRESOURCEW  lpNetResource,
-    IN LPCWSTR        lpUserID,
     IN LPCWSTR        lpPassword,
+    IN LPCWSTR        lpUserID,
     IN DWORD           dwFlags,
-    OUT LPWSTR         lpAccessName,
+    OUT LPWSTR        lpAccessName,
     IN OUT LPDWORD     lpBufferSize,
     OUT LPDWORD        lpResult
     );
@@ -785,21 +800,24 @@ WNetGetLastErrorW(
 
 // Connection
 
-#define WN_NOT_CONNECTED                ERROR_NOT_CONNECTED
-#define WN_OPEN_FILES                   ERROR_OPEN_FILES
-#define WN_DEVICE_IN_USE                ERROR_DEVICE_IN_USE
-#define WN_BAD_NETNAME                  ERROR_BAD_NET_NAME
-#define WN_BAD_LOCALNAME                ERROR_BAD_DEVICE
-#define WN_ALREADY_CONNECTED            ERROR_ALREADY_ASSIGNED
-#define WN_DEVICE_ERROR                 ERROR_GEN_FAILURE
-#define WN_CONNECTION_CLOSED            ERROR_CONNECTION_UNAVAIL
-#define WN_NO_NET_OR_BAD_PATH           ERROR_NO_NET_OR_BAD_PATH
-#define WN_BAD_PROVIDER                 ERROR_BAD_PROVIDER
-#define WN_CANNOT_OPEN_PROFILE          ERROR_CANNOT_OPEN_PROFILE
-#define WN_BAD_PROFILE                  ERROR_BAD_PROFILE
-#define WN_BAD_DEV_TYPE                 ERROR_BAD_DEV_TYPE
-#define WN_DEVICE_ALREADY_REMEMBERED    ERROR_DEVICE_ALREADY_REMEMBERED
-#define WN_CONNECTED_OTHER_PASSWORD     ERROR_CONNECTED_OTHER_PASSWORD
+#define WN_NOT_CONNECTED                       ERROR_NOT_CONNECTED
+#define WN_OPEN_FILES                          ERROR_OPEN_FILES
+#define WN_DEVICE_IN_USE                       ERROR_DEVICE_IN_USE
+#define WN_BAD_NETNAME                         ERROR_BAD_NET_NAME
+#define WN_BAD_LOCALNAME                       ERROR_BAD_DEVICE
+#define WN_ALREADY_CONNECTED                   ERROR_ALREADY_ASSIGNED
+#define WN_DEVICE_ERROR                        ERROR_GEN_FAILURE
+#define WN_CONNECTION_CLOSED                   ERROR_CONNECTION_UNAVAIL
+#define WN_NO_NET_OR_BAD_PATH                  ERROR_NO_NET_OR_BAD_PATH
+#define WN_BAD_PROVIDER                        ERROR_BAD_PROVIDER
+#define WN_CANNOT_OPEN_PROFILE                 ERROR_CANNOT_OPEN_PROFILE
+#define WN_BAD_PROFILE                         ERROR_BAD_PROFILE
+#define WN_BAD_DEV_TYPE                        ERROR_BAD_DEV_TYPE
+#define WN_DEVICE_ALREADY_REMEMBERED           ERROR_DEVICE_ALREADY_REMEMBERED
+#define WN_CONNECTED_OTHER_PASSWORD            ERROR_CONNECTED_OTHER_PASSWORD
+#if(WINVER >= 0x0501)
+#define WN_CONNECTED_OTHER_PASSWORD_DEFAULT    ERROR_CONNECTED_OTHER_PASSWORD_DEFAULT
+#endif /* WINVER >= 0x0501 */
 
 // Enumeration
 
@@ -853,6 +871,5 @@ MultinetGetConnectionPerformanceW(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif  // _WINNETWK_
 

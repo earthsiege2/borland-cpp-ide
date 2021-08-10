@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
@@ -1043,4 +1042,3 @@ extern RPC_IF_HANDLE __MIDL_itf_rrascfg_0017_v0_0_s_ifspec;
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

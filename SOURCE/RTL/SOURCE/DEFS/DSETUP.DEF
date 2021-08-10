@@ -1,17 +1,17 @@
 LIBRARY DSETUP
 EXPORTS
 
-    DirectXDeviceDriverSetupA                = 'DSETUP.DLL'.*
-    DirectXDeviceDriverSetupW                = 'DSETUP.DLL'.*
-    DirectXLoadString                        = 'DSETUP.DLL'.*
-    DirectXRegisterApplicationA              = 'DSETUP.DLL'.*
-    DirectXRegisterApplicationW              = 'DSETUP.DLL'.*
-    DirectXSetupA                            = 'DSETUP.DLL'.*
-    DirectXSetupCallback                     = 'DSETUP.DLL'.*
-    _DirectXSetupGetFileVersion              = 'DSETUP.DLL'.DirectXSetupGetFileVersion
-    DirectXSetupGetVersion                   = 'DSETUP.DLL'.*
-    DirectXSetupIsJapan                      = 'DSETUP.DLL'.*
-    DirectXSetupIsJapanNec                   = 'DSETUP.DLL'.*
-    DirectXSetupSetCallback                  = 'DSETUP.DLL'.*
-    DirectXSetupW                            = 'DSETUP.DLL'.*
-    DirectXUnRegisterApplication             = 'DSETUP.DLL'.*
+    DirectXDeviceDriverSetupA                
+    DirectXDeviceDriverSetupW                
+    DirectXLoadString                        
+    DirectXRegisterApplicationA              
+    DirectXRegisterApplicationW              
+    DirectXSetupA                            
+    DirectXSetupCallback                     
+    _DirectXSetupGetFileVersion              = DirectXSetupGetFileVersion
+    DirectXSetupGetVersion                   
+    DirectXSetupIsJapan                      
+    DirectXSetupIsJapanNec                   
+    DirectXSetupSetCallback                  
+    DirectXSetupW                            
+    DirectXUnRegisterApplication             

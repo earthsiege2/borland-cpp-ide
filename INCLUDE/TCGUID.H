@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1996-1998 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -13,154 +13,90 @@ Abstract:
 
 --*/
 
-#ifndef __TCGUID_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
-#define __TCGUID_H
-
 #ifdef __cplusplus
 extern  "C" {
 #endif
 
-//---------------------------------------------------------------------------
 //
 //	Remaining Bandwidth guid
 //
-//---------------------------------------------------------------------------
-
 DEFINE_GUID( GUID_QOS_REMAINING_BANDWIDTH, 0xc4c51720L, 0x40ec, 0x11d1, 0x2c, 0x91, 0x00, 0xaa, 0x00, 0x57, 0x49, 0x15);
 
-//---------------------------------------------------------------------------
-//
-//	Default Shape Mode for Controlled Load guid
-//
-//---------------------------------------------------------------------------
-
-DEFINE_GUID( GUID_QOS_DEFAULT_SHAPEMODE_CONTROLLEDLOAD, 0xde7a83b0L, 0x40ec, 0x11d1, 0x2c, 0x91, 0x00, 0xaa, 0x00, 0x57, 0x49, 0x15);
-
-//---------------------------------------------------------------------------
-//
-//	Default Shape Mode for Guaranteed Service guid
-//
-//---------------------------------------------------------------------------
-
-DEFINE_GUID( GUID_QOS_DEFAULT_SHAPEMODE_GUARANTEED, 0xae85e4e2L, 0x611f, 0x11d1, 0x2c, 0x91, 0x00, 0xaa, 0x00, 0x57, 0x49, 0x15);
-
-//---------------------------------------------------------------------------
 //
 //	Best Effort Bandwidth guid
 //
-//---------------------------------------------------------------------------
-
 DEFINE_GUID( GUID_QOS_BESTEFFORT_BANDWIDTH, 0xed885290L, 0x40ec, 0x11d1, 0x2c, 0x91, 0x00, 0xaa, 0x00, 0x57, 0x49, 0x15);
 
-//---------------------------------------------------------------------------
 //
 //	Latency guid
 //
-//---------------------------------------------------------------------------
-
 DEFINE_GUID( GUID_QOS_LATENCY, 0xfc408ef0L, 0x40ec, 0x11d1, 0x2c, 0x91, 0x00, 0xaa, 0x00, 0x57, 0x49, 0x15);
 
-//---------------------------------------------------------------------------
-//
-//	Supported Service Types
-//
-//---------------------------------------------------------------------------
-
-DEFINE_GUID( GUID_QOS_SERVICETYPES_SUPPORTED, 0x38797240L, 0x4665, 0x11d1, 0x2c, 0x91, 0x00, 0xaa, 0x00, 0x57, 0x49, 0x15);
-
-//---------------------------------------------------------------------------
 //
 //	Flow Count guid
 //
-//---------------------------------------------------------------------------
-
 DEFINE_GUID( GUID_QOS_FLOW_COUNT, 0x1147f880L, 0x40ed, 0x11d1, 0x2c, 0x91, 0x00, 0xaa, 0x00, 0x57, 0x49, 0x15);
 
-//---------------------------------------------------------------------------
 //
 //	Non Best Effort Limit guid
 //
-//---------------------------------------------------------------------------
-
 DEFINE_GUID( GUID_QOS_NON_BESTEFFORT_LIMIT, 0x185c44e0L, 0x40ed, 0x11d1, 0x2c, 0x91, 0x00, 0xaa, 0x00, 0x57, 0x49, 0x15);
 
-//---------------------------------------------------------------------------
-//
-//	Supported Scheduling Profiles List guid
-//
-//---------------------------------------------------------------------------
-
-DEFINE_GUID( GUID_QOS_SCHEDULING_PROFILES_SUPPORTED, 0x1ff890f0L, 0x40ed, 0x11d1, 0x2c, 0x91, 0x00, 0xaa, 0x00, 0x57, 0x49, 0x15);
-
-//---------------------------------------------------------------------------
-//
-//	Current Scheduling Profile guid
-//
-//---------------------------------------------------------------------------
-
-DEFINE_GUID( GUID_QOS_CURRENT_SCHEDULING_PROFILE, 0x2966ed30L, 0x40ed, 0x11d1, 0x2c, 0x91, 0x00, 0xaa, 0x00, 0x57, 0x49, 0x15);
-
-//---------------------------------------------------------------------------
 //
 //	Maximum Outstanding Sends guid
 //
-//---------------------------------------------------------------------------
-
 DEFINE_GUID( GUID_QOS_MAX_OUTSTANDING_SENDS, 0x161ffa86L, 0x6120, 0x11d1, 0x2c, 0x91, 0x00, 0xaa, 0x00, 0x57, 0x49, 0x15);
 
-//---------------------------------------------------------------------------
-//
-//	Disable DRR guid
-//
-//---------------------------------------------------------------------------
-
-DEFINE_GUID( GUID_QOS_DISABLE_DRR, 0x1fa6dc7aL, 0x6120, 0x11d1, 0x2c, 0x91, 0x00, 0xaa, 0x00, 0x57, 0x49, 0x15);
-
-//---------------------------------------------------------------------------
 //
 // Packet scheduler statistics
 //
-//---------------------------------------------------------------------------
-
 DEFINE_GUID( GUID_QOS_STATISTICS_BUFFER, 0xbb2c0980L,0xe900,0x11d1,0xb0,0x7e,0x00,0x80,0xc7,0x13,0x82,0xbf);
 
-//---------------------------------------------------------------------------
 //
-// Packet Scheduler Logging ( Log Threshold reached )
+// Packet Scheduler Flow Mode
 //
-//---------------------------------------------------------------------------
+DEFINE_GUID( GUID_QOS_FLOW_MODE, 0x5c82290aL,0x515a,0x11d2,0x8e,0x58,0x00,0xc0, 0x4f, 0xc9, 0xbf, 0xcb);
 
-DEFINE_GUID( GUID_QOS_LOG_THRESHOLD_REACHED, 0x357b74d2L,0x6134,0x11d1,0xab,0x5b,0x00,0xa0,0xc9,0x24,0x88,0x37);
-
-//---------------------------------------------------------------------------
 //
-// Packet Scheduler Logging ( Log Buffer Size )
+// ISSLOW Flow
 //
-//---------------------------------------------------------------------------
+DEFINE_GUID( GUID_QOS_ISSLOW_FLOW,0xabf273a4,0xee07,0x11d2,0xbe,0x1b,0x00,0xa0, 0xc9, 0x9e, 0xe6, 0x3b);
 
-DEFINE_GUID( GUID_QOS_LOG_BUFFER_SIZE, 0x357b74d3L,0x6134,0x11d1,0xab,0x5b,0x00,0xa0,0xc9,0x24,0x88,0x37);
-
-//---------------------------------------------------------------------------
 //
-// Packet Scheduler Logging ( Log Threshold )
+// Timer Resolution
 //
-//---------------------------------------------------------------------------
+DEFINE_GUID( GUID_QOS_TIMER_RESOLUTION, 0xba10cc88, 0xf13e, 0x11d2, 0xbe, 0x1b, 0x00, 0xa0, 0xc9, 0x9e, 0xe6, 0x3b);
 
-DEFINE_GUID( GUID_QOS_LOG_THRESHOLD, 0x357b74d0L,0x6134,0x11d1,0xab,0x5b,0x00,0xa0,0xc9,0x24,0x88,0x37);
-
-//---------------------------------------------------------------------------
 //
-// Packet Scheduler Logging ( Log Data )
+// The conforming IP Precedence value for this flow.
 //
-//---------------------------------------------------------------------------
+DEFINE_GUID( GUID_QOS_FLOW_IP_CONFORMING, 0x07f99a8b, 0xfcd2, 0x11d2, 0xbe, 0x1e,  0x00, 0xa0, 0xc9, 0x9e, 0xe6, 0x3b);
 
-DEFINE_GUID( GUID_QOS_LOG_DATA, 0x357b74d1L,0x6134,0x11d1,0xab,0x5b,0x00,0xa0,0xc9,0x24,0x88,0x37);
+//
+// The non-conforming IP Precedence value for this flow.
+//
+DEFINE_GUID( GUID_QOS_FLOW_IP_NONCONFORMING, 0x087a5987, 0xfcd2, 0x11d2, 0xbe, 0x1e,  0x00, 0xa0, 0xc9, 0x9e, 0xe6, 0x3b);
+
+//
+// The conforming 802.1p value for this flow.
+//
+DEFINE_GUID( GUID_QOS_FLOW_8021P_CONFORMING, 0x08c1e013, 0xfcd2, 0x11d2, 0xbe, 0x1e,  0x00, 0xa0, 0xc9, 0x9e, 0xe6, 0x3b);
+
+//
+// The non-conforming 802.1p value for this flow.
+//
+DEFINE_GUID( GUID_QOS_FLOW_8021P_NONCONFORMING, 0x09023f91, 0xfcd2, 0x11d2, 0xbe, 0x1e,  0x00, 0xa0, 0xc9, 0x9e, 0xe6, 0x3b);
+
+//
+// This will enable the Averaging statistics in Packet scheduler. (eg: Avg. number of packets in shaper)
+//
+DEFINE_GUID( GUID_QOS_ENABLE_AVG_STATS, 0xbafb6d11, 0x27c4, 0x4801, 0xa4, 0x6f, 0xef, 0x80, 0x80, 0xc1, 0x88, 0xc8);
+
+//
+// This will enable Window size adjustment for TCP connections on a slow link, running ICS
+//
+DEFINE_GUID( GUID_QOS_ENABLE_WINDOW_ADJUSTMENT, 0xaa966725, 0xd3e9, 0x4c55, 0xb3, 0x35, 0x2a, 0x0, 0x27, 0x9a, 0x1e, 0x64);
 
 #ifdef __cplusplus
 }
 #endif
-
-
-#pragma option pop /*P_O_Pop*/
-#endif __TCGUID_H

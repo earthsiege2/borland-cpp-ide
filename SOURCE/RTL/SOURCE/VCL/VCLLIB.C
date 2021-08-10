@@ -7,15 +7,8 @@
 
 */
 
-/*
- *      C/C++ Run Time Library - Version 10.0
- *
- *      Copyright (c) 1997, 2000 by Inprise Corporation
- *      All Rights Reserved.
- *
- */
-
-/* $Revision:   9.7  $        */
+/* $Copyright: 1997$ */
+/* $Revision: 9.13 $        */
 
 
 /* __VCLPACKVERSTR is set from the RTL's main WIN32.MAK file.  This allows the
@@ -32,15 +25,19 @@
 #define ADDVER(a) __PASTE3 ( __STR(a), __VCLPACKVERSTR,".lib")
 
 /* These must be listed in REVERSE order of linkage preference */
-#pragma comment (lib, ADDVER(bcbsmp))  /* VCL Samples                     */
-#pragma comment (lib, ADDVER(dclocx))  /* ActiveX Samples                 */
+/* Pre-bcb6 these libs had __VCLPACKVERSTR appended to them. Starting
+ * in bcb6 the version number has been removed so ADDVER is no longer used. 
+ */
+#pragma comment (lib, "bcbsmp.lib")  /* VCL Samples                     */
+#pragma comment (lib, "dclocx.lib")  /* ActiveX Samples                 */
 #ifndef __VCL_STD_SKU__
-#pragma comment (lib, ADDVER(vcldbx))  /* eXtra VCL Database stuff        */
-#pragma comment (lib, ADDVER(vcldb))   /* VCL Database stuff              */
+#pragma comment (lib, "vcldbx.lib")  /* eXtra VCL Database stuff        */
+#pragma comment (lib, "vcldb.lib")   /* VCL Database stuff              */
 #endif
-#pragma comment (lib, ADDVER(vcle))    /* VCL Emulation stuff (in C++)    */
-#pragma comment (lib, ADDVER(vclx))    /* eXtra VCL stuff                 */
-#pragma comment (lib, ADDVER(vcl))     /* Normal VCL stuff                */
+#pragma comment (lib, "vcle.lib")    /* VCL Emulation stuff (in C++)    */
+#pragma comment (lib, "vclx.lib")    /* eXtra VCL stuff                 */
+#pragma comment (lib, "vcl.lib")     /* Normal VCL stuff                */
+#pragma comment (lib, "rtl.lib")     /* Delphi RTL stuff                */
 
 #include <_defs.h>
 

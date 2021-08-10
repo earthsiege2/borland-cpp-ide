@@ -1,4 +1,3 @@
-
 
 
 
@@ -81,17 +80,21 @@
 
 
 
-[Version]
-DbXName="SQL Explorer"
 
 
+[Version]
 
+DbXName="SQL Explorer"
 
 
 
 
-
-DbXDR=True
+
+
+
+
+DbXDR=True
+
 DbXVersion=3.00
 
 [Properties]
@@ -132,7 +135,8 @@ MSSQL:HelpContext=4036
 ORACLE:HelpContext=4034
 STANDARD:HelpContext=4045
 SYBASE:HelpContext=4033
-
+
+
 MSSQL:Identity=select substring(@@version,1,charindex(char(0x0a),@@version)-1)
 MSSQL:IdentityRE=SQL Server [^0-9]*([0-9]+)\.
 
@@ -149,8 +153,10 @@ INFORMIX:IdentityRE=([0-9]+)\.
 
 DB2:IdentityMap:DB2/2=Common Server
 DB2:IdentityMap:DB2/NT=Common Server
-DB2:IdentityMap:DB2/AIX=Common Server
-
+DB2:IdentityMap:DB2/AIX=Common Server
+
+
+
 [DATAREP Properties]
 BDETypes:Values1=Closed,1=ZString,2=Date,3=Blob,4=Bool,5=Int16,6=Int32
 BDETypes:Values2=7=Float,8=BCD,9=Bytes,10=Time,11=TimeStamp,12=UInt16
@@ -254,8 +260,10 @@ EXTFIELD:Attrs19=BLOBTYPE=:2::::VM=TBlobType
 EXTFIELD:Attrs20=DEFAULT=:2
 EXTFIELD:Attrs21=SRVCHECK=:2:-E
 EXTFIELD:Attrs22=LOCCHECK=:2
-EXTFIELD:Attrs23=ERRORSTR=:2
-
+EXTFIELD:Attrs23=ERRORSTR=:2
+
+
+
 [STANDARD Properties]
 DriverType:Values=Closed,PARADOX="Paradox",DBASE="dBase",FOXPRO="FoxPro"
 BooleanYN:Values=Closed,0="No",-1="Yes",1="Yes"
@@ -574,8 +582,10 @@ Procedure:Dataset=NAME=String,DATE=Date,TIME=Time
 Procedure:Category=Executable
 Procedure:Attrs=DATE="Date":1,TIME="Time":1
 Procedure:EAttrs=Data
-Procedure:Name=NAME
-
+Procedure:Name=NAME
+
+
+
 [ORACLE Properties]
 TBooleanNY:Values=Closed,N="No",Y="Yes"
 TBlank0:Values=Open,0=
@@ -1134,8 +1144,10 @@ SYS.ALL_TABLES:Attrs18=AVG_ROW_LEN="Avg Row Length":2
 ; which is not defined in 7.2
 ; Cluster:Definition=Root=SYS.ALL_CLUSTERS
 ; SYS.ALL_TABLES:Reference:"Cluster"=OWNER,CLUSTER_NAME
-
-
+
+
+
+
 [MSSQL Properties]
 TBooleanYN:Values=Closed,0="No",-1="Yes"
 TPhysicalType:Values1=Closed,34=image:"Image",35=text:"Text"
@@ -1785,8 +1797,10 @@ ExtendedProcedure:Text:Init=sp_addextendedproc '`EDefaultName`', 'dllname.dll'
 ExtendedProcedure:Text:Get=sp_addextendedproc `NQ`, `:DLLName`
 ExtendedProcedure:Text:RE=sp_addextendedproc\_+'(\w+)',\_+'(\w+)'
 ExtendedProcedure:Text:Set=*N=1,DLLName=2
-ExtendedProcedure:Delete:Text=sp_dropextendedproc `OQ`
-
+ExtendedProcedure:Delete:Text=sp_dropextendedproc `OQ`
+
+
+
 [SYBASE Properties]
 TBooleanYN:Values=Closed,0="No",-1="Yes"
 TPhysicalType:Values1=Closed,34=image:"Image",35=text:"Text"
@@ -2215,12 +2229,14 @@ CheckConstraint:Text:Init=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `EDefaultName \N
 CheckConstraint:Text:Get=ALTER TABLE `{<}N \N`  ADD CONSTRAINT `N \N`  CHECK (`=Text`)
 CheckConstraint:Text:RE=ALTER\_+TABLE\_+(\w+)\_+ADD\_+CONSTRAINT\_+(\w+)\_+CHECK\_*\((.*)\)
 CheckConstraint:Text:Set=1=`{<}N`,*N=2,Text=3
-CheckConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
-
+CheckConstraint:Delete:Text=ALTER TABLE `{<}O` DROP CONSTRAINT `O`
+
+
+
 [INTRBASE Properties]
 TFieldType:Values1=Closed,7=SMALLINT,8=INTEGER,9=QUAD,10=FLOAT
 TFieldType:Values2=11=DOUBLE PRECISION,14=`'CHAR('=Length')'`:CHAR,27=NUMERIC
-TFieldType:Values3=35=DATE,37=`'VARCHAR('=Length')'`:VARCHAR
+TFieldType:Values3=12=DATE,13=TIME,35=TIMESTAMP,37=`'VARCHAR('=Length')'`:VARCHAR
 TFieldType:Values4=40=`'CSTRING('=Length')'`:CSTRING
 TFieldType:Values5=261=`'BLOB'``!' SUB_TYPE ' =SubType`:BLOB
 TFieldSubType:Values1=Closed,0=0:,1=1:"Text",2=2:"BLR",3=3:"ACL",4=4:"Ranges",5=5:"Summary"
@@ -2619,8 +2635,10 @@ Trigger:Text:Get1=CREATE TRIGGER `N` FOR `{<}N`
 Trigger:Text:Get2=`=Type` POSITION `=Position` `=Text`
 Trigger:Text:RE=CREATE\_+TRIGGER\_+(\w+)\_+FOR\_+(\w+)\_+(\w+\_\w+)\_+POSITION\_+(\w+)\_+(.*)
 Trigger:Text:Set=*N=1,2=`{<}N`,Type=3,Position=4,Text=5
-Trigger:Delete:Text=DROP TRIGGER `O`
-
+Trigger:Delete:Text=DROP TRIGGER `O`
+
+
+
 [INFORMIX Properties]
 TLockMode:Values=Closed,B=PAGE:"Page",P=PAGE:"Page",R=ROW:"Row"
 TUnique:Values=Closed,-=:"No",U=UNIQUE:"Yes",D=:"No"
@@ -2872,8 +2890,10 @@ Procedure:Text:NameRE=Text:PROCEDURE\_(\_*\w+)
 Procedure:Text:NameSet=1=`N`
 Procedure:Text:RE=CREATE(\_+DBA)?\_+PROCEDURE\_+(\w+).*
 Procedure:Text:Set=Text=0,*N=2
-Procedure:Delete:Text=DROP PROCEDURE `O`
-
+Procedure:Delete:Text=DROP PROCEDURE `O`
+
+
+
 [DB2 Common Server Properties]
 TBooleanNY:Values=Closed,N=:"No",Y=:"Yes"
 TBoolean01:Values=Closed,0=:"No",1=:"Yes"
@@ -3321,5 +3341,6 @@ Trigger:Text:RE=^(.*\_)?CREATE\_+TRIGGER\_+(\w+)\_.*\_ON\_+(\w+)\_.*$
 Trigger:Text:Set=*N=2,3=`{<}N`,Text=0
 Trigger:Text:NameRE=Text:TRIGGER\_(\_*\w+)
 Trigger:Text:NameSet=1=`N`
-Trigger:Delete:Text=DROP TRIGGER `O`
+Trigger:Delete:Text=DROP TRIGGER `O`
+
 

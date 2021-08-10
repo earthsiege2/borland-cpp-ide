@@ -1,24 +1,24 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxbutton.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MXBUTTON.pas' rev: 6.00
 
-#ifndef mxbuttonHPP
-#define mxbuttonHPP
+#ifndef MXBUTTONHPP
+#define MXBUTTONHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <mxcommon.hpp>	// Pascal unit
-#include <mxstore.hpp>	// Pascal unit
-#include <mxDB.hpp>	// Pascal unit
-#include <mxConsts.hpp>	// Pascal unit
+#include <MXCOMMON.hpp>	// Pascal unit
+#include <Mxstore.hpp>	// Pascal unit
+#include <MXDB.hpp>	// Pascal unit
+#include <Mxconsts.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
 #include <Menus.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
-#include <Bde.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
+#include <BDE.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
@@ -29,6 +29,7 @@
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
@@ -51,8 +52,7 @@ private:
 	int Action;
 public:
 	#pragma option push -w-inl
-	/* TMenuItem.Create */ inline __fastcall virtual TQuickMenuItem(Classes::TComponent* AOwner) : Menus::TMenuItem(
-		AOwner) { }
+	/* TMenuItem.Create */ inline __fastcall virtual TQuickMenuItem(Classes::TComponent* AOwner) : Menus::TMenuItem(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TMenuItem.Destroy */ inline __fastcall virtual ~TQuickMenuItem(void) { }
@@ -85,8 +85,7 @@ public:
 	__property Classes::TNotifyEvent OnSelected = {read=FOnSelected, write=FOnSelected};
 public:
 	#pragma option push -w-inl
-	/* TPopupMenu.Create */ inline __fastcall virtual TQuickMenu(Classes::TComponent* AOwner) : Menus::TPopupMenu(
-		AOwner) { }
+	/* TPopupMenu.Create */ inline __fastcall virtual TQuickMenu(Classes::TComponent* AOwner) : Menus::TPopupMenu(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TPopupMenu.Destroy */ inline __fastcall virtual ~TQuickMenu(void) { }
@@ -127,13 +126,10 @@ private:
 	
 protected:
 	HIDESBASE MESSAGE void __fastcall CMDesignHitTest(Messages::TWMMouse &Msg);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
-	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int 
-		Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
-	DYNAMIC void __fastcall DragOver(System::TObject* Source, int X, int Y, Controls::TDragState State, 
-		bool &Accept);
+	DYNAMIC void __fastcall DragOver(System::TObject* Source, int X, int Y, Controls::TDragState State, bool &Accept);
 	DYNAMIC void __fastcall DragCanceled(void);
 	virtual void __fastcall Paint(void);
 	
@@ -170,12 +166,10 @@ typedef Set<TDecisionPivotOption, xtRows, xtSummaries>  TDecisionPivotOptions;
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Mxbutton */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxbutton;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxbutton
+#endif	// MXBUTTON

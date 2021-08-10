@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="CGI_SimpleEcho.exe"/>
+    <OBJFILES value="CGI_SimpleEcho.obj CGIApp.obj SimpleEcho_u.obj SimpleEchoImpl.obj"/>
+    <RESFILES value="CGI_SimpleEcho.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) SimpleEcho_u.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value="vcl.lib dsnap.lib dbrtl.lib xmlrtl.lib soaprtl.lib inet.lib rtl.lib"/>
+    <SPARELIBS value="rtl.lib inet.lib soaprtl.lib xmlrtl.lib dbrtl.lib dsnap.lib vcl.lib"/>
+    <PACKAGES value="vcl.bpi rtl.bpi dbrtl.bpi adortl.bpi vcldb.bpi vclx.bpi bdertl.bpi 
+      vcldbx.bpi ibxpress.bpi dsnap.bpi cds.bpi bdecds.bpi qrpt.bpi teeui.bpi 
+      teedb.bpi tee.bpi dss.bpi teeqr.bpi visualclx.bpi visualdbclx.bpi 
+      dsnapcrba.bpi dsnapcon.bpi vclie.bpi xmlrtl.bpi inet.bpi inetdbbde.bpi 
+      inetdbxpress.bpi inetdb.bpi nmfast.bpi webdsnap.bpi bcbie60.bpi 
+      soaprtl.bpi dclocx.bpi dbexpress.bpi dbxcds.bpi indy.bpi 
+      bcb2kaxserver60.bpi bcbsmp.bpi websnap.bpi"/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value="_DEBUG"/>
+    <SYSDEFINES value="NO_STRICT"/>
+    <MAINSOURCE value="CGI_SimpleEcho.cpp"/>
+    <INCLUDEPATH value="C:\CBuilder6\Bin;C:\WPGDemos_bcb\examples\c\WebServices\EchoService\Server;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="C:\CBuilder6\Bin;C:\WPGDemos_bcb\examples\c\WebServices\EchoService\Server;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par"/>
+    <OTHERFILES value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-IC:\CBuilder6\Bin 
+      -IC:\WPGDemos_bcb\examples\c\WebServices\EchoService\Server 
+      -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -D_DEBUG -boa"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
+      -tW -tWM"/>
+    <PFLAGS value="-$YD -$W -$O- -$A8 -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-D&quot;&quot; -ap -Tpe -x -Gn -v"/>
+    <OTHERFILES value=""/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0x32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+    <OTHERFILES value=""/>
+  </LINKER>
+  <FILELIST>
+      <FILE FILENAME="CGI_SimpleEcho.res" FORMNAME="" UNITNAME="CGI_SimpleEcho.res" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="CGI_SimpleEcho.cpp" FORMNAME="" UNITNAME="CGI_SimpleEcho" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="CGIApp.obj" FORMNAME="" UNITNAME="CGIApp" CONTAINERID="OBJTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SimpleEcho_u.cpp" FORMNAME="WebModule1" UNITNAME="SimpleEcho_u" CONTAINERID="CCompiler" DESIGNCLASS="TWebModule" LOCALCOMMAND=""/>
+      <FILE FILENAME="SimpleEchoImpl.cpp" FORMNAME="" UNITNAME="SimpleEchoImpl" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1033
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=1
+Item0=C:\CBuilder6\Bin;C:\WPGDemos_bcb\examples\c\WebServices\EchoService\Server;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=1
+Item0=C:\CBuilder6\Bin;C:\WPGDemos_bcb\examples\c\WebServices\EchoService\Server;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=1
+Item0=_DEBUG
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteLauncher=
+RemoteCWD=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
+  </IDEOPTIONS>
+</PROJECT>

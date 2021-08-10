@@ -1,22 +1,23 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'mxdssqry.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MXDSSQRY.pas' rev: 6.00
 
-#ifndef mxdssqryHPP
-#define mxdssqryHPP
+#ifndef MXDSSQRYHPP
+#define MXDSSQRYHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <mxqparse.hpp>	// Pascal unit
-#include <mxtables.hpp>	// Pascal unit
-#include <mxstore.hpp>	// Pascal unit
-#include <mxcommon.hpp>	// Pascal unit
-#include <mxDB.hpp>	// Pascal unit
-#include <mxgrid.hpp>	// Pascal unit
-#include <mxConsts.hpp>	// Pascal unit
+#include <DesignIntf.hpp>	// Pascal unit
+#include <MXQPARSE.hpp>	// Pascal unit
+#include <MXTABLES.hpp>	// Pascal unit
+#include <Mxstore.hpp>	// Pascal unit
+#include <MXCOMMON.hpp>	// Pascal unit
+#include <MXDB.hpp>	// Pascal unit
+#include <MXGRID.hpp>	// Pascal unit
+#include <Mxconsts.hpp>	// Pascal unit
 #include <Menus.hpp>	// Pascal unit
 #include <ComCtrls.hpp>	// Pascal unit
 #include <Buttons.hpp>	// Pascal unit
@@ -24,7 +25,7 @@
 #include <Forms.hpp>	// Pascal unit
 #include <Grids.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -48,38 +49,28 @@ class PASCALIMPLEMENTATION ECubeDesignError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall ECubeDesignError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall ECubeDesignError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall ECubeDesignError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall ECubeDesignError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall ECubeDesignError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall ECubeDesignError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall ECubeDesignError(int Ident, const System::TVarRec * 
-		Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall ECubeDesignError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall ECubeDesignError(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall ECubeDesignError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall ECubeDesignError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall ECubeDesignError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall ECubeDesignError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall ECubeDesignError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall ECubeDesignError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall ECubeDesignError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -97,38 +88,28 @@ class PASCALIMPLEMENTATION EAddWarning : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EAddWarning(const AnsiString Msg) : Sysutils::Exception(Msg
-		) { }
+	/* Exception.Create */ inline __fastcall EAddWarning(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EAddWarning(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EAddWarning(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EAddWarning(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EAddWarning(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EAddWarning(int Ident, const System::TVarRec * Args, 
-		const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EAddWarning(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EAddWarning(const AnsiString Msg, int AHelpContext) : 
-		Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EAddWarning(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EAddWarning(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EAddWarning(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EAddWarning(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EAddWarning(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EAddWarning(System::PResStringRec ResStringRec, 
-		const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EAddWarning(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -146,38 +127,28 @@ class PASCALIMPLEMENTATION EAddError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EAddError(const AnsiString Msg) : Sysutils::Exception(Msg)
-		 { }
+	/* Exception.Create */ inline __fastcall EAddError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EAddError(const AnsiString Msg, const System::TVarRec * 
-		Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EAddError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EAddError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EAddError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EAddError(int Ident, const System::TVarRec * Args, const 
-		int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EAddError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EAddError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(
-		Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EAddError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EAddError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EAddError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EAddError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EAddError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EAddError(System::PResStringRec ResStringRec, const 
-		System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EAddError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -243,17 +214,12 @@ __published:
 	void __fastcall SelectAllFieldsClick(System::TObject* Sender);
 	void __fastcall FieldListDblClick(System::TObject* Sender);
 	void __fastcall average1Click(System::TObject* Sender);
-	void __fastcall ActiveDimListDragDrop(System::TObject* Sender, System::TObject* Source, int X, int 
-		Y);
-	void __fastcall ActiveDimListDragOver(System::TObject* Sender, System::TObject* Source, int X, int 
-		Y, Controls::TDragState State, bool &Accept);
-	void __fastcall FieldListDragOver(System::TObject* Sender, System::TObject* Source, int X, int Y, Controls::TDragState 
-		State, bool &Accept);
-	void __fastcall SummaryListDragOver(System::TObject* Sender, System::TObject* Source, int X, int Y, 
-		Controls::TDragState State, bool &Accept);
+	void __fastcall ActiveDimListDragDrop(System::TObject* Sender, System::TObject* Source, int X, int Y);
+	void __fastcall ActiveDimListDragOver(System::TObject* Sender, System::TObject* Source, int X, int Y, Controls::TDragState State, bool &Accept);
+	void __fastcall FieldListDragOver(System::TObject* Sender, System::TObject* Source, int X, int Y, Controls::TDragState State, bool &Accept);
+	void __fastcall SummaryListDragOver(System::TObject* Sender, System::TObject* Source, int X, int Y, Controls::TDragState State, bool &Accept);
 	void __fastcall FieldListDragDrop(System::TObject* Sender, System::TObject* Source, int X, int Y);
-	void __fastcall SummaryListDragDrop(System::TObject* Sender, System::TObject* Source, int X, int Y)
-		;
+	void __fastcall SummaryListDragDrop(System::TObject* Sender, System::TObject* Source, int X, int Y);
 	void __fastcall FieldListKeyPress(System::TObject* Sender, char &Key);
 	void __fastcall ShowBoxKeyPress(System::TObject* Sender, char &Key);
 	void __fastcall ActiveDimListKeyPress(System::TObject* Sender, char &Key);
@@ -266,8 +232,7 @@ __published:
 	void __fastcall TableComboKeyPress(System::TObject* Sender, char &Key);
 	void __fastcall TableComboExit(System::TObject* Sender);
 	void __fastcall HelpButtonClick(System::TObject* Sender);
-	void __fastcall DatabaseComboKeyDown(System::TObject* Sender, Word &Key, Classes::TShiftState Shift
-		);
+	void __fastcall DatabaseComboKeyDown(System::TObject* Sender, Word &Key, Classes::TShiftState Shift);
 	void __fastcall TableComboKeyDown(System::TObject* Sender, Word &Key, Classes::TShiftState Shift);
 	void __fastcall CountStarAvgClick(System::TObject* Sender);
 	
@@ -311,35 +276,30 @@ private:
 	void __fastcall UpdateTableName(void);
 	
 public:
-	bool __fastcall SInitialize(const Forms::_di_IDesigner Designer, Dbtables::TQuery* aQuery);
+	bool __fastcall SInitialize(const Designintf::_di_IDesigner Designer, Dbtables::TQuery* aQuery);
 	__fastcall virtual TDSSQueryEditor(Classes::TComponent* AOwner);
 	__fastcall virtual ~TDSSQueryEditor(void);
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TDSSQueryEditor(Classes::TComponent* AOwner, 
-		int Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TDSSQueryEditor(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDSSQueryEditor(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDSSQueryEditor(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE void __fastcall ShowDSSQueryEditor(const Forms::_di_IDesigner Designer, Dbtables::TQuery* 
-	aQuery);
+extern PACKAGE void __fastcall ShowDSSQueryEditor(const Designintf::_di_IDesigner Designer, Dbtables::TQuery* aQuery);
 
 }	/* namespace Mxdssqry */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mxdssqry;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// mxdssqry
+#endif	// MXDSSQRY

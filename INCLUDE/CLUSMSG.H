@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1991-1996  Microsoft Corporation
+Copyright (c) 1991-1999  Microsoft Corporation
 
 Module Name:
 
@@ -24,12 +24,11 @@ Notes:
 
 
 #ifndef _CLUSMSG_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _CLUSMSG_H_
 
 /*
  5034 is NOT free
- The next starting point is 5090 (5035 TO 5089 is used)
+ The next starting point is 5092 (5035 TO 5091 is used)
 */
 //
 //  Values are 32 bit values layed out as follows:
@@ -68,6 +67,25 @@ Notes:
 
 
 //
+// MessageId: ERROR_CLUSTER_MEMBERSHIP_INVALID_STATE
+//
+// MessageText:
+//
+//  An operation was attempted that is incompatible 
+//  with the current membership state of the node.
+//
+#define ERROR_CLUSTER_MEMBERSHIP_INVALID_STATE 5090L
+
+//
+// MessageId: ERROR_CLUSTER_QUORUMLOG_NOT_FOUND
+//
+// MessageText:
+//
+//  The quorum resource does not contain the quorum log.
+//
+#define ERROR_CLUSTER_QUORUMLOG_NOT_FOUND 5091L
+
+//
 // MessageId: CLUSTER_BUILD_PLACEHOLDER
 //
 // MessageText:
@@ -77,5 +95,4 @@ Notes:
 //
 #define CLUSTER_BUILD_PLACEHOLDER        59999L
 
-#pragma option pop /*P_O_Pop*/
 #endif // _CLUSMSG_H_

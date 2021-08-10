@@ -9,22 +9,25 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.1.2  $
-// File generated on 1/24/2000 10:20:00 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/24/2002 7:03:49 PM from Type Library described below.
 
-// ************************************************************************ //
-// Type Lib: \winnt\system32\shdocvw.dll (1)
-// IID\LCID: {EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}\0
+// ************************************************************************  //
+// Type Lib: ..\typelibraries\shdocvw.dll (1)
+// LIBID: {EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}
+// LCID: 0
 // Helpfile: 
+// HelpString: Microsoft Internet Controls
 // DepndLst: 
-//   (1) v2.0 stdole, (D:\WINNT\System32\stdole2.tlb)
-//   (2) v4.0 StdVCL, (D:\tlbgen\rampage\typelib\typelibraries\testing\stdvcl40.tlb)
+//   (1) v2.0 stdole, (C:\WINNT\System32\stdole2.tlb)
 // ************************************************************************ //
-#ifndef   __SHDocVw_OCX_h__
-#define   __SHDocVw_OCX_h__
+#ifndef   SHDocVw_OCXH
+#define   SHDocVw_OCXH
 
 #pragma option push -b -w-inl
 
+#include <olectrls.hpp>
+#include <oleserver.hpp>
 #include <utilcls.h>
 #if !defined(__UTILCLS_H_VERSION) || (__UTILCLS_H_VERSION < 0x0500)
 //
@@ -70,9 +73,9 @@ namespace Shdocvw_tlb
 typedef void __fastcall (__closure * TCppWebBrowser_V1BeforeNavigate)(System::TObject * Sender, 
                                                                       BSTR URL/*[in]*/, long Flags, 
                                                                       BSTR TargetFrameName, 
-                                                                      TVariant* PostData, 
+                                                                      VARIANT* PostData, 
                                                                       BSTR Headers, 
-                                                                      TOLEBOOL* Cancel/*[in,out]*/);
+                                                                      VARIANT_BOOL* Cancel/*[in,out]*/);
 typedef void __fastcall (__closure * TCppWebBrowser_V1NavigateComplete)(System::TObject * Sender, 
                                                                         BSTR URL/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowser_V1StatusTextChange)(System::TObject * Sender, 
@@ -82,34 +85,34 @@ typedef void __fastcall (__closure * TCppWebBrowser_V1ProgressChange)(System::TO
                                                                       long ProgressMax/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowser_V1CommandStateChange)(System::TObject * Sender, 
                                                                           long Command/*[in]*/, 
-                                                                          TOLEBOOL Enable/*[in]*/);
+                                                                          VARIANT_BOOL Enable/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowser_V1NewWindow)(System::TObject * Sender, 
                                                                  BSTR URL/*[in]*/, 
                                                                  long Flags/*[in]*/, 
                                                                  BSTR TargetFrameName/*[in]*/, 
-                                                                 TVariant* PostData/*[in]*/, 
+                                                                 VARIANT* PostData/*[in]*/, 
                                                                  BSTR Headers/*[in]*/, 
-                                                                 TOLEBOOL* Processed/*[in,out]*/);
+                                                                 VARIANT_BOOL* Processed/*[in,out]*/);
 typedef void __fastcall (__closure * TCppWebBrowser_V1TitleChange)(System::TObject * Sender, 
                                                                    BSTR Text/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowser_V1FrameBeforeNavigate)(System::TObject * Sender, 
                                                                            BSTR URL/*[in]*/, 
                                                                            long Flags, 
                                                                            BSTR TargetFrameName, 
-                                                                           TVariant* PostData, 
+                                                                           VARIANT* PostData, 
                                                                            BSTR Headers, 
-                                                                           TOLEBOOL* Cancel/*[in,out]*/);
+                                                                           VARIANT_BOOL* Cancel/*[in,out]*/);
 typedef void __fastcall (__closure * TCppWebBrowser_V1FrameNavigateComplete)(System::TObject * Sender, 
                                                                              BSTR URL/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowser_V1FrameNewWindow)(System::TObject * Sender, 
                                                                       BSTR URL/*[in]*/, 
                                                                       long Flags/*[in]*/, 
                                                                       BSTR TargetFrameName/*[in]*/, 
-                                                                      TVariant* PostData/*[in]*/, 
+                                                                      VARIANT* PostData/*[in]*/, 
                                                                       BSTR Headers/*[in]*/, 
-                                                                      TOLEBOOL* Processed/*[in,out]*/);
+                                                                      VARIANT_BOOL* Processed/*[in,out]*/);
 typedef void __fastcall (__closure * TCppWebBrowser_V1Quit)(System::TObject * Sender, 
-                                                            TOLEBOOL* Cancel/*[in,out]*/);
+                                                            VARIANT_BOOL* Cancel/*[in,out]*/);
 typedef void __fastcall (__closure * TCppWebBrowser_V1PropertyChange)(System::TObject * Sender, 
                                                                       BSTR Property/*[in]*/);
 //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
@@ -147,10 +150,14 @@ class PACKAGE TCppWebBrowser_V1 : public TOleControl
 
   // VCL Property Getters/Setters which delegate to OCX
   //
-  LPDISPATCH      __fastcall Get_Application(void);
-  LPDISPATCH      __fastcall Get_Parent(void);
-  LPDISPATCH      __fastcall Get_Container(void);
-  LPDISPATCH      __fastcall Get_Document(void);
+// StdProp:IDispatch
+  LPDISPATCH      __fastcall get_Application(void);
+// StdProp:IDispatch
+  LPDISPATCH      __fastcall get_Parent(void);
+// StdProp:IDispatch
+  LPDISPATCH      __fastcall get_Container(void);
+// StdProp:IDispatch
+  LPDISPATCH      __fastcall get_Document(void);
 
   // Static variables used by all instances of OCX proxy
   //
@@ -180,12 +187,12 @@ public:
   void            __fastcall GoForward(void);
   void            __fastcall GoHome(void);
   void            __fastcall GoSearch(void);
-  void            __fastcall Navigate(BSTR URL/*[in]*/, TVariant* Flags/*[in,opt]*/= TNoParam(), 
-                                      TVariant* TargetFrameName/*[in,opt]*/= TNoParam(), 
-                                      TVariant* PostData/*[in,opt]*/= TNoParam(), 
-                                      TVariant* Headers/*[in,opt]*/= TNoParam());
+  void            __fastcall Navigate(BSTR URL/*[in]*/, VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                                      VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                                      VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                                      VARIANT* Headers/*[in,opt]*/= TNoParam());
   void            __fastcall Refresh(void);
-  void            __fastcall Refresh2(TVariant* Level/*[in,opt]*/= TNoParam());
+  void            __fastcall Refresh2(VARIANT* Level/*[in,opt]*/= TNoParam());
   void            __fastcall Stop(void);
 
   // OCX properties
@@ -270,40 +277,76 @@ typedef void __fastcall (__closure * TCppWebBrowserProgressChange)(System::TObje
                                                                    long ProgressMax/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowserCommandStateChange)(System::TObject * Sender, 
                                                                        long Command/*[in]*/, 
-                                                                       TOLEBOOL Enable/*[in]*/);
+                                                                       VARIANT_BOOL Enable/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowserTitleChange)(System::TObject * Sender, 
                                                                 BSTR Text/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowserPropertyChange)(System::TObject * Sender, 
                                                                    BSTR szProperty/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowserBeforeNavigate2)(System::TObject * Sender, 
                                                                     LPDISPATCH pDisp/*[in]*/, 
-                                                                    TVariant* URL/*[in]*/, 
-                                                                    TVariant* Flags/*[in]*/, 
-                                                                    TVariant* TargetFrameName/*[in]*/, 
-                                                                    TVariant* PostData/*[in]*/, 
-                                                                    TVariant* Headers/*[in]*/, 
-                                                                    TOLEBOOL* Cancel/*[in,out]*/);
+                                                                    VARIANT* URL/*[in]*/, 
+                                                                    VARIANT* Flags/*[in]*/, 
+                                                                    VARIANT* TargetFrameName/*[in]*/, 
+                                                                    VARIANT* PostData/*[in]*/, 
+                                                                    VARIANT* Headers/*[in]*/, 
+                                                                    VARIANT_BOOL* Cancel/*[in,out]*/);
 typedef void __fastcall (__closure * TCppWebBrowserNewWindow2)(System::TObject * Sender, 
                                                                LPDISPATCH* ppDisp/*[in,out]*/, 
-                                                               TOLEBOOL* Cancel/*[in,out]*/);
+                                                               VARIANT_BOOL* Cancel/*[in,out]*/);
 typedef void __fastcall (__closure * TCppWebBrowserNavigateComplete2)(System::TObject * Sender, 
                                                                       LPDISPATCH pDisp/*[in]*/, 
-                                                                      TVariant* URL/*[in]*/);
+                                                                      VARIANT* URL/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowserDocumentComplete)(System::TObject * Sender, 
                                                                      LPDISPATCH pDisp/*[in]*/, 
-                                                                     TVariant* URL/*[in]*/);
+                                                                     VARIANT* URL/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowserOnVisible)(System::TObject * Sender, 
-                                                              TOLEBOOL Visible/*[in]*/);
+                                                              VARIANT_BOOL Visible/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowserOnToolBar)(System::TObject * Sender, 
-                                                              TOLEBOOL ToolBar/*[in]*/);
+                                                              VARIANT_BOOL ToolBar/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowserOnMenuBar)(System::TObject * Sender, 
-                                                              TOLEBOOL MenuBar/*[in]*/);
+                                                              VARIANT_BOOL MenuBar/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowserOnStatusBar)(System::TObject * Sender, 
-                                                                TOLEBOOL StatusBar/*[in]*/);
+                                                                VARIANT_BOOL StatusBar/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowserOnFullScreen)(System::TObject * Sender, 
-                                                                 TOLEBOOL FullScreen/*[in]*/);
+                                                                 VARIANT_BOOL FullScreen/*[in]*/);
 typedef void __fastcall (__closure * TCppWebBrowserOnTheaterMode)(System::TObject * Sender, 
-                                                                  TOLEBOOL TheaterMode/*[in]*/);
+                                                                  VARIANT_BOOL TheaterMode/*[in]*/);
+typedef void __fastcall (__closure * TCppWebBrowserWindowSetResizable)(System::TObject * Sender, 
+                                                                       VARIANT_BOOL Resizable/*[in]*/);
+typedef void __fastcall (__closure * TCppWebBrowserWindowSetLeft)(System::TObject * Sender, 
+                                                                  long Left/*[in]*/);
+typedef void __fastcall (__closure * TCppWebBrowserWindowSetTop)(System::TObject * Sender, 
+                                                                 long Top/*[in]*/);
+typedef void __fastcall (__closure * TCppWebBrowserWindowSetWidth)(System::TObject * Sender, 
+                                                                   long Width/*[in]*/);
+typedef void __fastcall (__closure * TCppWebBrowserWindowSetHeight)(System::TObject * Sender, 
+                                                                    long Height/*[in]*/);
+typedef void __fastcall (__closure * TCppWebBrowserWindowClosing)(System::TObject * Sender, 
+                                                                  VARIANT_BOOL IsChildWindow/*[in]*/, 
+                                                                  VARIANT_BOOL* Cancel/*[in,out]*/);
+typedef void __fastcall (__closure * TCppWebBrowserClientToHostWindow)(System::TObject * Sender, 
+                                                                       long* CX/*[in,out]*/, 
+                                                                       long* CY/*[in,out]*/);
+typedef void __fastcall (__closure * TCppWebBrowserSetSecureLockIcon)(System::TObject * Sender, 
+                                                                      long SecureLockIcon/*[in]*/);
+typedef void __fastcall (__closure * TCppWebBrowserFileDownload)(System::TObject * Sender, 
+                                                                 VARIANT_BOOL* Cancel/*[in,out]*/);
+typedef void __fastcall (__closure * TCppWebBrowserNavigateError)(System::TObject * Sender, 
+                                                                  LPDISPATCH pDisp/*[in]*/, 
+                                                                  VARIANT* URL/*[in]*/, 
+                                                                  VARIANT* Frame/*[in]*/, 
+                                                                  VARIANT* StatusCode/*[in]*/, 
+                                                                  VARIANT_BOOL* Cancel/*[in,out]*/);
+typedef void __fastcall (__closure * TCppWebBrowserPrintTemplateInstantiation)(System::TObject * Sender, 
+                                                                               LPDISPATCH pDisp/*[in]*/);
+typedef void __fastcall (__closure * TCppWebBrowserPrintTemplateTeardown)(System::TObject * Sender, 
+                                                                          LPDISPATCH pDisp/*[in]*/);
+typedef void __fastcall (__closure * TCppWebBrowserUpdatePageStatus)(System::TObject * Sender, 
+                                                                     LPDISPATCH pDisp/*[in]*/, 
+                                                                     VARIANT* nPage/*[in]*/, 
+                                                                     VARIANT* fDone/*[in]*/);
+typedef void __fastcall (__closure * TCppWebBrowserPrivacyImpactedStateChange)(System::TObject * Sender, 
+                                                                               VARIANT_BOOL bImpacted/*[in]*/);
 //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 // Proxy class to host WebBrowser Control in CBuilder IDE/Applications.
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -333,6 +376,20 @@ class PACKAGE TCppWebBrowser : public TOleControl
   TCppWebBrowserOnStatusBar      FOnStatusBar;
   TCppWebBrowserOnFullScreen     FOnFullScreen;
   TCppWebBrowserOnTheaterMode    FOnTheaterMode;
+  TCppWebBrowserWindowSetResizable FOnWindowSetResizable;
+  TCppWebBrowserWindowSetLeft    FOnWindowSetLeft;
+  TCppWebBrowserWindowSetTop     FOnWindowSetTop;
+  TCppWebBrowserWindowSetWidth   FOnWindowSetWidth;
+  TCppWebBrowserWindowSetHeight  FOnWindowSetHeight;
+  TCppWebBrowserWindowClosing    FOnWindowClosing;
+  TCppWebBrowserClientToHostWindow FOnClientToHostWindow;
+  TCppWebBrowserSetSecureLockIcon FOnSetSecureLockIcon;
+  TCppWebBrowserFileDownload     FOnFileDownload;
+  TCppWebBrowserNavigateError    FOnNavigateError;
+  TCppWebBrowserPrintTemplateInstantiation FOnPrintTemplateInstantiation;
+  TCppWebBrowserPrintTemplateTeardown FOnPrintTemplateTeardown;
+  TCppWebBrowserUpdatePageStatus FOnUpdatePageStatus;
+  TCppWebBrowserPrivacyImpactedStateChange FOnPrivacyImpactedStateChange;
 
   // Default Interace of OCX
   //
@@ -340,14 +397,18 @@ class PACKAGE TCppWebBrowser : public TOleControl
 
   // VCL Property Getters/Setters which delegate to OCX
   //
-  LPDISPATCH      __fastcall Get_Application(void);
-  LPDISPATCH      __fastcall Get_Parent(void);
-  LPDISPATCH      __fastcall Get_Container(void);
-  LPDISPATCH      __fastcall Get_Document(void);
+// StdProp:IDispatch
+  LPDISPATCH      __fastcall get_Application(void);
+// StdProp:IDispatch
+  LPDISPATCH      __fastcall get_Parent(void);
+// StdProp:IDispatch
+  LPDISPATCH      __fastcall get_Container(void);
+// StdProp:IDispatch
+  LPDISPATCH      __fastcall get_Document(void);
 
   // Static variables used by all instances of OCX proxy
   //
-  static int          EventDispIDs[18];
+  static int          EventDispIDs[32];
   static TControlData CControlData;
   static GUID         CTL_DEF_INTF;
 
@@ -373,30 +434,29 @@ public:
   void            __fastcall GoForward(void);
   void            __fastcall GoHome(void);
   void            __fastcall GoSearch(void);
-  void            __fastcall Navigate(BSTR URL/*[in]*/, TVariant* Flags/*[in,opt]*/= TNoParam(), 
-                                      TVariant* TargetFrameName/*[in,opt]*/= TNoParam(), 
-                                      TVariant* PostData/*[in,opt]*/= TNoParam(), 
-                                      TVariant* Headers/*[in,opt]*/= TNoParam());
+  void            __fastcall Navigate(BSTR URL/*[in]*/, VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                                      VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                                      VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                                      VARIANT* Headers/*[in,opt]*/= TNoParam());
   void            __fastcall Refresh(void);
-  void            __fastcall Refresh2(TVariant* Level/*[in,opt]*/= TNoParam());
+  void            __fastcall Refresh2(VARIANT* Level/*[in,opt]*/= TNoParam());
   void            __fastcall Stop(void);
   void            __fastcall Quit(void);
   void            __fastcall ClientToWindow(int* pcx/*[in,out]*/, int* pcy/*[in,out]*/);
-  void            __fastcall PutProperty(BSTR Property/*[in]*/, TVariantInParam vtValue/*[in]*/);
+  void            __fastcall PutProperty(BSTR Property/*[in]*/, VARIANT vtValue/*[in]*/);
   TVariant        __fastcall GetProperty(BSTR Property/*[in]*/);
-  void            __fastcall Navigate2(TVariant* URL/*[in]*/, 
-                                       TVariant* Flags/*[in,opt]*/= TNoParam(), 
-                                       TVariant* TargetFrameName/*[in,opt]*/= TNoParam(), 
-                                       TVariant* PostData/*[in,opt]*/= TNoParam(), 
-                                       TVariant* Headers/*[in,opt]*/= TNoParam());
+  void            __fastcall Navigate2(VARIANT* URL/*[in]*/, VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                                       VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                                       VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                                       VARIANT* Headers/*[in,opt]*/= TNoParam());
   Shdocvw_tlb::OLECMDF __fastcall QueryStatusWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/);
   void            __fastcall ExecWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/, 
                                     Shdocvw_tlb::OLECMDEXECOPT cmdexecopt/*[in]*/, 
-                                    TVariant* pvaIn/*[in,opt]*/= TNoParam(), 
-                                    TVariant* pvaOut/*[in,out,opt]*/= TNoParam());
-  void            __fastcall ShowBrowserBar(TVariant* pvaClsid/*[in]*/, 
-                                            TVariant* pvarShow/*[in,opt]*/= TNoParam(), 
-                                            TVariant* pvarSize/*[in,opt]*/= TNoParam());
+                                    VARIANT* pvaIn/*[in,opt]*/= TNoParam(), 
+                                    VARIANT* pvaOut/*[in,out,opt]*/= TNoParam());
+  void            __fastcall ShowBrowserBar(VARIANT* pvaClsid/*[in]*/, 
+                                            VARIANT* pvarShow/*[in,opt]*/= TNoParam(), 
+                                            VARIANT* pvarSize/*[in,opt]*/= TNoParam());
 
   // OCX properties
   //
@@ -473,6 +533,20 @@ __published:
   __property TCppWebBrowserOnStatusBar OnStatusBar={ read=FOnStatusBar, write=FOnStatusBar };
   __property TCppWebBrowserOnFullScreen OnFullScreen={ read=FOnFullScreen, write=FOnFullScreen };
   __property TCppWebBrowserOnTheaterMode OnTheaterMode={ read=FOnTheaterMode, write=FOnTheaterMode };
+  __property TCppWebBrowserWindowSetResizable OnWindowSetResizable={ read=FOnWindowSetResizable, write=FOnWindowSetResizable };
+  __property TCppWebBrowserWindowSetLeft OnWindowSetLeft={ read=FOnWindowSetLeft, write=FOnWindowSetLeft };
+  __property TCppWebBrowserWindowSetTop OnWindowSetTop={ read=FOnWindowSetTop, write=FOnWindowSetTop };
+  __property TCppWebBrowserWindowSetWidth OnWindowSetWidth={ read=FOnWindowSetWidth, write=FOnWindowSetWidth };
+  __property TCppWebBrowserWindowSetHeight OnWindowSetHeight={ read=FOnWindowSetHeight, write=FOnWindowSetHeight };
+  __property TCppWebBrowserWindowClosing OnWindowClosing={ read=FOnWindowClosing, write=FOnWindowClosing };
+  __property TCppWebBrowserClientToHostWindow OnClientToHostWindow={ read=FOnClientToHostWindow, write=FOnClientToHostWindow };
+  __property TCppWebBrowserSetSecureLockIcon OnSetSecureLockIcon={ read=FOnSetSecureLockIcon, write=FOnSetSecureLockIcon };
+  __property TCppWebBrowserFileDownload OnFileDownload={ read=FOnFileDownload, write=FOnFileDownload };
+  __property TCppWebBrowserNavigateError OnNavigateError={ read=FOnNavigateError, write=FOnNavigateError };
+  __property TCppWebBrowserPrintTemplateInstantiation OnPrintTemplateInstantiation={ read=FOnPrintTemplateInstantiation, write=FOnPrintTemplateInstantiation };
+  __property TCppWebBrowserPrintTemplateTeardown OnPrintTemplateTeardown={ read=FOnPrintTemplateTeardown, write=FOnPrintTemplateTeardown };
+  __property TCppWebBrowserUpdatePageStatus OnUpdatePageStatus={ read=FOnUpdatePageStatus, write=FOnUpdatePageStatus };
+  __property TCppWebBrowserPrivacyImpactedStateChange OnPrivacyImpactedStateChange={ read=FOnPrivacyImpactedStateChange, write=FOnPrivacyImpactedStateChange };
 };
 typedef TCppWebBrowser  TCppWebBrowserProxy;
 
@@ -494,40 +568,76 @@ typedef void __fastcall (__closure * TCppInternetExplorerProgressChange)(System:
                                                                          long ProgressMax/*[in]*/);
 typedef void __fastcall (__closure * TCppInternetExplorerCommandStateChange)(System::TObject * Sender, 
                                                                              long Command/*[in]*/, 
-                                                                             TOLEBOOL Enable/*[in]*/);
+                                                                             VARIANT_BOOL Enable/*[in]*/);
 typedef void __fastcall (__closure * TCppInternetExplorerTitleChange)(System::TObject * Sender, 
                                                                       BSTR Text/*[in]*/);
 typedef void __fastcall (__closure * TCppInternetExplorerPropertyChange)(System::TObject * Sender, 
                                                                          BSTR szProperty/*[in]*/);
 typedef void __fastcall (__closure * TCppInternetExplorerBeforeNavigate2)(System::TObject * Sender, 
                                                                           LPDISPATCH pDisp/*[in]*/, 
-                                                                          TVariant* URL/*[in]*/, 
-                                                                          TVariant* Flags/*[in]*/, 
-                                                                          TVariant* TargetFrameName/*[in]*/, 
-                                                                          TVariant* PostData/*[in]*/, 
-                                                                          TVariant* Headers/*[in]*/, 
-                                                                          TOLEBOOL* Cancel/*[in,out]*/);
+                                                                          VARIANT* URL/*[in]*/, 
+                                                                          VARIANT* Flags/*[in]*/, 
+                                                                          VARIANT* TargetFrameName/*[in]*/, 
+                                                                          VARIANT* PostData/*[in]*/, 
+                                                                          VARIANT* Headers/*[in]*/, 
+                                                                          VARIANT_BOOL* Cancel/*[in,out]*/);
 typedef void __fastcall (__closure * TCppInternetExplorerNewWindow2)(System::TObject * Sender, 
                                                                      LPDISPATCH* ppDisp/*[in,out]*/, 
-                                                                     TOLEBOOL* Cancel/*[in,out]*/);
+                                                                     VARIANT_BOOL* Cancel/*[in,out]*/);
 typedef void __fastcall (__closure * TCppInternetExplorerNavigateComplete2)(System::TObject * Sender, 
                                                                             LPDISPATCH pDisp/*[in]*/, 
-                                                                            TVariant* URL/*[in]*/);
+                                                                            VARIANT* URL/*[in]*/);
 typedef void __fastcall (__closure * TCppInternetExplorerDocumentComplete)(System::TObject * Sender, 
                                                                            LPDISPATCH pDisp/*[in]*/, 
-                                                                           TVariant* URL/*[in]*/);
+                                                                           VARIANT* URL/*[in]*/);
 typedef void __fastcall (__closure * TCppInternetExplorerOnVisible)(System::TObject * Sender, 
-                                                                    TOLEBOOL Visible/*[in]*/);
+                                                                    VARIANT_BOOL Visible/*[in]*/);
 typedef void __fastcall (__closure * TCppInternetExplorerOnToolBar)(System::TObject * Sender, 
-                                                                    TOLEBOOL ToolBar/*[in]*/);
+                                                                    VARIANT_BOOL ToolBar/*[in]*/);
 typedef void __fastcall (__closure * TCppInternetExplorerOnMenuBar)(System::TObject * Sender, 
-                                                                    TOLEBOOL MenuBar/*[in]*/);
+                                                                    VARIANT_BOOL MenuBar/*[in]*/);
 typedef void __fastcall (__closure * TCppInternetExplorerOnStatusBar)(System::TObject * Sender, 
-                                                                      TOLEBOOL StatusBar/*[in]*/);
+                                                                      VARIANT_BOOL StatusBar/*[in]*/);
 typedef void __fastcall (__closure * TCppInternetExplorerOnFullScreen)(System::TObject * Sender, 
-                                                                       TOLEBOOL FullScreen/*[in]*/);
+                                                                       VARIANT_BOOL FullScreen/*[in]*/);
 typedef void __fastcall (__closure * TCppInternetExplorerOnTheaterMode)(System::TObject * Sender, 
-                                                                        TOLEBOOL TheaterMode/*[in]*/);
+                                                                        VARIANT_BOOL TheaterMode/*[in]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerWindowSetResizable)(System::TObject * Sender, 
+                                                                             VARIANT_BOOL Resizable/*[in]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerWindowSetLeft)(System::TObject * Sender, 
+                                                                        long Left/*[in]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerWindowSetTop)(System::TObject * Sender, 
+                                                                       long Top/*[in]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerWindowSetWidth)(System::TObject * Sender, 
+                                                                         long Width/*[in]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerWindowSetHeight)(System::TObject * Sender, 
+                                                                          long Height/*[in]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerWindowClosing)(System::TObject * Sender, 
+                                                                        VARIANT_BOOL IsChildWindow/*[in]*/, 
+                                                                        VARIANT_BOOL* Cancel/*[in,out]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerClientToHostWindow)(System::TObject * Sender, 
+                                                                             long* CX/*[in,out]*/, 
+                                                                             long* CY/*[in,out]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerSetSecureLockIcon)(System::TObject * Sender, 
+                                                                            long SecureLockIcon/*[in]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerFileDownload)(System::TObject * Sender, 
+                                                                       VARIANT_BOOL* Cancel/*[in,out]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerNavigateError)(System::TObject * Sender, 
+                                                                        LPDISPATCH pDisp/*[in]*/, 
+                                                                        VARIANT* URL/*[in]*/, 
+                                                                        VARIANT* Frame/*[in]*/, 
+                                                                        VARIANT* StatusCode/*[in]*/, 
+                                                                        VARIANT_BOOL* Cancel/*[in,out]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerPrintTemplateInstantiation)(System::TObject * Sender, 
+                                                                                     LPDISPATCH pDisp/*[in]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerPrintTemplateTeardown)(System::TObject * Sender, 
+                                                                                LPDISPATCH pDisp/*[in]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerUpdatePageStatus)(System::TObject * Sender, 
+                                                                           LPDISPATCH pDisp/*[in]*/, 
+                                                                           VARIANT* nPage/*[in]*/, 
+                                                                           VARIANT* fDone/*[in]*/);
+typedef void __fastcall (__closure * TCppInternetExplorerPrivacyImpactedStateChange)(System::TObject * Sender, 
+                                                                                     VARIANT_BOOL bImpacted/*[in]*/);
 
 class PACKAGE TCppInternetExplorer : public Oleserver::TOleServer
 {
@@ -544,245 +654,293 @@ public:
   void __fastcall BeforeDestruction();
   void __fastcall ConnectTo(IWebBrowser2Ptr intf);
 
-  virtual void __fastcall InvokeEvent(int DispID, TVariantArray& params);
+  virtual void __fastcall InvokeEvent(int DispID, Oleserver::TVariantArray& params);
 
   /*CoClassWriteArrayPropMethods*/
-  LPDISPATCH __fastcall Get_Application(void)
+// StdProp:IDispatch
+  LPDISPATCH __fastcall get_Application(void)
   {
     return GetDefaultInterface()->get_Application();
   }
 
-  LPDISPATCH __fastcall Get_Parent(void)
+// StdProp:IDispatch
+  LPDISPATCH __fastcall get_Parent(void)
   {
     return GetDefaultInterface()->get_Parent();
   }
 
-  LPDISPATCH __fastcall Get_Container(void)
+// StdProp:IDispatch
+  LPDISPATCH __fastcall get_Container(void)
   {
     return GetDefaultInterface()->get_Container();
   }
 
-  LPDISPATCH __fastcall Get_Document(void)
+// StdProp:IDispatch
+  LPDISPATCH __fastcall get_Document(void)
   {
     return GetDefaultInterface()->get_Document();
   }
 
-  TOLEBOOL __fastcall Get_TopLevelContainer(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_TopLevelContainer(void)
   {
     return GetDefaultInterface()->get_TopLevelContainer();
   }
 
-  BSTR __fastcall Get_Type(void)
+// StdProp:WideString
+  BSTR __fastcall get_Type(void)
   {
     return GetDefaultInterface()->get_Type();
   }
 
-  long __fastcall Get_Left(void)
+// StdProp:Integer
+  long __fastcall get_Left(void)
   {
     return GetDefaultInterface()->get_Left();
   }
 
-  void __fastcall Set_Left(long pl/*[in]*/)
+// StdProp:Integer
+  void __fastcall set_Left(long pl/*[in]*/)
   {
     GetDefaultInterface()->set_Left(pl/*[in]*/);
   }
 
-  long __fastcall Get_Top(void)
+// StdProp:Integer
+  long __fastcall get_Top(void)
   {
     return GetDefaultInterface()->get_Top();
   }
 
-  void __fastcall Set_Top(long pl/*[in]*/)
+// StdProp:Integer
+  void __fastcall set_Top(long pl/*[in]*/)
   {
     GetDefaultInterface()->set_Top(pl/*[in]*/);
   }
 
-  long __fastcall Get_Width(void)
+// StdProp:Integer
+  long __fastcall get_Width(void)
   {
     return GetDefaultInterface()->get_Width();
   }
 
-  void __fastcall Set_Width(long pl/*[in]*/)
+// StdProp:Integer
+  void __fastcall set_Width(long pl/*[in]*/)
   {
     GetDefaultInterface()->set_Width(pl/*[in]*/);
   }
 
-  long __fastcall Get_Height(void)
+// StdProp:Integer
+  long __fastcall get_Height(void)
   {
     return GetDefaultInterface()->get_Height();
   }
 
-  void __fastcall Set_Height(long pl/*[in]*/)
+// StdProp:Integer
+  void __fastcall set_Height(long pl/*[in]*/)
   {
     GetDefaultInterface()->set_Height(pl/*[in]*/);
   }
 
-  BSTR __fastcall Get_LocationName(void)
+// StdProp:WideString
+  BSTR __fastcall get_LocationName(void)
   {
     return GetDefaultInterface()->get_LocationName();
   }
 
-  BSTR __fastcall Get_LocationURL(void)
+// StdProp:WideString
+  BSTR __fastcall get_LocationURL(void)
   {
     return GetDefaultInterface()->get_LocationURL();
   }
 
-  TOLEBOOL __fastcall Get_Busy(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_Busy(void)
   {
     return GetDefaultInterface()->get_Busy();
   }
 
-  BSTR __fastcall Get_Name(void)
+// StdProp:WideString
+  BSTR __fastcall get_Name(void)
   {
     return GetDefaultInterface()->get_Name();
   }
 
-  long __fastcall Get_HWND(void)
+// StdProp:Integer
+  long __fastcall get_HWND(void)
   {
     return GetDefaultInterface()->get_HWND();
   }
 
-  BSTR __fastcall Get_FullName(void)
+// StdProp:WideString
+  BSTR __fastcall get_FullName(void)
   {
     return GetDefaultInterface()->get_FullName();
   }
 
-  BSTR __fastcall Get_Path(void)
+// StdProp:WideString
+  BSTR __fastcall get_Path(void)
   {
     return GetDefaultInterface()->get_Path();
   }
 
-  TOLEBOOL __fastcall Get_Visible(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_Visible(void)
   {
     return GetDefaultInterface()->get_Visible();
   }
 
-  void __fastcall Set_Visible(TOLEBOOL pBool/*[in]*/)
+// StdProp:WordBool
+  void __fastcall set_Visible(VARIANT_BOOL pBool/*[in]*/)
   {
     GetDefaultInterface()->set_Visible(pBool/*[in]*/);
   }
 
-  TOLEBOOL __fastcall Get_StatusBar(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_StatusBar(void)
   {
     return GetDefaultInterface()->get_StatusBar();
   }
 
-  void __fastcall Set_StatusBar(TOLEBOOL pBool/*[in]*/)
+// StdProp:WordBool
+  void __fastcall set_StatusBar(VARIANT_BOOL pBool/*[in]*/)
   {
     GetDefaultInterface()->set_StatusBar(pBool/*[in]*/);
   }
 
-  BSTR __fastcall Get_StatusText(void)
+// StdProp:WideString
+  BSTR __fastcall get_StatusText(void)
   {
     return GetDefaultInterface()->get_StatusText();
   }
 
-  void __fastcall Set_StatusText(BSTR StatusText/*[in]*/)
+// StdProp:WideString
+  void __fastcall set_StatusText(BSTR StatusText/*[in]*/)
   {
     GetDefaultInterface()->set_StatusText(StatusText/*[in]*/);
   }
 
-  int __fastcall Get_ToolBar(void)
+// StdProp:Integer
+  int __fastcall get_ToolBar(void)
   {
     return GetDefaultInterface()->get_ToolBar();
   }
 
-  void __fastcall Set_ToolBar(int Value/*[in]*/)
+// StdProp:Integer
+  void __fastcall set_ToolBar(int Value/*[in]*/)
   {
     GetDefaultInterface()->set_ToolBar(Value/*[in]*/);
   }
 
-  TOLEBOOL __fastcall Get_MenuBar(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_MenuBar(void)
   {
     return GetDefaultInterface()->get_MenuBar();
   }
 
-  void __fastcall Set_MenuBar(TOLEBOOL Value/*[in]*/)
+// StdProp:WordBool
+  void __fastcall set_MenuBar(VARIANT_BOOL Value/*[in]*/)
   {
     GetDefaultInterface()->set_MenuBar(Value/*[in]*/);
   }
 
-  TOLEBOOL __fastcall Get_FullScreen(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_FullScreen(void)
   {
     return GetDefaultInterface()->get_FullScreen();
   }
 
-  void __fastcall Set_FullScreen(TOLEBOOL pbFullScreen/*[in]*/)
+// StdProp:WordBool
+  void __fastcall set_FullScreen(VARIANT_BOOL pbFullScreen/*[in]*/)
   {
     GetDefaultInterface()->set_FullScreen(pbFullScreen/*[in]*/);
   }
 
-  Shdocvw_tlb::tagREADYSTATE __fastcall Get_ReadyState(void)
+// StdProp:TOleEnum
+  Shdocvw_tlb::tagREADYSTATE __fastcall get_ReadyState(void)
   {
     return GetDefaultInterface()->get_ReadyState();
   }
 
-  TOLEBOOL __fastcall Get_Offline(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_Offline(void)
   {
     return GetDefaultInterface()->get_Offline();
   }
 
-  void __fastcall Set_Offline(TOLEBOOL pbOffline/*[in]*/)
+// StdProp:WordBool
+  void __fastcall set_Offline(VARIANT_BOOL pbOffline/*[in]*/)
   {
     GetDefaultInterface()->set_Offline(pbOffline/*[in]*/);
   }
 
-  TOLEBOOL __fastcall Get_Silent(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_Silent(void)
   {
     return GetDefaultInterface()->get_Silent();
   }
 
-  void __fastcall Set_Silent(TOLEBOOL pbSilent/*[in]*/)
+// StdProp:WordBool
+  void __fastcall set_Silent(VARIANT_BOOL pbSilent/*[in]*/)
   {
     GetDefaultInterface()->set_Silent(pbSilent/*[in]*/);
   }
 
-  TOLEBOOL __fastcall Get_RegisterAsBrowser(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_RegisterAsBrowser(void)
   {
     return GetDefaultInterface()->get_RegisterAsBrowser();
   }
 
-  void __fastcall Set_RegisterAsBrowser(TOLEBOOL pbRegister/*[in]*/)
+// StdProp:WordBool
+  void __fastcall set_RegisterAsBrowser(VARIANT_BOOL pbRegister/*[in]*/)
   {
     GetDefaultInterface()->set_RegisterAsBrowser(pbRegister/*[in]*/);
   }
 
-  TOLEBOOL __fastcall Get_RegisterAsDropTarget(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_RegisterAsDropTarget(void)
   {
     return GetDefaultInterface()->get_RegisterAsDropTarget();
   }
 
-  void __fastcall Set_RegisterAsDropTarget(TOLEBOOL pbRegister/*[in]*/)
+// StdProp:WordBool
+  void __fastcall set_RegisterAsDropTarget(VARIANT_BOOL pbRegister/*[in]*/)
   {
     GetDefaultInterface()->set_RegisterAsDropTarget(pbRegister/*[in]*/);
   }
 
-  TOLEBOOL __fastcall Get_TheaterMode(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_TheaterMode(void)
   {
     return GetDefaultInterface()->get_TheaterMode();
   }
 
-  void __fastcall Set_TheaterMode(TOLEBOOL pbRegister/*[in]*/)
+// StdProp:WordBool
+  void __fastcall set_TheaterMode(VARIANT_BOOL pbRegister/*[in]*/)
   {
     GetDefaultInterface()->set_TheaterMode(pbRegister/*[in]*/);
   }
 
-  TOLEBOOL __fastcall Get_AddressBar(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_AddressBar(void)
   {
     return GetDefaultInterface()->get_AddressBar();
   }
 
-  void __fastcall Set_AddressBar(TOLEBOOL Value/*[in]*/)
+// StdProp:WordBool
+  void __fastcall set_AddressBar(VARIANT_BOOL Value/*[in]*/)
   {
     GetDefaultInterface()->set_AddressBar(Value/*[in]*/);
   }
 
-  TOLEBOOL __fastcall Get_Resizable(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_Resizable(void)
   {
     return GetDefaultInterface()->get_Resizable();
   }
 
-  void __fastcall Set_Resizable(TOLEBOOL Value/*[in]*/)
+// StdProp:WordBool
+  void __fastcall set_Resizable(VARIANT_BOOL Value/*[in]*/)
   {
     GetDefaultInterface()->set_Resizable(Value/*[in]*/);
   }
@@ -808,10 +966,10 @@ public:
     GetDefaultInterface()->GoSearch();
   }
 
-  void __fastcall Navigate(BSTR URL/*[in]*/, TVariant* Flags/*[in,opt]*/= TNoParam(), 
-                           TVariant* TargetFrameName/*[in,opt]*/= TNoParam(), 
-                           TVariant* PostData/*[in,opt]*/= TNoParam(), 
-                           TVariant* Headers/*[in,opt]*/= TNoParam())
+  void __fastcall Navigate(BSTR URL/*[in]*/, VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                           VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                           VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                           VARIANT* Headers/*[in,opt]*/= TNoParam())
   {
     GetDefaultInterface()->Navigate(URL/*[in]*/, Flags/*[in,opt]*/, TargetFrameName/*[in,opt]*/, 
                                     PostData/*[in,opt]*/, Headers/*[in,opt]*/);
@@ -822,7 +980,7 @@ public:
     GetDefaultInterface()->Refresh();
   }
 
-  void __fastcall Refresh2(TVariant* Level/*[in,opt]*/= TNoParam())
+  void __fastcall Refresh2(VARIANT* Level/*[in,opt]*/= TNoParam())
   {
     GetDefaultInterface()->Refresh2(Level/*[in,opt]*/);
   }
@@ -842,7 +1000,7 @@ public:
     GetDefaultInterface()->ClientToWindow(pcx/*[in,out]*/, pcy/*[in,out]*/);
   }
 
-  void __fastcall PutProperty(BSTR Property/*[in]*/, TVariantInParam vtValue/*[in]*/)
+  void __fastcall PutProperty(BSTR Property/*[in]*/, VARIANT vtValue/*[in]*/)
   {
     GetDefaultInterface()->PutProperty(Property/*[in]*/, vtValue/*[in]*/);
   }
@@ -852,10 +1010,10 @@ public:
     return GetDefaultInterface()->GetProperty(Property/*[in]*/);
   }
 
-  void __fastcall Navigate2(TVariant* URL/*[in]*/, TVariant* Flags/*[in,opt]*/= TNoParam(), 
-                            TVariant* TargetFrameName/*[in,opt]*/= TNoParam(), 
-                            TVariant* PostData/*[in,opt]*/= TNoParam(), 
-                            TVariant* Headers/*[in,opt]*/= TNoParam())
+  void __fastcall Navigate2(VARIANT* URL/*[in]*/, VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                            VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                            VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                            VARIANT* Headers/*[in,opt]*/= TNoParam())
   {
     GetDefaultInterface()->Navigate2(URL/*[in]*/, Flags/*[in,opt]*/, TargetFrameName/*[in,opt]*/, 
                                      PostData/*[in,opt]*/, Headers/*[in,opt]*/);
@@ -868,54 +1026,54 @@ public:
 
   void __fastcall ExecWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/, 
                          Shdocvw_tlb::OLECMDEXECOPT cmdexecopt/*[in]*/, 
-                         TVariant* pvaIn/*[in,opt]*/= TNoParam(), 
-                         TVariant* pvaOut/*[in,out,opt]*/= TNoParam())
+                         VARIANT* pvaIn/*[in,opt]*/= TNoParam(), 
+                         VARIANT* pvaOut/*[in,out,opt]*/= TNoParam())
   {
     GetDefaultInterface()->ExecWB(cmdID/*[in]*/, cmdexecopt/*[in]*/, pvaIn/*[in,opt]*/, 
                                   pvaOut/*[in,out,opt]*/);
   }
 
-  void __fastcall ShowBrowserBar(TVariant* pvaClsid/*[in]*/, 
-                                 TVariant* pvarShow/*[in,opt]*/= TNoParam(), 
-                                 TVariant* pvarSize/*[in,opt]*/= TNoParam())
+  void __fastcall ShowBrowserBar(VARIANT* pvaClsid/*[in]*/, 
+                                 VARIANT* pvarShow/*[in,opt]*/= TNoParam(), 
+                                 VARIANT* pvarSize/*[in,opt]*/= TNoParam())
   {
     GetDefaultInterface()->ShowBrowserBar(pvaClsid/*[in]*/, pvarShow/*[in,opt]*/, 
                                           pvarSize/*[in,opt]*/);
   }
 
   /*CoClassWriteProperties*/
-  __property LPDISPATCH Application={ read=Get_Application }; // 0, No
-  __property LPDISPATCH Parent={ read=Get_Parent }; // 0, No
-  __property LPDISPATCH Container={ read=Get_Container }; // 0, No
-  __property LPDISPATCH Document={ read=Get_Document }; // 0, No
-  __property TOLEBOOL TopLevelContainer={ read=Get_TopLevelContainer }; // 0, No
-  __property BSTR Type={ read=Get_Type }; // 0, No
-  __property BSTR LocationName={ read=Get_LocationName }; // 0, No
-  __property BSTR LocationURL={ read=Get_LocationURL }; // 0, No
-  __property TOLEBOOL Busy={ read=Get_Busy }; // 0, No
-  __property BSTR Name={ read=Get_Name }; // 0, No
-  __property long HWND={ read=Get_HWND }; // 0, No
-  __property BSTR FullName={ read=Get_FullName }; // 0, No
-  __property BSTR Path={ read=Get_Path }; // 0, No
-  __property Shdocvw_tlb::tagREADYSTATE ReadyState={ read=Get_ReadyState }; // 0, No
+  __property LPDISPATCH Application={ read=get_Application }; // 0, No
+  __property LPDISPATCH Parent={ read=get_Parent }; // 0, No
+  __property LPDISPATCH Container={ read=get_Container }; // 0, No
+  __property LPDISPATCH Document={ read=get_Document }; // 0, No
+  __property TOLEBOOL TopLevelContainer={ read=get_TopLevelContainer }; // 0, No
+  __property BSTR Type={ read=get_Type }; // 0, No
+  __property BSTR LocationName={ read=get_LocationName }; // 0, No
+  __property BSTR LocationURL={ read=get_LocationURL }; // 0, No
+  __property TOLEBOOL Busy={ read=get_Busy }; // 0, No
+  __property BSTR Name={ read=get_Name }; // 0, No
+  __property long HWND={ read=get_HWND }; // 0, No
+  __property BSTR FullName={ read=get_FullName }; // 0, No
+  __property BSTR Path={ read=get_Path }; // 0, No
+  __property Shdocvw_tlb::tagREADYSTATE ReadyState={ read=get_ReadyState }; // 0, No
   /*CoClassWriteProperties*/
-  __property long Left={ read=Get_Left, write=Set_Left, stored=false }; // 0, No
-  __property long Top={ read=Get_Top, write=Set_Top, stored=false }; // 0, No
-  __property long Width={ read=Get_Width, write=Set_Width, stored=false }; // 0, No
-  __property long Height={ read=Get_Height, write=Set_Height, stored=false }; // 0, No
-  __property TOLEBOOL Visible={ read=Get_Visible, write=Set_Visible, stored=false }; // 0, No
-  __property TOLEBOOL StatusBar={ read=Get_StatusBar, write=Set_StatusBar, stored=false }; // 0, No
-  __property BSTR StatusText={ read=Get_StatusText, write=Set_StatusText, stored=false }; // 0, No
-  __property int ToolBar={ read=Get_ToolBar, write=Set_ToolBar, stored=false }; // 0, No
-  __property TOLEBOOL MenuBar={ read=Get_MenuBar, write=Set_MenuBar, stored=false }; // 0, No
-  __property TOLEBOOL FullScreen={ read=Get_FullScreen, write=Set_FullScreen, stored=false }; // 0, No
-  __property TOLEBOOL Offline={ read=Get_Offline, write=Set_Offline, stored=false }; // 0, No
-  __property TOLEBOOL Silent={ read=Get_Silent, write=Set_Silent, stored=false }; // 0, No
-  __property TOLEBOOL RegisterAsBrowser={ read=Get_RegisterAsBrowser, write=Set_RegisterAsBrowser, stored=false }; // 0, No
-  __property TOLEBOOL RegisterAsDropTarget={ read=Get_RegisterAsDropTarget, write=Set_RegisterAsDropTarget, stored=false }; // 0, No
-  __property TOLEBOOL TheaterMode={ read=Get_TheaterMode, write=Set_TheaterMode, stored=false }; // 0, No
-  __property TOLEBOOL AddressBar={ read=Get_AddressBar, write=Set_AddressBar, stored=false }; // 0, No
-  __property TOLEBOOL Resizable={ read=Get_Resizable, write=Set_Resizable, stored=false }; // 0, No
+  __property long Left={ read=get_Left, stored=false }; // 0, No
+  __property long Top={ read=get_Top, stored=false }; // 0, No
+  __property long Width={ read=get_Width, stored=false }; // 0, No
+  __property long Height={ read=get_Height, stored=false }; // 0, No
+  __property TOLEBOOL Visible={ read=get_Visible, stored=false }; // 0, No
+  __property TOLEBOOL StatusBar={ read=get_StatusBar, stored=false }; // 0, No
+  __property BSTR StatusText={ read=get_StatusText, stored=false }; // 0, No
+  __property int ToolBar={ read=get_ToolBar, stored=false }; // 0, No
+  __property TOLEBOOL MenuBar={ read=get_MenuBar, stored=false }; // 0, No
+  __property TOLEBOOL FullScreen={ read=get_FullScreen, stored=false }; // 0, No
+  __property TOLEBOOL Offline={ read=get_Offline, stored=false }; // 0, No
+  __property TOLEBOOL Silent={ read=get_Silent, stored=false }; // 0, No
+  __property TOLEBOOL RegisterAsBrowser={ read=get_RegisterAsBrowser, stored=false }; // 0, No
+  __property TOLEBOOL RegisterAsDropTarget={ read=get_RegisterAsDropTarget, stored=false }; // 0, No
+  __property TOLEBOOL TheaterMode={ read=get_TheaterMode, stored=false }; // 0, No
+  __property TOLEBOOL AddressBar={ read=get_AddressBar, stored=false }; // 0, No
+  __property TOLEBOOL Resizable={ read=get_Resizable, stored=false }; // 0, No
   /*CoClassWriteEventDecls*/
 private:
   TCppInternetExplorerStatusTextChange FOnStatusTextChange;
@@ -936,6 +1094,20 @@ private:
   TCppInternetExplorerOnStatusBar FOnStatusBar;
   TCppInternetExplorerOnFullScreen FOnFullScreen;
   TCppInternetExplorerOnTheaterMode FOnTheaterMode;
+  TCppInternetExplorerWindowSetResizable FOnWindowSetResizable;
+  TCppInternetExplorerWindowSetLeft FOnWindowSetLeft;
+  TCppInternetExplorerWindowSetTop FOnWindowSetTop;
+  TCppInternetExplorerWindowSetWidth FOnWindowSetWidth;
+  TCppInternetExplorerWindowSetHeight FOnWindowSetHeight;
+  TCppInternetExplorerWindowClosing FOnWindowClosing;
+  TCppInternetExplorerClientToHostWindow FOnClientToHostWindow;
+  TCppInternetExplorerSetSecureLockIcon FOnSetSecureLockIcon;
+  TCppInternetExplorerFileDownload FOnFileDownload;
+  TCppInternetExplorerNavigateError FOnNavigateError;
+  TCppInternetExplorerPrintTemplateInstantiation FOnPrintTemplateInstantiation;
+  TCppInternetExplorerPrintTemplateTeardown FOnPrintTemplateTeardown;
+  TCppInternetExplorerUpdatePageStatus FOnUpdatePageStatus;
+  TCppInternetExplorerPrivacyImpactedStateChange FOnPrivacyImpactedStateChange;
 __published:
   __property TCppInternetExplorerStatusTextChange OnStatusTextChange={ read=FOnStatusTextChange, write=FOnStatusTextChange };
   __property TCppInternetExplorerProgressChange OnProgressChange={ read=FOnProgressChange, write=FOnProgressChange };
@@ -955,6 +1127,613 @@ __published:
   __property TCppInternetExplorerOnStatusBar OnStatusBar={ read=FOnStatusBar, write=FOnStatusBar };
   __property TCppInternetExplorerOnFullScreen OnFullScreen={ read=FOnFullScreen, write=FOnFullScreen };
   __property TCppInternetExplorerOnTheaterMode OnTheaterMode={ read=FOnTheaterMode, write=FOnTheaterMode };
+  __property TCppInternetExplorerWindowSetResizable OnWindowSetResizable={ read=FOnWindowSetResizable, write=FOnWindowSetResizable };
+  __property TCppInternetExplorerWindowSetLeft OnWindowSetLeft={ read=FOnWindowSetLeft, write=FOnWindowSetLeft };
+  __property TCppInternetExplorerWindowSetTop OnWindowSetTop={ read=FOnWindowSetTop, write=FOnWindowSetTop };
+  __property TCppInternetExplorerWindowSetWidth OnWindowSetWidth={ read=FOnWindowSetWidth, write=FOnWindowSetWidth };
+  __property TCppInternetExplorerWindowSetHeight OnWindowSetHeight={ read=FOnWindowSetHeight, write=FOnWindowSetHeight };
+  __property TCppInternetExplorerWindowClosing OnWindowClosing={ read=FOnWindowClosing, write=FOnWindowClosing };
+  __property TCppInternetExplorerClientToHostWindow OnClientToHostWindow={ read=FOnClientToHostWindow, write=FOnClientToHostWindow };
+  __property TCppInternetExplorerSetSecureLockIcon OnSetSecureLockIcon={ read=FOnSetSecureLockIcon, write=FOnSetSecureLockIcon };
+  __property TCppInternetExplorerFileDownload OnFileDownload={ read=FOnFileDownload, write=FOnFileDownload };
+  __property TCppInternetExplorerNavigateError OnNavigateError={ read=FOnNavigateError, write=FOnNavigateError };
+  __property TCppInternetExplorerPrintTemplateInstantiation OnPrintTemplateInstantiation={ read=FOnPrintTemplateInstantiation, write=FOnPrintTemplateInstantiation };
+  __property TCppInternetExplorerPrintTemplateTeardown OnPrintTemplateTeardown={ read=FOnPrintTemplateTeardown, write=FOnPrintTemplateTeardown };
+  __property TCppInternetExplorerUpdatePageStatus OnUpdatePageStatus={ read=FOnUpdatePageStatus, write=FOnUpdatePageStatus };
+  __property TCppInternetExplorerPrivacyImpactedStateChange OnPrivacyImpactedStateChange={ read=FOnPrivacyImpactedStateChange, write=FOnPrivacyImpactedStateChange };
+};
+
+
+// *********************************************************************//
+// COM Component Proxy Class Declaration
+// Component Name   : TCppShellBrowserWindow
+// Help String      : Shell Browser Window.
+// Default Interface: IWebBrowser2
+// Def. Intf. Object: IWebBrowser2Ptr
+// Def. Intf. DISP? : No
+// Event   Interface: DWebBrowserEvents2
+// TypeFlags        : (18) CanCreate Hidden
+// *********************************************************************//
+typedef void __fastcall (__closure * TCppShellBrowserWindowStatusTextChange)(System::TObject * Sender, 
+                                                                             BSTR Text/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowProgressChange)(System::TObject * Sender, 
+                                                                           long Progress/*[in]*/, 
+                                                                           long ProgressMax/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowCommandStateChange)(System::TObject * Sender, 
+                                                                               long Command/*[in]*/, 
+                                                                               VARIANT_BOOL Enable/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowTitleChange)(System::TObject * Sender, 
+                                                                        BSTR Text/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowPropertyChange)(System::TObject * Sender, 
+                                                                           BSTR szProperty/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowBeforeNavigate2)(System::TObject * Sender, 
+                                                                            LPDISPATCH pDisp/*[in]*/, 
+                                                                            VARIANT* URL/*[in]*/, 
+                                                                            VARIANT* Flags/*[in]*/, 
+                                                                            VARIANT* TargetFrameName/*[in]*/, 
+                                                                            VARIANT* PostData/*[in]*/, 
+                                                                            VARIANT* Headers/*[in]*/, 
+                                                                            VARIANT_BOOL* Cancel/*[in,out]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowNewWindow2)(System::TObject * Sender, 
+                                                                       LPDISPATCH* ppDisp/*[in,out]*/, 
+                                                                       VARIANT_BOOL* Cancel/*[in,out]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowNavigateComplete2)(System::TObject * Sender, 
+                                                                              LPDISPATCH pDisp/*[in]*/, 
+                                                                              VARIANT* URL/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowDocumentComplete)(System::TObject * Sender, 
+                                                                             LPDISPATCH pDisp/*[in]*/, 
+                                                                             VARIANT* URL/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowOnVisible)(System::TObject * Sender, 
+                                                                      VARIANT_BOOL Visible/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowOnToolBar)(System::TObject * Sender, 
+                                                                      VARIANT_BOOL ToolBar/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowOnMenuBar)(System::TObject * Sender, 
+                                                                      VARIANT_BOOL MenuBar/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowOnStatusBar)(System::TObject * Sender, 
+                                                                        VARIANT_BOOL StatusBar/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowOnFullScreen)(System::TObject * Sender, 
+                                                                         VARIANT_BOOL FullScreen/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowOnTheaterMode)(System::TObject * Sender, 
+                                                                          VARIANT_BOOL TheaterMode/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowWindowSetResizable)(System::TObject * Sender, 
+                                                                               VARIANT_BOOL Resizable/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowWindowSetLeft)(System::TObject * Sender, 
+                                                                          long Left/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowWindowSetTop)(System::TObject * Sender, 
+                                                                         long Top/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowWindowSetWidth)(System::TObject * Sender, 
+                                                                           long Width/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowWindowSetHeight)(System::TObject * Sender, 
+                                                                            long Height/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowWindowClosing)(System::TObject * Sender, 
+                                                                          VARIANT_BOOL IsChildWindow/*[in]*/, 
+                                                                          VARIANT_BOOL* Cancel/*[in,out]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowClientToHostWindow)(System::TObject * Sender, 
+                                                                               long* CX/*[in,out]*/, 
+                                                                               long* CY/*[in,out]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowSetSecureLockIcon)(System::TObject * Sender, 
+                                                                              long SecureLockIcon/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowFileDownload)(System::TObject * Sender, 
+                                                                         VARIANT_BOOL* Cancel/*[in,out]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowNavigateError)(System::TObject * Sender, 
+                                                                          LPDISPATCH pDisp/*[in]*/, 
+                                                                          VARIANT* URL/*[in]*/, 
+                                                                          VARIANT* Frame/*[in]*/, 
+                                                                          VARIANT* StatusCode/*[in]*/, 
+                                                                          VARIANT_BOOL* Cancel/*[in,out]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowPrintTemplateInstantiation)(System::TObject * Sender, 
+                                                                                       LPDISPATCH pDisp/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowPrintTemplateTeardown)(System::TObject * Sender, 
+                                                                                  LPDISPATCH pDisp/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowUpdatePageStatus)(System::TObject * Sender, 
+                                                                             LPDISPATCH pDisp/*[in]*/, 
+                                                                             VARIANT* nPage/*[in]*/, 
+                                                                             VARIANT* fDone/*[in]*/);
+typedef void __fastcall (__closure * TCppShellBrowserWindowPrivacyImpactedStateChange)(System::TObject * Sender, 
+                                                                                       VARIANT_BOOL bImpacted/*[in]*/);
+
+class PACKAGE TCppShellBrowserWindow : public Oleserver::TOleServer
+{
+  IWebBrowser2Ptr m_DefaultIntf;
+  _di_IUnknown __fastcall GetDunk();
+public:
+  __fastcall TCppShellBrowserWindow(TComponent* owner) : Oleserver::TOleServer(owner)
+  {}
+
+  IWebBrowser2Ptr& GetDefaultInterface();
+  void __fastcall InitServerData();
+  void __fastcall Connect();
+  void __fastcall Disconnect();
+  void __fastcall BeforeDestruction();
+  void __fastcall ConnectTo(IWebBrowser2Ptr intf);
+
+  virtual void __fastcall InvokeEvent(int DispID, Oleserver::TVariantArray& params);
+
+  /*CoClassWriteArrayPropMethods*/
+// StdProp:IDispatch
+  LPDISPATCH __fastcall get_Application(void)
+  {
+    return GetDefaultInterface()->get_Application();
+  }
+
+// StdProp:IDispatch
+  LPDISPATCH __fastcall get_Parent(void)
+  {
+    return GetDefaultInterface()->get_Parent();
+  }
+
+// StdProp:IDispatch
+  LPDISPATCH __fastcall get_Container(void)
+  {
+    return GetDefaultInterface()->get_Container();
+  }
+
+// StdProp:IDispatch
+  LPDISPATCH __fastcall get_Document(void)
+  {
+    return GetDefaultInterface()->get_Document();
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_TopLevelContainer(void)
+  {
+    return GetDefaultInterface()->get_TopLevelContainer();
+  }
+
+// StdProp:WideString
+  BSTR __fastcall get_Type(void)
+  {
+    return GetDefaultInterface()->get_Type();
+  }
+
+// StdProp:Integer
+  long __fastcall get_Left(void)
+  {
+    return GetDefaultInterface()->get_Left();
+  }
+
+// StdProp:Integer
+  void __fastcall set_Left(long pl/*[in]*/)
+  {
+    GetDefaultInterface()->set_Left(pl/*[in]*/);
+  }
+
+// StdProp:Integer
+  long __fastcall get_Top(void)
+  {
+    return GetDefaultInterface()->get_Top();
+  }
+
+// StdProp:Integer
+  void __fastcall set_Top(long pl/*[in]*/)
+  {
+    GetDefaultInterface()->set_Top(pl/*[in]*/);
+  }
+
+// StdProp:Integer
+  long __fastcall get_Width(void)
+  {
+    return GetDefaultInterface()->get_Width();
+  }
+
+// StdProp:Integer
+  void __fastcall set_Width(long pl/*[in]*/)
+  {
+    GetDefaultInterface()->set_Width(pl/*[in]*/);
+  }
+
+// StdProp:Integer
+  long __fastcall get_Height(void)
+  {
+    return GetDefaultInterface()->get_Height();
+  }
+
+// StdProp:Integer
+  void __fastcall set_Height(long pl/*[in]*/)
+  {
+    GetDefaultInterface()->set_Height(pl/*[in]*/);
+  }
+
+// StdProp:WideString
+  BSTR __fastcall get_LocationName(void)
+  {
+    return GetDefaultInterface()->get_LocationName();
+  }
+
+// StdProp:WideString
+  BSTR __fastcall get_LocationURL(void)
+  {
+    return GetDefaultInterface()->get_LocationURL();
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_Busy(void)
+  {
+    return GetDefaultInterface()->get_Busy();
+  }
+
+// StdProp:WideString
+  BSTR __fastcall get_Name(void)
+  {
+    return GetDefaultInterface()->get_Name();
+  }
+
+// StdProp:Integer
+  long __fastcall get_HWND(void)
+  {
+    return GetDefaultInterface()->get_HWND();
+  }
+
+// StdProp:WideString
+  BSTR __fastcall get_FullName(void)
+  {
+    return GetDefaultInterface()->get_FullName();
+  }
+
+// StdProp:WideString
+  BSTR __fastcall get_Path(void)
+  {
+    return GetDefaultInterface()->get_Path();
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_Visible(void)
+  {
+    return GetDefaultInterface()->get_Visible();
+  }
+
+// StdProp:WordBool
+  void __fastcall set_Visible(VARIANT_BOOL pBool/*[in]*/)
+  {
+    GetDefaultInterface()->set_Visible(pBool/*[in]*/);
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_StatusBar(void)
+  {
+    return GetDefaultInterface()->get_StatusBar();
+  }
+
+// StdProp:WordBool
+  void __fastcall set_StatusBar(VARIANT_BOOL pBool/*[in]*/)
+  {
+    GetDefaultInterface()->set_StatusBar(pBool/*[in]*/);
+  }
+
+// StdProp:WideString
+  BSTR __fastcall get_StatusText(void)
+  {
+    return GetDefaultInterface()->get_StatusText();
+  }
+
+// StdProp:WideString
+  void __fastcall set_StatusText(BSTR StatusText/*[in]*/)
+  {
+    GetDefaultInterface()->set_StatusText(StatusText/*[in]*/);
+  }
+
+// StdProp:Integer
+  int __fastcall get_ToolBar(void)
+  {
+    return GetDefaultInterface()->get_ToolBar();
+  }
+
+// StdProp:Integer
+  void __fastcall set_ToolBar(int Value/*[in]*/)
+  {
+    GetDefaultInterface()->set_ToolBar(Value/*[in]*/);
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_MenuBar(void)
+  {
+    return GetDefaultInterface()->get_MenuBar();
+  }
+
+// StdProp:WordBool
+  void __fastcall set_MenuBar(VARIANT_BOOL Value/*[in]*/)
+  {
+    GetDefaultInterface()->set_MenuBar(Value/*[in]*/);
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_FullScreen(void)
+  {
+    return GetDefaultInterface()->get_FullScreen();
+  }
+
+// StdProp:WordBool
+  void __fastcall set_FullScreen(VARIANT_BOOL pbFullScreen/*[in]*/)
+  {
+    GetDefaultInterface()->set_FullScreen(pbFullScreen/*[in]*/);
+  }
+
+// StdProp:TOleEnum
+  Shdocvw_tlb::tagREADYSTATE __fastcall get_ReadyState(void)
+  {
+    return GetDefaultInterface()->get_ReadyState();
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_Offline(void)
+  {
+    return GetDefaultInterface()->get_Offline();
+  }
+
+// StdProp:WordBool
+  void __fastcall set_Offline(VARIANT_BOOL pbOffline/*[in]*/)
+  {
+    GetDefaultInterface()->set_Offline(pbOffline/*[in]*/);
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_Silent(void)
+  {
+    return GetDefaultInterface()->get_Silent();
+  }
+
+// StdProp:WordBool
+  void __fastcall set_Silent(VARIANT_BOOL pbSilent/*[in]*/)
+  {
+    GetDefaultInterface()->set_Silent(pbSilent/*[in]*/);
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_RegisterAsBrowser(void)
+  {
+    return GetDefaultInterface()->get_RegisterAsBrowser();
+  }
+
+// StdProp:WordBool
+  void __fastcall set_RegisterAsBrowser(VARIANT_BOOL pbRegister/*[in]*/)
+  {
+    GetDefaultInterface()->set_RegisterAsBrowser(pbRegister/*[in]*/);
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_RegisterAsDropTarget(void)
+  {
+    return GetDefaultInterface()->get_RegisterAsDropTarget();
+  }
+
+// StdProp:WordBool
+  void __fastcall set_RegisterAsDropTarget(VARIANT_BOOL pbRegister/*[in]*/)
+  {
+    GetDefaultInterface()->set_RegisterAsDropTarget(pbRegister/*[in]*/);
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_TheaterMode(void)
+  {
+    return GetDefaultInterface()->get_TheaterMode();
+  }
+
+// StdProp:WordBool
+  void __fastcall set_TheaterMode(VARIANT_BOOL pbRegister/*[in]*/)
+  {
+    GetDefaultInterface()->set_TheaterMode(pbRegister/*[in]*/);
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_AddressBar(void)
+  {
+    return GetDefaultInterface()->get_AddressBar();
+  }
+
+// StdProp:WordBool
+  void __fastcall set_AddressBar(VARIANT_BOOL Value/*[in]*/)
+  {
+    GetDefaultInterface()->set_AddressBar(Value/*[in]*/);
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_Resizable(void)
+  {
+    return GetDefaultInterface()->get_Resizable();
+  }
+
+// StdProp:WordBool
+  void __fastcall set_Resizable(VARIANT_BOOL Value/*[in]*/)
+  {
+    GetDefaultInterface()->set_Resizable(Value/*[in]*/);
+  }
+
+  /*CoClassWriteMethods*/
+  void __fastcall GoBack(void)
+  {
+    GetDefaultInterface()->GoBack();
+  }
+
+  void __fastcall GoForward(void)
+  {
+    GetDefaultInterface()->GoForward();
+  }
+
+  void __fastcall GoHome(void)
+  {
+    GetDefaultInterface()->GoHome();
+  }
+
+  void __fastcall GoSearch(void)
+  {
+    GetDefaultInterface()->GoSearch();
+  }
+
+  void __fastcall Navigate(BSTR URL/*[in]*/, VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                           VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                           VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                           VARIANT* Headers/*[in,opt]*/= TNoParam())
+  {
+    GetDefaultInterface()->Navigate(URL/*[in]*/, Flags/*[in,opt]*/, TargetFrameName/*[in,opt]*/, 
+                                    PostData/*[in,opt]*/, Headers/*[in,opt]*/);
+  }
+
+  void __fastcall Refresh(void)
+  {
+    GetDefaultInterface()->Refresh();
+  }
+
+  void __fastcall Refresh2(VARIANT* Level/*[in,opt]*/= TNoParam())
+  {
+    GetDefaultInterface()->Refresh2(Level/*[in,opt]*/);
+  }
+
+  void __fastcall Stop(void)
+  {
+    GetDefaultInterface()->Stop();
+  }
+
+  void __fastcall Quit(void)
+  {
+    GetDefaultInterface()->Quit();
+  }
+
+  void __fastcall ClientToWindow(int* pcx/*[in,out]*/, int* pcy/*[in,out]*/)
+  {
+    GetDefaultInterface()->ClientToWindow(pcx/*[in,out]*/, pcy/*[in,out]*/);
+  }
+
+  void __fastcall PutProperty(BSTR Property/*[in]*/, VARIANT vtValue/*[in]*/)
+  {
+    GetDefaultInterface()->PutProperty(Property/*[in]*/, vtValue/*[in]*/);
+  }
+
+  TVariant __fastcall GetProperty(BSTR Property/*[in]*/)
+  {
+    return GetDefaultInterface()->GetProperty(Property/*[in]*/);
+  }
+
+  void __fastcall Navigate2(VARIANT* URL/*[in]*/, VARIANT* Flags/*[in,opt]*/= TNoParam(), 
+                            VARIANT* TargetFrameName/*[in,opt]*/= TNoParam(), 
+                            VARIANT* PostData/*[in,opt]*/= TNoParam(), 
+                            VARIANT* Headers/*[in,opt]*/= TNoParam())
+  {
+    GetDefaultInterface()->Navigate2(URL/*[in]*/, Flags/*[in,opt]*/, TargetFrameName/*[in,opt]*/, 
+                                     PostData/*[in,opt]*/, Headers/*[in,opt]*/);
+  }
+
+  Shdocvw_tlb::OLECMDF __fastcall QueryStatusWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/)
+  {
+    return GetDefaultInterface()->QueryStatusWB(cmdID/*[in]*/);
+  }
+
+  void __fastcall ExecWB(Shdocvw_tlb::OLECMDID cmdID/*[in]*/, 
+                         Shdocvw_tlb::OLECMDEXECOPT cmdexecopt/*[in]*/, 
+                         VARIANT* pvaIn/*[in,opt]*/= TNoParam(), 
+                         VARIANT* pvaOut/*[in,out,opt]*/= TNoParam())
+  {
+    GetDefaultInterface()->ExecWB(cmdID/*[in]*/, cmdexecopt/*[in]*/, pvaIn/*[in,opt]*/, 
+                                  pvaOut/*[in,out,opt]*/);
+  }
+
+  void __fastcall ShowBrowserBar(VARIANT* pvaClsid/*[in]*/, 
+                                 VARIANT* pvarShow/*[in,opt]*/= TNoParam(), 
+                                 VARIANT* pvarSize/*[in,opt]*/= TNoParam())
+  {
+    GetDefaultInterface()->ShowBrowserBar(pvaClsid/*[in]*/, pvarShow/*[in,opt]*/, 
+                                          pvarSize/*[in,opt]*/);
+  }
+
+  /*CoClassWriteProperties*/
+  __property LPDISPATCH Application={ read=get_Application }; // 0, No
+  __property LPDISPATCH Parent={ read=get_Parent }; // 0, No
+  __property LPDISPATCH Container={ read=get_Container }; // 0, No
+  __property LPDISPATCH Document={ read=get_Document }; // 0, No
+  __property TOLEBOOL TopLevelContainer={ read=get_TopLevelContainer }; // 0, No
+  __property BSTR Type={ read=get_Type }; // 0, No
+  __property BSTR LocationName={ read=get_LocationName }; // 0, No
+  __property BSTR LocationURL={ read=get_LocationURL }; // 0, No
+  __property TOLEBOOL Busy={ read=get_Busy }; // 0, No
+  __property BSTR Name={ read=get_Name }; // 0, No
+  __property long HWND={ read=get_HWND }; // 0, No
+  __property BSTR FullName={ read=get_FullName }; // 0, No
+  __property BSTR Path={ read=get_Path }; // 0, No
+  __property Shdocvw_tlb::tagREADYSTATE ReadyState={ read=get_ReadyState }; // 0, No
+  /*CoClassWriteProperties*/
+  __property long Left={ read=get_Left, stored=false }; // 0, No
+  __property long Top={ read=get_Top, stored=false }; // 0, No
+  __property long Width={ read=get_Width, stored=false }; // 0, No
+  __property long Height={ read=get_Height, stored=false }; // 0, No
+  __property TOLEBOOL Visible={ read=get_Visible, stored=false }; // 0, No
+  __property TOLEBOOL StatusBar={ read=get_StatusBar, stored=false }; // 0, No
+  __property BSTR StatusText={ read=get_StatusText, stored=false }; // 0, No
+  __property int ToolBar={ read=get_ToolBar, stored=false }; // 0, No
+  __property TOLEBOOL MenuBar={ read=get_MenuBar, stored=false }; // 0, No
+  __property TOLEBOOL FullScreen={ read=get_FullScreen, stored=false }; // 0, No
+  __property TOLEBOOL Offline={ read=get_Offline, stored=false }; // 0, No
+  __property TOLEBOOL Silent={ read=get_Silent, stored=false }; // 0, No
+  __property TOLEBOOL RegisterAsBrowser={ read=get_RegisterAsBrowser, stored=false }; // 0, No
+  __property TOLEBOOL RegisterAsDropTarget={ read=get_RegisterAsDropTarget, stored=false }; // 0, No
+  __property TOLEBOOL TheaterMode={ read=get_TheaterMode, stored=false }; // 0, No
+  __property TOLEBOOL AddressBar={ read=get_AddressBar, stored=false }; // 0, No
+  __property TOLEBOOL Resizable={ read=get_Resizable, stored=false }; // 0, No
+  /*CoClassWriteEventDecls*/
+private:
+  TCppShellBrowserWindowStatusTextChange FOnStatusTextChange;
+  TCppShellBrowserWindowProgressChange FOnProgressChange;
+  TCppShellBrowserWindowCommandStateChange FOnCommandStateChange;
+  TNotifyEvent                   FOnDownloadBegin;
+  TNotifyEvent                   FOnDownloadComplete;
+  TCppShellBrowserWindowTitleChange FOnTitleChange;
+  TCppShellBrowserWindowPropertyChange FOnPropertyChange;
+  TCppShellBrowserWindowBeforeNavigate2 FOnBeforeNavigate2;
+  TCppShellBrowserWindowNewWindow2 FOnNewWindow2;
+  TCppShellBrowserWindowNavigateComplete2 FOnNavigateComplete2;
+  TCppShellBrowserWindowDocumentComplete FOnDocumentComplete;
+  TNotifyEvent                   FOnQuit;
+  TCppShellBrowserWindowOnVisible FOnVisible;
+  TCppShellBrowserWindowOnToolBar FOnToolBar;
+  TCppShellBrowserWindowOnMenuBar FOnMenuBar;
+  TCppShellBrowserWindowOnStatusBar FOnStatusBar;
+  TCppShellBrowserWindowOnFullScreen FOnFullScreen;
+  TCppShellBrowserWindowOnTheaterMode FOnTheaterMode;
+  TCppShellBrowserWindowWindowSetResizable FOnWindowSetResizable;
+  TCppShellBrowserWindowWindowSetLeft FOnWindowSetLeft;
+  TCppShellBrowserWindowWindowSetTop FOnWindowSetTop;
+  TCppShellBrowserWindowWindowSetWidth FOnWindowSetWidth;
+  TCppShellBrowserWindowWindowSetHeight FOnWindowSetHeight;
+  TCppShellBrowserWindowWindowClosing FOnWindowClosing;
+  TCppShellBrowserWindowClientToHostWindow FOnClientToHostWindow;
+  TCppShellBrowserWindowSetSecureLockIcon FOnSetSecureLockIcon;
+  TCppShellBrowserWindowFileDownload FOnFileDownload;
+  TCppShellBrowserWindowNavigateError FOnNavigateError;
+  TCppShellBrowserWindowPrintTemplateInstantiation FOnPrintTemplateInstantiation;
+  TCppShellBrowserWindowPrintTemplateTeardown FOnPrintTemplateTeardown;
+  TCppShellBrowserWindowUpdatePageStatus FOnUpdatePageStatus;
+  TCppShellBrowserWindowPrivacyImpactedStateChange FOnPrivacyImpactedStateChange;
+__published:
+  __property TCppShellBrowserWindowStatusTextChange OnStatusTextChange={ read=FOnStatusTextChange, write=FOnStatusTextChange };
+  __property TCppShellBrowserWindowProgressChange OnProgressChange={ read=FOnProgressChange, write=FOnProgressChange };
+  __property TCppShellBrowserWindowCommandStateChange OnCommandStateChange={ read=FOnCommandStateChange, write=FOnCommandStateChange };
+  __property TNotifyEvent OnDownloadBegin={ read=FOnDownloadBegin, write=FOnDownloadBegin };
+  __property TNotifyEvent OnDownloadComplete={ read=FOnDownloadComplete, write=FOnDownloadComplete };
+  __property TCppShellBrowserWindowTitleChange OnTitleChange={ read=FOnTitleChange, write=FOnTitleChange };
+  __property TCppShellBrowserWindowPropertyChange OnPropertyChange={ read=FOnPropertyChange, write=FOnPropertyChange };
+  __property TCppShellBrowserWindowBeforeNavigate2 OnBeforeNavigate2={ read=FOnBeforeNavigate2, write=FOnBeforeNavigate2 };
+  __property TCppShellBrowserWindowNewWindow2 OnNewWindow2={ read=FOnNewWindow2, write=FOnNewWindow2 };
+  __property TCppShellBrowserWindowNavigateComplete2 OnNavigateComplete2={ read=FOnNavigateComplete2, write=FOnNavigateComplete2 };
+  __property TCppShellBrowserWindowDocumentComplete OnDocumentComplete={ read=FOnDocumentComplete, write=FOnDocumentComplete };
+  __property TNotifyEvent OnQuit={ read=FOnQuit, write=FOnQuit };
+  __property TCppShellBrowserWindowOnVisible OnVisible={ read=FOnVisible, write=FOnVisible };
+  __property TCppShellBrowserWindowOnToolBar OnToolBar={ read=FOnToolBar, write=FOnToolBar };
+  __property TCppShellBrowserWindowOnMenuBar OnMenuBar={ read=FOnMenuBar, write=FOnMenuBar };
+  __property TCppShellBrowserWindowOnStatusBar OnStatusBar={ read=FOnStatusBar, write=FOnStatusBar };
+  __property TCppShellBrowserWindowOnFullScreen OnFullScreen={ read=FOnFullScreen, write=FOnFullScreen };
+  __property TCppShellBrowserWindowOnTheaterMode OnTheaterMode={ read=FOnTheaterMode, write=FOnTheaterMode };
+  __property TCppShellBrowserWindowWindowSetResizable OnWindowSetResizable={ read=FOnWindowSetResizable, write=FOnWindowSetResizable };
+  __property TCppShellBrowserWindowWindowSetLeft OnWindowSetLeft={ read=FOnWindowSetLeft, write=FOnWindowSetLeft };
+  __property TCppShellBrowserWindowWindowSetTop OnWindowSetTop={ read=FOnWindowSetTop, write=FOnWindowSetTop };
+  __property TCppShellBrowserWindowWindowSetWidth OnWindowSetWidth={ read=FOnWindowSetWidth, write=FOnWindowSetWidth };
+  __property TCppShellBrowserWindowWindowSetHeight OnWindowSetHeight={ read=FOnWindowSetHeight, write=FOnWindowSetHeight };
+  __property TCppShellBrowserWindowWindowClosing OnWindowClosing={ read=FOnWindowClosing, write=FOnWindowClosing };
+  __property TCppShellBrowserWindowClientToHostWindow OnClientToHostWindow={ read=FOnClientToHostWindow, write=FOnClientToHostWindow };
+  __property TCppShellBrowserWindowSetSecureLockIcon OnSetSecureLockIcon={ read=FOnSetSecureLockIcon, write=FOnSetSecureLockIcon };
+  __property TCppShellBrowserWindowFileDownload OnFileDownload={ read=FOnFileDownload, write=FOnFileDownload };
+  __property TCppShellBrowserWindowNavigateError OnNavigateError={ read=FOnNavigateError, write=FOnNavigateError };
+  __property TCppShellBrowserWindowPrintTemplateInstantiation OnPrintTemplateInstantiation={ read=FOnPrintTemplateInstantiation, write=FOnPrintTemplateInstantiation };
+  __property TCppShellBrowserWindowPrintTemplateTeardown OnPrintTemplateTeardown={ read=FOnPrintTemplateTeardown, write=FOnPrintTemplateTeardown };
+  __property TCppShellBrowserWindowUpdatePageStatus OnUpdatePageStatus={ read=FOnUpdatePageStatus, write=FOnUpdatePageStatus };
+  __property TCppShellBrowserWindowPrivacyImpactedStateChange OnPrivacyImpactedStateChange={ read=FOnPrivacyImpactedStateChange, write=FOnPrivacyImpactedStateChange };
 };
 
 
@@ -988,16 +1767,17 @@ public:
   void __fastcall BeforeDestruction();
   void __fastcall ConnectTo(IShellWindowsPtr intf);
 
-  virtual void __fastcall InvokeEvent(int DispID, TVariantArray& params);
+  virtual void __fastcall InvokeEvent(int DispID, Oleserver::TVariantArray& params);
 
   /*CoClassWriteArrayPropMethods*/
-  long __fastcall Get_Count(void)
+// StdProp:Integer
+  long __fastcall get_Count(void)
   {
     return GetDefaultInterface()->get_Count();
   }
 
   /*CoClassWriteMethods*/
-  LPDISPATCH __fastcall Item(TVariantInParam index/*[in,opt]*/)
+  LPDISPATCH __fastcall Item(VARIANT index/*[in,opt]*/)
   {
     return GetDefaultInterface()->Item(index/*[in,opt]*/);
   }
@@ -1013,8 +1793,8 @@ public:
     GetDefaultInterface()->Register(pid/*[in]*/, HWND/*[in]*/, swClass/*[in]*/, plCookie/*[out]*/);
   }
 
-  void __fastcall RegisterPending(long lThreadId/*[in]*/, TVariant* pvarloc/*[in]*/, 
-                                  TVariant* pvarlocRoot/*[in]*/, int swClass/*[in]*/, 
+  void __fastcall RegisterPending(long lThreadId/*[in]*/, VARIANT* pvarloc/*[in]*/, 
+                                  VARIANT* pvarlocRoot/*[in]*/, int swClass/*[in]*/, 
                                   long* plCookie/*[out]*/)
   {
     GetDefaultInterface()->RegisterPending(lThreadId/*[in]*/, pvarloc/*[in]*/, pvarlocRoot/*[in]*/, 
@@ -1026,22 +1806,22 @@ public:
     GetDefaultInterface()->Revoke(lCookie/*[in]*/);
   }
 
-  void __fastcall OnNavigate(long lCookie/*[in]*/, TVariant* pvarloc/*[in]*/)
+  void __fastcall OnNavigate(long lCookie/*[in]*/, VARIANT* pvarloc/*[in]*/)
   {
     GetDefaultInterface()->OnNavigate(lCookie/*[in]*/, pvarloc/*[in]*/);
   }
 
-  void __fastcall OnActivated(long lCookie/*[in]*/, TOLEBOOL fActive/*[in]*/)
+  void __fastcall OnActivated(long lCookie/*[in]*/, VARIANT_BOOL fActive/*[in]*/)
   {
     GetDefaultInterface()->OnActivated(lCookie/*[in]*/, fActive/*[in]*/);
   }
 
-  LPDISPATCH __fastcall FindWindow(TVariant* pvarloc/*[in]*/, TVariant* pvarlocRoot/*[in]*/, 
-                                   int swClass/*[in]*/, long* pHWND/*[out]*/, 
-                                   int swfwOptions/*[in]*/)
+  LPDISPATCH __fastcall FindWindowSW(VARIANT* pvarloc/*[in]*/, VARIANT* pvarlocRoot/*[in]*/, 
+                                     int swClass/*[in]*/, long* pHWND/*[out]*/, 
+                                     int swfwOptions/*[in]*/)
   {
-    return GetDefaultInterface()->FindWindow(pvarloc/*[in]*/, pvarlocRoot/*[in]*/, swClass/*[in]*/, 
-                                             pHWND/*[out]*/, swfwOptions/*[in]*/);
+    return GetDefaultInterface()->FindWindowSW(pvarloc/*[in]*/, pvarlocRoot/*[in]*/, swClass/*[in]*/, 
+                                               pHWND/*[out]*/, swfwOptions/*[in]*/);
   }
 
   void __fastcall OnCreated(long lCookie/*[in]*/, LPUNKNOWN punk/*[in]*/)
@@ -1049,13 +1829,13 @@ public:
     GetDefaultInterface()->OnCreated(lCookie/*[in]*/, punk/*[in]*/);
   }
 
-  void __fastcall ProcessAttachDetach(TOLEBOOL fAttach/*[in]*/)
+  void __fastcall ProcessAttachDetach(VARIANT_BOOL fAttach/*[in]*/)
   {
     GetDefaultInterface()->ProcessAttachDetach(fAttach/*[in]*/);
   }
 
   /*CoClassWriteProperties*/
-  __property long Count={ read=Get_Count }; // 0, No
+  __property long Count={ read=get_Count }; // 0, No
   /*CoClassWriteProperties*/
   /*CoClassWriteEventDecls*/
 private:
@@ -1110,7 +1890,7 @@ public:
     GetDefaultInterface()->RefreshOfflineDesktop();
   }
 
-  void __fastcall AddFavorite(BSTR URL/*[in]*/, TVariant* Title/*[in,opt]*/= TNoParam())
+  void __fastcall AddFavorite(BSTR URL/*[in]*/, VARIANT* Title/*[in,opt]*/= TNoParam())
   {
     GetDefaultInterface()->AddFavorite(URL/*[in]*/, Title/*[in,opt]*/);
   }
@@ -1121,10 +1901,10 @@ public:
   }
 
   void __fastcall AddDesktopComponent(BSTR URL/*[in]*/, BSTR Type/*[in]*/, 
-                                      TVariant* Left/*[in,opt]*/= TNoParam(), 
-                                      TVariant* Top/*[in,opt]*/= TNoParam(), 
-                                      TVariant* Width/*[in,opt]*/= TNoParam(), 
-                                      TVariant* Height/*[in,opt]*/= TNoParam())
+                                      VARIANT* Left/*[in,opt]*/= TNoParam(), 
+                                      VARIANT* Top/*[in,opt]*/= TNoParam(), 
+                                      VARIANT* Width/*[in,opt]*/= TNoParam(), 
+                                      VARIANT* Height/*[in,opt]*/= TNoParam())
   {
     GetDefaultInterface()->AddDesktopComponent(URL/*[in]*/, Type/*[in]*/, Left/*[in,opt]*/, 
                                                Top/*[in,opt]*/, Width/*[in,opt]*/, 
@@ -1137,34 +1917,34 @@ public:
   }
 
   void __fastcall NavigateAndFind(BSTR URL/*[in]*/, BSTR strQuery/*[in]*/, 
-                                  TVariant* varTargetFrame/*[in]*/)
+                                  VARIANT* varTargetFrame/*[in]*/)
   {
     GetDefaultInterface()->NavigateAndFind(URL/*[in]*/, strQuery/*[in]*/, varTargetFrame/*[in]*/);
   }
 
-  void __fastcall ImportExportFavorites(TOLEBOOL fImport/*[in]*/, BSTR strImpExpPath/*[in]*/)
+  void __fastcall ImportExportFavorites(VARIANT_BOOL fImport/*[in]*/, BSTR strImpExpPath/*[in]*/)
   {
     GetDefaultInterface()->ImportExportFavorites(fImport/*[in]*/, strImpExpPath/*[in]*/);
   }
 
-  void __fastcall AutoCompleteSaveForm(TVariant* Form/*[in,opt]*/= TNoParam())
+  void __fastcall AutoCompleteSaveForm(VARIANT* Form/*[in,opt]*/= TNoParam())
   {
     GetDefaultInterface()->AutoCompleteSaveForm(Form/*[in,opt]*/);
   }
 
   void __fastcall AutoScan(BSTR strSearch/*[in]*/, BSTR strFailureUrl/*[in]*/, 
-                           TVariant* pvarTargetFrame/*[in,opt]*/= TNoParam())
+                           VARIANT* pvarTargetFrame/*[in,opt]*/= TNoParam())
   {
     GetDefaultInterface()->AutoScan(strSearch/*[in]*/, strFailureUrl/*[in]*/, 
                                     pvarTargetFrame/*[in,opt]*/);
   }
 
-  void __fastcall AutoCompleteAttach(TVariant* Reserved/*[in,opt]*/= TNoParam())
+  void __fastcall AutoCompleteAttach(VARIANT* Reserved/*[in,opt]*/= TNoParam())
   {
     GetDefaultInterface()->AutoCompleteAttach(Reserved/*[in,opt]*/);
   }
 
-  TVariant __fastcall ShowBrowserUI(BSTR bstrName/*[in]*/, TVariant* pvarIn/*[in]*/)
+  TVariant __fastcall ShowBrowserUI(BSTR bstrName/*[in]*/, VARIANT* pvarIn/*[in]*/)
   {
     return GetDefaultInterface()->ShowBrowserUI(bstrName/*[in]*/, pvarIn/*[in]*/);
   }
@@ -1178,10 +1958,10 @@ public:
 // COM Component Proxy Class Declaration
 // Component Name   : TShellFavoritesNameSpace
 // Help String      : 
-// Default Interface: IShellFavoritesNameSpace
-// Def. Intf. Object: IShellFavoritesNameSpacePtr
+// Default Interface: IShellNameSpace
+// Def. Intf. Object: IShellNameSpacePtr
 // Def. Intf. DISP? : No
-// Event   Interface: _ShellFavoritesNameSpaceEvents
+// Event   Interface: DShellNameSpaceEvents
 // TypeFlags        : (2) CanCreate
 // *********************************************************************//
 typedef void __fastcall (__closure * TShellFavoritesNameSpaceFavoritesSelectionChange)(System::TObject * Sender, 
@@ -1195,25 +1975,128 @@ typedef void __fastcall (__closure * TShellFavoritesNameSpaceFavoritesSelectionC
 
 class PACKAGE TShellFavoritesNameSpace : public Oleserver::TOleServer
 {
-  IShellFavoritesNameSpacePtr m_DefaultIntf;
+  IShellNameSpacePtr m_DefaultIntf;
   _di_IUnknown __fastcall GetDunk();
 public:
   __fastcall TShellFavoritesNameSpace(TComponent* owner) : Oleserver::TOleServer(owner)
   {}
 
-  IShellFavoritesNameSpacePtr& GetDefaultInterface();
+  IShellNameSpacePtr& GetDefaultInterface();
   void __fastcall InitServerData();
   void __fastcall Connect();
   void __fastcall Disconnect();
   void __fastcall BeforeDestruction();
-  void __fastcall ConnectTo(IShellFavoritesNameSpacePtr intf);
+  void __fastcall ConnectTo(IShellNameSpacePtr intf);
 
-  virtual void __fastcall InvokeEvent(int DispID, TVariantArray& params);
+  virtual void __fastcall InvokeEvent(int DispID, Oleserver::TVariantArray& params);
 
   /*CoClassWriteArrayPropMethods*/
-  TOLEBOOL __fastcall Get_FOfflinePackInstalled(void)
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_SubscriptionsEnabled(void)
   {
-    return GetDefaultInterface()->get_FOfflinePackInstalled();
+    return GetDefaultInterface()->get_SubscriptionsEnabled();
+  }
+
+// StdProp:Integer
+  long __fastcall get_EnumOptions(void)
+  {
+    return GetDefaultInterface()->get_EnumOptions();
+  }
+
+// StdProp:Integer
+  void __fastcall set_EnumOptions(long pgrfEnumFlags/*[in]*/)
+  {
+    GetDefaultInterface()->set_EnumOptions(pgrfEnumFlags/*[in]*/);
+  }
+
+// StdProp:IDispatch
+  LPDISPATCH __fastcall get_SelectedItem(void)
+  {
+    return GetDefaultInterface()->get_SelectedItem();
+  }
+
+// StdProp:IDispatch
+  void __fastcall set_SelectedItem(LPDISPATCH pItem/*[in]*/)
+  {
+    GetDefaultInterface()->set_SelectedItem(pItem/*[in]*/);
+  }
+
+// StdProp:OleVariant
+  TVariant __fastcall get_Root(void)
+  {
+    return GetDefaultInterface()->get_Root();
+  }
+
+// StdProp:OleVariant
+  void __fastcall set_Root(VARIANT pvar/*[in]*/)
+  {
+    GetDefaultInterface()->set_Root(pvar/*[in]*/);
+  }
+
+// StdProp:Integer
+  int __fastcall get_Depth(void)
+  {
+    return GetDefaultInterface()->get_Depth();
+  }
+
+// StdProp:Integer
+  void __fastcall set_Depth(int piDepth/*[in]*/)
+  {
+    GetDefaultInterface()->set_Depth(piDepth/*[in]*/);
+  }
+
+// StdProp:Integer
+  unsigned __fastcall get_Mode(void)
+  {
+    return GetDefaultInterface()->get_Mode();
+  }
+
+// StdProp:Integer
+  void __fastcall set_Mode(unsigned puMode/*[in]*/)
+  {
+    GetDefaultInterface()->set_Mode(puMode/*[in]*/);
+  }
+
+// StdProp:Integer
+  unsigned_long __fastcall get_Flags(void)
+  {
+    return GetDefaultInterface()->get_Flags();
+  }
+
+// StdProp:Integer
+  void __fastcall set_Flags(unsigned_long pdwFlags/*[in]*/)
+  {
+    GetDefaultInterface()->set_Flags(pdwFlags/*[in]*/);
+  }
+
+// StdProp:Integer
+  void __fastcall set_TVFlags(unsigned_long dwFlags/*[in]*/)
+  {
+    GetDefaultInterface()->set_TVFlags(dwFlags/*[in]*/);
+  }
+
+// StdProp:Integer
+  unsigned_long __fastcall get_TVFlags(void)
+  {
+    return GetDefaultInterface()->get_TVFlags();
+  }
+
+// StdProp:WideString
+  BSTR __fastcall get_Columns(void)
+  {
+    return GetDefaultInterface()->get_Columns();
+  }
+
+// StdProp:WideString
+  void __fastcall set_Columns(BSTR bstrColumns/*[in]*/)
+  {
+    GetDefaultInterface()->set_Columns(bstrColumns/*[in]*/);
+  }
+
+// StdProp:Integer
+  int __fastcall get_CountViewTypes(void)
+  {
+    return GetDefaultInterface()->get_CountViewTypes();
   }
 
   /*CoClassWriteMethods*/
@@ -1277,14 +2160,382 @@ public:
     GetDefaultInterface()->SetRoot(bstrFullPath/*[in]*/);
   }
 
+  void __fastcall SetViewType(int iType/*[in]*/)
+  {
+    GetDefaultInterface()->SetViewType(iType/*[in]*/);
+  }
+
+  LPDISPATCH __fastcall SelectedItems(void)
+  {
+    return GetDefaultInterface()->SelectedItems();
+  }
+
+  void __fastcall Expand(VARIANT var/*[in]*/, int iDepth)
+  {
+    GetDefaultInterface()->Expand(var/*[in]*/, iDepth);
+  }
+
+  void __fastcall UnselectAll(void)
+  {
+    GetDefaultInterface()->UnselectAll();
+  }
+
   /*CoClassWriteProperties*/
-  __property TOLEBOOL FOfflinePackInstalled={ read=Get_FOfflinePackInstalled }; // 0, No
+  __property TOLEBOOL SubscriptionsEnabled={ read=get_SubscriptionsEnabled }; // 0, No
+  __property LPDISPATCH SelectedItem={ read=get_SelectedItem }; // 0, No
+  /* Warning: C++Builder is unable to validate the following property: 
+  __property TVariant Root={ read=get_Root }; // 0, No
+  */
+  __property int CountViewTypes={ read=get_CountViewTypes }; // 0, No
   /*CoClassWriteProperties*/
+  __property long EnumOptions={ read=get_EnumOptions, stored=false }; // 0, No
+  __property int Depth={ read=get_Depth, stored=false }; // 0, No
+  __property unsigned Mode={ read=get_Mode, stored=false }; // 0, No
+  __property unsigned_long Flags={ read=get_Flags, stored=false }; // 0, No
+  __property unsigned_long TVFlags={ read=get_TVFlags, stored=false }; // 0, No
+  __property BSTR Columns={ read=get_Columns, stored=false }; // 0, No
   /*CoClassWriteEventDecls*/
 private:
   TShellFavoritesNameSpaceFavoritesSelectionChange FOnFavoritesSelectionChange;
+  TNotifyEvent                   FOnSelectionChange;
+  TNotifyEvent                   FOnDoubleClick;
+  TNotifyEvent                   FOnInitialized;
 __published:
   __property TShellFavoritesNameSpaceFavoritesSelectionChange OnFavoritesSelectionChange={ read=FOnFavoritesSelectionChange, write=FOnFavoritesSelectionChange };
+  __property TNotifyEvent OnSelectionChange={ read=FOnSelectionChange, write=FOnSelectionChange };
+  __property TNotifyEvent OnDoubleClick={ read=FOnDoubleClick, write=FOnDoubleClick };
+  __property TNotifyEvent OnInitialized={ read=FOnInitialized, write=FOnInitialized };
+};
+
+
+// *********************************************************************//
+// COM Component Proxy Class Declaration
+// Component Name   : TCppCScriptErrorList
+// Help String      : 
+// Default Interface: IScriptErrorList
+// Def. Intf. Object: IScriptErrorListPtr
+// Def. Intf. DISP? : No
+// Event   Interface: 
+// TypeFlags        : (18) CanCreate Hidden
+// *********************************************************************//
+class PACKAGE TCppCScriptErrorList : public Oleserver::TOleServer
+{
+  IScriptErrorListPtr m_DefaultIntf;
+  _di_IUnknown __fastcall GetDunk();
+public:
+  __fastcall TCppCScriptErrorList(TComponent* owner) : Oleserver::TOleServer(owner)
+  {}
+
+  IScriptErrorListPtr& GetDefaultInterface();
+  void __fastcall InitServerData();
+  void __fastcall Connect();
+  void __fastcall Disconnect();
+  void __fastcall BeforeDestruction();
+  void __fastcall ConnectTo(IScriptErrorListPtr intf);
+
+
+  /*CoClassWriteArrayPropMethods*/
+  /*CoClassWriteMethods*/
+  void __fastcall advanceError(void)
+  {
+    GetDefaultInterface()->advanceError();
+  }
+
+  void __fastcall retreatError(void)
+  {
+    GetDefaultInterface()->retreatError();
+  }
+
+  long __fastcall canAdvanceError(void)
+  {
+    return GetDefaultInterface()->canAdvanceError();
+  }
+
+  long __fastcall canRetreatError(void)
+  {
+    return GetDefaultInterface()->canRetreatError();
+  }
+
+  long __fastcall getErrorLine(void)
+  {
+    return GetDefaultInterface()->getErrorLine();
+  }
+
+  long __fastcall getErrorChar(void)
+  {
+    return GetDefaultInterface()->getErrorChar();
+  }
+
+  long __fastcall getErrorCode(void)
+  {
+    return GetDefaultInterface()->getErrorCode();
+  }
+
+  BSTR __fastcall getErrorMsg(void)
+  {
+    return GetDefaultInterface()->getErrorMsg();
+  }
+
+  BSTR __fastcall getErrorUrl(void)
+  {
+    return GetDefaultInterface()->getErrorUrl();
+  }
+
+  long __fastcall getAlwaysShowLockState(void)
+  {
+    return GetDefaultInterface()->getAlwaysShowLockState();
+  }
+
+  long __fastcall getDetailsPaneOpen(void)
+  {
+    return GetDefaultInterface()->getDetailsPaneOpen();
+  }
+
+  void __fastcall setDetailsPaneOpen(long fDetailsPaneOpen)
+  {
+    GetDefaultInterface()->setDetailsPaneOpen(fDetailsPaneOpen);
+  }
+
+  long __fastcall getPerErrorDisplay(void)
+  {
+    return GetDefaultInterface()->getPerErrorDisplay();
+  }
+
+  void __fastcall setPerErrorDisplay(long fPerErrorDisplay)
+  {
+    GetDefaultInterface()->setPerErrorDisplay(fPerErrorDisplay);
+  }
+
+  /*CoClassWriteProperties*/
+  /*CoClassWriteProperties*/
+};
+
+
+// *********************************************************************//
+// COM Component Proxy Class Declaration
+// Component Name   : TCppSearchAssistantOC
+// Help String      : SearchAssistantOC Class
+// Default Interface: ISearchAssistantOC3
+// Def. Intf. Object: ISearchAssistantOC3Ptr
+// Def. Intf. DISP? : No
+// Event   Interface: _SearchAssistantEvents
+// TypeFlags        : (18) CanCreate Hidden
+// *********************************************************************//
+typedef void __fastcall (__closure * TCppSearchAssistantOCOnNextMenuSelect)(System::TObject * Sender, 
+                                                                            long idItem/*[in]*/);
+
+class PACKAGE TCppSearchAssistantOC : public Oleserver::TOleServer
+{
+  ISearchAssistantOC3Ptr m_DefaultIntf;
+  _di_IUnknown __fastcall GetDunk();
+public:
+  __fastcall TCppSearchAssistantOC(TComponent* owner) : Oleserver::TOleServer(owner)
+  {}
+
+  ISearchAssistantOC3Ptr& GetDefaultInterface();
+  void __fastcall InitServerData();
+  void __fastcall Connect();
+  void __fastcall Disconnect();
+  void __fastcall BeforeDestruction();
+  void __fastcall ConnectTo(ISearchAssistantOC3Ptr intf);
+
+  virtual void __fastcall InvokeEvent(int DispID, Oleserver::TVariantArray& params);
+
+  /*CoClassWriteArrayPropMethods*/
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_ShellFeaturesEnabled(void)
+  {
+    return GetDefaultInterface()->get_ShellFeaturesEnabled();
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_SearchAssistantDefault(void)
+  {
+    return GetDefaultInterface()->get_SearchAssistantDefault();
+  }
+
+// StdProp:
+  Shdocvw_tlb::ISearchesPtr __fastcall get_Searches(void)
+  {
+    return GetDefaultInterface()->get_Searches();
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_InWebFolder(void)
+  {
+    return GetDefaultInterface()->get_InWebFolder();
+  }
+
+// StdProp:WordBool
+  void __fastcall set_EventHandled(VARIANT_BOOL Param1/*[in]*/)
+  {
+    GetDefaultInterface()->set_EventHandled(Param1/*[in]*/);
+  }
+
+// StdProp:WideString
+  void __fastcall set_ASProvider(BSTR pProvider/*[in]*/)
+  {
+    GetDefaultInterface()->set_ASProvider(pProvider/*[in]*/);
+  }
+
+// StdProp:WideString
+  BSTR __fastcall get_ASProvider(void)
+  {
+    return GetDefaultInterface()->get_ASProvider();
+  }
+
+// StdProp:Integer
+  void __fastcall set_ASSetting(int pSetting/*[in]*/)
+  {
+    GetDefaultInterface()->set_ASSetting(pSetting/*[in]*/);
+  }
+
+// StdProp:Integer
+  int __fastcall get_ASSetting(void)
+  {
+    return GetDefaultInterface()->get_ASSetting();
+  }
+
+// StdProp:Integer
+  int __fastcall get_Version(void)
+  {
+    return GetDefaultInterface()->get_Version();
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_ShowFindPrinter(void)
+  {
+    return GetDefaultInterface()->get_ShowFindPrinter();
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_SearchCompanionAvailable(void)
+  {
+    return GetDefaultInterface()->get_SearchCompanionAvailable();
+  }
+
+// StdProp:WordBool
+  void __fastcall set_UseSearchCompanion(VARIANT_BOOL pbUseSC/*[in]*/)
+  {
+    GetDefaultInterface()->set_UseSearchCompanion(pbUseSC/*[in]*/);
+  }
+
+// StdProp:WordBool
+  TOLEBOOL __fastcall get_UseSearchCompanion(void)
+  {
+    return GetDefaultInterface()->get_UseSearchCompanion();
+  }
+
+  /*CoClassWriteMethods*/
+  void __fastcall AddNextMenuItem(BSTR bstrText/*[in]*/, long idItem/*[in]*/)
+  {
+    GetDefaultInterface()->AddNextMenuItem(bstrText/*[in]*/, idItem/*[in]*/);
+  }
+
+  void __fastcall SetDefaultSearchUrl(BSTR bstrUrl/*[in]*/)
+  {
+    GetDefaultInterface()->SetDefaultSearchUrl(bstrUrl/*[in]*/);
+  }
+
+  void __fastcall NavigateToDefaultSearch(void)
+  {
+    GetDefaultInterface()->NavigateToDefaultSearch();
+  }
+
+  TOLEBOOL __fastcall IsRestricted(BSTR bstrGuid/*[in]*/)
+  {
+    return GetDefaultInterface()->IsRestricted(bstrGuid/*[in]*/);
+  }
+
+  void __fastcall PutProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/, 
+                              BSTR bstrValue/*[in]*/)
+  {
+    GetDefaultInterface()->PutProperty(bPerLocale/*[in]*/, bstrName/*[in]*/, bstrValue/*[in]*/);
+  }
+
+  BSTR __fastcall GetProperty(VARIANT_BOOL bPerLocale/*[in]*/, BSTR bstrName/*[in]*/)
+  {
+    return GetDefaultInterface()->GetProperty(bPerLocale/*[in]*/, bstrName/*[in]*/);
+  }
+
+  void __fastcall ResetNextMenu(void)
+  {
+    GetDefaultInterface()->ResetNextMenu();
+  }
+
+  void __fastcall FindOnWeb(void)
+  {
+    GetDefaultInterface()->FindOnWeb();
+  }
+
+  void __fastcall FindFilesOrFolders(void)
+  {
+    GetDefaultInterface()->FindFilesOrFolders();
+  }
+
+  void __fastcall FindComputer(void)
+  {
+    GetDefaultInterface()->FindComputer();
+  }
+
+  void __fastcall FindPrinter(void)
+  {
+    GetDefaultInterface()->FindPrinter();
+  }
+
+  void __fastcall FindPeople(void)
+  {
+    GetDefaultInterface()->FindPeople();
+  }
+
+  BSTR __fastcall GetSearchAssistantURL(VARIANT_BOOL bSubstitute/*[in]*/, 
+                                        VARIANT_BOOL bCustomize/*[in]*/)
+  {
+    return GetDefaultInterface()->GetSearchAssistantURL(bSubstitute/*[in]*/, bCustomize/*[in]*/);
+  }
+
+  void __fastcall NotifySearchSettingsChanged(void)
+  {
+    GetDefaultInterface()->NotifySearchSettingsChanged();
+  }
+
+  void __fastcall NETDetectNextNavigate(void)
+  {
+    GetDefaultInterface()->NETDetectNextNavigate();
+  }
+
+  void __fastcall PutFindText(BSTR FindText/*[in]*/)
+  {
+    GetDefaultInterface()->PutFindText(FindText/*[in]*/);
+  }
+
+  BSTR __fastcall EncodeString(BSTR bstrValue/*[in]*/, BSTR bstrCharSet/*[in]*/, 
+                               VARIANT_BOOL bUseUTF8/*[in]*/)
+  {
+    return GetDefaultInterface()->EncodeString(bstrValue/*[in]*/, bstrCharSet/*[in]*/, 
+                                               bUseUTF8/*[in]*/);
+  }
+
+  /*CoClassWriteProperties*/
+  __property TOLEBOOL ShellFeaturesEnabled={ read=get_ShellFeaturesEnabled }; // 0, No
+  __property TOLEBOOL SearchAssistantDefault={ read=get_SearchAssistantDefault }; // 0, No
+  __property Shdocvw_tlb::ISearchesPtr Searches={ read=get_Searches }; // 0, Yes
+  __property TOLEBOOL InWebFolder={ read=get_InWebFolder }; // 0, No
+  __property TOLEBOOL EventHandled={ }; // 0, No
+  __property int Version={ read=get_Version }; // 0, No
+  __property TOLEBOOL ShowFindPrinter={ read=get_ShowFindPrinter }; // 0, No
+  __property TOLEBOOL SearchCompanionAvailable={ read=get_SearchCompanionAvailable }; // 0, No
+  /*CoClassWriteProperties*/
+  __property BSTR ASProvider={ read=get_ASProvider, stored=false }; // 0, No
+  __property int ASSetting={ read=get_ASSetting, stored=false }; // 0, No
+  __property TOLEBOOL UseSearchCompanion={ read=get_UseSearchCompanion, stored=false }; // 0, No
+  /*CoClassWriteEventDecls*/
+private:
+  TCppSearchAssistantOCOnNextMenuSelect FOnNextMenuSelect;
+  TNotifyEvent                   FOnNewSearch;
+__published:
+  __property TCppSearchAssistantOCOnNextMenuSelect OnNextMenuSelect={ read=FOnNextMenuSelect, write=FOnNextMenuSelect };
+  __property TNotifyEvent OnNewSearch={ read=FOnNewSearch, write=FOnNewSearch };
 };
 
 };     // namespace Shdocvw_tlb
@@ -1295,4 +2546,4 @@ using  namespace Shdocvw_tlb;
 
 #pragma option pop
 
-#endif // __SHDocVw_OCX_h__
+#endif // SHDocVw_OCXH

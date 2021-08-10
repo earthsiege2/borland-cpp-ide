@@ -6,11 +6,11 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
-unit CPL;
+unit Cpl;
 
 {$HPPEMIT '#include <cpl.h>'}
 

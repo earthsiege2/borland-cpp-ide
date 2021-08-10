@@ -1,13 +1,15 @@
-[!outputon] // $Revision:   1.6.1.9  $
+[!outputon] // $Revision:   1.9.1.0.1.2  $
 // [!HeaderName] : Declaration of the [!CoClassName]
 
 #ifndef [!IDEHeaderName]
 #define [!IDEHeaderName]
 
+#define ATL_FREE_THREADED
 #include <Classes.hpp>
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
+#include <MidConst.hpp>
 
 #include "[!TypeLibModuleName].H"
 #include <atl/atlvcl.h>
@@ -110,8 +112,8 @@ END_CONNECTION_POINT_MAP()
 [!if=(ThreadingModel, "Both")]
   DECLARE_THREADING_MODEL(otBoth);
 [!endif]
-  DECLARE_PROGID("");
-  DECLARE_DESCRIPTION("[!Description]");
+  DECLARE_PROGID(_T(""));
+  DECLARE_DESCRIPTION(_T("[!Description]"));
 
   // Function invoked to (un)register object
   //

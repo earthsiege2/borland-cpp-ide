@@ -23,7 +23,7 @@
 ** rights reserved under the Copyright Laws of the United States.
 *)
 
-unit Opengl;
+unit OpenGL;
 
 interface
 

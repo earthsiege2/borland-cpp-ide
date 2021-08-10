@@ -1,0 +1,1242 @@
+
+ Start         Length     Name                   Class
+ 0001:00000000 000193F0H .text                   CODE
+ 0002:00000000 0000054CH .data                   DATA
+ 0002:0000054C 000000A5H .bss                    BSS
+
+
+Detailed map of segments
+
+ 0001:00000000 000002A6 C=CODE     S=.text    G=(none)   M=System   ACBP=A9
+ 0001:000002A8 000001EC C=CODE     S=.text    G=(none)   M=SysInit  ACBP=A9
+ 0001:00000494 000001BE C=CODE     S=.text    G=(none)   M=ITECommon ACBP=A9
+ 0001:00000654 0000004E C=CODE     S=.text    G=(none)   M=ITEOTA   ACBP=A9
+ 0001:000006A4 00000036 C=CODE     S=.text    G=(none)   M=ActnList ACBP=A9
+ 0001:000006DC 0000000E C=CODE     S=.text    G=(none)   M=Contnrs  ACBP=A9
+ 0001:000006EC 000001FE C=CODE     S=.text    G=(none)   M=Classes  ACBP=A9
+ 0001:000008EC 0000000E C=CODE     S=.text    G=(none)   M=ActiveX  ACBP=A9
+ 0001:000008FC 00000038 C=CODE     S=.text    G=(none)   M=Messages ACBP=A9
+ 0001:00000934 00000094 C=CODE     S=.text    G=(none)   M=Windows  ACBP=A9
+ 0001:000009C8 00000016 C=CODE     S=.text    G=(none)   M=Types    ACBP=A9
+ 0001:000009E0 00000026 C=CODE     S=.text    G=(none)   M=TypInfo  ACBP=A9
+ 0001:00000A08 00000126 C=CODE     S=.text    G=(none)   M=SysUtils ACBP=A9
+ 0001:00000B30 0000000E C=CODE     S=.text    G=(none)   M=SysConst ACBP=A9
+ 0001:00000B40 0000000E C=CODE     S=.text    G=(none)   M=Variants ACBP=A9
+ 0001:00000B50 0000000E C=CODE     S=.text    G=(none)   M=VarUtils ACBP=A9
+ 0001:00000B60 0000000E C=CODE     S=.text    G=(none)   M=RTLConsts ACBP=A9
+ 0001:00000B70 0000000E C=CODE     S=.text    G=(none)   M=Math     ACBP=A9
+ 0001:00000B80 0000000E C=CODE     S=.text    G=(none)   M=ImgList  ACBP=A9
+ 0001:00000B90 00000038 C=CODE     S=.text    G=(none)   M=CommCtrl ACBP=A9
+ 0001:00000BC8 00000076 C=CODE     S=.text    G=(none)   M=Graphics ACBP=A9
+ 0001:00000C40 0000000E C=CODE     S=.text    G=(none)   M=Consts   ACBP=A9
+ 0001:00000C50 00000186 C=CODE     S=.text    G=(none)   M=Forms    ACBP=A9
+ 0001:00000DD8 0000000E C=CODE     S=.text    G=(none)   M=HelpIntfs ACBP=A9
+ 0001:00000DE8 0000000E C=CODE     S=.text    G=(none)   M=MultiMon ACBP=A9
+ 0001:00000DF8 0000025E C=CODE     S=.text    G=(none)   M=Controls ACBP=A9
+ 0001:00001058 00000038 C=CODE     S=.text    G=(none)   M=Imm      ACBP=A9
+ 0001:00001090 0000001E C=CODE     S=.text    G=(none)   M=Menus    ACBP=A9
+ 0001:000010B0 0000000E C=CODE     S=.text    G=(none)   M=WinHelpViewer ACBP=A9
+ 0001:000010C0 0000000E C=CODE     S=.text    G=(none)   M=StdActns ACBP=A9
+ 0001:000010D0 0000001E C=CODE     S=.text    G=(none)   M=Dialogs  ACBP=A9
+ 0001:000010F0 00000038 C=CODE     S=.text    G=(none)   M=ShlObj   ACBP=A9
+ 0001:00001128 00000038 C=CODE     S=.text    G=(none)   M=UrlMon   ACBP=A9
+ 0001:00001160 00000038 C=CODE     S=.text    G=(none)   M=WinInet  ACBP=A9
+ 0001:00001198 00000038 C=CODE     S=.text    G=(none)   M=RegStr   ACBP=A9
+ 0001:000011D0 00000038 C=CODE     S=.text    G=(none)   M=ShellAPI ACBP=A9
+ 0001:00001208 0000000E C=CODE     S=.text    G=(none)   M=Printers ACBP=A9
+ 0001:00001218 00000038 C=CODE     S=.text    G=(none)   M=WinSpool ACBP=A9
+ 0001:00001250 0000000E C=CODE     S=.text    G=(none)   M=StdCtrls ACBP=A9
+ 0001:00001260 00000038 C=CODE     S=.text    G=(none)   M=CommDlg  ACBP=A9
+ 0001:00001298 00000038 C=CODE     S=.text    G=(none)   M=Dlgs     ACBP=A9
+ 0001:000012D0 0000003E C=CODE     S=.text    G=(none)   M=ExtCtrls ACBP=A9
+ 0001:00001310 0000000E C=CODE     S=.text    G=(none)   M=StrUtils ACBP=A9
+ 0001:00001320 0000000E C=CODE     S=.text    G=(none)   M=Clipbrd  ACBP=A9
+ 0001:00001330 0000000E C=CODE     S=.text    G=(none)   M=FlatSB   ACBP=A9
+ 0001:00001340 00000076 C=CODE     S=.text    G=(none)   M=Grids    ACBP=A9
+ 0001:000013B8 0000000E C=CODE     S=.text    G=(none)   M=Mask     ACBP=A9
+ 0001:000013C8 0000000E C=CODE     S=.text    G=(none)   M=MaskUtils ACBP=A9
+ 0001:000013D8 0000001E C=CODE     S=.text    G=(none)   M=CheckLst ACBP=A9
+ 0001:000013F8 0000000E C=CODE     S=.text    G=(none)   M=ToolIntf ACBP=A9
+ 0001:00001408 0000000E C=CODE     S=.text    G=(none)   M=FileIntf ACBP=A9
+ 0001:00001418 0000000E C=CODE     S=.text    G=(none)   M=VirtIntf ACBP=A9
+ 0001:00001428 0000000E C=CODE     S=.text    G=(none)   M=EditIntf ACBP=A9
+ 0001:00001438 0000001E C=CODE     S=.text    G=(none)   M=ITEGridColor ACBP=A9
+ 0001:00001458 0000005E C=CODE     S=.text    G=(none)   M=Registry ACBP=A9
+ 0001:000014B8 0000000E C=CODE     S=.text    G=(none)   M=IniFiles ACBP=A9
+ 0001:000014C8 0000000E C=CODE     S=.text    G=(none)   M=ITEStrs  ACBP=A9
+ 0001:000014D8 00000046 C=CODE     S=.text    G=(none)   M=ITEIntlPars ACBP=A9
+ 0001:00001520 00000016 C=CODE     S=.text    G=(none)   M=ITEIntlStrm ACBP=A9
+ 0001:00001538 0000000E C=CODE     S=.text    G=(none)   M=ITEConst ACBP=A9
+ 0001:00001548 0000000E C=CODE     S=.text    G=(none)   M=ToolsAPI ACBP=A9
+ 0001:00001558 0000005E C=CODE     S=.text    G=(none)   M=ComCtrls ACBP=A9
+ 0001:000015B8 0000000E C=CODE     S=.text    G=(none)   M=ListActns ACBP=A9
+ 0001:000015C8 0000000E C=CODE     S=.text    G=(none)   M=ToolWin  ACBP=A9
+ 0001:000015D8 00000038 C=CODE     S=.text    G=(none)   M=RichEdit ACBP=A9
+ 0001:00001610 0000000E C=CODE     S=.text    G=(none)   M=ExtActns ACBP=A9
+ 0001:00001620 0000000E C=CODE     S=.text    G=(none)   M=ExtDlgs  ACBP=A9
+ 0001:00001630 0000000E C=CODE     S=.text    G=(none)   M=Buttons  ACBP=A9
+ 0001:00001640 0000000E C=CODE     S=.text    G=(none)   M=Mapi     ACBP=A9
+ 0001:00001650 0000000E C=CODE     S=.text    G=(none)   M=ComStrs  ACBP=A9
+ 0001:00001660 0000000E C=CODE     S=.text    G=(none)   M=DesignIntf ACBP=A9
+ 0001:00001670 0000000E C=CODE     S=.text    G=(none)   M=DesignMenus ACBP=A9
+ 0001:00001680 0000000E C=CODE     S=.text    G=(none)   M=ITERepositoryService ACBP=A9
+ 0001:00001690 00000016 C=CODE     S=.text    G=(none)   M=IDEPropSet ACBP=A9
+ 0001:000016A8 0000000E C=CODE     S=.text    G=(none)   M=IDEConst ACBP=A9
+ 0001:000016B8 0000000E C=CODE     S=.text    G=(none)   M=ITERepositoryEngine ACBP=A9
+ 0001:000016C8 0000000E C=CODE     S=.text    G=(none)   M=ITEXML   ACBP=A9
+ 0001:000016D8 0000000E C=CODE     S=.text    G=(none)   M=ITEMSXML_TLB ACBP=A9
+ 0001:000016E8 0000000E C=CODE     S=.text    G=(none)   M=StdVCL   ACBP=A9
+ 0001:000016F8 0000000E C=CODE     S=.text    G=(none)   M=OleCtrls ACBP=A9
+ 0001:00001708 0000000E C=CODE     S=.text    G=(none)   M=AxCtrls  ACBP=A9
+ 0001:00001718 0000000E C=CODE     S=.text    G=(none)   M=ComObj   ACBP=A9
+ 0001:00001728 0000000E C=CODE     S=.text    G=(none)   M=ComConst ACBP=A9
+ 0001:00001738 0000000E C=CODE     S=.text    G=(none)   M=OleConst ACBP=A9
+ 0001:00001748 0000000E C=CODE     S=.text    G=(none)   M=IStreams ACBP=A9
+ 0001:00001758 0000000E C=CODE     S=.text    G=(none)   M=ITEINTOptionProp ACBP=A9
+ 0001:00001768 0000000E C=CODE     S=.text    G=(none)   M=IDERegIniPropSet ACBP=A9
+ 0001:00001778 0000000E C=CODE     S=.text    G=(none)   M=IDEHistoryManager ACBP=A9
+ 0001:00001788 0000000E C=CODE     S=.text    G=(none)   M=ITEGetTranslationDlg ACBP=A9
+ 0001:00001798 000001DE C=CODE     S=.text    G=(none)   M=ITEControls ACBP=A9
+ 0001:00001978 0000000E C=CODE     S=.text    G=(none)   M=ITESWFrm ACBP=A9
+ 0001:00001988 0000000E C=CODE     S=.text    G=(none)   M=OpenGL   ACBP=A9
+ 0001:00001998 00000016 C=CODE     S=.text    G=(none)   M=ITEGridFont ACBP=A9
+ 0001:000019B0 0000000E C=CODE     S=.text    G=(none)   M=ITEAddTranslationDlg ACBP=A9
+ 0001:000019C0 000006DC C=CODE     S=.text    G=(none)   M=ITEDFMCommon ACBP=A9
+ 0001:0000209C 0000002E C=CODE     S=.text    G=(none)   M=ITESearchResults ACBP=A9
+ 0001:000020CC 0000000E C=CODE     S=.text    G=(none)   M=ITEListBox ACBP=A9
+ 0001:000020DC 00000036 C=CODE     S=.text    G=(none)   M=ITESearchForm ACBP=A9
+ 0001:00002114 00000016 C=CODE     S=.text    G=(none)   M=FileCtrl ACBP=A9
+ 0001:0000212C 00000016 C=CODE     S=.text    G=(none)   M=ITEDialogs ACBP=A9
+ 0001:00002144 0000000E C=CODE     S=.text    G=(none)   M=ITESelectFontDlg ACBP=A9
+ 0001:00002154 0000000E C=CODE     S=.text    G=(none)   M=ITESearchInit ACBP=A9
+ 0001:00002164 0000000E C=CODE     S=.text    G=(none)   M=ITEExplorer ACBP=A9
+ 0001:00002174 00000016 C=CODE     S=.text    G=(none)   M=ITEInputQueryDlg ACBP=A9
+ 0001:0000218C 00000016 C=CODE     S=.text    G=(none)   M=ITEMultiLineDlg ACBP=A9
+ 0001:000021A4 0000000E C=CODE     S=.text    G=(none)   M=AppEvnts ACBP=A9
+ 0001:000021B4 00000016 C=CODE     S=.text    G=(none)   M=PropertyCategories ACBP=A9
+ 0001:000021CC 0000000E C=CODE     S=.text    G=(none)   M=DesignEditors ACBP=A9
+ 0001:000021DC 0000000E C=CODE     S=.text    G=(none)   M=Proxies  ACBP=A9
+ 0001:000021EC 0000000E C=CODE     S=.text    G=(none)   M=DesignConst ACBP=A9
+ 0001:000021FC 0000000E C=CODE     S=.text    G=(none)   M=Masks    ACBP=A9
+ 0001:0000220C 0000027E C=CODE     S=.text    G=(none)   M=QControls ACBP=A9
+ 0001:0000248C 0000000E C=CODE     S=.text    G=(none)   M=QImgList ACBP=A9
+ 0001:0000249C 0000006E C=CODE     S=.text    G=(none)   M=QGraphics ACBP=A9
+ 0001:0000250C 0000005E C=CODE     S=.text    G=(none)   M=Qt       ACBP=A9
+ 0001:0000256C 0000000E C=CODE     S=.text    G=(none)   M=BindHelp ACBP=A9
+ 0001:0000257C 0000000E C=CODE     S=.text    G=(none)   M=QTypes   ACBP=A9
+ 0001:0000258C 0000000E C=CODE     S=.text    G=(none)   M=QConsts  ACBP=A9
+ 0001:0000259C 0000007E C=CODE     S=.text    G=(none)   M=QForms   ACBP=A9
+ 0001:0000261C 0000000E C=CODE     S=.text    G=(none)   M=QStyle   ACBP=A9
+ 0001:0000262C 0000000E C=CODE     S=.text    G=(none)   M=QActnList ACBP=A9
+ 0001:0000263C 0000000E C=CODE     S=.text    G=(none)   M=QMenus   ACBP=A9
+ 0001:0000264C 0000004E C=CODE     S=.text    G=(none)   M=QExtCtrls ACBP=A9
+ 0001:0000269C 0000000E C=CODE     S=.text    G=(none)   M=QStdCtrls ACBP=A9
+ 0001:000026AC 0000000E C=CODE     S=.text    G=(none)   M=QClipbrd ACBP=A9
+ 0001:000026BC 0000000E C=CODE     S=.text    G=(none)   M=QStdActns ACBP=A9
+ 0001:000026CC 0000000E C=CODE     S=.text    G=(none)   M=QSearch  ACBP=A9
+ 0001:000026DC 0000000E C=CODE     S=.text    G=(none)   M=QDialogs ACBP=A9
+ 0001:000026EC 00000036 C=CODE     S=.text    G=(none)   M=ITEExeImage ACBP=A9
+ 0001:00002724 0000000E C=CODE     S=.text    G=(none)   M=ITERxTypes ACBP=A9
+ 0001:00002734 00000016 C=CODE     S=.text    G=(none)   M=ITEPascalGenerator ACBP=A9
+ 0001:0000274C 00000016 C=CODE     S=.text    G=(none)   M=ITECPPGenerator ACBP=A9
+ 0001:00002764 00005F2F C=CODE     S=.text    G=(none)   M=ITEDFMUpdater ACBP=A9
+ 0001:00008694 00000108 C=CODE     S=.text    G=(none)   M=ITEFormDesigner ACBP=A9
+ 0001:0000879C 0000000E C=CODE     S=.text    G=(none)   M=QButtons ACBP=A9
+ 0001:000087AC 0000000E C=CODE     S=.text    G=(none)   M=QCheckLst ACBP=A9
+ 0001:000087BC 0000000E C=CODE     S=.text    G=(none)   M=QComCtrls ACBP=A9
+ 0001:000087CC 0000000E C=CODE     S=.text    G=(none)   M=QGrids   ACBP=A9
+ 0001:000087DC 0000000E C=CODE     S=.text    G=(none)   M=QMask    ACBP=A9
+ 0001:000087EC 0000000E C=CODE     S=.text    G=(none)   M=DdeMan   ACBP=A9
+ 0001:000087FC 00000038 C=CODE     S=.text    G=(none)   M=DDEml    ACBP=A9
+ 0001:00008834 0000000E C=CODE     S=.text    G=(none)   M=MPlayer  ACBP=A9
+ 0001:00008844 00000038 C=CODE     S=.text    G=(none)   M=MMSystem ACBP=A9
+ 0001:0000887C 0000000E C=CODE     S=.text    G=(none)   M=OleCtnrs ACBP=A9
+ 0001:0000888C 00000038 C=CODE     S=.text    G=(none)   M=OleDlg   ACBP=A9
+ 0001:000088C4 0000000E C=CODE     S=.text    G=(none)   M=Outline  ACBP=A9
+ 0001:000088D4 0000000E C=CODE     S=.text    G=(none)   M=TabNotBk ACBP=A9
+ 0001:000088E4 0000000E C=CODE     S=.text    G=(none)   M=Tabs     ACBP=A9
+ 0001:000088F4 0000000E C=CODE     S=.text    G=(none)   M=ValEdit  ACBP=A9
+ 0001:00008904 00001D18 C=CODE     S=.text    G=(none)   M=ITEDFMDesigner ACBP=A9
+ 0001:0000A61C 00001F6B C=CODE     S=.text    G=(none)   M=ITEXFMDesigner ACBP=A9
+ 0001:0000C588 00001365 C=CODE     S=.text    G=(none)   M=ITEDFMViewer ACBP=A9
+ 0001:0000D8F0 00007131 C=CODE     S=.text    G=(none)   M=ITEDFMForm ACBP=A9
+ 0001:00014A24 00002B04 C=CODE     S=.text    G=(none)   M=ITEDFMMgr ACBP=A9
+ 0001:00017528 000015F4 C=CODE     S=.text    G=(none)   M=ITEDFMCreator ACBP=A9
+ 0001:00018B1C 0000000E C=CODE     S=.text    G=(none)   M=IDEPropCtrls ACBP=A9
+ 0001:00018B2C 0000000E C=CODE     S=.text    G=(none)   M=ColorGrd ACBP=A9
+ 0001:00018B3C 0000001E C=CODE     S=.text    G=(none)   M=ITEExtOptionPage ACBP=A9
+ 0001:00018B5C 0000000E C=CODE     S=.text    G=(none)   M=ExptIntf ACBP=A9
+ 0001:00018B6C 0000000E C=CODE     S=.text    G=(none)   M=ITERepository ACBP=A9
+ 0001:00018B7C 0000000E C=CODE     S=.text    G=(none)   M=IDECommandButton ACBP=A9
+ 0001:00018B8C 0000000E C=CODE     S=.text    G=(none)   M=IDEMenuAction ACBP=A9
+ 0001:00018B9C 0000000E C=CODE     S=.text    G=(none)   M=ITERepositorySearchForm ACBP=A9
+ 0001:00018BAC 000002EC C=CODE     S=.text    G=(none)   M=ITEFormDesignerOptionPage ACBP=A9
+ 0001:00018E98 00000555 C=CODE     S=.text    G=(none)   M=dfm      ACBP=A9
+ 0002:00000000 00000028 C=DATA     S=.data    G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00000028 00000168 C=DATA     S=.data    G=DGROUP   M=ITEDFMCommon ACBP=A9
+ 0002:00000190 000001DC C=DATA     S=.data    G=DGROUP   M=ITEDFMUpdater ACBP=A9
+ 0002:0000036C 00000030 C=DATA     S=.data    G=DGROUP   M=ITEDFMDesigner ACBP=A9
+ 0002:0000039C 00000034 C=DATA     S=.data    G=DGROUP   M=ITEXFMDesigner ACBP=A9
+ 0002:000003D0 0000000A C=DATA     S=.data    G=DGROUP   M=ITEDFMViewer ACBP=A9
+ 0002:000003DC 0000002E C=DATA     S=.data    G=DGROUP   M=ITEDFMForm ACBP=A9
+ 0002:0000040C 00000001 C=DATA     S=.data    G=DGROUP   M=ITEDFMMgr ACBP=A9
+ 0002:00000410 00000014 C=DATA     S=.data    G=DGROUP   M=ITEDFMCreator ACBP=A9
+ 0002:00001000 00000018 C=BSS      S=.bss     G=DGROUP   M=SysInit  ACBP=A9
+ 0002:00001018 00000004 C=BSS      S=.bss     G=DGROUP   M=Messages ACBP=A9
+ 0002:0000101C 00000004 C=BSS      S=.bss     G=DGROUP   M=Windows  ACBP=A9
+ 0002:00001020 00000004 C=BSS      S=.bss     G=DGROUP   M=CommCtrl ACBP=A9
+ 0002:00001024 00000004 C=BSS      S=.bss     G=DGROUP   M=Imm      ACBP=A9
+ 0002:00001028 00000004 C=BSS      S=.bss     G=DGROUP   M=ShlObj   ACBP=A9
+ 0002:0000102C 00000004 C=BSS      S=.bss     G=DGROUP   M=UrlMon   ACBP=A9
+ 0002:00001030 00000004 C=BSS      S=.bss     G=DGROUP   M=WinInet  ACBP=A9
+ 0002:00001034 00000004 C=BSS      S=.bss     G=DGROUP   M=RegStr   ACBP=A9
+ 0002:00001038 00000004 C=BSS      S=.bss     G=DGROUP   M=ShellAPI ACBP=A9
+ 0002:0000103C 00000004 C=BSS      S=.bss     G=DGROUP   M=WinSpool ACBP=A9
+ 0002:00001040 00000004 C=BSS      S=.bss     G=DGROUP   M=CommDlg  ACBP=A9
+ 0002:00001044 00000004 C=BSS      S=.bss     G=DGROUP   M=Dlgs     ACBP=A9
+ 0002:00001048 00000004 C=BSS      S=.bss     G=DGROUP   M=RichEdit ACBP=A9
+ 0002:0000104C 00000004 C=BSS      S=.bss     G=DGROUP   M=ITEDFMCommon ACBP=A9
+ 0002:00001050 00000010 C=BSS      S=.bss     G=DGROUP   M=ITEDFMUpdater ACBP=A9
+ 0002:00001060 00000004 C=BSS      S=.bss     G=DGROUP   M=ITEFormDesigner ACBP=A9
+ 0002:00001064 00000004 C=BSS      S=.bss     G=DGROUP   M=DDEml    ACBP=A9
+ 0002:00001068 00000004 C=BSS      S=.bss     G=DGROUP   M=MMSystem ACBP=A9
+ 0002:0000106C 00000004 C=BSS      S=.bss     G=DGROUP   M=OleDlg   ACBP=A9
+ 0002:00001070 00000004 C=BSS      S=.bss     G=DGROUP   M=ITEDFMDesigner ACBP=A9
+ 0002:00001074 00000004 C=BSS      S=.bss     G=DGROUP   M=ITEXFMDesigner ACBP=A9
+ 0002:00001078 00000004 C=BSS      S=.bss     G=DGROUP   M=ITEDFMViewer ACBP=A9
+ 0002:0000107C 00000018 C=BSS      S=.bss     G=DGROUP   M=ITEDFMForm ACBP=A9
+ 0002:00001094 00000004 C=BSS      S=.bss     G=DGROUP   M=ITEDFMMgr ACBP=A9
+ 0002:00001098 00000004 C=BSS      S=.bss     G=DGROUP   M=ITEDFMCreator ACBP=A9
+ 0002:0000109C 00000008 C=BSS      S=.bss     G=DGROUP   M=ITEFormDesignerOptionPage ACBP=A9
+
+
+  Address         Publics by Name
+
+ 0002:00001038       .1
+ 0002:00001034       .1
+ 0002:00001064       .1
+ 0002:00001030       .1
+ 0002:00001040       .1
+ 0002:00001010       .1
+ 0002:0000102C       .1
+ 0002:00001028       .1
+ 0002:00001074       .1
+ 0002:00001044       .1
+ 0002:00001048       .1
+ 0002:00001024       .1
+ 0002:00001020       .1
+ 0002:00001060       .1
+ 0002:0000106C       .1
+ 0002:00001070       .1
+ 0002:00001018       .1
+ 0002:00001080       .2
+ 0002:000010A0       .2
+ 0002:00001078       .2
+ 0002:00001098       .2
+ 0002:00001050       .2
+ 0002:0000101C       .3
+ 0002:00001094       .3
+ 0002:0000103C       .3
+ 0002:0000104C       .4
+ 0002:00001068       .7
+ 0001:000193C8       @GetPackageInfoTable
+ 0001:000003E0       @InitPkg
+ 0001:000193D0       @PackageLoad
+ 0001:00000444       @PackageLoad
+ 0001:00000450       @PackageUnload
+ 0001:000193DC       @PackageUnload
+ 0001:00003BE4       AddText
+ 0002:00000410       ADFMCreater
+ 0002:00000190       ADFMUpdater
+ 0002:000003D0       ADFMViewer
+ 0001:000002E0       AllocTlsBuffer
+ 0001:00005560       AnalyzeResources
+ 0001:00000944       AppendMenu
+ 0002:00000414       bKeepDFNTimeStamp
+ 0002:00001093       bShowAllProperties
+ 0002:00001090       bShowOrigForm
+ 0002:00001091       bShowXlatForm
+ 0002:00001092       bStayOnTop
+ 0001:00006458       BuildTagList
+ 0001:0000CA10       CalcLeft
+ 0001:00013A28       CanEnableCopyPreviousLine
+ 0001:0001569C       CheckDFMStats
+ 0001:0000094C       CheckMenuItem
+ 0002:0000105C       CloseMarker
+ 0001:0000E330       ColToEnum
+ 0001:00000BC0       CommCtrl
+ 0001:00001290       CommDlg
+ 0001:00003DE0       ConvertBinary
+ 0001:00003CAC       ConvertHeader
+ 0001:00004824       ConvertObject
+ 0001:00004780       ConvertProperty
+ 0001:00003EAC       ConvertValue
+ 0001:00000934       CopyFile
+ 0001:0000A5B8       Create
+ 0001:0000C44C       Create
+ 0001:0000E324       CurrentDFMMgr
+ 0001:00012274       DC1
+ 0001:000122A0       DC2
+ 0001:0000882C       DDEml
+ 0002:000003AC       Deltas
+ 0002:0000037C       Deltas
+ 0001:000193E8       dfm
+ 0001:00018A7C       DFMCreator
+ 0001:000159EC       DFMStringToString
+ 0001:000085A0       DFMUpdater
+ 0001:0000D258       DFMViewer
+ 0002:00001084       DFNColIds
+ 0002:00000028       DFNColInfo
+ 0001:000012C8       Dlgs
+ 0001:00007374       DoCloseMarker
+ 0001:0000761C       DoCollection
+ 0001:00003304       DoDFMFile
+ 0001:000153DC       DoDictionary
+ 0001:000152B4       DoEggBuild
+ 0001:000145E8       DoFinalization
+ 0001:0000CFE4       DoForm
+ 0001:0000C8F8       DoForm
+ 0001:000142CC       DoInitialization
+ 0001:00016F40       DoLine
+ 0001:00014E28       DoListEvent
+ 0001:00014E20       DoMiscEvent
+ 0001:00007248       DoOpenMarker
+ 0001:000151B0       DoPurge
+ 0001:0001305C       DoRow
+ 0001:00006FC0       DoStringList
+ 0001:00006A64       DoTheCurr
+ 0001:00006CB8       DoTheCurrList
+ 0001:00006C18       DoTheCurrListSubGroup
+ 0001:00006D68       DoTheXlatList
+ 0001:00013958       EnableChangeStatusToTranslated
+ 0001:00017224       EndOfString
+ 0001:0000E33C       EnumToCol
+ 0001:00000954       EqualRect
+ 0001:0000038C       ExitProcessTLS
+ 0001:00000364       ExitThreadTLS
+ 0001:000127AC       FigureOutType
+ 0001:00001E20       FileExtToNoteExt
+ 0001:00001F38       FileNameToNoteName
+ 0001:00010544       FillUpGrid
+ 0001:0000A5E4       Finalization
+ 0001:00018E48       Finalization
+ 0001:00014934       Finalization
+ 0001:0000C530       Finalization
+ 0001:00018ABC       Finalization
+ 0001:0000045C       Finalization
+ 0001:000008FC       Finalization
+ 0001:00001218       Finalization
+ 0001:0000D278       Finalization
+ 0001:0000888C       Finalization
+ 0001:00008844       Finalization
+ 0001:000085C0       Finalization
+ 0001:00001FEC       Finalization
+ 0001:00000990       Finalization
+ 0001:00000B90       Finalization
+ 0001:000015D8       Finalization
+ 0001:00001058       Finalization
+ 0001:00001298       Finalization
+ 0001:000087FC       Finalization
+ 0001:000010F0       Finalization
+ 0001:00001260       Finalization
+ 0001:00001128       Finalization
+ 0001:00008764       Finalization
+ 0001:00001160       Finalization
+ 0001:00001198       Finalization
+ 0001:000011D0       Finalization
+ 0001:000174F0       Finalization
+ 0001:0000BC20       FindNextValidControl
+ 0001:00009E44       FindNextValidControl
+ 0001:0000BAC0       FindPrevValidControl
+ 0001:00009CE4       FindPrevValidControl
+ 0001:00006384       FirstUsedItem
+ 0002:00000198       FormData
+ 0001:000002A8       FreeLibrary
+ 0002:0000107C       frmITEDFMForm
+ 0002:0000109C       frmITEFormDesignerOptionPage
+ 0001:00015138       GetClassAndPropNames
+ 0001:00014F2C       GetClassName
+ 0001:00011D3C       GetCurrID
+ 0001:0001589C       GetDFMStats
+ 0001:0000095C       GetForegroundWindow
+ 0001:00014EDC       GetFullObjectName
+ 0001:00017848       GetLine
+ 0001:00014E70       GetObjectName
+ 0001:000177BC       GetObjMode
+ 0001:00015014       GetPropName
+ 0001:00010B48       GetString
+ 0001:00000964       GetSystemMenu
+ 0001:000177F8       GetTheType
+ 0001:000002EC       GetTlsSize
+ 0001:0000EFD0       GotoLineNumber
+ 0002:0000036C       GrabCursors
+ 0002:0000039C       GrabCursors
+ 0002:0000100C       HInstance
+ 0002:00001054       IDMarker
+ 0001:00001088       Imm
+ 0002:0000040C       InCheckDFMStats
+ 0002:00000194       InDFMExecute
+ 0001:000003B0       InitializeModule
+ 0001:00000338       InitProcessTLS
+ 0001:000002F4       InitThreadTLS
+ 0002:000003DC       InSaveToFile
+ 0001:0000093C       IsDBCSLeadByteEx
+ 0001:00006DBC       IsObject
+ 0001:00002088       ITEDFMCommon
+ 0001:00018B14       ITEDFMCreator
+ 0001:0000A614       ITEDFMDesigner
+ 0001:000149D8       ITEDFMForm
+ 0001:00017520       ITEDFMMgr
+ 0001:00008638       ITEDFMUpdater
+ 0001:0000D2BC       ITEDFMViewer
+ 0001:00008794       ITEFormDesigner
+ 0001:00018E84       ITEFormDesignerOptionPage
+ 0001:00014B8C       ITEIsRootBaseClass
+ 0001:0000C56C       ITEXFMDesigner
+ 0001:0000717C       JustTheObject
+ 0001:00006EF4       JustTheObject
+ 0001:0000A290       KeyEvent
+ 0001:0000C084       KeyEvent
+ 0001:0000096C       LoadBitmap
+ 0001:000055C0       LoadResources
+ 0001:000002B0       LocalAlloc
+ 0001:000002B8       LocalFree
+ 0001:00016F0C       LoopThruColumns
+ 0001:00016FE4       LoopThruMgr
+ 0001:0000092C       Messages
+ 0001:00008874       MMSystem
+ 0002:00000000       Module
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0001:0000A1AC       MoveControl
+ 0001:0000BF88       MoveControl
+ 0001:0000BDB4       MoveToNearestControl
+ 0001:00009FD8       MoveToNearestControl
+ 0002:000003E0       MsgDlgButtons
+ 0001:00001EAC       NoteExtToFileExt
+ 0001:00007BF0       ObjectDoesNotExistInCurrStrings
+ 0002:00000418       ObjInhInl
+ 0002:000003CC       OldWndProc
+ 0001:000088BC       OleDlg
+ 0002:00000404       OpenCloseArray
+ 0002:00001058       OpenMarker
+ 0001:00016B98       PerformSearch
+ 0001:00010B7C       PlaceObjectDelimiter
+ 0001:000067CC       PriorObjectsLocation
+ 0001:00006E00       ProcessAtIndex
+ 0001:00007CB8       ProcessCurrObject
+ 0001:000065A4       ProcessCurrProperty
+ 0001:000068D8       ProcessXlatProperty
+ 0001:0000C528       QClxApplication_setWndProcHook
+ 0001:00015560       QuickSortReOrder
+ 0002:000003FC       QuoteArray
+ 0001:000011C8       RegStr
+ 0001:00015DF8       RemoveDFMHeaderLines
+ 0001:00007574       RemoveExtraCloseParens
+ 0001:000074C8       RemoveExtraOpenParens
+ 0001:000176E8       RemoveUnused
+ 0001:00001608       RichEdit
+ 0002:000003E4       S1
+ 0002:000003EC       S2
+ 0002:000003F4       S3
+ 0001:00015EE8       SearchDFMFile
+ 0001:0000BC84       SelectNextControl
+ 0001:00009EA8       SelectNextControl
+ 0001:0000BB18       SelectPrevControl
+ 0001:00009D3C       SelectPrevControl
+ 0001:00015948       SetDFMStats
+ 0001:00000974       SetForegroundWindow
+ 0001:00001200       ShellAPI
+ 0001:00001120       ShlObj
+ 0001:00011264       ShowSettings
+ 0001:0000097C       SmallPointToPoint
+ 0001:0000BD94       Spacing
+ 0001:00009FB8       Spacing
+ 0001:0000E368       StatusToEnum
+ 0001:00002F00       StreamIsResource
+ 0001:00015B68       StringToDFMString
+ 0001:0000048C       SysInit
+ 0001:000175C8       TDFMCreator.Execute
+ 0001:000185C0       TDFMCreator.Execute
+ 0001:0001663C       TDFMMgr.CalcDFMStats
+ 0001:0001611C       TDFMMgr.CanLocalize
+ 0001:00016264       TDFMMgr.ClearList
+ 0001:00016270       TDFMMgr.Create
+ 0001:000162BC       TDFMMgr.Create
+ 0001:0001634C       TDFMMgr.Destroy
+ 0001:00016384       TDFMMgr.DoSearchEnd
+ 0001:000163AC       TDFMMgr.DoSearchFound
+ 0001:000163EC       TDFMMgr.DoSearchStart
+ 0001:00017244       TDFMMgr.EggBuild
+ 0001:00016410       TDFMMgr.GetCount
+ 0001:0001641C       TDFMMgr.GetStrings
+ 0001:0001644C       TDFMMgr.InitSearchLocale
+ 0001:000164B0       TDFMMgr.LoadFromStringList
+ 0001:00017380       TDFMMgr.MakeDictionary
+ 0001:00017184       TDFMMgr.Purge
+ 0001:0001655C       TDFMMgr.ReCalcDFMStats
+ 0001:0001671C       TDFMMgr.Save
+ 0001:000167D4       TDFMMgr.SaveStringList
+ 0001:00017074       TDFMMgr.Search
+ 0001:00017158       TDFMMgr.SetStrings
+ 0001:00017484       TDFMSearchSettings.Create
+ 0001:000174C0       TDFMSearchSettings.Destroy
+ 0001:00004C28       TDFMUpdater.ActionForCurrDFM
+ 0001:00004DC0       TDFMUpdater.ActionForXlatDFM
+ 0001:00003150       TDFMUpdater.AfterSave
+ 0001:00005B84       TDFMUpdater.CheckProperties
+ 0001:0000578C       TDFMUpdater.ClassNotInEXE
+ 0001:00003044       TDFMUpdater.Create
+ 0001:00008400       TDFMUpdater.CreateCPPProject
+ 0001:00008264       TDFMUpdater.CreateDelphiProject
+ 0001:000031F8       TDFMUpdater.DataHasNotChanged
+ 0001:000030D8       TDFMUpdater.Destroy
+ 0001:00003928       TDFMUpdater.Execute
+ 0001:00005814       TDFMUpdater.FormInEXE
+ 0001:00005624       TDFMUpdater.GetALLFormsFromTheEXE
+ 0001:00004E5C       TDFMUpdater.GetClassAndObjectNameFromDFM
+ 0001:000049A0       TDFMUpdater.GetDFMData
+ 0001:000059CC       TDFMUpdater.GetDFMList
+ 0001:00006370       TDFMUpdater.GetFormNotesFileName
+ 0001:00003A38       TDFMUpdater.GetXlatDFMFileName
+ 0001:00004BD0       TDFMUpdater.IsXlatItemUsed
+ 0001:00005D00       TDFMUpdater.NewDFMString
+ 0001:0000511C       TDFMUpdater.ScanCppAncestor
+ 0001:000054E4       TDFMUpdater.ScanFormResListForVCLForms
+ 0001:00004F80       TDFMUpdater.ScanPascalAncestor
+ 0001:000052D4       TDFMUpdater.ScanVCLForms
+ 0001:00004B54       TDFMUpdater.TagXlatItemAsUsed
+ 0001:00008258       TDFMUpdater.TranslatorCount
+ 0001:00006164       TDFMUpdater.UnchangedDFMString
+ 0001:00006188       TDFMUpdater.UnusedDFMString
+ 0001:00007E48       TDFMUpdater.UpdateDFMFile
+ 0001:00006220       TDFMUpdater.UpdateDFMString
+ 0001:000053F4       TDFMUpdater.UpdateFormInfo
+ 0001:0000C7D0       TDFMViewer.Create
+ 0001:0000CA84       TDFMViewer.CreateForm
+ 0001:0000C810       TDFMViewer.Destroy
+ 0001:0000C868       TDFMViewer.DestroyForm
+ 0001:0000C854       TDFMViewer.FormClose
+ 0001:0000D1E0       TDFMViewer.GetDesigner
+ 0001:0000D21C       TDFMViewer.GetDesignerOptions
+ 0001:0000C88C       TDFMViewer.HideForm
+ 0001:0000C9C8       TDFMViewer.ShowForm
+ 0001:0000D0C4       TDFMViewer.UpdateDesignerOptions
+ 0001:0000D098       TDFMViewer.UpdateFormStyle
+ 0002:00000400       TestEscSeq
+ 0001:00001F9C       TFormInfo.Create
+ 0001:0000C7C0       TFormStream.Error
+ 0001:0000C7B0       TFormStream.FindMethod
+ 0001:0000C694       TFormStream.ReadComponent
+ 0001:0000C794       TFormStream.ReadComponentRes
+ 0001:00013ABC       TfrmITEDFMForm.ActionList1Update
+ 0001:0000EF38       TfrmITEDFMForm.BuildRowText
+ 0001:000100BC       TfrmITEDFMForm.CanQuit
+ 0001:0000EF24       TfrmITEDFMForm.ChangeSize
+ 0001:0001383C       TfrmITEDFMForm.ChangeToXLatExecute
+ 0001:00013774       TfrmITEDFMForm.CopyOrigExecute
+ 0001:00013490       TfrmITEDFMForm.CopyPrevLineExecute
+ 0001:00013698       TfrmITEDFMForm.CopyPrevXlatExecute
+ 0001:00011D04       TfrmITEDFMForm.Create
+ 0001:0000E8F8       TfrmITEDFMForm.CreateParams
+ 0001:00013E1C       TfrmITEDFMForm.DFMFormEnter
+ 0001:0001378C       TfrmITEDFMForm.DoChangeToXLatExecute
+ 0001:00013514       TfrmITEDFMForm.DoCopyCommand
+ 0001:000136B0       TfrmITEDFMForm.DoCopyOrigExecute
+ 0001:000135D4       TfrmITEDFMForm.DoCopyPrevXlatExecute
+ 0001:0000FF7C       TfrmITEDFMForm.DoIdle
+ 0001:0000EEEC       TfrmITEDFMForm.EditFile
+ 0001:00010F18       TfrmITEDFMForm.EditFindExecute
+ 0001:00010F84       TfrmITEDFMForm.EditFindInFilesExecute
+ 0001:00010F6C       TfrmITEDFMForm.EditFindUpdate
+ 0001:000147D0       TfrmITEDFMForm.EditOnTopModeExecute
+ 0001:000147B8       TfrmITEDFMForm.EditOnTopModeUpdate
+ 0001:000141CC       TfrmITEDFMForm.EditRefreshXlatFormExecute
+ 0001:000141BC       TfrmITEDFMForm.EditRefreshXlatFormUpdate
+ 0001:000101B8       TfrmITEDFMForm.EditResetExecute
+ 0001:00013E5C       TfrmITEDFMForm.EditShowOriginalFormExecute
+ 0001:000141B0       TfrmITEDFMForm.EditShowOriginalFormUpdate
+ 0001:00013EC0       TfrmITEDFMForm.EditShowTranslatedFormExecute
+ 0001:0000FF4C       TfrmITEDFMForm.FileSave1Execute
+ 0001:0000FF60       TfrmITEDFMForm.FileSave1Update
+ 0001:00013854       TfrmITEDFMForm.FindNextExecute
+ 0001:000122C4       TfrmITEDFMForm.FormatDFMDirective
+ 0001:0000FFE4       TfrmITEDFMForm.FormCloseQuery
+ 0001:0000E91C       TfrmITEDFMForm.FormCreate
+ 0001:0000EE44       TfrmITEDFMForm.FormDestroy
+ 0001:000148C8       TfrmITEDFMForm.FormHide
+ 0001:00011064       TfrmITEDFMForm.FormResize
+ 0001:0000EE2C       TfrmITEDFMForm.FormShow
+ 0001:00011074       TfrmITEDFMForm.GridToDfmMgr
+ 0001:00011034       TfrmITEDFMForm.HideDockPanel
+ 0001:0000FFD8       TfrmITEDFMForm.Idle
+ 0001:0000F3AC       TfrmITEDFMForm.InitColumns
+ 0001:0000F37C       TfrmITEDFMForm.InitFilters
+ 0001:0000FBE4       TfrmITEDFMForm.IsDirty
+ 0001:000128E4       TfrmITEDFMForm.IsSelectionOfOneType
+ 0001:00013BF4       TfrmITEDFMForm.ITEGridAddedToRepository
+ 0001:00013F9C       TfrmITEDFMForm.ITEGridCellValueChangedEvent
+ 0001:0000FB50       TfrmITEDFMForm.ITEGridColumnMoved
+ 0001:00011ACC       TfrmITEDFMForm.ITEGridDrawCell
+ 0001:00013250       TfrmITEDFMForm.ITEGridEditMenuClick
+ 0001:00012BC0       TfrmITEDFMForm.ITEGridEditMenuPoping
+ 0001:0000FAEC       TfrmITEDFMForm.ITEGridFixedColClick
+ 0001:0000FBD4       TfrmITEDFMForm.ITEGridHomeClick
+ 0001:00012134       TfrmITEDFMForm.ITEGridInplaceComboBoxCloseUp
+ 0001:0001214C       TfrmITEDFMForm.ITEGridInplaceComboBoxShowing
+ 0001:0000F7DC       TfrmITEDFMForm.ITEGridProcessFilters
+ 0001:00013D1C       TfrmITEDFMForm.ITEGridPulledFromRepository
+ 0001:00010DF0       TfrmITEDFMForm.LoadDFMFile
+ 0001:0000F07C       TfrmITEDFMForm.LoadFromFile
+ 0001:0000FB7C       TfrmITEDFMForm.MoveEnum
+ 0001:000119F8       TfrmITEDFMForm.OnSearchEnd
+ 0001:000118A4       TfrmITEDFMForm.OnSearchFound
+ 0001:0001189C       TfrmITEDFMForm.OnSearchStart
+ 0001:0001102C       TfrmITEDFMForm.pnlSearchResultsDockDrop
+ 0001:0001105C       TfrmITEDFMForm.pnlSearchResultsUnDock
+ 0001:0000F9A8       TfrmITEDFMForm.ProcessStatus
+ 0001:0000FC0C       TfrmITEDFMForm.ResetColumns
+ 0001:0000FC1C       TfrmITEDFMForm.ResetDirtyList
+ 0001:0000FBFC       TfrmITEDFMForm.ResetFilters
+ 0001:0000FDEC       TfrmITEDFMForm.SaveToFile
+ 0001:00011610       TfrmITEDFMForm.SearchDfn
+ 0001:00013940       TfrmITEDFMForm.SelectAllExecute
+ 0001:00014810       TfrmITEDFMForm.SetOnTopModeButtonState
+ 0001:00010FE0       TfrmITEDFMForm.ShowDockPanel
+ 0001:000124BC       TfrmITEDFMForm.ShowMultiLineEditExecute
+ 0001:00012538       TfrmITEDFMForm.ShowMultiLineEditUpdate
+ 0001:00012580       TfrmITEDFMForm.ShowSettingsActionExecute
+ 0001:0000FF0C       TfrmITEDFMForm.TextWidthOf
+ 0001:000125E0       TfrmITEDFMForm.ToggleTextLabelsExecute
+ 0001:0000FCC8       TfrmITEDFMForm.UpdateDirty
+ 0001:00011EAC       TfrmITEDFMForm.UpdateStatusBar
+ 0001:00010334       TfrmITEDFMForm.ValidateStatus
+ 0001:000104E8       TfrmITEDFMForm.ValidateText
+ 0001:00013E2C       TfrmITEDFMForm.ViewerClose
+ 0001:00018E34       TfrmITEFormDesignerOptionPage.FormDestroy
+ 0001:00008EEC       TGrabHandles.Create
+ 0001:0000AC24       TGrabHandles.Create
+ 0001:0000ADE0       TGrabHandles.DrawDragBox
+ 0001:000090B8       TGrabHandles.DrawDragBox
+ 0001:0000903C       TGrabHandles.FormResize
+ 0001:0000AD60       TGrabHandles.FormResize
+ 0001:0000AE10       TGrabHandles.GetObjectID
+ 0001:000090E8       TGrabHandles.GetObjectID
+ 0001:0000AE94       TGrabHandles.GrabMouseDown
+ 0001:0000916C       TGrabHandles.GrabMouseDown
+ 0001:00009290       TGrabHandles.GrabMouseMove
+ 0001:0000AFB4       TGrabHandles.GrabMouseMove
+ 0001:00009468       TGrabHandles.GrabMouseUp
+ 0001:0000B190       TGrabHandles.GrabMouseUp
+ 0001:000094C4       TGrabHandles.SetGrabVisible
+ 0001:0000B1EC       TGrabHandles.SetGrabVisible
+ 0001:00009500       TGrabHandles.SetNotifier
+ 0001:0000B234       TGrabHandles.SetNotifier
+ 0001:00009550       TGrabHandles.SetParent
+ 0001:0000B284       TGrabHandles.SetParent
+ 0001:0000B2B8       TGrabHandles.SetSelection
+ 0001:00009584       TGrabHandles.SetSelection
+ 0001:0000B358       TGrabHandles.SetSelectionBounds
+ 0001:00009624       TGrabHandles.SetSelectionBounds
+ 0001:00009758       TGrabHandles.SnapToGrid
+ 0001:0000B488       TGrabHandles.SnapToGrid
+ 0001:0000B4D8       TGrabHandles.UpdateSelection
+ 0001:000097A8       TGrabHandles.UpdateSelection
+ 0002:000003D8       TheClxStyle
+ 0002:00001088       TheExts
+ 0002:000003D4       TheVCLStyle
+ 0001:0000C374       TITEFormDesigner.ControlPaintRequest
+ 0001:000098A4       TITEFormDesigner.Create
+ 0001:0000B670       TITEFormDesigner.Create
+ 0001:000099F8       TITEFormDesigner.FormShow
+ 0001:0000B7C8       TITEFormDesigner.FormShow
+ 0001:0000BABC       TITEFormDesigner.GetCustomForm
+ 0001:00009CD4       TITEFormDesigner.GetCustomForm
+ 0001:0000B7F0       TITEFormDesigner.GetDisplayGrid
+ 0001:00009A20       TITEFormDesigner.GetDisplayGrid
+ 0001:0000BA5C       TITEFormDesigner.GetEnabled
+ 0001:00009C88       TITEFormDesigner.GetEnabled
+ 0001:0000B7F4       TITEFormDesigner.GetGridOffset
+ 0001:00009A24       TITEFormDesigner.GetGridOffset
+ 0001:0000B848       TITEFormDesigner.GetGridSize
+ 0001:00009A78       TITEFormDesigner.GetGridSize
+ 0001:00009CDC       TITEFormDesigner.GetIsControl
+ 0001:0000A5AC       TITEFormDesigner.GetRoot
+ 0001:0000C440       TITEFormDesigner.GetRoot
+ 0001:0000B854       TITEFormDesigner.GetSnapToGrid
+ 0001:00009A84       TITEFormDesigner.GetSnapToGrid
+ 0001:0000C178       TITEFormDesigner.IsDesignEvent
+ 0001:0000A380       TITEFormDesigner.IsDesignMsg
+ 0001:0000C444       TITEFormDesigner.Modified
+ 0001:0000A5B0       TITEFormDesigner.Modified
+ 0001:0000A5B4       TITEFormDesigner.Notification
+ 0001:0000C448       TITEFormDesigner.Notification
+ 0001:0000A534       TITEFormDesigner.PaintGrid
+ 0001:0000C378       TITEFormDesigner.PaintGrid
+ 0001:00009B24       TITEFormDesigner.SelectComponent
+ 0001:0000B8F8       TITEFormDesigner.SelectComponent
+ 0001:00009CD8       TITEFormDesigner.SetCustomForm
+ 0001:00009A88       TITEFormDesigner.SetDisplayGrid
+ 0001:0000B858       TITEFormDesigner.SetDisplayGrid
+ 0001:0000BA60       TITEFormDesigner.SetEnabled
+ 0001:00009C8C       TITEFormDesigner.SetEnabled
+ 0001:00009A9C       TITEFormDesigner.SetGridSize
+ 0001:0000B870       TITEFormDesigner.SetGridSize
+ 0001:00009CE0       TITEFormDesigner.SetIsControl
+ 0001:00009AD4       TITEFormDesigner.SetNotifier
+ 0001:0000B8A8       TITEFormDesigner.SetNotifier
+ 0001:0000B8F4       TITEFormDesigner.SetSnapToGrid
+ 0001:00009B20       TITEFormDesigner.SetSnapToGrid
+ 0001:0000C43C       TITEFormDesigner.UniqueName
+ 0001:0000A5A8       TITEFormDesigner.UniqueName
+ 0001:0000B928       TITEFormDesigner.UpdateComponent
+ 0001:00009B54       TITEFormDesigner.UpdateComponent
+ 0001:0000A5A0       TITEFormDesigner.ValidateRename
+ 0001:0000C434       TITEFormDesigner.ValidateRename
+ 0001:0000E6DC       TITEFormDesignerNotifier.ComponentMoved
+ 0001:0000E778       TITEFormDesignerNotifier.ComponentResized
+ 0001:0000E818       TITEFormDesignerNotifier.ComponentSelected
+ 0001:000002C0       TlsAlloc
+ 0002:00001014       tlsBuffer
+ 0001:000002C8       TlsFree
+ 0001:000002D0       TlsGetValue
+ 0002:00001004       TlsIndex
+ 0002:AD865000       TlsLast
+ 0002:00000018       TlsProc
+ 0001:000002D8       TlsSetValue
+ 0001:0000B5E4       TNoClipCanvas.BeginPainting
+ 0002:0000108C       ToolServ
+ 0001:0000ABF0       TranslatePoint
+ 0001:00008EB8       TranslatePoint
+ 0001:000003BC       UninitializeModule
+ 0001:000036B8       UpdateFromOrig
+ 0001:00003874       UpdateFromTrans
+ 0001:0000E4D4       UpdateProperties
+ 0001:00001158       UrlMon
+ 0001:00007AEC       ValidateSubGroups
+ 0001:000009C0       Windows
+ 0001:00001190       WinInet
+ 0001:00001248       WinSpool
+ 0001:0000C478       WndProc
+
+
+  Address         Publics by Value
+
+ 0002:AD865000       TlsLast
+ 0001:000002A8       FreeLibrary
+ 0001:000002B0       LocalAlloc
+ 0001:000002B8       LocalFree
+ 0001:000002C0       TlsAlloc
+ 0001:000002C8       TlsFree
+ 0001:000002D0       TlsGetValue
+ 0001:000002D8       TlsSetValue
+ 0001:000002E0       AllocTlsBuffer
+ 0001:000002EC       GetTlsSize
+ 0001:000002F4       InitThreadTLS
+ 0001:00000338       InitProcessTLS
+ 0001:00000364       ExitThreadTLS
+ 0001:0000038C       ExitProcessTLS
+ 0001:000003B0       InitializeModule
+ 0001:000003BC       UninitializeModule
+ 0001:000003E0       @InitPkg
+ 0001:00000444       @PackageLoad
+ 0001:00000450       @PackageUnload
+ 0001:0000045C       Finalization
+ 0001:0000048C       SysInit
+ 0001:000008FC       Finalization
+ 0001:0000092C       Messages
+ 0001:00000934       CopyFile
+ 0001:0000093C       IsDBCSLeadByteEx
+ 0001:00000944       AppendMenu
+ 0001:0000094C       CheckMenuItem
+ 0001:00000954       EqualRect
+ 0001:0000095C       GetForegroundWindow
+ 0001:00000964       GetSystemMenu
+ 0001:0000096C       LoadBitmap
+ 0001:00000974       SetForegroundWindow
+ 0001:0000097C       SmallPointToPoint
+ 0001:00000990       Finalization
+ 0001:000009C0       Windows
+ 0001:00000B90       Finalization
+ 0001:00000BC0       CommCtrl
+ 0001:00001058       Finalization
+ 0001:00001088       Imm
+ 0001:000010F0       Finalization
+ 0001:00001120       ShlObj
+ 0001:00001128       Finalization
+ 0001:00001158       UrlMon
+ 0001:00001160       Finalization
+ 0001:00001190       WinInet
+ 0001:00001198       Finalization
+ 0001:000011C8       RegStr
+ 0001:000011D0       Finalization
+ 0001:00001200       ShellAPI
+ 0001:00001218       Finalization
+ 0001:00001248       WinSpool
+ 0001:00001260       Finalization
+ 0001:00001290       CommDlg
+ 0001:00001298       Finalization
+ 0001:000012C8       Dlgs
+ 0001:000015D8       Finalization
+ 0001:00001608       RichEdit
+ 0001:00001E20       FileExtToNoteExt
+ 0001:00001EAC       NoteExtToFileExt
+ 0001:00001F38       FileNameToNoteName
+ 0001:00001F9C       TFormInfo.Create
+ 0001:00001FEC       Finalization
+ 0001:00002088       ITEDFMCommon
+ 0001:00002F00       StreamIsResource
+ 0001:00003044       TDFMUpdater.Create
+ 0001:000030D8       TDFMUpdater.Destroy
+ 0001:00003150       TDFMUpdater.AfterSave
+ 0001:000031F8       TDFMUpdater.DataHasNotChanged
+ 0001:00003304       DoDFMFile
+ 0001:000036B8       UpdateFromOrig
+ 0001:00003874       UpdateFromTrans
+ 0001:00003928       TDFMUpdater.Execute
+ 0001:00003A38       TDFMUpdater.GetXlatDFMFileName
+ 0001:00003BE4       AddText
+ 0001:00003CAC       ConvertHeader
+ 0001:00003DE0       ConvertBinary
+ 0001:00003EAC       ConvertValue
+ 0001:00004780       ConvertProperty
+ 0001:00004824       ConvertObject
+ 0001:000049A0       TDFMUpdater.GetDFMData
+ 0001:00004B54       TDFMUpdater.TagXlatItemAsUsed
+ 0001:00004BD0       TDFMUpdater.IsXlatItemUsed
+ 0001:00004C28       TDFMUpdater.ActionForCurrDFM
+ 0001:00004DC0       TDFMUpdater.ActionForXlatDFM
+ 0001:00004E5C       TDFMUpdater.GetClassAndObjectNameFromDFM
+ 0001:00004F80       TDFMUpdater.ScanPascalAncestor
+ 0001:0000511C       TDFMUpdater.ScanCppAncestor
+ 0001:000052D4       TDFMUpdater.ScanVCLForms
+ 0001:000053F4       TDFMUpdater.UpdateFormInfo
+ 0001:000054E4       TDFMUpdater.ScanFormResListForVCLForms
+ 0001:00005560       AnalyzeResources
+ 0001:000055C0       LoadResources
+ 0001:00005624       TDFMUpdater.GetALLFormsFromTheEXE
+ 0001:0000578C       TDFMUpdater.ClassNotInEXE
+ 0001:00005814       TDFMUpdater.FormInEXE
+ 0001:000059CC       TDFMUpdater.GetDFMList
+ 0001:00005B84       TDFMUpdater.CheckProperties
+ 0001:00005D00       TDFMUpdater.NewDFMString
+ 0001:00006164       TDFMUpdater.UnchangedDFMString
+ 0001:00006188       TDFMUpdater.UnusedDFMString
+ 0001:00006220       TDFMUpdater.UpdateDFMString
+ 0001:00006370       TDFMUpdater.GetFormNotesFileName
+ 0001:00006384       FirstUsedItem
+ 0001:00006458       BuildTagList
+ 0001:000065A4       ProcessCurrProperty
+ 0001:000067CC       PriorObjectsLocation
+ 0001:000068D8       ProcessXlatProperty
+ 0001:00006A64       DoTheCurr
+ 0001:00006C18       DoTheCurrListSubGroup
+ 0001:00006CB8       DoTheCurrList
+ 0001:00006D68       DoTheXlatList
+ 0001:00006DBC       IsObject
+ 0001:00006E00       ProcessAtIndex
+ 0001:00006EF4       JustTheObject
+ 0001:00006FC0       DoStringList
+ 0001:0000717C       JustTheObject
+ 0001:00007248       DoOpenMarker
+ 0001:00007374       DoCloseMarker
+ 0001:000074C8       RemoveExtraOpenParens
+ 0001:00007574       RemoveExtraCloseParens
+ 0001:0000761C       DoCollection
+ 0001:00007AEC       ValidateSubGroups
+ 0001:00007BF0       ObjectDoesNotExistInCurrStrings
+ 0001:00007CB8       ProcessCurrObject
+ 0001:00007E48       TDFMUpdater.UpdateDFMFile
+ 0001:00008258       TDFMUpdater.TranslatorCount
+ 0001:00008264       TDFMUpdater.CreateDelphiProject
+ 0001:00008400       TDFMUpdater.CreateCPPProject
+ 0001:000085A0       DFMUpdater
+ 0001:000085C0       Finalization
+ 0001:00008638       ITEDFMUpdater
+ 0001:00008764       Finalization
+ 0001:00008794       ITEFormDesigner
+ 0001:000087FC       Finalization
+ 0001:0000882C       DDEml
+ 0001:00008844       Finalization
+ 0001:00008874       MMSystem
+ 0001:0000888C       Finalization
+ 0001:000088BC       OleDlg
+ 0001:00008EB8       TranslatePoint
+ 0001:00008EEC       TGrabHandles.Create
+ 0001:0000903C       TGrabHandles.FormResize
+ 0001:000090B8       TGrabHandles.DrawDragBox
+ 0001:000090E8       TGrabHandles.GetObjectID
+ 0001:0000916C       TGrabHandles.GrabMouseDown
+ 0001:00009290       TGrabHandles.GrabMouseMove
+ 0001:00009468       TGrabHandles.GrabMouseUp
+ 0001:000094C4       TGrabHandles.SetGrabVisible
+ 0001:00009500       TGrabHandles.SetNotifier
+ 0001:00009550       TGrabHandles.SetParent
+ 0001:00009584       TGrabHandles.SetSelection
+ 0001:00009624       TGrabHandles.SetSelectionBounds
+ 0001:00009758       TGrabHandles.SnapToGrid
+ 0001:000097A8       TGrabHandles.UpdateSelection
+ 0001:000098A4       TITEFormDesigner.Create
+ 0001:000099F8       TITEFormDesigner.FormShow
+ 0001:00009A20       TITEFormDesigner.GetDisplayGrid
+ 0001:00009A24       TITEFormDesigner.GetGridOffset
+ 0001:00009A78       TITEFormDesigner.GetGridSize
+ 0001:00009A84       TITEFormDesigner.GetSnapToGrid
+ 0001:00009A88       TITEFormDesigner.SetDisplayGrid
+ 0001:00009A9C       TITEFormDesigner.SetGridSize
+ 0001:00009AD4       TITEFormDesigner.SetNotifier
+ 0001:00009B20       TITEFormDesigner.SetSnapToGrid
+ 0001:00009B24       TITEFormDesigner.SelectComponent
+ 0001:00009B54       TITEFormDesigner.UpdateComponent
+ 0001:00009C88       TITEFormDesigner.GetEnabled
+ 0001:00009C8C       TITEFormDesigner.SetEnabled
+ 0001:00009CD4       TITEFormDesigner.GetCustomForm
+ 0001:00009CD8       TITEFormDesigner.SetCustomForm
+ 0001:00009CDC       TITEFormDesigner.GetIsControl
+ 0001:00009CE0       TITEFormDesigner.SetIsControl
+ 0001:00009CE4       FindPrevValidControl
+ 0001:00009D3C       SelectPrevControl
+ 0001:00009E44       FindNextValidControl
+ 0001:00009EA8       SelectNextControl
+ 0001:00009FB8       Spacing
+ 0001:00009FD8       MoveToNearestControl
+ 0001:0000A1AC       MoveControl
+ 0001:0000A290       KeyEvent
+ 0001:0000A380       TITEFormDesigner.IsDesignMsg
+ 0001:0000A534       TITEFormDesigner.PaintGrid
+ 0001:0000A5A0       TITEFormDesigner.ValidateRename
+ 0001:0000A5A8       TITEFormDesigner.UniqueName
+ 0001:0000A5AC       TITEFormDesigner.GetRoot
+ 0001:0000A5B0       TITEFormDesigner.Modified
+ 0001:0000A5B4       TITEFormDesigner.Notification
+ 0001:0000A5B8       Create
+ 0001:0000A5E4       Finalization
+ 0001:0000A614       ITEDFMDesigner
+ 0001:0000ABF0       TranslatePoint
+ 0001:0000AC24       TGrabHandles.Create
+ 0001:0000AD60       TGrabHandles.FormResize
+ 0001:0000ADE0       TGrabHandles.DrawDragBox
+ 0001:0000AE10       TGrabHandles.GetObjectID
+ 0001:0000AE94       TGrabHandles.GrabMouseDown
+ 0001:0000AFB4       TGrabHandles.GrabMouseMove
+ 0001:0000B190       TGrabHandles.GrabMouseUp
+ 0001:0000B1EC       TGrabHandles.SetGrabVisible
+ 0001:0000B234       TGrabHandles.SetNotifier
+ 0001:0000B284       TGrabHandles.SetParent
+ 0001:0000B2B8       TGrabHandles.SetSelection
+ 0001:0000B358       TGrabHandles.SetSelectionBounds
+ 0001:0000B488       TGrabHandles.SnapToGrid
+ 0001:0000B4D8       TGrabHandles.UpdateSelection
+ 0001:0000B5E4       TNoClipCanvas.BeginPainting
+ 0001:0000B670       TITEFormDesigner.Create
+ 0001:0000B7C8       TITEFormDesigner.FormShow
+ 0001:0000B7F0       TITEFormDesigner.GetDisplayGrid
+ 0001:0000B7F4       TITEFormDesigner.GetGridOffset
+ 0001:0000B848       TITEFormDesigner.GetGridSize
+ 0001:0000B854       TITEFormDesigner.GetSnapToGrid
+ 0001:0000B858       TITEFormDesigner.SetDisplayGrid
+ 0001:0000B870       TITEFormDesigner.SetGridSize
+ 0001:0000B8A8       TITEFormDesigner.SetNotifier
+ 0001:0000B8F4       TITEFormDesigner.SetSnapToGrid
+ 0001:0000B8F8       TITEFormDesigner.SelectComponent
+ 0001:0000B928       TITEFormDesigner.UpdateComponent
+ 0001:0000BA5C       TITEFormDesigner.GetEnabled
+ 0001:0000BA60       TITEFormDesigner.SetEnabled
+ 0001:0000BABC       TITEFormDesigner.GetCustomForm
+ 0001:0000BAC0       FindPrevValidControl
+ 0001:0000BB18       SelectPrevControl
+ 0001:0000BC20       FindNextValidControl
+ 0001:0000BC84       SelectNextControl
+ 0001:0000BD94       Spacing
+ 0001:0000BDB4       MoveToNearestControl
+ 0001:0000BF88       MoveControl
+ 0001:0000C084       KeyEvent
+ 0001:0000C178       TITEFormDesigner.IsDesignEvent
+ 0001:0000C374       TITEFormDesigner.ControlPaintRequest
+ 0001:0000C378       TITEFormDesigner.PaintGrid
+ 0001:0000C434       TITEFormDesigner.ValidateRename
+ 0001:0000C43C       TITEFormDesigner.UniqueName
+ 0001:0000C440       TITEFormDesigner.GetRoot
+ 0001:0000C444       TITEFormDesigner.Modified
+ 0001:0000C448       TITEFormDesigner.Notification
+ 0001:0000C44C       Create
+ 0001:0000C478       WndProc
+ 0001:0000C528       QClxApplication_setWndProcHook
+ 0001:0000C530       Finalization
+ 0001:0000C56C       ITEXFMDesigner
+ 0001:0000C694       TFormStream.ReadComponent
+ 0001:0000C794       TFormStream.ReadComponentRes
+ 0001:0000C7B0       TFormStream.FindMethod
+ 0001:0000C7C0       TFormStream.Error
+ 0001:0000C7D0       TDFMViewer.Create
+ 0001:0000C810       TDFMViewer.Destroy
+ 0001:0000C854       TDFMViewer.FormClose
+ 0001:0000C868       TDFMViewer.DestroyForm
+ 0001:0000C88C       TDFMViewer.HideForm
+ 0001:0000C8F8       DoForm
+ 0001:0000C9C8       TDFMViewer.ShowForm
+ 0001:0000CA10       CalcLeft
+ 0001:0000CA84       TDFMViewer.CreateForm
+ 0001:0000CFE4       DoForm
+ 0001:0000D098       TDFMViewer.UpdateFormStyle
+ 0001:0000D0C4       TDFMViewer.UpdateDesignerOptions
+ 0001:0000D1E0       TDFMViewer.GetDesigner
+ 0001:0000D21C       TDFMViewer.GetDesignerOptions
+ 0001:0000D258       DFMViewer
+ 0001:0000D278       Finalization
+ 0001:0000D2BC       ITEDFMViewer
+ 0001:0000E324       CurrentDFMMgr
+ 0001:0000E330       ColToEnum
+ 0001:0000E33C       EnumToCol
+ 0001:0000E368       StatusToEnum
+ 0001:0000E4D4       UpdateProperties
+ 0001:0000E6DC       TITEFormDesignerNotifier.ComponentMoved
+ 0001:0000E778       TITEFormDesignerNotifier.ComponentResized
+ 0001:0000E818       TITEFormDesignerNotifier.ComponentSelected
+ 0001:0000E8F8       TfrmITEDFMForm.CreateParams
+ 0001:0000E91C       TfrmITEDFMForm.FormCreate
+ 0001:0000EE2C       TfrmITEDFMForm.FormShow
+ 0001:0000EE44       TfrmITEDFMForm.FormDestroy
+ 0001:0000EEEC       TfrmITEDFMForm.EditFile
+ 0001:0000EF24       TfrmITEDFMForm.ChangeSize
+ 0001:0000EF38       TfrmITEDFMForm.BuildRowText
+ 0001:0000EFD0       GotoLineNumber
+ 0001:0000F07C       TfrmITEDFMForm.LoadFromFile
+ 0001:0000F37C       TfrmITEDFMForm.InitFilters
+ 0001:0000F3AC       TfrmITEDFMForm.InitColumns
+ 0001:0000F7DC       TfrmITEDFMForm.ITEGridProcessFilters
+ 0001:0000F9A8       TfrmITEDFMForm.ProcessStatus
+ 0001:0000FAEC       TfrmITEDFMForm.ITEGridFixedColClick
+ 0001:0000FB50       TfrmITEDFMForm.ITEGridColumnMoved
+ 0001:0000FB7C       TfrmITEDFMForm.MoveEnum
+ 0001:0000FBD4       TfrmITEDFMForm.ITEGridHomeClick
+ 0001:0000FBE4       TfrmITEDFMForm.IsDirty
+ 0001:0000FBFC       TfrmITEDFMForm.ResetFilters
+ 0001:0000FC0C       TfrmITEDFMForm.ResetColumns
+ 0001:0000FC1C       TfrmITEDFMForm.ResetDirtyList
+ 0001:0000FCC8       TfrmITEDFMForm.UpdateDirty
+ 0001:0000FDEC       TfrmITEDFMForm.SaveToFile
+ 0001:0000FF0C       TfrmITEDFMForm.TextWidthOf
+ 0001:0000FF4C       TfrmITEDFMForm.FileSave1Execute
+ 0001:0000FF60       TfrmITEDFMForm.FileSave1Update
+ 0001:0000FF7C       TfrmITEDFMForm.DoIdle
+ 0001:0000FFD8       TfrmITEDFMForm.Idle
+ 0001:0000FFE4       TfrmITEDFMForm.FormCloseQuery
+ 0001:000100BC       TfrmITEDFMForm.CanQuit
+ 0001:000101B8       TfrmITEDFMForm.EditResetExecute
+ 0001:00010334       TfrmITEDFMForm.ValidateStatus
+ 0001:000104E8       TfrmITEDFMForm.ValidateText
+ 0001:00010544       FillUpGrid
+ 0001:00010B48       GetString
+ 0001:00010B7C       PlaceObjectDelimiter
+ 0001:00010DF0       TfrmITEDFMForm.LoadDFMFile
+ 0001:00010F18       TfrmITEDFMForm.EditFindExecute
+ 0001:00010F6C       TfrmITEDFMForm.EditFindUpdate
+ 0001:00010F84       TfrmITEDFMForm.EditFindInFilesExecute
+ 0001:00010FE0       TfrmITEDFMForm.ShowDockPanel
+ 0001:0001102C       TfrmITEDFMForm.pnlSearchResultsDockDrop
+ 0001:00011034       TfrmITEDFMForm.HideDockPanel
+ 0001:0001105C       TfrmITEDFMForm.pnlSearchResultsUnDock
+ 0001:00011064       TfrmITEDFMForm.FormResize
+ 0001:00011074       TfrmITEDFMForm.GridToDfmMgr
+ 0001:00011264       ShowSettings
+ 0001:00011610       TfrmITEDFMForm.SearchDfn
+ 0001:0001189C       TfrmITEDFMForm.OnSearchStart
+ 0001:000118A4       TfrmITEDFMForm.OnSearchFound
+ 0001:000119F8       TfrmITEDFMForm.OnSearchEnd
+ 0001:00011ACC       TfrmITEDFMForm.ITEGridDrawCell
+ 0001:00011D04       TfrmITEDFMForm.Create
+ 0001:00011D3C       GetCurrID
+ 0001:00011EAC       TfrmITEDFMForm.UpdateStatusBar
+ 0001:00012134       TfrmITEDFMForm.ITEGridInplaceComboBoxCloseUp
+ 0001:0001214C       TfrmITEDFMForm.ITEGridInplaceComboBoxShowing
+ 0001:00012274       DC1
+ 0001:000122A0       DC2
+ 0001:000122C4       TfrmITEDFMForm.FormatDFMDirective
+ 0001:000124BC       TfrmITEDFMForm.ShowMultiLineEditExecute
+ 0001:00012538       TfrmITEDFMForm.ShowMultiLineEditUpdate
+ 0001:00012580       TfrmITEDFMForm.ShowSettingsActionExecute
+ 0001:000125E0       TfrmITEDFMForm.ToggleTextLabelsExecute
+ 0001:000127AC       FigureOutType
+ 0001:000128E4       TfrmITEDFMForm.IsSelectionOfOneType
+ 0001:00012BC0       TfrmITEDFMForm.ITEGridEditMenuPoping
+ 0001:0001305C       DoRow
+ 0001:00013250       TfrmITEDFMForm.ITEGridEditMenuClick
+ 0001:00013490       TfrmITEDFMForm.CopyPrevLineExecute
+ 0001:00013514       TfrmITEDFMForm.DoCopyCommand
+ 0001:000135D4       TfrmITEDFMForm.DoCopyPrevXlatExecute
+ 0001:00013698       TfrmITEDFMForm.CopyPrevXlatExecute
+ 0001:000136B0       TfrmITEDFMForm.DoCopyOrigExecute
+ 0001:00013774       TfrmITEDFMForm.CopyOrigExecute
+ 0001:0001378C       TfrmITEDFMForm.DoChangeToXLatExecute
+ 0001:0001383C       TfrmITEDFMForm.ChangeToXLatExecute
+ 0001:00013854       TfrmITEDFMForm.FindNextExecute
+ 0001:00013940       TfrmITEDFMForm.SelectAllExecute
+ 0001:00013958       EnableChangeStatusToTranslated
+ 0001:00013A28       CanEnableCopyPreviousLine
+ 0001:00013ABC       TfrmITEDFMForm.ActionList1Update
+ 0001:00013BF4       TfrmITEDFMForm.ITEGridAddedToRepository
+ 0001:00013D1C       TfrmITEDFMForm.ITEGridPulledFromRepository
+ 0001:00013E1C       TfrmITEDFMForm.DFMFormEnter
+ 0001:00013E2C       TfrmITEDFMForm.ViewerClose
+ 0001:00013E5C       TfrmITEDFMForm.EditShowOriginalFormExecute
+ 0001:00013EC0       TfrmITEDFMForm.EditShowTranslatedFormExecute
+ 0001:00013F9C       TfrmITEDFMForm.ITEGridCellValueChangedEvent
+ 0001:000141B0       TfrmITEDFMForm.EditShowOriginalFormUpdate
+ 0001:000141BC       TfrmITEDFMForm.EditRefreshXlatFormUpdate
+ 0001:000141CC       TfrmITEDFMForm.EditRefreshXlatFormExecute
+ 0001:000142CC       DoInitialization
+ 0001:000145E8       DoFinalization
+ 0001:000147B8       TfrmITEDFMForm.EditOnTopModeUpdate
+ 0001:000147D0       TfrmITEDFMForm.EditOnTopModeExecute
+ 0001:00014810       TfrmITEDFMForm.SetOnTopModeButtonState
+ 0001:000148C8       TfrmITEDFMForm.FormHide
+ 0001:00014934       Finalization
+ 0001:000149D8       ITEDFMForm
+ 0001:00014B8C       ITEIsRootBaseClass
+ 0001:00014E20       DoMiscEvent
+ 0001:00014E28       DoListEvent
+ 0001:00014E70       GetObjectName
+ 0001:00014EDC       GetFullObjectName
+ 0001:00014F2C       GetClassName
+ 0001:00015014       GetPropName
+ 0001:00015138       GetClassAndPropNames
+ 0001:000151B0       DoPurge
+ 0001:000152B4       DoEggBuild
+ 0001:000153DC       DoDictionary
+ 0001:00015560       QuickSortReOrder
+ 0001:0001569C       CheckDFMStats
+ 0001:0001589C       GetDFMStats
+ 0001:00015948       SetDFMStats
+ 0001:000159EC       DFMStringToString
+ 0001:00015B68       StringToDFMString
+ 0001:00015DF8       RemoveDFMHeaderLines
+ 0001:00015EE8       SearchDFMFile
+ 0001:0001611C       TDFMMgr.CanLocalize
+ 0001:00016264       TDFMMgr.ClearList
+ 0001:00016270       TDFMMgr.Create
+ 0001:000162BC       TDFMMgr.Create
+ 0001:0001634C       TDFMMgr.Destroy
+ 0001:00016384       TDFMMgr.DoSearchEnd
+ 0001:000163AC       TDFMMgr.DoSearchFound
+ 0001:000163EC       TDFMMgr.DoSearchStart
+ 0001:00016410       TDFMMgr.GetCount
+ 0001:0001641C       TDFMMgr.GetStrings
+ 0001:0001644C       TDFMMgr.InitSearchLocale
+ 0001:000164B0       TDFMMgr.LoadFromStringList
+ 0001:0001655C       TDFMMgr.ReCalcDFMStats
+ 0001:0001663C       TDFMMgr.CalcDFMStats
+ 0001:0001671C       TDFMMgr.Save
+ 0001:000167D4       TDFMMgr.SaveStringList
+ 0001:00016B98       PerformSearch
+ 0001:00016F0C       LoopThruColumns
+ 0001:00016F40       DoLine
+ 0001:00016FE4       LoopThruMgr
+ 0001:00017074       TDFMMgr.Search
+ 0001:00017158       TDFMMgr.SetStrings
+ 0001:00017184       TDFMMgr.Purge
+ 0001:00017224       EndOfString
+ 0001:00017244       TDFMMgr.EggBuild
+ 0001:00017380       TDFMMgr.MakeDictionary
+ 0001:00017484       TDFMSearchSettings.Create
+ 0001:000174C0       TDFMSearchSettings.Destroy
+ 0001:000174F0       Finalization
+ 0001:00017520       ITEDFMMgr
+ 0001:000175C8       TDFMCreator.Execute
+ 0001:000176E8       RemoveUnused
+ 0001:000177BC       GetObjMode
+ 0001:000177F8       GetTheType
+ 0001:00017848       GetLine
+ 0001:000185C0       TDFMCreator.Execute
+ 0001:00018A7C       DFMCreator
+ 0001:00018ABC       Finalization
+ 0001:00018B14       ITEDFMCreator
+ 0001:00018E34       TfrmITEFormDesignerOptionPage.FormDestroy
+ 0001:00018E48       Finalization
+ 0001:00018E84       ITEFormDesignerOptionPage
+ 0001:000193C8       @GetPackageInfoTable
+ 0001:000193D0       @PackageLoad
+ 0001:000193DC       @PackageUnload
+ 0001:000193E8       dfm
+ 0002:00000000       Module
+ 0002:00000018       TlsProc
+ 0002:00000028       DFNColInfo
+ 0002:00000190       ADFMUpdater
+ 0002:00000194       InDFMExecute
+ 0002:00000198       FormData
+ 0002:0000036C       GrabCursors
+ 0002:0000037C       Deltas
+ 0002:0000039C       GrabCursors
+ 0002:000003AC       Deltas
+ 0002:000003CC       OldWndProc
+ 0002:000003D0       ADFMViewer
+ 0002:000003D4       TheVCLStyle
+ 0002:000003D8       TheClxStyle
+ 0002:000003DC       InSaveToFile
+ 0002:000003E0       MsgDlgButtons
+ 0002:000003E4       S1
+ 0002:000003EC       S2
+ 0002:000003F4       S3
+ 0002:000003FC       QuoteArray
+ 0002:00000400       TestEscSeq
+ 0002:00000404       OpenCloseArray
+ 0002:0000040C       InCheckDFMStats
+ 0002:00000410       ADFMCreater
+ 0002:00000414       bKeepDFNTimeStamp
+ 0002:00000418       ObjInhInl
+ 0002:00001000       ModuleIsLib
+ 0002:00001001       ModuleIsPackage
+ 0002:00001004       TlsIndex
+ 0002:0000100C       HInstance
+ 0002:00001010       .1
+ 0002:00001014       tlsBuffer
+ 0002:00001018       .1
+ 0002:0000101C       .3
+ 0002:00001020       .1
+ 0002:00001024       .1
+ 0002:00001028       .1
+ 0002:0000102C       .1
+ 0002:00001030       .1
+ 0002:00001034       .1
+ 0002:00001038       .1
+ 0002:0000103C       .3
+ 0002:00001040       .1
+ 0002:00001044       .1
+ 0002:00001048       .1
+ 0002:0000104C       .4
+ 0002:00001050       .2
+ 0002:00001054       IDMarker
+ 0002:00001058       OpenMarker
+ 0002:0000105C       CloseMarker
+ 0002:00001060       .1
+ 0002:00001064       .1
+ 0002:00001068       .7
+ 0002:0000106C       .1
+ 0002:00001070       .1
+ 0002:00001074       .1
+ 0002:00001078       .2
+ 0002:0000107C       frmITEDFMForm
+ 0002:00001080       .2
+ 0002:00001084       DFNColIds
+ 0002:00001088       TheExts
+ 0002:0000108C       ToolServ
+ 0002:00001090       bShowOrigForm
+ 0002:00001091       bShowXlatForm
+ 0002:00001092       bStayOnTop
+ 0002:00001093       bShowAllProperties
+ 0002:00001094       .3
+ 0002:00001098       .2
+ 0002:0000109C       frmITEFormDesignerOptionPage
+ 0002:000010A0       .2
+
+
+Bound resource files
+
+dfmdata.res
+ITEDFMForm.dfm
+ITEFormDesignerOptionPage.dfm
+dfm.res
+C:\DOCUME~1\~storm\LOCALS~1\Temp\dtf72C9.tmp
+
+
+Program entry point at 0001:000193E8

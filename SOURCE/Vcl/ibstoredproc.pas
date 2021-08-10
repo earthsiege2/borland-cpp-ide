@@ -1,24 +1,38 @@
-{********************************************************}
-{                                                        }
-{       Borland Delphi Visual Component Library          }
-{       InterBase Express core components                }
-{                                                        }
-{       Copyright (c) 1998-1999 Inprise Corporation      }
-{                                                        }
-{    InterBase Express is based in part on the product   }
-{    Free IB Components, written by Gregory H. Deatz for }
-{    Hoagland, Longo, Moran, Dunst & Doukas Company.     }
-{    Free IB Components is used under license.           }
-{                                                        }
-{********************************************************}
+{************************************************************************}
+{                                                                        }
+{       Borland Delphi Visual Component Library                          }
+{       InterBase Express core components                                }
+{                                                                        }
+{       Copyright (c) 1998-2001 Borland Software Corporation             }
+{                                                                        }
+{    InterBase Express is based in part on the product                   }
+{    Free IB Components, written by Gregory H. Deatz for                 }
+{    Hoagland, Longo, Moran, Dunst & Doukas Company.                     }
+{    Free IB Components is used under license.                           }
+{                                                                        }
+{    The contents of this file are subject to the InterBase              }
+{    Public License Version 1.0 (the "License"); you may not             }
+{    use this file except in compliance with the License. You may obtain }
+{    a copy of the License at http://www.borland.com/interbase/IPL.html  }
+{    Software distributed under the License is distributed on            }
+{    an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either              }
+{    express or implied. See the License for the specific language       }
+{    governing rights and limitations under the License.                 }
+{    The Original Code was created by InterBase Software Corporation     }
+{       and its successors.                                              }
+{    Portions created by Borland Software Corporation are Copyright      }
+{       (C) Borland Software Corporation. All Rights Reserved.           }
+{    Contributor(s): Jeff Overcash                                       }
+{                                                                        }
+{************************************************************************}
 
 unit IBStoredProc;
 
 interface
 
-uses Windows, SysUtils, Graphics, Classes, Controls, Db, StdVCL, IB,
-  IBDatabase, IBCustomDataSet, IBHeader, IBSQL, IBUtils;
-
+uses SysUtils, Classes, DB, IB, IBDatabase, IBCustomDataSet,
+     IBHeader, IBSQL, IBUtils;
+     
 { TIBStoredProc }
 type
 
@@ -74,7 +88,16 @@ type
 
   published
     property StoredProcName: string read FProcName write SetProcName;
-    property Params: TParams read FParams write SetParamsList;
+    property Params: TParams read FParams write SetParamsList stored false;
+    property Filtered;
+
+    property BeforeDatabaseDisconnect;
+    property AfterDatabaseDisconnect;
+    property DatabaseFree;
+    property BeforeTransactionEnd;
+    property AfterTransactionEnd;
+    property TransactionFree;
+    property OnFilterRecord;
   end;
 
 implementation
@@ -123,10 +146,13 @@ begin
   DidActivate := ActivateTransaction;
   try
     SetPrepared(True);
-    if DataSource <> nil then SetParamsFromCursor;
-    if FParams.Count > 0 then SetParams;
+    if DataSource <> nil then
+      SetParamsFromCursor;
+    if FParams.Count > 0 then
+      SetParams;
     InternalExecQuery;
     FetchDataIntoOutputParams;
+    SetPrepared(false);  // Unprepare the statement due to a bug in GDS32
   finally
     if DidActivate then
       DeactivateTransaction;
@@ -147,12 +173,13 @@ begin
         (Database <> nil) then
         GenerateSQL;
     end;
-  end else begin
-    FProcName := Value;
-  if (Value <> '') and
-    (Database <> nil) then
-    GenerateSQL;
-  end;
+  end
+  else
+    begin
+      FProcName := Value;
+      if (Value <> '') and (Database <> nil) then
+        GenerateSQL;
+    end;
 end;
 
 function TIBStoredProc.GetParamsCount: Word;
@@ -162,8 +189,17 @@ end;
 
 procedure TIBStoredProc.SetFiltered(Value: Boolean);
 begin
-  if Value <> False then
-    IBError(ibxeNotSupported, [nil]);
+  if(Filtered <> Value) then
+  begin
+    inherited SetFiltered(value);
+    if Active then
+    begin
+      Close;
+      Open;
+    end;
+  end
+  else
+    inherited SetFiltered(value);
 end;
 
 procedure TIBStoredProc.GenerateSQL;
@@ -180,22 +216,30 @@ begin
     Query.SQL.Text := 'SELECT RDB$PARAMETER_NAME,  RDB$PARAMETER_TYPE ' + {do not localize}
                        'FROM RDB$PROCEDURE_PARAMETERS ' + {do not localize}
                        'WHERE RDB$PROCEDURE_NAME = ' + {do not localize}
-                       '''' + FormatIdentifierValue(Database.SQLDialect, FProcName) + '''' +
+                       '''' + FormatIdentifierValue(Database.SQLDialect,
+                               QuoteIdentifier(Database.SQLDialect, FProcName)) + '''' +
                        ' ORDER BY RDB$PARAMETER_NUMBER'; {do not localize}
     Query.Prepare;
     Query.GoToFirstRecordOnExecute := False;
     Query.ExecQuery;
-    while (not Query.EOF) and (Query.Next <> nil) do begin
-      if (Query.Current.ByName('RDB$PARAMETER_TYPE').AsInteger = 0) then begin {do not localize}
+    while (not Query.EOF) and (Query.Next <> nil) do
+    begin
+      if (Query.Current.ByName('RDB$PARAMETER_TYPE').AsInteger = 0) then {do not localize}
+      begin 
         if (input <> '') then
           input := input + ', :' +
-            FormatIdentifier(Database.SQLDialect, Query.Current.ByName('RDB$PARAMETER_NAME').AsString) else {do not localize}
+            QuoteIdentifier(Database.SQLDialect, Query.Current.ByName('RDB$PARAMETER_NAME').AsString) {do not localize}
+        else
           input := ':' +
-            FormatIdentifier(Database.SQLDialect, Query.Current.ByName('RDB$PARAMETER_NAME').AsString); {do not localize}
+            QuoteIdentifier(Database.SQLDialect, Query.Current.ByName('RDB$PARAMETER_NAME').AsString); {do not localize}
       end
     end;
-    SelectSQL.Text := 'Execute Procedure ' + {do not localize}
-                FormatIdentifier(Database.SQLDialect, FProcName) + ' ' + input;
+    if Input <> '' then
+      SelectSQL.Text := 'Execute Procedure ' + {do not localize}
+          QuoteIdentifier(Database.SQLDialect, FProcName) + '(' + input + ')'
+    else
+      SelectSQL.Text := 'Execute Procedure ' + {do not localize}
+          QuoteIdentifier(Database.SQLDialect, FProcName);
   finally
     Query.Free;
     Database.InternalTransaction.Commit;
@@ -223,13 +267,15 @@ begin
         DataType := ftInteger
       else if ((QSelect.Fields[i].AsXSQLVar)^.sqlscale >= (-4)) then
         DataType := ftBCD
-      else DataType := ftFloat;
+      else
+        DataType := ftFloat;
     SQL_INT64:
       if ((QSelect.Fields[i].AsXSQLVar)^.sqlscale = 0) then
         DataType := ftLargeInt
       else if ((QSelect.Fields[i].AsXSQLVar)^.sqlscale >= (-4)) then
         DataType := ftBCD
-      else DataType := ftFloat;
+      else
+        DataType := ftFloat;
     SQL_DOUBLE, SQL_FLOAT, SQL_D_FLOAT: DataType := ftFloat;
     SQL_TEXT: DataType := ftString;
     SQL_VARYING:
@@ -290,7 +336,8 @@ begin
         FreeStatement;
         raise;
       end
-    else FreeStatement;
+    else
+      FreeStatement;
   end;
 
 end;
@@ -308,13 +355,16 @@ end;
 procedure TIBStoredProc.FreeStatement;
 begin
   InternalUnPrepare;
+  QSelect.FreeHandle;
   FPrepared := False;
 end;
 
 procedure TIBStoredProc.SetPrepare(Value: Boolean);
 begin
-  if Value then Prepare
-  else UnPrepare;
+  if Value then
+    Prepare
+  else
+    UnPrepare;
 end;
 
 procedure TIBStoredProc.CopyParams(Value: TParams);
@@ -325,7 +375,8 @@ begin
     Value.Assign(FParams);
   finally
     UnPrepare;
-  end else
+  end
+  else
     Value.Assign(FParams);
 end;
 
@@ -343,6 +394,8 @@ end;
 
 function TIBStoredProc.ParamByName(const Value: string): TParam;
 begin
+  if not Prepared and (FParams.Count = 0) then
+    Prepare;
   Result := FParams.ParamByName(Value);
 end;
 
@@ -357,7 +410,8 @@ procedure TIBStoredProc.GetStoredProcedureNamesFromServer;
 var
   Query : TIBSQL;
 begin
-  if not (csReading in ComponentState) then begin
+  if not (csReading in ComponentState) then
+  begin
     ActivateConnection;
     Database.InternalTransaction.StartTransaction;
     Query := TIBSQL.Create(self);
@@ -400,8 +454,8 @@ begin
           SQLParams[i].AsShort := Params[j].AsSmallInt;
         ftInteger:
           SQLParams[i].AsLong := Params[j].AsInteger;
-{        ftLargeInt:
-          SQLParams[i].AsInt64 := Params[j].AsLargeInt; }
+        ftLargeInt:
+          SQLParams[i].AsInt64 := Params[j].Value;
         ftFloat, ftCurrency:
          SQLParams[i].AsDouble := Params[j].AsFloat;
         ftBCD:

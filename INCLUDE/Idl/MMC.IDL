@@ -12,7 +12,7 @@
 //
 
 cpp_quote("#ifndef MMC_VER")
-cpp_quote("#define MMC_VER 0x0120")
+cpp_quote("#define MMC_VER 0x0200")
 cpp_quote("#endif")
 
 import "basetsd.h";
@@ -48,6 +48,13 @@ cpp_quote("#if (MMC_VER >= 0x0120)")
 interface IColumnData;
 cpp_quote("#endif // MMC_VER >= 0x0120")
 
+cpp_quote("#if (MMC_VER >= 0x0200)")
+interface IConsole3;
+interface IConsolePower;
+interface INodeProperties;
+interface IResultData2;
+cpp_quote("#endif // MMC_VER >= 0x0200")
+
 ///////////////////////////////////////////////////////////////////////////////
 /// Interfaces implemented by the Snap-in server
 
@@ -72,6 +79,18 @@ cpp_quote("#endif // MMC_VER >= 0x0110")
 cpp_quote("#if (MMC_VER >= 0x0120)")
 interface IResultDataCompareEx;
 cpp_quote("#endif // MMC_VER >= 0x0120")
+
+cpp_quote("#if (MMC_VER >= 0x0200)")
+interface IComponent2;
+interface IComponentData2;
+interface IExtendView;
+interface IViewExtensionCallback;
+interface IConsolePowerSink;
+interface IConsole3;
+interface INodeProperties;
+interface IResultData2;
+cpp_quote("#endif // MMC_VER >= 0x0200")
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Type definitions
@@ -122,6 +141,23 @@ typedef ISnapinHelp2*               LPSNAPINHELP2;
 typedef IExtendTaskPad*             LPEXTENDTASKPAD;
 typedef IRequiredExtensions*        LPREQUIREDEXTENSIONS;
 cpp_quote("#endif // MMC_VER >= 0x0110")
+
+
+cpp_quote("#if (MMC_VER >= 0x0200)")
+typedef IComponent2*                LPCOMPONENT2;
+typedef IComponentData2*            LPCOMPONENTDATA2;
+typedef IExtendView*                LPEXTENDVIEW;
+typedef IViewExtensionCallback*     LPVIEWEXTENSIONCALLBACK;
+typedef IConsolePower*              LPCONSOLEPOWER;
+typedef IConsolePowerSink*          LPCONSOLEPOWERSINK;
+typedef IConsole3*                  LPCONSOLE3;
+typedef INodeProperties*            LPNODEPROPERTIES;
+typedef IResultData2*               LPRESULTDATA2;
+cpp_quote("#endif // MMC_VER >= 0x0200")
+
+
+// typedefs for external types
+typedef     BSTR*             PBSTR;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Published Common Console ListView constants
@@ -634,10 +670,16 @@ MMCN_CUTORMOVE:
     arg: pointer to a dataobject. See multi-selection below.
     param: unused.
 
+MMCN_CANPASTE_OUTOFPROC
+    dataobject: unused.
+    arg:        unused
+    param:      BOOL *, snapin sets to TRUE iff it handles dataobjects from another MMC process.
+    Return:     S_OK if the dataobject can be handled, S_FALSE otherwise.
+
 MMCN_QUERY_PASTE:
     dataobject: dataobject of the selected item provided by the snap-in.
     arg: dataobject of the item(s) provided by the source snap-in that needs to be pasted.
-    param: unused.
+    param: flags (IsCopy the default action).
     Return S_OK if the data can be pasted, S_FALSE otherwise.
 
 MMCN_PASTE:
@@ -763,6 +805,9 @@ cpp_quote("    MMCN_LISTPAD            = 0x8020,                        ")
 cpp_quote("    MMCN_EXPANDSYNC         = 0x8021,                        ")
 cpp_quote("#if (MMC_VER >= 0x0120)                                      ")
 cpp_quote("    MMCN_COLUMNS_CHANGED    = 0x8022,                        ")
+cpp_quote("#if (MMC_VER >= 0x0200)                                      ")
+cpp_quote("    MMCN_CANPASTE_OUTOFPROC = 0x8023,                        ")
+cpp_quote("#endif // MMC_VER >= 0x0200                                  ")
 cpp_quote("#endif // MMC_VER >= 0x0120                                  ")
 cpp_quote("#endif // MMC_VER >= 0x0110                                  ")
 cpp_quote("} MMC_NOTIFY_TYPE;                                           ")
@@ -862,6 +907,7 @@ const wchar_t* CCF_MMC_DYNAMIC_EXTENSIONS = L"CCF_MMC_DYNAMIC_EXTENSIONS";
 // optional Clipboard format for when the snapin wants to be preloaded;
 // the data for this format is a BOOL.
 const wchar_t* CCF_SNAPIN_PRELOADS = L"CCF_SNAPIN_PRELOADS";
+
 
 // clipboard format for custom dynamic node IDs
 typedef struct _SNodeID
@@ -2158,3 +2204,407 @@ typedef struct _MMC_SORT_SET_DATA
     }
 
 cpp_quote("#endif // MMC_VER >= 0x0120")
+
+
+cpp_quote("#if (MMC_VER >= 0x0200)")
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+////
+////            MMC 2.0 changes
+////
+
+typedef enum _MMC_VIEW_TYPE
+{
+   MMC_VIEW_TYPE_LIST,
+   MMC_VIEW_TYPE_HTML,
+   MMC_VIEW_TYPE_OCX
+
+} MMC_VIEW_TYPE;
+
+// dwMiscOptions
+const DWORD RVTI_MISC_OPTIONS_NOLISTVIEWS                      = 0x0001;
+
+// dwListOptions - similar to MMC_VIEW_OPTIONS
+const DWORD RVTI_LIST_OPTIONS_NONE                             = 0x0000;
+const DWORD RVTI_LIST_OPTIONS_OWNERDATALIST                    = 0x0002;
+const DWORD RVTI_LIST_OPTIONS_MULTISELECT                      = 0x0004;
+const DWORD RVTI_LIST_OPTIONS_FILTERED                         = 0x0008;
+const DWORD RVTI_LIST_OPTIONS_USEFONTLINKING                   = 0x0020;
+const DWORD RVTI_LIST_OPTIONS_EXCLUDE_SCOPE_ITEMS_FROM_LIST    = 0x0040;
+const DWORD RVTI_LIST_OPTIONS_LEXICAL_SORT                     = 0x0080;
+const DWORD RVTI_LIST_OPTIONS_ALLOWPASTE                       = 0x0100;
+
+// dwHTMLOptions
+const DWORD RVTI_HTML_OPTIONS_NONE                             = 0x0000;
+const DWORD RVTI_HTML_OPTIONS_NOLISTVIEW                       = 0x0001;
+
+// dwOCXOptions
+const DWORD RVTI_OCX_OPTIONS_NONE                              = 0x0000;
+const DWORD RVTI_OCX_OPTIONS_NOLISTVIEW                        = 0x0001;
+const DWORD RVTI_OCX_OPTIONS_CACHE_OCX                         = 0x0002;
+
+typedef struct _RESULT_VIEW_TYPE_INFO
+{
+    LPOLESTR      pstrPersistableViewDescription;
+    MMC_VIEW_TYPE eViewType;
+    DWORD         dwMiscOptions;
+
+    [switch_type(MMC_VIEW_TYPE), switch_is((MMC_VIEW_TYPE)eViewType)]
+    union
+    {
+
+    [case(MMC_VIEW_TYPE_LIST)]
+        DWORD dwListOptions;
+
+    [case(MMC_VIEW_TYPE_HTML)]
+        struct
+        {
+            DWORD       dwHTMLOptions; // must be zero for future expansion.
+            LPOLESTR    pstrURL;
+        };
+
+    [case(MMC_VIEW_TYPE_OCX)]
+        struct
+        {
+            DWORD       dwOCXOptions;
+            LPUNKNOWN   pUnkControl;
+        };
+
+    [default];
+    };
+} RESULT_VIEW_TYPE_INFO, *PRESULT_VIEW_TYPE_INFO;
+
+
+
+//#######################################################################
+//#######################################################################
+//
+//  Clipboard formats used by the built-in view extension
+//
+//#######################################################################
+//#######################################################################
+
+const wchar_t* CCF_DESCRIPTION  = L"CCF_DESCRIPTION";    // text only
+const wchar_t* CCF_HTML_DETAILS = L"CCF_HTML_DETAILS";   // interpreted as HTML
+
+
+//#######################################################################
+//#######################################################################
+//
+//  struct CONTEXTMENUITEM2: Adds a language independent name.
+//
+//#######################################################################
+//#######################################################################
+typedef struct _CONTEXTMENUITEM2
+{
+    LPWSTR      strName;
+    LPWSTR      strStatusBarText;
+    LONG        lCommandID;
+    LONG        lInsertionPointID;
+    LONG        fFlags;
+    LONG        fSpecialFlags;
+    LPWSTR      strLanguageIndependentName;
+} CONTEXTMENUITEM2;
+
+typedef CONTEXTMENUITEM2* LPCONTEXTMENUITEM2;
+
+ //#######################################################################
+ //#######################################################################
+ //
+ //  struct MMC_EXT_VIEW_DATA: definition of a view supplied by a view extension
+ //
+ //#######################################################################
+ //#######################################################################
+typedef struct _MMC_EXT_VIEW_DATA
+{
+    GUID        viewID;             // GUID used to describe the view. Used to restore a view.
+    LPCOLESTR   pszURL;             // URL describing extension page
+    LPCOLESTR   pszViewTitle;       // title of the view extension
+    LPCOLESTR   pszTooltipText;     // tooltip for the tab
+    BOOL        bReplacesDefaultView;  // TRUE == no "Normal" tab
+} MMC_EXT_VIEW_DATA, *PMMC_EXT_VIEW_DATA;
+
+
+ //#######################################################################
+ //#######################################################################
+ //
+ //  MMCN_QUERY_PASTE flags: The param is used as out parameter which
+ //                          can define below flags.
+ //
+ //#######################################################################
+ //#######################################################################
+const DWORD MMC_DEFAULT_OPERATION_COPY           = 0x0001;
+
+    //#######################################################################
+    //#######################################################################
+    //
+    //  The IComponentData2 interface
+    //
+    //#######################################################################
+    //#######################################################################
+    [
+        object,
+        uuid(CCA0F2D2-82DE-41B5-BF47-3B2076273D5C),
+        helpstring("IComponentData2 Interface"),
+        pointer_default(unique)
+    ]
+    interface IComponentData2 : IComponentData
+    {
+        [helpstring("Returns a Dispatch interface which may be used to perform actions for the specified cookie.")]
+        HRESULT QueryDispatch([in] MMC_COOKIE cookie, [in] DATA_OBJECT_TYPES type,
+                            [out] LPDISPATCH* ppDispatch);
+    };
+
+    //#######################################################################
+    //#######################################################################
+    //
+    //  The IComponent2 interface
+    //
+    //#######################################################################
+    //#######################################################################
+    [
+        object,
+        uuid(79A2D615-4A10-4ED4-8C65-8633F9335095),
+        helpstring("IComponent2 Interface"),
+        pointer_default(unique)
+    ]
+    interface IComponent2 : IComponent
+    {
+        [helpstring("Returns a Dispatch interface which may be used to perform actions for the specified cookie.")]
+        HRESULT QueryDispatch([in] MMC_COOKIE cookie, [in] DATA_OBJECT_TYPES type,
+                        [out] LPDISPATCH* ppDispatch);
+
+        [helpstring("Gets the result view type. Supersedes the GetResultViewType method.")]
+        HRESULT GetResultViewType2([in] MMC_COOKIE cookie, [in, out] PRESULT_VIEW_TYPE_INFO pResultViewType);
+
+        [helpstring("Restores the result view. Supersedes the MMCN_RESTORE notification")]
+        HRESULT RestoreResultView([in] MMC_COOKIE cookie, [in] PRESULT_VIEW_TYPE_INFO pResultViewType);
+    };
+
+
+    //#######################################################################
+    //#######################################################################
+    //
+    //  The IContextMenuCallback2 interface
+    //
+    //#######################################################################
+    //#######################################################################
+    [
+        object,
+        uuid(E178BC0E-2ED0-4b5e-8097-42C9087E8B33),
+        helpstring("IContextMenuCallback2 Interface"),
+        pointer_default(unique)
+    ]
+    interface IContextMenuCallback2 : IUnknown
+    {
+        // returns S_OK if the item was added
+        // returns E_INVALIDARG if given a NULL pointer
+        // returns E_INVALIDARG if an item already exists with this lCommandID
+        // returns E_INVALIDARG if insertion point ID could not be found
+        // returns E_INVALIDARG if command ID or insertion point ID is invalid
+        // returns E_INVALIDARG if fFlags contains MF_OWNERDRAW or MF_BITMAP
+        // returns E_INVALIDARG if an extension attempts to add an item where
+        //   fFlags contains MF_SEPARATOR or fSpecialFlags contains CCM_SPECIAL_SEPARATOR
+        //   except in submenus created by extensions
+        // otherwise an unexpected error occurred
+        [helpstring("Adds one item to context menu")]
+        HRESULT AddItem([in] CONTEXTMENUITEM2* pItem);
+    };
+
+    //#######################################################################
+    //#######################################################################
+    //
+    //  The IMMCVersion interface
+    //
+    //#######################################################################
+    //#######################################################################
+    [
+        uuid(A8D2C5FE-CDCB-4b9d-BDE5-A27343FF54BC),
+        helpstring("IMMCVersionInfo Interface"),
+    ]
+    interface IMMCVersionInfo : IUnknown
+    {
+       [helpstring("Returns the version information about the installed version of MMC")]
+       HRESULT GetMMCVersion([out] long * pVersionMajor, [out] long * pVersionMinor);
+    }
+
+    //#######################################################################
+    //#######################################################################
+    //
+    //  The MMCVersion type library
+    //
+    //#######################################################################
+    //#######################################################################
+   [
+       uuid(9EECDD85-B715-4188-8A72-61159ABDB8C4),
+       version(1.0),
+       helpstring("MMCVersion Type Library")
+   ]
+   library MMCVersionLib
+   {
+       importlib("stdole2.tlb");
+
+       [
+          helpstring("MMCVersionInfo coclass"),
+          uuid(D6FEDB1D-CF21-4bd9-AF3B-C5468E9C6684)
+       ]
+       coclass MMCVersionInfo
+       {
+           [default] interface IMMCVersionInfo;
+       };
+
+       [
+          helpstring("ConsolePower coclass"),
+          uuid(f0285374-dff1-11d3-b433-00c04f8ecd78)
+       ]
+       coclass ConsolePower
+       {
+           [default] interface IConsolePower;
+       };
+   };
+
+    //#######################################################################
+    //#######################################################################
+    //
+    //  The IExtendView interface
+    //
+    //#######################################################################
+    //#######################################################################
+    [
+        object,
+        uuid(89995CEE-D2ED-4c0e-AE5E-DF7E76F3FA53),
+        helpstring("IExtendView Interface"),
+        pointer_default(unique)
+    ]
+    interface IExtendView : IUnknown
+    {
+        [helpstring("Returns the view extension's information")]
+        HRESULT GetViews (
+            [in]  LPDATAOBJECT              pDataObject,
+            [in]  LPVIEWEXTENSIONCALLBACK   pViewExtensionCallback);
+    };
+
+    //#######################################################################
+    //#######################################################################
+    //
+    //  The IViewExtensionCallback interface
+    //
+    //#######################################################################
+    //#######################################################################
+   [
+       object,
+       uuid(34DD928A-7599-41E5-9F5E-D6BC3062C2DA),
+       helpstring("IViewExtensionCallback Interface"),
+       pointer_default(unique)
+   ]
+   interface IViewExtensionCallback : IUnknown
+   {
+        [helpstring("Adds a view to the result pane")]
+        HRESULT AddView([in] PMMC_EXT_VIEW_DATA pExtViewData);
+   }
+
+    //#######################################################################
+    //#######################################################################
+    //
+    //  The IConsolePower interface
+    //
+    //#######################################################################
+    //#######################################################################
+    [
+        object,
+        uuid(1cfbdd0e-62ca-49ce-a3af-dbb2de61b068),
+        helpstring("IConsolePower Interface"),
+        pointer_default(unique)
+    ]
+    interface IConsolePower : IUnknown
+    {
+        [helpstring("Sets the execution state for the current thread")]
+        HRESULT SetExecutionState ([in] DWORD dwAdd, [in] DWORD dwRemove);
+
+        [helpstring("Resets the given idle timer(s)")]
+        HRESULT ResetIdleTimer ([in] DWORD dwFlags);
+    };
+
+    //#######################################################################
+    //#######################################################################
+    //
+    //  The IConsolePowerSink interface
+    //
+    //#######################################################################
+    //#######################################################################
+    [
+        object,
+        uuid(3333759f-fe4f-4975-b143-fec0a5dd6d65),
+        helpstring("IConsolePowerSink Interface"),
+        pointer_default(unique)
+    ]
+    interface IConsolePowerSink : IUnknown
+    {
+        [helpstring("Handler for WM_POWERBROADCAST notification")]
+        HRESULT OnPowerBroadcast (
+            [in]  UINT     nEvent,      // power-management event
+            [in]  LPARAM   lParam,      // event-specific data
+            [out] LRESULT* plReturn);   // event-specific return code
+    };
+
+
+    //#######################################################################
+    //#######################################################################
+    //
+    //  The INodeProperties interface
+    //
+    //#######################################################################
+    //#######################################################################
+    [
+        object,
+        uuid(15BC4D24-A522-4406-AA55-0749537A6865),
+        helpstring("INodeProperties Interface"),
+        pointer_default(unique)
+    ]
+    interface INodeProperties : IUnknown
+    {
+        [helpstring("Returns text-only properties for a node")]
+        HRESULT GetProperty([in] LPDATAOBJECT pDataObject, [in] BSTR szPropertyName, [out] PBSTR pbstrProperty);
+    };
+
+    //#######################################################################
+    //#######################################################################
+    //
+    //  The IConsole3 interface
+    //
+    //#######################################################################
+    //#######################################################################
+    [
+        object,
+        uuid(4F85EFDB-D0E1-498c-8D4A-D010DFDD404F),
+        helpstring("IConsole3 Interface"),
+        pointer_default(unique)
+    ]
+    interface IConsole3 : IConsole2
+    {
+        [helpstring("Puts the specified scope item into rename mode.")]
+        HRESULT RenameScopeItem([in] HSCOPEITEM hScopeItem);
+    };
+
+    //#######################################################################
+    //#######################################################################
+    //
+    //  The IResultData2 interface
+    //
+    //#######################################################################
+    //#######################################################################
+    [
+        object,
+        uuid(0F36E0EB-A7F1-4a81-BE5A-9247F7DE4B1B),
+        helpstring("IResultData2 Interface"),
+        pointer_default(unique)
+    ]
+    interface IResultData2 : IResultData
+    {
+        [helpstring("Puts the specified result item into rename mode.")]
+        HRESULT RenameResultItem([in] HRESULTITEM itemID);
+    };
+
+cpp_quote("#endif // MMC_VER >= 0x0200")

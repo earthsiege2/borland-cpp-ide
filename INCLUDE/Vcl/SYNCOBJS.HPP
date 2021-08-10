@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'SyncObjs.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'SyncObjs.pas' rev: 6.00
 
 #ifndef SyncObjsHPP
 #define SyncObjsHPP
@@ -11,9 +11,9 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <Classes.hpp>	// Pascal unit
+#include <SysUtils.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
-#include <SysUtils.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -72,8 +72,7 @@ class PASCALIMPLEMENTATION TEvent : public THandleObject
 	typedef THandleObject inherited;
 	
 public:
-	__fastcall TEvent(Windows::PSecurityAttributes EventAttributes, bool ManualReset, bool InitialState
-		, const AnsiString Name);
+	__fastcall TEvent(Windows::PSecurityAttributes EventAttributes, bool ManualReset, bool InitialState, const AnsiString Name);
 	TWaitResult __fastcall WaitFor(unsigned Timeout);
 	void __fastcall SetEvent(void);
 	void __fastcall ResetEvent(void);
@@ -105,7 +104,7 @@ class PASCALIMPLEMENTATION TCriticalSection : public TSynchroObject
 {
 	typedef TSynchroObject inherited;
 	
-private:
+protected:
 	_RTL_CRITICAL_SECTION FSection;
 	
 public:
@@ -121,9 +120,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Syncobjs */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Syncobjs;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

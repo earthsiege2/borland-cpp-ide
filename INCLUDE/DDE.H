@@ -6,7 +6,6 @@
 *                                                                             *
 \*****************************************************************************/
 #ifndef _DDEHEADER_INCLUDED_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _DDEHEADER_INCLUDED_
 
 #if _MSC_VER > 1000
@@ -193,5 +192,4 @@ LPARAM APIENTRY ReuseDDElParam(LPARAM lParam, UINT msgIn, UINT msgOut, UINT_PTR 
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _DDEHEADER_INCLUDED_

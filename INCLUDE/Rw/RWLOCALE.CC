@@ -5,7 +5,7 @@
  *
  * locale.cc - Definitions of the Standard Library locale classes
  *
- * $Id: locale.cc,v 1.67 1996/10/22 05:11:35 delaney Exp $
+ * $Id: rwlocale.cc,v 9.10 2001/07/10 17:24:13 nyork Exp $
  *
  ***************************************************************************
  *

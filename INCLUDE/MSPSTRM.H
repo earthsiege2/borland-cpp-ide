@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1997-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -30,6 +30,111 @@ Class Description:
 #define STRM_RUNNING            0x00000004
 #define STRM_PAUSED             0x00000008
 #define STRM_STOPPED            0x00000010
+
+class CMSPStream;
+
+class ATL_NO_VTABLE CPTEventSink :
+    public CComObjectRootEx<CComMultiThreadModel>,
+    public ITPluggableTerminalEventSink
+{
+
+public:
+    CPTEventSink();
+    ~CPTEventSink();
+
+BEGIN_COM_MAP( CPTEventSink )
+    COM_INTERFACE_ENTRY( ITPluggableTerminalEventSink )
+END_COM_MAP()
+
+public:
+    // --- ITDTEventSink ---
+	STDMETHOD(FireEvent)(
+        /* in */ const MSP_EVENT_INFO *pMspEventInfo
+        );
+
+    
+public:
+
+    //
+    // set the stream which will be processing our events
+    //
+    // this method is called by the stream when it creates and initializes
+    // the sink object, and also when the stream is going away and want to 
+    // tell us that it is no longer available to process our events.
+    //
+
+    HRESULT SetSinkStream( CMSPStream *pStream );
+
+private:
+
+
+    //
+    // a nested structure that is used to pass event and stream to the
+    // asynchronous event processing routine.
+    //
+
+    struct AsyncEventStruct
+    {
+
+        //
+        // pointer to the stream on which to fire event
+        //
+
+        CMSPStream *pMSPStream;
+
+        
+        //
+        // pointer to the event item to be processed
+        //
+
+        MSPEVENTITEM *pEventItem;
+
+
+        //
+        // as a public service, initialize structure's data members 
+        //
+
+        AsyncEventStruct()
+            :pMSPStream(NULL),
+            pEventItem(NULL)
+        {
+            LOG((MSP_TRACE, "AsyncEventStruct::AsyncEventStruct[%p]", this));
+        }
+
+
+        //
+        // as a safety measure, set data members to NULL's in destructor 
+        // to make sure no one attemopts to use them after the strcuture is 
+        // gone. 
+        //
+        // note: we don't free any data members here -- that's responsibility 
+        // of the structure's client
+        //
+
+        ~AsyncEventStruct()
+        {
+            pMSPStream = NULL;
+            pEventItem = NULL;
+            
+            LOG((MSP_TRACE, "AsyncEventStruct::~AsyncEventStruct[%p]", this));
+        }
+
+    }; // AsyncEventStruct
+
+
+    //
+    // the callback function that is submitted to thread pool api for async 
+    // event processing. The argument is the event structure containing stream
+    // and the actual event
+    //
+    
+    static DWORD WINAPI FireEventCallBack(LPVOID pEventStructure);
+
+
+private:
+
+     CMSPStream*    m_pMSPStream;
+};
 
 class ATL_NO_VTABLE CMSPStream : 
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
@@ -99,7 +204,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
     virtual HRESULT GetState(
         OUT     DWORD *                  pdwStatus
-        ) { return E_NOTIMPL; } // BUGBUG not actually implemented here
+        ) { return E_NOTIMPL; }
 
     virtual HRESULT HandleTSPData(
         IN     BYTE *                   pData,
@@ -108,9 +213,34 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
 
     virtual HRESULT ProcessGraphEvent(
         IN  long lEventCode,
-        IN  long lParam1,
-        IN  long lParam2
+        IN  LONG_PTR lParam1,
+        IN  LONG_PTR lParam2
         );
+
+protected:
+    // --- Helper functions ---
+    HRESULT RegisterPluggableTerminalEventSink(
+        /*[in]*/ ITTerminal*     pTerminal
+        );
+
+    HRESULT UnregisterPluggableTerminalEventSink(
+        /*[in]*/ ITTerminal*     pTerminal
+        );
+
+    
+    HRESULT ReleaseSink();
+
+
+public:
+
+    
+    //
+    // this method is called by CPTEventSink when it has an event for us to 
+    // process
+    //
+
+    HRESULT HandleSinkEvent(MSPEVENTITEM *pEventItem);
+
 
 protected:
     // Pointer to the free threaded marshaler.
@@ -142,7 +272,12 @@ protected:
     // should never acquire the lock and then call a MSPCall method 
     // that might lock.
     CMSPCritSection             m_lock;
+
+    // The Event Sink for pluggable terminals
+    ITPluggableTerminalEventSink* m_pPTEventSink;
+
 };
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // __MSPSTRM_H_

@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1998 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1998-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // This program demonstrates using TClientDataSet in a distributed data
@@ -66,10 +66,9 @@ void __fastcall TEmployeeForm::EmpDataDataChange(TObject *Sender,
     StatusBar1->Panels->Items[1]->Text = Format(" %d of %d ", ARRAYOFCONST((Employees->RecNo, Employees->RecordCount)) );
 }
 //---------------------------------------------------------------------------
-
 void __fastcall TEmployeeForm::EmployeesReconcileError(
-      TClientDataSet *DataSet, EReconcileError *E, TUpdateKind UpdateKind,
-      TReconcileAction &Action)
+      TCustomClientDataSet *DataSet, EReconcileError *E,
+      TUpdateKind UpdateKind, TReconcileAction &Action)
 {
   // This is the event handler which is called when there are errors during the
   // update process.  To demonstrate, you can create an error by running two
@@ -80,4 +79,3 @@ void __fastcall TEmployeeForm::EmployeesReconcileError(
   Action = HandleReconcileError(Owner, DataSet, UpdateKind, E);
 }
 //---------------------------------------------------------------------------
- 

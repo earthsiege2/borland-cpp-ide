@@ -2,7 +2,7 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="SingleInstanceSample.exe"/>
     <OBJFILES value="SingleInstanceSample.obj SingleInstanceSampleUnit.obj"/>
     <RESFILES value="SingleInstanceSample.res"/>
@@ -11,9 +11,9 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) SingleInstanceSampleUnit.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="SingleAppInstance50.lib"/>
-    <SPARELIBS value="vcl50.lib SingleAppInstance50.lib"/>
-    <PACKAGES value="vcl50.bpi vclx50.bpi"/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="rtl.lib vcl.lib SingleAppInstance.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi vclx.bpi SingleAppInstance.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -25,23 +25,34 @@
     <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
     <MAINSOURCE value="SingleInstanceSample.cpp"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="$(BCB)\projects\lib;$(BCB)\lib\obj;$(BCB)\lib;&quot;D:\dpl_bpl\&quot;"/>
+    <LIBPATH value="$(BCB)\projects\lib;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par -w-8027 -w-8026"/>
+    <OTHERFILES value=""/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffixcpp"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
+    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
       -tW -tWM"/>
-    <PFLAGS value="-$Y+ -$W -$R -$Q -$O- -v -JPHNE -M"/>
+    <PFLAGS value="-$Y+ -$W -$R -$Q -$O- -$A8 -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -Gn -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
+    <OTHERFILES value=""/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
+    <OTHERFILES value=""/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="SingleInstanceSample.cpp" FORMNAME="" UNITNAME="SingleInstanceSample" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SingleInstanceSample.res" FORMNAME="" UNITNAME="SingleInstanceSample" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="SingleInstanceSampleUnit.cpp" FORMNAME="Form1" UNITNAME="SingleInstanceSampleUnit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -75,9 +86,14 @@ DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]

@@ -1,5 +1,5 @@
 /* WINSOCK.H--definitions to be used with the WINSOCK.DLL
- * Copyright (c) 1993-1999, Microsoft Corp. All rights reserved.
+ * Copyright (c) Microsoft Corporation. All rights reserved.
  *
  * This header file corresponds to version 1.1 of the Windows Sockets specification.
  *
@@ -11,7 +11,6 @@
  */
 
 #ifndef _WINSOCKAPI_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINSOCKAPI_
 
 #if _MSC_VER > 1000
@@ -1079,7 +1078,8 @@ typedef struct timeval FAR *LPTIMEVAL;
  */
 #define WSAGETSELECTERROR(lParam)           HIWORD(lParam)
 
-#pragma option pop /*P_O_Pop*/
+#ifdef IPV6STRICT
+#error WINSOCK2 required.
+#endif // IPV6STRICT
+
 #endif  /* _WINSOCKAPI_ */
-
-

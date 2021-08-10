@@ -3,7 +3,7 @@
 
 :BASE nmftp.hlp
 :TITLE FastNet FTP Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 TFTPDirectoryList object
 2 TFTPDirectoryList object Reference=Scribble1010
 2 Properties

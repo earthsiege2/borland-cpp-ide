@@ -1,6 +1,6 @@
 /*++ BUILD Version: 0001    // Increment this if a change has global effects
 
-Copyright (c) 1996-1999  Microsoft Corporation
+Copyright (c) 1996-2001  Microsoft Corporation
 
 Module Name:
 
@@ -19,7 +19,6 @@ Revision History:
 
 --*/
 #ifndef _PDH_MSG_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _PDH_MSG_H_
 #if _MSC_VER > 1000
 #pragma once
@@ -212,6 +211,25 @@ Revision History:
 //  The end of the log file was reached.
 //
 #define PDH_END_OF_LOG_FILE              ((DWORD)0x800007DAL)
+
+//
+// MessageId: PDH_ASYNC_QUERY_TIMEOUT
+//
+// MessageText:
+//
+//  Time out while waiting for asynchronous counter collection thread to end.
+//
+#define PDH_ASYNC_QUERY_TIMEOUT          ((DWORD)0x800007DBL)
+
+//
+// MessageId: PDH_CANNOT_SET_DEFAULT_REALTIME_DATASOURCE
+//
+// MessageText:
+//
+//  Cannot change set default realtime datasource. There are realtime query
+//  sessions collecting counter data.
+//
+#define PDH_CANNOT_SET_DEFAULT_REALTIME_DATASOURCE ((DWORD)0x800007DCL)
 
 //
 //     Error Messages
@@ -538,8 +556,7 @@ Revision History:
 //
 // MessageText:
 //
-//  An error occured while accessing the WBEM data store.  The WBEM error code
-//  is contained in the LastError value.
+//  An error occured while accessing the WBEM data store.
 //
 #define PDH_WBEM_ERROR                   ((DWORD)0xC0000BDAL)
 
@@ -554,6 +571,251 @@ Revision History:
 //
 #define PDH_ACCESS_DENIED                ((DWORD)0xC0000BDBL)
 
-#pragma option pop /*P_O_Pop*/
+//
+// MessageId: PDH_LOG_FILE_TOO_SMALL
+//
+// MessageText:
+//
+//  The maximum log file size specified is too small to log the selected counters. 
+//  No data will be recorded in this log file. Specify a smaller set of counters
+//  to log or a larger file size and retry this call.
+//
+#define PDH_LOG_FILE_TOO_SMALL           ((DWORD)0xC0000BDCL)
+
+//
+// MessageId: PDH_INVALID_DATASOURCE
+//
+// MessageText:
+//
+//  Cannot connect to ODBC DataSource Name.
+//
+#define PDH_INVALID_DATASOURCE           ((DWORD)0xC0000BDDL)
+
+//
+// MessageId: PDH_INVALID_SQLDB
+//
+// MessageText:
+//
+//  SQL Database does not contain a valid set of tables for Perfmon, use PdhCreateSQLTables.
+//
+#define PDH_INVALID_SQLDB                ((DWORD)0xC0000BDEL)
+
+//
+// MessageId: PDH_NO_COUNTERS
+//
+// MessageText:
+//
+//  No counters were found for this Perfmon SQL Log Set.
+//
+#define PDH_NO_COUNTERS                  ((DWORD)0xC0000BDFL)
+
+//
+// MessageId: PDH_SQL_ALLOC_FAILED
+//
+// MessageText:
+//
+//  Call to SQLAllocStmt failed with %1.
+//
+#define PDH_SQL_ALLOC_FAILED             ((DWORD)0xC0000BE0L)
+
+//
+// MessageId: PDH_SQL_ALLOCCON_FAILED
+//
+// MessageText:
+//
+//  Call to SQLAllocConnect failed with %1.
+//
+#define PDH_SQL_ALLOCCON_FAILED          ((DWORD)0xC0000BE1L)
+
+//
+// MessageId: PDH_SQL_EXEC_DIRECT_FAILED
+//
+// MessageText:
+//
+//  Call to SQLExecDirect failed with %1.
+//
+#define PDH_SQL_EXEC_DIRECT_FAILED       ((DWORD)0xC0000BE2L)
+
+//
+// MessageId: PDH_SQL_FETCH_FAILED
+//
+// MessageText:
+//
+//  Call to SQLFetch failed with %1.
+//
+#define PDH_SQL_FETCH_FAILED             ((DWORD)0xC0000BE3L)
+
+//
+// MessageId: PDH_SQL_ROWCOUNT_FAILED
+//
+// MessageText:
+//
+//  Call to SQLRowCount failed with %1.
+//
+#define PDH_SQL_ROWCOUNT_FAILED          ((DWORD)0xC0000BE4L)
+
+//
+// MessageId: PDH_SQL_MORE_RESULTS_FAILED
+//
+// MessageText:
+//
+//  Call to SQLMoreResults failed with %1.
+//
+#define PDH_SQL_MORE_RESULTS_FAILED      ((DWORD)0xC0000BE5L)
+
+//
+// MessageId: PDH_SQL_CONNECT_FAILED
+//
+// MessageText:
+//
+//  Call to SQLConnect failed with %1.
+//
+#define PDH_SQL_CONNECT_FAILED           ((DWORD)0xC0000BE6L)
+
+//
+// MessageId: PDH_SQL_BIND_FAILED
+//
+// MessageText:
+//
+//  Call to SQLBindCol failed with %1.
+//
+#define PDH_SQL_BIND_FAILED              ((DWORD)0xC0000BE7L)
+
+//
+// MessageId: PDH_CANNOT_CONNECT_WMI_SERVER
+//
+// MessageText:
+//
+//  Unable to connect to the WMI server on requested machine.
+//
+#define PDH_CANNOT_CONNECT_WMI_SERVER    ((DWORD)0xC0000BE8L)
+
+//
+// MessageId: PDH_PLA_COLLECTION_ALREADY_RUNNING
+//
+// MessageText:
+//
+//  Collection "%1!s!" is already running.
+//
+#define PDH_PLA_COLLECTION_ALREADY_RUNNING ((DWORD)0xC0000BE9L)
+
+//
+// MessageId: PDH_PLA_ERROR_SCHEDULE_OVERLAP
+//
+// MessageText:
+//
+//  The specified start time is after the end time.
+//
+#define PDH_PLA_ERROR_SCHEDULE_OVERLAP   ((DWORD)0xC0000BEAL)
+
+//
+// MessageId: PDH_PLA_COLLECTION_NOT_FOUND
+//
+// MessageText:
+//
+//  Collection "%1!s!" does not exist.
+//
+#define PDH_PLA_COLLECTION_NOT_FOUND     ((DWORD)0xC0000BEBL)
+
+//
+// MessageId: PDH_PLA_ERROR_SCHEDULE_ELAPSED
+//
+// MessageText:
+//
+//  The specified end time has already elapsed.
+//
+#define PDH_PLA_ERROR_SCHEDULE_ELAPSED   ((DWORD)0xC0000BECL)
+
+//
+// MessageId: PDH_PLA_ERROR_NOSTART
+//
+// MessageText:
+//
+//  Collection "%1!s!" did not start, check the application event log for any errors.
+//
+#define PDH_PLA_ERROR_NOSTART            ((DWORD)0xC0000BEDL)
+
+//
+// MessageId: PDH_PLA_ERROR_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  Collection "%1!s!" already exists.
+//
+#define PDH_PLA_ERROR_ALREADY_EXISTS     ((DWORD)0xC0000BEEL)
+
+//
+// MessageId: PDH_PLA_ERROR_TYPE_MISMATCH
+//
+// MessageText:
+//
+//  There is a mismatch in the settings type.
+//
+#define PDH_PLA_ERROR_TYPE_MISMATCH      ((DWORD)0xC0000BEFL)
+
+//
+// MessageId: PDH_PLA_ERROR_FILEPATH
+//
+// MessageText:
+//
+//  The information specified does not resolve to a valid path name.
+//
+#define PDH_PLA_ERROR_FILEPATH           ((DWORD)0xC0000BF0L)
+
+//
+// MessageId: PDH_PLA_SERVICE_ERROR
+//
+// MessageText:
+//
+//  The "Performance Logs & Alerts" service did not repond.
+//
+#define PDH_PLA_SERVICE_ERROR            ((DWORD)0xC0000BF1L)
+
+//
+// MessageId: PDH_PLA_VALIDATION_ERROR
+//
+// MessageText:
+//
+//  The information passed is not valid.
+//
+#define PDH_PLA_VALIDATION_ERROR         ((DWORD)0xC0000BF2L)
+
+//
+// MessageId: PDH_PLA_VALIDATION_WARNING
+//
+// MessageText:
+//
+//  The information passed is not valid.
+//
+#define PDH_PLA_VALIDATION_WARNING       ((DWORD)0x80000BF3L)
+
+//
+// MessageId: PDH_PLA_ERROR_NAME_TOO_LONG
+//
+// MessageText:
+//
+//  The name supplied is too long.
+//
+#define PDH_PLA_ERROR_NAME_TOO_LONG      ((DWORD)0xC0000BF4L)
+
+//
+// MessageId: PDH_INVALID_SQL_LOG_FORMAT
+//
+// MessageText:
+//
+//  SQL log format is incorrect. Correct format is "SQL:<DSN-name>!<LogSet-Name>".
+//
+#define PDH_INVALID_SQL_LOG_FORMAT       ((DWORD)0xC0000BF5L)
+
+//
+// MessageId: PDH_COUNTER_ALREADY_IN_QUERY
+//
+// MessageText:
+//
+//  Performance counter in PdhAddCounter() call has already been added
+//  in the performacne query. This counter is ignored.
+//
+#define PDH_COUNTER_ALREADY_IN_QUERY     ((DWORD)0xC0000BF6L)
+
 #endif //_PDH_MSG_H_
 // end of generated file

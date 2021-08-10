@@ -1,5 +1,5 @@
 // SYSOPEN.H: Pascal open array parameter support
-// Copyright (c) 1997, 1999 Borland International
+// Copyright (c) 1997, 2002 Borland Software Corporation
 
 #if !defined(SYSOPEN_H)	// open arrays
 #define SYSOPEN_H

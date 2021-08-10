@@ -5,7 +5,6 @@
 
 
 #ifndef __RECONCIL_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __RECONCIL_H__
 
 #if _MSC_VER > 1000
@@ -202,6 +201,5 @@ DECLARE_INTERFACE_(IBriefcaseInitiator, IUnknown)
 #endif   /* __cplusplus */
 
 
-#pragma option pop /*P_O_Pop*/
 #endif   /* ! __RECONCIL_H__ */
 

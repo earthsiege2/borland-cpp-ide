@@ -2,9 +2,8 @@
 {*******************************************************}
 {                                                       }
 {       Borland Delphi Visual Component Library         }
-{       Services                                        }
 {                                                       }
-{       Copyright (c) 1997,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -15,7 +14,7 @@ unit SvcMgr;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, WinSvc, Forms;
+  Windows, Messages, SysUtils, Classes, WinSvc;
 
 type
 
@@ -228,7 +227,7 @@ var
 implementation
 
 uses
-  Dialogs, Consts;
+  Forms, Dialogs, Consts;
 
 { TEventLogger }
 
@@ -293,8 +292,7 @@ end;
 constructor TServiceThread.Create(Service: TService);
 begin
   FService := Service;
-  FreeOnTerminate := True;
-  inherited Create(False);
+  inherited Create(True);
 end;
 
 procedure TServiceThread.Execute;
@@ -311,7 +309,8 @@ begin
     try
       FService.Status := csRunning;
       if Assigned(FService.OnExecute) then
-        FService.OnExecute(FService) else
+        FService.OnExecute(FService)
+      else
         ProcessRequests(True);
       ProcessRequests(False);
     except
@@ -407,7 +406,8 @@ end;
 function TService.GetDisplayName: String;
 begin
   if FDisplayName <> '' then
-    Result := FDisplayName else
+    Result := FDisplayName
+  else
     Result := Name;
 end;
 
@@ -627,7 +627,9 @@ begin
     Status := csStartPending;
     try
       FServiceThread := TServiceThread.Create(Self);
+      FServiceThread.Resume;
       FServiceThread.WaitFor;
+      FreeAndNil(FServiceThread);
     finally
       Status := csStopped;
     end;
@@ -774,7 +776,7 @@ procedure TServiceApplication.RegisterServices(Install, Silent: Boolean);
         PSSN, PChar(Password));
       TagID := TmpTagID;
       if Svc = 0 then
-        RaiseLastWin32Error;
+        RaiseLastOSError;
       try
         try
           if Assigned(AfterInstall) then AfterInstall(Service);
@@ -799,9 +801,9 @@ procedure TServiceApplication.RegisterServices(Install, Silent: Boolean);
     begin
       if Assigned(BeforeUninstall) then BeforeUninstall(Service);
       Svc := OpenService(SvcMgr, PChar(Name), SERVICE_ALL_ACCESS);
-      if Svc = 0 then RaiseLastWin32Error;
+      if Svc = 0 then RaiseLastOSError;
       try
-        if not DeleteService(Svc) then RaiseLastWin32Error;
+        if not DeleteService(Svc) then RaiseLastOSError;
       finally
         CloseServiceHandle(Svc);
       end;
@@ -818,7 +820,7 @@ var
 begin
   Success := True;
   SvcMgr := OpenSCManager(nil, nil, SC_MANAGER_ALL_ACCESS);
-  if SvcMgr = 0 then RaiseLastWin32Error;
+  if SvcMgr = 0 then RaiseLastOSError;
   try
     for i := 0 to ComponentCount - 1 do
       if Components[i] is TService then
@@ -912,7 +914,8 @@ end;
 procedure TServiceStartThread.Execute;
 begin
   if StartServiceCtrlDispatcher(FServiceStartTable[0]) then
-    ReturnValue := 0 else
+    ReturnValue := 0
+  else
     ReturnValue := GetLastError;
 end;
 
@@ -930,9 +933,10 @@ var
 begin
   AddExitProc(DoneServiceApplication);
   if FindSwitch('INSTALL') then
-    RegisterServices(True, FindSwitch('SILENT')) else
-  if FindSwitch('UNINSTALL') then
-    RegisterServices(False, FindSwitch('SILENT')) else
+    RegisterServices(True, FindSwitch('SILENT'))
+  else if FindSwitch('UNINSTALL') then
+    RegisterServices(False, FindSwitch('SILENT'))
+  else
   begin
     Forms.Application.OnException := OnExceptionHandler;
     ServiceCount := 0;
@@ -954,7 +958,7 @@ begin
         Forms.Application.HandleMessage;
       Forms.Application.Terminate;
       if StartThread.ReturnValue <> 0 then
-        FEventLogger.LogMessage(SysErrorMessage(GetLastError));
+        FEventLogger.LogMessage(SysErrorMessage(StartThread.ReturnValue));
     finally
       StartThread.Free;
     end;

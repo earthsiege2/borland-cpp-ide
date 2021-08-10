@@ -21,7 +21,6 @@ Revision History:
 --*/
 
 #ifndef _IPXCONST_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _IPXCONST_
 
 #if _MSC_VER > 1000
@@ -124,5 +123,4 @@ Revision History:
 #define GLOBAL_WAN_ROUTE		0x00000001
 #define DO_NOT_ADVERTISE_ROUTE		0x00000002
 
-#pragma option pop /*P_O_Pop*/
 #endif

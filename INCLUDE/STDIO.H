@@ -4,23 +4,14 @@
 
 */
 
-/*
- *      C/C++ Run Time Library - Version 10.0
- *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
- *      All Rights Reserved.
- *
- */
-
-/* $Revision:   9.10  $ */
+/* $Copyright: 1987$ */
+/* $Revision: 9.15 $ */
 
 #ifndef __STDIO_H
 #define __STDIO_H
 #define _INC_STDIO  /* MSC Guard name */
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 #if !defined(___NFILE_H)
 #include <_nfile.h>
@@ -130,9 +121,15 @@ extern "C" {
 extern  FILE        _RTLENTRY _EXPDATA _streams[];
 extern  unsigned    _RTLENTRY _EXPDATA _nfile;
 
+#ifdef __cplusplus
+#define stdin   (&std::_streams[0])
+#define stdout  (&std::_streams[1])
+#define stderr  (&std::_streams[2])
+#else
 #define stdin   (&_streams[0])
 #define stdout  (&_streams[1])
 #define stderr  (&_streams[2])
+#endif
 
 /* __getStream() is used internally with CG only, but prototyped here for
   consistancy with the 16-bit version.

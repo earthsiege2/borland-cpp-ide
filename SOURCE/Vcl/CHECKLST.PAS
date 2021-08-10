@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -25,9 +25,11 @@ type
     FStandardItemHeight: Integer;
     FOnClickCheck: TNotifyEvent;
     FSaveStates: TList;
+    FHeaderColor: TColor;
+    FHeaderBackgroundColor: TColor;
     procedure ResetItemHeight;
     procedure DrawCheck(R: TRect; AState: TCheckBoxState; AEnabled: Boolean);
-    procedure SetChecked(Index: Integer; Checked: Boolean);
+    procedure SetChecked(Index: Integer; AChecked: Boolean);
     function GetChecked(Index: Integer): Boolean;
     procedure SetState(Index: Integer; AState: TCheckBoxState);
     function GetState(Index: Integer): TCheckBoxState;
@@ -43,6 +45,10 @@ type
     procedure WMDestroy(var Msg : TWMDestroy);message WM_DESTROY;
     function GetItemEnabled(Index: Integer): Boolean;
     procedure SetItemEnabled(Index: Integer; const Value: Boolean);
+    function GetHeader(Index: Integer): Boolean;
+    procedure SetHeader(Index: Integer; const Value: Boolean);
+    procedure SetHeaderBackgroundColor(const Value: TColor);
+    procedure SetHeaderColor(const Value: TColor);
   protected
     procedure DrawItem(Index: Integer; Rect: TRect;
       State: TOwnerDrawState); override;
@@ -66,11 +72,18 @@ type
     property Checked[Index: Integer]: Boolean read GetChecked write SetChecked;
     property ItemEnabled[Index: Integer]: Boolean read GetItemEnabled write SetItemEnabled;
     property State[Index: Integer]: TCheckBoxState read GetState write SetState;
+    property Header[Index: Integer]: Boolean read GetHeader write SetHeader;
   published
     property OnClickCheck: TNotifyEvent read FOnClickCheck write FOnClickCheck;
     property Align;
     property AllowGrayed: Boolean read FAllowGrayed write FAllowGrayed default False;
     property Anchors;
+    property AutoComplete;
+    property BevelEdges;
+    property BevelInner;
+    property BevelOuter;
+    property BevelKind;
+    property BevelWidth;
     property BiDiMode;
     property BorderStyle;
     property Color;
@@ -84,6 +97,8 @@ type
     property Flat: Boolean read FFlat write SetFlat default True;
     //property ExtendedSelect;
     property Font;
+    property HeaderColor: TColor read FHeaderColor write SetHeaderColor default clInfoText;
+    property HeaderBackgroundColor: TColor read FHeaderBackgroundColor write SetHeaderBackgroundColor default clInfoBk;
     property ImeMode;
     property ImeName;
     property IntegralHeight;
@@ -105,6 +120,9 @@ type
     property Visible;
     property OnClick;
     property OnContextPopup;
+    property OnData;
+    property OnDataFind;
+    property OnDataObject;
     property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
@@ -126,7 +144,7 @@ type
 
 implementation
 
-uses Consts;
+uses Consts, RTLConsts;
 
 type
   TCheckListBoxDataWrapper = class
@@ -134,6 +152,7 @@ type
     FData: LongInt;
     FState: TCheckBoxState;
     FDisabled: Boolean;
+    FHeader: Boolean;
     procedure SetChecked(Check: Boolean);
     function GetChecked: Boolean;
   public
@@ -141,6 +160,7 @@ type
     property Checked: Boolean read GetChecked write SetChecked;
     property State: TCheckBoxState read FState write FState;
     property Disabled: Boolean read FDisabled write FDisabled;
+    property Header: Boolean read FHeader write FHeader;
   end;
 
 var
@@ -196,6 +216,8 @@ constructor TCheckListBox.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FFlat := True;
+  FHeaderColor := clInfoText;
+  FHeaderBackgroundColor := clInfoBk;
 end;
 
 destructor TCheckListBox.Destroy;
@@ -214,7 +236,7 @@ begin
   end;
   ResetItemHeight;
 end;
-    
+
 procedure TCheckListBox.DestroyWnd;
 var
   I: Integer;
@@ -256,7 +278,7 @@ begin
     Perform(LB_SETITEMHEIGHT, 0, FStandardItemHeight);
   end;
 end;
-    
+
 procedure TCheckListBox.DrawItem(Index: Integer; Rect: TRect;
   State: TOwnerDrawState);
 var
@@ -269,18 +291,26 @@ begin
   if Index < Items.Count then
   begin
     R := Rect;
-    if not UseRightToLeftAlignment then
+    Enable := Self.Enabled and GetItemEnabled(Index);
+    if not Header[Index] then
     begin
-      R.Right := Rect.Left;
-      R.Left := R.Right - ACheckWidth;
+      if not UseRightToLeftAlignment then
+      begin
+        R.Right := Rect.Left;
+        R.Left := R.Right - ACheckWidth;
+      end
+      else
+      begin
+        R.Left := Rect.Right;
+        R.Right := R.Left + ACheckWidth;
+      end;
+      DrawCheck(R, GetState(Index), Enable);
     end
     else
     begin
-      R.Left := Rect.Right;
-      R.Right := R.Left + ACheckWidth;
+      Canvas.Font.Color := HeaderColor;
+      Canvas.Brush.Color := HeaderBackgroundColor;
     end;
-    Enable := Self.Enabled and GetItemEnabled(Index);
-    DrawCheck(R, GetState(Index), Enable);
     if not Enable then
       Canvas.Font.Color := clGrayText;
   end;
@@ -302,11 +332,13 @@ end;
 
 procedure TCheckListBox.CNDrawItem(var Message: TWMDrawItem);
 begin
+  if Items.Count = 0 then exit;
   with Message.DrawItemStruct^ do
-    if not UseRightToLeftAlignment then
-      rcItem.Left := rcItem.Left + GetCheckWidth
-    else
-      rcItem.Right := rcItem.Right - GetCheckWidth;
+    if not Header[itemID] then
+      if not UseRightToLeftAlignment then
+        rcItem.Left := rcItem.Left + GetCheckWidth
+      else
+        rcItem.Right := rcItem.Right - GetCheckWidth;
   inherited;
 end;
 
@@ -367,11 +399,11 @@ begin
   end;
 end;
 
-procedure TCheckListBox.SetChecked(Index: Integer; Checked: Boolean);
+procedure TCheckListBox.SetChecked(Index: Integer; AChecked: Boolean);
 begin
-  if Checked <> GetChecked(Index) then
+  if AChecked <> GetChecked(Index) then
   begin
-    TCheckListBoxDataWrapper(GetWrapper(Index)).SetChecked(Checked);
+    TCheckListBoxDataWrapper(GetWrapper(Index)).SetChecked(AChecked);
     InvalidateCheck(Index);
   end;
 end;
@@ -393,18 +425,21 @@ begin
     InvalidateCheck(Index);
   end;
 end;
-    
+
 procedure TCheckListBox.InvalidateCheck(Index: Integer);
 var
   R: TRect;
 begin
-  R := ItemRect(Index);
-  if not UseRightToLeftAlignment then
-    R.Right := R.Left + GetCheckWidth
-  else
-    R.Left := R.Right - GetCheckWidth;
-  InvalidateRect(Handle, @R, not (csOpaque in ControlStyle));
-  UpdateWindow(Handle);
+  if not Header[Index] then
+  begin
+    R := ItemRect(Index);
+    if not UseRightToLeftAlignment then
+      R.Right := R.Left + GetCheckWidth
+    else
+      R.Left := R.Right - GetCheckWidth;
+    InvalidateRect(Handle, @R, not (csOpaque in ControlStyle));
+    UpdateWindow(Handle);
+  end;
 end;
     
 function TCheckListBox.GetChecked(Index: Integer): Boolean;
@@ -433,10 +468,11 @@ end;
 
 procedure TCheckListBox.KeyPress(var Key: Char);
 begin
-  inherited;
-  if (Key = ' ') then ToggleClickCheck(ItemIndex);
+  if (Key = ' ') then
+    ToggleClickCheck(ItemIndex);
+  inherited KeyPress(Key);
 end;
-    
+
 procedure TCheckListBox.MouseDown(Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
@@ -578,6 +614,41 @@ begin
   for i := 0 to Items.Count -1 do
     ExtractWrapper(i).Free;
   inherited;
+end;
+
+function TCheckListBox.GetHeader(Index: Integer): Boolean;
+begin
+  if HaveWrapper(Index) then
+    Result := TCheckListBoxDataWrapper(GetWrapper(Index)).Header
+  else
+    Result := False;
+end;
+
+procedure TCheckListBox.SetHeader(Index: Integer; const Value: Boolean);
+begin
+  if Value <> GetHeader(Index) then
+  begin
+    TCheckListBoxDataWrapper(GetWrapper(Index)).Header := Value;
+    InvalidateCheck(Index);
+  end;
+end;
+
+procedure TCheckListBox.SetHeaderBackgroundColor(const Value: TColor);
+begin
+  if Value <> HeaderBackgroundColor then
+  begin
+    FHeaderBackgroundColor := Value;
+    Invalidate;
+  end;
+end;
+
+procedure TCheckListBox.SetHeaderColor(const Value: TColor);
+begin
+  if Value <> HeaderColor then
+  begin
+    FHeaderColor := Value;
+    Invalidate;
+  end;
 end;
 
 initialization

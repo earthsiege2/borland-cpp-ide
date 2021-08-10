@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ColorGrd.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ColorGrd.pas' rev: 6.00
 
 #ifndef ColorGrdHPP
 #define ColorGrdHPP
@@ -71,11 +71,9 @@ private:
 	
 protected:
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
-	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int 
-		Y);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	virtual void __fastcall CreateWnd(void);
 	virtual void __fastcall Paint(void);
 	DYNAMIC void __fastcall Change(void);
@@ -88,29 +86,28 @@ public:
 	__property Graphics::TColor BackgroundColor = {read=GetBackgroundColor, nodefault};
 	
 __published:
-	__property Anchors ;
+	__property Anchors  = {default=3};
 	__property bool ClickEnablesColor = {read=FClickEnablesColor, write=FClickEnablesColor, default=0};
-		
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property TGridOrdering GridOrdering = {read=FGridOrdering, write=SetGridOrdering, default=2};
 	__property int ForegroundIndex = {read=FForegroundIndex, write=SetForegroundIndex, default=0};
 	__property int BackgroundIndex = {read=FBackgroundIndex, write=SetBackgroundIndex, default=0};
 	__property bool ForegroundEnabled = {read=FForegroundEnabled, write=EnableForeground, default=1};
 	__property bool BackgroundEnabled = {read=FBackgroundEnabled, write=EnableBackground, default=1};
 	__property Font ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property int Selection = {read=FSelection, write=SetSelection, default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=0};
+	__property Visible  = {default=1};
 	__property Classes::TNotifyEvent OnChange = {read=FOnChange, write=FOnChange};
 	__property OnClick ;
 	__property OnDragDrop ;
@@ -132,8 +129,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TColorGrid(HWND ParentWindow) : Controls::TCustomControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TColorGrid(HWND ParentWindow) : Controls::TCustomControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -143,9 +139,7 @@ public:
 static const Shortint NumPaletteEntries = 0x14;
 
 }	/* namespace Colorgrd */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Colorgrd;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

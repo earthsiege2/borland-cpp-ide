@@ -9,7 +9,6 @@
 /* Questions/comments to Bob Natale, bnatale@acecomm.com */
 
 #ifndef _INC_WINSNMP     /* Include WinSNMP declarations */
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define  _INC_WINSNMP    /* Just once! */
 
 #if _MSC_VER > 1000
@@ -485,6 +484,5 @@ SNMPAPI_STATUS SNMPAPI_CALL   SnmpFreeDescriptor
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif         /* _INC_WINSNMP */
 

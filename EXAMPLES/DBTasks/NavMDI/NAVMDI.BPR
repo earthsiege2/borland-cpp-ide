@@ -2,7 +2,7 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="navmdi.exe"/>
     <OBJFILES value="NAVMDI.obj Toolbar.obj CustData.obj CustOrds.obj About.obj DM.obj"/>
     <RESFILES value="navmdi.res"/>
@@ -11,9 +11,9 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) Toolbar.dfm CustData.dfm CustOrds.dfm About.dfm DM.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="vclbde50.lib vcldb50.lib vcl50.lib"/>
-    <SPARELIBS value="vcl50.lib vcldb50.lib vclbde50.lib"/>
-    <PACKAGES value=""/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="rtl.lib vcl.lib dbrtl.lib vcldb.lib"/>
+    <PACKAGES value="bdertl.bpi vcldb.bpi dbrtl.bpi vcl.bpi rtl.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -26,21 +26,33 @@
     <MAINSOURCE value="NAVMDI.cpp"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
-    <WARNINGS value="-w-8026 -w-8027 -w-par"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\include -I$(BCB)\include\vcl"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a8 -k -y -v -vi- -c -b- -tW"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tW"/>
     <PFLAGS value="-$YD -v -JPHNV -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w0 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -v"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="NAVMDI.cpp" FORMNAME="" UNITNAME="NAVMDI" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="readme.txt" FORMNAME="" UNITNAME="readme" CONTAINERID="File" DESIGNCLASS=""/>
+      <FILE FILENAME="toolbar.cpp" FORMNAME="fmToolbar" UNITNAME="Toolbar" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="CustData.cpp" FORMNAME="fmCustomer" UNITNAME="CustData" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="CustOrds.cpp" FORMNAME="fmCustOrd" UNITNAME="CustOrds" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="About.cpp" FORMNAME="fmAboutBox" UNITNAME="About" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="dm.cpp" FORMNAME="DM1" UNITNAME="DM" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="navmdi.res" FORMNAME="" UNITNAME="navmdi" CONTAINERID="ResTool" DESIGNCLASS=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -70,14 +82,24 @@ DebugSourceDirs=
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
-InMemoryExe=0
 ShowInfoMsgs=0
 LinkDebugVcl=1
+LinkCGLIB=0
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
   </IDEOPTIONS>
 </PROJECT>

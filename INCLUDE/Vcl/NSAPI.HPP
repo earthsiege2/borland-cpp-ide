@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NSApi.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Nsapi.pas' rev: 6.00
 
-#ifndef NSApiHPP
-#define NSApiHPP
+#ifndef NsapiHPP
+#define NsapiHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -51,14 +51,17 @@ typedef void *CRITICAL;
 
 typedef void *CONDVAR;
 
+struct TFile;
+typedef TFile *SYS_FILE;
+
+#pragma pack(push, 4)
 struct TFile
 {
 	unsigned fh;
 	char *fname;
 	unsigned flsem;
 } ;
-
-typedef TFile *SYS_FILE;
+#pragma pack(pop)
 
 typedef TFile  file_s;
 
@@ -69,6 +72,7 @@ typedef unsigned TPid;
 struct TStat;
 typedef TStat *PStat;
 
+#pragma pack(push, 4)
 struct TStat
 {
 	Word st_dev;
@@ -83,8 +87,12 @@ struct TStat
 	int st_mtime;
 	int st_ctime;
 } ;
+#pragma pack(pop)
 
 typedef TStat  Stat;
+
+struct TDirEnt;
+typedef TDirEnt *PDirEnt;
 
 #pragma pack(push, 1)
 struct TDirEnt
@@ -93,19 +101,19 @@ struct TDirEnt
 } ;
 #pragma pack(pop)
 
-typedef TDirEnt *PDirEnt;
-
 typedef TDirEnt  dirent_s;
 
 struct TDir;
 typedef TDir *PDir;
 
+#pragma pack(push, 4)
 struct TDir
 {
 	unsigned dp;
 	_WIN32_FIND_DATAA fdata;
 	TDirEnt de;
 } ;
+#pragma pack(pop)
 
 typedef TDir  dir_s;
 
@@ -113,6 +121,7 @@ typedef TDir *SYS_DIR;
 
 typedef TDir  SYS_DIRENT;
 
+#pragma pack(push, 4)
 struct tm
 {
 	int tm_sec;
@@ -125,27 +134,33 @@ struct tm
 	int tm_yday;
 	int tm_isdst;
 } ;
+#pragma pack(pop)
 
 typedef tm *ptm;
 
+struct TPbParam;
+typedef TPbParam *PPbParam;
+
+#pragma pack(push, 4)
 struct TPbParam
 {
 	char *name;
 	char *value;
 } ;
-
-typedef TPbParam *PPbParam;
+#pragma pack(pop)
 
 typedef TPbParam  pb_param;
 
 struct TPbEntry;
 typedef TPbEntry *PPbEntry;
 
+#pragma pack(push, 4)
 struct TPbEntry
 {
 	TPbParam *param;
 	TPbEntry *next;
 } ;
+#pragma pack(pop)
 
 typedef TPbEntry  pb_entry;
 
@@ -154,11 +169,13 @@ typedef PPbEntry *PPPbEntry;
 struct TPblock;
 typedef TPblock *PPblock;
 
+#pragma pack(push, 4)
 struct TPblock
 {
 	int hsize;
 	PPbEntry *ht;
 } ;
+#pragma pack(pop)
 
 typedef TPblock  pblock;
 
@@ -168,6 +185,10 @@ typedef char * *PPCharArray;
 
 typedef int SYS_NETFD;
 
+struct TFileBuffer;
+typedef TFileBuffer *PFileBuffer;
+
+#pragma pack(push, 4)
 struct TFileBuffer
 {
 	TFile *fd;
@@ -179,8 +200,7 @@ struct TFileBuffer
 	int pos;
 	char *errmsg;
 } ;
-
-typedef TFileBuffer *PFileBuffer;
+#pragma pack(pop)
 
 typedef TFileBuffer  filebuffer;
 
@@ -189,6 +209,7 @@ typedef TFileBuffer  filebuf;
 struct TNetBuf;
 typedef TNetBuf *PNetBuf;
 
+#pragma pack(push, 4)
 struct TNetBuf
 {
 	int sd;
@@ -200,12 +221,14 @@ struct TNetBuf
 	char *inbuf;
 	char *errmsg;
 } ;
+#pragma pack(pop)
 
 typedef TNetBuf  netbuf;
 
 struct TSession;
 typedef TSession *PSession;
 
+#pragma pack(push, 4)
 struct TSession
 {
 	TPblock *client;
@@ -216,20 +239,28 @@ struct TSession
 	void * *pool;
 	void *clauth;
 } ;
+#pragma pack(pop)
 
 typedef TSession  Session;
 
+struct TCInfo;
+typedef TCInfo *PCInfo;
+
+#pragma pack(push, 4)
 struct TCInfo
 {
 	char *ctype;
 	char *encoding;
 	char *language;
 } ;
-
-typedef TCInfo *PCInfo;
+#pragma pack(pop)
 
 typedef TCInfo  cinfo;
 
+struct TShMem;
+typedef TShMem *PShMem;
+
+#pragma pack(push, 4)
 struct TShMem
 {
 	void *data;
@@ -238,8 +269,7 @@ struct TShMem
 	char *name;
 	TFile *fd;
 } ;
-
-typedef TShMem *PShMem;
+#pragma pack(pop)
 
 typedef TShMem  shmem_s;
 
@@ -247,6 +277,10 @@ typedef void *SYS_THREAD;
 
 typedef void __cdecl (*TSysThreadFunc)(void * Arg);
 
+struct TMultipleDomains;
+typedef TMultipleDomains *PMultipleDomains;
+
+#pragma pack(push, 4)
 struct TMultipleDomains
 {
 	char *address;
@@ -255,8 +289,7 @@ struct TMultipleDomains
 	int threads;
 	int AddressNumber;
 } ;
-
-typedef TMultipleDomains *PMultipleDomains;
+#pragma pack(pop)
 
 typedef TMultipleDomains  multiple_domains;
 
@@ -266,6 +299,10 @@ typedef void __cdecl (*TRotateCallback)(void);
 
 typedef void __cdecl (*TRCBack)(int Param);
 
+struct TDaemon;
+typedef TDaemon *PDaemon;
+
+#pragma pack(push, 4)
 struct TDaemon
 {
 	char *ipstr;
@@ -281,54 +318,67 @@ struct TDaemon
 	int maxthreads;
 	int minthreads;
 } ;
-
-typedef TDaemon *PDaemon;
+#pragma pack(pop)
 
 typedef TDaemon  daemon_s;
 
+#pragma pack(push, 4)
 struct TDirective
 {
 	TPblock *param;
 	TPblock *client;
 } ;
+#pragma pack(pop)
 
 typedef TDirective *PDirective;
 
 typedef TDirective  directive;
 
+struct TDtable;
+typedef TDtable *PDtable;
+
+#pragma pack(push, 4)
 struct TDtable
 {
 	int ni;
 	TDirective *inst;
 } ;
-
-typedef TDtable *PDtable;
+#pragma pack(pop)
 
 typedef TDtable  dtable;
 
+struct THttpdObject;
+typedef THttpdObject *PHttpdObject;
+
+#pragma pack(push, 4)
 struct THttpdObject
 {
 	TPblock *name;
 	int nd;
 	TDtable *dt;
 } ;
-
-typedef THttpdObject *PHttpdObject;
+#pragma pack(pop)
 
 typedef THttpdObject  httpd_object;
 
 struct THttpdObjSet;
 typedef THttpdObjSet *PHttpdObjSet;
 
+#pragma pack(push, 4)
 struct THttpdObjSet
 {
 	int pos;
 	PHttpdObject *obj;
 	PPblock *initfns;
 } ;
+#pragma pack(pop)
 
 typedef THttpdObjSet  httpd_objset;
 
+struct TConfGlobalVars;
+typedef TConfGlobalVars *PConfGlobalVars;
+
+#pragma pack(push, 4)
 struct TConfGlobalVars
 {
 	int Vport;
@@ -349,14 +399,14 @@ struct TConfGlobalVars
 	char *Vserver_root;
 	char *Vserver_id;
 } ;
-
-typedef TConfGlobalVars *PConfGlobalVars;
+#pragma pack(pop)
 
 typedef TConfGlobalVars  conf_global_vars_s;
 
 struct TRequest;
 typedef TRequest *PRequest;
 
+#pragma pack(push, 4)
 struct TRequest
 {
 	TPblock *vars;
@@ -380,6 +430,7 @@ struct TRequest
 	int cached_headers_len;
 	char *cached_date_header;
 } ;
+#pragma pack(pop)
 
 typedef TRequest  Request;
 
@@ -388,12 +439,14 @@ typedef int __cdecl (*TFunction)(PPblock pb, PSession sn, PRequest rq);
 struct TFuncStruct;
 typedef TFuncStruct *PFuncStruct;
 
+#pragma pack(push, 4)
 struct TFuncStruct
 {
 	char *name;
 	TFunction func;
 	TFuncStruct *next;
 } ;
+#pragma pack(pop)
 
 //-- var, const, procedure ---------------------------------------------------
 #define PROXY_VERSION_DEF "2.0b4"
@@ -636,22 +689,20 @@ extern "C" int __cdecl net_getsockopt(int s, int level, int optname, void * optv
 extern "C" int __cdecl net_setsockopt(int s, int level, int optname, void * optval, int optlen);
 extern "C" int __cdecl net_listen(int s, int backlog);
 extern "C" int __cdecl net_create_listener(char * ipaddr, int port);
-extern "C" int __cdecl net_select(int nfds, Winsock::PFDSet r, Winsock::PFDSet w, Winsock::PFDSet e, 
-	Winsock::PTimeVal timeout);
+extern "C" int __cdecl net_select(int nfds, Winsock::PFDSet r, Winsock::PFDSet w, Winsock::PFDSet e, Winsock::PTimeVal timeout);
 extern "C" int __cdecl net_connect(int s, void * sockaddr, int namelen);
 extern "C" int __cdecl net_ioctl(int s, int tag, void * result);
 extern "C" int __cdecl net_getpeername(int s, sockaddr_in &name, int &namelen);
 extern "C" int __cdecl net_close(int s);
 extern "C" int __cdecl net_bind(int s, sockaddr_in &name, int namelen);
-extern "C" int __cdecl net_accept(int s, PSOCKADDR addr, Windows::PInteger addrlen);
+extern "C" int __cdecl net_accept(int s, PSOCKADDR addr, System::PInteger addrlen);
 extern "C" int __cdecl net_read(int sd, char * buf, int sz, int timeout);
 extern "C" int __cdecl net_write(int sd, char * buf, int sz);
 extern "C" BOOL __cdecl net_isalive(int sd);
 extern "C" char * __cdecl net_ip2host(char * ip, BOOL verify);
 extern "C" PFileBuffer __cdecl filebuf_open(SYS_FILE fd, int sz);
 extern "C" PNetBuf __cdecl netbuf_open(int sd, int sz);
-extern "C" PFileBuffer __cdecl filebuf_create(SYS_FILE fd, char * mmap_ptr, int mmap_len, int bufsz)
-	;
+extern "C" PFileBuffer __cdecl filebuf_create(SYS_FILE fd, char * mmap_ptr, int mmap_len, int bufsz);
 extern "C" void __cdecl filebuf_close_buffer(PFileBuffer buf, BOOL clean_mmap);
 extern "C" PFileBuffer __cdecl filebuf_open_nostat(SYS_FILE fd, int sz, TStat &finfo);
 extern "C" PFileBuffer __cdecl pipebuf_open(SYS_FILE fd, int sz, TStat &finfo);
@@ -728,7 +779,6 @@ extern "C" void __cdecl object_free(PHttpdObject obj);
 extern "C" void __cdecl object_add_directive(int dc, PPblock p, PPblock c, PHttpdObject obj);
 extern "C" int __cdecl object_execute(PDirective inst, PSession sn, void * rq);
 extern "C" PHttpdObjSet __cdecl objset_scan_buffer(PFileBuffer buf, char * errstr, PHttpdObjSet os);
-	
 extern "C" PHttpdObjSet __cdecl objset_create(void);
 extern "C" void __cdecl objset_free(PHttpdObjSet os);
 extern "C" void __cdecl objset_free_setonly(PHttpdObjSet os);
@@ -737,26 +787,16 @@ extern "C" void __cdecl objset_add_object(PHttpdObject obj, PHttpdObjSet os);
 extern "C" void __cdecl objset_add_init(PPblock initfn, PHttpdObjSet os);
 extern "C" PHttpdObject __cdecl objset_findbyname(char * name, PHttpdObjSet ign, PHttpdObjSet os);
 extern "C" PHttpdObject __cdecl objset_findbyppath(char * ppath, PHttpdObjSet ign, PHttpdObjSet os);
-	
 extern "C" PHttpdObjSet __cdecl objset_copydirs(PHttpdObjSet dst_os, PHttpdObjSet os, int dir);
-extern "C" PHttpdObjSet __cdecl objset_scan_registry(char * errstr, PHttpdObjSet os, char * product_key
-	);
-extern "C" void __cdecl ProcessObject(PHttpdObjSet nos, HKEY hObjectKey, char * Obj, unsigned ObjectIndex
-	);
-extern "C" BOOL __cdecl ProcessClient(PHttpdObject cobj, HKEY hObjectKey, char * Client, unsigned ObjectIndex
-	);
-extern "C" BOOL __cdecl ProcessDirective(PHttpdObject cobj, PPblock param, PPblock client, HKEY hObjectKey
-	, char * Directive, unsigned ObjectIndex, unsigned DirectiveIndex, unsigned &clrefs, BOOL IsObject)
-	;
-extern "C" BOOL __cdecl ProcessFunction(PPblock &param, HKEY hDirectiveKey, char * Func, unsigned ObjectIndex
-	, unsigned DirectiveIndex, unsigned FunctionIndex);
+extern "C" PHttpdObjSet __cdecl objset_scan_registry(char * errstr, PHttpdObjSet os, char * product_key);
+extern "C" void __cdecl ProcessObject(PHttpdObjSet nos, HKEY hObjectKey, char * Obj, unsigned ObjectIndex);
+extern "C" BOOL __cdecl ProcessClient(PHttpdObject cobj, HKEY hObjectKey, char * Client, unsigned ObjectIndex);
+extern "C" BOOL __cdecl ProcessDirective(PHttpdObject cobj, PPblock param, PPblock client, HKEY hObjectKey, char * Directive, unsigned ObjectIndex, unsigned DirectiveIndex, unsigned &clrefs, BOOL IsObject);
+extern "C" BOOL __cdecl ProcessFunction(PPblock &param, HKEY hDirectiveKey, char * Func, unsigned ObjectIndex, unsigned DirectiveIndex, unsigned FunctionIndex);
 extern PACKAGE int __cdecl _ntverify_parameter(char * str);
-extern "C" int __cdecl ntpblock_str2pblock(int ParameterIndex, char * name, char * value, int namelength
-	, int valuelength, PPblock pb);
-extern "C" int __cdecl ntpblock_pblock2str(PPbEntry p, char * &ParameterName, char * &ParameterValue
-	);
-extern "C" BOOL __cdecl ClearConfigurationParameters(HKEY hParentKey, char * CompleteKeyName, char * 
-	KeyName);
+extern "C" int __cdecl ntpblock_str2pblock(int ParameterIndex, char * name, char * value, int namelength, int valuelength, PPblock pb);
+extern "C" int __cdecl ntpblock_pblock2str(PPbEntry p, char * &ParameterName, char * &ParameterValue);
+extern "C" BOOL __cdecl ClearConfigurationParameters(HKEY hParentKey, char * CompleteKeyName, char * KeyName);
 extern "C" char * __cdecl GetProductKey(void);
 extern "C" char * __cdecl conf_init(char * cfn);
 extern "C" void __cdecl conf_terminate(void);
@@ -789,11 +829,9 @@ extern "C" void __cdecl http_finish_request(PSession sn, PRequest rq);
 extern "C" void __cdecl protocol_handle_session(PSession sn);
 extern "C" void __cdecl http_handle_session(PSession sn);
 extern "C" char * __cdecl protocol_uri2url(char * prefix, char * suffix);
-extern "C" char * __cdecl protocol_uri2url_dynamic(char * prefix, char * suffix, PSession sn, PRequest 
-	rq);
+extern "C" char * __cdecl protocol_uri2url_dynamic(char * prefix, char * suffix, PSession sn, PRequest rq);
 extern "C" char * __cdecl http_uri2url(char * prefix, char * suffix);
-extern "C" char * __cdecl http_uri2url_dynamic(char * prefix, char * suffix, PSession sn, PRequest rq
-	);
+extern "C" char * __cdecl http_uri2url_dynamic(char * prefix, char * suffix, PSession sn, PRequest rq);
 extern "C" void __cdecl protocol_set_keepalive_timeout(int secs);
 extern "C" void __cdecl http_set_keepalive_timeout(int secs);
 extern "C" void __cdecl func_init(void);
@@ -977,8 +1015,7 @@ inline char * __cdecl protocol_uri2url(char * prefix, char * suffix)
 
 
 #pragma option push -w-inl
-inline char * __cdecl protocol_uri2url_dynamic(char * prefix, char * suffix, PSession sn, PRequest rq
-	)
+inline char * __cdecl protocol_uri2url_dynamic(char * prefix, char * suffix, PSession sn, PRequest rq)
 {
 	return http_uri2url_dynamic(prefix, suffix, sn, rq);
 }
@@ -995,12 +1032,10 @@ inline void __cdecl protocol_set_keepalive_timeout(int secs)
 
 
 }	/* namespace Nsapi */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nsapi;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// NSApi
+#endif	// Nsapi

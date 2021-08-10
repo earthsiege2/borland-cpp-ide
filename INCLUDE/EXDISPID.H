@@ -1,5 +1,4 @@
 #ifndef EXDISPID_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
@@ -45,6 +44,22 @@
 #define DISPID_DOCUMENTCOMPLETE     259   // new document goes ReadyState_Complete
 #define DISPID_ONTHEATERMODE        260   // sent when theater mode should be on/off
 #define DISPID_ONADDRESSBAR         261   // sent when the address bar should be shown/hidden
+#define DISPID_WINDOWSETRESIZABLE   262   // sent to set the style of the host window frame
+#define DISPID_WINDOWCLOSING        263   // sent before script window.close closes the window 
+#define DISPID_WINDOWSETLEFT        264   // sent when the put_left method is called on the WebOC
+#define DISPID_WINDOWSETTOP         265   // sent when the put_top method is called on the WebOC
+#define DISPID_WINDOWSETWIDTH       266   // sent when the put_width method is called on the WebOC
+#define DISPID_WINDOWSETHEIGHT      267   // sent when the put_height method is called on the WebOC 
+#define DISPID_CLIENTTOHOSTWINDOW   268   // sent during window.open to request conversion of dimensions
+#define DISPID_SETSECURELOCKICON    269   // sent to suggest the appropriate security icon to show
+#define DISPID_FILEDOWNLOAD         270   // Fired to indicate the File Download dialog is opening
+#define DISPID_NAVIGATEERROR        271   // Fired to indicate the a binding error has occured
+#define DISPID_PRIVACYIMPACTEDSTATECHANGE   272  // Fired when the user's browsing experience is impacted
+
+// Printing events
+#define DISPID_PRINTTEMPLATEINSTANTIATION   225   // Fired to indicate that a print template is instantiated
+#define DISPID_PRINTTEMPLATETEARDOWN        226   // Fired to indicate that a print templete is completely gone 
+#define DISPID_UPDATEPAGESTATUS             227   // Fired to indicate that the spooling status has changed
 
 // define the events for the shell wiwndow list
 #define DISPID_WINDOWREGISTERED     200     // Window registered
@@ -82,8 +97,37 @@
 
 // Dispatch IDS for ShellFavoritesNameSpace Dispatch Events.
 //
-#define DISPID_SELECTIONCHANGE     1000
+#define DISPID_FAVSELECTIONCHANGE       1
+#define DISPID_SELECTIONCHANGE          2
+#define DISPID_DOUBLECLICK              3
+#define DISPID_INITIALIZED              4
+
+#define DISPID_MOVESELECTIONUP          1
+#define DISPID_MOVESELECTIONDOWN        2
+#define DISPID_RESETSORT                3
+#define DISPID_NEWFOLDER                4
+#define DISPID_SYNCHRONIZE              5
+#define DISPID_IMPORT                   6
+#define DISPID_EXPORT                   7
+#define DISPID_INVOKECONTEXTMENU        8
+#define DISPID_MOVESELECTIONTO          9
+#define DISPID_SUBSCRIPTIONSENABLED     10
+#define DISPID_CREATESUBSCRIPTION       11
+#define DISPID_DELETESUBSCRIPTION       12
+#define DISPID_SETROOT                  13
+#define DISPID_ENUMOPTIONS              14
+#define DISPID_SELECTEDITEM             15
+#define DISPID_ROOT                     16
+#define DISPID_DEPTH                    17
+#define DISPID_MODE                     18
+#define DISPID_FLAGS                    19
+#define DISPID_TVFLAGS                  20
+#define DISPID_NSCOLUMNS                21
+#define DISPID_COUNTVIEWTYPES           22
+#define DISPID_SETVIEWTYPE              23
+#define DISPID_SELECTEDITEMS            24
+#define DISPID_EXPAND                   25
+#define DISPID_UNSELECTALL              26
 
 #define EXDISPID_H_
-#pragma option pop /*P_O_Pop*/
 #endif // EXDISPID_H_

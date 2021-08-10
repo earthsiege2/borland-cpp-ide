@@ -6,14 +6,14 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.0  $        */
+/* $Revision: 9.5.2.1 $        */
 
 #include <_video.h>
 
@@ -27,7 +27,7 @@ Return value    __validatexy returns zero if the coordinates are invalid
 
 *---------------------------------------------------------------------*/
 
-int __validatexy(int x1, int y1, int x2, int y2)
+int _RTLENTRY _EXPFUNC __validatexy(int x1, int y1, int x2, int y2)
 {
     int wid, ht;
 

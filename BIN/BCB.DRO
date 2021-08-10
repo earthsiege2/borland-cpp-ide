@@ -8,6 +8,7 @@ Author=Borland
 DefaultMainForm=0
 DefaultNewForm=0
 Ancestor=
+Designer=dfm
 
 [OKCNHLP1]
 Type=FormTemplate
@@ -19,6 +20,7 @@ Author=Borland
 DefaultMainForm=0
 DefaultNewForm=0
 Ancestor=OKCANCL1
+Designer=dfm
 
 [OKCANCL2]
 Type=FormTemplate
@@ -30,6 +32,7 @@ Author=Borland
 DefaultMainForm=0
 DefaultNewForm=0
 Ancestor=
+Designer=dfm
 
 [OKCNHLP2]
 Type=FormTemplate
@@ -41,6 +44,7 @@ Author=Borland
 DefaultMainForm=0
 DefaultNewForm=0
 Ancestor=OKCANCL2
+Designer=dfm
 
 [ABOUT]
 Type=FormTemplate
@@ -52,6 +56,7 @@ Author=Borland
 DefaultMainForm=0
 DefaultNewForm=0
 Ancestor=
+Designer=dfm
 
 [TABPGDLG]
 Type=FormTemplate
@@ -63,6 +68,7 @@ Author=Borland
 DefaultMainForm=0
 DefaultNewForm=0
 Ancestor=
+Designer=dfm
 
 [PASSWORD]
 Type=FormTemplate
@@ -74,6 +80,7 @@ Author=Borland
 DefaultMainForm=0
 DefaultNewForm=0
 Ancestor=
+Designer=dfm
 
 [DUALLIST]
 Type=FormTemplate
@@ -85,6 +92,7 @@ Author=Borland
 DefaultMainForm=0
 DefaultNewForm=0
 Ancestor=
+Designer=dfm
 
 [MDIAPP]
 Type=ProjectTemplate
@@ -115,10 +123,10 @@ DefaultProject=0
 
 [WIN2kAPP]
 Type=ProjectTemplate
-Name=Win2000 Client Application
+Name=Win2000 Logo Application
 Page=Projects
 Icon=WIN2kAPP.ICO
-Description=Client application for Windows2000.
+Description=Application that meets minimum Windows2000 Logo requirements.
 Author=Borland
 DefaultProject=0
 

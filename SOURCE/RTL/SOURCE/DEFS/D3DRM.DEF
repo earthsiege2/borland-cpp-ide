@@ -1,24 +1,24 @@
 LIBRARY D3DRM
 EXPORTS
 
-    D3DRMColorGetAlpha                       = 'D3DRM.DLL'.*
-    D3DRMColorGetBlue                        = 'D3DRM.DLL'.*
-    D3DRMColorGetGreen                       = 'D3DRM.DLL'.*
-    D3DRMColorGetRed                         = 'D3DRM.DLL'.*
-    D3DRMCreateColorRGB                      = 'D3DRM.DLL'.*
-    D3DRMCreateColorRGBA                     = 'D3DRM.DLL'.*
-    D3DRMMatrixFromQuaternion                = 'D3DRM.DLL'.*
-    D3DRMQuaternionFromRotation              = 'D3DRM.DLL'.*
-    D3DRMQuaternionMultiply                  = 'D3DRM.DLL'.*
-    D3DRMQuaternionSlerp                     = 'D3DRM.DLL'.*
-    D3DRMVectorAdd                           = 'D3DRM.DLL'.*
-    D3DRMVectorCrossProduct                  = 'D3DRM.DLL'.*
-    D3DRMVectorDotProduct                    = 'D3DRM.DLL'.*
-    D3DRMVectorModulus                       = 'D3DRM.DLL'.*
-    D3DRMVectorNormalize                     = 'D3DRM.DLL'.*
-    D3DRMVectorRandom                        = 'D3DRM.DLL'.*
-    D3DRMVectorReflect                       = 'D3DRM.DLL'.*
-    D3DRMVectorRotate                        = 'D3DRM.DLL'.*
-    D3DRMVectorScale                         = 'D3DRM.DLL'.*
-    D3DRMVectorSubtract                      = 'D3DRM.DLL'.*
-    Direct3DRMCreate                         = 'D3DRM.DLL'.*
+    D3DRMColorGetAlpha                       
+    D3DRMColorGetBlue                        
+    D3DRMColorGetGreen                       
+    D3DRMColorGetRed                         
+    D3DRMCreateColorRGB                      
+    D3DRMCreateColorRGBA                     
+    D3DRMMatrixFromQuaternion                
+    D3DRMQuaternionFromRotation              
+    D3DRMQuaternionMultiply                  
+    D3DRMQuaternionSlerp                     
+    D3DRMVectorAdd                           
+    D3DRMVectorCrossProduct                  
+    D3DRMVectorDotProduct                    
+    D3DRMVectorModulus                       
+    D3DRMVectorNormalize                     
+    D3DRMVectorRandom                        
+    D3DRMVectorReflect                       
+    D3DRMVectorRotate                        
+    D3DRMVectorScale                         
+    D3DRMVectorSubtract                      
+    Direct3DRMCreate                         

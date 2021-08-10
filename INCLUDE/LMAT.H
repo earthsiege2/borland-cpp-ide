@@ -27,7 +27,6 @@ Revision History:
 --*/
 
 #ifndef _LMAT_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _LMAT_
 
 #if _MSC_VER > 1000
@@ -139,5 +138,4 @@ NetScheduleJobGetInfo(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _LMAT_

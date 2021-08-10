@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1998 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1998-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 #ifndef EmpFormH
@@ -18,6 +18,7 @@
 #include <Mask.hpp>
 #include <MConnect.hpp>
 #include <MidasCon.hpp>
+#include <DB.hpp>
 //---------------------------------------------------------------------------
 class TEmployeeForm : public TForm
 {
@@ -46,9 +47,9 @@ __published:	// IDE-managed Components
         void __fastcall UpdateButtonClick(TObject *Sender);
         void __fastcall UndoButtonClick(TObject *Sender);
         void __fastcall EmpDataDataChange(TObject *Sender, TField *Field);
-    void __fastcall EmployeesReconcileError(TClientDataSet *DataSet,
-          EReconcileError *E, TUpdateKind UpdateKind,
-          TReconcileAction &Action);
+        void __fastcall EmployeesReconcileError(
+          TCustomClientDataSet *DataSet, EReconcileError *E,
+          TUpdateKind UpdateKind, TReconcileAction &Action);
 private:	// User declarations
 public:		// User declarations
         __fastcall TEmployeeForm(TComponent* Owner);

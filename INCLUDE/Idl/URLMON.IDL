@@ -1,3 +1,4 @@
+
 //+---------------------------------------------------------------------------
 //
 //  Microsoft Windows
@@ -48,11 +49,32 @@ interface IAuthenticate;
 interface IWindowForBindingUI;
 interface ICodeInstall;
 interface IHttpNegotiate;
+interface IHttpNegotiate2;
+
+cpp_quote("// Side-by-Side clsid")
+cpp_quote("EXTERN_C const IID CLSID_SBS_StdURLMoniker;  ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_HttpProtocol;   ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_FtpProtocol;    ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_GopherProtocol; ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_HttpSProtocol;  ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_FileProtocol;   ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_MkProtocol;     ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_UrlMkBindCtx;   ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_SoftDistExt;  ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_StdEncodingFilterFac; ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_DeCompMimeFilter;     ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_CdlProtocol;          ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_ClassInstallFilter;   ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_InternetSecurityManager;  ")
+cpp_quote("EXTERN_C const IID CLSID_SBS_InternetZoneManager;  ")
+cpp_quote("// END Side-by-Side clsid")
+
 
 cpp_quote("// These are for backwards compatibility with previous URLMON versions")
 cpp_quote("#define BINDF_DONTUSECACHE BINDF_GETNEWESTVERSION")
 cpp_quote("#define BINDF_DONTPUTINCACHE BINDF_NOWRITECACHE")
 cpp_quote("#define BINDF_NOCOPYDATA BINDF_PULLDATA")
+cpp_quote("#define INVALID_P_ROOT_SECURITY_ID ((BYTE*)-1)")
 
 cpp_quote("#define PI_DOCFILECLSIDLOOKUP PI_CLSIDLOOKUP")
 
@@ -76,9 +98,13 @@ cpp_quote("EXTERN_C const IID IID_IAsyncBindCtx;    ")
 #pragma midl_echo("#define SZ_URLCONTEXT           OLESTR(\"URL Context\")")
 #pragma midl_echo("#define SZ_ASYNC_CALLEE         OLESTR(\"AsyncCallee\")")
 
-#pragma midl_echo("#define MKSYS_URLMONIKER    6                 ")
+#pragma midl_echo("#define MKSYS_URLMONIKER         6            ")
+#pragma midl_echo("#define URL_MK_LEGACY            0            ")
+#pragma midl_echo("#define URL_MK_UNIFORM           1            ")
+#pragma midl_echo("#define URL_MK_NO_CANONICALIZE   2            ")
 #pragma midl_echo(" ")
 #pragma midl_echo("STDAPI CreateURLMoniker(LPMONIKER pMkCtx, LPCWSTR szURL, LPMONIKER FAR * ppmk);             ")
+#pragma midl_echo("STDAPI CreateURLMonikerEx(LPMONIKER pMkCtx, LPCWSTR szURL, LPMONIKER FAR * ppmk, DWORD dwFlags);             ")
 #pragma midl_echo("STDAPI GetClassURL(LPCWSTR szURL, CLSID *pClsID);                                           ")
 #pragma midl_echo("STDAPI CreateAsyncBindCtx(DWORD reserved, IBindStatusCallback *pBSCb,                       ")
 #pragma midl_echo("                                IEnumFORMATETC *pEFetc, IBindCtx **ppBC);                   ")
@@ -150,6 +176,7 @@ cpp_quote("EXTERN_C const IID IID_IAsyncBindCtx;    ")
 
 
 #pragma midl_echo("STDAPI ObtainUserAgentString(DWORD dwOption, LPSTR pszUAOut, DWORD* cbSize);       ")
+#pragma midl_echo("STDAPI CompareSecurityIds(BYTE* pbSecurityId1, DWORD dwLen1, BYTE* pbSecurityId2, DWORD dwLen2, DWORD dwReserved);    ")
 
 #pragma midl_echo(" ")
 #pragma midl_echo("// URLMON-specific defines for UrlMkSetSessionOption() above")
@@ -185,6 +212,7 @@ cpp_quote("EXTERN_C const IID IID_IAsyncBindCtx;    ")
 #pragma midl_echo("#define CFSTR_MIME_RAWDATA      (TEXT(\"application/octet-stream\"))")
 #pragma midl_echo("#define CFSTR_MIME_RAWDATASTRM  (TEXT(\"application/octet-stream\"))")
 #pragma midl_echo("#define CFSTR_MIME_PDF          (TEXT(\"application/pdf\"))        ")
+#pragma midl_echo("#define CFSTR_MIME_HTA          (TEXT(\"application/hta\"))        ")
 #pragma midl_echo("#define CFSTR_MIME_X_AIFF       (TEXT(\"audio/x-aiff\"))           ")
 #pragma midl_echo("#define CFSTR_MIME_X_REALAUDIO  (TEXT(\"audio/x-pn-realaudio\"))   ")
 #pragma midl_echo("#define CFSTR_MIME_XBM          (TEXT(\"image/xbm\"))              ")
@@ -193,6 +221,7 @@ cpp_quote("EXTERN_C const IID IID_IAsyncBindCtx;    ")
 #pragma midl_echo("#define CFSTR_MIME_X_SGI_MOVIE  (TEXT(\"video/x-sgi-movie\"))      ")
 // 7 or 8 bit MIME Types
 #pragma midl_echo("#define CFSTR_MIME_HTML         (TEXT(\"text/html\"))              ")
+#pragma midl_echo("#define CFSTR_MIME_XML          (TEXT(\"text/xml\"))               ")
 #pragma midl_echo(" ")
 
 cpp_quote("// MessageId: MK_S_ASYNCHRONOUS                                              ")
@@ -297,8 +326,8 @@ cpp_quote("#define INET_E_REDIRECT_TO_DIR           _HRESULT_TYPEDEF_(0x800C0015
 //
 cpp_quote("#define INET_E_CANNOT_LOCK_REQUEST       _HRESULT_TYPEDEF_(0x800C0016L)      ")
 cpp_quote("#define INET_E_USE_EXTEND_BINDING        _HRESULT_TYPEDEF_(0x800C0017L)      ")
+cpp_quote("#define INET_E_TERMINATED_BIND           _HRESULT_TYPEDEF_(0x800C0018L)      ")
 cpp_quote("#define INET_E_ERROR_FIRST               _HRESULT_TYPEDEF_(0x800C0002L)      ")
-cpp_quote("#define INET_E_ERROR_LAST                INET_E_USE_EXTEND_BINDING")
 
 // User declined download of component
 cpp_quote("#define INET_E_CODE_DOWNLOAD_DECLINED    _HRESULT_TYPEDEF_(0x800C0100L)      ")
@@ -306,6 +335,9 @@ cpp_quote("#define INET_E_RESULT_DISPATCHED         _HRESULT_TYPEDEF_(0x800C0200
 
 // Exact code download version requested not found
 cpp_quote("#define INET_E_CANNOT_REPLACE_SFP_FILE   _HRESULT_TYPEDEF_(0x800C0300L)      ")
+
+// NOTE: Please update INET_E_ERROR_LAST if you add an error code with a higher number:
+cpp_quote("#define INET_E_ERROR_LAST                INET_E_CANNOT_REPLACE_SFP_FILE")
 
 //+---------------------------------------------------------------------------
 //
@@ -356,6 +388,38 @@ interface IPersistMoniker : IUnknown
 
 cpp_quote("#endif")
 
+//+---------------------------------------------------------------------------
+//
+//  Copyright (C) Microsoft Corporation, 1995-1998.
+//
+//  Contents:  IMonikerProp interface definition
+//
+//----------------------------------------------------------------------------
+
+cpp_quote("#ifndef _LPMONIKERPROP_DEFINED")
+cpp_quote("#define _LPMONIKERPROP_DEFINED")
+
+[
+        object,
+        uuid(a5ca5f7f-1847-4d87-9c5b-918509f7511d),
+        pointer_default(unique)
+]
+
+interface IMonikerProp : IUnknown
+{
+    typedef [unique] IMonikerProp *LPMONIKERPROP;
+
+    typedef enum {
+        MIMETYPEPROP  = 0x00000000
+    } MONIKERPROPERTY;
+    
+    HRESULT PutProperty (
+        [in] MONIKERPROPERTY mkp,
+        [in] LPCWSTR val
+    );
+}
+
+cpp_quote("#endif")
 
 //+---------------------------------------------------------------------------
 //
@@ -508,8 +572,8 @@ interface IBindStatusCallback: IUnknown
             ,BINDF_FROMURLMON                = 0x00100000
             ,BINDF_FWD_BACK                  = 0x00200000
             
-            ,BINDF_RESERVED_2                = 0x00400000
-            ,BINDF_RESERVED_3                = 0x00800000
+            ,BINDF_PREFERDEFAULTHANDLER      = 0x00400000
+            ,BINDF_ENFORCERESTRICTED         = 0x00800000
                        
             // Note:
             // the highest byte 0x??000000 is used internally
@@ -638,6 +702,20 @@ interface IBindStatusCallback: IUnknown
             ,BINDSTATUS_RAWMIMETYPE
             ,BINDSTATUS_PROXYDETECTING
             ,BINDSTATUS_ACCEPTRANGES
+            ,BINDSTATUS_COOKIE_SENT
+            ,BINDSTATUS_COMPACT_POLICY_RECEIVED
+            ,BINDSTATUS_COOKIE_SUPPRESSED
+            ,BINDSTATUS_COOKIE_STATE_UNKNOWN
+            ,BINDSTATUS_COOKIE_STATE_ACCEPT
+            ,BINDSTATUS_COOKIE_STATE_REJECT
+            ,BINDSTATUS_COOKIE_STATE_PROMPT
+            ,BINDSTATUS_COOKIE_STATE_LEASH
+            ,BINDSTATUS_COOKIE_STATE_DOWNGRADE
+            ,BINDSTATUS_POLICY_HREF
+            ,BINDSTATUS_P3P_HEADER
+            ,BINDSTATUS_SESSION_COOKIE_RECEIVED
+            ,BINDSTATUS_PERSISTENT_COOKIE_RECEIVED
+            ,BINDSTATUS_SESSION_COOKIES_ALLOWED
         } BINDSTATUS;
 
 
@@ -764,6 +842,38 @@ interface IHttpNegotiate : IUnknown
                 [in, unique] LPCWSTR szRequestHeaders,
                 [out]        LPWSTR *pszAdditionalRequestHeaders
                 );
+}
+
+cpp_quote("#endif")
+
+//+---------------------------------------------------------------------------
+//
+//  Copyright (C) Microsoft Corporation, 1995-1998.
+//
+//  Contents:   IHttpNegotiate2 interface definition
+//
+//----------------------------------------------------------------------------
+cpp_quote("#ifndef _LPHTTPNEGOTIATE2_DEFINED")
+cpp_quote("#define _LPHTTPNEGOTIATE2_DEFINED")
+
+[
+    object,
+    uuid(4F9F9FCB-E0F4-48eb-B7AB-FA2EA9365CB4),
+    pointer_default(unique)
+]
+
+interface IHttpNegotiate2 : IHttpNegotiate
+{
+    typedef [unique] IHttpNegotiate2 *LPHTTPNEGOTIATE2;
+
+    HRESULT GetRootSecurityId
+    (
+        [out, size_is(*pcbSecurityId)]
+                BYTE*   pbSecurityId,
+        [in, out]
+                DWORD*  pcbSecurityId,
+        [in]    DWORD_PTR dwReserved
+    );
 }
 
 cpp_quote("#endif")
@@ -1227,6 +1337,7 @@ interface IInternetProtocolRoot : IUnknown
             ,PI_LOADAPPDIRECT                   = 0x00004000
             // flags used in the protocol data on switch
             ,PD_FORCE_SWITCH            = 0x00010000
+            ,PI_PREFERDEFAULTHANDLER            = 0x00020000
             
         } PI_FLAGS;
 
@@ -1858,6 +1969,7 @@ interface IInternetSecurityManager : IUnknown
     );
 
 cpp_quote("#define MUTZ_NOSAVEDFILECHECK 0x00000001 // don't check file: for saved file comment")
+cpp_quote("#define MUTZ_ENFORCERESTRICTED   0x00000100 // enforce restricted zone independent of URL")
 
     HRESULT MapUrlToZone
     (
@@ -1892,6 +2004,7 @@ cpp_quote("#define MAX_SIZE_SECURITY_ID 512 // bytes")
         PUAF_DONTCHECKBOXINDIALOG           = 0x00000020,
         PUAF_TRUSTED                        = 0x00000040,
         PUAF_ACCEPT_WILDCARD_SCHEME         = 0x00000080, 
+        PUAF_ENFORCERESTRICTED              = 0x00000100,
     } PUAF ;
 
     HRESULT     ProcessUrlAction
@@ -2065,7 +2178,9 @@ cpp_quote("#define URLACTION_HTML_FONT_DOWNLOAD                           0x0000
 cpp_quote("#define URLACTION_HTML_JAVA_RUN                                0x00001605 // derive from Java custom policy")
 cpp_quote("#define URLACTION_HTML_USERDATA_SAVE                           0x00001606")
 cpp_quote("#define URLACTION_HTML_SUBFRAME_NAVIGATE                       0x00001607")
-cpp_quote("#define URLACTION_HTML_CURR_MAX                                0x00001607")
+cpp_quote("#define URLACTION_HTML_META_REFRESH                            0x00001608")
+cpp_quote("#define URLACTION_HTML_MIXED_CONTENT                           0x00001609")
+//cpp_quote("#define URLACTION_HTML_CURR_MAX                                0x00001609")
 cpp_quote("#define URLACTION_HTML_MAX                                     0x000017ff")
 cpp_quote("")
 cpp_quote("#define URLACTION_SHELL_MIN                                    0x00001800")
@@ -2094,7 +2209,15 @@ cpp_quote("")
 cpp_quote("#define URLACTION_COOKIES                                      0x00001A02")
 cpp_quote("#define URLACTION_COOKIES_SESSION                              0x00001A03")
 cpp_quote("")
-cpp_quote("#define URLACTION_NETWORK_CURR_MAX                             0x00001A03")
+cpp_quote("#define URLACTION_CLIENT_CERT_PROMPT                           0x00001A04")
+cpp_quote("")
+cpp_quote("#define URLACTION_COOKIES_THIRD_PARTY                          0x00001A05")
+cpp_quote("#define URLACTION_COOKIES_SESSION_THIRD_PARTY                  0x00001A06")
+cpp_quote("")
+cpp_quote("#define URLACTION_COOKIES_ENABLED                              0x00001A10")
+cpp_quote("")
+
+cpp_quote("#define URLACTION_NETWORK_CURR_MAX                             0x00001A10")
 cpp_quote("#define URLACTION_NETWORK_MAX                                  0x00001Bff")
 cpp_quote("")
 cpp_quote("")
@@ -2194,10 +2317,10 @@ interface IInternetZoneManager : IUnknown
     typedef enum tagURLZONE
     {
         URLZONE_PREDEFINED_MIN = 0,
-        URLZONE_LOCAL_MACHINE  = 0,         // local machine zone is not exposed in UI")
-        URLZONE_INTRANET,                   // My Intranet zone")
-        URLZONE_TRUSTED,                    // Trusted Web sites zone")
-        URLZONE_INTERNET,                   // The Internet zone")
+        URLZONE_LOCAL_MACHINE  = 0,         // local machine zone is not exposed in UI
+        URLZONE_INTRANET,                   // My Intranet zone
+        URLZONE_TRUSTED,                    // Trusted Web sites zone
+        URLZONE_INTERNET,                   // The Internet zone
         URLZONE_UNTRUSTED,                                      // Untrusted sites zone
         URLZONE_PREDEFINED_MAX = 999,
 
@@ -2716,4 +2839,32 @@ struct CONFIRMSAFETY
 
 cpp_quote("EXTERN_C const GUID GUID_CUSTOM_CONFIRMOBJECTSAFETY; ")
 
+cpp_quote("#endif")
+
+
+//+---------------------------------------------------------------------------
+//
+//  Copyright (C) Microsoft Corporation, 2000.
+//
+//  Contents:   IWrappedProtocol definition
+//
+//---------------------------------------------------------------------------
+cpp_quote("#ifndef _LPIWRAPPEDPROTOCOL_DEFINED")
+cpp_quote("#define _LPIWRAPPEDPROTOCOL_DEFINED")
+[
+        local,
+        object,
+        uuid(53c84785-8425-4dc5-971b-e58d9c19f9b6),
+        pointer_default(unique)
+]
+
+interface IWrappedProtocol : IUnknown
+{
+        typedef [unique] IWrappedProtocol *LPIWRAPPEDPROTOCOL;
+
+        HRESULT GetWrapperCode(
+            [out] LONG * pnCode,
+            [in]  DWORD_PTR dwReserved
+            );
+}
 cpp_quote("#endif")

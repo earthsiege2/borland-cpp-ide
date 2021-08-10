@@ -1,13 +1,10 @@
-/******************************************************************\
-*                     Microsoft Windows NT                         *
-*               Copyright(c) Microsoft Corp., 1992-1999            *
-\******************************************************************/
-
 /*++
+
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
-    RASSAPI.H
+    rassapi.h
 
 Description:
 
@@ -32,9 +29,7 @@ Note:
 
 --*/
 
-
 #ifndef _RASSAPI_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _RASSAPI_H_
 
 #if _MSC_VER > 1000
@@ -393,6 +388,5 @@ DWORD APIENTRY RasAdminSetUserParms(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _RASSAPI_H_
 

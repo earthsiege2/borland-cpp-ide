@@ -2,7 +2,7 @@
 *                                                                       *
 *   winerror.h --  error code definitions for the Win32 API functions   *
 *                                                                       *
-*   Copyright (c) 1991-1999, Microsoft Corp. All rights reserved.       *
+*   Copyright (c) Microsoft Corp.  All rights reserved.                 *
 *                                                                       *
 ************************************************************************/
 
@@ -10,6 +10,9 @@
 #pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINERROR_
 
+#if defined (_MSC_VER) && (_MSC_VER >= 1020) && !defined(__midl)
+#pragma once
+#endif
 
 //
 //  Values are 32 bit values layed out as follows:
@@ -40,8 +43,11 @@
 //
 // Define the facility codes
 //
+#define FACILITY_WINDOWS_CE              24
 #define FACILITY_WINDOWS                 8
 #define FACILITY_URT                     19
+#define FACILITY_UMI                     22
+#define FACILITY_SXS                     23
 #define FACILITY_STORAGE                 3
 #define FACILITY_SSPI                    9
 #define FACILITY_SCARD                   16
@@ -55,9 +61,14 @@
 #define FACILITY_MEDIASERVER             13
 #define FACILITY_INTERNET                12
 #define FACILITY_ITF                     4
+#define FACILITY_HTTP                    25
+#define FACILITY_DPLAY                   21
 #define FACILITY_DISPATCH                2
+#define FACILITY_CONFIGURATION           33
 #define FACILITY_COMPLUS                 17
 #define FACILITY_CERT                    11
+#define FACILITY_BACKGROUNDCOPY          32
+#define FACILITY_ACS                     20
 #define FACILITY_AAF                     18
 
 
@@ -381,8 +392,7 @@
 // MessageText:
 //
 //  The wrong diskette is in the drive.
-//  Insert %2 (Volume Serial Number: %3)
-//  into drive %1.
+//  Insert %2 (Volume Serial Number: %3) into drive %1.
 //
 #define ERROR_WRONG_DISK                 34L
 
@@ -418,7 +428,7 @@
 //
 // MessageText:
 //
-//  The network request is not supported.
+//  The request is not supported.
 //
 #define ERROR_NOT_SUPPORTED              50L
 
@@ -427,7 +437,7 @@
 //
 // MessageText:
 //
-//  The remote computer is not available.
+//  Windows cannot find the network path. Verify that the network path is correct and the destination computer is not busy or turned off. If Windows still cannot find the network path, contact your network administrator.
 //
 #define ERROR_REM_NOT_LIST               51L
 
@@ -436,7 +446,7 @@
 //
 // MessageText:
 //
-//  A duplicate name exists on the network.
+//  You were not connected because a duplicate name exists on the network. Go to System in Control Panel to change the computer name and try again.
 //
 #define ERROR_DUP_NAME                   52L
 
@@ -778,8 +788,7 @@
 //
 // MessageText:
 //
-//  The disk is in use or locked by
-//  another process.
+//  The disk is in use or locked by another process.
 //
 #define ERROR_DRIVE_LOCKED               108L
 
@@ -797,8 +806,7 @@
 //
 // MessageText:
 //
-//  The system cannot open the
-//  device or file specified.
+//  The system cannot open the device or file specified.
 //
 #define ERROR_OPEN_FAILED                110L
 
@@ -1176,8 +1184,7 @@
 //
 // MessageText:
 //
-//  The volume label you entered exceeds the label character
-//  limit of the target file system.
+//  The volume label you entered exceeds the label character limit of the target file system.
 //
 #define ERROR_LABEL_TOO_LONG             154L
 
@@ -1231,7 +1238,7 @@
 //
 // MessageText:
 //
-//  The argument string passed to DosExecPgm is not correct.
+//  One or more arguments are not correct.
 //
 #define ERROR_BAD_ARGUMENTS              160L
 
@@ -1278,7 +1285,7 @@
 //
 //  The requested resource is in use.
 //
-#define ERROR_BUSY                       170L
+#define ERROR_BUSY                       170L    // dderror
 
 //
 // MessageId: ERROR_CANCEL_VIOLATION
@@ -1483,8 +1490,7 @@
 //
 // MessageText:
 //
-//  The system could not find the environment
-//  option that was entered.
+//  The system could not find the environment option that was entered.
 //
 #define ERROR_ENVVAR_NOT_FOUND           203L
 
@@ -1493,8 +1499,7 @@
 //
 // MessageText:
 //
-//  No process in the command subtree has a
-//  signal handler.
+//  No process in the command subtree has a signal handler.
 //
 #define ERROR_NO_SIGNAL_SENT             205L
 
@@ -1658,7 +1663,7 @@
 //
 //  The wait operation timed out.
 //
-#define WAIT_TIMEOUT                     258L
+#define WAIT_TIMEOUT                     258L    // dderror
 
 //
 // MessageId: ERROR_NO_MORE_ITEMS
@@ -1776,6 +1781,24 @@
 //  An invalid oplock acknowledgment was received by the system.
 //
 #define ERROR_INVALID_OPLOCK_PROTOCOL    301L
+
+//
+// MessageId: ERROR_DISK_TOO_FRAGMENTED
+//
+// MessageText:
+//
+//  The volume is too fragmented to complete this operation.
+//
+#define ERROR_DISK_TOO_FRAGMENTED        302L
+
+//
+// MessageId: ERROR_DELETE_PENDING
+//
+// MessageText:
+//
+//  The file cannot be opened because it is in the process of being deleted.
+//
+#define ERROR_DELETE_PENDING             303L
 
 //
 // MessageId: ERROR_MR_MID_NOT_FOUND
@@ -2374,6 +2397,15 @@
 #define ERROR_SERVICE_NOT_IN_EXE         1083L
 
 //
+// MessageId: ERROR_NOT_SAFEBOOT_SERVICE
+//
+// MessageText:
+//
+//  This service cannot be started in Safe Mode
+//
+#define ERROR_NOT_SAFEBOOT_SERVICE       1084L
+
+//
 // MessageId: ERROR_END_OF_MEDIA
 //
 // MessageText:
@@ -2916,15 +2948,6 @@
 #define ERROR_NO_VOLUME_ID               1173L
 
 //
-// MessageId: ERROR_INVALID_VLM_OPERATION
-//
-// MessageText:
-//
-//  The specified Very Large Memory (64-bit) operation is invalid.
-//
-#define ERROR_INVALID_VLM_OPERATION      1174L
-
-//
 // MessageId: ERROR_UNABLE_TO_REMOVE_REPLACED
 //
 // MessageText:
@@ -2965,7 +2988,7 @@
 //
 // MessageText:
 //
-//  The volume change journal service is not active.
+//  The volume change journal is not active.
 //
 #define ERROR_JOURNAL_NOT_ACTIVE         1179L
 
@@ -3010,7 +3033,7 @@
 //
 // MessageText:
 //
-//  An attempt was made to remember a device that had previously been remembered.
+//  The local device name has a remembered connection to another network resource.
 //
 #define ERROR_DEVICE_ALREADY_REMEMBERED  1202L
 
@@ -3163,7 +3186,7 @@
 //
 // MessageText:
 //
-//  The credentials supplied conflict with an existing set of credentials.
+//  Multiple connections to a server or shared resource by the same user, using more than one user name, are not allowed. Disconnect all previous connections to the server or shared resource and try again..
 //
 #define ERROR_SESSION_CREDENTIAL_CONFLICT 1219L
 
@@ -3483,6 +3506,210 @@
 //
 #define ERROR_NOT_SUPPORTED_ON_SBS       1254L
 
+//
+// MessageId: ERROR_SERVER_SHUTDOWN_IN_PROGRESS
+//
+// MessageText:
+//
+//  The server machine is shutting down.
+//
+#define ERROR_SERVER_SHUTDOWN_IN_PROGRESS 1255L
+
+//
+// MessageId: ERROR_HOST_DOWN
+//
+// MessageText:
+//
+//  The remote system is not available. For information about network troubleshooting, see Windows Help.
+//
+#define ERROR_HOST_DOWN                  1256L
+
+//
+// MessageId: ERROR_NON_ACCOUNT_SID
+//
+// MessageText:
+//
+//  The security identifier provided is not from an account domain.
+//
+#define ERROR_NON_ACCOUNT_SID            1257L
+
+//
+// MessageId: ERROR_NON_DOMAIN_SID
+//
+// MessageText:
+//
+//  The security identifier provided does not have a domain component.
+//
+#define ERROR_NON_DOMAIN_SID             1258L
+
+//
+// MessageId: ERROR_APPHELP_BLOCK
+//
+// MessageText:
+//
+//  AppHelp dialog canceled thus preventing the application from starting.
+//
+#define ERROR_APPHELP_BLOCK              1259L
+
+//
+// MessageId: ERROR_ACCESS_DISABLED_BY_POLICY
+//
+// MessageText:
+//
+//  Windows cannot open this program because it has been prevented by a software restriction policy. For more information, open Event Viewer or contact your system administrator.
+//
+#define ERROR_ACCESS_DISABLED_BY_POLICY  1260L
+
+//
+// MessageId: ERROR_REG_NAT_CONSUMPTION
+//
+// MessageText:
+//
+//  A program attempt to use an invalid register value.  Normally caused by an uninitialized register. This error is Itanium specific.
+//
+#define ERROR_REG_NAT_CONSUMPTION        1261L
+
+//
+// MessageId: ERROR_CSCSHARE_OFFLINE
+//
+// MessageText:
+//
+//  The share is currently offline or does not exist.
+//
+#define ERROR_CSCSHARE_OFFLINE           1262L
+
+//
+// MessageId: ERROR_PKINIT_FAILURE
+//
+// MessageText:
+//
+//  The kerberos protocol encountered an error while validating the
+//  KDC certificate during smartcard logon.
+//
+#define ERROR_PKINIT_FAILURE             1263L
+
+//
+// MessageId: ERROR_SMARTCARD_SUBSYSTEM_FAILURE
+//
+// MessageText:
+//
+//  The kerberos protocol encountered an error while attempting to utilize
+//  the smartcard subsystem.
+//
+#define ERROR_SMARTCARD_SUBSYSTEM_FAILURE 1264L
+
+//
+// MessageId: ERROR_DOWNGRADE_DETECTED
+//
+// MessageText:
+//
+//  The system detected a possible attempt to compromise security. Please ensure that you can contact the server that authenticated you.
+//
+#define ERROR_DOWNGRADE_DETECTED         1265L
+
+//
+// MessageId: SEC_E_SMARTCARD_CERT_REVOKED
+//
+// MessageText:
+//
+//  The smartcard certificate used for authentication has been revoked. 
+//  Please contact your system administrator.  There may be additional information in the 
+//  event log.
+//
+#define SEC_E_SMARTCARD_CERT_REVOKED     1266L
+
+//
+// MessageId: SEC_E_ISSUING_CA_UNTRUSTED
+//
+// MessageText:
+//
+//  An untrusted certificate authority was detected While processing the 
+//  smartcard certificate used for authentication.  Please contact your system 
+//  administrator. 
+//
+#define SEC_E_ISSUING_CA_UNTRUSTED       1267L
+
+//
+// MessageId: SEC_E_REVOCATION_OFFLINE_C
+//
+// MessageText:
+//
+//  The revocation status of the smartcard certificate used for 
+//  authentication could not be determined. Please contact your system administrator.
+//
+#define SEC_E_REVOCATION_OFFLINE_C       1268L
+
+//
+// MessageId: SEC_E_PKINIT_CLIENT_FAILURE
+//
+// MessageText:
+//
+//  The smartcard certificate used for authentication was not trusted.  Please 
+//  contact your system administrator.
+//
+#define SEC_E_PKINIT_CLIENT_FAILURE      1269L
+
+//
+// MessageId: SEC_E_SMARTCARD_CERT_EXPIRED
+//
+// MessageText:
+//
+//  The smartcard certificate used for authentication has expired.  Please 
+//  contact your system administrator.
+//
+#define SEC_E_SMARTCARD_CERT_EXPIRED     1270L
+
+//
+// MessageId: ERROR_MACHINE_LOCKED
+//
+// MessageText:
+//
+//  The machine is locked and can not be shut down without the force option.
+//
+#define ERROR_MACHINE_LOCKED             1271L
+
+//
+// MessageId: ERROR_CALLBACK_SUPPLIED_INVALID_DATA
+//
+// MessageText:
+//
+//  An application-defined callback gave invalid data when called.
+//
+#define ERROR_CALLBACK_SUPPLIED_INVALID_DATA 1273L
+
+//
+// MessageId: ERROR_SYNC_FOREGROUND_REFRESH_REQUIRED
+//
+// MessageText:
+//
+//  The group policy framework should call the extension in the synchronous foreground policy refresh.
+//
+#define ERROR_SYNC_FOREGROUND_REFRESH_REQUIRED 1274L
+
+//
+// MessageId: ERROR_DRIVER_BLOCKED
+//
+// MessageText:
+//
+//  This driver has been blocked from loading
+//
+#define ERROR_DRIVER_BLOCKED             1275L
+
+//
+// MessageId: ERROR_INVALID_IMPORT_OF_NON_DLL
+//
+// MessageText:
+//
+//  A dynamic link library (DLL) referenced a module that was neither a DLL nor the process's executable image.
+//
+#define ERROR_INVALID_IMPORT_OF_NON_DLL  1276L
+
+
+///////////////////////////
+//
+// Add new status codes before this point unless there is a component specific section below.
+//
+///////////////////////////
 
 
 ///////////////////////////
@@ -3740,7 +3967,7 @@
 //
 // MessageText:
 //
-//  Logon failure: user account restriction.
+//  Logon failure: user account restriction.  Possible reasons are blank passwords not allowed, logon hour restrictions, or a policy restriction has been enforced.
 //
 #define ERROR_ACCOUNT_RESTRICTION        1327L
 
@@ -4371,9 +4598,18 @@
 //
 // MessageText:
 //
-//  There is a time difference between the client and server.
+//  There is a time and/or date difference between the client and server.
 //
 #define ERROR_TIME_SKEW                  1398L
+
+//
+// MessageId: ERROR_CURRENT_DOMAIN_NOT_ALLOWED
+//
+// MessageText:
+//
+//  This operation can not be performed on the current domain.
+//
+#define ERROR_CURRENT_DOMAIN_NOT_ALLOWED 1399L
 
 // End of security error codes
 
@@ -5007,7 +5243,7 @@
 //
 // MessageText:
 //
-//  The Windows Installer service could not be accessed.  Contact your support personnel to verify that the Windows Installer service is properly registered.
+//  The Windows Installer Service could not be accessed. This can occur if you are running Windows in safe mode, or if the Windows Installer is not correctly installed. Contact your support personnel for assistance.
 //
 #define ERROR_INSTALL_SERVICE_FAILURE    1601L
 
@@ -5286,7 +5522,7 @@
 //
 // MessageText:
 //
-//  The temp folder is either full or inaccessible.  Verify that the temp folder exists and that you can write to it.
+//  The Temp folder is on a drive that is full or is inaccessible. Free up space on the drive or verify that you have write permission on the Temp folder.
 //
 #define ERROR_INSTALL_TEMP_UNWRITABLE    1632L
 
@@ -5376,9 +5612,28 @@
 //
 // MessageText:
 //
-//  The upgrade patch cannot be installed by the Windows Installer service because the program to be upgraded may be missing, or the upgrade patch may update a different version of the program. Verify that the program to be upgraded exists on your computer and that you have the correct upgrade patch.
+//  The upgrade patch cannot be installed by the Windows Installer service because the program to be upgraded may be missing, or the upgrade patch may update a different version of the program. Verify that the program to be upgraded exists on your computer an
+//  d that you have the correct upgrade patch.
 //
 #define ERROR_PATCH_TARGET_NOT_FOUND     1642L
+
+//
+// MessageId: ERROR_PATCH_PACKAGE_REJECTED
+//
+// MessageText:
+//
+//  The patch package is not permitted by software restriction policy.
+//
+#define ERROR_PATCH_PACKAGE_REJECTED     1643L
+
+//
+// MessageId: ERROR_INSTALL_TRANSFORM_REJECTED
+//
+// MessageText:
+//
+//  One or more customizations are not permitted by software restriction policy.
+//
+#define ERROR_INSTALL_TRANSFORM_REJECTED 1644L
 
 // End of MSI error codes
 
@@ -6841,13 +7096,22 @@
 #define RPC_S_GRP_ELT_NOT_REMOVED        1929L
 
 //
-// MessageId: ERROR_NO_BROWSER_SERVERS_FOUND
+// MessageId: ERROR_KM_DRIVER_BLOCKED
 //
 // MessageText:
 //
-//  The list of servers for this workgroup is not currently available
+//  The printer driver is not compatible with a policy enabled on your computer that blocks NT 4.0 drivers.
 //
-#define ERROR_NO_BROWSER_SERVERS_FOUND   6118L
+#define ERROR_KM_DRIVER_BLOCKED          1930L
+
+//
+// MessageId: ERROR_CONTEXT_EXPIRED
+//
+// MessageText:
+//
+//  The context has expired and can no longer be used.
+//
+#define ERROR_CONTEXT_EXPIRED            1931L
 
 
 
@@ -7048,6 +7312,8 @@
 //                       //
 // Winnet32 Status Codes //
 //                       //
+// The range 2100 through 2999 is reserved for network status codes.
+// See lmerr.h for a complete listing
 ///////////////////////////
 
 
@@ -7059,6 +7325,15 @@
 //  The network connection was made successfully, but the user had to be prompted for a password other than the one originally specified.
 //
 #define ERROR_CONNECTED_OTHER_PASSWORD   2108L
+
+//
+// MessageId: ERROR_CONNECTED_OTHER_PASSWORD_DEFAULT
+//
+// MessageText:
+//
+//  The network connection was made successfully using default credentials.
+//
+#define ERROR_CONNECTED_OTHER_PASSWORD_DEFAULT 2109L
 
 //
 // MessageId: ERROR_BAD_USERNAME
@@ -7227,6 +7502,24 @@
 //  No printers were found.
 //
 #define ERROR_PRINTER_NOT_FOUND          3012L
+
+//
+// MessageId: ERROR_PRINTER_DRIVER_WARNED
+//
+// MessageText:
+//
+//  The printer driver is known to be unreliable.
+//
+#define ERROR_PRINTER_DRIVER_WARNED      3013L
+
+//
+// MessageId: ERROR_PRINTER_DRIVER_BLOCKED
+//
+// MessageText:
+//
+//  The printer driver is known to harm the system.
+//
+#define ERROR_PRINTER_DRIVER_BLOCKED     3014L
 
 ////////////////////////////////////
 //                                //
@@ -7815,6 +8108,15 @@
 //
 #define ERROR_NO_SUPPORTING_DRIVES       4339L
 
+//
+// MessageId: ERROR_CLEANER_CARTRIDGE_INSTALLED
+//
+// MessageText:
+//
+//  A cleaner cartridge is present in the tape library.
+//
+#define ERROR_CLEANER_CARTRIDGE_INSTALLED 4340L
+
 ////////////////////////////////////////////
 //                                        //
 // NT Remote Storage Service Error Codes  //
@@ -7994,7 +8296,7 @@
 //
 // MessageText:
 //
-//  A cluster node cannot be evicted from the cluster while it is online.
+//  A cluster node cannot be evicted from the cluster unless the node is down or it is the last node.
 //
 #define ERROR_CANT_EVICT_ACTIVE_NODE     5009L
 
@@ -8709,6 +9011,109 @@
 //
 #define ERROR_RESOURCE_PROPERTY_UNCHANGEABLE 5089L
 
+/*
+ Codes from 4300 through 5889 overlap with codes in ds\published\inc\apperr2.w.
+ Do not add any more error codes in that range.
+*/
+//
+// MessageId: ERROR_CLUSTER_MEMBERSHIP_INVALID_STATE
+//
+// MessageText:
+//
+//  An operation was attempted that is incompatible with the current membership state of the node.
+//
+#define ERROR_CLUSTER_MEMBERSHIP_INVALID_STATE 5890L
+
+//
+// MessageId: ERROR_CLUSTER_QUORUMLOG_NOT_FOUND
+//
+// MessageText:
+//
+//  The quorum resource does not contain the quorum log.
+//
+#define ERROR_CLUSTER_QUORUMLOG_NOT_FOUND 5891L
+
+//
+// MessageId: ERROR_CLUSTER_MEMBERSHIP_HALT
+//
+// MessageText:
+//
+//  The membership engine requested shutdown of the cluster service on this node.
+//
+#define ERROR_CLUSTER_MEMBERSHIP_HALT    5892L
+
+//
+// MessageId: ERROR_CLUSTER_INSTANCE_ID_MISMATCH
+//
+// MessageText:
+//
+//  The join operation failed because the cluster instance ID of the joining node does not match the cluster instance ID of the sponsor node.
+//
+#define ERROR_CLUSTER_INSTANCE_ID_MISMATCH 5893L
+
+//
+// MessageId: ERROR_CLUSTER_NETWORK_NOT_FOUND_FOR_IP
+//
+// MessageText:
+//
+//  A matching network for the specified IP address could not be found. Please also specify a subnet mask and a cluster network.
+//
+#define ERROR_CLUSTER_NETWORK_NOT_FOUND_FOR_IP 5894L
+
+//
+// MessageId: ERROR_CLUSTER_PROPERTY_DATA_TYPE_MISMATCH
+//
+// MessageText:
+//
+//  The actual data type of the property did not match the expected data type of the property.
+//
+#define ERROR_CLUSTER_PROPERTY_DATA_TYPE_MISMATCH 5895L
+
+//
+// MessageId: ERROR_CLUSTER_EVICT_WITHOUT_CLEANUP
+//
+// MessageText:
+//
+//  The cluster node was evicted from the cluster successfully, but the node was not cleaned up.  Extended status information explaining why the node was not cleaned up is available.
+//
+#define ERROR_CLUSTER_EVICT_WITHOUT_CLEANUP 5896L
+
+//
+// MessageId: ERROR_CLUSTER_PARAMETER_MISMATCH
+//
+// MessageText:
+//
+//  Two or more parameter values specified for a resource's properties are in conflict.
+//
+#define ERROR_CLUSTER_PARAMETER_MISMATCH 5897L
+
+//
+// MessageId: ERROR_NODE_CANNOT_BE_CLUSTERED
+//
+// MessageText:
+//
+//  This computer cannot be made a member of a cluster.
+//
+#define ERROR_NODE_CANNOT_BE_CLUSTERED   5898L
+
+//
+// MessageId: ERROR_CLUSTER_WRONG_OS_VERSION
+//
+// MessageText:
+//
+//  This computer cannot be made a member of a cluster because it does not have the correct version of Windows installed.
+//
+#define ERROR_CLUSTER_WRONG_OS_VERSION   5899L
+
+//
+// MessageId: ERROR_CLUSTER_CANT_CREATE_DUP_CLUSTER_NAME
+//
+// MessageText:
+//
+//  A cluster cannot be created with the specified cluster name because that cluster name is already in use. Specify a different name for the cluster.
+//
+#define ERROR_CLUSTER_CANT_CREATE_DUP_CLUSTER_NAME 5900L
+
 ////////////////////////////////////
 //                                //
 //     EFS Error Codes            //
@@ -8821,6 +9226,61 @@
 //  The server is not trusted for remote encryption operation.
 //
 #define ERROR_EFS_SERVER_NOT_TRUSTED     6011L
+
+//
+// MessageId: ERROR_BAD_RECOVERY_POLICY
+//
+// MessageText:
+//
+//  Recovery policy configured for this system contains invalid recovery certificate.
+//
+#define ERROR_BAD_RECOVERY_POLICY        6012L
+
+//
+// MessageId: ERROR_EFS_ALG_BLOB_TOO_BIG
+//
+// MessageText:
+//
+//  The encryption algorithm used on the source file needs a bigger key buffer than the one on the destination file.
+//
+#define ERROR_EFS_ALG_BLOB_TOO_BIG       6013L
+
+//
+// MessageId: ERROR_VOLUME_NOT_SUPPORT_EFS
+//
+// MessageText:
+//
+//  The disk partition does not support file encryption.
+//
+#define ERROR_VOLUME_NOT_SUPPORT_EFS     6014L
+
+//
+// MessageId: ERROR_EFS_DISABLED
+//
+// MessageText:
+//
+//  This machine is disabled for file encryption.
+//
+#define ERROR_EFS_DISABLED               6015L
+
+//
+// MessageId: ERROR_EFS_VERSION_NOT_SUPPORT
+//
+// MessageText:
+//
+//  A newer system is required to decrypt this encrypted file.
+//
+#define ERROR_EFS_VERSION_NOT_SUPPORT    6016L
+
+// This message number is for historical purposes and cannot be changed or re-used.
+//
+// MessageId: ERROR_NO_BROWSER_SERVERS_FOUND
+//
+// MessageText:
+//
+//  The list of servers for this workgroup is not currently available
+//
+#define ERROR_NO_BROWSER_SERVERS_FOUND   6118L
 
 //////////////////////////////////////////////////////////////////
 //                                                              //
@@ -9120,7 +9580,7 @@
 // MessageText:
 //
 //  The requested session cannot be controlled remotely.
-//  This may be because the session is disconnected or does not currently have a user logged on. Also, you cannot control a session remotely from the system console or control the system console remotely. And you cannot remote control your own current session.
+//  This may be because the session is disconnected or does not currently have a user logged on.
 //
 #define ERROR_CTX_SHADOW_INVALID         7050L
 
@@ -9139,7 +9599,7 @@
 // MessageText:
 //
 //  Your request to connect to this Terminal Server has been rejected. Your Terminal Server client license number is currently being used by another user.
-//  Please call your system administrator to obtain a new copy of the Terminal Server client with a valid, unique license number.
+//  Please call your system administrator to obtain a unique license number.
 //
 #define ERROR_CTX_CLIENT_LICENSE_IN_USE  7052L
 
@@ -9149,7 +9609,7 @@
 // MessageText:
 //
 //  Your request to connect to this Terminal Server has been rejected. Your Terminal Server client license number has not been entered for this copy of the Terminal Server client.
-//  Please call your system administrator for help in entering a valid, unique license number for this Terminal Server client.
+//  Please contact your system administrator.
 //
 #define ERROR_CTX_CLIENT_LICENSE_NOT_SET 7053L
 
@@ -9180,6 +9640,24 @@
 //  The system license has expired.  Your logon request is denied.
 //
 #define ERROR_CTX_LICENSE_EXPIRED        7056L
+
+//
+// MessageId: ERROR_CTX_SHADOW_NOT_RUNNING
+//
+// MessageText:
+//
+//  Remote control could not be terminated because the specified session is not currently being remotely controlled.
+//
+#define ERROR_CTX_SHADOW_NOT_RUNNING     7057L
+
+//
+// MessageId: ERROR_CTX_SHADOW_ENDED_BY_MODE_CHANGE
+//
+// MessageText:
+//
+//  The remote control of the console was terminated because the display mode was changed. Changing the display mode in a remote control session is not supported.
+//
+#define ERROR_CTX_SHADOW_ENDED_BY_MODE_CHANGE 7058L
 
 ///////////////////////////////////////////////////
 //                                                /
@@ -9909,6 +10387,24 @@
 #define ERROR_DS_REFERRAL_LIMIT_EXCEEDED 8260L
 
 //
+// MessageId: ERROR_DS_SORT_CONTROL_MISSING
+//
+// MessageText:
+//
+//  The search requires a SORT control.
+//
+#define ERROR_DS_SORT_CONTROL_MISSING    8261L
+
+//
+// MessageId: ERROR_DS_OFFSET_RANGE_ERROR
+//
+// MessageText:
+//
+//  The search results exceed the offset range specified.
+//
+#define ERROR_DS_OFFSET_RANGE_ERROR      8262L
+
+//
 // MessageId: ERROR_DS_ROOT_MUST_BE_NC
 //
 // MessageText:
@@ -10175,8 +10671,7 @@
 //
 // MessageText:
 //
-//  The object and parent must be of the same type, either both masters or
-//  both replicas.
+//  The object and parent must be of the same type, either both masters or both replicas.
 //
 #define ERROR_DS_CANT_MIX_MASTER_AND_REPS 8331L
 
@@ -10243,7 +10738,15 @@
 //
 #define ERROR_DS_OUT_OF_SCOPE            8338L
 
-// 8339 unused
+//
+// MessageId: ERROR_DS_OBJECT_BEING_REMOVED
+//
+// MessageText:
+//
+//  The operation cannot continue because the object is in the process of being removed.
+//
+#define ERROR_DS_OBJECT_BEING_REMOVED    8339L
+
 //
 // MessageId: ERROR_DS_CANT_DELETE_DSA_OBJ
 //
@@ -11392,7 +11895,7 @@
 //
 // MessageText:
 //
-//  A schema mismatch is detected between the source and the build used during a replica install. The replica cannot be installed.
+//  The version of the Active Directory schema of the source forest is not compatible with the version of Active Directory on this computer.  You must upgrade the operating system on a domain controller in the source forest before this computer can be added as a domain controller to that forest.
 //
 #define ERROR_DS_INSTALL_SCHEMA_MISMATCH 8467L
 
@@ -11644,7 +12147,7 @@
 //
 // MessageText:
 //
-//  The directory cannot validate the proposed naming context name because it does not hold a replica of the naming context above the proposed naming context.  Please ensure that the domain naming master role is held by a server that is configured as a global catalog server, and that the server is up to date with its replication partners.
+//  The directory cannot validate the proposed naming context name because it does not hold a replica of the naming context above the proposed naming context.  Please ensure that the domain naming master role is held by a server that is configured as a global catalog server, and that the server is up to date with its replication partners. (Applies only to Windows 2000 Domain Naming masters)
 //
 #define ERROR_DS_CR_IMPOSSIBLE_TO_VALIDATE 8495L
 
@@ -11671,7 +12174,7 @@
 //
 // MessageText:
 //
-//  Cross-domain move of account groups is not allowed.
+//  Cross-domain move of non-empty account groups is not allowed.
 //
 #define ERROR_DS_CANT_MOVE_ACCOUNT_GROUP 8498L
 
@@ -11680,7 +12183,7 @@
 //
 // MessageText:
 //
-//  Cross-domain move of resource groups is not allowed.
+//  Cross-domain move of non-empty resource groups is not allowed.
 //
 #define ERROR_DS_CANT_MOVE_RESOURCE_GROUP 8499L
 
@@ -11771,7 +12274,7 @@
 //
 // MessageText:
 //
-//  Schema update is not allowed on this DC. Either the registry key is not set or the DC is not the schema FSMO Role Owner.
+//  Schema update is not allowed on this DC because the DC is not the schema FSMO Role Owner.
 //
 #define ERROR_DS_SCHEMA_UPDATE_DISALLOWED 8509L
 
@@ -11897,7 +12400,7 @@
 //
 // MessageText:
 //
-//  Only DSAs configured to be Global Catalog servers should be allowed to hold the Domain Naming Master FSMO role.
+//  Only DSAs configured to be Global Catalog servers should be allowed to hold the Domain Naming Master FSMO role. (Applies only to Windows 2000 servers)
 //
 #define ERROR_DS_NAMING_MASTER_GC        8523L
 
@@ -12078,8 +12581,7 @@
 //
 // MessageText:
 //
-//  The replication operation could not be completed due to a schema
-//  incompatibility.
+//  The replication operation could not be completed due to a schema incompatibility.
 //
 #define ERROR_DS_DRA_SCHEMA_CONFLICT     8543L
 
@@ -12223,7 +12725,7 @@
 //
 // MessageText:
 //
-//  For security reasons, the source DC must be Service Pack 4 or greater.
+//  For security reasons, the source DC must be NT4SP4 or greater.
 //
 #define ERROR_DS_SRC_DC_MUST_BE_SP4_OR_GREATER 8559L
 
@@ -12235,6 +12737,380 @@
 //  Critical Directory Service System objects cannot be deleted during tree delete operations.  The tree delete may have been partially performed.
 //
 #define ERROR_DS_CANT_TREE_DELETE_CRITICAL_OBJ 8560L
+
+//
+// MessageId: ERROR_DS_INIT_FAILURE_CONSOLE
+//
+// MessageText:
+//
+//  Directory Services could not start because of the following error: %1.
+//  Error Status: 0x%2. Please click OK to shutdown the system. You can use the recovery console to diagnose the system further.
+//
+#define ERROR_DS_INIT_FAILURE_CONSOLE    8561L
+
+//
+// MessageId: ERROR_DS_SAM_INIT_FAILURE_CONSOLE
+//
+// MessageText:
+//
+//  Security Accounts Manager initialization failed because of the following error: %1.
+//  Error Status: 0x%2. Please click OK to shutdown the system. You can use the recovery console to diagnose the system further.
+//
+#define ERROR_DS_SAM_INIT_FAILURE_CONSOLE 8562L
+
+//
+// MessageId: ERROR_DS_FOREST_VERSION_TOO_HIGH
+//
+// MessageText:
+//
+//  This version of Windows is too old to support the current directory forest behavior.  You must upgrade the operating system on this server before it can become a domain controller in this forest.
+//
+#define ERROR_DS_FOREST_VERSION_TOO_HIGH 8563L
+
+//
+// MessageId: ERROR_DS_DOMAIN_VERSION_TOO_HIGH
+//
+// MessageText:
+//
+//  This version of Windows is too old to support the current domain behavior.  You must upgrade the operating system on this server before it can become a domain controller in this domain.
+//
+#define ERROR_DS_DOMAIN_VERSION_TOO_HIGH 8564L
+
+//
+// MessageId: ERROR_DS_FOREST_VERSION_TOO_LOW
+//
+// MessageText:
+//
+//  This version of Windows no longer supports the behavior version in use in this directory forest.  You must advance the forest behavior version before this server can become a domain controller in the forest.
+//
+#define ERROR_DS_FOREST_VERSION_TOO_LOW  8565L
+
+//
+// MessageId: ERROR_DS_DOMAIN_VERSION_TOO_LOW
+//
+// MessageText:
+//
+//  This version of Windows no longer supports the behavior version in use in this domain.  You must advance the domain behavior version before this server can become a domain controller in the domain.
+//
+#define ERROR_DS_DOMAIN_VERSION_TOO_LOW  8566L
+
+//
+// MessageId: ERROR_DS_INCOMPATIBLE_VERSION
+//
+// MessageText:
+//
+//  The version of Windows is incompatible with the behavior version of the domain or forest.
+//
+#define ERROR_DS_INCOMPATIBLE_VERSION    8567L
+
+//
+// MessageId: ERROR_DS_LOW_DSA_VERSION
+//
+// MessageText:
+//
+//  The behavior version cannot be increased to the requested value because Domain Controllers still exist with versions lower than the requested value.
+//
+#define ERROR_DS_LOW_DSA_VERSION         8568L
+
+//
+// MessageId: ERROR_DS_NO_BEHAVIOR_VERSION_IN_MIXEDDOMAIN
+//
+// MessageText:
+//
+//  The behavior version value cannot be increased while the domain is still in mixed domain mode.  You must first change the domain to native mode before increasing the behavior version.
+//
+#define ERROR_DS_NO_BEHAVIOR_VERSION_IN_MIXEDDOMAIN 8569L
+
+//
+// MessageId: ERROR_DS_NOT_SUPPORTED_SORT_ORDER
+//
+// MessageText:
+//
+//  The sort order requested is not supported.
+//
+#define ERROR_DS_NOT_SUPPORTED_SORT_ORDER 8570L
+
+//
+// MessageId: ERROR_DS_NAME_NOT_UNIQUE
+//
+// MessageText:
+//
+//  Found an object with a non unique name.
+//
+#define ERROR_DS_NAME_NOT_UNIQUE         8571L
+
+//
+// MessageId: ERROR_DS_MACHINE_ACCOUNT_CREATED_PRENT4
+//
+// MessageText:
+//
+//  The machine account was created pre-NT4.  The account needs to be recreated.
+//
+#define ERROR_DS_MACHINE_ACCOUNT_CREATED_PRENT4 8572L
+
+//
+// MessageId: ERROR_DS_OUT_OF_VERSION_STORE
+//
+// MessageText:
+//
+//  The database is out of version store.
+//
+#define ERROR_DS_OUT_OF_VERSION_STORE    8573L
+
+//
+// MessageId: ERROR_DS_INCOMPATIBLE_CONTROLS_USED
+//
+// MessageText:
+//
+//  Unable to continue operation because multiple conflicting controls were used.
+//
+#define ERROR_DS_INCOMPATIBLE_CONTROLS_USED 8574L
+
+//
+// MessageId: ERROR_DS_NO_REF_DOMAIN
+//
+// MessageText:
+//
+//  Unable to find a valid security descriptor reference domain for this partition.
+//
+#define ERROR_DS_NO_REF_DOMAIN           8575L
+
+//
+// MessageId: ERROR_DS_RESERVED_LINK_ID
+//
+// MessageText:
+//
+//  Schema update failed: The link identifier is reserved.
+//
+#define ERROR_DS_RESERVED_LINK_ID        8576L
+
+//
+// MessageId: ERROR_DS_LINK_ID_NOT_AVAILABLE
+//
+// MessageText:
+//
+//  Schema update failed: There are no link identifiers available.
+//
+#define ERROR_DS_LINK_ID_NOT_AVAILABLE   8577L
+
+//
+// MessageId: ERROR_DS_AG_CANT_HAVE_UNIVERSAL_MEMBER
+//
+// MessageText:
+//
+//  A account group can not have a universal group as a member.
+//
+#define ERROR_DS_AG_CANT_HAVE_UNIVERSAL_MEMBER 8578L
+
+//
+// MessageId: ERROR_DS_MODIFYDN_DISALLOWED_BY_INSTANCE_TYPE
+//
+// MessageText:
+//
+//  Rename or move operations on naming context heads or read-only objects are not allowed.
+//
+#define ERROR_DS_MODIFYDN_DISALLOWED_BY_INSTANCE_TYPE 8579L
+
+//
+// MessageId: ERROR_DS_NO_OBJECT_MOVE_IN_SCHEMA_NC
+//
+// MessageText:
+//
+//  Move operations on objects in the schema naming context are not allowed.
+//
+#define ERROR_DS_NO_OBJECT_MOVE_IN_SCHEMA_NC 8580L
+
+//
+// MessageId: ERROR_DS_MODIFYDN_DISALLOWED_BY_FLAG
+//
+// MessageText:
+//
+//  A system flag has been set on the object and does not allow the object to be moved or renamed.
+//
+#define ERROR_DS_MODIFYDN_DISALLOWED_BY_FLAG 8581L
+
+//
+// MessageId: ERROR_DS_MODIFYDN_WRONG_GRANDPARENT
+//
+// MessageText:
+//
+//  This object is not allowed to change its grandparent container. Moves are not forbidden on this object, but are restricted to sibling containers.
+//
+#define ERROR_DS_MODIFYDN_WRONG_GRANDPARENT 8582L
+
+//
+// MessageId: ERROR_DS_NAME_ERROR_TRUST_REFERRAL
+//
+// MessageText:
+//
+//  Unable to resolve completely, a referral to another forest is generated.
+//
+#define ERROR_DS_NAME_ERROR_TRUST_REFERRAL 8583L
+
+//
+// MessageId: ERROR_NOT_SUPPORTED_ON_STANDARD_SERVER
+//
+// MessageText:
+//
+//  The requested action is not supported on standard server.
+//
+#define ERROR_NOT_SUPPORTED_ON_STANDARD_SERVER 8584L
+
+//
+// MessageId: ERROR_DS_CANT_ACCESS_REMOTE_PART_OF_AD
+//
+// MessageText:
+//
+//  Could not access a partition of the Active Directory located on a remote server.  Make sure at least one server is running for the partition in question.
+//
+#define ERROR_DS_CANT_ACCESS_REMOTE_PART_OF_AD 8585L
+
+//
+// MessageId: ERROR_DS_CR_IMPOSSIBLE_TO_VALIDATE_V2
+//
+// MessageText:
+//
+//  The directory cannot validate the proposed naming context (or partition) name because it does not hold a replica nor can it contact a replica of the naming context above the proposed naming context.  Please ensure that the parent naming context is properly registered in DNS, and at least one replica of this naming context is reachable by the Domain Naming master.
+//
+#define ERROR_DS_CR_IMPOSSIBLE_TO_VALIDATE_V2 8586L
+
+//
+// MessageId: ERROR_DS_THREAD_LIMIT_EXCEEDED
+//
+// MessageText:
+//
+//  The thread limit for this request was exceeded.
+//
+#define ERROR_DS_THREAD_LIMIT_EXCEEDED   8587L
+
+//
+// MessageId: ERROR_DS_NOT_CLOSEST
+//
+// MessageText:
+//
+//  The Global catalog server is not in the closest site.
+//
+#define ERROR_DS_NOT_CLOSEST             8588L
+
+//
+// MessageId: ERROR_DS_CANT_DERIVE_SPN_WITHOUT_SERVER_REF
+//
+// MessageText:
+//
+//  The DS cannot derive a service principal name (SPN) with which to mutually authenticate the target server because the corresponding server object in the local DS database has no serverReference attribute.
+//
+#define ERROR_DS_CANT_DERIVE_SPN_WITHOUT_SERVER_REF 8589L
+
+//
+// MessageId: ERROR_DS_SINGLE_USER_MODE_FAILED
+//
+// MessageText:
+//
+//  The Directory Service failed to enter single user mode.
+//
+#define ERROR_DS_SINGLE_USER_MODE_FAILED 8590L
+
+//
+// MessageId: ERROR_DS_NTDSCRIPT_SYNTAX_ERROR
+//
+// MessageText:
+//
+//  The Directory Service cannot parse the script because of a syntax error.
+//
+#define ERROR_DS_NTDSCRIPT_SYNTAX_ERROR  8591L
+
+//
+// MessageId: ERROR_DS_NTDSCRIPT_PROCESS_ERROR
+//
+// MessageText:
+//
+//  The Directory Service cannot process the script because of an error.
+//
+#define ERROR_DS_NTDSCRIPT_PROCESS_ERROR 8592L
+
+//
+// MessageId: ERROR_DS_DIFFERENT_REPL_EPOCHS
+//
+// MessageText:
+//
+//  The directory service cannot perform the requested operation because the servers
+//  involved are of different replication epochs (which is usually related to a
+//  domain rename that is in progress).
+//
+#define ERROR_DS_DIFFERENT_REPL_EPOCHS   8593L
+
+//
+// MessageId: ERROR_DS_DRS_EXTENSIONS_CHANGED
+//
+// MessageText:
+//
+//  The directory service binding must be renegotiated due to a change in the server
+//  extensions information.
+//
+#define ERROR_DS_DRS_EXTENSIONS_CHANGED  8594L
+
+//
+// MessageId: ERROR_DS_REPLICA_SET_CHANGE_NOT_ALLOWED_ON_DISABLED_CR
+//
+// MessageText:
+//
+//  Operation not allowed on a disabled cross ref.
+//
+#define ERROR_DS_REPLICA_SET_CHANGE_NOT_ALLOWED_ON_DISABLED_CR 8595L
+
+//
+// MessageId: ERROR_DS_NO_MSDS_INTID
+//
+// MessageText:
+//
+//  Schema update failed: No values for msDS-IntId are available.
+//
+#define ERROR_DS_NO_MSDS_INTID           8596L
+
+//
+// MessageId: ERROR_DS_DUP_MSDS_INTID
+//
+// MessageText:
+//
+//  Schema update failed: Duplicate msDS-INtId. Retry the operation.
+//
+#define ERROR_DS_DUP_MSDS_INTID          8597L
+
+//
+// MessageId: ERROR_DS_EXISTS_IN_RDNATTID
+//
+// MessageText:
+//
+//  Schema deletion failed: attribute is used in rDNAttID.
+//
+#define ERROR_DS_EXISTS_IN_RDNATTID      8598L
+
+//
+// MessageId: ERROR_DS_AUTHORIZATION_FAILED
+//
+// MessageText:
+//
+//  The directory service failed to authorize the request.
+//
+#define ERROR_DS_AUTHORIZATION_FAILED    8599L
+
+//
+// MessageId: ERROR_DS_INVALID_SCRIPT
+//
+// MessageText:
+//
+//  The Directory Service cannot process the script because it is invalid.
+//
+#define ERROR_DS_INVALID_SCRIPT          8600L
+
+//
+// MessageId: ERROR_DS_REMOTE_CROSSREF_OP_FAILED
+//
+// MessageText:
+//
+//  The remote create cross reference operation failed on the Domain Naming Master FSMO.  The operation's error is in the extended data.
+//
+#define ERROR_DS_REMOTE_CROSSREF_OP_FAILED 8601L
 
 ///////////////////////////////////////////////////
 //                                                /
@@ -12577,6 +13453,16 @@
 //
 #define DNS_ERROR_NUMERIC_NAME           9561L
 
+// DNS_ERROR_NOT_ALLOWED_ON_ROOT_SERVER  0x0000255A
+//
+// MessageId: DNS_ERROR_NOT_ALLOWED_ON_ROOT_SERVER
+//
+// MessageText:
+//
+//  The operation requested is not permitted on a DNS root server.
+//
+#define DNS_ERROR_NOT_ALLOWED_ON_ROOT_SERVER 9562L
+
 
 //
 //  Zone errors
@@ -12763,6 +13649,36 @@
 //  Invalid delete of start of authority (SOA)
 //
 #define DNS_ERROR_SOA_DELETE_INVALID     9618L
+
+// DNS_ERROR_FORWARDER_ALREADY_EXISTS    0x00002593
+//
+// MessageId: DNS_ERROR_FORWARDER_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  A conditional forwarding zone already exists for that name.
+//
+#define DNS_ERROR_FORWARDER_ALREADY_EXISTS 9619L
+
+// DNS_ERROR_ZONE_REQUIRES_MASTER_IP     0x00002594
+//
+// MessageId: DNS_ERROR_ZONE_REQUIRES_MASTER_IP
+//
+// MessageText:
+//
+//  This zone must be configured with one or more master DNS server IP addresses.
+//
+#define DNS_ERROR_ZONE_REQUIRES_MASTER_IP 9620L
+
+// DNS_ERROR_ZONE_IS_SHUTDOWN            0x00002595
+//
+// MessageId: DNS_ERROR_ZONE_IS_SHUTDOWN
+//
+// MessageText:
+//
+//  The operation cannot be performed because this zone is shutdown.
+//
+#define DNS_ERROR_ZONE_IS_SHUTDOWN       9621L
 
 
 //
@@ -13099,6 +14015,53 @@
 //
 #define DNS_ERROR_NO_DNS_SERVERS         9852L
 
+
+//
+//  Directory partition (DP) errors
+//
+
+#define DNS_ERROR_DP_BASE 9900
+
+// DNS_ERROR_DP_DOES_NOT_EXIST           0x000026ad
+//
+// MessageId: DNS_ERROR_DP_DOES_NOT_EXIST
+//
+// MessageText:
+//
+//  The specified directory partition does not exist.
+//
+#define DNS_ERROR_DP_DOES_NOT_EXIST      9901L
+
+// DNS_ERROR_DP_ALREADY_EXISTS           0x000026ae
+//
+// MessageId: DNS_ERROR_DP_ALREADY_EXISTS
+//
+// MessageText:
+//
+//  The specified directory partition already exists.
+//
+#define DNS_ERROR_DP_ALREADY_EXISTS      9902L
+
+// DNS_ERROR_DP_NOT_ENLISTED             0x000026af
+//
+// MessageId: DNS_ERROR_DP_NOT_ENLISTED
+//
+// MessageText:
+//
+//  The DS is not enlisted in the specified directory partition.
+//
+#define DNS_ERROR_DP_NOT_ENLISTED        9903L
+
+// DNS_ERROR_DP_ALREADY_ENLISTED         0x000026b0
+//
+// MessageId: DNS_ERROR_DP_ALREADY_ENLISTED
+//
+// MessageText:
+//
+//  The DS is already enlisted in the specified directory partition.
+//
+#define DNS_ERROR_DP_ALREADY_ENLISTED    9904L
+
 ///////////////////////////////////////////////////
 //                                               //
 //             End of DNS Error Codes            //
@@ -13296,8 +14259,7 @@
 //
 // MessageText:
 //
-//  Only one usage of each socket address (protocol/network address/port)
-//  is normally permitted.
+//  Only one usage of each socket address (protocol/network address/port) is normally permitted.
 //
 #define WSAEADDRINUSE                    10048L
 
@@ -13932,6 +14894,1717 @@
 ///////////////////////////////////////////////////
 
 
+
+///////////////////////////////////////////////////
+//                                               //
+//             Side By Side Error Codes          //
+//                                               //
+//                 14000 to 14999                //
+///////////////////////////////////////////////////
+
+//
+// MessageId: ERROR_SXS_SECTION_NOT_FOUND
+//
+// MessageText:
+//
+//  The requested section was not present in the activation context.
+//
+#define ERROR_SXS_SECTION_NOT_FOUND      14000L
+
+//
+// MessageId: ERROR_SXS_CANT_GEN_ACTCTX
+//
+// MessageText:
+//
+//  This application has failed to start because the application configuration is incorrect. Reinstalling the application may fix this problem.
+//
+#define ERROR_SXS_CANT_GEN_ACTCTX        14001L
+
+//
+// MessageId: ERROR_SXS_INVALID_ACTCTXDATA_FORMAT
+//
+// MessageText:
+//
+//  The application binding data format is invalid.
+//
+#define ERROR_SXS_INVALID_ACTCTXDATA_FORMAT 14002L
+
+//
+// MessageId: ERROR_SXS_ASSEMBLY_NOT_FOUND
+//
+// MessageText:
+//
+//  The referenced assembly is not installed on your system.
+//
+#define ERROR_SXS_ASSEMBLY_NOT_FOUND     14003L
+
+//
+// MessageId: ERROR_SXS_MANIFEST_FORMAT_ERROR
+//
+// MessageText:
+//
+//  The manifest file does not begin with the required tag and format information.
+//
+#define ERROR_SXS_MANIFEST_FORMAT_ERROR  14004L
+
+//
+// MessageId: ERROR_SXS_MANIFEST_PARSE_ERROR
+//
+// MessageText:
+//
+//  The manifest file contains one or more syntax errors.
+//
+#define ERROR_SXS_MANIFEST_PARSE_ERROR   14005L
+
+//
+// MessageId: ERROR_SXS_ACTIVATION_CONTEXT_DISABLED
+//
+// MessageText:
+//
+//  The application attempted to activate a disabled activation context.
+//
+#define ERROR_SXS_ACTIVATION_CONTEXT_DISABLED 14006L
+
+//
+// MessageId: ERROR_SXS_KEY_NOT_FOUND
+//
+// MessageText:
+//
+//  The requested lookup key was not found in any active activation context.
+//
+#define ERROR_SXS_KEY_NOT_FOUND          14007L
+
+//
+// MessageId: ERROR_SXS_VERSION_CONFLICT
+//
+// MessageText:
+//
+//  A component version required by the application conflicts with another component version already active.
+//
+#define ERROR_SXS_VERSION_CONFLICT       14008L
+
+//
+// MessageId: ERROR_SXS_WRONG_SECTION_TYPE
+//
+// MessageText:
+//
+//  The type requested activation context section does not match the query API used.
+//
+#define ERROR_SXS_WRONG_SECTION_TYPE     14009L
+
+//
+// MessageId: ERROR_SXS_THREAD_QUERIES_DISABLED
+//
+// MessageText:
+//
+//  Lack of system resources has required isolated activation to be disabled for the current thread of execution.
+//
+#define ERROR_SXS_THREAD_QUERIES_DISABLED 14010L
+
+//
+// MessageId: ERROR_SXS_PROCESS_DEFAULT_ALREADY_SET
+//
+// MessageText:
+//
+//  An attempt to set the process default activation context failed because the process default activation context was already set.
+//
+#define ERROR_SXS_PROCESS_DEFAULT_ALREADY_SET 14011L
+
+//
+// MessageId: ERROR_SXS_UNKNOWN_ENCODING_GROUP
+//
+// MessageText:
+//
+//  The encoding group identifier specified is not recognized.
+//
+#define ERROR_SXS_UNKNOWN_ENCODING_GROUP 14012L
+
+//
+// MessageId: ERROR_SXS_UNKNOWN_ENCODING
+//
+// MessageText:
+//
+//  The encoding requested is not recognized.
+//
+#define ERROR_SXS_UNKNOWN_ENCODING       14013L
+
+//
+// MessageId: ERROR_SXS_INVALID_XML_NAMESPACE_URI
+//
+// MessageText:
+//
+//  The manifest contains a reference to an invalid URI.
+//
+#define ERROR_SXS_INVALID_XML_NAMESPACE_URI 14014L
+
+//
+// MessageId: ERROR_SXS_ROOT_MANIFEST_DEPENDENCY_NOT_INSTALLED
+//
+// MessageText:
+//
+//  The application manifest contains a reference to a dependent assembly which is not installed
+//
+#define ERROR_SXS_ROOT_MANIFEST_DEPENDENCY_NOT_INSTALLED 14015L
+
+//
+// MessageId: ERROR_SXS_LEAF_MANIFEST_DEPENDENCY_NOT_INSTALLED
+//
+// MessageText:
+//
+//  The manifest for an assembly used by the application has a reference to a dependent assembly which is not installed
+//
+#define ERROR_SXS_LEAF_MANIFEST_DEPENDENCY_NOT_INSTALLED 14016L
+
+//
+// MessageId: ERROR_SXS_INVALID_ASSEMBLY_IDENTITY_ATTRIBUTE
+//
+// MessageText:
+//
+//  The manifest contains an attribute for the assembly identity which is not valid.
+//
+#define ERROR_SXS_INVALID_ASSEMBLY_IDENTITY_ATTRIBUTE 14017L
+
+//
+// MessageId: ERROR_SXS_MANIFEST_MISSING_REQUIRED_DEFAULT_NAMESPACE
+//
+// MessageText:
+//
+//  The manifest is missing the required default namespace specification on the assembly element.
+//
+#define ERROR_SXS_MANIFEST_MISSING_REQUIRED_DEFAULT_NAMESPACE 14018L
+
+//
+// MessageId: ERROR_SXS_MANIFEST_INVALID_REQUIRED_DEFAULT_NAMESPACE
+//
+// MessageText:
+//
+//  The manifest has a default namespace specified on the assembly element but its value is not "urn:schemas-microsoft-com:asm.v1".
+//
+#define ERROR_SXS_MANIFEST_INVALID_REQUIRED_DEFAULT_NAMESPACE 14019L
+
+//
+// MessageId: ERROR_SXS_PRIVATE_MANIFEST_CROSS_PATH_WITH_REPARSE_POINT
+//
+// MessageText:
+//
+//  The private manifest probed has crossed reparse-point-associated path
+//
+#define ERROR_SXS_PRIVATE_MANIFEST_CROSS_PATH_WITH_REPARSE_POINT 14020L
+
+//
+// MessageId: ERROR_SXS_DUPLICATE_DLL_NAME
+//
+// MessageText:
+//
+//  Two or more components referenced directly or indirectly by the application manifest have files by the same name.
+//
+#define ERROR_SXS_DUPLICATE_DLL_NAME     14021L
+
+//
+// MessageId: ERROR_SXS_DUPLICATE_WINDOWCLASS_NAME
+//
+// MessageText:
+//
+//  Two or more components referenced directly or indirectly by the application manifest have window classes with the same name.
+//
+#define ERROR_SXS_DUPLICATE_WINDOWCLASS_NAME 14022L
+
+//
+// MessageId: ERROR_SXS_DUPLICATE_CLSID
+//
+// MessageText:
+//
+//  Two or more components referenced directly or indirectly by the application manifest have the same COM server CLSIDs.
+//
+#define ERROR_SXS_DUPLICATE_CLSID        14023L
+
+//
+// MessageId: ERROR_SXS_DUPLICATE_IID
+//
+// MessageText:
+//
+//  Two or more components referenced directly or indirectly by the application manifest have proxies for the same COM interface IIDs.
+//
+#define ERROR_SXS_DUPLICATE_IID          14024L
+
+//
+// MessageId: ERROR_SXS_DUPLICATE_TLBID
+//
+// MessageText:
+//
+//  Two or more components referenced directly or indirectly by the application manifest have the same COM type library TLBIDs.
+//
+#define ERROR_SXS_DUPLICATE_TLBID        14025L
+
+//
+// MessageId: ERROR_SXS_DUPLICATE_PROGID
+//
+// MessageText:
+//
+//  Two or more components referenced directly or indirectly by the application manifest have the same COM ProgIDs.
+//
+#define ERROR_SXS_DUPLICATE_PROGID       14026L
+
+//
+// MessageId: ERROR_SXS_DUPLICATE_ASSEMBLY_NAME
+//
+// MessageText:
+//
+//  Two or more components referenced directly or indirectly by the application manifest are different versions of the same component which is not permitted.
+//
+#define ERROR_SXS_DUPLICATE_ASSEMBLY_NAME 14027L
+
+//
+// MessageId: ERROR_SXS_FILE_HASH_MISMATCH
+//
+// MessageText:
+//
+//  A component's file does not match the verification information present in the
+//  component manifest.
+//
+#define ERROR_SXS_FILE_HASH_MISMATCH     14028L
+
+//
+// MessageId: ERROR_SXS_POLICY_PARSE_ERROR
+//
+// MessageText:
+//
+//  The policy manifest contains one or more syntax errors.
+//
+#define ERROR_SXS_POLICY_PARSE_ERROR     14029L
+
+//
+// MessageId: ERROR_SXS_XML_E_MISSINGQUOTE
+//
+// MessageText:
+//
+//  Manifest Parse Error : A string literal was expected, but no opening quote character was found.
+//
+#define ERROR_SXS_XML_E_MISSINGQUOTE     14030L
+
+//
+// MessageId: ERROR_SXS_XML_E_COMMENTSYNTAX
+//
+// MessageText:
+//
+//  Manifest Parse Error : Incorrect syntax was used in a comment.
+//
+#define ERROR_SXS_XML_E_COMMENTSYNTAX    14031L
+
+//
+// MessageId: ERROR_SXS_XML_E_BADSTARTNAMECHAR
+//
+// MessageText:
+//
+//  Manifest Parse Error : A name was started with an invalid character.
+//
+#define ERROR_SXS_XML_E_BADSTARTNAMECHAR 14032L
+
+//
+// MessageId: ERROR_SXS_XML_E_BADNAMECHAR
+//
+// MessageText:
+//
+//  Manifest Parse Error : A name contained an invalid character.
+//
+#define ERROR_SXS_XML_E_BADNAMECHAR      14033L
+
+//
+// MessageId: ERROR_SXS_XML_E_BADCHARINSTRING
+//
+// MessageText:
+//
+//  Manifest Parse Error : A string literal contained an invalid character.
+//
+#define ERROR_SXS_XML_E_BADCHARINSTRING  14034L
+
+//
+// MessageId: ERROR_SXS_XML_E_XMLDECLSYNTAX
+//
+// MessageText:
+//
+//  Manifest Parse Error : Invalid syntax for an xml declaration.
+//
+#define ERROR_SXS_XML_E_XMLDECLSYNTAX    14035L
+
+//
+// MessageId: ERROR_SXS_XML_E_BADCHARDATA
+//
+// MessageText:
+//
+//  Manifest Parse Error : An Invalid character was found in text content.
+//
+#define ERROR_SXS_XML_E_BADCHARDATA      14036L
+
+//
+// MessageId: ERROR_SXS_XML_E_MISSINGWHITESPACE
+//
+// MessageText:
+//
+//  Manifest Parse Error : Required white space was missing.
+//
+#define ERROR_SXS_XML_E_MISSINGWHITESPACE 14037L
+
+//
+// MessageId: ERROR_SXS_XML_E_EXPECTINGTAGEND
+//
+// MessageText:
+//
+//  Manifest Parse Error : The character '>' was expected.
+//
+#define ERROR_SXS_XML_E_EXPECTINGTAGEND  14038L
+
+//
+// MessageId: ERROR_SXS_XML_E_MISSINGSEMICOLON
+//
+// MessageText:
+//
+//  Manifest Parse Error : A semi colon character was expected.
+//
+#define ERROR_SXS_XML_E_MISSINGSEMICOLON 14039L
+
+//
+// MessageId: ERROR_SXS_XML_E_UNBALANCEDPAREN
+//
+// MessageText:
+//
+//  Manifest Parse Error : Unbalanced parentheses.
+//
+#define ERROR_SXS_XML_E_UNBALANCEDPAREN  14040L
+
+//
+// MessageId: ERROR_SXS_XML_E_INTERNALERROR
+//
+// MessageText:
+//
+//  Manifest Parse Error : Internal error.
+//
+#define ERROR_SXS_XML_E_INTERNALERROR    14041L
+
+//
+// MessageId: ERROR_SXS_XML_E_UNEXPECTED_WHITESPACE
+//
+// MessageText:
+//
+//  Manifest Parse Error : Whitespace is not allowed at this location.
+//
+#define ERROR_SXS_XML_E_UNEXPECTED_WHITESPACE 14042L
+
+//
+// MessageId: ERROR_SXS_XML_E_INCOMPLETE_ENCODING
+//
+// MessageText:
+//
+//  Manifest Parse Error : End of file reached in invalid state for current encoding.
+//
+#define ERROR_SXS_XML_E_INCOMPLETE_ENCODING 14043L
+
+//
+// MessageId: ERROR_SXS_XML_E_MISSING_PAREN
+//
+// MessageText:
+//
+//  Manifest Parse Error : Missing parenthesis.
+//
+#define ERROR_SXS_XML_E_MISSING_PAREN    14044L
+
+//
+// MessageId: ERROR_SXS_XML_E_EXPECTINGCLOSEQUOTE
+//
+// MessageText:
+//
+//  Manifest Parse Error : A single or double closing quote character (\' or \") is missing.
+//
+#define ERROR_SXS_XML_E_EXPECTINGCLOSEQUOTE 14045L
+
+//
+// MessageId: ERROR_SXS_XML_E_MULTIPLE_COLONS
+//
+// MessageText:
+//
+//  Manifest Parse Error : Multiple colons are not allowed in a name.
+//
+#define ERROR_SXS_XML_E_MULTIPLE_COLONS  14046L
+
+//
+// MessageId: ERROR_SXS_XML_E_INVALID_DECIMAL
+//
+// MessageText:
+//
+//  Manifest Parse Error : Invalid character for decimal digit.
+//
+#define ERROR_SXS_XML_E_INVALID_DECIMAL  14047L
+
+//
+// MessageId: ERROR_SXS_XML_E_INVALID_HEXIDECIMAL
+//
+// MessageText:
+//
+//  Manifest Parse Error : Invalid character for hexidecimal digit.
+//
+#define ERROR_SXS_XML_E_INVALID_HEXIDECIMAL 14048L
+
+//
+// MessageId: ERROR_SXS_XML_E_INVALID_UNICODE
+//
+// MessageText:
+//
+//  Manifest Parse Error : Invalid unicode character value for this platform.
+//
+#define ERROR_SXS_XML_E_INVALID_UNICODE  14049L
+
+//
+// MessageId: ERROR_SXS_XML_E_WHITESPACEORQUESTIONMARK
+//
+// MessageText:
+//
+//  Manifest Parse Error : Expecting whitespace or '?'.
+//
+#define ERROR_SXS_XML_E_WHITESPACEORQUESTIONMARK 14050L
+
+//
+// MessageId: ERROR_SXS_XML_E_UNEXPECTEDENDTAG
+//
+// MessageText:
+//
+//  Manifest Parse Error : End tag was not expected at this location.
+//
+#define ERROR_SXS_XML_E_UNEXPECTEDENDTAG 14051L
+
+//
+// MessageId: ERROR_SXS_XML_E_UNCLOSEDTAG
+//
+// MessageText:
+//
+//  Manifest Parse Error : The following tags were not closed: %1.
+//
+#define ERROR_SXS_XML_E_UNCLOSEDTAG      14052L
+
+//
+// MessageId: ERROR_SXS_XML_E_DUPLICATEATTRIBUTE
+//
+// MessageText:
+//
+//  Manifest Parse Error : Duplicate attribute.
+//
+#define ERROR_SXS_XML_E_DUPLICATEATTRIBUTE 14053L
+
+//
+// MessageId: ERROR_SXS_XML_E_MULTIPLEROOTS
+//
+// MessageText:
+//
+//  Manifest Parse Error : Only one top level element is allowed in an XML document.
+//
+#define ERROR_SXS_XML_E_MULTIPLEROOTS    14054L
+
+//
+// MessageId: ERROR_SXS_XML_E_INVALIDATROOTLEVEL
+//
+// MessageText:
+//
+//  Manifest Parse Error : Invalid at the top level of the document.
+//
+#define ERROR_SXS_XML_E_INVALIDATROOTLEVEL 14055L
+
+//
+// MessageId: ERROR_SXS_XML_E_BADXMLDECL
+//
+// MessageText:
+//
+//  Manifest Parse Error : Invalid xml declaration.
+//
+#define ERROR_SXS_XML_E_BADXMLDECL       14056L
+
+//
+// MessageId: ERROR_SXS_XML_E_MISSINGROOT
+//
+// MessageText:
+//
+//  Manifest Parse Error : XML document must have a top level element.
+//
+#define ERROR_SXS_XML_E_MISSINGROOT      14057L
+
+//
+// MessageId: ERROR_SXS_XML_E_UNEXPECTEDEOF
+//
+// MessageText:
+//
+//  Manifest Parse Error : Unexpected end of file.
+//
+#define ERROR_SXS_XML_E_UNEXPECTEDEOF    14058L
+
+//
+// MessageId: ERROR_SXS_XML_E_BADPEREFINSUBSET
+//
+// MessageText:
+//
+//  Manifest Parse Error : Parameter entities cannot be used inside markup declarations in an internal subset.
+//
+#define ERROR_SXS_XML_E_BADPEREFINSUBSET 14059L
+
+//
+// MessageId: ERROR_SXS_XML_E_UNCLOSEDSTARTTAG
+//
+// MessageText:
+//
+//  Manifest Parse Error : Element was not closed.
+//
+#define ERROR_SXS_XML_E_UNCLOSEDSTARTTAG 14060L
+
+//
+// MessageId: ERROR_SXS_XML_E_UNCLOSEDENDTAG
+//
+// MessageText:
+//
+//  Manifest Parse Error : End element was missing the character '>'.
+//
+#define ERROR_SXS_XML_E_UNCLOSEDENDTAG   14061L
+
+//
+// MessageId: ERROR_SXS_XML_E_UNCLOSEDSTRING
+//
+// MessageText:
+//
+//  Manifest Parse Error : A string literal was not closed.
+//
+#define ERROR_SXS_XML_E_UNCLOSEDSTRING   14062L
+
+//
+// MessageId: ERROR_SXS_XML_E_UNCLOSEDCOMMENT
+//
+// MessageText:
+//
+//  Manifest Parse Error : A comment was not closed.
+//
+#define ERROR_SXS_XML_E_UNCLOSEDCOMMENT  14063L
+
+//
+// MessageId: ERROR_SXS_XML_E_UNCLOSEDDECL
+//
+// MessageText:
+//
+//  Manifest Parse Error : A declaration was not closed.
+//
+#define ERROR_SXS_XML_E_UNCLOSEDDECL     14064L
+
+//
+// MessageId: ERROR_SXS_XML_E_UNCLOSEDCDATA
+//
+// MessageText:
+//
+//  Manifest Parse Error : A CDATA section was not closed.
+//
+#define ERROR_SXS_XML_E_UNCLOSEDCDATA    14065L
+
+//
+// MessageId: ERROR_SXS_XML_E_RESERVEDNAMESPACE
+//
+// MessageText:
+//
+//  Manifest Parse Error : The namespace prefix is not allowed to start with the reserved string "xml".
+//
+#define ERROR_SXS_XML_E_RESERVEDNAMESPACE 14066L
+
+//
+// MessageId: ERROR_SXS_XML_E_INVALIDENCODING
+//
+// MessageText:
+//
+//  Manifest Parse Error : System does not support the specified encoding.
+//
+#define ERROR_SXS_XML_E_INVALIDENCODING  14067L
+
+//
+// MessageId: ERROR_SXS_XML_E_INVALIDSWITCH
+//
+// MessageText:
+//
+//  Manifest Parse Error : Switch from current encoding to specified encoding not supported.
+//
+#define ERROR_SXS_XML_E_INVALIDSWITCH    14068L
+
+//
+// MessageId: ERROR_SXS_XML_E_BADXMLCASE
+//
+// MessageText:
+//
+//  Manifest Parse Error : The name 'xml' is reserved and must be lower case.
+//
+#define ERROR_SXS_XML_E_BADXMLCASE       14069L
+
+//
+// MessageId: ERROR_SXS_XML_E_INVALID_STANDALONE
+//
+// MessageText:
+//
+//  Manifest Parse Error : The standalone attribute must have the value 'yes' or 'no'.
+//
+#define ERROR_SXS_XML_E_INVALID_STANDALONE 14070L
+
+//
+// MessageId: ERROR_SXS_XML_E_UNEXPECTED_STANDALONE
+//
+// MessageText:
+//
+//  Manifest Parse Error : The standalone attribute cannot be used in external entities.
+//
+#define ERROR_SXS_XML_E_UNEXPECTED_STANDALONE 14071L
+
+//
+// MessageId: ERROR_SXS_XML_E_INVALID_VERSION
+//
+// MessageText:
+//
+//  Manifest Parse Error : Invalid version number.
+//
+#define ERROR_SXS_XML_E_INVALID_VERSION  14072L
+
+//
+// MessageId: ERROR_SXS_XML_E_MISSINGEQUALS
+//
+// MessageText:
+//
+//  Manifest Parse Error : Missing equals sign between attribute and attribute value.
+//
+#define ERROR_SXS_XML_E_MISSINGEQUALS    14073L
+
+//
+// MessageId: ERROR_SXS_PROTECTION_RECOVERY_FAILED
+//
+// MessageText:
+//
+//  Assembly Protection Error : Unable to recover the specified assembly.
+//
+#define ERROR_SXS_PROTECTION_RECOVERY_FAILED 14074L
+
+//
+// MessageId: ERROR_SXS_PROTECTION_PUBLIC_KEY_TOO_SHORT
+//
+// MessageText:
+//
+//  Assembly Protection Error : The public key for an assembly was too short to be allowed.
+//
+#define ERROR_SXS_PROTECTION_PUBLIC_KEY_TOO_SHORT 14075L
+
+//
+// MessageId: ERROR_SXS_PROTECTION_CATALOG_NOT_VALID
+//
+// MessageText:
+//
+//  Assembly Protection Error : The catalog for an assembly is not valid, or does not match the assembly's manifest.
+//
+#define ERROR_SXS_PROTECTION_CATALOG_NOT_VALID 14076L
+
+//
+// MessageId: ERROR_SXS_UNTRANSLATABLE_HRESULT
+//
+// MessageText:
+//
+//  An HRESULT could not be translated to a corresponding Win32 error code.
+//
+#define ERROR_SXS_UNTRANSLATABLE_HRESULT 14077L
+
+//
+// MessageId: ERROR_SXS_PROTECTION_CATALOG_FILE_MISSING
+//
+// MessageText:
+//
+//  Assembly Protection Error : The catalog for an assembly is missing.
+//
+#define ERROR_SXS_PROTECTION_CATALOG_FILE_MISSING 14078L
+
+//
+// MessageId: ERROR_SXS_MISSING_ASSEMBLY_IDENTITY_ATTRIBUTE
+//
+// MessageText:
+//
+//  The supplied assembly identity is missing one or more attributes which must be present in this context.
+//
+#define ERROR_SXS_MISSING_ASSEMBLY_IDENTITY_ATTRIBUTE 14079L
+
+//
+// MessageId: ERROR_SXS_INVALID_ASSEMBLY_IDENTITY_ATTRIBUTE_NAME
+//
+// MessageText:
+//
+//  The supplied assembly identity has one or more attribute names that contain characters not permitted in XML names.
+//
+#define ERROR_SXS_INVALID_ASSEMBLY_IDENTITY_ATTRIBUTE_NAME 14080L
+
+
+///////////////////////////////////////////////////
+//                                               //
+//           End of Side By Side Error Codes     //
+//                                               //
+//                 14000 to 14999                //
+///////////////////////////////////////////////////
+
+
+
+///////////////////////////////////////////////////
+//                                               //
+//           Start of IPSec Error codes          //
+//                                               //
+//                 13000 to 13999                //
+///////////////////////////////////////////////////
+
+
+//
+// MessageId: ERROR_IPSEC_QM_POLICY_EXISTS
+//
+// MessageText:
+//
+//  The specified quick mode policy already exists.
+//
+#define ERROR_IPSEC_QM_POLICY_EXISTS     13000L
+
+//
+// MessageId: ERROR_IPSEC_QM_POLICY_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified quick mode policy was not found.
+//
+#define ERROR_IPSEC_QM_POLICY_NOT_FOUND  13001L
+
+//
+// MessageId: ERROR_IPSEC_QM_POLICY_IN_USE
+//
+// MessageText:
+//
+//  The specified quick mode policy is being used.
+//
+#define ERROR_IPSEC_QM_POLICY_IN_USE     13002L
+
+//
+// MessageId: ERROR_IPSEC_MM_POLICY_EXISTS
+//
+// MessageText:
+//
+//  The specified main mode policy already exists.
+//
+#define ERROR_IPSEC_MM_POLICY_EXISTS     13003L
+
+//
+// MessageId: ERROR_IPSEC_MM_POLICY_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified main mode policy was not found
+//
+#define ERROR_IPSEC_MM_POLICY_NOT_FOUND  13004L
+
+//
+// MessageId: ERROR_IPSEC_MM_POLICY_IN_USE
+//
+// MessageText:
+//
+//  The specified main mode policy is being used.
+//
+#define ERROR_IPSEC_MM_POLICY_IN_USE     13005L
+
+//
+// MessageId: ERROR_IPSEC_MM_FILTER_EXISTS
+//
+// MessageText:
+//
+//  The specified main mode filter already exists.
+//
+#define ERROR_IPSEC_MM_FILTER_EXISTS     13006L
+
+//
+// MessageId: ERROR_IPSEC_MM_FILTER_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified main mode filter was not found.
+//
+#define ERROR_IPSEC_MM_FILTER_NOT_FOUND  13007L
+
+//
+// MessageId: ERROR_IPSEC_TRANSPORT_FILTER_EXISTS
+//
+// MessageText:
+//
+//  The specified transport mode filter already exists.
+//
+#define ERROR_IPSEC_TRANSPORT_FILTER_EXISTS 13008L
+
+//
+// MessageId: ERROR_IPSEC_TRANSPORT_FILTER_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified transport mode filter does not exist.
+//
+#define ERROR_IPSEC_TRANSPORT_FILTER_NOT_FOUND 13009L
+
+//
+// MessageId: ERROR_IPSEC_MM_AUTH_EXISTS
+//
+// MessageText:
+//
+//  The specified main mode authentication list exists.
+//
+#define ERROR_IPSEC_MM_AUTH_EXISTS       13010L
+
+//
+// MessageId: ERROR_IPSEC_MM_AUTH_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified main mode authentication list was not found.
+//
+#define ERROR_IPSEC_MM_AUTH_NOT_FOUND    13011L
+
+//
+// MessageId: ERROR_IPSEC_MM_AUTH_IN_USE
+//
+// MessageText:
+//
+//  The specified quick mode policy is being used.
+//
+#define ERROR_IPSEC_MM_AUTH_IN_USE       13012L
+
+//
+// MessageId: ERROR_IPSEC_DEFAULT_MM_POLICY_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified main mode policy was not found.
+//
+#define ERROR_IPSEC_DEFAULT_MM_POLICY_NOT_FOUND 13013L
+
+//
+// MessageId: ERROR_IPSEC_DEFAULT_MM_AUTH_NOT_FOUND
+//
+// MessageText:
+//
+//  The specified quick mode policy was not found
+//
+#define ERROR_IPSEC_DEFAULT_MM_AUTH_NOT_FOUND 13014L
+
+//
+// MessageId: ERROR_IPSEC_DEFAULT_QM_POLICY_NOT_FOUND
+//
+// MessageText:
+//
+//  The manifest file contains one or more syntax errors.
+//
+#define ERROR_IPSEC_DEFAULT_QM_POLICY_NOT_FOUND 13015L
+
+//
+// MessageId: ERROR_IPSEC_TUNNEL_FILTER_EXISTS
+//
+// MessageText:
+//
+//  The application attempted to activate a disabled activation context.
+//
+#define ERROR_IPSEC_TUNNEL_FILTER_EXISTS 13016L
+
+//
+// MessageId: ERROR_IPSEC_TUNNEL_FILTER_NOT_FOUND
+//
+// MessageText:
+//
+//  The requested lookup key was not found in any active activation context.
+//
+#define ERROR_IPSEC_TUNNEL_FILTER_NOT_FOUND 13017L
+
+//
+// MessageId: ERROR_IPSEC_MM_FILTER_PENDING_DELETION
+//
+// MessageText:
+//
+//  The Main Mode filter is pending deletion.
+//
+#define ERROR_IPSEC_MM_FILTER_PENDING_DELETION 13018L
+
+//
+// MessageId: ERROR_IPSEC_TRANSPORT_FILTER_PENDING_DELETION
+//
+// MessageText:
+//
+//  The transport filter is pending deletion.
+//
+#define ERROR_IPSEC_TRANSPORT_FILTER_PENDING_DELETION 13019L
+
+//
+// MessageId: ERROR_IPSEC_TUNNEL_FILTER_PENDING_DELETION
+//
+// MessageText:
+//
+//  The tunnel filter is pending deletion.
+//
+#define ERROR_IPSEC_TUNNEL_FILTER_PENDING_DELETION 13020L
+
+//
+// MessageId: ERROR_IPSEC_MM_POLICY_PENDING_DELETION
+//
+// MessageText:
+//
+//  The Main Mode policy is pending deletion.
+//
+#define ERROR_IPSEC_MM_POLICY_PENDING_DELETION 13021L
+
+//
+// MessageId: ERROR_IPSEC_MM_AUTH_PENDING_DELETION
+//
+// MessageText:
+//
+//  The Main Mode authentication bundle is pending deletion.
+//
+#define ERROR_IPSEC_MM_AUTH_PENDING_DELETION 13022L
+
+//
+// MessageId: ERROR_IPSEC_QM_POLICY_PENDING_DELETION
+//
+// MessageText:
+//
+//  The Quick Mode policy is pending deletion.
+//
+#define ERROR_IPSEC_QM_POLICY_PENDING_DELETION 13023L
+
+//
+// MessageId: ERROR_IPSEC_IKE_NEG_STATUS_BEGIN
+//
+// MessageText:
+//
+//  ERROR_IPSEC_IKE_NEG_STATUS_BEGIN
+//
+#define ERROR_IPSEC_IKE_NEG_STATUS_BEGIN 13800L
+
+//
+// MessageId: ERROR_IPSEC_IKE_AUTH_FAIL
+//
+// MessageText:
+//
+//  IKE authentication credentials are unacceptable
+//
+#define ERROR_IPSEC_IKE_AUTH_FAIL        13801L
+
+//
+// MessageId: ERROR_IPSEC_IKE_ATTRIB_FAIL
+//
+// MessageText:
+//
+//  IKE security attributes are unacceptable
+//
+#define ERROR_IPSEC_IKE_ATTRIB_FAIL      13802L
+
+//
+// MessageId: ERROR_IPSEC_IKE_NEGOTIATION_PENDING
+//
+// MessageText:
+//
+//  IKE Negotiation in progress
+//
+#define ERROR_IPSEC_IKE_NEGOTIATION_PENDING 13803L
+
+//
+// MessageId: ERROR_IPSEC_IKE_GENERAL_PROCESSING_ERROR
+//
+// MessageText:
+//
+//  General processing error
+//
+#define ERROR_IPSEC_IKE_GENERAL_PROCESSING_ERROR 13804L
+
+//
+// MessageId: ERROR_IPSEC_IKE_TIMED_OUT
+//
+// MessageText:
+//
+//  Negotiation timed out
+//
+#define ERROR_IPSEC_IKE_TIMED_OUT        13805L
+
+//
+// MessageId: ERROR_IPSEC_IKE_NO_CERT
+//
+// MessageText:
+//
+//  IKE failed to find valid machine certificate
+//
+#define ERROR_IPSEC_IKE_NO_CERT          13806L
+
+//
+// MessageId: ERROR_IPSEC_IKE_SA_DELETED
+//
+// MessageText:
+//
+//  IKE SA deleted by peer before establishment completed
+//
+#define ERROR_IPSEC_IKE_SA_DELETED       13807L
+
+//
+// MessageId: ERROR_IPSEC_IKE_SA_REAPED
+//
+// MessageText:
+//
+//  IKE SA deleted before establishment completed
+//
+#define ERROR_IPSEC_IKE_SA_REAPED        13808L
+
+//
+// MessageId: ERROR_IPSEC_IKE_MM_ACQUIRE_DROP
+//
+// MessageText:
+//
+//  Negotiation request sat in Queue too long
+//
+#define ERROR_IPSEC_IKE_MM_ACQUIRE_DROP  13809L
+
+//
+// MessageId: ERROR_IPSEC_IKE_QM_ACQUIRE_DROP
+//
+// MessageText:
+//
+//  Negotiation request sat in Queue too long
+//
+#define ERROR_IPSEC_IKE_QM_ACQUIRE_DROP  13810L
+
+//
+// MessageId: ERROR_IPSEC_IKE_QUEUE_DROP_MM
+//
+// MessageText:
+//
+//  Negotiation request sat in Queue too long
+//
+#define ERROR_IPSEC_IKE_QUEUE_DROP_MM    13811L
+
+//
+// MessageId: ERROR_IPSEC_IKE_QUEUE_DROP_NO_MM
+//
+// MessageText:
+//
+//  Negotiation request sat in Queue too long
+//
+#define ERROR_IPSEC_IKE_QUEUE_DROP_NO_MM 13812L
+
+//
+// MessageId: ERROR_IPSEC_IKE_DROP_NO_RESPONSE
+//
+// MessageText:
+//
+//  No response from peer
+//
+#define ERROR_IPSEC_IKE_DROP_NO_RESPONSE 13813L
+
+//
+// MessageId: ERROR_IPSEC_IKE_MM_DELAY_DROP
+//
+// MessageText:
+//
+//  Negotiation took too long
+//
+#define ERROR_IPSEC_IKE_MM_DELAY_DROP    13814L
+
+//
+// MessageId: ERROR_IPSEC_IKE_QM_DELAY_DROP
+//
+// MessageText:
+//
+//  Negotiation took too long
+//
+#define ERROR_IPSEC_IKE_QM_DELAY_DROP    13815L
+
+//
+// MessageId: ERROR_IPSEC_IKE_ERROR
+//
+// MessageText:
+//
+//  Unknown error occurred
+//
+#define ERROR_IPSEC_IKE_ERROR            13816L
+
+//
+// MessageId: ERROR_IPSEC_IKE_CRL_FAILED
+//
+// MessageText:
+//
+//  Certificate Revocation Check failed
+//
+#define ERROR_IPSEC_IKE_CRL_FAILED       13817L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_KEY_USAGE
+//
+// MessageText:
+//
+//  Invalid certificate key usage
+//
+#define ERROR_IPSEC_IKE_INVALID_KEY_USAGE 13818L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_CERT_TYPE
+//
+// MessageText:
+//
+//  Invalid certificate type
+//
+#define ERROR_IPSEC_IKE_INVALID_CERT_TYPE 13819L
+
+//
+// MessageId: ERROR_IPSEC_IKE_NO_PRIVATE_KEY
+//
+// MessageText:
+//
+//  No private key associated with machine certificate
+//
+#define ERROR_IPSEC_IKE_NO_PRIVATE_KEY   13820L
+
+//
+// MessageId: ERROR_IPSEC_IKE_DH_FAIL
+//
+// MessageText:
+//
+//  Failure in Diffie-Helman computation
+//
+#define ERROR_IPSEC_IKE_DH_FAIL          13822L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_HEADER
+//
+// MessageText:
+//
+//  Invalid header
+//
+#define ERROR_IPSEC_IKE_INVALID_HEADER   13824L
+
+//
+// MessageId: ERROR_IPSEC_IKE_NO_POLICY
+//
+// MessageText:
+//
+//  No policy configured
+//
+#define ERROR_IPSEC_IKE_NO_POLICY        13825L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_SIGNATURE
+//
+// MessageText:
+//
+//  Failed to verify signature
+//
+#define ERROR_IPSEC_IKE_INVALID_SIGNATURE 13826L
+
+//
+// MessageId: ERROR_IPSEC_IKE_KERBEROS_ERROR
+//
+// MessageText:
+//
+//  Failed to authenticate using kerberos
+//
+#define ERROR_IPSEC_IKE_KERBEROS_ERROR   13827L
+
+//
+// MessageId: ERROR_IPSEC_IKE_NO_PUBLIC_KEY
+//
+// MessageText:
+//
+//  Peer's certificate did not have a public key
+//
+#define ERROR_IPSEC_IKE_NO_PUBLIC_KEY    13828L
+
+// These must stay as a unit.
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR
+//
+// MessageText:
+//
+//  Error processing error payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR      13829L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR_SA
+//
+// MessageText:
+//
+//  Error processing SA payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR_SA   13830L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR_PROP
+//
+// MessageText:
+//
+//  Error processing Proposal payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR_PROP 13831L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR_TRANS
+//
+// MessageText:
+//
+//  Error processing Transform payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR_TRANS 13832L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR_KE
+//
+// MessageText:
+//
+//  Error processing KE payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR_KE   13833L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR_ID
+//
+// MessageText:
+//
+//  Error processing ID payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR_ID   13834L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR_CERT
+//
+// MessageText:
+//
+//  Error processing Cert payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR_CERT 13835L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR_CERT_REQ
+//
+// MessageText:
+//
+//  Error processing Certificate Request payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR_CERT_REQ 13836L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR_HASH
+//
+// MessageText:
+//
+//  Error processing Hash payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR_HASH 13837L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR_SIG
+//
+// MessageText:
+//
+//  Error processing Signature payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR_SIG  13838L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR_NONCE
+//
+// MessageText:
+//
+//  Error processing Nonce payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR_NONCE 13839L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR_NOTIFY
+//
+// MessageText:
+//
+//  Error processing Notify payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR_NOTIFY 13840L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR_DELETE
+//
+// MessageText:
+//
+//  Error processing Delete Payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR_DELETE 13841L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PROCESS_ERR_VENDOR
+//
+// MessageText:
+//
+//  Error processing VendorId payload
+//
+#define ERROR_IPSEC_IKE_PROCESS_ERR_VENDOR 13842L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_PAYLOAD
+//
+// MessageText:
+//
+//  Invalid payload received
+//
+#define ERROR_IPSEC_IKE_INVALID_PAYLOAD  13843L
+
+//
+// MessageId: ERROR_IPSEC_IKE_LOAD_SOFT_SA
+//
+// MessageText:
+//
+//  Soft SA loaded
+//
+#define ERROR_IPSEC_IKE_LOAD_SOFT_SA     13844L
+
+//
+// MessageId: ERROR_IPSEC_IKE_SOFT_SA_TORN_DOWN
+//
+// MessageText:
+//
+//  Soft SA torn down
+//
+#define ERROR_IPSEC_IKE_SOFT_SA_TORN_DOWN 13845L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_COOKIE
+//
+// MessageText:
+//
+//  Invalid cookie received.
+//
+#define ERROR_IPSEC_IKE_INVALID_COOKIE   13846L
+
+//
+// MessageId: ERROR_IPSEC_IKE_NO_PEER_CERT
+//
+// MessageText:
+//
+//  Peer failed to send valid machine certificate
+//
+#define ERROR_IPSEC_IKE_NO_PEER_CERT     13847L
+
+//
+// MessageId: ERROR_IPSEC_IKE_PEER_CRL_FAILED
+//
+// MessageText:
+//
+//  Certification Revocation check of peer's certificate failed
+//
+#define ERROR_IPSEC_IKE_PEER_CRL_FAILED  13848L
+
+//
+// MessageId: ERROR_IPSEC_IKE_POLICY_CHANGE
+//
+// MessageText:
+//
+//  New policy invalidated SAs formed with old policy
+//
+#define ERROR_IPSEC_IKE_POLICY_CHANGE    13849L
+
+//
+// MessageId: ERROR_IPSEC_IKE_NO_MM_POLICY
+//
+// MessageText:
+//
+//  There is no available Main Mode IKE policy.
+//
+#define ERROR_IPSEC_IKE_NO_MM_POLICY     13850L
+
+//
+// MessageId: ERROR_IPSEC_IKE_NOTCBPRIV
+//
+// MessageText:
+//
+//  Failed to enabled TCB privilege.
+//
+#define ERROR_IPSEC_IKE_NOTCBPRIV        13851L
+
+//
+// MessageId: ERROR_IPSEC_IKE_SECLOADFAIL
+//
+// MessageText:
+//
+//  Failed to load SECURITY.DLL.
+//
+#define ERROR_IPSEC_IKE_SECLOADFAIL      13852L
+
+//
+// MessageId: ERROR_IPSEC_IKE_FAILSSPINIT
+//
+// MessageText:
+//
+//  Failed to obtain security function table dispatch address from SSPI.
+//
+#define ERROR_IPSEC_IKE_FAILSSPINIT      13853L
+
+//
+// MessageId: ERROR_IPSEC_IKE_FAILQUERYSSP
+//
+// MessageText:
+//
+//  Failed to query Kerberos package to obtain max token size.
+//
+#define ERROR_IPSEC_IKE_FAILQUERYSSP     13854L
+
+//
+// MessageId: ERROR_IPSEC_IKE_SRVACQFAIL
+//
+// MessageText:
+//
+//  Failed to obtain Kerberos server credentials for ISAKMP/ERROR_IPSEC_IKE service.  Kerberos authentication will not function.  The most likely reason for this is lack of domain membership.  This is normal if your computer is a member of a workgroup.
+//
+#define ERROR_IPSEC_IKE_SRVACQFAIL       13855L
+
+//
+// MessageId: ERROR_IPSEC_IKE_SRVQUERYCRED
+//
+// MessageText:
+//
+//  Failed to determine SSPI principal name for ISAKMP/ERROR_IPSEC_IKE service (QueryCredentialsAttributes).
+//
+#define ERROR_IPSEC_IKE_SRVQUERYCRED     13856L
+
+//
+// MessageId: ERROR_IPSEC_IKE_GETSPIFAIL
+//
+// MessageText:
+//
+//  Failed to obtain new SPI for the inbound SA from Ipsec driver.  The most common cause for this is that the driver does not have the correct filter.  Check your policy to verify the filters.
+//
+#define ERROR_IPSEC_IKE_GETSPIFAIL       13857L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_FILTER
+//
+// MessageText:
+//
+//  Given filter is invalid
+//
+#define ERROR_IPSEC_IKE_INVALID_FILTER   13858L
+
+//
+// MessageId: ERROR_IPSEC_IKE_OUT_OF_MEMORY
+//
+// MessageText:
+//
+//  Memory allocation failed.
+//
+#define ERROR_IPSEC_IKE_OUT_OF_MEMORY    13859L
+
+//
+// MessageId: ERROR_IPSEC_IKE_ADD_UPDATE_KEY_FAILED
+//
+// MessageText:
+//
+//  Failed to add Security Association to IPSec Driver.  The most common cause for this is if the IKE negotiation took too long to complete.  If the problem persists, reduce the load on the faulting machine.
+//
+#define ERROR_IPSEC_IKE_ADD_UPDATE_KEY_FAILED 13860L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_POLICY
+//
+// MessageText:
+//
+//  Invalid policy
+//
+#define ERROR_IPSEC_IKE_INVALID_POLICY   13861L
+
+//
+// MessageId: ERROR_IPSEC_IKE_UNKNOWN_DOI
+//
+// MessageText:
+//
+//  Invalid DOI
+//
+#define ERROR_IPSEC_IKE_UNKNOWN_DOI      13862L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_SITUATION
+//
+// MessageText:
+//
+//  Invalid situation
+//
+#define ERROR_IPSEC_IKE_INVALID_SITUATION 13863L
+
+//
+// MessageId: ERROR_IPSEC_IKE_DH_FAILURE
+//
+// MessageText:
+//
+//  Diffie-Hellman failure
+//
+#define ERROR_IPSEC_IKE_DH_FAILURE       13864L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_GROUP
+//
+// MessageText:
+//
+//  Invalid Diffie-Hellman group
+//
+#define ERROR_IPSEC_IKE_INVALID_GROUP    13865L
+
+//
+// MessageId: ERROR_IPSEC_IKE_ENCRYPT
+//
+// MessageText:
+//
+//  Error encrypting payload
+//
+#define ERROR_IPSEC_IKE_ENCRYPT          13866L
+
+//
+// MessageId: ERROR_IPSEC_IKE_DECRYPT
+//
+// MessageText:
+//
+//  Error decrypting payload
+//
+#define ERROR_IPSEC_IKE_DECRYPT          13867L
+
+//
+// MessageId: ERROR_IPSEC_IKE_POLICY_MATCH
+//
+// MessageText:
+//
+//  Policy match error
+//
+#define ERROR_IPSEC_IKE_POLICY_MATCH     13868L
+
+//
+// MessageId: ERROR_IPSEC_IKE_UNSUPPORTED_ID
+//
+// MessageText:
+//
+//  Unsupported ID
+//
+#define ERROR_IPSEC_IKE_UNSUPPORTED_ID   13869L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_HASH
+//
+// MessageText:
+//
+//  Hash verification failed
+//
+#define ERROR_IPSEC_IKE_INVALID_HASH     13870L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_HASH_ALG
+//
+// MessageText:
+//
+//  Invalid hash algorithm
+//
+#define ERROR_IPSEC_IKE_INVALID_HASH_ALG 13871L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_HASH_SIZE
+//
+// MessageText:
+//
+//  Invalid hash size
+//
+#define ERROR_IPSEC_IKE_INVALID_HASH_SIZE 13872L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_ENCRYPT_ALG
+//
+// MessageText:
+//
+//  Invalid encryption algorithm
+//
+#define ERROR_IPSEC_IKE_INVALID_ENCRYPT_ALG 13873L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_AUTH_ALG
+//
+// MessageText:
+//
+//  Invalid authentication algorithm
+//
+#define ERROR_IPSEC_IKE_INVALID_AUTH_ALG 13874L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_SIG
+//
+// MessageText:
+//
+//  Invalid certificate signature
+//
+#define ERROR_IPSEC_IKE_INVALID_SIG      13875L
+
+//
+// MessageId: ERROR_IPSEC_IKE_LOAD_FAILED
+//
+// MessageText:
+//
+//  Load failed
+//
+#define ERROR_IPSEC_IKE_LOAD_FAILED      13876L
+
+//
+// MessageId: ERROR_IPSEC_IKE_RPC_DELETE
+//
+// MessageText:
+//
+//  Deleted via RPC call
+//
+#define ERROR_IPSEC_IKE_RPC_DELETE       13877L
+
+//
+// MessageId: ERROR_IPSEC_IKE_BENIGN_REINIT
+//
+// MessageText:
+//
+//  Temporary state created to perform reinit. This is not a real failure.
+//
+#define ERROR_IPSEC_IKE_BENIGN_REINIT    13878L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_RESPONDER_LIFETIME_NOTIFY
+//
+// MessageText:
+//
+//  The lifetime value received in the Responder Lifetime Notify is below the Windows 2000 configured minimum value.  Please fix the policy on the peer machine.
+//
+#define ERROR_IPSEC_IKE_INVALID_RESPONDER_LIFETIME_NOTIFY 13879L
+
+//
+// MessageId: ERROR_IPSEC_IKE_INVALID_CERT_KEYLEN
+//
+// MessageText:
+//
+//  Key length in certificate is too small for configured security requirements.
+//
+#define ERROR_IPSEC_IKE_INVALID_CERT_KEYLEN 13881L
+
+//
+// MessageId: ERROR_IPSEC_IKE_MM_LIMIT
+//
+// MessageText:
+//
+//  Max number of established MM SAs to peer exceeded.
+//
+#define ERROR_IPSEC_IKE_MM_LIMIT         13882L
+
+//
+// MessageId: ERROR_IPSEC_IKE_NEGOTIATION_DISABLED
+//
+// MessageText:
+//
+//  IKE received a policy that disables negotiation.
+//
+#define ERROR_IPSEC_IKE_NEGOTIATION_DISABLED 13883L
+
+//
+// MessageId: ERROR_IPSEC_IKE_NEG_STATUS_END
+//
+// MessageText:
+//
+//  ERROR_IPSEC_IKE_NEG_STATUS_END
+//
+#define ERROR_IPSEC_IKE_NEG_STATUS_END   13884L
+
 ////////////////////////////////////
 //                                //
 //     COM Error Codes            //
@@ -14050,7 +16723,26 @@
 // Define bits here so macros are guaranteed to work
 
 #define FACILITY_NT_BIT                 0x10000000
-#define HRESULT_FROM_WIN32(x) ((HRESULT)(x) <= 0 ? ((HRESULT)(x)) : ((HRESULT) (((x) & 0x0000FFFF) | (FACILITY_WIN32 << 16) | 0x80000000)))
+
+// __HRESULT_FROM_WIN32 will always be a macro.
+// The goal will be to enable INLINE_HRESULT_FROM_WIN32 all the time,
+// but there's too much code to change to do that at this time.
+
+#define __HRESULT_FROM_WIN32(x) ((HRESULT)(x) <= 0 ? ((HRESULT)(x)) : ((HRESULT) (((x) & 0x0000FFFF) | (FACILITY_WIN32 << 16) | 0x80000000)))
+
+#ifdef INLINE_HRESULT_FROM_WIN32
+#ifndef _HRESULT_DEFINED
+#define _HRESULT_DEFINED
+typedef long HRESULT;
+#endif
+#ifndef __midl
+__inline HRESULT HRESULT_FROM_WIN32(long x) { return x < 0 ? (HRESULT)x : (HRESULT) (((x) & 0x0000FFFF) | (FACILITY_WIN32 << 16) | 0x80000000);}
+#else
+#define HRESULT_FROM_WIN32(x) __HRESULT_FROM_WIN32(x)
+#endif
+#else
+#define HRESULT_FROM_WIN32(x) __HRESULT_FROM_WIN32(x)
+#endif
 
 //
 // Map an NT status value into a HRESULT
@@ -14565,6 +17257,105 @@
 //  The specified activation could not occur in the client context as specified.
 //
 #define CO_E_ATTEMPT_TO_CREATE_OUTSIDE_CLIENT_CONTEXT _HRESULT_TYPEDEF_(0x80004024L)
+
+//
+// MessageId: CO_E_SERVER_PAUSED
+//
+// MessageText:
+//
+//  Activations on the server are paused.
+//
+#define CO_E_SERVER_PAUSED               _HRESULT_TYPEDEF_(0x80004025L)
+
+//
+// MessageId: CO_E_SERVER_NOT_PAUSED
+//
+// MessageText:
+//
+//  Activations on the server are not paused.
+//
+#define CO_E_SERVER_NOT_PAUSED           _HRESULT_TYPEDEF_(0x80004026L)
+
+//
+// MessageId: CO_E_CLASS_DISABLED
+//
+// MessageText:
+//
+//  The component or application containing the component has been disabled.
+//
+#define CO_E_CLASS_DISABLED              _HRESULT_TYPEDEF_(0x80004027L)
+
+//
+// MessageId: CO_E_CLRNOTAVAILABLE
+//
+// MessageText:
+//
+//  The common language runtime is not available
+//
+#define CO_E_CLRNOTAVAILABLE             _HRESULT_TYPEDEF_(0x80004028L)
+
+//
+// MessageId: CO_E_ASYNC_WORK_REJECTED
+//
+// MessageText:
+//
+//  The thread-pool rejected the submitted asynchronous work.
+//
+#define CO_E_ASYNC_WORK_REJECTED         _HRESULT_TYPEDEF_(0x80004029L)
+
+//
+// MessageId: CO_E_SERVER_INIT_TIMEOUT
+//
+// MessageText:
+//
+//  The server started, but did not finish initializing in a timely fashion.
+//
+#define CO_E_SERVER_INIT_TIMEOUT         _HRESULT_TYPEDEF_(0x8000402AL)
+
+//
+// MessageId: CO_E_NO_SECCTX_IN_ACTIVATE
+//
+// MessageText:
+//
+//  Unable to complete the call since there is no COM+ security context inside IObjectControl.Activate.
+//
+#define CO_E_NO_SECCTX_IN_ACTIVATE       _HRESULT_TYPEDEF_(0x8000402BL)
+
+//
+// MessageId: CO_E_TRACKER_CONFIG
+//
+// MessageText:
+//
+//  The provided tracker configuration is invalid
+//
+#define CO_E_TRACKER_CONFIG              _HRESULT_TYPEDEF_(0x80004030L)
+
+//
+// MessageId: CO_E_THREADPOOL_CONFIG
+//
+// MessageText:
+//
+//  The provided thread pool configuration is invalid
+//
+#define CO_E_THREADPOOL_CONFIG           _HRESULT_TYPEDEF_(0x80004031L)
+
+//
+// MessageId: CO_E_SXS_CONFIG
+//
+// MessageText:
+//
+//  The provided side-by-side configuration is invalid
+//
+#define CO_E_SXS_CONFIG                  _HRESULT_TYPEDEF_(0x80004032L)
+
+//
+// MessageId: CO_E_MALFORMED_SPN
+//
+// MessageText:
+//
+//  The server principal name (SPN) obtained during security negotiation is malformed.
+//
+#define CO_E_MALFORMED_SPN               _HRESULT_TYPEDEF_(0x80004033L)
 
 
 //
@@ -15740,6 +18531,591 @@
 //
 #define EVENT_E_COMPLUS_NOT_INSTALLED    _HRESULT_TYPEDEF_(0x8004020CL)
 
+//
+// MessageId: EVENT_E_CANT_MODIFY_OR_DELETE_UNCONFIGURED_OBJECT
+//
+// MessageText:
+//
+//  Cannot modify or delete an object that was not added using the COM+ Admin SDK
+//
+#define EVENT_E_CANT_MODIFY_OR_DELETE_UNCONFIGURED_OBJECT _HRESULT_TYPEDEF_(0x8004020DL)
+
+//
+// MessageId: EVENT_E_CANT_MODIFY_OR_DELETE_CONFIGURED_OBJECT
+//
+// MessageText:
+//
+//  Cannot modify or delete an object that was added using the COM+ Admin SDK
+//
+#define EVENT_E_CANT_MODIFY_OR_DELETE_CONFIGURED_OBJECT _HRESULT_TYPEDEF_(0x8004020EL)
+
+//
+// MessageId: EVENT_E_INVALID_EVENT_CLASS_PARTITION
+//
+// MessageText:
+//
+//  The event class for this subscription is in an invalid partition
+//
+#define EVENT_E_INVALID_EVENT_CLASS_PARTITION _HRESULT_TYPEDEF_(0x8004020FL)
+
+//
+// MessageId: EVENT_E_PER_USER_SID_NOT_LOGGED_ON
+//
+// MessageText:
+//
+//  The owner of the PerUser subscription is not logged on to the system specified
+//
+#define EVENT_E_PER_USER_SID_NOT_LOGGED_ON _HRESULT_TYPEDEF_(0x80040210L)
+
+#define XACT_E_FIRST	0x8004D000
+#define XACT_E_LAST    0x8004D029
+#define XACT_S_FIRST   0x0004D000
+#define XACT_S_LAST    0x0004D010
+//
+// MessageId: XACT_E_ALREADYOTHERSINGLEPHASE
+//
+// MessageText:
+//
+//  Another single phase resource manager has already been enlisted in this transaction.
+//
+#define XACT_E_ALREADYOTHERSINGLEPHASE   _HRESULT_TYPEDEF_(0x8004D000L)
+
+//
+// MessageId: XACT_E_CANTRETAIN
+//
+// MessageText:
+//
+//  A retaining commit or abort is not supported
+//
+#define XACT_E_CANTRETAIN                _HRESULT_TYPEDEF_(0x8004D001L)
+
+//
+// MessageId: XACT_E_COMMITFAILED
+//
+// MessageText:
+//
+//  The transaction failed to commit for an unknown reason. The transaction was aborted.
+//
+#define XACT_E_COMMITFAILED              _HRESULT_TYPEDEF_(0x8004D002L)
+
+//
+// MessageId: XACT_E_COMMITPREVENTED
+//
+// MessageText:
+//
+//  Cannot call commit on this transaction object because the calling application did not initiate the transaction.
+//
+#define XACT_E_COMMITPREVENTED           _HRESULT_TYPEDEF_(0x8004D003L)
+
+//
+// MessageId: XACT_E_HEURISTICABORT
+//
+// MessageText:
+//
+//  Instead of committing, the resource heuristically aborted.
+//
+#define XACT_E_HEURISTICABORT            _HRESULT_TYPEDEF_(0x8004D004L)
+
+//
+// MessageId: XACT_E_HEURISTICCOMMIT
+//
+// MessageText:
+//
+//  Instead of aborting, the resource heuristically committed.
+//
+#define XACT_E_HEURISTICCOMMIT           _HRESULT_TYPEDEF_(0x8004D005L)
+
+//
+// MessageId: XACT_E_HEURISTICDAMAGE
+//
+// MessageText:
+//
+//  Some of the states of the resource were committed while others were aborted, likely because of heuristic decisions.
+//
+#define XACT_E_HEURISTICDAMAGE           _HRESULT_TYPEDEF_(0x8004D006L)
+
+//
+// MessageId: XACT_E_HEURISTICDANGER
+//
+// MessageText:
+//
+//  Some of the states of the resource may have been committed while others may have been aborted, likely because of heuristic decisions.
+//
+#define XACT_E_HEURISTICDANGER           _HRESULT_TYPEDEF_(0x8004D007L)
+
+//
+// MessageId: XACT_E_ISOLATIONLEVEL
+//
+// MessageText:
+//
+//  The requested isolation level is not valid or supported.
+//
+#define XACT_E_ISOLATIONLEVEL            _HRESULT_TYPEDEF_(0x8004D008L)
+
+//
+// MessageId: XACT_E_NOASYNC
+//
+// MessageText:
+//
+//  The transaction manager doesn't support an asynchronous operation for this method.
+//
+#define XACT_E_NOASYNC                   _HRESULT_TYPEDEF_(0x8004D009L)
+
+//
+// MessageId: XACT_E_NOENLIST
+//
+// MessageText:
+//
+//  Unable to enlist in the transaction.
+//
+#define XACT_E_NOENLIST                  _HRESULT_TYPEDEF_(0x8004D00AL)
+
+//
+// MessageId: XACT_E_NOISORETAIN
+//
+// MessageText:
+//
+//  The requested semantics of retention of isolation across retaining commit and abort boundaries cannot be supported by this transaction implementation, or isoFlags was not equal to zero.
+//
+#define XACT_E_NOISORETAIN               _HRESULT_TYPEDEF_(0x8004D00BL)
+
+//
+// MessageId: XACT_E_NORESOURCE
+//
+// MessageText:
+//
+//  There is no resource presently associated with this enlistment
+//
+#define XACT_E_NORESOURCE                _HRESULT_TYPEDEF_(0x8004D00CL)
+
+//
+// MessageId: XACT_E_NOTCURRENT
+//
+// MessageText:
+//
+//  The transaction failed to commit due to the failure of optimistic concurrency control in at least one of the resource managers.
+//
+#define XACT_E_NOTCURRENT                _HRESULT_TYPEDEF_(0x8004D00DL)
+
+//
+// MessageId: XACT_E_NOTRANSACTION
+//
+// MessageText:
+//
+//  The transaction has already been implicitly or explicitly committed or aborted
+//
+#define XACT_E_NOTRANSACTION             _HRESULT_TYPEDEF_(0x8004D00EL)
+
+//
+// MessageId: XACT_E_NOTSUPPORTED
+//
+// MessageText:
+//
+//  An invalid combination of flags was specified
+//
+#define XACT_E_NOTSUPPORTED              _HRESULT_TYPEDEF_(0x8004D00FL)
+
+//
+// MessageId: XACT_E_UNKNOWNRMGRID
+//
+// MessageText:
+//
+//  The resource manager id is not associated with this transaction or the transaction manager.
+//
+#define XACT_E_UNKNOWNRMGRID             _HRESULT_TYPEDEF_(0x8004D010L)
+
+//
+// MessageId: XACT_E_WRONGSTATE
+//
+// MessageText:
+//
+//  This method was called in the wrong state
+//
+#define XACT_E_WRONGSTATE                _HRESULT_TYPEDEF_(0x8004D011L)
+
+//
+// MessageId: XACT_E_WRONGUOW
+//
+// MessageText:
+//
+//  The indicated unit of work does not match the unit of work expected by the resource manager.
+//
+#define XACT_E_WRONGUOW                  _HRESULT_TYPEDEF_(0x8004D012L)
+
+//
+// MessageId: XACT_E_XTIONEXISTS
+//
+// MessageText:
+//
+//  An enlistment in a transaction already exists.
+//
+#define XACT_E_XTIONEXISTS               _HRESULT_TYPEDEF_(0x8004D013L)
+
+//
+// MessageId: XACT_E_NOIMPORTOBJECT
+//
+// MessageText:
+//
+//  An import object for the transaction could not be found.
+//
+#define XACT_E_NOIMPORTOBJECT            _HRESULT_TYPEDEF_(0x8004D014L)
+
+//
+// MessageId: XACT_E_INVALIDCOOKIE
+//
+// MessageText:
+//
+//  The transaction cookie is invalid.
+//
+#define XACT_E_INVALIDCOOKIE             _HRESULT_TYPEDEF_(0x8004D015L)
+
+//
+// MessageId: XACT_E_INDOUBT
+//
+// MessageText:
+//
+//  The transaction status is in doubt. A communication failure occurred, or a transaction manager or resource manager has failed
+//
+#define XACT_E_INDOUBT                   _HRESULT_TYPEDEF_(0x8004D016L)
+
+//
+// MessageId: XACT_E_NOTIMEOUT
+//
+// MessageText:
+//
+//  A time-out was specified, but time-outs are not supported.
+//
+#define XACT_E_NOTIMEOUT                 _HRESULT_TYPEDEF_(0x8004D017L)
+
+//
+// MessageId: XACT_E_ALREADYINPROGRESS
+//
+// MessageText:
+//
+//  The requested operation is already in progress for the transaction.
+//
+#define XACT_E_ALREADYINPROGRESS         _HRESULT_TYPEDEF_(0x8004D018L)
+
+//
+// MessageId: XACT_E_ABORTED
+//
+// MessageText:
+//
+//  The transaction has already been aborted.
+//
+#define XACT_E_ABORTED                   _HRESULT_TYPEDEF_(0x8004D019L)
+
+//
+// MessageId: XACT_E_LOGFULL
+//
+// MessageText:
+//
+//  The Transaction Manager returned a log full error.
+//
+#define XACT_E_LOGFULL                   _HRESULT_TYPEDEF_(0x8004D01AL)
+
+//
+// MessageId: XACT_E_TMNOTAVAILABLE
+//
+// MessageText:
+//
+//  The Transaction Manager is not available.
+//
+#define XACT_E_TMNOTAVAILABLE            _HRESULT_TYPEDEF_(0x8004D01BL)
+
+//
+// MessageId: XACT_E_CONNECTION_DOWN
+//
+// MessageText:
+//
+//  A connection with the transaction manager was lost.
+//
+#define XACT_E_CONNECTION_DOWN           _HRESULT_TYPEDEF_(0x8004D01CL)
+
+//
+// MessageId: XACT_E_CONNECTION_DENIED
+//
+// MessageText:
+//
+//  A request to establish a connection with the transaction manager was denied.
+//
+#define XACT_E_CONNECTION_DENIED         _HRESULT_TYPEDEF_(0x8004D01DL)
+
+//
+// MessageId: XACT_E_REENLISTTIMEOUT
+//
+// MessageText:
+//
+//  Resource manager reenlistment to determine transaction status timed out.
+//
+#define XACT_E_REENLISTTIMEOUT           _HRESULT_TYPEDEF_(0x8004D01EL)
+
+//
+// MessageId: XACT_E_TIP_CONNECT_FAILED
+//
+// MessageText:
+//
+//  This transaction manager failed to establish a connection with another TIP transaction manager.
+//
+#define XACT_E_TIP_CONNECT_FAILED        _HRESULT_TYPEDEF_(0x8004D01FL)
+
+//
+// MessageId: XACT_E_TIP_PROTOCOL_ERROR
+//
+// MessageText:
+//
+//  This transaction manager encountered a protocol error with another TIP transaction manager.
+//
+#define XACT_E_TIP_PROTOCOL_ERROR        _HRESULT_TYPEDEF_(0x8004D020L)
+
+//
+// MessageId: XACT_E_TIP_PULL_FAILED
+//
+// MessageText:
+//
+//  This transaction manager could not propagate a transaction from another TIP transaction manager.
+//
+#define XACT_E_TIP_PULL_FAILED           _HRESULT_TYPEDEF_(0x8004D021L)
+
+//
+// MessageId: XACT_E_DEST_TMNOTAVAILABLE
+//
+// MessageText:
+//
+//  The Transaction Manager on the destination machine is not available.
+//
+#define XACT_E_DEST_TMNOTAVAILABLE       _HRESULT_TYPEDEF_(0x8004D022L)
+
+//
+// MessageId: XACT_E_TIP_DISABLED
+//
+// MessageText:
+//
+//  The Transaction Manager has disabled its support for TIP.
+//
+#define XACT_E_TIP_DISABLED              _HRESULT_TYPEDEF_(0x8004D023L)
+
+//
+// MessageId: XACT_E_NETWORK_TX_DISABLED
+//
+// MessageText:
+//
+//  The transaction manager has disabled its support for remote/network transactions.
+//
+#define XACT_E_NETWORK_TX_DISABLED       _HRESULT_TYPEDEF_(0x8004D024L)
+
+//
+// MessageId: XACT_E_PARTNER_NETWORK_TX_DISABLED
+//
+// MessageText:
+//
+//  The partner transaction manager has disabled its support for remote/network transactions.
+//
+#define XACT_E_PARTNER_NETWORK_TX_DISABLED _HRESULT_TYPEDEF_(0x8004D025L)
+
+//
+// MessageId: XACT_E_XA_TX_DISABLED
+//
+// MessageText:
+//
+//  The transaction manager has disabled its support for XA transactions.
+//
+#define XACT_E_XA_TX_DISABLED            _HRESULT_TYPEDEF_(0x8004D026L)
+
+//
+// MessageId: XACT_E_UNABLE_TO_READ_DTC_CONFIG
+//
+// MessageText:
+//
+//  MSDTC was unable to read its configuration information.
+//
+#define XACT_E_UNABLE_TO_READ_DTC_CONFIG _HRESULT_TYPEDEF_(0x8004D027L)
+
+//
+// MessageId: XACT_E_UNABLE_TO_LOAD_DTC_PROXY
+//
+// MessageText:
+//
+//  MSDTC was unable to load the dtc proxy dll.
+//
+#define XACT_E_UNABLE_TO_LOAD_DTC_PROXY  _HRESULT_TYPEDEF_(0x8004D028L)
+
+//
+// MessageId: XACT_E_ABORTING
+//
+// MessageText:
+//
+//  The local transaction has aborted.
+//
+#define XACT_E_ABORTING                  _HRESULT_TYPEDEF_(0x8004D029L)
+
+//
+// TXF & CRM errors start 4d080.
+//
+// MessageId: XACT_E_CLERKNOTFOUND
+//
+// MessageText:
+//
+//  XACT_E_CLERKNOTFOUND
+//
+#define XACT_E_CLERKNOTFOUND             _HRESULT_TYPEDEF_(0x8004D080L)
+
+//
+// MessageId: XACT_E_CLERKEXISTS
+//
+// MessageText:
+//
+//  XACT_E_CLERKEXISTS
+//
+#define XACT_E_CLERKEXISTS               _HRESULT_TYPEDEF_(0x8004D081L)
+
+//
+// MessageId: XACT_E_RECOVERYINPROGRESS
+//
+// MessageText:
+//
+//  XACT_E_RECOVERYINPROGRESS
+//
+#define XACT_E_RECOVERYINPROGRESS        _HRESULT_TYPEDEF_(0x8004D082L)
+
+//
+// MessageId: XACT_E_TRANSACTIONCLOSED
+//
+// MessageText:
+//
+//  XACT_E_TRANSACTIONCLOSED
+//
+#define XACT_E_TRANSACTIONCLOSED         _HRESULT_TYPEDEF_(0x8004D083L)
+
+//
+// MessageId: XACT_E_INVALIDLSN
+//
+// MessageText:
+//
+//  XACT_E_INVALIDLSN
+//
+#define XACT_E_INVALIDLSN                _HRESULT_TYPEDEF_(0x8004D084L)
+
+//
+// MessageId: XACT_E_REPLAYREQUEST
+//
+// MessageText:
+//
+//  XACT_E_REPLAYREQUEST
+//
+#define XACT_E_REPLAYREQUEST             _HRESULT_TYPEDEF_(0x8004D085L)
+
+//
+// OleTx Success codes.
+//
+//
+// MessageId: XACT_S_ASYNC
+//
+// MessageText:
+//
+//  An asynchronous operation was specified. The operation has begun, but its outcome is not known yet.
+//
+#define XACT_S_ASYNC                     _HRESULT_TYPEDEF_(0x0004D000L)
+
+//
+// MessageId: XACT_S_DEFECT
+//
+// MessageText:
+//
+//  XACT_S_DEFECT
+//
+#define XACT_S_DEFECT                    _HRESULT_TYPEDEF_(0x0004D001L)
+
+//
+// MessageId: XACT_S_READONLY
+//
+// MessageText:
+//
+//  The method call succeeded because the transaction was read-only.
+//
+#define XACT_S_READONLY                  _HRESULT_TYPEDEF_(0x0004D002L)
+
+//
+// MessageId: XACT_S_SOMENORETAIN
+//
+// MessageText:
+//
+//  The transaction was successfully aborted. However, this is a coordinated transaction, and some number of enlisted resources were aborted outright because they could not support abort-retaining semantics
+//
+#define XACT_S_SOMENORETAIN              _HRESULT_TYPEDEF_(0x0004D003L)
+
+//
+// MessageId: XACT_S_OKINFORM
+//
+// MessageText:
+//
+//  No changes were made during this call, but the sink wants another chance to look if any other sinks make further changes.
+//
+#define XACT_S_OKINFORM                  _HRESULT_TYPEDEF_(0x0004D004L)
+
+//
+// MessageId: XACT_S_MADECHANGESCONTENT
+//
+// MessageText:
+//
+//  The sink is content and wishes the transaction to proceed. Changes were made to one or more resources during this call.
+//
+#define XACT_S_MADECHANGESCONTENT        _HRESULT_TYPEDEF_(0x0004D005L)
+
+//
+// MessageId: XACT_S_MADECHANGESINFORM
+//
+// MessageText:
+//
+//  The sink is for the moment and wishes the transaction to proceed, but if other changes are made following this return by other event sinks then this sink wants another chance to look
+//
+#define XACT_S_MADECHANGESINFORM         _HRESULT_TYPEDEF_(0x0004D006L)
+
+//
+// MessageId: XACT_S_ALLNORETAIN
+//
+// MessageText:
+//
+//  The transaction was successfully aborted. However, the abort was non-retaining.
+//
+#define XACT_S_ALLNORETAIN               _HRESULT_TYPEDEF_(0x0004D007L)
+
+//
+// MessageId: XACT_S_ABORTING
+//
+// MessageText:
+//
+//  An abort operation was already in progress.
+//
+#define XACT_S_ABORTING                  _HRESULT_TYPEDEF_(0x0004D008L)
+
+//
+// MessageId: XACT_S_SINGLEPHASE
+//
+// MessageText:
+//
+//  The resource manager has performed a single-phase commit of the transaction.
+//
+#define XACT_S_SINGLEPHASE               _HRESULT_TYPEDEF_(0x0004D009L)
+
+//
+// MessageId: XACT_S_LOCALLY_OK
+//
+// MessageText:
+//
+//  The local transaction has not aborted.
+//
+#define XACT_S_LOCALLY_OK                _HRESULT_TYPEDEF_(0x0004D00AL)
+
+//
+// MessageId: XACT_S_LASTRESOURCEMANAGER
+//
+// MessageText:
+//
+//  The resource manager has requested to be the coordinator (last resource manager) for the transaction.
+//
+#define XACT_S_LASTRESOURCEMANAGER       _HRESULT_TYPEDEF_(0x0004D010L)
+
 #define CONTEXT_E_FIRST        0x8004E000L
 #define CONTEXT_E_LAST         0x8004E02FL
 #define CONTEXT_S_FIRST        0x0004E000L
@@ -15878,6 +19254,69 @@
 //  The components threading model has changed after install into a COM+ Application.  Please re-install component.
 //
 #define CO_E_THREADINGMODEL_CHANGED      _HRESULT_TYPEDEF_(0x8004E028L)
+
+//
+// MessageId: CO_E_NOIISINTRINSICS
+//
+// MessageText:
+//
+//  IIS intrinsics not available.  Start your work with IIS.
+//
+#define CO_E_NOIISINTRINSICS             _HRESULT_TYPEDEF_(0x8004E029L)
+
+//
+// MessageId: CO_E_NOCOOKIES
+//
+// MessageText:
+//
+//  An attempt to write a cookie failed.
+//
+#define CO_E_NOCOOKIES                   _HRESULT_TYPEDEF_(0x8004E02AL)
+
+//
+// MessageId: CO_E_DBERROR
+//
+// MessageText:
+//
+//  An attempt to use a database generated a database specific error.
+//
+#define CO_E_DBERROR                     _HRESULT_TYPEDEF_(0x8004E02BL)
+
+//
+// MessageId: CO_E_NOTPOOLED
+//
+// MessageText:
+//
+//  The COM+ component you created must use object pooling to work.
+//
+#define CO_E_NOTPOOLED                   _HRESULT_TYPEDEF_(0x8004E02CL)
+
+//
+// MessageId: CO_E_NOTCONSTRUCTED
+//
+// MessageText:
+//
+//  The COM+ component you created must use object construction to work correctly.
+//
+#define CO_E_NOTCONSTRUCTED              _HRESULT_TYPEDEF_(0x8004E02DL)
+
+//
+// MessageId: CO_E_NOSYNCHRONIZATION
+//
+// MessageText:
+//
+//  The COM+ component requires synchronization, and it is not configured for it.
+//
+#define CO_E_NOSYNCHRONIZATION           _HRESULT_TYPEDEF_(0x8004E02EL)
+
+//
+// MessageId: CO_E_ISOLEVELMISMATCH
+//
+// MessageText:
+//
+//  The TxIsolation Level property for the COM+ component being created is stronger than the TxIsolationLevel for the "root" component for the transaction.  The creation failed.
+//
+#define CO_E_ISOLEVELMISMATCH            _HRESULT_TYPEDEF_(0x8004E02FL)
 
 //
 // Old OLE Success Codes
@@ -16386,6 +19825,15 @@
 //  Not all the requested interfaces were available
 //
 #define CO_S_NOTALLINTERFACES            _HRESULT_TYPEDEF_(0x00080012L)
+
+//
+// MessageId: CO_S_MACHINENAMENOTFOUND
+//
+// MessageText:
+//
+//  The specified machine name was not found in the cache.
+//
+#define CO_S_MACHINENAMENOTFOUND         _HRESULT_TYPEDEF_(0x00080013L)
 
 // ******************
 // FACILITY_DISPATCH
@@ -17212,6 +20660,81 @@
 //
 #define STG_S_CANNOTCONSOLIDATE          _HRESULT_TYPEDEF_(0x00030206L)
 
+/*++
+
+ MessageId's 0x0305 - 0x031f (inclusive) are reserved for **STORAGE**
+ copy protection errors.
+
+--*/
+//
+// MessageId: STG_E_STATUS_COPY_PROTECTION_FAILURE
+//
+// MessageText:
+//
+//  Generic Copy Protection Error.
+//
+#define STG_E_STATUS_COPY_PROTECTION_FAILURE _HRESULT_TYPEDEF_(0x80030305L)
+
+//
+// MessageId: STG_E_CSS_AUTHENTICATION_FAILURE
+//
+// MessageText:
+//
+//  Copy Protection Error - DVD CSS Authentication failed.
+//
+#define STG_E_CSS_AUTHENTICATION_FAILURE _HRESULT_TYPEDEF_(0x80030306L)
+
+//
+// MessageId: STG_E_CSS_KEY_NOT_PRESENT
+//
+// MessageText:
+//
+//  Copy Protection Error - The given sector does not have a valid CSS key.
+//
+#define STG_E_CSS_KEY_NOT_PRESENT        _HRESULT_TYPEDEF_(0x80030307L)
+
+//
+// MessageId: STG_E_CSS_KEY_NOT_ESTABLISHED
+//
+// MessageText:
+//
+//  Copy Protection Error - DVD session key not established.
+//
+#define STG_E_CSS_KEY_NOT_ESTABLISHED    _HRESULT_TYPEDEF_(0x80030308L)
+
+//
+// MessageId: STG_E_CSS_SCRAMBLED_SECTOR
+//
+// MessageText:
+//
+//  Copy Protection Error - The read failed because the sector is encrypted.
+//
+#define STG_E_CSS_SCRAMBLED_SECTOR       _HRESULT_TYPEDEF_(0x80030309L)
+
+//
+// MessageId: STG_E_CSS_REGION_MISMATCH
+//
+// MessageText:
+//
+//  Copy Protection Error - The current DVD's region does not correspond to the region setting of the drive.
+//
+#define STG_E_CSS_REGION_MISMATCH        _HRESULT_TYPEDEF_(0x8003030AL)
+
+//
+// MessageId: STG_E_RESETS_EXHAUSTED
+//
+// MessageText:
+//
+//  Copy Protection Error - The drive's region setting may be permanent or the number of user resets has been exhausted.
+//
+#define STG_E_RESETS_EXHAUSTED           _HRESULT_TYPEDEF_(0x8003030BL)
+
+/*++
+
+ MessageId's 0x0305 - 0x031f (inclusive) are reserved for **STORAGE**
+ copy protection errors.
+
+--*/
 // ******************
 // FACILITY_RPC
 // ******************
@@ -17966,6 +21489,44 @@
 #define RPC_E_UNEXPECTED                 _HRESULT_TYPEDEF_(0x8001FFFFL)
 
 
+
+//////////////////////////////////////
+//                                  //
+// Additional Security Status Codes //
+//                                  //
+// Facility=Security                //
+//                                  //
+//////////////////////////////////////
+
+
+//
+// MessageId: ERROR_AUDITING_DISABLED
+//
+// MessageText:
+//
+//  The specified event is currently not being audited.
+//
+#define ERROR_AUDITING_DISABLED          _HRESULT_TYPEDEF_(0xC0090001L)
+
+//
+// MessageId: ERROR_ALL_SIDS_FILTERED
+//
+// MessageText:
+//
+//  The SID filtering operation removed all SIDs.
+//
+#define ERROR_ALL_SIDS_FILTERED          _HRESULT_TYPEDEF_(0xC0090002L)
+
+
+
+/////////////////////////////////////////////
+//                                         //
+// end of Additional Security Status Codes //
+//                                         //
+/////////////////////////////////////////////
+
+
+
  /////////////////
  //
  //  FACILITY_SSPI
@@ -18522,6 +22083,15 @@
 #define SEC_E_CONTEXT_EXPIRED            _HRESULT_TYPEDEF_(0x80090317L)
 
 //
+// MessageId: SEC_I_CONTEXT_EXPIRED
+//
+// MessageText:
+//
+//  The context has expired and can no longer be used.
+//
+#define SEC_I_CONTEXT_EXPIRED            _HRESULT_TYPEDEF_(0x00090317L)
+
+//
 // MessageId: SEC_E_INCOMPLETE_MESSAGE
 //
 // MessageText:
@@ -18598,7 +22168,7 @@
 //
 // MessageText:
 //
-//  The certificate chain was issued by an untrusted authority.
+//  The certificate chain was issued by an authority that is not trusted.
 //
 #define SEC_E_UNTRUSTED_ROOT             _HRESULT_TYPEDEF_(0x80090325L)
 
@@ -18665,6 +22235,195 @@
 //  The security context could not be established due to a failure in the requested quality of service (e.g. mutual authentication or delegation).
 //
 #define SEC_E_SECURITY_QOS_FAILED        _HRESULT_TYPEDEF_(0x80090332L)
+
+//
+// MessageId: SEC_E_UNFINISHED_CONTEXT_DELETED
+//
+// MessageText:
+//
+//  A security context was deleted before the context was completed.  This is considered a logon failure.
+//
+#define SEC_E_UNFINISHED_CONTEXT_DELETED _HRESULT_TYPEDEF_(0x80090333L)
+
+//
+// MessageId: SEC_E_NO_TGT_REPLY
+//
+// MessageText:
+//
+//  The client is trying to negotiate a context and the server requires user-to-user but didn't send a TGT reply.
+//
+#define SEC_E_NO_TGT_REPLY               _HRESULT_TYPEDEF_(0x80090334L)
+
+//
+// MessageId: SEC_E_NO_IP_ADDRESSES
+//
+// MessageText:
+//
+//  Unable to accomplish the requested task because the local machine does not have any IP addresses.
+//
+#define SEC_E_NO_IP_ADDRESSES            _HRESULT_TYPEDEF_(0x80090335L)
+
+//
+// MessageId: SEC_E_WRONG_CREDENTIAL_HANDLE
+//
+// MessageText:
+//
+//  The supplied credential handle does not match the credential associated with the security context.
+//
+#define SEC_E_WRONG_CREDENTIAL_HANDLE    _HRESULT_TYPEDEF_(0x80090336L)
+
+//
+// MessageId: SEC_E_CRYPTO_SYSTEM_INVALID
+//
+// MessageText:
+//
+//  The crypto system or checksum function is invalid because a required function is unavailable.
+//
+#define SEC_E_CRYPTO_SYSTEM_INVALID      _HRESULT_TYPEDEF_(0x80090337L)
+
+//
+// MessageId: SEC_E_MAX_REFERRALS_EXCEEDED
+//
+// MessageText:
+//
+//  The number of maximum ticket referrals has been exceeded.
+//
+#define SEC_E_MAX_REFERRALS_EXCEEDED     _HRESULT_TYPEDEF_(0x80090338L)
+
+//
+// MessageId: SEC_E_MUST_BE_KDC
+//
+// MessageText:
+//
+//  The local machine must be a Kerberos KDC (domain controller) and it is not.
+//
+#define SEC_E_MUST_BE_KDC                _HRESULT_TYPEDEF_(0x80090339L)
+
+//
+// MessageId: SEC_E_STRONG_CRYPTO_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  The other end of the security negotiation is requires strong crypto but it is not supported on the local machine.
+//
+#define SEC_E_STRONG_CRYPTO_NOT_SUPPORTED _HRESULT_TYPEDEF_(0x8009033AL)
+
+//
+// MessageId: SEC_E_TOO_MANY_PRINCIPALS
+//
+// MessageText:
+//
+//  The KDC reply contained more than one principal name.
+//
+#define SEC_E_TOO_MANY_PRINCIPALS        _HRESULT_TYPEDEF_(0x8009033BL)
+
+//
+// MessageId: SEC_E_NO_PA_DATA
+//
+// MessageText:
+//
+//  Expected to find PA data for a hint of what etype to use, but it was not found.
+//
+#define SEC_E_NO_PA_DATA                 _HRESULT_TYPEDEF_(0x8009033CL)
+
+//
+// MessageId: SEC_E_PKINIT_NAME_MISMATCH
+//
+// MessageText:
+//
+//  The client cert name does not matches the user name or the KDC name is incorrect.
+//
+#define SEC_E_PKINIT_NAME_MISMATCH       _HRESULT_TYPEDEF_(0x8009033DL)
+
+//
+// MessageId: SEC_E_SMARTCARD_LOGON_REQUIRED
+//
+// MessageText:
+//
+//  Smartcard logon is required and was not used.
+//
+#define SEC_E_SMARTCARD_LOGON_REQUIRED   _HRESULT_TYPEDEF_(0x8009033EL)
+
+//
+// MessageId: SEC_E_SHUTDOWN_IN_PROGRESS
+//
+// MessageText:
+//
+//  A system shutdown is in progress.
+//
+#define SEC_E_SHUTDOWN_IN_PROGRESS       _HRESULT_TYPEDEF_(0x8009033FL)
+
+//
+// MessageId: SEC_E_KDC_INVALID_REQUEST
+//
+// MessageText:
+//
+//  An invalid request was sent to the KDC.
+//
+#define SEC_E_KDC_INVALID_REQUEST        _HRESULT_TYPEDEF_(0x80090340L)
+
+//
+// MessageId: SEC_E_KDC_UNABLE_TO_REFER
+//
+// MessageText:
+//
+//  The KDC was unable to generate a referral for the service requested.
+//
+#define SEC_E_KDC_UNABLE_TO_REFER        _HRESULT_TYPEDEF_(0x80090341L)
+
+//
+// MessageId: SEC_E_KDC_UNKNOWN_ETYPE
+//
+// MessageText:
+//
+//  The encryption type requested is not supported by the KDC.
+//
+#define SEC_E_KDC_UNKNOWN_ETYPE          _HRESULT_TYPEDEF_(0x80090342L)
+
+//
+// MessageId: SEC_E_UNSUPPORTED_PREAUTH
+//
+// MessageText:
+//
+//  An unsupported preauthentication mechanism was presented to the kerberos package.
+//
+#define SEC_E_UNSUPPORTED_PREAUTH        _HRESULT_TYPEDEF_(0x80090343L)
+
+//
+// MessageId: SEC_E_DELEGATION_REQUIRED
+//
+// MessageText:
+//
+//  The requested operation requires delegation to be enabled on the machine.
+//
+#define SEC_E_DELEGATION_REQUIRED        _HRESULT_TYPEDEF_(0x80090345L)
+
+//
+// MessageId: SEC_E_BAD_BINDINGS
+//
+// MessageText:
+//
+//  Client's supplied SSPI channel bindings were incorrect.
+//
+#define SEC_E_BAD_BINDINGS               _HRESULT_TYPEDEF_(0x80090346L)
+
+//
+// MessageId: SEC_E_MULTIPLE_ACCOUNTS
+//
+// MessageText:
+//
+//  The received certificate was mapped to multiple accounts.
+//
+#define SEC_E_MULTIPLE_ACCOUNTS          _HRESULT_TYPEDEF_(0x80090347L)
+
+//
+// MessageId: SEC_E_NO_KERB_KEY
+//
+// MessageText:
+//
+//  SEC_E_NO_KERB_KEY
+//
+#define SEC_E_NO_KERB_KEY                _HRESULT_TYPEDEF_(0x80090348L)
 
 //
 // Provided for backwards compatibility
@@ -18825,6 +22584,15 @@
 //  The streamed cryptographic message requires more data to complete the decode operation.
 //
 #define CRYPT_E_STREAM_INSUFFICIENT_DATA _HRESULT_TYPEDEF_(0x80091011L)
+
+//
+// MessageId: CRYPT_I_NEW_PROTECTION_REQUIRED
+//
+// MessageText:
+//
+//  The protected data needs to be re-protected.
+//
+#define CRYPT_I_NEW_PROTECTION_REQUIRED  _HRESULT_TYPEDEF_(0x00091012L)
 
 //
 // MessageId: CRYPT_E_BAD_LEN
@@ -19786,6 +23554,105 @@
 #define CERTSRV_E_ENCODING_LENGTH        _HRESULT_TYPEDEF_(0x80094007L)
 
 //
+// MessageId: CERTSRV_E_ROLECONFLICT
+//
+// MessageText:
+//
+//  The operation is denied. The user has multiple roles assigned and the certification authority is configured to enforce role separation.
+//
+#define CERTSRV_E_ROLECONFLICT           _HRESULT_TYPEDEF_(0x80094008L)
+
+//
+// MessageId: CERTSRV_E_RESTRICTEDOFFICER
+//
+// MessageText:
+//
+//  The operation is denied. It can only be performed by a certificate manager that is allowed to manage certificates for the current requester.
+//
+#define CERTSRV_E_RESTRICTEDOFFICER      _HRESULT_TYPEDEF_(0x80094009L)
+
+//
+// MessageId: CERTSRV_E_KEY_ARCHIVAL_NOT_CONFIGURED
+//
+// MessageText:
+//
+//  Cannot archive private key.  The certification authority is not configured for key archival.
+//
+#define CERTSRV_E_KEY_ARCHIVAL_NOT_CONFIGURED _HRESULT_TYPEDEF_(0x8009400AL)
+
+//
+// MessageId: CERTSRV_E_NO_VALID_KRA
+//
+// MessageText:
+//
+//  Cannot archive private key.  The certification authority could not verify one or more key recovery certificates.
+//
+#define CERTSRV_E_NO_VALID_KRA           _HRESULT_TYPEDEF_(0x8009400BL)
+
+//
+// MessageId: CERTSRV_E_BAD_REQUEST_KEY_ARCHIVAL
+//
+// MessageText:
+//
+//  The request is incorrectly formatted.  The encrypted private key must be in an unauthenticated attribute in an outermost signature.
+//
+#define CERTSRV_E_BAD_REQUEST_KEY_ARCHIVAL _HRESULT_TYPEDEF_(0x8009400CL)
+
+//
+// MessageId: CERTSRV_E_NO_CAADMIN_DEFINED
+//
+// MessageText:
+//
+//  At least one security principal must have the permission to manage this CA.
+//
+#define CERTSRV_E_NO_CAADMIN_DEFINED     _HRESULT_TYPEDEF_(0x8009400DL)
+
+//
+// MessageId: CERTSRV_E_BAD_RENEWAL_CERT_ATTRIBUTE
+//
+// MessageText:
+//
+//  The request contains an invalid renewal certificate attribute.
+//
+#define CERTSRV_E_BAD_RENEWAL_CERT_ATTRIBUTE _HRESULT_TYPEDEF_(0x8009400EL)
+
+//
+// MessageId: CERTSRV_E_NO_DB_SESSIONS
+//
+// MessageText:
+//
+//  An attempt was made to open a Certification Authority database session, but there are already too many active sessions.  The server may need to be configured to allow additional sessions.
+//
+#define CERTSRV_E_NO_DB_SESSIONS         _HRESULT_TYPEDEF_(0x8009400FL)
+
+//
+// MessageId: CERTSRV_E_ALIGNMENT_FAULT
+//
+// MessageText:
+//
+//  A memory reference caused a data alignment fault.
+//
+#define CERTSRV_E_ALIGNMENT_FAULT        _HRESULT_TYPEDEF_(0x80094010L)
+
+//
+// MessageId: CERTSRV_E_ENROLL_DENIED
+//
+// MessageText:
+//
+//  The permissions on this certification authority do not allow the current user to enroll for certificates.
+//
+#define CERTSRV_E_ENROLL_DENIED          _HRESULT_TYPEDEF_(0x80094011L)
+
+//
+// MessageId: CERTSRV_E_TEMPLATE_DENIED
+//
+// MessageText:
+//
+//  The permissions on the certificate template do not allow the current user to enroll for this type of certificate.
+//
+#define CERTSRV_E_TEMPLATE_DENIED        _HRESULT_TYPEDEF_(0x80094012L)
+
+//
 // MessageId: CERTSRV_E_UNSUPPORTED_CERT_TYPE
 //
 // MessageText:
@@ -19802,6 +23669,207 @@
 //  The request contains no certificate template information.
 //
 #define CERTSRV_E_NO_CERT_TYPE           _HRESULT_TYPEDEF_(0x80094801L)
+
+//
+// MessageId: CERTSRV_E_TEMPLATE_CONFLICT
+//
+// MessageText:
+//
+//  The request contains conflicting template information.
+//
+#define CERTSRV_E_TEMPLATE_CONFLICT      _HRESULT_TYPEDEF_(0x80094802L)
+
+//
+// MessageId: CERTSRV_E_SUBJECT_ALT_NAME_REQUIRED
+//
+// MessageText:
+//
+//  The request is missing a required Subject Alternate name extension.
+//
+#define CERTSRV_E_SUBJECT_ALT_NAME_REQUIRED _HRESULT_TYPEDEF_(0x80094803L)
+
+//
+// MessageId: CERTSRV_E_ARCHIVED_KEY_REQUIRED
+//
+// MessageText:
+//
+//  The request is missing a required private key for archival by the server.
+//
+#define CERTSRV_E_ARCHIVED_KEY_REQUIRED  _HRESULT_TYPEDEF_(0x80094804L)
+
+//
+// MessageId: CERTSRV_E_SMIME_REQUIRED
+//
+// MessageText:
+//
+//  The request is missing a required SMIME capabilities extension.
+//
+#define CERTSRV_E_SMIME_REQUIRED         _HRESULT_TYPEDEF_(0x80094805L)
+
+//
+// MessageId: CERTSRV_E_BAD_RENEWAL_SUBJECT
+//
+// MessageText:
+//
+//  The request was made on behalf of a subject other than the caller.  The certificate template must be configured to require at least one signature to authorize the request.
+//
+#define CERTSRV_E_BAD_RENEWAL_SUBJECT    _HRESULT_TYPEDEF_(0x80094806L)
+
+//
+// MessageId: CERTSRV_E_BAD_TEMPLATE_VERSION
+//
+// MessageText:
+//
+//  The request template version is newer than the supported template version.
+//
+#define CERTSRV_E_BAD_TEMPLATE_VERSION   _HRESULT_TYPEDEF_(0x80094807L)
+
+//
+// MessageId: CERTSRV_E_TEMPLATE_POLICY_REQUIRED
+//
+// MessageText:
+//
+//  The template is missing a required signature policy attribute.
+//
+#define CERTSRV_E_TEMPLATE_POLICY_REQUIRED _HRESULT_TYPEDEF_(0x80094808L)
+
+//
+// MessageId: CERTSRV_E_SIGNATURE_POLICY_REQUIRED
+//
+// MessageText:
+//
+//  The request is missing required signature policy information.
+//
+#define CERTSRV_E_SIGNATURE_POLICY_REQUIRED _HRESULT_TYPEDEF_(0x80094809L)
+
+//
+// MessageId: CERTSRV_E_SIGNATURE_COUNT
+//
+// MessageText:
+//
+//  The request is missing one or more required signatures.
+//
+#define CERTSRV_E_SIGNATURE_COUNT        _HRESULT_TYPEDEF_(0x8009480AL)
+
+//
+// MessageId: CERTSRV_E_SIGNATURE_REJECTED
+//
+// MessageText:
+//
+//  One or more signatures did not include the required application or issuance policies.  The request is missing one or more required valid signatures.
+//
+#define CERTSRV_E_SIGNATURE_REJECTED     _HRESULT_TYPEDEF_(0x8009480BL)
+
+//
+// MessageId: CERTSRV_E_ISSUANCE_POLICY_REQUIRED
+//
+// MessageText:
+//
+//  The request is missing one or more required signature issuance policies.
+//
+#define CERTSRV_E_ISSUANCE_POLICY_REQUIRED _HRESULT_TYPEDEF_(0x8009480CL)
+
+//
+// MessageId: CERTSRV_E_SUBJECT_UPN_REQUIRED
+//
+// MessageText:
+//
+//  The UPN is unavailable and cannot be added to the Subject Alternate name.
+//
+#define CERTSRV_E_SUBJECT_UPN_REQUIRED   _HRESULT_TYPEDEF_(0x8009480DL)
+
+//
+// MessageId: CERTSRV_E_SUBJECT_DIRECTORY_GUID_REQUIRED
+//
+// MessageText:
+//
+//  The Active Directory GUID is unavailable and cannot be added to the Subject Alternate name.
+//
+#define CERTSRV_E_SUBJECT_DIRECTORY_GUID_REQUIRED _HRESULT_TYPEDEF_(0x8009480EL)
+
+//
+// MessageId: CERTSRV_E_SUBJECT_DNS_REQUIRED
+//
+// MessageText:
+//
+//  The DNS name is unavailable and cannot be added to the Subject Alternate name.
+//
+#define CERTSRV_E_SUBJECT_DNS_REQUIRED   _HRESULT_TYPEDEF_(0x8009480FL)
+
+//
+// MessageId: CERTSRV_E_ARCHIVED_KEY_UNEXPECTED
+//
+// MessageText:
+//
+//  The request includes a private key for archival by the server, but key archival is not enabled for the specified certificate template.
+//
+#define CERTSRV_E_ARCHIVED_KEY_UNEXPECTED _HRESULT_TYPEDEF_(0x80094810L)
+
+//
+// MessageId: CERTSRV_E_KEY_LENGTH
+//
+// MessageText:
+//
+//  The public key does not meet the minimum size required by the specified certificate template.
+//
+#define CERTSRV_E_KEY_LENGTH             _HRESULT_TYPEDEF_(0x80094811L)
+
+//
+// The range 0x5000-0x51ff is reserved for XENROLL errors.
+//
+//
+// MessageId: XENROLL_E_KEY_NOT_EXPORTABLE
+//
+// MessageText:
+//
+//  The key is not exportable.
+//
+#define XENROLL_E_KEY_NOT_EXPORTABLE     _HRESULT_TYPEDEF_(0x80095000L)
+
+//
+// MessageId: XENROLL_E_CANNOT_ADD_ROOT_CERT
+//
+// MessageText:
+//
+//  You cannot add the root CA certificate into your local store.
+//
+#define XENROLL_E_CANNOT_ADD_ROOT_CERT   _HRESULT_TYPEDEF_(0x80095001L)
+
+//
+// MessageId: XENROLL_E_RESPONSE_KA_HASH_NOT_FOUND
+//
+// MessageText:
+//
+//  The key archival hash attribute was not found in the response.
+//
+#define XENROLL_E_RESPONSE_KA_HASH_NOT_FOUND _HRESULT_TYPEDEF_(0x80095002L)
+
+//
+// MessageId: XENROLL_E_RESPONSE_UNEXPECTED_KA_HASH
+//
+// MessageText:
+//
+//  An unexpetced key archival hash attribute was found in the response.
+//
+#define XENROLL_E_RESPONSE_UNEXPECTED_KA_HASH _HRESULT_TYPEDEF_(0x80095003L)
+
+//
+// MessageId: XENROLL_E_RESPONSE_KA_HASH_MISMATCH
+//
+// MessageText:
+//
+//  There is a key archival hash mismatch between the request and the response.
+//
+#define XENROLL_E_RESPONSE_KA_HASH_MISMATCH _HRESULT_TYPEDEF_(0x80095004L)
+
+//
+// MessageId: XENROLL_E_KEYSPEC_SMIME_MISMATCH
+//
+// MessageText:
+//
+//  Signing certificate cannot include SMIME extension.
+//
+#define XENROLL_E_KEYSPEC_SMIME_MISMATCH _HRESULT_TYPEDEF_(0x80095005L)
 
 //
 // MessageId: TRUST_E_SYSTEM_ERROR
@@ -20272,7 +24340,7 @@
 //
 // MessageText:
 //
-//  A certificate chain processed correctly, but terminated in a root certificate which is not trusted by the trust provider.
+//  A certificate chain processed, but terminated in a root certificate which is not trusted by the trust provider.
 //
 #define CERT_E_UNTRUSTEDROOT             _HRESULT_TYPEDEF_(0x800B0109L)
 
@@ -20356,6 +24424,24 @@
 //  A certification chain processed correctly, but one of the CA certificates is not trusted by the policy provider.
 //
 #define CERT_E_UNTRUSTEDCA               _HRESULT_TYPEDEF_(0x800B0112L)
+
+//
+// MessageId: CERT_E_INVALID_POLICY
+//
+// MessageText:
+//
+//  The certificate has invalid policy.
+//
+#define CERT_E_INVALID_POLICY            _HRESULT_TYPEDEF_(0x800B0113L)
+
+//
+// MessageId: CERT_E_INVALID_NAME
+//
+// MessageText:
+//
+//  The certificate has an invalid name. The name is not included in the permitted list or is explicitly excluded.
+//
+#define CERT_E_INVALID_NAME              _HRESULT_TYPEDEF_(0x800B0114L)
 
 // *****************
 // FACILITY_SETUPAPI
@@ -20849,7 +24935,7 @@
 //
 // MessageText:
 //
-//  The driver selected for this device does not support Windows 2000.
+//  The driver selected for this device does not support Windows XP.
 //
 #define SPAPI_E_NON_WINDOWS_NT_DRIVER    _HRESULT_TYPEDEF_(0x800F022DL)
 
@@ -20897,6 +24983,60 @@
 //  The device could not be dynamically removed.
 //
 #define SPAPI_E_CANT_REMOVE_DEVINST      _HRESULT_TYPEDEF_(0x800F0232L)
+
+//
+// MessageId: SPAPI_E_INVALID_TARGET
+//
+// MessageText:
+//
+//  Cannot copy to specified target.
+//
+#define SPAPI_E_INVALID_TARGET           _HRESULT_TYPEDEF_(0x800F0233L)
+
+//
+// MessageId: SPAPI_E_DRIVER_NONNATIVE
+//
+// MessageText:
+//
+//  Driver is not intended for this platform.
+//
+#define SPAPI_E_DRIVER_NONNATIVE         _HRESULT_TYPEDEF_(0x800F0234L)
+
+//
+// MessageId: SPAPI_E_IN_WOW64
+//
+// MessageText:
+//
+//  Operation not allowed in WOW64.
+//
+#define SPAPI_E_IN_WOW64                 _HRESULT_TYPEDEF_(0x800F0235L)
+
+//
+// MessageId: SPAPI_E_SET_SYSTEM_RESTORE_POINT
+//
+// MessageText:
+//
+//  The operation involving unsigned file copying was rolled back, so that a system restore point could be set.
+//
+#define SPAPI_E_SET_SYSTEM_RESTORE_POINT _HRESULT_TYPEDEF_(0x800F0236L)
+
+//
+// MessageId: SPAPI_E_INCORRECTLY_COPIED_INF
+//
+// MessageText:
+//
+//  An INF was copied into the Windows INF directory in an improper manner.
+//
+#define SPAPI_E_INCORRECTLY_COPIED_INF   _HRESULT_TYPEDEF_(0x800F0237L)
+
+//
+// MessageId: SPAPI_E_SCE_DISABLED
+//
+// MessageText:
+//
+//  The Security Configuration Editor (SCE) APIs have been disabled on this Embedded product.
+//
+#define SPAPI_E_SCE_DISABLED             _HRESULT_TYPEDEF_(0x800F0238L)
 
 //
 // MessageId: SPAPI_E_ERROR_NOT_INSTALLED
@@ -21272,7 +25412,7 @@
 //
 // MessageText:
 //
-//  An attempt was made to write more data than would fit in the target object.
+//  The smartcard does not have enough memory to store the information.
 //
 #define SCARD_E_WRITE_TOO_MANY           _HRESULT_TYPEDEF_(0x80100028L)
 
@@ -21338,6 +25478,15 @@
 //  A communications error with the smart card has been detected.  Retry the operation.
 //
 #define SCARD_E_COMM_DATA_LOST           _HRESULT_TYPEDEF_(0x8010002FL)
+
+//
+// MessageId: SCARD_E_NO_KEY_CONTAINER
+//
+// MessageText:
+//
+//  The requested key container does not exist on the smart card.
+//
+#define SCARD_E_NO_KEY_CONTAINER         _HRESULT_TYPEDEF_(0x80100030L)
 
 //
 // These are warning codes.
@@ -21432,6 +25581,15 @@
 //
 #define SCARD_W_CANCELLED_BY_USER        _HRESULT_TYPEDEF_(0x8010006EL)
 
+//
+// MessageId: SCARD_W_CARD_NOT_AUTHENTICATED
+//
+// MessageText:
+//
+//  No PIN was presented to the smart card.
+//
+#define SCARD_W_CARD_NOT_AUTHENTICATED   _HRESULT_TYPEDEF_(0x8010006FL)
+
 // *****************
 // FACILITY_COMPLUS
 // *****************
@@ -21440,6 +25598,12 @@
 // Facility COMPLUS Error Messages
 // ===============================
 //
+//
+// The following are the subranges  within the COMPLUS facility
+// 0x400 - 0x4ff               COMADMIN_E_CAT
+// 0x600 - 0x6ff               COMQC errors
+// 0x700 - 0x7ff               MSDTC errors
+// 0x800 - 0x8ff               Other COMADMIN errors
 //
 // COMPLUS Admin errors
 //
@@ -21831,6 +25995,15 @@
 #define COMADMIN_E_OBJECTEXISTS          _HRESULT_TYPEDEF_(0x80110438L)
 
 //
+// MessageId: COMADMIN_E_COMPONENTEXISTS
+//
+// MessageText:
+//
+//  The component already exists
+//
+#define COMADMIN_E_COMPONENTEXISTS       _HRESULT_TYPEDEF_(0x80110439L)
+
+//
 // MessageId: COMADMIN_E_REGFILE_CORRUPT
 //
 // MessageText:
@@ -21939,6 +26112,285 @@
 #define COMADMIN_E_CANT_SUBSCRIBE_TO_COMPONENT _HRESULT_TYPEDEF_(0x8011044DL)
 
 //
+// MessageId: COMADMIN_E_EVENTCLASS_CANT_BE_SUBSCRIBER
+//
+// MessageText:
+//
+//  An event class cannot also be a subscriber component
+//
+#define COMADMIN_E_EVENTCLASS_CANT_BE_SUBSCRIBER _HRESULT_TYPEDEF_(0x8011044EL)
+
+//
+// MessageId: COMADMIN_E_LIB_APP_PROXY_INCOMPATIBLE
+//
+// MessageText:
+//
+//  Library applications and application proxies are incompatible
+//
+#define COMADMIN_E_LIB_APP_PROXY_INCOMPATIBLE _HRESULT_TYPEDEF_(0x8011044FL)
+
+//
+// MessageId: COMADMIN_E_BASE_PARTITION_ONLY
+//
+// MessageText:
+//
+//  This function is valid for the base partition only
+//
+#define COMADMIN_E_BASE_PARTITION_ONLY   _HRESULT_TYPEDEF_(0x80110450L)
+
+//
+// MessageId: COMADMIN_E_START_APP_DISABLED
+//
+// MessageText:
+//
+//  You cannot start an application that has been disabled
+//
+#define COMADMIN_E_START_APP_DISABLED    _HRESULT_TYPEDEF_(0x80110451L)
+
+//
+// MessageId: COMADMIN_E_CAT_DUPLICATE_PARTITION_NAME
+//
+// MessageText:
+//
+//  The specified partition name is already in use on this computer
+//
+#define COMADMIN_E_CAT_DUPLICATE_PARTITION_NAME _HRESULT_TYPEDEF_(0x80110457L)
+
+//
+// MessageId: COMADMIN_E_CAT_INVALID_PARTITION_NAME
+//
+// MessageText:
+//
+//  The specified partition name is invalid. Check that the name contains at least one visible character
+//
+#define COMADMIN_E_CAT_INVALID_PARTITION_NAME _HRESULT_TYPEDEF_(0x80110458L)
+
+//
+// MessageId: COMADMIN_E_CAT_PARTITION_IN_USE
+//
+// MessageText:
+//
+//  The partition cannot be deleted because it is the default partition for one or more users
+//
+#define COMADMIN_E_CAT_PARTITION_IN_USE  _HRESULT_TYPEDEF_(0x80110459L)
+
+//
+// MessageId: COMADMIN_E_FILE_PARTITION_DUPLICATE_FILES
+//
+// MessageText:
+//
+//  The partition cannot be exported, because one or more components in the partition have the same file name
+//
+#define COMADMIN_E_FILE_PARTITION_DUPLICATE_FILES _HRESULT_TYPEDEF_(0x8011045AL)
+
+//
+// MessageId: COMADMIN_E_CAT_IMPORTED_COMPONENTS_NOT_ALLOWED
+//
+// MessageText:
+//
+//  Applications that contain one or more imported components cannot be installed into a non-base partition
+//
+#define COMADMIN_E_CAT_IMPORTED_COMPONENTS_NOT_ALLOWED _HRESULT_TYPEDEF_(0x8011045BL)
+
+//
+// MessageId: COMADMIN_E_AMBIGUOUS_APPLICATION_NAME
+//
+// MessageText:
+//
+//  The application name is not unique and cannot be resolved to an application id
+//
+#define COMADMIN_E_AMBIGUOUS_APPLICATION_NAME _HRESULT_TYPEDEF_(0x8011045CL)
+
+//
+// MessageId: COMADMIN_E_AMBIGUOUS_PARTITION_NAME
+//
+// MessageText:
+//
+//  The partition name is not unique and cannot be resolved to a partition id
+//
+#define COMADMIN_E_AMBIGUOUS_PARTITION_NAME _HRESULT_TYPEDEF_(0x8011045DL)
+
+//
+// MessageId: COMADMIN_E_REGDB_NOTINITIALIZED
+//
+// MessageText:
+//
+//  The COM+ registry database has not been initialized
+//
+#define COMADMIN_E_REGDB_NOTINITIALIZED  _HRESULT_TYPEDEF_(0x80110472L)
+
+//
+// MessageId: COMADMIN_E_REGDB_NOTOPEN
+//
+// MessageText:
+//
+//  The COM+ registry database is not open
+//
+#define COMADMIN_E_REGDB_NOTOPEN         _HRESULT_TYPEDEF_(0x80110473L)
+
+//
+// MessageId: COMADMIN_E_REGDB_SYSTEMERR
+//
+// MessageText:
+//
+//  The COM+ registry database detected a system error
+//
+#define COMADMIN_E_REGDB_SYSTEMERR       _HRESULT_TYPEDEF_(0x80110474L)
+
+//
+// MessageId: COMADMIN_E_REGDB_ALREADYRUNNING
+//
+// MessageText:
+//
+//  The COM+ registry database is already running
+//
+#define COMADMIN_E_REGDB_ALREADYRUNNING  _HRESULT_TYPEDEF_(0x80110475L)
+
+//
+// MessageId: COMADMIN_E_MIG_VERSIONNOTSUPPORTED
+//
+// MessageText:
+//
+//  This version of the COM+ registry database cannot be migrated
+//
+#define COMADMIN_E_MIG_VERSIONNOTSUPPORTED _HRESULT_TYPEDEF_(0x80110480L)
+
+//
+// MessageId: COMADMIN_E_MIG_SCHEMANOTFOUND
+//
+// MessageText:
+//
+//  The schema version to be migrated could not be found in the COM+ registry database
+//
+#define COMADMIN_E_MIG_SCHEMANOTFOUND    _HRESULT_TYPEDEF_(0x80110481L)
+
+//
+// MessageId: COMADMIN_E_CAT_BITNESSMISMATCH
+//
+// MessageText:
+//
+//  There was a type mismatch between binaries
+//
+#define COMADMIN_E_CAT_BITNESSMISMATCH   _HRESULT_TYPEDEF_(0x80110482L)
+
+//
+// MessageId: COMADMIN_E_CAT_UNACCEPTABLEBITNESS
+//
+// MessageText:
+//
+//  A binary of unknown or invalid type was provided
+//
+#define COMADMIN_E_CAT_UNACCEPTABLEBITNESS _HRESULT_TYPEDEF_(0x80110483L)
+
+//
+// MessageId: COMADMIN_E_CAT_WRONGAPPBITNESS
+//
+// MessageText:
+//
+//  There was a type mismatch between a binary and an application
+//
+#define COMADMIN_E_CAT_WRONGAPPBITNESS   _HRESULT_TYPEDEF_(0x80110484L)
+
+//
+// MessageId: COMADMIN_E_CAT_PAUSE_RESUME_NOT_SUPPORTED
+//
+// MessageText:
+//
+//  The application cannot be paused or resumed
+//
+#define COMADMIN_E_CAT_PAUSE_RESUME_NOT_SUPPORTED _HRESULT_TYPEDEF_(0x80110485L)
+
+//
+// MessageId: COMADMIN_E_CAT_SERVERFAULT
+//
+// MessageText:
+//
+//  The COM+ Catalog Server threw an exception during execution
+//
+#define COMADMIN_E_CAT_SERVERFAULT       _HRESULT_TYPEDEF_(0x80110486L)
+
+//
+// COMPLUS Queued component errors
+//
+//
+// MessageId: COMQC_E_APPLICATION_NOT_QUEUED
+//
+// MessageText:
+//
+//  Only COM+ Applications marked "queued" can be invoked using the "queue" moniker
+//
+#define COMQC_E_APPLICATION_NOT_QUEUED   _HRESULT_TYPEDEF_(0x80110600L)
+
+//
+// MessageId: COMQC_E_NO_QUEUEABLE_INTERFACES
+//
+// MessageText:
+//
+//  At least one interface must be marked "queued" in order to create a queued component instance with the "queue" moniker
+//
+#define COMQC_E_NO_QUEUEABLE_INTERFACES  _HRESULT_TYPEDEF_(0x80110601L)
+
+//
+// MessageId: COMQC_E_QUEUING_SERVICE_NOT_AVAILABLE
+//
+// MessageText:
+//
+//  MSMQ is required for the requested operation and is not installed
+//
+#define COMQC_E_QUEUING_SERVICE_NOT_AVAILABLE _HRESULT_TYPEDEF_(0x80110602L)
+
+//
+// MessageId: COMQC_E_NO_IPERSISTSTREAM
+//
+// MessageText:
+//
+//  Unable to marshal an interface that does not support IPersistStream
+//
+#define COMQC_E_NO_IPERSISTSTREAM        _HRESULT_TYPEDEF_(0x80110603L)
+
+//
+// MessageId: COMQC_E_BAD_MESSAGE
+//
+// MessageText:
+//
+//  The message is improperly formatted or was damaged in transit
+//
+#define COMQC_E_BAD_MESSAGE              _HRESULT_TYPEDEF_(0x80110604L)
+
+//
+// MessageId: COMQC_E_UNAUTHENTICATED
+//
+// MessageText:
+//
+//  An unauthenticated message was received by an application that accepts only authenticated messages
+//
+#define COMQC_E_UNAUTHENTICATED          _HRESULT_TYPEDEF_(0x80110605L)
+
+//
+// MessageId: COMQC_E_UNTRUSTED_ENQUEUER
+//
+// MessageText:
+//
+//  The message was requeued or moved by a user not in the "QC Trusted User" role
+//
+#define COMQC_E_UNTRUSTED_ENQUEUER       _HRESULT_TYPEDEF_(0x80110606L)
+
+//
+// The range 0x700-0x7ff is reserved for MSDTC errors.
+//
+//
+// MessageId: MSDTC_E_DUPLICATE_RESOURCE
+//
+// MessageText:
+//
+//  Cannot create a duplicate resource of type Distributed Transaction Coordinator
+//
+#define MSDTC_E_DUPLICATE_RESOURCE       _HRESULT_TYPEDEF_(0x80110701L)
+
+//
+// More COMADMIN errors from 0x8**
+//
+//
 // MessageId: COMADMIN_E_OBJECT_PARENT_MISSING
 //
 // MessageText:
@@ -21957,34 +26409,242 @@
 #define COMADMIN_E_OBJECT_DOES_NOT_EXIST _HRESULT_TYPEDEF_(0x80110809L)
 
 //
-// COMPLUS Queued component errors
-//
-//
-// MessageId: COMQC_E_APPLICATION_NOT_QUEUED
+// MessageId: COMADMIN_E_APP_NOT_RUNNING
 //
 // MessageText:
 //
-//  Only COM+ applications marked "queued" can be created using the "queue" moniker.
+//  The specified application is not currently running
 //
-#define COMQC_E_APPLICATION_NOT_QUEUED   _HRESULT_TYPEDEF_(0x80110600L)
+#define COMADMIN_E_APP_NOT_RUNNING       _HRESULT_TYPEDEF_(0x8011080AL)
 
 //
-// MessageId: COMQC_E_NO_QUEUEABLE_INTERFACES
+// MessageId: COMADMIN_E_INVALID_PARTITION
 //
 // MessageText:
 //
-//  At least one interface must be marked 'queued" in order to create a queued component instance with the "queue" moniker.
+//  The partition(s) specified are not valid.
 //
-#define COMQC_E_NO_QUEUEABLE_INTERFACES  _HRESULT_TYPEDEF_(0x80110601L)
+#define COMADMIN_E_INVALID_PARTITION     _HRESULT_TYPEDEF_(0x8011080BL)
 
 //
-// MessageId: COMQC_E_QUEUING_SERVICE_NOT_AVAILABLE
+// MessageId: COMADMIN_E_SVCAPP_NOT_POOLABLE_OR_RECYCLABLE
 //
 // MessageText:
 //
-//  MSMQ, which is required for the requested operation, is not installed.
+//  COM+ applications that run as NT service may not be pooled or recycled
 //
-#define COMQC_E_QUEUING_SERVICE_NOT_AVAILABLE _HRESULT_TYPEDEF_(0x80110602L)
+#define COMADMIN_E_SVCAPP_NOT_POOLABLE_OR_RECYCLABLE _HRESULT_TYPEDEF_(0x8011080DL)
+
+//
+// MessageId: COMADMIN_E_USER_IN_SET
+//
+// MessageText:
+//
+//  One or more users are already assigned to a local partition set.
+//
+#define COMADMIN_E_USER_IN_SET           _HRESULT_TYPEDEF_(0x8011080EL)
+
+//
+// MessageId: COMADMIN_E_CANTRECYCLELIBRARYAPPS
+//
+// MessageText:
+//
+//  Library applications may not be recycled.
+//
+#define COMADMIN_E_CANTRECYCLELIBRARYAPPS _HRESULT_TYPEDEF_(0x8011080FL)
+
+//
+// MessageId: COMADMIN_E_CANTRECYCLESERVICEAPPS
+//
+// MessageText:
+//
+//  Applications running as NT services may not be recycled.
+//
+#define COMADMIN_E_CANTRECYCLESERVICEAPPS _HRESULT_TYPEDEF_(0x80110811L)
+
+//
+// MessageId: COMADMIN_E_PROCESSALREADYRECYCLED
+//
+// MessageText:
+//
+//  The process has already been recycled.
+//
+#define COMADMIN_E_PROCESSALREADYRECYCLED _HRESULT_TYPEDEF_(0x80110812L)
+
+//
+// MessageId: COMADMIN_E_PAUSEDPROCESSMAYNOTBERECYCLED
+//
+// MessageText:
+//
+//  A paused process may not be recycled.
+//
+#define COMADMIN_E_PAUSEDPROCESSMAYNOTBERECYCLED _HRESULT_TYPEDEF_(0x80110813L)
+
+//
+// MessageId: COMADMIN_E_CANTMAKEINPROCSERVICE
+//
+// MessageText:
+//
+//  Library applications may not be NT services.
+//
+#define COMADMIN_E_CANTMAKEINPROCSERVICE _HRESULT_TYPEDEF_(0x80110814L)
+
+//
+// MessageId: COMADMIN_E_PROGIDINUSEBYCLSID
+//
+// MessageText:
+//
+//  The ProgID provided to the copy operation is invalid. The ProgID is in use by another registered CLSID.
+//
+#define COMADMIN_E_PROGIDINUSEBYCLSID    _HRESULT_TYPEDEF_(0x80110815L)
+
+//
+// MessageId: COMADMIN_E_DEFAULT_PARTITION_NOT_IN_SET
+//
+// MessageText:
+//
+//  The partition specified as default is not a member of the partition set.
+//
+#define COMADMIN_E_DEFAULT_PARTITION_NOT_IN_SET _HRESULT_TYPEDEF_(0x80110816L)
+
+//
+// MessageId: COMADMIN_E_RECYCLEDPROCESSMAYNOTBEPAUSED
+//
+// MessageText:
+//
+//  A recycled process may not be paused.
+//
+#define COMADMIN_E_RECYCLEDPROCESSMAYNOTBEPAUSED _HRESULT_TYPEDEF_(0x80110817L)
+
+//
+// MessageId: COMADMIN_E_PARTITION_ACCESSDENIED
+//
+// MessageText:
+//
+//  Access to the specified partition is denied.
+//
+#define COMADMIN_E_PARTITION_ACCESSDENIED _HRESULT_TYPEDEF_(0x80110818L)
+
+//
+// MessageId: COMADMIN_E_PARTITION_MSI_ONLY
+//
+// MessageText:
+//
+//  Only Application Files (*.MSI files) can be installed into partitions.
+//
+#define COMADMIN_E_PARTITION_MSI_ONLY    _HRESULT_TYPEDEF_(0x80110819L)
+
+//
+// MessageId: COMADMIN_E_LEGACYCOMPS_NOT_ALLOWED_IN_1_0_FORMAT
+//
+// MessageText:
+//
+//  Applications containing one or more legacy components may not be exported to 1.0 format.
+//
+#define COMADMIN_E_LEGACYCOMPS_NOT_ALLOWED_IN_1_0_FORMAT _HRESULT_TYPEDEF_(0x8011081AL)
+
+//
+// MessageId: COMADMIN_E_LEGACYCOMPS_NOT_ALLOWED_IN_NONBASE_PARTITIONS
+//
+// MessageText:
+//
+//  Legacy components may not exist in non-base partitions.
+//
+#define COMADMIN_E_LEGACYCOMPS_NOT_ALLOWED_IN_NONBASE_PARTITIONS _HRESULT_TYPEDEF_(0x8011081BL)
+
+//
+// MessageId: COMADMIN_E_COMP_MOVE_SOURCE
+//
+// MessageText:
+//
+//  A component cannot be moved (or copied) from the System Application, an application proxy or a non-changeable application
+//
+#define COMADMIN_E_COMP_MOVE_SOURCE      _HRESULT_TYPEDEF_(0x8011081CL)
+
+//
+// MessageId: COMADMIN_E_COMP_MOVE_DEST
+//
+// MessageText:
+//
+//  A component cannot be moved (or copied) to the System Application, an application proxy or a non-changeable application
+//
+#define COMADMIN_E_COMP_MOVE_DEST        _HRESULT_TYPEDEF_(0x8011081DL)
+
+//
+// MessageId: COMADMIN_E_COMP_MOVE_PRIVATE
+//
+// MessageText:
+//
+//  A private component cannot be moved (or copied) to a library application or to the base partition
+//
+#define COMADMIN_E_COMP_MOVE_PRIVATE     _HRESULT_TYPEDEF_(0x8011081EL)
+
+//
+// MessageId: COMADMIN_E_BASEPARTITION_REQUIRED_IN_SET
+//
+// MessageText:
+//
+//  The Base Application Partition exists in all partition sets and cannot be removed.
+//
+#define COMADMIN_E_BASEPARTITION_REQUIRED_IN_SET _HRESULT_TYPEDEF_(0x8011081FL)
+
+//
+// MessageId: COMADMIN_E_CANNOT_ALIAS_EVENTCLASS
+//
+// MessageText:
+//
+//  Alas, Event Class components cannot be aliased.
+//
+#define COMADMIN_E_CANNOT_ALIAS_EVENTCLASS _HRESULT_TYPEDEF_(0x80110820L)
+
+//
+// MessageId: COMADMIN_E_PRIVATE_ACCESSDENIED
+//
+// MessageText:
+//
+//  Access is denied because the component is private.
+//
+#define COMADMIN_E_PRIVATE_ACCESSDENIED  _HRESULT_TYPEDEF_(0x80110821L)
+
+//
+// MessageId: COMADMIN_E_SAFERINVALID
+//
+// MessageText:
+//
+//  The specified SAFER level is invalid.
+//
+#define COMADMIN_E_SAFERINVALID          _HRESULT_TYPEDEF_(0x80110822L)
+
+//
+// MessageId: COMADMIN_E_REGISTRY_ACCESSDENIED
+//
+// MessageText:
+//
+//  The specified user cannot write to the system registry
+//
+#define COMADMIN_E_REGISTRY_ACCESSDENIED _HRESULT_TYPEDEF_(0x80110823L)
+
+//
+// REMOVE THESE WHEN POSSIBLE
+//
+//
+// MessageId: COMADMIN_E_CAT_DUPLICATE_PARTITION_SET_NAME
+//
+// MessageText:
+//
+//  REMOVE THIS ERROR
+//
+#define COMADMIN_E_CAT_DUPLICATE_PARTITION_SET_NAME _HRESULT_TYPEDEF_(0x80110900L)
+
+//
+// MessageId: COMADMIN_E_CAT_INVALID_PARTITION_SET_NAME
+//
+// MessageText:
+//
+//  REMOVE THIS ERROR
+//
+#define COMADMIN_E_CAT_INVALID_PARTITION_SET_NAME _HRESULT_TYPEDEF_(0x80110901L)
+
 
 #pragma option pop /*P_O_Pop*/
 #endif//_WINERROR_

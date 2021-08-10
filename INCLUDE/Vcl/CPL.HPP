@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'CPL.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Cpl.pas' rev: 6.00
 
-#ifndef CPLHPP
-#define CPLHPP
+#ifndef CplHPP
+#define CplHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -42,12 +42,10 @@ typedef tagNEWCPLINFOA  TNewCPLInfo;
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Cpl */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Cpl;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// CPL
+#endif	// Cpl

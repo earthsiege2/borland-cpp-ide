@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Pageinfo.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'PageInfo.pas' rev: 6.00
 
-#ifndef PageinfoHPP
-#define PageinfoHPP
+#ifndef PageInfoHPP
+#define PageInfoHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -50,16 +50,13 @@ private:
 	
 public:
 	__property AnsiString PageName = {read=GetPageName, write=SetPageName};
-	__property Classes::THelpContext PageContext = {read=GetPageContext, write=SetPageContext, nodefault
-		};
+	__property Classes::THelpContext PageContext = {read=GetPageContext, write=SetPageContext, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TPageInfoDlg(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TPageInfoDlg(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TPageInfoDlg(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TPageInfoDlg(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TPageInfoDlg(void) { }
@@ -67,8 +64,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TPageInfoDlg(HWND ParentWindow) : Forms::TForm(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TPageInfoDlg(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -77,12 +73,10 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Pageinfo */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Pageinfo;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Pageinfo
+#endif	// PageInfo

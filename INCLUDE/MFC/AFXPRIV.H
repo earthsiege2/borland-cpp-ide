@@ -454,6 +454,7 @@ protected:
 #endif
 
 #ifndef LAYOUT_RTL
+#define LAYOUT_LTR                               0x00000000
 #define LAYOUT_RTL                         0x00000001
 #define NOMIRRORBITMAP                     0x80000000
 #endif

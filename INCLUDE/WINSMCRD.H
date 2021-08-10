@@ -11,10 +11,6 @@ Abstract:
     user mode and kernel mode, using Smart Card IOCTL's, defines,
     data structures
 
-   Author:
-
-    George Chrysanthakopoulos/Doug Barlow  - 12/4/96
-
 Revision History:
 
 --*/
@@ -70,7 +66,7 @@ typedef UCHAR BYTE;
 //
 // This is the mask of ISO defined transmission protocols
 //
-#define SCARD_PROTOCOL_Tx           SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1
+#define SCARD_PROTOCOL_Tx           (SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1)
 //
 // Use the default transmission parameters / card clock freq.
 //
@@ -331,6 +327,7 @@ typedef SCARD_T1_REQUEST *PSCARD_T1_REQUEST, *LPSCARD_T1_REQUEST;
 #ifdef __cplusplus
 }
 #endif
+
 #pragma option pop /*P_O_Pop*/
 #endif
 

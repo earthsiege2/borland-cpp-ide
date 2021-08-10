@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1997 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1997-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 // Demonstrates FreeNotication to safely link to controls in other forms
 //  through form linking and demonstrates preventing a component from being used

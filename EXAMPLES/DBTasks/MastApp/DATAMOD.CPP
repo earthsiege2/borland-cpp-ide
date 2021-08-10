@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1998 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1998-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
@@ -172,7 +172,7 @@ bool TMastData::DataSetApplyUpdates(TDBDataSet *DataSet, bool Apply)
     {
       if (Apply)
       {
-        Database->ApplyUpdates(OPENARRAY(TDBDataSet*, (DataSet)));
+        Database->ApplyUpdates((const TDBDataSet **)DataSet, 0);
         DataSet->CancelUpdates();
       }
       else
@@ -226,7 +226,9 @@ void __fastcall TMastData::OrdersAfterPost(TDataSet *DataSet)
     CustLastInvoiceDate->Value = OrdersShipDate->Value;
     Cust->Post();
   }
-  Database->ApplyUpdates(OPENARRAY(TDBDataSet*, (Orders, Items, Parts, Cust)));
+
+  TDBDataSet *dsArray[] = { Orders, Items, Parts, Cust };
+  Database->ApplyUpdates((const TDBDataSet **)dsArray, 3);
 }
 //---------------------------------------------------------------------------
 void __fastcall TMastData::OrdersBeforeCancel(TDataSet *DataSet)
@@ -452,7 +454,8 @@ void __fastcall TMastData::CustBeforePost(TDataSet *DataSet)
 //---------------------------------------------------------------------------
 void __fastcall TMastData::OrdersAfterDelete(TDataSet *DataSet)
 {
-  Database->ApplyUpdates(OPENARRAY(TDBDataSet*, (Cust, Parts, Items, Orders)));
+  TDBDataSet *dsArray[] = { Orders, Items, Parts, Cust };
+  Database->ApplyUpdates((const TDBDataSet **)dsArray, 3);
 }
 //---------------------------------------------------------------------------
 void __fastcall TMastData::OrdersBeforeEdit(TDataSet *DataSet)

@@ -43,7 +43,8 @@ typedef enum _SE_OBJECT_TYPE
     SE_DS_OBJECT,
     SE_DS_OBJECT_ALL,
     SE_PROVIDER_DEFINED_OBJECT,
-    SE_WMIGUID_OBJECT
+    SE_WMIGUID_OBJECT,
+    SE_REGISTRY_WOW64_32KEY
 } SE_OBJECT_TYPE;
 
 //
@@ -631,7 +632,8 @@ typedef PTRUSTEE_ACCESSA PTRUSTEE_ACCESS;
 #define ACTRL_WIN_EXIT                          ACTRL_PERM_9
 
 
-
+#pragma warning (push)
+#pragma warning (disable: 4201)
 
 typedef struct _ACTRL_OVERLAPPED
 {
@@ -644,6 +646,8 @@ typedef struct _ACTRL_OVERLAPPED
     HANDLE      hEvent;
 
 } ACTRL_OVERLAPPED, *PACTRL_OVERLAPPED;
+
+#pragma warning(pop)
 
 typedef struct _ACTRL_ACCESS_INFOA
 {
@@ -686,9 +690,90 @@ typedef PACTRL_CONTROL_INFOA PACTRL_CONTROL_INFO;
 #define ACTRL_ACCESS_SUPPORTS_OBJECT_ENTRIES    0x00000001
 
 
+typedef enum _PROGRESS_INVOKE_SETTING {
+    ProgressInvokeNever = 1,    // Never invoke the progress function
+    ProgressInvokeEveryObject,  // Invoke for each object
+    ProgressInvokeOnError,      // Invoke only for each error case
+    ProgressCancelOperation,    // Stop propagation and return
+    ProgressRetryOperation      // Retry operation on subtree
+} PROG_INVOKE_SETTING, *PPROG_INVOKE_SETTING;
+
+//
+// Progress Function:
+// Caller of tree operation implements this Progress function, then
+// passes its function pointer to tree operation.
+// Tree operation invokes Progress function to provide progress and error
+// information to the caller during the potentially long execution
+// of the tree operation.  Tree operation provides the name of the object
+// last processed and the error status of the operation on that object.
+// Tree operation also passes the current InvokeSetting value.
+// Caller may change the InvokeSetting value, for example, from "Always"
+// to "Only On Error."
+//
+
+/*
+typedef VOID (*FN_PROGRESS) (
+    IN LPWSTR                   pObjectName,    // name of object just processed
+    IN DWORD                    Status,         // status of operation on object
+    IN OUT PPROG_INVOKE_SETTING pInvokeSetting, // Never, always,
+    IN PVOID                    Args,           // Caller specific data
+    IN BOOL                     SecuritySet     // Whether security was set
+    );
+*/
+
+//
+// New Object Type function pointers.  TBD.
+// To support additional object resource managers generically, the
+// resource manager must provide it's own functions for operations
+// like:
+// GetAncestorAcl(IN ObjName, IN GenerationGap, IN DaclOrSacl?, ...)
+// GetAncestorName(...)
+// FreeNameStructure(...)
+//
+
+typedef struct _FN_OBJECT_MGR_FUNCTIONS
+{
+    ULONG   Placeholder;
+} FN_OBJECT_MGR_FUNCTS, *PFN_OBJECT_MGR_FUNCTS;
+
+//
+// Name of ancestor and number of generations between
+// ancestor and inheriting object.
+//
+// GenerationGap:
+//     Name of ancestor from which ACE was inherited.
+//     NULL for explicit ACE.
+//
+// AncestorName:
+//     Number of levels (or generations) between the object and the ancestor.
+//     Parent, gap=1.
+//     Grandparent, gap=2.
+//     Set to 0 for explicit ACE on object.
+//
+
+typedef struct _INHERITED_FROMA
+{
+    LONG   GenerationGap;
+    LPSTR   AncestorName;
+} INHERITED_FROMA, *PINHERITED_FROMA;
+typedef struct _INHERITED_FROMW
+{
+    LONG   GenerationGap;
+    LPWSTR  AncestorName;
+} INHERITED_FROMW, *PINHERITED_FROMW;
+#ifdef UNICODE
+typedef INHERITED_FROMW INHERITED_FROM;
+typedef PINHERITED_FROMW PINHERITED_FROM;
+#else
+typedef INHERITED_FROMA INHERITED_FROM;
+typedef PINHERITED_FROMA PINHERITED_FROM;
+#endif // UNICODE
+
+
 #ifdef __cplusplus
 }
 #endif
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // __ACCESS_CONTROL__

@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1991-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -15,17 +15,10 @@ Abstract:
 --*/
 
 #ifndef __RPCDCEP_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __RPCDCEP_H__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif
-
-// Set the packing level for RPC structures for Dos and Windows.
-
-#if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
-#pragma pack(2)
 #endif
 
 #ifdef __cplusplus
@@ -82,7 +75,7 @@ RPC_ENTRY RPC_ADDRESS_CHANGE_FN(
 *  New context handle flavors.
 */
 
-#define RPC_CONTEXT_HANDLE_DEFAULT_GUARD    ((void *)0xFFFFF00D)
+#define RPC_CONTEXT_HANDLE_DEFAULT_GUARD    ((void *) -4083) /* FFFFF00D */
 
 #define RPC_CONTEXT_HANDLE_DEFAULT_FLAGS    0x00000000UL
 #define RPC_CONTEXT_HANDLE_FLAGS            0x30000000UL
@@ -111,11 +104,10 @@ RPC_ENTRY RPC_ADDRESS_CHANGE_FN(
 #define RPCFLG_ASYNCHRONOUS         0x40000000UL
 #define RPCFLG_NON_NDR              0x80000000UL
 
-#if defined(__RPC_WIN32__) || defined(__RPC_MAC__) || defined(__RPC_WIN64__)
+#define RPCFLG_HAS_MULTI_SYNTAXES   0x02000000UL
+#define RPCFLG_HAS_CALLBACK         0x04000000UL
+
 #define RPC_FLAGS_VALID_BIT 0x00008000
-#elif defined(__RPC_DOS__) || defined(__RPC_WIN16__)
-#define RPC_FLAGS_VALID_BIT 0x8000
-#endif
 
 typedef
 void
@@ -167,6 +159,13 @@ typedef struct _RPC_CLIENT_INTERFACE
     void const __RPC_FAR *  InterpreterInfo;
     unsigned int Flags ;
 } RPC_CLIENT_INTERFACE, __RPC_FAR * PRPC_CLIENT_INTERFACE;
+
+RPCRTAPI
+RPC_STATUS
+RPC_ENTRY
+I_RpcNegotiateTransferSyntax (
+    IN OUT RPC_MESSAGE __RPC_FAR * Message
+    );
 
 RPCRTAPI
 RPC_STATUS
@@ -361,6 +360,30 @@ RPC_ENTRY
 I_RpcBindingInqSecurityContext (
     IN RPC_BINDING_HANDLE Binding,
     OUT void **SecurityContextHandle
+    );
+
+RPCRTAPI
+RPC_STATUS
+RPC_ENTRY
+I_RpcBindingInqWireIdForSnego (
+    IN RPC_BINDING_HANDLE Binding,
+    OUT unsigned char *WireId
+    );
+
+RPCRTAPI
+RPC_STATUS
+RPC_ENTRY
+I_RpcBindingInqLocalClientPID (
+    IN RPC_BINDING_HANDLE Binding,
+    OUT unsigned long *Pid
+    );
+
+RPCRTAPI
+RPC_STATUS
+RPC_ENTRY
+I_RpcBindingHandleToAsyncHandle (
+    IN RPC_BINDING_HANDLE Binding,
+    OUT void **AsyncHandle
     );
 
 #ifdef RPC_UNICODE_SUPPORTED
@@ -602,6 +625,29 @@ I_RpcServerSetAddressChangeFn(
     IN RPC_ADDRESS_CHANGE_FN * pAddressChangeFn
     );
 
+/* The return buffer will contain SOCKADDR_IN for IPv4 */
+#define RPC_P_ADDR_FORMAT_TCP_IPV4      1
+
+/* The return buffer will contain SOCKADDR_STORAGE for IPv6 */
+#define RPC_P_ADDR_FORMAT_TCP_IPV6      2
+
+RPCRTAPI
+RPC_STATUS
+RPC_ENTRY
+I_RpcServerInqLocalConnAddress (
+    IN RPC_BINDING_HANDLE Binding,
+    IN OUT void *Buffer,
+    IN OUT unsigned long *BufferSize,
+    OUT unsigned long *AddressFormat
+    );
+
+RPCRTAPI
+RPC_STATUS
+RPC_ENTRY
+I_RpcTurnOnEEInfoPropagation (
+    void
+    );
+
 RPCRTAPI
 RPC_STATUS
 RPC_ENTRY
@@ -722,11 +768,4 @@ I_RpcMapWin32Status (
 }
 #endif
 
-// Reset the packing level for Dos and Windows.
-
-#if defined(__RPC_DOS__) || defined(__RPC_WIN16__)
-#pragma pack()
-#endif
-
-#pragma option pop /*P_O_Pop*/
 #endif /* __RPCDCEP_H__ */

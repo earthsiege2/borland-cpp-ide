@@ -1,9 +1,9 @@
 // SYSTVAR.H: Pascal TVarRec support (Pascal const parameter types)
 //
-// $Revision:   1.14  $
-// $Date:   02 Sep 1999 18:01:08  $
+// $Revision:   1.15.1.0.1.1  $
+// $Date:   25 Jan 2002 12:54:24  $
 //
-// Copyright (c) 1997, 1999 Borland International
+// Copyright (c) 1997, 2002 Borland Software Corporation
 
 #if !defined(SYSTVAR_H)
 #define SYSTVAR_H
@@ -31,6 +31,24 @@ typedef struct tagVARIANT VARIANT;
 
 namespace System
 {
+  #pragma pack(push, 1)
+  typedef struct
+  {
+    unsigned char CallType;
+    unsigned char ArgCount;
+    unsigned char NamedArgCount;
+    unsigned char ArgTypes[256];
+  } TCallDesc, *PCallDesc;
+
+  typedef struct
+  {
+    int DispID;
+    unsigned char ResType;
+    TCallDesc CallDesc;
+  } TDispDesc, *PDispDesc;
+  #pragma pack(pop)
+
+
   // TVarData = VARIANT
   struct TVarData
   {
@@ -60,6 +78,7 @@ namespace System
       Pointer       VString;      //  ??????
       PVarArray     VArray;       //  parray
       Pointer       VPointer;     //  byref
+      __int64       VInt64;       //  ????
 
       // tagVARIANT compatible members (from OAIDL.H)
       // Allowing all types marked as [V] (may appear in a VARIANT to be initialized
@@ -73,6 +92,7 @@ namespace System
       CY            cyVal;
       DATE          date;
       BSTR          bstrVal;
+      LONG64        llVal;
       IUnknown     *punkVal;
       IDispatch    *pdispVal;
       SAFEARRAY    *parray;
@@ -102,6 +122,7 @@ namespace System
       ULONG        *pulVal;
       INT          *pintVal;
       UINT         *puintVal;
+      LONG64       *pllVal;
     };
   };
 

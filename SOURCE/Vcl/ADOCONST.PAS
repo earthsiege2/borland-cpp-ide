@@ -25,6 +25,7 @@ resourcestring
   SConnectionRequired = 'A connection component is required for async ExecuteOptions';
   SCantRequery = 'Cannot perform a requery after connection has changed';
   SNoFilterOptions = 'FilterOptions are not supported';
+  SRecordsetNotOpen = 'Recordset is not open';
 
 implementation
 

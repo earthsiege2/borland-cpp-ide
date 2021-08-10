@@ -2,7 +2,7 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="mastapp.exe"/>
     <OBJFILES value="MASTAPP.obj Datamod.obj about.obj brcstord.obj brparts.obj custrpt.obj 
       edcust.obj edorders.obj edparts.obj invcrpt.obj main.obj orderrpt.obj 
@@ -15,9 +15,9 @@
       edcust.dfm edorders.dfm edparts.dfm invcrpt.dfm main.dfm orderrpt.dfm 
       pickdate.dfm pickinvc.dfm pickrep.dfm qrycust.dfm splash.dfm srchdlg.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="bcbsmp50.lib vclbde50.lib vclx50.lib vcldb50.lib qrpt50.lib vcl50.lib"/>
-    <SPARELIBS value="vcl50.lib qrpt50.lib vcldb50.lib vclx50.lib vclbde50.lib bcbsmp50.lib"/>
-    <PACKAGES value=""/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="rtl.lib vcl.lib qrpt.lib dbrtl.lib vcldb.lib vclx.lib bdertl.lib bcbsmp.lib"/>
+    <PACKAGES value="bdertl.bpi vcldb.bpi dbrtl.bpi vcl.bpi rtl.bpi bcbsmp.bpi qrpt.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -30,21 +30,44 @@
     <MAINSOURCE value="MASTAPP.cpp"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;..\..\controls\source"/>
     <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib;..\..\controls\source"/>
-    <WARNINGS value="-w-8026 -w-8027 -w-par"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\include -I$(BCB)\include\vcl"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a8 -k -y -v -vi- -c -b- -tW"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tW"/>
     <PFLAGS value="-$YD -v -JPHNV -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w0 /zi"/>
-    <LFLAGS value="-aa -Tpe -x -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -v"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="MASTAPP.cpp" FORMNAME="" UNITNAME="MASTAPP" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="readme.txt" FORMNAME="" UNITNAME="readme" CONTAINERID="File" DESIGNCLASS=""/>
+      <FILE FILENAME="Datamod.cpp" FORMNAME="MastData" UNITNAME="Datamod" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="about.cpp" FORMNAME="AboutBox" UNITNAME="about" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="brcstord.cpp" FORMNAME="BrCustOrdForm" UNITNAME="brcstord" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="brparts.cpp" FORMNAME="BrPartsForm" UNITNAME="brparts" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="custrpt.cpp" FORMNAME="CustomerByInvoiceReport" UNITNAME="custrpt" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="edcust.cpp" FORMNAME="EdCustForm" UNITNAME="edcust" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="edorders.cpp" FORMNAME="EdOrderForm" UNITNAME="edorders" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="edparts.cpp" FORMNAME="EdPartsForm" UNITNAME="edparts" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="invcrpt.cpp" FORMNAME="InvoiceByOrderNoReport" UNITNAME="invcrpt" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="MAIN.CPP" FORMNAME="MainForm" UNITNAME="main" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="orderrpt.cpp" FORMNAME="OrdersByDateReport" UNITNAME="orderrpt" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="pickdate.cpp" FORMNAME="BrDateForm" UNITNAME="pickdate" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="pickinvc.cpp" FORMNAME="PickOrderNoDlg" UNITNAME="pickinvc" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="pickrep.cpp" FORMNAME="PickRpt" UNITNAME="pickrep" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="qrycust.cpp" FORMNAME="QueryCustDlg" UNITNAME="qrycust" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="splash.cpp" FORMNAME="SplashForm" UNITNAME="splash" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="srchdlg.cpp" FORMNAME="SearchDlg" UNITNAME="srchdlg" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -74,14 +97,24 @@ DebugSourceDirs=
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
-InMemoryExe=0
 ShowInfoMsgs=0
 LinkDebugVcl=1
+LinkCGLIB=0
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
   </IDEOPTIONS>
 </PROJECT>

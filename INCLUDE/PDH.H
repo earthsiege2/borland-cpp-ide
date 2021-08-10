@@ -12,7 +12,6 @@ Abstract:
 
 --*/
 #ifndef _PDH_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _PDH_H_
 
 #if _MSC_VER > 1000
@@ -55,11 +54,28 @@ typedef LONG            PDH_STATUS;
 #define IsErrorSeverity(ErrorCode)      \
     ((((DWORD)(ErrorCode) & (0xC0000000L)) == 0xC0000000L) ? TRUE : FALSE)
 
+#define MAX_COUNTER_PATH    256         // Maximum counter path length
+
 // data type definitions
 
-typedef HANDLE  HCOUNTER;
-typedef HANDLE  HQUERY;
-typedef HANDLE  HLOG;
+typedef HANDLE       PDH_HCOUNTER;
+typedef HANDLE       PDH_HQUERY;
+typedef HANDLE       PDH_HLOG;
+
+typedef PDH_HCOUNTER HCOUNTER;
+typedef PDH_HQUERY   HQUERY;
+#ifndef _LMHLOGDEFINED_
+typedef PDH_HLOG     HLOG;
+#endif
+
+#ifdef INVALID_HANDLE_VALUE
+#undef INVALID_HANDLE_VALUE
+#define INVALID_HANDLE_VALUE  ((HANDLE)((LONG_PTR)-1))
+#endif
+
+#define H_REALTIME_DATASOURCE NULL
+#define H_WBEM_DATASOURCE     INVALID_HANDLE_VALUE
+
 
 typedef struct _PDH_RAW_COUNTER {
     DWORD       CStatus;
@@ -294,47 +310,47 @@ PdhGetDllVersion(
 
 PDH_FUNCTION
 PdhOpenQueryW (
-    IN      LPCWSTR     szDataSource,
-    IN      DWORD_PTR   dwUserData,
-    IN      HQUERY      *phQuery
+    IN      LPCWSTR      szDataSource,
+    IN      DWORD_PTR    dwUserData,
+    IN      PDH_HQUERY * phQuery
 );
 
 PDH_FUNCTION
 PdhOpenQueryA (
-    IN      LPCSTR      szDataSource,
-    IN      DWORD_PTR   dwUserData,
-    IN      HQUERY      *phQuery
+    IN      LPCSTR       szDataSource,
+    IN      DWORD_PTR    dwUserData,
+    IN      PDH_HQUERY * phQuery
 );
 
 PDH_FUNCTION
 PdhAddCounterW (
-    IN      HQUERY      hQuery,
-    IN      LPCWSTR     szFullCounterPath,
-    IN      DWORD_PTR   dwUserData,
-    IN      HCOUNTER    *phCounter
+    IN      PDH_HQUERY     hQuery,
+    IN      LPCWSTR        szFullCounterPath,
+    IN      DWORD_PTR      dwUserData,
+    IN      PDH_HCOUNTER * phCounter
 );
 
 PDH_FUNCTION
 PdhAddCounterA (
-    IN      HQUERY      hQuery,
-    IN      LPCSTR      szFullCounterPath,
-    IN      DWORD_PTR   dwUserData,
-    IN      HCOUNTER    *phCounter
+    IN      PDH_HQUERY     hQuery,
+    IN      LPCSTR         szFullCounterPath,
+    IN      DWORD_PTR      dwUserData,
+    IN      PDH_HCOUNTER * phCounter
 );
 
 PDH_FUNCTION
 PdhRemoveCounter (
-    IN      HCOUNTER    hCounter
+    IN      PDH_HCOUNTER    hCounter
 );
 
 PDH_FUNCTION
 PdhCollectQueryData (
-    IN      HQUERY      hQuery
+    IN      PDH_HQUERY      hQuery
 );
 
 PDH_FUNCTION
 PdhCloseQuery (
-    IN      HQUERY      hQuery
+    IN      PDH_HQUERY      hQuery
 );
 
 //
@@ -343,7 +359,7 @@ PdhCloseQuery (
 
 PDH_FUNCTION
 PdhGetFormattedCounterValue (
-    IN      HCOUNTER                hCounter,
+    IN      PDH_HCOUNTER            hCounter,
     IN      DWORD                   dwFormat,
     IN      LPDWORD                 lpdwType,
     IN      PPDH_FMT_COUNTERVALUE   pValue
@@ -351,20 +367,20 @@ PdhGetFormattedCounterValue (
 
 PDH_FUNCTION
 PdhGetFormattedCounterArrayA (
-    IN      HCOUNTER                hCounter,
-    IN      DWORD                   dwFormat,
-    IN      LPDWORD                 lpdwBufferSize,
-    IN      LPDWORD                 lpdwItemCount,
-    IN      PPDH_FMT_COUNTERVALUE_ITEM_A    ItemBuffer
+    IN      PDH_HCOUNTER                 hCounter,
+    IN      DWORD                        dwFormat,
+    IN      LPDWORD                      lpdwBufferSize,
+    IN      LPDWORD                      lpdwItemCount,
+    IN      PPDH_FMT_COUNTERVALUE_ITEM_A ItemBuffer
 );
 
 PDH_FUNCTION
 PdhGetFormattedCounterArrayW (
-    IN      HCOUNTER                hCounter,
-    IN      DWORD                   dwFormat,
-    IN      LPDWORD                 lpdwBufferSize,
-    IN      LPDWORD                 lpdwItemCount,
-    IN      PPDH_FMT_COUNTERVALUE_ITEM_W    ItemBuffer
+    IN      PDH_HCOUNTER                 hCounter,
+    IN      DWORD                        dwFormat,
+    IN      LPDWORD                      lpdwBufferSize,
+    IN      LPDWORD                      lpdwItemCount,
+    IN      PPDH_FMT_COUNTERVALUE_ITEM_W ItemBuffer
 );
 
 
@@ -386,14 +402,14 @@ PdhGetFormattedCounterArrayW (
 
 PDH_FUNCTION
 PdhGetRawCounterValue (
-    IN      HCOUNTER            hCounter,
-    IN      LPDWORD             lpdwType,
-    IN      PPDH_RAW_COUNTER    pValue
+    IN      PDH_HCOUNTER      hCounter,
+    IN      LPDWORD           lpdwType,
+    IN      PPDH_RAW_COUNTER  pValue
 );
 
 PDH_FUNCTION
 PdhGetRawCounterArrayA (
-    IN      HCOUNTER                hCounter,
+    IN      PDH_HCOUNTER            hCounter,
     IN      LPDWORD                 lpdwBufferSize,
     IN      LPDWORD                 lpdwItemCount,
     IN      PPDH_RAW_COUNTER_ITEM_A ItemBuffer
@@ -401,7 +417,7 @@ PdhGetRawCounterArrayA (
 
 PDH_FUNCTION
 PdhGetRawCounterArrayW (
-    IN      HCOUNTER                hCounter,
+    IN      PDH_HCOUNTER            hCounter,
     IN      LPDWORD                 lpdwBufferSize,
     IN      LPDWORD                 lpdwItemCount,
     IN      PPDH_RAW_COUNTER_ITEM_W ItemBuffer
@@ -409,7 +425,7 @@ PdhGetRawCounterArrayW (
 
 PDH_FUNCTION
 PdhCalculateCounterFromRawValue (
-    IN      HCOUNTER                hCounter,
+    IN      PDH_HCOUNTER            hCounter,
     IN      DWORD                   dwFormat,
     IN      PPDH_RAW_COUNTER        rawValue1,
     IN      PPDH_RAW_COUNTER        rawValue2,
@@ -418,7 +434,7 @@ PdhCalculateCounterFromRawValue (
 
 PDH_FUNCTION
 PdhComputeCounterStatistics (
-    IN      HCOUNTER            hCounter,
+    IN      PDH_HCOUNTER        hCounter,
     IN      DWORD               dwFormat,
     IN      DWORD               dwFirstEntry,
     IN      DWORD               dwNumEntries,
@@ -428,7 +444,7 @@ PdhComputeCounterStatistics (
 
 PDH_FUNCTION
 PdhGetCounterInfoW (
-    IN      HCOUNTER            hCounter,
+    IN      PDH_HCOUNTER        hCounter,
     IN      BOOLEAN             bRetrieveExplainText,
     IN      LPDWORD             pdwBufferSize,
     IN      PPDH_COUNTER_INFO_W lpBuffer
@@ -436,7 +452,7 @@ PdhGetCounterInfoW (
 
 PDH_FUNCTION
 PdhGetCounterInfoA (
-    IN      HCOUNTER            hCounter,
+    IN      PDH_HCOUNTER        hCounter,
     IN      BOOLEAN             bRetrieveExplainText,
     IN      LPDWORD             pdwBufferSize,
     IN      PPDH_COUNTER_INFO_A lpBuffer
@@ -447,8 +463,8 @@ PdhGetCounterInfoA (
 
 PDH_FUNCTION
 PdhSetCounterScaleFactor (
-    IN      HCOUNTER    hCounter,
-    IN      LONG        lFactor
+    IN      PDH_HCOUNTER  hCounter,
+    IN      LONG          lFactor
 );
 //
 //   Browsing and enumeration functions
@@ -522,6 +538,8 @@ PdhEnumObjectItemsA (
     IN      DWORD   dwDetailLevel,
     IN      DWORD   dwFlags
 );
+
+#define PDH_OBJECT_HAS_INSTANCES    ((DWORD) 0x00000001)
 
 PDH_FUNCTION
 PdhMakeCounterPathW (
@@ -630,6 +648,56 @@ typedef PDH_STATUS (__stdcall *CounterPathCallBack)(DWORD_PTR);
 #pragma warning(push)
 #endif
 #pragma warning ( disable : 4214 )  // Disable warning messages
+typedef struct _BrowseDlgConfig_HW {
+    // Configuration flags
+    DWORD   bIncludeInstanceIndex:1,
+            bSingleCounterPerAdd:1,
+            bSingleCounterPerDialog:1,
+            bLocalCountersOnly:1,
+            bWildCardInstances:1,
+            bHideDetailBox:1,
+            bInitializePath:1,
+            bDisableMachineSelection:1,
+            bIncludeCostlyObjects:1,
+            bShowObjectBrowser:1,
+            bReserved:22;
+
+    HWND                hWndOwner;
+    PDH_HLOG            hDataSource;
+    LPWSTR              szReturnPathBuffer;
+    DWORD               cchReturnPathLength;
+    CounterPathCallBack pCallBack;
+    DWORD_PTR           dwCallBackArg;
+    PDH_STATUS          CallBackStatus;
+    DWORD               dwDefaultDetailLevel;
+    LPWSTR              szDialogBoxCaption;
+} PDH_BROWSE_DLG_CONFIG_HW, *PPDH_BROWSE_DLG_CONFIG_HW;
+
+typedef struct _BrowseDlgConfig_HA {
+    // Configuration flags
+    DWORD   bIncludeInstanceIndex:1,
+            bSingleCounterPerAdd:1,
+            bSingleCounterPerDialog:1,
+            bLocalCountersOnly:1,
+            bWildCardInstances:1,
+            bHideDetailBox:1,
+            bInitializePath:1,
+            bDisableMachineSelection:1,
+            bIncludeCostlyObjects:1,
+            bShowObjectBrowser:1,
+            bReserved:22;
+
+    HWND                hWndOwner;
+    PDH_HLOG            hDataSource;
+    LPSTR               szReturnPathBuffer;
+    DWORD               cchReturnPathLength;
+    CounterPathCallBack pCallBack;
+    DWORD_PTR           dwCallBackArg;
+    PDH_STATUS          CallBackStatus;
+    DWORD               dwDefaultDetailLevel;
+    LPSTR               szDialogBoxCaption;
+} PDH_BROWSE_DLG_CONFIG_HA, *PPDH_BROWSE_DLG_CONFIG_HA;
+
 typedef struct _BrowseDlgConfig_W {
     // Configuration flags
     DWORD   bIncludeInstanceIndex:1,
@@ -641,7 +709,8 @@ typedef struct _BrowseDlgConfig_W {
             bInitializePath:1,
             bDisableMachineSelection:1,
             bIncludeCostlyObjects:1,
-            bReserved:23;
+            bShowObjectBrowser:1,
+            bReserved:22;
 
     HWND                hWndOwner;
     LPWSTR              szDataSource;
@@ -665,7 +734,8 @@ typedef struct _BrowseDlgConfig_A {
             bInitializePath:1,
             bDisableMachineSelection:1,
             bIncludeCostlyObjects:1,
-            bReserved:23;
+            bShowObjectBrowser:1,
+            bReserved:22;
 
     HWND                hWndOwner;
     LPSTR               szDataSource;
@@ -776,67 +846,70 @@ PdhExpandWildCardPathW (
 #define PDH_LOG_OPEN_EXISTING   ((DWORD)0x00000004)
 #define PDH_LOG_CREATE_MASK     ((DWORD)0x0000000F)
 
-#define PDH_LOG_OPT_USER_STRING ((DWORD)0x01000000)
-#define PDH_LOG_OPT_CIRCULAR    ((DWORD)0x02000000)
+#define PDH_LOG_OPT_USER_STRING  ((DWORD)0x01000000)
+#define PDH_LOG_OPT_CIRCULAR     ((DWORD)0x02000000)
 #define PDH_LOG_OPT_MAX_IS_BYTES ((DWORD)0x04000000)
-#define PDH_LOG_OPT_MASK        ((DWORD)0x0F000000)
+#define PDH_LOG_OPT_APPEND       ((DWORD)0x08000000)
+#define PDH_LOG_OPT_MASK         ((DWORD)0x0F000000)
 
 #define PDH_LOG_TYPE_UNDEFINED      0
 #define PDH_LOG_TYPE_CSV            1
 #define PDH_LOG_TYPE_TSV            2
-#define PDH_LOG_TYPE_BINARY         3
+//#define PDH_LOG_TYPE_BINARY         3 // this is the retired binary format
 #define PDH_LOG_TYPE_TRACE_KERNEL   4
 #define PDH_LOG_TYPE_TRACE_GENERIC  5
 #define PDH_LOG_TYPE_PERFMON        6
+#define PDH_LOG_TYPE_SQL            7
+#define PDH_LOG_TYPE_BINARY         8
 
 PDH_FUNCTION
 PdhOpenLogW (
-    IN      LPCWSTR szLogFileName,
-    IN      DWORD   dwAccessFlags,
-    IN      LPDWORD lpdwLogType,
-    IN      HQUERY  hQuery,
-    IN      DWORD   dwMaxSize,
-    IN      LPCWSTR szUserCaption,
-    IN      HLOG    *phLog
+    IN      LPCWSTR     szLogFileName,
+    IN      DWORD       dwAccessFlags,
+    IN      LPDWORD     lpdwLogType,
+    IN      PDH_HQUERY  hQuery,
+    IN      DWORD       dwMaxSize,
+    IN      LPCWSTR     szUserCaption,
+    IN      PDH_HLOG  * phLog
 );
 
 PDH_FUNCTION
 PdhOpenLogA (
-    IN      LPCSTR  szLogFileName,
-    IN      DWORD   dwAccessFlags,
-    IN      LPDWORD lpdwLogType,
-    IN      HQUERY  hQuery,
-    IN      DWORD   dwMaxSize,
-    IN      LPCSTR  szUserCaption,
-    IN      HLOG    *phLog
+    IN      LPCSTR       szLogFileName,
+    IN      DWORD        dwAccessFlags,
+    IN      LPDWORD      lpdwLogType,
+    IN      PDH_HQUERY   hQuery,
+    IN      DWORD        dwMaxSize,
+    IN      LPCSTR       szUserCaption,
+    IN      PDH_HLOG   * phLog
 );
 
 PDH_FUNCTION
 PdhUpdateLogW (
-    IN      HLOG    hLog,
-    IN      LPCWSTR szUserString
+    IN      PDH_HLOG hLog,
+    IN      LPCWSTR  szUserString
 );
 
 PDH_FUNCTION
 PdhUpdateLogA (
-    IN      HLOG    hLog,
-    IN      LPCSTR  szUserString
+    IN      PDH_HLOG hLog,
+    IN      LPCSTR   szUserString
 );
 
 PDH_FUNCTION
 PdhUpdateLogFileCatalog (
-    IN      HLOG    hLog
+    IN      PDH_HLOG    hLog
 );
 
 PDH_FUNCTION
 PdhGetLogFileSize (
-    IN  HLOG        hLog,
-    IN  LONGLONG    *llSize
+    IN  PDH_HLOG     hLog,
+    IN  LONGLONG   * llSize
 );
 
 PDH_FUNCTION
 PdhCloseLog(
-    IN  HLOG        hLog,
+    IN  PDH_HLOG    hLog,
     IN  DWORD       dwFlags
 );
 
@@ -864,12 +937,12 @@ PdhSelectDataSourceA (
 
 BOOL
 PdhIsRealTimeQuery (
-    IN  HQUERY  hQuery
+    IN  PDH_HQUERY  hQuery
 );
 
 PDH_FUNCTION
 PdhSetQueryTimeRange (
-    IN      HQUERY          hQuery,
+    IN      PDH_HQUERY      hQuery,
     IN      PPDH_TIME_INFO  pInfo
 );
 
@@ -891,7 +964,7 @@ PdhGetDataSourceTimeRangeA (
 
 PDH_FUNCTION
 PdhCollectQueryDataEx (
-    IN      HQUERY      hQuery,
+    IN      PDH_HQUERY  hQuery,
     IN      DWORD       dwIntervalTime,
     IN      HANDLE      hNewDataEvent
 );
@@ -908,13 +981,13 @@ PdhFormatFromRawValue (
 
 PDH_FUNCTION
 PdhGetCounterTimeBase (
-    IN  HCOUNTER    hCounter,
-    IN  LONGLONG    *pTimeBase
+    IN  PDH_HCOUNTER   hCounter,
+    IN  LONGLONG     * pTimeBase
 );
 
 PDH_FUNCTION
 PdhReadRawLogRecord (
-    IN  HLOG                    hLog,
+    IN  PDH_HLOG                hLog,
     IN  FILETIME                ftRecord,
     IN  PPDH_RAW_LOG_RECORD     pRawLogRecord,
     IN  LPDWORD                 pdwBufferLength
@@ -996,6 +1069,211 @@ PdhLogServiceControlW (
     IN  PPDH_LOG_SERVICE_QUERY_INFO_W pInfoBuffer,
     IN  LPDWORD         pdwBufferSize
 );
+
+// Extended API for WMI event trace logfile format
+//
+PDH_FUNCTION
+PdhBindInputDataSourceW (
+    IN PDH_HLOG    * phDataSource,
+    IN LPCWSTR       LogFileNameList
+);
+
+PDH_FUNCTION
+PdhBindInputDataSourceA (
+    IN PDH_HLOG   * phDataSource,
+    IN LPCSTR       LogFileNameList
+);
+
+PDH_FUNCTION
+PdhOpenQueryH (
+    IN PDH_HLOG     hDataSource,
+    IN DWORD_PTR    dwUserData,
+    IN PDH_HQUERY * phQuery
+);
+
+PDH_FUNCTION
+PdhEnumMachinesHW (
+    IN PDH_HLOG    hDataSource,
+    IN LPWSTR      mszMachineList,
+    IN LPDWORD     pcchBufferSize
+);
+
+PDH_FUNCTION
+PdhEnumMachinesHA (
+    IN PDH_HLOG    hDataSource,
+    IN LPSTR       mszMachineList,
+    IN LPDWORD     pcchBufferSize
+);
+
+PDH_FUNCTION
+PdhEnumObjectsHW (
+    IN PDH_HLOG    hDataSource,
+    IN LPCWSTR     szMachineName,
+    IN LPWSTR      mszObjectList,
+    IN LPDWORD     pcchBufferSize,
+    IN DWORD       dwDetailLevel,
+    IN BOOL        bRefresh
+);
+
+PDH_FUNCTION
+PdhEnumObjectsHA (
+    IN PDH_HLOG    hDataSource,
+    IN LPCSTR      szMachineName,
+    IN LPSTR       mszObjectList,
+    IN LPDWORD     pcchBufferSize,
+    IN DWORD       dwDetailLevel,
+    IN BOOL        bRefresh
+);
+
+PDH_FUNCTION
+PdhEnumObjectItemsHW (
+    IN PDH_HLOG    hDataSource,
+    IN LPCWSTR     szMachineName,
+    IN LPCWSTR     szObjectName,
+    IN LPWSTR      mszCounterList,
+    IN LPDWORD     pcchCounterListLength,
+    IN LPWSTR      mszInstanceList,
+    IN LPDWORD     pcchInstanceListLength,
+    IN DWORD       dwDetailLevel,
+    IN DWORD       dwFlags
+);
+
+PDH_FUNCTION
+PdhEnumObjectItemsHA (
+    IN PDH_HLOG    hDataSource,
+    IN LPCSTR      szMachineName,
+    IN LPCSTR      szObjectName,
+    IN LPSTR       mszCounterList,
+    IN LPDWORD     pcchCounterListLength,
+    IN LPSTR       mszInstanceList,
+    IN LPDWORD     pcchInstanceListLength,
+    IN DWORD       dwDetailLevel,
+    IN DWORD       dwFlags
+);
+
+PDH_FUNCTION
+PdhExpandWildCardPathHW (
+    IN PDH_HLOG    hDataSource,
+    IN LPCWSTR     szWildCardPath,
+    IN LPWSTR      mszExpandedPathList,
+    IN LPDWORD     pcchPathListLength,
+    IN DWORD       dwFlags
+);
+
+PDH_FUNCTION
+PdhExpandWildCardPathHA (
+    IN PDH_HLOG    hDataSource,
+    IN LPCSTR      szWildCardPath,
+    IN LPSTR       mszExpandedPathList,
+    IN LPDWORD     pcchPathListLength,
+    IN DWORD       dwFlags
+);
+
+PDH_FUNCTION
+PdhGetDataSourceTimeRangeH (
+    IN PDH_HLOG        hDataSource,
+    IN LPDWORD         pdwNumEntries,
+    IN PPDH_TIME_INFO  pInfo,
+    IN LPDWORD         pdwBufferSize
+);
+
+PDH_FUNCTION
+PdhGetDefaultPerfObjectHW (
+    IN PDH_HLOG  hDataSource,
+    IN LPCWSTR   szMachineName,
+    IN LPWSTR    szDefaultObjectName,
+    IN LPDWORD   pcchBufferSize
+);
+
+PDH_FUNCTION
+PdhGetDefaultPerfObjectHA (
+    IN PDH_HLOG    hDataSource,
+    IN LPCSTR      szMachineName,
+    IN LPSTR       szDefaultObjectName,
+    IN LPDWORD     pcchBufferSize
+);
+
+PDH_FUNCTION
+PdhGetDefaultPerfCounterHW (
+    IN PDH_HLOG    hDataSource,
+    IN LPCWSTR     szMachineName,
+    IN LPCWSTR     szObjectName,
+    IN LPWSTR      szDefaultCounterName,
+    IN LPDWORD pcchBufferSize
+);
+
+PDH_FUNCTION
+PdhGetDefaultPerfCounterHA (
+    IN PDH_HLOG    hDataSource,
+    IN LPCSTR      szMachineName,
+    IN LPCSTR      szObjectName,
+    IN LPSTR       szDefaultCounterName,
+    IN LPDWORD pcchBufferSize
+);
+
+PDH_FUNCTION
+PdhBrowseCountersHW (
+    IN PPDH_BROWSE_DLG_CONFIG_HW pBrowseDlgData
+);
+
+PDH_FUNCTION
+PdhBrowseCountersHA (
+    IN PPDH_BROWSE_DLG_CONFIG_HA pBrowseDlgData
+);
+
+//Check that a DSN points to a database that contains the correct Perfmon tables.
+PDH_FUNCTION
+PdhVerifySQLDBW (
+	IN	LPCWSTR			szDataSource
+);
+
+PDH_FUNCTION
+PdhVerifySQLDBA (
+	IN	LPCSTR			szDataSource
+);
+
+
+//Create the correct perfmon tables in the database pointed to by a DSN.
+PDH_FUNCTION
+PdhCreateSQLTablesW (
+	IN	LPCWSTR			szDataSource
+);  
+
+PDH_FUNCTION
+PdhCreateSQLTablesA (
+	IN	LPCSTR			szDataSource
+);     
+
+//Return the list of Log set names in the database pointed to by the DSN.
+PDH_FUNCTION
+PdhEnumLogSetNamesW (
+	IN	LPCWSTR			szDataSource,
+	IN	LPWSTR			mszDataSetNameList,
+	IN	LPDWORD			pcchBufferLength
+);
+
+PDH_FUNCTION
+PdhEnumLogSetNamesA (
+	IN	LPCSTR			szDataSource,
+	IN	LPSTR			mszDataSetNameList,
+	IN	LPDWORD			pcchBufferLength
+);
+
+//Retrieve the GUID for an open Log Set
+PDH_FUNCTION
+PdhGetLogSetGUID (
+	IN	PDH_HLOG    hLog,             
+	IN	GUID      * pGuid,
+	IN	int       * pRunId
+);
+
+//Set the RunID for an open Log Set
+PDH_FUNCTION
+PdhSetLogSetRunID (
+	IN	PDH_HLOG    hLog,             
+	IN	int         RunId
+);
+
 //
 //   Unicode/ANSI compatibility section
 //
@@ -1031,8 +1309,11 @@ PdhLogServiceControlW (
 #define PdhGetDefaultPerfObject     PdhGetDefaultPerfObjectW
 #define PdhGetDefaultPerfCounter    PdhGetDefaultPerfCounterW
 #define PdhBrowseCounters           PdhBrowseCountersW
+#define PdhBrowseCountersH          PdhBrowseCountersHW
 #define PDH_BROWSE_DLG_CONFIG       PDH_BROWSE_DLG_CONFIG_W
 #define PPDH_BROWSE_DLG_CONFIG      PPDH_BROWSE_DLG_CONFIG_W
+#define PDH_BROWSE_DLG_CONFIG_H     PDH_BROWSE_DLG_CONFIG_HW
+#define PPDH_BROWSE_DLG_CONFIG_H    PPDH_BROWSE_DLG_CONFIG_HW
 #define PdhExpandCounterPath        PdhExpandCounterPathW
 // v2.0 functions
 #define PDH_FMT_COUNTERVALUE_ITEM   PDH_FMT_COUNTERVALUE_ITEM_W
@@ -1042,7 +1323,7 @@ PdhLogServiceControlW (
 #define PdhGetFormattedCounterArray PdhGetFormattedCounterArrayW
 #define PdhGetRawCounterArray       PdhGetRawCounterArrayW
 #define PdhLookupPerfNameByIndex    PdhLookupPerfNameByIndexW
-#define PdhLookupIndexByPerfName    PdhLookupIndexByPerfNameW
+#define PdhLookupPerfIndexByName    PdhLookupPerfIndexByNameW
 #define PdhOpenLog                  PdhOpenLogW
 #define PdhUpdateLog                PdhUpdateLogW
 #define PdhSelectDataSource         PdhSelectDataSourceW
@@ -1052,6 +1333,16 @@ PdhLogServiceControlW (
 #define PdhLogServiceControl        PdhLogServiceControlW
 #define PdhLogServiceQuery          PdhLogServiceQueryW
 #define PdhExpandWildCardPath       PdhExpandWildCardPathW
+#define PdhBindInputDataSource      PdhBindInputDataSourceW
+#define PdhEnumMachinesH            PdhEnumMachinesHW
+#define PdhEnumObjectsH             PdhEnumObjectsHW
+#define PdhEnumObjectItemsH         PdhEnumObjectItemsHW
+#define PdhExpandWildCardPathH      PdhExpandWildCardPathHW
+#define PdhGetDefaultPerfObjectH    PdhGetDefaultPerfObjectHW
+#define PdhGetDefaultPerfCounterH   PdhGetDefaultPerfCounterHW
+#define PdhEnumLogSetNames	    PdhEnumLogSetNamesW
+#define PdhCreateSQLTables	    PdhCreateSQLTablesW
+#define	PdhVerifySQLDB		    PdhVerifySQLDBW
 
 // end of UNICODE definitions
 #else
@@ -1074,8 +1365,11 @@ PdhLogServiceControlW (
 #define PdhGetDefaultPerfObject     PdhGetDefaultPerfObjectA
 #define PdhGetDefaultPerfCounter    PdhGetDefaultPerfCounterA
 #define PdhBrowseCounters           PdhBrowseCountersA
+#define PdhBrowseCountersH          PdhBrowseCountersHA
 #define PDH_BROWSE_DLG_CONFIG       PDH_BROWSE_DLG_CONFIG_A
 #define PPDH_BROWSE_DLG_CONFIG      PPDH_BROWSE_DLG_CONFIG_A
+#define PDH_BROWSE_DLG_CONFIG_H     PDH_BROWSE_DLG_CONFIG_HA
+#define PPDH_BROWSE_DLG_CONFIG_H    PPDH_BROWSE_DLG_CONFIG_HA
 #define PdhExpandCounterPath        PdhExpandCounterPathA
 // v2.0 functions
 #define PDH_FMT_COUNTERVALUE_ITEM   PDH_FMT_COUNTERVALUE_ITEM_A
@@ -1085,7 +1379,7 @@ PdhLogServiceControlW (
 #define PdhGetFormattedCounterArray PdhGetFormattedCounterArrayA
 #define PdhGetRawCounterArray       PdhGetRawCounterArrayA
 #define PdhLookupPerfNameByIndex    PdhLookupPerfNameByIndexA
-#define PdhLookupIndexByPerfName    PdhLookupIndexByPerfNameA
+#define PdhLookupPerfIndexByName    PdhLookupPerfIndexByNameA
 #define PdhOpenLog                  PdhOpenLogA
 #define PdhUpdateLog                PdhUpdateLogA
 #define PdhSelectDataSource         PdhSelectDataSourceA
@@ -1095,6 +1389,16 @@ PdhLogServiceControlW (
 #define PdhLogServiceControl        PdhLogServiceControlA
 #define PdhLogServiceQuery          PdhLogServiceQueryA
 #define PdhExpandWildCardPath       PdhExpandWildCardPathA
+#define PdhBindInputDataSource      PdhBindInputDataSourceA
+#define PdhEnumMachinesH            PdhEnumMachinesHA
+#define PdhEnumObjectsH             PdhEnumObjectsHA
+#define PdhEnumObjectItemsH         PdhEnumObjectItemsHA
+#define PdhExpandWildCardPathH      PdhExpandWildCardPathHA
+#define PdhGetDefaultPerfObjectH    PdhGetDefaultPerfObjectHA
+#define PdhGetDefaultPerfCounterH   PdhGetDefaultPerfCounterHA
+#define PdhEnumLogSetNames	    PdhEnumLogSetNamesA
+#define PdhCreateSQLTables	    PdhCreateSQLTablesA
+#define PdhVerifySQLDB	            PdhVerifySQLDBA
 
 // end of ANSI definitions
 #endif  // UNICODE
@@ -1110,5 +1414,4 @@ PdhLogServiceControlW (
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif //_PDH_H_

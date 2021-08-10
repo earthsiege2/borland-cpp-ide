@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'AccCtrl.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'AccCtrl.pas' rev: 6.00
 
 #ifndef AccCtrlHPP
 #define AccCtrlHPP
@@ -63,12 +63,9 @@ typedef ACTRL_CONTROL_INFOA *PACTRL_CONTROL_INFO;
 typedef PACTRL_CONTROL_INFOA *PPACTRL_CONTROL_INFO;
 
 //-- var, const, procedure ---------------------------------------------------
-#define ACCCTRL_DEFAULT_PROVIDER "Windows NT Access Provider"
 
 }	/* namespace Accctrl */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Accctrl;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

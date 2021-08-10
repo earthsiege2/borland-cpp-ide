@@ -8,11 +8,11 @@
 {							}
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
-unit Imagehlp;
+unit ImageHlp;
 
 interface
 
@@ -55,14 +55,14 @@ const
 function CheckSumMappedFile(BaseAddress: Pointer; FileLength: DWORD;
   HeaderSum: PDWORD; CheckSum: PDWORD): PImageNtHeaders; stdcall;
 
+{$EXTERNALSYM MapFileAndCheckSum}
+function MapFileAndCheckSum(Filename: PChar; var HeaderSum,
+  CheckSum: DWORD): DWORD; stdcall;
 {$EXTERNALSYM MapFileAndCheckSumA}
 function MapFileAndCheckSumA(Filename: PAnsiChar; var HeaderSum,
   CheckSum: DWORD): DWORD; stdcall;
 {$EXTERNALSYM MapFileAndCheckSumW}
 function MapFileAndCheckSumW(Filename: PWideChar; var HeaderSum,
-  CheckSum: DWORD): DWORD; stdcall;
-{$EXTERNALSYM MapFileAndCheckSum}
-function MapFileAndCheckSum(Filename: PChar; var HeaderSum,
   CheckSum: DWORD): DWORD; stdcall;
 
 
@@ -142,7 +142,7 @@ const
   IMAGE_SEPARATION     = 64 * 1024;
 
 type
-  PloadedImage = ^LoadedImage;
+  PloadedImage = ^TLoadedImage;
   {$EXTERNALSYM _LOADED_IMAGE}
   _LOADED_IMAGE = record
     ModuleName: LPSTR;
@@ -161,6 +161,7 @@ type
   {$EXTERNALSYM LOADED_IMAGE}
   LOADED_IMAGE = _LOADED_IMAGE;
   LoadedImage = _LOADED_IMAGE;
+  TLoadedImage = _Loaded_IMAGE;
 
 
 {$EXTERNALSYM ImageLoad}
@@ -714,9 +715,9 @@ function ImageUnload;                   external ImagehlpLib name 'ImageUnload';
 function MakeSureDirectoryPathExists;   external ImagehlpLib name 'MakeSureDirectoryPathExists';
 function MapAndLoad;                    external ImagehlpLib name 'MapAndLoad';
 function MapDebugInformation;           external ImagehlpLib name 'MapDebugInformation';
+function MapFileAndCheckSum;           external ImagehlpLib name 'MapFileAndCheckSumA';
 function MapFileAndCheckSumA;           external ImagehlpLib name 'MapFileAndCheckSumA';
 function MapFileAndCheckSumW;           external ImagehlpLib name 'MapFileAndCheckSumW';
-function MapFileAndCheckSum;           external ImagehlpLib name 'MapFileAndCheckSumA';
 function ReBaseImage;                   external ImagehlpLib name 'ReBaseImage';
 function RemovePrivateCvSymbolic;       external ImagehlpLib name 'RemovePrivateCvSymbolic';
 procedure RemoveRelocations;            external ImagehlpLib name 'RemoveRelocations';

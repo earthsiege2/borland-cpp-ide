@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:36:46 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for servprov.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -38,6 +37,10 @@
 #ifndef __servprov_h__
 #define __servprov_h__
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
 /* Forward Declarations */ 
 
 #ifndef __IServiceProvider_FWD_DEFINED__
@@ -53,8 +56,8 @@ typedef interface IServiceProvider IServiceProvider;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_servprov_0000 */
 /* [local] */ 
@@ -87,7 +90,7 @@ extern RPC_IF_HANDLE __MIDL_itf_servprov_0000_v0_0_s_ifspec;
 /* interface IServiceProvider */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IServiceProvider __RPC_FAR *LPSERVICEPROVIDER;
+typedef /* [unique] */ IServiceProvider *LPSERVICEPROVIDER;
 
 #if (_MSC_VER >= 1100) && defined(__cplusplus) && !defined(CINTERFACE)
     EXTERN_C const IID IID_IServiceProvider;
@@ -135,7 +138,7 @@ EXTERN_C const IID IID_IServiceProvider;
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE QueryService( 
             /* [in] */ REFGUID guidService,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+            /* [out] */ void **ppvObject) = 0;
         
     };
     
@@ -145,29 +148,29 @@ EXTERN_C const IID IID_IServiceProvider;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IServiceProvider __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IServiceProvider * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IServiceProvider __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IServiceProvider * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IServiceProvider __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IServiceProvider * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryService )( 
-            IServiceProvider __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *QueryService )( 
+            IServiceProvider * This,
             /* [in] */ REFGUID guidService,
             /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [out] */ void **ppvObject);
         
         END_INTERFACE
     } IServiceProviderVtbl;
 
     interface IServiceProvider
     {
-        CONST_VTBL struct IServiceProviderVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IServiceProviderVtbl *lpVtbl;
     };
 
     
@@ -196,10 +199,10 @@ EXTERN_C const IID IID_IServiceProvider;
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IServiceProvider_RemoteQueryService_Proxy( 
-    IServiceProvider __RPC_FAR * This,
+    IServiceProvider * This,
     /* [in] */ REFGUID guidService,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+    /* [iid_is][out] */ IUnknown **ppvObject);
 
 
 void __RPC_STUB IServiceProvider_RemoteQueryService_Stub(
@@ -213,29 +216,29 @@ void __RPC_STUB IServiceProvider_RemoteQueryService_Stub(
 #endif 	/* __IServiceProvider_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_servprov_0083 */
+/* interface __MIDL_itf_servprov_0088 */
 /* [local] */ 
 
 #endif // VC6 Hack
 
 
-extern RPC_IF_HANDLE __MIDL_itf_servprov_0083_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_servprov_0083_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_servprov_0088_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_servprov_0088_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IServiceProvider_QueryService_Proxy( 
-    IServiceProvider __RPC_FAR * This,
+    IServiceProvider * This,
     /* [in] */ REFGUID guidService,
     /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+    /* [out] */ void **ppvObject);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE IServiceProvider_QueryService_Stub( 
-    IServiceProvider __RPC_FAR * This,
+    IServiceProvider * This,
     /* [in] */ REFGUID guidService,
     /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject);
+    /* [iid_is][out] */ IUnknown **ppvObject);
 
 
 
@@ -246,6 +249,7 @@ extern RPC_IF_HANDLE __MIDL_itf_servprov_0083_v0_0_s_ifspec;
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

@@ -1,14 +1,13 @@
 //+-------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  File:       cguid.h
 //
 //--------------------------------------------------------------------------
 
 #ifndef __CGUID_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __CGUID_H__
 
 #if _MSC_VER > 1000
@@ -20,6 +19,7 @@ extern "C" {
 #endif
 
 extern const IID GUID_NULL;
+extern const IID CATID_MARSHALER;
 extern const IID IID_IRpcChannel;
 extern const IID IID_IRpcStub;
 extern const IID IID_IStubManager;
@@ -59,6 +59,7 @@ extern const CLSID CLSID_ComBinding;
 extern const CLSID CLSID_StdEvent;
 extern const CLSID CLSID_ManualResetEvent;
 extern const CLSID CLSID_SynchronizeContainer;
+extern const CLSID CLSID_AddrControl;
 
 //********************************************
 //
@@ -129,5 +130,4 @@ extern const GUID GUID_TRISTATE;
 #endif
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // __CGUID_H__

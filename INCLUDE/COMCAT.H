@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:32:21 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for comcat.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -20,7 +19,7 @@
 
 /* verify that the <rpcndr.h> version is high enough to compile this file*/
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
-#define __REQUIRED_RPCNDR_H_VERSION__ 440
+#define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
 
 #include "rpc.h"
@@ -37,6 +36,10 @@
 
 #ifndef __comcat_h__
 #define __comcat_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -71,8 +74,8 @@ typedef interface ICatInformation ICatInformation;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_comcat_0000 */
 /* [local] */ 
@@ -80,7 +83,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 //=--------------------------------------------------------------------------=
 // ComCat.h
 //=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -94,8 +97,6 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 // OLE Componet Categories Interfaces.
 //=--------------------------------------------------------------------------=
 //
-#pragma warning(disable:4047)
-#pragma warning(disable:4024)
 
 
 
@@ -151,7 +152,7 @@ extern RPC_IF_HANDLE __MIDL_itf_comcat_0000_v0_0_s_ifspec;
 /* interface IEnumGUID */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEnumGUID __RPC_FAR *LPENUMGUID;
+typedef /* [unique] */ IEnumGUID *LPENUMGUID;
 
 
 EXTERN_C const IID IID_IEnumGUID;
@@ -164,8 +165,8 @@ EXTERN_C const IID IID_IEnumGUID;
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ GUID __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [length_is][size_is][out] */ GUID *rgelt,
+            /* [out] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -173,7 +174,7 @@ EXTERN_C const IID IID_IEnumGUID;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumGUID **ppenum) = 0;
         
     };
     
@@ -183,40 +184,40 @@ EXTERN_C const IID IID_IEnumGUID;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumGUID __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumGUID * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumGUID __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumGUID * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumGUID __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumGUID * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumGUID __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumGUID * This,
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ GUID __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+            /* [length_is][size_is][out] */ GUID *rgelt,
+            /* [out] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumGUID __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumGUID * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumGUID __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumGUID * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumGUID __RPC_FAR * This,
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumGUID * This,
+            /* [out] */ IEnumGUID **ppenum);
         
         END_INTERFACE
     } IEnumGUIDVtbl;
 
     interface IEnumGUID
     {
-        CONST_VTBL struct IEnumGUIDVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumGUIDVtbl *lpVtbl;
     };
 
     
@@ -254,10 +255,10 @@ EXTERN_C const IID IID_IEnumGUID;
 
 
 HRESULT STDMETHODCALLTYPE IEnumGUID_Next_Proxy( 
-    IEnumGUID __RPC_FAR * This,
+    IEnumGUID * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ GUID __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ GUID *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumGUID_Next_Stub(
@@ -268,7 +269,7 @@ void __RPC_STUB IEnumGUID_Next_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumGUID_Skip_Proxy( 
-    IEnumGUID __RPC_FAR * This,
+    IEnumGUID * This,
     /* [in] */ ULONG celt);
 
 
@@ -280,7 +281,7 @@ void __RPC_STUB IEnumGUID_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumGUID_Reset_Proxy( 
-    IEnumGUID __RPC_FAR * This);
+    IEnumGUID * This);
 
 
 void __RPC_STUB IEnumGUID_Reset_Stub(
@@ -291,8 +292,8 @@ void __RPC_STUB IEnumGUID_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumGUID_Clone_Proxy( 
-    IEnumGUID __RPC_FAR * This,
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenum);
+    IEnumGUID * This,
+    /* [out] */ IEnumGUID **ppenum);
 
 
 void __RPC_STUB IEnumGUID_Clone_Stub(
@@ -323,16 +324,16 @@ extern RPC_IF_HANDLE __MIDL_itf_comcat_0009_v0_0_s_ifspec;
 /* interface IEnumCATEGORYINFO */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEnumCATEGORYINFO __RPC_FAR *LPENUMCATEGORYINFO;
+typedef /* [unique] */ IEnumCATEGORYINFO *LPENUMCATEGORYINFO;
 
 typedef struct tagCATEGORYINFO
     {
     CATID catid;
     LCID lcid;
     OLECHAR szDescription[ 128 ];
-    }	CATEGORYINFO;
+    } 	CATEGORYINFO;
 
-typedef struct tagCATEGORYINFO __RPC_FAR *LPCATEGORYINFO;
+typedef struct tagCATEGORYINFO *LPCATEGORYINFO;
 
 
 EXTERN_C const IID IID_IEnumCATEGORYINFO;
@@ -345,8 +346,8 @@ EXTERN_C const IID IID_IEnumCATEGORYINFO;
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ CATEGORYINFO __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+            /* [length_is][size_is][out] */ CATEGORYINFO *rgelt,
+            /* [out] */ ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG celt) = 0;
@@ -354,7 +355,7 @@ EXTERN_C const IID IID_IEnumCATEGORYINFO;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenum) = 0;
+            /* [out] */ IEnumCATEGORYINFO **ppenum) = 0;
         
     };
     
@@ -364,40 +365,40 @@ EXTERN_C const IID IID_IEnumCATEGORYINFO;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumCATEGORYINFO __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumCATEGORYINFO * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumCATEGORYINFO __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumCATEGORYINFO * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumCATEGORYINFO __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumCATEGORYINFO * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumCATEGORYINFO __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumCATEGORYINFO * This,
             /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ CATEGORYINFO __RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+            /* [length_is][size_is][out] */ CATEGORYINFO *rgelt,
+            /* [out] */ ULONG *pceltFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumCATEGORYINFO __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumCATEGORYINFO * This,
             /* [in] */ ULONG celt);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumCATEGORYINFO __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumCATEGORYINFO * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumCATEGORYINFO __RPC_FAR * This,
-            /* [out] */ IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumCATEGORYINFO * This,
+            /* [out] */ IEnumCATEGORYINFO **ppenum);
         
         END_INTERFACE
     } IEnumCATEGORYINFOVtbl;
 
     interface IEnumCATEGORYINFO
     {
-        CONST_VTBL struct IEnumCATEGORYINFOVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumCATEGORYINFOVtbl *lpVtbl;
     };
 
     
@@ -435,10 +436,10 @@ EXTERN_C const IID IID_IEnumCATEGORYINFO;
 
 
 HRESULT STDMETHODCALLTYPE IEnumCATEGORYINFO_Next_Proxy( 
-    IEnumCATEGORYINFO __RPC_FAR * This,
+    IEnumCATEGORYINFO * This,
     /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ CATEGORYINFO __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+    /* [length_is][size_is][out] */ CATEGORYINFO *rgelt,
+    /* [out] */ ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumCATEGORYINFO_Next_Stub(
@@ -449,7 +450,7 @@ void __RPC_STUB IEnumCATEGORYINFO_Next_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumCATEGORYINFO_Skip_Proxy( 
-    IEnumCATEGORYINFO __RPC_FAR * This,
+    IEnumCATEGORYINFO * This,
     /* [in] */ ULONG celt);
 
 
@@ -461,7 +462,7 @@ void __RPC_STUB IEnumCATEGORYINFO_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumCATEGORYINFO_Reset_Proxy( 
-    IEnumCATEGORYINFO __RPC_FAR * This);
+    IEnumCATEGORYINFO * This);
 
 
 void __RPC_STUB IEnumCATEGORYINFO_Reset_Stub(
@@ -472,8 +473,8 @@ void __RPC_STUB IEnumCATEGORYINFO_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumCATEGORYINFO_Clone_Proxy( 
-    IEnumCATEGORYINFO __RPC_FAR * This,
-    /* [out] */ IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenum);
+    IEnumCATEGORYINFO * This,
+    /* [out] */ IEnumCATEGORYINFO **ppenum);
 
 
 void __RPC_STUB IEnumCATEGORYINFO_Clone_Stub(
@@ -504,7 +505,7 @@ extern RPC_IF_HANDLE __MIDL_itf_comcat_0010_v0_0_s_ifspec;
 /* interface ICatRegister */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ ICatRegister __RPC_FAR *LPCATREGISTER;
+typedef /* [unique] */ ICatRegister *LPCATREGISTER;
 
 
 EXTERN_C const IID IID_ICatRegister;
@@ -517,31 +518,31 @@ EXTERN_C const IID IID_ICatRegister;
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterCategories( 
             /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATEGORYINFO __RPC_FAR rgCategoryInfo[  ]) = 0;
+            /* [size_is][in] */ CATEGORYINFO rgCategoryInfo[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnRegisterCategories( 
             /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]) = 0;
+            /* [size_is][in] */ CATID rgcatid[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterClassImplCategories( 
             /* [in] */ REFCLSID rclsid,
             /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]) = 0;
+            /* [size_is][in] */ CATID rgcatid[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnRegisterClassImplCategories( 
             /* [in] */ REFCLSID rclsid,
             /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]) = 0;
+            /* [size_is][in] */ CATID rgcatid[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterClassReqCategories( 
             /* [in] */ REFCLSID rclsid,
             /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]) = 0;
+            /* [size_is][in] */ CATID rgcatid[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnRegisterClassReqCategories( 
             /* [in] */ REFCLSID rclsid,
             /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]) = 0;
+            /* [size_is][in] */ CATID rgcatid[  ]) = 0;
         
     };
     
@@ -551,57 +552,57 @@ EXTERN_C const IID IID_ICatRegister;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICatRegister __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICatRegister * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICatRegister __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICatRegister * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICatRegister __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICatRegister * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterCategories )( 
-            ICatRegister __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RegisterCategories )( 
+            ICatRegister * This,
             /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATEGORYINFO __RPC_FAR rgCategoryInfo[  ]);
+            /* [size_is][in] */ CATEGORYINFO rgCategoryInfo[  ]);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnRegisterCategories )( 
-            ICatRegister __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *UnRegisterCategories )( 
+            ICatRegister * This,
             /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+            /* [size_is][in] */ CATID rgcatid[  ]);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterClassImplCategories )( 
-            ICatRegister __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RegisterClassImplCategories )( 
+            ICatRegister * This,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+            /* [size_is][in] */ CATID rgcatid[  ]);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnRegisterClassImplCategories )( 
-            ICatRegister __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *UnRegisterClassImplCategories )( 
+            ICatRegister * This,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+            /* [size_is][in] */ CATID rgcatid[  ]);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RegisterClassReqCategories )( 
-            ICatRegister __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *RegisterClassReqCategories )( 
+            ICatRegister * This,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+            /* [size_is][in] */ CATID rgcatid[  ]);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnRegisterClassReqCategories )( 
-            ICatRegister __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *UnRegisterClassReqCategories )( 
+            ICatRegister * This,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ ULONG cCategories,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+            /* [size_is][in] */ CATID rgcatid[  ]);
         
         END_INTERFACE
     } ICatRegisterVtbl;
 
     interface ICatRegister
     {
-        CONST_VTBL struct ICatRegisterVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICatRegisterVtbl *lpVtbl;
     };
 
     
@@ -645,9 +646,9 @@ EXTERN_C const IID IID_ICatRegister;
 
 
 HRESULT STDMETHODCALLTYPE ICatRegister_RegisterCategories_Proxy( 
-    ICatRegister __RPC_FAR * This,
+    ICatRegister * This,
     /* [in] */ ULONG cCategories,
-    /* [size_is][in] */ CATEGORYINFO __RPC_FAR rgCategoryInfo[  ]);
+    /* [size_is][in] */ CATEGORYINFO rgCategoryInfo[  ]);
 
 
 void __RPC_STUB ICatRegister_RegisterCategories_Stub(
@@ -658,9 +659,9 @@ void __RPC_STUB ICatRegister_RegisterCategories_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICatRegister_UnRegisterCategories_Proxy( 
-    ICatRegister __RPC_FAR * This,
+    ICatRegister * This,
     /* [in] */ ULONG cCategories,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+    /* [size_is][in] */ CATID rgcatid[  ]);
 
 
 void __RPC_STUB ICatRegister_UnRegisterCategories_Stub(
@@ -671,10 +672,10 @@ void __RPC_STUB ICatRegister_UnRegisterCategories_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICatRegister_RegisterClassImplCategories_Proxy( 
-    ICatRegister __RPC_FAR * This,
+    ICatRegister * This,
     /* [in] */ REFCLSID rclsid,
     /* [in] */ ULONG cCategories,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+    /* [size_is][in] */ CATID rgcatid[  ]);
 
 
 void __RPC_STUB ICatRegister_RegisterClassImplCategories_Stub(
@@ -685,10 +686,10 @@ void __RPC_STUB ICatRegister_RegisterClassImplCategories_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICatRegister_UnRegisterClassImplCategories_Proxy( 
-    ICatRegister __RPC_FAR * This,
+    ICatRegister * This,
     /* [in] */ REFCLSID rclsid,
     /* [in] */ ULONG cCategories,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+    /* [size_is][in] */ CATID rgcatid[  ]);
 
 
 void __RPC_STUB ICatRegister_UnRegisterClassImplCategories_Stub(
@@ -699,10 +700,10 @@ void __RPC_STUB ICatRegister_UnRegisterClassImplCategories_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICatRegister_RegisterClassReqCategories_Proxy( 
-    ICatRegister __RPC_FAR * This,
+    ICatRegister * This,
     /* [in] */ REFCLSID rclsid,
     /* [in] */ ULONG cCategories,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+    /* [size_is][in] */ CATID rgcatid[  ]);
 
 
 void __RPC_STUB ICatRegister_RegisterClassReqCategories_Stub(
@@ -713,10 +714,10 @@ void __RPC_STUB ICatRegister_RegisterClassReqCategories_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICatRegister_UnRegisterClassReqCategories_Proxy( 
-    ICatRegister __RPC_FAR * This,
+    ICatRegister * This,
     /* [in] */ REFCLSID rclsid,
     /* [in] */ ULONG cCategories,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatid[  ]);
+    /* [size_is][in] */ CATID rgcatid[  ]);
 
 
 void __RPC_STUB ICatRegister_UnRegisterClassReqCategories_Stub(
@@ -747,7 +748,7 @@ extern RPC_IF_HANDLE __MIDL_itf_comcat_0011_v0_0_s_ifspec;
 /* interface ICatInformation */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ ICatInformation __RPC_FAR *LPCATINFORMATION;
+typedef /* [unique] */ ICatInformation *LPCATINFORMATION;
 
 
 EXTERN_C const IID IID_ICatInformation;
@@ -760,34 +761,34 @@ EXTERN_C const IID IID_ICatInformation;
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumCategories( 
             /* [in] */ LCID lcid,
-            /* [out] */ IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenumCategoryInfo) = 0;
+            /* [out] */ IEnumCATEGORYINFO **ppenumCategoryInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCategoryDesc( 
             /* [in] */ REFCATID rcatid,
             /* [in] */ LCID lcid,
-            /* [out] */ LPWSTR __RPC_FAR *pszDesc) = 0;
+            /* [out] */ LPWSTR *pszDesc) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE EnumClassesOfCategories( 
             /* [in] */ ULONG cImplemented,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
+            /* [size_is][in] */ CATID rgcatidImpl[  ],
             /* [in] */ ULONG cRequired,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ],
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid) = 0;
+            /* [size_is][in] */ CATID rgcatidReq[  ],
+            /* [out] */ IEnumGUID **ppenumClsid) = 0;
         
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE IsClassOfCategories( 
             /* [in] */ REFCLSID rclsid,
             /* [in] */ ULONG cImplemented,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
+            /* [size_is][in] */ CATID rgcatidImpl[  ],
             /* [in] */ ULONG cRequired,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ]) = 0;
+            /* [size_is][in] */ CATID rgcatidReq[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumImplCategoriesOfClass( 
             /* [in] */ REFCLSID rclsid,
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid) = 0;
+            /* [out] */ IEnumGUID **ppenumCatid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumReqCategoriesOfClass( 
             /* [in] */ REFCLSID rclsid,
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid) = 0;
+            /* [out] */ IEnumGUID **ppenumCatid) = 0;
         
     };
     
@@ -797,60 +798,60 @@ EXTERN_C const IID IID_ICatInformation;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICatInformation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICatInformation * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICatInformation __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICatInformation * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICatInformation __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICatInformation * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumCategories )( 
-            ICatInformation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnumCategories )( 
+            ICatInformation * This,
             /* [in] */ LCID lcid,
-            /* [out] */ IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenumCategoryInfo);
+            /* [out] */ IEnumCATEGORYINFO **ppenumCategoryInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCategoryDesc )( 
-            ICatInformation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetCategoryDesc )( 
+            ICatInformation * This,
             /* [in] */ REFCATID rcatid,
             /* [in] */ LCID lcid,
-            /* [out] */ LPWSTR __RPC_FAR *pszDesc);
+            /* [out] */ LPWSTR *pszDesc);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumClassesOfCategories )( 
-            ICatInformation __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *EnumClassesOfCategories )( 
+            ICatInformation * This,
             /* [in] */ ULONG cImplemented,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
+            /* [size_is][in] */ CATID rgcatidImpl[  ],
             /* [in] */ ULONG cRequired,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ],
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid);
+            /* [size_is][in] */ CATID rgcatidReq[  ],
+            /* [out] */ IEnumGUID **ppenumClsid);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsClassOfCategories )( 
-            ICatInformation __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *IsClassOfCategories )( 
+            ICatInformation * This,
             /* [in] */ REFCLSID rclsid,
             /* [in] */ ULONG cImplemented,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
+            /* [size_is][in] */ CATID rgcatidImpl[  ],
             /* [in] */ ULONG cRequired,
-            /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ]);
+            /* [size_is][in] */ CATID rgcatidReq[  ]);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumImplCategoriesOfClass )( 
-            ICatInformation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnumImplCategoriesOfClass )( 
+            ICatInformation * This,
             /* [in] */ REFCLSID rclsid,
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid);
+            /* [out] */ IEnumGUID **ppenumCatid);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumReqCategoriesOfClass )( 
-            ICatInformation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *EnumReqCategoriesOfClass )( 
+            ICatInformation * This,
             /* [in] */ REFCLSID rclsid,
-            /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid);
+            /* [out] */ IEnumGUID **ppenumCatid);
         
         END_INTERFACE
     } ICatInformationVtbl;
 
     interface ICatInformation
     {
-        CONST_VTBL struct ICatInformationVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICatInformationVtbl *lpVtbl;
     };
 
     
@@ -894,9 +895,9 @@ EXTERN_C const IID IID_ICatInformation;
 
 
 HRESULT STDMETHODCALLTYPE ICatInformation_EnumCategories_Proxy( 
-    ICatInformation __RPC_FAR * This,
+    ICatInformation * This,
     /* [in] */ LCID lcid,
-    /* [out] */ IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenumCategoryInfo);
+    /* [out] */ IEnumCATEGORYINFO **ppenumCategoryInfo);
 
 
 void __RPC_STUB ICatInformation_EnumCategories_Stub(
@@ -907,10 +908,10 @@ void __RPC_STUB ICatInformation_EnumCategories_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICatInformation_GetCategoryDesc_Proxy( 
-    ICatInformation __RPC_FAR * This,
+    ICatInformation * This,
     /* [in] */ REFCATID rcatid,
     /* [in] */ LCID lcid,
-    /* [out] */ LPWSTR __RPC_FAR *pszDesc);
+    /* [out] */ LPWSTR *pszDesc);
 
 
 void __RPC_STUB ICatInformation_GetCategoryDesc_Stub(
@@ -921,12 +922,12 @@ void __RPC_STUB ICatInformation_GetCategoryDesc_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ICatInformation_RemoteEnumClassesOfCategories_Proxy( 
-    ICatInformation __RPC_FAR * This,
+    ICatInformation * This,
     /* [in] */ ULONG cImplemented,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidImpl[  ],
+    /* [size_is][unique][in] */ CATID rgcatidImpl[  ],
     /* [in] */ ULONG cRequired,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidReq[  ],
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid);
+    /* [size_is][unique][in] */ CATID rgcatidReq[  ],
+    /* [out] */ IEnumGUID **ppenumClsid);
 
 
 void __RPC_STUB ICatInformation_RemoteEnumClassesOfCategories_Stub(
@@ -937,12 +938,12 @@ void __RPC_STUB ICatInformation_RemoteEnumClassesOfCategories_Stub(
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ICatInformation_RemoteIsClassOfCategories_Proxy( 
-    ICatInformation __RPC_FAR * This,
+    ICatInformation * This,
     /* [in] */ REFCLSID rclsid,
     /* [in] */ ULONG cImplemented,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidImpl[  ],
+    /* [size_is][unique][in] */ CATID rgcatidImpl[  ],
     /* [in] */ ULONG cRequired,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidReq[  ]);
+    /* [size_is][unique][in] */ CATID rgcatidReq[  ]);
 
 
 void __RPC_STUB ICatInformation_RemoteIsClassOfCategories_Stub(
@@ -953,9 +954,9 @@ void __RPC_STUB ICatInformation_RemoteIsClassOfCategories_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICatInformation_EnumImplCategoriesOfClass_Proxy( 
-    ICatInformation __RPC_FAR * This,
+    ICatInformation * This,
     /* [in] */ REFCLSID rclsid,
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid);
+    /* [out] */ IEnumGUID **ppenumCatid);
 
 
 void __RPC_STUB ICatInformation_EnumImplCategoriesOfClass_Stub(
@@ -966,9 +967,9 @@ void __RPC_STUB ICatInformation_EnumImplCategoriesOfClass_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICatInformation_EnumReqCategoriesOfClass_Proxy( 
-    ICatInformation __RPC_FAR * This,
+    ICatInformation * This,
     /* [in] */ REFCLSID rclsid,
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid);
+    /* [out] */ IEnumGUID **ppenumCatid);
 
 
 void __RPC_STUB ICatInformation_EnumReqCategoriesOfClass_Stub(
@@ -994,38 +995,38 @@ extern RPC_IF_HANDLE __MIDL_itf_comcat_0012_v0_0_s_ifspec;
 /* Additional Prototypes for ALL interfaces */
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ICatInformation_EnumClassesOfCategories_Proxy( 
-    ICatInformation __RPC_FAR * This,
+    ICatInformation * This,
     /* [in] */ ULONG cImplemented,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
+    /* [size_is][in] */ CATID rgcatidImpl[  ],
     /* [in] */ ULONG cRequired,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ],
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid);
+    /* [size_is][in] */ CATID rgcatidReq[  ],
+    /* [out] */ IEnumGUID **ppenumClsid);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ICatInformation_EnumClassesOfCategories_Stub( 
-    ICatInformation __RPC_FAR * This,
+    ICatInformation * This,
     /* [in] */ ULONG cImplemented,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidImpl[  ],
+    /* [size_is][unique][in] */ CATID rgcatidImpl[  ],
     /* [in] */ ULONG cRequired,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidReq[  ],
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid);
+    /* [size_is][unique][in] */ CATID rgcatidReq[  ],
+    /* [out] */ IEnumGUID **ppenumClsid);
 
 /* [local] */ HRESULT STDMETHODCALLTYPE ICatInformation_IsClassOfCategories_Proxy( 
-    ICatInformation __RPC_FAR * This,
+    ICatInformation * This,
     /* [in] */ REFCLSID rclsid,
     /* [in] */ ULONG cImplemented,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
+    /* [size_is][in] */ CATID rgcatidImpl[  ],
     /* [in] */ ULONG cRequired,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ]);
+    /* [size_is][in] */ CATID rgcatidReq[  ]);
 
 
 /* [call_as] */ HRESULT STDMETHODCALLTYPE ICatInformation_IsClassOfCategories_Stub( 
-    ICatInformation __RPC_FAR * This,
+    ICatInformation * This,
     /* [in] */ REFCLSID rclsid,
     /* [in] */ ULONG cImplemented,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidImpl[  ],
+    /* [size_is][unique][in] */ CATID rgcatidImpl[  ],
     /* [in] */ ULONG cRequired,
-    /* [size_is][unique][in] */ CATID __RPC_FAR rgcatidReq[  ]);
+    /* [size_is][unique][in] */ CATID rgcatidReq[  ]);
 
 
 
@@ -1036,6 +1037,7 @@ extern RPC_IF_HANDLE __MIDL_itf_comcat_0012_v0_0_s_ifspec;
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

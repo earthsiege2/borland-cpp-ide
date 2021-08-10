@@ -1,70 +1,78 @@
 LIBRARY NTMSAPI
 EXPORTS
 
-    AccessNtmsLibraryDoor                    = 'NTMSAPI.DLL'.*
-    AddNtmsMediaType                         = 'NTMSAPI.DLL'.*
-    AllocateNtmsMedia                        = 'NTMSAPI.DLL'.*
-    BeginNtmsDeviceChangeDetection           = 'NTMSAPI.DLL'.*
-    CancelNtmsLibraryRequest                 = 'NTMSAPI.DLL'.*
-    CancelNtmsOperatorRequest                = 'NTMSAPI.DLL'.*
-    ChangeNtmsMediaType                      = 'NTMSAPI.DLL'.*
-    CleanNtmsDrive                           = 'NTMSAPI.DLL'.*
-    CloseNtmsNotification                    = 'NTMSAPI.DLL'.*
-    CloseNtmsSession                         = 'NTMSAPI.DLL'.*
-    CreateNtmsMediaA                         = 'NTMSAPI.DLL'.*
-    CreateNtmsMediaPoolA                     = 'NTMSAPI.DLL'.*
-    CreateNtmsMediaPoolW                     = 'NTMSAPI.DLL'.*
-    CreateNtmsMediaW                         = 'NTMSAPI.DLL'.*
-    DeallocateNtmsMedia                      = 'NTMSAPI.DLL'.*
-    DecommissionNtmsMedia                    = 'NTMSAPI.DLL'.*
-    DeleteNtmsDrive                          = 'NTMSAPI.DLL'.*
-    DeleteNtmsLibrary                        = 'NTMSAPI.DLL'.*
-    DeleteNtmsMedia                          = 'NTMSAPI.DLL'.*
-    DeleteNtmsMediaPool                      = 'NTMSAPI.DLL'.*
-    DeleteNtmsMediaType                      = 'NTMSAPI.DLL'.*
-    DeleteNtmsRequests                       = 'NTMSAPI.DLL'.*
-    DisableNtmsObject                        = 'NTMSAPI.DLL'.*
-    DismountNtmsDrive                        = 'NTMSAPI.DLL'.*
-    DismountNtmsMedia                        = 'NTMSAPI.DLL'.*
-    EjectDiskFromSADriveA                    = 'NTMSAPI.DLL'.*
-    EjectDiskFromSADriveW                    = 'NTMSAPI.DLL'.*
-    EjectNtmsCleaner                         = 'NTMSAPI.DLL'.*
-    EjectNtmsMedia                           = 'NTMSAPI.DLL'.*
-    EnableNtmsObject                         = 'NTMSAPI.DLL'.*
-    EndNtmsDeviceChangeDetection             = 'NTMSAPI.DLL'.*
-    EnumerateNtmsObject                      = 'NTMSAPI.DLL'.*
-    ExportNtmsDatabase                       = 'NTMSAPI.DLL'.*
-    GetNtmsMediaPoolNameA                    = 'NTMSAPI.DLL'.*
-    GetNtmsMediaPoolNameW                    = 'NTMSAPI.DLL'.*
-    GetNtmsObjectAttributeA                  = 'NTMSAPI.DLL'.*
-    GetNtmsObjectAttributeW                  = 'NTMSAPI.DLL'.*
-    GetNtmsObjectInformationA                = 'NTMSAPI.DLL'.*
-    GetNtmsObjectInformationW                = 'NTMSAPI.DLL'.*
-    GetNtmsObjectSecurity                    = 'NTMSAPI.DLL'.*
-    GetNtmsRequestOrder                      = 'NTMSAPI.DLL'.*
-    ImportNtmsDatabase                       = 'NTMSAPI.DLL'.*
-    InjectNtmsCleaner                        = 'NTMSAPI.DLL'.*
-    InjectNtmsMedia                          = 'NTMSAPI.DLL'.*
-    InventoryNtmsLibrary                     = 'NTMSAPI.DLL'.*
-    MountNtmsMedia                           = 'NTMSAPI.DLL'.*
-    MoveToNtmsMediaPool                      = 'NTMSAPI.DLL'.*
-    OpenNtmsNotification                     = 'NTMSAPI.DLL'.*
-    OpenNtmsSessionA                         = 'NTMSAPI.DLL'.*
-    OpenNtmsSessionW                         = 'NTMSAPI.DLL'.*
-    ReleaseNtmsCleanerSlot                   = 'NTMSAPI.DLL'.*
-    ReserveNtmsCleanerSlot                   = 'NTMSAPI.DLL'.*
-    SatisfyNtmsOperatorRequest               = 'NTMSAPI.DLL'.*
-    SetNtmsDeviceChangeDetection             = 'NTMSAPI.DLL'.*
-    SetNtmsMediaComplete                     = 'NTMSAPI.DLL'.*
-    SetNtmsObjectAttributeA                  = 'NTMSAPI.DLL'.*
-    SetNtmsObjectAttributeW                  = 'NTMSAPI.DLL'.*
-    SetNtmsObjectInformationA                = 'NTMSAPI.DLL'.*
-    SetNtmsObjectInformationW                = 'NTMSAPI.DLL'.*
-    SetNtmsObjectSecurity                    = 'NTMSAPI.DLL'.*
-    SetNtmsRequestOrder                      = 'NTMSAPI.DLL'.*
-    SubmitNtmsOperatorRequestA               = 'NTMSAPI.DLL'.*
-    SubmitNtmsOperatorRequestW               = 'NTMSAPI.DLL'.*
-    SwapNtmsMedia                            = 'NTMSAPI.DLL'.*
-    UpdateNtmsOmidInfo                       = 'NTMSAPI.DLL'.*
-    WaitForNtmsNotification                  = 'NTMSAPI.DLL'.*
-    WaitForNtmsOperatorRequest               = 'NTMSAPI.DLL'.*
+    AccessNtmsLibraryDoor
+    AddNtmsMediaType
+    AllocateNtmsMedia
+    BeginNtmsDeviceChangeDetection
+    CancelNtmsLibraryRequest
+    CancelNtmsOperatorRequest
+    ChangeNtmsMediaType
+    CleanNtmsDrive
+    CloseNtmsNotification
+    CloseNtmsSession
+    CreateNtmsMediaA
+    CreateNtmsMediaPoolA
+    CreateNtmsMediaPoolW
+    CreateNtmsMediaW
+    DeallocateNtmsMedia
+    DecommissionNtmsMedia
+    DeleteNtmsDrive
+    DeleteNtmsLibrary
+    DeleteNtmsMedia
+    DeleteNtmsMediaPool
+    DeleteNtmsMediaType
+    DeleteNtmsRequests
+    DisableNtmsObject
+    DismountNtmsDrive
+    DismountNtmsMedia
+    DoEjectFromSADriveW
+    EjectDiskFromSADriveA
+    EjectDiskFromSADriveW
+    EjectNtmsCleaner
+    EjectNtmsMedia
+    EnableNtmsObject
+    EndNtmsDeviceChangeDetection
+    EnumerateNtmsObject
+    ExportNtmsDatabase
+    GetNtmsMediaPoolNameA
+    GetNtmsMediaPoolNameW
+    GetNtmsObjectAttributeA
+    GetNtmsObjectAttributeW
+    GetNtmsObjectInformationA
+    GetNtmsObjectInformationW
+    GetNtmsObjectSecurity
+    GetNtmsRequestOrder
+    GetNtmsUIOptionsA
+    GetNtmsUIOptionsW
+    GetVolumesFromDriveA
+    GetVolumesFromDriveW
+    IdentifyNtmsSlot
+    ImportNtmsDatabase
+    InjectNtmsCleaner
+    InjectNtmsMedia
+    InventoryNtmsLibrary
+    MountNtmsMedia
+    MoveToNtmsMediaPool
+    OpenNtmsNotification
+    OpenNtmsSessionA
+    OpenNtmsSessionW
+    ReleaseNtmsCleanerSlot
+    ReserveNtmsCleanerSlot
+    SatisfyNtmsOperatorRequest
+    SetNtmsDeviceChangeDetection
+    SetNtmsMediaComplete
+    SetNtmsObjectAttributeA
+    SetNtmsObjectAttributeW
+    SetNtmsObjectInformationA
+    SetNtmsObjectInformationW
+    SetNtmsObjectSecurity
+    SetNtmsRequestOrder
+    SetNtmsUIOptionsA
+    SetNtmsUIOptionsW
+    SubmitNtmsOperatorRequestA
+    SubmitNtmsOperatorRequestW
+    SwapNtmsMedia
+    UpdateNtmsOmidInfo
+    WaitForNtmsNotification
+    WaitForNtmsOperatorRequest

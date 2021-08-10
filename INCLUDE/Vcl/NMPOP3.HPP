@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'NMpop3.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'NMpop3.pas' rev: 6.00
 
 #ifndef NMpop3HPP
 #define NMpop3HPP
@@ -151,14 +151,11 @@ __published:
 	__property bool DeleteOnRead = {read=FDeleteOnRead, write=FDeleteOnRead, nodefault};
 	__property AnsiString AttachFilePath = {read=FAttachFilePath, write=SetAttachFilePath};
 	__property Classes::TNotifyEvent OnConnect = {read=FOnConnect, write=FOnConnect};
-	__property Psock::THandlerEvent OnAuthenticationNeeded = {read=FOnAuthenticationNeeded, write=FOnAuthenticationNeeded
-		};
-	__property Psock::THandlerEvent OnAuthenticationFailed = {read=FOnAuthenticationFailed, write=FOnAuthenticationFailed
-		};
+	__property Psock::THandlerEvent OnAuthenticationNeeded = {read=FOnAuthenticationNeeded, write=FOnAuthenticationNeeded};
+	__property Psock::THandlerEvent OnAuthenticationFailed = {read=FOnAuthenticationFailed, write=FOnAuthenticationFailed};
 	__property Classes::TNotifyEvent OnReset = {read=FOnReset, write=FOnReset};
 	__property TListEvent OnList = {read=FOnList, write=FOnList};
 	__property Classes::TNotifyEvent OnRetrieveStart = {read=FOnRetrieveStart, write=FOnRetrieveStart};
-		
 	__property Classes::TNotifyEvent OnRetrieveEnd = {read=FOnRetrieveEnd, write=FOnRetrieveEnd};
 	__property Classes::TNotifyEvent OnSuccess = {read=FOnSuccess, write=FOnSuccess};
 	__property Classes::TNotifyEvent OnFailure = {read=FOnFailure, write=FOnFailure};
@@ -197,9 +194,7 @@ static const Shortint POP3_PORT = 0x6e;
 #define Cons_Head_B642 "Base64"
 
 }	/* namespace Nmpop3 */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Nmpop3;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

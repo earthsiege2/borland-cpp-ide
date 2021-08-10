@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'MPlayer.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'MPlayer.pas' rev: 6.00
 
 #ifndef MPlayerHPP
 #define MPlayerHPP
@@ -38,6 +38,7 @@ typedef Set<TMPBtnType, btPlay, btEject>  TButtonSet;
 enum TMPGlyph { mgEnabled, mgDisabled, mgColored };
 #pragma option pop
 
+#pragma pack(push, 4)
 struct TMPButton
 {
 	bool Visible;
@@ -46,15 +47,14 @@ struct TMPButton
 	bool Auto;
 	Graphics::TBitmap* Bitmaps[3];
 } ;
+#pragma pack(pop)
 
 #pragma option push -b-
-enum TMPDeviceTypes { dtAutoSelect, dtAVIVideo, dtCDAudio, dtDAT, dtDigitalVideo, dtMMMovie, dtOther, 
-	dtOverlay, dtScanner, dtSequencer, dtVCR, dtVideodisc, dtWaveAudio };
+enum TMPDeviceTypes { dtAutoSelect, dtAVIVideo, dtCDAudio, dtDAT, dtDigitalVideo, dtMMMovie, dtOther, dtOverlay, dtScanner, dtSequencer, dtVCR, dtVideodisc, dtWaveAudio };
 #pragma option pop
 
 #pragma option push -b-
-enum TMPTimeFormats { tfMilliseconds, tfHMS, tfMSF, tfFrames, tfSMPTE24, tfSMPTE25, tfSMPTE30, tfSMPTE30Drop, 
-	tfBytes, tfSamples, tfTMSF };
+enum TMPTimeFormats { tfMilliseconds, tfHMS, tfMSF, tfFrames, tfSMPTE24, tfSMPTE25, tfSMPTE30, tfSMPTE30Drop, tfBytes, tfSamples, tfTMSF };
 #pragma option pop
 
 #pragma option push -b-
@@ -71,8 +71,7 @@ enum TMPDevCaps { mpCanStep, mpCanEject, mpCanPlay, mpCanRecord, mpUsesWindow };
 
 typedef Set<TMPDevCaps, mpCanStep, mpUsesWindow>  TMPDevCapsSet;
 
-typedef void __fastcall (__closure *EMPNotify)(System::TObject* Sender, TMPBtnType Button, bool &DoDefault
-	);
+typedef void __fastcall (__closure *EMPNotify)(System::TObject* Sender, TMPBtnType Button, bool &DoDefault);
 
 typedef void __fastcall (__closure *EMPPostNotify)(System::TObject* Sender, TMPBtnType Button);
 
@@ -83,38 +82,28 @@ class PASCALIMPLEMENTATION EMCIDeviceError : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EMCIDeviceError(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EMCIDeviceError(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EMCIDeviceError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EMCIDeviceError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EMCIDeviceError(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EMCIDeviceError(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EMCIDeviceError(int Ident, const System::TVarRec * Args
-		, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EMCIDeviceError(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EMCIDeviceError(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EMCIDeviceError(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EMCIDeviceError(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EMCIDeviceError(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EMCIDeviceError(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EMCIDeviceError(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EMCIDeviceError(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EMCIDeviceError(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -139,9 +128,15 @@ private:
 	bool Pressed;
 	bool Down;
 	TMPBtnType CurrentButton;
-	Windows::TRect CurrentRect;
+	#pragma pack(push, 1)
+	Types::TRect CurrentRect;
+	#pragma pack(pop)
+	
 	int ButtonWidth;
-	Windows::TPoint MinBtnSize;
+	#pragma pack(push, 1)
+	Types::TPoint MinBtnSize;
+	#pragma pack(pop)
+	
 	EMPNotify FOnClick;
 	EMPPostNotify FOnPostClick;
 	Classes::TNotifyEvent FOnNotify;
@@ -206,8 +201,8 @@ private:
 	void __fastcall SetTimeFormat(TMPTimeFormats Value);
 	void __fastcall SetDisplay(Controls::TWinControl* Value);
 	void __fastcall SetOrigDisplay(void);
-	void __fastcall SetDisplayRect(const Windows::TRect &Value);
-	Windows::TRect __fastcall GetDisplayRect();
+	void __fastcall SetDisplayRect(const Types::TRect &Value);
+	Types::TRect __fastcall GetDisplayRect();
 	void __fastcall GetDeviceCaps(void);
 	int __fastcall GetStart(void);
 	int __fastcall GetLength(void);
@@ -223,8 +218,7 @@ protected:
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
 	virtual void __fastcall Loaded(void);
 	DYNAMIC void __fastcall AutoButtonSet(TMPBtnType Btn);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	virtual void __fastcall Paint(void);
 	MESSAGE void __fastcall MMNotify(Messages::TMessage &Message);
 	HIDESBASEDYNAMIC void __fastcall Click(TMPBtnType Button, bool &DoDefault);
@@ -268,15 +262,14 @@ public:
 	__property int EndPos = {read=FTo, write=SetTo, nodefault};
 	__property Word DeviceID = {read=FDeviceID, nodefault};
 	__property TMPTimeFormats TimeFormat = {read=GetTimeFormat, write=SetTimeFormat, nodefault};
-	__property Windows::TRect DisplayRect = {read=GetDisplayRect, write=SetDisplayRect};
+	__property Types::TRect DisplayRect = {read=GetDisplayRect, write=SetDisplayRect};
 	
 __published:
 	__property TButtonSet ColoredButtons = {read=FColoredButtons, write=SetColored, default=511};
-	__property Enabled ;
-	__property TButtonSet EnabledButtons = {read=FEnabledButtons, write=SetEnabledButtons, default=511}
-		;
+	__property Enabled  = {default=1};
+	__property TButtonSet EnabledButtons = {read=FEnabledButtons, write=SetEnabledButtons, default=511};
 	__property TButtonSet VisibleButtons = {read=FVisibleButtons, write=SetVisible, default=511};
-	__property Anchors ;
+	__property Anchors  = {default=3};
 	__property bool AutoEnable = {read=FAutoEnable, write=SetAutoEnable, default=1};
 	__property bool AutoOpen = {read=FAutoOpen, write=FAutoOpen, default=0};
 	__property bool AutoRewind = {read=FAutoRewind, write=FAutoRewind, default=1};
@@ -285,12 +278,12 @@ __published:
 	__property Controls::TWinControl* Display = {read=FDisplay, write=SetDisplay};
 	__property AnsiString FileName = {read=FElementName, write=FElementName};
 	__property bool Shareable = {read=FShareable, write=FShareable, default=0};
-	__property Visible ;
-	__property ParentShowHint ;
+	__property Visible  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property ShowHint ;
 	__property PopupMenu ;
-	__property TabOrder ;
-	__property TabStop ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
 	__property EMPNotify OnClick = {read=FOnClick, write=FOnClick};
 	__property OnContextPopup ;
 	__property OnEnter ;
@@ -299,8 +292,7 @@ __published:
 	__property Classes::TNotifyEvent OnNotify = {read=FOnNotify, write=FOnNotify};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TMediaPlayer(HWND ParentWindow) : Controls::TCustomControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TMediaPlayer(HWND ParentWindow) : Controls::TCustomControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -309,9 +301,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Mplayer */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Mplayer;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

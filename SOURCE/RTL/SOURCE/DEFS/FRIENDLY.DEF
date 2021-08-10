@@ -1,10 +1,10 @@
-LIBRARY FRIENDLY
+LIBRARY Friendly
 EXPORTS
 
-    _Friendly_GetOpenFileName                = 'FRIENDLY.DLL'.Friendly_GetOpenFileName
-    _Friendly_GetSaveFileName                = 'FRIENDLY.DLL'.Friendly_GetSaveFileName
-    Friendly_HookFileEBProc                  = 'FRIENDLY.DLL'.*
-    Friendly_HookFileLBProc                  = 'FRIENDLY.DLL'.*
-    Friendly_HookProc                        = 'FRIENDLY.DLL'.*
-    _UnFriendly_NoRemote                     = 'FRIENDLY.DLL'.UnFriendly_NoRemote
-    _UnFriendly_TimeToDie                    = 'FRIENDLY.DLL'.UnFriendly_TimeToDie
+    _Friendly_GetOpenFileName        = Friendly_GetOpenFileName
+    _Friendly_GetSaveFileName        = Friendly_GetSaveFileName
+    Friendly_HookFileEBProc
+    Friendly_HookFileLBProc
+    Friendly_HookProc
+    _UnFriendly_NoRemote        = UnFriendly_NoRemote
+    _UnFriendly_TimeToDie        = UnFriendly_TimeToDie

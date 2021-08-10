@@ -1,18 +1,18 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DRTable.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DrTable.pas' rev: 6.00
 
-#ifndef DRTableHPP
-#define DRTableHPP
+#ifndef DrTableHPP
+#define DrTableHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
 #include <DBTables.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
-#include <Bde.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
+#include <BDE.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
@@ -33,8 +33,7 @@ protected:
 	virtual Bde::hDBICur __fastcall CreateHandle(void);
 public:
 	#pragma option push -w-inl
-	/* TBDEDataSet.Create */ inline __fastcall virtual TDRList(Classes::TComponent* AOwner) : Dbtables::TBDEDataSet(
-		AOwner) { }
+	/* TBDEDataSet.Create */ inline __fastcall virtual TDRList(Classes::TComponent* AOwner) : Dbtables::TBDEDataSet(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBDEDataSet.Destroy */ inline __fastcall virtual ~TDRList(void) { }
@@ -55,8 +54,7 @@ public:
 	__property Bde::hDBIDR DRHandle = {read=FDBIDR, write=FDBIDR};
 public:
 	#pragma option push -w-inl
-	/* TBDEDataSet.Create */ inline __fastcall virtual TDRDataSet(Classes::TComponent* AOwner) : Dbtables::TBDEDataSet(
-		AOwner) { }
+	/* TBDEDataSet.Create */ inline __fastcall virtual TDRDataSet(Classes::TComponent* AOwner) : Dbtables::TBDEDataSet(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBDEDataSet.Destroy */ inline __fastcall virtual ~TDRDataSet(void) { }
@@ -74,8 +72,7 @@ protected:
 	virtual Bde::hDBICur __fastcall CreateHandle(void);
 public:
 	#pragma option push -w-inl
-	/* TBDEDataSet.Create */ inline __fastcall virtual TDRObjectDescList(Classes::TComponent* AOwner) : 
-		TDRDataSet(AOwner) { }
+	/* TBDEDataSet.Create */ inline __fastcall virtual TDRObjectDescList(Classes::TComponent* AOwner) : TDRDataSet(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBDEDataSet.Destroy */ inline __fastcall virtual ~TDRObjectDescList(void) { }
@@ -93,8 +90,7 @@ protected:
 	AnsiString FObjectName;
 public:
 	#pragma option push -w-inl
-	/* TBDEDataSet.Create */ inline __fastcall virtual TDRObjectItems(Classes::TComponent* AOwner) : TDRDataSet(
-		AOwner) { }
+	/* TBDEDataSet.Create */ inline __fastcall virtual TDRObjectItems(Classes::TComponent* AOwner) : TDRDataSet(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBDEDataSet.Destroy */ inline __fastcall virtual ~TDRObjectItems(void) { }
@@ -115,8 +111,7 @@ __published:
 	__property AnsiString ObjectTypeName = {read=FObjectName, write=FObjectName};
 public:
 	#pragma option push -w-inl
-	/* TBDEDataSet.Create */ inline __fastcall virtual TDRRelationshipDescList(Classes::TComponent* AOwner
-		) : TDRObjectItems(AOwner) { }
+	/* TBDEDataSet.Create */ inline __fastcall virtual TDRRelationshipDescList(Classes::TComponent* AOwner) : TDRObjectItems(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBDEDataSet.Destroy */ inline __fastcall virtual ~TDRRelationshipDescList(void) { }
@@ -137,8 +132,7 @@ __published:
 	__property AnsiString TypeName = {read=FObjectName, write=FObjectName};
 public:
 	#pragma option push -w-inl
-	/* TBDEDataSet.Create */ inline __fastcall virtual TDRAttrDescList(Classes::TComponent* AOwner) : TDRObjectItems(
-		AOwner) { }
+	/* TBDEDataSet.Create */ inline __fastcall virtual TDRAttrDescList(Classes::TComponent* AOwner) : TDRObjectItems(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBDEDataSet.Destroy */ inline __fastcall virtual ~TDRAttrDescList(void) { }
@@ -159,8 +153,7 @@ __published:
 	__property AnsiString Condition = {read=FCond, write=FCond};
 public:
 	#pragma option push -w-inl
-	/* TBDEDataSet.Create */ inline __fastcall virtual TDRInstanceItems(Classes::TComponent* AOwner) : 
-		TDRObjectItems(AOwner) { }
+	/* TBDEDataSet.Create */ inline __fastcall virtual TDRInstanceItems(Classes::TComponent* AOwner) : TDRObjectItems(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBDEDataSet.Destroy */ inline __fastcall virtual ~TDRInstanceItems(void) { }
@@ -191,8 +184,7 @@ __published:
 	__property AnsiString ObjectTypeName = {read=FObjectName, write=FObjectName};
 public:
 	#pragma option push -w-inl
-	/* TBDEDataSet.Create */ inline __fastcall virtual TDRObjectList(Classes::TComponent* AOwner) : TDRInstanceItems(
-		AOwner) { }
+	/* TBDEDataSet.Create */ inline __fastcall virtual TDRObjectList(Classes::TComponent* AOwner) : TDRInstanceItems(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBDEDataSet.Destroy */ inline __fastcall virtual ~TDRObjectList(void) { }
@@ -226,8 +218,7 @@ __published:
 	__property AnsiString RelationshipTypeName = {read=FObjectName, write=FObjectName};
 public:
 	#pragma option push -w-inl
-	/* TBDEDataSet.Create */ inline __fastcall virtual TDRRelationshipList(Classes::TComponent* AOwner)
-		 : TDRInstanceItems(AOwner) { }
+	/* TBDEDataSet.Create */ inline __fastcall virtual TDRRelationshipList(Classes::TComponent* AOwner) : TDRInstanceItems(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBDEDataSet.Destroy */ inline __fastcall virtual ~TDRRelationshipList(void) { }
@@ -254,8 +245,7 @@ public:
 	__property Dbtables::TQuery* Query = {read=FQuery, write=FQuery};
 public:
 	#pragma option push -w-inl
-	/* TBDEDataSet.Create */ inline __fastcall virtual TQueryDescription(Classes::TComponent* AOwner) : 
-		Dbtables::TBDEDataSet(AOwner) { }
+	/* TBDEDataSet.Create */ inline __fastcall virtual TQueryDescription(Classes::TComponent* AOwner) : Dbtables::TBDEDataSet(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBDEDataSet.Destroy */ inline __fastcall virtual ~TQueryDescription(void) { }
@@ -268,12 +258,10 @@ public:
 extern PACKAGE Bde::DRObject NullDRObject;
 
 }	/* namespace Drtable */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Drtable;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// DRTable
+#endif	// DrTable

@@ -6,11 +6,10 @@
  *		functionality available for v2.0 and 3.0 that is not in the original
  *		Windows 95 release.
  *	
- *	Copyright (c) 1993-1998, Microsoft Corporation
+ *	Copyright (c) Microsoft Corporation. All rights reserved.
  */
 
 #ifndef _RICHEDIT_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define	_RICHEDIT_
 
 #ifdef _WIN32
@@ -601,7 +600,7 @@ typedef struct _formatrange
 #define MAX_TAB_STOPS 32
 #define lDefaultTab 720
 
-/* This is a hack to make PARAFORMAT compatible with RE 1.0 */
+/* This is to make PARAFORMAT compatible with RE 1.0 */
 #define	wReserved	wEffects
 
 typedef struct _paraformat
@@ -728,7 +727,7 @@ typedef struct _charformat2a
 
 
 /* CHARFORMAT and PARAFORMAT "ALL" masks
-   CFM_COLOR mirrors CFE_AUTOCOLOR, a little hack to easily deal with autocolor*/
+   CFM_COLOR mirrors CFE_AUTOCOLOR, a way to easily deal with autocolor*/
 
 #define CFM_EFFECTS (CFM_BOLD | CFM_ITALIC | CFM_UNDERLINE | CFM_COLOR | \
 					 CFM_STRIKEOUT | CFE_PROTECTED | CFM_LINK)
@@ -1169,6 +1168,5 @@ typedef struct _bidioptions
 }
 #endif  /* __cplusplus */
 
-#pragma option pop /*P_O_Pop*/
 #endif /* !_RICHEDIT_ */
 

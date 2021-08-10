@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -195,15 +195,15 @@ type
     property DisplayRect: TRect read GetDisplayRect write SetDisplayRect;
   published
     property ColoredButtons: TButtonSet read FColoredButtons write SetColored
-	   default [btPlay, btPause, btStop, btNext, btPrev, btStep, btBack,
-      btRecord, btEject];
+      default [btPlay, btPause, btStop, btNext, btPrev, btStep, btBack,
+               btRecord, btEject];
     property Enabled;
     property EnabledButtons: TButtonSet read FEnabledButtons write SetEnabledButtons
-	   default [btPlay, btPause, btStop, btNext, btPrev, btStep, btBack,
-      btRecord, btEject];
+      default [btPlay, btPause, btStop, btNext, btPrev, btStep, btBack,
+               btRecord, btEject];
     property VisibleButtons: TButtonSet read FVisibleButtons write SetVisible
-	   default [btPlay, btPause, btStop, btNext, btPrev, btStep, btBack,
-      btRecord, btEject];
+      default [btPlay, btPause, btStop, btNext, btPrev, btStep, btBack,
+               btRecord, btEject];
     property Anchors;
     property AutoEnable: Boolean read FAutoEnable write SetAutoEnable default True;
     property AutoOpen: Boolean read FAutoOpen write FAutoOpen default False;
@@ -838,16 +838,15 @@ begin
     FUseNotify := False;
   end;
 
-  if FDeviceType <> dtAutoSelect then 
-  begin
-    if FElementName <> '' then
-      FFlags := FFlags or MCI_OPEN_ELEMENT;
+  if FDeviceType <> dtAutoSelect then
     FFlags := FFlags or mci_Open_Type;
-  end
+
+  if FDeviceType <> dtAutoSelect then
+    FFlags := FFlags or mci_Open_Type
   else
     FFlags := FFlags or MCI_OPEN_ELEMENT;
 
-  if FShareable then 
+  if FShareable then
     FFlags := FFlags or mci_Open_Shareable;
   OpenParm.dwCallback := Handle;
 
@@ -1136,40 +1135,40 @@ begin
     if FNotify then FFlags := FFlags or mci_Notify;
     FUseNotify := False;
   end;
-  
+
   TempFlags := FFlags; {preserve FFlags from GetTimeFormat & GetPosition}
   if TimeFormat = tfTMSF then {using Tracks}
   begin
     cpos := Position;
     tpos := GetTrackPosition(mci_TMSF_Track(Position));
-    if Mode = mpPlaying then 
+    if Mode = mpPlaying then
     begin
-    	{if not on first track, and at beginning of current track}
-    	if (mci_TMSF_Track(cpos) <> 1) and
-      	(mci_TMSF_Minute(cpos) = mci_TMSF_Minute(tpos)) and
-      	(mci_TMSF_Second(cpos) = mci_TMSF_Second(tpos)) then
-      	StartPos := GetTrackPosition(mci_TMSF_Track(Position)-1) {go to previous}
-    	else
-      	StartPos := tpos; {otherwise, go to beginning of current}
+      {if not on first track, and at beginning of current track}
+      if (mci_TMSF_Track(cpos) <> 1) and
+         (mci_TMSF_Minute(cpos) = mci_TMSF_Minute(tpos)) and
+         (mci_TMSF_Second(cpos) = mci_TMSF_Second(tpos)) then
+        StartPos := GetTrackPosition(mci_TMSF_Track(Position)-1) {go to previous}
+      else
+        StartPos := tpos; {otherwise, go to beginning of current}
       Play;
       CurrentButton := btPlay;
       Exit;
-	 end
-	 else
-	 begin
-    	{if not on first track, and at beginning of current track}
-    	if (mci_TMSF_Track(cpos) <> 1) and
-      	(mci_TMSF_Minute(cpos) = mci_TMSF_Minute(tpos)) and
-      	(mci_TMSF_Second(cpos) = mci_TMSF_Second(tpos)) then
-      	SeekParm.dwTo := GetTrackPosition(mci_TMSF_Track(Position)-1) {go to previous}
-    	else
-      	SeekParm.dwTo := tpos; {otherwise, go to beginning of current}
-    	FFlags := TempFlags or mci_To;
-	 end;
+    end
+    else
+    begin
+      {if not on first track, and at beginning of current track}
+      if (mci_TMSF_Track(cpos) <> 1) and
+         (mci_TMSF_Minute(cpos) = mci_TMSF_Minute(tpos)) and
+         (mci_TMSF_Second(cpos) = mci_TMSF_Second(tpos)) then
+        SeekParm.dwTo := GetTrackPosition(mci_TMSF_Track(Position)-1) {go to previous}
+      else
+         SeekParm.dwTo := tpos; {otherwise, go to beginning of current}
+      FFlags := TempFlags or mci_To;
+    end;
   end
   else
     FFlags := TempFlags or mci_Seek_To_Start;
-    
+
   SeekParm.dwCallback := Handle;
   FError := mciSendCommand( FDeviceID, mci_Seek, FFlags, Longint(@SeekParm));
 end; {Previous}

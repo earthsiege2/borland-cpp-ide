@@ -1,10 +1,9 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*
  *  I N I T O I D . H
  *
  *  Define macros to be used for initializing MAPI OID's
  *
- *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1986-1999 Microsoft Corporation. All Rights Reserved.
  */
 
 #define MAPI_PREFIX         0x2A,0x86,0x48,0x86,0xf7,0x14,0x03
@@ -46,4 +45,3 @@
     EXTERN_C const BYTE __based(__segname("_CODE")) name[] =\
         { MAPI_PREFIX, b0, b1, b2, b3, b4 }
 #endif
-#pragma option pop /*P_O_Pop*/

@@ -1,13 +1,17 @@
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1996-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 {*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
 {       Structure definitions and prototypes for the    }
 {       Microsoft Internet Server API (ISAPI)           }
-{                                                       }
-{       Copyright (C) 1996,99 Inprise Corporation       }
-{                                                       }
 {*******************************************************}
+
+{$HPPEMIT '#include <httpext.h>' }
 
 unit Isapi;
 
@@ -86,7 +90,7 @@ type
 type
   TGetServerVariableProc = function ( hConn: HCONN;
                                       VariableName: PChar;
-				      Buffer: Pointer;
+                                      Buffer: Pointer;
                                       var Size: DWORD ): BOOL stdcall;
 
   TWriteClientProc = function ( ConnID: HCONN;

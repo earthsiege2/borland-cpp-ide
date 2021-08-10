@@ -1,38 +1,38 @@
-LIBRARY NAL
+LIBRARY Nal
 EXPORTS
 
-    AllocNetworkBuffer                       = 'NAL.DLL'.*
-    CancelTransmit                           = 'NAL.DLL'.*
-    ClearStatistics                          = 'NAL.DLL'.*
-    CloseNetwork                             = 'NAL.DLL'.*
-    CompactNetworkBuffer                     = 'NAL.DLL'.*
-    ContinueCapturing                        = 'NAL.DLL'.*
-    DestroyNetworkID                         = 'NAL.DLL'.*
-    EnumNetworks                             = 'NAL.DLL'.*
-    FreeNetworkBuffer                        = 'NAL.DLL'.*
-    GetBufferSize                            = 'NAL.DLL'.*
-    GetBufferTimeStamp                       = 'NAL.DLL'.*
-    GetBufferTotalBytesCaptured              = 'NAL.DLL'.*
-    GetBufferTotalFramesCaptured             = 'NAL.DLL'.*
-    GetNetworkBuffer                         = 'NAL.DLL'.*
-    GetNetworkCallback                       = 'NAL.DLL'.*
-    GetNetworkFrame                          = 'NAL.DLL'.*
-    GetNetworkID                             = 'NAL.DLL'.*
-    GetNetworkInfo                           = 'NAL.DLL'.*
-    GetNetworkInstanceData                   = 'NAL.DLL'.*
-    GetReconnectInfo                         = 'NAL.DLL'.*
-    NetworkProc                              = 'NAL.DLL'.*
-    OpenNetwork                              = 'NAL.DLL'.*
-    PauseCapturing                           = 'NAL.DLL'.*
-    QueryNetworkStatus                       = 'NAL.DLL'.*
-    SetNetworkBuffer                         = 'NAL.DLL'.*
-    SetNetworkCallback                       = 'NAL.DLL'.*
-    SetNetworkFilter                         = 'NAL.DLL'.*
-    SetNetworkInstanceData                   = 'NAL.DLL'.*
-    SetReconnectInfo                         = 'NAL.DLL'.*
-    SetupNetwork                             = 'NAL.DLL'.*
-    StartCapturing                           = 'NAL.DLL'.*
-    StationQuery                             = 'NAL.DLL'.*
-    StopCapturing                            = 'NAL.DLL'.*
-    TransmitQueue                            = 'NAL.DLL'.*
-    TransmitSpecialFrame                     = 'NAL.DLL'.*
+    AllocNetworkBuffer
+    CancelTransmit
+    ClearStatistics
+    CloseNetwork
+    CompactNetworkBuffer
+    ContinueCapturing
+    DestroyNetworkID
+    EnumNetworks
+    FreeNetworkBuffer
+    GetBufferSize
+    GetBufferTimeStamp
+    GetBufferTotalBytesCaptured
+    GetBufferTotalFramesCaptured
+    GetNetworkBuffer
+    GetNetworkCallback
+    GetNetworkFrame
+    GetNetworkID
+    GetNetworkInfo
+    GetNetworkInstanceData
+    GetReconnectInfo
+    NetworkProc
+    OpenNetwork
+    PauseCapturing
+    QueryNetworkStatus
+    SetNetworkBuffer
+    SetNetworkCallback
+    SetNetworkFilter
+    SetNetworkInstanceData
+    SetReconnectInfo
+    SetupNetwork
+    StartCapturing
+    StationQuery
+    StopCapturing
+    TransmitQueue
+    TransmitSpecialFrame

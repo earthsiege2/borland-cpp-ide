@@ -7,7 +7,6 @@
  */
 
 #ifndef _NTDSBMSG_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _NTDSBMSG_
 
 //
@@ -1760,5 +1759,4 @@
 //
 #define hrAccessDenied                   ((HRESULT)0xC8000773L)
 
-#pragma option pop /*P_O_Pop*/
 #endif	// _NTDSBMSG_

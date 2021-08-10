@@ -28,7 +28,7 @@ void PASCAL CException::operator delete(void* pbData)
 		CObject::operator delete(pbData);
 }
 
-#if 0 // _MSC_VER >= 1200
+#if 0 // __BORLANDC__ was _MSC_VER >= 1200
 void PASCAL CException::operator delete(void* pbData,
 	LPCSTR /* lpszFileName */, int /* nLine */)
 {

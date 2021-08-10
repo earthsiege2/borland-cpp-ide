@@ -9,15 +9,15 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = SingleAppInstance50.bpl dclSingleAppInstance50.bpl SingleInstanceSample.exe
+PROJECTS = SingleAppInstance60.bpl dclSingleAppInstance60.bpl SingleInstanceSample.exe
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
 
-dclSingleAppInstance50.bpl: dclSingleAppInstance50.bpk
+dclSingleAppInstance60.bpl: dclSingleAppInstance.bpk
   $(MAKE)
 
-SingleAppInstance50.bpl: SingleAppInstance50.bpk
+SingleAppInstance60.bpl: SingleAppInstance.bpk
   $(MAKE)
 
 SingleInstanceSample.exe: SingleInstanceSample.bpr

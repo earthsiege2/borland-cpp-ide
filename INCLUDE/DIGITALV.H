@@ -13,7 +13,6 @@
 /****************************************************************************/
 
 #ifndef _INC_DIGITALV
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_DIGITALV  100
 
 #ifdef _WIN32
@@ -1103,5 +1102,4 @@ typedef LPMCI_DGV_WINDOW_PARMSA LPMCI_DGV_WINDOW_PARMS;
 #endif
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* !_INC_DIGITALV */

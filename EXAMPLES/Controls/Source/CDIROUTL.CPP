@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 // Borland C++Builder
-// Copyright (c) 1987, 1999 Borland International Inc.  All Rights Reserved.
+// Copyright (c) 1987, 1999-2002 Borland International Inc.  All Rights Reserved.
 //---------------------------------------------------------------------------
 #pragma hdrstop          //This header has some initialized data so we can't use
 #include  "cdiroutl.h"
@@ -365,13 +365,5 @@ void __fastcall TCDirectoryOutline::WalkTree(const AnsiString& Dest)
     SelectedItem = Item;
 }
             
-//---------------------------------------------------------------------------
-namespace Cdiroutl
-{
-    void __fastcall PACKAGE Register()
-    {
-        TComponentClass classes[1] = {__classid(TCDirectoryOutline)};
-        RegisterComponents(LoadStr(Tab_101), classes, 0);
-    }
-}
+
 //---------------------------------------------------------------------------

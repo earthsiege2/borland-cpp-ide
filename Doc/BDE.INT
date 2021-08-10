@@ -8,7 +8,7 @@
 {                                                       }
 {*******************************************************}
 
-unit Bde;
+unit BDE;
 
 {$Z+}
 
@@ -238,7 +238,9 @@ const
   fldREF             = 22;              { Reference to ADT }
   fldTABLE           = 23;              { Nested table (reference) }
 
-  MAXLOGFLDTYPES     = 24;              { Number of logical fieldtypes }
+  fldDATETIME        = 24;              { DateTime structure field }
+
+  MAXLOGFLDTYPES     = 25;              { Number of logical fieldtypes }
 
 { Sub Types (Logical) }
 
@@ -276,6 +278,12 @@ const
 
 { fldDATE subtype }
   fldstADTDATE       = 37;              { DATE (OCIDate ) with in an ADT }
+
+{ fldZSTRING subtype }
+  fldstGUID          = 38;              { Subtype of string. Ado-guid field }
+
+{ fldBYTES subtype }
+  fldstINT64         = 39;              { Interbase 6 INT64 }
 
 { Paradox types (Physical) }
 
@@ -2522,7 +2530,7 @@ const
   szCFGFALSE         = 'FALSE';
   szOPENMODE         = 'OPEN MODE';
   szREADWRITE        = 'READ/WRITE';
-  szREADONLY         = 'READ ONLY';
+  szREADONLy         = 'READ ONLY';  { Changed from szREADONLY to avoid DSIntf.hpp conflict }
   szSHAREMODE        = 'SHARE MODE';
   szEXCLUSIVE        = 'EXCLUSIVE';
   szSHARED           = 'SHARED';
@@ -5839,7 +5847,6 @@ function DbiQGetBaseDescs(
       hStmt         : hDBIStmt;         { Statement Handle }
 var   hCur          : hDBICur           { Cursor of type STMTBaseDesc }
    ): DBIResult stdcall;
-
 
 
 

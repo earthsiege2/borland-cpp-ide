@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DSIntf.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DSIntf.pas' rev: 6.00
 
 #ifndef DSIntfHPP
 #define DSIntfHPP
@@ -11,8 +11,9 @@
 #pragma option push -w-
 #pragma option push -Vx
 #include <DBCommon.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <ActiveX.hpp>	// Pascal unit
+#include <Variants.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
@@ -22,6 +23,8 @@
 namespace Dsintf
 {
 //-- type declarations -------------------------------------------------------
+typedef BOOL *PLongBool;
+
 typedef Word DBResult;
 
 #pragma option push -b
@@ -93,16 +96,11 @@ typedef int DSKEY[16];
 typedef BOOL DSKEYBOOL[16];
 
 #pragma option push -b
-enum DSProp { dspropLOGCHANGES, dspropREADONLY, dspropNOOFCHANGES, dspropCONSTRAINTS_DISABLED, dspropDSISPARTIAL, 
-	dspropRECORDSINDS, dspropAUTOINC_DISABLED, dspropISDELTA, dspropDONTINCLMETADATA, dspropINCLBLOBSINDELTA, 
-	dspropGETSAVEPOINT, dspropCOMPRESSARRAYS, dspropMD_SEMANTICS, dspropFIELD_FULLNAME, dspropFIELDID_FORNAME, 
-	dspropFIELDID_FORPARENT, dspropCHANGEINDEX_VIEW, dspropGETUNIQUEINDEX, dspropREMOTE_UPDATEMODE, dspropXML_STREAMMODE 
-	};
+enum DSProp { dspropLOGCHANGES, dspropREADONLY, dspropNOOFCHANGES, dspropCONSTRAINTS_DISABLED, dspropDSISPARTIAL, dspropRECORDSINDS, dspropAUTOINC_DISABLED, dspropISDELTA, dspropDONTINCLMETADATA, dspropINCLBLOBSINDELTA, dspropGETSAVEPOINT, dspropCOMPRESSARRAYS, dspropMD_SEMANTICS, dspropFIELD_FULLNAME, dspropFIELDID_FORNAME, dspropFIELDID_FORPARENT, dspropCHANGEINDEX_VIEW, dspropGETUNIQUEINDEX, dspropREMOTE_UPDATEMODE, dspropXML_STREAMMODE, dspropDISABLEDELETES, dspropDISABLEINSERTS, dspropDISABLEEDITS, dspropDISABLESTRINGTRIM, dspropDATAHASCHANGED };
 #pragma option pop
 
 #pragma option push -b
-enum CURProp { curpropCONSTRAINT_ERROR_MESSAGE, curpropDSBASE, curpropSETCRACK, curpropGETORG_RECBUF 
-	};
+enum CURProp { curpropCONSTRAINT_ERROR_MESSAGE, curpropDSBASE, curpropSETCRACK, curpropGETORG_RECBUF };
 #pragma option pop
 
 struct DSProps;
@@ -172,13 +170,9 @@ typedef int dsCBRType;
 
 typedef int *pdsCBRType;
 
-typedef int __stdcall (*pfDSReconcile)(int iClientData, int iRslt, DSAttr iAction, int iResponse, int 
-	iErrCode, char * pErrMessage, char * pErrContext, void * pRecUpd, void * pRecOrg, void * pRecConflict
-	);
+typedef int __stdcall (*pfDSReconcile)(int iClientData, int iRslt, DSAttr iAction, int iResponse, int iErrCode, char * pErrMessage, char * pErrContext, void * pRecUpd, void * pRecOrg, void * pRecConflict);
 
-typedef int __fastcall (*pfDSReconcile_MD)(int iClientData, int iRslt, DSAttr iAction, int iErrResponse
-	, int iErrCode, char * pErrMessage, char * pErrContext, Windows::PByte pRecUpd, Windows::PByte pRecOrg
-	, Windows::PByte pRecConflict, int iLevels, Windows::PInteger piFieldIDs);
+typedef int __fastcall (*pfDSReconcile_MD)(int iClientData, int iRslt, DSAttr iAction, int iErrResponse, int iErrCode, char * pErrMessage, char * pErrContext, System::PByte pRecUpd, System::PByte pRecOrg, System::PByte pRecConflict, int iLevels, System::PInteger piFieldIDs);
 
 typedef int __fastcall (*pfFLDComp)(int iClientData, void * pVal1, void * pVal2);
 
@@ -190,6 +184,9 @@ enum TPcktAttrArea { fldAttrArea, pcktAttrArea };
 enum TPcktFldStatus { fldIsChanged, fldIsNull, fldIsUnChanged };
 #pragma option pop
 
+struct TDSDataPacketFldDesc;
+typedef TDSDataPacketFldDesc *PDSDataPacketFldDesc;
+
 #pragma pack(push, 1)
 struct TDSDataPacketFldDesc
 {
@@ -199,62 +196,50 @@ struct TDSDataPacketFldDesc
 } ;
 #pragma pack(pop)
 
-typedef TDSDataPacketFldDesc *PDSDataPacketFldDesc;
-
 __interface IDSBase;
 typedef System::DelphiInterface<IDSBase> _di_IDSBase;
-__interface INTERFACE_UUID("{9E8D2FA2-591C-11D0-BF52-0020AF32BD64}") IDSBase  : public IUnknown 
+__interface INTERFACE_UUID("{9E8D2FA2-591C-11D0-BF52-0020AF32BD64}") IDSBase  : public IInterface 
 {
 	
 public:
 	virtual Word __stdcall Create(unsigned iFields, pDSFLDDesc pFldDes, char * pszName) = 0 ;
 	virtual Word __stdcall AddField(pDSFLDDesc pFldDes) = 0 ;
 	virtual Word __stdcall AppendData(Activex::PSafeArray Packet, BOOL bEof) = 0 ;
-	virtual Word __stdcall GetOptParameter(unsigned iNo, unsigned iFldNo, void * &ppName, unsigned &piType
-		, unsigned &piLen, void * &ppValue) = 0 ;
-	virtual Word __stdcall AddOptParameter(unsigned iFldNo, char * pszAttr, unsigned iType, unsigned iLen
-		, void * pValue) = 0 ;
+	virtual Word __stdcall GetOptParameter(unsigned iNo, unsigned iFldNo, void * &ppName, unsigned &piType, unsigned &piLen, void * &ppValue) = 0 ;
+	virtual Word __stdcall AddOptParameter(unsigned iFldNo, char * pszAttr, unsigned iType, unsigned iLen, void * pValue) = 0 ;
 	virtual Word __stdcall GetProps(DSProps &Prop) = 0 ;
 	virtual Word __stdcall GetFieldDescs(pDSFLDDesc Fields) = 0 ;
 	virtual Word __stdcall GetIndexDescs(pDSIDXDesc p1) = 0 ;
 	virtual Word __stdcall GetDelta(/* out */ _di_IDSBase &DsDelta) = 0 ;
 	virtual Word __stdcall StreamDS(/* out */ Activex::PSafeArray &Packet) = 0 ;
 	virtual Word __stdcall AcceptChanges(void) = 0 ;
-	virtual Word __stdcall PutBlank(void * pRecBuf, unsigned iRecNo, unsigned iFldNo, unsigned iBlankValue
-		) = 0 ;
+	virtual Word __stdcall PutBlank(void * pRecBuf, unsigned iRecNo, unsigned iFldNo, unsigned iBlankValue) = 0 ;
 	virtual Word __stdcall CreateIndex(const DSIDXDesc &IdxDesc) = 0 ;
 	virtual Word __stdcall RemoveIndex(char * pszName) = 0 ;
 	virtual Word __stdcall GetErrorString(Word iErrCode, char * pString) = 0 ;
-	virtual int __stdcall FldCmp(unsigned iFldType, void * pFld1, void * pFld2, unsigned iUnits1, unsigned 
-		iUnits2) = 0 ;
+	virtual int __stdcall FldCmp(unsigned iFldType, void * pFld1, void * pFld2, unsigned iUnits1, unsigned iUnits2) = 0 ;
 	virtual Word __stdcall GetProp(DSProp eProp, void * piPropValue) = 0 ;
 	virtual Word __stdcall SetProp(DSProp eProp, unsigned iPropValue) = 0 ;
 	virtual Word __stdcall SetFieldCalculation(unsigned iClientData, pfDSCalcField pfCalc) = 0 ;
-	virtual Word __stdcall Reconcile(Activex::PSafeArray DeltaPacket, Activex::PSafeArray ErrorPacket, 
-		unsigned iClientData, pfDSReconcile pfReconcile) = 0 ;
+	virtual Word __stdcall Reconcile(Activex::PSafeArray DeltaPacket, Activex::PSafeArray ErrorPacket, unsigned iClientData, pfDSReconcile pfReconcile) = 0 ;
 	virtual Word __stdcall Reserved1(void * Input) = 0 ;
 	virtual Word __stdcall Reserved2(void * Input) = 0 ;
 	virtual Word __stdcall Reserved3(void * Input) = 0 ;
-	virtual Word __stdcall Refresh(Activex::PSafeArray NewPacket, unsigned iClientData, pfDSReconcile pfReconcile
-		) = 0 ;
+	virtual Word __stdcall Refresh(Activex::PSafeArray NewPacket, unsigned iClientData, pfDSReconcile pfReconcile) = 0 ;
 	virtual Word __stdcall Reset(void) = 0 ;
 	virtual Word __stdcall RollBack(SAVEPOINT iSavePoint) = 0 ;
 	virtual Word __stdcall GetEmbeddedDS(unsigned iFieldID, /* out */ _di_IDSBase &DsDet) = 0 ;
-	virtual Word __stdcall MakeEmbedded(_di_IDSBase DsDet, unsigned iFieldsLink, PDWORD piFieldsM, PDWORD 
-		piFieldsD, char * pMasterFieldName, char * pDetailFieldName) = 0 ;
-	virtual Word __stdcall RefreshRecords(Activex::PSafeArray NewDataPacket, unsigned iRecNo, unsigned 
-		iClientData, pfDSReconcile pfReconcile) = 0 ;
+	virtual Word __stdcall MakeEmbedded(_di_IDSBase DsDet, unsigned iFieldsLink, System::PLongWord piFieldsM, System::PLongWord piFieldsD, char * pMasterFieldName, char * pDetailFieldName) = 0 ;
+	virtual Word __stdcall RefreshRecords(Activex::PSafeArray NewDataPacket, unsigned iRecNo, unsigned iClientData, pfDSReconcile pfReconcile) = 0 ;
 	virtual Word __stdcall ReleaseBlobs(unsigned iBlobId) = 0 ;
-	virtual Word __stdcall Clone(unsigned iPType, BOOL bRecurse, BOOL bCloneOptParams, _di_IDSBase &DataSet
-		) = 0 ;
-	virtual Word __stdcall Reconcile_MD(_di_IDSBase pDsRec, Activex::PSafeArray pDeltaPacket, Activex::PSafeArray 
-		pErrorPacket, unsigned iClientData, pfDSReconcile_MD pfReconcile_MD) = 0 ;
+	virtual Word __stdcall Clone(unsigned iPType, BOOL bRecurse, BOOL bCloneOptParams, _di_IDSBase &DataSet) = 0 ;
+	virtual Word __stdcall Reconcile_MD(_di_IDSBase pDsRec, Activex::PSafeArray pDeltaPacket, Activex::PSafeArray pErrorPacket, unsigned iClientData, pfDSReconcile_MD pfReconcile_MD) = 0 ;
 	virtual Word __stdcall DropOptParameter(unsigned iFldNo, char * pName) = 0 ;
 };
 
 __interface IDSCursor;
 typedef System::DelphiInterface<IDSCursor> _di_IDSCursor;
-__interface INTERFACE_UUID("{9E8D2FA4-591C-11D0-BF52-0020AF32BD64}") IDSCursor  : public IUnknown 
+__interface INTERFACE_UUID("{9E8D2FA4-591C-11D0-BF52-0020AF32BD64}") IDSCursor  : public IInterface 
 {
 	
 public:
@@ -264,7 +249,7 @@ public:
 	virtual Word __stdcall GetIndexDescs(BOOL bCurrentOnly, DSIDXDesc &IdxDesc) = 0 ;
 	virtual Word __stdcall GetFieldDescs(pDSFLDDesc p1) = 0 ;
 	virtual Word __stdcall GetCurrentRecord(void * pRecBuf) = 0 ;
-	virtual Word __stdcall GetRecordBlock(PDWORD piRecs, void * pRecBuf) = 0 ;
+	virtual Word __stdcall GetRecordBlock(System::PLongWord piRecs, void * pRecBuf) = 0 ;
 	virtual Word __stdcall GetCurrentBookMark(void * pBookMark) = 0 ;
 	virtual Word __stdcall GetSequenceNumber(unsigned &iSeq) = 0 ;
 	virtual Word __stdcall GetRecordAttribute(DSAttr &Attr) = 0 ;
@@ -274,20 +259,15 @@ public:
 	virtual Word __stdcall MoveRelative(int i) = 0 ;
 	virtual Word __stdcall MoveToSeqNo(unsigned i) = 0 ;
 	virtual Word __stdcall MoveToBookMark(void * pBookMark) = 0 ;
-	virtual Word __stdcall MoveToKey(DBSearchCond SearchCond, unsigned iFields, unsigned iPartLen, void * 
-		pRecBuf) = 0 ;
+	virtual Word __stdcall MoveToKey(DBSearchCond SearchCond, unsigned iFields, unsigned iPartLen, void * pRecBuf) = 0 ;
 	virtual Word __stdcall CompareBookMarks(void * pBookMark1, void * pBookMark2, int &iCmp) = 0 ;
 	virtual Word __stdcall ExtractKey(void * pRecBuf, void * pKeyBuf) = 0 ;
-	virtual Word __stdcall GetRecordForKey(unsigned iFields, unsigned iPartLen, void * pKey, void * pRecBuf
-		) = 0 ;
-	virtual Word __stdcall GetField(void * pRecBuf, unsigned iFieldNo, void * pFldBuf, BOOL &bBlank) = 0 
-		;
+	virtual Word __stdcall GetRecordForKey(unsigned iFields, unsigned iPartLen, void * pKey, void * pRecBuf) = 0 ;
+	virtual Word __stdcall GetField(void * pRecBuf, unsigned iFieldNo, void * pFldBuf, BOOL &bBlank) = 0 ;
 	virtual Word __stdcall PutField(void * pRecBuf, unsigned iFieldNo, void * pFldBuf) = 0 ;
 	virtual Word __stdcall GetBlobLen(void * pRecBuf, unsigned iFieldNo, unsigned &iLength) = 0 ;
-	virtual Word __stdcall GetBlob(void * pRecBuf, unsigned iFieldNo, unsigned iOffSet, void * pBuf, unsigned 
-		&iLength) = 0 ;
-	virtual Word __stdcall PutBlob(void * pRecBuf, unsigned iFieldNo, unsigned iOffSet, void * pBuf, unsigned 
-		iLength) = 0 ;
+	virtual Word __stdcall GetBlob(void * pRecBuf, unsigned iFieldNo, unsigned iOffSet, void * pBuf, unsigned &iLength) = 0 ;
+	virtual Word __stdcall PutBlob(void * pRecBuf, unsigned iFieldNo, unsigned iOffSet, void * pBuf, unsigned iLength) = 0 ;
 	virtual Word __stdcall InitRecord(void * pRecBuf) = 0 ;
 	virtual Word __stdcall DeleteRecord(void) = 0 ;
 	virtual Word __stdcall ModifyRecord(void * pRecBuf) = 0 ;
@@ -295,46 +275,39 @@ public:
 	virtual Word __stdcall UndoLastChange(BOOL bFollowChange) = 0 ;
 	virtual Word __stdcall AddFilter(void * pcanExpr, unsigned iLen, hDSFilter &hFilter) = 0 ;
 	virtual Word __stdcall DropFilter(hDSFilter hFilter) = 0 ;
-	virtual Word __stdcall SetRange(unsigned iFields, void * pKey1, BOOL bKey1Incl, void * pKey2, BOOL 
-		bKey2Incl) = 0 ;
+	virtual Word __stdcall SetRange(unsigned iFields, void * pKey1, BOOL bKey1Incl, void * pKey2, BOOL bKey2Incl) = 0 ;
 	virtual Word __stdcall DropRange(void) = 0 ;
-	virtual Word __stdcall SortOnFields(unsigned iFields, PDWORD piFields, PBOOL pDescending, PBOOL pCaseInsensitive
-		) = 0 ;
+	virtual Word __stdcall SortOnFields(unsigned iFields, System::PLongWord piFields, PLongBool pDescending, PLongBool pCaseInsensitive) = 0 ;
 	virtual Word __stdcall UseIndexOrder(char * pszName) = 0 ;
 	virtual Word __stdcall SetNotifyCallBack(unsigned iClientData, pfCHANGECallBack pfCallBack) = 0 ;
-	virtual Word __stdcall AddFilterCallBack(unsigned iClientData, pfDSFilter pfFilter, hDSFilter &hFilter
-		) = 0 ;
+	virtual Word __stdcall AddFilterCallBack(unsigned iClientData, pfDSFilter pfFilter, hDSFilter &hFilter) = 0 ;
 	virtual Word __stdcall VerifyField(unsigned iFieldNo, void * pFldBuf) = 0 ;
 	virtual Word __stdcall GetProp(CURProp eProp, void * piPropValue) = 0 ;
 	virtual Word __stdcall RevertRecord(void) = 0 ;
 	virtual Word __stdcall LocateWithFilter(void * pCanExpr, unsigned iLen) = 0 ;
-	virtual Word __stdcall AddAggregate(unsigned iFlds, unsigned iCanLen, void * pCanExpr, hDSAggregate 
-		&hAgg) = 0 ;
+	virtual Word __stdcall AddAggregate(unsigned iFlds, unsigned iCanLen, void * pCanExpr, hDSAggregate &hAgg) = 0 ;
 	virtual Word __stdcall DropAggregate(hDSAggregate hAgg) = 0 ;
 	virtual Word __stdcall GetAggregateValue(hDSAggregate hAgg, void * pValue, BOOL &bBlank) = 0 ;
 	virtual Word __stdcall GetAggregateDesc(hDSAggregate hAgg, DSFLDDesc &Desc) = 0 ;
 	virtual Word __stdcall MoveToNextSubGroup(unsigned iFields) = 0 ;
 	virtual Word __stdcall GetSubGroupState(unsigned iFields, GROUPSTATE &iSubGroupState) = 0 ;
-	virtual Word __stdcall LinkCursors(unsigned iFieldsM, PDWORD piFieldsM, PDWORD piFieldsD, _di_IDSCursor 
-		hCurDet) = 0 ;
+	virtual Word __stdcall LinkCursors(unsigned iFieldsM, System::PLongWord piFieldsM, System::PLongWord piFieldsD, _di_IDSCursor hCurDet) = 0 ;
 	virtual Word __stdcall ResyncWithMaster(void) = 0 ;
 	virtual Word __stdcall SetProp(CURProp eProp, unsigned iPropValue) = 0 ;
 	virtual Word __stdcall GetRecordNumber(unsigned &iRecNo) = 0 ;
-	virtual Word __stdcall GetRowRequestPacket(BOOL bKeysOnly, BOOL bFetchAllBlobs, BOOL bFetchAllDetails
-		, BOOL bInclMetaData, /* out */ Activex::PSafeArray &Packet) = 0 ;
+	virtual Word __stdcall GetRowRequestPacket(BOOL bKeysOnly, BOOL bFetchAllBlobs, BOOL bFetchAllDetails, BOOL bInclMetaData, /* out */ Activex::PSafeArray &Packet) = 0 ;
 	virtual Word __stdcall RefreshRecord(Activex::PSafeArray Packet) = 0 ;
 };
 
 __interface IDSWriter;
 typedef System::DelphiInterface<IDSWriter> _di_IDSWriter;
-__interface INTERFACE_UUID("{9E8D2FA6-591C-11D0-BF52-0020AF32BD64}") IDSWriter  : public IUnknown 
+__interface INTERFACE_UUID("{9E8D2FA6-591C-11D0-BF52-0020AF32BD64}") IDSWriter  : public IInterface 
 {
 	
 public:
 	virtual Word __stdcall Init_Sequential(unsigned Version, Word Columns) = 0 ;
 	virtual Word __stdcall Init(unsigned Version, Word Columns, PDSDataPacketFldDesc FieldDesc) = 0 ;
-	virtual Word __stdcall AddAttribute(TPcktAttrArea AttrArea, char * Attr, unsigned AttrType, unsigned 
-		Len, void * Value) = 0 ;
+	virtual Word __stdcall AddAttribute(TPcktAttrArea AttrArea, char * Attr, unsigned AttrType, unsigned Len, void * Value) = 0 ;
 	virtual Word __stdcall GetDataPacket(Activex::PSafeArray &SA) = 0 ;
 	virtual Word __stdcall GetSize(unsigned &DataPacketSize) = 0 ;
 	virtual Word __stdcall PutField(TPcktFldStatus FldStatus, unsigned Len, void * Src) = 0 ;
@@ -379,7 +352,9 @@ static const Shortint dscbrREFRESH = 0x6;
 static const Shortint xmlUNTYPED = 0x1;
 static const Shortint xmlXMLDATATYPED = 0x2;
 static const Shortint xmlXMLSCHEMA = 0x4;
+static const Shortint xmlXMLUTF8 = 0x8;
 static const Shortint xmlON = 0x5;
+static const Shortint xmlUTF8 = 0xd;
 static const Shortint xmlOFF = 0x0;
 #define szUNIQUE_KEY "UNIQUE_KEY"
 #define szPRIMARY_KEY "PRIMARY_KEY"
@@ -451,6 +426,8 @@ static const Shortint dsfldADT = 0xc;
 static const Shortint dsfldARRAY = 0xd;
 static const Shortint dsfldEMBEDDEDTBL = 0xe;
 static const Shortint dsfldREF = 0xf;
+static const Shortint dsfldDATETIME = 0x11;
+static const Shortint dsfldFMTBCD = 0x12;
 static const Shortint dsSizeBitsLen = 0x10;
 static const Word dsSizeBitsMask = 0xffff;
 static const int dsTypeBitsMask = 0x3f0000;
@@ -465,6 +442,7 @@ static const Word dskeyDESCENDING = 0x8000;
 static const unsigned dsDELAYEDBIT = 0x80000000;
 static const Shortint PACKETVERSION_1 = 0x1;
 static const Shortint PACKETVERSION_2 = 0x2;
+static const Shortint PACKETVERSION_3 = 0x3;
 static const Shortint dsCASCADEDELETES = 0x1;
 static const Shortint dsCASCADEUPDATES = 0x2;
 static const Shortint fldUNKNOWN = 0x0;
@@ -491,7 +469,9 @@ static const Shortint fldADT = 0x14;
 static const Shortint fldARRAY = 0x15;
 static const Shortint fldREF = 0x16;
 static const Shortint fldTABLE = 0x17;
-static const Shortint MAXLOGFLDTYPES = 0x18;
+static const Shortint fldDATETIME = 0x18;
+static const Shortint fldFMTBCD = 0x19;
+static const Shortint MAXLOGFLDTYPES = 0x1a;
 static const Word fldUNICODE = 0x1007;
 static const Shortint fldstMONEY = 0x15;
 static const Shortint fldstMEMO = 0x16;
@@ -510,9 +490,9 @@ static const Shortint fldstFIXED = 0x1f;
 static const Shortint fldstUNICODE = 0x20;
 static const Shortint fldstGUID = 0x26;
 static const Shortint fldstAUTOINC = 0x1d;
-extern PACKAGE Byte FieldTypeMap[36];
-extern PACKAGE Word FldSubTypeMap[36];
-extern PACKAGE Db::TFieldType DataTypeMap[24];
+extern PACKAGE Byte FieldTypeMap[38];
+extern PACKAGE Word FldSubTypeMap[38];
+extern PACKAGE Db::TFieldType DataTypeMap[26];
 extern PACKAGE Db::TFieldType BlobTypeMap[15];
 static const Shortint DBERR_NONE = 0x0;
 static const Word DBERR_BOF = 0x2201;
@@ -551,20 +531,17 @@ static const Word DBERR_NOCASCADEDUPDATES = 0x400e;
 extern PACKAGE GUID CLSID_DSBase;
 extern PACKAGE GUID CLSID_DSCursor;
 extern PACKAGE GUID CLSID_DSWriter;
-extern PACKAGE void __fastcall CreateDbClientObject(const GUID &CLSID, const GUID &IID, /* out */ void 
-	*Obj);
+extern PACKAGE void __fastcall CreateDbClientObject(const GUID &CLSID, const GUID &IID, /* out */ void *Obj);
 extern PACKAGE void __fastcall FreeDataPacket(Activex::PSafeArray &DataPacket);
 extern PACKAGE Activex::PSafeArray __fastcall VarToDataPacket(const OleVariant &V);
 extern PACKAGE int __fastcall DataPacketSize(const Activex::PSafeArray DataPacket);
-extern PACKAGE void __fastcall DataPacketToVariant(const Activex::PSafeArray DataPacket, OleVariant 
-	&V);
+extern PACKAGE void __fastcall DataPacketToVariant(const Activex::PSafeArray DataPacket, OleVariant &V);
 extern PACKAGE AnsiString __fastcall VariantArrayToString(const OleVariant &V);
 extern PACKAGE OleVariant __fastcall StringToVariantArray(const AnsiString S);
+extern PACKAGE void __fastcall RegisterMidasLib(void * GetClassProc);
 
 }	/* namespace Dsintf */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dsintf;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

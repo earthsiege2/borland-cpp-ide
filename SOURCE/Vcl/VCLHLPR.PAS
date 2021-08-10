@@ -1,16 +1,16 @@
 {*******************************************************}
 {  VCL helpers/hacks for C++Builder                     }
 {                                                       }
-{ $Revision:   1.0.1.0  $                                  }
-{ $Date:   21 Sep 1999 12:54:52  $                      }
+{ $Revision:   1.3  $                                  }
+{ $Date:   30 Oct 2000 17:25:04  $                      }
 {*******************************************************}
-unit Vclhlpr;
+unit vclhlpr;
 
 interface
 
 uses
   Windows, Messages, ActiveX, SysUtils, ComObj, Classes, Graphics,
-  Controls, Forms, ExtCtrls, StdVcl, Axctrls;
+  Controls, Forms, ExtCtrls, StdVCL, AxCtrls;
 
 type
 
@@ -42,9 +42,9 @@ procedure VariantXor(const src: Variant; var dst: Variant);
 procedure VariantShl(const src: Variant; var dst: Variant);
 procedure VariantShr(const src: Variant; var dst: Variant);
 
-function  VariantCmp(const v1: Variant; const V2: Variant): Boolean;
-function  VariantLT (const V1: Variant; const V2: Variant): Boolean;
-function  VariantGT (const V1: Variant; const V2: Variant): Boolean;
+function  VariantCmpEQ(const v1: Variant; const V2: Variant): Boolean;
+function  VariantCmpLT(const V1: Variant; const V2: Variant): Boolean;
+function  VariantCmpGT(const V1: Variant; const V2: Variant): Boolean;
 function  VariantAdd2(const V1: Variant; const V2: Variant): Variant;
 function  VariantSub2(const V1: Variant; const V2: Variant): Variant;
 function  VariantMul2(const V1: Variant; const V2: Variant): Variant;
@@ -133,17 +133,17 @@ begin
   dst := dst shr src;
 end;
 
-function  VariantCmp(const v1: Variant; const V2: Variant): Boolean;
+function  VariantCmpEQ(const v1: Variant; const V2: Variant): Boolean;
 begin
   Result := v1 = v2;
 end;
 
-function  VariantLT (const V1: Variant; const V2: Variant): Boolean;
+function  VariantCmpLT(const V1: Variant; const V2: Variant): Boolean;
 begin
   Result := V1 < V2;
 end;
 
-function  VariantGT (const V1: Variant; const V2: Variant): Boolean;
+function  VariantCmpGT(const V1: Variant; const V2: Variant): Boolean;
 begin
   Result := V1 > V2;
 end;

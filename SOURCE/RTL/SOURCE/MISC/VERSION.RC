@@ -5,14 +5,14 @@
 /*------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1993, 2000 by Inprise Corporation
+ *      Copyright (c) 1993, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.11  $        */
+/* $Revision: 9.17.2.1 $        */
 
 #include "version.h"
 
@@ -47,13 +47,15 @@ FILEOS          VOS__WINDOWS32
 FILETYPE        VFT_DLL
 FILESUBTYPE     VS_USER_DEFINED
 
+FILEVERSION 6, 0, 0, 0
+PRODUCTVERSION 6, 0, 0, 0
 
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
     BLOCK "040904E4"
     BEGIN
-      VALUE "CompanyName", "Inprise Corporation\0"
+      VALUE "CompanyName", "Borland Corporation\0"
       VALUE "FileDescription", __RTLDLLDESCSTR
       VALUE "FileVersion", VERSION_STRING
       VALUE "InternalName", "Run Time Library\0"

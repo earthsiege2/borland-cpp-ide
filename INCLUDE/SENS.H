@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1997-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -27,7 +27,6 @@ Revision History:
 
 
 #ifndef __SENS_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __SENS_H__
 
 #if _MSC_VER > 1000
@@ -106,6 +105,13 @@ DEFINE_GUID(
     0x8d, 0xd2, 0x00, 0xaa, 0x00, 0x4a, 0xbd, 0x5e
 );
 
+DEFINE_GUID(
+    SENSGUID_EVENTCLASS_LOGON2,         /* d5978650-5b9f-11d1-8dd2-00aa004abd5e */
+    0xd5978650,
+    0x5b9f,
+    0x11d1,
+    0x8d, 0xd2, 0x00, 0xaa, 0x00, 0x4a, 0xbd, 0x5e
+);
 
-#pragma option pop /*P_O_Pop*/
+
 #endif // __SENS_H__

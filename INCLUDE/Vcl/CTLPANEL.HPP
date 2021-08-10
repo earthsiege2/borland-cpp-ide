@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'CtlPanel.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'CtlPanel.pas' rev: 6.00
 
 #ifndef CtlPanelHPP
 #define CtlPanelHPP
@@ -10,13 +10,11 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <Dialogs.hpp>	// Pascal unit
-#include <CPL.hpp>	// Pascal unit
+#include <Cpl.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
-#include <Windows.hpp>	// Pascal unit
-#include <Forms.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
+#include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -32,38 +30,28 @@ class PASCALIMPLEMENTATION EAppletException : public Sysutils::Exception
 	
 public:
 	#pragma option push -w-inl
-	/* Exception.Create */ inline __fastcall EAppletException(const AnsiString Msg) : Sysutils::Exception(
-		Msg) { }
+	/* Exception.Create */ inline __fastcall EAppletException(const AnsiString Msg) : Sysutils::Exception(Msg) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmt */ inline __fastcall EAppletException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
+	/* Exception.CreateFmt */ inline __fastcall EAppletException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size) : Sysutils::Exception(Msg, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateRes */ inline __fastcall EAppletException(int Ident)/* overload */ : Sysutils::Exception(
-		Ident) { }
+	/* Exception.CreateRes */ inline __fastcall EAppletException(int Ident)/* overload */ : Sysutils::Exception(Ident) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmt */ inline __fastcall EAppletException(int Ident, const System::TVarRec * 
-		Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
+	/* Exception.CreateResFmt */ inline __fastcall EAppletException(int Ident, const System::TVarRec * Args, const int Args_Size)/* overload */ : Sysutils::Exception(Ident, Args, Args_Size) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateHelp */ inline __fastcall EAppletException(const AnsiString Msg, int AHelpContext
-		) : Sysutils::Exception(Msg, AHelpContext) { }
+	/* Exception.CreateHelp */ inline __fastcall EAppletException(const AnsiString Msg, int AHelpContext) : Sysutils::Exception(Msg, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateFmtHelp */ inline __fastcall EAppletException(const AnsiString Msg, const System::TVarRec 
-		* Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext
-		) { }
+	/* Exception.CreateFmtHelp */ inline __fastcall EAppletException(const AnsiString Msg, const System::TVarRec * Args, const int Args_Size, int AHelpContext) : Sysutils::Exception(Msg, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResHelp */ inline __fastcall EAppletException(int Ident, int AHelpContext)/* overload */
-		 : Sysutils::Exception(Ident, AHelpContext) { }
+	/* Exception.CreateResHelp */ inline __fastcall EAppletException(int Ident, int AHelpContext)/* overload */ : Sysutils::Exception(Ident, AHelpContext) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* Exception.CreateResFmtHelp */ inline __fastcall EAppletException(System::PResStringRec ResStringRec
-		, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(
-		ResStringRec, Args, Args_Size, AHelpContext) { }
+	/* Exception.CreateResFmtHelp */ inline __fastcall EAppletException(System::PResStringRec ResStringRec, const System::TVarRec * Args, const int Args_Size, int AHelpContext)/* overload */ : Sysutils::Exception(ResStringRec, Args, Args_Size, AHelpContext) { }
 	#pragma option pop
 	
 public:
@@ -86,18 +74,16 @@ typedef void __fastcall (__closure *TActivateEvent)(System::TObject* Sender, int
 
 typedef void __fastcall (__closure *TStopEvent)(System::TObject* Sender, int Data);
 
-typedef void __fastcall (__closure *TInquireEvent)(System::TObject* Sender, int &idIcon, int &idName
-	, int &idInfo, int &lData);
+typedef void __fastcall (__closure *TInquireEvent)(System::TObject* Sender, int &idIcon, int &idName, int &idInfo, int &lData);
 
-typedef void __fastcall (__closure *TNewInquireEvent)(System::TObject* Sender, int &lData, HICON &hIcon
-	, AnsiString &AppletName, AnsiString &AppletInfo);
+typedef void __fastcall (__closure *TNewInquireEvent)(System::TObject* Sender, int &lData, HICON &hIcon, AnsiString &AppletName, AnsiString &AppletInfo);
 
 typedef void __fastcall (__closure *TStartWParmsEvent)(System::TObject* Sender, AnsiString Params);
 
 class DELPHICLASS TAppletModule;
-class PASCALIMPLEMENTATION TAppletModule : public Forms::TDataModule 
+class PASCALIMPLEMENTATION TAppletModule : public Classes::TDataModule 
 {
-	typedef Forms::TDataModule inherited;
+	typedef Classes::TDataModule inherited;
 	
 private:
 	TActivateEvent FOnActivate;
@@ -147,8 +133,7 @@ __published:
 	__property int ResidInfo = {read=FResidInfo, write=SetResidInfo, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TDataModule.CreateNew */ inline __fastcall virtual TAppletModule(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TDataModule(AOwner, Dummy) { }
+	/* TDataModule.CreateNew */ inline __fastcall virtual TAppletModule(Classes::TComponent* AOwner, int Dummy) : Classes::TDataModule(AOwner, Dummy) { }
 	#pragma option pop
 	
 };
@@ -160,13 +145,14 @@ typedef TMetaClass*TCPLAppletClass;
 
 typedef TMetaClass*TDataModuleClass;
 
+typedef void __fastcall (__closure *TOnAppletExceptionEvent)(System::TObject* Sender, Sysutils::Exception* E);
+
 class DELPHICLASS TAppletApplication;
 class PASCALIMPLEMENTATION TAppletApplication : public Classes::TComponent 
 {
 	typedef Classes::TComponent inherited;
 	
 private:
-	TMetaClass*FComponentClass;
 	unsigned FControlPanelHandle;
 	Classes::TList* FModules;
 	TInitEvent FOnInit;
@@ -174,14 +160,14 @@ private:
 	Classes::TNotifyEvent FOnExit;
 	Classes::TNotifyEvent FOnSetup;
 	int FModuleCount;
-	void __fastcall OnExceptionHandler(System::TObject* Sender, Sysutils::Exception* E);
+	TOnAppletExceptionEvent FOnException;
 	TAppletModule* __fastcall GetModules(int Index);
 	void __fastcall SetModules(int Index, const TAppletModule* Value);
 	void __fastcall SetModuleCount(const int Value);
 	int __fastcall GetModuleCount(void);
 	
 protected:
-	DYNAMIC void __fastcall DoHandleException(Sysutils::Exception* E);
+	DYNAMIC void __fastcall DoHandleException(System::TObject* Sender, Sysutils::Exception* E);
 	DYNAMIC void __fastcall DoInit(bool &AppInitOK);
 	DYNAMIC void __fastcall DoCount(int &AppCount);
 	DYNAMIC void __fastcall DoExit(void);
@@ -191,6 +177,7 @@ public:
 	__fastcall virtual TAppletApplication(Classes::TComponent* AOwner);
 	__fastcall virtual ~TAppletApplication(void);
 	virtual void __fastcall CreateForm(TMetaClass* InstanceClass, void *Reference);
+	void __fastcall HandleException(System::TObject* Sender);
 	virtual void __fastcall Initialize(void);
 	virtual void __fastcall Run(void);
 	__property TAppletModule* Modules[int Index] = {read=GetModules, write=SetModules};
@@ -198,6 +185,7 @@ public:
 	__property unsigned ControlPanelHandle = {read=FControlPanelHandle, nodefault};
 	__property TInitEvent OnInit = {read=FOnInit, write=FOnInit};
 	__property TCountEvent OnCount = {read=FOnCount, write=FOnCount};
+	__property TOnAppletExceptionEvent OnException = {read=FOnException, write=FOnException};
 	__property Classes::TNotifyEvent OnExit = {read=FOnExit, write=FOnExit};
 	__property Classes::TNotifyEvent OnSetup = {read=FOnSetup, write=FOnSetup};
 };
@@ -208,9 +196,7 @@ extern PACKAGE TAppletApplication* Application;
 extern PACKAGE int __stdcall CPlApplet(unsigned hwndCPl, unsigned uMsg, int lParam1, int lParam2);
 
 }	/* namespace Ctlpanel */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ctlpanel;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

@@ -1,12 +1,11 @@
-
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Runtime Library                  }
-{       System Unit                                     }
-{                                                       }
-{       Copyright (C) 1988,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi / Kylix Cross-Platform Runtime Library                           }
+{ System Unit                                                             }
+{                                                                         }
+{ Copyright (c) 1988-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 unit System; { Predefined constants, types, procedures, }
              { and functions (such as True, Integer, or }
@@ -15,11 +14,12 @@ unit System; { Predefined constants, types, procedures, }
              { and are treated as if they were declared }
              { at the beginning of the System unit.     }
 
-{$H+,I-,S-}
+{$H+,I-,R-,O+,W-}
+{$WARN SYMBOL_PLATFORM OFF}
 
 { L- should never be specified.
 
-  The IDE needs to find debug hook (through the C++
+  The IDE needs to find DebugHook (through the C++
   compiler sometimes) for integrated debugging to
   function properly.
 
@@ -36,35 +36,82 @@ unit System; { Predefined constants, types, procedures, }
 
 interface
 
+(* You can use RTLVersion in $IF expressions to test the runtime library
+  version level independently of the compiler version level.
+  Example:  {$IF RTLVersion >= 16.2} ... {$IFEND}                  *)
+
 const
+  RTLVersion = 14.20;
+
+{$EXTERNALSYM CompilerVersion}
+
+(*
+const
+  CompilerVersion = 0.0;
+
+  CompilerVersion is assigned a value by the compiler when
+  the system unit is compiled.  It indicates the revision level of the
+  compiler features / language syntax, which may advance independently of
+  the RTLVersion.  CompilerVersion can be tested in $IF expressions and
+  should be used instead of testing for the VERxxx conditional define.
+  Always test for greater than or less than a known revision level.
+  It's a bad idea to test for a specific revision level.
+*)
+
+
+{$IFDEF DECLARE_GPL}
+(* The existence of the GPL symbol indicates that the System unit
+  and the rest of the Delphi runtime library were compiled for use
+  and distribution under the terms of the GNU General Public License (GPL).
+  Under the terms of the GPL, all applications compiled with the
+  GPL version of the Delphi runtime library must also be distributed
+  under the terms of the GPL.
+  For more information about the GNU GPL, see
+  http://www.gnu.org/copyleft/gpl.html
+
+  The GPL symbol does not exist in the Delphi runtime library
+  purchased for commercial/proprietary software development.
+
+  If your source code needs to know which licensing model it is being
+  compiled into, you can use {$IF DECLARED(GPL)}...{$IFEND} to
+  test for the existence of the GPL symbol.  The value of the
+  symbol itself is not significant.   *)
+
+const
+  GPL = True;
+{$ENDIF}
 
 { Variant type codes (wtypes.h) }
 
-  varEmpty    = $0000; { vt_empty       }
-  varNull     = $0001; { vt_null        }
-  varSmallint = $0002; { vt_i2          }
-  varInteger  = $0003; { vt_i4          }
-  varSingle   = $0004; { vt_r4          }
-  varDouble   = $0005; { vt_r8          }
-  varCurrency = $0006; { vt_cy          }
-  varDate     = $0007; { vt_date        }
-  varOleStr   = $0008; { vt_bstr        }
-  varDispatch = $0009; { vt_dispatch    }
-  varError    = $000A; { vt_error       }
-  varBoolean  = $000B; { vt_bool        }
-  varVariant  = $000C; { vt_variant     }
-  varUnknown  = $000D; { vt_unknown     }
-                       { vt_decimal $e  }
-                       { undefined  $f  }
-                       { vt_i1      $10 }
-  varByte     = $0011; { vt_ui1         }
-                       { vt_ui2     $12 }
-                       { vt_ui4     $13 }
-                       { vt_i8      $14 }
-  { if adding new items, update varLast, BaseTypeMap and OpTypeMap }
-  varStrArg   = $0048; { vt_clsid    }
-  varString   = $0100; { Pascal string; not OLE compatible }
-  varAny      = $0101;
+  varEmpty    = $0000; { vt_empty        0 }
+  varNull     = $0001; { vt_null         1 }
+  varSmallint = $0002; { vt_i2           2 }
+  varInteger  = $0003; { vt_i4           3 }
+  varSingle   = $0004; { vt_r4           4 }
+  varDouble   = $0005; { vt_r8           5 }
+  varCurrency = $0006; { vt_cy           6 }
+  varDate     = $0007; { vt_date         7 }
+  varOleStr   = $0008; { vt_bstr         8 }
+  varDispatch = $0009; { vt_dispatch     9 }
+  varError    = $000A; { vt_error       10 }
+  varBoolean  = $000B; { vt_bool        11 }
+  varVariant  = $000C; { vt_variant     12 }
+  varUnknown  = $000D; { vt_unknown     13 }
+//varDecimal  = $000E; { vt_decimal     14 } {UNSUPPORTED as of v6.x code base}
+//varUndef0F  = $000F; { undefined      15 } {UNSUPPORTED per Microsoft}
+  varShortInt = $0010; { vt_i1          16 }
+  varByte     = $0011; { vt_ui1         17 }
+  varWord     = $0012; { vt_ui2         18 }
+  varLongWord = $0013; { vt_ui4         19 }
+  varInt64    = $0014; { vt_i8          20 }
+//varWord64   = $0015; { vt_ui8         21 } {UNSUPPORTED as of v6.x code base}
+{  if adding new items, update Variants' varLast, BaseTypeMap and OpTypeMap }
+
+  varStrArg   = $0048; { vt_clsid       72 }
+  varString   = $0100; { Pascal string 256 } {not OLE compatible }
+  varAny      = $0101; { Corba any     257 } {not OLE compatible }
+  // custom types range from $110 (272) to $7FF (2047)
+
   varTypeMask = $0FFF;
   varArray    = $2000;
   varByRef    = $4000;
@@ -122,11 +169,8 @@ type
 
   TClass = class of TObject;
 
-  {$EXTERNALSYM HRESULT}
   HRESULT = type Longint;  { from WTYPES.H }
-
-{$EXTERNALSYM IUnknown}
-{$EXTERNALSYM IDispatch}
+  {$EXTERNALSYM HRESULT}
 
   PGUID = ^TGUID;
   TGUID = packed record
@@ -148,6 +192,19 @@ type
   TInterfaceTable = packed record
     EntryCount: Integer;
     Entries: array[0..9999] of TInterfaceEntry;
+  end;
+
+  TMethod = record
+    Code, Data: Pointer;
+  end;
+
+{ TObject.Dispatch accepts any data type as its Message parameter.  The
+  first 2 bytes of the data are taken as the message id to search for
+  in the object's message methods.  TDispatchMessage is an example of
+  such a structure with a word field for the message id.
+}
+  TDispatchMessage = record
+    MsgID: Word;
   end;
 
   TObject = class
@@ -179,12 +236,26 @@ type
     destructor Destroy; virtual;
   end;
 
-  IUnknown = interface
+const
+  S_OK = 0;                             {$EXTERNALSYM S_OK}
+  S_FALSE = $00000001;                  {$EXTERNALSYM S_FALSE}
+  E_NOINTERFACE = HRESULT($80004002);   {$EXTERNALSYM E_NOINTERFACE}
+  E_UNEXPECTED = HRESULT($8000FFFF);    {$EXTERNALSYM E_UNEXPECTED}
+  E_NOTIMPL = HRESULT($80004001);       {$EXTERNALSYM E_NOTIMPL}
+
+type
+  IInterface = interface
     ['{00000000-0000-0000-C000-000000000046}']
     function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
   end;
+
+  IUnknown = IInterface;
+{$M+}
+  IInvokable = interface(IInterface)
+  end;
+{$M-}
 
   IDispatch = interface(IUnknown)
     ['{00020400-0000-0000-C000-000000000046}']
@@ -196,7 +267,14 @@ type
       Flags: Word; var Params; VarResult, ExcepInfo, ArgErr: Pointer): HResult; stdcall;
   end;
 
-  TInterfacedObject = class(TObject, IUnknown)
+{$EXTERNALSYM IUnknown}
+{$EXTERNALSYM IDispatch}
+
+{ TInterfacedObject provides a threadsafe default implementation
+  of IInterface.  You should use TInterfaceObject as the base class
+  of objects implementing interfaces.  }
+
+  TInterfacedObject = class(TObject, IInterface)
   protected
     FRefCount: Integer;
     function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
@@ -211,10 +289,140 @@ type
 
   TInterfacedClass = class of TInterfacedObject;
 
+{ TAggregatedObject and TContainedObject are suitable base
+  classes for interfaced objects intended to be aggregated
+  or contained in an outer controlling object.  When using
+  the "implements" syntax on an interface property in
+  an outer object class declaration, use these types
+  to implement the inner object.
+
+  Interfaces implemented by aggregated objects on behalf of
+  the controller should not be distinguishable from other
+  interfaces provided by the controller.  Aggregated objects
+  must not maintain their own reference count - they must
+  have the same lifetime as their controller.  To achieve this,
+  aggregated objects reflect the reference count methods
+  to the controller.
+
+  TAggregatedObject simply reflects QueryInterface calls to
+  its controller.  From such an aggregated object, one can
+  obtain any interface that the controller supports, and
+  only interfaces that the controller supports.  This is
+  useful for implementing a controller class that uses one
+  or more internal objects to implement the interfaces declared
+  on the controller class.  Aggregation promotes implementation
+  sharing across the object hierarchy.
+
+  TAggregatedObject is what most aggregate objects should
+  inherit from, especially when used in conjunction with
+  the "implements" syntax.  }
+
+  TAggregatedObject = class(TObject)
+  private
+    FController: Pointer;  // weak reference to controller
+    function GetController: IInterface;
+  protected
+    { IInterface }
+    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
+  public
+    constructor Create(const Controller: IInterface);
+    property Controller: IInterface read GetController;
+  end;
+
+  { TContainedObject is an aggregated object that isolates
+    QueryInterface on the aggregate from the controller.
+    TContainedObject will return only interfaces that the
+    contained object itself implements, not interfaces
+    that the controller implements.  This is useful for
+    implementing nodes that are attached to a controller and
+    have the same lifetime as the controller, but whose
+    interface identity is separate from the controller.
+    You might do this if you don't want the consumers of
+    an aggregated interface to have access to other interfaces
+    implemented by the controller - forced encapsulation.
+    This is a less common case than TAggregatedObject.  }
+
+  TContainedObject = class(TAggregatedObject, IInterface)
+  protected
+    { IInterface }
+    function QueryInterface(const IID: TGUID; out Obj): HResult; virtual; stdcall;
+  end;
+
+  PShortString = ^ShortString;
+  PAnsiString = ^AnsiString;
+  PWideString = ^WideString;
+  PString = PAnsiString;
+
+  UCS2Char = WideChar;
+  PUCS2Char = PWideChar;
+  UCS4Char = type LongWord;
+  {$NODEFINE UCS4CHAR}
+  PUCS4Char = ^UCS4Char;
+  {$NODEFINE PUCS4CHAR}
+  TUCS4CharArray = array [0..$effffff] of UCS4Char;
+  PUCS4CharArray = ^TUCS4CharArray;
+  UCS4String = array of UCS4Char;
+  {$NODEFINE UCS4String}
+
+  UTF8String = type string;
+  PUTF8String = ^UTF8String;
+  {$NODEFINE UTF8String}
+  {$NODEFINE PUTF8String}
+
+  IntegerArray  = array[0..$effffff] of Integer;
+  PIntegerArray = ^IntegerArray;
+  PointerArray = array [0..512*1024*1024 - 2] of Pointer;
+  PPointerArray = ^PointerArray;
+  TBoundArray = array of Integer;
+  TPCharArray = packed array[0..(MaxLongint div SizeOf(PChar))-1] of PChar;
+  PPCharArray = ^TPCharArray;
+
+  PLongint      = ^Longint;
+  {$EXTERNALSYM PLongint}
+  PInteger      = ^Integer;
+  PCardinal     = ^Cardinal;
+  PWord         = ^Word;
+  PSmallInt     = ^SmallInt;
+  PByte         = ^Byte;
+  PShortInt     = ^ShortInt;
+  PInt64        = ^Int64;
+  PLongWord     = ^LongWord;
+  PSingle       = ^Single;
+  PDouble       = ^Double;
+  PDate         = ^Double;
+  PDispatch     = ^IDispatch;
+  PPDispatch    = ^PDispatch;
+  PError        = ^LongWord;
+  PWordBool     = ^WordBool;
+  PUnknown      = ^IUnknown;
+  PPUnknown     = ^PUnknown;
+  {$NODEFINE PByte}
+  PPWideChar    = ^PWideChar;
+  PPChar        = ^PChar;
+  PPAnsiChar    = PPChar;
+  PExtended     = ^Extended;
+  PComp         = ^Comp;
+  PCurrency     = ^Currency;
+  PVariant      = ^Variant;
+  POleVariant   = ^OleVariant;
+  PPointer      = ^Pointer;
+  PBoolean      = ^Boolean;
+
+  TDateTime = type Double;
+  PDateTime = ^TDateTime;
+
+  THandle = LongWord;
+
   TVarArrayBound = packed record
     ElementCount: Integer;
     LowBound: Integer;
   end;
+  TVarArrayBoundArray = array [0..0] of TVarArrayBound;
+  PVarArrayBoundArray = ^TVarArrayBoundArray;
+  TVarArrayCoorArray = array [0..0] of Integer;
+  PVarArrayCoorArray = ^TVarArrayCoorArray;
 
   PVarArray = ^TVarArray;
   TVarArray = packed record
@@ -223,45 +431,159 @@ type
     ElementSize: Integer;
     LockCount: Integer;
     Data: Pointer;
-    Bounds: array[0..255] of TVarArrayBound;
+    Bounds: TVarArrayBoundArray;
   end;
 
+  TVarType = Word;
   PVarData = ^TVarData;
+  {$EXTERNALSYM PVarData}
   TVarData = packed record
-    VType: Word;
-    Reserved1, Reserved2, Reserved3: Word;
+    VType: TVarType;
     case Integer of
-      varSmallint: (VSmallint: Smallint);
-      varInteger:  (VInteger: Integer);
-      varSingle:   (VSingle: Single);
-      varDouble:   (VDouble: Double);
-      varCurrency: (VCurrency: Currency);
-      varDate:     (VDate: Double);
-      varOleStr:   (VOleStr: PWideChar);
-      varDispatch: (VDispatch: Pointer);
-      varError:    (VError: LongWord);
-      varBoolean:  (VBoolean: WordBool);
-      varUnknown:  (VUnknown: Pointer);
-      varByte:     (VByte: Byte);
-      varString:   (VString: Pointer);
-      varAny:      (VAny: Pointer);
-      varArray:    (VArray: PVarArray);
-      varByRef:    (VPointer: Pointer);
+      0: (Reserved1: Word;
+          case Integer of
+            0: (Reserved2, Reserved3: Word;
+                case Integer of
+                  varSmallInt: (VSmallInt: SmallInt);
+                  varInteger:  (VInteger: Integer);
+                  varSingle:   (VSingle: Single);
+                  varDouble:   (VDouble: Double);
+                  varCurrency: (VCurrency: Currency);
+                  varDate:     (VDate: TDateTime);
+                  varOleStr:   (VOleStr: PWideChar);
+                  varDispatch: (VDispatch: Pointer);
+                  varError:    (VError: LongWord);
+                  varBoolean:  (VBoolean: WordBool);
+                  varUnknown:  (VUnknown: Pointer);
+                  varShortInt: (VShortInt: ShortInt);
+                  varByte:     (VByte: Byte);
+                  varWord:     (VWord: Word);
+                  varLongWord: (VLongWord: LongWord);
+                  varInt64:    (VInt64: Int64);
+                  varString:   (VString: Pointer);
+                  varAny:      (VAny: Pointer);
+                  varArray:    (VArray: PVarArray);
+                  varByRef:    (VPointer: Pointer);
+               );
+            1: (VLongs: array[0..2] of LongInt);
+         );
+      2: (VWords: array [0..6] of Word);
+      3: (VBytes: array [0..13] of Byte);
+  end;
+  {$EXTERNALSYM TVarData}
+
+type
+  TVarOp = Integer;
+
+const
+  opAdd =        0;
+  opSubtract =   1;
+  opMultiply =   2;
+  opDivide =     3;
+  opIntDivide =  4;
+  opModulus =    5;
+  opShiftLeft =  6;
+  opShiftRight = 7;
+  opAnd =        8;
+  opOr =         9;
+  opXor =        10;
+  opCompare =    11;
+  opNegate =     12;
+  opNot =        13;
+
+  opCmpEQ =      14;
+  opCmpNE =      15;
+  opCmpLT =      16;
+  opCmpLE =      17;
+  opCmpGT =      18;
+  opCmpGE =      19;
+
+type
+  { Dispatch call descriptor }
+  PCallDesc = ^TCallDesc;
+  TCallDesc = packed record
+    CallType: Byte;
+    ArgCount: Byte;
+    NamedArgCount: Byte;
+    ArgTypes: array[0..255] of Byte;
   end;
 
-  PShortString = ^ShortString;
-  PAnsiString = ^AnsiString;
-  PWideString = ^WideString;
-  PString = PAnsiString;
+  PDispDesc = ^TDispDesc;
+  TDispDesc = packed record
+    DispID: Integer;
+    ResType: Byte;
+    CallDesc: TCallDesc;
+  end;
 
-  PExtended = ^Extended;
-  PCurrency = ^Currency;
-  PVariant = ^Variant;
-  POleVariant = ^OleVariant;
-  PInt64 = ^Int64;
+  PVariantManager = ^TVariantManager;
+  {$EXTERNALSYM PVariantManager}
+  TVariantManager = record
+    VarClear: procedure(var V : Variant);
+    VarCopy: procedure(var Dest: Variant; const Source: Variant);
+    VarCopyNoInd: procedure; // ARGS PLEASE!
+    VarCast: procedure(var Dest: Variant; const Source: Variant; VarType: Integer);
+    VarCastOle: procedure(var Dest: Variant; const Source: Variant; VarType: Integer);
 
-  TDateTime = type Double;
-  PDateTime = ^TDateTime;
+    VarToInt: function(const V: Variant): Integer;
+    VarToInt64: function(const V: Variant): Int64;
+    VarToBool: function(const V: Variant): Boolean;
+    VarToReal: function(const V: Variant): Extended;
+    VarToCurr: function(const V: Variant): Currency;
+    VarToPStr: procedure(var S; const V: Variant);
+    VarToLStr: procedure(var S: string; const V: Variant);
+    VarToWStr: procedure(var S: WideString; const V: Variant);
+    VarToIntf: procedure(var Unknown: IInterface; const V: Variant);
+    VarToDisp: procedure(var Dispatch: IDispatch; const V: Variant);
+    VarToDynArray: procedure(var DynArray: Pointer; const V: Variant; TypeInfo: Pointer);
+
+    VarFromInt: procedure(var V: Variant; const Value, Range: Integer);
+    VarFromInt64: procedure(var V: Variant; const Value: Int64);
+    VarFromBool: procedure(var V: Variant; const Value: Boolean);
+    VarFromReal: procedure; // var V: Variant; const Value: Real
+    VarFromTDateTime: procedure; // var V: Variant; const Value: TDateTime
+    VarFromCurr: procedure; // var V: Variant; const Value: Currency
+    VarFromPStr: procedure(var V: Variant; const Value: ShortString);
+    VarFromLStr: procedure(var V: Variant; const Value: string);
+    VarFromWStr: procedure(var V: Variant; const Value: WideString);
+    VarFromIntf: procedure(var V: Variant; const Value: IInterface);
+    VarFromDisp: procedure(var V: Variant; const Value: IDispatch);
+    VarFromDynArray: procedure(var V: Variant; const DynArray: Pointer; TypeInfo: Pointer);
+    OleVarFromPStr: procedure(var V: OleVariant; const Value: ShortString);
+    OleVarFromLStr: procedure(var V: OleVariant; const Value: string);
+    OleVarFromVar: procedure(var V: OleVariant; const Value: Variant);
+    OleVarFromInt: procedure(var V: OleVariant; const Value, Range: Integer);
+
+    VarOp: procedure(var Left: Variant; const Right: Variant; OpCode: TVarOp);
+    VarCmp: procedure(const Left, Right: TVarData; const OpCode: TVarOp); { result is set in the flags }
+    VarNeg: procedure(var V: Variant);
+    VarNot: procedure(var V: Variant);
+
+    DispInvoke: procedure(Dest: PVarData; const Source: TVarData;
+      CallDesc: PCallDesc; Params: Pointer); cdecl;
+    VarAddRef: procedure(var V: Variant);
+
+    VarArrayRedim: procedure(var A : Variant; HighBound: Integer);
+    VarArrayGet: function(var A: Variant; IndexCount: Integer;
+      Indices: Integer): Variant; cdecl;
+    VarArrayPut: procedure(var A: Variant; const Value: Variant;
+      IndexCount: Integer; Indices: Integer); cdecl;
+
+    WriteVariant: function(var T: Text; const V: Variant; Width: Integer): Pointer;
+    Write0Variant: function(var T: Text; const V: Variant): Pointer;
+  end;
+  {$EXTERNALSYM TVariantManager}
+
+  { Dynamic array support }
+  PDynArrayTypeInfo = ^TDynArrayTypeInfo;
+  {$EXTERNALSYM PDynArrayTypeInfo}
+  TDynArrayTypeInfo = packed record
+    kind: Byte;
+    name: string[0];
+    elSize: Longint;
+    elType: ^PDynArrayTypeInfo;
+    varType: Integer;
+  end;
+  {$EXTERNALSYM TDynArrayTypeInfo}
 
   PVarRec = ^TVarRec;
   TVarRec = record { do not pack this record; it is compiler-generated }
@@ -305,8 +627,19 @@ type
     HeapErrorCode: Cardinal;
   end;
 
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+  PUnwinder = ^TUnwinder;
+  TUnwinder = record
+    RaiseException: function(Exc: Pointer): LongBool; cdecl;
+    RegisterIPLookup: function(fn: Pointer; StartAddr, EndAddr: LongInt; Context: Pointer; GOT: LongInt): LongBool; cdecl;
+    UnregisterIPLookup: procedure(StartAddr: LongInt) cdecl;
+    DelphiLookup: function(Addr: LongInt; Context: Pointer): Pointer; cdecl;
+    ClosestHandler: function(Context: Pointer): LongWord; cdecl;
+  end;
+{$ENDIF PC_MAPPED_EXCEPTIONS}
+
   PackageUnitEntry = packed record
-    Init, FInit : procedure;
+    Init, FInit : Pointer;
   end;
 
   { Compiler generated table to be processed sequentially to init & finit all package units }
@@ -324,82 +657,187 @@ type
   { Each package exports a '@GetPackageInfoTable' which can be used to retrieve }
   { the table which contains compiler generated information about the package DLL }
   GetPackageInfoTable = function : PackageInfo;
-
+
+{$IFDEF DEBUG_FUNCTIONS}
+{ Inspector Query; implementation in GETMEM.INC; no need to conditionalize that }
+  THeapBlock = record
+    Start: Pointer;
+    Size: Cardinal;
+  end;
+
+  THeapBlockArray = array of THeapBlock;
+  TObjectArray = array of TObject;
+
+function GetHeapBlocks: THeapBlockArray;
+function FindObjects(AClass: TClass; FindDerived: Boolean): TObjectArray;
+{ Inspector Query }
+{$ENDIF}
+
+{
+  When an exception is thrown, the exception object that is thrown is destroyed
+  automatically when the except clause which handles the exception is exited.
+  There are some cases in which an application may wish to acquire the thrown
+  object and keep it alive after the except clause is exited.  For this purpose,
+  we have added the AcquireExceptionObject and ReleaseExceptionObject functions.
+  These functions maintain a reference count on the most current exception object,
+  allowing applications to legitimately obtain references.  If the reference count
+  for an exception that is being thrown is positive when the except clause is exited,
+  then the thrown object is not destroyed by the RTL, but assumed to be in control
+  of the application.  It is then the application's responsibility to destroy the
+  thrown object.  If the reference count is zero, then the RTL will destroy the
+  thrown object when the except clause is exited.
+}
+function AcquireExceptionObject: Pointer;
+procedure ReleaseExceptionObject;
+
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+procedure GetUnwinder(var Dest: TUnwinder);
+procedure SetUnwinder(const NewUnwinder: TUnwinder);
+function IsUnwinderSet: Boolean;
+
+//function SysRegisterIPLookup(ModuleHandle, StartAddr, EndAddr: LongInt; Context: Pointer; GOT: LongInt): LongBool;
+{
+  Do NOT call these functions.  They are for internal use only:
+    SysRegisterIPLookup
+    SysUnregisterIPLookup
+    BlockOSExceptions
+    UnblockOSExceptions
+    AreOSExceptionsBlocked
+}
+function SysRegisterIPLookup(StartAddr, EndAddr: LongInt; Context: Pointer; GOT: LongInt): LongBool;
+procedure SysUnregisterIPLookup(StartAddr: LongInt);
+//function SysAddressIsInPCMap(Addr: LongInt): Boolean;
+function SysClosestDelphiHandler(Context: Pointer): LongWord;
+procedure BlockOSExceptions;
+procedure UnblockOSExceptions;
+function AreOSExceptionsBlocked: Boolean;
+
+{$ELSE}
+// These functions are not portable.  Use AcquireExceptionObject above instead
+function RaiseList: Pointer; deprecated;  { Stack of current exception objects }
+function SetRaiseList(NewPtr: Pointer): Pointer; deprecated;  { returns previous value }
+{$ENDIF}
+
+function ExceptObject: TObject;
+function ExceptAddr: Pointer;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-function RaiseList: Pointer;  { Stack of current exception objects }
-function SetRaiseList(NewPtr: Pointer): Pointer;  { returns previous value }
 procedure SetInOutRes(NewValue: Integer);
 
-var
+type
+  TAssertErrorProc = procedure (const Message, Filename: string;
+    LineNumber: Integer; ErrorAddr: Pointer);
+  TSafeCallErrorProc = procedure (ErrorCode: HResult; ErrorAddr: Pointer);
 
+{$IFDEF DEBUG}
+{
+  This variable is just for debugging the exception handling system.  See
+  _DbgExcNotify for the usage.
+}
+var
+  ExcNotificationProc : procedure (  NotificationKind: Integer;
+  ExceptionObject: Pointer;
+  ExceptionName: PShortString;
+  ExceptionLocation: Pointer;
+  HandlerAddr: Pointer) = nil;
+{$ENDIF}
+
+var
+  DispCallByIDProc: Pointer;
   ExceptProc: Pointer;    { Unhandled exception handler }
-  ErrorProc: Pointer;     { Error handler procedure }
+  ErrorProc: procedure (ErrorCode: Byte; ErrorAddr: Pointer);     { Error handler procedure }
+{$IFDEF MSWINDOWS}
   ExceptClsProc: Pointer; { Map an OS Exception to a Delphi class reference }
   ExceptObjProc: Pointer; { Map an OS Exception to a Delphi class instance }
+  RaiseExceptionProc: Pointer;
+  RTLUnwindProc: Pointer;
+{$ENDIF}
   ExceptionClass: TClass; { Exception base class (must be Exception) }
-  SafeCallErrorProc: Pointer; { Safecall error handler }
-  AssertErrorProc: Pointer; { Assertion error handler }
-  AbstractErrorProc: Pointer; { Abstract method error handler }
-  HPrevInst: LongWord;    { Handle of previous instance - HPrevInst cannot be tested for multiple instances in Win32}
-  MainInstance: LongWord; { Handle of the main(.EXE) HInstance }
-  MainThreadID: LongWord; { ThreadID of thread that module was initialized in }
-  IsLibrary: Boolean;     { True if module is a DLL }
-  CmdShow: Integer;       { CmdShow parameter for CreateWindow }
-  CmdLine: PChar;         { Command line pointer }
-  InitProc: Pointer;      { Last installed initialization procedure }
-  ExitCode: Integer;      { Program result }
-  ExitProc: Pointer;      { Last installed exit procedure }
-  ErrorAddr: Pointer;     { Address of run-time error }
-  RandSeed: Longint;      { Base for random number generator }
-  IsConsole: Boolean;     { True if compiled as console app }
-  IsMultiThread: Boolean; { True if more than one thread }
-  FileMode: Byte;         { Standard mode for opening files }
-  Test8086: Byte;         { Will always be 2 (386 or later) }
-  Test8087: Byte;         { Will always be 3 (387 or later) }
+  SafeCallErrorProc: TSafeCallErrorProc; { Safecall error handler }
+  AssertErrorProc: TAssertErrorProc; { Assertion error handler }
+  ExitProcessProc: procedure; { Hook to be called just before the process actually exits }
+  AbstractErrorProc: procedure; { Abstract method error handler }
+  HPrevInst: LongWord deprecated;    { Handle of previous instance - HPrevInst cannot be tested for multiple instances in Win32}
+  MainInstance: LongWord;   { Handle of the main(.EXE) HInstance }
+  MainThreadID: LongWord;   { ThreadID of thread that module was initialized in }
+  IsLibrary: Boolean;       { True if module is a DLL }
+  CmdShow: Integer platform;       { CmdShow parameter for CreateWindow }
+  CmdLine: PChar platform;         { Command line pointer }
+  InitProc: Pointer;        { Last installed initialization procedure }
+  ExitCode: Integer = 0;    { Program result }
+  ExitProc: Pointer;        { Last installed exit procedure }
+  ErrorAddr: Pointer = nil; { Address of run-time error }
+  RandSeed: Longint = 0;    { Base for random number generator }
+  IsConsole: Boolean;       { True if compiled as console app }
+  IsMultiThread: Boolean;   { True if more than one thread }
+  FileMode: Byte = 2;       { Standard mode for opening files }
+{$IFDEF LINUX}
+  FileAccessRights: Integer platform; { Default access rights for opening files }
+  ArgCount: Integer platform;
+  ArgValues: PPChar platform;
+{$ENDIF}
+  Test8086: Byte;         { CPU family (minus one) See consts below }
+  Test8087: Byte = 3;     { assume 80387 FPU or OS supplied FPU emulation }
   TestFDIV: Shortint;     { -1: Flawed Pentium, 0: Not determined, 1: Ok }
   Input: Text;            { Standard input }
   Output: Text;           { Standard output }
+  ErrOutput: Text;        { Standard error output }
+  envp: PPChar platform;
 
-  ClearAnyProc: Pointer;  { Handler clearing a varAny }
-  ChangeAnyProc: Pointer; { Handler to change any to variant }
-  RefAnyProc: Pointer;    { Handler to add a reference to an varAny }
+const
+  CPUi386     = 2;
+  CPUi486     = 3;
+  CPUPentium  = 4;
 
 var
   Default8087CW: Word = $1332;{ Default 8087 control word.  FPU control
                                 register is set to this value.
                                 CAUTION:  Setting this to an invalid value
-                                          could cause unpredictable behavior. }
+                                could cause unpredictable behavior. }
 
-  HeapAllocFlags: Word = 2;   { Heap allocation flags, gmem_Moveable }
-  DebugHook: Byte = 0;        { 1 to notify debugger of non-Delphi exceptions
+  HeapAllocFlags: Word platform = 2;   { Heap allocation flags, gmem_Moveable }
+  DebugHook: Byte platform = 0;        { 1 to notify debugger of non-Delphi exceptions
                                 >1 to notify debugger of exception unwinding }
-  JITEnable: Byte = 0;        { 1 to call UnhandledExceptionFilter if the exception
-                                  is not a Pascal exception.
+  JITEnable: Byte platform = 0;        { 1 to call UnhandledExceptionFilter if the exception
+                                is not a Pascal exception.
                                 >1 to call UnhandledExceptionFilter for all exceptions }
-  NoErrMsg: Boolean = False;  { True causes the base RTL to not display the message box
+  NoErrMsg: Boolean platform = False;  { True causes the base RTL to not display the message box
                                 when a run-time error occurs }
+{$IFDEF LINUX}
+                              { CoreDumpEnabled = True will cause unhandled
+                                exceptions and runtime errors to raise a
+                                SIGABRT signal, which will cause the OS to
+                                coredump the process address space.  This can
+                                be useful for postmortem debugging. }
+  CoreDumpEnabled: Boolean platform = False;
+{$ENDIF}
 
-var
-  Unassigned: Variant;    { Unassigned standard constant }
-  Null: Variant;          { Null standard constant }
-  EmptyParam: OleVariant; { "Empty parameter" standard constant which can be
-                            passed as an optional parameter on a dual interface. }
+type
+(*$NODEFINE TTextLineBreakStyle*)
+  TTextLineBreakStyle = (tlbsLF, tlbsCRLF);
 
-  AllocMemCount: Integer; { Number of allocated memory blocks }
-  AllocMemSize: Integer;  { Total size of allocated memory blocks }
+var   { Text output line break handling.  Default value for all text files }
+  DefaultTextLineBreakStyle: TTextLineBreakStyle = {$IFDEF LINUX} tlbsLF {$ENDIF}
+                                                 {$IFDEF MSWINDOWS} tlbsCRLF {$ENDIF};
+const
+  sLineBreak = {$IFDEF LINUX} #10 {$ENDIF} {$IFDEF MSWINDOWS} #13#10 {$ENDIF};
+
+type
+  HRSRC = THandle;
+  TResourceHandle = HRSRC;   // make an opaque handle type
+  HINST = THandle;
+  HMODULE = HINST;
+  HGLOBAL = THandle;
+
+{$IFDEF ELF}
+{ ELF resources }
+function FindResource(ModuleHandle: HMODULE; ResourceName, ResourceType: PChar): TResourceHandle;
+function LoadResource(ModuleHandle: HMODULE; ResHandle: TResourceHandle): HGLOBAL;
+function SizeofResource(ModuleHandle: HMODULE; ResHandle: TResourceHandle): Integer;
+function LockResource(ResData: HGLOBAL): Pointer;
+function UnlockResource(ResData: HGLOBAL): LongBool;
+function FreeResource(ResData: HGLOBAL): LongBool;
+{$ENDIF}
 
 { Memory manager support }
 
@@ -411,38 +849,144 @@ function SysGetMem(Size: Integer): Pointer;
 function SysFreeMem(P: Pointer): Integer;
 function SysReallocMem(P: Pointer; Size: Integer): Pointer;
 
-function GetHeapStatus: THeapStatus;
+var
+  AllocMemCount: Integer; { Number of allocated memory blocks }
+  AllocMemSize: Integer;  { Total size of allocated memory blocks }
+
+{$IFDEF MSWINDOWS}
+function GetHeapStatus: THeapStatus; platform;
+{$ENDIF}
 
 { Thread support }
 type
   TThreadFunc = function(Parameter: Pointer): Integer;
+{$IFDEF LINUX}
+  TSize_T = Cardinal;
 
+  TSchedParam = record
+    sched_priority: Integer;
+  end;
+
+  pthread_attr_t = record
+    __detachstate,
+    __schedpolicy: Integer;
+    __schedparam: TSchedParam;
+    __inheritsched,
+    __scope: Integer;
+    __guardsize: TSize_T;
+    __stackaddr_set: Integer;
+    __stackaddr: Pointer;
+    __stacksize: TSize_T;
+  end;
+  {$EXTERNALSYM pthread_attr_t}
+  TThreadAttr = pthread_attr_t;
+  PThreadAttr = ^TThreadAttr;
+
+  TBeginThreadProc = function (Attribute: PThreadAttr;
+    ThreadFunc: TThreadFunc; Parameter: Pointer;
+    var ThreadId: Cardinal): Integer;
+  TEndThreadProc = procedure(ExitCode: Integer);
+
+var
+  BeginThreadProc: TBeginThreadProc = nil;
+  EndThreadProc: TEndThreadProc = nil;
+{$ENDIF}
+
+{$IFDEF MSWINDOWS}
 function BeginThread(SecurityAttributes: Pointer; StackSize: LongWord;
   ThreadFunc: TThreadFunc; Parameter: Pointer; CreationFlags: LongWord;
   var ThreadId: LongWord): Integer;
+{$ENDIF}
+{$IFDEF LINUX}
+function BeginThread(Attribute: PThreadAttr; ThreadFunc: TThreadFunc;
+                     Parameter: Pointer; var ThreadId: Cardinal): Integer;
 
+{$ENDIF}
 procedure EndThread(ExitCode: Integer);
 
 { Standard procedures and functions }
 
-procedure _ChDir(const S: string);
-procedure __Flush(var F: Text);
+const
+{ File mode magic numbers }
+
+  fmClosed = $D7B0;
+  fmInput  = $D7B1;
+  fmOutput = $D7B2;
+  fmInOut  = $D7B3;
+
+{ Text file flags         }
+  tfCRLF   = $1;    // Dos compatibility flag, for CR+LF line breaks and EOF checks
+
+type
+{ Typed-file and untyped-file record }
+
+  TFileRec = packed record (* must match the size the compiler generates: 332 bytes *)
+    Handle: Integer;
+    Mode: Word;
+    Flags: Word;
+    case Byte of
+      0: (RecSize: Cardinal);   //  files of record
+      1: (BufSize: Cardinal;    //  text files
+          BufPos: Cardinal;
+          BufEnd: Cardinal;
+          BufPtr: PChar;
+          OpenFunc: Pointer;
+          InOutFunc: Pointer;
+          FlushFunc: Pointer;
+          CloseFunc: Pointer;
+          UserData: array[1..32] of Byte;
+          Name: array[0..259] of Char; );
+  end;
+
+{ Text file record structure used for Text files }
+  PTextBuf = ^TTextBuf;
+  TTextBuf = array[0..127] of Char;
+  TTextRec = packed record (* must match the size the compiler generates: 460 bytes *)
+    Handle: Integer;       (* must overlay with TFileRec *)
+    Mode: Word;
+    Flags: Word;
+    BufSize: Cardinal;
+    BufPos: Cardinal;
+    BufEnd: Cardinal;
+    BufPtr: PChar;
+    OpenFunc: Pointer;
+    InOutFunc: Pointer;
+    FlushFunc: Pointer;
+    CloseFunc: Pointer;
+    UserData: array[1..32] of Byte;
+    Name: array[0..259] of Char;
+    Buffer: TTextBuf;
+  end;
+
+  TTextIOFunc = function (var F: TTextRec): Integer;
+  TFileIOFunc = function (var F: TFileRec): Integer;
+
+procedure SetLineBreakStyle(var T: Text; Style: TTextLineBreakStyle);
+
+procedure ChDir(const S: string); overload;
+procedure ChDir(P: PChar); overload;
+function Flush(var t: Text): Integer;
 procedure _LGetDir(D: Byte; var S: string);
 procedure _SGetDir(D: Byte; var S: ShortString);
 function IOResult: Integer;
-procedure _MkDir(const S: string);
+procedure MkDir(const S: string); overload;
+procedure MkDir(P: PChar); overload;
 procedure Move(const Source; var Dest; Count: Integer);
 function ParamCount: Integer;
 function ParamStr(Index: Integer): string;
 procedure Randomize;
-procedure _RmDir(const S: string);
+procedure RmDir(const S: string); overload;
+procedure RmDir(P: PChar); overload;
 function UpCase(Ch: Char): Char;
 
 { Control 8087 control word }
 
 procedure Set8087CW(NewCW: Word);
+function Get8087CW: Word;
 
-{ Wide character support procedures and functions }
+{ Wide character support procedures and functions for C++ }
+{ These functions should not be used in Delphi code!
+ (conversion is implicit in Delphi code)      }
 
 function WideCharToString(Source: PWideChar): string;
 function WideCharLenToString(Source: PWideChar; SourceLen: Integer): string;
@@ -452,48 +996,141 @@ procedure WideCharLenToStrVar(Source: PWideChar; SourceLen: Integer;
 function StringToWideChar(const Source: string; Dest: PWideChar;
   DestSize: Integer): PWideChar;
 
+{ PUCS4Chars returns a pointer to the UCS4 char data in the
+  UCS4String array, or a pointer to a null char if UCS4String is empty }
+
+function PUCS4Chars(const S: UCS4String): PUCS4Char;
+
+{ Widestring <-> UCS4 conversion }
+
+function WideStringToUCS4String(const S: WideString): UCS4String;
+function UCS4StringToWideString(const S: UCS4String): WideString;
+
+{ PChar/PWideChar Unicode <-> UTF8 conversion }
+
+// UnicodeToUTF8(3):
+// UTF8ToUnicode(3):
+// Scans the source data to find the null terminator, up to MaxBytes
+// Dest must have MaxBytes available in Dest.
+// MaxDestBytes includes the null terminator (last char in the buffer will be set to null)
+// Function result includes the null terminator.
+
+function UnicodeToUtf8(Dest: PChar; Source: PWideChar; MaxBytes: Integer): Integer; overload; deprecated;
+function Utf8ToUnicode(Dest: PWideChar; Source: PChar; MaxChars: Integer): Integer; overload; deprecated;
+
+// UnicodeToUtf8(4):
+// UTF8ToUnicode(4):
+// MaxDestBytes includes the null terminator (last char in the buffer will be set to null)
+// Function result includes the null terminator.
+// Nulls in the source data are not considered terminators - SourceChars must be accurate
+
+function UnicodeToUtf8(Dest: PChar; MaxDestBytes: Cardinal; Source: PWideChar; SourceChars: Cardinal): Cardinal; overload;
+function Utf8ToUnicode(Dest: PWideChar; MaxDestChars: Cardinal; Source: PChar; SourceBytes: Cardinal): Cardinal; overload;
+
+{ WideString <-> UTF8 conversion }
+
+function UTF8Encode(const WS: WideString): UTF8String;
+function UTF8Decode(const S: UTF8String): WideString;
+
+{ Ansi <-> UTF8 conversion }
+
+function AnsiToUtf8(const S: string): UTF8String;
+function Utf8ToAnsi(const S: UTF8String): string;
+
 { OLE string support procedures and functions }
 
 function OleStrToString(Source: PWideChar): string;
 procedure OleStrToStrVar(Source: PWideChar; var Dest: string);
 function StringToOleStr(const Source: string): PWideChar;
 
+{ Variant manager support procedures and functions }
+
+procedure GetVariantManager(var VarMgr: TVariantManager);
+procedure SetVariantManager(const VarMgr: TVariantManager);
+function IsVariantManagerSet: Boolean;
+
 { Variant support procedures and functions }
 
-procedure _VarClear(var V : Variant);
-procedure _VarCopy(var Dest : Variant; const Source: Variant);
-procedure _VarCast(var Dest : Variant; const Source: Variant; VarType: Integer);
-procedure _VarCastOle(var Dest : Variant; const Source: Variant; VarType: Integer);
-procedure VarCopyNoInd(var Dest: Variant; const Source: Variant);
-function VarType(const V: Variant): Integer;
-function VarAsType(const V: Variant; VarType: Integer): Variant;
-function VarIsEmpty(const V: Variant): Boolean;
-function VarIsNull(const V: Variant): Boolean;
-function VarToStr(const V: Variant): string;
-function VarFromDateTime(DateTime: TDateTime): Variant;
-function VarToDateTime(const V: Variant): TDateTime;
+procedure _VarClear(var V: Variant);
+procedure _VarCopy(var Dest: Variant; const Source: Variant);
+procedure _VarCopyNoInd;
+procedure _VarCast(var Dest: Variant; const Source: Variant; VarType: Integer);
+procedure _VarCastOle(var Dest: Variant; const Source: Variant; VarType: Integer);
+procedure _VarClr(var V: Variant);
+
+{ Variant text streaming support }
+
+function _WriteVariant(var T: Text; const V: Variant; Width: Integer): Pointer;
+function _Write0Variant(var T: Text; const V: Variant): Pointer;
+
+{ Variant math and conversion support }
+
+function _VarToInt(const V: Variant): Integer;
+function _VarToInt64(const V: Variant): Int64;
+function _VarToBool(const V: Variant): Boolean;
+function _VarToReal(const V: Variant): Extended;
+function _VarToCurr(const V: Variant): Currency;
+procedure _VarToPStr(var S; const V: Variant);
+procedure _VarToLStr(var S: string; const V: Variant);
+procedure _VarToWStr(var S: WideString; const V: Variant);
+procedure _VarToIntf(var Unknown: IInterface; const V: Variant);
+procedure _VarToDisp(var Dispatch: IDispatch; const V: Variant);
+procedure _VarToDynArray(var DynArray: Pointer; const V: Variant; TypeInfo: Pointer);
+
+procedure _VarFromInt(var V: Variant; const Value, Range: Integer);
+procedure _VarFromInt64(var V: Variant; const Value: Int64);
+procedure _VarFromBool(var V: Variant; const Value: Boolean);
+procedure _VarFromReal; // var V: Variant; const Value: Real
+procedure _VarFromTDateTime; // var V: Variant; const Value: TDateTime
+procedure _VarFromCurr; // var V: Variant; const Value: Currency
+procedure _VarFromPStr(var V: Variant; const Value: ShortString);
+procedure _VarFromLStr(var V: Variant; const Value: string);
+procedure _VarFromWStr(var V: Variant; const Value: WideString);
+procedure _VarFromIntf(var V: Variant; const Value: IInterface);
+procedure _VarFromDisp(var V: Variant; const Value: IDispatch);
+procedure _VarFromDynArray(var V: Variant; const DynArray: Pointer; TypeInfo: Pointer);
+procedure _OleVarFromPStr(var V: OleVariant; const Value: ShortString);
+procedure _OleVarFromLStr(var V: OleVariant; const Value: string);
+procedure _OleVarFromVar(var V: OleVariant; const Value: Variant);
+procedure _OleVarFromInt(var V: OleVariant; const Value, Range: Integer);
+
+procedure _VarAdd(var Left: Variant; const Right: Variant);
+procedure _VarSub(var Left: Variant; const Right: Variant);
+procedure _VarMul(var Left: Variant; const Right: Variant);
+procedure _VarDiv(var Left: Variant; const Right: Variant);
+procedure _VarMod(var Left: Variant; const Right: Variant);
+procedure _VarAnd(var Left: Variant; const Right: Variant);
+procedure _VarOr(var Left: Variant; const Right: Variant);
+procedure _VarXor(var Left: Variant; const Right: Variant);
+procedure _VarShl(var Left: Variant; const Right: Variant);
+procedure _VarShr(var Left: Variant; const Right: Variant);
+procedure _VarRDiv(var Left: Variant; const Right: Variant);
+
+procedure _VarCmpEQ(const Left, Right: Variant); // result is set in the flags
+procedure _VarCmpNE(const Left, Right: Variant); // result is set in the flags
+procedure _VarCmpLT(const Left, Right: Variant); // result is set in the flags
+procedure _VarCmpLE(const Left, Right: Variant); // result is set in the flags
+procedure _VarCmpGT(const Left, Right: Variant); // result is set in the flags
+procedure _VarCmpGE(const Left, Right: Variant); // result is set in the flags
+
+procedure _VarNeg(var V: Variant);
+procedure _VarNot(var V: Variant);
+
+{ Variant dispatch and reference support }
+
+procedure _DispInvoke; cdecl; // Dest: PVarData; const Source: TVarData;
+                              // CallDesc: PCallDesc; Params: Pointer
+procedure _IntfDispCall; cdecl; // ARGS PLEASE!
+procedure _IntfVarCall; cdecl; // ARGS PLEASE!
+procedure _VarAddRef(var V: Variant);
 
 { Variant array support procedures and functions }
 
-function VarArrayCreate(const Bounds: array of Integer;
-  VarType: Integer): Variant;
-function VarArrayOf(const Values: array of Variant): Variant;
 procedure _VarArrayRedim(var A : Variant; HighBound: Integer);
-function VarArrayDimCount(const A: Variant): Integer;
-function VarArrayLowBound(const A: Variant; Dim: Integer): Integer;
-function VarArrayHighBound(const A: Variant; Dim: Integer): Integer;
-function VarArrayLock(const A: Variant): Pointer;
-procedure VarArrayUnlock(const A: Variant);
-function VarArrayRef(const A: Variant): Variant;
-function VarIsArray(const A: Variant): Boolean;
-
-{ Variant IDispatch call support }
-
-procedure _DispInvokeError;
-
-var
-  VarDispProc: Pointer = @_DispInvokeError;
-  DispCallByIDProc: Pointer = @_DispInvokeError;
+function _VarArrayGet(var A: Variant; IndexCount: Integer;
+  Indices: Integer): Variant; cdecl;
+procedure _VarArrayPut(var A: Variant; const Value: Variant;
+  IndexCount: Integer; Indices: Integer); cdecl;
 
 { Package/Module registration and unregistration }
 
@@ -506,6 +1143,13 @@ type
     DataInstance: LongWord;
     ResInstance: LongWord;
     Reserved: Integer;
+{$IFDEF LINUX}
+    InstanceVar: Pointer platform;
+    GOT: LongWord platform;
+    CodeSegStart: LongWord platform;
+    CodeSegEnd: LongWord platform;
+    InitTable: Pointer platform;
+{$ENDIF}
   end;
 
   TEnumModuleFunc = function (HInstance: Integer; Data: Pointer): Boolean;
@@ -532,7 +1176,7 @@ procedure UnregisterModule(LibModule: PLibModule);
 function FindHInstance(Address: Pointer): LongWord;
 function FindClassHInstance(ClassType: TClass): LongWord;
 function FindResourceHInstance(Instance: LongWord): LongWord;
-function LoadResourceModule(ModuleName: PChar): LongWord;
+function LoadResourceModule(ModuleName: PChar; CheckOwner: Boolean = True): LongWord;
 procedure EnumModules(Func: TEnumModuleFunc; Data: Pointer); overload;
 procedure EnumResourceModules(Func: TEnumModuleFunc; Data: Pointer); overload;
 procedure EnumModules(Func: TEnumModuleFuncLW; Data: Pointer); overload;
@@ -541,13 +1185,18 @@ procedure AddModuleUnloadProc(Proc: TModuleUnloadProc); overload;
 procedure RemoveModuleUnloadProc(Proc: TModuleUnloadProc); overload;
 procedure AddModuleUnloadProc(Proc: TModuleUnloadProcLW); overload;
 procedure RemoveModuleUnloadProc(Proc: TModuleUnloadProcLW); overload;
+{$IFDEF LINUX}
+{ Given an HMODULE, this function will return its fully qualified name.  There is
+  no direct equivalent in Linux so this function provides that capability. }
+function GetModuleFileName(Module: HMODULE; Buffer: PChar; BufLen: Integer): Integer;
+{$ENDIF}
 
 { ResString support function/record }
 
 type
   PResStringRec = ^TResStringRec;
   TResStringRec = packed record
-    Module: ^Longint;
+    Module: ^Cardinal;
     Identifier: Integer;
   end;
 
@@ -565,83 +1214,93 @@ procedure _TRUNC;
 
 procedure _AbstractError;
 procedure _Assert(const Message, Filename: AnsiString; LineNumber: Integer);
-procedure _Append;
-procedure _Assign(var T: Text; S: ShortString);
-procedure _BlockRead;
-procedure _BlockWrite;
-procedure _Close;
+function _Append(var t: TTextRec): Integer;
+function _Assign(var t: TTextRec; const S: String): Integer;
+function _BlockRead(var f: TFileRec; buffer: Pointer; recCnt: Longint; var recsRead: Longint): Longint;
+function  _BlockWrite(var f: TFileRec; buffer: Pointer; recCnt: Longint; var recsWritten: Longint): Longint;
+function _Close(var t: TTextRec): Integer;
 procedure _PStrCat;
 procedure _PStrNCat;
-procedure _PStrCpy;
-procedure _PStrNCpy;
-procedure _EofFile;
-procedure _EofText;
-procedure _Eoln;
-procedure _Erase;
-procedure _FilePos;
-procedure _FileSize;
-procedure _FillChar;
-procedure _FreeMem;
-procedure _GetMem;
-procedure _ReallocMem;
-procedure _Halt;
+procedure _PStrCpy(Dest: PShortString; Source: PShortString);
+procedure _PStrNCpy(Dest: PShortString; Source: PShortString; MaxLen: Byte);
+function _EofFile(var f: TFileRec): Boolean;
+function _EofText(var t: TTextRec): Boolean;
+function _Eoln(var t: TTextRec): Boolean;
+procedure _Erase(var f: TFileRec);
+function _FilePos(var f: TFileRec): Longint;
+function _FileSize(var f: TFileRec): Longint;
+procedure _FillChar(var Dest; count: Integer; Value: Char);
+function _FreeMem(P: Pointer): Integer;
+function _GetMem(Size: Integer): Pointer;
+function _ReallocMem(var P: Pointer; NewSize: Integer): Pointer;
+procedure _Halt(Code: Integer);
 procedure _Halt0;
-procedure _Mark;
+procedure Mark; deprecated;
 procedure _PStrCmp;
 procedure _AStrCmp;
 procedure _RandInt;
 procedure _RandExt;
-procedure _ReadRec;
-procedure _ReadChar;
-procedure _ReadLong;
-procedure _ReadString;
-procedure _ReadCString;
-procedure _ReadLString;
-procedure _ReadExt;
-procedure _ReadLn;
-procedure _Rename;
-procedure _Release;
-procedure _ResetText(var T: Text);
-procedure _ResetFile;
-procedure _RewritText(var T: Text);
-procedure _RewritFile;
-procedure _RunError;
+function _ReadRec(var f: TFileRec; Buffer: Pointer): Integer;
+function _ReadChar(var t: TTextRec): Char;
+function _ReadLong(var t: TTextRec): Longint;
+procedure _ReadString(var t: TTextRec; s: PShortString; maxLen: Longint);
+procedure _ReadCString(var t: TTextRec; s: PChar; maxLen: Longint);
+procedure _ReadLString(var t: TTextRec; var s: AnsiString);
+procedure _ReadWString(var t: TTextRec; var s: WideString);
+procedure _ReadWCString(var t: TTextRec; s: PWideChar; maxBytes: Longint);
+function _ReadWChar(var t: TTextRec): WideChar;
+function _ReadExt(var t: TTextRec): Extended;
+procedure _ReadLn(var t: TTextRec);
+procedure _Rename(var f: TFileRec; newName: PChar);
+procedure Release; deprecated;
+function _ResetText(var t: TTextRec): Integer;
+function _ResetFile(var f: TFileRec; recSize: Longint): Integer;
+function _RewritText(var t: TTextRec): Integer;
+function _RewritFile(var f: TFileRec; recSize: Longint): Integer;
+procedure _RunError(errorCode: Byte);
 procedure _Run0Error;
-procedure _Seek;
-procedure _SeekEof;
-procedure _SeekEoln;
-procedure _SetTextBuf;
-procedure _StrLong;
-procedure _Str0Long;
-procedure _Truncate;
-procedure _ValLong;
-procedure _WriteRec;
-procedure _WriteChar;
-procedure _Write0Char;
-procedure _WriteBool;
-procedure _Write0Bool;
-procedure _WriteLong;
-procedure _Write0Long;
-procedure _WriteString;
-procedure _Write0String;
-procedure _WriteCString;
-procedure _Write0CString;
-procedure _WriteLString;
-procedure _Write0LString;
-function _WriteVariant(var T: Text; const V: Variant; Width: Integer): Pointer;
-function _Write0Variant(var T: Text; const V: Variant): Pointer;
+procedure _Seek(var f: TFileRec; recNum: Cardinal);
+function _SeekEof(var t: TTextRec): Boolean;
+function _SeekEoln(var t: TTextRec): Boolean;
+procedure _SetTextBuf(var t: TTextRec; p: Pointer; size: Longint);
+procedure _StrLong(val, width: Longint; s: PShortString);
+procedure _Str0Long(val: Longint; s: PShortString);
+procedure _Truncate(var f: TFileRec);
+function _ValLong(const s: String; var code: Integer): Longint;
+{$IFDEF LINUX}
+procedure _UnhandledException;
+{$ENDIF}
+function _WriteRec(var f: TFileRec; buffer: Pointer): Pointer;
+function _WriteChar(var t: TTextRec; c: Char; width: Integer): Pointer;
+function _Write0Char(var t: TTextRec; c: Char): Pointer;
+function _WriteBool(var t: TTextRec; val: Boolean; width: Longint): Pointer;
+function _Write0Bool(var t: TTextRec; val: Boolean): Pointer;
+function _WriteLong(var t: TTextRec; val, width: Longint): Pointer;
+function _Write0Long(var t: TTextRec; val: Longint): Pointer;
+function _WriteString(var t: TTextRec; const s: ShortString; width: Longint): Pointer;
+function _Write0String(var t: TTextRec; const s: ShortString): Pointer;
+function _WriteCString(var t: TTextRec; s: PChar; width: Longint): Pointer;
+function _Write0CString(var t: TTextRec; s: PChar): Pointer;
+function _Write0LString(var t: TTextRec; const s: AnsiString): Pointer;
+function _WriteLString(var t: TTextRec; const s: AnsiString; width: Longint): Pointer;
+function _Write0WString(var t: TTextRec; const s: WideString): Pointer;
+function _WriteWString(var t: TTextRec; const s: WideString; width: Longint): Pointer;
+function _WriteWCString(var t: TTextRec; s: PWideChar; width: Longint): Pointer;
+function _Write0WCString(var t: TTextRec; s: PWideChar): Pointer;
+function _WriteWChar(var t: TTextRec; c: WideChar; width: Integer): Pointer;
+function _Write0WChar(var t: TTextRec; c: WideChar): Pointer;
 procedure _Write2Ext;
 procedure _Write1Ext;
 procedure _Write0Ext;
-procedure _WriteLn;
+function _WriteLn(var t: TTextRec): Pointer;
 
-procedure __CToPasStr;
-procedure __CLenToPasStr;
-procedure __ArrayToPasStr;
-procedure __PasToCStr;
+procedure __CToPasStr(Dest: PShortString; const Source: PChar);
+procedure __CLenToPasStr(Dest: PShortString; const Source: PChar; MaxLen: Integer);
+procedure __ArrayToPasStr(Dest: PShortString; const Source: PChar; Len: Integer);
+procedure __PasToCStr(const Source: PShortString; const Dest: PChar);
 
 procedure __IOTest;
-procedure _Flush(var F: Text);
+function _Flush(var t: TTextRec): Integer;
 
 procedure _SetElem;
 procedure _SetRange;
@@ -668,36 +1327,89 @@ procedure _ObjCopy;
 procedure _Fail;
 procedure _BoundErr;
 procedure _IntOver;
-procedure _StartExe;
+
+{ Module initialization context.  For internal use only. }
+
+type
+  PInitContext = ^TInitContext;
+  TInitContext = record
+    OuterContext:   PInitContext;     { saved InitContext   }
+{$IFNDEF PC_MAPPED_EXCEPTIONS}
+    ExcFrame:       Pointer;          { bottom exc handler  }
+{$ENDIF}
+    InitTable:      PackageInfo;      { unit init info      }
+    InitCount:      Integer;          { how far we got      }
+    Module:         PLibModule;       { ptr to module desc  }
+    DLLSaveEBP:     Pointer;          { saved regs for DLLs }
+    DLLSaveEBX:     Pointer;          { saved regs for DLLs }
+    DLLSaveESI:     Pointer;          { saved regs for DLLs }
+    DLLSaveEDI:     Pointer;          { saved regs for DLLs }
+{$IFDEF MSWINDOWS}
+    ExitProcessTLS: procedure;        { Shutdown for TLS    }
+{$ENDIF}
+    DLLInitState:   Byte;             { 0 = package, 1 = DLL shutdown, 2 = DLL startup }
+  end platform;
+
+type
+  TDLLProc = procedure (Reason: Integer);
+  // TDLLProcEx provides the reserved param returned by WinNT
+  TDLLProcEx = procedure (Reason: Integer; Reserved: Integer);
+
+{$IFDEF LINUX}
+procedure _StartExe(InitTable: PackageInfo; Module: PLibModule; Argc: Integer; Argv: Pointer);
+procedure _StartLib(Context: PInitContext; Module: PLibModule; DLLProc: TDLLProcEx);
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+procedure _StartExe(InitTable: PackageInfo; Module: PLibModule);
 procedure _StartLib;
-procedure _PackageLoad  (const Table : PackageInfo);
-procedure _PackageUnload(const Table : PackageInfo);
+{$ENDIF}
+procedure _PackageLoad(const Table : PackageInfo; Module: PLibModule);
+procedure _PackageUnload(const Table : PackageInfo; Module: PLibModule);
 procedure _InitResStrings;
 procedure _InitResStringImports;
 procedure _InitImports;
+{$IFDEF MSWINDOWS}
 procedure _InitWideStrings;
+{$ENDIF}
 
-procedure _ClassCreate;
-procedure _ClassDestroy;
-procedure _AfterConstruction;
-procedure _BeforeDestruction;
-procedure _IsClass;
-procedure _AsClass;
+function _ClassCreate(AClass: TClass; Alloc: Boolean): TObject;
+procedure _ClassDestroy(Instance: TObject);
+function _AfterConstruction(Instance: TObject): TObject;
+function _BeforeDestruction(Instance: TObject; OuterMost: ShortInt): TObject;
+function _IsClass(Child: TObject; Parent: TClass): Boolean;
+function _AsClass(Child: TObject; Parent: TClass): TObject;
 
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+procedure _RaiseAtExcept;
+//procedure _DestroyException(Exc: PRaisedException);
+procedure _DestroyException;
+{$ENDIF}
 procedure _RaiseExcept;
 procedure _RaiseAgain;
 procedure _DoneExcept;
+{$IFNDEF PC_MAPPED_EXCEPTIONS}
 procedure _TryFinallyExit;
+{$ENDIF}
+procedure _HandleAnyException;
+procedure _HandleFinally;
+procedure _HandleOnException;
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+procedure _HandleOnExceptionPIC;
+{$ENDIF}
+procedure _HandleAutoException;
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+procedure _ClassHandleException;
+{$ENDIF}
 
 procedure _CallDynaInst;
 procedure _CallDynaClass;
 procedure _FindDynaInst;
 procedure _FindDynaClass;
 
-procedure _LStrClr(var S: AnsiString);
-procedure _LStrArrayClr{var str: AnsiString; cnt: longint};
-procedure _LStrAsg{var dest: AnsiString; source: AnsiString};
-procedure _LStrLAsg{var dest: AnsiString; source: AnsiString};
+procedure _LStrClr(var S);
+procedure _LStrArrayClr(var StrArray; cnt: longint);
+procedure _LStrAsg(var dest; const source);
+procedure _LStrLAsg(var dest; const source);
 procedure _LStrFromPCharLen(var Dest: AnsiString; Source: PAnsiChar; Length: Integer);
 procedure _LStrFromPWCharLen(var Dest: AnsiString; Source: PWideChar; Length: Integer);
 procedure _LStrFromChar(var Dest: AnsiString; Source: AnsiChar);
@@ -709,22 +1421,25 @@ procedure _LStrFromArray(var Dest: AnsiString; Source: PAnsiChar; Length: Intege
 procedure _LStrFromWArray(var Dest: AnsiString; Source: PWideChar; Length: Integer);
 procedure _LStrFromWStr(var Dest: AnsiString; const Source: WideString);
 procedure _LStrToString{(var Dest: ShortString; const Source: AnsiString; MaxLen: Integer)};
-function _LStrLen{str: AnsiString}: Longint;
+function _LStrLen(const s: AnsiString): Longint;
 procedure _LStrCat{var dest: AnsiString; source: AnsiString};
 procedure _LStrCat3{var dest:AnsiString; source1: AnsiString; source2: AnsiString};
 procedure _LStrCatN{var dest:AnsiString; argCnt: Integer; ...};
 procedure _LStrCmp{left: AnsiString; right: AnsiString};
-procedure _LStrAddRef{str: AnsiString};
-procedure _LStrToPChar{str: AnsiString): PChar};
+function _LStrAddRef(var str): Pointer;
+function _LStrToPChar(const s: AnsiString): PChar;
 procedure _Copy{ s : ShortString; index, count : Integer ) : ShortString};
 procedure _Delete{ var s : openstring; index, count : Integer };
 procedure _Insert{ source : ShortString; var s : openstring; index : Integer };
 procedure _Pos{ substr : ShortString; s : ShortString ) : Integer};
-procedure _SetLength{var s: ShortString; newLength: Integer};
-procedure _SetString{var s: ShortString: buffer: PChar; len: Integer};
+procedure _SetLength(s: PShortString; newLength: Byte);
+procedure _SetString(s: PShortString; buffer: PChar; len: Byte);
 
-procedure UniqueString(var str: string);
-procedure _NewAnsiString{length: Longint};      { for debugger purposes only }
+procedure UniqueString(var str: AnsiString); overload;
+procedure UniqueString(var str: WideString); overload;
+procedure _UniqueStringA(var str: AnsiString);
+procedure _UniqueStringW(var str: WideString);
+
 
 procedure _LStrCopy  { const s : AnsiString; index, count : Integer) : AnsiString};
 procedure _LStrDelete{ var s : AnsiString; index, count : Integer };
@@ -732,12 +1447,17 @@ procedure _LStrInsert{ const source : AnsiString; var s : AnsiString; index : In
 procedure _LStrPos{ const substr : AnsiString; const s : AnsiString ) : Integer};
 procedure _LStrSetLength{ var str: AnsiString; newLength: Integer};
 procedure _LStrOfChar{ c: Char; count: Integer): AnsiString };
+function _NewAnsiString(length: Longint): Pointer;      { for debugger purposes only }
+function _NewWideString(CharLength: Longint): Pointer;
 
-procedure _WStrClr(var S: WideString);
+procedure _WStrClr(var S);
 procedure _WStrArrayClr(var StrArray; Count: Integer);
 procedure _WStrAsg(var Dest: WideString; const Source: WideString);
+procedure _WStrLAsg(var Dest: WideString; const Source: WideString);
+function _WStrToPWChar(const S: WideString): PWideChar;
+function _WStrLen(const S: WideString): Integer;
 procedure _WStrFromPCharLen(var Dest: WideString; Source: PAnsiChar; Length: Integer);
-procedure _WStrFromPWCharLen(var Dest: WideString; Source: PWideChar; Length: Integer);
+procedure _WStrFromPWCharLen(var Dest: WideString; Source: PWideChar; CharLength: Integer);
 procedure _WStrFromChar(var Dest: WideString; Source: AnsiChar);
 procedure _WStrFromWChar(var Dest: WideString; Source: WideChar);
 procedure _WStrFromPChar(var Dest: WideString; Source: PAnsiChar);
@@ -747,27 +1467,24 @@ procedure _WStrFromArray(var Dest: WideString; Source: PAnsiChar; Length: Intege
 procedure _WStrFromWArray(var Dest: WideString; Source: PWideChar; Length: Integer);
 procedure _WStrFromLStr(var Dest: WideString; const Source: AnsiString);
 procedure _WStrToString(Dest: PShortString; const Source: WideString; MaxLen: Integer);
-function _WStrToPWChar(const S: WideString): PWideChar;
-function _WStrLen(const S: WideString): Integer;
 procedure _WStrCat(var Dest: WideString; const Source: WideString);
 procedure _WStrCat3(var Dest: WideString; const Source1, Source2: WideString);
 procedure _WStrCatN{var dest:WideString; argCnt: Integer; ...};
 procedure _WStrCmp{left: WideString; right: WideString};
-function _NewWideString(Length: Integer): PWideChar;
 function _WStrCopy(const S: WideString; Index, Count: Integer): WideString;
 procedure _WStrDelete(var S: WideString; Index, Count: Integer);
 procedure _WStrInsert(const Source: WideString; var Dest: WideString; Index: Integer);
 procedure _WStrPos{ const substr : WideString; const s : WideString ) : Integer};
 procedure _WStrSetLength(var S: WideString; NewLength: Integer);
 function _WStrOfWChar(Ch: WideChar; Count: Integer): WideString;
-procedure _WStrAddRef{var str: WideString};
+function _WStrAddRef(var str: WideString): Pointer;
 
-procedure _Initialize;
-procedure _InitializeArray;
-procedure _InitializeRecord;
-procedure _Finalize;
-procedure _FinalizeArray;
-procedure _FinalizeRecord;
+procedure _Initialize(p: Pointer; typeInfo: Pointer);
+procedure _InitializeArray(p: Pointer; typeInfo: Pointer; elemCount: Cardinal);
+procedure _InitializeRecord(p: Pointer; typeInfo: Pointer);
+procedure _Finalize(p: Pointer; typeInfo: Pointer);
+procedure _FinalizeArray(p: Pointer; typeInfo: Pointer; elemCount: Cardinal);
+procedure _FinalizeRecord(P: Pointer; typeInfo: Pointer);
 procedure _AddRef;
 procedure _AddRefArray;
 procedure _AddRefRecord;
@@ -775,61 +1492,10 @@ procedure _CopyArray;
 procedure _CopyRecord;
 procedure _CopyObject;
 
-procedure _New;
-procedure _Dispose;
-
-procedure _DispInvoke; cdecl;
-procedure _IntfDispCall; cdecl;
-procedure _IntfVarCall; cdecl;
-
-procedure _VarToInt;
-procedure _VarToBool;
-procedure _VarToReal;
-procedure _VarToCurr;
-procedure _VarToPStr(var S; const V: Variant);
-procedure _VarToLStr(var S: string; const V: Variant);
-procedure _VarToWStr(var S: WideString; const V: Variant);
-procedure _VarToIntf(var Unknown: IUnknown; const V: Variant);
-procedure _VarToDisp(var Dispatch: IDispatch; const V: Variant);
-procedure _VarToDynArray(var DynArray: Pointer; const V: Variant; TypeInfo: Pointer);
-
-procedure _VarFromInt;
-procedure _VarFromBool;
-procedure _VarFromReal;
-procedure _VarFromTDateTime;
-procedure _VarFromCurr;
-procedure _VarFromPStr(var V: Variant; const Value: ShortString);
-procedure _VarFromLStr(var V: Variant; const Value: string);
-procedure _VarFromWStr(var V: Variant; const Value: WideString);
-procedure _VarFromIntf(var V: Variant; const Value: IUnknown);
-procedure _VarFromDisp(var V: Variant; const Value: IDispatch);
-procedure _VarFromDynArray(var V: Variant; const DynArray: Pointer; TypeInfo: Pointer);
-procedure _OleVarFromPStr(var V: OleVariant; const Value: ShortString);
-procedure _OleVarFromLStr(var V: OleVariant; const Value: string);
-procedure _OleVarFromVar(var V: OleVariant; const Value: Variant);
-
-procedure _VarAdd;
-procedure _VarSub;
-procedure _VarMul;
-procedure _VarDiv;
-procedure _VarMod;
-procedure _VarAnd;
-procedure _VarOr;
-procedure _VarXor;
-procedure _VarShl;
-procedure _VarShr;
-procedure _VarRDiv;
-procedure _VarCmp;
-
-procedure _VarNeg;
-procedure _VarNot;
-
-procedure _VarCopyNoInd;
-procedure _VarClr;
-procedure _VarAddRef;
+function _New(size: Longint; typeInfo: Pointer): Pointer;
+procedure _Dispose(p: Pointer; typeInfo: Pointer);
 
 { 64-bit Integer helper routines }
-
 procedure __llmul;
 procedure __lldiv;
 procedure __lludiv;
@@ -857,41 +1523,113 @@ procedure _DynArrayCopy(a: Pointer; typeInfo: Pointer; var Result: Pointer);
 procedure _DynArrayCopyRange(a: Pointer; typeInfo: Pointer; index, count : Integer; var Result: Pointer);
 procedure _DynArrayAsg;
 procedure _DynArrayAddRef;
-procedure  DynArrayToVariant(var V: Variant; const DynArray: Pointer; TypeInfo: Pointer);
-procedure  DynArrayFromVariant(var DynArray: Pointer; const V: Variant; TypeInfo: Pointer);
 
-procedure _IntfClear(var Dest: IUnknown);
-procedure _IntfCopy(var Dest: IUnknown; const Source: IUnknown);
-procedure _IntfCast(var Dest: IUnknown; const Source: IUnknown; const IID: TGUID);
-procedure _IntfAddRef(const Dest: IUnknown);
+procedure DynArrayClear(var a: Pointer; typeInfo: Pointer);
+procedure DynArraySetLength(var a: Pointer; typeInfo: Pointer; dimCnt: Longint; lengthVec: PLongint);
+function DynArrayDim(typeInfo: PDynArrayTypeInfo): Integer;
+{$NODEFINE DynArrayDim}
 
-function _VarArrayGet(var A: Variant; IndexCount: Integer;
-  Indices: Integer): Variant; cdecl;
-procedure _VarArrayPut(var A: Variant; const Value: Variant;
-  IndexCount: Integer; Indices: Integer); cdecl;
+function _IntfClear(var Dest: IInterface): Pointer;
+procedure _IntfCopy(var Dest: IInterface; const Source: IInterface);
+procedure _IntfCast(var Dest: IInterface; const Source: IInterface; const IID: TGUID);
+procedure _IntfAddRef(const Dest: IInterface);
 
-procedure _HandleAnyException;
-procedure _HandleOnException;
-procedure _HandleFinally;
-procedure _HandleAutoException;
-
+{$IFDEF MSWINDOWS}
 procedure _FSafeDivide;
 procedure _FSafeDivideR;
+{$ENDIF}
 
-procedure _CheckAutoResult;
+function _CheckAutoResult(ResultCode: HResult): HResult;
 
 procedure FPower10;
 
-procedure TextStart;
+procedure TextStart; deprecated;
 
-function  CompToDouble(acomp: Comp): Double; cdecl;
-procedure DoubleToComp(adouble: Double; var result: Comp); cdecl;
-function  CompToCurrency(acomp: Comp): Currency; cdecl;
-procedure CurrencyToComp(acurrency: Currency; var result: Comp); cdecl;
+// Conversion utility routines for C++ convenience.  Not for Delphi code.
+function  CompToDouble(Value: Comp): Double; cdecl;
+procedure DoubleToComp(Value: Double; var Result: Comp); cdecl;
+function  CompToCurrency(Value: Comp): Currency; cdecl;
+procedure CurrencyToComp(Value: Currency; var Result: Comp); cdecl;
 
 function GetMemory(Size: Integer): Pointer; cdecl;
 function FreeMemory(P: Pointer): Integer; cdecl;
 function ReallocMemory(P: Pointer; Size: Integer): Pointer; cdecl;
+
+{ Internal runtime error codes }
+
+type
+  TRuntimeError = (reNone, reOutOfMemory, reInvalidPtr, reDivByZero,
+  reRangeError, reIntOverflow, reInvalidOp, reZeroDivide, reOverflow,
+  reUnderflow, reInvalidCast, reAccessViolation, rePrivInstruction,
+  reControlBreak, reStackOverflow,
+  { reVar* used in Variants.pas }
+  reVarTypeCast, reVarInvalidOp,
+  reVarDispatch, reVarArrayCreate, reVarNotArray, reVarArrayBounds,
+  reAssertionFailed,
+  reExternalException, { not used here; in SysUtils }
+  reIntfCastError, reSafeCallError);
+{$NODEFINE TRuntimeError}
+
+procedure Error(errorCode: TRuntimeError);
+{$NODEFINE Error}
+
+{ GetLastError returns the last error reported by an OS API call.  Calling
+  this function usually resets the OS error state.
+}
+
+function GetLastError: Integer; {$IFDEF MSWINDOWS} stdcall; {$ENDIF}
+{$EXTERNALSYM GetLastError}
+
+{ SetLastError writes to the thread local storage area read by GetLastError. }
+
+procedure SetLastError(ErrorCode: Integer); {$IFDEF MSWINDOWS} stdcall; {$ENDIF}
+
+{$IFDEF LINUX}
+{  To improve performance, some RTL routines cache module handles and data
+   derived from modules.  If an application dynamically loads and unloads
+   shared object libraries, packages, or resource packages, it is possible for
+   the handle of the newly loaded module to match the handle of a recently
+   unloaded module.  The resource caches have no way to detect when this happens.
+
+   To address this issue, the RTL maintains an internal counter that is
+   incremented every time a module is loaded or unloaded using RTL functions
+   (like LoadPackage).  This provides a cache version level signature that
+   can detect when modules have been cycled but have the same handle.
+
+   If you load or unload modules "by hand" using dlopen or dlclose, you must call
+   InvalidateModuleCache after each load or unload so that the RTL module handle
+   caches will refresh themselves properly the next time they are used.  This is
+   especially important if you manually tinker with the LibModuleList list of
+   loaded modules, or manually add or remove resource modules in the nodes
+   of that list.
+
+   ModuleCacheID returns the "current generation" or version number kept by
+   the RTL.  You can use this to implement your own refresh-on-next-use
+   (passive) module handle caches as the RTL does.  The value changes each
+   time InvalidateModuleCache is called.
+}
+
+function ModuleCacheID: Cardinal;
+procedure InvalidateModuleCache;
+{$ENDIF}
+
+{$IFDEF LINUX}
+{  When a process that is being debugged is stopped while it has the mouse
+   pointer grabbed, there is no way for the debugger to release the grab on
+   behalf of the process. The process needs to do it itself. To accomplish this,
+   the debugger causes DbgUnlockX to execute whenever it detects the process
+   might have the mouse grabbed. This method will call through DbgUnlockXProc
+   which should be assigned by any library using X and locks the X pointer. This
+   method should be chained, by storing of the previous instance and calling it
+   when you are called, since there might be more than one display that needs
+   to be unlocked. This method should call XUngrabPointer on the display that
+   has the pointer grabbed.
+}
+var
+  DbgUnlockXProc: procedure;
+
+procedure DbgUnlockX;
+{$ENDIF}
 
 (* =================================================================== *)
 
@@ -900,53 +1638,467 @@ implementation
 uses
   SysInit;
 
-{ Internal runtime error codes }
-
-const
-  reOutOfMemory       = 1;
-  reInvalidPtr        = 2;
-  reDivByZero         = 3;
-  reRangeError        = 4;
-  reIntOverflow       = 5;
-  reInvalidOp         = 6;
-  reZeroDivide        = 7;
-  reOverflow          = 8;
-  reUnderflow         = 9;
-  reInvalidCast       = 10;
-  reAccessViolation   = 11;
-  reStackOverflow     = 12;
-  reControlBreak      = 13;
-  rePrivInstruction   = 14;
-  reVarTypeCast       = 15;
-  reVarInvalidOp      = 16;
-  reVarDispatch       = 17;
-  reVarArrayCreate    = 18;
-  reVarNotArray       = 19;
-  reVarArrayBounds    = 20;
-  reAssertionFailed   = 21;
-  reExternalException = 22;     { not used here; in SysUtils }
-  reIntfCastError     = 23;
-  reSafeCallError     = 24;
-
-{ this procedure should be at the very beginning of the }
-{ text segment. it is only used by _RunError to find    }
-{ start address of the text segment so a nice error     }
-{ location can be shown.                                                                }
+{ This procedure should be at the very beginning of the }
+{ text segment. It used to be used by _RunError to find    }
+{ start address of the text segment, but is not used anymore.  }
 
 procedure TextStart;
 begin
 end;
 
-{ ----------------------------------------------------- }
-{       NT Calls necessary for the .asm files           }
-{ ----------------------------------------------------- }
+{$IFDEF PIC}
+function GetGOT: LongWord; export;
+begin
+  asm
+  MOV Result,EBX
+  end;
+end;
+{$ENDIF}
 
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+const
+  UNWINDFI_TOPOFSTACK =   $BE00EF00;
+
+const
+{$IFDEF MSWINDOWS}
+  unwind = 'unwind.dll';
+
+type
+  UNWINDPROC  = Pointer;
+function UnwindRegisterIPLookup(fn: UNWINDPROC; StartAddr, EndAddr: LongInt; Context: Pointer; GOT: LongInt): LongBool; cdecl;
+  external unwind name '__BorUnwind_RegisterIPLookup';
+
+function UnwindDelphiLookup(Addr: LongInt; Context: Pointer): UNWINDPROC; cdecl;
+  external unwind name '__BorUnwind_DelphiLookup';
+
+function UnwindRaiseException(Exc: Pointer): LongBool; cdecl;
+  external unwind name '__BorUnwind_RaiseException';
+
+function UnwindClosestHandler(Context: Pointer): LongWord; cdecl;
+  external unwind name '__BorUnwind_ClosestDelphiHandler';
+{$ENDIF}
+{$IFDEF LINUX}
+  unwind = 'libborunwind.so.6';
+type
+  UNWINDPROC  = Pointer;
+
+{$DEFINE STATIC_UNWIND}
+
+{$IFDEF STATIC_UNWIND}
+function _BorUnwind_RegisterIPLookup(fn: UNWINDPROC; StartAddr, EndAddr: LongInt; Context: Pointer; GOT: LongInt): LongBool; cdecl;
+  external;
+
+procedure _BorUnwind_UnregisterIPLookup(StartAddr: LongInt); cdecl;  external;
+
+function _BorUnwind_DelphiLookup(Addr: LongInt; Context: Pointer): UNWINDPROC; cdecl;  external;
+
+function _BorUnwind_RaiseException(Exc: Pointer): LongBool; cdecl;  external;
+
+//function _BorUnwind_AddressIsInPCMap(Addr: LongInt): LongBool; cdecl; external;
+function _BorUnwind_ClosestDelphiHandler(Context: Pointer): LongWord; cdecl; external;
+{$ELSE}
+
+function _BorUnwind_RegisterIPLookup(fn: UNWINDPROC; StartAddr, EndAddr: LongInt; Context: Pointer; GOT: LongInt): LongBool; cdecl;
+  external unwind name '_BorUnwind_RegisterIPLookup';
+
+procedure _BorUnwind_UnregisterIPLookup(StartAddr: LongInt); cdecl;
+  external unwind name '_BorUnwind_UnregisterIPLookup';
+
+function _BorUnwind_DelphiLookup(Addr: LongInt; Context: Pointer): UNWINDPROC; cdecl;
+  external unwind name '_BorUnwind_DelphiLookup';
+
+function _BorUnwind_RaiseException(Exc: Pointer): LongBool; cdecl;
+  external unwind name '_BorUnwind_RaiseException';
+
+function _BorUnwind_ClosestDelphiHandler(Context: Pointer): LongWord; cdecl;
+  external unwind name '_BorUnwind_ClosestDelphiHandler';
+{$ENDIF}
+{$ENDIF}
+{$ENDIF}
+
+const { copied from xx.h }
+  cContinuable        = 0;
+  cNonContinuable     = 1;
+  cUnwinding          = 2;
+  cUnwindingForExit   = 4;
+  cUnwindInProgress   = cUnwinding or cUnwindingForExit;
+  cDelphiException    = $0EEDFADE;
+  cDelphiReRaise      = $0EEDFADF;
+  cDelphiExcept       = $0EEDFAE0;
+  cDelphiFinally      = $0EEDFAE1;
+  cDelphiTerminate    = $0EEDFAE2;
+  cDelphiUnhandled    = $0EEDFAE3;
+  cNonDelphiException = $0EEDFAE4;
+  cDelphiExitFinally  = $0EEDFAE5;
+  cCppException       = $0EEFFACE; { used by BCB }
+  EXCEPTION_CONTINUE_SEARCH    = 0;
+  EXCEPTION_EXECUTE_HANDLER    = 1;
+  EXCEPTION_CONTINUE_EXECUTION = -1;
+
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+const
+  excIsBeingHandled     = $00000001;
+  excIsBeingReRaised    = $00000002;
+{$ENDIF}
+
+type
+  JmpInstruction =
+  packed record
+    opCode:   Byte;
+    distance: Longint;
+  end;
+  TExcDescEntry =
+  record
+    vTable:  Pointer;
+    handler: Pointer;
+  end;
+  PExcDesc = ^TExcDesc;
+  TExcDesc =
+  packed record
+{$IFNDEF PC_MAPPED_EXCEPTIONS}
+    jmp: JmpInstruction;
+{$ENDIF}
+    case Integer of
+    0:      (instructions: array [0..0] of Byte);
+    1{...}: (cnt: Integer; excTab: array [0..0{cnt-1}] of TExcDescEntry);
+  end;
+
+{$IFNDEF PC_MAPPED_EXCEPTIONS}
+  PExcFrame = ^TExcFrame;
+  TExcFrame = record
+    next: PExcFrame;
+    desc: PExcDesc;
+    hEBP: Pointer;
+    case Integer of
+    0:  ( );
+    1:  ( ConstructedObject: Pointer );
+    2:  ( SelfOfMethod: Pointer );
+  end;
+
+  PExceptionRecord = ^TExceptionRecord;
+  TExceptionRecord =
+  record
+    ExceptionCode        : LongWord;
+    ExceptionFlags       : LongWord;
+    OuterException       : PExceptionRecord;
+    ExceptionAddress     : Pointer;
+    NumberParameters     : Longint;
+    case {IsOsException:} Boolean of
+    True:  (ExceptionInformation : array [0..14] of Longint);
+    False: (ExceptAddr: Pointer; ExceptObject: Pointer);
+  end;
+{$ENDIF}
+
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+  PRaisedException = ^TRaisedException;
+  TRaisedException = packed record
+    RefCount: Integer;
+    ExceptObject: TObject;
+    ExceptionAddr: Pointer;
+    HandlerEBP: LongWord;
+    Flags: LongWord;
+  end;
+{$ELSE}
+  PRaiseFrame = ^TRaiseFrame;
+  TRaiseFrame = packed record
+    NextRaise: PRaiseFrame;
+    ExceptAddr: Pointer;
+    ExceptObject: TObject;
+    ExceptionRecord: PExceptionRecord;
+  end;
+{$ENDIF}
+
+const
+  cCR = $0D;
+  cLF = $0A;
+  cEOF = $1A;
+
+{$IFDEF LINUX}
+const
+  libc = 'libc.so.6';
+  libdl = 'libdl.so.2';
+  libpthread = 'libpthread.so.0';
+
+  O_RDONLY     = $0000;
+  O_WRONLY     = $0001;
+  O_RDWR       = $0002;
+  O_CREAT      = $0040;
+  O_EXCL       = $0080;
+  O_NOCTTY     = $0100;
+  O_TRUNC      = $0200;
+  O_APPEND     = $0400;
+
+  // protection flags
+  S_IREAD       = $0100;    // Read by owner.
+  S_IWRITE      = $0080;    // Write by owner.
+  S_IEXEC       = $0040;    // Execute by owner.
+  S_IRUSR       = S_IREAD;
+  S_IWUSR       = S_IWRITE;
+  S_IXUSR       = S_IEXEC;
+  S_IRWXU       = S_IRUSR or S_IWUSR or S_IXUSR;
+
+  S_IRGRP       = S_IRUSR shr 3; // Read by group.
+  S_IWGRP       = S_IWUSR shr 3; // Write by group.
+  S_IXGRP       = S_IXUSR shr 3; // Execute by group.
+  S_IRWXG       = S_IRWXU shr 3; // Read, write, and execute by group.
+
+  S_IROTH       = S_IRGRP shr 3; // Read by others.
+  S_IWOTH       = S_IWGRP shr 3; // Write by others.
+  S_IXOTH       = S_IXGRP shr 3; // Execute by others.
+  S_IRWXO       = S_IRWXG shr 3; // Read, write, and execute by others.
+
+  STDIN_FILENO         = 0;
+  STDOUT_FILENO        = 1;
+  STDERR_FILENO        = 2;
+
+  SEEK_SET      = 0;
+  SEEK_CUR      = 1;
+  SEEK_END      = 2;
+
+  LC_CTYPE    = 0;
+  _NL_CTYPE_CODESET_NAME = LC_CTYPE shl 16 + 14;
+
+  MAX_PATH      = 4095;
+
+
+function __open(PathName: PChar; Flags: Integer; Mode: Integer): Integer; cdecl;
+  external libc name 'open';
+
+function __close(Handle: Integer): Integer; cdecl;
+  external libc name 'close';
+
+function __read(Handle: Integer; Buffer: Pointer; Count: Cardinal): Cardinal; cdecl;
+  external libc name 'read';
+
+function __write(Handle: Integer; Buffer: Pointer; Count: Cardinal): Cardinal; cdecl;
+  external libc name 'write';
+
+function __mkdir(PathName: PChar; Mode: Integer): Integer; cdecl;
+  external libc name 'mkdir';
+
+function __getcwd(Buffer: PChar; BufSize: Integer): PChar; cdecl;
+  external libc name 'getcwd';
+
+function __getenv(Name: PChar): PChar; cdecl;
+  external libc name 'getenv';
+
+function __chdir(PathName: PChar): Integer; cdecl;
+  external libc name 'chdir';
+
+function __rmdir(PathName: PChar): Integer; cdecl;
+  external libc name 'rmdir';
+
+function __remove(PathName: PChar): Integer; cdecl;
+  external libc name 'remove';
+
+function __rename(OldPath, NewPath: PChar): Integer; cdecl;
+  external libc name 'rename';
+
+{$IFDEF EFENCE}
+function __malloc(Size: Integer): Pointer; cdecl;
+  external 'libefence.so' name 'malloc';
+
+procedure __free(P: Pointer); cdecl;
+  external 'libefence.so' name 'free';
+
+function __realloc(P: Pointer; Size: Integer): Pointer; cdecl;
+  external 'libefence.so' name 'realloc';
+{$ELSE}
+function __malloc(Size: Integer): Pointer; cdecl;
+  external libc name 'malloc';
+
+procedure __free(P: Pointer); cdecl;
+  external libc name 'free';
+
+function __realloc(P: Pointer; Size: Integer): Pointer; cdecl;
+  external libc name 'realloc';
+{$ENDIF}
+
+procedure ExitProcess(status: Integer); cdecl;
+  external libc name 'exit';
+
+function _time(P: Pointer): Integer; cdecl;
+  external libc name 'time';
+
+function _lseek(Handle, Offset, Direction: Integer): Integer; cdecl;
+  external libc name 'lseek';
+
+function _ftruncate(Handle: Integer; Filesize: Integer): Integer; cdecl;
+  external libc name 'ftruncate';
+
+function strcasecmp(s1, s2: PChar): Integer; cdecl;
+  external libc name 'strcasecmp';
+
+function __errno_location: PInteger; cdecl;
+  external libc name '__errno_location';
+
+function nl_langinfo(item: integer): pchar; cdecl;
+  external libc name 'nl_langinfo';
+
+function iconv_open(ToCode: PChar; FromCode: PChar): Integer; cdecl;
+  external libc name 'iconv_open';
+
+function iconv(cd: Integer; var InBuf; var InBytesLeft: Integer; var OutBuf; var OutBytesLeft: Integer): Integer; cdecl;
+  external libc name 'iconv';
+
+function iconv_close(cd: Integer): Integer; cdecl;
+  external libc name 'iconv_close';
+
+function mblen(const S: PChar; N: LongWord): Integer; cdecl;
+  external libc name 'mblen';
+
+function mmap(start: Pointer; length: Cardinal; prot, flags, fd, offset: Integer): Pointer; cdecl;
+  external libc name 'mmap';
+
+function munmap(start: Pointer; length: Cardinal): Integer; cdecl;
+  external libc name 'munmap';
+
+const
+  SIGABRT = 6;
+
+function __raise(SigNum: Integer): Integer; cdecl;
+  external libc name 'raise';
+
+type
+  TStatStruct = record
+    st_dev: Int64;          // device
+    __pad1: Word;
+    st_ino: Cardinal;       // inode
+    st_mode: Cardinal;      // protection
+    st_nlink: Cardinal;     //  number of hard links
+    st_uid: Cardinal;       // user ID of owner
+    st_gid: Cardinal;       // group ID of owner
+    st_rdev: Int64;         // device type (if inode device)
+    __pad2: Word;
+    st_size: Cardinal;      // total size, in bytes
+    st_blksize: Cardinal;   // blocksize for filesystem I/O
+    st_blocks: Cardinal;    // number of blocks allocated
+    st_atime: Integer;      // time of last access
+    __unused1: Cardinal;
+    st_mtime: Integer;      // time of last modification
+    __unused2: Cardinal;
+    st_ctime: Integer;      // time of last change
+    __unused3: Cardinal;
+    __unused4: Cardinal;
+    __unused5: Cardinal;
+  end;
+
+const
+  STAT_VER_LINUX = 3;
+
+function _fxstat(Version: Integer; Handle: Integer; var Stat: TStatStruct): Integer; cdecl;
+  external libc name '__fxstat';
+
+function __xstat(Ver: Integer; FileName: PChar; var StatBuffer: TStatStruct): Integer; cdecl;
+  external libc name '__xstat';
+  
+function _strlen(P: PChar): Integer; cdecl;
+  external libc name 'strlen';
+
+function _readlink(PathName: PChar; Buf: PChar; Len: Integer): Integer; cdecl;
+  external libc name 'readlink';
+
+type
+  TDLInfo = record
+    FileName: PChar;
+    BaseAddress: Pointer;
+    NearestSymbolName: PChar;
+    SymbolAddress: Pointer;
+  end;
+
+const
+  RTLD_LAZY = 1;
+  RTLD_NOW  = 2;
+
+function dladdr(Address: Pointer; var Info: TDLInfo): Integer; cdecl;
+  external libdl name 'dladdr';
+function dlopen(Filename: PChar; Flag: Integer): LongWord; cdecl;
+  external libdl name 'dlopen';
+function dlclose(Handle: LongWord): Integer; cdecl;
+  external libdl name 'dlclose';
+function FreeLibrary(Handle: LongWord): Integer; cdecl;
+  external libdl name 'dlclose';
+function dlsym(Handle: LongWord; Symbol: PChar): Pointer; cdecl;
+  external libdl name 'dlsym';
+function dlerror: PChar; cdecl;
+  external libdl name 'dlerror';
+
+type
+  TPthread_fastlock = record
+    __status: LongInt;
+    __spinlock: Integer;
+  end;
+
+  TRTLCriticalSection = record
+    __m_reserved,
+    __m_count:  Integer;
+    __m_owner:  Pointer;
+    __m_kind: Integer; // __m_kind := 0 fastlock, __m_kind := 1 recursive lock
+    __m_lock: TPthread_fastlock;
+  end;
+
+function _pthread_mutex_lock(var Mutex: TRTLCriticalSection): Integer; cdecl;
+  external libpthread name 'pthread_mutex_lock';
+function _pthread_mutex_unlock(var Mutex: TRTLCriticalSection): Integer; cdecl;
+  external libpthread name 'pthread_mutex_unlock';
+function _pthread_create(var ThreadID: Cardinal; Attr: PThreadAttr;
+  TFunc: TThreadFunc; Arg: Pointer): Integer; cdecl;
+  external libpthread name 'pthread_create';
+function _pthread_exit(var RetVal: Integer): Integer; cdecl;
+  external libpthread name 'pthread_exit';
+function GetCurrentThreadID: LongWord; cdecl;
+  external libpthread name 'pthread_self';
+function _pthread_detach(ThreadID: Cardinal): Integer; cdecl;
+  external libpthread name 'pthread_detach'
+
+function GetLastError: Integer;
+begin
+  Result := __errno_location^;
+end;
+
+procedure SetLastError(ErrorCode: Integer);
+begin
+  __errno_location^ := ErrorCode;
+end;
+
+function InterlockedIncrement(var I: Integer): Integer;
+asm
+      MOV   EDX,1
+      XCHG  EAX,EDX
+ LOCK XADD  [EDX],EAX
+      INC   EAX
+end;
+
+function InterlockedDecrement(var I: Integer): Integer;
+asm
+      MOV   EDX,-1
+      XCHG  EAX,EDX
+ LOCK XADD  [EDX],EAX
+      DEC   EAX
+end;
+
+var
+  ModuleCacheVersion: Cardinal = 0;
+
+function ModuleCacheID: Cardinal;
+begin
+  Result := ModuleCacheVersion;
+end;
+
+procedure InvalidateModuleCache;
+begin
+  InterlockedIncrement(Integer(ModuleCacheVersion));
+end;
+
+{$ENDIF}
+
+{$IFDEF MSWINDOWS}
 type
   PMemInfo = ^TMemInfo;
   TMemInfo = packed record
-    BaseAddress: Pointer;
-    AllocationBase: Pointer;
-    AllocationProtect: Longint;
+  BaseAddress: Pointer;
+  AllocationBase: Pointer;
+  AllocationProtect: Longint;
     RegionSize: Longint;
     State: Longint;
     Protect: Longint;
@@ -994,22 +2146,57 @@ const
   user = 'user32.dll';
   oleaut = 'oleaut32.dll';
 
-procedure CloseHandle;                  external kernel name 'CloseHandle';
-procedure CreateFileA;                  external kernel name 'CreateFileA';
-procedure DeleteFileA;                  external kernel name 'DeleteFileA';
-procedure GetFileType;                  external kernel name 'GetFileType';
-procedure GetSystemTime;                external kernel name 'GetSystemTime';
-procedure GetFileSize;                  external kernel name 'GetFileSize';
-procedure GetStdHandle;                 external kernel name 'GetStdHandle';
-//procedure GetStartupInfo;               external kernel name 'GetStartupInfo';
-procedure MoveFileA;                    external kernel name 'MoveFileA';
-procedure RaiseException;               external kernel name 'RaiseException';
-procedure ReadFile;                     external kernel name 'ReadFile';
-procedure RtlUnwind;                    external kernel name 'RtlUnwind';
-procedure SetEndOfFile;                 external kernel name 'SetEndOfFile';
-procedure SetFilePointer;               external kernel name 'SetFilePointer';
-procedure UnhandledExceptionFilter;     external kernel name 'UnhandledExceptionFilter';
-procedure WriteFile;                    external kernel name 'WriteFile';
+  GENERIC_READ             = Integer($80000000);
+  GENERIC_WRITE            = $40000000;
+  FILE_SHARE_READ          = $00000001;
+  FILE_SHARE_WRITE         = $00000002;
+  FILE_ATTRIBUTE_NORMAL    = $00000080;
+
+  CREATE_NEW               = 1;
+  CREATE_ALWAYS            = 2;
+  OPEN_EXISTING            = 3;
+
+  FILE_BEGIN               = 0;
+  FILE_CURRENT             = 1;
+  FILE_END                 = 2;
+
+  STD_INPUT_HANDLE         = Integer(-10);
+  STD_OUTPUT_HANDLE        = Integer(-11);
+  STD_ERROR_HANDLE         = Integer(-12);
+  MAX_PATH                 = 260;
+
+function CloseHandle(Handle: Integer): Integer; stdcall;
+  external kernel name 'CloseHandle';
+function CreateFileA(lpFileName: PChar; dwDesiredAccess, dwShareMode: Integer;
+  lpSecurityAttributes: Pointer; dwCreationDisposition, dwFlagsAndAttributes: Integer;
+  hTemplateFile: Integer): Integer; stdcall;
+  external kernel name 'CreateFileA';
+function DeleteFileA(Filename: PChar): LongBool;  stdcall;
+  external kernel name 'DeleteFileA';
+function GetFileType(hFile: Integer): Integer; stdcall;
+  external kernel name 'GetFileType';
+procedure GetSystemTime; stdcall;               external kernel name 'GetSystemTime';
+function GetFileSize(Handle: Integer; x: Integer): Integer; stdcall;
+  external kernel name 'GetFileSize';
+function GetStdHandle(nStdHandle: Integer): Integer; stdcall;
+  external kernel name 'GetStdHandle';
+function MoveFileA(OldName, NewName: PChar): LongBool; stdcall;
+  external kernel name 'MoveFileA';
+procedure RaiseException; stdcall;       external kernel name 'RaiseException';
+function ReadFile(hFile: Integer; var Buffer; nNumberOfBytesToRead: Cardinal;
+  var lpNumberOfBytesRead: Cardinal; lpOverlapped: Pointer): Integer; stdcall;
+  external kernel name 'ReadFile';
+procedure RtlUnwind; stdcall;             external kernel name 'RtlUnwind';
+function SetEndOfFile(Handle: Integer): LongBool; stdcall;
+  external kernel name 'SetEndOfFile';
+function SetFilePointer(Handle, Distance: Integer; DistanceHigh: Pointer;
+  MoveMethod: Integer): Integer; stdcall;
+  external kernel name 'SetFilePointer';
+procedure UnhandledExceptionFilter; stdcall;
+  external kernel name 'UnhandledExceptionFilter';
+function WriteFile(hFile: Integer; const Buffer; nNumberOfBytesToWrite: Cardinal;
+  var lpNumberOfBytesWritten: Cardinal; lpOverlapped: Pointer): Integer; stdcall;
+  external kernel name 'WriteFile';
 
 function CharNext(lpsz: PChar): PChar; stdcall;
   external user name 'CharNextA';
@@ -1049,6 +2236,9 @@ function GetCurrentDirectory(BufSize: Integer; Buffer: PChar): Integer; stdcall;
 function GetLastError: Integer; stdcall;
   external kernel name 'GetLastError';
 
+procedure SetLastError(ErrorCode: Integer); stdcall;
+  external kernel name 'SetLastError';
+
 function GetLocaleInfo(Locale: Longint; LCType: Longint; lpLCData: PChar; cchData: Integer): Integer; stdcall;
   external kernel name 'GetLocaleInfoA';
 
@@ -1085,7 +2275,7 @@ function lstrcpyn(lpString1, lpString2: PChar;
   iMaxLength: Integer): PChar; stdcall;
   external kernel name 'lstrcpynA';
 
-function lstrlen(lpString: PChar): Integer; stdcall;
+function _strlen(lpString: PChar): Integer; stdcall;
   external kernel name 'lstrlenA';
 
 function MultiByteToWideChar(CodePage, Flags: Integer; MBStr: PChar;
@@ -1134,66 +2324,14 @@ procedure SysFreeString(const S: WideString); stdcall;
 function SysStringLen(const S: WideString): Integer; stdcall;
   external oleaut name 'SysStringLen';
 
-//procedure VariantInit(var V: Variant); stdcall;
-//  external oleaut name 'VariantInit';
-
-function VariantClear(var V: Variant): Integer; stdcall;
-  external oleaut name 'VariantClear';
-
-function VariantCopy(var Dest: Variant; const Source: Variant): Integer; stdcall;
-  external oleaut name 'VariantCopy';
-
-function VariantCopyInd(var Dest: Variant; const Source: Variant): Integer; stdcall;
-  external oleaut name 'VariantCopyInd';
-
-//function VariantChangeType(var Dest: Variant; const Source: Variant;
-//  Flags: Word; VarType: Word): Integer; stdcall;
-//  external oleaut name 'VariantChangeType';
-
-function VariantChangeTypeEx(var Dest: Variant; const Source: Variant;
-  LCID: Integer; Flags: Word; VarType: Word): Integer; stdcall;
-  external oleaut name 'VariantChangeTypeEx';
-
-function SafeArrayCreate(VarType, DimCount: Integer;
-  const Bounds): PVarArray; stdcall;
-  external oleaut name 'SafeArrayCreate';
-
-function SafeArrayRedim(VarArray: PVarArray;
-  var NewBound: TVarArrayBound): Integer; stdcall;
-  external oleaut name 'SafeArrayRedim';
-
-function SafeArrayGetLBound(VarArray: PVarArray; Dim: Integer;
-  var LBound: Integer): Integer; stdcall;
-  external oleaut name 'SafeArrayGetLBound';
-
-function SafeArrayGetUBound(VarArray: PVarArray; Dim: Integer;
-  var UBound: Integer): Integer; stdcall;
-  external oleaut name 'SafeArrayGetUBound';
-
-function SafeArrayAccessData(VarArray: PVarArray;
-  var Data: Pointer): Integer; stdcall;
-  external oleaut name 'SafeArrayAccessData';
-
-function SafeArrayUnaccessData(VarArray: PVarArray): Integer; stdcall;
-  external oleaut name 'SafeArrayUnaccessData';
-
-function SafeArrayGetElement(VarArray: PVarArray; Indices,
-  Data: Pointer): Integer; stdcall;
-  external oleaut name 'SafeArrayGetElement';
-
-function SafeArrayPtrOfIndex(VarArray: PVarArray; Indices: Pointer;
-  var pvData: Pointer): HResult; stdcall;
-  external oleaut name 'SafeArrayPtrOfIndex';
-
-function SafeArrayPutElement(VarArray: PVarArray; Indices,
-  Data: Pointer): Integer; stdcall;
-  external oleaut name 'SafeArrayPutElement';
-
 function InterlockedIncrement(var Addend: Integer): Integer; stdcall;
   external kernel name 'InterlockedIncrement';
 
 function InterlockedDecrement(var Addend: Integer): Integer; stdcall;
   external kernel name 'InterlockedDecrement';
+
+function GetCurrentThreadId: LongWord; stdcall;
+  external kernel name 'GetCurrentThreadId';
 
 function GetCmdShow: Integer;
 var
@@ -1205,13 +2343,37 @@ begin
     Result := SI.wShowWindow;
 end;
 
+{$ENDIF} // MSWindows
+
+function WCharFromChar(WCharDest: PWideChar; DestChars: Integer; const CharSource: PChar; SrcBytes: Integer): Integer; forward;
+function CharFromWChar(CharDest: PChar; DestBytes: Integer; const WCharSource: PWideChar; SrcChars: Integer): Integer; forward;
+
 { ----------------------------------------------------- }
-{       Memory manager                                                                          }
+{       Memory manager                                  }
 { ----------------------------------------------------- }
 
-procedure Error(errorCode: Byte); forward;
-
+{$IFDEF MSWINDOWS}
 {$I GETMEM.INC }
+{$ENDIF}
+
+{$IFDEF LINUX}
+function SysGetMem(Size: Integer): Pointer;
+begin
+  Result := __malloc(size);
+end;
+
+function SysFreeMem(P: Pointer): Integer;
+begin
+  __free(P);
+  Result := 0;
+end;
+
+function SysReallocMem(P: Pointer; Size: Integer): Pointer;
+begin
+  Result := __realloc(P, Size);
+end;
+
+{$ENDIF}
 
 var
   MemoryManager: TMemoryManager = (
@@ -1219,31 +2381,149 @@ var
     FreeMem: SysFreeMem;
     ReallocMem: SysReallocMem);
 
-procedure _GetMem;
-asm
-        TEST    EAX,EAX
-        JE      @@1
-        CALL    MemoryManager.GetMem
-        OR      EAX,EAX
-        JE      @@2
-@@1:    RET
-@@2:    MOV     AL,reOutOfMemory
-        JMP     Error
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+var
+//  Unwinder: TUnwinder = (
+//    RaiseException: UnwindRaiseException;
+//    RegisterIPLookup: UnwindRegisterIPLookup;
+//    UnregisterIPLookup: UnwindUnregisterIPLookup;
+//    DelphiLookup: UnwindDelphiLookup);
+  Unwinder: TUnwinder;
+
+{$IFDEF STATIC_UNWIND}
+{$IFDEF PIC}
+{$L 'objs/arith.pic.o'}
+{$L 'objs/diag.pic.o'}
+{$L 'objs/delphiuw.pic.o'}
+{$L 'objs/unwind.pic.o'}
+{$ELSE}
+{$L 'objs/arith.o'}
+{$L 'objs/diag.o'}
+{$L 'objs/delphiuw.o'}
+{$L 'objs/unwind.o'}
+{$ENDIF}
+procedure Arith_RdUnsigned; external;
+procedure Arith_RdSigned; external;
+procedure __assert_fail; cdecl; external libc name '__assert_fail';
+procedure malloc; cdecl; external libc name 'malloc';
+procedure memset; cdecl; external libc name 'memset';
+procedure strchr; cdecl; external libc name 'strchr';
+procedure strncpy; cdecl; external libc name 'strncpy';
+procedure strcpy; cdecl; external libc name 'strcpy';
+procedure strcmp; cdecl; external libc name 'strcmp';
+procedure printf; cdecl; external libc name 'printf';
+procedure free; cdecl; external libc name 'free';
+procedure getenv; cdecl; external libc name 'getenv';
+procedure strtok; cdecl; external libc name 'strtok';
+procedure strdup; cdecl; external libc name 'strdup';
+procedure __strdup; cdecl; external libc name '__strdup';
+procedure fopen; cdecl; external libc name 'fopen';
+procedure fdopen; cdecl; external libc name 'fdopen';
+procedure time; cdecl; external libc name 'time';
+procedure ctime; cdecl; external libc name 'ctime';
+procedure fclose; cdecl; external libc name 'fclose';
+procedure fprintf; cdecl; external libc name 'fprintf';
+procedure vfprintf; cdecl; external libc name 'vfprintf';
+procedure fflush; cdecl; external libc name 'fflush';
+procedure debug_init; external;
+procedure debug_print; external;
+procedure debug_class_enabled; external;
+procedure debug_continue; external;
+{$ENDIF}
+{$ENDIF}
+
+function _GetMem(Size: Integer): Pointer;
+{$IF Defined(DEBUG) and Defined(LINUX)}
+var
+  Signature: PLongInt;
+{$IFEND}
+begin
+  if Size > 0 then
+  begin
+{$IF Defined(DEBUG) and Defined(LINUX)}
+    Signature := PLongInt(MemoryManager.GetMem(Size + 4));
+    if Signature = nil then
+      Error(reOutOfMemory);
+    Signature^ := 0;
+    Result := Pointer(LongInt(Signature) + 4);
+{$ELSE}
+    Result := MemoryManager.GetMem(Size);
+    if Result = nil then
+      Error(reOutOfMemory);
+{$IFEND}
+  end
+  else
+    Result := nil;
 end;
 
-procedure _FreeMem;
-asm
-        TEST    EAX,EAX
-        JE      @@1
-        CALL    MemoryManager.FreeMem
-        OR      EAX,EAX
-        JNE     @@2
-@@1:    RET
-@@2:    MOV     AL,reInvalidPtr
-        JMP     Error
+const
+  FreeMemorySignature = Longint($FBEEFBEE);
+
+function _FreeMem(P: Pointer): Integer;
+{$IF Defined(DEBUG) and Defined(LINUX)}
+var
+  Signature: PLongInt;
+{$IFEND}
+begin
+  if P <> nil then
+  begin
+{$IF Defined(DEBUG) and Defined(LINUX)}
+    Signature := PLongInt(LongInt(P) - 4);
+    if Signature^ <> 0 then
+      Error(reInvalidPtr);
+    Signature^ := FreeMemorySignature;
+    Result := MemoryManager.Freemem(Pointer(Signature));
+{$ELSE}
+    Result := MemoryManager.FreeMem(P);
+{$IFEND}
+    if Result <> 0 then
+      Error(reInvalidPtr);
+  end
+  else
+    Result := 0;
 end;
 
-procedure _ReallocMem;
+{$IFDEF LINUX}
+function _ReallocMem(var P: Pointer; NewSize: Integer): Pointer;
+{$IFDEF DEBUG}
+var
+  Temp: Pointer;
+{$ENDIF}
+begin
+  if P <> nil then
+  begin
+{$IFDEF DEBUG}
+    Temp := Pointer(LongInt(P) - 4);
+    if NewSize > 0 then
+    begin
+      Temp := MemoryManager.ReallocMem(Temp, NewSize + 4);
+      Result := Pointer(LongInt(Temp) + 4);
+    end
+    else
+    begin
+      MemoryManager.FreeMem(Temp);
+      Result := nil;
+    end;
+{$ELSE}
+    if NewSize > 0 then
+    begin
+      Result := MemoryManager.ReallocMem(P, NewSize);
+    end
+    else
+    begin
+      MemoryManager.FreeMem(P);
+      Result := nil;
+    end;
+{$ENDIF}
+    P := Result;
+  end else
+  begin
+    Result := _GetMem(NewSize);
+    P := Result;
+  end;
+end;
+{$ELSEIF Defined(MSWINDOWS)}
+function _ReallocMem(var P: Pointer; NewSize: Integer): Pointer;
 asm
         MOV     ECX,[EAX]
         TEST    ECX,ECX
@@ -1284,6 +2564,7 @@ asm
         MOV     [ECX],EAX
 @@exit:
 end;
+{$IFEND}
 
 procedure GetMemoryManager(var MemMgr: TMemoryManager);
 begin
@@ -1302,73 +2583,377 @@ begin
       (@ReallocMem <> @SysReallocMem);
 end;
 
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+procedure GetUnwinder(var Dest: TUnwinder);
+begin
+  Dest := Unwinder;
+end;
+
+procedure SetUnwinder(const NewUnwinder: TUnwinder);
+begin
+  Unwinder := NewUnwinder;
+end;
+
+function IsUnwinderSet: Boolean;
+begin
+  with Unwinder do
+    Result := (@RaiseException <> @_BorUnwind_RaiseException) or
+      (@RegisterIPLookup <> @_BorUnwind_RegisterIPLookup) or
+      (@UnregisterIPLookup <> @_BorUnwind_UnregisterIPLookup) or
+      (@DelphiLookup <> @_BorUnwind_DelphiLookup);
+end;
+
+procedure InitUnwinder;
+var
+  Addr: Pointer;
+begin
+  {
+    We look to see if we can find a dynamic version of the unwinder.  This will
+    be the case if the application used Unwind.pas.  If it is present, then we
+    fire it up.  Otherwise, we use our static copy.
+  }
+  Addr := dlsym(0, '_BorUnwind_RegisterIPLookup');
+  if Addr <> nil then
+  begin
+    Unwinder.RegisterIPLookup := Addr;
+    Addr := dlsym(0, '_BorUnwind_UnregisterIPLookup');
+    Unwinder.UnregisterIPLookup := Addr;
+    Addr := dlsym(0, '_BorUnwind_RaiseException');
+    Unwinder.RaiseException := Addr;
+    Addr := dlsym(0, '_BorUnwind_DelphiLookup');
+    Unwinder.DelphiLookup := Addr;
+    Addr := dlsym(0, '_BorUnwind_ClosestHandler');
+    Unwinder.ClosestHandler := Addr;
+  end
+  else
+  begin
+    dlerror;   // clear error state;  dlsym doesn't
+    Unwinder.RegisterIPLookup := _BorUnwind_RegisterIPLookup;
+    Unwinder.DelphiLookup := _BorUnwind_DelphiLookup;
+    Unwinder.UnregisterIPLookup := _BorUnwind_UnregisterIPLookup;
+    Unwinder.RaiseException := _BorUnwind_RaiseException;
+    Unwinder.ClosestHandler := _BorUnwind_ClosestDelphiHandler;
+  end;
+end;
+
+function SysClosestDelphiHandler(Context: Pointer): LongWord;
+begin
+  if not Assigned(Unwinder.ClosestHandler) then
+    InitUnwinder;
+  Result := Unwinder.ClosestHandler(Context);
+end;
+
+function SysRegisterIPLookup(StartAddr, EndAddr: LongInt; Context: Pointer; GOT: LongInt): LongBool;
+begin
+//  xxx
+  if not Assigned(Unwinder.RegisterIPLookup) then
+  begin
+    InitUnwinder;
+//    Unwinder.RegisterIPLookup := UnwindRegisterIPLookup;
+//    Unwinder.DelphiLookup := UnwindDelphiLookup;
+  end;
+  Result := Unwinder.RegisterIPLookup(@Unwinder.DelphiLookup, StartAddr, EndAddr, Context, GOT);
+end;
+
+procedure SysUnregisterIPLookup(StartAddr: LongInt);
+begin
+//  if not Assigned(Unwinder.UnregisterIPLookup) then
+//    Unwinder.UnregisterIPLookup := UnwindUnregisterIPLookup;
+  Unwinder.UnregisterIPLookup(StartAddr);
+end;
+
+function SysRaiseException(Exc: Pointer): LongBool; export;
+begin
+//  if not Assigned(Unwinder.RaiseException) then
+//    Unwinder.RaiseException := UnwindRaiseException;
+  Result := Unwinder.RaiseException(Exc);
+end;
+
+const
+  MAX_NESTED_EXCEPTIONS = 16;
+{$ENDIF}
+
 threadvar
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+  ExceptionObjects: array[0..MAX_NESTED_EXCEPTIONS-1] of TRaisedException;
+  ExceptionObjectCount: Integer;
+  OSExceptionsBlocked: Integer;
+{$ELSE}
   RaiseListPtr: pointer;
+{$ENDIF}
   InOutRes: Integer;
 
-function RaiseList: Pointer;
+{$IFDEF PUREPASCAL}
+var
+  notimpl: array [0..15] of Char = 'not implemented'#10;
+
+procedure NotImplemented;
+begin
+  __write (2, @notimpl, 16);
+  Halt;
+end;
+{$ENDIF}
+
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+procedure BlockOSExceptions;
+asm
+        PUSH    EAX
+        PUSH    EDX
+        CALL    SysInit.@GetTLS
+        MOV     [EAX].OSExceptionsBlocked, 1
+        POP     EDX
+        POP     EAX
+end;
+
+procedure UnblockOSExceptions;
+asm
+        PUSH    EAX
+        CALL    SysInit.@GetTLS
+        MOV     [EAX].OSExceptionsBlocked, 0
+        POP     EAX
+end;
+
+function AreOSExceptionsBlocked: Boolean;
 asm
         CALL    SysInit.@GetTLS
-        MOV     EAX, [EAX].RaiseListPtr
+        MOV     EAX, [EAX].OSExceptionsBlocked
+end;
+
+const
+  TRAISEDEXCEPTION_SIZE = SizeOf(TRaisedException);
+
+function CurrentException: PRaisedException;
+asm
+        CALL    SysInit.@GetTLS
+        LEA     EDX, [EAX].ExceptionObjects
+        MOV     EAX, [EAX].ExceptionObjectCount
+        OR      EAX, EAX
+        JE      @@Done
+        DEC     EAX
+        IMUL    EAX, TRAISEDEXCEPTION_SIZE
+        ADD     EAX, EDX
+@@Done:
+end;
+
+function AllocateException(Exception: Pointer; ExceptionAddr: Pointer): PRaisedException;
+asm
+        PUSH    EAX
+        PUSH    EDX
+        CALL    SysInit.@GetTLS
+        CMP     [EAX].ExceptionObjectCount, MAX_NESTED_EXCEPTIONS-1
+        JE      @@TooManyNestedExceptions
+        INC     [EAX].ExceptionObjectCount
+        CALL    CurrentException
+        POP     EDX
+        POP     ECX
+        MOV     [EAX].TRaisedException.ExceptObject, ECX
+        MOV     [EAX].TRaisedException.ExceptionAddr, EDX
+        MOV     [EAX].TRaisedException.RefCount, 0
+        MOV     [EAX].TRaisedException.HandlerEBP, $FFFFFFFF
+        MOV     [EAX].TRaisedException.Flags, 0
+        RET
+@@TooManyNestedExceptions:
+        MOV     EAX, 231
+        JMP     _RunError
+end;
+
+{
+  In the interests of code size here, this function is slightly overloaded.
+  It is responsible for freeing up the current exception record on the
+  exception stack, and it conditionally returns the thrown object to the
+  caller.  If the object has been acquired through AcquireExceptionObject,
+  we don't return the thrown object.
+}
+function FreeException: Pointer;
+asm
+        CALL    CurrentException
+        OR      EAX, EAX
+        JE      @@Error
+        { EAX -> the TRaisedException }
+        XOR     ECX, ECX
+        { If the exception object has been referenced, we don't return it. }
+        CMP     [EAX].TRaisedException.RefCount, 0
+        JA      @@GotObject
+        MOV     ECX, [EAX].TRaisedException.ExceptObject
+@@GotObject:
+        PUSH    ECX
+        CALL    SysInit.@GetTLS
+        POP     ECX
+        DEC     [EAX].ExceptionObjectCount
+        MOV     EAX, ECX
+        RET
+@@Error:
+        { Some kind of internal error }
+        JMP     _Run0Error
+end;
+
+function AcquireExceptionObject: Pointer;
+asm
+        CALL    CurrentException
+        OR      EAX, EAX
+        JE      @@Error
+        INC     [EAX].TRaisedException.RefCount
+        MOV     EAX, [EAX].TRaisedException.ExceptObject
+        RET
+@@Error:
+        { This happens if there is no exception pending }
+        JMP     _Run0Error
+end;
+
+procedure ReleaseExceptionObject;
+asm
+        CALL    CurrentException
+        OR      EAX, EAX
+        JE      @@Error
+        CMP     [EAX].TRaisedException.RefCount, 0
+        JE      @@Error
+        DEC     [EAX].TRaisedException.RefCount
+        RET
+@@Error:
+
+{
+  This happens if there is no exception pending, or
+  if the reference count on a pending exception is
+  zero.
+}
+        JMP   _Run0Error
+end;
+
+function ExceptObject: TObject;
+var
+  Exc: PRaisedException;
+begin
+  Exc := CurrentException;
+  if Exc <> nil then
+    Result := TObject(Exc^.ExceptObject)
+  else
+    Result := nil;
+end;
+
+{ Return current exception address }
+
+function ExceptAddr: Pointer;
+var
+  Exc: PRaisedException;
+begin
+  Exc := CurrentException;
+  if Exc <> nil then
+    Result := Exc^.ExceptionAddr
+  else
+    Result := nil;
+end;
+{$ELSE}  {not PC_MAPPED_EXCEPTIONS}
+
+function ExceptObject: TObject;
+begin
+  if RaiseListPtr <> nil then
+    Result := PRaiseFrame(RaiseListPtr)^.ExceptObject
+  else
+    Result := nil;
+end;
+
+{ Return current exception address }
+
+function ExceptAddr: Pointer;
+begin
+  if RaiseListPtr <> nil then
+    Result := PRaiseFrame(RaiseListPtr)^.ExceptAddr
+  else
+    Result := nil;
+end;
+
+
+function AcquireExceptionObject: Pointer;
+begin
+  if RaiseListPtr <> nil then
+  begin
+    Result := PRaiseFrame(RaiseListPtr)^.ExceptObject;
+    PRaiseFrame(RaiseListPtr)^.ExceptObject := nil;
+  end
+  else
+    Result := nil;
+end;
+
+procedure ReleaseExceptionObject;
+begin
+end;
+
+function RaiseList: Pointer;
+begin
+  Result := RaiseListPtr;
 end;
 
 function SetRaiseList(NewPtr: Pointer): Pointer;
 asm
-        MOV     ECX, EAX
+        PUSH    EAX
         CALL    SysInit.@GetTLS
         MOV     EDX, [EAX].RaiseListPtr
-        MOV     [EAX].RaiseListPtr, ECX
+        POP     [EAX].RaiseListPtr
         MOV     EAX, EDX
 end;
+{$ENDIF}
 
 { ----------------------------------------------------- }
 {    local functions & procedures of the system unit    }
 { ----------------------------------------------------- }
 
-procedure Error(errorCode: Byte);
+procedure RunErrorAt(ErrCode: Integer; ErrorAtAddr: Pointer);
+begin
+  ErrorAddr := ErrorAtAddr;
+  _Halt(ErrCode);
+end;
+
+procedure ErrorAt(ErrorCode: Byte; ErrorAddr: Pointer);
+
+const
+  reMap: array [TRunTimeError] of Byte = (
+    0,
+    203, { reOutOfMemory }
+    204, { reInvalidPtr }
+    200, { reDivByZero }
+    201, { reRangeError }
+{   210    abstract error }
+    215, { reIntOverflow }
+    207, { reInvalidOp }
+    200, { reZeroDivide }
+    205, { reOverflow }
+    206, { reUnderflow }
+    219, { reInvalidCast }
+    216, { Access violation }
+    202, { Stack overflow }
+    217, { Control-C }
+    218, { Privileged instruction }
+    220, { Invalid variant type cast }
+    221, { Invalid variant operation }
+    222, { No variant method call dispatcher }
+    223, { Cannot create variant array }
+    224, { Variant does not contain an array }
+    225, { Variant array bounds error }
+{   226       thread init failure }
+    227, { reAssertionFailed }
+    0,   { reExternalException not used here; in SysUtils }
+    228, { reIntfCastError }
+    229 { reSafeCallError }
+{   230   Reserved by the compiler for unhandled exceptions }
+{   231   Too many nested exceptions }
+{   232   Fatal signal raised on a non-Delphi thread });
+
+begin
+  errorCode := errorCode and 127;
+  if Assigned(ErrorProc) then
+    ErrorProc(errorCode, ErrorAddr);
+  if errorCode = 0 then
+    errorCode := InOutRes
+  else if errorCode <= Byte(High(TRuntimeError)) then
+    errorCode := reMap[TRunTimeError(errorCode)];
+  RunErrorAt(errorCode, ErrorAddr);
+end;
+
+procedure Error(errorCode: TRuntimeError);
 asm
         AND     EAX,127
-        MOV     ECX,ErrorProc
-        TEST    ECX,ECX
-        JE      @@term
-        POP     EDX
-        CALL    ECX
-@@term:
-        DEC     EAX
-        MOV     AL,byte ptr @@errorTable[EAX]
-        JNS     @@skip
-        CALL    SysInit.@GetTLS
-        MOV     EAX,[EAX].InOutRes
-@@skip:
-        JMP     _RunError
-
-@@errorTable:
-        DB      203     { reOutOfMemory }
-        DB      204     { reInvalidPtr }
-        DB      200     { reDivByZero }
-        DB      201     { reRangeError }
-{               210       abstract error }
-        DB      215     { reIntOverflow }
-        DB      207     { reInvalidOp }
-        DB      200     { reZeroDivide }
-        DB      205     { reOverflow }
-        DB      206     { reUnderflow }
-        DB      219     { reInvalidCast }
-        DB      216     { Access violation }
-        DB      202     { Stack overflow }
-        DB      217     { Control-C }
-        DB      218     { Privileged instruction }
-        DB      220     { Invalid variant type cast }
-        DB      221     { Invalid variant operation }
-        DB      222     { No variant method call dispatcher }
-        DB      223     { Cannot create variant array }
-        DB      224     { Variant does not contain an array }
-        DB      225     { Variant array bounds error }
-{               226       thread init failure }
-        DB      227     { reAssertionFailed }
-        DB      0       { reExternalException not used here; in SysUtils }
-        DB      228     { reIntfCastError }
-        DB      229     { reSafeCallError }
+        MOV     EDX,[ESP]
+        JMP     ErrorAt
 end;
 
 procedure       __IOTest;
@@ -1388,23 +2973,30 @@ asm
         JMP     Error
 end;
 
-procedure SetInOutRes;
-asm
-        PUSH    EAX
-        CALL    SysInit.@GetTLS
-        POP     [EAX].InOutRes
+procedure SetInOutRes(NewValue: Integer);
+begin
+  InOutRes := NewValue;
 end;
-
 
 procedure InOutError;
-asm
-        CALL    GetLastError
-        JMP     SetInOutRes
+begin
+  SetInOutRes(GetLastError);
 end;
 
-procedure _ChDir(const S: string);
+procedure ChDir(const S: string);
 begin
-  if not SetCurrentDirectory(PChar(S)) then InOutError;
+  ChDir(PChar(S));
+end;
+
+procedure ChDir(P: PChar);
+begin
+{$IFDEF MSWINDOWS}
+  if not SetCurrentDirectory(P) then
+{$ENDIF}
+{$IFDEF LINUX}
+  if __chdir(P) <> 0 then
+{$ENDIF}
+    InOutError;
 end;
 
 procedure       _Copy{ s : ShortString; index, count : Integer ) : ShortString};
@@ -1513,35 +3105,38 @@ asm
         POP     ESI
 end;
 
-procedure       __Flush( var f : Text );
-external;       {   Assign  }
-
-procedure       _Flush( var f : Text );
-external;       {   Assign  }
-
 procedure _LGetDir(D: Byte; var S: string);
+{$IFDEF MSWINDOWS}
 var
   Drive: array[0..3] of Char;
-  DirBuf, SaveBuf: array[0..259] of Char;
+  DirBuf, SaveBuf: array[0..MAX_PATH] of Char;
 begin
   if D <> 0 then
   begin
-        Drive[0] := Chr(D + Ord('A') - 1);
-        Drive[1] := ':';
-        Drive[2] := #0;
-        GetCurrentDirectory(SizeOf(SaveBuf), SaveBuf);
-        SetCurrentDirectory(Drive);
+    Drive[0] := Chr(D + Ord('A') - 1);
+    Drive[1] := ':';
+    Drive[2] := #0;
+    GetCurrentDirectory(SizeOf(SaveBuf), SaveBuf);
+    SetCurrentDirectory(Drive);
   end;
   GetCurrentDirectory(SizeOf(DirBuf), DirBuf);
   if D <> 0 then SetCurrentDirectory(SaveBuf);
   S := DirBuf;
+{$ENDIF}
+{$IFDEF LINUX}
+var
+  DirBuf: array[0..MAX_PATH] of Char;
+begin
+  __getcwd(DirBuf, sizeof(DirBuf));
+  S := string(DirBuf);
+{$ENDIF}
 end;
 
 procedure _SGetDir(D: Byte; var S: ShortString);
 var
   L: string;
 begin
-  GetDir(D, L);
+  _LGetDir(D, L);
   S := L;
 end;
 
@@ -1627,24 +3222,48 @@ asm
         POP     EDI
         POP     ESI
         POP     EBX
-    RET 4
+        RET 4
 end;
 
 function IOResult: Integer;
-asm
-        CALL    SysInit.@GetTLS
-        XOR     EDX,EDX
-        MOV     ECX,[EAX].InOutRes
-        MOV     [EAX].InOutRes,EDX
-        MOV     EAX,ECX
+begin
+  Result := InOutRes;
+  InOutRes := 0;
 end;
 
-procedure _MkDir(const S: string);
+procedure MkDir(const S: string);
 begin
-  if not CreateDirectory(PChar(S), 0) then InOutError;
+  MkDir(PChar(s));
+end;
+
+procedure MkDir(P: PChar);
+begin
+{$IFDEF MSWINDOWS}
+  if not CreateDirectory(P, 0) then
+{$ENDIF}
+{$IFDEF LINUX}
+  if __mkdir(P, -1) <> 0 then
+{$ENDIF}
+    InOutError;
 end;
 
 procedure       Move( const Source; var Dest; count : Integer );
+{$IFDEF PUREPASCAL}
+var
+  S, D: PChar;
+  I: Integer;
+begin
+  S := PChar(@Source);
+  D := PChar(@Dest);
+  if S = D then Exit;
+  if Cardinal(D) > Cardinal(S) then
+    for I := count-1 downto 0 do
+      D[I] := S[I]
+  else
+    for I := 0 to count-1 do
+      D[I] := S[I];
+end;
+{$ELSE}
 asm
 {     ->EAX     Pointer to source       }
 {       EDX     Pointer to destination  }
@@ -1691,59 +3310,115 @@ asm
         POP     EDI
         POP     ESI
 end;
+{$ENDIF}
 
+{$IFDEF MSWINDOWS}
 function GetParamStr(P: PChar; var Param: string): PChar;
 var
-  Len: Integer;
-  Buffer: array[0..4095] of Char;
+  i, Len: Integer;
+  Start, S, Q: PChar;
 begin
   while True do
   begin
-    while (P[0] <> #0) and (P[0] <= ' ') do Inc(P);
+    while (P[0] <> #0) and (P[0] <= ' ') do
+      P := CharNext(P);
     if (P[0] = '"') and (P[1] = '"') then Inc(P, 2) else Break;
   end;
   Len := 0;
-  while (P[0] > ' ') and (Len < SizeOf(Buffer)) do
+  Start := P;
+  while P[0] > ' ' do
+  begin
     if P[0] = '"' then
     begin
-      Inc(P);
+      P := CharNext(P);
       while (P[0] <> #0) and (P[0] <> '"') do
       begin
-        Buffer[Len] := P[0];
-        Inc(Len);
-        Inc(P);
+        Q := CharNext(P);
+        Inc(Len, Q - P);
+        P := Q;
       end;
-      if P[0] <> #0 then Inc(P);
-    end else
+      if P[0] <> #0 then
+        P := CharNext(P);
+    end
+    else
     begin
-      Buffer[Len] := P[0];
-      Inc(Len);
-      Inc(P);
+      Q := CharNext(P);
+      Inc(Len, Q - P);
+      P := Q;
     end;
-  SetString(Param, Buffer, Len);
+  end;
+
+  SetLength(Param, Len);
+
+  P := Start;
+  S := Pointer(Param);
+  i := 0;
+  while P[0] > ' ' do
+  begin
+    if P[0] = '"' then
+    begin
+      P := CharNext(P);
+      while (P[0] <> #0) and (P[0] <> '"') do
+      begin
+        Q := CharNext(P);
+        while P < Q do
+        begin
+          S[i] := P^;
+          Inc(P);
+          Inc(i);
+        end;
+      end;
+      if P[0] <> #0 then P := CharNext(P);
+    end
+    else
+    begin
+      Q := CharNext(P);
+      while P < Q do
+      begin
+        S[i] := P^;
+        Inc(P);
+        Inc(i);
+      end;
+    end;
+  end;
+
   Result := P;
 end;
+{$ENDIF}
 
 function ParamCount: Integer;
+{$IFDEF MSWINDOWS}
 var
   P: PChar;
   S: string;
 begin
-  P := GetParamStr(GetCommandLine, S);
   Result := 0;
+  P := GetParamStr(GetCommandLine, S);
   while True do
   begin
     P := GetParamStr(P, S);
     if S = '' then Break;
     Inc(Result);
   end;
+{$ENDIF}
+{$IFDEF LINUX}
+begin
+  if ArgCount > 1 then
+    Result := ArgCount - 1
+  else Result := 0;
+{$ENDIF}
 end;
 
+type
+  PCharArray = array[0..0] of PChar;
+
 function ParamStr(Index: Integer): string;
+{$IFDEF MSWINDOWS}
 var
   P: PChar;
   Buffer: array[0..260] of Char;
 begin
+  Result := '';
   if Index = 0 then
     SetString(Result, Buffer, GetModuleFileName(0, Buffer, SizeOf(Buffer)))
   else
@@ -1756,6 +3431,14 @@ begin
       Dec(Index);
     end;
   end;
+{$ENDIF}
+{$IFDEF LINUX}
+begin
+  if Index < ArgCount then
+    Result := PCharArray(ArgValues^)[Index]
+  else
+    Result := '';
+{$ENDIF}
 end;
 
 procedure       _Pos{ substr : ShortString; s : ShortString ) : Integer};
@@ -1819,31 +3502,28 @@ asm
         POP     EBX
 end;
 
-procedure       _SetLength{var s: ShortString; newLength: Integer};
-asm
-        { ->    EAX pointer to string   }
-        {       EDX new length          }
+// Don't use var param here - var ShortString is an open string param, which passes
+// the ptr in EAX and the string's declared buffer length in EDX.  Compiler codegen
+// expects only two params for this call - ptr and newlength
 
-        MOV     [EAX],DL        { should also fill new space, parameter should be openstring }
-
+procedure       _SetLength(s: PShortString; newLength: Byte);
+begin
+  Byte(s^[0]) := newLength;   // should also fill new space
 end;
 
-procedure       _SetString{var s: ShortString: buffer: PChar; len: Integer};
-asm
-        { ->    EAX pointer to string           }
-        {       EDX pointer to buffer   }
-        {       ECX len                         }
-
-        MOV     [EAX],CL
-        TEST    EDX,EDX
-        JE      @@noMove
-        XCHG    EAX,EDX
-        INC     EDX
-        CALL    Move
-@@noMove:
+procedure       _SetString(s: PShortString; buffer: PChar; len: Byte);
+begin
+  Byte(s^[0]) := len;
+  if buffer <> nil then
+    Move(buffer^, s^[1], len);
 end;
 
 procedure       Randomize;
+{$IFDEF LINUX}
+begin
+  RandSeed := _time(nil);
+{$ENDIF}
+{$IFDEF MSWINDOWS}
 var
         systemTime :
         record
@@ -1872,14 +3552,34 @@ asm
         MOV     DX,systemTime.wMilliSeconds
         ADD     EAX,EDX                 { sum = sum * 1000 + milliseconds       }
         MOV     RandSeed,EAX
+{$ENDIF}
 end;
 
-procedure _RmDir(const S: string);
+procedure RmDir(const S: string);
 begin
-  if not RemoveDirectory(PChar(S)) then InOutError;
+  RmDir(PChar(s));
+end;
+
+procedure RmDir(P: PChar);
+begin
+{$IFDEF MSWINDOWS}
+  if not RemoveDirectory(P) then
+{$ENDIF}
+{$IFDEF LINUX}
+  if __rmdir(P) <> 0 then
+{$ENDIF}
+    InOutError;
 end;
 
 function        UpCase( ch : Char ) : Char;
+{$IFDEF PUREPASCAL}
+begin
+  Result := ch;
+  case Result of
+    'a'..'z':  Dec(Result, Ord('a') - Ord('A'));
+  end;
+end;
+{$ELSE}
 asm
 { ->    AL      Character       }
 { <-    AL      Result          }
@@ -1891,20 +3591,33 @@ asm
         SUB     AL,'a' - 'A'
 @@exit:
 end;
-
+{$ENDIF}
 
 procedure Set8087CW(NewCW: Word);
-asm
-        MOV     Default8087CW,AX
+begin
+  Default8087CW := NewCW;
+  asm
         FNCLEX  // don't raise pending exceptions enabled by the new flags
+{$IFDEF PIC}
+        MOV     EAX,[EBX].OFFSET Default8087CW
+        FLDCW   [EAX]
+{$ELSE}
         FLDCW   Default8087CW
+{$ENDIF}
+  end;
 end;
+
+function Get8087CW: Word;
+asm
+        PUSH    0
+        FNSTCW  [ESP].Word
+        POP     EAX
+end;
+
 
 { ----------------------------------------------------- }
 {       functions & procedures that need compiler magic }
 { ----------------------------------------------------- }
-
-const cwChop : Word = $1F32;
 
 procedure       _COS;
 asm
@@ -1938,12 +3651,14 @@ end;
 procedure       _INT;
 asm
         SUB     ESP,4
-        FSTCW   [ESP]
+        FNSTCW  [ESP].Word     // save
+        FNSTCW  [ESP+2].Word   // scratch
         FWAIT
-        FLDCW   cwChop
+        OR      [ESP+2].Word, $0F00  // trunc toward zero, full precision
+        FLDCW   [ESP+2].Word
         FRNDINT
         FWAIT
-        FLDCW   [ESP]
+        FLDCW   [ESP].Word
         ADD     ESP,4
 end;
 
@@ -1963,12 +3678,14 @@ procedure       _FRAC;
 asm
         FLD     ST(0)
         SUB     ESP,4
-        FSTCW   [ESP]
+        FNSTCW  [ESP].Word     // save
+        FNSTCW  [ESP+2].Word   // scratch
         FWAIT
-        FLDCW   cwChop
+        OR      [ESP+2].Word, $0F00  // trunc toward zero, full precision
+        FLDCW   [ESP+2].Word
         FRNDINT
         FWAIT
-        FLDCW   [ESP]
+        FLDCW   [ESP].Word
         ADD     ESP,4
         FSUB
 end;
@@ -1987,22 +3704,37 @@ end;
 
 procedure       _TRUNC;
 asm
-        { ->    FST(0)   Extended argument       }
-        { <-    EDX:EAX  Result                  }
+       { ->    FST(0)   Extended argument       }
+       { <-    EDX:EAX  Result                  }
 
         SUB     ESP,12
-        FSTCW   [ESP]
+        FNSTCW  [ESP].Word          // save
+        FNSTCW  [ESP+2].Word        // scratch
         FWAIT
-        FLDCW   cwChop
+        OR      [ESP+2].Word, $0F00  // trunc toward zero, full precision
+        FLDCW   [ESP+2].Word
         FISTP   qword ptr [ESP+4]
         FWAIT
-        FLDCW   [ESP]
+        FLDCW   [ESP].Word
         POP     ECX
         POP     EAX
         POP     EDX
 end;
 
 procedure       _AbstractError;
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+asm
+        MOV     EAX,210
+        JMP     _RunError
+end;
+{$ELSE}
+{$IFDEF PIC}
+begin
+  if Assigned(AbstractErrorProc) then
+    AbstractErrorProc;
+  _RunError(210);  // loses return address
+end;
+{$ELSE}
 asm
         CMP     AbstractErrorProc, 0
         JE      @@NoAbstErrProc
@@ -2012,12 +3744,690 @@ asm
         MOV     EAX,210
         JMP     _RunError
 end;
+{$ENDIF}
+{$ENDIF}
 
-procedure       _Append;                                external;       {   OpenText}
-procedure       _Assign(var t: text; s: ShortString);   external;       {$L Assign  }
-procedure       _BlockRead;                             external;       {$L BlockRea}
-procedure       _BlockWrite;                            external;       {$L BlockWri}
-procedure       _Close;                                 external;       {$L Close   }
+function TextOpen(var t: TTextRec): Integer; forward;
+
+function OpenText(var t: TTextRec; Mode: Word): Integer;
+begin
+  if (t.Mode < fmClosed) or (t.Mode > fmInOut) then
+    Result := 102
+  else
+  begin
+    if t.Mode <> fmClosed then _Close(t);
+    t.Mode := Mode;
+    if (t.Name[0] = #0) and (t.OpenFunc = nil) then  // stdio
+      t.OpenFunc := @TextOpen;
+    Result := TTextIOFunc(t.OpenFunc)(t);
+  end;
+  if Result <> 0 then SetInOutRes(Result);
+end;
+
+function _ResetText(var t: TTextRec): Integer;
+begin
+  Result := OpenText(t, fmInput);
+end;
+
+function _RewritText(var t: TTextRec): Integer;
+begin
+  Result := OpenText(t, fmOutput);
+end;
+
+function _Append(var t: TTextRec): Integer;
+begin
+  Result := OpenText(t, fmInOut);
+end;
+
+function TextIn(var t: TTextRec): Integer;
+begin
+  t.BufEnd := 0;
+  t.BufPos := 0;
+{$IFDEF LINUX}
+  t.BufEnd := __read(t.Handle, t.BufPtr, t.BufSize);
+  if Integer(t.BufEnd) = -1 then
+  begin
+    t.BufEnd := 0;
+    Result := GetLastError;
+  end
+  else
+    Result := 0;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+  if ReadFile(t.Handle, t.BufPtr^, t.BufSize, t.BufEnd, nil) = 0 then
+  begin
+    Result := GetLastError;
+    if Result = 109 then
+      Result := 0; // NT quirk: got "broken pipe"? it's really eof
+  end
+  else
+    Result := 0;
+{$ENDIF}
+end;
+
+function FileNOPProc(var t): Integer;
+begin
+  Result := 0;
+end;
+
+function TextOut(var t: TTextRec): Integer;
+{$IFDEF MSWINDOWS}
+var
+  Dummy: Cardinal;
+{$ENDIF}
+begin
+  if t.BufPos = 0 then
+    Result := 0
+  else
+  begin
+{$IFDEF LINUX}
+    if __write(t.Handle, t.BufPtr, t.BufPos) = Cardinal(-1) then
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+    if WriteFile(t.Handle, t.BufPtr^, t.BufPos, Dummy, nil) = 0 then
+{$ENDIF}
+      Result := GetLastError
+    else
+      Result := 0;
+    t.BufPos := 0;
+  end;
+end;
+
+function InternalClose(Handle: Integer): Boolean;
+begin
+{$IFDEF LINUX}
+  Result := __close(Handle) = 0;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+  Result := CloseHandle(Handle) = 1;
+{$ENDIF}
+end;
+
+function TextClose(var t: TTextRec): Integer;
+begin
+  t.Mode := fmClosed;
+  if not InternalClose(t.Handle) then
+    Result := GetLastError
+  else
+    Result := 0;
+end;
+
+function TextOpenCleanup(var t: TTextRec): Integer;
+begin
+  InternalClose(t.Handle);
+  t.Mode := fmClosed;
+  Result := GetLastError;
+end;
+
+function TextOpen(var t: TTextRec): Integer;
+{$IFDEF LINUX}
+var
+  Flags: Integer;
+  Temp, I: Integer;
+  BytesRead: Integer;
+begin
+  Result := 0;
+  t.BufPos := 0;
+  t.BufEnd := 0;
+  case t.Mode of
+    fmInput: // called by Reset
+      begin
+        Flags := O_RDONLY;
+        t.InOutFunc := @TextIn;
+      end;
+    fmOutput: // called by Rewrite
+      begin
+        Flags := O_CREAT or O_TRUNC or O_WRONLY;
+        t.InOutFunc := @TextOut;
+      end;
+    fmInOut:  // called by Append
+      begin
+        Flags := O_APPEND or O_RDWR;
+        t.InOutFunc := @TextOut;
+      end;
+  else
+    Exit;
+    Flags := 0;
+  end;
+
+  t.FlushFunc := @FileNOPProc;
+
+  if t.Name[0] = #0 then  // stdin or stdout
+  begin
+    if t.BufPtr = nil then  // don't overwrite bufptr provided by SetTextBuf
+    begin
+      t.BufPtr := @t.Buffer;
+      t.BufSize := sizeof(t.Buffer);
+    end;
+    t.CloseFunc := @FileNOPProc;
+    if t.Mode = fmOutput then
+    begin
+      if @t = @ErrOutput then
+        t.Handle := STDERR_FILENO
+      else
+        t.Handle := STDOUT_FILENO;
+      t.FlushFunc := @TextOut;
+    end
+    else
+      t.Handle := STDIN_FILENO;
+  end
+  else
+  begin
+    t.CloseFunc := @TextClose;
+
+    Temp := __open(t.Name, Flags, FileAccessRights);
+    if Temp = -1 then
+    begin
+      t.Mode := fmClosed;
+      Result := GetLastError;
+      Exit;
+    end;
+
+    t.Handle := Temp;
+
+    if t.Mode = fmInOut then      // Append mode
+    begin
+      t.Mode := fmOutput;
+
+      if (t.flags and tfCRLF) <> 0 then  // DOS mode, EOF significant
+      begin  // scan for EOF char in last 128 byte sector.
+        Temp := _lseek(t.Handle, 0, SEEK_END);
+        if Temp = -1 then
+        begin
+          Result := TextOpenCleanup(t);
+          Exit;
+        end;
+
+        Dec(Temp, 128);
+        if Temp < 0 then Temp := 0;
+
+        if _lseek(t.Handle, Temp, SEEK_SET) = -1 then
+        begin
+          Result := TextOpenCleanup(t);
+          Exit;
+        end;
+
+        BytesRead := __read(t.Handle, t.BufPtr, 128);
+        if BytesRead = -1 then
+        begin
+          Result := TextOpenCleanup(t);
+          Exit;
+        end;
+
+        for I := 0 to BytesRead - 1 do
+        begin
+          if t.Buffer[I] = Char(cEOF) then
+          begin  // truncate the file here
+            if _ftruncate(t.Handle, _lseek(t.Handle, I - BytesRead, SEEK_END)) = -1 then
+            begin
+              Result := TextOpenCleanup(t);
+              Exit;
+            end;
+            Break;
+          end;
+        end;
+      end;
+    end;
+  end;
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+(*
+var
+  OpenMode: Integer;
+  Flags, Std: ShortInt;
+  Temp: Integer;
+  I, BytesRead: Cardinal;
+  Mode: Byte;
+begin
+  Result := 0;
+  if (t.Mode - fmInput) > (fmInOut - fmInput) then Exit;
+  Mode := t.Mode and 3;
+  t.BufPos := 0;
+  t.BufEnd := 0;
+  t.FlushFunc := @FileNOPProc;
+
+  if t.Name[0] = #0 then  // stdin or stdout
+  begin
+    t.BufPtr := @t.Buffer;
+    t.BufSize := sizeof(t.Buffer);
+    t.CloseFunc := @FileNOPProc;
+    if Mode = (fmOutput and 3) then
+    begin
+      t.InOutFunc := @TextOut;
+      if @t = @ErrOutput then
+        Std := STD_ERROR_HANDLE
+      else
+        Std := STD_OUTPUT_HANDLE;
+    end
+    else
+    begin
+      t.InOutFunc := @TextIn;
+      Std := STD_INPUT_HANDLE;
+    end;
+    t.Handle := GetStdHandle(Std);
+  end
+  else
+  begin
+    t.CloseFunc := @TextClose;
+
+    Flags := OPEN_EXISTING;
+    if Mode = (fmInput and 3) then
+    begin // called by Reset
+      t.InOutFunc := @TextIn;
+      OpenMode := GENERIC_READ; // open for read
+    end
+    else
+    begin
+      t.InOutFunc := @TextOut;
+      if Mode = (fmInOut and 3) then  // called by Append
+        OpenMode := GENERIC_READ OR GENERIC_WRITE  // open for read/write
+      else
+      begin  // called by Rewrite
+        OpenMode := GENERIC_WRITE;      // open for write
+        Flags := CREATE_ALWAYS;
+      end;
+    end;
+
+    Temp := CreateFileA(t.Name, OpenMode, FILE_SHARE_READ, nil, Flags, FILE_ATTRIBUTE_NORMAL, 0);
+    if Temp = -1 then
+    begin
+      Result := TextOpenCleanup(t);
+      Exit;
+    end;
+
+    t.Handle := Temp;
+
+    if Mode = (fmInOut and 3) then
+    begin
+      Dec(t.Mode);  // fmInOut -> fmOutput
+
+{;  ???  we really have to look for the first eof byte in the
+; ???  last record and truncate the file there.
+; Not very nice and clean...
+;
+; lastRecPos = Max( GetFileSize(...) - 128, 0);
+}
+      Temp := GetFileSize(t.Handle, 0);
+      if Temp = -1 then
+      begin
+        Result := TextOpenCleanup(t);
+        Exit;
+      end;
+
+      Dec(Temp, 128);
+      if Temp < 0 then Temp := 0;
+
+      if (SetFilePointer(t.Handle, Temp, nil, FILE_BEGIN) = -1) or
+         (ReadFile(t.Handle, t.Buffer, 128, BytesRead, nil) = 0) then
+      begin
+        Result := TextOpenCleanup(t);
+        Exit;
+      end;
+
+      for I := 0 to BytesRead do
+      begin
+        if t.Buffer[I] = Char(cEOF) then
+        begin  // truncate the file here
+          if (SetFilePointer(t.Handle, I - BytesRead, nil, FILE_END) = -1) or
+            (not SetEndOfFile(t.Handle)) then
+          begin
+            Result := TextOpenCleanup(t);
+            Exit;
+          end;
+          Break;
+        end;
+      end;
+    end;
+    if Mode <> (fmInput and 3) then
+    begin
+      case GetFileType(t.Handle) of
+        0: begin  // bad file type
+             TextOpenCleanup(t);
+             Result := 105;
+             Exit;
+           end;
+        2: t.FlushFunc := @TextOut;
+      end;
+    end;
+  end;
+end;
+*)
+
+asm
+// -> EAX Pointer to text record
+
+        PUSH    ESI
+
+        MOV     ESI,EAX
+
+        XOR     EAX,EAX
+        MOV     [ESI].TTextRec.BufPos,EAX
+        MOV     [ESI].TTextRec.BufEnd,EAX
+        MOV     AX,[ESI].TTextRec.Mode
+
+        SUB     EAX,fmInput
+        JE      @@calledByReset
+
+        DEC     EAX
+        JE      @@calledByRewrite
+
+        DEC     EAX
+        JE      @@calledByAppend
+
+        JMP     @@exit
+
+@@calledByReset:
+
+        MOV     EAX,GENERIC_READ      // open for read
+        MOV     EDX,FILE_SHARE_READ
+        MOV     ECX,OPEN_EXISTING
+
+        MOV     [ESI].TTextRec.InOutFunc,offset TextIn
+
+        JMP     @@common
+
+@@calledByRewrite:
+
+        MOV     EAX,GENERIC_WRITE     // open for write
+        MOV     EDX,FILE_SHARE_READ
+        MOV     ECX,CREATE_ALWAYS
+        JMP     @@commonOut
+
+@@calledByAppend:
+
+        MOV     EAX,GENERIC_READ OR GENERIC_WRITE // open for read/write
+        MOV     EDX,FILE_SHARE_READ
+  MOV     ECX,OPEN_EXISTING
+
+@@commonOut:
+
+        MOV     [ESI].TTextRec.InOutFunc,offset TextOut
+
+@@common:
+
+        MOV     [ESI].TTextRec.CloseFunc,offset TextClose
+        MOV     [ESI].TTextRec.FlushFunc,offset FileNOPProc
+        CMP     byte ptr [ESI].TTextRec.Name,0
+        JE      @@isCon
+
+//  CreateFile(t.Name, EAX, EDX, Nil, ECX, FILE_ATTRIBUTE_NORMAL, 0);
+
+        PUSH    0
+        PUSH    FILE_ATTRIBUTE_NORMAL
+        PUSH    ECX
+        PUSH    0
+        PUSH    EDX
+        PUSH    EAX
+        LEA     EAX,[ESI].TTextRec.Name
+        PUSH    EAX
+        CALL    CreateFileA
+
+        CMP     EAX,-1
+        JZ      @@error
+
+        MOV     [ESI].TTextRec.Handle,EAX
+        CMP     [ESI].TTextRec.Mode,fmInOut
+        JNE     @@success
+
+        DEC     [ESI].TTextRec.Mode     // fmInOut -> fmOutput
+
+{;  ???  we really have to look for the first eof byte in the
+; ???  last record and truncate the file there.
+; Not very nice and clean...
+;
+; lastRecPos = Max( GetFileSize(...) - 128, 0);
+}
+        PUSH    0
+        PUSH    [ESI].TTextRec.Handle
+        CALL    GetFileSize
+
+        INC     EAX
+        JZ      @@error
+        SUB     EAX,129
+        JNC     @@3
+        XOR     EAX,EAX
+@@3:
+//  lseek(f.Handle, SEEK_SET, lastRecPos);
+
+        PUSH    FILE_BEGIN
+        PUSH    0
+        PUSH    EAX
+        PUSH    [ESI].TTextRec.Handle
+        CALL    SetFilePointer
+
+        INC     EAX
+        JE      @@error
+
+//  bytesRead = read(f.Handle, f.Buffer, 128);
+
+        PUSH    0
+        MOV     EDX,ESP
+  PUSH    0
+        PUSH    EDX
+        PUSH    128
+        LEA     EDX,[ESI].TTextRec.Buffer
+        PUSH    EDX
+        PUSH    [ESI].TTextRec.Handle
+        CALL    ReadFile
+        POP     EDX
+        DEC     EAX
+        JNZ     @@error
+
+//  for (i = 0; i < bytesRead; i++)
+
+        XOR     EAX,EAX
+@@loop:
+        CMP     EAX,EDX
+        JAE     @@success
+
+//    if  (f.Buffer[i] == eof)
+
+        CMP     byte ptr [ESI].TTextRec.Buffer[EAX],eof
+        JE      @@truncate
+        INC     EAX
+        JMP     @@loop
+
+@@truncate:
+
+//  lseek( f.Handle, SEEK_END, i - bytesRead );
+
+        PUSH    FILE_END
+        PUSH    0
+        SUB     EAX,EDX
+        PUSH    EAX
+        PUSH    [ESI].TTextRec.Handle
+        CALL    SetFilePointer
+        INC     EAX
+        JE      @@error
+
+//  SetEndOfFile( f.Handle );
+
+        PUSH    [ESI].TTextRec.Handle
+        CALL    SetEndOfFile
+        DEC     EAX
+        JNE     @@error
+
+        JMP     @@success
+
+@@isCon:
+        LEA     EAX,[ESI].TTextRec.Buffer
+        MOV     [ESI].TTextRec.BufSize, TYPE TTextRec.Buffer
+        MOV     [ESI].TTextRec.CloseFunc,offset FileNOPProc
+        MOV     [ESI].TTextRec.BufPtr,EAX
+        CMP     [ESI].TTextRec.Mode,fmOutput
+        JE      @@output
+        PUSH    STD_INPUT_HANDLE
+        JMP     @@1
+@@output:
+        CMP     ESI,offset ErrOutput
+        JNE     @@stdout
+        PUSH    STD_ERROR_HANDLE
+        JMP     @@1
+@@stdout:
+        PUSH    STD_OUTPUT_HANDLE
+@@1:
+        CALL    GetStdHandle
+        CMP     EAX,-1
+        JE      @@error
+        MOV     [ESI].TTextRec.Handle,EAX
+
+@@success:
+  CMP     [ESI].TTextRec.Mode,fmInput
+  JE      @@2
+  PUSH    [ESI].TTextRec.Handle
+  CALL    GetFileType
+  TEST    EAX,EAX
+  JE      @@badFileType
+  CMP     EAX,2
+  JNE     @@2
+  MOV     [ESI].TTextRec.FlushFunc,offset TextOut
+@@2:
+  XOR     EAX,EAX
+@@exit:
+  POP     ESI
+  RET
+
+@@badFileType:
+  PUSH    [ESI].TTextRec.Handle
+  CALL    CloseHandle
+  MOV     [ESI].TTextRec.Mode,fmClosed
+  MOV     EAX,105
+  JMP     @@exit
+
+@@error:
+  MOV     [ESI].TTextRec.Mode,fmClosed
+        CALL    GetLastError
+        JMP     @@exit
+end;
+{$ENDIF}
+
+const
+  fNameLen = 260;
+
+function _Assign(var t: TTextRec; const s: String): Integer;
+begin
+  FillChar(t, sizeof(TFileRec), 0);
+  t.BufPtr := @t.Buffer;
+  t.Mode := fmClosed;
+  t.Flags := tfCRLF * Byte(DefaultTextLineBreakStyle);
+  t.BufSize := sizeof(t.Buffer);
+  t.OpenFunc := @TextOpen;
+  Move(S[1], t.Name, Length(s));
+  t.Name[Length(s)] := #0;
+  Result := 0;
+end;
+
+function InternalFlush(var t: TTextRec; Func: TTextIOFunc): Integer;
+begin
+  case t.Mode of
+    fmOutput,
+    fmInOut  : Result := Func(t);
+    fmInput  : Result := 0;
+  else
+    if (@t = @Output) or (@t = @ErrOutput) then
+      Result := 0
+    else
+      Result := 103;
+  end;
+  if Result <> 0 then SetInOutRes(Result);
+end;
+
+function Flush(var t: Text): Integer;
+begin
+  Result := InternalFlush(TTextRec(t), TTextRec(t).InOutFunc);
+end;
+
+function _Flush(var t: TTextRec): Integer;
+begin
+  Result := InternalFlush(t, t.FlushFunc);
+end;
+
+type
+{$IFDEF MSWINDOWS}
+  TIOProc = function (hFile: Integer; Buffer: Pointer; nNumberOfBytesToWrite: Cardinal;
+  var lpNumberOfBytesWritten: Cardinal; lpOverlapped: Pointer): Integer; stdcall;
+
+function ReadFileX(hFile: Integer; Buffer: Pointer; nNumberOfBytesToRead: Cardinal;
+  var lpNumberOfBytesRead: Cardinal; lpOverlapped: Pointer): Integer; stdcall;
+  external kernel name 'ReadFile';
+function WriteFileX(hFile: Integer; Buffer: Pointer; nNumberOfBytesToWrite: Cardinal;
+  var lpNumberOfBytesWritten: Cardinal; lpOverlapped: Pointer): Integer; stdcall;
+  external kernel name 'WriteFile';
+
+{$ENDIF}
+{$IFDEF LINUX}
+  TIOProc = function (Handle: Integer; Buffer: Pointer; Count: Cardinal): Cardinal; cdecl;
+{$ENDIF}
+
+function BlockIO(var f: TFileRec; buffer: Pointer; recCnt: Cardinal; var recsDone: Longint;
+  ModeMask: Integer; IOProc: TIOProc; ErrorNo: Integer): Cardinal;
+// Note:  RecsDone ptr can be nil!
+begin
+  if (f.Mode and ModeMask) = ModeMask then  // fmOutput or fmInOut / fmInput or fmInOut
+  begin
+{$IFDEF LINUX}
+    Result := IOProc(f.Handle, buffer, recCnt * f.RecSize);
+    if Integer(Result) = -1 then
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+    if IOProc(f.Handle, buffer, recCnt * f.RecSize, Result, nil) = 0 then
+{$ENDIF}
+    begin
+      SetInOutRes(GetLastError);
+      Result := 0;
+    end
+    else
+    begin
+      Result := Result div f.RecSize;
+      if @RecsDone <> nil then
+        RecsDone := Result
+      else if Result <> recCnt then
+      begin
+        SetInOutRes(ErrorNo);
+        Result := 0;
+      end
+    end;
+  end
+  else
+  begin
+    SetInOutRes(103);  // file not open
+    Result := 0;
+  end;
+end;
+
+function _BlockRead(var f: TFileRec; buffer: Pointer; recCnt: Longint; var recsRead: Longint): Longint;
+begin
+  Result := BlockIO(f, buffer, recCnt, recsRead, fmInput,
+    {$IFDEF MSWINDOWS} ReadFileX, {$ENDIF}
+    {$IFDEF LINUX} __read, {$ENDIF}
+    100);
+end;
+
+function  _BlockWrite(var f: TFileRec; buffer: Pointer; recCnt: Longint; var recsWritten: Longint): Longint;
+begin
+  Result := BlockIO(f, buffer, recCnt, recsWritten, fmOutput,
+  {$IFDEF MSWINDOWS} WriteFileX, {$ENDIF}
+  {$IFDEF LINUX} __write, {$ENDIF}
+  101);
+end;
+
+function _Close(var t: TTextRec): Integer;
+begin
+  Result := 0;
+  if (t.Mode >= fmInput) and (t.Mode <= fmInOut) then
+  begin
+    if (t.Mode and fmOutput) = fmOutput then  // fmOutput or fmInOut
+      Result := TTextIOFunc(t.InOutFunc)(t);
+    if Result = 0 then
+      Result := TTextIOFunc(t.CloseFunc)(t);
+    if Result <> 0 then
+      SetInOutRes(Result);
+  end
+  else
+  if @t <> @Input then
+    SetInOutRes(103);
+end;
 
 procedure       _PStrCat;
 asm
@@ -2129,76 +4539,17 @@ asm
         JMP     @@cont
 end;
 
-procedure       _PStrCpy;
-asm
-{     ->EAX = Pointer to dest string    }
-{       EDX = Pointer to source string  }
-
-        XOR     ECX,ECX
-
-        PUSH    ESI
-        PUSH    EDI
-
-        MOV     CL,[EDX]
-
-        MOV     EDI,EAX
-
-        INC     ECX             { we must copy len+1 bytes      }
-
-        MOV     ESI,EDX
-
-        MOV     EAX,ECX
-        SHR     ECX,2
-        AND     EAX,3
-        REP     MOVSD
-
-        MOV     ECX,EAX
-        REP     MOVSB
-
-        POP     EDI
-        POP     ESI
+procedure       _PStrCpy(Dest: PShortString; Source: PShortString);
+begin
+  Move(Source^, Dest^, Byte(Source^[0])+1);
 end;
 
-procedure       _PStrNCpy;
-asm
-{     ->EAX = Pointer to dest string                            }
-{       EDX = Pointer to source string                          }
-{       CL  = Maximum length to copy (allocated size of dest - 1)       }
-
-        PUSH    ESI
-        PUSH    EDI
-
-        MOV     EDI,EAX
-        XOR     EAX,EAX
-        MOV     ESI,EDX
-
-        MOV     AL,[EDX]
-        CMP     AL,CL
-        JA      @@trunc
-
-        INC     EAX
-
-        MOV     ECX,EAX
-        AND     EAX,3
-        SHR     ECX,2
-        REP     MOVSD
-
-        MOV     ECX,EAX
-        REP     MOVSB
-
-        POP     EDI
-        POP     ESI
-        RET
-
-@@trunc:
-        MOV     [EDI],CL        { result length is maxLen       }
-        INC     ESI             { advance pointers              }
-        INC     EDI
-        AND     ECX,0FFH        { should be cheaper than MOVZX  }
-        REP     MOVSB   { copy maxLen bytes             }
-
-        POP     EDI
-        POP     ESI
+procedure       _PStrNCpy(Dest: PShortString; Source: PShortString; MaxLen: Byte);
+begin
+  if MaxLen > Byte(Source^[0]) then
+    MaxLen := Byte(Source^[0]);
+  Byte(Dest^[0]) := MaxLen;
+  Move(Source^[1], Dest^[1], MaxLen);
 end;
 
 procedure       _PStrCmp;
@@ -2360,18 +4711,305 @@ asm
         POP     EBX
 end;
 
-procedure       _EofFile;                               external;       {$L EofFile }
-procedure       _EofText;                               external;       {$L EofText }
-procedure       _Eoln;                          external;       {$L Eoln    }
-procedure       _Erase;                         external;       {$L Erase   }
+function _EofFile(var f: TFileRec): Boolean;
+begin
+  Result := _FilePos(f) >= _FileSize(f);
+end;
 
-procedure       _FSafeDivide;                           external;       {$L FDIV    }
-procedure       _FSafeDivideR;                          external;       {   FDIV    }
+function _EofText(var t: TTextRec): Boolean;
+asm
+// -> EAX Pointer to text record
+// <- AL  Boolean result
+        CMP     [EAX].TTextRec.Mode,fmInput
+        JNE     @@readChar
+        MOV     EDX,[EAX].TTextRec.BufPos
+        CMP     EDX,[EAX].TTextRec.BufEnd
+        JAE     @@readChar
+        ADD     EDX,[EAX].TTextRec.BufPtr
+        TEST    [EAX].TTextRec.Flags,tfCRLF
+        JZ      @@FalseExit
+        MOV     CL,[EDX]
+        CMP     CL,cEof
+        JNZ     @@FalseExit
 
-procedure       _FilePos;                               external;       {$L FilePos }
-procedure       _FileSize;                              external;       {$L FileSize}
+@@eof:
+        MOV     AL,1
+        JMP     @@exit
 
-procedure       _FillChar;
+@@readChar:
+        PUSH    EAX
+        CALL    _ReadChar
+        POP     EDX
+        CMP     AH,cEof
+        JE      @@eof
+        DEC     [EDX].TTextRec.BufPos
+@@FalseExit:
+        XOR     EAX,EAX
+@@exit:
+end;
+
+function _Eoln(var t: TTextRec): Boolean;
+asm
+// -> EAX Pointer to text record
+// <- AL  Boolean result
+
+        CMP     [EAX].TTextRec.Mode,fmInput
+        JNE     @@readChar
+        MOV     EDX,[EAX].TTextRec.BufPos
+        CMP     EDX,[EAX].TTextRec.BufEnd
+        JAE     @@readChar
+        ADD     EDX,[EAX].TTextRec.BufPtr
+        TEST    [EAX].TTextRec.Flags,tfCRLF
+        MOV     AL,0
+        MOV     CL,[EDX]
+        JZ      @@testLF
+        CMP     CL,cCR
+        JE      @@eol
+        CMP     CL,cEOF
+        JE      @@eof
+        JMP     @@exit
+
+@@testLF:
+        CMP     CL,cLF
+        JE      @@eol
+        CMP     CL,cEOF
+        JE      @@eof
+        JMP     @@exit
+
+@@readChar:
+        PUSH    EAX
+        CALL    _ReadChar
+        POP     EDX
+        CMP     AH,cEOF
+        JE      @@eof
+        DEC     [EDX].TTextRec.BufPos
+        XOR     ECX,ECX
+        XCHG    ECX,EAX
+        TEST    [EDX].TTextRec.Mode,tfCRLF
+        JZ      @@testLF
+        CMP     CL,cCR
+        JE      @@eol
+        JMP     @@exit
+
+@@eol:
+@@eof:
+        MOV     AL,1
+@@exit:
+end;
+
+procedure _Erase(var f: TFileRec);
+begin
+  if (f.Mode < fmClosed) or (f.Mode > fmInOut) then
+    SetInOutRes(102)  // file not assigned
+  else
+{$IFDEF LINUX}
+    if __remove(f.Name) < 0 then
+      SetInOutRes(GetLastError);
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+    if not DeleteFileA(f.Name) then
+      SetInOutRes(GetLastError);
+{$ENDIF}
+end;
+
+{$IFDEF MSWINDOWS}
+// Floating-point divide reverse routine
+// ST(1) = ST(0) / ST(1), pop ST
+
+procedure _FSafeDivideR;
+asm
+  FXCH
+  JMP _FSafeDivide
+end;
+
+// Floating-point divide routine
+// ST(1) = ST(1) / ST(0), pop ST
+
+procedure _FSafeDivide;
+type
+  Z = packed record  // helper type to make parameter references more readable
+    Dividend: Extended;   // (TBYTE PTR [ESP])
+    Pad: Word;
+    Divisor: Extended;    // (TBYTE PTR [ESP+12])
+  end;
+asm
+  CMP TestFDIV,0    //Check FDIV indicator
+  JLE @@FDivideChecked  //Jump if flawed or don't know
+  FDIV        //Known to be ok, so just do FDIV
+  RET
+
+// FDIV constants
+@@FDIVRiscTable: DB 0,1,0,0,4,0,0,7,0,0,10,0,0,13,0,0;
+
+@@FDIVScale1:    DD $3F700000            // 0.9375
+@@FDIVScale2:    DD $3F880000            // 1.0625
+@@FDIV1SHL63:    DD $5F000000            // 1 SHL 63
+
+@@TestDividend:  DD $C0000000,$4150017E  // 4195835.0
+@@TestDivisor:   DD $80000000,$4147FFFF  // 3145727.0
+@@TestOne:       DD $00000000,$3FF00000  // 1.0
+
+// Flawed FDIV detection
+@@FDivideDetect:
+  MOV TestFDIV,1      //Indicate correct FDIV
+  PUSH  EAX
+  SUB ESP,12
+  FSTP  TBYTE PTR [ESP]           //Save off ST
+  FLD QWORD PTR @@TestDividend  //Ok if x - (x / y) * y < 1.0
+  FDIV  QWORD PTR @@TestDivisor
+  FMUL  QWORD PTR @@TestDivisor
+  FSUBR QWORD PTR @@TestDividend
+  FCOMP QWORD PTR @@TestOne
+  FSTSW AX
+  SHR EAX,7
+  AND EAX,002H    //Zero if FDIV is flawed
+  DEC EAX
+  MOV TestFDIV,AL   //1 means Ok, -1 means flawed
+  FLD TBYTE PTR [ESP]   //Restore ST
+  ADD ESP,12
+  POP EAX
+  JMP _FSafeDivide
+
+@@FDivideChecked:
+  JE  @@FDivideDetect   //Do detection if TestFDIV = 0
+
+@@1:  PUSH  EAX
+  SUB ESP,24
+  FSTP  [ESP].Z.Divisor     //Store Divisor and Dividend
+  FSTP  [ESP].Z.Dividend
+  FLD [ESP].Z.Dividend
+  FLD [ESP].Z.Divisor
+@@2:  MOV EAX,DWORD PTR [ESP+4].Z.Divisor   //Is Divisor a denormal?
+  ADD EAX,EAX
+  JNC @@20      //Yes, @@20
+  XOR EAX,0E000000H   //If these three bits are not all
+  TEST  EAX,0E000000H   //ones, FDIV will work
+  JZ  @@10      //Jump if all ones
+@@3:  FDIV        //Do FDIV and exit
+  ADD ESP,24
+  POP EAX
+  RET
+
+@@10: SHR EAX,28      //If the four bits following the MSB
+          //of the mantissa have a decimal
+          //of 1, 4, 7, 10, or 13, FDIV may
+  CMP byte ptr @@FDIVRiscTable[EAX],0 //not work correctly
+  JZ  @@3     //Do FDIV if not 1, 4, 7, 10, or 13
+  MOV EAX,DWORD PTR [ESP+8].Z.Divisor //Get Divisor exponent
+  AND EAX,7FFFH
+  JZ  @@3     //Ok to FDIV if denormal
+  CMP EAX,7FFFH
+  JE  @@3     //Ok to FDIV if NAN or INF
+  MOV EAX,DWORD PTR [ESP+8].Z.Dividend //Get Dividend exponent
+  AND EAX,7FFFH
+  CMP EAX,1     //Small number?
+  JE  @@11      //Yes, @@11
+  FMUL  DWORD PTR @@FDIVScale1  //Scale by 15/16
+  FXCH
+  FMUL  DWORD PTR @@FDIVScale1
+  FXCH
+  JMP @@3     //FDIV is now safe
+
+@@11: FMUL  DWORD PTR @@FDIVScale2    //Scale by 17/16
+  FXCH
+  FMUL  DWORD PTR @@FDIVScale2
+  FXCH
+  JMP @@3     //FDIV is now safe
+
+@@20: MOV EAX,DWORD PTR [ESP].Z.Divisor     //Is entire Divisor zero?
+  OR  EAX,DWORD PTR [ESP+4].Z.Divisor
+  JZ  @@3               //Yes, ok to FDIV
+  MOV EAX,DWORD PTR [ESP+8].Z.Divisor   //Get Divisor exponent
+  AND EAX,7FFFH             //Non-zero exponent is invalid
+  JNZ @@3               //Ok to FDIV if invalid
+  MOV EAX,DWORD PTR [ESP+8].Z.Dividend  //Get Dividend exponent
+  AND EAX,7FFFH             //Denormal?
+  JZ  @@21                //Yes, @@21
+  CMP EAX,7FFFH             //NAN or INF?
+  JE  @@3               //Yes, ok to FDIV
+  MOV EAX,DWORD PTR [ESP+4].Z.Dividend  //If MSB of mantissa is zero,
+  ADD EAX,EAX               //the number is invalid
+  JNC @@3               //Ok to FDIV if invalid
+  JMP @@22
+@@21: MOV EAX,DWORD PTR [ESP+4].Z.Dividend  //If MSB of mantissa is zero,
+  ADD EAX,EAX               //the number is invalid
+  JC  @@3               //Ok to FDIV if invalid
+@@22: FXCH                  //Scale stored Divisor image by
+  FSTP  ST(0)               //1 SHL 63 and restart
+  FLD ST(0)
+  FMUL  DWORD PTR @@FDIV1SHL63
+  FSTP  [ESP].Z.Divisor
+  FLD [ESP].Z.Dividend
+  FXCH
+  JMP @@2
+end;
+{$ENDIF}
+
+function _FilePos(var f: TFileRec): Longint;
+begin
+  if (f.Mode > fmClosed) and (f.Mode <= fmInOut) then
+  begin
+{$IFDEF LINUX}
+    Result := _lseek(f.Handle, 0, SEEK_CUR);
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+    Result := SetFilePointer(f.Handle, 0, nil, FILE_CURRENT);
+{$ENDIF}
+    if Result = -1 then
+      InOutError
+    else
+      Result := Cardinal(Result) div f.RecSize;
+  end
+  else
+  begin
+    SetInOutRes(103);
+    Result := -1;
+  end;
+end;
+
+function _FileSize(var f: TFileRec): Longint;
+{$IFDEF MSWINDOWS}
+begin
+  Result := -1;
+  if (f.Mode > fmClosed) and (f.Mode <= fmInOut) then
+  begin
+    Result := GetFileSize(f.Handle, 0);
+    if Result = -1 then
+      InOutError
+    else
+      Result := Cardinal(Result) div f.RecSize;
+  end
+  else
+    SetInOutRes(103);
+{$ENDIF}
+{$IFDEF LINUX}
+var
+  stat: TStatStruct;
+begin
+  Result := -1;
+  if (f.Mode > fmClosed) and (f.Mode <= fmInOut) then
+  begin
+    if _fxstat(STAT_VER_LINUX, f.Handle, stat) <> 0 then
+      InOutError
+    else
+      Result := stat.st_size div f.RecSize;
+  end
+  else
+    SetInOutRes(103);
+{$ENDIF}
+end;
+
+procedure       _FillChar(var Dest; count: Integer; Value: Char);
+{$IFDEF PUREPASCAL}
+var
+  I: Integer;
+  P: PChar;
+begin
+  P := PChar(@Dest);
+  for I := count-1 downto 0 do
+    P[I] := Value;
+end;
+{$ELSE}
 asm
 {     ->EAX     Pointer to destination  }
 {       EDX     count   }
@@ -2399,8 +5037,9 @@ asm
 @@exit:
         POP     EDI
 end;
+{$ENDIF}
 
-procedure       _Mark;
+procedure       Mark;
 begin
   Error(reInvalidPtr);
 end;
@@ -2409,11 +5048,25 @@ procedure       _RandInt;
 asm
 {     ->EAX     Range   }
 {     <-EAX     Result  }
-        IMUL    EDX,RandSeed,08088405H
+        PUSH    EBX
+{$IFDEF PIC}
+        PUSH    EAX
+        CALL    GetGOT
+        MOV     EBX,EAX
+        POP     EAX
+        MOV     ECX,[EBX].OFFSET RandSeed
+        IMUL    EDX,[ECX],08088405H
         INC     EDX
-        MOV     RandSeed,EDX
+        MOV     [ECX],EDX
+{$ELSE}
+        XOR     EBX, EBX
+        IMUL    EDX,[EBX].RandSeed,08088405H
+        INC     EDX
+        MOV     [EBX].RandSeed,EDX
+{$ENDIF}
         MUL     EDX
         MOV     EAX,EDX
+        POP     EBX
 end;
 
 procedure       _RandExt;
@@ -2421,47 +5074,955 @@ const two2neg32: double = ((1.0/$10000) / $10000);  // 2^-32
 asm
 {       FUNCTION _RandExt: Extended;    }
 
-        IMUL    EDX,RandSeed,08088405H
+        PUSH    EBX
+{$IFDEF PIC}
+        CALL    GetGOT
+        MOV     EBX,EAX
+        MOV     ECX,[EBX].OFFSET RandSeed
+        IMUL    EDX,[ECX],08088405H
         INC     EDX
-        MOV     RandSeed,EDX
+        MOV     [ECX],EDX
+{$ELSE}
+        XOR     EBX, EBX
+        IMUL    EDX,[EBX].RandSeed,08088405H
+        INC     EDX
+        MOV     [EBX].RandSeed,EDX
+{$ENDIF}
 
-        FLD     two2neg32
+        FLD     [EBX].two2neg32
         PUSH    0
         PUSH    EDX
         FILD    qword ptr [ESP]
         ADD     ESP,8
-        FMULP  ST(1), ST(0)
+        FMULP   ST(1), ST(0)
+        POP     EBX
 end;
 
-procedure       _ReadRec;                               external;       {$L ReadRec }
+function _ReadRec(var f: TFileRec; Buffer: Pointer): Integer;
+{$IFDEF LINUX}
+begin
+  if (f.Mode and fmInput) = fmInput then  // fmInput or fmInOut
+  begin
+  Result := __read(f.Handle, Buffer, f.RecSize);
+  if Result = -1 then
+    InOutError
+  else if Cardinal(Result) <> f.RecSize then
+    SetInOutRes(100);
+  end
+  else
+  begin
+  SetInOutRes(103);  // file not open for input
+  Result := 0;
+  end;
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+asm
+// -> EAX Pointer to file variable
+//  EDX Pointer to buffer
 
-procedure       _ReadChar;                              external;       {$L ReadChar}
-procedure       _ReadLong;                              external;       {$L ReadLong}
-procedure       _ReadString;                    external;       {$L ReadStri}
-procedure       _ReadCString;                   external;       {   ReadStri}
+        PUSH    EBX
+        XOR     ECX,ECX
+        MOV     EBX,EAX
+        MOV     CX,[EAX].TFileRec.Mode   // File must be open
+        SUB     ECX,fmInput
+        JE      @@skip
+        SUB     ECX,fmInOut-fmInput
+        JNE     @@fileNotOpen
+@@skip:
 
-procedure       _ReadExt;                               external;       {$L ReadExt }
-procedure       _ReadLn;                                external;       {$L ReadLn  }
+//  ReadFile(f.Handle, buffer, f.RecSize, @result, Nil);
 
-procedure       _Rename;                                external;       {$L Rename  }
+        PUSH    0     // space for OS result
+        MOV     EAX,ESP
 
-procedure       _Release;
+        PUSH    0     // pass lpOverlapped
+        PUSH    EAX     // pass @result
+
+        PUSH    [EBX].TFileRec.RecSize    // pass nNumberOfBytesToRead
+
+        PUSH    EDX     // pass lpBuffer
+        PUSH    [EBX].TFileRec.Handle   // pass hFile
+        CALL    ReadFile
+        POP     EDX     // pop result
+        DEC     EAX     // check EAX = TRUE
+        JNZ     @@error
+
+        CMP     EDX,[EBX].TFileRec.RecSize  // result = f.RecSize ?
+        JE      @@exit
+
+@@readError:
+        MOV EAX,100
+        JMP @@errExit
+
+@@fileNotOpen:
+        MOV EAX,103
+        JMP @@errExit
+
+@@error:
+        CALL  GetLastError
+@@errExit:
+        CALL  SetInOutRes
+@@exit:
+        POP EBX
+end;
+{$ENDIF}
+
+
+// If the file is Input std variable, try to open it
+// Otherwise, runtime error.
+function TryOpenForInput(var t: TTextRec): Boolean;
+begin
+  if @t = @Input then
+  begin
+    t.Flags := tfCRLF * Byte(DefaultTextLineBreakStyle);
+    _ResetText(t);
+  end;
+
+  Result := t.Mode = fmInput;
+  if not Result then
+    SetInOutRes(104);
+end;
+
+function _ReadChar(var t: TTextRec): Char;
+asm
+// -> EAX Pointer to text record
+// <- AL  Character read. (may be a pseudo cEOF in DOS mode)
+// <- AH  cEOF = End of File, else 0
+//    For eof, #$1A is returned in AL and in AH.
+//    For errors, InOutRes is set and #$1A is returned.
+
+        CMP     [EAX].TTextRec.Mode, fmInput
+        JE      @@checkBuf
+        PUSH    EAX
+        CALL    TryOpenForInput
+        TEST    AL,AL
+        POP     EAX
+        JZ      @@eofexit
+
+@@checkBuf:
+        MOV     EDX,[EAX].TTextRec.BufPos
+        CMP     EDX,[EAX].TTextRec.BufEnd
+        JAE     @@fillBuf
+@@cont:
+        TEST    [EAX].TTextRec.Flags,tfCRLF
+        MOV     ECX,[EAX].TTextRec.BufPtr
+        MOV     CL,[ECX+EDX]
+        JZ      @@cont2
+        CMP     CL,cEof                       // Check for EOF char in DOS mode
+        JE      @@eofexit
+@@cont2:
+        INC     EDX
+        MOV     [EAX].TTextRec.BufPos,EDX
+        XOR     EAX,EAX
+        JMP     @@exit
+
+@@fillBuf:
+        PUSH    EAX
+        CALL    [EAX].TTextRec.InOutFunc
+        TEST    EAX,EAX
+        JNE     @@error
+        POP     EAX
+        MOV     EDX,[EAX].TTextRec.BufPos
+        CMP     EDX,[EAX].TTextRec.BufEnd
+        JB      @@cont
+
+//  We didn't get characters. Must be eof then.
+
+@@eof:
+        TEST    [EAX].TTextRec.Flags,tfCRLF
+        JZ      @@eofexit
+//  In DOS CRLF compatibility mode, synthesize an EOF char
+//  Store one eof in the buffer and increment BufEnd
+        MOV     ECX,[EAX].TTextRec.BufPtr
+        MOV     byte ptr [ECX+EDX],cEof
+        INC     [EAX].TTextRec.BufEnd
+        JMP     @@eofexit
+
+@@error:
+        CALL    SetInOutRes
+        POP     EAX
+@@eofexit:
+        MOV     CL,cEof
+        MOV     AH,CL
+@@exit:
+        MOV     AL,CL
+end;
+
+function _ReadLong(var t: TTextRec): Longint;
+asm
+// -> EAX Pointer to text record
+// <- EAX Result
+
+        PUSH    EBX
+        PUSH    ESI
+        PUSH    EDI
+        SUB     ESP,36      // var numbuf: String[32];
+
+        MOV     ESI,EAX
+        CALL    _SeekEof
+        DEC     AL
+        JZ      @@eof
+
+        MOV     EDI,ESP     // EDI -> numBuf[0]
+        MOV     BL,32
+@@loop:
+        MOV     EAX,ESI
+        CALL    _ReadChar
+        CMP     AL,' '
+        JBE     @@endNum
+        STOSB
+        DEC     BL
+        JNZ     @@loop
+@@convert:
+        MOV     byte ptr [EDI],0
+        MOV     EAX,ESP     // EAX -> numBuf
+        PUSH    EDX     // allocate code result
+        MOV     EDX,ESP     // pass pointer to code
+        CALL    _ValLong    // convert
+        POP     EDX     // pop code result into EDX
+        TEST    EDX,EDX
+        JZ      @@exit
+        MOV     EAX,106
+        CALL    SetInOutRes
+        JMP     @@exit
+
+@@endNum:
+        CMP     AH,cEof
+        JE      @@convert
+        DEC     [ESI].TTextRec.BufPos
+        JMP     @@convert
+
+@@eof:
+        XOR     EAX,EAX
+@@exit:
+        ADD     ESP,36
+        POP     EDI
+        POP     ESI
+        POP     EBX
+end;
+
+function ReadLine(var t: TTextRec; buf: Pointer; maxLen: Longint): Pointer;
+asm
+// -> EAX Pointer to text record
+//  EDX Pointer to buffer
+//  ECX Maximum count of chars to read
+// <- ECX Actual count of chars in buffer
+// <- EAX Pointer to text record
+
+        PUSH    EBX
+        PUSH    ESI
+        PUSH    EDI
+        PUSH    ECX
+        MOV     ESI,ECX
+        MOV     EDI,EDX
+
+        CMP     [EAX].TTextRec.Mode,fmInput
+        JE      @@start
+        PUSH    EAX
+        CALL    TryOpenForInput
+        TEST    AL,AL
+        POP     EAX
+        JZ      @@exit
+
+@@start:
+        MOV     EBX,EAX
+
+        TEST    ESI,ESI
+        JLE     @@exit
+
+        MOV     EDX,[EBX].TTextRec.BufPos
+        MOV     ECX,[EBX].TTextRec.BufEnd
+        SUB     ECX,EDX
+        ADD     EDX,[EBX].TTextRec.BufPtr
+
+@@loop:
+        DEC     ECX
+        JL      @@readChar
+        MOV     AL,[EDX]
+        INC     EDX
+@@cont:
+        CMP     AL,cLF
+        JE      @@lf
+
+        CMP     AL,cCR
+        JE      @@cr
+
+        STOSB
+        DEC     ESI
+        JG      @@loop
+        JMP     @@finish
+
+@@cr:
+        MOV     AL,[EDX]
+        CMP     AL,cLF
+        JNE     @@loop
+@@lf:
+        DEC     EDX
+@@finish:
+        SUB     EDX,[EBX].TTextRec.BufPtr
+        MOV     [EBX].TTextRec.BufPos,EDX
+        JMP     @@exit
+
+@@readChar:
+        MOV     [EBX].TTextRec.BufPos,EDX
+        MOV     EAX,EBX
+        CALL    _ReadChar
+        MOV     EDX,[EBX].TTextRec.BufPos
+        MOV     ECX,[EBX].TTextRec.BufEnd
+        SUB     ECX,EDX
+        ADD     EDX,[EBX].TTextRec.BufPtr
+        TEST    AH,AH    //eof
+        JZ      @@cont
+
+@@exit:
+        MOV     EAX,EBX
+        POP     ECX
+        SUB     ECX,ESI
+        POP     EDI
+        POP     ESI
+        POP     EBX
+end;
+
+procedure _ReadString(var t: TTextRec; s: PShortString; maxLen: Longint);
+asm
+// -> EAX Pointer to text record
+//  EDX Pointer to string
+//  ECX Maximum length of string
+
+        PUSH     EDX
+        INC      EDX
+        CALL     ReadLine
+        POP      EDX
+        MOV      [EDX],CL
+end;
+
+procedure _ReadCString(var t: TTextRec; s: PChar; maxLen: Longint);
+asm
+// -> EAX Pointer to text record
+//  EDX Pointer to string
+//  ECX Maximum length of string
+
+        PUSH    EDX
+        CALL    ReadLine
+        POP     EDX
+        MOV     byte ptr [EDX+ECX],0
+end;
+
+procedure _ReadLString(var t: TTextRec; var s: AnsiString);
+asm
+        { ->    EAX     pointer to Text         }
+        {       EDX     pointer to AnsiString   }
+
+        PUSH    EBX
+        PUSH    ESI
+        MOV     EBX,EAX
+        MOV     ESI,EDX
+
+        MOV     EAX,EDX
+        CALL    _LStrClr
+
+        SUB     ESP,256
+
+        MOV     EAX,EBX
+        MOV     EDX,ESP
+        MOV     ECX,255
+        CALL    _ReadString
+
+        MOV     EAX,ESI
+        MOV     EDX,ESP
+        CALL    _LStrFromString
+
+        CMP     byte ptr [ESP],255
+        JNE     @@exit
+@@loop:
+
+        MOV     EAX,EBX
+        MOV     EDX,ESP
+        MOV     ECX,255
+        CALL    _ReadString
+
+        MOV     EDX,ESP
+        PUSH    0
+        MOV     EAX,ESP
+        CALL    _LStrFromString
+
+        MOV     EAX,ESI
+        MOV     EDX,[ESP]
+        CALL    _LStrCat
+
+        MOV     EAX,ESP
+        CALL    _LStrClr
+        POP     EAX
+
+        CMP     byte ptr [ESP],255
+        JE      @@loop
+
+@@exit:
+        ADD     ESP,256
+        POP     ESI
+        POP     EBX
+end;
+
+
+function IsValidMultibyteChar(const Src: PChar; SrcBytes: Integer): Boolean;
+{$IFDEF MSWINDOWS}
+const
+  ERROR_NO_UNICODE_TRANSLATION = 1113;   // Win32 GetLastError when result = 0
+  MB_ERR_INVALID_CHARS         = 8;
+var
+  Dest: WideChar;
+begin
+  Result := MultiByteToWideChar(0, MB_ERR_INVALID_CHARS, Src, SrcBytes, @Dest, 1) <> 0;
+{$ENDIF}
+{$IFDEF LINUX}
+begin
+  Result := mblen(Src, SrcBytes) <> -1;
+{$ENDIF}
+end;
+
+
+function _ReadWChar(var t: TTextRec): WideChar;
+var
+  scratch: array [0..7] of AnsiChar;
+  wc: WideChar;
+  i: Integer;
+begin
+  i := 0;
+  while i < High(scratch) do
+  begin
+    scratch[i] := _ReadChar(t);
+    Inc(i);
+    scratch[i] := #0;
+    if IsValidMultibyteChar(scratch, i) then
+    begin
+      WCharFromChar(@wc, 1, scratch, i);
+      Result := wc;
+      Exit;
+    end;
+  end;
+  SetInOutRes(106);  // Invalid Input
+  Result := #0;
+end;
+
+
+procedure _ReadWCString(var t: TTextRec; s: PWideChar; maxBytes: Longint);
+var
+  i, maxLen: Integer;
+  wc: WideChar;
+begin
+  if s = nil then Exit;
+  i := 0;
+  maxLen := maxBytes div sizeof(WideChar);
+  while i < maxLen do
+  begin
+    wc := _ReadWChar(t);
+    case Integer(wc) of
+      cEOF: if _EOFText(t) then Break;
+      cLF : begin
+              Dec(t.BufPos);
+              Break;
+            end;
+      cCR : if Byte(t.BufPtr[t.BufPos]) = cLF then
+            begin
+              Dec(t.BufPos);
+              Break;
+            end;
+    end;
+    s[i] := wc;
+    Inc(i);
+  end;
+  s[i] := #0;
+end;
+
+procedure _ReadWString(var t: TTextRec; var s: WideString);
+var
+  Temp: AnsiString;
+begin
+  _ReadLString(t, Temp);
+  s := Temp;
+end;
+
+function _ReadExt(var t: TTextRec): Extended;
+asm
+// -> EAX Pointer to text record
+// <- FST(0)  Result
+
+        PUSH     EBX
+        PUSH     ESI
+        PUSH     EDI
+        SUB      ESP,68      // var numbuf: array[0..64] of char;
+
+        MOV      ESI,EAX
+        CALL     _SeekEof
+        DEC      AL
+        JZ       @@eof
+
+        MOV      EDI,ESP     // EDI -> numBuf[0]
+        MOV      BL,64
+@@loop:
+        MOV      EAX,ESI
+        CALL     _ReadChar
+        CMP      AL,' '
+        JBE      @@endNum
+        STOSB
+        DEC      BL
+        JNZ      @@loop
+@@convert:
+        MOV      byte ptr [EDI],0
+        MOV      EAX,ESP     // EAX -> numBuf
+        PUSH     EDX     // allocate code result
+        MOV      EDX,ESP     // pass pointer to code
+        CALL     _ValExt     // convert
+        POP      EDX     // pop code result into EDX
+        TEST     EDX,EDX
+        JZ       @@exit
+        MOV      EAX,106
+        CALL     SetInOutRes
+        JMP      @@exit
+
+@@endNum:
+        CMP      AH,cEOF
+        JE       @@convert
+        DEC      [ESI].TTextRec.BufPos
+        JMP      @@convert
+
+@@eof:
+        FLDZ
+@@exit:
+        ADD      ESP,68
+        POP      EDI
+        POP      ESI
+        POP      EBX
+end;
+
+procedure _ReadLn(var t: TTextRec);
+asm
+// -> EAX Pointer to text record
+
+        PUSH     EBX
+        MOV      EBX,EAX
+@@loop:
+        MOV      EAX,EBX
+        CALL     _ReadChar
+
+        CMP      AL,cLF            // accept LF as end of line
+        JE       @@exit
+        CMP      AH,cEOF
+        JE       @@eof
+        CMP      AL,cCR
+        JNE      @@loop
+
+        MOV      EAX,EBX
+        CALL     _ReadChar
+
+        CMP      AL,cLF            // accept CR+LF as end of line
+        JE       @@exit
+        CMP      AH,cEOF           // accept CR+EOF as end of line
+        JE       @@eof
+        DEC      [EBX].TTextRec.BufPos
+        JMP      @@loop            // else CR+ anything else is not a line break.
+
+@@exit:
+@@eof:
+        POP      EBX
+end;
+
+procedure _Rename(var f: TFileRec; newName: PChar);
+var
+  I: Integer;
+begin
+  if f.Mode = fmClosed then
+  begin
+    if newName = nil then newName := '';
+{$IFDEF LINUX}
+    if __rename(f.Name, newName) = 0 then
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+    if MoveFileA(f.Name, newName) then
+{$ENDIF}
+    begin
+      I := 0;
+      while (newName[I] <> #0) and (I < High(f.Name)) do
+      begin
+        f.Name[I] := newName[I];
+        Inc(I);
+      end
+    end
+    else
+      SetInOutRes(GetLastError);
+  end
+  else
+    SetInOutRes(102);
+end;
+
+procedure       Release;
 begin
   Error(reInvalidPtr);
 end;
 
-procedure       _ResetText(var t: text);                external;       {$L OpenText}
-procedure       _ResetFile;                             external;       {$L OpenFile}
-procedure       _RewritText(var t: text);               external;       {   OpenText}
-procedure       _RewritFile;                    external;       {   OpenFile}
+function _CloseFile(var f: TFileRec): Integer;
+begin
+  f.Mode := fmClosed;
+  Result := 0;
+  if not InternalClose(f.Handle) then
+  begin
+    InOutError;
+    Result := 1;
+  end;
+end;
 
-procedure       _Seek;                          external;       {$L Seek    }
-procedure       _SeekEof;                               external;       {$L SeekEof }
-procedure       _SeekEoln;                              external;       {$L SeekEoln}
+function OpenFile(var f: TFileRec; recSiz: Longint; mode: Longint): Integer;
+{$IFDEF LINUX}
+var
+  Flags: Integer;
+begin
+  Result := 0;
+  if (f.Mode >= fmClosed) and (f.Mode <= fmInOut) then
+  begin
+    if f.Mode <> fmClosed then // not yet closed: close it
+    begin
+      Result := TFileIOFunc(f.CloseFunc)(f);
+      if Result <> 0 then
+        SetInOutRes(Result);
+    end;
 
-procedure       _SetTextBuf;                    external;       {$L SetTextB}
+    if recSiz <= 0 then
+      SetInOutRes(106);
 
-procedure       _StrLong;
+    f.RecSize := recSiz;
+    f.InOutFunc := @FileNopProc;
+
+    if f.Name[0] <> #0 then
+    begin
+      f.CloseFunc := @_CloseFile;
+      case mode of
+        1: begin
+             Flags := O_APPEND or O_WRONLY;
+             f.Mode := fmOutput;
+           end;
+        2: begin
+             Flags := O_RDWR;
+             f.Mode := fmInOut;
+           end;
+        3: begin
+             Flags := O_CREAT or O_TRUNC or O_RDWR;
+             f.Mode := fmInOut;
+           end;
+      else
+        Flags := O_RDONLY;
+        f.Mode := fmInput;
+      end;
+
+      f.Handle := __open(f.Name, Flags, FileAccessRights);
+    end
+    else  // stdin or stdout
+    begin
+      f.CloseFunc := @FileNopProc;
+      if mode = 3 then
+        f.Handle := STDOUT_FILENO
+      else
+        f.Handle := STDIN_FILENO;
+    end;
+
+    if f.Handle = -1 then
+    begin
+      f.Mode := fmClosed;
+      InOutError;
+    end;
+  end
+  else
+    SetInOutRes(102);
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+const
+  ShareTab: array [0..7] of Integer =
+    (FILE_SHARE_READ OR FILE_SHARE_WRITE,  // OF_SHARE_COMPAT     0x00000000
+     0,                                    // OF_SHARE_EXCLUSIVE  0x00000010
+     FILE_SHARE_READ,                      // OF_SHARE_DENY_WRITE 0x00000020
+     FILE_SHARE_WRITE,                     // OF_SHARE_DENY_READ  0x00000030
+     FILE_SHARE_READ OR FILE_SHARE_WRITE,  // OF_SHARE_DENY_NONE  0x00000040
+     0,0,0);
+asm
+//->  EAX Pointer to file record
+//  EDX Record size
+//  ECX File mode
+
+        PUSH     EBX
+        PUSH     ESI
+        PUSH     EDI
+
+        MOV      ESI,EDX
+        MOV      EDI,ECX
+        XOR      EDX,EDX
+        MOV      EBX,EAX
+
+  MOV      DX,[EAX].TFileRec.Mode
+        SUB      EDX,fmClosed
+        JE       @@alreadyClosed
+        CMP      EDX,fmInOut-fmClosed
+        JA       @@notAssignedError
+
+//  not yet closed: close it. File parameter is still in EAX
+
+        CALL     [EBX].TFileRec.CloseFunc
+        TEST     EAX,EAX
+        JE       @@alreadyClosed
+        CALL     SetInOutRes
+
+@@alreadyClosed:
+
+        MOV     [EBX].TFileRec.Mode,fmInOut
+        MOV     [EBX].TFileRec.RecSize,ESI
+        MOV     [EBX].TFileRec.CloseFunc,offset _CloseFile
+        MOV     [EBX].TFileRec.InOutFunc,offset FileNopProc
+
+        CMP     byte ptr [EBX].TFileRec.Name,0
+        JE      @@isCon
+
+        MOV     EAX,GENERIC_READ OR GENERIC_WRITE
+        MOV     DL,FileMode
+        AND     EDX,070H
+        SHR     EDX,4-2
+        MOV     EDX,dword ptr [shareTab+EDX]
+        MOV     ECX,CREATE_ALWAYS
+
+        SUB     EDI,3
+        JE      @@calledByRewrite
+
+        MOV     ECX,OPEN_EXISTING
+        INC     EDI
+        JE      @@skip
+
+        MOV     EAX,GENERIC_WRITE
+        INC     EDI
+        MOV     [EBX].TFileRec.Mode,fmOutput
+        JE      @@skip
+
+        MOV     EAX,GENERIC_READ
+        MOV     [EBX].TFileRec.Mode,fmInput
+
+@@skip:
+@@calledByRewrite:
+
+//  CreateFile(t.FileName, EAX, EDX, Nil, ECX, FILE_ATTRIBUTE_NORMAL, 0);
+
+        PUSH     0
+        PUSH     FILE_ATTRIBUTE_NORMAL
+        PUSH     ECX
+        PUSH     0
+        PUSH     EDX
+        PUSH     EAX
+        LEA      EAX,[EBX].TFileRec.Name
+        PUSH     EAX
+        CALL     CreateFileA
+@@checkHandle:
+        CMP      EAX,-1
+        JZ       @@error
+
+        MOV      [EBX].TFileRec.Handle,EAX
+        JMP      @@exit
+
+@@isCon:
+        MOV      [EBX].TFileRec.CloseFunc,offset FileNopProc
+        CMP      EDI,3
+        JE       @@output
+        PUSH     STD_INPUT_HANDLE
+        JMP      @@1
+@@output:
+        PUSH     STD_OUTPUT_HANDLE
+@@1:
+        CALL     GetStdHandle
+        JMP      @@checkHandle
+
+@@notAssignedError:
+        MOV      EAX,102
+        JMP      @@errExit
+
+@@error:
+        MOV      [EBX].TFileRec.Mode,fmClosed
+        CALL     GetLastError
+@@errExit:
+        CALL     SetInOutRes
+
+@@exit:
+        POP      EDI
+        POP      ESI
+        POP      EBX
+end;
+{$ENDIF}
+
+function _ResetFile(var f: TFileRec; recSize: Longint): Integer;
+var
+  m: Byte;
+begin
+  m := FileMode and 3;
+  if m > 2 then m := 2;
+  Result := OpenFile(f, recSize, m);
+end;
+
+function _RewritFile(var f: TFileRec; recSize: Longint): Integer;
+begin
+  Result := OpenFile(f, recSize, 3);
+end;
+
+procedure _Seek(var f: TFileRec; recNum: Cardinal);
+{$IFDEF LINUX}
+begin
+  if (f.Mode >= fmInput) and (f.Mode <= fmInOut) then
+  begin
+    if _lseek(f.Handle, f.RecSize * recNum, SEEK_SET) = -1 then
+      InOutError;
+  end
+  else
+    SetInOutRes(103);
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+asm
+// -> EAX Pointer to file variable
+//  EDX Record number
+
+        MOV      ECX,EAX
+        MOVZX    EAX,[EAX].TFileRec.Mode // check whether file is open
+        SUB      EAX,fmInput
+        CMP      EAX,fmInOut-fmInput
+        JA       @@fileNotOpen
+
+//  SetFilePointer(f.Handle, recNum*f.RecSize, FILE_BEGIN
+        PUSH     FILE_BEGIN    // pass dwMoveMethod
+        MOV      EAX,[ECX].TFileRec.RecSize
+        MUL      EDX
+        PUSH     0           // pass lpDistanceToMoveHigh
+        PUSH     EAX           // pass lDistanceToMove
+        PUSH     [ECX].TFileRec.Handle   // pass hFile
+        CALL     SetFilePointer          // get current position
+        INC      EAX
+        JZ       InOutError
+        JMP      @@exit
+
+@@fileNotOpen:
+        MOV      EAX,103
+        JMP      SetInOutRes
+
+@@exit:
+end;
+{$ENDIF}
+
+function _SeekEof(var t: TTextRec): Boolean;
+asm
+// -> EAX Pointer to text record
+// <- AL  Boolean result
+
+        PUSH     EBX
+        MOV      EBX,EAX
+@@loop:
+        MOV      EAX,EBX
+        CALL     _ReadChar
+        CMP      AL,' '
+        JA       @@endloop
+        CMP      AH,cEOF
+        JE       @@eof
+        JMP      @@loop
+@@eof:
+        MOV      AL,1
+        JMP      @@exit
+
+@@endloop:
+        DEC      [EBX].TTextRec.BufPos
+        XOR      AL,AL
+@@exit:
+        POP      EBX
+end;
+
+function _SeekEoln(var t: TTextRec): Boolean;
+asm
+// -> EAX Pointer to text record
+// <- AL  Boolean result
+
+        PUSH     EBX
+        MOV      EBX,EAX
+@@loop:
+        MOV      EAX,EBX
+        CALL     _ReadChar
+        CMP      AL,' '
+        JA       @@falseExit
+        CMP      AH,cEOF
+        JE       @@eof
+        CMP      AL,cLF
+        JE       @@trueExit
+        CMP      AL,cCR
+        JNE      @@loop
+
+@@trueExit:
+        MOV      AL,1
+        JMP      @@exitloop
+
+@@falseExit:
+        XOR      AL,AL
+@@exitloop:
+        DEC      [EBX].TTextRec.BufPos
+        JMP      @@exit
+
+@@eof:
+        MOV      AL,1
+@@exit:
+        POP EBX
+end;
+
+procedure _SetTextBuf(var t: TTextRec; p: Pointer; size: Longint);
+begin
+  if size < 0 then
+    Error(reRangeError);
+  t.BufPtr := P;
+  t.BufSize := size;
+  t.BufPos := 0;
+  t.BufEnd := 0;
+end;
+
+procedure _StrLong(val, width: Longint; s: PShortString);
+{$IFDEF PUREPASCAL}
+var
+  I: Integer;
+  sign: Longint;
+  a: array [0..19] of char;
+  P: PChar;
+begin
+  sign := val;
+  val := Abs(val);
+  I := 0;
+  repeat
+    a[I] := Chr((val mod 10) + Ord('0'));
+    Inc(I);
+    val := val div 10;
+  until val = 0;
+
+  if sign < 0 then
+  begin
+    a[I] := '-';
+    Inc(I);
+  end;
+
+  if width < I then
+    width := I;
+  if width > 255 then
+    width := 255;
+  s^[0] := Chr(width);
+  P := @S^[1];
+  while width > I do
+  begin
+    P^ := ' ';
+    Inc(P);
+    Dec(width);
+  end;
+  repeat
+    Dec(I);
+    P^ := a[I];
+    Inc(P);
+  until I <= 0;
+end;
+{$ELSE}
 asm
 {       PROCEDURE _StrLong( val: Longint; width: Longint; VAR s: ShortString );
       ->EAX     Value
@@ -2527,20 +6088,111 @@ asm
         POP     ESI
         POP     EBX
 end;
+{$ENDIF}
 
-procedure       _Str0Long;
-asm
-{     ->EAX     Value           }
-{       EDX     Pointer to string       }
-
-        MOV     ECX,EDX
-        XOR     EDX,EDX
-        JMP     _StrLong
+procedure  _Str0Long(val: Longint; s: PShortString);
+begin
+  _StrLong(val, 0, s);
 end;
 
-procedure       _Truncate;                              external;       {$L Truncate}
+procedure _Truncate(var f: TFileRec);
+{$IFDEF LINUX}
+begin
+  if (f.Mode and fmOutput) = fmOutput then  // fmOutput or fmInOut
+  begin
+    if _ftruncate(f.Handle, _lseek(f.Handle, 0, SEEK_CUR)) = -1 then
+      InOutError;
+  end
+  else
+    SetInOutRes(103);
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+asm
+// -> EAX Pointer to text or file variable
 
-procedure       _ValLong;
+       MOVZX   EDX,[EAX].TFileRec.Mode   // check whether file is open
+       SUB     EDX,fmInput
+       CMP     EDX,fmInOut-fmInput
+       JA      @@fileNotOpen
+
+       PUSH    [EAX].TFileRec.Handle
+       CALL    SetEndOfFile
+       DEC     EAX
+       JZ      @@exit
+       JMP     InOutError
+
+@@fileNotOpen:
+       MOV     EAX,103
+       JMP     SetInOutRes
+
+@@exit:
+end;
+{$ENDIF}
+
+function _ValLong(const s: String; var code: Integer): Longint;
+{$IFDEF PUREPASCAL}
+var
+  I: Integer;
+  Negative, Hex: Boolean;
+begin
+  I := 1;
+  code := -1;
+  Result := 0;
+  Negative := False;
+  Hex := False;
+  while (I <= Length(s)) and (s[I] = ' ') do Inc(I);
+  if I > Length(s) then Exit;
+  case s[I] of
+    '$',
+    'x',
+    'X': begin
+           Hex := True;
+           Inc(I);
+         end;
+    '0': begin
+          Hex := (Length(s) > I) and (UpCase(s[I+1]) = 'X');
+    if Hex then Inc(I,2);
+         end;
+    '-': begin
+          Negative := True;
+          Inc(I);
+         end;
+    '+': Inc(I);
+  end;
+  if Hex then
+    while I <= Length(s) do
+    begin
+      if Result > (High(Result) div 16) then
+      begin
+        code := I;
+        Exit;
+      end;
+      case s[I] of
+        '0'..'9': Result := Result * 16 + Ord(s[I]) - Ord('0');
+        'a'..'f': Result := Result * 16 + Ord(s[I]) - Ord('a') + 10;
+        'A'..'F': Result := Result * 16 + Ord(s[I]) - Ord('A') + 10;
+      else
+        code := I;
+        Exit;
+      end;
+    end
+  else
+    while I <= Length(s) do
+    begin
+      if Result > (High(Result) div 10) then
+      begin
+        code := I;
+        Exit;
+      end;
+      Result := Result * 10 + Ord(s[I]) - Ord('0');
+      Inc(I);
+    end;
+  if Negative then
+    Result := -Result;
+  code := 0;
+end;
+{$ELSE}
 asm
 {       FUNCTION _ValLong( s: AnsiString; VAR code: Integer ) : Longint;        }
 {     ->EAX     Pointer to string       }
@@ -2616,21 +6268,8 @@ asm
         DEC     CH
         JE      @@negate
         TEST    EAX,EAX
-        JL      @@overFlow
-
-@@successExit:
-
-        POP     ECX                     { saved copy of string pointer  }
-
-        XOR     ESI,ESI         { signal no error to caller     }
-
-@@exit:
-        MOV     [EDX],ESI
-
-        POP     EDI
-        POP     ESI
-        POP     EBX
-        RET
+        JGE     @@successExit
+        JMP     @@overFlow
 
 @@empty:
         INC     ESI
@@ -2686,89 +6325,374 @@ asm
         TEST    BL,BL
         JNE     @@hDigLoop
 
-        JMP     @@successExit
+@@successExit:
+        POP     ECX                     { saved copy of string pointer  }
+        XOR     ESI,ESI         { signal no error to caller     }
+
+@@exit:
+        MOV     [EDX],ESI
+        POP     EDI
+        POP     ESI
+        POP     EBX
+end;
+{$ENDIF}
+
+function _WriteRec(var f: TFileRec; buffer: Pointer): Pointer;
+{$IFDEF LINUX}
+var
+  Dummy: Integer;
+begin
+  _BlockWrite(f, Buffer, 1, Dummy);
+  Result := @F;
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+asm
+// -> EAX Pointer to file variable
+//  EDX Pointer to buffer
+// <- EAX Pointer to file variable
+        PUSH    EBX
+
+        MOV     EBX,EAX
+
+        MOVZX   EAX,[EAX].TFileRec.Mode
+        SUB     EAX,fmOutput
+        CMP     EAX,fmInOut-fmOutput  // File must be fmInOut or fmOutput
+        JA      @@fileNotOpen
+
+//  WriteFile(f.Handle, buffer, f.RecSize, @result, Nil);
+
+        PUSH    0                       // space for OS result
+        MOV     EAX,ESP
+
+        PUSH    0                       // pass lpOverlapped
+        PUSH    EAX                     // pass @result
+        PUSH    [EBX].TFileRec.RecSize  // pass nNumberOfBytesToRead
+        PUSH    EDX                     // pass lpBuffer
+        PUSH    [EBX].TFileRec.Handle   // pass hFile
+        CALL    WriteFile
+        POP     EDX                     // pop result
+        DEC     EAX                     // check EAX = TRUE
+        JNZ     @@error
+
+        CMP     EDX,[EBX].TFileRec.RecSize  // result = f.RecSize ?
+        JE      @@exit
+
+@@writeError:
+        MOV     EAX,101
+        JMP     @@errExit
+
+@@fileNotOpen:
+        MOV     EAX,5
+        JMP     @@errExit
+
+@@error:
+        CALL    GetLastError
+@@errExit:
+        CALL    SetInOutRes
+@@exit:
+        MOV     EAX,EBX
+        POP     EBX
+end;
+{$ENDIF}
+
+// If the file is Output or ErrOutput std variable, try to open it
+// Otherwise, runtime error.
+function TryOpenForOutput(var t: TTextRec): Boolean;
+begin
+  if (@t = @Output) or (@t = @ErrOutput) then
+  begin
+    t.Flags := tfCRLF * Byte(DefaultTextLineBreakStyle);
+    _RewritText(t);
+  end;
+
+  Result := t.Mode = fmOutput;
+  if not Result then
+    SetInOutRes(105);
 end;
 
-procedure       _WriteRec;                              external;       {$L WriteRec}
+function _WriteBytes(var t: TTextRec; const b; cnt : Longint): Pointer;
+{$IFDEF PUREPASCAL}
+var
+  P: PChar;
+  RemainingBytes: Longint;
+  Temp: Integer;
+begin
+  Result := @t;
+  if t.Mode <> fmOutput and not TryOpenForOutput(t) then Exit;
 
-procedure       _WriteChar;                             external;       {   WriteStr}
-procedure       _Write0Char;                    external;       {   WriteStr}
-
-procedure       _WriteBool;
-asm
-{       PROCEDURE _WriteBool( VAR t: Text; val: Boolean; width: Longint);       }
-{     ->EAX     Pointer to file record  }
-{       DL      Boolean value           }
-{       ECX     Field width             }
-
-        TEST    DL,DL
-        JE      @@false
-        MOV     EDX,offset @trueString
-        JMP     _WriteString
-@@false:
-        MOV     EDX,offset @falseString
-        JMP     _WriteString
-@trueString:  db        4,'TRUE'
-@falseString: db        5,'FALSE'
+  P := t.BufPtr + t.BufPos;
+  RemainingBytes := t.BufSize - t.BufPos;
+  while RemainingBytes <= cnt do
+  begin
+    Inc(t.BufPos, RemainingBytes);
+    Dec(cnt, RemainingBytes);
+    Move(B, P^, RemainingBytes);
+    Temp := TTextIOFunc(t.InOutFunc)(t);
+    if Temp <> 0 then
+    begin
+      SetInOutRes(Temp);
+      Exit;
+    end;
+    P := t.BufPtr + t.BufPos;
+    RemainingBytes := t.BufSize - t.BufPos;
+  end;
+  Inc(t.BufPos, cnt);
+  Move(B, P^, cnt);
 end;
-
-procedure       _Write0Bool;
+{$ELSE}
 asm
-{       PROCEDURE _Write0Bool( VAR t: Text; val: Boolean);      }
-{     ->EAX     Pointer to file record  }
-{       DL      Boolean value           }
+// -> EAX Pointer to file record
+//  EDX Pointer to buffer
+//  ECX Number of bytes to write
+// <- EAX Pointer to file record
 
-        XOR     ECX,ECX
-        JMP     _WriteBool
-end;
+        PUSH    ESI
+        PUSH    EDI
 
-procedure       _WriteLong;
-asm
-{       PROCEDURE _WriteLong( VAR t: Text; val: Longint; with: Longint);        }
-{     ->EAX     Pointer to file record  }
-{       EDX     Value                   }
-{       ECX     Field width             }
+        MOV     ESI,EDX
 
-        SUB     ESP,32          { VAR s: String[31];    }
+        CMP     [EAX].TTextRec.Mode,fmOutput
+        JE      @@loop
+        PUSH    EAX
+        PUSH    EDX
+        PUSH    ECX
+        CALL    TryOpenForOutput
+        TEST    AL,AL
+        POP     ECX
+        POP     EDX
+        POP     EAX
+        JE      @@exit
+
+@@loop:
+        MOV     EDI,[EAX].TTextRec.BufPtr
+        ADD     EDI,[EAX].TTextRec.BufPos
+
+//  remainingBytes = t.bufSize - t.bufPos
+
+        MOV     EDX,[EAX].TTextRec.BufSize
+        SUB     EDX,[EAX].TTextRec.BufPos
+
+//  if (remainingBytes <= cnt)
+
+        CMP     EDX,ECX
+        JG      @@1
+
+//  t.BufPos += remainingBytes, cnt -= remainingBytes
+
+        ADD     [EAX].TTextRec.BufPos,EDX
+        SUB     ECX,EDX
+
+//  copy remainingBytes, advancing ESI
 
         PUSH    EAX
         PUSH    ECX
+        MOV     ECX,EDX
+        REP     MOVSB
 
-        MOV     EAX,EDX         { Str( val : 0, s );    }
-        XOR     EDX,EDX
-        CMP     ECX,31
-        JG      @@1
-        MOV     EDX,ECX
-@@1:
-        LEA     ECX,[ESP+8]
-        CALL    _StrLong
+        CALL    [EAX].TTextRec.InOutFunc
+        TEST    EAX,EAX
+        JNZ     @@error
 
         POP     ECX
         POP     EAX
+        JMP     @@loop
 
-        MOV     EDX,ESP         { Write( t, s : width );}
-        CALL    _WriteString
+@@error:
+        CALL    SetInOutRes
+        POP     ECX
+        POP     EAX
+        JMP     @@exit
+@@1:
+        ADD     [EAX].TTextRec.BufPos,ECX
+        REP     MOVSB
 
-        ADD     ESP,32
+@@exit:
+        POP     EDI
+        POP     ESI
 end;
+{$ENDIF}
 
-procedure       _Write0Long;
+function _WriteSpaces(var t: TTextRec; cnt: Longint): Pointer;
+{$IFDEF PUREPASCAL}
+const
+  s64Spaces = '                                                                ';
+begin
+  Result := @t;
+  while cnt > 64 do
+  begin
+    _WriteBytes(t, s64Spaces, 64);
+    if InOutRes <> 0 then Exit;
+    Dec(cnt, 64);
+  end;
+  if cnt > 0 then
+    _WriteBytes(t, s64Spaces, cnt);
+end;
+{$ELSE}
+const
+  spCnt = 64;
 asm
-{       PROCEDURE _Write0Long( VAR t: Text; val: Longint);      }
-{     ->EAX     Pointer to file record  }
-{       EDX     Value                   }
-        XOR     ECX,ECX
-        JMP     _WriteLong
+// -> EAX Pointer to text record
+//  EDX Number of spaces (<= 0: None)
+
+        MOV     ECX,EDX
+@@loop:
+{$IFDEF PIC}
+        LEA     EDX, [EBX] + offset @@spBuf
+{$ELSE}
+        MOV     EDX,offset @@spBuf
+{$ENDIF}
+
+        CMP     ECX,spCnt
+        JLE     @@1
+
+        SUB     ECX,spCnt
+        PUSH    EAX
+        PUSH    ECX
+        MOV     ECX,spCnt
+        CALL    _WriteBytes
+        CALL    SysInit.@GetTLS
+        CMP     [EAX].InOutRes,0
+        JNE     @@error
+        POP     ECX
+        POP     EAX
+        JMP     @@loop
+
+@@error:
+        POP ECX
+        POP EAX
+        JMP     @@exit
+
+@@spBuf:  // 64 spaces
+        DB '                                                                ';
+@@1:
+        TEST  ECX,ECX
+        JG  _WriteBytes
+@@exit:
+end;
+{$ENDIF}
+
+function _Write0Char(var t: TTextRec; c: Char): Pointer;
+{$IFDEF PUREPASCAL}
+var
+  Temp: Integer;
+begin
+  Result := @t;
+  if not TryOpenForOutput(t) then Exit;
+
+  if t.BufPos >= t.BufSize then
+  begin
+    Temp := TTextIOFunc(t.InOutFunc)(t);
+    if Temp <> 0 then
+    begin
+      SetInOutRes(Temp);
+      Exit;
+    end;
+  end;
+
+  t.BufPtr[t.BufPos] := c;
+  Inc(t.BufPos);
+end;
+{$ELSE}
+asm
+// -> EAX Pointer to text record
+//  DL  Character
+
+        CMP     [EAX].TTextRec.Mode,fmOutput
+        JE      @@loop
+        PUSH    EAX
+        PUSH    EDX
+        CALL    TryOpenForOutput
+        TEST    AL,AL
+        POP     EDX
+        POP     EAX
+        JNE     @@loop
+        JMP     @@exit
+
+@@flush:
+        PUSH    EAX
+        PUSH    EDX
+        CALL    [EAX].TTextRec.InOutFunc
+        TEST    EAX,EAX
+        JNZ     @@error
+        POP     EDX
+        POP     EAX
+        JMP     @@loop
+
+@@error:
+        CALL    SetInOutRes
+        POP     EDX
+        POP     EAX
+        JMP     @@exit
+
+@@loop:
+        MOV     ECX,[EAX].TTextRec.BufPos
+        CMP     ECX,[EAX].TTextRec.BufSize
+        JGE     @@flush
+
+        ADD     ECX,[EAX].TTextRec.BufPtr
+        MOV     [ECX],DL
+
+        INC     [EAX].TTextRec.BufPos
+@@exit:
+end;
+{$ENDIF}
+
+function _WriteChar(var t: TTextRec; c: Char; width: Integer): Pointer;
+begin
+  _WriteSpaces(t, width-1);
+  Result := _WriteBytes(t, c, 1);
 end;
 
-procedure       _WriteString;                   external;       {$L WriteStr}
-procedure       _Write0String;                  external;       {   WriteStr}
+function _WriteBool(var t: TTextRec; val: Boolean; width: Longint): Pointer;
+const
+  BoolStrs: array [Boolean] of ShortString = ('FALSE', 'TRUE');
+begin
+  Result := _WriteString(t, BoolStrs[val], width);
+end;
 
-procedure       _WriteCString;                  external;       {   WriteStr}
-procedure       _Write0CString;                 external;       {   WriteStr}
+function _Write0Bool(var t: TTextRec; val: Boolean): Pointer;
+begin
+  Result := _WriteBool(t, val, 0);
+end;
 
-procedure       _WriteBytes;                    external;       {   WriteStr}
-procedure       _WriteSpaces;                   external;       {   WriteStr}
+function _WriteLong(var t: TTextRec; val, width: Longint): Pointer;
+var
+  S: string[31];
+begin
+  Str(val:0, S);
+  Result := _WriteString(t, S, width);
+end;
+
+function _Write0Long(var t: TTextRec; val: Longint): Pointer;
+begin
+  Result := _WriteLong(t, val, 0);
+end;
+
+function _Write0String(var t: TTextRec; const s: ShortString): Pointer;
+begin
+  Result := _WriteBytes(t, S[1], Byte(S[0]));
+end;
+
+function _WriteString(var t: TTextRec; const s: ShortString; width: Longint): Pointer;
+begin
+  _WriteSpaces(t, Width - Byte(S[0]));
+  Result := _WriteBytes(t, S[1], Byte(S[0]));
+end;
+
+function _Write0CString(var t: TTextRec; s: PChar): Pointer;
+begin
+  Result := _WriteCString(t, s, 0);
+end;
+
+function _WriteCString(var t: TTextRec; s: PChar; width: Longint): Pointer;
+var
+  len: Longint;
+begin
+  len := _strlen(s);
+  _WriteSpaces(t, width - len);
+  Result := _WriteBytes(t, s^, len);
+end;
 
 procedure       _Write2Ext;
 asm
@@ -2826,33 +6750,45 @@ asm
         JMP     _Write2Ext
 end;
 
-procedure       _WriteLn;                       external;       {   WriteStr}
-
-procedure       __CToPasStr;
-asm
-{     ->EAX     Pointer to destination  }
-{       EDX     Pointer to source       }
-
-        PUSH    EAX             { save destination      }
-
-        MOV     CL,255
-@@loop:
-        MOV     CH,[EDX]        { ch = *src++;          }
-        INC     EDX
-        TEST    CH,CH   { if (ch == 0) break    }
-        JE      @@endLoop
-        INC     EAX             { *++dest = ch;         }
-        MOV     [EAX],CH
-        DEC     CL
-        JNE     @@loop
-
-@@endLoop:
-        POP     EDX
-        SUB     EAX,EDX
-        MOV     [EDX],AL
+function _WriteLn(var t: TTextRec): Pointer;
+var
+  Buf: array [0..1] of Char;
+begin
+  if (t.flags and tfCRLF) <> 0 then
+  begin
+    Buf[0] := #13;
+    Buf[1] := #10;
+    Result := _WriteBytes(t, Buf, 2);
+  end
+  else
+  begin
+    Buf[0] := #10;
+    Result := _WriteBytes(t, Buf, 1);
+  end;
+  _Flush(t);
 end;
 
-procedure       __CLenToPasStr;
+procedure       __CToPasStr(Dest: PShortString; const Source: PChar);
+begin
+  __CLenToPasStr(Dest, Source, 255);
+end;
+
+procedure       __CLenToPasStr(Dest: PShortString; const Source: PChar; MaxLen: Integer);
+{$IFDEF PUREPASCAL}
+var
+  I: Integer;
+begin
+  I := 0;
+  if MaxLen > 255 then MaxLen := 255;
+  while (Source[I] <> #0) and (I <= MaxLen) do
+  begin
+    Dest^[I+1] := Source[I];
+    Inc(I);
+  end;
+  if I > 0 then Dec(I);
+  Byte(Dest^[0]) := I;
+end;
+{$ELSE}
 asm
 {     ->EAX     Pointer to destination  }
 {       EDX     Pointer to source       }
@@ -2863,7 +6799,7 @@ asm
 
         CMP     ECX,255
         JBE     @@loop
-    MOV ECX,255
+        MOV     ECX,255
 @@loop:
         MOV     BL,[EDX]        { ch = *src++;          }
         INC     EDX
@@ -2880,50 +6816,19 @@ asm
         MOV     [EDX],AL
         POP     EBX
 end;
+{$ENDIF}
 
-procedure       __ArrayToPasStr;
-asm
-{     ->EAX     Pointer to destination  }
-{       EDX     Pointer to source       }
-{       ECX     cnt                     }
-
-        XCHG    EAX,EDX
-
-        {       limit the length to 255 }
-
-        CMP     ECX,255
-    JBE     @@skip
-    MOV     ECX,255
-@@skip:
-    MOV     [EDX],CL
-
-        {       copy the source to destination + 1 }
-
-        INC     EDX
-        JMP     Move
+procedure       __ArrayToPasStr(Dest: PShortString; const Source: PChar; Len: Integer);
+begin
+  if Len > 255 then Len := 255;
+  Byte(Dest^[0]) := Len;
+  Move(Source^, Dest^[1], Len);
 end;
 
-
-procedure       __PasToCStr;
-asm
-{     ->EAX     Pointer to source       }
-{       EDX     Pointer to destination  }
-
-        PUSH    ESI
-        PUSH    EDI
-
-        MOV     ESI,EAX
-        MOV     EDI,EDX
-
-        XOR     ECX,ECX
-        MOV     CL,[ESI]
-        INC     ESI
-
-        REP     MOVSB
-        MOV     byte ptr [EDI],CL       { Append terminator: CL is zero here }
-
-        POP     EDI
-        POP     ESI
+procedure       __PasToCStr(const Source: PShortString; const Dest: PChar);
+begin
+  Move(Source^[1], Dest^, Byte(Source^[0]));
+  Dest[Byte(Source^[0])] := #0;
 end;
 
 procedure       _SetElem;
@@ -3093,20 +6998,20 @@ asm
 {       EAX     =       destination operand             }
 {       EDX     =       source operand                  }
 {       ECX     =       size of set (0 < size <= 32)    }
-{	[ESP+4]	=	2nd source operand		}
+{ [ESP+4] = 2nd source operand    }
 
-	PUSH	EBX
-	PUSH	ESI
-	MOV	ESI,[ESP+8+4]
+        PUSH    EBX
+        PUSH    ESI
+        MOV     ESI,[ESP+8+4]
 @@loop:
         MOV     BL,[EDX+ECX-1]
-	AND	BL,[ESI+ECX-1]
-	MOV	[EAX+ECX-1],BL
+        AND     BL,[ESI+ECX-1]
+        MOV     [EAX+ECX-1],BL
         DEC     ECX
         JNZ     @@loop
 
-	POP	ESI
-	POP	EBX
+        POP     ESI
+        POP     EBX
 end;
 
 procedure       _SetUnion;
@@ -3131,20 +7036,20 @@ asm
 {       EAX     =       destination operand             }
 {       EDX     =       source operand                  }
 {       ECX     =       size of set (0 < size <= 32)    }
-{	[ESP+4]	=	2nd source operand		}
+{ [ESP+4] = 2nd source operand    }
 
-	PUSH	EBX
-	PUSH	ESI
-	MOV	ESI,[ESP+8+4]
+      PUSH  EBX
+      PUSH  ESI
+      MOV   ESI,[ESP+8+4]
 @@loop:
-        MOV     BL,[EDX+ECX-1]
-	OR	BL,[ESI+ECX-1]
-	MOV	[EAX+ECX-1],BL
-        DEC     ECX
-        JNZ     @@loop
+      MOV   BL,[EDX+ECX-1]
+      OR    BL,[ESI+ECX-1]
+      MOV   [EAX+ECX-1],BL
+      DEC   ECX
+      JNZ   @@loop
 
-	POP	ESI
-	POP	EBX
+      POP   ESI
+      POP   EBX
 end;
 
 procedure       _SetSub;
@@ -3170,21 +7075,21 @@ asm
 {       EAX     =       destination operand             }
 {       EDX     =       source operand                  }
 {       ECX     =       size of set (0 < size <= 32)    }
-{	[ESP+4]	=	2nd source operand		}
+{ [ESP+4] = 2nd source operand    }
 
-	PUSH	EBX
-	PUSH	ESI
-	MOV	ESI,[ESP+8+4]
+        PUSH    EBX
+        PUSH    ESI
+        MOV     ESI,[ESP+8+4]
 @@loop:
-	MOV	BL,[ESI+ECX-1]
-	NOT	BL
+        MOV     BL,[ESI+ECX-1]
+        NOT     BL
         AND     BL,[EDX+ECX-1]
-	MOV	[EAX+ECX-1],BL
+        MOV     [EAX+ECX-1],BL
         DEC     ECX
         JNZ     @@loop
 
-	POP	ESI
-	POP	EBX
+        POP     ESI
+        POP     EBX
 end;
 
 procedure       _SetExpand;
@@ -3225,20 +7130,888 @@ asm
         POP     ESI
 end;
 
-procedure       _Str2Ext;                       external;       {$L StrExt  }
-procedure       _Str0Ext;                       external;       {   StrExt  }
-procedure       _Str1Ext;                       external;       {   StrExt  }
+procedure _EmitDigits;
+const
+  tenE17: Double = 1e17;
+  tenE18: Double = 1e18;
+asm
+// -> FST(0)  Value, 0 <= value < 10.0
+//  EAX Count of digits to generate
+//  EDX Pointer to digit buffer
 
-procedure       _ValExt;                        external;       {$L ValExt  }
+        PUSH    EBX
+{$IFDEF PIC}
+        PUSH    EAX
+        CALL    GetGOT
+        MOV     EBX,EAX
+        POP     EAX
+{$ELSE}
+        XOR     EBX,EBX
+{$ENDIF}
+        PUSH    EDI
+        MOV     EDI,EDX
+        MOV     ECX,EAX
 
-procedure       _Pow10;                         external;       {$L Pow10   }
-procedure       FPower10;                       external;       {   Pow10   }
-procedure       _Real2Ext;                      external;       {$L Real2Ext}
-procedure       _Ext2Real;                      external;       {$L Ext2Real}
+        SUB     ESP,10      // VAR bcdBuf: array [0..9] of Byte
+        MOV     byte ptr [EDI],'0'  // digBuf[0] := '0'//
+        FMUL    qword ptr [EBX] + offset tenE17        // val := Round(val*1e17);
+        FRNDINT
+
+        FCOM    qword ptr [EBX] + offset tenE18        // if val >= 1e18 then
+        FSTSW   AX
+        SAHF
+        JB      @@1
+
+        FSUB    qword ptr [EBX] + offset tenE18  //   val := val - 1e18;
+        MOV     byte ptr [EDI],'1'  //   digBuf[0] := '1';
+@@1:
+        FBSTP   tbyte ptr [ESP]   // store packed bcd digits in bcdBuf
+
+        MOV     EDX,8
+        INC     EDI
+
+@@2:
+        WAIT
+        MOV     AL,[ESP+EDX]    // unpack 18 bcd digits in 9 bytes
+        MOV     AH,AL     // into 9 words = 18 bytes
+        SHR     AL,4
+        AND     AH,0FH
+        ADD     AX,'00'
+        STOSW
+        DEC     EDX
+        JNS     @@2
+
+        SUB     ECX,18      // we need at least digCnt digits
+        JL      @@3     // we have generated 18
+
+        MOV     AL,'0'      // if this is not enough, append zeroes
+        REP     STOSB
+        JMP     @@4     // in this case, we don't need to round
+
+@@3:
+        ADD     EDI,ECX     // point EDI to the round digit
+        CMP     byte ptr [EDI],'5'
+        JL      @@4
+@@5:
+        DEC     EDI
+        INC     byte ptr [EDI]
+        CMP     byte ptr [EDI],'9'
+        JLE     @@4
+        MOV     byte ptr [EDI],'0'
+        JMP     @@5
+
+@@4:
+        ADD     ESP,10
+        POP     EDI
+        POP     EBX
+end;
+
+procedure _ScaleExt;
+asm
+// -> FST(0)  Value
+// <- EAX exponent (base 10)
+//  FST(0)  Value / 10**eax
+// PIC safe - uses EBX, but only call is to _POW10, which fixes up EBX itself
+
+        PUSH    EBX
+        SUB     ESP,12
+
+        XOR     EBX,EBX
+
+@@normLoop:       // loop necessary for denormals
+
+        FLD     ST(0)
+        FSTP    tbyte ptr [ESP]
+        MOV     AX,[ESP+8]
+        TEST    AX,AX
+        JE      @@testZero
+@@cont:
+        SUB     AX,3FFFH
+        MOV     DX,4D10H  // log10(2) * 2**16
+        IMUL    DX
+        MOVSX   EAX,DX    // exp10 = exp2 * log10(2)
+        NEG     EAX
+        JE      @@exit
+        SUB     EBX,EAX
+        CALL    _Pow10
+        JMP     @@normLoop
+
+@@testZero:
+        CMP     dword ptr [ESP+4],0
+        JNE     @@cont
+        CMP     dword ptr [ESP+0],0
+        JNE     @@cont
+
+@@exit:
+        ADD     ESP,12
+        MOV     EAX,EBX
+        POP     EBX
+end;
 
 const
-        ovtInstanceSize = -8;   { Offset of instance size in OBJECTs    }
-        ovtVmtPtrOffs   = -4;
+  Ten: Double = 10.0;
+  NanStr: String[3] = 'Nan';
+  PlusInfStr: String[4] = '+Inf';
+  MinInfStr: String[4] = '-Inf';
+
+procedure _Str2Ext;//( val: Extended; width, precision: Longint; var s: String );
+const
+  MAXDIGS = 256;
+asm
+// -> [ESP+4] Extended value
+//  EAX Width
+//  EDX Precision
+//  ECX Pointer to string
+
+      FLD     tbyte ptr [ESP+4]
+
+      PUSH    EBX
+      PUSH    ESI
+      PUSH    EDI
+      MOV     EBX,EAX
+      MOV     ESI,EDX
+      PUSH    ECX     // save string pointer
+      SUB     ESP,MAXDIGS             // VAR digBuf: array [0..MAXDIGS-1] of Char
+
+//  limit width to 255
+
+      CMP     EBX,255     // if width > 255 then width := 255;
+      JLE     @@1
+      MOV     EBX,255
+@@1:
+
+//  save sign bit in bit 0 of EDI, take absolute value of val, check for
+//  Nan and infinity.
+
+      FLD     ST(0)
+      FSTP    tbyte ptr [ESP]
+      XOR     EAX,EAX
+      MOV     AX,word ptr [ESP+8]
+      MOV     EDI,EAX
+      SHR     EDI,15
+      AND     AX,7FFFH
+      CMP     AX,7FFFH
+      JE      @@nanInf
+      FABS
+
+//  if precision < 0 then do scientific else do fixed;
+
+      TEST    ESI,ESI
+      JGE     @@fixed
+
+//  the following call finds a decimal exponent and a reduced
+//  mantissa such that val = mant * 10**exp
+
+      CALL    _ScaleExt   // val is FST(0), exp is EAX
+
+//  for scientific notation, we have width - 8 significant digits
+//  however, we can not have less than 2 or more than 18 digits.
+
+@@scientific:
+
+      MOV     ESI,EBX     // digCnt := width - 8;
+      SUB     ESI,8
+      CMP     ESI,2     // if digCnt < 2 then digCnt := 2
+      JGE     @@2
+      MOV     ESI,2
+      JMP     @@3
+@@2:
+      CMP     ESI,18      // else if digCnt > 18 then digCnt := 18;
+      JLE     @@3
+      MOV     ESI,18
+@@3:
+
+//  _EmitDigits( val, digCnt, digBuf )
+
+      MOV     EDX,ESP     // pass digBuf
+      PUSH    EAX     // save exponent
+      MOV     EAX,ESI     // pass digCnt
+      CALL    _EmitDigits   // convert val to ASCII
+
+      MOV     EDX,EDI     // save sign in EDX
+      MOV     EDI,[ESP+MAXDIGS+4] // load result string pointer
+
+      MOV     [EDI],BL    // length of result string := width
+      INC     EDI
+
+      MOV     AL,' '      // prepare for leading blanks and sign
+
+      MOV     ECX,EBX     // blankCnt := width - digCnt - 8
+      SUB     ECX,ESI
+      SUB     ECX,8
+      JLE     @@4
+
+      REP     STOSB     // emit blankCnt blanks
+@@4:
+      SUB     [EDI-1],CL    // if blankCnt < 0, adjust length
+
+      TEST    DL,DL     // emit the sign (' ' or '-')
+      JE      @@5
+      MOV     AL,'-'
+@@5:
+      STOSB
+
+      POP     EAX
+      MOV     ECX,ESI     // emit digCnt digits
+      MOV     ESI,ESP     // point ESI to digBuf
+
+      CMP     byte ptr [ESI],'0'
+      JE      @@5a      // if rounding overflowed, adjust exponent and ESI
+      INC     EAX
+      DEC     ESI
+@@5a:
+      INC     ESI
+
+      MOVSB   // emit one digit
+      MOV     byte ptr [EDI],'.'  // emit dot
+      INC     EDI     // adjust dest pointer
+      DEC     ECX     // adjust count
+
+      REP     MOVSB
+
+      MOV     byte ptr [EDI],'E'
+
+      MOV     CL,'+'      // emit sign of exponent ('+' or '-')
+      TEST    EAX,EAX
+      JGE     @@6
+      MOV     CL,'-'
+      NEG     EAX
+@@6:
+      MOV     [EDI+1],CL
+
+      XOR     EDX,EDX     // emit exponent
+      MOV     CX,10
+      DIV     CX
+      ADD     DL,'0'
+      MOV     [EDI+5],DL
+
+      XOR     EDX,EDX
+      DIV     CX
+      ADD     DL,'0'
+      MOV     [EDI+4],DL
+
+      XOR     EDX,EDX
+      DIV     CX
+      ADD     DL,'0'
+      MOV     [EDI+3],DL
+
+      ADD     AL,'0'
+      MOV     [EDI+2],AL
+
+      JMP     @@exit
+
+@@fixed:
+
+//  FST(0)  = value >= 0.0
+//  EBX = width
+//  ESI = precision
+//  EDI = sign
+
+      CMP     ESI,MAXDIGS-40    // else if precision > MAXDIGS-40 then precision := MAXDIGS-40;
+      JLE     @@6a
+      MOV     ESI,MAXDIGS-40
+@@6a:
+{$IFDEF PIC}
+      PUSH    EAX
+      CALL    GetGOT
+      FCOM    qword ptr [EAX] + offset Ten
+      POP     EAX
+{$ELSE}
+      FCOM    qword ptr ten
+{$ENDIF}
+      FSTSW   AX
+      SAHF
+      MOV     EAX,0
+      JB      @@7
+
+      CALL    _ScaleExt   // val is FST(0), exp is EAX
+
+      CMP     EAX,35      // if val is too large, use scientific
+      JG      @@scientific
+
+@@7:
+//  FST(0)  = scaled value, 0.0 <= value < 10.0
+//  EAX = exponent, 0 <= exponent
+
+//  intDigCnt := exponent + 1;
+
+      INC     EAX
+
+//  _EmitDigits( value, intDigCnt + precision, digBuf );
+
+      MOV     EDX,ESP
+      PUSH    EAX
+      ADD     EAX,ESI
+      CALL    _EmitDigits
+      POP     EAX
+
+//  Now we need to check whether rounding to the right number of
+//  digits overflowed, and if so, adjust things accordingly
+
+      MOV     EDX,ESI     // put precision in EDX
+      MOV     ESI,ESP     // point EDI to digBuf
+      CMP     byte ptr [ESI],'0'
+      JE      @@8
+      INC     EAX
+      DEC     ESI
+@@8:
+      INC     ESI
+
+      MOV     ECX,EAX     // numWidth := sign + intDigCnt;
+      ADD     ECX,EDI
+
+      TEST    EDX,EDX     // if precision > 0 then
+      JE      @@9
+      INC     ECX     //   numWidth := numWidth + 1 + precision
+      ADD     ECX,EDX
+
+      CMP     EBX,ECX     // if width <= numWidth
+      JG      @@9
+      MOV     EBX,ECX     //   width := numWidth
+@@9:
+      PUSH    EAX
+      PUSH    EDI
+
+      MOV     EDI,[ESP+MAXDIGS+2*4] // point EDI to dest string
+
+      MOV     [EDI],BL    // store final length in dest string
+      INC     EDI
+
+      SUB     EBX,ECX     // width := width - numWidth
+      MOV     ECX,EBX
+      JLE     @@10
+
+      MOV     AL,' '      // emit width blanks
+      REP     STOSB
+@@10:
+      SUB     [EDI-1],CL    // if blankCnt < 0, adjust length
+      POP     EAX
+      POP     ECX
+
+      TEST    EAX,EAX
+      JE      @@11
+
+      MOV     byte ptr [EDI],'-'
+      INC     EDI
+
+@@11:
+      REP     MOVSB     // copy intDigCnt digits
+
+      TEST    EDX,EDX     // if precision > 0 then
+      JE      @@12
+
+      MOV     byte ptr [EDI],'.'  //   emit '.'
+      INC     EDI
+      MOV     ECX,EDX     //   emit precision digits
+      REP     MOVSB
+
+@@12:
+
+@@exit:
+      ADD     ESP,MAXDIGS
+      POP     ECX
+      POP     EDI
+      POP     ESI
+      POP     EBX
+      RET     12
+
+@@nanInf:
+//  here: EBX = width, ECX = string pointer, EDI = sign, [ESP] = value
+
+{$IFDEF PIC}
+      CALL    GetGOT
+{$ELSE}
+      XOR     EAX,EAX
+{$ENDIF}
+      FSTP    ST(0)
+      CMP     dword ptr [ESP+4],80000000H
+      LEA     ESI,[EAX] + offset nanStr
+      JNE     @@13
+      DEC     EDI
+      LEA     ESI,[EAX] + offset plusInfStr
+      JNZ     @@13
+      LEA     ESI,[EAX] + offset minInfStr
+@@13:
+      MOV     EDI,ECX
+      MOV     ECX,EBX
+      MOV     [EDI],CL
+      INC     EDI
+      SUB     CL,[ESI]
+      JBE     @@14
+      MOV     AL,' '
+      REP     STOSB
+@@14:
+      SUB     [EDI-1],CL
+      MOV     CL,[ESI]
+      INC     ESI
+      REP     MOVSB
+
+      JMP     @@exit
+end;
+
+procedure _Str0Ext;
+asm
+// -> [ESP+4] Extended value
+//  EAX Pointer to string
+
+      MOV     ECX,EAX     // pass string
+      MOV     EAX,23      // pass default field width
+      OR      EDX,-1      // pass precision -1
+      JMP     _Str2Ext
+end;
+
+procedure _Str1Ext;//( val: Extended; width: Longint; var s: String );
+asm
+// -> [ESP+4] Extended value
+//  EAX Field width
+//  EDX Pointer to string
+
+      MOV     ECX,EDX
+      OR      EDX,-1      // pass precision -1
+      JMP     _Str2Ext
+end;
+
+//function _ValExt( s: AnsiString; VAR code: Integer ) : Extended;
+procedure _ValExt;
+asm
+// -> EAX Pointer to string
+//  EDX Pointer to code result
+// <- FST(0)  Result
+
+      PUSH    EBX
+{$IFDEF PIC}
+      PUSH    EAX
+      CALL    GetGOT
+      MOV     EBX,EAX
+      POP     EAX
+{$ELSE}
+      XOR     EBX,EBX
+{$ENDIF}
+      PUSH    ESI
+      PUSH    EDI
+
+      PUSH    EBX     // SaveGOT = ESP+8
+      MOV     ESI,EAX
+      PUSH    EAX     // save for the error case
+
+      FLDZ
+      XOR     EAX,EAX
+      XOR     EBX,EBX
+      XOR     EDI,EDI
+
+      PUSH    EBX     // temp to get digs to fpu
+
+      TEST    ESI,ESI
+      JE      @@empty
+
+@@blankLoop:
+      MOV     BL,[ESI]
+      INC     ESI
+      CMP     BL,' '
+      JE      @@blankLoop
+
+@@endBlanks:
+      MOV     CH,0
+      CMP     BL,'-'
+      JE      @@minus
+      CMP     BL,'+'
+      JE      @@plus
+      JMP     @@firstDigit
+
+@@minus:
+      INC     CH
+@@plus:
+      MOV     BL,[ESI]
+      INC     ESI
+
+@@firstDigit:
+      TEST    BL,BL
+      JE      @@error
+
+      MOV     EDI,[ESP+8]     // SaveGOT
+
+@@digLoop:
+      SUB     BL,'0'
+      CMP     BL,9
+      JA      @@dotExp
+      FMUL    qword ptr [EDI] + offset Ten
+      MOV     dword ptr [ESP],EBX
+      FIADD   dword ptr [ESP]
+
+      MOV     BL,[ESI]
+      INC     ESI
+
+      TEST    BL,BL
+      JNE     @@digLoop
+      JMP     @@prefinish
+
+@@dotExp:
+      CMP     BL,'.' - '0'
+      JNE     @@exp
+
+      MOV     BL,[ESI]
+      INC     ESI
+
+      TEST    BL,BL
+      JE      @@prefinish
+
+//  EDI = SaveGot
+@@fracDigLoop:
+      SUB     BL,'0'
+      CMP     BL,9
+      JA      @@exp
+      FMUL    qword ptr [EDI] + offset Ten
+      MOV     dword ptr [ESP],EBX
+      FIADD   dword ptr [ESP]
+      DEC     EAX
+
+      MOV     BL,[ESI]
+      INC     ESI
+
+      TEST    BL,BL
+      JNE     @@fracDigLoop
+
+@@prefinish:
+      XOR     EDI,EDI
+      JMP     @@finish
+
+@@exp:
+      CMP     BL,'E' - '0'
+      JE      @@foundExp
+      CMP     BL,'e' - '0'
+      JNE     @@error
+@@foundExp:
+      MOV     BL,[ESI]
+      INC     ESI
+      MOV     AH,0
+      CMP     BL,'-'
+      JE      @@minusExp
+      CMP     BL,'+'
+      JE      @@plusExp
+      JMP     @@firstExpDigit
+@@minusExp:
+      INC     AH
+@@plusExp:
+      MOV     BL,[ESI]
+      INC     ESI
+@@firstExpDigit:
+      SUB     BL,'0'
+      CMP     BL,9
+      JA      @@error
+      MOV     EDI,EBX
+      MOV     BL,[ESI]
+      INC     ESI
+      TEST    BL,BL
+      JZ      @@endExp
+@@expDigLoop:
+      SUB    BL,'0'
+      CMP    BL,9
+      JA     @@error
+      LEA    EDI,[EDI+EDI*4]
+      ADD    EDI,EDI
+      ADD    EDI,EBX
+      MOV    BL,[ESI]
+      INC    ESI
+      TEST   BL,BL
+      JNZ    @@expDigLoop
+@@endExp:
+      DEC    AH
+      JNZ    @@expPositive
+      NEG    EDI
+@@expPositive:
+      MOVSX  EAX,AL
+
+@@finish:
+      ADD    EAX,EDI
+      PUSH   EDX
+      PUSH   ECX
+      CALL   _Pow10
+      POP    ECX
+      POP    EDX
+
+      DEC    CH
+      JE     @@negate
+
+@@successExit:
+
+      ADD    ESP,12   // pop temp and saved copy of string pointer
+
+      XOR    ESI,ESI   // signal no error to caller
+
+@@exit:
+      MOV    [EDX],ESI
+
+      POP    EDI
+      POP    ESI
+      POP    EBX
+      RET
+
+@@negate:
+      FCHS
+      JMP    @@successExit
+
+@@empty:
+      INC    ESI
+
+@@error:
+      POP    EAX
+      POP    EBX
+      SUB    ESI,EBX
+      ADD    ESP,4
+      JMP    @@exit
+end;
+
+procedure FPower10;
+asm
+  JMP  _Pow10
+end;
+
+//function _Pow10(val: Extended; Power: Integer): Extended;
+procedure _Pow10;
+asm
+// -> FST(0)  val
+// -> EAX Power
+// <- FST(0)  val * 10**Power
+
+//  This routine generates 10**power with no more than two
+//  floating point multiplications. Up to 10**31, no multiplications
+//  are needed.
+
+  PUSH  EBX
+{$IFDEF PIC}
+  PUSH  EAX
+  CALL  GetGOT
+  MOV   EBX,EAX
+  POP   EAX
+{$ELSE}
+  XOR   EBX,EBX
+{$ENDIF}
+  TEST  EAX,EAX
+  JL  @@neg
+  JE  @@exit
+  CMP EAX,5120
+  JGE @@inf
+  MOV EDX,EAX
+  AND EDX,01FH
+  LEA EDX,[EDX+EDX*4]
+  FLD tbyte ptr @@tab0[EBX+EDX*2]
+
+  FMULP
+
+  SHR EAX,5
+  JE  @@exit
+
+  MOV EDX,EAX
+  AND EDX,0FH
+  JE  @@skip2ndMul
+  LEA EDX,[EDX+EDX*4]
+  FLD tbyte ptr @@tab1-10[EBX+EDX*2]
+  FMULP
+
+@@skip2ndMul:
+
+  SHR EAX,4
+  JE  @@exit
+  LEA EAX,[EAX+EAX*4]
+  FLD tbyte ptr @@tab2-10[EBX+EAX*2]
+  FMULP
+  JMP   @@exit
+
+@@neg:
+  NEG EAX
+  CMP EAX,5120
+  JGE @@zero
+  MOV EDX,EAX
+  AND EDX,01FH
+  LEA EDX,[EDX+EDX*4]
+  FLD tbyte ptr @@tab0[EBX+EDX*2]
+  FDIVP
+
+  SHR EAX,5
+  JE  @@exit
+
+  MOV EDX,EAX
+  AND EDX,0FH
+  JE  @@skip2ndDiv
+  LEA EDX,[EDX+EDX*4]
+  FLD tbyte ptr @@tab1-10[EBX+EDX*2]
+  FDIVP
+
+@@skip2ndDiv:
+
+  SHR EAX,4
+  JE  @@exit
+  LEA EAX,[EAX+EAX*4]
+  FLD tbyte ptr @@tab2-10[EBX+EAX*2]
+  FDIVP
+
+  JMP   @@exit
+
+@@inf:
+  FLD tbyte ptr @@infval[EBX]
+  JMP   @@exit
+
+@@zero:
+  FLDZ
+
+@@exit:
+  POP EBX
+  RET
+
+@@infval:  DW  $0000,$0000,$0000,$8000,$7FFF
+@@tab0:    DW  $0000,$0000,$0000,$8000,$3FFF  // 10**0
+           DW  $0000,$0000,$0000,$A000,$4002    // 10**1
+           DW  $0000,$0000,$0000,$C800,$4005    // 10**2
+           DW  $0000,$0000,$0000,$FA00,$4008        // 10**3
+           DW  $0000,$0000,$0000,$9C40,$400C        // 10**4
+           DW  $0000,$0000,$0000,$C350,$400F        // 10**5
+           DW  $0000,$0000,$0000,$F424,$4012        // 10**6
+           DW  $0000,$0000,$8000,$9896,$4016        // 10**7
+           DW  $0000,$0000,$2000,$BEBC,$4019        // 10**8
+           DW  $0000,$0000,$2800,$EE6B,$401C        // 10**9
+           DW  $0000,$0000,$F900,$9502,$4020        // 10**10
+           DW  $0000,$0000,$B740,$BA43,$4023        // 10**11
+           DW  $0000,$0000,$A510,$E8D4,$4026        // 10**12
+           DW  $0000,$0000,$E72A,$9184,$402A        // 10**13
+           DW  $0000,$8000,$20F4,$B5E6,$402D        // 10**14
+           DW  $0000,$A000,$A931,$E35F,$4030        // 10**15
+           DW  $0000,$0400,$C9BF,$8E1B,$4034        // 10**16
+           DW  $0000,$C500,$BC2E,$B1A2,$4037        // 10**17
+           DW  $0000,$7640,$6B3A,$DE0B,$403A        // 10**18
+           DW  $0000,$89E8,$2304,$8AC7,$403E        // 10**19
+           DW  $0000,$AC62,$EBC5,$AD78,$4041        // 10**20
+           DW  $8000,$177A,$26B7,$D8D7,$4044        // 10**21
+           DW  $9000,$6EAC,$7832,$8786,$4048        // 10**22
+           DW  $B400,$0A57,$163F,$A968,$404B        // 10**23
+           DW  $A100,$CCED,$1BCE,$D3C2,$404E        // 10**24
+           DW  $84A0,$4014,$5161,$8459,$4052        // 10**25
+           DW  $A5C8,$9019,$A5B9,$A56F,$4055        // 10**26
+           DW  $0F3A,$F420,$8F27,$CECB,$4058        // 10**27
+           DW  $0984,$F894,$3978,$813F,$405C        // 10**28
+           DW  $0BE5,$36B9,$07D7,$A18F,$405F        // 10**29
+           DW  $4EDF,$0467,$C9CD,$C9F2,$4062        // 10**30
+           DW  $2296,$4581,$7C40,$FC6F,$4065        // 10**31
+
+@@tab1:    DW  $B59E,$2B70,$ADA8,$9DC5,$4069        // 10**32
+           DW  $A6D5,$FFCF,$1F49,$C278,$40D3        // 10**64
+           DW  $14A3,$C59B,$AB16,$EFB3,$413D        // 10**96
+           DW  $8CE0,$80E9,$47C9,$93BA,$41A8        // 10**128
+           DW  $17AA,$7FE6,$A12B,$B616,$4212        // 10**160
+           DW  $556B,$3927,$F78D,$E070,$427C        // 10**192
+           DW  $C930,$E33C,$96FF,$8A52,$42E7        // 10**224
+           DW  $DE8E,$9DF9,$EBFB,$AA7E,$4351        // 10**256
+           DW  $2F8C,$5C6A,$FC19,$D226,$43BB        // 10**288
+           DW  $E376,$F2CC,$2F29,$8184,$4426        // 10**320
+           DW  $0AD2,$DB90,$2700,$9FA4,$4490        // 10**352
+           DW  $AA17,$AEF8,$E310,$C4C5,$44FA        // 10**384
+           DW  $9C59,$E9B0,$9C07,$F28A,$4564        // 10**416
+           DW  $F3D4,$EBF7,$4AE1,$957A,$45CF        // 10**448
+           DW  $A262,$0795,$D8DC,$B83E,$4639        // 10**480
+
+@@tab2:    DW  $91C7,$A60E,$A0AE,$E319,$46A3        // 10**512
+           DW  $0C17,$8175,$7586,$C976,$4D48        // 10**1024
+           DW  $A7E4,$3993,$353B,$B2B8,$53ED        // 10**1536
+           DW  $5DE5,$C53D,$3B5D,$9E8B,$5A92        // 10**2048
+           DW  $F0A6,$20A1,$54C0,$8CA5,$6137        // 10**2560
+           DW  $5A8B,$D88B,$5D25,$F989,$67DB        // 10**3072
+           DW  $F3F8,$BF27,$C8A2,$DD5D,$6E80        // 10**3584
+           DW  $979B,$8A20,$5202,$C460,$7525        // 10**4096
+           DW  $59F0,$6ED5,$1162,$AE35,$7BCA        // 10**4608
+end;
+
+const
+  RealBias = 129;
+  ExtBias  = $3FFF;
+
+procedure _Real2Ext;//( val : Real ) : Extended;
+asm
+// -> EAX Pointer to value
+// <- FST(0)  Result
+
+//  the REAL data type has the following format:
+//  8 bit exponent (bias 129), 39 bit fraction, 1 bit sign
+
+  MOV DH,[EAX+5]  // isolate the sign bit
+  AND DH,80H
+  MOV DL,[EAX]  // fetch exponent
+  TEST  DL,DL   // exponent zero means number is zero
+  JE  @@zero
+
+  ADD DX,ExtBias-RealBias // adjust exponent bias
+
+  PUSH    EDX   // the exponent is at the highest address
+
+  MOV EDX,[EAX+2] // load high fraction part, set hidden bit
+  OR  EDX,80000000H
+  PUSH  EDX   // push high fraction part
+
+  MOV DL,[EAX+1]  // load remaining low byte of fraction
+  SHL EDX,24    // clear low 24 bits
+  PUSH  EDX
+
+  FLD tbyte ptr [ESP] // pop result onto chip
+  ADD ESP,12
+
+  RET
+
+@@zero:
+  FLDZ
+  RET
+end;
+
+procedure _Ext2Real;//( val : Extended ) : Real;
+asm
+// -> FST(0)  Value
+//  EAX Pointer to result
+
+  PUSH  EBX
+
+  SUB ESP,12
+  FSTP  tbyte ptr [ESP]
+
+  POP EBX     // EBX is low half of fraction
+  POP EDX     // EDX is high half of fraction
+  POP ECX     // CX is exponent and sign
+
+  SHR EBX,24      // set carry to last bit shifted out
+  ADC BL,0      // if bit was 1, round up
+  ADC EDX,0
+  ADC CX,0
+  JO  @@overflow
+
+  ADD EDX,EDX     // shift fraction 1 bit left
+  ADD CX,CX     // shift sign bit into carry
+  RCR EDX,1     // attach sign bit to fraction
+  SHR CX,1      // restore exponent, deleting sign
+
+  SUB CX,ExtBias-RealBias // adjust exponent
+  JLE @@underflow
+  TEST  CH,CH     // CX must be in 1..255
+  JG  @@overflow
+
+  MOV [EAX],CL
+  MOV [EAX+1],BL
+  MOV [EAX+2],EDX
+
+  POP EBX
+  RET
+
+@@underflow:
+  XOR ECX,ECX
+  MOV [EAX],ECX
+  MOV [EAX+4],CX
+  POP EBX
+  RET
+
+@@overflow:
+  POP EBX
+  MOV AL,8
+  JMP Error
+end;
+
+const
+    ovtInstanceSize = -8;   { Offset of instance size in OBJECTs    }
+    ovtVmtPtrOffs   = -4;
 
 procedure       _ObjSetup;
 asm
@@ -3261,7 +8034,7 @@ asm
         TEST    EAX,EAX
         JE      @@zeroSize
         PUSH    EDX
-        CALL    MemoryManager.GetMem
+        CALL    _GetMem
         POP     EDX
         TEST    EAX,EAX
         JZ      @@fail
@@ -3359,6 +8132,7 @@ asm
         XOR     EAX,EAX
 end;
 
+{$IFDEF MSWINDOWS}
 function GetKeyboardType(nTypeFlag: Integer): Integer; stdcall;
   external user name 'GetKeyboardType';
 
@@ -3375,9 +8149,12 @@ begin
   end;
 end;
 
-procedure _FpuMaskInit;
 const
   HKEY_LOCAL_MACHINE = $80000002;
+
+// workaround a Japanese Win95 bug
+procedure _FpuMaskInit;
+const
   KEY_QUERY_VALUE    = $00000001;
   REG_DWORD          = 4;
   FPUMASKKEY  = 'SOFTWARE\Borland\Delphi\RTL';
@@ -3395,16 +8172,21 @@ begin
   finally
     RegCloseKey(phkResult);
   end;
-
   Default8087CW := (Default8087CW and $ffc0) or (lpData and $3f);
 end;
+{$ENDIF}
 
 procedure       _FpuInit;
-//const cwDefault: Word = $1332 { $133F};
 asm
         FNINIT
         FWAIT
+{$IFDEF PIC}
+        CALL    GetGOT
+        MOV     EAX,[EAX].OFFSET Default8087CW
+        FLDCW   [EAX]
+{$ELSE}
         FLDCW   Default8087CW
+{$ENDIF}
 end;
 
 procedure       _BoundErr;
@@ -3420,11 +8202,16 @@ asm
 end;
 
 function TObject.ClassType: TClass;
-asm
-        mov     eax,[eax]
+begin
+  Pointer(Result) := PPointer(Self)^;
 end;
 
 class function TObject.ClassName: ShortString;
+{$IFDEF PUREPASCAL}
+begin
+  Result := PShortString(PPointer(Integer(Self) + vmtClassName)^)^;
+end;
+{$ELSE}
 asm
         { ->    EAX VMT                         }
         {       EDX Pointer to result string    }
@@ -3439,8 +8226,21 @@ asm
         POP     EDI
         POP     ESI
 end;
+{$ENDIF}
 
 class function TObject.ClassNameIs(const Name: string): Boolean;
+{$IFDEF PUREPASCAL}
+var
+  Temp: ShortString;
+  I: Byte;
+begin
+  Result := False;
+  Temp := ClassName;
+  for I := 0 to Byte(Temp[0]) do
+    if Temp[I] <> Name[I] then Exit;
+  Result := True;
+end;
+{$ELSE}
 asm
         PUSH    EBX
         XOR     EBX,EBX
@@ -3464,8 +8264,16 @@ asm
         MOV     AL,BL
         POP     EBX
 end;
+{$ENDIF}
 
 class function TObject.ClassParent: TClass;
+{$IFDEF PUREPASCAL}
+begin
+  Pointer(Result) := PPointer(Integer(Self) + vmtParent)^;
+  if Result <> nil then
+    Pointer(Result) := PPointer(Result)^;
+end;
+{$ELSE}
 asm
         MOV     EAX,[EAX].vmtParent
         TEST    EAX,EAX
@@ -3473,43 +8281,22 @@ asm
         MOV     EAX,[EAX]
 @@exit:
 end;
+{$ENDIF}
 
 class function TObject.NewInstance: TObject;
-asm
-        PUSH    EAX
-        MOV     EAX,[EAX].vmtInstanceSize
-        CALL    _GetMem
-        MOV     EDX,EAX
-        POP     EAX
-        JMP     TObject.InitInstance
+begin
+  Result := InitInstance(_GetMem(InstanceSize));
 end;
 
 procedure TObject.FreeInstance;
-asm
-        PUSH    EBX
-        PUSH    ESI
-        MOV     EBX,EAX
-        MOV     ESI,EAX
-@@loop:
-        MOV     ESI,[ESI]
-        MOV     EDX,[ESI].vmtInitTable
-        MOV     ESI,[ESI].vmtParent
-        TEST    EDX,EDX
-        JE      @@skip
-        CALL    _FinalizeRecord
-        MOV     EAX,EBX
-@@skip:
-        TEST    ESI,ESI
-        JNE     @@loop
-
-        CALL    _FreeMem
-        POP     ESI
-        POP     EBX
+begin
+  CleanupInstance;
+  _FreeMem(Self);
 end;
 
 class function TObject.InstanceSize: Longint;
-asm
-        MOV     EAX,[EAX].vmtInstanceSize
+begin
+  Result := PInteger(Integer(Self) + vmtInstanceSize)^;
 end;
 
 constructor TObject.Create;
@@ -3521,16 +8308,36 @@ begin
 end;
 
 procedure TObject.Free;
-asm
-        TEST    EAX,EAX
-        JE      @@exit
-        MOV     ECX,[EAX]
-        MOV     DL,1
-        CALL    dword ptr [ECX].vmtDestroy
-@@exit:
+begin
+  if Self <> nil then
+    Destroy;
 end;
 
 class function TObject.InitInstance(Instance: Pointer): TObject;
+{$IFDEF PUREPASCAL}
+var
+  IntfTable: PInterfaceTable;
+  ClassPtr: TClass;
+  I: Integer;
+begin
+  FillChar(Instance^, InstanceSize, 0);
+  PInteger(Instance)^ := Integer(Self);
+  ClassPtr := Self;
+  while ClassPtr <> nil do
+  begin
+    IntfTable := ClassPtr.GetInterfaceTable;
+    if IntfTable <> nil then
+      for I := 0 to IntfTable.EntryCount-1 do
+  with IntfTable.Entries[I] do
+  begin
+    if VTable <> nil then
+      PInteger(@PChar(Instance)[IOffset])^ := Integer(VTable);
+  end;
+    ClassPtr := ClassPtr.ClassParent;
+  end;
+  Result := Instance;
+end;
+{$ELSE}
 asm
         PUSH    EBX
         PUSH    ESI
@@ -3577,8 +8384,25 @@ asm
         POP     ESI
         POP     EBX
 end;
+{$ENDIF}
 
 procedure TObject.CleanupInstance;
+{$IFDEF PUREPASCAL}
+var
+  ClassPtr: TClass;
+  InitTable: Pointer;
+begin
+  ClassPtr := ClassType;
+  InitTable := PPointer(Integer(ClassPtr) + vmtInitTable)^;
+  while (ClassPtr <> nil) and (InitTable <> nil) do
+  begin
+    _FinalizeRecord(Self, InitTable);
+    ClassPtr := ClassPtr.ClassParent;
+    if ClassPtr <> nil then
+      InitTable := PPointer(Integer(ClassPtr) + vmtInitTable)^;
+  end;
+end;
+{$ELSE}
 asm
         PUSH    EBX
         PUSH    ESI
@@ -3599,8 +8423,29 @@ asm
         POP     ESI
         POP     EBX
 end;
+{$ENDIF}
 
-function InvokeImplGetter(Self: TObject; ImplGetter: Integer): IUnknown;
+function InvokeImplGetter(Self: TObject; ImplGetter: Cardinal): IInterface;
+{$IFDEF PUREPASCAL}
+var
+  M: function: IInterface of object;
+begin
+  TMethod(M).Data := Self;
+  case ImplGetter of
+    $FF000000..$FFFFFFFF:  // Field
+        Result := IInterface(Pointer(Cardinal(Self) + (ImplGetter and $00FFFFFF)));
+    $FE000000..$FEFFFFFF:  // virtual method
+      begin
+        // sign extend vmt slot offset = smallint cast
+  TMethod(M).Code := PPointer(Integer(Self) + SmallInt(ImplGetter))^;
+        Result := M;
+      end;
+  else // static method
+    TMethod(M).Code := Pointer(ImplGetter);
+    Result := M;
+  end;
+end;
+{$ELSE}
 asm
         XCHG    EDX,ECX
         CMP     ECX,$FF000000
@@ -3623,33 +8468,51 @@ asm
         MOV     EDX,[ECX]
         JMP     _IntfCopy
 end;
+{$ENDIF}
 
 function TObject.GetInterface(const IID: TGUID; out Obj): Boolean;
 var
   InterfaceEntry: PInterfaceEntry;
 begin
+  Pointer(Obj) := nil;
   InterfaceEntry := GetInterfaceEntry(IID);
   if InterfaceEntry <> nil then
   begin
     if InterfaceEntry^.IOffset <> 0 then
-      Pointer(Obj) := Pointer(Integer(Self) + InterfaceEntry^.IOffset)
-    else
-      IUnknown(Obj) := InvokeImplGetter(Self, InterfaceEntry^.ImplGetter);
-    if Pointer(Obj) <> nil then
     begin
-      if InterfaceEntry^.IOffset <> 0 then IUnknown(Obj)._AddRef;
-      Result := True;
+      Pointer(Obj) := Pointer(Integer(Self) + InterfaceEntry^.IOffset);
+      if Pointer(Obj) <> nil then IInterface(Obj)._AddRef;
     end
     else
-      Result := False;
-  end else
-  begin
-    Pointer(Obj) := nil;
-    Result := False;
+      IInterface(Obj) := InvokeImplGetter(Self, InterfaceEntry^.ImplGetter);
   end;
+  Result := Pointer(Obj) <> nil;
 end;
 
 class function TObject.GetInterfaceEntry(const IID: TGUID): PInterfaceEntry;
+{$IFDEF PUREPASCAL}
+var
+  ClassPtr: TClass;
+  IntfTable: PInterfaceTable;
+  I: Integer;
+begin
+  ClassPtr := Self;
+  while ClassPtr <> nil do
+  begin
+    IntfTable := ClassPtr.GetInterfaceTable;
+    if IntfTable <> nil then
+      for I := 0 to IntfTable.EntryCount-1 do
+      begin
+        Result := @IntfTable.Entries[I];
+//        if Result^.IID = IID then Exit;
+        if (Int64(Result^.IID.D1) = Int64(IID.D1)) and
+           (Int64(Result^.IID.D4) = Int64(IID.D4)) then Exit;
+      end;
+    ClassPtr := ClassPtr.ClassParent;
+  end;
+  Result := nil;
+end;
+{$ELSE}
 asm
         PUSH    EBX
         PUSH    ESI
@@ -3683,35 +8546,26 @@ asm
 @@5:    POP     ESI
         POP     EBX
 end;
+{$ENDIF}
 
 class function TObject.GetInterfaceTable: PInterfaceTable;
-asm
-        MOV     EAX,[EAX].vmtIntfTable
+begin
+  Result := PPointer(Integer(Self) + vmtIntfTable)^;
 end;
 
-
-procedure       _IsClass;
-asm
-        { ->    EAX     left operand (class)    }
-        {       EDX VMT of right operand        }
-        { <-    AL      left is derived from right      }
-        TEST    EAX,EAX
-        JE      @@exit
-@@loop:
-        MOV     EAX,[EAX]
-        CMP     EAX,EDX
-        JE      @@success
-        MOV     EAX,[EAX].vmtParent
-        TEST    EAX,EAX
-        JNE     @@loop
-        JMP     @@exit
-@@success:
-        MOV     AL,1
-@@exit:
+function _IsClass(Child: TObject; Parent: TClass): Boolean;
+begin
+  Result := (Child <> nil) and Child.InheritsFrom(Parent);
 end;
 
-
-procedure       _AsClass;
+function _AsClass(Child: TObject; Parent: TClass): TObject;
+{$IFDEF PUREPASCAL}
+begin
+  Result := Child;
+  if not (Child is Parent) then
+    Error(reInvalidCast);   // loses return address
+end;
+{$ELSE}
 asm
         { ->    EAX     left operand (class)    }
         {       EDX VMT of right operand        }
@@ -3733,24 +8587,25 @@ asm
 
 @@exit:
 end;
+{$ENDIF}
 
 
 procedure       GetDynaMethod;
 {       function        GetDynaMethod(vmt: TClass; selector: Smallint) : Pointer;       }
 asm
         { ->    EAX     vmt of class            }
-        {       BX      dynamic method index    }
-        { <-    EBX pointer to routine  }
+        {       SI      dynamic method index    }
+        { <-    ESI pointer to routine  }
         {       ZF = 0 if found         }
         {       trashes: EAX, ECX               }
 
         PUSH    EDI
-        XCHG    EAX,EBX
+        XCHG    EAX,ESI
         JMP     @@haveVMT
 @@outerLoop:
-        MOV     EBX,[EBX]
+        MOV     ESI,[ESI]
 @@haveVMT:
-        MOV     EDI,[EBX].vmtDynamicTable
+        MOV     EDI,[ESI].vmtDynamicTable
         TEST    EDI,EDI
         JE      @@parent
         MOVZX   ECX,word ptr [EDI]
@@ -3760,8 +8615,8 @@ asm
         JE      @@found
         POP     ECX
 @@parent:
-        MOV     EBX,[EBX].vmtParent
-        TEST    EBX,EBX
+        MOV     ESI,[ESI].vmtParent
+        TEST    ESI,ESI
         JNE     @@outerLoop
         JMP     @@exit
 
@@ -3769,7 +8624,7 @@ asm
         POP     EAX
         ADD     EAX,EAX
         SUB     EAX,ECX         { this will always clear the Z-flag ! }
-        MOV     EBX,[EDI+EAX*2-4]
+        MOV     ESI,[EDI+EAX*2-4]
 
 @@exit:
         POP     EDI
@@ -3784,7 +8639,7 @@ asm
         POP     ECX
         POP     EAX
         JE      @@Abstract
-        JMP     EBX
+        JMP     ESI
 @@Abstract:
         POP     ECX
         JMP     _AbstractError
@@ -3799,7 +8654,7 @@ asm
         POP     ECX
         POP     EAX
         JE      @@Abstract
-        JMP     EBX
+        JMP     ESI
 @@Abstract:
         POP     ECX
         JMP     _AbstractError
@@ -3808,12 +8663,12 @@ end;
 
 procedure       _FindDynaInst;
 asm
-        PUSH    EBX
-        MOV     EBX,EDX
+        PUSH    ESI
+        MOV     ESI,EDX
         MOV     EAX,[EAX]
         CALL    GetDynaMethod
-        MOV     EAX,EBX
-        POP     EBX
+        MOV     EAX,ESI
+        POP     ESI
         JNE     @@exit
         POP     ECX
         JMP     _AbstractError
@@ -3823,19 +8678,28 @@ end;
 
 procedure       _FindDynaClass;
 asm
-        PUSH    EBX
-        MOV     EBX,EDX
+        PUSH    ESI
+        MOV     ESI,EDX
         CALL    GetDynaMethod
-        MOV     EAX,EBX
-        POP     EBX
+        MOV     EAX,ESI
+        POP     ESI
         JNE     @@exit
         POP     ECX
         JMP     _AbstractError
 @@exit:
 end;
 
-
 class function TObject.InheritsFrom(AClass: TClass): Boolean;
+{$IFDEF PUREPASCAL}
+var
+  ClassPtr: TClass;
+begin
+  ClassPtr := Self;
+  while (ClassPtr <> nil) and (ClassPtr <> AClass) do
+    ClassPtr := PPointer(Integer(ClassPtr) + vmtParent)^;
+  Result := ClassPtr = AClass;
+end;
+{$ELSE}
 asm
         { ->    EAX     Pointer to our class    }
         {       EDX     Pointer to AClass               }
@@ -3854,11 +8718,12 @@ asm
         MOV     AL,1
 @@exit:
 end;
+{$ENDIF}
 
 
 class function TObject.ClassInfo: Pointer;
-asm
-        MOV     EAX,[EAX].vmtTypeInfo
+begin
+  Result := PPointer(Integer(Self) + vmtTypeInfo)^;
 end;
 
 
@@ -3884,25 +8749,25 @@ end;
 
 procedure TObject.Dispatch(var Message);
 asm
-        PUSH    EBX
-        MOV     BX,[EDX]
-        OR      BX,BX
-        JE      @@default
-        CMP     BX,0C000H
-        JAE     @@default
-        PUSH    EAX
-        MOV     EAX,[EAX]
-        CALL    GetDynaMethod
-        POP     EAX
-        JE      @@default
-        MOV     ECX,EBX
-        POP     EBX
-        JMP     ECX
+    PUSH    ESI
+    MOV     SI,[EDX]
+    OR      SI,SI
+    JE      @@default
+    CMP     SI,0C000H
+    JAE     @@default
+    PUSH    EAX
+    MOV     EAX,[EAX]
+    CALL    GetDynaMethod
+    POP     EAX
+    JE      @@default
+    MOV     ECX,ESI
+    POP     ESI
+    JMP     ECX
 
 @@default:
-        POP     EBX
-        MOV     ECX,[EAX]
-        JMP     dword ptr [ECX].vmtDefaultHandler
+    POP     ESI
+    MOV     ECX,[EAX]
+    JMP     dword ptr [ECX].vmtDefaultHandler
 end;
 
 
@@ -4014,7 +8879,7 @@ end;
 
 function TObject.FieldAddress(const Name: ShortString): Pointer;
 asm
-        { ->    EAX     Pointer to instance     }
+  { ->    EAX     Pointer to instance     }
         {       EDX     Pointer to name }
         PUSH    EBX
         PUSH    ESI
@@ -4071,81 +8936,7 @@ asm
         POP     EBX
 end;
 
-
-const { copied from xx.h }
-  cContinuable        = 0;
-  cNonContinuable     = 1;
-  cUnwinding          = 2;
-  cUnwindingForExit   = 4;
-  cUnwindInProgress   = cUnwinding or cUnwindingForExit;
-  cDelphiException    = $0EEDFADE;
-  cDelphiReRaise      = $0EEDFADF;
-  cDelphiExcept       = $0EEDFAE0;
-  cDelphiFinally      = $0EEDFAE1;
-  cDelphiTerminate    = $0EEDFAE2;
-  cDelphiUnhandled    = $0EEDFAE3;
-  cNonDelphiException = $0EEDFAE4;
-  cDelphiExitFinally  = $0EEDFAE5;
-  cCppException       = $0EEFFACE; { used by BCB }
-  EXCEPTION_CONTINUE_SEARCH    = 0;
-  EXCEPTION_EXECUTE_HANDLER    = 1;
-  EXCEPTION_CONTINUE_EXECUTION = -1;
-
-type
-  JmpInstruction =
-  packed record
-    opCode:   Byte;
-    distance: Longint;
-  end;
-  TExcDescEntry =
-  record
-    vTable:  Pointer;
-    handler: Pointer;
-  end;
-  PExcDesc = ^TExcDesc;
-  TExcDesc =
-  packed record
-    jmp: JmpInstruction;
-    case Integer of
-    0:      (instructions: array [0..0] of Byte);
-    1{...}: (cnt: Integer; excTab: array [0..0{cnt-1}] of TExcDescEntry);
-  end;
-
-  PExcFrame = ^TExcFrame;
-  TExcFrame =
-  record
-    next: PExcFrame;
-    desc: PExcDesc;
-    hEBP: Pointer;
-    case Integer of
-    0:  ( );
-    1:  ( ConstructedObject: Pointer );
-    2:  ( SelfOfMethod: Pointer );
-  end;
-
-  PExceptionRecord = ^TExceptionRecord;
-  TExceptionRecord =
-  record
-    ExceptionCode        : LongWord;
-    ExceptionFlags       : LongWord;
-    OuterException       : PExceptionRecord;
-    ExceptionAddress     : Pointer;
-    NumberParameters     : Longint;
-    case {IsOsException:} Boolean of
-    True:  (ExceptionInformation : array [0..14] of Longint);
-    False: (ExceptAddr: Pointer; ExceptObject: Pointer);
-  end;
-
-  PRaiseFrame = ^TRaiseFrame;
-  TRaiseFrame = packed record
-    NextRaise: PRaiseFrame;
-    ExceptAddr: Pointer;
-    ExceptObject: TObject;
-    ExceptionRecord: PExceptionRecord;
-  end;
-
-
-procedure       _ClassCreate;
+function _ClassCreate(AClass: TClass; Alloc: Boolean): TObject;
 asm
         { ->    EAX = pointer to VMT      }
         { <-    EAX = pointer to instance }
@@ -4156,6 +8947,7 @@ asm
         JL      @@noAlloc
         CALL    dword ptr [EAX].vmtNewInstance
 @@noAlloc:
+{$IFNDEF PC_MAPPED_EXCEPTIONS}
         XOR     EDX,EDX
         LEA     ECX,[ESP+16]
         MOV     EBX,FS:[EDX]
@@ -4164,15 +8956,17 @@ asm
         MOV     [ECX].TExcFrame.desc,offset @desc
         MOV     [ECX].TexcFrame.ConstructedObject,EAX   { trick: remember copy to instance }
         MOV     FS:[EDX],ECX
+{$ENDIF}
         POP     EBX
         POP     ECX
         POP     EDX
         RET
 
+{$IFNDEF PC_MAPPED_EXCEPTIONS}
 @desc:
         JMP     _HandleAnyException
 
-        {       destroy the object                                                      }
+  {       destroy the object                                                      }
 
         MOV     EAX,[ESP+8+9*4]
         MOV     EAX,[EAX].TExcFrame.ConstructedObject
@@ -4185,32 +8979,35 @@ asm
         POP     EAX
         CALL    _ClassDestroy
 @@skip:
-        {       reraise the exception   }
+  {       reraise the exception   }
         CALL    _RaiseAgain
+{$ENDIF}
+end;
+
+procedure _ClassDestroy(Instance: TObject);
+begin
+  Instance.FreeInstance;
 end;
 
 
-procedure       _ClassDestroy;
-asm
-        MOV     EDX,[EAX]
-        CALL    dword ptr [EDX].vmtFreeInstance
+function _AfterConstruction(Instance: TObject): TObject;
+begin
+  Instance.AfterConstruction;
+  Result := Instance;
 end;
 
-
-procedure _AfterConstruction;
-asm
-        { ->  EAX = pointer to instance }
-
-        PUSH    EAX
-        MOV     EDX,[EAX]
-        CALL    dword ptr [EDX].vmtAfterConstruction
-        POP     EAX
+function _BeforeDestruction(Instance: TObject; OuterMost: ShortInt): TObject;
+// Must preserve DL on return!
+{$IFDEF PUREPASCAL}
+begin
+  Result := Instance;
+  if OuterMost > 0 then Exit;
+  Instance.BeforeDestruction;
 end;
-
-procedure _BeforeDestruction;
+{$ELSE}
 asm
-        { ->  EAX  = pointer to instance }
-        {      DL  = dealloc flag        }
+       { ->  EAX  = pointer to instance }
+       {      DL  = dealloc flag        }
 
         TEST    DL,DL
         JG      @@outerMost
@@ -4223,6 +9020,7 @@ asm
         POP     EDX
         POP     EAX
 end;
+{$ENDIF}
 
 {
   The following NotifyXXXX routines are used to "raise" special exceptions
@@ -4232,21 +9030,113 @@ end;
   debug event with DBG_CONTINE so that normal processing will occur.
 }
 
+{$IFDEF LINUX}
+const
+  excRaise      = 0; { an exception is being raised by the user (could be a reraise) }
+  excCatch      = 1; { an exception is about to be caught }
+  excFinally    = 2; { a finally block is about to be executed because of an exception }
+  excUnhandled  = 3; { no user exception handler was found (the app will die) }
+
+procedure _DbgExcNotify(
+  NotificationKind: Integer;
+  ExceptionObject: Pointer;
+  ExceptionName: PShortString;
+  ExceptionLocation: Pointer;
+  HandlerAddr: Pointer); cdecl; export;
+begin
+{$IFDEF DEBUG}
+  {
+    This code is just for debugging the exception handling system.  The debugger
+    needs _DbgExcNotify, however to place breakpoints in, so the function itself
+    cannot be removed.
+  }
+  asm
+    PUSH EAX
+    PUSH EDX
+  end;
+  if Assigned(ExcNotificationProc) then
+    ExcNotificationProc(NotificationKind, ExceptionObject, ExceptionName, ExceptionLocation, HandlerAddr);
+  asm
+    POP EDX
+    POP EAX
+  end;
+{$ENDIF}
+end;
+
+{
+  The following functions are used by the debugger for the evaluator.  If you
+  change them IN ANY WAY, the debugger will cease to function correctly.
+}
+procedure _DbgEvalMarker;
+begin
+end;
+
+procedure _DbgEvalExcept(E: TObject);
+begin
+end;
+
+procedure _DbgEvalEnd;
+begin
+end;
+
+{
+  This function is used by the debugger to provide a soft landing spot
+  when evaluating a function call that may raise an unhandled exception.
+  The return address of _DbgEvalMarker is pushed onto the stack so that
+  the unwinder will transfer control to the except block.
+}
+procedure _DbgEvalFrame;
+begin
+  try
+    _DbgEvalMarker;
+  except on E: TObject do
+    _DbgEvalExcept(E);
+  end;
+  _DbgEvalEnd;
+end;
+
+{
+  These export names need to match the names that will be generated into
+  the .symtab section, so that the debugger can find them if stabs
+  debug information is being generated.
+}
+exports
+  _DbgExcNotify   name  '@DbgExcNotify',
+  _DbgEvalFrame   name  '@DbgEvalFrame',
+  _DbgEvalMarker  name  '@DbgEvalMarker',
+  _DbgEvalExcept  name  '@DbgEvalExcept',
+  _DbgEvalEnd     name  '@DbgEvalEnd';
+{$ENDIF}
+
 { tell the debugger that the next raise is a re-raise of the current non-Delphi
   exception }
 procedure       NotifyReRaise;
 asm
+{$IFDEF LINUX}
+{     ->EAX     Pointer to exception object }
+{       EDX     location of exception       }
+        PUSH    0                   { handler addr }
+        PUSH    EDX                 { location of exception }
+        MOV     ECX, [EAX]
+        PUSH    [ECX].vmtClassName  { exception name }
+        PUSH    EAX                 { exception object }
+        PUSH    excRaise            { notification kind }
+        CALL    _DbgExcNotify
+        ADD     ESP, 20
+{$ELSE}
         CMP     BYTE PTR DebugHook,1
         JBE     @@1
         PUSH    0
         PUSH    0
         PUSH    cContinuable
         PUSH    cDelphiReRaise
-        CALL    RaiseException
+        CALL    RaiseExceptionProc
 @@1:
+{$ENDIF}
 end;
 
 { tell the debugger about the raise of a non-Delphi exception }
+{$IFNDEF LINUX}
 procedure       NotifyNonDelphiException;
 asm
         CMP     BYTE PTR DebugHook,0
@@ -4258,34 +9148,67 @@ asm
         PUSH    2
         PUSH    cContinuable
         PUSH    cNonDelphiException
-        CALL    RaiseException
+        CALL    RaiseExceptionProc
         ADD     ESP,8
         POP     EAX
 @@1:
 end;
+{$ENDIF}
 
 { Tell the debugger where the handler for the current exception is located }
 procedure       NotifyExcept;
 asm
+{$IFDEF LINUX}
+{     ->EAX     Pointer to exception object }
+{       EDX     handler addr                }
+        PUSH    EAX
+        MOV     EAX, [EAX].TRaisedException.ExceptObject
+
+        PUSH    EDX                 { handler addr }
+        PUSH    0                   { location of exception }
+        MOV     ECX, [EAX]
+        PUSH    [ECX].vmtClassName  { exception name }
+        PUSH    EAX                 { exception object }
+        PUSH    excCatch            { notification kind }
+        CALL    _DbgExcNotify
+        ADD     ESP, 20
+
+        POP     EAX
+{$ELSE}
         PUSH    ESP
         PUSH    1
         PUSH    cContinuable
         PUSH    cDelphiExcept           { our magic exception code }
-        CALL    RaiseException
+        CALL    RaiseExceptionProc
         ADD     ESP,4
         POP     EAX
+{$ENDIF}
 end;
 
 procedure       NotifyOnExcept;
 asm
+{$IFDEF LINUX}
+{     ->EAX     Pointer to exception object }
+{       EDX     handler addr                }
+        PUSH    EDX                 { handler addr }
+        PUSH    0                   { location of exception }
+        MOV     ECX, [EAX]
+        PUSH    [ECX].vmtClassName  { exception name }
+        PUSH    EAX                 { exception object }
+        PUSH    excCatch            { notification kind }
+        CALL    _DbgExcNotify
+        ADD     ESP, 20
+{$ELSE}
         CMP     BYTE PTR DebugHook,1
         JBE     @@1
         PUSH    EAX
         PUSH    [EBX].TExcDescEntry.handler
         JMP     NotifyExcept
 @@1:
+{$ENDIF}
 end;
 
+{$IFNDEF LINUX}
 procedure       NotifyAnyExcept;
 asm
         CMP     BYTE PTR DebugHook,1
@@ -4315,10 +9238,22 @@ asm
         ADD     ECX,EAX
 @@3:
 end;
+{$ENDIF} { not LINUX }
 
 { Notify debugger of a finally during an exception unwind }
 procedure       NotifyExceptFinally;
 asm
+{$IFDEF LINUX}
+{     ->EAX     Pointer to exception object }
+{       EDX     handler addr                }
+        PUSH    EDX                 { handler addr }
+        PUSH    0                   { location of exception }
+        PUSH    0                   { exception name }
+        PUSH    0                   { exception object }
+        PUSH    excFinally          { notification kind }
+        CALL    _DbgExcNotify
+        ADD     ESP, 20
+{$ELSE}
         CMP     BYTE PTR DebugHook,1
         JBE     @@1
         PUSH    EAX
@@ -4330,17 +9265,19 @@ asm
         PUSH    1                       { there is 1 argument }
         PUSH    cContinuable            { continuable execution }
         PUSH    cDelphiFinally          { our magic exception code }
-        CALL    RaiseException
+        CALL    RaiseExceptionProc
         POP     ECX
         POP     ECX
         POP     EDX
         POP     EAX
 @@1:
+{$ENDIF}
 end;
 
 
 { Tell the debugger that the current exception is handled and cleaned up.
   Also indicate where execution is about to resume. }
+{$IFNDEF LINUX}
 procedure       NotifyTerminate;
 asm
         CMP     BYTE PTR DebugHook,1
@@ -4350,15 +9287,33 @@ asm
         PUSH    1
         PUSH    cContinuable
         PUSH    cDelphiTerminate        { our magic exception code }
-        CALL    RaiseException
+        CALL    RaiseExceptionProc
         POP     EDX
 @@1:
 end;
+{$ENDIF}
 
-{ Tell the debugger that there was no handler found for the current execption
+{ Tell the debugger that there was no handler found for the current exception
   and we are about to go to the default handler }
 procedure       NotifyUnhandled;
 asm
+{$IFDEF LINUX}
+{     ->EAX     Pointer to exception object }
+{       EDX     location of exception       }
+        PUSH    EAX
+        MOV     EAX, [EAX].TRaisedException.ExceptObject
+
+        PUSH    0                   { handler addr }
+        PUSH    EDX                 { location of exception }
+        MOV     ECX, [EAX]
+        PUSH    [ECX].vmtClassName  { exception name }
+        PUSH    EAX                 { exception object }
+        PUSH    excUnhandled        { notification kind }
+        CALL    _DbgExcNotify
+        ADD     ESP, 20
+
+        POP     EAX
+{$ELSE}
         PUSH    EAX
         PUSH    EDX
         CMP     BYTE PTR DebugHook,1
@@ -4367,15 +9322,24 @@ asm
         PUSH    2
         PUSH    cContinuable
         PUSH    cDelphiUnhandled
-        CALL    RaiseException
+        CALL    RaiseExceptionProc
 @@1:
         POP     EDX
         POP     EAX
+{$ENDIF}
 end;
-
 
 procedure       _HandleAnyException;
 asm
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+        CALL    UnblockOSExceptions
+        OR      [EAX].TRaisedException.Flags, excIsBeingHandled
+        MOV     ESI, EBX
+        MOV     EDX, [ESP]
+        CALL    NotifyExcept
+        MOV     EBX, ESI
+{$ENDIF}
+{$IFNDEF  PC_MAPPED_EXCEPTIONS}
         { ->    [ESP+ 4] excPtr: PExceptionRecord       }
         {       [ESP+ 8] errPtr: PExcFrame              }
         {       [ESP+12] ctxPtr: Pointer                }
@@ -4403,10 +9367,11 @@ asm
         CMP     [ECX].TExceptionRecord.ExceptionCode,cCppException
         JE      @@CppException
         CALL    NotifyNonDelphiException
+{$IFDEF MSWINDOWS}
         CMP     BYTE PTR JITEnable,0
         JBE     @@CppException
         CMP     BYTE PTR DebugHook,0
-        JA      @@CppException                     { Do not JIT if debugging }
+        JA      @@CppException                     // Do not JIT if debugging
         LEA     ECX,[ESP+4]
         PUSH    EAX
         PUSH    ECX
@@ -4418,13 +9383,14 @@ asm
         MOV     EAX,[ESP+4]
         MOV     ECX,[EAX].TExceptionRecord.ExceptionAddress
         JMP     @@GoUnwind
-
+{$ENDIF}
 @@CppException:
         MOV     EDX,EAX
         MOV     EAX,[ESP+4]
         MOV     ECX,[EAX].TExceptionRecord.ExceptionAddress
 
 @@DelphiException:
+{$IFDEF MSWINDOWS}
         CMP     BYTE PTR JITEnable,1
         JBE     @@GoUnwind
         CMP     BYTE PTR DebugHook,0                { Do not JIT if debugging }
@@ -4440,6 +9406,7 @@ asm
         POP     EDX
         POP     EAX
         JE      @@exit
+{$ENDIF}
 
 @@GoUnwind:
         OR      [EAX].TExceptionRecord.ExceptionFlags,cUnwinding
@@ -4462,12 +9429,12 @@ asm
         PUSH    EAX
         PUSH    offset @@returnAddress
         PUSH    EDX
-        CALL    RtlUnwind
+        CALL    RtlUnwindProc
 @@returnAddress:
 
         MOV     EDI,[ESP+8+8*4]
 
-        {       Make the RaiseList entry on the stack }
+  {       Make the RaiseList entry on the stack }
 
         CALL    SysInit.@GetTLS
         PUSH    [EAX].RaiseListPtr
@@ -4498,13 +9465,188 @@ asm
 
 @@exit:
         MOV     EAX,1
+{$ENDIF}  { not PC_MAPPED_EXCEPTIONS }
 end;
 
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+{
+  Common code between the Win32 and PC mapped exception handling
+  scheme.  This function takes a pointer to an object, and an exception
+  'on' descriptor table and finds the matching handler descriptor.
+
+  For support of Linux, we assume that EBX has been loaded with the GOT
+  that pertains to the code which is handling the exception currently.
+  If this function is being called from code which is not PIC, then
+  EBX should be zero on entry.
+}
+procedure FindOnExceptionDescEntry;
+asm
+        { ->    EAX raised object: Pointer                }
+        {       EDX descriptor table: ^TExcDesc           }
+        {       EBX GOT of user code, or 0 if not an SO   }
+        { <-    EAX matching descriptor: ^TExcDescEntry   }
+        PUSH    EBP
+        MOV     EBP, ESP
+        SUB     ESP, 8                          { Room for vtable temp, and adjustor }
+
+        PUSH    EBX
+        PUSH    ESI
+        PUSH    EDI
+
+        MOV [EBP - 8], EBX      { Store the potential GOT }
+        MOV EAX, [EAX]          { load vtable of exception object }
+        MOV     EBX,[EDX].TExcDesc.cnt
+        LEA     ESI,[EDX].TExcDesc.excTab       { point ECX to exc descriptor table }
+        MOV     [EBP - 4], EAX                  { temp for vtable of exception object }
+
+@@innerLoop:
+        MOV     EAX,[ESI].TExcDescEntry.vTable
+        TEST    EAX,EAX                         { catch all clause?                     }
+        JE      @@found                         { yes: This is the handler              }
+        ADD     EAX, [EBP - 8]                  { add in the adjustor (could be 0) }
+        MOV     EDI,[EBP - 4]                   { load vtable of exception object       }
+        JMP     @@haveVMT
+
+@@vtLoop:
+        MOV     EDI,[EDI]
+@@haveVMT:
+        MOV     EAX,[EAX]
+        CMP     EAX,EDI
+        JE      @@found
+
+        MOV     ECX,[EAX].vmtInstanceSize
+        CMP     ECX,[EDI].vmtInstanceSize
+        JNE     @@parent
+
+        MOV     EAX,[EAX].vmtClassName
+        MOV     EDX,[EDI].vmtClassName
+
+        XOR     ECX,ECX
+        MOV     CL,[EAX]
+        CMP     CL,[EDX]
+        JNE     @@parent
+
+        INC     EAX
+        INC     EDX
+        CALL    _AStrCmp
+        JE      @@found
+
+@@parent:
+        MOV     EDI,[EDI].vmtParent             { load vtable of parent         }
+        MOV     EAX,[ESI].TExcDescEntry.vTable
+        ADD     EAX, [EBP - 8]                  { add in the adjustor (could be 0) }
+        TEST    EDI,EDI
+        JNE     @@vtLoop
+
+        ADD     ESI,8
+        DEC     EBX
+        JNZ     @@innerLoop
+
+        { Didn't find a handler. }
+        XOR     ESI, ESI
+
+@@found:
+        MOV     EAX, ESI
+@@done:
+        POP     EDI
+        POP     ESI
+        POP     EBX
+        MOV     ESP, EBP
+        POP     EBP
+end;
+{$ENDIF}
+
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+procedure       _HandleOnExceptionPIC;
+asm
+        { ->    EAX obj : Exception object }
+        {       [RA]  desc: ^TExcDesc }
+        { <-    Doesn't return }
+
+        // Mark the exception as being handled
+        OR      [EAX].TRaisedException.Flags, excIsBeingHandled
+
+        MOV     ESI, EBX                      // Save the GOT
+        MOV     EDX, [ESP]                    // Get the addr of the TExcDesc
+        PUSH    EAX                           // Save the object
+        MOV     EAX, [EAX].TRaisedException.ExceptObject
+        CALL    FindOnExceptionDescEntry
+        OR      EAX, EAX
+        JE      @@NotForMe
+
+        MOV     EBX, ESI                      // Set back to user's GOT
+        MOV     EDX, EAX
+        POP     EAX                           // Get the object back
+        POP     ECX                           // Ditch the return addr
+
+        // Get the Pascal object itself.
+        MOV     EAX, [EAX].TRaisedException.ExceptObject
+
+        MOV     EDX, [EDX].TExcDescEntry.handler
+        ADD     EDX, EBX                      // adjust for GOT
+        CALL    NotifyOnExcept
+
+        MOV     EBX, ESI                      // Make sure of user's GOT
+        JMP     EDX                           // Back to the user code
+        // never returns
+@@NotForMe:
+        POP     EAX                           // Get the exception object
+
+        // Mark that we're reraising this exception, so that the
+        // compiler generated exception handler for the 'except on' clause
+        // will not get confused
+        OR      [EAX].TRaisedException.Flags, excIsBeingReRaised
+
+        JMP     SysRaiseException             // Should be using resume here
+end;
+{$ENDIF}
 
 procedure       _HandleOnException;
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+asm
+        { ->    EAX obj : Exception object }
+        {       [RA]  desc: ^TExcDesc }
+        { <-    Doesn't return }
+       
+        // Mark the exception as being handled
+        OR      [EAX].TRaisedException.Flags, excIsBeingHandled
+
+        MOV     EDX, [ESP]                    // Get the addr of the TExcDesc
+        PUSH    EAX                           // Save the object
+        PUSH    EBX                           // Save EBX
+        XOR     EBX, EBX                      // No GOT
+        MOV     EAX, [EAX].TRaisedException.ExceptObject
+        CALL    FindOnExceptionDescEntry
+        POP     EBX                           // Restore EBX
+        OR      EAX, EAX                      // Is the exception for me?
+        JE      @@NotForMe
+
+        MOV     EDX, EAX
+        POP     EAX                           // Get the object back
+        POP     ECX                           // Ditch the return addr
+
+        // Get the Pascal object itself.
+        MOV     EAX, [EAX].TRaisedException.ExceptObject
+
+        MOV     EDX, [EDX].TExcDescEntry.handler
+        CALL    NotifyOnExcept                // Tell the debugger about it
+
+        JMP     EDX                           // Back to the user code
+        // never returns
+@@NotForMe:
+        POP     EAX                           // Get the exception object
+
+        // Mark that we're reraising this exception, so that the
+        // compiler generated exception handler for the 'except on' clause
+        // will not get confused
+        OR      [EAX].TRaisedException.Flags, excIsBeingReRaised
+        JMP     SysRaiseException             // Should be using resume here
+end;
+{$ENDIF}
+{$IFNDEF  PC_MAPPED_EXCEPTIONS}
 asm
         { ->    [ESP+ 4] excPtr: PExceptionRecord       }
-        {       [ESP+ 8] errPtr: PExcFrame              }
+  {       [ESP+ 8] errPtr: PExcFrame              }
         {       [ESP+12] ctxPtr: Pointer                }
         {       [ESP+16] dspPtr: Pointer                }
         { <-    EAX return value - always one   }
@@ -4599,6 +9741,7 @@ asm
         CALL    ExceptObjProc
         MOV     EDX,[ESP+12+4*4]
         CALL    NotifyNonDelphiException
+{$IFDEF MSWINDOWS}
         CMP     BYTE PTR JITEnable,0
         JBE     @@NoJIT
         CMP     BYTE PTR DebugHook,0
@@ -4610,6 +9753,7 @@ asm
         CMP     EAX,EXCEPTION_CONTINUE_SEARCH
         POP     EAX
         JE      @@exit
+{$ENDIF}
 @@noJIT:
         MOV     EDX,EAX
         MOV     EAX,[ESP+4+4*4]
@@ -4617,6 +9761,7 @@ asm
         JMP     @@GoUnwind
 
 @@haveObject:
+{$IFDEF MSWINDOWS}
         CMP     BYTE PTR JITEnable,1
         JBE     @@GoUnwind
         CMP     BYTE PTR DebugHook,0
@@ -4632,6 +9777,7 @@ asm
         POP     EDX
         POP     EAX
         JE      @@exit
+{$ENDIF}
 
 @@GoUnwind:
         XOR     EBX,EBX
@@ -4650,7 +9796,7 @@ asm
         PUSH    EAX
         PUSH    offset @@returnAddress
         PUSH    EDX
-        CALL    RtlUnwind
+        CALL    RtlUnwindProc
 @@returnAddress:
 
         POP     EBX                     { Restore handler entry  }
@@ -4686,10 +9832,41 @@ asm
 @@exit:
         MOV     EAX,1
 end;
-
+{$ENDIF}
 
 procedure       _HandleFinally;
 asm
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+{$IFDEF PIC}
+        MOV     ESI, EBX
+{$ENDIF}
+        CALL    UnblockOSExceptions
+        MOV     EDX, [ESP]
+        CALL    NotifyExceptFinally
+        PUSH    EAX
+{$IFDEF PIC}
+        MOV     EBX, ESI
+{$ENDIF}
+        {
+          Mark the current exception with the EBP of the handler.  If
+          an exception is raised from the finally block, then this
+          exception will be orphaned.  We will catch this later, when
+          we clean up the next except block to complete execution.
+          See DoneExcept.
+        }
+        MOV [EAX].TRaisedException.HandlerEBP, EBP
+        CALL    EDX
+        POP     EAX
+        {
+          We executed the finally handler without adverse reactions.
+          It's safe to clear the marker now.
+        }
+        MOV [EAX].TRaisedException.HandlerEBP, $FFFFFFFF
+        PUSH    EBP
+        MOV     EBP, ESP
+        CALL    SysRaiseException             // Should be using resume here
+{$ENDIF}
+{$IFDEF MSWINDOWS}
         { ->    [ESP+ 4] excPtr: PExceptionRecord       }
         {       [ESP+ 8] errPtr: PExcFrame              }
         {       [ESP+12] ctxPtr: Pointer                }
@@ -4720,16 +9897,56 @@ asm
 
 @@exit:
         MOV     EAX,1
+{$ENDIF}
 end;
 
 
 procedure       _HandleAutoException;
+{$IFDEF LINUX}
+{$IFDEF PC_MAPPED_EXCEPTIONS}
 asm
-        { ->    [ESP+ 4] excPtr: PExceptionRecord       }
-        {       [ESP+ 8] errPtr: PExcFrame              }
-        {       [ESP+12] ctxPtr: Pointer                }
-        {       [ESP+16] dspPtr: Pointer                }
-        { <-    EAX return value - always one           }
+        // EAX = TObject reference, or nil
+        // [ESP] = ret addr
+
+        CALL    UnblockOSExceptions
+//
+//  The compiler wants the stack to look like this:
+//  ESP+4->  HRESULT
+//  ESP+0->  ret addr
+//
+//  Make it so.
+//
+        POP     EDX
+        PUSH    8000FFFFH
+        PUSH    EDX
+
+        OR      EAX, EAX    // Was this a method call?
+        JE      @@Done
+
+        PUSH    EAX
+        CALL    CurrentException
+        MOV     EDX, [EAX].TRaisedException.ExceptObject
+        MOV     ECX, [EAX].TRaisedException.ExceptionAddr;
+        POP     EAX
+        MOV     EAX, [EAX]
+        CALL    [EAX].vmtSafeCallException.Pointer;
+        MOV     [ESP+4], EAX
+@@Done:
+        CALL    _DoneExcept
+end;
+{$ELSE}
+begin
+  Error(reSafeCallError);  //!!
+end;
+{$ENDIF}
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+asm
+  { ->    [ESP+ 4] excPtr: PExceptionRecord       }
+  {       [ESP+ 8] errPtr: PExcFrame              }
+  {       [ESP+12] ctxPtr: Pointer                }
+  {       [ESP+16] dspPtr: Pointer                }
+  { <-    EAX return value - always one           }
 
         MOV     EAX,[ESP+4]
         TEST    [EAX].TExceptionRecord.ExceptionFlags,cUnwindInProgress
@@ -4773,7 +9990,7 @@ asm
         PUSH    EAX
         PUSH    offset @@returnAddress
         PUSH    EDX
-        CALL    RtlUnwind
+        CALL    RtlUnwindProc
 
 @@returnAddress:
         POP     EBP
@@ -4788,9 +10005,12 @@ asm
         MOV     ECX,[EAX].TExceptionRecord.ExceptAddr
         MOV     EAX,[ESP+8]
         MOV     EAX,[EAX].TExcFrame.SelfOfMethod
+        TEST    EAX,EAX
+        JZ      @@freeException
         MOV     EBX,[EAX]
         CALL    [EBX].vmtSafeCallException.Pointer
         MOV     EBX,EAX
+@@freeException:
         MOV     EAX,[ESP+4]
         MOV     EAX,[EAX].TExceptionRecord.ExceptObject
         CALL    TObject.Free
@@ -4807,21 +10027,60 @@ asm
 @@exit:
         MOV     EAX,1
 end;
+{$ENDIF}
 
+
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+procedure       _RaiseAtExcept;
+asm
+        { ->    EAX     Pointer to exception object     }
+        { ->    EDX     Purported addr of exception     }
+        { Be careful: EBX is not set up in PIC mode. }
+        { Outward bound calls must go through an exported fn, like SysRaiseException }
+        OR      EAX, EAX
+        JNE     @@GoAhead
+        MOV     EAX, 216
+        CALL    _RunError
+
+@@GoAhead:
+        CALL    BlockOSExceptions
+        PUSH    EBP
+        MOV     EBP, ESP
+        CALL    NotifyReRaise
+        CALL    AllocateException
+        CALL    SysRaiseException
+        {
+          This can only return if there was a terrible error.  In this event,
+          we have to bail out.
+        }
+        JMP     _Run0Error
+end;
+{$ENDIF}
 
 procedure       _RaiseExcept;
 asm
-        { When making changes to the way Delphi Exceptions are raised, }
-        { please realize that the C++ Exception handling code reraises }
-        { some exceptions as Delphi Exceptions.  Of course we want to  }
-        { keep exception raising compatible between Delphi and C++, so }
-        { when you make changes here, consult with the relevant C++    }
-        { exception handling engineer. The C++ code is in xx.cpp, in   }
-        { the RTL sources, in function tossAnException.                }
-
+{$IFDEF PC_MAPPED_EXCEPTIONS}
         { ->    EAX     Pointer to exception object     }
-        {       [ESP]   Error address           }
+        MOV     EDX, [ESP]
+        JMP     _RaiseAtExcept
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+  { When making changes to the way Delphi Exceptions are raised, }
+  { please realize that the C++ Exception handling code reraises }
+  { some exceptions as Delphi Exceptions.  Of course we want to  }
+  { keep exception raising compatible between Delphi and C++, so }
+  { when you make changes here, consult with the relevant C++    }
+  { exception handling engineer. The C++ code is in xx.cpp, in   }
+  { the RTL sources, in function tossAnException.                }
 
+  { ->    EAX     Pointer to exception object     }
+  {       [ESP]   Error address           }
+
+        OR      EAX, EAX
+        JNE     @@GoAhead
+        MOV     EAX, 216
+        CALL    _RunError
+@@GoAhead:
         POP     EDX
 
         PUSH    ESP
@@ -4837,12 +10096,52 @@ asm
         PUSH    cNonContinuable                 { we can't continue execution   }
         PUSH    cDelphiException                { our magic exception code              }
         PUSH    EDX                             { pass the user's return address        }
-        JMP     RaiseException
+        JMP     RaiseExceptionProc
+{$ENDIF}
 end;
 
 
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+{
+  Used in the PC mapping exception implementation to handle exceptions in constructors.
+}
+procedure       _ClassHandleException;
+asm
+  {
+  EAX = self
+  EDX = top flag
+  }
+        TEST     DL, DL
+        JE       _RaiseAgain
+        MOV      ECX,[EAX]
+        MOV      DL,$81
+        PUSH     EAX
+        CALL     dword ptr [ECX].vmtDestroy
+        POP      EAX
+        CALL     _ClassDestroy
+        JMP      _RaiseAgain
+end;
+{$ENDIF}
+
 procedure       _RaiseAgain;
 asm
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+        CALL    CurrentException
+// The following notifies the debugger of a reraise of exceptions.  This will
+// be supported in a later release, but is disabled for now.
+//        PUSH    EAX
+//        MOV     EDX, [EAX].TRaisedException.ExceptionAddr
+//        MOV     EAX, [EAX].TRaisedException.ExceptObject
+//        CALL    NotifyReRaise                   { Tell the debugger }
+//        POP     EAX
+        TEST    [EAX].TRaisedException.Flags, excIsBeingHandled
+        JZ      @@DoIt
+        OR      [EAX].TRaisedException.Flags, excIsBeingReRaised
+@@DoIt:
+        MOV     EDX, [ESP]                      { Get the user's addr }
+        JMP     SysRaiseException
+{$ENDIF}
+{$IFDEF MSWINDOWS}
         { ->    [ESP        ] return address to user program }
         {       [ESP+ 4     ] raise list entry (4 dwords)    }
         {       [ESP+ 4+ 4*4] saved topmost frame            }
@@ -4888,11 +10187,84 @@ asm
         POP     EBX
 @@exit:
         MOV     EAX,1
+{$ENDIF}
 end;
 
+{$IFDEF DEBUG_EXCEPTIONS}
+procedure NoteDE;
+begin
+  Writeln('DoneExcept: Skipped the destructor');
+end;
+
+procedure NoteDE2;
+begin
+  Writeln('DoneExcept: Destroyed the object');
+end;
+{$ENDIF}
+
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+{
+  This is implemented slow and dumb.  The theory is that it is rare
+  to throw an exception past an except handler, and that the penalty
+  can be particularly high here.  Partly it's done the dumb way for
+  the sake of maintainability.  It could be inlined.
+}
+procedure       _DestroyException;
+var
+  Exc: PRaisedException;
+  RefCount: Integer;
+  ExcObj: Pointer;
+  ExcAddr: Pointer;
+begin
+  asm
+    MOV   Exc, EAX
+  end;
+
+  if (Exc^.Flags and excIsBeingReRaised) = 0 then
+  begin
+    RefCount := Exc^.RefCount;
+    ExcObj := Exc^.ExceptObject;
+    ExcAddr := Exc^.ExceptionAddr;
+    Exc^.RefCount := 1;
+    FreeException;
+    _DoneExcept;
+    Exc := AllocateException(ExcObj, ExcAddr);
+    Exc^.RefCount := RefCount;
+  end;
+
+  Exc^.Flags := Exc^.Flags and not (excIsBeingReRaised or excIsBeingHandled);
+
+  SysRaiseException(Exc);
+end;
+{$ENDIF}
 
 procedure       _DoneExcept;
 asm
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+        CALL    FreeException
+        OR      EAX, EAX
+        JE      @@Done
+        CALL    TObject.Free
+@@Done:
+        {
+          Take a peek at the next exception object on the stack.
+          If its EBP marker is at an address lower than our current
+          EBP, then we know that it was orphaned when an exception was
+          thrown from within the execution of a finally block.  We clean
+          it up now, so that we won't leak exception records/objects.
+        }
+        CALL    CurrentException
+        OR      EAX, EAX
+        JE      @@Done2
+        CMP     [EAX].TRaisedException.HandlerEBP, EBP
+        JA      @@Done2
+        CALL    FreeException
+        OR      EAX, EAX
+        JE      @@Done2
+        CALL    TObject.Free
+@@Done2:
+{$ENDIF}
+{$IFDEF MSWINDOWS}
         { ->    [ESP+ 4+10*4] excPtr: PExceptionRecord       }
         {       [ESP+ 8+10*4] errPtr: PExcFrame              }
 
@@ -4917,11 +10289,13 @@ asm
         POP     EBP
         CALL    NotifyTerminate
         JMP     EDX
+{$ENDIF}
 end;
 
-
+{$IFNDEF PC_MAPPED_EXCEPTIONS}
 procedure   _TryFinallyExit;
 asm
+{$IFDEF MSWINDOWS}
         XOR     EDX,EDX
         MOV     ECX,[ESP+4].TExcFrame.desc
         MOV     EAX,[ESP+4].TExcFrame.next
@@ -4929,35 +10303,15 @@ asm
         MOV     FS:[EDX],EAX
         CALL    ECX
 @@1:    RET     12
+{$ENDIF}
 end;
+{$ENDIF}
 
-
-type
-  PInitContext = ^TInitContext;
-  TInitContext = record
-    OuterContext:   PInitContext;     { saved InitContext   }
-    ExcFrame:       PExcFrame;        { bottom exc handler  }
-    InitTable:      PackageInfo;      { unit init info      }
-    InitCount:      Integer;          { how far we got      }
-    Module:         PLibModule;       { ptr to module desc  }
-    DLLSaveEBP:     Pointer;          { saved regs for DLLs }
-    DLLSaveEBX:     Pointer;          { saved regs for DLLs }
-    DLLSaveESI:     Pointer;          { saved regs for DLLs }
-    DLLSaveEDI:     Pointer;          { saved regs for DLLs }
-    DLLInitState:   Byte;
-    ExitProcessTLS: procedure;        { Shutdown for TLS    }
-  end;
 
 var
   InitContext: TInitContext;
 
-
-procedure       RunErrorAt(ErrCode: Integer; ErrorAddr: Pointer);
-asm
-        MOV     [ESP],ErrorAddr
-        JMP     _RunError
-end;
-
+{$IFNDEF PC_MAPPED_EXCEPTIONS}
 procedure       MapToRunError(P: PExceptionRecord); stdcall;
 const
   STATUS_ACCESS_VIOLATION         = $C0000005;
@@ -4997,12 +10351,14 @@ begin
   RunErrorAt(ErrCode, P.ExceptionAddress);
 end;
 
+
 procedure       _ExceptionHandler;
 asm
         MOV     EAX,[ESP+4]
 
         TEST    [EAX].TExceptionRecord.ExceptionFlags,cUnwindInProgress
         JNE     @@exit
+{$IFDEF MSWINDOWS}
         CMP     BYTE PTR DebugHook,0
         JA      @@ExecuteHandler
         LEA     EAX,[ESP+4]
@@ -5011,8 +10367,7 @@ asm
         CMP     EAX,EXCEPTION_CONTINUE_SEARCH
         JNE     @@ExecuteHandler
         JMP     @@exit
-//        MOV     EAX,1
-//        RET
+{$ENDIF}
 
 @@ExecuteHandler:
         MOV     EAX,[ESP+4]
@@ -5024,9 +10379,9 @@ asm
         PUSH    EAX
         PUSH    offset @@returnAddress
         PUSH    EDX
-        CALL    RtlUnwind
-@@returnAddress:
+        CALL    RtlUnwindProc
 
+@@returnAddress:
         MOV     EBX,[ESP+4]
         CMP     [EBX].TExceptionRecord.ExceptionCode,cDelphiException
         MOV     EDX,[EBX].TExceptionRecord.ExceptAddr
@@ -5061,25 +10416,39 @@ asm
         XOR     EAX,EAX
 end;
 
-
 procedure       SetExceptionHandler;
 asm
-        XOR     EDX,EDX                 { using [EDX] saves some space over [0] }
-        LEA     EAX,[EBP-12]
-        MOV     ECX,FS:[EDX]            { ECX := head of chain                  }
-        MOV     FS:[EDX],EAX            { head of chain := @exRegRec            }
+  XOR     EDX,EDX                 { using [EDX] saves some space over [0] }
+  LEA     EAX,[EBP-12]
+  MOV     ECX,FS:[EDX]            { ECX := head of chain                  }
+  MOV     FS:[EDX],EAX            { head of chain := @exRegRec            }
 
-        MOV     [EAX].TExcFrame.next,ECX
-        MOV     [EAX].TExcFrame.desc,offset _ExceptionHandler
-        MOV     [EAX].TExcFrame.hEBP,EBP
-        MOV     InitContext.ExcFrame,EAX
+  MOV     [EAX].TExcFrame.next,ECX
+{$IFDEF PIC}
+  LEA     EDX, [EBX]._ExceptionHandler
+  MOV     [EAX].TExcFrame.desc, EDX
+{$ELSE}
+  MOV     [EAX].TExcFrame.desc,offset _ExceptionHandler
+{$ENDIF}
+  MOV     [EAX].TExcFrame.hEBP,EBP
+{$IFDEF PIC}
+  MOV     [EBX].InitContext.ExcFrame,EAX
+{$ELSE}
+  MOV     InitContext.ExcFrame,EAX
+{$ENDIF}
 end;
 
 
 procedure       UnsetExceptionHandler;
 asm
         XOR     EDX,EDX
+{$IFDEF PIC}
+        MOV     EAX,[EBX].InitContext.ExcFrame
+{$ELSE}
         MOV     EAX,InitContext.ExcFrame
+{$ENDIF}
+        TEST    EAX,EAX
+        JZ      @@exit
         MOV     ECX,FS:[EDX]    { ECX := head of chain          }
         CMP     EAX,ECX         { simple case: our record is first      }
         JNE     @@search
@@ -5099,18 +10468,35 @@ asm
         MOV     [ECX],EAX       { unlink our record                     }
 @@exit:
 end;
+{$ENDIF} // not PC_MAPPED_EXCEPTIONS
 
+type
+  TProc = procedure;
 
-procedure FInitUnits;
+{$IFDEF LINUX}
+procedure CallProc(Proc: Pointer; GOT: Cardinal);
+asm
+        PUSH    EBX
+        MOV     EBX,EDX
+        ADD     EAX,EBX
+        CALL    EAX
+        POP     EBX
+end;
+{$ENDIF}
+
+procedure FinalizeUnits;
 var
   Count: Integer;
   Table: PUnitEntryTable;
-  P: procedure;
+  P: Pointer;
 begin
   if InitContext.InitTable = nil then
-        exit;
+    exit;
   Count := InitContext.InitCount;
   Table := InitContext.InitTable^.UnitInfo;
+{$IFDEF LINUX}
+  Inc(Cardinal(Table), InitContext.Module^.GOT);
+{$ENDIF}
   try
     while Count > 0 do
     begin
@@ -5118,26 +10504,35 @@ begin
       InitContext.InitCount := Count;
       P := Table^[Count].FInit;
       if Assigned(P) then
-        P;
+      begin
+{$IFDEF LINUX}
+        CallProc(P, InitContext.Module^.GOT);
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+        TProc(P)();
+{$ENDIF}
+      end;
     end;
   except
-    FInitUnits;  { try to finalize the others }
+    FinalizeUnits;  { try to finalize the others }
     raise;
   end;
 end;
-
 
 procedure InitUnits;
 var
   Count, I: Integer;
   Table: PUnitEntryTable;
-  P: procedure;
+  P: Pointer;
 begin
   if InitContext.InitTable = nil then
     exit;
   Count := InitContext.InitTable^.UnitCount;
   I := 0;
   Table := InitContext.InitTable^.UnitInfo;
+{$IFDEF LINUX}
+  Inc(Cardinal(Table), InitContext.Module^.GOT);
+{$ENDIF}
   try
     while I < Count do
     begin
@@ -5145,16 +10540,22 @@ begin
       Inc(I);
       InitContext.InitCount := I;
       if Assigned(P) then
-        P;
+      begin
+{$IFDEF LINUX}
+        CallProc(P, InitContext.Module^.GOT);
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+        TProc(P)();
+{$ENDIF}
+      end;
     end;
   except
-    FInitUnits;
+    FinalizeUnits;
     raise;
   end;
 end;
 
-
-procedure _PackageLoad(const Table : PackageInfo);
+procedure _PackageLoad(const Table : PackageInfo; Module: PLibModule);
 var
   SavedContext: TInitContext;
 begin
@@ -5162,6 +10563,7 @@ begin
   InitContext.DLLInitState := 0;
   InitContext.InitTable := Table;
   InitContext.InitCount := 0;
+  InitContext.Module := Module;
   InitContext.OuterContext := @SavedContext;
   try
     InitUnits;
@@ -5171,7 +10573,7 @@ begin
 end;
 
 
-procedure _PackageUnload(const Table : PackageInfo);
+procedure _PackageUnload(const Table : PackageInfo; Module: PLibModule);
 var
   SavedContext: TInitContext;
 begin
@@ -5179,34 +10581,39 @@ begin
   InitContext.DLLInitState := 0;
   InitContext.InitTable := Table;
   InitContext.InitCount := Table^.UnitCount;
+  InitContext.Module := Module;
   InitContext.OuterContext := @SavedContext;
   try
-  FInitUnits;
+    FinalizeUnits;
   finally
-  InitContext := SavedContext;
+    InitContext := SavedContext;
   end;
 end;
 
-
-procedure       _StartExe;
-asm
-        { ->    EAX InitTable   }
-        {       EDX Module      }
-        MOV     InitContext.InitTable,EAX
-        XOR     EAX,EAX
-        MOV     InitContext.InitCount,EAX
-        MOV     InitContext.Module,EDX
-        MOV     EAX,[EDX].TLibModule.Instance
-        MOV     MainInstance,EAX
-
-        CALL    SetExceptionHandler
-
-        MOV     IsLibrary,0
-
-        CALL    InitUnits;
+{$IFDEF LINUX}
+procedure       _StartExe(InitTable: PackageInfo; Module: PLibModule; Argc: Integer; Argv: Pointer);
+begin
+  ArgCount := Argc;
+  ArgValues := Argv;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+procedure       _StartExe(InitTable: PackageInfo; Module: PLibModule);
+begin
+  RaiseExceptionProc := @RaiseException;
+  RTLUnwindProc := @RTLUnwind;
+{$ENDIF}
+  InitContext.InitTable := InitTable;
+  InitContext.InitCount := 0;
+  InitContext.Module := Module;
+  MainInstance := Module.Instance;
+{$IFNDEF PC_MAPPED_EXCEPTIONS}
+  SetExceptionHandler;
+{$ENDIF}
+  IsLibrary := False;
+  InitUnits;
 end;
 
-
+{$IFDEF MSWINDOWS}
 procedure       _StartLib;
 asm
         { ->    EAX InitTable   }
@@ -5246,6 +10653,11 @@ asm
 @@notShutDown:
         MOV     InitContext.InitCount,ECX
 
+        MOV     EAX, offset RaiseException
+        MOV     RaiseExceptionProc, EAX
+        MOV     EAX, offset RTLUnwind
+        MOV     RTLUnwindProc, EAX
+
         CALL    SetExceptionHandler
 
         MOV     EAX,[EBP+12]
@@ -5258,18 +10670,30 @@ asm
         POP     ECX
         MOV     EDX,[ECX]
         MOV     InitContext.ExitProcessTLS,EDX
-        JE      @@noTLSproc
+        JE      @@skipTLSproc
+        CMP     AL,3              // DLL_THREAD_DETACH
+        JGE     @@skipTLSproc     // call ExitThreadTLS proc after DLLProc
         CALL    dword ptr [ECX+EAX*4]
-@@noTLSproc:
+@@skipTLSproc:
 
         { Call any DllProc }
 
-        MOV     EDX,[ESP+4]
-        TEST    EDX,EDX
+        PUSH    ECX
+        MOV     ECX,[ESP+8]
+        TEST    ECX,ECX
         JE      @@noDllProc
         MOV     EAX,[EBP+12]
-        CALL    EDX
+        MOV     EDX,[EBP+16]
+        CALL    ECX
 @@noDllProc:
+
+        POP     ECX
+        MOV     EAX, [EBP+12]
+        CMP     AL,3                  // DLL_THREAD_DETACH
+        JL      @@afterDLLproc        // don't free TLS on process shutdown
+        CALL    dword ptr [ECX+EAX*4]
+
+@@afterDLLProc:
 
         { Set IsLibrary if there was no exe yet }
 
@@ -5286,7 +10710,54 @@ asm
         CALL    InitUnits
         RET     4
 end;
+{$ENDIF  MSWINDOWS}
+{$IFDEF LINUX}
+procedure       _StartLib(Context: PInitContext; Module: PLibModule; DLLProc: TDLLProcEx);
+var
+  TempSwap: TInitContext;
+begin
+  // Context's register save fields are already initialized.
+  // Save the current InitContext and activate the new Context by swapping them
+  TempSwap := InitContext;
+  InitContext := PInitContext(Context)^;
+  PInitContext(Context)^ := TempSwap;
 
+  InitContext.Module := Module;
+  InitContext.OuterContext := Context;
+
+  // DLLInitState is initialized by SysInit to 0 for shutdown, 1 for startup
+  // Inc DLLInitState to distinguish from package init:
+  // 0 for package, 1 for DLL shutdown, 2 for DLL startup
+
+  Inc(InitContext.DLLInitState);
+
+  if InitContext.DLLInitState = 1 then
+  begin
+    InitContext.InitTable := Module.InitTable;
+    if Assigned(InitContext.InitTable) then
+      InitContext.InitCount := InitContext.InitTable.UnitCount  // shutdown
+  end
+  else
+  begin
+    Module.InitTable := InitContext.InitTable;  // save for shutdown
+    InitContext.InitCount := 0;  // startup
+  end;
+
+  if Assigned(DLLProc) then
+    DLLProc(InitContext.DLLInitState-1,0);
+
+  if MainInstance = 0 then        { Set IsLibrary if there was no exe yet }
+  begin
+    IsLibrary := True;
+    Default8087CW := Get8087CW;
+  end;
+
+  if InitContext.DLLInitState = 1 then
+    _Halt0
+  else
+    InitUnits;
+end;
+{$ENDIF}
 
 procedure _InitResStrings;
 asm
@@ -5298,21 +10769,31 @@ asm
         {                      resStringAddress: Pointer;   }
         {                   end;                            }
         {                 end;                              }
+        { EBX = caller's GOT for PIC callers, 0 for non-PIC }
 
+{$IFDEF MSWINDOWS}
         PUSH    EBX
+        XOR     EBX,EBX
+{$ENDIF}
+        PUSH    EDI
         PUSH    ESI
-        MOV     EBX,[EAX]
-        LEA     ESI,[EAX+4]
+        MOV     EDI,[EBX+EAX]
+        LEA     ESI,[EBX+EAX+4]
 @@loop:
-        MOV     EAX,[ESI+4]   { load resStringAddress   }
+        MOV     EAX,[ESI+4]       { load resStringAddress   }
         MOV     EDX,[ESI]         { load variableAddress    }
+        ADD     EAX,EBX
+        ADD     EDX,EBX
         CALL    LoadResString
         ADD     ESI,8
-        DEC     EBX
+        DEC     EDI
         JNZ     @@loop
 
         POP     ESI
+        POP     EDI
+{$IFDEF MSWINDOWS}
         POP     EBX
+{$ENDIF}
 end;
 
 procedure _InitResStringImports;
@@ -5325,22 +10806,31 @@ asm
         {                      resStringAddress: ^Pointer;  }
         {                   end;                            }
         {                 end;                              }
+        { EBX = caller's GOT for PIC callers, 0 for non-PIC }
 
+{$IFDEF MSWINDOWS}
         PUSH    EBX
+        XOR     EBX,EBX
+{$ENDIF}
+        PUSH    EDI
         PUSH    ESI
-        MOV     EBX,[EAX]
-        LEA     ESI,[EAX+4]
+        MOV     EDI,[EBX+EAX]
+        LEA     ESI,[EBX+EAX+4]
 @@loop:
-        MOV     EAX,[ESI+4]     { load address of import    }
-        MOV     EDX,[ESI]       { load address of variable  }
-        MOV     EAX,[EAX]       { load contents of import   }
+        MOV     EAX,[ESI+4]         { load address of import    }
+        MOV     EDX,[ESI]           { load address of variable  }
+        MOV     EAX,[EBX+EAX]       { load contents of import   }
+        ADD     EDX,EBX
         CALL    LoadResString
         ADD     ESI,8
-  DEC     EBX
-  JNZ     @@loop
+        DEC     EDI
+        JNZ     @@loop
 
-  POP     ESI
-  POP     EBX
+        POP     ESI
+        POP     EDI
+{$IFDEF MSWINDOWS}
+        POP     EBX
+{$ENDIF}
 end;
 
 procedure _InitImports;
@@ -5354,52 +10844,61 @@ asm
         {                      sourceOffset: Longint;       }
         {                   end;                            }
         {                 end;                              }
+        { EBX = caller's GOT for PIC callers, 0 for non-PIC }
 
+{$IFDEF MSWINDOWS}
         PUSH    EBX
+        XOR     EBX,EBX
+{$ENDIF}
+        PUSH    EDI
         PUSH    ESI
-        MOV     EBX,[EAX]
-        LEA     ESI,[EAX+4]
+        MOV     EDI,[EBX+EAX]
+        LEA     ESI,[EBX+EAX+4]
 @@loop:
         MOV     EAX,[ESI+4]     { load address of import    }
         MOV     EDX,[ESI]       { load address of variable  }
-        MOV     ECX,[ESI+8]     { load offset               }
-        MOV     EAX,[EAX]       { load contents of import   }
-        ADD     EAX,ECX         { calc address of variable  }
-        MOV     [EDX],EAX       { store result              }
+        MOV     EAX,[EBX+EAX]   { load contents of import   }
+        ADD     EAX,[ESI+8]     { calc address of variable  }
+        MOV     [EBX+EDX],EAX   { store result              }
         ADD     ESI,12
-        DEC     EBX
+        DEC     EDI
         JNZ     @@loop
 
         POP     ESI
+        POP     EDI
+{$IFDEF MSWINDOWS}
         POP     EBX
+{$ENDIF}
 end;
 
+{$IFDEF MSWINDOWS}
 procedure _InitWideStrings;
 asm
-        { ->    EAX     Pointer to init table               }
-        {                 record                            }
-        {                   cnt: Integer;                   }
-        {                   tab: array [1..cnt] record      }
-        {                      variableAddress: Pointer;    }
-        {                      stringAddress: ^Pointer;     }
-        {                   end;                            }
-        {                 end;                              }
+     { ->    EAX     Pointer to init table               }
+     {                 record                            }
+     {                   cnt: Integer;                   }
+     {                   tab: array [1..cnt] record      }
+     {                      variableAddress: Pointer;    }
+     {                      stringAddress: ^Pointer;     }
+     {                   end;                            }
+     {                 end;                              }
 
-        PUSH    EBX
-        PUSH    ESI
-        MOV     EBX,[EAX]
-        LEA     ESI,[EAX+4]
+    PUSH    EBX
+    PUSH    ESI
+    MOV     EBX,[EAX]
+    LEA     ESI,[EAX+4]
 @@loop:
-  MOV     EDX,[ESI+4]     { load address of string    }
-  MOV     EAX,[ESI]       { load address of variable  }
-  CALL    _WStrAsg
-  ADD     ESI,8
-  DEC     EBX
-  JNZ     @@loop
+    MOV     EDX,[ESI+4]     { load address of string    }
+    MOV     EAX,[ESI]       { load address of variable  }
+    CALL    _WStrAsg
+    ADD     ESI,8
+    DEC     EBX
+    JNZ     @@loop
 
-  POP     ESI
-  POP     EBX
+    POP     ESI
+    POP     EBX
 end;
+{$ENDIF}
 
 var
   runErrMsg: array[0..29] of Char = 'Runtime error     at 00000000'#0;
@@ -5410,49 +10909,52 @@ var
 procedure MakeErrorMessage;
 const
   dig : array [0..15] of Char = '0123456789ABCDEF';
-asm
-        PUSH    EBX
-        MOV     EAX,ExitCode
-        MOV     EBX,offset runErrMsg + 16
-        MOV     ECX,10
-
-@@digLoop:
-        XOR     EDX,EDX
-        DIV     ECX
-        ADD     DL,'0'
-        MOV     [EBX],DL
-        DEC     EBX
-        TEST    EAX,EAX
-        JNZ     @@digLoop
-
-    MOV     EAX,ErrorAddr
-
-        CALL    FindHInstance
-        MOV     EDX, ErrorAddr
-        XCHG    EAX, EDX
-        SUB     EAX, EDX           { EAX <=> offset from start of code for HINSTANCE }
-        MOV     EBX,offset runErrMsg + 28
-
-@@hdigLoop:
-        MOV     EDX,EAX
-        AND     EDX,0FH
-        MOV     DL,byte ptr dig[EDX]
-        MOV     [EBX],DL
-        DEC     EBX
-        SHR     EAX,4
-        JNE     @@hdigLoop
-        POP     EBX
+var
+  digit: Byte;
+  Temp: Integer;
+  Addr: Cardinal;
+begin
+  digit := 16;
+  Temp := ExitCode;
+  repeat
+    runErrMsg[digit] := Char(Ord('0') + (Temp mod 10));
+    Temp := Temp div 10;
+    Dec(digit);
+  until Temp = 0;
+  digit := 28;
+  Addr := Cardinal(ErrorAddr);
+  repeat
+    runErrMsg[digit] := dig[Addr and $F];
+    Addr := Addr div 16;
+    Dec(digit);
+  until Addr = 0;
 end;
 
 
 procedure       ExitDll;
 asm
+        { Return False if ExitCode <> 0, and set ExitCode to 0 }
+
+        XOR     EAX,EAX
+{$IFDEF PIC}
+        MOV     ECX,[EBX].ExitCode
+        XCHG    EAX,[ECX]
+{$ELSE}
+        XCHG    EAX, ExitCode
+{$ENDIF}
+        NEG     EAX
+        SBB     EAX,EAX
+        INC     EAX
+
         { Restore the InitContext }
+{$IFDEF PIC}
+        LEA     EDI, [EBX].InitContext
+{$ELSE}
+        MOV EDI, offset InitContext
+{$ENDIF}
 
-        MOV     EDI,offset InitContext
-
-        MOV     EBX,InitContext.DLLSaveEBX
-        MOV     EBP,InitContext.DLLSaveEBP
+        MOV     EBX,[EDI].TInitContext.DLLSaveEBX
+        MOV     EBP,[EDI].TInitContext.DLLSaveEBP
         PUSH    [EDI].TInitContext.DLLSaveESI
         PUSH    [EDI].TInitContext.DLLSaveEDI
 
@@ -5462,22 +10964,56 @@ asm
         POP     EDI
         POP     ESI
 
-        { Return False if ExitCode <> 0, and set ExitCode to 0 }
-
-        XOR     EAX,EAX
-        XCHG    EAX,ExitCode
-        NEG     EAX
-        SBB     EAX,EAX
-        INC     EAX
         LEAVE
+{$IFDEF MSWINDOWS}
         RET     12
+{$ENDIF}
+{$IFDEF LINUX}
+        RET
+{$ENDIF}
 end;
 
+procedure WriteErrorMessage;
+{$IFDEF MSWINDOWS}
+var
+  Dummy: Cardinal;
+begin
+  if IsConsole then
+  begin
+    with TTextRec(Output) do
+    begin
+      if (Mode = fmOutput) and (BufPos > 0) then
+        TTextIOFunc(InOutFunc)(TTextRec(Output));  // flush out text buffer
+    end;
+    WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), runErrMsg, Sizeof(runErrMsg), Dummy, nil);
+    WriteFile(GetStdHandle(STD_OUTPUT_HANDLE), sLineBreak, 2, Dummy, nil);
+  end
+  else if not NoErrMsg then
+    MessageBox(0, runErrMsg, errCaption, 0);
+{$ENDIF}
+{$IFDEF LINUX}
+var
+  c: Char;
+begin
+  with TTextRec(Output) do
+  begin
+    if (Mode = fmOutput) and (BufPos > 0) then
+      TTextIOFunc(InOutFunc)(TTextRec(Output));  // flush out text buffer
+  end;
+   __write(STDERR_FILENO, @runErrMsg, Sizeof(runErrMsg)-1);
+   c := sLineBreak;
+   __write(STDERR_FILENO, @c, 1);
+{$ENDIF}
+end;
 
 procedure _Halt0;
 var
   P: procedure;
 begin
+{$IFDEF LINUX}
+  if (ExitCode <> 0) and CoreDumpEnabled then
+    __raise(SIGABRT);
+{$ENDIF}
 
   if InitContext.DLLInitState = 0 then
     while ExitProc <> nil do
@@ -5492,10 +11028,7 @@ begin
   if ErrorAddr <> nil then
   begin
     MakeErrorMessage;
-    if IsConsole then
-      WriteLn(PChar(@runErrMsg))
-    else if not NoErrMsg then
-      MessageBox(0, runErrMsg, errCaption, 0);
+    WriteErrorMessage;
     ErrorAddr := nil;
   end;
 
@@ -5512,69 +11045,140 @@ begin
 
     { Undo any unit initializations accomplished so far }
 
-    FInitUnits;
+    FinalizeUnits;
 
     if (InitContext.DLLInitState <= 1) or (ExitCode <> 0) then
+    begin
       if InitContext.Module <> nil then
         with InitContext do
         begin
           UnregisterModule(Module);
-          if Module.ResInstance <> Module.Instance then
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+          SysUnregisterIPLookup(Module.CodeSegStart);
+{$ENDIF}
+          if (Module.ResInstance <> Module.Instance) and (Module.ResInstance <> 0) then
             FreeLibrary(Module.ResInstance);
         end;
+    end;
 
+{$IFNDEF PC_MAPPED_EXCEPTIONS}
     UnsetExceptionHandler;
+{$ENDIF}
 
+{$IFDEF MSWINDOWS}
     if InitContext.DllInitState = 1 then
       InitContext.ExitProcessTLS;
+{$ENDIF}
 
     if InitContext.DllInitState <> 0 then
       ExitDll;
 
     if InitContext.OuterContext = nil then
+    begin
+      {
+        If an ExitProcessProc is set, we call it.  Note that at this
+        point the RTL is completely shutdown.  The only thing this is used
+        for right now is the proper semantic handling of signals under Linux.
+      }
+      if Assigned(ExitProcessProc) then
+        ExitProcessProc;
       ExitProcess(ExitCode);
+    end;
 
     InitContext := InitContext.OuterContext^
   end;
-
-  asm
-    db 'Portions Copyright (c) 1983,99 Borland',0
-  end;
-
 end;
 
-
 procedure _Halt;
-asm
-        MOV     ExitCode,EAX
-        JMP     _Halt0
+begin
+  ExitCode := Code;
+  _Halt0;
 end;
 
 
 procedure _Run0Error;
+{$IFDEF PUREPASCAL}
+begin
+  _RunError(0);   // loses return address
+end;
+{$ELSE}
 asm
         XOR     EAX,EAX
         JMP     _RunError
 end;
+{$ENDIF}
 
 
-procedure _RunError;
+procedure _RunError(errorCode: Byte);
+{$IFDEF PUREPASCAL}
+begin
+  ErrorAddr := Pointer(-1);  // no return address available
+  Halt(errorCode);
+end;
+{$ELSE}
 asm
+{$IFDEF PIC}
+        PUSH    EAX
+        CALL    GetGOT
+        MOV     EBX, EAX
+        POP     EAX
+        MOV     ECX, [EBX].ErrorAddr
+        POP     [ECX]
+{$ELSE}
         POP     ErrorAddr
+{$ENDIF}
         JMP     _Halt
 end;
+{$ENDIF}
 
+procedure _UnhandledException;
+type TExceptProc = procedure (Obj: TObject; Addr: Pointer);
+begin
+  if Assigned(ExceptProc) then
+    TExceptProc(ExceptProc)(ExceptObject, ExceptAddr)
+  else
+    RunError(230);
+end;
 
 procedure _Assert(const Message, Filename: AnsiString; LineNumber: Integer);
-asm
-        CMP     AssertErrorProc,0
-        JE      @@1
-        PUSH    [ESP].Pointer
-        CALL    AssertErrorProc
-        RET
-@@1:    MOV     AL,reAssertionFailed
-        JMP     Error
+{$IFDEF PUREPASCAL}
+begin
+  if Assigned(AssertErrorProc) then
+    AssertErrorProc(Message, Filename, LineNumber, Pointer(-1))
+  else
+    Error(reAssertionFailed);  // loses return address
 end;
+{$ELSE}
+asm
+        PUSH    EBX
+{$IFDEF PIC}
+        PUSH    EAX
+        PUSH    ECX
+        CALL    GetGOT
+        MOV     EBX, EAX
+        MOV     EAX, [EBX].AssertErrorProc
+        CMP     [EAX], 0
+        POP     ECX
+        POP     EAX
+{$ELSE}
+        CMP     AssertErrorProc,0
+{$ENDIF}
+        JNZ     @@1
+        MOV     AL,reAssertionFailed
+        CALL    Error
+        JMP     @@exit
+
+@@1:    PUSH    [ESP+4].Pointer
+{$IFDEF PIC}
+        MOV     EBX, [EBX].AssertErrorProc
+        CALL    [EBX]
+{$ELSE}
+        CALL    AssertErrorProc
+{$ENDIF}
+@@exit:
+        POP     EBX
+end;
+{$ENDIF}
 
 type
   PThreadRec = ^TThreadRec;
@@ -5583,17 +11187,26 @@ type
     Parameter: Pointer;
   end;
 
-
+{$IFDEF MSWINDOWS}
 function ThreadWrapper(Parameter: Pointer): Integer; stdcall;
+{$ELSE}
+function ThreadWrapper(Parameter: Pointer): Pointer; cdecl;
+{$ENDIF}
 asm
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+        { Mark the top of the stack with a signature }
+        PUSH    UNWINDFI_TOPOFSTACK
+{$ENDIF}
         CALL    _FpuInit
-        XOR     ECX,ECX
         PUSH    EBP
+{$IFNDEF PC_MAPPED_EXCEPTIONS}
+        XOR     ECX,ECX
         PUSH    offset _ExceptionHandler
         MOV     EDX,FS:[ECX]
         PUSH    EDX
-        MOV     EAX,Parameter
         MOV     FS:[ECX],ESP
+{$ENDIF}
+        MOV     EAX,Parameter
 
         MOV     ECX,[EAX].TThreadRec.Parameter
         MOV     EDX,[EAX].TThreadRec.Func
@@ -5604,14 +11217,21 @@ asm
         POP     EAX
         CALL    EDX
 
+{$IFNDEF PC_MAPPED_EXCEPTIONS}
         XOR     EDX,EDX
         POP     ECX
         MOV     FS:[EDX],ECX
         POP     ECX
+{$ENDIF}
         POP     EBP
+{$IFDEF PC_MAPPED_EXCEPTIONS}
+        { Ditch our TOS marker }
+        ADD     ESP, 4
+{$ENDIF}
 end;
 
 
+{$IFDEF MSWINDOWS}
 function BeginThread(SecurityAttributes: Pointer; StackSize: LongWord;
   ThreadFunc: TThreadFunc; Parameter: Pointer; CreationFlags: LongWord;
   var ThreadId: LongWord): Integer;
@@ -5631,22 +11251,65 @@ procedure EndThread(ExitCode: Integer);
 begin
   ExitThread(ExitCode);
 end;
+{$ENDIF}
 
+{$IFDEF LINUX}
+function BeginThread(Attribute: PThreadAttr;
+                     ThreadFunc: TThreadFunc;
+                     Parameter: Pointer;
+                     var ThreadId: Cardinal): Integer;
+var
+  P: PThreadRec;
+begin
+  if Assigned(BeginThreadProc) then
+    Result := BeginThreadProc(Attribute, ThreadFunc, Parameter, ThreadId)
+  else
+  begin
+    New(P);
+    P.Func := ThreadFunc;
+    P.Parameter := Parameter;
+    IsMultiThread := True;
+    Result := _pthread_create(ThreadID, Attribute, @ThreadWrapper, P);
+  end;
+end;
+
+procedure EndThread(ExitCode: Integer);
+begin
+  if Assigned(EndThreadProc) then
+    EndThreadProc(ExitCode);
+  // No "else" required since EndThreadProc does not (!!should not!!) return.
+  _pthread_detach(GetCurrentThreadID);
+  _pthread_exit(ExitCode);
+end;
+{$ENDIF}
 
 type
+  PStrRec = ^StrRec;
   StrRec = packed record
-    allocSiz: Longint;
     refCnt: Longint;
     length: Longint;
   end;
 
 const
         skew = sizeof(StrRec);
-        rOff = sizeof(StrRec) - sizeof(Longint); { refCnt offset }
+        rOff = sizeof(StrRec); { refCnt offset }
         overHead = sizeof(StrRec) + 1;
 
-
-procedure _LStrClr(var S: AnsiString);
+procedure _LStrClr(var S);
+{$IFDEF PUREPASCAL}
+var
+  P: PStrRec;
+begin
+  if Pointer(S) <> nil then
+  begin
+    P := Pointer(Integer(S) - Sizeof(StrRec));
+    Pointer(S) := nil;
+    if P.refCnt > 0 then
+      if InterlockedDecrement(P.refCnt) = 0 then
+        FreeMem(P);
+  end;
+end;
+{$ELSE}
 asm
         { ->    EAX pointer to str      }
 
@@ -5665,9 +11328,22 @@ asm
         POP     EAX
 @@done:
 end;
+{$ENDIF}
 
-
-procedure       _LStrArrayClr{var str: AnsiString; cnt: longint};
+procedure       _LStrArrayClr(var StrArray; cnt: longint);
+{$IFDEF PUREPASCAL}
+var
+  P: Pointer;
+begin
+  P := @StrArray;
+  while cnt > 0 do
+  begin
+    _LStrClr(P^);
+    Dec(cnt);
+    Inc(Integer(P), sizeof(Pointer));
+  end;
+end;
+{$ELSE}
 asm
         { ->    EAX pointer to str      }
         {       EDX cnt         }
@@ -5697,6 +11373,7 @@ asm
         POP     ESI
         POP     EBX
 end;
+{$ENDIF}
 
 { 99.03.11
   This function is used when assigning to global variables.
@@ -5707,105 +11384,167 @@ end;
   segment of the DLL) to be removed -- and therefore leaving the
   global variable pointing to invalid memory.
 }
-procedure _LStrAsg{var dest: AnsiString; source: AnsiString};
+procedure _LStrAsg(var dest; const source);
+{$IFDEF PUREPASCAL}
+var
+  S, D: Pointer;
+  P: PStrRec;
+  Temp: Longint;
+begin
+  S := Pointer(source);
+  if S <> nil then
+  begin
+    P := PStrRec(Integer(S) - sizeof(StrRec));
+    if P.refCnt < 0 then   // make copy of string literal
+    begin
+      Temp := P.length;
+      S := _NewAnsiString(Temp);
+      Move(Pointer(source)^, S^, Temp);
+      P := PStrRec(Integer(S) - sizeof(StrRec));
+    end;
+    InterlockedIncrement(P.refCnt);
+  end;
+
+  D := Pointer(dest);
+  Pointer(dest) := S;
+  if D <> nil then
+  begin
+    P := PStrRec(Integer(D) - sizeof(StrRec));
+    if P.refCnt > 0 then
+      if InterlockedDecrement(P.refCnt) = 0 then
+        FreeMem(P);
+  end;
+end;
+{$ELSE}
 asm
         { ->    EAX pointer to dest   str      }
         { ->    EDX pointer to source str      }
 
-        TEST    EDX,EDX                           { have a source? }
-        JE      @@2                               { no -> jump     }
+                TEST    EDX,EDX                           { have a source? }
+                JE      @@2                               { no -> jump     }
 
-        MOV     ECX,[EDX-skew].StrRec.refCnt
-        INC     ECX
-        JG      @@1                               { literal string -> jump not taken }
+                MOV     ECX,[EDX-skew].StrRec.refCnt
+                INC     ECX
+                JG      @@1                               { literal string -> jump not taken }
 
-        PUSH    EAX
-        PUSH    EDX
-        MOV     EAX,[EDX-skew].StrRec.length
-        CALL    _NewAnsiString
-        MOV     EDX,EAX
-        POP     EAX
-        PUSH    EDX
-        MOV     ECX,[EAX-skew].StrRec.length
-        CALL    Move
-        POP     EDX
-        POP     EAX
-        JMP     @@2
+                PUSH    EAX
+                PUSH    EDX
+                MOV     EAX,[EDX-skew].StrRec.length
+                CALL    _NewAnsiString
+                MOV     EDX,EAX
+                POP     EAX
+                PUSH    EDX
+                MOV     ECX,[EAX-skew].StrRec.length
+                CALL    Move
+                POP     EDX
+                POP     EAX
+                JMP     @@2
 
 @@1:
-   LOCK INC     [EDX-skew].StrRec.refCnt
+           LOCK INC     [EDX-skew].StrRec.refCnt
 
-@@2:    XCHG    EDX,[EAX]
-        TEST    EDX,EDX
-        JE      @@3
-        MOV     ECX,[EDX-skew].StrRec.refCnt
-        DEC     ECX
-        JL      @@3
-   LOCK DEC     [EDX-skew].StrRec.refCnt
-        JNE     @@3
-        LEA     EAX,[EDX-skew].StrRec.refCnt
-        CALL    _FreeMem
+@@2:            XCHG    EDX,[EAX]
+                TEST    EDX,EDX
+                JE      @@3
+                MOV     ECX,[EDX-skew].StrRec.refCnt
+                DEC     ECX
+                JL      @@3
+           LOCK DEC     [EDX-skew].StrRec.refCnt
+                JNE     @@3
+                LEA     EAX,[EDX-skew].StrRec.refCnt
+                CALL    _FreeMem
 @@3:
 end;
+{$ENDIF}
 
-procedure       _LStrLAsg{var dest: AnsiString; source: AnsiString};
+procedure _LStrLAsg(var dest; const source);
+{$IFDEF PUREPASCAL}
+var
+  P: Pointer;
+begin
+  P := Pointer(source);
+  _LStrAddRef(P);
+  P := Pointer(dest);
+  Pointer(dest) := Pointer(source);
+  _LStrClr(P);
+end;
+{$ELSE}
 asm
 { ->    EAX     pointer to dest }
 {       EDX     source          }
 
-        TEST    EDX,EDX
-        JE      @@sourceDone
+                TEST    EDX,EDX
+                JE      @@sourceDone
 
-        { bump up the ref count of the source }
+                { bump up the ref count of the source }
 
-        MOV     ECX,[EDX-skew].StrRec.refCnt
-        INC     ECX
-        JLE     @@sourceDone                    { literal assignment -> jump taken }
-   LOCK INC     [EDX-skew].StrRec.refCnt
+                MOV     ECX,[EDX-skew].StrRec.refCnt
+                INC     ECX
+                JLE     @@sourceDone                    { literal assignment -> jump taken }
+           LOCK INC     [EDX-skew].StrRec.refCnt
 @@sourceDone:
 
-        { we need to release whatever the dest is pointing to   }
+                { we need to release whatever the dest is pointing to   }
 
-        XCHG    EDX,[EAX]                       { fetch str                    }
-        TEST    EDX,EDX                         { if nil, nothing to do        }
-        JE      @@done
-        MOV     ECX,[EDX-skew].StrRec.refCnt    { fetch refCnt                 }
-        DEC     ECX                             { if < 0: literal str          }
-        JL      @@done
-   LOCK DEC     [EDX-skew].StrRec.refCnt        { threadsafe dec refCount      }
-        JNE     @@done
-        LEA     EAX,[EDX-skew].StrRec.refCnt    { if refCnt now zero, deallocate}
-        CALL    _FreeMem
+                XCHG    EDX,[EAX]                       { fetch str                    }
+                TEST    EDX,EDX                         { if nil, nothing to do        }
+                JE      @@done
+                MOV     ECX,[EDX-skew].StrRec.refCnt    { fetch refCnt                 }
+                DEC     ECX                             { if < 0: literal str          }
+                JL      @@done
+           LOCK DEC     [EDX-skew].StrRec.refCnt        { threadsafe dec refCount      }
+                JNE     @@done
+                LEA     EAX,[EDX-skew].StrRec.refCnt    { if refCnt now zero, deallocate}
+                CALL    _FreeMem
 @@done:
 end;
+{$ENDIF}
 
-procedure       _NewAnsiString{length: Longint};
-asm
-        { ->    EAX     length                  }
-        { <-    EAX pointer to new string       }
-
-        TEST    EAX,EAX
-        JLE     @@null
-        PUSH    EAX
-        ADD     EAX,rOff+1
-        CALL    _GetMem
-        ADD     EAX,rOff
-        POP     EDX
-        MOV     [EAX-skew].StrRec.length,EDX
-        MOV     [EAX-skew].StrRec.refCnt,1
-        MOV     byte ptr [EAX+EDX],0
-        RET
-
-@@null:
-        XOR     EAX,EAX
+function _NewAnsiString(length: Longint): Pointer;
+{$IFDEF PUREPASCAL}
+var
+  P: PStrRec;
+begin
+  Result := nil;
+  if length <= 0 then Exit;
+  // Alloc an extra null for strings with even length.  This has no actual cost
+  // since the allocator will round up the request to an even size anyway.
+  // All widestring allocations have even length, and need a double null terminator.
+  GetMem(P, length + sizeof(StrRec) + 1 + ((length + 1) and 1));
+  Result := Pointer(Integer(P) + sizeof(StrRec));
+  P.length := length;
+  P.refcnt := 1;
+  PWideChar(Result)[length div 2] := #0;  // length guaranteed >= 2
 end;
+{$ELSE}
+asm
+  { ->    EAX     length                  }
+  { <-    EAX pointer to new string       }
 
+          TEST    EAX,EAX
+          JLE     @@null
+          PUSH    EAX
+          ADD     EAX,rOff+2                       // one or two nulls (Ansi/Wide)
+          AND     EAX, not 1                   // round up to even length
+          PUSH    EAX
+          CALL    _GetMem
+          POP     EDX                              // actual allocated length (>= 2)
+          MOV     word ptr [EAX+EDX-2],0           // double null terminator
+          ADD     EAX,rOff
+          POP     EDX                              // requested string length
+          MOV     [EAX-skew].StrRec.length,EDX
+          MOV     [EAX-skew].StrRec.refCnt,1
+          RET
+@@null:
+          XOR     EAX,EAX
+end;
+{$ENDIF}
 
 procedure _LStrFromPCharLen(var Dest: AnsiString; Source: PAnsiChar; Length: Integer);
 asm
-        { ->    EAX     pointer to dest }
-        {       EDX source              }
-        {       ECX length              }
+  { ->    EAX     pointer to dest }
+  {       EDX source              }
+  {       ECX length              }
 
         PUSH    EBX
         PUSH    ESI
@@ -5843,49 +11582,115 @@ asm
 end;
 
 
+{$IFDEF LINUX}
+function BufConvert(var Dest;   DestBytes: Integer;
+                    const Source; SrcBytes: Integer;
+                    context: Integer): Integer;
+var
+  SrcBytesLeft, DestBytesLeft: Integer;
+  s, d: Pointer;
+begin
+  if context = -1 then
+  begin
+    Result := -1;
+    Exit;
+  end;
+  // make copies of params...  iconv modifies param ptrs
+  DestBytesLeft := DestBytes;
+  SrcBytesLeft := SrcBytes;
+  s := Pointer(Source);
+  d := Pointer(Dest);
+  if (SrcBytes = 0) or (DestBytes = 0) then
+    Result := 0
+  else
+  begin
+    Result := iconv(context, s, SrcBytesLeft, d, DestBytesLeft);
+    while (SrcBytesLeft > 0) and (DestBytesLeft > 0)
+      and (Result = -1) and (GetLastError = 7) do
+    begin
+      Result := iconv(context, s, SrcBytesLeft, d, DestBytesLeft);
+    end;
+
+    if Result <> -1 then
+      Result := DestBytes - DestBytesLeft;
+  end;
+
+  iconv_close(context);
+end;
+{$ENDIF}
+
+
+function CharFromWChar(CharDest: PChar; DestBytes: Integer; const WCharSource: PWideChar; SrcChars: Integer): Integer;
+begin
+{$IFDEF LINUX}
+  Result := BufConvert(CharDest, DestBytes, WCharSource, SrcChars * sizeof(WideChar),
+     iconv_open(nl_langinfo(_NL_CTYPE_CODESET_NAME), 'UNICODELITTLE'));
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+  Result := WideCharToMultiByte(0, 0, WCharSource, SrcChars,
+      CharDest, DestBytes, nil, nil);
+{$ENDIF}
+end;
+
+
+function WCharFromChar(WCharDest: PWideChar; DestChars: Integer; const CharSource: PChar; SrcBytes: Integer): Integer;
+begin
+{$IFDEF LINUX}
+  Result := BufConvert(WCharDest, DestChars * sizeof(WideChar), CharSource, SrcBytes,
+     iconv_open('UNICODELITTLE', nl_langinfo(_NL_CTYPE_CODESET_NAME))) div sizeof(WideChar);
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+  Result := MultiByteToWideChar(0, 0, CharSource, SrcBytes,
+      WCharDest, DestChars);
+{$ENDIF}
+end;
+
+
 procedure _LStrFromPWCharLen(var Dest: AnsiString; Source: PWideChar; Length: Integer);
 var
   DestLen: Integer;
-  Buffer: array[0..2047] of Char;
+  Buffer: array[0..4095] of Char;
 begin
   if Length <= 0 then
   begin
     _LStrClr(Dest);
     Exit;
   end;
-  if Length < SizeOf(Buffer) div 2 then
+  if Length+1 < (High(Buffer) div sizeof(WideChar)) then
   begin
-    DestLen := WideCharToMultiByte(0, 0, Source, Length,
-      Buffer, SizeOf(Buffer), nil, nil);
-    if DestLen > 0 then
+    DestLen := CharFromWChar(Buffer, High(Buffer), Source, Length);
+    if DestLen >= 0 then
     begin
       _LStrFromPCharLen(Dest, Buffer, DestLen);
       Exit;
     end;
   end;
-  DestLen := WideCharToMultiByte(0, 0, Source, Length, nil, 0, nil, nil);
-  _LStrFromPCharLen(Dest, nil, DestLen);
-  WideCharToMultiByte(0, 0, Source, Length, Pointer(Dest), DestLen, nil, nil);
+
+  DestLen := (Length + 1) * sizeof(WideChar);
+  SetLength(Dest, DestLen);  // overallocate, trim later
+  DestLen := CharFromWChar(Pointer(Dest), DestLen, Source, Length);
+  if DestLen < 0 then DestLen := 0;
+  SetLength(Dest, DestLen);
 end;
 
 
 procedure _LStrFromChar(var Dest: AnsiString; Source: AnsiChar);
 asm
-        PUSH    EDX
-        MOV     EDX,ESP
-        MOV     ECX,1
-        CALL    _LStrFromPCharLen
-        POP     EDX
+    PUSH    EDX
+    MOV     EDX,ESP
+    MOV     ECX,1
+    CALL    _LStrFromPCharLen
+    POP     EDX
 end;
 
 
 procedure _LStrFromWChar(var Dest: AnsiString; Source: WideChar);
 asm
-        PUSH    EDX
-        MOV     EDX,ESP
-        MOV     ECX,1
-        CALL    _LStrFromPWCharLen
-        POP     EDX
+    PUSH    EDX
+    MOV     EDX,ESP
+    MOV     ECX,1
+    CALL    _LStrFromPWCharLen
+    POP     EDX
 end;
 
 
@@ -6033,8 +11838,14 @@ asm
         POP     EBX
 end;
 
-
-function        _LStrLen{str: AnsiString}: Longint;
+function _LStrLen(const s: AnsiString): Longint;
+{$IFDEF PUREPASCAL}
+begin
+  Result := 0;
+  if Pointer(s) <> nil then
+    Result := PStrRec(Integer(s) - sizeof(StrRec)).length;
+end;
+{$ELSE}
 asm
         { ->    EAX str }
 
@@ -6043,6 +11854,7 @@ asm
         MOV     EAX,[EAX-skew].StrRec.length;
 @@done:
 end;
+{$ENDIF}
 
 
 procedure       _LStrCat{var dest: AnsiString; source: AnsiString};
@@ -6174,30 +11986,56 @@ procedure       _LStrCatN{var dest:AnsiString; argCnt: Integer; ...};
 asm
         {     ->EAX = Pointer to dest   }
         {       EDX = number of args (>= 3)     }
-        {       [ESP+4], [ESP+8], ... crgCnt AnsiString arguments }
+        {       [ESP+4], [ESP+8], ... crgCnt AnsiString arguments, reverse order }
 
         PUSH    EBX
         PUSH    ESI
+        PUSH    EDI
         PUSH    EDX
         PUSH    EAX
         MOV     EBX,EDX
 
+        XOR     EDI,EDI
+        MOV     ECX,[ESP+EDX*4+5*4] // first arg is furthest out
+        TEST    ECX,ECX
+        JZ      @@0
+        CMP     [EAX],ECX          // is dest = first arg?
+        JNE     @@0
+        MOV     EDI,ECX            // EDI nonzero -> potential appendstr case
+@@0:
         XOR     EAX,EAX
 @@loop1:
-        MOV     ECX,[ESP+EDX*4+4*4]
+        MOV     ECX,[ESP+EDX*4+5*4]
         TEST    ECX,ECX
         JE      @@1
         ADD     EAX,[ECX-skew].StrRec.length
+        CMP     EDI,ECX          // is dest an arg besides arg1?
+        JNE     @@1
+        XOR     EDI,EDI          // can't appendstr - dest is multiple args
 @@1:
         DEC     EDX
         JNE     @@loop1
 
+@@append:
+        TEST    EDI,EDI          // dest is 1st and only 1st arg?
+        JZ      @@copy
+        MOV     EDX,EAX          // length into EDX
+        MOV     EAX,EDI          // ptr to str into EAX
+        MOV     ESI,[EDI]
+        MOV     ESI,[ESI-skew].StrRec.Length  // save old size before realloc
+        CALL    _LStrSetLength
+        PUSH    EDI              // append other strs to dest
+        ADD     ESI,[EDI]        // end of old string
+        DEC     EBX
+        JMP     @@loop2
+
+@@copy:
         CALL    _NewAnsiString
         PUSH    EAX
         MOV     ESI,EAX
 
 @@loop2:
-        MOV     EAX,[ESP+EBX*4+5*4]
+        MOV     EAX,[ESP+EBX*4+6*4]
         MOV     EDX,ESI
         TEST    EAX,EAX
         JE      @@2
@@ -6210,13 +12048,18 @@ asm
 
         POP     EDX
         POP     EAX
+        TEST    EDI,EDI
+        JNZ      @@exit
+
         TEST    EDX,EDX
         JE      @@skip
         DEC     [EDX-skew].StrRec.refCnt   // EDX = local temp str
 @@skip:
         CALL    _LStrAsg
 
+@@exit:
         POP     EDX
+        POP     EDI
         POP     ESI
         POP     EBX
         POP     EAX
@@ -6329,8 +12172,18 @@ asm
 
 end;
 
-
-procedure       _LStrAddRef{str: AnsiString};
+function _LStrAddRef(var str): Pointer;
+{$IFDEF PUREPASCAL}
+var
+  P: PStrRec;
+begin
+  P := Pointer(Integer(str) - sizeof(StrRec));
+  if P <> nil then
+    if P.refcnt >= 0 then
+      InterlockedIncrement(P.refcnt);
+  Result := Pointer(str);
+end;
+{$ELSE}
 asm
         { ->    EAX     str     }
         TEST    EAX,EAX
@@ -6341,9 +12194,24 @@ asm
    LOCK INC     [EAX-skew].StrRec.refCnt
 @@exit:
 end;
+{$ENDIF}
 
+function PICEmptyString: PWideChar;
+begin
+  Result := '';
+end;
 
-procedure       _LStrToPChar{str: AnsiString): PChar};
+function _LStrToPChar(const s: AnsiString): PChar;
+{$IFDEF PUREPASCAL}
+const
+  EmptyString = '';
+begin
+  if Pointer(s) = nil then
+    Result := EmptyString
+  else
+    Result := Pointer(s);
+end;
+{$ELSE}
 asm
         { ->    EAX pointer to str              }
         { <-    EAX pointer to PChar    }
@@ -6351,14 +12219,19 @@ asm
         TEST    EAX,EAX
         JE      @@handle0
         RET
+{$IFDEF PIC}
+@@handle0:
+        JMP     PICEmptyString
+{$ELSE}
 @@zeroByte:
         DB      0
 @@handle0:
         MOV     EAX,offset @@zeroByte
+{$ENDIF}             
 end;
+{$ENDIF}
 
-
-procedure       UniqueString(var str: string);
+function InternalUniqueString(var str): Pointer;
 asm
         { ->    EAX pointer to str              }
         { <-    EAX pointer to unique copy      }
@@ -6376,19 +12249,54 @@ asm
         MOV     EDX,EAX
         MOV     EAX,[EBX]
         MOV     [EBX],EDX
+        PUSH    EAX
+        MOV     ECX,[EAX-skew].StrRec.length
+        CALL    Move
+        POP     EAX
         MOV     ECX,[EAX-skew].StrRec.refCnt
         DEC     ECX
         JL      @@skip
    LOCK DEC     [EAX-skew].StrRec.refCnt
+        JNZ     @@skip
+        LEA     EAX,[EAX-skew].StrRec.refCnt    { if refCnt now zero, deallocate}
+        CALL    _FreeMem
 @@skip:
-        MOV     ECX,[EAX-skew].StrRec.length
-        CALL    Move
         MOV     EDX,[EBX]
         POP     EBX
 @@exit:
         MOV     EAX,EDX
 end;
 
+
+procedure UniqueString(var str: AnsiString);
+asm
+        JMP     InternalUniqueString
+end;
+
+procedure _UniqueStringA(var str: AnsiString);
+asm
+        JMP     InternalUniqueString
+end;
+
+procedure UniqueString(var str: WideString);
+asm
+{$IFDEF LINUX}
+        JMP     InternalUniqueString
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+    // nothing to do - Windows WideStrings are always single reference
+{$ENDIF}
+end;
+
+procedure _UniqueStringW(var str: WideString);
+asm
+{$IFDEF LINUX}
+        JMP     InternalUniqueString
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+    // nothing to do - Windows WideStrings are always single reference
+{$ENDIF}
+end;
 
 procedure       _LStrCopy{ const s : AnsiString; index, count : Integer) : AnsiString};
 asm
@@ -6667,7 +12575,7 @@ asm
         XOR     EDI,EDI
 
         TEST    EDX,EDX
-        JE      @@setString
+        JLE     @@setString
 
         MOV     EAX,[EBX]
         TEST    EAX,EAX
@@ -6736,7 +12644,7 @@ asm
         CALL    _LStrClr
 
         TEST    ESI,ESI
-    JLE @@exit
+        JLE @@exit
 
         MOV     EAX,ESI
         CALL    _NewAnsiString
@@ -6756,17 +12664,22 @@ asm
 end;
 
 
-procedure _Write0LString{ VAR t: Text; s: AnsiString };
-asm
-        { ->    EAX     Pointer to text record  }
-        {       EDX     Pointer to AnsiString   }
-
-        XOR     ECX,ECX
-        JMP     _WriteLString
+function _Write0LString(var t: TTextRec; const s: AnsiString): Pointer;
+begin
+  Result := _WriteLString(t, s, 0);
 end;
 
 
-procedure _WriteLString{ VAR t: Text; s: AnsiString; width: Longint };
+function _WriteLString(var t: TTextRec; const s: AnsiString; width: Longint): Pointer;
+{$IFDEF PUREPASCAL}
+var
+  i: Integer;
+begin
+  i := Length(s);
+  _WriteSpaces(t, width - i);
+  Result := _WriteBytes(t, s[1], i);
+end;
+{$ELSE}
 asm
         { ->    EAX     Pointer to text record  }
         {       EDX     Pointer to AnsiString   }
@@ -6791,84 +12704,124 @@ asm
         POP     EBX
         JMP     _WriteBytes
 end;
+{$ENDIF}
 
 
-procedure       _ReadLString{var t: Text; var str: AnsiString};
-asm
-        { ->    EAX     pointer to Text         }
-        {       EDX     pointer to AnsiString   }
-
-        PUSH    EBX
-        PUSH    ESI
-        MOV     EBX,EAX
-        MOV     ESI,EDX
-
-        MOV     EAX,EDX
-        CALL    _LStrClr
-
-        SUB     ESP,256
-
-        MOV     EAX,EBX
-        MOV     EDX,ESP
-        MOV     ECX,255
-        CALL    _ReadString
-
-        MOV     EAX,ESI
-        MOV     EDX,ESP
-        CALL    _LStrFromString
-
-        CMP     byte ptr [ESP],255
-        JNE     @@exit
-@@loop:
-
-        MOV     EAX,EBX
-        MOV     EDX,ESP
-        MOV     ECX,255
-        CALL    _ReadString
-
-        MOV     EDX,ESP
-        PUSH    0
-        MOV     EAX,ESP
-        CALL    _LStrFromString
-
-        MOV     EAX,ESI
-        MOV     EDX,[ESP]
-        CALL    _LStrCat
-
-        MOV     EAX,ESP
-        CALL    _LStrClr
-        POP     EAX
-
-        CMP     byte ptr [ESP],255
-        JE      @@loop
-
-@@exit:
-        ADD     ESP,256
-        POP     ESI
-        POP     EBX
+function _Write0WString(var t: TTextRec; const s: WideString): Pointer;
+begin
+  Result := _WriteWString(t, s, 0);
 end;
 
 
+function _WriteWString(var t: TTextRec; const s: WideString; width: Longint): Pointer;
+var
+  i: Integer;
+begin
+  i := Length(s);
+  _WriteSpaces(t, width - i);
+  Result := _WriteLString(t, AnsiString(s), 0);
+end;
+
+
+function _Write0WCString(var t: TTextRec; s: PWideChar): Pointer;
+begin
+  Result := _WriteWCString(t, s, 0);
+end;
+
+
+function _WriteWCString(var t: TTextRec; s: PWideChar; width: Longint): Pointer;
+var
+  i: Integer;
+begin
+  i := 0;
+  if (s <> nil) then
+    while s[i] <> #0 do
+      Inc(i);
+
+  _WriteSpaces(t, width - i);
+  Result := _WriteLString(t, AnsiString(s), 0);
+end;
+
+
+function _Write0WChar(var t: TTextRec; c: WideChar): Pointer;
+begin
+  Result := _WriteWChar(t, c, 0);
+end;
+
+
+function _WriteWChar(var t: TTextRec; c: WideChar; width: Integer): Pointer;
+begin
+  _WriteSpaces(t, width - 1);
+  Result := _WriteLString(t, AnsiString(c), 0);
+end;
+
+
+{$IFDEF MSWINDOWS}
 procedure WStrError;
 asm
         MOV     AL,reOutOfMemory
         JMP     Error
 end;
+{$ENDIF}
 
-
-procedure WStrSet(var S: WideString; P: PWideChar);
+function _NewWideString(CharLength: Longint): Pointer;
+{$IFDEF LINUX}
+begin
+  Result := _NewAnsiString(CharLength*2);
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
 asm
-        MOV     ECX,[EAX]
-        MOV     [EAX],EDX
-        TEST    ECX,ECX
+        TEST    EAX,EAX
         JE      @@1
-        PUSH    ECX
-        CALL    SysFreeString
+        PUSH    EAX
+        PUSH    0
+        CALL    SysAllocStringLen
+        TEST    EAX,EAX
+        JE      WStrError
 @@1:
 end;
+{$ENDIF}
+
+procedure WStrSet(var S: WideString; P: PWideChar);
+{$IFDEF PUREPASCAL}
+var
+  Temp: Pointer;
+begin
+  Temp := Pointer(InterlockedExchange(Pointer(S), Pointer(P)));
+  if Temp <> nil then
+    _WStrClr(Temp);
+end;
+{$ELSE}
+asm
+{$IFDEF LINUX}
+        XCHG    [EAX],EDX
+        TEST    EDX,EDX
+        JZ      @@1
+        PUSH    EDX
+        MOV     EAX, ESP
+        CALL    _WStrClr
+        POP     EAX
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+        XCHG    [EAX],EDX
+        TEST    EDX,EDX
+        JZ      @@1
+        PUSH    EDX
+        CALL    SysFreeString
+{$ENDIF}
+@@1:
+end;
+{$ENDIF}
 
 
-procedure _WStrClr(var S: WideString);
+procedure _WStrClr(var S);
+{$IFDEF LINUX}
+asm
+        JMP     _LStrClr;
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
 asm
         { ->    EAX     Pointer to WideString  }
 
@@ -6882,9 +12835,16 @@ asm
         POP     EAX
 @@1:
 end;
+{$ENDIF}
 
 
 procedure _WStrArrayClr(var StrArray; Count: Integer);
+{$IFDEF LINUX}
+asm
+        JMP     _LStrArrayClr
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
 asm
         PUSH    EBX
         PUSH    ESI
@@ -6902,9 +12862,16 @@ asm
         POP     ESI
         POP     EBX
 end;
+{$ENDIF}
 
 
 procedure _WStrAsg(var Dest: WideString; const Source: WideString);
+{$IFDEF LINUX}
+asm
+        JMP     _LStrAsg
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
 asm
         { ->    EAX     Pointer to WideString }
         {       EDX     Pointer to data       }
@@ -6920,35 +12887,65 @@ asm
         TEST    EAX,EAX
         JE      WStrError
 end;
+{$ENDIF}
 
+procedure _WStrLAsg(var Dest: WideString; const Source: WideString);
+{$IFDEF LINUX}
+asm
+        JMP   _LStrLAsg
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+asm
+        JMP   _WStrAsg
+end;
+{$ENDIF}
 
 procedure _WStrFromPCharLen(var Dest: WideString; Source: PAnsiChar; Length: Integer);
 var
   DestLen: Integer;
-  Buffer: array[0..1023] of WideChar;
+  Buffer: array[0..2047] of WideChar;
 begin
   if Length <= 0 then
   begin
     _WStrClr(Dest);
     Exit;
   end;
-  if Length < SizeOf(Buffer) div 2 then
+  if Length+1 < High(Buffer) then
   begin
-    DestLen := MultiByteToWideChar(0, 0, Source, Length,
-      Buffer, SizeOf(Buffer) div 2);
+    DestLen := WCharFromChar(Buffer, High(Buffer), Source, Length);
     if DestLen > 0 then
     begin
-      _WStrFromPWCharLen(Dest, Buffer, DestLen);
+      _WStrFromPWCharLen(Dest, @Buffer, DestLen);
       Exit;
     end;
   end;
-  DestLen := MultiByteToWideChar(0, 0, Source, Length, nil, 0);
-  _WStrFromPWCharLen(Dest, nil, DestLen);
-  MultiByteToWideChar(0, 0, Source, Length, Pointer(Dest), DestLen);
+
+  DestLen := (Length + 1);
+  _WStrSetLength(Dest, DestLen);  // overallocate, trim later
+  DestLen := WCharFromChar(Pointer(Dest), DestLen, Source, Length);
+  if DestLen < 0 then DestLen := 0;
+  _WStrSetLength(Dest, DestLen);
 end;
 
-
-procedure _WStrFromPWCharLen(var Dest: WideString; Source: PWideChar; Length: Integer);
+procedure _WStrFromPWCharLen(var Dest: WideString; Source: PWideChar; CharLength: Integer);
+{$IFDEF LINUX}
+var
+  Temp: Pointer;
+begin
+  Temp := Pointer(Dest);
+  if CharLength > 0 then
+  begin
+    Pointer(Dest) := _NewWideString(CharLength);
+    if Source <> nil then
+      Move(Source^, Pointer(Dest)^, CharLength * sizeof(WideChar));
+  end
+  else
+    Pointer(Dest) := nil;
+  _WStrClr(Temp);
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
 asm
         { ->    EAX     Pointer to WideString (dest)      }
         {       EDX     Pointer to characters (source)    }
@@ -6970,6 +12967,7 @@ asm
 
         CALL    SysFreeString
 end;
+{$ENDIF}
 
 
 procedure _WStrFromChar(var Dest: WideString; Source: AnsiChar);
@@ -6996,7 +12994,7 @@ end;
 
 procedure _WStrFromPChar(var Dest: WideString; Source: PAnsiChar);
 asm
-        { ->    EAX     Pointer to WideString (dest)   }
+  { ->    EAX     Pointer to WideString (dest)   }
         {       EDX     Pointer to character  (source) }
         XOR     ECX,ECX
         TEST    EDX,EDX
@@ -7111,40 +13109,67 @@ var
   SourceLen, DestLen: Integer;
   Buffer: array[0..511] of Char;
 begin
+  if MaxLen > 255 then MaxLen := 255;
   SourceLen := Length(Source);
-  if SourceLen >= 255 then SourceLen := 255;
-  if SourceLen = 0 then DestLen := 0 else
+  if SourceLen >= MaxLen then SourceLen := MaxLen;
+  if SourceLen = 0 then
+    DestLen := 0
+  else
   begin
-    DestLen := WideCharToMultiByte(0, 0, Pointer(Source), SourceLen,
-      Buffer, SizeOf(Buffer), nil, nil);
-    if DestLen > MaxLen then DestLen := MaxLen;
+    DestLen := CharFromWChar(Buffer, High(Buffer), PWideChar(Pointer(Source)), SourceLen);
+    if DestLen < 0 then
+      DestLen := 0
+    else if DestLen > MaxLen then
+      DestLen := MaxLen;
   end;
   Dest^[0] := Chr(DestLen);
   if DestLen > 0 then Move(Buffer, Dest^[1], DestLen);
 end;
 
-
 function _WStrToPWChar(const S: WideString): PWideChar;
+{$IFDEF PUREPASCAL}
+const
+  EmptyString = '';
+begin
+  if Pointer(S) = nil then
+    Result := EmptyString
+  else
+    Result := Pointer(S);
+end;
+{$ELSE}
 asm
         TEST    EAX,EAX
         JE      @@1
         RET
+{$IFDEF PIC}
+@@1:    JMP     PICEmptyString
+{$ELSE}
         NOP
 @@0:    DW      0
 @@1:    MOV     EAX,OFFSET @@0
+{$ENDIF}
 end;
+{$ENDIF}
 
 
 function _WStrLen(const S: WideString): Integer;
+{$IFDEF PUREPASCAL}
+begin
+  if Pointer(S) = nil then
+    Result := 0
+  else
+    Result := PInteger(Integer(S) - 4)^ div sizeof(WideChar);
+end;
+{$ELSE}
 asm
-        { ->    EAX     Pointer to WideString data }
-        TEST    EAX,EAX
-        JE      @@1
-        MOV     EAX,[EAX-4]
-        SHR     EAX,1
+    { ->    EAX     Pointer to WideString data }
+    TEST    EAX,EAX
+    JE      @@1
+    MOV     EAX,[EAX-4]
+    SHR     EAX,1
 @@1:
 end;
-
+{$ENDIF}
 
 procedure _WStrCat(var Dest: WideString; const Source: WideString);
 var
@@ -7157,8 +13182,8 @@ begin
     DestLen := Length(Dest);
     NewStr := _NewWideString(DestLen + SourceLen);
     if DestLen > 0 then
-      Move(Pointer(Dest)^, NewStr^, DestLen * 2);
-    Move(Pointer(Source)^, NewStr[DestLen], SourceLen * 2);
+      Move(Pointer(Dest)^, NewStr^, DestLen * sizeof(WideChar));
+    Move(Pointer(Source)^, NewStr[DestLen], SourceLen * sizeof(WideChar));
     WStrSet(Dest, NewStr);
   end;
 end;
@@ -7174,8 +13199,8 @@ begin
   if (Source1Len <> 0) or (Source2Len <> 0) then
   begin
     NewStr := _NewWideString(Source1Len + Source2Len);
-    Move(Pointer(Source1)^, Pointer(NewStr)^, Source1Len * 2);
-    Move(Pointer(Source2)^, NewStr[Source1Len], Source2Len * 2);
+    Move(Pointer(Source1)^, Pointer(NewStr)^, Source1Len * sizeof(WideChar));
+    Move(Pointer(Source2)^, NewStr[Source1Len], Source2Len * sizeof(WideChar));
     WStrSet(Dest, NewStr);
   end;
 end;
@@ -7320,19 +13345,6 @@ asm
         POP     EDI
         POP     ESI
         POP     EBX
-end;
-
-
-function _NewWideString(Length: Integer): PWideChar;
-asm
-        TEST    EAX,EAX
-        JE      @@1
-        PUSH    EAX
-        PUSH    0
-        CALL    SysAllocStringLen
-        TEST    EAX,EAX
-        JE      WStrError
-@@1:
 end;
 
 
@@ -7510,8 +13522,13 @@ begin
   end;
 end;
 
-
-procedure _WStrAddRef{var str: WideString};
+function _WStrAddRef(var str: WideString): Pointer;
+{$IFDEF LINUX}
+asm
+        JMP     _LStrAddRef
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
 asm
         MOV     EDX,[EAX]
         TEST    EDX,EDX
@@ -7528,9 +13545,50 @@ asm
         MOV     [EDX],EAX
 @@1:
 end;
+{$ENDIF}
 
+type
+  PPTypeInfo = ^PTypeInfo;
+  PTypeInfo = ^TTypeInfo;
+  TTypeInfo = packed record
+    Kind: Byte;
+    Name: ShortString;
+   {TypeData: TTypeData}
+  end;
 
-procedure       _InitializeRecord{ p: Pointer; typeInfo: Pointer };
+  TFieldInfo = packed record
+    TypeInfo: PPTypeInfo;
+    Offset: Cardinal;
+  end;
+
+  PFieldTable = ^TFieldTable;
+  TFieldTable = packed record
+    X: Word;
+    Size: Cardinal;
+    Count: Cardinal;
+    Fields: array [0..0] of TFieldInfo;
+  end;
+
+{ ===========================================================================
+  InitializeRecord, InitializeArray, and Initialize are PIC safe even though
+  they alter EBX because they only call each other.  They never call out to
+  other functions and they don't access global data.
+
+  FinalizeRecord, Finalize, and FinalizeArray are PIC safe because they call
+  Pascal routines which will have EBX fixup prologs.
+  ===========================================================================}
+
+procedure   _InitializeRecord(p: Pointer; typeInfo: Pointer);
+{$IFDEF PUREPASCAL}
+var
+  FT: PFieldTable;
+  I: Cardinal;
+begin
+  FT := PFieldTable(Integer(typeInfo) + Byte(PTypeInfo(typeInfo).Name[0]));
+  for I := FT.Count-1 downto 0 do
+    _InitializeArray(Pointer(Cardinal(P) + FT.Fields[I].Offset), FT.Fields[I].TypeInfo^, 1);
+end;
+{$ELSE}
 asm
         { ->    EAX pointer to record to be initialized }
         {       EDX pointer to type info                }
@@ -7543,7 +13601,7 @@ asm
         PUSH    ESI
         PUSH    EDI
 
-        MOV     EBX,EAX
+        MOV     EBX,EAX                     // PIC safe. See comment above
         LEA     ESI,[EDX+ECX+2+8]           { address of destructable fields }
         MOV     EDI,[EDX+ECX+2+4]           { number of destructable fields }
 
@@ -7553,7 +13611,8 @@ asm
         MOV     EAX,[ESI+4]
         ADD     EAX,EBX
         MOV     EDX,[EDX]
-        CALL    _Initialize
+        MOV     ECX,1
+        CALL    _InitializeArray
         ADD     ESI,8
         DEC     EDI
         JG      @@loop
@@ -7562,6 +13621,7 @@ asm
         POP     ESI
         POP     EBX
 end;
+{$ENDIF}
 
 
 const
@@ -7573,16 +13633,67 @@ const
   tkInterface = 15;
   tkDynArray  = 17;
 
-procedure       _InitializeArray{ p: Pointer; typeInfo: Pointer; elemCount: Longint};
+procedure       _InitializeArray(p: Pointer; typeInfo: Pointer; elemCount: Cardinal);
+{$IFDEF PUREPASCAL}
+var
+  FT: PFieldTable;
+begin
+  if elemCount = 0 then Exit;
+  case PTypeInfo(typeInfo).Kind of
+    tkLString, tkWString, tkInterface, tkDynArray:
+      while elemCount > 0 do
+      begin
+        PInteger(P)^ := 0;
+        Inc(Integer(P), 4);
+        Dec(elemCount);
+      end;
+    tkVariant:
+      while elemCount > 0 do
+      begin
+        PInteger(P)^ := 0;
+        PInteger(Integer(P)+4)^ := 0;
+        PInteger(Integer(P)+8)^ := 0;
+        PInteger(Integer(P)+12)^ := 0;
+        Inc(Integer(P), sizeof(Variant));
+        Dec(elemCount);
+      end;
+    tkArray:
+      begin
+        FT := PFieldTable(Integer(typeInfo) + Byte(PTypeInfo(typeInfo).Name[0]));
+        while elemCount > 0 do
+        begin
+          _InitializeArray(P, FT.Fields[0].TypeInfo^, FT.Count);
+          Inc(Integer(P), FT.Size);
+          Dec(elemCount);
+        end;
+      end;
+    tkRecord:
+      begin
+        FT := PFieldTable(Integer(typeInfo) + Byte(PTypeInfo(typeInfo).Name[0]));
+        while elemCount > 0 do
+        begin
+          _InitializeRecord(P, typeInfo);
+          Inc(Integer(P), FT.Size);
+          Dec(elemCount);
+        end;
+      end;
+  else
+    Error(reInvalidPtr);
+  end;
+end;
+{$ELSE}
 asm
         { ->    EAX     pointer to data to be initialized       }
         {       EDX     pointer to type info describing data    }
         {       ECX number of elements of that type             }
 
+        TEST    ECX, ECX
+        JZ      @@zerolength
+
         PUSH    EBX
         PUSH    ESI
         PUSH    EDI
-        MOV     EBX,EAX
+        MOV     EBX,EAX             // PIC safe.  See comment above
         MOV     ESI,EDX
         MOV     EDI,ECX
 
@@ -7602,9 +13713,9 @@ asm
         CMP     AL,tkRecord
         JE      @@Record
         CMP     AL,tkInterface
-  JE      @@Interface
-  CMP AL,tkDynArray
-  JE  @@DynArray
+        JE      @@Interface
+        CMP     AL,tkDynArray
+        JE      @@DynArray
         MOV     AL,reInvalidPtr
         POP     EDI
         POP     ESI
@@ -7635,10 +13746,10 @@ asm
         PUSH    EBP
         MOV     EBP,EDX
 @@ArrayLoop:
-        MOV     EDX,[ESI+EBP+2+8]
+        MOV     EDX,[ESI+EBP+2+8]    // address of destructable fields typeinfo
         MOV     EAX,EBX
-        ADD     EBX,[ESI+EBP+2]
-        MOV     ECX,[ESI+EBP+2+4]
+        ADD     EBX,[ESI+EBP+2]      // size in bytes of the array data
+        MOV     ECX,[ESI+EBP+2+4]    // number of destructable fields
         MOV     EDX,[EDX]
         CALL    _InitializeArray
         DEC     EDI
@@ -7662,17 +13773,34 @@ asm
 
         POP     EDI
         POP     ESI
-    POP EBX
+        POP     EBX
+@@zerolength:
 end;
+{$ENDIF}
 
-
-procedure       _Initialize{ p: Pointer; typeInfo: Pointer};
+procedure       _Initialize(p: Pointer; typeInfo: Pointer);
+{$IFDEF PUREPASCAL}
+begin
+  _InitializeArray(p, typeInfo, 1);
+end;
+{$ELSE}
 asm
         MOV     ECX,1
         JMP     _InitializeArray
 end;
+{$ENDIF}
 
-procedure       _FinalizeRecord{ p: Pointer; typeInfo: Pointer };
+procedure _FinalizeRecord(p: Pointer; typeInfo: Pointer);
+{$IFDEF PUREPASCAL}
+var
+  FT: PFieldTable;
+  I: Cardinal;
+begin
+  FT := PFieldTable(Integer(typeInfo) + Byte(PTypeInfo(typeInfo).Name[0]));
+  for I := 0 to FT.Count-1 do
+    _FinalizeArray(Pointer(Cardinal(P) + FT.Fields[I].Offset), FT.Fields[I].TypeInfo^, 1);
+end;
+{$ELSE}
 asm
         { ->    EAX pointer to record to be finalized   }
         {       EDX pointer to type info                }
@@ -7695,7 +13823,8 @@ asm
         MOV     EAX,[ESI+4]
         ADD     EAX,EBX
         MOV     EDX,[EDX]
-        CALL    _Finalize
+        MOV     ECX,1
+        CALL    _FinalizeArray
         ADD     ESI,8
         DEC     EDI
         JG      @@loop
@@ -7706,13 +13835,72 @@ asm
         POP     ESI
         POP     EBX
 end;
+{$ENDIF}
 
-
-procedure       _FinalizeArray{ p: Pointer; typeInfo: Pointer; elemCount: Longint};
+procedure _FinalizeArray(p: Pointer; typeInfo: Pointer; elemCount: Cardinal);
+{$IFDEF PUREPASCAL}
+var
+  FT: PFieldTable;
+begin
+  if elemCount = 0 then Exit;
+  case PTypeInfo(typeInfo).Kind of
+    tkLString: _LStrArrayClr(P^, elemCount);
+    tkWString: _WStrArrayClr(P^, elemCount);
+    tkVariant:
+      while elemCount > 0 do
+      begin
+        _VarClr(P);
+        Inc(Integer(P), sizeof(Variant));
+        Dec(elemCount);
+      end;
+    tkArray:
+      begin
+        FT := PFieldTable(Integer(typeInfo) + Byte(PTypeInfo(typeInfo).Name[0]));
+        while elemCount > 0 do
+        begin
+          _FinalizeArray(P, FT.Fields[0].TypeInfo^, FT.Count);
+          Inc(Integer(P), FT.Size);
+          Dec(elemCount);
+        end;
+      end;
+    tkRecord:
+      begin
+        FT := PFieldTable(Integer(typeInfo) + Byte(PTypeInfo(typeInfo).Name[0]));
+        while elemCount > 0 do
+        begin
+          _FinalizeRecord(P, typeInfo);
+          Inc(Integer(P), FT.Size);
+          Dec(elemCount);
+        end;
+      end;
+    tkInterface:
+      while elemCount > 0 do
+      begin
+        _IntfClear(IInterface(P^));
+        Inc(Integer(P), 4);
+        Dec(elemCount);
+      end;
+    tkDynArray:
+      while elemCount > 0 do
+      begin
+        _DynArrayClr(P);
+        Inc(Integer(P), 4);
+        Dec(elemCount);
+      end;
+  else
+    Error(reInvalidPtr);
+  end;
+end;
+{$ELSE}
 asm
         { ->    EAX     pointer to data to be finalized         }
         {       EDX     pointer to type info describing data    }
         {       ECX number of elements of that type             }
+
+        { This code appears to be PIC safe.  The functions called from
+          here either don't make external calls or call Pascal
+          routines that will fix up EBX in their prolog code
+          (FreeMem, VarClr, IntfClr).  }
 
         CMP     ECX, 0                        { no array -> nop }
         JE      @@zerolength
@@ -7749,12 +13937,8 @@ asm
 
         CMP     AL,tkDynArray
         JE      @@DynArray
-        POP     EDI
-        POP     ESI
-        POP     EBX
-        POP      EAX
-        MOV     AL,reInvalidPtr
-        JMP     Error
+
+        JMP     @@error
 
 @@LString:
         CMP     ECX,1
@@ -7777,7 +13961,6 @@ asm
         MOV     EDX,ECX
         CALL    _WStrArrayClr
         JMP     @@exit
-
 @@Variant:
         MOV     EAX,EBX
         ADD     EBX,16
@@ -7785,7 +13968,6 @@ asm
         DEC     EDI
         JG      @@Variant
         JMP     @@exit
-
 @@Array:
         PUSH    EBP
         MOV     EBP,EDX
@@ -7831,22 +14013,36 @@ asm
         CALL    _DynArrayClear
         DEC     EDI
         JG      @@DynArray
+        JMP     @@exit
+
+@@error:
+        POP     EDI
+        POP     ESI
+        POP     EBX
+        POP     EAX
+        MOV     AL,reInvalidPtr
+        JMP     Error
 
 @@exit:
-
         POP     EDI
         POP     ESI
         POP     EBX
         POP     EAX
 @@zerolength:
 end;
+{$ENDIF}
 
-
-procedure       _Finalize{ p: Pointer; typeInfo: Pointer};
+procedure _Finalize(p: Pointer; typeInfo: Pointer);
+{$IFDEF PUREPASCAL}
+begin
+  _FinalizeArray(p, typeInfo, 1);
+end;
+{$ELSE}
 asm
         MOV     ECX,1
         JMP     _FinalizeArray
 end;
+{$ENDIF}
 
 procedure       _AddRefRecord{ p: Pointer; typeInfo: Pointer };
 asm
@@ -7871,7 +14067,8 @@ asm
         MOV     EAX,[ESI+4]
         ADD     EAX,EBX
         MOV     EDX,[EDX]
-        CALL    _AddRef
+        MOV     ECX, 1
+        CALL    _AddRefArray
         ADD     ESI,8
         DEC     EDI
         JG      @@loop
@@ -7888,9 +14085,18 @@ asm
         {       EDX     pointer to type info describing data    }
         {       ECX number of elements of that type             }
 
+        { This code appears to be PIC safe.  The functions called from
+          here either don't make external calls (LStrAddRef, WStrAddRef) or
+          are Pascal routines that will fix up EBX in their prolog code
+          (VarAddRef, IntfAddRef).  }
+
         PUSH    EBX
         PUSH    ESI
         PUSH    EDI
+
+        TEST  ECX,ECX
+        JZ    @@exit
+
         MOV     EBX,EAX
         MOV     ESI,EDX
         MOV     EDI,ECX
@@ -7934,7 +14140,6 @@ asm
         DEC     EDI
         JG      @@WString
         JMP     @@exit
-
 @@Variant:
         MOV     EAX,EBX
         ADD     EBX,16
@@ -8284,7 +14489,14 @@ asm
 end;
 
 
-procedure       _New{ size: Longint; typeInfo: Pointer};
+function _New(size: Longint; typeInfo: Pointer): Pointer;
+{$IFDEF PUREPASCAL}
+begin
+  GetMem(Result, size);
+  if Result <> nil then
+    _Initialize(Result, typeInfo);
+end;
+{$ELSE}
 asm
         { ->    EAX size of object to allocate  }
         {       EDX pointer to typeInfo         }
@@ -8299,8 +14511,15 @@ asm
         POP     EAX
 @@exit:
 end;
+{$ENDIF}
 
-procedure       _Dispose{ p: Pointer; typeInfo: Pointer};
+procedure _Dispose(p: Pointer; typeInfo: Pointer);
+{$IFDEF PUREPASCAL}
+begin
+  _Finalize(p, typeinfo);
+  FreeMem(p);
+end;
+{$ELSE}
 asm
         { ->    EAX     Pointer to object to be disposed        }
         {       EDX     Pointer to type info            }
@@ -8310,6 +14529,7 @@ asm
         POP     EAX
         CALL    _FreeMem
 end;
+{$ENDIF}
 
 { ----------------------------------------------------- }
 {       Wide character support                          }
@@ -8326,41 +14546,20 @@ begin
 end;
 
 procedure WideCharToStrVar(Source: PWideChar; var Dest: string);
-var
-  SourceLen: Integer;
 begin
-  SourceLen := 0;
-  while Source[SourceLen] <> #0 do Inc(SourceLen);
-  WideCharLenToStrVar(Source, SourceLen, Dest);
+  _LStrFromPWChar(Dest, Source);
 end;
 
 procedure WideCharLenToStrVar(Source: PWideChar; SourceLen: Integer;
   var Dest: string);
-var
-  DestLen: Integer;
-  Buffer: array[0..2047] of Char;
 begin
-  if SourceLen = 0 then
-    Dest := ''
-  else
-    if SourceLen < SizeOf(Buffer) div 2 then
-      SetString(Dest, Buffer, WideCharToMultiByte(0, 0,
-        Source, SourceLen, Buffer, SizeOf(Buffer), nil, nil))
-    else
-    begin
-      DestLen := WideCharToMultiByte(0, 0, Source, SourceLen,
-        nil, 0, nil, nil);
-      SetString(Dest, nil, DestLen);
-      WideCharToMultiByte(0, 0, Source, SourceLen, Pointer(Dest),
-        DestLen, nil, nil);
-    end;
+  _LStrFromPWCharLen(Dest, Source, SourceLen);
 end;
 
 function StringToWideChar(const Source: string; Dest: PWideChar;
   DestSize: Integer): PWideChar;
 begin
-  Dest[MultiByteToWideChar(0, 0, PChar(Source), Length(Source),
-    Dest, DestSize - 1)] := #0;
+  Dest[WCharFromChar(Dest, DestSize - 1, PChar(Source), Length(Source))] := #0;
   Result := Dest;
 end;
 
@@ -8375,1790 +14574,1402 @@ end;
 
 procedure OleStrToStrVar(Source: PWideChar; var Dest: string);
 begin
-  WideCharLenToStrVar(Source, SysStringLen(WideString(Pointer(Source))), Dest);
+  WideCharLenToStrVar(Source, Length(WideString(Pointer(Source))), Dest);
 end;
 
 function StringToOleStr(const Source: string): PWideChar;
-var
-  SourceLen, ResultLen: Integer;
-  Buffer: array[0..1023] of WideChar;
 begin
-  SourceLen := Length(Source);
-  if Length(Source) < SizeOf(Buffer) div 2 then
-    Result := SysAllocStringLen(Buffer, MultiByteToWideChar(0, 0,
-      PChar(Source), SourceLen, Buffer, SizeOf(Buffer) div 2))
+  Result := nil;
+  _WStrFromPCharLen(WideString(Pointer(Result)), PChar(Pointer(Source)), Length(Source));
+end;
+
+{ ----------------------------------------------------- }
+{       Variant manager support                         }
+{ ----------------------------------------------------- }
+
+var
+  VariantManager: TVariantManager;
+
+procedure VariantSystemUndefinedError;
+asm
+        MOV     AL,reVarInvalidOp
+        JMP     Error;
+end;
+
+procedure VariantSystemDefaultVarClear(var V: TVarData);
+begin
+  case V.VType of
+    varEmpty, varNull, varError:;
   else
-  begin
-    ResultLen := MultiByteToWideChar(0, 0,
-      Pointer(Source), SourceLen, nil, 0);
-    Result := SysAllocStringLen(nil, ResultLen);
-    MultiByteToWideChar(0, 0, Pointer(Source), SourceLen,
-      Result, ResultLen);
+    VariantSystemUndefinedError;
   end;
+end;
+
+procedure InitVariantManager;
+type
+  TPtrArray = array [Word] of Pointer;
+var
+  P: ^TPtrArray;
+  I: Integer;
+begin
+  P := @VariantManager;
+  for I := 0 to (SizeOf(VariantManager) div SizeOf(Pointer))-1 do
+    P[I] := @VariantSystemUndefinedError;
+  VariantManager.VarClear := @VariantSystemDefaultVarClear;
+end;
+
+procedure GetVariantManager(var VarMgr: TVariantManager);
+begin
+  VarMgr := VariantManager;
+end;
+
+procedure SetVariantManager(const VarMgr: TVariantManager);
+begin
+  VariantManager := VarMgr;
+end;
+
+function IsVariantManagerSet: Boolean;
+type
+  TPtrArray = array [Word] of Pointer;
+var
+  P: ^TPtrArray;
+  I: Integer;
+begin
+  Result := True;
+  P := @VariantManager;
+  for I := 0 to (SizeOf(VariantManager) div SizeOf(Pointer))-1 do
+    if P[I] <> @VariantSystemUndefinedError then
+    begin
+      Result := False;
+      Break;
+    end;
 end;
 
 { ----------------------------------------------------- }
 {       Variant support                                 }
 { ----------------------------------------------------- }
 
-type
-  TBaseType = (btErr, btNul, btInt, btFlt, btCur, btStr, btBol, btDat);
-
-const
-  varLast = varByte;
-
-const
-  BaseTypeMap: array[0..varLast] of TBaseType = (
-    btErr,  { varEmpty    }
-    btNul,  { varNull     }
-    btInt,  { varSmallint }
-    btInt,  { varInteger  }
-    btFlt,  { varSingle   }
-    btFlt,  { varDouble   }
-    btCur,  { varCurrency }
-    btDat,  { varDate     }
-    btStr,  { varOleStr   }
-    btErr,  { varDispatch }
-    btErr,  { varError    }
-    btBol,  { varBoolean  }
-    btErr,  { varVariant  }
-    btErr,  { varUnknown  }
-    btErr,  { vt_decimal  }
-    btErr,  { undefined   }
-    btErr,  { vt_i1       }
-    btInt); { varByte     }
-
-const
-  OpTypeMap: array[TBaseType, TBaseType] of TBaseType = (
-    (btErr, btErr, btErr, btErr, btErr, btErr, btErr, btErr),
-    (btErr, btNul, btNul, btNul, btNul, btNul, btNul, btNul),
-    (btErr, btNul, btInt, btFlt, btCur, btFlt, btInt, btDat),
-    (btErr, btNul, btFlt, btFlt, btCur, btFlt, btFlt, btDat),
-    (btErr, btNul, btCur, btCur, btCur, btCur, btCur, btDat),
-    (btErr, btNul, btFlt, btFlt, btCur, btStr, btBol, btDat),
-    (btErr, btNul, btInt, btFlt, btCur, btBol, btBol, btDat),
-    (btErr, btNul, btDat, btDat, btDat, btDat, btDat, btDat));
-
-const
-  C10000: Single = 10000;
-
-const
-  opAdd  = 0;
-  opSub  = 1;
-  opMul  = 2;
-  opDvd  = 3;
-  opDiv  = 4;
-  opMod  = 5;
-  opShl  = 6;
-  opShr  = 7;
-  opAnd  = 8;
-  opOr   = 9;
-  opXor  = 10;
-
-procedure _DispInvoke;
+procedure _DispInvoke;//(var Dest: Variant; const Source: Variant;
+                     //CallDesc: PCallDesc; Params: Pointer); cdecl;
 asm
-        { ->    [ESP+4] Pointer to result or nil }
-        {       [ESP+8] Pointer to variant }
-        {       [ESP+12]        Pointer to call descriptor }
-        {       [ESP+16]        Additional parameters, if any }
-        JMP     VarDispProc
+{$IFDEF PIC}
+        CALL    GetGOT
+        LEA     EAX,[EAX].OFFSET VariantManager
+        JMP     [EAX].TVariantManager.DispInvoke
+{$ELSE}
+        JMP     VariantManager.DispInvoke
+{$ENDIF}
+end;
+
+procedure _VarClear(var V : Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarClear(V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarClear
+{$IFEND}
+end;
+
+procedure _VarCopy(var Dest: Variant; const Source: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarCopy(Dest, Source);
+{$ELSE}
+asm
+        JMP     VariantManager.VarCopy
+{$IFEND}
+end;
+
+procedure _VarCast(var Dest: Variant; const Source: Variant; VarType: Integer);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarCast(Dest, Source, VarType);
+{$ELSE}
+asm
+        JMP     VariantManager.VarCast
+{$IFEND}
+end;
+
+procedure _VarCastOle(var Dest: Variant; const Source: Variant; VarType: Integer);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarCastOle(Dest, Source, VarType);
+{$ELSE}
+asm
+        JMP     VariantManager.VarCastOle
+{$IFEND}
+end;
+
+function _VarToInt(const V: Variant): Integer;
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  Result := VariantManager.VarToInt(V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarToInt
+{$IFEND}
+end;
+
+function _VarToInt64(const V: Variant): Int64;
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  Result := VariantManager.VarToInt64(V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarToInt64
+{$IFEND}
+end;
+
+function _VarToBool(const V: Variant): Boolean;
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  Result := VariantManager.VarToBool(V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarToBool
+{$IFEND}
+end;
+
+function _VarToReal(const V: Variant): Extended;
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  Result := VariantManager.VarToReal(V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarToReal
+{$IFEND}
+end;
+
+function _VarToCurr(const V: Variant): Currency;
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  Result := VariantManager.VarToCurr(V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarToCurr
+{$IFEND}
+end;
+
+procedure _VarToPStr(var S; const V: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarToPStr(S, V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarToPStr
+{$IFEND}
+end;
+
+procedure _VarToLStr(var S: string; const V: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarToLStr(S, V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarToLStr
+{$IFEND}
+end;
+
+procedure _VarToWStr(var S: WideString; const V: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarToWStr(S, V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarToWStr
+{$IFEND}
+end;
+
+procedure _VarToIntf(var Unknown: IInterface; const V: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarToIntf(Unknown, V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarToIntf
+{$IFEND}
+end;
+
+procedure _VarToDisp(var Dispatch: IDispatch; const V: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarToDisp(Dispatch, V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarToDisp
+{$IFEND}
+end;
+
+procedure _VarToDynArray(var DynArray: Pointer; const V: Variant; TypeInfo: Pointer);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarToDynArray(DynArray, V, TypeInfo);
+{$ELSE}
+asm
+        JMP     VariantManager.VarToDynArray
+{$IFEND}
+end;
+
+procedure _VarFromInt(var V: Variant; const Value, Range: Integer);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarFromInt(V, Value, Range);
+{$ELSE}
+asm
+        JMP     VariantManager.VarFromInt
+{$IFEND}
+end;
+
+procedure _VarFromInt64(var V: Variant; const Value: Int64);
+begin
+  VariantManager.VarFromInt64(V, Value);
+end;
+
+procedure _VarFromBool(var V: Variant; const Value: Boolean);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarFromBool(V, Value);
+{$ELSE}
+asm
+        JMP     VariantManager.VarFromBool
+{$IFEND}
+end;
+
+procedure _VarFromReal; // var V: Variant; const Value: Real
+asm
+{$IFDEF PIC}
+        PUSH    EAX
+        PUSH    ECX
+        CALL    GetGOT
+        POP     ECX
+        LEA     EAX,[EAX].OFFSET VariantManager
+        MOV     EAX,[EAX].TVariantManager.VarFromReal
+        XCHG    EAX,[ESP]
+        RET
+{$ELSE}
+        JMP     VariantManager.VarFromReal
+{$ENDIF}
+end;
+
+procedure _VarFromTDateTime; // var V: Variant; const Value: TDateTime
+asm
+{$IFDEF PIC}
+        PUSH    EAX
+        PUSH    ECX
+        CALL    GetGOT
+        POP     ECX
+        LEA     EAX,[EAX].OFFSET VariantManager
+        MOV     EAX,[EAX].TVariantManager.VarFromTDateTime
+        XCHG    EAX,[ESP]
+        RET
+{$ELSE}
+        JMP     VariantManager.VarFromTDateTime
+{$ENDIF}
+end;
+
+procedure _VarFromCurr; // var V: Variant; const Value: Currency
+asm
+{$IFDEF PIC}
+        PUSH    EAX
+        PUSH    ECX
+        CALL    GetGOT
+        POP     ECX
+        LEA     EAX,[EAX].OFFSET VariantManager
+        MOV     EAX,[EAX].TVariantManager.VarFromCurr
+        XCHG    EAX,[ESP]
+        RET
+{$ELSE}
+        JMP     VariantManager.VarFromCurr
+{$ENDIF}
+end;
+
+procedure _VarFromPStr(var V: Variant; const Value: ShortString);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarFromPStr(V, Value);
+{$ELSE}
+asm
+        JMP     VariantManager.VarFromPStr
+{$IFEND}
+end;
+
+procedure _VarFromLStr(var V: Variant; const Value: string);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarFromLStr(V, Value);
+{$ELSE}
+asm
+        JMP     VariantManager.VarFromLStr
+{$IFEND}
+end;
+
+procedure _VarFromWStr(var V: Variant; const Value: WideString);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarFromWStr(V, Value);
+{$ELSE}
+asm
+        JMP     VariantManager.VarFromWStr
+{$IFEND}
+end;
+
+procedure _VarFromIntf(var V: Variant; const Value: IInterface);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarFromIntf(V, Value);
+{$ELSE}
+asm
+        JMP     VariantManager.VarFromIntf
+{$IFEND}
+end;
+
+procedure _VarFromDisp(var V: Variant; const Value: IDispatch);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarFromDisp(V, Value);
+{$ELSE}
+asm
+        JMP     VariantManager.VarFromDisp
+{$IFEND}
+end;
+
+procedure _VarFromDynArray(var V: Variant; const DynArray: Pointer; TypeInfo: Pointer);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarFromDynArray(V, DynArray, TypeInfo);
+{$ELSE}
+asm
+        JMP     VariantManager.VarFromDynArray
+{$IFEND}
+end;
+
+procedure _OleVarFromPStr(var V: OleVariant; const Value: ShortString);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.OleVarFromPStr(V, Value);
+{$ELSE}
+asm
+        JMP     VariantManager.OleVarFromPStr
+{$IFEND}
+end;
+
+procedure _OleVarFromLStr(var V: OleVariant; const Value: string);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.OleVarFromLStr(V, Value);
+{$ELSE}
+asm
+        JMP     VariantManager.OleVarFromLStr
+{$IFEND}
+end;
+
+procedure _OleVarFromVar(var V: OleVariant; const Value: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.OleVarFromVar(V, Value);
+{$ELSE}
+asm
+        JMP     VariantManager.OleVarFromVar
+{$IFEND}
+end;
+
+procedure _OleVarFromInt(var V: OleVariant; const Value, Range: Integer);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.OleVarFromInt(V, Value, Range);
+{$ELSE}
+asm
+        JMP     VariantManager.OleVarFromInt
+{$IFEND}
+end;
+
+procedure _VarAdd(var Left: Variant; const Right: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarOp(Left, Right, opAdd);
+{$ELSE}
+asm
+        MOV     ECX,opAdd
+        JMP     VariantManager.VarOp
+{$IFEND}
+end;
+
+procedure _VarSub(var Left: Variant; const Right: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarOp(Left, Right, opSubtract);
+{$ELSE}
+asm
+        MOV     ECX,opSubtract
+        JMP     VariantManager.VarOp
+{$IFEND}
+end;
+
+procedure _VarMul(var Left: Variant; const Right: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarOp(Left, Right, opMultiply);
+{$ELSE}
+asm
+        MOV     ECX,opMultiply
+        JMP     VariantManager.VarOp
+{$IFEND}
+end;
+
+procedure _VarDiv(var Left: Variant; const Right: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarOp(Left, Right, opIntDivide);
+{$ELSE}
+asm
+        MOV     ECX,opIntDivide
+        JMP     VariantManager.VarOp
+{$IFEND}
+end;
+
+procedure _VarMod(var Left: Variant; const Right: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarOp(Left, Right, opModulus);
+{$ELSE}
+asm
+        MOV     ECX,opModulus
+        JMP     VariantManager.VarOp
+{$IFEND}
+end;
+
+procedure _VarAnd(var Left: Variant; const Right: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarOp(Left, Right, opAnd);
+{$ELSE}
+asm
+        MOV     ECX,opAnd
+        JMP     VariantManager.VarOp
+{$IFEND}
+end;
+
+procedure _VarOr(var Left: Variant; const Right: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarOp(Left, Right, opOr);
+{$ELSE}
+asm
+        MOV     ECX,opOr
+        JMP     VariantManager.VarOp
+{$IFEND}
+end;
+
+procedure _VarXor(var Left: Variant; const Right: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarOp(Left, Right, opXor);
+{$ELSE}
+asm
+        MOV     ECX,opXor
+        JMP     VariantManager.VarOp
+{$IFEND}
+end;
+
+procedure _VarShl(var Left: Variant; const Right: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarOp(Left, Right, opShiftLeft);
+{$ELSE}
+asm
+        MOV     ECX,opShiftLeft
+        JMP     VariantManager.VarOp
+{$IFEND}
+end;
+
+procedure _VarShr(var Left: Variant; const Right: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarOp(Left, Right, opShiftRight);
+{$ELSE}
+asm
+        MOV     ECX,opShiftRight
+        JMP     VariantManager.VarOp
+{$IFEND}
+end;
+
+procedure _VarRDiv(var Left: Variant; const Right: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarOp(Left, Right, opDivide);
+{$ELSE}
+asm
+        MOV     ECX,opDivide
+        JMP     VariantManager.VarOp
+{$IFEND}
+end;
+
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+// result is set in the flags
+procedure DoVarCmp(const Left, Right: Variant; OpCode: Integer);
+begin
+  VariantManager.VarCmp(TVarData(Left), TVarData(Right), OpCode);
+end;
+{$IFEND}
+
+procedure _VarCmpEQ(const Left, Right: Variant); // result is set in the flags
+asm
+        MOV     ECX, opCmpEQ
+{$IFDEF PIC}
+        JMP     DoVarCmp
+{$ELSE}
+        JMP     VariantManager.VarCmp
+{$ENDIF}
+end;
+
+procedure _VarCmpNE(const Left, Right: Variant); // result is set in the flags
+asm
+        MOV     ECX, opCmpNE
+{$IFDEF PIC}
+        JMP     DoVarCmp
+{$ELSE}
+        JMP     VariantManager.VarCmp
+{$ENDIF}
+end;
+
+procedure _VarCmpLT(const Left, Right: Variant); // result is set in the flags
+asm
+        MOV     ECX, opCmpLT
+{$IFDEF PIC}
+        JMP     DoVarCmp
+{$ELSE}
+        JMP     VariantManager.VarCmp
+{$ENDIF}
+end;
+
+procedure _VarCmpLE(const Left, Right: Variant); // result is set in the flags
+asm
+        MOV     ECX, opCmpLE
+{$IFDEF PIC}
+        JMP     DoVarCmp
+{$ELSE}
+        JMP     VariantManager.VarCmp
+{$ENDIF}
+end;
+
+procedure _VarCmpGT(const Left, Right: Variant); // result is set in the flags
+asm
+        MOV     ECX, opCmpGT
+{$IFDEF PIC}
+        JMP     DoVarCmp
+{$ELSE}
+        JMP     VariantManager.VarCmp
+{$ENDIF}
+end;
+
+procedure _VarCmpGE(const Left, Right: Variant); // result is set in the flags
+asm
+        MOV     ECX, opCmpGE
+{$IFDEF PIC}
+        JMP     DoVarCmp
+{$ELSE}
+        JMP     VariantManager.VarCmp
+{$ENDIF}
 end;
 
 
-procedure _DispInvokeError;
+procedure _VarNeg(var V: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarNeg(V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarNeg
+{$IFEND}
+end;
+
+procedure _VarNot(var V: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarNot(V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarNot
+{$IFEND}
+end;
+
+procedure _VarCopyNoInd;
+asm
+{$IFDEF PIC}
+        PUSH    EAX
+        PUSH    ECX
+        CALL    GetGOT
+        POP     ECX
+        LEA     EAX,[EAX].OFFSET VariantManager
+        MOV     EAX,[EAX].TVariantManager.VarCopyNoInd
+        XCHG    EAX,[ESP]
+        RET
+{$ELSE}
+        JMP     VariantManager.VarCopyNoInd
+{$ENDIF}
+end;
+
+procedure _VarClr(var V: Variant);
+asm
+        PUSH    EAX
+        CALL    _VarClear
+        POP     EAX
+end;
+
+procedure _VarAddRef(var V: Variant);
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  VariantManager.VarAddRef(V);
+{$ELSE}
+asm
+        JMP     VariantManager.VarAddRef
+{$IFEND}
+end;
+
+procedure _IntfDispCall;
+asm
+{$IFDEF PIC}
+        PUSH    EAX
+        PUSH    ECX
+        CALL    GetGOT
+        POP     ECX
+        LEA     EAX,[EAX].OFFSET DispCallByIDProc
+        MOV     EAX,[EAX]
+        XCHG    EAX,[ESP]
+        RET
+{$ELSE}
+        JMP     DispCallByIDProc
+{$ENDIF}
+end;
+
+procedure _DispCallByIDError;
 asm
         MOV     AL,reVarDispatch
         JMP     Error
 end;
 
-procedure VarCastError;
+procedure _IntfVarCall;
 asm
-        MOV     AL,reVarTypeCast
-        JMP     Error
-end;
-
-procedure VarInvalidOp;
-asm
-        MOV     AL,reVarInvalidOp
-        JMP     Error
-end;
-
-procedure _VarClear(var V : Variant);
-asm
-        XOR     EDX,EDX
-        MOV     DX,[EAX].TVarData.VType
-        TEST    EDX,varByRef
-        JNE     @@2
-        CMP     EDX,varOleStr
-        JB      @@2
-        CMP     EDX,varString
-        JE      @@1
-        CMP     EDX,varAny
-        JNE     @@3
-        JMP     [ClearAnyProc]
-@@1:    MOV     [EAX].TVarData.VType,varEmpty
-        ADD     EAX,OFFSET TVarData.VString
-        JMP     _LStrClr
-@@2:    MOV     [EAX].TVarData.VType,varEmpty
-        RET
-@@3:    PUSH    EAX
-        CALL    VariantClear
-end;
-
-procedure _VarCopy(var Dest : Variant; const Source: Variant);
-asm
-        CMP     EAX,EDX
-        JE      @@9
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@3
-        PUSH    EAX
-        PUSH    EDX
-        CMP     [EAX].TVarData.VType,varString
-        JE      @@1
-        CMP     [EAX].TVarData.VType,varAny
-        JE      @@0
-        PUSH    EAX
-        CALL    VariantClear
-        JMP     @@2
-@@0:    CALL    [ClearAnyProc]
-        JMP     @@2
-@@1:    ADD     EAX,OFFSET TVarData.VString
-        CALL    _LStrClr
-@@2:    POP     EDX
-        POP     EAX
-@@3:    CMP     [EDX].TVarData.VType,varOleStr
-        JAE     @@5
-@@4:    MOV     ECX,[EDX]
-        MOV     [EAX],ECX
-        MOV     ECX,[EDX+8]
-        MOV     [EAX+8],ECX
-        MOV     ECX,[EDX+12]
-        MOV     [EAX+12],ECX
-        RET
-@@5:    CMP     [EDX].TVarData.VType,varString
-        JE      @@6
-        CMP     [EDX].TVarData.VType,varAny
-        JNE     @@8
-        PUSH    EAX
-        CALL    @@4
-        POP     EAX
-        JMP     [RefAnyProc]
-@@6:    MOV     EDX,[EDX].TVarData.VString
-        OR      EDX,EDX
-        JE      @@7
-        MOV     ECX,[EDX-skew].StrRec.refCnt
-        INC     ECX
-        JLE     @@7
-   LOCK INC     [EDX-skew].StrRec.refCnt
-@@7:    MOV     [EAX].TVarData.VType,varString
-        MOV     [EAX].TVarData.VString,EDX
-        RET
-@@8:    MOV     [EAX].TVarData.VType,varEmpty
-        PUSH    EDX
-        PUSH    EAX
-        CALL    VariantCopyInd
-        OR      EAX,EAX
-        JNE     VarInvalidOp
-@@9:
-end;
-
-procedure VarCopyNoInd(var Dest: Variant; const Source: Variant);
-asm
-        CMP     EAX,EDX
-        JE      @@9
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@3
-        PUSH    EAX
-        PUSH    EDX
-        CMP     [EAX].TVarData.VType,varString
-        JE      @@1
-        CMP     [EAX].TVarData.VType,varAny
-        JE      @@0
-        PUSH    EAX
-        CALL    VariantClear
-        JMP     @@2
-@@0:    CALL    [ClearAnyProc]
-        JMP     @@2
-@@1:    ADD     EAX,OFFSET TVarData.VString
-        CALL    _LStrClr
-@@2:    POP     EDX
-        POP     EAX
-@@3:    CMP     [EDX].TVarData.VType,varOleStr
-        JAE     @@5
-@@4:    MOV     ECX,[EDX]
-        MOV     [EAX],ECX
-        MOV     ECX,[EDX+8]
-        MOV     [EAX+8],ECX
-        MOV     ECX,[EDX+12]
-        MOV     [EAX+12],ECX
-        RET
-@@5:    CMP     [EDX].TVarData.VType,varString
-        JNE     @@6
-        CMP     [EDX].TVarData.VType,varAny
-        JNE     @@8
-        CALL    @@4
-        JMP     [RefAnyProc]
-@@6:    MOV     EDX,[EDX].TVarData.VString
-        OR      EDX,EDX
-        JE      @@7
-        MOV     ECX,[EDX-skew].StrRec.refCnt
-        INC     ECX
-        JLE     @@7
-   LOCK INC     [EDX-skew].StrRec.refCnt
-@@7:    MOV     [EAX].TVarData.VType,varString
-        MOV     [EAX].TVarData.VString,EDX
-        RET
-@@8:    MOV     [EAX].TVarData.VType,varEmpty
-        PUSH    EDX
-        PUSH    EAX
-        CALL    VariantCopy
-@@9:
-end;
-
-type
-  TAnyProc = procedure (var V: Variant);
-
-procedure VarChangeType(var Dest: Variant; const Source: Variant;
-  DestType: Word); forward;
-
-procedure AnyChangeType(var Dest: Variant; Source: Variant; DestType: Word);
-begin
-  TAnyProc(ChangeAnyProc)(Source);
-  VarChangeType(Dest, Source, DestType);
-end;
-
-procedure VarChangeType(var Dest: Variant; const Source: Variant;
-  DestType: Word);
-type
-  TVarMem = array[0..3] of Integer;
-
-  function ChangeSourceAny(var Dest: Variant; const Source: Variant;
-    DestType: Word): Boolean;
-  begin
-    Result := False;
-    if TVarData(Source).VType = varAny then
-    begin
-      AnyChangeType(Dest, Source, DestType);
-      Result := True;
-    end;
-  end;
-
-var
-  Temp: TVarData;
-begin
-  case TVarData(Dest).VType of
-    varString:
-      begin
-        if not ChangeSourceAny(Dest, Source, DestType) then
-        begin
-          Temp.VType := varEmpty;
-          if VariantChangeTypeEx(Variant(Temp), Source, $400, 0, DestType) <> 0 then
-          VarCastError;
-          _VarClear(Dest);
-          TVarMem(Dest)[0] := TVarMem(Temp)[0];
-          TVarMem(Dest)[2] := TVarMem(Temp)[2];
-          TVarMem(Dest)[3] := TVarMem(Temp)[3];
-        end;
-      end;
-    varAny: AnyChangeType(Dest, Source, DestType);
-  else if not ChangeSourceAny(Dest, Source, DestType) then
-    if VariantChangeTypeEx(Dest, Source, $400, 0, DestType) <> 0 then
-      VarCastError;
-  end;
-end;
-
-procedure VarOleStrToString(var Dest: Variant; const Source: Variant);
-var
-  StringPtr: Pointer;
-begin
-  StringPtr := nil;
-  OleStrToStrVar(TVarData(Source).VOleStr, string(StringPtr));
-  _VarClear(Dest);
-  TVarData(Dest).VType := varString;
-  TVarData(Dest).VString := StringPtr;
-end;
-
-procedure VarStringToOleStr(var Dest: Variant; const Source: Variant);
-var
-  OleStrPtr: PWideChar;
-begin
-  OleStrPtr := StringToOleStr(string(TVarData(Source).VString));
-  _VarClear(Dest);
-  TVarData(Dest).VType := varOleStr;
-  TVarData(Dest).VOleStr := OleStrPtr;
-end;
-
-procedure _VarCast(var Dest : Variant; const Source: Variant; VarType: Integer);
-var
-  SourceType, DestType: Word;
-  Temp: TVarData;
-begin
-  SourceType := TVarData(Source).VType;
-  DestType := Word(VarType);
-  if SourceType = DestType then
-    _VarCopy(Dest, Source)
-  else
-  if SourceType = varString then
-    if DestType = varOleStr then
-      VarStringToOleStr(Variant(Dest), Source)
-    else
-    begin
-      Temp.VType := varEmpty;
-      VarStringToOleStr(Variant(Temp), Source);
-      try
-        VarChangeType(Variant(Dest), Variant(Temp), DestType);
-      finally
-        _VarClear(PVariant(@Temp)^);
-      end;
-    end
-  else
-  if (DestType = varString) and (SourceType <> varAny) then
-    if SourceType = varOleStr then
-      VarOleStrToString(Variant(Dest), Source)
-    else
-    begin
-      Temp.VType := varEmpty;
-      VarChangeType(Variant(Temp), Source, varOleStr);
-      try
-        VarOleStrToString(Variant(Dest), Variant(Temp));
-      finally
-        _VarClear(Variant(Temp));
-      end;
-    end
-  else
-    VarChangeType(Variant(Dest), Source, DestType);
-end;
-
-(* VarCast when the destination is OleVariant *)
-procedure _VarCastOle(var Dest : Variant; const Source: Variant; VarType: Integer);
-begin
-  if (VarType = varString) or (VarType = varAny) then
-    VarCastError
-  else
-    _VarCast(Dest, Source, VarType);
-end;
-
-procedure _VarToInt;
-asm
-        XOR     EDX,EDX
-        MOV     DX,[EAX].TVarData.VType
-        CMP     EDX,varInteger
-        JE      @@0
-        CMP     EDX,varSmallint
-        JE      @@1
-        CMP     EDX,varByte
-        JE      @@2
-        CMP     EDX,varDouble
-        JE      @@5
-        CMP     EDX,varSingle
-        JE      @@4
-        CMP     EDX,varCurrency
-        JE      @@3
-        SUB     ESP,16
-        MOV     [ESP].TVarData.VType,varEmpty
-        MOV     EDX,EAX
-        MOV     EAX,ESP
-        MOV     ECX,varInteger
-        CALL    _VarCast
-        MOV     EAX,[ESP].TVarData.VInteger
-        ADD     ESP,16
-        RET
-@@0:    MOV     EAX,[EAX].TVarData.VInteger
-        RET
-@@1:    MOVSX   EAX,[EAX].TVarData.VSmallint
-        RET
-@@2:    MOVZX   EAX,[EAX].TVarData.VByte
-        RET
-@@3:    FILD    [EAX].TVarData.VCurrency
-        FDIV    C10000
-        JMP     @@6
-@@4:    FLD     [EAX].TVarData.VSingle
-        JMP     @@6
-@@5:    FLD     [EAX].TVarData.VDouble
-@@6:    PUSH    EAX
-        FISTP   DWORD PTR [ESP]
-        FWAIT
-        POP     EAX
-end;
-
-procedure _VarToBool;
-asm
-        CMP     [EAX].TVarData.VType,varBoolean
-        JE      @@1
-        SUB     ESP,16
-        MOV     [ESP].TVarData.VType,varEmpty
-        MOV     EDX,EAX
-        MOV     EAX,ESP
-        MOV     ECX,varBoolean
-        CALL    _VarCast
-        MOV     AX,[ESP].TVarData.VBoolean
-        ADD     ESP,16
-        JMP     @@2
-@@1:    MOV     AX,[EAX].TVarData.VBoolean
-@@2:    NEG     AX
-        SBB     EAX,EAX
-        NEG     EAX
-end;
-
-procedure _VarToReal;
-asm
-        XOR     EDX,EDX
-        MOV     DX,[EAX].TVarData.VType
-        CMP     EDX,varDouble
-        JE      @@1
-        CMP     EDX,varSingle
-        JE      @@2
-        CMP     EDX,varCurrency
-        JE      @@3
-        CMP     EDX,varInteger
-        JE      @@4
-        CMP     EDX,varSmallint
-        JE      @@5
-        CMP     EDX,varDate
-        JE      @@1
-        SUB     ESP,16
-        MOV     [ESP].TVarData.VType,varEmpty
-        MOV     EDX,EAX
-        MOV     EAX,ESP
-        MOV     ECX,varDouble
-        CALL    _VarCast
-        FLD     [ESP].TVarData.VDouble
-        ADD     ESP,16
-        RET
-@@1:    FLD     [EAX].TVarData.VDouble
-        RET
-@@2:    FLD     [EAX].TVarData.VSingle
-        RET
-@@3:    FILD    [EAX].TVarData.VCurrency
-        FDIV    C10000
-        RET
-@@4:    FILD    [EAX].TVarData.VInteger
-        RET
-@@5:    FILD    [EAX].TVarData.VSmallint
-end;
-
-procedure _VarToCurr;
-asm
-        XOR     EDX,EDX
-        MOV     DX,[EAX].TVarData.VType
-        CMP     EDX,varCurrency
-        JE      @@1
-        CMP     EDX,varDouble
-        JE      @@2
-        CMP     EDX,varSingle
-        JE      @@3
-        CMP     EDX,varInteger
-        JE      @@4
-        CMP     EDX,varSmallint
-        JE      @@5
-        SUB     ESP,16
-        MOV     [ESP].TVarData.VType,varEmpty
-        MOV     EDX,EAX
-        MOV     EAX,ESP
-        MOV     ECX,varCurrency
-        CALL    _VarCast
-        FILD    [ESP].TVarData.VCurrency
-        ADD     ESP,16
-        RET
-@@1:    FILD    [EAX].TVarData.VCurrency
-        RET
-@@2:    FLD     [EAX].TVarData.VDouble
-        JMP     @@6
-@@3:    FLD     [EAX].TVarData.VSingle
-        JMP     @@6
-@@4:    FILD    [EAX].TVarData.VInteger
-        JMP     @@6
-@@5:    FILD    [EAX].TVarData.VSmallint
-@@6:    FMUL    C10000
-end;
-
-procedure _VarToPStr(var S; const V: Variant);
-var
-  Temp: string;
-begin
-  _VarToLStr(Temp, V);
-  ShortString(S) := Temp;
-end;
-
-procedure _VarToLStr(var S: string; const V: Variant);
-asm
-        { -> EAX: destination string }
-        {    EDX: source variant     }
-        { <- none                    }
-
-        CMP     [EDX].TVarData.VType,varString
-        JNE     @@1
-        MOV     EDX,[EDX].TVarData.VString
-        JMP     _LStrAsg
-@@1:    PUSH    EBX
-        MOV     EBX,EAX
-        SUB     ESP,16
-        MOV     [ESP].TVarData.VType,varEmpty
-        MOV     EAX,ESP
-        MOV     ECX,varString
-        CALL    _VarCast
-        MOV     EAX,EBX
-        CALL    _LStrClr
-        MOV     EAX,[ESP].TVarData.VString
-        MOV     [EBX],EAX
-        ADD     ESP,16
-        POP     EBX
-end;
-
-procedure _VarToWStr(var S: WideString; const V: Variant);
-asm
-        CMP     [EDX].TVarData.VType,varOleStr
-        JNE     @@1
-        MOV     EDX,[EDX].TVarData.VOleStr
-        JMP     _WStrAsg
-@@1:    PUSH    EBX
-        MOV     EBX,EAX
-        SUB     ESP,16
-        MOV     [ESP].TVarData.VType,varEmpty
-        MOV     EAX,ESP
-        MOV     ECX,varOleStr
-        CALL    _VarCast
-        MOV     EAX,EBX
-        MOV     EDX,[ESP].TVarData.VOleStr
-        CALL    WStrSet
-        ADD     ESP,16
-        POP     EBX
-end;
-
-procedure AnyToIntf(var Unknown: IUnknown; V: Variant);
-begin
-  TAnyProc(ChangeAnyProc)(V);
-  if TVarData(V).VType <> varUnknown then
-    VarCastError;
-  Unknown := IUnknown(TVarData(V).VUnknown);
-end;
-
-procedure _VarToIntf(var Unknown: IUnknown; const V: Variant);
-asm
-        CMP     [EDX].TVarData.VType,varEmpty
-        JE      _IntfClear
-        CMP     [EDX].TVarData.VType,varUnknown
-        JE      @@2
-        CMP     [EDX].TVarData.VType,varDispatch
-        JE      @@2
-        CMP     [EDX].TVarData.VType,varUnknown+varByRef
-        JE      @@1
-        CMP     [EDX].TVarData.VType,varDispatch+varByRef
-        JE      @@1
-        CMP     [EDX].TVarData.VType,varAny
-        JNE     VarCastError
-        JMP     AnyToIntf
-@@0:    CALL    _VarClear
-        ADD     ESP,16
-        JMP     VarCastError
-@@1:    MOV     EDX,[EDX].TVarData.VPointer
-        MOV     EDX,[EDX]
-        JMP     _IntfCopy
-@@2:    MOV     EDX,[EDX].TVarData.VUnknown
-        JMP     _IntfCopy
-end;
-
-procedure _VarToDisp(var Dispatch: IDispatch; const V: Variant);
-asm
-        CMP     [EDX].TVarData.VType,varEmpty
-        JE      _IntfClear
-        CMP     [EDX].TVarData.VType,varDispatch
-        JE      @@1
-        CMP     [EDX].TVarData.VType,varDispatch+varByRef
-        JNE     VarCastError
-        MOV     EDX,[EDX].TVarData.VPointer
-        MOV     EDX,[EDX]
-        JMP     _IntfCopy
-@@1:    MOV     EDX,[EDX].TVarData.VDispatch
-        JMP     _IntfCopy
-end;
-
-procedure _VarToDynArray(var DynArray: Pointer; const V: Variant; TypeInfo: Pointer);
-asm
-        CALL    DynArrayFromVariant
-        OR      EAX, EAX
-        JNZ     @@1
-        JMP     VarCastError
-@@1:
-end;
-
-procedure _VarFromInt;
-asm
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@1
-        PUSH    EAX
-        PUSH    EDX
-        CALL    _VarClear
-        POP     EDX
-        POP     EAX
-@@1:    MOV     [EAX].TVarData.VType,varInteger
-        MOV     [EAX].TVarData.VInteger,EDX
-end;
-
-procedure _VarFromBool;
-asm
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@1
-        PUSH    EAX
-        PUSH    EDX
-        CALL    _VarClear
-        POP     EDX
-        POP     EAX
-@@1:    MOV     [EAX].TVarData.VType,varBoolean
-        NEG     DL
-        SBB     EDX,EDX
-        MOV     [EAX].TVarData.VBoolean,DX
-end;
-
-procedure _VarFromReal;
-asm
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@1
-        PUSH    EAX
-        CALL    _VarClear
-        POP     EAX
-@@1:    MOV     [EAX].TVarData.VType,varDouble
-        FSTP    [EAX].TVarData.VDouble
-        FWAIT
-end;
-
-procedure _VarFromTDateTime;
-asm
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@1
-        PUSH    EAX
-        CALL    _VarClear
-        POP     EAX
-@@1:    MOV     [EAX].TVarData.VType,varDate
-        FSTP    [EAX].TVarData.VDouble
-        FWAIT
-end;
-
-procedure _VarFromCurr;
-asm
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@1
-        PUSH    EAX
-        CALL    _VarClear
-        POP     EAX
-@@1:    MOV     [EAX].TVarData.VType,varCurrency
-        FISTP   [EAX].TVarData.VCurrency
-        FWAIT
-end;
-
-procedure _VarFromPStr(var V: Variant; const Value: ShortString);
-begin
-  _VarFromLStr(V, Value);
-end;
-
-procedure _VarFromLStr(var V: Variant; const Value: string);
-asm
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@1
-        PUSH    EAX
-        PUSH    EDX
-        CALL    _VarClear
-        POP     EDX
-        POP     EAX
-@@1:    TEST    EDX,EDX
-        JE      @@3
-        MOV     ECX,[EDX-skew].StrRec.refCnt
-        INC     ECX
-        JLE     @@2
-   LOCK INC     [EDX-skew].StrRec.refCnt
-        JMP     @@3
-@@2:    PUSH    EAX
-        PUSH    EDX
-        MOV     EAX,[EDX-skew].StrRec.length
-        CALL    _NewAnsiString
-        MOV     EDX,EAX
-        POP     EAX
-        PUSH    EDX
-        MOV     ECX,[EDX-skew].StrRec.length
-        CALL    Move
-        POP     EDX
-        POP     EAX
-@@3:    MOV     [EAX].TVarData.VType,varString
-        MOV     [EAX].TVarData.VString,EDX
-end;
-
-procedure _VarFromWStr(var V: Variant; const Value: WideString);
-asm
-        PUSH    EAX
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@1
-        PUSH    EDX
-        CALL    _VarClear
-        POP     EDX
-@@1:    XOR     EAX,EAX
-        TEST    EDX,EDX
-        JE      @@2
-        MOV     EAX,[EDX-4]
-        SHR     EAX,1
-        JE      @@2
-        PUSH    EAX
-        PUSH    EDX
-        CALL    SysAllocStringLen
-        TEST    EAX,EAX
-        JE      WStrError
-@@2:    POP     EDX
-        MOV     [EDX].TVarData.VType,varOleStr
-        MOV     [EDX].TVarData.VOleStr,EAX
-end;
-
-procedure _VarFromIntf(var V: Variant; const Value: IUnknown);
-asm
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@1
-        PUSH    EAX
-        PUSH    EDX
-        CALL    _VarClear
-        POP     EDX
-        POP     EAX
-@@1:    MOV     [EAX].TVarData.VType,varUnknown
-        MOV     [EAX].TVarData.VUnknown,EDX
-        TEST    EDX,EDX
-        JE      @@2
-        PUSH    EDX
-        MOV     EAX,[EDX]
-        CALL    [EAX].vmtAddRef.Pointer
-@@2:
-end;
-
-procedure _VarFromDisp(var V: Variant; const Value: IDispatch);
-asm
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@1
-        PUSH    EAX
-        PUSH    EDX
-        CALL    _VarClear
-        POP     EDX
-        POP     EAX
-@@1:    MOV     [EAX].TVarData.VType,varDispatch
-        MOV     [EAX].TVarData.VDispatch,EDX
-        TEST    EDX,EDX
-        JE      @@2
-        PUSH    EDX
-        MOV     EAX,[EDX]
-        CALL    [EAX].vmtAddRef.Pointer
-@@2:
-end;
-
-procedure _VarFromDynArray(var V: Variant; const DynArray: Pointer; TypeInfo: Pointer);
-asm
-        PUSH    EAX
-        CALL    DynArrayToVariant
-        POP     EAX
-        CMP     [EAX].TVarData.VType,varEmpty
-        JNE     @@1
-        JMP     VarCastError
-@@1:
-end;
-
-procedure _OleVarFromPStr(var V: OleVariant; const Value: ShortString);
-begin
-  _OleVarFromLStr(V, Value);
-end;
-
-
-procedure _OleVarFromLStr(var V: OleVariant; const Value: string);
-asm
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@1
-        PUSH    EAX
-        PUSH    EDX
-        CALL    _VarClear
-        POP     EDX
-        POP     EAX
-@@1:    MOV     [EAX].TVarData.VType,varOleStr
-        ADD     EAX,TVarData.VOleStr
-        XOR     ECX,ECX
-        MOV     [EAX],ECX
-        JMP     _WStrFromLStr
-end;
-
-procedure OleVarFromAny(var V: OleVariant; Value: Variant);
-begin
-  TAnyProc(ChangeAnyProc)(Value);
-  V := Value;
-end;
-
-procedure _OleVarFromVar(var V: OleVariant; const Value: Variant);
-asm
-        CMP     [EDX].TVarData.VType,varAny
-        JE      OleVarFromAny
-        CMP     [EDX].TVarData.VType,varString
-        JNE     _VarCopy
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@1
-        PUSH    EAX
-        PUSH    EDX
-        CALL    _VarClear
-        POP     EDX
-        POP     EAX
-@@1:    MOV     [EAX].TVarData.VType,varOleStr
-        ADD     EAX,TVarData.VOleStr
-        ADD     EDX,TVarData.VString
-        XOR     ECX,ECX
-        MOV     EDX,[EDX]
-        MOV     [EAX],ECX
-        JMP     _WStrFromLStr
-@@2:
-end;
-
-
-procedure VarStrCat(var Dest: Variant; const Source: Variant);
-begin
-  if TVarData(Dest).VType = varString then
-    Dest := string(Dest) + string(Source)
-  else
-    Dest := WideString(Dest) + WideString(Source);
-end;
-
-procedure VarOp(var Dest: Variant; const Source: Variant; OpCode: Integer); forward;
-
-procedure AnyOp(var Dest: Variant; Source: Variant; OpCode: Integer);
-begin
-  if TVarData(Dest).VType = varAny then TAnyProc(ChangeAnyProc)(Dest);
-  if TVarData(Source).VType = varAny then TAnyProc(ChangeAnyProc)(Source);
-  VarOp(Dest, Source, OpCode);
-end;
-
-procedure VarOp(var Dest: Variant; const Source: Variant; OpCode: Integer);
-asm
-        PUSH    EBX
-        PUSH    ESI
-        PUSH    EDI
-        MOV     EDI,EAX
-        MOV     ESI,EDX
-        MOV     EBX,ECX
-        MOV     EAX,[EDI].TVarData.VType.Integer
-        MOV     EDX,[ESI].TVarData.VType.Integer
-        AND     EAX,varTypeMask
-        AND     EDX,varTypeMask
-        CMP     EAX,varLast
-        JBE     @@1
-        CMP     EAX,varString
-        JNE     @@4
-        MOV     EAX,varOleStr
-@@1:    CMP     EDX,varLast
-        JBE     @@2
-        CMP     EDX,varString
-        JNE     @@3
-        MOV     EDX,varOleStr
-@@2:    MOV     AL,BaseTypeMap.Byte[EAX]
-        MOV     DL,BaseTypeMap.Byte[EDX]
-        MOVZX   ECX,OpTypeMap.Byte[EAX*8+EDX]
-        CALL    @VarOpTable.Pointer[ECX*4]
-        POP     EDI
-        POP     ESI
-        POP     EBX
-        RET
-@@3:    MOV     EAX,EDX
-@@4:    CMP     EAX,varAny
-        JNE     @InvalidOp
-        POP     EDI
-        POP     ESI
-        POP     EBX
-        JMP     AnyOp
-
-@VarOpTable:
-        DD      @VarOpError
-        DD      @VarOpNull
-        DD      @VarOpInteger
-        DD      @VarOpReal
-        DD      @VarOpCurr
-        DD      @VarOpString
-        DD      @VarOpBoolean
-        DD      @VarOpDate
-
-@VarOpError:
-        POP     EAX
-
-@InvalidOp:
-        POP     EDI
-        POP     ESI
-        POP     EBX
-        JMP     VarInvalidOp
-
-@VarOpNull:
-        MOV     EAX,EDI
-        CALL    _VarClear
-        MOV     [EDI].TVarData.VType,varNull
-        RET
-
-@VarOpInteger:
-        CMP     BL,opDvd
-        JE      @RealOp
-
-@IntegerOp:
-        MOV     EAX,ESI
-        CALL    _VarToInt
-        PUSH    EAX
-        MOV     EAX,EDI
-        CALL    _VarToInt
-        POP     EDX
-        CALL    @IntegerOpTable.Pointer[EBX*4]
-        MOV     EDX,EAX
-        MOV     EAX,EDI
-        JMP     _VarFromInt
-
-@IntegerOpTable:
-        DD      @IntegerAdd
-        DD      @IntegerSub
-        DD      @IntegerMul
-        DD      0
-        DD      @IntegerDiv
-        DD      @IntegerMod
-        DD      @IntegerShl
-        DD      @IntegerShr
-        DD      @IntegerAnd
-        DD      @IntegerOr
-        DD      @IntegerXor
-
-@IntegerAdd:
-        ADD     EAX,EDX
-        JO      @IntToRealOp
-        RET
-
-@IntegerSub:
-        SUB     EAX,EDX
-        JO      @IntToRealOp
-        RET
-
-@IntegerMul:
-        IMUL    EDX
-        JO      @IntToRealOp
-        RET
-
-@IntegerDiv:
-        MOV     ECX,EDX
-        CDQ
-        IDIV    ECX
-        RET
-
-@IntegerMod:
-        MOV     ECX,EDX
-        CDQ
-        IDIV    ECX
-        MOV     EAX,EDX
-        RET
-
-@IntegerShl:
-        MOV     ECX,EDX
-        SHL     EAX,CL
-        RET
-
-@IntegerShr:
-        MOV     ECX,EDX
-        SHR     EAX,CL
-        RET
-
-@IntegerAnd:
-        AND     EAX,EDX
-        RET
-
-@IntegerOr:
-        OR      EAX,EDX
-        RET
-
-@IntegerXor:
-        XOR     EAX,EDX
-        RET
-
-@IntToRealOp:
-        POP     EAX
-        JMP     @RealOp
-
-@VarOpReal:
-        CMP     BL,opDiv
-        JAE     @IntegerOp
-
-@RealOp:
-        MOV     EAX,ESI
-        CALL    _VarToReal
-        SUB     ESP,12
-        FSTP    TBYTE PTR [ESP]
-        MOV     EAX,EDI
-        CALL    _VarToReal
-        FLD     TBYTE PTR [ESP]
-        ADD     ESP,12
-        CALL    @RealOpTable.Pointer[EBX*4]
-
-@RealResult:
-        MOV     EAX,EDI
-        JMP     _VarFromReal
-
-@VarOpCurr:
-        CMP     BL,opDiv
-        JAE     @IntegerOp
-        CMP     BL,opMul
-        JAE     @CurrMulDvd
-        MOV     EAX,ESI
-        CALL    _VarToCurr
-        SUB     ESP,12
-        FSTP    TBYTE PTR [ESP]
-        MOV     EAX,EDI
-        CALL    _VarToCurr
-        FLD     TBYTE PTR [ESP]
-        ADD     ESP,12
-        CALL    @RealOpTable.Pointer[EBX*4]
-
-@CurrResult:
-        MOV     EAX,EDI
-        JMP     _VarFromCurr
-
-@CurrMulDvd:
-        CMP     DL,btCur
-        JE      @CurrOpCurr
-        MOV     EAX,ESI
-        CALL    _VarToReal
-        FILD    [EDI].TVarData.VCurrency
-        FXCH
-        CALL    @RealOpTable.Pointer[EBX*4]
-        JMP     @CurrResult
-
-@CurrOpCurr:
-        CMP     BL,opDvd
-        JE      @CurrDvdCurr
-        CMP     AL,btCur
-        JE      @CurrMulCurr
-        MOV     EAX,EDI
-        CALL    _VarToReal
-        FILD    [ESI].TVarData.VCurrency
-        FMUL
-        JMP     @CurrResult
-
-@CurrMulCurr:
-        FILD    [EDI].TVarData.VCurrency
-        FILD    [ESI].TVarData.VCurrency
-        FMUL
-        FDIV    C10000
-        JMP     @CurrResult
-
-@CurrDvdCurr:
-        MOV     EAX,EDI
-        CALL    _VarToCurr
-        FILD    [ESI].TVarData.VCurrency
-        FDIV
-        JMP     @RealResult
-
-@RealOpTable:
-        DD      @RealAdd
-        DD      @RealSub
-        DD      @RealMul
-        DD      @RealDvd
-
-@RealAdd:
-        FADD
-        RET
-
-@RealSub:
-        FSUB
-        RET
-
-@RealMul:
-        FMUL
-        RET
-
-@RealDvd:
-        FDIV
-        RET
-
-@VarOpString:
-        CMP     BL,opAdd
-        JNE     @VarOpReal
-        MOV     EAX,EDI
-        MOV     EDX,ESI
-        JMP     VarStrCat
-
-@VarOpBoolean:
-        CMP     BL,opAnd
-        JB      @VarOpReal
-        MOV     EAX,ESI
-        CALL    _VarToBool
-        PUSH    EAX
-        MOV     EAX,EDI
-        CALL    _VarToBool
-        POP     EDX
-        CALL    @IntegerOpTable.Pointer[EBX*4]
-        MOV     EDX,EAX
-        MOV     EAX,EDI
-        JMP     _VarFromBool
-
-@VarOpDate:
-        CMP     BL,opSub
-        JA      @VarOpReal
-        JB      @DateOp
-        MOV     AH,DL
-        CMP     AX,btDat+btDat*256
-        JE      @RealOp
-
-@DateOp:
-        CALL    @RealOp
-        MOV     [EDI].TVarData.VType,varDate
-        RET
-end;
-
-procedure _VarAdd;
-asm
-        MOV     ECX,opAdd
-        JMP     VarOp
-end;
-
-procedure _VarSub;
-asm
-        MOV     ECX,opSub
-        JMP     VarOp
-end;
-
-procedure _VarMul;
-asm
-        MOV     ECX,opMul
-        JMP     VarOp
-end;
-
-procedure _VarDiv;
-asm
-        MOV     ECX,opDiv
-        JMP     VarOp
-end;
-
-procedure _VarMod;
-asm
-        MOV     ECX,opMod
-        JMP     VarOp
-end;
-
-procedure _VarAnd;
-asm
-        MOV     ECX,opAnd
-        JMP     VarOp
-end;
-
-procedure _VarOr;
-asm
-        MOV     ECX,opOr
-        JMP     VarOp
-end;
-
-procedure _VarXor;
-asm
-        MOV     ECX,opXor
-        JMP     VarOp
-end;
-
-procedure _VarShl;
-asm
-        MOV     ECX,opShl
-        JMP     VarOp
-end;
-
-procedure _VarShr;
-asm
-        MOV     ECX,opShr
-        JMP     VarOp
-end;
-
-procedure _VarRDiv;
-asm
-        MOV     ECX,opDvd
-        JMP     VarOp
-end;
-
-function VarCompareString(const S1, S2: string): Integer;
-asm
-        PUSH    ESI
-        PUSH    EDI
-        MOV     ESI,EAX
-        MOV     EDI,EDX
-        OR      EAX,EAX
-        JE      @@1
-        MOV     EAX,[EAX-4]
-@@1:    OR      EDX,EDX
-        JE      @@2
-        MOV     EDX,[EDX-4]
-@@2:    MOV     ECX,EAX
-        CMP     ECX,EDX
-        JBE     @@3
-        MOV     ECX,EDX
-@@3:    CMP     ECX,ECX
-        REPE    CMPSB
-        JE      @@4
-        MOVZX   EAX,BYTE PTR [ESI-1]
-        MOVZX   EDX,BYTE PTR [EDI-1]
-@@4:    SUB     EAX,EDX
-        POP     EDI
-        POP     ESI
-end;
-
-function VarCmpStr(const V1, V2: Variant): Integer;
-begin
-  Result := VarCompareString(V1, V2);
-end;
-
-function AnyCmp(var Dest: Variant; const Source: Variant): Integer;
-var
-  Temp: Variant;
-  P: ^Variant;
-begin
-  asm
-        PUSH    Dest
-  end;
-  P := @Source;
-  if TVarData(Dest).VType = varAny then TAnyProc(ChangeAnyProc)(Dest);
-  if TVarData(Source).VType = varAny then
-  begin
-    Temp := Source;
-    TAnyProc(ChangeAnyProc)(Temp);
-    P := @Temp;
-  end;
-  asm
-        MOV     EDX,P
-        POP     EAX
-        CALL    _VarCmp
-        PUSHF
-        POP     EAX
-        MOV     Result,EAX
-  end;
-end;
-
-procedure _VarCmp;
-asm
-        PUSH    ESI
-        PUSH    EDI
-        MOV     EDI,EAX
-        MOV     ESI,EDX
-        MOV     EAX,[EDI].TVarData.VType.Integer
-        MOV     EDX,[ESI].TVarData.VType.Integer
-        AND     EAX,varTypeMask
-        AND     EDX,varTypeMask
-        CMP     EAX,varLast
-        JBE     @@1
-        CMP     EAX,varString
-        JNE     @@4
-        MOV     EAX,varOleStr
-@@1:    CMP     EDX,varLast
-        JBE     @@2
-        CMP     EDX,varString
-        JNE     @@3
-        MOV     EDX,varOleStr
-@@2:    MOV     AL,BaseTypeMap.Byte[EAX]
-        MOV     DL,BaseTypeMap.Byte[EDX]
-        MOVZX   ECX,OpTypeMap.Byte[EAX*8+EDX]
-        JMP     @VarCmpTable.Pointer[ECX*4]
-@@3:    MOV     EAX,EDX
-@@4:    CMP     EAX,varAny
-        JNE     @VarCmpError
-        POP     EDI
-        POP     ESI
-        CALL    AnyCmp
-        PUSH    EAX
-        POPF
-        RET
-
-@VarCmpTable:
-        DD      @VarCmpError
-        DD      @VarCmpNull
-        DD      @VarCmpInteger
-        DD      @VarCmpReal
-        DD      @VarCmpCurr
-        DD      @VarCmpString
-        DD      @VarCmpBoolean
-        DD      @VarCmpDate
-
-@VarCmpError:
-        POP     EDI
-        POP     ESI
-        JMP     VarInvalidOp
-
-@VarCmpNull:
-        CMP     AL,DL
-        JMP     @Exit
-
-@VarCmpInteger:
-        MOV     EAX,ESI
-        CALL    _VarToInt
-        XCHG    EAX,EDI
-        CALL    _VarToInt
-        CMP     EAX,EDI
-        JMP     @Exit
-
-@VarCmpReal:
-@VarCmpDate:
-        MOV     EAX,EDI
-        CALL    _VarToReal
-        SUB     ESP,12
-        FSTP    TBYTE PTR [ESP]
-        MOV     EAX,ESI
-        CALL    _VarToReal
-        FLD     TBYTE PTR [ESP]
-        ADD     ESP,12
-
-@RealCmp:
-        FCOMPP
-        FNSTSW  AX
-        MOV     AL,AH   { Move CF into SF }
-        AND     AX,4001H
-        ROR     AL,1
-        OR      AH,AL
-        SAHF
-        JMP     @Exit
-
-@VarCmpCurr:
-        MOV     EAX,EDI
-        CALL    _VarToCurr
-        SUB     ESP,12
-        FSTP    TBYTE PTR [ESP]
-        MOV     EAX,ESI
-        CALL    _VarToCurr
-        FLD     TBYTE PTR [ESP]
-        ADD     ESP,12
-        JMP     @RealCmp
-
-@VarCmpString:
-        MOV     EAX,EDI
-        MOV     EDX,ESI
-        CALL    VarCmpStr
-        CMP     EAX,0
-        JMP     @Exit
-
-@VarCmpBoolean:
-        MOV     EAX,ESI
-        CALL    _VarToBool
-        XCHG    EAX,EDI
-        CALL    _VarToBool
-        MOV     EDX,EDI
-        CMP     AL,DL
-
-@Exit:
-        POP     EDI
-        POP     ESI
-end;
-
-procedure _VarNeg;
-asm
-        MOV     EDX,[EAX].TVarData.VType.Integer
-        AND     EDX,varTypeMask
-        CMP     EDX,varLast
-        JBE     @@1
-        CMP     EDX,varString
-        JNE     @VarNegError
-        MOV     EDX,varOleStr
-@@1:    MOV     DL,BaseTypeMap.Byte[EDX]
-        JMP     @VarNegTable.Pointer[EDX*4]
-@@2:    CMP     EAX,varAny
-        JNE     @VarNegError
-        PUSH    EAX
-        CALL    [ChangeAnyProc]
-        POP     EAX
-        JMP     _VarNeg
-
-@VarNegTable:
-        DD      @VarNegError
-        DD      @VarNegNull
-        DD      @VarNegInteger
-        DD      @VarNegReal
-        DD      @VarNegCurr
-        DD      @VarNegReal
-        DD      @VarNegInteger
-        DD      @VarNegDate
-
-@VarNegError:
-        JMP     VarInvalidOp
-
-@VarNegNull:
-        RET
-
-@VarNegInteger:
-        PUSH    EAX
-        CALL    _VarToInt
-        NEG     EAX
-        MOV     EDX,EAX
-        POP     EAX
-        JMP     _VarFromInt
-
-@VarNegReal:
-        PUSH    EAX
-        CALL    _VarToReal
-        FCHS
-        POP     EAX
-        JMP     _VarFromReal
-
-@VarNegCurr:
-        FILD    [EAX].TVarData.VCurrency
-        FCHS
-        FISTP   [EAX].TVarData.VCurrency
-        FWAIT
-        RET
-
-@VarNegDate:
-        FLD     [EAX].TVarData.VDate
-        FCHS
-        FSTP    [EAX].TVarData.VDate
-        FWAIT
-end;
-
-procedure _VarNot;
-asm
-        MOV     EDX,[EAX].TVarData.VType.Integer
-        AND     EDX,varTypeMask
-        JE      @@2
-        CMP     EDX,varBoolean
-        JE      @@3
-        CMP     EDX,varNull
-        JE      @@4
-        CMP     EDX,varLast
-        JBE     @@1
-        CMP     EDX,varString
-        JE      @@1
-        CMP     EAX,varAny
-        JNE     @@2
-        PUSH    EAX
-        CALL    [ChangeAnyProc]
-        POP     EAX
-        JMP     _VarNot
-@@1:    PUSH    EAX
-        CALL    _VarToInt
-        NOT     EAX
-        MOV     EDX,EAX
-        POP     EAX
-        JMP     _VarFromInt
-@@2:    JMP     VarInvalidOp
-@@3:    MOV     DX,[EAX].TVarData.VBoolean
-        NEG     DX
-        SBB     EDX,EDX
-        NOT     EDX
-        MOV     [EAX].TVarData.VBoolean,DX
-@@4:
-end;
-
-procedure _VarCopyNoInd;
-asm
-        JMP     VarCopyNoInd
-end;
-
-procedure _VarClr;
-asm
-        PUSH    EAX
-        CALL    _VarClear
-        POP     EAX
-end;
-
-procedure _VarAddRef;
-asm
-        CMP     [EAX].TVarData.VType,varOleStr
-        JB      @@1
-        PUSH    [EAX].Integer[12]
-        PUSH    [EAX].Integer[8]
-        PUSH    [EAX].Integer[4]
-        PUSH    [EAX].Integer[0]
-        MOV     [EAX].TVarData.VType,varEmpty
-        MOV     EDX,ESP
-        CALL    _VarCopy
-        ADD     ESP,16
-@@1:
-end;
-
-function VarType(const V: Variant): Integer;
-asm
-        MOVZX   EAX,[EAX].TVarData.VType
-end;
-
-function VarAsType(const V: Variant; VarType: Integer): Variant;
-begin
-  _VarCast(Result, V, VarType);
-end;
-
-function VarIsEmpty(const V: Variant): Boolean;
-begin
-  with TVarData(V) do
-    Result := (VType = varEmpty) or ((VType = varDispatch) or
-      (VType = varUnknown)) and (VDispatch = nil);
-end;
-
-function VarIsNull(const V: Variant): Boolean;
-begin
-  Result := TVarData(V).VType = varNull;
-end;
-
-function VarToStr(const V: Variant): string;
-begin
-  if TVarData(V).VType <> varNull then Result := V else Result := '';
-end;
-
-function VarFromDateTime(DateTime: TDateTime): Variant;
-begin
-  _VarClear(Result);
-  TVarData(Result).VType := varDate;
-  TVarData(Result).VDate := DateTime;
-end;
-
-function VarToDateTime(const V: Variant): TDateTime;
-var
-  Temp: TVarData;
-begin
-  Temp.VType := varEmpty;
-  _VarCast(Variant(Temp), V, varDate);
-  Result := Temp.VDate;
 end;
 
 function _WriteVariant(var T: Text; const V: Variant; Width: Integer): Pointer;
-var
-  S: string;
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
 begin
-  if TVarData(V).VType >= varSmallint then S := V;
-  Write(T, S: Width);
-  Result := @T;
+  Result := VariantManager.WriteVariant(T, V, Width);
+{$ELSE}
+asm
+        JMP     VariantManager.WriteVariant
+{$IFEND}
 end;
 
 function _Write0Variant(var T: Text; const V: Variant): Pointer;
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
 begin
-  Result := _WriteVariant(T, V, 0);
+  Result := VariantManager.Write0Variant(T, V);
+{$ELSE}
+asm
+        JMP     VariantManager.Write0Variant
+{$IFEND}
 end;
 
 { ----------------------------------------------------- }
 {       Variant array support                           }
 { ----------------------------------------------------- }
 
-function VarArrayCreate(const Bounds: array of Integer;
-  VarType: Integer): Variant;
-var
-  I, DimCount: Integer;
-  VarArrayRef: PVarArray;
-  VarBounds: array[0..63] of TVarArrayBound;
-begin
-  if not Odd(High(Bounds)) or (High(Bounds) > 127) then
-    Error(reVarArrayCreate);
-  DimCount := (High(Bounds) + 1) div 2;
-  for I := 0 to DimCount - 1 do
-    with VarBounds[I] do
-    begin
-      LowBound := Bounds[I * 2];
-      ElementCount := Bounds[I * 2 + 1] - LowBound + 1;
-    end;
-  VarArrayRef := SafeArrayCreate(VarType, DimCount, VarBounds);
-  if VarArrayRef = nil then Error(reVarArrayCreate);
-  _VarClear(Result);
-  TVarData(Result).VType := VarType or varArray;
-  TVarData(Result).VArray := VarArrayRef;
-end;
-
-function VarArrayOf(const Values: array of Variant): Variant;
-var
-  I: Integer;
-begin
-  Result := VarArrayCreate([0, High(Values)], varVariant);
-  for I := 0 to High(Values) do Result[I] := Values[I];
-end;
-
 procedure _VarArrayRedim(var A : Variant; HighBound: Integer);
-var
-  VarBound: TVarArrayBound;
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
 begin
-  if (TVarData(A).VType and (varArray or varByRef)) <> varArray then
-    Error(reVarNotArray);
-  with TVarData(A).VArray^ do
-    VarBound.LowBound := Bounds[DimCount - 1].LowBound;
-  VarBound.ElementCount := HighBound - VarBound.LowBound + 1;
-  if SafeArrayRedim(TVarData(A).VArray, VarBound) <> 0 then
-    Error(reVarArrayCreate);
-end;
-
-function GetVarArray(const A: Variant): PVarArray;
-begin
-  if TVarData(A).VType and varArray = 0 then Error(reVarNotArray);
-  if TVarData(A).VType and varByRef <> 0 then
-    Result := PVarArray(TVarData(A).VPointer^) else
-    Result := TVarData(A).VArray;
-end;
-
-function VarArrayDimCount(const A: Variant): Integer;
-begin
-  if TVarData(A).VType and varArray <> 0 then
-    Result := GetVarArray(A)^.DimCount else
-    Result := 0;
-end;
-
-function VarArrayLowBound(const A: Variant; Dim: Integer): Integer;
-begin
-  if SafeArrayGetLBound(GetVarArray(A), Dim, Result) <> 0 then
-    Error(reVarArrayBounds);
-end;
-
-function VarArrayHighBound(const A: Variant; Dim: Integer): Integer;
-begin
-  if SafeArrayGetUBound(GetVarArray(A), Dim, Result) <> 0 then
-    Error(reVarArrayBounds);
-end;
-
-function VarArrayLock(const A: Variant): Pointer;
-begin
-  if SafeArrayAccessData(GetVarArray(A), Result) <> 0 then
-    Error(reVarNotArray);
-end;
-
-procedure VarArrayUnlock(const A: Variant);
-begin
-  if SafeArrayUnaccessData(GetVarArray(A)) <> 0 then
-    Error(reVarNotArray);
-end;
-
-function VarArrayRef(const A: Variant): Variant;
-begin
-  if TVarData(A).VType and varArray = 0 then Error(reVarNotArray);
-  _VarClear(Result);
-  TVarData(Result).VType := TVarData(A).VType or varByRef;
-  if TVarData(A).VType and varByRef <> 0 then
-    TVarData(Result).VPointer := TVarData(A).VPointer else
-    TVarData(Result).VPointer := @TVarData(A).VArray;
-end;
-
-function VarIsArray(const A: Variant): Boolean;
-begin
-  Result := TVarData(A).VType and varArray <> 0;
+  VariantManager.VarArrayRedim(A, HighBound);
+{$ELSE}
+asm
+        JMP     VariantManager.VarArrayRedim
+{$IFEND}
 end;
 
 function _VarArrayGet(var A: Variant; IndexCount: Integer;
   Indices: Integer): Variant; cdecl;
-var
-  VarArrayPtr: PVarArray;
-  VarType: Integer;
-  P: Pointer;
-begin
-  if TVarData(A).VType and varArray = 0 then Error(reVarNotArray);
-  VarArrayPtr := GetVarArray(A);
-  if VarArrayPtr^.DimCount <> IndexCount then Error(reVarArrayBounds);
-  VarType := TVarData(A).VType and varTypeMask;
-  _VarClear(Result);
-  if VarType = varVariant then
-  begin
-    if SafeArrayPtrOfIndex(VarArrayPtr, @Indices, P) <> 0 then
-      Error(reVarArrayBounds);
-    Result := PVariant(P)^;
-  end else
-  begin
-  if SafeArrayGetElement(VarArrayPtr, @Indices,
-      @TVarData(Result).VPointer) <> 0 then Error(reVarArrayBounds);
-    TVarData(Result).VType := VarType;
-  end;
+asm
+        POP     EBP
+{$IFDEF PIC}
+        CALL    GetGOT
+        LEA     EAX,[EAX].OFFSET VariantManager
+        MOV     EAX,[EAX].TVariantManager.VarArrayGet
+        PUSH    EAX
+        RET
+{$ELSE}
+        JMP     VariantManager.VarArrayGet
+{$ENDIF}
 end;
 
 procedure _VarArrayPut(var A: Variant; const Value: Variant;
   IndexCount: Integer; Indices: Integer); cdecl;
-type
-  TAnyPutArrayProc = procedure (var A: Variant; const Value: Variant; Index: Integer);
-var
-  VarArrayPtr: PVarArray;
-  VarType: Integer;
-  P: Pointer;
-  Temp: TVarData;
-begin
-  if TVarData(A).VType and varArray = 0 then Error(reVarNotArray);
-  VarArrayPtr := GetVarArray(A);
-  if VarArrayPtr^.DimCount <> IndexCount then Error(reVarArrayBounds);
-  VarType := TVarData(A).VType and varTypeMask;
-  if (VarType = varVariant) and (TVarData(Value).VType <> varString) then
-  begin
-    if SafeArrayPtrOfIndex(VarArrayPtr, @Indices, P) <> 0 then
-      Error(reVarArrayBounds);
-    PVariant(P)^ := Value;
-  end else
-  begin
-    Temp.VType := varEmpty;
-    try
-      if VarType = varVariant then
-      begin
-        VarStringToOleStr(Variant(Temp), Value);
-        P := @Temp;
-      end else
-      begin
-        _VarCast(Variant(Temp), Value, VarType);
-        case VarType of
-          varOleStr, varDispatch, varUnknown:
-            P := Temp.VPointer;
-        else
-          P := @Temp.VPointer;
-        end;
-      end;
-      if SafeArrayPutElement(VarArrayPtr, @Indices, P) <> 0 then
-        Error(reVarArrayBounds);
-    finally
-      _VarClear(Variant(Temp));
-    end;
-  end;
-end;
-
-
-function VarArrayGet(const A: Variant; const Indices: array of Integer): Variant;
 asm
-        {     ->EAX     Pointer to A            }
-        {       EDX     Pointer to Indices      }
-        {       ECX     High bound of Indices   }
-        {       [EBP+8] Pointer to result       }
-
-        PUSH    EBX
-
-        MOV     EBX,ECX
-        INC     EBX
-        JLE     @@endLoop
-@@loop:
-        PUSH    [EDX+ECX*4].Integer
-        DEC     ECX
-        JNS     @@loop
-@@endLoop:
-        PUSH    EBX
+        POP     EBP
+{$IFDEF PIC}
+        CALL    GetGOT
+        LEA     EAX,[EAX].OFFSET VariantManager
+        MOV     EAX,[EAX].TVariantManager.VarArrayPut
         PUSH    EAX
-        MOV     EAX,[EBP+8]
-        PUSH    EAX
-        CALL    _VarArrayGet
-        LEA     ESP,[ESP+EBX*4+3*4]
-
-        POP     EBX
+        RET
+{$ELSE}
+        JMP     VariantManager.VarArrayPut
+{$ENDIF}
 end;
 
-procedure VarArrayPut(var A: Variant; const Value: Variant; const Indices: array of Integer);
+// 64 bit integer helper routines
+//
+// These functions always return the 64-bit result in EAX:EDX
+
+// ------------------------------------------------------------------------------
+//  64-bit signed multiply
+// ------------------------------------------------------------------------------
+//
+//  Param 1(EAX:EDX), Param 2([ESP+8]:[ESP+4])  ; before reg pushing
+//
+
+procedure __llmul;
 asm
-        {     ->EAX     Pointer to A            }
-        {       EDX     Pointer to Value        }
-        {       ECX     Pointer to Indices      }
-        {       [EBP+8] High bound of Indices   }
+        push  edx
+        push  eax
 
-        PUSH    EBX
+  // Param2 : [ESP+16]:[ESP+12]  (hi:lo)
+  // Param1 : [ESP+4]:[ESP]      (hi:lo)
 
-        MOV     EBX,[EBP+8]
+        mov   eax, [esp+16]
+        mul   dword ptr [esp]
+        mov   ecx, eax
 
-        TEST    EBX,EBX
-        JS      @@endLoop
-@@loop:
-        PUSH    [ECX+EBX*4].Integer
-        DEC     EBX
-        JNS     @@loop
-@@endLoop:
-        MOV     EBX,[EBP+8]
-        INC     EBX
-        PUSH    EBX
-        PUSH    EDX
-        PUSH    EAX
-        CALL    _VarArrayPut
-        LEA     ESP,[ESP+EBX*4+3*4]
+        mov   eax, [esp+4]
+        mul   dword ptr [esp+12]
+        add   ecx, eax
 
-        POP     EBX
+        mov   eax, [esp]
+        mul   dword ptr [esp+12]
+        add   edx, ecx
+
+        pop   ecx
+        pop   ecx
+
+        ret     8
 end;
 
+// ------------------------------------------------------------------------------
+//  64-bit signed multiply, with overflow check (98.05.15: overflow not supported yet)
+// ------------------------------------------------------------------------------
+//
+//  Param1 ~= U   (Uh, Ul)
+//  Param2 ~= V   (Vh, Vl)
+//
+//  Param 1(EAX:EDX), Param 2([ESP+8]:[ESP+4])  ; before reg pushing
+//
+//  compiler-helper function
+//  O-flag set on exit   => result is invalid
+//  O-flag clear on exit => result is valid
 
-{ 64-bit Integer helper routines - recycling C++ RTL routines }
+procedure __llmulo;
+asm
+        push   edx
+        push   eax
 
-procedure __llmul;      external;    {$L _LL  }
-procedure __lldiv;      external;    {   _LL  }
-procedure __llmod;      external;    {   _LL  }
-procedure __llmulo;     external;    {   _LL  (overflow version) }
-procedure __lldivo;     external;    {   _LL  (overflow version) }
-procedure __llmodo;     external;    {   _LL  (overflow version) }
-procedure __llshl;      external;    {   _LL  }
-procedure __llushr;     external;    {   _LL  }
-procedure __llumod;     external;    {   _LL  }
-procedure __lludiv;     external;    {   _LL  }
+        // Param2 : [ESP+16]:[ESP+12]  (hi:lo)
+        // Param1 : [ESP+4]:[ESP]      (hi:lo)
+
+        mov    eax, [esp+16]
+        mul    dword ptr [esp]
+        mov    ecx, eax
+
+        mov    eax, [esp+4]
+        mul    dword ptr [esp+12]
+        add    ecx, eax
+
+        mov    eax, [esp]
+        mul    dword ptr [esp+12]
+        add    edx, ecx
+
+        pop    ecx
+        pop    ecx
+
+        ret    8
+end;
+
+// ------------------------------------------------------------------------------
+//  64-bit signed division
+// ------------------------------------------------------------------------------
+
+//
+//  Dividend = Numerator, Divisor = Denominator
+//
+//  Dividend(EAX:EDX), Divisor([ESP+8]:[ESP+4])  ; before reg pushing
+//
+//
+
+procedure __lldiv;
+asm
+        push    ebp
+        push    ebx
+        push    esi
+        push    edi
+        xor     edi,edi
+
+        mov     ebx,20[esp]             // get the divisor low dword
+        mov     ecx,24[esp]             // get the divisor high dword
+
+        or      ecx,ecx
+        jnz     @__lldiv@slow_ldiv      // both high words are zero
+
+        or      edx,edx
+        jz      @__lldiv@quick_ldiv
+
+        or      ebx,ebx
+        jz      @__lldiv@quick_ldiv     // if ecx:ebx == 0 force a zero divide
+          // we don't expect this to actually
+          // work
+
+@__lldiv@slow_ldiv:
+
+//
+//               Signed division should be done.  Convert negative
+//               values to positive and do an unsigned division.
+//               Store the sign value in the next higher bit of
+//               di (test mask of 4).  Thus when we are done, testing
+//               that bit will determine the sign of the result.
+//
+        or      edx,edx                 // test sign of dividend
+        jns     @__lldiv@onepos
+        neg     edx
+        neg     eax
+        sbb     edx,0                   // negate dividend
+        or      edi,1
+
+@__lldiv@onepos:
+        or      ecx,ecx                 // test sign of divisor
+        jns     @__lldiv@positive
+        neg     ecx
+        neg     ebx
+        sbb     ecx,0                   // negate divisor
+        xor edi,1
+
+@__lldiv@positive:
+        mov     ebp,ecx
+        mov     ecx,64                  // shift counter
+        push    edi                     // save the flags
+//
+//       Now the stack looks something like this:
+//
+//               24[esp]: divisor (high dword)
+//               20[esp]: divisor (low dword)
+//               16[esp]: return EIP
+//               12[esp]: previous EBP
+//                8[esp]: previous EBX
+//                4[esp]: previous ESI
+//                 [esp]: previous EDI
+//
+        xor     edi,edi                 // fake a 64 bit dividend
+        xor     esi,esi
+
+@__lldiv@xloop:
+        shl     eax,1                   // shift dividend left one bit
+        rcl     edx,1
+        rcl     esi,1
+        rcl     edi,1
+        cmp     edi,ebp                 // dividend larger?
+        jb      @__lldiv@nosub
+        ja      @__lldiv@subtract
+        cmp     esi,ebx                 // maybe
+        jb      @__lldiv@nosub
+
+@__lldiv@subtract:
+        sub     esi,ebx
+        sbb     edi,ebp                 // subtract the divisor
+        inc     eax                     // build quotient
+
+@__lldiv@nosub:
+        loop    @__lldiv@xloop
+//
+//       When done with the loop the four registers values' look like:
+//
+//       |     edi    |    esi     |    edx     |    eax     |
+//       |        remainder        |         quotient        |
+//
+        pop     ebx                     // get control bits
+        test    ebx,1                   // needs negative
+        jz      @__lldiv@finish
+        neg     edx
+        neg     eax
+        sbb     edx,0                   // negate
+
+@__lldiv@finish:
+        pop     edi
+        pop     esi
+        pop     ebx
+        pop     ebp
+        ret     8
+
+@__lldiv@quick_ldiv:
+        div     ebx                     // unsigned divide
+        xor     edx,edx
+        jmp     @__lldiv@finish
+end;
+
+// ------------------------------------------------------------------------------
+//  64-bit signed division with overflow check (98.05.15: not implementated yet)
+// ------------------------------------------------------------------------------
+
+//
+//  Dividend = Numerator, Divisor = Denominator
+//
+//  Dividend(EAX:EDX), Divisor([ESP+8]:[ESP+4])
+//  Param 1 (EAX:EDX), Param 2([ESP+8]:[ESP+4])
+//
+//  Param1 ~= U   (Uh, Ul)
+//  Param2 ~= V   (Vh, Vl)
+//
+//  compiler-helper function
+//  O-flag set on exit   => result is invalid
+//  O-flag clear on exit => result is valid
+//
+
+procedure __lldivo;
+asm
+  // check for overflow condition: min(int64) DIV -1
+        push  esi
+        mov esi, [esp+12]   // Vh
+        and esi, [esp+8]    // Vl
+        cmp esi, 0ffffffffh   // V = -1?
+        jne @@divok
+
+        mov esi, eax
+        or  esi, edx
+        cmp esi, 80000000H    // U = min(int64)?
+        jne @@divok
+
+@@divOvl:
+        mov eax, esi
+        pop esi
+        dec eax                     // turn on O-flag
+        ret
+
+@@divok:
+        pop esi
+        push  dword ptr [esp+8]   // Vh
+        push  dword ptr [esp+8]   // Vl (offset is changed from push)
+        call  __lldiv
+        and eax, eax    // turn off O-flag
+        ret 8
+end;
+
+// ------------------------------------------------------------------------------
+//  64-bit unsigned division
+// ------------------------------------------------------------------------------
+
+//  Dividend(EAX(hi):EDX(lo)), Divisor([ESP+8](hi):[ESP+4](lo))  // before reg pushing
+procedure __lludiv;
+asm
+        push    ebp
+        push    ebx
+        push    esi
+        push    edi
+//
+//       Now the stack looks something like this:
+//
+//               24[esp]: divisor (high dword)
+//               20[esp]: divisor (low dword)
+//               16[esp]: return EIP
+//               12[esp]: previous EBP
+//                8[esp]: previous EBX
+//                4[esp]: previous ESI
+//                 [esp]: previous EDI
+//
+
+//       dividend is pushed last, therefore the first in the args
+//       divisor next.
+//
+        mov     ebx,20[esp]             // get the first low word
+        mov     ecx,24[esp]             // get the first high word
+
+        or      ecx,ecx
+        jnz     @__lludiv@slow_ldiv     // both high words are zero
+
+        or      edx,edx
+        jz      @__lludiv@quick_ldiv
+
+        or      ebx,ebx
+        jz      @__lludiv@quick_ldiv    // if ecx:ebx == 0 force a zero divide
+          // we don't expect this to actually
+          // work
+
+@__lludiv@slow_ldiv:
+        mov     ebp,ecx
+        mov     ecx,64                  // shift counter
+        xor     edi,edi                 // fake a 64 bit dividend
+        xor     esi,esi
+
+@__lludiv@xloop:
+        shl     eax,1                   // shift dividend left one bit
+        rcl     edx,1
+        rcl     esi,1
+        rcl     edi,1
+        cmp     edi,ebp                 // dividend larger?
+        jb      @__lludiv@nosub
+        ja      @__lludiv@subtract
+        cmp     esi,ebx                 // maybe
+        jb      @__lludiv@nosub
+
+@__lludiv@subtract:
+        sub     esi,ebx
+        sbb     edi,ebp                 // subtract the divisor
+        inc     eax                     // build quotient
+
+@__lludiv@nosub:
+        loop    @__lludiv@xloop
+//
+//       When done with the loop the four registers values' look like:
+//
+//       |     edi    |    esi     |    edx     |    eax     |
+//       |        remainder        |         quotient        |
+//
+
+@__lludiv@finish:
+        pop     edi
+        pop     esi
+        pop     ebx
+        pop     ebp
+        ret     8
+
+@__lludiv@quick_ldiv:
+        div     ebx                     // unsigned divide
+        xor     edx,edx
+        jmp     @__lludiv@finish
+end;
+
+// ------------------------------------------------------------------------------
+//  64-bit modulo
+// ------------------------------------------------------------------------------
+
+//  Dividend(EAX:EDX), Divisor([ESP+8]:[ESP+4])  // before reg pushing
+procedure __llmod;
+asm
+        push    ebp
+        push    ebx
+        push    esi
+        push    edi
+        xor   edi,edi
+//
+//       dividend is pushed last, therefore the first in the args
+//       divisor next.
+//
+        mov     ebx,20[esp]             // get the first low word
+        mov     ecx,24[esp]             // get the first high word
+        or      ecx,ecx
+        jnz     @__llmod@slow_ldiv      // both high words are zero
+
+        or      edx,edx
+        jz      @__llmod@quick_ldiv
+
+        or      ebx,ebx
+        jz      @__llmod@quick_ldiv     // if ecx:ebx == 0 force a zero divide
+          // we don't expect this to actually
+          // work
+@__llmod@slow_ldiv:
+//
+//               Signed division should be done.  Convert negative
+//               values to positive and do an unsigned division.
+//               Store the sign value in the next higher bit of
+//               di (test mask of 4).  Thus when we are done, testing
+//               that bit will determine the sign of the result.
+//
+        or      edx,edx                 // test sign of dividend
+        jns     @__llmod@onepos
+        neg     edx
+        neg     eax
+        sbb     edx,0                   // negate dividend
+        or      edi,1
+
+@__llmod@onepos:
+        or      ecx,ecx                 // test sign of divisor
+        jns     @__llmod@positive
+        neg     ecx
+        neg     ebx
+        sbb     ecx,0                   // negate divisor
+
+@__llmod@positive:
+        mov     ebp,ecx
+        mov     ecx,64                  // shift counter
+        push    edi                     // save the flags
+//
+//       Now the stack looks something like this:
+//
+//               24[esp]: divisor (high dword)
+//               20[esp]: divisor (low dword)
+//               16[esp]: return EIP
+//               12[esp]: previous EBP
+//                8[esp]: previous EBX
+//                4[esp]: previous ESI
+//                 [esp]: previous EDI
+//
+        xor     edi,edi                 // fake a 64 bit dividend
+        xor     esi,esi
+
+@__llmod@xloop:
+        shl     eax,1                   // shift dividend left one bit
+        rcl     edx,1
+        rcl     esi,1
+        rcl     edi,1
+        cmp     edi,ebp                 // dividend larger?
+        jb      @__llmod@nosub
+        ja      @__llmod@subtract
+        cmp     esi,ebx                 // maybe
+        jb      @__llmod@nosub
+
+@__llmod@subtract:
+        sub     esi,ebx
+        sbb     edi,ebp                 // subtract the divisor
+        inc     eax                     // build quotient
+
+@__llmod@nosub:
+        loop    @__llmod@xloop
+//
+//       When done with the loop the four registers values' look like:
+//
+//       |     edi    |    esi     |    edx     |    eax     |
+//       |        remainder        |         quotient        |
+//
+        mov     eax,esi
+        mov     edx,edi                 // use remainder
+
+        pop     ebx                     // get control bits
+        test    ebx,1                   // needs negative
+        jz      @__llmod@finish
+        neg     edx
+        neg     eax
+        sbb     edx,0                    // negate
+
+@__llmod@finish:
+        pop     edi
+        pop     esi
+        pop     ebx
+        pop     ebp
+        ret     8
+
+@__llmod@quick_ldiv:
+        div     ebx                     // unsigned divide
+        xchg  eax,edx
+        xor     edx,edx
+        jmp     @__llmod@finish
+end;
+
+// ------------------------------------------------------------------------------
+//  64-bit signed modulo with overflow (98.05.15: overflow not yet supported)
+// ------------------------------------------------------------------------------
+
+//  Dividend(EAX:EDX), Divisor([ESP+8]:[ESP+4])
+//  Param 1 (EAX:EDX), Param 2([ESP+8]:[ESP+4])
+//
+//  Param1 ~= U   (Uh, Ul)
+//  Param2 ~= V   (Vh, Vl)
+//
+//  compiler-helper function
+//  O-flag set on exit   => result is invalid
+//  O-flag clear on exit => result is valid
+//
+
+procedure __llmodo;
+asm
+  // check for overflow condition: min(int64) MOD -1
+        push  esi
+        mov esi, [esp+12]   // Vh
+        and esi, [esp+8]    // Vl
+        cmp esi, 0ffffffffh   // V = -1?
+        jne @@modok
+
+        mov esi, eax
+        or  esi, edx
+        cmp esi, 80000000H    // U = min(int64)?
+        jne @@modok
+
+@@modOvl:
+        mov eax, esi
+        pop esi
+        dec eax                     // turn on O-flag
+        ret
+
+@@modok:
+        pop esi
+        push  dword ptr [esp+8]       // Vh
+        push  dword ptr [esp+8] // Vl (offset is changed from push)
+        call  __llmod
+        and eax, eax    // turn off O-flag
+        ret 8
+end;
+
+// ------------------------------------------------------------------------------
+//  64-bit unsigned modulo
+// ------------------------------------------------------------------------------
+//  Dividend(EAX(hi):EDX(lo)), Divisor([ESP+8](hi):[ESP+4](lo))  // before reg pushing
+
+procedure __llumod;
+asm
+        push    ebp
+        push    ebx
+        push    esi
+        push    edi
+//
+//       Now the stack looks something like this:
+//
+//               24[esp]: divisor (high dword)
+//               20[esp]: divisor (low dword)
+//               16[esp]: return EIP
+//               12[esp]: previous EBP
+//                8[esp]: previous EBX
+//                4[esp]: previous ESI
+//                 [esp]: previous EDI
+//
+
+//       dividend is pushed last, therefore the first in the args
+//       divisor next.
+//
+        mov     ebx,20[esp]             // get the first low word
+        mov     ecx,24[esp]             // get the first high word
+        or      ecx,ecx
+        jnz     @__llumod@slow_ldiv     // both high words are zero
+
+        or      edx,edx
+        jz      @__llumod@quick_ldiv
+
+        or      ebx,ebx
+        jz      @__llumod@quick_ldiv    // if ecx:ebx == 0 force a zero divide
+          // we don't expect this to actually
+          // work
+@__llumod@slow_ldiv:
+        mov     ebp,ecx
+        mov     ecx,64                  // shift counter
+        xor     edi,edi                 // fake a 64 bit dividend
+        xor     esi,esi                 //
+
+@__llumod@xloop:
+        shl     eax,1                   // shift dividend left one bit
+        rcl     edx,1
+        rcl     esi,1
+        rcl     edi,1
+        cmp     edi,ebp                 // dividend larger?
+        jb      @__llumod@nosub
+        ja      @__llumod@subtract
+        cmp     esi,ebx                 // maybe
+        jb      @__llumod@nosub
+
+@__llumod@subtract:
+        sub     esi,ebx
+        sbb     edi,ebp                 // subtract the divisor
+        inc     eax                     // build quotient
+
+@__llumod@nosub:
+        loop    @__llumod@xloop
+//
+//       When done with the loop the four registers values' look like:
+//
+//       |     edi    |    esi     |    edx     |    eax     |
+//       |        remainder        |         quotient        |
+//
+        mov     eax,esi
+        mov     edx,edi                 // use remainder
+
+@__llumod@finish:
+        pop     edi
+        pop     esi
+        pop     ebx
+        pop     ebp
+        ret     8
+
+@__llumod@quick_ldiv:
+        div     ebx                     // unsigned divide
+        xchg  eax,edx
+        xor     edx,edx
+        jmp     @__llumod@finish
+end;
+
+// ------------------------------------------------------------------------------
+//  64-bit shift left
+// ------------------------------------------------------------------------------
+
+//
+// target (EAX:EDX) count (ECX)
+//
+procedure __llshl;
+asm
+        cmp cl, 32
+        jl  @__llshl@below32
+        cmp cl, 64
+        jl  @__llshl@below64
+        xor edx, edx
+        xor eax, eax
+        ret
+
+@__llshl@below64:
+        mov edx, eax
+        shl edx, cl
+        xor eax, eax
+        ret
+
+@__llshl@below32:
+        shld  edx, eax, cl
+        shl eax, cl
+        ret
+end;
+
+// ------------------------------------------------------------------------------
+//  64-bit signed shift right
+// ------------------------------------------------------------------------------
+// target (EAX:EDX) count (ECX)
+
+procedure __llshr;
+asm
+        cmp cl, 32
+        jl  @__llshr@below32
+        cmp cl, 64
+        jl  @__llshr@below64
+        sar edx, 1fh
+        mov eax,edx
+        ret
+
+@__llshr@below64:
+        mov eax, edx
+        cdq
+        sar eax,cl
+        ret
+
+@__llshr@below32:
+        shrd  eax, edx, cl
+        sar edx, cl
+        ret
+end;
+
+// ------------------------------------------------------------------------------
+//  64-bit unsigned shift right
+// ------------------------------------------------------------------------------
+
+// target (EAX:EDX) count (ECX)
+procedure __llushr;
+asm
+        cmp cl, 32
+        jl  @__llushr@below32
+        cmp cl, 64
+        jl  @__llushr@below64
+        xor edx, edx
+        xor eax, eax
+        ret
+
+@__llushr@below64:
+        mov eax, edx
+        xor edx, edx
+        shr eax, cl
+        ret
+
+@__llushr@below32:
+        shrd  eax, edx, cl
+        shr edx, cl
+        ret
+end;
 
 function _StrInt64(val: Int64; width: Integer): ShortString;
 var
@@ -10247,7 +16058,60 @@ asm
         JMP     _WriteInt64
 end;
 
-procedure       _ReadInt64;     external;       {$L ReadInt64 }
+procedure _ReadInt64;
+asm
+      // -> EAX Pointer to text record
+      // <- EAX:EDX Result
+
+        PUSH  EBX
+        PUSH  ESI
+        PUSH  EDI
+        SUB ESP,36      // var numbuf: String[32];
+
+        MOV ESI,EAX
+        CALL  _SeekEof
+        DEC AL
+        JZ  @@eof
+
+        MOV EDI,ESP     // EDI -> numBuf[0]
+        MOV BL,32
+@@loop:
+        MOV EAX,ESI
+        CALL  _ReadChar
+        CMP AL,' '
+        JBE @@endNum
+        STOSB
+        DEC BL
+        JNZ @@loop
+@@convert:
+        MOV byte ptr [EDI],0
+        MOV EAX,ESP     // EAX -> numBuf
+        PUSH  EDX     // allocate code result
+        MOV EDX,ESP     // pass pointer to code
+        CALL  _ValInt64   // convert
+        POP ECX     // pop code result into EDX
+        TEST  ECX,ECX
+        JZ  @@exit
+        MOV     EAX,106
+        CALL    SetInOutRes
+
+@@exit:
+        ADD ESP,36
+        POP EDI
+        POP ESI
+        POP EBX
+        RET
+
+@@endNum:
+        CMP AH,cEof
+        JE  @@convert
+        DEC [ESI].TTextRec.BufPos
+        JMP @@convert
+
+@@eof:
+        XOR EAX,EAX
+        JMP @@exit
+end;
 
 function _ValInt64(const s: AnsiString; var code: Integer): Int64;
 var
@@ -10289,7 +16153,7 @@ begin
       else
         break;
       end;
-      if (Result < 0) or (Result > $0FFFFFFFFFFFFFFF) then
+      if (Result < 0) or (Result > (High(Int64) shr 3)) then
         break;
       Result := Result shl 4 + dig;
       Inc(i);
@@ -10307,7 +16171,7 @@ begin
       else
         break;
       end;
-      if (Result < 0) or (Result > $7FFFFFFFFFFFFFFF div 10) then
+      if (Result < 0) or (Result > (High(Int64) div 10)) then
         break;
       Result := Result*10 + dig;
       Inc(i);
@@ -10344,20 +16208,6 @@ asm
         DEC     EAX
 end;
 
-type
-  PLongint = ^Longint;
-  PointerArray = array [0..512*1024*1024 -2] of Pointer;
-  PPointerArray = ^PointerArray;
-  PDynArrayTypeInfo = ^TDynArrayTypeInfo;
-  TDynArrayTypeInfo = packed record
-    kind: Byte;
-    name: string[0];
-    elSize: Longint;
-    elType: ^PDynArrayTypeInfo;
-    varType: Integer;
-  end;
-
-
 procedure CopyArray(dest, source, typeInfo: Pointer; cnt: Integer);
 asm
         PUSH    dword ptr [EBP+8]
@@ -10371,10 +16221,10 @@ end;
 
 procedure DynArrayClear(var a: Pointer; typeInfo: Pointer);
 asm
-        CALL    _DynArrayClear
+  CALL    _DynArrayClear
 end;
 
-procedure DynArraySetLength(var a: Pointer; typeInfo: PDynArrayTypeInfo; dimCnt: Longint; lengthVec: PLongint);
+procedure DynArraySetLength(var a: Pointer; typeInfo: Pointer; dimCnt: Longint; lengthVec: PLongint);
 var
   i: Integer;
   newLength, oldLength, minLength: Longint;
@@ -10403,10 +16253,10 @@ begin
   end;
 
   // Calculate the needed size of the heap object
-  Inc(PChar(typeInfo), Length(typeInfo.name));
-  elSize := typeInfo.elSize;
-  if typeInfo.elType <> nil then
-    typeInfo := typeInfo.elType^
+  Inc(PChar(typeInfo), Length(PDynArrayTypeInfo(typeInfo).name));
+  elSize := PDynArrayTypeInfo(typeInfo).elSize;
+  if PDynArrayTypeInfo(typeInfo).elType <> nil then
+    typeInfo := PDynArrayTypeInfo(typeInfo).elType^
   else
     typeInfo := nil;
   neededSize := newLength*elSize;
@@ -10474,7 +16324,9 @@ end;
 procedure _DynArrayCopy(a: Pointer; typeInfo: Pointer; var Result: Pointer);
 begin
   if a <> nil then
-    _DynArrayCopyRange(a, typeInfo, 0, PLongint(PChar(a)-4)^, Result);
+    _DynArrayCopyRange(a, typeInfo, 0, PLongint(PChar(a)-4)^, Result)
+  else
+    _DynArrayClear(Result, typeInfo);
 end;
 
 procedure _DynArrayCopyRange(a: Pointer; typeInfo: Pointer; index, count : Integer; var Result: Pointer);
@@ -10558,7 +16410,7 @@ asm
    LOCK DEC     dword ptr [ECX-8]
         JNE     @@exit
 
-        {       Save the source - we're supposed to return it }
+  {       Save the source - we're supposed to return it }
         PUSH    EAX
         MOV     EAX,ECX
 
@@ -10631,7 +16483,7 @@ end;
 function DynArrayIndex(const P: Pointer; const Indices: array of Integer; const TypInfo: Pointer): Pointer;
 asm
         {     ->EAX     P                       }
-        {       EDX     Pointer to Indices      }
+  {       EDX     Pointer to Indices      }
         {       ECX     High bound of Indices   }
         {       [EBP+8] TypInfo                 }
 
@@ -10674,12 +16526,6 @@ asm
         POP     ESI
         POP     EBX
 end;
-
-
-
-type
-  TBoundArray = array of Integer;
-  PPointer    = ^Pointer;
 
 
 { Returns the DynArrayTypeInfo of the Element Type of the specified DynArrayTypeInfo }
@@ -10751,33 +16597,6 @@ begin
   end;
 end;
 
-// Returns Bounds of a DynamicArray in a format usable for creating a Variant.
-//  i.e. The format of the bounds returns contains pairs of lo and hi bounds where
-//       lo is always 0, and hi is the size dimension of the array-1.
-function DynArrayVariantBounds(const DynArray: Pointer; typeInfo: PDynArrayTypeInfo): TBoundArray;
-var
-  Dim, I: Integer;
-  P: Pointer;
-begin
-  P := DynArray;
-
-  Dim := DynArrayDim(typeInfo);
-  SetLength(Result, Dim*2);
-
-  I := 0;
-  while I < dim*2 do
-  begin
-    Result[I] := 0;   // Always use 0 as low-bound in low/high pair
-    Inc(I);
-    if P <> nil then
-    begin
-      Result[I] := DynArraySize(P)-1; // Adjust for 0-base low-bound
-      P := PPointerArray(p)[0];       // Assume rectangular arrays
-    end;
-    Inc(I);
-  end;
-end;
-
 // Returns Bounds of Dynamic array as an array of integer containing the 'high' of each dimension
 function DynArrayBounds(const DynArray: Pointer; typeInfo: PDynArrayTypeInfo): TBoundArray;
 var
@@ -10796,39 +16615,6 @@ begin
       P := PPointerArray(P)[0]; // Assume rectangular arrays
     end;
 end;
-
-// The dynamicArrayTypeInformation contains the VariantType of the element type
-// when the kind == tkDynArray. This function returns that VariantType.
-function DynArrayVarType(typeInfo: PDynArrayTypeInfo): Integer;
-begin
-  Result := varNull;
-  if (typeInfo <> nil) and (typeInfo.Kind = tkDynArray) then
-  begin
-    Inc(PChar(typeInfo), Length(typeInfo.name));
-    Result := typeInfo.varType;
-  end;
-
-  { NOTE: DECL.H and SYSTEM.PAS have different values for varString }
-  if Result = $48 then
-    Result := varString;
-end;
-
-type
-  IntegerArray  = array[0..$effffff] of Integer;
-  PIntegerArray = ^IntegerArray;
-  PSmallInt     = ^SmallInt;
-  PInteger      = ^Integer;
-  PSingle       = ^Single;
-  PDouble       = ^Double;
-  PDate         = ^Double;
-  PDispatch     = ^IDispatch;
-  PPDispatch    = ^PDispatch;
-  PError        = ^LongWord;
-  PWordBool     = ^WordBool;
-  PUnknown      = ^IUnknown;
-  PPUnknown     = ^PUnknown;
-  PByte         = ^Byte;
-  PPWideChar    = ^PWideChar;
 
 { Decrements to next lower index - Returns True if successful }
 { Indices: Indices to be decremented }
@@ -10877,166 +16663,209 @@ begin
   end;
 end;
 
-// Copy Contents of Dynamic Array to Variant
-// NOTE: The Dynamic array must be rectangular
-//       The Dynamic array must contain items whose type is Automation compatible
-// In case of failure, the function returns with a Variant of type VT_EMPTY.
-procedure DynArrayToVariant(var V: Variant; const DynArray: Pointer; TypeInfo: Pointer);
-var
-  VarBounds, Bounds, Indices: TBoundArray;
-  DAVarType, VVarType, DynDim: Integer;
-  PDAData: Pointer;
-  Value: Variant;
-begin
-  VarBounds := nil;
-  Bounds    := nil;
-  { This resets the Variant to VT_EMPTY - flag which is used to determine whether the }
-  { the cast to Variant succeeded or not }
-  VarClear(V);
-
-  { Get variantType code from DynArrayTypeInfo }
-  DAVarType := DynArrayVarType(PDynArrayTypeInfo(TypeInfo));
-
-  { Validate the Variant Type }
-  if ((DAVarType > varNull) and (DAVarType <= varByte)) or (DAVarType = varString) then
-  begin
-    {NOTE: Map varString to varOleStr for SafeArrayCreate call }
-    if DAVarType = varString then
-      VVarType := varOleStr
-    else
-      VVarType := DAVarType;
-
-    { Get dimension of Dynamic Array }
-    DynDim := DynarrayDim(PDynArrayTypeInfo(TypeInfo));
-
-    { If more than one dimension, make sure we're dealing with a rectangular array }
-    if DynDim > 1 then
-      if not IsDynArrayRectangular(DynArray, PDynArrayTypeInfo(TypeInfo)) then
-        Exit;
-
-    { Get Variant-style Bounds (lo/hi pair) of Dynamic Array }
-    VarBounds := DynArrayVariantBounds(DynArray, TypeInfo);
-
-    { Get DynArray Bounds }
-    Bounds := DynArrayBounds(DynArray, TypeInfo);
-    Indices:= Copy(Bounds);
-
-    { Create Variant of SAFEARRAY }
-    V := VarArrayCreate(VarBounds, VVarType);
-    Assert(VarArrayDimCount(V) = DynDim);
-
-    repeat
-      PDAData := DynArrayIndex(DynArray, Indices, TypeInfo);
-      if PDAData <> nil then
-      begin
-        case DAVarType of
-          varSmallInt:  Value := PSmallInt(PDAData)^;
-          varInteger:   Value := PInteger(PDAData)^;
-          varSingle:    value := PSingle(PDAData)^;
-          varDouble:    value := PDouble(PDAData)^;
-          varCurrency:  Value := PCurrency(PDAData)^;
-          varDate:      Value := PDouble(PDAData)^;
-          varOleStr:    Value := PWideString(PDAData)^;
-          varDispatch:  Value := PDispatch(PDAData)^;
-          varError:     Value := PError(PDAData)^;
-          varBoolean:   Value := PWordBool(PDAData)^;
-          varVariant:   Value := PVariant(PDAData)^;
-          varUnknown:   Value := PUnknown(PDAData)^;
-          varByte:      Value := PByte(PDAData)^;
-          varString:    Value := PString(PDAData)^;
-        else
-          VarClear(Value);
-        end; { case }
-        VarArrayPut(V, Value, Indices);
-      end;
-    until not DecIndices(Indices, Bounds);
-  end;
-end;
-
-// Copies data from the Variant to the DynamicArray
-procedure DynArrayFromVariant(var DynArray: Pointer; const V: Variant; TypeInfo: Pointer);
-var
-  DADimCount, VDimCount : Integer;
-  DAVarType, I: Integer;
-  lengthVec: PLongInt;
-  Bounds, Indices: TBoundArray;
-  Value: Variant;
-  PDAData: Pointer;
-begin
-  { Get Variant information }
-  VDimCount:= VarArrayDimCount(V);
-
-  { Allocate vector for lengths }
-  GetMem(lengthVec, VDimCount * sizeof(Integer));
-
-  { Initialize lengths - NOTE: VarArrayxxxxBound are 1-based.}
-  for I := 0  to  VDimCount-1 do
-    PIntegerArray(lengthVec)[I]:= (VarArrayHighBound(V, I+1) - VarArrayLowBound(V, I+1)) + 1;
-
-  { Set Length of DynArray }
-  DynArraySetLength(DynArray, PDynArrayTypeInfo(TypeInfo), VDimCount, lengthVec);
-
-  { Get DynArray information }
-  DADimCount:= DynArrayDim(PDynArrayTypeInfo(TypeInfo));
-  DAVarType := DynArrayVarType(PDynArrayTypeInfo(TypeInfo));
-  Assert(VDimCount = DADimCount);
-
-  { Get DynArray Bounds }
-  Bounds := DynArrayBounds(DynArray, TypeInfo);
-  Indices:= Copy(Bounds);
-
-  { Copy data over}
-  repeat
-    Value   := VarArrayGet(V, Indices);
-    PDAData := DynArrayIndex(DynArray, Indices, TypeInfo);
-    case DAVarType of
-      varSmallInt:  PSmallInt(PDAData)^   := Value;
-      varInteger:   PInteger(PDAData)^    := Value;
-      varSingle:    PSingle(PDAData)^     := Value;
-      varDouble:    PDouble(PDAData)^     := Value;
-      varCurrency:  PCurrency(PDAData)^   := Value;
-      varDate:      PDouble(PDAData)^     := Value;
-      varOleStr:    PWideString(PDAData)^ := Value;
-      varDispatch:  PDispatch(PDAData)^   := Value;
-      varError:     PError(PDAData)^      := Value;
-      varBoolean:   PWordBool(PDAData)^   := Value;
-      varVariant:   PVariant(PDAData)^    := Value;
-      varUnknown:   PUnknown(PDAData)^    := value;
-      varByte:      PByte(PDAData)^       := Value;
-      varString:    PString(PDAData)^     := Value;
-    end; { case }
-  until not DecIndices(Indices, Bounds);
-
-  { Free vector of lengths }
-  FreeMem(lengthVec);
-end;
-
-
-
 { Package/Module registration/unregistration }
 
+{$IFDEF MSWINDOWS}
 const
   LOCALE_SABBREVLANGNAME = $00000003;   { abbreviated language name }
   LOAD_LIBRARY_AS_DATAFILE = 2;
   HKEY_CURRENT_USER = $80000001;
   KEY_ALL_ACCESS = $000F003F;
+  KEY_READ = $000F0019;
 
   OldLocaleOverrideKey = 'Software\Borland\Delphi\Locales'; // do not localize
   NewLocaleOverrideKey = 'Software\Borland\Locales'; // do not localize
+{$ENDIF}
+
+function FindModule(Instance: LongWord): PLibModule;
+begin
+  Result := LibModuleList;
+  while Result <> nil do
+  begin
+    if (Instance = Result.Instance) or
+       (Instance = Result.CodeInstance) or
+       (Instance = Result.DataInstance) or
+       (Instance = Result.ResInstance) then
+      Exit;
+    Result := Result.Next;
+  end;
+end;
 
 function FindHInstance(Address: Pointer): LongWord;
+{$IFDEF MSWINDOWS}
 var
   MemInfo: TMemInfo;
 begin
   VirtualQuery(Address, MemInfo, SizeOf(MemInfo));
   if MemInfo.State = $1000{MEM_COMMIT} then
-    Result := Longint(MemInfo.AllocationBase)
-  else Result := 0;
+    Result := LongWord(MemInfo.AllocationBase)
+  else
+    Result := 0;
 end;
+{$ENDIF}
+{$IFDEF LINUX}
+var
+  Info: TDLInfo;
+begin
+  if (dladdr(Address, Info) = 0) or (Info.BaseAddress = ExeBaseAddress) then
+    Info.Filename := nil;   // if it's not in a library, assume the exe
+  Result := LongWord(dlopen(Info.Filename, RTLD_LAZY));
+  if Result <> 0 then
+    dlclose(Result);
+end;
+{$ENDIF}
 
 function FindClassHInstance(ClassType: TClass): LongWord;
 begin
   Result := FindHInstance(Pointer(ClassType));
+end;
+
+{$IFDEF LINUX}
+function GetModuleFileName(Module: HMODULE; Buffer: PChar; BufLen: Integer): Integer;
+var
+  Addr: Pointer;
+  Info: TDLInfo;
+  FoundInModule: HMODULE;
+begin
+  Result := 0;
+  if (Module = MainInstance) or (Module = 0) then
+  begin
+    // First, try the dlsym approach.
+    // dladdr fails to return the name of the main executable
+    // in glibc prior to 2.1.91
+
+{   Look for a dynamic symbol exported from this program.
+    _DYNAMIC is not required in a main program file.
+    If the main program is compiled with Delphi, it will always
+    have a resource section, named @Sysinit@ResSym.
+    If the main program is not compiled with Delphi, dlsym
+    will search the global name space, potentially returning
+    the address of a symbol in some other shared object library
+    loaded by the program.  To guard against that, we check
+    that the address of the symbol found is within the
+    main program address range.  }
+
+    dlerror;   // clear error state;  dlsym doesn't
+    Addr := dlsym(Module, '@Sysinit@ResSym');
+    if (Addr <> nil) and (dlerror = nil)
+      and (dladdr(Addr, Info) <> 0)
+      and (Info.FileName <> nil)
+      and (Info.BaseAddress = ExeBaseAddress) then
+    begin
+      Result := _strlen(Info.FileName);
+      if Result >= BufLen then Result := BufLen-1;
+      Move(Info.FileName^, Buffer^, Result);
+      Buffer[Result] := #0;
+      Exit;
+    end;
+
+    // Try inspecting the /proc/ virtual file system
+    // to find the program filename in the process info
+    Result := _readlink('/proc/self/exe', Buffer, BufLen);
+    if Result <> -1 then
+    begin
+      if Result >= BufLen then Result := BufLen-1;
+      Buffer[Result] := #0;
+    end;
+{$IFDEF AllowParamStrModuleName}
+{   Using ParamStr(0) to obtain a module name presents a potential
+    security hole.  Resource modules are loaded based upon the filename
+    of a given module.  We use dlopen() to load resource modules, which
+    means the .init code of the resource module will be executed.
+    Normally, resource modules contain no code at all - they're just
+    carriers of resource data.
+    An unpriviledged user program could launch our trusted,
+    priviledged program with a bogus parameter list, tricking us
+    into loading a module that contains malicious code in its
+    .init section.
+    Without this ParamStr(0) section, GetModuleFilename cannot be
+    misdirected by unpriviledged code (unless the system program loader
+    or the /proc file system or system root directory has been compromised).
+    Resource modules are always loaded from the same directory as the
+    given module.  Trusted code (programs, packages, and libraries)
+    should reside in directories that unpriviledged code cannot alter.
+
+    If you need GetModuleFilename to have a chance of working on systems
+    where glibc < 2.1.91 and /proc is not available, and your
+    program will not run as a priviledged user (or you don't care),
+    you can define AllowParamStrModuleNames and rebuild the System unit
+    and baseCLX package.  Note that even with ParamStr(0) support
+    enabled, GetModuleFilename can still fail to find the name of
+    a module.  C'est la Unix.  }
+
+    if Result = -1 then // couldn't access the /proc filesystem
+    begin               // return less accurate ParamStr(0)
+
+{     ParamStr(0) returns the name of the link used
+      to launch the app, not the name of the app itself.
+      Also, if this app was launched by some other program,
+      there is no guarantee that the launching program has set
+      up our environment at all.  (example: Apache CGI) }
+
+      if (ArgValues = nil) or (ArgValues^ = nil) or
+        (PCharArray(ArgValues^)[0] = nil) then
+      begin
+        Result := 0;
+        Exit;
+      end;
+      Result := _strlen(PCharArray(ArgValues^)[0]);
+      if Result >= BufLen then Result := BufLen-1;
+      Move(PCharArray(ArgValues^)[0]^, Buffer^, Result);
+      Buffer[Result] := #0;
+    end;
+{$ENDIF}
+  end
+  else
+  begin
+{   For shared object libraries, we can rely on the dlsym technique.
+    Look for a dynamic symbol in the requested module.
+    Don't assume the module was compiled with Delphi.
+    We look for a dynamic symbol with the name _DYNAMIC.  This
+    exists in all ELF shared object libraries that export
+    or import symbols;  If someone has a shared object library that
+    contains no imports or exports of any kind, this will probably fail.
+    If dlsym can't find the requested symbol in the given module, it
+    will search the global namespace and could return the address
+    of a symbol from some other module that happens to be loaded
+    into this process.  That would be bad, so we double check
+    that the module handle of the symbol found matches the
+    module handle we asked about.}
+
+    dlerror;   // clear error state;  dlsym doesn't
+    Addr := dlsym(Module, '_DYNAMIC');
+    if (Addr <> nil) and (dlerror = nil)
+      and (dladdr(Addr, Info) <> 0) then
+    begin
+      if Info.BaseAddress = ExeBaseAddress then
+        Info.FileName := nil;
+      FoundInModule := HMODULE(dlopen(Info.FileName, RTLD_LAZY));
+      if FoundInModule <> 0 then
+        dlclose(FoundInModule);
+      if Module = FoundInModule then
+      begin
+        Result := _strlen(Info.FileName);
+        if Result >= BufLen then Result := BufLen-1;
+        Move(Info.FileName^, Buffer^, Result);
+        Buffer[Result] := #0;
+      end;
+    end;
+  end;
+  if Result < 0 then Result := 0;
+end;
+{$ENDIF}
+
+function DelayLoadResourceModule(Module: PLibModule): LongWord;
+var
+  FileName: array[0..MAX_PATH] of Char;
+begin
+  if Module.ResInstance = 0 then
+  begin
+    GetModuleFileName(Module.Instance, FileName, SizeOf(FileName));
+    Module.ResInstance := LoadResourceModule(FileName);
+    if Module.ResInstance = 0 then
+      Module.ResInstance := Module.Instance;
+  end;
+  Result := Module.ResInstance;
 end;
 
 function FindResourceHInstance(Instance: LongWord): LongWord;
@@ -11050,7 +16879,7 @@ begin
        (Instance = CurModule.CodeInstance) or
        (Instance = CurModule.DataInstance) then
     begin
-      Result := CurModule.ResInstance;
+      Result := DelayLoadResourceModule(CurModule);
       Exit;
     end;
     CurModule := CurModule.Next;
@@ -11058,9 +16887,73 @@ begin
   Result := Instance;
 end;
 
-function LoadResourceModule(ModuleName: PChar): LongWord;
+function LoadResourceModule(ModuleName: PChar; CheckOwner: Boolean): LongWord;
+{$IFDEF LINUX}
 var
-  FileName: array[0..260] of Char;
+  FileName: array [0..MAX_PATH] of Char;
+  LangCode: PChar;  // Language and country code.  Example: en_US
+  P: PChar;
+  ModuleNameLen, FileNameLen, i: Integer;
+  st1, st2: TStatStruct;
+begin
+  LangCode := __getenv('LANG');
+  Result := 0;
+  if (LangCode = nil) or (LangCode^ = #0) then Exit;
+
+  // look for modulename.en_US  (ignoring codeset and modifier suffixes)
+  P := LangCode;
+  while P^ in ['a'..'z', 'A'..'Z', '_'] do
+    Inc(P);
+  if P = LangCode then Exit;
+
+  if CheckOwner and (__xstat(STAT_VER_LINUX, ModuleName, st1) = -1) then
+    Exit;
+
+  ModuleNameLen := _strlen(ModuleName);
+  if (ModuleNameLen + P - LangCode) >= MAX_PATH then Exit;
+  Move(ModuleName[0], Filename[0], ModuleNameLen);
+  Filename[ModuleNameLen] := '.';
+  Move(LangCode[0], Filename[ModuleNameLen + 1], P - LangCode);
+  FileNameLen := ModuleNameLen + 1 + (P - LangCode);
+  Filename[FileNameLen] := #0;
+
+{ Security check:  make sure the user id (owner) and group id of
+  the base module matches the user id and group id of the resource
+  module we're considering loading.  This is to prevent loading
+  of malicious code dropped into the base module's directory by
+  a hostile user.  The app and all its resource modules must
+  have the same owner and group.  To disable this security check,
+  call this function with CheckOwner set to False. }
+
+  if (not CheckOwner) or
+    ((__xstat(STAT_VER_LINUX, FileName, st2) <> -1)
+    and (st1.st_uid = st2.st_uid)
+    and (st1.st_gid = st2.st_gid)) then
+  begin
+    Result := dlopen(Filename, RTLD_LAZY);
+    if Result <> 0 then Exit;
+  end;
+
+  // look for modulename.en    (ignoring country code and suffixes)
+  i := ModuleNameLen + 1;
+  while (i <= FileNameLen) and (Filename[i] in ['a'..'z', 'A'..'Z']) do
+    Inc(i);
+  if (i = ModuleNameLen + 1) or (i > FileNameLen) then Exit;
+  FileName[i] := #0;
+
+  { Security check.  See notes above.  }
+  if (not CheckOwner) or
+    ((__xstat(STAT_VER_LINUX, FileName, st2) <> -1)
+    and (st1.st_uid = st2.st_uid)
+    and (st1.st_gid = st2.st_gid)) then
+  begin
+    Result := dlopen(FileName, RTLD_LAZY);
+  end;
+end;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+var
+  FileName: array[0..MAX_PATH] of Char;
   Key: LongWord;
   LocaleName, LocaleOverride: array[0..4] of Char;
   Size: Integer;
@@ -11073,12 +16966,12 @@ var
       Result := CharNext(Result);
   end;
 
-  function ToLongPath(AFileName: PChar): PChar;
+  function ToLongPath(AFileName: PChar; BufSize: Integer): PChar;
   var
     CurrBS, NextBS: PChar;
     Handle, L: Integer;
     FindData: TWin32FindData;
-    Buffer: array[0..260] of Char;
+    Buffer: array[0..MAX_PATH] of Char;
     GetLongPathName: function (ShortPathName: PChar; LongPathName: PChar;
       cchBuffer: Integer): Integer stdcall;
   begin
@@ -11088,9 +16981,9 @@ var
     begin
       @GetLongPathName := GetProcAddress(Handle, 'GetLongPathNameA');
       if Assigned(GetLongPathName) and
-         (GetLongPathName(AFileName, Buffer, SizeOf(Buffer)) <> 0) then
+        (GetLongPathName(AFileName, Buffer, SizeOf(Buffer)) <> 0) then
       begin
-        lstrcpy(AFileName, Buffer);
+        lstrcpyn(AFileName, Buffer, BufSize);
         Exit;
       end;
     end;
@@ -11117,33 +17010,36 @@ var
       if (Handle = -1) then Exit;
       FindClose(Handle);
 
-      if L + 1 + lstrlen(FindData.cFileName) + 1 > SizeOf(Buffer) then Exit;
+      if L + 1 + _strlen(FindData.cFileName) + 1 > SizeOf(Buffer) then Exit;
       Buffer[L] := '\';
-      lstrcpy(Buffer + L + 1, FindData.cFileName);
-      Inc(L, lstrlen(FindData.cFileName) + 1);
+      lstrcpyn(Buffer + L + 1, FindData.cFileName, Sizeof(Buffer) - L - 1);
+      Inc(L, _strlen(FindData.cFileName) + 1);
       CurrBS := NextBS;
     end;
-    lstrcpy(AFileName, Buffer);
+    lstrcpyn(AFileName, Buffer, BufSize);
   end;
-
 begin
-  GetModuleFileName(0, FileName, SizeOf(FileName)); // Get host appliation name
+  GetModuleFileName(0, FileName, SizeOf(FileName)); // Get host application name
   LocaleOverride[0] := #0;
-  if (RegOpenKeyEx(HKEY_CURRENT_USER, NewLocaleOverrideKey, 0, KEY_ALL_ACCESS, Key) = 0) or
-   (RegOpenKeyEx(HKEY_CURRENT_USER, OldLocaleOverrideKey, 0, KEY_ALL_ACCESS, Key) = 0) then
+  if (RegOpenKeyEx(HKEY_CURRENT_USER, NewLocaleOverrideKey, 0, KEY_READ, Key) = 0) or
+   (RegOpenKeyEx(HKEY_LOCAL_MACHINE, NewLocaleOverrideKey, 0, KEY_READ, Key) = 0) or
+   (RegOpenKeyEx(HKEY_CURRENT_USER, OldLocaleOverrideKey, 0, KEY_READ, Key) = 0) then
   try
-    Size := SizeOf(LocaleOverride);
-    if RegQueryValueEx(Key, ToLongPath(FileName), nil, nil, LocaleOverride, @Size) <> 0 then
-      RegQueryValueEx(Key, '', nil, nil, LocaleOverride, @Size);
+    Size := sizeof(LocaleOverride);
+    ToLongPath(FileName, sizeof(FileName));
+    if RegQueryValueEx(Key, FileName, nil, nil, LocaleOverride, @Size) <> 0 then
+      if RegQueryValueEx(Key, '', nil, nil, LocaleOverride, @Size) <> 0 then
+        LocaleOverride[0] := #0;
+    LocaleOverride[sizeof(LocaleOverride)-1] := #0;
   finally
     RegCloseKey(Key);
   end;
-  lstrcpy(FileName, ModuleName);
-  GetLocaleInfo(GetThreadLocale, LOCALE_SABBREVLANGNAME, LocaleName, SizeOf(LocaleName));
+  lstrcpyn(FileName, ModuleName, sizeof(FileName));
+  GetLocaleInfo(GetThreadLocale, LOCALE_SABBREVLANGNAME, LocaleName, sizeof(LocaleName));
   Result := 0;
   if (FileName[0] <> #0) and ((LocaleName[0] <> #0) or (LocaleOverride[0] <> #0)) then
   begin
-    P := PChar(@FileName) + lstrlen(FileName);
+    P := PChar(@FileName) + _strlen(FileName);
     while (P^ <> '.') and (P <> @FileName) do Dec(P);
     if P <> @FileName then
     begin
@@ -11151,25 +17047,26 @@ begin
       // First look for a locale registry override
       if LocaleOverride[0] <> #0 then
       begin
-        lstrcpy(P, LocaleOverride);
+        lstrcpyn(P, LocaleOverride, sizeof(FileName) - (P - FileName));
         Result := LoadLibraryEx(FileName, 0, LOAD_LIBRARY_AS_DATAFILE);
       end;
       if (Result = 0) and (LocaleName[0] <> #0) then
       begin
         // Then look for a potential language/country translation
-        lstrcpy(P, LocaleName);
+        lstrcpyn(P, LocaleName, sizeof(FileName) - (P - FileName));
         Result := LoadLibraryEx(FileName, 0, LOAD_LIBRARY_AS_DATAFILE);
         if Result = 0 then
         begin
           // Finally look for a language only translation
           LocaleName[2] := #0;
-          lstrcpy(P, LocaleName);
+          lstrcpyn(P, LocaleName, sizeof(FileName) - (P - FileName));
           Result := LoadLibraryEx(FileName, 0, LOAD_LIBRARY_AS_DATAFILE);
         end;
       end;
     end;
   end;
 end;
+{$ENDIF}
 
 procedure EnumModules(Func: TEnumModuleFunc; Data: Pointer); assembler;
 begin
@@ -11200,7 +17097,7 @@ begin
   CurModule := LibModuleList;
   while CurModule <> nil do
   begin
-    if not Func(CurModule.ResInstance, Data) then Exit;
+    if not Func(DelayLoadResourceModule(CurModule), Data) then Exit;
     CurModule := CurModule.Next;
   end;
 end;
@@ -11265,6 +17162,9 @@ begin
     end;
     P := P.Next;
   end;
+{$IFDEF LINUX}
+  InvalidateModuleCache;
+{$ENDIF}
 end;
 
 procedure RegisterModule(LibModule: PLibModule);
@@ -11298,21 +17198,20 @@ begin
   end;
 end;
 
-{ ResString support function }
-
-function LoadResString(ResStringRec: PResStringRec): string;
+function _IntfClear(var Dest: IInterface): Pointer;
+{$IFDEF PUREPASCAL}
 var
-  Buffer: array[0..1023] of Char;
+  P: Pointer;
 begin
-  if ResStringRec <> nil then
-  if ResStringRec.Identifier < 64*1024 then
-    SetString(Result, Buffer, LoadString(FindResourceHInstance(ResStringRec.Module^),
-    ResStringRec.Identifier, Buffer, SizeOf(Buffer)))
-  else
-    Result := PChar(ResStringRec.Identifier);
+  Result := @Dest;
+  if Dest <> nil then
+  begin
+    P := Pointer(Dest);
+    Pointer(Dest) := nil;
+    IInterface(P)._Release;
+  end;
 end;
-
-procedure _IntfClear(var Dest: IUnknown);
+{$ELSE}
 asm
         MOV     EDX,[EAX]
         TEST    EDX,EDX
@@ -11321,31 +17220,84 @@ asm
         PUSH    EAX
         PUSH    EDX
         MOV     EAX,[EDX]
-        CALL    [EAX].vmtRelease.Pointer
+        CALL    DWORD PTR [EAX] + VMTOFFSET IInterface._Release
         POP     EAX
 @@1:
 end;
+{$ENDIF}
 
-procedure _IntfCopy(var Dest: IUnknown; const Source: IUnknown);
-asm
-        MOV     ECX,[EAX]       { save dest }
-        MOV     [EAX],EDX       { assign dest }
-        TEST    EDX,EDX         { need to addref source before releasing dest }
-        JE      @@1             { to make self assignment (I := I) work right }
-        PUSH    ECX
-        PUSH    EDX
-        MOV     EAX,[EDX]
-        CALL    [EAX].vmtAddRef.Pointer
-        POP     ECX
-@@1:    TEST    ECX,ECX
-        JE      @@2
-        PUSH    ECX
-        MOV     EAX,[ECX]
-        CALL    [EAX].vmtRelease.Pointer
-@@2:
+procedure _IntfCopy(var Dest: IInterface; const Source: IInterface);
+{$IFDEF PUREPASCAL}
+var
+  P: Pointer;
+begin
+  P := Pointer(Dest);
+  if Source <> nil then
+    Source._AddRef;
+  Pointer(Dest) := Pointer(Source);
+  if P <> nil then
+    IInterface(P)._Release;
 end;
+{$ELSE}
+asm
+{
+  The most common case is the single assignment of a non-nil interface
+  to a nil interface.  So we streamline that case here.  After this,
+  we give essentially equal weight to other outcomes.
 
-procedure _IntfCast(var Dest: IUnknown; const Source: IUnknown; const IID: TGUID);
+    The semantics are:  The source intf must be addrefed *before* it
+    is assigned to the destination.  The old intf must be released
+    after the new intf is addrefed to support self assignment (I := I).
+    Either intf can be nil.  The first requirement is really to make an
+    error case function a little better, and to improve the behaviour
+    of multithreaded applications - if the addref throws an exception,
+    you don't want the interface to have been assigned here, and if the
+    assignment is made to a global and another thread references it,
+    again you don't want the intf to be available until the reference
+    count is bumped.
+}
+        TEST    EDX,EDX         // is source nil?
+        JE      @@NilSource
+        PUSH    EDX             // save source
+        PUSH    EAX             // save dest
+        MOV     EAX,[EDX]       // get source vmt
+        PUSH    EDX             // source as arg
+        CALL    DWORD PTR [EAX] + VMTOFFSET IInterface._AddRef
+        POP     EAX             // retrieve dest
+        MOV     ECX, [EAX]      // get current value
+        POP     [EAX]         // set dest in place
+        TEST    ECX, ECX        // is current value nil?
+        JNE     @@ReleaseDest   // no, release it
+        RET                     // most common case, we return here
+@@ReleaseDest:
+        MOV     EAX,[ECX]       // get current value vmt
+        PUSH    ECX             // current value as arg
+        CALL    DWORD PTR [EAX] + VMTOFFSET IInterface._Release
+        RET
+
+{   Now we're into the less common cases.  }
+@@NilSource:
+        MOV     ECX, [EAX]      // get current value
+        TEST    ECX, ECX        // is it nil?
+        MOV     [EAX], EDX      // store in dest (which is nil)
+        JE  @@Done
+        MOV     EAX, [ECX]      // get current vmt
+        PUSH    ECX             // current value as arg
+        CALL    [EAX].vmtRelease.Pointer
+@@Done:
+end;
+{$ENDIF}
+
+procedure _IntfCast(var Dest: IInterface; const Source: IInterface; const IID: TGUID);
+{$IFDEF PUREPASCAL}
+// PIC:  EBX must be correct before calling QueryInterface
+begin
+  if Source = nil then
+    Dest := nil
+  else if Source.QueryInterface(IID, Dest) <> 0 then
+    Error(reIntfCastError);
+end;
+{$ELSE}
 asm
         TEST    EDX,EDX
         JE      _IntfClear
@@ -11357,18 +17309,19 @@ asm
         JE      @@1
         PUSH    ECX
         MOV     EAX,[ECX]
-        CALL    [EAX].vmtRelease.Pointer
+        CALL    DWORD PTR [EAX] + VMTOFFSET IInterface._Release
         MOV     EDX,[ESP]
 @@1:    MOV     EAX,[EDX]
-        CALL    [EAX].vmtQueryInterface.Pointer
+        CALL    DWORD PTR [EAX] + VMTOFFSET IInterface.QueryInterface
         TEST    EAX,EAX
         JE      @@2
         MOV     AL,reIntfCastError
         JMP     Error
 @@2:
 end;
+{$ENDIF}
 
-procedure _IntfAddRef(const Dest: IUnknown);
+procedure _IntfAddRef(const Dest: IInterface);
 begin
   if Dest <> nil then Dest._AddRef;
 end;
@@ -11381,7 +17334,8 @@ end;
 
 procedure TInterfacedObject.BeforeDestruction;
 begin
-  if RefCount <> 0 then Error(reInvalidPtr);
+  if RefCount <> 0 then
+    Error(reInvalidPtr);
 end;
 
 // Set an implicit refcount so that refcounting
@@ -11393,10 +17347,11 @@ begin
 end;
 
 function TInterfacedObject.QueryInterface(const IID: TGUID; out Obj): HResult;
-const
-  E_NOINTERFACE = HResult($80004002);
 begin
-  if GetInterface(IID, Obj) then Result := 0 else Result := E_NOINTERFACE;
+  if GetInterface(IID, Obj) then
+    Result := 0
+  else
+    Result := E_NOINTERFACE;
 end;
 
 function TInterfacedObject._AddRef: Integer;
@@ -11411,7 +17366,57 @@ begin
     Destroy;
 end;
 
-procedure _CheckAutoResult;
+{ TAggregatedObject }
+
+constructor TAggregatedObject.Create(const Controller: IInterface);
+begin
+  // weak reference to controller - don't keep it alive
+  FController := Pointer(Controller);
+end;
+
+function TAggregatedObject.GetController: IInterface;
+begin
+  Result := IInterface(FController);
+end;
+
+function TAggregatedObject.QueryInterface(const IID: TGUID; out Obj): HResult;
+begin
+  Result := IInterface(FController).QueryInterface(IID, Obj);
+end;
+
+function TAggregatedObject._AddRef: Integer;
+begin
+  Result := IInterface(FController)._AddRef;
+end;
+
+function TAggregatedObject._Release: Integer; stdcall;
+begin
+  Result := IInterface(FController)._Release;
+end;
+
+{ TContainedObject }
+
+function TContainedObject.QueryInterface(const IID: TGUID; out Obj): HResult;
+begin
+  if GetInterface(IID, Obj) then
+    Result := S_OK
+  else
+    Result := E_NOINTERFACE;
+end;
+
+
+function _CheckAutoResult(ResultCode: HResult): HResult;
+{$IF Defined(PIC) or Defined(PUREPASCAL)}
+begin
+  if ResultCode < 0 then
+  begin
+    if Assigned(SafeCallErrorProc) then
+      SafeCallErrorProc(ResultCode, Pointer(-1));  // loses error address
+    Error(reSafeCallError);
+  end;
+  Result := ResultCode;
+end;
+{$ELSE}
 asm
         TEST    EAX,EAX
         JNS     @@2
@@ -11424,41 +17429,31 @@ asm
         JMP     Error
 @@2:
 end;
+{$IFEND}
 
-
-procedure _IntfDispCall;
-asm
-        JMP     DispCallByIDProc
-end;
-
-
-procedure _IntfVarCall;
-asm
-end;
-
-function  CompToDouble(acomp: Comp): Double; cdecl;
+function  CompToDouble(Value: Comp): Double; cdecl;
 begin
-  Result := acomp;
+  Result := Value;
 end;
 
-procedure  DoubleToComp(adouble: Double; var result: Comp); cdecl;
+procedure  DoubleToComp(Value: Double; var Result: Comp); cdecl;
 begin
-  result := adouble;
+  Result := Value;
 end;
 
-function  CompToCurrency(acomp: Comp): Currency; cdecl;
+function  CompToCurrency(Value: Comp): Currency; cdecl;
 begin
-  Result := acomp;
+  Result := Value;
 end;
 
-procedure  CurrencyToComp(acurrency: Currency; var result: Comp); cdecl;
+procedure  CurrencyToComp(Value: Currency; var Result: Comp); cdecl;
 begin
-  result := acurrency
+  Result := Value;
 end;
 
 function GetMemory(Size: Integer): Pointer; cdecl;
 begin
-  Result := SysGetMem(Size);
+  Result := MemoryManager.GetMem(Size);
 end;
 
 function FreeMemory(P: Pointer): Integer; cdecl;
@@ -11466,48 +17461,658 @@ begin
   if P = nil then
     Result := 0
   else
-    Result := SysFreeMem(P);
+    Result := MemoryManager.FreeMem(P);
 end;
 
 function ReallocMemory(P: Pointer; Size: Integer): Pointer; cdecl;
 begin
-  Result := SysReallocMem(P, Size);
+  if P = nil then
+    Result := GetMemory(Size)
+  else
+    Result := MemoryManager.ReallocMem(P, Size);
 end;
 
-function GetCurrentThreadId: DWORD; stdcall; external kernel name 'GetCurrentThreadId';
+procedure SetLineBreakStyle(var T: Text; Style: TTextLineBreakStyle);
+begin
+  if TTextRec(T).Mode = fmClosed then
+    TTextRec(T).Flags := (TTextRec(T).Flags and not tfCRLF) or (tfCRLF * Byte(Style))
+  else
+    SetInOutRes(107);  // can't change mode of open file
+end;
+
+// UnicodeToUTF8(3):
+// Scans the source data to find the null terminator, up to MaxBytes
+// Dest must have MaxBytes available in Dest.
+
+function UnicodeToUtf8(Dest: PChar; Source: PWideChar; MaxBytes: Integer): Integer;
+var
+  len: Cardinal;
+begin
+  len := 0;
+  if Source <> nil then
+    while Source[len] <> #0 do
+      Inc(len);
+  Result := UnicodeToUtf8(Dest, MaxBytes, Source, len);
+end;
+
+// UnicodeToUtf8(4):
+// MaxDestBytes includes the null terminator (last char in the buffer will be set to null)
+// Function result includes the null terminator.
+// Nulls in the source data are not considered terminators - SourceChars must be accurate
+
+function UnicodeToUtf8(Dest: PChar; MaxDestBytes: Cardinal; Source: PWideChar; SourceChars: Cardinal): Cardinal;
+var
+  i, count: Cardinal;
+  c: Cardinal;
+begin
+  Result := 0;
+  if Source = nil then Exit;
+  count := 0;
+  i := 0;
+  if Dest <> nil then
+  begin
+    while (i < SourceChars) and (count < MaxDestBytes) do
+    begin
+      c := Cardinal(Source[i]);
+      Inc(i);
+      if c <= $7F then
+      begin
+        Dest[count] := Char(c);
+        Inc(count);
+      end
+      else if c > $7FF then
+      begin
+        if count + 3 > MaxDestBytes then
+          break;
+        Dest[count] := Char($E0 or (c shr 12));
+        Dest[count+1] := Char($80 or ((c shr 6) and $3F));
+        Dest[count+2] := Char($80 or (c and $3F));
+        Inc(count,3);
+      end
+      else //  $7F < Source[i] <= $7FF
+      begin
+        if count + 2 > MaxDestBytes then
+          break;
+        Dest[count] := Char($C0 or (c shr 6));
+        Dest[count+1] := Char($80 or (c and $3F));
+        Inc(count,2);
+      end;
+    end;
+    if count >= MaxDestBytes then count := MaxDestBytes-1;
+    Dest[count] := #0;
+  end
+  else
+  begin
+    while i < SourceChars do
+    begin
+      c := Integer(Source[i]);
+      Inc(i);
+      if c > $7F then
+      begin
+        if c > $7FF then
+          Inc(count);
+        Inc(count);
+      end;
+      Inc(count);
+    end;
+  end;
+  Result := count+1;  // convert zero based index to byte count
+end;
+
+function Utf8ToUnicode(Dest: PWideChar; Source: PChar; MaxChars: Integer): Integer;
+var
+  len: Cardinal;
+begin
+  len := 0;
+  if Source <> nil then
+    while Source[len] <> #0 do
+      Inc(len);
+  Result := Utf8ToUnicode(Dest, MaxChars, Source, len);
+end;
+
+function Utf8ToUnicode(Dest: PWideChar; MaxDestChars: Cardinal; Source: PChar; SourceBytes: Cardinal): Cardinal;
+var
+  i, count: Cardinal;
+  c: Byte;
+  wc: Cardinal;
+begin
+  if Source = nil then
+  begin
+    Result := 0;
+    Exit;
+  end;
+  Result := Cardinal(-1);
+  count := 0;
+  i := 0;
+  if Dest <> nil then
+  begin
+    while (i < SourceBytes) and (count < MaxDestChars) do
+    begin
+      wc := Cardinal(Source[i]);
+      Inc(i);
+      if (wc and $80) <> 0 then
+      begin
+        wc := wc and $3F;
+        if i > SourceBytes then Exit;           // incomplete multibyte char
+        if (wc and $20) <> 0 then
+        begin
+          c := Byte(Source[i]);
+          Inc(i);
+          if (c and $C0) <> $80 then  Exit;     // malformed trail byte or out of range char
+          if i > SourceBytes then Exit;         // incomplete multibyte char
+          wc := (wc shl 6) or (c and $3F);
+        end;
+        c := Byte(Source[i]);
+        Inc(i);
+        if (c and $C0) <> $80 then Exit;       // malformed trail byte
+
+        Dest[count] := WideChar((wc shl 6) or (c and $3F));
+      end
+      else
+        Dest[count] := WideChar(wc);
+      Inc(count);
+    end;
+	if count >= MaxDestChars then count := MaxDestChars-1;
+	Dest[count] := #0;
+  end
+  else
+  begin
+	while (i <= SourceBytes) do
+	begin
+	  c := Byte(Source[i]);
+	  Inc(i);
+	  if (c and $80) <> 0 then
+	  begin
+		if (c and $F0) = $F0 then Exit;  // too many bytes for UCS2
+		if (c and $40) = 0 then Exit;    // malformed lead byte
+		if i > SourceBytes then Exit;         // incomplete multibyte char
+
+		if (Byte(Source[i]) and $C0) <> $80 then Exit;  // malformed trail byte
+		Inc(i);
+		if i > SourceBytes then Exit;         // incomplete multibyte char
+		if ((c and $20) <> 0) and ((Byte(Source[i]) and $C0) <> $80) then Exit; // malformed trail byte
+		Inc(i);
+	  end;
+	  Inc(count);
+	end;
+  end;
+  Result := count+1;
+end;
+
+function Utf8Encode(const WS: WideString): UTF8String;
+var
+  L: Integer;
+  Temp: UTF8String;
+begin
+  Result := '';
+  if WS = '' then Exit;
+  SetLength(Temp, Length(WS) * 3); // SetLength includes space for null terminator
+
+  L := UnicodeToUtf8(PChar(Temp), Length(Temp)+1, PWideChar(WS), Length(WS));
+  if L > 0 then
+    SetLength(Temp, L-1)
+  else
+    Temp := '';
+  Result := Temp;
+end;
+
+function Utf8Decode(const S: UTF8String): WideString;
+var
+  L: Integer;
+  Temp: WideString;
+begin
+  Result := '';
+  if S = '' then Exit;
+  SetLength(Temp, Length(S));
+
+  L := Utf8ToUnicode(PWideChar(Temp), Length(Temp)+1, PChar(S), Length(S));
+  if L > 0 then
+    SetLength(Temp, L-1)
+  else
+    Temp := '';
+  Result := Temp;
+end;
+
+function AnsiToUtf8(const S: string): UTF8String;
+begin
+  Result := Utf8Encode(S);
+end;
+
+function Utf8ToAnsi(const S: UTF8String): string;
+begin
+  Result := Utf8Decode(S);
+end;
+
+{$IFDEF LINUX}
+
+function GetCPUType: Integer;
+asm
+      PUSH      EBX
+    // this code assumes ESP is 4 byte aligned
+    // test for 80386:  see if bit #18 of EFLAGS (Alignment fault) can be toggled
+      PUSHF
+      POP       EAX
+      MOV       ECX, EAX
+      XOR       EAX, $40000   // flip AC bit in EFLAGS
+      PUSH      EAX
+      POPF
+      PUSHF
+      POP       EAX
+      XOR       EAX, ECX      // zero = 80386 CPU (can't toggle AC bit)
+      MOV       EAX, CPUi386
+      JZ        @@Exit
+      PUSH      ECX
+      POPF                    // restore original flags before next test
+
+      // test for 80486:  see if bit #21 of EFLAGS (CPUID supported) can be toggled
+      MOV       EAX, ECX        // get original EFLAGS
+      XOR       EAX, $200000    // flip CPUID bit in EFLAGS
+      PUSH      EAX
+      POPF
+      PUSHF
+      POP       EAX
+      XOR       EAX, ECX    // zero = 80486 (can't toggle EFLAGS bit #21)
+      MOV       EAX, CPUi486
+      JZ        @@Exit
+
+      // Use CPUID instruction to get CPU family
+      XOR       EAX, EAX
+      CPUID
+      CMP       EAX, 1
+      JL        @@Exit          // unknown processor response: report as 486
+      XOR       EAX, EAX
+      INC       EAX       // we only care about info level 1
+      CPUID
+      AND       EAX, $F00
+      SHR       EAX, 8
+      // Test8086 values are one less than the CPU model number, for historical reasons
+      DEC       EAX
+
+@@Exit:
+      POP       EBX
+end;
+
+
+const
+  sResSymExport = '@Sysinit@ResSym';
+  sResStrExport = '@Sysinit@ResStr';
+  sResHashExport = '@Sysinit@ResHash';
+
+type
+  TElf32Sym = record
+    Name: Cardinal;
+    Value: Pointer;
+    Size: Cardinal;
+    Info: Byte;
+    Other: Byte;
+    Section: Word;
+  end;
+  PElf32Sym = ^TElf32Sym;
+
+  TElfSymTab = array [0..0] of TElf32Sym;
+  PElfSymTab = ^TElfSymTab;
+
+  TElfWordTab = array [0..2] of Cardinal;
+  PElfWordTab = ^TElfWordTab;
+
+
+{ If Name encodes a numeric identifier, return it, else return -1.  }
+function NameToId(Name: PChar): Longint;
+var digit: Longint;
+begin
+  if Longint(Name) and $ffff0000 = 0 then
+  begin
+    Result := Longint(Name) and $ffff;
+  end
+  else if Name^ = '#' then
+  begin
+    Result := 0;
+    inc (Name);
+    while (Ord(Name^) <> 0) do
+    begin
+      digit := Ord(Name^) - Ord('0');
+      if (LongWord(digit) > 9) then
+      begin
+        Result := -1;
+        exit;
+      end;
+      Result := Result * 10 + digit;
+      inc (Name);
+    end;
+  end
+  else
+    Result := -1;
+end;
+
+
+// Return ELF hash value for NAME converted to lower case.
+function ElfHashLowercase(Name: PChar): Cardinal;
+var
+  g: Cardinal;
+  c: Char;
+begin
+  Result := 0;
+  while name^ <> #0 do
+  begin
+    c := name^;
+    case c of
+      'A'..'Z': Inc(c, Ord('a') - Ord('A'));
+    end;
+    Result := (Result shl 4) + Ord(c);
+    g := Result and $f0000000;
+    Result := (Result xor (g shr 24)) and not g;
+    Inc(name);
+  end;
+end;
+
+type
+  PFindResourceCache = ^TFindResourceCache;
+  TFindResourceCache = record
+    ModuleHandle: HMODULE;
+    Version: Cardinal;
+    SymbolTable: PElfSymTab;
+    StringTable: PChar;
+    HashTable: PElfWordTab;
+    BaseAddress: Cardinal;
+  end;
+
+threadvar
+  FindResourceCache: TFindResourceCache;
+
+function GetResourceCache(ModuleHandle: HMODULE): PFindResourceCache;
+var
+  info: TDLInfo;
+begin
+  Result := @FindResourceCache;
+  if (ModuleHandle <> Result^.ModuleHandle) or (ModuleCacheVersion <> Result^.Version) then
+  begin
+    Result^.SymbolTable := dlsym(ModuleHandle, sResSymExport);
+    Result^.StringTable := dlsym(ModuleHandle, sResStrExport);
+    Result^.HashTable := dlsym(ModuleHandle, sResHashExport);
+    Result^.ModuleHandle := ModuleHandle;
+    if (dladdr(Result^.HashTable, Info) = 0) or (Info.BaseAddress = ExeBaseAddress) then
+      Result^.BaseAddress := 0   // if it's not in a library, assume the exe
+    else
+      Result^.BaseAddress := Cardinal(Info.BaseAddress);
+    Result^.Version := ModuleCacheVersion;
+  end;
+end;
+
+function FindResource(ModuleHandle: HMODULE; ResourceName: PChar; ResourceType: PChar): TResourceHandle;
+var
+  P: PFindResourceCache;
+  nid, tid: Longint;
+  ucs2_key: array [0..2] of WideChar;
+  key: array [0..127] of Char;
+  len: Integer;
+  pc: PChar;
+  ch: Char;
+  nbucket: Cardinal;
+  bucket, chain: PElfWordTab;
+  syndx: Cardinal;
+begin
+  Result := 0;
+  if ResourceName = nil then Exit;
+  P := GetResourceCache(ModuleHandle);
+
+  tid := NameToId (ResourceType);
+  if tid = -1 then Exit;  { not supported (yet?) }
+
+  { This code must match util-common/elfres.c }
+  nid := NameToId (ResourceName);
+  if nid = -1 then
+  begin
+    ucs2_key[0] := WideChar(2*tid+2);
+    ucs2_key[1] := WideChar(0);
+    len := UnicodeToUtf8 (key, ucs2_key, SizeOf (key));
+    pc := key+len;
+    while Ord(ResourceName^) <> 0 do
+    begin
+      ch := ResourceName^;
+      if Ord(ch) > 127 then exit; { insist on 7bit ASCII for now }
+      if ('A' <= ch) and (ch <= 'Z') then Inc(ch, Ord('a') - Ord('A'));
+      pc^ := ch;
+      inc (pc);
+      if pc = key + SizeOf(key) then exit;
+      inc (ResourceName);
+    end;
+    pc^ := Char(0);
+  end
+  else
+  begin
+    ucs2_key[0] := WideChar(2*tid+1);
+    ucs2_key[1] := WideChar(nid);
+    ucs2_key[2] := WideChar(0);
+    UnicodeToUtf8 (key, ucs2_key, SizeOf (key));
+  end;
+
+  with P^ do
+  begin
+    nbucket := HashTable[0];
+  //  nsym := HashTable[1];
+    bucket := @HashTable[2];
+    chain := @HashTable[2+nbucket];
+
+    syndx := bucket[ElfHashLowercase(key) mod nbucket];
+    while (syndx <> 0)
+      and (strcasecmp(key, @StringTable[SymbolTable[syndx].Name]) <> 0) do
+      syndx := chain[syndx];
+
+    if syndx = 0 then
+      Result := 0
+    else
+      Result := TResourceHandle(@SymbolTable[syndx]);
+  end;
+end;
+
+function LoadResource(ModuleHandle: HMODULE; ResHandle: TResourceHandle): HGLOBAL;
+var
+  P: PFindResourceCache;
+begin
+  if ResHandle <> 0 then
+  begin
+    P := GetResourceCache(ModuleHandle);
+    Result := HGLOBAL(PElf32Sym(ResHandle)^.Value);
+    Inc (Cardinal(Result), P^.BaseAddress);
+  end
+  else
+    Result := 0;
+end;
+
+function SizeofResource(ModuleHandle: HMODULE; ResHandle: TResourceHandle): Integer;
+begin
+  if ResHandle <> 0 then
+    Result := PElf32Sym(ResHandle)^.Size
+  else
+    Result := 0;
+end;
+
+function LockResource(ResData: HGLOBAL): Pointer;
+begin
+  Result := Pointer(ResData);
+end;
+
+function UnlockResource(ResData: HGLOBAL): LongBool;
+begin
+  Result := False;
+end;
+
+function FreeResource(ResData: HGLOBAL): LongBool;
+begin
+  Result := True;
+end;
+{$ENDIF}
+
+{ ResString support function }
+
+{$IFDEF MSWINDOWS}
+function LoadResString(ResStringRec: PResStringRec): string;
+var
+  Buffer: array [0..1023] of char;
+begin
+  if ResStringRec = nil then Exit;
+  if ResStringRec.Identifier < 64*1024 then
+    SetString(Result, Buffer,
+      LoadString(FindResourceHInstance(ResStringRec.Module^),
+        ResStringRec.Identifier, Buffer, SizeOf(Buffer)))
+  else
+    Result := PChar(ResStringRec.Identifier);
+end;
+{$ENDIF}
+{$IFDEF LINUX}
+
+const
+  ResStringTableLen = 16;
+
+type
+  ResStringTable = array [0..ResStringTableLen-1] of LongWord;
+
+function LoadResString(ResStringRec: PResStringRec): string;
+var
+  Handle: TResourceHandle;
+  Tab: ^ResStringTable;
+  ResMod: HMODULE;
+begin
+  if ResStringRec = nil then Exit;
+  ResMod := FindResourceHInstance(ResStringRec^.Module^);
+  Handle := FindResource(ResMod,
+       PChar(ResStringRec^.Identifier div ResStringTableLen),
+       PChar(6));   // RT_STRING
+  Tab := Pointer(LoadResource(ResMod, Handle));
+  if Tab = nil then
+    Result := ''
+  else
+    Result := PChar (Tab) + Tab[ResStringRec^.Identifier mod ResStringTableLen];
+end;
+
+procedure DbgUnlockX;
+begin
+  if Assigned(DbgUnlockXProc) then
+    DbgUnlockXProc;
+end;
+
+{ The Win32 program loader sets up the first 64k of process address space
+  with no read or write access, to help detect use of invalid pointers
+  (whose integer value is 0..64k).  Linux doesn't do this.
+
+  Parts of the Delphi RTL and IDE design environment
+  rely on the notion that pointer values in the [0..64k] range are
+  invalid pointers.  To accomodate this in Linux, we reserve the range
+  at startup.  If the range is already allocated, we keep going anyway. }
+
+var
+  ZeroPageReserved: Boolean = False;
+
+procedure ReserveZeroPage;
+const
+  PROT_NONE = 0;
+  MAP_PRIVATE   = $02;
+  MAP_FIXED     = $10;
+  MAP_ANONYMOUS = $20;
+var
+  P: Pointer;
+begin
+  if IsLibrary then Exit;  // page reserve is app's job, not .so's
+
+  if not ZeroPageReserved then
+  begin
+    P := mmap(nil, High(Word), PROT_NONE,
+      MAP_ANONYMOUS or MAP_PRIVATE or MAP_FIXED, 0, 0);
+    ZeroPageReserved := P = nil;
+    if (Integer(P) <> -1) and (P <> nil) then  // we didn't get it
+      munmap(P, High(Word));
+  end;
+end;
+
+procedure ReleaseZeroPage;
+begin
+  if ZeroPageReserved then
+  begin
+    munmap(nil, High(Word) - 4096);
+    ZeroPageReserved := False;
+  end;
+end;
+{$ENDIF}
+
+function PUCS4Chars(const S: UCS4String): PUCS4Char;
+const
+  Null: UCS4Char = 0;
+  PNull: PUCS4Char = @Null;
+begin
+  if Length(S) > 0 then
+    Result := @S[0]
+  else
+    Result := PNull;
+end;
+
+function WideStringToUCS4String(const S: WideString): UCS4String;
+var
+  I: Integer;
+begin
+  SetLength(Result, Length(S) + 1);
+  for I := 0 to Length(S) - 1 do
+    Result[I] := UCS4Char(S[I + 1]);
+  Result[Length(S)] := 0;
+end;
+
+function UCS4StringToWidestring(const S: UCS4String): WideString;
+var
+  I: Integer;
+begin
+  SetLength(Result, Length(S)-1);
+  for I := 0 to Length(S)-2 do
+    Result[I+1] := WideChar(S[I]);
+end;
 
 initialization
 
-  ExitCode  := 0;
-  ErrorAddr := nil;
-
-  RandSeed := 0;
   FileMode := 2;
 
+  RaiseExceptionProc := @RaiseException;
+  RTLUnwindProc := @RTLUnwind;
+
+{$IFDEF LINUX}
+  FileAccessRights := S_IRUSR or S_IWUSR or S_IRGRP or S_IWGRP or S_IROTH or S_IWOTH;
+  Test8086 := GetCPUType;
+  IsConsole := True;
+  FindResourceCache.ModuleHandle := LongWord(-1);
+  ReserveZeroPage;
+{$ELSE}
   Test8086 := 2;
-  Test8087 := 3;
+{$ENDIF}
 
-  TVarData(Unassigned).VType := varEmpty;
-  TVarData(Null).VType := varNull;
-  TVarData(EmptyParam).VType := varError;
-  TVarData(EmptyParam).VError := $80020004; {DISP_E_PARAMNOTFOUND}
+  DispCallByIDProc := @_DispCallByIDError;
 
-  ClearAnyProc := @VarInvalidOp;
-  ChangeAnyProc := @VarCastError;
-  RefAnyProc := @VarInvalidOp;
-
+{$IFDEF MSWINDOWS}
   if _isNECWindows then _FpuMaskInit;
+{$ENDIF}
   _FpuInit();
 
-  _Assign( Input, '' );  { _ResetText( Input );   }
-  _Assign( Output, '' );  { _RewritText( Output ); }
+  TTextRec(Input).Mode := fmClosed;
+  TTextRec(Output).Mode := fmClosed;
+  TTextRec(ErrOutput).Mode := fmClosed;
+  InitVariantManager;
 
+{$IFDEF MSWINDOWS}
   CmdLine := GetCommandLine;
   CmdShow := GetCmdShow;
+{$ENDIF}
   MainThreadID := GetCurrentThreadID;
+
+{$IFDEF LINUX}
+  // Ensure DbgUnlockX is linked in, calling it now does nothing
+  DbgUnlockX;
+{$ENDIF}
 
 finalization
   Close(Input);
   Close(Output);
+  Close(ErrOutput);
+{$IFDEF LINUX}
+  ReleaseZeroPage;
+{$ENDIF}
+{$IFDEF MSWINDOWS}
   UninitAllocator;
+{$ENDIF}
 end.
+

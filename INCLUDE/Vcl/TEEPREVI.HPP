@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'TeePrevi.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'TeePrevi.pas' rev: 6.00
 
 #ifndef TeePreviHPP
 #define TeePreviHPP
@@ -10,8 +10,9 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <ComCtrls.hpp>	// Pascal unit
+#include <TeCanvas.hpp>	// Pascal unit
 #include <TeeProcs.hpp>	// Pascal unit
+#include <ComCtrls.hpp>	// Pascal unit
 #include <Buttons.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
 #include <ExtCtrls.hpp>	// Pascal unit
@@ -20,9 +21,9 @@
 #include <Controls.hpp>	// Pascal unit
 #include <Graphics.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
+#include <SysUtils.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
-#include <SysUtils.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -31,12 +32,10 @@
 namespace Teeprevi
 {
 //-- type declarations -------------------------------------------------------
-typedef void __fastcall (__closure *TOnChangeMarginsEvent)(System::TObject* Sender, bool DisableProportional
-	, const Windows::TRect &NewMargins);
+typedef void __fastcall (__closure *TOnChangeMarginsEvent)(System::TObject* Sender, bool DisableProportional, const Types::TRect &NewMargins);
 
 #pragma option push -b-
-enum TeePreviewZones { teePrev_None, teePrev_Left, teePrev_Top, teePrev_Right, teePrev_Bottom, teePrev_Image, 
-	teePrev_LeftTop, teePrev_RightTop, teePrev_LeftBottom, teePrev_RightBottom };
+enum TeePreviewZones { teePrev_None, teePrev_Left, teePrev_Top, teePrev_Right, teePrev_Bottom, teePrev_Image, teePrev_LeftTop, teePrev_RightTop, teePrev_LeftBottom, teePrev_RightBottom };
 #pragma option pop
 
 class DELPHICLASS TTeePreviewPage;
@@ -58,24 +57,31 @@ private:
 	TeePreviewZones FDragged;
 	int OldX;
 	int OldY;
-	Windows::TRect OldRect;
-	Windows::TRect ImageRect;
-	Windows::TRect PaperRect;
+	#pragma pack(push, 1)
+	Types::TRect OldRect;
+	#pragma pack(pop)
+	
+	#pragma pack(push, 1)
+	Types::TRect ImageRect;
+	#pragma pack(pop)
+	
+	#pragma pack(push, 1)
+	Types::TRect PaperRect;
+	#pragma pack(pop)
+	
 	void __fastcall SetShowMargins(bool Value);
 	void __fastcall SetImage(Teeprocs::TCustomTeePanel* Value);
 	Graphics::TBitmap* __fastcall GetPrintingBitmap(void);
 	
 protected:
 	virtual void __fastcall Paint(void);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
-	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int 
-		Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
 	
 public:
 	__fastcall virtual TTeePreviewPage(Classes::TComponent* AOwner);
-	Windows::TRect __fastcall CalcImagePrintMargins();
+	Types::TRect __fastcall CalcImagePrintMargins();
 	void __fastcall DrawPaper(Graphics::TCanvas* ACanvas);
 	void __fastcall DrawBack(Graphics::TCanvas* ACanvas);
 	void __fastcall DrawImage(Graphics::TCanvas* ACanvas);
@@ -92,7 +98,6 @@ __published:
 	__property bool ShowImage = {read=FShowImage, write=FShowImage, default=1};
 	__property bool ShowMargins = {read=FShowMargins, write=SetShowMargins, default=1};
 	__property TOnChangeMarginsEvent OnChangeMargins = {read=FOnChangeMargins, write=FOnChangeMargins};
-		
 	__property Teeprocs::TCustomTeePanel* Image = {read=FImage, write=SetImage};
 public:
 	#pragma option push -w-inl
@@ -161,20 +166,20 @@ protected:
 	
 public:
 	TTeePreviewPage* PreviewPage;
-	Windows::TRect OldMargins;
+	#pragma pack(push, 1)
+	Types::TRect OldMargins;
+	#pragma pack(pop)
+	
 	void __fastcall RefreshPage(void);
 	void __fastcall RecalcControls(void);
-	void __fastcall PreviewPageChangeMargins(System::TObject* Sender, bool DisableProportional, const Windows::TRect 
-		&NewMargins);
+	void __fastcall PreviewPageChangeMargins(System::TObject* Sender, bool DisableProportional, const Types::TRect &NewMargins);
 	void __fastcall ChangeMargin(Comctrls::TUpDown* UpDown, int &APos, int OtherSide);
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TChartPreview(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TChartPreview(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TChartPreview(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TChartPreview(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TChartPreview(void) { }
@@ -182,21 +187,17 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TChartPreview(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TChartPreview(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE void __fastcall ChartPreview(Classes::TComponent* AOwner, Teeprocs::TCustomTeePanel* 
-	TeePanel);
+extern PACKAGE void __fastcall ChartPreview(Classes::TComponent* AOwner, Teeprocs::TCustomTeePanel* TeePanel);
 
 }	/* namespace Teeprevi */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Teeprevi;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

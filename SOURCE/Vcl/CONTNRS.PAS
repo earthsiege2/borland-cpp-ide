@@ -1,10 +1,10 @@
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
+{ *********************************************************************** }
+{                                                                         }
+{ Delphi Runtime Library                                                  }
+{                                                                         }
+{ Copyright (c) 1995-2001 Borland Software Corporation                    }
+{                                                                         }
+{ *********************************************************************** }
 
 unit Contnrs;
 
@@ -29,10 +29,13 @@ type
     constructor Create(AOwnsObjects: Boolean); overload;
 
     function Add(AObject: TObject): Integer;
+    function Extract(Item: TObject): TObject;
     function Remove(AObject: TObject): Integer;
     function IndexOf(AObject: TObject): Integer;
     function FindInstanceOf(AClass: TClass; AExact: Boolean = True; AStartAt: Integer = 0): Integer;
     procedure Insert(Index: Integer; AObject: TObject);
+    function First: TObject;
+    function Last: TObject;
     property OwnsObjects: Boolean read FOwnsObjects write FOwnsObjects;
     property Items[Index: Integer]: TObject read GetItem write SetItem; default;
   end;
@@ -51,8 +54,11 @@ type
     destructor Destroy; override;
 
     function Add(AComponent: TComponent): Integer;
+    function Extract(Item: TComponent): TComponent;
     function Remove(AComponent: TComponent): Integer;
     function IndexOf(AComponent: TComponent): Integer;
+    function First: TComponent;
+    function Last: TComponent;
     procedure Insert(Index: Integer; AComponent: TComponent);
     property Items[Index: Integer]: TComponent read GetItems write SetItems; default;
   end;
@@ -64,10 +70,13 @@ type
     function GetItems(Index: Integer): TClass;
     procedure SetItems(Index: Integer; AClass: TClass);
   public
-    function Add(aClass: TClass): Integer;
-    function Remove(aClass: TClass): Integer;
-    function IndexOf(aClass: TClass): Integer;
-    procedure Insert(Index: Integer; aClass: TClass);
+    function Add(AClass: TClass): Integer;
+    function Extract(Item: TClass): TClass;
+    function Remove(AClass: TClass): Integer;
+    function IndexOf(AClass: TClass): Integer;
+    function First: TClass;
+    function Last: TClass;
+    procedure Insert(Index: Integer; AClass: TClass);
     property Items[Index: Integer]: TClass read GetItems write SetItems; default;
   end;
 
@@ -87,7 +96,7 @@ type
 
     function Count: Integer;
     function AtLeast(ACount: Integer): Boolean;
-    procedure Push(AItem: Pointer);
+    function Push(AItem: Pointer): Pointer;
     function Pop: Pointer;
     function Peek: Pointer;
   end;
@@ -103,7 +112,7 @@ type
 
   TObjectStack = class(TStack)
   public
-    procedure Push(AObject: TObject);
+    function Push(AObject: TObject): TObject;
     function Pop: TObject;
     function Peek: TObject;
   end;
@@ -119,12 +128,101 @@ type
 
   TObjectQueue = class(TQueue)
   public
-    procedure Push(AObject: TObject);
+    function Push(AObject: TObject): TObject;
     function Pop: TObject;
     function Peek: TObject;
   end;
 
+{ TBucketList, Hashed associative list }
+
+  TCustomBucketList = class;
+
+  TBucketItem = record
+    Item, Data: Pointer;
+  end;
+  TBucketItemArray = array of TBucketItem;
+
+  TBucket = record
+    Count: Integer;
+    Items: TBucketItemArray;
+  end;
+  TBucketArray = array of TBucket;
+
+  TBucketProc = procedure(AInfo, AItem, AData: Pointer; out AContinue: Boolean);
+
+  TCustomBucketList = class(TObject)
+  private
+    FBuckets: TBucketArray;
+    FBucketCount: Integer;
+    FListLocked: Boolean;
+    function GetData(AItem: Pointer): Pointer;
+    procedure SetData(AItem: Pointer; const AData: Pointer);
+    procedure SetBucketCount(const Value: Integer);
+  protected
+    property Buckets: TBucketArray read FBuckets;
+    property BucketCount: Integer read FBucketCount write SetBucketCount;
+
+    function BucketFor(AItem: Pointer): Integer; virtual; abstract;
+
+    function FindItem(AItem: Pointer; out ABucket, AIndex: Integer): Boolean; virtual;
+    function AddItem(ABucket: Integer; AItem, AData: Pointer): Pointer; virtual;
+    function DeleteItem(ABucket: Integer; AIndex: Integer): Pointer; virtual;
+  public
+    destructor Destroy; override;
+    procedure Clear;
+
+    function Add(AItem, AData: Pointer): Pointer;
+    function Remove(AItem: Pointer): Pointer;
+
+    function ForEach(AProc: TBucketProc; AInfo: Pointer = nil): Boolean;
+    procedure Assign(AList: TCustomBucketList);
+
+    function Exists(AItem: Pointer): Boolean;
+    function Find(AItem: Pointer; out AData: Pointer): Boolean;
+    property Data[AItem: Pointer]: Pointer read GetData write SetData; default;
+  end;
+
+{ TBucketList }
+
+  TBucketListSizes = (bl2, bl4, bl8, bl16, bl32, bl64, bl128, bl256);
+
+  TBucketList = class(TCustomBucketList)
+  private
+    FBucketMask: Byte;
+  protected
+    function BucketFor(AItem: Pointer): Integer; override;
+  public
+    constructor Create(ABuckets: TBucketListSizes = bl16);
+  end;
+
+{ TObjectBucketList }
+
+  TObjectBucketList = class(TBucketList)
+  protected
+    function GetData(AItem: TObject): TObject;
+    procedure SetData(AItem: TObject; const AData: TObject);
+  public
+    function Add(AItem, AData: TObject): TObject;
+    function Remove(AItem: TObject): TObject;
+
+    property Data[AItem: TObject]: TObject read GetData write SetData; default;
+  end;
+
+{ Easy access error message }
+
+procedure RaiseListError(const ATemplate: string; const AData: array of const);
+
 implementation
+
+uses
+  RTLConsts, Math;
+
+{ Easy access error message }
+
+procedure RaiseListError(const ATemplate: string; const AData: array of const);
+begin
+  raise EListError.CreateFmt(ATemplate, AData);
+end;
 
 { TObjectList }
 
@@ -145,6 +243,11 @@ begin
   FOwnsObjects := AOwnsObjects;
 end;
 
+function TObjectList.Extract(Item: TObject): TObject;
+begin
+  Result := TObject(inherited Extract(Item));
+end;
+
 function TObjectList.FindInstanceOf(AClass: TClass; AExact: Boolean;
   AStartAt: Integer): Integer;
 var
@@ -162,6 +265,11 @@ begin
     end;
 end;
 
+function TObjectList.First: TObject;
+begin
+  Result := TObject(inherited First);
+end;
+
 function TObjectList.GetItem(Index: Integer): TObject;
 begin
   Result := inherited Items[Index];
@@ -175,6 +283,11 @@ end;
 procedure TObjectList.Insert(Index: Integer; AObject: TObject);
 begin
   inherited Insert(Index, AObject);
+end;
+
+function TObjectList.Last: TObject;
+begin
+  Result := TObject(inherited Last);
 end;
 
 procedure TObjectList.Notify(Ptr: Pointer; Action: TListNotification);
@@ -228,8 +341,18 @@ end;
 
 destructor TComponentList.Destroy;
 begin
-  FNexus.Free;
   inherited Destroy;
+  FNexus.Free;
+end;
+
+function TComponentList.Extract(Item: TComponent): TComponent;
+begin
+  Result := TComponent(inherited Extract(Item));
+end;
+
+function TComponentList.First: TComponent;
+begin
+  Result := TComponent(inherited First);
 end;
 
 function TComponentList.GetItems(Index: Integer): TComponent;
@@ -250,6 +373,11 @@ end;
 procedure TComponentList.Insert(Index: Integer; AComponent: TComponent);
 begin
   inherited Insert(Index, AComponent);
+end;
+
+function TComponentList.Last: TComponent;
+begin
+  Result := TComponent(inherited Last);
 end;
 
 procedure TComponentList.Notify(Ptr: Pointer; Action: TListNotification);
@@ -288,6 +416,16 @@ begin
   Result := inherited Add(AClass);
 end;
 
+function TClassList.Extract(Item: TClass): TClass;
+begin
+  Result := TClass(inherited Extract(Item));
+end;
+
+function TClassList.First: TClass;
+begin
+  Result := TClass(inherited First);
+end;
+
 function TClassList.GetItems(Index: Integer): TClass;
 begin
   Result := TClass(inherited Items[Index]);
@@ -301,6 +439,11 @@ end;
 procedure TClassList.Insert(Index: Integer; AClass: TClass);
 begin
   inherited Insert(Index, AClass);
+end;
+
+function TClassList.Last: TClass;
+begin
+  Result := TClass(inherited Last);
 end;
 
 function TClassList.Remove(AClass: TClass): Integer;
@@ -330,9 +473,10 @@ begin
   Result := PopItem;
 end;
 
-procedure TOrderedList.Push(AItem: Pointer);
+function TOrderedList.Push(AItem: Pointer): Pointer;
 begin
   PushItem(AItem);
+  Result := AItem;
 end;
 
 function TOrderedList.Count: Integer;
@@ -382,9 +526,9 @@ begin
   Result := TObject(inherited Pop);
 end;
 
-procedure TObjectStack.Push(AObject: TObject);
+function TObjectStack.Push(AObject: TObject): TObject;
 begin
-  inherited Push(AObject);
+  Result := TObject(inherited Push(AObject));
 end;
 
 { TQueue }
@@ -406,9 +550,228 @@ begin
   Result := TObject(inherited Pop);
 end;
 
-procedure TObjectQueue.Push(AObject: TObject);
+function TObjectQueue.Push(AObject: TObject): TObject;
 begin
-  inherited Push(AObject);
+  Result := TObject(inherited Push(AObject));
+end;
+
+{ TCustomBucketList }
+
+function TCustomBucketList.Add(AItem, AData: Pointer): Pointer;
+var
+  LBucket: Integer;
+  LIndex: Integer;
+begin
+  if FListLocked then
+    raise EListError.Create(SBucketListLocked);
+  if FindItem(AItem, LBucket, LIndex) then
+    raise EListError.CreateFmt(SDuplicateItem, [Integer(AItem)])
+  else
+    Result := AddItem(LBucket, AItem, AData);
+end;
+
+function TCustomBucketList.AddItem(ABucket: Integer; AItem, AData: Pointer): Pointer;
+var
+  LDelta, LSize: Integer;
+begin
+  with Buckets[ABucket] do
+  begin
+    LSize := Length(Items);
+    if Count = LSize then
+    begin
+      if LSize > 64 then
+        LDelta := LSize div 4
+      else if LSize > 8 then
+        LDelta := 16
+      else
+        LDelta := 4;
+      SetLength(Items, LSize + LDelta);
+    end;
+
+    with Items[Count] do
+    begin
+      Item := AItem;
+      Data := AData;
+    end;
+    Inc(Count);
+  end;
+  Result := AData;
+end;
+
+procedure AssignProc(AInfo, AItem, AData: Pointer; out AContinue: Boolean);
+begin
+  TCustomBucketList(AInfo).Add(AItem, AData);
+end;
+
+procedure TCustomBucketList.Assign(AList: TCustomBucketList);
+begin
+  Clear;
+  AList.ForEach(AssignProc, Self);
+end;
+
+procedure TCustomBucketList.Clear;
+var
+  LBucket, LIndex: Integer;
+begin
+  if FListLocked then
+    raise EListError.Create(SBucketListLocked);
+  for LBucket := 0 to BucketCount - 1 do
+    for LIndex := Buckets[LBucket].Count - 1 downto 0 do
+      DeleteItem(LBucket, LIndex);
+end;
+
+function TCustomBucketList.DeleteItem(ABucket, AIndex: Integer): Pointer;
+begin
+  with Buckets[ABucket] do
+  begin
+    Result := Items[AIndex].Data;
+    if Count = 1 then
+      SetLength(Items, 0)
+    else
+      System.Move(Items[AIndex + 1], Items[AIndex],
+                  (Count - AIndex) * SizeOf(TBucketItem));
+    Dec(Count);
+  end;
+end;
+
+destructor TCustomBucketList.Destroy;
+begin
+  Clear;
+  inherited Destroy;
+end;
+
+function TCustomBucketList.Exists(AItem: Pointer): Boolean;
+var
+  LBucket, LIndex: Integer;
+begin
+  Result := FindItem(AItem, LBucket, LIndex);
+end;
+
+function TCustomBucketList.Find(AItem: Pointer; out AData: Pointer): Boolean;
+var
+  LBucket, LIndex: Integer;
+begin
+  Result := FindItem(AItem, LBucket, LIndex);
+  if Result then
+    AData := Buckets[LBucket].Items[LIndex].Data;
+end;
+
+function TCustomBucketList.FindItem(AItem: Pointer; out ABucket, AIndex: Integer): Boolean;
+var
+  I: Integer;
+begin
+  Result := False;
+  ABucket := BucketFor(AItem);
+  with FBuckets[ABucket] do
+    for I := 0 to Count - 1 do
+      if Items[I].Item = AItem then
+      begin
+        AIndex := I;
+        Result := True;
+        Break;
+      end;
+end;
+
+function TCustomBucketList.ForEach(AProc: TBucketProc; AInfo: Pointer): Boolean;
+var
+  LBucket, LIndex: Integer;
+  LOldListLocked: Boolean;
+begin
+  Result := True;
+  LOldListLocked := FListLocked;
+  FListLocked := True;
+  try
+    for LBucket := 0 to BucketCount - 1 do
+      with Buckets[LBucket] do
+        for LIndex := Count - 1 downto 0 do
+        begin
+          with Items[LIndex] do
+            AProc(AInfo, Item, Data, Result);
+          if not Result then
+            Exit;
+        end;
+  finally
+    FListLocked := LOldListLocked;
+  end;
+end;
+
+function TCustomBucketList.GetData(AItem: Pointer): Pointer;
+var
+  LBucket, LIndex: Integer;
+begin
+  if not FindItem(AItem, LBucket, LIndex) then
+    raise EListError.CreateFmt(SItemNotFound, [Integer(AItem)]);
+  Result := Buckets[LBucket].Items[LIndex].Data;
+end;
+
+function TCustomBucketList.Remove(AItem: Pointer): Pointer;
+var
+  LBucket, LIndex: Integer;
+begin
+  if FListLocked then
+    raise EListError.Create(SBucketListLocked);
+  Result := nil;
+  if FindItem(AItem, LBucket, LIndex) then
+    Result := DeleteItem(LBucket, LIndex);
+end;
+
+procedure TCustomBucketList.SetBucketCount(const Value: Integer);
+begin
+  if Value <> FBucketCount then
+  begin
+    FBucketCount := Value;
+    SetLength(FBuckets, FBucketCount);
+  end;
+end;
+
+procedure TCustomBucketList.SetData(AItem: Pointer; const AData: Pointer);
+var
+  LBucket, LIndex: Integer;
+begin
+  if not FindItem(AItem, LBucket, LIndex) then
+    raise EListError.CreateFmt(SItemNotFound, [Integer(AItem)]);
+  Buckets[LBucket].Items[LIndex].Data := AData;
+end;
+
+{ TBucketList }
+
+function TBucketList.BucketFor(AItem: Pointer): Integer;
+begin
+  // this can be overridden with your own calculation but remember to
+  //  keep it in sync with your bucket count.
+  Result := LongRec(AItem).Bytes[1] and FBucketMask;
+end;
+
+constructor TBucketList.Create(ABuckets: TBucketListSizes);
+const
+  cBucketMasks: array [TBucketListSizes] of Byte =
+    ($01, $03, $07, $0F, $1F, $3F, $7F, $FF);
+begin
+  inherited Create;
+  FBucketMask := CBucketMasks[ABuckets];
+  BucketCount := FBucketMask + 1;
+end;
+
+{ TObjectBucketList }
+
+function TObjectBucketList.Add(AItem, AData: TObject): TObject;
+begin
+  Result := TObject(inherited Add(AItem, AData));
+end;
+
+function TObjectBucketList.GetData(AItem: TObject): TObject;
+begin
+  Result := TObject(inherited Data[AItem]);
+end;
+
+function TObjectBucketList.Remove(AItem: TObject): TObject;
+begin
+  Result := TObject(inherited Remove(AItem));
+end;
+
+procedure TObjectBucketList.SetData(AItem: TObject; const AData: TObject);
+begin
+  inherited Data[AItem] := AData;
 end;
 
 end.

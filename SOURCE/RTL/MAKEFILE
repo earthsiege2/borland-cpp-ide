@@ -92,6 +92,7 @@ $(BUILDDIR) :
 # Do whatever is necessary at the start and end of the build.               #
 #############################################################################
 start :
+    @$(RTLROOT)\tools\timenow.exe DATETIME_STRING > $(RTLROOT)\include\rtlinc\timenow.h
     @echo.
     @echo [***************** Borland C++Builder Run Time Libary *****************]
     @echo.

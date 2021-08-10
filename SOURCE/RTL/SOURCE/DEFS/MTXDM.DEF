@@ -1,5 +1,5 @@
 LIBRARY MTXDM
 EXPORTS
 
-    _GetDispenserManager                     = 'MTXDM.DLL'.GetDispenserManager
-    _GetDispenserManagerDriver               = 'MTXDM.DLL'.GetDispenserManagerDriver
+    _GetDispenserManager                     = GetDispenserManager
+    _GetDispenserManagerDriver               = GetDispenserManagerDriver

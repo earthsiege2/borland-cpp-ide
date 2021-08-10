@@ -4,12 +4,11 @@
 /*                                                                          */
 /*        Note: You must include WINDOWS.H before including this file.      */
 /*                                                                          */
-/*        Copyright (c) 1990-1995, Microsoft Corp.  All rights reserved.    */
+/*        Copyright (c) 1990-1999, Microsoft Corp.  All rights reserved.    */
 /*                                                                          */
 /****************************************************************************/
 
 #ifndef __DISPDIB_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __DISPDIB_H__
 
 // DisplayDib() error return codes
@@ -279,5 +278,4 @@ __inline HWND DisplayDibWindowCreateEx(HWND hwndParent, HINSTANCE hInstance, DWO
 #define DisplayDibWindowClose(hwnd)                     SendMessage(hwnd, DDM_CLOSE, 0, 0)
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _DISPDIB_H

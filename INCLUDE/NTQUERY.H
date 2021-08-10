@@ -10,7 +10,6 @@
 //----------------------------------------------------------------------------
 
 #if !defined(__NTQUERY_H__)
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __NTQUERY_H__
 
 #if _MSC_VER > 1000
@@ -107,7 +106,6 @@ STDAPI LocateCatalogsA( char const * pwszScope,
 #define PID_STG_CREATETIME              ((PROPID) 0x0000000f)
 #define PID_STG_ACCESSTIME              ((PROPID) 0x00000010)
 #define PID_STG_CHANGETIME              ((PROPID) 0x00000011)
-#define PID_STG_ALLOCSIZE               ((PROPID) 0x00000012)
 #define PID_STG_CONTENTS                ((PROPID) 0x00000013)
 #define PID_STG_SHORTNAME               ((PROPID) 0x00000014)
 #define PID_STG_MAX                     PID_STG_SHORTNAME
@@ -136,6 +134,7 @@ STDAPI LocateCatalogsA( char const * pwszScope,
 #define DBPROP_USECONTENTINDEX           2
 #define DBPROP_DEFERNONINDEXEDTRIMMING   3
 #define DBPROP_USEEXTENDEDDBTYPES        4
+#define DBPROP_FIRSTROWS                 7
 
 // Content Index Framework Core property set
 
@@ -201,6 +200,7 @@ STDAPI LocateCatalogsA( char const * pwszScope,
 #define CICAT_WRITABLE    0x4
 #define CICAT_NO_QUERY    0x8
 #define CICAT_GET_STATE   0x10
+#define CICAT_ALL_OPENED  0x20
 
 STDAPI SetCatalogState ( WCHAR const * pwcsCat,
                          WCHAR const * pwcsMachine,
@@ -377,6 +377,5 @@ STDAPI CIRestrictionToFullTree( DBCOMMANDTREE const *pTree,
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // __NTQUERY_H__
 

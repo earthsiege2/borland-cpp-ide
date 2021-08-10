@@ -1,6 +1,6 @@
 /*++
 
-Copyright (C) Microsoft Corporation, 1996 - 1999
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -13,7 +13,6 @@ Abstract:
 --*/
 
 #ifndef __KSPROXY__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __KSPROXY__
 
 #ifdef __cplusplus
@@ -843,5 +842,4 @@ DECLARE_INTERFACE_(IKsTopology, IUnknown)
 }
 #endif // __cplusplus
 
-#pragma option pop /*P_O_Pop*/
 #endif // __KSPROXY__

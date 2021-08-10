@@ -14,7 +14,6 @@ Abstract:
 --*/
 
 #ifndef __DSROLE_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __DSROLE_H__
 
 #if _MSC_VER > 1000
@@ -121,7 +120,6 @@ DsRoleFreeMemory(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // __DSROLE_H__
 
 

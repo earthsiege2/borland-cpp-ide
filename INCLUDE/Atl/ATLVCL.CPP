@@ -2,7 +2,7 @@
 // ATLVCL.CPP - Provides the connective tissue between
 //              the ATL framework and VCL components.
 //
-// $Revision:   1.29.2.6  $
+// $Revision:   1.33  $
 //
 // Copyright (c) 1997, 2000 Borland International
 ///////////////////////////////////////////////////////////////////////////////

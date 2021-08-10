@@ -5,21 +5,19 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.5  $ */
+/* $Revision: 9.9.2.2 $ */
 
 #if !defined(__FCNTL_H)
 #define __FCNTL_H
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 #if !defined(RC_INVOKED)
 

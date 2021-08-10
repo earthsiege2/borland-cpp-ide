@@ -2,8 +2,8 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
-    <PROJECT value="customersserver.exe"/>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="CustomersServer.exe"/>
     <OBJFILES value="customersserver.obj CustomersImplU.obj Any2Variant.obj Customers_c.obj 
       Customers_s.obj"/>
     <RESFILES value=""/>
@@ -13,8 +13,8 @@
     <RESDEPEN value="$(RESFILES) CustomersImplU.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value=""/>
-    <SPARELIBS value="vcl50.lib vclmid50.lib vcldb50.lib vclbde50.lib"/>
-    <PACKAGES value="vclmid50.bpi vcldb50.bpi vclbde50.bpi vcl50.bpi vclx50.bpi vcldbx50.bpi"/>
+    <SPARELIBS value="rtl.lib vcl.lib dsnap.lib dbrtl.lib vcldb.lib bdertl.lib"/>
+    <PACKAGES value="dsnap.bpi dbrtl.bpi vcldb.bpi bdertl.bpi rtl.bpi vcl.bpi vclx.bpi vcldbx.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -22,7 +22,7 @@
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="ilink32"/>
-    <USERDEFINES value=""/>
+    <USERDEFINES value="WIN32;_USE_OLD_RW_STL"/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT;_VIS_NOLIB;USEPACKAGES"/>
     <MAINSOURCE value="customersserver.cpp"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl;$(VBROKERDIR)\include"/>
@@ -33,8 +33,8 @@
   <OPTIONS>
     <IDLCFLAGS value="-src_suffix cpp -I$(BCB)\include -I$(BCB)\include\vcl 
       -I$(VBROKERDIR)\include -boa"/>
-    <CFLAG1 value="-Od -H=z:\PROGRA~1\borland\rampage\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 
-      -b- -k -y -v -vi- -c -tW -tWM"/>
+    <CFLAG1 value="-Od -H=$(BCB)\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tW -tWM"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
@@ -45,6 +45,23 @@
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="orb_br.lib vport_br.lib $(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="CustomersServer.cpp" FORMNAME="" UNITNAME="customersserver" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Customers.idl" FORMNAME="" UNITNAME="Customers" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="CustomersImplU.cpp" FORMNAME="CustomersImpl" UNITNAME="CustomersImplU" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND="" IDLFILESNAMES="Customers.idl"/>
+      <FILE FILENAME="Any2Variant.cpp" FORMNAME="" UNITNAME="Any2Variant" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Customers_c.cpp" FORMNAME="" UNITNAME="Customers_c" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Customers_s.cpp" FORMNAME="" UNITNAME="Customers_s" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
+  <FILES>
+    <FILE type="depend" value="Customers.idl" translator="idl2cpp">
+      <IDLROOTDIR value=" -root_dir .\ "/>
+      <DEPENDENT value="Customers_s.cpp"/>
+      <DEPENDENT value="Customers_c.cpp"/>
+    </FILE>
+  </FILES>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -74,25 +91,24 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=1
-Item0=$(BCB)\include;$(BCB)\include\vcl;$(VBROKERDIR)\include
 
 [HistoryLists\hlLibraryPath]
-Count=1
-Item0=$(BCB)\lib;$(BCB)\lib\obj;$(VBROKERDIR)\lib
 
 [HistoryLists\hlDebugSourcePath]
-Count=1
-Item0=$(BCB)\source\vcl
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
@@ -110,12 +126,4 @@ ActiveLang=
 ProjectLang=
 RootDir=
   </IDEOPTIONS>
-
-  <FILES>
-    <FILE type="depend" value="Customers.idl" translator="idl2cpp">
-      <IDLROOTDIR value=" -root_dir D:\CBuilder4\Examples\Corba\corbamidas\ "/>
-      <DEPENDENT value="Customers_s.cpp"/>
-      <DEPENDENT value="Customers_c.cpp"/>
-    </FILE>
-  </FILES>
 </PROJECT>

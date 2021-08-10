@@ -3,7 +3,7 @@
 
 :BASE nmmsg.hlp
 :TITLE FastNet Message Components Help
-:INCLUDE BCB5.OHL
+:INCLUDE bcb6.OHL
 1 TNMMsg component
 2 TNMMsg component Reference=Scribble1010
 2 Properties

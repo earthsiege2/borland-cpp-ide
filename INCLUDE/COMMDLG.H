@@ -2,14 +2,14 @@
 *                                                                       *
 *   commdlg.h -- This module defines the 32-Bit Common Dialog APIs      *
 *                                                                       *
-*   Copyright (c) 1992-1999, Microsoft Corp. All rights reserved.       *
+*   Copyright (c) Microsoft Corporation. All rights reserved.           *
 *                                                                       *
 ************************************************************************/
 
 
 #ifndef _INC_COMMDLG
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_COMMDLG
+
 
 
 #if(WINVER >= 0x0500)
@@ -39,11 +39,25 @@ DEFINE_GUID(IID_IPrintDialogServices, 0x509aaeda, 0x5639, 0x11d1, 0xb6, 0xa1, 0x
 
 #include <prsht.h>
 
+#if !defined(_WIN64)
 #include <pshpack1.h>         /* Assume byte packing throughout */
+#endif
 
 #ifdef __cplusplus
 extern "C" {            /* Assume C declarations for C++ */
 #endif  /* __cplusplus */
+
+//
+// Define API decoration for direct importing of DLL references.
+//
+#ifndef WINCOMMDLGAPI
+#if !defined(_COMDLG32_)
+#define WINCOMMDLGAPI DECLSPEC_IMPORT
+#else
+#define WINCOMMDLGAPI
+#endif
+#endif // WINCOMMDLGAPI
+
 
 #if(WINVER >= 0x0400)
 #ifndef SNDMSG
@@ -74,20 +88,76 @@ typedef struct tagEDITMENU
    WORD    idClear;
    WORD    idUndo;
 } EDITMENU;
-typedef EDITMENU FAR *LPEDITMENU;
+typedef EDITMENU *LPEDITMENU;
 #endif
 
-#ifndef _MAC
-typedef UINT_PTR (APIENTRY *LPOFNHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
-#else
 typedef UINT_PTR (CALLBACK *LPOFNHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
-#endif
 
 
 #ifndef CDSIZEOF_STRUCT
 #define CDSIZEOF_STRUCT(structname, member)  (((int)((LPBYTE)(&((structname*)0)->member) - ((LPBYTE)((structname*)0)))) + sizeof(((structname*)0)->member))
 #endif
 
+//
+// For compilers that don't support nameless unions
+//
+#ifndef DUMMYUNIONNAME
+#ifdef NONAMELESSUNION
+#define DUMMYUNIONNAME   u
+#endif // NONAMELESSUNION
+#endif // DUMMYUNIONNAME
+
+typedef struct tagOFN_NT4A {
+   DWORD        lStructSize;
+   HWND         hwndOwner;
+   HINSTANCE    hInstance;
+   LPCSTR       lpstrFilter;
+   LPSTR        lpstrCustomFilter;
+   DWORD        nMaxCustFilter;
+   DWORD        nFilterIndex;
+   LPSTR        lpstrFile;
+   DWORD        nMaxFile;
+   LPSTR        lpstrFileTitle;
+   DWORD        nMaxFileTitle;
+   LPCSTR       lpstrInitialDir;
+   LPCSTR       lpstrTitle;
+   DWORD        Flags;
+   WORD         nFileOffset;
+   WORD         nFileExtension;
+   LPCSTR       lpstrDefExt;
+   LPARAM       lCustData;
+   LPOFNHOOKPROC lpfnHook;
+   LPCSTR       lpTemplateName;
+} OPENFILENAME_NT4A, *LPOPENFILENAME_NT4A;
+typedef struct tagOFN_NT4W {
+   DWORD        lStructSize;
+   HWND         hwndOwner;
+   HINSTANCE    hInstance;
+   LPCWSTR      lpstrFilter;
+   LPWSTR       lpstrCustomFilter;
+   DWORD        nMaxCustFilter;
+   DWORD        nFilterIndex;
+   LPWSTR       lpstrFile;
+   DWORD        nMaxFile;
+   LPWSTR       lpstrFileTitle;
+   DWORD        nMaxFileTitle;
+   LPCWSTR      lpstrInitialDir;
+   LPCWSTR      lpstrTitle;
+   DWORD        Flags;
+   WORD         nFileOffset;
+   WORD         nFileExtension;
+   LPCWSTR      lpstrDefExt;
+   LPARAM       lCustData;
+   LPOFNHOOKPROC lpfnHook;
+   LPCWSTR      lpTemplateName;
+} OPENFILENAME_NT4W, *LPOPENFILENAME_NT4W;
+#ifdef UNICODE
+typedef OPENFILENAME_NT4W OPENFILENAME_NT4;
+typedef LPOPENFILENAME_NT4W LPOPENFILENAME_NT4;
+#else
+typedef OPENFILENAME_NT4A OPENFILENAME_NT4;
+typedef LPOPENFILENAME_NT4A LPOPENFILENAME_NT4;
+#endif // UNICODE
 
 typedef struct tagOFNA {
    DWORD        lStructSize;
@@ -115,7 +185,7 @@ typedef struct tagOFNA {
    LPCSTR       lpstrPrompt;
 #endif
 #if (_WIN32_WINNT >= 0x0500)
-   void *       pvReserved;
+   void *		pvReserved;
    DWORD        dwReserved;
    DWORD        FlagsEx;
 #endif // (_WIN32_WINNT >= 0x0500)
@@ -146,7 +216,7 @@ typedef struct tagOFNW {
    LPCSTR       lpstrPrompt;
 #endif
 #if (_WIN32_WINNT >= 0x0500)
-   void *       pvReserved;
+   void *		pvReserved;
    DWORD        dwReserved;
    DWORD        FlagsEx;
 #endif // (_WIN32_WINNT >= 0x0500)
@@ -170,22 +240,24 @@ typedef LPOPENFILENAMEA LPOPENFILENAME;
 #endif // (_WIN32_WINNT >= 0x0500)
 
 
-BOOL  APIENTRY     GetOpenFileNameA(LPOPENFILENAMEA);
-BOOL  APIENTRY     GetOpenFileNameW(LPOPENFILENAMEW);
+WINCOMMDLGAPI BOOL  APIENTRY GetOpenFileNameA(LPOPENFILENAMEA);
+WINCOMMDLGAPI BOOL  APIENTRY GetOpenFileNameW(LPOPENFILENAMEW);
 #ifdef UNICODE
 #define GetOpenFileName  GetOpenFileNameW
 #else
 #define GetOpenFileName  GetOpenFileNameA
 #endif // !UNICODE
-BOOL  APIENTRY     GetSaveFileNameA(LPOPENFILENAMEA);
-BOOL  APIENTRY     GetSaveFileNameW(LPOPENFILENAMEW);
+WINCOMMDLGAPI BOOL  APIENTRY GetSaveFileNameA(LPOPENFILENAMEA);
+WINCOMMDLGAPI BOOL  APIENTRY GetSaveFileNameW(LPOPENFILENAMEW);
 #ifdef UNICODE
 #define GetSaveFileName  GetSaveFileNameW
 #else
 #define GetSaveFileName  GetSaveFileNameA
 #endif // !UNICODE
-short APIENTRY     GetFileTitleA(LPCSTR, LPSTR, WORD);
-short APIENTRY     GetFileTitleW(LPCWSTR, LPWSTR, WORD);
+
+
+WINCOMMDLGAPI short APIENTRY GetFileTitleA(LPCSTR, LPSTR, WORD);
+WINCOMMDLGAPI short APIENTRY GetFileTitleW(LPCWSTR, LPWSTR, WORD);
 #ifdef UNICODE
 #define GetFileTitle  GetFileTitleW
 #else
@@ -223,7 +295,6 @@ short APIENTRY     GetFileTitleW(LPCWSTR, LPWSTR, WORD);
 #define OFN_FORCESHOWHIDDEN          0x10000000    // Show All files including System and hidden files
 #endif // (_WIN32_WINNT >= 0x0500)
 
-
 //FlagsEx Values
 #if (_WIN32_WINNT >= 0x0500)
 #define  OFN_EX_NOPLACESBAR         0x00000001
@@ -243,11 +314,7 @@ short APIENTRY     GetFileTitleW(LPCWSTR, LPWSTR, WORD);
 #define OFN_SHARENOWARN          1
 #define OFN_SHAREWARN            0
 
-#ifndef _MAC
-typedef UINT_PTR (APIENTRY *LPCCHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
-#else
 typedef UINT_PTR (CALLBACK *LPCCHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
-#endif
 
 #if(WINVER >= 0x0400)
 // Structure used for all file based OpenFileName notifications
@@ -256,14 +323,14 @@ typedef struct _OFNOTIFYA
         NMHDR           hdr;
         LPOPENFILENAMEA lpOFN;
         LPSTR           pszFile;        // May be NULL
-} OFNOTIFYA, FAR *LPOFNOTIFYA;
+} OFNOTIFYA, *LPOFNOTIFYA;
 // Structure used for all file based OpenFileName notifications
 typedef struct _OFNOTIFYW
 {
         NMHDR           hdr;
         LPOPENFILENAMEW lpOFN;
         LPWSTR          pszFile;        // May be NULL
-} OFNOTIFYW, FAR *LPOFNOTIFYW;
+} OFNOTIFYW, *LPOFNOTIFYW;
 #ifdef UNICODE
 typedef OFNOTIFYW OFNOTIFY;
 typedef LPOFNOTIFYW LPOFNOTIFY;
@@ -280,7 +347,7 @@ typedef struct _OFNOTIFYEXA
         LPOPENFILENAMEA lpOFN;
         LPVOID          psf;
         LPVOID          pidl;          // May be NULL
-} OFNOTIFYEXA, FAR *LPOFNOTIFYEXA;
+} OFNOTIFYEXA, *LPOFNOTIFYEXA;
 // Structure used for all object based OpenFileName notifications
 typedef struct _OFNOTIFYEXW
 {
@@ -288,7 +355,7 @@ typedef struct _OFNOTIFYEXW
         LPOPENFILENAMEW lpOFN;
         LPVOID          psf;
         LPVOID          pidl;          // May be NULL
-} OFNOTIFYEXW, FAR *LPOFNOTIFYEXW;
+} OFNOTIFYEXW, *LPOFNOTIFYEXW;
 #ifdef UNICODE
 typedef OFNOTIFYEXW OFNOTIFYEX;
 typedef LPOFNOTIFYEXW LPOFNOTIFYEX;
@@ -301,7 +368,7 @@ typedef LPOFNOTIFYEXA LPOFNOTIFYEX;
 #define CDN_FIRST   (0U-601U)
 #define CDN_LAST    (0U-699U)
 
-// Notifications from Open or Save dialog 
+// Notifications from Open or Save dialog
 #define CDN_INITDONE            (CDN_FIRST - 0x0000)
 #define CDN_SELCHANGE           (CDN_FIRST - 0x0001)
 #define CDN_FOLDERCHANGE        (CDN_FIRST - 0x0002)
@@ -452,8 +519,8 @@ typedef LPCHOOSECOLORA LPCHOOSECOLOR;
 #endif // UNICODE
 #endif //_MAC
 
-BOOL  APIENTRY ChooseColorA(LPCHOOSECOLORA);
-BOOL  APIENTRY ChooseColorW(LPCHOOSECOLORW);
+WINCOMMDLGAPI BOOL APIENTRY ChooseColorA(LPCHOOSECOLORA);
+WINCOMMDLGAPI BOOL APIENTRY ChooseColorW(LPCHOOSECOLORW);
 #ifdef UNICODE
 #define ChooseColor  ChooseColorW
 #else
@@ -472,11 +539,7 @@ BOOL  APIENTRY ChooseColorW(LPCHOOSECOLORW);
 #define CC_ANYCOLOR              0x00000100
 #endif /* WINVER >= 0x0400 */
 
-#ifndef _MAC
-typedef UINT_PTR (APIENTRY *LPFRHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
-#else
 typedef UINT_PTR (CALLBACK *LPFRHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
-#endif
 
 typedef struct tagFINDREPLACEA {
    DWORD        lStructSize;        // size of this struct 0x20
@@ -536,24 +599,24 @@ typedef LPFINDREPLACEA LPFINDREPLACE;
 #define FR_MATCHKASHIDA                 0x40000000
 #define FR_MATCHALEFHAMZA               0x80000000
 
-HWND  APIENTRY    FindTextA(LPFINDREPLACEA);
-HWND  APIENTRY    FindTextW(LPFINDREPLACEW);
+WINCOMMDLGAPI HWND APIENTRY FindTextA(LPFINDREPLACEA);
+WINCOMMDLGAPI HWND APIENTRY FindTextW(LPFINDREPLACEW);
 #ifdef UNICODE
 #define FindText  FindTextW
 #else
 #define FindText  FindTextA
 #endif // !UNICODE
 #ifndef _MAC
-HWND  APIENTRY    ReplaceTextA(LPFINDREPLACEA);
-HWND  APIENTRY    ReplaceTextW(LPFINDREPLACEW);
+WINCOMMDLGAPI HWND APIENTRY ReplaceTextA(LPFINDREPLACEA);
+WINCOMMDLGAPI HWND APIENTRY ReplaceTextW(LPFINDREPLACEW);
 #ifdef UNICODE
 #define ReplaceText  ReplaceTextW
 #else
 #define ReplaceText  ReplaceTextA
 #endif // !UNICODE
 #else
-HWND  APIENTRY    AfxReplaceTextA(LPFINDREPLACEA);
-HWND  APIENTRY    AfxReplaceTextW(LPFINDREPLACEW);
+WINCOMMDLGAPI HWND APIENTRY AfxReplaceTextA(LPFINDREPLACEA);
+WINCOMMDLGAPI HWND APIENTRY AfxReplaceTextW(LPFINDREPLACEW);
 #ifdef UNICODE
 #define AfxReplaceText  AfxReplaceTextW
 #else
@@ -561,11 +624,7 @@ HWND  APIENTRY    AfxReplaceTextW(LPFINDREPLACEW);
 #endif // !UNICODE
 #endif
 
-#ifndef _MAC
-typedef UINT_PTR (APIENTRY *LPCFHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
-#else
 typedef UINT_PTR (CALLBACK *LPCFHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
-#endif
 
 typedef struct tagCHOOSEFONTA {
    DWORD           lStructSize;
@@ -621,8 +680,8 @@ typedef CHOOSEFONTA CHOOSEFONT;
 typedef LPCHOOSEFONTA LPCHOOSEFONT;
 #endif // UNICODE
 
-BOOL APIENTRY ChooseFontA(LPCHOOSEFONTA);
-BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
+WINCOMMDLGAPI BOOL APIENTRY ChooseFontA(LPCHOOSEFONTA);
+WINCOMMDLGAPI BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
 #ifdef UNICODE
 #define ChooseFont  ChooseFontW
 #else
@@ -731,13 +790,8 @@ BOOL APIENTRY ChooseFontW(LPCHOOSEFONTW);
 #define CD_LBSELSUB      1
 #define CD_LBSELADD      2
 
-#ifndef _MAC
-typedef UINT_PTR (APIENTRY *LPPRINTHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
-typedef UINT_PTR (APIENTRY *LPSETUPHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
-#else
 typedef UINT_PTR (CALLBACK *LPPRINTHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 typedef UINT_PTR (CALLBACK *LPSETUPHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
-#endif
 
 typedef struct tagPDA {
    DWORD            lStructSize;
@@ -789,8 +843,8 @@ typedef PRINTDLGA PRINTDLG;
 typedef LPPRINTDLGA LPPRINTDLG;
 #endif // UNICODE
 
-BOOL  APIENTRY  PrintDlgA(LPPRINTDLGA);
-BOOL  APIENTRY  PrintDlgW(LPPRINTDLGW);
+WINCOMMDLGAPI BOOL APIENTRY PrintDlgA(LPPRINTDLGA);
+WINCOMMDLGAPI BOOL APIENTRY PrintDlgW(LPPRINTDLGW);
 #ifdef UNICODE
 #define PrintDlg  PrintDlgW
 #else
@@ -949,8 +1003,10 @@ typedef PRINTDLGEXA PRINTDLGEX;
 typedef LPPRINTDLGEXA LPPRINTDLGEX;
 #endif // UNICODE
 
-HRESULT  APIENTRY  PrintDlgExA(LPPRINTDLGEXA);
-HRESULT  APIENTRY  PrintDlgExW(LPPRINTDLGEXW);
+
+
+WINCOMMDLGAPI HRESULT APIENTRY PrintDlgExA(LPPRINTDLGEXA);
+WINCOMMDLGAPI HRESULT APIENTRY PrintDlgExW(LPPRINTDLGEXW);
 #ifdef UNICODE
 #define PrintDlgEx  PrintDlgExW
 #else
@@ -1032,7 +1088,7 @@ typedef struct tagDEVNAMES {
 #define DN_DEFAULTPRN      0x0001
 
 
-DWORD APIENTRY     CommDlgExtendedError(VOID);
+WINCOMMDLGAPI DWORD APIENTRY CommDlgExtendedError(VOID);
 
 #if(WINVER >= 0x0400)
 #define WM_PSD_PAGESETUPDLG     (WM_USER  )
@@ -1043,8 +1099,8 @@ DWORD APIENTRY     CommDlgExtendedError(VOID);
 #define WM_PSD_ENVSTAMPRECT     (WM_USER+5)
 #define WM_PSD_YAFULLPAGERECT   (WM_USER+6)
 
-typedef UINT_PTR (APIENTRY* LPPAGEPAINTHOOK)( HWND, UINT, WPARAM, LPARAM );
-typedef UINT_PTR (APIENTRY* LPPAGESETUPHOOK)( HWND, UINT, WPARAM, LPARAM );
+typedef UINT_PTR (CALLBACK* LPPAGEPAINTHOOK)( HWND, UINT, WPARAM, LPARAM );
+typedef UINT_PTR (CALLBACK* LPPAGESETUPHOOK)( HWND, UINT, WPARAM, LPARAM );
 
 typedef struct tagPSDA
 {
@@ -1088,8 +1144,8 @@ typedef PAGESETUPDLGA PAGESETUPDLG;
 typedef LPPAGESETUPDLGA LPPAGESETUPDLG;
 #endif // UNICODE
 
-BOOL APIENTRY PageSetupDlgA( LPPAGESETUPDLGA );
-BOOL APIENTRY PageSetupDlgW( LPPAGESETUPDLGW );
+WINCOMMDLGAPI BOOL APIENTRY PageSetupDlgA( LPPAGESETUPDLGA );
+WINCOMMDLGAPI BOOL APIENTRY PageSetupDlgW( LPPAGESETUPDLGW );
 #ifdef UNICODE
 #define PageSetupDlg  PageSetupDlgW
 #else
@@ -1118,12 +1174,858 @@ BOOL APIENTRY PageSetupDlgW( LPPAGESETUPDLGW );
 #define PSD_NONETWORKBUTTON               0x00200000 // must be same as PD_*
 #endif /* WINVER >= 0x0400 */
 
+
+
+
+#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+#if ISOLATION_AWARE_ENABLED
+
+
+#if !defined(ISOLATION_AWARE_INLINE)
+#if defined(__cplusplus)
+#define ISOLATION_AWARE_INLINE inline
+#else
+#define ISOLATION_AWARE_INLINE __inline
+#endif
+#endif
+
+FARPROC WINAPI CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL(LPCSTR pszProcName);
+
+BOOL WINAPI IsolationAwareGetOpenFileNameA(LPOPENFILENAMEA unnamed1);
+BOOL WINAPI IsolationAwareGetOpenFileNameW(LPOPENFILENAMEW unnamed1);
+BOOL WINAPI IsolationAwareGetSaveFileNameA(LPOPENFILENAMEA unnamed1);
+BOOL WINAPI IsolationAwareGetSaveFileNameW(LPOPENFILENAMEW unnamed1);
+short WINAPI IsolationAwareGetFileTitleA(LPCSTR unnamed1,LPSTR unnamed2,WORD unnamed3);
+short WINAPI IsolationAwareGetFileTitleW(LPCWSTR unnamed1,LPWSTR unnamed2,WORD unnamed3);
+BOOL WINAPI IsolationAwareChooseColorA(LPCHOOSECOLORA unnamed1);
+BOOL WINAPI IsolationAwareChooseColorW(LPCHOOSECOLORW unnamed1);
+HWND WINAPI IsolationAwareFindTextA(LPFINDREPLACEA unnamed1);
+HWND WINAPI IsolationAwareFindTextW(LPFINDREPLACEW unnamed1);
+HWND WINAPI IsolationAwareReplaceTextA(LPFINDREPLACEA unnamed1);
+HWND WINAPI IsolationAwareReplaceTextW(LPFINDREPLACEW unnamed1);
+BOOL WINAPI IsolationAwareChooseFontA(LPCHOOSEFONTA unnamed1);
+BOOL WINAPI IsolationAwareChooseFontW(LPCHOOSEFONTW unnamed1);
+BOOL WINAPI IsolationAwarePrintDlgA(LPPRINTDLGA unnamed1);
+BOOL WINAPI IsolationAwarePrintDlgW(LPPRINTDLGW unnamed1);
+#if defined(STDMETHOD) && (WINVER >= 0x0500)
+HRESULT WINAPI IsolationAwarePrintDlgExA(LPPRINTDLGEXA unnamed1);
+HRESULT WINAPI IsolationAwarePrintDlgExW(LPPRINTDLGEXW unnamed1);
+#endif /* defined(STDMETHOD) && (WINVER >= 0x0500) */
+DWORD WINAPI IsolationAwareCommDlgExtendedError(void);
+BOOL WINAPI IsolationAwarePageSetupDlgA(LPPAGESETUPDLGA unnamed1);
+BOOL WINAPI IsolationAwarePageSetupDlgW(LPPAGESETUPDLGW unnamed1);
+
+#if defined(UNICODE)
+
+#define IsolationAwareChooseColor IsolationAwareChooseColorW
+#define IsolationAwareChooseFont IsolationAwareChooseFontW
+#define IsolationAwareFindText IsolationAwareFindTextW
+#define IsolationAwareGetFileTitle IsolationAwareGetFileTitleW
+#define IsolationAwareGetOpenFileName IsolationAwareGetOpenFileNameW
+#define IsolationAwareGetSaveFileName IsolationAwareGetSaveFileNameW
+#define IsolationAwarePageSetupDlg IsolationAwarePageSetupDlgW
+#define IsolationAwarePrintDlg IsolationAwarePrintDlgW
+#define IsolationAwarePrintDlgEx IsolationAwarePrintDlgExW
+#define IsolationAwareReplaceText IsolationAwareReplaceTextW
+
+#else /* UNICODE */
+
+#define IsolationAwareChooseColor IsolationAwareChooseColorA
+#define IsolationAwareChooseFont IsolationAwareChooseFontA
+#define IsolationAwareFindText IsolationAwareFindTextA
+#define IsolationAwareGetFileTitle IsolationAwareGetFileTitleA
+#define IsolationAwareGetOpenFileName IsolationAwareGetOpenFileNameA
+#define IsolationAwareGetSaveFileName IsolationAwareGetSaveFileNameA
+#define IsolationAwarePageSetupDlg IsolationAwarePageSetupDlgA
+#define IsolationAwarePrintDlg IsolationAwarePrintDlgA
+#define IsolationAwarePrintDlgEx IsolationAwarePrintDlgExA
+#define IsolationAwareReplaceText IsolationAwareReplaceTextA
+
+#endif /* UNICODE */
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareGetOpenFileNameA(LPOPENFILENAMEA unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPOPENFILENAMEA unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("GetOpenFileNameA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareGetOpenFileNameW(LPOPENFILENAMEW unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPOPENFILENAMEW unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("GetOpenFileNameW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareGetSaveFileNameA(LPOPENFILENAMEA unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPOPENFILENAMEA unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("GetSaveFileNameA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareGetSaveFileNameW(LPOPENFILENAMEW unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPOPENFILENAMEW unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("GetSaveFileNameW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE short WINAPI IsolationAwareGetFileTitleA(LPCSTR unnamed1,LPSTR unnamed2,WORD unnamed3)
+{
+    short nResult = -1;
+    typedef short (WINAPI* PFN)(LPCSTR unnamed1,LPSTR unnamed2,WORD unnamed3);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("GetFileTitleA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(unnamed1,unnamed2,unnamed3);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == -1);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE short WINAPI IsolationAwareGetFileTitleW(LPCWSTR unnamed1,LPWSTR unnamed2,WORD unnamed3)
+{
+    short nResult = -1;
+    typedef short (WINAPI* PFN)(LPCWSTR unnamed1,LPWSTR unnamed2,WORD unnamed3);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("GetFileTitleW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(unnamed1,unnamed2,unnamed3);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == -1);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareChooseColorA(LPCHOOSECOLORA unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPCHOOSECOLORA unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("ChooseColorA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareChooseColorW(LPCHOOSECOLORW unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPCHOOSECOLORW unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("ChooseColorW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE HWND WINAPI IsolationAwareFindTextA(LPFINDREPLACEA unnamed1)
+{
+    HWND windowResult = NULL;
+    typedef HWND (WINAPI* PFN)(LPFINDREPLACEA unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return windowResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("FindTextA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        windowResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (windowResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return windowResult;
+}
+
+ISOLATION_AWARE_INLINE HWND WINAPI IsolationAwareFindTextW(LPFINDREPLACEW unnamed1)
+{
+    HWND windowResult = NULL;
+    typedef HWND (WINAPI* PFN)(LPFINDREPLACEW unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return windowResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("FindTextW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        windowResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (windowResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return windowResult;
+}
+
+ISOLATION_AWARE_INLINE HWND WINAPI IsolationAwareReplaceTextA(LPFINDREPLACEA unnamed1)
+{
+    HWND windowResult = NULL;
+    typedef HWND (WINAPI* PFN)(LPFINDREPLACEA unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return windowResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("ReplaceTextA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        windowResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (windowResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return windowResult;
+}
+
+ISOLATION_AWARE_INLINE HWND WINAPI IsolationAwareReplaceTextW(LPFINDREPLACEW unnamed1)
+{
+    HWND windowResult = NULL;
+    typedef HWND (WINAPI* PFN)(LPFINDREPLACEW unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return windowResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("ReplaceTextW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        windowResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (windowResult == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return windowResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareChooseFontA(LPCHOOSEFONTA unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPCHOOSEFONTA unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("ChooseFontA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareChooseFontW(LPCHOOSEFONTW unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPCHOOSEFONTW unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("ChooseFontW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwarePrintDlgA(LPPRINTDLGA unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPPRINTDLGA unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("PrintDlgA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwarePrintDlgW(LPPRINTDLGW unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPPRINTDLGW unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("PrintDlgW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+#if defined(STDMETHOD) && (WINVER >= 0x0500)
+
+ISOLATION_AWARE_INLINE HRESULT WINAPI IsolationAwarePrintDlgExA(LPPRINTDLGEXA unnamed1)
+{
+    HRESULT result = S_OK;
+    typedef HRESULT (WINAPI* PFN)(LPPRINTDLGEXA unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        goto ExitWin32ToHresult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("PrintDlgExA");
+            if (s_pfn == NULL)
+                goto ExitWin32ToHresult;
+        }
+        result = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+        }
+    }
+    return result;
+
+ExitWin32ToHresult:
+    {
+        DWORD dwLastError = GetLastError();
+        if (dwLastError == NO_ERROR)
+            dwLastError = ERROR_INTERNAL_ERROR;
+        result = HRESULT_FROM_WIN32(dwLastError);
+        return result;
+    }
+}
+
+ISOLATION_AWARE_INLINE HRESULT WINAPI IsolationAwarePrintDlgExW(LPPRINTDLGEXW unnamed1)
+{
+    HRESULT result = S_OK;
+    typedef HRESULT (WINAPI* PFN)(LPPRINTDLGEXW unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        goto ExitWin32ToHresult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("PrintDlgExW");
+            if (s_pfn == NULL)
+                goto ExitWin32ToHresult;
+        }
+        result = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+        }
+    }
+    return result;
+
+ExitWin32ToHresult:
+    {
+        DWORD dwLastError = GetLastError();
+        if (dwLastError == NO_ERROR)
+            dwLastError = ERROR_INTERNAL_ERROR;
+        result = HRESULT_FROM_WIN32(dwLastError);
+        return result;
+    }
+}
+
+#endif /* defined(STDMETHOD) && (WINVER >= 0x0500) */
+
+ISOLATION_AWARE_INLINE DWORD WINAPI IsolationAwareCommDlgExtendedError(void)
+{
+    DWORD nResult = 0 ;
+    typedef DWORD (WINAPI* PFN)(void);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("CommDlgExtendedError");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn();
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == 0 );
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwarePageSetupDlgA(LPPAGESETUPDLGA unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPPAGESETUPDLGA unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("PageSetupDlgA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwarePageSetupDlgW(LPPAGESETUPDLGW unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(LPPAGESETUPDLGW unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL("PageSetupDlgW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE FARPROC WINAPI CommdlgIsolationAwarePrivatetEgCebCnDDeEff_pbMDLGDC_DLL(LPCSTR pszProcName)
+/* This function is shared by the other stubs in this header. */
+{
+    FARPROC proc = NULL;
+    static HMODULE s_module;
+    BOOL fActivateActCtxSuccess = FALSE;
+    ULONG_PTR ulpCookie = 0;
+    __try
+    {
+        if (s_module == NULL)
+        {
+            if (!IsolationAwarePrivateG_FqbjaLEiEL)
+            {
+                fActivateActCtxSuccess = IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+                if (!fActivateActCtxSuccess)
+                    __leave;
+            }
+            s_module = LoadLibraryW(L"Comdlg32.dll");
+            if (s_module == NULL)
+            {
+                if (GetLastError() != ERROR_CALL_NOT_IMPLEMENTED)
+                    __leave;
+                s_module = LoadLibraryA("Comdlg32.dll");
+                if (s_module == NULL)
+                    __leave;
+            }
+        }
+        proc = GetProcAddress(s_module, pszProcName);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL && fActivateActCtxSuccess)
+        {
+            const DWORD dwLastError = (proc == NULL) ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (proc == NULL)
+                SetLastError(dwLastError);
+        }
+    }
+    return proc;
+}
+
+#define ChooseColorA IsolationAwareChooseColorA
+#define ChooseColorW IsolationAwareChooseColorW
+#define ChooseFontA IsolationAwareChooseFontA
+#define ChooseFontW IsolationAwareChooseFontW
+#define CommDlgExtendedError IsolationAwareCommDlgExtendedError
+#define FindTextA IsolationAwareFindTextA
+#define FindTextW IsolationAwareFindTextW
+#define GetFileTitleA IsolationAwareGetFileTitleA
+#define GetFileTitleW IsolationAwareGetFileTitleW
+#define GetOpenFileNameA IsolationAwareGetOpenFileNameA
+#define GetOpenFileNameW IsolationAwareGetOpenFileNameW
+#define GetSaveFileNameA IsolationAwareGetSaveFileNameA
+#define GetSaveFileNameW IsolationAwareGetSaveFileNameW
+#define PageSetupDlgA IsolationAwarePageSetupDlgA
+#define PageSetupDlgW IsolationAwarePageSetupDlgW
+#define PrintDlgA IsolationAwarePrintDlgA
+#define PrintDlgExA IsolationAwarePrintDlgExA
+#define PrintDlgExW IsolationAwarePrintDlgExW
+#define PrintDlgW IsolationAwarePrintDlgW
+#define ReplaceTextA IsolationAwareReplaceTextA
+#define ReplaceTextW IsolationAwareReplaceTextW
+
+#endif /* ISOLATION_AWARE_ENABLED */
+#endif /* RC */
+
+
+
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
 
+#if !defined(_WIN64)
 #include <poppack.h>
+#endif
 #endif  /* GUID_DEFS_ONLY */
-#pragma option pop /*P_O_Pop*/
 #endif  /* !_INC_COMMDLG */
 

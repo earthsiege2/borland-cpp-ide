@@ -15,7 +15,6 @@ Revision History:
 --*/
 
 #ifndef _WINSPOOL_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINSPOOL_
 
 #ifdef _WINUSER_
@@ -261,6 +260,7 @@ typedef LPPRINTER_INFO_9A LPPRINTER_INFO_9;
 #define PRINTER_ATTRIBUTE_ENABLE_BIDI    0x00000800
 #define PRINTER_ATTRIBUTE_RAW_ONLY       0x00001000
 #define PRINTER_ATTRIBUTE_PUBLISHED      0x00002000
+#define PRINTER_ATTRIBUTE_FAX            0x00004000
 
 
 #define NO_PRIORITY   0
@@ -330,7 +330,7 @@ typedef struct _JOB_INFO_2A {
    DWORD    TotalPages;
    DWORD    Size;
    SYSTEMTIME Submitted;    // Time the job was spooled
-   DWORD    Time;           // How many seconds the job has been printing
+   DWORD    Time;           // How many miliseconds the job has been printing
    DWORD    PagesPrinted;
 } JOB_INFO_2A, *PJOB_INFO_2A, *LPJOB_INFO_2A;
 typedef struct _JOB_INFO_2W {
@@ -355,7 +355,7 @@ typedef struct _JOB_INFO_2W {
    DWORD    TotalPages;
    DWORD    Size;
    SYSTEMTIME Submitted;    // Time the job was spooled
-   DWORD    Time;           // How many seconds the job has been printing
+   DWORD    Time;           // How many miliseconds the job has been printing
    DWORD    PagesPrinted;
 } JOB_INFO_2W, *PJOB_INFO_2W, *LPJOB_INFO_2W;
 #ifdef UNICODE
@@ -394,6 +394,7 @@ typedef struct _JOB_INFO_3 {
 #define JOB_STATUS_BLOCKED_DEVQ         0x00000200
 #define JOB_STATUS_USER_INTERVENTION    0x00000400
 #define JOB_STATUS_RESTART              0x00000800
+#define JOB_STATUS_COMPLETE             0x00001000
 
 #define JOB_POSITION_UNSPECIFIED       0
 
@@ -608,6 +609,7 @@ typedef PDRIVER_INFO_6A PDRIVER_INFO_6;
 typedef LPDRIVER_INFO_6A LPDRIVER_INFO_6;
 #endif // UNICODE
 
+
 // FLAGS for dwDriverAttributes
 #define DRIVER_KERNELMODE                0x00000001
 #define DRIVER_USERMODE                  0x00000002
@@ -622,6 +624,9 @@ typedef LPDRIVER_INFO_6A LPDRIVER_INFO_6;
 #define APD_STRICT_DOWNGRADE             0x00000002
 #define APD_COPY_ALL_FILES               0x00000004
 #define APD_COPY_NEW_FILES               0x00000008
+#define APD_COPY_FROM_DIRECTORY          0x00000010
+
+// String for EnumPrinterDrivers. Used by Windows Update
 
 typedef struct _DOC_INFO_1A {
     LPSTR     pDocName;
@@ -737,6 +742,16 @@ typedef PRINTPROCESSOR_INFO_1A PRINTPROCESSOR_INFO_1;
 typedef PPRINTPROCESSOR_INFO_1A PPRINTPROCESSOR_INFO_1;
 typedef LPPRINTPROCESSOR_INFO_1A LPPRINTPROCESSOR_INFO_1;
 #endif // UNICODE
+
+typedef struct _PRINTPROCESSOR_CAPS_1 {
+    DWORD     dwLevel;
+    DWORD     dwNupOptions;
+    DWORD     dwPageOrderFlags;
+    DWORD     dwNumberOfCopies;
+} PRINTPROCESSOR_CAPS_1, *PPRINTPROCESSOR_CAPS_1;
+
+#define NORMAL_PRINT                   0x00000000
+#define REVERSE_PRINT                  0x00000001
 
 typedef struct _PORT_INFO_1A {
     LPSTR     pName;
@@ -955,6 +970,7 @@ EnumPrintersW(
 #define PRINTER_ENUM_REMOTE      0x00000010
 #define PRINTER_ENUM_SHARED      0x00000020
 #define PRINTER_ENUM_NETWORK     0x00000040
+
 
 #define PRINTER_ENUM_EXPAND      0x00004000
 #define PRINTER_ENUM_CONTAINER   0x00008000
@@ -1185,6 +1201,7 @@ AddPrinterDriverW(
 #else
 #define AddPrinterDriver  AddPrinterDriverA
 #endif // !UNICODE
+
 
 BOOL
 WINAPI
@@ -1972,6 +1989,89 @@ typedef struct _PRINTER_NOTIFY_INFO {
     PRINTER_NOTIFY_INFO_DATA aData[1];
 } PRINTER_NOTIFY_INFO, *PPRINTER_NOTIFY_INFO, *LPPRINTER_NOTIFY_INFO;
 
+
+typedef struct _BINARY_CONTAINER{
+    DWORD cbBuf;
+    LPBYTE pData;
+} BINARY_CONTAINER, *PBINARY_CONTAINER;
+
+
+typedef struct _BIDI_DATA{
+    DWORD dwBidiType;
+    union {
+        BOOL   bData;
+        LONG   iData;
+        LPWSTR sData;
+        FLOAT  fData;
+        BINARY_CONTAINER biData;
+        }u;
+} BIDI_DATA, *PBIDI_DATA, *LPBIDI_DATA;
+
+
+typedef struct _BIDI_REQUEST_DATA{
+    DWORD     dwReqNumber;
+    LPWSTR    pSchema;
+    BIDI_DATA data;
+} BIDI_REQUEST_DATA , *PBIDI_REQUEST_DATA , *LPBIDI_REQUEST_DATA;
+
+
+typedef struct _BIDI_REQUEST_CONTAINER{
+    DWORD Version;
+    DWORD Flags;
+    DWORD Count;
+    BIDI_REQUEST_DATA aData[ 1 ];
+}BIDI_REQUEST_CONTAINER, *PBIDI_REQUEST_CONTAINER, *LPBIDI_REQUEST_CONTAINER;
+
+typedef struct _BIDI_RESPONSE_DATA{
+    DWORD  dwResult;
+    DWORD  dwReqNumber;
+    LPWSTR pSchema;
+    BIDI_DATA data;
+} BIDI_RESPONSE_DATA, *PBIDI_RESPONSE_DATA, *LPBIDI_RESPONSE_DATA;
+
+typedef struct _BIDI_RESPONSE_CONTAINER{
+    DWORD Version;
+    DWORD Flags;
+    DWORD Count;
+    BIDI_RESPONSE_DATA aData[ 1 ];
+} BIDI_RESPONSE_CONTAINER, *PBIDI_RESPONSE_CONTAINER, *LPBIDI_RESPONSE_CONTAINER;
+
+#define BIDI_ACTION_ENUM_SCHEMA                 L"EnumSchema"
+#define BIDI_ACTION_GET                         L"Get"
+#define BIDI_ACTION_SET                         L"Set"
+#define BIDI_ACTION_GET_ALL                     L"GetAll"
+
+typedef enum {
+    BIDI_NULL   = 0,
+    BIDI_INT    = 1,
+    BIDI_FLOAT  = 2,
+    BIDI_BOOL   = 3,
+    BIDI_STRING = 4,
+    BIDI_TEXT   = 5,
+    BIDI_ENUM   = 6,
+    BIDI_BLOB   = 7
+} BIDI_TYPE;
+
+#define BIDI_ACCESS_ADMINISTRATOR  0x1
+#define BIDI_ACCESS_USER           0x2
+
+
+               
+/*
+    Error code for bidi apis
+*/
+
+#define ERROR_BIDI_STATUS_OK                0
+#define ERROR_BIDI_NOT_SUPPORTED            ERROR_NOT_SUPPORTED
+
+#define ERROR_BIDI_ERROR_BASE 13000
+#define ERROR_BIDI_STATUS_WARNING           (ERROR_BIDI_ERROR_BASE + 1)
+#define ERROR_BIDI_SCHEMA_READ_ONLY         (ERROR_BIDI_ERROR_BASE + 2)
+#define ERROR_BIDI_SERVER_OFFLINE           (ERROR_BIDI_ERROR_BASE + 3)
+#define ERROR_BIDI_DEVICE_OFFLINE           (ERROR_BIDI_ERROR_BASE + 4)
+#define ERROR_BIDI_SCHEMA_NOT_SUPPORTED     (ERROR_BIDI_ERROR_BASE + 5)
+
+
 DWORD
 WINAPI
 WaitForPrinterChange(
@@ -2576,6 +2676,7 @@ DeletePrintProvidorW(
 #define    SPLREG_MINOR_VERSION                       TEXT("MinorVersion")
 #define    SPLREG_ARCHITECTURE                        TEXT("Architecture")
 #define    SPLREG_OS_VERSION                          TEXT("OSVersion")
+#define    SPLREG_OS_VERSIONEX                        TEXT("OSVersionEx")
 #define    SPLREG_DS_PRESENT                          TEXT("DsPresent")
 #define    SPLREG_DS_PRESENT_FOR_USER                 TEXT("DsPresentForUser")
 #define    SPLREG_REMOTE_FAX                          TEXT("RemoteFax")
@@ -2725,5 +2826,4 @@ DeletePrintProvidorW(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _WINSPOOL_

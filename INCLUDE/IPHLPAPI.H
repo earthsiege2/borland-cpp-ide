@@ -1,23 +1,18 @@
 /*++
 
-Copyright (c) 1997-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
-    public\sdk\inc\iphlpapi.h
+    iphlpapi.h
 
 Abstract:
     Header file for functions to interact with the IP Stack for MIB-II and
     related functionality
 
-Revision History:
-    Amritansh Raghav    Created
-    NK Srinivas         Added
-
 --*/
 
 #ifndef __IPHLPAPI_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __IPHLPAPI_H__
 
 #if _MSC_VER > 1000
@@ -42,7 +37,7 @@ extern "C" {
 //////////////////////////////////////////////////////////////////////////////
 //                                                                          //
 // The GetXXXTable APIs take a buffer and a size of buffer.  If the buffer  //
-// is not large enough, they APIs return ERROR_INSUFFICIENT_BUFFER  and     //
+// is not large enough, the APIs return ERROR_INSUFFICIENT_BUFFER  and      //
 // *pdwSize is the required buffer size                                     //
 // The bOrder is a BOOLEAN, which if TRUE sorts the table according to      //
 // MIB-II (RFC XXXX)                                                        //
@@ -171,6 +166,13 @@ GetIpStatistics(
 
 DWORD
 WINAPI
+GetIpStatisticsEx(
+    OUT  PMIB_IPSTATS   pStats,
+    IN   DWORD          dwFamily
+    );
+
+DWORD
+WINAPI
 GetIcmpStatistics(
     OUT PMIB_ICMP   pStats
     );
@@ -184,8 +186,22 @@ GetTcpStatistics(
 
 DWORD
 WINAPI
+GetTcpStatisticsEx(
+    OUT PMIB_TCPSTATS   pStats,
+    IN  DWORD           dwFamily
+    );
+
+DWORD
+WINAPI
 GetUdpStatistics(
     OUT PMIB_UDPSTATS   pStats
+    );
+
+DWORD
+WINAPI
+GetUdpStatisticsEx(
+    OUT PMIB_UDPSTATS   pStats,
+    IN  DWORD           dwFamily
     );
 
 //////////////////////////////////////////////////////////////////////////////
@@ -427,6 +443,24 @@ GetAdaptersInfo(
     PIP_ADAPTER_INFO pAdapterInfo, PULONG pOutBufLen
     );
 
+#ifdef _WINSOCK2API_
+
+//
+// The following functions require Winsock2.
+//
+
+DWORD
+WINAPI
+GetAdaptersAddresses(
+    ULONG Family,
+    DWORD Flags,
+    PVOID Reserved,
+    PIP_ADAPTER_ADDRESSES pAdapterAddresses, 
+    PULONG pOutBufLen
+    );
+
+#endif
+
 DWORD
 WINAPI
 GetPerAdapterInfo(
@@ -483,12 +517,30 @@ UnenableRouter(
     OVERLAPPED* pOverlapped,
     LPDWORD lpdwEnableCount OPTIONAL
     );
+DWORD
+WINAPI
+DisableMediaSense(
+    HANDLE *pHandle,
+    OVERLAPPED *pOverLapped
+    );
+
+DWORD
+WINAPI
+RestoreMediaSense(
+    OVERLAPPED* pOverlapped,
+    LPDWORD lpdwEnableCount OPTIONAL
+    );
+
+DWORD
+WINAPI
+GetIpErrorString(
+    IN IP_STATUS ErrorCode,
+    OUT PWCHAR Buffer,
+    IN OUT PDWORD Size
+    );
 
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif //__IPHLPAPI_H__
-
-

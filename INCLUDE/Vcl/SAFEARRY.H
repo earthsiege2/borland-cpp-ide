@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 //  SAFEARRY.H - Helpers to handle SAFEARRAY in C++
 //
-//  $Revision:   1.15  $
-//  $Date:   27 May 1999 12:31:36  $
+//  $Revision:   1.15.1.0.1.2  $
+//  $Date:   25 Jan 2002 12:54:20  $
 //
-//  Copyright (c) 1997, 1998 Borland International
+//  Copyright (c) 1997, 2002 Borland Software Corporation
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -219,8 +219,10 @@ public:
 
  ~TSAAccessorT()
   {
-    if (m_Alloc)
+    if (m_Alloc) {
+      m_Indices--;
       delete[] m_Indices;
+    }
   }
 
   friend  TSAAccessorT<T, DIM+1>;

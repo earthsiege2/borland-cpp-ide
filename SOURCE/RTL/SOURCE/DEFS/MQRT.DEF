@@ -1,37 +1,45 @@
-LIBRARY MQRT
+LIBRARY MqRt
 EXPORTS
 
-    MQBeginTransaction                       = 'MQRT.DLL'.*
-    MQCloseCursor                            = 'MQRT.DLL'.*
-    MQCloseQueue                             = 'MQRT.DLL'.*
-    MQCreateCursor                           = 'MQRT.DLL'.*
-    MQCreateQueue                            = 'MQRT.DLL'.*
-    MQDeleteQueue                            = 'MQRT.DLL'.*
-    MQFreeMemory                             = 'MQRT.DLL'.*
-    MQFreeSecurityContext                    = 'MQRT.DLL'.*
-    MQGetInternalCert                        = 'MQRT.DLL'.*
-    MQGetMachineProperties                   = 'MQRT.DLL'.*
-    MQGetOverlappedResult                    = 'MQRT.DLL'.*
-    MQGetPrivateComputerInformation          = 'MQRT.DLL'.*
-    MQGetQueueProperties                     = 'MQRT.DLL'.*
-    MQGetQueueSecurity                       = 'MQRT.DLL'.*
-    MQGetSecurityContext                     = 'MQRT.DLL'.*
-    MQGetUserCerts                           = 'MQRT.DLL'.*
-    MQHandleToFormatName                     = 'MQRT.DLL'.*
-    MQInstanceToFormatName                   = 'MQRT.DLL'.*
-    MQLocateBegin                            = 'MQRT.DLL'.*
-    MQLocateEnd                              = 'MQRT.DLL'.*
-    MQLocateNext                             = 'MQRT.DLL'.*
-    MQMgmtAction                             = 'MQRT.DLL'.*
-    MQMgmtGetInfo                            = 'MQRT.DLL'.*
-    MQOpenInternalCertStore                  = 'MQRT.DLL'.*
-    MQOpenQueue                              = 'MQRT.DLL'.*
-    MQPathNameToFormatName                   = 'MQRT.DLL'.*
-    MQPurgeQueue                             = 'MQRT.DLL'.*
-    MQReceiveMessage                         = 'MQRT.DLL'.*
-    MQRegisterCertificate                    = 'MQRT.DLL'.*
-    MQRegisterUserCert                       = 'MQRT.DLL'.*
-    MQRemoveUserCert                         = 'MQRT.DLL'.*
-    MQSendMessage                            = 'MQRT.DLL'.*
-    MQSetQueueProperties                     = 'MQRT.DLL'.*
-    MQSetQueueSecurity                       = 'MQRT.DLL'.*
+    MQADsPathToFormatName
+    MQAllocateMemory
+    MQBeginTransaction
+    MQCloseCursor
+    MQCloseQueue
+    MQCreateCursor
+    MQCreateQueue
+    MQDeleteQueue
+    MQFreeMemory
+    MQFreeSecurityContext
+    MQGetMachineProperties
+    MQGetOverlappedResult
+    MQGetPrivateComputerInformation
+    MQGetQueueProperties
+    MQGetQueueSecurity
+    MQGetSecurityContext
+    MQGetSecurityContextEx
+    MQHandleToFormatName
+    MQInstanceToFormatName
+    MQLocateBegin
+    MQLocateEnd
+    MQLocateNext
+    MQMgmtAction
+    MQMgmtGetInfo
+    MQOpenQueue
+    MQPathNameToFormatName
+    MQPurgeQueue
+    MQReceiveMessage
+    MQReceiveMessageByLookupId
+    MQRegisterCertificate
+    MQSendMessage
+    MQSetQueueProperties
+    MQSetQueueSecurity
+    RTCreateInternalCertificate
+    RTDeleteInternalCert
+    RTGetInternalCert
+    RTGetUserCerts
+    RTIsDependentClient
+    RTOpenInternalCertStore
+    RTRegisterUserCert
+    RTRemoveUserCert
+    RTXactGetDTC

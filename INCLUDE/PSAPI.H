@@ -19,7 +19,6 @@ Revision History:
 --*/
 
 #ifndef _PSAPI_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _PSAPI_H_
 
 #if _MSC_VER > 1000
@@ -251,9 +250,88 @@ GetProcessMemoryInfo(
     DWORD cb
     );
 
+typedef struct _PERFORMACE_INFORMATION {
+    DWORD cb;
+    SIZE_T CommitTotal;
+    SIZE_T CommitLimit;
+    SIZE_T CommitPeak;
+    SIZE_T PhysicalTotal;
+    SIZE_T PhysicalAvailable;
+    SIZE_T SystemCache;
+    SIZE_T KernelTotal;
+    SIZE_T KernelPaged;
+    SIZE_T KernelNonpaged;
+    SIZE_T PageSize;
+    DWORD HandleCount;
+    DWORD ProcessCount;
+    DWORD ThreadCount;
+} PERFORMACE_INFORMATION, *PPERFORMACE_INFORMATION;
+
+BOOL
+WINAPI
+GetPerformanceInfo (
+    PPERFORMACE_INFORMATION pPerformanceInformation,
+    DWORD cb
+    );
+
+typedef struct _ENUM_PAGE_FILE_INFORMATION {
+    DWORD cb;
+    DWORD Reserved;
+    SIZE_T TotalSize;
+    SIZE_T TotalInUse;
+    SIZE_T PeakUsage;
+} ENUM_PAGE_FILE_INFORMATION, *PENUM_PAGE_FILE_INFORMATION;
+
+typedef BOOL (*PENUM_PAGE_FILE_CALLBACKW) (LPVOID pContext, PENUM_PAGE_FILE_INFORMATION pPageFileInfo, LPCWSTR lpFilename);
+
+typedef BOOL (*PENUM_PAGE_FILE_CALLBACKA) (LPVOID pContext, PENUM_PAGE_FILE_INFORMATION pPageFileInfo, LPCSTR lpFilename);
+
+BOOL
+WINAPI
+EnumPageFilesW (
+    PENUM_PAGE_FILE_CALLBACKW pCallBackRoutine,
+    LPVOID pContext
+    );
+
+BOOL
+WINAPI
+EnumPageFilesA (
+    PENUM_PAGE_FILE_CALLBACKA pCallBackRoutine,
+    LPVOID pContext
+    );
+
+#ifdef UNICODE
+#define PENUM_PAGE_FILE_CALLBACK PENUM_PAGE_FILE_CALLBACKW
+#define EnumPageFiles EnumPageFilesW
+#else
+#define PENUM_PAGE_FILE_CALLBACK PENUM_PAGE_FILE_CALLBACKA
+#define EnumPageFiles EnumPageFilesA
+#endif // !UNICODE
+
+DWORD
+WINAPI
+GetProcessImageFileNameA(
+    HANDLE hProcess,
+    LPSTR lpImageFileName,
+    DWORD nSize
+    );
+
+DWORD
+WINAPI
+GetProcessImageFileNameW(
+    HANDLE hProcess,
+    LPWSTR lpImageFileName,
+    DWORD nSize
+    );
+
+#ifdef UNICODE
+#define GetProcessImageFileName  GetProcessImageFileNameW
+#else
+#define GetProcessImageFileName  GetProcessImageFileNameA
+#endif // !UNICODE
+
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif

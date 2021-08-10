@@ -14,7 +14,6 @@
 
 
 #ifndef _SMX_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _SMX_H_
 
 
@@ -429,5 +428,4 @@ BOOL PASCAL SMEValidateW( PSMS_VALIDATEW psmsValidate );
 
 
 
-#pragma option pop /*P_O_Pop*/
 #endif  // _SMX_H_

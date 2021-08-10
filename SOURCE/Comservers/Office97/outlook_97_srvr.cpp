@@ -9,17 +9,20 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.2.1  $
-// File generated on 1/24/2000 9:49:48 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/28/2002 7:55:39 AM from Type Library described below.
 
-// ************************************************************************ //
-// Type Lib: g:\rampage\typelib\TypeLibraries\MSOUTL8.olb (1)
-// IID\LCID: {00062FFF-0000-0000-C000-000000000046}\0
-// Helpfile: D:\Program Files\Microsoft Office\Office\VBAOUTL.HLP
+// ************************************************************************  //
+// Type Lib: c:\program files\microsoft office\office97\office\msoutl8.olb (1)
+// LIBID: {00062FFF-0000-0000-C000-000000000046}
+// LCID: 0
+// Helpfile: C:\Program Files\Microsoft Office\office97\Office\VBAOUTL.HLP
+// HelpString: Microsoft Outlook 8.0 Object Library
 // DepndLst: 
 //   (1) v1.0 stdole, (C:\WINNT\System32\stdole32.tlb)
-//   (2) v2.0 Office, (D:\Program Files\Microsoft Office\Office\MSO97.DLL)
+//   (2) v2.0 Office, (C:\Program Files\Microsoft Office\office97\Office\MSO97.DLL)
 //   (3) v2.0 MSForms, (C:\WINNT\System32\FM20.DLL)
+//   (4) v2.0 StdType, (C:\WINNT\System32\olepro32.dll)
 // Errors:
 //   Hint: Symbol 'Application' renamed to 'OutlookApplication'
 //   Hint: Symbol 'Application' renamed to 'OutlookApplication'
@@ -28,6 +31,7 @@
 #include <vcl.h>
 #pragma hdrstop
 
+#include <oleserver.hpp>
 #if defined(USING_ATL)
 #include <atl\atlvcl.h>
 #endif
@@ -160,54 +164,76 @@ void __fastcall TAppointmentItem::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TAppointmentItem::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TAppointmentItem::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 61441:
-      if (OnRead)
+    case 61441: {
+      if (OnRead) {
         (OnRead)(this);
+      }
       break;
-    case 61442:
-      if (OnWrite)
+      }
+    case 61442: {
+      if (OnWrite) {
         (OnWrite)(this);
+      }
       break;
-    case 61443:
-      if (OnOpen)
+      }
+    case 61443: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 61444:
-      if (OnClose)
+      }
+    case 61444: {
+      if (OnClose) {
         (OnClose)(this);
+      }
       break;
-    case 61445:
-      if (OnSend)
+      }
+    case 61445: {
+      if (OnSend) {
         (OnSend)(this);
+      }
       break;
-    case 62566:
-      if (OnReply)
+      }
+    case 62566: {
+      if (OnReply) {
         (OnReply)(this, TVariant(params[0]));
+      }
       break;
-    case 62567:
-      if (OnReplyAll)
+      }
+    case 62567: {
+      if (OnReplyAll) {
         (OnReplyAll)(this, TVariant(params[0]));
+      }
       break;
-    case 62568:
-      if (OnForward)
+      }
+    case 62568: {
+      if (OnForward) {
         (OnForward)(this, TVariant(params[0]));
+      }
       break;
-    case 61446:
-      if (OnCustomAction)
+      }
+    case 61446: {
+      if (OnCustomAction) {
         (OnCustomAction)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 61448:
-      if (OnCustomPropertyChange)
+      }
+    case 61448: {
+      if (OnCustomPropertyChange) {
         (OnCustomPropertyChange)(this, TVariant(params[0]));
+      }
       break;
-    case 61449:
-      if (OnPropertyChange)
+      }
+    case 61449: {
+      if (OnPropertyChange) {
         (OnPropertyChange)(this, TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -272,54 +298,76 @@ void __fastcall TContactItem::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TContactItem::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TContactItem::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 61441:
-      if (OnRead)
+    case 61441: {
+      if (OnRead) {
         (OnRead)(this);
+      }
       break;
-    case 61442:
-      if (OnWrite)
+      }
+    case 61442: {
+      if (OnWrite) {
         (OnWrite)(this);
+      }
       break;
-    case 61443:
-      if (OnOpen)
+      }
+    case 61443: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 61444:
-      if (OnClose)
+      }
+    case 61444: {
+      if (OnClose) {
         (OnClose)(this);
+      }
       break;
-    case 61445:
-      if (OnSend)
+      }
+    case 61445: {
+      if (OnSend) {
         (OnSend)(this);
+      }
       break;
-    case 62566:
-      if (OnReply)
+      }
+    case 62566: {
+      if (OnReply) {
         (OnReply)(this, TVariant(params[0]));
+      }
       break;
-    case 62567:
-      if (OnReplyAll)
+      }
+    case 62567: {
+      if (OnReplyAll) {
         (OnReplyAll)(this, TVariant(params[0]));
+      }
       break;
-    case 62568:
-      if (OnForward)
+      }
+    case 62568: {
+      if (OnForward) {
         (OnForward)(this, TVariant(params[0]));
+      }
       break;
-    case 61446:
-      if (OnCustomAction)
+      }
+    case 61446: {
+      if (OnCustomAction) {
         (OnCustomAction)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 61448:
-      if (OnCustomPropertyChange)
+      }
+    case 61448: {
+      if (OnCustomPropertyChange) {
         (OnCustomPropertyChange)(this, TVariant(params[0]));
+      }
       break;
-    case 61449:
-      if (OnPropertyChange)
+      }
+    case 61449: {
+      if (OnPropertyChange) {
         (OnPropertyChange)(this, TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -384,54 +432,76 @@ void __fastcall TJournalItem::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TJournalItem::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TJournalItem::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 61441:
-      if (OnRead)
+    case 61441: {
+      if (OnRead) {
         (OnRead)(this);
+      }
       break;
-    case 61442:
-      if (OnWrite)
+      }
+    case 61442: {
+      if (OnWrite) {
         (OnWrite)(this);
+      }
       break;
-    case 61443:
-      if (OnOpen)
+      }
+    case 61443: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 61444:
-      if (OnClose)
+      }
+    case 61444: {
+      if (OnClose) {
         (OnClose)(this);
+      }
       break;
-    case 61445:
-      if (OnSend)
+      }
+    case 61445: {
+      if (OnSend) {
         (OnSend)(this);
+      }
       break;
-    case 62566:
-      if (OnReply)
+      }
+    case 62566: {
+      if (OnReply) {
         (OnReply)(this, TVariant(params[0]));
+      }
       break;
-    case 62567:
-      if (OnReplyAll)
+      }
+    case 62567: {
+      if (OnReplyAll) {
         (OnReplyAll)(this, TVariant(params[0]));
+      }
       break;
-    case 62568:
-      if (OnForward)
+      }
+    case 62568: {
+      if (OnForward) {
         (OnForward)(this, TVariant(params[0]));
+      }
       break;
-    case 61446:
-      if (OnCustomAction)
+      }
+    case 61446: {
+      if (OnCustomAction) {
         (OnCustomAction)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 61448:
-      if (OnCustomPropertyChange)
+      }
+    case 61448: {
+      if (OnCustomPropertyChange) {
         (OnCustomPropertyChange)(this, TVariant(params[0]));
+      }
       break;
-    case 61449:
-      if (OnPropertyChange)
+      }
+    case 61449: {
+      if (OnPropertyChange) {
         (OnPropertyChange)(this, TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -496,54 +566,76 @@ void __fastcall TMailItem::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TMailItem::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TMailItem::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 61441:
-      if (OnRead)
+    case 61441: {
+      if (OnRead) {
         (OnRead)(this);
+      }
       break;
-    case 61442:
-      if (OnWrite)
+      }
+    case 61442: {
+      if (OnWrite) {
         (OnWrite)(this);
+      }
       break;
-    case 61443:
-      if (OnOpen)
+      }
+    case 61443: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 61444:
-      if (OnClose)
+      }
+    case 61444: {
+      if (OnClose) {
         (OnClose)(this);
+      }
       break;
-    case 61445:
-      if (OnSend)
+      }
+    case 61445: {
+      if (OnSend) {
         (OnSend)(this);
+      }
       break;
-    case 62566:
-      if (OnReply)
+      }
+    case 62566: {
+      if (OnReply) {
         (OnReply)(this, TVariant(params[0]));
+      }
       break;
-    case 62567:
-      if (OnReplyAll)
+      }
+    case 62567: {
+      if (OnReplyAll) {
         (OnReplyAll)(this, TVariant(params[0]));
+      }
       break;
-    case 62568:
-      if (OnForward)
+      }
+    case 62568: {
+      if (OnForward) {
         (OnForward)(this, TVariant(params[0]));
+      }
       break;
-    case 61446:
-      if (OnCustomAction)
+      }
+    case 61446: {
+      if (OnCustomAction) {
         (OnCustomAction)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 61448:
-      if (OnCustomPropertyChange)
+      }
+    case 61448: {
+      if (OnCustomPropertyChange) {
         (OnCustomPropertyChange)(this, TVariant(params[0]));
+      }
       break;
-    case 61449:
-      if (OnPropertyChange)
+      }
+    case 61449: {
+      if (OnPropertyChange) {
         (OnPropertyChange)(this, TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -608,54 +700,76 @@ void __fastcall TMeetingRequestItem::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TMeetingRequestItem::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TMeetingRequestItem::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 61441:
-      if (OnRead)
+    case 61441: {
+      if (OnRead) {
         (OnRead)(this);
+      }
       break;
-    case 61442:
-      if (OnWrite)
+      }
+    case 61442: {
+      if (OnWrite) {
         (OnWrite)(this);
+      }
       break;
-    case 61443:
-      if (OnOpen)
+      }
+    case 61443: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 61444:
-      if (OnClose)
+      }
+    case 61444: {
+      if (OnClose) {
         (OnClose)(this);
+      }
       break;
-    case 61445:
-      if (OnSend)
+      }
+    case 61445: {
+      if (OnSend) {
         (OnSend)(this);
+      }
       break;
-    case 62566:
-      if (OnReply)
+      }
+    case 62566: {
+      if (OnReply) {
         (OnReply)(this, TVariant(params[0]));
+      }
       break;
-    case 62567:
-      if (OnReplyAll)
+      }
+    case 62567: {
+      if (OnReplyAll) {
         (OnReplyAll)(this, TVariant(params[0]));
+      }
       break;
-    case 62568:
-      if (OnForward)
+      }
+    case 62568: {
+      if (OnForward) {
         (OnForward)(this, TVariant(params[0]));
+      }
       break;
-    case 61446:
-      if (OnCustomAction)
+      }
+    case 61446: {
+      if (OnCustomAction) {
         (OnCustomAction)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 61448:
-      if (OnCustomPropertyChange)
+      }
+    case 61448: {
+      if (OnCustomPropertyChange) {
         (OnCustomPropertyChange)(this, TVariant(params[0]));
+      }
       break;
-    case 61449:
-      if (OnPropertyChange)
+      }
+    case 61449: {
+      if (OnPropertyChange) {
         (OnPropertyChange)(this, TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -720,54 +834,76 @@ void __fastcall TNoteItem::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TNoteItem::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TNoteItem::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 61441:
-      if (OnRead)
+    case 61441: {
+      if (OnRead) {
         (OnRead)(this);
+      }
       break;
-    case 61442:
-      if (OnWrite)
+      }
+    case 61442: {
+      if (OnWrite) {
         (OnWrite)(this);
+      }
       break;
-    case 61443:
-      if (OnOpen)
+      }
+    case 61443: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 61444:
-      if (OnClose)
+      }
+    case 61444: {
+      if (OnClose) {
         (OnClose)(this);
+      }
       break;
-    case 61445:
-      if (OnSend)
+      }
+    case 61445: {
+      if (OnSend) {
         (OnSend)(this);
+      }
       break;
-    case 62566:
-      if (OnReply)
+      }
+    case 62566: {
+      if (OnReply) {
         (OnReply)(this, TVariant(params[0]));
+      }
       break;
-    case 62567:
-      if (OnReplyAll)
+      }
+    case 62567: {
+      if (OnReplyAll) {
         (OnReplyAll)(this, TVariant(params[0]));
+      }
       break;
-    case 62568:
-      if (OnForward)
+      }
+    case 62568: {
+      if (OnForward) {
         (OnForward)(this, TVariant(params[0]));
+      }
       break;
-    case 61446:
-      if (OnCustomAction)
+      }
+    case 61446: {
+      if (OnCustomAction) {
         (OnCustomAction)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 61448:
-      if (OnCustomPropertyChange)
+      }
+    case 61448: {
+      if (OnCustomPropertyChange) {
         (OnCustomPropertyChange)(this, TVariant(params[0]));
+      }
       break;
-    case 61449:
-      if (OnPropertyChange)
+      }
+    case 61449: {
+      if (OnPropertyChange) {
         (OnPropertyChange)(this, TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -832,54 +968,76 @@ void __fastcall TPostItem::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TPostItem::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TPostItem::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 61441:
-      if (OnRead)
+    case 61441: {
+      if (OnRead) {
         (OnRead)(this);
+      }
       break;
-    case 61442:
-      if (OnWrite)
+      }
+    case 61442: {
+      if (OnWrite) {
         (OnWrite)(this);
+      }
       break;
-    case 61443:
-      if (OnOpen)
+      }
+    case 61443: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 61444:
-      if (OnClose)
+      }
+    case 61444: {
+      if (OnClose) {
         (OnClose)(this);
+      }
       break;
-    case 61445:
-      if (OnSend)
+      }
+    case 61445: {
+      if (OnSend) {
         (OnSend)(this);
+      }
       break;
-    case 62566:
-      if (OnReply)
+      }
+    case 62566: {
+      if (OnReply) {
         (OnReply)(this, TVariant(params[0]));
+      }
       break;
-    case 62567:
-      if (OnReplyAll)
+      }
+    case 62567: {
+      if (OnReplyAll) {
         (OnReplyAll)(this, TVariant(params[0]));
+      }
       break;
-    case 62568:
-      if (OnForward)
+      }
+    case 62568: {
+      if (OnForward) {
         (OnForward)(this, TVariant(params[0]));
+      }
       break;
-    case 61446:
-      if (OnCustomAction)
+      }
+    case 61446: {
+      if (OnCustomAction) {
         (OnCustomAction)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 61448:
-      if (OnCustomPropertyChange)
+      }
+    case 61448: {
+      if (OnCustomPropertyChange) {
         (OnCustomPropertyChange)(this, TVariant(params[0]));
+      }
       break;
-    case 61449:
-      if (OnPropertyChange)
+      }
+    case 61449: {
+      if (OnPropertyChange) {
         (OnPropertyChange)(this, TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -944,54 +1102,76 @@ void __fastcall TRemoteItem::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TRemoteItem::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TRemoteItem::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 61441:
-      if (OnRead)
+    case 61441: {
+      if (OnRead) {
         (OnRead)(this);
+      }
       break;
-    case 61442:
-      if (OnWrite)
+      }
+    case 61442: {
+      if (OnWrite) {
         (OnWrite)(this);
+      }
       break;
-    case 61443:
-      if (OnOpen)
+      }
+    case 61443: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 61444:
-      if (OnClose)
+      }
+    case 61444: {
+      if (OnClose) {
         (OnClose)(this);
+      }
       break;
-    case 61445:
-      if (OnSend)
+      }
+    case 61445: {
+      if (OnSend) {
         (OnSend)(this);
+      }
       break;
-    case 62566:
-      if (OnReply)
+      }
+    case 62566: {
+      if (OnReply) {
         (OnReply)(this, TVariant(params[0]));
+      }
       break;
-    case 62567:
-      if (OnReplyAll)
+      }
+    case 62567: {
+      if (OnReplyAll) {
         (OnReplyAll)(this, TVariant(params[0]));
+      }
       break;
-    case 62568:
-      if (OnForward)
+      }
+    case 62568: {
+      if (OnForward) {
         (OnForward)(this, TVariant(params[0]));
+      }
       break;
-    case 61446:
-      if (OnCustomAction)
+      }
+    case 61446: {
+      if (OnCustomAction) {
         (OnCustomAction)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 61448:
-      if (OnCustomPropertyChange)
+      }
+    case 61448: {
+      if (OnCustomPropertyChange) {
         (OnCustomPropertyChange)(this, TVariant(params[0]));
+      }
       break;
-    case 61449:
-      if (OnPropertyChange)
+      }
+    case 61449: {
+      if (OnPropertyChange) {
         (OnPropertyChange)(this, TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -1056,54 +1236,76 @@ void __fastcall TReportItem::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TReportItem::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TReportItem::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 61441:
-      if (OnRead)
+    case 61441: {
+      if (OnRead) {
         (OnRead)(this);
+      }
       break;
-    case 61442:
-      if (OnWrite)
+      }
+    case 61442: {
+      if (OnWrite) {
         (OnWrite)(this);
+      }
       break;
-    case 61443:
-      if (OnOpen)
+      }
+    case 61443: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 61444:
-      if (OnClose)
+      }
+    case 61444: {
+      if (OnClose) {
         (OnClose)(this);
+      }
       break;
-    case 61445:
-      if (OnSend)
+      }
+    case 61445: {
+      if (OnSend) {
         (OnSend)(this);
+      }
       break;
-    case 62566:
-      if (OnReply)
+      }
+    case 62566: {
+      if (OnReply) {
         (OnReply)(this, TVariant(params[0]));
+      }
       break;
-    case 62567:
-      if (OnReplyAll)
+      }
+    case 62567: {
+      if (OnReplyAll) {
         (OnReplyAll)(this, TVariant(params[0]));
+      }
       break;
-    case 62568:
-      if (OnForward)
+      }
+    case 62568: {
+      if (OnForward) {
         (OnForward)(this, TVariant(params[0]));
+      }
       break;
-    case 61446:
-      if (OnCustomAction)
+      }
+    case 61446: {
+      if (OnCustomAction) {
         (OnCustomAction)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 61448:
-      if (OnCustomPropertyChange)
+      }
+    case 61448: {
+      if (OnCustomPropertyChange) {
         (OnCustomPropertyChange)(this, TVariant(params[0]));
+      }
       break;
-    case 61449:
-      if (OnPropertyChange)
+      }
+    case 61449: {
+      if (OnPropertyChange) {
         (OnPropertyChange)(this, TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -1168,54 +1370,76 @@ void __fastcall TTaskItem::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TTaskItem::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TTaskItem::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 61441:
-      if (OnRead)
+    case 61441: {
+      if (OnRead) {
         (OnRead)(this);
+      }
       break;
-    case 61442:
-      if (OnWrite)
+      }
+    case 61442: {
+      if (OnWrite) {
         (OnWrite)(this);
+      }
       break;
-    case 61443:
-      if (OnOpen)
+      }
+    case 61443: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 61444:
-      if (OnClose)
+      }
+    case 61444: {
+      if (OnClose) {
         (OnClose)(this);
+      }
       break;
-    case 61445:
-      if (OnSend)
+      }
+    case 61445: {
+      if (OnSend) {
         (OnSend)(this);
+      }
       break;
-    case 62566:
-      if (OnReply)
+      }
+    case 62566: {
+      if (OnReply) {
         (OnReply)(this, TVariant(params[0]));
+      }
       break;
-    case 62567:
-      if (OnReplyAll)
+      }
+    case 62567: {
+      if (OnReplyAll) {
         (OnReplyAll)(this, TVariant(params[0]));
+      }
       break;
-    case 62568:
-      if (OnForward)
+      }
+    case 62568: {
+      if (OnForward) {
         (OnForward)(this, TVariant(params[0]));
+      }
       break;
-    case 61446:
-      if (OnCustomAction)
+      }
+    case 61446: {
+      if (OnCustomAction) {
         (OnCustomAction)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 61448:
-      if (OnCustomPropertyChange)
+      }
+    case 61448: {
+      if (OnCustomPropertyChange) {
         (OnCustomPropertyChange)(this, TVariant(params[0]));
+      }
       break;
-    case 61449:
-      if (OnPropertyChange)
+      }
+    case 61449: {
+      if (OnPropertyChange) {
         (OnPropertyChange)(this, TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -1280,54 +1504,76 @@ void __fastcall TTaskRequestItem::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TTaskRequestItem::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TTaskRequestItem::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 61441:
-      if (OnRead)
+    case 61441: {
+      if (OnRead) {
         (OnRead)(this);
+      }
       break;
-    case 61442:
-      if (OnWrite)
+      }
+    case 61442: {
+      if (OnWrite) {
         (OnWrite)(this);
+      }
       break;
-    case 61443:
-      if (OnOpen)
+      }
+    case 61443: {
+      if (OnOpen) {
         (OnOpen)(this);
+      }
       break;
-    case 61444:
-      if (OnClose)
+      }
+    case 61444: {
+      if (OnClose) {
         (OnClose)(this);
+      }
       break;
-    case 61445:
-      if (OnSend)
+      }
+    case 61445: {
+      if (OnSend) {
         (OnSend)(this);
+      }
       break;
-    case 62566:
-      if (OnReply)
+      }
+    case 62566: {
+      if (OnReply) {
         (OnReply)(this, TVariant(params[0]));
+      }
       break;
-    case 62567:
-      if (OnReplyAll)
+      }
+    case 62567: {
+      if (OnReplyAll) {
         (OnReplyAll)(this, TVariant(params[0]));
+      }
       break;
-    case 62568:
-      if (OnForward)
+      }
+    case 62568: {
+      if (OnForward) {
         (OnForward)(this, TVariant(params[0]));
+      }
       break;
-    case 61446:
-      if (OnCustomAction)
+      }
+    case 61446: {
+      if (OnCustomAction) {
         (OnCustomAction)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 61448:
-      if (OnCustomPropertyChange)
+      }
+    case 61448: {
+      if (OnCustomPropertyChange) {
         (OnCustomPropertyChange)(this, TVariant(params[0]));
+      }
       break;
-    case 61449:
-      if (OnPropertyChange)
+      }
+    case 61449: {
+      if (OnPropertyChange) {
         (OnPropertyChange)(this, TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
@@ -1363,7 +1609,7 @@ void __fastcall PACKAGE Register()
                               __classid(Outlook_97::TTaskItem), 
                               __classid(Outlook_97::TTaskRequestItem)
                            };
-  RegisterComponents("Servers", cls_svr,
+  RegisterComponents("Office97", cls_svr,
                      sizeof(cls_svr)/sizeof(cls_svr[0])-1);
 }
 

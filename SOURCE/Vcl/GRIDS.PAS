@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -13,8 +13,8 @@ unit Grids;
 
 interface
 
-uses Messages, Windows, SysUtils, Classes, Graphics, Menus, Controls, Forms,
-  StdCtrls, Mask;
+uses Messages, {$IFDEF LINUX} WinUtils, {$ENDIF} Windows, SysUtils, Classes,
+  Variants, Graphics, Menus, Controls, Forms, StdCtrls, Mask;
 
 const
   MaxCustomExtents = MaxListSize;
@@ -205,6 +205,8 @@ type
       1: (TopLeft, BottomRight: TGridCoord);
   end;
 
+  TEditStyle =  (esSimple, esEllipsis, esPickList);
+
   TSelectCellEvent = procedure (Sender: TObject; ACol, ARow: Longint;
     var CanSelect: Boolean) of object;
   TDrawCellEvent = procedure (Sender: TObject; ACol, ARow: Longint;
@@ -246,17 +248,13 @@ type
     function CalcMaxTopLeft(const Coord: TGridCoord;
       const DrawInfo: TGridDrawInfo): TGridCoord;
     procedure CancelMode;
-    procedure ChangeGridOrientation(RightToLeftOrientation: Boolean);
     procedure ChangeSize(NewColCount, NewRowCount: Longint);
     procedure ClampInView(const Coord: TGridCoord);
     procedure DrawSizingLine(const DrawInfo: TGridDrawInfo);
     procedure DrawMove;
-    procedure FocusCell(ACol, ARow: Longint; MoveAnchor: Boolean);
     procedure GridRectToScreenRect(GridRect: TGridRect;
       var ScreenRect: TRect; IncludeLine: Boolean);
-    procedure HideEdit;
     procedure Initialize;
-    procedure InvalidateGrid;
     procedure InvalidateRect(ARect: TGridRect);
     procedure ModifyScrollBar(ScrollBar, ScrollCode, Pos: Cardinal;
       UseRightToLeft: Boolean);
@@ -335,6 +333,7 @@ type
     procedure CalcSizingState(X, Y: Integer; var State: TGridState;
       var Index: Longint; var SizingPos, SizingOfs: Integer;
       var FixedInfo: TGridDrawInfo); virtual;
+    procedure ChangeGridOrientation(RightToLeftOrientation: Boolean);
     function CreateEditor: TInplaceEdit; virtual;
     procedure CreateParams(var Params: TCreateParams); override;
     procedure KeyDown(var Key: Word; Shift: TShiftState); override;
@@ -354,16 +353,20 @@ type
     function CanEditShow: Boolean; virtual;
     function DoMouseWheelDown(Shift: TShiftState; MousePos: TPoint): Boolean; override;
     function DoMouseWheelUp(Shift: TShiftState; MousePos: TPoint): Boolean; override;
+    procedure FocusCell(ACol, ARow: Longint; MoveAnchor: Boolean);
     function GetEditText(ACol, ARow: Longint): string; dynamic;
     procedure SetEditText(ACol, ARow: Longint; const Value: string); dynamic;
-    function GetEditMask(ACol, ARow: Longint): string; dynamic;
     function GetEditLimit: Integer; dynamic;
+    function GetEditMask(ACol, ARow: Longint): string; dynamic;
+    function GetEditStyle(ACol, ARow: Longint): TEditStyle; dynamic;
     function GetGridWidth: Integer;
     function GetGridHeight: Integer;
+    procedure HideEdit;
     procedure HideEditor;
     procedure ShowEditor;
     procedure ShowEditorChar(Ch: Char);
     procedure InvalidateEditor;
+    procedure InvalidateGrid;
     procedure MoveColumn(FromIndex, ToIndex: Longint);
     procedure ColumnMoved(FromIndex, ToIndex: Longint); dynamic;
     procedure MoveRow(FromIndex, ToIndex: Longint);
@@ -438,7 +441,7 @@ type
     property TabStop default True;
   end;
 
-  { TDrawGrid }
+  { TCustomDrawGrid }
 
   { A grid relies on the OnDrawCell event to display the cells.
      CellRect
@@ -474,7 +477,7 @@ type
   TSetEditEvent = procedure (Sender: TObject; ACol, ARow: Longint; const Value: string) of object;
   TMovedEvent = procedure (Sender: TObject; FromIndex, ToIndex: Longint) of object;
 
-  TDrawGrid = class(TCustomGrid)
+  TCustomDrawGrid = class(TCustomGrid)
   private
     FOnColumnMoved: TMovedEvent;
     FOnDrawCell: TDrawCellEvent;
@@ -494,6 +497,14 @@ type
     function SelectCell(ACol, ARow: Longint): Boolean; override;
     procedure SetEditText(ACol, ARow: Longint; const Value: string); override;
     procedure TopLeftChanged; override;
+    property OnColumnMoved: TMovedEvent read FOnColumnMoved write FOnColumnMoved;
+    property OnDrawCell: TDrawCellEvent read FOnDrawCell write FOnDrawCell;
+    property OnGetEditMask: TGetEditEvent read FOnGetEditMask write FOnGetEditMask;
+    property OnGetEditText: TGetEditEvent read FOnGetEditText write FOnGetEditText;
+    property OnRowMoved: TMovedEvent read FOnRowMoved write FOnRowMoved;
+    property OnSelectCell: TSelectCellEvent read FOnSelectCell write FOnSelectCell;
+    property OnSetEditText: TSetEditEvent read FOnSetEditText write FOnSetEditText;
+    property OnTopLeftChanged: TNotifyEvent read FOnTopLeftChanged write FOnTopLeftChanged;
   public
     function CellRect(ACol, ARow: Longint): TRect;
     procedure MouseToCell(X, Y: Integer; var ACol, ARow: Longint);
@@ -509,6 +520,11 @@ type
     property RowHeights;
     property TabStops;
     property TopRow;
+  end;
+
+  { TDrawGrid }
+
+  TDrawGrid = class(TCustomDrawGrid)
   published
     property Align;
     property Anchors;
@@ -541,23 +557,22 @@ type
     property ScrollBars;
     property ShowHint;
     property TabOrder;
-    property TabStop;
     property Visible;
     property VisibleColCount;
     property VisibleRowCount;
     property OnClick;
-    property OnColumnMoved: TMovedEvent read FOnColumnMoved write FOnColumnMoved;
+    property OnColumnMoved;
     property OnContextPopup;
     property OnDblClick;
     property OnDragDrop;
     property OnDragOver;
-    property OnDrawCell: TDrawCellEvent read FOnDrawCell write FOnDrawCell;
+    property OnDrawCell;
     property OnEndDock;
     property OnEndDrag;
     property OnEnter;
     property OnExit;
-    property OnGetEditMask: TGetEditEvent read FOnGetEditMask write FOnGetEditMask;
-    property OnGetEditText: TGetEditEvent read FOnGetEditText write FOnGetEditText;
+    property OnGetEditMask;
+    property OnGetEditText;
     property OnKeyDown;
     property OnKeyPress;
     property OnKeyUp;
@@ -566,12 +581,12 @@ type
     property OnMouseUp;
     property OnMouseWheelDown;
     property OnMouseWheelUp;
-    property OnRowMoved: TMovedEvent read FOnRowMoved write FOnRowMoved;
-    property OnSelectCell: TSelectCellEvent read FOnSelectCell write FOnSelectCell;
-    property OnSetEditText: TSetEditEvent read FOnSetEditText write FOnSetEditText;
+    property OnRowMoved;
+    property OnSelectCell;
+    property OnSetEditText;
     property OnStartDock;
     property OnStartDrag;
-    property OnTopLeftChanged: TNotifyEvent read FOnTopLeftChanged write FOnTopLeftChanged;
+    property OnTopLeftChanged;
   end;
 
   { TStringGrid }
@@ -662,9 +677,95 @@ type
     property Rows[Index: Integer]: TStrings read GetRows write SetRows;
   end;
 
+  { TInplaceEditList }
+
+  { TInplaceEditList adds to TInplaceEdit the ability to drop down a pick list
+    of possible values or to display an ellipsis button which will invoke
+    user code in an event to bring up a modal dialog.  The EditStyle property
+    determines which type of button to draw (if any)
+      ActiveList
+        TWinControl reference which typically points to the internal
+        PickList.  May be set to a different list by descendent inplace
+        editors which provide additional functionality.
+      ButtonWidth
+        The width of the button used to drop down the pick list.
+      DropDownRows
+        The maximum number of rows to display at a time in the pick list.
+      EditStyle
+        Indicates what type of list to display (none, custom, or picklist).
+      ListVisible
+        Indicates if the list is currently dropped down.
+      PickList
+        Reference to the internal PickList (a TCustomListBox).
+      Pressed
+        Indicates if the button is currently pressed.}
+
+  TOnGetPickListItems = procedure(ACol, ARow: Integer; Items: TStrings) of Object;
+
+  TInplaceEditList = class(TInPlaceEdit)
+  private
+    FButtonWidth: Integer;
+    FPickList: TCustomListbox;
+    FActiveList: TWinControl;
+    FEditStyle: TEditStyle;
+    FDropDownRows: Integer;
+    FListVisible: Boolean;
+    FTracking: Boolean;
+    FPressed: Boolean;
+    FPickListLoaded: Boolean;
+    FOnGetPickListitems: TOnGetPickListItems;
+    FOnEditButtonClick: TNotifyEvent;
+    function GetPickList: TCustomListbox;
+    procedure CMCancelMode(var Message: TCMCancelMode); message CM_CancelMode;
+    procedure WMCancelMode(var Message: TMessage); message WM_CancelMode;
+    procedure WMKillFocus(var Message: TMessage); message WM_KillFocus;
+    procedure WMLButtonDblClk(var Message: TWMLButtonDblClk); message wm_LButtonDblClk;
+    procedure WMPaint(var Message: TWMPaint); message wm_Paint;
+    procedure WMSetCursor(var Message: TWMSetCursor); message WM_SetCursor;
+  protected
+    procedure BoundsChanged; override;
+    function ButtonRect: TRect;
+    procedure CloseUp(Accept: Boolean); dynamic;
+    procedure DblClick; override;
+    procedure DoDropDownKeys(var Key: Word; Shift: TShiftState); virtual;
+    procedure DoEditButtonClick; virtual;
+    procedure DoGetPickListItems; dynamic;
+    procedure DropDown; dynamic;
+    procedure KeyDown(var Key: Word; Shift: TShiftState); override;
+    procedure ListMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
+      X, Y: Integer); override;
+    procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
+      X, Y: Integer); override;
+    function OverButton(const P: TPoint): Boolean;
+    procedure PaintWindow(DC: HDC); override;
+    procedure StopTracking;
+    procedure TrackButton(X,Y: Integer);
+    procedure UpdateContents; override;
+    procedure WndProc(var Message: TMessage); override;
+  public
+    constructor Create(Owner: TComponent); override;
+    procedure RestoreContents;
+    property ActiveList: TWinControl read FActiveList write FActiveList;
+    property ButtonWidth: Integer read FButtonWidth write FButtonWidth;
+    property DropDownRows: Integer read FDropDownRows write FDropDownRows;
+    property EditStyle: TEditStyle read FEditStyle;
+    property ListVisible: Boolean read FListVisible write FListVisible;
+    property PickList: TCustomListbox read GetPickList;
+    property PickListLoaded: Boolean read FPickListLoaded write FPickListLoaded;
+    property Pressed: Boolean read FPressed;
+    property OnEditButtonClick: TNotifyEvent read FOnEditButtonClick
+      write FOnEditButtonClick;
+    property OnGetPickListitems: TOnGetPickListItems read FOnGetPickListitems
+      write FOnGetPickListitems;
+  end;
+
+
 implementation
 
-uses Math, Consts;
+uses Math, Consts, RTLConsts;
 
 type
   PIntArray = ^TIntArray;
@@ -848,7 +949,27 @@ end;
   is for unsigned). }
 
 function LongMulDiv(Mult1, Mult2, Div1: Longint): Longint; stdcall;
+{$IFDEF LINUX}
+{$IFDEF WINE}
+  external 'libwine.so' name 'MulDiv';
+{$ELSE}
+  external 'libtwin32.so' name 'MulDiv';
+{$ENDIF}
+{$ENDIF}
+{$IFDEF WIN32}
   external 'kernel32.dll' name 'MulDiv';
+{$ENDIF}
+
+procedure KillMessage(Wnd: HWnd; Msg: Integer);
+// Delete the requested message from the queue, but throw back
+// any WM_QUIT msgs that PeekMessage may also return
+var
+  M: TMsg;
+begin
+  M.Message := 0;
+  if PeekMessage(M, Wnd, Msg, Msg, pm_Remove) and (M.Message = WM_QUIT) then
+    PostQuitMessage(M.wparam);
+end;
 
 type
   TSelection = record
@@ -953,17 +1074,26 @@ procedure TInplaceEdit.KeyDown(var Key: Word; Shift: TShiftState);
     SendMessage(Handle, EM_GETSEL, Longint(@Result.StartPos), Longint(@Result.EndPos));
   end;
 
+  function CaretPos: Integer;
+  var
+    P: TPoint;
+  begin
+    Windows.GetCaretPos(P);
+    Result := SendMessage(Handle, EM_CHARFROMPOS, 0, MakeLong(P.X, P.Y));
+  end;
+
   function RightSide: Boolean;
   begin
     with Selection do
-      Result := ((StartPos = 0) or (EndPos = StartPos)) and
-        (EndPos = GetTextLen);
+      Result := (CaretPos = GetTextLen) and
+        ((StartPos = 0) or (EndPos = StartPos)) and (EndPos = GetTextLen);
    end;
 
   function LeftSide: Boolean;
   begin
     with Selection do
-      Result := (StartPos = 0) and ((EndPos = 0) or (EndPos = GetTextLen));
+      Result := (CaretPos = 0) and (StartPos = 0) and
+        ((EndPos = 0) or (EndPos = GetTextLen));
   end;
 
 begin
@@ -986,8 +1116,12 @@ begin
         end;
       end;
     VK_TAB: if not (ssAlt in Shift) then SendToParent;
+    VK_DELETE:
+      if Ctrl then
+        SendToParent
+      else
+        if not Grid.CanEditModify then Key := 0;
   end;
-  if (Key = VK_DELETE) and not Grid.CanEditModify then Key := 0;
   if Key <> 0 then
   begin
     ParentEvent;
@@ -1338,6 +1472,11 @@ begin
   Result := 0;
 end;
 
+function TCustomGrid.GetEditStyle(ACol, ARow: Longint): TEditStyle;
+begin
+  Result := esSimple;
+end;
+
 procedure TCustomGrid.HideEditor;
 begin
   FEditorMode := False;
@@ -1630,7 +1769,8 @@ var
       LogBrush: TLOGBRUSH;
       Index: Integer;
       Points: PIntArray;
-      StopMajor, StartMinor, StopMinor: Integer;
+      StopMajor, StartMinor, StopMinor, StopIndex: Integer;
+      LineIncr: Integer;
     begin
       with Canvas, AxisInfo do
       begin
@@ -1656,6 +1796,7 @@ var
           StartMinor := CellBounds[MajorIndex xor 1];
           StopMinor := CellBounds[2 + (MajorIndex xor 1)];
           StopMajor := CellBounds[2 + MajorIndex] + EffectiveLineWidth;
+          StopIndex := MaxStroke * 4;
           Index := 0;
           repeat
             Points^[Index + MajorIndex] := Line;         { MoveTo }
@@ -1664,10 +1805,14 @@ var
             Points^[Index + MajorIndex] := Line;         { LineTo }
             Points^[Index + (MajorIndex xor 1)] := StopMinor;
             Inc(Index, 2);
-            Inc(Cell);
-            // For hidden columns/rows, set extent to -EffectiveLineWidth
-            Inc(Line, GetExtent(Cell) + EffectiveLineWidth);
-          until (Line > StopMajor) or (Cell > LastFullVisibleCell);
+            // Skip hidden columns/rows.  We don't have stroke slots for them
+            // A column/row with an extent of -EffectiveLineWidth is hidden
+            repeat
+              Inc(Cell);
+              LineIncr := GetExtent(Cell) + EffectiveLineWidth;
+            until (LineIncr > 0) or (Cell > LastFullVisibleCell);
+            Inc(Line, LineIncr);
+          until (Line > StopMajor) or (Cell > LastFullVisibleCell) or (Index > StopIndex);
            { 2 integers per point, 2 points per line -> Index div 4 }
           PolyPolyLine(Canvas.Handle, Points^, StrokeList^, Index shr 2);
         end;
@@ -2051,7 +2196,7 @@ procedure TCustomGrid.CalcSizingState(X, Y: Integer; var State: TGridState;
   var
     I, Line, Back, Range: Integer;
   begin
-    if UseRightToLeftAlignment then
+    if (NewState = gsColSizing) and UseRightToLeftAlignment then 
       Pos := ClientWidth - Pos;
     with AxisInfo do
     begin
@@ -2270,8 +2415,16 @@ begin
       try
         if FGridState = gsRowSizing then
         begin
-          MoveTo(0, FSizingPos);
-          LineTo(Horz.GridBoundary, FSizingPos);
+          if UseRightToLeftAlignment then 
+          begin
+            MoveTo(Horz.GridExtent, FSizingPos); 
+            LineTo(Horz.GridExtent - Horz.GridBoundary, FSizingPos); 
+          end
+          else
+          begin
+            MoveTo(0, FSizingPos);
+            LineTo(Horz.GridBoundary, FSizingPos);
+          end;
         end
         else
         begin
@@ -3204,7 +3357,7 @@ begin
       DrawInfo);
     if FGridState <> gsNormal then
     begin
-      if UseRightToLeftAlignment then
+      if (FGridState = gsColSizing) and UseRightToLeftAlignment then
         FSizingPos := ClientWidth - FSizingPos;
       DrawSizingLine(DrawInfo);
       Exit;
@@ -3337,7 +3490,7 @@ begin
         begin
           CalcDrawInfo(DrawInfo);
           DrawSizingLine(DrawInfo);
-          if UseRightToLeftAlignment then
+          if (FGridState = gsColSizing) and UseRightToLeftAlignment then
             FSizingPos := ClientWidth - FSizingPos;
           if FGridState = gsColSizing then
           begin
@@ -4051,14 +4204,14 @@ begin
   if Showing then UpdateScrollRange;
 end;
 
-{ TDrawGrid }
+{ TCustomDrawGrid }
 
-function TDrawGrid.CellRect(ACol, ARow: Longint): TRect;
+function TCustomDrawGrid.CellRect(ACol, ARow: Longint): TRect;
 begin
   Result := inherited CellRect(ACol, ARow);
 end;
 
-procedure TDrawGrid.MouseToCell(X, Y: Integer; var ACol, ARow: Longint);
+procedure TCustomDrawGrid.MouseToCell(X, Y: Integer; var ACol, ARow: Longint);
 var
   Coord: TGridCoord;
 begin
@@ -4067,40 +4220,40 @@ begin
   ARow := Coord.Y;
 end;
 
-procedure TDrawGrid.ColumnMoved(FromIndex, ToIndex: Longint);
+procedure TCustomDrawGrid.ColumnMoved(FromIndex, ToIndex: Longint);
 begin
   if Assigned(FOnColumnMoved) then FOnColumnMoved(Self, FromIndex, ToIndex);
 end;
 
-function TDrawGrid.GetEditMask(ACol, ARow: Longint): string;
+function TCustomDrawGrid.GetEditMask(ACol, ARow: Longint): string;
 begin
   Result := '';
   if Assigned(FOnGetEditMask) then FOnGetEditMask(Self, ACol, ARow, Result);
 end;
 
-function TDrawGrid.GetEditText(ACol, ARow: Longint): string;
+function TCustomDrawGrid.GetEditText(ACol, ARow: Longint): string;
 begin
   Result := '';
   if Assigned(FOnGetEditText) then FOnGetEditText(Self, ACol, ARow, Result);
 end;
 
-procedure TDrawGrid.RowMoved(FromIndex, ToIndex: Longint);
+procedure TCustomDrawGrid.RowMoved(FromIndex, ToIndex: Longint);
 begin
   if Assigned(FOnRowMoved) then FOnRowMoved(Self, FromIndex, ToIndex);
 end;
 
-function TDrawGrid.SelectCell(ACol, ARow: Longint): Boolean;
+function TCustomDrawGrid.SelectCell(ACol, ARow: Longint): Boolean;
 begin
   Result := True;
   if Assigned(FOnSelectCell) then FOnSelectCell(Self, ACol, ARow, Result);
 end;
 
-procedure TDrawGrid.SetEditText(ACol, ARow: Longint; const Value: string);
+procedure TCustomDrawGrid.SetEditText(ACol, ARow: Longint; const Value: string);
 begin
   if Assigned(FOnSetEditText) then FOnSetEditText(Self, ACol, ARow, Value);
 end;
 
-procedure TDrawGrid.DrawCell(ACol, ARow: Longint; ARect: TRect;
+procedure TCustomDrawGrid.DrawCell(ACol, ARow: Longint; ARect: TRect;
   AState: TGridDrawState);
 var
   Hold: Integer;
@@ -4121,7 +4274,7 @@ begin
   end;
 end;
 
-procedure TDrawGrid.TopLeftChanged;
+procedure TCustomDrawGrid.TopLeftChanged;
 begin
   inherited TopLeftChanged;
   if Assigned(FOnTopLeftChanged) then FOnTopLeftChanged(Self);
@@ -4151,9 +4304,6 @@ end;
 { Sparse array classes for TStringGrid }
 
 type
-
-  PPointer = ^Pointer;
-
 { Exception classes }
 
   EStringSparseListError = class(Exception);
@@ -4552,6 +4702,7 @@ end;
 
 constructor TStringSparseList.Create(Quantum: TSPAQuantum);
 begin
+  inherited Create;
   FList := TSparseList.Create(Quantum)
 end;
 
@@ -4956,7 +5107,7 @@ end;
 
 procedure TStringGrid.SetUpdateState(Updating: Boolean);
 begin
-  FUpdating := Updating;
+  FUpdating := Updating; 
   if not Updating and FNeedsUpdating then
   begin
     InvalidateGrid;
@@ -5050,6 +5201,473 @@ end;
 procedure TStringGrid.SetRows(Index: Integer; Value: TStrings);
 begin
   EnsureColRow(Index, False).Assign(Value);
+end;
+
+type
+
+{ TPopupListbox }
+
+  TPopupListbox = class(TCustomListbox)
+  private
+    FSearchText: String;
+    FSearchTickCount: Longint;
+  protected
+    procedure CreateParams(var Params: TCreateParams); override;
+    procedure CreateWnd; override;
+    procedure KeyPress(var Key: Char); override;
+    procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
+  end;
+
+procedure TPopupListBox.CreateParams(var Params: TCreateParams);
+begin
+  inherited CreateParams(Params);
+  with Params do
+  begin
+    Style := Style or WS_BORDER;
+    ExStyle := WS_EX_TOOLWINDOW or WS_EX_TOPMOST;
+    AddBiDiModeExStyle(ExStyle);
+    WindowClass.Style := CS_SAVEBITS;
+  end;
+end;
+
+procedure TPopupListbox.CreateWnd;
+begin
+  inherited CreateWnd;
+  Windows.SetParent(Handle, 0);
+  CallWindowProc(DefWndProc, Handle, wm_SetFocus, 0, 0);
+end;
+
+procedure TPopupListbox.Keypress(var Key: Char);
+var
+  TickCount: Integer;
+begin
+  case Key of
+    #8, #27: FSearchText := '';
+    #32..#255:
+      begin
+        TickCount := GetTickCount;
+        if TickCount - FSearchTickCount > 2000 then FSearchText := '';
+        FSearchTickCount := TickCount;
+        if Length(FSearchText) < 32 then FSearchText := FSearchText + Key;
+        SendMessage(Handle, LB_SelectString, WORD(-1), Longint(PChar(FSearchText)));
+        Key := #0;
+      end;
+  end;
+  inherited Keypress(Key);
+end;
+
+procedure TPopupListbox.MouseUp(Button: TMouseButton; Shift: TShiftState;
+  X, Y: Integer);
+begin
+  inherited MouseUp(Button, Shift, X, Y);
+  TInplaceEditList(Owner).CloseUp((X >= 0) and (Y >= 0) and
+      (X < Width) and (Y < Height));
+end;
+
+{ TInplaceEditList }
+
+constructor TInplaceEditList.Create(Owner: TComponent);
+begin
+  inherited Create(Owner);
+  FButtonWidth := GetSystemMetrics(SM_CXVSCROLL);
+  FEditStyle := esSimple;
+end;
+
+procedure TInplaceEditList.BoundsChanged;
+var
+  R: TRect;
+begin
+  SetRect(R, 2, 2, Width - 2, Height);
+  if EditStyle <> esSimple then
+    if not Grid.UseRightToLeftAlignment then
+      Dec(R.Right, ButtonWidth)
+    else
+      Inc(R.Left, ButtonWidth - 2);
+  SendMessage(Handle, EM_SETRECTNP, 0, LongInt(@R));
+  SendMessage(Handle, EM_SCROLLCARET, 0, 0);
+  if SysLocale.FarEast then
+    SetImeCompositionWindow(Font, R.Left, R.Top);
+end;
+
+procedure TInplaceEditList.CloseUp(Accept: Boolean);
+var
+  ListValue: Variant;
+begin
+  if ListVisible and (ActiveList = FPickList) then
+  begin
+    if GetCapture <> 0 then SendMessage(GetCapture, WM_CANCELMODE, 0, 0);
+    if PickList.ItemIndex <> -1 then
+      ListValue := PickList.Items[PickList.ItemIndex];
+    SetWindowPos(ActiveList.Handle, 0, 0, 0, 0, 0, SWP_NOZORDER or
+      SWP_NOMOVE or SWP_NOSIZE or SWP_NOACTIVATE or SWP_HIDEWINDOW);
+    FListVisible := False;
+    Invalidate;
+    if Accept then
+      if (not VarIsEmpty(ListValue) or VarIsNull(ListValue))
+         and (ListValue <> Text) then
+      begin
+        { Here we store the new value directly in the edit control so that
+          we bypass the CMTextChanged method on TCustomMaskedEdit.  This
+          preserves the old value so that we can restore it later by calling
+          the Reset method. }
+        Perform(WM_SETTEXT, 0, Longint(string(ListValue)));
+        Modified := True;
+        with Grid do
+          SetEditText(Col, Row, ListValue);
+      end;
+  end;
+end;
+
+procedure TInplaceEditList.DoDropDownKeys(var Key: Word; Shift: TShiftState);
+begin
+  case Key of
+    VK_UP, VK_DOWN:
+      if ssAlt in Shift then
+      begin
+        if ListVisible then CloseUp(True) else DropDown;
+        Key := 0;
+      end;
+    VK_RETURN, VK_ESCAPE:
+      if ListVisible and not (ssAlt in Shift) then
+      begin
+        CloseUp(Key = VK_RETURN);
+        Key := 0;
+      end;
+  end;
+end;
+
+procedure TInplaceEditList.DoEditButtonClick;
+begin
+  if Assigned(FOnEditButtonClick) then
+    FOnEditButtonClick(Grid);
+end;
+
+procedure TInplaceEditList.DoGetPickListItems;
+begin
+  if not PickListLoaded then
+  begin
+    if Assigned(OnGetPickListItems) then
+      OnGetPickListItems(Grid.Col, Grid.Row, PickList.Items);
+    PickListLoaded := (PickList.Items.Count > 0);
+  end;
+end;
+
+function TInplaceEditList.GetPickList: TCustomListbox;
+var
+  PopupListbox: TPopupListbox;
+begin
+  if not Assigned(FPickList) then
+  begin
+    PopupListbox := TPopupListbox.Create(Self);
+    PopupListbox.Visible := False;
+    PopupListbox.Parent := Self;
+    PopupListbox.OnMouseUp := ListMouseUp;
+    PopupListbox.IntegralHeight := True;
+    PopupListbox.ItemHeight := 11;
+    FPickList := PopupListBox;
+  end;
+  Result := FPickList;
+end;
+
+procedure TInplaceEditList.DropDown;
+var
+  P: TPoint;
+  I,J,Y: Integer;
+begin
+  if not ListVisible then
+  begin
+    ActiveList.Width := Width;
+    if ActiveList = FPickList then
+    begin
+      DoGetPickListItems;
+      TPopupListbox(PickList).Color := Color;
+      TPopupListbox(PickList).Font := Font;
+      if (DropDownRows > 0) and (PickList.Items.Count >= DropDownRows) then
+        PickList.Height := DropDownRows * TPopupListbox(PickList).ItemHeight + 4
+      else
+        PickList.Height := PickList.Items.Count * TPopupListbox(PickList).ItemHeight + 4;
+      if Text = '' then
+        PickList.ItemIndex := -1
+      else
+        PickList.ItemIndex := PickList.Items.IndexOf(Text);
+      J := PickList.ClientWidth;
+      for I := 0 to PickList.Items.Count - 1 do
+      begin
+        Y := PickList.Canvas.TextWidth(PickList.Items[I]);
+        if Y > J then J := Y;
+      end;
+      PickList.ClientWidth := J;
+    end;
+    P := Parent.ClientToScreen(Point(Left, Top));
+    Y := P.Y + Height;
+    if Y + ActiveList.Height > Screen.Height then Y := P.Y - ActiveList.Height;
+    SetWindowPos(ActiveList.Handle, HWND_TOP, P.X, Y, 0, 0,
+      SWP_NOSIZE or SWP_NOACTIVATE or SWP_SHOWWINDOW);
+    FListVisible := True;
+    Invalidate;
+    Windows.SetFocus(Handle);
+  end;
+end;
+
+procedure TInplaceEditList.KeyDown(var Key: Word; Shift: TShiftState);
+begin
+  if (EditStyle = esEllipsis) and (Key = VK_RETURN) and (Shift = [ssCtrl]) then
+  begin
+    DoEditButtonClick;
+    KillMessage(Handle, WM_CHAR);
+  end
+  else
+    inherited KeyDown(Key, Shift);
+end;
+
+procedure TInplaceEditList.ListMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if Button = mbLeft then
+    CloseUp(PtInRect(ActiveList.ClientRect, Point(X, Y)));
+end;
+
+procedure TInplaceEditList.MouseDown(Button: TMouseButton; Shift: TShiftState;
+  X, Y: Integer);
+begin
+  if (Button = mbLeft) and (EditStyle <> esSimple) and
+    OverButton(Point(X,Y)) then
+  begin
+    if ListVisible then
+      CloseUp(False)
+    else
+    begin
+      MouseCapture := True;
+      FTracking := True;
+      TrackButton(X, Y);
+      if Assigned(ActiveList) then
+        DropDown;
+    end;
+  end;
+  inherited MouseDown(Button, Shift, X, Y);
+end;
+
+procedure TInplaceEditList.MouseMove(Shift: TShiftState; X, Y: Integer);
+var
+  ListPos: TPoint;
+  MousePos: TSmallPoint;
+begin
+  if FTracking then
+  begin
+    TrackButton(X, Y);
+    if ListVisible then
+    begin
+      ListPos := ActiveList.ScreenToClient(ClientToScreen(Point(X, Y)));
+      if PtInRect(ActiveList.ClientRect, ListPos) then
+      begin
+        StopTracking;
+        MousePos := PointToSmallPoint(ListPos);
+        SendMessage(ActiveList.Handle, WM_LBUTTONDOWN, 0, Integer(MousePos));
+        Exit;
+      end;
+    end;
+  end;
+  inherited MouseMove(Shift, X, Y);
+end;
+
+procedure TInplaceEditList.MouseUp(Button: TMouseButton; Shift: TShiftState;
+  X, Y: Integer);
+var
+  WasPressed: Boolean;
+begin
+  WasPressed := Pressed;
+  StopTracking;
+  if (Button = mbLeft) and (EditStyle = esEllipsis) and WasPressed then
+    DoEditButtonClick;
+  inherited MouseUp(Button, Shift, X, Y);
+end;
+
+procedure TInplaceEditList.PaintWindow(DC: HDC);
+var
+  R: TRect;
+  Flags: Integer;
+  W, X, Y: Integer;
+begin
+  if EditStyle <> esSimple then
+  begin
+    R := ButtonRect;
+    Flags := 0;
+    case EditStyle of
+      esPickList:
+        begin
+          if ActiveList = nil then
+            Flags := DFCS_INACTIVE
+          else if Pressed then
+            Flags := DFCS_FLAT or DFCS_PUSHED;
+          DrawFrameControl(DC, R, DFC_SCROLL, Flags or DFCS_SCROLLCOMBOBOX);
+        end;
+      esEllipsis:
+        begin
+          if Pressed then Flags := BF_FLAT;
+          DrawEdge(DC, R, EDGE_RAISED, BF_RECT or BF_MIDDLE or Flags);
+          X := R.Left + ((R.Right - R.Left) shr 1) - 1 + Ord(Pressed);
+          Y := R.Top + ((R.Bottom - R.Top) shr 1) - 1 + Ord(Pressed);
+          W := ButtonWidth shr 3;
+          if W = 0 then W := 1;
+          PatBlt(DC, X, Y, W, W, BLACKNESS);
+          PatBlt(DC, X - (W * 2), Y, W, W, BLACKNESS);
+          PatBlt(DC, X + (W * 2), Y, W, W, BLACKNESS);
+        end;
+    end;
+    ExcludeClipRect(DC, R.Left, R.Top, R.Right, R.Bottom);
+  end;
+  inherited PaintWindow(DC);
+end;
+
+procedure TInplaceEditList.StopTracking;
+begin
+  if FTracking then
+  begin
+    TrackButton(-1, -1);
+    FTracking := False;
+    MouseCapture := False;
+  end;
+end;
+
+procedure TInplaceEditList.TrackButton(X,Y: Integer);
+var
+  NewState: Boolean;
+  R: TRect;
+begin
+  R := ButtonRect;
+  NewState := PtInRect(R, Point(X, Y));
+  if Pressed <> NewState then
+  begin
+    FPressed := NewState;
+    InvalidateRect(Handle, @R, False);
+  end;
+end;
+
+procedure TInplaceEditList.UpdateContents;
+begin
+  ActiveList := nil;
+  PickListLoaded := False;
+  FEditStyle := Grid.GetEditStyle(Grid.Col, Grid.Row);
+  if EditStyle = esPickList then
+    ActiveList := PickList;
+  inherited UpdateContents;
+end;
+
+procedure TInplaceEditList.RestoreContents;
+begin
+  Reset;
+  Grid.UpdateText;
+end;
+
+procedure TInplaceEditList.CMCancelMode(var Message: TCMCancelMode);
+begin
+  if (Message.Sender <> Self) and (Message.Sender <> ActiveList) then
+    CloseUp(False);
+end;
+
+procedure TInplaceEditList.WMCancelMode(var Message: TMessage);
+begin
+  StopTracking;
+  inherited;
+end;
+
+procedure TInplaceEditList.WMKillFocus(var Message: TMessage);
+begin
+  if not SysLocale.FarEast then inherited
+  else
+  begin
+    ImeName := Screen.DefaultIme;
+    ImeMode := imDontCare;
+    inherited;
+    if HWND(Message.WParam) <> Grid.Handle then
+      ActivateKeyboardLayout(Screen.DefaultKbLayout, KLF_ACTIVATE);
+  end;
+  CloseUp(False);
+end;
+
+function TInplaceEditList.ButtonRect: TRect;
+begin
+  if not Grid.UseRightToLeftAlignment then
+    Result := Rect(Width - ButtonWidth, 0, Width, Height)
+  else
+    Result := Rect(0, 0, ButtonWidth, Height);
+end;
+
+function TInplaceEditList.OverButton(const P: TPoint): Boolean;
+begin
+  Result := PtInRect(ButtonRect, P);
+end;
+
+procedure TInplaceEditList.WMLButtonDblClk(var Message: TWMLButtonDblClk);
+begin
+  with Message do
+  if (EditStyle <> esSimple) and OverButton(Point(XPos, YPos)) then
+    Exit;
+  inherited;
+end;
+
+procedure TInplaceEditList.WMPaint(var Message: TWMPaint);
+begin
+  PaintHandler(Message);
+end;
+
+procedure TInplaceEditList.WMSetCursor(var Message: TWMSetCursor);
+var
+  P: TPoint;
+begin
+  GetCursorPos(P);
+  P := ScreenToClient(P);
+  if (EditStyle <> esSimple) and OverButton(P) then
+    Windows.SetCursor(LoadCursor(0, idc_Arrow))
+  else
+    inherited;
+end;
+
+procedure TInplaceEditList.WndProc(var Message: TMessage);
+begin
+  case Message.Msg of
+    wm_KeyDown, wm_SysKeyDown, wm_Char:
+      if EditStyle = esPickList then
+      with TWMKey(Message) do
+      begin
+        DoDropDownKeys(CharCode, KeyDataToShiftState(KeyData));
+        if (CharCode <> 0) and ListVisible then
+        begin
+          with TMessage(Message) do
+            SendMessage(ActiveList.Handle, Msg, WParam, LParam);
+          Exit;
+        end;
+      end
+  end;
+  inherited;
+end;
+
+procedure TInplaceEditList.DblClick;
+var
+  Index: Integer;
+  ListValue: string;
+begin
+  if (EditStyle = esSimple) or Assigned(Grid.OnDblClick) then
+    inherited
+  else if (EditStyle = esPickList) and (ActiveList = PickList) then
+  begin
+    DoGetPickListItems;
+    if PickList.Items.Count > 0 then
+    begin
+      Index := PickList.ItemIndex + 1;
+      if Index >= PickList.Items.Count then
+        Index := 0;
+      PickList.ItemIndex := Index;
+      ListValue := PickList.Items[PickList.ItemIndex];
+      Perform(WM_SETTEXT, 0, Longint(ListValue));
+      Modified := True;
+      with Grid do
+        SetEditText(Col, Row, ListValue);
+      SelectAll;
+    end;
+  end
+  else if EditStyle = esEllipsis then
+    DoEditButtonClick;
 end;
 
 end.

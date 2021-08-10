@@ -1,20 +1,25 @@
 /*++
 
-Copyright (c) 1995-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
     iptypes.h
 
-*/
+--*/
 
 #ifndef IP_TYPES_INCLUDED
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define IP_TYPES_INCLUDED
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#pragma warning(disable:4201)
 
 #include <time.h>
 
@@ -38,16 +43,6 @@ Module Name:
 #define PEER_TO_PEER_NODETYPE           2
 #define MIXED_NODETYPE                  4
 #define HYBRID_NODETYPE                 8
-
-// Adapter Type
-
-#define IF_OTHER_ADAPTERTYPE            0
-#define IF_ETHERNET_ADAPTERTYPE         1
-#define IF_TOKEN_RING_ADAPTERTYPE       2
-#define IF_FDDI_ADAPTERTYPE             3
-#define IF_PPP_ADAPTERTYPE              4
-#define IF_LOOPBACK_ADAPTERTYPE         5
-#define IF_SLIP_ADAPTERTYPE             6
 
 //
 // IP_ADDRESS_STRING - store an IP address as a dotted decimal string
@@ -95,6 +90,154 @@ typedef struct _IP_ADAPTER_INFO {
     time_t LeaseExpires;
 } IP_ADAPTER_INFO, *PIP_ADAPTER_INFO;
 
+#ifdef _WINSOCK2API_
+
+//
+// The following types require Winsock2.
+//
+
+typedef enum {
+    IpPrefixOriginOther = 0,
+    IpPrefixOriginManual,
+    IpPrefixOriginWellKnown,
+    IpPrefixOriginDhcp,
+    IpPrefixOriginRouterAdvertisement,
+} IP_PREFIX_ORIGIN;
+
+typedef enum {
+    IpSuffixOriginOther = 0,
+    IpSuffixOriginManual,
+    IpSuffixOriginWellKnown,
+    IpSuffixOriginDhcp,
+    IpSuffixOriginLinkLayerAddress,
+    IpSuffixOriginRandom,
+} IP_SUFFIX_ORIGIN;
+
+typedef enum {
+    IpDadStateInvalid    = 0,
+    IpDadStateTentative,
+    IpDadStateDuplicate,
+    IpDadStateDeprecated,
+    IpDadStatePreferred,
+} IP_DAD_STATE;
+
+typedef struct _IP_ADAPTER_UNICAST_ADDRESS {
+    union {
+        ULONGLONG Alignment;
+        struct { 
+            ULONG Length;
+            DWORD Flags;
+        };
+    };
+    struct _IP_ADAPTER_UNICAST_ADDRESS *Next;
+    SOCKET_ADDRESS Address;
+
+    IP_PREFIX_ORIGIN PrefixOrigin;
+    IP_SUFFIX_ORIGIN SuffixOrigin;
+    IP_DAD_STATE DadState;
+
+    ULONG ValidLifetime;
+    ULONG PreferredLifetime;
+    ULONG LeaseLifetime;
+} IP_ADAPTER_UNICAST_ADDRESS, *PIP_ADAPTER_UNICAST_ADDRESS;
+
+typedef struct _IP_ADAPTER_ANYCAST_ADDRESS {
+    union {
+        ULONGLONG Alignment;
+        struct { 
+            ULONG Length;
+            DWORD Flags;
+        };
+    };
+    struct _IP_ADAPTER_ANYCAST_ADDRESS *Next;
+    SOCKET_ADDRESS Address;
+} IP_ADAPTER_ANYCAST_ADDRESS, *PIP_ADAPTER_ANYCAST_ADDRESS;
+
+typedef struct _IP_ADAPTER_MULTICAST_ADDRESS {
+    union {
+        ULONGLONG Alignment;
+        struct {
+            ULONG Length;
+            DWORD Flags;
+        };
+    };
+    struct _IP_ADAPTER_MULTICAST_ADDRESS *Next;
+    SOCKET_ADDRESS Address;
+} IP_ADAPTER_MULTICAST_ADDRESS, *PIP_ADAPTER_MULTICAST_ADDRESS;
+
+//
+// Per-address Flags
+//
+#define IP_ADAPTER_ADDRESS_DNS_ELIGIBLE 0x01
+#define IP_ADAPTER_ADDRESS_TRANSIENT    0x02
+
+typedef struct _IP_ADAPTER_DNS_SERVER_ADDRESS {
+    union {
+        ULONGLONG Alignment;
+        struct {
+            ULONG Length;
+            DWORD Reserved;
+        };
+    };
+    struct _IP_ADAPTER_DNS_SERVER_ADDRESS *Next;
+    SOCKET_ADDRESS Address;
+} IP_ADAPTER_DNS_SERVER_ADDRESS, *PIP_ADAPTER_DNS_SERVER_ADDRESS;
+
+//
+// Per-adapter Flags
+//
+#define IP_ADAPTER_DDNS_ENABLED            0x01
+#define IP_ADAPTER_REGISTER_ADAPTER_SUFFIX 0x02
+#define IP_ADAPTER_DHCP_ENABLED            0x04
+
+//
+// OperStatus values from RFC 2863
+//
+typedef enum {
+    IfOperStatusUp = 1,
+    IfOperStatusDown,
+    IfOperStatusTesting,
+    IfOperStatusUnknown,
+    IfOperStatusDormant,
+    IfOperStatusNotPresent,
+    IfOperStatusLowerLayerDown
+} IF_OPER_STATUS;
+
+typedef struct _IP_ADAPTER_ADDRESSES {
+    union {
+        ULONGLONG Alignment;
+        struct {
+            ULONG Length;
+            DWORD IfIndex;
+        };
+    };
+    struct _IP_ADAPTER_ADDRESSES *Next;
+    PCHAR AdapterName;
+    PIP_ADAPTER_UNICAST_ADDRESS FirstUnicastAddress;
+    PIP_ADAPTER_ANYCAST_ADDRESS FirstAnycastAddress;
+    PIP_ADAPTER_MULTICAST_ADDRESS FirstMulticastAddress;
+    PIP_ADAPTER_DNS_SERVER_ADDRESS FirstDnsServerAddress;
+    PWCHAR DnsSuffix;
+    PWCHAR Description;
+    PWCHAR FriendlyName;
+    BYTE PhysicalAddress[MAX_ADAPTER_ADDRESS_LENGTH];
+    DWORD PhysicalAddressLength;
+    DWORD Flags;
+    DWORD Mtu;
+    DWORD IfType;
+    IF_OPER_STATUS OperStatus;
+} IP_ADAPTER_ADDRESSES, *PIP_ADAPTER_ADDRESSES;
+
+//
+// Flags used as argument to GetAdaptersAddresses()
+//
+#define GAA_FLAG_SKIP_UNICAST      0x0001
+#define GAA_FLAG_SKIP_ANYCAST      0x0002
+#define GAA_FLAG_SKIP_MULTICAST    0x0004
+#define GAA_FLAG_SKIP_DNS_SERVER   0x0008
+
+#endif /* _WINSOCK2API_ */
+
 //
 // IP_PER_ADAPTER_INFO - per-adapter IP information such as DNS server list.
 //
@@ -122,5 +265,10 @@ typedef struct {
     UINT EnableDns;
 } FIXED_INFO, *PFIXED_INFO;
 
-#pragma option pop /*P_O_Pop*/
+#pragma warning(default:4201)
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

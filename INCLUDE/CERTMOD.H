@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Wed Aug 25 16:06:05 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for certmod.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -38,6 +37,10 @@
 #ifndef __certmod_h__
 #define __certmod_h__
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
+
 /* Forward Declarations */ 
 
 #ifndef __ICertManageModule_FWD_DEFINED__
@@ -54,8 +57,8 @@ typedef interface ICertManageModule ICertManageModule;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_certmod_0000 */
 /* [local] */ 
@@ -73,6 +76,8 @@ const WCHAR wszCMM_PROP_FILEVER[  ]	=	L"File Version";
 const WCHAR wszCMM_PROP_PRODUCTVER[  ]	=	L"Product Version";
 
 const WCHAR wszCMM_PROP_DISPLAY_HWND[  ]	=	L"HWND";
+
+const WCHAR wszCMM_PROP_ISMULTITHREADED[  ]	=	L"IsMultiThreaded";
 
 
 
@@ -99,14 +104,14 @@ EXTERN_C const IID IID_ICertManageModule;
             /* [in] */ BSTR strStorageLocation,
             /* [in] */ BSTR strPropertyName,
             /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty) = 0;
+            /* [retval][out] */ VARIANT *pvarProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
             /* [in] */ const BSTR strConfig,
             /* [in] */ BSTR strStorageLocation,
             /* [in] */ BSTR strPropertyName,
             /* [in] */ LONG Flags,
-            /* [in] */ const VARIANT __RPC_FAR *pvarProperty) = 0;
+            /* [in] */ const VARIANT *pvarProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Configure( 
             /* [in] */ const BSTR strConfig,
@@ -121,64 +126,64 @@ EXTERN_C const IID IID_ICertManageModule;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            ICertManageModule __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            ICertManageModule * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            ICertManageModule __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            ICertManageModule * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            ICertManageModule __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            ICertManageModule * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            ICertManageModule __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            ICertManageModule * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            ICertManageModule __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            ICertManageModule * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            ICertManageModule __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            ICertManageModule * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            ICertManageModule __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            ICertManageModule * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProperty )( 
-            ICertManageModule __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetProperty )( 
+            ICertManageModule * This,
             /* [in] */ const BSTR strConfig,
             /* [in] */ BSTR strStorageLocation,
             /* [in] */ BSTR strPropertyName,
             /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty);
+            /* [retval][out] */ VARIANT *pvarProperty);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProperty )( 
-            ICertManageModule __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetProperty )( 
+            ICertManageModule * This,
             /* [in] */ const BSTR strConfig,
             /* [in] */ BSTR strStorageLocation,
             /* [in] */ BSTR strPropertyName,
             /* [in] */ LONG Flags,
-            /* [in] */ const VARIANT __RPC_FAR *pvarProperty);
+            /* [in] */ const VARIANT *pvarProperty);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Configure )( 
-            ICertManageModule __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Configure )( 
+            ICertManageModule * This,
             /* [in] */ const BSTR strConfig,
             /* [in] */ BSTR strStorageLocation,
             /* [in] */ LONG Flags);
@@ -188,7 +193,7 @@ EXTERN_C const IID IID_ICertManageModule;
 
     interface ICertManageModule
     {
-        CONST_VTBL struct ICertManageModuleVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct ICertManageModuleVtbl *lpVtbl;
     };
 
     
@@ -236,12 +241,12 @@ EXTERN_C const IID IID_ICertManageModule;
 
 
 HRESULT STDMETHODCALLTYPE ICertManageModule_GetProperty_Proxy( 
-    ICertManageModule __RPC_FAR * This,
+    ICertManageModule * This,
     /* [in] */ const BSTR strConfig,
     /* [in] */ BSTR strStorageLocation,
     /* [in] */ BSTR strPropertyName,
     /* [in] */ LONG Flags,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarProperty);
+    /* [retval][out] */ VARIANT *pvarProperty);
 
 
 void __RPC_STUB ICertManageModule_GetProperty_Stub(
@@ -252,12 +257,12 @@ void __RPC_STUB ICertManageModule_GetProperty_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertManageModule_SetProperty_Proxy( 
-    ICertManageModule __RPC_FAR * This,
+    ICertManageModule * This,
     /* [in] */ const BSTR strConfig,
     /* [in] */ BSTR strStorageLocation,
     /* [in] */ BSTR strPropertyName,
     /* [in] */ LONG Flags,
-    /* [in] */ const VARIANT __RPC_FAR *pvarProperty);
+    /* [in] */ const VARIANT *pvarProperty);
 
 
 void __RPC_STUB ICertManageModule_SetProperty_Stub(
@@ -268,7 +273,7 @@ void __RPC_STUB ICertManageModule_SetProperty_Stub(
 
 
 HRESULT STDMETHODCALLTYPE ICertManageModule_Configure_Proxy( 
-    ICertManageModule __RPC_FAR * This,
+    ICertManageModule * This,
     /* [in] */ const BSTR strConfig,
     /* [in] */ BSTR strStorageLocation,
     /* [in] */ LONG Flags);
@@ -287,15 +292,15 @@ void __RPC_STUB ICertManageModule_Configure_Stub(
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
+unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
+void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
 /* end of Additional Prototypes */
 
@@ -304,6 +309,7 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

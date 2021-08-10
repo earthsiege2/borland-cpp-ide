@@ -3,13 +3,13 @@
 ;[]-----------------------------------------------------------------[]
 
 ;
-;       C/C++ Run Time Library - Version 10.0
+;       C/C++ Run Time Library - Version 11.0
 ; 
-;       Copyright (c) 1991, 2000 by Inprise Corporation
+;       Copyright (c) 1991, 2002 by Borland Software Corporation
 ;       All Rights Reserved.
 ; 
 
-; $Revision:   9.1  $
+; $Revision: 9.5 $
 
         include RULES.ASI
 
@@ -70,9 +70,13 @@ Locals@ <int Control>
 
         fstcw   Control                 ; get current control word
         mov     eax, new                ; get new value of CW
+        mov     ecx, cwmask             ; get mask
+        jecxz   skip_clobber 			; don't clobber default87 if
+                                        ;  not modifying the cw.
+
         mov     _default87@, eax        ; update the RTLs default so that
                                         ;  fpreset uses this new CW
-        mov     ecx, cwmask             ; get mask
+skip_clobber:
         and     eax, ecx                ; apply mask to new value
         not     ecx                     ; invert the mask
         fwait

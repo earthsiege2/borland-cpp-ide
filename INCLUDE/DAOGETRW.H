@@ -8,12 +8,11 @@
 **                                                                      *
 **                                                                      *
 *************************************************************************
-** Copyright (C) 1996 - 1999 Microsoft Corporation                          *
+** Copyright (C) 1996 by Microsoft Corporation                          *
 **         All Rights Reserved                                          *
 ************************************************************************/
 
 #if !defined (_DAOGETRW_H_)
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _DAOGETRW_H_
 
 /*
@@ -150,5 +149,4 @@ DECLARE_INTERFACE_(ICDAORecordset, IDispatch)
 #define errVtoBadBindInfo		-30033	//3645	One of the binding parameters is incorrect.
 #define errVtoColumnMissing		-30034	//3647	A column requested is not being returned to the recordset.
 
-#pragma option pop /*P_O_Pop*/
 #endif // _DAOGETRW_H_

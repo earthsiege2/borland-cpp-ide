@@ -1,4 +1,3 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
@@ -178,7 +177,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 // -----------------------------------------------------------------------	
 #include <objbase.h>
 #ifndef DECLSPEC_UUID
-#if _MSC_VER >= 1100
+#if (_MSC_VER >= 1100) || (__BORLANDC__ >= 0x0550)
 #define DECLSPEC_UUID(x)    __declspec(uuid(x))
 #else
 #define DECLSPEC_UUID(x)
@@ -2086,4 +2085,3 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 #endif
-#pragma option pop /*P_O_Pop*/

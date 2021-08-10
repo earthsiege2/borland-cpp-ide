@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBInstallHeader.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBInstallHeader.pas' rev: 6.00
 
 #ifndef IBInstallHeaderHPP
 #define IBInstallHeaderHPP
@@ -10,14 +10,6 @@
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <Dialogs.hpp>	// Pascal unit
-#include <Forms.hpp>	// Pascal unit
-#include <Controls.hpp>	// Pascal unit
-#include <Graphics.hpp>	// Pascal unit
-#include <Classes.hpp>	// Pascal unit
-#include <SysUtils.hpp>	// Pascal unit
-#include <Messages.hpp>	// Pascal unit
-#include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -42,15 +34,11 @@ typedef int __stdcall (*FP_STATUS)(int Status, void * UserContext, const char * 
 
 typedef int __stdcall (*Tisc_install_clear_options)(POPTIONS_HANDLE hOption);
 
-typedef int __stdcall (*Tisc_install_execute)(int hOption, char * src_dir, char * dest_dir, FP_STATUS 
-	status_func, void * status_data, FP_ERROR error_func, void * error_data, char * uninstal_file_name)
-	;
+typedef int __stdcall (*Tisc_install_execute)(int hOption, char * src_dir, char * dest_dir, FP_STATUS status_func, void * status_data, FP_ERROR error_func, void * error_data, char * uninstal_file_name);
 
-typedef int __stdcall (*Tisc_install_get_info)(int info_type, int option, void * info_buffer, unsigned 
-	buf_len);
+typedef int __stdcall (*Tisc_install_get_info)(int info_type, int option, void * info_buffer, unsigned buf_len);
 
-typedef int __stdcall (*Tisc_install_get_message)(int hOption, int message_no, void * message_txt, unsigned 
-	message_len);
+typedef int __stdcall (*Tisc_install_get_message)(int hOption, int message_no, void * message_txt, unsigned message_len);
 
 typedef int __stdcall (*Tisc_install_load_external_text)(char * msg_file_name);
 
@@ -58,8 +46,7 @@ typedef int __stdcall (*Tisc_install_precheck)(int hOption, char * src_dir, char
 
 typedef int __stdcall (*Tisc_install_set_option)(POPTIONS_HANDLE hOption, int option);
 
-typedef int __stdcall (*Tisc_uninstall_execute)(char * uninstall_file_name, FP_STATUS status_func, void * 
-	status_data, FP_ERROR error_func, void * error_data);
+typedef int __stdcall (*Tisc_uninstall_execute)(char * uninstall_file_name, FP_STATUS status_func, void * status_data, FP_ERROR error_func, void * error_data);
 
 typedef int __stdcall (*Tisc_uninstall_precheck)(char * uninstall_file_name);
 
@@ -188,9 +175,7 @@ static const Shortint isc_install_drv_version = 0x43;
 static const Shortint isc_install_tran_version = 0x44;
 
 }	/* namespace Ibinstallheader */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ibinstallheader;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

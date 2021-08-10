@@ -1,22 +1,29 @@
+{ ********************************************************************** }
+{                                                                        }
+{ Kylix and Delphi Cross-Platform Visual Component Library               }
+{                                                                        }
+{ Copyright (C) 1997, 2001 Borland Software Corporation                  }
+{                                                                        }
+{ ********************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{       Provider - Resolver framework                   }
-{                                                       }
-{       Copyright (c) 1997,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
 unit Provider;
 
 {$T-,H+,X+}
 
 interface
+{$IFDEF MSWINDOWS}
+uses Windows, SysUtils, Variants, Classes, DBClient, DB, DSIntf, ActiveX, Midas, SqlTimSt;
+{$ENDIF}
+{$IFDEF LINUX}
+uses Libc, SysUtils, Variants, Classes, DBClient, DB, DSIntf, Midas, SqlTimSt;
+{$ENDIF}
 
-uses Windows, SysUtils, Classes, DbClient, DB, DsIntf, ActiveX, Midas;
+var
+  InformixLob: Boolean;
 
 type
+
 
 { EDSWriter }
 
@@ -80,7 +87,10 @@ type
 
 type
 
-  TGetRecordOption = (grMetaData, grReset, grXML);
+{ Forward declarations }
+
+
+  TGetRecordOption = (grMetaData, grReset, grXML, grXMLUTF8);
   TGetRecordOptions = set of TGetRecordOption;
 
   TDataRequestEvent = function(Sender: TObject; Input: OleVariant): OleVariant of object;
@@ -89,7 +99,7 @@ type
     poIncFieldProps, poCascadeDeletes, poCascadeUpdates, poReadOnly,
     poAllowMultiRecordUpdates, poDisableInserts, poDisableEdits,
     poDisableDeletes, poNoReset, poAutoRefresh, poPropogateChanges,
-    poAllowCommandText);
+    poAllowCommandText, poRetainServerOrder );
   TProviderOptions = set of TProviderOption;
 
   PPutFieldInfo = ^TPutFieldInfo;
@@ -137,6 +147,7 @@ type
     procedure PutStringField(Info: PPutFieldInfo);
     procedure PutWideStringField(Info: PPutFieldInfo);
     procedure PutVarBytesField(Info: PPutFieldInfo);
+    procedure Reset;
     procedure WriteMetaData(DataSet: TDataSet; const Info: TInfoArray;
       IsReference: Boolean = False);
     function WriteDataSet(DataSet: TDataSet; var Info: TInfoArray;
@@ -153,7 +164,7 @@ type
 
 { TPacketDataSet }
 
-  TPacketDataSet = class(TClientDataSet)
+  TPacketDataSet = class(TCustomClientDataSet)
   private
     FOldRecBuf: PChar;
     FCurRecBuf: PChar;
@@ -215,10 +226,18 @@ type
     function InternalGetParams(Types: TParamTypes = AllParamTypes): OleVariant; virtual;
 
   { Event overrides }
-    procedure DoBeforeGetRecords(Count: Integer; Options: Integer;
-      const CommandText: WideString; var Params, OwnerData: OleVariant); virtual;
+    procedure DoAfterApplyUpdates(var OwnerData: OleVariant); virtual;
+    procedure DoBeforeApplyUpdates(var OwnerData: OleVariant); virtual;
+    procedure DoAfterExecute(var OwnerData: OleVariant); virtual;
     procedure DoBeforeExecute(const CommandText: WideString; var Params,
       OwnerData: OleVariant); virtual;
+    procedure DoAfterGetParams(var OwnerData: OleVariant); virtual;
+    procedure DoBeforeGetParams(var OwnerData: OleVariant); virtual;
+    procedure DoAfterGetRecords(var OwnerData: OleVariant); virtual;
+    procedure DoBeforeGetRecords(Count: Integer; Options: Integer;
+      const CommandText: WideString; var Params, OwnerData: OleVariant); virtual;
+    procedure DoAfterRowRequest(var OwnerData: OleVariant); virtual;
+    procedure DoBeforeRowRequest(var OwnerData: OleVariant); virtual;
 
   { Events }
     property OnDataRequest: TDataRequestEvent read FOnDataRequest write FOnDataRequest;
@@ -256,18 +275,26 @@ type
     property Exported: Boolean read FExported write FExported default True;
   end;
 
+const
+  ResetOption: Integer = byte(grReset);
+  MetaDataOption: Integer = byte(grMetaData);
+  XMLOption: Integer = byte(grXML);
+  XMLUTF8Option: Integer = byte(grXMLUTF8);
+
 { TBaseProvider }
 
 type
 
+  TUpdateTree = class;
+
   TCustomResolver = class;
   TResolverResponse = (rrSkip, rrAbort, rrMerge, rrApply, rrIgnore);
-  TProviderDataEvent = procedure(Sender: TObject; DataSet: TClientDataSet) of object;
+  TProviderDataEvent = procedure(Sender: TObject; DataSet: TCustomClientDataSet) of object;
   TBeforeUpdateRecordEvent = procedure(Sender: TObject; SourceDS: TDataSet;
-    DeltaDS: TClientDataSet; UpdateKind: TUpdateKind; var Applied: Boolean) of object;
+    DeltaDS: TCustomClientDataSet; UpdateKind: TUpdateKind; var Applied: Boolean) of object;
   TAfterUpdateRecordEvent = procedure(Sender: TObject; SourceDS: TDataSet;
-    DeltaDS: TClientDataSet; UpdateKind: TUpdateKind) of object;
-  TResolverErrorEvent = procedure(Sender: TObject; DataSet: TClientDataSet;
+    DeltaDS: TCustomClientDataSet; UpdateKind: TUpdateKind) of object;
+  TResolverErrorEvent = procedure(Sender: TObject; DataSet: TCustomClientDataSet;
     E: EUpdateError; UpdateKind: TUpdateKind; var Response: TResolverResponse) of object;
 
   TBaseProvider = class(TCustomProvider)
@@ -292,7 +319,6 @@ type
     procedure LocateRecord(Source, Delta: TDataSet); virtual;
     procedure UpdateRecord(Source, Delta: TDataSet; BlobsOnly, KeyOnly: Boolean); virtual;
     procedure FetchDetails(Source, Delta: TDataSet); virtual;
-
     function InternalRowRequest(const Row: OleVariant;
       RequestType: TFetchOptions): OleVariant; override;
     function InternalApplyUpdates(const Delta: OleVariant; MaxErrors: Integer;
@@ -333,6 +359,7 @@ type
     FResolveToDataSet: Boolean;
     FRecordsSent: Integer;
     FConstraints: Boolean;
+    FTransactionStarted: Boolean;
     FGetTableName: TGetTableNameEvent;
     procedure CheckDataSet;
     function FindRecord(Source, Delta: TDataSet; UpdateMode: TUpdateMode): Boolean;
@@ -355,11 +382,12 @@ type
     function CreateResolver: TCustomResolver; override;
     procedure CreateDataPacket(PacketOpts: TGetRecordOptions;
       ProvOpts: TProviderOptions; var RecsOut: Integer; var Data: OleVariant); override;
+    function GetDataSetFromDelta(ATree: TUpdateTree; Source, Delta: TDataSet; Mode: TUpdateMode): TDataSet;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     procedure LocateRecord(Source, Delta: TDataSet); override;
     procedure UpdateRecord(Source, Delta: TDataSet; BlobsOnly, KeyOnly: Boolean); override;
     procedure FetchDetails(Source, Delta: TDataSet); override;
-
+    procedure FetchDetailsFromServer(Source, Current, Delta: TDataSet; ATree: TUpdateTree);
     function InternalRowRequest(const Row: OleVariant; Options: TFetchOptions): OleVariant; override;
     function InternalGetParams(Types: TParamTypes = AllParamTypes): OleVariant; override;
     procedure InternalExecute(const CommandText: WideString; var Params: OleVariant); override;
@@ -368,12 +396,13 @@ type
       var Params: OleVariant): OleVariant; override;
     function InternalApplyUpdates(const Delta: OleVariant; MaxErrors: Integer;
       out ErrorCount: Integer): OleVariant; override;
+    property Params: TParams read FParams;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   published
     property DataSet: TDataSet read FDataSet write SetDataSet;
-    property Constraints: Boolean read FConstraints write FConstraints;
+    property Constraints: Boolean read FConstraints write FConstraints default False;
     property ResolveToDataSet: Boolean read FResolveToDataSet write SetResolveToDataSet default False;
     property Exported;
     property Options;
@@ -425,7 +454,6 @@ type
   protected
     procedure Clear;
     function DoUpdates: Boolean;
-
     procedure RefreshData(Options: TFetchOptions);
     procedure InitErrorPacket(E: EUpdateError; Response: TResolverResponse);
     procedure InitData(ASource: TDataSet);
@@ -517,7 +545,7 @@ type
     procedure GenUpdateSQL(Tree: TUpdateTree; SQL: TStrings; Params: TParams;
       Alias: string);
     procedure GenSelectSQL(Tree: TUpdateTree; SQL: TStrings; Params: TParams;
-      Alias: string);
+      Alias: string; Mode: TUpdateMode = upWhereKeyOnly);
     function UseFieldInUpdate(Field: TField): Boolean;
     function UseFieldInWhere(Field: TField; Mode: TUpdateMode): Boolean;
     procedure InternalDoUpdate(Tree: TUpdateTree; UpdateKind: TUpdateKind);
@@ -539,7 +567,7 @@ type
 
 { TLocalAppServer }
 
-  TLocalAppServer = class(TInterfacedObject, IAppServer, ISupportErrorInfo)
+  TLocalAppServer = class(TInterfacedObject, IAppServer{$IFDEF MSWINDOWS}, ISupportErrorInfo{$ENDIF})
   private
     FProvider: TCustomProvider;
     FProviderCreated: Boolean;
@@ -565,7 +593,7 @@ type
     procedure AS_Execute(const ProviderName: WideString;  const CommandText: WideString;
                          var Params, OwnerData: OleVariant); safecall;
     { ISupportErrorInfo }
-    function InterfaceSupportsErrorInfo(const iid: TIID): HResult; stdcall;
+    function InterfaceSupportsErrorInfo(const iid: TGUID): HResult; stdcall;
   public
     constructor Create(AProvider: TCustomProvider); overload;
     constructor Create(ADataset: TDataset); overload;
@@ -574,14 +602,25 @@ type
       ExceptAddr: Pointer): HResult; override;
   end;
 
+  IProviderContainer = interface
+  ['{EEE9FFD4-752F-11D4-80DD-00C04F6BB88C}']
+    procedure RegisterProvider(Prov: TCustomProvider);
+    procedure UnRegisterProvider(Prov: TCustomProvider);
+  end;
+
 { Utility functions }
 
 function GetObjectProperty(Instance: TPersistent; const PropName: string): TObject;
 function GetStringProperty(Instance: TPersistent; const PropName: string): string;
+function VarArrayFromStrings(Strings: TStrings): Variant;
 
 implementation
-
-uses MidConst, DBConsts, DBCommon, TypInfo, DataBkr, ComObj;
+{$IFDEF MSWINDOWS}
+uses MidConst, DBConsts, DBCommon, TypInfo, DataBkr, ComObj, FMTBcd;
+{$ENDIF}
+{$IFDEF LINUX}
+uses MidConst, DBConsts, DBCommon, TypInfo, VarUtils, FMTBcd, Types;
+{$ENDIF}
 
 const
   DEFBUFSIZE = 8192;  { Default size for field data buffer }
@@ -596,7 +635,7 @@ const
      dsfldBYTES, dsfldBYTES, dsfldBYTES, dsfldBYTES, dsfldBYTES, dsfldUNKNOWN,
      dsfldZSTRING, dsfldUNICODE, dsfldINT, dsfldADT, dsfldARRAY, dsfldEMBEDDEDTBL,
      dsfldEMBEDDEDTBL, dsfldBYTES, dsfldBYTES, dsfldUNKNOWN, dsfldUNKNOWN,
-     dsfldUNKNOWN, dsfldZSTRING);
+     dsfldUNKNOWN, dsfldZSTRING, dsfldDATETIME, dsFLDFMTBCD);
 
   ExtraFieldProps: array [0..10] of string = ('Alignment', 'DisplayLabel',
     'DisplayWidth', 'Visible', 'EditMask', 'DisplayFormat', 'EditFormat',
@@ -622,6 +661,18 @@ begin
   PropInfo := TypInfo.GetPropInfo(Instance.ClassInfo, PropName);
   if (PropInfo <> nil) and (PropInfo^.PropType^.Kind in [tkString, tkLString, tkWString]) then
     Result := GetStrProp(Instance, PropInfo);
+end;
+
+function VarArrayFromStrings(Strings: TStrings): Variant;
+var
+  I: Integer;
+begin
+  Result := Null;
+  if Strings.Count > 0 then
+  begin
+    Result := VarArrayCreate([0, Strings.Count - 1], varOleStr);
+    for I := 0 to Strings.Count - 1 do Result[I] := WideString(Strings[I]);
+  end;
 end;
 
 { EDSWriter }
@@ -674,7 +725,7 @@ var
   TimeStamp: TTimeStamp;
 begin
   if ((VarType(Value) and varTypeMask) in [varSmallInt, varInteger, varSingle,
-      varDouble, varCurrency, varDate, varOleStr, varBoolean, varByte]) then
+      varDouble, varCurrency, varDate, varOleStr, varBoolean, varByte, varNull]) then
   begin
     ParamType := ParamTypeMap[VarType(Value) and varTypeMask];
     ParamLen := ParamTypeSize[VarType(Value) and varTypeMask];
@@ -684,7 +735,7 @@ begin
       ParamLen := Length(Value) + 1;
       PWord(FBuffer)^ := ParamLen;
       Inc(ParamLen, SizeOf(Word));
-      StrPCopy(@FBuffer[SizeOf(Word)], Value);
+      StrPLCopy(@FBuffer[SizeOf(Word)], Value, Length(FBuffer) - SizeOf(Word) - 1);
     end else
     if ParamType = dsfldTIMESTAMP then
     begin
@@ -693,13 +744,22 @@ begin
       Move(DateRec, PChar(FBuffer)^, ParamLen);
       ParamType := ParamType shl dsSizeBitsLen or SizeOf(TDateTimeRec);
     end else
+    if ParamType = dsfldDATETIME then
+    begin
+      P := @TVarData(Value).VPointer;
+      Move(P^, PByte(FBuffer)^, ParamLen);
+      ParamType := (ParamType shl dsSizeBitsLen) or SizeOf(TSQLTimeStamp);
+    end else
     if VarIsArray(Value) then
     begin
       if ParamLen = 0 then
         raise EDSWriter.Create(SInvalidOptParamType, 0);
       ElemCount := VarArrayHighBound(Value, 1) + 1;
       ElemSize := ParamLen;
-      ParamType := (dsfldUINT shl dsSizeBitsLen) or dsArrayFldType or ElemSize;
+      if ParamType in [dsfldINT, dsfldUINT] then
+        ParamType := (dsfldUINT shl dsSizeBitsLen) or dsArrayFldType or ElemSize
+      else
+        ParamType := (dsfldBYTES shl dsSizeBitsLen) or dsArrayFldType or ElemSize;
       PInteger(FBuffer)^ := ElemCount;
       ParamLen := ElemCount * ElemSize;
       P := VarArrayLock(Value);
@@ -788,6 +848,8 @@ end;
 
 procedure TDataPacketWriter.PutStringField(Info: PPutFieldInfo);
 begin
+  if Length(FBuffer) <= Info.Size then
+    SetLength(FBuffer, Info.Size + 1);
   if Info.DataSet.GetFieldData(Info.FieldNo, FBuffer) then
   begin
     if TStringField(Info.Field).Transliterate then
@@ -903,12 +965,31 @@ const
   B: Byte = 0;
 var
   i: Integer;
+  ChildOpened: Boolean;
+
+  function OpenCloseDetails(Info: TInfoArray; ActiveState: Boolean): Boolean;
+  var
+    I: Integer;
+  begin
+    Result := False;
+    for I := 0 to High(Info) do
+    begin
+      if Info[I].IsDetail and (Info[I].DataSet.Active <> ActiveState) then
+      begin
+        Info[I].DataSet.Active := ActiveState;
+        Info[I].Opened := ActiveState;
+        Result := True;
+      end;
+    end;
+  end;
+
 begin
   Result := 0;
   if RecsOut = AllRecords then
     RecsOut := High(Integer);
   if DataSet.DefaultFields then
     RefreshPutProcs(DataSet, Info);
+  ChildOpened := OpenCloseDetails(Info, True);
   while (not DataSet.EOF) and (Result < RecsOut) do
   begin
     FIDSWriter.PutField(fldIsChanged, 1, @B);
@@ -918,6 +999,8 @@ begin
     if Result < RecsOut then
       DataSet.Next;
   end;
+  if ChildOpened then
+    OpenCloseDetails(Info, False);
 end;
 
 { Writing meta data }
@@ -975,7 +1058,8 @@ procedure TDataPacketWriter.AddExtraFieldProps(Field: TField);
 var
   Writer: TPropWriter;
   Stream: TMemoryStream;
-  i, Attr: Integer;
+  i: Integer;
+  Attr: Cardinal;
 begin
   Stream := TMemoryStream.Create;
   try
@@ -988,7 +1072,7 @@ begin
       Writer.FlushBuffer;
       if Stream.Size > 2 then
       begin
-        Attr := (dsfldBYTES shl dsSizeBitsLen) or dsArrayFldType or SizeOf(Byte);
+        Attr := (dsfldBYTES shl dsSizeBitsLen) or dsArrayFldType or SizeOf(Byte) or dsIncInDelta;
         PInteger(FBuffer)^ := Stream.Size;
         Move(Stream.Memory^, FBuffer[SizeOf(Integer)], Stream.Size);
         Check(FIDSWriter.AddAttribute(fldAttrArea, szFIELDPROPS, Attr,
@@ -1008,10 +1092,10 @@ procedure TDataPacketWriter.AddColumn(const Info: TPutFieldInfo);
   var
     FldDesc: TDSDataPacketFldDesc;
   begin
-    if Length(FldName) > SizeOf(FldDesc.szFieldName) then
+    if Length(FldName) >= SizeOf(FldDesc.szFieldName) then
       raise EDSWriter.CreateFmt(SFieldNameTooLong,[SizeOf(FldDesc.szFieldName) - 1]);
     FillChar(FldDesc, SizeOf(FldDesc), 0);
-    StrCopy(FldDesc.szFieldName, PChar(FldName));
+    StrLCopy(FldDesc.szFieldName, PChar(FldName), SizeOf(FldDesc.szFieldName) - 1);
     FldDesc.iFieldType := FldType;
     FldDesc.iAttributes := Attributes;
     Check(FIDSWriter.AddColumnDesc(FldDesc));
@@ -1057,6 +1141,15 @@ procedure TDataPacketWriter.AddColumn(const Info: TPutFieldInfo);
              AddAttribute(fldAttrArea, szMAXVALUE, 
                           TBCDField(AField).MaxValue, False);
            end;
+      ftFMTBcd:
+        if (TFMTBcdField(AField).MaxValue <> '') or
+           (TFMTBcdField(AField).MinValue <> '') then
+           begin
+             AddAttribute(fldAttrArea, szMINVALUE, 
+                    VarFMTBcdCreate(TFMTBCDField(AField).MinValue, TFMTBCDField(AField).Precision, TFMTBCDField(AField).Size), False);
+             AddAttribute(fldAttrArea, szMAXVALUE, 
+                    VarFMTBcdCreate(TFMTBCDField(AField).MaxValue, TFMTBCDField(AField).Precision, TFMTBCDField(AField).Size), False);
+           end;
     end;
   end;
 
@@ -1079,6 +1172,8 @@ begin
     if (pfHidden in Info.Field.ProviderFlags) then Attr := Attr or fldAttrHIDDEN or fldAttrREADONLY;
     FldType := PacketTypeMap[Info.Field.DataType];
     case Info.Field.DataType of
+      ftTimeStamp:
+        FldType := (FldType shl dsSizeBitsLen) or sizeof(TSQLTimeStamp);
       ftString, ftFixedChar, ftVarBytes, ftGUID, ftWideString:
       begin
         FldType := FldType shl dsSizeBitsLen or dsVaryingFldType;
@@ -1092,6 +1187,15 @@ begin
         if TBCDField(Info.Field).Precision = 0 then
           Width := 32 else
           Width := TBCDField(Info.Field).Precision;
+        Prec := Width shr 1;
+        Inc(Prec, Prec and 1);  { Make an even number }
+        FldType := (FldType shl dsSizeBitsLen) or (Prec + 2);
+      end;
+      ftFMTBcd:
+      begin
+        if TFMTBCDField(Info.Field).Precision = 0 then
+          Width := 32 else
+          Width := TFMTBCDField(Info.Field).Precision;
         Prec := Width shr 1;
         Inc(Prec, Prec and 1);  { Make an even number }
         FldType := (FldType shl dsSizeBitsLen) or (Prec + 2);
@@ -1122,8 +1226,16 @@ begin
       AddAttribute(fldAttrArea, szORIGIN, Info.Field.Origin, True);
     if Width > 0 then
       AddAttribute(fldAttrArea, szWIDTH, Width, False);
-    if (Info.Field is TBCDField) and (TBCDField(Info.Field).Size <> 0) then
-      AddAttribute(fldAttrArea, szDECIMALS, TBCDField(Info.Field).Size, False);
+    if Info.Field is TBCDField then 
+    begin
+      if TBCDField(Info.Field).Size <> 0 then
+        AddAttribute(fldAttrArea, szDECIMALS, TBCDField(Info.Field).Size, False);
+    end
+    else if Info.Field is TFMTBCDField then 
+    begin
+      if TFMTBCDField(Info.Field).Size <> 0 then
+        AddAttribute(fldAttrArea, szDECIMALS, TFMTBCDField(Info.Field).Size, False);
+    end;
     AddMinMax(Info.Field);
     case Info.Field.DataType of
       ftCurrency: TempStr := szstMONEY;
@@ -1218,7 +1330,7 @@ type
     end;
     PInteger(FBuffer)^ := AttrSize;
     if Len > 0 then
-      StrCopy(@FBuffer[SizeOf(TSQLExprInfo) + SizeOf(Integer)], PChar(ErrorStr));
+      StrLCopy(@FBuffer[SizeOf(TSQLExprInfo) + SizeOf(Integer)], PChar(ErrorStr), Length(FBuffer) - SizeOf(TSQLExprInfo) - SizeOf(Integer) - 1);
     AttrType := TypeStr[ConstraintType];
     Check(FIDSWriter.AddAttribute(pcktAttrArea, AttrType, Attr, AttrSize + SizeOf(Integer), PByte(FBuffer)));
   end;
@@ -1246,13 +1358,14 @@ begin
               ctRecord, False);
           end;
       except
-        on E: Exception do
-        begin
-          if DataSet.Name <> '' then
-            ErrMsg := Format('%s: %s',[DataSet.Name, SRecConstFail]) else
-            ErrMsg := SRecConstFail;
-          raise EDSWriter.CreateFmt(ErrMsg, [E.Message]);
-        end;
+        if DataSet.Name <> '' then
+          ErrMsg := Format('%s: %s',[DataSet.Name, SRecConstFail]) 
+        else
+          ErrMsg := SRecConstFail;
+        if ExceptObject is Exception then
+          raise EDSWriter.CreateFmt(ErrMsg, [Exception(ExceptObject).Message])
+        else
+          raise EDSWriter.CreateFmt(ErrMsg, ['']);
       end;
     end;
     for i := 0 to DataSet.FieldList.Count - 1 do
@@ -1262,15 +1375,15 @@ begin
           AddSQLExprAttr(ExprParser, DefaultExpression, '', FullName, i + 1,
             ctDefault, False);
         except
-          on E: Exception do
-          begin
-            if Name <> '' then
-              ErrMsg := Format('%s: %s',[Name, SDefExprFail]) else
-            if DataSet.Name <> '' then
-              ErrMsg := Format('%s.%s: %s',[DataSet.Name, FullName, SDefExprFail]) else
-              ErrMsg := Format('%s: %s',[FullName, SDefExprFail]);
-            raise EDSWriter.CreateFmt(ErrMsg, [E.Message]);
-          end;
+          if Name <> '' then
+            ErrMsg := Format('%s: %s',[Name, SDefExprFail]) else
+          if DataSet.Name <> '' then
+            ErrMsg := Format('%s.%s: %s',[DataSet.Name, FullName, SDefExprFail]) else
+            ErrMsg := Format('%s: %s', [FullName, SDefExprFail]);
+          if ExceptObject is Exception then
+            raise EDSWriter.CreateFmt(ErrMsg, [Exception(ExceptObject).Message])
+          else
+            raise EDSWriter.CreateFmt(ErrMsg, ['']);
         end;
         try
           AddSQLExprAttr(ExprParser, ImportedConstraint, ConstraintErrorMessage,
@@ -1278,15 +1391,15 @@ begin
           AddSQLExprAttr(ExprParser, CustomConstraint, ConstraintErrorMessage,
             FullName, i + 1, ctField, False);
         except
-          on E: Exception do
-          begin
-            if Name <> '' then
-              ErrMsg := Format('%s: %s',[Name, SFieldConstFail]) else
-            if DataSet.Name <> '' then
-              ErrMsg := Format('%s.%s: %s',[DataSet.Name, FullName, SFieldConstFail]) else
-              ErrMsg := Format('%s: %s',[FullName, SFieldConstFail]);
-            raise EDSWriter.CreateFmt(ErrMsg, [E.Message]);
-          end;
+          if Name <> '' then
+            ErrMsg := Format('%s: %s',[Name, SFieldConstFail]) else
+          if DataSet.Name <> '' then
+            ErrMsg := Format('%s.%s: %s',[DataSet.Name, FullName, SFieldConstFail]) else
+            ErrMsg := Format('%s: %s', [FullName, SFieldConstFail]);
+          if ExceptObject is Exception then
+            raise EDSWriter.CreateFmt(ErrMsg, [Exception(ExceptObject).Message])
+          else
+            raise EDSWriter.CreateFmt(ErrMsg, ['']);
         end;
       end;
   finally
@@ -1340,7 +1453,10 @@ begin
       DescList := TList.Create;
       try
         { Get the DEFAULT_ORDER }
-        DefIdx := IProviderSupport(DataSet).PSGetDefaultOrder;
+        if not (poRetainServerOrder in Options) then
+          DefIdx := IProviderSupport(DataSet).PSGetDefaultOrder
+        else
+          DefIdx := nil;
         if Assigned(DefIdx) then
         try
           KeyList := GetKeyData(DefIdx);
@@ -1585,7 +1701,7 @@ function TDataPacketWriter.InitPutProcs(ADataSet: TDataSet;
                 TInfoArray(FieldInfos)[i], GlobalIdx, NestedIdx);
           end;
           ftSmallint, ftInteger, ftWord, ftBoolean, ftFloat, ftCurrency, ftBCD,
-          ftDate, ftTime, ftDateTime, ftAutoInc, ftLargeint, ftBytes:
+          ftDate, ftTime, ftDateTime, ftAutoInc, ftLargeint, ftBytes, ftTimeStamp, ftFMTBcd:
             PutProc := PutField;
           ftBlob, ftMemo, ftGraphic, ftFmtMemo, ftParadoxOle, ftDBaseOle, ftTypedBinary, ftOraBlob, ftOraClob:
             PutProc := PutBlobField;
@@ -1637,10 +1753,13 @@ procedure TDataPacketWriter.GetDataPacket(DataSet: TDataSet;
       end;
       FPutFieldInfo := InitPutProcs(DataSet, Idx);
       if poFetchBlobsOnDemand in Options then
-        Version := PACKETVERSION_2 else
+        Version := PACKETVERSION_3 else
         Version := PACKETVERSION_1;
-      if grXML in PacketOptions then
-        FIDSWriter.SetXMLMode(xmlON) else
+      if grXMLUTF8 in PacketOptions then
+        FIDSWriter.SetXMLMode(xmlUTF8)
+      else if grXML in PacketOptions then
+        FIDSWriter.SetXMLMode(xmlON)
+      else
         FIDSWriter.SetXMLMode(0);
       Check(FIDSWriter.Init_Sequential(Version, Idx - 1));
       WriteMetaData(DataSet, FPutFieldInfo);
@@ -1662,6 +1781,25 @@ begin
     RecsOut := WriteDataSet(DataSet, FPutFieldInfo, RecsOut);
     FIDSWriter.GetDataPacket(DataPacket);
     DataPacketToVariant(DataPacket, Data);
+end;
+
+procedure TDataPacketWriter.Reset;
+
+  procedure CloseDetailDatasets(const Info: TInfoArray);
+  var
+    i: integer;
+  begin
+    for i := 0 to High(Info) do
+      if Info[i].IsDetail and (Info[i].Opened or Info[i].Dataset.Active) then
+      begin
+        Info[i].DataSet.Close;
+        Info[i].Opened := False;
+        CloseDetailDatasets(TInfoArray(Info[i].FieldInfos));
+      end;
+  end;
+
+begin
+  CloseDetailDatasets(FPutFieldInfo);
 end;
 
 { TPacketDataSet }
@@ -1716,7 +1854,7 @@ begin
   if FUseCurValues and (State = dsOldValue) and HasCurValues then
   begin
     Result := inherited GetStateFieldValue(dsCurValue, Field);
-    if not VarIsEmpty(Result) then Exit;
+    if not VarIsClear(Result) then Exit;
   end;
   Result := inherited GetStateFieldValue(State, Field);
 end;
@@ -1815,7 +1953,7 @@ begin
          (Field.OldValue <> SourceField.Value) then
       begin
         NewValue := Field.NewValue;
-        if VarIsEmpty(Field.NewValue) or
+        if VarIsClear(Field.NewValue) or
            (NewValue <> SourceField.Value) then
           Field.Assign(SourceField);
       end;
@@ -1847,7 +1985,7 @@ begin
           CurValue := CurValues[I];
           Field := Fields[I];
         end;
-        if not VarIsEmpty(CurValue) then
+        if not VarIsClear(CurValue) then
           if (Field.OldValue <> CurValue) then
             Fields[I].Value := CurValue;
       end;
@@ -1866,9 +2004,9 @@ begin
     with Fields[I] do
     begin
       CurVal := CurValue;
-      if VarIsEmpty(CurVal) then Continue;
+      if VarIsClear(CurVal) then Continue;
       NewVal := NewValue;
-      if VarIsEmpty(NewVal) then Continue;
+      if VarIsClear(NewVal) then Continue;
       if CurVal = NewVal then Continue;
       Result := True;
       Break;
@@ -1878,21 +2016,45 @@ end;
 { TCustomProvider }
 
 constructor TCustomProvider.Create(AOwner: TComponent);
+var
+  ProvContainer: IProviderContainer;
 begin
   inherited Create(AOwner);
   FExported := True;
+{$IFDEF MSWINDOWS}
   if AOwner is TRemoteDataModule then
     TRemoteDataModule(AOwner).RegisterProvider(Self)
   else if AOwner is TCRemoteDataModule then
-    TCRemoteDataModule(AOwner).RegisterProvider(Self);
+    TCRemoteDataModule(AOwner).RegisterProvider(Self)
+  else if Assigned(AOwner) then
+    if AOwner.GetInterface(IProviderContainer, ProvContainer) then
+      ProvContainer.RegisterProvider(Self);
+{$ENDIF}
+{$IFDEF LINUX}
+  if Assigned(AOwner) then
+    if AOwner.GetInterface(IProviderContainer, ProvContainer) then
+      ProvContainer.RegisterProvider(Self);
+{$ENDIF}
 end;
 
 destructor TCustomProvider.Destroy;
+var
+  ProvContainer: IProviderContainer;
 begin
+{$IFDEF MSWINDOWS}
   if Owner is TRemoteDataModule then
     TRemoteDataModule(Owner).UnRegisterProvider(Self)
   else if Owner is TCRemoteDataModule then
-    TCRemoteDataModule(Owner).UnRegisterProvider(Self);
+    TCRemoteDataModule(Owner).UnRegisterProvider(Self)
+  else if Assigned(Owner) then
+    if Owner.GetInterface(IProviderContainer, ProvContainer) then
+      ProvContainer.UnRegisterProvider(Self);
+{$ENDIF}
+{$IFDEF LINUX}
+  if Assigned(Owner) then
+    if Owner.GetInterface(IProviderContainer, ProvContainer) then
+      ProvContainer.UnRegisterProvider(Self);
+{$ENDIF}
   inherited Destroy;
 end;
 
@@ -1903,6 +2065,16 @@ var
 begin
   Options := [grMetaData];
   Result := GetRecords(-1, Recs, Byte(Options));
+end;
+
+procedure TCustomProvider.DoAfterApplyUpdates(var OwnerData: OleVariant);
+begin
+  if Assigned(FAfterApplyUpdates) then FAfterApplyUpdates(Self, OwnerData);
+end;
+
+procedure TCustomProvider.DoBeforeApplyUpdates(var OwnerData: OleVariant);
+begin
+  if Assigned(FBeforeApplyUpdates) then FBeforeApplyUpdates(Self, OwnerData);
 end;
 
 function TCustomProvider.ApplyUpdates(Const Delta: OleVariant; MaxErrors: Integer;
@@ -1916,9 +2088,14 @@ end;
 function TCustomProvider.ApplyUpdates(const Delta: OleVariant; MaxErrors: Integer;
   out ErrorCount: Integer; var OwnerData: OleVariant): OleVariant;
 begin
-  if Assigned(FBeforeApplyUpdates) then FBeforeApplyUpdates(Self, OwnerData);
+  DoBeforeApplyUpdates(OwnerData);
   Result := InternalApplyUpdates(Delta, MaxErrors, ErrorCount);
-  if Assigned(FAfterApplyUpdates) then FAfterApplyUpdates(Self, OwnerData);
+  DoAfterApplyUpdates(OwnerData);
+end;
+
+procedure TCustomProvider.DoAfterGetRecords(var OwnerData: OleVariant);
+begin
+  if Assigned(FAfterGetRecords) then FAfterGetRecords(Self, OwnerData);
 end;
 
 procedure TCustomProvider.DoBeforeGetRecords(Count: Integer; Options: Integer;
@@ -1940,20 +2117,35 @@ begin
   DoBeforeGetRecords(Count, Options, CommandText, Params, OwnerData);
   Result := InternalGetRecords(Count, RecsOut, TGetRecordOptions(Byte(Options)),
     CommandText, Params);
-  if Assigned(FAfterGetRecords) then FAfterGetRecords(Self, OwnerData);
+  DoAfterGetRecords(OwnerData);
   Params := InternalGetParams([ptOutput, ptInputOutput]);
+end;
+
+procedure TCustomProvider.DoAfterRowRequest(var OwnerData: OleVariant);
+begin
+  if Assigned(FAfterRowRequest) then FAfterRowRequest(Self, OwnerData);
+end;
+
+procedure TCustomProvider.DoBeforeRowRequest(var OwnerData: OleVariant);
+begin
+  if Assigned(FBeforeRowRequest) then FBeforeRowRequest(Self, OwnerData);
 end;
 
 function TCustomProvider.RowRequest(const Row: OleVariant; RequestType: Integer;
   var OwnerData: OleVariant): OleVariant;
 begin
-  if Assigned(FBeforeRowRequest) then FBeforeRowRequest(Self, OwnerData);
+  DoBeforeRowRequest(OwnerData);
   Result := InternalRowRequest(Row, TFetchOptions(Byte(RequestType)));
-  if Assigned(FAfterRowRequest) then FAfterRowRequest(Self, OwnerData);
+  DoAfterRowRequest(OwnerData);
 end;
 
-procedure TCustomProvider.DoBeforeExecute(const CommandText: WideString;
-  var Params, OwnerData: OleVariant);
+procedure TCustomProvider.DoAfterExecute(var OwnerData: OleVariant);
+begin
+  if Assigned(FAfterExecute) then FAfterExecute(Self, OwnerData);
+end;
+
+procedure TCustomProvider.DoBeforeExecute(const CommandText: WideString; var Params,
+      OwnerData: OleVariant);
 begin
   if Assigned(FBeforeExecute) then FBeforeExecute(Self, OwnerData);
 end;
@@ -1963,15 +2155,25 @@ procedure TCustomProvider.Execute(const CommandText: WideString;
 begin
   DoBeforeExecute(CommandText, Params, OwnerData);
   InternalExecute(CommandText, Params);
-  if Assigned(FAfterExecute) then FAfterExecute(Self, OwnerData);
+  DoAfterExecute(OwnerData);
   Params := InternalGetParams([ptOutput, ptInputOutput]);
+end;
+
+procedure TCustomProvider.DoAfterGetParams(var OwnerData: OleVariant);
+begin
+  if Assigned(FAfterGetParams) then FAfterGetParams(Self, OwnerData);
+end;
+
+procedure TCustomProvider.DoBeforeGetParams(var OwnerData: OleVariant);
+begin
+  if Assigned(FBeforeGetParams) then FBeforeGetParams(Self, OwnerData);
 end;
 
 function TCustomProvider.GetParams(var OwnerData: OleVariant): OleVariant;
 begin
-  if Assigned(FBeforeGetParams) then FBeforeGetParams(Self, OwnerData);
+  DoBeforeGetParams(OwnerData); 
   Result := InternalGetParams;
-  if Assigned(FAfterGetParams) then FAfterGetParams(Self, OwnerData);
+  DoAfterGetParams(OwnerData); 
 end;
 
 function TCustomProvider.InternalGetParams(Types: TParamTypes = AllParamTypes): OleVariant;
@@ -2106,6 +2308,17 @@ end;
 
 { TDataSetProvider }
 
+type
+  PSQLInfo = ^TSQLInfo;
+  TSQLInfo = record
+    IsSQLBased: Boolean;
+    QuoteChar: string;
+    QuotedTable: string;
+    QuotedTableDot: string;
+    Opened: Boolean;
+    HasObjects: Boolean;
+  end;
+
 constructor TDataSetProvider.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -2126,6 +2339,8 @@ end;
 
 procedure TDataSetProvider.LocateRecord(Source, Delta: TDataSet);
 begin
+  FDataSetOpened := not Source.Active;
+  if FDataSetOpened then Source.Open;
   if not FindRecord(Source, Delta, UpdateMode) then
     DatabaseError(SRecordChanged);
 end;
@@ -2148,7 +2363,7 @@ function TDataSetProvider.FindRecord(Source, Delta: TDataSet;
           upWhereAll:
             if pfInWhere in ProviderFlags then List.Add(DataSet.Fields[i]);
           upWhereChanged:
-            if (pfInKey in ProviderFlags) or (not VarIsEmpty(NewValue)) then
+            if (pfInKey in ProviderFlags) or (not VarIsClear(NewValue)) then
               List.Add(DataSet.Fields[i]);
         end;
       end;
@@ -2159,7 +2374,7 @@ var
   KeyValues: Variant;
   Fields: string;
   FieldList: TList;
-  IsDelta: BOOL;
+  IsDelta: LongBool;
 begin
   Result := False;
   TPacketDataSet(Delta).DSBase.GetProp(dspropISDELTA, @IsDelta);
@@ -2194,11 +2409,76 @@ begin
   end;
 end;
 
+procedure TDataSetProvider.FetchDetailsFromServer(Source, Current, Delta: TDataSet; ATree: TUpdateTree);
+var
+  i: Integer;
+  Field: TField;
+  DS: TDataSet;
+
+  function GetDetailDataSetFromDelta(ATree: TUpdateTree; Source, Current, Delta: TDataSet; Mode: TUpdateMode): TDataSet;
+  var
+    Temp, Alias: String;
+    FSQL: TStringList;
+    FParams: TParams;
+    I: Integer;
+  begin
+    Result := nil;
+    FSQL := TStringList.Create;
+    FParams := TParams.Create;
+    try
+      CheckResolver;
+      if PSQLInfo(Resolver.FUpdateTree.Data)^.HasObjects then Alias := DefAlias else Alias := '';
+      with PSQLInfo(ATree.Data)^ do
+      begin
+        FSQL.Add('select');
+        for i := 0 to ATree.Delta.FieldCount - 1 do
+          with ATree.Delta.Fields[i] do
+            if not (DataType in [ftDataSet, ftReference]) and (FieldKind = fkData)
+               and (pfInWhere in ProviderFlags) then
+          FSQL.Add(Format(' %s%s%s%1:s,',[QuotedTableDot, QuoteChar, Origin]));
+        { Remove last ',' }
+        Temp := FSQL[FSQL.Count-1];
+        FSQL[FSQL.Count-1] := Copy(Temp, 1, Length(Temp) - 1);
+        FSQL.Add(Format(' from %s %s',[QuotedTable, Alias]));     { Do not localize }
+      end;
+      TSQLResolver(Delta).GenWhereSQL(Self.Resolver.FUpdateTree, FSQL, FParams,
+            Mode, Alias);
+      IProviderSupport(Current).PSExecuteStatement(FSQL.Text, FParams, @Result);
+    finally
+      FSQL.Free;
+      FParams.Free;
+    end;
+  end;
+
+begin
+  FDataSetOpened := not Source.Active;
+  if FDataSetOpened then Source.Open;
+  DS := GetDetailDataSetFromDelta(ATree, Source, Current, Delta, upWhereKeyOnly );
+  try
+    while not DS.EOF do
+    begin
+      Delta.Insert;
+      for i := 0 to Delta.FieldCount - 1 do
+      begin
+        Field := DS.FindField(Delta.Fields[i].FieldName);
+        if Field <> nil then
+          Delta.Fields[i].Assign(Field);
+      end;
+      Delta.Post;
+      DS.Next;
+    end;
+  finally
+    if Assigned(DS) then DS.Free;
+  end;  
+end;
+
 procedure TDataSetProvider.FetchDetails(Source, Delta: TDataSet);
 var
   i: Integer;
   Field: TField;
 begin
+  FDataSetOpened := not Source.Active;
+  if FDataSetOpened then Source.Open;
   Source.First;
   while not Source.EOF do
   begin
@@ -2214,34 +2494,63 @@ begin
   end;
 end;
 
+function TDataSetProvider.GetDataSetFromDelta(ATree: TUpdateTree; Source, Delta: TDataSet; Mode: TUpdateMode): TDataSet;
+var
+  Alias: String;
+  FSQL: TStringList;
+  FParams: TParams;
+begin
+  Result := nil;
+  FSQL := TStringList.Create;
+  FParams := TParams.Create;
+  try
+    CheckResolver;
+    if PSQLInfo(Resolver.FUpdateTree.Data)^.HasObjects then Alias := DefAlias else Alias := '';
+    TSQLResolver(Resolver).GenSelectSQL(ATree, FSQL, FParams, Alias, Mode);
+    IProviderSupport(Source).PSExecuteStatement(FSQL.Text, FParams, @Result);
+    if Result.EOF then
+      DatabaseError(SRecordChanged);
+  finally
+    FSQL.Free;
+    FParams.Free;
+  end;
+end;
+
 procedure TDataSetProvider.UpdateRecord(Source, Delta: TDataSet; BlobsOnly, KeyOnly: Boolean);
 var
   Field: TField;
   i: Integer;
   UseUpMode: TUpdateMode;
+  DS: TDataSet;
 begin
   if KeyOnly then
     UseUpMode := upWhereKeyOnly
   else
     UseUpMode := UpdateMode;
-  if not FindRecord(Source, Delta, UseUpMode) then
-    DatabaseError(SRecordChanged);
-  begin
-    if not FindRecord(Source, Delta, upWhereKeyOnly) then
+  if Source.IsUnidirectional then
+     DS := TDataSetProvider(Self.Resolver.FProvider).GetDataSetFromDelta(
+           Self.Resolver.FUpdateTree, Source, Delta, UseUpMode)
+  else begin
+    if not FindRecord(Source, Delta, UseUpMode) then
       DatabaseError(SRecordChanged);
-    with Delta do
-    begin
-      Edit;
-      for i := 0 to FieldCount - 1 do
-      begin
-        Field := Source.FindField(Fields[i].FieldName);
-        if (Field <> nil) and (not BlobsOnly or (Field.IsBlob and VarIsNull(Fields[i].NewValue))) then
-          Fields[i].Assign(Field);
-      end;
-      Post;
-    end;
+    DS := Source;
   end;
+  with Delta do
+  begin
+    Edit;
+    for I := 0 to FieldCount - 1 do
+    begin
+      Field := DS.FindField(Fields[I].FieldName);
+        if (Field <> nil) and (not (Field.Lookup or Field.Calculated)) and
+           (not BlobsOnly or (Field.IsBlob and VarIsNull(Fields[i].NewValue))) then
+          Fields[i].Assign(Field);
+    end;
+    Post;
+  end;
+  if Source.IsUnidirectional then
+    DS.Free;
 end;
+
 
 procedure TDataSetProvider.DoBeforeExecute(const CommandText: WideString;
   var Params, OwnerData: OleVariant);
@@ -2269,6 +2578,7 @@ begin
   CheckDataSet;
   if FDataSetOpened then
   begin
+    FDSWriter.Reset;
     DataSet.Close;
     FDataSetOpened := False;
   end;
@@ -2289,7 +2599,7 @@ end;
 
 procedure TDataSetProvider.SetParams(Values: OleVariant);
 begin
-  if VarIsEmpty(Values) then Exit;
+  if VarIsClear(Values) then Exit;
   CheckDataSet;
   if not Assigned(FParams) then
     FParams := TParams.Create;
@@ -2319,12 +2629,13 @@ begin
     begin
       DataSet.Open;
       FDataSetOpened := True;
-    end;     
+    end;
     Result := inherited InternalRowRequest(Row, Options);
   finally
     Resolver.FUpdateTree.InitData(nil);
     if FDataSetOpened then
     begin
+      FDSWriter.Reset;
       DataSet.Close;
       FDataSetOpened := False;
     end;    
@@ -2333,12 +2644,10 @@ end;
 
 function TDataSetProvider.InternalApplyUpdates(const Delta: OleVariant; MaxErrors: Integer;
   out ErrorCount: Integer): OleVariant;
-var
-  TransactionStarted: Boolean;
 begin
   CheckDataSet;
-  TransactionStarted := not IProviderSupport(DataSet).PSInTransaction;
-  if TransactionStarted then
+  FTransactionStarted := not IProviderSupport(DataSet).PSInTransaction;
+  if FTransactionStarted then
     IProviderSupport(DataSet).PSStartTransaction;
   try
     CheckResolver;
@@ -2349,7 +2658,7 @@ begin
       Resolver.FUpdateTree.InitData(nil);
     end;
   finally
-    if TransactionStarted then
+    if FTransactionStarted then
       IProviderSupport(DataSet).PSEndTransaction((ErrorCount <= MaxErrors) or (MaxErrors = -1));
   end;
 end;
@@ -2383,7 +2692,7 @@ procedure TDataSetProvider.DoBeforeGetRecords(Count: Integer; Options: Integer;
 begin
   SetCommandText(CommandText);
   SetParams(Params);
-  inherited;
+  inherited DoBeforeGetRecords(Count, Options, CommandText, Params, OwnerData);
 end;
 
 function TDataSetProvider.InternalGetRecords(Count: Integer; out RecsOut: Integer;
@@ -2554,7 +2863,8 @@ begin
   end else
   begin
     FSourceDS := ASource;
-    FOpened := (FSourceDS.FieldCount = 0) and FSourceDS.ObjectView;
+    FOpened := (FSourceDS.FieldCount = 0) and FSourceDS.ObjectView and 
+            (not FSourceDS.IsUniDirectional);
     if FOpened then FSourceDS.Open;
     if FSourceDS.ObjectView then
       for i := 0 to FSourceDS.FieldCount - 1 do
@@ -2578,6 +2888,9 @@ begin
   end;
 end;
 
+type
+  TPropReader = class(TReader);
+
 procedure TUpdateTree.InitDelta(ADelta: TPacketDataSet);
 var
   i: Integer;
@@ -2585,35 +2898,66 @@ var
   KeySet: Boolean;
   Tree: TUpdateTree;
   FieldInfo: TFieldInfo;
+  P: Pointer;
+  Stream: TMemoryStream;
+  Reader: TPropReader;
 begin
   if (FDeltaDS <> nil) and (FDeltaDS <> ADelta) then
     FDeltaDS.Free;
   FDeltaDS := ADelta;
   FDeltaDS.LogChanges := False;
   KeySet := False;
-  for i := 0 to FDeltaDS.FieldCount - 1 do
-  begin
-    Attr := FDeltaDS.InternalGetOptionalParam(szPROVFLAGS, FDeltaDS.Fields[i].FieldNo);
-    if not (VarIsNull(Attr) or VarIsEmpty(Attr)) then
-      FDeltaDS.Fields[i].ProviderFlags := TProviderFlags(Byte(Attr));
-    Attr := FDeltaDS.InternalGetOptionalParam(szORIGIN, FDeltaDS.Fields[i].FieldNo);
-    if not (VarIsNull(Attr) or VarIsEmpty(Attr)) then
-      FDeltaDS.Fields[i].Origin := Attr;
-    Attr := FDeltaDS.InternalGetOptionalParam(szSERVERCALC, FDeltaDS.Fields[i].FieldNo);
-    if not (VarIsEmpty(Attr) or VarIsNull(Attr)) and
-      (VarType(Attr) = varBoolean) and Boolean(Attr) then
-      FDeltaDS.Fields[i].Tag := tagSERVERCALC;
-    if GetFieldInfo(FDeltaDS.Fields[i].Origin, FieldInfo) then
-      FDeltaDS.Fields[i].Origin := FieldInfo.OriginalFieldName else
-      FDeltaDS.Fields[i].Origin := FDeltaDS.Fields[i].FieldName;
-    if pfInKey in FDeltaDS.Fields[i].ProviderFlags then
-      KeySet := True;
-    if Delta.Fields[i].DataType = ftDataSet then
-      with TDataSetField(Delta.Fields[i]) do
+  Stream := TMemoryStream.Create;
+  try
+    for i := 0 to FDeltaDS.FieldCount - 1 do
+    begin
+      Attr := FDeltaDS.InternalGetOptionalParam(szPROVFLAGS, FDeltaDS.Fields[i].FieldNo);
+      if not (VarIsNull(Attr) or VarIsClear(Attr)) then
+        FDeltaDS.Fields[i].ProviderFlags := TProviderFlags(Byte(Attr));
+      Attr := FDeltaDS.InternalGetOptionalParam(szORIGIN, FDeltaDS.Fields[i].FieldNo);
+      if not (VarIsNull(Attr) or VarIsClear(Attr)) then
+        FDeltaDS.Fields[i].Origin := Attr;
+      Attr := FDeltaDS.InternalGetOptionalParam(szSERVERCALC, FDeltaDS.Fields[i].FieldNo);
+      if not (VarIsClear(Attr) or VarIsNull(Attr)) and
+        (VarType(Attr) = varBoolean) and Boolean(Attr) then
+        FDeltaDS.Fields[i].Tag := tagSERVERCALC;
+      {Setup included field properties}
+(**)      Attr := FDeltaDS.InternalGetOptionalParam(szFIELDPROPS, FDeltaDS.Fields[i].FieldNo);
+      if not (VarIsNull(Attr) or VarIsClear(Attr) or not VarIsArray(Attr)) then
       begin
-        Tree := GetTree(Delta.Fields[i].FieldName);
-        Tree.InitDelta(TPacketDataSet(NestedDataSet));
+        Stream.Size := VarArrayHighBound(Attr, 1);
+        P := VarArrayLock(Attr);
+        try
+          Stream.Position := 0;
+          Stream.Write(Pointer(Integer(P))^, Stream.Size);
+          Stream.Position := 0;
+        finally
+          VarArrayUnlock(Attr);
+        end;
+        Attr := NULL;
+        Reader := TPropReader.Create(Stream, 1024);
+        try
+          Reader.ReadListBegin;
+          while not Reader.EndOfList do
+            Reader.ReadProperty(FDeltaDS.Fields[i]);
+        finally
+          Reader.Free;
+        end;
       end;
+      if GetFieldInfo(FDeltaDS.Fields[i].Origin, FieldInfo) then
+        FDeltaDS.Fields[i].Origin := FieldInfo.OriginalFieldName else
+        FDeltaDS.Fields[i].Origin := FDeltaDS.Fields[i].FieldName;
+      if pfInKey in FDeltaDS.Fields[i].ProviderFlags then
+        KeySet := True;
+      if Delta.Fields[i].DataType = ftDataSet then
+        with TDataSetField(Delta.Fields[i]) do
+        begin
+          Tree := GetTree(Delta.Fields[i].FieldName);
+          Tree.InitDelta(TPacketDataSet(NestedDataSet));
+        end;
+    end;
+  finally
+    Stream.Free;
   end;
   FResolver.InitTreeData(Self);
   if not KeySet then
@@ -2660,15 +3004,17 @@ var
   i: Integer;
   Tree: TUpdateTree;
   Field: TField;
-  Updated: Boolean;
+  IsUnidirectional, Updated: Boolean;
+  DS: TDataSet;
 begin
+  IsUnidirectional := False;
   Updated := False;
   if (foRecord in Options) and (Delta.RecordCount > 0) then
   begin
     Updated := True;
     FResolver.Provider.UpdateRecord(Source, Delta, False, True);
   end;
-  for i := 0 to Delta.FieldCount - 1 do
+  for I := 0 to Delta.FieldCount - 1 do
   begin
     Field := Delta.Fields[i];
     if (not Updated) and (foBlobs in Options) and Field.IsBlob and
@@ -2679,17 +3025,32 @@ begin
     end;
     if (Field is TDataSetField) then
     begin
-      if not Updated then
-        FResolver.Provider.LocateRecord(Source, Delta);
+      if (not Updated) and Source.IsUnidirectional then
+      begin
+        Delta.AssignCurValues(Source);
+        DS := TDataSetProvider(Self.FResolver.FProvider).GetDataSetFromDelta(
+             Self, Source, Delta, upWhereKeyOnly);
+        IsUnidirectional := True;
+      end else
+      begin
+        DS := nil;
+        if not Updated then
+          FResolver.Provider.LocateRecord(Source, Delta);
+      end;
       Tree := GetTree(Field.FieldName);
       if Assigned(Tree) then
       begin
-        if not VarIsNull(Field.NewValue) then
+        if not IsUnidirectional and (not VarIsNull(Field.NewValue)) then
         begin
           if Tree.Delta.RecordCount > 0 then
             Tree.RefreshData(Options);
         end else
-          FResolver.Provider.FetchDetails(Tree.Source, Tree.Delta);
+        begin
+          if not IsUnidirectional then
+            FResolver.Provider.FetchDetails(Tree.Source, Tree.Delta)
+          else
+            TDataSetProvider(FResolver.Provider).FetchDetailsFromServer(Tree.Source, DS, Tree.Delta, Tree);
+        end;
       end;
     end;
   end;
@@ -2834,14 +3195,6 @@ begin
 end;
 
 function TCustomResolver.InternalUpdateRecord(Tree: TUpdateTree): Boolean;
-type
-  PRaiseFrame = ^TRaiseFrame;
-  TRaiseFrame = record
-    NextRaise: PRaiseFrame;
-    ExceptAddr: Pointer;
-    ExceptObject: TObject;
-    ExceptionRecord: PExceptionRecord;
-  end;
 var
   RecNoSave: Integer;
   Applied: Boolean;
@@ -2894,11 +3247,7 @@ begin
       LogUpdateRecord(Tree);
     Break;
   except
-    if RaiseList <> nil then
-    begin
-      { Remove the exception }
-      E := Exception(PRaiseFrame(RaiseList)^.ExceptObject);
-      PRaiseFrame(RaiseList)^.ExceptObject := nil;
+      E := AcquireExceptionObject;
       PrevErr.Free;
       PrevErr := Err;
       Err := IProviderSupport(Tree.Source).PSGetUpdateException(E, PrevErr);
@@ -2908,7 +3257,6 @@ begin
         Continue;
       end else
         break;
-    end;
   end;
   PrevErr.Free;
   Err.Free;
@@ -2934,6 +3282,10 @@ end;
 
 function TCustomResolver.ApplyUpdates(const Delta: OleVariant; MaxErrors: Integer;
   out ErrorCount: Integer): OleVariant;
+var
+  XmlMode: LongWord;
+  Status: Integer;
+  DataPacket: TDataPacket;
 begin
   BeginUpdate;
   try
@@ -2947,7 +3299,16 @@ begin
       FUpdateTree.DoUpdates;
       ErrorCount := FErrorCount;
       if FUpdateTree.HasErrors then
-        Result := FUpdateTree.ErrorDS.Data else
+      begin
+        Status := FUpdateTree.ErrorDS.DSBase.GetProp(dspropXML_StreamMode, @XMLMode);
+        if (Status <> 0) or (XMLMode = 0) then
+          Result := FUpdateTree.ErrorDS.Data
+        else
+        begin
+          FUpdateTree.ErrorDS.Check(FUpdateTree.ErrorDS.DSBase.StreamDS(DataPacket));
+          DataPacketToVariant(DataPacket, Result);
+        end;  
+      end else
         Result := Null;
     finally
       FUpdateTree.Clear;
@@ -3003,7 +3364,7 @@ begin
        (Tree.Delta.Fields[I].DataType in [ftBytes, ftVarBytes]) then
       continue;
     CurVal := Tree.Delta.Fields[I].NewValue;
-    if not VarIsEmpty(CurVal) then
+    if not VarIsClear(CurVal) then
       Tree.ErrorDS.FieldByName(Tree.Delta.Fields[I].FieldName).Value := CurVal;
   end;
   Tree.ErrorDS.Post;
@@ -3024,7 +3385,7 @@ begin
          (Tree.Delta.Fields[I].DataType in [ftBytes, ftVarBytes]) then
         continue;
       CurVal := Tree.Delta.Fields[I].CurValue;
-      if not VarIsEmpty(CurVal) then
+      if not VarIsClear(CurVal) then
         Tree.ErrorDS.FieldByName(Tree.Delta.Fields[I].FieldName).Value := CurVal;
     end;
   Tree.ErrorDS.Post;
@@ -3091,7 +3452,7 @@ procedure TDataSetResolver.PutRecord(Tree: TUpdateTree);
     if VarIsNull(Src.NewValue) then
       Dest.Clear else
       for i := 0 to Src.FieldCount - 1 do
-        if (not VarIsEmpty(Src.Fields[i].NewValue)) and
+        if (not VarIsClear(Src.Fields[i].NewValue)) and
            (pfInUpdate in Src.Fields[i].ProviderFlags) then
           PutField(Src.Fields[i], Dest.Fields[i]);
   end;
@@ -3102,7 +3463,7 @@ procedure TDataSetResolver.PutRecord(Tree: TUpdateTree);
       PutObjectField(TObjectField(Src), TObjectField(Dest)) else
     if (Src.DataType in [ftDataSet, ftReference]) then
       raise Exception.CreateRes(@SNoDataSets) else
-    if (not VarIsEmpty(Src.NewValue)) and
+    if (not VarIsClear(Src.NewValue)) and
        (pfInUpdate in Src.ProviderFlags) then
       Dest.Assign(Src);
   end;
@@ -3116,7 +3477,7 @@ begin
     for i := 0 to Delta.FieldCount - 1 do
     begin
       Field := Source.FindField(Delta.Fields[i].FieldName);
-      if (Field <> nil) then
+      if (Field <> nil) and (Delta.Fields[i].DataType <> ftDataSet) then
         PutField(Delta.Fields[i], Field);
     end;
     Source.Post;
@@ -3155,17 +3516,6 @@ end;
 
 { TSQLResolver }
 
-type
-  PSQLInfo = ^TSQLInfo;
-  TSQLInfo = record
-    IsSQLBased: Boolean;
-    QuoteChar: string;
-    QuotedTable: string;
-    QuotedTableDot: string;
-    Opened: Boolean;
-    HasObjects: Boolean;
-  end;
-
 constructor TSQLResolver.Create(AProvider: TDataSetProvider);
 begin
   inherited Create(AProvider);
@@ -3195,7 +3545,7 @@ procedure TSQLResolver.InitTreeData(Tree: TUpdateTree);
     Result := '';
     if Length(TableName) > 0 then
     begin
-      if TableName[1] in ['''','"','`'] then
+      if (TableName[1] in ['''','"','`']) or (TableName[strlen(PChar(TableName))] in ['''','"','`']) then
         Result := TableName else
       begin
         if SQLBased then
@@ -3256,7 +3606,11 @@ var
 begin
   RowsAffected := IProviderSupport(Provider.DataSet).PSExecuteStatement(SQL.Text, Params);
   if not (poAllowMultiRecordUpdates in Provider.Options) and (RowsAffected > 1) then
+  begin
+    IProviderSupport(Provider.DataSet).PSEndTransaction(False);
+    Provider.FTransactionStarted := False;
     DatabaseError(STooManyRecordsModified);
+  end;
   if RowsAffected < 1 then
     DatabaseError(SRecordChanged);
 end;
@@ -3349,7 +3703,7 @@ begin
   begin
     Result := (pfInUpdate in ProviderFlags) and not (DataType in ExcludedTypes) and
       not ReadOnly and (FieldKind = fkData) and not (pfHidden in ProviderFlags) and
-      not VarIsEmpty(NewValue) and (Tag <> tagSERVERCALC);
+      not VarIsClear(NewValue) and (Tag <> tagSERVERCALC);
   end;
 end;
 
@@ -3366,7 +3720,7 @@ begin
         upWhereAll:
           Result := pfInWhere in ProviderFlags;
         upWhereChanged:
-          Result := ((pfInWhere in ProviderFlags) and not VarIsEmpty(NewValue)) or
+          Result := ((pfInWhere in ProviderFlags) and not VarIsClear(NewValue)) or
             (pfInKey in ProviderFlags);
         upWhereKeyOnly:
           Result := pfInKey in ProviderFlags;
@@ -3391,17 +3745,17 @@ procedure TSQLResolver.GenWhereSQL(Tree: TUpdateTree; SQL: TStrings; Params: TPa
           if AddField(TObjectField(Field).Fields[i], True) then
             Result := True;
       end else
-      if UseFieldInWhere(Field, GenUpdateMode) then
+      if UseFieldInWhere(Field, GenUpdateMode) and (Field.DataSize < dsMaxStringSize) then
       begin
         Result := True;
         if InObject then
         begin
           if VarIsNull(Field.OldValue) then
-            BindText := Format(' %s.%s is null and', [Alias,
+            BindText := Format(' %s.%s is null and', [Alias,   { Do not localize }
               QuoteFullName(Field.FullName, QuoteChar)])
           else
           begin
-            BindText := Format(' %s.%s = ? and',[Alias,
+            BindText := Format(' %s.%s = ? and',[Alias,        { Do not localize }
               QuoteFullName(Field.FullName, QuoteChar)]);
             TParam(Params.Add).AssignFieldValue(Field, Field.OldValue);
           end;
@@ -3409,11 +3763,11 @@ procedure TSQLResolver.GenWhereSQL(Tree: TUpdateTree; SQL: TStrings; Params: TPa
         begin
           if VarIsNull(Field.OldValue) or (not IsSQLBased and
              (Field.DataType = ftString) and (Length(Field.OldValue) = 0)) then
-            BindText := Format(' %s%s%s%1:s is null and', [PSQLInfo(Tree.Data)^.QuotedTableDot,
-              QuoteChar, Field.Origin])
+            BindText := Format(' %s%s%s%1:s is null and',       { Do not localize }
+              [PSQLInfo(Tree.Data)^.QuotedTableDot, QuoteChar, Field.Origin])
           else
           begin
-            BindText := Format(' %s%s%s%1:s = ? and',
+            BindText := Format(' %s%s%s%1:s = ? and',           { Do not localize }
               [PSQLInfo(Tree.Data)^.QuotedTableDot, QuoteChar, Field.Origin]);
             TParam(Params.Add).AssignFieldValue(Field, Field.OldValue);
           end;
@@ -3469,26 +3823,32 @@ procedure TSQLResolver.GenInsertSQL(Tree: TUpdateTree; SQL: TStrings;
           QuoteChar, Field.Origin]);
         ParamLine := Format('%s%s(), ', [ParamLine, TDataSetField(Field).ObjectType]);
       end else
-      if UseFieldInUpdate(Field) then
+      if (UseFieldInUpdate(Field)) or ((Field.ParentField <> nil) and (Field.ParentField.DataType in [ftADT, ftArray, ftReference]) and VarIsNull(Field.Value)) then
       begin
-        if Field.DataType = ftOraBlob then
+        if (Field.DataType = ftOraBlob) and (not InformixLob) then
         begin
           FieldLine := Format('%s%s%s%s%2:s, ', [FieldLine, PSQLInfo(Tree.Data)^.QuotedTableDot,
                     QuoteChar, Field.Origin]);
-          ParamLine := ParamLine + 'EMPTY_BLOB(), '
+          ParamLine := ParamLine + 'EMPTY_BLOB(), '    { Do not localize }
         end 
-        else if Field.DataType = ftOraClob then
+        else if (Field.DataType = ftOraClob) and (not InformixLob) then
         begin
           FieldLine := Format('%s%s%s%s%2:s, ', [FieldLine, PSQLInfo(Tree.Data)^.QuotedTableDot,
                     QuoteChar, Field.Origin]);
-          ParamLine := ParamLine + 'EMPTY_CLOB(), '
+          ParamLine := ParamLine + 'EMPTY_CLOB(), '    { Do not localize }
+        end else  
+        if (Field.ParentField <> nil) and VarIsNull(Field.Value) then
+        begin
+          FieldLine := Format('%s%s%s%s%2:s, ', [FieldLine, PSQLInfo(Tree.Data)^.QuotedTableDot,
+             QuoteChar, Field.Origin]);
+          ParamLine := ParamLine + 'null, ';
         end else
         begin
           FieldLine := Format('%s%s%s%s%2:s, ', [FieldLine, PSQLInfo(Tree.Data)^.QuotedTableDot,
           QuoteChar, Field.Origin]);
           ParamLine := ParamLine + '?, ';
           Value := Field.NewValue;
-          if VarIsEmpty(Value) then Value := Field.OldValue;
+          if VarIsClear(Value) then Value := Field.OldValue;
           TParam(Params.Add).AssignFieldValue(Field, Value);
         end;
       end;
@@ -3508,18 +3868,19 @@ begin
     if Tree.IsNested then
     begin
       SQL.Add(Format('insert into the (select %s FROM %s %s',[QuoteFullName(Tree.Name, QuoteChar),
-        PSQLInfo(Tree.Parent.Data).QuotedTable, DefAlias]));
+        PSQLInfo(Tree.Parent.Data).QuotedTable, DefAlias]));   { Do not localize }
       GenWhereSQL(Tree.Parent, SQL, Params, upWhereKeyOnly, DefAlias);
       SQL.Add(')');
     end else
-      SQL.Add(Format('insert into %s', [QuotedTable]));
+      SQL.Add(Format('insert into %s', [QuotedTable]));        { Do not localize }
     FieldLine := '  (';
     ParamLine := FieldLine;
     for I := 0 to Tree.Delta.FieldCount - 1 do
     begin
       AddField(Tree.Delta.Fields[I], FieldLine, ParamLine);
       if Tree.Delta.Fields[I].DataType in [ftOraClob, ftOraBlob] then
-        Inc(OraLobs);
+        if (not InformixLob) then
+          Inc(OraLobs);
     end;
     if not Tree.IsNested then
       SQL.Add(Copy(FieldLine, 1, Length(FieldLine)-2)+')');
@@ -3528,7 +3889,7 @@ begin
 
     if OraLobs > 0 then
     begin
-      SQL.Add(' RETURNING ');
+      SQL.Add(' RETURNING ');              { Do not localize }
       J := OraLobs;
       for I := 0 to Tree.Delta.FieldCount - 1 do
         if (Tree.Delta.Fields[I].DataType in [ftOraClob, ftOraBlob] )
@@ -3538,10 +3899,10 @@ begin
              SQL.Add(Format('%s ', [Tree.Delta.Fields[I].FullName]));
              if J > 0 then SQL.Add(', ');
              Value := Tree.Delta.Fields[I].NewValue;
-             if VarIsEmpty(Value) then Value := Tree.Delta.Fields[I].OldValue;
+             if VarIsClear(Value) then Value := Tree.Delta.Fields[I].OldValue;
              TParam(Params.Add).AssignFieldValue(Tree.Delta.Fields[I], Value)
            end;
-      SQL.Add('INTO ');
+      SQL.Add('INTO ');                    { Do not localize }
       while OraLobs > 0 do
       begin
         SQL.Add('? ');
@@ -3562,11 +3923,11 @@ begin
     begin
       Alias := NestAlias;
       SQL.Add(Format('delete the (select %s FROM %s %s',[QuoteFullName(Tree.Name, QuoteChar),
-        PSQLInfo(Tree.Parent.Data).QuotedTable, DefAlias]));
+        PSQLInfo(Tree.Parent.Data).QuotedTable, DefAlias]));       { Do not localize }
       GenWhereSQL(Tree.Parent, SQL, Params, upWhereKeyOnly, DefAlias);
       SQL.Add(Format(') %s',[Alias]));
     end else
-      SQL.Add(Format('delete from %s %s', [QuotedTable, Alias]));
+      SQL.Add(Format('delete from %s %s', [QuotedTable, Alias]));  { Do not localize } 
     GenWhereSQL(Tree, SQL, Params, Provider.UpdateMode, Alias);
   end;
 end;
@@ -3610,27 +3971,27 @@ procedure TSQLResolver.GenUpdateSQL(Tree: TUpdateTree; SQL: TStrings;
       begin
         SQL.Add(' ?,');
         Value := Field.NewValue;
-        if VarIsEmpty(Value) then Value := Field.OldValue;
+        if VarIsClear(Value) then Value := Field.OldValue;
         TParam(Params.Add).AssignFieldValue(Field, Value);
       end
       else if UseFieldInUpdate(Field) then
       begin
-        if Field.DataType = ftOraClob then
+        if (Field.DataType = ftOraClob) and (not InformixLob) then
         begin
           NoParam := True;
           if InObject then
-            SQL.Add(Format(' %s.%s = EMPTY_CLOB(),', [Alias, QuoteFullName(Field.FullName, QuoteChar),
-              Field.FullName])) else
-            SQL.Add(Format(' %s%s%s%1:s = EMPTY_CLOB(),', [PSQLInfo(Tree.Data)^.QuotedTableDot,
+            SQL.Add(Format(' %s.%s = EMPTY_CLOB(),', [Alias, QuoteFullName(Field.FullName, QuoteChar),   { Do not localize }
+              Field.FullName])) else 
+            SQL.Add(Format(' %s%s%s%1:s = EMPTY_CLOB(),', [PSQLInfo(Tree.Data)^.QuotedTableDot,          { Do not localize }
                QuoteChar, Field.Origin]));
         end
-        else if Field.DataType = ftOraBlob then
+        else if (Field.DataType = ftOraBlob) and (not InformixLob) then
         begin
           NoParam := True;
           if InObject then
-            SQL.Add(Format(' %s.%s = EMPTY_BLOB(),', [Alias, QuoteFullName(Field.FullName, QuoteChar),
+            SQL.Add(Format(' %s.%s = EMPTY_BLOB(),', [Alias, QuoteFullName(Field.FullName, QuoteChar),   { Do not localize }
                Field.FullName])) else
-            SQL.Add(Format(' %s%s%s%1:s = EMPTY_BLOB(),', [PSQLInfo(Tree.Data)^.QuotedTableDot,
+            SQL.Add(Format(' %s%s%s%1:s = EMPTY_BLOB(),', [PSQLInfo(Tree.Data)^.QuotedTableDot,          { Do not localize }
                QuoteChar, Field.Origin]));
         end
         else if InObject then
@@ -3641,7 +4002,7 @@ procedure TSQLResolver.GenUpdateSQL(Tree: TUpdateTree; SQL: TStrings;
         if not NoParam then
         begin
           Value := Field.NewValue;
-          if VarIsEmpty(Value) then Value := Field.OldValue;
+          if VarIsClear(Value) then Value := Field.OldValue;
           TParam(Params.Add).AssignFieldValue(Field, Value);
         end;
       end;
@@ -3660,18 +4021,19 @@ begin
     if Tree.IsNested then
     begin
       Alias := NestAlias;
-      SQL.Add(Format('update the (select %s FROM %s %s',[QuoteFullName(Tree.Name, QuoteChar),
+      SQL.Add(Format('update the (select %s FROM %s %s',[QuoteFullName(Tree.Name, QuoteChar),   { Do not localize }
         PSQLInfo(Tree.Parent.Data).QuotedTable, DefAlias]));
       GenWhereSQL(Tree.Parent, SQL, Params, upWhereKeyOnly, DefAlias);
-      SQL.Add(Format(') %s set',[Alias]));
+      SQL.Add(Format(') %s set',[Alias]));                                                      { Do not localize }
     end else
-      SQL.Add(Format('update %s %s set', [QuotedTable, Alias]));
-
+      SQL.Add(Format('update %s %s set', [QuotedTable, Alias]));                                { Do not localize }
+                                                                                                
     for I := 0 to Tree.Delta.FieldCount - 1 do
     begin
       if (Tree.Delta.Fields[i].DataType in [ftOraClob, ftOraBlob]) and
           UseFieldInUpdate(Tree.Delta.Fields[I]) then
-          Inc(OraLobs);
+          if (not InformixLob) then
+            Inc(OraLobs);
       AddField(Tree.Delta.Fields[i], Alias = NestAlias, False);
     end;
     { Remove last ',' }
@@ -3682,7 +4044,7 @@ begin
 
     if OraLobs > 0 then
     begin
-      SQL.Add(' RETURNING ');
+      SQL.Add(' RETURNING ');       { Do not localize }
       J := OraLobs;
       for I := 0 to Tree.Delta.FieldCount - 1 do
         if (Tree.Delta.Fields[I].DataType in [ftOraClob, ftOraBlob]) 
@@ -3692,10 +4054,10 @@ begin
              SQL.Add(Format('%s ', [Tree.Delta.Fields[I].FullName]));
              if J > 0 then SQL.Add(', ');
              Value := Tree.Delta.Fields[I].NewValue;
-             if VarIsEmpty(Value) then Value := Tree.Delta.Fields[I].OldValue;
+             if VarIsClear(Value) then Value := Tree.Delta.Fields[I].OldValue;
              TParam(Params.Add).AssignFieldValue(Tree.Delta.Fields[I], Value)
            end;
-      SQL.Add('INTO ');
+      SQL.Add('INTO ');         { Do not localize }
       while OraLobs > 0 do
       begin
         SQL.Add('? ');
@@ -3707,7 +4069,7 @@ begin
 end;
 
 procedure TSQLResolver.GenSelectSQL(Tree: TUpdateTree; SQL: TStrings;
-  Params: TParams; Alias: string);
+  Params: TParams; Alias: string; Mode: TUpdateMode = upWhereKeyOnly);
 var
   i: Integer;
   Temp: string;
@@ -3723,8 +4085,8 @@ begin
     { Remove last ',' }
     Temp := SQL[SQL.Count-1];
     SQL[SQL.Count-1] := Copy(Temp, 1, Length(Temp) - 1);
-    SQL.Add(Format(' from %s %s',[QuotedTable, Alias]));
-    GenWhereSQL(Tree, SQL, Params, upWhereKeyOnly, Alias);
+    SQL.Add(Format(' from %s %s',[QuotedTable, Alias]));     { Do not localize }
+    GenWhereSQL(Tree, SQL, Params, Mode, Alias);
   end;
 end;
 
@@ -3816,7 +4178,7 @@ begin
   FProvider.Execute(CommandText, Params, OwnerData);
 end;
 
-function TLocalAppServer.InterfaceSupportsErrorInfo(const iid: TIID): HResult;
+function TLocalAppServer.InterfaceSupportsErrorInfo(const iid: TGUID): HResult;
 begin
   if IsEqualGUID(IAppServer, iid) then
     Result := S_OK else
@@ -3826,7 +4188,19 @@ end;
 function TLocalAppServer.SafeCallException(ExceptObject: TObject;
   ExceptAddr: Pointer): HResult;
 begin
+{$IFDEF MSWINDOWS}
   Result := HandleSafeCallException(ExceptObject, ExceptAddr, IAppServer, '', '');
+{$ENDIF}
+{$IFDEF LINUX}
+	if ExceptObject is Exception then
+	begin
+		SetSafeCallExceptionMsg(Exception(ExceptObject).Message);
+		SetSafeCallExceptionAddr(ExceptAddr);
+		Result := HResult($8000FFFF);
+	end
+	else
+    Result := inherited SafeCallException(ExceptObject, ExceptAddr);
+{$ENDIF}
 end;
 
 

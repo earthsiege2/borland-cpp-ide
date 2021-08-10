@@ -63,13 +63,13 @@ void __fastcall TMainForm::CoolBar1DockOver(TObject *Sender,
   if (Accept)
   {
     // Modify the DockRect to preview dock area (Coolbar client area)
-    Windows::TPoint TopLeft = Windows::TPoint(CoolBar1->ClientRect.Left, CoolBar1->ClientRect.Top);
+    Types::TPoint TopLeft = Types::TPoint(CoolBar1->ClientRect.Left, CoolBar1->ClientRect.Top);
     TopLeft = CoolBar1->ClientToScreen(TopLeft);
 
-    Windows::TPoint BottomRight = Windows::TPoint(CoolBar1->ClientRect.Right, CoolBar1->ClientRect.Bottom);
+    Types::TPoint BottomRight = Types::TPoint(CoolBar1->ClientRect.Right, CoolBar1->ClientRect.Bottom);
     BottomRight = CoolBar1->ClientToScreen(BottomRight);
 
-    Source->DockRect = Windows::TRect(TopLeft, BottomRight);
+    Source->DockRect = Types::TRect(TopLeft, BottomRight);
   }
 }
 //---------------------------------------------------------------------------
@@ -188,10 +188,10 @@ void __fastcall TMainForm::LeftDockPanelDockOver(TObject *Sender,
   if (Accept)
   {
     // Modify the DockRect to preview dock area.
-    Windows::TPoint TopLeft = LeftDockPanel->ClientToScreen(Point(0, 0));
-    Windows::TPoint BottomRight = LeftDockPanel->ClientToScreen(
+    Types::TPoint TopLeft = LeftDockPanel->ClientToScreen(Point(0, 0));
+    Types::TPoint BottomRight = LeftDockPanel->ClientToScreen(
       Point(this->ClientWidth / 3, LeftDockPanel->Height));
-    Source->DockRect = Windows::TRect(TopLeft, BottomRight);
+    Source->DockRect = Types::TRect(TopLeft, BottomRight);
   }
 }
 //---------------------------------------------------------------------------
@@ -227,11 +227,11 @@ void __fastcall TMainForm::BottomDockPanelDockOver(TObject *Sender,
   if (Accept)
   {
     // Modify the DockRect to preview dock area.
-    Windows::TPoint TopLeft = BottomDockPanel->ClientToScreen(
+    Types::TPoint TopLeft = BottomDockPanel->ClientToScreen(
       Point(0, -this->ClientHeight / 3));
-    Windows::TPoint BottomRight = BottomDockPanel->ClientToScreen(
+    Types::TPoint BottomRight = BottomDockPanel->ClientToScreen(
       Point(BottomDockPanel->Width, BottomDockPanel->Height));
-    Source->DockRect = Windows::TRect(TopLeft, BottomRight);
+    Source->DockRect = Types::TRect(TopLeft, BottomRight);
   }
 }
 //---------------------------------------------------------------------------

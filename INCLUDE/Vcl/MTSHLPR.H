@@ -8,10 +8,10 @@
 // This class wraps those functions, hiding the work, and presenting an
 // interface which will work against either platform.
 //
-// $Revision:   1.0.1.2  $
-// $Date:   16 Dec 1999 18:44:22  $
+// $Revision:   1.1.1.0.1.0  $
+// $Date:   25 Jan 2002 12:54:20  $
 //
-// Copyright (c) 1999, 2000 Borland International
+// Copyright (c) 1999, 2002 Borland Software Corporation
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef _MTSHLPR_H
@@ -19,8 +19,6 @@
 
 #include <comsvcs.h>  // IObjectContext
 #include <utilcls.h>
-
-/* Wrapper class for the loading of MTS or COM+ */
 
 class TMtsDll
 {
@@ -36,15 +34,5 @@ class TMtsDll
 
        void* SafeRef(REFIID rid, IUnknown* pUnknown);
 };
-
-/* Static instantiations of enumerative values passed to MTS-related
- * methods. These methods require long pointers to these values,
- * which are defined in enumerations in mtxspm.h (in previous
- * versions of the Windows header files) or comsvcs.h (now)*/
-
-extern "C" long LockMode_SetGet;
-extern "C" long LockMode_LockMethod;
-extern "C" long ReleaseMode_Standard;
-extern "C" long ReleaseMode_Process;
 
 #endif

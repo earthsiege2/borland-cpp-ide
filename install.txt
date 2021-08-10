@@ -1,0 +1,524 @@
+C++Builder 6
+Installation Notes
+
+
+============================================================
+
+This file describes issues that may affect the installation
+of this product. We recommend that you read it in full
+before continuing. The contents of this file are available
+on your CD for later printing or viewing.
+
+Other notes, including known issues, compatibility
+information, and uninstallation information, are contained
+in the product README file, also available for review or
+printing after installation from your CD or from your
+installation directory root.
+
+
+============================================================
+CONTENTS
+
+* ABOUT THE NEW INSTALLER
+* PRODUCT COEXISTENCE ISSUES
+* INSTALLING FOR MULTIPLE USERS [WINNT/2000 ONLY]
+* GENERAL INSTALLATION NOTES
+* KNOWN INSTALLATION ISSUES
+* REGISTERING THIS PRODUCT
+* UNINSTALLING THIS PRODUCT
+
+
+============================================================
+ABOUT THE NEW INSTALLER
+
+This product now uses the new Microsoft Installer (MSI)
+service to perform the installation. Among the more
+significant changes are:
+
+* The installer modifies your PATH statement, so rebooting
+  after installation is necessary on all platforms.
+
+* An installation maintenance mode is available by simply
+  rerunning the installation. The maintenance dialog lets
+  you add or remove features, repair the installation, or
+  remove the product. Choosing "Modify" lets you install
+  features that you did not previously install, or remove
+  features that you no longer use. Choosing "Repair" causes
+  the installer to search for and reinstall any files that
+  are missing or damaged. "Remove" uninstalls the product.
+
+* On Windows 2000 and higher (including Windows XP), the
+  Microsoft Installer service provides an auto-repair
+  feature that constantly tries to detect and repair
+  damaged applications. One of the ways that it does this
+  is by monitoring the installed directory structure of an
+  application. If you delete or rename any of the
+  directories installed by C++Builder, the Microsoft
+  Installer will detect this and will, without warning,
+  attempt to restore the missing directories. To prevent
+  the auto-repair function from being unintentionally
+  invoked, you should not manually delete or rename any of
+  the installed C++Builder directories. To add or remove
+  features, always use the installer application.
+
+
+============================================================
+PRODUCT COEXISTENCE ISSUES
+
+Running Delphi 6 and C++Builder 6 on the same machine
+------------------------------
+
+If you already have Delphi 6 installed or you plan to
+install Delphi 6 on the same machine as C++Builder 6, you
+must also install the Delphi 6 Update Pack 2 to allow both
+products to function correctly. The Delphi 6 patch can be
+installed either before or after C++Builder 6. The patch,
+which replaces Delphi 6 Update Pack 1, is available on the
+Delphi 6 Registered Users site (login required) at
+http://www.borland.com/delphi/webreg/
+ d6/d6_registeredusers.html
+
+Using the Web App Debugger in Delphi 6
+after uninstalling C++Builder 6
+------------------------------
+
+If you install C++Builder 6 on a machine on which Delphi 6
+is installed, then uninstall C++Builder 6, the Delphi 6 Web
+App Debugger will no longer work as expected.
+
+Solution: After uninstalling C++Builder 6, you can
+reregister the Web App Debugger by running the following
+from your Delphi6\Bin directory:
+
+1.   Run ServerInfo for the Web App Debugger:
+     serverinfo
+
+2.   Use the tregsvr utility to reregister the debugger
+library:
+     tregsvr weblib.tlb
+
+Using C++Builder 6
+and earlier versions of C++Builder on the same machine
+------------------------------
+
+If an earlier version of C++Builder is installed, and both
+the earlier version and C++Builder are installed to their
+default directories (c:\program
+files\borland\cbuilder<version number>), the installer
+writes the string "C:\PROGRA~1\BORLAND\CBUILD~2\BIN" to the
+beginning of your PATH statement for C++Builder 6, and
+retains "C:\PROGRA~1\BORLAND\CBUILD~1\BIN" for the earlier
+version.
+
+You should be aware, however, that such an arrangement can
+cause conflicts if you have BPLs or DLLs with the same name
+stored in the default project directories (\projects\bpl) of
+both products, since the PATH setting will cause the earlier
+version of the product to search the C++Builder 6 default
+directories first. To avoid such conflicts, we suggest
+rebuilding your BPLs and DLLs with different names for each
+product (e.g., new50.bpl, new60.bpl).
+
+You should also keep this issue in mind when running command-
+line tools: If the same tool is available in both products
+and you don't include the full path to the tool when running
+it, the system will default to the path appearing first in
+the PATH statement (to the tool in the C++Builder 6
+structure, in a default setting).
+
+
+============================================================
+INSTALLING FOR MULTIPLE USERS [WINNT/2000 ONLY]
+
+[Note: This section applies only to installations on Windows
+NT, 2000, and later Windows operating systems, including XP.
+It does not apply to installations on Windows 98 or Me
+systems.]
+
+The procedure for installing and uninstalling C++Builder for
+multiple users on Windows NT and Windows 2000 systems has
+changed.
+
+The new installation procedure no longer requires each user
+to install C++Builder separately. The product is installed
+only once, by any user with Administrator privileges, and is
+immediately available to all users of the same machine. It
+is also available to any new users you may add later.
+
+In previous releases, an Administrator installed the
+product, and all other users of the same machine who needed
+to use C++Builder had to install the product separately
+using the "Registry Only" option.
+
+The new uninstallation procedure has also changed. The
+Administrator who initially installed the product must first
+uninstall it (through the Control Panel's Add/Remove
+Programs applet); after that, all other users of the product
+must log in and run the provided BCB6RegClean.exe utility in
+order to remove user-specific data from the Windows
+registry. (Note: BCB6RegClean.exe is installed to your \Bin
+directory and is also available on your CD in the
+\Info\Extras folder, along with RegFlip, a utility that
+allows you to add, remove, and edit Just In Time debugging
+information in the Windows registry.)
+
+In previous releases, no uninstall mechanism was provided
+for users other than the Administrator who installed the
+product.
+
+Cautions
+------------------------------
+
+* Some utilities--such as the Image Editor, the Package
+  Collection Editor, Database Desktop, and the XMLMapper--
+  will not work correctly until the C++Builder IDE is run
+  at least once. This is because the IDE copies a set of
+  global registry entries from HKEY_LOCAL_MACHINE to the
+  user's registry space. In the past, the installation
+  program performed this task.
+
+* If you perform a partial install, then add other
+  components later, the new components will not
+  automatically appear in the IDE. To make the new packages
+  appear, you can manually add them to the IDE using the
+  Install Packages dialog (Component menu). An alternative
+  is to run the BCB6RegClean.exe utility to force the IDE
+  to refresh its settings from the global environment
+  space. Note: Using the latter procedure will restore the
+  default settings, replacing any customized settings you
+  may have made.
+
+
+============================================================
+GENERAL INSTALLATION NOTES
+
+The following items describe known issues, behavior, and
+functionality that can affect installation of this product.
+
+Minimum system requirements
+------------------------------
+
+* Intel Pentium 166 MHz or higher (P2 400 MHz recommended)
+* Microsoft Windows 98, Windows Millennium (Me), Windows
+  2000, or later version of the Microsoft Windows operating
+  system
+* 128 Mb RAM (256 Mb recommended)
+* 115 Mb hard disk space (compact install)
+* Hard disk space required for a full install: 675 Mb
+  (Enterprise edition); 580 Mb (Professional);
+  480 Mb (Personal)
+* CD-ROM drive
+* VGA or higher resolution monitor
+* Mouse or other pointing device
+
+Before you install
+------------------------------
+
+You should always protect your data by backing it up. Before
+loading a project that was created with an earlier version
+of this product, be sure that copies of all of the files
+related to the project you're about to load are backed up
+and securely stored.
+
+Back up your BDE configuration
+------------------------------
+
+This product includes a new version of the Borland Database
+Engine (BDE). Unless you specify other than the default
+setup directories during installation, C++Builder will
+overwrite your existing 32-bit BDE and SQL Links
+installations, so it is strongly recommended that you back
+up all current BDE configuration files before installing
+this release.
+
+Installation directory
+------------------------------
+
+By default, this release installs into the directory
+
+ \Program Files\Borland\CBuilder6
+
+Product release notes and most other documentation assumes
+these defaults.
+
+WARNING:
+ Do not install C++Builder 6 in a directory that contains
+ an older version. Always install a new version of
+ C++Builder in a new directory. Different versions of
+ C++Builder can coexist on the same system, but each
+ version must be installed in its own directory.
+
+If you've installed this product before
+------------------------------
+
+You can install to the same machine (though to a different
+location) as another version of the product. If you want to
+install to the same directory as an existing version,
+uninstall the existing version first. In either case, you
+should back up your IDAPI.CFG file (if one is present) and
+any other important data, including existing projects that
+you intend to use with this version.
+
+Uninstall Internet Control Pack
+------------------------------
+
+If you have installed any previous standalone release of the
+Internet Control Pack (known as the Microsoft Internet
+Control Pack, NEWT Internet ActiveX Control Pack, or ICP),
+use the Add/Remove Programs applet in the Control Panel to
+uninstall that version before installing this product.
+
+Installing from a network or shared drive
+------------------------------
+
+If installing from a network or shared drive, you must map a
+drive letter to the server and folder that contains the
+INSTALL.EXE program that initiates installation of this
+product.
+
+Performing a Custom installation
+------------------------------
+
+To conserve disk space, you can perform a custom
+installation, selecting only the options you require. To do
+so, select the Custom radio button in the Setup Type dialog
+during installation. Disk space required for the total
+custom installation and individual options is displayed as
+you select or deselect options.
+
+VisiBroker installs JRE
+------------------------------
+
+The VisiBroker 4.5 installer looks for Sun's Java Runtime
+Environment (JRE) or Java Development Kit (JDK) version
+1.2.2 or higher. If neither is found, JRE 1.2.2 is
+installed.
+
+Just-In-Time Debugging
+------------------------------
+
+If the installer detects that another application is
+registered as your Just-In-Time debugger, you will be asked
+if you want to change this setting to use the C++Builder
+debugger. For proper operation of this release, you should
+choose to update this setting.
+
+To preserve your existing AEDebug settings for later
+restoration, follow these steps:
+1. Run Regedit.
+2. Select the AEDebug key
+        HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\
+             Windows NT\CurrentVersion\AEDebug\Debugger
+3. Choose Registry|Export Registry File.
+4. Name and save the file containing the AEDebug key.
+
+To restore the AEDebug settings:
+1. Run Regedit.
+2. Choose Registry|Import Registry File.
+3. Specify the file in which you saved the AEDebug key.
+
+Manually registering the debugger kernel
+------------------------------
+
+The Borland Debugger Kernel is automatically registered by
+the new installer. If, however, you receive "BORDBK61 not
+registered" errors when running the program, then you will
+need to manually register the debugger.
+
+To manually register the debugger, open a command window,
+switch to the Debugger Kernel location (default c:\program
+files\common files\borland shared\debugger\bordbk61.dll) and
+run the Microsoft Register Server utility with the following
+command:
+
+regsvr32 bordbk61.dll
+
+Note:
+ If REGSVR32 is not on your path, switch to your
+ Windows\System directory and run the utility with  a full
+ path specification to the Debugger Kernel file.
+
+Legacy Windows libraries
+------------------------------
+
+In past releases of this product, updated versions of some
+Microsoft Windows DLLs were installed for you. These
+included OLEAUT32.DLL, OLEPRO32.DLL, MSVCRT.DLL,
+MSVCRT20.DLL, and MSVCRT40.DLL. In the past, we updated
+these libraries because Windows 95 systems required the
+updates in order to run provided demos and examples.
+
+However, we no longer check for or update these libraries,
+since the versions provided by current Windows versions
+(2000, 98 and higher) support the demos we provide.
+
+Installer may require additional temporary space
+------------------------------
+
+If the drive containing the folder specified in your TMP
+environment variable is low on space, the Installer may halt
+with an error message noting the shortage. If this occurs,
+you'll need to assign your TMP variable to a folder on a
+drive with more disk space, then rerun the installation.
+
+
+============================================================
+KNOWN INSTALLATION ISSUES
+
+Java, InterBase paths require manual entry
+------------------------------
+
+The VisiBroker 4.5 installer looks for Sun's Java Runtime
+Environment (JRE) or Java Development Kit (JDK) version
+1.2.2 or higher. If neither is found, JRE 1.2.2 is
+installed.
+
+Neither the VisiBroker or Java Runtime Environment (JRE)
+installers set your PATH or CLASSPATH specifications to
+point to the JRE installation location. Unless you manually
+set these environment variables, programs requiring the JRE
+(including all VisiBroker programs except the OSAgent and
+the console, which uses a batch file) will not run.
+
+The InterBase Administration components IBInstall and
+IBUninstall will not work correctly unless you manually add
+the <InterBase> location (default C:\Program
+Files\Borland\InterBase) to your PATH variable.
+
+VisiBroker install dialog displays incorrect information
+------------------------------
+
+The VisiBroker installer displays a dialog which suggests an
+evaluation version is being installed. You may disregard
+this information. A "Named User" development license, as
+described in the VisiBroker license agreement, will be
+provided by the C++Builder installer.
+
+JRE error message on Japanese Windows systems
+------------------------------
+
+On Japanese Windows systems, Sun's JRE installer issues the
+following error message: "JRE_UPDATE_VERSION entry not found
+in the string table." The message may be ignored;
+installation of the JRE is not affected, and you may safely
+continue the installation by pressing the OK button in the
+error dialog.
+
+Installer may misreport disk space requirements
+on Windows 98/Me
+------------------------------
+
+On Windows 98 and Me systems, the Microsoft Windows
+Installer may misreport the amount of disk space required by
+C++Builder. The Installer may report that it needs more than
+2GB of disk space. C++Builder does not require this much
+space. To work around this issue, exit the Installer and
+restart the installation.
+
+If your second installation CD is not recognized under XP
+------------------------------
+
+If you are installing on Windows XP and your second
+C++Builder 6 installation CD is not recognized, open Windows
+Explorer, click on the icon of the CD-ROM drive containing
+your installation disk, then continue your installation.
+This action causes XP to refresh the drive and recognize the
+"CD-changed" notification.
+
+
+============================================================
+REGISTERING THIS PRODUCT
+
+Registration is required of all users.
+
+The Registration dialog appears on first use of the product.
+If you choose not to register on first use, you can run the
+Registration application any time thereafter by selecting
+Start|Programs|Borland C++Builder 6|Register Now, or running
+the program BCB6reg.exe from your CBuilder6\Bin folder.
+
+The Registration program offers three ways to register:
+Online (direct registration through a secure connection), by
+telephone, or through a Web form. If you choose to receive
+your activation key over the phone or via email through the
+Web form, the unregistered product will remain functional
+while you wait for the key to be provided or sent. When you
+receive your key, enter it in the appropriate field in the
+Registration dialog.
+
+Each of the Registration options is driven by Wizards, with
+Help provided where necessary.
+
+IMPORTANT
+ Online registration requires an active Internet
+ connection. The process uses port 443 for the transaction;
+ if there is a problem using that port, an attempt is made
+ through port 8080. If your machine is protected by a
+ firewall and the process fails, you must either contact
+ your system administrator to request that the ports noted
+ above be made available, or use an alternate registration
+ method, such as telephone or Web registration. Online
+ registration also requires that all users of this copy of
+ the software use the same software registration account
+ when registering.
+
+
+============================================================
+UNINSTALLING THIS PRODUCT
+
+To uninstall this release from your computer, open the
+Control Panel folder and double-click the Add/Remove
+Programs icon. Select Borland C++Builder 6 from the list,
+click the Add/Remove button, and follow the instructions
+that appear on the screen.
+
+Notes:
+
+* During installation you're asked if you want to save a
+  copy of the installation database to your hard disk
+  drive. Doing so will allow you to uninstall without
+  inserting the product CD. However, if the local copy of
+  the installation database becomes damaged or is erased,
+  the CD may be required to uninstall the product. The
+  installation database ("Borland C++Builder 6.msi") can be
+  found in the Install directory on your CD.
+
+  If you do not have the product CD inserted when you
+  uninstall, you'll be prompted to locate
+  Borland C++Builder 6.msi on your hard drive (normally
+  saved to your \Program Files\Borland\CBuilder6
+  directory). On Windows 98/Me systems, the Browse button
+  (which allows you to locate your .msi) may be disabled,
+  in which case you must type the full path to the .msi
+  file into the "Use Feature From" field.
+
+* After installing C++Builder 6, any files and folders
+  created in your \CBuilder6 directory and subdirectories
+  are not removed during the uninstall process. After
+  uninstalling, you should delete or move these files,
+  particularly if you plan on reinstalling to the same
+  location.
+
+* C++Builder 6 and other dbExpress-based applications use
+  the registry key
+     HKEY_CURRENT_USER\Software\Borland\DBExpress
+  to locate the database configuration files
+  (dbxconnections.ini and dbxdrivers.ini).
+
+  When uninstalling C++Builder 6, you are asked if you want
+  to remove the dbExpress registry keys. If you know that
+  you are not using any other dbExpress-based applications,
+  you can answer Yes. If other dbExpress applications exist
+  on your computer, you should answer No.
+
+  If you do not delete the dbExpress registry entries and
+  you later reinstall C++Builder to a different location,
+  you will need to manually delete this registry key for
+  dbExpress to recognize your new configuration file
+  location.
+
+
+============================================================
+Copyright (c) 2002 Borland Software Corporation.
+All rights reserved.
+

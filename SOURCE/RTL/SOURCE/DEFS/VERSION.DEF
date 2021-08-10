@@ -1,15 +1,15 @@
-LIBRARY 'VERSION'
+LIBRARY Version
 EXPORTS
 
-    GetFileVersionInfoA                      = 'VERSION.DLL'.*
-    GetFileVersionInfoSizeA                  = 'VERSION.DLL'.*
-    GetFileVersionInfoSizeW                  = 'VERSION.DLL'.*
-    GetFileVersionInfoW                      = 'VERSION.DLL'.*
-    VerFindFileA                             = 'VERSION.DLL'.*
-    VerFindFileW                             = 'VERSION.DLL'.*
-    VerInstallFileA                          = 'VERSION.DLL'.*
-    VerInstallFileW                          = 'VERSION.DLL'.*
-    VerQueryValueA                           = 'VERSION.DLL'.*
-    VerQueryValueIndexA                      = 'VERSION.DLL'.*
-    VerQueryValueIndexW                      = 'VERSION.DLL'.*
-    VerQueryValueW                           = 'VERSION.DLL'.*
+    GetFileVersionInfoA
+    GetFileVersionInfoSizeA
+    GetFileVersionInfoSizeW
+    GetFileVersionInfoW
+    VerFindFileA
+    VerFindFileW
+    VerInstallFileA
+    VerInstallFileW
+    VerQueryValueA
+    VerQueryValueIndexA
+    VerQueryValueIndexW
+    VerQueryValueW

@@ -4,14 +4,14 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1997, 2000 by Inprise Corporation
+ *      Copyright (c) 1997, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.4  $ */
+/* $Revision: 1.3.2.1 $ */
 
 #define  __USING_CNAME__
 #include <_str.h>
@@ -21,8 +21,12 @@
    of _str.h will suffice.
 */
 #  undef   __USING_CNAME__
-#  include <string.stl>
-   using std::string;
+# ifdef __USE_OLD_RW_STL
+#  include <oldstl/string.stl>
+# else
+#  include <stlport/string>
+#endif
+    using std::string;
 #endif  /* __USING_STD_NAMES__ */
 
 #undef   __USING_CNAME__

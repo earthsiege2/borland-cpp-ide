@@ -6,14 +6,14 @@
  *-----------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1991, 2000 by Inprise Corporation
+ *      Copyright (c) 1991, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.0  $        */
+/* $Revision: 9.5.2.1 $        */
 
 #define INCL_CON
 #include <ntbc.h>
@@ -34,7 +34,7 @@ Return value    None
 
 *---------------------------------------------------------------------*/
 
-void __scroll(uchar dir, uchar x1, uchar y1,
+void _RTLENTRY _EXPFUNC __scroll(uchar dir, uchar x1, uchar y1,
                    uchar x2,  uchar y2, uchar lines)
 {
     CHAR_INFO   fill;

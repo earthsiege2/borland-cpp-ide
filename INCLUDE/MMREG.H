@@ -24,9 +24,8 @@ Revision History:
 // NOBITMAP     No extended bitmap info header definition
 
 #ifndef _INC_MMREG
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /* use version number to verify compatibility */
-#define _INC_MMREG     157      // version * 100 + revision
+#define _INC_MMREG     158      // version * 100 + revision
 
 #if _MSC_VER > 1000
 #pragma once
@@ -308,6 +307,11 @@ extern "C" {            /* Assume C declarations for C++ */
 #define   MM_ICCC                       259         /* ICCC A/S */
 #define   MM_3COM                       260         /* 3COM Corporation */
 #define   MM_MALDEN                     261         /* Malden Electronics Ltd. */
+#define   MM_3DFX                       262         /* 3Dfx Interactive, Inc. */
+#define   MM_MINDMAKER                  263         /* Mindmaker, Inc. */
+#define   MM_TELEKOL                    264         /* Telekol Corp. */
+#define   MM_ST_MICROELECTRONICS        265         /* ST Microelectronics */
+#define   MM_ALGOVISION                 266         /* Algo Vision Systems GmbH */
 
 #define   MM_UNMAPPED                   0xffff      /* extensible MID mapping */
 
@@ -812,6 +816,11 @@ extern "C" {            /* Assume C declarations for C++ */
 #define  MM_YAMAHA_SXG_MIDIOUT              0x22
 #define  MM_YAMAHA_SXG_WAVEOUT              0x23
 #define  MM_YAMAHA_SXG_MIXER                0x24
+#define  MM_YAMAHA_ACXG_WAVEIN              0x25
+#define  MM_YAMAHA_ACXG_WAVEOUT             0x26
+#define  MM_YAMAHA_ACXG_MIDIOUT             0x27
+#define  MM_YAMAHA_ACXG_MIXER               0x28
+#define  MM_YAMAHA_ACXG_AUX                 0x29
 
 /* MM_EVEREX product IDs */
 #define  MM_EVEREX_CARRIER                  1
@@ -2009,6 +2018,22 @@ extern "C" {            /* Assume C declarations for C++ */
 #define  MM_3COM_CB_WAVEIN                  2
 #define  MM_3COM_CB_WAVEOUT                 3
 
+/* MM_MINDMAKER product IDs */
+#define  MM_MINDMAKER_GC_WAVEIN             1
+#define  MM_MINDMAKER_GC_WAVEOUT            2
+#define  MM_MINDMAKER_GC_MIXER              3
+
+/* MM_TELEKOL product IDs */
+#define  MM_TELEKOL_WAVEOUT                 1
+#define  MM_TELEKOL_WAVEIN                  2
+
+/* MM_ALGOVISION product IDs */
+#define  MM_ALGOVISION_VB80WAVEOUT          1
+#define  MM_ALGOVISION_VB80WAVEIN           2
+#define  MM_ALGOVISION_VB80MIXER            3
+#define  MM_ALGOVISION_VB80AUX              4
+#define  MM_ALGOVISION_VB80AUX2             5
+
 #endif  // !NOMMIDS
 
 /* ------------------------------------------------------------------------------ */
@@ -2072,6 +2097,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define  WAVE_FORMAT_ALAW                       0x0006 /* Microsoft Corporation */
 #define  WAVE_FORMAT_MULAW                      0x0007 /* Microsoft Corporation */
 #define  WAVE_FORMAT_DTS                        0x0008 /* Microsoft Corporation */
+#define  WAVE_FORMAT_DRM                        0x0009 /* Microsoft Corporation */
 #define  WAVE_FORMAT_OKI_ADPCM                  0x0010 /* OKI */
 #define  WAVE_FORMAT_DVI_ADPCM                  0x0011 /* Intel Corporation */
 #define  WAVE_FORMAT_IMA_ADPCM                  (WAVE_FORMAT_DVI_ADPCM) /*  Intel Corporation */
@@ -2166,6 +2192,10 @@ extern "C" {            /* Assume C declarations for C++ */
 #define  WAVE_FORMAT_QUALCOMM_HALFRATE          0x0151 /* Qualcomm, Inc. */
 #define  WAVE_FORMAT_TUBGSM                     0x0155 /* Ring Zero Systems, Inc. */
 #define  WAVE_FORMAT_MSAUDIO1                   0x0160 /* Microsoft Corporation */
+#define  WAVE_FORMAT_UNISYS_NAP_ADPCM           0x0170 /* Unisys Corp. */
+#define  WAVE_FORMAT_UNISYS_NAP_ULAW            0x0171 /* Unisys Corp. */
+#define  WAVE_FORMAT_UNISYS_NAP_ALAW            0x0172 /* Unisys Corp. */
+#define  WAVE_FORMAT_UNISYS_NAP_16K             0x0173 /* Unisys Corp. */
 #define  WAVE_FORMAT_CREATIVE_ADPCM             0x0200 /* Creative Labs, Inc */
 #define  WAVE_FORMAT_CREATIVE_FASTSPEECH8       0x0202 /* Creative Labs, Inc */
 #define  WAVE_FORMAT_CREATIVE_FASTSPEECH10      0x0203 /* Creative Labs, Inc */
@@ -2173,6 +2203,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define  WAVE_FORMAT_QUARTERDECK                0x0220 /* Quarterdeck Corporation */
 #define  WAVE_FORMAT_ILINK_VC                   0x0230 /* I-link Worldwide */
 #define  WAVE_FORMAT_RAW_SPORT                  0x0240 /* Aureal Semiconductor */
+#define  WAVE_FORMAT_ESST_AC3                   0x0241 /* ESS Technology, Inc. */
 #define  WAVE_FORMAT_IPI_HSX                    0x0250 /* Interactive Products, Inc. */
 #define  WAVE_FORMAT_IPI_RPELP                  0x0251 /* Interactive Products, Inc. */
 #define  WAVE_FORMAT_CS2                        0x0260 /* Consistent Software */
@@ -2361,6 +2392,20 @@ typedef ADPCMWAVEFORMAT FAR  *LPADPCMWAVEFORMAT;
 #ifdef _MSC_VER
 #pragma warning(default:4200)
 #endif
+
+//
+//  Microsoft's DRM structure definitions
+//
+typedef struct drmwaveformat_tag {
+	WAVEFORMATEX    wfx;
+	WORD            wReserved;
+	ULONG           ulContentId;
+	WAVEFORMATEX    wfxSecure;
+} DRMWAVEFORMAT;
+typedef DRMWAVEFORMAT       *PDRMWAVEFORMAT;
+typedef DRMWAVEFORMAT NEAR *NPDRMWAVEFORMAT;
+typedef DRMWAVEFORMAT FAR  *LPDRMWAVEFORMAT;
+
 
 //
 //  Intel's DVI ADPCM structure definitions
@@ -3228,5 +3273,4 @@ MJPGHDTSEG_STORAGE BYTE MJPGDHTSeg[0x1A4] = {
 }                       /* End of extern "C" { */
 #endif  /* __cplusplus */
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* _INC_MMREG */

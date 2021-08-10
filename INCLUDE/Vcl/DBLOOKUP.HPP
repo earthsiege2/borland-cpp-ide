@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DBLookup.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'dblookup.pas' rev: 6.00
 
-#ifndef DBLookupHPP
-#define DBLookupHPP
+#ifndef dblookupHPP
+#define dblookupHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -21,7 +21,7 @@
 #include <SysUtils.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <Windows.hpp>	// Pascal unit
@@ -87,16 +87,13 @@ private:
 	HIDESBASE MESSAGE void __fastcall CMExit(Messages::TWMNoParams &Message);
 	
 protected:
-	virtual bool __fastcall HighlightCell(int DataCol, int DataRow, const AnsiString Value, Grids::TGridDrawState 
-		AState);
+	virtual bool __fastcall HighlightCell(int DataCol, int DataRow, const AnsiString Value, Grids::TGridDrawState AState);
 	DYNAMIC bool __fastcall CanGridAcceptKey(Word Key, Classes::TShiftState Shift);
 	virtual void __fastcall DefineFieldMap(void);
 	virtual void __fastcall SetColumnAttributes(void);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
-	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int 
-		Y);
+	DYNAMIC void __fastcall MouseUp(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	virtual bool __fastcall CanEdit(void);
 	void __fastcall InitFields(bool ShowError);
 	virtual void __fastcall CreateWnd(void);
@@ -107,8 +104,7 @@ protected:
 	virtual void __fastcall Scroll(int Distance);
 	DYNAMIC void __fastcall ListClick(void);
 	virtual void __fastcall Loaded(void);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	
 public:
 	__fastcall virtual TDBLookupList(Classes::TComponent* AOwner);
@@ -125,27 +121,27 @@ __published:
 	__property TDBLookupListOptions Options = {read=FOptions, write=SetOptions, default=0};
 	__property Classes::TNotifyEvent OnClick = {read=FOnListClick, write=FOnListClick};
 	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, default=0};
-	__property Align ;
-	__property Anchors ;
-	__property BorderStyle ;
-	__property Color ;
+	__property Align  = {default=0};
+	__property Anchors  = {default=3};
+	__property BorderStyle  = {default=1};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property Enabled ;
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnDblClick ;
 	__property OnDragDrop ;
 	__property OnDragOver ;
@@ -158,8 +154,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBLookupList(HWND ParentWindow) : Dbgrids::TCustomDBGrid(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBLookupList(HWND ParentWindow) : Dbgrids::TCustomDBGrid(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -177,13 +172,12 @@ protected:
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
 	HIDESBASE MESSAGE void __fastcall WMLButtonUp(Messages::TWMMouse &Message);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	virtual bool __fastcall CanEdit(void);
 	virtual void __fastcall LinkActive(bool Value);
 	
 public:
-	__property RowCount ;
+	__property RowCount  = {default=5};
 	__fastcall virtual TPopupGrid(Classes::TComponent* AOwner);
 public:
 	#pragma option push -w-inl
@@ -192,8 +186,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TPopupGrid(HWND ParentWindow) : TDBLookupList(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TPopupGrid(HWND ParentWindow) : TDBLookupList(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -260,8 +253,7 @@ private:
 	HIDESBASE MESSAGE void __fastcall CMEnabledChanged(Messages::TMessage &Message);
 	
 protected:
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	DYNAMIC void __fastcall Change(void);
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
@@ -287,30 +279,30 @@ __published:
 	__property AnsiString LookupField = {read=GetLookupField, write=SetLookupField};
 	__property TDBLookupListOptions Options = {read=GetOptions, write=SetOptions, default=0};
 	__property TDBLookupComboStyle Style = {read=FStyle, write=SetStyle, default=0};
-	__property Anchors ;
-	__property AutoSelect ;
-	__property Color ;
+	__property Anchors  = {default=3};
+	__property AutoSelect  = {default=1};
+	__property Color  = {default=-2147483643};
 	__property Constraints ;
 	__property Ctl3D ;
-	__property DragCursor ;
-	__property DragMode ;
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
 	__property int DropDownCount = {read=FDropDownCount, write=FDropDownCount, default=8};
 	__property int DropDownWidth = {read=FDropDownWidth, write=FDropDownWidth, default=0};
-	__property Enabled ;
+	__property Enabled  = {default=1};
 	__property Font ;
-	__property ImeMode ;
+	__property ImeMode  = {default=3};
 	__property ImeName ;
-	__property MaxLength ;
-	__property ParentColor ;
-	__property ParentCtl3D ;
-	__property ParentFont ;
-	__property ParentShowHint ;
+	__property MaxLength  = {default=0};
+	__property ParentColor  = {default=0};
+	__property ParentCtl3D  = {default=1};
+	__property ParentFont  = {default=1};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property bool ReadOnly = {read=GetReadOnly, write=SetReadOnly, default=0};
 	__property ShowHint ;
-	__property TabOrder ;
-	__property TabStop ;
-	__property Visible ;
+	__property TabOrder  = {default=-1};
+	__property TabStop  = {default=1};
+	__property Visible  = {default=1};
 	__property OnChange ;
 	__property OnClick ;
 	__property OnDblClick ;
@@ -329,8 +321,7 @@ __published:
 	__property OnStartDrag ;
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDBLookupCombo(HWND ParentWindow) : Stdctrls::TCustomEdit(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDBLookupCombo(HWND ParentWindow) : Stdctrls::TCustomEdit(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -343,12 +334,10 @@ class PASCALIMPLEMENTATION TComboButton : public Buttons::TSpeedButton
 	
 protected:
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
-	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, 
-		int Y);
+	DYNAMIC void __fastcall MouseDown(Controls::TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 public:
 	#pragma option push -w-inl
-	/* TSpeedButton.Create */ inline __fastcall virtual TComboButton(Classes::TComponent* AOwner) : Buttons::TSpeedButton(
-		AOwner) { }
+	/* TSpeedButton.Create */ inline __fastcall virtual TComboButton(Classes::TComponent* AOwner) : Buttons::TSpeedButton(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TSpeedButton.Destroy */ inline __fastcall virtual ~TComboButton(void) { }
@@ -360,12 +349,10 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Dblookup */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dblookup;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// DBLookup
+#endif	// dblookup

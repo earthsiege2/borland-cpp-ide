@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:32:41 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for emptyvc.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -37,6 +35,10 @@
 
 #ifndef __emptyvc_h__
 #define __emptyvc_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -67,8 +69,8 @@ typedef interface IEmptyVolumeCache2 IEmptyVolumeCache2;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_emptyvc_0000 */
 /* [local] */ 
@@ -76,7 +78,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 //=--------------------------------------------------------------------------=
 // emptyvc.h
 //=--------------------------------------------------------------------------=
-// (C) Copyright 1996-1998 Microsoft Corporation.  All Rights Reserved.
+// Copyright (c) Microsoft Corporation. All rights reserved.
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
@@ -118,7 +120,7 @@ extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0000_v0_0_s_ifspec;
 /* interface IEmptyVolumeCacheCallBack */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEmptyVolumeCacheCallBack __RPC_FAR *LPEMPTYVOLUMECACHECALLBACK;
+typedef /* [unique] */ IEmptyVolumeCacheCallBack *LPEMPTYVOLUMECACHECALLBACK;
 
 
 EXTERN_C const IID IID_IEmptyVolumeCacheCallBack;
@@ -148,25 +150,25 @@ EXTERN_C const IID IID_IEmptyVolumeCacheCallBack;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEmptyVolumeCacheCallBack __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEmptyVolumeCacheCallBack * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEmptyVolumeCacheCallBack __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEmptyVolumeCacheCallBack * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEmptyVolumeCacheCallBack __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEmptyVolumeCacheCallBack * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ScanProgress )( 
-            IEmptyVolumeCacheCallBack __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ScanProgress )( 
+            IEmptyVolumeCacheCallBack * This,
             /* [in] */ DWORDLONG dwlSpaceUsed,
             /* [in] */ DWORD dwFlags,
             /* [in] */ LPCWSTR pcwszStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PurgeProgress )( 
-            IEmptyVolumeCacheCallBack __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *PurgeProgress )( 
+            IEmptyVolumeCacheCallBack * This,
             /* [in] */ DWORDLONG dwlSpaceFreed,
             /* [in] */ DWORDLONG dwlSpaceToFree,
             /* [in] */ DWORD dwFlags,
@@ -177,7 +179,7 @@ EXTERN_C const IID IID_IEmptyVolumeCacheCallBack;
 
     interface IEmptyVolumeCacheCallBack
     {
-        CONST_VTBL struct IEmptyVolumeCacheCallBackVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEmptyVolumeCacheCallBackVtbl *lpVtbl;
     };
 
     
@@ -209,7 +211,7 @@ EXTERN_C const IID IID_IEmptyVolumeCacheCallBack;
 
 
 HRESULT STDMETHODCALLTYPE IEmptyVolumeCacheCallBack_ScanProgress_Proxy( 
-    IEmptyVolumeCacheCallBack __RPC_FAR * This,
+    IEmptyVolumeCacheCallBack * This,
     /* [in] */ DWORDLONG dwlSpaceUsed,
     /* [in] */ DWORD dwFlags,
     /* [in] */ LPCWSTR pcwszStatus);
@@ -223,7 +225,7 @@ void __RPC_STUB IEmptyVolumeCacheCallBack_ScanProgress_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEmptyVolumeCacheCallBack_PurgeProgress_Proxy( 
-    IEmptyVolumeCacheCallBack __RPC_FAR * This,
+    IEmptyVolumeCacheCallBack * This,
     /* [in] */ DWORDLONG dwlSpaceFreed,
     /* [in] */ DWORDLONG dwlSpaceToFree,
     /* [in] */ DWORD dwFlags,
@@ -241,7 +243,7 @@ void __RPC_STUB IEmptyVolumeCacheCallBack_PurgeProgress_Stub(
 #endif 	/* __IEmptyVolumeCacheCallBack_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_emptyvc_0131 */
+/* interface __MIDL_itf_emptyvc_0136 */
 /* [local] */ 
 
 #endif
@@ -249,8 +251,8 @@ void __RPC_STUB IEmptyVolumeCacheCallBack_PurgeProgress_Stub(
 #define _LPEMPTYVOLUMECACHE_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0131_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0131_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0136_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0136_v0_0_s_ifspec;
 
 #ifndef __IEmptyVolumeCache_INTERFACE_DEFINED__
 #define __IEmptyVolumeCache_INTERFACE_DEFINED__
@@ -258,7 +260,7 @@ extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0131_v0_0_s_ifspec;
 /* interface IEmptyVolumeCache */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEmptyVolumeCache __RPC_FAR *LPEMPTYVOLUMECACHE;
+typedef /* [unique] */ IEmptyVolumeCache *LPEMPTYVOLUMECACHE;
 
 
 EXTERN_C const IID IID_IEmptyVolumeCache;
@@ -272,23 +274,23 @@ EXTERN_C const IID IID_IEmptyVolumeCache;
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE Initialize( 
             /* [in] */ HKEY hkRegKey,
             /* [in] */ LPCWSTR pcwszVolume,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszDisplayName,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszDescription,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags) = 0;
+            /* [out] */ LPWSTR *ppwszDisplayName,
+            /* [out] */ LPWSTR *ppwszDescription,
+            /* [out] */ DWORD *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSpaceUsed( 
-            /* [out] */ DWORDLONG __RPC_FAR *pdwlSpaceUsed,
-            /* [in] */ IEmptyVolumeCacheCallBack __RPC_FAR *picb) = 0;
+            /* [out] */ DWORDLONG *pdwlSpaceUsed,
+            /* [in] */ IEmptyVolumeCacheCallBack *picb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Purge( 
             /* [in] */ DWORDLONG dwlSpaceToFree,
-            /* [in] */ IEmptyVolumeCacheCallBack __RPC_FAR *picb) = 0;
+            /* [in] */ IEmptyVolumeCacheCallBack *picb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowProperties( 
             /* [in] */ HWND hwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Deactivate( 
-            /* [out] */ DWORD __RPC_FAR *pdwFlags) = 0;
+            /* [out] */ DWORD *pdwFlags) = 0;
         
     };
     
@@ -298,49 +300,49 @@ EXTERN_C const IID IID_IEmptyVolumeCache;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEmptyVolumeCache __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEmptyVolumeCache * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEmptyVolumeCache __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEmptyVolumeCache * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEmptyVolumeCache __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEmptyVolumeCache * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IEmptyVolumeCache __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+            IEmptyVolumeCache * This,
             /* [in] */ HKEY hkRegKey,
             /* [in] */ LPCWSTR pcwszVolume,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszDisplayName,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszDescription,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags);
+            /* [out] */ LPWSTR *ppwszDisplayName,
+            /* [out] */ LPWSTR *ppwszDescription,
+            /* [out] */ DWORD *pdwFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSpaceUsed )( 
-            IEmptyVolumeCache __RPC_FAR * This,
-            /* [out] */ DWORDLONG __RPC_FAR *pdwlSpaceUsed,
-            /* [in] */ IEmptyVolumeCacheCallBack __RPC_FAR *picb);
+        HRESULT ( STDMETHODCALLTYPE *GetSpaceUsed )( 
+            IEmptyVolumeCache * This,
+            /* [out] */ DWORDLONG *pdwlSpaceUsed,
+            /* [in] */ IEmptyVolumeCacheCallBack *picb);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Purge )( 
-            IEmptyVolumeCache __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Purge )( 
+            IEmptyVolumeCache * This,
             /* [in] */ DWORDLONG dwlSpaceToFree,
-            /* [in] */ IEmptyVolumeCacheCallBack __RPC_FAR *picb);
+            /* [in] */ IEmptyVolumeCacheCallBack *picb);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowProperties )( 
-            IEmptyVolumeCache __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ShowProperties )( 
+            IEmptyVolumeCache * This,
             /* [in] */ HWND hwnd);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Deactivate )( 
-            IEmptyVolumeCache __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags);
+        HRESULT ( STDMETHODCALLTYPE *Deactivate )( 
+            IEmptyVolumeCache * This,
+            /* [out] */ DWORD *pdwFlags);
         
         END_INTERFACE
     } IEmptyVolumeCacheVtbl;
 
     interface IEmptyVolumeCache
     {
-        CONST_VTBL struct IEmptyVolumeCacheVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEmptyVolumeCacheVtbl *lpVtbl;
     };
 
     
@@ -381,12 +383,12 @@ EXTERN_C const IID IID_IEmptyVolumeCache;
 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEmptyVolumeCache_Initialize_Proxy( 
-    IEmptyVolumeCache __RPC_FAR * This,
+    IEmptyVolumeCache * This,
     /* [in] */ HKEY hkRegKey,
     /* [in] */ LPCWSTR pcwszVolume,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszDisplayName,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszDescription,
-    /* [out] */ DWORD __RPC_FAR *pdwFlags);
+    /* [out] */ LPWSTR *ppwszDisplayName,
+    /* [out] */ LPWSTR *ppwszDescription,
+    /* [out] */ DWORD *pdwFlags);
 
 
 void __RPC_STUB IEmptyVolumeCache_Initialize_Stub(
@@ -397,9 +399,9 @@ void __RPC_STUB IEmptyVolumeCache_Initialize_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEmptyVolumeCache_GetSpaceUsed_Proxy( 
-    IEmptyVolumeCache __RPC_FAR * This,
-    /* [out] */ DWORDLONG __RPC_FAR *pdwlSpaceUsed,
-    /* [in] */ IEmptyVolumeCacheCallBack __RPC_FAR *picb);
+    IEmptyVolumeCache * This,
+    /* [out] */ DWORDLONG *pdwlSpaceUsed,
+    /* [in] */ IEmptyVolumeCacheCallBack *picb);
 
 
 void __RPC_STUB IEmptyVolumeCache_GetSpaceUsed_Stub(
@@ -410,9 +412,9 @@ void __RPC_STUB IEmptyVolumeCache_GetSpaceUsed_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEmptyVolumeCache_Purge_Proxy( 
-    IEmptyVolumeCache __RPC_FAR * This,
+    IEmptyVolumeCache * This,
     /* [in] */ DWORDLONG dwlSpaceToFree,
-    /* [in] */ IEmptyVolumeCacheCallBack __RPC_FAR *picb);
+    /* [in] */ IEmptyVolumeCacheCallBack *picb);
 
 
 void __RPC_STUB IEmptyVolumeCache_Purge_Stub(
@@ -423,7 +425,7 @@ void __RPC_STUB IEmptyVolumeCache_Purge_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEmptyVolumeCache_ShowProperties_Proxy( 
-    IEmptyVolumeCache __RPC_FAR * This,
+    IEmptyVolumeCache * This,
     /* [in] */ HWND hwnd);
 
 
@@ -435,8 +437,8 @@ void __RPC_STUB IEmptyVolumeCache_ShowProperties_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEmptyVolumeCache_Deactivate_Proxy( 
-    IEmptyVolumeCache __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwFlags);
+    IEmptyVolumeCache * This,
+    /* [out] */ DWORD *pdwFlags);
 
 
 void __RPC_STUB IEmptyVolumeCache_Deactivate_Stub(
@@ -450,7 +452,7 @@ void __RPC_STUB IEmptyVolumeCache_Deactivate_Stub(
 #endif 	/* __IEmptyVolumeCache_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_emptyvc_0132 */
+/* interface __MIDL_itf_emptyvc_0137 */
 /* [local] */ 
 
 #endif
@@ -458,8 +460,8 @@ void __RPC_STUB IEmptyVolumeCache_Deactivate_Stub(
 #define _LPEMPTYVOLUMECACHE2_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0132_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0132_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0137_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0137_v0_0_s_ifspec;
 
 #ifndef __IEmptyVolumeCache2_INTERFACE_DEFINED__
 #define __IEmptyVolumeCache2_INTERFACE_DEFINED__
@@ -467,7 +469,7 @@ extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0132_v0_0_s_ifspec;
 /* interface IEmptyVolumeCache2 */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEmptyVolumeCache2 __RPC_FAR *LPEMPTYVOLUMECACHE2;
+typedef /* [unique] */ IEmptyVolumeCache2 *LPEMPTYVOLUMECACHE2;
 
 
 EXTERN_C const IID IID_IEmptyVolumeCache2;
@@ -482,10 +484,10 @@ EXTERN_C const IID IID_IEmptyVolumeCache2;
             /* [in] */ HKEY hkRegKey,
             /* [in] */ LPCWSTR pcwszVolume,
             /* [in] */ LPCWSTR pcwszKeyName,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszDisplayName,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszDescription,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszBtnText,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags) = 0;
+            /* [out] */ LPWSTR *ppwszDisplayName,
+            /* [out] */ LPWSTR *ppwszDescription,
+            /* [out] */ LPWSTR *ppwszBtnText,
+            /* [out] */ DWORD *pdwFlags) = 0;
         
     };
     
@@ -495,59 +497,59 @@ EXTERN_C const IID IID_IEmptyVolumeCache2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEmptyVolumeCache2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEmptyVolumeCache2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEmptyVolumeCache2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEmptyVolumeCache2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEmptyVolumeCache2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEmptyVolumeCache2 * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
-            IEmptyVolumeCache2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+            IEmptyVolumeCache2 * This,
             /* [in] */ HKEY hkRegKey,
             /* [in] */ LPCWSTR pcwszVolume,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszDisplayName,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszDescription,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags);
+            /* [out] */ LPWSTR *ppwszDisplayName,
+            /* [out] */ LPWSTR *ppwszDescription,
+            /* [out] */ DWORD *pdwFlags);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSpaceUsed )( 
-            IEmptyVolumeCache2 __RPC_FAR * This,
-            /* [out] */ DWORDLONG __RPC_FAR *pdwlSpaceUsed,
-            /* [in] */ IEmptyVolumeCacheCallBack __RPC_FAR *picb);
+        HRESULT ( STDMETHODCALLTYPE *GetSpaceUsed )( 
+            IEmptyVolumeCache2 * This,
+            /* [out] */ DWORDLONG *pdwlSpaceUsed,
+            /* [in] */ IEmptyVolumeCacheCallBack *picb);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Purge )( 
-            IEmptyVolumeCache2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Purge )( 
+            IEmptyVolumeCache2 * This,
             /* [in] */ DWORDLONG dwlSpaceToFree,
-            /* [in] */ IEmptyVolumeCacheCallBack __RPC_FAR *picb);
+            /* [in] */ IEmptyVolumeCacheCallBack *picb);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowProperties )( 
-            IEmptyVolumeCache2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ShowProperties )( 
+            IEmptyVolumeCache2 * This,
             /* [in] */ HWND hwnd);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Deactivate )( 
-            IEmptyVolumeCache2 __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags);
+        HRESULT ( STDMETHODCALLTYPE *Deactivate )( 
+            IEmptyVolumeCache2 * This,
+            /* [out] */ DWORD *pdwFlags);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitializeEx )( 
-            IEmptyVolumeCache2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *InitializeEx )( 
+            IEmptyVolumeCache2 * This,
             /* [in] */ HKEY hkRegKey,
             /* [in] */ LPCWSTR pcwszVolume,
             /* [in] */ LPCWSTR pcwszKeyName,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszDisplayName,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszDescription,
-            /* [out] */ LPWSTR __RPC_FAR *ppwszBtnText,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags);
+            /* [out] */ LPWSTR *ppwszDisplayName,
+            /* [out] */ LPWSTR *ppwszDescription,
+            /* [out] */ LPWSTR *ppwszBtnText,
+            /* [out] */ DWORD *pdwFlags);
         
         END_INTERFACE
     } IEmptyVolumeCache2Vtbl;
 
     interface IEmptyVolumeCache2
     {
-        CONST_VTBL struct IEmptyVolumeCache2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEmptyVolumeCache2Vtbl *lpVtbl;
     };
 
     
@@ -592,14 +594,14 @@ EXTERN_C const IID IID_IEmptyVolumeCache2;
 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IEmptyVolumeCache2_InitializeEx_Proxy( 
-    IEmptyVolumeCache2 __RPC_FAR * This,
+    IEmptyVolumeCache2 * This,
     /* [in] */ HKEY hkRegKey,
     /* [in] */ LPCWSTR pcwszVolume,
     /* [in] */ LPCWSTR pcwszKeyName,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszDisplayName,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszDescription,
-    /* [out] */ LPWSTR __RPC_FAR *ppwszBtnText,
-    /* [out] */ DWORD __RPC_FAR *pdwFlags);
+    /* [out] */ LPWSTR *ppwszDisplayName,
+    /* [out] */ LPWSTR *ppwszDescription,
+    /* [out] */ LPWSTR *ppwszBtnText,
+    /* [out] */ DWORD *pdwFlags);
 
 
 void __RPC_STUB IEmptyVolumeCache2_InitializeEx_Stub(
@@ -613,21 +615,21 @@ void __RPC_STUB IEmptyVolumeCache2_InitializeEx_Stub(
 #endif 	/* __IEmptyVolumeCache2_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_emptyvc_0133 */
+/* interface __MIDL_itf_emptyvc_0138 */
 /* [local] */ 
 
 #endif
 
 
-extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0133_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0133_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0138_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_emptyvc_0138_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  HWND_UserSize(     unsigned long __RPC_FAR *, unsigned long            , HWND __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HWND_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HWND __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  HWND_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HWND __RPC_FAR * ); 
-void                      __RPC_USER  HWND_UserFree(     unsigned long __RPC_FAR *, HWND __RPC_FAR * ); 
+unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long            , HWND * ); 
+unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * ); 
+unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
+void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
 
 /* end of Additional Prototypes */
 
@@ -638,4 +640,3 @@ void                      __RPC_USER  HWND_UserFree(     unsigned long __RPC_FAR
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

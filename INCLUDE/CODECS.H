@@ -1,10 +1,9 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 //****************************************************************************
 //  File: CODECS.H
 //  Content:    
 //              
 //
-//  Copyright (c) Microsoft Corporation 1997
+//  Copyright (c) Microsoft Corporation 1999
 //      All Rights Reserved
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
@@ -131,4 +130,3 @@ DEFINE_GUID(IID_IInstallAudioCodecs, 0x8ed14cc2, 0x7a1f, 0x11d0, 0x92, 0xf6, 0x0
 DEFINE_GUID(IID_IInstallVideoCodecs, 0x8ed14cc3, 0x7a1f, 0x11d0, 0x92, 0xf6, 0x0, 0xa0, 0xc9, 0x22, 0xe6, 0xb2);
 
 #include <poppack.h> /* End byte packing */
-#pragma option pop /*P_O_Pop*/

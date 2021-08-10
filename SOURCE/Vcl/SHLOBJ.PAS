@@ -6,7 +6,7 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
@@ -16,13 +16,14 @@ unit ShlObj;
 
 interface
 
-uses Windows, ActiveX, CommCtrl, ShellAPI, RegStr, Messages, WinINet, URLMon;
+uses Windows, ActiveX, CommCtrl, ShellAPI, RegStr, Messages, WinInet, UrlMon;
 
-{$HPPEMIT '//---------------------------------------------------------------------------'}
-{$HPPEMIT '// if compilation errors occur while attempting to access structs, unions, or enums'}
-{$HPPEMIT '// define NO_WIN32_LEAN_AND_MEAN so that the appropriate windows headers are included.'}
-{$HPPEMIT '//---------------------------------------------------------------------------'}
+{$HPPEMIT '// If problems occur when compiling win32 structs, records, or'}
+{$HPPEMIT '// unions, please define NO_WIN32_LEAN_AND_MEAN to force inclusion'}
+{$HPPEMIT '// of Windows header files. '}
+
 {$HPPEMIT '#if defined(NO_WIN32_LEAN_AND_MEAN)'}
+
 {$HPPEMIT '#include <ole2.h>'}
 {$HPPEMIT '#include <prsht.h>'}
 {$HPPEMIT '#include <commctrl.h>   // for LPTBBUTTON'}
@@ -30,34 +31,66 @@ uses Windows, ActiveX, CommCtrl, ShellAPI, RegStr, Messages, WinINet, URLMon;
 {$HPPEMIT '#include <shlobj.h>'}
 {$HPPEMIT '#endif'}
 
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IAdviseSink);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IShellBrowser);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IShellView);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IContextMenu);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IShellIcon);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IShellFolder);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IShellFolder2);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IShellDetails);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IShellExtInit);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IShellPropSheetExt);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IPersistFolder);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(ICommDlgBrowser);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IEnumIDList);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IFileViewerSite);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IContextMenu2);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IShellView2);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(INewShortcutHookA);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(INewShortcutHookW);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IFileViewerA);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IFileViewerW);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IShellLinkA);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IShellLinkW);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IExtractIconA);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IExtractIconW);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IShellExecuteHookA);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(IShellExecuteHookW);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(ICopyHookA);'}
-{$HPPEMIT 'DECLARE_DINTERFACE_TYPE(ICopyHookW);'}
+{$HPPEMIT '#if !defined(NO_WIN32_LEAN_AND_MEAN)'}
+{$HPPEMIT 'interface DECLSPEC_UUID("0000010f-0000-0000-C000-000000000046") IAdviseSink;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214e2-0000-0000-c000-000000000046") IShellBrowser;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214e3-0000-0000-c000-000000000046") IShellView;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214e4-0000-0000-c000-000000000046") IContextMenu;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214e5-0000-0000-c000-000000000046") IShellIcon;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214e6-0000-0000-c000-000000000046") IShellFolder;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("93F2F68C-1D1B-11d3-A30E-00C04F79ABD1") IShellFolder2;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214EC-0000-0000-C000-000000000046") IShellDetails;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214e8-0000-0000-c000-000000000046") IShellExtInit;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214e9-0000-0000-c000-000000000046") IShellPropSheetExt;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214ea-0000-0000-c000-000000000046") IPersistFolder;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214f1-0000-0000-c000-000000000046") ICommDlgBrowser;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214f2-0000-0000-c000-000000000046") IEnumIDList;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214f3-0000-0000-c000-000000000046") IFileViewerSite;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214f4-0000-0000-c000-000000000046") IContextMenu2;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("88e39e80-3578-11cf-ae69-08002b2e1262") IShellView2;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214e1-0000-0000-c000-000000000046") INewShortcutHookA;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214f7-0000-0000-c000-000000000046") INewShortcutHookW;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214f0-0000-0000-c000-000000000046") IFileViewerA;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214f8-0000-0000-c000-000000000046") IFileViewerW;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214ee-0000-0000-c000-000000000046") IShellLinkA;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214f9-0000-0000-c000-000000000046") IShellLinkW;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214eb-0000-0000-c000-000000000046") IExtractIconA;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214fa-0000-0000-c000-000000000046") IExtractIconW;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214f5-0000-0000-c000-000000000046") IShellExecuteHookA;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214fb-0000-0000-c000-000000000046") IShellExecuteHookW;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214EF-0000-0000-c000-000000000046") ICopyHookA;'}
+{$HPPEMIT 'interface DECLSPEC_UUID("000214FC-0000-0000-c000-000000000046") ICopyHookW;'}
+{$HPPEMIT '#endif'}
+
+{$HPPEMIT 'typedef System::DelphiInterface<IAdviseSink> _di_IAdviseSink;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IShellBrowser> _di_IShellBrowser;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IShellView> _di_IShellView;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IContextMenu> _di_IContextMenu;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IShellIcon> _di_IShellIcon;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IShellFolder> _di_IShellFolder;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IShellFolder2> _di_IShellFolder2;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IShellDetails> _di_IShellDetails;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IShellExtInit> _di_IShellExtInit;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IShellPropSheetExt> _di_IShellPropSheetExt;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IPersistFolder> _di_IPersistFolder;'}
+{$HPPEMIT 'typedef System::DelphiInterface<ICommDlgBrowser> _di_ICommDlgBrowser;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IEnumIDList> _di_IEnumIDList;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IFileViewerSite> _di_IFileViewerSite;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IContextMenu2> _di_IContextMenu2;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IShellView2> _di_IShellView2;'}
+{$HPPEMIT 'typedef System::DelphiInterface<INewShortcutHookA> _di_INewShortcutHookA;'}
+{$HPPEMIT 'typedef System::DelphiInterface<INewShortcutHookW> _di_INewShortcutHookW;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IFileViewerA> _di_IFileViewerA;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IFileViewerW> _di_IFileViewerW;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IShellLinkA> _di_IShellLinkA;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IShellLinkW> _di_IShellLinkW;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IExtractIconA> _di_IExtractIconA;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IExtractIconW> _di_IExtractIconW;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IShellExecuteHookA> _di_IShellExecuteHookA;'}
+{$HPPEMIT 'typedef System::DelphiInterface<IShellExecuteHookW> _di_IShellExecuteHookW;'}
+{$HPPEMIT 'typedef System::DelphiInterface<ICopyHookA> _di_ICopyHookA;'}
+{$HPPEMIT 'typedef System::DelphiInterface<ICopyHookW> _di_ICopyHookW;'}
+
 {$HPPEMIT '#ifdef UNICODE'}
 {$HPPEMIT 'typedef _di_INewShortcutHookW _di_INewShortcutHook;'}
 {$HPPEMIT 'typedef _di_IFileViewerW _di_IFileViewer;'}
@@ -73,6 +106,7 @@ uses Windows, ActiveX, CommCtrl, ShellAPI, RegStr, Messages, WinINet, URLMon;
 {$HPPEMIT 'typedef _di_IShellExecuteHookA _di_IShellExecuteHook;'}
 {$HPPEMIT 'typedef _di_ICopyHookA _di_ICopyHook;'}
 {$HPPEMIT '#endif'}
+
 {$HPPEMIT '#if !defined(NO_WIN32_LEAN_AND_MEAN)'}
 {$HPPEMIT 'struct _SHITEMID;'}
 {$HPPEMIT 'struct _ITEMIDLIST;'}
@@ -232,6 +266,16 @@ const
   {$EXTERNALSYM IID_IShellView2}
   IID_IShellView2: TGUID = (
     D1:$88E39E80; D2:$3578; D3:$11CF; D4:($AE,$69,$08,$00,$2B,$2E,$12,$62));
+  {$EXTERNALSYM IID_IShellFolder2}
+  IID_IShellFolder2: TGUID = (
+    D1:$B82C5AA8; D2:$A41B; D3:$11D2; D4:($BE,$32,$00,$C0,$4F,$B9,$36,$61));
+  {$EXTERNALSYM IID_IShellDetails}
+  IID_IShellDetails: TGUID = (
+    D1:$000214EC; D2:$0000; D3:$0000; D4:($C0,$00,$00,$00,$00,$00,$00,$46));
+  {$EXTERNALSYM IID_IEnumExtraSearch}
+  IID_IEnumExtraSearch: TGUID = (
+    D1:$E700BE1; D2: $9DB6; D3:$11D1; D4:($A1,$CE,$00,$C0,$4F,$D7,$5D,$13));
+
 
 // String constants for Interface IDs
   SID_INewShortcutHookA  = '{000214E1-0000-0000-C000-000000000046}';
@@ -274,7 +318,10 @@ const
   SID_IActiveDesktop     = '{F490EB00-1240-11D1-9888-006097DEACF9}';
   SID_IShellChangeNotify = '{00000000-0000-0000-0000-000000000000}';  // !!
   SID_IQueryInfo         = '{00021500-0000-0000-C000-000000000046}';
-
+  SID_IShellDetails      = '{000214EC-0000-0000-C000-000000000046}';
+  SID_IShellFolder2      = '{B82C5AA8-A41B-11D2-BE32-00C04FB93661}';
+  SID_IEnumExtraSearch   = '{0E700BE1-9DB6-11D1-A1CE-00C04FD75D13}';
+  
 type
 { TSHItemID -- Item ID }
   PSHItemID = ^TSHItemID;
@@ -464,7 +511,8 @@ const
   GCS_VALIDATEW        = $00000006;     { validate command exists (unicode) }
   {$EXTERNALSYM GCS_UNICODE}
   GCS_UNICODE          = $00000004;     { for bit testing - Unicode string }
-
+
+
 
 
 
@@ -477,7 +525,8 @@ const
   {$EXTERNALSYM GCS_HELPTEXT}
   GCS_HELPTEXT        = GCS_HELPTEXTA;
   {$EXTERNALSYM GCS_VALIDATE}
-  GCS_VALIDATE        = GCS_VALIDATEA;
+  GCS_VALIDATE        = GCS_VALIDATEA;
+
 
   {$EXTERNALSYM CMDSTR_NEWFOLDERA}
   CMDSTR_NEWFOLDERA       = 'NewFolder';
@@ -491,7 +540,8 @@ const
   CMDSTR_VIEWLISTW        = 'ViewList';
   {$EXTERNALSYM CMDSTR_VIEWDETAILSW}
   CMDSTR_VIEWDETAILSW     = 'ViewDetails';
-
+
+
 
 
 
@@ -504,7 +554,8 @@ const
   {$EXTERNALSYM CMDSTR_VIEWLIST}
   CMDSTR_VIEWLIST         = CMDSTR_VIEWLISTA;
   {$EXTERNALSYM CMDSTR_VIEWDETAILS}
-  CMDSTR_VIEWDETAILS      = CMDSTR_VIEWDETAILSA;
+  CMDSTR_VIEWDETAILS      = CMDSTR_VIEWDETAILSA;
+
 
   {$EXTERNALSYM CMIC_MASK_HOTKEY}
   CMIC_MASK_HOTKEY            = SEE_MASK_HOTKEY;
@@ -1898,18 +1949,36 @@ type
   {$EXTERNALSYM STRRET}
   STRRET = _STRRET;
 
+ { IShellDetails is supported on Win9x and NT4; for >= NT5 use IShellFolder2 }
+  PShellDetails = ^TShellDetails;
+  {$EXTERNALSYM _SHELLDETAILS}
+  _SHELLDETAILS = record
+    fmt,
+    cxChar: Integer;
+    str: STRRET;
+  end;
+  TShellDetails = _SHELLDETAILS;
+  {$EXTERNALSYM SHELLDETAILS}
+  SHELLDETAILS = _SHELLDETAILS;
+
+  IShellDetails = interface(IUnknown)
+    [SID_IShellDetails]
+    function GetDetailsOf(pidl: PItemIDList; iColumn: UINT;
+      var pDetails: TShellDetails): HResult; stdcall;
+    function ColumnClick(iColumn: UINT): HResult; stdcall;
+  end;
 
 { SHGetPathFromIDList }
 
 { This function assumes the size of the buffer (MAX_PATH). The pidl
   should point to a file system object. }
 
+{$EXTERNALSYM SHGetPathFromIDList}
+function SHGetPathFromIDList(pidl: PItemIDList; pszPath: PChar): BOOL; stdcall;
 {$EXTERNALSYM SHGetPathFromIDListA}
 function SHGetPathFromIDListA(pidl: PItemIDList; pszPath: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM SHGetPathFromIDListW}
 function SHGetPathFromIDListW(pidl: PItemIDList; pszPath: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM SHGetPathFromIDList}
-function SHGetPathFromIDList(pidl: PItemIDList; pszPath: PChar): BOOL; stdcall;
 
 { SHGetSpecialFolderLocation }
 
@@ -1985,15 +2054,15 @@ const
 function SHGetSpecialFolderLocation(hwndOwner: HWND; nFolder: Integer;
   var ppidl: PItemIDList): HResult; stdcall;
 
+function SHGetSpecialFolderPath(hwndOwner: HWND; lpszPath: PChar;
+  nFolder: Integer; fCreate: BOOL): BOOL; stdcall;
+{$EXTERNALSYM SHGetSpecialFolderPath}
 function SHGetSpecialFolderPathA(hwndOwner: HWND; lpszPath: PAnsiChar;
   nFolder: Integer; fCreate: BOOL): BOOL; stdcall;
 {$EXTERNALSYM SHGetSpecialFolderPathA}
 function SHGetSpecialFolderPathW(hwndOwner: HWND; lpszPath: PWideChar;
   nFolder: Integer; fCreate: BOOL): BOOL; stdcall;
 {$EXTERNALSYM SHGetSpecialFolderPathW}
-function SHGetSpecialFolderPath(hwndOwner: HWND; lpszPath: PChar;
-  nFolder: Integer; fCreate: BOOL): BOOL; stdcall;
-{$EXTERNALSYM SHGetSpecialFolderPath}
 
 { SHBrowseForFolder API }
 
@@ -2085,7 +2154,8 @@ const
   BFFM_SETSELECTIONW          = WM_USER + 103;
   {$EXTERNALSYM BFFM_SETSTATUSTEXTW}
   BFFM_SETSTATUSTEXTW         = WM_USER + 104;
-
+
+
 
 
 
@@ -2098,14 +2168,15 @@ const
   {$EXTERNALSYM BFFM_SETSTATUSTEXT}
   BFFM_SETSTATUSTEXT      = BFFM_SETSTATUSTEXTA;
   {$EXTERNALSYM BFFM_SETSELECTION}
-  BFFM_SETSELECTION       = BFFM_SETSELECTIONA;
+  BFFM_SETSELECTION       = BFFM_SETSELECTIONA;
 
+
+{$EXTERNALSYM SHBrowseForFolder}
+function SHBrowseForFolder(var lpbi: TBrowseInfo): PItemIDList; stdcall;
 {$EXTERNALSYM SHBrowseForFolderA}
 function SHBrowseForFolderA(var lpbi: TBrowseInfoA): PItemIDList; stdcall;
 {$EXTERNALSYM SHBrowseForFolderW}
 function SHBrowseForFolderW(var lpbi: TBrowseInfoW): PItemIDList; stdcall;
-{$EXTERNALSYM SHBrowseForFolder}
-function SHBrowseForFolder(var lpbi: TBrowseInfo): PItemIDList; stdcall;
 
 { SHLoadInProc }
 
@@ -2184,6 +2255,9 @@ const
   SHGDN_NORMAL           = 0;         { default (display purpose) }
   {$EXTERNALSYM SHGDN_INFOLDER}
   SHGDN_INFOLDER         = 1;         { displayed under a folder (relative) }
+
+  {$EXTERNALSYM SHGDN_FOREDITING}
+  SHGDN_FOREDITING       = $1000;     { for in-place editing text }
   {$EXTERNALSYM SHGDN_INCLUDE_NONFILESYS}
   SHGDN_INCLUDE_NONFILESYS = $2000;   { if not set, display names for shell
                                         name space items that are not in the
@@ -2280,6 +2354,70 @@ type
       var lpName: TStrRet): HResult; stdcall;
     function SetNameOf(hwndOwner: HWND; pidl: PItemIDList; lpszName: POLEStr;
       uFlags: DWORD; var ppidlOut: PItemIDList): HResult; stdcall;
+  end;
+
+  {$EXTERNALSYM PExtraSearch}
+  PExtraSearch = ^TExtraSearch;
+  {$EXTERNALSYM tagExtraSearch}
+  tagExtraSearch = record
+    guidSearch: TGUID;
+    wszFriendlyName,
+    wszMenuText: array[0..79] of WideChar;
+    wszHelpText: array[0..MAX_PATH] of WideChar;
+    wszUrl: array[0..2047] of WideChar;
+    wszIcon,
+    wszGreyIcon,
+    wszClrIcon: array[0..MAX_PATH+10] of WideChar;
+  end;
+  {$EXTERNALSYM TExtraSearch}
+  TExtraSearch = tagExtraSearch;
+
+  {$EXTERNALSYM IEnumExtraSearch}
+  IEnumExtraSearch = interface(IUnknown)
+    [SID_IEnumExtraSearch]
+    function Next(celt: ULONG; out rgelt: PExtraSearch;
+      out pceltFetched: ULONG): HResult; stdcall;
+    function Skip(celt: ULONG): HResult; stdcall;
+    function Reset: HResult; stdcall;
+    function Clone(out ppEnum: IEnumExtraSearch): HResult; stdcall;
+  end;
+
+const
+  {IShellFolder2.GetDefaultColumnState Values}
+  SHCOLSTATE_TYPE_STR     = $00000001;
+  SHCOLSTATE_TYPE_INT     = $00000002;
+  SHCOLSTATE_TYPE_DATE    = $00000003;
+  SHCOLSTATE_TYPEMASK     = $0000000F;
+  SHCOLSTATE_ONBYDEFAULT  = $00000010;   // should on by default in details view
+  SHCOLSTATE_SLOW         = $00000020;   // will be slow to compute; do on a background thread
+  SHCOLSTATE_EXTENDED     = $00000040;   // provided by a handler; not the folder
+  SHCOLSTATE_SECONDARYUI  = $00000080;   // not displayed in context menu; but listed in the "More..." dialog
+  SHCOLSTATE_HIDDEN       = $00000100;   // not displayed in the UI
+
+type
+  {$EXTERNALSYM PShColumnID}
+  PShColumnID = ^TShColumnID;
+  {$EXTERNALSYM SHCOLUMNID}
+  SHCOLUMNID = record
+    fmtid: TGUID;
+    pid: DWORD;
+  end;
+  {$EXTERNALSYM TShColumnID}
+  TShColumnID = SHCOLUMNID;
+
+  {$EXTERNALSYM IShellFolder2}
+  IShellFolder2 = interface(IShellFolder)
+    [SID_IShellFolder2]
+    function GetDefaultSearchGUID(out pguid: TGUID): HResult; stdcall;
+    function EnumSearches(out ppEnum: IEnumExtraSearch): HResult; stdcall;
+    function GetDefaultColumn(dwRes: DWORD; var pSort: ULONG;
+      var pDisplay: ULONG): HResult; stdcall;
+    function GetDefaultColumnState(iColumn: UINT; var pcsFlags: DWORD): HResult; stdcall;
+    function GetDetailsEx(pidl: PItemIDList; const pscid: SHCOLUMNID;
+      pv: POleVariant): HResult; stdcall;
+    function GetDetailsOf(pidl: PItemIDList; iColumn: UINT;
+      var psd: TShellDetails): HResult; stdcall;
+    function MapNameToSCID(pwszName: LPCWSTR; var pscid: TShColumnID): HResult; stdcall;
   end;
 
 { Helper function which returns a IShellFolder interface to the desktop
@@ -2732,7 +2870,8 @@ const
   CFSTR_PASTESUCCEEDED        = 'Paste Succeeded';
   {$EXTERNALSYM CFSTR_INDRAGLOOP}
   CFSTR_INDRAGLOOP            = 'InShellDragLoop';
-
+
+
 
 
 
@@ -2745,7 +2884,8 @@ const
   {$EXTERNALSYM CFSTR_FILENAME}
   CFSTR_FILENAME              = CFSTR_FILENAMEA;
   {$EXTERNALSYM CFSTR_FILENAMEMAP}
-  CFSTR_FILENAMEMAP           = CFSTR_FILENAMEMAPA;
+  CFSTR_FILENAMEMAP           = CFSTR_FILENAMEMAPA;
+
 
 
 { CF_OBJECTPOSITIONS }
@@ -2978,7 +3118,8 @@ const
   SHCNF_FLUSH           = $1000;
   {$EXTERNALSYM SHCNF_FLUSHNOWAIT}
   SHCNF_FLUSHNOWAIT     = $2000;
-
+
+
 
 
 
@@ -2987,7 +3128,8 @@ const
   {$EXTERNALSYM SHCNF_PATH}
   SHCNF_PATH          = SHCNF_PATHA;
   {$EXTERNALSYM SHCNF_PRINTER}
-  SHCNF_PRINTER       = SHCNF_PRINTERA;
+  SHCNF_PRINTER       = SHCNF_PRINTERA;
+
 
 { APIs }
 
@@ -3033,12 +3175,14 @@ const
   SHARD_PATHA         = $00000002;
   {$EXTERNALSYM SHARD_PATHW}
   SHARD_PATHW         = $00000003;
-
+
+
 
 
 
   {$EXTERNALSYM SHARD_PATH}
-  SHARD_PATH      = SHARD_PATHA;
+  SHARD_PATH      = SHARD_PATHA;
+
 
 
 { SHGetDataFromIDList}
@@ -3098,14 +3242,14 @@ type
   SHDESCRIPTIONID = _SHDESCRIPTIONID;
 
 
+{$EXTERNALSYM SHGetDataFromIDList}
+function SHGetDataFromIDList(psf: IShellFolder; pidl: PItemIDList;
+  nFormat: Integer; ptr: Pointer; cb: Integer): HResult; stdcall;
 {$EXTERNALSYM SHGetDataFromIDListA}
 function SHGetDataFromIDListA(psf: IShellFolder; pidl: PItemIDList;
   nFormat: Integer; ptr: Pointer; cb: Integer): HResult; stdcall;
 {$EXTERNALSYM SHGetDataFromIDListW}
 function SHGetDataFromIDListW(psf: IShellFolder; pidl: PItemIDList;
-  nFormat: Integer; ptr: Pointer; cb: Integer): HResult; stdcall;
-{$EXTERNALSYM SHGetDataFromIDList}
-function SHGetDataFromIDList(psf: IShellFolder; pidl: PItemIDList;
   nFormat: Integer; ptr: Pointer; cb: Integer): HResult; stdcall;
 
 { PROPIDs for Internet Shortcuts (FMTID_Intshcut) to be used with }
@@ -3331,24 +3475,24 @@ const
   shell32 = 'shell32.dll';
 
 procedure SHAddToRecentDocs;             external shell32 name 'SHAddToRecentDocs';
+function SHBrowseForFolder;          external shell32 name 'SHBrowseForFolderA';
 function SHBrowseForFolderA;          external shell32 name 'SHBrowseForFolderA';
 function SHBrowseForFolderW;          external shell32 name 'SHBrowseForFolderW';
-function SHBrowseForFolder;          external shell32 name 'SHBrowseForFolderA';
 procedure SHChangeNotify;                external shell32 name 'SHChangeNotify';
+function SHGetDataFromIDList;        external shell32 name 'SHGetDataFromIDListA';
 function SHGetDataFromIDListA;        external shell32 name 'SHGetDataFromIDListA';
 function SHGetDataFromIDListW;        external shell32 name 'SHGetDataFromIDListW';
-function SHGetDataFromIDList;        external shell32 name 'SHGetDataFromIDListA';
 function SHGetDesktopFolder;            external shell32 name 'SHGetDesktopFolder';
 function SHGetInstanceExplorer;         external shell32 name 'SHGetInstanceExplorer';
 function SHGetMalloc;                   external shell32 name 'SHGetMalloc';
+function SHGetPathFromIDList;        external shell32 name 'SHGetPathFromIDListA';
 function SHGetPathFromIDListA;        external shell32 name 'SHGetPathFromIDListA';
 function SHGetPathFromIDListW;        external shell32 name 'SHGetPathFromIDListW';
-function SHGetPathFromIDList;        external shell32 name 'SHGetPathFromIDListA';
 function SHGetSpecialFolderLocation;    external shell32 name 'SHGetSpecialFolderLocation';
 function SHLoadInProc;                  external shell32 name 'SHLoadInProc';
+function SHGetSpecialFolderPath;     external shell32 name 'SHGetSpecialFolderPathA'
 function SHGetSpecialFolderPathA;     external shell32 name 'SHGetSpecialFolderPathA'
 function SHGetSpecialFolderPathW;     external shell32 name 'SHGetSpecialFolderPathW'
-function SHGetSpecialFolderPath;     external shell32 name 'SHGetSpecialFolderPathA'
 procedure SHGetSettings;                external shell32 name 'SHGetSettings'
 function SoftwareUpdateMessageBox;      external shell32 name 'SoftwareUpdateMessageBox'
 

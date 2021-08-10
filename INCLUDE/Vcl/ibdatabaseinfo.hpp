@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBDatabaseInfo.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBDatabaseInfo.pas' rev: 6.00
 
 #ifndef IBDatabaseInfoHPP
 #define IBDatabaseInfoHPP
@@ -14,11 +14,8 @@
 #include <IB.hpp>	// Pascal unit
 #include <IBExternals.hpp>	// Pascal unit
 #include <IBHeader.hpp>	// Pascal unit
-#include <ExtCtrls.hpp>	// Pascal unit
-#include <Forms.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
-#include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -73,10 +70,8 @@ protected:
 	Classes::TStringList* __fastcall GetReadIdxCount(void);
 	Classes::TStringList* __fastcall GetReadSeqCount(void);
 	Classes::TStringList* __fastcall GetUpdateCount(void);
-	Classes::TStringList* __fastcall GetOperationCounts(int DBInfoCommand, Classes::TStringList* FOperation
-		);
+	Classes::TStringList* __fastcall GetOperationCounts(int DBInfoCommand, Classes::TStringList* FOperation);
 	int __fastcall GetReadOnly(void);
-	int __fastcall GetLongDatabaseInfo(int DatabaseInfoCommand);
 	AnsiString __fastcall GetStringDatabaseInfo(int DatabaseInfoCommand);
 	int __fastcall GetDBSQLDialect(void);
 	
@@ -84,6 +79,7 @@ public:
 	__fastcall virtual TIBDatabaseInfo(Classes::TComponent* AOwner);
 	__fastcall virtual ~TIBDatabaseInfo(void);
 	int __fastcall Call(int ErrCode, bool RaiseError);
+	int __fastcall GetLongDatabaseInfo(int DatabaseInfoCommand);
 	__property int Allocation = {read=GetAllocation, nodefault};
 	__property int BaseLevel = {read=GetBaseLevel, nodefault};
 	__property AnsiString DBFileName = {read=GetDBFileName};
@@ -124,9 +120,7 @@ __published:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Ibdatabaseinfo */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ibdatabaseinfo;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

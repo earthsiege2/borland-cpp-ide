@@ -5,26 +5,30 @@
 */
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1987, 2000 by Inprise Corporation
+ *      Copyright (c) 1987, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.0  $ */
+/* $Revision: 9.9.2.5 $ */
 
 #ifndef __STRING_H
 #define __STRING_H
 #define _INC_STRING  /* MSC Guard name */
 
-#ifndef ___STDDEF_H
 #include <_stddef.h>
-#endif
 
 #if !defined(__STDC__) && defined(__USELOCALES__)
 #if !defined(__LOCALE_H)
-#include <locale.h>
+
+#ifndef _USE_OLD_RW_STL
+# include <oldstl/locale.h>
+#else
+# include <locale.h>
+#endif
+
 #endif
 #endif  /* !__STDC__ && __USELOCALES__ */
 
@@ -97,7 +101,6 @@ _SIZE_T      _RTLENTRY  _EXPFUNC strspn(const char _FAR *__s1, const char _FAR *
 char _FAR * _RTLENTRYF _EXPFUNC strtok(char _FAR *__s1, const char _FAR *__s2);
 char _FAR * _RTLENTRY  _EXPFUNC _strerror(const char _FAR *__s);
 
-
 #if !defined(__STDC__)
 /* compatibility with other compilers */
 #define strcmpi(s1,s2)      stricmp(s1,s2)
@@ -118,7 +121,6 @@ char _FAR * _RTLENTRY  _EXPFUNC   strset(char _FAR *__s, int __ch);
 char _FAR * _RTLENTRYF _EXPFUNC   strupr(char _FAR *__s);
 #endif  /* !__STDC__ */
 
-
 #if defined(__cplusplus)
 extern "C++"
 {
@@ -137,7 +139,6 @@ extern "C++"
           char _FAR * _RTLENTRYF _EXPFUNC   strpbrk(const char _FAR *__s1, const char _FAR *__s2);
           char _FAR * _RTLENTRY  _EXPFUNC   strstr(const char _FAR *__s1, const char _FAR *__s2);
 #endif
-
 
 /* Intrinsic functions */
 
@@ -166,7 +167,6 @@ char _FAR * _RTLENTRY  _EXPFUNC16 __strset__(char _FAR *__s, int __ch);
 #ifdef __cplusplus
 namespace std {
 #endif /* __cplusplus */
-
 
 #if defined(__MSC) && !defined(__MFC_COMPAT__)
 #define _strnicmp(s1,s2,s3) strnicmp(s1,s2,s3)

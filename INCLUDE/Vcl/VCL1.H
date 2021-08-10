@@ -1,10 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////////
 // VCL1.H - Borland C++ Builder pre-compiled header file
-// $Revision:   1.3  $
-// Copyright (c) 1997, 1999 Borland International
+// $Revision:   1.3.1.0.1.1  $
+// Copyright (c) 1997, 2002 Borland Software Corporation
 /////////////////////////////////////////////////////////////////////////////////
 
+#define INC_VCL
 #define INC_VCLDB_HEADERS
 
-#include <vcl0.h>
+#include <basepch0.h>
 

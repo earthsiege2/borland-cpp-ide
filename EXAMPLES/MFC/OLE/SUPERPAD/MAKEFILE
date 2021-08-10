@@ -12,11 +12,15 @@ PROJ=SUPERPAD
 OBJS=superpad.obj paddoc.obj padview.obj mainfrm.obj ipframe.obj \
 	 pageset.obj tabstop.obj padframe.obj aboutbox.obj paditem.obj \
 	 linkitem.obj
-USES_OLE=1
 
-!if "$(PLATFORM)" == "M68K" || "$(PLATFORM)" == "MPPC"
-MACPROJ=SuperPad
-MACSIG=SPAD
-!endif
+#!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+!include <..\..\mfcrules.mak>
 
-!include <$(MAKEDIR)\..\include\mfc\mfcsamps.mak>
+default: integration
+	$(MAKE) -f $(PROJ).mak
+
+clean:
+	$(CLEAN_MFC)
+                                
+integration: $(PROJ).bpr $(PROJ).mak
+    $(NOP)

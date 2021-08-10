@@ -21,7 +21,6 @@
 
 /*NOINC*/
 #ifndef NETERR_INCLUDED
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define NETERR_INCLUDED
 
 #if _MSC_VER > 1000
@@ -74,7 +73,7 @@
 #define NERR_RemoteOnly         (NERR_BASE+6)   /* This operation is not supported on workstations. */
 #define NERR_DevNotRedirected   (NERR_BASE+7)   /* The device is not connected. */
 /* NERR_BASE+8 is used for ERROR_CONNECTED_OTHER_PASSWORD */
-/* UNUSED BASE+9 */
+/* NERR_BASE+9 is used for ERROR_CONNECTED_OTHER_PASSWORD_DEFAULT */
 /* UNUSED BASE+10 */
 /* UNUSED BASE+11 */
 /* UNUSED BASE+12 */
@@ -541,31 +540,31 @@
  *          NERR_BASE + (560-590)
  */
 
-#define NERR_DfsInternalCorruption         (NERR_BASE+560) /*The internal database maintained by the Dfs service is corrupt*/
-#define NERR_DfsVolumeDataCorrupt          (NERR_BASE+561) /*One of the records in the internal Dfs database is corrupt*/
-#define NERR_DfsNoSuchVolume               (NERR_BASE+562) /*There is no volume whose entry path matches the input Entry Path*/
-#define NERR_DfsVolumeAlreadyExists        (NERR_BASE+563) /*A volume with the given name already exists*/
-#define NERR_DfsAlreadyShared              (NERR_BASE+564) /*The server share specified is already shared in the Dfs*/
-#define NERR_DfsNoSuchShare                (NERR_BASE+565) /*The indicated server share does not support the indicated Dfs volume*/
-#define NERR_DfsNotALeafVolume             (NERR_BASE+566) /*The operation is not valid on a non-leaf volume*/
-#define NERR_DfsLeafVolume                 (NERR_BASE+567) /*The operation is not valid on a leaf volume*/
-#define NERR_DfsVolumeHasMultipleServers   (NERR_BASE+568) /*The operation is ambiguous because the volume has multiple servers*/
-#define NERR_DfsCantCreateJunctionPoint    (NERR_BASE+569) /*Unable to create a junction point*/
-#define NERR_DfsServerNotDfsAware          (NERR_BASE+570) /*The server is not Dfs Aware*/
+#define NERR_DfsInternalCorruption         (NERR_BASE+560) /*The internal database maintained by the DFS service is corrupt*/
+#define NERR_DfsVolumeDataCorrupt          (NERR_BASE+561) /*One of the records in the internal DFS database is corrupt*/
+#define NERR_DfsNoSuchVolume               (NERR_BASE+562) /*There is no DFS name whose entry path matches the input Entry Path*/
+#define NERR_DfsVolumeAlreadyExists        (NERR_BASE+563) /*A root or link with the given name already exists*/
+#define NERR_DfsAlreadyShared              (NERR_BASE+564) /*The server share specified is already shared in the DFS*/
+#define NERR_DfsNoSuchShare                (NERR_BASE+565) /*The indicated server share does not support the indicated DFS namespace*/
+#define NERR_DfsNotALeafVolume             (NERR_BASE+566) /*The operation is not valid on this portion of the namespace*/
+#define NERR_DfsLeafVolume                 (NERR_BASE+567) /*The operation is not valid on this portion of the namespace*/
+#define NERR_DfsVolumeHasMultipleServers   (NERR_BASE+568) /*The operation is ambiguous because the link has multiple servers*/
+#define NERR_DfsCantCreateJunctionPoint    (NERR_BASE+569) /*Unable to create a link*/
+#define NERR_DfsServerNotDfsAware          (NERR_BASE+570) /*The server is not DFS Aware*/
 #define NERR_DfsBadRenamePath              (NERR_BASE+571) /*The specified rename target path is invalid*/
-#define NERR_DfsVolumeIsOffline            (NERR_BASE+572) /*The specified Dfs volume is offline*/
-#define NERR_DfsNoSuchServer               (NERR_BASE+573) /*The specified server is not a server for this volume*/
-#define NERR_DfsCyclicalName               (NERR_BASE+574) /*A cycle in the Dfs name was detected*/
-#define NERR_DfsNotSupportedInServerDfs    (NERR_BASE+575) /*The operation is not supported on a server-based Dfs*/
-#define NERR_DfsDuplicateService           (NERR_BASE+576) /*This volume is already supported by the specified server-share*/
-#define NERR_DfsCantRemoveLastServerShare  (NERR_BASE+577) /*Can't remove the last server-share supporting this volume*/
-#define NERR_DfsVolumeIsInterDfs           (NERR_BASE+578) /*The operation is not supported for an Inter-Dfs volume*/
-#define NERR_DfsInconsistent               (NERR_BASE+579) /*The internal state of the Dfs Service has become inconsistent*/
-#define NERR_DfsServerUpgraded             (NERR_BASE+580) /*The Dfs Service has been installed on the specified server*/
-#define NERR_DfsDataIsIdentical            (NERR_BASE+581) /*The Dfs data being reconciled is identical*/
-#define NERR_DfsCantRemoveDfsRoot          (NERR_BASE+582) /*The Dfs root volume cannot be deleted - Uninstall Dfs if required*/
-#define NERR_DfsChildOrParentInDfs         (NERR_BASE+583) /*A child or parent directory of the share is already in a Dfs*/
-#define NERR_DfsInternalError              (NERR_BASE+590) /*Dfs internal error*/
+#define NERR_DfsVolumeIsOffline            (NERR_BASE+572) /*The specified DFS link is offline*/
+#define NERR_DfsNoSuchServer               (NERR_BASE+573) /*The specified server is not a server for this link*/
+#define NERR_DfsCyclicalName               (NERR_BASE+574) /*A cycle in the DFS name was detected*/
+#define NERR_DfsNotSupportedInServerDfs    (NERR_BASE+575) /*The operation is not supported on a server-based DFS*/
+#define NERR_DfsDuplicateService           (NERR_BASE+576) /*This link is already supported by the specified server-share*/
+#define NERR_DfsCantRemoveLastServerShare  (NERR_BASE+577) /*Can't remove the last server-share supporting this root or link*/
+#define NERR_DfsVolumeIsInterDfs           (NERR_BASE+578) /*The operation is not supported for an Inter-DFS link*/
+#define NERR_DfsInconsistent               (NERR_BASE+579) /*The internal state of the DFS Service has become inconsistent*/
+#define NERR_DfsServerUpgraded             (NERR_BASE+580) /*The DFS Service has been installed on the specified server*/
+#define NERR_DfsDataIsIdentical            (NERR_BASE+581) /*The DFS data being reconciled is identical*/
+#define NERR_DfsCantRemoveDfsRoot          (NERR_BASE+582) /*The DFS root cannot be deleted - Uninstall DFS if required*/
+#define NERR_DfsChildOrParentInDfs         (NERR_BASE+583) /*A child or parent directory of the share is already in a DFS*/
+#define NERR_DfsInternalError              (NERR_BASE+590) /*DFS internal error*/
 
 /*
  *  Net setup error codes.
@@ -576,9 +575,10 @@
 #define NERR_SetupNotJoined                (NERR_BASE+592) /*This machine is not currently joined to a domain.*/
 #define NERR_SetupDomainController         (NERR_BASE+593) /*This machine is a domain controller and cannot be unjoined from a domain.*/
 #define NERR_DefaultJoinRequired           (NERR_BASE+594) /*The destination domain controller does not support creating machine accounts in OUs.*/
-#define NERR_InvalidWorkgroupName          (NERR_BASE+595) /*The specified workgroup name is invalid*/
+#define NERR_InvalidWorkgroupName          (NERR_BASE+595) /*The specified workgroup name is invalid.*/
 #define NERR_NameUsesIncompatibleCodePage  (NERR_BASE+596) /*The specified computer name is incompatible with the default language used on the domain controller.*/
 #define NERR_ComputerAccountNotFound       (NERR_BASE+597) /*The specified computer account could not be found.*/
+#define NERR_PersonalSku                   (NERR_BASE+598) /*This version of Windows cannot be joined to a domain.*/
 
 /***********WARNING ****************
  *The range 2750-2799 has been     *
@@ -603,7 +603,6 @@
 
 
 /*NOINC*/
-#pragma option pop /*P_O_Pop*/
 #endif /* NETERR_INCLUDED */
 /*INC*/
 

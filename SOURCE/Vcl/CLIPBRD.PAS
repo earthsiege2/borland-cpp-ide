@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -67,22 +67,26 @@ type
     procedure AssignToMetafile(Dest: TMetafile);
     procedure AssignToPicture(Dest: TPicture);
     function GetAsText: string;
+    function GetClipboardWindow: HWND;
     function GetFormatCount: Integer;
     function GetFormats(Index: Integer): Word;
     procedure SetAsText(const Value: string);
-    procedure SetBuffer(Format: Word; var Buffer; Size: Integer);
-    procedure WndProc(var Message: TMessage);
   protected
     procedure AssignTo(Dest: TPersistent); override;
+    procedure SetBuffer(Format: Word; var Buffer; Size: Integer);
+    procedure WndProc(var Message: TMessage); virtual;
+    procedure MainWndProc(var Message: TMessage);
+    property Handle: HWND read GetClipboardWindow;
+    property OpenRefCount: Integer read FOpenRefCount;
   public
     procedure Assign(Source: TPersistent); override;
-    procedure Clear;
-    procedure Close;
+    procedure Clear; virtual;
+    procedure Close; virtual;
     function GetComponent(Owner, Parent: TComponent): TComponent;
     function GetAsHandle(Format: Word): THandle;
     function GetTextBuf(Buffer: PChar; BufSize: Integer): Integer;
     function HasFormat(Format: Word): Boolean;
-    procedure Open;
+    procedure Open; virtual;
     procedure SetComponent(Component: TComponent);
     procedure SetAsHandle(Format: Word; Value: THandle);
     procedure SetTextBuf(Buffer: PChar);
@@ -124,7 +128,8 @@ begin
   if FOpenRefCount = 0 then
   begin
     CloseClipboard;
-    if FAllocated then DeallocateHWnd(FClipboardWindow);
+    if FAllocated then
+      Classes.DeallocateHWnd(FClipboardWindow);
     FClipboardWindow := 0;
   end;
 end;
@@ -136,7 +141,7 @@ begin
     FClipboardWindow := Application.Handle;
     if FClipboardWindow = 0 then
     begin
-      FClipboardWindow := AllocateHWnd(WndProc);
+      FClipboardWindow := Classes.AllocateHWnd(MainWndProc);
       FAllocated := True;
     end;
     if not OpenClipboard(FClipboardWindow) then
@@ -176,7 +181,8 @@ begin
           Reader.Parent := Parent;
           Result := Reader.ReadRootComponent(nil);
           try
-            Owner.InsertComponent(Result);
+            if Owner <> nil then
+              Owner.InsertComponent(Result);
           except
             Result.Free;
             raise;
@@ -261,12 +267,20 @@ begin
   Data := GetClipboardData(CF_TEXT);
   try
     if Data <> 0 then
-      Result := PChar(GlobalLock(Data)) else
+      Result := PChar(GlobalLock(Data))
+    else
       Result := '';
   finally
     if Data <> 0 then GlobalUnlock(Data);
     Close;
   end;
+end;
+
+function TClipboard.GetClipboardWindow: HWND;
+begin
+  if FClipboardWindow = 0 then
+    Open;
+  Result := FClipboardWindow;
 end;
 
 procedure TClipboard.SetAsText(const Value: string);
@@ -469,6 +483,18 @@ function SetClipboard(NewClipboard: TClipboard): TClipboard;
 begin
   Result := FClipboard;
   FClipboard := NewClipboard;
+end;
+
+procedure TClipboard.MainWndProc(var Message: TMessage);
+begin
+  try
+    WndProc(Message);
+  except
+    if Assigned(ApplicationHandleException) then
+      ApplicationHandleException(Self)
+    else
+      raise;
+  end;
 end;
 
 initialization

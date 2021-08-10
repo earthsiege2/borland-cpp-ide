@@ -2,27 +2,27 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="dclinetxcustom_bcb.bpl"/>
     <OBJFILES value="dclinetxcustom_bcb.obj inetxcustomreg.obj"/>
-    <RESFILES value="dclinetxcustom_bcb.res inetxcustomreg.dcr"/>
+    <RESFILES value="dclinetxcustom_bcb.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES)"/>
     <LIBFILES value=""/>
     <LIBRARIES value=""/>
-    <SPARELIBS value="Vcl50.lib Vclmid50.lib vcldb50.lib Inet50.lib webmid50.lib inetdb50.lib 
-      vclbde50.lib"/>
-    <PACKAGES value="vcl50.bpi inetxcustom_bcb.bpi Vclmid50.bpi Vcldb50.bpi Inetdb50.bpi 
-      Inet50.bpi Vclbde50.bpi webmid50.bpi"/>
+    <SPARELIBS value="rtl.lib vcl.lib dsnap.lib dbrtl.lib vcldb.lib inet.lib webdsnap.lib 
+      inetdb.lib bdertl.lib"/>
+    <PACKAGES value="inetxcustom_bcb.bpi rtl.bpi vcl.bpi dsnap.bpi dbrtl.bpi vcldb.bpi 
+      inetdb.bpi inet.bpi bdertl.bpi webdsnap.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
-    <LINKER value="tlink32"/>
+    <LINKER value="ilink32"/>
     <USERDEFINES value=""/>
     <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
     <MAINSOURCE value="dclinetxcustom_bcb.cpp"/>
@@ -32,7 +32,7 @@
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -boa"/>
-    <CFLAG1 value="-O2 -H=$(BCB)\lib\vcl50.csm -Vx -Ve -X- -a8 -b- -k- -vi -c -tWM"/>
+    <CFLAG1 value="-O2 -H=$(BCB)\lib\vcl60.csm -Vx -Ve -X- -a8 -b- -k- -vi -c -tWM"/>
     <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zn"/>
@@ -43,6 +43,23 @@
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="dclinetxcustom_bcb.cpp" FORMNAME="" UNITNAME="dclinetxcustom_bcb" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="dclinetxcustom_bcb.res" FORMNAME="" UNITNAME="dclinetxcustom_bcb" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="inetxcustomreg.cpp" FORMNAME="" UNITNAME="inetxcustomreg" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="inetxcustomreg.dcr" FORMNAME="" UNITNAME="inetxcustomreg" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="inetxcustom_bcb.bpi" FORMNAME="" UNITNAME="inetxcustom_bcb" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="rtl.bpi" FORMNAME="" UNITNAME="rtl" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="vcl.bpi" FORMNAME="" UNITNAME="vcl" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="dsnap.bpi" FORMNAME="" UNITNAME="dsnap" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="dbrtl.bpi" FORMNAME="" UNITNAME="dbrtl" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="vcldb.bpi" FORMNAME="" UNITNAME="vcldb" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="inetdb.bpi" FORMNAME="" UNITNAME="inetdb" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="inet.bpi" FORMNAME="" UNITNAME="inet" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="bdertl.bpi" FORMNAME="" UNITNAME="bdertl" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="webdsnap.bpi" FORMNAME="" UNITNAME="webdsnap" CONTAINERID="BPITool" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=1
@@ -72,58 +89,40 @@ ProductVersion=1.0.0.0
 Comments=
 
 [Excluded Packages]
-e:\bcb\bin\dclinetxcustom.bpl=InternetExpress sample components
 
 [HistoryLists\hlIncludePath]
-Count=2
-Item0=$(BCB)\include;$(BCB)\include\vcl
-Item1=$(BCB)\include;$(BCB)\units;$(BCB)\emuvcl;$(BCB)\vcl;$(BCB)\db;$(BCB)\internet;$(BCB)\quickrpt;$(BCB)\teechart;$(BCB)\xtab;$(BCB)\Samples;$(BCB)\Examples;$(BCB)\app\lib
+Count=0
 
 [HistoryLists\hlLibraryPath]
-Count=4
-Item0=$(BCB)\Lib\Obj;$(BCB)\Lib
-Item1=$(BCB)\Lib\Obj;$(BCB)\Lib;
-Item2=$(BCB)\Projects\Lib;$(BCB)\Lib;
-Item3=$(BCB)\Projects\Lib;$(BCB)\include;$(BCB)\units;$(BCB)\emuvcl;$(BCB)\vcl;$(BCB)\db;$(BCB)\internet;$(BCB)\quickrpt;$(BCB)\teechart;$(BCB)\xtab;$(BCB)\Samples;$(BCB)\Examples;$(BCB)\app\lib;$(BCB)\lib;$(BCB)\netmstrs
+Count=0
 
 [HistoryLists\hlDebugSourcePath]
-Count=2
-Item0=$(BCB)\source\vcl
-Item1=$(BCB)\source\vcl;$(BCB)\include;$(BCB)\units;$(BCB)\emuvcl;$(BCB)\vcl;$(BCB)\db;$(BCB)\internet;$(BCB)\quickrpt;$(BCB)\teechart;$(BCB)\xtab;$(BCB)\Samples;$(BCB)\Examples;$(BCB)\app\lib;$(BCB)\rtl\sys;$(BCB)\rtl\win;$(BCB)\app;$(BCB)\app\com;$(BCB)\app\ui;$(BCB)\app\ed;$(BCB)\app\common;;$(BCB)\app\bccide
+Count=0
 
 [HistoryLists\hlConditionals]
-Count=1
-Item0=_DEBUG
+Count=0
 
 [HistoryLists\hlFinalOutputDir]
-Count=3
-Item0=..\..\..\..\bin\
-Item1=$(BCB)\bin
-Item2=e:\bcb\bin\
+Count=0
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
 ShowInfoMsgs=0
 LinkDebugVcl=0
 LinkCGLIB=0
-
-[CORBA]
-AddServerUnit=1
-AddClientUnit=1
-PrecompiledHeaders=1
-
-[Language]
-ActiveLang=
-ProjectLang=
-RootDir=
   </IDEOPTIONS>
 </PROJECT>

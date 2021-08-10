@@ -9,32 +9,32 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.1.1  $
-// File generated on 1/24/2000 09:45:44 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/28/2002 8:27:22 AM from Type Library described below.
 
-// ************************************************************************ //
-// Type Lib: d:\tlbgen\rampage\typelib\TypeLibraries\MSOUTL9.olb (1)
-// IID\LCID: {00062FFF-0000-0000-C000-000000000046}\0
-// Helpfile: d:\tlbgen\rampage\typelib\TypeLibraries\VBAOUTL9.CHM
+// ************************************************************************  //
+// Type Lib: c:\program files\microsoft office\office\msoutl9.olb (1)
+// LIBID: {00062FFF-0000-0000-C000-000000000046}
+// LCID: 0
+// Helpfile: c:\program files\microsoft office\office\VBAOUTL9.CHM
+// HelpString: Microsoft Outlook 9.0 Object Library
 // DepndLst: 
-//   (1) v2.0 stdole, (D:\WINNT\System32\stdole2.tlb)
-//   (2) v2.1 Office, (D:\msof2k\Office\mso9.dll)
-//   (3) v4.0 StdVCL, (D:\tlbgen\rampage\typelib\typelibraries\testing\stdvcl40.tlb)
+//   (1) v2.0 stdole, (C:\WINNT\System32\stdole2.tlb)
+//   (2) v2.1 Office, (C:\Program Files\Microsoft Office\Office\MSO9.DLL)
 // Errors:
 //   Hint: Symbol 'Application' renamed to 'OutlookApplication'
-//   Hint: Symbol 'Update' renamed to '_Update'
 //   Hint: Symbol 'Application' renamed to 'OutlookApplication'
-//   Hint: Symbol 'Update' renamed to '_Update'
 // ************************************************************************ //
 
 #include <vcl.h>
 #pragma hdrstop
 
+#include <oleserver.hpp>
 #if defined(USING_ATL)
 #include <atl\atlvcl.h>
 #endif
 
-#include "Outlook_2K_SRVR.h"
+#include "Outlook_2k_srvr.h"
 
 #if !defined(__PRAGMA_PACKAGE_SMART_INIT)
 #define      __PRAGMA_PACKAGE_SMART_INIT
@@ -103,34 +103,46 @@ void __fastcall TOutlookApplication::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TOutlookApplication::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TOutlookApplication::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 61442:
-      if (OnItemSend)
+    case 61442: {
+      if (OnItemSend) {
         (OnItemSend)(this, TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 61443:
-      if (OnNewMail)
+      }
+    case 61443: {
+      if (OnNewMail) {
         (OnNewMail)(this);
+      }
       break;
-    case 61444:
-      if (OnReminder)
+      }
+    case 61444: {
+      if (OnReminder) {
         (OnReminder)(this, TVariant(params[0]));
+      }
       break;
-    case 61445:
-      if (OnOptionsPagesAdd)
+      }
+    case 61445: {
+      if (OnOptionsPagesAdd) {
         (OnOptionsPagesAdd)(this, (Outlook_2k::PropertyPages*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 61446:
-      if (OnStartup)
+      }
+    case 61446: {
+      if (OnStartup) {
         (OnStartup)(this);
+      }
       break;
-    case 61447:
-      if (OnQuit)
+      }
+    case 61447: {
+      if (OnQuit) {
         (OnQuit)(this);
+      }
       break;
+      }
     default:
       break;
   }
@@ -155,7 +167,7 @@ void __fastcall PACKAGE Register()
   TComponentClass cls_svr[] = {
                               __classid(Outlook_2k::TOutlookApplication)
                            };
-  RegisterComponents("Servers", cls_svr,
+  RegisterComponents("Office2k", cls_svr,
                      sizeof(cls_svr)/sizeof(cls_svr[0])-1);
 }
 

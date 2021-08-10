@@ -14,7 +14,7 @@ unit DBTables;
 
 interface
 
-uses Windows, SysUtils, Graphics, Classes, Controls, Db, DBCommon, Bde, SMIntf;
+uses Variants, Windows, SysUtils, Classes, DB, DBCommon, BDE, SMINTF;
 
 const
 
@@ -45,19 +45,20 @@ const
     fldVARBYTES, fldINT32, fldBLOB, fldBLOB, fldBLOB, fldBLOB, fldBLOB,
     fldBLOB, fldBLOB, fldCURSOR, fldZSTRING, fldZSTRING, fldINT64, fldADT,
     fldArray, fldREF, fldTABLE, fldBLOB, fldBLOB, fldUNKNOWN, fldUNKNOWN,
-    fldUNKNOWN, fldZSTRING);
+    fldUNKNOWN, fldZSTRING, fldDATETIME,fldBCD);
 
   FldSubTypeMap: array[TFieldType] of Word = (
     0, 0, 0, 0, 0, 0, 0, fldstMONEY, 0, 0, 0, 0, 0, 0, fldstAUTOINC,
     fldstBINARY, fldstMEMO, fldstGRAPHIC, fldstFMTMEMO, fldstOLEOBJ,
     fldstDBSOLEOBJ, fldstTYPEDBINARY, 0, fldstFIXED, fldstUNICODE,
-    0, 0, 0, 0, 0, fldstHBINARY, fldstHMEMO, 0, 0, 0, 0);
+    0, 0, 0, 0, 0, fldstHBINARY, fldstHMEMO, 0, 0, 0, 0, 0, 0);
 
   DataTypeMap: array[0..MAXLOGFLDTYPES - 1] of TFieldType = (
     ftUnknown, ftString, ftDate, ftBlob, ftBoolean, ftSmallint,
     ftInteger, ftFloat, ftBCD, ftBytes, ftTime, ftDateTime,
     ftWord, ftInteger, ftUnknown, ftVarBytes, ftUnknown, ftUnknown,
-    ftLargeInt, ftLargeInt, ftADT, ftArray, ftReference, ftDataSet);
+    ftLargeInt, ftLargeInt, ftADT, ftArray, ftReference, ftDataSet, 
+    ftTimeStamp);
 
   BlobTypeMap: array[fldstMEMO..fldstBFILE] of TFieldType = (
     ftMemo, ftBlob, ftFmtMemo, ftParadoxOle, ftGraphic, ftDBaseOle,
@@ -182,7 +183,7 @@ type
 
   TTraceFlags = set of TTraceFlag;
 
-  TSession = class(TComponent)
+  TSession = class(TComponent, IDBSession)
   private
     FHandle: HDBISes;
     FDatabases: TList;
@@ -284,6 +285,8 @@ type
     procedure GetDatabaseNames(List: TStrings);
     procedure GetDriverNames(List: TStrings);
     procedure GetDriverParams(const DriverName: string; List: TStrings);
+    procedure GetFieldNames(const DatabaseName, TableName: string;
+      List: TStrings);
     function GetPassword: Boolean;
     procedure GetTableNames(const DatabaseName, Pattern: string;
       Extensions, SystemTables: Boolean; List: TStrings);
@@ -407,11 +410,13 @@ type
     destructor Destroy; override;
     procedure ApplyUpdates(const DataSets: array of TDBDataSet);
     procedure CloseDataSets;
-    procedure Commit;
+    procedure Commit; 
     function Execute(const SQL: string; Params: TParams = nil;
       Cache: Boolean = False; Cursor: phDBICur = nil): Integer;
     procedure FlushSchemaCache(const TableName: string);
-    procedure Rollback;
+    procedure GetFieldNames(const TableName: string; List: TStrings);
+    procedure GetTableNames(List: TStrings; SystemTables: Boolean = False);
+    procedure Rollback; 
     procedure StartTransaction;
     procedure ValidateName(const Name: string);
     property DataSets[Index: Integer]: TDBDataSet read GetDataSet;
@@ -450,10 +455,10 @@ type
   
   TDataSetUpdateObject = class(TComponent)
   protected
-    function GetDataSet: TBDEDataSet; virtual; abstract;
-    procedure SetDataSet(ADataSet: TBDEDataSet); virtual; abstract;
+    function GetDataSet: TDataSet; virtual; abstract;
+    procedure SetDataSet(ADataSet: TDataSet); virtual; abstract;
     procedure Apply(UpdateKind: TUpdateKind); virtual; abstract;
-    property DataSet: TBDEDataSet read GetDataSet write SetDataSet;
+    property DataSet: TDataSet read GetDataSet write SetDataSet;
   end;
 
   TSQLUpdateObject = class(TDataSetUpdateObject)
@@ -566,6 +571,7 @@ type
     function GetBookmarkFlag(Buffer: PChar): TBookmarkFlag; override;
     function GetCanModify: Boolean; override;
     function GetFieldFullName(Field: TField): string; override;
+    function GetHandle: HDBICur;
     function GetIndexField(Index: Integer): TField;
     function GetIndexFieldCount: Integer;
     function GetIsIndexField(Field: TField): Boolean; override;
@@ -773,7 +779,7 @@ type
     property DBHandle: HDBIDB read GetDBHandle;
     property DBLocale: TLocale read GetDBLocale;
     property DBSession: TSession read GetDBSession;
-    property Handle: HDBICur read FHandle write SetHandle;
+    property Handle: HDBICur read GetHandle write SetHandle;
   published
     property AutoRefresh: Boolean read FAutoRefresh write SetAutoRefresh default False;
     property DatabaseName: string read FDatabaseName write SetDatabaseName;
@@ -923,7 +929,6 @@ type
     procedure SetRangeStart;
     procedure UnlockTable(LockType: TLockType);
     property Exists: Boolean read GetExists;
-    property Handle: HDBICur read FHandle;
     property IndexFieldCount: Integer read GetIndexFieldCount;
     property IndexFields[Index: Integer]: TField read GetIndexField write SetIndexField;
     property KeyExclusive: Boolean read GetKeyExclusive write SetKeyExclusive;
@@ -1059,7 +1064,7 @@ type
     procedure Prepare;
     procedure GetResults;
     procedure UnPrepare;
-    property Handle: HDBICur read FHandle;
+    property Handle: HDBICur read GetHandle;
     property ParamCount: Word read GetParamsCount;
     property StmtHandle;
     property Prepared: Boolean read FPrepared write SetPrepare;
@@ -1131,7 +1136,6 @@ type
     function ParamByName(const Value: string): TParam;
     procedure Prepare;
     procedure UnPrepare;
-    property Handle: HDBICur read FHandle;
     property Prepared: Boolean read FPrepared write SetPrepare;
     property ParamCount: Word read GetParamsCount;
     property Local: Boolean read FLocal;
@@ -1157,7 +1161,9 @@ end;
 
   TUpdateSQL = class(TSQLUpdateObject)
   private
-    FDataSet: TBDEDataSet;
+    FDataSet: TDataSet;
+    FDatabaseName: string;
+    FSessionName: string;
     FQueries: array[TUpdateKind] of TQuery;
     FSQLText: array[TUpdateKind] of TStrings;
     function GetQuery(UpdateKind: TUpdateKind): TQuery;
@@ -1166,18 +1172,20 @@ end;
     procedure SetSQLIndex(Index: Integer; Value: TStrings);
   protected
     function GetSQL(UpdateKind: TUpdateKind): TStrings; override;
-    function GetDataSet: TBDEDataSet; override;
-    procedure SetDataSet(ADataSet: TBDEDataSet); override;
+    function GetDataSet: TDataSet; override;
+    procedure SetDataSet(ADataSet: TDataSet); override;
     procedure SQLChanged(Sender: TObject);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure Apply(UpdateKind: TUpdateKind); override;
-    procedure ExecSQL(UpdateKind: TUpdateKind);
-    procedure SetParams(UpdateKind: TUpdateKind);
+    procedure ExecSQL(UpdateKind: TUpdateKind); virtual; 
+    procedure SetParams(UpdateKind: TUpdateKind); virtual; 
+    property DatabaseName: string read FDatabaseName write FDatabaseName; 
     property DataSet;
     property Query[UpdateKind: TUpdateKind]: TQuery read GetQuery;
     property SQL[UpdateKind: TUpdateKind]: TStrings read GetSQL write SetSQL;
+    property SessionName: string read FSessionName write FSessionName; 
   published
     property ModifySQL: TStrings index 0 read GetSQLIndex write SetSQLIndex;
     property InsertSQL: TStrings index 1 read GetSQLIndex write SetSQLIndex;
@@ -1241,7 +1249,7 @@ var
 
 implementation
 
-uses Forms, DBPWDlg, DBLogDlg, DBConsts, BDEConst, ActiveX;
+uses DBConsts, bdeconst, ActiveX;
 
 const
   TableTypeDriverNames: array[TTableType] of PChar =
@@ -1382,6 +1390,12 @@ begin
     (ADataSources.szTblName[0] <> #0);
 end;
 
+procedure ApplicationHandleException(Sender: TObject);
+begin
+  if Assigned(Classes.ApplicationHandleException) then
+    Classes.ApplicationHandleException(Sender);
+end;
+
 { Parameter binding routines }
 
 function GetParamDataSize(Param: TParam): Integer;
@@ -1518,7 +1532,8 @@ begin
     KillTimer(0, TimerID);
     TimerID := 0;
     StartTime := 0;
-    Screen.Cursor := crDefault;
+    if Assigned(DBScreen) then
+      DBScreen.Cursor := dcrDefault;
   end;
 end;
 
@@ -1631,8 +1646,11 @@ begin
     if Locale <> nil then
     begin
       EnterCriticalSection(CSAnsiToNative);
-      DbiAnsiToNative(Locale, Dest, Source, Len, DataLoss);
-      LeaveCriticalSection(CSAnsiToNative);
+      try
+        DbiAnsiToNative(Locale, Dest, Source, Len, DataLoss);
+      finally
+        LeaveCriticalSection(CSAnsiToNative);
+      end;
     end else
       CharToOemBuff(Source, Dest, Len);
 end;
@@ -1645,8 +1663,11 @@ begin
     if Locale <> nil then
     begin
       EnterCriticalSection(CSNativeToAnsi);
-      DbiNativeToAnsi(Locale, Dest, Source, Len, DataLoss);
-      LeaveCriticalSection(CSNativeToAnsi);
+      try
+        DbiNativeToAnsi(Locale, Dest, Source, Len, DataLoss);
+      finally
+        LeaveCriticalSection(CSNativeToAnsi);
+      end;
     end else
       OemToCharBuff(Source, Dest, Len)
 end;
@@ -2176,13 +2197,14 @@ begin
           AliasParams.Free;
         end;
         Password := '';
-        if LoginDialogEx(szDbName, UserName, Password, True) then
-        begin
-          AnsiToNative(Locale, Password, szPassword, SizeOf(szPassword) - 1);
-          bCallbackToClose := False;
-        end
-        else
-          Result :=cbrAbort;
+        if Assigned(LoginDialogExProc) then
+          if LoginDialogExProc(szDbName, UserName, Password, True) then
+          begin
+            AnsiToNative(Locale, Password, szPassword, SizeOf(szPassword) - 1);
+            bCallbackToClose := False;
+          end
+          else
+            Result :=cbrAbort;
       end
     end else
     begin
@@ -2515,8 +2537,10 @@ begin
   begin
     Result := False;
     FOnPassword(Self, Result)
-  end else
-    Result := PasswordDialog(Self);
+  end else if Assigned(DB.PasswordDialog) then
+    Result := DB.PasswordDialog(Self as IDBSession)
+  else
+    Result := False;  
 end;
 
 procedure TSession.GetTableNames(const DatabaseName, Pattern: string;
@@ -2546,6 +2570,38 @@ begin
           begin
             if Extensions and (szExt[0] <> #0) then
               StrCat(StrCat(szName, '.'), szExt);
+            NativeToAnsi(Database.Locale, szName, Name);
+            List.Add(Name);
+          end;
+      finally
+        DbiCloseCursor(Cursor);
+      end;
+    finally
+      CloseDatabase(Database);
+    end;
+  finally
+    List.EndUpdate;
+  end;
+end;
+
+procedure TSession.GetFieldNames(const DatabaseName, TableName: string;
+  List: TStrings);
+var
+  Database: TDatabase;
+  Cursor: HDBICur;
+  Name: string;
+  Desc: FLDDesc;
+begin
+  List.BeginUpdate;
+  try
+    List.Clear;
+    Database := OpenDatabase(DatabaseName);
+    try
+      Check(DbiOpenFieldList(Database.Handle, PChar(TableName), '', False, Cursor));
+      try
+        while DbiGetNextRecord(Cursor, dbiNOLOCK, @Desc, nil) = 0 do
+          with Desc do
+          begin
             NativeToAnsi(Database.Locale, szName, Name);
             List.Add(Name);
           end;
@@ -2598,9 +2654,9 @@ var
   ClientHandle: hDBIObj;
   SetCursor: Boolean;
 begin
-  SetCursor := (GetCurrentThreadID = MainThreadID) and (Screen.Cursor = crDefault);
+  SetCursor := (GetCurrentThreadID = MainThreadID) and (DBScreen.Cursor = dcrDefault);
   if SetCursor then
-    Screen.Cursor := crHourGlass;
+    DBScreen.Cursor := dcrHourGlass;
   try
     FillChar(Env, SizeOf(Env), 0);
     StrPLCopy(Env.szLang, SIDAPILangID, SizeOf(Env.szLang) - 1);
@@ -2613,8 +2669,8 @@ begin
     if IsLibrary then
       DbiRegisterCallback(nil, cbDETACHNOTIFY, 0, 0, nil, DLLDetachCallBack);
   finally
-    if SetCursor and (Screen.Cursor = crHourGlass) then
-      Screen.Cursor := crDefault;
+    if SetCursor and (DBScreen.Cursor = dcrHourGlass) then
+      DBScreen.Cursor := dcrDefault;
   end;
 end;
 
@@ -2687,7 +2743,7 @@ begin
     if FStreamedActive then SetActive(True);
   except
     if csDesigning in ComponentState then
-      Application.HandleException(Self)
+      ApplicationHandleException(Self)
     else
       raise;
   end;
@@ -2870,7 +2926,7 @@ begin
     end;
     if Assigned(FSMClient) then
     begin
-      ClientName := Application.Title;
+      ClientName := DBApplication.Title;
       if ClientName = '' then  ClientName := SUntitled;
       if not FDefault then
         ClientName := Format('%s.%s', [ClientName, SessionName]);
@@ -2967,8 +3023,8 @@ begin
   begin
     if TimerID = 0 then
       TimerID := SetTimer(0, 0, SQLDelay, @TimerCallBack);
-    if Screen.Cursor <> crSQLWait then
-      Screen.Cursor := crSQLWait;
+    if Assigned(DBScreen) and (DBScreen.Cursor <> dcrSQLWait) then
+      DBScreen.Cursor := dcrSQLWait;
     StartTime := GetTickCount;
   end;
 end;
@@ -3597,6 +3653,18 @@ begin
     Result := '';
 end;
 
+procedure TDatabase.GetFieldNames(const TableName: string; List: TStrings);
+begin
+  if Assigned(FSession) then
+    FSession.GetFieldNames(Self.DatabaseName, TableName, List);
+end;
+
+procedure TDatabase.GetTableNames(List: TStrings; SystemTables: Boolean = False);
+begin
+  if Assigned(FSession) then
+    FSession.GetTableNames(Self.DatabaseName, '', False, SystemTables, List);
+end;
+
 function TDatabase.GetDriverName: string;
 begin
   if FAliased then Result := '' else Result := FDatabaseType;
@@ -3677,8 +3745,9 @@ begin
   if Assigned(FOnLogin) then FOnLogin(Self, LoginParams) else
   begin
     UserName := LoginParams.Values[szUSERNAME];
-    if not LoginDialogEx(DatabaseName, UserName, Password, False) then
-      DatabaseErrorFmt(SLoginError, [DatabaseName]);
+    if Assigned(LoginDialogExProc) then
+      if not LoginDialogExProc(DatabaseName, UserName, Password, False) then
+        DatabaseErrorFmt(SLoginError, [DatabaseName]);
     LoginParams.Values[szUSERNAME] := UserName;
     LoginParams.Values[szPASSWORD] := Password;
   end;
@@ -3950,7 +4019,8 @@ begin
     if FSessionName <> Value then
     begin
       FSessionName := Value;
-      CheckSessionName(False);
+      if not (csDestroying in ComponentState) then
+        CheckSessionName(False);
     end;
   end;
 end;
@@ -4063,6 +4133,11 @@ procedure TBDEDataSet.DestroyHandle;
 begin
   DbiRelRecordLock(FHandle, False);
   DbiCloseCursor(FHandle);
+end;
+
+function TBDEDataSet.GetHandle: HDBICur;
+begin
+  Result := FHandle;
 end;
 
 procedure TBDEDataSet.InternalInitFieldDefs;
@@ -4215,7 +4290,7 @@ end;
 
 procedure TBDEDataSet.InternalHandleException;
 begin
-  Application.HandleException(Self)
+  ApplicationHandleException(Self)
 end;
 
 procedure TBDEDataSet.SetLocale(Value: TLocale);
@@ -4713,6 +4788,7 @@ end;
 
 procedure TBDEDataSet.InternalPost;
 begin
+  inherited;
   if State = dsEdit then
     Check(DbiModifyRecord(FHandle, ActiveBuffer, True)) else
     Check(DbiInsertRecord(FHandle, dbiNoLock, ActiveBuffer));
@@ -5417,7 +5493,7 @@ begin
     Accept := True;
     OnFilterRecord(Self, Accept);
   except
-    Application.HandleException(Self);
+    ApplicationHandleException(Self);
   end;
   RestoreState(SaveState);
   Result := Ord(Accept);
@@ -5760,7 +5836,8 @@ procedure TBDEDataSet.CancelUpdates;
 begin
   Cancel;
   ProcessUpdates(dbiDelayedUpdCancel);
-  Resync([]);
+  if Active then
+    Resync([]);
 end;
 
 procedure TBDEDataSet.RevertRecord;
@@ -5819,7 +5896,7 @@ begin
         FOnUpdateError(Self, EDatabaseError(E), UpdateKind, UpdateAction)
       else
       begin
-        Application.HandleException(Self);
+        ApplicationHandleException(Self);
         UpdateAction := uaAbort;
       end;
     end;
@@ -5861,8 +5938,9 @@ begin
       { If another dataset already references this updateobject, then
         remove the reference }
       if Assigned(FUpdateObject.DataSet) and
+        (FUpdateObject.Dataset is TBDEDataset) and 
         (FUpdateObject.DataSet <> Self) then
-        FUpdateObject.DataSet.UpdateObject := nil;
+        TBDEDataset(FUpdateObject.DataSet).UpdateObject := nil; 
       FUpdateObject.DataSet := Self;
     end;
   end;
@@ -6012,6 +6090,7 @@ end;
 
 procedure TNestedTable.InternalPost;
 begin
+  inherited;
   if (DataSetField.DataType = ftReference) and (State = dsInsert) then
   begin
     if TReferenceField(DataSetField).ReferenceTableName = '' then
@@ -6340,7 +6419,7 @@ end;
 
 function TDBDataSet.PSUpdateRecord(UpdateKind: TUpdateKind; Delta: TDataSet): Boolean;
 
-  procedure AssignParams(DataSet: TDataSet; Params: TParams);
+{  procedure AssignParams(DataSet: TDataSet; Params: TParams);
   var
     I: Integer;
     Old: Boolean;
@@ -6360,7 +6439,7 @@ function TDBDataSet.PSUpdateRecord(UpdateKind: TUpdateKind; Delta: TDataSet): Bo
       if Old then Param.AssignFieldValue(Field, Field.OldValue) else
       begin
         Value := Field.NewValue;
-        if VarIsEmpty(Value) then Value := Field.OldValue;
+        if VarIsClear(Value) then Value := Field.OldValue;
         Param.AssignFieldValue(Field, Value);
       end;
     end;
@@ -6368,25 +6447,34 @@ function TDBDataSet.PSUpdateRecord(UpdateKind: TUpdateKind; Delta: TDataSet): Bo
 
 var
   SQL: string;
-  Params: TParams;
+  Params: TParams; }   
 begin
   Result := inherited PSUpdateRecord(UpdateKind, Delta);
-  if not Result and Assigned(FUpdateObject) and (FUpdateObject is TSQLUpdateObject) then
+  if not Result and Assigned(FUpdateObject) and (FUpdateObject is TUpdateSQL) then 
   begin
-    SQL := TSQLUpdateObject(FUpdateObject).GetSQL(UpdateKind).Text;
+    TUpdateSQL(FUpdateObject).Dataset := Delta; 
+    TUpdateSQL(FUpdateObject).DatabaseName := DatabaseName; 
+    TUpdateSQL(FUpdateObject).SessionName := SessionName; 
+    TUpdateSQL(FUpdateObject).Apply(UpdateKind); 
+    // USQL.Apply calls USQL.ExecSQL, which raises an exception if RowsAffected<>1
+    Result := True; 
+{    SQL := TSQLUpdateObject(FUpdateObject).GetSQL(UpdateKind).Text;
     if SQL <> '' then
     begin
       Params := TParams.Create;
       try
         Params.ParseSQL(SQL, True);
-        AssignParams(Delta, Params);
+        TSQLUpdateObject(FUpdateObject).Dataset := Delta;
+        TSQLUpdateObject(FUpdateObject).DatabaseName := '';
+        TSQLUpdateObject(FUpdateObject).SetParams(UpdateKind);
+        TSQLUpdateObject(FUpdateObject).ExecSQL;
         if PSExecuteStatement(SQL, Params) = 0 then
           DatabaseError(SRecordChanged);
         Result := True;
       finally
         Params.Free;
       end;
-    end;
+    end;} 
   end;
 end;
 
@@ -7737,7 +7825,7 @@ end;
 
 procedure TTable.DataEvent(Event: TDataEvent; Info: Longint);
 begin
-  if Event = dePropertyChange then IndexDefs.Updated := False;
+  if (Event = dePropertyChange) and Assigned(IndexDefs) then IndexDefs.Updated := False;
   inherited DataEvent(Event, Info);
 end;
 
@@ -8275,6 +8363,12 @@ begin
       begin
         uLen := 255;
         iUnits1 := 255;
+      end
+      else if uFldType = fldADT then
+      begin
+        iUnits1 := Value;
+        iUnits2 := Value;
+        AnsiToNative(Locale, Name, szName, SizeOf(szName) - 1)
       end else
         uLen := GetParamDataSize(Params[I]);
       uOffset := Offset;
@@ -8901,8 +8995,9 @@ destructor TUpdateSQL.Destroy;
 var
   UpdateKind: TUpdateKind;
 begin
-  if Assigned(FDataSet) and (FDataSet.UpdateObject = Self) then
-    FDataSet.UpdateObject := nil;
+  if Assigned(FDataSet) and (FDataset is TBDEDataset) and 
+    (TBDEDataset(FDataSet).UpdateObject = Self) then 
+    TBDEDataset(FDataSet).UpdateObject := nil;
   for UpdateKind := Low(TUpdateKind) to High(TUpdateKind) do
     FSQLText[UpdateKind].Free;
   inherited Destroy;
@@ -8928,7 +9023,11 @@ begin
     begin
       FQueries[UpdateKind].SessionName := TDBDataSet(FDataSet).SessionName;
       FQueries[UpdateKind].DatabaseName := TDBDataSet(FDataSet).DataBaseName;
-    end;
+    end
+    else begin 
+      FQueries[UpdateKind].SessionName := Self.SessionName; 
+      FQueries[UpdateKind].DatabaseName := Self.DataBaseName; 
+    end; 
   end;
   Result := FQueries[UpdateKind];
 end;
@@ -8943,12 +9042,12 @@ begin
   Result := FSQLText[TUpdateKind(Index)];
 end;
 
-function TUpdateSQL.GetDataSet: TBDEDataSet;
+function TUpdateSQL.GetDataSet: TDataSet;
 begin
   Result := FDataSet;
 end;
 
-procedure TUpdateSQL.SetDataSet(ADataSet: TBDEDataSet);
+procedure TUpdateSQL.SetDataSet(ADataSet: TDataSet);
 begin
   FDataSet := ADataSet;
 end;
@@ -9002,7 +9101,7 @@ begin
       if Old then Param.AssignFieldValue(Field, Field.OldValue) else
       begin
         Value := Field.NewValue;
-        if VarIsEmpty(Value) then Value := Field.OldValue;
+        if VarIsClear(Value) then Value := Field.OldValue;
         Param.AssignFieldValue(Field, Value);
       end;
     end;
@@ -9067,7 +9166,7 @@ begin
   try
     FDataSet.DataEvent(deFieldChange, Longint(FField));
   except
-    Application.HandleException(Self);
+    ApplicationHandleException(Self);
   end;
 end;
 

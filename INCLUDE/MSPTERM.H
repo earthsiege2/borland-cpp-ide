@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1998-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -16,6 +16,11 @@ Abstract:
 #pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _MSPTERM_H_
 
+template <class T>
+class  ITTerminalVtblBase : public ITTerminal
+{
+};
+
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 //                                                                         
@@ -29,7 +34,7 @@ Abstract:
 
 class CBaseTerminal : 
     virtual public CComObjectRootEx<CComMultiThreadModelNoCS>, // we have our own CS implementation
-    public IDispatchImpl<ITTerminal, &IID_ITTerminal, &LIBID_TAPI3Lib>,
+    public IDispatchImpl<ITTerminalVtblBase<CBaseTerminal>, &IID_ITTerminal, &LIBID_TAPI3Lib>,
     public ITTerminalControl
 {
 
@@ -92,7 +97,7 @@ public:
 
     STDMETHOD (ConnectTerminal) (
             IN      IGraphBuilder  * pGraph,
-            IN      DWORD            dwReserved,
+            IN      DWORD            dwTerminalDirection,
             IN OUT  DWORD          * pdwNumPins,
             OUT     IPin          ** ppPins
             );
@@ -245,6 +250,47 @@ public:
 
     virtual HRESULT RemoveFiltersFromGraph();
 };
+
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+//                                                                         //
+// CSingleFilterStaticTerminal                                             //
+//                                                                         //
+// This is a base class for a static terminal with a single filter and     //
+// pin. The terminal could be any direction or media type.                 //
+//                                                                         //
+//                                                                         //
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+class CSingleFilterStaticTerminal :
+    public CSingleFilterTerminal
+{
+
+// If we add any additional interfaces to this class then
+// we must uncomment and expand the following.
+//
+// BEGIN_COM_MAP(CSingleFilterStaticTerminal)
+//    COM_INTERFACE_ENTRY_CHAIN(CSingleFilterTerminal)
+// END_COM_MAP()
+
+
+public:
+    // public because CreateTerminal and CMSPAddress::UpdateTerminalListForPnp accesses it
+    CComPtr<IMoniker> m_pMoniker;
+
+    // this flag allows CMSPAddress::UpdateTerminalListForPnp to perform a mark and sweep
+    // on the terminal list
+    BOOL m_bMark;
+
+    //
+    // Compares this terminal's moniker to pMoniker, returns S_OK if they match, S_FALSE if they don't
+    //
+    virtual HRESULT CompareMoniker(
+                                    IMoniker *pMoniker
+                                  );
+};
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // _MSPTERM_H_

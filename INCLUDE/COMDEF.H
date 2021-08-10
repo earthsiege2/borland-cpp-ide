@@ -7,7 +7,6 @@
 ****/
 
 #if !defined(_INC_COMDEF)
-#pragma option push -b -a8 -pc -A- -w-inl /*P_O_Push*/
 #define _INC_COMDEF
 
 #if _MSC_VER > 1000
@@ -217,7 +216,6 @@ inline _GUID _com_error::GUID() const throw()
 #else
         memcpy(&guid, &__uuidof(NULL), sizeof(_GUID));
 #endif
-
         if (m_perrinfo != NULL) {
                 m_perrinfo->GetGUID(&guid);
         }
@@ -312,6 +310,18 @@ inline WORD _com_error::HRESULTToWCode(HRESULT hr) throw()
 
 #if !defined(_COM_NO_STANDARD_GUIDS_)
 
+#ifdef _WIN64
+#define     IActiveScriptParse                  IActiveScriptParse64
+#define     IActiveScriptParseProcedureOld      IActiveScriptParseProcedureOld64
+#define     IActiveScriptParseProcedure         IActiveScriptParseProcedure64
+#define     IActiveScriptParseProcedure2        IActiveScriptParseProcedure2_64
+#else
+#define     IActiveScriptParse                  IActiveScriptParse32
+#define     IActiveScriptParseProcedureOld      IActiveScriptParseProcedureOld32
+#define     IActiveScriptParseProcedure         IActiveScriptParseProcedure32
+#define     IActiveScriptParseProcedure2        IActiveScriptParseProcedure2_32
+#endif
+
 // Interfaces:
 
 struct __declspec(uuid("0000013D-0000-0000-C000-000000000046")) IClientSecurity;
@@ -354,9 +364,10 @@ struct __declspec(uuid("08EC3E00-50B0-11CF-960C-0080C7F4EE85")) FolderItemVerb;
 struct __declspec(uuid("0c6c4200-c589-11d0-999a-00c04fd655e1")) IShellIconOverlayIdentifier;
 struct __declspec(uuid("1008C4A0-7613-11CF-9AF1-0020AF6E72F4")) IChannelHook;
 struct __declspec(uuid("163BB1E0-6E00-11CF-837A-48DC04C10000")) IHTMLLocation;
-struct __declspec(uuid("1CFF0050-6FDD-11D0-9328-00A0C90DCAA9")) IActiveScriptParseProcedureOld;
+struct __declspec(uuid("1CFF0050-6FDD-11D0-9328-00A0C90DCAA9")) IActiveScriptParseProcedureOld32;
 struct __declspec(uuid("1F8352C0-50B0-11CF-960C-0080C7F4EE85")) FolderItemVerbs;
 struct __declspec(uuid("1ac3d9f0-175c-11d1-95be-00609797ea4f")) IPersistFolder2;
+struct __declspec(uuid("21F57128-08C9-4638-BA12-22D15D88DC5C")) IActiveScriptParseProcedureOld64;
 struct __declspec(uuid("275C23E1-3747-11D0-9FEA-00AA003F8646")) IMultiLanguage;
 struct __declspec(uuid("275C23E3-3747-11D0-9FEA-00AA003F8646")) IEnumCodePage;
 struct __declspec(uuid("2a342fc2-7b26-11d0-8ca9-00a0c92dbfe8")) IDockingWindowSite;
@@ -475,7 +486,7 @@ struct __declspec(uuid("618736e0-3c3d-11cf-810c-00aa00389b71")) IAccessible;
 struct __declspec(uuid("626FC520-A41E-11CF-A731-00A0C9082637")) IHTMLDocument;
 struct __declspec(uuid("63CDBCB0-C1B1-11D0-9336-00A0C90DCAA9")) IBindEventHandler;
 struct __declspec(uuid("68284faa-6a48-11d0-8c78-00c04fd918b4")) IInputObject;
-struct __declspec(uuid("71EE5B20-FB04-11d1-B3A8-00A0C911E8B2")) IActiveScriptParseProcedure2;
+struct __declspec(uuid("71EE5B20-FB04-11d1-B3A8-00A0C911E8B2")) IActiveScriptParseProcedure2_32;
 struct __declspec(uuid("729FE2F8-1EA8-11D1-8F85-00C04FC2FBE1")) IShellUIHelper;
 struct __declspec(uuid("744129E0-CBE5-11CE-8350-444553540000")) FolderItems;
 struct __declspec(uuid("79EAC9C2-BAF9-11CE-8C82-00AA004BA90B")) IHlinkSite;
@@ -498,7 +509,7 @@ struct __declspec(uuid("A4C65425-0F82-11D1-90C3-00C04FC2F568")) IEnumChannels;
 struct __declspec(uuid("A6EF9860-C720-11D0-9337-00A0C90DCAA9")) IDispatchEx;
 struct __declspec(uuid("A6EF9861-C720-11D0-9337-00A0C90DCAA9")) IDispError;
 struct __declspec(uuid("A6EF9862-C720-11D0-9337-00A0C90DCAA9")) IVariantChangeType;
-struct __declspec(uuid("AA5B6A80-B834-11D0-932F-00A0C90DCAA9")) IActiveScriptParseProcedure;
+struct __declspec(uuid("AA5B6A80-B834-11D0-932F-00A0C90DCAA9")) IActiveScriptParseProcedure32;
 struct __declspec(uuid("AFA0DC11-C313-11D0-831A-00C04FD5AE38")) IUrlHistoryStg2;
 struct __declspec(uuid("B722BCC5-4E68-101B-A2BC-00AA00404770")) IOleDocument;
 struct __declspec(uuid("B722BCC6-4E68-101B-A2BC-00AA00404770")) IOleDocumentView;
@@ -510,13 +521,15 @@ struct __declspec(uuid("B722BCCB-4E68-101B-A2BC-00AA00404770")) IOleCommandTarge
 struct __declspec(uuid("B8DA6310-E19B-11D0-933C-00A0C90DCAA9")) IActiveScriptStats;
 struct __declspec(uuid("BAA342A0-2DED-11D0-86F4-00A0C913F750")) IImageDecodeEventSink;
 struct __declspec(uuid("BB1A2AE1-A4F9-11CF-8F20-00805F2CD064")) IActiveScript;
-struct __declspec(uuid("BB1A2AE2-A4F9-11CF-8F20-00805F2CD064")) IActiveScriptParse;
+struct __declspec(uuid("BB1A2AE2-A4F9-11CF-8F20-00805F2CD064")) IActiveScriptParse32;
 struct __declspec(uuid("BC40BEC1-C493-11D0-831B-00C04FD5AE38")) IUrlHistoryNotify;
 struct __declspec(uuid("BD3F23C0-D43E-11CF-893B-00AA00BDCE1A")) IDocHostUIHandler;
 struct __declspec(uuid("C04D65CE-B70D-11D0-B188-00AA0038C969")) IMLangString;
 struct __declspec(uuid("C04D65D0-B70D-11D0-B188-00AA0038C969")) IMLangStringWStr;
 struct __declspec(uuid("C04D65D2-B70D-11D0-B188-00AA0038C969")) IMLangStringAStr;
 struct __declspec(uuid("C4D244B0-D43E-11CF-893B-00AA00BDCE1A")) IDocHostShowUI;
+struct __declspec(uuid("C64713B6-E029-4CC5-9200-438B72890B6A")) IActiveScriptParseProcedure64;
+struct __declspec(uuid("C7EF7658-E1EE-480E-97EA-D52CB4D76D17")) IActiveScriptParse64;
 struct __declspec(uuid("CA04B7E6-0D21-11D1-8CC5-00C04FC2B085")) IObjectIdentity;
 struct __declspec(uuid("CB5BDC81-93C1-11CF-8F20-00805F2CD064")) IObjectSafety;
 struct __declspec(uuid("D10F6761-83E9-11CF-8F20-00805F2CD064")) IActiveScriptSiteWindow;
@@ -535,6 +548,7 @@ struct __declspec(uuid("EAE1BA61-A4ED-11CF-8F20-00805F2CD064")) IActiveScriptErr
 struct __declspec(uuid("F5BE2EE1-BFD7-11D0-B188-00AA0038C969")) IMLangLineBreakConsole;
 struct __declspec(uuid("F77459A0-BF9A-11CF-BA4E-00C04FD70816")) IMimeInfo;
 struct __declspec(uuid("FAC32C80-CBE4-11CE-8350-444553540000")) FolderItem;
+struct __declspec(uuid("FE7C4271-210C-448D-9F54-76DAB7047B28")) IActiveScriptParseProcedure2_64;
 struct __declspec(uuid("FECEAAA2-8405-11CF-8BA1-00AA00476DA6")) IOmHistory;
 struct __declspec(uuid("FECEAAA5-8405-11CF-8BA1-00AA00476DA6")) IOmNavigator;
 struct __declspec(uuid("ac60f6a0-0fd9-11d0-99cb-00c04fd64497")) IURLSearchHook;
@@ -711,7 +725,6 @@ class __declspec(uuid("fbf23b40-e3f0-101b-8488-00aa003e56f8")) InternetShortcut;
 
 // Interface Smart Pointers:
 
-
 _COM_SMARTPTR_TYPEDEF(FolderItem, __uuidof(FolderItem));
 _COM_SMARTPTR_TYPEDEF(FolderItemVerb, __uuidof(FolderItemVerb));
 _COM_SMARTPTR_TYPEDEF(FolderItemVerbs, __uuidof(FolderItemVerbs));
@@ -771,7 +784,14 @@ _COM_SMARTPTR_TYPEDEF(IDataObject, __uuidof(IDataObject));
 _COM_SMARTPTR_TYPEDEF(IDeskBand, __uuidof(IDeskBand));
 _COM_SMARTPTR_TYPEDEF(IDirectWriterLock, __uuidof(IDirectWriterLock));
 _COM_SMARTPTR_TYPEDEF(IDispError, __uuidof(IDispError));
-_COM_SMARTPTR_TYPEDEF(IDispatch, __uuidof(IDispatch));
+
+#if !defined(__UTILCLS_H) || defined(USING_COM_SMARTPTR) || !defined(__BORLANDC__)
+  // Define USING_COM_SMARTPTR if you have to include COMDEF.H after UTILCLS.H
+  _COM_SMARTPTR_TYPEDEF(IDispatch, __uuidof(IDispatch));
+#else
+  #pragma message "Typenames collision with UTILCLS.H (WARNING) "
+#endif
+
 _COM_SMARTPTR_TYPEDEF(IDispatchEx, __uuidof(IDispatchEx));
 _COM_SMARTPTR_TYPEDEF(IDocHostShowUI, __uuidof(IDocHostShowUI));
 _COM_SMARTPTR_TYPEDEF(IDocHostUIHandler, __uuidof(IDocHostUIHandler));
@@ -802,7 +822,11 @@ _COM_SMARTPTR_TYPEDEF(IEnumSTATSTG, __uuidof(IEnumSTATSTG));
 _COM_SMARTPTR_TYPEDEF(IEnumSTATURL, __uuidof(IEnumSTATURL));
 _COM_SMARTPTR_TYPEDEF(IEnumString, __uuidof(IEnumString));
 _COM_SMARTPTR_TYPEDEF(IEnumUnknown, __uuidof(IEnumUnknown));
-_COM_SMARTPTR_TYPEDEF(IEnumVARIANT, __uuidof(IEnumVARIANT));
+
+#if !defined(__UTILCLS_H) || defined(USING_COM_SMARTPTR) || !defined(__BORLANDC__)
+  _COM_SMARTPTR_TYPEDEF(IEnumVARIANT, __uuidof(IEnumVARIANT));
+#endif
+
 _COM_SMARTPTR_TYPEDEF(IErrorInfo, __uuidof(IErrorInfo));
 _COM_SMARTPTR_TYPEDEF(IErrorLog, __uuidof(IErrorLog));
 _COM_SMARTPTR_TYPEDEF(IExtensionServices, __uuidof(IExtensionServices));
@@ -815,8 +839,12 @@ _COM_SMARTPTR_TYPEDEF(IFileViewerW, __uuidof(IFileViewerW));
 _COM_SMARTPTR_TYPEDEF(IFillLockBytes, __uuidof(IFillLockBytes));
 _COM_SMARTPTR_TYPEDEF(IFilter, __uuidof(IFilter));
 _COM_SMARTPTR_TYPEDEF(IFolderViewOC, __uuidof(IFolderViewOC));
-_COM_SMARTPTR_TYPEDEF(IFont, __uuidof(IFont));
-_COM_SMARTPTR_TYPEDEF(IFontDisp, __uuidof(IFontDisp));
+
+#if !defined(__UTILCLS_H) || defined(USING_COM_SMARTPTR) || !defined(__BORLANDC__)
+  _COM_SMARTPTR_TYPEDEF(IFont, __uuidof(IFont));
+  _COM_SMARTPTR_TYPEDEF(IFontDisp, __uuidof(IFontDisp));
+#endif
+
 _COM_SMARTPTR_TYPEDEF(IFontEventsDisp, __uuidof(IFontEventsDisp));
 _COM_SMARTPTR_TYPEDEF(IGlobalInterfaceTable, __uuidof(IGlobalInterfaceTable));
 _COM_SMARTPTR_TYPEDEF(IHTMLAnchorElement, __uuidof(IHTMLAnchorElement));
@@ -1010,8 +1038,12 @@ _COM_SMARTPTR_TYPEDEF(IPersistPropertyBag2, __uuidof(IPersistPropertyBag2));
 _COM_SMARTPTR_TYPEDEF(IPersistStorage, __uuidof(IPersistStorage));
 _COM_SMARTPTR_TYPEDEF(IPersistStream, __uuidof(IPersistStream));
 _COM_SMARTPTR_TYPEDEF(IPersistStreamInit, __uuidof(IPersistStreamInit));
-_COM_SMARTPTR_TYPEDEF(IPicture, __uuidof(IPicture));
-_COM_SMARTPTR_TYPEDEF(IPictureDisp, __uuidof(IPictureDisp));
+
+#if !defined(__UTILCLS_H) || defined(USING_COM_SMARTPTR) || !defined(__BORLANDC__)
+  _COM_SMARTPTR_TYPEDEF(IPicture, __uuidof(IPicture));
+  _COM_SMARTPTR_TYPEDEF(IPictureDisp, __uuidof(IPictureDisp));
+#endif
+
 _COM_SMARTPTR_TYPEDEF(IPointerInactive, __uuidof(IPointerInactive));
 _COM_SMARTPTR_TYPEDEF(IPrint, __uuidof(IPrint));
 _COM_SMARTPTR_TYPEDEF(IProgressNotify, __uuidof(IProgressNotify));
@@ -1087,7 +1119,11 @@ _COM_SMARTPTR_TYPEDEF(ITypeMarshal, __uuidof(ITypeMarshal));
 _COM_SMARTPTR_TYPEDEF(IURLSearchHook, __uuidof(IURLSearchHook));
 _COM_SMARTPTR_TYPEDEF(IUniformResourceLocatorA, __uuidof(IUniformResourceLocatorA));
 _COM_SMARTPTR_TYPEDEF(IUniformResourceLocatorW, __uuidof(IUniformResourceLocatorW));
-_COM_SMARTPTR_TYPEDEF(IUnknown, __uuidof(IUnknown));
+
+#if !defined(__UTILCLS_H) || defined(USING_COM_SMARTPTR) || !defined(__BORLANDC__)
+  _COM_SMARTPTR_TYPEDEF(IUnknown, __uuidof(IUnknown));
+#endif
+
 _COM_SMARTPTR_TYPEDEF(IUrlHistoryNotify, __uuidof(IUrlHistoryNotify));
 _COM_SMARTPTR_TYPEDEF(IUrlHistoryStg, __uuidof(IUrlHistoryStg));
 _COM_SMARTPTR_TYPEDEF(IUrlHistoryStg2, __uuidof(IUrlHistoryStg2));
@@ -1119,6 +1155,5 @@ _COM_SMARTPTR_TYPEDEF(OLEDBSimpleProviderListener, __uuidof(OLEDBSimpleProviderL
 #pragma warning(pop)
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* _INC_COMDEF */
 

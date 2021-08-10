@@ -1,8 +1,7 @@
 //
-// Copyright (c) 1998-1999  Microsoft Corporation
-//
+// Copyright (c) Microsoft Corporation. All rights reserved.
 
-cpp_quote("/* Copyright (c) 1998-1999  Microsoft Corporation  */")
+cpp_quote("/* Copyright (c) Microsoft Corporation. All rights reserved. */")
 
 // rend.idl : IDL source for rend.dll
 //
@@ -12,6 +11,16 @@ cpp_quote("/* Copyright (c) 1998-1999  Microsoft Corporation  */")
 
 import "oaidl.idl";
 import "tapi3if.idl";
+
+// Conference and user object Interfaces
+const DISPID  IDISPDIROBJECT            = 0x00010000;
+const DISPID  IDISPDIROBJCONFERENCE     = 0x00020000;
+const DISPID  IDISPDIROBJUSER           = 0x00030000;
+
+// Directory object interfaces
+const DISPID  IDISPDIRECTORY            = 0x00010000;
+const DISPID  IDISPILSCONFIG            = 0x00020000;
+
 
 typedef enum DIRECTORY_TYPE
 {
@@ -46,77 +55,77 @@ typedef enum RND_ADVERTISING_SCOPE
 
 interface ITDirectoryObjectConference : IDispatch
 {
-    [propget, id(1), helpstring("The protocol used in describing the conference.")]
+    [propget, id(IDISPDIROBJCONFERENCE | 1), helpstring("The protocol used in describing the conference.")]
     HRESULT Protocol(
         [out, retval] BSTR *ppProtocol
         );
 
-    [propget, id(2), helpstring("The originator of the conference.")]
+    [propget, id(IDISPDIROBJCONFERENCE | 2), helpstring("The originator of the conference.")]
     HRESULT Originator(
         [out, retval] BSTR *ppOriginator
         );
 
-    [propput, id(2), helpstring("The originator of the conference.")]
+    [propput, id(IDISPDIROBJCONFERENCE | 2), helpstring("The originator of the conference.")]
     HRESULT Originator(
         [in] BSTR pOriginator
         );
 
-    [propget, id(3), helpstring("The scope of the conference.")]
+    [propget, id(IDISPDIROBJCONFERENCE | 3), helpstring("The scope of the conference.")]
     HRESULT AdvertisingScope(
         [out, retval] RND_ADVERTISING_SCOPE *pAdvertisingScope
         );
 
-    [propput, id(3), helpstring("The scope of the conference.")]
+    [propput, id(IDISPDIROBJCONFERENCE | 3), helpstring("The scope of the conference.")]
     HRESULT AdvertisingScope(
         [in] RND_ADVERTISING_SCOPE AdvertisingScope
         );
 
-    [propget, id(4), helpstring("The Url for the conference.")]
+    [propget, id(IDISPDIROBJCONFERENCE | 4), helpstring("The Url for the conference.")]
     HRESULT Url(
         [out, retval] BSTR *ppUrl
         );
 
-    [propput, id(4), helpstring("The Url for the conference.")]
+    [propput, id(IDISPDIROBJCONFERENCE | 4), helpstring("The Url for the conference.")]
     HRESULT Url(
         [in] BSTR pUrl
         );
 
-    [propget, id(5), helpstring("The description of the conference.")]
+    [propget, id(IDISPDIROBJCONFERENCE | 5), helpstring("The description of the conference.")]
     HRESULT Description(
         [out, retval] BSTR *ppDescription
         );
 
-    [propput, id(5), helpstring("The description of the conference.")]
+    [propput, id(IDISPDIROBJCONFERENCE | 5), helpstring("The description of the conference.")]
     HRESULT Description(
         [in] BSTR pDescription
         );
 
-    [propget, id(6), helpstring("If the conference is encrypted.")]
+    [propget, id(IDISPDIROBJCONFERENCE | 6), helpstring("If the conference is encrypted.")]
     HRESULT IsEncrypted(
         [out, retval] VARIANT_BOOL *pfEncrypted
         );
 
-    [propput, id(6), helpstring("If the conference is encrypted.")]
+    [propput, id(IDISPDIROBJCONFERENCE | 6), helpstring("If the conference is encrypted.")]
     HRESULT IsEncrypted(
         [in] VARIANT_BOOL fEncrypted
         );
 
-    [propget, id(7), helpstring("The start time of the conference.")]
+    [propget, id(IDISPDIROBJCONFERENCE | 7), helpstring("The start time of the conference.")]
     HRESULT StartTime(
         [out, retval] DATE *pDate
         );
 
-    [propput, id(7), helpstring("The start time of the conference.")]
+    [propput, id(IDISPDIROBJCONFERENCE | 7), helpstring("The start time of the conference.")]
     HRESULT StartTime(
         [in] DATE   Date
         );
 
-    [propget, id(8), helpstring("The stop time of the conference.")]
+    [propget, id(IDISPDIROBJCONFERENCE | 8), helpstring("The stop time of the conference.")]
     HRESULT StopTime(
         [out, retval] DATE *pDate
         );
 
-    [propput, id(8), helpstring("The stop time of the conference.")]
+    [propput, id(IDISPDIROBJCONFERENCE | 8), helpstring("The stop time of the conference.")]
     HRESULT StopTime(
         [in] DATE   Date
         );
@@ -133,12 +142,12 @@ interface ITDirectoryObjectConference : IDispatch
 
 interface ITDirectoryObjectUser : IDispatch
 {
-    [propget, id(1), helpstring("The primary IP phone attribute.")]
+    [propget, id(IDISPDIROBJUSER | 1), helpstring("The primary IP phone attribute.")]
     HRESULT IPPhonePrimary(
         [out, retval] BSTR *ppName
         );
 
-    [propput, id(1), helpstring("The primary IP phone attribute.")]
+    [propput, id(IDISPDIROBJUSER | 1), helpstring("The primary IP phone attribute.")]
     HRESULT IPPhonePrimary(
         [in] BSTR pName
         );
@@ -181,39 +190,39 @@ interface IEnumDialableAddrs : IUnknown
 
 interface ITDirectoryObject : IDispatch
 {
-    [propget, id(1), helpstring("The type of this object.")]
+    [propget, id(IDISPDIROBJECT | 1), helpstring("The type of this object.")]
     HRESULT ObjectType(
         [out, retval] DIRECTORY_OBJECT_TYPE *   pObjectType
         );
 
-    [propget, id(2), helpstring("The name of this object.")]
+    [propget, id(IDISPDIROBJECT | 2), helpstring("The name of this object.")]
     HRESULT Name(
         [out, retval] BSTR *ppName
         );
 
-    [propput, id(2), helpstring("The name of this object.")]
+    [propput, id(IDISPDIROBJECT | 2), helpstring("The name of this object.")]
     HRESULT Name(
         [in] BSTR pName
         );
 
-    [propget, id(3), helpstring("The addresses of the object that can be dialed.")]
+    [propget, id(IDISPDIROBJECT | 3), helpstring("The addresses of the object that can be dialed.")]
     HRESULT DialableAddrs(
         [in]            long       dwAddressType,   //defined in tapi.h
         [out, retval]   VARIANT *   pVariant
         );
 
-    [id(4), hidden, restricted, helpstring("method EnumerateDialableAddrs")]
+    [id(IDISPDIROBJECT | 4), hidden, restricted, helpstring("method EnumerateDialableAddrs")]
     HRESULT EnumerateDialableAddrs(
         [in]    DWORD                   dwAddressType, //defined in tapi.h
         [out]   IEnumDialableAddrs **   ppEnumDialableAddrs
         );
 
-    [propget, id(5), helpstring("The security descriptor.")]
+    [propget, id(IDISPDIROBJECT | 5), helpstring("The security descriptor.")]
     HRESULT SecurityDescriptor(
         [out, retval] IDispatch ** ppSecDes
         );
 
-    [propput, id(5), helpstring("The security descriptor.")]
+    [propput, id(IDISPDIROBJECT | 5), helpstring("The security descriptor.")]
     HRESULT SecurityDescriptor(
         [in] IDispatch * pSecDes
         );
@@ -255,12 +264,12 @@ interface IEnumDirectoryObject : IUnknown
 ]
 interface ITILSConfig : IDispatch
 {
-    [propget, id(1), helpstring("The port the ILS server is listening on.")]
+    [propget, id(IDISPILSCONFIG | 1), helpstring("The port the ILS server is listening on.")]
     HRESULT Port(
         [out, retval] long *pPort
         );
 
-    [propput, id(1), helpstring("The port the ILS server is listening on.")]
+    [propput, id(IDISPILSCONFIG | 1), helpstring("The port the ILS server is listening on.")]
     HRESULT Port(
         [in] long Port
         );
@@ -276,42 +285,42 @@ interface ITILSConfig : IDispatch
 interface ITDirectory : IDispatch
 {
     // find the type of the directory, NTDS, ILS, etc.
-    [propget, id(1), helpstring("The type of the directory.")]
+    [propget, id(IDISPDIRECTORY | 1), helpstring("The type of the directory.")]
     HRESULT DirectoryType(
         [out, retval] DIRECTORY_TYPE *  pDirectoryType
         );
 
-    [propget, id(2), helpstring("The name of the directory.")]
+    [propget, id(IDISPDIRECTORY | 2), helpstring("The name of the directory.")]
     HRESULT DisplayName(
         [out, retval] BSTR *  pName
         );
     
-    [propget, id(3), helpstring("If the object on the server needs refresh.")]
+    [propget, id(IDISPDIRECTORY | 3), helpstring("If the object on the server needs refresh.")]
     HRESULT IsDynamic(
         [out, retval] VARIANT_BOOL *pfDynamic
         );
 
-    [propget, id(4), helpstring("The default Time To Live value(in seconds) for object created. Only apply to dynamic servers.")]
+    [propget, id(IDISPDIRECTORY | 4), helpstring("The default Time To Live value(in seconds) for object created. Only apply to dynamic servers.")]
     HRESULT DefaultObjectTTL(
         [out, retval] long *pTTL
         );
 
-    [propput, id(4), helpstring("The default Time To Live value(in seconds) for object created. Only apply to dynamic servers. Minimum 300 seconds.")]
+    [propput, id(IDISPDIRECTORY | 4), helpstring("The default Time To Live value(in seconds) for object created. Only apply to dynamic servers. Minimum 300 seconds.")]
     HRESULT DefaultObjectTTL(
         [in] long TTL                   
         );
 
-    [id(5), helpstring("Enable the auto refresh for object created afterwards. Only apply to dynamic servers.")]
+    [id(IDISPDIRECTORY | 5), helpstring("Enable the auto refresh for object created afterwards. Only apply to dynamic servers.")]
     HRESULT EnableAutoRefresh(
         [in] VARIANT_BOOL fEnable
         );
 
-    [id(6), helpstring("Connect to the server.")]
+    [id(IDISPDIRECTORY | 6), helpstring("Connect to the server.")]
     HRESULT Connect(
         [in] VARIANT_BOOL fSecure
         );
 
-    [id(7), helpstring("Bind to the server.")]
+    [id(IDISPDIRECTORY | 7), helpstring("Bind to the server.")]
     HRESULT Bind(
         [in] BSTR           pDomainName,   // Can be NULL.
         [in] BSTR           pUserName,     // Can be NULL.
@@ -319,34 +328,34 @@ interface ITDirectory : IDispatch
         [in] long           lFlags
         );
 
-    [id(8), helpstring("Add an object to the server.")]
+    [id(IDISPDIRECTORY | 8), helpstring("Add an object to the server.")]
     HRESULT AddDirectoryObject(
         [in] ITDirectoryObject *pDirectoryObject
         );
 
-    [id(9), helpstring("Modify an object on the server.")]
+    [id(IDISPDIRECTORY | 9), helpstring("Modify an object on the server.")]
     HRESULT ModifyDirectoryObject(
         [in] ITDirectoryObject *pDirectoryObject
         );
 
-    [id(10), helpstring("Refresh the TTL for an object on the server. Only apply to dynamic servers.")]
+    [id(IDISPDIRECTORY | 10), helpstring("Refresh the TTL for an object on the server. Only apply to dynamic servers.")]
     HRESULT RefreshDirectoryObject(
         [in] ITDirectoryObject *pDirectoryObject
         );
 
-    [id(11), helpstring("Delete an object from the server.")]
+    [id(IDISPDIRECTORY | 11), helpstring("Delete an object from the server.")]
     HRESULT DeleteDirectoryObject(
         [in] ITDirectoryObject *pDirectoryObject
         );
 
-    [propget, id(12), helpstring("All the objects on the server with specified type and name.")]
+    [propget, id(IDISPDIRECTORY | 12), helpstring("All the objects on the server with specified type and name.")]
     HRESULT DirectoryObjects(
         [in]            DIRECTORY_OBJECT_TYPE   DirectoryObjectType,
         [in]            BSTR                    pName,
         [out, retval]   VARIANT *               pVariant
         );
 
-    [id(13), hidden, restricted, helpstring("method EnumerateDirectoryObjects")]
+    [id(IDISPDIRECTORY | 13), hidden, restricted, helpstring("method EnumerateDirectoryObjects")]
     HRESULT EnumerateDirectoryObjects(
         [in]    DIRECTORY_OBJECT_TYPE   DirectoryObjectType,
         [in]    BSTR                    pName,
@@ -448,7 +457,7 @@ cpp_quote("")
 ]
 library RENDLib
 {
-    importlib("stdole32.tlb");
+    importlib("stdole2.tlb");
     
     interface ITRendezvous;
     interface ITDirectoryObjectConference;

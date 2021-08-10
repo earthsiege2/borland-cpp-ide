@@ -1,576 +1,525 @@
-LIBRARY SETUPAPI
+LIBRARY SetupAPI
 EXPORTS
 
-    AcquireSCMLock                           = 'SETUPAPI.DLL'.*
-    AddMiniIconToList                        = 'SETUPAPI.DLL'.*
-    AddTagToGroupOrderListEntry              = 'SETUPAPI.DLL'.*
-    AppendStringToMultiSz                    = 'SETUPAPI.DLL'.*
-    AssertFail                               = 'SETUPAPI.DLL'.*
-    CMP_Init_Detection                       = 'SETUPAPI.DLL'.*
-    CMP_RegisterNotification                 = 'SETUPAPI.DLL'.*
-    CMP_Report_LogOn                         = 'SETUPAPI.DLL'.*
-    CMP_UnregisterNotification               = 'SETUPAPI.DLL'.*
-    CMP_WaitNoPendingInstallEvents           = 'SETUPAPI.DLL'.*
-    CMP_WaitServicesAvailable                = 'SETUPAPI.DLL'.*
-    CM_Add_Empty_Log_Conf                    = 'SETUPAPI.DLL'.*
-    CM_Add_Empty_Log_Conf_Ex                 = 'SETUPAPI.DLL'.*
-    CM_Add_IDA                               = 'SETUPAPI.DLL'.*
-    CM_Add_IDW                               = 'SETUPAPI.DLL'.*
-    CM_Add_ID_ExA                            = 'SETUPAPI.DLL'.*
-    CM_Add_ID_ExW                            = 'SETUPAPI.DLL'.*
-    CM_Add_Range                             = 'SETUPAPI.DLL'.*
-    CM_Add_Res_Des                           = 'SETUPAPI.DLL'.*
-    CM_Add_Res_Des_Ex                        = 'SETUPAPI.DLL'.*
-    CM_Connect_MachineA                      = 'SETUPAPI.DLL'.*
-    CM_Connect_MachineW                      = 'SETUPAPI.DLL'.*
-    CM_Create_DevNodeA                       = 'SETUPAPI.DLL'.*
-    CM_Create_DevNodeW                       = 'SETUPAPI.DLL'.*
-    CM_Create_DevNode_ExA                    = 'SETUPAPI.DLL'.*
-    CM_Create_DevNode_ExW                    = 'SETUPAPI.DLL'.*
-    CM_Create_Range_List                     = 'SETUPAPI.DLL'.*
-    CM_Delete_Class_Key                      = 'SETUPAPI.DLL'.*
-    CM_Delete_Class_Key_Ex                   = 'SETUPAPI.DLL'.*
-    CM_Delete_DevNode_Key                    = 'SETUPAPI.DLL'.*
-    CM_Delete_DevNode_Key_Ex                 = 'SETUPAPI.DLL'.*
-    CM_Delete_Range                          = 'SETUPAPI.DLL'.*
-    CM_Detect_Resource_Conflict              = 'SETUPAPI.DLL'.*
-    CM_Detect_Resource_Conflict_Ex           = 'SETUPAPI.DLL'.*
-    CM_Disable_DevNode                       = 'SETUPAPI.DLL'.*
-    CM_Disable_DevNode_Ex                    = 'SETUPAPI.DLL'.*
-    CM_Disconnect_Machine                    = 'SETUPAPI.DLL'.*
-    CM_Dup_Range_List                        = 'SETUPAPI.DLL'.*
-    CM_Enable_DevNode                        = 'SETUPAPI.DLL'.*
-    CM_Enable_DevNode_Ex                     = 'SETUPAPI.DLL'.*
-    CM_Enumerate_Classes                     = 'SETUPAPI.DLL'.*
-    CM_Enumerate_Classes_Ex                  = 'SETUPAPI.DLL'.*
-    CM_Enumerate_EnumeratorsA                = 'SETUPAPI.DLL'.*
-    CM_Enumerate_EnumeratorsW                = 'SETUPAPI.DLL'.*
-    CM_Enumerate_Enumerators_ExA             = 'SETUPAPI.DLL'.*
-    CM_Enumerate_Enumerators_ExW             = 'SETUPAPI.DLL'.*
-    CM_Find_Range                            = 'SETUPAPI.DLL'.*
-    CM_First_Range                           = 'SETUPAPI.DLL'.*
-    CM_Free_Log_Conf                         = 'SETUPAPI.DLL'.*
-    CM_Free_Log_Conf_Ex                      = 'SETUPAPI.DLL'.*
-    CM_Free_Log_Conf_Handle                  = 'SETUPAPI.DLL'.*
-    CM_Free_Range_List                       = 'SETUPAPI.DLL'.*
-    CM_Free_Res_Des                          = 'SETUPAPI.DLL'.*
-    CM_Free_Res_Des_Ex                       = 'SETUPAPI.DLL'.*
-    CM_Free_Res_Des_Handle                   = 'SETUPAPI.DLL'.*
-    CM_Free_Resource_Conflict_Handle         = 'SETUPAPI.DLL'.*
-    CM_Get_Child                             = 'SETUPAPI.DLL'.*
-    CM_Get_Child_Ex                          = 'SETUPAPI.DLL'.*
-    CM_Get_Class_Key_NameA                   = 'SETUPAPI.DLL'.*
-    CM_Get_Class_Key_NameW                   = 'SETUPAPI.DLL'.*
-    CM_Get_Class_Key_Name_ExA                = 'SETUPAPI.DLL'.*
-    CM_Get_Class_Key_Name_ExW                = 'SETUPAPI.DLL'.*
-    CM_Get_Class_NameA                       = 'SETUPAPI.DLL'.*
-    CM_Get_Class_NameW                       = 'SETUPAPI.DLL'.*
-    CM_Get_Class_Name_ExA                    = 'SETUPAPI.DLL'.*
-    CM_Get_Class_Name_ExW                    = 'SETUPAPI.DLL'.*
-    CM_Get_Class_Registry_PropertyA          = 'SETUPAPI.DLL'.*
-    CM_Get_Class_Registry_PropertyW          = 'SETUPAPI.DLL'.*
-    CM_Get_Depth                             = 'SETUPAPI.DLL'.*
-    CM_Get_Depth_Ex                          = 'SETUPAPI.DLL'.*
-    CM_Get_DevNode_Registry_PropertyA        = 'SETUPAPI.DLL'.*
-    CM_Get_DevNode_Registry_PropertyW        = 'SETUPAPI.DLL'.*
-    CM_Get_DevNode_Registry_Property_ExA     = 'SETUPAPI.DLL'.*
-    CM_Get_DevNode_Registry_Property_ExW     = 'SETUPAPI.DLL'.*
-    CM_Get_DevNode_Status                    = 'SETUPAPI.DLL'.*
-    CM_Get_DevNode_Status_Ex                 = 'SETUPAPI.DLL'.*
-    CM_Get_Device_IDA                        = 'SETUPAPI.DLL'.*
-    CM_Get_Device_IDW                        = 'SETUPAPI.DLL'.*
-    CM_Get_Device_ID_ExA                     = 'SETUPAPI.DLL'.*
-    CM_Get_Device_ID_ExW                     = 'SETUPAPI.DLL'.*
-    CM_Get_Device_ID_ListA                   = 'SETUPAPI.DLL'.*
-    CM_Get_Device_ID_ListW                   = 'SETUPAPI.DLL'.*
-    CM_Get_Device_ID_List_ExA                = 'SETUPAPI.DLL'.*
-    CM_Get_Device_ID_List_ExW                = 'SETUPAPI.DLL'.*
-    CM_Get_Device_ID_List_SizeA              = 'SETUPAPI.DLL'.*
-    CM_Get_Device_ID_List_SizeW              = 'SETUPAPI.DLL'.*
-    CM_Get_Device_ID_List_Size_ExA           = 'SETUPAPI.DLL'.*
-    CM_Get_Device_ID_List_Size_ExW           = 'SETUPAPI.DLL'.*
-    CM_Get_Device_ID_Size                    = 'SETUPAPI.DLL'.*
-    CM_Get_Device_ID_Size_Ex                 = 'SETUPAPI.DLL'.*
-    CM_Get_Device_Interface_AliasA           = 'SETUPAPI.DLL'.*
-    CM_Get_Device_Interface_AliasW           = 'SETUPAPI.DLL'.*
-    CM_Get_Device_Interface_Alias_ExA        = 'SETUPAPI.DLL'.*
-    CM_Get_Device_Interface_Alias_ExW        = 'SETUPAPI.DLL'.*
-    CM_Get_Device_Interface_ListA            = 'SETUPAPI.DLL'.*
-    CM_Get_Device_Interface_ListW            = 'SETUPAPI.DLL'.*
-    CM_Get_Device_Interface_List_ExA         = 'SETUPAPI.DLL'.*
-    CM_Get_Device_Interface_List_ExW         = 'SETUPAPI.DLL'.*
-    CM_Get_Device_Interface_List_SizeA       = 'SETUPAPI.DLL'.*
-    CM_Get_Device_Interface_List_SizeW       = 'SETUPAPI.DLL'.*
-    CM_Get_Device_Interface_List_Size_ExA    = 'SETUPAPI.DLL'.*
-    CM_Get_Device_Interface_List_Size_ExW    = 'SETUPAPI.DLL'.*
-    CM_Get_First_Log_Conf                    = 'SETUPAPI.DLL'.*
-    CM_Get_First_Log_Conf_Ex                 = 'SETUPAPI.DLL'.*
-    CM_Get_Global_State                      = 'SETUPAPI.DLL'.*
-    CM_Get_Global_State_Ex                   = 'SETUPAPI.DLL'.*
-    CM_Get_HW_Prof_FlagsA                    = 'SETUPAPI.DLL'.*
-    CM_Get_HW_Prof_FlagsW                    = 'SETUPAPI.DLL'.*
-    CM_Get_HW_Prof_Flags_ExA                 = 'SETUPAPI.DLL'.*
-    CM_Get_HW_Prof_Flags_ExW                 = 'SETUPAPI.DLL'.*
-    CM_Get_Hardware_Profile_InfoA            = 'SETUPAPI.DLL'.*
-    CM_Get_Hardware_Profile_InfoW            = 'SETUPAPI.DLL'.*
-    CM_Get_Hardware_Profile_Info_ExA         = 'SETUPAPI.DLL'.*
-    CM_Get_Hardware_Profile_Info_ExW         = 'SETUPAPI.DLL'.*
-    CM_Get_Log_Conf_Priority                 = 'SETUPAPI.DLL'.*
-    CM_Get_Log_Conf_Priority_Ex              = 'SETUPAPI.DLL'.*
-    CM_Get_Next_Log_Conf                     = 'SETUPAPI.DLL'.*
-    CM_Get_Next_Log_Conf_Ex                  = 'SETUPAPI.DLL'.*
-    CM_Get_Next_Res_Des                      = 'SETUPAPI.DLL'.*
-    CM_Get_Next_Res_Des_Ex                   = 'SETUPAPI.DLL'.*
-    CM_Get_Parent                            = 'SETUPAPI.DLL'.*
-    CM_Get_Parent_Ex                         = 'SETUPAPI.DLL'.*
-    CM_Get_Res_Des_Data                      = 'SETUPAPI.DLL'.*
-    CM_Get_Res_Des_Data_Ex                   = 'SETUPAPI.DLL'.*
-    CM_Get_Res_Des_Data_Size                 = 'SETUPAPI.DLL'.*
-    CM_Get_Res_Des_Data_Size_Ex              = 'SETUPAPI.DLL'.*
-    CM_Get_Resource_Conflict_Count           = 'SETUPAPI.DLL'.*
-    CM_Get_Resource_Conflict_DetailsA        = 'SETUPAPI.DLL'.*
-    CM_Get_Resource_Conflict_DetailsW        = 'SETUPAPI.DLL'.*
-    CM_Get_Sibling                           = 'SETUPAPI.DLL'.*
-    CM_Get_Sibling_Ex                        = 'SETUPAPI.DLL'.*
-    CM_Get_Version                           = 'SETUPAPI.DLL'.*
-    CM_Get_Version_Ex                        = 'SETUPAPI.DLL'.*
-    CM_Intersect_Range_List                  = 'SETUPAPI.DLL'.*
-    CM_Invert_Range_List                     = 'SETUPAPI.DLL'.*
-    CM_Is_Dock_Station_Present               = 'SETUPAPI.DLL'.*
-    CM_Is_Dock_Station_Present_Ex            = 'SETUPAPI.DLL'.*
-    CM_Locate_DevNodeA                       = 'SETUPAPI.DLL'.*
-    CM_Locate_DevNodeW                       = 'SETUPAPI.DLL'.*
-    CM_Locate_DevNode_ExA                    = 'SETUPAPI.DLL'.*
-    CM_Locate_DevNode_ExW                    = 'SETUPAPI.DLL'.*
-    CM_Merge_Range_List                      = 'SETUPAPI.DLL'.*
-    CM_Modify_Res_Des                        = 'SETUPAPI.DLL'.*
-    CM_Modify_Res_Des_Ex                     = 'SETUPAPI.DLL'.*
-    CM_Move_DevNode                          = 'SETUPAPI.DLL'.*
-    CM_Move_DevNode_Ex                       = 'SETUPAPI.DLL'.*
-    CM_Next_Range                            = 'SETUPAPI.DLL'.*
-    CM_Open_Class_KeyA                       = 'SETUPAPI.DLL'.*
-    CM_Open_Class_KeyW                       = 'SETUPAPI.DLL'.*
-    CM_Open_Class_Key_ExA                    = 'SETUPAPI.DLL'.*
-    CM_Open_Class_Key_ExW                    = 'SETUPAPI.DLL'.*
-    CM_Open_DevNode_Key                      = 'SETUPAPI.DLL'.*
-    CM_Open_DevNode_Key_Ex                   = 'SETUPAPI.DLL'.*
-    CM_Query_And_Remove_SubTreeA             = 'SETUPAPI.DLL'.*
-    CM_Query_And_Remove_SubTreeW             = 'SETUPAPI.DLL'.*
-    CM_Query_And_Remove_SubTree_ExA          = 'SETUPAPI.DLL'.*
-    CM_Query_And_Remove_SubTree_ExW          = 'SETUPAPI.DLL'.*
-    CM_Query_Arbitrator_Free_Data            = 'SETUPAPI.DLL'.*
-    CM_Query_Arbitrator_Free_Data_Ex         = 'SETUPAPI.DLL'.*
-    CM_Query_Arbitrator_Free_Size            = 'SETUPAPI.DLL'.*
-    CM_Query_Arbitrator_Free_Size_Ex         = 'SETUPAPI.DLL'.*
-    CM_Query_Remove_SubTree                  = 'SETUPAPI.DLL'.*
-    CM_Query_Remove_SubTree_Ex               = 'SETUPAPI.DLL'.*
-    CM_Query_Resource_Conflict_List          = 'SETUPAPI.DLL'.*
-    CM_Reenumerate_DevNode                   = 'SETUPAPI.DLL'.*
-    CM_Reenumerate_DevNode_Ex                = 'SETUPAPI.DLL'.*
-    CM_Register_Device_Driver                = 'SETUPAPI.DLL'.*
-    CM_Register_Device_Driver_Ex             = 'SETUPAPI.DLL'.*
-    CM_Register_Device_InterfaceA            = 'SETUPAPI.DLL'.*
-    CM_Register_Device_InterfaceW            = 'SETUPAPI.DLL'.*
-    CM_Register_Device_Interface_ExA         = 'SETUPAPI.DLL'.*
-    CM_Register_Device_Interface_ExW         = 'SETUPAPI.DLL'.*
-    CM_Remove_SubTree                        = 'SETUPAPI.DLL'.*
-    CM_Remove_SubTree_Ex                     = 'SETUPAPI.DLL'.*
-    CM_Request_Device_EjectA                 = 'SETUPAPI.DLL'.*
-    CM_Request_Device_EjectW                 = 'SETUPAPI.DLL'.*
-    CM_Request_Device_Eject_ExA              = 'SETUPAPI.DLL'.*
-    CM_Request_Device_Eject_ExW              = 'SETUPAPI.DLL'.*
-    CM_Request_Eject_PC                      = 'SETUPAPI.DLL'.*
-    CM_Request_Eject_PC_Ex                   = 'SETUPAPI.DLL'.*
-    CM_Run_Detection                         = 'SETUPAPI.DLL'.*
-    CM_Run_Detection_Ex                      = 'SETUPAPI.DLL'.*
-    CM_Set_Class_Registry_PropertyA          = 'SETUPAPI.DLL'.*
-    CM_Set_Class_Registry_PropertyW          = 'SETUPAPI.DLL'.*
-    CM_Set_DevNode_Problem                   = 'SETUPAPI.DLL'.*
-    CM_Set_DevNode_Problem_Ex                = 'SETUPAPI.DLL'.*
-    CM_Set_DevNode_Registry_PropertyA        = 'SETUPAPI.DLL'.*
-    CM_Set_DevNode_Registry_PropertyW        = 'SETUPAPI.DLL'.*
-    CM_Set_DevNode_Registry_Property_ExA     = 'SETUPAPI.DLL'.*
-    CM_Set_DevNode_Registry_Property_ExW     = 'SETUPAPI.DLL'.*
-    CM_Set_HW_Prof                           = 'SETUPAPI.DLL'.*
-    CM_Set_HW_Prof_Ex                        = 'SETUPAPI.DLL'.*
-    CM_Set_HW_Prof_FlagsA                    = 'SETUPAPI.DLL'.*
-    CM_Set_HW_Prof_FlagsW                    = 'SETUPAPI.DLL'.*
-    CM_Set_HW_Prof_Flags_ExA                 = 'SETUPAPI.DLL'.*
-    CM_Set_HW_Prof_Flags_ExW                 = 'SETUPAPI.DLL'.*
-    CM_Setup_DevNode                         = 'SETUPAPI.DLL'.*
-    CM_Setup_DevNode_Ex                      = 'SETUPAPI.DLL'.*
-    CM_Test_Range_Available                  = 'SETUPAPI.DLL'.*
-    CM_Uninstall_DevNode                     = 'SETUPAPI.DLL'.*
-    CM_Uninstall_DevNode_Ex                  = 'SETUPAPI.DLL'.*
-    CM_Unregister_Device_InterfaceA          = 'SETUPAPI.DLL'.*
-    CM_Unregister_Device_InterfaceW          = 'SETUPAPI.DLL'.*
-    CM_Unregister_Device_Interface_ExA       = 'SETUPAPI.DLL'.*
-    CM_Unregister_Device_Interface_ExW       = 'SETUPAPI.DLL'.*
-    CaptureAndConvertAnsiArg                 = 'SETUPAPI.DLL'.*
-    CaptureStringArg                         = 'SETUPAPI.DLL'.*
-    CenterWindowRelativeToParent             = 'SETUPAPI.DLL'.*
-    ConcatenatePaths                         = 'SETUPAPI.DLL'.*
-    DelayedMove                              = 'SETUPAPI.DLL'.*
-    DelimStringToMultiSz                     = 'SETUPAPI.DLL'.*
-    DestroyTextFileReadBuffer                = 'SETUPAPI.DLL'.*
-    DoInstallActionWithParams                = 'SETUPAPI.DLL'.*
-    DoesUserHavePrivilege                    = 'SETUPAPI.DLL'.*
-    DuplicateString                          = 'SETUPAPI.DLL'.*
-    EnablePrivilege                          = 'SETUPAPI.DLL'.*
-    ExtensionPropSheetPageProc               = 'SETUPAPI.DLL'.*
-    FileExists                               = 'SETUPAPI.DLL'.*
-    FreeStringArray                          = 'SETUPAPI.DLL'.*
-    GetCurrentDriverSigningPolicy            = 'SETUPAPI.DLL'.*
-    GetSetFileTimestamp                      = 'SETUPAPI.DLL'.*
-    GetVersionInfoFromImage                  = 'SETUPAPI.DLL'.*
-    HandleFailedVerification                 = 'SETUPAPI.DLL'.*
-    InfIsFromOemLocation                     = 'SETUPAPI.DLL'.*
-    InstallCatalog                           = 'SETUPAPI.DLL'.*
-    InstallHinfSection                       = 'SETUPAPI.DLL'.*
-    InstallHinfSectionA                      = 'SETUPAPI.DLL'.*
-    InstallHinfSectionW                      = 'SETUPAPI.DLL'.*
-    InstallStop                              = 'SETUPAPI.DLL'.*
-    InstallStopEx                            = 'SETUPAPI.DLL'.*
-    IsUserAdmin                              = 'SETUPAPI.DLL'.*
-    LookUpStringInTable                      = 'SETUPAPI.DLL'.*
-    MemoryInitialize                         = 'SETUPAPI.DLL'.*
-    MultiByteToUnicode                       = 'SETUPAPI.DLL'.*
-    MultiSzFromSearchControl                 = 'SETUPAPI.DLL'.*
-    MyFree                                   = 'SETUPAPI.DLL'.*
-    MyGetFileTitle                           = 'SETUPAPI.DLL'.*
-    MyMalloc                                 = 'SETUPAPI.DLL'.*
-    MyRealloc                                = 'SETUPAPI.DLL'.*
-    OpenAndMapFileForRead                    = 'SETUPAPI.DLL'.*
-    OutOfMemory                              = 'SETUPAPI.DLL'.*
-    QueryMultiSzValueToArray                 = 'SETUPAPI.DLL'.*
-    QueryRegistryValue                       = 'SETUPAPI.DLL'.*
-    ReadAsciiOrUnicodeTextFile               = 'SETUPAPI.DLL'.*
-    RegistryDelnode                          = 'SETUPAPI.DLL'.*
-    RetreiveFileSecurity                     = 'SETUPAPI.DLL'.*
-    RetrieveServiceConfig                    = 'SETUPAPI.DLL'.*
-    SearchForInfFile                         = 'SETUPAPI.DLL'.*
-    SetArrayToMultiSzValue                   = 'SETUPAPI.DLL'.*
-    SetupAddInstallSectionToDiskSpaceListA   = 'SETUPAPI.DLL'.*
-    SetupAddInstallSectionToDiskSpaceListW   = 'SETUPAPI.DLL'.*
-    SetupAddSectionToDiskSpaceListA          = 'SETUPAPI.DLL'.*
-    SetupAddSectionToDiskSpaceListW          = 'SETUPAPI.DLL'.*
-    SetupAddToDiskSpaceListA                 = 'SETUPAPI.DLL'.*
-    SetupAddToDiskSpaceListW                 = 'SETUPAPI.DLL'.*
-    SetupAddToSourceListA                    = 'SETUPAPI.DLL'.*
-    SetupAddToSourceListW                    = 'SETUPAPI.DLL'.*
-    SetupAdjustDiskSpaceListA                = 'SETUPAPI.DLL'.*
-    SetupAdjustDiskSpaceListW                = 'SETUPAPI.DLL'.*
-    SetupBackupErrorA                        = 'SETUPAPI.DLL'.*
-    SetupBackupErrorW                        = 'SETUPAPI.DLL'.*
-    SetupCancelTemporarySourceList           = 'SETUPAPI.DLL'.*
-    SetupCloseFileQueue                      = 'SETUPAPI.DLL'.*
-    SetupCloseInfFile                        = 'SETUPAPI.DLL'.*
-    SetupCloseLog                            = 'SETUPAPI.DLL'.*
-    SetupCommitFileQueue                     = 'SETUPAPI.DLL'.*
-    SetupCommitFileQueueA                    = 'SETUPAPI.DLL'.*
-    SetupCommitFileQueueW                    = 'SETUPAPI.DLL'.*
-    SetupCopyErrorA                          = 'SETUPAPI.DLL'.*
-    SetupCopyErrorW                          = 'SETUPAPI.DLL'.*
-    SetupCopyOEMInfA                         = 'SETUPAPI.DLL'.*
-    SetupCopyOEMInfW                         = 'SETUPAPI.DLL'.*
-    SetupCreateDiskSpaceListA                = 'SETUPAPI.DLL'.*
-    SetupCreateDiskSpaceListW                = 'SETUPAPI.DLL'.*
-    SetupDecompressOrCopyFileA               = 'SETUPAPI.DLL'.*
-    SetupDecompressOrCopyFileW               = 'SETUPAPI.DLL'.*
-    SetupDefaultQueueCallback                = 'SETUPAPI.DLL'.*
-    SetupDefaultQueueCallbackA               = 'SETUPAPI.DLL'.*
-    SetupDefaultQueueCallbackW               = 'SETUPAPI.DLL'.*
-    SetupDeleteErrorA                        = 'SETUPAPI.DLL'.*
-    SetupDeleteErrorW                        = 'SETUPAPI.DLL'.*
-    SetupDestroyDiskSpaceList                = 'SETUPAPI.DLL'.*
-    SetupDiAskForOEMDisk                     = 'SETUPAPI.DLL'.*
-    SetupDiBuildClassInfoList                = 'SETUPAPI.DLL'.*
-    SetupDiBuildClassInfoListExA             = 'SETUPAPI.DLL'.*
-    SetupDiBuildClassInfoListExW             = 'SETUPAPI.DLL'.*
-    SetupDiBuildDriverInfoList               = 'SETUPAPI.DLL'.*
-    SetupDiCallClassInstaller                = 'SETUPAPI.DLL'.*
-    SetupDiCancelDriverInfoSearch            = 'SETUPAPI.DLL'.*
-    SetupDiChangeState                       = 'SETUPAPI.DLL'.*
-    SetupDiClassGuidsFromNameA               = 'SETUPAPI.DLL'.*
-    SetupDiClassGuidsFromNameExA             = 'SETUPAPI.DLL'.*
-    SetupDiClassGuidsFromNameExW             = 'SETUPAPI.DLL'.*
-    SetupDiClassGuidsFromNameW               = 'SETUPAPI.DLL'.*
-    SetupDiClassNameFromGuidA                = 'SETUPAPI.DLL'.*
-    SetupDiClassNameFromGuidExA              = 'SETUPAPI.DLL'.*
-    SetupDiClassNameFromGuidExW              = 'SETUPAPI.DLL'.*
-    SetupDiClassNameFromGuidW                = 'SETUPAPI.DLL'.*
-    SetupDiCreateDevRegKeyA                  = 'SETUPAPI.DLL'.*
-    SetupDiCreateDevRegKeyW                  = 'SETUPAPI.DLL'.*
-    SetupDiCreateDeviceInfoA                 = 'SETUPAPI.DLL'.*
-    SetupDiCreateDeviceInfoList              = 'SETUPAPI.DLL'.*
-    SetupDiCreateDeviceInfoListExA           = 'SETUPAPI.DLL'.*
-    SetupDiCreateDeviceInfoListExW           = 'SETUPAPI.DLL'.*
-    SetupDiCreateDeviceInfoW                 = 'SETUPAPI.DLL'.*
-    SetupDiCreateDeviceInterfaceA            = 'SETUPAPI.DLL'.*
-    SetupDiCreateDeviceInterfaceRegKeyA      = 'SETUPAPI.DLL'.*
-    SetupDiCreateDeviceInterfaceRegKeyW      = 'SETUPAPI.DLL'.*
-    SetupDiCreateDeviceInterfaceW            = 'SETUPAPI.DLL'.*
-    SetupDiDeleteDevRegKey                   = 'SETUPAPI.DLL'.*
-    SetupDiDeleteDeviceInfo                  = 'SETUPAPI.DLL'.*
-    SetupDiDeleteDeviceInterfaceData         = 'SETUPAPI.DLL'.*
-    SetupDiDeleteDeviceInterfaceRegKey       = 'SETUPAPI.DLL'.*
-    SetupDiDestroyClassImageList             = 'SETUPAPI.DLL'.*
-    SetupDiDestroyDeviceInfoList             = 'SETUPAPI.DLL'.*
-    SetupDiDestroyDriverInfoList             = 'SETUPAPI.DLL'.*
-    SetupDiDrawMiniIcon                      = 'SETUPAPI.DLL'.*
-    SetupDiEnumDeviceInfo                    = 'SETUPAPI.DLL'.*
-    SetupDiEnumDeviceInterfaces              = 'SETUPAPI.DLL'.*
-    SetupDiEnumDriverInfoA                   = 'SETUPAPI.DLL'.*
-    SetupDiEnumDriverInfoW                   = 'SETUPAPI.DLL'.*
-    SetupDiGetActualSectionToInstallA        = 'SETUPAPI.DLL'.*
-    SetupDiGetActualSectionToInstallW        = 'SETUPAPI.DLL'.*
-    SetupDiGetClassBitmapIndex               = 'SETUPAPI.DLL'.*
-    SetupDiGetClassDescriptionA              = 'SETUPAPI.DLL'.*
-    SetupDiGetClassDescriptionExA            = 'SETUPAPI.DLL'.*
-    SetupDiGetClassDescriptionExW            = 'SETUPAPI.DLL'.*
-    SetupDiGetClassDescriptionW              = 'SETUPAPI.DLL'.*
-    SetupDiGetClassDevPropertySheetsA        = 'SETUPAPI.DLL'.*
-    SetupDiGetClassDevPropertySheetsW        = 'SETUPAPI.DLL'.*
-    SetupDiGetClassDevsA                     = 'SETUPAPI.DLL'.*
-    SetupDiGetClassDevsExA                   = 'SETUPAPI.DLL'.*
-    SetupDiGetClassDevsExW                   = 'SETUPAPI.DLL'.*
-    SetupDiGetClassDevsW                     = 'SETUPAPI.DLL'.*
-    SetupDiGetClassImageIndex                = 'SETUPAPI.DLL'.*
-    SetupDiGetClassImageList                 = 'SETUPAPI.DLL'.*
-    SetupDiGetClassImageListExA              = 'SETUPAPI.DLL'.*
-    SetupDiGetClassImageListExW              = 'SETUPAPI.DLL'.*
-    SetupDiGetClassInstallParamsA            = 'SETUPAPI.DLL'.*
-    SetupDiGetClassInstallParamsW            = 'SETUPAPI.DLL'.*
-    SetupDiGetDeviceInfoListClass            = 'SETUPAPI.DLL'.*
-    SetupDiGetDeviceInfoListDetailA          = 'SETUPAPI.DLL'.*
-    SetupDiGetDeviceInfoListDetailW          = 'SETUPAPI.DLL'.*
-    SetupDiGetDeviceInstallParamsA           = 'SETUPAPI.DLL'.*
-    SetupDiGetDeviceInstallParamsW           = 'SETUPAPI.DLL'.*
-    SetupDiGetDeviceInstanceIdA              = 'SETUPAPI.DLL'.*
-    SetupDiGetDeviceInstanceIdW              = 'SETUPAPI.DLL'.*
-    SetupDiGetDeviceInterfaceAlias           = 'SETUPAPI.DLL'.*
-    SetupDiGetDeviceInterfaceDetailA         = 'SETUPAPI.DLL'.*
-    SetupDiGetDeviceInterfaceDetailW         = 'SETUPAPI.DLL'.*
-    SetupDiGetDeviceRegistryPropertyA        = 'SETUPAPI.DLL'.*
-    SetupDiGetDeviceRegistryPropertyW        = 'SETUPAPI.DLL'.*
-    SetupDiGetDriverInfoDetailA              = 'SETUPAPI.DLL'.*
-    SetupDiGetDriverInfoDetailW              = 'SETUPAPI.DLL'.*
-    SetupDiGetDriverInstallParamsA           = 'SETUPAPI.DLL'.*
-    SetupDiGetDriverInstallParamsW           = 'SETUPAPI.DLL'.*
-    SetupDiGetHwProfileFriendlyNameA         = 'SETUPAPI.DLL'.*
-    SetupDiGetHwProfileFriendlyNameExA       = 'SETUPAPI.DLL'.*
-    SetupDiGetHwProfileFriendlyNameExW       = 'SETUPAPI.DLL'.*
-    SetupDiGetHwProfileFriendlyNameW         = 'SETUPAPI.DLL'.*
-    SetupDiGetHwProfileList                  = 'SETUPAPI.DLL'.*
-    SetupDiGetHwProfileListExA               = 'SETUPAPI.DLL'.*
-    SetupDiGetHwProfileListExW               = 'SETUPAPI.DLL'.*
-    SetupDiGetINFClassA                      = 'SETUPAPI.DLL'.*
-    SetupDiGetINFClassW                      = 'SETUPAPI.DLL'.*
-    SetupDiGetSelectedDevice                 = 'SETUPAPI.DLL'.*
-    SetupDiGetSelectedDriverA                = 'SETUPAPI.DLL'.*
-    SetupDiGetSelectedDriverW                = 'SETUPAPI.DLL'.*
-    SetupDiGetWizardPage                     = 'SETUPAPI.DLL'.*
-    SetupDiInstallClassA                     = 'SETUPAPI.DLL'.*
-    SetupDiInstallClassExA                   = 'SETUPAPI.DLL'.*
-    SetupDiInstallClassExW                   = 'SETUPAPI.DLL'.*
-    SetupDiInstallClassW                     = 'SETUPAPI.DLL'.*
-    SetupDiInstallDevice                     = 'SETUPAPI.DLL'.*
-    SetupDiInstallDeviceInterfaces           = 'SETUPAPI.DLL'.*
-    SetupDiInstallDriverFiles                = 'SETUPAPI.DLL'.*
-    SetupDiLoadClassIcon                     = 'SETUPAPI.DLL'.*
-    SetupDiMoveDuplicateDevice               = 'SETUPAPI.DLL'.*
-    SetupDiOpenClassRegKey                   = 'SETUPAPI.DLL'.*
-    SetupDiOpenClassRegKeyExA                = 'SETUPAPI.DLL'.*
-    SetupDiOpenClassRegKeyExW                = 'SETUPAPI.DLL'.*
-    SetupDiOpenDevRegKey                     = 'SETUPAPI.DLL'.*
-    SetupDiOpenDeviceInfoA                   = 'SETUPAPI.DLL'.*
-    SetupDiOpenDeviceInfoW                   = 'SETUPAPI.DLL'.*
-    SetupDiOpenDeviceInterfaceA              = 'SETUPAPI.DLL'.*
-    SetupDiOpenDeviceInterfaceRegKey         = 'SETUPAPI.DLL'.*
-    SetupDiOpenDeviceInterfaceW              = 'SETUPAPI.DLL'.*
-    SetupDiRegisterCoDeviceInstallers        = 'SETUPAPI.DLL'.*
-    SetupDiRegisterDeviceInfo                = 'SETUPAPI.DLL'.*
-    SetupDiRemoveDevice                      = 'SETUPAPI.DLL'.*
-    SetupDiRemoveDeviceInterface             = 'SETUPAPI.DLL'.*
-    SetupDiSelectBestCompatDrv               = 'SETUPAPI.DLL'.*
-    SetupDiSelectDevice                      = 'SETUPAPI.DLL'.*
-    SetupDiSelectOEMDrv                      = 'SETUPAPI.DLL'.*
-    SetupDiSetClassInstallParamsA            = 'SETUPAPI.DLL'.*
-    SetupDiSetClassInstallParamsW            = 'SETUPAPI.DLL'.*
-    SetupDiSetDeviceInstallParamsA           = 'SETUPAPI.DLL'.*
-    SetupDiSetDeviceInstallParamsW           = 'SETUPAPI.DLL'.*
-    SetupDiSetDeviceRegistryPropertyA        = 'SETUPAPI.DLL'.*
-    SetupDiSetDeviceRegistryPropertyW        = 'SETUPAPI.DLL'.*
-    SetupDiSetDriverInstallParamsA           = 'SETUPAPI.DLL'.*
-    SetupDiSetDriverInstallParamsW           = 'SETUPAPI.DLL'.*
-    SetupDiSetSelectedDevice                 = 'SETUPAPI.DLL'.*
-    SetupDiSetSelectedDriverA                = 'SETUPAPI.DLL'.*
-    SetupDiSetSelectedDriverW                = 'SETUPAPI.DLL'.*
-    SetupDiUnremoveDevice                    = 'SETUPAPI.DLL'.*
-    SetupDuplicateDiskSpaceListA             = 'SETUPAPI.DLL'.*
-    SetupDuplicateDiskSpaceListW             = 'SETUPAPI.DLL'.*
-    SetupFindFirstLineA                      = 'SETUPAPI.DLL'.*
-    SetupFindFirstLineW                      = 'SETUPAPI.DLL'.*
-    SetupFindNextLine                        = 'SETUPAPI.DLL'.*
-    SetupFindNextMatchLineA                  = 'SETUPAPI.DLL'.*
-    SetupFindNextMatchLineW                  = 'SETUPAPI.DLL'.*
-    SetupFreeSourceListA                     = 'SETUPAPI.DLL'.*
-    SetupFreeSourceListW                     = 'SETUPAPI.DLL'.*
-    SetupGetBackupInformationA               = 'SETUPAPI.DLL'.*
-    SetupGetBackupInformationW               = 'SETUPAPI.DLL'.*
-    SetupGetBinaryField                      = 'SETUPAPI.DLL'.*
-    SetupGetFieldCount                       = 'SETUPAPI.DLL'.*
-    SetupGetFileCompressionInfoA             = 'SETUPAPI.DLL'.*
-    SetupGetFileCompressionInfoW             = 'SETUPAPI.DLL'.*
-    SetupGetInfFileListA                     = 'SETUPAPI.DLL'.*
-    SetupGetInfFileListW                     = 'SETUPAPI.DLL'.*
-    SetupGetInfInformationA                  = 'SETUPAPI.DLL'.*
-    SetupGetInfInformationW                  = 'SETUPAPI.DLL'.*
-    SetupGetInfSections                      = 'SETUPAPI.DLL'.*
-    SetupGetIntField                         = 'SETUPAPI.DLL'.*
-    SetupGetLineByIndexA                     = 'SETUPAPI.DLL'.*
-    SetupGetLineByIndexW                     = 'SETUPAPI.DLL'.*
-    SetupGetLineCountA                       = 'SETUPAPI.DLL'.*
-    SetupGetLineCountW                       = 'SETUPAPI.DLL'.*
-    SetupGetLineTextA                        = 'SETUPAPI.DLL'.*
-    SetupGetLineTextW                        = 'SETUPAPI.DLL'.*
-    SetupGetMultiSzFieldA                    = 'SETUPAPI.DLL'.*
-    SetupGetMultiSzFieldW                    = 'SETUPAPI.DLL'.*
-    SetupGetSourceFileLocationA              = 'SETUPAPI.DLL'.*
-    SetupGetSourceFileLocationW              = 'SETUPAPI.DLL'.*
-    SetupGetSourceFileSizeA                  = 'SETUPAPI.DLL'.*
-    SetupGetSourceFileSizeW                  = 'SETUPAPI.DLL'.*
-    SetupGetSourceInfoA                      = 'SETUPAPI.DLL'.*
-    SetupGetSourceInfoW                      = 'SETUPAPI.DLL'.*
-    SetupGetStringFieldA                     = 'SETUPAPI.DLL'.*
-    SetupGetStringFieldW                     = 'SETUPAPI.DLL'.*
-    SetupGetTargetPathA                      = 'SETUPAPI.DLL'.*
-    SetupGetTargetPathW                      = 'SETUPAPI.DLL'.*
-    SetupInitDefaultQueueCallback            = 'SETUPAPI.DLL'.*
-    SetupInitDefaultQueueCallbackEx          = 'SETUPAPI.DLL'.*
-    SetupInitializeFileLogA                  = 'SETUPAPI.DLL'.*
-    SetupInitializeFileLogW                  = 'SETUPAPI.DLL'.*
-    SetupInstallFileA                        = 'SETUPAPI.DLL'.*
-    SetupInstallFileExA                      = 'SETUPAPI.DLL'.*
-    SetupInstallFileExW                      = 'SETUPAPI.DLL'.*
-    SetupInstallFileW                        = 'SETUPAPI.DLL'.*
-    SetupInstallFilesFromInfSectionA         = 'SETUPAPI.DLL'.*
-    SetupInstallFilesFromInfSectionW         = 'SETUPAPI.DLL'.*
-    SetupInstallFromInfSectionA              = 'SETUPAPI.DLL'.*
-    SetupInstallFromInfSectionW              = 'SETUPAPI.DLL'.*
-    SetupInstallServicesFromInfSectionA      = 'SETUPAPI.DLL'.*
-    SetupInstallServicesFromInfSectionExA    = 'SETUPAPI.DLL'.*
-    SetupInstallServicesFromInfSectionExW    = 'SETUPAPI.DLL'.*
-    SetupInstallServicesFromInfSectionW      = 'SETUPAPI.DLL'.*
-    SetupIterateCabinetA                     = 'SETUPAPI.DLL'.*
-    SetupIterateCabinetW                     = 'SETUPAPI.DLL'.*
-    SetupLogErrorA                           = 'SETUPAPI.DLL'.*
-    SetupLogErrorW                           = 'SETUPAPI.DLL'.*
-    SetupLogFileA                            = 'SETUPAPI.DLL'.*
-    SetupLogFileW                            = 'SETUPAPI.DLL'.*
-    SetupOpenAppendInfFileA                  = 'SETUPAPI.DLL'.*
-    SetupOpenAppendInfFileW                  = 'SETUPAPI.DLL'.*
-    SetupOpenFileQueue                       = 'SETUPAPI.DLL'.*
-    SetupOpenInfFileA                        = 'SETUPAPI.DLL'.*
-    SetupOpenInfFileW                        = 'SETUPAPI.DLL'.*
-    SetupOpenLog                             = 'SETUPAPI.DLL'.*
-    SetupOpenMasterInf                       = 'SETUPAPI.DLL'.*
-    SetupPromptForDiskA                      = 'SETUPAPI.DLL'.*
-    SetupPromptForDiskW                      = 'SETUPAPI.DLL'.*
-    SetupPromptReboot                        = 'SETUPAPI.DLL'.*
-    SetupQueryDrivesInDiskSpaceListA         = 'SETUPAPI.DLL'.*
-    SetupQueryDrivesInDiskSpaceListW         = 'SETUPAPI.DLL'.*
-    SetupQueryFileLogA                       = 'SETUPAPI.DLL'.*
-    SetupQueryFileLogW                       = 'SETUPAPI.DLL'.*
-    SetupQueryInfFileInformationA            = 'SETUPAPI.DLL'.*
-    SetupQueryInfFileInformationW            = 'SETUPAPI.DLL'.*
-    SetupQueryInfOriginalFileInformationA    = 'SETUPAPI.DLL'.*
-    SetupQueryInfOriginalFileInformationW    = 'SETUPAPI.DLL'.*
-    SetupQueryInfVersionInformationA         = 'SETUPAPI.DLL'.*
-    SetupQueryInfVersionInformationW         = 'SETUPAPI.DLL'.*
-    SetupQuerySourceListA                    = 'SETUPAPI.DLL'.*
-    SetupQuerySourceListW                    = 'SETUPAPI.DLL'.*
-    SetupQuerySpaceRequiredOnDriveA          = 'SETUPAPI.DLL'.*
-    SetupQuerySpaceRequiredOnDriveW          = 'SETUPAPI.DLL'.*
-    SetupQueueCopyA                          = 'SETUPAPI.DLL'.*
-    SetupQueueCopyIndirectA                  = 'SETUPAPI.DLL'.*
-    SetupQueueCopyIndirectW                  = 'SETUPAPI.DLL'.*
-    SetupQueueCopySectionA                   = 'SETUPAPI.DLL'.*
-    SetupQueueCopySectionW                   = 'SETUPAPI.DLL'.*
-    SetupQueueCopyW                          = 'SETUPAPI.DLL'.*
-    SetupQueueDefaultCopyA                   = 'SETUPAPI.DLL'.*
-    SetupQueueDefaultCopyW                   = 'SETUPAPI.DLL'.*
-    SetupQueueDeleteA                        = 'SETUPAPI.DLL'.*
-    SetupQueueDeleteSectionA                 = 'SETUPAPI.DLL'.*
-    SetupQueueDeleteSectionW                 = 'SETUPAPI.DLL'.*
-    SetupQueueDeleteW                        = 'SETUPAPI.DLL'.*
-    SetupQueueRenameA                        = 'SETUPAPI.DLL'.*
-    SetupQueueRenameSectionA                 = 'SETUPAPI.DLL'.*
-    SetupQueueRenameSectionW                 = 'SETUPAPI.DLL'.*
-    SetupQueueRenameW                        = 'SETUPAPI.DLL'.*
-    SetupRemoveFileLogEntryA                 = 'SETUPAPI.DLL'.*
-    SetupRemoveFileLogEntryW                 = 'SETUPAPI.DLL'.*
-    SetupRemoveFromDiskSpaceListA            = 'SETUPAPI.DLL'.*
-    SetupRemoveFromDiskSpaceListW            = 'SETUPAPI.DLL'.*
-    SetupRemoveFromSourceListA               = 'SETUPAPI.DLL'.*
-    SetupRemoveFromSourceListW               = 'SETUPAPI.DLL'.*
-    SetupRemoveInstallSectionFromDiskSpaceListA = 'SETUPAPI.DLL'.*
-    SetupRemoveInstallSectionFromDiskSpaceListW = 'SETUPAPI.DLL'.*
-    SetupRemoveSectionFromDiskSpaceListA     = 'SETUPAPI.DLL'.*
-    SetupRemoveSectionFromDiskSpaceListW     = 'SETUPAPI.DLL'.*
-    SetupRenameErrorA                        = 'SETUPAPI.DLL'.*
-    SetupRenameErrorW                        = 'SETUPAPI.DLL'.*
-    SetupScanFileQueue                       = 'SETUPAPI.DLL'.*
-    SetupScanFileQueueA                      = 'SETUPAPI.DLL'.*
-    SetupScanFileQueueW                      = 'SETUPAPI.DLL'.*
-    SetupSetDirectoryIdA                     = 'SETUPAPI.DLL'.*
-    SetupSetDirectoryIdExA                   = 'SETUPAPI.DLL'.*
-    SetupSetDirectoryIdExW                   = 'SETUPAPI.DLL'.*
-    SetupSetDirectoryIdW                     = 'SETUPAPI.DLL'.*
-    SetupSetFileQueueAlternatePlatformA      = 'SETUPAPI.DLL'.*
-    SetupSetFileQueueAlternatePlatformW      = 'SETUPAPI.DLL'.*
-    SetupSetPlatformPathOverrideA            = 'SETUPAPI.DLL'.*
-    SetupSetPlatformPathOverrideW            = 'SETUPAPI.DLL'.*
-    SetupSetSourceListA                      = 'SETUPAPI.DLL'.*
-    SetupSetSourceListW                      = 'SETUPAPI.DLL'.*
-    SetupTermDefaultQueueCallback            = 'SETUPAPI.DLL'.*
-    SetupTerminateFileLog                    = 'SETUPAPI.DLL'.*
-    ShouldDeviceBeExcluded                   = 'SETUPAPI.DLL'.*
-    StampFileSecurity                        = 'SETUPAPI.DLL'.*
-    StringTableAddString                     = 'SETUPAPI.DLL'.*
-    StringTableAddStringEx                   = 'SETUPAPI.DLL'.*
-    StringTableDestroy                       = 'SETUPAPI.DLL'.*
-    StringTableDuplicate                     = 'SETUPAPI.DLL'.*
-    StringTableEnum                          = 'SETUPAPI.DLL'.*
-    StringTableGetExtraData                  = 'SETUPAPI.DLL'.*
-    StringTableInitialize                    = 'SETUPAPI.DLL'.*
-    StringTableInitializeEx                  = 'SETUPAPI.DLL'.*
-    StringTableLookUpString                  = 'SETUPAPI.DLL'.*
-    StringTableLookUpStringEx                = 'SETUPAPI.DLL'.*
-    StringTableSetExtraData                  = 'SETUPAPI.DLL'.*
-    StringTableStringFromId                  = 'SETUPAPI.DLL'.*
-    StringTableStringFromIdEx                = 'SETUPAPI.DLL'.*
-    StringTableTrim                          = 'SETUPAPI.DLL'.*
-    TakeOwnershipOfFile                      = 'SETUPAPI.DLL'.*
-    UnicodeToMultiByte                       = 'SETUPAPI.DLL'.*
-    UnmapAndCloseFile                        = 'SETUPAPI.DLL'.*
-    VerifyCatalogFile                        = 'SETUPAPI.DLL'.*
-    VerifyFile                               = 'SETUPAPI.DLL'.*
-    pSetupAccessRunOnceNodeList              = 'SETUPAPI.DLL'.*
-    pSetupDestroyRunOnceNodeList             = 'SETUPAPI.DLL'.*
-    pSetupDiGetDeviceInfoContext             = 'SETUPAPI.DLL'.*
-    pSetupDiSetDeviceInfoContext             = 'SETUPAPI.DLL'.*
-    pSetupDirectoryIdToPath                  = 'SETUPAPI.DLL'.*
-    pSetupGetField                           = 'SETUPAPI.DLL'.*
-    pSetupGetGlobalFlags                     = 'SETUPAPI.DLL'.*
-    pSetupGetOsLoaderDriveAndPath            = 'SETUPAPI.DLL'.*
-    pSetupGetQueueFlags                      = 'SETUPAPI.DLL'.*
-    pSetupGetVersionDatum                    = 'SETUPAPI.DLL'.*
-    pSetupGuidFromString                     = 'SETUPAPI.DLL'.*
-    pSetupIsGuidNull                         = 'SETUPAPI.DLL'.*
-    pSetupMakeSurePathExists                 = 'SETUPAPI.DLL'.*
-    pSetupSetGlobalFlags                     = 'SETUPAPI.DLL'.*
-    pSetupSetQueueFlags                      = 'SETUPAPI.DLL'.*
-    pSetupSetSystemSourcePath                = 'SETUPAPI.DLL'.*
-    pSetupStringFromGuid                     = 'SETUPAPI.DLL'.*
-    pSetupVerifyQueuedCatalogs               = 'SETUPAPI.DLL'.*
+    CMP_GetBlockedDriverInfo
+    CMP_GetServerSideDeviceInstallFlags
+    CMP_Init_Detection
+    CMP_RegisterNotification
+    CMP_Report_LogOn
+    CMP_UnregisterNotification
+    CMP_WaitNoPendingInstallEvents
+    CMP_WaitServicesAvailable
+    CM_Add_Empty_Log_Conf
+    CM_Add_Empty_Log_Conf_Ex
+    CM_Add_IDA
+    CM_Add_IDW
+    CM_Add_ID_ExA
+    CM_Add_ID_ExW
+    CM_Add_Range
+    CM_Add_Res_Des
+    CM_Add_Res_Des_Ex
+    CM_Connect_MachineA
+    CM_Connect_MachineW
+    CM_Create_DevNodeA
+    CM_Create_DevNodeW
+    CM_Create_DevNode_ExA
+    CM_Create_DevNode_ExW
+    CM_Create_Range_List
+    CM_Delete_Class_Key
+    CM_Delete_Class_Key_Ex
+    CM_Delete_DevNode_Key
+    CM_Delete_DevNode_Key_Ex
+    CM_Delete_Range
+    CM_Detect_Resource_Conflict
+    CM_Detect_Resource_Conflict_Ex
+    CM_Disable_DevNode
+    CM_Disable_DevNode_Ex
+    CM_Disconnect_Machine
+    CM_Dup_Range_List
+    CM_Enable_DevNode
+    CM_Enable_DevNode_Ex
+    CM_Enumerate_Classes
+    CM_Enumerate_Classes_Ex
+    CM_Enumerate_EnumeratorsA
+    CM_Enumerate_EnumeratorsW
+    CM_Enumerate_Enumerators_ExA
+    CM_Enumerate_Enumerators_ExW
+    CM_Find_Range
+    CM_First_Range
+    CM_Free_Log_Conf
+    CM_Free_Log_Conf_Ex
+    CM_Free_Log_Conf_Handle
+    CM_Free_Range_List
+    CM_Free_Res_Des
+    CM_Free_Res_Des_Ex
+    CM_Free_Res_Des_Handle
+    CM_Free_Resource_Conflict_Handle
+    CM_Get_Child
+    CM_Get_Child_Ex
+    CM_Get_Class_Key_NameA
+    CM_Get_Class_Key_NameW
+    CM_Get_Class_Key_Name_ExA
+    CM_Get_Class_Key_Name_ExW
+    CM_Get_Class_NameA
+    CM_Get_Class_NameW
+    CM_Get_Class_Name_ExA
+    CM_Get_Class_Name_ExW
+    CM_Get_Class_Registry_PropertyA
+    CM_Get_Class_Registry_PropertyW
+    CM_Get_Depth
+    CM_Get_Depth_Ex
+    CM_Get_DevNode_Custom_PropertyA
+    CM_Get_DevNode_Custom_PropertyW
+    CM_Get_DevNode_Custom_Property_ExA
+    CM_Get_DevNode_Custom_Property_ExW
+    CM_Get_DevNode_Registry_PropertyA
+    CM_Get_DevNode_Registry_PropertyW
+    CM_Get_DevNode_Registry_Property_ExA
+    CM_Get_DevNode_Registry_Property_ExW
+    CM_Get_DevNode_Status
+    CM_Get_DevNode_Status_Ex
+    CM_Get_Device_IDA
+    CM_Get_Device_IDW
+    CM_Get_Device_ID_ExA
+    CM_Get_Device_ID_ExW
+    CM_Get_Device_ID_ListA
+    CM_Get_Device_ID_ListW
+    CM_Get_Device_ID_List_ExA
+    CM_Get_Device_ID_List_ExW
+    CM_Get_Device_ID_List_SizeA
+    CM_Get_Device_ID_List_SizeW
+    CM_Get_Device_ID_List_Size_ExA
+    CM_Get_Device_ID_List_Size_ExW
+    CM_Get_Device_ID_Size
+    CM_Get_Device_ID_Size_Ex
+    CM_Get_Device_Interface_AliasA
+    CM_Get_Device_Interface_AliasW
+    CM_Get_Device_Interface_Alias_ExA
+    CM_Get_Device_Interface_Alias_ExW
+    CM_Get_Device_Interface_ListA
+    CM_Get_Device_Interface_ListW
+    CM_Get_Device_Interface_List_ExA
+    CM_Get_Device_Interface_List_ExW
+    CM_Get_Device_Interface_List_SizeA
+    CM_Get_Device_Interface_List_SizeW
+    CM_Get_Device_Interface_List_Size_ExA
+    CM_Get_Device_Interface_List_Size_ExW
+    CM_Get_First_Log_Conf
+    CM_Get_First_Log_Conf_Ex
+    CM_Get_Global_State
+    CM_Get_Global_State_Ex
+    CM_Get_HW_Prof_FlagsA
+    CM_Get_HW_Prof_FlagsW
+    CM_Get_HW_Prof_Flags_ExA
+    CM_Get_HW_Prof_Flags_ExW
+    CM_Get_Hardware_Profile_InfoA
+    CM_Get_Hardware_Profile_InfoW
+    CM_Get_Hardware_Profile_Info_ExA
+    CM_Get_Hardware_Profile_Info_ExW
+    CM_Get_Log_Conf_Priority
+    CM_Get_Log_Conf_Priority_Ex
+    CM_Get_Next_Log_Conf
+    CM_Get_Next_Log_Conf_Ex
+    CM_Get_Next_Res_Des
+    CM_Get_Next_Res_Des_Ex
+    CM_Get_Parent
+    CM_Get_Parent_Ex
+    CM_Get_Res_Des_Data
+    CM_Get_Res_Des_Data_Ex
+    CM_Get_Res_Des_Data_Size
+    CM_Get_Res_Des_Data_Size_Ex
+    CM_Get_Resource_Conflict_Count
+    CM_Get_Resource_Conflict_DetailsA
+    CM_Get_Resource_Conflict_DetailsW
+    CM_Get_Sibling
+    CM_Get_Sibling_Ex
+    CM_Get_Version
+    CM_Get_Version_Ex
+    CM_Intersect_Range_List
+    CM_Invert_Range_List
+    CM_Is_Dock_Station_Present
+    CM_Is_Dock_Station_Present_Ex
+    CM_Is_Version_Available
+    CM_Is_Version_Available_Ex
+    CM_Locate_DevNodeA
+    CM_Locate_DevNodeW
+    CM_Locate_DevNode_ExA
+    CM_Locate_DevNode_ExW
+    CM_Merge_Range_List
+    CM_Modify_Res_Des
+    CM_Modify_Res_Des_Ex
+    CM_Move_DevNode
+    CM_Move_DevNode_Ex
+    CM_Next_Range
+    CM_Open_Class_KeyA
+    CM_Open_Class_KeyW
+    CM_Open_Class_Key_ExA
+    CM_Open_Class_Key_ExW
+    CM_Open_DevNode_Key
+    CM_Open_DevNode_Key_Ex
+    CM_Query_And_Remove_SubTreeA
+    CM_Query_And_Remove_SubTreeW
+    CM_Query_And_Remove_SubTree_ExA
+    CM_Query_And_Remove_SubTree_ExW
+    CM_Query_Arbitrator_Free_Data
+    CM_Query_Arbitrator_Free_Data_Ex
+    CM_Query_Arbitrator_Free_Size
+    CM_Query_Arbitrator_Free_Size_Ex
+    CM_Query_Remove_SubTree
+    CM_Query_Remove_SubTree_Ex
+    CM_Query_Resource_Conflict_List
+    CM_Reenumerate_DevNode
+    CM_Reenumerate_DevNode_Ex
+    CM_Register_Device_Driver
+    CM_Register_Device_Driver_Ex
+    CM_Register_Device_InterfaceA
+    CM_Register_Device_InterfaceW
+    CM_Register_Device_Interface_ExA
+    CM_Register_Device_Interface_ExW
+    CM_Remove_SubTree
+    CM_Remove_SubTree_Ex
+    CM_Request_Device_EjectA
+    CM_Request_Device_EjectW
+    CM_Request_Device_Eject_ExA
+    CM_Request_Device_Eject_ExW
+    CM_Request_Eject_PC
+    CM_Request_Eject_PC_Ex
+    CM_Run_Detection
+    CM_Run_Detection_Ex
+    CM_Set_Class_Registry_PropertyA
+    CM_Set_Class_Registry_PropertyW
+    CM_Set_DevNode_Problem
+    CM_Set_DevNode_Problem_Ex
+    CM_Set_DevNode_Registry_PropertyA
+    CM_Set_DevNode_Registry_PropertyW
+    CM_Set_DevNode_Registry_Property_ExA
+    CM_Set_DevNode_Registry_Property_ExW
+    CM_Set_HW_Prof
+    CM_Set_HW_Prof_Ex
+    CM_Set_HW_Prof_FlagsA
+    CM_Set_HW_Prof_FlagsW
+    CM_Set_HW_Prof_Flags_ExA
+    CM_Set_HW_Prof_Flags_ExW
+    CM_Setup_DevNode
+    CM_Setup_DevNode_Ex
+    CM_Test_Range_Available
+    CM_Uninstall_DevNode
+    CM_Uninstall_DevNode_Ex
+    CM_Unregister_Device_InterfaceA
+    CM_Unregister_Device_InterfaceW
+    CM_Unregister_Device_Interface_ExA
+    CM_Unregister_Device_Interface_ExW
+    ExtensionPropSheetPageProc
+    InstallHinfSection
+    InstallHinfSectionA
+    InstallHinfSectionW
+    SetupAddInstallSectionToDiskSpaceListA
+    SetupAddInstallSectionToDiskSpaceListW
+    SetupAddSectionToDiskSpaceListA
+    SetupAddSectionToDiskSpaceListW
+    SetupAddToDiskSpaceListA
+    SetupAddToDiskSpaceListW
+    SetupAddToSourceListA
+    SetupAddToSourceListW
+    SetupAdjustDiskSpaceListA
+    SetupAdjustDiskSpaceListW
+    SetupBackupErrorA
+    SetupBackupErrorW
+    SetupCancelTemporarySourceList
+    SetupCloseFileQueue
+    SetupCloseInfFile
+    SetupCloseLog
+    SetupCommitFileQueue
+    SetupCommitFileQueueA
+    SetupCommitFileQueueW
+    SetupCopyErrorA
+    SetupCopyErrorW
+    SetupCopyOEMInfA
+    SetupCopyOEMInfW
+    SetupCreateDiskSpaceListA
+    SetupCreateDiskSpaceListW
+    SetupDecompressOrCopyFileA
+    SetupDecompressOrCopyFileW
+    SetupDefaultQueueCallback
+    SetupDefaultQueueCallbackA
+    SetupDefaultQueueCallbackW
+    SetupDeleteErrorA
+    SetupDeleteErrorW
+    SetupDestroyDiskSpaceList
+    SetupDiAskForOEMDisk
+    SetupDiBuildClassInfoList
+    SetupDiBuildClassInfoListExA
+    SetupDiBuildClassInfoListExW
+    SetupDiBuildDriverInfoList
+    SetupDiCallClassInstaller
+    SetupDiCancelDriverInfoSearch
+    SetupDiChangeState
+    SetupDiClassGuidsFromNameA
+    SetupDiClassGuidsFromNameExA
+    SetupDiClassGuidsFromNameExW
+    SetupDiClassGuidsFromNameW
+    SetupDiClassNameFromGuidA
+    SetupDiClassNameFromGuidExA
+    SetupDiClassNameFromGuidExW
+    SetupDiClassNameFromGuidW
+    SetupDiCreateDevRegKeyA
+    SetupDiCreateDevRegKeyW
+    SetupDiCreateDeviceInfoA
+    SetupDiCreateDeviceInfoList
+    SetupDiCreateDeviceInfoListExA
+    SetupDiCreateDeviceInfoListExW
+    SetupDiCreateDeviceInfoW
+    SetupDiCreateDeviceInterfaceA
+    SetupDiCreateDeviceInterfaceRegKeyA
+    SetupDiCreateDeviceInterfaceRegKeyW
+    SetupDiCreateDeviceInterfaceW
+    SetupDiDeleteDevRegKey
+    SetupDiDeleteDeviceInfo
+    SetupDiDeleteDeviceInterfaceData
+    SetupDiDeleteDeviceInterfaceRegKey
+    SetupDiDestroyClassImageList
+    SetupDiDestroyDeviceInfoList
+    SetupDiDestroyDriverInfoList
+    SetupDiDrawMiniIcon
+    SetupDiEnumDeviceInfo
+    SetupDiEnumDeviceInterfaces
+    SetupDiEnumDriverInfoA
+    SetupDiEnumDriverInfoW
+    SetupDiGetActualSectionToInstallA
+    SetupDiGetActualSectionToInstallExA
+    SetupDiGetActualSectionToInstallExW
+    SetupDiGetActualSectionToInstallW
+    SetupDiGetClassBitmapIndex
+    SetupDiGetClassDescriptionA
+    SetupDiGetClassDescriptionExA
+    SetupDiGetClassDescriptionExW
+    SetupDiGetClassDescriptionW
+    SetupDiGetClassDevPropertySheetsA
+    SetupDiGetClassDevPropertySheetsW
+    SetupDiGetClassDevsA
+    SetupDiGetClassDevsExA
+    SetupDiGetClassDevsExW
+    SetupDiGetClassDevsW
+    SetupDiGetClassImageIndex
+    SetupDiGetClassImageList
+    SetupDiGetClassImageListExA
+    SetupDiGetClassImageListExW
+    SetupDiGetClassInstallParamsA
+    SetupDiGetClassInstallParamsW
+    SetupDiGetClassRegistryPropertyA
+    SetupDiGetClassRegistryPropertyW
+    SetupDiGetCustomDevicePropertyA
+    SetupDiGetCustomDevicePropertyW
+    SetupDiGetDeviceInfoListClass
+    SetupDiGetDeviceInfoListDetailA
+    SetupDiGetDeviceInfoListDetailW
+    SetupDiGetDeviceInstallParamsA
+    SetupDiGetDeviceInstallParamsW
+    SetupDiGetDeviceInstanceIdA
+    SetupDiGetDeviceInstanceIdW
+    SetupDiGetDeviceInterfaceAlias
+    SetupDiGetDeviceInterfaceDetailA
+    SetupDiGetDeviceInterfaceDetailW
+    SetupDiGetDeviceRegistryPropertyA
+    SetupDiGetDeviceRegistryPropertyW
+    SetupDiGetDriverInfoDetailA
+    SetupDiGetDriverInfoDetailW
+    SetupDiGetDriverInstallParamsA
+    SetupDiGetDriverInstallParamsW
+    SetupDiGetHwProfileFriendlyNameA
+    SetupDiGetHwProfileFriendlyNameExA
+    SetupDiGetHwProfileFriendlyNameExW
+    SetupDiGetHwProfileFriendlyNameW
+    SetupDiGetHwProfileList
+    SetupDiGetHwProfileListExA
+    SetupDiGetHwProfileListExW
+    SetupDiGetINFClassA
+    SetupDiGetINFClassW
+    SetupDiGetSelectedDevice
+    SetupDiGetSelectedDriverA
+    SetupDiGetSelectedDriverW
+    SetupDiGetWizardPage
+    SetupDiInstallClassA
+    SetupDiInstallClassExA
+    SetupDiInstallClassExW
+    SetupDiInstallClassW
+    SetupDiInstallDevice
+    SetupDiInstallDeviceInterfaces
+    SetupDiInstallDriverFiles
+    SetupDiLoadClassIcon
+    SetupDiMoveDuplicateDevice
+    SetupDiOpenClassRegKey
+    SetupDiOpenClassRegKeyExA
+    SetupDiOpenClassRegKeyExW
+    SetupDiOpenDevRegKey
+    SetupDiOpenDeviceInfoA
+    SetupDiOpenDeviceInfoW
+    SetupDiOpenDeviceInterfaceA
+    SetupDiOpenDeviceInterfaceRegKey
+    SetupDiOpenDeviceInterfaceW
+    SetupDiRegisterCoDeviceInstallers
+    SetupDiRegisterDeviceInfo
+    SetupDiRemoveDevice
+    SetupDiRemoveDeviceInterface
+    SetupDiSelectBestCompatDrv
+    SetupDiSelectDevice
+    SetupDiSelectOEMDrv
+    SetupDiSetClassInstallParamsA
+    SetupDiSetClassInstallParamsW
+    SetupDiSetClassRegistryPropertyA
+    SetupDiSetClassRegistryPropertyW
+    SetupDiSetDeviceInstallParamsA
+    SetupDiSetDeviceInstallParamsW
+    SetupDiSetDeviceInterfaceDefault
+    SetupDiSetDeviceRegistryPropertyA
+    SetupDiSetDeviceRegistryPropertyW
+    SetupDiSetDriverInstallParamsA
+    SetupDiSetDriverInstallParamsW
+    SetupDiSetSelectedDevice
+    SetupDiSetSelectedDriverA
+    SetupDiSetSelectedDriverW
+    SetupDiUnremoveDevice
+    SetupDuplicateDiskSpaceListA
+    SetupDuplicateDiskSpaceListW
+    SetupEnumInfSectionsA
+    SetupEnumInfSectionsW
+    SetupFindFirstLineA
+    SetupFindFirstLineW
+    SetupFindNextLine
+    SetupFindNextMatchLineA
+    SetupFindNextMatchLineW
+    SetupFreeSourceListA
+    SetupFreeSourceListW
+    SetupGetBackupInformationA
+    SetupGetBackupInformationW
+    SetupGetBinaryField
+    SetupGetFieldCount
+    SetupGetFileCompressionInfoA
+    SetupGetFileCompressionInfoExA
+    SetupGetFileCompressionInfoExW
+    SetupGetFileCompressionInfoW
+    SetupGetFileQueueCount
+    SetupGetFileQueueFlags
+    SetupGetInfFileListA
+    SetupGetInfFileListW
+    SetupGetInfInformationA
+    SetupGetInfInformationW
+    SetupGetInfSections
+    SetupGetIntField
+    SetupGetLineByIndexA
+    SetupGetLineByIndexW
+    SetupGetLineCountA
+    SetupGetLineCountW
+    SetupGetLineTextA
+    SetupGetLineTextW
+    SetupGetMultiSzFieldA
+    SetupGetMultiSzFieldW
+    SetupGetNonInteractiveMode
+    SetupGetSourceFileLocationA
+    SetupGetSourceFileLocationW
+    SetupGetSourceFileSizeA
+    SetupGetSourceFileSizeW
+    SetupGetSourceInfoA
+    SetupGetSourceInfoW
+    SetupGetStringFieldA
+    SetupGetStringFieldW
+    SetupGetTargetPathA
+    SetupGetTargetPathW
+    SetupInitDefaultQueueCallback
+    SetupInitDefaultQueueCallbackEx
+    SetupInitializeFileLogA
+    SetupInitializeFileLogW
+    SetupInstallFileA
+    SetupInstallFileExA
+    SetupInstallFileExW
+    SetupInstallFileW
+    SetupInstallFilesFromInfSectionA
+    SetupInstallFilesFromInfSectionW
+    SetupInstallFromInfSectionA
+    SetupInstallFromInfSectionW
+    SetupInstallServicesFromInfSectionA
+    SetupInstallServicesFromInfSectionExA
+    SetupInstallServicesFromInfSectionExW
+    SetupInstallServicesFromInfSectionW
+    SetupIterateCabinetA
+    SetupIterateCabinetW
+    SetupLogErrorA
+    SetupLogErrorW
+    SetupLogFileA
+    SetupLogFileW
+    SetupOpenAppendInfFileA
+    SetupOpenAppendInfFileW
+    SetupOpenFileQueue
+    SetupOpenInfFileA
+    SetupOpenInfFileW
+    SetupOpenLog
+    SetupOpenMasterInf
+    SetupPrepareQueueForRestoreA
+    SetupPrepareQueueForRestoreW
+    SetupPromptForDiskA
+    SetupPromptForDiskW
+    SetupPromptReboot
+    SetupQueryDrivesInDiskSpaceListA
+    SetupQueryDrivesInDiskSpaceListW
+    SetupQueryFileLogA
+    SetupQueryFileLogW
+    SetupQueryInfFileInformationA
+    SetupQueryInfFileInformationW
+    SetupQueryInfOriginalFileInformationA
+    SetupQueryInfOriginalFileInformationW
+    SetupQueryInfVersionInformationA
+    SetupQueryInfVersionInformationW
+    SetupQuerySourceListA
+    SetupQuerySourceListW
+    SetupQuerySpaceRequiredOnDriveA
+    SetupQuerySpaceRequiredOnDriveW
+    SetupQueueCopyA
+    SetupQueueCopyIndirectA
+    SetupQueueCopyIndirectW
+    SetupQueueCopySectionA
+    SetupQueueCopySectionW
+    SetupQueueCopyW
+    SetupQueueDefaultCopyA
+    SetupQueueDefaultCopyW
+    SetupQueueDeleteA
+    SetupQueueDeleteSectionA
+    SetupQueueDeleteSectionW
+    SetupQueueDeleteW
+    SetupQueueRenameA
+    SetupQueueRenameSectionA
+    SetupQueueRenameSectionW
+    SetupQueueRenameW
+    SetupRemoveFileLogEntryA
+    SetupRemoveFileLogEntryW
+    SetupRemoveFromDiskSpaceListA
+    SetupRemoveFromDiskSpaceListW
+    SetupRemoveFromSourceListA
+    SetupRemoveFromSourceListW
+    SetupRemoveInstallSectionFromDiskSpaceListA
+    SetupRemoveInstallSectionFromDiskSpaceListW
+    SetupRemoveSectionFromDiskSpaceListA
+    SetupRemoveSectionFromDiskSpaceListW
+    SetupRenameErrorA
+    SetupRenameErrorW
+    SetupScanFileQueue
+    SetupScanFileQueueA
+    SetupScanFileQueueW
+    SetupSetDirectoryIdA
+    SetupSetDirectoryIdExA
+    SetupSetDirectoryIdExW
+    SetupSetDirectoryIdW
+    SetupSetFileQueueAlternatePlatformA
+    SetupSetFileQueueAlternatePlatformW
+    SetupSetFileQueueFlags
+    SetupSetNonInteractiveMode
+    SetupSetPlatformPathOverrideA
+    SetupSetPlatformPathOverrideW
+    SetupSetSourceListA
+    SetupSetSourceListW
+    SetupTermDefaultQueueCallback
+    SetupTerminateFileLog
+    SetupUninstallNewlyCopiedInfs
+    SetupUninstallOEMInfA
+    SetupUninstallOEMInfW
+    SetupVerifyInfFileA
+    SetupVerifyInfFileW

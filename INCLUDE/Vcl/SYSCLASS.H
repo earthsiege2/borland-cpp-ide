@@ -1,5 +1,5 @@
 // SYSCLASS.H: Definitions of Pascal types
-// Copyright (c) 1997, 1999 Borland International
+// Copyright (c) 1997, 2002 Borland Software Corporation
 
 #if !defined(SYSCLASS_H)
 #define SYSCLASS_H
@@ -108,6 +108,68 @@ namespace System
     Pointer __fastcall (*GetMem)(Integer Size);
     Integer __fastcall (*FreeMem)(Pointer P);
     Pointer __fastcall (*ReallocMem)(Pointer P, Integer Size);
+  } ;
+
+/*
+  typedef class TDynArrayTypeInfo *PDynArrayTypeInfo;
+
+  #pragma pack(push, 1)
+  class PACKAGE TDynArrayTypeInfo
+  {
+  public:
+    Byte kind;
+    System::SmallString<0> name;
+    int elSize;
+    PDynArrayTypeInfo *elType;
+    int varType;
+  };
+  #pragma pack(pop)
+*/
+  class TVariantManager;
+  typedef TVariantManager *PVariantManager;
+
+  class PACKAGE TVariantManager
+  {
+  public:
+     void __fastcall (*VarClear)(Variant &V);
+     void __fastcall (*VarCopy)(Variant &Dest, const Variant &Source);
+     void __fastcall (*VarCopyNoInd)(void);
+     void __fastcall (*VarCast)(Variant &Dest, const Variant &Source, int VarType);
+     void __fastcall (*VarCastOle)(Variant &Dest, const Variant &Source, int VarType);
+     int __fastcall (*VarToInt)(const Variant &V);
+     bool __fastcall (*VarToBool)(const Variant &V);
+     Extended __fastcall (*VarToReal)(const Variant &V);
+     System::Currency __fastcall (*VarToCurr)(const Variant &V);
+     void __fastcall (*VarToPStr)(void *S, const Variant &V);
+     void __fastcall (*VarToLStr)(AnsiString &S, const Variant &V);
+     void __fastcall (*VarToWStr)(WideString &S, const Variant &V);
+     void __fastcall (*VarToIntf)(_di_IUnknown &Unknown, const Variant &V);
+     void __fastcall (*VarToDisp)(_di_IDispatch &Dispatch, const Variant &V);
+     void __fastcall (*VarToDynArray)(void * &DynArray, const Variant &V, void * TypeInfo);
+     void __fastcall (*VarFromInt)(Variant &V, const int Value);
+     void __fastcall (*VarFromBool)(Variant &V, const bool Value);
+     void __fastcall (*VarFromReal)(void);
+     void __fastcall (*VarFromTDateTime)(void);
+     void __fastcall (*VarFromCurr)(void);
+     void __fastcall (*VarFromPStr)(Variant &V, const System::ShortString &Value);
+     void __fastcall (*VarFromLStr)(Variant &V, const AnsiString Value);
+     void __fastcall (*VarFromWStr)(Variant &V, const WideString Value);
+     void __fastcall (*VarFromIntf)(Variant &V, const _di_IUnknown Value);
+     void __fastcall (*VarFromDisp)(Variant &V, const _di_IDispatch Value);
+     void __fastcall (*VarFromDynArray)(Variant &V, const void * DynArray, void * TypeInfo);
+     void __fastcall (*OleVarFromPStr)(OleVariant &V, const System::ShortString &Value);
+     void __fastcall (*OleVarFromLStr)(OleVariant &V, const AnsiString Value);
+     void __fastcall (*OleVarFromVar)(OleVariant &V, const Variant &Value);
+     void __fastcall (*VarOp)(Variant &Dest, const Variant &Src, int OpCode);
+     void __fastcall (*VarCmp)(const Variant &Left, const Variant &Right);
+     void __fastcall (*VarNeg)(Variant &V);
+     void __fastcall (*VarNot)(Variant &V);
+     void __fastcall (*DispInvoke)(void);
+     void __fastcall (*DispCallByIDProc)(void);
+     void __fastcall (*VarAddRef)(Variant &V);
+     void __fastcall (*VarArrayRedim)(Variant &A, int HighBound);
+     Variant __cdecl (*VarArrayGet)(Variant &A, int IndexCount, int Indices);
+     void __cdecl (*VarArrayPut)(Variant &A, const Variant &Value, int IndexCount, int Indices);
   } ;
 
   class PACKAGE THeapStatus
@@ -226,6 +288,9 @@ namespace System
 #define USE(FileName, ContainerId) \
    extern PACKAGE DummyThatIsNeverReferenced
 
+#define USEADDITIONALFILES(Exts) \
+   extern PACKAGE DummyThatIsNeverReferenced
+
   struct PACKAGE ResourceString
   {
     HINSTANCE       *hinstance;
@@ -243,8 +308,6 @@ namespace System
   {
     TLibModule  *next;
     long        instance;
-    long        codeinstance;
-    long        datainstance;   
     long        resinstance;
     long        reserved;
   };

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8' ?>
 <!-- C++Builder XML Project --><PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
-    <PROJECT value="chkbook.exe"/>
-    <OBJFILES value="stdafx.obj chkbook.obj mainfrm.obj chkbkfrm.obj checkdoc.obj fxrecdoc.obj rowview.obj bookvw.obj checkvw.obj dollcent.obj"/>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="CHKBOOK.exe"/>
+    <OBJFILES value=" bookvw.obj checkdoc.obj checkvw.obj chkbkfrm.obj chkbook.obj dollcent.obj fxrecdoc.obj mainfrm.obj rowview.obj stdafx.obj"/>
     <RESFILES value=" chkbook.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -13,32 +13,32 @@
     <LIBRARIES value=""/>
     <SPARELIBS value=""/>
     <PACKAGES value=""/>
-    <PATHCPP value=".;;"/>
+    <PATHCPP value=".;.\;"/>
     <PATHPAS value=".;"/>
-    <PATHRC value=".;;"/>
+    <PATHRC value=".;.\;"/>
     <PATHASM value=".;"/>
     <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="ilink32"/>
-    <USERDEFINES value=""/>
-    <SYSDEFINES value="_NO_VCL;_X86_;_WINDOWS;_AFX_PORTABLE;_AFX_NOFORCE_LIBS;_MT;_CRT_PORTABLE;_AFX_NO_DEBUG_CRT;_MSC_VER=1100;"/>
-    <MAINSOURCE value="chkbook.bpf"/>
-    <INCLUDEPATH value="$(BCB)\include\atl;$(BCB)\include;$(BCB)\INCLUDE;$(BCB)\INCLUDE\MFC"/>
-    <LIBPATH value="$(BCB)\lib;$(BCB)\lib\obj;$(BCB)\LIB;$(BCB)\lib\psdk;"/>
-    <WARNINGS value="-w-8026 -w-8027 -w-par"/>
+    <USERDEFINES value="WIN32;_DEBUG;_WINDOWS;_MBCS"/>
+    <SYSDEFINES value="_NO_VCL;;_ASSERTE;NO_STRICT;INC_OLE2;_X86_;_WINDOWS;_MSC_VER=1100;_AFX_PORTABLE;__MSC;_AFX_NOFORCE_LIBS;_MT;_CRT_PORTABLE;_AFX_NO_DEBUG_CRT"/>
+    <MAINSOURCE value="CHKBOOK.bpf"/>
+    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\mfc;$(BCB)\include\atl;$(BCB)\include\vcl;"/>
+    <LIBPATH value="$(BCB)\lib;$(DEBUGLIBPATH);;$(BCB)\lib\psdk;"/>
+    <WARNINGS value="-w-8026 -w-8027 -w-8022 -w-8084 -w-8010 -w-8013 -w-8058 -w-par -w-aus -w-hid -w-inl"/>
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-I$(BCB)\include"/>
-    <CFLAG1 value="-Od -Hc -w -k -r- -y -v -vi- -c  -g0 -WM -W -VF "/>
-    <PFLAGS value="-$YD -$W -$O- -v -jphnd -M"/>
-    <RFLAGS value=""/>
+    <CFLAG1 value=" -q -tWM -w -x -v -Od -c -g0 -VF -w-8026 -w-8027 -w-8022 -w-8084 -w-8010 -w-8013 -w-8058 -w-par -w-aus -w-hid -w-inl"/>
+    <PFLAGS value=""/>
+    <RFLAGS value="/l 0x409 /d &quot;_DEBUG&quot; /i$(BCB)\include;$(BCB)\include\mfc"/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -v -Gn "/>
+    <LFLAGS value=" -q -aa -v -x -Gn"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0w32.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
-    <ALLLIB value="$(LIBFILES) $(LIBRARIES)  nafxcw.lib import32.lib cw32mt.lib"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) nafxcwd.lib ole2w32.lib odbccp32.lib odbc32.lib bfcs42d.lib bfc42d.lib import32.lib cw32mt.lib"/>
   </LINKER>
   <IDEOPTIONS>
 [Version Info]

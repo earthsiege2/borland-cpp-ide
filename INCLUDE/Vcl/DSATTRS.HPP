@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DSAttrS.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DSAttrS.pas' rev: 6.00
 
 #ifndef DSAttrSHPP
 #define DSAttrSHPP
@@ -53,16 +53,13 @@ private:
 	void __fastcall AddToList(const AnsiString Value);
 	
 public:
-	bool __fastcall Execute(const AnsiString TableName, const AnsiString FieldName, AnsiString &AttributesName
-		, Drintf::TAttrID &BasedOnID);
+	bool __fastcall Execute(const AnsiString TableName, const AnsiString FieldName, AnsiString &AttributesName, Drintf::TAttrID &BasedOnID);
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TSaveAttributesAs(Classes::TComponent* AOwner) : 
-		Forms::TForm(AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TSaveAttributesAs(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TSaveAttributesAs(Classes::TComponent* AOwner
-		, int Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TSaveAttributesAs(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TSaveAttributesAs(void) { }
@@ -70,21 +67,17 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TSaveAttributesAs(HWND ParentWindow) : Forms::TForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TSaveAttributesAs(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 //-- var, const, procedure ---------------------------------------------------
-extern PACKAGE bool __fastcall SaveAttributesAsDlg(const AnsiString TableName, const AnsiString FieldName
-	, AnsiString &Name, Drintf::TAttrID &BasedOnID);
+extern PACKAGE bool __fastcall SaveAttributesAsDlg(const AnsiString TableName, const AnsiString FieldName, AnsiString &Name, Drintf::TAttrID &BasedOnID);
 
 }	/* namespace Dsattrs */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Dsattrs;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

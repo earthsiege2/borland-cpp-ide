@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'ToolWin.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'ToolWin.pas' rev: 6.00
 
 #ifndef ToolWinHPP
 #define ToolWinHPP
@@ -45,6 +45,9 @@ private:
 	void __fastcall SetEdgeBorders(TEdgeBorders Value);
 	void __fastcall SetEdgeInner(TEdgeStyle Value);
 	void __fastcall SetEdgeOuter(TEdgeStyle Value);
+	
+protected:
+	virtual void __fastcall NCPaint(HDC DC);
 	HIDESBASE MESSAGE void __fastcall WMNCCalcSize(Messages::TWMNCCalcSize &Message);
 	HIDESBASE MESSAGE void __fastcall WMNCPaint(Messages::TMessage &Message);
 	HIDESBASE MESSAGE void __fastcall CMBorderChanged(Messages::TMessage &Message);
@@ -57,8 +60,7 @@ public:
 	__property TEdgeStyle EdgeOuter = {read=FEdgeOuter, write=SetEdgeOuter, default=2};
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TToolWindow(HWND ParentWindow) : Controls::TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TToolWindow(HWND ParentWindow) : Controls::TWinControl(ParentWindow) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TWinControl.Destroy */ inline __fastcall virtual ~TToolWindow(void) { }
@@ -73,7 +75,7 @@ class PASCALIMPLEMENTATION TToolDockObject : public Controls::TDragDockObject
 	typedef Controls::TDragDockObject inherited;
 	
 protected:
-	virtual void __fastcall AdjustDockRect(const Windows::TRect &ARect);
+	virtual void __fastcall AdjustDockRect(const Types::TRect &ARect);
 	virtual void __fastcall DrawDragDockImage(void);
 	virtual void __fastcall EraseDragDockImage(void);
 	
@@ -103,23 +105,22 @@ private:
 	int FSizingAdjustW;
 	TSizingOrientation FSizingOrientation;
 	bool FUpdatingSize;
+	
+protected:
+	virtual bool __fastcall CanResize(int &NewWidth, int &NewHeight);
+	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
+	DYNAMIC void __fastcall DoAddDockClient(Controls::TControl* Client, const Types::TRect &ARect);
 	HIDESBASE MESSAGE void __fastcall WMNCCreate(Messages::TWMNCCreate &Message);
 	HIDESBASE MESSAGE void __fastcall WMNCHitTest(Messages::TWMNCHitTest &Message);
 	HIDESBASE MESSAGE void __fastcall WMNCLButtonDown(Messages::TWMNCHitMessage &Message);
 	HIDESBASE MESSAGE void __fastcall WMSize(Messages::TWMSize &Message);
 	HIDESBASE MESSAGE void __fastcall WMSysCommand(Messages::TWMSysCommand &Message);
 	
-protected:
-	virtual bool __fastcall CanResize(int &NewWidth, int &NewHeight);
-	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
-	DYNAMIC void __fastcall DoAddDockClient(Controls::TControl* Client, const Windows::TRect &ARect);
-	
 public:
 	__fastcall virtual TToolDockForm(Classes::TComponent* AOwner);
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TToolDockForm(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TCustomDockForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TToolDockForm(Classes::TComponent* AOwner, int Dummy) : Forms::TCustomDockForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TToolDockForm(void) { }
@@ -127,8 +128,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TToolDockForm(HWND ParentWindow) : Forms::TCustomDockForm(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TToolDockForm(HWND ParentWindow) : Forms::TCustomDockForm(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -137,9 +137,7 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Toolwin */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Toolwin;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

@@ -1,12 +1,11 @@
+{ *************************************************************************** }
+{                                                                             }
+{ Kylix and Delphi Cross-Platform Visual Component Library                    }
+{                                                                             }
+{ Copyright (c) 1997, 2001 Borland Software Corporation                       }
+{                                                                             }
+{ *************************************************************************** }
 
-{*******************************************************}
-{                                                       }
-{       Borland Delphi Visual Component Library         }
-{       Win32 Synchronization objects                   }
-{                                                       }
-{       Copyright (c) 1997,99 Inprise Corporation       }
-{                                                       }
-{*******************************************************}
 
 unit SyncObjs;
 
@@ -14,9 +13,22 @@ unit SyncObjs;
 
 interface
 
-uses Sysutils, Windows, Messages, Classes;
+uses 
+{$IFDEF MSWINDOWS}
+  Windows, 
+  Messages,
+{$ENDIF}
+{$IFDEF LINUX}
+  Libc,
+{$ENDIF}
+  SysUtils, 
+  Classes;
 
 type
+{$IFNDEF MSWINDOWS}
+  PSecurityAttributes = pointer;
+{$ENDIF}
+
   TSynchroObject = class(TObject)
   public
     procedure Acquire; virtual;
@@ -24,6 +36,7 @@ type
   end;
 
   THandleObject = class(TSynchroObject)
+{$IFDEF MSWINDOWS}
   private
     FHandle: THandle;
     FLastError: Integer;
@@ -31,15 +44,20 @@ type
     destructor Destroy; override;
     property LastError: Integer read FLastError;
     property Handle: THandle read FHandle;
+{$ENDIF}
   end;
 
   TWaitResult = (wrSignaled, wrTimeout, wrAbandoned, wrError);
 
   TEvent = class(THandleObject)
+  {$IFDEF LINUX}
+  private
+    FEvent: TSemaphore;
+  {$ENDIF}
   public
     constructor Create(EventAttributes: PSecurityAttributes; ManualReset,
       InitialState: Boolean; const Name: string);
-    function WaitFor(Timeout: DWORD): TWaitResult;
+    function WaitFor(Timeout: LongWord): TWaitResult;
     procedure SetEvent;
     procedure ResetEvent;
   end;
@@ -50,7 +68,7 @@ type
   end;
 
   TCriticalSection = class(TSynchroObject)
-  private
+  protected
     FSection: TRTLCriticalSection;
   public
     constructor Create;
@@ -75,22 +93,37 @@ end;
 
 { THandleObject }
 
+{$IFDEF MSWINDOWS}
 destructor THandleObject.Destroy;
 begin
   CloseHandle(FHandle);
   inherited Destroy;
 end;
+{$ENDIF}
 
 { TEvent }
 
 constructor TEvent.Create(EventAttributes: PSecurityAttributes; ManualReset,
   InitialState: Boolean; const Name: string);
+{$IFDEF MSWINDOWS}
 begin
   FHandle := CreateEvent(EventAttributes, ManualReset, InitialState, PChar(Name));
 end;
-
-function TEvent.WaitFor(Timeout: DWORD): TWaitResult;
+{$ENDIF}
+{$IFDEF LINUX}
+var
+   Value: Integer;
 begin
+   if InitialState then
+     Value := 1
+   else Value := 0;
+   sem_init(FEvent, False, Value);
+end;
+{$ENDIF}
+
+function TEvent.WaitFor(Timeout: LongWord): TWaitResult;
+begin
+{$IFDEF MSWINDOWS}
   case WaitForSingleObject(Handle, Timeout) of
     WAIT_ABANDONED: Result := wrAbandoned;
     WAIT_OBJECT_0: Result := wrSignaled;
@@ -103,23 +136,48 @@ begin
   else
     Result := wrError;    
   end;
+{$ENDIF}
+{$IFDEF LINUX}
+  if Timeout = LongWord($FFFFFFFF) then
+  begin
+    sem_wait(FEvent);
+    Result := wrSignaled;
+  end else
+    Result := wrError;
+{$ENDIF}
 end;
 
 procedure TEvent.SetEvent;
+{$IFDEF MSWINDOWS}
 begin
   Windows.SetEvent(Handle);
 end;
+{$ENDIF}
+{$IFDEF LINUX}
+var
+  I: Integer;
+begin
+  sem_getvalue(FEvent, I);
+  if I = 0 then
+    sem_post(FEvent);
+end;
+{$ENDIF}
 
 procedure TEvent.ResetEvent;
 begin
+{$IFDEF MSWINDOWS}
   Windows.ResetEvent(Handle);
+{$ENDIF}
+{$IFDEF LINUX}
+//  All events on Linux are auto-reset
+{$ENDIF}
 end;
 
 { TSimpleEvent }
 
 constructor TSimpleEvent.Create;
 begin
-  FHandle := CreateEvent(nil, True, False, nil);
+  inherited Create(nil, True, False, '');
 end;
 
 { TCriticalSection }

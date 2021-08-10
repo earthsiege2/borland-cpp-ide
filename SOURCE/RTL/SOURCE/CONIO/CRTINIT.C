@@ -9,14 +9,14 @@
  *--------------------------------------------------------------------------*/
 
 /*
- *      C/C++ Run Time Library - Version 10.0
+ *      C/C++ Run Time Library - Version 11.0
  *
- *      Copyright (c) 1991, 2000 by Inprise Corporation
+ *      Copyright (c) 1991, 2002 by Borland Software Corporation
  *      All Rights Reserved.
  *
  */
 
-/* $Revision:   9.1  $        */
+/* $Revision: 9.6.2.1 $        */
 
 #define INCL_CON
 #include <ntbc.h>
@@ -220,7 +220,7 @@ Prototype in    _video.h
 Description     Initializes the _video variable
 *---------------------------------------------------------------------------*/
 
-void _crtinit(int newmode)
+void _RTLENTRY _EXPFUNC _crtinit(int newmode)
 {
     int i, j, k;
     int actual_mode;

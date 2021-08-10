@@ -2,8 +2,8 @@
 <!-- C++Builder XML Project -->
 <PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
-    <PROJECT value="urlDemo.exe"/>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="UrlDemo.exe"/>
     <OBJFILES value="UrlDemo.obj urlmain.obj"/>
     <RESFILES value="urldemo.res"/>
     <IDLFILES value=""/>
@@ -11,9 +11,9 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) urlmain.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="vclx50.lib nmfast50.lib vcl50.lib"/>
-    <SPARELIBS value="vcl50.lib nmfast50.lib vclx50.lib"/>
-    <PACKAGES value=""/>
+    <LIBRARIES value="vclx.lib nmfast.lib vcl.lib rtl.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib nmfast.lib vclx.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -26,21 +26,28 @@
     <MAINSOURCE value="UrlDemo.cpp"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
-    <WARNINGS value="-w-8026 -w-8027 -w-par"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-src_suffixcpp -I$(BCB)\include -I$(BCB)\include\vcl"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a8 -k -y -v -vi- -c -b- -tW"/>
+    <IDLCFLAGS value="-src_suffix cpp -I$(BCB)\include -I$(BCB)\include\vcl"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tW"/>
     <PFLAGS value="-$YD -v -JPHN -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w0 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -v"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="UrlDemo.cpp" FORMNAME="" UNITNAME="UrlDemo" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="urlmain.cpp" FORMNAME="FormMain" UNITNAME="urlmain" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="urldemo.res" FORMNAME="" UNITNAME="urldemo" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -70,31 +77,35 @@ ProductVersion=1.0.0.0
 Comments=
 
 [HistoryLists\hlIncludePath]
-Count=1
-Item0=$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=1
-Item0=$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
-Count=1
-Item0=$(BCB)\source\vcl
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
-InMemoryExe=0
 ShowInfoMsgs=0
 LinkDebugVcl=1
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
 
 [Language]
 ActiveLang=

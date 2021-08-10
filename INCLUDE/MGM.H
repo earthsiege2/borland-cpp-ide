@@ -1,17 +1,16 @@
 //============================================================================
-// Copyright (c) 1995-1999, Microsoft Corporation
+// Copyright (c) Microsoft Corporation. All rights reserved.
 //
 // File: Mgm.h
 //
 // History:
-//      V Raman	June-25-1997  Created.
+//      V Raman    June-25-1997  Created.
 //
 // Data structures and entry points into MGM.
 //============================================================================
 
 
 #ifndef _MGM_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _MGM_H_
 
 #if _MSC_VER > 1000
@@ -39,7 +38,7 @@ typedef struct _MGM_IF_ENTRY {
     DWORD               dwIfNextHopAddr;
     BOOL                bIGMP;
     BOOL                bIsEnabled;
-    	
+        
 } MGM_IF_ENTRY, *PMGM_IF_ENTRY;
 
 
@@ -281,7 +280,6 @@ typedef enum _MGM_ENUM_TYPES
 } MGM_ENUM_TYPES;
 
 
-
 //
 // SOURCE_GROUP_ENTRY
 //
@@ -358,6 +356,9 @@ MgmGetProtocolOnInterface(
 // Group membership manipulation API. (addition / deletion )
 //============================================================================
 
+#define         MGM_JOIN_STATE_FLAG         0x00000001
+#define         MGM_FORWARD_STATE_FLAG      0x00000002
+
 DWORD
 MgmAddGroupMembershipEntry(
     IN              HANDLE                  hProtocol,
@@ -366,7 +367,8 @@ MgmAddGroupMembershipEntry(
     IN              DWORD                   dwGroupAddr,
     IN              DWORD                   dwGroupMask,
     IN              DWORD                   dwIfIndex,
-    IN              DWORD                   dwIfNextHopIPAddr
+    IN              DWORD                   dwIfNextHopIPAddr,
+    IN              DWORD                   dwFlags
 );
 
 DWORD
@@ -377,7 +379,8 @@ MgmDeleteGroupMembershipEntry(
     IN              DWORD                   dwGroupAddr,
     IN              DWORD                   dwGroupMask,
     IN              DWORD                   dwIfIndex,
-    IN              DWORD                   dwIfNextHopIPAddr
+    IN              DWORD                   dwIfNextHopIPAddr,
+    IN              DWORD                   dwFlags
 );
 
 //============================================================================
@@ -415,18 +418,33 @@ MgmGetNextMfe(
 );
 
 
+//
+// Include statistics corresponding to MIB_IPMCAST_MFE_STATS
+//
+
+#define         MGM_MFE_STATS_0             0x00000001
+
+//
+// Include statistics corresponding to MIB_IPMCAST_MFE_STATS_EX
+//
+
+#define         MGM_MFE_STATS_1             0x00000002
+
+
 DWORD
 MgmGetMfeStats(
     IN              PMIB_IPMCAST_MFE        pimm,
     IN  OUT         PDWORD                  pdwBufferSize,
-    IN  OUT         PBYTE                   pbBuffer
+    IN  OUT         PBYTE                   pbBuffer,
+    IN              DWORD                   dwFlags
 );
 
 DWORD
 MgmGetFirstMfeStats(
     IN  OUT         PDWORD                  pdwBufferSize,
     IN  OUT         PBYTE                   pbBuffer,
-    IN  OUT         PDWORD                  pdwNumEntries
+    IN  OUT         PDWORD                  pdwNumEntries,
+    IN              DWORD                   dwFlags
 );
 
 
@@ -435,7 +453,8 @@ MgmGetNextMfeStats(
     IN              PMIB_IPMCAST_MFE        pimmStart,
     IN  OUT         PDWORD                  pdwBufferSize,
     IN  OUT         PBYTE                   pbBuffer,
-    IN  OUT         PDWORD                  pdwNumEntries
+    IN  OUT         PDWORD                  pdwNumEntries,
+    IN              DWORD                   dwFlags
 );
 
 //----------------------------------------------------------------------------
@@ -476,5 +495,4 @@ MgmSetMfe(
 );
 
 
-#pragma option pop /*P_O_Pop*/
 #endif //_MGM_H_

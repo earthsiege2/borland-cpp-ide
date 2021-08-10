@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -75,6 +75,9 @@ type
     function GetHandle: HImageList;
     function GetImageHandle(Image, ImageDDB: TBitmap): HBITMAP;
     procedure InsertImage(Index: Integer; Image, Mask: TBitmap; MaskColor: TColor);
+    function InternalGetInstRes(Instance: THandle; ResType: TResType;
+      Name: PChar; Width: Integer; LoadFlags: TLoadResources;
+      MaskColor: TColor): Boolean;
     procedure ReadData(Stream: TStream);
     procedure SetBkColor(Value: TColor);
     procedure SetDrawingStyle(Value: TDrawingStyle);
@@ -90,7 +93,7 @@ type
     procedure Change; dynamic;
     procedure DefineProperties(Filer: TFiler); override;
     procedure DoDraw(Index: Integer; Canvas: TCanvas; X, Y: Integer;
-      Style: Cardinal; Enabled: Boolean); virtual;
+      Style: Cardinal; Enabled: Boolean = True); virtual;
     procedure GetImages(Index: Integer; Image, Mask: TBitmap);
     procedure HandleNeeded;
     procedure Initialize; virtual;
@@ -105,20 +108,31 @@ type
     function AddMasked(Image: TBitmap; MaskColor: TColor): Integer;
     procedure Clear;
     procedure Delete(Index: Integer);
-    procedure Draw(Canvas: TCanvas; X, Y, Index: Integer; Enabled: Boolean=True);
+    procedure Draw(Canvas: TCanvas; X, Y, Index: Integer;
+      Enabled: Boolean = True); overload;
+    procedure Draw(Canvas: TCanvas; X, Y, Index: Integer;
+      ADrawingStyle: TDrawingStyle; AImageType: TImageType;
+      Enabled: Boolean = True); overload;
     procedure DrawOverlay(Canvas: TCanvas; X, Y: Integer;
-      ImageIndex: Integer; Overlay: TOverlay; Enabled: Boolean=True);
-    function FileLoad(ResType: TResType; Name: string;
+      ImageIndex: Integer; Overlay: TOverlay; Enabled: Boolean = True); overload;
+    procedure DrawOverlay(Canvas: TCanvas; X, Y: Integer;
+      ImageIndex: Integer; Overlay: TOverlay; ADrawingStyle: TDrawingStyle;
+      AImageType: TImageType; Enabled: Boolean = True); overload;
+    function FileLoad(ResType: TResType; const Name: string;
       MaskColor: TColor): Boolean;
-    procedure GetBitmap(Index: Integer; Image: TBitmap);
+    function GetBitmap(Index: Integer; Image: TBitmap): Boolean;
     function GetHotSpot: TPoint; virtual;
-    procedure GetIcon(Index: Integer; Image: TIcon);
+    procedure GetIcon(Index: Integer; Image: TIcon); overload;
+    procedure GetIcon(Index: Integer; Image: TIcon; ADrawingStyle: TDrawingStyle;
+      AImageType: TImageType); overload;
     function GetImageBitmap: HBITMAP;
     function GetMaskBitmap: HBITMAP;
-    function GetResource(ResType: TResType; Name: string;
+    function GetResource(ResType: TResType; const Name: string;
       Width: Integer; LoadFlags: TLoadResources; MaskColor: TColor): Boolean;
-    function GetInstRes(Instance: THandle; ResType: TResType; Name: string;
-      Width: Integer; LoadFlags: TLoadResources; MaskColor: TColor): Boolean;
+    function GetInstRes(Instance: THandle; ResType: TResType; const Name: string;
+      Width: Integer; LoadFlags: TLoadResources; MaskColor: TColor): Boolean; overload;
+    function GetInstRes(Instance: THandle; ResType: TResType; ResID: DWORD;
+      Width: Integer; LoadFlags: TLoadResources; MaskColor: TColor): Boolean; overload;
     function HandleAllocated: Boolean;
     procedure Insert(Index: Integer; Image, Mask: TBitmap);
     procedure InsertIcon(Index: Integer; Image: TIcon);
@@ -126,10 +140,10 @@ type
     procedure Move(CurIndex, NewIndex: Integer);
     function Overlay(ImageIndex: Integer; Overlay: TOverlay): Boolean;
     procedure RegisterChanges(Value: TChangeLink);
-    function ResourceLoad(ResType: TResType; Name: string;
+    function ResourceLoad(ResType: TResType; const Name: string;
       MaskColor: TColor): Boolean;
-    function ResInstLoad(Instance: THandle; ResType: TResType; Name: string;
-      MaskColor: TColor): Boolean;
+    function ResInstLoad(Instance: THandle; ResType: TResType;
+      const Name: string; MaskColor: TColor): Boolean;
     procedure Replace(Index: Integer; Image, Mask: TBitmap);
     procedure ReplaceIcon(Index: Integer; Image: TIcon);
     procedure ReplaceMasked(Index: Integer; NewImage: TBitmap; MaskColor: TColor);
@@ -151,10 +165,16 @@ type
 
 implementation
 
-uses SysUtils, Consts, Forms;
+uses
+  SysUtils, Consts, Forms, ActiveX;
 
 { TCustomImageList }
 
+const
+  DrawingStyles: array[TDrawingStyle] of Longint = (ILD_FOCUS, ILD_SELECTED,
+    ILD_NORMAL, ILD_TRANSPARENT);
+  Images: array[TImageType] of Longint = (0, ILD_MASK);
+  
 function GetRGBColor(Value: TColor): DWORD;
 begin
   Result := ColorToRGB(Value);
@@ -340,7 +360,7 @@ const
 begin
   FHandle := ImageList_Create(Width, Height, ILC_COLORDDB or Mask[Masked],
     AllocBy, AllocBy);
-  if FHandle = 0 then raise EInvalidOperation.Create(SInvalidImageList);
+  if not HandleAllocated then raise EInvalidOperation.Create(SInvalidImageList);
   if FBkColor <> clNone then BkColor := FBkColor;
 end;
 
@@ -426,9 +446,10 @@ begin
   Change;
 end;
 
-procedure TCustomImageList.GetBitmap(Index: Integer; Image: TBitmap);
+function TCustomImageList.GetBitmap(Index: Integer; Image: TBitmap): Boolean;
 begin
-  if (Image <> nil) and HandleAllocated then
+  Result := (Image <> nil) and HandleAllocated and (Index > -1) and (Index < Count);
+  if Result then
     with Image do
     begin
       Height := FHeight;
@@ -438,14 +459,16 @@ begin
 end;
 
 procedure TCustomImageList.GetIcon(Index: Integer; Image: TIcon);
-const
-  DrawingStyles: array[TDrawingStyle] of Longint = (ILD_FOCUS,
-    ILD_SELECTED, ILD_NORMAL, ILD_TRANSPARENT);
-  Images: array[TImageType] of Longint = (0, ILD_MASK);
+begin
+  GetIcon(Index, Image, DrawingStyle, ImageType);
+end;
+
+procedure TCustomImageList.GetIcon(Index: Integer; Image: TIcon;
+  ADrawingStyle: TDrawingStyle; AImageType: TImageType);
 begin
   if (Image <> nil) and HandleAllocated then
     Image.Handle := ImageList_GetIcon(Handle, Index,
-      DrawingStyles[DrawingStyle] or Images[ImageType]);
+      DrawingStyles[ADrawingStyle] or Images[AImageType]);
 end;
 
 function TCustomImageList.GetCount: Integer;
@@ -584,7 +607,7 @@ begin
       FMonoBitmap.Canvas.Brush.Color := clWhite;
       FMonoBitmap.Canvas.FillRect(Rect(0, 0, Self.Width, Self.Height));
       ImageList_DrawEx(Handle, Index, FMonoBitmap.Canvas.Handle, 0,0,0,0,
-        CLR_DEFAULT, 0, ILD_NORMAL);
+        CLR_NONE, 0, ILD_NORMAL);
       R := Rect(X, Y, X+Width, Y+Height);
       SrcDC := FMonoBitmap.Canvas.Handle;
       { Convert Black to clBtnHighlight }
@@ -605,28 +628,35 @@ end;
 
 procedure TCustomImageList.Draw(Canvas: TCanvas; X, Y, Index: Integer;
   Enabled: Boolean);
-const
-  DrawingStyles: array[TDrawingStyle] of Longint = (ILD_FOCUS, ILD_SELECTED,
-    ILD_NORMAL, ILD_TRANSPARENT);
-  Images: array[TImageType] of Longint = (0, ILD_MASK);
+begin
+  Draw(Canvas, X, Y, Index, DrawingStyle, ImageType, Enabled);
+end;
+
+procedure TCustomImageList.Draw(Canvas: TCanvas; X, Y, Index: Integer;
+  ADrawingStyle: TDrawingStyle; AImageType: TImageType; Enabled: Boolean);
 begin
   if HandleAllocated then
-    DoDraw(Index, Canvas, X, Y, DrawingStyles[DrawingStyle] or
-      Images[ImageType], Enabled);
+    DoDraw(Index, Canvas, X, Y, DrawingStyles[ADrawingStyle] or
+      Images[AImageType], Enabled);
 end;
 
 procedure TCustomImageList.DrawOverlay(Canvas: TCanvas; X, Y: Integer;
   ImageIndex: Integer; Overlay: TOverlay; Enabled: Boolean);
-const
-  Images: array[TImageType] of Longint = (0, ILD_MASK);
+begin
+  DrawOverlay(Canvas, X, Y, ImageIndex, Overlay, dsNormal, itImage, Enabled);
+end;
+
+procedure TCustomImageList.DrawOverlay(Canvas: TCanvas; X, Y: Integer;
+  ImageIndex: Integer; Overlay: TOverlay; ADrawingStyle: TDrawingStyle;
+  AImageType: TImageType; Enabled: Boolean);
 var
   Index: Integer;
 begin
   if HandleAllocated then
   begin
     Index := IndexToOverlayMask(Overlay + 1);
-    DoDraw(ImageIndex, Canvas, X, Y, Images[ImageType] or ILD_OVERLAYMASK and
-      Index, Enabled);
+    DoDraw(ImageIndex, Canvas, X, Y, DrawingStyles[ADrawingStyle] or
+      Images[AImageType] or ILD_OVERLAYMASK and Index, Enabled);
   end;
 end;
 
@@ -779,13 +809,15 @@ var
   TempList: TCustomImageList;
   Icon: TIcon;
 begin
-  Icon := TIcon.Create;
-  TempList := TCustomImageList.CreateSize(5, 5);
-  TempList.Assign(Self);
-  Clear;
-  if Index > TempList.Count then raise EInvalidOperation.Create(SImageIndexError);
+  Icon := nil;
+  TempList := nil;
   BeginUpdate;
   try
+    TempList := TCustomImageList.CreateSize(5, 5);
+    TempList.Assign(Self);
+    Clear;
+    if Index > TempList.Count then raise EInvalidOperation.Create(SImageIndexError);
+    Icon := TIcon.Create;
     for I := 0 to Index - 1 do
     begin
       TempList.GetIcon(I, Icon);
@@ -798,8 +830,9 @@ begin
       AddIcon(Icon);
     end;
   finally
-    TempList.Free;
     EndUpdate;
+    Icon.Free;
+    TempList.Free;
   end;
 end;
 
@@ -911,8 +944,24 @@ begin
 end;
 
 function TCustomImageList.GetInstRes(Instance: THandle; ResType: TResType;
-  Name: string; Width: Integer; LoadFlags: TLoadResources; MaskColor: TColor):
-  Boolean;
+  ResID: DWORD; Width: Integer; LoadFlags: TLoadResources;
+  MaskColor: TColor): Boolean;
+begin
+  Result := InternalGetInstRes(Instance, ResType, PChar(ResID), Width,
+    LoadFlags, MaskColor);
+end;
+
+function TCustomImageList.GetInstRes(Instance: THandle; ResType: TResType;
+  const Name: string; Width: Integer; LoadFlags: TLoadResources;
+  MaskColor: TColor): Boolean;
+begin
+  Result := InternalGetInstRes(Instance, ResType, PChar(Name), Width,
+    LoadFlags, MaskColor);
+end;
+
+function TCustomImageList.InternalGetInstRes(Instance: THandle;
+  ResType: TResType; Name: PChar; Width: Integer; LoadFlags: TLoadResources;
+  MaskColor: TColor): Boolean;
 const
   ResMap: array [TResType] of Integer = (IMAGE_BITMAP, IMAGE_CURSOR, IMAGE_ICON);
 var
@@ -926,8 +975,8 @@ begin
   if lrMap3DColors in LoadFlags then Flags := Flags or LR_LOADMAP3DCOLORS;
   if lrTransparent in LoadFlags then Flags := Flags or LR_LOADTRANSPARENT;
   if lrMonoChrome in LoadFlags then Flags := Flags or LR_MONOCHROME;
-  hImage := ImageList_LoadImage(Instance, PChar(Name), Width, AllocBy,
-    MaskColor, ResMap[ResType], Flags);
+  hImage := ImageList_LoadImage(Instance, Name, Width, AllocBy, MaskColor,
+    ResMap[ResType], Flags);
   if hImage <> 0 then
   begin
     CopyImages(hImage);
@@ -937,19 +986,19 @@ begin
   else Result := False;
 end;
 
-function TCustomImageList.GetResource(ResType: TResType; Name: string;
+function TCustomImageList.GetResource(ResType: TResType; const Name: string;
   Width: Integer; LoadFlags: TLoadResources; MaskColor: TColor): Boolean;
 begin
   Result := GetInstRes(MainInstance, ResType, Name, Width, LoadFlags, MaskColor);
 end;
 
 function TCustomImageList.ResInstLoad(Instance: THandle; ResType: TResType;
-  Name: string; MaskColor: TColor): Boolean;
+  const Name: string; MaskColor: TColor): Boolean;
 begin
   Result := GetInstRes(Instance, ResType, Name, Width, [], MaskColor);
 end;
 
-function TCustomImageList.ResourceLoad(ResType: TResType; Name: string;
+function TCustomImageList.ResourceLoad(ResType: TResType; const Name: string;
   MaskColor: TColor): Boolean;
 var
   LibModule: PLibModule;
@@ -972,7 +1021,7 @@ begin
   end;
 end;
 
-function TCustomImageList.FileLoad(ResType: TResType; Name: string;
+function TCustomImageList.FileLoad(ResType: TResType; const Name: string;
   MaskColor: TColor): Boolean;
 begin
   Result := GetResource(ResType, Name, Width, [lrFromFile], MaskColor);
@@ -1116,15 +1165,68 @@ end;
 
 procedure TCustomImageList.ReadD3Stream(Stream: TStream);
 var
-  SA: TStreamAdapter;
+  LAdapter: TStreamAdapter;
+  LTemp: TMemoryStream;
+  LRetry: Boolean;
+  LValue, LBitCount: Byte;
 begin
-  SA := TStreamAdapter.Create(Stream);
+  // attempt a simple read
+  LAdapter := TStreamAdapter.Create(Stream);
   try
-    Handle := ImageList_Read(SA);
-    if Handle = 0 then
-      raise EReadError.CreateRes(@SImageReadFail);
+    Handle := ImageList_Read(LAdapter);
   finally
-    SA.Free;
+    LAdapter.Free;
+  end;
+
+  // if we were not successful then attempt to fix up the really old ComCtl stream
+  if not HandleAllocated then
+  begin
+
+    // make a temp copy of the stream
+    LRetry := False;
+    LTemp := TMemoryStream.Create;
+    try
+      Stream.Position := 0;
+      LTemp.LoadFromStream(Stream);
+
+      // find the bad value imagelist header info
+      LTemp.Position := 18;
+      if (LTemp.Read(LValue, 1) = 1) and (LValue = 1) then
+      begin
+
+        // find the bitcount data farther on into the BitmapInfoHeader
+        LTemp.Position := 56;
+        if LTemp.Read(LBitCount, 1) = 1 then
+        begin
+
+          // correct the original value
+          LValue := LValue or LBitCount;
+
+          // back to the imagelist header info and patch it
+          LTemp.Position := 18;
+          LRetry := LTemp.Write(LValue, 1) = 1;
+        end;
+      end;
+
+      // reattempt the load
+      if LRetry then
+      begin
+        LTemp.Position := 0;
+        LAdapter := TStreamAdapter.Create(LTemp);
+        try
+          Handle := ImageList_Read(LAdapter);
+        finally
+          LAdapter.Free;
+        end;
+      end;
+
+    finally
+      LTemp.Free;
+    end;
+
+    // if we still didn't succeed then fail
+    if not HandleAllocated then
+      raise EReadError.CreateRes(@SImageReadFail);
   end;
 end;
 

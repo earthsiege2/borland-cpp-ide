@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1998-1999 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -43,6 +43,12 @@ typedef struct
 
 } COMMAND_QUEUE_ITEM;
 
+typedef struct _NOTIF_LIST
+{
+    CMSPAddress      *addr;
+    _NOTIF_LIST      *next;
+} NOTIF_LIST, *PNOTIF_LIST;
+
 class CMSPThread
 {
 public:
@@ -52,6 +58,8 @@ public:
 
         m_hCommandEvent = NULL;
         m_hThread       = NULL;
+
+        m_NotifList     = NULL;
 
         m_iStartCount = 0;
     }
@@ -67,6 +75,11 @@ public:
     HRESULT Shutdown();
 
     HRESULT ThreadProc();
+
+    static LRESULT CALLBACK NotifWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+    HRESULT RegisterPnpNotification(CMSPAddress *pCMSPAddress);
+    HRESULT UnregisterPnpNotification(CMSPAddress *pCMSPAddress);
 
     HRESULT QueueWorkItem(
         LPTHREAD_START_ROUTINE Function,
@@ -94,9 +107,19 @@ private:
                                              // save it so that we can wait
                                              // for it when stopping the
                                              // thread.
+
+    HDEVNOTIFY              m_hDevNotifyVideo;  // Handles of device notification registration
+    HDEVNOTIFY              m_hDevNotifyAudio;  // for video and audio devices.
+
+    HWND                    m_hWndNotif;     // Window handle for notification window
+
+    PNOTIF_LIST             m_NotifList;     // List of notification functions to call
+                                             // on a PNP event
+    CMSPCritSection         m_NotifLock;     // Notification list critical section
 };
 
 extern CMSPThread g_Thread;
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // __MSPTHRD_H

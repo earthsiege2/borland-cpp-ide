@@ -11,6 +11,7 @@
 #include <DBClient.hpp>
 #include <MConnect.hpp>
 #include <MidasCon.hpp>
+#include <DB.hpp>
 //---------------------------------------------------------------------------
 class TDataModule1 : public TDataModule
 {

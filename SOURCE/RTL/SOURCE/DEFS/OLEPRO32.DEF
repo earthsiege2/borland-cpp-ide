@@ -1,10 +1,10 @@
-LIBRARY OLEPRO32
+LIBRARY OlePro32
 EXPORTS
 
-    OleCreateFontIndirect                    = 'OLEPRO32.DLL'.*
-    OleCreatePictureIndirect                 = 'OLEPRO32.DLL'.*
-    OleCreatePropertyFrame                   = 'OLEPRO32.DLL'.*
-    OleCreatePropertyFrameIndirect           = 'OLEPRO32.DLL'.*
-    OleIconToCursor                          = 'OLEPRO32.DLL'.*
-    OleLoadPicture                           = 'OLEPRO32.DLL'.*
-    OleTranslateColor                        = 'OLEPRO32.DLL'.*
+    OleCreateFontIndirect        @253
+    OleCreatePictureIndirect        @252
+    OleCreatePropertyFrame        @250
+    OleCreatePropertyFrameIndirect        @249
+    OleIconToCursor        @248
+    OleLoadPicture        @251
+    OleTranslateColor        @254

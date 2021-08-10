@@ -2,13 +2,14 @@
 *                                                                           *
 * winuser.h -- USER procedure declarations, constant definitions and macros *
 *                                                                           *
-* Copyright (c) 1985 - 1999, Microsoft Corporation                          *
+* Copyright (c) Microsoft Corporation. All rights reserved.                          *
 *                                                                           *
 ****************************************************************************/
 
 
+
+
 #ifndef _WINUSER_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WINUSER_
 
 
@@ -171,7 +172,7 @@ typedef DESKTOPENUMPROCA    DESKTOPENUMPROC;
 #define RT_RCDATA           MAKEINTRESOURCE(10)
 #define RT_MESSAGETABLE     MAKEINTRESOURCE(11)
 
-#define DIFFERENCE          11
+#define DIFFERENCE     11
 #define RT_GROUP_CURSOR MAKEINTRESOURCE((ULONG_PTR)RT_CURSOR + DIFFERENCE)
 #define RT_GROUP_ICON   MAKEINTRESOURCE((ULONG_PTR)RT_ICON + DIFFERENCE)
 #define RT_VERSION      MAKEINTRESOURCE(16)
@@ -183,6 +184,22 @@ typedef DESKTOPENUMPROCA    DESKTOPENUMPROC;
 #define RT_ANIICON      MAKEINTRESOURCE(22)
 #endif /* WINVER >= 0x0400 */
 #define RT_HTML         MAKEINTRESOURCE(23)
+#ifdef RC_INVOKED
+#define RT_MANIFEST                        24
+#define CREATEPROCESS_MANIFEST_RESOURCE_ID  1
+#define ISOLATIONAWARE_MANIFEST_RESOURCE_ID 2
+#define ISOLATIONAWARE_NOSTATICIMPORT_MANIFEST_RESOURCE_ID 3
+#define MINIMUM_RESERVED_MANIFEST_RESOURCE_ID 1   /* inclusive */
+#define MAXIMUM_RESERVED_MANIFEST_RESOURCE_ID 16  /* inclusive */
+#else  /* RC_INVOKED */
+#define RT_MANIFEST                        MAKEINTRESOURCE(24)
+#define CREATEPROCESS_MANIFEST_RESOURCE_ID MAKEINTRESOURCE( 1)
+#define ISOLATIONAWARE_MANIFEST_RESOURCE_ID MAKEINTRESOURCE(2)
+#define ISOLATIONAWARE_NOSTATICIMPORT_MANIFEST_RESOURCE_ID MAKEINTRESOURCE(3)
+#define MINIMUM_RESERVED_MANIFEST_RESOURCE_ID MAKEINTRESOURCE( 1 /*inclusive*/)
+#define MAXIMUM_RESERVED_MANIFEST_RESOURCE_ID MAKEINTRESOURCE(16 /*inclusive*/)
+#endif /* RC_INVOKED */
+
 
 #endif /* !NORESOURCE */
 
@@ -705,6 +722,32 @@ typedef struct tagCBTACTIVATESTRUCT
     HWND    hWndActive;
 } CBTACTIVATESTRUCT, *LPCBTACTIVATESTRUCT;
 
+#if(_WIN32_WINNT >= 0x0501)
+/*
+ * WTSSESSION_NOTIFICATION struct pointed by lParam, for WM_WTSSESSION_CHANGE
+ */
+typedef struct tagWTSSESSION_NOTIFICATION
+{
+    DWORD cbSize;
+    DWORD dwSessionId;
+
+} WTSSESSION_NOTIFICATION, *PWTSSESSION_NOTIFICATION;
+
+/*
+ * codes passed in WPARAM for WM_WTSSESSION_CHANGE
+ */
+
+#define WTS_CONSOLE_CONNECT                0x1
+#define WTS_CONSOLE_DISCONNECT             0x2
+#define WTS_REMOTE_CONNECT                 0x3
+#define WTS_REMOTE_DISCONNECT              0x4
+#define WTS_SESSION_LOGON                  0x5
+#define WTS_SESSION_LOGOFF                 0x6
+#define WTS_SESSION_LOCK                   0x7
+#define WTS_SESSION_UNLOCK                 0x8
+
+#endif /* _WIN32_WINNT >= 0x0501 */
+
 /*
  * WH_MSGFILTER Filter Proc Codes
  */
@@ -734,6 +777,10 @@ typedef struct tagCBTACTIVATESTRUCT
 #define HSHELL_ACCESSIBILITYSTATE   11
 #define HSHELL_APPCOMMAND           12
 #endif /* _WIN32_WINNT >= 0x0500 */
+
+#if(_WIN32_WINNT >= 0x0501)
+#define HSHELL_WINDOWREPLACED       13
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 
 #if(_WIN32_WINNT >= 0x0500)
@@ -766,6 +813,30 @@ typedef struct tagCBTACTIVATESTRUCT
 #define APPCOMMAND_BASS_UP                21
 #define APPCOMMAND_TREBLE_DOWN            22
 #define APPCOMMAND_TREBLE_UP              23
+#if(_WIN32_WINNT >= 0x0501)
+#define APPCOMMAND_MICROPHONE_VOLUME_MUTE 24
+#define APPCOMMAND_MICROPHONE_VOLUME_DOWN 25
+#define APPCOMMAND_MICROPHONE_VOLUME_UP   26
+#define APPCOMMAND_HELP                   27
+#define APPCOMMAND_FIND                   28
+#define APPCOMMAND_NEW                    29
+#define APPCOMMAND_OPEN                   30
+#define APPCOMMAND_CLOSE                  31
+#define APPCOMMAND_SAVE                   32
+#define APPCOMMAND_PRINT                  33
+#define APPCOMMAND_UNDO                   34
+#define APPCOMMAND_REDO                   35
+#define APPCOMMAND_COPY                   36
+#define APPCOMMAND_CUT                    37
+#define APPCOMMAND_PASTE                  38
+#define APPCOMMAND_REPLY_TO_MAIL          39
+#define APPCOMMAND_FORWARD_MAIL           40
+#define APPCOMMAND_SEND_MAIL              41
+#define APPCOMMAND_SPELL_CHECK            42
+#define APPCOMMAND_DICTATE_OR_COMMAND_CONTROL_TOGGLE    43
+#define APPCOMMAND_MIC_ON_OFF_TOGGLE      44
+#define APPCOMMAND_CORRECTION_LIST        45
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 #define FAPPCOMMAND_MOUSE 0x8000
 #define FAPPCOMMAND_KEY   0
@@ -1715,12 +1786,17 @@ typedef struct tagMDINEXTMENU
 #define WM_NCMBUTTONDBLCLK              0x00A9
 
 
+
 #if(_WIN32_WINNT >= 0x0500)
 #define WM_NCXBUTTONDOWN                0x00AB
 #define WM_NCXBUTTONUP                  0x00AC
 #define WM_NCXBUTTONDBLCLK              0x00AD
 #endif /* _WIN32_WINNT >= 0x0500 */
 
+
+#if(_WIN32_WINNT >= 0x0501)
+#define WM_INPUT                        0x00FF
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 #define WM_KEYFIRST                     0x0100
 #define WM_KEYDOWN                      0x0100
@@ -1731,7 +1807,13 @@ typedef struct tagMDINEXTMENU
 #define WM_SYSKEYUP                     0x0105
 #define WM_SYSCHAR                      0x0106
 #define WM_SYSDEADCHAR                  0x0107
+#if(_WIN32_WINNT >= 0x0501)
+#define WM_UNICHAR                      0x0109
+#define WM_KEYLAST                      0x0109
+#define UNICODE_NOCHAR                  0xFFFF
+#else
 #define WM_KEYLAST                      0x0108
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 #if(WINVER >= 0x0400)
 #define WM_IME_STARTCOMPOSITION         0x010D
@@ -1768,21 +1850,23 @@ typedef struct tagMDINEXTMENU
 /*
  * LOWORD(wParam) values in WM_*UISTATE*
  */
-#define UIS_SET         1
-#define UIS_CLEAR       2
-#define UIS_INITIALIZE  3
+#define UIS_SET                         1
+#define UIS_CLEAR                       2
+#define UIS_INITIALIZE                  3
 
 /*
  * HIWORD(wParam) values in WM_*UISTATE*
  */
-#define UISF_HIDEFOCUS   0x1
-#define UISF_HIDEACCEL   0x2
+#define UISF_HIDEFOCUS                  0x1
+#define UISF_HIDEACCEL                  0x2
+#if(_WIN32_WINNT >= 0x0501)
+#define UISF_ACTIVE                     0x4
+#endif /* _WIN32_WINNT >= 0x0501 */
 #endif /* _WIN32_WINNT >= 0x0500 */
 #endif
 
 #endif
 #endif /* WINVER >= 0x0500 */
-
 
 #define WM_CTLCOLORMSGBOX               0x0132
 #define WM_CTLCOLOREDIT                 0x0133
@@ -1791,7 +1875,6 @@ typedef struct tagMDINEXTMENU
 #define WM_CTLCOLORDLG                  0x0136
 #define WM_CTLCOLORSCROLLBAR            0x0137
 #define WM_CTLCOLORSTATIC               0x0138
-
 
 #define WM_MOUSEFIRST                   0x0200
 #define WM_MOUSEMOVE                    0x0200
@@ -1838,7 +1921,7 @@ typedef struct tagMDINEXTMENU
 /* XButton values are WORD flags */
 #define XBUTTON1      0x0001
 #define XBUTTON2      0x0002
-/* Were there to be an XBUTTON3, it's value would be 0x0004 */
+/* Were there to be an XBUTTON3, its value would be 0x0004 */
 #endif /* _WIN32_WINNT >= 0x0500 */
 
 #define WM_PARENTNOTIFY                 0x0210
@@ -1930,6 +2013,13 @@ typedef struct tagMDINEXTMENU
 #define WM_NCMOUSELEAVE                 0x02A2
 #endif /* WINVER >= 0x0500 */
 
+#if(_WIN32_WINNT >= 0x0501)
+#define WM_WTSSESSION_CHANGE            0x02B1
+
+#define WM_TABLET_FIRST                 0x02c0
+#define WM_TABLET_LAST                  0x02df
+#endif /* _WIN32_WINNT >= 0x0501 */
+
 #define WM_CUT                          0x0300
 #define WM_COPY                         0x0301
 #define WM_PASTE                        0x0302
@@ -1958,6 +2048,11 @@ typedef struct tagMDINEXTMENU
 #if(_WIN32_WINNT >= 0x0500)
 #define WM_APPCOMMAND                   0x0319
 #endif /* _WIN32_WINNT >= 0x0500 */
+
+#if(_WIN32_WINNT >= 0x0501)
+#define WM_THEMECHANGED                 0x031A
+#endif /* _WIN32_WINNT >= 0x0501 */
+
 
 #if(WINVER >= 0x0400)
 
@@ -2034,6 +2129,7 @@ typedef struct tagMDINEXTMENU
 #define HTHELP              21
 #endif /* WINVER >= 0x0400 */
 
+
 /*
  * SendMessageTimeout values
  */
@@ -2058,6 +2154,9 @@ typedef struct tagMDINEXTMENU
  */
 #define ICON_SMALL          0
 #define ICON_BIG            1
+#if(_WIN32_WINNT >= 0x0501)
+#define ICON_SMALL2         2
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 
 WINUSERAPI
@@ -2251,6 +2350,9 @@ TrackMouseEvent(
 #define WS_EX_CLIENTEDGE        0x00000200L
 #define WS_EX_CONTEXTHELP       0x00000400L
 
+#endif /* WINVER >= 0x0400 */
+#if(WINVER >= 0x0400)
+
 #define WS_EX_RIGHT             0x00001000L
 #define WS_EX_LEFT              0x00000000L
 #define WS_EX_RTLREADING        0x00002000L
@@ -2270,6 +2372,7 @@ TrackMouseEvent(
 
 #if(_WIN32_WINNT >= 0x0500)
 #define WS_EX_LAYERED           0x00080000
+
 #endif /* _WIN32_WINNT >= 0x0500 */
 
 
@@ -2278,6 +2381,9 @@ TrackMouseEvent(
 #define WS_EX_LAYOUTRTL         0x00400000L // Right to left mirroring
 #endif /* WINVER >= 0x0500 */
 
+#if(_WIN32_WINNT >= 0x0501)
+#define WS_EX_COMPOSITED        0x02000000L
+#endif /* _WIN32_WINNT >= 0x0501 */
 #if(_WIN32_WINNT >= 0x0500)
 #define WS_EX_NOACTIVATE        0x08000000L
 #endif /* _WIN32_WINNT >= 0x0500 */
@@ -2299,6 +2405,9 @@ TrackMouseEvent(
 #define CS_GLOBALCLASS      0x4000
 
 #define CS_IME              0x00010000
+#if(_WIN32_WINNT >= 0x0501)
+#define CS_DROPSHADOW       0x00020000
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 
 
@@ -2434,14 +2543,18 @@ DrawFrameControl(
 #if(WINVER >= 0x0500)
 #define DC_GRADIENT         0x0020
 #endif /* WINVER >= 0x0500 */
+#if(_WIN32_WINNT >= 0x0501)
+#define DC_BUTTONS          0x1000
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 WINUSERAPI
 BOOL
 WINAPI
-DrawCaption( IN HWND, IN HDC, IN CONST RECT *, IN UINT);
+DrawCaption(IN HWND, IN HDC, IN CONST RECT *, IN UINT);
 
 
 #define IDANI_OPEN          1
+#define IDANI_CAPTION       3
 
 WINUSERAPI
 BOOL
@@ -2733,6 +2846,7 @@ GetMessageW(
 #define GetMessage  GetMessageA
 #endif // !UNICODE
 
+
 WINUSERAPI
 BOOL
 WINAPI
@@ -2754,7 +2868,6 @@ DispatchMessageW(
 #else
 #define DispatchMessage  DispatchMessageA
 #endif // !UNICODE
-
 
 WINUSERAPI
 BOOL
@@ -2785,6 +2898,7 @@ PeekMessageW(
 #else
 #define PeekMessage  PeekMessageA
 #endif // !UNICODE
+
 
 /*
  * PeekMessage() Options
@@ -2990,6 +3104,41 @@ SendMessageCallbackW(
 #define SendMessageCallback  SendMessageCallbackA
 #endif // !UNICODE
 
+#if(_WIN32_WINNT >= 0x0501)
+typedef struct {
+    UINT  cbSize;
+    HDESK hdesk;
+    HWND  hwnd;
+    LUID  luid;
+} BSMINFO, *PBSMINFO;
+
+WINUSERAPI
+long
+WINAPI
+BroadcastSystemMessageExA(
+    IN DWORD,
+    IN LPDWORD,
+    IN UINT,
+    IN WPARAM,
+    IN LPARAM,
+    OUT PBSMINFO);
+WINUSERAPI
+long
+WINAPI
+BroadcastSystemMessageExW(
+    IN DWORD,
+    IN LPDWORD,
+    IN UINT,
+    IN WPARAM,
+    IN LPARAM,
+    OUT PBSMINFO);
+#ifdef UNICODE
+#define BroadcastSystemMessageEx  BroadcastSystemMessageExW
+#else
+#define BroadcastSystemMessageEx  BroadcastSystemMessageExA
+#endif // !UNICODE
+#endif /* _WIN32_WINNT >= 0x0501 */
+
 #if(WINVER >= 0x0400)
 
 #if defined(_WIN32_WINNT)
@@ -3027,6 +3176,7 @@ BroadcastSystemMessage(
     IN UINT,
     IN WPARAM,
     IN LPARAM);
+
 #endif
 
 //Broadcast Special Message Recipient list
@@ -3049,6 +3199,10 @@ BroadcastSystemMessage(
 #define BSF_ALLOWSFW            0x00000080
 #define BSF_SENDNOTIFYMESSAGE   0x00000100
 #endif /* _WIN32_WINNT >= 0x0500 */
+#if(_WIN32_WINNT >= 0x0501)
+#define BSF_RETURNHDESK         0x00000200
+#define BSF_LUID                0x00000400
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 #define BROADCAST_QUERY_DENY         0x424D5144  // Return this value to deny a query.
 #endif /* WINVER >= 0x0400 */
@@ -3059,8 +3213,11 @@ BroadcastSystemMessage(
 typedef  PVOID           HDEVNOTIFY;
 typedef  HDEVNOTIFY     *PHDEVNOTIFY;
 
-#define DEVICE_NOTIFY_WINDOW_HANDLE     0x00000000
-#define DEVICE_NOTIFY_SERVICE_HANDLE    0x00000001
+#define DEVICE_NOTIFY_WINDOW_HANDLE          0x00000000
+#define DEVICE_NOTIFY_SERVICE_HANDLE         0x00000001
+#if(_WIN32_WINNT >= 0x0501)
+#define DEVICE_NOTIFY_ALL_INTERFACE_CLASSES  0x00000004
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 WINUSERAPI
 HDEVNOTIFY
@@ -3176,6 +3333,7 @@ BOOL
 WINAPI
 WaitMessage(
     VOID);
+
 
 WINUSERAPI
 DWORD
@@ -3411,6 +3569,10 @@ GetClassInfoExW(
  */
 #define HWND_DESKTOP        ((HWND)0)
 
+#if(_WIN32_WINNT >= 0x0501)
+typedef BOOLEAN (WINAPI * PREGISTERCLASSNAMEW)(LPCWSTR);
+#endif /* _WIN32_WINNT >= 0x0501 */
+
 WINUSERAPI
 HWND
 WINAPI
@@ -3523,6 +3685,29 @@ UpdateLayeredWindow(
     DWORD dwFlags);
 #endif
 
+#if(_WIN32_WINNT >= 0x0501)
+WINUSERAPI
+BOOL
+WINAPI
+GetLayeredWindowAttributes(
+    HWND hwnd,
+    COLORREF *pcrKey,
+    BYTE *pbAlpha,
+    DWORD *pdwFlags);
+
+#define PW_CLIENTONLY           0x00000001
+
+
+WINUSERAPI
+BOOL
+WINAPI
+PrintWindow(
+    IN HWND hwnd,
+    IN HDC hdcBlt,
+    IN UINT nFlags);
+
+#endif /* _WIN32_WINNT >= 0x0501 */
+
 WINUSERAPI
 BOOL
 WINAPI
@@ -3539,6 +3724,7 @@ SetLayeredWindowAttributes(
 #define ULW_COLORKEY            0x00000001
 #define ULW_ALPHA               0x00000002
 #define ULW_OPAQUE              0x00000004
+
 
 #endif /* _WIN32_WINNT >= 0x0500 */
 
@@ -4878,6 +5064,7 @@ WINAPI
 GetQueueStatus(
     IN UINT flags);
 
+
 WINUSERAPI
 HWND
 WINAPI
@@ -4916,6 +5103,7 @@ MsgWaitForMultipleObjectsEx(
     IN DWORD dwWakeMask,
     IN DWORD dwFlags);
 
+
 #define MWMO_WAITALL        0x0001
 #define MWMO_ALERTABLE      0x0002
 #define MWMO_INPUTAVAILABLE 0x0004
@@ -4932,12 +5120,21 @@ MsgWaitForMultipleObjectsEx(
 #define QS_SENDMESSAGE      0x0040
 #define QS_HOTKEY           0x0080
 #define QS_ALLPOSTMESSAGE   0x0100
+#if(_WIN32_WINNT >= 0x0501)
+#define QS_RAWINPUT         0x0400
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 #define QS_MOUSE           (QS_MOUSEMOVE     | \
                             QS_MOUSEBUTTON)
 
+#if (_WIN32_WINNT >= 0x0501)
+#define QS_INPUT           (QS_MOUSE         | \
+                            QS_KEY           | \
+                            QS_RAWINPUT)
+#else
 #define QS_INPUT           (QS_MOUSE         | \
                             QS_KEY)
+#endif // (_WIN32_WINNT >= 0x0501)
 
 #define QS_ALLEVENTS       (QS_INPUT         | \
                             QS_POSTMESSAGE   | \
@@ -5179,15 +5376,25 @@ TranslateAcceleratorW(
 #if(_WIN32_WINNT >= 0x0500)
 #define SM_IMMENABLED           82
 #endif /* _WIN32_WINNT >= 0x0500 */
+#if(_WIN32_WINNT >= 0x0501)
+#define SM_CXFOCUSBORDER        83
+#define SM_CYFOCUSBORDER        84
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 #if (WINVER < 0x0500) && (!defined(_WIN32_WINNT) || (_WIN32_WINNT < 0x0400))
 #define SM_CMETRICS             76
 #else
-#define SM_CMETRICS             83
+#define SM_CMETRICS             86
 #endif
 
 #if(WINVER >= 0x0500)
 #define SM_REMOTESESSION        0x1000
+
+
+#if(_WIN32_WINNT >= 0x0501)
+#define SM_SHUTTINGDOWN         0x2000
+#endif /* _WIN32_WINNT >= 0x0501 */
+
 #endif /* WINVER >= 0x0500 */
 
 
@@ -5196,6 +5403,7 @@ int
 WINAPI
 GetSystemMetrics(
     IN int nIndex);
+
 
 #endif /* !NOSYSMETRICS */
 
@@ -5318,6 +5526,11 @@ BOOL
 WINAPI
 DrawMenuBar(
     IN HWND hWnd);
+
+#if(_WIN32_WINNT >= 0x0501)
+#define PMB_ACTIVE      0x00000001
+
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 
 WINUSERAPI
@@ -5791,6 +6004,9 @@ WINUSERAPI int     WINAPI MenuItemFromPoint( IN HWND hWnd, IN HMENU hMenu, IN PO
 #if(_WIN32_WINNT >= 0x0500)
 #define TPM_NOANIMATION     0x4000L
 #endif /* _WIN32_WINNT >= 0x0500 */
+#if(_WIN32_WINNT >= 0x0501)
+#define TPM_LAYOUTRTL       0x8000L
+#endif /* _WIN32_WINNT >= 0x0501 */
 #endif /* WINVER >= 0x0500 */
 
 
@@ -6233,12 +6449,24 @@ SetWindowRgn(
     IN HRGN hRgn,
     IN BOOL bRedraw);
 
+
 WINUSERAPI
 int
 WINAPI
 GetWindowRgn(
     IN HWND hWnd,
     IN HRGN hRgn);
+
+#if(_WIN32_WINNT >= 0x0501)
+
+WINUSERAPI
+int
+WINAPI
+GetWindowRgnBox(
+    IN HWND hWnd,
+    OUT LPRECT lprc);
+
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 WINUSERAPI
 int
@@ -6611,6 +6839,7 @@ AdjustWindowRectEx(
     IN BOOL bMenu,
     IN DWORD dwExStyle);
 
+
 #if(WINVER >= 0x0400)
 #define HELPINFO_WINDOW    0x0001
 #define HELPINFO_MENUITEM  0x0002
@@ -6785,7 +7014,7 @@ typedef struct tagMSGBOXPARAMSA
     LPCSTR      lpszIcon;
     DWORD_PTR   dwContextHelpId;
     MSGBOXCALLBACK      lpfnMsgBoxCallback;
-    DWORD   dwLanguageId;
+    DWORD       dwLanguageId;
 } MSGBOXPARAMSA, *PMSGBOXPARAMSA, *LPMSGBOXPARAMSA;
 typedef struct tagMSGBOXPARAMSW
 {
@@ -6798,7 +7027,7 @@ typedef struct tagMSGBOXPARAMSW
     LPCWSTR     lpszIcon;
     DWORD_PTR   dwContextHelpId;
     MSGBOXCALLBACK      lpfnMsgBoxCallback;
-    DWORD   dwLanguageId;
+    DWORD       dwLanguageId;
 } MSGBOXPARAMSW, *PMSGBOXPARAMSW, *LPMSGBOXPARAMSW;
 #ifdef UNICODE
 typedef MSGBOXPARAMSW MSGBOXPARAMS;
@@ -6809,7 +7038,6 @@ typedef MSGBOXPARAMSA MSGBOXPARAMS;
 typedef PMSGBOXPARAMSA PMSGBOXPARAMS;
 typedef LPMSGBOXPARAMSA LPMSGBOXPARAMS;
 #endif // UNICODE
-
 
 WINUSERAPI
 int
@@ -6827,7 +7055,6 @@ MessageBoxIndirectW(
 #define MessageBoxIndirect  MessageBoxIndirectA
 #endif // !UNICODE
 #endif /* WINVER >= 0x0400 */
-
 
 
 WINUSERAPI
@@ -7025,6 +7252,10 @@ WINUSERAPI HWND    WINAPI ChildWindowFromPointEx( IN HWND, IN POINT, IN UINT);
 #define COLOR_HOTLIGHT          26
 #define COLOR_GRADIENTACTIVECAPTION 27
 #define COLOR_GRADIENTINACTIVECAPTION 28
+#if(WINVER >= 0x0501)
+#define COLOR_MENUHILIGHT       29
+#define COLOR_MENUBAR           30
+#endif /* WINVER >= 0x0501 */
 #endif /* WINVER >= 0x0500 */
 
 #if(WINVER >= 0x0400)
@@ -7532,8 +7763,17 @@ GetWindowThreadProcessId(
     IN HWND hWnd,
     OUT LPDWORD lpdwProcessId);
 
+#if(_WIN32_WINNT >= 0x0501)
+WINUSERAPI
+BOOL
+WINAPI
+IsGUIThread(
+    BOOL bConvert);
+
+#endif /* _WIN32_WINNT >= 0x0501 */
+
 #define GetWindowTask(hWnd) \
-        ((HANDLE)GetWindowThreadProcessId(hWnd, NULL))
+        ((HANDLE)(DWORD_PTR)GetWindowThreadProcessId(hWnd, NULL))
 
 WINUSERAPI
 HWND
@@ -7664,7 +7904,6 @@ CallNextHookEx(
 #define DefHookProc(nCode, wParam, lParam, phhk)\
         CallNextHookEx((HHOOK)*phhk, nCode, wParam, lParam)
 #endif /* STRICT */
-
 #endif /* !NOWH */
 
 #ifndef NOMENUS
@@ -7799,6 +8038,7 @@ typedef struct {        // version 0
 #define SC_CONTEXTHELP  0xF180
 #define SC_SEPARATOR    0xF00F
 #endif /* WINVER >= 0x0400 */
+
 /*
  * Obsolete names
  */
@@ -8083,6 +8323,9 @@ CopyImage(
 #define DI_NORMAL       0x0003
 #define DI_COMPAT       0x0004
 #define DI_DEFAULTSIZE  0x0008
+#if(_WIN32_WINNT >= 0x0501)
+#define DI_NOMIRROR     0x0010
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 WINUSERAPI BOOL WINAPI DrawIconEx( IN HDC hdc, IN int xLeft, IN int yTop,
               IN HICON hIcon, IN int cxWidth, IN int cyWidth,
@@ -8274,6 +8517,12 @@ LoadStringW(
 #define IDTRYAGAIN      10
 #define IDCONTINUE      11
 #endif /* WINVER >= 0x0500 */
+
+#if(WINVER >= 0x0501)
+#ifndef IDTIMEOUT
+#define IDTIMEOUT 32000
+#endif
+#endif /* WINVER >= 0x0501 */
 
 
 #ifndef NOCTLMGR
@@ -8498,6 +8747,9 @@ LoadStringW(
 #define SS_ETCHEDFRAME      0x00000012L
 #define SS_TYPEMASK         0x0000001FL
 #endif /* WINVER >= 0x0400 */
+#if(WINVER >= 0x0501)
+#define SS_REALSIZECONTROL  0x00000040L
+#endif /* WINVER >= 0x0501 */
 #define SS_NOPREFIX         0x00000080L /* Don't do "&" character translation */
 #if(WINVER >= 0x0400)
 #define SS_NOTIFY           0x00000100L
@@ -8826,7 +9078,14 @@ DlgDirSelectComboBoxExW(
 #define LB_MULTIPLEADDSTRING    0x01B1
 #endif
 
-#if(_WIN32_WCE >= 0x0400)
+
+#if(_WIN32_WINNT >= 0x0501)
+#define LB_GETLISTBOXINFO       0x01B2
+#endif /* _WIN32_WINNT >= 0x0501 */
+
+#if(_WIN32_WINNT >= 0x0501)
+#define LB_MSGMAX               0x01B3
+#elif(_WIN32_WCE >= 0x0400)
 #define LB_MSGMAX               0x01B1
 #elif(WINVER >= 0x0400)
 #define LB_MSGMAX               0x01B0
@@ -8955,7 +9214,14 @@ DlgDirSelectComboBoxExW(
 #define CB_MULTIPLEADDSTRING        0x0163
 #endif
 #endif /* WINVER >= 0x0400 */
-#if(_WIN32_WCE >= 0x0400)
+
+#if(_WIN32_WINNT >= 0x0501)
+#define CB_GETCOMBOBOXINFO          0x0164
+#endif /* _WIN32_WINNT >= 0x0501 */
+
+#if(_WIN32_WINNT >= 0x0501)
+#define CB_MSGMAX                   0x0165
+#elif(_WIN32_WCE >= 0x0400)
 #define CB_MSGMAX                   0x0163
 #elif(WINVER >= 0x0400)
 #define CB_MSGMAX                   0x0162
@@ -9001,7 +9267,13 @@ DlgDirSelectComboBoxExW(
 #if(WINVER >= 0x0400)
 #define SBM_SETSCROLLINFO           0x00E9
 #define SBM_GETSCROLLINFO           0x00EA
+#endif /* WINVER >= 0x0400 */
 
+#if(_WIN32_WINNT >= 0x0501)
+#define SBM_GETSCROLLBARINFO        0x00EB
+#endif /* _WIN32_WINNT >= 0x0501 */
+
+#if(WINVER >= 0x0400)
 #define SIF_RANGE           0x0001
 #define SIF_PAGE            0x0002
 #define SIF_POS             0x0004
@@ -9021,8 +9293,9 @@ typedef struct tagSCROLLINFO
 }   SCROLLINFO, FAR *LPSCROLLINFO;
 typedef SCROLLINFO CONST FAR *LPCSCROLLINFO;
 
-WINUSERAPI int     WINAPI SetScrollInfo( IN HWND, IN int, IN LPCSCROLLINFO, IN BOOL);
-WINUSERAPI BOOL    WINAPI GetScrollInfo( IN HWND, IN int, IN OUT LPSCROLLINFO);
+WINUSERAPI int     WINAPI SetScrollInfo(IN HWND, IN int, IN LPCSCROLLINFO, IN BOOL);
+WINUSERAPI BOOL    WINAPI GetScrollInfo(IN HWND, IN int, IN OUT LPSCROLLINFO);
+
 #endif /* WINVER >= 0x0400 */
 #endif /* !NOWINMESSAGES */
 #endif /* !NOCTLMGR */
@@ -9344,130 +9617,129 @@ GetGuiResources(
  * Parameter for SystemParametersInfo()
  */
 
-#define SPI_GETBEEP                 1
-#define SPI_SETBEEP                 2
-#define SPI_GETMOUSE                3
-#define SPI_SETMOUSE                4
-#define SPI_GETBORDER               5
-#define SPI_SETBORDER               6
-#define SPI_GETKEYBOARDSPEED       10
-#define SPI_SETKEYBOARDSPEED       11
-#define SPI_LANGDRIVER             12
-#define SPI_ICONHORIZONTALSPACING  13
-#define SPI_GETSCREENSAVETIMEOUT   14
-#define SPI_SETSCREENSAVETIMEOUT   15
-#define SPI_GETSCREENSAVEACTIVE    16
-#define SPI_SETSCREENSAVEACTIVE    17
-#define SPI_GETGRIDGRANULARITY     18
-#define SPI_SETGRIDGRANULARITY     19
-#define SPI_SETDESKWALLPAPER       20
-#define SPI_SETDESKPATTERN         21
-#define SPI_GETKEYBOARDDELAY       22
-#define SPI_SETKEYBOARDDELAY       23
-#define SPI_ICONVERTICALSPACING    24
-#define SPI_GETICONTITLEWRAP       25
-#define SPI_SETICONTITLEWRAP       26
-#define SPI_GETMENUDROPALIGNMENT   27
-#define SPI_SETMENUDROPALIGNMENT   28
-#define SPI_SETDOUBLECLKWIDTH      29
-#define SPI_SETDOUBLECLKHEIGHT     30
-#define SPI_GETICONTITLELOGFONT    31
-#define SPI_SETDOUBLECLICKTIME     32
-#define SPI_SETMOUSEBUTTONSWAP     33
-#define SPI_SETICONTITLELOGFONT    34
-#define SPI_GETFASTTASKSWITCH      35
-#define SPI_SETFASTTASKSWITCH      36
+#define SPI_GETBEEP                 0x0001
+#define SPI_SETBEEP                 0x0002
+#define SPI_GETMOUSE                0x0003
+#define SPI_SETMOUSE                0x0004
+#define SPI_GETBORDER               0x0005
+#define SPI_SETBORDER               0x0006
+#define SPI_GETKEYBOARDSPEED        0x000A
+#define SPI_SETKEYBOARDSPEED        0x000B
+#define SPI_LANGDRIVER              0x000C
+#define SPI_ICONHORIZONTALSPACING   0x000D
+#define SPI_GETSCREENSAVETIMEOUT    0x000E
+#define SPI_SETSCREENSAVETIMEOUT    0x000F
+#define SPI_GETSCREENSAVEACTIVE     0x0010
+#define SPI_SETSCREENSAVEACTIVE     0x0011
+#define SPI_GETGRIDGRANULARITY      0x0012
+#define SPI_SETGRIDGRANULARITY      0x0013
+#define SPI_SETDESKWALLPAPER        0x0014
+#define SPI_SETDESKPATTERN          0x0015
+#define SPI_GETKEYBOARDDELAY        0x0016
+#define SPI_SETKEYBOARDDELAY        0x0017
+#define SPI_ICONVERTICALSPACING     0x0018
+#define SPI_GETICONTITLEWRAP        0x0019
+#define SPI_SETICONTITLEWRAP        0x001A
+#define SPI_GETMENUDROPALIGNMENT    0x001B
+#define SPI_SETMENUDROPALIGNMENT    0x001C
+#define SPI_SETDOUBLECLKWIDTH       0x001D
+#define SPI_SETDOUBLECLKHEIGHT      0x001E
+#define SPI_GETICONTITLELOGFONT     0x001F
+#define SPI_SETDOUBLECLICKTIME      0x0020
+#define SPI_SETMOUSEBUTTONSWAP      0x0021
+#define SPI_SETICONTITLELOGFONT     0x0022
+#define SPI_GETFASTTASKSWITCH       0x0023
+#define SPI_SETFASTTASKSWITCH       0x0024
 #if(WINVER >= 0x0400)
-#define SPI_SETDRAGFULLWINDOWS     37
-#define SPI_GETDRAGFULLWINDOWS     38
-#define SPI_GETNONCLIENTMETRICS    41
-#define SPI_SETNONCLIENTMETRICS    42
-#define SPI_GETMINIMIZEDMETRICS    43
-#define SPI_SETMINIMIZEDMETRICS    44
-#define SPI_GETICONMETRICS         45
-#define SPI_SETICONMETRICS         46
-#define SPI_SETWORKAREA            47
-#define SPI_GETWORKAREA            48
-#define SPI_SETPENWINDOWS          49
+#define SPI_SETDRAGFULLWINDOWS      0x0025
+#define SPI_GETDRAGFULLWINDOWS      0x0026
+#define SPI_GETNONCLIENTMETRICS     0x0029
+#define SPI_SETNONCLIENTMETRICS     0x002A
+#define SPI_GETMINIMIZEDMETRICS     0x002B
+#define SPI_SETMINIMIZEDMETRICS     0x002C
+#define SPI_GETICONMETRICS          0x002D
+#define SPI_SETICONMETRICS          0x002E
+#define SPI_SETWORKAREA             0x002F
+#define SPI_GETWORKAREA             0x0030
+#define SPI_SETPENWINDOWS           0x0031
 
-#define SPI_GETHIGHCONTRAST        66
-#define SPI_SETHIGHCONTRAST        67
-#define SPI_GETKEYBOARDPREF        68
-#define SPI_SETKEYBOARDPREF        69
-#define SPI_GETSCREENREADER        70
-#define SPI_SETSCREENREADER        71
-#define SPI_GETANIMATION           72
-#define SPI_SETANIMATION           73
-#define SPI_GETFONTSMOOTHING       74
-#define SPI_SETFONTSMOOTHING       75
-#define SPI_SETDRAGWIDTH           76
-#define SPI_SETDRAGHEIGHT          77
-#define SPI_SETHANDHELD            78
-#define SPI_GETLOWPOWERTIMEOUT     79
-#define SPI_GETPOWEROFFTIMEOUT     80
-#define SPI_SETLOWPOWERTIMEOUT     81
-#define SPI_SETPOWEROFFTIMEOUT     82
-#define SPI_GETLOWPOWERACTIVE      83
-#define SPI_GETPOWEROFFACTIVE      84
-#define SPI_SETLOWPOWERACTIVE      85
-#define SPI_SETPOWEROFFACTIVE      86
-#define SPI_SETCURSORS             87
-#define SPI_SETICONS               88
-#define SPI_GETDEFAULTINPUTLANG    89
-#define SPI_SETDEFAULTINPUTLANG    90
-#define SPI_SETLANGTOGGLE          91
-#define SPI_GETWINDOWSEXTENSION    92
-#define SPI_SETMOUSETRAILS         93
-#define SPI_GETMOUSETRAILS         94
-#define SPI_SETSCREENSAVERRUNNING  97
+#define SPI_GETHIGHCONTRAST         0x0042
+#define SPI_SETHIGHCONTRAST         0x0043
+#define SPI_GETKEYBOARDPREF         0x0044
+#define SPI_SETKEYBOARDPREF         0x0045
+#define SPI_GETSCREENREADER         0x0046
+#define SPI_SETSCREENREADER         0x0047
+#define SPI_GETANIMATION            0x0048
+#define SPI_SETANIMATION            0x0049
+#define SPI_GETFONTSMOOTHING        0x004A
+#define SPI_SETFONTSMOOTHING        0x004B
+#define SPI_SETDRAGWIDTH            0x004C
+#define SPI_SETDRAGHEIGHT           0x004D
+#define SPI_SETHANDHELD             0x004E
+#define SPI_GETLOWPOWERTIMEOUT      0x004F
+#define SPI_GETPOWEROFFTIMEOUT      0x0050
+#define SPI_SETLOWPOWERTIMEOUT      0x0051
+#define SPI_SETPOWEROFFTIMEOUT      0x0052
+#define SPI_GETLOWPOWERACTIVE       0x0053
+#define SPI_GETPOWEROFFACTIVE       0x0054
+#define SPI_SETLOWPOWERACTIVE       0x0055
+#define SPI_SETPOWEROFFACTIVE       0x0056
+#define SPI_SETCURSORS              0x0057
+#define SPI_SETICONS                0x0058
+#define SPI_GETDEFAULTINPUTLANG     0x0059
+#define SPI_SETDEFAULTINPUTLANG     0x005A
+#define SPI_SETLANGTOGGLE           0x005B
+#define SPI_GETWINDOWSEXTENSION     0x005C
+#define SPI_SETMOUSETRAILS          0x005D
+#define SPI_GETMOUSETRAILS          0x005E
+#define SPI_SETSCREENSAVERRUNNING   0x0061
 #define SPI_SCREENSAVERRUNNING     SPI_SETSCREENSAVERRUNNING
 #endif /* WINVER >= 0x0400 */
-#define SPI_GETFILTERKEYS          50
-#define SPI_SETFILTERKEYS          51
-#define SPI_GETTOGGLEKEYS          52
-#define SPI_SETTOGGLEKEYS          53
-#define SPI_GETMOUSEKEYS           54
-#define SPI_SETMOUSEKEYS           55
-#define SPI_GETSHOWSOUNDS          56
-#define SPI_SETSHOWSOUNDS          57
-#define SPI_GETSTICKYKEYS          58
-#define SPI_SETSTICKYKEYS          59
-#define SPI_GETACCESSTIMEOUT       60
-#define SPI_SETACCESSTIMEOUT       61
+#define SPI_GETFILTERKEYS          0x0032
+#define SPI_SETFILTERKEYS          0x0033
+#define SPI_GETTOGGLEKEYS          0x0034
+#define SPI_SETTOGGLEKEYS          0x0035
+#define SPI_GETMOUSEKEYS           0x0036
+#define SPI_SETMOUSEKEYS           0x0037
+#define SPI_GETSHOWSOUNDS          0x0038
+#define SPI_SETSHOWSOUNDS          0x0039
+#define SPI_GETSTICKYKEYS          0x003A
+#define SPI_SETSTICKYKEYS          0x003B
+#define SPI_GETACCESSTIMEOUT       0x003C
+#define SPI_SETACCESSTIMEOUT       0x003D
 #if(WINVER >= 0x0400)
-#define SPI_GETSERIALKEYS          62
-#define SPI_SETSERIALKEYS          63
+#define SPI_GETSERIALKEYS          0x003E
+#define SPI_SETSERIALKEYS          0x003F
 #endif /* WINVER >= 0x0400 */
-#define SPI_GETSOUNDSENTRY         64
-#define SPI_SETSOUNDSENTRY         65
+#define SPI_GETSOUNDSENTRY         0x0040
+#define SPI_SETSOUNDSENTRY         0x0041
 #if(_WIN32_WINNT >= 0x0400)
-#define SPI_GETSNAPTODEFBUTTON     95
-#define SPI_SETSNAPTODEFBUTTON     96
+#define SPI_GETSNAPTODEFBUTTON     0x005F
+#define SPI_SETSNAPTODEFBUTTON     0x0060
 #endif /* _WIN32_WINNT >= 0x0400 */
 #if (_WIN32_WINNT >= 0x0400) || (_WIN32_WINDOWS > 0x0400)
-#define SPI_GETMOUSEHOVERWIDTH     98
-#define SPI_SETMOUSEHOVERWIDTH     99
-#define SPI_GETMOUSEHOVERHEIGHT   100
-#define SPI_SETMOUSEHOVERHEIGHT   101
-#define SPI_GETMOUSEHOVERTIME     102
-#define SPI_SETMOUSEHOVERTIME     103
-#define SPI_GETWHEELSCROLLLINES   104
-#define SPI_SETWHEELSCROLLLINES   105
-#define SPI_GETMENUSHOWDELAY      106
-#define SPI_SETMENUSHOWDELAY      107
+#define SPI_GETMOUSEHOVERWIDTH     0x0062
+#define SPI_SETMOUSEHOVERWIDTH     0x0063
+#define SPI_GETMOUSEHOVERHEIGHT    0x0064
+#define SPI_SETMOUSEHOVERHEIGHT    0x0065
+#define SPI_GETMOUSEHOVERTIME      0x0066
+#define SPI_SETMOUSEHOVERTIME      0x0067
+#define SPI_GETWHEELSCROLLLINES    0x0068
+#define SPI_SETWHEELSCROLLLINES    0x0069
+#define SPI_GETMENUSHOWDELAY       0x006A
+#define SPI_SETMENUSHOWDELAY       0x006B
 
 
-#define SPI_GETSHOWIMEUI          110
-#define SPI_SETSHOWIMEUI          111
+#define SPI_GETSHOWIMEUI          0x006E
+#define SPI_SETSHOWIMEUI          0x006F
 #endif
 
 
 #if(WINVER >= 0x0500)
-#define SPI_GETMOUSESPEED         112
-#define SPI_SETMOUSESPEED         113
-#define SPI_GETSCREENSAVERRUNNING 114
-#define SPI_GETDESKWALLPAPER      115
-
+#define SPI_GETMOUSESPEED         0x0070
+#define SPI_SETMOUSESPEED         0x0071
+#define SPI_GETSCREENSAVERRUNNING 0x0072
+#define SPI_GETDESKWALLPAPER      0x0073
 #endif /* WINVER >= 0x0500 */
 
 
@@ -9500,6 +9772,18 @@ GetGuiResources(
 #define SPI_SETTOOLTIPFADE                  0x1019
 #define SPI_GETCURSORSHADOW                 0x101A
 #define SPI_SETCURSORSHADOW                 0x101B
+#if(_WIN32_WINNT >= 0x0501)
+#define SPI_GETMOUSESONAR                   0x101C
+#define SPI_SETMOUSESONAR                   0x101D
+#define SPI_GETMOUSECLICKLOCK               0x101E
+#define SPI_SETMOUSECLICKLOCK               0x101F
+#define SPI_GETMOUSEVANISH                  0x1020
+#define SPI_SETMOUSEVANISH                  0x1021
+#define SPI_GETFLATMENU                     0x1022
+#define SPI_SETFLATMENU                     0x1023
+#define SPI_GETDROPSHADOW                   0x1024
+#define SPI_SETDROPSHADOW                   0x1025
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 #define SPI_GETUIEFFECTS                    0x103E
 #define SPI_SETUIEFFECTS                    0x103F
@@ -9512,6 +9796,27 @@ GetGuiResources(
 #define SPI_SETFOREGROUNDFLASHCOUNT         0x2005
 #define SPI_GETCARETWIDTH                   0x2006
 #define SPI_SETCARETWIDTH                   0x2007
+
+#if(_WIN32_WINNT >= 0x0501)
+#define SPI_GETMOUSECLICKLOCKTIME           0x2008
+#define SPI_SETMOUSECLICKLOCKTIME           0x2009
+#define SPI_GETFONTSMOOTHINGTYPE            0x200A
+#define SPI_SETFONTSMOOTHINGTYPE            0x200B
+
+/* constants for SPI_GETFONTSMOOTHINGTYPE and SPI_SETFONTSMOOTHINGTYPE: */
+#define FE_FONTSMOOTHINGSTANDARD            0x0001
+#define FE_FONTSMOOTHINGCLEARTYPE           0x0002
+#define FE_FONTSMOOTHINGDOCKING             0x8000
+
+#define SPI_GETFONTSMOOTHINGCONTRAST           0x200C
+#define SPI_SETFONTSMOOTHINGCONTRAST           0x200D
+
+#define SPI_GETFOCUSBORDERWIDTH             0x200E
+#define SPI_SETFOCUSBORDERWIDTH             0x200F
+#define SPI_GETFOCUSBORDERHEIGHT            0x2010
+#define SPI_SETFOCUSBORDERHEIGHT            0x2011
+#endif /* _WIN32_WINNT >= 0x0501 */
+
 #endif /* WINVER >= 0x0500 */
 
 /*
@@ -9715,6 +10020,9 @@ typedef LPHIGHCONTRASTA LPHIGHCONTRAST;
 #define DISP_CHANGE_NOTUPDATED      -3
 #define DISP_CHANGE_BADFLAGS        -4
 #define DISP_CHANGE_BADPARAM        -5
+#if(_WIN32_WINNT >= 0x0501)
+#define DISP_CHANGE_BADDUALVIEW     -6
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 #ifdef _WINGDI_
 #ifndef NOGDI
@@ -9859,6 +10167,7 @@ SystemParametersInfoW(
 #else
 #define SystemParametersInfo  SystemParametersInfoA
 #endif // !UNICODE
+
 
 #endif  /* !NOSYSPARAMSINFO  */
 
@@ -10207,6 +10516,14 @@ SetWinEventHook(
     IN DWORD        idThread,
     IN DWORD        dwFlags);
 
+#if(_WIN32_WINNT >= 0x0501)
+WINUSERAPI
+BOOL
+WINAPI
+IsWinEventHookInstalled(
+    IN DWORD event);
+#endif /* _WIN32_WINNT >= 0x0501 */
+
 /*
  * dwFlags for SetWinEventHook
  */
@@ -10247,20 +10564,20 @@ UnhookWinEvent(
 /*
  * Reserved IDs for system objects
  */
-#define     OBJID_WINDOW        0x00000000
-#define     OBJID_SYSMENU       0xFFFFFFFF
-#define     OBJID_TITLEBAR      0xFFFFFFFE
-#define     OBJID_MENU          0xFFFFFFFD
-#define     OBJID_CLIENT        0xFFFFFFFC
-#define     OBJID_VSCROLL       0xFFFFFFFB
-#define     OBJID_HSCROLL       0xFFFFFFFA
-#define     OBJID_SIZEGRIP      0xFFFFFFF9
-#define     OBJID_CARET         0xFFFFFFF8
-#define     OBJID_CURSOR        0xFFFFFFF7
-#define     OBJID_ALERT         0xFFFFFFF6
-#define     OBJID_SOUND         0xFFFFFFF5
-#define     OBJID_QUERYCLASSNAMEIDX 0xFFFFFFF4
-#define     OBJID_NATIVEOM      0xFFFFFFF0
+#define     OBJID_WINDOW        ((LONG)0x00000000)
+#define     OBJID_SYSMENU       ((LONG)0xFFFFFFFF)
+#define     OBJID_TITLEBAR      ((LONG)0xFFFFFFFE)
+#define     OBJID_MENU          ((LONG)0xFFFFFFFD)
+#define     OBJID_CLIENT        ((LONG)0xFFFFFFFC)
+#define     OBJID_VSCROLL       ((LONG)0xFFFFFFFB)
+#define     OBJID_HSCROLL       ((LONG)0xFFFFFFFA)
+#define     OBJID_SIZEGRIP      ((LONG)0xFFFFFFF9)
+#define     OBJID_CARET         ((LONG)0xFFFFFFF8)
+#define     OBJID_CURSOR        ((LONG)0xFFFFFFF7)
+#define     OBJID_ALERT         ((LONG)0xFFFFFFF6)
+#define     OBJID_SOUND         ((LONG)0xFFFFFFF5)
+#define     OBJID_QUERYCLASSNAMEIDX ((LONG)0xFFFFFFF4)
+#define     OBJID_NATIVEOM      ((LONG)0xFFFFFFF0)
 
 /*
  * EVENT DEFINITION
@@ -10426,6 +10743,26 @@ UnhookWinEvent(
 #define EVENT_SYSTEM_MINIMIZEEND        0x0017
 
 
+#if(_WIN32_WINNT >= 0x0501)
+#define EVENT_CONSOLE_CARET             0x4001
+#define EVENT_CONSOLE_UPDATE_REGION     0x4002
+#define EVENT_CONSOLE_UPDATE_SIMPLE     0x4003
+#define EVENT_CONSOLE_UPDATE_SCROLL     0x4004
+#define EVENT_CONSOLE_LAYOUT            0x4005
+#define EVENT_CONSOLE_START_APPLICATION 0x4006
+#define EVENT_CONSOLE_END_APPLICATION   0x4007
+
+/*
+ * Flags for EVENT_CONSOLE_START/END_APPLICATION.
+ */
+#define CONSOLE_APPLICATION_16BIT       0x0001
+
+/*
+ * Flags for EVENT_CONSOLE_CARET
+ */
+#define CONSOLE_CARET_SELECTION         0x0001
+#define CONSOLE_CARET_VISIBLE           0x0002
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 /*
  * Object events
@@ -10656,6 +10993,9 @@ typedef struct tagGUITHREADINFO
 #define GUI_INMENUMODE      0x00000004
 #define GUI_SYSTEMMENUMODE  0x00000008
 #define GUI_POPUPMENUMODE   0x00000010
+#if(_WIN32_WINNT >= 0x0501)
+#define GUI_16BITTASK       0x00000020
+#endif /* _WIN32_WINNT >= 0x0501 */
 
 WINUSERAPI
 BOOL
@@ -10993,12 +11333,388 @@ UserHandleGrantAccess(
 
 #endif /* _WIN32_WINNT >= 0x0500 */
 
+#if(_WIN32_WINNT >= 0x0501)
+
+/*
+ * Raw Input Messages.
+ */
+
+DECLARE_HANDLE(HRAWINPUT);
+
+/*
+ * WM_INPUT wParam
+ */
+
+/*
+ * Use this macro to get the input code from wParam.
+ */
+#define GET_RAWINPUT_CODE_WPARAM(wParam)    ((wParam) & 0xff)
+
+/*
+ * The input is in the regular message flow,
+ * the app is required to call DefWindowProc
+ * so that the system can perform clean ups.
+ */
+#define RIM_INPUT       0
+
+/*
+ * The input is sink only. The app is expected
+ * to behave nicely, honoring RIM_FOREGROUND etc.
+ */
+#define RIM_INPUTSINK   1
+
+
+/*
+ * Raw Input data header
+ */
+typedef struct tagRAWINPUTHEADER {
+    DWORD dwType;
+    DWORD dwSize;
+    HANDLE hDevice;
+    WPARAM wParam;
+} RAWINPUTHEADER, *PRAWINPUTHEADER, *LPRAWINPUTHEADER;
+
+/*
+ * Type of the raw input
+ */
+#define RIM_TYPEMOUSE       0
+#define RIM_TYPEKEYBOARD    1
+#define RIM_TYPEHID         2
+
+/*
+ * Raw format of the mouse input
+ */
+typedef struct tagRAWMOUSE {
+    /*
+     * Indicator flags.
+     */
+    USHORT usFlags;
+
+    /*
+     * The transition state of the mouse buttons.
+     */
+    union {
+        ULONG ulButtons;
+        struct  {
+            USHORT  usButtonFlags;
+            USHORT  usButtonData;
+        };
+    };
+
+
+    /*
+     * The raw state of the mouse buttons.
+     */
+    ULONG ulRawButtons;
+
+    /*
+     * The signed relative or absolute motion in the X direction.
+     */
+    LONG lLastX;
+
+    /*
+     * The signed relative or absolute motion in the Y direction.
+     */
+    LONG lLastY;
+
+    /*
+     * Device-specific additional information for the event.
+     */
+    ULONG ulExtraInformation;
+
+} RAWMOUSE, *PRAWMOUSE, *LPRAWMOUSE;
+
+/*
+ * Define the mouse button state indicators.
+ */
+
+#define RI_MOUSE_LEFT_BUTTON_DOWN   0x0001  // Left Button changed to down.
+#define RI_MOUSE_LEFT_BUTTON_UP     0x0002  // Left Button changed to up.
+#define RI_MOUSE_RIGHT_BUTTON_DOWN  0x0004  // Right Button changed to down.
+#define RI_MOUSE_RIGHT_BUTTON_UP    0x0008  // Right Button changed to up.
+#define RI_MOUSE_MIDDLE_BUTTON_DOWN 0x0010  // Middle Button changed to down.
+#define RI_MOUSE_MIDDLE_BUTTON_UP   0x0020  // Middle Button changed to up.
+
+#define RI_MOUSE_BUTTON_1_DOWN      RI_MOUSE_LEFT_BUTTON_DOWN
+#define RI_MOUSE_BUTTON_1_UP        RI_MOUSE_LEFT_BUTTON_UP
+#define RI_MOUSE_BUTTON_2_DOWN      RI_MOUSE_RIGHT_BUTTON_DOWN
+#define RI_MOUSE_BUTTON_2_UP        RI_MOUSE_RIGHT_BUTTON_UP
+#define RI_MOUSE_BUTTON_3_DOWN      RI_MOUSE_MIDDLE_BUTTON_DOWN
+#define RI_MOUSE_BUTTON_3_UP        RI_MOUSE_MIDDLE_BUTTON_UP
+
+#define RI_MOUSE_BUTTON_4_DOWN      0x0040
+#define RI_MOUSE_BUTTON_4_UP        0x0080
+#define RI_MOUSE_BUTTON_5_DOWN      0x0100
+#define RI_MOUSE_BUTTON_5_UP        0x0200
+
+/*
+ * If usButtonFlags has RI_MOUSE_WHEEL, the wheel delta is stored in usButtonData.
+ * Take it as a signed value.
+ */
+#define RI_MOUSE_WHEEL              0x0400
+
+/*
+ * Define the mouse indicator flags.
+ */
+#define MOUSE_MOVE_RELATIVE         0
+#define MOUSE_MOVE_ABSOLUTE         1
+#define MOUSE_VIRTUAL_DESKTOP    0x02  // the coordinates are mapped to the virtual desktop
+#define MOUSE_ATTRIBUTES_CHANGED 0x04  // requery for mouse attributes
+
+
+/*
+ * Raw format of the keyboard input
+ */
+typedef struct tagRAWKEYBOARD {
+    /*
+     * The "make" scan code (key depression).
+     */
+    USHORT MakeCode;
+
+    /*
+     * The flags field indicates a "break" (key release) and other
+     * miscellaneous scan code information defined in ntddkbd.h.
+     */
+    USHORT Flags;
+
+    USHORT Reserved;
+
+    /*
+     * Windows message compatible information
+     */
+    USHORT VKey;
+    UINT   Message;
+
+    /*
+     * Device-specific additional information for the event.
+     */
+    ULONG ExtraInformation;
+
+
+} RAWKEYBOARD, *PRAWKEYBOARD, *LPRAWKEYBOARD;
+
+
+/*
+ * Define the keyboard overrun MakeCode.
+ */
+
+#define KEYBOARD_OVERRUN_MAKE_CODE    0xFF
+
+/*
+ * Define the keyboard input data Flags.
+ */
+#define RI_KEY_MAKE             0
+#define RI_KEY_BREAK            1
+#define RI_KEY_E0               2
+#define RI_KEY_E1               4
+#define RI_KEY_TERMSRV_SET_LED  8
+#define RI_KEY_TERMSRV_SHADOW   0x10
+
+
+/*
+ * Raw format of the input from Human Input Devices
+ */
+typedef struct tagRAWHID {
+    DWORD dwSizeHid;    // byte size of each report
+    DWORD dwCount;      // number of input packed
+    BYTE bRawData[1];
+} RAWHID, *PRAWHID, *LPRAWHID;
+
+/*
+ * RAWINPUT data structure.
+ */
+typedef struct tagRAWINPUT {
+    RAWINPUTHEADER header;
+    union {
+        RAWMOUSE    mouse;
+        RAWKEYBOARD keyboard;
+        RAWHID      hid;
+    } data;
+} RAWINPUT, *PRAWINPUT, *LPRAWINPUT;
+
+#ifdef _WIN64
+#define RAWINPUT_ALIGN(x)   (((x) + sizeof(QWORD) - 1) & ~(sizeof(QWORD) - 1))
+#else   // _WIN64
+#define RAWINPUT_ALIGN(x)   (((x) + sizeof(DWORD) - 1) & ~(sizeof(DWORD) - 1))
+#endif  // _WIN64
+
+#define NEXTRAWINPUTBLOCK(ptr) ((PRAWINPUT)RAWINPUT_ALIGN((ULONG_PTR)((PBYTE)(ptr) + (ptr)->header.dwSize)))
+
+/*
+ * Flags for GetRawInputData
+ */
+
+#define RID_INPUT               0x10000003
+#define RID_HEADER              0x10000005
+
+WINUSERAPI
+UINT
+WINAPI
+GetRawInputData(
+    IN HRAWINPUT    hRawInput,
+    IN UINT         uiCommand,
+    OUT LPVOID      pData,
+    IN OUT PUINT    pcbSize,
+    IN UINT         cbSizeHeader);
+
+/*
+ * Raw Input Device Information
+ */
+#define RIDI_PREPARSEDDATA      0x20000005
+#define RIDI_DEVICENAME         0x20000007  // the return valus is the character length, not the byte size
+#define RIDI_DEVICEINFO         0x2000000b
+
+typedef struct tagRID_DEVICE_INFO_MOUSE {
+    DWORD dwId;
+    DWORD dwNumberOfButtons;
+    DWORD dwSampleRate;
+} RID_DEVICE_INFO_MOUSE, *PRID_DEVICE_INFO_MOUSE;
+
+typedef struct tagRID_DEVICE_INFO_KEYBOARD {
+    DWORD dwType;
+    DWORD dwSubType;
+    DWORD dwKeyboardMode;
+    DWORD dwNumberOfFunctionKeys;
+    DWORD dwNumberOfIndicators;
+    DWORD dwNumberOfKeysTotal;
+} RID_DEVICE_INFO_KEYBOARD, *PRID_DEVICE_INFO_KEYBOARD;
+
+typedef struct tagRID_DEVICE_INFO_HID {
+    DWORD dwVendorId;
+    DWORD dwProductId;
+    DWORD dwVersionNumber;
+
+    /*
+     * Top level collection UsagePage and Usage
+     */
+    USHORT usUsagePage;
+    USHORT usUsage;
+} RID_DEVICE_INFO_HID, *PRID_DEVICE_INFO_HID;
+
+typedef struct tagRID_DEVICE_INFO {
+    DWORD cbSize;
+    DWORD dwType;
+    union {
+        RID_DEVICE_INFO_MOUSE mouse;
+        RID_DEVICE_INFO_KEYBOARD keyboard;
+        RID_DEVICE_INFO_HID hid;
+    };
+} RID_DEVICE_INFO, *PRID_DEVICE_INFO, *LPRID_DEVICE_INFO;
+
+WINUSERAPI
+UINT
+WINAPI
+GetRawInputDeviceInfoA(
+    IN HANDLE hDevice,
+    IN UINT uiCommand,
+    OUT LPVOID pData,
+    IN OUT PUINT pcbSize);
+WINUSERAPI
+UINT
+WINAPI
+GetRawInputDeviceInfoW(
+    IN HANDLE hDevice,
+    IN UINT uiCommand,
+    OUT LPVOID pData,
+    IN OUT PUINT pcbSize);
+#ifdef UNICODE
+#define GetRawInputDeviceInfo  GetRawInputDeviceInfoW
+#else
+#define GetRawInputDeviceInfo  GetRawInputDeviceInfoA
+#endif // !UNICODE
+
+
+/*
+ * Raw Input Bulk Read: GetRawInputBuffer
+ */
+WINUSERAPI
+UINT
+WINAPI
+GetRawInputBuffer(
+    OUT PRAWINPUT   pData,
+    IN OUT PUINT    pcbSize,
+    IN UINT         cbSizeHeader);
+
+/*
+ * Raw Input request APIs
+ */
+typedef struct tagRAWINPUTDEVICE {
+    USHORT usUsagePage; // Toplevel collection UsagePage
+    USHORT usUsage;     // Toplevel collection Usage
+    DWORD dwFlags;
+    HWND hwndTarget;    // Target hwnd. NULL = follows keyboard focus
+} RAWINPUTDEVICE, *PRAWINPUTDEVICE, *LPRAWINPUTDEVICE;
+
+typedef CONST RAWINPUTDEVICE* PCRAWINPUTDEVICE;
+
+#define RIDEV_REMOVE            0x00000001
+#define RIDEV_EXCLUDE           0x00000010
+#define RIDEV_PAGEONLY          0x00000020
+#define RIDEV_NOLEGACY          0x00000030
+#define RIDEV_CAPTUREMOUSE      0x00000200  // effective when mouse nolegacy is specified, otherwise it would be an error
+#define RIDEV_NOHOTKEYS         0x00000200  // effective for keyboard.
+#define RIDEV_EXMODEMASK        0x000000F0
+
+#define RIDEV_EXMODE(mode)  ((mode) & RIDEV_EXMODEMASK)
+
+WINUSERAPI
+BOOL
+WINAPI
+RegisterRawInputDevices(
+    IN PCRAWINPUTDEVICE pRawInputDevices,
+    IN UINT uiNumDevices,
+    IN UINT cbSize);
+
+WINUSERAPI
+UINT
+WINAPI
+GetRegisteredRawInputDevices(
+    OUT PRAWINPUTDEVICE pRawInputDevices,
+    IN OUT PUINT puiNumDevices,
+    IN UINT cbSize);
+
+
+typedef struct tagRAWINPUTDEVICELIST {
+    HANDLE hDevice;
+    DWORD dwType;
+} RAWINPUTDEVICELIST, *PRAWINPUTDEVICELIST;
+
+WINUSERAPI
+UINT
+WINAPI
+GetRawInputDeviceList(
+    OUT PRAWINPUTDEVICELIST pRawInputDeviceList,
+    IN OUT PUINT puiNumDevices,
+    IN UINT cbSize);
+
+
+WINUSERAPI
+LRESULT
+WINAPI
+DefRawInputProc(
+    IN PRAWINPUT* paRawInput,
+    IN INT nInput,
+    IN UINT cbSizeHeader);
+
+
+#endif /* _WIN32_WINNT >= 0x0501 */
+
+
+
+
+#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+#if ISOLATION_AWARE_ENABLED
+#include "winuser.inl"
+#endif /* ISOLATION_AWARE_ENABLED */
+#endif /* RC */
 
 #ifdef __cplusplus
 }
 #endif  /* __cplusplus */
 
-#pragma option pop /*P_O_Pop*/
 #endif /* !_WINUSER_ */
+
+
+
 
 

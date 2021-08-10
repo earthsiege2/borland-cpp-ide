@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Win31Cst.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Win31Cst.pas' rev: 6.00
 
 #ifndef Win31CstHPP
 #define Win31CstHPP
@@ -35,9 +35,7 @@ extern PACKAGE System::ResourceString _sQDelete;
 #define Win31cst_sQDelete System::LoadResourceString(&Win31cst::_sQDelete)
 
 }	/* namespace Win31cst */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Win31cst;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

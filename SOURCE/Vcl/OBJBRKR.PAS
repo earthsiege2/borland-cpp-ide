@@ -14,7 +14,7 @@ unit ObjBrkr;
 interface
 
 uses
-  MConnect, Classes, SysUtils;
+  MConnect, Classes, Variants, SysUtils;
 
 type
 
@@ -205,7 +205,7 @@ var
   Stream: TMemoryStream;
   P: Pointer;
 begin
-  if VarIsNull(Value) or VarIsEmpty(Value) then
+  if VarIsNull(Value) or VarIsClear(Value) then
     Servers.Clear else
   begin
     Stream := TMemoryStream.Create;

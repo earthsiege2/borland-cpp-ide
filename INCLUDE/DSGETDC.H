@@ -21,7 +21,6 @@ Notes:
 
 
 #ifndef _DSGETDC_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _DSGETDC_
 
 #if _MSC_VER > 1000
@@ -52,6 +51,7 @@ extern "C" {
 #define DS_DIRECTORY_SERVICE_PREFERRED  0x00000020
 #define DS_GC_SERVER_REQUIRED           0x00000040
 #define DS_PDC_REQUIRED                 0x00000080
+#define DS_BACKGROUND_ONLY              0x00000100
 #define DS_IP_REQUIRED                  0x00000200
 #define DS_KDC_REQUIRED                 0x00000400
 #define DS_TIMESERV_REQUIRED            0x00000800
@@ -73,6 +73,7 @@ extern "C" {
             DS_DIRECTORY_SERVICE_PREFERRED | \
             DS_GC_SERVER_REQUIRED | \
             DS_PDC_REQUIRED | \
+            DS_BACKGROUND_ONLY | \
             DS_IP_REQUIRED | \
             DS_KDC_REQUIRED | \
             DS_TIMESERV_REQUIRED | \
@@ -166,6 +167,7 @@ typedef struct _DOMAIN_CONTROLLER_INFOW {
 #define DS_CLOSEST_FLAG        0x00000080    // DC is in closest site to client
 #define DS_WRITABLE_FLAG       0x00000100    // DC has a writable DS
 #define DS_GOOD_TIMESERV_FLAG  0x00000200    // DC is running time service (and has clock hardware)
+#define DS_NDNC_FLAG           0x00000400    // DomainName is non-domain NC serviced by the LDAP server
 #define DS_PING_FLAGS          0x0000FFFF    // Flags returned on ping
 
 #define DS_DNS_CONTROLLER_FLAG 0x20000000    // DomainControllerName is a DNS name
@@ -430,6 +432,38 @@ DsEnumerateDomainTrustsA (
 #define DsEnumerateDomainTrusts DsEnumerateDomainTrustsA
 #endif // !UNICODE
 
+
+
+//
+// Only define this API if the caller has #included the pre-requisite ntlsa.h
+
+#ifdef _NTLSA_
+
+DSGETDCAPI
+DWORD
+WINAPI
+DsGetForestTrustInformationW (
+    IN LPCWSTR ServerName OPTIONAL,
+    IN LPCWSTR TrustedDomainName OPTIONAL,
+    IN DWORD Flags,
+    OUT PLSA_FOREST_TRUST_INFORMATION *ForestTrustInfo
+    );
+
+#define DS_GFTI_UPDATE_TDO      0x1     // Update TDO with information returned
+#define DS_GFTI_VALID_FLAGS     0x1     // All valid flags to DsGetForestTrustInformation
+
+DSGETDCAPI
+DWORD
+WINAPI
+DsMergeForestTrustInformationW(
+    IN LPCWSTR DomainName,
+    IN PLSA_FOREST_TRUST_INFORMATION NewForestTrustInfo,
+    IN PLSA_FOREST_TRUST_INFORMATION OldForestTrustInfo OPTIONAL,
+    OUT PLSA_FOREST_TRUST_INFORMATION *MergedForestTrustInfo
+    );
+
+#endif //_NTLSA_
+
 DSGETDCAPI
 DWORD
 WINAPI
@@ -482,9 +516,106 @@ DsDeregisterDnsHostRecordsA (
 #define DsDeregisterDnsHostRecords DsDeregisterDnsHostRecordsA
 #endif // !UNICODE
 
+
+#ifdef _WINSOCK2API_  // DsGetDcOpen/Next/Close depend on winsock2.h be included
+
+//
+// Option flags passed to DsGetDcOpen
+//
+
+#define DS_ONLY_DO_SITE_NAME         0x01   // Non-site specific names should be avoided.
+#define DS_NOTIFY_AFTER_SITE_RECORDS 0x02   // Return ERROR_FILEMARK_DETECTED after all
+                                            //  site specific records have been processed.
+
+#define DS_OPEN_VALID_OPTION_FLAGS ( DS_ONLY_DO_SITE_NAME | DS_NOTIFY_AFTER_SITE_RECORDS )
+
+//
+// Valid DcFlags for DsGetDcOpen
+//
+
+#define DS_OPEN_VALID_FLAGS (       \
+            DS_FORCE_REDISCOVERY  | \
+            DS_ONLY_LDAP_NEEDED   | \
+            DS_KDC_REQUIRED       | \
+            DS_PDC_REQUIRED       | \
+            DS_GC_SERVER_REQUIRED | \
+            DS_WRITABLE_REQUIRED )
+
+DSGETDCAPI
+DWORD
+WINAPI
+DsGetDcOpenW(
+    IN LPCWSTR DnsName,
+    IN ULONG OptionFlags,
+    IN LPCWSTR SiteName OPTIONAL,
+    IN GUID *DomainGuid OPTIONAL,
+    IN LPCWSTR DnsForestName OPTIONAL,
+    IN ULONG DcFlags,
+    OUT PHANDLE RetGetDcContext
+    );
+
+DSGETDCAPI
+DWORD
+WINAPI
+DsGetDcOpenA(
+    IN LPCSTR DnsName,
+    IN ULONG OptionFlags,
+    IN LPCSTR SiteName OPTIONAL,
+    IN GUID *DomainGuid OPTIONAL,
+    IN LPCSTR DnsForestName OPTIONAL,
+    IN ULONG DcFlags,
+    OUT PHANDLE RetGetDcContext
+    );
+
+#ifdef UNICODE
+#define DsGetDcOpen DsGetDcOpenW
+#else
+#define DsGetDcOpen DsGetDcOpenA
+#endif // !UNICODE
+
+DSGETDCAPI
+DWORD
+WINAPI
+DsGetDcNextW(
+    IN HANDLE GetDcContextHandle,
+    OUT PULONG SockAddressCount OPTIONAL,
+    OUT LPSOCKET_ADDRESS *SockAddresses OPTIONAL,
+    OUT LPWSTR *DnsHostName OPTIONAL
+    );
+
+DSGETDCAPI
+DWORD
+WINAPI
+DsGetDcNextA(
+    IN HANDLE GetDcContextHandle,
+    OUT PULONG SockAddressCount OPTIONAL,
+    OUT LPSOCKET_ADDRESS *SockAddresses OPTIONAL,
+    OUT LPSTR *DnsHostName OPTIONAL
+    );
+
+#ifdef UNICODE
+#define DsGetDcNext DsGetDcNextW
+#else
+#define DsGetDcNext DsGetDcNextA
+#endif // !UNICODE
+
+DSGETDCAPI
+VOID
+WINAPI
+DsGetDcCloseW(
+    IN HANDLE GetDcContextHandle
+    );
+
+#ifdef UNICODE
+#define DsGetDcClose DsGetDcCloseW
+#else
+#define DsGetDcClose DsGetDcCloseW  // same for ANSI
+#endif // !UNICODE
+
+#endif // _WINSOCK2API_
+
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _DSGETDC_

@@ -1,9 +1,11 @@
 //=============================================================================
-//  Microsoft (R) Bloodhound (tm). Copyright (C) 1991-1992.
+//  Microsoft (R) Network Monitor (tm). 
+//  Copyright (C) 1991-1999. All rights reserved.
 //
 //  MODULE: bhTypes.h
 //
-//  This is the top-level include file for all Bloodhound struct definitions.
+//  This is the top-level include file for all Network Monitor struct 
+//  definitions.
 //=============================================================================
 
 #if !defined(_BHTYPE_)
@@ -11,7 +13,17 @@
 
 #define _BHTYPE_
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #pragma pack(1)
+
+// yes we know that the following structures have:
+// warning C4200: nonstandard extension used : zero-sized array in struct/union
+// this is OK and intended
+#pragma warning(disable:4200)
 
 //=============================================================================
 //  Unaligned base type definitions.
@@ -30,7 +42,7 @@ typedef SYSTEMTIME  UNALIGNED   *ULPSYSTEMTIME;
 
 typedef struct _PARSER     *HPARSER;
 
-typedef struct _FRAMEDESC  *HFRAME;
+typedef struct _CAPFRAMEDESC  *HFRAME;
 typedef struct _CAPTURE    *HCAPTURE;
 typedef struct _FILTER     *HFILTER;
 typedef struct _ADDRESSDB  *HADDRESSDB;
@@ -41,11 +53,13 @@ typedef HPROTOCOL          *LPHPROTOCOL;
 
 //=============================================================================
 //  GetTableSize() -- The following macro is used to calculate the actual
-//                    length of Bloodhound variable-length table structures.
+//                    length of Network Monitor variable-length table structures.
 //
 //  EXAMPLE:
 //
-//  GetTableSize(PROTOCOLTABLESIZE, ProtocolTable->nProtocols, sizeof(HPROTOCOL))
+//  GetTableSize(PROTOCOLTABLESIZE, 
+//               ProtocolTable->nProtocols, 
+//               sizeof(HPROTOCOL))
 //=============================================================================
 
 #define GetTableSize(TableBaseSize, nElements, ElementSize) ((TableBaseSize) + ((nElements) * (ElementSize)))
@@ -68,7 +82,7 @@ typedef DWORD OBJECTTYPE;
 #define HANDLE_TYPE_BUFFER              MAKE_IDENTIFIER('B', 'U', 'F', '$')
 
 //=============================================================================
-//  Bloodhound constant definitions.
+//  Network Monitor constant definitions.
 //=============================================================================
 
 #define INLINE  __inline
@@ -183,13 +197,6 @@ typedef DWORD OBJECTTYPE;
 //=============================================================================
 //  LARGEINT structure defined in winnt.h
 //=============================================================================
-
-//typedef struct _LARGEINT
-//{
-//    ULONG LowLong;
-//    LONG  HighLong;
-//} LARGEINT;
-//
 
 typedef LARGE_INTEGER *LPLARGEINT;
 typedef LARGE_INTEGER UNALIGNED *ULPLARGEINT;
@@ -532,9 +539,9 @@ typedef VOID    (WINAPI *REGISTER)(HPROTOCOL);
 
 typedef VOID    (WINAPI *DEREGISTER)(HPROTOCOL);
 
-typedef LPBYTE  (WINAPI *RECOGNIZEFRAME)(HFRAME, LPBYTE, LPBYTE, DWORD, DWORD, HPROTOCOL, DWORD, LPDWORD, LPHPROTOCOL, LPDWORD);
+typedef LPBYTE  (WINAPI *RECOGNIZEFRAME)(HFRAME, LPBYTE, LPBYTE, DWORD, DWORD, HPROTOCOL, DWORD, LPDWORD, LPHPROTOCOL, PDWORD_PTR);
 
-typedef LPBYTE  (WINAPI *ATTACHPROPERTIES)(HFRAME, LPBYTE, LPBYTE, DWORD, DWORD, HPROTOCOL, DWORD, DWORD);
+typedef LPBYTE  (WINAPI *ATTACHPROPERTIES)(HFRAME, LPBYTE, LPBYTE, DWORD, DWORD, HPROTOCOL, DWORD, DWORD_PTR);
 
 typedef DWORD   (WINAPI *FORMATPROPERTIES)(HFRAME, LPBYTE, LPBYTE, DWORD, LPPROPERTYINST);
 
@@ -615,7 +622,7 @@ typedef struct _ADDRESSINFO *LPADDRESSINFO;
 typedef struct _ADDRESSINFO
 {
     ADDRESS        Address;
-    BYTE           Name[MAX_NAME_SIZE];
+    WCHAR          Name[MAX_NAME_SIZE];
 	DWORD          Flags;
     LPVOID         lpAddressInstData;
 } ADDRESSINFO;
@@ -642,6 +649,14 @@ typedef ADDRESSINFOTABLE *LPADDRESSINFOTABLE;
 
 typedef DWORD (WINAPI *FILTERPROC)(HCAPTURE, HFRAME, LPVOID);
 
+#pragma warning(default:4200)
+
 #pragma pack()
+
+#ifdef __cplusplus
+}
+#endif
+
+
 #pragma option pop /*P_O_Pop*/
 #endif

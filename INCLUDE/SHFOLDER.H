@@ -1,11 +1,10 @@
 // functions to get shell special folders/
 // shfolder.dll supports these on all platforms including Win95, Win98, NT4 and IE4 shell
 
-// all CSIDL values refereed to here are supported natively by shfolder.dll, that is they
+// all CSIDL values referred to here are supported natively by shfolder.dll, that is they
 // will work on all platforms.
 
 #ifndef _SHFOLDER_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _SHFOLDER_H_
 
 #ifndef SHFOLDERAPI
@@ -18,6 +17,10 @@
 
 #ifndef CSIDL_PERSONAL
 #define CSIDL_PERSONAL                  0x0005      // My Documents
+#endif
+
+#ifndef CSIDL_MYMUSIC
+#define CSIDL_MYMUSIC                   0x000d        // "My Music" folder
 #endif
 
 #ifndef CSIDL_APPDATA
@@ -37,6 +40,8 @@
 #define CSIDL_MYPICTURES                0x0027      // My Pictures, new for Win2K
 #define CSIDL_PROGRAM_FILES_COMMON      0x002b      // C:\Program Files\Common 
 #define CSIDL_COMMON_DOCUMENTS          0x002e      // All Users\Documents
+#define CSIDL_RESOURCES                 0x0038      // %windir%\Resources\, For theme and other windows resources.
+#define CSIDL_RESOURCES_LOCALIZED       0x0039      // %windir%\Resources\<LangID>, for theme and other windows specific resources.
 
 
 #define CSIDL_FLAG_CREATE               0x8000      // new for Win2K, or this in to force creation of folder
@@ -63,5 +68,4 @@ typedef HRESULT (__stdcall * PFNSHGETFOLDERPATHW)(HWND, int, HANDLE, DWORD, LPWS
 #define PFNSHGETFOLDERPATH  PFNSHGETFOLDERPATHA
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif //  _SHFOLDER_H_

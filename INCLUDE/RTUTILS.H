@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1995-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -12,7 +12,6 @@ Abstract:
 --*/
 
 #ifndef __ROUTING_RTUTILS_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __ROUTING_RTUTILS_H__
 
 #if _MSC_VER > 1000
@@ -45,6 +44,7 @@ extern "C" {
 #define TRACE_NO_STDINFO    0x00000001
 #define TRACE_USE_MASK      0x00000002
 #define TRACE_USE_MSEC      0x00000004
+#define TRACE_USE_DATE      0x00000008
 
 #define INVALID_TRACEID     0xFFFFFFFF
 
@@ -83,7 +83,7 @@ TraceGetConsoleA(
     );
 
 DWORD
-APIENTRY
+__cdecl
 TracePrintfA(
     IN  DWORD       dwTraceID,
     IN  LPCSTR      lpszFormat,
@@ -91,7 +91,7 @@ TracePrintfA(
     );
 
 DWORD
-APIENTRY
+__cdecl
 TracePrintfExA(
     IN  DWORD       dwTraceID,
     IN  DWORD       dwFlags,
@@ -176,7 +176,7 @@ TraceGetConsoleW(
     );
 
 DWORD
-APIENTRY
+__cdecl
 TracePrintfW(
     IN  DWORD       dwTraceID,
     IN  LPCWSTR     lpszFormat,
@@ -184,7 +184,7 @@ TracePrintfW(
     );
 
 DWORD
-APIENTRY
+__cdecl
 TracePrintfExW(
     IN  DWORD       dwTraceID,
     IN  DWORD       dwFlags,
@@ -403,6 +403,7 @@ RouterLogEventStringA(
     );
 
 VOID
+__cdecl
 RouterLogEventExA(
     IN HANDLE   hLogHandle,
     IN DWORD    dwEventType,
@@ -500,6 +501,7 @@ RouterLogEventStringW(
     );
 
 VOID
+__cdecl
 RouterLogEventExW(
     IN HANDLE   hLogHandle,
     IN DWORD    dwEventType,
@@ -757,14 +759,27 @@ RouterAssert(
 //                                                                          //
 //////////////////////////////////////////////////////////////////////////////
 
-#define MAX_PROTOCOL_NAME_LEN                           40
-#define MAX_PROTOCOL_DLL_LEN                            48
+#define RTUTILS_MAX_PROTOCOL_NAME_LEN	                40
+#define RTUTILS_MAX_PROTOCOL_DLL_LEN                    48
+
+//
+// the below two names should not be used
+//
+
+#ifndef MAX_PROTOCOL_NAME_LEN
+#define MAX_PROTOCOL_NAME_LEN RTUTILS_MAX_PROTOCOL_NAME_LEN
+#else
+#undef MAX_PROTOCOL_NAME_LEN
+#endif
+#define MAX_PROTOCOL_DLL_LEN  RTUTILS_MAX_PROTOCOL_DLL_LEN
+
+
 
 typedef struct _MPR_PROTOCOL_0 {
 
     DWORD       dwProtocolId;                           // e.g. IP_RIP
-    WCHAR       wszProtocol[MAX_PROTOCOL_NAME_LEN+1];   // e.g. "IPRIP"
-    WCHAR       wszDLLName[MAX_PROTOCOL_DLL_LEN+1];     // e.g. "iprip2.dll"
+    WCHAR       wszProtocol[RTUTILS_MAX_PROTOCOL_NAME_LEN+1];   // e.g. "IPRIP"
+    WCHAR       wszDLLName[RTUTILS_MAX_PROTOCOL_DLL_LEN+1];     // e.g. "iprip2.dll"
 
 } MPR_PROTOCOL_0;
 
@@ -1094,7 +1109,6 @@ DebugPrintWaitWorkerThreads (
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // ___ROUTING_RTUTILS_H__
 
 

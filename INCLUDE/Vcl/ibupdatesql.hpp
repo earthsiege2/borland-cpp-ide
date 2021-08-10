@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'IBUpdateSQL.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'IBUpdateSQL.pas' rev: 6.00
 
 #ifndef IBUpdateSQLHPP
 #define IBUpdateSQLHPP
@@ -13,13 +13,9 @@
 #include <IBQuery.hpp>	// Pascal unit
 #include <IBCustomDataSet.hpp>	// Pascal unit
 #include <IB.hpp>	// Pascal unit
-#include <StdVCL.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
-#include <Controls.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Classes.hpp>	// Pascal unit
-#include <Graphics.hpp>	// Pascal unit
 #include <SysUtils.hpp>	// Pascal unit
-#include <Windows.hpp>	// Pascal unit
 #include <SysInit.hpp>	// Pascal unit
 #include <System.hpp>	// Pascal unit
 
@@ -68,9 +64,7 @@ __published:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Ibupdatesql */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ibupdatesql;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

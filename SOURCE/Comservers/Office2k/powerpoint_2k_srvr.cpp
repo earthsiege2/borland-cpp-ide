@@ -9,63 +9,47 @@
 // manual modifications will be lost.                                         
 // ************************************************************************ //
 
-// C++ TLBWRTR : $Revision:   1.0.1.1  $
-// File generated on 1/24/2000 09:46:20 AM from Type Library described below.
+// C++ TLBWRTR : $Revision:   1.151.1.0.1.21  $
+// File generated on 1/28/2002 8:27:28 AM from Type Library described below.
 
-// ************************************************************************ //
-// Type Lib: d:\tlbgen\rampage\typelib\TypeLibraries\MSPPT9.olb (1)
-// IID\LCID: {91493440-5A91-11CF-8700-00AA0060263B}\0
-// Helpfile: d:\tlbgen\rampage\typelib\TypeLibraries\VBAPPT9.CHM
+// ************************************************************************  //
+// Type Lib: c:\program files\microsoft office\office\msppt9.olb (1)
+// LIBID: {91493440-5A91-11CF-8700-00AA0060263B}
+// LCID: 0
+// Helpfile: c:\program files\microsoft office\office\VBAPPT9.CHM
+// HelpString: Microsoft PowerPoint 9.0 Object Library
 // DepndLst: 
-//   (1) v2.0 stdole, (D:\WINNT\System32\stdole2.tlb)
-//   (2) v2.1 Office, (D:\msof2k\Office\mso9.dll)
-//   (3) v5.3 VBIDE, (D:\Program Files\Common Files\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB)
-//   (4) v4.0 StdVCL, (D:\tlbgen\rampage\typelib\typelibraries\testing\stdvcl40.tlb)
+//   (1) v2.0 stdole, (C:\WINNT\System32\stdole2.tlb)
+//   (2) v2.1 Office, (C:\Program Files\Microsoft Office\Office\MSO9.DLL)
+//   (3) v5.3 VBIDE, (C:\Program Files\Common Files\Microsoft Shared\VBA\VBA6\VBE6EXT.OLB)
 // Errors:
 //   Hint: Symbol 'Application' renamed to 'PowerPointApplication'
 //   Hint: Symbol 'Global' renamed to 'PowerPointGlobal'
 //   Hint: Symbol 'Presentation' renamed to 'PowerPointPresentation'
 //   Hint: Symbol 'Slide' renamed to 'PowerPointSlide'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
 //   Hint: Symbol 'Application' renamed to 'PowerPointApplication'
 //   Hint: Symbol 'Global' renamed to 'PowerPointGlobal'
 //   Hint: Symbol 'Presentation' renamed to 'PowerPointPresentation'
 //   Hint: Symbol 'Slide' renamed to 'PowerPointSlide'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
 //   Hint: Symbol 'RGB' renamed to 'rgb'
-//   Hint: Symbol 'Update' renamed to '_Update'
-//   Hint: Symbol 'Windows' renamed to 'Windoz'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
-//   Hint: Symbol 'Click' renamed to '_Click'
 // ************************************************************************ //
 
 #include <vcl.h>
 #pragma hdrstop
 
+#include <oleserver.hpp>
 #if defined(USING_ATL)
 #include <atl\atlvcl.h>
 #endif
 
-#include "PowerPoint_2K_SRVR.h"
+#include "PowerPoint_2k_srvr.h"
 
 #if !defined(__PRAGMA_PACKAGE_SMART_INIT)
 #define      __PRAGMA_PACKAGE_SMART_INIT
@@ -134,132 +118,103 @@ void __fastcall TPowerPointApplication::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TPowerPointApplication::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TPowerPointApplication::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
-    case 2001:
-      if (OnWindowSelectionChange)
+    case 2001: {
+      if (OnWindowSelectionChange) {
         (OnWindowSelectionChange)(this, (Powerpoint_2k::Selection*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 2002:
-      if (OnWindowBeforeRightClick)
+      }
+    case 2002: {
+      if (OnWindowBeforeRightClick) {
         (OnWindowBeforeRightClick)(this, (Powerpoint_2k::Selection*)(LPDISPATCH)TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 2003:
-      if (OnWindowBeforeDoubleClick)
+      }
+    case 2003: {
+      if (OnWindowBeforeDoubleClick) {
         (OnWindowBeforeDoubleClick)(this, (Powerpoint_2k::Selection*)(LPDISPATCH)TVariant(params[0]), TVariant(params[1]));
+      }
       break;
-    case 2004:
-      if (OnPresentationClose)
+      }
+    case 2004: {
+      if (OnPresentationClose) {
         (OnPresentationClose)(this, (Powerpoint_2k::PowerPointPresentation*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 2005:
-      if (OnPresentationSave)
+      }
+    case 2005: {
+      if (OnPresentationSave) {
         (OnPresentationSave)(this, (Powerpoint_2k::PowerPointPresentation*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 2006:
-      if (OnPresentationOpen)
+      }
+    case 2006: {
+      if (OnPresentationOpen) {
         (OnPresentationOpen)(this, (Powerpoint_2k::PowerPointPresentation*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 2007:
-      if (OnNewPresentation)
+      }
+    case 2007: {
+      if (OnNewPresentation) {
         (OnNewPresentation)(this, (Powerpoint_2k::PowerPointPresentation*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 2008:
-      if (OnPresentationNewSlide)
+      }
+    case 2008: {
+      if (OnPresentationNewSlide) {
         (OnPresentationNewSlide)(this, (Powerpoint_2k::PowerPointSlide*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 2009:
-      if (OnWindowActivate)
+      }
+    case 2009: {
+      if (OnWindowActivate) {
         (OnWindowActivate)(this, (Powerpoint_2k::PowerPointPresentation*)(LPDISPATCH)TVariant(params[0]), (Powerpoint_2k::DocumentWindow*)(LPDISPATCH)TVariant(params[1]));
+      }
       break;
-    case 2010:
-      if (OnWindowDeactivate)
+      }
+    case 2010: {
+      if (OnWindowDeactivate) {
         (OnWindowDeactivate)(this, (Powerpoint_2k::PowerPointPresentation*)(LPDISPATCH)TVariant(params[0]), (Powerpoint_2k::DocumentWindow*)(LPDISPATCH)TVariant(params[1]));
+      }
       break;
-    case 2011:
-      if (OnSlideShowBegin)
+      }
+    case 2011: {
+      if (OnSlideShowBegin) {
         (OnSlideShowBegin)(this, (Powerpoint_2k::SlideShowWindow*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 2012:
-      if (OnSlideShowNextBuild)
+      }
+    case 2012: {
+      if (OnSlideShowNextBuild) {
         (OnSlideShowNextBuild)(this, (Powerpoint_2k::SlideShowWindow*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 2013:
-      if (OnSlideShowNextSlide)
+      }
+    case 2013: {
+      if (OnSlideShowNextSlide) {
         (OnSlideShowNextSlide)(this, (Powerpoint_2k::SlideShowWindow*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 2014:
-      if (OnSlideShowEnd)
+      }
+    case 2014: {
+      if (OnSlideShowEnd) {
         (OnSlideShowEnd)(this, (Powerpoint_2k::PowerPointPresentation*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
-    case 2015:
-      if (OnPresentationPrint)
+      }
+    case 2015: {
+      if (OnPresentationPrint) {
         (OnPresentationPrint)(this, (Powerpoint_2k::PowerPointPresentation*)(LPDISPATCH)TVariant(params[0]));
+      }
       break;
+      }
     default:
       break;
   }
-}
-
-_GlobalPtr& TPowerPointGlobal::GetDefaultInterface()
-{
-  if (!m_DefaultIntf)
-    Connect();
-  return m_DefaultIntf;
-}
-
-_di_IUnknown __fastcall TPowerPointGlobal::GetDunk()
-{
-  _di_IUnknown diUnk;
-  if (m_DefaultIntf) {
-    IUnknownPtr punk = m_DefaultIntf;
-    diUnk = LPUNKNOWN(punk);
-  }
-  return diUnk;
-}
-
-void __fastcall TPowerPointGlobal::Connect()
-{
-  if (!m_DefaultIntf) {
-    _di_IUnknown punk = GetServer();
-    m_DefaultIntf = punk;
-    if (ServerData->EventIID != GUID_NULL)
-      ConnectEvents(GetDunk());
-  }
-}
-
-void __fastcall TPowerPointGlobal::Disconnect()
-{
-  if (m_DefaultIntf) {
-    
-    if (ServerData->EventIID != GUID_NULL)
-      DisconnectEvents(GetDunk());
-    m_DefaultIntf.Reset();
-  }
-}
-
-void __fastcall TPowerPointGlobal::BeforeDestruction()
-{
-  Disconnect();
-}
-
-void __fastcall TPowerPointGlobal::ConnectTo(_GlobalPtr intf)
-{
-  Disconnect();
-  m_DefaultIntf = intf;
-  if (ServerData->EventIID != GUID_NULL)
-    ConnectEvents(GetDunk());
-}
-
-void __fastcall TPowerPointGlobal::InitServerData()
-{
-  static Oleserver::TServerData sd;
-  sd.ClassID = CLSID_PowerPointGlobal;
-  sd.IntfIID = __uuidof(_Global);
-  sd.EventIID= GUID_NULL;
-  ServerData = &sd;
 }
 
 _PresentationPtr& TPowerPointPresentation::GetDefaultInterface()
@@ -321,7 +276,7 @@ void __fastcall TPowerPointPresentation::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TPowerPointPresentation::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TPowerPointPresentation::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
@@ -389,7 +344,7 @@ void __fastcall TPowerPointSlide::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TPowerPointSlide::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TPowerPointSlide::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
@@ -457,7 +412,7 @@ void __fastcall TMaster::InitServerData()
   ServerData = &sd;
 }
 
-void __fastcall TMaster::InvokeEvent(int id, TVariantArray& params)
+void __fastcall TMaster::InvokeEvent(int id, Oleserver::TVariantArray& params)
 {
   switch(id)
   {
@@ -481,15 +436,14 @@ namespace Powerpoint_2k_srvr
 
 void __fastcall PACKAGE Register()
 {
-  // [5]
+  // [4]
   TComponentClass cls_svr[] = {
                               __classid(Powerpoint_2k::TPowerPointApplication), 
-                              __classid(Powerpoint_2k::TPowerPointGlobal), 
                               __classid(Powerpoint_2k::TPowerPointPresentation), 
                               __classid(Powerpoint_2k::TPowerPointSlide), 
                               __classid(Powerpoint_2k::TMaster)
                            };
-  RegisterComponents("Servers", cls_svr,
+  RegisterComponents("Office2k", cls_svr,
                      sizeof(cls_svr)/sizeof(cls_svr[0])-1);
 }
 

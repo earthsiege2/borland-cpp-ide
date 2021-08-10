@@ -1,13 +1,14 @@
-USEUNIT("chkbook.cpp");
-USEUNIT("mainfrm.cpp");
-USEUNIT("chkbkfrm.cpp");
-USEUNIT("checkdoc.cpp");
-USEUNIT("fxrecdoc.cpp");
-USEUNIT("rowview.cpp");
-USEUNIT("bookvw.cpp");
-USEUNIT("checkvw.cpp");
-USEUNIT("dollcent.cpp");
-USEUNIT("stdafx.cpp");
-USERC("chkbook.rc");
+USEUNIT(".\bookvw.cpp");
+USEUNIT(".\checkdoc.cpp");
+USEUNIT(".\checkvw.cpp");
+USEUNIT(".\chkbkfrm.cpp");
+USEUNIT(".\chkbook.cpp");
+USEUNIT(".\dollcent.cpp");
+USEUNIT(".\fxrecdoc.cpp");
+USEUNIT(".\mainfrm.cpp");
+USEUNIT(".\rowview.cpp");
+USEUNIT(".\stdafx.cpp");
+USERC(".\chkbook.rc");
+USEFILE("vctobpr.log");
 
 #define WinMain

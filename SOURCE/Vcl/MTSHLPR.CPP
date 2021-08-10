@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////
 //  MTSHLPR.CPP -- transparent support for MTS and COM+
 //
-//  $Revision:   1.0.1.7  $
-//  $Date:   05 Jan 2000 16:27:10  $
+//  $Revision:   1.3.1.0.1.1  $
+//  $Date:   25 Jan 2002 13:02:00  $
 //
-//  Copyright (c) 1999, 2000 Borland International
+//  Copyright (c) 1999, 2002 Borland Software Corporation
 //////////////////////////////////////////////////////////////////////////
 
 #include <windows.h>
@@ -74,7 +74,7 @@ HRESULT TMtsDll::Get_ObjectContext(IObjectContext** ppInstanceContext)
   {
     case COMPLUS :
     {
-      TDllStdProc2<GUID, IObjectContext**> BGetObjectContext(*Library, _T("CoGetObjectContext")); /* do not localize */
+      TDllStdProc2<REFIID, IObjectContext**> BGetObjectContext(*Library, _T("CoGetObjectContext")); /* do not localize */
       HRESULT hr = E_FAIL;
       if (BGetObjectContext)
         hr = BGetObjectContext(IID_IObjectContext, ppInstanceContext);

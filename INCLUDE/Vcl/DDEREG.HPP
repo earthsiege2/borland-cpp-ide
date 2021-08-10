@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'DDEReg.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'DdeReg.pas' rev: 6.00
 
-#ifndef DDERegHPP
-#define DDERegHPP
+#ifndef DdeRegHPP
+#define DdeRegHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -14,7 +14,8 @@
 #include <StdCtrls.hpp>	// Pascal unit
 #include <Messages.hpp>	// Pascal unit
 #include <DdeMan.hpp>	// Pascal unit
-#include <DsgnIntf.hpp>	// Pascal unit
+#include <DesignEditors.hpp>	// Pascal unit
+#include <DesignIntf.hpp>	// Pascal unit
 #include <TypInfo.hpp>	// Pascal unit
 #include <Buttons.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -32,17 +33,15 @@ namespace Ddereg
 {
 //-- type declarations -------------------------------------------------------
 class DELPHICLASS TSrvrConvEdit;
-class PASCALIMPLEMENTATION TSrvrConvEdit : public Dsgnintf::TDefaultEditor 
+class PASCALIMPLEMENTATION TSrvrConvEdit : public Designeditors::TDefaultEditor 
 {
-	typedef Dsgnintf::TDefaultEditor inherited;
+	typedef Designeditors::TDefaultEditor inherited;
 	
 protected:
-	virtual void __fastcall EditProperty(Dsgnintf::TPropertyEditor* PropertyEditor, bool &Continue, bool 
-		&FreeEditor);
+	virtual void __fastcall EditProperty(const Designintf::_di_IProperty Prop, bool &Continue);
 public:
 	#pragma option push -w-inl
-	/* TComponentEditor.Create */ inline __fastcall virtual TSrvrConvEdit(Classes::TComponent* AComponent
-		, Dsgnintf::_di_IFormDesigner ADesigner) : Dsgnintf::TDefaultEditor(AComponent, ADesigner) { }
+	/* TComponentEditor.Create */ inline __fastcall virtual TSrvrConvEdit(Classes::TComponent* AComponent, Designintf::_di_IDesigner ADesigner) : Designeditors::TDefaultEditor(AComponent, ADesigner) { }
 	#pragma option pop
 	
 public:
@@ -54,17 +53,15 @@ public:
 
 
 class DELPHICLASS TCliConvEdit;
-class PASCALIMPLEMENTATION TCliConvEdit : public Dsgnintf::TDefaultEditor 
+class PASCALIMPLEMENTATION TCliConvEdit : public Designeditors::TDefaultEditor 
 {
-	typedef Dsgnintf::TDefaultEditor inherited;
+	typedef Designeditors::TDefaultEditor inherited;
 	
 protected:
-	virtual void __fastcall EditProperty(Dsgnintf::TPropertyEditor* PropertyEditor, bool &Continue, bool 
-		&FreeEditor);
+	virtual void __fastcall EditProperty(const Designintf::_di_IProperty Prop, bool &Continue);
 public:
 	#pragma option push -w-inl
-	/* TComponentEditor.Create */ inline __fastcall virtual TCliConvEdit(Classes::TComponent* AComponent
-		, Dsgnintf::_di_IFormDesigner ADesigner) : Dsgnintf::TDefaultEditor(AComponent, ADesigner) { }
+	/* TComponentEditor.Create */ inline __fastcall virtual TCliConvEdit(Classes::TComponent* AComponent, Designintf::_di_IDesigner ADesigner) : Designeditors::TDefaultEditor(AComponent, ADesigner) { }
 	#pragma option pop
 	
 public:
@@ -76,16 +73,15 @@ public:
 
 
 class DELPHICLASS TSrvrItemEdit;
-class PASCALIMPLEMENTATION TSrvrItemEdit : public Dsgnintf::TDefaultEditor 
+class PASCALIMPLEMENTATION TSrvrItemEdit : public Designeditors::TDefaultEditor 
 {
-	typedef Dsgnintf::TDefaultEditor inherited;
+	typedef Designeditors::TDefaultEditor inherited;
 	
 public:
 	virtual void __fastcall Copy(void);
 public:
 	#pragma option push -w-inl
-	/* TComponentEditor.Create */ inline __fastcall virtual TSrvrItemEdit(Classes::TComponent* AComponent
-		, Dsgnintf::_di_IFormDesigner ADesigner) : Dsgnintf::TDefaultEditor(AComponent, ADesigner) { }
+	/* TComponentEditor.Create */ inline __fastcall virtual TSrvrItemEdit(Classes::TComponent* AComponent, Designintf::_di_IDesigner ADesigner) : Designeditors::TDefaultEditor(AComponent, ADesigner) { }
 	#pragma option pop
 	
 public:
@@ -119,12 +115,10 @@ private:
 	HIDESBASE MESSAGE void __fastcall WMActivate(Messages::TWMActivate &Message);
 public:
 	#pragma option push -w-inl
-	/* TCustomForm.Create */ inline __fastcall virtual TDdeLinkDlg(Classes::TComponent* AOwner) : Forms::TForm(
-		AOwner) { }
+	/* TCustomForm.Create */ inline __fastcall virtual TDdeLinkDlg(Classes::TComponent* AOwner) : Forms::TForm(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomForm.CreateNew */ inline __fastcall virtual TDdeLinkDlg(Classes::TComponent* AOwner, int 
-		Dummy) : Forms::TForm(AOwner, Dummy) { }
+	/* TCustomForm.CreateNew */ inline __fastcall virtual TDdeLinkDlg(Classes::TComponent* AOwner, int Dummy) : Forms::TForm(AOwner, Dummy) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomForm.Destroy */ inline __fastcall virtual ~TDdeLinkDlg(void) { }
@@ -132,29 +126,25 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TDdeLinkDlg(HWND ParentWindow) : Forms::TForm(ParentWindow
-		) { }
+	/* TWinControl.CreateParented */ inline __fastcall TDdeLinkDlg(HWND ParentWindow) : Forms::TForm(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 class DELPHICLASS TDdeLinkInfoProperty;
-class PASCALIMPLEMENTATION TDdeLinkInfoProperty : public Dsgnintf::TPropertyEditor 
+class PASCALIMPLEMENTATION TDdeLinkInfoProperty : public Designeditors::TPropertyEditor 
 {
-	typedef Dsgnintf::TPropertyEditor inherited;
+	typedef Designeditors::TPropertyEditor inherited;
 	
 public:
-	virtual Dsgnintf::TPropertyAttributes __fastcall GetAttributes(void);
+	virtual Designintf::TPropertyAttributes __fastcall GetAttributes(void);
 	virtual void __fastcall Edit(void);
 	virtual AnsiString __fastcall GetValue();
-protected:
-	#pragma option push -w-inl
-	/* TPropertyEditor.Create */ inline __fastcall virtual TDdeLinkInfoProperty(const Dsgnintf::_di_IFormDesigner 
-		ADesigner, int APropCount) : Dsgnintf::TPropertyEditor(ADesigner, APropCount) { }
-	#pragma option pop
-	
 public:
+	#pragma option push -w-inl
+	/* TPropertyEditor.Create */ inline __fastcall virtual TDdeLinkInfoProperty(const Designintf::_di_IDesigner ADesigner, int APropCount) : Designeditors::TPropertyEditor(ADesigner, APropCount) { }
+	#pragma option pop
 	#pragma option push -w-inl
 	/* TPropertyEditor.Destroy */ inline __fastcall virtual ~TDdeLinkInfoProperty(void) { }
 	#pragma option pop
@@ -163,20 +153,17 @@ public:
 
 
 class DELPHICLASS TDdeClientItemProperty;
-class PASCALIMPLEMENTATION TDdeClientItemProperty : public Dsgnintf::TStringProperty 
+class PASCALIMPLEMENTATION TDdeClientItemProperty : public Designeditors::TStringProperty 
 {
-	typedef Dsgnintf::TStringProperty inherited;
+	typedef Designeditors::TStringProperty inherited;
 	
 public:
-	virtual Dsgnintf::TPropertyAttributes __fastcall GetAttributes(void);
+	virtual Designintf::TPropertyAttributes __fastcall GetAttributes(void);
 	virtual void __fastcall GetValues(Classes::TGetStrProc Proc);
-protected:
-	#pragma option push -w-inl
-	/* TPropertyEditor.Create */ inline __fastcall virtual TDdeClientItemProperty(const Dsgnintf::_di_IFormDesigner 
-		ADesigner, int APropCount) : Dsgnintf::TStringProperty(ADesigner, APropCount) { }
-	#pragma option pop
-	
 public:
+	#pragma option push -w-inl
+	/* TPropertyEditor.Create */ inline __fastcall virtual TDdeClientItemProperty(const Designintf::_di_IDesigner ADesigner, int APropCount) : Designeditors::TStringProperty(ADesigner, APropCount) { }
+	#pragma option pop
 	#pragma option push -w-inl
 	/* TPropertyEditor.Destroy */ inline __fastcall virtual ~TDdeClientItemProperty(void) { }
 	#pragma option pop
@@ -188,12 +175,10 @@ public:
 extern PACKAGE void __fastcall Register(void);
 
 }	/* namespace Ddereg */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Ddereg;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// DDEReg
+#endif	// DdeReg

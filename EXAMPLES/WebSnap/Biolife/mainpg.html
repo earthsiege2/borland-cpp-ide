@@ -1,0 +1,25 @@
+<!--#include file="..\include\StdDemoHeader.html"-->
+
+<P>
+<!--#include file="readme.txt"-->
+
+<P>
+<b>
+ISAPI DLL notes:<br>
+
+<P>To allow the BDE to work with IIS 5 on Windows 2000, you must do the
+following:<br>
+
+You must give the IUSR_MACHINE_NAME and IWAM_MACHINE_NAME accounts
+full read and write permissions to the following directories:
+<br>
+1. The BDE directory<br>
+2. The TSession.NetDir and TSession.PrivateDir set
+ on your Session component<br>
+3. Your actual temp directory, probably C:&#092;WINNT&#092;Temp   <br>
+4. Your directory that contains the database files<br>
+5. If all else fails, give read and write permissions to C:&#092;WINNT.
+
+</b>
+
+<!--#include file="..\include\StdDemoFooter.html"-->

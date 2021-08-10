@@ -1,13 +1,13 @@
-USEUNIT("clntsock.cpp");
-USEUNIT("dialogs.cpp");
-USEUNIT("lstnsock.cpp");
-USEUNIT("mainfrm.cpp");
-USEUNIT("msg.cpp");
-USEUNIT("srvrvw.cpp");
-USEUNIT("srvrdoc.cpp");
-USEUNIT("stdafx.cpp");
-USEUNIT("clntsock.cpp");
-USEUNIT("chatsrvr.cpp");
-USERC("chatsrvr.rc");
+USEUNIT(".\Chatsrvr.cpp");
+USEUNIT(".\Clntsock.cpp");
+USEUNIT(".\Dialogs.cpp");
+USEUNIT(".\Lstnsock.cpp");
+USEUNIT(".\Mainfrm.cpp");
+USEUNIT(".\Msg.cpp");
+USEUNIT(".\Srvrdoc.cpp");
+USEUNIT(".\Srvrvw.cpp");
+USEUNIT(".\Stdafx.cpp");
+USERC(".\Chatsrvr.rc");
+USEFILE("vctobpr.log");
 
 #define WinMain

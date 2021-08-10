@@ -6,12 +6,11 @@
 *               designed to allow version stamping of Windows executable files*
 *               and of special .VER files for DOS executable files.           *
 *                                                                             *
-*          Copyright (c) 1993-1998, Microsoft Corp.  All rights reserved      *
+*               Copyright (c) Microsoft Corporation. All rights reserved.     *
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef VER_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define VER_H
 
 #ifdef __cplusplus
@@ -81,6 +80,7 @@ extern "C" {
 #define VFT2_DRV_SOUND          0x00000009L
 #define VFT2_DRV_COMM           0x0000000AL
 #define VFT2_DRV_INPUTMETHOD    0x0000000BL
+#define VFT2_DRV_VERSIONED_PRINTER    0x0000000CL
 
 /* ----- VS_VERSION.dwFileSubtype for VFT_WINDOWS_FONT ----- */
 #define VFT2_FONT_RASTER        0x00000001L
@@ -299,5 +299,5 @@ VerQueryValueW(
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif  /* !VER_H */
+

@@ -2,7 +2,7 @@
 **	_ D B D A O . H													*
 **																		*
 *************************************************************************
-** Copyright (C) 1996 - 1999 Microsoft Corporation		 			*
+** Copyright (C) 1996 by Microsoft Corporation		 			*
 **		   All Rights Reserved					 						*
 ************************************************************************/
 /*
@@ -11,7 +11,6 @@
 	Internal definitions and prototypes for dbdao C++ classes
 */
 #ifndef __DBDAO_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __DBDAO_H_
 
 
@@ -731,5 +730,4 @@ STDMETHOD(get_Item)		(VARIANT index, LPUNKNOWN *ppunk);
 };
 
 
-#pragma option pop /*P_O_Pop*/
 #endif // __DBDAO_H_ 

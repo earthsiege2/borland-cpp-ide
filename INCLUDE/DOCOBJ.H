@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:32:34 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for docobj.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -37,6 +36,10 @@
 
 #ifndef __docobj_h__
 #define __docobj_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -89,8 +92,8 @@ typedef interface IOleCommandTarget IOleCommandTarget;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_docobj_0000 */
 /* [local] */ 
@@ -133,7 +136,7 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0000_v0_0_s_ifspec;
 /* interface IOleDocument */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleDocument __RPC_FAR *LPOLEDOCUMENT;
+typedef /* [unique] */ IOleDocument *LPOLEDOCUMENT;
 
 typedef /* [public] */ 
 enum __MIDL_IOleDocument_0001
@@ -141,7 +144,7 @@ enum __MIDL_IOleDocument_0001
 	DOCMISC_SUPPORTCOMPLEXRECTANGLES	= 2,
 	DOCMISC_CANTOPENEDIT	= 4,
 	DOCMISC_NOFILESUPPORT	= 8
-    }	DOCMISC;
+    } 	DOCMISC;
 
 
 EXTERN_C const IID IID_IOleDocument;
@@ -153,17 +156,17 @@ EXTERN_C const IID IID_IOleDocument;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateView( 
-            /* [unique][in] */ IOleInPlaceSite __RPC_FAR *pIPSite,
-            /* [unique][in] */ IStream __RPC_FAR *pstm,
+            /* [unique][in] */ IOleInPlaceSite *pIPSite,
+            /* [unique][in] */ IStream *pstm,
             /* [in] */ DWORD dwReserved,
-            /* [out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *ppView) = 0;
+            /* [out] */ IOleDocumentView **ppView) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDocMiscStatus( 
-            /* [out] */ DWORD __RPC_FAR *pdwStatus) = 0;
+            /* [out] */ DWORD *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumViews( 
-            /* [out] */ IEnumOleDocumentViews __RPC_FAR *__RPC_FAR *ppEnum,
-            /* [out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *ppView) = 0;
+            /* [out] */ IEnumOleDocumentViews **ppEnum,
+            /* [out] */ IOleDocumentView **ppView) = 0;
         
     };
     
@@ -173,39 +176,39 @@ EXTERN_C const IID IID_IOleDocument;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleDocument __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleDocument * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleDocument __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleDocument * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleDocument __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleDocument * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateView )( 
-            IOleDocument __RPC_FAR * This,
-            /* [unique][in] */ IOleInPlaceSite __RPC_FAR *pIPSite,
-            /* [unique][in] */ IStream __RPC_FAR *pstm,
+        HRESULT ( STDMETHODCALLTYPE *CreateView )( 
+            IOleDocument * This,
+            /* [unique][in] */ IOleInPlaceSite *pIPSite,
+            /* [unique][in] */ IStream *pstm,
             /* [in] */ DWORD dwReserved,
-            /* [out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *ppView);
+            /* [out] */ IOleDocumentView **ppView);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDocMiscStatus )( 
-            IOleDocument __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwStatus);
+        HRESULT ( STDMETHODCALLTYPE *GetDocMiscStatus )( 
+            IOleDocument * This,
+            /* [out] */ DWORD *pdwStatus);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumViews )( 
-            IOleDocument __RPC_FAR * This,
-            /* [out] */ IEnumOleDocumentViews __RPC_FAR *__RPC_FAR *ppEnum,
-            /* [out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *ppView);
+        HRESULT ( STDMETHODCALLTYPE *EnumViews )( 
+            IOleDocument * This,
+            /* [out] */ IEnumOleDocumentViews **ppEnum,
+            /* [out] */ IOleDocumentView **ppView);
         
         END_INTERFACE
     } IOleDocumentVtbl;
 
     interface IOleDocument
     {
-        CONST_VTBL struct IOleDocumentVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleDocumentVtbl *lpVtbl;
     };
 
     
@@ -240,11 +243,11 @@ EXTERN_C const IID IID_IOleDocument;
 
 
 HRESULT STDMETHODCALLTYPE IOleDocument_CreateView_Proxy( 
-    IOleDocument __RPC_FAR * This,
-    /* [unique][in] */ IOleInPlaceSite __RPC_FAR *pIPSite,
-    /* [unique][in] */ IStream __RPC_FAR *pstm,
+    IOleDocument * This,
+    /* [unique][in] */ IOleInPlaceSite *pIPSite,
+    /* [unique][in] */ IStream *pstm,
     /* [in] */ DWORD dwReserved,
-    /* [out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *ppView);
+    /* [out] */ IOleDocumentView **ppView);
 
 
 void __RPC_STUB IOleDocument_CreateView_Stub(
@@ -255,8 +258,8 @@ void __RPC_STUB IOleDocument_CreateView_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleDocument_GetDocMiscStatus_Proxy( 
-    IOleDocument __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwStatus);
+    IOleDocument * This,
+    /* [out] */ DWORD *pdwStatus);
 
 
 void __RPC_STUB IOleDocument_GetDocMiscStatus_Stub(
@@ -267,9 +270,9 @@ void __RPC_STUB IOleDocument_GetDocMiscStatus_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleDocument_EnumViews_Proxy( 
-    IOleDocument __RPC_FAR * This,
-    /* [out] */ IEnumOleDocumentViews __RPC_FAR *__RPC_FAR *ppEnum,
-    /* [out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *ppView);
+    IOleDocument * This,
+    /* [out] */ IEnumOleDocumentViews **ppEnum,
+    /* [out] */ IOleDocumentView **ppView);
 
 
 void __RPC_STUB IOleDocument_EnumViews_Stub(
@@ -283,7 +286,7 @@ void __RPC_STUB IOleDocument_EnumViews_Stub(
 #endif 	/* __IOleDocument_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_docobj_0247 */
+/* interface __MIDL_itf_docobj_0255 */
 /* [local] */ 
 
 #endif
@@ -291,8 +294,8 @@ void __RPC_STUB IOleDocument_EnumViews_Stub(
 #define _LPOLEDOCUMENTSITE_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0247_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0247_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0255_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0255_v0_0_s_ifspec;
 
 #ifndef __IOleDocumentSite_INTERFACE_DEFINED__
 #define __IOleDocumentSite_INTERFACE_DEFINED__
@@ -300,7 +303,7 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0247_v0_0_s_ifspec;
 /* interface IOleDocumentSite */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleDocumentSite __RPC_FAR *LPOLEDOCUMENTSITE;
+typedef /* [unique] */ IOleDocumentSite *LPOLEDOCUMENTSITE;
 
 
 EXTERN_C const IID IID_IOleDocumentSite;
@@ -312,7 +315,7 @@ EXTERN_C const IID IID_IOleDocumentSite;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ActivateMe( 
-            /* [in] */ IOleDocumentView __RPC_FAR *pViewToActivate) = 0;
+            /* [in] */ IOleDocumentView *pViewToActivate) = 0;
         
     };
     
@@ -322,27 +325,27 @@ EXTERN_C const IID IID_IOleDocumentSite;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleDocumentSite __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleDocumentSite * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleDocumentSite __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleDocumentSite * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleDocumentSite __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleDocumentSite * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ActivateMe )( 
-            IOleDocumentSite __RPC_FAR * This,
-            /* [in] */ IOleDocumentView __RPC_FAR *pViewToActivate);
+        HRESULT ( STDMETHODCALLTYPE *ActivateMe )( 
+            IOleDocumentSite * This,
+            /* [in] */ IOleDocumentView *pViewToActivate);
         
         END_INTERFACE
     } IOleDocumentSiteVtbl;
 
     interface IOleDocumentSite
     {
-        CONST_VTBL struct IOleDocumentSiteVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleDocumentSiteVtbl *lpVtbl;
     };
 
     
@@ -371,8 +374,8 @@ EXTERN_C const IID IID_IOleDocumentSite;
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentSite_ActivateMe_Proxy( 
-    IOleDocumentSite __RPC_FAR * This,
-    /* [in] */ IOleDocumentView __RPC_FAR *pViewToActivate);
+    IOleDocumentSite * This,
+    /* [in] */ IOleDocumentView *pViewToActivate);
 
 
 void __RPC_STUB IOleDocumentSite_ActivateMe_Stub(
@@ -386,7 +389,7 @@ void __RPC_STUB IOleDocumentSite_ActivateMe_Stub(
 #endif 	/* __IOleDocumentSite_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_docobj_0248 */
+/* interface __MIDL_itf_docobj_0256 */
 /* [local] */ 
 
 #endif
@@ -394,8 +397,8 @@ void __RPC_STUB IOleDocumentSite_ActivateMe_Stub(
 #define _LPOLEDOCUMENTVIEW_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0248_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0248_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0256_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0256_v0_0_s_ifspec;
 
 #ifndef __IOleDocumentView_INTERFACE_DEFINED__
 #define __IOleDocumentView_INTERFACE_DEFINED__
@@ -403,7 +406,7 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0248_v0_0_s_ifspec;
 /* interface IOleDocumentView */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleDocumentView __RPC_FAR *LPOLEDOCUMENTVIEW;
+typedef /* [unique] */ IOleDocumentView *LPOLEDOCUMENTVIEW;
 
 
 EXTERN_C const IID IID_IOleDocumentView;
@@ -415,13 +418,13 @@ EXTERN_C const IID IID_IOleDocumentView;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetInPlaceSite( 
-            /* [unique][in] */ IOleInPlaceSite __RPC_FAR *pIPSite) = 0;
+            /* [unique][in] */ IOleInPlaceSite *pIPSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInPlaceSite( 
-            /* [out] */ IOleInPlaceSite __RPC_FAR *__RPC_FAR *ppIPSite) = 0;
+            /* [out] */ IOleInPlaceSite **ppIPSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDocument( 
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk) = 0;
+            /* [out] */ IUnknown **ppunk) = 0;
         
         virtual /* [input_sync] */ HRESULT STDMETHODCALLTYPE SetRect( 
             /* [in] */ LPRECT prcView) = 0;
@@ -453,8 +456,8 @@ EXTERN_C const IID IID_IOleDocumentView;
             /* [in] */ LPSTREAM pstm) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [in] */ IOleInPlaceSite __RPC_FAR *pIPSiteNew,
-            /* [out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *ppViewNew) = 0;
+            /* [in] */ IOleInPlaceSite *pIPSiteNew,
+            /* [out] */ IOleDocumentView **ppViewNew) = 0;
         
     };
     
@@ -464,78 +467,78 @@ EXTERN_C const IID IID_IOleDocumentView;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleDocumentView __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleDocumentView * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleDocumentView __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleDocumentView * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleDocumentView __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleDocumentView * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInPlaceSite )( 
-            IOleDocumentView __RPC_FAR * This,
-            /* [unique][in] */ IOleInPlaceSite __RPC_FAR *pIPSite);
+        HRESULT ( STDMETHODCALLTYPE *SetInPlaceSite )( 
+            IOleDocumentView * This,
+            /* [unique][in] */ IOleInPlaceSite *pIPSite);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetInPlaceSite )( 
-            IOleDocumentView __RPC_FAR * This,
-            /* [out] */ IOleInPlaceSite __RPC_FAR *__RPC_FAR *ppIPSite);
+        HRESULT ( STDMETHODCALLTYPE *GetInPlaceSite )( 
+            IOleDocumentView * This,
+            /* [out] */ IOleInPlaceSite **ppIPSite);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDocument )( 
-            IOleDocumentView __RPC_FAR * This,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+        HRESULT ( STDMETHODCALLTYPE *GetDocument )( 
+            IOleDocumentView * This,
+            /* [out] */ IUnknown **ppunk);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRect )( 
-            IOleDocumentView __RPC_FAR * This,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *SetRect )( 
+            IOleDocumentView * This,
             /* [in] */ LPRECT prcView);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRect )( 
-            IOleDocumentView __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetRect )( 
+            IOleDocumentView * This,
             /* [out] */ LPRECT prcView);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRectComplex )( 
-            IOleDocumentView __RPC_FAR * This,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *SetRectComplex )( 
+            IOleDocumentView * This,
             /* [unique][in] */ LPRECT prcView,
             /* [unique][in] */ LPRECT prcHScroll,
             /* [unique][in] */ LPRECT prcVScroll,
             /* [unique][in] */ LPRECT prcSizeBox);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Show )( 
-            IOleDocumentView __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Show )( 
+            IOleDocumentView * This,
             /* [in] */ BOOL fShow);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UIActivate )( 
-            IOleDocumentView __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *UIActivate )( 
+            IOleDocumentView * This,
             /* [in] */ BOOL fUIActivate);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Open )( 
-            IOleDocumentView __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Open )( 
+            IOleDocumentView * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CloseView )( 
-            IOleDocumentView __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *CloseView )( 
+            IOleDocumentView * This,
             DWORD dwReserved);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SaveViewState )( 
-            IOleDocumentView __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SaveViewState )( 
+            IOleDocumentView * This,
             /* [in] */ LPSTREAM pstm);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ApplyViewState )( 
-            IOleDocumentView __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *ApplyViewState )( 
+            IOleDocumentView * This,
             /* [in] */ LPSTREAM pstm);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IOleDocumentView __RPC_FAR * This,
-            /* [in] */ IOleInPlaceSite __RPC_FAR *pIPSiteNew,
-            /* [out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *ppViewNew);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IOleDocumentView * This,
+            /* [in] */ IOleInPlaceSite *pIPSiteNew,
+            /* [out] */ IOleDocumentView **ppViewNew);
         
         END_INTERFACE
     } IOleDocumentViewVtbl;
 
     interface IOleDocumentView
     {
-        CONST_VTBL struct IOleDocumentViewVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleDocumentViewVtbl *lpVtbl;
     };
 
     
@@ -600,8 +603,8 @@ EXTERN_C const IID IID_IOleDocumentView;
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_SetInPlaceSite_Proxy( 
-    IOleDocumentView __RPC_FAR * This,
-    /* [unique][in] */ IOleInPlaceSite __RPC_FAR *pIPSite);
+    IOleDocumentView * This,
+    /* [unique][in] */ IOleInPlaceSite *pIPSite);
 
 
 void __RPC_STUB IOleDocumentView_SetInPlaceSite_Stub(
@@ -612,8 +615,8 @@ void __RPC_STUB IOleDocumentView_SetInPlaceSite_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_GetInPlaceSite_Proxy( 
-    IOleDocumentView __RPC_FAR * This,
-    /* [out] */ IOleInPlaceSite __RPC_FAR *__RPC_FAR *ppIPSite);
+    IOleDocumentView * This,
+    /* [out] */ IOleInPlaceSite **ppIPSite);
 
 
 void __RPC_STUB IOleDocumentView_GetInPlaceSite_Stub(
@@ -624,8 +627,8 @@ void __RPC_STUB IOleDocumentView_GetInPlaceSite_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_GetDocument_Proxy( 
-    IOleDocumentView __RPC_FAR * This,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk);
+    IOleDocumentView * This,
+    /* [out] */ IUnknown **ppunk);
 
 
 void __RPC_STUB IOleDocumentView_GetDocument_Stub(
@@ -636,7 +639,7 @@ void __RPC_STUB IOleDocumentView_GetDocument_Stub(
 
 
 /* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleDocumentView_SetRect_Proxy( 
-    IOleDocumentView __RPC_FAR * This,
+    IOleDocumentView * This,
     /* [in] */ LPRECT prcView);
 
 
@@ -648,7 +651,7 @@ void __RPC_STUB IOleDocumentView_SetRect_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_GetRect_Proxy( 
-    IOleDocumentView __RPC_FAR * This,
+    IOleDocumentView * This,
     /* [out] */ LPRECT prcView);
 
 
@@ -660,7 +663,7 @@ void __RPC_STUB IOleDocumentView_GetRect_Stub(
 
 
 /* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleDocumentView_SetRectComplex_Proxy( 
-    IOleDocumentView __RPC_FAR * This,
+    IOleDocumentView * This,
     /* [unique][in] */ LPRECT prcView,
     /* [unique][in] */ LPRECT prcHScroll,
     /* [unique][in] */ LPRECT prcVScroll,
@@ -675,7 +678,7 @@ void __RPC_STUB IOleDocumentView_SetRectComplex_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_Show_Proxy( 
-    IOleDocumentView __RPC_FAR * This,
+    IOleDocumentView * This,
     /* [in] */ BOOL fShow);
 
 
@@ -687,7 +690,7 @@ void __RPC_STUB IOleDocumentView_Show_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_UIActivate_Proxy( 
-    IOleDocumentView __RPC_FAR * This,
+    IOleDocumentView * This,
     /* [in] */ BOOL fUIActivate);
 
 
@@ -699,7 +702,7 @@ void __RPC_STUB IOleDocumentView_UIActivate_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_Open_Proxy( 
-    IOleDocumentView __RPC_FAR * This);
+    IOleDocumentView * This);
 
 
 void __RPC_STUB IOleDocumentView_Open_Stub(
@@ -710,7 +713,7 @@ void __RPC_STUB IOleDocumentView_Open_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_CloseView_Proxy( 
-    IOleDocumentView __RPC_FAR * This,
+    IOleDocumentView * This,
     DWORD dwReserved);
 
 
@@ -722,7 +725,7 @@ void __RPC_STUB IOleDocumentView_CloseView_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_SaveViewState_Proxy( 
-    IOleDocumentView __RPC_FAR * This,
+    IOleDocumentView * This,
     /* [in] */ LPSTREAM pstm);
 
 
@@ -734,7 +737,7 @@ void __RPC_STUB IOleDocumentView_SaveViewState_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_ApplyViewState_Proxy( 
-    IOleDocumentView __RPC_FAR * This,
+    IOleDocumentView * This,
     /* [in] */ LPSTREAM pstm);
 
 
@@ -746,9 +749,9 @@ void __RPC_STUB IOleDocumentView_ApplyViewState_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleDocumentView_Clone_Proxy( 
-    IOleDocumentView __RPC_FAR * This,
-    /* [in] */ IOleInPlaceSite __RPC_FAR *pIPSiteNew,
-    /* [out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *ppViewNew);
+    IOleDocumentView * This,
+    /* [in] */ IOleInPlaceSite *pIPSiteNew,
+    /* [out] */ IOleDocumentView **ppViewNew);
 
 
 void __RPC_STUB IOleDocumentView_Clone_Stub(
@@ -762,7 +765,7 @@ void __RPC_STUB IOleDocumentView_Clone_Stub(
 #endif 	/* __IOleDocumentView_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_docobj_0249 */
+/* interface __MIDL_itf_docobj_0257 */
 /* [local] */ 
 
 #endif
@@ -770,8 +773,8 @@ void __RPC_STUB IOleDocumentView_Clone_Stub(
 #define _LPENUMOLEDOCUMENTVIEWS_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0249_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0249_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0257_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0257_v0_0_s_ifspec;
 
 #ifndef __IEnumOleDocumentViews_INTERFACE_DEFINED__
 #define __IEnumOleDocumentViews_INTERFACE_DEFINED__
@@ -779,7 +782,7 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0249_v0_0_s_ifspec;
 /* interface IEnumOleDocumentViews */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IEnumOleDocumentViews __RPC_FAR *LPENUMOLEDOCUMENTVIEWS;
+typedef /* [unique] */ IEnumOleDocumentViews *LPENUMOLEDOCUMENTVIEWS;
 
 
 EXTERN_C const IID IID_IEnumOleDocumentViews;
@@ -792,8 +795,8 @@ EXTERN_C const IID IID_IEnumOleDocumentViews;
     public:
         virtual /* [local] */ HRESULT __stdcall Next( 
             /* [in] */ ULONG cViews,
-            /* [out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *rgpView,
-            /* [out] */ ULONG __RPC_FAR *pcFetched) = 0;
+            /* [out] */ IOleDocumentView **rgpView,
+            /* [out] */ ULONG *pcFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ ULONG cViews) = 0;
@@ -801,7 +804,7 @@ EXTERN_C const IID IID_IEnumOleDocumentViews;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumOleDocumentViews __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+            /* [out] */ IEnumOleDocumentViews **ppEnum) = 0;
         
     };
     
@@ -811,40 +814,40 @@ EXTERN_C const IID IID_IEnumOleDocumentViews;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumOleDocumentViews __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumOleDocumentViews * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumOleDocumentViews __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumOleDocumentViews * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumOleDocumentViews __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumOleDocumentViews * This);
         
-        /* [local] */ HRESULT ( __stdcall __RPC_FAR *Next )( 
-            IEnumOleDocumentViews __RPC_FAR * This,
+        /* [local] */ HRESULT ( __stdcall *Next )( 
+            IEnumOleDocumentViews * This,
             /* [in] */ ULONG cViews,
-            /* [out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *rgpView,
-            /* [out] */ ULONG __RPC_FAR *pcFetched);
+            /* [out] */ IOleDocumentView **rgpView,
+            /* [out] */ ULONG *pcFetched);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumOleDocumentViews __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumOleDocumentViews * This,
             /* [in] */ ULONG cViews);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumOleDocumentViews __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumOleDocumentViews * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumOleDocumentViews __RPC_FAR * This,
-            /* [out] */ IEnumOleDocumentViews __RPC_FAR *__RPC_FAR *ppEnum);
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumOleDocumentViews * This,
+            /* [out] */ IEnumOleDocumentViews **ppEnum);
         
         END_INTERFACE
     } IEnumOleDocumentViewsVtbl;
 
     interface IEnumOleDocumentViews
     {
-        CONST_VTBL struct IEnumOleDocumentViewsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IEnumOleDocumentViewsVtbl *lpVtbl;
     };
 
     
@@ -882,10 +885,10 @@ EXTERN_C const IID IID_IEnumOleDocumentViews;
 
 
 /* [call_as] */ HRESULT __stdcall IEnumOleDocumentViews_RemoteNext_Proxy( 
-    IEnumOleDocumentViews __RPC_FAR * This,
+    IEnumOleDocumentViews * This,
     /* [in] */ ULONG cViews,
-    /* [length_is][size_is][out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *rgpView,
-    /* [out] */ ULONG __RPC_FAR *pcFetched);
+    /* [length_is][size_is][out] */ IOleDocumentView **rgpView,
+    /* [out] */ ULONG *pcFetched);
 
 
 void __RPC_STUB IEnumOleDocumentViews_RemoteNext_Stub(
@@ -896,7 +899,7 @@ void __RPC_STUB IEnumOleDocumentViews_RemoteNext_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumOleDocumentViews_Skip_Proxy( 
-    IEnumOleDocumentViews __RPC_FAR * This,
+    IEnumOleDocumentViews * This,
     /* [in] */ ULONG cViews);
 
 
@@ -908,7 +911,7 @@ void __RPC_STUB IEnumOleDocumentViews_Skip_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumOleDocumentViews_Reset_Proxy( 
-    IEnumOleDocumentViews __RPC_FAR * This);
+    IEnumOleDocumentViews * This);
 
 
 void __RPC_STUB IEnumOleDocumentViews_Reset_Stub(
@@ -919,8 +922,8 @@ void __RPC_STUB IEnumOleDocumentViews_Reset_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IEnumOleDocumentViews_Clone_Proxy( 
-    IEnumOleDocumentViews __RPC_FAR * This,
-    /* [out] */ IEnumOleDocumentViews __RPC_FAR *__RPC_FAR *ppEnum);
+    IEnumOleDocumentViews * This,
+    /* [out] */ IEnumOleDocumentViews **ppEnum);
 
 
 void __RPC_STUB IEnumOleDocumentViews_Clone_Stub(
@@ -934,7 +937,7 @@ void __RPC_STUB IEnumOleDocumentViews_Clone_Stub(
 #endif 	/* __IEnumOleDocumentViews_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_docobj_0250 */
+/* interface __MIDL_itf_docobj_0258 */
 /* [local] */ 
 
 #endif
@@ -942,8 +945,8 @@ void __RPC_STUB IEnumOleDocumentViews_Clone_Stub(
 #define _LPCONTINUECALLBACK_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0250_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0250_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0258_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0258_v0_0_s_ifspec;
 
 #ifndef __IContinueCallback_INTERFACE_DEFINED__
 #define __IContinueCallback_INTERFACE_DEFINED__
@@ -951,7 +954,7 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0250_v0_0_s_ifspec;
 /* interface IContinueCallback */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IContinueCallback __RPC_FAR *LPCONTINUECALLBACK;
+typedef /* [unique] */ IContinueCallback *LPCONTINUECALLBACK;
 
 
 EXTERN_C const IID IID_IContinueCallback;
@@ -967,7 +970,7 @@ EXTERN_C const IID IID_IContinueCallback;
         virtual HRESULT STDMETHODCALLTYPE FContinuePrinting( 
             /* [in] */ LONG nCntPrinted,
             /* [in] */ LONG nCurPage,
-            /* [unique][in] */ wchar_t __RPC_FAR *pwszPrintStatus) = 0;
+            /* [unique][in] */ wchar_t *pwszPrintStatus) = 0;
         
     };
     
@@ -977,32 +980,32 @@ EXTERN_C const IID IID_IContinueCallback;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IContinueCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IContinueCallback * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IContinueCallback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IContinueCallback * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IContinueCallback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IContinueCallback * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FContinue )( 
-            IContinueCallback __RPC_FAR * This);
+        HRESULT ( STDMETHODCALLTYPE *FContinue )( 
+            IContinueCallback * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FContinuePrinting )( 
-            IContinueCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *FContinuePrinting )( 
+            IContinueCallback * This,
             /* [in] */ LONG nCntPrinted,
             /* [in] */ LONG nCurPage,
-            /* [unique][in] */ wchar_t __RPC_FAR *pwszPrintStatus);
+            /* [unique][in] */ wchar_t *pwszPrintStatus);
         
         END_INTERFACE
     } IContinueCallbackVtbl;
 
     interface IContinueCallback
     {
-        CONST_VTBL struct IContinueCallbackVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IContinueCallbackVtbl *lpVtbl;
     };
 
     
@@ -1034,7 +1037,7 @@ EXTERN_C const IID IID_IContinueCallback;
 
 
 HRESULT STDMETHODCALLTYPE IContinueCallback_FContinue_Proxy( 
-    IContinueCallback __RPC_FAR * This);
+    IContinueCallback * This);
 
 
 void __RPC_STUB IContinueCallback_FContinue_Stub(
@@ -1045,10 +1048,10 @@ void __RPC_STUB IContinueCallback_FContinue_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IContinueCallback_FContinuePrinting_Proxy( 
-    IContinueCallback __RPC_FAR * This,
+    IContinueCallback * This,
     /* [in] */ LONG nCntPrinted,
     /* [in] */ LONG nCurPage,
-    /* [unique][in] */ wchar_t __RPC_FAR *pwszPrintStatus);
+    /* [unique][in] */ wchar_t *pwszPrintStatus);
 
 
 void __RPC_STUB IContinueCallback_FContinuePrinting_Stub(
@@ -1062,7 +1065,7 @@ void __RPC_STUB IContinueCallback_FContinuePrinting_Stub(
 #endif 	/* __IContinueCallback_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_docobj_0251 */
+/* interface __MIDL_itf_docobj_0259 */
 /* [local] */ 
 
 #endif
@@ -1070,8 +1073,8 @@ void __RPC_STUB IContinueCallback_FContinuePrinting_Stub(
 #define _LPPRINT_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0251_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0251_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0259_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0259_v0_0_s_ifspec;
 
 #ifndef __IPrint_INTERFACE_DEFINED__
 #define __IPrint_INTERFACE_DEFINED__
@@ -1079,7 +1082,7 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0251_v0_0_s_ifspec;
 /* interface IPrint */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IPrint __RPC_FAR *LPPRINT;
+typedef /* [unique] */ IPrint *LPPRINT;
 
 typedef /* [public] */ 
 enum __MIDL_IPrint_0001
@@ -1090,13 +1093,13 @@ enum __MIDL_IPrint_0001
 	PRINTFLAG_DONTACTUALLYPRINT	= 16,
 	PRINTFLAG_FORCEPROPERTIES	= 32,
 	PRINTFLAG_PRINTTOFILE	= 64
-    }	PRINTFLAG;
+    } 	PRINTFLAG;
 
 typedef struct tagPAGERANGE
     {
     LONG nFromPage;
     LONG nToPage;
-    }	PAGERANGE;
+    } 	PAGERANGE;
 
 typedef struct tagPAGESET
     {
@@ -1105,7 +1108,7 @@ typedef struct tagPAGESET
     BOOL fEvenPages;
     ULONG cPageRange;
     /* [size_is] */ PAGERANGE rgPages[ 1 ];
-    }	PAGESET;
+    } 	PAGESET;
 
 #define PAGESET_TOLASTPAGE   ((WORD)(-1L))
 
@@ -1121,18 +1124,18 @@ EXTERN_C const IID IID_IPrint;
             /* [in] */ LONG nFirstPage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPageInfo( 
-            /* [out] */ LONG __RPC_FAR *pnFirstPage,
-            /* [out] */ LONG __RPC_FAR *pcPages) = 0;
+            /* [out] */ LONG *pnFirstPage,
+            /* [out] */ LONG *pcPages) = 0;
         
         virtual /* [local] */ HRESULT __stdcall Print( 
             /* [in] */ DWORD grfFlags,
-            /* [out][in] */ DVTARGETDEVICE __RPC_FAR *__RPC_FAR *pptd,
-            /* [out][in] */ PAGESET __RPC_FAR *__RPC_FAR *ppPageSet,
-            /* [unique][out][in] */ STGMEDIUM __RPC_FAR *pstgmOptions,
-            /* [in] */ IContinueCallback __RPC_FAR *pcallback,
+            /* [out][in] */ DVTARGETDEVICE **pptd,
+            /* [out][in] */ PAGESET **ppPageSet,
+            /* [unique][out][in] */ STGMEDIUM *pstgmOptions,
+            /* [in] */ IContinueCallback *pcallback,
             /* [in] */ LONG nFirstPage,
-            /* [out] */ LONG __RPC_FAR *pcPagesPrinted,
-            /* [out] */ LONG __RPC_FAR *pnLastPage) = 0;
+            /* [out] */ LONG *pcPagesPrinted,
+            /* [out] */ LONG *pnLastPage) = 0;
         
     };
     
@@ -1142,43 +1145,43 @@ EXTERN_C const IID IID_IPrint;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IPrint __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IPrint * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IPrint __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IPrint * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IPrint __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IPrint * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetInitialPageNum )( 
-            IPrint __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *SetInitialPageNum )( 
+            IPrint * This,
             /* [in] */ LONG nFirstPage);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPageInfo )( 
-            IPrint __RPC_FAR * This,
-            /* [out] */ LONG __RPC_FAR *pnFirstPage,
-            /* [out] */ LONG __RPC_FAR *pcPages);
+        HRESULT ( STDMETHODCALLTYPE *GetPageInfo )( 
+            IPrint * This,
+            /* [out] */ LONG *pnFirstPage,
+            /* [out] */ LONG *pcPages);
         
-        /* [local] */ HRESULT ( __stdcall __RPC_FAR *Print )( 
-            IPrint __RPC_FAR * This,
+        /* [local] */ HRESULT ( __stdcall *Print )( 
+            IPrint * This,
             /* [in] */ DWORD grfFlags,
-            /* [out][in] */ DVTARGETDEVICE __RPC_FAR *__RPC_FAR *pptd,
-            /* [out][in] */ PAGESET __RPC_FAR *__RPC_FAR *ppPageSet,
-            /* [unique][out][in] */ STGMEDIUM __RPC_FAR *pstgmOptions,
-            /* [in] */ IContinueCallback __RPC_FAR *pcallback,
+            /* [out][in] */ DVTARGETDEVICE **pptd,
+            /* [out][in] */ PAGESET **ppPageSet,
+            /* [unique][out][in] */ STGMEDIUM *pstgmOptions,
+            /* [in] */ IContinueCallback *pcallback,
             /* [in] */ LONG nFirstPage,
-            /* [out] */ LONG __RPC_FAR *pcPagesPrinted,
-            /* [out] */ LONG __RPC_FAR *pnLastPage);
+            /* [out] */ LONG *pcPagesPrinted,
+            /* [out] */ LONG *pnLastPage);
         
         END_INTERFACE
     } IPrintVtbl;
 
     interface IPrint
     {
-        CONST_VTBL struct IPrintVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IPrintVtbl *lpVtbl;
     };
 
     
@@ -1213,7 +1216,7 @@ EXTERN_C const IID IID_IPrint;
 
 
 HRESULT STDMETHODCALLTYPE IPrint_SetInitialPageNum_Proxy( 
-    IPrint __RPC_FAR * This,
+    IPrint * This,
     /* [in] */ LONG nFirstPage);
 
 
@@ -1225,9 +1228,9 @@ void __RPC_STUB IPrint_SetInitialPageNum_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IPrint_GetPageInfo_Proxy( 
-    IPrint __RPC_FAR * This,
-    /* [out] */ LONG __RPC_FAR *pnFirstPage,
-    /* [out] */ LONG __RPC_FAR *pcPages);
+    IPrint * This,
+    /* [out] */ LONG *pnFirstPage,
+    /* [out] */ LONG *pcPages);
 
 
 void __RPC_STUB IPrint_GetPageInfo_Stub(
@@ -1238,15 +1241,15 @@ void __RPC_STUB IPrint_GetPageInfo_Stub(
 
 
 /* [call_as] */ HRESULT __stdcall IPrint_RemotePrint_Proxy( 
-    IPrint __RPC_FAR * This,
+    IPrint * This,
     /* [in] */ DWORD grfFlags,
-    /* [out][in] */ DVTARGETDEVICE __RPC_FAR *__RPC_FAR *pptd,
-    /* [out][in] */ PAGESET __RPC_FAR *__RPC_FAR *pppageset,
-    /* [unique][out][in] */ RemSTGMEDIUM __RPC_FAR *pstgmOptions,
-    /* [in] */ IContinueCallback __RPC_FAR *pcallback,
+    /* [out][in] */ DVTARGETDEVICE **pptd,
+    /* [out][in] */ PAGESET **pppageset,
+    /* [unique][out][in] */ RemSTGMEDIUM *pstgmOptions,
+    /* [in] */ IContinueCallback *pcallback,
     /* [in] */ LONG nFirstPage,
-    /* [out] */ LONG __RPC_FAR *pcPagesPrinted,
-    /* [out] */ LONG __RPC_FAR *pnLastPage);
+    /* [out] */ LONG *pcPagesPrinted,
+    /* [out] */ LONG *pnLastPage);
 
 
 void __RPC_STUB IPrint_RemotePrint_Stub(
@@ -1260,7 +1263,7 @@ void __RPC_STUB IPrint_RemotePrint_Stub(
 #endif 	/* __IPrint_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_docobj_0252 */
+/* interface __MIDL_itf_docobj_0260 */
 /* [local] */ 
 
 #endif
@@ -1268,8 +1271,8 @@ void __RPC_STUB IPrint_RemotePrint_Stub(
 #define _LPOLECOMMANDTARGET_DEFINED
 
 
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0252_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0252_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0260_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0260_v0_0_s_ifspec;
 
 #ifndef __IOleCommandTarget_INTERFACE_DEFINED__
 #define __IOleCommandTarget_INTERFACE_DEFINED__
@@ -1277,7 +1280,7 @@ extern RPC_IF_HANDLE __MIDL_itf_docobj_0252_v0_0_s_ifspec;
 /* interface IOleCommandTarget */
 /* [unique][uuid][object] */ 
 
-typedef /* [unique] */ IOleCommandTarget __RPC_FAR *LPOLECOMMANDTARGET;
+typedef /* [unique] */ IOleCommandTarget *LPOLECOMMANDTARGET;
 
 typedef 
 enum OLECMDF
@@ -1287,13 +1290,13 @@ enum OLECMDF
 	OLECMDF_NINCHED	= 0x8,
 	OLECMDF_INVISIBLE	= 0x10,
 	OLECMDF_DEFHIDEONCTXTMENU	= 0x20
-    }	OLECMDF;
+    } 	OLECMDF;
 
 typedef struct _tagOLECMD
     {
     ULONG cmdID;
     DWORD cmdf;
-    }	OLECMD;
+    } 	OLECMD;
 
 typedef struct _tagOLECMDTEXT
     {
@@ -1301,14 +1304,14 @@ typedef struct _tagOLECMDTEXT
     ULONG cwActual;
     ULONG cwBuf;
     /* [size_is] */ wchar_t rgwz[ 1 ];
-    }	OLECMDTEXT;
+    } 	OLECMDTEXT;
 
 typedef 
 enum OLECMDTEXTF
     {	OLECMDTEXTF_NONE	= 0,
 	OLECMDTEXTF_NAME	= 1,
 	OLECMDTEXTF_STATUS	= 2
-    }	OLECMDTEXTF;
+    } 	OLECMDTEXTF;
 
 typedef 
 enum OLECMDEXECOPT
@@ -1316,7 +1319,7 @@ enum OLECMDEXECOPT
 	OLECMDEXECOPT_PROMPTUSER	= 1,
 	OLECMDEXECOPT_DONTPROMPTUSER	= 2,
 	OLECMDEXECOPT_SHOWHELP	= 3
-    }	OLECMDEXECOPT;
+    } 	OLECMDEXECOPT;
 
 /* OLECMDID_STOPDOWNLOAD and OLECMDID_ALLOWUILESSSAVEAS are supported for QueryStatus Only */
 typedef 
@@ -1367,8 +1370,13 @@ enum OLECMDID
 	OLECMDID_SHOWPRINT	= 44,
 	OLECMDID_CLOSE	= 45,
 	OLECMDID_ALLOWUILESSSAVEAS	= 46,
-	OLECMDID_DONTDOWNLOADCSS	= 47
-    }	OLECMDID;
+	OLECMDID_DONTDOWNLOADCSS	= 47,
+	OLECMDID_UPDATEPAGESTATUS	= 48,
+	OLECMDID_PRINT2	= 49,
+	OLECMDID_PRINTPREVIEW2	= 50,
+	OLECMDID_SETPRINTTEMPLATE	= 51,
+	OLECMDID_GETPRINTTEMPLATE	= 52
+    } 	OLECMDID;
 
 #define OLECMDERR_E_FIRST            (OLE_E_LAST+1)
 #define OLECMDERR_E_NOTSUPPORTED (OLECMDERR_E_FIRST)
@@ -1392,17 +1400,17 @@ EXTERN_C const IID IID_IOleCommandTarget;
     {
     public:
         virtual /* [input_sync] */ HRESULT STDMETHODCALLTYPE QueryStatus( 
-            /* [unique][in] */ const GUID __RPC_FAR *pguidCmdGroup,
+            /* [unique][in] */ const GUID *pguidCmdGroup,
             /* [in] */ ULONG cCmds,
-            /* [out][in][size_is] */ OLECMD __RPC_FAR prgCmds[  ],
-            /* [unique][out][in] */ OLECMDTEXT __RPC_FAR *pCmdText) = 0;
+            /* [out][in][size_is] */ OLECMD prgCmds[  ],
+            /* [unique][out][in] */ OLECMDTEXT *pCmdText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Exec( 
-            /* [unique][in] */ const GUID __RPC_FAR *pguidCmdGroup,
+            /* [unique][in] */ const GUID *pguidCmdGroup,
             /* [in] */ DWORD nCmdID,
             /* [in] */ DWORD nCmdexecopt,
-            /* [unique][in] */ VARIANT __RPC_FAR *pvaIn,
-            /* [unique][out][in] */ VARIANT __RPC_FAR *pvaOut) = 0;
+            /* [unique][in] */ VARIANT *pvaIn,
+            /* [unique][out][in] */ VARIANT *pvaOut) = 0;
         
     };
     
@@ -1412,38 +1420,38 @@ EXTERN_C const IID IID_IOleCommandTarget;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IOleCommandTarget __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IOleCommandTarget * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IOleCommandTarget __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IOleCommandTarget * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IOleCommandTarget __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IOleCommandTarget * This);
         
-        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryStatus )( 
-            IOleCommandTarget __RPC_FAR * This,
-            /* [unique][in] */ const GUID __RPC_FAR *pguidCmdGroup,
+        /* [input_sync] */ HRESULT ( STDMETHODCALLTYPE *QueryStatus )( 
+            IOleCommandTarget * This,
+            /* [unique][in] */ const GUID *pguidCmdGroup,
             /* [in] */ ULONG cCmds,
-            /* [out][in][size_is] */ OLECMD __RPC_FAR prgCmds[  ],
-            /* [unique][out][in] */ OLECMDTEXT __RPC_FAR *pCmdText);
+            /* [out][in][size_is] */ OLECMD prgCmds[  ],
+            /* [unique][out][in] */ OLECMDTEXT *pCmdText);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Exec )( 
-            IOleCommandTarget __RPC_FAR * This,
-            /* [unique][in] */ const GUID __RPC_FAR *pguidCmdGroup,
+        HRESULT ( STDMETHODCALLTYPE *Exec )( 
+            IOleCommandTarget * This,
+            /* [unique][in] */ const GUID *pguidCmdGroup,
             /* [in] */ DWORD nCmdID,
             /* [in] */ DWORD nCmdexecopt,
-            /* [unique][in] */ VARIANT __RPC_FAR *pvaIn,
-            /* [unique][out][in] */ VARIANT __RPC_FAR *pvaOut);
+            /* [unique][in] */ VARIANT *pvaIn,
+            /* [unique][out][in] */ VARIANT *pvaOut);
         
         END_INTERFACE
     } IOleCommandTargetVtbl;
 
     interface IOleCommandTarget
     {
-        CONST_VTBL struct IOleCommandTargetVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IOleCommandTargetVtbl *lpVtbl;
     };
 
     
@@ -1475,11 +1483,11 @@ EXTERN_C const IID IID_IOleCommandTarget;
 
 
 /* [input_sync] */ HRESULT STDMETHODCALLTYPE IOleCommandTarget_QueryStatus_Proxy( 
-    IOleCommandTarget __RPC_FAR * This,
-    /* [unique][in] */ const GUID __RPC_FAR *pguidCmdGroup,
+    IOleCommandTarget * This,
+    /* [unique][in] */ const GUID *pguidCmdGroup,
     /* [in] */ ULONG cCmds,
-    /* [out][in][size_is] */ OLECMD __RPC_FAR prgCmds[  ],
-    /* [unique][out][in] */ OLECMDTEXT __RPC_FAR *pCmdText);
+    /* [out][in][size_is] */ OLECMD prgCmds[  ],
+    /* [unique][out][in] */ OLECMDTEXT *pCmdText);
 
 
 void __RPC_STUB IOleCommandTarget_QueryStatus_Stub(
@@ -1490,12 +1498,12 @@ void __RPC_STUB IOleCommandTarget_QueryStatus_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IOleCommandTarget_Exec_Proxy( 
-    IOleCommandTarget __RPC_FAR * This,
-    /* [unique][in] */ const GUID __RPC_FAR *pguidCmdGroup,
+    IOleCommandTarget * This,
+    /* [unique][in] */ const GUID *pguidCmdGroup,
     /* [in] */ DWORD nCmdID,
     /* [in] */ DWORD nCmdexecopt,
-    /* [unique][in] */ VARIANT __RPC_FAR *pvaIn,
-    /* [unique][out][in] */ VARIANT __RPC_FAR *pvaOut);
+    /* [unique][in] */ VARIANT *pvaIn,
+    /* [unique][out][in] */ VARIANT *pvaOut);
 
 
 void __RPC_STUB IOleCommandTarget_Exec_Stub(
@@ -1509,7 +1517,7 @@ void __RPC_STUB IOleCommandTarget_Exec_Stub(
 #endif 	/* __IOleCommandTarget_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_docobj_0253 */
+/* interface __MIDL_itf_docobj_0261 */
 /* [local] */ 
 
 #endif
@@ -1523,7 +1531,8 @@ typedef enum
       OLECMDIDF_REFRESH_RELOAD          = 5,
       OLECMDIDF_REFRESH_LEVELMASK       = 0x00FF,
       OLECMDIDF_REFRESH_CLEARUSERINPUT  = 0x1000,
-      OLECMDIDF_REFRESH_PROMPTIFOFFLINE = 0x2000
+      OLECMDIDF_REFRESH_PROMPTIFOFFLINE = 0x2000,
+      OLECMDIDF_REFRESH_THROUGHSCRIPT   = 0x4000
 } OLECMDID_REFRESHFLAG;
 
 ////////////////////////////////////////////////////////////////////////////
@@ -1579,51 +1588,51 @@ typedef enum
 EXTERN_C const GUID SID_SContainerDispatch;
 
 
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0253_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_docobj_0253_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0261_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_docobj_0261_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long __RPC_FAR *, unsigned long            , VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
-void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
+unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
+void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
 /* [local] */ HRESULT __stdcall IEnumOleDocumentViews_Next_Proxy( 
-    IEnumOleDocumentViews __RPC_FAR * This,
+    IEnumOleDocumentViews * This,
     /* [in] */ ULONG cViews,
-    /* [out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *rgpView,
-    /* [out] */ ULONG __RPC_FAR *pcFetched);
+    /* [out] */ IOleDocumentView **rgpView,
+    /* [out] */ ULONG *pcFetched);
 
 
 /* [call_as] */ HRESULT __stdcall IEnumOleDocumentViews_Next_Stub( 
-    IEnumOleDocumentViews __RPC_FAR * This,
+    IEnumOleDocumentViews * This,
     /* [in] */ ULONG cViews,
-    /* [length_is][size_is][out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *rgpView,
-    /* [out] */ ULONG __RPC_FAR *pcFetched);
+    /* [length_is][size_is][out] */ IOleDocumentView **rgpView,
+    /* [out] */ ULONG *pcFetched);
 
 /* [local] */ HRESULT __stdcall IPrint_Print_Proxy( 
-    IPrint __RPC_FAR * This,
+    IPrint * This,
     /* [in] */ DWORD grfFlags,
-    /* [out][in] */ DVTARGETDEVICE __RPC_FAR *__RPC_FAR *pptd,
-    /* [out][in] */ PAGESET __RPC_FAR *__RPC_FAR *ppPageSet,
-    /* [unique][out][in] */ STGMEDIUM __RPC_FAR *pstgmOptions,
-    /* [in] */ IContinueCallback __RPC_FAR *pcallback,
+    /* [out][in] */ DVTARGETDEVICE **pptd,
+    /* [out][in] */ PAGESET **ppPageSet,
+    /* [unique][out][in] */ STGMEDIUM *pstgmOptions,
+    /* [in] */ IContinueCallback *pcallback,
     /* [in] */ LONG nFirstPage,
-    /* [out] */ LONG __RPC_FAR *pcPagesPrinted,
-    /* [out] */ LONG __RPC_FAR *pnLastPage);
+    /* [out] */ LONG *pcPagesPrinted,
+    /* [out] */ LONG *pnLastPage);
 
 
 /* [call_as] */ HRESULT __stdcall IPrint_Print_Stub( 
-    IPrint __RPC_FAR * This,
+    IPrint * This,
     /* [in] */ DWORD grfFlags,
-    /* [out][in] */ DVTARGETDEVICE __RPC_FAR *__RPC_FAR *pptd,
-    /* [out][in] */ PAGESET __RPC_FAR *__RPC_FAR *pppageset,
-    /* [unique][out][in] */ RemSTGMEDIUM __RPC_FAR *pstgmOptions,
-    /* [in] */ IContinueCallback __RPC_FAR *pcallback,
+    /* [out][in] */ DVTARGETDEVICE **pptd,
+    /* [out][in] */ PAGESET **pppageset,
+    /* [unique][out][in] */ RemSTGMEDIUM *pstgmOptions,
+    /* [in] */ IContinueCallback *pcallback,
     /* [in] */ LONG nFirstPage,
-    /* [out] */ LONG __RPC_FAR *pcPagesPrinted,
-    /* [out] */ LONG __RPC_FAR *pnLastPage);
+    /* [out] */ LONG *pcPagesPrinted,
+    /* [out] */ LONG *pnLastPage);
 
 
 
@@ -1634,6 +1643,7 @@ void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

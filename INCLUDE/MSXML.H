@@ -5,11 +5,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Fri Jul 30 19:34:45 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for msxml.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -28,6 +27,10 @@
 
 #ifndef __msxml_h__
 #define __msxml_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -274,8 +277,8 @@ typedef struct XMLDocument XMLDocument;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_msxml_0000 */
 /* [local] */ 
@@ -296,7 +299,7 @@ typedef struct _xml_error
     BSTR _pszExpected;
     DWORD _reserved1;
     DWORD _reserved2;
-    }	XML_ERROR;
+    } 	XML_ERROR;
 
 
 
@@ -350,7 +353,7 @@ enum tagDOMNodeType
 	NODE_DOCUMENT_TYPE	= NODE_DOCUMENT + 1,
 	NODE_DOCUMENT_FRAGMENT	= NODE_DOCUMENT_TYPE + 1,
 	NODE_NOTATION	= NODE_DOCUMENT_FRAGMENT + 1
-    }	DOMNodeType;
+    } 	DOMNodeType;
 
 //+-------------------------------------------------------------------------
 //
@@ -376,7 +379,7 @@ enum tagXMLEMEM_TYPE
 	XMLELEMTYPE_DTD	= XMLELEMTYPE_DOCUMENT + 1,
 	XMLELEMTYPE_PI	= XMLELEMTYPE_DTD + 1,
 	XMLELEMTYPE_OTHER	= XMLELEMTYPE_PI + 1
-    }	XMLELEM_TYPE;
+    } 	XMLELEM_TYPE;
 
 
 EXTERN_C const IID LIBID_MSXML;
@@ -399,7 +402,7 @@ EXTERN_C const IID IID_IXMLDOMImplementation;
         virtual /* [id] */ HRESULT STDMETHODCALLTYPE hasFeature( 
             /* [in] */ BSTR feature,
             /* [in] */ BSTR version,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasFeature) = 0;
+            /* [retval][out] */ VARIANT_BOOL *hasFeature) = 0;
         
     };
     
@@ -409,58 +412,58 @@ EXTERN_C const IID IID_IXMLDOMImplementation;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMImplementation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMImplementation * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMImplementation __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMImplementation * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMImplementation __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMImplementation * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMImplementation __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMImplementation * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMImplementation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMImplementation * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMImplementation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMImplementation * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMImplementation __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMImplementation * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasFeature )( 
-            IXMLDOMImplementation __RPC_FAR * This,
+        /* [id] */ HRESULT ( STDMETHODCALLTYPE *hasFeature )( 
+            IXMLDOMImplementation * This,
             /* [in] */ BSTR feature,
             /* [in] */ BSTR version,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasFeature);
+            /* [retval][out] */ VARIANT_BOOL *hasFeature);
         
         END_INTERFACE
     } IXMLDOMImplementationVtbl;
 
     interface IXMLDOMImplementation
     {
-        CONST_VTBL struct IXMLDOMImplementationVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMImplementationVtbl *lpVtbl;
     };
 
     
@@ -502,10 +505,10 @@ EXTERN_C const IID IID_IXMLDOMImplementation;
 
 
 /* [id] */ HRESULT STDMETHODCALLTYPE IXMLDOMImplementation_hasFeature_Proxy( 
-    IXMLDOMImplementation __RPC_FAR * This,
+    IXMLDOMImplementation * This,
     /* [in] */ BSTR feature,
     /* [in] */ BSTR version,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasFeature);
+    /* [retval][out] */ VARIANT_BOOL *hasFeature);
 
 
 void __RPC_STUB IXMLDOMImplementation_hasFeature_Stub(
@@ -535,122 +538,122 @@ EXTERN_C const IID IID_IXMLDOMNode;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_nodeName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name) = 0;
+            /* [retval][out] */ BSTR *name) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_nodeValue( 
-            /* [retval][out] */ VARIANT __RPC_FAR *value) = 0;
+            /* [retval][out] */ VARIANT *value) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_nodeValue( 
             /* [in] */ VARIANT value) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_nodeType( 
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type) = 0;
+            /* [retval][out] */ DOMNodeType *type) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_parentNode( 
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent) = 0;
+            /* [retval][out] */ IXMLDOMNode **parent) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_childNodes( 
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList) = 0;
+            /* [retval][out] */ IXMLDOMNodeList **childList) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_firstChild( 
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild) = 0;
+            /* [retval][out] */ IXMLDOMNode **firstChild) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_lastChild( 
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild) = 0;
+            /* [retval][out] */ IXMLDOMNode **lastChild) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_previousSibling( 
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling) = 0;
+            /* [retval][out] */ IXMLDOMNode **previousSibling) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_nextSibling( 
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling) = 0;
+            /* [retval][out] */ IXMLDOMNode **nextSibling) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_attributes( 
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap) = 0;
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE insertBefore( 
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild) = 0;
+            /* [retval][out] */ IXMLDOMNode **outNewChild) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE replaceChild( 
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild) = 0;
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeChild( 
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild) = 0;
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE appendChild( 
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild) = 0;
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE hasChildNodes( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild) = 0;
+            /* [retval][out] */ VARIANT_BOOL *hasChild) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ownerDocument( 
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument) = 0;
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE cloneNode( 
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot) = 0;
+            /* [retval][out] */ IXMLDOMNode **cloneRoot) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_nodeTypeString( 
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType) = 0;
+            /* [out][retval] */ BSTR *nodeType) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_text( 
-            /* [out][retval] */ BSTR __RPC_FAR *text) = 0;
+            /* [out][retval] */ BSTR *text) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_text( 
             /* [in] */ BSTR text) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_specified( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified) = 0;
+            /* [retval][out] */ VARIANT_BOOL *isSpecified) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_definition( 
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode) = 0;
+            /* [out][retval] */ IXMLDOMNode **definitionNode) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_nodeTypedValue( 
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue) = 0;
+            /* [out][retval] */ VARIANT *typedValue) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_nodeTypedValue( 
             /* [in] */ VARIANT typedValue) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_dataType( 
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName) = 0;
+            /* [out][retval] */ VARIANT *dataTypeName) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_dataType( 
             /* [in] */ BSTR dataTypeName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_xml( 
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString) = 0;
+            /* [out][retval] */ BSTR *xmlString) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE transformNode( 
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString) = 0;
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE selectNodes( 
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList) = 0;
+            /* [out][retval] */ IXMLDOMNodeList **resultList) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE selectSingleNode( 
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode) = 0;
+            /* [out][retval] */ IXMLDOMNode **resultNode) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_parsed( 
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed) = 0;
+            /* [out][retval] */ VARIANT_BOOL *isParsed) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_namespaceURI( 
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI) = 0;
+            /* [out][retval] */ BSTR *namespaceURI) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_prefix( 
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString) = 0;
+            /* [out][retval] */ BSTR *prefixString) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_baseName( 
-            /* [out][retval] */ BSTR __RPC_FAR *nameString) = 0;
+            /* [out][retval] */ BSTR *nameString) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE transformNodeToObject( 
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject) = 0;
         
     };
@@ -661,199 +664,199 @@ EXTERN_C const IID IID_IXMLDOMNode;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMNode __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMNode * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMNode __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMNode * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMNode __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMNode * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMNode * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMNode __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMNode * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMNode __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMNode * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMNode __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMNode * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMNode * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMNode * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMNode __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMNode * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMNode * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMNode * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMNode * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMNode * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMNode * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMNode * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMNode * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMNode * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMNode * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMNode * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMNode * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMNode * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMNode * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMNode * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMNode __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMNode * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMNode * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMNode * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMNode __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMNode * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMNode * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMNode * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMNode * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMNode __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMNode * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMNode * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMNode __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMNode * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMNode * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMNode * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMNode __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMNode * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMNode __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMNode * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMNode * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMNode * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMNode * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMNode * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMNode __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMNode * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
         END_INTERFACE
@@ -861,7 +864,7 @@ EXTERN_C const IID IID_IXMLDOMNode;
 
     interface IXMLDOMNode
     {
-        CONST_VTBL struct IXMLDOMNodeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMNodeVtbl *lpVtbl;
     };
 
     
@@ -1008,8 +1011,8 @@ EXTERN_C const IID IID_IXMLDOMNode;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeName_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *name);
+    IXMLDOMNode * This,
+    /* [retval][out] */ BSTR *name);
 
 
 void __RPC_STUB IXMLDOMNode_get_nodeName_Stub(
@@ -1020,8 +1023,8 @@ void __RPC_STUB IXMLDOMNode_get_nodeName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeValue_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *value);
+    IXMLDOMNode * This,
+    /* [retval][out] */ VARIANT *value);
 
 
 void __RPC_STUB IXMLDOMNode_get_nodeValue_Stub(
@@ -1032,7 +1035,7 @@ void __RPC_STUB IXMLDOMNode_get_nodeValue_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_put_nodeValue_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
+    IXMLDOMNode * This,
     /* [in] */ VARIANT value);
 
 
@@ -1044,8 +1047,8 @@ void __RPC_STUB IXMLDOMNode_put_nodeValue_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeType_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+    IXMLDOMNode * This,
+    /* [retval][out] */ DOMNodeType *type);
 
 
 void __RPC_STUB IXMLDOMNode_get_nodeType_Stub(
@@ -1056,8 +1059,8 @@ void __RPC_STUB IXMLDOMNode_get_nodeType_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_parentNode_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+    IXMLDOMNode * This,
+    /* [retval][out] */ IXMLDOMNode **parent);
 
 
 void __RPC_STUB IXMLDOMNode_get_parentNode_Stub(
@@ -1068,8 +1071,8 @@ void __RPC_STUB IXMLDOMNode_get_parentNode_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_childNodes_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+    IXMLDOMNode * This,
+    /* [retval][out] */ IXMLDOMNodeList **childList);
 
 
 void __RPC_STUB IXMLDOMNode_get_childNodes_Stub(
@@ -1080,8 +1083,8 @@ void __RPC_STUB IXMLDOMNode_get_childNodes_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_firstChild_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+    IXMLDOMNode * This,
+    /* [retval][out] */ IXMLDOMNode **firstChild);
 
 
 void __RPC_STUB IXMLDOMNode_get_firstChild_Stub(
@@ -1092,8 +1095,8 @@ void __RPC_STUB IXMLDOMNode_get_firstChild_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_lastChild_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+    IXMLDOMNode * This,
+    /* [retval][out] */ IXMLDOMNode **lastChild);
 
 
 void __RPC_STUB IXMLDOMNode_get_lastChild_Stub(
@@ -1104,8 +1107,8 @@ void __RPC_STUB IXMLDOMNode_get_lastChild_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_previousSibling_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+    IXMLDOMNode * This,
+    /* [retval][out] */ IXMLDOMNode **previousSibling);
 
 
 void __RPC_STUB IXMLDOMNode_get_previousSibling_Stub(
@@ -1116,8 +1119,8 @@ void __RPC_STUB IXMLDOMNode_get_previousSibling_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nextSibling_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+    IXMLDOMNode * This,
+    /* [retval][out] */ IXMLDOMNode **nextSibling);
 
 
 void __RPC_STUB IXMLDOMNode_get_nextSibling_Stub(
@@ -1128,8 +1131,8 @@ void __RPC_STUB IXMLDOMNode_get_nextSibling_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_attributes_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+    IXMLDOMNode * This,
+    /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
 
 
 void __RPC_STUB IXMLDOMNode_get_attributes_Stub(
@@ -1140,10 +1143,10 @@ void __RPC_STUB IXMLDOMNode_get_attributes_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_insertBefore_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+    IXMLDOMNode * This,
+    /* [in] */ IXMLDOMNode *newChild,
     /* [in] */ VARIANT refChild,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+    /* [retval][out] */ IXMLDOMNode **outNewChild);
 
 
 void __RPC_STUB IXMLDOMNode_insertBefore_Stub(
@@ -1154,10 +1157,10 @@ void __RPC_STUB IXMLDOMNode_insertBefore_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_replaceChild_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-    /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+    IXMLDOMNode * This,
+    /* [in] */ IXMLDOMNode *newChild,
+    /* [in] */ IXMLDOMNode *oldChild,
+    /* [retval][out] */ IXMLDOMNode **outOldChild);
 
 
 void __RPC_STUB IXMLDOMNode_replaceChild_Stub(
@@ -1168,9 +1171,9 @@ void __RPC_STUB IXMLDOMNode_replaceChild_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_removeChild_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+    IXMLDOMNode * This,
+    /* [in] */ IXMLDOMNode *childNode,
+    /* [retval][out] */ IXMLDOMNode **oldChild);
 
 
 void __RPC_STUB IXMLDOMNode_removeChild_Stub(
@@ -1181,9 +1184,9 @@ void __RPC_STUB IXMLDOMNode_removeChild_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_appendChild_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+    IXMLDOMNode * This,
+    /* [in] */ IXMLDOMNode *newChild,
+    /* [retval][out] */ IXMLDOMNode **outNewChild);
 
 
 void __RPC_STUB IXMLDOMNode_appendChild_Stub(
@@ -1194,8 +1197,8 @@ void __RPC_STUB IXMLDOMNode_appendChild_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_hasChildNodes_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+    IXMLDOMNode * This,
+    /* [retval][out] */ VARIANT_BOOL *hasChild);
 
 
 void __RPC_STUB IXMLDOMNode_hasChildNodes_Stub(
@@ -1206,8 +1209,8 @@ void __RPC_STUB IXMLDOMNode_hasChildNodes_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_ownerDocument_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+    IXMLDOMNode * This,
+    /* [retval][out] */ IXMLDOMDocument **DOMDocument);
 
 
 void __RPC_STUB IXMLDOMNode_get_ownerDocument_Stub(
@@ -1218,9 +1221,9 @@ void __RPC_STUB IXMLDOMNode_get_ownerDocument_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_cloneNode_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
+    IXMLDOMNode * This,
     /* [in] */ VARIANT_BOOL deep,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+    /* [retval][out] */ IXMLDOMNode **cloneRoot);
 
 
 void __RPC_STUB IXMLDOMNode_cloneNode_Stub(
@@ -1231,8 +1234,8 @@ void __RPC_STUB IXMLDOMNode_cloneNode_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeTypeString_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+    IXMLDOMNode * This,
+    /* [out][retval] */ BSTR *nodeType);
 
 
 void __RPC_STUB IXMLDOMNode_get_nodeTypeString_Stub(
@@ -1243,8 +1246,8 @@ void __RPC_STUB IXMLDOMNode_get_nodeTypeString_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_text_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *text);
+    IXMLDOMNode * This,
+    /* [out][retval] */ BSTR *text);
 
 
 void __RPC_STUB IXMLDOMNode_get_text_Stub(
@@ -1255,7 +1258,7 @@ void __RPC_STUB IXMLDOMNode_get_text_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_put_text_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
+    IXMLDOMNode * This,
     /* [in] */ BSTR text);
 
 
@@ -1267,8 +1270,8 @@ void __RPC_STUB IXMLDOMNode_put_text_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_specified_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+    IXMLDOMNode * This,
+    /* [retval][out] */ VARIANT_BOOL *isSpecified);
 
 
 void __RPC_STUB IXMLDOMNode_get_specified_Stub(
@@ -1279,8 +1282,8 @@ void __RPC_STUB IXMLDOMNode_get_specified_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_definition_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+    IXMLDOMNode * This,
+    /* [out][retval] */ IXMLDOMNode **definitionNode);
 
 
 void __RPC_STUB IXMLDOMNode_get_definition_Stub(
@@ -1291,8 +1294,8 @@ void __RPC_STUB IXMLDOMNode_get_definition_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeTypedValue_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+    IXMLDOMNode * This,
+    /* [out][retval] */ VARIANT *typedValue);
 
 
 void __RPC_STUB IXMLDOMNode_get_nodeTypedValue_Stub(
@@ -1303,7 +1306,7 @@ void __RPC_STUB IXMLDOMNode_get_nodeTypedValue_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_put_nodeTypedValue_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
+    IXMLDOMNode * This,
     /* [in] */ VARIANT typedValue);
 
 
@@ -1315,8 +1318,8 @@ void __RPC_STUB IXMLDOMNode_put_nodeTypedValue_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_dataType_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+    IXMLDOMNode * This,
+    /* [out][retval] */ VARIANT *dataTypeName);
 
 
 void __RPC_STUB IXMLDOMNode_get_dataType_Stub(
@@ -1327,7 +1330,7 @@ void __RPC_STUB IXMLDOMNode_get_dataType_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_put_dataType_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
+    IXMLDOMNode * This,
     /* [in] */ BSTR dataTypeName);
 
 
@@ -1339,8 +1342,8 @@ void __RPC_STUB IXMLDOMNode_put_dataType_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_xml_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+    IXMLDOMNode * This,
+    /* [out][retval] */ BSTR *xmlString);
 
 
 void __RPC_STUB IXMLDOMNode_get_xml_Stub(
@@ -1351,9 +1354,9 @@ void __RPC_STUB IXMLDOMNode_get_xml_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_transformNode_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-    /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+    IXMLDOMNode * This,
+    /* [in] */ IXMLDOMNode *stylesheet,
+    /* [out][retval] */ BSTR *xmlString);
 
 
 void __RPC_STUB IXMLDOMNode_transformNode_Stub(
@@ -1364,9 +1367,9 @@ void __RPC_STUB IXMLDOMNode_transformNode_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_selectNodes_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
+    IXMLDOMNode * This,
     /* [in] */ BSTR queryString,
-    /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+    /* [out][retval] */ IXMLDOMNodeList **resultList);
 
 
 void __RPC_STUB IXMLDOMNode_selectNodes_Stub(
@@ -1377,9 +1380,9 @@ void __RPC_STUB IXMLDOMNode_selectNodes_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_selectSingleNode_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
+    IXMLDOMNode * This,
     /* [in] */ BSTR queryString,
-    /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+    /* [out][retval] */ IXMLDOMNode **resultNode);
 
 
 void __RPC_STUB IXMLDOMNode_selectSingleNode_Stub(
@@ -1390,8 +1393,8 @@ void __RPC_STUB IXMLDOMNode_selectSingleNode_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_parsed_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+    IXMLDOMNode * This,
+    /* [out][retval] */ VARIANT_BOOL *isParsed);
 
 
 void __RPC_STUB IXMLDOMNode_get_parsed_Stub(
@@ -1402,8 +1405,8 @@ void __RPC_STUB IXMLDOMNode_get_parsed_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_namespaceURI_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+    IXMLDOMNode * This,
+    /* [out][retval] */ BSTR *namespaceURI);
 
 
 void __RPC_STUB IXMLDOMNode_get_namespaceURI_Stub(
@@ -1414,8 +1417,8 @@ void __RPC_STUB IXMLDOMNode_get_namespaceURI_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_prefix_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+    IXMLDOMNode * This,
+    /* [out][retval] */ BSTR *prefixString);
 
 
 void __RPC_STUB IXMLDOMNode_get_prefix_Stub(
@@ -1426,8 +1429,8 @@ void __RPC_STUB IXMLDOMNode_get_prefix_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_baseName_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *nameString);
+    IXMLDOMNode * This,
+    /* [out][retval] */ BSTR *nameString);
 
 
 void __RPC_STUB IXMLDOMNode_get_baseName_Stub(
@@ -1438,8 +1441,8 @@ void __RPC_STUB IXMLDOMNode_get_baseName_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_transformNodeToObject_Proxy( 
-    IXMLDOMNode __RPC_FAR * This,
-    /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+    IXMLDOMNode * This,
+    /* [in] */ IXMLDOMNode *stylesheet,
     /* [in] */ VARIANT outputObject);
 
 
@@ -1477,199 +1480,199 @@ EXTERN_C const IID IID_IXMLDOMDocumentFragment;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMDocumentFragment * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMDocumentFragment * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMDocumentFragment * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMDocumentFragment * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMDocumentFragment * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMDocumentFragment * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMDocumentFragment * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMDocumentFragment * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMDocumentFragment * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMDocumentFragment * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMDocumentFragment * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMDocumentFragment * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMDocumentFragment * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMDocumentFragment * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMDocumentFragment * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMDocumentFragment * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMDocumentFragment * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMDocumentFragment * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMDocumentFragment * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMDocumentFragment * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMDocumentFragment * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMDocumentFragment * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMDocumentFragment * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMDocumentFragment * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMDocumentFragment * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMDocumentFragment * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMDocumentFragment * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMDocumentFragment * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMDocumentFragment * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMDocumentFragment * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMDocumentFragment * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMDocumentFragment * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMDocumentFragment * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMDocumentFragment * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMDocumentFragment * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMDocumentFragment * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMDocumentFragment * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMDocumentFragment * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMDocumentFragment * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMDocumentFragment * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMDocumentFragment * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMDocumentFragment * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMDocumentFragment __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMDocumentFragment * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
         END_INTERFACE
@@ -1677,7 +1680,7 @@ EXTERN_C const IID IID_IXMLDOMDocumentFragment;
 
     interface IXMLDOMDocumentFragment
     {
-        CONST_VTBL struct IXMLDOMDocumentFragmentVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMDocumentFragmentVtbl *lpVtbl;
     };
 
     
@@ -1844,78 +1847,78 @@ EXTERN_C const IID IID_IXMLDOMDocument;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_doctype( 
-            /* [retval][out] */ IXMLDOMDocumentType __RPC_FAR *__RPC_FAR *documentType) = 0;
+            /* [retval][out] */ IXMLDOMDocumentType **documentType) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_implementation( 
-            /* [retval][out] */ IXMLDOMImplementation __RPC_FAR *__RPC_FAR *impl) = 0;
+            /* [retval][out] */ IXMLDOMImplementation **impl) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_documentElement( 
-            /* [retval][out] */ IXMLDOMElement __RPC_FAR *__RPC_FAR *DOMElement) = 0;
+            /* [retval][out] */ IXMLDOMElement **DOMElement) = 0;
         
         virtual /* [helpstring][id][propputref] */ HRESULT STDMETHODCALLTYPE putref_documentElement( 
-            /* [in] */ IXMLDOMElement __RPC_FAR *DOMElement) = 0;
+            /* [in] */ IXMLDOMElement *DOMElement) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createElement( 
             /* [in] */ BSTR tagName,
-            /* [retval][out] */ IXMLDOMElement __RPC_FAR *__RPC_FAR *element) = 0;
+            /* [retval][out] */ IXMLDOMElement **element) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createDocumentFragment( 
-            /* [retval][out] */ IXMLDOMDocumentFragment __RPC_FAR *__RPC_FAR *docFrag) = 0;
+            /* [retval][out] */ IXMLDOMDocumentFragment **docFrag) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createTextNode( 
             /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMText __RPC_FAR *__RPC_FAR *text) = 0;
+            /* [retval][out] */ IXMLDOMText **text) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createComment( 
             /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMComment __RPC_FAR *__RPC_FAR *comment) = 0;
+            /* [retval][out] */ IXMLDOMComment **comment) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createCDATASection( 
             /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMCDATASection __RPC_FAR *__RPC_FAR *cdata) = 0;
+            /* [retval][out] */ IXMLDOMCDATASection **cdata) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createProcessingInstruction( 
             /* [in] */ BSTR target,
             /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMProcessingInstruction __RPC_FAR *__RPC_FAR *pi) = 0;
+            /* [retval][out] */ IXMLDOMProcessingInstruction **pi) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createAttribute( 
             /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMAttribute __RPC_FAR *__RPC_FAR *attribute) = 0;
+            /* [retval][out] */ IXMLDOMAttribute **attribute) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createEntityReference( 
             /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMEntityReference __RPC_FAR *__RPC_FAR *entityRef) = 0;
+            /* [retval][out] */ IXMLDOMEntityReference **entityRef) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getElementsByTagName( 
             /* [in] */ BSTR tagName,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList) = 0;
+            /* [retval][out] */ IXMLDOMNodeList **resultList) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createNode( 
             /* [in] */ VARIANT Type,
             /* [in] */ BSTR name,
             /* [in] */ BSTR namespaceURI,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *node) = 0;
+            /* [out][retval] */ IXMLDOMNode **node) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE nodeFromID( 
             /* [in] */ BSTR idString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *node) = 0;
+            /* [out][retval] */ IXMLDOMNode **node) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE load( 
             /* [in] */ VARIANT xmlSource,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSuccessful) = 0;
+            /* [retval][out] */ VARIANT_BOOL *isSuccessful) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_readyState( 
-            /* [out][retval] */ long __RPC_FAR *value) = 0;
+            /* [out][retval] */ long *value) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_parseError( 
-            /* [out][retval] */ IXMLDOMParseError __RPC_FAR *__RPC_FAR *errorObj) = 0;
+            /* [out][retval] */ IXMLDOMParseError **errorObj) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_url( 
-            /* [out][retval] */ BSTR __RPC_FAR *urlString) = 0;
+            /* [out][retval] */ BSTR *urlString) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_async( 
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isAsync) = 0;
+            /* [out][retval] */ VARIANT_BOOL *isAsync) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_async( 
             /* [in] */ VARIANT_BOOL isAsync) = 0;
@@ -1924,25 +1927,25 @@ EXTERN_C const IID IID_IXMLDOMDocument;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE loadXML( 
             /* [in] */ BSTR bstrXML,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSuccessful) = 0;
+            /* [retval][out] */ VARIANT_BOOL *isSuccessful) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE save( 
             /* [in] */ VARIANT desination) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_validateOnParse( 
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isValidating) = 0;
+            /* [out][retval] */ VARIANT_BOOL *isValidating) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_validateOnParse( 
             /* [in] */ VARIANT_BOOL isValidating) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_resolveExternals( 
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isResolving) = 0;
+            /* [out][retval] */ VARIANT_BOOL *isResolving) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_resolveExternals( 
             /* [in] */ VARIANT_BOOL isResolving) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_preserveWhiteSpace( 
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isPreserving) = 0;
+            /* [out][retval] */ VARIANT_BOOL *isPreserving) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_preserveWhiteSpace( 
             /* [in] */ VARIANT_BOOL isPreserving) = 0;
@@ -1964,345 +1967,345 @@ EXTERN_C const IID IID_IXMLDOMDocument;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMDocument * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMDocument __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMDocument * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMDocument __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMDocument * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMDocument * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMDocument * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMDocument * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMDocument * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMDocument * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMDocument * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMDocument * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMDocument * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMDocument * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMDocument * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMDocument * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMDocument * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMDocument * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_doctype )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocumentType __RPC_FAR *__RPC_FAR *documentType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_doctype )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ IXMLDOMDocumentType **documentType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_implementation )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMImplementation __RPC_FAR *__RPC_FAR *impl);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_implementation )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ IXMLDOMImplementation **impl);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_documentElement )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMElement __RPC_FAR *__RPC_FAR *DOMElement);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_documentElement )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ IXMLDOMElement **DOMElement);
         
-        /* [helpstring][id][propputref] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *putref_documentElement )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [in] */ IXMLDOMElement __RPC_FAR *DOMElement);
+        /* [helpstring][id][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_documentElement )( 
+            IXMLDOMDocument * This,
+            /* [in] */ IXMLDOMElement *DOMElement);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *createElement )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createElement )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR tagName,
-            /* [retval][out] */ IXMLDOMElement __RPC_FAR *__RPC_FAR *element);
+            /* [retval][out] */ IXMLDOMElement **element);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *createDocumentFragment )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocumentFragment __RPC_FAR *__RPC_FAR *docFrag);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createDocumentFragment )( 
+            IXMLDOMDocument * This,
+            /* [retval][out] */ IXMLDOMDocumentFragment **docFrag);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *createTextNode )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createTextNode )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMText __RPC_FAR *__RPC_FAR *text);
+            /* [retval][out] */ IXMLDOMText **text);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *createComment )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createComment )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMComment __RPC_FAR *__RPC_FAR *comment);
+            /* [retval][out] */ IXMLDOMComment **comment);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *createCDATASection )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createCDATASection )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMCDATASection __RPC_FAR *__RPC_FAR *cdata);
+            /* [retval][out] */ IXMLDOMCDATASection **cdata);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *createProcessingInstruction )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createProcessingInstruction )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR target,
             /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMProcessingInstruction __RPC_FAR *__RPC_FAR *pi);
+            /* [retval][out] */ IXMLDOMProcessingInstruction **pi);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *createAttribute )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createAttribute )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMAttribute __RPC_FAR *__RPC_FAR *attribute);
+            /* [retval][out] */ IXMLDOMAttribute **attribute);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *createEntityReference )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createEntityReference )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMEntityReference __RPC_FAR *__RPC_FAR *entityRef);
+            /* [retval][out] */ IXMLDOMEntityReference **entityRef);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getElementsByTagName )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getElementsByTagName )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR tagName,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [retval][out] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *createNode )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createNode )( 
+            IXMLDOMDocument * This,
             /* [in] */ VARIANT Type,
             /* [in] */ BSTR name,
             /* [in] */ BSTR namespaceURI,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *node);
+            /* [out][retval] */ IXMLDOMNode **node);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *nodeFromID )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *nodeFromID )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR idString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *node);
+            /* [out][retval] */ IXMLDOMNode **node);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *load )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *load )( 
+            IXMLDOMDocument * This,
             /* [in] */ VARIANT xmlSource,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSuccessful);
+            /* [retval][out] */ VARIANT_BOOL *isSuccessful);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_readyState )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ long __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ long *value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parseError )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMParseError __RPC_FAR *__RPC_FAR *errorObj);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parseError )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ IXMLDOMParseError **errorObj);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_url )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *urlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_url )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ BSTR *urlString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_async )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isAsync);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_async )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ VARIANT_BOOL *isAsync);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_async )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_async )( 
+            IXMLDOMDocument * This,
             /* [in] */ VARIANT_BOOL isAsync);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *abort )( 
-            IXMLDOMDocument __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *abort )( 
+            IXMLDOMDocument * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *loadXML )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *loadXML )( 
+            IXMLDOMDocument * This,
             /* [in] */ BSTR bstrXML,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSuccessful);
+            /* [retval][out] */ VARIANT_BOOL *isSuccessful);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *save )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *save )( 
+            IXMLDOMDocument * This,
             /* [in] */ VARIANT desination);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_validateOnParse )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isValidating);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_validateOnParse )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ VARIANT_BOOL *isValidating);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_validateOnParse )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_validateOnParse )( 
+            IXMLDOMDocument * This,
             /* [in] */ VARIANT_BOOL isValidating);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_resolveExternals )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isResolving);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_resolveExternals )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ VARIANT_BOOL *isResolving);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_resolveExternals )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_resolveExternals )( 
+            IXMLDOMDocument * This,
             /* [in] */ VARIANT_BOOL isResolving);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_preserveWhiteSpace )( 
-            IXMLDOMDocument __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isPreserving);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_preserveWhiteSpace )( 
+            IXMLDOMDocument * This,
+            /* [out][retval] */ VARIANT_BOOL *isPreserving);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_preserveWhiteSpace )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_preserveWhiteSpace )( 
+            IXMLDOMDocument * This,
             /* [in] */ VARIANT_BOOL isPreserving);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_onreadystatechange )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_onreadystatechange )( 
+            IXMLDOMDocument * This,
             /* [in] */ VARIANT readystatechangeSink);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ondataavailable )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ondataavailable )( 
+            IXMLDOMDocument * This,
             /* [in] */ VARIANT ondataavailableSink);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ontransformnode )( 
-            IXMLDOMDocument __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ontransformnode )( 
+            IXMLDOMDocument * This,
             /* [in] */ VARIANT ontransformnodeSink);
         
         END_INTERFACE
@@ -2310,7 +2313,7 @@ EXTERN_C const IID IID_IXMLDOMDocument;
 
     interface IXMLDOMDocument
     {
-        CONST_VTBL struct IXMLDOMDocumentVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMDocumentVtbl *lpVtbl;
     };
 
     
@@ -2557,8 +2560,8 @@ EXTERN_C const IID IID_IXMLDOMDocument;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_doctype_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMDocumentType __RPC_FAR *__RPC_FAR *documentType);
+    IXMLDOMDocument * This,
+    /* [retval][out] */ IXMLDOMDocumentType **documentType);
 
 
 void __RPC_STUB IXMLDOMDocument_get_doctype_Stub(
@@ -2569,8 +2572,8 @@ void __RPC_STUB IXMLDOMDocument_get_doctype_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_implementation_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMImplementation __RPC_FAR *__RPC_FAR *impl);
+    IXMLDOMDocument * This,
+    /* [retval][out] */ IXMLDOMImplementation **impl);
 
 
 void __RPC_STUB IXMLDOMDocument_get_implementation_Stub(
@@ -2581,8 +2584,8 @@ void __RPC_STUB IXMLDOMDocument_get_implementation_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_documentElement_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMElement __RPC_FAR *__RPC_FAR *DOMElement);
+    IXMLDOMDocument * This,
+    /* [retval][out] */ IXMLDOMElement **DOMElement);
 
 
 void __RPC_STUB IXMLDOMDocument_get_documentElement_Stub(
@@ -2593,8 +2596,8 @@ void __RPC_STUB IXMLDOMDocument_get_documentElement_Stub(
 
 
 /* [helpstring][id][propputref] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_putref_documentElement_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
-    /* [in] */ IXMLDOMElement __RPC_FAR *DOMElement);
+    IXMLDOMDocument * This,
+    /* [in] */ IXMLDOMElement *DOMElement);
 
 
 void __RPC_STUB IXMLDOMDocument_putref_documentElement_Stub(
@@ -2605,9 +2608,9 @@ void __RPC_STUB IXMLDOMDocument_putref_documentElement_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createElement_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ BSTR tagName,
-    /* [retval][out] */ IXMLDOMElement __RPC_FAR *__RPC_FAR *element);
+    /* [retval][out] */ IXMLDOMElement **element);
 
 
 void __RPC_STUB IXMLDOMDocument_createElement_Stub(
@@ -2618,8 +2621,8 @@ void __RPC_STUB IXMLDOMDocument_createElement_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createDocumentFragment_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMDocumentFragment __RPC_FAR *__RPC_FAR *docFrag);
+    IXMLDOMDocument * This,
+    /* [retval][out] */ IXMLDOMDocumentFragment **docFrag);
 
 
 void __RPC_STUB IXMLDOMDocument_createDocumentFragment_Stub(
@@ -2630,9 +2633,9 @@ void __RPC_STUB IXMLDOMDocument_createDocumentFragment_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createTextNode_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ BSTR data,
-    /* [retval][out] */ IXMLDOMText __RPC_FAR *__RPC_FAR *text);
+    /* [retval][out] */ IXMLDOMText **text);
 
 
 void __RPC_STUB IXMLDOMDocument_createTextNode_Stub(
@@ -2643,9 +2646,9 @@ void __RPC_STUB IXMLDOMDocument_createTextNode_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createComment_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ BSTR data,
-    /* [retval][out] */ IXMLDOMComment __RPC_FAR *__RPC_FAR *comment);
+    /* [retval][out] */ IXMLDOMComment **comment);
 
 
 void __RPC_STUB IXMLDOMDocument_createComment_Stub(
@@ -2656,9 +2659,9 @@ void __RPC_STUB IXMLDOMDocument_createComment_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createCDATASection_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ BSTR data,
-    /* [retval][out] */ IXMLDOMCDATASection __RPC_FAR *__RPC_FAR *cdata);
+    /* [retval][out] */ IXMLDOMCDATASection **cdata);
 
 
 void __RPC_STUB IXMLDOMDocument_createCDATASection_Stub(
@@ -2669,10 +2672,10 @@ void __RPC_STUB IXMLDOMDocument_createCDATASection_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createProcessingInstruction_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ BSTR target,
     /* [in] */ BSTR data,
-    /* [retval][out] */ IXMLDOMProcessingInstruction __RPC_FAR *__RPC_FAR *pi);
+    /* [retval][out] */ IXMLDOMProcessingInstruction **pi);
 
 
 void __RPC_STUB IXMLDOMDocument_createProcessingInstruction_Stub(
@@ -2683,9 +2686,9 @@ void __RPC_STUB IXMLDOMDocument_createProcessingInstruction_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createAttribute_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ BSTR name,
-    /* [retval][out] */ IXMLDOMAttribute __RPC_FAR *__RPC_FAR *attribute);
+    /* [retval][out] */ IXMLDOMAttribute **attribute);
 
 
 void __RPC_STUB IXMLDOMDocument_createAttribute_Stub(
@@ -2696,9 +2699,9 @@ void __RPC_STUB IXMLDOMDocument_createAttribute_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createEntityReference_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ BSTR name,
-    /* [retval][out] */ IXMLDOMEntityReference __RPC_FAR *__RPC_FAR *entityRef);
+    /* [retval][out] */ IXMLDOMEntityReference **entityRef);
 
 
 void __RPC_STUB IXMLDOMDocument_createEntityReference_Stub(
@@ -2709,9 +2712,9 @@ void __RPC_STUB IXMLDOMDocument_createEntityReference_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_getElementsByTagName_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ BSTR tagName,
-    /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+    /* [retval][out] */ IXMLDOMNodeList **resultList);
 
 
 void __RPC_STUB IXMLDOMDocument_getElementsByTagName_Stub(
@@ -2722,11 +2725,11 @@ void __RPC_STUB IXMLDOMDocument_getElementsByTagName_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createNode_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ VARIANT Type,
     /* [in] */ BSTR name,
     /* [in] */ BSTR namespaceURI,
-    /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *node);
+    /* [out][retval] */ IXMLDOMNode **node);
 
 
 void __RPC_STUB IXMLDOMDocument_createNode_Stub(
@@ -2737,9 +2740,9 @@ void __RPC_STUB IXMLDOMDocument_createNode_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_nodeFromID_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ BSTR idString,
-    /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *node);
+    /* [out][retval] */ IXMLDOMNode **node);
 
 
 void __RPC_STUB IXMLDOMDocument_nodeFromID_Stub(
@@ -2750,9 +2753,9 @@ void __RPC_STUB IXMLDOMDocument_nodeFromID_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_load_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ VARIANT xmlSource,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSuccessful);
+    /* [retval][out] */ VARIANT_BOOL *isSuccessful);
 
 
 void __RPC_STUB IXMLDOMDocument_load_Stub(
@@ -2763,8 +2766,8 @@ void __RPC_STUB IXMLDOMDocument_load_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_readyState_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
-    /* [out][retval] */ long __RPC_FAR *value);
+    IXMLDOMDocument * This,
+    /* [out][retval] */ long *value);
 
 
 void __RPC_STUB IXMLDOMDocument_get_readyState_Stub(
@@ -2775,8 +2778,8 @@ void __RPC_STUB IXMLDOMDocument_get_readyState_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_parseError_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
-    /* [out][retval] */ IXMLDOMParseError __RPC_FAR *__RPC_FAR *errorObj);
+    IXMLDOMDocument * This,
+    /* [out][retval] */ IXMLDOMParseError **errorObj);
 
 
 void __RPC_STUB IXMLDOMDocument_get_parseError_Stub(
@@ -2787,8 +2790,8 @@ void __RPC_STUB IXMLDOMDocument_get_parseError_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_url_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *urlString);
+    IXMLDOMDocument * This,
+    /* [out][retval] */ BSTR *urlString);
 
 
 void __RPC_STUB IXMLDOMDocument_get_url_Stub(
@@ -2799,8 +2802,8 @@ void __RPC_STUB IXMLDOMDocument_get_url_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_async_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
-    /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isAsync);
+    IXMLDOMDocument * This,
+    /* [out][retval] */ VARIANT_BOOL *isAsync);
 
 
 void __RPC_STUB IXMLDOMDocument_get_async_Stub(
@@ -2811,7 +2814,7 @@ void __RPC_STUB IXMLDOMDocument_get_async_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_async_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ VARIANT_BOOL isAsync);
 
 
@@ -2823,7 +2826,7 @@ void __RPC_STUB IXMLDOMDocument_put_async_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_abort_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This);
+    IXMLDOMDocument * This);
 
 
 void __RPC_STUB IXMLDOMDocument_abort_Stub(
@@ -2834,9 +2837,9 @@ void __RPC_STUB IXMLDOMDocument_abort_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_loadXML_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ BSTR bstrXML,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSuccessful);
+    /* [retval][out] */ VARIANT_BOOL *isSuccessful);
 
 
 void __RPC_STUB IXMLDOMDocument_loadXML_Stub(
@@ -2847,7 +2850,7 @@ void __RPC_STUB IXMLDOMDocument_loadXML_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_save_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ VARIANT desination);
 
 
@@ -2859,8 +2862,8 @@ void __RPC_STUB IXMLDOMDocument_save_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_validateOnParse_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
-    /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isValidating);
+    IXMLDOMDocument * This,
+    /* [out][retval] */ VARIANT_BOOL *isValidating);
 
 
 void __RPC_STUB IXMLDOMDocument_get_validateOnParse_Stub(
@@ -2871,7 +2874,7 @@ void __RPC_STUB IXMLDOMDocument_get_validateOnParse_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_validateOnParse_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ VARIANT_BOOL isValidating);
 
 
@@ -2883,8 +2886,8 @@ void __RPC_STUB IXMLDOMDocument_put_validateOnParse_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_resolveExternals_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
-    /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isResolving);
+    IXMLDOMDocument * This,
+    /* [out][retval] */ VARIANT_BOOL *isResolving);
 
 
 void __RPC_STUB IXMLDOMDocument_get_resolveExternals_Stub(
@@ -2895,7 +2898,7 @@ void __RPC_STUB IXMLDOMDocument_get_resolveExternals_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_resolveExternals_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ VARIANT_BOOL isResolving);
 
 
@@ -2907,8 +2910,8 @@ void __RPC_STUB IXMLDOMDocument_put_resolveExternals_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_preserveWhiteSpace_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
-    /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isPreserving);
+    IXMLDOMDocument * This,
+    /* [out][retval] */ VARIANT_BOOL *isPreserving);
 
 
 void __RPC_STUB IXMLDOMDocument_get_preserveWhiteSpace_Stub(
@@ -2919,7 +2922,7 @@ void __RPC_STUB IXMLDOMDocument_get_preserveWhiteSpace_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_preserveWhiteSpace_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ VARIANT_BOOL isPreserving);
 
 
@@ -2931,7 +2934,7 @@ void __RPC_STUB IXMLDOMDocument_put_preserveWhiteSpace_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_onreadystatechange_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ VARIANT readystatechangeSink);
 
 
@@ -2943,7 +2946,7 @@ void __RPC_STUB IXMLDOMDocument_put_onreadystatechange_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_ondataavailable_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ VARIANT ondataavailableSink);
 
 
@@ -2955,7 +2958,7 @@ void __RPC_STUB IXMLDOMDocument_put_ondataavailable_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_ontransformnode_Proxy( 
-    IXMLDOMDocument __RPC_FAR * This,
+    IXMLDOMDocument * This,
     /* [in] */ VARIANT ontransformnodeSink);
 
 
@@ -2987,18 +2990,18 @@ EXTERN_C const IID IID_IXMLDOMNodeList;
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_item( 
             /* [in] */ long index,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *listItem) = 0;
+            /* [retval][out] */ IXMLDOMNode **listItem) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long __RPC_FAR *listLength) = 0;
+            /* [retval][out] */ long *listLength) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE nextNode( 
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextItem) = 0;
+            /* [retval][out] */ IXMLDOMNode **nextItem) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE reset( void) = 0;
         
         virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__newEnum( 
-            /* [out][retval] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+            /* [out][retval] */ IUnknown **ppUnk) = 0;
         
     };
     
@@ -3008,72 +3011,72 @@ EXTERN_C const IID IID_IXMLDOMNodeList;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMNodeList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMNodeList * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMNodeList __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMNodeList * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMNodeList __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMNodeList * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMNodeList __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMNodeList * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMNodeList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMNodeList * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMNodeList __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMNodeList * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMNodeList __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMNodeList * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_item )( 
-            IXMLDOMNodeList __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_item )( 
+            IXMLDOMNodeList * This,
             /* [in] */ long index,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *listItem);
+            /* [retval][out] */ IXMLDOMNode **listItem);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_length )( 
-            IXMLDOMNodeList __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *listLength);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+            IXMLDOMNodeList * This,
+            /* [retval][out] */ long *listLength);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *nextNode )( 
-            IXMLDOMNodeList __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextItem);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *nextNode )( 
+            IXMLDOMNodeList * This,
+            /* [retval][out] */ IXMLDOMNode **nextItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *reset )( 
-            IXMLDOMNodeList __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *reset )( 
+            IXMLDOMNodeList * This);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__newEnum )( 
-            IXMLDOMNodeList __RPC_FAR * This,
-            /* [out][retval] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__newEnum )( 
+            IXMLDOMNodeList * This,
+            /* [out][retval] */ IUnknown **ppUnk);
         
         END_INTERFACE
     } IXMLDOMNodeListVtbl;
 
     interface IXMLDOMNodeList
     {
-        CONST_VTBL struct IXMLDOMNodeListVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMNodeListVtbl *lpVtbl;
     };
 
     
@@ -3127,9 +3130,9 @@ EXTERN_C const IID IID_IXMLDOMNodeList;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_get_item_Proxy( 
-    IXMLDOMNodeList __RPC_FAR * This,
+    IXMLDOMNodeList * This,
     /* [in] */ long index,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *listItem);
+    /* [retval][out] */ IXMLDOMNode **listItem);
 
 
 void __RPC_STUB IXMLDOMNodeList_get_item_Stub(
@@ -3140,8 +3143,8 @@ void __RPC_STUB IXMLDOMNodeList_get_item_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_get_length_Proxy( 
-    IXMLDOMNodeList __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *listLength);
+    IXMLDOMNodeList * This,
+    /* [retval][out] */ long *listLength);
 
 
 void __RPC_STUB IXMLDOMNodeList_get_length_Stub(
@@ -3152,8 +3155,8 @@ void __RPC_STUB IXMLDOMNodeList_get_length_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_nextNode_Proxy( 
-    IXMLDOMNodeList __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextItem);
+    IXMLDOMNodeList * This,
+    /* [retval][out] */ IXMLDOMNode **nextItem);
 
 
 void __RPC_STUB IXMLDOMNodeList_nextNode_Stub(
@@ -3164,7 +3167,7 @@ void __RPC_STUB IXMLDOMNodeList_nextNode_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_reset_Proxy( 
-    IXMLDOMNodeList __RPC_FAR * This);
+    IXMLDOMNodeList * This);
 
 
 void __RPC_STUB IXMLDOMNodeList_reset_Stub(
@@ -3175,8 +3178,8 @@ void __RPC_STUB IXMLDOMNodeList_reset_Stub(
 
 
 /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_get__newEnum_Proxy( 
-    IXMLDOMNodeList __RPC_FAR * This,
-    /* [out][retval] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+    IXMLDOMNodeList * This,
+    /* [out][retval] */ IUnknown **ppUnk);
 
 
 void __RPC_STUB IXMLDOMNodeList_get__newEnum_Stub(
@@ -3207,40 +3210,40 @@ EXTERN_C const IID IID_IXMLDOMNamedNodeMap;
     public:
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getNamedItem( 
             /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *namedItem) = 0;
+            /* [retval][out] */ IXMLDOMNode **namedItem) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setNamedItem( 
-            /* [in] */ IXMLDOMNode __RPC_FAR *newItem,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nameItem) = 0;
+            /* [in] */ IXMLDOMNode *newItem,
+            /* [retval][out] */ IXMLDOMNode **nameItem) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeNamedItem( 
             /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *namedItem) = 0;
+            /* [retval][out] */ IXMLDOMNode **namedItem) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_item( 
             /* [in] */ long index,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *listItem) = 0;
+            /* [retval][out] */ IXMLDOMNode **listItem) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long __RPC_FAR *listLength) = 0;
+            /* [retval][out] */ long *listLength) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getQualifiedItem( 
             /* [in] */ BSTR baseName,
             /* [in] */ BSTR namespaceURI,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *qualifiedItem) = 0;
+            /* [retval][out] */ IXMLDOMNode **qualifiedItem) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeQualifiedItem( 
             /* [in] */ BSTR baseName,
             /* [in] */ BSTR namespaceURI,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *qualifiedItem) = 0;
+            /* [retval][out] */ IXMLDOMNode **qualifiedItem) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE nextNode( 
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextItem) = 0;
+            /* [retval][out] */ IXMLDOMNode **nextItem) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE reset( void) = 0;
         
         virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__newEnum( 
-            /* [out][retval] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+            /* [out][retval] */ IUnknown **ppUnk) = 0;
         
     };
     
@@ -3250,99 +3253,99 @@ EXTERN_C const IID IID_IXMLDOMNamedNodeMap;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMNamedNodeMap * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMNamedNodeMap * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMNamedNodeMap * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMNamedNodeMap * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMNamedNodeMap * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMNamedNodeMap * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMNamedNodeMap * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getNamedItem )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getNamedItem )( 
+            IXMLDOMNamedNodeMap * This,
             /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *namedItem);
+            /* [retval][out] */ IXMLDOMNode **namedItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setNamedItem )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newItem,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nameItem);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setNamedItem )( 
+            IXMLDOMNamedNodeMap * This,
+            /* [in] */ IXMLDOMNode *newItem,
+            /* [retval][out] */ IXMLDOMNode **nameItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeNamedItem )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeNamedItem )( 
+            IXMLDOMNamedNodeMap * This,
             /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *namedItem);
+            /* [retval][out] */ IXMLDOMNode **namedItem);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_item )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_item )( 
+            IXMLDOMNamedNodeMap * This,
             /* [in] */ long index,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *listItem);
+            /* [retval][out] */ IXMLDOMNode **listItem);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_length )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *listLength);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+            IXMLDOMNamedNodeMap * This,
+            /* [retval][out] */ long *listLength);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getQualifiedItem )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getQualifiedItem )( 
+            IXMLDOMNamedNodeMap * This,
             /* [in] */ BSTR baseName,
             /* [in] */ BSTR namespaceURI,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *qualifiedItem);
+            /* [retval][out] */ IXMLDOMNode **qualifiedItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeQualifiedItem )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeQualifiedItem )( 
+            IXMLDOMNamedNodeMap * This,
             /* [in] */ BSTR baseName,
             /* [in] */ BSTR namespaceURI,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *qualifiedItem);
+            /* [retval][out] */ IXMLDOMNode **qualifiedItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *nextNode )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextItem);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *nextNode )( 
+            IXMLDOMNamedNodeMap * This,
+            /* [retval][out] */ IXMLDOMNode **nextItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *reset )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *reset )( 
+            IXMLDOMNamedNodeMap * This);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__newEnum )( 
-            IXMLDOMNamedNodeMap __RPC_FAR * This,
-            /* [out][retval] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__newEnum )( 
+            IXMLDOMNamedNodeMap * This,
+            /* [out][retval] */ IUnknown **ppUnk);
         
         END_INTERFACE
     } IXMLDOMNamedNodeMapVtbl;
 
     interface IXMLDOMNamedNodeMap
     {
-        CONST_VTBL struct IXMLDOMNamedNodeMapVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMNamedNodeMapVtbl *lpVtbl;
     };
 
     
@@ -3411,9 +3414,9 @@ EXTERN_C const IID IID_IXMLDOMNamedNodeMap;
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_getNamedItem_Proxy( 
-    IXMLDOMNamedNodeMap __RPC_FAR * This,
+    IXMLDOMNamedNodeMap * This,
     /* [in] */ BSTR name,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *namedItem);
+    /* [retval][out] */ IXMLDOMNode **namedItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_getNamedItem_Stub(
@@ -3424,9 +3427,9 @@ void __RPC_STUB IXMLDOMNamedNodeMap_getNamedItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_setNamedItem_Proxy( 
-    IXMLDOMNamedNodeMap __RPC_FAR * This,
-    /* [in] */ IXMLDOMNode __RPC_FAR *newItem,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nameItem);
+    IXMLDOMNamedNodeMap * This,
+    /* [in] */ IXMLDOMNode *newItem,
+    /* [retval][out] */ IXMLDOMNode **nameItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_setNamedItem_Stub(
@@ -3437,9 +3440,9 @@ void __RPC_STUB IXMLDOMNamedNodeMap_setNamedItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_removeNamedItem_Proxy( 
-    IXMLDOMNamedNodeMap __RPC_FAR * This,
+    IXMLDOMNamedNodeMap * This,
     /* [in] */ BSTR name,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *namedItem);
+    /* [retval][out] */ IXMLDOMNode **namedItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_removeNamedItem_Stub(
@@ -3450,9 +3453,9 @@ void __RPC_STUB IXMLDOMNamedNodeMap_removeNamedItem_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_get_item_Proxy( 
-    IXMLDOMNamedNodeMap __RPC_FAR * This,
+    IXMLDOMNamedNodeMap * This,
     /* [in] */ long index,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *listItem);
+    /* [retval][out] */ IXMLDOMNode **listItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_get_item_Stub(
@@ -3463,8 +3466,8 @@ void __RPC_STUB IXMLDOMNamedNodeMap_get_item_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_get_length_Proxy( 
-    IXMLDOMNamedNodeMap __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *listLength);
+    IXMLDOMNamedNodeMap * This,
+    /* [retval][out] */ long *listLength);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_get_length_Stub(
@@ -3475,10 +3478,10 @@ void __RPC_STUB IXMLDOMNamedNodeMap_get_length_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_getQualifiedItem_Proxy( 
-    IXMLDOMNamedNodeMap __RPC_FAR * This,
+    IXMLDOMNamedNodeMap * This,
     /* [in] */ BSTR baseName,
     /* [in] */ BSTR namespaceURI,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *qualifiedItem);
+    /* [retval][out] */ IXMLDOMNode **qualifiedItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_getQualifiedItem_Stub(
@@ -3489,10 +3492,10 @@ void __RPC_STUB IXMLDOMNamedNodeMap_getQualifiedItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_removeQualifiedItem_Proxy( 
-    IXMLDOMNamedNodeMap __RPC_FAR * This,
+    IXMLDOMNamedNodeMap * This,
     /* [in] */ BSTR baseName,
     /* [in] */ BSTR namespaceURI,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *qualifiedItem);
+    /* [retval][out] */ IXMLDOMNode **qualifiedItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_removeQualifiedItem_Stub(
@@ -3503,8 +3506,8 @@ void __RPC_STUB IXMLDOMNamedNodeMap_removeQualifiedItem_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_nextNode_Proxy( 
-    IXMLDOMNamedNodeMap __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextItem);
+    IXMLDOMNamedNodeMap * This,
+    /* [retval][out] */ IXMLDOMNode **nextItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_nextNode_Stub(
@@ -3515,7 +3518,7 @@ void __RPC_STUB IXMLDOMNamedNodeMap_nextNode_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_reset_Proxy( 
-    IXMLDOMNamedNodeMap __RPC_FAR * This);
+    IXMLDOMNamedNodeMap * This);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_reset_Stub(
@@ -3526,8 +3529,8 @@ void __RPC_STUB IXMLDOMNamedNodeMap_reset_Stub(
 
 
 /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_get__newEnum_Proxy( 
-    IXMLDOMNamedNodeMap __RPC_FAR * This,
-    /* [out][retval] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+    IXMLDOMNamedNodeMap * This,
+    /* [out][retval] */ IUnknown **ppUnk);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_get__newEnum_Stub(
@@ -3557,18 +3560,18 @@ EXTERN_C const IID IID_IXMLDOMCharacterData;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_data( 
-            /* [retval][out] */ BSTR __RPC_FAR *data) = 0;
+            /* [retval][out] */ BSTR *data) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_data( 
             /* [in] */ BSTR data) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long __RPC_FAR *dataLength) = 0;
+            /* [retval][out] */ long *dataLength) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE substringData( 
             /* [in] */ long offset,
             /* [in] */ long count,
-            /* [retval][out] */ BSTR __RPC_FAR *data) = 0;
+            /* [retval][out] */ BSTR *data) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE appendData( 
             /* [in] */ BSTR data) = 0;
@@ -3594,235 +3597,235 @@ EXTERN_C const IID IID_IXMLDOMCharacterData;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMCharacterData __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMCharacterData * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMCharacterData __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMCharacterData * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMCharacterData * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMCharacterData * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMCharacterData * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMCharacterData * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMCharacterData * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMCharacterData * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMCharacterData * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMCharacterData * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMCharacterData * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMCharacterData * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMCharacterData * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMCharacterData * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMCharacterData * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMCharacterData * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMCharacterData * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMCharacterData * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMCharacterData * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_data )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *data);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_data )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ BSTR *data);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_data )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_data )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_length )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *dataLength);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+            IXMLDOMCharacterData * This,
+            /* [retval][out] */ long *dataLength);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *substringData )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *substringData )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ long offset,
             /* [in] */ long count,
-            /* [retval][out] */ BSTR __RPC_FAR *data);
+            /* [retval][out] */ BSTR *data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendData )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendData )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertData )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertData )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ long offset,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *deleteData )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *deleteData )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ long offset,
             /* [in] */ long count);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceData )( 
-            IXMLDOMCharacterData __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceData )( 
+            IXMLDOMCharacterData * This,
             /* [in] */ long offset,
             /* [in] */ long count,
             /* [in] */ BSTR data);
@@ -3832,7 +3835,7 @@ EXTERN_C const IID IID_IXMLDOMCharacterData;
 
     interface IXMLDOMCharacterData
     {
-        CONST_VTBL struct IXMLDOMCharacterDataVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMCharacterDataVtbl *lpVtbl;
     };
 
     
@@ -4004,8 +4007,8 @@ EXTERN_C const IID IID_IXMLDOMCharacterData;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_get_data_Proxy( 
-    IXMLDOMCharacterData __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *data);
+    IXMLDOMCharacterData * This,
+    /* [retval][out] */ BSTR *data);
 
 
 void __RPC_STUB IXMLDOMCharacterData_get_data_Stub(
@@ -4016,7 +4019,7 @@ void __RPC_STUB IXMLDOMCharacterData_get_data_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_put_data_Proxy( 
-    IXMLDOMCharacterData __RPC_FAR * This,
+    IXMLDOMCharacterData * This,
     /* [in] */ BSTR data);
 
 
@@ -4028,8 +4031,8 @@ void __RPC_STUB IXMLDOMCharacterData_put_data_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_get_length_Proxy( 
-    IXMLDOMCharacterData __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *dataLength);
+    IXMLDOMCharacterData * This,
+    /* [retval][out] */ long *dataLength);
 
 
 void __RPC_STUB IXMLDOMCharacterData_get_length_Stub(
@@ -4040,10 +4043,10 @@ void __RPC_STUB IXMLDOMCharacterData_get_length_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_substringData_Proxy( 
-    IXMLDOMCharacterData __RPC_FAR * This,
+    IXMLDOMCharacterData * This,
     /* [in] */ long offset,
     /* [in] */ long count,
-    /* [retval][out] */ BSTR __RPC_FAR *data);
+    /* [retval][out] */ BSTR *data);
 
 
 void __RPC_STUB IXMLDOMCharacterData_substringData_Stub(
@@ -4054,7 +4057,7 @@ void __RPC_STUB IXMLDOMCharacterData_substringData_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_appendData_Proxy( 
-    IXMLDOMCharacterData __RPC_FAR * This,
+    IXMLDOMCharacterData * This,
     /* [in] */ BSTR data);
 
 
@@ -4066,7 +4069,7 @@ void __RPC_STUB IXMLDOMCharacterData_appendData_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_insertData_Proxy( 
-    IXMLDOMCharacterData __RPC_FAR * This,
+    IXMLDOMCharacterData * This,
     /* [in] */ long offset,
     /* [in] */ BSTR data);
 
@@ -4079,7 +4082,7 @@ void __RPC_STUB IXMLDOMCharacterData_insertData_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_deleteData_Proxy( 
-    IXMLDOMCharacterData __RPC_FAR * This,
+    IXMLDOMCharacterData * This,
     /* [in] */ long offset,
     /* [in] */ long count);
 
@@ -4092,7 +4095,7 @@ void __RPC_STUB IXMLDOMCharacterData_deleteData_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_replaceData_Proxy( 
-    IXMLDOMCharacterData __RPC_FAR * This,
+    IXMLDOMCharacterData * This,
     /* [in] */ long offset,
     /* [in] */ long count,
     /* [in] */ BSTR data);
@@ -4125,10 +4128,10 @@ EXTERN_C const IID IID_IXMLDOMAttribute;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_name( 
-            /* [retval][out] */ BSTR __RPC_FAR *attributeName) = 0;
+            /* [retval][out] */ BSTR *attributeName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_value( 
-            /* [retval][out] */ VARIANT __RPC_FAR *attributeValue) = 0;
+            /* [retval][out] */ VARIANT *attributeValue) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_value( 
             /* [in] */ VARIANT attributeValue) = 0;
@@ -4141,211 +4144,211 @@ EXTERN_C const IID IID_IXMLDOMAttribute;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMAttribute __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMAttribute * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMAttribute __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMAttribute * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMAttribute __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMAttribute * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMAttribute * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMAttribute __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMAttribute * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMAttribute __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMAttribute * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMAttribute __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMAttribute * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMAttribute __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMAttribute * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMAttribute * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMAttribute * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMAttribute * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMAttribute * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMAttribute __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMAttribute * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMAttribute * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMAttribute * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMAttribute __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMAttribute * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMAttribute * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMAttribute * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMAttribute __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMAttribute * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMAttribute * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMAttribute __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMAttribute * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMAttribute * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMAttribute * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMAttribute __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMAttribute * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMAttribute __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMAttribute * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMAttribute * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMAttribute * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMAttribute * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMAttribute * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMAttribute * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_name )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *attributeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_name )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ BSTR *attributeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_value )( 
-            IXMLDOMAttribute __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *attributeValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_value )( 
+            IXMLDOMAttribute * This,
+            /* [retval][out] */ VARIANT *attributeValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_value )( 
-            IXMLDOMAttribute __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_value )( 
+            IXMLDOMAttribute * This,
             /* [in] */ VARIANT attributeValue);
         
         END_INTERFACE
@@ -4353,7 +4356,7 @@ EXTERN_C const IID IID_IXMLDOMAttribute;
 
     interface IXMLDOMAttribute
     {
-        CONST_VTBL struct IXMLDOMAttributeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMAttributeVtbl *lpVtbl;
     };
 
     
@@ -4510,8 +4513,8 @@ EXTERN_C const IID IID_IXMLDOMAttribute;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMAttribute_get_name_Proxy( 
-    IXMLDOMAttribute __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *attributeName);
+    IXMLDOMAttribute * This,
+    /* [retval][out] */ BSTR *attributeName);
 
 
 void __RPC_STUB IXMLDOMAttribute_get_name_Stub(
@@ -4522,8 +4525,8 @@ void __RPC_STUB IXMLDOMAttribute_get_name_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMAttribute_get_value_Proxy( 
-    IXMLDOMAttribute __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *attributeValue);
+    IXMLDOMAttribute * This,
+    /* [retval][out] */ VARIANT *attributeValue);
 
 
 void __RPC_STUB IXMLDOMAttribute_get_value_Stub(
@@ -4534,7 +4537,7 @@ void __RPC_STUB IXMLDOMAttribute_get_value_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMAttribute_put_value_Proxy( 
-    IXMLDOMAttribute __RPC_FAR * This,
+    IXMLDOMAttribute * This,
     /* [in] */ VARIANT attributeValue);
 
 
@@ -4565,11 +4568,11 @@ EXTERN_C const IID IID_IXMLDOMElement;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_tagName( 
-            /* [retval][out] */ BSTR __RPC_FAR *tagName) = 0;
+            /* [retval][out] */ BSTR *tagName) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAttribute( 
             /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT __RPC_FAR *value) = 0;
+            /* [retval][out] */ VARIANT *value) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setAttribute( 
             /* [in] */ BSTR name,
@@ -4580,19 +4583,19 @@ EXTERN_C const IID IID_IXMLDOMElement;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAttributeNode( 
             /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMAttribute __RPC_FAR *__RPC_FAR *attributeNode) = 0;
+            /* [retval][out] */ IXMLDOMAttribute **attributeNode) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setAttributeNode( 
-            /* [in] */ IXMLDOMAttribute __RPC_FAR *DOMAttribute,
-            /* [retval][out] */ IXMLDOMAttribute __RPC_FAR *__RPC_FAR *attributeNode) = 0;
+            /* [in] */ IXMLDOMAttribute *DOMAttribute,
+            /* [retval][out] */ IXMLDOMAttribute **attributeNode) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeAttributeNode( 
-            /* [in] */ IXMLDOMAttribute __RPC_FAR *DOMAttribute,
-            /* [retval][out] */ IXMLDOMAttribute __RPC_FAR *__RPC_FAR *attributeNode) = 0;
+            /* [in] */ IXMLDOMAttribute *DOMAttribute,
+            /* [retval][out] */ IXMLDOMAttribute **attributeNode) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getElementsByTagName( 
             /* [in] */ BSTR tagName,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList) = 0;
+            /* [retval][out] */ IXMLDOMNodeList **resultList) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE normalize( void) = 0;
         
@@ -4604,248 +4607,248 @@ EXTERN_C const IID IID_IXMLDOMElement;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMElement __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMElement * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMElement __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMElement * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMElement __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMElement * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMElement * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMElement __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMElement * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMElement __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMElement * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMElement __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMElement * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMElement __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMElement * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMElement * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMElement * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMElement * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMElement * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMElement __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMElement * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMElement * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMElement * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMElement __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMElement * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMElement * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMElement * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMElement __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMElement * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMElement * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMElement __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMElement * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMElement * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMElement * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMElement __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMElement * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMElement __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMElement * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMElement * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMElement * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMElement * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMElement * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMElement * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_tagName )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *tagName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_tagName )( 
+            IXMLDOMElement * This,
+            /* [retval][out] */ BSTR *tagName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAttribute )( 
-            IXMLDOMElement __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getAttribute )( 
+            IXMLDOMElement * This,
             /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setAttribute )( 
-            IXMLDOMElement __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setAttribute )( 
+            IXMLDOMElement * This,
             /* [in] */ BSTR name,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeAttribute )( 
-            IXMLDOMElement __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeAttribute )( 
+            IXMLDOMElement * This,
             /* [in] */ BSTR name);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAttributeNode )( 
-            IXMLDOMElement __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getAttributeNode )( 
+            IXMLDOMElement * This,
             /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMAttribute __RPC_FAR *__RPC_FAR *attributeNode);
+            /* [retval][out] */ IXMLDOMAttribute **attributeNode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setAttributeNode )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [in] */ IXMLDOMAttribute __RPC_FAR *DOMAttribute,
-            /* [retval][out] */ IXMLDOMAttribute __RPC_FAR *__RPC_FAR *attributeNode);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setAttributeNode )( 
+            IXMLDOMElement * This,
+            /* [in] */ IXMLDOMAttribute *DOMAttribute,
+            /* [retval][out] */ IXMLDOMAttribute **attributeNode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeAttributeNode )( 
-            IXMLDOMElement __RPC_FAR * This,
-            /* [in] */ IXMLDOMAttribute __RPC_FAR *DOMAttribute,
-            /* [retval][out] */ IXMLDOMAttribute __RPC_FAR *__RPC_FAR *attributeNode);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeAttributeNode )( 
+            IXMLDOMElement * This,
+            /* [in] */ IXMLDOMAttribute *DOMAttribute,
+            /* [retval][out] */ IXMLDOMAttribute **attributeNode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getElementsByTagName )( 
-            IXMLDOMElement __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getElementsByTagName )( 
+            IXMLDOMElement * This,
             /* [in] */ BSTR tagName,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [retval][out] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *normalize )( 
-            IXMLDOMElement __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *normalize )( 
+            IXMLDOMElement * This);
         
         END_INTERFACE
     } IXMLDOMElementVtbl;
 
     interface IXMLDOMElement
     {
-        CONST_VTBL struct IXMLDOMElementVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMElementVtbl *lpVtbl;
     };
 
     
@@ -5020,8 +5023,8 @@ EXTERN_C const IID IID_IXMLDOMElement;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_get_tagName_Proxy( 
-    IXMLDOMElement __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *tagName);
+    IXMLDOMElement * This,
+    /* [retval][out] */ BSTR *tagName);
 
 
 void __RPC_STUB IXMLDOMElement_get_tagName_Stub(
@@ -5032,9 +5035,9 @@ void __RPC_STUB IXMLDOMElement_get_tagName_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_getAttribute_Proxy( 
-    IXMLDOMElement __RPC_FAR * This,
+    IXMLDOMElement * This,
     /* [in] */ BSTR name,
-    /* [retval][out] */ VARIANT __RPC_FAR *value);
+    /* [retval][out] */ VARIANT *value);
 
 
 void __RPC_STUB IXMLDOMElement_getAttribute_Stub(
@@ -5045,7 +5048,7 @@ void __RPC_STUB IXMLDOMElement_getAttribute_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_setAttribute_Proxy( 
-    IXMLDOMElement __RPC_FAR * This,
+    IXMLDOMElement * This,
     /* [in] */ BSTR name,
     /* [in] */ VARIANT value);
 
@@ -5058,7 +5061,7 @@ void __RPC_STUB IXMLDOMElement_setAttribute_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_removeAttribute_Proxy( 
-    IXMLDOMElement __RPC_FAR * This,
+    IXMLDOMElement * This,
     /* [in] */ BSTR name);
 
 
@@ -5070,9 +5073,9 @@ void __RPC_STUB IXMLDOMElement_removeAttribute_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_getAttributeNode_Proxy( 
-    IXMLDOMElement __RPC_FAR * This,
+    IXMLDOMElement * This,
     /* [in] */ BSTR name,
-    /* [retval][out] */ IXMLDOMAttribute __RPC_FAR *__RPC_FAR *attributeNode);
+    /* [retval][out] */ IXMLDOMAttribute **attributeNode);
 
 
 void __RPC_STUB IXMLDOMElement_getAttributeNode_Stub(
@@ -5083,9 +5086,9 @@ void __RPC_STUB IXMLDOMElement_getAttributeNode_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_setAttributeNode_Proxy( 
-    IXMLDOMElement __RPC_FAR * This,
-    /* [in] */ IXMLDOMAttribute __RPC_FAR *DOMAttribute,
-    /* [retval][out] */ IXMLDOMAttribute __RPC_FAR *__RPC_FAR *attributeNode);
+    IXMLDOMElement * This,
+    /* [in] */ IXMLDOMAttribute *DOMAttribute,
+    /* [retval][out] */ IXMLDOMAttribute **attributeNode);
 
 
 void __RPC_STUB IXMLDOMElement_setAttributeNode_Stub(
@@ -5096,9 +5099,9 @@ void __RPC_STUB IXMLDOMElement_setAttributeNode_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_removeAttributeNode_Proxy( 
-    IXMLDOMElement __RPC_FAR * This,
-    /* [in] */ IXMLDOMAttribute __RPC_FAR *DOMAttribute,
-    /* [retval][out] */ IXMLDOMAttribute __RPC_FAR *__RPC_FAR *attributeNode);
+    IXMLDOMElement * This,
+    /* [in] */ IXMLDOMAttribute *DOMAttribute,
+    /* [retval][out] */ IXMLDOMAttribute **attributeNode);
 
 
 void __RPC_STUB IXMLDOMElement_removeAttributeNode_Stub(
@@ -5109,9 +5112,9 @@ void __RPC_STUB IXMLDOMElement_removeAttributeNode_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_getElementsByTagName_Proxy( 
-    IXMLDOMElement __RPC_FAR * This,
+    IXMLDOMElement * This,
     /* [in] */ BSTR tagName,
-    /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+    /* [retval][out] */ IXMLDOMNodeList **resultList);
 
 
 void __RPC_STUB IXMLDOMElement_getElementsByTagName_Stub(
@@ -5122,7 +5125,7 @@ void __RPC_STUB IXMLDOMElement_getElementsByTagName_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_normalize_Proxy( 
-    IXMLDOMElement __RPC_FAR * This);
+    IXMLDOMElement * This);
 
 
 void __RPC_STUB IXMLDOMElement_normalize_Stub(
@@ -5153,7 +5156,7 @@ EXTERN_C const IID IID_IXMLDOMText;
     public:
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE splitText( 
             /* [in] */ long offset,
-            /* [retval][out] */ IXMLDOMText __RPC_FAR *__RPC_FAR *rightHandTextNode) = 0;
+            /* [retval][out] */ IXMLDOMText **rightHandTextNode) = 0;
         
     };
     
@@ -5163,250 +5166,250 @@ EXTERN_C const IID IID_IXMLDOMText;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMText __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMText * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMText __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMText * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMText __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMText * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMText * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMText __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMText * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMText __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMText * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMText * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMText * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMText * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMText * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMText * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMText * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMText * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMText * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMText * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMText * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMText * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMText * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMText * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMText * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMText * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMText * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMText * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMText * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMText * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMText * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMText * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMText * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMText * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMText * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_data )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *data);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_data )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ BSTR *data);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_data )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_data )( 
+            IXMLDOMText * This,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_length )( 
-            IXMLDOMText __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *dataLength);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+            IXMLDOMText * This,
+            /* [retval][out] */ long *dataLength);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *substringData )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *substringData )( 
+            IXMLDOMText * This,
             /* [in] */ long offset,
             /* [in] */ long count,
-            /* [retval][out] */ BSTR __RPC_FAR *data);
+            /* [retval][out] */ BSTR *data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendData )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendData )( 
+            IXMLDOMText * This,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertData )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertData )( 
+            IXMLDOMText * This,
             /* [in] */ long offset,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *deleteData )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *deleteData )( 
+            IXMLDOMText * This,
             /* [in] */ long offset,
             /* [in] */ long count);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceData )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceData )( 
+            IXMLDOMText * This,
             /* [in] */ long offset,
             /* [in] */ long count,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *splitText )( 
-            IXMLDOMText __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *splitText )( 
+            IXMLDOMText * This,
             /* [in] */ long offset,
-            /* [retval][out] */ IXMLDOMText __RPC_FAR *__RPC_FAR *rightHandTextNode);
+            /* [retval][out] */ IXMLDOMText **rightHandTextNode);
         
         END_INTERFACE
     } IXMLDOMTextVtbl;
 
     interface IXMLDOMText
     {
-        CONST_VTBL struct IXMLDOMTextVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMTextVtbl *lpVtbl;
     };
 
     
@@ -5582,9 +5585,9 @@ EXTERN_C const IID IID_IXMLDOMText;
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMText_splitText_Proxy( 
-    IXMLDOMText __RPC_FAR * This,
+    IXMLDOMText * This,
     /* [in] */ long offset,
-    /* [retval][out] */ IXMLDOMText __RPC_FAR *__RPC_FAR *rightHandTextNode);
+    /* [retval][out] */ IXMLDOMText **rightHandTextNode);
 
 
 void __RPC_STUB IXMLDOMText_splitText_Stub(
@@ -5621,235 +5624,235 @@ EXTERN_C const IID IID_IXMLDOMComment;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMComment __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMComment * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMComment __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMComment * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMComment __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMComment * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMComment * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMComment __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMComment * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMComment __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMComment * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMComment * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMComment * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMComment * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMComment * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMComment * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMComment * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMComment * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMComment * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMComment * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMComment * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMComment * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMComment * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMComment * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMComment * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMComment * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMComment * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMComment * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMComment * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMComment * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMComment * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMComment * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMComment * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMComment * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMComment * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_data )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *data);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_data )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ BSTR *data);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_data )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_data )( 
+            IXMLDOMComment * This,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_length )( 
-            IXMLDOMComment __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *dataLength);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+            IXMLDOMComment * This,
+            /* [retval][out] */ long *dataLength);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *substringData )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *substringData )( 
+            IXMLDOMComment * This,
             /* [in] */ long offset,
             /* [in] */ long count,
-            /* [retval][out] */ BSTR __RPC_FAR *data);
+            /* [retval][out] */ BSTR *data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendData )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendData )( 
+            IXMLDOMComment * This,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertData )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertData )( 
+            IXMLDOMComment * This,
             /* [in] */ long offset,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *deleteData )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *deleteData )( 
+            IXMLDOMComment * This,
             /* [in] */ long offset,
             /* [in] */ long count);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceData )( 
-            IXMLDOMComment __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceData )( 
+            IXMLDOMComment * This,
             /* [in] */ long offset,
             /* [in] */ long count,
             /* [in] */ BSTR data);
@@ -5859,7 +5862,7 @@ EXTERN_C const IID IID_IXMLDOMComment;
 
     interface IXMLDOMComment
     {
-        CONST_VTBL struct IXMLDOMCommentVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMCommentVtbl *lpVtbl;
     };
 
     
@@ -6051,10 +6054,10 @@ EXTERN_C const IID IID_IXMLDOMProcessingInstruction;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_target( 
-            /* [retval][out] */ BSTR __RPC_FAR *name) = 0;
+            /* [retval][out] */ BSTR *name) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_data( 
-            /* [retval][out] */ BSTR __RPC_FAR *value) = 0;
+            /* [retval][out] */ BSTR *value) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_data( 
             /* [in] */ BSTR value) = 0;
@@ -6067,211 +6070,211 @@ EXTERN_C const IID IID_IXMLDOMProcessingInstruction;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMProcessingInstruction * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMProcessingInstruction * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMProcessingInstruction * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMProcessingInstruction * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMProcessingInstruction * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMProcessingInstruction * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMProcessingInstruction * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMProcessingInstruction * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMProcessingInstruction * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMProcessingInstruction * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMProcessingInstruction * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMProcessingInstruction * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMProcessingInstruction * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_target )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_target )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_data )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_data )( 
+            IXMLDOMProcessingInstruction * This,
+            /* [retval][out] */ BSTR *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_data )( 
-            IXMLDOMProcessingInstruction __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_data )( 
+            IXMLDOMProcessingInstruction * This,
             /* [in] */ BSTR value);
         
         END_INTERFACE
@@ -6279,7 +6282,7 @@ EXTERN_C const IID IID_IXMLDOMProcessingInstruction;
 
     interface IXMLDOMProcessingInstruction
     {
-        CONST_VTBL struct IXMLDOMProcessingInstructionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMProcessingInstructionVtbl *lpVtbl;
     };
 
     
@@ -6436,8 +6439,8 @@ EXTERN_C const IID IID_IXMLDOMProcessingInstruction;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMProcessingInstruction_get_target_Proxy( 
-    IXMLDOMProcessingInstruction __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *name);
+    IXMLDOMProcessingInstruction * This,
+    /* [retval][out] */ BSTR *name);
 
 
 void __RPC_STUB IXMLDOMProcessingInstruction_get_target_Stub(
@@ -6448,8 +6451,8 @@ void __RPC_STUB IXMLDOMProcessingInstruction_get_target_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMProcessingInstruction_get_data_Proxy( 
-    IXMLDOMProcessingInstruction __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *value);
+    IXMLDOMProcessingInstruction * This,
+    /* [retval][out] */ BSTR *value);
 
 
 void __RPC_STUB IXMLDOMProcessingInstruction_get_data_Stub(
@@ -6460,7 +6463,7 @@ void __RPC_STUB IXMLDOMProcessingInstruction_get_data_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMProcessingInstruction_put_data_Proxy( 
-    IXMLDOMProcessingInstruction __RPC_FAR * This,
+    IXMLDOMProcessingInstruction * This,
     /* [in] */ BSTR value);
 
 
@@ -6498,250 +6501,250 @@ EXTERN_C const IID IID_IXMLDOMCDATASection;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMCDATASection __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMCDATASection * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMCDATASection __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMCDATASection * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMCDATASection * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMCDATASection * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMCDATASection * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMCDATASection * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMCDATASection * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMCDATASection * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMCDATASection * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMCDATASection * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMCDATASection * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMCDATASection * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMCDATASection * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMCDATASection * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMCDATASection * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMCDATASection * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMCDATASection * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMCDATASection * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMCDATASection * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_data )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *data);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_data )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ BSTR *data);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_data )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_data )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_length )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *dataLength);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+            IXMLDOMCDATASection * This,
+            /* [retval][out] */ long *dataLength);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *substringData )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *substringData )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ long offset,
             /* [in] */ long count,
-            /* [retval][out] */ BSTR __RPC_FAR *data);
+            /* [retval][out] */ BSTR *data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendData )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendData )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertData )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertData )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ long offset,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *deleteData )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *deleteData )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ long offset,
             /* [in] */ long count);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceData )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceData )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ long offset,
             /* [in] */ long count,
             /* [in] */ BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *splitText )( 
-            IXMLDOMCDATASection __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *splitText )( 
+            IXMLDOMCDATASection * This,
             /* [in] */ long offset,
-            /* [retval][out] */ IXMLDOMText __RPC_FAR *__RPC_FAR *rightHandTextNode);
+            /* [retval][out] */ IXMLDOMText **rightHandTextNode);
         
         END_INTERFACE
     } IXMLDOMCDATASectionVtbl;
 
     interface IXMLDOMCDATASection
     {
-        CONST_VTBL struct IXMLDOMCDATASectionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMCDATASectionVtbl *lpVtbl;
     };
 
     
@@ -6937,13 +6940,13 @@ EXTERN_C const IID IID_IXMLDOMDocumentType;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_name( 
-            /* [retval][out] */ BSTR __RPC_FAR *rootName) = 0;
+            /* [retval][out] */ BSTR *rootName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_entities( 
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *entityMap) = 0;
+            /* [retval][out] */ IXMLDOMNamedNodeMap **entityMap) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_notations( 
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *notationMap) = 0;
+            /* [retval][out] */ IXMLDOMNamedNodeMap **notationMap) = 0;
         
     };
     
@@ -6953,219 +6956,219 @@ EXTERN_C const IID IID_IXMLDOMDocumentType;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMDocumentType * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMDocumentType __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMDocumentType * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMDocumentType __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMDocumentType * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMDocumentType * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMDocumentType * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMDocumentType * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMDocumentType * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMDocumentType * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMDocumentType * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMDocumentType * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMDocumentType * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMDocumentType * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMDocumentType * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMDocumentType * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMDocumentType * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMDocumentType * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMDocumentType * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMDocumentType * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMDocumentType * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMDocumentType * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMDocumentType * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMDocumentType * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMDocumentType * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMDocumentType * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMDocumentType * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMDocumentType * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMDocumentType * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMDocumentType * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMDocumentType * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMDocumentType * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_name )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *rootName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_name )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ BSTR *rootName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_entities )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *entityMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_entities )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **entityMap);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_notations )( 
-            IXMLDOMDocumentType __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *notationMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_notations )( 
+            IXMLDOMDocumentType * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **notationMap);
         
         END_INTERFACE
     } IXMLDOMDocumentTypeVtbl;
 
     interface IXMLDOMDocumentType
     {
-        CONST_VTBL struct IXMLDOMDocumentTypeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMDocumentTypeVtbl *lpVtbl;
     };
 
     
@@ -7322,8 +7325,8 @@ EXTERN_C const IID IID_IXMLDOMDocumentType;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocumentType_get_name_Proxy( 
-    IXMLDOMDocumentType __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *rootName);
+    IXMLDOMDocumentType * This,
+    /* [retval][out] */ BSTR *rootName);
 
 
 void __RPC_STUB IXMLDOMDocumentType_get_name_Stub(
@@ -7334,8 +7337,8 @@ void __RPC_STUB IXMLDOMDocumentType_get_name_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocumentType_get_entities_Proxy( 
-    IXMLDOMDocumentType __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *entityMap);
+    IXMLDOMDocumentType * This,
+    /* [retval][out] */ IXMLDOMNamedNodeMap **entityMap);
 
 
 void __RPC_STUB IXMLDOMDocumentType_get_entities_Stub(
@@ -7346,8 +7349,8 @@ void __RPC_STUB IXMLDOMDocumentType_get_entities_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocumentType_get_notations_Proxy( 
-    IXMLDOMDocumentType __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *notationMap);
+    IXMLDOMDocumentType * This,
+    /* [retval][out] */ IXMLDOMNamedNodeMap **notationMap);
 
 
 void __RPC_STUB IXMLDOMDocumentType_get_notations_Stub(
@@ -7377,10 +7380,10 @@ EXTERN_C const IID IID_IXMLDOMNotation;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_publicId( 
-            /* [retval][out] */ VARIANT __RPC_FAR *publicID) = 0;
+            /* [retval][out] */ VARIANT *publicID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_systemId( 
-            /* [retval][out] */ VARIANT __RPC_FAR *systemID) = 0;
+            /* [retval][out] */ VARIANT *systemID) = 0;
         
     };
     
@@ -7390,215 +7393,215 @@ EXTERN_C const IID IID_IXMLDOMNotation;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMNotation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMNotation * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMNotation __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMNotation * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMNotation __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMNotation * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMNotation * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMNotation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMNotation * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMNotation __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMNotation * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMNotation __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMNotation * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMNotation __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMNotation * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMNotation * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMNotation * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMNotation * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMNotation * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMNotation __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMNotation * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMNotation * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMNotation * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMNotation __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMNotation * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMNotation * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMNotation * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMNotation __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMNotation * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMNotation * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMNotation __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMNotation * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMNotation * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMNotation * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMNotation __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMNotation * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMNotation __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMNotation * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMNotation * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMNotation * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMNotation * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMNotation * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMNotation * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_publicId )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *publicID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_publicId )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ VARIANT *publicID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_systemId )( 
-            IXMLDOMNotation __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *systemID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_systemId )( 
+            IXMLDOMNotation * This,
+            /* [retval][out] */ VARIANT *systemID);
         
         END_INTERFACE
     } IXMLDOMNotationVtbl;
 
     interface IXMLDOMNotation
     {
-        CONST_VTBL struct IXMLDOMNotationVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMNotationVtbl *lpVtbl;
     };
 
     
@@ -7752,8 +7755,8 @@ EXTERN_C const IID IID_IXMLDOMNotation;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNotation_get_publicId_Proxy( 
-    IXMLDOMNotation __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *publicID);
+    IXMLDOMNotation * This,
+    /* [retval][out] */ VARIANT *publicID);
 
 
 void __RPC_STUB IXMLDOMNotation_get_publicId_Stub(
@@ -7764,8 +7767,8 @@ void __RPC_STUB IXMLDOMNotation_get_publicId_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNotation_get_systemId_Proxy( 
-    IXMLDOMNotation __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *systemID);
+    IXMLDOMNotation * This,
+    /* [retval][out] */ VARIANT *systemID);
 
 
 void __RPC_STUB IXMLDOMNotation_get_systemId_Stub(
@@ -7795,13 +7798,13 @@ EXTERN_C const IID IID_IXMLDOMEntity;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_publicId( 
-            /* [retval][out] */ VARIANT __RPC_FAR *publicID) = 0;
+            /* [retval][out] */ VARIANT *publicID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_systemId( 
-            /* [retval][out] */ VARIANT __RPC_FAR *systemID) = 0;
+            /* [retval][out] */ VARIANT *systemID) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_notationName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name) = 0;
+            /* [retval][out] */ BSTR *name) = 0;
         
     };
     
@@ -7811,219 +7814,219 @@ EXTERN_C const IID IID_IXMLDOMEntity;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMEntity __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMEntity * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMEntity __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMEntity * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMEntity __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMEntity * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMEntity * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMEntity __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMEntity * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMEntity __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMEntity * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMEntity __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMEntity * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMEntity __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMEntity * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMEntity * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMEntity * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMEntity * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMEntity * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMEntity __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMEntity * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMEntity * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMEntity * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMEntity __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMEntity * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMEntity * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMEntity * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMEntity __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMEntity * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMEntity * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMEntity __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMEntity * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMEntity * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMEntity * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMEntity __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMEntity * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMEntity __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMEntity * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMEntity * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMEntity * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMEntity * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMEntity * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMEntity * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_publicId )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *publicID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_publicId )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ VARIANT *publicID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_systemId )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *systemID);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_systemId )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ VARIANT *systemID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_notationName )( 
-            IXMLDOMEntity __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_notationName )( 
+            IXMLDOMEntity * This,
+            /* [retval][out] */ BSTR *name);
         
         END_INTERFACE
     } IXMLDOMEntityVtbl;
 
     interface IXMLDOMEntity
     {
-        CONST_VTBL struct IXMLDOMEntityVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMEntityVtbl *lpVtbl;
     };
 
     
@@ -8180,8 +8183,8 @@ EXTERN_C const IID IID_IXMLDOMEntity;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMEntity_get_publicId_Proxy( 
-    IXMLDOMEntity __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *publicID);
+    IXMLDOMEntity * This,
+    /* [retval][out] */ VARIANT *publicID);
 
 
 void __RPC_STUB IXMLDOMEntity_get_publicId_Stub(
@@ -8192,8 +8195,8 @@ void __RPC_STUB IXMLDOMEntity_get_publicId_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMEntity_get_systemId_Proxy( 
-    IXMLDOMEntity __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *systemID);
+    IXMLDOMEntity * This,
+    /* [retval][out] */ VARIANT *systemID);
 
 
 void __RPC_STUB IXMLDOMEntity_get_systemId_Stub(
@@ -8204,8 +8207,8 @@ void __RPC_STUB IXMLDOMEntity_get_systemId_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMEntity_get_notationName_Proxy( 
-    IXMLDOMEntity __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *name);
+    IXMLDOMEntity * This,
+    /* [retval][out] */ BSTR *name);
 
 
 void __RPC_STUB IXMLDOMEntity_get_notationName_Stub(
@@ -8242,199 +8245,199 @@ EXTERN_C const IID IID_IXMLDOMEntityReference;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMEntityReference * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMEntityReference __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMEntityReference * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMEntityReference __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMEntityReference * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMEntityReference * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMEntityReference * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMEntityReference * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMEntityReference * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXMLDOMEntityReference * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXMLDOMEntityReference * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXMLDOMEntityReference * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXMLDOMEntityReference * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXMLDOMEntityReference * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXMLDOMEntityReference * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXMLDOMEntityReference * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXMLDOMEntityReference * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXMLDOMEntityReference * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXMLDOMEntityReference * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLDOMEntityReference * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXMLDOMEntityReference * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXMLDOMEntityReference * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLDOMEntityReference * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXMLDOMEntityReference * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXMLDOMEntityReference * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXMLDOMEntityReference * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXMLDOMEntityReference * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXMLDOMEntityReference * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLDOMEntityReference * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLDOMEntityReference * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXMLDOMEntityReference * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXMLDOMEntityReference * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXMLDOMEntityReference * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXMLDOMEntityReference * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXMLDOMEntityReference * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXMLDOMEntityReference * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXMLDOMEntityReference * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXMLDOMEntityReference * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXMLDOMEntityReference * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXMLDOMEntityReference * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXMLDOMEntityReference * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXMLDOMEntityReference * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXMLDOMEntityReference * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXMLDOMEntityReference * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXMLDOMEntityReference __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXMLDOMEntityReference * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
         END_INTERFACE
@@ -8442,7 +8445,7 @@ EXTERN_C const IID IID_IXMLDOMEntityReference;
 
     interface IXMLDOMEntityReference
     {
-        CONST_VTBL struct IXMLDOMEntityReferenceVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMEntityReferenceVtbl *lpVtbl;
     };
 
     
@@ -8609,25 +8612,25 @@ EXTERN_C const IID IID_IXMLDOMParseError;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_errorCode( 
-            /* [out][retval] */ long __RPC_FAR *errorCode) = 0;
+            /* [out][retval] */ long *errorCode) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_url( 
-            /* [out][retval] */ BSTR __RPC_FAR *urlString) = 0;
+            /* [out][retval] */ BSTR *urlString) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_reason( 
-            /* [out][retval] */ BSTR __RPC_FAR *reasonString) = 0;
+            /* [out][retval] */ BSTR *reasonString) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_srcText( 
-            /* [out][retval] */ BSTR __RPC_FAR *sourceString) = 0;
+            /* [out][retval] */ BSTR *sourceString) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_line( 
-            /* [out][retval] */ long __RPC_FAR *lineNumber) = 0;
+            /* [out][retval] */ long *lineNumber) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_linepos( 
-            /* [out][retval] */ long __RPC_FAR *linePosition) = 0;
+            /* [out][retval] */ long *linePosition) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_filepos( 
-            /* [out][retval] */ long __RPC_FAR *filePosition) = 0;
+            /* [out][retval] */ long *filePosition) = 0;
         
     };
     
@@ -8637,80 +8640,80 @@ EXTERN_C const IID IID_IXMLDOMParseError;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDOMParseError __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDOMParseError * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDOMParseError __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDOMParseError * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDOMParseError __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDOMParseError * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDOMParseError __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDOMParseError * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDOMParseError __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDOMParseError * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDOMParseError __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDOMParseError * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDOMParseError __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDOMParseError * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_errorCode )( 
-            IXMLDOMParseError __RPC_FAR * This,
-            /* [out][retval] */ long __RPC_FAR *errorCode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_errorCode )( 
+            IXMLDOMParseError * This,
+            /* [out][retval] */ long *errorCode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_url )( 
-            IXMLDOMParseError __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *urlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_url )( 
+            IXMLDOMParseError * This,
+            /* [out][retval] */ BSTR *urlString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_reason )( 
-            IXMLDOMParseError __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *reasonString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_reason )( 
+            IXMLDOMParseError * This,
+            /* [out][retval] */ BSTR *reasonString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_srcText )( 
-            IXMLDOMParseError __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *sourceString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_srcText )( 
+            IXMLDOMParseError * This,
+            /* [out][retval] */ BSTR *sourceString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_line )( 
-            IXMLDOMParseError __RPC_FAR * This,
-            /* [out][retval] */ long __RPC_FAR *lineNumber);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_line )( 
+            IXMLDOMParseError * This,
+            /* [out][retval] */ long *lineNumber);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_linepos )( 
-            IXMLDOMParseError __RPC_FAR * This,
-            /* [out][retval] */ long __RPC_FAR *linePosition);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_linepos )( 
+            IXMLDOMParseError * This,
+            /* [out][retval] */ long *linePosition);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_filepos )( 
-            IXMLDOMParseError __RPC_FAR * This,
-            /* [out][retval] */ long __RPC_FAR *filePosition);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_filepos )( 
+            IXMLDOMParseError * This,
+            /* [out][retval] */ long *filePosition);
         
         END_INTERFACE
     } IXMLDOMParseErrorVtbl;
 
     interface IXMLDOMParseError
     {
-        CONST_VTBL struct IXMLDOMParseErrorVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDOMParseErrorVtbl *lpVtbl;
     };
 
     
@@ -8770,8 +8773,8 @@ EXTERN_C const IID IID_IXMLDOMParseError;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_errorCode_Proxy( 
-    IXMLDOMParseError __RPC_FAR * This,
-    /* [out][retval] */ long __RPC_FAR *errorCode);
+    IXMLDOMParseError * This,
+    /* [out][retval] */ long *errorCode);
 
 
 void __RPC_STUB IXMLDOMParseError_get_errorCode_Stub(
@@ -8782,8 +8785,8 @@ void __RPC_STUB IXMLDOMParseError_get_errorCode_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_url_Proxy( 
-    IXMLDOMParseError __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *urlString);
+    IXMLDOMParseError * This,
+    /* [out][retval] */ BSTR *urlString);
 
 
 void __RPC_STUB IXMLDOMParseError_get_url_Stub(
@@ -8794,8 +8797,8 @@ void __RPC_STUB IXMLDOMParseError_get_url_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_reason_Proxy( 
-    IXMLDOMParseError __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *reasonString);
+    IXMLDOMParseError * This,
+    /* [out][retval] */ BSTR *reasonString);
 
 
 void __RPC_STUB IXMLDOMParseError_get_reason_Stub(
@@ -8806,8 +8809,8 @@ void __RPC_STUB IXMLDOMParseError_get_reason_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_srcText_Proxy( 
-    IXMLDOMParseError __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *sourceString);
+    IXMLDOMParseError * This,
+    /* [out][retval] */ BSTR *sourceString);
 
 
 void __RPC_STUB IXMLDOMParseError_get_srcText_Stub(
@@ -8818,8 +8821,8 @@ void __RPC_STUB IXMLDOMParseError_get_srcText_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_line_Proxy( 
-    IXMLDOMParseError __RPC_FAR * This,
-    /* [out][retval] */ long __RPC_FAR *lineNumber);
+    IXMLDOMParseError * This,
+    /* [out][retval] */ long *lineNumber);
 
 
 void __RPC_STUB IXMLDOMParseError_get_line_Stub(
@@ -8830,8 +8833,8 @@ void __RPC_STUB IXMLDOMParseError_get_line_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_linepos_Proxy( 
-    IXMLDOMParseError __RPC_FAR * This,
-    /* [out][retval] */ long __RPC_FAR *linePosition);
+    IXMLDOMParseError * This,
+    /* [out][retval] */ long *linePosition);
 
 
 void __RPC_STUB IXMLDOMParseError_get_linepos_Stub(
@@ -8842,8 +8845,8 @@ void __RPC_STUB IXMLDOMParseError_get_linepos_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_filepos_Proxy( 
-    IXMLDOMParseError __RPC_FAR * This,
-    /* [out][retval] */ long __RPC_FAR *filePosition);
+    IXMLDOMParseError * This,
+    /* [out][retval] */ long *filePosition);
 
 
 void __RPC_STUB IXMLDOMParseError_get_filepos_Stub(
@@ -8873,47 +8876,47 @@ EXTERN_C const IID IID_IXTLRuntime;
     {
     public:
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE uniqueID( 
-            /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-            /* [retval][out] */ long __RPC_FAR *pID) = 0;
+            /* [in] */ IXMLDOMNode *pNode,
+            /* [retval][out] */ long *pID) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE depth( 
-            /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-            /* [retval][out] */ long __RPC_FAR *pDepth) = 0;
+            /* [in] */ IXMLDOMNode *pNode,
+            /* [retval][out] */ long *pDepth) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE childNumber( 
-            /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-            /* [retval][out] */ long __RPC_FAR *pNumber) = 0;
+            /* [in] */ IXMLDOMNode *pNode,
+            /* [retval][out] */ long *pNumber) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ancestorChildNumber( 
             /* [in] */ BSTR bstrNodeName,
-            /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-            /* [retval][out] */ long __RPC_FAR *pNumber) = 0;
+            /* [in] */ IXMLDOMNode *pNode,
+            /* [retval][out] */ long *pNumber) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE absoluteChildNumber( 
-            /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-            /* [retval][out] */ long __RPC_FAR *pNumber) = 0;
+            /* [in] */ IXMLDOMNode *pNode,
+            /* [retval][out] */ long *pNumber) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE formatIndex( 
             /* [in] */ long lIndex,
             /* [in] */ BSTR bstrFormat,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFormattedString) = 0;
+            /* [retval][out] */ BSTR *pbstrFormattedString) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE formatNumber( 
             /* [in] */ double dblNumber,
             /* [in] */ BSTR bstrFormat,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFormattedString) = 0;
+            /* [retval][out] */ BSTR *pbstrFormattedString) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE formatDate( 
             /* [in] */ VARIANT varDate,
             /* [in] */ BSTR bstrFormat,
             /* [optional][in] */ VARIANT varDestLocale,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFormattedString) = 0;
+            /* [retval][out] */ BSTR *pbstrFormattedString) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE formatTime( 
             /* [in] */ VARIANT varTime,
             /* [in] */ BSTR bstrFormat,
             /* [optional][in] */ VARIANT varDestLocale,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFormattedString) = 0;
+            /* [retval][out] */ BSTR *pbstrFormattedString) = 0;
         
     };
     
@@ -8923,259 +8926,259 @@ EXTERN_C const IID IID_IXTLRuntime;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXTLRuntime __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXTLRuntime * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXTLRuntime __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXTLRuntime * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXTLRuntime __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXTLRuntime * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXTLRuntime * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXTLRuntime __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXTLRuntime * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXTLRuntime __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXTLRuntime * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXTLRuntime __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXTLRuntime * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeName )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+            IXTLRuntime * This,
+            /* [retval][out] */ BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeValue )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *value);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+            IXTLRuntime * This,
+            /* [retval][out] */ VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeValue )( 
-            IXTLRuntime __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+            IXTLRuntime * This,
             /* [in] */ VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeType )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [retval][out] */ DOMNodeType __RPC_FAR *type);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+            IXTLRuntime * This,
+            /* [retval][out] */ DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parentNode )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *parent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+            IXTLRuntime * This,
+            /* [retval][out] */ IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_childNodes )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *childList);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+            IXTLRuntime * This,
+            /* [retval][out] */ IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_firstChild )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *firstChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+            IXTLRuntime * This,
+            /* [retval][out] */ IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_lastChild )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *lastChild);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+            IXTLRuntime * This,
+            /* [retval][out] */ IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_previousSibling )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *previousSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+            IXTLRuntime * This,
+            /* [retval][out] */ IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nextSibling )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *nextSibling);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+            IXTLRuntime * This,
+            /* [retval][out] */ IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap __RPC_FAR *__RPC_FAR *attributeMap);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXTLRuntime * This,
+            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *insertBefore )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+            IXTLRuntime * This,
+            /* [in] */ IXMLDOMNode *newChild,
             /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *replaceChild )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [in] */ IXMLDOMNode __RPC_FAR *oldChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outOldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+            IXTLRuntime * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [in] */ IXMLDOMNode *oldChild,
+            /* [retval][out] */ IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *childNode,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *oldChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXTLRuntime * This,
+            /* [in] */ IXMLDOMNode *childNode,
+            /* [retval][out] */ IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *appendChild )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *newChild,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *outNewChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+            IXTLRuntime * This,
+            /* [in] */ IXMLDOMNode *newChild,
+            /* [retval][out] */ IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *hasChildNodes )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *hasChild);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+            IXTLRuntime * This,
+            /* [retval][out] */ VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ownerDocument )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *DOMDocument);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+            IXTLRuntime * This,
+            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *cloneNode )( 
-            IXTLRuntime __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+            IXTLRuntime * This,
             /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *cloneRoot);
+            /* [retval][out] */ IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypeString )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nodeType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+            IXTLRuntime * This,
+            /* [out][retval] */ BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *text);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXTLRuntime * This,
+            /* [out][retval] */ BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXTLRuntime __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXTLRuntime * This,
             /* [in] */ BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_specified )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *isSpecified);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+            IXTLRuntime * This,
+            /* [retval][out] */ VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_definition )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *definitionNode);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+            IXTLRuntime * This,
+            /* [out][retval] */ IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_nodeTypedValue )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *typedValue);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+            IXTLRuntime * This,
+            /* [out][retval] */ VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_nodeTypedValue )( 
-            IXTLRuntime __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+            IXTLRuntime * This,
             /* [in] */ VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dataType )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [out][retval] */ VARIANT __RPC_FAR *dataTypeName);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+            IXTLRuntime * This,
+            /* [out][retval] */ VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_dataType )( 
-            IXTLRuntime __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+            IXTLRuntime * This,
             /* [in] */ BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_xml )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+            IXTLRuntime * This,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNode )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
-            /* [out][retval] */ BSTR __RPC_FAR *xmlString);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+            IXTLRuntime * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
+            /* [out][retval] */ BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectNodes )( 
-            IXTLRuntime __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+            IXTLRuntime * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList __RPC_FAR *__RPC_FAR *resultList);
+            /* [out][retval] */ IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *selectSingleNode )( 
-            IXTLRuntime __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+            IXTLRuntime * This,
             /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode __RPC_FAR *__RPC_FAR *resultNode);
+            /* [out][retval] */ IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parsed )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *isParsed);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+            IXTLRuntime * This,
+            /* [out][retval] */ VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_namespaceURI )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *namespaceURI);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+            IXTLRuntime * This,
+            /* [out][retval] */ BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_prefix )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *prefixString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+            IXTLRuntime * This,
+            /* [out][retval] */ BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_baseName )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *nameString);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+            IXTLRuntime * This,
+            /* [out][retval] */ BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *transformNodeToObject )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *stylesheet,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+            IXTLRuntime * This,
+            /* [in] */ IXMLDOMNode *stylesheet,
             /* [in] */ VARIANT outputObject);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *uniqueID )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-            /* [retval][out] */ long __RPC_FAR *pID);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *uniqueID )( 
+            IXTLRuntime * This,
+            /* [in] */ IXMLDOMNode *pNode,
+            /* [retval][out] */ long *pID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *depth )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-            /* [retval][out] */ long __RPC_FAR *pDepth);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *depth )( 
+            IXTLRuntime * This,
+            /* [in] */ IXMLDOMNode *pNode,
+            /* [retval][out] */ long *pDepth);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *childNumber )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-            /* [retval][out] */ long __RPC_FAR *pNumber);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *childNumber )( 
+            IXTLRuntime * This,
+            /* [in] */ IXMLDOMNode *pNode,
+            /* [retval][out] */ long *pNumber);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ancestorChildNumber )( 
-            IXTLRuntime __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ancestorChildNumber )( 
+            IXTLRuntime * This,
             /* [in] */ BSTR bstrNodeName,
-            /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-            /* [retval][out] */ long __RPC_FAR *pNumber);
+            /* [in] */ IXMLDOMNode *pNode,
+            /* [retval][out] */ long *pNumber);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *absoluteChildNumber )( 
-            IXTLRuntime __RPC_FAR * This,
-            /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-            /* [retval][out] */ long __RPC_FAR *pNumber);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *absoluteChildNumber )( 
+            IXTLRuntime * This,
+            /* [in] */ IXMLDOMNode *pNode,
+            /* [retval][out] */ long *pNumber);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *formatIndex )( 
-            IXTLRuntime __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *formatIndex )( 
+            IXTLRuntime * This,
             /* [in] */ long lIndex,
             /* [in] */ BSTR bstrFormat,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFormattedString);
+            /* [retval][out] */ BSTR *pbstrFormattedString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *formatNumber )( 
-            IXTLRuntime __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *formatNumber )( 
+            IXTLRuntime * This,
             /* [in] */ double dblNumber,
             /* [in] */ BSTR bstrFormat,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFormattedString);
+            /* [retval][out] */ BSTR *pbstrFormattedString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *formatDate )( 
-            IXTLRuntime __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *formatDate )( 
+            IXTLRuntime * This,
             /* [in] */ VARIANT varDate,
             /* [in] */ BSTR bstrFormat,
             /* [optional][in] */ VARIANT varDestLocale,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFormattedString);
+            /* [retval][out] */ BSTR *pbstrFormattedString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *formatTime )( 
-            IXTLRuntime __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *formatTime )( 
+            IXTLRuntime * This,
             /* [in] */ VARIANT varTime,
             /* [in] */ BSTR bstrFormat,
             /* [optional][in] */ VARIANT varDestLocale,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrFormattedString);
+            /* [retval][out] */ BSTR *pbstrFormattedString);
         
         END_INTERFACE
     } IXTLRuntimeVtbl;
 
     interface IXTLRuntime
     {
-        CONST_VTBL struct IXTLRuntimeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXTLRuntimeVtbl *lpVtbl;
     };
 
     
@@ -9350,9 +9353,9 @@ EXTERN_C const IID IID_IXTLRuntime;
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_uniqueID_Proxy( 
-    IXTLRuntime __RPC_FAR * This,
-    /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-    /* [retval][out] */ long __RPC_FAR *pID);
+    IXTLRuntime * This,
+    /* [in] */ IXMLDOMNode *pNode,
+    /* [retval][out] */ long *pID);
 
 
 void __RPC_STUB IXTLRuntime_uniqueID_Stub(
@@ -9363,9 +9366,9 @@ void __RPC_STUB IXTLRuntime_uniqueID_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_depth_Proxy( 
-    IXTLRuntime __RPC_FAR * This,
-    /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-    /* [retval][out] */ long __RPC_FAR *pDepth);
+    IXTLRuntime * This,
+    /* [in] */ IXMLDOMNode *pNode,
+    /* [retval][out] */ long *pDepth);
 
 
 void __RPC_STUB IXTLRuntime_depth_Stub(
@@ -9376,9 +9379,9 @@ void __RPC_STUB IXTLRuntime_depth_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_childNumber_Proxy( 
-    IXTLRuntime __RPC_FAR * This,
-    /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-    /* [retval][out] */ long __RPC_FAR *pNumber);
+    IXTLRuntime * This,
+    /* [in] */ IXMLDOMNode *pNode,
+    /* [retval][out] */ long *pNumber);
 
 
 void __RPC_STUB IXTLRuntime_childNumber_Stub(
@@ -9389,10 +9392,10 @@ void __RPC_STUB IXTLRuntime_childNumber_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_ancestorChildNumber_Proxy( 
-    IXTLRuntime __RPC_FAR * This,
+    IXTLRuntime * This,
     /* [in] */ BSTR bstrNodeName,
-    /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-    /* [retval][out] */ long __RPC_FAR *pNumber);
+    /* [in] */ IXMLDOMNode *pNode,
+    /* [retval][out] */ long *pNumber);
 
 
 void __RPC_STUB IXTLRuntime_ancestorChildNumber_Stub(
@@ -9403,9 +9406,9 @@ void __RPC_STUB IXTLRuntime_ancestorChildNumber_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_absoluteChildNumber_Proxy( 
-    IXTLRuntime __RPC_FAR * This,
-    /* [in] */ IXMLDOMNode __RPC_FAR *pNode,
-    /* [retval][out] */ long __RPC_FAR *pNumber);
+    IXTLRuntime * This,
+    /* [in] */ IXMLDOMNode *pNode,
+    /* [retval][out] */ long *pNumber);
 
 
 void __RPC_STUB IXTLRuntime_absoluteChildNumber_Stub(
@@ -9416,10 +9419,10 @@ void __RPC_STUB IXTLRuntime_absoluteChildNumber_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_formatIndex_Proxy( 
-    IXTLRuntime __RPC_FAR * This,
+    IXTLRuntime * This,
     /* [in] */ long lIndex,
     /* [in] */ BSTR bstrFormat,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFormattedString);
+    /* [retval][out] */ BSTR *pbstrFormattedString);
 
 
 void __RPC_STUB IXTLRuntime_formatIndex_Stub(
@@ -9430,10 +9433,10 @@ void __RPC_STUB IXTLRuntime_formatIndex_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_formatNumber_Proxy( 
-    IXTLRuntime __RPC_FAR * This,
+    IXTLRuntime * This,
     /* [in] */ double dblNumber,
     /* [in] */ BSTR bstrFormat,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFormattedString);
+    /* [retval][out] */ BSTR *pbstrFormattedString);
 
 
 void __RPC_STUB IXTLRuntime_formatNumber_Stub(
@@ -9444,11 +9447,11 @@ void __RPC_STUB IXTLRuntime_formatNumber_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_formatDate_Proxy( 
-    IXTLRuntime __RPC_FAR * This,
+    IXTLRuntime * This,
     /* [in] */ VARIANT varDate,
     /* [in] */ BSTR bstrFormat,
     /* [optional][in] */ VARIANT varDestLocale,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFormattedString);
+    /* [retval][out] */ BSTR *pbstrFormattedString);
 
 
 void __RPC_STUB IXTLRuntime_formatDate_Stub(
@@ -9459,11 +9462,11 @@ void __RPC_STUB IXTLRuntime_formatDate_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_formatTime_Proxy( 
-    IXTLRuntime __RPC_FAR * This,
+    IXTLRuntime * This,
     /* [in] */ VARIANT varTime,
     /* [in] */ BSTR bstrFormat,
     /* [optional][in] */ VARIANT varDestLocale,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrFormattedString);
+    /* [retval][out] */ BSTR *pbstrFormattedString);
 
 
 void __RPC_STUB IXTLRuntime_formatTime_Stub(
@@ -9499,52 +9502,52 @@ EXTERN_C const IID DIID_XMLDOMDocumentEvents;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            XMLDOMDocumentEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            XMLDOMDocumentEvents * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            XMLDOMDocumentEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            XMLDOMDocumentEvents * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            XMLDOMDocumentEvents __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            XMLDOMDocumentEvents * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            XMLDOMDocumentEvents __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            XMLDOMDocumentEvents * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            XMLDOMDocumentEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            XMLDOMDocumentEvents * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            XMLDOMDocumentEvents __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            XMLDOMDocumentEvents * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            XMLDOMDocumentEvents __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            XMLDOMDocumentEvents * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
         END_INTERFACE
     } XMLDOMDocumentEventsVtbl;
 
     interface XMLDOMDocumentEvents
     {
-        CONST_VTBL struct XMLDOMDocumentEventsVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct XMLDOMDocumentEventsVtbl *lpVtbl;
     };
 
     
@@ -9627,10 +9630,10 @@ EXTERN_C const IID IID_IXMLHttpRequest;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getResponseHeader( 
             /* [in] */ BSTR bstrHeader,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrValue) = 0;
+            /* [retval][out] */ BSTR *pbstrValue) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAllResponseHeaders( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrHeaders) = 0;
+            /* [retval][out] */ BSTR *pbstrHeaders) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE send( 
             /* [optional][in] */ VARIANT varBody) = 0;
@@ -9638,28 +9641,28 @@ EXTERN_C const IID IID_IXMLHttpRequest;
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE abort( void) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_status( 
-            /* [retval][out] */ long __RPC_FAR *plStatus) = 0;
+            /* [retval][out] */ long *plStatus) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_statusText( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatus) = 0;
+            /* [retval][out] */ BSTR *pbstrStatus) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_responseXML( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppBody) = 0;
+            /* [retval][out] */ IDispatch **ppBody) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_responseText( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrBody) = 0;
+            /* [retval][out] */ BSTR *pbstrBody) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_responseBody( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarBody) = 0;
+            /* [retval][out] */ VARIANT *pvarBody) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_responseStream( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarBody) = 0;
+            /* [retval][out] */ VARIANT *pvarBody) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_readyState( 
-            /* [retval][out] */ long __RPC_FAR *plState) = 0;
+            /* [retval][out] */ long *plState) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_onreadystatechange( 
-            /* [in] */ IDispatch __RPC_FAR *pReadyStateSink) = 0;
+            /* [in] */ IDispatch *pReadyStateSink) = 0;
         
     };
     
@@ -9669,113 +9672,113 @@ EXTERN_C const IID IID_IXMLHttpRequest;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLHttpRequest __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLHttpRequest * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLHttpRequest __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLHttpRequest * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLHttpRequest __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLHttpRequest * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLHttpRequest __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLHttpRequest * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLHttpRequest __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLHttpRequest * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLHttpRequest __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLHttpRequest * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLHttpRequest __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLHttpRequest * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *open )( 
-            IXMLHttpRequest __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *open )( 
+            IXMLHttpRequest * This,
             /* [in] */ BSTR bstrMethod,
             /* [in] */ BSTR bstrUrl,
             /* [optional][in] */ VARIANT varAsync,
             /* [optional][in] */ VARIANT bstrUser,
             /* [optional][in] */ VARIANT bstrPassword);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setRequestHeader )( 
-            IXMLHttpRequest __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setRequestHeader )( 
+            IXMLHttpRequest * This,
             /* [in] */ BSTR bstrHeader,
             /* [in] */ BSTR bstrValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getResponseHeader )( 
-            IXMLHttpRequest __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getResponseHeader )( 
+            IXMLHttpRequest * This,
             /* [in] */ BSTR bstrHeader,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrValue);
+            /* [retval][out] */ BSTR *pbstrValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAllResponseHeaders )( 
-            IXMLHttpRequest __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrHeaders);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getAllResponseHeaders )( 
+            IXMLHttpRequest * This,
+            /* [retval][out] */ BSTR *pbstrHeaders);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *send )( 
-            IXMLHttpRequest __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *send )( 
+            IXMLHttpRequest * This,
             /* [optional][in] */ VARIANT varBody);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *abort )( 
-            IXMLHttpRequest __RPC_FAR * This);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *abort )( 
+            IXMLHttpRequest * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_status )( 
-            IXMLHttpRequest __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plStatus);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_status )( 
+            IXMLHttpRequest * This,
+            /* [retval][out] */ long *plStatus);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_statusText )( 
-            IXMLHttpRequest __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatus);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_statusText )( 
+            IXMLHttpRequest * This,
+            /* [retval][out] */ BSTR *pbstrStatus);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_responseXML )( 
-            IXMLHttpRequest __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppBody);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_responseXML )( 
+            IXMLHttpRequest * This,
+            /* [retval][out] */ IDispatch **ppBody);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_responseText )( 
-            IXMLHttpRequest __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrBody);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_responseText )( 
+            IXMLHttpRequest * This,
+            /* [retval][out] */ BSTR *pbstrBody);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_responseBody )( 
-            IXMLHttpRequest __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarBody);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_responseBody )( 
+            IXMLHttpRequest * This,
+            /* [retval][out] */ VARIANT *pvarBody);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_responseStream )( 
-            IXMLHttpRequest __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarBody);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_responseStream )( 
+            IXMLHttpRequest * This,
+            /* [retval][out] */ VARIANT *pvarBody);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_readyState )( 
-            IXMLHttpRequest __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plState);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
+            IXMLHttpRequest * This,
+            /* [retval][out] */ long *plState);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_onreadystatechange )( 
-            IXMLHttpRequest __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pReadyStateSink);
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_onreadystatechange )( 
+            IXMLHttpRequest * This,
+            /* [in] */ IDispatch *pReadyStateSink);
         
         END_INTERFACE
     } IXMLHttpRequestVtbl;
 
     interface IXMLHttpRequest
     {
-        CONST_VTBL struct IXMLHttpRequestVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLHttpRequestVtbl *lpVtbl;
     };
 
     
@@ -9856,7 +9859,7 @@ EXTERN_C const IID IID_IXMLHttpRequest;
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_open_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This,
+    IXMLHttpRequest * This,
     /* [in] */ BSTR bstrMethod,
     /* [in] */ BSTR bstrUrl,
     /* [optional][in] */ VARIANT varAsync,
@@ -9872,7 +9875,7 @@ void __RPC_STUB IXMLHttpRequest_open_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_setRequestHeader_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This,
+    IXMLHttpRequest * This,
     /* [in] */ BSTR bstrHeader,
     /* [in] */ BSTR bstrValue);
 
@@ -9885,9 +9888,9 @@ void __RPC_STUB IXMLHttpRequest_setRequestHeader_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_getResponseHeader_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This,
+    IXMLHttpRequest * This,
     /* [in] */ BSTR bstrHeader,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrValue);
+    /* [retval][out] */ BSTR *pbstrValue);
 
 
 void __RPC_STUB IXMLHttpRequest_getResponseHeader_Stub(
@@ -9898,8 +9901,8 @@ void __RPC_STUB IXMLHttpRequest_getResponseHeader_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_getAllResponseHeaders_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrHeaders);
+    IXMLHttpRequest * This,
+    /* [retval][out] */ BSTR *pbstrHeaders);
 
 
 void __RPC_STUB IXMLHttpRequest_getAllResponseHeaders_Stub(
@@ -9910,7 +9913,7 @@ void __RPC_STUB IXMLHttpRequest_getAllResponseHeaders_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_send_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This,
+    IXMLHttpRequest * This,
     /* [optional][in] */ VARIANT varBody);
 
 
@@ -9922,7 +9925,7 @@ void __RPC_STUB IXMLHttpRequest_send_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_abort_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This);
+    IXMLHttpRequest * This);
 
 
 void __RPC_STUB IXMLHttpRequest_abort_Stub(
@@ -9933,8 +9936,8 @@ void __RPC_STUB IXMLHttpRequest_abort_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_status_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plStatus);
+    IXMLHttpRequest * This,
+    /* [retval][out] */ long *plStatus);
 
 
 void __RPC_STUB IXMLHttpRequest_get_status_Stub(
@@ -9945,8 +9948,8 @@ void __RPC_STUB IXMLHttpRequest_get_status_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_statusText_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrStatus);
+    IXMLHttpRequest * This,
+    /* [retval][out] */ BSTR *pbstrStatus);
 
 
 void __RPC_STUB IXMLHttpRequest_get_statusText_Stub(
@@ -9957,8 +9960,8 @@ void __RPC_STUB IXMLHttpRequest_get_statusText_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_responseXML_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppBody);
+    IXMLHttpRequest * This,
+    /* [retval][out] */ IDispatch **ppBody);
 
 
 void __RPC_STUB IXMLHttpRequest_get_responseXML_Stub(
@@ -9969,8 +9972,8 @@ void __RPC_STUB IXMLHttpRequest_get_responseXML_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_responseText_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrBody);
+    IXMLHttpRequest * This,
+    /* [retval][out] */ BSTR *pbstrBody);
 
 
 void __RPC_STUB IXMLHttpRequest_get_responseText_Stub(
@@ -9981,8 +9984,8 @@ void __RPC_STUB IXMLHttpRequest_get_responseText_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_responseBody_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarBody);
+    IXMLHttpRequest * This,
+    /* [retval][out] */ VARIANT *pvarBody);
 
 
 void __RPC_STUB IXMLHttpRequest_get_responseBody_Stub(
@@ -9993,8 +9996,8 @@ void __RPC_STUB IXMLHttpRequest_get_responseBody_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_responseStream_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarBody);
+    IXMLHttpRequest * This,
+    /* [retval][out] */ VARIANT *pvarBody);
 
 
 void __RPC_STUB IXMLHttpRequest_get_responseStream_Stub(
@@ -10005,8 +10008,8 @@ void __RPC_STUB IXMLHttpRequest_get_responseStream_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_readyState_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plState);
+    IXMLHttpRequest * This,
+    /* [retval][out] */ long *plState);
 
 
 void __RPC_STUB IXMLHttpRequest_get_readyState_Stub(
@@ -10017,8 +10020,8 @@ void __RPC_STUB IXMLHttpRequest_get_readyState_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_put_onreadystatechange_Proxy( 
-    IXMLHttpRequest __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pReadyStateSink);
+    IXMLHttpRequest * This,
+    /* [in] */ IDispatch *pReadyStateSink);
 
 
 void __RPC_STUB IXMLHttpRequest_put_onreadystatechange_Stub(
@@ -10056,19 +10059,19 @@ EXTERN_C const IID IID_IXMLDSOControl;
     {
     public:
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_XMLDocument( 
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *ppDoc) = 0;
+            /* [retval][out] */ IXMLDOMDocument **ppDoc) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_XMLDocument( 
-            /* [in] */ IXMLDOMDocument __RPC_FAR *ppDoc) = 0;
+            /* [in] */ IXMLDOMDocument *ppDoc) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_JavaDSOCompatible( 
-            /* [retval][out] */ BOOL __RPC_FAR *fJavaDSOCompatible) = 0;
+            /* [retval][out] */ BOOL *fJavaDSOCompatible) = 0;
         
         virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_JavaDSOCompatible( 
             /* [in] */ BOOL fJavaDSOCompatible) = 0;
         
         virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_readyState( 
-            /* [retval][out] */ long __RPC_FAR *state) = 0;
+            /* [retval][out] */ long *state) = 0;
         
     };
     
@@ -10078,72 +10081,72 @@ EXTERN_C const IID IID_IXMLDSOControl;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDSOControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDSOControl * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDSOControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDSOControl * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDSOControl __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDSOControl * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDSOControl __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDSOControl * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDSOControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDSOControl * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDSOControl __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDSOControl * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDSOControl __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDSOControl * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_XMLDocument )( 
-            IXMLDSOControl __RPC_FAR * This,
-            /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *ppDoc);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XMLDocument )( 
+            IXMLDSOControl * This,
+            /* [retval][out] */ IXMLDOMDocument **ppDoc);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_XMLDocument )( 
-            IXMLDSOControl __RPC_FAR * This,
-            /* [in] */ IXMLDOMDocument __RPC_FAR *ppDoc);
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_XMLDocument )( 
+            IXMLDSOControl * This,
+            /* [in] */ IXMLDOMDocument *ppDoc);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_JavaDSOCompatible )( 
-            IXMLDSOControl __RPC_FAR * This,
-            /* [retval][out] */ BOOL __RPC_FAR *fJavaDSOCompatible);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_JavaDSOCompatible )( 
+            IXMLDSOControl * This,
+            /* [retval][out] */ BOOL *fJavaDSOCompatible);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_JavaDSOCompatible )( 
-            IXMLDSOControl __RPC_FAR * This,
+        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_JavaDSOCompatible )( 
+            IXMLDSOControl * This,
             /* [in] */ BOOL fJavaDSOCompatible);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_readyState )( 
-            IXMLDSOControl __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *state);
+        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
+            IXMLDSOControl * This,
+            /* [retval][out] */ long *state);
         
         END_INTERFACE
     } IXMLDSOControlVtbl;
 
     interface IXMLDSOControl
     {
-        CONST_VTBL struct IXMLDSOControlVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDSOControlVtbl *lpVtbl;
     };
 
     
@@ -10197,8 +10200,8 @@ EXTERN_C const IID IID_IXMLDSOControl;
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDSOControl_get_XMLDocument_Proxy( 
-    IXMLDSOControl __RPC_FAR * This,
-    /* [retval][out] */ IXMLDOMDocument __RPC_FAR *__RPC_FAR *ppDoc);
+    IXMLDSOControl * This,
+    /* [retval][out] */ IXMLDOMDocument **ppDoc);
 
 
 void __RPC_STUB IXMLDSOControl_get_XMLDocument_Stub(
@@ -10209,8 +10212,8 @@ void __RPC_STUB IXMLDSOControl_get_XMLDocument_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDSOControl_put_XMLDocument_Proxy( 
-    IXMLDSOControl __RPC_FAR * This,
-    /* [in] */ IXMLDOMDocument __RPC_FAR *ppDoc);
+    IXMLDSOControl * This,
+    /* [in] */ IXMLDOMDocument *ppDoc);
 
 
 void __RPC_STUB IXMLDSOControl_put_XMLDocument_Stub(
@@ -10221,8 +10224,8 @@ void __RPC_STUB IXMLDSOControl_put_XMLDocument_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDSOControl_get_JavaDSOCompatible_Proxy( 
-    IXMLDSOControl __RPC_FAR * This,
-    /* [retval][out] */ BOOL __RPC_FAR *fJavaDSOCompatible);
+    IXMLDSOControl * This,
+    /* [retval][out] */ BOOL *fJavaDSOCompatible);
 
 
 void __RPC_STUB IXMLDSOControl_get_JavaDSOCompatible_Stub(
@@ -10233,7 +10236,7 @@ void __RPC_STUB IXMLDSOControl_get_JavaDSOCompatible_Stub(
 
 
 /* [id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDSOControl_put_JavaDSOCompatible_Proxy( 
-    IXMLDSOControl __RPC_FAR * This,
+    IXMLDSOControl * This,
     /* [in] */ BOOL fJavaDSOCompatible);
 
 
@@ -10245,8 +10248,8 @@ void __RPC_STUB IXMLDSOControl_put_JavaDSOCompatible_Stub(
 
 
 /* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDSOControl_get_readyState_Proxy( 
-    IXMLDSOControl __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *state);
+    IXMLDSOControl * This,
+    /* [retval][out] */ long *state);
 
 
 void __RPC_STUB IXMLDSOControl_get_readyState_Stub(
@@ -10287,15 +10290,15 @@ EXTERN_C const IID IID_IXMLElementCollection;
             /* [in] */ long v) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [out][retval] */ long __RPC_FAR *p) = 0;
+            /* [out][retval] */ long *p) = 0;
         
         virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__newEnum( 
-            /* [out][retval] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+            /* [out][retval] */ IUnknown **ppUnk) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE item( 
             /* [in][optional] */ VARIANT var1,
             /* [in][optional] */ VARIANT var2,
-            /* [out][retval] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp) = 0;
+            /* [out][retval] */ IDispatch **ppDisp) = 0;
         
     };
     
@@ -10305,70 +10308,70 @@ EXTERN_C const IID IID_IXMLElementCollection;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLElementCollection __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLElementCollection * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLElementCollection __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLElementCollection * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLElementCollection __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLElementCollection * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLElementCollection __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLElementCollection * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLElementCollection __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLElementCollection * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLElementCollection __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLElementCollection * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLElementCollection __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLElementCollection * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [id][hidden][restricted][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_length )( 
-            IXMLElementCollection __RPC_FAR * This,
+        /* [id][hidden][restricted][propput] */ HRESULT ( STDMETHODCALLTYPE *put_length )( 
+            IXMLElementCollection * This,
             /* [in] */ long v);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_length )( 
-            IXMLElementCollection __RPC_FAR * This,
-            /* [out][retval] */ long __RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+            IXMLElementCollection * This,
+            /* [out][retval] */ long *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get__newEnum )( 
-            IXMLElementCollection __RPC_FAR * This,
-            /* [out][retval] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__newEnum )( 
+            IXMLElementCollection * This,
+            /* [out][retval] */ IUnknown **ppUnk);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *item )( 
-            IXMLElementCollection __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *item )( 
+            IXMLElementCollection * This,
             /* [in][optional] */ VARIANT var1,
             /* [in][optional] */ VARIANT var2,
-            /* [out][retval] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+            /* [out][retval] */ IDispatch **ppDisp);
         
         END_INTERFACE
     } IXMLElementCollectionVtbl;
 
     interface IXMLElementCollection
     {
-        CONST_VTBL struct IXMLElementCollectionVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLElementCollectionVtbl *lpVtbl;
     };
 
     
@@ -10419,7 +10422,7 @@ EXTERN_C const IID IID_IXMLElementCollection;
 
 
 /* [id][hidden][restricted][propput] */ HRESULT STDMETHODCALLTYPE IXMLElementCollection_put_length_Proxy( 
-    IXMLElementCollection __RPC_FAR * This,
+    IXMLElementCollection * This,
     /* [in] */ long v);
 
 
@@ -10431,8 +10434,8 @@ void __RPC_STUB IXMLElementCollection_put_length_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElementCollection_get_length_Proxy( 
-    IXMLElementCollection __RPC_FAR * This,
-    /* [out][retval] */ long __RPC_FAR *p);
+    IXMLElementCollection * This,
+    /* [out][retval] */ long *p);
 
 
 void __RPC_STUB IXMLElementCollection_get_length_Stub(
@@ -10443,8 +10446,8 @@ void __RPC_STUB IXMLElementCollection_get_length_Stub(
 
 
 /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLElementCollection_get__newEnum_Proxy( 
-    IXMLElementCollection __RPC_FAR * This,
-    /* [out][retval] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+    IXMLElementCollection * This,
+    /* [out][retval] */ IUnknown **ppUnk);
 
 
 void __RPC_STUB IXMLElementCollection_get__newEnum_Stub(
@@ -10455,10 +10458,10 @@ void __RPC_STUB IXMLElementCollection_get__newEnum_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElementCollection_item_Proxy( 
-    IXMLElementCollection __RPC_FAR * This,
+    IXMLElementCollection * This,
     /* [in][optional] */ VARIANT var1,
     /* [in][optional] */ VARIANT var2,
-    /* [out][retval] */ IDispatch __RPC_FAR *__RPC_FAR *ppDisp);
+    /* [out][retval] */ IDispatch **ppDisp);
 
 
 void __RPC_STUB IXMLElementCollection_item_Stub(
@@ -10488,48 +10491,48 @@ EXTERN_C const IID IID_IXMLDocument;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_root( 
-            /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *p) = 0;
+            /* [out][retval] */ IXMLElement **p) = 0;
         
         virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_fileSize( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_fileModifiedDate( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_fileUpdatedDate( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_URL( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_URL( 
             /* [in] */ BSTR p) = 0;
         
         virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_mimeType( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_readyState( 
-            /* [out][retval] */ long __RPC_FAR *pl) = 0;
+            /* [out][retval] */ long *pl) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_charset( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_charset( 
             /* [in] */ BSTR p) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_version( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_doctype( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_dtdURL( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createElement( 
             /* [in] */ VARIANT vType,
             /* [in][optional] */ VARIANT var1,
-            /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *ppElem) = 0;
+            /* [out][retval] */ IXMLElement **ppElem) = 0;
         
     };
     
@@ -10539,110 +10542,110 @@ EXTERN_C const IID IID_IXMLDocument;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDocument __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDocument * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDocument __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDocument * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDocument __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDocument * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDocument __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDocument * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDocument __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDocument * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDocument __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDocument * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDocument __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDocument * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_root )( 
-            IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_root )( 
+            IXMLDocument * This,
+            /* [out][retval] */ IXMLElement **p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fileSize )( 
-            IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_fileSize )( 
+            IXMLDocument * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fileModifiedDate )( 
-            IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_fileModifiedDate )( 
+            IXMLDocument * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fileUpdatedDate )( 
-            IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_fileUpdatedDate )( 
+            IXMLDocument * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
-            IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_URL )( 
+            IXMLDocument * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
-            IXMLDocument __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_URL )( 
+            IXMLDocument * This,
             /* [in] */ BSTR p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mimeType )( 
-            IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_mimeType )( 
+            IXMLDocument * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_readyState )( 
-            IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ long __RPC_FAR *pl);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
+            IXMLDocument * This,
+            /* [out][retval] */ long *pl);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_charset )( 
-            IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_charset )( 
+            IXMLDocument * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_charset )( 
-            IXMLDocument __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_charset )( 
+            IXMLDocument * This,
             /* [in] */ BSTR p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_version )( 
-            IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_version )( 
+            IXMLDocument * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_doctype )( 
-            IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_doctype )( 
+            IXMLDocument * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dtdURL )( 
-            IXMLDocument __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dtdURL )( 
+            IXMLDocument * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *createElement )( 
-            IXMLDocument __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createElement )( 
+            IXMLDocument * This,
             /* [in] */ VARIANT vType,
             /* [in][optional] */ VARIANT var1,
-            /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *ppElem);
+            /* [out][retval] */ IXMLElement **ppElem);
         
         END_INTERFACE
     } IXMLDocumentVtbl;
 
     interface IXMLDocument
     {
-        CONST_VTBL struct IXMLDocumentVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDocumentVtbl *lpVtbl;
     };
 
     
@@ -10723,8 +10726,8 @@ EXTERN_C const IID IID_IXMLDocument;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_root_Proxy( 
-    IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *p);
+    IXMLDocument * This,
+    /* [out][retval] */ IXMLElement **p);
 
 
 void __RPC_STUB IXMLDocument_get_root_Stub(
@@ -10735,8 +10738,8 @@ void __RPC_STUB IXMLDocument_get_root_Stub(
 
 
 /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileSize_Proxy( 
-    IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_fileSize_Stub(
@@ -10747,8 +10750,8 @@ void __RPC_STUB IXMLDocument_get_fileSize_Stub(
 
 
 /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileModifiedDate_Proxy( 
-    IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_fileModifiedDate_Stub(
@@ -10759,8 +10762,8 @@ void __RPC_STUB IXMLDocument_get_fileModifiedDate_Stub(
 
 
 /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileUpdatedDate_Proxy( 
-    IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_fileUpdatedDate_Stub(
@@ -10771,8 +10774,8 @@ void __RPC_STUB IXMLDocument_get_fileUpdatedDate_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_URL_Proxy( 
-    IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_URL_Stub(
@@ -10783,7 +10786,7 @@ void __RPC_STUB IXMLDocument_get_URL_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDocument_put_URL_Proxy( 
-    IXMLDocument __RPC_FAR * This,
+    IXMLDocument * This,
     /* [in] */ BSTR p);
 
 
@@ -10795,8 +10798,8 @@ void __RPC_STUB IXMLDocument_put_URL_Stub(
 
 
 /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_mimeType_Proxy( 
-    IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_mimeType_Stub(
@@ -10807,8 +10810,8 @@ void __RPC_STUB IXMLDocument_get_mimeType_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_readyState_Proxy( 
-    IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ long __RPC_FAR *pl);
+    IXMLDocument * This,
+    /* [out][retval] */ long *pl);
 
 
 void __RPC_STUB IXMLDocument_get_readyState_Stub(
@@ -10819,8 +10822,8 @@ void __RPC_STUB IXMLDocument_get_readyState_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_charset_Proxy( 
-    IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_charset_Stub(
@@ -10831,7 +10834,7 @@ void __RPC_STUB IXMLDocument_get_charset_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDocument_put_charset_Proxy( 
-    IXMLDocument __RPC_FAR * This,
+    IXMLDocument * This,
     /* [in] */ BSTR p);
 
 
@@ -10843,8 +10846,8 @@ void __RPC_STUB IXMLDocument_put_charset_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_version_Proxy( 
-    IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_version_Stub(
@@ -10855,8 +10858,8 @@ void __RPC_STUB IXMLDocument_get_version_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_doctype_Proxy( 
-    IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_doctype_Stub(
@@ -10867,8 +10870,8 @@ void __RPC_STUB IXMLDocument_get_doctype_Stub(
 
 
 /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_dtdURL_Proxy( 
-    IXMLDocument __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_dtdURL_Stub(
@@ -10879,10 +10882,10 @@ void __RPC_STUB IXMLDocument_get_dtdURL_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDocument_createElement_Proxy( 
-    IXMLDocument __RPC_FAR * This,
+    IXMLDocument * This,
     /* [in] */ VARIANT vType,
     /* [in][optional] */ VARIANT var1,
-    /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *ppElem);
+    /* [out][retval] */ IXMLElement **ppElem);
 
 
 void __RPC_STUB IXMLDocument_createElement_Stub(
@@ -10912,51 +10915,51 @@ EXTERN_C const IID IID_IXMLDocument2;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_root( 
-            /* [out][retval] */ IXMLElement2 __RPC_FAR *__RPC_FAR *p) = 0;
+            /* [out][retval] */ IXMLElement2 **p) = 0;
         
         virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_fileSize( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_fileModifiedDate( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_fileUpdatedDate( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_URL( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_URL( 
             /* [in] */ BSTR p) = 0;
         
         virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_mimeType( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_readyState( 
-            /* [out][retval] */ long __RPC_FAR *pl) = 0;
+            /* [out][retval] */ long *pl) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_charset( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_charset( 
             /* [in] */ BSTR p) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_version( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_doctype( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_dtdURL( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createElement( 
             /* [in] */ VARIANT vType,
             /* [in][optional] */ VARIANT var1,
-            /* [out][retval] */ IXMLElement2 __RPC_FAR *__RPC_FAR *ppElem) = 0;
+            /* [out][retval] */ IXMLElement2 **ppElem) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_async( 
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *pf) = 0;
+            /* [out][retval] */ VARIANT_BOOL *pf) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_async( 
             /* [in] */ VARIANT_BOOL f) = 0;
@@ -10969,110 +10972,110 @@ EXTERN_C const IID IID_IXMLDocument2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLDocument2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLDocument2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLDocument2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLDocument2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLDocument2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLDocument2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLDocument2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLDocument2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLDocument2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLDocument2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLDocument2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLDocument2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLDocument2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLDocument2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_root )( 
-            IXMLDocument2 __RPC_FAR * This,
-            /* [out][retval] */ IXMLElement2 __RPC_FAR *__RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_root )( 
+            IXMLDocument2 * This,
+            /* [out][retval] */ IXMLElement2 **p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fileSize )( 
-            IXMLDocument2 __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_fileSize )( 
+            IXMLDocument2 * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fileModifiedDate )( 
-            IXMLDocument2 __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_fileModifiedDate )( 
+            IXMLDocument2 * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_fileUpdatedDate )( 
-            IXMLDocument2 __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_fileUpdatedDate )( 
+            IXMLDocument2 * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_URL )( 
-            IXMLDocument2 __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_URL )( 
+            IXMLDocument2 * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_URL )( 
-            IXMLDocument2 __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_URL )( 
+            IXMLDocument2 * This,
             /* [in] */ BSTR p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_mimeType )( 
-            IXMLDocument2 __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_mimeType )( 
+            IXMLDocument2 * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_readyState )( 
-            IXMLDocument2 __RPC_FAR * This,
-            /* [out][retval] */ long __RPC_FAR *pl);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
+            IXMLDocument2 * This,
+            /* [out][retval] */ long *pl);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_charset )( 
-            IXMLDocument2 __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_charset )( 
+            IXMLDocument2 * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_charset )( 
-            IXMLDocument2 __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_charset )( 
+            IXMLDocument2 * This,
             /* [in] */ BSTR p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_version )( 
-            IXMLDocument2 __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_version )( 
+            IXMLDocument2 * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_doctype )( 
-            IXMLDocument2 __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_doctype )( 
+            IXMLDocument2 * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_dtdURL )( 
-            IXMLDocument2 __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dtdURL )( 
+            IXMLDocument2 * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *createElement )( 
-            IXMLDocument2 __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createElement )( 
+            IXMLDocument2 * This,
             /* [in] */ VARIANT vType,
             /* [in][optional] */ VARIANT var1,
-            /* [out][retval] */ IXMLElement2 __RPC_FAR *__RPC_FAR *ppElem);
+            /* [out][retval] */ IXMLElement2 **ppElem);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_async )( 
-            IXMLDocument2 __RPC_FAR * This,
-            /* [out][retval] */ VARIANT_BOOL __RPC_FAR *pf);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_async )( 
+            IXMLDocument2 * This,
+            /* [out][retval] */ VARIANT_BOOL *pf);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_async )( 
-            IXMLDocument2 __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_async )( 
+            IXMLDocument2 * This,
             /* [in] */ VARIANT_BOOL f);
         
         END_INTERFACE
@@ -11080,7 +11083,7 @@ EXTERN_C const IID IID_IXMLDocument2;
 
     interface IXMLDocument2
     {
-        CONST_VTBL struct IXMLDocument2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLDocument2Vtbl *lpVtbl;
     };
 
     
@@ -11167,8 +11170,8 @@ EXTERN_C const IID IID_IXMLDocument2;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_root_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
-    /* [out][retval] */ IXMLElement2 __RPC_FAR *__RPC_FAR *p);
+    IXMLDocument2 * This,
+    /* [out][retval] */ IXMLElement2 **p);
 
 
 void __RPC_STUB IXMLDocument2_get_root_Stub(
@@ -11179,8 +11182,8 @@ void __RPC_STUB IXMLDocument2_get_root_Stub(
 
 
 /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_fileSize_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument2 * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_fileSize_Stub(
@@ -11191,8 +11194,8 @@ void __RPC_STUB IXMLDocument2_get_fileSize_Stub(
 
 
 /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_fileModifiedDate_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument2 * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_fileModifiedDate_Stub(
@@ -11203,8 +11206,8 @@ void __RPC_STUB IXMLDocument2_get_fileModifiedDate_Stub(
 
 
 /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_fileUpdatedDate_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument2 * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_fileUpdatedDate_Stub(
@@ -11215,8 +11218,8 @@ void __RPC_STUB IXMLDocument2_get_fileUpdatedDate_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_URL_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument2 * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_URL_Stub(
@@ -11227,7 +11230,7 @@ void __RPC_STUB IXMLDocument2_get_URL_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_put_URL_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
+    IXMLDocument2 * This,
     /* [in] */ BSTR p);
 
 
@@ -11239,8 +11242,8 @@ void __RPC_STUB IXMLDocument2_put_URL_Stub(
 
 
 /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_mimeType_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument2 * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_mimeType_Stub(
@@ -11251,8 +11254,8 @@ void __RPC_STUB IXMLDocument2_get_mimeType_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_readyState_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
-    /* [out][retval] */ long __RPC_FAR *pl);
+    IXMLDocument2 * This,
+    /* [out][retval] */ long *pl);
 
 
 void __RPC_STUB IXMLDocument2_get_readyState_Stub(
@@ -11263,8 +11266,8 @@ void __RPC_STUB IXMLDocument2_get_readyState_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_charset_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument2 * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_charset_Stub(
@@ -11275,7 +11278,7 @@ void __RPC_STUB IXMLDocument2_get_charset_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_put_charset_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
+    IXMLDocument2 * This,
     /* [in] */ BSTR p);
 
 
@@ -11287,8 +11290,8 @@ void __RPC_STUB IXMLDocument2_put_charset_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_version_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument2 * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_version_Stub(
@@ -11299,8 +11302,8 @@ void __RPC_STUB IXMLDocument2_get_version_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_doctype_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument2 * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_doctype_Stub(
@@ -11311,8 +11314,8 @@ void __RPC_STUB IXMLDocument2_get_doctype_Stub(
 
 
 /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_dtdURL_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLDocument2 * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_dtdURL_Stub(
@@ -11323,10 +11326,10 @@ void __RPC_STUB IXMLDocument2_get_dtdURL_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_createElement_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
+    IXMLDocument2 * This,
     /* [in] */ VARIANT vType,
     /* [in][optional] */ VARIANT var1,
-    /* [out][retval] */ IXMLElement2 __RPC_FAR *__RPC_FAR *ppElem);
+    /* [out][retval] */ IXMLElement2 **ppElem);
 
 
 void __RPC_STUB IXMLDocument2_createElement_Stub(
@@ -11337,8 +11340,8 @@ void __RPC_STUB IXMLDocument2_createElement_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_async_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
-    /* [out][retval] */ VARIANT_BOOL __RPC_FAR *pf);
+    IXMLDocument2 * This,
+    /* [out][retval] */ VARIANT_BOOL *pf);
 
 
 void __RPC_STUB IXMLDocument2_get_async_Stub(
@@ -11349,7 +11352,7 @@ void __RPC_STUB IXMLDocument2_get_async_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_put_async_Proxy( 
-    IXMLDocument2 __RPC_FAR * This,
+    IXMLDocument2 * This,
     /* [in] */ VARIANT_BOOL f);
 
 
@@ -11380,13 +11383,13 @@ EXTERN_C const IID IID_IXMLElement;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_tagName( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_tagName( 
             /* [in] */ BSTR p) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_parent( 
-            /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *ppParent) = 0;
+            /* [out][retval] */ IXMLElement **ppParent) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setAttribute( 
             /* [in] */ BSTR strPropertyName,
@@ -11394,30 +11397,30 @@ EXTERN_C const IID IID_IXMLElement;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAttribute( 
             /* [in] */ BSTR strPropertyName,
-            /* [out][retval] */ VARIANT __RPC_FAR *PropertyValue) = 0;
+            /* [out][retval] */ VARIANT *PropertyValue) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeAttribute( 
             /* [in] */ BSTR strPropertyName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_children( 
-            /* [out][retval] */ IXMLElementCollection __RPC_FAR *__RPC_FAR *pp) = 0;
+            /* [out][retval] */ IXMLElementCollection **pp) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_type( 
-            /* [out][retval] */ long __RPC_FAR *plType) = 0;
+            /* [out][retval] */ long *plType) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_text( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_text( 
             /* [in] */ BSTR p) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE addChild( 
-            /* [in] */ IXMLElement __RPC_FAR *pChildElem,
+            /* [in] */ IXMLElement *pChildElem,
             long lIndex,
             long lReserved) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeChild( 
-            /* [in] */ IXMLElement __RPC_FAR *pChildElem) = 0;
+            /* [in] */ IXMLElement *pChildElem) = 0;
         
     };
     
@@ -11427,104 +11430,104 @@ EXTERN_C const IID IID_IXMLElement;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLElement __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLElement * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLElement __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLElement * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLElement __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLElement * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLElement __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLElement * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLElement __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLElement * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLElement __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLElement * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLElement __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLElement * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_tagName )( 
-            IXMLElement __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_tagName )( 
+            IXMLElement * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_tagName )( 
-            IXMLElement __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_tagName )( 
+            IXMLElement * This,
             /* [in] */ BSTR p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parent )( 
-            IXMLElement __RPC_FAR * This,
-            /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *ppParent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parent )( 
+            IXMLElement * This,
+            /* [out][retval] */ IXMLElement **ppParent);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setAttribute )( 
-            IXMLElement __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setAttribute )( 
+            IXMLElement * This,
             /* [in] */ BSTR strPropertyName,
             /* [in] */ VARIANT PropertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAttribute )( 
-            IXMLElement __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getAttribute )( 
+            IXMLElement * This,
             /* [in] */ BSTR strPropertyName,
-            /* [out][retval] */ VARIANT __RPC_FAR *PropertyValue);
+            /* [out][retval] */ VARIANT *PropertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeAttribute )( 
-            IXMLElement __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeAttribute )( 
+            IXMLElement * This,
             /* [in] */ BSTR strPropertyName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_children )( 
-            IXMLElement __RPC_FAR * This,
-            /* [out][retval] */ IXMLElementCollection __RPC_FAR *__RPC_FAR *pp);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_children )( 
+            IXMLElement * This,
+            /* [out][retval] */ IXMLElementCollection **pp);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_type )( 
-            IXMLElement __RPC_FAR * This,
-            /* [out][retval] */ long __RPC_FAR *plType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_type )( 
+            IXMLElement * This,
+            /* [out][retval] */ long *plType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLElement __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLElement * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLElement __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLElement * This,
             /* [in] */ BSTR p);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *addChild )( 
-            IXMLElement __RPC_FAR * This,
-            /* [in] */ IXMLElement __RPC_FAR *pChildElem,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *addChild )( 
+            IXMLElement * This,
+            /* [in] */ IXMLElement *pChildElem,
             long lIndex,
             long lReserved);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLElement __RPC_FAR * This,
-            /* [in] */ IXMLElement __RPC_FAR *pChildElem);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLElement * This,
+            /* [in] */ IXMLElement *pChildElem);
         
         END_INTERFACE
     } IXMLElementVtbl;
 
     interface IXMLElement
     {
-        CONST_VTBL struct IXMLElementVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLElementVtbl *lpVtbl;
     };
 
     
@@ -11599,8 +11602,8 @@ EXTERN_C const IID IID_IXMLElement;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_tagName_Proxy( 
-    IXMLElement __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLElement * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLElement_get_tagName_Stub(
@@ -11611,7 +11614,7 @@ void __RPC_STUB IXMLElement_get_tagName_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLElement_put_tagName_Proxy( 
-    IXMLElement __RPC_FAR * This,
+    IXMLElement * This,
     /* [in] */ BSTR p);
 
 
@@ -11623,8 +11626,8 @@ void __RPC_STUB IXMLElement_put_tagName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_parent_Proxy( 
-    IXMLElement __RPC_FAR * This,
-    /* [out][retval] */ IXMLElement __RPC_FAR *__RPC_FAR *ppParent);
+    IXMLElement * This,
+    /* [out][retval] */ IXMLElement **ppParent);
 
 
 void __RPC_STUB IXMLElement_get_parent_Stub(
@@ -11635,7 +11638,7 @@ void __RPC_STUB IXMLElement_get_parent_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement_setAttribute_Proxy( 
-    IXMLElement __RPC_FAR * This,
+    IXMLElement * This,
     /* [in] */ BSTR strPropertyName,
     /* [in] */ VARIANT PropertyValue);
 
@@ -11648,9 +11651,9 @@ void __RPC_STUB IXMLElement_setAttribute_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement_getAttribute_Proxy( 
-    IXMLElement __RPC_FAR * This,
+    IXMLElement * This,
     /* [in] */ BSTR strPropertyName,
-    /* [out][retval] */ VARIANT __RPC_FAR *PropertyValue);
+    /* [out][retval] */ VARIANT *PropertyValue);
 
 
 void __RPC_STUB IXMLElement_getAttribute_Stub(
@@ -11661,7 +11664,7 @@ void __RPC_STUB IXMLElement_getAttribute_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement_removeAttribute_Proxy( 
-    IXMLElement __RPC_FAR * This,
+    IXMLElement * This,
     /* [in] */ BSTR strPropertyName);
 
 
@@ -11673,8 +11676,8 @@ void __RPC_STUB IXMLElement_removeAttribute_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_children_Proxy( 
-    IXMLElement __RPC_FAR * This,
-    /* [out][retval] */ IXMLElementCollection __RPC_FAR *__RPC_FAR *pp);
+    IXMLElement * This,
+    /* [out][retval] */ IXMLElementCollection **pp);
 
 
 void __RPC_STUB IXMLElement_get_children_Stub(
@@ -11685,8 +11688,8 @@ void __RPC_STUB IXMLElement_get_children_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_type_Proxy( 
-    IXMLElement __RPC_FAR * This,
-    /* [out][retval] */ long __RPC_FAR *plType);
+    IXMLElement * This,
+    /* [out][retval] */ long *plType);
 
 
 void __RPC_STUB IXMLElement_get_type_Stub(
@@ -11697,8 +11700,8 @@ void __RPC_STUB IXMLElement_get_type_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_text_Proxy( 
-    IXMLElement __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLElement * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLElement_get_text_Stub(
@@ -11709,7 +11712,7 @@ void __RPC_STUB IXMLElement_get_text_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLElement_put_text_Proxy( 
-    IXMLElement __RPC_FAR * This,
+    IXMLElement * This,
     /* [in] */ BSTR p);
 
 
@@ -11721,8 +11724,8 @@ void __RPC_STUB IXMLElement_put_text_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement_addChild_Proxy( 
-    IXMLElement __RPC_FAR * This,
-    /* [in] */ IXMLElement __RPC_FAR *pChildElem,
+    IXMLElement * This,
+    /* [in] */ IXMLElement *pChildElem,
     long lIndex,
     long lReserved);
 
@@ -11735,8 +11738,8 @@ void __RPC_STUB IXMLElement_addChild_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement_removeChild_Proxy( 
-    IXMLElement __RPC_FAR * This,
-    /* [in] */ IXMLElement __RPC_FAR *pChildElem);
+    IXMLElement * This,
+    /* [in] */ IXMLElement *pChildElem);
 
 
 void __RPC_STUB IXMLElement_removeChild_Stub(
@@ -11766,13 +11769,13 @@ EXTERN_C const IID IID_IXMLElement2;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_tagName( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_tagName( 
             /* [in] */ BSTR p) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_parent( 
-            /* [out][retval] */ IXMLElement2 __RPC_FAR *__RPC_FAR *ppParent) = 0;
+            /* [out][retval] */ IXMLElement2 **ppParent) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setAttribute( 
             /* [in] */ BSTR strPropertyName,
@@ -11780,33 +11783,33 @@ EXTERN_C const IID IID_IXMLElement2;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAttribute( 
             /* [in] */ BSTR strPropertyName,
-            /* [out][retval] */ VARIANT __RPC_FAR *PropertyValue) = 0;
+            /* [out][retval] */ VARIANT *PropertyValue) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeAttribute( 
             /* [in] */ BSTR strPropertyName) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_children( 
-            /* [out][retval] */ IXMLElementCollection __RPC_FAR *__RPC_FAR *pp) = 0;
+            /* [out][retval] */ IXMLElementCollection **pp) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_type( 
-            /* [out][retval] */ long __RPC_FAR *plType) = 0;
+            /* [out][retval] */ long *plType) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_text( 
-            /* [out][retval] */ BSTR __RPC_FAR *p) = 0;
+            /* [out][retval] */ BSTR *p) = 0;
         
         virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_text( 
             /* [in] */ BSTR p) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE addChild( 
-            /* [in] */ IXMLElement2 __RPC_FAR *pChildElem,
+            /* [in] */ IXMLElement2 *pChildElem,
             long lIndex,
             long lReserved) = 0;
         
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeChild( 
-            /* [in] */ IXMLElement2 __RPC_FAR *pChildElem) = 0;
+            /* [in] */ IXMLElement2 *pChildElem) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_attributes( 
-            /* [out][retval] */ IXMLElementCollection __RPC_FAR *__RPC_FAR *pp) = 0;
+            /* [out][retval] */ IXMLElementCollection **pp) = 0;
         
     };
     
@@ -11816,108 +11819,108 @@ EXTERN_C const IID IID_IXMLElement2;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLElement2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLElement2 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLElement2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLElement2 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLElement2 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLElement2 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLElement2 __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLElement2 * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLElement2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLElement2 * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLElement2 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLElement2 * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLElement2 __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLElement2 * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_tagName )( 
-            IXMLElement2 __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_tagName )( 
+            IXMLElement2 * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_tagName )( 
-            IXMLElement2 __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_tagName )( 
+            IXMLElement2 * This,
             /* [in] */ BSTR p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_parent )( 
-            IXMLElement2 __RPC_FAR * This,
-            /* [out][retval] */ IXMLElement2 __RPC_FAR *__RPC_FAR *ppParent);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parent )( 
+            IXMLElement2 * This,
+            /* [out][retval] */ IXMLElement2 **ppParent);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *setAttribute )( 
-            IXMLElement2 __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setAttribute )( 
+            IXMLElement2 * This,
             /* [in] */ BSTR strPropertyName,
             /* [in] */ VARIANT PropertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *getAttribute )( 
-            IXMLElement2 __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getAttribute )( 
+            IXMLElement2 * This,
             /* [in] */ BSTR strPropertyName,
-            /* [out][retval] */ VARIANT __RPC_FAR *PropertyValue);
+            /* [out][retval] */ VARIANT *PropertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeAttribute )( 
-            IXMLElement2 __RPC_FAR * This,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeAttribute )( 
+            IXMLElement2 * This,
             /* [in] */ BSTR strPropertyName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_children )( 
-            IXMLElement2 __RPC_FAR * This,
-            /* [out][retval] */ IXMLElementCollection __RPC_FAR *__RPC_FAR *pp);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_children )( 
+            IXMLElement2 * This,
+            /* [out][retval] */ IXMLElementCollection **pp);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_type )( 
-            IXMLElement2 __RPC_FAR * This,
-            /* [out][retval] */ long __RPC_FAR *plType);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_type )( 
+            IXMLElement2 * This,
+            /* [out][retval] */ long *plType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_text )( 
-            IXMLElement2 __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *p);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+            IXMLElement2 * This,
+            /* [out][retval] */ BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_text )( 
-            IXMLElement2 __RPC_FAR * This,
+        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+            IXMLElement2 * This,
             /* [in] */ BSTR p);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *addChild )( 
-            IXMLElement2 __RPC_FAR * This,
-            /* [in] */ IXMLElement2 __RPC_FAR *pChildElem,
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *addChild )( 
+            IXMLElement2 * This,
+            /* [in] */ IXMLElement2 *pChildElem,
             long lIndex,
             long lReserved);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *removeChild )( 
-            IXMLElement2 __RPC_FAR * This,
-            /* [in] */ IXMLElement2 __RPC_FAR *pChildElem);
+        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+            IXMLElement2 * This,
+            /* [in] */ IXMLElement2 *pChildElem);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_attributes )( 
-            IXMLElement2 __RPC_FAR * This,
-            /* [out][retval] */ IXMLElementCollection __RPC_FAR *__RPC_FAR *pp);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+            IXMLElement2 * This,
+            /* [out][retval] */ IXMLElementCollection **pp);
         
         END_INTERFACE
     } IXMLElement2Vtbl;
 
     interface IXMLElement2
     {
-        CONST_VTBL struct IXMLElement2Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLElement2Vtbl *lpVtbl;
     };
 
     
@@ -11995,8 +11998,8 @@ EXTERN_C const IID IID_IXMLElement2;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement2_get_tagName_Proxy( 
-    IXMLElement2 __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLElement2 * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLElement2_get_tagName_Stub(
@@ -12007,7 +12010,7 @@ void __RPC_STUB IXMLElement2_get_tagName_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLElement2_put_tagName_Proxy( 
-    IXMLElement2 __RPC_FAR * This,
+    IXMLElement2 * This,
     /* [in] */ BSTR p);
 
 
@@ -12019,8 +12022,8 @@ void __RPC_STUB IXMLElement2_put_tagName_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement2_get_parent_Proxy( 
-    IXMLElement2 __RPC_FAR * This,
-    /* [out][retval] */ IXMLElement2 __RPC_FAR *__RPC_FAR *ppParent);
+    IXMLElement2 * This,
+    /* [out][retval] */ IXMLElement2 **ppParent);
 
 
 void __RPC_STUB IXMLElement2_get_parent_Stub(
@@ -12031,7 +12034,7 @@ void __RPC_STUB IXMLElement2_get_parent_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement2_setAttribute_Proxy( 
-    IXMLElement2 __RPC_FAR * This,
+    IXMLElement2 * This,
     /* [in] */ BSTR strPropertyName,
     /* [in] */ VARIANT PropertyValue);
 
@@ -12044,9 +12047,9 @@ void __RPC_STUB IXMLElement2_setAttribute_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement2_getAttribute_Proxy( 
-    IXMLElement2 __RPC_FAR * This,
+    IXMLElement2 * This,
     /* [in] */ BSTR strPropertyName,
-    /* [out][retval] */ VARIANT __RPC_FAR *PropertyValue);
+    /* [out][retval] */ VARIANT *PropertyValue);
 
 
 void __RPC_STUB IXMLElement2_getAttribute_Stub(
@@ -12057,7 +12060,7 @@ void __RPC_STUB IXMLElement2_getAttribute_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement2_removeAttribute_Proxy( 
-    IXMLElement2 __RPC_FAR * This,
+    IXMLElement2 * This,
     /* [in] */ BSTR strPropertyName);
 
 
@@ -12069,8 +12072,8 @@ void __RPC_STUB IXMLElement2_removeAttribute_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement2_get_children_Proxy( 
-    IXMLElement2 __RPC_FAR * This,
-    /* [out][retval] */ IXMLElementCollection __RPC_FAR *__RPC_FAR *pp);
+    IXMLElement2 * This,
+    /* [out][retval] */ IXMLElementCollection **pp);
 
 
 void __RPC_STUB IXMLElement2_get_children_Stub(
@@ -12081,8 +12084,8 @@ void __RPC_STUB IXMLElement2_get_children_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement2_get_type_Proxy( 
-    IXMLElement2 __RPC_FAR * This,
-    /* [out][retval] */ long __RPC_FAR *plType);
+    IXMLElement2 * This,
+    /* [out][retval] */ long *plType);
 
 
 void __RPC_STUB IXMLElement2_get_type_Stub(
@@ -12093,8 +12096,8 @@ void __RPC_STUB IXMLElement2_get_type_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement2_get_text_Proxy( 
-    IXMLElement2 __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *p);
+    IXMLElement2 * This,
+    /* [out][retval] */ BSTR *p);
 
 
 void __RPC_STUB IXMLElement2_get_text_Stub(
@@ -12105,7 +12108,7 @@ void __RPC_STUB IXMLElement2_get_text_Stub(
 
 
 /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLElement2_put_text_Proxy( 
-    IXMLElement2 __RPC_FAR * This,
+    IXMLElement2 * This,
     /* [in] */ BSTR p);
 
 
@@ -12117,8 +12120,8 @@ void __RPC_STUB IXMLElement2_put_text_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement2_addChild_Proxy( 
-    IXMLElement2 __RPC_FAR * This,
-    /* [in] */ IXMLElement2 __RPC_FAR *pChildElem,
+    IXMLElement2 * This,
+    /* [in] */ IXMLElement2 *pChildElem,
     long lIndex,
     long lReserved);
 
@@ -12131,8 +12134,8 @@ void __RPC_STUB IXMLElement2_addChild_Stub(
 
 
 /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement2_removeChild_Proxy( 
-    IXMLElement2 __RPC_FAR * This,
-    /* [in] */ IXMLElement2 __RPC_FAR *pChildElem);
+    IXMLElement2 * This,
+    /* [in] */ IXMLElement2 *pChildElem);
 
 
 void __RPC_STUB IXMLElement2_removeChild_Stub(
@@ -12143,8 +12146,8 @@ void __RPC_STUB IXMLElement2_removeChild_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement2_get_attributes_Proxy( 
-    IXMLElement2 __RPC_FAR * This,
-    /* [out][retval] */ IXMLElementCollection __RPC_FAR *__RPC_FAR *pp);
+    IXMLElement2 * This,
+    /* [out][retval] */ IXMLElementCollection **pp);
 
 
 void __RPC_STUB IXMLElement2_get_attributes_Stub(
@@ -12174,10 +12177,10 @@ EXTERN_C const IID IID_IXMLAttribute;
     {
     public:
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_name( 
-            /* [out][retval] */ BSTR __RPC_FAR *n) = 0;
+            /* [out][retval] */ BSTR *n) = 0;
         
         virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_value( 
-            /* [out][retval] */ BSTR __RPC_FAR *v) = 0;
+            /* [out][retval] */ BSTR *v) = 0;
         
     };
     
@@ -12187,60 +12190,60 @@ EXTERN_C const IID IID_IXMLAttribute;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLAttribute __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLAttribute * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLAttribute __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLAttribute * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLAttribute __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLAttribute * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
-            IXMLAttribute __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
+            IXMLAttribute * This,
+            /* [out] */ UINT *pctinfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
-            IXMLAttribute __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
+            IXMLAttribute * This,
             /* [in] */ UINT iTInfo,
             /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+            /* [out] */ ITypeInfo **ppTInfo);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
-            IXMLAttribute __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
+            IXMLAttribute * This,
             /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
+            /* [size_is][in] */ LPOLESTR *rgszNames,
             /* [in] */ UINT cNames,
             /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+            /* [size_is][out] */ DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
-            IXMLAttribute __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+            IXMLAttribute * This,
             /* [in] */ DISPID dispIdMember,
             /* [in] */ REFIID riid,
             /* [in] */ LCID lcid,
             /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+            /* [out][in] */ DISPPARAMS *pDispParams,
+            /* [out] */ VARIANT *pVarResult,
+            /* [out] */ EXCEPINFO *pExcepInfo,
+            /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_name )( 
-            IXMLAttribute __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *n);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_name )( 
+            IXMLAttribute * This,
+            /* [out][retval] */ BSTR *n);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_value )( 
-            IXMLAttribute __RPC_FAR * This,
-            /* [out][retval] */ BSTR __RPC_FAR *v);
+        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_value )( 
+            IXMLAttribute * This,
+            /* [out][retval] */ BSTR *v);
         
         END_INTERFACE
     } IXMLAttributeVtbl;
 
     interface IXMLAttribute
     {
-        CONST_VTBL struct IXMLAttributeVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLAttributeVtbl *lpVtbl;
     };
 
     
@@ -12285,8 +12288,8 @@ EXTERN_C const IID IID_IXMLAttribute;
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLAttribute_get_name_Proxy( 
-    IXMLAttribute __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *n);
+    IXMLAttribute * This,
+    /* [out][retval] */ BSTR *n);
 
 
 void __RPC_STUB IXMLAttribute_get_name_Stub(
@@ -12297,8 +12300,8 @@ void __RPC_STUB IXMLAttribute_get_name_Stub(
 
 
 /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLAttribute_get_value_Proxy( 
-    IXMLAttribute __RPC_FAR * This,
-    /* [out][retval] */ BSTR __RPC_FAR *v);
+    IXMLAttribute * This,
+    /* [out][retval] */ BSTR *v);
 
 
 void __RPC_STUB IXMLAttribute_get_value_Stub(
@@ -12328,7 +12331,7 @@ EXTERN_C const IID IID_IXMLError;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetErrorInfo( 
-            XML_ERROR __RPC_FAR *pErrorReturn) = 0;
+            XML_ERROR *pErrorReturn) = 0;
         
     };
     
@@ -12338,27 +12341,27 @@ EXTERN_C const IID IID_IXMLError;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IXMLError __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IXMLError * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IXMLError __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IXMLError * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IXMLError __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IXMLError * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetErrorInfo )( 
-            IXMLError __RPC_FAR * This,
-            XML_ERROR __RPC_FAR *pErrorReturn);
+        HRESULT ( STDMETHODCALLTYPE *GetErrorInfo )( 
+            IXMLError * This,
+            XML_ERROR *pErrorReturn);
         
         END_INTERFACE
     } IXMLErrorVtbl;
 
     interface IXMLError
     {
-        CONST_VTBL struct IXMLErrorVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IXMLErrorVtbl *lpVtbl;
     };
 
     
@@ -12387,8 +12390,8 @@ EXTERN_C const IID IID_IXMLError;
 
 
 HRESULT STDMETHODCALLTYPE IXMLError_GetErrorInfo_Proxy( 
-    IXMLError __RPC_FAR * This,
-    XML_ERROR __RPC_FAR *pErrorReturn);
+    IXMLError * This,
+    XML_ERROR *pErrorReturn);
 
 
 void __RPC_STUB IXMLError_GetErrorInfo_Stub(
@@ -12420,6 +12423,7 @@ XMLDocument;
 #endif
 
 #endif
+
 
 
 #pragma option pop /*P_O_Pop*/

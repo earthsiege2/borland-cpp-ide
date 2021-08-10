@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1995,99 Inprise Corporation       }
+{  Copyright (c) 1995-2001 Borland Software Corporation }
 {                                                       }
 {*******************************************************}
 
@@ -22,25 +22,25 @@ type
 
   TOpenPictureDialog = class(TOpenDialog)
   private
-    FPicture: TPicture;
     FPicturePanel: TPanel;
     FPictureLabel: TLabel;
     FPreviewButton: TSpeedButton;
     FPaintPanel: TPanel;
-    FPaintBox: TPaintBox;
+    FImageCtrl: TImage;
+    FSavedFilename: string;
     function  IsFilterStored: Boolean;
-    procedure PaintBoxPaint(Sender: TObject);
-    procedure PreviewClick(Sender: TObject);
     procedure PreviewKeyPress(Sender: TObject; var Key: Char);
   protected
+    procedure PreviewClick(Sender: TObject); virtual;
     procedure DoClose; override;
     procedure DoSelectionChange; override;
     procedure DoShow; override;
+    property ImageCtrl: TImage read FImageCtrl;
+    property PictureLabel: TLabel read FPictureLabel;
   published
     property Filter stored IsFilterStored;
   public
     constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
     function Execute: Boolean; override;
   end;
 
@@ -53,7 +53,22 @@ type
 
 implementation
 
-uses Consts, Forms, CommDlg, Dlgs;
+uses Consts, Math, Forms, CommDlg, Dlgs;
+
+type
+  TSilentPaintPanel = class(TPanel)
+  protected
+    procedure WMPaint(var Msg: TWMPaint); message WM_PAINT;
+  end;
+
+procedure TSilentPaintPanel.WMPaint(var Msg: TWMPaint);
+begin
+  try
+    inherited;
+  except
+    Caption := SInvalidImage;
+  end;
+end;
 
 { TOpenPictureDialog }
 
@@ -63,7 +78,6 @@ constructor TOpenPictureDialog.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   Filter := GraphicFilter(TGraphic);
-  FPicture := TPicture.Create;
   FPicturePanel := TPanel.Create(Self);
   with FPicturePanel do
   begin
@@ -96,7 +110,7 @@ begin
       OnClick := PreviewClick;
       Parent := FPicturePanel;
     end;
-    FPaintPanel := TPanel.Create(Self);
+    FPaintPanel := TSilentPaintPanel.Create(Self);
     with FPaintPanel do
     begin
       Name := 'PaintPanel';
@@ -106,30 +120,21 @@ begin
       BevelInner := bvRaised;
       BevelOuter := bvLowered;
       TabOrder := 0;
-      FPaintBox := TPaintBox.Create(Self);
+      FImageCtrl := TImage.Create(Self);
       Parent := FPicturePanel;
-      with FPaintBox do
+      with FImageCtrl do
       begin
         Name := 'PaintBox';
-        SetBounds(0, 0, 153, 141);
         Align := alClient;
         OnDblClick := PreviewClick;
-        OnPaint := PaintBoxPaint;
         Parent := FPaintPanel;
+        Proportional := True;
+        Stretch := True;
+        Center := True;
+        IncrementalDisplay := True;
       end;
     end;
   end;
-end;
-
-destructor TOpenPictureDialog.Destroy;
-begin
-  FPaintBox.Free;
-  FPaintPanel.Free;
-  FPreviewButton.Free;
-  FPictureLabel.Free;
-  FPicturePanel.Free;
-  FPicture.Free;
-  inherited Destroy;
 end;
 
 procedure TOpenPictureDialog.DoSelectionChange;
@@ -144,23 +149,28 @@ var
 
 begin
   FullName := FileName;
-  ValidPicture := FileExists(FullName) and ValidFile(FullName);
-  if ValidPicture then
-  try
-    FPicture.LoadFromFile(FullName);
-    FPictureLabel.Caption := Format(SPictureDesc, [FPicture.Width,
-      FPicture.Height]);
-    FPreviewButton.Enabled := True;
-  except
-    ValidPicture := False;
-  end;
-  if not ValidPicture then
+  if FullName <> FSavedFilename then
   begin
-    FPictureLabel.Caption := SPictureLabel;
-    FPreviewButton.Enabled := False;
-    FPicture.Assign(nil);
+    FSavedFilename := FullName;
+    ValidPicture := FileExists(FullName) and ValidFile(FullName);
+    if ValidPicture then
+    try
+      FImageCtrl.Picture.LoadFromFile(FullName);
+      FPictureLabel.Caption := Format(SPictureDesc,
+        [FImageCtrl.Picture.Width, FImageCtrl.Picture.Height]);
+      FPreviewButton.Enabled := True;
+      FPaintPanel.Caption := '';
+    except
+      ValidPicture := False;
+    end;
+    if not ValidPicture then
+    begin
+      FPictureLabel.Caption := SPictureLabel;
+      FPreviewButton.Enabled := False;
+      FImageCtrl.Picture := nil;
+      FPaintPanel.Caption := srNone;
+    end;
   end;
-  FPaintBox.Invalidate;
   inherited DoSelectionChange;
 end;
 
@@ -183,7 +193,9 @@ begin
   Inc(PreviewRect.Top, 4);
   FPicturePanel.BoundsRect := PreviewRect;
   FPreviewButton.Left := FPaintPanel.BoundsRect.Right - FPreviewButton.Width - 2;
-  FPicture.Assign(nil);
+  FImageCtrl.Picture := nil;
+  FSavedFilename := '';
+  FPaintPanel.Caption := srNone;
   FPicturePanel.ParentWindow := Handle;
   inherited DoShow;
 end;
@@ -196,41 +208,6 @@ begin
   Result := inherited Execute;
 end;
 
-procedure TOpenPictureDialog.PaintBoxPaint(Sender: TObject);
-var
-  DrawRect: TRect;
-  SNone: string;
-begin
-  with TPaintBox(Sender) do
-  begin
-    Canvas.Brush.Color := Color;
-    DrawRect := ClientRect;
-    if FPicture.Width > 0 then
-    begin
-      with DrawRect do
-        if (FPicture.Width > Right - Left) or (FPicture.Height > Bottom - Top) then
-        begin
-          if FPicture.Width > FPicture.Height then
-            Bottom := Top + MulDiv(FPicture.Height, Right - Left, FPicture.Width)
-          else
-            Right := Left + MulDiv(FPicture.Width, Bottom - Top, FPicture.Height);
-          Canvas.StretchDraw(DrawRect, FPicture.Graphic);
-        end
-        else
-          with DrawRect do
-            Canvas.Draw(Left + (Right - Left - FPicture.Width) div 2, Top + (Bottom - Top -
-              FPicture.Height) div 2, FPicture.Graphic);
-    end
-    else
-      with DrawRect, Canvas do
-      begin
-        SNone := srNone;
-        TextOut(Left + (Right - Left - TextWidth(SNone)) div 2, Top + (Bottom -
-          Top - TextHeight(SNone)) div 2, SNone);
-      end;
-  end;
-end;
-
 procedure TOpenPictureDialog.PreviewClick(Sender: TObject);
 var
   PreviewForm: TForm;
@@ -240,6 +217,7 @@ begin
   with PreviewForm do
   try
     Name := 'PreviewForm';
+    Visible := False;
     Caption := SPreviewLabel;
     BorderStyle := bsSizeToolWin;
     KeyPreview := True;
@@ -256,20 +234,24 @@ begin
       BorderWidth := 5;
       Color := clWindow;
       Parent := PreviewForm;
+      DoubleBuffered := True;
       with TImage.Create(PreviewForm) do
       begin
         Name := 'Image';
-        Caption := '';
         Align := alClient;
         Stretch := True;
-        Picture.Assign(FPicture);
+        Proportional := True;
+        Center := True;
+        Picture.Assign(FImageCtrl.Picture);
         Parent := Panel;
       end;
     end;
-    if FPicture.Width > 0 then
+    if FImageCtrl.Picture.Width > 0 then
     begin
-      ClientWidth := FPicture.Width + (ClientWidth - Panel.ClientWidth)+ 10;
-      ClientHeight := FPicture.Height + (ClientHeight - Panel.ClientHeight) + 10;
+      ClientWidth := Min(Monitor.Width * 3 div 4,
+        FImageCtrl.Picture.Width + (ClientWidth - Panel.ClientWidth)+ 10);
+      ClientHeight := Min(Monitor.Height * 3 div 4,
+        FImageCtrl.Picture.Height + (ClientHeight - Panel.ClientHeight) + 10);
     end;
     ShowModal;
   finally

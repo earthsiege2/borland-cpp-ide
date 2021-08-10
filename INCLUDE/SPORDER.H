@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1996-1999  Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -17,7 +17,6 @@ Revision History:
 --*/
 
 #ifndef __SPORDER_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __SPORDER_H__
 
 #if _MSC_VER > 1000
@@ -43,6 +42,15 @@ int
     IN DWORD dwNumberOfEntries
     );
 
+#ifdef _WIN64
+int
+WSPAPI
+WSCWriteProviderOrder32 (
+    IN LPDWORD lpwdCatalogEntryId,
+    IN DWORD dwNumberOfEntries
+    );
+#endif
+
 
 int
 WSPAPI
@@ -58,10 +66,17 @@ int
     IN DWORD dwNumberOfEntries
     );
 
+#ifdef _WIN64
+int
+WSPAPI
+WSCWriteNameSpaceOrder32 (
+    IN LPGUID lpProviderId,
+    IN DWORD dwNumberOfEntries
+    );
+#endif
 
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif      // __SPORDER_H__

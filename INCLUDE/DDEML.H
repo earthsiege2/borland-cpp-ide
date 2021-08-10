@@ -7,11 +7,10 @@
 *                                                                             *
 *               Version 3.10                                                  *
 *                                                                             *
-*               Copyright (c) 1993-1998, Microsoft Corp.  All rights reserved.*
+*               Copyright (c) Microsoft Corporation.  All rights reserved.    *
 *                                                                             *
 \*****************************************************************************/
 #ifndef _INC_DDEMLH
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _INC_DDEMLH
 
 #ifdef __cplusplus
@@ -53,7 +52,7 @@ typedef CONVCONTEXT FAR *PCONVCONTEXT;
 
 typedef struct tagCONVINFO {
     DWORD   cb;            /* sizeof(CONVINFO)  */
-    DWORD   hUser;         /* user specified field  */
+    DWORD_PTR hUser;       /* user specified field  */
     HCONV   hConvPartner;  /* hConv on other end or 0 if non-ddemgr partner  */
     HSZ     hszSvcPartner; /* app name of partner if obtainable  */
     HSZ     hszServiceReq; /* AppName requested for connection  */
@@ -205,7 +204,7 @@ typedef HDDEDATA CALLBACK FNCALLBACK(UINT wType, UINT wFmt, HCONV hConv,
 typedef HDDEDATA (CALLBACK *PFNCALLBACK)(UINT wType, UINT wFmt, HCONV hConv,
         HSZ hsz1, HSZ hsz2, HDDEDATA hData, ULONG_PTR dwData1, ULONG_PTR dwData2);
 
-#define     CBR_BLOCK           ((HDDEDATA)0xffffffffL)
+#define     CBR_BLOCK           ((HDDEDATA)-1)
 
 /* DLL registration functions */
 
@@ -270,7 +269,7 @@ HCONV WINAPI DdeConnect( IN DWORD idInst, IN HSZ hszService, IN HSZ hszTopic,
 BOOL WINAPI DdeDisconnect( IN OUT HCONV hConv);
 HCONV WINAPI DdeReconnect( IN HCONV hConv);
 UINT WINAPI DdeQueryConvInfo( IN HCONV hConv, IN DWORD idTransaction, IN OUT PCONVINFO pConvInfo);
-BOOL WINAPI DdeSetUserHandle( IN HCONV hConv, IN DWORD id, IN DWORD hUser);
+BOOL WINAPI DdeSetUserHandle( IN HCONV hConv, IN DWORD id, IN DWORD_PTR hUser);
 BOOL WINAPI DdeAbandonTransaction( IN DWORD idInst, IN HCONV hConv, IN DWORD idTransaction);
 
 
@@ -490,7 +489,6 @@ typedef struct tagMONCONVSTRUCT {
 }
 #endif  /* __cplusplus */
 
-#pragma option pop /*P_O_Pop*/
 #endif /* _INC_DDEMLH */
 
 

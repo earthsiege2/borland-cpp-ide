@@ -16,7 +16,6 @@
 
 // begin_ntifs
 #ifndef __SSPI_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __SSPI_H__
 // end_ntifs
 
@@ -37,11 +36,6 @@ extern "C" {
 #define ISSP_MODE   1
 #endif // SECURITY_WIN32
 
-#ifdef SECURITY_WIN16
-#define ISSP_LEVEL  16
-#define ISSP_MODE   1
-#endif // SECURITY_WIN16
-
 #ifdef SECURITY_KERNEL
 #define ISSP_LEVEL  32          // ntifs
 
@@ -55,16 +49,6 @@ extern "C" {
 #define ISSP_MODE   0           // ntifs
 #endif // SECURITY_KERNEL
 
-#ifdef SECURITY_OS212
-#define ISSP_LEVEL  16
-#define ISSP_MODE   1
-#endif // SECURITY_OS212
-
-#ifdef SECURITY_DOS
-#define ISSP_LEVEL  16
-#define ISSP_MODE   1
-#endif // SECURITY_DOS
-
 #ifdef SECURITY_MAC
 #define ISSP_LEVEL  32
 #define ISSP_MODE   1
@@ -72,8 +56,8 @@ extern "C" {
 
 
 #ifndef ISSP_LEVEL
-#error  You must define one of SECURITY_WIN32, SECURITY_WIN16, SECURITY_KERNEL
-#error  SECURITY_DOS, SECURITY_MAC or SECURITY_OS212
+#error  You must define one of SECURITY_WIN32, SECURITY_KERNEL, or
+#error  SECURITY_MAC 
 #endif // !ISSP_LEVEL
 
 
@@ -81,57 +65,16 @@ extern "C" {
 // Now, define platform specific mappings:
 //
 
-#if ISSP_LEVEL == 16
-
-typedef short SECURITY_STATUS;
-typedef unsigned short SEC_WCHAR;
-typedef char SEC_CHAR;
-#define SEC_TEXT(_x_) _x_
-
-#ifdef SECURITY_WIN16
-
-#define SEC_FAR __far
-#define SEC_ENTRY __pascal __far __export
-
-#else // SECURITY_WIN16
-
-#define SEC_FAR __far
-#define SEC_ENTRY __pascal __far __loadds
-#if _MSC_VER >= 1200
-#pragma warning(push)
-#endif
-#pragma warning(disable:4147)
-
-#endif // SECURITY_WIN16
-
-#elif defined(SECURITY_MAC)  // ISSP_LEVEL == 16
-
-#define SEC_ENTRY
-#define SEC_TEXT(_X_) _X_
-#define SEC_FAR
-
-typedef unsigned short SEC_WCHAR;
-typedef char SEC_CHAR;
-typedef long SECURITY_STATUS;
-
-// No Unicode on the Mac
-
-typedef SEC_CHAR SEC_FAR * SECURITY_PSTR;
-typedef SEC_CHAR SEC_FAR * SECURITY_PCSTR;
-
-#else // ISSP_LEVEL == 16
-
-//
-// For NT-2 and up, wtypes will define HRESULT to be long.
-//
 
 // begin_ntifs
 
 typedef WCHAR SEC_WCHAR;
 typedef CHAR SEC_CHAR;
 
-
+#ifndef __SECSTATUS_DEFINED__
 typedef LONG SECURITY_STATUS;
+#define __SECSTATUS_DEFINED__
+#endif
 
 #define SEC_TEXT TEXT
 #define SEC_FAR
@@ -153,7 +96,6 @@ typedef CONST SEC_CHAR SEC_FAR * SECURITY_PCSTR;
 #endif // UNICODE
 
 
-#endif // ISSP_LEVEL == 16
 
 //
 // Equivalent string for rpcrt:
@@ -166,20 +108,6 @@ typedef CONST SEC_CHAR SEC_FAR * SECURITY_PCSTR;
 // Okay, security specific types:
 //
 
-
-#if ISSP_LEVEL == 16
-
-typedef struct _SecHandle
-{
-    unsigned long dwLower;
-    unsigned long dwUpper;
-} SecHandle, SEC_FAR * PSecHandle;
-
-#define SecInvalidateHandle( x )    \
-            ((PSecHandle) x)->dwLower = 0xFFFFFFFF ; \
-            ((PSecHandle) x)->dwUpper = 0xFFFFFFFF ;
-
-#else
 
 // begin_ntifs
 
@@ -194,13 +122,12 @@ typedef struct _SecHandle
 #endif // __SECHANDLE_DEFINED__
 
 #define SecInvalidateHandle( x )    \
-            ((PSecHandle) x)->dwLower = (ULONG_PTR) -1 ; \
-            ((PSecHandle) x)->dwUpper = (ULONG_PTR) -1 ;
+            ((PSecHandle) x)->dwLower = ((ULONG_PTR) ((INT_PTR)-1)) ; \
+            ((PSecHandle) x)->dwUpper = ((ULONG_PTR) ((INT_PTR)-1)) ; \
 
-// end_ntifs
-#endif
-
-// begin_ntifs
+#define SecIsValidHandle( x ) \
+            ( ( ((PSecHandle) x)->dwLower != ((ULONG_PTR) ((INT_PTR) -1 ))) && \
+              ( ((PSecHandle) x)->dwUpper != ((ULONG_PTR) ((INT_PTR) -1 ))) )
 
 typedef SecHandle CredHandle;
 typedef PSecHandle PCredHandle;
@@ -209,8 +136,6 @@ typedef SecHandle CtxtHandle;
 typedef PSecHandle PCtxtHandle;
 
 // end_ntifs
-
-#if ISSP_LEVEL == 32
 
 
 #  ifdef WIN32_CHICAGO
@@ -243,15 +168,6 @@ typedef unsigned long TimeStamp;
 typedef unsigned long * PTimeStamp;
 #  endif // SECUIRT_MAC
 
-#else // ISSP_LEVEL == 32
-
-typedef unsigned long TimeStamp;
-typedef unsigned long SEC_FAR * PTimeStamp;
-#  ifdef WIN32_CHICAGO
-typedef TimeStamp LARGE_INTEGER;
-#endif // WIN32_CHICAGO
-
-#endif // ISSP_LEVEL == 32
 
 
 //
@@ -261,7 +177,6 @@ typedef TimeStamp LARGE_INTEGER;
 // for kernel components (e.g. FSPs)
 //
 
-#if ISSP_LEVEL == 32
 #  ifndef _NTDEF_
 typedef struct _SECURITY_STRING {
     unsigned short      Length;
@@ -274,7 +189,6 @@ typedef struct _SECURITY_STRING {
 #  else // _NTDEF_
 typedef UNICODE_STRING SECURITY_STRING, *PSECURITY_STRING;  // ntifs
 #  endif // _NTDEF_
-#endif // ISSP_LEVEL == 32
 
 
 // begin_ntifs
@@ -392,10 +306,15 @@ typedef struct _SecBufferDesc {
 #define SECBUFFER_NEGOTIATION_INFO  8   // Hints from the negotiation pkg
 #define SECBUFFER_PADDING           9   // non-data padding
 #define SECBUFFER_STREAM            10  // whole encrypted message
+#define SECBUFFER_MECHLIST          11  
+#define SECBUFFER_MECHLIST_SIGNATURE 12 
+#define SECBUFFER_TARGET            13
+#define SECBUFFER_CHANNEL_BINDINGS  14
 
 #define SECBUFFER_ATTRMASK          0xF0000000
 #define SECBUFFER_READONLY          0x80000000  // Buffer is read-only
-#define SECBUFFER_RESERVED          0x40000000
+#define SECBUFFER_RESERVED          0x60000000  // Flags reserved to security system
+
 
 typedef struct _SEC_NEGOTIATION_INFO {
     unsigned long       Size;           // Size of this structure
@@ -403,6 +322,18 @@ typedef struct _SEC_NEGOTIATION_INFO {
     SEC_WCHAR SEC_FAR * Name;           // Name hint
     void SEC_FAR *      Reserved;       // Reserved
 } SEC_NEGOTIATION_INFO, SEC_FAR * PSEC_NEGOTIATION_INFO ;
+
+typedef struct _SEC_CHANNEL_BINDINGS {
+    unsigned long  dwInitiatorAddrType;
+    unsigned long  cbInitiatorLength;
+    unsigned long  dwInitiatorOffset;
+    unsigned long  dwAcceptorAddrType;
+    unsigned long  cbAcceptorLength;
+    unsigned long  dwAcceptorOffset;
+    unsigned long  cbApplicationDataLength;
+    unsigned long  dwApplicationDataOffset;
+} SEC_CHANNEL_BINDINGS, SEC_FAR * PSEC_CHANNEL_BINDINGS ;
+
 
 //
 //  Data Representation Constant:
@@ -560,6 +491,10 @@ typedef struct _SecPkgCredentials_NamesA
 #define SECPKG_ATTR_NEGOTIATION_INFO 12
 #define SECPKG_ATTR_NATIVE_NAMES    13
 #define SECPKG_ATTR_FLAGS           14
+#define SECPKG_ATTR_USE_VALIDATED   15
+#define SECPKG_ATTR_CREDENTIAL_NAME 16
+#define SECPKG_ATTR_TARGET_INFORMATION 17
+#define SECPKG_ATTR_ACCESS_TOKEN 18
 
 typedef struct _SecPkgContext_Sizes
 {
@@ -740,17 +675,21 @@ typedef struct _SecPkgContext_Flags
 #define PSecPkgContext_PackageInfo  PSecPkgContext_PackageInfoA
 #endif
 
+
 typedef struct _SecPkgContext_NegotiationInfoA
 {
     PSecPkgInfoA    PackageInfo ;
     unsigned long   NegotiationState ;
 } SecPkgContext_NegotiationInfoA, SEC_FAR * PSecPkgContext_NegotiationInfoA ;
 
+// begin_ntifs
 typedef struct _SecPkgContext_NegotiationInfoW
 {
     PSecPkgInfoW    PackageInfo ;
     unsigned long   NegotiationState ;
 } SecPkgContext_NegotiationInfoW, SEC_FAR * PSecPkgContext_NegotiationInfoW ;
+
+// end_ntifs
 
 #ifdef UNICODE
 #define SecPkgContext_NegotiationInfo   SecPkgContext_NegotiationInfoW
@@ -786,6 +725,41 @@ typedef struct _SecPkgContext_NativeNamesA
 #  define SecPkgContext_NativeNames SecPkgContext_NativeNamesA
 #  define PSecPkgContext_NativeNames PSecPkgContext_NativeNamesA
 #endif // !UNICODE
+
+// begin_ntifs
+typedef struct _SecPkgContext_CredentialNameW
+{
+    unsigned long CredentialType;
+    SEC_WCHAR SEC_FAR *sCredentialName;
+} SecPkgContext_CredentialNameW, SEC_FAR * PSecPkgContext_CredentialNameW;
+
+// end_ntifs
+
+typedef struct _SecPkgContext_CredentialNameA
+{
+    unsigned long CredentialType;
+    SEC_CHAR SEC_FAR *sCredentialName;
+} SecPkgContext_CredentialNameA, SEC_FAR * PSecPkgContext_CredentialNameA;
+
+#ifdef UNICODE
+#  define SecPkgContext_CredentialName SecPkgContext_CredentialNameW          // ntifs
+#  define PSecPkgContext_CredentialName PSecPkgContext_CredentialNameW        // ntifs
+#else
+#  define SecPkgContext_CredentialName SecPkgContext_CredentialNameA
+#  define PSecPkgContext_CredentialName PSecPkgContext_CredentialNameA
+#endif // !UNICODE
+
+typedef struct _SecPkgContext_AccessToken
+{
+    void SEC_FAR * AccessToken;
+} SecPkgContext_AccessToken, SEC_FAR * PSecPkgContext_AccessToken;
+
+typedef struct _SecPkgContext_TargetInformation
+{
+    unsigned long MarshalledTargetInfoLength;
+    unsigned char SEC_FAR * MarshalledTargetInfo;
+
+} SecPkgContext_TargetInformation, SEC_FAR * PSecPkgContext_TargetInformation;
 
 
 // begin_ntifs
@@ -1217,6 +1191,47 @@ typedef SECURITY_STATUS
 #endif // !UNICODE
 
 // begin_ntifs
+SECURITY_STATUS SEC_ENTRY
+SetContextAttributesW(
+    PCtxtHandle phContext,              // Context to Set
+    unsigned long ulAttribute,          // Attribute to Set
+    void SEC_FAR * pBuffer,             // Buffer for attributes
+    unsigned long cbBuffer              // Size (in bytes) of Buffer
+    );
+
+typedef SECURITY_STATUS
+(SEC_ENTRY * SET_CONTEXT_ATTRIBUTES_FN_W)(
+    PCtxtHandle,
+    unsigned long,
+    void SEC_FAR *,
+    unsigned long );
+
+// end_ntifs
+
+SECURITY_STATUS SEC_ENTRY
+SetContextAttributesA(
+    PCtxtHandle phContext,              // Context to Set
+    unsigned long ulAttribute,          // Attribute to Set
+    void SEC_FAR * pBuffer,             // Buffer for attributes
+    unsigned long cbBuffer              // Size (in bytes) of Buffer
+    );
+
+typedef SECURITY_STATUS
+(SEC_ENTRY * SET_CONTEXT_ATTRIBUTES_FN_A)(
+    PCtxtHandle,
+    unsigned long,
+    void SEC_FAR *,
+    unsigned long );
+
+#ifdef UNICODE
+#  define SetContextAttributes SetContextAttributesW            // ntifs
+#  define SET_CONTEXT_ATTRIBUTES_FN SET_CONTEXT_ATTRIBUTES_FN_W // ntifs
+#else
+#  define SetContextAttributes SetContextAttributesA
+#  define SET_CONTEXT_ATTRIBUTES_FN SET_CONTEXT_ATTRIBUTES_FN_A
+#endif // !UNICODE
+
+// begin_ntifs
 
 SECURITY_STATUS SEC_ENTRY
 QueryCredentialsAttributesW(
@@ -1416,28 +1431,6 @@ typedef SECURITY_STATUS
 #endif // !UNICODE
 
 
-#if ISSP_MODE == 0
-
-#define DeleteSecurityContextDefer  DeleteSecurityContext
-#define FreeCredentialsHandleDefer  FreeCredentialsHandle
-
-#if 0
-//
-// Deferred mode calls for rdr
-//
-
-SECURITY_STATUS SEC_ENTRY
-DeleteSecurityContextDefer(
-    PCtxtHandle     phContext);
-
-SECURITY_STATUS SEC_ENTRY
-FreeCredentialsHandleDefer(
-    PCredHandle     phCreds);
-
-#endif
-
-#endif
-
 typedef enum _SecDelegationType {
     SecFull,
     SecService,
@@ -1561,6 +1554,43 @@ SecMakeSPN(
     OUT PULONG Length OPTIONAL,
     IN BOOLEAN Allocate
     );
+    
+NTSTATUS
+NTAPI
+SecMakeSPNEx(
+    IN PUNICODE_STRING ServiceClass,
+    IN PUNICODE_STRING ServiceName,
+    IN PUNICODE_STRING InstanceName OPTIONAL,
+    IN USHORT InstancePort OPTIONAL,
+    IN PUNICODE_STRING Referrer OPTIONAL,
+    IN PUNICODE_STRING TargetInfo OPTIONAL,
+    IN OUT PUNICODE_STRING Spn,
+    OUT PULONG Length OPTIONAL,
+    IN BOOLEAN Allocate
+    );
+
+NTSTATUS
+SEC_ENTRY
+SecLookupAccountSid(
+    IN PSID Sid,
+    IN OUT PULONG NameSize,
+    OUT PUNICODE_STRING NameBuffer,
+    IN OUT PULONG DomainSize OPTIONAL,
+    OUT PUNICODE_STRING DomainBuffer OPTIONAL,
+    OUT PSID_NAME_USE NameUse
+    );
+
+NTSTATUS
+SEC_ENTRY
+SecLookupAccountName(
+    IN PUNICODE_STRING Name,
+    IN OUT PULONG SidSize,
+    OUT PSID Sid,
+    OUT PSID_NAME_USE NameUse,
+    IN OUT PULONG DomainSize OPTIONAL,
+    OUT PUNICODE_STRING ReferencedDomain OPTIONAL
+    );
+
 #endif
 
 // end_ntifs
@@ -1626,6 +1656,7 @@ typedef struct _SECURITY_FUNCTION_TABLE_W {
     QUERY_SECURITY_CONTEXT_TOKEN_FN     QuerySecurityContextToken;
     ENCRYPT_MESSAGE_FN                  EncryptMessage;
     DECRYPT_MESSAGE_FN                  DecryptMessage;
+    SET_CONTEXT_ATTRIBUTES_FN_W         SetContextAttributesW;
 } SecurityFunctionTableW, SEC_FAR * PSecurityFunctionTableW;
 
 // end_ntifs
@@ -1662,6 +1693,7 @@ typedef struct _SECURITY_FUNCTION_TABLE_A {
     QUERY_SECURITY_CONTEXT_TOKEN_FN     QuerySecurityContextToken;
     ENCRYPT_MESSAGE_FN                  EncryptMessage;
     DECRYPT_MESSAGE_FN                  DecryptMessage;
+    SET_CONTEXT_ATTRIBUTES_FN_A         SetContextAttributesA;
 } SecurityFunctionTableA, SEC_FAR * PSecurityFunctionTableA;
 
 #ifdef UNICODE
@@ -1674,7 +1706,11 @@ typedef struct _SECURITY_FUNCTION_TABLE_A {
 
 #define SECURITY_
 
+// Function table has all routines through DecryptMessage
 #define SECURITY_SUPPORT_PROVIDER_INTERFACE_VERSION     1   // ntifs
+
+// Function table has all routines through SetContextAttributes
+#define SECURITY_SUPPORT_PROVIDER_INTERFACE_VERSION_2   2   // ntifs
 
 
 PSecurityFunctionTableA SEC_ENTRY
@@ -1831,6 +1867,30 @@ SaslAcceptSecurityContext(
     );
 
 
+#define SASL_OPTION_SEND_SIZE       1
+#define SASL_OPTION_RECV_SIZE       2
+#define SASL_OPTION_AUTHZ_STRING    3
+
+SECURITY_STATUS
+SEC_ENTRY
+SaslSetContextOption(
+    PCtxtHandle ContextHandle,
+    ULONG Option,
+    PVOID Value,
+    ULONG Size
+    );
+    
+
+SECURITY_STATUS
+SEC_ENTRY
+SaslGetContextOption(
+    PCtxtHandle ContextHandle,
+    ULONG Option,
+    PVOID Value,
+    ULONG Size,
+    PULONG Needed OPTIONAL
+    );
+
 #endif
 
 #ifdef SECURITY_DOS
@@ -1841,11 +1901,171 @@ SaslAcceptSecurityContext(
 #endif
 #endif
 
+//
+// This is the legacy credentials structure.  
+// The EX version below is preferred.
+
+// begin_ntifs
+#ifndef _AUTH_IDENTITY_DEFINED
+#define _AUTH_IDENTITY_DEFINED
+
+#define SEC_WINNT_AUTH_IDENTITY_ANSI    0x1
+#define SEC_WINNT_AUTH_IDENTITY_UNICODE 0x2
+
+typedef struct _SEC_WINNT_AUTH_IDENTITY_W {
+  unsigned short *User;
+  unsigned long UserLength;
+  unsigned short *Domain;
+  unsigned long DomainLength;
+  unsigned short *Password;
+  unsigned long PasswordLength;
+  unsigned long Flags;
+} SEC_WINNT_AUTH_IDENTITY_W, *PSEC_WINNT_AUTH_IDENTITY_W;
+
+// end_ntifs
+
+typedef struct _SEC_WINNT_AUTH_IDENTITY_A {
+  unsigned char *User;
+  unsigned long UserLength;
+  unsigned char *Domain;
+  unsigned long DomainLength;
+  unsigned char *Password;
+  unsigned long PasswordLength;
+  unsigned long Flags;
+} SEC_WINNT_AUTH_IDENTITY_A, *PSEC_WINNT_AUTH_IDENTITY_A;
+
+
+#ifdef UNICODE
+#define SEC_WINNT_AUTH_IDENTITY SEC_WINNT_AUTH_IDENTITY_W       // ntifs
+#define PSEC_WINNT_AUTH_IDENTITY PSEC_WINNT_AUTH_IDENTITY_W     // ntifs
+#define _SEC_WINNT_AUTH_IDENTITY _SEC_WINNT_AUTH_IDENTITY_W     // ntifs
+#else // UNICODE
+#define SEC_WINNT_AUTH_IDENTITY SEC_WINNT_AUTH_IDENTITY_A
+#define PSEC_WINNT_AUTH_IDENTITY PSEC_WINNT_AUTH_IDENTITY_A
+#define _SEC_WINNT_AUTH_IDENTITY _SEC_WINNT_AUTH_IDENTITY_A
+#endif // UNICODE
+                                                               
+#endif //_AUTH_IDENTITY_DEFINED                                 // ntifs
+
+// begin_ntifs
+//
+// This is the combined authentication identity structure that may be
+// used with the negotiate package, NTLM, Kerberos, or SCHANNEL
+//
+
+
+#ifndef SEC_WINNT_AUTH_IDENTITY_VERSION
+#define SEC_WINNT_AUTH_IDENTITY_VERSION 0x200
+
+typedef struct _SEC_WINNT_AUTH_IDENTITY_EXW {
+    unsigned long Version;
+    unsigned long Length;
+    unsigned short SEC_FAR *User;
+    unsigned long UserLength;
+    unsigned short SEC_FAR *Domain;
+    unsigned long DomainLength;
+    unsigned short SEC_FAR *Password;
+    unsigned long PasswordLength;
+    unsigned long Flags;
+    unsigned short SEC_FAR * PackageList;
+    unsigned long PackageListLength;
+} SEC_WINNT_AUTH_IDENTITY_EXW, *PSEC_WINNT_AUTH_IDENTITY_EXW;
+
+// end_ntifs
+
+typedef struct _SEC_WINNT_AUTH_IDENTITY_EXA {
+    unsigned long Version;
+    unsigned long Length;
+    unsigned char SEC_FAR *User;
+    unsigned long UserLength;
+    unsigned char SEC_FAR *Domain;
+    unsigned long DomainLength;
+    unsigned char SEC_FAR *Password;
+    unsigned long PasswordLength;
+    unsigned long Flags;
+    unsigned char SEC_FAR * PackageList;
+    unsigned long PackageListLength;
+} SEC_WINNT_AUTH_IDENTITY_EXA, *PSEC_WINNT_AUTH_IDENTITY_EXA;
+
+#ifdef UNICODE
+#define SEC_WINNT_AUTH_IDENTITY_EX  SEC_WINNT_AUTH_IDENTITY_EXW    // ntifs
+#define PSEC_WINNT_AUTH_IDENTITY_EX PSEC_WINNT_AUTH_IDENTITY_EXW   // ntifs
+#else 
+#define SEC_WINNT_AUTH_IDENTITY_EX  SEC_WINNT_AUTH_IDENTITY_EXA
+#endif 
+
+// begin_ntifs
+#endif // SEC_WINNT_AUTH_IDENTITY_VERSION       
+
+
+//
+// Common types used by negotiable security packages
+//
+
+#define SEC_WINNT_AUTH_IDENTITY_MARSHALLED      0x4     // all data is in one buffer
+#define SEC_WINNT_AUTH_IDENTITY_ONLY            0x8     // these credentials are for identity only - no PAC needed
+
+// end_ntifs
+
+//
+// Routines for manipulating packages
+//
+
+typedef struct _SECURITY_PACKAGE_OPTIONS {
+    unsigned long   Size;
+    unsigned long   Type;
+    unsigned long   Flags;
+    unsigned long   SignatureSize;
+    void SEC_FAR *  Signature;
+} SECURITY_PACKAGE_OPTIONS, SEC_FAR * PSECURITY_PACKAGE_OPTIONS;
+
+#define SECPKG_OPTIONS_TYPE_UNKNOWN 0
+#define SECPKG_OPTIONS_TYPE_LSA     1
+#define SECPKG_OPTIONS_TYPE_SSPI    2
+
+#define SECPKG_OPTIONS_PERMANENT    0x00000001
+
+SECURITY_STATUS
+SEC_ENTRY
+AddSecurityPackageA(
+    SEC_CHAR SEC_FAR *  pszPackageName,
+    SECURITY_PACKAGE_OPTIONS SEC_FAR * Options
+    );
+
+SECURITY_STATUS
+SEC_ENTRY
+AddSecurityPackageW(
+    SEC_WCHAR SEC_FAR * pszPackageName,
+    SECURITY_PACKAGE_OPTIONS SEC_FAR * Options
+    );
+
+#ifdef UNICODE
+#define AddSecurityPackage  AddSecurityPackageW
+#else
+#define AddSecurityPackage  AddSecurityPackageA
+#endif
+
+SECURITY_STATUS
+SEC_ENTRY
+DeleteSecurityPackageA(
+    SEC_CHAR SEC_FAR *  pszPackageName );
+
+SECURITY_STATUS
+SEC_ENTRY
+DeleteSecurityPackageW(
+    SEC_WCHAR SEC_FAR * pszPackageName );
+
+#ifdef UNICODE
+#define DeleteSecurityPackage   DeleteSecurityPackageW
+#else
+#define DeleteSecurityPackage   DeleteSecurityPackageA
+#endif
+
+
 #ifdef __cplusplus
 }  // extern "C"
 #endif
 
 // begin_ntifs
-#pragma option pop /*P_O_Pop*/
 #endif // __SSPI_H__
 // end_ntifs

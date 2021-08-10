@@ -1,6 +1,6 @@
 //----------------------------------------------------------------------------
 //Borland C++Builder
-//Copyright (c) 1987, 1998 Borland International Inc. All Rights Reserved.
+//Copyright (c) 1987, 1998-2002 Borland International Inc. All Rights Reserved.
 //----------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 #include <vcl.h>
@@ -9,6 +9,7 @@
 #include "GridForm.h"
 #include "RecForm.h"
 //---------------------------------------------------------------------------
+#pragma link "gdsdata"
 #pragma resource "*.dfm"
 TGridViewForm *GridViewForm;
 //---------------------------------------------------------------------------

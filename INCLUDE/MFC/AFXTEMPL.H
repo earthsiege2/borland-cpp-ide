@@ -794,7 +794,12 @@ CList<TYPE, ARG_TYPE>::NewNode(CList::CNode* pPrev, CList::CNode* pNext)
 	}
 	ASSERT(m_pNodeFree != NULL);  // we must have something
 
+#ifndef __BORLANDC__
 	CList::CNode* pNode = m_pNodeFree;
+#else
+	CList<TYPE, ARG_TYPE>::CNode* pNode = m_pNodeFree;
+#endif
+
 	m_pNodeFree = m_pNodeFree->pNext;
 	pNode->pPrev = pPrev;
 	pNode->pNext = pNext;

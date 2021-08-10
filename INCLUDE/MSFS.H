@@ -1,12 +1,11 @@
 #if !defined( _MSFS_H )
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _MSFS_H
 
 /*
  *  M S F S . H
  *
  *
- *  Copyright (C) Microsoft Corp. 1986-1996.  All Rights Reserved.
+ *  Copyright (C) Microsoft Corp. 1986-1999.  All Rights Reserved.
  *
  *
  *  Definitions used by the the Microsoft Mail transport, address book
@@ -377,5 +376,4 @@ typedef struct SchedSess {
                                   0x08,0x00,0x2b,0x2b,0x8a,0x29,0x00,0x00 }
                                                                             
 
-#pragma option pop /*P_O_Pop*/
 #endif // _MSFS_H

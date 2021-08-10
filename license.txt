@@ -1,0 +1,379 @@
+BORLAND SOFTWARE CORPORATION
+LICENSE TERMS
+
+C++ BUILDER 6 ENTERPRISE
+
+NOTICE: THIS BORLAND SOFTWARE PRODUCT (TOGETHER WITH ITS 
+ACCOMPANYING DOCUMENTATION, THE "PRODUCT") IS THE PROPERTY OF 
+BORLAND SOFTWARE CORPORATION ("BORLAND").  THE PRODUCT IS MADE 
+AVAILABLE TO YOU, THE ORIGINAL PURCHASER, SUBJECT TO THE FOLLOWING 
+LICENSE AGREEMENT  ("LICENSE").  PLEASE READ THIS LICENSE CAREFULLY 
+BEFORE INSTALLING OR USING THE PRODUCT.  A COPY OF THIS LICENSE IS 
+AVAILABLE FOR YOUR FUTURE REFERENCE IN THE "LICENSE.TXT" FILE PROVIDED 
+WITH THE PRODUCT.
+
+YOU MAY ACCEPT THIS LICENSE BY PLACING A CHECK IN THE "I ACCEPT THE 
+TERMS IN THE LICENSE AGREEMENT" BOX BELOW.  YOU MAY REJECT THIS LICENSE, 
+AND TERMINATE THIS INSTALLATION PROCESS, BY CLICKING THE "CANCEL" 
+BUTTON BELOW.  IF YOU DO NOT ACCEPT THIS LICENSE, THEN YOU MAY NOT 
+INSTALL OR USE THE PRODUCT.  IN THAT CASE, YOU MAY, WITHIN TEN (10) DAYS 
+AFTER YOU FIRST RECEIVED THE PRODUCT, RETURN IT TO BORLAND OR YOUR 
+BORLAND AUTHORIZED RESELLER, ALONG WITH ITS ORIGINAL PACKAGING AND 
+PROOF-OF-PURCHASE, FOR A FULL REFUND.  ANY USE BY YOU OF THIS PRODUCT ALSO 
+CONSTITUTES YOUR ACCEPTANCE OF THESE TERMS.
+
+Borland is only willing to grant you this License if you obtained the Product from Borland or a Borland 
+authorized reseller. If you obtained the Product from any other source you may not install or use the 
+Product.
+
+1.  OWNERSHIP.  The Product is proprietary to Borland.  The Product is licensed, not sold, to you 
+notwithstanding any reference herein to "purchases."  You acknowledge and agree that:  (a) the Product is 
+protected under U.S. copyright and other laws; (b) Borland and its licensors retain all copyrights and other 
+intellectual property rights in the Product; (c) there are no implied licenses under this License, and any 
+rights not expressly granted to you hereunder are reserved by Borland; (d) you acquire no ownership or 
+other interest (other than your license rights) in or to the Product; and (e) Borland owns all copies of the 
+Product, however made.  You agree that you will not, at any time, contest anywhere in the world Borland's 
+ownership of the Product, nor will you challenge the validity of Borland's rights in the Product.  You have 
+no rights hereunder to use any trademark or service mark belonging to Borland.
+
+2.  GRANT OF LICENSE AND SCOPE OF USE.
+
+2.1  Grant of License.  Subject to the terms and conditions of this License, Borland grants to you, if you 
+are an individual, or, if you are an entity, one (1) designated person in your organization ("Named User") a 
+personal, nonexclusive, nontransferable and limited license to use the Product solely to create, compile 
+(including byte code compile), test and deploy, in source or object code form, your own application 
+programs and other works ("Works").  Subject to the other terms and conditions of this License, you may 
+distribute your Works to others for production use. You may also make a reasonable number of copies of 
+the Product to backup devices such as harddisks, optical media, or tape and one (1) physical CD media 
+backup copy of the Product solely to replace the original copy provided to you if the original copy is 
+damaged or destroyed. All rights not specifically granted to you herein are retained by Borland.
+
+2.2  Multiple Licensed Copies.  You may purchase from Borland or its authorized reseller additional 
+licenses to permit multiple Named Users to use the Product (each, a "Named User License").  Such rights 
+will be effective only when granted in writing by Borland or its authorized reseller and are conditioned 
+upon your payment of the applicable fees.  If you purchase additional Named User Licenses for the Product 
+then you are granted for each Named User License the personal, nonexclusive, nontransferable and limited 
+license to designate one individual in your organization as the Named User and permit such Named User to 
+install and use the Product solely as permitted under Section 2.1.  In such case, the Product may be used 
+exclusively by the specifically designated Named Users, subject to all the terms and conditions of this 
+License. You agree that you will not designate more Named Users than the number of Named User Licenses 
+that Borland or its authorized reseller has expressly granted to you and you will not allow the Product to be 
+used by any individuals other than the Named Users designated by you from time to time.  You agree to 
+maintain accurate records of the Named User designated by you to use the Product under each Named User 
+License you hold.
+
+3.  GENERAL TERMS THAT APPLY TO COMPILED PROGRAMS AND REDISTRIBUTABLES.
+
+3.1  Redistributables.  The Product may include certain files, libraries and/or source code specifically 
+designated as "redistributables" by Borland in the accompanying printed or on-line documentation and that 
+are necessary to use Works created using the Product ("Redistributables").  From time to time, Borland may 
+designate other files as Redistributables.  You should refer to the documentation, including any "readme" or 
+"deploy" files provided with the Product, for additional information regarding Redistributables. Subject to 
+the terms and conditions of this License, you may freely redistribute source code or compiled code that is 
+entirely your own and does not contain any Redistributables. 
+
+3.2  Licensing of Redistributables.  Subject to the terms and conditions of this License including the 
+restrictions of Section 3.3, Borland grants you the personal, non-exclusive, non-transferable and limited 
+license to: (a) make exact copies of the Redistributables and distribute those copies solely as components of 
+your Works and solely as required for permitting end users of the Works ("End Users") to install and 
+execute the Works; (b) install and execute Redistributables, without modification, on computers that you 
+own or possess solely for your own internal use; and (c) sublicense to your End Users the personal, non-
+exclusive, non-transferable right to install and execute Redistributables, without modification, solely as 
+components of Works and solely for such End Users' own internal use, subject to End Users' compliance 
+with the restrictions in Section 5 as to Redistributables.  The rights granted to you under this Section 3.2 
+may not be exercised by others, including co-developers, regardless of how you might compile, link, or 
+package your Works.  These rights apply only to Redistributables and to no other file, library, source code 
+or other component or derivative work of the Product.  They may be exercised only with respect to Works 
+created by you using a duly licensed, properly registered copy of the Product.
+
+3.3  Certain Restrictions.  Regardless of any modifications that you make and regardless of how you might 
+compile, link, or package your Works:  (a) you may not permit your End Users to modify or further 
+distribute Redistributables or use Redistributables in any program that they create; (b) you may not use 
+Borland's or any of its suppliers' names, logos, or trademarks to market your Works, except to state 
+descriptively that your Work was written using the Product; (c) all copies of the Works you create must bear 
+a valid copyright notice, either your own or the Borland copyright notice that appears on the Product, and 
+you may not remove or alter any Borland copyright, trademark or other proprietary rights notice contained 
+in any portion of the Redistributables; and (d) you may only distribute Redistributables with Works that add 
+primary and substantial functionality to the Redistributables and are not merely a set or subset of any of the 
+Redistributables, and that are created in accordance with the terms of this License.
+
+3.4  Relationship with End Users.  Except as set forth in Section 4, there are no third party beneficiaries to 
+this License.  Consequently, Borland provides no warranty at all to any person, other than the limited 
+warranty provided to you the original purchaser of the Product, as set forth herein, and you will be solely 
+responsible to your End Users (or anyone else who uses or acquires Works) for support, service, upgrades, 
+or technical or other assistance (including with respect to any Redistributables included therein), and such 
+persons will have no right to contact Borland for any services or assistance.  You will indemnify, defend 
+and hold Borland, its licensors, its suppliers and each of their respective employees, officers, directors and 
+affiliates, harmless from and against any claims or liabilities arising out of or related to the use, 
+procurement, reproduction or distribution of your Works by third parties.
+
+3.5  Third Party Software.  The Product, including Redistributables, may include source code, 
+redistributable files, and/or other files provided by a third party vendor ("Third Party Product").  Since use 
+of Third Party Product might be subject to license restrictions imposed by the third party vendor, you 
+should refer to the on-line documentation (if any) provided with Third Party Product for any license 
+restrictions imposed by the third party vendor.  In any event, any license restrictions imposed by a third 
+party vendor are in addition to, not in lieu of, the terms and conditions of this License.
+
+3.6  Other Rights.  Contact Borland for the applicable royalties due and other licensing terms for all other 
+uses or distribution of the Redistributables.
+
+4.  SPECIAL TERMS.
+The following terms and conditions ("Special Terms") are specific to certain editions, versions and 
+components of the Product and are in addition to the provisions of Sections 2 and 3.  If any provision of the 
+Special Terms applicable to the Product conflicts with any other provision of this License, then the 
+provision of the Special Terms will supercede and control.
+
+4.1  SPECIAL TERMS THAT APPLY TO C++ BUILDER 6 ENTERPRISE AND C++ BUILDER 6 
+PROFESSIONAL ONLY
+
+ADDITIONAL LICENSE TERMS FOR INTERBASE 
+The portion of the Product identified as InterBase is not a Redistributable and is licensed for development 
+purposes only.  This License does not permit you to use the InterBase portion of this Product for any 
+commercial, business, governmental institutional or other purpose of any kind, other than development and 
+testing of Works.  You must purchase a separate InterBase deployment license from Borland before 
+deploying or distributing any Work that uses InterBase.
+
+4.2  SPECIAL TERMS THAT APPLY TO C++ BUILDER 6 ENTERPRISE
+
+ADDITIONAL LICENSE TERMS FOR ACCOMPANYING PRODUCTS - BORLAND ENTERPRISE 
+SERVER AND COMPONENTS
+The Product may be accompanied by other Borland products ("Accompanying Products"), including 
+BORLAND ENTERPRISE SERVER and its component parts (including but not limited to Visibroker, 
+AppServer and Borland Enterprise Server Web Edition). These Accompanying Products do not constitute a 
+part of the Product. These Accompanying Products are subject to separate license terms which are on the 
+media containing the Accompanying Products and which may be viewed and accepted at the time the 
+Accompanying Products are installed.  You have no rights under this License to use any software other than 
+the Products, and your use of the Accompanying Products may require you to purchase separate licenses 
+and obtain separate License Key Certificates.
+
+ADDITIONAL LICENSE TERMS RELATING TO THE TRANSLATION MANAGER
+The portion of the Product identified as the "Translation Manager" may accompany copies of your Works 
+that are provided to a third party for the sole purpose of localization of such Works (e.g. the translation of a 
+Work, for example, from the English language to the German language). The third party may receive and 
+may only use, subject to the terms and conditions of this License, five copies of the Translation Manager for 
+each Licensed Copy. You agree that you shall be liable for any violation of this License by such third party.
+
+4.3  ADDITIONAL LICENSE TERMS APPLICABLE TO EVALUATION SOFTWARE
+
+You may not use the Product for any commercial, business, governmental or institutional purpose of any 
+kind. At the end of the Evaluation Period, further use of the Product by you is prohibited without the 
+purchase of a commercial license.  If you do not purchase a license for the Product at the end of the 
+Evaluation Period, you hereby agree to permanently remove or delete the Product from all computer 
+systems on which it was installed and destroy any software and documentation received, and not to reinstall 
+a new copy of the Product. If you desire to continue to use the Product following the Evaluation Period, you 
+should contact Borland or a Borland authorized reseller to order commercial licenses to use the Product.
+
+4.4  ADDITIONAL LICENSE TERMS APPLICABLE TO SOFTWARE LICENSED FOR 
+EDUCATIONAL USE
+
+Subject to the terms and conditions of this License, you may exercise your rights under this license to use 
+the Product and to create Works solely for your own personal use in providing or receiving instruction 
+within the limited scope of guided computer programming and/or software training courses in which you are 
+a direct and personal participant, either as student or instructor ("Courses"). You may only reproduce, 
+distribute and use Works, in source or object code form, to other participants of the Courses and then only 
+for educational or training purposes. You may not use the Products or Works created with the products for 
+any commercial, business, governmental or institutional purpose of any kind, except to the extent you are an 
+instructor teaching a Course. All rights not specifically granted to you herein are retained by Borland.
+
+4.5  ADDITIONAL LICENSE TERMS APPLICABLE TO THIRD PARTY SOFTWARE
+
+Certain components of the Product use or incorporate third-party software programs and/or libraries 
+("Third-Party Software") which are loaded (in both object and source code form) on the Product media.  
+You agree that Borland's third-party licensors and suppliers are intended third party beneficiaries of all 
+terms and conditions of this License intended to protect intellectual property rights in the Product (including 
+the Third-Party Software) and limit certain uses thereof.
+
+4.6  ADDITIONAL LICENSE TERMS APPLICABLE TO UPGRADES
+
+If you have purchased an upgrade version of the Product, it constitutes a single product with the copy of the 
+Product that you upgraded.  This means that, although you may have two sets of Product media, you still 
+have only one license.  Therefore, you may not transfer the original copy of the Product to any other party.
+
+5.  LIMITATIONS.  You may not:  (a) modify, adapt, alter, translate, or create derivative works of the 
+Product or merge the Product with other software other than as described in the Product's accompanying 
+documentation or as approved of in writing by Borland; (b) lease, rent or loan the Product to any third 
+party; (c) sublicense, distribute or otherwise transfer the Product or any component thereof to any third 
+party except as expressly authorized under Section 3; (d) reverse engineer, decompile, disassemble, or 
+otherwise attempt to derive the source code of the Product; (e) remove, alter, or obscure any confidentiality 
+or proprietary notices (including copyright and trademark notices) of Borland or its suppliers on the 
+Product; (f) allow third parties to access or use the Product such as in a time-sharing arrangement or operate 
+the Product as part of a service bureau or, except as expressly authorized under Sections 2, 3 or 4, otherwise 
+for the use or benefit of third parties; (g) reproduce or use the Product except as expressly authorized under 
+Sections 2, 3 or 4; or (h) disclose or publish performance benchmark results for the Product.  The rights 
+granted under this License apply only to this Product.  You must procure a separate license to use other 
+Borland software.  Furthermore, you may not permit your End Users to conduct the restricted activities 
+limited by items (a) through (e), (g) and (h) above insofar as they apply to Redistributables, and such End 
+User's sublicense rights to the Redistributables are conditioned upon compliance with such limitations.  The 
+limitations in this Section 5 apply equally to your use of the Product, in whole or in part, including any 
+component or Redistributable.
+
+6.  LIMITED WARRANTY AND DISCLAIMER.  Borland warrants to you, the original purchaser and 
+to no other party, that any physical media included with the Product, as and when provided to you, will be 
+free of physical defects in materials and workmanship for a period of ninety (90) days after the date that you 
+initially acquire the Product.  Your exclusive remedy and Borland's sole liability for breach of this warranty 
+is that Borland will replace any defective media returned to Borland within the ninety (90) day warranty 
+period.  This warranty does not apply to damages resulting from misuse, abuse or neglect.  Any replacement 
+media will be warranted as above for the remainder of the original warranty period or twenty (20) days from 
+the date we ship it to you, whichever is longer.  EXCEPT FOR THIS EXPRESS LIMITED 
+WARRANTY, THE PRODUCT IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY 
+KIND.  BORLAND HEREBY EXCLUDES AND DISCLAIMS ALL IMPLIED OR STATUTORY 
+WARRANTIES, INCLUDING ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+PARTICULAR PURPOSE, QUALITY, NON-INFRINGEMENT, TITLE, RESULTS, EFFORTS OR 
+QUIET ENJOYMENT.  THERE IS NO WARRANTY THAT THE PRODUCT WILL BE ERROR-
+FREE OR WILL FUNCTION WITHOUT INTERRUPTION.  YOU ASSUME THE ENTIRE RISK 
+FOR THE RESULTS OBTAINED USING THE PRODUCT.  TO THE EXTENT THAT BORLAND 
+MAY NOT DISCLAIM ANY WARRANTY AS A MATTER OF APPLICABLE LAW, THE SCOPE 
+AND DURATION OF SUCH WARRANTY WILL BE THE MINIMUM PERMITTED UNDER 
+SUCH LAW. 
+
+SOME STATES DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES, SO THE 
+ABOVE EXCLUSION MAY NOT APPLY TO YOU.  THIS LIMITED WARRANTY GIVES YOU 
+SPECIFIC LEGAL RIGHTS, AND YOU MAY ALSO HAVE OTHER LEGAL RIGHTS, WHICH 
+VARY FROM STATE TO STATE.
+
+7.  SERVICES; UPDATES; PRODUCT CHANGES.  Borland is not required under this License to 
+provide any installation, training or other services to you.  Such services, if available, must be purchased 
+separately.  If, pursuant to a separate support agreement or otherwise, Borland provides you with a new 
+release, error correction, update, upgrade or other modification to the Product, such modification will be 
+deemed part of the Product, and subject to the terms of this License, unless the modification is expressly 
+provided subject to a separate license agreement. Borland reserves the right at any time not to release or to 
+discontinue release of any Product and to alter prices, features, specifications, capabilities, functions, 
+licensing terms, release dates, general availability or other characteristics of any future releases of the 
+Product.
+
+8.  REGISTRATION.  You must register the Product with Borland as a condition to your rights to use the 
+Product.  You will be prompted to register the Product at the time of your installation or first use of the 
+Product, at which time you will be notified (or directed to online resources explaining) how registration 
+information provided by you may be used and you will be afforded the opportunity to opt out of certain uses 
+of such information.
+
+9.  CONFIDENTIALITY.  You acknowledge that the Product in source code form remains a confidential trade 
+secret of Borland.  You agree to hold this information in confidence, not disclose it to any person, and not use it for 
+any purpose other than the use and operation of the Product as permitted under this License.
+
+10.  LIMITATION OF LIABILITY.  IN NO EVENT WILL BORLAND BE LIABLE TO ANY 
+PARTY FOR ANY INDIRECT, INCIDENTAL, CONSEQUENTIAL, EXEMPLARY, SPECIAL OR 
+PUNITIVE DAMAGES, INCLUDING ANY LOSS OF PROFIT, REVENUE, BUSINESS 
+OPPORTUNITY OR DATA, ARISING FROM OR RELATING TO THIS LICENSE OR THE 
+PRODUCT, WHETHER IN CONTRACT, IN TORT OR OTHERWISE, EVEN IF BORLAND 
+KNEW, SHOULD HAVE KNOWN OR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH 
+DAMAGES.  BORLAND'S TOTAL CUMULATIVE LIABILITY ARISING FROM OR RELATED 
+TO THIS LICENSE OR THE PRODUCT, WHETHER IN CONTRACT, IN TORT OR 
+OTHERWISE, WILL NOT EXCEED THE FEES ACTUALLY PAID BY YOU UNDER THIS 
+LICENSE.  THIS SECTION 10 WILL APPLY EVEN IF AN EXCLUSIVE REMEDY 
+HEREUNDER HAS FAILED OF ITS ESSENTIAL PURPOSE.
+
+SOME STATES DO NOT ALLOW THE EXCLUSION OR LIMITATION OF INCIDENTAL OR 
+CONSEQUENTIAL DAMAGES, SO THE ABOVE LIMITATION OR EXCLUSION MAY NOT 
+APPLY TO YOU.
+
+11.  THIRD PARTY CLAIMS.  Borland will defend and settle any suit brought against you by a third 
+party (not your affiliate) based on a claim that the Product infringes upon any U.S. copyright and Borland 
+will pay those costs and damages finally awarded against you in such suit that are specifically attributable to 
+such claims or those amounts payable by you under a settlement of such suit. The foregoing obligations are 
+conditioned on you:  (a) notifying Borland promptly in writing of such action; (b) giving Borland sole 
+control of the defense thereof and any related settlement negotiations; and (c) cooperating and, at Borland's 
+request and expense, assisting in such defense. If the Product becomes, or in Borland's opinion is likely to 
+become, the subject of an infringement claim that Borland is required to defend, then Borland may (at its 
+option and expense) either:  (a) procure for you the right to continue using the Product; (b) replace or 
+modify the Product so that it becomes non-infringing; or (c) terminate this License and your rights 
+hereunder to use the Product and refund a pro rata portion of any license fee you paid under this License, 
+based on a three (3) year product life. Notwithstanding the foregoing, Borland will have no obligation under 
+this Section 11 or otherwise with respect to any infringement claim based upon:  (a) any use of the Product 
+not in accordance with this License or the products accompanying documentation: (b) any use of the 
+Product in combination with other products, equipment, software, or data not provided by Borland; (c) any 
+use of any version of the Product other than the most current version made available to you; or (d) any 
+modification of the Product by any person other than Borland or its authorized agents ("Excluded Claims"). 
+You will indemnify Borland against all liability, damages and costs (including reasonable attorneys' fees) 
+resulting from or related to an Excluded Claim. This section 11 states Borland's entire liability and your 
+sole and exclusive remedy for third-party claims relating to the Product.
+
+12.  TERM AND TERMINATION.
+
+12.1  Term.  The term of this License will begin as of the date that you receive the Product and will remain 
+in effect perpetually unless terminated under this Section 12.
+
+12.2  Termination for Convenience.  You may terminate this License for any reason, or for no reason, by 
+giving Borland five (5) days' written notice.
+
+12.3  Termination for Cause.  Borland may terminate this License if you breach your obligations 
+hereunder.  Borland will effect such termination by giving you notice of termination, specifying therein the 
+alleged breach.  If your breach is curable, you will have a grace period of thirty (30) days after such notice 
+is served to cure the breach described therein.  If the breach is cured within the thirty (30) day grace period, 
+then this License will remain in effect; otherwise, this License will automatically terminate upon the 
+conclusion of the thirty (30) day grace period.
+
+12.4  Effect of Termination.  Upon the termination of this License for any reason the following terms shall 
+apply:  (a) all rights granted under this License will immediately terminate and you must stop all use of the 
+Product and any Redistributables; (b) you must return to Borland or destroy all copies of the Product 
+provided to or made by you, and will, within ten (10) days after the effective date of termination, provide 
+Borland with written certification that all such copies have been returned or destroyed;; and (c) all 
+provisions of this License with the exception of the licenses granted in Sections 2, 3 and 4, will survive 
+termination of this License for any reason. 
+
+13.  GENERAL PROVISIONS.
+
+13.1  Canadian Transactions.  If you are subject to Canadian law, you agree to the following:
+
+The parties hereto have expressly required that the present License and its Exhibits be drawn up in the 
+English language.  /  Les parties aux presentes ont expressement exige que la presente Convention et ses 
+Annexes soient redigees en langue anglaise.
+
+13.2  Hazardous Uses.  The Product is not intended for use, and you may not use or allow others to use the 
+Product, in connection with any application requiring fail-safe performance such as the operation of nuclear 
+power facilities, air traffic control or navigation systems, weapons control systems, life support systems, or 
+any other system whose failure could lead to injury, death, environmental damage or mass destruction.  You 
+agree that Borland will have no liability of any nature, and you are solely responsible, for any expense, loss, 
+injury or damage incurred as a result of such use of the Product.
+
+13.3  Governing Law.  This License will be governed by and construed in accordance with the laws of the 
+United States and the State of California, without giving effect to any conflicts or choice of laws principles 
+that would require the application of the laws of a different jurisdiction.  The parties expressly exclude the 
+application of the 1980 United Nations Convention on the International Sale of Goods (if applicable).
+
+13.4  Entire License; Severability.   This License constitutes the entire, final and exclusive agreement 
+between you and Borland regarding the specific license transaction described herein.  If any provision of 
+this License is held to be illegal, invalid or unenforceable for any reason, then such provision will be 
+enforced to the maximum extent permissible and the remainder of the provisions of this License will remain 
+in full force and effect.
+
+13.5  Assignment.  You may not transfer the Software media, assign this License or assign any of your 
+rights or delegate any of your obligations under this License, by operation of law or otherwise (including by 
+merger, sale of assets or consolidation), without Borland's prior written consent.  Any attempted assignment 
+in violation of this Section 13.5 will be void. 
+
+13.6  Export Control.  You may not directly or indirectly transfer the Product, including its documentation, to 
+any country if such transfer would be prohibited by applicable law, including the U.S. Export Administration 
+Act and the regulations issued thereunder. You agree to the foregoing and you are representing and 
+warranting that you are not located in, under the control of, or a national or resident of any such country. 
+You will be solely responsible for identifying and complying with all laws of any jurisdiction outside of the 
+United States regarding the import, export or use of Products and technical data supplied by Borland.  You 
+will obtain at your own expense all licenses, permits or approvals required by any government to use the 
+Product. 
+
+13.7  U.S. Government Rights.  The Product is a "commercial item" as that term is defined at 48 C.F.R. 
+2.101, consisting of "commercial computer software" and "commercial computer software documentation" 
+as such terms are used in 48 C.F.R. 12.212.  Consistent with 48 C.F.R. 12.212 and 48 C.F.R. 227.7202-1 
+through 227.7202-4, all U.S. Government end users acquire the Product with only those rights set forth in 
+this License. 
+
+13.8  Waiver and Modifications.  All waivers must be in writing.  Any waiver or failure to enforce a 
+provision of this License on one occasion shall not be deemed a waiver of any other provision or such 
+provision on any other occasion.  This License may only be amended by a written document signed by both 
+parties.
+
+
+If you have any questions about this License, please contact your Borland authorized reseller or Borland.
+If you agree to the terms and conditions of this License Agreement, please place a check in the "I ACCEPT 
+THE TERMS OF THE LICENSE AGREEMENT" box below.  This will be the legal equivalent of your 
+signature on a written contract and the terms of this license shall be a legally binding agreement between 
+you and Borland.  You must agree to these terms and conditions in order to install and use the Product.  If 
+you do not agree with these terms and conditions, you should press the "CANCEL" button below to exit this 
+installation process, as Borland is unwilling to license the Product to you in such case, and you may return 
+the Product within ten (10) days after you first received it to Borland or your Borland authorized reseller, 
+along with its original packaging and proof-of-purchase, for a full refund.
+
+Borland Software Corporation
+100 Enterprise Way
+Scotts Valley, CA 95066-3249
+

@@ -14,7 +14,6 @@ Abstract:
 --*/
 
 #ifndef _WOWNT32_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _WOWNT32_
 
 #if defined(_MSC_VER)
@@ -258,5 +257,4 @@ BOOL WINAPI WOWCallback16Ex(
                 PDWORD pdwRetCode
                 );
 
-#pragma option pop /*P_O_Pop*/
 #endif /* !_WOWNT32_ */

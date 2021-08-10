@@ -22,7 +22,6 @@ Revision History:
 
 
 #ifndef _SFC_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _SFC_
 
 
@@ -40,10 +39,12 @@ extern "C" {
 #define SFC_SCAN_NORMAL             0
 #define SFC_SCAN_ALWAYS             1
 #define SFC_SCAN_ONCE               2
+#define SFC_SCAN_IMMEDIATE          3
 
 #define SFC_QUOTA_DEFAULT           50
 #define SFC_QUOTA_ALL_FILES         ((ULONG)-1)
 
+#define SFC_IDLE_TRIGGER       L"WFP_IDLE_TRIGGER"
 
 typedef struct _PROTECTED_FILE_DATA {
     WCHAR   FileName[MAX_PATH];
@@ -65,11 +66,22 @@ SfcIsFileProtected(
     IN LPCWSTR ProtFileName
     );
 
+//
+// new APIs which are not currently supported, but are stubbed out
+//
+BOOL
+WINAPI
+SfpVerifyFile(
+    IN LPCTSTR pszFileName,
+    IN LPTSTR  pszError,
+    IN DWORD   dwErrSize
+    );    
+
+
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // _SFC_

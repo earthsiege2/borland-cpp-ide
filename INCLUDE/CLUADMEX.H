@@ -1,15 +1,13 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 
 #pragma warning( disable: 4049 )  /* more than 64k source lines */
 
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Mon Aug 09 16:45:43 1999
- */
+ /* File created by MIDL compiler version 6.00.0347 */
 /* Compiler settings for cluadmex.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext, robust
+    Oicf, W1, Zp8, env=Win32 (32b run)
+    protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
          __declspec(uuid()), __declspec(selectany), __declspec(novtable)
@@ -37,6 +35,10 @@
 
 #ifndef __cluadmex_h__
 #define __cluadmex_h__
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#pragma once
+#endif
 
 /* Forward Declarations */ 
 
@@ -150,8 +152,8 @@ typedef interface IWEExtendWizard97 IWEExtendWizard97;
 extern "C"{
 #endif 
 
-void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void * __RPC_USER MIDL_user_allocate(size_t);
+void __RPC_USER MIDL_user_free( void * ); 
 
 /* interface __MIDL_itf_cluadmex_0000 */
 /* [local] */ 
@@ -166,7 +168,7 @@ enum _CLUADMEX_OBJECT_TYPE
 	CLUADMEX_OT_RESOURCETYPE	= CLUADMEX_OT_RESOURCE + 1,
 	CLUADMEX_OT_NETWORK	= CLUADMEX_OT_RESOURCETYPE + 1,
 	CLUADMEX_OT_NETINTERFACE	= CLUADMEX_OT_NETWORK + 1
-    }	CLUADMEX_OBJECT_TYPE;
+    } 	CLUADMEX_OBJECT_TYPE;
 
 
 
@@ -190,7 +192,7 @@ EXTERN_C const IID IID_IGetClusterUIInfo;
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetClusterName( 
             /* [out] */ BSTR lpszName,
-            /* [out][in] */ LONG __RPC_FAR *pcchName) = 0;
+            /* [out][in] */ LONG *pcchName) = 0;
         
         virtual /* [local] */ LCID STDMETHODCALLTYPE GetLocale( void) = 0;
         
@@ -206,37 +208,37 @@ EXTERN_C const IID IID_IGetClusterUIInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IGetClusterUIInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IGetClusterUIInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IGetClusterUIInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IGetClusterUIInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IGetClusterUIInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IGetClusterUIInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClusterName )( 
-            IGetClusterUIInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetClusterName )( 
+            IGetClusterUIInfo * This,
             /* [out] */ BSTR lpszName,
-            /* [out][in] */ LONG __RPC_FAR *pcchName);
+            /* [out][in] */ LONG *pcchName);
         
-        /* [local] */ LCID ( STDMETHODCALLTYPE __RPC_FAR *GetLocale )( 
-            IGetClusterUIInfo __RPC_FAR * This);
+        /* [local] */ LCID ( STDMETHODCALLTYPE *GetLocale )( 
+            IGetClusterUIInfo * This);
         
-        /* [local] */ HFONT ( STDMETHODCALLTYPE __RPC_FAR *GetFont )( 
-            IGetClusterUIInfo __RPC_FAR * This);
+        /* [local] */ HFONT ( STDMETHODCALLTYPE *GetFont )( 
+            IGetClusterUIInfo * This);
         
-        /* [local] */ HICON ( STDMETHODCALLTYPE __RPC_FAR *GetIcon )( 
-            IGetClusterUIInfo __RPC_FAR * This);
+        /* [local] */ HICON ( STDMETHODCALLTYPE *GetIcon )( 
+            IGetClusterUIInfo * This);
         
         END_INTERFACE
     } IGetClusterUIInfoVtbl;
 
     interface IGetClusterUIInfo
     {
-        CONST_VTBL struct IGetClusterUIInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IGetClusterUIInfoVtbl *lpVtbl;
     };
 
     
@@ -274,9 +276,9 @@ EXTERN_C const IID IID_IGetClusterUIInfo;
 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IGetClusterUIInfo_GetClusterName_Proxy( 
-    IGetClusterUIInfo __RPC_FAR * This,
+    IGetClusterUIInfo * This,
     /* [out] */ BSTR lpszName,
-    /* [out][in] */ LONG __RPC_FAR *pcchName);
+    /* [out][in] */ LONG *pcchName);
 
 
 void __RPC_STUB IGetClusterUIInfo_GetClusterName_Stub(
@@ -287,7 +289,7 @@ void __RPC_STUB IGetClusterUIInfo_GetClusterName_Stub(
 
 
 /* [local] */ LCID STDMETHODCALLTYPE IGetClusterUIInfo_GetLocale_Proxy( 
-    IGetClusterUIInfo __RPC_FAR * This);
+    IGetClusterUIInfo * This);
 
 
 void __RPC_STUB IGetClusterUIInfo_GetLocale_Stub(
@@ -298,7 +300,7 @@ void __RPC_STUB IGetClusterUIInfo_GetLocale_Stub(
 
 
 /* [local] */ HFONT STDMETHODCALLTYPE IGetClusterUIInfo_GetFont_Proxy( 
-    IGetClusterUIInfo __RPC_FAR * This);
+    IGetClusterUIInfo * This);
 
 
 void __RPC_STUB IGetClusterUIInfo_GetFont_Stub(
@@ -309,7 +311,7 @@ void __RPC_STUB IGetClusterUIInfo_GetFont_Stub(
 
 
 /* [local] */ HICON STDMETHODCALLTYPE IGetClusterUIInfo_GetIcon_Proxy( 
-    IGetClusterUIInfo __RPC_FAR * This);
+    IGetClusterUIInfo * This);
 
 
 void __RPC_STUB IGetClusterUIInfo_GetIcon_Stub(
@@ -340,7 +342,7 @@ EXTERN_C const IID IID_IGetClusterDataInfo;
     public:
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetClusterName( 
             /* [out] */ BSTR lpszName,
-            /* [out][in] */ LONG __RPC_FAR *pcchName) = 0;
+            /* [out][in] */ LONG *pcchName) = 0;
         
         virtual /* [local] */ HCLUSTER STDMETHODCALLTYPE GetClusterHandle( void) = 0;
         
@@ -354,34 +356,34 @@ EXTERN_C const IID IID_IGetClusterDataInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IGetClusterDataInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IGetClusterDataInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IGetClusterDataInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IGetClusterDataInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IGetClusterDataInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IGetClusterDataInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetClusterName )( 
-            IGetClusterDataInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetClusterName )( 
+            IGetClusterDataInfo * This,
             /* [out] */ BSTR lpszName,
-            /* [out][in] */ LONG __RPC_FAR *pcchName);
+            /* [out][in] */ LONG *pcchName);
         
-        /* [local] */ HCLUSTER ( STDMETHODCALLTYPE __RPC_FAR *GetClusterHandle )( 
-            IGetClusterDataInfo __RPC_FAR * This);
+        /* [local] */ HCLUSTER ( STDMETHODCALLTYPE *GetClusterHandle )( 
+            IGetClusterDataInfo * This);
         
-        /* [local] */ LONG ( STDMETHODCALLTYPE __RPC_FAR *GetObjectCount )( 
-            IGetClusterDataInfo __RPC_FAR * This);
+        /* [local] */ LONG ( STDMETHODCALLTYPE *GetObjectCount )( 
+            IGetClusterDataInfo * This);
         
         END_INTERFACE
     } IGetClusterDataInfoVtbl;
 
     interface IGetClusterDataInfo
     {
-        CONST_VTBL struct IGetClusterDataInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IGetClusterDataInfoVtbl *lpVtbl;
     };
 
     
@@ -416,9 +418,9 @@ EXTERN_C const IID IID_IGetClusterDataInfo;
 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IGetClusterDataInfo_GetClusterName_Proxy( 
-    IGetClusterDataInfo __RPC_FAR * This,
+    IGetClusterDataInfo * This,
     /* [out] */ BSTR lpszName,
-    /* [out][in] */ LONG __RPC_FAR *pcchName);
+    /* [out][in] */ LONG *pcchName);
 
 
 void __RPC_STUB IGetClusterDataInfo_GetClusterName_Stub(
@@ -429,7 +431,7 @@ void __RPC_STUB IGetClusterDataInfo_GetClusterName_Stub(
 
 
 /* [local] */ HCLUSTER STDMETHODCALLTYPE IGetClusterDataInfo_GetClusterHandle_Proxy( 
-    IGetClusterDataInfo __RPC_FAR * This);
+    IGetClusterDataInfo * This);
 
 
 void __RPC_STUB IGetClusterDataInfo_GetClusterHandle_Stub(
@@ -440,7 +442,7 @@ void __RPC_STUB IGetClusterDataInfo_GetClusterHandle_Stub(
 
 
 /* [local] */ LONG STDMETHODCALLTYPE IGetClusterDataInfo_GetObjectCount_Proxy( 
-    IGetClusterDataInfo __RPC_FAR * This);
+    IGetClusterDataInfo * This);
 
 
 void __RPC_STUB IGetClusterDataInfo_GetObjectCount_Stub(
@@ -472,7 +474,7 @@ EXTERN_C const IID IID_IGetClusterObjectInfo;
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetObjectName( 
             /* [in] */ LONG lObjIndex,
             /* [out] */ BSTR lpszName,
-            /* [out][in] */ LONG __RPC_FAR *pcchName) = 0;
+            /* [out][in] */ LONG *pcchName) = 0;
         
         virtual /* [local] */ CLUADMEX_OBJECT_TYPE STDMETHODCALLTYPE GetObjectType( 
             /* [in] */ LONG lObjIndex) = 0;
@@ -485,25 +487,25 @@ EXTERN_C const IID IID_IGetClusterObjectInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IGetClusterObjectInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IGetClusterObjectInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IGetClusterObjectInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IGetClusterObjectInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IGetClusterObjectInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IGetClusterObjectInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetObjectName )( 
-            IGetClusterObjectInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetObjectName )( 
+            IGetClusterObjectInfo * This,
             /* [in] */ LONG lObjIndex,
             /* [out] */ BSTR lpszName,
-            /* [out][in] */ LONG __RPC_FAR *pcchName);
+            /* [out][in] */ LONG *pcchName);
         
-        /* [local] */ CLUADMEX_OBJECT_TYPE ( STDMETHODCALLTYPE __RPC_FAR *GetObjectType )( 
-            IGetClusterObjectInfo __RPC_FAR * This,
+        /* [local] */ CLUADMEX_OBJECT_TYPE ( STDMETHODCALLTYPE *GetObjectType )( 
+            IGetClusterObjectInfo * This,
             /* [in] */ LONG lObjIndex);
         
         END_INTERFACE
@@ -511,7 +513,7 @@ EXTERN_C const IID IID_IGetClusterObjectInfo;
 
     interface IGetClusterObjectInfo
     {
-        CONST_VTBL struct IGetClusterObjectInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IGetClusterObjectInfoVtbl *lpVtbl;
     };
 
     
@@ -543,10 +545,10 @@ EXTERN_C const IID IID_IGetClusterObjectInfo;
 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IGetClusterObjectInfo_GetObjectName_Proxy( 
-    IGetClusterObjectInfo __RPC_FAR * This,
+    IGetClusterObjectInfo * This,
     /* [in] */ LONG lObjIndex,
     /* [out] */ BSTR lpszName,
-    /* [out][in] */ LONG __RPC_FAR *pcchName);
+    /* [out][in] */ LONG *pcchName);
 
 
 void __RPC_STUB IGetClusterObjectInfo_GetObjectName_Stub(
@@ -557,7 +559,7 @@ void __RPC_STUB IGetClusterObjectInfo_GetObjectName_Stub(
 
 
 /* [local] */ CLUADMEX_OBJECT_TYPE STDMETHODCALLTYPE IGetClusterObjectInfo_GetObjectType_Proxy( 
-    IGetClusterObjectInfo __RPC_FAR * This,
+    IGetClusterObjectInfo * This,
     /* [in] */ LONG lObjIndex);
 
 
@@ -598,19 +600,19 @@ EXTERN_C const IID IID_IGetClusterNodeInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IGetClusterNodeInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IGetClusterNodeInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IGetClusterNodeInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IGetClusterNodeInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IGetClusterNodeInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IGetClusterNodeInfo * This);
         
-        /* [local] */ HNODE ( STDMETHODCALLTYPE __RPC_FAR *GetNodeHandle )( 
-            IGetClusterNodeInfo __RPC_FAR * This,
+        /* [local] */ HNODE ( STDMETHODCALLTYPE *GetNodeHandle )( 
+            IGetClusterNodeInfo * This,
             /* [in] */ LONG lObjIndex);
         
         END_INTERFACE
@@ -618,7 +620,7 @@ EXTERN_C const IID IID_IGetClusterNodeInfo;
 
     interface IGetClusterNodeInfo
     {
-        CONST_VTBL struct IGetClusterNodeInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IGetClusterNodeInfoVtbl *lpVtbl;
     };
 
     
@@ -647,7 +649,7 @@ EXTERN_C const IID IID_IGetClusterNodeInfo;
 
 
 /* [local] */ HNODE STDMETHODCALLTYPE IGetClusterNodeInfo_GetNodeHandle_Proxy( 
-    IGetClusterNodeInfo __RPC_FAR * This,
+    IGetClusterNodeInfo * This,
     /* [in] */ LONG lObjIndex);
 
 
@@ -688,19 +690,19 @@ EXTERN_C const IID IID_IGetClusterGroupInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IGetClusterGroupInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IGetClusterGroupInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IGetClusterGroupInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IGetClusterGroupInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IGetClusterGroupInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IGetClusterGroupInfo * This);
         
-        /* [local] */ HGROUP ( STDMETHODCALLTYPE __RPC_FAR *GetGroupHandle )( 
-            IGetClusterGroupInfo __RPC_FAR * This,
+        /* [local] */ HGROUP ( STDMETHODCALLTYPE *GetGroupHandle )( 
+            IGetClusterGroupInfo * This,
             /* [in] */ LONG lObjIndex);
         
         END_INTERFACE
@@ -708,7 +710,7 @@ EXTERN_C const IID IID_IGetClusterGroupInfo;
 
     interface IGetClusterGroupInfo
     {
-        CONST_VTBL struct IGetClusterGroupInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IGetClusterGroupInfoVtbl *lpVtbl;
     };
 
     
@@ -737,7 +739,7 @@ EXTERN_C const IID IID_IGetClusterGroupInfo;
 
 
 /* [local] */ HGROUP STDMETHODCALLTYPE IGetClusterGroupInfo_GetGroupHandle_Proxy( 
-    IGetClusterGroupInfo __RPC_FAR * This,
+    IGetClusterGroupInfo * This,
     /* [in] */ LONG lObjIndex);
 
 
@@ -773,12 +775,12 @@ EXTERN_C const IID IID_IGetClusterResourceInfo;
         virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetResourceTypeName( 
             /* [in] */ LONG lObjIndex,
             /* [out] */ BSTR lpszResTypeName,
-            /* [out][in] */ LONG __RPC_FAR *pcchResTypeName) = 0;
+            /* [out][in] */ LONG *pcchResTypeName) = 0;
         
         virtual /* [local] */ BOOL STDMETHODCALLTYPE GetResourceNetworkName( 
             /* [in] */ LONG lObjIndex,
             /* [out] */ BSTR lpszNetName,
-            /* [out][in] */ ULONG __RPC_FAR *pcchNetName) = 0;
+            /* [out][in] */ ULONG *pcchNetName) = 0;
         
     };
     
@@ -788,39 +790,39 @@ EXTERN_C const IID IID_IGetClusterResourceInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IGetClusterResourceInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IGetClusterResourceInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IGetClusterResourceInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IGetClusterResourceInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IGetClusterResourceInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IGetClusterResourceInfo * This);
         
-        /* [local] */ HRESOURCE ( STDMETHODCALLTYPE __RPC_FAR *GetResourceHandle )( 
-            IGetClusterResourceInfo __RPC_FAR * This,
+        /* [local] */ HRESOURCE ( STDMETHODCALLTYPE *GetResourceHandle )( 
+            IGetClusterResourceInfo * This,
             /* [in] */ LONG lObjIndex);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetResourceTypeName )( 
-            IGetClusterResourceInfo __RPC_FAR * This,
+        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetResourceTypeName )( 
+            IGetClusterResourceInfo * This,
             /* [in] */ LONG lObjIndex,
             /* [out] */ BSTR lpszResTypeName,
-            /* [out][in] */ LONG __RPC_FAR *pcchResTypeName);
+            /* [out][in] */ LONG *pcchResTypeName);
         
-        /* [local] */ BOOL ( STDMETHODCALLTYPE __RPC_FAR *GetResourceNetworkName )( 
-            IGetClusterResourceInfo __RPC_FAR * This,
+        /* [local] */ BOOL ( STDMETHODCALLTYPE *GetResourceNetworkName )( 
+            IGetClusterResourceInfo * This,
             /* [in] */ LONG lObjIndex,
             /* [out] */ BSTR lpszNetName,
-            /* [out][in] */ ULONG __RPC_FAR *pcchNetName);
+            /* [out][in] */ ULONG *pcchNetName);
         
         END_INTERFACE
     } IGetClusterResourceInfoVtbl;
 
     interface IGetClusterResourceInfo
     {
-        CONST_VTBL struct IGetClusterResourceInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IGetClusterResourceInfoVtbl *lpVtbl;
     };
 
     
@@ -855,7 +857,7 @@ EXTERN_C const IID IID_IGetClusterResourceInfo;
 
 
 /* [local] */ HRESOURCE STDMETHODCALLTYPE IGetClusterResourceInfo_GetResourceHandle_Proxy( 
-    IGetClusterResourceInfo __RPC_FAR * This,
+    IGetClusterResourceInfo * This,
     /* [in] */ LONG lObjIndex);
 
 
@@ -867,10 +869,10 @@ void __RPC_STUB IGetClusterResourceInfo_GetResourceHandle_Stub(
 
 
 /* [local] */ HRESULT STDMETHODCALLTYPE IGetClusterResourceInfo_GetResourceTypeName_Proxy( 
-    IGetClusterResourceInfo __RPC_FAR * This,
+    IGetClusterResourceInfo * This,
     /* [in] */ LONG lObjIndex,
     /* [out] */ BSTR lpszResTypeName,
-    /* [out][in] */ LONG __RPC_FAR *pcchResTypeName);
+    /* [out][in] */ LONG *pcchResTypeName);
 
 
 void __RPC_STUB IGetClusterResourceInfo_GetResourceTypeName_Stub(
@@ -881,10 +883,10 @@ void __RPC_STUB IGetClusterResourceInfo_GetResourceTypeName_Stub(
 
 
 /* [local] */ BOOL STDMETHODCALLTYPE IGetClusterResourceInfo_GetResourceNetworkName_Proxy( 
-    IGetClusterResourceInfo __RPC_FAR * This,
+    IGetClusterResourceInfo * This,
     /* [in] */ LONG lObjIndex,
     /* [out] */ BSTR lpszNetName,
-    /* [out][in] */ ULONG __RPC_FAR *pcchNetName);
+    /* [out][in] */ ULONG *pcchNetName);
 
 
 void __RPC_STUB IGetClusterResourceInfo_GetResourceNetworkName_Stub(
@@ -924,19 +926,19 @@ EXTERN_C const IID IID_IGetClusterNetworkInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IGetClusterNetworkInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IGetClusterNetworkInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IGetClusterNetworkInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IGetClusterNetworkInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IGetClusterNetworkInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IGetClusterNetworkInfo * This);
         
-        /* [local] */ HNETWORK ( STDMETHODCALLTYPE __RPC_FAR *GetNetworkHandle )( 
-            IGetClusterNetworkInfo __RPC_FAR * This,
+        /* [local] */ HNETWORK ( STDMETHODCALLTYPE *GetNetworkHandle )( 
+            IGetClusterNetworkInfo * This,
             /* [in] */ LONG lObjIndex);
         
         END_INTERFACE
@@ -944,7 +946,7 @@ EXTERN_C const IID IID_IGetClusterNetworkInfo;
 
     interface IGetClusterNetworkInfo
     {
-        CONST_VTBL struct IGetClusterNetworkInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IGetClusterNetworkInfoVtbl *lpVtbl;
     };
 
     
@@ -973,7 +975,7 @@ EXTERN_C const IID IID_IGetClusterNetworkInfo;
 
 
 /* [local] */ HNETWORK STDMETHODCALLTYPE IGetClusterNetworkInfo_GetNetworkHandle_Proxy( 
-    IGetClusterNetworkInfo __RPC_FAR * This,
+    IGetClusterNetworkInfo * This,
     /* [in] */ LONG lObjIndex);
 
 
@@ -1014,19 +1016,19 @@ EXTERN_C const IID IID_IGetClusterNetInterfaceInfo;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IGetClusterNetInterfaceInfo __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IGetClusterNetInterfaceInfo * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IGetClusterNetInterfaceInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IGetClusterNetInterfaceInfo * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IGetClusterNetInterfaceInfo __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IGetClusterNetInterfaceInfo * This);
         
-        /* [local] */ HNETINTERFACE ( STDMETHODCALLTYPE __RPC_FAR *GetNetInterfaceHandle )( 
-            IGetClusterNetInterfaceInfo __RPC_FAR * This,
+        /* [local] */ HNETINTERFACE ( STDMETHODCALLTYPE *GetNetInterfaceHandle )( 
+            IGetClusterNetInterfaceInfo * This,
             /* [in] */ LONG lObjIndex);
         
         END_INTERFACE
@@ -1034,7 +1036,7 @@ EXTERN_C const IID IID_IGetClusterNetInterfaceInfo;
 
     interface IGetClusterNetInterfaceInfo
     {
-        CONST_VTBL struct IGetClusterNetInterfaceInfoVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IGetClusterNetInterfaceInfoVtbl *lpVtbl;
     };
 
     
@@ -1063,7 +1065,7 @@ EXTERN_C const IID IID_IGetClusterNetInterfaceInfo;
 
 
 /* [local] */ HNETINTERFACE STDMETHODCALLTYPE IGetClusterNetInterfaceInfo_GetNetInterfaceHandle_Proxy( 
-    IGetClusterNetInterfaceInfo __RPC_FAR * This,
+    IGetClusterNetInterfaceInfo * This,
     /* [in] */ LONG lObjIndex);
 
 
@@ -1094,7 +1096,7 @@ EXTERN_C const IID IID_IWCPropertySheetCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddPropertySheetPage( 
-            /* [in] */ LONG __RPC_FAR *hpage) = 0;
+            /* [in] */ LONG *hpage) = 0;
         
     };
     
@@ -1104,27 +1106,27 @@ EXTERN_C const IID IID_IWCPropertySheetCallback;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWCPropertySheetCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWCPropertySheetCallback * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWCPropertySheetCallback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWCPropertySheetCallback * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWCPropertySheetCallback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWCPropertySheetCallback * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddPropertySheetPage )( 
-            IWCPropertySheetCallback __RPC_FAR * This,
-            /* [in] */ LONG __RPC_FAR *hpage);
+        HRESULT ( STDMETHODCALLTYPE *AddPropertySheetPage )( 
+            IWCPropertySheetCallback * This,
+            /* [in] */ LONG *hpage);
         
         END_INTERFACE
     } IWCPropertySheetCallbackVtbl;
 
     interface IWCPropertySheetCallback
     {
-        CONST_VTBL struct IWCPropertySheetCallbackVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWCPropertySheetCallbackVtbl *lpVtbl;
     };
 
     
@@ -1153,8 +1155,8 @@ EXTERN_C const IID IID_IWCPropertySheetCallback;
 
 
 HRESULT STDMETHODCALLTYPE IWCPropertySheetCallback_AddPropertySheetPage_Proxy( 
-    IWCPropertySheetCallback __RPC_FAR * This,
-    /* [in] */ LONG __RPC_FAR *hpage);
+    IWCPropertySheetCallback * This,
+    /* [in] */ LONG *hpage);
 
 
 void __RPC_STUB IWCPropertySheetCallback_AddPropertySheetPage_Stub(
@@ -1184,8 +1186,8 @@ EXTERN_C const IID IID_IWEExtendPropertySheet;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreatePropertySheetPages( 
-            /* [in] */ IUnknown __RPC_FAR *piData,
-            /* [in] */ IWCPropertySheetCallback __RPC_FAR *piCallback) = 0;
+            /* [in] */ IUnknown *piData,
+            /* [in] */ IWCPropertySheetCallback *piCallback) = 0;
         
     };
     
@@ -1195,28 +1197,28 @@ EXTERN_C const IID IID_IWEExtendPropertySheet;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWEExtendPropertySheet __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWEExtendPropertySheet * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWEExtendPropertySheet __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWEExtendPropertySheet * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWEExtendPropertySheet __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWEExtendPropertySheet * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreatePropertySheetPages )( 
-            IWEExtendPropertySheet __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *piData,
-            /* [in] */ IWCPropertySheetCallback __RPC_FAR *piCallback);
+        HRESULT ( STDMETHODCALLTYPE *CreatePropertySheetPages )( 
+            IWEExtendPropertySheet * This,
+            /* [in] */ IUnknown *piData,
+            /* [in] */ IWCPropertySheetCallback *piCallback);
         
         END_INTERFACE
     } IWEExtendPropertySheetVtbl;
 
     interface IWEExtendPropertySheet
     {
-        CONST_VTBL struct IWEExtendPropertySheetVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWEExtendPropertySheetVtbl *lpVtbl;
     };
 
     
@@ -1245,9 +1247,9 @@ EXTERN_C const IID IID_IWEExtendPropertySheet;
 
 
 HRESULT STDMETHODCALLTYPE IWEExtendPropertySheet_CreatePropertySheetPages_Proxy( 
-    IWEExtendPropertySheet __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *piData,
-    /* [in] */ IWCPropertySheetCallback __RPC_FAR *piCallback);
+    IWEExtendPropertySheet * This,
+    /* [in] */ IUnknown *piData,
+    /* [in] */ IWCPropertySheetCallback *piCallback);
 
 
 void __RPC_STUB IWEExtendPropertySheet_CreatePropertySheetPages_Stub(
@@ -1277,10 +1279,10 @@ EXTERN_C const IID IID_IWCWizardCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddWizardPage( 
-            /* [in] */ LONG __RPC_FAR *hpage) = 0;
+            /* [in] */ LONG *hpage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableNext( 
-            /* [in] */ LONG __RPC_FAR *hpage,
+            /* [in] */ LONG *hpage,
             /* [in] */ BOOL bEnable) = 0;
         
     };
@@ -1291,24 +1293,24 @@ EXTERN_C const IID IID_IWCWizardCallback;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWCWizardCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWCWizardCallback * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWCWizardCallback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWCWizardCallback * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWCWizardCallback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWCWizardCallback * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddWizardPage )( 
-            IWCWizardCallback __RPC_FAR * This,
-            /* [in] */ LONG __RPC_FAR *hpage);
+        HRESULT ( STDMETHODCALLTYPE *AddWizardPage )( 
+            IWCWizardCallback * This,
+            /* [in] */ LONG *hpage);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnableNext )( 
-            IWCWizardCallback __RPC_FAR * This,
-            /* [in] */ LONG __RPC_FAR *hpage,
+        HRESULT ( STDMETHODCALLTYPE *EnableNext )( 
+            IWCWizardCallback * This,
+            /* [in] */ LONG *hpage,
             /* [in] */ BOOL bEnable);
         
         END_INTERFACE
@@ -1316,7 +1318,7 @@ EXTERN_C const IID IID_IWCWizardCallback;
 
     interface IWCWizardCallback
     {
-        CONST_VTBL struct IWCWizardCallbackVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWCWizardCallbackVtbl *lpVtbl;
     };
 
     
@@ -1348,8 +1350,8 @@ EXTERN_C const IID IID_IWCWizardCallback;
 
 
 HRESULT STDMETHODCALLTYPE IWCWizardCallback_AddWizardPage_Proxy( 
-    IWCWizardCallback __RPC_FAR * This,
-    /* [in] */ LONG __RPC_FAR *hpage);
+    IWCWizardCallback * This,
+    /* [in] */ LONG *hpage);
 
 
 void __RPC_STUB IWCWizardCallback_AddWizardPage_Stub(
@@ -1360,8 +1362,8 @@ void __RPC_STUB IWCWizardCallback_AddWizardPage_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IWCWizardCallback_EnableNext_Proxy( 
-    IWCWizardCallback __RPC_FAR * This,
-    /* [in] */ LONG __RPC_FAR *hpage,
+    IWCWizardCallback * This,
+    /* [in] */ LONG *hpage,
     /* [in] */ BOOL bEnable);
 
 
@@ -1392,8 +1394,8 @@ EXTERN_C const IID IID_IWEExtendWizard;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateWizardPages( 
-            /* [in] */ IUnknown __RPC_FAR *piData,
-            /* [in] */ IWCWizardCallback __RPC_FAR *piCallback) = 0;
+            /* [in] */ IUnknown *piData,
+            /* [in] */ IWCWizardCallback *piCallback) = 0;
         
     };
     
@@ -1403,28 +1405,28 @@ EXTERN_C const IID IID_IWEExtendWizard;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWEExtendWizard __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWEExtendWizard * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWEExtendWizard __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWEExtendWizard * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWEExtendWizard __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWEExtendWizard * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateWizardPages )( 
-            IWEExtendWizard __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *piData,
-            /* [in] */ IWCWizardCallback __RPC_FAR *piCallback);
+        HRESULT ( STDMETHODCALLTYPE *CreateWizardPages )( 
+            IWEExtendWizard * This,
+            /* [in] */ IUnknown *piData,
+            /* [in] */ IWCWizardCallback *piCallback);
         
         END_INTERFACE
     } IWEExtendWizardVtbl;
 
     interface IWEExtendWizard
     {
-        CONST_VTBL struct IWEExtendWizardVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWEExtendWizardVtbl *lpVtbl;
     };
 
     
@@ -1453,9 +1455,9 @@ EXTERN_C const IID IID_IWEExtendWizard;
 
 
 HRESULT STDMETHODCALLTYPE IWEExtendWizard_CreateWizardPages_Proxy( 
-    IWEExtendWizard __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *piData,
-    /* [in] */ IWCWizardCallback __RPC_FAR *piCallback);
+    IWEExtendWizard * This,
+    /* [in] */ IUnknown *piData,
+    /* [in] */ IWCWizardCallback *piCallback);
 
 
 void __RPC_STUB IWEExtendWizard_CreateWizardPages_Stub(
@@ -1499,19 +1501,19 @@ EXTERN_C const IID IID_IWCContextMenuCallback;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWCContextMenuCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWCContextMenuCallback * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWCContextMenuCallback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWCContextMenuCallback * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWCContextMenuCallback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWCContextMenuCallback * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddExtensionMenuItem )( 
-            IWCContextMenuCallback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *AddExtensionMenuItem )( 
+            IWCContextMenuCallback * This,
             /* [in] */ BSTR lpszName,
             /* [in] */ BSTR lpszStatusBarText,
             /* [in] */ ULONG nCommandID,
@@ -1523,7 +1525,7 @@ EXTERN_C const IID IID_IWCContextMenuCallback;
 
     interface IWCContextMenuCallback
     {
-        CONST_VTBL struct IWCContextMenuCallbackVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWCContextMenuCallbackVtbl *lpVtbl;
     };
 
     
@@ -1552,7 +1554,7 @@ EXTERN_C const IID IID_IWCContextMenuCallback;
 
 
 HRESULT STDMETHODCALLTYPE IWCContextMenuCallback_AddExtensionMenuItem_Proxy( 
-    IWCContextMenuCallback __RPC_FAR * This,
+    IWCContextMenuCallback * This,
     /* [in] */ BSTR lpszName,
     /* [in] */ BSTR lpszStatusBarText,
     /* [in] */ ULONG nCommandID,
@@ -1587,8 +1589,8 @@ EXTERN_C const IID IID_IWEExtendContextMenu;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddContextMenuItems( 
-            /* [in] */ IUnknown __RPC_FAR *piData,
-            /* [in] */ IWCContextMenuCallback __RPC_FAR *piCallback) = 0;
+            /* [in] */ IUnknown *piData,
+            /* [in] */ IWCContextMenuCallback *piCallback) = 0;
         
     };
     
@@ -1598,28 +1600,28 @@ EXTERN_C const IID IID_IWEExtendContextMenu;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWEExtendContextMenu __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWEExtendContextMenu * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWEExtendContextMenu __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWEExtendContextMenu * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWEExtendContextMenu __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWEExtendContextMenu * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddContextMenuItems )( 
-            IWEExtendContextMenu __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *piData,
-            /* [in] */ IWCContextMenuCallback __RPC_FAR *piCallback);
+        HRESULT ( STDMETHODCALLTYPE *AddContextMenuItems )( 
+            IWEExtendContextMenu * This,
+            /* [in] */ IUnknown *piData,
+            /* [in] */ IWCContextMenuCallback *piCallback);
         
         END_INTERFACE
     } IWEExtendContextMenuVtbl;
 
     interface IWEExtendContextMenu
     {
-        CONST_VTBL struct IWEExtendContextMenuVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWEExtendContextMenuVtbl *lpVtbl;
     };
 
     
@@ -1648,9 +1650,9 @@ EXTERN_C const IID IID_IWEExtendContextMenu;
 
 
 HRESULT STDMETHODCALLTYPE IWEExtendContextMenu_AddContextMenuItems_Proxy( 
-    IWEExtendContextMenu __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *piData,
-    /* [in] */ IWCContextMenuCallback __RPC_FAR *piCallback);
+    IWEExtendContextMenu * This,
+    /* [in] */ IUnknown *piData,
+    /* [in] */ IWCContextMenuCallback *piCallback);
 
 
 void __RPC_STUB IWEExtendContextMenu_AddContextMenuItems_Stub(
@@ -1681,7 +1683,7 @@ EXTERN_C const IID IID_IWEInvokeCommand;
     public:
         virtual HRESULT STDMETHODCALLTYPE InvokeCommand( 
             /* [in] */ ULONG nCommandID,
-            /* [in] */ IUnknown __RPC_FAR *piData) = 0;
+            /* [in] */ IUnknown *piData) = 0;
         
     };
     
@@ -1691,28 +1693,28 @@ EXTERN_C const IID IID_IWEInvokeCommand;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWEInvokeCommand __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWEInvokeCommand * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWEInvokeCommand __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWEInvokeCommand * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWEInvokeCommand __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWEInvokeCommand * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InvokeCommand )( 
-            IWEInvokeCommand __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *InvokeCommand )( 
+            IWEInvokeCommand * This,
             /* [in] */ ULONG nCommandID,
-            /* [in] */ IUnknown __RPC_FAR *piData);
+            /* [in] */ IUnknown *piData);
         
         END_INTERFACE
     } IWEInvokeCommandVtbl;
 
     interface IWEInvokeCommand
     {
-        CONST_VTBL struct IWEInvokeCommandVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWEInvokeCommandVtbl *lpVtbl;
     };
 
     
@@ -1741,9 +1743,9 @@ EXTERN_C const IID IID_IWEInvokeCommand;
 
 
 HRESULT STDMETHODCALLTYPE IWEInvokeCommand_InvokeCommand_Proxy( 
-    IWEInvokeCommand __RPC_FAR * This,
+    IWEInvokeCommand * This,
     /* [in] */ ULONG nCommandID,
-    /* [in] */ IUnknown __RPC_FAR *piData);
+    /* [in] */ IUnknown *piData);
 
 
 void __RPC_STUB IWEInvokeCommand_InvokeCommand_Stub(
@@ -1773,10 +1775,10 @@ EXTERN_C const IID IID_IWCWizard97Callback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddWizard97Page( 
-            /* [in] */ LONG __RPC_FAR *hpage) = 0;
+            /* [in] */ LONG *hpage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableNext( 
-            /* [in] */ LONG __RPC_FAR *hpage,
+            /* [in] */ LONG *hpage,
             /* [in] */ BOOL bEnable) = 0;
         
     };
@@ -1787,24 +1789,24 @@ EXTERN_C const IID IID_IWCWizard97Callback;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWCWizard97Callback __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWCWizard97Callback * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWCWizard97Callback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWCWizard97Callback * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWCWizard97Callback __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWCWizard97Callback * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddWizard97Page )( 
-            IWCWizard97Callback __RPC_FAR * This,
-            /* [in] */ LONG __RPC_FAR *hpage);
+        HRESULT ( STDMETHODCALLTYPE *AddWizard97Page )( 
+            IWCWizard97Callback * This,
+            /* [in] */ LONG *hpage);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnableNext )( 
-            IWCWizard97Callback __RPC_FAR * This,
-            /* [in] */ LONG __RPC_FAR *hpage,
+        HRESULT ( STDMETHODCALLTYPE *EnableNext )( 
+            IWCWizard97Callback * This,
+            /* [in] */ LONG *hpage,
             /* [in] */ BOOL bEnable);
         
         END_INTERFACE
@@ -1812,7 +1814,7 @@ EXTERN_C const IID IID_IWCWizard97Callback;
 
     interface IWCWizard97Callback
     {
-        CONST_VTBL struct IWCWizard97CallbackVtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWCWizard97CallbackVtbl *lpVtbl;
     };
 
     
@@ -1844,8 +1846,8 @@ EXTERN_C const IID IID_IWCWizard97Callback;
 
 
 HRESULT STDMETHODCALLTYPE IWCWizard97Callback_AddWizard97Page_Proxy( 
-    IWCWizard97Callback __RPC_FAR * This,
-    /* [in] */ LONG __RPC_FAR *hpage);
+    IWCWizard97Callback * This,
+    /* [in] */ LONG *hpage);
 
 
 void __RPC_STUB IWCWizard97Callback_AddWizard97Page_Stub(
@@ -1856,8 +1858,8 @@ void __RPC_STUB IWCWizard97Callback_AddWizard97Page_Stub(
 
 
 HRESULT STDMETHODCALLTYPE IWCWizard97Callback_EnableNext_Proxy( 
-    IWCWizard97Callback __RPC_FAR * This,
-    /* [in] */ LONG __RPC_FAR *hpage,
+    IWCWizard97Callback * This,
+    /* [in] */ LONG *hpage,
     /* [in] */ BOOL bEnable);
 
 
@@ -1888,8 +1890,8 @@ EXTERN_C const IID IID_IWEExtendWizard97;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateWizard97Pages( 
-            /* [in] */ IUnknown __RPC_FAR *piData,
-            /* [in] */ IWCWizard97Callback __RPC_FAR *piCallback) = 0;
+            /* [in] */ IUnknown *piData,
+            /* [in] */ IWCWizard97Callback *piCallback) = 0;
         
     };
     
@@ -1899,28 +1901,28 @@ EXTERN_C const IID IID_IWEExtendWizard97;
     {
         BEGIN_INTERFACE
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IWEExtendWizard97 __RPC_FAR * This,
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IWEExtendWizard97 * This,
             /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+            /* [iid_is][out] */ void **ppvObject);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IWEExtendWizard97 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IWEExtendWizard97 * This);
         
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IWEExtendWizard97 __RPC_FAR * This);
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IWEExtendWizard97 * This);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateWizard97Pages )( 
-            IWEExtendWizard97 __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *piData,
-            /* [in] */ IWCWizard97Callback __RPC_FAR *piCallback);
+        HRESULT ( STDMETHODCALLTYPE *CreateWizard97Pages )( 
+            IWEExtendWizard97 * This,
+            /* [in] */ IUnknown *piData,
+            /* [in] */ IWCWizard97Callback *piCallback);
         
         END_INTERFACE
     } IWEExtendWizard97Vtbl;
 
     interface IWEExtendWizard97
     {
-        CONST_VTBL struct IWEExtendWizard97Vtbl __RPC_FAR *lpVtbl;
+        CONST_VTBL struct IWEExtendWizard97Vtbl *lpVtbl;
     };
 
     
@@ -1949,9 +1951,9 @@ EXTERN_C const IID IID_IWEExtendWizard97;
 
 
 HRESULT STDMETHODCALLTYPE IWEExtendWizard97_CreateWizard97Pages_Proxy( 
-    IWEExtendWizard97 __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *piData,
-    /* [in] */ IWCWizard97Callback __RPC_FAR *piCallback);
+    IWEExtendWizard97 * This,
+    /* [in] */ IUnknown *piData,
+    /* [in] */ IWCWizard97Callback *piCallback);
 
 
 void __RPC_STUB IWEExtendWizard97_CreateWizard97Pages_Stub(
@@ -1967,10 +1969,10 @@ void __RPC_STUB IWEExtendWizard97_CreateWizard97Pages_Stub(
 
 /* Additional Prototypes for ALL interfaces */
 
-unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
-void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
+unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
+unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
+void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
 /* end of Additional Prototypes */
 
@@ -1981,4 +1983,3 @@ void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR
 #endif
 
 
-#pragma option pop /*P_O_Pop*/

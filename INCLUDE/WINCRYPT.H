@@ -10,7 +10,6 @@
 //----------------------------------------------------------------------------
 
 #ifndef __WINCRYPT_H__
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define __WINCRYPT_H__
 
 #if defined (_MSC_VER)
@@ -77,6 +76,12 @@ typedef LONG HRESULT;
 #define WINCRYPT32API
 #endif
 
+#if !defined(_CRYPT32STRING_)
+# define WINCRYPT32STRINGAPI WINCRYPT32API
+#else
+# define WINCRYPT32STRINGAPI
+#endif
+
 //
 // Algorithm IDs and Flags
 //
@@ -132,6 +137,10 @@ typedef LONG HRESULT;
 #define ALG_SID_3DES_112                9
 #define ALG_SID_CYLINK_MEK              12
 #define ALG_SID_RC5                     13
+#define ALG_SID_AES_128                 14
+#define ALG_SID_AES_192                 15
+#define ALG_SID_AES_256                 16
+#define ALG_SID_AES                     17
 
 // Fortezza sub-ids
 #define ALG_SID_SKIPJACK                10
@@ -168,7 +177,8 @@ typedef LONG HRESULT;
 #define ALG_SID_RIPEMD160               7
 #define ALG_SID_SSL3SHAMD5              8
 #define ALG_SID_HMAC                    9
-#define	ALG_SID_TLS1PRF					10
+#define ALG_SID_TLS1PRF                 10
+#define ALG_SID_HASH_REPLACE_OWF        11
 
 // secure channel sub ids
 #define ALG_SID_SSL3_MASTER             1
@@ -196,21 +206,22 @@ typedef unsigned int ALG_ID;
 #define CALG_MAC                (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_MAC)
 #define CALG_RSA_SIGN           (ALG_CLASS_SIGNATURE | ALG_TYPE_RSA | ALG_SID_RSA_ANY)
 #define CALG_DSS_SIGN           (ALG_CLASS_SIGNATURE | ALG_TYPE_DSS | ALG_SID_DSS_ANY)
+#define CALG_NO_SIGN            (ALG_CLASS_SIGNATURE | ALG_TYPE_ANY | ALG_SID_ANY)
 #define CALG_RSA_KEYX           (ALG_CLASS_KEY_EXCHANGE|ALG_TYPE_RSA|ALG_SID_RSA_ANY)
 #define CALG_DES                (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_DES)
 #define CALG_3DES_112           (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_3DES_112)
 #define CALG_3DES               (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_3DES)
 #define CALG_DESX               (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_DESX)
-#define CALG_RC2				(ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_RC2)
-#define CALG_RC4				(ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_STREAM|ALG_SID_RC4)
-#define CALG_SEAL				(ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_STREAM|ALG_SID_SEAL)
+#define CALG_RC2                (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_RC2)
+#define CALG_RC4                (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_STREAM|ALG_SID_RC4)
+#define CALG_SEAL               (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_STREAM|ALG_SID_SEAL)
 #define CALG_DH_SF              (ALG_CLASS_KEY_EXCHANGE|ALG_TYPE_DH|ALG_SID_DH_SANDF)
-#define CALG_DH_EPHEM			(ALG_CLASS_KEY_EXCHANGE|ALG_TYPE_DH|ALG_SID_DH_EPHEM)
-#define CALG_AGREEDKEY_ANY		(ALG_CLASS_KEY_EXCHANGE|ALG_TYPE_DH|ALG_SID_AGREED_KEY_ANY)
-#define CALG_KEA_KEYX			(ALG_CLASS_KEY_EXCHANGE|ALG_TYPE_DH|ALG_SID_KEA)
+#define CALG_DH_EPHEM           (ALG_CLASS_KEY_EXCHANGE|ALG_TYPE_DH|ALG_SID_DH_EPHEM)
+#define CALG_AGREEDKEY_ANY      (ALG_CLASS_KEY_EXCHANGE|ALG_TYPE_DH|ALG_SID_AGREED_KEY_ANY)
+#define CALG_KEA_KEYX           (ALG_CLASS_KEY_EXCHANGE|ALG_TYPE_DH|ALG_SID_KEA)
 #define CALG_HUGHES_MD5         (ALG_CLASS_KEY_EXCHANGE|ALG_TYPE_ANY|ALG_SID_MD5)
-#define CALG_SKIPJACK			(ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_SKIPJACK)
-#define CALG_TEK				(ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_TEK)
+#define CALG_SKIPJACK           (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_SKIPJACK)
+#define CALG_TEK                (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_TEK)
 #define CALG_CYLINK_MEK         (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_CYLINK_MEK)
 #define CALG_SSL3_SHAMD5        (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_SSL3SHAMD5)
 #define CALG_SSL3_MASTER        (ALG_CLASS_MSG_ENCRYPT|ALG_TYPE_SECURECHANNEL|ALG_SID_SSL3_MASTER)
@@ -221,21 +232,13 @@ typedef unsigned int ALG_ID;
 #define CALG_SSL2_MASTER        (ALG_CLASS_MSG_ENCRYPT|ALG_TYPE_SECURECHANNEL|ALG_SID_SSL2_MASTER)
 #define CALG_TLS1_MASTER        (ALG_CLASS_MSG_ENCRYPT|ALG_TYPE_SECURECHANNEL|ALG_SID_TLS1_MASTER)
 #define CALG_RC5                (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_RC5)
-#define CALG_HMAC				(ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_HMAC)
-#define CALG_TLS1PRF			(ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_TLS1PRF)
-
-// resource number for signatures in the CSP
-#define	SIGNATURE_RESOURCE_NUMBER	0x29A
-
-typedef struct _VTableProvStruc {
-    DWORD   Version;
-    FARPROC FuncVerifyImage;
-    FARPROC FuncReturnhWnd;
-    DWORD   dwProvType;
-    BYTE	*pbContextInfo;
-    DWORD	cbContextInfo;
-    LPSTR   pszProvName;
-} VTableProvStruc, *PVTableProvStruc;
+#define CALG_HMAC               (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_HMAC)
+#define CALG_TLS1PRF            (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_TLS1PRF)
+#define CALG_HASH_REPLACE_OWF   (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_HASH_REPLACE_OWF)
+#define CALG_AES_128            (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_AES_128)
+#define CALG_AES_192            (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_AES_192)
+#define CALG_AES_256            (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_AES_256)
+#define CALG_AES                (ALG_CLASS_DATA_ENCRYPT|ALG_TYPE_BLOCK|ALG_SID_AES)
 
 typedef ULONG_PTR HCRYPTPROV;
 typedef ULONG_PTR HCRYPTKEY;
@@ -262,13 +265,14 @@ typedef ULONG_PTR HCRYPTHASH;
 #define CRYPT_CREATE_IV         0x00000200
 #define CRYPT_KEK               0x00000400
 #define CRYPT_DATA_KEY          0x00000800
-#define	CRYPT_VOLATILE          0x00001000
-#define	CRYPT_SGCKEY            0x00002000
+#define CRYPT_VOLATILE          0x00001000
+#define CRYPT_SGCKEY            0x00002000
+#define CRYPT_ARCHIVABLE        0x00004000
 
 #define RSA1024BIT_KEY          0x04000000
 
 // dwFlags definitions for CryptDeriveKey
-#define	CRYPT_SERVER			0x00000400
+#define CRYPT_SERVER            0x00000400
 
 #define KEY_LENGTH_MASK         0xFFFF0000
 
@@ -281,17 +285,21 @@ typedef ULONG_PTR HCRYPTHASH;
                                             // CryptEncrypt and CryptDecrypt
 
 #define CRYPT_BLOB_VER3         0x00000080  // export version 3 of a blob type
+#define CRYPT_IPSEC_HMAC_KEY    0x00000100  // CryptImportKey only
 
 // dwFlags definitions for CryptCreateHash
 #define CRYPT_SECRETDIGEST      0x00000001
+
+// dwFlags definitions for CryptHashData
+#define CRYPT_OWF_REPL_LM_HASH  0x00000001  // this is only for the OWF replacement CSP
 
 // dwFlags definitions for CryptHashSessionKey
 #define CRYPT_LITTLE_ENDIAN     0x00000001
 
 // dwFlags definitions for CryptSignHash and CryptVerifySignature
-#define	CRYPT_NOHASHOID         0x00000001
-#define	CRYPT_TYPE2_FORMAT      0x00000002
-#define	CRYPT_X931_FORMAT       0x00000004
+#define CRYPT_NOHASHOID         0x00000001
+#define CRYPT_TYPE2_FORMAT      0x00000002
+#define CRYPT_X931_FORMAT       0x00000004
 
 // dwFlag definitions for CryptSetProviderEx and CryptGetDefaultProvider
 #define CRYPT_MACHINE_DEFAULT   0x00000001
@@ -332,33 +340,33 @@ typedef ULONG_PTR HCRYPTHASH;
 #define KP_RB                   17      // Fortezza RB value
 #define KP_INFO                 18      // for putting information into an RSA envelope
 #define KP_EFFECTIVE_KEYLEN     19      // setting and getting RC2 effective key length
-#define KP_SCHANNEL_ALG	        20      // for setting the Secure Channel algorithms
-#define KP_CLIENT_RANDOM		21      // for setting the Secure Channel client random data
-#define KP_SERVER_RANDOM		22      // for setting the Secure Channel server random data
-#define	KP_RP					23
-#define	KP_PRECOMP_MD5			24
-#define	KP_PRECOMP_SHA			25
+#define KP_SCHANNEL_ALG         20      // for setting the Secure Channel algorithms
+#define KP_CLIENT_RANDOM        21      // for setting the Secure Channel client random data
+#define KP_SERVER_RANDOM        22      // for setting the Secure Channel server random data
+#define KP_RP                   23
+#define KP_PRECOMP_MD5          24
+#define KP_PRECOMP_SHA          25
 #define KP_CERTIFICATE          26      // for setting Secure Channel certificate data (PCT1)
 #define KP_CLEAR_KEY            27      // for setting Secure Channel clear key data (PCT1)
 #define KP_PUB_EX_LEN           28
 #define KP_PUB_EX_VAL           29
-#define KP_KEYVAL				30
+#define KP_KEYVAL               30
 #define KP_ADMIN_PIN            31
 #define KP_KEYEXCHANGE_PIN      32
 #define KP_SIGNATURE_PIN        33
-#define	KP_PREHASH              34
+#define KP_PREHASH              34
 
-#define	KP_OAEP_PARAMS          36      // for setting OAEP params on RSA keys
-#define	KP_CMS_KEY_INFO			37
-#define	KP_CMS_DH_KEY_INFO      38
+#define KP_OAEP_PARAMS          36      // for setting OAEP params on RSA keys
+#define KP_CMS_KEY_INFO         37
+#define KP_CMS_DH_KEY_INFO      38
 #define KP_PUB_PARAMS           39      // for setting public parameters
 #define KP_VERIFY_PARAMS        40      // for verifying DSA and DH parameters
 #define KP_HIGHEST_VERSION      41      // for TLS protocol version setting
 
 // KP_PADDING
 #define PKCS5_PADDING           1       // PKCS 5 (sec 6.2) padding method
-#define RANDOM_PADDING			2
-#define	ZERO_PADDING			3
+#define RANDOM_PADDING          2
+#define ZERO_PADDING            3
 
 // KP_MODE
 #define CRYPT_MODE_CBC          1       // Cipher block chaining
@@ -376,6 +384,7 @@ typedef ULONG_PTR HCRYPTHASH;
 #define CRYPT_MAC               0x0020  // Allow MACs to be used with key
 #define CRYPT_EXPORT_KEY        0x0040  // Allow key to be used for exporting keys
 #define CRYPT_IMPORT_KEY        0x0080  // Allow key to be used for importing keys
+#define CRYPT_ARCHIVE           0x0100  // Allow key to be exported at creation only
 
 #define HP_ALGID                0x0001  // Hash algorithm
 #define HP_HASHVAL              0x0002  // Hash value
@@ -410,9 +419,9 @@ typedef ULONG_PTR HCRYPTHASH;
 #define PP_SESSION_KEYSIZE      20
 #define PP_UI_PROMPT            21
 #define PP_ENUMALGS_EX          22
-#define PP_ENUMMANDROOTS		25
-#define PP_ENUMELECTROOTS		26
-#define	PP_KEYSET_TYPE			27
+#define PP_ENUMMANDROOTS        25
+#define PP_ENUMELECTROOTS       26
+#define PP_KEYSET_TYPE          27
 #define PP_ADMIN_PIN            31
 #define PP_KEYEXCHANGE_PIN      32
 #define PP_SIGNATURE_PIN        33
@@ -421,12 +430,12 @@ typedef ULONG_PTR HCRYPTHASH;
 #define PP_UNIQUE_CONTAINER     36
 #define PP_SGC_INFO             37
 #define PP_USE_HARDWARE_RNG     38
-#define	PP_KEYSPEC              39
-#define	PP_ENUMEX_SIGNING_PROT  40
+#define PP_KEYSPEC              39
+#define PP_ENUMEX_SIGNING_PROT  40
 
 #define CRYPT_FIRST             1
 #define CRYPT_NEXT              2
-#define CRYPT_SGC_ENUM			4
+#define CRYPT_SGC_ENUM          4
 
 #define CRYPT_IMPL_HARDWARE     1
 #define CRYPT_IMPL_SOFTWARE     2
@@ -455,9 +464,9 @@ typedef ULONG_PTR HCRYPTHASH;
 // CryptSetProvParam
 //
 #define PP_CLIENT_HWND          1
-#define PP_CONTEXT_INFO			11
-#define	PP_KEYEXCHANGE_KEYSIZE	12
-#define	PP_SIGNATURE_KEYSIZE    13
+#define PP_CONTEXT_INFO         11
+#define PP_KEYEXCHANGE_KEYSIZE  12
+#define PP_SIGNATURE_KEYSIZE    13
 #define PP_KEYEXCHANGE_ALG      14
 #define PP_SIGNATURE_ALG        15
 #define PP_DELETEKEY            24
@@ -478,66 +487,68 @@ typedef ULONG_PTR HCRYPTHASH;
 #define PROV_SPYRUS_LYNKS       20
 #define PROV_RNG                21
 #define PROV_INTEL_SEC          22
+#define PROV_REPLACE_OWF        23
+#define PROV_RSA_AES            24
 
 
 //
 // STT defined Providers
 //
-#define PROV_STT_MER                    7
-#define PROV_STT_ACQ                    8
-#define PROV_STT_BRND                   9
-#define PROV_STT_ROOT                   10
-#define PROV_STT_ISS                    11
+#define PROV_STT_MER            7
+#define PROV_STT_ACQ            8
+#define PROV_STT_BRND           9
+#define PROV_STT_ROOT           10
+#define PROV_STT_ISS            11
 
 //
 // Provider friendly names
 //
-#define MS_DEF_PROV_A       "Microsoft Base Cryptographic Provider v1.0"
-#define MS_DEF_PROV_W       L"Microsoft Base Cryptographic Provider v1.0"
+#define MS_DEF_PROV_A           "Microsoft Base Cryptographic Provider v1.0"
+#define MS_DEF_PROV_W           L"Microsoft Base Cryptographic Provider v1.0"
 #ifdef UNICODE
-#define MS_DEF_PROV         MS_DEF_PROV_W
+#define MS_DEF_PROV             MS_DEF_PROV_W
 #else
-#define MS_DEF_PROV         MS_DEF_PROV_A
+#define MS_DEF_PROV             MS_DEF_PROV_A
 #endif
 
-#define MS_ENHANCED_PROV_A       "Microsoft Enhanced Cryptographic Provider v1.0"
-#define MS_ENHANCED_PROV_W       L"Microsoft Enhanced Cryptographic Provider v1.0"
+#define MS_ENHANCED_PROV_A      "Microsoft Enhanced Cryptographic Provider v1.0"
+#define MS_ENHANCED_PROV_W      L"Microsoft Enhanced Cryptographic Provider v1.0"
 #ifdef UNICODE
-#define MS_ENHANCED_PROV         MS_ENHANCED_PROV_W
+#define MS_ENHANCED_PROV        MS_ENHANCED_PROV_W
 #else
-#define MS_ENHANCED_PROV         MS_ENHANCED_PROV_A
+#define MS_ENHANCED_PROV        MS_ENHANCED_PROV_A
 #endif
 
-#define MS_STRONG_PROV_A       "Microsoft Strong Cryptographic Provider"
-#define MS_STRONG_PROV_W       L"Microsoft Strong Cryptographic Provider"
+#define MS_STRONG_PROV_A        "Microsoft Strong Cryptographic Provider"
+#define MS_STRONG_PROV_W        L"Microsoft Strong Cryptographic Provider"
 #ifdef UNICODE
-#define MS_STRONG_PROV         MS_STRONG_PROV_W
+#define MS_STRONG_PROV          MS_STRONG_PROV_W
 #else
-#define MS_STRONG_PROV           MS_STRONG_PROV_A
+#define MS_STRONG_PROV          MS_STRONG_PROV_A
 #endif
 
-#define MS_DEF_RSA_SIG_PROV_A    "Microsoft RSA Signature Cryptographic Provider"
-#define MS_DEF_RSA_SIG_PROV_W    L"Microsoft RSA Signature Cryptographic Provider"
+#define MS_DEF_RSA_SIG_PROV_A   "Microsoft RSA Signature Cryptographic Provider"
+#define MS_DEF_RSA_SIG_PROV_W   L"Microsoft RSA Signature Cryptographic Provider"
 #ifdef UNICODE
-#define MS_DEF_RSA_SIG_PROV      MS_DEF_RSA_SIG_PROV_W
+#define MS_DEF_RSA_SIG_PROV     MS_DEF_RSA_SIG_PROV_W
 #else
-#define MS_DEF_RSA_SIG_PROV      MS_DEF_RSA_SIG_PROV_A
+#define MS_DEF_RSA_SIG_PROV     MS_DEF_RSA_SIG_PROV_A
 #endif
 
 #define MS_DEF_RSA_SCHANNEL_PROV_A  "Microsoft RSA SChannel Cryptographic Provider"
 #define MS_DEF_RSA_SCHANNEL_PROV_W  L"Microsoft RSA SChannel Cryptographic Provider"
 #ifdef UNICODE
-#define MS_DEF_RSA_SCHANNEL_PROV         MS_DEF_RSA_SCHANNEL_PROV_W
+#define MS_DEF_RSA_SCHANNEL_PROV    MS_DEF_RSA_SCHANNEL_PROV_W
 #else
-#define MS_DEF_RSA_SCHANNEL_PROV         MS_DEF_RSA_SCHANNEL_PROV_A
+#define MS_DEF_RSA_SCHANNEL_PROV    MS_DEF_RSA_SCHANNEL_PROV_A
 #endif
 
-#define MS_DEF_DSS_PROV_A        "Microsoft Base DSS Cryptographic Provider"
-#define MS_DEF_DSS_PROV_W        L"Microsoft Base DSS Cryptographic Provider"
+#define MS_DEF_DSS_PROV_A       "Microsoft Base DSS Cryptographic Provider"
+#define MS_DEF_DSS_PROV_W       L"Microsoft Base DSS Cryptographic Provider"
 #ifdef UNICODE
-#define MS_DEF_DSS_PROV          MS_DEF_DSS_PROV_W
+#define MS_DEF_DSS_PROV         MS_DEF_DSS_PROV_W
 #else
-#define MS_DEF_DSS_PROV          MS_DEF_DSS_PROV_A
+#define MS_DEF_DSS_PROV         MS_DEF_DSS_PROV_A
 #endif
 
 #define MS_DEF_DSS_DH_PROV_A    "Microsoft Base DSS and Diffie-Hellman Cryptographic Provider"
@@ -559,17 +570,25 @@ typedef ULONG_PTR HCRYPTHASH;
 #define MS_DEF_DH_SCHANNEL_PROV_A  "Microsoft DH SChannel Cryptographic Provider"
 #define MS_DEF_DH_SCHANNEL_PROV_W  L"Microsoft DH SChannel Cryptographic Provider"
 #ifdef UNICODE
-#define MS_DEF_DH_SCHANNEL_PROV         MS_DEF_DH_SCHANNEL_PROV_W
+#define MS_DEF_DH_SCHANNEL_PROV MS_DEF_DH_SCHANNEL_PROV_W
 #else
-#define MS_DEF_DH_SCHANNEL_PROV         MS_DEF_DH_SCHANNEL_PROV_A
+#define MS_DEF_DH_SCHANNEL_PROV MS_DEF_DH_SCHANNEL_PROV_A
 #endif
 
-#define MS_SCARD_PROV_A  "Microsoft Base Smart Card Crypto Provider"
-#define MS_SCARD_PROV_W  L"Microsoft Base Smart Card Crypto Provider"
+#define MS_SCARD_PROV_A         "Microsoft Base Smart Card Crypto Provider"
+#define MS_SCARD_PROV_W         L"Microsoft Base Smart Card Crypto Provider"
 #ifdef UNICODE
-#define MS_SCARD_PROV MS_SCARD_PROV_W
+#define MS_SCARD_PROV           MS_SCARD_PROV_W
 #else
-#define MS_SCARD_PROV MS_SCARD_PROV_A
+#define MS_SCARD_PROV           MS_SCARD_PROV_A
+#endif
+
+#define MS_ENH_RSA_AES_PROV_A   "Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"
+#define MS_ENH_RSA_AES_PROV_W   L"Microsoft Enhanced RSA and AES Cryptographic Provider (Prototype)"
+#ifdef UNICODE
+#define MS_ENH_RSA_AES_PROV     MS_ENH_RSA_AES_PROV_W
+#else
+#define MS_ENH_RSA_AES_PROV     MS_ENH_RSA_AES_PROV_A
 #endif
 
 #define MAXUIDLEN               64
@@ -583,10 +602,10 @@ typedef ULONG_PTR HCRYPTHASH;
 // structure for use with CryptSetKeyParam for CMS keys
 // DO NOT USE THIS STRUCTURE!!!!!
 typedef struct _CMS_KEY_INFO {
-    DWORD	dwVersion;			// sizeof(CMS_KEY_INFO)
-    ALG_ID  Algid;				// algorithmm id for the key to be converted
-    BYTE    *pbOID;				// pointer to OID to hash in with Z
-    DWORD   cbOID;				// length of OID to hash in with Z
+    DWORD       dwVersion;                      // sizeof(CMS_KEY_INFO)
+    ALG_ID  Algid;                              // algorithmm id for the key to be converted
+    BYTE    *pbOID;                             // pointer to OID to hash in with Z
+    DWORD   cbOID;                              // length of OID to hash in with Z
 } CMS_KEY_INFO, *PCMS_KEY_INFO;
 
 // structure for use with CryptSetHashParam with CALG_HMAC
@@ -709,8 +728,8 @@ CRYPT_ATTR_BLOB, *PCRYPT_ATTR_BLOB;
 
 // structure for use with CryptSetKeyParam for CMS keys
 typedef struct _CMS_DH_KEY_INFO {
-    DWORD	        dwVersion;			// sizeof(CMS_DH_KEY_INFO)
-    ALG_ID          Algid;				// algorithmm id for the key to be converted
+    DWORD               dwVersion;                      // sizeof(CMS_DH_KEY_INFO)
+    ALG_ID          Algid;                              // algorithmm id for the key to be converted
     LPSTR           pszContentEncObjId; // pointer to OID to hash in with Z
     CRYPT_DATA_BLOB PubInfo;            // OPTIONAL - public information
     void            *pReserved;         // reserved - should be NULL
@@ -722,8 +741,8 @@ BOOL
 WINAPI
 CryptAcquireContextA(
     HCRYPTPROV *phProv,
-    LPCSTR pszContainer,
-    LPCSTR pszProvider,
+    LPCSTR szContainer,
+    LPCSTR szProvider,
     DWORD dwProvType,
     DWORD dwFlags
     );
@@ -732,8 +751,8 @@ BOOL
 WINAPI
 CryptAcquireContextW(
     HCRYPTPROV *phProv,
-    LPCWSTR pszContainer,
-    LPCWSTR pszProvider,
+    LPCWSTR szContainer,
+    LPCWSTR szProvider,
     DWORD dwProvType,
     DWORD dwFlags
     );
@@ -748,7 +767,7 @@ BOOL
 WINAPI
 CryptReleaseContext(
     HCRYPTPROV hProv,
-    ULONG_PTR dwFlags
+    DWORD dwFlags
     );
 
 WINADVAPI
@@ -785,7 +804,7 @@ WINAPI
 CryptSetKeyParam(
     HCRYPTKEY hKey,
     DWORD dwParam,
-    BYTE *pbData,
+    CONST BYTE *pbData,
     DWORD dwFlags
     );
 
@@ -806,7 +825,7 @@ WINAPI
 CryptSetHashParam(
     HCRYPTHASH hHash,
     DWORD dwParam,
-    BYTE*pbData,
+    CONST BYTE *pbData,
     DWORD dwFlags
     );
 
@@ -816,7 +835,7 @@ WINAPI
 CryptGetHashParam(
     HCRYPTHASH hHash,
     DWORD dwParam,
-    BYTE*pbData,
+    BYTE *pbData,
     DWORD *pdwDataLen,
     DWORD dwFlags
     );
@@ -827,7 +846,7 @@ WINAPI
 CryptSetProvParam(
     HCRYPTPROV hProv,
     DWORD dwParam,
-    BYTE*pbData,
+    CONST BYTE *pbData,
     DWORD dwFlags
     );
 
@@ -837,7 +856,7 @@ WINAPI
 CryptGetProvParam(
     HCRYPTPROV hProv,
     DWORD dwParam,
-    BYTE*pbData,
+    BYTE *pbData,
     DWORD *pdwDataLen,
     DWORD dwFlags
     );
@@ -952,7 +971,7 @@ WINAPI
 CryptSignHashA(
     HCRYPTHASH hHash,
     DWORD dwKeySpec,
-    LPCSTR sDescription,
+    LPCSTR szDescription,
     DWORD dwFlags,
     BYTE *pbSignature,
     DWORD *pdwSigLen
@@ -963,7 +982,7 @@ WINAPI
 CryptSignHashW(
     HCRYPTHASH hHash,
     DWORD dwKeySpec,
-    LPCWSTR sDescription,
+    LPCWSTR szDescription,
     DWORD dwFlags,
     BYTE *pbSignature,
     DWORD *pdwSigLen
@@ -982,7 +1001,7 @@ CryptVerifySignatureA(
     CONST BYTE *pbSignature,
     DWORD dwSigLen,
     HCRYPTKEY hPubKey,
-    LPCSTR sDescription,
+    LPCSTR szDescription,
     DWORD dwFlags
     );
 WINADVAPI
@@ -993,7 +1012,7 @@ CryptVerifySignatureW(
     CONST BYTE *pbSignature,
     DWORD dwSigLen,
     HCRYPTKEY hPubKey,
-    LPCWSTR sDescription,
+    LPCWSTR szDescription,
     DWORD dwFlags
     );
 #ifdef UNICODE
@@ -1007,14 +1026,14 @@ BOOL
 WINAPI
 CryptSetProviderA(
     LPCSTR pszProvName,
-    DWORD    dwProvType
+    DWORD dwProvType
     );
 WINADVAPI
 BOOL
 WINAPI
 CryptSetProviderW(
     LPCWSTR pszProvName,
-    DWORD    dwProvType
+    DWORD dwProvType
     );
 #ifdef UNICODE
 #define CryptSetProvider  CryptSetProviderW
@@ -1027,18 +1046,18 @@ BOOL
 WINAPI
 CryptSetProviderExA(
     LPCSTR pszProvName,
-    DWORD    dwProvType,
-    DWORD * pdwReserved,
-    DWORD   dwFlags
+    DWORD dwProvType,
+    DWORD *pdwReserved,
+    DWORD dwFlags
     );
 WINADVAPI
 BOOL
 WINAPI
 CryptSetProviderExW(
     LPCWSTR pszProvName,
-    DWORD    dwProvType,
-    DWORD * pdwReserved,
-    DWORD   dwFlags
+    DWORD dwProvType,
+    DWORD *pdwReserved,
+    DWORD dwFlags
     );
 #ifdef UNICODE
 #define CryptSetProviderEx  CryptSetProviderExW
@@ -1076,23 +1095,23 @@ WINADVAPI
 BOOL
 WINAPI
 CryptEnumProviderTypesA(
-    DWORD   dwIndex,
-    DWORD * pdwReserved,
-    DWORD   dwFlags,
-    DWORD * pdwProvType,
-    LPSTR pszTypeName,
-    DWORD * pcbTypeName
+    DWORD dwIndex,
+    DWORD *pdwReserved,
+    DWORD dwFlags,
+    DWORD *pdwProvType,
+    LPSTR szTypeName,
+    DWORD *pcbTypeName
     );
 WINADVAPI
 BOOL
 WINAPI
 CryptEnumProviderTypesW(
-    DWORD   dwIndex,
-    DWORD * pdwReserved,
-    DWORD   dwFlags,
-    DWORD * pdwProvType,
-    LPWSTR pszTypeName,
-    DWORD * pcbTypeName
+    DWORD dwIndex,
+    DWORD *pdwReserved,
+    DWORD dwFlags,
+    DWORD *pdwProvType,
+    LPWSTR szTypeName,
+    DWORD *pcbTypeName
     );
 #ifdef UNICODE
 #define CryptEnumProviderTypes  CryptEnumProviderTypesW
@@ -1104,23 +1123,23 @@ WINADVAPI
 BOOL
 WINAPI
 CryptEnumProvidersA(
-    DWORD   dwIndex,
-    DWORD * pdwReserved,
-    DWORD   dwFlags,
-    DWORD * pdwProvType,
-    LPSTR pszProvName,
-    DWORD * pcbProvName
+    DWORD dwIndex,
+    DWORD *pdwReserved,
+    DWORD dwFlags,
+    DWORD *pdwProvType,
+    LPSTR szProvName,
+    DWORD *pcbProvName
     );
 WINADVAPI
 BOOL
 WINAPI
 CryptEnumProvidersW(
-    DWORD   dwIndex,
-    DWORD * pdwReserved,
-    DWORD   dwFlags,
-    DWORD * pdwProvType,
-    LPWSTR pszProvName,
-    DWORD * pcbProvName
+    DWORD dwIndex,
+    DWORD *pdwReserved,
+    DWORD dwFlags,
+    DWORD *pdwProvType,
+    LPWSTR szProvName,
+    DWORD *pcbProvName
     );
 #ifdef UNICODE
 #define CryptEnumProviders  CryptEnumProvidersW
@@ -1133,29 +1152,53 @@ BOOL
 WINAPI
 CryptContextAddRef(
     HCRYPTPROV hProv,
-    DWORD * pdwReserved,
-    DWORD   dwFlags
+    DWORD *pdwReserved,
+    DWORD dwFlags
     );
 
 WINADVAPI
 BOOL
 WINAPI
 CryptDuplicateKey(
-    HCRYPTKEY   hKey,
-    DWORD     * pdwReserved,
-    DWORD       dwFlags,
-    HCRYPTKEY * phKey
+    HCRYPTKEY hKey,
+    DWORD *pdwReserved,
+    DWORD dwFlags,
+    HCRYPTKEY *phKey
     );
 
 WINADVAPI
 BOOL
 WINAPI
 CryptDuplicateHash(
-    HCRYPTHASH   hHash,
-    DWORD      * pdwReserved,
-    DWORD        dwFlags,
-    HCRYPTHASH * phHash
+    HCRYPTHASH hHash,
+    DWORD *pdwReserved,
+    DWORD dwFlags,
+    HCRYPTHASH *phHash
     );
+
+typedef struct {
+    DWORD  dwVersion;
+    ALG_ID algId;
+    DWORD  dwMinKeyLength;
+    DWORD  dwMaxKeyLength;
+    DWORD  dwRequiredFlags;
+    DWORD  dwDisallowedFlags;
+} _CRYPT_KEY_LIMITS_V01;
+typedef _CRYPT_KEY_LIMITS_V01 CRYPT_KEY_LIMITS, *PCRYPT_KEY_LIMITS;
+
+// Request Flag definitions
+#define CRYPTLIMIT_USING_PCT 0x0001
+#define CRYPTLIMIT_USING_SGC 0x0002
+
+WINADVAPI
+BOOL
+WINAPI
+CryptGetLocalKeyLimits(
+    IN  ALG_ID algId,
+    IN  DWORD dwFlags,
+    OUT PCRYPT_KEY_LIMITS pLimits,
+    IN OUT LPDWORD cbLimitLength);
+
 
 //+-------------------------------------------------------------------------
 //  In a CRYPT_BIT_BLOB the last byte may contain 0-7 unused bits. Therefore, the
@@ -1466,7 +1509,7 @@ typedef struct _CERT_RDN_ATTR {
 #define szOID_PKCS_12_FRIENDLY_NAME_ATTR     "1.2.840.113549.1.9.20"
 #define szOID_PKCS_12_LOCAL_KEY_ID           "1.2.840.113549.1.9.21"
 #define szOID_PKCS_12_KEY_PROVIDER_NAME_ATTR "1.3.6.1.4.1.311.17.1"
-#define szOID_LOCAL_MACHINE_KEYSET			 "1.3.6.1.4.1.311.17.2"
+#define szOID_LOCAL_MACHINE_KEYSET                       "1.3.6.1.4.1.311.17.2"
 
 //+-------------------------------------------------------------------------
 //  Microsoft CERT_RDN attribute Object Identifiers
@@ -2315,6 +2358,27 @@ CryptDecodeObject(
 //--------------------------------------------------------------------------
 #define X942_OTHER_INFO                     ((LPCSTR) 52)
 
+#define X509_CERT_PAIR                      ((LPCSTR) 53)
+#define X509_ISSUING_DIST_POINT             ((LPCSTR) 54)
+#define X509_NAME_CONSTRAINTS               ((LPCSTR) 55)
+#define X509_POLICY_MAPPINGS                ((LPCSTR) 56)
+#define X509_POLICY_CONSTRAINTS             ((LPCSTR) 57)
+#define X509_CROSS_CERT_DIST_POINTS         ((LPCSTR) 58)
+
+//+-------------------------------------------------------------------------
+//  Certificate Management Messages over CMS (CMC) Data Structures
+//--------------------------------------------------------------------------
+#define CMC_DATA                            ((LPCSTR) 59)
+#define CMC_RESPONSE                        ((LPCSTR) 60)
+#define CMC_STATUS                          ((LPCSTR) 61)
+#define CMC_ADD_EXTENSIONS                  ((LPCSTR) 62)
+#define CMC_ADD_ATTRIBUTES                  ((LPCSTR) 63)
+
+//+-------------------------------------------------------------------------
+//  Certificate Template
+//--------------------------------------------------------------------------
+#define X509_CERTIFICATE_TEMPLATE           ((LPCSTR) 64)
+
 //+-------------------------------------------------------------------------
 //  Predefined PKCS #7 data structures that can be encoded / decoded.
 //--------------------------------------------------------------------------
@@ -2347,25 +2411,46 @@ CryptDecodeObject(
 #define szOID_KEY_USAGE                 "2.5.29.15"
 #define szOID_PRIVATEKEY_USAGE_PERIOD   "2.5.29.16"
 #define szOID_BASIC_CONSTRAINTS2        "2.5.29.19"
+
 #define szOID_CERT_POLICIES             "2.5.29.32"
+#define szOID_ANY_CERT_POLICY           "2.5.29.32.0"
 
 #define szOID_AUTHORITY_KEY_IDENTIFIER2 "2.5.29.35"
 #define szOID_SUBJECT_KEY_IDENTIFIER    "2.5.29.14"
 #define szOID_SUBJECT_ALT_NAME2         "2.5.29.17"
 #define szOID_ISSUER_ALT_NAME2          "2.5.29.18"
 #define szOID_CRL_REASON_CODE           "2.5.29.21"
+#define szOID_REASON_CODE_HOLD          "2.5.29.23"
 #define szOID_CRL_DIST_POINTS           "2.5.29.31"
 #define szOID_ENHANCED_KEY_USAGE        "2.5.29.37"
 
+// szOID_CRL_NUMBER -- Base CRLs only.  Monotonically increasing sequence
+// number for each CRL issued by a CA.
+#define szOID_CRL_NUMBER                "2.5.29.20"
+// szOID_DELTA_CRL_INDICATOR -- Delta CRLs only.  Marked critical.
+// Contains the minimum base CRL Number that can be used with a delta CRL.
+#define szOID_DELTA_CRL_INDICATOR       "2.5.29.27"
+#define szOID_ISSUING_DIST_POINT        "2.5.29.28"
+// szOID_FRESHEST_CRL -- Base CRLs only.  Formatted identically to a CDP
+// extension that holds URLs to fetch the delta CRL.
+#define szOID_FRESHEST_CRL              "2.5.29.46"
+#define szOID_NAME_CONSTRAINTS          "2.5.29.30"
+
+// Note on 1/1/2000 szOID_POLICY_MAPPINGS was changed from "2.5.29.5"
+#define szOID_POLICY_MAPPINGS           "2.5.29.33"
+#define szOID_LEGACY_POLICY_MAPPINGS    "2.5.29.5"
+#define szOID_POLICY_CONSTRAINTS        "2.5.29.36"
+
+
 // Microsoft PKCS10 Attributes
-#define szOID_RENEWAL_CERTIFICATE	    "1.3.6.1.4.1.311.13.1"
+#define szOID_RENEWAL_CERTIFICATE           "1.3.6.1.4.1.311.13.1"
 #define szOID_ENROLLMENT_NAME_VALUE_PAIR    "1.3.6.1.4.1.311.13.2.1"
-#define szOID_ENROLLMENT_CSP_PROVIDER	    "1.3.6.1.4.1.311.13.2.2"
-#define szOID_OS_VERSION        	    "1.3.6.1.4.1.311.13.2.3"
+#define szOID_ENROLLMENT_CSP_PROVIDER       "1.3.6.1.4.1.311.13.2.2"
+#define szOID_OS_VERSION                    "1.3.6.1.4.1.311.13.2.3"
 
 //
 // Extension contain certificate type
-#define szOID_ENROLLMENT_AGENT		    "1.3.6.1.4.1.311.20.2.1"
+#define szOID_ENROLLMENT_AGENT              "1.3.6.1.4.1.311.20.2.1"
 
 // Internet Public Key Infrastructure (PKIX)
 #define szOID_PKIX                      "1.3.6.1.5.5.7"
@@ -2375,6 +2460,8 @@ CryptDecodeObject(
 // Microsoft extensions or attributes
 #define szOID_CERT_EXTENSIONS           "1.3.6.1.4.1.311.2.1.14"
 #define szOID_NEXT_UPDATE_LOCATION      "1.3.6.1.4.1.311.10.2"
+#define szOID_REMOVE_CERTIFICATE            "1.3.6.1.4.1.311.10.8.1"
+#define szOID_CROSS_CERT_DIST_POINTS    "1.3.6.1.4.1.311.10.9.1"
 
 //  Microsoft PKCS #7 ContentType Object Identifiers
 #define szOID_CTL                       "1.3.6.1.4.1.311.10.1"
@@ -2384,24 +2471,26 @@ CryptDecodeObject(
 
 // serialized serial numbers for PRS
 #ifndef szOID_SERIALIZED
-#define szOID_SERIALIZED		"1.3.6.1.4.1.311.10.3.3.1"
+#define szOID_SERIALIZED                "1.3.6.1.4.1.311.10.3.3.1"
 #endif
 
 // UPN principal name in SubjectAltName
 #ifndef szOID_NT_PRINCIPAL_NAME
-#define szOID_NT_PRINCIPAL_NAME 	"1.3.6.1.4.1.311.20.2.3"
+#define szOID_NT_PRINCIPAL_NAME         "1.3.6.1.4.1.311.20.2.3"
 #endif
 
 // Windows product update unauthenticated attribute
 #ifndef szOID_PRODUCT_UPDATE
-#define szOID_PRODUCT_UPDATE		"1.3.6.1.4.1.311.31.1"
+#define szOID_PRODUCT_UPDATE            "1.3.6.1.4.1.311.31.1"
 #endif
 
+// CryptUI
+#define szOID_ANY_APPLICATION_POLICY    "1.3.6.1.4.1.311.10.12.1"
 
 //+-------------------------------------------------------------------------
 //  Object Identifiers for use with Auto Enrollment
 //--------------------------------------------------------------------------
-#define szOID_AUTO_ENROLL_CTL_USAGE	"1.3.6.1.4.1.311.20.1"
+#define szOID_AUTO_ENROLL_CTL_USAGE     "1.3.6.1.4.1.311.20.1"
 
 // Extension contain certificate type
 #define szOID_ENROLL_CERTTYPE_EXTENSION "1.3.6.1.4.1.311.20.2"
@@ -2413,19 +2502,71 @@ CryptDecodeObject(
 //  Object Identifiers for use with the MS Certificate Server
 //--------------------------------------------------------------------------
 #ifndef szOID_CERTSRV_CA_VERSION
-#define szOID_CERTSRV_CA_VERSION	"1.3.6.1.4.1.311.21.1"
+#define szOID_CERTSRV_CA_VERSION        "1.3.6.1.4.1.311.21.1"
 #endif
+
+
+// szOID_CERTSRV_PREVIOUS_CERT_HASH -- Contains the sha1 hash of the previous
+// version of the CA certificate.
+#define szOID_CERTSRV_PREVIOUS_CERT_HASH    "1.3.6.1.4.1.311.21.2"
+
+// szOID_CRL_VIRTUAL_BASE -- Delta CRLs only.  Contains the base CRL Number
+// of the corresponding base CRL.
+#define szOID_CRL_VIRTUAL_BASE          "1.3.6.1.4.1.311.21.3"
+
+// szOID_CRL_NEXT_PUBLISH -- Contains the time when the next CRL is expected
+// to be published.  This may be sooner than the CRL's NextUpdate field.
+#define szOID_CRL_NEXT_PUBLISH          "1.3.6.1.4.1.311.21.4"
+
+// Enhanced Key Usage for CA encryption certificate
+#define szOID_KP_CA_EXCHANGE            "1.3.6.1.4.1.311.21.5"
+
+// Enhanced Key Usage for key recovery agent certificate
+#define szOID_KP_KEY_RECOVERY_AGENT     "1.3.6.1.4.1.311.21.6"
+
+// Certificate template extension (v2)
+#define szOID_CERTIFICATE_TEMPLATE      "1.3.6.1.4.1.311.21.7"
+
+// The root oid for all enterprise specific oids
+#define szOID_ENTERPRISE_OID_ROOT       "1.3.6.1.4.1.311.21.8"
+
+// Dummy signing Subject RDN
+#define szOID_RDN_DUMMY_SIGNER          "1.3.6.1.4.1.311.21.9"
+
+// Application Policies extension -- same encoding as szOID_CERT_POLICIES
+#define szOID_APPLICATION_CERT_POLICIES     "1.3.6.1.4.1.311.21.10"
+
+// Application Policy Mappings -- same encoding as szOID_POLICY_MAPPINGS
+#define szOID_APPLICATION_POLICY_MAPPINGS   "1.3.6.1.4.1.311.21.11"
+
+// Application Policy Constraints -- same encoding as szOID_POLICY_CONSTRAINTS
+#define szOID_APPLICATION_POLICY_CONSTRAINTS    "1.3.6.1.4.1.311.21.12"
+
+#define szOID_ARCHIVED_KEY_ATTR                "1.3.6.1.4.1.311.21.13"
+#define szOID_CRL_SELF_CDP                     "1.3.6.1.4.1.311.21.14"
+
+
+// Requires all certificates below the root to have a non-empty intersecting
+// issuance certificate policy usage.
+#define szOID_REQUIRE_CERT_CHAIN_POLICY        "1.3.6.1.4.1.311.21.15"
+#define szOID_ARCHIVED_KEY_CERT_HASH           "1.3.6.1.4.1.311.21.16"
+#define szOID_ISSUED_CERT_HASH                 "1.3.6.1.4.1.311.21.17"
+
+// Enhanced key usage for DS email replication
+#define szOID_DS_EMAIL_REPLICATION             "1.3.6.1.4.1.311.21.19"
+
+#define szOID_REQUEST_CLIENT_INFO              "1.3.6.1.4.1.311.21.20"
+#define szOID_ENCRYPTED_KEY_HASH               "1.3.6.1.4.1.311.21.21"
 
 //+-------------------------------------------------------------------------
 //  Object Identifiers for use with the MS Directory Service
 //--------------------------------------------------------------------------
-#define szOID_NTDS_REPLICATION	    "1.3.6.1.4.1.311.25.1"
+#define szOID_NTDS_REPLICATION      "1.3.6.1.4.1.311.25.1"
 
 
 //+-------------------------------------------------------------------------
 //  Extension Object Identifiers (currently not implemented)
 //--------------------------------------------------------------------------
-#define szOID_POLICY_MAPPINGS           "2.5.29.5"
 #define szOID_SUBJECT_DIR_ATTRS         "2.5.29.9"
 
 //+-------------------------------------------------------------------------
@@ -2462,6 +2603,11 @@ CryptDecodeObject(
 // Consistent key usage bits: DIGITAL_SIGNATURE or NON_REPUDIATION
 #define szOID_PKIX_KP_TIMESTAMP_SIGNING "1.3.6.1.5.5.7.3.8"
 
+
+// IKE (Internet Key Exchange) Intermediate KP for an IPsec end entity.
+// Defined in draft-ietf-ipsec-pki-req-04.txt, December 14, 1999.
+#define szOID_IPSEC_KP_IKE_INTERMEDIATE "1.3.6.1.5.5.8.2.2"
+
 //+-------------------------------------------------------------------------
 //  Microsoft Enhanced Key Usage (Purpose) Object Identifiers
 //+-------------------------------------------------------------------------
@@ -2480,34 +2626,63 @@ CryptDecodeObject(
 #define szOID_SGC_NETSCAPE              "2.16.840.1.113730.4.1"
 #endif
 
-#define szOID_KP_EFS			"1.3.6.1.4.1.311.10.3.4"
+#define szOID_KP_EFS                    "1.3.6.1.4.1.311.10.3.4"
+#define szOID_EFS_RECOVERY              "1.3.6.1.4.1.311.10.3.4.1"
 
 // Can use Windows Hardware Compatible (WHQL)
-#define szOID_WHQL_CRYPTO		"1.3.6.1.4.1.311.10.3.5"
+#define szOID_WHQL_CRYPTO               "1.3.6.1.4.1.311.10.3.5"
 
 // Signed by the NT5 build lab
-#define szOID_NT5_CRYPTO		"1.3.6.1.4.1.311.10.3.6"
+#define szOID_NT5_CRYPTO                "1.3.6.1.4.1.311.10.3.6"
 
 // Signed by and OEM of WHQL
-#define szOID_OEM_WHQL_CRYPTO		"1.3.6.1.4.1.311.10.3.7"
+#define szOID_OEM_WHQL_CRYPTO           "1.3.6.1.4.1.311.10.3.7"
 
 // Signed by the Embedded NT
-#define szOID_EMBEDDED_NT_CRYPTO	"1.3.6.1.4.1.311.10.3.8"
+#define szOID_EMBEDDED_NT_CRYPTO        "1.3.6.1.4.1.311.10.3.8"
+
+// Signer of a CTL containing trusted roots
+#define szOID_ROOT_LIST_SIGNER      "1.3.6.1.4.1.311.10.3.9"
+
+// Can sign cross-cert and subordinate CA requests with qualified
+// subordination (name constraints, policy mapping, etc.)
+#define szOID_KP_QUALIFIED_SUBORDINATION    "1.3.6.1.4.1.311.10.3.10"
+
+// Can be used to encrypt/recover escrowed keys
+#define szOID_KP_KEY_RECOVERY               "1.3.6.1.4.1.311.10.3.11"
+
+// Signer of documents
+#define szOID_KP_DOCUMENT_SIGNING           "1.3.6.1.4.1.311.10.3.12"
+
+// The default WinVerifyTrust Authenticode policy is to treat all time stamped
+// signatures as being valid forever. This OID limits the valid lifetime of the
+// signature to the lifetime of the certificate. This allows timestamped
+// signatures to expire. Normally this OID will be used in conjunction with
+// szOID_PKIX_KP_CODE_SIGNING to indicate new time stamp semantics should be
+// used. Support for this OID was added in WXP.
+#define szOID_KP_LIFETIME_SIGNING           "1.3.6.1.4.1.311.10.3.13"
 
 #ifndef szOID_DRM
-#define szOID_DRM			"1.3.6.1.4.1.311.10.5.1"
+#define szOID_DRM                       "1.3.6.1.4.1.311.10.5.1"
 #endif
 
+
+// Microsoft DRM EKU
+#ifndef szOID_DRM_INDIVIDUALIZATION
+#define szOID_DRM_INDIVIDUALIZATION "1.3.6.1.4.1.311.10.5.2"
+#endif
+
+
 #ifndef szOID_LICENSES
-#define szOID_LICENSES			"1.3.6.1.4.1.311.10.6.1"
+#define szOID_LICENSES                  "1.3.6.1.4.1.311.10.6.1"
 #endif
 
 #ifndef szOID_LICENSE_SERVER
-#define szOID_LICENSE_SERVER		"1.3.6.1.4.1.311.10.6.2"
+#define szOID_LICENSE_SERVER            "1.3.6.1.4.1.311.10.6.2"
 #endif
 
 #ifndef szOID_KP_SMARTCARD_LOGON
-#define szOID_KP_SMARTCARD_LOGON	"1.3.6.1.4.1.311.20.2.2"
+#define szOID_KP_SMARTCARD_LOGON        "1.3.6.1.4.1.311.20.2.2"
 #endif
 
 //+-------------------------------------------------------------------------
@@ -2966,6 +3141,38 @@ typedef struct _CERT_POLICY95_QUALIFIER1 {
     CPS_URLS    *rgCPSURLs;                 // optional
 } CERT_POLICY95_QUALIFIER1, *PCERT_POLICY95_QUALIFIER1;
 
+
+//+-------------------------------------------------------------------------
+//  X509_POLICY_MAPPINGS
+//  szOID_POLICY_MAPPINGS
+//  szOID_LEGACY_POLICY_MAPPINGS
+//
+//  pvStructInfo points to following CERT_POLICY_MAPPINGS_INFO.
+//--------------------------------------------------------------------------
+typedef struct _CERT_POLICY_MAPPING {
+    LPSTR                       pszIssuerDomainPolicy;      // pszObjId
+    LPSTR                       pszSubjectDomainPolicy;     // pszObjId
+} CERT_POLICY_MAPPING, *PCERT_POLICY_MAPPING;
+
+typedef struct _CERT_POLICY_MAPPINGS_INFO {
+    DWORD                       cPolicyMapping;
+    PCERT_POLICY_MAPPING        rgPolicyMapping;
+} CERT_POLICY_MAPPINGS_INFO, *PCERT_POLICY_MAPPINGS_INFO;
+
+//+-------------------------------------------------------------------------
+//  X509_POLICY_CONSTRAINTS
+//  szOID_POLICY_CONSTRAINTS
+//
+//  pvStructInfo points to following CERT_POLICY_CONSTRAINTS_INFO.
+//--------------------------------------------------------------------------
+typedef struct _CERT_POLICY_CONSTRAINTS_INFO {
+    BOOL                        fRequireExplicitPolicy;
+    DWORD                       dwRequireExplicitPolicySkipCerts;
+
+    BOOL                        fInhibitPolicyMapping;
+    DWORD                       dwInhibitPolicyMappingSkipCerts;
+} CERT_POLICY_CONSTRAINTS_INFO, *PCERT_POLICY_CONSTRAINTS_INFO;
+
 //+-------------------------------------------------------------------------
 //  RSA_CSP_PUBLICKEYBLOB
 //
@@ -3236,6 +3443,38 @@ typedef struct _CRL_DIST_POINTS_INFO {
 #define IS_CRL_DIST_POINT_ERR_CRL_ISSUER(X)   \
     (0 != (X & CRL_DIST_POINT_ERR_CRL_ISSUER_BIT))
 
+//+-------------------------------------------------------------------------
+//  X509_CROSS_CERT_DIST_POINTS
+//  szOID_CROSS_CERT_DIST_POINTS
+//
+//  pvStructInfo points to following CROSS_CERT_DIST_POINTS_INFO.
+//
+//  For CRYPT_E_INVALID_IA5_STRING, the error location is returned in
+//  *pcbEncoded by CryptEncodeObject(X509_CRL_DIST_POINTS)
+//
+//  Error location consists of:
+//    POINT_INDEX       - 8 bits << 24
+//    ENTRY_INDEX       - 8 bits << 16
+//    VALUE_INDEX       - 16 bits (unicode character index)
+//
+//  See X509_ALTERNATE_NAME for ENTRY_INDEX and VALUE_INDEX error location
+//  defines.
+//--------------------------------------------------------------------------
+typedef struct _CROSS_CERT_DIST_POINTS_INFO {
+    // Seconds between syncs. 0 implies use client default.
+    DWORD                   dwSyncDeltaTime;
+
+    DWORD                   cDistPoint;
+    PCERT_ALT_NAME_INFO     rgDistPoint;
+} CROSS_CERT_DIST_POINTS_INFO, *PCROSS_CERT_DIST_POINTS_INFO;
+
+#define CROSS_CERT_DIST_POINT_ERR_INDEX_MASK   0xFF
+#define CROSS_CERT_DIST_POINT_ERR_INDEX_SHIFT  24
+#define GET_CROSS_CERT_DIST_POINT_ERR_INDEX(X)   \
+    ((X >> CROSS_CERT_DIST_POINT_ERR_INDEX_SHIFT) & \
+                CROSS_CERT_DIST_POINT_ERR_INDEX_MASK)
+
+
 
 //+-------------------------------------------------------------------------
 //  X509_ENHANCED_KEY_USAGE
@@ -3245,9 +3484,104 @@ typedef struct _CRL_DIST_POINTS_INFO {
 //--------------------------------------------------------------------------
 
 //+-------------------------------------------------------------------------
+//  X509_CERT_PAIR
+//
+//  pvStructInfo points to the following CERT_PAIR.
+//--------------------------------------------------------------------------
+typedef struct _CERT_PAIR {
+   CERT_BLOB    Forward;        // OPTIONAL, if Forward.cbData == 0, omitted
+   CERT_BLOB    Reverse;        // OPTIONAL, if Reverse.cbData == 0, omitted
+} CERT_PAIR, *PCERT_PAIR;
+
+//+-------------------------------------------------------------------------
+//  szOID_CRL_NUMBER
+//
+//  pvStructInfo points to an int.
+//--------------------------------------------------------------------------
+
+//+-------------------------------------------------------------------------
+//  szOID_DELTA_CRL_INDICATOR
+//
+//  pvStructInfo points to an int.
+//--------------------------------------------------------------------------
+
+//+-------------------------------------------------------------------------
+//  szOID_ISSUING_DIST_POINT
+//  X509_ISSUING_DIST_POINT
+//
+//  pvStructInfo points to the following CRL_ISSUING_DIST_POINT.
+//
+//  For CRYPT_E_INVALID_IA5_STRING, the error location is returned in
+//  *pcbEncoded by CryptEncodeObject(X509_ISSUING_DIST_POINT)
+//
+//  Error location consists of:
+//    ENTRY_INDEX       - 8 bits << 16
+//    VALUE_INDEX       - 16 bits (unicode character index)
+//
+//  See X509_ALTERNATE_NAME for ENTRY_INDEX and VALUE_INDEX error location
+//  defines.
+//--------------------------------------------------------------------------
+typedef struct _CRL_ISSUING_DIST_POINT {
+    CRL_DIST_POINT_NAME     DistPointName;              // OPTIONAL
+    BOOL                    fOnlyContainsUserCerts;
+    BOOL                    fOnlyContainsCACerts;
+    CRYPT_BIT_BLOB          OnlySomeReasonFlags;        // OPTIONAL
+    BOOL                    fIndirectCRL;
+} CRL_ISSUING_DIST_POINT, *PCRL_ISSUING_DIST_POINT;
+
+//+-------------------------------------------------------------------------
+//  szOID_FRESHEST_CRL
+//
+//  pvStructInfo points to CRL_DIST_POINTS_INFO.
+//--------------------------------------------------------------------------
+
+//+-------------------------------------------------------------------------
+//  szOID_NAME_CONSTRAINTS
+//  X509_NAME_CONSTRAINTS
+//
+//  pvStructInfo points to the following CERT_NAME_CONSTRAINTS_INFO
+//
+//  For CRYPT_E_INVALID_IA5_STRING, the error location is returned in
+//  *pcbEncoded by CryptEncodeObject(X509_NAME_CONSTRAINTS)
+//
+//  Error location consists of:
+//    EXCLUDED_SUBTREE_BIT  - 1 bit  << 31 (0 for permitted, 1 for excluded)
+//    ENTRY_INDEX           - 8 bits << 16
+//    VALUE_INDEX           - 16 bits (unicode character index)
+//
+//  See X509_ALTERNATE_NAME for ENTRY_INDEX and VALUE_INDEX error location
+//  defines.
+//--------------------------------------------------------------------------
+typedef struct _CERT_GENERAL_SUBTREE {
+    CERT_ALT_NAME_ENTRY     Base;
+    DWORD                   dwMinimum;
+    BOOL                    fMaximum;
+    DWORD                   dwMaximum;
+} CERT_GENERAL_SUBTREE, *PCERT_GENERAL_SUBTREE;
+
+typedef struct _CERT_NAME_CONSTRAINTS_INFO {
+    DWORD                   cPermittedSubtree;
+    PCERT_GENERAL_SUBTREE   rgPermittedSubtree;
+    DWORD                   cExcludedSubtree;
+    PCERT_GENERAL_SUBTREE   rgExcludedSubtree;
+} CERT_NAME_CONSTRAINTS_INFO, *PCERT_NAME_CONSTRAINTS_INFO;
+
+#define CERT_EXCLUDED_SUBTREE_BIT       0x80000000L
+#define IS_CERT_EXCLUDED_SUBTREE(X)     \
+    (0 != (X & CERT_EXCLUDED_SUBTREE_BIT))
+
+//+-------------------------------------------------------------------------
 //  szOID_NEXT_UPDATE_LOCATION
 //
 //  pvStructInfo points to a CERT_ALT_NAME_INFO.
+//--------------------------------------------------------------------------
+
+//+-------------------------------------------------------------------------
+//  szOID_REMOVE_CERTIFICATE
+//
+//  pvStructInfo points to an int which can be set to one of the following
+//   0 - Add certificate
+//   1 - Remove certificate
 //--------------------------------------------------------------------------
 
 //+-------------------------------------------------------------------------
@@ -3445,6 +3779,22 @@ typedef struct _CRYPT_SMIME_CAPABILITIES {
 //  pvStructInfo points to CMSG_CMS_SIGNER_INFO.
 //--------------------------------------------------------------------------
 
+//+-------------------------------------------------------------------------
+//  Verisign Certificate Extension Object Identifiers
+//--------------------------------------------------------------------------
+
+// Octet String containing Boolean
+#define szOID_VERISIGN_PRIVATE_6_9       "2.16.840.1.113733.1.6.9"
+
+// Octet String containing IA5 string: lower case 32 char hex string
+#define szOID_VERISIGN_ONSITE_JURISDICTION_HASH "2.16.840.1.113733.1.6.11"
+
+// Octet String containing Bit string
+#define szOID_VERISIGN_BITSTRING_6_13    "2.16.840.1.113733.1.6.13"
+
+// EKU
+#define szOID_VERISIGN_ISS_STRONG_CRYPTO "2.16.840.1.113733.1.8.1"
+
 
 //+-------------------------------------------------------------------------
 //  Netscape Certificate Extension Object Identifiers
@@ -3610,6 +3960,279 @@ typedef struct _CRYPT_SMIME_CAPABILITIES {
 //  pszObjId = szOID_NETSCAPE_CERT_SEQUENCE and the CRYPT_DER_BLOBs point
 //  to encoded X509 certificates.
 //--------------------------------------------------------------------------
+
+//+=========================================================================
+//  Certificate Management Messages over CMS (CMC) Data Structures
+//==========================================================================
+
+// Content Type (request)
+#define szOID_CT_PKI_DATA               "1.3.6.1.5.5.7.12.2"
+
+// Content Type (response)
+#define szOID_CT_PKI_RESPONSE           "1.3.6.1.5.5.7.12.3"
+
+// Signature value that only contains the hash octets. The parameters for
+// this algorithm must be present and must be encoded as NULL. 
+#define szOID_PKIX_NO_SIGNATURE         "1.3.6.1.5.5.7.6.2"
+
+#define szOID_CMC                       "1.3.6.1.5.5.7.7"
+#define szOID_CMC_STATUS_INFO           "1.3.6.1.5.5.7.7.1"
+#define szOID_CMC_IDENTIFICATION        "1.3.6.1.5.5.7.7.2"
+#define szOID_CMC_IDENTITY_PROOF        "1.3.6.1.5.5.7.7.3"
+#define szOID_CMC_DATA_RETURN           "1.3.6.1.5.5.7.7.4"
+
+// Transaction Id (integer)
+#define szOID_CMC_TRANSACTION_ID        "1.3.6.1.5.5.7.7.5"
+
+// Sender Nonce (octet string)
+#define szOID_CMC_SENDER_NONCE          "1.3.6.1.5.5.7.7.6"
+
+// Recipient Nonce (octet string)
+#define szOID_CMC_RECIPIENT_NONCE       "1.3.6.1.5.5.7.7.7"
+
+#define szOID_CMC_ADD_EXTENSIONS        "1.3.6.1.5.5.7.7.8"
+#define szOID_CMC_ENCRYPTED_POP         "1.3.6.1.5.5.7.7.9"
+#define szOID_CMC_DECRYPTED_POP         "1.3.6.1.5.5.7.7.10"
+#define szOID_CMC_LRA_POP_WITNESS       "1.3.6.1.5.5.7.7.11"
+
+// Issuer Name + Serial
+#define szOID_CMC_GET_CERT              "1.3.6.1.5.5.7.7.15"
+
+// Issuer Name [+ CRL Name] + Time [+ Reasons]
+#define szOID_CMC_GET_CRL               "1.3.6.1.5.5.7.7.16"
+
+// Issuer Name + Serial [+ Reason] [+ Effective Time] [+ Secret] [+ Comment]
+#define szOID_CMC_REVOKE_REQUEST        "1.3.6.1.5.5.7.7.17"
+
+// (octet string) URL-style parameter list (IA5?)
+#define szOID_CMC_REG_INFO              "1.3.6.1.5.5.7.7.18"
+
+#define szOID_CMC_RESPONSE_INFO         "1.3.6.1.5.5.7.7.19"
+
+// (octet string)
+#define szOID_CMC_QUERY_PENDING         "1.3.6.1.5.5.7.7.21"
+#define szOID_CMC_ID_POP_LINK_RANDOM    "1.3.6.1.5.5.7.7.22"
+#define szOID_CMC_ID_POP_LINK_WITNESS   "1.3.6.1.5.5.7.7.23"
+
+// optional Name + Integer
+#define szOID_CMC_ID_CONFIRM_CERT_ACCEPTANCE "1.3.6.1.5.5.7.7.24"
+
+#define szOID_CMC_ADD_ATTRIBUTES        "1.3.6.1.4.1.311.10.10.1"
+
+//+-------------------------------------------------------------------------
+//  CMC_DATA
+//  CMC_RESPONSE
+//
+//  Certificate Management Messages over CMS (CMC) PKIData and Response
+//  messages.
+//
+//  For CMC_DATA, pvStructInfo points to a CMC_DATA_INFO.
+//  CMC_DATA_INFO contains optional arrays of tagged attributes, requests,
+//  content info and/or arbitrary other messages.
+//
+//  For CMC_RESPONSE, pvStructInfo points to a CMC_RESPONSE_INFO.
+//  CMC_RESPONSE_INFO is the same as CMC_DATA_INFO without the tagged
+//  requests.
+//--------------------------------------------------------------------------
+typedef struct _CMC_TAGGED_ATTRIBUTE {
+    DWORD               dwBodyPartID;
+    CRYPT_ATTRIBUTE     Attribute;
+} CMC_TAGGED_ATTRIBUTE, *PCMC_TAGGED_ATTRIBUTE;
+
+typedef struct _CMC_TAGGED_CERT_REQUEST {
+    DWORD               dwBodyPartID;
+    CRYPT_DER_BLOB      SignedCertRequest;
+} CMC_TAGGED_CERT_REQUEST, *PCMC_TAGGED_CERT_REQUEST;
+
+typedef struct _CMC_TAGGED_REQUEST {
+    DWORD               dwTaggedRequestChoice;
+    union {
+        // CMC_TAGGED_CERT_REQUEST_CHOICE
+        PCMC_TAGGED_CERT_REQUEST   pTaggedCertRequest;
+    };
+} CMC_TAGGED_REQUEST, *PCMC_TAGGED_REQUEST;
+
+#define CMC_TAGGED_CERT_REQUEST_CHOICE      1
+
+typedef struct _CMC_TAGGED_CONTENT_INFO {
+    DWORD               dwBodyPartID;
+    CRYPT_DER_BLOB      EncodedContentInfo;
+} CMC_TAGGED_CONTENT_INFO, *PCMC_TAGGED_CONTENT_INFO;
+
+typedef struct _CMC_TAGGED_OTHER_MSG {
+    DWORD               dwBodyPartID;
+    LPSTR               pszObjId;
+    CRYPT_OBJID_BLOB    Value;
+} CMC_TAGGED_OTHER_MSG, *PCMC_TAGGED_OTHER_MSG;
+
+
+// All the tagged arrays are optional
+typedef struct _CMC_DATA_INFO {
+    DWORD                       cTaggedAttribute;
+    PCMC_TAGGED_ATTRIBUTE       rgTaggedAttribute;
+    DWORD                       cTaggedRequest;
+    PCMC_TAGGED_REQUEST         rgTaggedRequest;
+    DWORD                       cTaggedContentInfo;
+    PCMC_TAGGED_CONTENT_INFO    rgTaggedContentInfo;
+    DWORD                       cTaggedOtherMsg;
+    PCMC_TAGGED_OTHER_MSG       rgTaggedOtherMsg;
+} CMC_DATA_INFO, *PCMC_DATA_INFO;
+
+
+// All the tagged arrays are optional
+typedef struct _CMC_RESPONSE_INFO {
+    DWORD                       cTaggedAttribute;
+    PCMC_TAGGED_ATTRIBUTE       rgTaggedAttribute;
+    DWORD                       cTaggedContentInfo;
+    PCMC_TAGGED_CONTENT_INFO    rgTaggedContentInfo;
+    DWORD                       cTaggedOtherMsg;
+    PCMC_TAGGED_OTHER_MSG       rgTaggedOtherMsg;
+} CMC_RESPONSE_INFO, *PCMC_RESPONSE_INFO;
+
+
+//+-------------------------------------------------------------------------
+//  CMC_STATUS
+//
+//  Certificate Management Messages over CMS (CMC) Status.
+//
+//  pvStructInfo points to a CMC_STATUS_INFO.
+//--------------------------------------------------------------------------
+typedef struct _CMC_PEND_INFO {
+    CRYPT_DATA_BLOB             PendToken;
+    FILETIME                    PendTime;
+} CMC_PEND_INFO, *PCMC_PEND_INFO;
+
+typedef struct _CMC_STATUS_INFO {
+    DWORD                       dwStatus;
+    DWORD                       cBodyList;
+    DWORD                       *rgdwBodyList;
+    LPWSTR                      pwszStatusString;   // OPTIONAL
+    DWORD                       dwOtherInfoChoice;
+    union  {
+        // CMC_OTHER_INFO_NO_CHOICE
+        //  none
+        // CMC_OTHER_INFO_FAIL_CHOICE
+        DWORD                       dwFailInfo;
+        // CMC_OTHER_INFO_PEND_CHOICE
+        PCMC_PEND_INFO              pPendInfo;
+    };
+} CMC_STATUS_INFO, *PCMC_STATUS_INFO;
+
+#define CMC_OTHER_INFO_NO_CHOICE        0
+#define CMC_OTHER_INFO_FAIL_CHOICE      1
+#define CMC_OTHER_INFO_PEND_CHOICE      2
+
+//
+// dwStatus values
+//
+
+// Request was granted
+#define CMC_STATUS_SUCCESS          0
+
+// Request failed, more information elsewhere in the message
+#define CMC_STATUS_FAILED           2
+
+// The request body part has not yet been processed. Requester is responsible
+// to poll back. May only be returned for certificate request operations.
+#define CMC_STATUS_PENDING          3
+
+// The requested operation is not supported
+#define CMC_STATUS_NO_SUPPORT       4
+
+// Confirmation using the idConfirmCertAcceptance control is required
+// before use of certificate
+#define CMC_STATUS_CONFIRM_REQUIRED 5
+
+
+//
+// dwFailInfo values
+//
+
+// Unrecognized or unsupported algorithm
+#define CMC_FAIL_BAD_ALG            0
+
+// Integrity check failed
+#define CMC_FAIL_BAD_MESSAGE_CHECK  1
+
+// Transaction not permitted or supported
+#define CMC_FAIL_BAD_REQUEST        2
+
+// Message time field was not sufficiently close to the system time
+#define CMC_FAIL_BAD_TIME           3
+
+// No certificate could be identified matching the provided criteria
+#define CMC_FAIL_BAD_CERT_ID        4
+
+// A requested X.509 extension is not supported by the recipient CA.
+#define CMC_FAIL_UNSUPORTED_EXT     5
+
+// Private key material must be supplied
+#define CMC_FAIL_MUST_ARCHIVE_KEYS  6
+
+// Identification Attribute failed to verify
+#define CMC_FAIL_BAD_IDENTITY       7
+
+// Server requires a POP proof before issuing certificate
+#define CMC_FAIL_POP_REQUIRED       8
+
+// POP processing failed
+#define CMC_FAIL_POP_FAILED         9
+
+// Server policy does not allow key re-use
+#define CMC_FAIL_NO_KEY_REUSE       10
+
+#define CMC_FAIL_INTERNAL_CA_ERROR  11
+
+#define CMC_FAIL_TRY_LATER          12
+
+
+//+-------------------------------------------------------------------------
+//  CMC_ADD_EXTENSIONS
+//
+//  Certificate Management Messages over CMS (CMC) Add Extensions control
+//  attribute.
+//
+//  pvStructInfo points to a CMC_ADD_EXTENSIONS_INFO.
+//--------------------------------------------------------------------------
+typedef struct _CMC_ADD_EXTENSIONS_INFO {
+    DWORD                       dwCmcDataReference;
+    DWORD                       cCertReference;
+    DWORD                       *rgdwCertReference;
+    DWORD                       cExtension;
+    PCERT_EXTENSION             rgExtension;
+} CMC_ADD_EXTENSIONS_INFO, *PCMC_ADD_EXTENSIONS_INFO;
+
+
+//+-------------------------------------------------------------------------
+//  CMC_ADD_ATTRIBUTES
+//
+//  Certificate Management Messages over CMS (CMC) Add Attributes control
+//  attribute.
+//
+//  pvStructInfo points to a CMC_ADD_ATTRIBUTES_INFO.
+//--------------------------------------------------------------------------
+typedef struct _CMC_ADD_ATTRIBUTES_INFO {
+    DWORD                       dwCmcDataReference;
+    DWORD                       cCertReference;
+    DWORD                       *rgdwCertReference;
+    DWORD                       cAttribute;
+    PCRYPT_ATTRIBUTE            rgAttribute;
+} CMC_ADD_ATTRIBUTES_INFO, *PCMC_ADD_ATTRIBUTES_INFO;
+
+
+//+-------------------------------------------------------------------------
+//  X509_CERTIFICATE_TEMPLATE
+//  szOID_CERTIFICATE_TEMPLATE
+//
+//  pvStructInfo points to following CERT_TEMPLATE_EXT data structure.
+//
+//--------------------------------------------------------------------------
+typedef struct _CERT_TEMPLATE_EXT {
+    LPSTR               pszObjId;
+    DWORD               dwMajorVersion;
+    BOOL                fMinorVersion;      // TRUE for a minor version
+    DWORD               dwMinorVersion;
+} CERT_TEMPLATE_EXT, *PCERT_TEMPLATE_EXT;
 
 
 //+=========================================================================
@@ -4042,7 +4665,8 @@ typedef const CRYPT_OID_INFO CCRYPT_OID_INFO, *PCCRYPT_OID_INFO;
 #define CRYPT_EXT_OR_ATTR_OID_GROUP_ID          6
 #define CRYPT_ENHKEY_USAGE_OID_GROUP_ID         7
 #define CRYPT_POLICY_OID_GROUP_ID               8
-#define CRYPT_LAST_OID_GROUP_ID                 8
+#define CRYPT_TEMPLATE_OID_GROUP_ID             9
+#define CRYPT_LAST_OID_GROUP_ID                 9
 
 #define CRYPT_FIRST_ALG_OID_GROUP_ID            CRYPT_HASH_ALG_OID_GROUP_ID
 #define CRYPT_LAST_ALG_OID_GROUP_ID             CRYPT_SIGN_ALG_OID_GROUP_ID
@@ -4050,8 +4674,8 @@ typedef const CRYPT_OID_INFO CCRYPT_OID_INFO, *PCCRYPT_OID_INFO;
 
 // The CRYPT_*_ALG_OID_GROUP_ID's have an Algid. The CRYPT_RDN_ATTR_OID_GROUP_ID
 // has a dwLength. The CRYPT_EXT_OR_ATTR_OID_GROUP_ID,
-// CRYPT_ENHKEY_USAGE_OID_GROUP_ID or CRYPT_POLICY_OID_GROUP_ID don't have a
-// dwValue.
+// CRYPT_ENHKEY_USAGE_OID_GROUP_ID, CRYPT_POLICY_OID_GROUP_ID or
+// CRYPT_TEMPLATE_OID_GROUP_ID don't have a dwValue.
 //
 
 // CRYPT_PUBKEY_ALG_OID_GROUP_ID has the following optional ExtraInfo:
@@ -4302,6 +4926,11 @@ typedef struct _CERT_ID {
 //  The hCryptProv and dwKeySpec specify the private key to use. If dwKeySpec
 //  == 0, then, defaults to AT_SIGNATURE.
 //
+//  If the HashEncryptionAlgorithm is set to szOID_PKIX_NO_SIGNATURE, then,
+//  the signature value only contains the hash octets. hCryptProv must still
+//  be specified. However, since a private key isn't used the hCryptProv can be
+//  acquired using CRYPT_VERIFYCONTEXT.
+//
 //  If CMSG_CRYPT_RELEASE_CONTEXT_FLAG is set in the dwFlags
 //  passed to CryptMsgOpenToEncode(), the signer hCryptProv's are released.
 //
@@ -4460,7 +5089,7 @@ typedef struct _CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO {
 //  private key is used. The hCryptProv and dwKeySpec specify the private key.
 //  The pSenderId identifies the certificate containing the sender's public key.
 //
-//  Currently, pvKeyEncryptionAuxInfo isn't used and must be set to NULL. 
+//  Currently, pvKeyEncryptionAuxInfo isn't used and must be set to NULL.
 //
 //  If KeyEncryptionAlgorithm.Parameters.cbData == 0, then, its Parameters
 //  are updated with the encoded KeyWrapAlgorithm.
@@ -4741,13 +5370,6 @@ typedef struct _CMSG_STREAM_INFO {
 //+-------------------------------------------------------------------------
 //  Open a cryptographic message for encoding
 //
-//  For PKCS #7:
-//  If the content to be passed to CryptMsgUpdate has already
-//  been message encoded (the input to CryptMsgUpdate is the streamed output
-//  from another message encode), then, the CMSG_ENCODED_CONTENT_INFO_FLAG should
-//  be set in dwFlags. If not set, then, the inner ContentType is Data and
-//  the input to CryptMsgUpdate is treated as the inner Data type's Content,
-//  a string of bytes.
 //  If CMSG_BARE_CONTENT_FLAG is specified for a streamed message,
 //  the streamed output will not have an outer ContentInfo wrapper. This
 //  makes it suitable to be streamed into an enclosing message.
@@ -5481,6 +6103,11 @@ CryptMsgControl(
 //
 //  The signer can be a pointer to a CERT_PUBLIC_KEY_INFO, certificate
 //  context or a chain context.
+//
+//  If the signer's HashEncryptionAlgorithm is szOID_PKIX_NO_SIGNATURE, then,
+//  the signature is expected to contain the hash octets. Only dwSignerType
+//  of CMSG_VERIFY_SIGNER_NULL may be specified to verify this no signature
+//  case.
 //--------------------------------------------------------------------------
 typedef struct _CMSG_CTRL_VERIFY_SIGNATURE_EX_PARA {
     DWORD               cbSize;
@@ -5497,6 +6124,8 @@ typedef struct _CMSG_CTRL_VERIFY_SIGNATURE_EX_PARA {
     // pvSigner :: PCCERT_CONTEXT
 #define CMSG_VERIFY_SIGNER_CHAIN                    3
     // pvSigner :: PCCERT_CHAIN_CONTEXT
+#define CMSG_VERIFY_SIGNER_NULL                     4
+    // pvSigner :: NULL
 
 
 //+-------------------------------------------------------------------------
@@ -6376,9 +7005,22 @@ typedef const CTL_CONTEXT *PCCTL_CONTEXT;
 #define CERT_KEY_IDENTIFIER_PROP_ID         20
 #define CERT_AUTO_ENROLL_PROP_ID            21
 #define CERT_PUBKEY_ALG_PARA_PROP_ID        22
+#define CERT_CROSS_CERT_DIST_POINTS_PROP_ID 23
+#define CERT_ISSUER_PUBLIC_KEY_MD5_HASH_PROP_ID     24
+#define CERT_SUBJECT_PUBLIC_KEY_MD5_HASH_PROP_ID    25
+#define CERT_ENROLLMENT_PROP_ID             26
+#define CERT_DATE_STAMP_PROP_ID             27
+#define CERT_ISSUER_SERIAL_NUMBER_MD5_HASH_PROP_ID  28
+#define CERT_SUBJECT_NAME_MD5_HASH_PROP_ID  29
+#define CERT_EXTENDED_ERROR_INFO_PROP_ID    30
 
-#define CERT_FIRST_RESERVED_PROP_ID         23
 // Note, 32 - 35 are reserved for the CERT, CRL, CTL and KeyId file element IDs.
+//       36 - 63 are reserved for future element IDs.
+
+#define CERT_RENEWAL_PROP_ID                64
+#define CERT_ARCHIVED_KEY_HASH_PROP_ID      65
+#define CERT_FIRST_RESERVED_PROP_ID         66
+
 #define CERT_LAST_RESERVED_PROP_ID          0x00007FFF
 #define CERT_FIRST_USER_PROP_ID             0x00008000
 #define CERT_LAST_USER_PROP_ID              0x0000FFFF
@@ -6387,6 +7029,27 @@ typedef const CTL_CONTEXT *PCCTL_CONTEXT;
 #define IS_CERT_HASH_PROP_ID(X)     (CERT_SHA1_HASH_PROP_ID == (X) || \
                                         CERT_MD5_HASH_PROP_ID == (X) || \
                                         CERT_SIGNATURE_HASH_PROP_ID == (X))
+
+#define IS_PUBKEY_HASH_PROP_ID(X)     (CERT_ISSUER_PUBLIC_KEY_MD5_HASH_PROP_ID == (X) || \
+                                        CERT_SUBJECT_PUBLIC_KEY_MD5_HASH_PROP_ID == (X))
+
+#define IS_CHAIN_HASH_PROP_ID(X)     (CERT_ISSUER_PUBLIC_KEY_MD5_HASH_PROP_ID == (X) || \
+                                        CERT_SUBJECT_PUBLIC_KEY_MD5_HASH_PROP_ID == (X) || \
+                                        CERT_ISSUER_SERIAL_NUMBER_MD5_HASH_PROP_ID == (X) || \
+                                        CERT_SUBJECT_NAME_MD5_HASH_PROP_ID == (X))
+
+
+//+-------------------------------------------------------------------------
+//  Property OIDs
+//--------------------------------------------------------------------------
+// The OID component following the prefix contains the PROP_ID (decimal)
+#define szOID_CERT_PROP_ID_PREFIX           "1.3.6.1.4.1.311.10.11."
+
+#define szOID_CERT_KEY_IDENTIFIER_PROP_ID   "1.3.6.1.4.1.311.10.11.20"
+#define szOID_CERT_ISSUER_SERIAL_NUMBER_MD5_HASH_PROP_ID \
+                                            "1.3.6.1.4.1.311.10.11.28"
+#define szOID_CERT_SUBJECT_NAME_MD5_HASH_PROP_ID \
+                                            "1.3.6.1.4.1.311.10.11.29"
 
 //+-------------------------------------------------------------------------
 //  Access State flags returned by CERT_ACCESS_STATE_PROP_ID. Note,
@@ -6452,6 +7115,7 @@ typedef struct _CERT_KEY_CONTEXT {
     DWORD           dwKeySpec;
 } CERT_KEY_CONTEXT, *PCERT_KEY_CONTEXT;
 
+
 //+-------------------------------------------------------------------------
 //  Certificate Store Provider Types
 //--------------------------------------------------------------------------
@@ -6507,6 +7171,9 @@ typedef struct _CERT_KEY_CONTEXT {
 #define CERT_STORE_NO_CRL_FLAG              0x00010000
 #define CERT_STORE_NO_ISSUER_FLAG           0x00020000
 
+#define CERT_STORE_BASE_CRL_FLAG            0x00000100
+#define CERT_STORE_DELTA_CRL_FLAG           0x00000200
+
 
 //+-------------------------------------------------------------------------
 //  Certificate Store open/property flags
@@ -6515,9 +7182,12 @@ typedef struct _CERT_KEY_CONTEXT {
 #define CERT_STORE_SET_LOCALIZED_NAME_FLAG              0x00000002
 #define CERT_STORE_DEFER_CLOSE_UNTIL_LAST_FREE_FLAG     0x00000004
 #define CERT_STORE_DELETE_FLAG                          0x00000010
+#define CERT_STORE_SHARE_STORE_FLAG                     0x00000040
+#define CERT_STORE_SHARE_CONTEXT_FLAG                   0x00000080
 #define CERT_STORE_MANIFOLD_FLAG                        0x00000100
 #define CERT_STORE_ENUM_ARCHIVED_FLAG                   0x00000200
 #define CERT_STORE_UPDATE_KEYID_FLAG                    0x00000400
+#define CERT_STORE_BACKUP_RESTORE_FLAG                  0x00000800
 #define CERT_STORE_READONLY_FLAG                        0x00008000
 #define CERT_STORE_OPEN_EXISTING_FLAG                   0x00004000
 #define CERT_STORE_CREATE_NEW_FLAG                      0x00002000
@@ -6640,9 +7310,130 @@ typedef struct _CERT_SYSTEM_STORE_RELOCATE_PARA {
 // disabled, the purging is done silently without UI.
 #define CERT_PROT_ROOT_INHIBIT_PURGE_LM_FLAG        0x4
 
-// Set the following flag to only open the .LocalMachineGroupPolicy
-// physical store when opening the CurrentUser's "Root" system store.
+// Set the following flag to inhibit the opening of the LocalMachine's
+// .AuthRoot physical store when opening the LocalMachine's "Root" system store.
+// The .AuthRoot physical store open's the LocalMachine SystemRegistry
+// "AuthRoot" store. The "AuthRoot" store contains the pre-installed
+// SSL ServerAuth and the ActiveX Authenticode "root" certificates.
+#define CERT_PROT_ROOT_DISABLE_LM_AUTH_FLAG         0x8
+
+// The semantics for the following legacy definition has been changed to be
+// the same as for the CERT_PROT_ROOT_DISABLE_LM_AUTH_FLAG.
 #define CERT_PROT_ROOT_ONLY_LM_GPT_FLAG             0x8
+
+// Set the following flag to disable the requiring of the issuing CA
+// certificate being in the "NTAuth" system registry store found in the
+// CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE store location.
+//
+// When set, CertVerifyCertificateChainPolicy(CERT_CHAIN_POLICY_NT_AUTH)
+// will check that the chain has a valid name constraint for all name
+// spaces, including UPN if the issuing CA isn't in the "NTAuth" store.
+#define CERT_PROT_ROOT_DISABLE_NT_AUTH_REQUIRED_FLAG 0x10
+
+
+//+-------------------------------------------------------------------------
+//  Trusted Publisher Definitions
+//--------------------------------------------------------------------------
+// Registry path to the trusted publisher "Safer" group policy subkey
+#define CERT_TRUST_PUB_SAFER_GROUP_POLICY_REGPATH    \
+    CERT_GROUP_POLICY_SYSTEM_STORE_REGPATH L"\\TrustedPublisher\\Safer"
+
+
+// Registry path to the Local Machine system stores
+#define CERT_LOCAL_MACHINE_SYSTEM_STORE_REGPATH \
+    L"Software\\Microsoft\\SystemCertificates"
+
+// Registry path to the trusted publisher "Safer" local machine subkey
+#define CERT_TRUST_PUB_SAFER_LOCAL_MACHINE_REGPATH    \
+    CERT_LOCAL_MACHINE_SYSTEM_STORE_REGPATH L"\\TrustedPublisher\\Safer"
+
+
+// "Safer" subkey value names. All values are DWORDs.
+#define CERT_TRUST_PUB_AUTHENTICODE_FLAGS_VALUE_NAME    L"AuthenticodeFlags"
+
+
+// AuthenticodeFlags definitions
+
+// Definition of who is allowed to trust publishers
+//
+// Setting allowed trust to MACHINE_ADMIN or ENTERPRISE_ADMIN disables UI,
+// only trusts publishers in the "TrustedPublisher" system store and
+// inhibits the opening of the CurrentUser's .Default physical store when
+// opening the CurrentUsers's "TrustedPublisher" system store.
+//
+// The .Default physical store open's the CurrentUser SystemRegistry
+// "TrustedPublisher" store.
+//
+// Setting allowed trust to ENTERPRISE_ADMIN only opens the
+// LocalMachine's .GroupPolicy and .Enterprise physical stores when opening
+// the CurrentUser's "TrustedPublisher" system store or when opening the
+// LocalMachine's "TrustedPublisher" system store.
+
+#define CERT_TRUST_PUB_ALLOW_TRUST_MASK                 0x00000003
+#define CERT_TRUST_PUB_ALLOW_END_USER_TRUST             0x00000000
+#define CERT_TRUST_PUB_ALLOW_MACHINE_ADMIN_TRUST        0x00000001
+#define CERT_TRUST_PUB_ALLOW_ENTERPRISE_ADMIN_TRUST     0x00000002
+
+// Set the following flag to enable revocation checking of the publisher
+// chain.
+#define CERT_TRUST_PUB_CHECK_PUBLISHER_REV_FLAG         0x00000100
+
+// Set the following flag to enable revocation checking of the time stamp
+// chain.
+#define CERT_TRUST_PUB_CHECK_TIMESTAMP_REV_FLAG         0x00000200
+
+
+//+-------------------------------------------------------------------------
+//  OCM Subcomponents Definitions
+//--------------------------------------------------------------------------
+
+// Registry path to the OCM Subcomponents local machine subkey
+#define CERT_OCM_SUBCOMPONENTS_LOCAL_MACHINE_REGPATH        \
+    L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\Subcomponents"
+
+// REG_DWORD, 1 is installed, 0 is NOT installed
+#define CERT_OCM_SUBCOMPONENTS_ROOT_AUTO_UPDATE_VALUE_NAME  L"RootAutoUpdate"
+    
+
+//+-------------------------------------------------------------------------
+//  AuthRoot Auto Update Definitions
+//--------------------------------------------------------------------------
+
+// Registry path to the AuthRoot "Auto Update" local machine subkey
+#define CERT_AUTH_ROOT_AUTO_UPDATE_LOCAL_MACHINE_REGPATH    \
+    CERT_LOCAL_MACHINE_SYSTEM_STORE_REGPATH L"\\AuthRoot\\AutoUpdate"
+
+
+// AuthRoot Auto Update subkey value names.
+
+// REG_SZ, URL to the directory containing the AuthRoots, CTL and Seq files
+#define CERT_AUTH_ROOT_AUTO_UPDATE_ROOT_DIR_URL_VALUE_NAME      L"RootDirUrl"
+
+// REG_DWORD, seconds between syncs. 0 implies use default.
+#define CERT_AUTH_ROOT_AUTO_UPDATE_SYNC_DELTA_TIME_VALUE_NAME   L"SyncDeltaTime"
+
+// REG_DWORD, misc flags
+#define CERT_AUTH_ROOT_AUTO_UPDATE_FLAGS_VALUE_NAME             L"Flags"
+
+#define CERT_AUTH_ROOT_AUTO_UPDATE_DISABLE_UNTRUSTED_ROOT_LOGGING_FLAG  0x1
+#define CERT_AUTH_ROOT_AUTO_UPDATE_DISABLE_PARTIAL_CHAIN_LOGGING_FLAG   0x2
+
+
+// AuthRoot Auto Update filenames
+
+// CTL containing the list of certs in the AuthRoot store
+#define CERT_AUTH_ROOT_CTL_FILENAME                             L"authroot.stl"
+#define CERT_AUTH_ROOT_CTL_FILENAME_A                           "authroot.stl"
+
+// Cab containing the above CTL
+#define CERT_AUTH_ROOT_CAB_FILENAME                             L"authrootstl.cab"
+
+// SequenceNumber (Formatted as big endian ascii hex)
+#define CERT_AUTH_ROOT_SEQ_FILENAME                             L"authrootseq.txt"
+
+// Root certs extension
+#define CERT_AUTH_ROOT_CERT_EXT                                 L".crt"
+
 
 
 //+-------------------------------------------------------------------------
@@ -6726,6 +7517,28 @@ typedef struct _CERT_REGISTRY_STORE_ROAMING_PARA {
 //
 #define CERT_FILE_STORE_COMMIT_ENABLE_FLAG      0x10000
 
+
+//+-------------------------------------------------------------------------
+//  Certificate LDAP Store Flag Values for the providers:
+//      CERT_STORE_PROV_LDAP
+//      CERT_STORE_PROV_LDAP_W
+//      sz_CERT_STORE_PROV_LDAP_W
+//      sz_CERT_STORE_PROV_LDAP
+//--------------------------------------------------------------------------
+
+// Set this flag to digitally sign all of the ldap traffic to and from a
+// Windows 2000 LDAP server using the Kerberos authentication protocol.
+// This feature provides integrity required by some applications. 
+//
+#define CERT_LDAP_STORE_SIGN_FLAG               0x10000
+
+// Performs an A-Record only DNS lookup on the supplied host string.
+// This prevents bogus DNS queries from being generated when resolving host
+// names. Use this flag whenever passing a hostname as opposed to a
+// domain name for the hostname parameter. 
+//
+// See LDAP_OPT_AREC_EXCLUSIVE defined in winldap.h for more details.
+#define CERT_LDAP_STORE_AREC_EXCLUSIVE_FLAG     0x20000
 
 //+-------------------------------------------------------------------------
 //  Open the cert store using the specified store provider.
@@ -7664,7 +8477,9 @@ CertFindCertificateInStore(
 #define CERT_COMPARE_SIGNATURE_HASH 14
 #define CERT_COMPARE_KEY_IDENTIFIER 15
 #define CERT_COMPARE_CERT_ID        16
+#define CERT_COMPARE_CROSS_CERT_DIST_POINTS 17
 
+#define CERT_COMPARE_PUBKEY_MD5_HASH 18
 
 //+-------------------------------------------------------------------------
 //  dwFindType
@@ -7707,8 +8522,12 @@ CertFindCertificateInStore(
 #define CERT_FIND_ISSUER_OF     (CERT_COMPARE_ISSUER_OF << CERT_COMPARE_SHIFT)
 #define CERT_FIND_EXISTING      (CERT_COMPARE_EXISTING << CERT_COMPARE_SHIFT)
 #define CERT_FIND_CERT_ID       (CERT_COMPARE_CERT_ID << CERT_COMPARE_SHIFT)
+#define CERT_FIND_CROSS_CERT_DIST_POINTS \
+                    (CERT_COMPARE_CROSS_CERT_DIST_POINTS << CERT_COMPARE_SHIFT)
 
 
+#define CERT_FIND_PUBKEY_MD5_HASH \
+                    (CERT_COMPARE_PUBKEY_MD5_HASH << CERT_COMPARE_SHIFT)
 
 //+-------------------------------------------------------------------------
 //  CERT_FIND_ANY
@@ -7889,6 +8708,15 @@ CertFindCertificateInStore(
 //  Find a certificate with the specified CERT_ID.
 //
 //  pvFindPara points to a CERT_ID.
+//--------------------------------------------------------------------------
+
+//+-------------------------------------------------------------------------
+//  CERT_FIND_CROSS_CERT_DIST_POINTS
+//
+//  Find a certificate having either a cross certificate distribution
+//  point extension or property.
+//
+//  pvFindPara isn't used.
 //--------------------------------------------------------------------------
 
 //+-------------------------------------------------------------------------
@@ -8087,6 +8915,27 @@ CertFreeCertificateContext(
 //      CryptEncodeObject(X509_DSS_PARAMETERS). This property may be set
 //      by CryptVerifyCertificateSignatureEx().
 //
+//      CERT_CROSS_CERT_DIST_POINTS_PROP_ID - location of the cross certs.
+//      Currently only applicable to certs. pvData points to a CRYPT_DATA_BLOB
+//      containing an ASN.1 encoded CROSS_CERT_DIST_POINTS_INFO (encoded via
+//      CryptEncodeObject(X509_CROSS_CERT_DIST_POINTS)).
+//
+//      CERT_ENROLLMENT_PROP_ID - enrollment information of the pending request.
+//      It contains RequestID, CADNSName, CAName, and FriendlyName.
+//      The data format is defined as, the first 4 bytes - pending request ID,
+//      next 4 bytes - CADNSName size in characters including null-terminator
+//      followed by CADNSName string with null-terminator,
+//      next 4 bytes - CAName size in characters including null-terminator
+//      followed by CAName string with null-terminator,
+//      next 4 bytes - FriendlyName size in characters including null-terminator
+//      followed by FriendlyName string with null-terminator.
+//
+//      CERT_DATE_STAMP_PROP_ID - contains the time when added to the store
+//      by an admin tool. pvData points to a CRYPT_DATA_BLOB containing
+//      the FILETIME.
+//
+//      CERT_RENEWAL_PROP_ID - contains the hash of renewed certificate
+//
 //  For all the other PROP_IDs: an encoded PCRYPT_DATA_BLOB is passed in pvData.
 //
 //  If the property already exists, then, the old value is deleted and silently
@@ -8108,6 +8957,9 @@ CertSetCertificateContextProperty(
 // Set this flag to ignore any store provider write errors and always update
 // the cached context's property
 #define CERT_SET_PROPERTY_IGNORE_PERSIST_ERROR_FLAG     0x80000000
+
+// Set this flag to inhibit the persisting of this property
+#define CERT_SET_PROPERTY_INHIBIT_PERSIST_FLAG          0x40000000
 
 //+-------------------------------------------------------------------------
 //  Get the property for the specified certificate context.
@@ -8150,6 +9002,9 @@ CertSetCertificateContextProperty(
 //  for public keys supporting algorithm parameter inheritance and when the
 //  parameters have been omitted from the encoded and signed certificate.
 //
+//  For CERT_DATE_STAMP_PROP_ID, pvPara points to a FILETIME updated by
+//  an admin tool to indicate when the certificate was added to the store.
+//
 //  For all other PROP_IDs, pvData points to an encoded array of bytes.
 //--------------------------------------------------------------------------
 WINCRYPT32API
@@ -8182,6 +9037,60 @@ WINAPI
 CertEnumCertificateContextProperties(
     IN PCCERT_CONTEXT pCertContext,
     IN DWORD dwPropId
+    );
+
+
+//+-------------------------------------------------------------------------
+//  Creates a CTL entry whose attributes are the certificate context's
+//  properties.
+//
+//  The SubjectIdentifier in the CTL entry is the SHA1 hash of the certificate.
+//
+//  The certificate properties are added as attributes. The property attribute 
+//  OID is the decimal PROP_ID preceded by szOID_CERT_PROP_ID_PREFIX. Each
+//  property value is copied as a single attribute value.
+//
+//  Any additional attributes to be included in the CTL entry can be passed
+//  in via the cOptAttr and rgOptAttr parameters.
+//
+//  CTL_ENTRY_FROM_PROP_CHAIN_FLAG can be set in dwFlags, to force the
+//  inclusion of the chain building hash properties as attributes.
+//--------------------------------------------------------------------------
+WINCRYPT32API
+BOOL
+WINAPI
+CertCreateCTLEntryFromCertificateContextProperties(
+    IN PCCERT_CONTEXT pCertContext,
+    IN DWORD cOptAttr,
+    IN OPTIONAL PCRYPT_ATTRIBUTE rgOptAttr,
+    IN DWORD dwFlags,
+    IN OPTIONAL void *pvReserved,
+    OUT OPTIONAL PCTL_ENTRY pCtlEntry,
+    IN OUT DWORD *pcbCtlEntry
+    );
+
+// Set this flag to get and include the chain building hash properties
+// as attributes in the CTL entry
+#define CTL_ENTRY_FROM_PROP_CHAIN_FLAG                  0x1
+
+
+//+-------------------------------------------------------------------------
+//  Sets properties on the certificate context using the attributes in
+//  the CTL entry.
+//
+//  The property attribute OID is the decimal PROP_ID preceded by
+//  szOID_CERT_PROP_ID_PREFIX. Only attributes containing such an OID are
+//  copied.
+//
+//  CERT_SET_PROPERTY_IGNORE_PERSIST_ERROR_FLAG may be set in dwFlags.
+//--------------------------------------------------------------------------
+WINCRYPT32API
+BOOL
+WINAPI
+CertSetCertificateContextPropertiesFromCTLEntry(
+    IN PCCERT_CONTEXT pCertContext,
+    IN PCTL_ENTRY pCtlEntry,
+    IN DWORD dwFlags
     );
 
 //+-------------------------------------------------------------------------
@@ -8220,6 +9129,13 @@ CertEnumCertificateContextProperties(
 //      CERT_STORE_TIME_VALIDITY_FLAG - get the current time and verify that
 //                                      its within the CRL's ThisUpdate and
 //                                      NextUpdate validity period.
+//      CERT_STORE_BASE_CRL_FLAG      - get base CRL.
+//      CERT_STORE_DELTA_CRL_FLAG     - get delta CRL.
+//
+//  If only one of CERT_STORE_BASE_CRL_FLAG or CERT_STORE_DELTA_CRL_FLAG is
+//  set, then, only returns either a base or delta CRL. In any case, the
+//  appropriate base or delta flag will be cleared upon returned. If both
+//  flags are set, then, only one of flags will be cleared.
 //
 //  If an enabled verification check fails, then, its flag is set upon return.
 //
@@ -8301,6 +9217,7 @@ CertFindCRLInStore(
 #define CRL_FIND_ANY                0
 #define CRL_FIND_ISSUED_BY          1
 #define CRL_FIND_EXISTING           2
+#define CRL_FIND_ISSUED_FOR         3
 
 //+-------------------------------------------------------------------------
 //  CRL_FIND_ANY
@@ -8313,9 +9230,10 @@ CertFindCRLInStore(
 //+-------------------------------------------------------------------------
 //  CRL_FIND_ISSUED_BY
 //
-//  Find CRL matching the specified issuer. 
+//  Find CRL matching the specified issuer.
 //
-//  pvFindPara is the PCCERT_CONTEXT of the CRL issuer.
+//  pvFindPara is the PCCERT_CONTEXT of the CRL issuer. May be NULL to
+//  match any issuer.
 //
 //  By default, only does issuer name matching. The following flags can be
 //  set in dwFindFlags to do additional filtering.
@@ -8330,9 +9248,17 @@ CertFindCRLInStore(
 //  If CRL_FIND_ISSUED_BY_SIGNATURE_FLAG is set in dwFindFlags, then,
 //  uses the public key in the issuer's certificate to verify the
 //  signature on the CRL. Only returns a CRL having a valid signature.
+//
+//  If CRL_FIND_ISSUED_BY_DELTA_FLAG is set in dwFindFlags, then, only
+//  returns a delta CRL.
+//
+//  If CRL_FIND_ISSUED_BY_BASE_FLAG is set in dwFindFlags, then, only
+//  returns a base CRL.
 //--------------------------------------------------------------------------
 #define CRL_FIND_ISSUED_BY_AKI_FLAG         0x1
 #define CRL_FIND_ISSUED_BY_SIGNATURE_FLAG   0x2
+#define CRL_FIND_ISSUED_BY_DELTA_FLAG       0x4
+#define CRL_FIND_ISSUED_BY_BASE_FLAG        0x8
 
 //+-------------------------------------------------------------------------
 //  CRL_FIND_EXISTING
@@ -8342,6 +9268,29 @@ CertFindCRLInStore(
 //  pvFindPara is the PCCRL_CONTEXT of the CRL to check if it already
 //  exists in the store.
 //--------------------------------------------------------------------------
+
+//+-------------------------------------------------------------------------
+//  CRL_FIND_ISSUED_FOR
+//
+//  Find CRL for the specified subject and its issuer.
+//
+//  pvFindPara points to the following CRL_FIND_ISSUED_FOR_PARA which contains
+//  both the subject and issuer certificates. Not optional.
+//
+//  The subject's issuer name is used to match the CRL's issuer name. Otherwise,
+//  the issuer's certificate is used the same as in the above
+//  CRL_FIND_ISSUED_BY.
+//
+//  Note, when cross certificates are used, the subject name in the issuer's
+//  certificate may not match the issuer name in the subject certificate and
+//  its corresponding CRL.
+//
+//  All of the above CRL_FIND_ISSUED_BY_*_FLAGS apply to this find type.
+//--------------------------------------------------------------------------
+typedef struct _CRL_FIND_ISSUED_FOR_PARA {
+    PCCERT_CONTEXT              pSubjectCert;
+    PCCERT_CONTEXT              pIssuerCert;
+} CRL_FIND_ISSUED_FOR_PARA, *PCRL_FIND_ISSUED_FOR_PARA;
 
 
 //+-------------------------------------------------------------------------
@@ -8464,6 +9413,29 @@ CertFindCertificateInCRL(
     IN OPTIONAL void *pvReserved,
     OUT PCRL_ENTRY *ppCrlEntry
     );
+
+//+-------------------------------------------------------------------------
+//  Is the specified CRL valid for the certificate.
+//
+//  Returns TRUE if the CRL's list of entries would contain the certificate
+//  if it was revoked. Note, doesn't check that the certificate is in the
+//  list of entries.
+//
+//  If the CRL has an Issuing Distribution Point (IDP) extension, checks
+//  that it's valid for the subject certificate.
+//
+//  dwFlags and pvReserved currently aren't used and must be set to 0 and NULL.
+//--------------------------------------------------------------------------
+WINCRYPT32API
+BOOL
+WINAPI
+CertIsValidCRLForCertificate(
+    IN PCCERT_CONTEXT pCert,
+    IN PCCRL_CONTEXT pCrl,
+    IN DWORD dwFlags,
+    IN void *pvReserved
+    );
+
 
 //+-------------------------------------------------------------------------
 // Add certificate/CRL, encoded, context or element disposition values.
@@ -9216,7 +10188,9 @@ CertControlStore(
 #define CERT_STORE_CTRL_NOTIFY_CHANGE       2
 #define CERT_STORE_CTRL_COMMIT              3
 #define CERT_STORE_CTRL_AUTO_RESYNC         4
+#define CERT_STORE_CTRL_CANCEL_NOTIFY       5
 
+#define CERT_STORE_CTRL_INHIBIT_DUPLICATE_HANDLE_FLAG   0x1
 
 //+-------------------------------------------------------------------------
 //  CERT_STORE_CTRL_RESYNC
@@ -9228,6 +10202,12 @@ CertControlStore(
 //  event HANDLE passed to CERT_STORE_CTRL_NOTIFY_CHANGE during initialization.
 //
 //  If pvCtrlPara is NULL, no events are re-armed.
+//
+//  By default the event HANDLE is DuplicateHandle'd.
+//  CERT_STORE_CTRL_INHIBIT_DUPLICATE_HANDLE_FLAG can be set in dwFlags
+//  to inhibit a DupicateHandle of the event HANDLE. If this flag
+//  is set, then, CertControlStore(CERT_STORE_CTRL_CANCEL_NOTIFY) must be
+//  called for this event HANDLE before closing the hCertStore.
 //--------------------------------------------------------------------------
 
 //+-------------------------------------------------------------------------
@@ -9245,6 +10225,21 @@ CertControlStore(
 //  Recommend calling CERT_STORE_CTRL_NOTIFY_CHANGE once for each event to
 //  be passed to CERT_STORE_CTRL_RESYNC. This should only happen after
 //  the event has been created. Not after each time the event is signaled.
+//
+//  By default the event HANDLE is DuplicateHandle'd.
+//  CERT_STORE_CTRL_INHIBIT_DUPLICATE_HANDLE_FLAG can be set in dwFlags
+//  to inhibit a DupicateHandle of the event HANDLE. If this flag
+//  is set, then, CertControlStore(CERT_STORE_CTRL_CANCEL_NOTIFY) must be
+//  called for this event HANDLE before closing the hCertStore.
+//--------------------------------------------------------------------------
+
+//+-------------------------------------------------------------------------
+//  CERT_STORE_CTRL_CANCEL_NOTIFY
+//
+//  Cancel notification signaling of the event HANDLE passed in a previous
+//  CERT_STORE_CTRL_NOTIFY_CHANGE or CERT_STORE_CTRL_RESYNC.
+//
+//  pvCtrlPara points to the event HANDLE to be canceled.
 //--------------------------------------------------------------------------
 
 //+-------------------------------------------------------------------------
@@ -9670,6 +10665,7 @@ typedef BOOL (WINAPI *PFN_CERT_ENUM_PHYSICAL_STORE)(
 #define CERT_PHYSICAL_STORE_LOCAL_MACHINE_GROUP_POLICY_NAME \
             L".LocalMachineGroupPolicy"
 #define CERT_PHYSICAL_STORE_ENTERPRISE_NAME         L".Enterprise"
+#define CERT_PHYSICAL_STORE_AUTH_ROOT_NAME          L".AuthRoot"
 
 //+-------------------------------------------------------------------------
 //  Enumerate the system store locations.
@@ -10108,6 +11104,21 @@ CertVerifyCTLUsage(
 //==========================================================================
 
 //+-------------------------------------------------------------------------
+//  This data structure is updated by a CRL revocation type handler
+//  with the base and possibly the delta CRL used.
+//--------------------------------------------------------------------------
+typedef struct _CERT_REVOCATION_CRL_INFO {
+    DWORD                   cbSize;
+    PCCRL_CONTEXT           pBaseCrlContext;
+    PCCRL_CONTEXT           pDeltaCrlContext;
+
+    // When revoked, points to entry in either of the above CRL contexts.
+    // Don't free.
+    PCRL_ENTRY              pCrlEntry;
+    BOOL                    fDeltaCrlEntry; // TRUE if in pDeltaCrlContext
+} CERT_REVOCATION_CRL_INFO, *PCERT_REVOCATION_CRL_INFO;
+
+//+-------------------------------------------------------------------------
 //  The following data structure may be passed to CertVerifyRevocation to
 //  assist in finding the issuer of the context to be verified.
 //
@@ -10125,12 +11136,40 @@ CertVerifyCTLUsage(
 //  independent of time or relative to current time
 //--------------------------------------------------------------------------
 typedef struct _CERT_REVOCATION_PARA {
-    DWORD                   cbSize;
-    PCCERT_CONTEXT          pIssuerCert;
-    DWORD                   cCertStore;
-    HCERTSTORE              *rgCertStore;
-    HCERTSTORE              hCrlStore;
-    LPFILETIME              pftTimeToUse;
+    DWORD                       cbSize;
+    PCCERT_CONTEXT              pIssuerCert;
+    DWORD                       cCertStore;
+    HCERTSTORE                  *rgCertStore;
+    HCERTSTORE                  hCrlStore;
+    LPFILETIME                  pftTimeToUse;
+
+#ifdef CERT_REVOCATION_PARA_HAS_EXTRA_FIELDS
+    // Note, if you #define CERT_REVOCATION_PARA_HAS_EXTRA_FIELDS, then, you
+    // must zero all unused fields in this data structure.
+    // More fields could be added in a future release.
+
+    // 0 uses revocation handler's default timeout.
+    DWORD                       dwUrlRetrievalTimeout;  // milliseconds
+
+    // When set, checks and attempts to retrieve a CRL where
+    // ThisUpdate >= (CurrentTime - dwFreshnessTime). Otherwise, defaults
+    // to using the CRL's NextUpdate.
+    BOOL                        fCheckFreshnessTime;
+    DWORD                       dwFreshnessTime;        // seconds
+
+    // If NULL, revocation handler gets the current time
+    LPFILETIME                  pftCurrentTime;
+
+    // If nonNULL, a CRL revocation type handler updates with the base and
+    // possibly the delta CRL used. Note, *pCrlInfo must be initialized
+    // by the caller. Any nonNULL CRL contexts are freed. Any updated
+    // CRL contexts must be freed by the caller.
+    //
+    // The CRL info is only applicable to the last context checked. If
+    // interested in this information, then, CertVerifyRevocation should be
+    // called with cContext = 1.
+    PCERT_REVOCATION_CRL_INFO   pCrlInfo;
+#endif
 } CERT_REVOCATION_PARA, *PCERT_REVOCATION_PARA;
 
 
@@ -10140,17 +11179,30 @@ typedef struct _CERT_REVOCATION_PARA {
 //  following CertVerifyRevocation comments for details.
 //
 //  Upon input to CertVerifyRevocation, cbSize must be set to a size
-//  >= sizeof(CERT_REVOCATION_STATUS). Otherwise, CertVerifyRevocation
-//  returns FALSE and sets LastError to E_INVALIDARG.
+//  >= (offsetof(CERT_REVOCATION_STATUS, dwReason) + sizeof(DWORD) ).
+//  Otherwise, CertVerifyRevocation returns FALSE and sets LastError to
+//  E_INVALIDARG.
 //
 //  Upon input to the installed or registered CRYPT_OID_VERIFY_REVOCATION_FUNC
 //  functions, the dwIndex, dwError and dwReason have been zero'ed.
+//  If present, fHasFreshnessTime and dwFreshnessTime have been zero'ed.
 //--------------------------------------------------------------------------
 typedef struct _CERT_REVOCATION_STATUS {
     DWORD                   cbSize;
     DWORD                   dwIndex;
     DWORD                   dwError;
     DWORD                   dwReason;
+
+    // Depending on cbSize, the following fields may optionally be returned.
+
+    // The Freshness time is only applicable to the last context checked. If
+    // interested in this information, then, CertVerifyRevocation should be
+    // called with cContext = 1.
+    //
+    // fHasFreshnessTime is only set if we are able to retrieve revocation
+    // information. For a CRL its CurrentTime - ThisUpdate.
+    BOOL                    fHasFreshnessTime;
+    DWORD                   dwFreshnessTime;    // seconds
 } CERT_REVOCATION_STATUS, *PCERT_REVOCATION_STATUS;
 
 //+-------------------------------------------------------------------------
@@ -10259,6 +11311,15 @@ CertVerifyRevocation(
 // accessing any network based resources for revocation checking
 //--------------------------------------------------------------------------
 #define CERT_VERIFY_CACHE_ONLY_BASED_REVOCATION 0x00000002
+
+//+-------------------------------------------------------------------------
+//  By default, the dwUrlRetrievalTimeout in pRevPara is the timeout used
+//  for each URL wire retrieval. When the following flag is set,
+//  dwUrlRetrievalTimeout is the accumulative timeout across all URL wire
+//  retrievals.
+//--------------------------------------------------------------------------
+#define CERT_VERIFY_REV_ACCUMULATIVE_TIMEOUT_FLAG   0x00000004
+
 
 //+-------------------------------------------------------------------------
 //  CERT_CONTEXT_REVOCATION_TYPE
@@ -10419,6 +11480,12 @@ CryptVerifyCertificateSignature(
 //  hCryptProv specifies the crypto provider to use to verify the signature.
 //  Its private key isn't used. If hCryptProv is NULL, a default
 //  provider is picked according to the PublicKey Algorithm OID.
+//
+//  If the signature algorithm is a hashing algorithm, then, the
+//  signature is expected to contain the hash octets. Only dwIssuerType
+//  of CRYPT_VERIFY_CERT_SIGN_ISSUER_NULL may be specified
+//  to verify this no signature case. If any other dwIssuerType is
+//  specified, the verify will fail with LastError set to E_INVALIDARG.
 //--------------------------------------------------------------------------
 WINCRYPT32API
 BOOL
@@ -10450,6 +11517,8 @@ CryptVerifyCertificateSignatureEx(
     // pvIssuer :: PCCERT_CONTEXT
 #define CRYPT_VERIFY_CERT_SIGN_ISSUER_CHAIN         3
     // pvIssuer :: PCCERT_CHAIN_CONTEXT
+#define CRYPT_VERIFY_CERT_SIGN_ISSUER_NULL          4
+    // pvIssuer :: NULL
 
 //+-------------------------------------------------------------------------
 //  Compute the hash of the "to be signed" information in the encoded
@@ -10497,6 +11566,11 @@ CryptHashCertificate(
 //
 //  hCryptProv specifies the crypto provider to use to do the signature.
 //  It uses the specified private key.
+//
+//  If the SignatureAlgorithm is a hash algorithm, then, the signature
+//  contains the hash octets. A private key isn't used to encrypt the hash.
+//  dwKeySpec isn't used and hCryptProv can be NULL where an appropriate
+//  default provider will be used for hashing.
 //--------------------------------------------------------------------------
 WINCRYPT32API
 BOOL
@@ -10519,6 +11593,11 @@ CryptSignCertificate(
 //
 //  hCryptProv specifies the crypto provider to use to do the signature.
 //  It uses the specified private key.
+//
+//  If the SignatureAlgorithm is a hash algorithm, then, the signature
+//  contains the hash octets. A private key isn't used to encrypt the hash.
+//  dwKeySpec isn't used and hCryptProv can be NULL where an appropriate
+//  default provider will be used for hashing.
 //--------------------------------------------------------------------------
 WINCRYPT32API
 BOOL
@@ -10780,7 +11859,7 @@ CryptUninstallDefaultContext(
 //  Export the public key info associated with the provider's corresponding
 //  private key.
 //
-//  Calls CryptExportPublicKeyInfo with pszPublicKeyObjId = szOID_RSA_RSA,
+//  Calls CryptExportPublicKeyInfoEx with pszPublicKeyObjId = NULL,
 //  dwFlags = 0 and pvAuxInfo = NULL.
 //--------------------------------------------------------------------------
 WINCRYPT32API
@@ -10896,6 +11975,9 @@ CryptImportPublicKeyInfoEx(
 //  a cached HCRYPTPROV is returned, the comparison isn't done. We assume the
 //  comparison was done on the initial acquire.
 //
+//  The CRYPT_ACQUIRE_SILENT_FLAG can be set to suppress any UI by the CSP.
+//  See CryptAcquireContext's CRYPT_SILENT flag for more details.
+//
 //  *pfCallerFreeProv is returned set to FALSE for:
 //    - Acquire or public key comparison fails.
 //    - CRYPT_ACQUIRE_CACHE_FLAG is set.
@@ -10922,9 +12004,11 @@ CryptAcquireCertificatePrivateKey(
     OUT OPTIONAL BOOL *pfCallerFreeProv
     );
 
-#define CRYPT_ACQUIRE_CACHE_FLAG                0x1
-#define CRYPT_ACQUIRE_USE_PROV_INFO_FLAG        0x2
-#define CRYPT_ACQUIRE_COMPARE_KEY_FLAG          0x4
+#define CRYPT_ACQUIRE_CACHE_FLAG                0x00000001
+#define CRYPT_ACQUIRE_USE_PROV_INFO_FLAG        0x00000002
+#define CRYPT_ACQUIRE_COMPARE_KEY_FLAG          0x00000004
+
+#define CRYPT_ACQUIRE_SILENT_FLAG               0x00000040
 
 
 //+-------------------------------------------------------------------------
@@ -10940,6 +12024,9 @@ CryptAcquireCertificatePrivateKey(
 //  The CRYPT_FIND_USER_KEYSET_FLAG or CRYPT_FIND_MACHINE_KEYSET_FLAG
 //  can be set in dwFlags to restrict the search to either of the containers.
 //
+//  The CRYPT_FIND_SILENT_KEYSET_FLAG can be set to suppress any UI by the CSP.
+//  See CryptAcquireContext's CRYPT_SILENT flag for more details.
+//
 //  If a container isn't found, returns FALSE with LastError set to
 //  NTE_NO_KEY.
 //--------------------------------------------------------------------------
@@ -10952,8 +12039,9 @@ CryptFindCertificateKeyProvInfo(
     IN void *pvReserved
     );
 
-#define CRYPT_FIND_USER_KEYSET_FLAG        0x1
-#define CRYPT_FIND_MACHINE_KEYSET_FLAG     0x2
+#define CRYPT_FIND_USER_KEYSET_FLAG        0x00000001
+#define CRYPT_FIND_MACHINE_KEYSET_FLAG     0x00000002
+#define CRYPT_FIND_SILENT_KEYSET_FLAG      0x00000040
 
 
 //+-------------------------------------------------------------------------
@@ -11057,11 +12145,11 @@ CryptExportPKCS8(
 // psExportParams - specifies information about the key to export
 // dwFlags - The flag values. None currently supported
 // pvAuxInfo - This parameter is reserved for future use and should be set to
-//			   NULL in the interim.
+//                         NULL in the interim.
 // pbPrivateKeyBlob - A pointer to the private key blob.  It will be encoded
-//					  as a PKCS8 PrivateKeyInfo.
+//                                        as a PKCS8 PrivateKeyInfo.
 // pcbPrivateKeyBlob - A pointer to a DWORD that contains the size, in bytes,
-//					   of the private key blob being exported.
+//                                         of the private key blob being exported.
 //+-------------------------------------------------------------------------
 WINCRYPT32API
 BOOL
@@ -11400,6 +12488,25 @@ CertStrToNameW(
 //      Subject Name field for the Email OID, "1.2.840.113549.1.9.1".
 //      If the rfc822Name or Email OID is found, returns the string. Otherwise,
 //      returns an empty string (returned character count is 1).
+//    CERT_NAME_DNS_TYPE
+//      If the certificate has a Subject Alternative Name extension (for
+//      issuer, Issuer Alternative Name), searches for first DNSName choice.
+//      If the DNSName choice isn't found in the extension, searches the
+//      Subject Name field for the CN OID, "2.5.4.3".
+//      If the DNSName or CN OID is found, returns the string. Otherwise,
+//      returns an empty string.
+//    CERT_NAME_URL_TYPE
+//      If the certificate has a Subject Alternative Name extension (for
+//      issuer, Issuer Alternative Name), searches for first URL choice.
+//      If the URL choice is found, returns the string. Otherwise,
+//      returns an empty string.
+//    CERT_NAME_UPN_TYPE
+//      If the certificate has a Subject Alternative Name extension,
+//      searches the OtherName choices looking for a
+//      pszObjId == szOID_NT_PRINCIPAL_NAME, "1.3.6.1.4.1.311.20.2.3".
+//      If the UPN OID is found, the blob is decoded as a
+//      X509_UNICODE_ANY_STRING and the decoded string is returned.
+//      Otherwise, returns an empty string.
 //    CERT_NAME_RDN_TYPE
 //      Converts the Subject Name blob by calling CertNameToStr. pvTypePara
 //      points to a DWORD containing the dwStrType passed to CertNameToStr.
@@ -11490,6 +12597,9 @@ CertGetNameStringW(
 #define CERT_NAME_ATTR_TYPE             3
 #define CERT_NAME_SIMPLE_DISPLAY_TYPE   4
 #define CERT_NAME_FRIENDLY_DISPLAY_TYPE 5
+#define CERT_NAME_DNS_TYPE              6
+#define CERT_NAME_URL_TYPE              7
+#define CERT_NAME_UPN_TYPE              8
 
 //+-------------------------------------------------------------------------
 //  Certificate name flags
@@ -11597,6 +12707,9 @@ typedef PCCERT_CONTEXT (WINAPI *PFN_CRYPT_GET_SIGNER_CERTIFICATE)(
 //  For CMS messages, CRYPT_MESSAGE_KEYID_SIGNER_FLAG may be set to identify
 //  signers by their Key Identifier and not their Issuer and Serial Number.
 //
+//  The CRYPT_MESSAGE_SILENT_KEYSET_FLAG can be set to suppress any UI by the
+//  CSP. See CryptAcquireContext's CRYPT_SILENT flag for more details.
+//
 //  If HashEncryptionAlgorithm is present and not NULL its used instead of
 //  the SigningCert's PublicKeyInfo.Algorithm.
 //
@@ -11630,15 +12743,19 @@ typedef struct _CRYPT_SIGN_MESSAGE_PARA {
 #endif
 } CRYPT_SIGN_MESSAGE_PARA, *PCRYPT_SIGN_MESSAGE_PARA;
 
-#define CRYPT_MESSAGE_BARE_CONTENT_OUT_FLAG     0x1
+#define CRYPT_MESSAGE_BARE_CONTENT_OUT_FLAG         0x00000001
 
 // When set, nonData type inner content is encapsulated within an
 // OCTET STRING
-#define CRYPT_MESSAGE_ENCAPSULATED_CONTENT_OUT_FLAG 0x2
+#define CRYPT_MESSAGE_ENCAPSULATED_CONTENT_OUT_FLAG 0x00000002
 
 // When set, signers are identified by their Key Identifier and not
 // their Issuer and Serial Number.
-#define CRYPT_MESSAGE_KEYID_SIGNER_FLAG         0x4
+#define CRYPT_MESSAGE_KEYID_SIGNER_FLAG             0x00000004
+
+// When set, suppresses any UI by the CSP.
+// See CryptAcquireContext's CRYPT_SILENT flag for more details.
+#define CRYPT_MESSAGE_SILENT_KEYSET_FLAG            0x00000040
 
 //+-------------------------------------------------------------------------
 //  The CRYPT_VERIFY_MESSAGE_PARA are used to verify signed messages.
@@ -11740,6 +12857,15 @@ typedef struct _CRYPT_DECRYPT_MESSAGE_PARA {
     DWORD                   dwMsgAndCertEncodingType;
     DWORD                   cCertStore;
     HCERTSTORE              *rghCertStore;
+
+#ifdef CRYPT_DECRYPT_MESSAGE_PARA_HAS_EXTRA_FIELDS
+// The above defined, CRYPT_MESSAGE_SILENT_KEYSET_FLAG, can be set to
+// suppress UI by the CSP.  See CryptAcquireContext's CRYPT_SILENT
+// flag for more details.
+
+    DWORD                   dwFlags;
+#endif
+
 } CRYPT_DECRYPT_MESSAGE_PARA, *PCRYPT_DECRYPT_MESSAGE_PARA;
 
 //+-------------------------------------------------------------------------
@@ -12315,8 +13441,9 @@ FindCertsByIssuer(
 //                              CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED
 //                              CERT_QUERY_CONTENT_FLAG_PKCS7_UNSIGNED
 //                              CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED
-//                              CERT_QUERY_CONTNET_FLAG_PKCS10
-//                              CERT_QUERY_CONTNET_FLAG_PFX
+//                              CERT_QUERY_CONTENT_FLAG_PKCS10
+//                              CERT_QUERY_CONTENT_FLAG_PFX
+//                              CERT_QUERY_CONTENT_FLAG_CERT_PAIR
 //
 //  INPUT   dwExpectedFormatTypeFlags:
 //                        Indicate the expected format type.
@@ -12324,6 +13451,7 @@ FindCertsByIssuer(
 //                              CERT_QUERY_FORMAT_FLAG_ALL (the content can be any format)
 //                              CERT_QUERY_FORMAT_FLAG_BINARY
 //                              CERT_QUERY_FORMAT_FLAG_BASE64_ENCODED
+//                              CERT_QUERY_FORMAT_FLAG_ASN_ASCII_HEX_ENCODED
 //
 //
 //  INPUT   dwFlags
@@ -12351,6 +13479,7 @@ FindCertsByIssuer(
 //                              CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED
 //                              CERT_QUERY_CONTENT_PKCS10
 //                              CERT_QUERY_CONTENT_PFX
+//                              CERT_QUERY_CONTENT_CERT_PAIR
 //
 //  OUTPUT  pdwFormatType
 //                        Optional output.  If NULL !=pdwFormatType, it
@@ -12358,6 +13487,7 @@ FindCertsByIssuer(
 //                        following:
 //                              CERT_QUERY_FORMAT_BINARY
 //                              CERT_QUERY_FORMAT_BASE64_ENCODED
+//                              CERT_QUERY_FORMAT_ASN_ASCII_HEX_ENCODED
 //
 //
 //  OUTPUT  phCertStore
@@ -12374,6 +13504,7 @@ FindCertsByIssuer(
 //                              CERT_QUERY_CONTENT_SERIALIZED_CRL
 //                              CERT_QUERY_CONTENT_PKCS7_SIGNED
 //                              CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED
+//                              CERT_QUERY_CONTENT_CERT_PAIR
 //
 //                       Caller should free *phCertStore via CertCloseStore.
 //
@@ -12431,7 +13562,7 @@ CryptQueryObject(
 #define     CERT_QUERY_OBJECT_BLOB         0x00000002
 
 //-------------------------------------------------------------------------
-//dwConentType for CryptQueryObject
+//dwContentType for CryptQueryObject
 //-------------------------------------------------------------------------
 //encoded single certificate
 #define     CERT_QUERY_CONTENT_CERT                 1
@@ -12456,7 +13587,9 @@ CryptQueryObject(
 //an encoded PKCS#10
 #define     CERT_QUERY_CONTENT_PKCS10               11
 //an encoded PKX BLOB
-#define     CERT_QUERY_CONTENT_PFX					12
+#define     CERT_QUERY_CONTENT_PFX                                      12
+//an encoded CertificatePair (contains forward and/or reverse cross certs)
+#define     CERT_QUERY_CONTENT_CERT_PAIR            13
 
 
 //-------------------------------------------------------------------------
@@ -12511,6 +13644,10 @@ CryptQueryObject(
 #define     CERT_QUERY_CONTENT_FLAG_PFX      \
                 ( 1 << CERT_QUERY_CONTENT_PFX)
 
+//an encoded CertificatePair (contains forward and/or reverse cross certs)
+#define     CERT_QUERY_CONTENT_FLAG_CERT_PAIR   \
+                ( 1 << CERT_QUERY_CONTENT_CERT_PAIR)
+
 //content can be any type
 #define     CERT_QUERY_CONTENT_FLAG_ALL                         \
                 CERT_QUERY_CONTENT_FLAG_CERT |                  \
@@ -12523,8 +13660,9 @@ CryptQueryObject(
                 CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED     |      \
                 CERT_QUERY_CONTENT_FLAG_PKCS7_UNSIGNED   |      \
                 CERT_QUERY_CONTENT_FLAG_PKCS7_SIGNED_EMBED |    \
-                CERT_QUERY_CONTENT_FLAG_PKCS10			   |    \
-                CERT_QUERY_CONTENT_FLAG_PFX
+                CERT_QUERY_CONTENT_FLAG_PKCS10                     |    \
+                CERT_QUERY_CONTENT_FLAG_PFX                |    \
+                CERT_QUERY_CONTENT_FLAG_CERT_PAIR
 
 
 //-------------------------------------------------------------------------
@@ -12535,6 +13673,9 @@ CryptQueryObject(
 
 //the content is base64 encoded
 #define     CERT_QUERY_FORMAT_BASE64_ENCODED        2
+
+//the content is ascii hex encoded with "{ASN}" prefix
+#define     CERT_QUERY_FORMAT_ASN_ASCII_HEX_ENCODED 3
 //-------------------------------------------------------------------------
 //dwExpectedFormatTypeFlags for CryptQueryObject
 //-------------------------------------------------------------------------
@@ -12546,10 +13687,15 @@ CryptQueryObject(
 #define     CERT_QUERY_FORMAT_FLAG_BASE64_ENCODED \
                 ( 1 << CERT_QUERY_FORMAT_BASE64_ENCODED)
 
+//the content is ascii hex encoded with "{ASN}" prefix
+#define     CERT_QUERY_FORMAT_FLAG_ASN_ASCII_HEX_ENCODED \
+                ( 1 << CERT_QUERY_FORMAT_ASN_ASCII_HEX_ENCODED)
+
 //the content can be of any format
 #define     CERT_QUERY_FORMAT_FLAG_ALL              \
             CERT_QUERY_FORMAT_FLAG_BINARY   |       \
-            CERT_QUERY_FORMAT_FLAG_BASE64_ENCODED
+            CERT_QUERY_FORMAT_FLAG_BASE64_ENCODED | \
+            CERT_QUERY_FORMAT_FLAG_ASN_ASCII_HEX_ENCODED
 
 
 
@@ -12701,13 +13847,13 @@ typedef VOID (WINAPI *PFN_FREE_ENCODED_OBJECT_FUNC) (
 //                   IN LPCSTR pszUrl,
 //                   IN LPCSTR pszObjectOid,
 //                   IN DWORD dwRetrievalFlags,
-//                   IN DWORD dwTimeout,
+//                   IN DWORD dwTimeout,                // milliseconds
 //                   OUT PCRYPT_BLOB_ARRAY pObject,
 //                   OUT PFN_FREE_ENCODED_OBJECT_FUNC* ppfnFreeObject,
 //                   OUT LPVOID* ppvFreeContext,
 //                   IN HCRYPTASYNC hAsyncRetrieve,
 //                   IN PCRYPT_CREDENTIALS pCredentials,
-//                   IN LPVOID pvReserved
+//                   IN PCRYPT_RETRIEVE_AUX_INFO pAuxInfo
 //                   )
 //
 
@@ -12742,11 +13888,40 @@ typedef VOID (WINAPI *PFN_FREE_ENCODED_OBJECT_FUNC) (
 // Retrieval flags
 //
 
-#define CRYPT_RETRIEVE_MULTIPLE_OBJECTS 0x00000001
-#define CRYPT_CACHE_ONLY_RETRIEVAL      0x00000002
-#define CRYPT_WIRE_ONLY_RETRIEVAL       0x00000004
-#define CRYPT_DONT_CACHE_RESULT         0x00000008
-#define CRYPT_ASYNC_RETRIEVAL           0x00000010
+#define CRYPT_RETRIEVE_MULTIPLE_OBJECTS         0x00000001
+#define CRYPT_CACHE_ONLY_RETRIEVAL              0x00000002
+#define CRYPT_WIRE_ONLY_RETRIEVAL               0x00000004
+#define CRYPT_DONT_CACHE_RESULT                 0x00000008
+#define CRYPT_ASYNC_RETRIEVAL                   0x00000010
+#define CRYPT_STICKY_CACHE_RETRIEVAL            0x00001000
+#define CRYPT_LDAP_SCOPE_BASE_ONLY_RETRIEVAL    0x00002000
+#define CRYPT_OFFLINE_CHECK_RETRIEVAL           0x00004000
+
+// When the following flag is set, the following 2 NULL terminated ascii
+// strings are inserted at the beginning of each returned blob:
+//  "%d\0%s\0", dwEntryIndex, pszAttribute
+//
+//  The first dwEntryIndex is 0, "0\0". 
+//
+// When set, pszObjectOid must be NULL, so that a PCRYPT_BLOB_ARRAY is returned.
+#define CRYPT_LDAP_INSERT_ENTRY_ATTRIBUTE       0x00008000
+
+// Set this flag to digitally sign all of the ldap traffic to and from a
+// Windows 2000 LDAP server using the Kerberos authentication protocol.
+// This feature provides integrity required by some applications. 
+#define CRYPT_LDAP_SIGN_RETRIEVAL               0x00010000
+
+// Set this flag to inhibit automatic authentication handling. See the
+// wininet flag, INTERNET_FLAG_NO_AUTH, for more details.
+#define CRYPT_NO_AUTH_RETRIEVAL                 0x00020000
+
+// Performs an A-Record only DNS lookup on the supplied host string.
+// This prevents bogus DNS queries from being generated when resolving host
+// names. Use this flag whenever passing a hostname as opposed to a
+// domain name for the hostname parameter. 
+//
+// See LDAP_OPT_AREC_EXCLUSIVE defined in winldap.h for more details.
+#define CRYPT_LDAP_AREC_EXCLUSIVE_RETRIEVAL     0x00040000
 
 //
 // Data verification retrieval flags
@@ -12767,9 +13942,20 @@ typedef VOID (WINAPI *PFN_FREE_ENCODED_OBJECT_FUNC) (
 // Time Valid Object flags
 //
 
-#define CRYPT_KEEP_TIME_VALID           0x00000080
-#define CRYPT_DONT_VERIFY_SIGNATURE     0x00000100
-#define CRYPT_DONT_CHECK_TIME_VALIDITY  0x00000200
+#define CRYPT_KEEP_TIME_VALID               0x00000080
+#define CRYPT_DONT_VERIFY_SIGNATURE         0x00000100
+#define CRYPT_DONT_CHECK_TIME_VALIDITY      0x00000200
+
+// The default checks if ftNextUpdate >= ftValidFor. Set this flag to
+// check if ftThisUpdate >= ftValidFor.
+#define CRYPT_CHECK_FRESHNESS_TIME_VALIDITY 0x00000400
+
+#define CRYPT_ACCUMULATIVE_TIMEOUT          0x00000800
+
+typedef struct _CRYPT_RETRIEVE_AUX_INFO {
+    DWORD       cbSize;
+    FILETIME    *pLastSyncTime;
+} CRYPT_RETRIEVE_AUX_INFO, *PCRYPT_RETRIEVE_AUX_INFO;
 
 WINCRYPT32API
 BOOL
@@ -12778,12 +13964,12 @@ CryptRetrieveObjectByUrlA (
     IN LPCSTR pszUrl,
     IN LPCSTR pszObjectOid,
     IN DWORD dwRetrievalFlags,
-    IN DWORD dwTimeout,
+    IN DWORD dwTimeout,                     // milliseconds
     OUT LPVOID* ppvObject,
     IN HCRYPTASYNC hAsyncRetrieve,
     IN OPTIONAL PCRYPT_CREDENTIALS pCredentials,
     IN OPTIONAL LPVOID pvVerify,
-    IN OPTIONAL LPVOID pvReserved
+    IN OPTIONAL PCRYPT_RETRIEVE_AUX_INFO pAuxInfo
     );
 WINCRYPT32API
 BOOL
@@ -12792,12 +13978,12 @@ CryptRetrieveObjectByUrlW (
     IN LPCWSTR pszUrl,
     IN LPCSTR pszObjectOid,
     IN DWORD dwRetrievalFlags,
-    IN DWORD dwTimeout,
+    IN DWORD dwTimeout,                     // milliseconds
     OUT LPVOID* ppvObject,
     IN HCRYPTASYNC hAsyncRetrieve,
     IN OPTIONAL PCRYPT_CREDENTIALS pCredentials,
     IN OPTIONAL LPVOID pvVerify,
-    IN OPTIONAL LPVOID pvReserved
+    IN OPTIONAL PCRYPT_RETRIEVE_AUX_INFO pAuxInfo
     );
 #ifdef UNICODE
 #define CryptRetrieveObjectByUrl  CryptRetrieveObjectByUrlW
@@ -12809,11 +13995,11 @@ CryptRetrieveObjectByUrlW (
 //
 // Call back function to cancel object retrieval
 //
-// The function can be installed on a per thread basis.  
+// The function can be installed on a per thread basis.
 // If CryptInstallCancelRetrieval is called for multiple times, only the most recent
 // installation will be kept.
 //
-// This is only effective for http, https, gopher, and ftp protocol.  
+// This is only effective for http, https, gopher, and ftp protocol.
 // It is ignored by the rest of the protocols.
 
 
@@ -12834,7 +14020,7 @@ WINCRYPT32API
 BOOL
 WINAPI
 CryptInstallCancelRetrieval(
-    IN PFN_CRYPT_CANCEL_RETRIEVAL pfnCancel, 
+    IN PFN_CRYPT_CANCEL_RETRIEVAL pfnCancel,
     IN const void *pvArg,
     IN DWORD dwFlags,
     IN void *pvReserved
@@ -12845,9 +14031,9 @@ WINCRYPT32API
 BOOL
 WINAPI
 CryptUninstallCancelRetrieval(
-	IN DWORD dwFlags,
-	IN void  *pvReserved
-	);
+        IN DWORD dwFlags,
+        IN void  *pvReserved
+        );
 
 
 WINCRYPT32API
@@ -12907,7 +14093,16 @@ typedef struct _CRYPT_URL_ARRAY {
 } CRYPT_URL_ARRAY, *PCRYPT_URL_ARRAY;
 
 typedef struct _CRYPT_URL_INFO {
-    DWORD cbSize;
+    DWORD   cbSize;
+
+    // Seconds between syncs
+    DWORD   dwSyncDeltaTime;
+
+    // Returned URLs may be grouped. For instance, groups of cross cert
+    // distribution points. Each distribution point may have multiple
+    // URLs, (LDAP and HTTP scheme).
+    DWORD   cGroup;
+    DWORD   *rgcGroupEntry;
 } CRYPT_URL_INFO, *PCRYPT_URL_INFO;
 
 WINCRYPT32API
@@ -12972,12 +14167,45 @@ CryptGetObjectUrl (
 // cert distribution point extension).  It will be encoded as an authority
 // info access extension method.
 //
+// URL_OID_CERTIFICATE_FRESHEST_CRL
+//
+// pvPara == PCCERT_CONTEXT, certificate whose freshest CRL distribution point
+// is being requested
+//
+// This will be retrieved from the freshest CRL extension or property
+// on the certificate
+//
+// URL_OID_CRL_FRESHEST_CRL
+//
+// pvPara == PCCERT_CRL_CONTEXT_PAIR, certificate's base CRL whose
+// freshest CRL distribution point is being requested
+//
+// This will be retrieved from the freshest CRL extension or property
+// on the CRL
+//
+// URL_OID_CROSS_CERT_DIST_POINT
+//
+// pvPara == PCCERT_CONTEXT, certificate whose cross certificate distribution
+// point is being requested
+//
+// This will be retrieved from the cross certificate distribution point
+// extension or property on the certificate
+//
 
 #define URL_OID_CERTIFICATE_ISSUER         ((LPCSTR)1)
 #define URL_OID_CERTIFICATE_CRL_DIST_POINT ((LPCSTR)2)
 #define URL_OID_CTL_ISSUER                 ((LPCSTR)3)
 #define URL_OID_CTL_NEXT_UPDATE            ((LPCSTR)4)
 #define URL_OID_CRL_ISSUER                 ((LPCSTR)5)
+#define URL_OID_CERTIFICATE_FRESHEST_CRL   ((LPCSTR)6)
+#define URL_OID_CRL_FRESHEST_CRL           ((LPCSTR)7)
+#define URL_OID_CROSS_CERT_DIST_POINT      ((LPCSTR)8)
+
+typedef struct _CERT_CRL_CONTEXT_PAIR {
+    PCCERT_CONTEXT          pCertContext;
+    PCCRL_CONTEXT           pCrlContext;
+} CERT_CRL_CONTEXT_PAIR, *PCERT_CRL_CONTEXT_PAIR;
+typedef const CERT_CRL_CONTEXT_PAIR *PCCERT_CRL_CONTEXT_PAIR;
 
 //
 // Get a time valid CAPI2 object
@@ -12992,7 +14220,7 @@ CryptGetTimeValidObject (
     IN PCCERT_CONTEXT pIssuer,
     IN OPTIONAL LPFILETIME pftValidFor,
     IN DWORD dwFlags,
-    IN DWORD dwTimeout,
+    IN DWORD dwTimeout,                         // milliseconds
     OUT OPTIONAL LPVOID* ppvObject,
     IN OPTIONAL PCRYPT_CREDENTIALS pCredentials,
     IN OPTIONAL LPVOID pvReserved
@@ -13017,10 +14245,21 @@ CryptGetTimeValidObject (
 //
 // pvPara == PCCERT_CONTEXT, the subject cert
 //
+// TIME_VALID_OID_GET_FRESHEST_CRL_FROM_CERT
+//
+// pvPara == PCCERT_CONTEXT, the subject cert
+//
+// TIME_VALID_OID_GET_FRESHEST_CRL_FROM_CRL
+//
+// pvPara == PCCERT_CRL_CONTEXT_PAIR, the subject cert and its base CRL
+//
 
 #define TIME_VALID_OID_GET_CTL           ((LPCSTR)1)
 #define TIME_VALID_OID_GET_CRL           ((LPCSTR)2)
 #define TIME_VALID_OID_GET_CRL_FROM_CERT ((LPCSTR)3)
+
+#define TIME_VALID_OID_GET_FRESHEST_CRL_FROM_CERT   ((LPCSTR)4)
+#define TIME_VALID_OID_GET_FRESHEST_CRL_FROM_CRL    ((LPCSTR)5)
 
 WINCRYPT32API
 BOOL
@@ -13050,10 +14289,24 @@ CryptFlushTimeValidObject (
 //
 // TIME_VALID_OID_FLUSH_CRL_FROM_CERT
 //
+// pvPara == PCCERT_CONTEXT, the subject cert's CRL to flush
+//
+// TIME_VALID_OID_FLUSH_FRESHEST_CRL_FROM_CERT
+//
+// pvPara == PCCERT_CONTEXT, the subject cert's freshest CRL to flush
+//
+// TIME_VALID_OID_FLUSH_FRESHEST_CRL_FROM_CRL
+//
+// pvPara == PCCERT_CRL_CONTEXT_PAIR, the subject cert and its base CRL's
+// freshest CRL to flush
+//
 
 #define TIME_VALID_OID_FLUSH_CTL           ((LPCSTR)1)
 #define TIME_VALID_OID_FLUSH_CRL           ((LPCSTR)2)
 #define TIME_VALID_OID_FLUSH_CRL_FROM_CERT ((LPCSTR)3)
+
+#define TIME_VALID_OID_FLUSH_FRESHEST_CRL_FROM_CERT ((LPCSTR)4)
+#define TIME_VALID_OID_FLUSH_FRESHEST_CRL_FROM_CRL  ((LPCSTR)5)
 
 //-------------------------------------------------------------------------
 // Data Protection APIs
@@ -13095,11 +14348,11 @@ typedef struct  _CRYPTPROTECT_PROMPTSTRUCT
 //
 // prompt on protect
 #define CRYPTPROTECT_PROMPT_ON_PROTECT       0x2  // 1<<1
-#define CRYPTPROTECT_PROMPT_RESERVED	     0x04 // reserved, do not use.
+#define CRYPTPROTECT_PROMPT_RESERVED         0x04 // reserved, do not use.
 
 //
 // only allow strong variant UI protection (user supplied password currently).
-#define CRYPTPROTECT_PROMPT_STRONG	     0x08 // 1<<3
+#define CRYPTPROTECT_PROMPT_STRONG           0x08 // 1<<3
 
 //
 // CryptProtectData and CryptUnprotectData dwFlags
@@ -13118,6 +14371,27 @@ typedef struct  _CRYPTPROTECT_PROMPTSTRUCT
 // force credential synchronize during CryptProtectData()
 // Synchronize is only operation that occurs during this operation
 #define CRYPTPROTECT_CRED_SYNC           0x8
+
+//
+// Generate an Audit on protect and unprotect operations
+//
+#define CRYPTPROTECT_AUDIT              0x10
+
+//
+// Protect data with a non-recoverable key
+//
+#define CRYPTPROTECT_NO_RECOVERY        0x20
+
+
+//
+// Verify the protection of a protected blob
+//
+#define CRYPTPROTECT_VERIFY_PROTECTION  0x40
+
+//
+// Regenerate the local machine protection
+//
+#define CRYPTPROTECT_CRED_REGENERATE    0x80
 
 // flags reserved for system use
 #define CRYPTPROTECT_FIRST_RESERVED_FLAGVAL    0x0FFFFFFF
@@ -13426,6 +14700,7 @@ typedef HANDLE HCERTCHAINENGINE;
 //                                                URL based objects
 //
 //      dwUrlRetrievalTimeout - timeout for wire based URL object retrievals
+//                              (milliseconds)
 //
 
 #define CERT_CHAIN_CACHE_END_CERT           0x00000001
@@ -13433,6 +14708,7 @@ typedef HANDLE HCERTCHAINENGINE;
 #define CERT_CHAIN_CACHE_ONLY_URL_RETRIEVAL 0x00000004
 #define CERT_CHAIN_USE_LOCAL_MACHINE_STORE  0x00000008
 #define CERT_CHAIN_ENABLE_CACHE_AUTO_UPDATE 0x00000010
+#define CERT_CHAIN_ENABLE_SHARE_STORE       0x00000020
 
 typedef struct _CERT_CHAIN_ENGINE_CONFIG {
 
@@ -13443,7 +14719,7 @@ typedef struct _CERT_CHAIN_ENGINE_CONFIG {
     DWORD       cAdditionalStore;
     HCERTSTORE* rghAdditionalStore;
     DWORD       dwFlags;
-    DWORD       dwUrlRetrievalTimeout;
+    DWORD       dwUrlRetrievalTimeout;      // milliseconds
     DWORD       MaximumCachedCertificates;
     DWORD       CycleDetectionModulus;
 
@@ -13507,22 +14783,35 @@ typedef struct _CERT_TRUST_STATUS {
 
 // These can be applied to certificates and chains
 
-#define CERT_TRUST_NO_ERROR                   0x00000000
-#define CERT_TRUST_IS_NOT_TIME_VALID          0x00000001
-#define CERT_TRUST_IS_NOT_TIME_NESTED         0x00000002
-#define CERT_TRUST_IS_REVOKED                 0x00000004
-#define CERT_TRUST_IS_NOT_SIGNATURE_VALID     0x00000008
-#define CERT_TRUST_IS_NOT_VALID_FOR_USAGE     0x00000010
-#define CERT_TRUST_IS_UNTRUSTED_ROOT          0x00000020
-#define CERT_TRUST_REVOCATION_STATUS_UNKNOWN  0x00000040
-#define CERT_TRUST_IS_CYCLIC                  0x00000080
+#define CERT_TRUST_NO_ERROR                             0x00000000
+#define CERT_TRUST_IS_NOT_TIME_VALID                    0x00000001
+#define CERT_TRUST_IS_NOT_TIME_NESTED                   0x00000002
+#define CERT_TRUST_IS_REVOKED                           0x00000004
+#define CERT_TRUST_IS_NOT_SIGNATURE_VALID               0x00000008
+#define CERT_TRUST_IS_NOT_VALID_FOR_USAGE               0x00000010
+#define CERT_TRUST_IS_UNTRUSTED_ROOT                    0x00000020
+#define CERT_TRUST_REVOCATION_STATUS_UNKNOWN            0x00000040
+#define CERT_TRUST_IS_CYCLIC                            0x00000080
+
+#define CERT_TRUST_INVALID_EXTENSION                    0x00000100
+#define CERT_TRUST_INVALID_POLICY_CONSTRAINTS           0x00000200
+#define CERT_TRUST_INVALID_BASIC_CONSTRAINTS            0x00000400
+#define CERT_TRUST_INVALID_NAME_CONSTRAINTS             0x00000800
+#define CERT_TRUST_HAS_NOT_SUPPORTED_NAME_CONSTRAINT    0x00001000
+#define CERT_TRUST_HAS_NOT_DEFINED_NAME_CONSTRAINT      0x00002000
+#define CERT_TRUST_HAS_NOT_PERMITTED_NAME_CONSTRAINT    0x00004000
+#define CERT_TRUST_HAS_EXCLUDED_NAME_CONSTRAINT         0x00008000
+
+#define CERT_TRUST_IS_OFFLINE_REVOCATION                0x01000000
+#define CERT_TRUST_NO_ISSUANCE_CHAIN_POLICY             0x02000000
+
 
 // These can be applied to chains only
 
-#define CERT_TRUST_IS_PARTIAL_CHAIN           0x00010000
-#define CERT_TRUST_CTL_IS_NOT_TIME_VALID      0x00020000
-#define CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID 0x00040000
-#define CERT_TRUST_CTL_IS_NOT_VALID_FOR_USAGE 0x00080000
+#define CERT_TRUST_IS_PARTIAL_CHAIN                     0x00010000
+#define CERT_TRUST_CTL_IS_NOT_TIME_VALID                0x00020000
+#define CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID           0x00040000
+#define CERT_TRUST_CTL_IS_NOT_VALID_FOR_USAGE           0x00080000
 
 //
 // The following are info status bits
@@ -13530,14 +14819,23 @@ typedef struct _CERT_TRUST_STATUS {
 
 // These can be applied to certificates only
 
-#define CERT_TRUST_HAS_EXACT_MATCH_ISSUER     0x00000001
-#define CERT_TRUST_HAS_KEY_MATCH_ISSUER       0x00000002
-#define CERT_TRUST_HAS_NAME_MATCH_ISSUER      0x00000004
-#define CERT_TRUST_IS_SELF_SIGNED             0x00000008
+#define CERT_TRUST_HAS_EXACT_MATCH_ISSUER               0x00000001
+#define CERT_TRUST_HAS_KEY_MATCH_ISSUER                 0x00000002
+#define CERT_TRUST_HAS_NAME_MATCH_ISSUER                0x00000004
+#define CERT_TRUST_IS_SELF_SIGNED                       0x00000008
+
+// These can be applied to certificates and chains
+
+#define CERT_TRUST_HAS_PREFERRED_ISSUER                 0x00000100
+#define CERT_TRUST_HAS_ISSUANCE_CHAIN_POLICY            0x00000200
+#define CERT_TRUST_HAS_VALID_NAME_CONSTRAINTS           0x00000400
 
 // These can be applied to chains only
 
-#define CERT_TRUST_IS_COMPLEX_CHAIN           0x00010000
+#define CERT_TRUST_IS_COMPLEX_CHAIN                     0x00010000
+
+
+
 
 //
 // Each certificate context in a simple chain has a corresponding chain element
@@ -13547,7 +14845,7 @@ typedef struct _CERT_TRUST_STATUS {
 // dwErrorStatus has CERT_TRUST_REVOCATION_STATUS_UNKNOWN, pRevocationInfo set
 
 //
-// BUGBUG: Note that the post processing revocation supported in the first
+//         Note that the post processing revocation supported in the first
 //         version only sets cbSize and dwRevocationResult.  Everything else
 //         is NULL
 //
@@ -13558,10 +14856,18 @@ typedef struct _CERT_TRUST_STATUS {
 
 typedef struct _CERT_REVOCATION_INFO {
 
-    DWORD  cbSize;
-    DWORD  dwRevocationResult;
-    LPCSTR pszRevocationOid;
-    LPVOID pvOidSpecificInfo;
+    DWORD                       cbSize;
+    DWORD                       dwRevocationResult;
+    LPCSTR                      pszRevocationOid;
+    LPVOID                      pvOidSpecificInfo;
+
+    // fHasFreshnessTime is only set if we are able to retrieve revocation
+    // information. For a CRL its CurrentTime - ThisUpdate.
+    BOOL                        fHasFreshnessTime;
+    DWORD                       dwFreshnessTime;    // seconds
+
+    // NonNULL for CRL base revocation checking
+    PCERT_REVOCATION_CRL_INFO   pCrlInfo;
 
 } CERT_REVOCATION_INFO, *PCERT_REVOCATION_INFO;
 
@@ -13588,6 +14894,11 @@ typedef struct _CERT_CHAIN_ELEMENT {
     CERT_TRUST_STATUS     TrustStatus;
     PCERT_REVOCATION_INFO pRevocationInfo;
 
+    PCERT_ENHKEY_USAGE    pIssuanceUsage;       // If NULL, any
+    PCERT_ENHKEY_USAGE    pApplicationUsage;    // If NULL, any
+
+    LPCWSTR               pwszExtendedErrorInfo;    // If NULL, none
+
 } CERT_CHAIN_ELEMENT, *PCERT_CHAIN_ELEMENT;
 
 //
@@ -13607,6 +14918,15 @@ typedef struct _CERT_SIMPLE_CHAIN {
     PCERT_CHAIN_ELEMENT*  rgpElement;
     PCERT_TRUST_LIST_INFO pTrustListInfo;
 
+    // fHasRevocationFreshnessTime is only set if we are able to retrieve
+    // revocation information for all elements checked for revocation.
+    // For a CRL its CurrentTime - ThisUpdate.
+    //
+    // dwRevocationFreshnessTime is the largest time across all elements
+    // checked.
+    BOOL                   fHasRevocationFreshnessTime;
+    DWORD                  dwRevocationFreshnessTime;    // seconds
+
 } CERT_SIMPLE_CHAIN, *PCERT_SIMPLE_CHAIN;
 
 //
@@ -13619,16 +14939,30 @@ typedef struct _CERT_SIMPLE_CHAIN {
 // ends in a certificate which is contained in the root store
 //
 
-typedef struct _CERT_CHAIN_CONTEXT {
-
-    DWORD               cbSize;
-    CERT_TRUST_STATUS   TrustStatus;
-    DWORD               cChain;
-    PCERT_SIMPLE_CHAIN* rgpChain;
-
-} CERT_CHAIN_CONTEXT, *PCERT_CHAIN_CONTEXT;
-
+typedef struct _CERT_CHAIN_CONTEXT CERT_CHAIN_CONTEXT, *PCERT_CHAIN_CONTEXT;
 typedef const CERT_CHAIN_CONTEXT *PCCERT_CHAIN_CONTEXT;
+
+struct _CERT_CHAIN_CONTEXT {
+    DWORD                   cbSize;
+    CERT_TRUST_STATUS       TrustStatus;
+    DWORD                   cChain;
+    PCERT_SIMPLE_CHAIN*     rgpChain;
+
+    // Following is returned when CERT_CHAIN_RETURN_LOWER_QUALITY_CONTEXTS
+    // is set in dwFlags
+    DWORD                   cLowerQualityChainContext;
+    PCCERT_CHAIN_CONTEXT*   rgpLowerQualityChainContext;
+
+    // fHasRevocationFreshnessTime is only set if we are able to retrieve
+    // revocation information for all elements checked for revocation.
+    // For a CRL its CurrentTime - ThisUpdate.
+    //
+    // dwRevocationFreshnessTime is the largest time across all elements
+    // checked.
+    BOOL                    fHasRevocationFreshnessTime;
+    DWORD                   dwRevocationFreshnessTime;    // seconds
+};
+
 
 //
 // When building a chain, the there are various parameters used for finding
@@ -13658,6 +14992,19 @@ typedef struct _CERT_CHAIN_PARA {
 
     DWORD            cbSize;
     CERT_USAGE_MATCH RequestedUsage;
+
+#ifdef CERT_CHAIN_PARA_HAS_EXTRA_FIELDS
+
+    // Note, if you #define CERT_CHAIN_PARA_HAS_EXTRA_FIELDS, then, you
+    // must zero all unused fields in this data structure.
+    // More fields could be added in a future release.
+
+    CERT_USAGE_MATCH RequestedIssuancePolicy;
+    DWORD            dwUrlRetrievalTimeout;     // milliseconds
+    BOOL             fCheckRevocationFreshnessTime;
+    DWORD            dwRevocationFreshnessTime; // seconds
+
+#endif
 
 } CERT_CHAIN_PARA, *PCERT_CHAIN_PARA;
 
@@ -13695,6 +15042,35 @@ typedef struct _CERT_CHAIN_PARA {
 #define CERT_CHAIN_REVOCATION_CHECK_CHAIN              0x20000000
 #define CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT 0x40000000
 #define CERT_CHAIN_REVOCATION_CHECK_CACHE_ONLY         0x80000000
+
+// By default, the dwUrlRetrievalTimeout in pChainPara is the timeout used
+// for each revocation URL wire retrieval. When the following flag is set,
+// dwUrlRetrievalTimeout is the accumulative timeout across all
+// revocation URL wire retrievals.
+#define CERT_CHAIN_REVOCATION_ACCUMULATIVE_TIMEOUT     0x08000000
+
+
+// First pass determines highest quality based upon:
+//  - Chain signature valid (higest quality bit of this set)
+//  - Complete chain
+//  - Trusted root          (lowestest quality bit of this set)
+// By default, second pass only considers paths >= highest first pass quality
+#define CERT_CHAIN_DISABLE_PASS1_QUALITY_FILTERING  0x00000040
+
+#define CERT_CHAIN_RETURN_LOWER_QUALITY_CONTEXTS    0x00000080
+
+#define CERT_CHAIN_DISABLE_AUTH_ROOT_AUTO_UPDATE    0x00000100
+
+
+// When this flag is set, pTime will be used as the timestamp time.
+// pTime will be used to determine if the end certificate was valid at this
+// time. Revocation checking will be relative to pTime.
+// In addition, current time will also be used
+// to determine if the certificate is still time valid. All remaining
+// CA and root certificates will be checked using current time and not pTime.
+//
+// This flag was added 4/5/01 in WXP.
+#define CERT_CHAIN_TIMESTAMP_TIME                   0x00000200
 
 WINCRYPT32API
 BOOL
@@ -13855,8 +15231,8 @@ typedef struct _CERT_CHAIN_FIND_BY_ISSUER_PARA {
     // When CERT_CHAIN_FIND_BY_ISSUER_COMPARE_KEY_FLAG is set in dwFindFlags,
     // CryptAcquireCertificatePrivateKey is called to do the public key
     // comparison. The following flags can be set to enable caching
-    // of the acquired private key. See the API for more details on these
-    // flags.
+    // of the acquired private key or suppress CSP UI. See the API for more
+    // details on these flags.
     DWORD                                   dwAcquirePrivateKeyFlags;
 
     // Pointer to an array of X509, ASN.1 encoded issuer name blobs. If
@@ -13869,7 +15245,29 @@ typedef struct _CERT_CHAIN_FIND_BY_ISSUER_PARA {
     // enhanced key usage.
     PFN_CERT_CHAIN_FIND_BY_ISSUER_CALLBACK pfnFindCallback;
     void                                    *pvFindArg;
-} CERT_CHAIN_FIND_BY_ISSUER_PARA, *PCERT_CHAIN_FIND_ISSUER_PARA;
+
+#ifdef CERT_CHAIN_FIND_BY_ISSUER_PARA_HAS_EXTRA_FIELDS
+    // Note, if you #define CERT_CHAIN_FIND_BY_ISSUER_PARA_HAS_EXTRA_FIELDS,
+    // then, you must zero all unused fields in this data structure.
+    // More fields could be added in a future release.
+
+    // If the following pointers are nonNull, returns the index of the
+    // matching issuer certificate, which is at:
+    // pChainContext->
+    //      rgpChain[*pdwIssuerChainIndex]->rgpElement[*pdwIssuerElementIndex].
+    //
+    // The issuer name blob is compared against the Issuer field in the
+    // certificate. The *pdwIssuerElementIndex is set to the index of this
+    // subject certificate + 1. Therefore, its possible for a partial chain or
+    // a self signed certificate matching the name blob, where
+    // *pdwIssuerElementIndex points past the last certificate in the chain.
+    //
+    // Note, not updated if the above cIssuer == 0.
+    DWORD                                   *pdwIssuerChainIndex;
+    DWORD                                   *pdwIssuerElementIndex;
+#endif
+} CERT_CHAIN_FIND_ISSUER_PARA, *PCERT_CHAIN_FIND_ISSUER_PARA,
+    CERT_CHAIN_FIND_BY_ISSUER_PARA, *PCERT_CHAIN_FIND_BY_ISSUER_PARA;
 
 // The following dwFindFlags can be set for CERT_CHAIN_FIND_BY_ISSUER
 
@@ -13931,6 +15329,7 @@ typedef struct _CERT_CHAIN_POLICY_STATUS {
 #define CERT_CHAIN_POLICY_IGNORE_NOT_TIME_VALID_FLAG                0x00000001
 #define CERT_CHAIN_POLICY_IGNORE_CTL_NOT_TIME_VALID_FLAG            0x00000002
 #define CERT_CHAIN_POLICY_IGNORE_NOT_TIME_NESTED_FLAG               0x00000004
+#define CERT_CHAIN_POLICY_IGNORE_INVALID_BASIC_CONSTRAINTS_FLAG     0x00000008
 
 #define CERT_CHAIN_POLICY_IGNORE_ALL_NOT_TIME_VALID_FLAGS ( \
     CERT_CHAIN_POLICY_IGNORE_NOT_TIME_VALID_FLAG                | \
@@ -13941,6 +15340,8 @@ typedef struct _CERT_CHAIN_POLICY_STATUS {
 
 #define CERT_CHAIN_POLICY_ALLOW_UNKNOWN_CA_FLAG                     0x00000010
 #define CERT_CHAIN_POLICY_IGNORE_WRONG_USAGE_FLAG                   0x00000020
+#define CERT_CHAIN_POLICY_IGNORE_INVALID_NAME_FLAG                  0x00000040
+#define CERT_CHAIN_POLICY_IGNORE_INVALID_POLICY_FLAG                0x00000080
 
 #define CERT_CHAIN_POLICY_IGNORE_END_REV_UNKNOWN_FLAG               0x00000100
 #define CERT_CHAIN_POLICY_IGNORE_CTL_SIGNER_REV_UNKNOWN_FLAG        0x00000200
@@ -14006,6 +15407,7 @@ CertVerifyCertificateChainPolicy(
 #define CERT_CHAIN_POLICY_SSL               ((LPCSTR) 4)
 #define CERT_CHAIN_POLICY_BASIC_CONSTRAINTS ((LPCSTR) 5)
 #define CERT_CHAIN_POLICY_NT_AUTH           ((LPCSTR) 6)
+#define CERT_CHAIN_POLICY_MICROSOFT_ROOT    ((LPCSTR) 7)
 
 //+-------------------------------------------------------------------------
 //  CERT_CHAIN_POLICY_BASE
@@ -14137,7 +15539,299 @@ typedef struct _HTTPSPolicyCallbackData
 //          CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE store location.
 //          If this verification fails, whereby the CA isn't trusted,
 //          dwError is set to CERT_E_UNTRUSTEDCA.
+//
+//          If CERT_PROT_ROOT_DISABLE_NT_AUTH_REQUIRED_FLAG is set
+//          in the "Flags" value of the HKLM policy "ProtectedRoots" subkey
+//          defined by CERT_PROT_ROOT_FLAGS_REGPATH, then,
+//          if the above check fails, checks if the chain
+//          has CERT_TRUST_HAS_VALID_NAME_CONSTRAINTS set in dwInfoStatus. This
+//          will only be set if there was a valid name constraint for all
+//          name spaces including UPN. If the chain doesn't have this info
+//          status set, dwError is set to CERT_E_UNTRUSTEDCA.
 //--------------------------------------------------------------------------
+
+//+-------------------------------------------------------------------------
+//  CERT_CHAIN_POLICY_MICROSOFT_ROOT
+//
+//  Checks if the last element of the first simple chain contains a
+//  Microsoft root public key. If it doesn't contain a Microsoft root
+//  public key, dwError is set to CERT_E_UNTRUSTEDROOT.
+//
+//  pvExtraPolicyPara and pvExtraPolicyStatus aren't used and must be set
+//  to NULL.
+//--------------------------------------------------------------------------
+
+
+
+//+-------------------------------------------------------------------------
+// convert formatted string to binary
+// If cchString is 0, then pszString is NULL terminated and
+// cchString is obtained via strlen() + 1.
+// dwFlags defines string format
+// if pbBinary is NULL, *pcbBinary returns the size of required memory
+// *pdwSkip returns the character count of skipped strings, optional
+// *pdwFlags returns the actual format used in the conversion, optional
+//--------------------------------------------------------------------------
+WINCRYPT32STRINGAPI
+BOOL
+WINAPI
+CryptStringToBinaryA(
+    IN     LPCSTR  pszString,
+    IN     DWORD     cchString,
+    IN     DWORD     dwFlags,
+    IN     BYTE     *pbBinary,
+    IN OUT DWORD    *pcbBinary,
+    OUT    DWORD    *pdwSkip,    //OPTIONAL
+    OUT    DWORD    *pdwFlags    //OPTIONAL
+    );
+//+-------------------------------------------------------------------------
+// convert formatted string to binary
+// If cchString is 0, then pszString is NULL terminated and
+// cchString is obtained via strlen() + 1.
+// dwFlags defines string format
+// if pbBinary is NULL, *pcbBinary returns the size of required memory
+// *pdwSkip returns the character count of skipped strings, optional
+// *pdwFlags returns the actual format used in the conversion, optional
+//--------------------------------------------------------------------------
+WINCRYPT32STRINGAPI
+BOOL
+WINAPI
+CryptStringToBinaryW(
+    IN     LPCWSTR  pszString,
+    IN     DWORD     cchString,
+    IN     DWORD     dwFlags,
+    IN     BYTE     *pbBinary,
+    IN OUT DWORD    *pcbBinary,
+    OUT    DWORD    *pdwSkip,    //OPTIONAL
+    OUT    DWORD    *pdwFlags    //OPTIONAL
+    );
+#ifdef UNICODE
+#define CryptStringToBinary  CryptStringToBinaryW
+#else
+#define CryptStringToBinary  CryptStringToBinaryA
+#endif // !UNICODE
+
+//+-------------------------------------------------------------------------
+// convert binary to formatted string
+// dwFlags defines string format
+// if pszString is NULL, *pcchString returns the size of required memory in byte
+//--------------------------------------------------------------------------
+WINCRYPT32STRINGAPI
+BOOL
+WINAPI
+CryptBinaryToStringA(
+    IN     CONST BYTE  *pbBinary,
+    IN     DWORD        cbBinary,
+    IN     DWORD        dwFlags,
+    IN     LPSTR      pszString,
+    IN OUT DWORD       *pcchString
+    );
+//+-------------------------------------------------------------------------
+// convert binary to formatted string
+// dwFlags defines string format
+// if pszString is NULL, *pcchString returns the size of required memory in byte
+//--------------------------------------------------------------------------
+WINCRYPT32STRINGAPI
+BOOL
+WINAPI
+CryptBinaryToStringW(
+    IN     CONST BYTE  *pbBinary,
+    IN     DWORD        cbBinary,
+    IN     DWORD        dwFlags,
+    IN     LPWSTR      pszString,
+    IN OUT DWORD       *pcchString
+    );
+#ifdef UNICODE
+#define CryptBinaryToString  CryptBinaryToStringW
+#else
+#define CryptBinaryToString  CryptBinaryToStringA
+#endif // !UNICODE
+
+// dwFlags has the following defines
+#define CRYPT_STRING_BASE64HEADER           0x00000000
+#define CRYPT_STRING_BASE64                 0x00000001
+#define CRYPT_STRING_BINARY                 0x00000002
+#define CRYPT_STRING_BASE64REQUESTHEADER    0x00000003
+#define CRYPT_STRING_HEX                    0x00000004
+#define CRYPT_STRING_HEXASCII               0x00000005
+#define CRYPT_STRING_BASE64_ANY             0x00000006
+#define CRYPT_STRING_ANY                    0x00000007
+#define CRYPT_STRING_HEX_ANY                0x00000008
+#define CRYPT_STRING_BASE64X509CRLHEADER    0x00000009
+#define CRYPT_STRING_HEXADDR                0x0000000a
+#define CRYPT_STRING_HEXASCIIADDR           0x0000000b
+
+#define CRYPT_STRING_NOCR                   0x80000000
+
+// CryptBinaryToString uses the following flags
+// CRYPT_STRING_BASE64HEADER - base64 format with certificate begin
+//                             and end headers
+// CRYPT_STRING_BASE64 - only base64 without headers
+// CRYPT_STRING_BINARY - pure binary copy
+// CRYPT_STRING_BASE64REQUESTHEADER - base64 format with request begin
+//                                    and end headers
+// CRYPT_STRING_BASE64X509CRLHEADER - base64 format with x509 crl begin
+//                                    and end headers
+// CRYPT_STRING_HEX - only hex format
+// CRYPT_STRING_HEXASCII - hex format with ascii char display
+// CRYPT_STRING_HEXADDR - hex format with address display
+// CRYPT_STRING_HEXASCIIADDR - hex format with ascii char and address display
+//
+// CryptBinaryToString accepts CRYPT_STRING_NOCR or'd into one of the above.
+// When set, line breaks contain only LF, instead of CR-LF pairs.
+
+// CryptStringToBinary uses the following flags
+// CRYPT_STRING_BASE64_ANY tries the following, in order:
+//    CRYPT_STRING_BASE64HEADER
+//    CRYPT_STRING_BASE64
+// CRYPT_STRING_ANY tries the following, in order:
+//    CRYPT_STRING_BASE64_ANY
+//    CRYPT_STRING_BINARY -- should always succeed
+// CRYPT_STRING_HEX_ANY tries the following, in order:
+//    CRYPT_STRING_HEXADDR
+//    CRYPT_STRING_HEXASCIIADDR
+//    CRYPT_STRING_HEXASCII
+//    CRYPT_STRING_HEX
+
+
+//+=========================================================================
+//  PFX (PKCS #12) function defintions and types
+//==========================================================================
+
+
+//+-------------------------------------------------------------------------
+//      PFXImportCertStore
+//
+//  Import the PFX blob and return a store containing certificates
+//
+//  If the password parameter is incorrect or any other problems decoding
+//  the PFX blob are encountered, the function will return NULL and the
+//      error code can be found from GetLastError(). 
+//
+//  The dwFlags parameter may be set to the following:
+//  CRYPT_EXPORTABLE - specify that any imported keys should be marked as 
+//                     exportable (see documentation on CryptImportKey)
+//  CRYPT_USER_PROTECTED - (see documentation on CryptImportKey)
+//  CRYPT_MACHINE_KEYSET - used to force the private key to be stored in the
+//                        the local machine and not the current user.
+//  CRYPT_USER_KEYSET - used to force the private key to be stored in the
+//                      the current user and not the local machine, even if
+//                      the pfx blob specifies that it should go into local
+//                      machine.
+//--------------------------------------------------------------------------
+WINCRYPT32API
+HCERTSTORE
+WINAPI
+PFXImportCertStore(
+    IN CRYPT_DATA_BLOB* pPFX,
+    IN LPCWSTR szPassword,
+    IN DWORD   dwFlags);
+
+// dwFlags definitions for PFXImportCertStore
+//#define CRYPT_EXPORTABLE        0x00000001  // CryptImportKey dwFlags
+//#define CRYPT_USER_PROTECTED    0x00000002  // CryptImportKey dwFlags
+//#define CRYPT_MACHINE_KEYSET    0x00000020  // CryptAcquireContext dwFlags
+
+#define CRYPT_USER_KEYSET         0x00001000     
+
+#define PKCS12_IMPORT_RESERVED_MASK    0xffff0000 
+
+
+//+-------------------------------------------------------------------------
+//      PFXIsPFXBlob
+//
+//  This function will try to decode the outer layer of the blob as a pfx 
+//  blob, and if that works it will return TRUE, it will return FALSE otherwise
+//
+//--------------------------------------------------------------------------
+WINCRYPT32API
+BOOL
+WINAPI
+PFXIsPFXBlob(
+    IN CRYPT_DATA_BLOB* pPFX);
+
+
+
+//+-------------------------------------------------------------------------
+//      PFXVerifyPassword
+//
+//  This function will attempt to decode the outer layer of the blob as a pfx 
+//  blob and decrypt with the given password. No data from the blob will be
+//  imported.
+//
+//  Return value is TRUE if password appears correct, FALSE otherwise.
+//
+//--------------------------------------------------------------------------
+WINCRYPT32API
+BOOL 
+WINAPI
+PFXVerifyPassword(
+    IN CRYPT_DATA_BLOB* pPFX,
+    IN LPCWSTR szPassword,
+    IN DWORD dwFlags);
+
+
+//+-------------------------------------------------------------------------
+//      PFXExportCertStoreEx
+//
+//  Export the certificates and private keys referenced in the passed-in store 
+//
+//  This API encodes the blob under a stronger algorithm. The resulting
+//  PKCS12 blobs are incompatible with the earlier PFXExportCertStore API.
+//
+//  The value passed in the password parameter will be used to encrypt and 
+//  verify the integrity of the PFX packet. If any problems encoding the store
+//  are encountered, the function will return FALSE and the error code can 
+//  be found from GetLastError(). 
+//
+//  The dwFlags parameter may be set to any combination of 
+//      EXPORT_PRIVATE_KEYS
+//      REPORT_NO_PRIVATE_KEY
+//      REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY
+//
+//  The encoded PFX blob is returned in *pPFX. If pPFX->pbData is NULL upon
+//  input, this is a length only calculation, whereby, pPFX->cbData is updated
+//  with the number of bytes required for the encoded blob. Otherwise,
+//  the memory pointed to by pPFX->pbData is updated with the encoded bytes
+//  and pPFX->cbData is updated with the encoded byte length.
+//--------------------------------------------------------------------------
+WINCRYPT32API
+BOOL
+WINAPI
+PFXExportCertStoreEx(
+    IN HCERTSTORE hStore,
+    IN OUT CRYPT_DATA_BLOB* pPFX,
+    IN LPCWSTR szPassword,
+    IN void*   pvReserved,
+    IN DWORD   dwFlags);
+
+
+// dwFlags definitions for PFXExportCertStoreEx
+#define REPORT_NO_PRIVATE_KEY                   0x0001
+#define REPORT_NOT_ABLE_TO_EXPORT_PRIVATE_KEY   0x0002
+#define EXPORT_PRIVATE_KEYS                     0x0004
+#define PKCS12_EXPORT_RESERVED_MASK             0xffff0000
+
+
+//+-------------------------------------------------------------------------
+//      PFXExportCertStore
+//
+//  Export the certificates and private keys referenced in the passed-in store 
+//
+//  This is an old API kept for compatibility with IE4 clients. New applications
+//  should call the above PfxExportCertStoreEx for enhanced security.
+//--------------------------------------------------------------------------
+WINCRYPT32API
+BOOL
+WINAPI
+PFXExportCertStore(
+    IN HCERTSTORE hStore,
+    IN OUT CRYPT_DATA_BLOB* pPFX,
+    IN LPCWSTR szPassword,
+    IN DWORD   dwFlags);
+
+
+
 
 #ifdef __cplusplus
 }       // Balance extern "C" above
@@ -14155,6 +15849,5 @@ typedef struct _HTTPSPolicyCallbackData
 #endif
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif // __WINCRYPT_H__
 

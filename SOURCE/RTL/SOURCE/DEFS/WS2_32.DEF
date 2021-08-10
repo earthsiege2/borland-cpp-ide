@@ -1,110 +1,116 @@
 LIBRARY WS2_32
 EXPORTS
 
-    WPUCompleteOverlappedRequest             = 'WS2_32.DLL'.*
-    WSAAccept                                = 'WS2_32.DLL'.*
-    WSAAddressToStringA                      = 'WS2_32.DLL'.*
-    WSAAddressToStringW                      = 'WS2_32.DLL'.*
-    WSAAsyncGetHostByAddr                    = 'WS2_32.DLL'.* @102 @101
-    WSAAsyncGetHostByName                    = 'WS2_32.DLL'.* @103 @102
-    WSAAsyncGetProtoByName                   = 'WS2_32.DLL'.* @105 @104
-    WSAAsyncGetProtoByNumber                 = 'WS2_32.DLL'.* @104 @103
-    WSAAsyncGetServByName                    = 'WS2_32.DLL'.* @107 @106
-    WSAAsyncGetServByPort                    = 'WS2_32.DLL'.* @106 @105
-    WSAAsyncSelect                           = 'WS2_32.DLL'.* @101 @100
-    WSACancelAsyncRequest                    = 'WS2_32.DLL'.* @108 @107
-    WSACancelBlockingCall                    = 'WS2_32.DLL'.* @113 @112
-    WSACleanup                               = 'WS2_32.DLL'.* @116 @115
-    WSACloseEvent                            = 'WS2_32.DLL'.*
-    WSAConnect                               = 'WS2_32.DLL'.*
-    WSACreateEvent                           = 'WS2_32.DLL'.*
-    WSADuplicateSocketA                      = 'WS2_32.DLL'.*
-    WSADuplicateSocketW                      = 'WS2_32.DLL'.*
-    WSAEnumNameSpaceProvidersA               = 'WS2_32.DLL'.*
-    WSAEnumNameSpaceProvidersW               = 'WS2_32.DLL'.*
-    WSAEnumNetworkEvents                     = 'WS2_32.DLL'.*
-    WSAEnumProtocolsA                        = 'WS2_32.DLL'.*
-    WSAEnumProtocolsW                        = 'WS2_32.DLL'.*
-    WSAEventSelect                           = 'WS2_32.DLL'.*
-    WSAGetLastError                          = 'WS2_32.DLL'.* @111 @110
-    WSAGetOverlappedResult                   = 'WS2_32.DLL'.*
-    WSAGetQOSByName                          = 'WS2_32.DLL'.*
-    WSAGetServiceClassInfoA                  = 'WS2_32.DLL'.*
-    WSAGetServiceClassInfoW                  = 'WS2_32.DLL'.*
-    WSAGetServiceClassNameByClassIdA         = 'WS2_32.DLL'.*
-    WSAGetServiceClassNameByClassIdW         = 'WS2_32.DLL'.*
-    WSAHtonl                                 = 'WS2_32.DLL'.*
-    WSAHtons                                 = 'WS2_32.DLL'.*
-    WSAInstallServiceClassA                  = 'WS2_32.DLL'.*
-    WSAInstallServiceClassW                  = 'WS2_32.DLL'.*
-    WSAIoctl                                 = 'WS2_32.DLL'.*
-    WSAIsBlocking                            = 'WS2_32.DLL'.* @114 @113
-    WSAJoinLeaf                              = 'WS2_32.DLL'.*
-    WSALookupServiceBeginA                   = 'WS2_32.DLL'.*
-    WSALookupServiceBeginW                   = 'WS2_32.DLL'.*
-    WSALookupServiceEnd                      = 'WS2_32.DLL'.*
-    WSALookupServiceNextA                    = 'WS2_32.DLL'.*
-    WSALookupServiceNextW                    = 'WS2_32.DLL'.*
-    WSANtohl                                 = 'WS2_32.DLL'.*
-    WSANtohs                                 = 'WS2_32.DLL'.*
-    WSAProviderConfigChange                  = 'WS2_32.DLL'.*
-    WSARecv                                  = 'WS2_32.DLL'.*
-    WSARecvDisconnect                        = 'WS2_32.DLL'.*
-    WSARecvFrom                              = 'WS2_32.DLL'.*
-    WSARemoveServiceClass                    = 'WS2_32.DLL'.*
-    WSAResetEvent                            = 'WS2_32.DLL'.*
-    WSASend                                  = 'WS2_32.DLL'.*
-    WSASendDisconnect                        = 'WS2_32.DLL'.*
-    WSASendTo                                = 'WS2_32.DLL'.*
-    WSASetBlockingHook                       = 'WS2_32.DLL'.* @109 @108
-    WSASetEvent                              = 'WS2_32.DLL'.*
-    WSASetLastError                          = 'WS2_32.DLL'.* @112 @111
-    WSASetServiceA                           = 'WS2_32.DLL'.*
-    WSASetServiceW                           = 'WS2_32.DLL'.*
-    WSASocketA                               = 'WS2_32.DLL'.*
-    WSASocketW                               = 'WS2_32.DLL'.*
-    WSAStartup                               = 'WS2_32.DLL'.* @115 @114
-    WSAStringToAddressA                      = 'WS2_32.DLL'.*
-    WSAStringToAddressW                      = 'WS2_32.DLL'.*
-    WSAUnhookBlockingHook                    = 'WS2_32.DLL'.* @110 @109
-    WSAWaitForMultipleEvents                 = 'WS2_32.DLL'.*
-    WSCDeinstallProvider                     = 'WS2_32.DLL'.*
-    WSCEnableNSProvider                      = 'WS2_32.DLL'.*
-    WSCEnumProtocols                         = 'WS2_32.DLL'.*
-    WSCGetProviderPath                       = 'WS2_32.DLL'.*
-    WSCInstallNameSpace                      = 'WS2_32.DLL'.*
-    WSCInstallProvider                       = 'WS2_32.DLL'.*
-    WSCUnInstallNameSpace                    = 'WS2_32.DLL'.*
-    WSCWriteNameSpaceOrder                   = 'WS2_32.DLL'.*
-    WSCWriteProviderOrder                    = 'WS2_32.DLL'.*
-    __WSAFDIsSet                             = 'WS2_32.DLL'.* @151 @150
-    accept                                   = 'WS2_32.DLL'.* @1 @0
-    bind                                     = 'WS2_32.DLL'.* @2 @1
-    closesocket                              = 'WS2_32.DLL'.* @3 @2
-    connect                                  = 'WS2_32.DLL'.* @4 @3
-    gethostbyaddr                            = 'WS2_32.DLL'.* @51 @50
-    gethostbyname                            = 'WS2_32.DLL'.* @52 @51
-    gethostname                              = 'WS2_32.DLL'.* @57 @56
-    getpeername                              = 'WS2_32.DLL'.* @5 @4
-    getprotobyname                           = 'WS2_32.DLL'.* @53 @52
-    getprotobynumber                         = 'WS2_32.DLL'.* @54 @53
-    getservbyname                            = 'WS2_32.DLL'.* @55 @54
-    getservbyport                            = 'WS2_32.DLL'.* @56 @55
-    getsockname                              = 'WS2_32.DLL'.* @6 @5
-    getsockopt                               = 'WS2_32.DLL'.* @7 @6
-    htonl                                    = 'WS2_32.DLL'.* @8 @7
-    htons                                    = 'WS2_32.DLL'.* @9 @8
-    inet_addr                                = 'WS2_32.DLL'.* @11 @10
-    inet_ntoa                                = 'WS2_32.DLL'.* @12 @11
-    ioctlsocket                              = 'WS2_32.DLL'.* @10 @9
-    listen                                   = 'WS2_32.DLL'.* @13 @12
-    ntohl                                    = 'WS2_32.DLL'.* @14 @13
-    ntohs                                    = 'WS2_32.DLL'.* @15 @14
-    recv                                     = 'WS2_32.DLL'.* @16 @15
-    recvfrom                                 = 'WS2_32.DLL'.* @17 @16
-    select                                   = 'WS2_32.DLL'.* @18 @17
-    send                                     = 'WS2_32.DLL'.* @19 @18
-    sendto                                   = 'WS2_32.DLL'.* @20 @19
-    setsockopt                               = 'WS2_32.DLL'.* @21 @20
-    shutdown                                 = 'WS2_32.DLL'.* @22 @21
-    socket                                   = 'WS2_32.DLL'.* @23 @22
+    socket        @23
+    shutdown        @22
+    setsockopt        @21
+    sendto        @20
+    send        @19
+    select        @18
+    recvfrom        @17
+    recv        @16
+    ntohs        @15
+    ntohl        @14
+    listen        @13
+    ioctlsocket        @10
+    inet_ntoa        @12
+    inet_addr        @11
+    htons        @9
+    htonl        @8
+    getsockopt        @7
+    getsockname        @6
+    getservbyport        @56
+    getservbyname        @55
+    getprotobynumber        @54
+    getprotobyname        @53
+    getpeername        @5
+    getnameinfo
+    gethostname        @57
+    gethostbyname        @52
+    gethostbyaddr        @51
+    getaddrinfo
+    freeaddrinfo
+    connect        @4
+    closesocket        @3
+    bind        @2
+    accept        @1
+    __WSAFDIsSet        @151
+    WSCWriteProviderOrder
+    WSCWriteNameSpaceOrder
+    WSCUpdateProvider
+    WSCUnInstallNameSpace
+    WSCInstallProvider
+    WSCInstallNameSpace
+    WSCGetProviderPath
+    WSCEnumProtocols
+    WSCEnableNSProvider
+    WSCDeinstallProvider
+    WSAWaitForMultipleEvents
+    WSAUnhookBlockingHook        @110
+    WSAStringToAddressW
+    WSAStringToAddressA
+    WSAStartup        @115
+    WSASocketW
+    WSASocketA
+    WSASetServiceW
+    WSASetServiceA
+    WSASetLastError        @112
+    WSASetEvent
+    WSASetBlockingHook        @109
+    WSASendTo
+    WSASendDisconnect
+    WSASend
+    WSAResetEvent
+    WSARemoveServiceClass
+    WSARecvFrom
+    WSARecvDisconnect
+    WSARecv
+    WSAProviderConfigChange
+    WSANtohs
+    WSANtohl
+    WSANSPIoctl
+    WSALookupServiceNextW
+    WSALookupServiceNextA
+    WSALookupServiceEnd
+    WSALookupServiceBeginW
+    WSALookupServiceBeginA
+    WSAJoinLeaf
+    WSAIsBlocking        @114
+    WSAIoctl
+    WSAInstallServiceClassW
+    WSAInstallServiceClassA
+    WSAHtons
+    WSAHtonl
+    WSAGetServiceClassNameByClassIdW
+    WSAGetServiceClassNameByClassIdA
+    WSAGetServiceClassInfoW
+    WSAGetServiceClassInfoA
+    WSAGetQOSByName
+    WSAGetOverlappedResult
+    WSAGetLastError        @111
+    WSAEventSelect
+    WSAEnumProtocolsW
+    WSAEnumProtocolsA
+    WSAEnumNetworkEvents
+    WSAEnumNameSpaceProvidersW
+    WSAEnumNameSpaceProvidersA
+    WSADuplicateSocketW
+    WSADuplicateSocketA
+    WSACreateEvent
+    WSAConnect
+    WSACloseEvent
+    WSACleanup        @116
+    WSACancelBlockingCall        @113
+    WSACancelAsyncRequest        @108
+    WSAAsyncSelect        @101
+    WSAAsyncGetServByPort        @106
+    WSAAsyncGetServByName        @107
+    WSAAsyncGetProtoByNumber        @104
+    WSAAsyncGetProtoByName        @105
+    WSAAsyncGetHostByName        @103
+    WSAAsyncGetHostByAddr        @102
+    WSAAddressToStringW
+    WSAAddressToStringA
+    WSAAccept
+    WPUCompleteOverlappedRequest
+    WEP        @500

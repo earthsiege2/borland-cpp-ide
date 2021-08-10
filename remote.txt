@@ -1,0 +1,50 @@
+C++Builder 6
+
+
+============================================================
+ADDITIONAL LICENSE TERMS
+FOR DEPLOYING MULTI-TIER PROGRAMS
+
+
+============================================================
+
+This version of the software may include redistributable
+files identified as "ClientDataset Redistributables" for
+creating multi-tier application programs. Installation and
+use of the ClientDataset Redistributables for supporting
+data sharing among two or more computers requires purchase
+of a DataSnap Deployment License, available separately from
+Borland.
+
+"Data sharing" refers to any use of the ClientDataset
+Redistributables for supporting the transmission by any
+means of data from one computer to another for use by
+ClientDataset Redistributables installed on another
+computer. Note that purchase of a DataSnap Deployment
+License is not required for deploying an application which
+does not use ClientDataset Redistributables for supporting
+such data sharing among computers.
+
+This product does not include deployment rights for the
+VisiBroker CORBA ORB. When deploying an application
+requiring CORBA services, you must first obtain VisiBroker
+Deployment licenses, available separately from Borland.
+
+For more information on DataSnap and its licensing options,
+see Borland's World Wide Web site at the URL below, or
+contact your local Borland sales office.
+
+http://www.borland.com/DataSnap/
+
+For more information on VisiBroker, see Borland's World Wide
+Web site at the URL below, or contact your local Borland
+sales office.
+
+http://www.Borland.com/visibroker/
+
+
+
+============================================================
+Copyright (c) 2002 Borland Software Corporation.
+All rights reserved.
+

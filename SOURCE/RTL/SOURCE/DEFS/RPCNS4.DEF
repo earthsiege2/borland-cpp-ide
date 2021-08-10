@@ -1,65 +1,66 @@
-LIBRARY RPCNS4
+LIBRARY Rpcns4
 EXPORTS
 
-    I_GetDefaultEntrySyntax                  = 'RPCNS4.DLL'.*
-    I_RpcNsGetBuffer                         = 'RPCNS4.DLL'.*
-    I_RpcNsRaiseException                    = 'RPCNS4.DLL'.*
-    I_RpcNsSendReceive                       = 'RPCNS4.DLL'.*
-    I_RpcReBindBuffer                        = 'RPCNS4.DLL'.*
-    RpcIfIdVectorFree                        = 'RPCNS4.DLL'.*
-    RpcNsBindingExportA                      = 'RPCNS4.DLL'.*
-    RpcNsBindingExportPnPA                   = 'RPCNS4.DLL'.*
-    RpcNsBindingExportPnPW                   = 'RPCNS4.DLL'.*
-    RpcNsBindingExportW                      = 'RPCNS4.DLL'.*
-    RpcNsBindingImportBeginA                 = 'RPCNS4.DLL'.*
-    RpcNsBindingImportBeginW                 = 'RPCNS4.DLL'.*
-    RpcNsBindingImportDone                   = 'RPCNS4.DLL'.*
-    RpcNsBindingImportNext                   = 'RPCNS4.DLL'.*
-    RpcNsBindingLookupBeginA                 = 'RPCNS4.DLL'.*
-    RpcNsBindingLookupBeginW                 = 'RPCNS4.DLL'.*
-    RpcNsBindingLookupDone                   = 'RPCNS4.DLL'.*
-    RpcNsBindingLookupNext                   = 'RPCNS4.DLL'.*
-    RpcNsBindingSelect                       = 'RPCNS4.DLL'.*
-    RpcNsBindingUnexportA                    = 'RPCNS4.DLL'.*
-    RpcNsBindingUnexportPnPA                 = 'RPCNS4.DLL'.*
-    RpcNsBindingUnexportPnPW                 = 'RPCNS4.DLL'.*
-    RpcNsBindingUnexportW                    = 'RPCNS4.DLL'.*
-    RpcNsEntryExpandNameA                    = 'RPCNS4.DLL'.*
-    RpcNsEntryExpandNameW                    = 'RPCNS4.DLL'.*
-    RpcNsEntryObjectInqBeginA                = 'RPCNS4.DLL'.*
-    RpcNsEntryObjectInqBeginW                = 'RPCNS4.DLL'.*
-    RpcNsEntryObjectInqDone                  = 'RPCNS4.DLL'.*
-    RpcNsEntryObjectInqNext                  = 'RPCNS4.DLL'.*
-    RpcNsGroupDeleteA                        = 'RPCNS4.DLL'.*
-    RpcNsGroupDeleteW                        = 'RPCNS4.DLL'.*
-    RpcNsGroupMbrAddA                        = 'RPCNS4.DLL'.*
-    RpcNsGroupMbrAddW                        = 'RPCNS4.DLL'.*
-    RpcNsGroupMbrInqBeginA                   = 'RPCNS4.DLL'.*
-    RpcNsGroupMbrInqBeginW                   = 'RPCNS4.DLL'.*
-    RpcNsGroupMbrInqDone                     = 'RPCNS4.DLL'.*
-    RpcNsGroupMbrInqNextA                    = 'RPCNS4.DLL'.*
-    RpcNsGroupMbrInqNextW                    = 'RPCNS4.DLL'.*
-    RpcNsGroupMbrRemoveA                     = 'RPCNS4.DLL'.*
-    RpcNsGroupMbrRemoveW                     = 'RPCNS4.DLL'.*
-    RpcNsMgmtBindingUnexportA                = 'RPCNS4.DLL'.*
-    RpcNsMgmtBindingUnexportW                = 'RPCNS4.DLL'.*
-    RpcNsMgmtEntryCreateA                    = 'RPCNS4.DLL'.*
-    RpcNsMgmtEntryCreateW                    = 'RPCNS4.DLL'.*
-    RpcNsMgmtEntryDeleteA                    = 'RPCNS4.DLL'.*
-    RpcNsMgmtEntryDeleteW                    = 'RPCNS4.DLL'.*
-    RpcNsMgmtEntryInqIfIdsA                  = 'RPCNS4.DLL'.*
-    RpcNsMgmtEntryInqIfIdsW                  = 'RPCNS4.DLL'.*
-    RpcNsMgmtHandleSetExpAge                 = 'RPCNS4.DLL'.*
-    RpcNsMgmtInqExpAge                       = 'RPCNS4.DLL'.*
-    RpcNsMgmtSetExpAge                       = 'RPCNS4.DLL'.*
-    RpcNsProfileDeleteA                      = 'RPCNS4.DLL'.*
-    RpcNsProfileDeleteW                      = 'RPCNS4.DLL'.*
-    RpcNsProfileEltAddA                      = 'RPCNS4.DLL'.*
-    RpcNsProfileEltAddW                      = 'RPCNS4.DLL'.*
-    RpcNsProfileEltInqBeginA                 = 'RPCNS4.DLL'.*
-    RpcNsProfileEltInqBeginW                 = 'RPCNS4.DLL'.*
-    RpcNsProfileEltInqDone                   = 'RPCNS4.DLL'.*
-    RpcNsProfileEltInqNextA                  = 'RPCNS4.DLL'.*
-    RpcNsProfileEltInqNextW                  = 'RPCNS4.DLL'.*
-    RpcNsProfileEltRemoveA                   = 'RPCNS4.DLL'.*
-    RpcNsProfileEltRemoveW                   = 'RPCNS4.DLL'.*
+    I_GetDefaultEntrySyntax
+    I_RpcNsGetBuffer
+    I_RpcNsNegotiateTransferSyntax
+    I_RpcNsRaiseException
+    I_RpcNsSendReceive
+    I_RpcReBindBuffer
+    RpcIfIdVectorFree
+    RpcNsBindingExportA
+    RpcNsBindingExportPnPA
+    RpcNsBindingExportPnPW
+    RpcNsBindingExportW
+    RpcNsBindingImportBeginA
+    RpcNsBindingImportBeginW
+    RpcNsBindingImportDone
+    RpcNsBindingImportNext
+    RpcNsBindingLookupBeginA
+    RpcNsBindingLookupBeginW
+    RpcNsBindingLookupDone
+    RpcNsBindingLookupNext
+    RpcNsBindingSelect
+    RpcNsBindingUnexportA
+    RpcNsBindingUnexportPnPA
+    RpcNsBindingUnexportPnPW
+    RpcNsBindingUnexportW
+    RpcNsEntryExpandNameA
+    RpcNsEntryExpandNameW
+    RpcNsEntryObjectInqBeginA
+    RpcNsEntryObjectInqBeginW
+    RpcNsEntryObjectInqDone
+    RpcNsEntryObjectInqNext
+    RpcNsGroupDeleteA
+    RpcNsGroupDeleteW
+    RpcNsGroupMbrAddA
+    RpcNsGroupMbrAddW
+    RpcNsGroupMbrInqBeginA
+    RpcNsGroupMbrInqBeginW
+    RpcNsGroupMbrInqDone
+    RpcNsGroupMbrInqNextA
+    RpcNsGroupMbrInqNextW
+    RpcNsGroupMbrRemoveA
+    RpcNsGroupMbrRemoveW
+    RpcNsMgmtBindingUnexportA
+    RpcNsMgmtBindingUnexportW
+    RpcNsMgmtEntryCreateA
+    RpcNsMgmtEntryCreateW
+    RpcNsMgmtEntryDeleteA
+    RpcNsMgmtEntryDeleteW
+    RpcNsMgmtEntryInqIfIdsA
+    RpcNsMgmtEntryInqIfIdsW
+    RpcNsMgmtHandleSetExpAge
+    RpcNsMgmtInqExpAge
+    RpcNsMgmtSetExpAge
+    RpcNsProfileDeleteA
+    RpcNsProfileDeleteW
+    RpcNsProfileEltAddA
+    RpcNsProfileEltAddW
+    RpcNsProfileEltInqBeginA
+    RpcNsProfileEltInqBeginW
+    RpcNsProfileEltInqDone
+    RpcNsProfileEltInqNextA
+    RpcNsProfileEltInqNextW
+    RpcNsProfileEltRemoveA
+    RpcNsProfileEltRemoveW

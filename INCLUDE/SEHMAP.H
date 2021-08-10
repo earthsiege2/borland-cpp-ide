@@ -11,7 +11,6 @@
 
 
 #ifndef __cplusplus
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #undef try
 #undef except
 #undef finally
@@ -20,9 +19,4 @@
 #define except  __except
 #define finally __finally
 #define leave   __leave
-#define abnormal_termination()    __abnormal_termination
-#define exception_code()          __exception_code
-#define exception_info()          ((PEXCEPTION_POINTERS)__exception_info)
-
-#pragma option pop /*P_O_Pop*/
 #endif

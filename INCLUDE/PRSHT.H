@@ -5,13 +5,15 @@
 *                                                                             *
 * Version 1.0                                                                 *
 *                                                                             *
-* Copyright (c) 1991-1998, Microsoft Corp.      All rights reserved.          *
+* Copyright (c) Microsoft Corporation. All rights reserved.                   *
 *                                                                             *
 \*****************************************************************************/
 
 #ifndef _PRSHT_H_
 #pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _PRSHT_H_
+
+
 
 #ifndef _WINRESRC_
 #ifndef _WIN32_IE
@@ -87,15 +89,15 @@ extern "C" {
 #define MAXPROPPAGES            100
 
 struct _PSP;
-typedef struct _PSP FAR* HPROPSHEETPAGE;
+typedef struct _PSP * HPROPSHEETPAGE;
 
 #ifndef MIDL_PASS
 struct _PROPSHEETPAGEA;
 struct _PROPSHEETPAGEW;
 #endif
 
-typedef UINT (CALLBACK FAR * LPFNPSPCALLBACKA)(HWND hwnd, UINT uMsg, struct _PROPSHEETPAGEA FAR *ppsp);
-typedef UINT (CALLBACK FAR * LPFNPSPCALLBACKW)(HWND hwnd, UINT uMsg, struct _PROPSHEETPAGEW FAR *ppsp);
+typedef UINT (CALLBACK *LPFNPSPCALLBACKA)(HWND hwnd, UINT uMsg, struct _PROPSHEETPAGEA *ppsp);
+typedef UINT (CALLBACK *LPFNPSPCALLBACKW)(HWND hwnd, UINT uMsg, struct _PROPSHEETPAGEW *ppsp);
 
 #ifdef UNICODE
 #define LPFNPSPCALLBACK         LPFNPSPCALLBACKW
@@ -122,6 +124,9 @@ typedef UINT (CALLBACK FAR * LPFNPSPCALLBACKW)(HWND hwnd, UINT uMsg, struct _PRO
 #define PSP_USEHEADERSUBTITLE      0x00002000
 //-------------------------------------------
 #endif
+#if (_WIN32_WINNT >= 0x0501) || ISOLATION_AWARE_ENABLED
+#define PSP_USEFUSIONCONTEXT       0x00004000
+#endif
 
 
 #if (_WIN32_IE >= 0x0500)
@@ -133,63 +138,148 @@ typedef UINT (CALLBACK FAR * LPFNPSPCALLBACKW)(HWND hwnd, UINT uMsg, struct _PRO
 #define PROPSHEETPAGEA_V1_SIZE CCSIZEOF_STRUCT(PROPSHEETPAGEA, pcRefParent)
 #define PROPSHEETPAGEW_V1_SIZE CCSIZEOF_STRUCT(PROPSHEETPAGEW, pcRefParent)
 
-typedef struct _PROPSHEETPAGEA {
-        DWORD           dwSize;
-        DWORD           dwFlags;
-        HINSTANCE       hInstance;
-        union {
-            LPCSTR          pszTemplate;
+#define PROPSHEETPAGEA_V2_SIZE CCSIZEOF_STRUCT(PROPSHEETPAGEA, pszHeaderSubTitle)
+#define PROPSHEETPAGEW_V2_SIZE CCSIZEOF_STRUCT(PROPSHEETPAGEW, pszHeaderSubTitle)
+
 #ifdef _WIN32
-            LPCDLGTEMPLATE  pResource;
+typedef LPCDLGTEMPLATE PROPSHEETPAGE_RESOURCE;
 #else
-            const VOID FAR *pResource;
+typedef const VOID* PROPSHEETPAGE_RESOURCE;
 #endif
-        } DUMMYUNIONNAME;
-        union {
-            HICON       hIcon;
-            LPCSTR      pszIcon;
-        } DUMMYUNIONNAME2;
-        LPCSTR          pszTitle;
-        DLGPROC         pfnDlgProc;
-        LPARAM          lParam;
-        LPFNPSPCALLBACKA pfnCallback;
-        UINT FAR * pcRefParent;
 
-#if (_WIN32_IE >= 0x0400)
-        LPCSTR pszHeaderTitle;    // this is displayed in the header
-        LPCSTR pszHeaderSubTitle; //
-#endif
-} PROPSHEETPAGEA, FAR *LPPROPSHEETPAGEA;
-typedef const PROPSHEETPAGEA FAR *LPCPROPSHEETPAGEA;
+#define PROPSHEETPAGEA_V1_FIELDS   \
+    DWORD           dwSize;        \
+    DWORD           dwFlags;       \
+    HINSTANCE       hInstance;     \
+    union                          \
+    {                              \
+        LPCSTR      pszTemplate;   \
+        PROPSHEETPAGE_RESOURCE pResource; \
+    } DUMMYUNIONNAME;              \
+    union                          \
+    {                              \
+        HICON        hIcon;        \
+        LPCSTR       pszIcon;      \
+    } DUMMYUNIONNAME2;             \
+    LPCSTR           pszTitle;     \
+    DLGPROC          pfnDlgProc;   \
+    LPARAM           lParam;       \
+    LPFNPSPCALLBACKA pfnCallback;  \
+    UINT             *pcRefParent; \
 
-typedef struct _PROPSHEETPAGEW {
-        DWORD           dwSize;
-        DWORD           dwFlags;
-        HINSTANCE       hInstance;
-        union {
-            LPCWSTR          pszTemplate;
-#ifdef _WIN32
-            LPCDLGTEMPLATE  pResource;
+#define PROPSHEETPAGEW_V1_FIELDS   \
+    DWORD           dwSize;        \
+    DWORD           dwFlags;       \
+    HINSTANCE       hInstance;     \
+    union                          \
+    {                              \
+        LPCWSTR     pszTemplate;   \
+        PROPSHEETPAGE_RESOURCE pResource; \
+    } DUMMYUNIONNAME;              \
+    union                          \
+    {                              \
+        HICON        hIcon;        \
+        LPCWSTR      pszIcon;      \
+    } DUMMYUNIONNAME2;             \
+    LPCWSTR          pszTitle;     \
+    DLGPROC          pfnDlgProc;   \
+    LPARAM           lParam;       \
+    LPFNPSPCALLBACKW pfnCallback;  \
+    UINT             *pcRefParent; \
+
+#if (_WIN32_WINNT >= 0x0501) || ISOLATION_AWARE_ENABLED
+#define  _PROPSHEETPAGEA_V3 _PROPSHEETPAGEA
+#define  _PROPSHEETPAGEW_V3 _PROPSHEETPAGEW
+#elif (_WIN32_IE >= 0x0400)
+#define  _PROPSHEETPAGEA_V2 _PROPSHEETPAGEA
+#define  _PROPSHEETPAGEW_V2 _PROPSHEETPAGEW
 #else
-            const VOID FAR *pResource;
+#define  _PROPSHEETPAGEA_V1 _PROPSHEETPAGEA
+#define  _PROPSHEETPAGEW_V1 _PROPSHEETPAGEW
 #endif
-        }DUMMYUNIONNAME;
-        union {
-            HICON       hIcon;
-            LPCWSTR      pszIcon;
-        }DUMMYUNIONNAME2;
-        LPCWSTR          pszTitle;
-        DLGPROC         pfnDlgProc;
-        LPARAM          lParam;
-        LPFNPSPCALLBACKW pfnCallback;
-        UINT FAR * pcRefParent;
 
-#if (_WIN32_IE >= 0x0400)
-        LPCWSTR pszHeaderTitle;    // this is displayed in the header
-        LPCWSTR pszHeaderSubTitle; ///
+typedef struct _PROPSHEETPAGEA_V1
+{
+    PROPSHEETPAGEA_V1_FIELDS
+} PROPSHEETPAGEA_V1, *LPPROPSHEETPAGEA_V1;
+typedef const PROPSHEETPAGEA_V1 *LPCPROPSHEETPAGEA_V1;
+
+typedef struct _PROPSHEETPAGEA_V2
+{
+    PROPSHEETPAGEA_V1_FIELDS
+
+    LPCSTR           pszHeaderTitle;    // this is displayed in the header
+    LPCSTR           pszHeaderSubTitle; //
+} PROPSHEETPAGEA_V2, *LPPROPSHEETPAGEA_V2;
+typedef const PROPSHEETPAGEA_V2 *LPCPROPSHEETPAGEA_V2;
+
+typedef struct _PROPSHEETPAGEA_V3
+{
+    PROPSHEETPAGEA_V1_FIELDS
+
+    LPCSTR           pszHeaderTitle;    // this is displayed in the header
+    LPCSTR           pszHeaderSubTitle; //
+
+    HANDLE           hActCtx;
+} PROPSHEETPAGEA_V3, *LPPROPSHEETPAGEA_V3;
+typedef const PROPSHEETPAGEA_V3 *LPCPROPSHEETPAGEA_V3;
+
+
+typedef struct _PROPSHEETPAGEW_V1
+{
+    PROPSHEETPAGEW_V1_FIELDS
+} PROPSHEETPAGEW_V1, *LPPROPSHEETPAGEW_V1;
+typedef const PROPSHEETPAGEW_V1 *LPCPROPSHEETPAGEW_V1;
+
+typedef struct _PROPSHEETPAGEW_V2
+{
+    PROPSHEETPAGEW_V1_FIELDS
+
+    LPCWSTR           pszHeaderTitle;    // this is displayed in the header
+    LPCWSTR           pszHeaderSubTitle; //
+} PROPSHEETPAGEW_V2, *LPPROPSHEETPAGEW_V2;
+typedef const PROPSHEETPAGEW_V2 *LPCPROPSHEETPAGEW_V2;
+
+typedef struct _PROPSHEETPAGEW_V3
+{
+    PROPSHEETPAGEW_V1_FIELDS
+
+    LPCWSTR           pszHeaderTitle;    // this is displayed in the header
+    LPCWSTR           pszHeaderSubTitle; //
+
+    HANDLE           hActCtx;
+} PROPSHEETPAGEW_V3, *LPPROPSHEETPAGEW_V3;
+typedef const PROPSHEETPAGEW_V3 *LPCPROPSHEETPAGEW_V3;
+
+typedef    PROPSHEETPAGEA_V3    PROPSHEETPAGEA_LATEST;
+typedef    PROPSHEETPAGEW_V3    PROPSHEETPAGEW_LATEST;
+typedef  LPPROPSHEETPAGEA_V3  LPPROPSHEETPAGEA_LATEST;
+typedef  LPPROPSHEETPAGEW_V3  LPPROPSHEETPAGEW_LATEST;
+typedef LPCPROPSHEETPAGEA_V3 LPCPROPSHEETPAGEA_LATEST;
+typedef LPCPROPSHEETPAGEW_V3 LPCPROPSHEETPAGEW_LATEST;
+
+#if (_WIN32_WINNT >= 0x0501) || ISOLATION_AWARE_ENABLED
+typedef    PROPSHEETPAGEA_V3    PROPSHEETPAGEA;
+typedef    PROPSHEETPAGEW_V3    PROPSHEETPAGEW;
+typedef  LPPROPSHEETPAGEA_V3  LPPROPSHEETPAGEA;
+typedef  LPPROPSHEETPAGEW_V3  LPPROPSHEETPAGEW;
+typedef LPCPROPSHEETPAGEA_V3 LPCPROPSHEETPAGEA;
+typedef LPCPROPSHEETPAGEW_V3 LPCPROPSHEETPAGEW;
+#elif (_WIN32_IE >= 0x0400)
+typedef    PROPSHEETPAGEA_V2    PROPSHEETPAGEA;
+typedef    PROPSHEETPAGEW_V2    PROPSHEETPAGEW;
+typedef  LPPROPSHEETPAGEA_V2  LPPROPSHEETPAGEA;
+typedef  LPPROPSHEETPAGEW_V2  LPPROPSHEETPAGEW;
+typedef LPCPROPSHEETPAGEA_V2 LPCPROPSHEETPAGEA;
+typedef LPCPROPSHEETPAGEW_V2 LPCPROPSHEETPAGEW;
+#else
+typedef    PROPSHEETPAGEA_V1    PROPSHEETPAGEA;
+typedef    PROPSHEETPAGEW_V1    PROPSHEETPAGEW;
+typedef  LPPROPSHEETPAGEA_V1  LPPROPSHEETPAGEA;
+typedef  LPPROPSHEETPAGEW_V1  LPPROPSHEETPAGEW;
+typedef LPCPROPSHEETPAGEA_V1 LPCPROPSHEETPAGEA;
+typedef LPCPROPSHEETPAGEW_V1 LPCPROPSHEETPAGEW;
 #endif
-} PROPSHEETPAGEW, FAR *LPPROPSHEETPAGEW;
-typedef const PROPSHEETPAGEW FAR *LPCPROPSHEETPAGEW;
 
 #if 0 // IEUNIX reserved.
 /* Macros for the missing definitions.  */
@@ -202,17 +292,42 @@ typedef const PROPSHEETPAGEW FAR *LPCPROPSHEETPAGEW;
 #endif
 
 #ifdef UNICODE
-#define PROPSHEETPAGE           PROPSHEETPAGEW
-#define LPPROPSHEETPAGE         LPPROPSHEETPAGEW
+#define    PROPSHEETPAGE           PROPSHEETPAGEW
+#define  LPPROPSHEETPAGE         LPPROPSHEETPAGEW
 #define LPCPROPSHEETPAGE        LPCPROPSHEETPAGEW
-#define PROPSHEETPAGE_V1_SIZE PROPSHEETPAGEW_V1_SIZE
+#define    PROPSHEETPAGE_V1_SIZE   PROPSHEETPAGEW_V1_SIZE
+#define    PROPSHEETPAGE_V2_SIZE   PROPSHEETPAGEW_V2_SIZE
+#define    PROPSHEETPAGE_V1        PROPSHEETPAGEW_V1
+#define  LPPROPSHEETPAGE_V1      LPPROPSHEETPAGEW_V1
+#define LPCPROPSHEETPAGE_V1     LPCPROPSHEETPAGEW_V1
+#define    PROPSHEETPAGE_V2        PROPSHEETPAGEW_V2
+#define  LPPROPSHEETPAGE_V2      LPPROPSHEETPAGEW_V2
+#define LPCPROPSHEETPAGE_V2     LPCPROPSHEETPAGEW_V2
+#define    PROPSHEETPAGE_V3        PROPSHEETPAGEW_V3
+#define  LPPROPSHEETPAGE_V3      LPPROPSHEETPAGEW_V3
+#define LPCPROPSHEETPAGE_V3     LPCPROPSHEETPAGEW_V3
+#define    PROPSHEETPAGE_LATEST    PROPSHEETPAGEW_LATEST
+#define  LPPROPSHEETPAGE_LATEST  LPPROPSHEETPAGEW_LATEST
+#define LPCPROPSHEETPAGE_LATEST LPCPROPSHEETPAGEW_LATEST
 #else
-#define PROPSHEETPAGE           PROPSHEETPAGEA
-#define LPPROPSHEETPAGE         LPPROPSHEETPAGEA
+#define    PROPSHEETPAGE           PROPSHEETPAGEA
+#define  LPPROPSHEETPAGE         LPPROPSHEETPAGEA
 #define LPCPROPSHEETPAGE        LPCPROPSHEETPAGEA
-#define PROPSHEETPAGE_V1_SIZE PROPSHEETPAGEA_V1_SIZE
+#define    PROPSHEETPAGE_V1_SIZE   PROPSHEETPAGEA_V1_SIZE
+#define    PROPSHEETPAGE_V2_SIZE   PROPSHEETPAGEA_V2_SIZE
+#define    PROPSHEETPAGE_V1        PROPSHEETPAGEA_V1
+#define  LPPROPSHEETPAGE_V1      LPPROPSHEETPAGEA_V1
+#define LPCPROPSHEETPAGE_V1     LPCPROPSHEETPAGEA_V1
+#define    PROPSHEETPAGE_V2        PROPSHEETPAGEA_V2
+#define  LPPROPSHEETPAGE_V2      LPPROPSHEETPAGEA_V2
+#define LPCPROPSHEETPAGE_V2     LPCPROPSHEETPAGEA_V2
+#define    PROPSHEETPAGE_V3        PROPSHEETPAGEA_V3
+#define  LPPROPSHEETPAGE_V3      LPPROPSHEETPAGEA_V3
+#define LPCPROPSHEETPAGE_V3     LPCPROPSHEETPAGEA_V3
+#define    PROPSHEETPAGE_LATEST    PROPSHEETPAGEA_LATEST
+#define  LPPROPSHEETPAGE_LATEST  LPPROPSHEETPAGEA_LATEST
+#define LPCPROPSHEETPAGE_LATEST LPCPROPSHEETPAGEA_LATEST
 #endif
-
 
 #define PSH_DEFAULT             0x00000000
 #define PSH_PROPTITLE           0x00000001
@@ -260,79 +375,94 @@ typedef int (CALLBACK *PFNPROPSHEETCALLBACK)(HWND, UINT, LPARAM);
 #define PROPSHEETHEADERA_V1_SIZE CCSIZEOF_STRUCT(PROPSHEETHEADERA, pfnCallback)
 #define PROPSHEETHEADERW_V1_SIZE CCSIZEOF_STRUCT(PROPSHEETHEADERW, pfnCallback)
 
-typedef struct _PROPSHEETHEADERA {
+#define PROPSHEETHEADERA_V2_SIZE CCSIZEOF_STRUCT(PROPSHEETHEADERA, DUMMYUNION5_MEMBER(hbmHeader))
+#define PROPSHEETHEADERW_V2_SIZE CCSIZEOF_STRUCT(PROPSHEETHEADERW, DUMMYUNION5_MEMBER(hbmHeader))
+
+typedef struct _PROPSHEETHEADERA 
+{
         DWORD           dwSize;
         DWORD           dwFlags;
         HWND            hwndParent;
         HINSTANCE       hInstance;
-        union {
+        union 
+        {
             HICON       hIcon;
             LPCSTR      pszIcon;
-        }DUMMYUNIONNAME;
+        } DUMMYUNIONNAME;
         LPCSTR          pszCaption;
 
         UINT            nPages;
-        union {
+        union 
+        {
             UINT        nStartPage;
             LPCSTR      pStartPage;
-        }DUMMYUNIONNAME2;
-        union {
+        } DUMMYUNIONNAME2;
+        union 
+        {
             LPCPROPSHEETPAGEA ppsp;
-            HPROPSHEETPAGE FAR *phpage;
-        }DUMMYUNIONNAME3;
+            HPROPSHEETPAGE *phpage;
+        } DUMMYUNIONNAME3;
         PFNPROPSHEETCALLBACK pfnCallback;
 
 #if (_WIN32_IE >= 0x0400)
-        union {
+        union 
+        {
             HBITMAP hbmWatermark;
             LPCSTR pszbmWatermark;
         } DUMMYUNIONNAME4;
         HPALETTE hplWatermark;
-        union {
+        union 
+        {
             HBITMAP hbmHeader;     // Header  bitmap shares the palette with watermark
             LPCSTR pszbmHeader;
         } DUMMYUNIONNAME5;
 #endif
-} PROPSHEETHEADERA, FAR *LPPROPSHEETHEADERA;
+} PROPSHEETHEADERA, *LPPROPSHEETHEADERA;
 
-typedef const PROPSHEETHEADERA FAR *LPCPROPSHEETHEADERA;
+typedef const PROPSHEETHEADERA *LPCPROPSHEETHEADERA;
 
-typedef struct _PROPSHEETHEADERW {
+typedef struct _PROPSHEETHEADERW 
+{
         DWORD           dwSize;
         DWORD           dwFlags;
         HWND            hwndParent;
         HINSTANCE       hInstance;
-        union {
+        union 
+        {
             HICON       hIcon;
             LPCWSTR     pszIcon;
-        }DUMMYUNIONNAME;
+        } DUMMYUNIONNAME;
         LPCWSTR         pszCaption;
 
 
         UINT            nPages;
-        union {
+        union 
+        {
             UINT        nStartPage;
             LPCWSTR     pStartPage;
-        }DUMMYUNIONNAME2;
-        union {
+        } DUMMYUNIONNAME2;
+        union 
+        {
             LPCPROPSHEETPAGEW ppsp;
-            HPROPSHEETPAGE FAR *phpage;
-        }DUMMYUNIONNAME3;
+            HPROPSHEETPAGE *phpage;
+        } DUMMYUNIONNAME3;
         PFNPROPSHEETCALLBACK pfnCallback;
 
 #if (_WIN32_IE >= 0x0400)
-        union {
+        union 
+        {
             HBITMAP hbmWatermark;
             LPCWSTR pszbmWatermark;
         } DUMMYUNIONNAME4;
         HPALETTE hplWatermark;
-        union {
+        union 
+        {
             HBITMAP hbmHeader;
             LPCWSTR pszbmHeader;
         } DUMMYUNIONNAME5;
 #endif
-} PROPSHEETHEADERW, FAR *LPPROPSHEETHEADERW;
-typedef const PROPSHEETHEADERW FAR *LPCPROPSHEETHEADERW;
+} PROPSHEETHEADERW, *LPPROPSHEETHEADERW;
+typedef const PROPSHEETHEADERW *LPCPROPSHEETHEADERW;
 
 #if 0 //IEUNIX reserved.
 /* Macros for the missing definitions.  */
@@ -351,21 +481,37 @@ typedef const PROPSHEETHEADERW FAR *LPCPROPSHEETHEADERW;
 #define LPPROPSHEETHEADER       LPPROPSHEETHEADERW
 #define LPCPROPSHEETHEADER      LPCPROPSHEETHEADERW
 #define PROPSHEETHEADER_V1_SIZE PROPSHEETHEADERW_V1_SIZE
+#define PROPSHEETHEADER_V2_SIZE PROPSHEETHEADERW_V2_SIZE
 #else
 #define PROPSHEETHEADER         PROPSHEETHEADERA
 #define LPPROPSHEETHEADER       LPPROPSHEETHEADERA
 #define LPCPROPSHEETHEADER      LPCPROPSHEETHEADERA
 #define PROPSHEETHEADER_V1_SIZE PROPSHEETHEADERA_V1_SIZE
+#define PROPSHEETHEADER_V2_SIZE PROPSHEETHEADERA_V2_SIZE
 #endif
 
 
 #define PSCB_INITIALIZED  1
 #define PSCB_PRECREATE    2
 
-WINCOMMCTRLAPI HPROPSHEETPAGE WINAPI CreatePropertySheetPageA(LPCPROPSHEETPAGEA);
-WINCOMMCTRLAPI HPROPSHEETPAGE WINAPI CreatePropertySheetPageW(LPCPROPSHEETPAGEW);
+#if (_WIN32_IE >= 0x560)
+// PSCB_BUTTONPRESSED will be sent when the user clicks a button in the
+// property dialog (OK, Cancel, Apply, or Close).  The message will be sent
+// to PROPSHEETHEADER's pfnCallback if the PSH_USECALLBACK flag was specified.
+// The LPARAM will be equal to one of the following based on the button pressed:
+// This message is only supported on comctl32 v6.
+// PSBTN_FINISH (Close), PSBTN_OK, PSBTN_APPLYNOW, or PSBTN_CANCEL
+
+#define PSCB_BUTTONPRESSED 3
+#endif  // _WIN32_IE >= 0x560
+
+
+WINCOMMCTRLAPI HPROPSHEETPAGE WINAPI CreatePropertySheetPageA(LPCPROPSHEETPAGEA constPropSheetPagePointer);
+WINCOMMCTRLAPI HPROPSHEETPAGE WINAPI CreatePropertySheetPageW(LPCPROPSHEETPAGEW constPropSheetPagePointer);
 WINCOMMCTRLAPI BOOL           WINAPI DestroyPropertySheetPage(HPROPSHEETPAGE);
+
 WINCOMMCTRLAPI INT_PTR        WINAPI PropertySheetA(LPCPROPSHEETHEADERA);
+
 WINCOMMCTRLAPI INT_PTR        WINAPI PropertySheetW(LPCPROPSHEETHEADERW);
 
 #ifdef UNICODE
@@ -378,15 +524,15 @@ WINCOMMCTRLAPI INT_PTR        WINAPI PropertySheetW(LPCPROPSHEETHEADERW);
 
 
 
-typedef BOOL (CALLBACK FAR * LPFNADDPROPSHEETPAGE)(HPROPSHEETPAGE, LPARAM);
-typedef BOOL (CALLBACK FAR * LPFNADDPROPSHEETPAGES)(LPVOID, LPFNADDPROPSHEETPAGE, LPARAM);
+typedef BOOL (CALLBACK *LPFNADDPROPSHEETPAGE)(HPROPSHEETPAGE, LPARAM);
+typedef BOOL (CALLBACK *LPFNADDPROPSHEETPAGES)(LPVOID, LPFNADDPROPSHEETPAGE, LPARAM);
 
 
 typedef struct _PSHNOTIFY
 {
     NMHDR hdr;
     LPARAM lParam;
-} PSHNOTIFY, FAR *LPPSHNOTIFY;
+} PSHNOTIFY, *LPPSHNOTIFY;
 
 #define PSN_FIRST               (0U-200U)
 #define PSN_LAST                (0U-299U)
@@ -477,7 +623,7 @@ typedef struct _PSHNOTIFY
 #endif
 
 #define PropSheet_SetTitle(hDlg, wStyle, lpszText)\
-        SNDMSG(hDlg, PSM_SETTITLE, wStyle, (LPARAM)(LPCTSTR)lpszText)
+        SNDMSG(hDlg, PSM_SETTITLE, wStyle, (LPARAM)(LPCTSTR)(lpszText))
 
 
 #define PSM_SETWIZBUTTONS       (WM_USER + 112)
@@ -623,11 +769,304 @@ typedef struct _PSHNOTIFY
 #define PROP_LG_CYDLG           218
 
 
+
+
+
+#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+#if ISOLATION_AWARE_ENABLED
+
+
+#if !defined(ISOLATION_AWARE_INLINE)
+#if defined(__cplusplus)
+#define ISOLATION_AWARE_INLINE inline
+#else
+#define ISOLATION_AWARE_INLINE __inline
+#endif
+#endif
+
+FARPROC WINAPI PrshtIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL(LPCSTR pszProcName);
+
+
+#ifndef CCSIZEOF_STRUCT
+#define CCSIZEOF_STRUCT(structname, member)  (((int)((LPBYTE)(&((structname*)0)->member) - ((LPBYTE)((structname*)0)))) + sizeof(((structname*)0)->member))
+#endif
+
+HPROPSHEETPAGE WINAPI IsolationAwareCreatePropertySheetPageA(LPCPROPSHEETPAGEA constPropSheetPagePointer);
+HPROPSHEETPAGE WINAPI IsolationAwareCreatePropertySheetPageW(LPCPROPSHEETPAGEW constPropSheetPagePointer);
+BOOL WINAPI IsolationAwareDestroyPropertySheetPage(HPROPSHEETPAGE unnamed1);
+INT_PTR WINAPI IsolationAwarePropertySheetA(LPCPROPSHEETHEADERA unnamed1);
+INT_PTR WINAPI IsolationAwarePropertySheetW(LPCPROPSHEETHEADERW unnamed1);
+
+#if defined(UNICODE)
+
+#define IsolationAwareCreatePropertySheetPage IsolationAwareCreatePropertySheetPageW
+#define IsolationAwarePropertySheet IsolationAwarePropertySheetW
+
+#else /* UNICODE */
+
+#define IsolationAwareCreatePropertySheetPage IsolationAwareCreatePropertySheetPageA
+#define IsolationAwarePropertySheet IsolationAwarePropertySheetA
+
+#endif /* UNICODE */
+
+ISOLATION_AWARE_INLINE HPROPSHEETPAGE WINAPI IsolationAwareCreatePropertySheetPageA(LPCPROPSHEETPAGEA constPropSheetPagePointer)
+{
+    HPROPSHEETPAGE result = NULL;
+    typedef HPROPSHEETPAGE (WINAPI* PFN)(LPCPROPSHEETPAGEA constPropSheetPagePointer);
+    static PFN s_pfn;
+
+    const LPPROPSHEETPAGEA_LATEST latestPropSheetPagePointer = (LPPROPSHEETPAGEA_LATEST)constPropSheetPagePointer;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return result;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)PrshtIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("CreatePropertySheetPageA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+
+        if (IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            if ((latestPropSheetPagePointer->dwFlags & PSP_USEFUSIONCONTEXT) != 0)
+            {
+                latestPropSheetPagePointer->dwFlags &= ~PSP_USEFUSIONCONTEXT;
+            }
+        }
+        else if ((   latestPropSheetPagePointer->dwFlags & PSP_USEFUSIONCONTEXT) == 0
+                    && latestPropSheetPagePointer->dwSize >= CCSIZEOF_STRUCT(PROPSHEETPAGEA_V3, hActCtx)
+                  )
+        {
+            latestPropSheetPagePointer->dwFlags |= PSP_USEFUSIONCONTEXT;
+            latestPropSheetPagePointer->hActCtx = WinbaseIsolationAwarePrivateG_HnCgpgk;
+        }
+        result = s_pfn(constPropSheetPagePointer);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (result == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return result;
+}
+
+ISOLATION_AWARE_INLINE HPROPSHEETPAGE WINAPI IsolationAwareCreatePropertySheetPageW(LPCPROPSHEETPAGEW constPropSheetPagePointer)
+{
+    HPROPSHEETPAGE result = NULL;
+    typedef HPROPSHEETPAGE (WINAPI* PFN)(LPCPROPSHEETPAGEW constPropSheetPagePointer);
+    static PFN s_pfn;
+
+    const LPPROPSHEETPAGEW_LATEST latestPropSheetPagePointer = (LPPROPSHEETPAGEW_LATEST)constPropSheetPagePointer;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return result;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)PrshtIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("CreatePropertySheetPageW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+
+        if (IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            if ((latestPropSheetPagePointer->dwFlags & PSP_USEFUSIONCONTEXT) != 0)
+            {
+                latestPropSheetPagePointer->dwFlags &= ~PSP_USEFUSIONCONTEXT;
+            }
+        }
+        else if ((   latestPropSheetPagePointer->dwFlags & PSP_USEFUSIONCONTEXT) == 0
+                    && latestPropSheetPagePointer->dwSize >= CCSIZEOF_STRUCT(PROPSHEETPAGEW_V3, hActCtx)
+                  )
+        {
+            latestPropSheetPagePointer->dwFlags |= PSP_USEFUSIONCONTEXT;
+            latestPropSheetPagePointer->hActCtx = WinbaseIsolationAwarePrivateG_HnCgpgk;
+        }
+        result = s_pfn(constPropSheetPagePointer);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (result == NULL);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return result;
+}
+
+ISOLATION_AWARE_INLINE BOOL WINAPI IsolationAwareDestroyPropertySheetPage(HPROPSHEETPAGE unnamed1)
+{
+    BOOL fResult = FALSE;
+    typedef BOOL (WINAPI* PFN)(HPROPSHEETPAGE unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return fResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)PrshtIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("DestroyPropertySheetPage");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        fResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (fResult == FALSE);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return fResult;
+}
+
+ISOLATION_AWARE_INLINE INT_PTR WINAPI IsolationAwarePropertySheetA(LPCPROPSHEETHEADERA unnamed1)
+{
+    INT_PTR nResult = -1;
+    typedef INT_PTR (WINAPI* PFN)(LPCPROPSHEETHEADERA unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)PrshtIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("PropertySheetA");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == -1);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE INT_PTR WINAPI IsolationAwarePropertySheetW(LPCPROPSHEETHEADERW unnamed1)
+{
+    INT_PTR nResult = -1;
+    typedef INT_PTR (WINAPI* PFN)(LPCPROPSHEETHEADERW unnamed1);
+    static PFN s_pfn;
+    ULONG_PTR  ulpCookie = 0;
+    const BOOL fActivateActCtxSuccess = IsolationAwarePrivateG_FqbjaLEiEL || IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+    if (!fActivateActCtxSuccess)
+        return nResult;
+    __try
+    {
+        if (s_pfn == NULL)
+        {
+            s_pfn = (PFN)PrshtIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL("PropertySheetW");
+            if (s_pfn == NULL)
+                __leave;
+        }
+        nResult = s_pfn(unnamed1);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL)
+        {
+            const BOOL fPreserveLastError = (nResult == -1);
+            const DWORD dwLastError = fPreserveLastError ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (fPreserveLastError)
+                SetLastError(dwLastError);
+        }
+    }
+    return nResult;
+}
+
+ISOLATION_AWARE_INLINE FARPROC WINAPI PrshtIsolationAwarePrivatetEgCebCnDDeEff_pbMCgLDC_DLL(LPCSTR pszProcName)
+/* This function is shared by the other stubs in this header. */
+{
+    FARPROC proc = NULL;
+    static HMODULE s_module;
+    BOOL fActivateActCtxSuccess = FALSE;
+    ULONG_PTR ulpCookie = 0;
+    __try
+    {
+        if (s_module == NULL)
+        {
+            if (!IsolationAwarePrivateG_FqbjaLEiEL)
+            {
+                fActivateActCtxSuccess = IsolationAwarePrivatenCgIiAgEzlnCgpgk(&ulpCookie);
+                if (!fActivateActCtxSuccess)
+                    __leave;
+            }
+            s_module = LoadLibraryW(L"Comctl32.dll");
+            if (s_module == NULL)
+            {
+                if (GetLastError() != ERROR_CALL_NOT_IMPLEMENTED)
+                    __leave;
+                s_module = LoadLibraryA("Comctl32.dll");
+                if (s_module == NULL)
+                    __leave;
+            }
+        }
+        proc = GetProcAddress(s_module, pszProcName);
+    }
+    __finally
+    {
+        if (!IsolationAwarePrivateG_FqbjaLEiEL && fActivateActCtxSuccess)
+        {
+            const DWORD dwLastError = (proc == NULL) ? GetLastError() : NO_ERROR;
+            (void)IsolationAwareDeactivateActCtx(0, ulpCookie);
+            if (proc == NULL)
+                SetLastError(dwLastError);
+        }
+    }
+    return proc;
+}
+
+#define CreatePropertySheetPageA IsolationAwareCreatePropertySheetPageA
+#define CreatePropertySheetPageW IsolationAwareCreatePropertySheetPageW
+#define DestroyPropertySheetPage IsolationAwareDestroyPropertySheetPage
+#define PropertySheetA IsolationAwarePropertySheetA
+#define PropertySheetW IsolationAwarePropertySheetW
+
+#endif /* ISOLATION_AWARE_ENABLED */
+#endif /* RC */
+
+
+
 #ifdef __cplusplus
 }
 #endif
 
 #include <poppack.h>
+
 
 
 #pragma option pop /*P_O_Pop*/

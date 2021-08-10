@@ -2,7 +2,7 @@
 //      Example Program:  Briefcase
 //      File:  BriefCaseMain.h
 //      Description:  Declaration file for the Briefcase example
-//      Copyright (c) 1987, 1999 Borland International Inc. All Rights Reserved.
+//      Copyright (c) 1987, 1999-2002 Borland International Inc. All Rights Reserved.
 //---------------------------------------------------------------------------
 #ifndef BriefCaseMainH
 #define BriefCaseMainH

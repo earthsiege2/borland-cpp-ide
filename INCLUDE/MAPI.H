@@ -1,9 +1,9 @@
 /*
- *  M A P I . H
+ *	M A P I . H
  *
  *  Messaging Applications Programming Interface.
  *
- *  Copyright 1986-1996 Microsoft Corporation. All Rights Reserved.
+ *  Copyright 1993-1999 Microsoft Corporation. All Rights Reserved.
  *
  *  Purpose:
  *
@@ -15,8 +15,11 @@
 
 
 #ifndef MAPI_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define MAPI_H
+
+#if _MSC_VER > 1000
+#pragma once
+#endif
 
 /*
  *  Types.
@@ -42,7 +45,7 @@ typedef unsigned long       FLAGS;
 
 #ifndef __LHANDLE
 #define __LHANDLE
-typedef unsigned long       LHANDLE, FAR * LPLHANDLE;
+typedef ULONG_PTR       LHANDLE, FAR * LPLHANDLE;
 #endif
 
 typedef unsigned char FAR * LPBYTE;
@@ -84,7 +87,7 @@ typedef struct
     LPVOID lpEntryID;           /* System-specific recipient reference      */
 } MapiRecipDesc, FAR * lpMapiRecipDesc;
 
-#ifndef MAPI_ORIG               /* also defined in mapix.h */
+#ifndef MAPI_ORIG				/* also defined in mapix.h */
 #define MAPI_ORIG   0           /* Recipient is message originator          */
 #define MAPI_TO     1           /* Recipient is a primary recipient         */
 #define MAPI_CC     2           /* Recipient is a copy recipient            */
@@ -126,7 +129,7 @@ typedef struct
 
 #define MAPI_LOGON_UI           0x00000001  /* Display logon UI             */
 #ifndef MAPI_PASSWORD_UI
-#define MAPI_PASSWORD_UI        0x00020000  /* prompt for password only     */
+#define MAPI_PASSWORD_UI		0x00020000	/* prompt for password only     */
 #endif
 #define MAPI_NEW_SESSION        0x00000002  /* Don't use shared session     */
 #define MAPI_FORCE_DOWNLOAD     0x00001000  /* Get new mail before return   */
@@ -137,16 +140,16 @@ typedef struct
 /* #define MAPI_LOGON_UI        0x00000001     Display logon UI             */
 /* #define MAPI_NEW_SESSION     0x00000002     Don't use shared session     */
 
-#ifndef MAPI_DIALOG             /* also defined in property.h */
+#ifndef MAPI_DIALOG				/* also defined in property.h */
 #define MAPI_DIALOG             0x00000008  /* Display a send note UI       */
 #endif
-/*# define MAPI_USE_DEFAULT     0x00000040     Use default profile in logon */
+/*# define MAPI_USE_DEFAULT		0x00000040	   Use default profile in logon */
 
 /* MAPIFindNext() flags.    */
 
 #define MAPI_UNREAD_ONLY        0x00000020  /* Only unread messages         */
 #define MAPI_GUARANTEE_FIFO     0x00000100  /* use date order               */
-#define MAPI_LONG_MSGID         0x00004000  /* allow 512 char returned ID   */
+#define MAPI_LONG_MSGID			0x00004000	/* allow 512 char returned ID	*/
 
 /* MAPIReadMail() flags.    */
 
@@ -159,7 +162,7 @@ typedef struct
 
 /* #define MAPI_LOGON_UI        0x00000001     Display logon UI             */
 /* #define MAPI_NEW_SESSION     0x00000002     Don't use shared session     */
-/* #define MAPI_LONG_MSGID      0x00004000  /* allow 512 char returned ID   */
+/* #define MAPI_LONG_MSGID		0x00004000	/* allow 512 char returned ID	*/
 
 /* MAPIAddress() flags.     */
 
@@ -180,133 +183,129 @@ typedef struct
 /* #define MAPI_AB_NOMODIFY     0x00000400     Don't allow mods of AB entries */
 
 typedef ULONG (FAR PASCAL MAPILOGON)(
-    ULONG ulUIParam,
-    LPSTR lpszProfileName,
-    LPSTR lpszPassword,
-    FLAGS flFlags,
-    ULONG ulReserved,
-    LPLHANDLE lplhSession
+	ULONG_PTR ulUIParam,
+	LPSTR lpszProfileName,
+	LPSTR lpszPassword,
+	FLAGS flFlags,
+	ULONG ulReserved,
+	LPLHANDLE lplhSession
 );
 typedef MAPILOGON FAR *LPMAPILOGON;
 MAPILOGON MAPILogon;
 
 typedef ULONG (FAR PASCAL MAPILOGOFF)(
-    LHANDLE lhSession,
-    ULONG ulUIParam,
-    FLAGS flFlags,
-    ULONG ulReserved
+	LHANDLE lhSession,
+	ULONG_PTR ulUIParam,
+	FLAGS flFlags,
+	ULONG ulReserved
 );
 typedef MAPILOGOFF FAR *LPMAPILOGOFF;
 MAPILOGOFF MAPILogoff;
 
 
 typedef ULONG (FAR PASCAL MAPISENDMAIL)(
-    LHANDLE lhSession,
-    ULONG ulUIParam,
-    lpMapiMessage lpMessage,
-    FLAGS flFlags,
-    ULONG ulReserved
+	LHANDLE lhSession,
+	ULONG_PTR ulUIParam,
+	lpMapiMessage lpMessage,
+	FLAGS flFlags,
+	ULONG ulReserved
 );
 typedef MAPISENDMAIL FAR *LPMAPISENDMAIL;
 MAPISENDMAIL MAPISendMail;
 
 
 typedef ULONG (FAR PASCAL MAPISENDDOCUMENTS)(
-    ULONG ulUIParam,
-    LPSTR lpszDelimChar,
-    LPSTR lpszFilePaths,
-    LPSTR lpszFileNames,
-    ULONG ulReserved
+	ULONG_PTR ulUIParam,
+	LPSTR lpszDelimChar,
+	LPSTR lpszFilePaths,
+	LPSTR lpszFileNames,
+	ULONG ulReserved
 );
 typedef MAPISENDDOCUMENTS FAR *LPMAPISENDDOCUMENTS;
 MAPISENDDOCUMENTS MAPISendDocuments;
 
 
 typedef ULONG (FAR PASCAL MAPIFINDNEXT)(
-    LHANDLE lhSession,
-    ULONG ulUIParam,
-    LPSTR lpszMessageType,
-    LPSTR lpszSeedMessageID,
-    FLAGS flFlags,
-    ULONG ulReserved,
-    LPSTR lpszMessageID
+	LHANDLE lhSession,
+	ULONG_PTR ulUIParam,
+	LPSTR lpszMessageType,
+	LPSTR lpszSeedMessageID,
+	FLAGS flFlags,
+	ULONG ulReserved,
+	LPSTR lpszMessageID
 );
 typedef MAPIFINDNEXT FAR *LPMAPIFINDNEXT;
 MAPIFINDNEXT MAPIFindNext;
 
 typedef ULONG (FAR PASCAL MAPIREADMAIL)(
-    LHANDLE lhSession,
-    ULONG ulUIParam,
-    LPSTR lpszMessageID,
-    FLAGS flFlags,
-    ULONG ulReserved,
-    lpMapiMessage FAR *lppMessage
+	LHANDLE lhSession,
+	ULONG_PTR ulUIParam,
+	LPSTR lpszMessageID,
+	FLAGS flFlags,
+	ULONG ulReserved,
+	lpMapiMessage FAR *lppMessage
 );
 typedef MAPIREADMAIL FAR *LPMAPIREADMAIL;
 MAPIREADMAIL MAPIReadMail;
 
 typedef ULONG (FAR PASCAL MAPISAVEMAIL)(
-    LHANDLE lhSession,
-    ULONG ulUIParam,
-    lpMapiMessage lpMessage,
-    FLAGS flFlags,
-    ULONG ulReserved,
-    LPSTR lpszMessageID
+	LHANDLE lhSession,
+	ULONG_PTR ulUIParam,
+	lpMapiMessage lpMessage,
+	FLAGS flFlags,
+	ULONG ulReserved,
+	LPSTR lpszMessageID
 );
 typedef MAPISAVEMAIL FAR *LPMAPISAVEMAIL;
 MAPISAVEMAIL MAPISaveMail;
 
 typedef ULONG (FAR PASCAL MAPIDELETEMAIL)(
-    LHANDLE lhSession,
-    ULONG ulUIParam,
-    LPSTR lpszMessageID,
-    FLAGS flFlags,
-    ULONG ulReserved
+	LHANDLE lhSession,
+	ULONG_PTR ulUIParam,
+	LPSTR lpszMessageID,
+	FLAGS flFlags,
+	ULONG ulReserved
 );
 typedef MAPIDELETEMAIL FAR *LPMAPIDELETEMAIL;
 MAPIDELETEMAIL MAPIDeleteMail;
 
-#ifndef _MAC
-typedef ULONG (EXPORT FAR PASCAL MAPIFREEBUFFER)(
-    LPVOID pv
-);
-typedef MAPIFREEBUFFER FAR *LPMAPIFREEBUFFER;
-MAPIFREEBUFFER MAPIFreeBuffer;
-#endif
+typedef ULONG (EXPORT FAR PASCAL *LPMAPIFREEBUFFER)(LPVOID pv);
+
+ULONG FAR PASCAL MAPIFreeBuffer(LPVOID pv);
 
 typedef ULONG (FAR PASCAL MAPIADDRESS)(
-    LHANDLE lhSession,
-    ULONG ulUIParam,
-    LPSTR lpszCaption,
-    ULONG nEditFields,
-    LPSTR lpszLabels,
-    ULONG nRecips,
-    lpMapiRecipDesc lpRecips,
-    FLAGS flFlags,
-    ULONG ulReserved,
-    LPULONG lpnNewRecips,
-    lpMapiRecipDesc FAR *lppNewRecips
+	LHANDLE lhSession,
+	ULONG_PTR ulUIParam,
+	LPSTR lpszCaption,
+	ULONG nEditFields,
+	LPSTR lpszLabels,
+	ULONG nRecips,
+	lpMapiRecipDesc lpRecips,
+	FLAGS flFlags,
+	ULONG ulReserved,
+	LPULONG lpnNewRecips,
+	lpMapiRecipDesc FAR *lppNewRecips
 );
 typedef MAPIADDRESS FAR *LPMAPIADDRESS;
 MAPIADDRESS MAPIAddress;
 
 typedef ULONG (FAR PASCAL MAPIDETAILS)(
-    LHANDLE lhSession,
-    ULONG ulUIParam,
-    lpMapiRecipDesc lpRecip,
-    FLAGS flFlags,
-    ULONG ulReserved
+	LHANDLE lhSession,
+	ULONG_PTR ulUIParam,
+	lpMapiRecipDesc lpRecip,
+	FLAGS flFlags,
+	ULONG ulReserved
 );
 typedef MAPIDETAILS FAR *LPMAPIDETAILS;
 MAPIDETAILS MAPIDetails;
 
 typedef ULONG (FAR PASCAL MAPIRESOLVENAME)(
-    LHANDLE lhSession,
-    ULONG ulUIParam,
-    LPSTR lpszName,
-    FLAGS flFlags,
-    ULONG ulReserved,
-    lpMapiRecipDesc FAR *lppRecip
+	LHANDLE lhSession,
+	ULONG_PTR ulUIParam,
+	LPSTR lpszName,
+	FLAGS flFlags,
+	ULONG ulReserved,
+	lpMapiRecipDesc FAR *lppRecip
 );
 typedef MAPIRESOLVENAME FAR *LPMAPIRESOLVENAME;
 MAPIRESOLVENAME MAPIResolveName;
@@ -350,15 +349,14 @@ MAPIRESOLVENAME MAPIResolveName;
 
 STDMETHODIMP_(SCODE)
 ScMAPIXFromSMAPI(LHANDLE lhSimpleSession,
-                ULONG ulFlags,
-                LPCIID lpInterface,
-                LPMAPISESSION FAR * lppMAPISession);
+				ULONG ulFlags,
+				LPCIID lpInterface,
+				LPMAPISESSION FAR * lppMAPISession);
 #endif /* MAPIX_H */
 
 
-#ifdef  __cplusplus
-}       /*  extern "C" */
+#ifdef	__cplusplus
+}		/*	extern "C" */
 #endif
 
-#pragma option pop /*P_O_Pop*/
 #endif /* MAPI_H */

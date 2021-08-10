@@ -1,7 +1,6 @@
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 /*++
 
-Copyright (c) 1992-1998 Microsoft Corporation
+Copyright (c) Microsoft Corporation. All rights reserved.
 
 Module Name:
 
@@ -44,6 +43,10 @@ Compiler switches:
 
 #ifndef __RPCPROXY_H__
 #define __RPCPROXY_H__
+#if _MSC_VER > 1000
+#pragma once
+#endif
+
 #define __midl_proxy
 
 #ifdef __REQUIRED_RPCPROXY_H_VERSION__
@@ -53,7 +56,7 @@ Compiler switches:
 #endif
 
 // If this is the first file included __RPC_WIN64__ is not defined yet.
-#if defined(_M_IA64) || defined(_M_AXP64)
+#if defined(_M_IA64) || defined(_M_AMD64)
 #include <pshpack8.h>
 #endif
 
@@ -63,58 +66,18 @@ Compiler switches:
 #define INC_OLE2
 #endif
 
-#if defined(WIN32) || defined(__RPC_WIN64__) || defined(_MPPC_)
+#if defined(WIN32) || defined(__RPC_WIN64__)
 
 //We need to define REFIID, REFCLSID, REFGUID, & REFFMTID here so that the
 //proxy code won't get the const GUID *const definition.
 #ifndef GUID_DEFINED
-#define GUID_DEFINED
-typedef struct _GUID
-{
-    unsigned long Data1;
-    unsigned short Data2;
-    unsigned short Data3;
-    unsigned char Data4[8];
-} GUID;
+#include <guiddef.h>
 #endif /* GUID_DEFINED */
 
-#if !defined( __IID_DEFINED__ )
-    #define __IID_DEFINED__
-
-    typedef GUID IID;
-    typedef IID *LPIID;
-    #define IID_NULL            GUID_NULL
-    #define IsEqualIID(riid1, riid2) IsEqualGUID(riid1, riid2)
-    typedef GUID CLSID;
-    typedef CLSID *LPCLSID;
-    #define CLSID_NULL          GUID_NULL
-    #define IsEqualCLSID(rclsid1, rclsid2) IsEqualGUID(rclsid1, rclsid2)
-    typedef GUID FMTID;
-    typedef FMTID *LPFMTID;
-    #define FMTID_NULL          GUID_NULL
-    #define IsEqualFMTID(rfmtid1, rfmtid2) IsEqualGUID(rfmtid1, rfmtid2)
-
-    #ifndef _REFGUID_DEFINED
-        #define _REFGUID_DEFINED
-        typedef const GUID *REFGUID;
-    #endif // !_REFGUID_DEFINED
-
-    #ifndef _REFIID_DEFINED
-        #define _REFIID_DEFINED
-        typedef const IID *REFIID;
-    #endif // !_REFIID_DEFINED
-
-    #ifndef _REFCLSID_DEFINED
-        #define _REFCLSID_DEFINED
-        typedef const CLSID *REFCLSID;
-    #endif // !_REFCLSID_DEFINED
-
-    #ifndef _REFFMTID_DEFINED
-        #define _REFFMTID_DEFINED
-        typedef const FMTID *REFFMTID;
-    #endif // !_REFFMTID_DEFINED
-
-#endif // !__IID_DEFINED__
+#if defined(__cplusplus)
+extern "C"
+{
+#endif
 
 // forward declarations
 struct tagCInterfaceStubVtbl;
@@ -130,16 +93,16 @@ typedef IIDLookupRtn * PIIDLookup;
 typedef struct tagProxyFileInfo
 {
     const PCInterfaceProxyVtblList *pProxyVtblList;
-    const PCInterfaceStubVtblList *pStubVtblList;
-    const PCInterfaceName *     pNamesArray;
-    const IID **                pDelegatedIIDs;
-    const PIIDLookup            pIIDLookupRtn;
-    unsigned short              TableSize;
-    unsigned short              TableVersion;
-    const IID **                pAsyncIIDLookup;
-    LONG_PTR                    Filler2;
-    LONG_PTR                    Filler3;
-    LONG_PTR                    Filler4;
+    const PCInterfaceStubVtblList  *pStubVtblList;
+    const PCInterfaceName *         pNamesArray;
+    const IID **                    pDelegatedIIDs;
+    const PIIDLookup                pIIDLookupRtn;
+    unsigned short                  TableSize;
+    unsigned short                  TableVersion;
+    const IID **                    pAsyncIIDLookup;
+    LONG_PTR                        Filler2;
+    LONG_PTR                        Filler3;
+    LONG_PTR                        Filler4;
 }ProxyFileInfo;
 
 // extended info with list of interface names
@@ -163,59 +126,53 @@ typedef struct tagCInterfaceProxyHeader
 
 // Macro used for ANSI compatible stubs.
 
-#if defined(_MPPC_)
-#define CINTERFACE_PROXY_VTABLE( n )  \
-struct \
-{                                     \
-    CInterfaceProxyHeader header;     \
-    void * pDummyEntryForPowerMac;    \
-    void *Vtbl[ n ];                  \
-}
-#else
 #define CINTERFACE_PROXY_VTABLE( n )  \
 struct \
 {                                     \
     CInterfaceProxyHeader header;     \
     void *Vtbl[ n ];                  \
 }
-#endif
 
+#if _MSC_VER >= 1200
+#pragma warning(push)
+#endif
 #pragma warning( disable:4200 )
 typedef struct tagCInterfaceProxyVtbl
 {
     CInterfaceProxyHeader header;
-#if defined(_MPPC_)
-    void * pDummyEntryForPowerMac;
-#endif
 #if defined( _MSC_VER )
     void *Vtbl[];
 #else
     void *Vtbl[1];
 #endif
 } CInterfaceProxyVtbl;
+#if _MSC_VER >= 1200
+#pragma warning(pop)
+#else
 #pragma warning( default:4200 )
+#endif
 
 typedef
 void
-(__RPC_STUB __RPC_FAR * PRPC_STUB_FUNCTION) (
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer * _pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD __RPC_FAR *pdwStubPhase);
+(__RPC_STUB * PRPC_STUB_FUNCTION) (
+    IRpcStubBuffer          *   This,
+    IRpcChannelBuffer       *   _pRpcChannelBuffer,
+    PRPC_MESSAGE                _pRpcMessage,
+    DWORD *pdwStubPhase);
 
 typedef struct tagCInterfaceStubHeader
 {
     //New fields should be added here, at the beginning of the structure.
-    const IID *piid;
-    const MIDL_SERVER_INFO *pServerInfo;
-    unsigned long DispatchTableCount;
-    const PRPC_STUB_FUNCTION *pDispatchTable;
+    const IID               *   piid;
+    const MIDL_SERVER_INFO  *   pServerInfo;
+    unsigned long               DispatchTableCount;
+    const PRPC_STUB_FUNCTION *  pDispatchTable;
 } CInterfaceStubHeader;
 
 typedef struct tagCInterfaceStubVtbl
 {
-    CInterfaceStubHeader header;
-    IRpcStubBufferVtbl Vtbl;
+    CInterfaceStubHeader        header;
+    IRpcStubBufferVtbl          Vtbl;
 } CInterfaceStubVtbl;
 
 typedef struct tagCStdStubBuffer
@@ -227,14 +184,15 @@ typedef struct tagCStdStubBuffer
     const struct ICallFactoryVtbl *     pCallFactoryVtbl;
     const IID *                         pAsyncIID;
     struct IPSFactoryBuffer *           pPSFactory;
+    const struct IReleaseMarshalBuffersVtbl *     pRMBVtbl;
 } CStdStubBuffer;
 
 typedef struct tagCStdPSFactoryBuffer
 {
-    const IPSFactoryBufferVtbl *lpVtbl;
-    long                    RefCount;
-    const ProxyFileInfo **  pProxyFileList;
-    long                    Filler1;  //Reserved for future use.
+    const IPSFactoryBufferVtbl  *   lpVtbl;
+    long                            RefCount;
+    const ProxyFileInfo **          pProxyFileList;
+    long                            Filler1;  //Reserved for future use.
 } CStdPSFactoryBuffer;
 
 RPCRTAPI
@@ -297,7 +255,7 @@ void __RPC_STUB NdrStubForwardingFunction(
     IN  IRpcStubBuffer *    This,
     IN  IRpcChannelBuffer * pChannel,
     IN  PRPC_MESSAGE        pmsg,
-    OUT DWORD __RPC_FAR *   pdwStubPhase);
+    OUT DWORD             * pdwStubPhase);
 
 RPCRTAPI
 void
@@ -311,75 +269,61 @@ RPCRTAPI
 HRESULT
 RPC_ENTRY
 NdrStubErrorHandler(
-    DWORD dwExceptionCode);
+    DWORD               dwExceptionCode);
 
 HRESULT STDMETHODCALLTYPE
 CStdStubBuffer_QueryInterface(
-    IRpcStubBuffer *This,
-    REFIID riid,
-    void **ppvObject);
+    IRpcStubBuffer  *   This,
+    REFIID              riid,
+    void            **  ppvObject);
 
 ULONG STDMETHODCALLTYPE
 CStdStubBuffer_AddRef(
-    IRpcStubBuffer *This);
+    IRpcStubBuffer *    This);
 
 ULONG STDMETHODCALLTYPE
 CStdStubBuffer_Release(
-    IRpcStubBuffer *This);
+    IRpcStubBuffer *    This);
 
 ULONG STDMETHODCALLTYPE
 NdrCStdStubBuffer_Release(
-    IRpcStubBuffer *This,
-    IPSFactoryBuffer * pPSF);
+    IRpcStubBuffer *    This,
+    IPSFactoryBuffer *  pPSF);
 
 HRESULT STDMETHODCALLTYPE
 CStdStubBuffer_Connect(
-    IRpcStubBuffer *This,
-    IUnknown *pUnkServer);
+    IRpcStubBuffer *    This,
+    IUnknown *          pUnkServer);
 
 void STDMETHODCALLTYPE
 CStdStubBuffer_Disconnect(
-    IRpcStubBuffer *This);
+    IRpcStubBuffer *    This);
 
 HRESULT STDMETHODCALLTYPE
 CStdStubBuffer_Invoke(
-    IRpcStubBuffer *This,
-    RPCOLEMESSAGE *pRpcMsg,
-    IRpcChannelBuffer *pRpcChannelBuffer);
+    IRpcStubBuffer  *   This,
+    RPCOLEMESSAGE   *   pRpcMsg,
+    IRpcChannelBuffer * pRpcChannelBuffer);
 
 IRpcStubBuffer * STDMETHODCALLTYPE
 CStdStubBuffer_IsIIDSupported(
-    IRpcStubBuffer *This,
+    IRpcStubBuffer  *   This,
     REFIID riid);
 
 ULONG STDMETHODCALLTYPE
 CStdStubBuffer_CountRefs(
-    IRpcStubBuffer *This);
+    IRpcStubBuffer  *   This);
 
 HRESULT STDMETHODCALLTYPE
 CStdStubBuffer_DebugServerQueryInterface(
-    IRpcStubBuffer *This,
+    IRpcStubBuffer  *   This,
     void **ppv);
 
 void STDMETHODCALLTYPE
 CStdStubBuffer_DebugServerRelease(
-    IRpcStubBuffer *This,
+    IRpcStubBuffer  *   This,
     void *pv);
 
-#if defined(_MPPC_)
-#define CStdStubBuffer_METHODS \
-    0,  /* a PowerMac dummy */  \
-    CStdStubBuffer_QueryInterface,\
-    CStdStubBuffer_AddRef, \
-    CStdStubBuffer_Release, \
-    CStdStubBuffer_Connect, \
-    CStdStubBuffer_Disconnect, \
-    CStdStubBuffer_Invoke, \
-    CStdStubBuffer_IsIIDSupported, \
-    CStdStubBuffer_CountRefs, \
-    CStdStubBuffer_DebugServerQueryInterface, \
-    CStdStubBuffer_DebugServerRelease
-#else
 #define CStdStubBuffer_METHODS \
     CStdStubBuffer_QueryInterface,\
     CStdStubBuffer_AddRef, \
@@ -391,7 +335,6 @@ CStdStubBuffer_DebugServerRelease(
     CStdStubBuffer_CountRefs, \
     CStdStubBuffer_DebugServerQueryInterface, \
     CStdStubBuffer_DebugServerRelease
-#endif
 
 #define CStdAsyncStubBuffer_METHODS              0,0,0,0,0,0,0,0,0,0
 #define CStdAsyncStubBuffer_DELEGATING_METHODS   0,0,0,0,0,0,0,0,0,0
@@ -407,19 +350,25 @@ CStdStubBuffer_DebugServerRelease(
 #define IID_BS_LOOKUP_SETUP     int result, low=-1;
 
 #define IID_BS_LOOKUP_INITIAL_TEST(name, sz, split)   \
-    if ( ( result = name##_CHECK_IID( split ) ) > 0 ) \
-        { low = sz - split; }                      \
+    result = name##_CHECK_IID( split );               \
+    if ( result > 0 )                                 \
+        { low = sz - split; }                         \
     else if ( !result )                               \
         { low = split; goto found_label; }
 
-#define IID_BS_LOOKUP_NEXT_TEST(name, split )         \
-    if ( ( result = name##_CHECK_IID( low + split )) >= 0 )  \
+#define IID_BS_LOOKUP_NEXT_TEST(name, split )      \
+        result = name##_CHECK_IID( low + split );  \
+        if ( result >= 0 )                         \
         { low = low + split; if ( !result ) goto found_label; }
 
-#define IID_BS_LOOKUP_RETURN_RESULT(name, sz, index )                  \
-    low = low + 1;                                          \
-    if ( ( low >= sz ) || (result = name##_CHECK_IID( low ) )) goto not_found_label; \
-    found_label: (index) = low; return 1;                         \
+#define IID_BS_LOOKUP_RETURN_RESULT(name, sz, index )  \
+    low = low + 1;                                     \
+    if (low >= sz)                                     \
+        goto not_found_label;                          \
+    result = name##_CHECK_IID( low );                  \
+    if (result)                                        \
+        goto not_found_label;                          \
+    found_label: (index) = low; return 1;              \
     not_found_label: return 0;
 
 //+-------------------------------------------------------------------------
@@ -447,7 +396,7 @@ RPCRTAPI
 HRESULT
 RPC_ENTRY
 NdrDllCanUnloadNow(
-    IN CStdPSFactoryBuffer * pPSFactoryBuffer);
+    IN CStdPSFactoryBuffer *    pPSFactoryBuffer);
 
 // if the user specified a routine prefix, pick it up...
 //     if not, add nothing
@@ -459,28 +408,33 @@ NdrDllCanUnloadNow(
 #endif
 
 #define ENTRY_PREFIX
-#endif
+#define DLLREGISTERSERVER_ENTRY DllRegisterServer
+#define DLLUNREGISTERSERVER_ENTRY DllUnregisterServer
+#define DLLMAIN_ENTRY DllMain
+
+#define DLLGETCLASSOBJECT_ENTRY DllGetClassObject
+#define DLLCANUNLOADNOW_ENTRY DllCanUnloadNow
+
+#else   // ENTRY_PREFIX
+
+#define __rpc_macro_expand2(a, b) a##b
+#define __rpc_macro_expand(a, b) __rpc_macro_expand2(a,b)
+#define DLLREGISTERSERVER_ENTRY __rpc_macro_expand(ENTRY_PREFIX, DllRegisterServer)
+#define DLLUNREGISTERSERVER_ENTRY __rpc_macro_expand(ENTRY_PREFIX, DllUnregisterServer)
+#define DLLMAIN_ENTRY __rpc_macro_expand(ENTRY_PREFIX, DllMain)
+
+#define DLLGETCLASSOBJECT_ENTRY __rpc_macro_expand(ENTRY_PREFIX, DllGetClassObject)
+#define DLLCANUNLOADNOW_ENTRY __rpc_macro_expand(ENTRY_PREFIX, DllCanUnloadNow)
+
+#endif  // ENTRY_PREFIX
 
 #ifndef DISABLE_THREAD_LIBRARY_CALLS
 #define DISABLE_THREAD_LIBRARY_CALLS(x)
 #endif
 
-// get around the pain of cpp with an extra level of expansion
-#define EXPANDED_ENTRY_PREFIX() ENTRY_PREFIX
-
-#define DLLREGISTERSERVER_ENTRY EXPANDED_ENTRY_PREFIX()##DllRegisterServer
-#define DLLUNREGISTERSERVER_ENTRY EXPANDED_ENTRY_PREFIX()##DllUnregisterServer
-#define DLLMAIN_ENTRY EXPANDED_ENTRY_PREFIX()##DllMain
-
-#define DLLGETCLASSOBJECT_ENTRY EXPANDED_ENTRY_PREFIX()##DllGetClassObject
-#define DLLCANUNLOADNOW_ENTRY EXPANDED_ENTRY_PREFIX()##DllCanUnloadNow
-
 /*************************************************************************
 The following new functions were added after the Windows NT 3.5 release.
-Programs intended to run on Windows NT 3.5 should define NT35_STRICT to
-ensure that no new functions are used.
 *************************************************************************/
-#ifndef NT35_STRICT
 
 RPCRTAPI
 HRESULT
@@ -539,7 +493,6 @@ NdrCStdStubBuffer2_Release(IRpcStubBuffer *This,IPSFactoryBuffer * pPSF);
 
 #define CStdStubBuffer_DELEGATING_METHODS 0, 0, CStdStubBuffer2_Release, 0, 0, 0, 0, 0, 0, 0
 
-#endif //NT35_STRICT
 /*************************************************************************
 End of new functions.
 *************************************************************************/
@@ -670,21 +623,15 @@ ULONG STDMETHODCALLTYPE CStdStubBuffer2_Release(IRpcStubBuffer *This) \
 #define DLLDATA_STANDARD_ROUTINES   \
     DLLDATA_ROUTINES( (const ProxyFileInfo**) pProxyFileList, &CLSID_PSFactoryBuffer )  \
 
+#if defined(__cplusplus)
+} // extern "C"
+#endif
 
-#else  // WIN32 or _MPPC_
+#endif // WIN32 or _WIN64_
 
-//+-------------------------------------------------------------------------
-//
-//  16-bit definitions (all empty)
-//
-//--------------------------------------------------------------------------
-
-#endif // WIN32 or _MPPC_
-
-#if defined(_M_IA64) || defined(_M_AXP64)
+#if defined(_M_IA64) || defined(_M_AMD64)
 #include <poppack.h>
 #endif
 
 #endif // __RPCPROXY_H__
 
-#pragma option pop /*P_O_Pop*/

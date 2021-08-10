@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='utf-8' ?>
-<!-- C++Builder XML Project --><PROJECT>
+<!-- C++Builder XML Project -->
+<PROJECT>
   <MACROS>
-    <VERSION value="BCB.05.03"/>
+    <VERSION value="BCB.06.00"/>
     <PROJECT value="ddraw1b.exe"/>
     <OBJFILES value="ddraw1b.obj Main.obj"/>
     <RESFILES value="ddraw1b.res"/>
@@ -10,9 +11,9 @@
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) Main.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value="vcl50.lib ddraw.lib"/>
-    <SPARELIBS value="vcl50.lib ddraw.lib"/>
-    <PACKAGES value=""/>
+    <LIBRARIES value="ddraw.lib"/>
+    <SPARELIBS value="rtl.lib vcl.lib ddraw.lib"/>
+    <PACKAGES value="vcl.bpi rtl.bpi"/>
     <PATHCPP value=".;"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
@@ -25,22 +26,28 @@
     <MAINSOURCE value="ddraw1b.cpp"/>
     <INCLUDEPATH value="..\utils;$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="..\utils;$(BCB)\lib\release;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\psdk"/>
-    <WARNINGS value=" -w-8026 -w-8027 -w-par"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-src_suffixcpp -I..\utils -I$(BCB)\include -I$(BCB)\include\vcl"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -r- -a8 -k -y -v -vi- -c -b- 
-      -tW -tW"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y 
+      -v -vi- -c -tW -tW"/>
     <PFLAGS value="-$YD -v -JPHN -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zd"/>
-    <LFLAGS value="-aa -Tpe -x -v"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -v"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
   </LINKER>
+  <FILELIST>
+      <FILE FILENAME="ddraw1b.cpp" FORMNAME="" UNITNAME="ddraw1b" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+      <FILE FILENAME="ddraw1b.res" FORMNAME="" UNITNAME="ddraw1b" CONTAINERID="ResTool" DESIGNCLASS=""/>
+      <FILE FILENAME="Main.cpp" FORMNAME="FormMain" UNITNAME="Main" CONTAINERID="CCompiler" DESIGNCLASS=""/>
+  </FILELIST>
+
   <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
@@ -74,14 +81,24 @@ DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
 RemoteHost=
 RemotePath=
+RemoteLauncher=
+RemoteCWD=
 RemoteDebug=0
 
 [Compiler]
-InMemoryExe=0
 ShowInfoMsgs=0
 LinkDebugVcl=0
+LinkCGLIB=0
+
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
   </IDEOPTIONS>
 </PROJECT>

@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
 //
-//      Copyright (c) 1998-1999  Microsoft Corporation
+//      Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //
 //      Name: msptrmar.h
@@ -22,7 +22,9 @@
 
 class CAudioRenderTerminal : 
     public IDispatchImpl<ITBasicAudioTerminal, &IID_ITBasicAudioTerminal, &LIBID_TAPI3Lib>, 
-    public CSingleFilterTerminal
+    public IDispatchImpl<ITStaticAudioTerminal, &IID_ITStaticAudioTerminal, &LIBID_TAPI3Lib>, 
+    public CSingleFilterStaticTerminal,
+    public CMSPObjectSafetyImpl
 {
 public:
     CAudioRenderTerminal();
@@ -40,8 +42,10 @@ public:
     HRESULT FindTerminalPin();
 
 BEGIN_COM_MAP(CAudioRenderTerminal)
+    COM_INTERFACE_ENTRY(IObjectSafety)
     COM_INTERFACE_ENTRY(ITBasicAudioTerminal)
-    COM_INTERFACE_ENTRY_CHAIN(CSingleFilterTerminal)
+    COM_INTERFACE_ENTRY(ITStaticAudioTerminal)
+    COM_INTERFACE_ENTRY_CHAIN(CSingleFilterStaticTerminal)
 END_COM_MAP()
 
 DECLARE_VQI()
@@ -53,6 +57,11 @@ public:
     STDMETHOD(put_Balance)(IN   long newVal);
     STDMETHOD(get_Volume) (OUT  long *pVal);
     STDMETHOD(put_Volume) (IN   long newVal);
+
+// ITStaticAudioTerminal
+public:
+
+    STDMETHOD(get_WaveId) (OUT  long * plWaveId);
 
 // Implementation
 public:
@@ -75,9 +84,6 @@ public:
 
     HRESULT CreateFilters();
 
-    // public because CreateTerminal access it
-    CComPtr<IMoniker> m_pMoniker;
-
 private:
 
     // Keeps track of whether we need to unreserve WaveOut
@@ -86,6 +92,7 @@ private:
     CComPtr<IBasicAudio> m_pIBasicAudio;
 
 };
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // _MSPTRMAR_H_

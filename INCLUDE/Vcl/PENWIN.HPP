@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'PenWin.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'PenWin.pas' rev: 6.00
 
 #ifndef PenWinHPP
 #define PenWinHPP
@@ -17,6 +17,7 @@
 #include <System.hpp>	// Pascal unit
 
 //-- user supplied -----------------------------------------------------------
+#include "penwin.h"
 
 namespace Penwin
 {
@@ -91,7 +92,19 @@ typedef tagPENPACKET *PPenPacket;
 
 typedef tagPENPACKET  TPenPacket;
 
+struct tagOEMPENPACKET;
 typedef tagOEMPENPACKET *POEMPenPacket;
+
+#pragma pack(push, 1)
+struct tagOEMPENPACKET
+{
+	unsigned wTabletX;
+	unsigned wTabletY;
+	unsigned wPDK;
+	unsigned rgwOemData[6];
+	unsigned dwTime;
+} ;
+#pragma pack(pop)
 
 typedef tagOEMPENPACKET  TOEMPenPacket;
 
@@ -111,8 +124,7 @@ typedef int *PHRCRESULT;
 
 typedef int *PHWL;
 
-typedef BOOL __stdcall (*TFNHRCResultHookProc)(int p1, int p2, unsigned p3, unsigned p4, unsigned p5
-	, void * p6);
+typedef BOOL __stdcall (*TFNHRCResultHookProc)(int p1, int p2, unsigned p3, unsigned p4, unsigned p5, void * p6);
 
 typedef tagINTERVAL *PInterval;
 
@@ -146,27 +158,58 @@ typedef tagINKINGINFO *PInkingInfo;
 
 typedef tagINKINGINFO  TInkingInfo;
 
-typedef tagSYC *PSYC;
-
-typedef tagSYC  TSYC;
-
-typedef tagSYE *PSYE;
+#pragma pack(push, 1)
+struct tagSYE
+{
+	int syv;
+	int lRecogVal;
+	int cl;
+	int iSyc;
+} ;
+#pragma pack(pop)
 
 typedef tagSYE  TSYE;
 
-typedef tagSYG *PSYG;
-
-typedef tagSYG  TSYG;
-
+struct tagRC;
 typedef tagRC *PRC;
 
+#pragma pack(push, 1)
+struct tagRC
+{
+	int hrec;
+	HWND hwnd;
+	unsigned wEventRef;
+	unsigned wRcPreferences;
+	int lRcOptions;
+	RCYIELDPROC lpfnYield;
+	Byte lpUser[32];
+	unsigned wCountry;
+	unsigned wIntlPreferences;
+	char lpLanguage[44];
+	LPDF *rglpdf[16];
+	unsigned wTryDictionary;
+	int clErrorLevel;
+	int alc;
+	int alcPriority;
+	Byte rgbfAlc[32];
+	unsigned wResultMode;
+	unsigned wTimeOut;
+	int lPcm;
+	Types::TRect rectBound;
+	Types::TRect rectExclude;
+	tagGUIDE guide;
+	unsigned wRcOrient;
+	unsigned wRcDirect;
+	int nInkWidth;
+	unsigned rgbInk;
+	unsigned dwAppParam;
+	unsigned dwDictParam;
+	unsigned dwRecognizer;
+	unsigned rgwReserved[8];
+} ;
+#pragma pack(pop)
+
 typedef tagRC  TRC;
-
-typedef tagRCRESULT *PRCResult;
-
-typedef tagRCRESULT  TRCResult;
-
-typedef int __stdcall (*TFNFuncResults)(PRCResult p1, int p2);
 
 typedef tagTARGET *PTarget;
 
@@ -180,16 +223,10 @@ typedef tagINPPARAMS *PInpParams;
 
 typedef tagINPPARAMS  TInpParams;
 
-typedef tagSKBINFO *PSKBInfo;
-
-typedef tagSKBINFO  TSKBInfo;
-
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Penwin */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Penwin;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

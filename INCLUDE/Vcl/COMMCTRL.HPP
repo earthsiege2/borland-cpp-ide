@@ -1,11 +1,11 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Commctrl.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'CommCtrl.pas' rev: 6.00
 
-#ifndef CommctrlHPP
-#define CommctrlHPP
+#ifndef CommCtrlHPP
+#define CommCtrlHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
@@ -60,7 +60,6 @@ typedef _PROPSHEETHEADERA  TPropSheetHeader;
 typedef BOOL __stdcall (*TFNAddPropSheetPage)(void * hPSP, int lParam);
 
 typedef BOOL __stdcall (*TFNAddPropSheetPages)(void * lpvoid, LPFNADDPROPSHEETPAGE pfn, int lParam);
-	
 
 typedef tagINITCOMMONCONTROLSEX *PInitCommonControlsEx;
 
@@ -300,7 +299,7 @@ struct tagNMTTDISPINFOA
 	tagNMHDR hdr;
 	char *lpszText;
 	char szText[80];
-	Windows::HINST hinst;
+	unsigned hinst;
 	unsigned uFlags;
 	int lParam;
 } ;
@@ -312,7 +311,7 @@ struct tagNMTTDISPINFOW
 	tagNMHDR hdr;
 	wchar_t *lpszText;
 	wchar_t szText[80];
-	Windows::HINST hinst;
+	unsigned hinst;
 	unsigned uFlags;
 	int lParam;
 } ;
@@ -737,12 +736,10 @@ static const Word LVA_SORTDESCENDING = 0x200;
 static const Shortint MCS_NOTODAY_PRE_IE4 = 0x8;
 
 }	/* namespace Commctrl */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Commctrl;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// Commctrl
+#endif	// CommCtrl

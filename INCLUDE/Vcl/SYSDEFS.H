@@ -1,5 +1,5 @@
 // SYSDEFS.H - Support for properties & vcl intrinsic types
-// Copyright (c) 1997, 1999 Borland International
+// Copyright (c) 1997, 2002 Borland Software Corporation
 
 #ifndef SYSDEFS_H
 #define SYSDEFS_H

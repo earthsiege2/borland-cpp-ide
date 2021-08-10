@@ -1,9 +1,9 @@
 // SYSDYN.H: Pascal Dynamic array type
 //
-// $Revision:   1.22  $
-// $Date:   14 Jul 1999 12:32:26  $
+// $Revision:   1.22.1.0.1.6  $
+// $Date:   25 Jan 2002 12:54:22  $
 //
-// Copyright (c) 1997, 1999 Borland International
+// Copyright (c) 1997, 2002 Borland Software Corporation
 
 #if !defined(SYSDYN_H)      // dynamic array
 #define SYSDYN_H
@@ -69,7 +69,11 @@ namespace System
   // ============
   // Template providing Delphi style Dynamic Array support in C++
   /////////////////////////////////////////////////////////////////////////////
+#if !defined(NO_DYNARRAY_RTTI)
+  template<class T> class RTL_DELPHIRETURN DECLSPEC_DRTTI DynamicArray
+#else
   template<class T> class RTL_DELPHIRETURN DynamicArray
+#endif
   {
   public:
     DynamicArray();
@@ -367,8 +371,10 @@ namespace System
       T*  p = Data;
       int l = (*this).Length;
 
-      for (; l-- > 0; p++)
-        p->~T();
+      for (; l-- > 0; p++) {
+        if (p)    /* Not necessary but shuts off compiler warning */
+          p->~T();
+      }
 
       // Free chunk of memory
       // NOTE: Don't use delete []p_i to be compatible with Delphi's memory manager
@@ -378,6 +384,56 @@ namespace System
       Data = 0;
     }
   }
+
+  // Provide definitions for the Dynamic arrays defined
+  // in Delphi's TYPES.PAS as well as generic array names
+  // NOTE: The generic must preceed the names from TYPES.PAS
+  //       as C++ RTTI picks the first one
+#if defined(GENERIC_ARRAY_NAMES)
+  typedef DynamicArray<int>             ArrayOfint;
+  typedef DynamicArray<AnsiString>      ArrayOfstring;
+  typedef DynamicArray<WideString>      ArrayOfwidestring;
+  typedef DynamicArray<Byte>            ArrayOfbyte;
+  typedef DynamicArray<short>           ArrayOfshort;
+  typedef DynamicArray<long>            ArrayOflong;
+  typedef DynamicArray<bool>            ArrayOfboolean;
+  typedef DynamicArray<double>          ArrayOfdouble;
+#endif
+
+  typedef DynamicArray<Integer>         TIntegerDynArray;
+  typedef DynamicArray<Cardinal>        TCardinalDynArray;
+  typedef DynamicArray<Word>            TWordDynArray;
+  typedef DynamicArray<Smallint>        TSmallIntDynArray;
+  typedef DynamicArray<Byte>            TByteDynArray;
+  typedef DynamicArray<Shortint>        TShortIntDynArray;
+  typedef DynamicArray<__int64>         TInt64DynArray;
+  // NOTE: The following is not quite correct given that
+  //       LongWord is defined as 'unsigned long' in SYSMAC.H
+  // However, 'DynamicArray<unsigned>' is what the Pascal
+  // compiler is emitting in .HPPs for TLongWordDynArray
+  // Please update this if the .HPPs change.
+  typedef DynamicArray<unsigned>        TLongWordDynArray;
+  typedef DynamicArray<Single>          TSingleDynArray;
+  typedef DynamicArray<Double>          TDoubleDynArray;
+  typedef DynamicArray<Boolean>         TBooleanDynArray;
+  typedef DynamicArray<String>          TStringDynArray;
+  typedef DynamicArray<WideString>      TWideStringDynArray;
+
+  // Low overhead (include-wise) for RAII of newed objects.
+  // NOTE: This is mainly used by WebServices code generation currently
+  template <typename T>
+  class sPointer {
+    T* ptr;
+  public:
+    sPointer()     : ptr(0) {}
+    sPointer(T* p) : ptr(p) {}
+   ~sPointer()              { delete ptr; }
+    T* operator& ()         { return ptr; }
+    T* operator->()         { return ptr;}
+  private:
+    sPointer(const sPointer<T>&);
+    const sPointer<T>& operator=(const sPointer<T>&);
+  };
 
 } // namespace System
 

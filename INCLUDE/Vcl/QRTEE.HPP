@@ -1,24 +1,24 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'QrTee.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QRTEE.pas' rev: 6.00
 
-#ifndef QrTeeHPP
-#define QrTeeHPP
+#ifndef QRTEEHPP
+#define QRTEEHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
-#include <ExtCtrls.hpp>	// Pascal unit
-#include <Menus.hpp>	// Pascal unit
-#include <StdCtrls.hpp>	// Pascal unit
-#include <DBChart.hpp>	// Pascal unit
+#include <DbChart.hpp>	// Pascal unit
 #include <TeCanvas.hpp>	// Pascal unit
 #include <QuickRpt.hpp>	// Pascal unit
 #include <Chart.hpp>	// Pascal unit
 #include <TeEngine.hpp>	// Pascal unit
 #include <TeeProcs.hpp>	// Pascal unit
+#include <ExtCtrls.hpp>	// Pascal unit
+#include <Menus.hpp>	// Pascal unit
+#include <StdCtrls.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
 #include <Controls.hpp>	// Pascal unit
@@ -46,46 +46,46 @@ class PASCALIMPLEMENTATION TQRDBChart : public Dbchart::TCustomDBChart
 	
 public:
 	__fastcall virtual TQRDBChart(Classes::TComponent* AOwner);
-	virtual Windows::TRect __fastcall GetRectangle();
+	virtual Types::TRect __fastcall GetRectangle();
 	virtual void __fastcall Invalidate(void);
 	virtual void __fastcall Paint(void);
 	
 __published:
-	__property ShowGlassCursor ;
+	__property ShowGlassCursor  = {default=1};
 	__property OnProcessRecord ;
 	__property BackImage ;
-	__property BackImageInside ;
-	__property BackImageMode ;
+	__property BackImageInside  = {default=0};
+	__property BackImageMode  = {default=0};
 	__property BackWall ;
 	__property BottomWall ;
 	__property Foot ;
 	__property Gradient ;
 	__property LeftWall ;
-	__property MarginBottom ;
-	__property MarginLeft ;
-	__property MarginRight ;
-	__property MarginTop ;
+	__property MarginBottom  = {index=3, default=4};
+	__property MarginLeft  = {index=0, default=3};
+	__property MarginRight  = {index=2, default=3};
+	__property MarginTop  = {index=1, default=4};
 	__property Title ;
 	__property OnGetLegendPos ;
 	__property OnGetLegendRect ;
-	__property AxisVisible ;
-	__property BackColor ;
+	__property AxisVisible  = {default=1};
+	__property BackColor  = {default=536870912};
 	__property BottomAxis ;
-	__property Chart3DPercent ;
-	__property ClipPoints ;
+	__property Chart3DPercent  = {default=15};
+	__property ClipPoints  = {default=1};
 	__property DepthAxis ;
 	__property Frame ;
 	__property LeftAxis ;
 	__property Legend ;
-	__property MaxPointsPerPage ;
-	__property Page ;
+	__property MaxPointsPerPage  = {default=0};
+	__property Page  = {default=1};
 	__property RightAxis ;
-	__property ScaleLastPage ;
+	__property ScaleLastPage  = {default=1};
 	__property SeriesList ;
 	__property TopAxis ;
-	__property View3D ;
+	__property View3D  = {default=1};
 	__property View3DOptions ;
-	__property View3DWalls ;
+	__property View3DWalls  = {default=1};
 	__property OnAfterDraw ;
 	__property OnBeforeDrawAxes ;
 	__property OnBeforeDrawSeries ;
@@ -93,16 +93,16 @@ __published:
 	__property OnGetLegendText ;
 	__property OnGetNextAxisLabel ;
 	__property OnPageChange ;
-	__property BevelInner ;
-	__property BevelWidth ;
-	__property BevelOuter ;
-	__property BorderWidth ;
-	__property BorderStyle ;
-	__property Color ;
-	__property DragCursor ;
-	__property DragMode ;
-	__property ParentColor ;
-	__property ParentShowHint ;
+	__property BevelInner  = {default=0};
+	__property BevelWidth  = {default=1};
+	__property BevelOuter  = {default=0};
+	__property BorderWidth  = {default=0};
+	__property BorderStyle  = {default=0};
+	__property Color  = {default=16777215};
+	__property DragCursor  = {default=-12};
+	__property DragMode  = {default=0};
+	__property ParentColor  = {default=0};
+	__property ParentShowHint  = {default=1};
 	__property PopupMenu ;
 	__property ShowHint ;
 	__property OnClick ;
@@ -127,16 +127,14 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRDBChart(HWND ParentWindow) : Dbchart::TCustomDBChart(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRDBChart(HWND ParentWindow) : Dbchart::TCustomDBChart(ParentWindow) { }
 	#pragma option pop
 	
 };
 
 
 class DELPHICLASS TQRChart;
-typedef void __fastcall (__closure *TPrintChartEvent)(TQRChart* Sender, Windows::TRect &PaperRect, Windows::TRect 
-	&ChartRect);
+typedef void __fastcall (__closure *TPrintChartEvent)(TQRChart* Sender, Types::TRect &PaperRect, Types::TRect &ChartRect);
 
 class PASCALIMPLEMENTATION TQRChart : public Quickrpt::TQRPrintable 
 {
@@ -158,8 +156,7 @@ public:
 	
 __published:
 	__property TQRDBChart* Chart = {read=GetChart};
-	__property TTeeQuickMethod TeePrintMethod = {read=FTeePrintMethod, write=SetPrintMethod, default=1}
-		;
+	__property TTeeQuickMethod TeePrintMethod = {read=FTeePrintMethod, write=SetPrintMethod, default=1};
 	__property TPrintChartEvent OnPrint = {read=FOnPrint, write=FOnPrint};
 public:
 	#pragma option push -w-inl
@@ -168,8 +165,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TQRChart(HWND ParentWindow) : Quickrpt::TQRPrintable(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TQRChart(HWND ParentWindow) : Quickrpt::TQRPrintable(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -178,12 +174,10 @@ public:
 //-- var, const, procedure ---------------------------------------------------
 
 }	/* namespace Qrtee */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qrtee;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// QrTee
+#endif	// QRTEE

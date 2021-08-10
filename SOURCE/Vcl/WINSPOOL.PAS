@@ -6,7 +6,7 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
@@ -936,14 +936,14 @@ type
   {$EXTERNALSYM PRINTER_DEFAULTS}
   PRINTER_DEFAULTS = PRINTER_DEFAULTSA;
 
+{$EXTERNALSYM EnumPrinters}
+function EnumPrinters(Flags: DWORD; Name: PChar; Level: DWORD;
+  pPrinterEnum: Pointer; cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumPrintersA}
 function EnumPrintersA(Flags: DWORD; Name: PAnsiChar; Level: DWORD;
   pPrinterEnum: Pointer; cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumPrintersW}
 function EnumPrintersW(Flags: DWORD; Name: PWideChar; Level: DWORD;
-  pPrinterEnum: Pointer; cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumPrinters}
-function EnumPrinters(Flags: DWORD; Name: PChar; Level: DWORD;
   pPrinterEnum: Pointer; cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 
 const
@@ -988,143 +988,143 @@ const
   {$EXTERNALSYM PRINTER_ENUM_ICON8}
   PRINTER_ENUM_ICON8       = $00800000;
 
+{$EXTERNALSYM OpenPrinter}
+function OpenPrinter(pPrinterName: PChar; var phPrinter: THandle; pDefault: PPrinterDefaults): BOOL; stdcall;
 {$EXTERNALSYM OpenPrinterA}
 function OpenPrinterA(pPrinterName: PAnsiChar; var phPrinter: THandle; pDefault: PPrinterDefaultsA): BOOL; stdcall;
 {$EXTERNALSYM OpenPrinterW}
 function OpenPrinterW(pPrinterName: PWideChar; var phPrinter: THandle; pDefault: PPrinterDefaultsW): BOOL; stdcall;
-{$EXTERNALSYM OpenPrinter}
-function OpenPrinter(pPrinterName: PChar; var phPrinter: THandle; pDefault: PPrinterDefaults): BOOL; stdcall;
+{$EXTERNALSYM ResetPrinter}
+function ResetPrinter(hPrinter: THandle; pDefault: PPrinterDefaults): BOOL; stdcall;
 {$EXTERNALSYM ResetPrinterA}
 function ResetPrinterA(hPrinter: THandle; pDefault: PPrinterDefaultsA): BOOL; stdcall;
 {$EXTERNALSYM ResetPrinterW}
 function ResetPrinterW(hPrinter: THandle; pDefault: PPrinterDefaultsW): BOOL; stdcall;
-{$EXTERNALSYM ResetPrinter}
-function ResetPrinter(hPrinter: THandle; pDefault: PPrinterDefaults): BOOL; stdcall;
+{$EXTERNALSYM SetJob}
+function SetJob(hPrinter: THandle; JobId: DWORD; Level: DWORD; pJob: Pointer; Command: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SetJobA}
 function SetJobA(hPrinter: THandle; JobId: DWORD; Level: DWORD; pJob: Pointer; Command: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SetJobW}
 function SetJobW(hPrinter: THandle; JobId: DWORD; Level: DWORD; pJob: Pointer; Command: DWORD): BOOL; stdcall;
-{$EXTERNALSYM SetJob}
-function SetJob(hPrinter: THandle; JobId: DWORD; Level: DWORD; pJob: Pointer; Command: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetJob}
+function GetJob(hPrinter: THandle; JobId: DWORD; Level: DWORD; pJob: Pointer; cbBuf: DWORD; pcbNeeded: PDWORD): BOOL; stdcall;
 {$EXTERNALSYM GetJobA}
 function GetJobA(hPrinter: THandle; JobId: DWORD; Level: DWORD; pJob: Pointer; cbBuf: DWORD; pcbNeeded: PDWORD): BOOL; stdcall;
 {$EXTERNALSYM GetJobW}
 function GetJobW(hPrinter: THandle; JobId: DWORD; Level: DWORD; pJob: Pointer; cbBuf: DWORD; pcbNeeded: PDWORD): BOOL; stdcall;
-{$EXTERNALSYM GetJob}
-function GetJob(hPrinter: THandle; JobId: DWORD; Level: DWORD; pJob: Pointer; cbBuf: DWORD; pcbNeeded: PDWORD): BOOL; stdcall;
+{$EXTERNALSYM EnumJobs}
+function EnumJobs(hPrinter: THandle; FirstJob, NoJobs, Level: DWORD; pJob: Pointer; cbBuf: DWORD;
+  var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumJobsA}
 function EnumJobsA(hPrinter: THandle; FirstJob, NoJobs, Level: DWORD; pJob: Pointer; cbBuf: DWORD;
   var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumJobsW}
 function EnumJobsW(hPrinter: THandle; FirstJob, NoJobs, Level: DWORD; pJob: Pointer; cbBuf: DWORD;
   var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumJobs}
-function EnumJobs(hPrinter: THandle; FirstJob, NoJobs, Level: DWORD; pJob: Pointer; cbBuf: DWORD;
-  var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
+{$EXTERNALSYM AddPrinter}
+function AddPrinter(pName: PChar; Level: DWORD; pPrinter: Pointer): THandle; stdcall;
 {$EXTERNALSYM AddPrinterA}
 function AddPrinterA(pName: PAnsiChar; Level: DWORD; pPrinter: Pointer): THandle; stdcall;
 {$EXTERNALSYM AddPrinterW}
 function AddPrinterW(pName: PWideChar; Level: DWORD; pPrinter: Pointer): THandle; stdcall;
-{$EXTERNALSYM AddPrinter}
-function AddPrinter(pName: PChar; Level: DWORD; pPrinter: Pointer): THandle; stdcall;
 {$EXTERNALSYM DeletePrinter}
 function DeletePrinter(hPrinter: THandle): BOOL; stdcall;
+{$EXTERNALSYM SetPrinter}
+function SetPrinter(hPrinter: THandle; Level: DWORD; pPrinter: Pointer; Command: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SetPrinterA}
 function SetPrinterA(hPrinter: THandle; Level: DWORD; pPrinter: Pointer; Command: DWORD): BOOL; stdcall;
 {$EXTERNALSYM SetPrinterW}
 function SetPrinterW(hPrinter: THandle; Level: DWORD; pPrinter: Pointer; Command: DWORD): BOOL; stdcall;
-{$EXTERNALSYM SetPrinter}
-function SetPrinter(hPrinter: THandle; Level: DWORD; pPrinter: Pointer; Command: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetPrinter}
+function GetPrinter(hPrinter: THandle; Level: DWORD; pPrinter: Pointer; cbBuf: DWORD; pcbNeeded: PDWORD): BOOL; stdcall;
 {$EXTERNALSYM GetPrinterA}
 function GetPrinterA(hPrinter: THandle; Level: DWORD; pPrinter: Pointer; cbBuf: DWORD; pcbNeeded: PDWORD): BOOL; stdcall;
 {$EXTERNALSYM GetPrinterW}
 function GetPrinterW(hPrinter: THandle; Level: DWORD; pPrinter: Pointer; cbBuf: DWORD; pcbNeeded: PDWORD): BOOL; stdcall;
-{$EXTERNALSYM GetPrinter}
-function GetPrinter(hPrinter: THandle; Level: DWORD; pPrinter: Pointer; cbBuf: DWORD; pcbNeeded: PDWORD): BOOL; stdcall;
+{$EXTERNALSYM AddPrinterDriver}
+function AddPrinterDriver(pName: PChar; Level: DWORD; pDriverInfo: Pointer): BOOL; stdcall;
 {$EXTERNALSYM AddPrinterDriverA}
 function AddPrinterDriverA(pName: PAnsiChar; Level: DWORD; pDriverInfo: Pointer): BOOL; stdcall;
 {$EXTERNALSYM AddPrinterDriverW}
 function AddPrinterDriverW(pName: PWideChar; Level: DWORD; pDriverInfo: Pointer): BOOL; stdcall;
-{$EXTERNALSYM AddPrinterDriver}
-function AddPrinterDriver(pName: PChar; Level: DWORD; pDriverInfo: Pointer): BOOL; stdcall;
+{$EXTERNALSYM EnumPrinterDrivers}
+function EnumPrinterDrivers(pName, pEnvironment: PChar; Level: DWORD;
+  pDriverInfo: Pointer; cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumPrinterDriversA}
 function EnumPrinterDriversA(pName, pEnvironment: PAnsiChar; Level: DWORD;
   pDriverInfo: Pointer; cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumPrinterDriversW}
 function EnumPrinterDriversW(pName, pEnvironment: PWideChar; Level: DWORD;
   pDriverInfo: Pointer; cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumPrinterDrivers}
-function EnumPrinterDrivers(pName, pEnvironment: PChar; Level: DWORD;
-  pDriverInfo: Pointer; cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetPrinterDriver}
+function GetPrinterDriver(hPrinter: THandle; pEnvironment: PChar; Level: DWORD;
+  pDriverInfo: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetPrinterDriverA}
 function GetPrinterDriverA(hPrinter: THandle; pEnvironment: PAnsiChar; Level: DWORD;
   pDriverInfo: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetPrinterDriverW}
 function GetPrinterDriverW(hPrinter: THandle; pEnvironment: PWideChar; Level: DWORD;
   pDriverInfo: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetPrinterDriver}
-function GetPrinterDriver(hPrinter: THandle; pEnvironment: PChar; Level: DWORD;
-  pDriverInfo: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetPrinterDriverDirectory}
+function GetPrinterDriverDirectory(pName, pEnvironment: PChar; Level: DWORD;
+  pDriverDirectory: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetPrinterDriverDirectoryA}
 function GetPrinterDriverDirectoryA(pName, pEnvironment: PAnsiChar; Level: DWORD;
   pDriverDirectory: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetPrinterDriverDirectoryW}
 function GetPrinterDriverDirectoryW(pName, pEnvironment: PWideChar; Level: DWORD;
   pDriverDirectory: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetPrinterDriverDirectory}
-function GetPrinterDriverDirectory(pName, pEnvironment: PChar; Level: DWORD;
-  pDriverDirectory: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
+{$EXTERNALSYM DeletePrinterDriver}
+function DeletePrinterDriver(pName, pEnvironment, pDriverName: PChar): BOOL; stdcall;
 {$EXTERNALSYM DeletePrinterDriverA}
 function DeletePrinterDriverA(pName, pEnvironment, pDriverName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM DeletePrinterDriverW}
 function DeletePrinterDriverW(pName, pEnvironment, pDriverName: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM DeletePrinterDriver}
-function DeletePrinterDriver(pName, pEnvironment, pDriverName: PChar): BOOL; stdcall;
+{$EXTERNALSYM AddPrintProcessor}
+function AddPrintProcessor(pName, pEnvironment, pPathName, pPrintProcessorName: PChar): BOOL; stdcall;
 {$EXTERNALSYM AddPrintProcessorA}
 function AddPrintProcessorA(pName, pEnvironment, pPathName, pPrintProcessorName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM AddPrintProcessorW}
 function AddPrintProcessorW(pName, pEnvironment, pPathName, pPrintProcessorName: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM AddPrintProcessor}
-function AddPrintProcessor(pName, pEnvironment, pPathName, pPrintProcessorName: PChar): BOOL; stdcall;
+{$EXTERNALSYM EnumPrintProcessors}
+function EnumPrintProcessors(pName, pEnvironment: PChar; Level: DWORD; pPrintProcessorInfo: Pointer;
+  cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumPrintProcessorsA}
 function EnumPrintProcessorsA(pName, pEnvironment: PAnsiChar; Level: DWORD; pPrintProcessorInfo: Pointer;
   cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumPrintProcessorsW}
 function EnumPrintProcessorsW(pName, pEnvironment: PWideChar; Level: DWORD; pPrintProcessorInfo: Pointer;
   cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumPrintProcessors}
-function EnumPrintProcessors(pName, pEnvironment: PChar; Level: DWORD; pPrintProcessorInfo: Pointer;
-  cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
+{$EXTERNALSYM GetPrintProcessorDirectory}
+function GetPrintProcessorDirectory(pName, pEnvironment: PChar; Level: DWORD;
+  pPrintProcessorInfo: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetPrintProcessorDirectoryA}
 function GetPrintProcessorDirectoryA(pName, pEnvironment: PAnsiChar; Level: DWORD;
   pPrintProcessorInfo: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetPrintProcessorDirectoryW}
 function GetPrintProcessorDirectoryW(pName, pEnvironment: PWideChar; Level: DWORD;
   pPrintProcessorInfo: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetPrintProcessorDirectory}
-function GetPrintProcessorDirectory(pName, pEnvironment: PChar; Level: DWORD;
-  pPrintProcessorInfo: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
+{$EXTERNALSYM EnumPrintProcessorDatatypes}
+function EnumPrintProcessorDatatypes(pName, pPrintProcessorName: PChar; Level: DWORD;
+  pDatatypes: Pointer; cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumPrintProcessorDatatypesA}
 function EnumPrintProcessorDatatypesA(pName, pPrintProcessorName: PAnsiChar; Level: DWORD;
   pDatatypes: Pointer; cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumPrintProcessorDatatypesW}
 function EnumPrintProcessorDatatypesW(pName, pPrintProcessorName: PWideChar; Level: DWORD;
   pDatatypes: Pointer; cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumPrintProcessorDatatypes}
-function EnumPrintProcessorDatatypes(pName, pPrintProcessorName: PChar; Level: DWORD;
-  pDatatypes: Pointer; cbBuf: DWORD; var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
+{$EXTERNALSYM DeletePrintProcessor}
+function DeletePrintProcessor(pName, pEnvironment, pPrintProcessorName: PChar): BOOL; stdcall;
 {$EXTERNALSYM DeletePrintProcessorA}
 function DeletePrintProcessorA(pName, pEnvironment, pPrintProcessorName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM DeletePrintProcessorW}
 function DeletePrintProcessorW(pName, pEnvironment, pPrintProcessorName: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM DeletePrintProcessor}
-function DeletePrintProcessor(pName, pEnvironment, pPrintProcessorName: PChar): BOOL; stdcall;
+{$EXTERNALSYM StartDocPrinter}
+function StartDocPrinter(hPrinter: THandle; Level: DWORD; pDocInfo: Pointer): DWORD; stdcall;
 {$EXTERNALSYM StartDocPrinterA}
 function StartDocPrinterA(hPrinter: THandle; Level: DWORD; pDocInfo: Pointer): DWORD; stdcall;
 {$EXTERNALSYM StartDocPrinterW}
 function StartDocPrinterW(hPrinter: THandle; Level: DWORD; pDocInfo: Pointer): DWORD; stdcall;
-{$EXTERNALSYM StartDocPrinter}
-function StartDocPrinter(hPrinter: THandle; Level: DWORD; pDocInfo: Pointer): DWORD; stdcall;
 {$EXTERNALSYM StartPagePrinter}
 function StartPagePrinter(hPrinter: THandle): BOOL; stdcall;
 {$EXTERNALSYM WritePrinter}
@@ -1137,16 +1137,20 @@ function AbortPrinter(hPrinter: THandle): BOOL; stdcall;
 function ReadPrinter(hPrinter: THandle; pBuf: Pointer; cbBuf: DWORD; var pNoBytesRead: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EndDocPrinter}
 function EndDocPrinter(hPrinter: THandle): BOOL; stdcall;
+{$EXTERNALSYM AddJob}
+function AddJob(hPrinter: THandle; Level: DWORD; pData: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM AddJobA}
 function AddJobA(hPrinter: THandle; Level: DWORD; pData: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM AddJobW}
 function AddJobW(hPrinter: THandle; Level: DWORD; pData: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
-{$EXTERNALSYM AddJob}
-function AddJob(hPrinter: THandle; Level: DWORD; pData: Pointer; cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM ScheduleJob}
 function ScheduleJob(hPrinter: THandle; JobId: DWORD): BOOL; stdcall;
 {$EXTERNALSYM PrinterProperties}
 function PrinterProperties(hWnd: HWND; hPrinter: THandle): BOOL; stdcall;
+{$EXTERNALSYM DocumentProperties}
+function DocumentProperties(hWnd: HWND; hPrinter: THandle; pDeviceName: PChar;
+  const pDevModeOutput: TDeviceMode; var pDevModeInput: TDeviceMode;
+  fMode: DWORD): Longint; stdcall;
 {$EXTERNALSYM DocumentPropertiesA}
 function DocumentPropertiesA(hWnd: HWND; hPrinter: THandle; pDeviceName: PAnsiChar;
   const pDevModeOutput: TDeviceModeA; var pDevModeInput: TDeviceModeA;
@@ -1155,28 +1159,28 @@ function DocumentPropertiesA(hWnd: HWND; hPrinter: THandle; pDeviceName: PAnsiCh
 function DocumentPropertiesW(hWnd: HWND; hPrinter: THandle; pDeviceName: PWideChar;
   const pDevModeOutput: TDeviceModeW; var pDevModeInput: TDeviceModeW;
   fMode: DWORD): Longint; stdcall;
-{$EXTERNALSYM DocumentProperties}
-function DocumentProperties(hWnd: HWND; hPrinter: THandle; pDeviceName: PChar;
-  const pDevModeOutput: TDeviceMode; var pDevModeInput: TDeviceMode;
-  fMode: DWORD): Longint; stdcall;
+{$EXTERNALSYM AdvancedDocumentProperties}
+function AdvancedDocumentProperties(hWnd: HWND; hPrinter: THandle; pDeviceName: PChar;
+  pDevModeOutput, pDevModeInput: PDeviceMode): Longint; stdcall;
 {$EXTERNALSYM AdvancedDocumentPropertiesA}
 function AdvancedDocumentPropertiesA(hWnd: HWND; hPrinter: THandle; pDeviceName: PAnsiChar;
   pDevModeOutput, pDevModeInput: PDeviceModeA): Longint; stdcall;
 {$EXTERNALSYM AdvancedDocumentPropertiesW}
 function AdvancedDocumentPropertiesW(hWnd: HWND; hPrinter: THandle; pDeviceName: PWideChar;
   pDevModeOutput, pDevModeInput: PDeviceModeW): Longint; stdcall;
-{$EXTERNALSYM AdvancedDocumentProperties}
-function AdvancedDocumentProperties(hWnd: HWND; hPrinter: THandle; pDeviceName: PChar;
-  pDevModeOutput, pDevModeInput: PDeviceMode): Longint; stdcall;
+{$EXTERNALSYM GetPrinterData}
+function GetPrinterData(hPrinter: THandle; pValueName: PChar; pType: PDWORD; pData: Pointer;
+  nSize: DWORD; var pcbNeeded: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetPrinterDataA}
 function GetPrinterDataA(hPrinter: THandle; pValueName: PAnsiChar; pType: PDWORD; pData: Pointer;
   nSize: DWORD; var pcbNeeded: DWORD): DWORD; stdcall;
 {$EXTERNALSYM GetPrinterDataW}
 function GetPrinterDataW(hPrinter: THandle; pValueName: PWideChar; pType: PDWORD; pData: Pointer;
   nSize: DWORD; var pcbNeeded: DWORD): DWORD; stdcall;
-{$EXTERNALSYM GetPrinterData}
-function GetPrinterData(hPrinter: THandle; pValueName: PChar; pType: PDWORD; pData: Pointer;
-  nSize: DWORD; var pcbNeeded: DWORD): DWORD; stdcall;
+function EnumPrinterData(hPrinter: THandle; dwIndex: DWORD; pValueName: PChar;
+  cbValueName: DWORD; var pcbValueName, pType: DWORD; pData: PByte;
+  cbData: DWORD; pcbData: PDWORD): DWORD; stdcall;
+{$EXTERNALSYM EnumPrinterData}
 function EnumPrinterDataA(hPrinter: THandle; dwIndex: DWORD; pValueName: PAnsiChar;
   cbValueName: DWORD; var pcbValueName, pType: DWORD; pData: PByte;
   cbData: DWORD; pcbData: PDWORD): DWORD; stdcall;
@@ -1185,22 +1189,18 @@ function EnumPrinterDataW(hPrinter: THandle; dwIndex: DWORD; pValueName: PWideCh
   cbValueName: DWORD; var pcbValueName, pType: DWORD; pData: PByte;
   cbData: DWORD; pcbData: PDWORD): DWORD; stdcall;
 {$EXTERNALSYM EnumPrinterDataW}
-function EnumPrinterData(hPrinter: THandle; dwIndex: DWORD; pValueName: PChar;
-  cbValueName: DWORD; var pcbValueName, pType: DWORD; pData: PByte;
-  cbData: DWORD; pcbData: PDWORD): DWORD; stdcall;
-{$EXTERNALSYM EnumPrinterData}
+{$EXTERNALSYM SetPrinterData}
+function SetPrinterData(hPrinter: THandle; pValueName: PChar; dwType: DWORD; pData: Pointer; cbData: DWORD): DWORD; stdcall;
 {$EXTERNALSYM SetPrinterDataA}
 function SetPrinterDataA(hPrinter: THandle; pValueName: PAnsiChar; dwType: DWORD; pData: Pointer; cbData: DWORD): DWORD; stdcall;
 {$EXTERNALSYM SetPrinterDataW}
 function SetPrinterDataW(hPrinter: THandle; pValueName: PWideChar; dwType: DWORD; pData: Pointer; cbData: DWORD): DWORD; stdcall;
-{$EXTERNALSYM SetPrinterData}
-function SetPrinterData(hPrinter: THandle; pValueName: PChar; dwType: DWORD; pData: Pointer; cbData: DWORD): DWORD; stdcall;
+function DeletePrinterData(hPrinter: THandle; pValueName: PChar): DWORD; stdcall;
+{$EXTERNALSYM DeletePrinterData}
 function DeletePrinterDataA(hPrinter: THandle; pValueName: PAnsiChar): DWORD; stdcall;
 {$EXTERNALSYM DeletePrinterDataA}
 function DeletePrinterDataW(hPrinter: THandle; pValueName: PWideChar): DWORD; stdcall;
 {$EXTERNALSYM DeletePrinterDataW}
-function DeletePrinterData(hPrinter: THandle; pValueName: PChar): DWORD; stdcall;
-{$EXTERNALSYM DeletePrinterData}
 
 const
   {$EXTERNALSYM PRINTER_NOTIFY_TYPE}
@@ -1449,14 +1449,14 @@ const
   {$EXTERNALSYM PRINTER_CHANGE_ALL}
   PRINTER_CHANGE_ALL                      = $7777FFFF;
 
+{$EXTERNALSYM PrinterMessageBox}
+function PrinterMessageBox(hPrinter: THandle; Error: DWORD; hWnd: HWND; pText, pCaption: PChar;
+  dwType: DWORD): DWORD; stdcall;
 {$EXTERNALSYM PrinterMessageBoxA}
 function PrinterMessageBoxA(hPrinter: THandle; Error: DWORD; hWnd: HWND; pText, pCaption: PAnsiChar;
   dwType: DWORD): DWORD; stdcall;
 {$EXTERNALSYM PrinterMessageBoxW}
 function PrinterMessageBoxW(hPrinter: THandle; Error: DWORD; hWnd: HWND; pText, pCaption: PWideChar;
-  dwType: DWORD): DWORD; stdcall;
-{$EXTERNALSYM PrinterMessageBox}
-function PrinterMessageBox(hPrinter: THandle; Error: DWORD; hWnd: HWND; pText, pCaption: PChar;
   dwType: DWORD): DWORD; stdcall;
 
 const
@@ -1476,41 +1476,44 @@ const
 
 {$EXTERNALSYM ClosePrinter}
 function ClosePrinter(hPrinter: THandle): BOOL; stdcall;
+{$EXTERNALSYM AddForm}
+function AddForm(hPrinter: THandle; Level: DWORD; pForm: Pointer): BOOL; stdcall;
 {$EXTERNALSYM AddFormA}
 function AddFormA(hPrinter: THandle; Level: DWORD; pForm: Pointer): BOOL; stdcall;
 {$EXTERNALSYM AddFormW}
 function AddFormW(hPrinter: THandle; Level: DWORD; pForm: Pointer): BOOL; stdcall;
-{$EXTERNALSYM AddForm}
-function AddForm(hPrinter: THandle; Level: DWORD; pForm: Pointer): BOOL; stdcall;
+{$EXTERNALSYM DeleteForm}
+function DeleteForm(hPrinter: THandle; pFormName: PChar): BOOL; stdcall;
 {$EXTERNALSYM DeleteFormA}
 function DeleteFormA(hPrinter: THandle; pFormName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM DeleteFormW}
 function DeleteFormW(hPrinter: THandle; pFormName: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM DeleteForm}
-function DeleteForm(hPrinter: THandle; pFormName: PChar): BOOL; stdcall;
+{$EXTERNALSYM GetForm}
+function GetForm(hPrinter: THandle; pFormName: PChar; Level: DWORD; pForm: Pointer;
+  cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetFormA}
 function GetFormA(hPrinter: THandle; pFormName: PAnsiChar; Level: DWORD; pForm: Pointer;
   cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
 {$EXTERNALSYM GetFormW}
 function GetFormW(hPrinter: THandle; pFormName: PWideChar; Level: DWORD; pForm: Pointer;
   cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
-{$EXTERNALSYM GetForm}
-function GetForm(hPrinter: THandle; pFormName: PChar; Level: DWORD; pForm: Pointer;
-  cbBuf: DWORD; var pcbNeeded: DWORD): BOOL; stdcall;
+{$EXTERNALSYM SetForm}
+function SetForm(hPrinter: THandle; pFormName: PChar; Level: DWORD; pForm: Pointer): BOOL; stdcall;
 {$EXTERNALSYM SetFormA}
 function SetFormA(hPrinter: THandle; pFormName: PAnsiChar; Level: DWORD; pForm: Pointer): BOOL; stdcall;
 {$EXTERNALSYM SetFormW}
 function SetFormW(hPrinter: THandle; pFormName: PWideChar; Level: DWORD; pForm: Pointer): BOOL; stdcall;
-{$EXTERNALSYM SetForm}
-function SetForm(hPrinter: THandle; pFormName: PChar; Level: DWORD; pForm: Pointer): BOOL; stdcall;
+{$EXTERNALSYM EnumForms}
+function EnumForms(hPrinter: THandle; Level: DWORD; pForm: Pointer; cbBuf: DWORD;
+  var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumFormsA}
 function EnumFormsA(hPrinter: THandle; Level: DWORD; pForm: Pointer; cbBuf: DWORD;
   var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumFormsW}
 function EnumFormsW(hPrinter: THandle; Level: DWORD; pForm: Pointer; cbBuf: DWORD;
   var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumForms}
-function EnumForms(hPrinter: THandle; Level: DWORD; pForm: Pointer; cbBuf: DWORD;
+{$EXTERNALSYM EnumMonitors}
+function EnumMonitors(pName: PChar; Level: DWORD; pMonitors: Pointer; cbBuf: DWORD;
   var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumMonitorsA}
 function EnumMonitorsA(pName: PAnsiChar; Level: DWORD; pMonitors: Pointer; cbBuf: DWORD;
@@ -1518,66 +1521,63 @@ function EnumMonitorsA(pName: PAnsiChar; Level: DWORD; pMonitors: Pointer; cbBuf
 {$EXTERNALSYM EnumMonitorsW}
 function EnumMonitorsW(pName: PWideChar; Level: DWORD; pMonitors: Pointer; cbBuf: DWORD;
   var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumMonitors}
-function EnumMonitors(pName: PChar; Level: DWORD; pMonitors: Pointer; cbBuf: DWORD;
-  var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
+{$EXTERNALSYM AddMonitor}
+function AddMonitor(pName: PChar; Level: DWORD; pMonitors: Pointer): BOOL; stdcall;
 {$EXTERNALSYM AddMonitorA}
 function AddMonitorA(pName: PAnsiChar; Level: DWORD; pMonitors: Pointer): BOOL; stdcall;
 {$EXTERNALSYM AddMonitorW}
 function AddMonitorW(pName: PWideChar; Level: DWORD; pMonitors: Pointer): BOOL; stdcall;
-{$EXTERNALSYM AddMonitor}
-function AddMonitor(pName: PChar; Level: DWORD; pMonitors: Pointer): BOOL; stdcall;
+{$EXTERNALSYM DeleteMonitor}
+function DeleteMonitor(pName, pEnvironment, pMonitorName: PChar): BOOL; stdcall;
 {$EXTERNALSYM DeleteMonitorA}
 function DeleteMonitorA(pName, pEnvironment, pMonitorName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM DeleteMonitorW}
 function DeleteMonitorW(pName, pEnvironment, pMonitorName: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM DeleteMonitor}
-function DeleteMonitor(pName, pEnvironment, pMonitorName: PChar): BOOL; stdcall;
+{$EXTERNALSYM EnumPorts}
+function EnumPorts(pName: PChar; Level: DWORD; pPorts: Pointer; cbBuf: DWORD;
+  var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumPortsA}
 function EnumPortsA(pName: PAnsiChar; Level: DWORD; pPorts: Pointer; cbBuf: DWORD;
   var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
 {$EXTERNALSYM EnumPortsW}
 function EnumPortsW(pName: PWideChar; Level: DWORD; pPorts: Pointer; cbBuf: DWORD;
   var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
-{$EXTERNALSYM EnumPorts}
-function EnumPorts(pName: PChar; Level: DWORD; pPorts: Pointer; cbBuf: DWORD;
-  var pcbNeeded, pcReturned: DWORD): BOOL; stdcall;
+{$EXTERNALSYM AddPort}
+function AddPort(pName: PChar; hWnd: HWND; pMonitorName: PChar): BOOL; stdcall;
 {$EXTERNALSYM AddPortA}
 function AddPortA(pName: PAnsiChar; hWnd: HWND; pMonitorName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM AddPortW}
 function AddPortW(pName: PWideChar; hWnd: HWND; pMonitorName: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM AddPort}
-function AddPort(pName: PChar; hWnd: HWND; pMonitorName: PChar): BOOL; stdcall;
+{$EXTERNALSYM ConfigurePort}
+function ConfigurePort(pName: PChar; hWnd: HWND; pPortName: PChar): BOOL; stdcall;
 {$EXTERNALSYM ConfigurePortA}
 function ConfigurePortA(pName: PAnsiChar; hWnd: HWND; pPortName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM ConfigurePortW}
 function ConfigurePortW(pName: PWideChar; hWnd: HWND; pPortName: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM ConfigurePort}
-function ConfigurePort(pName: PChar; hWnd: HWND; pPortName: PChar): BOOL; stdcall;
+{$EXTERNALSYM DeletePort}
+function DeletePort(pName: PChar; hWnd: HWND; pPortName: PChar): BOOL; stdcall;
 {$EXTERNALSYM DeletePortA}
 function DeletePortA(pName: PAnsiChar; hWnd: HWND; pPortName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM DeletePortW}
 function DeletePortW(pName: PWideChar; hWnd: HWND; pPortName: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM DeletePort}
-function DeletePort(pName: PChar; hWnd: HWND; pPortName: PChar): BOOL; stdcall;
+function SetPort(pName, pPortName: PChar; dwLevel: DWORD; pPortInfo: Pointer): BOOL; stdcall;
+{$EXTERNALSYM SetPort}
 function SetPortA(pName, pPortName: PAnsiChar; dwLevel: DWORD; pPortInfo: Pointer): BOOL; stdcall;
 {$EXTERNALSYM SetPortA}
 function SetPortW(pName, pPortName: PWideChar; dwLevel: DWORD; pPortInfo: Pointer): BOOL; stdcall;
 {$EXTERNALSYM SetPortW}
-function SetPort(pName, pPortName: PChar; dwLevel: DWORD; pPortInfo: Pointer): BOOL; stdcall;
-{$EXTERNALSYM SetPort}
+{$EXTERNALSYM AddPrinterConnection}
+function AddPrinterConnection(pName: PChar): BOOL; stdcall;
 {$EXTERNALSYM AddPrinterConnectionA}
 function AddPrinterConnectionA(pName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM AddPrinterConnectionW}
 function AddPrinterConnectionW(pName: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM AddPrinterConnection}
-function AddPrinterConnection(pName: PChar): BOOL; stdcall;
+{$EXTERNALSYM DeletePrinterConnection}
+function DeletePrinterConnection(pName: PChar): BOOL; stdcall;
 {$EXTERNALSYM DeletePrinterConnectionA}
 function DeletePrinterConnectionA(pName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM DeletePrinterConnectionW}
 function DeletePrinterConnectionW(pName: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM DeletePrinterConnection}
-function DeletePrinterConnection(pName: PChar): BOOL; stdcall;
 {$EXTERNALSYM ConnectToPrinterDlg}
 function ConnectToPrinterDlg(hwnd: HWND; Flags: DWORD): THandle; stdcall;
 
@@ -1609,18 +1609,18 @@ type
   {$EXTERNALSYM PROVIDOR_INFO_1}
   PROVIDOR_INFO_1 = PROVIDOR_INFO_1A;
 
+{$EXTERNALSYM AddPrintProvidor}
+function AddPrintProvidor(pName: PChar; level: DWORD; pProvidorInfo: Pointer): BOOL; stdcall;
 {$EXTERNALSYM AddPrintProvidorA}
 function AddPrintProvidorA(pName: PAnsiChar; level: DWORD; pProvidorInfo: Pointer): BOOL; stdcall;
 {$EXTERNALSYM AddPrintProvidorW}
 function AddPrintProvidorW(pName: PWideChar; level: DWORD; pProvidorInfo: Pointer): BOOL; stdcall;
-{$EXTERNALSYM AddPrintProvidor}
-function AddPrintProvidor(pName: PChar; level: DWORD; pProvidorInfo: Pointer): BOOL; stdcall;
+{$EXTERNALSYM DeletePrintProvidor}
+function DeletePrintProvidor(pName, pEnvironment, pPrintProvidorName: PChar): BOOL; stdcall;
 {$EXTERNALSYM DeletePrintProvidorA}
 function DeletePrintProvidorA(pName, pEnvironment, pPrintProvidorName: PAnsiChar): BOOL; stdcall;
 {$EXTERNALSYM DeletePrintProvidorW}
 function DeletePrintProvidorW(pName, pEnvironment, pPrintProvidorName: PWideChar): BOOL; stdcall;
-{$EXTERNALSYM DeletePrintProvidor}
-function DeletePrintProvidor(pName, pEnvironment, pPrintProvidorName: PChar): BOOL; stdcall;
 
 { SetPrinterData and GetPrinterData Server Handle Key values }
 
@@ -1696,15 +1696,15 @@ const
   {$EXTERNALSYM JOB_EXECUTE}
   JOB_EXECUTE = (STANDARD_RIGHTS_EXECUTE or JOB_ACCESS_ADMINISTER);
 
+{$EXTERNALSYM DeviceCapabilities}
+function DeviceCapabilities(pDevice, pPort: PChar; fwCapability: Word;
+  pOutput: PChar; DevMode: PDeviceMode): Integer; stdcall;
 {$EXTERNALSYM DeviceCapabilitiesA}
 function DeviceCapabilitiesA(pDevice, pPort: PAnsiChar; fwCapability: Word;
   pOutput: PAnsiChar; DevMode: PDeviceModeA): Integer; stdcall;
 {$EXTERNALSYM DeviceCapabilitiesW}
 function DeviceCapabilitiesW(pDevice, pPort: PWideChar; fwCapability: Word;
   pOutput: PWideChar; DevMode: PDeviceModeW): Integer; stdcall;
-{$EXTERNALSYM DeviceCapabilities}
-function DeviceCapabilities(pDevice, pPort: PChar; fwCapability: Word;
-  pOutput: PChar; DevMode: PDeviceMode): Integer; stdcall;
 
 const
   winspl = 'winspool.drv';
@@ -1712,156 +1712,156 @@ const
 implementation
 
 function AbortPrinter; external winspl name 'AbortPrinter';
+function AddForm; external winspl name 'AddFormA';
 function AddFormA; external winspl name 'AddFormA';
 function AddFormW; external winspl name 'AddFormW';
-function AddForm; external winspl name 'AddFormA';
+function AddJob; external winspl name 'AddJobA';
 function AddJobA; external winspl name 'AddJobA';
 function AddJobW; external winspl name 'AddJobW';
-function AddJob; external winspl name 'AddJobA';
+function AddMonitor; external winspl name 'AddMonitorA';
 function AddMonitorA; external winspl name 'AddMonitorA';
 function AddMonitorW; external winspl name 'AddMonitorW';
-function AddMonitor; external winspl name 'AddMonitorA';
+function AddPort; external winspl name 'AddPortA';
 function AddPortA; external winspl name 'AddPortA';
 function AddPortW; external winspl name 'AddPortW';
-function AddPort; external winspl name 'AddPortA';
+function AddPrinter; external winspl name 'AddPrinterA';
 function AddPrinterA; external winspl name 'AddPrinterA';
 function AddPrinterW; external winspl name 'AddPrinterW';
-function AddPrinter; external winspl name 'AddPrinterA';
+function AddPrinterConnection; external winspl name 'AddPrinterConnectionA';
 function AddPrinterConnectionA; external winspl name 'AddPrinterConnectionA';
 function AddPrinterConnectionW; external winspl name 'AddPrinterConnectionW';
-function AddPrinterConnection; external winspl name 'AddPrinterConnectionA';
+function AddPrinterDriver; external winspl name 'AddPrinterDriverA';
 function AddPrinterDriverA; external winspl name 'AddPrinterDriverA';
 function AddPrinterDriverW; external winspl name 'AddPrinterDriverW';
-function AddPrinterDriver; external winspl name 'AddPrinterDriverA';
+function AddPrintProcessor; external winspl name 'AddPrintProcessorA';
 function AddPrintProcessorA; external winspl name 'AddPrintProcessorA';
 function AddPrintProcessorW; external winspl name 'AddPrintProcessorW';
-function AddPrintProcessor; external winspl name 'AddPrintProcessorA';
+function AddPrintProvidor; external winspl name 'AddPrintProvidorA';
 function AddPrintProvidorA; external winspl name 'AddPrintProvidorA';
 function AddPrintProvidorW; external winspl name 'AddPrintProvidorW';
-function AddPrintProvidor; external winspl name 'AddPrintProvidorA';
+function AdvancedDocumentProperties; external winspl name 'AdvancedDocumentPropertiesA';
 function AdvancedDocumentPropertiesA; external winspl name 'AdvancedDocumentPropertiesA';
 function AdvancedDocumentPropertiesW; external winspl name 'AdvancedDocumentPropertiesW';
-function AdvancedDocumentProperties; external winspl name 'AdvancedDocumentPropertiesA';
 function ClosePrinter; external winspl name 'ClosePrinter';
+function ConfigurePort; external winspl name 'ConfigurePortA';
 function ConfigurePortA; external winspl name 'ConfigurePortA';
 function ConfigurePortW; external winspl name 'ConfigurePortW';
-function ConfigurePort; external winspl name 'ConfigurePortA';
 function ConnectToPrinterDlg; external winspl name 'ConnectToPrinterDlg';
+function DeleteForm; external winspl name 'DeleteFormA';
 function DeleteFormA; external winspl name 'DeleteFormA';
 function DeleteFormW; external winspl name 'DeleteFormW';
-function DeleteForm; external winspl name 'DeleteFormA';
+function DeleteMonitor; external winspl name 'DeleteMonitorA';
 function DeleteMonitorA; external winspl name 'DeleteMonitorA';
 function DeleteMonitorW; external winspl name 'DeleteMonitorW';
-function DeleteMonitor; external winspl name 'DeleteMonitorA';
+function DeletePort; external winspl name 'DeletePortA';
 function DeletePortA; external winspl name 'DeletePortA';
 function DeletePortW; external winspl name 'DeletePortW';
-function DeletePort; external winspl name 'DeletePortA';
 function DeletePrinter; external winspl name 'DeletePrinter';
+function DeletePrinterConnection; external winspl name 'DeletePrinterConnectionA';
 function DeletePrinterConnectionA; external winspl name 'DeletePrinterConnectionA';
 function DeletePrinterConnectionW; external winspl name 'DeletePrinterConnectionW';
-function DeletePrinterConnection; external winspl name 'DeletePrinterConnectionA';
+function DeletePrinterData; external winspl name 'DeletePrinterDataA';
 function DeletePrinterDataA; external winspl name 'DeletePrinterDataA';
 function DeletePrinterDataW; external winspl name 'DeletePrinterDataW';
-function DeletePrinterData; external winspl name 'DeletePrinterDataA';
+function DeletePrinterDriver; external winspl name 'DeletePrinterDriverA';
 function DeletePrinterDriverA; external winspl name 'DeletePrinterDriverA';
 function DeletePrinterDriverW; external winspl name 'DeletePrinterDriverW';
-function DeletePrinterDriver; external winspl name 'DeletePrinterDriverA';
+function DeletePrintProcessor; external winspl name 'DeletePrintProcessorA';
 function DeletePrintProcessorA; external winspl name 'DeletePrintProcessorA';
 function DeletePrintProcessorW; external winspl name 'DeletePrintProcessorW';
-function DeletePrintProcessor; external winspl name 'DeletePrintProcessorA';
+function DeletePrintProvidor; external winspl name 'DeletePrintProvidorA';
 function DeletePrintProvidorA; external winspl name 'DeletePrintProvidorA';
 function DeletePrintProvidorW; external winspl name 'DeletePrintProvidorW';
-function DeletePrintProvidor; external winspl name 'DeletePrintProvidorA';
+function DeviceCapabilities; external winspl name 'DeviceCapabilitiesA';
 function DeviceCapabilitiesA; external winspl name 'DeviceCapabilitiesA';
 function DeviceCapabilitiesW; external winspl name 'DeviceCapabilitiesW';
-function DeviceCapabilities; external winspl name 'DeviceCapabilitiesA';
+function DocumentProperties; external winspl name 'DocumentPropertiesA';
 function DocumentPropertiesA; external winspl name 'DocumentPropertiesA';
 function DocumentPropertiesW; external winspl name 'DocumentPropertiesW';
-function DocumentProperties; external winspl name 'DocumentPropertiesA';
 function EndDocPrinter; external winspl name 'EndDocPrinter';
 function EndPagePrinter; external winspl name 'EndPagePrinter';
+function EnumForms; external winspl name 'EnumFormsA';
 function EnumFormsA; external winspl name 'EnumFormsA';
 function EnumFormsW; external winspl name 'EnumFormsW';
-function EnumForms; external winspl name 'EnumFormsA';
+function EnumJobs; external winspl name 'EnumJobsA';
 function EnumJobsA; external winspl name 'EnumJobsA';
 function EnumJobsW; external winspl name 'EnumJobsW';
-function EnumJobs; external winspl name 'EnumJobsA';
+function EnumMonitors; external winspl name 'EnumMonitorsA';
 function EnumMonitorsA; external winspl name 'EnumMonitorsA';
 function EnumMonitorsW; external winspl name 'EnumMonitorsW';
-function EnumMonitors; external winspl name 'EnumMonitorsA';
+function EnumPorts; external winspl name 'EnumPortsA';
 function EnumPortsA; external winspl name 'EnumPortsA';
 function EnumPortsW; external winspl name 'EnumPortsW';
-function EnumPorts; external winspl name 'EnumPortsA';
+function EnumPrinterData; external winspl name 'EnumPrinterDataA';
 function EnumPrinterDataA; external winspl name 'EnumPrinterDataA';
 function EnumPrinterDataW; external winspl name 'EnumPrinterDataW';
-function EnumPrinterData; external winspl name 'EnumPrinterDataA';
+function EnumPrinterDrivers; external winspl name 'EnumPrinterDriversA';
 function EnumPrinterDriversA; external winspl name 'EnumPrinterDriversA';
 function EnumPrinterDriversW; external winspl name 'EnumPrinterDriversW';
-function EnumPrinterDrivers; external winspl name 'EnumPrinterDriversA';
+function EnumPrinters; external winspl name 'EnumPrintersA';
 function EnumPrintersA; external winspl name 'EnumPrintersA';
 function EnumPrintersW; external winspl name 'EnumPrintersW';
-function EnumPrinters; external winspl name 'EnumPrintersA';
+function EnumPrintProcessorDatatypes; external winspl name 'EnumPrintProcessorDatatypesA';
 function EnumPrintProcessorDatatypesA; external winspl name 'EnumPrintProcessorDatatypesA';
 function EnumPrintProcessorDatatypesW; external winspl name 'EnumPrintProcessorDatatypesW';
-function EnumPrintProcessorDatatypes; external winspl name 'EnumPrintProcessorDatatypesA';
+function EnumPrintProcessors; external winspl name 'EnumPrintProcessorsA';
 function EnumPrintProcessorsA; external winspl name 'EnumPrintProcessorsA';
 function EnumPrintProcessorsW; external winspl name 'EnumPrintProcessorsW';
-function EnumPrintProcessors; external winspl name 'EnumPrintProcessorsA';
 function FindClosePrinterChangeNotification; external winspl name 'FindClosePrinterChangeNotification';
 function FindFirstPrinterChangeNotification; external winspl name 'FindFirstPrinterChangeNotification';
 function FindNextPrinterChangeNotification; external winspl name 'FindNextPrinterChangeNotification';
 function FreePrinterNotifyInfo; external winspl name 'FreePrinterNotifyInfo';
+function GetForm; external winspl name 'GetFormA';
 function GetFormA; external winspl name 'GetFormA';
 function GetFormW; external winspl name 'GetFormW';
-function GetForm; external winspl name 'GetFormA';
+function GetJob; external winspl name 'GetJobA';
 function GetJobA; external winspl name 'GetJobA';
 function GetJobW; external winspl name 'GetJobW';
-function GetJob; external winspl name 'GetJobA';
+function GetPrinter; external winspl name 'GetPrinterA';
 function GetPrinterA; external winspl name 'GetPrinterA';
 function GetPrinterW; external winspl name 'GetPrinterW';
-function GetPrinter; external winspl name 'GetPrinterA';
+function GetPrinterData; external winspl name 'GetPrinterDataA';
 function GetPrinterDataA; external winspl name 'GetPrinterDataA';
 function GetPrinterDataW; external winspl name 'GetPrinterDataW';
-function GetPrinterData; external winspl name 'GetPrinterDataA';
+function GetPrinterDriver; external winspl name 'GetPrinterDriverA';
 function GetPrinterDriverA; external winspl name 'GetPrinterDriverA';
 function GetPrinterDriverW; external winspl name 'GetPrinterDriverW';
-function GetPrinterDriver; external winspl name 'GetPrinterDriverA';
+function GetPrinterDriverDirectory; external winspl name 'GetPrinterDriverDirectoryA';
 function GetPrinterDriverDirectoryA; external winspl name 'GetPrinterDriverDirectoryA';
 function GetPrinterDriverDirectoryW; external winspl name 'GetPrinterDriverDirectoryW';
-function GetPrinterDriverDirectory; external winspl name 'GetPrinterDriverDirectoryA';
+function GetPrintProcessorDirectory; external winspl name 'GetPrintProcessorDirectoryA';
 function GetPrintProcessorDirectoryA; external winspl name 'GetPrintProcessorDirectoryA';
 function GetPrintProcessorDirectoryW; external winspl name 'GetPrintProcessorDirectoryW';
-function GetPrintProcessorDirectory; external winspl name 'GetPrintProcessorDirectoryA';
+function OpenPrinter; external winspl name 'OpenPrinterA';
 function OpenPrinterA; external winspl name 'OpenPrinterA';
 function OpenPrinterW; external winspl name 'OpenPrinterW';
-function OpenPrinter; external winspl name 'OpenPrinterA';
+function PrinterMessageBox; external winspl name 'PrinterMessageBoxA';
 function PrinterMessageBoxA; external winspl name 'PrinterMessageBoxA';
 function PrinterMessageBoxW; external winspl name 'PrinterMessageBoxW';
-function PrinterMessageBox; external winspl name 'PrinterMessageBoxA';
 function PrinterProperties; external winspl name 'PrinterProperties';
 function ReadPrinter; external winspl name 'ReadPrinter';
+function ResetPrinter; external winspl name 'ResetPrinterA';
 function ResetPrinterA; external winspl name 'ResetPrinterA';
 function ResetPrinterW; external winspl name 'ResetPrinterW';
-function ResetPrinter; external winspl name 'ResetPrinterA';
 function ScheduleJob; external winspl name 'ScheduleJob';
+function SetForm; external winspl name 'SetFormA';
 function SetFormA; external winspl name 'SetFormA';
 function SetFormW; external winspl name 'SetFormW';
-function SetForm; external winspl name 'SetFormA';
+function SetJob; external winspl name 'SetJobA';
 function SetJobA; external winspl name 'SetJobA';
 function SetJobW; external winspl name 'SetJobW';
-function SetJob; external winspl name 'SetJobA';
+function SetPort; external winspl name 'SetPortA';
 function SetPortA; external winspl name 'SetPortA';
 function SetPortW; external winspl name 'SetPortW';
-function SetPort; external winspl name 'SetPortA';
+function SetPrinter; external winspl name 'SetPrinterA';
 function SetPrinterA; external winspl name 'SetPrinterA';
 function SetPrinterW; external winspl name 'SetPrinterW';
-function SetPrinter; external winspl name 'SetPrinterA';
+function SetPrinterData; external winspl name 'SetPrinterDataA';
 function SetPrinterDataA; external winspl name 'SetPrinterDataA';
 function SetPrinterDataW; external winspl name 'SetPrinterDataW';
-function SetPrinterData; external winspl name 'SetPrinterDataA';
+function StartDocPrinter; external winspl name 'StartDocPrinterA';
 function StartDocPrinterA; external winspl name 'StartDocPrinterA';
 function StartDocPrinterW; external winspl name 'StartDocPrinterW';
-function StartDocPrinter; external winspl name 'StartDocPrinterA';
 function StartPagePrinter; external winspl name 'StartPagePrinter';
 function WaitForPrinterChange; external winspl name 'WaitForPrinterChange';
 function WritePrinter; external winspl name 'WritePrinter';

@@ -1,8 +1,8 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'Controls.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'Controls.pas' rev: 6.00
 
 #ifndef ControlsHPP
 #define ControlsHPP
@@ -39,6 +39,8 @@ namespace Controls
 namespace Controls
 {
 //-- type declarations -------------------------------------------------------
+typedef int TModalResult;
+
 typedef TMetaClass*TWinControlClass;
 
 typedef Messages::TWMNoParams  TCMActivate;
@@ -63,6 +65,7 @@ typedef Messages::TWMMouse  TCMDesignHitTest;
 
 typedef Messages::TWMKey  TCMWantSpecialKey;
 
+#pragma pack(push, 4)
 struct TCMMouseWheel
 {
 	unsigned Msg;
@@ -73,7 +76,7 @@ struct TCMMouseWheel
 	{
 		struct 
 		{
-			Windows::TSmallPoint Pos;
+			Types::TSmallPoint Pos;
 			int Result;
 			
 		};
@@ -86,28 +89,24 @@ struct TCMMouseWheel
 		
 	};
 } ;
+#pragma pack(pop)
 
 class DELPHICLASS TControl;
 class DELPHICLASS TWinControl;
-typedef void __fastcall (__closure *TWndMethod)(Messages::TMessage &Message);
-
 #pragma option push -b-
-enum Controls__8 { csAcceptsControls, csCaptureMouse, csDesignInteractive, csClickEvents, csFramed, 
-	csSetCaption, csOpaque, csDoubleClicks, csFixedWidth, csFixedHeight, csNoDesignVisible, csReplicatable, 
-	csNoStdEvents, csDisplayDragImage, csReflector, csActionClient, csMenuEvents };
+enum Controls__11 { csAcceptsControls, csCaptureMouse, csDesignInteractive, csClickEvents, csFramed, csSetCaption, csOpaque, csDoubleClicks, csFixedWidth, csFixedHeight, csNoDesignVisible, csReplicatable, csNoStdEvents, csDisplayDragImage, csReflector, csActionClient, csMenuEvents };
 #pragma option pop
 
-typedef Set<Controls__8, csAcceptsControls, csMenuEvents>  TControlStyle;
+typedef Set<Controls__11, csAcceptsControls, csMenuEvents>  TControlStyle;
 
 #pragma option push -b-
-enum Controls__7 { csLButtonDown, csClicked, csPalette, csReadingState, csAlignmentNeeded, csFocusing, 
-	csCreating, csPaintCopy, csCustomPaint, csDestroyingHandle, csDocking };
+enum Controls__01 { csLButtonDown, csClicked, csPalette, csReadingState, csAlignmentNeeded, csFocusing, csCreating, csPaintCopy, csCustomPaint, csDestroyingHandle, csDocking };
 #pragma option pop
 
-typedef Set<Controls__7, csLButtonDown, csDocking>  TControlState;
+typedef Set<Controls__01, csLButtonDown, csDocking>  TControlState;
 
 #pragma option push -b-
-enum TAlign { alNone, alTop, alBottom, alLeft, alRight, alClient };
+enum TAlign { alNone, alTop, alBottom, alLeft, alRight, alClient, alCustom };
 #pragma option pop
 
 #pragma option push -b-
@@ -130,6 +129,7 @@ protected:
 	virtual void __fastcall AssignClient(System::TObject* AClient);
 	virtual bool __fastcall IsCaptionLinked(void);
 	virtual bool __fastcall IsEnabledLinked(void);
+	virtual bool __fastcall IsHelpLinked(void);
 	virtual bool __fastcall IsHintLinked(void);
 	virtual bool __fastcall IsVisibleLinked(void);
 	virtual bool __fastcall IsOnExecuteLinked(void);
@@ -137,12 +137,14 @@ protected:
 	virtual void __fastcall SetCaption(const AnsiString Value);
 	virtual void __fastcall SetEnabled(bool Value);
 	virtual void __fastcall SetHint(const AnsiString Value);
+	virtual void __fastcall SetHelpContext(Classes::THelpContext Value);
+	virtual void __fastcall SetHelpKeyword(const AnsiString Value);
+	virtual void __fastcall SetHelpType(Classes::THelpType Value);
 	virtual void __fastcall SetVisible(bool Value);
 	virtual void __fastcall SetOnExecute(Classes::TNotifyEvent Value);
 public:
 	#pragma option push -w-inl
-	/* TBasicActionLink.Create */ inline __fastcall virtual TControlActionLink(System::TObject* AClient
-		) : Actnlist::TActionLink(AClient) { }
+	/* TBasicActionLink.Create */ inline __fastcall virtual TControlActionLink(System::TObject* AClient) : Actnlist::TActionLink(AClient) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBasicActionLink.Destroy */ inline __fastcall virtual ~TControlActionLink(void) { }
@@ -168,7 +170,7 @@ private:
 	void __fastcall SetConstraints(int Index, TConstraintSize Value);
 	
 protected:
-	DYNAMIC void __fastcall Change(void);
+	virtual void __fastcall Change(void);
 	virtual void __fastcall AssignTo(Classes::TPersistent* Dest);
 	__property TControl* Control = {read=FControl};
 	
@@ -178,13 +180,10 @@ public:
 	
 __published:
 	__property TConstraintSize MaxHeight = {read=FMaxHeight, write=SetConstraints, index=0, default=0};
-		
 	__property TConstraintSize MaxWidth = {read=FMaxWidth, write=SetConstraints, index=1, default=0};
 	__property TConstraintSize MinHeight = {read=FMinHeight, write=SetConstraints, index=2, default=0};
-		
 	__property TConstraintSize MinWidth = {read=FMinWidth, write=SetConstraints, index=3, default=0};
 public:
-		
 	#pragma option push -w-inl
 	/* TPersistent.Destroy */ inline __fastcall virtual ~TSizeConstraints(void) { }
 	#pragma option pop
@@ -193,10 +192,10 @@ public:
 
 
 #pragma option push -b-
-enum Controls__9 { sfLeft, sfTop, sfWidth, sfHeight, sfFont };
+enum Controls__21 { sfLeft, sfTop, sfWidth, sfHeight, sfFont, sfDesignSize };
 #pragma option pop
 
-typedef Set<Controls__9, sfLeft, sfFont>  TScalingFlags;
+typedef Set<Controls__21, sfLeft, sfDesignSize>  TScalingFlags;
 
 #pragma option push -b-
 enum TDragKind { dkDrag, dkDock };
@@ -206,45 +205,39 @@ enum TDragKind { dkDrag, dkDock };
 enum TDockOrientation { doNoOrient, doHorizontal, doVertical };
 #pragma option pop
 
-typedef void __fastcall (__closure *TCanResizeEvent)(System::TObject* Sender, int &NewWidth, int &NewHeight
-	, bool &Resize);
+typedef void __fastcall (__closure *TCanResizeEvent)(System::TObject* Sender, int &NewWidth, int &NewHeight, bool &Resize);
 
-typedef void __fastcall (__closure *TConstrainedResizeEvent)(System::TObject* Sender, int &MinWidth, 
-	int &MinHeight, int &MaxWidth, int &MaxHeight);
+typedef void __fastcall (__closure *TConstrainedResizeEvent)(System::TObject* Sender, int &MinWidth, int &MinHeight, int &MaxWidth, int &MaxHeight);
 
 #pragma option push -b-
 enum TMouseButton { mbLeft, mbRight, mbMiddle };
 #pragma option pop
 
-typedef void __fastcall (__closure *TMouseEvent)(System::TObject* Sender, TMouseButton Button, Classes::TShiftState 
-	Shift, int X, int Y);
+typedef void __fastcall (__closure *TMouseEvent)(System::TObject* Sender, TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 
-typedef void __fastcall (__closure *TMouseMoveEvent)(System::TObject* Sender, Classes::TShiftState Shift
-	, int X, int Y);
+typedef void __fastcall (__closure *TMouseMoveEvent)(System::TObject* Sender, Classes::TShiftState Shift, int X, int Y);
 
-typedef void __fastcall (__closure *TDragDropEvent)(System::TObject* Sender, System::TObject* Source
-	, int X, int Y);
+typedef void __fastcall (__closure *TDragDropEvent)(System::TObject* Sender, System::TObject* Source, int X, int Y);
 
 #pragma option push -b-
 enum TDragState { dsDragEnter, dsDragLeave, dsDragMove };
 #pragma option pop
 
-typedef void __fastcall (__closure *TDragOverEvent)(System::TObject* Sender, System::TObject* Source
-	, int X, int Y, TDragState State, bool &Accept);
+typedef void __fastcall (__closure *TDragOverEvent)(System::TObject* Sender, System::TObject* Source, int X, int Y, TDragState State, bool &Accept);
 
 class DELPHICLASS TDragDockObject;
-typedef void __fastcall (__closure *TStartDockEvent)(System::TObject* Sender, TDragDockObject* &DragObject
-	);
+typedef void __fastcall (__closure *TStartDockEvent)(System::TObject* Sender, TDragDockObject* &DragObject);
 
-typedef void __fastcall (__closure *TEndDragEvent)(System::TObject* Sender, System::TObject* Target, 
-	int X, int Y);
+typedef void __fastcall (__closure *TEndDragEvent)(System::TObject* Sender, System::TObject* Target, int X, int Y);
 
 class DELPHICLASS TDragObject;
-typedef void __fastcall (__closure *TStartDragEvent)(System::TObject* Sender, TDragObject* &DragObject
-	);
+typedef void __fastcall (__closure *TStartDragEvent)(System::TObject* Sender, TDragObject* &DragObject);
 
-typedef void __fastcall (__closure *TContextPopupEvent)(System::TObject* Sender, const Windows::TPoint 
-	&MousePos, bool &Handled);
+typedef void __fastcall (__closure *TContextPopupEvent)(System::TObject* Sender, const Types::TPoint &MousePos, bool &Handled);
+
+typedef void __fastcall (__closure *TMouseWheelEvent)(System::TObject* Sender, Classes::TShiftState Shift, int WheelDelta, const Types::TPoint &MousePos, bool &Handled);
+
+typedef void __fastcall (__closure *TMouseWheelUpDownEvent)(System::TObject* Sender, Classes::TShiftState Shift, const Types::TPoint &MousePos, bool &Handled);
 
 struct TCMDrag;
 typedef AnsiString TCaption;
@@ -259,7 +252,7 @@ class PASCALIMPLEMENTATION TControl : public Classes::TComponent
 	
 private:
 	TWinControl* FParent;
-	TWndMethod FWindowProc;
+	Classes::TWndMethod FWindowProc;
 	int FLeft;
 	int FTop;
 	int FWidth;
@@ -289,14 +282,21 @@ private:
 	Menus::TPopupMenu* FPopupMenu;
 	AnsiString FHint;
 	int FFontHeight;
-	Windows::TPoint FAnchorRules;
-	Windows::TPoint FOriginalParentSize;
+	#pragma pack(push, 1)
+	Types::TPoint FAnchorRules;
+	#pragma pack(pop)
+	
+	#pragma pack(push, 1)
+	Types::TPoint FOriginalParentSize;
+	#pragma pack(pop)
+	
 	TScalingFlags FScalingFlags;
 	bool FShowHint;
 	bool FParentShowHint;
 	TDragKind FDragKind;
 	TDockOrientation FDockOrientation;
 	TWinControl* FHostDockSite;
+	int FWheelAccumulator;
 	int FUndockWidth;
 	int FUndockHeight;
 	int FLRDockWidth;
@@ -317,21 +317,25 @@ private:
 	Classes::TNotifyEvent FOnClick;
 	Classes::TNotifyEvent FOnDblClick;
 	TContextPopupEvent FOnContextPopup;
+	TMouseWheelEvent FOnMouseWheel;
+	TMouseWheelUpDownEvent FOnMouseWheelDown;
+	TMouseWheelUpDownEvent FOnMouseWheelUp;
+	Classes::THelpType FHelpType;
+	AnsiString FHelpKeyword;
+	Classes::THelpContext FHelpContext;
 	void __fastcall CalcDockSizes(void);
 	bool __fastcall CheckNewSize(int &NewWidth, int &NewHeight);
-	TWinControl* __fastcall CreateFloatingDockSite(const Windows::TRect &Bounds);
+	TWinControl* __fastcall CreateFloatingDockSite(const Types::TRect &Bounds);
 	void __fastcall DoActionChange(System::TObject* Sender);
 	bool __fastcall DoCanAutoSize(int &NewWidth, int &NewHeight);
 	bool __fastcall DoCanResize(int &NewWidth, int &NewHeight);
 	void __fastcall DoConstraintsChange(System::TObject* Sender);
 	void __fastcall DoConstrainedResize(int &NewWidth, int &NewHeight);
 	void __fastcall DoDragMsg(TCMDrag &DragMsg);
-	void __fastcall DoMouseDown(Messages::TWMMouse &Message, TMouseButton Button, Classes::TShiftState 
-		Shift);
+	void __fastcall DoMouseDown(Messages::TWMMouse &Message, TMouseButton Button, Classes::TShiftState Shift);
 	void __fastcall DoMouseUp(Messages::TWMMouse &Message, TMouseButton Button);
 	void __fastcall FontChanged(System::TObject* Sender);
-	Classes::TBasicAction* __fastcall GetAction(void);
-	Windows::TRect __fastcall GetBoundsRect();
+	Types::TRect __fastcall GetBoundsRect();
 	int __fastcall GetClientHeight(void);
 	int __fastcall GetClientWidth(void);
 	int __fastcall GetLRDockWidth(void);
@@ -348,6 +352,7 @@ private:
 	bool __fastcall IsEnabledStored(void);
 	bool __fastcall IsFontStored(void);
 	bool __fastcall IsHintStored(void);
+	bool __fastcall IsHelpContextStored(void);
 	bool __fastcall IsOnClickStored(void);
 	bool __fastcall IsShowHintStored(void);
 	bool __fastcall IsVisibleStored(void);
@@ -355,16 +360,17 @@ private:
 	void __fastcall SetAnchors(TAnchors Value);
 	void __fastcall SetAction(Classes::TBasicAction* Value);
 	void __fastcall SetAlign(TAlign Value);
-	void __fastcall SetAutoSize(bool Value);
-	void __fastcall SetBoundsRect(const Windows::TRect &Rect);
+	void __fastcall SetBoundsRect(const Types::TRect &Rect);
 	void __fastcall SetClientHeight(int Value);
-	void __fastcall SetClientSize(const Windows::TPoint &Value);
+	void __fastcall SetClientSize(const Types::TPoint &Value);
 	void __fastcall SetClientWidth(int Value);
 	void __fastcall SetColor(Graphics::TColor Value);
 	void __fastcall SetCursor(TCursor Value);
 	void __fastcall SetDesktopFont(bool Value);
 	void __fastcall SetFont(Graphics::TFont* Value);
 	void __fastcall SetHeight(int Value);
+	void __fastcall SetHelpContext(const Classes::THelpContext Value);
+	void __fastcall SetHelpKeyword(const AnsiString Value);
 	void __fastcall SetHostDockSite(TWinControl* Value);
 	void __fastcall SetLeft(int Value);
 	void __fastcall SetMouseCapture(bool Value);
@@ -391,6 +397,7 @@ private:
 	MESSAGE void __fastcall WMLButtonUp(Messages::TWMMouse &Message);
 	MESSAGE void __fastcall WMRButtonUp(Messages::TWMMouse &Message);
 	MESSAGE void __fastcall WMMButtonUp(Messages::TWMMouse &Message);
+	MESSAGE void __fastcall WMMouseWheel(Messages::TWMMouseWheel &Message);
 	MESSAGE void __fastcall WMCancelMode(Messages::TWMNoParams &Message);
 	MESSAGE void __fastcall WMWindowPosChanged(Messages::TWMWindowPosMsg &Message);
 	MESSAGE void __fastcall CMVisibleChanged(Messages::TMessage &Message);
@@ -409,7 +416,9 @@ private:
 	MESSAGE void __fastcall CMFloat(TCMFloat &Message);
 	MESSAGE void __fastcall CMBiDiModeChanged(Messages::TMessage &Message);
 	MESSAGE void __fastcall CMParentBiDiModeChanged(Messages::TMessage &Message);
+	MESSAGE void __fastcall CMMouseWheel(TCMMouseWheel &Message);
 	MESSAGE void __fastcall WMContextMenu(Messages::TWMContextMenu &Message);
+	void __fastcall SetConstraints(const TSizeConstraints* Value);
 	
 protected:
 	DYNAMIC void __fastcall ActionChange(System::TObject* Sender, bool CheckDefaults);
@@ -421,28 +430,32 @@ protected:
 	void __fastcall Changed(void);
 	DYNAMIC void __fastcall ChangeScale(int M, int D);
 	DYNAMIC void __fastcall Click(void);
-	virtual void __fastcall ConstrainedResize(int &MinWidth, int &MinHeight, int &MaxWidth, int &MaxHeight
-		);
+	virtual void __fastcall ConstrainedResize(int &MinWidth, int &MinHeight, int &MaxWidth, int &MaxHeight);
+	Types::TPoint __fastcall CalcCursorPos();
+	DYNAMIC bool __fastcall DesignWndProc(Messages::TMessage &Message);
 	DYNAMIC void __fastcall DblClick(void);
 	DYNAMIC void __fastcall DefaultDockImage(TDragDockObject* DragDockObject, bool Erase);
 	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
 	DYNAMIC void __fastcall DockTrackNoTarget(TDragDockObject* Source, int X, int Y);
-	DYNAMIC void __fastcall DoContextPopup(const Windows::TPoint &MousePos, bool &Handled);
+	DYNAMIC void __fastcall DoContextPopup(const Types::TPoint &MousePos, bool &Handled);
 	DYNAMIC void __fastcall DoEndDock(System::TObject* Target, int X, int Y);
-	DYNAMIC void __fastcall DoDock(TWinControl* NewDockSite, Windows::TRect &ARect);
+	DYNAMIC void __fastcall DoDock(TWinControl* NewDockSite, Types::TRect &ARect);
 	DYNAMIC void __fastcall DoStartDock(TDragObject* &DragObject);
+	DYNAMIC bool __fastcall DoMouseWheel(Classes::TShiftState Shift, int WheelDelta, const Types::TPoint &MousePos);
+	DYNAMIC bool __fastcall DoMouseWheelDown(Classes::TShiftState Shift, const Types::TPoint &MousePos);
+	DYNAMIC bool __fastcall DoMouseWheelUp(Classes::TShiftState Shift, const Types::TPoint &MousePos);
 	DYNAMIC void __fastcall DragCanceled(void);
-	DYNAMIC void __fastcall DragOver(System::TObject* Source, int X, int Y, TDragState State, bool &Accept
-		);
+	DYNAMIC void __fastcall DragOver(System::TObject* Source, int X, int Y, TDragState State, bool &Accept);
 	DYNAMIC void __fastcall DoEndDrag(System::TObject* Target, int X, int Y);
 	DYNAMIC void __fastcall DoStartDrag(TDragObject* &DragObject);
 	DYNAMIC void __fastcall DrawDragDockImage(TDragDockObject* DragDockObject);
 	DYNAMIC void __fastcall EraseDragDockImage(TDragDockObject* DragDockObject);
+	virtual Classes::TBasicAction* __fastcall GetAction(void);
 	DYNAMIC TMetaClass* __fastcall GetActionLinkClass(void);
-	virtual Windows::TPoint __fastcall GetClientOrigin();
-	virtual Windows::TRect __fastcall GetClientRect();
+	virtual Types::TPoint __fastcall GetClientOrigin();
+	virtual Types::TRect __fastcall GetClientRect();
 	virtual HDC __fastcall GetDeviceContext(HWND &WindowHandle);
-	DYNAMIC TAlign __fastcall GetDockEdge(const Windows::TPoint &MousePos);
+	DYNAMIC TAlign __fastcall GetDockEdge(const Types::TPoint &MousePos);
 	virtual TDragImageList* __fastcall GetDragImages(void);
 	virtual bool __fastcall GetEnabled(void);
 	virtual bool __fastcall GetFloating(void);
@@ -453,8 +466,7 @@ protected:
 	DYNAMIC void __fastcall MouseDown(TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseMove(Classes::TShiftState Shift, int X, int Y);
 	DYNAMIC void __fastcall MouseUp(TMouseButton Button, Classes::TShiftState Shift, int X, int Y);
-	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation
-		);
+	virtual void __fastcall Notification(Classes::TComponent* AComponent, Classes::TOperation Operation);
 	DYNAMIC void __fastcall PositionDockRect(TDragDockObject* DragDockObject);
 	DYNAMIC bool __fastcall PaletteChanged(bool Foreground);
 	virtual void __fastcall ReadState(Classes::TReader* Reader);
@@ -462,6 +474,7 @@ protected:
 	DYNAMIC void __fastcall Resize(void);
 	void __fastcall SendCancelMode(TControl* Sender);
 	void __fastcall SendDockNotification(unsigned Msg, int WParam, int LParam);
+	virtual void __fastcall SetAutoSize(bool Value);
 	virtual void __fastcall SetDragMode(TDragMode Value);
 	virtual void __fastcall SetEnabled(bool Value);
 	virtual void __fastcall SetName(const AnsiString Value);
@@ -470,14 +483,13 @@ protected:
 	virtual void __fastcall SetParentBiDiMode(bool Value);
 	virtual void __fastcall SetBiDiMode(Classes::TBiDiMode Value);
 	DYNAMIC void __fastcall SetZOrder(bool TopMost);
-	void __fastcall UpdateBoundsRect(const Windows::TRect &R);
+	void __fastcall UpdateBoundsRect(const Types::TRect &R);
 	DYNAMIC void __fastcall VisibleChanging(void);
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
 	__property TControlActionLink* ActionLink = {read=FActionLink, write=FActionLink};
 	__property bool AutoSize = {read=FAutoSize, write=SetAutoSize, default=0};
 	__property AnsiString Caption = {read=GetText, write=SetText, stored=IsCaptionStored};
-	__property Graphics::TColor Color = {read=FColor, write=SetColor, stored=IsColorStored, default=-2147483643
-		};
+	__property Graphics::TColor Color = {read=FColor, write=SetColor, stored=IsColorStored, default=-2147483643};
 	__property bool DesktopFont = {read=FDesktopFont, write=SetDesktopFont, default=0};
 	__property TDragKind DragKind = {read=FDragKind, write=FDragKind, default=0};
 	__property TCursor DragCursor = {read=FDragCursor, write=FDragCursor, default=-12};
@@ -492,12 +504,11 @@ protected:
 	__property Menus::TPopupMenu* PopupMenu = {read=FPopupMenu, write=SetPopupMenu};
 	__property TScalingFlags ScalingFlags = {read=FScalingFlags, write=FScalingFlags, nodefault};
 	__property AnsiString Text = {read=GetText, write=SetText};
+	__property int WheelAccumulator = {read=FWheelAccumulator, write=FWheelAccumulator, nodefault};
 	__property char * WindowText = {read=FText, write=FText};
 	__property TCanResizeEvent OnCanResize = {read=FOnCanResize, write=FOnCanResize};
 	__property Classes::TNotifyEvent OnClick = {read=FOnClick, write=FOnClick, stored=IsOnClickStored};
-		
-	__property TConstrainedResizeEvent OnConstrainedResize = {read=FOnConstrainedResize, write=FOnConstrainedResize
-		};
+	__property TConstrainedResizeEvent OnConstrainedResize = {read=FOnConstrainedResize, write=FOnConstrainedResize};
 	__property TContextPopupEvent OnContextPopup = {read=FOnContextPopup, write=FOnContextPopup};
 	__property Classes::TNotifyEvent OnDblClick = {read=FOnDblClick, write=FOnDblClick};
 	__property TDragDropEvent OnDragDrop = {read=FOnDragDrop, write=FOnDragDrop};
@@ -507,6 +518,9 @@ protected:
 	__property TMouseEvent OnMouseDown = {read=FOnMouseDown, write=FOnMouseDown};
 	__property TMouseMoveEvent OnMouseMove = {read=FOnMouseMove, write=FOnMouseMove};
 	__property TMouseEvent OnMouseUp = {read=FOnMouseUp, write=FOnMouseUp};
+	__property TMouseWheelEvent OnMouseWheel = {read=FOnMouseWheel, write=FOnMouseWheel};
+	__property TMouseWheelUpDownEvent OnMouseWheelDown = {read=FOnMouseWheelDown, write=FOnMouseWheelDown};
+	__property TMouseWheelUpDownEvent OnMouseWheelUp = {read=FOnMouseWheelUp, write=FOnMouseWheelUp};
 	__property Classes::TNotifyEvent OnResize = {read=FOnResize, write=FOnResize};
 	__property TStartDockEvent OnStartDock = {read=FOnStartDock, write=FOnStartDock};
 	__property TStartDragEvent OnStartDrag = {read=FOnStartDrag, write=FOnStartDrag};
@@ -514,10 +528,11 @@ protected:
 public:
 	__fastcall virtual TControl(Classes::TComponent* AOwner);
 	__fastcall virtual ~TControl(void);
-	void __fastcall BeginDrag(bool Immediate, int Threshold);
+	void __fastcall BeginDrag(bool Immediate, int Threshold = 0xffffffff);
 	void __fastcall BringToFront(void);
-	Windows::TPoint __fastcall ClientToScreen(const Windows::TPoint &Point);
-	DYNAMIC void __fastcall Dock(TWinControl* NewDockSite, const Windows::TRect &ARect);
+	Types::TPoint __fastcall ClientToScreen(const Types::TPoint &Point);
+	Types::TPoint __fastcall ClientToParent(const Types::TPoint &Point, TWinControl* AParent = (TWinControl*)(0x0));
+	DYNAMIC void __fastcall Dock(TWinControl* NewDockSite, const Types::TRect &ARect);
 	virtual void __fastcall DefaultHandler(void *Message);
 	bool __fastcall Dragging(void);
 	DYNAMIC void __fastcall DragDrop(System::TObject* Source, int X, int Y);
@@ -533,15 +548,16 @@ public:
 	void __fastcall Hide(void);
 	virtual void __fastcall InitiateAction(void);
 	virtual void __fastcall Invalidate(void);
+	DYNAMIC void __fastcall MouseWheelHandler(Messages::TMessage &Message);
 	bool __fastcall IsRightToLeft(void);
-	bool __fastcall ManualDock(TWinControl* NewDockSite, TControl* DropControl, TAlign ControlSide);
-	bool __fastcall ManualFloat(const Windows::TRect &ScreenPos);
+	bool __fastcall ManualDock(TWinControl* NewDockSite, TControl* DropControl = (TControl*)(0x0), TAlign ControlSide = (TAlign)(0x0));
+	bool __fastcall ManualFloat(const Types::TRect &ScreenPos);
 	int __fastcall Perform(unsigned Msg, int WParam, int LParam);
 	void __fastcall Refresh(void);
 	virtual void __fastcall Repaint(void);
-	bool __fastcall ReplaceDockedControl(TControl* Control, TWinControl* NewDockSite, TControl* DropControl
-		, TAlign ControlSide);
-	Windows::TPoint __fastcall ScreenToClient(const Windows::TPoint &Point);
+	bool __fastcall ReplaceDockedControl(TControl* Control, TWinControl* NewDockSite, TControl* DropControl, TAlign ControlSide);
+	Types::TPoint __fastcall ScreenToClient(const Types::TPoint &Point);
+	Types::TPoint __fastcall ParentToClient(const Types::TPoint &Point, TWinControl* AParent = (TWinControl*)(0x0));
 	void __fastcall SendToBack(void);
 	virtual void __fastcall SetBounds(int ALeft, int ATop, int AWidth, int AHeight);
 	void __fastcall SetTextBuf(char * Buffer);
@@ -553,33 +569,27 @@ public:
 	__property Classes::TBasicAction* Action = {read=GetAction, write=SetAction};
 	__property TAlign Align = {read=FAlign, write=SetAlign, default=0};
 	__property TAnchors Anchors = {read=FAnchors, write=SetAnchors, stored=IsAnchorsStored, default=3};
-		
-	__property Classes::TBiDiMode BiDiMode = {read=FBiDiMode, write=SetBiDiMode, stored=IsBiDiModeStored
-		, nodefault};
-	__property Windows::TRect BoundsRect = {read=GetBoundsRect, write=SetBoundsRect};
-	__property int ClientHeight = {read=GetClientHeight, write=SetClientHeight, stored=false, nodefault
-		};
-	__property Windows::TPoint ClientOrigin = {read=GetClientOrigin};
-	__property Windows::TRect ClientRect = {read=GetClientRect};
+	__property Classes::TBiDiMode BiDiMode = {read=FBiDiMode, write=SetBiDiMode, stored=IsBiDiModeStored, nodefault};
+	__property Types::TRect BoundsRect = {read=GetBoundsRect, write=SetBoundsRect};
+	__property int ClientHeight = {read=GetClientHeight, write=SetClientHeight, stored=false, nodefault};
+	__property Types::TPoint ClientOrigin = {read=GetClientOrigin};
+	__property Types::TRect ClientRect = {read=GetClientRect};
 	__property int ClientWidth = {read=GetClientWidth, write=SetClientWidth, stored=false, nodefault};
-	__property TSizeConstraints* Constraints = {read=FConstraints, write=FConstraints};
+	__property TSizeConstraints* Constraints = {read=FConstraints, write=SetConstraints};
 	__property TControlState ControlState = {read=FControlState, write=FControlState, nodefault};
 	__property TControlStyle ControlStyle = {read=FControlStyle, write=FControlStyle, nodefault};
-	__property TDockOrientation DockOrientation = {read=FDockOrientation, write=FDockOrientation, nodefault
-		};
+	__property TDockOrientation DockOrientation = {read=FDockOrientation, write=FDockOrientation, nodefault};
 	__property bool Floating = {read=GetFloating, nodefault};
-	__property TMetaClass* FloatingDockSiteClass = {read=GetFloatingDockSiteClass, write=FFloatingDockSiteClass
-		};
+	__property TMetaClass* FloatingDockSiteClass = {read=GetFloatingDockSiteClass, write=FFloatingDockSiteClass};
 	__property TWinControl* HostDockSite = {read=FHostDockSite, write=SetHostDockSite};
 	__property int LRDockWidth = {read=GetLRDockWidth, write=FLRDockWidth, nodefault};
 	__property TWinControl* Parent = {read=FParent, write=SetParent};
 	__property bool ShowHint = {read=FShowHint, write=SetShowHint, stored=IsShowHintStored, nodefault};
-		
 	__property int TBDockHeight = {read=GetTBDockHeight, write=FTBDockHeight, nodefault};
 	__property int UndockHeight = {read=GetUndockHeight, write=FUndockHeight, nodefault};
 	__property int UndockWidth = {read=GetUndockWidth, write=FUndockWidth, nodefault};
 	__property bool Visible = {read=FVisible, write=SetVisible, stored=IsVisibleStored, default=1};
-	__property TWndMethod WindowProc = {read=FWindowProc, write=FWindowProc};
+	__property Classes::TWndMethod WindowProc = {read=FWindowProc, write=FWindowProc};
 	
 __published:
 	__property int Left = {read=FLeft, write=SetLeft, nodefault};
@@ -588,6 +598,9 @@ __published:
 	__property int Height = {read=FHeight, write=SetHeight, nodefault};
 	__property TCursor Cursor = {read=FCursor, write=SetCursor, default=0};
 	__property AnsiString Hint = {read=FHint, write=FHint, stored=IsHintStored};
+	__property Classes::THelpType HelpType = {read=FHelpType, write=FHelpType, default=1};
+	__property AnsiString HelpKeyword = {read=FHelpKeyword, write=SetHelpKeyword, stored=IsHelpContextStored};
+	__property Classes::THelpContext HelpContext = {read=FHelpContext, write=SetHelpContext, stored=IsHelpContextStored, default=0};
 };
 
 
@@ -611,20 +624,17 @@ typedef int TBorderWidth;
 
 __interface IDockManager;
 typedef System::DelphiInterface<IDockManager> _di_IDockManager;
-__interface INTERFACE_UUID("{8619FD79-C281-11D1-AA60-00C04FA370E8}") IDockManager  : public IUnknown 
-	
+__interface INTERFACE_UUID("{8619FD79-C281-11D1-AA60-00C04FA370E8}") IDockManager  : public IInterface 
 {
 	
 public:
 	virtual void __fastcall BeginUpdate(void) = 0 ;
 	virtual void __fastcall EndUpdate(void) = 0 ;
-	virtual void __fastcall GetControlBounds(TControl* Control, /* out */ Windows::TRect &CtlBounds) = 0 
-		;
+	virtual void __fastcall GetControlBounds(TControl* Control, /* out */ Types::TRect &CtlBounds) = 0 ;
 	virtual void __fastcall InsertControl(TControl* Control, TAlign InsertAt, TControl* DropCtl) = 0 ;
 	virtual void __fastcall LoadFromStream(Classes::TStream* Stream) = 0 ;
 	virtual void __fastcall PaintSite(HDC DC) = 0 ;
-	virtual void __fastcall PositionDockRect(TControl* Client, TControl* DropCtl, TAlign DropAlign, Windows::TRect 
-		&DockRect) = 0 ;
+	virtual void __fastcall PositionDockRect(TControl* Client, TControl* DropCtl, TAlign DropAlign, Types::TRect &DockRect) = 0 ;
 	virtual void __fastcall RemoveControl(TControl* Control) = 0 ;
 	virtual void __fastcall ResetBounds(bool Force) = 0 ;
 	virtual void __fastcall SaveToStream(Classes::TStream* Stream) = 0 ;
@@ -632,34 +642,22 @@ public:
 };
 
 #pragma option push -b-
-enum TImeMode { imDisable, imClose, imOpen, imDontCare, imSAlpha, imAlpha, imHira, imSKata, imKata, 
-	imChinese, imSHanguel, imHanguel };
+enum TImeMode { imDisable, imClose, imOpen, imDontCare, imSAlpha, imAlpha, imHira, imSKata, imKata, imChinese, imSHanguel, imHanguel };
 #pragma option pop
 
 typedef AnsiString TImeName;
 
-typedef void __fastcall (__closure *TDockDropEvent)(System::TObject* Sender, TDragDockObject* Source
-	, int X, int Y);
+typedef void __fastcall (__closure *TDockDropEvent)(System::TObject* Sender, TDragDockObject* Source, int X, int Y);
 
-typedef void __fastcall (__closure *TDockOverEvent)(System::TObject* Sender, TDragDockObject* Source
-	, int X, int Y, TDragState State, bool &Accept);
+typedef void __fastcall (__closure *TDockOverEvent)(System::TObject* Sender, TDragDockObject* Source, int X, int Y, TDragState State, bool &Accept);
 
-typedef void __fastcall (__closure *TGetSiteInfoEvent)(System::TObject* Sender, TControl* DockClient
-	, Windows::TRect &InfluenceRect, const Windows::TPoint &MousePos, bool &CanDock);
+typedef void __fastcall (__closure *TGetSiteInfoEvent)(System::TObject* Sender, TControl* DockClient, Types::TRect &InfluenceRect, const Types::TPoint &MousePos, bool &CanDock);
 
-typedef void __fastcall (__closure *TKeyEvent)(System::TObject* Sender, Word &Key, Classes::TShiftState 
-	Shift);
+typedef void __fastcall (__closure *TKeyEvent)(System::TObject* Sender, Word &Key, Classes::TShiftState Shift);
 
 typedef void __fastcall (__closure *TKeyPressEvent)(System::TObject* Sender, char &Key);
 
-typedef void __fastcall (__closure *TMouseWheelEvent)(System::TObject* Sender, Classes::TShiftState 
-	Shift, int WheelDelta, const Windows::TPoint &MousePos, bool &Handled);
-
-typedef void __fastcall (__closure *TMouseWheelUpDownEvent)(System::TObject* Sender, Classes::TShiftState 
-	Shift, const Windows::TPoint &MousePos, bool &Handled);
-
-typedef void __fastcall (__closure *TUnDockEvent)(System::TObject* Sender, TControl* Client, TWinControl* 
-	NewTarget, bool &Allow);
+typedef void __fastcall (__closure *TUnDockEvent)(System::TObject* Sender, TControl* Client, TWinControl* NewTarget, bool &Allow);
 
 typedef short TTabOrder;
 
@@ -667,6 +665,7 @@ struct TCMFocusChanged;
 struct TCMDockClient;
 struct TCMUnDockClient;
 struct TCreateParams;
+struct TAlignInfo;
 class PASCALIMPLEMENTATION TWinControl : public TControl 
 {
 	typedef TControl inherited;
@@ -680,26 +679,24 @@ private:
 	TBevelWidth FBevelWidth;
 	TBorderWidth FBorderWidth;
 	Graphics::TBrush* FBrush;
-	Classes::TList* FControls;
-	bool FCtl3D;
 	void *FDefWndProc;
 	Classes::TList* FDockClients;
-	bool FDockSite;
 	_di_IDockManager FDockManager;
 	HWND FHandle;
-	Classes::THelpContext FHelpContext;
 	TImeMode FImeMode;
 	AnsiString FImeName;
 	void *FObjectInstance;
-	bool FParentCtl3D;
 	HWND FParentWindow;
-	bool FShowing;
 	Classes::TList* FTabList;
+	Classes::TList* FControls;
+	Classes::TList* FWinControls;
 	int FTabOrder;
 	bool FTabStop;
-	int FWheelAccumulator;
+	bool FCtl3D;
+	bool FShowing;
 	bool FUseDockManager;
-	Classes::TList* FWinControls;
+	bool FDockSite;
+	bool FParentCtl3D;
 	TDockDropEvent FOnDockDrop;
 	TDockOverEvent FOnDockOver;
 	Classes::TNotifyEvent FOnEnter;
@@ -708,12 +705,10 @@ private:
 	TKeyEvent FOnKeyDown;
 	TKeyPressEvent FOnKeyPress;
 	TKeyEvent FOnKeyUp;
-	TMouseWheelEvent FOnMouseWheel;
-	TMouseWheelUpDownEvent FOnMouseWheelDown;
-	TMouseWheelUpDownEvent FOnMouseWheelUp;
 	TUnDockEvent FOnUnDock;
 	void __fastcall AlignControl(TControl* AControl);
 	void __fastcall CalcConstraints(int &MinWidth, int &MinHeight, int &MaxWidth, int &MaxHeight);
+	bool __fastcall GetAlignDisabled(void);
 	TControl* __fastcall GetControl(int Index);
 	int __fastcall GetControlCount(void);
 	int __fastcall GetDockClientCount(void);
@@ -723,9 +718,10 @@ private:
 	int __fastcall GetVisibleDockClientCount(void);
 	HIDESBASE void __fastcall Insert(TControl* AControl);
 	void __fastcall InvalidateFrame(void);
+	void __fastcall InvokeHelp(void);
 	bool __fastcall IsCtl3DStored(void);
-	bool __fastcall IsHelpContextStored(void);
 	HWND __fastcall PrecedingWindow(TWinControl* Control);
+	void __fastcall ReadDesignSize(Classes::TReader* Reader);
 	HIDESBASE void __fastcall Remove(TControl* AControl);
 	void __fastcall RemoveFocus(bool Removing);
 	void __fastcall SetBevelCut(int Index, const TBevelCut Value);
@@ -744,6 +740,7 @@ private:
 	void __fastcall UpdateTabOrder(TTabOrder Value);
 	void __fastcall UpdateBounds(void);
 	void __fastcall UpdateShowing(void);
+	void __fastcall WriteDesignSize(Classes::TWriter* Writer);
 	bool __fastcall IsMenuKey(Messages::TWMKey &Message);
 	MESSAGE void __fastcall WMPaint(Messages::TWMPaint &Message);
 	MESSAGE void __fastcall WMCommand(Messages::TWMCommand &Message);
@@ -784,7 +781,6 @@ private:
 	MESSAGE void __fastcall WMKillFocus(Messages::TWMSetFocus &Message);
 	MESSAGE void __fastcall WMIMEStartComp(Messages::TMessage &Message);
 	MESSAGE void __fastcall WMIMEEndComp(Messages::TMessage &Message);
-	MESSAGE void __fastcall WMMouseWheel(Messages::TWMMouseWheel &Message);
 	HIDESBASE MESSAGE void __fastcall WMContextMenu(Messages::TWMContextMenu &Message);
 	MESSAGE void __fastcall CMChanged(Messages::TMessage &Message);
 	MESSAGE void __fastcall CMChildKey(Messages::TMessage &Message);
@@ -822,62 +818,58 @@ private:
 	MESSAGE void __fastcall CMUnDockClient(TCMUnDockClient &Message);
 	HIDESBASE MESSAGE void __fastcall CMFloat(TCMFloat &Message);
 	HIDESBASE MESSAGE void __fastcall CMBiDiModeChanged(Messages::TMessage &Message);
-	MESSAGE void __fastcall CMMouseWheel(TCMMouseWheel &Message);
 	
 protected:
 	bool FDoubleBuffered;
 	bool FInImeComposition;
+	#pragma pack(push, 1)
+	Types::TPoint FDesignSize;
+	#pragma pack(pop)
+	
 	DYNAMIC void __fastcall ActionChange(System::TObject* Sender, bool CheckDefaults);
 	void __fastcall AddBiDiModeExStyle(unsigned &ExStyle);
 	virtual void __fastcall AssignTo(Classes::TPersistent* Dest);
-	virtual void __fastcall AdjustClientRect(Windows::TRect &Rect);
+	virtual void __fastcall AdjustClientRect(Types::TRect &Rect);
 	DYNAMIC void __fastcall AdjustSize(void);
-	virtual void __fastcall AlignControls(TControl* AControl, Windows::TRect &Rect);
+	virtual void __fastcall AlignControls(TControl* AControl, Types::TRect &Rect);
 	virtual bool __fastcall CanAutoSize(int &NewWidth, int &NewHeight);
 	virtual bool __fastcall CanResize(int &NewWidth, int &NewHeight);
 	DYNAMIC void __fastcall ChangeScale(int M, int D);
-	virtual void __fastcall ConstrainedResize(int &MinWidth, int &MinHeight, int &MaxWidth, int &MaxHeight
-		);
+	virtual void __fastcall ConstrainedResize(int &MinWidth, int &MinHeight, int &MaxWidth, int &MaxHeight);
+	DYNAMIC void __fastcall ControlsAligned(void);
 	DYNAMIC _di_IDockManager __fastcall CreateDockManager();
 	virtual void __fastcall CreateHandle(void);
 	virtual void __fastcall CreateParams(TCreateParams &Params);
 	void __fastcall CreateSubClass(TCreateParams &Params, char * ControlClassName);
 	virtual void __fastcall CreateWindowHandle(const TCreateParams &Params);
 	virtual void __fastcall CreateWnd(void);
+	virtual bool __fastcall CustomAlignInsertBefore(TControl* C1, TControl* C2);
+	virtual void __fastcall CustomAlignPosition(TControl* Control, int &NewLeft, int &NewTop, int &NewWidth, int &NewHeight, Types::TRect &AlignRect, const TAlignInfo &AlignInfo);
+	virtual void __fastcall DefineProperties(Classes::TFiler* Filer);
 	void __fastcall DestroyHandle(void);
 	virtual void __fastcall DestroyWindowHandle(void);
 	virtual void __fastcall DestroyWnd(void);
-	DYNAMIC void __fastcall DoAddDockClient(TControl* Client, const Windows::TRect &ARect);
-	DYNAMIC void __fastcall DockOver(TDragDockObject* Source, int X, int Y, TDragState State, bool &Accept
-		);
-	DYNAMIC void __fastcall DoDockOver(TDragDockObject* Source, int X, int Y, TDragState State, bool &Accept
-		);
+	DYNAMIC void __fastcall DoAddDockClient(TControl* Client, const Types::TRect &ARect);
+	DYNAMIC void __fastcall DockOver(TDragDockObject* Source, int X, int Y, TDragState State, bool &Accept);
+	DYNAMIC void __fastcall DoDockOver(TDragDockObject* Source, int X, int Y, TDragState State, bool &Accept);
 	DYNAMIC void __fastcall DoEnter(void);
 	DYNAMIC void __fastcall DoExit(void);
 	DYNAMIC void __fastcall DoFlipChildren(void);
 	bool __fastcall DoKeyDown(Messages::TWMKey &Message);
 	bool __fastcall DoKeyPress(Messages::TWMKey &Message);
 	bool __fastcall DoKeyUp(Messages::TWMKey &Message);
-	DYNAMIC bool __fastcall DoMouseWheel(Classes::TShiftState Shift, int WheelDelta, const Windows::TPoint 
-		&MousePos);
-	DYNAMIC bool __fastcall DoMouseWheelDown(Classes::TShiftState Shift, const Windows::TPoint &MousePos
-		);
-	DYNAMIC bool __fastcall DoMouseWheelUp(Classes::TShiftState Shift, const Windows::TPoint &MousePos)
-		;
 	DYNAMIC void __fastcall DoRemoveDockClient(TControl* Client);
 	DYNAMIC bool __fastcall DoUnDock(TWinControl* NewTarget, TControl* Client);
-	TWinControl* __fastcall FindNextControl(TWinControl* CurControl, bool GoForward, bool CheckTabStop, 
-		bool CheckParent);
+	TWinControl* __fastcall FindNextControl(TWinControl* CurControl, bool GoForward, bool CheckTabStop, bool CheckParent);
 	void __fastcall FixupTabList(void);
 	DYNAMIC TMetaClass* __fastcall GetActionLinkClass(void);
 	DYNAMIC void __fastcall GetChildren(Classes::TGetChildProc Proc, Classes::TComponent* Root);
-	virtual Windows::TPoint __fastcall GetClientOrigin();
-	virtual Windows::TRect __fastcall GetClientRect();
-	virtual Windows::TRect __fastcall GetControlExtents();
+	virtual Types::TPoint __fastcall GetClientOrigin();
+	virtual Types::TRect __fastcall GetClientRect();
+	virtual Types::TRect __fastcall GetControlExtents();
 	virtual HDC __fastcall GetDeviceContext(HWND &WindowHandle);
 	HWND __fastcall GetParentHandle(void);
-	DYNAMIC void __fastcall GetSiteInfo(TControl* Client, Windows::TRect &InfluenceRect, const Windows::TPoint 
-		&MousePos, bool &CanDock);
+	DYNAMIC void __fastcall GetSiteInfo(TControl* Client, Types::TRect &InfluenceRect, const Types::TPoint &MousePos, bool &CanDock);
 	HWND __fastcall GetTopParentHandle(void);
 	bool __fastcall IsControlMouseMsg(Messages::TWMMouse &Message);
 	DYNAMIC void __fastcall KeyDown(Word &Key, Classes::TShiftState Shift);
@@ -917,7 +909,6 @@ protected:
 	__property AnsiString ImeName = {read=FImeName, write=FImeName};
 	__property bool ParentCtl3D = {read=FParentCtl3D, write=SetParentCtl3D, default=1};
 	__property bool UseDockManager = {read=FUseDockManager, write=SetUseDockManager, default=0};
-	__property int WheelAccumulator = {read=FWheelAccumulator, write=FWheelAccumulator, nodefault};
 	__property HWND WindowHandle = {read=FHandle, write=FHandle, nodefault};
 	__property TDockDropEvent OnDockDrop = {read=FOnDockDrop, write=FOnDockDrop};
 	__property TDockOverEvent OnDockOver = {read=FOnDockOver, write=FOnDockOver};
@@ -927,23 +918,17 @@ protected:
 	__property TKeyEvent OnKeyDown = {read=FOnKeyDown, write=FOnKeyDown};
 	__property TKeyPressEvent OnKeyPress = {read=FOnKeyPress, write=FOnKeyPress};
 	__property TKeyEvent OnKeyUp = {read=FOnKeyUp, write=FOnKeyUp};
-	__property TMouseWheelEvent OnMouseWheel = {read=FOnMouseWheel, write=FOnMouseWheel};
-	__property TMouseWheelUpDownEvent OnMouseWheelDown = {read=FOnMouseWheelDown, write=FOnMouseWheelDown
-		};
-	__property TMouseWheelUpDownEvent OnMouseWheelUp = {read=FOnMouseWheelUp, write=FOnMouseWheelUp};
 	__property TUnDockEvent OnUnDock = {read=FOnUnDock, write=FOnUnDock};
 	
 public:
 	__fastcall virtual TWinControl(Classes::TComponent* AOwner);
 	__fastcall TWinControl(HWND ParentWindow);
-	/*         class method */ static TWinControl* __fastcall CreateParentedControl(TMetaClass* vmt, HWND 
-		ParentWindow);
+	/*         class method */ static TWinControl* __fastcall CreateParentedControl(TMetaClass* vmt, HWND ParentWindow);
 	__fastcall virtual ~TWinControl(void);
 	void __fastcall Broadcast(void *Message);
 	DYNAMIC bool __fastcall CanFocus(void);
 	bool __fastcall ContainsControl(TControl* Control);
-	TControl* __fastcall ControlAtPos(const Windows::TPoint &Pos, bool AllowDisabled, bool AllowWinControls
-		);
+	TControl* __fastcall ControlAtPos(const Types::TPoint &Pos, bool AllowDisabled, bool AllowWinControls = false);
 	virtual void __fastcall DefaultHandler(void *Message);
 	void __fastcall DisableAlign(void);
 	__property int DockClientCount = {read=GetDockClientCount, nodefault};
@@ -959,8 +944,8 @@ public:
 	void __fastcall HandleNeeded(void);
 	void __fastcall InsertControl(TControl* AControl);
 	virtual void __fastcall Invalidate(void);
-	DYNAMIC void __fastcall MouseWheelHandler(Messages::TMessage &Message);
-	void __fastcall PaintTo(HDC DC, int X, int Y);
+	void __fastcall PaintTo(HDC DC, int X, int Y)/* overload */;
+	void __fastcall PaintTo(Graphics::TCanvas* Canvas, int X, int Y)/* overload */;
 	void __fastcall RemoveControl(TControl* AControl);
 	void __fastcall Realign(void);
 	virtual void __fastcall Repaint(void);
@@ -970,6 +955,7 @@ public:
 	virtual void __fastcall SetFocus(void);
 	virtual void __fastcall Update(void);
 	void __fastcall UpdateControlState(void);
+	__property bool AlignDisabled = {read=GetAlignDisabled, nodefault};
 	__property int VisibleDockClientCount = {read=GetVisibleDockClientCount, nodefault};
 	__property Graphics::TBrush* Brush = {read=FBrush};
 	__property TControl* Controls[int Index] = {read=GetControl};
@@ -979,14 +965,11 @@ public:
 	__property bool Showing = {read=FShowing, nodefault};
 	__property TTabOrder TabOrder = {read=GetTabOrder, write=SetTabOrder, default=-1};
 	__property bool TabStop = {read=FTabStop, write=SetTabStop, default=0};
-	
-__published:
-	__property Classes::THelpContext HelpContext = {read=FHelpContext, write=FHelpContext, stored=IsHelpContextStored
-		, default=0};
 };
 
 
 
+#pragma pack(push, 4)
 struct TCMCancelMode
 {
 	unsigned Msg;
@@ -994,7 +977,9 @@ struct TCMCancelMode
 	TControl* Sender;
 	int Result;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TCMFocusChanged
 {
 	unsigned Msg;
@@ -1002,7 +987,9 @@ struct TCMFocusChanged
 	TWinControl* Sender;
 	int Result;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TCMControlListChange
 {
 	unsigned Msg;
@@ -1010,7 +997,9 @@ struct TCMControlListChange
 	BOOL Inserting;
 	int Result;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TCMChildKey
 {
 	unsigned Msg;
@@ -1019,7 +1008,9 @@ struct TCMChildKey
 	TWinControl* Sender;
 	int Result;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TCMControlChange
 {
 	unsigned Msg;
@@ -1027,7 +1018,9 @@ struct TCMControlChange
 	BOOL Inserting;
 	int Result;
 } ;
+#pragma pack(pop)
 
+#pragma pack(push, 4)
 struct TCMChanged
 {
 	unsigned Msg;
@@ -1035,6 +1028,7 @@ struct TCMChanged
 	TControl* Child;
 	int Result;
 } ;
+#pragma pack(pop)
 
 #pragma option push -b-
 enum TDragMessage { dmDragEnter, dmDragLeave, dmDragMove, dmDragDrop, dmDragCancel, dmFindTarget };
@@ -1043,13 +1037,15 @@ enum TDragMessage { dmDragEnter, dmDragLeave, dmDragMove, dmDragDrop, dmDragCanc
 struct TDragRec;
 typedef TDragRec *PDragRec;
 
+#pragma pack(push, 4)
 struct TDragRec
 {
-	Windows::TPoint Pos;
+	Types::TPoint Pos;
 	TDragObject* Source;
 	void *Target;
 	bool Docking;
 } ;
+#pragma pack(pop)
 
 #pragma pack(push, 1)
 struct TCMDrag
@@ -1068,7 +1064,7 @@ struct TCMDockClient
 {
 	unsigned Msg;
 	TDragDockObject* DockSource;
-	Windows::TSmallPoint MousePos;
+	Types::TSmallPoint MousePos;
 	int Result;
 } ;
 #pragma pack(pop)
@@ -1096,12 +1092,14 @@ struct TCMFloat
 struct TDockNotifyRec;
 typedef TDockNotifyRec *PDockNotifyRec;
 
+#pragma pack(push, 4)
 struct TDockNotifyRec
 {
 	unsigned ClientMsg;
 	int MsgWParam;
 	int MsgLParam;
 } ;
+#pragma pack(pop)
 
 #pragma pack(push, 1)
 struct TCMDockNotification
@@ -1113,7 +1111,7 @@ struct TCMDockNotification
 } ;
 #pragma pack(pop)
 
-typedef Set<TAlign, alNone, alClient>  TAlignSet;
+typedef Set<TAlign, alNone, alCustom>  TAlignSet;
 
 class PASCALIMPLEMENTATION TDragObject : public System::TObject 
 {
@@ -1122,39 +1120,70 @@ class PASCALIMPLEMENTATION TDragObject : public System::TObject
 private:
 	void *FDragTarget;
 	HWND FDragHandle;
-	Windows::TPoint FDragPos;
-	Windows::TPoint FDragTargetPos;
+	#pragma pack(push, 1)
+	Types::TPoint FDragPos;
+	#pragma pack(pop)
+	
+	#pragma pack(push, 1)
+	Types::TPoint FDragTargetPos;
+	#pragma pack(pop)
+	
+	bool FDropped;
 	double FMouseDeltaX;
 	double FMouseDeltaY;
 	bool FCancelling;
 	HWND __fastcall Capture(void);
-	void __fastcall MouseMsg(Messages::TMessage &Msg);
 	void __fastcall ReleaseCapture(HWND Handle);
 	
 protected:
 	virtual void __fastcall Finished(System::TObject* Target, int X, int Y, bool Accepted);
 	virtual TCursor __fastcall GetDragCursor(bool Accepted, int X, int Y);
 	virtual TDragImageList* __fastcall GetDragImages(void);
+	virtual void __fastcall WndProc(Messages::TMessage &Msg);
+	void __fastcall MainWndProc(Messages::TMessage &Message);
 	
 public:
+	virtual void __fastcall AfterConstruction(void);
 	virtual void __fastcall Assign(TDragObject* Source);
+	virtual void __fastcall BeforeDestruction(void);
 	virtual AnsiString __fastcall GetName();
 	virtual void __fastcall HideDragImage(void);
 	virtual unsigned __fastcall Instance(void);
 	virtual void __fastcall ShowDragImage(void);
 	__property bool Cancelling = {read=FCancelling, write=FCancelling, nodefault};
 	__property HWND DragHandle = {read=FDragHandle, write=FDragHandle, nodefault};
-	__property Windows::TPoint DragPos = {read=FDragPos, write=FDragPos};
-	__property Windows::TPoint DragTargetPos = {read=FDragTargetPos, write=FDragTargetPos};
+	__property Types::TPoint DragPos = {read=FDragPos, write=FDragPos};
+	__property Types::TPoint DragTargetPos = {read=FDragTargetPos, write=FDragTargetPos};
 	__property void * DragTarget = {read=FDragTarget, write=FDragTarget};
+	__property bool Dropped = {read=FDropped, nodefault};
 	__property double MouseDeltaX = {read=FMouseDeltaX};
-	__property double MouseDeltaY = {read=FMouseDeltaX};
+	__property double MouseDeltaY = {read=FMouseDeltaY};
 public:
 	#pragma option push -w-inl
 	/* TObject.Create */ inline __fastcall TDragObject(void) : System::TObject() { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TObject.Destroy */ inline __fastcall virtual ~TDragObject(void) { }
+	#pragma option pop
+	
+};
+
+
+typedef TMetaClass*TDragObjectClass;
+
+class DELPHICLASS TDragObjectEx;
+class PASCALIMPLEMENTATION TDragObjectEx : public TDragObject 
+{
+	typedef TDragObject inherited;
+	
+public:
+	virtual void __fastcall BeforeDestruction(void);
+public:
+	#pragma option push -w-inl
+	/* TObject.Create */ inline __fastcall TDragObjectEx(void) : TDragObject() { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TObject.Destroy */ inline __fastcall virtual ~TDragObjectEx(void) { }
 	#pragma option pop
 	
 };
@@ -1198,13 +1227,32 @@ public:
 	virtual void __fastcall ShowDragImage(void);
 public:
 	#pragma option push -w-inl
-	/* TBaseDragControlObject.Create */ inline __fastcall virtual TDragControlObject(TControl* AControl
-		) : TBaseDragControlObject(AControl) { }
+	/* TBaseDragControlObject.Create */ inline __fastcall virtual TDragControlObject(TControl* AControl) : TBaseDragControlObject(AControl) { }
 	#pragma option pop
 	
 public:
 	#pragma option push -w-inl
 	/* TObject.Destroy */ inline __fastcall virtual ~TDragControlObject(void) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TDragControlObjectEx;
+class PASCALIMPLEMENTATION TDragControlObjectEx : public TDragControlObject 
+{
+	typedef TDragControlObject inherited;
+	
+public:
+	virtual void __fastcall BeforeDestruction(void);
+public:
+	#pragma option push -w-inl
+	/* TBaseDragControlObject.Create */ inline __fastcall virtual TDragControlObjectEx(TControl* AControl) : TDragControlObject(AControl) { }
+	#pragma option pop
+	
+public:
+	#pragma option push -w-inl
+	/* TObject.Destroy */ inline __fastcall virtual ~TDragControlObjectEx(void) { }
 	#pragma option pop
 	
 };
@@ -1216,15 +1264,21 @@ class PASCALIMPLEMENTATION TDragDockObject : public TBaseDragControlObject
 	
 private:
 	Graphics::TBrush* FBrush;
-	Windows::TRect FDockRect;
+	#pragma pack(push, 1)
+	Types::TRect FDockRect;
+	#pragma pack(pop)
+	
 	TAlign FDropAlign;
 	TControl* FDropOnControl;
-	Windows::TRect FEraseDockRect;
+	#pragma pack(push, 1)
+	Types::TRect FEraseDockRect;
+	#pragma pack(pop)
+	
 	bool FFloating;
 	void __fastcall SetBrush(Graphics::TBrush* Value);
 	
 protected:
-	virtual void __fastcall AdjustDockRect(const Windows::TRect &ARect);
+	virtual void __fastcall AdjustDockRect(const Types::TRect &ARect);
 	virtual void __fastcall DrawDragDockImage(void);
 	virtual void __fastcall EndDrag(System::TObject* Target, int X, int Y);
 	virtual void __fastcall EraseDragDockImage(void);
@@ -1236,11 +1290,29 @@ public:
 	__fastcall virtual ~TDragDockObject(void);
 	virtual void __fastcall Assign(TDragObject* Source);
 	__property Graphics::TBrush* Brush = {read=FBrush, write=SetBrush};
-	__property Windows::TRect DockRect = {read=FDockRect, write=FDockRect};
+	__property Types::TRect DockRect = {read=FDockRect, write=FDockRect};
 	__property TAlign DropAlign = {read=FDropAlign, nodefault};
 	__property TControl* DropOnControl = {read=FDropOnControl};
 	__property bool Floating = {read=FFloating, write=FFloating, nodefault};
 	__property int FrameWidth = {read=GetFrameWidth, nodefault};
+};
+
+
+class DELPHICLASS TDragDockObjectEx;
+class PASCALIMPLEMENTATION TDragDockObjectEx : public TDragDockObject 
+{
+	typedef TDragDockObject inherited;
+	
+public:
+	virtual void __fastcall BeforeDestruction(void);
+public:
+	#pragma option push -w-inl
+	/* TDragDockObject.Create */ inline __fastcall virtual TDragDockObjectEx(TControl* AControl) : TDragDockObject(AControl) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TDragDockObject.Destroy */ inline __fastcall virtual ~TDragDockObjectEx(void) { }
+	#pragma option pop
+	
 };
 
 
@@ -1273,6 +1345,7 @@ public:
 
 typedef TMetaClass*TControlClass;
 
+#pragma pack(push, 4)
 struct TCreateParams
 {
 	char *Caption;
@@ -1287,6 +1360,7 @@ struct TCreateParams
 	tagWNDCLASSA WindowClass;
 	char WinClassName[64];
 } ;
+#pragma pack(pop)
 
 class DELPHICLASS TWinControlActionLink;
 class PASCALIMPLEMENTATION TWinControlActionLink : public TControlActionLink 
@@ -1300,8 +1374,7 @@ protected:
 	virtual void __fastcall SetHelpContext(Classes::THelpContext Value);
 public:
 	#pragma option push -w-inl
-	/* TBasicActionLink.Create */ inline __fastcall virtual TWinControlActionLink(System::TObject* AClient
-		) : TControlActionLink(AClient) { }
+	/* TBasicActionLink.Create */ inline __fastcall virtual TWinControlActionLink(System::TObject* AClient) : TControlActionLink(AClient) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TBasicActionLink.Destroy */ inline __fastcall virtual ~TWinControlActionLink(void) { }
@@ -1311,6 +1384,16 @@ public:
 
 
 typedef TMetaClass*TWinControlActionLinkClass;
+
+#pragma pack(push, 4)
+struct TAlignInfo
+{
+	Classes::TList* AlignList;
+	int ControlIndex;
+	TAlign Align;
+	int Scratch;
+} ;
+#pragma pack(pop)
 
 class DELPHICLASS TGraphicControl;
 class PASCALIMPLEMENTATION TGraphicControl : public TControl 
@@ -1350,8 +1433,7 @@ public:
 	__fastcall virtual ~TCustomControl(void);
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall TCustomControl(HWND ParentWindow) : TWinControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall TCustomControl(HWND ParentWindow) : TWinControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1364,26 +1446,27 @@ class PASCALIMPLEMENTATION THintWindow : public TCustomControl
 	
 private:
 	bool FActivating;
+	unsigned FLastActive;
 	HIDESBASE MESSAGE void __fastcall WMNCHitTest(Messages::TWMNCHitTest &Message);
 	HIDESBASE MESSAGE void __fastcall WMNCPaint(Messages::TMessage &Message);
 	MESSAGE void __fastcall CMTextChanged(Messages::TMessage &Message);
 	
 protected:
 	virtual void __fastcall CreateParams(TCreateParams &Params);
+	virtual void __fastcall NCPaint(HDC DC);
 	virtual void __fastcall Paint(void);
+	MESSAGE void __fastcall WMPrint(Messages::TMessage &Message);
 	
 public:
 	__fastcall virtual THintWindow(Classes::TComponent* AOwner);
-	virtual void __fastcall ActivateHint(const Windows::TRect &Rect, const AnsiString AHint);
-	virtual void __fastcall ActivateHintData(const Windows::TRect &Rect, const AnsiString AHint, void * 
-		AData);
-	virtual Windows::TRect __fastcall CalcHintRect(int MaxWidth, const AnsiString AHint, void * AData);
-		
+	virtual void __fastcall ActivateHint(const Types::TRect &Rect, const AnsiString AHint);
+	virtual void __fastcall ActivateHintData(const Types::TRect &Rect, const AnsiString AHint, void * AData);
+	virtual Types::TRect __fastcall CalcHintRect(int MaxWidth, const AnsiString AHint, void * AData);
 	virtual bool __fastcall IsHintMsg(tagMSG &Msg);
 	void __fastcall ReleaseHandle(void);
 	__property BiDiMode ;
 	__property Caption ;
-	__property Color ;
+	__property Color  = {default=-2147483643};
 	__property Canvas ;
 	__property Font ;
 public:
@@ -1393,8 +1476,7 @@ public:
 	
 public:
 	#pragma option push -w-inl
-	/* TWinControl.CreateParented */ inline __fastcall THintWindow(HWND ParentWindow) : TCustomControl(
-		ParentWindow) { }
+	/* TWinControl.CreateParented */ inline __fastcall THintWindow(HWND ParentWindow) : TCustomControl(ParentWindow) { }
 	#pragma option pop
 	
 };
@@ -1410,7 +1492,10 @@ private:
 	TCursor FDragCursor;
 	bool FDragging;
 	HWND FDragHandle;
-	Windows::TPoint FDragHotspot;
+	#pragma pack(push, 1)
+	Types::TPoint FDragHotspot;
+	#pragma pack(pop)
+	
 	int FDragIndex;
 	void __fastcall CombineDragCursor(void);
 	void __fastcall SetDragCursor(TCursor Value);
@@ -1424,7 +1509,7 @@ public:
 	bool __fastcall DragMove(int X, int Y);
 	void __fastcall DragUnlock(void);
 	bool __fastcall EndDrag(void);
-	virtual Windows::TPoint __fastcall GetHotSpot();
+	virtual Types::TPoint __fastcall GetHotSpot();
 	void __fastcall HideDragImage(void);
 	bool __fastcall SetDragImage(int Index, int HotSpotX, int HotSpotY);
 	void __fastcall ShowDragImage(void);
@@ -1432,12 +1517,10 @@ public:
 	__property bool Dragging = {read=FDragging, nodefault};
 public:
 	#pragma option push -w-inl
-	/* TCustomImageList.Create */ inline __fastcall virtual TDragImageList(Classes::TComponent* AOwner)
-		 : Imglist::TCustomImageList(AOwner) { }
+	/* TCustomImageList.Create */ inline __fastcall virtual TDragImageList(Classes::TComponent* AOwner) : Imglist::TCustomImageList(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomImageList.CreateSize */ inline __fastcall TDragImageList(int AWidth, int AHeight) : Imglist::TCustomImageList(
-		AWidth, AHeight) { }
+	/* TCustomImageList.CreateSize */ inline __fastcall TDragImageList(int AWidth, int AHeight) : Imglist::TCustomImageList(AWidth, AHeight) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomImageList.Destroy */ inline __fastcall virtual ~TDragImageList(void) { }
@@ -1452,24 +1535,22 @@ class PASCALIMPLEMENTATION TImageList : public TDragImageList
 	typedef TDragImageList inherited;
 	
 __published:
-	__property BlendColor ;
-	__property BkColor ;
-	__property AllocBy ;
-	__property DrawingStyle ;
-	__property Height ;
-	__property ImageType ;
-	__property Masked ;
+	__property BlendColor  = {default=536870911};
+	__property BkColor  = {default=536870911};
+	__property AllocBy  = {default=4};
+	__property DrawingStyle  = {default=2};
+	__property Height  = {default=16};
+	__property ImageType  = {default=0};
+	__property Masked  = {default=1};
 	__property OnChange ;
-	__property ShareImages ;
-	__property Width ;
+	__property ShareImages  = {default=0};
+	__property Width  = {default=16};
 public:
 	#pragma option push -w-inl
-	/* TCustomImageList.Create */ inline __fastcall virtual TImageList(Classes::TComponent* AOwner) : TDragImageList(
-		AOwner) { }
+	/* TCustomImageList.Create */ inline __fastcall virtual TImageList(Classes::TComponent* AOwner) : TDragImageList(AOwner) { }
 	#pragma option pop
 	#pragma option push -w-inl
-	/* TCustomImageList.CreateSize */ inline __fastcall TImageList(int AWidth, int AHeight) : TDragImageList(
-		AWidth, AHeight) { }
+	/* TCustomImageList.CreateSize */ inline __fastcall TImageList(int AWidth, int AHeight) : TDragImageList(AWidth, AHeight) { }
 	#pragma option pop
 	#pragma option push -w-inl
 	/* TCustomImageList.Destroy */ inline __fastcall virtual ~TImageList(void) { }
@@ -1492,13 +1573,19 @@ private:
 	TWinControl* FDockSite;
 	int FGrabberSize;
 	bool FGrabbersOnTop;
-	Windows::TRect FOldRect;
-	TWndMethod FOldWndProc;
+	#pragma pack(push, 1)
+	Types::TRect FOldRect;
+	#pragma pack(pop)
+	
+	Classes::TWndMethod FOldWndProc;
 	TDockZone* FReplacementZone;
 	double FScaleBy;
 	TDockOrientation FShiftScaleOrient;
 	int FShiftBy;
-	Windows::TPoint FSizePos;
+	#pragma pack(push, 1)
+	Types::TPoint FSizePos;
+	#pragma pack(pop)
+	
 	HDC FSizingDC;
 	HWND FSizingWnd;
 	TDockZone* FSizingZone;
@@ -1511,32 +1598,29 @@ private:
 	TDockZone* __fastcall FindControlZone(TControl* Control);
 	void __fastcall ForEachAt(TDockZone* Zone, TForEachZoneProc Proc);
 	int __fastcall GetNextLimit(TDockZone* AZone);
-	void __fastcall InsertNewParent(TDockZone* NewZone, TDockZone* SiblingZone, TDockOrientation ParentOrientation
-		, bool InsertLast);
+	void __fastcall InsertNewParent(TDockZone* NewZone, TDockZone* SiblingZone, TDockOrientation ParentOrientation, bool InsertLast);
 	void __fastcall InsertSibling(TDockZone* NewZone, TDockZone* SiblingZone, bool InsertLast);
-	TDockZone* __fastcall InternalHitTest(const Windows::TPoint &MousePos, /* out */ int &HTFlag);
+	TDockZone* __fastcall InternalHitTest(const Types::TPoint &MousePos, /* out */ int &HTFlag);
 	void __fastcall PruneZone(TDockZone* Zone);
 	void __fastcall RemoveZone(TDockZone* Zone);
 	void __fastcall ScaleZone(TDockZone* Zone);
 	void __fastcall SetNewBounds(TDockZone* Zone);
 	void __fastcall ShiftZone(TDockZone* Zone);
-	void __fastcall SplitterMouseDown(TDockZone* OnZone, const Windows::TPoint &MousePos);
+	void __fastcall SplitterMouseDown(TDockZone* OnZone, const Types::TPoint &MousePos);
 	void __fastcall SplitterMouseUp(void);
 	void __fastcall UpdateZone(TDockZone* Zone);
 	void __fastcall WindowProc(Messages::TMessage &Message);
 	
 protected:
-	virtual void __fastcall AdjustDockRect(TControl* Control, Windows::TRect &ARect);
+	virtual void __fastcall AdjustDockRect(TControl* Control, Types::TRect &ARect);
 	void __fastcall BeginUpdate(void);
 	void __fastcall EndUpdate(void);
-	void __fastcall GetControlBounds(TControl* Control, /* out */ Windows::TRect &CtlBounds);
-	virtual TControl* __fastcall HitTest(const Windows::TPoint &MousePos, /* out */ int &HTFlag);
+	void __fastcall GetControlBounds(TControl* Control, /* out */ Types::TRect &CtlBounds);
+	virtual TControl* __fastcall HitTest(const Types::TPoint &MousePos, /* out */ int &HTFlag);
 	virtual void __fastcall InsertControl(TControl* Control, TAlign InsertAt, TControl* DropCtl);
 	virtual void __fastcall LoadFromStream(Classes::TStream* Stream);
-	virtual void __fastcall PaintDockFrame(Graphics::TCanvas* Canvas, TControl* Control, const Windows::TRect 
-		&ARect);
-	virtual void __fastcall PositionDockRect(TControl* Client, TControl* DropCtl, TAlign DropAlign, Windows::TRect 
-		&DockRect);
+	virtual void __fastcall PaintDockFrame(Graphics::TCanvas* Canvas, TControl* Control, const Types::TRect &ARect);
+	virtual void __fastcall PositionDockRect(TControl* Client, TControl* DropCtl, TAlign DropAlign, Types::TRect &DockRect);
 	virtual void __fastcall RemoveControl(TControl* Control);
 	virtual void __fastcall SaveToStream(Classes::TStream* Stream);
 	void __fastcall SetReplacingControl(TControl* Control);
@@ -1570,17 +1654,27 @@ private:
 	TDockZone* FPrevSibling;
 	TDockTree* FTree;
 	int FZoneLimit;
+	int FOldSize;
 	int __fastcall GetChildCount(void);
+	AnsiString __fastcall GetControlName();
 	int __fastcall GetLimitBegin(void);
 	int __fastcall GetLimitSize(void);
 	int __fastcall GetTopLeft(int Orient);
 	int __fastcall GetHeightWidth(int Orient);
-	AnsiString __fastcall GetControlName();
+	bool __fastcall GetVisible(void);
+	int __fastcall GetVisibleChildCount(void);
+	int __fastcall GetZoneLimit(void);
 	bool __fastcall SetControlName(const AnsiString Value);
+	void __fastcall SetZoneLimit(const int Value);
 	
 public:
 	__fastcall TDockZone(TDockTree* Tree);
+	void __fastcall ExpandZoneLimit(int NewLimit);
+	TDockZone* __fastcall FirstVisibleChild(void);
+	TDockZone* __fastcall NextVisible(void);
+	TDockZone* __fastcall PrevVisible(void);
 	void __fastcall ResetChildren(void);
+	void __fastcall ResetZoneLimits(void);
 	void __fastcall Update(void);
 	__property int ChildCount = {read=GetChildCount, nodefault};
 	__property int Height = {read=GetHeightWidth, index=1, nodefault};
@@ -1588,7 +1682,10 @@ public:
 	__property int LimitBegin = {read=GetLimitBegin, nodefault};
 	__property int LimitSize = {read=GetLimitSize, nodefault};
 	__property int Top = {read=GetTopLeft, index=1, nodefault};
+	__property bool Visible = {read=GetVisible, nodefault};
+	__property int VisibleChildCount = {read=GetVisibleChildCount, nodefault};
 	__property int Width = {read=GetHeightWidth, index=2, nodefault};
+	__property int ZoneLimit = {read=GetZoneLimit, write=SetZoneLimit, nodefault};
 public:
 	#pragma option push -w-inl
 	/* TObject.Destroy */ inline __fastcall virtual ~TDockZone(void) { }
@@ -1618,25 +1715,89 @@ private:
 	void __fastcall GetMouseData(void);
 	void __fastcall GetNativeData(void);
 	void __fastcall GetRegisteredData(void);
-	Windows::TPoint __fastcall GetCursorPos();
-	void __fastcall SetCursorPos(const Windows::TPoint &Value);
+	Types::TPoint __fastcall GetCursorPos();
+	void __fastcall SetCursorPos(const Types::TPoint &Value);
 	HWND __fastcall GetCapture(void);
 	void __fastcall SetCapture(const HWND Value);
+	bool __fastcall GetIsDragging(void);
 	
 public:
 	__fastcall TMouse(void);
 	__fastcall virtual ~TMouse(void);
 	void __fastcall SettingChanged(int Setting);
 	__property HWND Capture = {read=GetCapture, write=SetCapture, nodefault};
-	__property Windows::TPoint CursorPos = {read=GetCursorPos, write=SetCursorPos};
+	__property Types::TPoint CursorPos = {read=GetCursorPos, write=SetCursorPos};
 	__property bool DragImmediate = {read=FDragImmediate, write=FDragImmediate, default=1};
 	__property int DragThreshold = {read=FDragThreshold, write=FDragThreshold, default=5};
 	__property bool MousePresent = {read=FMousePresent, nodefault};
+	__property bool IsDragging = {read=GetIsDragging, nodefault};
 	__property unsigned RegWheelMessage = {read=FWheelMessage, nodefault};
 	__property bool WheelPresent = {read=FWheelPresent, nodefault};
 	__property int WheelScrollLines = {read=FScrollLines, nodefault};
 };
 
+
+class DELPHICLASS TCustomListControl;
+class PASCALIMPLEMENTATION TCustomListControl : public TWinControl 
+{
+	typedef TWinControl inherited;
+	
+protected:
+	virtual int __fastcall GetCount(void) = 0 ;
+	virtual int __fastcall GetItemIndex(void) = 0 ;
+	virtual void __fastcall SetItemIndex(const int Value) = 0 /* overload */;
+	
+public:
+	virtual void __fastcall AddItem(AnsiString Item, System::TObject* AObject) = 0 ;
+	virtual void __fastcall Clear(void) = 0 ;
+	virtual void __fastcall ClearSelection(void) = 0 ;
+	virtual void __fastcall CopySelection(TCustomListControl* Destination) = 0 ;
+	virtual void __fastcall DeleteSelected(void) = 0 ;
+	virtual void __fastcall MoveSelection(TCustomListControl* Destination);
+	virtual void __fastcall SelectAll(void) = 0 ;
+	__property int ItemIndex = {read=GetItemIndex, write=SetItemIndex, nodefault};
+public:
+	#pragma option push -w-inl
+	/* TWinControl.Create */ inline __fastcall virtual TCustomListControl(Classes::TComponent* AOwner) : TWinControl(AOwner) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TWinControl.CreateParented */ inline __fastcall TCustomListControl(HWND ParentWindow) : TWinControl(ParentWindow) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TWinControl.Destroy */ inline __fastcall virtual ~TCustomListControl(void) { }
+	#pragma option pop
+	
+};
+
+
+class DELPHICLASS TCustomMultiSelectListControl;
+class PASCALIMPLEMENTATION TCustomMultiSelectListControl : public TCustomListControl 
+{
+	typedef TCustomListControl inherited;
+	
+protected:
+	bool FMultiSelect;
+	virtual int __fastcall GetSelCount(void) = 0 ;
+	virtual void __fastcall SetMultiSelect(bool Value) = 0 ;
+	
+public:
+	__property bool MultiSelect = {read=FMultiSelect, write=SetMultiSelect, default=0};
+	__property int SelCount = {read=GetSelCount, nodefault};
+public:
+	#pragma option push -w-inl
+	/* TWinControl.Create */ inline __fastcall virtual TCustomMultiSelectListControl(Classes::TComponent* AOwner) : TCustomListControl(AOwner) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TWinControl.CreateParented */ inline __fastcall TCustomMultiSelectListControl(HWND ParentWindow) : TCustomListControl(ParentWindow) { }
+	#pragma option pop
+	#pragma option push -w-inl
+	/* TWinControl.Destroy */ inline __fastcall virtual ~TCustomMultiSelectListControl(void) { }
+	#pragma option pop
+	
+};
+
+
+typedef BOOL __stdcall (*TAnimateWindowProc)(HWND hWnd, unsigned dwTime, unsigned dwFlags);
 
 //-- var, const, procedure ---------------------------------------------------
 static const Word CM_BASE = 0xb000;
@@ -1708,6 +1869,7 @@ static const Word CM_ACTIONEXECUTE = 0xb040;
 static const Word CM_HINTSHOWPAUSE = 0xb041;
 static const Word CM_DOCKNOTIFICATION = 0xb042;
 static const Word CM_MOUSEWHEEL = 0xb043;
+static const Word CM_ISSHORTCUT = 0xb044;
 static const Word CN_BASE = 0xbc00;
 static const Word CN_CHARTOITEM = 0xbc2f;
 static const Word CN_COMMAND = 0xbd11;
@@ -1767,11 +1929,12 @@ static const TCursor crHelp = 0xffffffec;
 static const TCursor crHandPoint = 0xffffffeb;
 static const TCursor crSizeAll = 0xffffffea;
 extern PACKAGE TMouse* Mouse;
+extern PACKAGE TAnimateWindowProc AnimateWindowProc;
 extern PACKAGE TWinControl* CreationControl;
 extern PACKAGE TMetaClass*DefaultDockTreeClass;
 static const Word CTL3D_ALL = 0xffff;
 extern const TWinControl* NullDockSite;
-extern PACKAGE TAnchors AnchorAlign[6];
+extern PACKAGE TAnchors AnchorAlign[7];
 extern PACKAGE bool NewStyleControls;
 extern PACKAGE void __fastcall ChangeBiDiModeAlignment(Classes::TAlignment &Alignment);
 extern PACKAGE int __stdcall InitWndProc(HWND HWindow, int Message, int WParam, int LParam);
@@ -1787,33 +1950,32 @@ extern PACKAGE AnsiString __fastcall GetLongHint(const AnsiString Hint);
 extern PACKAGE TControl* __fastcall GetCaptureControl(void);
 extern PACKAGE void __fastcall SetCaptureControl(TControl* Control);
 extern PACKAGE bool __fastcall IsDragObject(System::TObject* Sender);
+extern PACKAGE void __fastcall DragDone(bool Drop);
 extern PACKAGE void __fastcall CancelDrag(void);
-extern PACKAGE TWinControl* __fastcall FindVCLWindow(const Windows::TPoint &Pos);
-extern PACKAGE TControl* __fastcall FindDragTarget(const Windows::TPoint &Pos, bool AllowDisabled);
+extern PACKAGE TWinControl* __fastcall FindVCLWindow(const Types::TPoint &Pos);
+extern PACKAGE TControl* __fastcall FindDragTarget(const Types::TPoint &Pos, bool AllowDisabled);
 extern PACKAGE void __fastcall MoveWindowOrg(HDC DC, int DX, int DY);
 extern PACKAGE bool __fastcall Win32NLSEnableIME(HWND hWnd, bool Enable);
 extern PACKAGE void __fastcall SetImeMode(HWND hWnd, TImeMode Mode);
 extern PACKAGE void __fastcall SetImeName(AnsiString Name);
 extern PACKAGE int __fastcall Imm32GetContext(HWND hWnd);
 extern PACKAGE bool __fastcall Imm32ReleaseContext(HWND hWnd, int hImc);
-extern PACKAGE bool __fastcall Imm32GetConversionStatus(int hImc, unsigned &Conversion, unsigned &Sentence
-	);
-extern PACKAGE bool __fastcall Imm32SetConversionStatus(int hImc, unsigned Conversion, unsigned Sentence
-	);
+extern PACKAGE bool __fastcall Imm32GetConversionStatus(int hImc, unsigned &Conversion, unsigned &Sentence);
+extern PACKAGE bool __fastcall Imm32SetConversionStatus(int hImc, unsigned Conversion, unsigned Sentence);
 extern PACKAGE bool __fastcall Imm32SetOpenStatus(int hImc, bool fOpen);
-extern PACKAGE bool __fastcall Imm32SetCompositionWindow(int hImc, Imm::PCompositionForm lpCompForm)
-	;
+extern PACKAGE bool __fastcall Imm32SetCompositionWindow(int hImc, Imm::PCompositionForm lpCompForm);
 extern PACKAGE bool __fastcall Imm32SetCompositionFont(int hImc, Windows::PLogFontA lpLogfont);
-extern PACKAGE int __fastcall Imm32GetCompositionString(int hImc, unsigned dWord1, void * lpBuf, unsigned 
-	dwBufLen);
+extern PACKAGE int __fastcall Imm32GetCompositionString(int hImc, unsigned dWord1, void * lpBuf, unsigned dwBufLen);
 extern PACKAGE bool __fastcall Imm32IsIME(HKL hKl);
-extern PACKAGE bool __fastcall Imm32NotifyIME(int hImc, unsigned dwAction, unsigned dwIndex, unsigned 
-	dwValue);
+extern PACKAGE bool __fastcall Imm32NotifyIME(int hImc, unsigned dwAction, unsigned dwIndex, unsigned dwValue);
+extern PACKAGE bool __fastcall IsPositiveResult(const TModalResult AModalResult);
+extern PACKAGE bool __fastcall IsNegativeResult(const TModalResult AModalResult);
+extern PACKAGE bool __fastcall IsAbortResult(const TModalResult AModalResult);
+extern PACKAGE bool __fastcall IsAnAllResult(const TModalResult AModalResult);
+extern PACKAGE TModalResult __fastcall StripAllFromResult(const TModalResult AModalResult);
 
 }	/* namespace Controls */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Controls;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 

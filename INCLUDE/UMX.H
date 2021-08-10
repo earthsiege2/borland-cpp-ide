@@ -14,7 +14,6 @@
 
 
 #ifndef _UMX_H_
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _UMX_H_
 
 
@@ -502,5 +501,4 @@ VOID PASCAL UMERenameW( HWND hwndParent,
                         LPWSTR pchNewName );
 
 
-#pragma option pop /*P_O_Pop*/
 #endif  // _UMX_H_

@@ -1,6 +1,6 @@
 /*
 
-    Copyright (c) 1998-1999  Microsoft Corporation
+    Copyright (c) Microsoft Corporation. All rights reserved.
 
 */
 
@@ -34,7 +34,6 @@ private:
     
 public:
 
-    // ZoltanS: added constructor
     CTapiIfCollection(void) : m_nSize(0), m_Var(NULL) { }
 
     // initialize
@@ -164,7 +163,17 @@ public:
             return E_INVALIDARG;
         }
 
-        VariantCopy(retval, &m_Var[Index-1]);
+
+        hr = VariantCopy(retval, &m_Var[Index-1]);
+
+        if (FAILED(hr))
+        {
+            LOG((MSP_ERROR, 
+                "CTapiCollection::get_Item - VariantCopy failed. hr = %lx", 
+                hr));
+
+            return hr;
+        }
 
         LOG((MSP_TRACE, "CTapiCollection::get_Item - exit"));
         
@@ -223,13 +232,15 @@ public:
 ////////////////////////////////////////////////////////////////////////
 class CTapiBstrCollection :
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
-    public IDispatchImpl<ITCollection, &IID_ITCollection, &LIBID_TAPI3Lib>
+    public IDispatchImpl<ITCollection, &IID_ITCollection, &LIBID_TAPI3Lib>,
+    public CMSPObjectSafetyImpl
 {
 public:
     
 BEGIN_COM_MAP(CTapiBstrCollection)
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(ITCollection)
+    COM_INTERFACE_ENTRY(IObjectSafety)
 END_COM_MAP()
 
 private:
@@ -239,7 +250,6 @@ private:
     
 public:
 
-    // ZoltanS: added constructor
     CTapiBstrCollection(void) : m_dwSize(0), m_Var(NULL) { }
 
     // initialize
@@ -335,7 +345,7 @@ public:
         retval->bstrVal = NULL;
 
         // use 1-based index, VB like
-        // ZoltanS: no problem with signed/unsigned, since
+        // no problem with signed/unsigned, since
         // if Index < 0 then first clause is true, making it
         // irrelevant if the second clause is correct or not.
 
@@ -348,7 +358,17 @@ public:
         // This copies the string, not just the pointer.
         //
 
-        VariantCopy(retval, &m_Var[Index-1]);
+        hr = VariantCopy(retval, &m_Var[Index-1]);
+
+        if (FAILED(hr))
+        {
+            LOG((MSP_ERROR, 
+                "CTapiBstrCollection::get_Item - VariantCopy failed. hr = %lx", 
+                hr));
+
+            return hr;
+        }
+
 
         LOG((MSP_TRACE, "CTapiBstrCollection::get_Item - exit"));
 
@@ -415,6 +435,7 @@ public:
     }
 
 };
+
 
 #pragma option pop /*P_O_Pop*/
 #endif // _MSPCOLL_H_

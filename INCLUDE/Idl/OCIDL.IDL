@@ -1,7 +1,7 @@
 //+---------------------------------------------------------------------------
 //
 //  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993-1999.
+//  Copyright (c) Microsoft Corporation. All rights reserved.
 //
 //  File: ocidl.idl
 //
@@ -10,12 +10,13 @@
 cpp_quote("//+-------------------------------------------------------------------------")
 cpp_quote("//")
 cpp_quote("//  Microsoft Windows")
-cpp_quote("//  Copyright (C) Microsoft Corporation, 1993-1999.")
+cpp_quote("//  Copyright (c) Microsoft Corporation. All rights reserved.")
 cpp_quote("//")
 cpp_quote("//--------------------------------------------------------------------------")
 cpp_quote("#if ( _MSC_VER >= 1020 )")
 cpp_quote("#pragma once")
 cpp_quote("#endif")
+
 
 #ifndef DO_NO_IMPORTS
 import "oleidl.idl";
@@ -146,8 +147,8 @@ interface IOleControlTypes
         wireBSTR bstrDescription;
         wireBSTR bstrHelpFile;
         DWORD dwHelpContext;
-        ULONG pvReserved;
-        ULONG pfnDeferredFillIn;
+        ULONG_PTR pvReserved;
+        ULONG_PTR pfnDeferredFillIn;
         SCODE scode;
     } UserEXCEPINFO;
 
@@ -401,11 +402,11 @@ interface IProvideMultipleClassInfo : IProvideClassInfo2
 
     typedef IProvideMultipleClassInfo * LPPROVIDEMULTIPLECLASSINFO;
 
-    HRESULT GetMultiTypeInfoCount(
+    HRESULT GetMultiTypeInfoCount( 
                 [out] ULONG * pcti
             );
 
-    HRESULT GetInfoOfIndex(
+    HRESULT GetInfoOfIndex( 
                 [in]  ULONG iti,
                 [in]  DWORD dwFlags,
                 [out] ITypeInfo ** pptiCoClass,
@@ -830,7 +831,7 @@ interface IFont : IUnknown
 {
     typedef IFont * LPFONT;
 
-cpp_quote("#if defined(_WIN32) && !defined(OLE2ANSI)")
+cpp_quote("#if (defined(_WIN32) || defined (_WIN64)) && !defined(OLE2ANSI)")
     typedef TEXTMETRICW TEXTMETRICOLE;
 cpp_quote("#else")
 cpp_quote("typedef TEXTMETRIC TEXTMETRICOLE;")
@@ -952,11 +953,11 @@ interface IPicture : IUnknown
         PICTURE_TRANSPARENT = 0x2
     } PICTUREATTRIBUTES;
 
-    typedef UINT OLE_HANDLE;
-    typedef LONG OLE_XPOS_HIMETRIC;
-    typedef LONG OLE_YPOS_HIMETRIC;
-    typedef LONG OLE_XSIZE_HIMETRIC;
-    typedef LONG OLE_YSIZE_HIMETRIC;
+    typedef [uuid(66504313-BE0F-101A-8BBB-00AA00300CAB), public] UINT OLE_HANDLE;
+    typedef [uuid(66504306-BE0F-101A-8BBB-00AA00300CAB), hidden] LONG OLE_XPOS_HIMETRIC;
+    typedef [uuid(66504307-BE0F-101A-8BBB-00AA00300CAB), hidden] LONG OLE_YPOS_HIMETRIC;
+    typedef [uuid(66504308-BE0F-101A-8BBB-00AA00300CAB), hidden] LONG OLE_XSIZE_HIMETRIC;
+    typedef [uuid(66504309-BE0F-101A-8BBB-00AA00300CAB), hidden] LONG OLE_YSIZE_HIMETRIC;
 
     HRESULT get_Handle(
                 [out] OLE_HANDLE * pHandle
@@ -1408,7 +1409,7 @@ cpp_quote("#define SID_SOleUndoManager IID_IOleUndoManager")
 
     HRESULT Close(
                 [in] IOleParentUndoUnit * pPUU,
-                [in] BOOL fCommit
+                [in] BOOL fCommit   
             );
 
     HRESULT Add(
@@ -1514,11 +1515,14 @@ interface IObjectWithSite : IUnknown
 
 #if !defined(_DCOM_OC_REMOTING_)
 
+
+
 [
     object,
     uuid(376BD3AA-3845-101B-84ED-08002B2EC713),
     pointer_default(unique)
 ]
+
 
 interface IPerPropertyBrowsing : IUnknown
 {
@@ -1562,6 +1566,7 @@ interface IPerPropertyBrowsing : IUnknown
 }
 
 #endif // #if !defined(_DCOM_OC_REMOTING_)
+
 
 #if !defined(_NON_DCOM_REMOTING_) && !defined(_DCOM_OC_REMOTING_)
 
@@ -1710,7 +1715,7 @@ interface IQuickActivate : IUnknown
     } QACONTAINERFLAGS;
 
     typedef [uuid(66504301-BE0F-101A-8BBB-00AA00300CAB), public] DWORD OLE_COLOR;
-
+    
     typedef struct tagQACONTAINER {
         ULONG                   cbSize;
         IOleClientSite *        pClientSite;
@@ -1729,7 +1734,7 @@ interface IQuickActivate : IUnknown
         IOleControlSite *       pOleControlSite;
         IServiceProvider *      pServiceProvider;
     } QACONTAINER;
-
+    
     typedef struct tagQACONTROL {
         ULONG   cbSize;
         DWORD   dwMiscStatus;

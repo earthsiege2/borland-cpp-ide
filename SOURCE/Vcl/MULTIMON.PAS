@@ -6,7 +6,7 @@
 {                                                       }
 {       Copyright (c) 1985-1999, Microsoft Corporation  }
 {                                                       }
-{       Translator: Inprise Corporation                 }
+{       Translator: Borland Software Corporation        }
 {                                                       }
 {*******************************************************}
 
@@ -42,7 +42,8 @@ const
   SM_CMETRICS = 83;
   {$EXTERNALSYM SM_CMETRICS}
 
-type
+type
+
 
 
 
@@ -50,7 +51,8 @@ type
 
 
   HMONITOR = type Integer;
-  {$EXTERNALSYM HMONITOR}
+  {$EXTERNALSYM HMONITOR}
+
 
 const
   MONITOR_DEFAULTTONULL = $0;
@@ -180,12 +182,12 @@ var
   MonitorFromRect: TMonitorFromRect; 
   {$EXTERNALSYM MonitorFromPoint}
   MonitorFromPoint: TMonitorFromPoint;
+  {$EXTERNALSYM GetMonitorInfo}
+  {procedure}GetMonitorInfo: TGetMonitorInfo;
   {$EXTERNALSYM GetMonitorInfoA}
   {procedure}GetMonitorInfoA: TGetMonitorInfoA;
   {$EXTERNALSYM GetMonitorInfoW}
   {procedure}GetMonitorInfoW: TGetMonitorInfoW;
-  {$EXTERNALSYM GetMonitorInfo}
-  {procedure}GetMonitorInfo: TGetMonitorInfo;
   {$EXTERNALSYM EnumDisplayMonitors}
   EnumDisplayMonitors: TEnumDisplayMonitors;
 
@@ -313,6 +315,33 @@ begin
       Result := xPRIMARY_MONITOR;
 end;
 
+function xGetMonitorInfo(hMonitor: HMONITOR; lpMonitorInfo: PMonitorInfo): Boolean; stdcall;
+var
+  rcWork: TRect;
+begin
+  if not InitApis[mmGetMonitorInfo] then
+  begin
+    @GetMonitorInfo := InitAnApi(mmGetMonitorInfo, @GetMonitorInfo, 'GetMonitorInfo');
+    Result := GetMonitorInfo(hMonitor, lpMonitorInfo);
+    Exit;
+  end;
+
+  Result := False;
+  if (hMonitor = xPRIMARY_MONITOR) and (lpMonitorInfo <> nil) and
+    (lpMonitorInfo.cbSize >= DWORD(SizeOf(TMonitorInfo))) and
+    SystemParametersInfo (SPI_GETWORKAREA, 0, @rcWork, 0) then
+    begin
+      lpMonitorInfo.rcMonitor.Left := 0;
+      lpMonitorInfo.rcMonitor.Top := 0;
+      lpMonitorInfo.rcMonitor.Right := GetSystemMetrics(SM_CXSCREEN);
+      lpMonitorInfo.rcMonitor.Bottom := GetSystemMetrics(SM_CYSCREEN);
+      lpMonitorInfo.rcWork := rcWork;
+      lpMonitorInfo.dwFlags := MONITORINFOF_PRIMARY;
+      if (lpMonitorInfo.cbSize >= DWORD(SizeOf(TMonitorInfoEx))) then
+        lstrcpy(PMonitorInfoEx(lpMonitorInfo).szDevice, 'DISPLAY'); // do not localize
+      Result := True;
+    end;
+end;
 function xGetMonitorInfoA(hMonitor: HMONITOR; lpMonitorInfo: PMonitorInfoA): Boolean; stdcall;
 var
   rcWork: TRect;
@@ -348,33 +377,6 @@ begin
   begin
     @GetMonitorInfoW := InitAnApi(mmGetMonitorInfoW, @GetMonitorInfoW, 'GetMonitorInfoW');
     Result := GetMonitorInfoW(hMonitor, lpMonitorInfo);
-    Exit;
-  end;
-
-  Result := False;
-  if (hMonitor = xPRIMARY_MONITOR) and (lpMonitorInfo <> nil) and
-    (lpMonitorInfo.cbSize >= DWORD(SizeOf(TMonitorInfo))) and
-    SystemParametersInfo (SPI_GETWORKAREA, 0, @rcWork, 0) then
-    begin
-      lpMonitorInfo.rcMonitor.Left := 0;
-      lpMonitorInfo.rcMonitor.Top := 0;
-      lpMonitorInfo.rcMonitor.Right := GetSystemMetrics(SM_CXSCREEN);
-      lpMonitorInfo.rcMonitor.Bottom := GetSystemMetrics(SM_CYSCREEN);
-      lpMonitorInfo.rcWork := rcWork;
-      lpMonitorInfo.dwFlags := MONITORINFOF_PRIMARY;
-      if (lpMonitorInfo.cbSize >= DWORD(SizeOf(TMonitorInfoEx))) then
-        lstrcpy(PMonitorInfoEx(lpMonitorInfo).szDevice, 'DISPLAY'); // do not localize
-      Result := True;
-    end;
-end;
-function xGetMonitorInfo(hMonitor: HMONITOR; lpMonitorInfo: PMonitorInfo): Boolean; stdcall;
-var
-  rcWork: TRect;
-begin
-  if not InitApis[mmGetMonitorInfo] then
-  begin
-    @GetMonitorInfo := InitAnApi(mmGetMonitorInfo, @GetMonitorInfo, 'GetMonitorInfo');
-    Result := GetMonitorInfo(hMonitor, lpMonitorInfo);
     Exit;
   end;
 
@@ -446,9 +448,9 @@ begin
   @MonitorFromWindow := @xMonitorFromWindow;
   @MonitorFromRect := @xMonitorFromRect;
   @MonitorFromPoint := @xMonitorFromPoint;
+  {procedure}@GetMonitorInfo := @xGetMonitorInfo;
   {procedure}@GetMonitorInfoA := @xGetMonitorInfoA;
   {procedure}@GetMonitorInfoW := @xGetMonitorInfoW;
-  {procedure}@GetMonitorInfo := @xGetMonitorInfo;
   @EnumDisplayMonitors := @xEnumDisplayMonitors;
 end;
 

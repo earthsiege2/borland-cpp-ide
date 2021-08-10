@@ -3,7 +3,7 @@
 {                                                       }
 {       Borland Delphi Visual Component Library         }
 {                                                       }
-{       Copyright (c) 1999 Inprise Corporation          }
+{ Copyright (c) 1999-2001 Borland Software Corporation  }
 {                                                       }
 {*******************************************************}
 
@@ -11,8 +11,8 @@ unit XMLBrokr;
 
 interface
 
-uses Classes, HTTPApp, Db, DbClient, Provider,
-  WebComp, Masks, Midas;
+uses Variants, Classes, HTTPApp, DB, DBClient, Provider,
+  WebComp, Masks, Midas, AutoDisp;
 
 type
 
@@ -37,9 +37,8 @@ type
   TXMLOption = (xoQuote);
   TXMLOptions = set of TXMLOption;
 
-  TWebDispatch = class;
 
-  TXMLBroker = class(TComponent, IWebDispatch)
+  TXMLBroker = class(TComponent, IWebDispatch, IGetXMLStream)
   private
     FWebDispatch: TWebDispatch;
     FAppServer: IAppServer;
@@ -64,12 +63,13 @@ type
       Options: Integer; const CommandText: WideString; Params: OleVariant; var OwnerData: OleVariant): OleVariant;
     function AS_ApplyUpdates(Delta: OleVariant; MaxErrors: Integer;
       out ErrorCount: Integer): OleVariant;
+    { IGetXMLStream }
+    function GetXMLStream(var Owned: Boolean): TStream;
     { IWebDispatch }
     function DispatchEnabled: Boolean;
     function DispatchMethodType: TMethodType;
     function DispatchRequest(Sender: TObject; Request: TWebRequest; Response: TWebResponse): Boolean;
     function DispatchMask: TMask;
-    function DispatchSubItems: IInterfaceList;
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     procedure SetWebDispatch(const Value: TWebDispatch);
     function GetAppServer: IAppServer;
@@ -133,43 +133,7 @@ type
     property OnGetResponse: TGetResponseEvent read FGetResponse write FGetResponse;
   end;
 
-  TWebPathInfo = class;
 
-  TWebDispatch = class(TPersistent)
-  private
-    FPathInfo: TWebPathInfo;
-    FMethodType: TMethodType;
-    FEnabled: Boolean;
-    function GetMask: TMask;
-  protected
-    procedure AssignTo(Dest: TPersistent); override;
-    procedure SetPathInfo(const Value: string);
-    function GetPathInfo: string;
-  public
-    constructor Create(AComponent: TComponent);
-    destructor Destroy; override;
-    property Mask: TMask read GetMask;
-  published
-    property Enabled: Boolean read FEnabled write FEnabled default True;
-    property MethodType: TMethodType read FMethodType write FMethodType default mtPost;
-    property PathInfo: string read GetPathInfo write SetPathInfo;
-  end;
-
-  TWebPathInfo = class
-  private
-    FMask: TMask;
-    FMaskPathInfo: string;
-    FPathInfo: string;
-    FOwner: TComponent;
-    function GetMask: TMask;
-    function GetPathInfo: string;
-    procedure SetPathInfo(const Value: string);
-  public
-    constructor Create(AOwner: TComponent);
-    destructor Destroy; override;
-    property Mask: TMask read GetMask;
-    property PathInfo: string read GetPathInfo write SetPathInfo;
-  end;
 
   INotifyConnectionChange = interface
   ['{0BC29A90-0EEC-11D3-AFED-00C04FB16EC3}']
@@ -185,8 +149,8 @@ function FormatXML(const Value: string; XMLOptions: TXMLOptions): string;
 
 implementation
 
-uses Windows, Messages, DbConsts, MidConst, ActiveX, ComObj, WebConst, sysutils, DbWeb, Forms,
-  DsIntf, WbmConst;
+uses Windows, Messages, DBConsts, MidConst, ActiveX, ComObj, WebConst, SysUtils, DBWeb,
+  DSIntf, WbmConst;
 
 { TLocalAppServer }
 
@@ -472,37 +436,41 @@ begin
   FParams.Assign(Value);
 end;
 
-//{$DEFINE DEBUG}
+//
 
-
-
-
-
-
-
-
-
-
-
+procedure DumpXML(const FileName, XML: string);
+var
+  F: TFileStream;
+begin
+  F := TFileStream.Create(FileName, fmCreate or fmShareDenyNone);
+  try
+    F.Write(PChar(XML)^, Length(XML));
+  finally
+    F.Free;
+  end;
+end;
 
 
 function TXMLBroker.ApplyXMLUpdates(const Delta: string; out ErrorCount: Integer): string;
 var
   XMLDelta: OleVariant;
   XMLErrors: OleVariant;
-begin
+begin
 
+  DumpXML('\xmldelta.txt', Delta);
 
-  XMLDelta := StringToVariantArray('<?xml version="1.0" standalone="yes"?>' + Delta);
+  XMLDelta := StringToVariantArray('<?xml version="1.0" standalone="yes"?>' + Delta);
 
+  DumpXML('\xmlconvert.txt', VariantArrayToString(XMLDelta));
 
   if Delta = '' then
     ErrorCount := 0
   else
     XMLErrors := AS_ApplyUpdates(XMLDelta, MaxErrors, ErrorCount);
   if ErrorCount > 0 then
-  begin
+  begin
 
+    DumpXML('\xmlerrors.txt', VariantArrayToString(XMLErrors));
 
     Result := VariantArrayToString(XMLErrors)
   end
@@ -663,11 +631,6 @@ begin
   Result := Request.ContentFields.Values[SPostDelta];
 end;
 
-function TXMLBroker.DispatchSubItems: IInterfaceList;
-begin
-  Result := nil;
-end;
-
 procedure TXMLBroker.SetWebDispatch(const Value: TWebDispatch);
 begin
   FWebDispatch.Assign(Value);
@@ -770,6 +733,17 @@ begin
   end;
 end;
 
+function TXMLBroker.GetXMLStream(var Owned: Boolean): TStream;
+var
+  RecsOut: Integer;
+  OwnerData: OleVariant;
+  S: string;
+begin
+  S := GetXMLRecords(RecsOut, OwnerData, []);
+  Owned := True;
+  Result := TStringStream.Create(S);
+end;
+
 { TXMLParams }
 
 procedure TXMLParams.AssignStrings(Value: TStrings);
@@ -793,101 +767,5 @@ begin
   else inherited AssignTo(Dest);
 end;
 
-{ TWebDispatch }
-
-constructor TWebDispatch.Create(AComponent: TComponent);
-begin
-  inherited Create;
-  FEnabled := True;
-  FMethodType := mtPost;
-  FPathInfo := TWebPathInfo.Create(AComponent);
-end;
-
-destructor TWebDispatch.Destroy;
-begin
-  inherited;
-  FPathInfo.Free;
-end;
-
-procedure TWebDispatch.SetPathInfo(const Value: string);
-begin
-  FPathInfo.PathInfo := Value;
-end;
-
-procedure TWebDispatch.AssignTo(Dest: TPersistent);
-begin
-  if Dest is TWebDispatch then
-    with TWebDispatch(Dest) do
-    begin
-      PathInfo := Self.PathInfo;
-      MethodType := Self.MethodType;
-      Enabled := Self.Enabled;
-    end else inherited AssignTo(Dest);
-end;
-
-function TWebDispatch.GetPathInfo: string;
-begin
-  Result := FPathInfo.PathInfo;
-end;
-
-function TWebDispatch.GetMask: TMask;
-begin
-  Result := FPathInfo.Mask;
-end;
-
-{ TWebPathInfo }
-
-constructor TWebPathInfo.Create(AOwner: TComponent);
-begin
-  FMaskPathInfo := '';
-  FMask := TMask.Create(FMaskPathInfo);
-  FOwner := AOwner;
-end;
-
-destructor TWebPathInfo.Destroy;
-begin
-  FMask.Free;
-  inherited;
-end;
-
-function TWebPathInfo.GetMask: TMask;
-var
-  Mask: TMask;
-  NewValue: string;
-begin
-  if PathInfo <> FMaskPathInfo then
-  begin
-    FMaskPathInfo := PathInfo;
-    if FMaskPathInfo <> '' then NewValue := DosPathToUnixPath(FMaskPathInfo);
-    if (NewValue <> '') and (NewValue[1] <> '/') then Insert('/', NewValue, 1);
-    Mask := TMask.Create(NewValue);
-    try
-      FPathInfo := NewValue;
-      FMask.Free;
-      FMask := nil;
-    except
-      Mask.Free;
-      raise;
-    end;
-    FMask := Mask;
-  end;
-  Result := FMask;
-end;
-
-function TWebPathInfo.GetPathInfo: string;
-begin
-  Result := FPathInfo;
-  if Result = '' then
-    if Assigned(FOwner) then
-      Result := FOwner.Name;
-end;
-
-procedure TWebPathInfo.SetPathInfo(const Value: string);
-begin
-  if Assigned(FOwner) and (Value = FOwner.Name) then
-    FPathInfo := ''
-  else
-    FPathInfo := Value;
-end;
 
 end.

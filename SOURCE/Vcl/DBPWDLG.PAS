@@ -13,7 +13,7 @@ unit DBPWDlg;
 
 interface
 
-uses Windows, Classes, Graphics, Forms, Controls, StdCtrls;
+uses Windows, Classes, Graphics, Forms, Controls, StdCtrls, DB;
 
 type
   TPasswordDialog = class(TForm)
@@ -31,18 +31,16 @@ type
     procedure OKButtonClick(Sender: TObject);
   private
     PasswordAdded: Boolean;
-    FSession: TComponent;
+    FSession: IDBSession;
   end;
 
-function PasswordDialog(ASession: TComponent): Boolean;
+function PasswordDialog(const ASession: IDBSession): Boolean;
 
 implementation
 
-{$R *.DFM}
+{$R *.dfm}
 
-uses DBTables;
-
-function PasswordDialog(ASession: TComponent): Boolean;
+function PasswordDialog(const ASession: IDBSession): Boolean;
 begin
   with TPasswordDialog.Create(Application) do
   try
@@ -65,7 +63,7 @@ end;
 
 procedure TPasswordDialog.AddButtonClick(Sender: TObject);
 begin
-  (FSession as TSession).AddPassword(Edit.Text);
+  FSession.AddPassword(Edit.Text);
   PasswordAdded := True;
   Edit.Clear;
   Edit.SetFocus;
@@ -73,20 +71,26 @@ end;
 
 procedure TPasswordDialog.RemoveButtonClick(Sender: TObject);
 begin
-  (FSession as TSession).RemovePassword(Edit.Text);
+  FSession.RemovePassword(Edit.Text);
   Edit.Clear;
   Edit.SetFocus;
 end;
 
 procedure TPasswordDialog.RemoveAllButtonClick(Sender: TObject);
 begin
-  (FSession as TSession).RemoveAllPasswords;
+  FSession.RemoveAllPasswords;
   Edit.SetFocus;
 end;
 
 procedure TPasswordDialog.OKButtonClick(Sender: TObject);
 begin
-  (FSession as TSession).AddPassword(Edit.Text);
+  FSession.AddPassword(Edit.Text);
 end;
+
+initialization
+  DB.PasswordDialog := PasswordDialog;
+
+finalization
+  DB.PasswordDialog := nil;
 
 end.

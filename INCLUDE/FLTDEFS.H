@@ -19,7 +19,6 @@ Revision History:
 --*/
 
 #ifndef _FLTDEFS_H
-#pragma option push -b -a8 -pc -A- /*P_O_Push*/
 #define _FLTDEFS_H
 
 #if _MSC_VER > 1000
@@ -403,5 +402,4 @@ PfTestPacket(
     );
 
 
-#pragma option pop /*P_O_Pop*/
 #endif

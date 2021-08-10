@@ -1,24 +1,24 @@
 // Borland C++ Builder
-// Copyright (c) 1995, 1999 by Borland International
+// Copyright (c) 1995, 2002 by Borland Software Corporation
 // All rights reserved
 
-// (DO NOT EDIT: machine generated header) 'qrextra.pas' rev: 5.00
+// (DO NOT EDIT: machine generated header) 'QRExtra.pas' rev: 6.00
 
-#ifndef qrextraHPP
-#define qrextraHPP
+#ifndef QRExtraHPP
+#define QRExtraHPP
 
 #pragma delphiheader begin
 #pragma option push -w-
 #pragma option push -Vx
 #include <QRPrev.hpp>	// Pascal unit
 #include <DBTables.hpp>	// Pascal unit
-#include <QRExpbld.hpp>	// Pascal unit
-#include <Qrcomped.hpp>	// Pascal unit
-#include <Qrctrls.hpp>	// Pascal unit
+#include <QRExpBld.hpp>	// Pascal unit
+#include <QRCompEd.hpp>	// Pascal unit
+#include <QRCtrls.hpp>	// Pascal unit
 #include <QuickRpt.hpp>	// Pascal unit
 #include <QRPrntr.hpp>	// Pascal unit
 #include <Clipbrd.hpp>	// Pascal unit
-#include <Db.hpp>	// Pascal unit
+#include <DB.hpp>	// Pascal unit
 #include <Printers.hpp>	// Pascal unit
 #include <Dialogs.hpp>	// Pascal unit
 #include <Forms.hpp>	// Pascal unit
@@ -108,8 +108,7 @@ public:
 	Quickrpt::TCustomQuickRep* __fastcall FetchReport(void);
 	__property bool Active = {read=FActive, write=SetActive, nodefault};
 	__property Graphics::TFont* Font = {read=FFont, write=FFont};
-	__property Printers::TPrinterOrientation Orientation = {read=FOrientation, write=SetOrientation, nodefault
-		};
+	__property Printers::TPrinterOrientation Orientation = {read=FOrientation, write=SetOrientation, nodefault};
 	__property Quickrpt::TCustomQuickRep* Report = {read=FReport, write=FReport};
 	__property AnsiString Title = {read=FTitle, write=SetTitle};
 };
@@ -140,20 +139,16 @@ public:
 
 //-- var, const, procedure ---------------------------------------------------
 extern PACKAGE void __fastcall PopulateFontSizeCombo(Stdctrls::TComboBox* aCombo);
-extern PACKAGE Classes::TStrings* __fastcall AllDataSets(Forms::TCustomForm* Form, bool IncludeDataModules
-	);
+extern PACKAGE Classes::TStrings* __fastcall AllDataSets(Forms::TCustomForm* Form, bool IncludeDataModules);
 extern PACKAGE Quickrpt::TQuickRep* __fastcall QRLoadReport(AnsiString Filename);
 extern PACKAGE void __fastcall QRFreeReport(Quickrpt::TQuickRep* aReport);
-extern PACKAGE void __fastcall QRCreateList(Quickrpt::TCustomQuickRep* &AReport, Classes::TComponent* 
-	AOwner, Db::TDataSet* aDataSet, AnsiString aTitle, Classes::TStrings* aFieldList);
+extern PACKAGE void __fastcall QRCreateList(Quickrpt::TCustomQuickRep* &AReport, Classes::TComponent* AOwner, Db::TDataSet* aDataSet, AnsiString aTitle, Classes::TStrings* aFieldList);
 
 }	/* namespace Qrextra */
-#if !defined(NO_IMPLICIT_NAMESPACE_USE)
 using namespace Qrextra;
-#endif
 #pragma option pop	// -w-
 #pragma option pop	// -Vx
 
 #pragma delphiheader end.
 //-- end unit ----------------------------------------------------------------
-#endif	// qrextra
+#endif	// QRExtra
